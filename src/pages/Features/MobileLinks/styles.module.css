@@ -1,0 +1,7 @@
+.zaions__mobile_link_bg {
+  background: url('../../../assets/images/pages/features/mobile.jpg');
+  background-position: center 53%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding-bottom: 5rem !important;
+}

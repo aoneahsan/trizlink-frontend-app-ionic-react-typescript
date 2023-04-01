@@ -1,0 +1,7 @@
+{
+  "name": "zlink-ionic7-react-project",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}

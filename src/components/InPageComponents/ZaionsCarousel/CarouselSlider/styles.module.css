@@ -1,0 +1,27 @@
+.zaions__carousel {
+  box-shadow: none;
+  border: 1px #000 solid;
+  border-radius: 30px;
+  margin-bottom: 2px;
+  position: relative;
+}
+.zaions__quote {
+  position: absolute;
+  right: 36px;
+  top: -29px;
+  width: 100px;
+  z-index: 2;
+}
+.zaions__stars_box {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  align-items: center;
+}
+.zaions__stars {
+  width: 100px;
+  height: auto;
+}
+.zaions__max_height {
+  height: max-content !important;
+}

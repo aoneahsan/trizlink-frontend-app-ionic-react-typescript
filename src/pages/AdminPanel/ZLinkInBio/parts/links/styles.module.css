@@ -1,0 +1,8 @@
+.link-page-background-color {
+  --background: #f3f3f1 !important;
+}
+.link-page-analytics {
+  --border-radius: 20px !important;
+  --background: #fff;
+  --background-hover: #fff;
+}

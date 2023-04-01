@@ -1,0 +1,11 @@
+.zaions__moveNagitive100pxLeft {
+  margin-left: -100px !important;
+}
+.zaions__move100pxLeft {
+  margin-left: 100px !important;
+}
+.zaions__bannerQuote_btn {
+  font-size: 15px;
+  letter-spacing: 1px;
+  cursor: pointer;
+}

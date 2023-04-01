@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24.761 24.761" focusable="false">
+  <defs>
+    <clipPath>
+      <path d="M0 0H24.761V24.761H0z" class="carousel_cls-1-carousel" transform="translate(187.837 232.837)"></path>
+    </clipPath>
+    <style>
+      .carousel_cls-1-carousel {
+        fill: #fff
+      }
+
+    </style>
+  </defs>
+  <g transform="translate(-187.837 -232.837)">
+    <path
+      d="M21.859 3.385h-1.934V2.9a2.9 2.9 0 0 0-2.9-2.9H7.738a2.9 2.9 0 0 0-2.9 2.9v.484H2.9A2.9 2.9 0 0 0 0 6.287v12.139a2.9 2.9 0 0 0 2.9 2.9h1.936v.532a2.9 2.9 0 0 0 2.9 2.9h9.285a2.9 2.9 0 0 0 2.9-2.9v-.532h1.934a2.9 2.9 0 0 0 2.9-2.9V6.287a2.9 2.9 0 0 0-2.896-2.902zM2.9 19.393a.968.968 0 0 1-.967-.967V6.287A.968.968 0 0 1 2.9 5.32h1.936v14.073zm15.09 2.466a.968.968 0 0 1-.967.967H7.738a.968.968 0 0 1-.967-.967V2.9a.968.968 0 0 1 .967-.967h9.285a.968.968 0 0 1 .967.967zm4.836-3.434a.968.968 0 0 1-.967.967h-1.934V5.32h1.934a.968.968 0 0 1 .967.967zm0 0"
+      class="carousel_cls-1-carousel" transform="translate(187.837 232.837)"></path>
+  </g>
+</svg>

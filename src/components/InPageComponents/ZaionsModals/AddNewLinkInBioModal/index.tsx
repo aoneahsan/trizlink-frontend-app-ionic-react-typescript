@@ -1,0 +1,193 @@
+// Core Imports
+import React from 'react';
+
+// Packages Import
+import { closeOutline, toggleOutline } from 'ionicons/icons';
+import classNames from 'classnames';
+
+// Custom Imports
+import {
+  ZIonButton,
+  ZIonContent,
+  ZIonIcon,
+  ZIonInput,
+  ZIonItem,
+  ZIonLabel,
+  ZIonNote,
+  ZIonText,
+} from 'components/ZIonComponents';
+import { Formik } from 'formik';
+import { useZRQCreateRequest } from 'ZaionsHooks/zreactquery-hooks';
+
+// Global Constants
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from 'utils/enums';
+import { reportCustomError } from 'utils/customErrorType';
+import {
+  createRedirectRoute,
+  extractInnerData,
+  validateField,
+  zStringify,
+} from 'utils/helpers';
+import CONSTANTS from 'utils/constants';
+import ZaionsRoutes from 'utils/constants/RoutesConstants';
+
+// Images
+
+// Recoil States
+import { ZaionsLinkInBioDefaultData } from 'data/UserDashboard/LinkInBio/index.data';
+
+// Types
+import { LinkInBioType } from 'types/AdminPanel/linkInBioType';
+import {
+  ZLinkInBioPageEnum,
+  ZLinkInBioRHSComponentEnum,
+} from 'types/AdminPanel/linkInBioType';
+
+// Styles
+
+/**
+ *
+ * link-in-bio add new link-in-bio modal. the user will pass the title and click create link-in-bio of that title will be created and after that it will redirect to editing page of the link-in-bio.
+ * @returns
+ */
+const ZaionsAddLinkInBioModal: React.FC<{
+  dismissZIonModal: (data?: string, role?: string | undefined) => void;
+  zNavigatePushRoute?: (_url: string) => void;
+}> = ({ dismissZIonModal, zNavigatePushRoute }) => {
+  // Create new link-in-bio API.
+  const { mutateAsync: createLinkInBioMutate } =
+    useZRQCreateRequest<LinkInBioType>({
+      _url: API_URL_ENUM.linkInBio_create_list,
+      _queriesKeysToInvalidate: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+      ],
+    });
+
+  return (
+    <ZIonContent className='ion-padding'>
+      <div className='ion-text-end'>
+        <ZIonButton
+          className='ion-no-padding ion-no-margin'
+          onClick={() => {
+            dismissZIonModal();
+          }}
+          fill='clear'
+          color='dark'
+        >
+          <h4 className='ion-no-margin mt-1'>
+            <ZIonIcon icon={closeOutline} />
+          </h4>
+        </ZIonButton>
+      </div>
+      <div className='d-flex ion-text-center ion-justify-content-center flex-column'>
+        <ZIonText className='' color={'primary'}>
+          <h1 className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}>
+            <ZIonIcon
+              icon={toggleOutline}
+              className='mx-auto'
+              color='light'
+            ></ZIonIcon>
+          </h1>
+        </ZIonText>
+        <br />
+        <ZIonText color={'dark'}>
+          <h5 className='fw-bold'>Create a new Link-in-bio 😊</h5>
+        </ZIonText>
+
+        <Formik
+          initialValues={{
+            linkInBioTitle: '',
+          }}
+          validate={(values) => {
+            const errors = {};
+            validateField('linkInBioTitle', values, errors);
+            return errors;
+          }}
+          onSubmit={async (values) => {
+            try {
+              if (values && values.linkInBioTitle) {
+                // Making an api call creating new link in bio
+                const _response = await createLinkInBioMutate(
+                  zStringify({
+                    linkInBioTitle: values.linkInBioTitle,
+                    theme: zStringify(ZaionsLinkInBioDefaultData.theme), // passing default data with title
+                  })
+                );
+
+                if (_response) {
+                  const _data = extractInnerData<LinkInBioType>(
+                    _response,
+                    extractInnerDataOptionsEnum.createRequestResponseItem
+                  );
+
+                  if (_data && _data.id) {
+                    // After api and recoil storing dismissing modal
+                    dismissZIonModal();
+
+                    // after dismissing redirecting to edit link-in-bio-page
+                    zNavigatePushRoute &&
+                      zNavigatePushRoute(
+                        createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel
+                            .ZaionsAdminEditLinkInBioRoute,
+                          params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
+                          values: [_data.id],
+                          routeSearchParams: {
+                            page: ZLinkInBioPageEnum.design,
+                            step: ZLinkInBioRHSComponentEnum.theme,
+                          },
+                        })
+                      );
+                  }
+                }
+              }
+            } catch (error) {
+              reportCustomError(error);
+            }
+          }}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            submitForm,
+          }) => {
+            return (
+              <>
+                <ZIonItem
+                  className={classNames({
+                    'my-2 mx-2 ion-item-start-no-padding': true,
+                    'ion-touched ion-invalid':
+                      touched.linkInBioTitle && errors.linkInBioTitle,
+                    'ion-touched ion-valid':
+                      touched.linkInBioTitle && !errors.linkInBioTitle,
+                  })}
+                >
+                  <ZIonLabel position='floating'>Link-in-bio title</ZIonLabel>
+                  <ZIonInput
+                    name='linkInBioTitle'
+                    value={values.linkInBioTitle} // the title of the new-link-in-bio
+                    onIonChange={handleChange}
+                    onIonBlur={handleBlur}
+                  />
+                  <ZIonNote slot='error'>{errors.linkInBioTitle}</ZIonNote>
+                </ZIonItem>
+                <ZIonButton
+                  expand='block'
+                  className='mt-4'
+                  onClick={() => void submitForm()}
+                >
+                  Create
+                </ZIonButton>
+              </>
+            );
+          }}
+        </Formik>
+      </div>
+    </ZIonContent>
+  );
+};
+
+export default ZaionsAddLinkInBioModal;

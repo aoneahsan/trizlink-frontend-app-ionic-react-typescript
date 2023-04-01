@@ -1,0 +1,13 @@
+.zaions__branded_links_bg {
+  background: url('../../../assets/images/pages/features/brandedlinkshero.jpg');
+  background-position: center 26%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding-bottom: 6rem !important;
+}
+.zaions__brandLinks__headerHr {
+  border-color: #abb8c3;
+  margin-top: 0;
+  width: 93%;
+  margin-left: auto;
+}

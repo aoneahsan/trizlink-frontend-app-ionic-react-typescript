@@ -1,0 +1,26 @@
+.zaions__max_content {
+  width: max-content !important;
+}
+
+.zaions__dropdown_item:hover div .zaions__dropdown_icon,
+.zaions__dropdown_item:hover div .zaions__dropdown_title {
+  color: #2a5bd7;
+}
+
+.zaions__dropdown_routeLink a:active {
+  background-color: inherit !important;
+  color: inherit !important;
+}
+
+.zaions__color_777 {
+  color: #777;
+}
+
+.zaions__dropdown_menu {
+  width: 500px !important;
+  transform: translate(-51px, 22px) !important;
+  -webkit-transform: translate(-51px, 22px) !important;
+  -moz-transform: translate(-51px, 22px) !important;
+  -ms-transform: translate(-51px, 22px) !important;
+  -o-transform: translate(-51px, 22px) !important;
+}

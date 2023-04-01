@@ -1,0 +1,4 @@
+.zaions-datetime-field::part(native) {
+  border-bottom: none !important;
+  background-color: transparent !important;
+}

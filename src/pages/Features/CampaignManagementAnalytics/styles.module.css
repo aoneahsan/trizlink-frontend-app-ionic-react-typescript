@@ -1,0 +1,13 @@
+.zaions__branded_links_bg {
+  background: url('../../../assets/images/pages/features/campaignandanalytics-01.jpg');
+  background-position: center 84%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding-bottom: 8rem !important;
+}
+.zaions__CampaignManagementAnalytics__headerHr {
+  border-color: #abb8c3;
+  margin-top: 0;
+  width: 93%;
+  margin-left: auto;
+}

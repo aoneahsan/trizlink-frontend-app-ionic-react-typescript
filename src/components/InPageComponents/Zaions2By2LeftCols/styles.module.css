@@ -1,0 +1,14 @@
+.zaions__inpage_secondarybtn {
+  background-color: #edf2fe;
+  border-radius: 6px;
+  font-size: inherit;
+  transition: background 100ms linear;
+  text-decoration: none;
+  line-height: normal;
+  outline: none !important;
+  font-size: 15px;
+}
+.zaions__inpage_secondarybtn:hover {
+  background: #cedafa;
+  color: #2a5bd7;
+}

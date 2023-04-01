@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 33.863 33.863" focusable="false">
+  <defs>
+    <clipPath>
+      <path d="M0 0H33.863V33.863H0z" class="block_separator_cls-1-separator"></path>
+    </clipPath>
+    <style>
+      .block_separator_cls-1-separator {
+        fill: #a4a2a2
+      }
+
+    </style>
+  </defs>
+  <g>
+    <g transform="translate(0 15.609)">
+      <g>
+        <path d="M32.54 11.413H1.323a1.323 1.323 0 1 0 0 2.646H32.54a1.323 1.323 0 0 0 0-2.646z"
+          class="block_separator_cls-1-separator" transform="translate(0 -11.413)"></path>
+      </g>
+    </g>
+  </g>
+</svg>

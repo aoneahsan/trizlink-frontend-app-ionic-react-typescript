@@ -1,0 +1,38 @@
+.zaions__view_panel {
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+}
+
+.zaions-block-button-text {
+  display: block;
+  padding-top: 1rem;
+}
+
+.map-auto-complete-input:focus-visible {
+  outline: none !important;
+}
+
+.zaions-button-type {
+  --padding-top: 1rem;
+  --padding-bottom: 1rem;
+  --padding-start: 4rem;
+  --padding-end: 4rem;
+  --box-shadow: none;
+}
+
+.zaions-button-type-shadow {
+  --box-shadow: 6px 6px #aab1c4 !important;
+}
+
+.powered-by-subscription-modal-size {
+  --width: 500px;
+  --height: 350px;
+}
+
+.zaions-pd-color-block {
+  --padding-bottom: 2.3rem;
+  --padding-top: 2.3rem;
+  --padding-start: 1.7rem;
+  --padding-end: 1.7rem;
+}

@@ -1,0 +1,292 @@
+/**
+ * Core Imports go down
+ * ? Like Import of React is a Core Import
+ * */
+import React from 'react';
+
+/**
+ * Packages Imports go down
+ * ? Like import of ionic components is a packages import
+ * */
+
+/**
+ * Custom Imports go down
+ * ? Like import of custom components is a custom import
+ * */
+import {
+  ZIonButton,
+  ZIonContent,
+  ZIonIcon,
+  ZIonText,
+} from 'components/ZIonComponents';
+
+import { useZRQCreateRequest } from 'ZaionsHooks/zreactquery-hooks';
+
+/**
+ * Global Constants Imports go down
+ * ? Like import of Constant is a global constants import
+ * */
+import CONSTANTS from 'utils/constants';
+import {
+  createRedirectRoute,
+  extractInnerData,
+  zStringify,
+} from 'utils/helpers';
+import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from 'utils/enums';
+import { reportCustomError } from 'utils/customErrorType';
+
+/**
+ * Type Imports go down
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
+ * */
+import {
+  ZLinkInBioPageEnum,
+  ZLinkInBioRHSComponentEnum,
+} from 'types/AdminPanel/linkInBioType';
+import {
+  LinkInBioBlockEnum,
+  LinkInBioBlockFromType,
+  LinkInBioBlocksPositionEnum,
+  LinkInBioSingleBlockContentType,
+} from 'types/AdminPanel/linkInBioType/blockTypes';
+
+/**
+ * Recoil State Imports go down
+ * ? Import of recoil states is a Recoil State import
+ * */
+import { LinkInBioBlocksRState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
+import { useSetRecoilState } from 'recoil';
+import { closeOutline, toggleOutline } from 'ionicons/icons';
+import { LinkInBioBlocksDefaultData } from 'data/UserDashboard/LinkInBio/Blocks/index.data';
+
+/**
+ * Style files Imports go down
+ * ? Import of style sheet is a style import
+ * */
+
+/**
+ * Images Imports go down
+ * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
+ * */
+
+/**
+ * Component props type go down
+ * ? Like if you have a type for props it should be please Down
+ * */
+
+/**
+ * Functional Component
+ * About: (Info of component here...)
+ * @type {*}
+ * */
+const ZLinkInBioAddBlockModal: React.FC<{
+  dismissZIonModal: (data?: string, role?: string | undefined) => void;
+  _blockType: LinkInBioBlockEnum;
+  _blockContent: LinkInBioSingleBlockContentType;
+  editLinkInBioId: string;
+  modalHeading?: string;
+  modalSubHeading?: string;
+  zNavigatePushRoute?: (_url: string) => void;
+}> = ({
+  dismissZIonModal,
+  _blockType,
+  _blockContent = LinkInBioBlocksDefaultData[_blockType as string],
+  editLinkInBioId,
+  modalHeading = 'Add block 😊',
+  modalSubHeading = `Would you like add this ${_blockType} block in your page?`,
+  zNavigatePushRoute,
+}) => {
+  const setLinkInBioBlocksState = useSetRecoilState(LinkInBioBlocksRState);
+
+  // API to create new block belong to this link-in-bio.
+  const { mutateAsync: createLinkInBioMutate } =
+    useZRQCreateRequest<LinkInBioBlockFromType>({
+      _url: API_URL_ENUM.linkInBioBlock_create_list,
+      _queriesKeysToInvalidate: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.BLOCK.MAIN,
+      ],
+      authenticated: true,
+      _itemsIds: [editLinkInBioId],
+      _urlDynamicParts: [':linkInBioId'],
+    });
+
+  const addBlockHandler = async (_position: LinkInBioBlocksPositionEnum) => {
+    try {
+      if (_position) {
+        const _stringifyValue = zStringify({
+          blockType: _blockType,
+          blockContent: zStringify(_blockContent),
+          position: _position,
+        });
+
+        const _response = await createLinkInBioMutate(_stringifyValue);
+
+        if (_response) {
+          const _data = extractInnerData<LinkInBioBlockFromType>(
+            _response,
+            extractInnerDataOptionsEnum.createRequestResponseItem
+          );
+
+          if (_position === LinkInBioBlocksPositionEnum.top) {
+            const _newLinkInBioBlock: LinkInBioBlockFromType = {
+              id: _data?.id,
+              blockType:
+                LinkInBioBlockEnum[_data?.blockType as LinkInBioBlockEnum],
+              blockContent:
+                _data?.blockContent as LinkInBioSingleBlockContentType,
+              // icon: 'string',
+              isActive: _data?.isActive,
+              orderNo: '-1', // as in API we always set orderNo from 0, so setting it, -1 mean this will have the lowest orderNo
+            };
+            setLinkInBioBlocksState((oldValues) => [
+              _newLinkInBioBlock,
+              ...oldValues,
+            ]);
+          } else if (_position === LinkInBioBlocksPositionEnum.bottom) {
+            const _newLinkInBioBlock: LinkInBioBlockFromType = {
+              id: _data?.id,
+              blockType:
+                LinkInBioBlockEnum[_data?.blockType as LinkInBioBlockEnum],
+              blockContent:
+                _data?.blockContent as LinkInBioSingleBlockContentType, // icon: 'string',
+              isActive: _data?.isActive,
+              orderNo: '100000', // as in API we always set orderNo from 0, so setting it, 100000 mean this will have the highest orderNo (hopefully)
+            };
+            setLinkInBioBlocksState((oldValues) => [
+              ...oldValues,
+              _newLinkInBioBlock,
+            ]);
+          }
+
+          dismissZIonModal();
+
+          // after dismissing redirecting to blockForm
+          zNavigatePushRoute &&
+            zNavigatePushRoute(
+              createRedirectRoute({
+                url: ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkInBioRoute,
+                params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
+                values: [editLinkInBioId],
+                routeSearchParams: {
+                  page: ZLinkInBioPageEnum.design,
+                  step: ZLinkInBioRHSComponentEnum.blockForm,
+                  blockId: _data?.id || '',
+                },
+              })
+            );
+        }
+      }
+    } catch (error) {
+      dismissZIonModal();
+      reportCustomError(error);
+    }
+  };
+
+  return (
+    <>
+      {/**
+       * Header of Modal will shown if the `showActionInModalHeader` is set to `true` in  appSetting and hide if it is `false`
+       * default: false
+       *  */}
+      {/* {appSettings.appModalsSetting.actions.showActionInModalHeader && (
+        <ZIonHeader>
+          <ZIonRow className='ion-align-items-center'>
+            <ZIonCol>
+              <ZIonButton
+                onClick={() => {
+                  // Close the Modal
+                  dismissZIonModal();
+                }}
+                color='primary'
+                className='ion-text-capitalize'
+                fill='outline'
+              >
+                Close
+              </ZIonButton>
+            </ZIonCol>
+          </ZIonRow>
+        </ZIonHeader>
+      )} */}
+
+      <ZIonContent className='ion-padding'>
+        <div className='ion-text-end'>
+          <ZIonButton
+            className='ion-no-margin'
+            onClick={() => {
+              dismissZIonModal();
+            }}
+            fill='clear'
+            color='dark'
+          >
+            <h4 className='ion-no-margin mt-1'>
+              <ZIonIcon icon={closeOutline} />
+            </h4>
+          </ZIonButton>
+        </div>
+        <div className='d-flex ion-text-center ion-justify-content-center flex-column ion-padding-top ion-margin-top'>
+          <ZIonText className='' color={'primary'}>
+            <h1
+              className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}
+            >
+              <ZIonIcon
+                icon={toggleOutline}
+                className='mx-auto'
+                color='light'
+              ></ZIonIcon>
+            </h1>
+          </ZIonText>
+          <br />
+          <ZIonText color={'dark'}>
+            <h5 className='fw-bold'>{modalHeading}</h5>
+          </ZIonText>
+          <ZIonText className='mt-2 mb-2'>{modalSubHeading}</ZIonText>
+          <ZIonButton
+            expand='block'
+            className='mt-4'
+            onClick={() => {
+              void addBlockHandler(LinkInBioBlocksPositionEnum.top);
+            }}
+          >
+            Insert at top
+          </ZIonButton>
+          <ZIonButton
+            expand='block'
+            fill='outline'
+            className='mt-3'
+            onClick={() => {
+              void addBlockHandler(LinkInBioBlocksPositionEnum.bottom);
+            }}
+          >
+            Insert at bottom
+          </ZIonButton>
+        </div>
+      </ZIonContent>
+
+      {/**
+       * Footer of Modal will shown if the `showActionInModalFooter` is set to `true` in appSetting, and hide if it is `false`
+       * default: true
+       *  */}
+      {/* {appSettings.appModalsSetting.actions.showActionInModalFooter && (
+        <ZIonFooter>
+          <ZIonRow className=' mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
+            <ZIonCol>
+              <ZIonButton
+                fill='outline'
+                size='default'
+                className='ion-text-capitalize'
+                onClick={() => {
+                  dismissZIonModal();
+                }}
+              >
+                Close
+              </ZIonButton>
+            </ZIonCol>
+          </ZIonRow>
+        </ZIonFooter>
+      )} */}
+    </>
+  );
+};
+
+export default ZLinkInBioAddBlockModal;

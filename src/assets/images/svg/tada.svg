@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24.761 24.761" fit=""
+  preserveAspectRatio="xMidYMid meet" focusable="false">
+  <defs>
+    <clipPath id="btn_tada_clip-path">
+      <path id="btn_tada_Rectangle_7831" d="M0 0H24.761V24.761H0z" class="btn_tada_cls-1" data-name="Rectangle 7831"
+        transform="translate(187.837 232.837)"></path>
+    </clipPath>
+    <style>
+      .btn_tada_cls-1 {
+        fill: #fff
+      }
+
+    </style>
+  </defs>
+  <g id="btn_tada_Groupe_de_masques_795" data-name="Groupe de masques 795" transform="translate(-187.837 -232.837)">
+    <g id="btn_tada_vibration" transform="translate(187.837 232.837)">
+      <g id="btn_tada_Groupe_9235" data-name="Groupe 9235">
+        <g id="btn_tada_Groupe_9234" data-name="Groupe 9234">
+          <path id="btn_tada_Tracé_32834"
+            d="M4.417 14.155l-2.549-2.548L4.415 9.06a.775.775 0 0 0 0-1.1l-3.1-3.1A.774.774 0 1 0 .228 5.963l2.547 2.549-2.549 2.547a.774.774 0 0 0 0 1.094L2.775 14.7.228 17.249a.774.774 0 0 0 0 1.094.766.766 0 0 0 .546.227.777.777 0 0 0 .548-.226l3.1-3.1a.774.774 0 0 0-.005-1.089z"
+            class="btn_tada_cls-1" data-name="Tracé 32834"></path>
+        </g>
+      </g>
+      <g id="btn_tada_Groupe_9237" data-name="Groupe 9237">
+        <g id="btn_tada_Groupe_9236" data-name="Groupe 9236">
+          <path id="btn_tada_Tracé_32835"
+            d="M24.535 17.25l-2.549-2.55 2.547-2.547a.775.775 0 0 0 0-1.1l-2.547-2.541 2.547-2.547a.774.774 0 0 0-1.094-1.095l-3.1 3.1a.774.774 0 0 0 0 1.094l2.549 2.547-2.547 2.547a.774.774 0 0 0 0 1.094l3.1 3.1a.766.766 0 0 0 .546.227.773.773 0 0 0 .548-1.32z"
+            class="btn_tada_cls-1" data-name="Tracé 32835"></path>
+        </g>
+      </g>
+      <g id="btn_tada_Groupe_9239" data-name="Groupe 9239">
+        <g id="btn_tada_Groupe_9238" data-name="Groupe 9238">
+          <path id="btn_tada_Tracé_32836"
+            d="M17.023 3.1H7.738A1.55 1.55 0 0 0 6.19 4.643v15.475a1.549 1.549 0 0 0 1.548 1.548h9.285a1.548 1.548 0 0 0 1.548-1.548V4.643A1.549 1.549 0 0 0 17.023 3.1zm0 15.475H7.738V6.19h9.285z"
+            class="btn_tada_cls-1" data-name="Tracé 32836"></path>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

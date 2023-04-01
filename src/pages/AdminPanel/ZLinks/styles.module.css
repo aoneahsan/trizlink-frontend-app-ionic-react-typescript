@@ -1,0 +1,13 @@
+.zaionsEngagements {
+  position: absolute;
+  height: 69.2%;
+  width: 100%;
+  overflow-y: scroll;
+}
+.zaionsEngagementsContent {
+  /* height: max-content; */
+  overflow-y: auto;
+}
+.button__shadow_none {
+  --box-shadow: 'none';
+}

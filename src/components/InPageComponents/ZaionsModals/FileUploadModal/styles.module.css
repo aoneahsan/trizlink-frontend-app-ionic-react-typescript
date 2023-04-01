@@ -1,0 +1,30 @@
+.file-modal-upload-input {
+  font-size: 20px;
+  border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -o-border-radius: 0px;
+}
+
+ion-input.file-modal-upload-input input {
+  padding-left: 1rem !important;
+}
+
+.zaions-gallery-card {
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-position: 50% !important;
+}
+
+.zaions-gallery-card-block-data span {
+  font-size: 0.9rem;
+}
+
+.zaions-gallery-card-block-data {
+  display: none;
+}
+
+.zaions-gallery-card:hover .zaions-gallery-card-block-data {
+  display: block;
+}

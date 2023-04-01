@@ -1,0 +1,10 @@
+.ZaionsCard {
+  border: 1px solid transparent;
+}
+.ZaionsCard:hover {
+  border-color: #2a5bd7 !important;
+}
+.ZaionsCardBtn:hover {
+  color: #2a5bd7 !important;
+  text-decoration: underline;
+}

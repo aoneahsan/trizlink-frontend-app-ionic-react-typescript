@@ -1,0 +1,30 @@
+.zaions__review_bg {
+  background-image: url('../../../assets/images/pages/company/reviews/grey_wave_desktop_spring_2022.png');
+  background-position: 50% center;
+  background-size: contain;
+}
+
+.reviewAvater {
+  border-radius: 50%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -js-display: flex;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 100%;
+  /* max-width: 100%;
+  min-width: 100%; */
+  width: 80%;
+  overflow: hidden;
+  border-width: 2px;
+}
+
+.zaions__color_orangered {
+  color: orangered;
+}
+
+.reviewBtn:hover {
+  color: #5a39a2;
+  text-decoration: underline;
+}

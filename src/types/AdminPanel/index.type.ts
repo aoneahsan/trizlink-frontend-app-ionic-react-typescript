@@ -1,0 +1,69 @@
+import { ZaionsRSelectOptions } from 'types/components/CustomComponents/index.type';
+
+// Enum's
+export enum FormMode {
+  ADD = 'add',
+  EDIT = 'edit',
+}
+
+export enum folderState {
+  ShortLink = 'Short-links-folder-state',
+  LinkInBios = 'LinkInBio-folder-state',
+}
+
+export enum messengerPlatformsBlockEnum {
+  email = 'email',
+  link = 'link',
+  whatsapp = 'whatsapp',
+  messenger = 'messenger',
+  call = 'call',
+  sms = 'sms',
+  telegram = 'telegram',
+  skype = 'skype',
+  wechat = 'wechat',
+  line = 'line',
+  viber = 'viber',
+  default = 'default',
+}
+
+// Interfaces
+export interface UTMTagInfoInterface {
+  templateId?: string;
+  utmCampaign?: string;
+  utmMedium?: string;
+  utmSource?: string;
+  utmTerm?: string;
+  utmContent?: string;
+}
+
+export interface ShortUrlInterface {
+  domain?: string;
+  url?: string;
+}
+
+export interface ABTestingRotatorInterface {
+  id?: string;
+  redirectionLink?: string;
+  percentage?: number;
+}
+
+export interface GeoLocationRotatorInterface {
+  id?: string;
+  redirectionLink?: string;
+  country?: string;
+}
+
+export interface LinkExpirationInfoInterface {
+  expirationDate?: string;
+  timezone?: string;
+  redirectionLink?: string;
+  enabled?: boolean;
+}
+
+export interface PasswordInterface {
+  value?: string;
+  enabled?: boolean;
+}
+
+// Types
+export type genericZaionsRSelectOptions = ZaionsRSelectOptions[] | undefined;

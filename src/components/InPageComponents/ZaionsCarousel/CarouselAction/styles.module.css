@@ -1,0 +1,32 @@
+.carosusel__action_btn {
+  background-color: #edf2fe;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -ms-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+}
+.carosusel__action_btn:hover {
+  background-color: #cedafa;
+}
+.zaions__point {
+  width: 24px;
+  height: 24px;
+  background: #fff;
+  border: 1px #000 solid;
+  border-radius: 200vmax;
+  -webkit-border-radius: 200vmax;
+  -moz-border-radius: 200vmax;
+  -ms-border-radius: 200vmax;
+  -o-border-radius: 200vmax;
+  cursor: pointer;
+}
+
+.zaions__point:hover {
+  background-color: #cedafa;
+}
+
+.zaions__point.zaions__point_active {
+  background-color: #cedafa;
+}

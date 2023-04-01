@@ -1,0 +1,21 @@
+.zaions__postion_sticky {
+  position: static !important;
+  top: 40px;
+}
+.zaions__nav {
+  display: flex;
+}
+.zaions_gap3 {
+  gap: 3rem;
+}
+.zaions_gap2 {
+  gap: 1.5rem;
+}
+.zaions_nav_button {
+  letter-spacing: 0.2px;
+  font-size: 15px;
+}
+
+.zaions__nav_col_two_space {
+  padding-right: 6.9rem;
+}

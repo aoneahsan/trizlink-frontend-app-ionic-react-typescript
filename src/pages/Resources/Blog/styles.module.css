@@ -1,0 +1,57 @@
+.zaions__blog_fa_btn {
+  background-color: rgb(237, 242, 254);
+  font-size: 18px !important;
+  line-height: 1.11;
+  padding: 18px 1.5rem;
+  border-radius: 8px;
+}
+
+.row__box_shadow {
+  box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 12%),
+    0px 4px 5px 0px rgb(0 0 0 / 10%), 0px 1px 10px 0px rgb(0 0 0 / 8%);
+}
+
+.Blog__title {
+  font-size: 3.5rem;
+  padding: 2rem 0;
+  font-weight: 800;
+}
+
+.zaions__blog_search_input {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+}
+.zaions__blog_search_input input {
+  background: rgb(255, 255, 255);
+  border-radius: 8px !important;
+  border: 1px solid rgb(216, 216, 216) !important;
+  height: 46px;
+  width: 305px;
+  display: inline-block;
+  font-size: 16px;
+  margin-left: auto !important;
+  width: 50% !important;
+  margin: 0;
+  padding-left: 40px !important;
+  -webkit-border-radius: 8px !important;
+  -moz-border-radius: 8px !important;
+  -ms-border-radius: 8px !important;
+  -o-border-radius: 8px !important;
+  transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -ms-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+}
+
+.zaions__blog_search_input input:focus {
+  width: 100% !important;
+  box-shadow: 0px 0px 0px 2px rgb(206 218 250) !important;
+  border: 1px solid rgb(42, 91, 215) !important;
+}
+
+.zaions__bg_f5f6f8 {
+  background-color: #f5f6f8;
+}

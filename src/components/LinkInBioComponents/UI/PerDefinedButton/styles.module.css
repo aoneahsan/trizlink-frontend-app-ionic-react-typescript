@@ -1,0 +1,15 @@
+.zaions-block-button::part(native) {
+  transition: 0.2s;
+  -webkit-transition: 0.2s;
+  -moz-transition: 0.2s;
+  -ms-transition: 0.2s;
+  -o-transition: 0.2s;
+}
+.zaions-block-button {
+  --padding-top: 2.2rem;
+  --padding-bottom: 2.2rem;
+  /* background-color: var(--ion-color-primary); */
+}
+.zaions-block-button::part(native):hover {
+  border-color: var(--ion-color-secondary) !important;
+}

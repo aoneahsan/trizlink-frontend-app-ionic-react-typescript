@@ -1,0 +1,15 @@
+.caretDownSm {
+  width: 0.5em;
+}
+.helpIcon {
+  font-size: 2.5rem !important;
+}
+.searchIonItem {
+  width: 34%;
+}
+.user_account_modal {
+  --offset-x: 0rem;
+  --offset-y: 6px;
+  --width: 24%;
+  --max-height: max-content;
+}

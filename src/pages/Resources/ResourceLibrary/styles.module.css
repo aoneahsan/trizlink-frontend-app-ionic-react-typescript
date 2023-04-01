@@ -1,0 +1,23 @@
+.zaions__sidebar_btn {
+  color: #252628;
+  font-size: 20px;
+  font-weight: 400;
+  text-align: center;
+  letter-spacing: 0;
+  background: #f5f6f7;
+  border-radius: 100vmax;
+  border: 1px #f5f6f7 solid;
+  padding: 2px 25px;
+  line-height: 45px;
+  transition: all 100ms;
+  -webkit-border-radius: 100vmax;
+  -moz-border-radius: 100vmax;
+  -ms-border-radius: 100vmax;
+  -o-border-radius: 100vmax;
+  margin-bottom: 0.5rem;
+}
+.zaions__sidebar_btn:hover {
+  background: #edf2fe;
+  color: #2a5bd7;
+  border-color: #2a5bd7;
+}

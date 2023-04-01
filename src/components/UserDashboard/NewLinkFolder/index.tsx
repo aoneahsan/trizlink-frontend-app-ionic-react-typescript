@@ -1,0 +1,114 @@
+// Core Imports
+import React from 'react';
+
+// Packages Import
+import { addCircleOutline, folderOpenOutline } from 'ionicons/icons';
+
+// Custom Imports
+import {
+  ZIonCol,
+  ZIonText,
+  ZIonIcon,
+  ZIonRouterLink,
+} from 'components/ZIonComponents';
+
+// Global Constants
+
+// Images
+
+// Recoil States
+
+// Types
+// import ZaionsRSelect from 'components/CustomComponents/ZaionsRSelect';
+import { ZIonButton } from 'components/ZIonComponents';
+import {
+  FolderInterface,
+  ZaionsShortUrlOptionFieldsValuesInterface,
+} from 'types/AdminPanel/linksType';
+import { useFormikContext } from 'formik';
+import ZaionsRSelect from 'components/CustomComponents/ZaionsRSelect';
+import { ZaionsRSelectOptions } from 'types/components/CustomComponents/index.type';
+import { formatReactSelectOption } from 'utils/helpers';
+import { ZGenericObject } from 'types/zaionsAppSettings.type';
+import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
+import ZaionsAddNewFolder from 'components/InPageComponents/ZaionsModals/AddNewFolder';
+import { folderState } from 'types/AdminPanel/index.type';
+
+// Styles
+// import CLASSES from './styles.module.css';
+
+const NewLinkFolder: React.FC<{
+  _foldersData: FolderInterface[];
+  _state: folderState;
+}> = ({ _foldersData, _state }) => {
+  const { values, setFieldValue } =
+    useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
+
+  const { presentZIonModal: presentFolderModal } = useZIonModal(
+    ZaionsAddNewFolder,
+    {
+      state: _state,
+    }
+  );
+
+  return (
+    <>
+      <ZIonCol
+        sizeXl='5.7'
+        sizeLg='5.6'
+        sizeMd='5.6'
+        sizeSm='12'
+        sizeXs='12'
+        className='border py-3 zaions__bg_white'
+      >
+        <div className='d-flex align-items-center border-bottom ion-padding-start'>
+          <ZIonIcon icon={folderOpenOutline} size={'large'}></ZIonIcon>
+          <ZIonText>
+            <h6 className='fw-bold ion-no-margin ion-padding-start'>
+              Folder{' '}
+              <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
+                (help)
+              </ZIonRouterLink>
+            </h6>
+          </ZIonText>
+          <ZIonButton
+            fill='clear'
+            className='ms-auto'
+            onClick={() => {
+              presentFolderModal({
+                _cssClass: 'folder-modal-size',
+              });
+            }}
+          >
+            <ZIonIcon icon={addCircleOutline} size={'large'} />
+          </ZIonButton>
+        </div>
+        <div className='mt-4 d-block px-4'>
+          <ZaionsRSelect
+            className='ion-padding-top'
+            options={_foldersData as unknown as ZaionsRSelectOptions[]}
+            name='folderId'
+            onChange={(_value) => {
+              setFieldValue(
+                'folderId',
+                (_value as ZaionsRSelectOptions)?.value,
+                false
+              );
+            }}
+            value={
+              formatReactSelectOption(
+                values?.folderId,
+                _foldersData as ZGenericObject[],
+                'value',
+                'label'
+              ) || []
+            }
+          />
+        </div>
+      </ZIonCol>
+    </>
+  );
+};
+
+export default NewLinkFolder;

@@ -1,0 +1,249 @@
+// Core Imports
+import React, { useLayoutEffect } from 'react';
+
+// Packages Imports
+import { IonSearchbar } from '@ionic/react';
+import Button from 'react-bootstrap/Button';
+import { useRecoilState } from 'recoil';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+
+// Custom Imports
+import ZaionsIonPage from 'components/ZaionsIonPage';
+import InPageFooter from 'components/InPageFooter';
+import ZaionsTopMenu from 'navigation/TopMenu';
+import Zaions4By4GridSystem from 'components/InPageComponents/Zaions4By4GridSystem';
+import ZaionsFeatureBanner from 'components/InPageComponents/ZaionsFeatureBanner';
+import {
+  ZIonCol,
+  ZIonText,
+  ZIonRouterLink,
+  ZIonRow,
+  ZIonGrid,
+  ZIonContent,
+  ZIonList,
+} from 'components/ZIonComponents';
+
+// Type
+import { Zaions4By4GridSysType } from 'types/InPageComponentTypes/Zaions4By4GridSys.type';
+
+// Recoil
+import { ZaionsSPSocialMarketersState } from 'ZaionsStore/SolutionPages/SocialMarketers/ZaionsSPSocialMarketers.recoil';
+
+// Data
+import { RSBlogData } from 'data/resources/blog/RSBlog.data';
+
+// Global Imports
+import { PRODUCT_NAME } from 'utils/constants';
+
+// Styles
+import classes from './styles.module.css';
+import { ZIonButton } from 'components/ZIonComponents';
+import ZaionsRoutes from 'utils/constants/RoutesConstants';
+
+const ZaionsBlogs: React.FC = () => {
+  const [BlogData, setBlogData] = useRecoilState<Zaions4By4GridSysType[]>(
+    ZaionsSPSocialMarketersState
+  );
+
+  useLayoutEffect(() => {
+    setBlogData(RSBlogData);
+  }, [setBlogData]);
+  return (
+    <ZaionsIonPage pageTitle='Link Managment'>
+      {/* Page Content */}
+      <ZIonContent>
+        <ZaionsTopMenu />
+        <ZIonGrid
+          className={`ion-align-items-center position-sticky ${classes.zaions__bg_f5f6f8}`}
+        >
+          <ZIonRow className='ion-align-items-center'>
+            <ZIonCol size='1'></ZIonCol>
+            <ZIonCol size='6' className='d-flex ion-align-items-center'>
+              <ZIonList
+                lines='none'
+                className={`ps-0 d-flex ion-align-items-center py-0 ${classes.zaions__bg_f5f6f8}`}
+              >
+                <ZIonRouterLink
+                  routerLink={ZaionsRoutes.HomeRoute}
+                  color={'dark'}
+                  className={`${classes.zaions__bg_f5f6f8}`}
+                >
+                  <ZIonText className='d-inline-block me-3 pe-2 zaions__fs_15'>
+                    Latest Articles
+                  </ZIonText>
+                </ZIonRouterLink>
+
+                <ZIonRouterLink
+                  routerLink={ZaionsRoutes.HomeRoute}
+                  className={`${classes.zaions__bg_f5f6f8}`}
+                >
+                  <ZIonText className='d-inline-block me-3 pe-1 zaions__fs_15'>
+                    Digital Marketing
+                  </ZIonText>
+                </ZIonRouterLink>
+
+                <ZIonRouterLink
+                  routerLink={ZaionsRoutes.HomeRoute}
+                  className={`${classes.zaions__bg_f5f6f8}`}
+                >
+                  <ZIonText className='d-inline-block me-3 pe-1 zaions__fs_15'>
+                    Social Media Marketing
+                  </ZIonText>
+                </ZIonRouterLink>
+
+                <ZIonRouterLink
+                  routerLink={ZaionsRoutes.HomeRoute}
+                  color={'dark'}
+                  className={`${classes.zaions__bg_f5f6f8}`}
+                >
+                  <ZIonText className='d-inline-block me-3 pe-1 zaions__fs_15'>
+                    Customer Service
+                  </ZIonText>
+                </ZIonRouterLink>
+
+                <ZIonRouterLink
+                  routerLink={ZaionsRoutes.HomeRoute}
+                  className={`${classes.zaions__bg_f5f6f8}`}
+                >
+                  <ZIonText className='d-inline-block me-3 pe-1 zaions__fs_15'>
+                    Branding
+                  </ZIonText>
+                </ZIonRouterLink>
+              </ZIonList>
+            </ZIonCol>
+            <ZIonCol size='4'>
+              <IonSearchbar
+                showClearButton='focus'
+                className={classes.zaions__blog_search_input}
+                value='Search Blog'
+                placeholder='Search Blog'
+              ></IonSearchbar>
+            </ZIonCol>
+            <ZIonCol size='1'></ZIonCol>
+          </ZIonRow>
+        </ZIonGrid>
+
+        <ZaionsFeatureBanner
+          title={`${PRODUCT_NAME} Blog`}
+          bannerLabel='Featured Article'
+          bannerColTitle={
+            <>
+              New Plan on the Block: Why <br /> Starter Plan is Right For You
+            </>
+          }
+          bannerText={
+            <>
+              Surpassed the Free plan, but not quite ready for the whole <br />
+              enchilada? Good news! {PRODUCT_NAME} has a plan offering that may
+              be <br /> a great match for you.
+            </>
+          }
+          bannerImg='https://s17233.pcdn.co/blog/wp-content/uploads/2022/09/blog_starterplan_illustration@2x-1.png'
+          routeLink='/'
+        />
+
+        <Zaions4By4GridSystem
+          MinHeight='365px'
+          data={BlogData}
+          titleBar={false}
+          BGColor='#fff'
+          className='pb-3'
+        />
+        <ZIonGrid>
+          <ZIonRow>
+            <ZIonCol size='12' className='ion-text-center mb-5 pb-4'>
+              <ZIonButton
+                className={classes.zaions__blog_fa_btn}
+                fill={'clear'}
+                size={'large'}
+              >
+                Load More
+              </ZIonButton>
+            </ZIonCol>
+          </ZIonRow>
+        </ZIonGrid>
+
+        <ZIonGrid style={{ backgroundColor: '#eeeeee' }}>
+          <ZIonRow className='py-5'>
+            <ZIonCol
+              sizeXl='1'
+              sizeLg='1'
+              sizeMd='0'
+              sizeSm='0'
+              sizeXs='0'
+            ></ZIonCol>
+            <ZIonCol sizeXl='5' sizeLg='5' sizeMd='12' sizeSm='12' sizeXs='12'>
+              <ZIonText className='fw-bolder fs-5 d-block'>
+                About {PRODUCT_NAME}
+              </ZIonText>
+              <ZIonText className='mt-2 d-block'>
+                {PRODUCT_NAME} is a leading global SaaS company offering a
+                comprehensive <br /> platform designed to enable every piece of
+                information shared <br /> online to connect with key audiences
+                and ignite action.
+              </ZIonText>
+              <ZIonButton
+                className='ion-text-capitalize mt-3'
+                color={'tertiary'}
+              >
+                Learn More
+              </ZIonButton>
+            </ZIonCol>
+            <ZIonCol sizeXl='5' sizeLg='5' sizeMd='12' sizeSm='12' sizeXs='12'>
+              <ZIonText className='fw-bolder fs-5'>
+                Sign up for our newsletter
+              </ZIonText>{' '}
+              <br />
+              <ZIonText className='mt-2 pb-2'>
+                Get our most popular content sent straight to your inbox from
+                the <br /> team behind the scenes.
+              </ZIonText>
+              <Form.Label htmlFor='email-url'>Email</Form.Label>
+              <InputGroup className='mb-3' size='lg'>
+                <Form.Control id='email-url' aria-describedby='basic-addon2' />
+                <Button variant='primary' id='button-addon2'>
+                  Sign up
+                </Button>
+              </InputGroup>
+              <ZIonText className='mt-4' style={{ fontSize: '13px' }}>
+                By submitting my email, I consent to {PRODUCT_NAME} emailing me
+                marketing communications. I may opt out at any time. By signing
+                up, I agree to {PRODUCT_NAME}'s{' '}
+                <ZIonRouterLink
+                  routerLink={ZaionsRoutes.Legal.ZaionsTermsOfService}
+                >
+                  Terms of Service
+                </ZIonRouterLink>
+                ,
+                <ZIonRouterLink
+                  routerLink={ZaionsRoutes.Legal.ZaionsPrivacyPolicyRoute}
+                >
+                  {' '}
+                  Privacy Policy
+                </ZIonRouterLink>
+                , and{' '}
+                <ZIonRouterLink
+                  routerLink={ZaionsRoutes.Legal.ZaionsAcceptableUsePolicyRoute}
+                >
+                  Acceptable Use Policy
+                </ZIonRouterLink>
+                .
+              </ZIonText>
+            </ZIonCol>
+            <ZIonCol
+              sizeXl='1'
+              sizeLg='1'
+              sizeMd='0'
+              sizeSm='0'
+              sizeXs='0'
+            ></ZIonCol>
+          </ZIonRow>
+        </ZIonGrid>
+        <InPageFooter btnText='Start for free' blueSec={false} />
+      </ZIonContent>
+    </ZaionsIonPage>
+  );
+};
+
+export default ZaionsBlogs;

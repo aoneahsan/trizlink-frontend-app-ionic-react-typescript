@@ -1,0 +1,10 @@
+.zaions_label_new {
+  font-size: 12px;
+  display: inline-block;
+  color: #fff;
+  font-weight: 400;
+  padding: 0px 3px;
+  height: max-content;
+  line-height: 15px;
+  vertical-align: middle;
+}
