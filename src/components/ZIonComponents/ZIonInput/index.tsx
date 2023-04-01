@@ -140,7 +140,7 @@ type ZIonInputType = {
 
 const ZIonInput = React.forwardRef(
   (props: ZIonInputType, ref: React.Ref<HTMLIonInputElement>) => {
-    return <IonInput {...props} ref={ref} />;
+    return <IonInput {...props} onIonInput={props.onIonChange} ref={ref} />;
   }
 );
 
