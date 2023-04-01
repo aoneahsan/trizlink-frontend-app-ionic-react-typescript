@@ -63,7 +63,6 @@ interface ZLinkInBioSocialBlockInterface {
 const ZLinkInBioSocialBlock: React.FC<ZLinkInBioSocialBlockInterface> = ({
   socialBlockData,
 }) => {
-  console.log(socialBlockData);
   return (
     <ZIonCol>
       <ZIonRow className='ion-align-items-center ion-justify-content-center row-gap-1-point-6-rem'>

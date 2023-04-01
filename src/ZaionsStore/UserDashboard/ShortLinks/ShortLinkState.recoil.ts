@@ -90,8 +90,6 @@ export const FilteredShortLinkData = selector<ShortLinkType[] | undefined>({
           toLocaleStringOptions
         );
 
-        console.log({ startDate, endDate, _formattedStartDate });
-
         _filterLinksData = _allLinksData?.filter((el) => {
           const _createdAt = new Date(
             new Date(el.createdAt as string)

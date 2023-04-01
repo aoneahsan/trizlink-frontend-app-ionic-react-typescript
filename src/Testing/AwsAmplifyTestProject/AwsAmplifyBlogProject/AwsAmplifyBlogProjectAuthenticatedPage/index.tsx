@@ -17,12 +17,6 @@
 // 			/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 // 			const _res = await Auth.currentUserInfo();
-
-// 			console.log({
-// 				message:
-// 					'AwsAmplifyBlogProjectAuthenticatedPage - fetchAndSetData - success',
-// 				_res,
-// 			});
 // 		};
 
 // 		fetchAndSetData()

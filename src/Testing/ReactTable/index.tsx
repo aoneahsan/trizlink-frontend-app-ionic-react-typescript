@@ -12,7 +12,6 @@ const TestingReactTable: React.FC = () => {
   });
   // const tableInstance = useReactTable({});
 
-  console.log({ isLoading, isError, data });
   return (
     <>
       <h1>React Table</h1>

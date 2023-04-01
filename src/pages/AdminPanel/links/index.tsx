@@ -793,7 +793,6 @@ const AdminLinksIndexPage: React.FC = () => {
       const _shortLinksFoldersIds: string[] = [];
       for (let i = 0; i < _shortLinksFoldersEls.length; i++) {
         const _block = _shortLinksFoldersEls[i];
-        console.log({ _block });
         _shortLinksFoldersIds.push(
           _block.getAttribute('data-folder-id') as string
         );

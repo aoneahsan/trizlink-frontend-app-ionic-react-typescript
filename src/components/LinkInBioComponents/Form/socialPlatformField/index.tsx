@@ -87,7 +87,6 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
   ) => {
     // The `from` and `to` properties contain the index of the item
     // when the drag started and ended, respectively
-    // console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
 
     // Finish the reorder and position the item in the DOM based on
     // where the gesture ended. This method can also be called directly
@@ -210,7 +209,6 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
               >
                 {values.cardItems?.length
                   ? values.cardItems.map((_cardItem, _index) => {
-                      console.log(_cardItem);
                       return (
                         <ZIonItem
                           className='my-4 zaions-linkInBio-block border py-3'

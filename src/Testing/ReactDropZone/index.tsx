@@ -88,10 +88,6 @@ const TestingReactDropzone: React.FC = () => {
         //     message: 'ReactDropzone onDropAccepted event',
         //     data: { event },
         //   });
-        //   console.log(
-        //     'ReactDropzone onDropAccepted event - File Accepted - FileName: ' +
-        //       event[0].name
-        //   );
         //   void uploadFileToBackend(event[0]);
         // }}
         onDropRejected={(event) => {
@@ -99,15 +95,12 @@ const TestingReactDropzone: React.FC = () => {
             message: 'ReactDropzone onDropRejected event',
             data: { event },
           });
-          const errorMessage = event[0].errors[0].message;
-          console.log('ReactDropzone onDropRejected event - ' + errorMessage);
         }}
         onError={(event) => {
           zConsoleLog({
             message: 'ReactDropzone onError event',
             data: { event },
           });
-          console.log('ReactDropzone onError event - ' + event.message);
         }}
         // onFileDialogCancel={() => {
         //   zConsoleLog({
@@ -163,10 +156,6 @@ const TestingReactDropzone: React.FC = () => {
             message: 'ReactDropzone onDropAccepted event',
             data: { event: files },
           });
-          console.log(
-            'ReactDropzone onDropAccepted event - File Accepted - FileName: ' +
-              files[0].name
-          );
           void uploadFilesToBackend(files);
         }}
         onDropRejected={(fileRejections) => {
@@ -174,15 +163,12 @@ const TestingReactDropzone: React.FC = () => {
             message: 'ReactDropzone onDropRejected event',
             data: { event: fileRejections },
           });
-          const errorMessage = fileRejections[0].errors[0].message;
-          console.log('ReactDropzone onDropRejected event - ' + errorMessage);
         }}
         onError={(event) => {
           zConsoleLog({
             message: 'ReactDropzone onError event',
             data: { event },
           });
-          console.log('ReactDropzone onError event - ' + event.message);
         }}
         // onFileDialogCancel={() => {
         //   zConsoleLog({

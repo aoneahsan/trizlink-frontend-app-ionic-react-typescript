@@ -27,17 +27,11 @@
 // 	useEffect(() => {
 // 		if (!aabpAuthInfo?.id) {
 // 			const fetchAndSetData = async () => {
-// 				console.log({ message: 'fetchAndSetData called.' });
 // 				let errorOccurred;
 // 				try {
 // 					await presentZIonLoader('Checking auth info...');
 // 					const _authInfo =
 // 						(await Auth.currentUserInfo()) as AwsAmplifyBlogProjectAuthData;
-
-// 					console.log({
-// 						message: 'AwsAmplifyBlogProject - fetchAndSetData - success',
-// 						_authInfo,
-// 					});
 
 // 					if (_authInfo.attributes && _authInfo.attributes?.email) {
 // 						await dismissZIonLoader();

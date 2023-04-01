@@ -157,7 +157,6 @@ const LinkInBioDesignPage: React.FC = () => {
   const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
     // The `from` and `to` properties contain the index of the item
     // when the drag started and ended, respectively
-    // console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
 
     // Finish the reorder and position the item in the DOM based on
     // where the gesture ended. This method can also be called directly
@@ -172,7 +171,6 @@ const LinkInBioDesignPage: React.FC = () => {
       const _linkInBioBlocksIds: string[] = [];
       for (let i = 0; i < _linkInBioBlocksEls.length; i++) {
         const _block = _linkInBioBlocksEls[i];
-        console.log({ _block });
         _linkInBioBlocksIds.push(
           _block.getAttribute('data-block-id') as string
         );
@@ -193,12 +191,6 @@ const LinkInBioDesignPage: React.FC = () => {
   useEffect(() => {
     try {
       if (selectedLinkInBioBlocks) {
-        // console.log({
-        //   log: 'executed!',
-        //   data: selectedLinkInBioBlocks.map((el) =>
-        //     zJsonParse(String(el.blockContent))
-        //   ),
-        // });
         setLinkInBioBlocksState(selectedLinkInBioBlocks);
       }
     } catch (error) {
@@ -376,13 +368,6 @@ const LinkInBioDesignPage: React.FC = () => {
                             >
                               {/* RHS review panel blocks. */}
                               {linkInBioBlocksState.map((el, index) => {
-                                // console.log({
-                                //   index: index,
-                                //   log: 'From Loop',
-                                //   data: zJsonParse(
-                                //     String(el.blockContent)
-                                //   ),
-                                // });
                                 return (
                                   <ZLinkInBioReorderItem
                                     element={el}

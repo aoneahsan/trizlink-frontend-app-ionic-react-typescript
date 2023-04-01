@@ -92,12 +92,6 @@ import classes from './styles.module.css';
 const AdminLinkInBiosIndexPage: React.FC = () => {
   const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
     event.detail.complete();
-    console.log({
-      log: 'Dragged from index',
-      start: event.detail.from,
-      end: event.detail.to,
-      event: event,
-    });
   };
   const { zNavigatePushRoute } = useZNavigate();
   const linkInBiosFilterOptionsState = useRecoilValue(

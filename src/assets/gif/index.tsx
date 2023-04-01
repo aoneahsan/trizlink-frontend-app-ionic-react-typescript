@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-export const BrandingGif = require('./branding-min.gif') as string;
-export const DashboardGif = require('./dash-min.gif') as string;
-export const ShortenMin = require('./shorten-min.gif') as string;
+import BrandingGif from './branding-min.gif';
+import DashboardGif from './dash-min.gif';
+import ShortenMin from './shorten-min.gif';
+export { BrandingGif, DashboardGif, ShortenMin };

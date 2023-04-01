@@ -6,6 +6,6 @@ export const GM_CONSTANTS = {
     LNG: -117.9,
   },
   ZOOM_LEVEL: 8,
-  MAP_API_KEY: ENVS.REACT_APP_GOOGLE_MAP_API_KEY || '',
+  MAP_API_KEY: ENVS.googleMapApiKey || '',
   MAP_ID: 'zaions-google-map-default-id',
 };

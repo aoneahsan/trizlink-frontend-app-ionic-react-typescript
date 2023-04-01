@@ -1105,14 +1105,6 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                           );
                           const _lat = place.geometry?.location?.lat() || 0;
                           const _lng = place.geometry?.location?.lng() || 0;
-                          console.log({
-                            place,
-                            userEnteredAddress: values.map.userEnteredAddress,
-                            values,
-                            map: values.map,
-                            _lat,
-                            _lng,
-                          });
                           setFieldValue('map.lat', _lat, true);
                           setFieldValue('map.lng', _lng, true);
                         }}
@@ -1134,10 +1126,6 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                       'Making a string',
                       true
                     );
-
-                    console.log({
-                      map: values.map,
-                    });
                   }}
                   value={values.map.lat}
                 /> */}

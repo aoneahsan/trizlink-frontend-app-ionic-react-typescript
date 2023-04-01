@@ -23,7 +23,7 @@ import { ENVS } from '@/utils/envKeys';
 
 // Constant
 // const ZLinkApiRootUrl = 'https://zlinkbackend.zaions.com/public/api/zlink/v1';
-export const ZLinkApiRootUrl = ENVS.REACT_APP_API_URL;
+export const ZLinkApiRootUrl = ENVS.apiUrl;
 export const API_URLS = {
   login: '/login',
   logout: '/logout',

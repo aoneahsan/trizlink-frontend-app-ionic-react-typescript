@@ -71,10 +71,6 @@ const ZaionsLoginForm: React.FC = () => {
       await presentZIonLoader('Logging in. please wait a second.');
 
       // registering data
-      console.log({
-        log: 'From login',
-        _values,
-      });
       const ___response = await zAxiosApiRequest<UserAuthData>({
         _url: API_URL_ENUM.login,
         _method: 'post',
@@ -91,7 +87,6 @@ const ZaionsLoginForm: React.FC = () => {
         ___response.success &&
         ___response.data.token.plainTextToken
       ) {
-        console.log(___response);
         // getting user data.
         const userData = getUserDataObjectForm(___response.data.user);
         // Storing user token at userAccountAuthToken State.

@@ -7,21 +7,21 @@ import classNames from 'classnames';
 
 // Custom Imports
 import {
-  ZIonCol,
-  ZIonText,
-  ZIonItem,
-  ZIonRow,
-  ZIonGrid,
-  ZIonContent,
-  ZIonTitle,
-  ZIonLabel,
-  ZIonInput,
-  ZIonNote,
-  ZIonImg,
+	ZIonCol,
+	ZIonText,
+	ZIonItem,
+	ZIonRow,
+	ZIonGrid,
+	ZIonContent,
+	ZIonTitle,
+	ZIonLabel,
+	ZIonInput,
+	ZIonNote,
+	ZIonImg,
 } from '@/components/ZIonComponents';
 
 // Global Constants
-import { validateFields } from '@/utils/helpers';
+import { validateFields, zConsoleLog } from '@/utils/helpers';
 import { VALIDATION_RULE } from '@/utils/enums';
 import ZaionsIonPage from '@/components/ZaionsIonPage';
 import { ProductLogo } from '@/assets/images';
@@ -30,118 +30,120 @@ import { ZIonButton } from '@/components/ZIonComponents';
 // Style
 
 const ZaionsPasswordResetConfirm: React.FC = () => {
-  return (
-    <ZaionsIonPage>
-      <ZIonContent color='light'>
-        <ZIonGrid className=''>
-          <ZIonRow className='ion-justify-content-center ion-align-items-top '>
-            <ZIonCol
-              className='ion-text-start border py-5 zaions__bg_white mt-5'
-              sizeXl='4'
-              sizeLg='5'
-              sizeMd='6.2'
-              sizeSm='8.2'
-              sizeXs='11.5'
-            >
-              <div className='zaions__w80 mx-auto'>
-                <ZIonImg src={ProductLogo} className='logo mx-auto' />
-                <ZIonTitle color='dark'>
-                  <h5 className='ion-text-center mt-4 mb-3'>
-                    FORGOT YOUR PASSWORD?
-                  </h5>
-                </ZIonTitle>
-                <ZIonText>
-                  It happens to the best of us. Enter your email or username to
-                  request a password reset link.
-                </ZIonText>
-              </div>
-              <Formik
-                // Initial Values of sign up form fields
-                initialValues={{
-                  emailAddress: '',
-                }}
-                // Validations of sign up form fields
-                validate={(values) => {
-                  try {
-                    const errors: {
-                      emailAddress?: string;
-                    } = {};
+	return (
+		<ZaionsIonPage>
+			<ZIonContent color='light'>
+				<ZIonGrid className=''>
+					<ZIonRow className='ion-justify-content-center ion-align-items-top '>
+						<ZIonCol
+							className='ion-text-start border py-5 zaions__bg_white mt-5'
+							sizeXl='4'
+							sizeLg='5'
+							sizeMd='6.2'
+							sizeSm='8.2'
+							sizeXs='11.5'
+						>
+							<div className='zaions__w80 mx-auto'>
+								<ZIonImg src={ProductLogo} className='logo mx-auto' />
+								<ZIonTitle color='dark'>
+									<h5 className='ion-text-center mt-4 mb-3'>
+										FORGOT YOUR PASSWORD?
+									</h5>
+								</ZIonTitle>
+								<ZIonText>
+									It happens to the best of us. Enter your email or username to
+									request a password reset link.
+								</ZIonText>
+							</div>
+							<Formik
+								// Initial Values of sign up form fields
+								initialValues={{
+									emailAddress: '',
+								}}
+								// Validations of sign up form fields
+								validate={(values) => {
+									try {
+										const errors: {
+											emailAddress?: string;
+										} = {};
 
-                    validateFields(['emailAddress'], values, errors, [
-                      VALIDATION_RULE.email,
-                    ]);
+										validateFields(['emailAddress'], values, errors, [
+											VALIDATION_RULE.email,
+										]);
 
-                    return errors;
-                  } catch (error) {
-                    console.error({
-                      errorPlacement:
-                        'From components - InPageComponents - ZaionsLoginPage - ZaionsSignUpForm Formik validate Catch',
-                      error,
-                    });
-                  }
-                }}
-                // Submit action
-                onSubmit={(values) => {
-                  try {
-                    console.log({
-                      log: 'From components - InPageComponents - ZaionsLoginPage - ZaionsSignUpForm Formik onSubmit Try',
-                      values,
-                    });
-                  } catch (error) {
-                    console.error({
-                      errorPlacement:
-                        'From components - InPageComponents - ZaionsLoginPage - ZaionsSignUpForm Formik onSubmit Catch',
-                      error,
-                    });
-                  }
-                }}
-              >
-                {({ handleChange, handleBlur, values, touched, errors }) => (
-                  <>
-                    {/* Email Address Field */}
-                    <ZIonItem
-                      className={classNames({
-                        'mb-4 ion-item-start-no-padding zaions__w80 mx-auto':
-                          true,
+										return errors;
+									} catch (error) {
+										console.error({
+											errorPlacement:
+												'From components - InPageComponents - ZaionsLoginPage - ZaionsSignUpForm Formik validate Catch',
+											error,
+										});
+									}
+								}}
+								// Submit action
+								onSubmit={(values) => {
+									try {
+										zConsoleLog({
+											data: {
+												log: 'From components - InPageComponents - ZaionsLoginPage - ZaionsSignUpForm Formik onSubmit Try',
+												values,
+											},
+										});
+									} catch (error) {
+										console.error({
+											errorPlacement:
+												'From components - InPageComponents - ZaionsLoginPage - ZaionsSignUpForm Formik onSubmit Catch',
+											error,
+										});
+									}
+								}}
+							>
+								{({ handleChange, handleBlur, values, touched, errors }) => (
+									<>
+										{/* Email Address Field */}
+										<ZIonItem
+											className={classNames({
+												'mb-4 ion-item-start-no-padding zaions__w80 mx-auto':
+													true,
 
-                        'ion-touched ion-invalid':
-                          touched.emailAddress && errors.emailAddress,
-                        'ion-touched ion-valid':
-                          touched.emailAddress && !errors.emailAddress,
-                        zaions_item_input_bb:
-                          !touched.emailAddress ||
-                          (touched.emailAddress && !errors.emailAddress),
-                      })}
-                    >
-                      <ZIonLabel position='floating'>
-                        Username or Email Address:
-                      </ZIonLabel>
-                      <ZIonInput
-                        name='emailAddress'
-                        type='email'
-                        onIonChange={handleChange}
-                        onIonBlur={handleBlur}
-                        value={values.emailAddress}
-                      />
-                      <ZIonNote slot='error'>{errors.emailAddress}</ZIonNote>
-                    </ZIonItem>
+												'ion-touched ion-invalid':
+													touched.emailAddress && errors.emailAddress,
+												'ion-touched ion-valid':
+													touched.emailAddress && !errors.emailAddress,
+												zaions_item_input_bb:
+													!touched.emailAddress ||
+													(touched.emailAddress && !errors.emailAddress),
+											})}
+										>
+											<ZIonLabel position='floating'>
+												Username or Email Address:
+											</ZIonLabel>
+											<ZIonInput
+												name='emailAddress'
+												type='email'
+												onIonChange={handleChange}
+												onIonBlur={handleBlur}
+												value={values.emailAddress}
+											/>
+											<ZIonNote slot='error'>{errors.emailAddress}</ZIonNote>
+										</ZIonItem>
 
-                    {/* Submit Button */}
-                    <ZIonButton
-                      expand='block'
-                      className='ion-text-capitalize mt-4 zaions__w80 mx-auto mt-3 mb-5'
-                    >
-                      Log in
-                    </ZIonButton>
-                  </>
-                )}
-              </Formik>
-            </ZIonCol>
-          </ZIonRow>
-        </ZIonGrid>
-      </ZIonContent>
-    </ZaionsIonPage>
-  );
+										{/* Submit Button */}
+										<ZIonButton
+											expand='block'
+											className='ion-text-capitalize mt-4 zaions__w80 mx-auto mt-3 mb-5'
+										>
+											Log in
+										</ZIonButton>
+									</>
+								)}
+							</Formik>
+						</ZIonCol>
+					</ZIonRow>
+				</ZIonGrid>
+			</ZIonContent>
+		</ZaionsIonPage>
+	);
 };
 
 export default ZaionsPasswordResetConfirm;

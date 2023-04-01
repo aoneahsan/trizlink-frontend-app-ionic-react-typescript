@@ -20,7 +20,7 @@ import { ENVS } from '@/utils/envKeys';
 import MESSAGES from '@/utils/messages';
 import { AES, enc } from 'crypto-js';
 import { UserAccountType } from '@/types/UserAccount/index.type';
-import axiosInstance from 'axiosInstance';
+import axiosInstance from '@/axiosInstance';
 import {
   ZCapDialogPropsType,
   ZConsolePropsType,
@@ -397,24 +397,6 @@ export const createRedirectRoute = ({
   return _route;
 };
 
-// console.log({
-//   log: 'mti is checking the replaceRouteParams function',
-//   data: replaceRouteParams(
-//     ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkInBioRoute,
-//     [CONSTANTS.RouteParams.editLinkInBioIdParam],
-//     ['1']
-//   ),
-//   data2: createRedirectRoute({
-//     url: ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkInBioRoute,
-//     params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
-//     values: ['1'],
-//     routeSearchParams: {
-//       page: ZLinkInBioPageEnum.design,
-//       step: ZLinkInBioRHSComponentEnum.theme,
-//     },
-//   }),
-// });
-
 export const formatDataForZaionsRSelectOptions = (
   data: unknown,
   valueKey: string,
@@ -535,14 +517,14 @@ export const validateFields = (
 export const encryptData = (val: unknown): string => {
   return AES.encrypt(
     JSON.stringify(val),
-    ENVS.REACT_APP_CRYPTO_SECRET
+    ENVS.cryptoSecret
   ).toString();
 };
 
 export const decryptData = <T>(val: string): T | undefined => {
   try {
     return zJsonParse<T | undefined>(
-      AES.decrypt(val, ENVS.REACT_APP_CRYPTO_SECRET).toString(enc.Utf8)
+      AES.decrypt(val, ENVS.cryptoSecret).toString(enc.Utf8)
     );
   } catch (err) {
     return undefined;
@@ -815,8 +797,6 @@ export const formatReactSelectOption = (
   } else {
     return undefined;
   }
-  // let index = result.map((obj) => arr1.findIndex((item) => item.id === obj.id));
-  // console.log(index);
 };
 
 export const formatReactSelectOptionsArray = (
@@ -983,7 +963,7 @@ export const extractInnerData = <T>(
 export const ZSanitizeHTML = <T>({ value }: { value: T }) => {
   try {
     if (value) {
-      console.log(value);
+      zConsoleLog({ data: { value } });
     }
   } catch (error) {
     reportCustomError(error);
@@ -1072,17 +1052,6 @@ export const convertTimeToSpecificUnit = ({
 //   }
 // };
 
-// console.log(
-//   processAnalyticsData(
-//     [
-//       { country: 'pakistan', visit: '1', unique: '1', visitPercentage: '100' },
-//       { country: 'india', visit: '3', unique: '2', visitPercentage: '100' },
-//       { country: 'china', visit: '2', unique: '1', visitPercentage: '100' },
-//     ],
-//     'country'
-//   )
-// );
-
 const formattedAnalyticsBlocksData = (
   _data: ZGenericObject[],
   columnNames: string[]
@@ -1132,10 +1101,3 @@ const formattedAnalyticsBlocksData = (
     reportCustomError(error);
   }
 };
-
-console.log(
-  formattedAnalyticsBlocksData(
-    [{ country: 'pakistan', visit: '1', unique: '1', visitPercentage: '100' }],
-    ['country', 'visit', 'unique', 'visitPercentage']
-  )
-);

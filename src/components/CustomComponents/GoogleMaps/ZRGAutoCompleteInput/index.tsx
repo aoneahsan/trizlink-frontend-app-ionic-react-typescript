@@ -38,18 +38,11 @@ const ZRGAutoCompleteInput: React.FC<IZRGAutoCompleteInputProps> = ({
         defaultValue={defaultValue}
         // onChange={(event) => {
         //   const _value = (event.target as { value?: string })?.value || '';
-        //   console.log({ inputName, _value });
         //   setFieldValue && setFieldValue(inputName, _value, false);
         //   setFieldTouched && setFieldTouched(inputName, true, true);
         // }}
         onSelect={(event) => {
           // const _value = (event.target as { value?: string })?.value || '';
-          // console.log({
-          //   eventType: 'onSelect',
-          //   target: event.target,
-          //   inputName,
-          //   _value,
-          // });
           // setFieldValue && setFieldValue(inputName, _value, false);
           // setFieldTouched && setFieldTouched(inputName, true, true);
         }}

@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-// Esp's
-export const ProductLogoEsp = require('./product_logo.eps') as string;
+// eslint-disable
 
-// Zaps
-export const ProductImagesZip = require('./Product-Images.zip') as string;
+import ProductLogoEsp from './product_logo.eps';
+import ProductImagesZip from './Product-Images.zip';
+
+export { ProductImagesZip, ProductLogoEsp };

@@ -79,10 +79,6 @@ const LinkExpiration: React.FC = () => {
           {/* <IonToggle
 						name='linkExpiration.enabled'
 						onIonChange={({ target }) => {
-							console.log({
-								log: 'MTI From LE IonToggle',
-								val: values.linkExpiration.enabled,
-							});
 							setFieldValue('linkExpiration.enabled', target.checked, false);
 							setFieldTouched('linkExpiration.enabled', true, true);
 						}}
