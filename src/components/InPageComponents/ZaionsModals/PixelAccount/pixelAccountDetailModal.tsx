@@ -30,14 +30,14 @@ import {
 // Images
 
 // Recoil States
-import { ZaionsAppSettingsRState } from 'ZaionsStore/zaionsAppSettings.recoil';
-import { ShortLinkFormState } from 'ZaionsStore/FormStates/shortLinkFormState';
+import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
+import { ShortLinkFormState } from '@/ZaionsStore/FormStates/shortLinkFormState';
 
 // Types
 import { PixelAccountType } from '@/types/AdminPanel/linksType';
 import { FormMode } from '@/types/AdminPanel/index.type';
 import { ZIonButton } from '@/components/ZIonComponents';
-import { useZRQGetRequest } from 'ZaionsHooks/zreactquery-hooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 

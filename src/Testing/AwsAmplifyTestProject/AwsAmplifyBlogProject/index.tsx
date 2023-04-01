@@ -13,7 +13,7 @@
 // import AwsAmplifyBlogProjectAuthenticatedPage from './AwsAmplifyBlogProjectAuthenticatedPage';
 // import AwsAmplifyBlogProjectGuestPage from './AwsAmplifyBlogProjectGuestPage';
 // import AABPConstants from './awsAmplifyBlogProject.constants';
-// import { useZIonAlert, useZIonLoading } from 'ZaionsHooks/zionic-hooks';
+// import { useZIonAlert, useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
 
 // const AwsAmplifyBlogProject: React.FC = () => {
 // 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();

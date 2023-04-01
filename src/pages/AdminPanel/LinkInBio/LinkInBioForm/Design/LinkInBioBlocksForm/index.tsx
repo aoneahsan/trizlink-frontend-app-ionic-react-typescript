@@ -59,15 +59,15 @@ import LinkInBioSearchField from '@/components/LinkInBioComponents/Form/SearchFi
 import LinkInBioTimezoneField from '@/components/LinkInBioComponents/Form/TimezoneField';
 import ZRoundedButton from '@/components/CustomComponents/ZRoundedButton';
 import ZTextEditor from '@/components/CustomComponents/ZTextEditor';
-import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import ZaionsColorPiker from '@/components/InPageComponents/ZaionsColorPiker';
 
 import {
   useZRQDeleteRequest,
   useZRQGetRequest,
   useZRQUpdateRequest,
-} from 'ZaionsHooks/zreactquery-hooks';
-import { useZValidateRequestResponse } from 'ZaionsHooks/zapi-hooks';
+} from '@/ZaionsHooks/zreactquery-hooks';
+import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 
 /**
  * Global Constants Imports go down
@@ -117,7 +117,7 @@ import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import {
   LinkInBioBlocksRState,
   LinkInBioSelectedBlockFromRState,
-} from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
+} from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
 
 /**
  * Style files Imports go down
@@ -152,7 +152,7 @@ import {
 import dayjs from 'dayjs';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
-import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZLinkInBioAddBlockModal from '@/components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal';
 import LinkInBioCarouselCardField from '@/components/LinkInBioComponents/Form/CarouselCardField';
 import LinkInBioQAndACardField from '@/components/LinkInBioComponents/Form/QAndACardField';

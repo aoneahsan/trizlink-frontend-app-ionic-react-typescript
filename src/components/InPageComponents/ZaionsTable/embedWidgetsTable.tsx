@@ -42,10 +42,10 @@ import {
   useZIonAlert,
   useZIonErrorAlert,
   useZIonModal,
-} from 'ZaionsHooks/zionic-hooks';
+} from '@/ZaionsHooks/zionic-hooks';
 
 // Recoil States
-import { EmbedWidgetsFormState } from 'ZaionsStore/FormStates/embedWidgetsFormState.recoil';
+import { EmbedWidgetsFormState } from '@/ZaionsStore/FormStates/embedWidgetsFormState.recoil';
 
 // Types
 import { EmbedWidgetsType } from '@/types/AdminPanel/linksType';
@@ -53,7 +53,7 @@ import { FormMode } from '@/types/AdminPanel/index.type';
 import {
   useZRQDeleteRequest,
   useZRQGetRequest,
-} from 'ZaionsHooks/zreactquery-hooks';
+} from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZIonSelect from '@/components/ZIonComponents/ZIonSelect';

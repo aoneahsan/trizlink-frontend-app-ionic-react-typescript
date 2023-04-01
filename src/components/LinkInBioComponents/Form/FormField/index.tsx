@@ -20,8 +20,8 @@ import {
   ZIonText,
   ZIonTitle,
 } from '@/components/ZIonComponents';
-import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
-import { useZRQGetRequest } from 'ZaionsHooks/zreactquery-hooks';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
 import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedButton';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
@@ -49,7 +49,7 @@ import { FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
 // Styles
 
 // Recoil
-import { LinkInBioPredefinedFormFieldsRState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
+import { LinkInBioPredefinedFormFieldsRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
 import { linkInBioFormFieldsDefaultData } from '@/data/UserDashboard/LinkInBio/BlockFormFields/index.data';
 
 // Component Type

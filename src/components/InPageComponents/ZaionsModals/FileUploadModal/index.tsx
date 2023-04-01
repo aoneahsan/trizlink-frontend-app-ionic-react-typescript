@@ -22,7 +22,7 @@ import {
 import {
   useZRQCreateRequest,
   useZRQUpdateRequest,
-} from 'ZaionsHooks/zreactquery-hooks';
+} from '@/ZaionsHooks/zreactquery-hooks';
 
 // Global Constants
 import { API_URL_ENUM } from '@/utils/enums';

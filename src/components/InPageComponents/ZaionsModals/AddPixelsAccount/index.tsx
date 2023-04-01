@@ -35,8 +35,8 @@ import MESSAGES from '@/utils/messages';
 // Images
 
 // Recoil States
-import { PixelAccountPlatformOptionsRState } from 'ZaionsStore/UserDashboard/PixelAccountsState/index.recoil';
-import { ZaionsAppSettingsRState } from 'ZaionsStore/zaionsAppSettings.recoil';
+import { PixelAccountPlatformOptionsRState } from '@/ZaionsStore/UserDashboard/PixelAccountsState/index.recoil';
+import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
 
 // Types
 import {
@@ -44,12 +44,12 @@ import {
   PixelPlatformsEnum,
 } from '@/types/AdminPanel/linksType';
 import { FormMode } from '@/types/AdminPanel/index.type';
-import { PixelAccountFormState } from 'ZaionsStore/FormStates/pixelAccountFormState.recoil';
+import { PixelAccountFormState } from '@/ZaionsStore/FormStates/pixelAccountFormState.recoil';
 import { resetFormType } from '@/types/ZaionsFormik.type';
 import {
   useZRQCreateRequest,
   useZRQUpdateRequest,
-} from 'ZaionsHooks/zreactquery-hooks';
+} from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM, VALIDATION_RULE } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';

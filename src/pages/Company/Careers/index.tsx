@@ -22,9 +22,9 @@ import {
 } from '@/components/ZIonComponents';
 
 // Recoil States
-import { ZaionsCareersPageGalleryState } from 'ZaionsStore/CompanySection/Careers/Gallery.recoil';
-import { ZaionsJobsState } from 'ZaionsStore/CompanySection/Careers/AvalableJobs.recoil';
-import { ZaionsInpageColState } from 'ZaionsStore/InpageComponents/ZaionsInpageCol.recoil';
+import { ZaionsCareersPageGalleryState } from '@/ZaionsStore/CompanySection/Careers/Gallery.recoil';
+import { ZaionsJobsState } from '@/ZaionsStore/CompanySection/Careers/AvalableJobs.recoil';
+import { ZaionsInpageColState } from '@/ZaionsStore/InpageComponents/ZaionsInpageCol.recoil';
 
 // Types
 import { ZaionsGalleryType } from '@/types/Company/CareersPage/Gallery.type';

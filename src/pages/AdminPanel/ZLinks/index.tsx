@@ -76,8 +76,8 @@ import {
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { ShortLinksRState } from 'ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
-import { SelectedShortLinkData } from 'ZaionsStore/UserDashboard/ShortLinks/SelectedShortLinkData.recoil';
+import { ShortLinksRState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
+import { SelectedShortLinkData } from '@/ZaionsStore/UserDashboard/ShortLinks/SelectedShortLinkData.recoil';
 
 /**
  * Style files Imports go down
@@ -90,7 +90,7 @@ import classes from './styles.module.css';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { placeholderImage, qrCodeImage } from '@/assets/images';
-import { useZIonModal, useZIonPopover } from 'ZaionsHooks/zionic-hooks';
+import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import ZaionsDashboardFiltersModal from '@/components/InPageComponents/ZaionsModals/DashboardFiltersModal.tsx';

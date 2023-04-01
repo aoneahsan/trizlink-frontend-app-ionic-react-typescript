@@ -19,14 +19,14 @@ import { ZIonButton } from '@/components/ZIonComponents';
 // Global Constants
 import { API_URL_ENUM } from '@/utils/enums';
 import CONSTANTS, { Platforms } from '@/utils/constants';
-import { useZRQGetRequest } from 'ZaionsHooks/zreactquery-hooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 import { formatReactSelectOptionsArray } from '@/utils/helpers';
 
 // Images
 
 // Recoil States
-import { PixelAccountsRState } from 'ZaionsStore/UserDashboard/PixelAccountsState/index.recoil';
+import { PixelAccountsRState } from '@/ZaionsStore/UserDashboard/PixelAccountsState/index.recoil';
 
 // Types
 import {
@@ -37,7 +37,7 @@ import {
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { useFormikContext } from 'formik';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZaionsAddPixelAccount from '@/components/InPageComponents/ZaionsModals/AddPixelsAccount';
 
 // Styles

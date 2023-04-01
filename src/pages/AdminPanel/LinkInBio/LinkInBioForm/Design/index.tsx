@@ -46,8 +46,8 @@ import ZLinkInBioReorderItem from '@/components/LinkInBioComponents/UI/LinkInBio
 import {
   useZRQGetRequest,
   useZRQUpdateRequest,
-} from 'ZaionsHooks/zreactquery-hooks';
-import { useZValidateRequestResponse } from 'ZaionsHooks/zapi-hooks';
+} from '@/ZaionsHooks/zreactquery-hooks';
+import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 
 /**
  * Global Constants Imports go down
@@ -81,7 +81,7 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { LinkInBioBlocksRState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
+import { LinkInBioBlocksRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
 
 /**
  * Style files Imports go down

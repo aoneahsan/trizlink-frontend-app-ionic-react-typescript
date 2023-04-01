@@ -20,9 +20,9 @@ import { useParams } from 'react-router';
 import { ZIonCol, ZIonRow, ZIonText } from '@/components/ZIonComponents';
 import ZLinkInBioAddBlockModal from '@/components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal';
 
-import { LinkInBioPredefinedBlocksRState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
-import { useZRQGetRequest } from 'ZaionsHooks/zreactquery-hooks';
-import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
+import { LinkInBioPredefinedBlocksRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down

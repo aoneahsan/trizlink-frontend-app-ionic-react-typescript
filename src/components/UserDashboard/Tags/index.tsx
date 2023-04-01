@@ -21,7 +21,7 @@ import {
 // Images
 
 // Recoil States
-import { useZIonToast } from 'ZaionsHooks/zionic-hooks';
+import { useZIonToast } from '@/ZaionsHooks/zionic-hooks';
 import { useFormikContext } from 'formik';
 import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';

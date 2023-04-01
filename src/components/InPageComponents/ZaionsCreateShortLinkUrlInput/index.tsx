@@ -11,7 +11,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { Formik } from 'formik';
 import { useSetRecoilState } from 'recoil';
-import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 /**
  * Custom Imports go down
@@ -43,7 +43,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { NewShortLinkFormState } from 'ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
+import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { validateField } from '@/utils/helpers';
 import { VALIDATION_RULE } from '@/utils/enums';
 import { IonNote } from '@ionic/react';

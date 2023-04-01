@@ -3,7 +3,7 @@
  * ? Like Import of React is a Core Import
  * */
 import React from 'react';
-// import { useZIsAuthenticated } from 'ZaionsHooks/zuseraccount-hook';
+// import { useZIsAuthenticated } from '@/ZaionsHooks/zuseraccount-hook';
 
 /**
  * Packages Imports go down

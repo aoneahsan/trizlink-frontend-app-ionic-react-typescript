@@ -22,7 +22,7 @@ import {
 } from '@/components/ZIonComponents';
 
 // Recoil
-import { ZaionsRTCState } from 'ZaionsStore/Resources/ZaionsRTrustCenter.recoil';
+import { ZaionsRTCState } from '@/ZaionsStore/Resources/ZaionsRTrustCenter.recoil';
 
 // Global Constants
 import { BRACKPOINT_LG, PRODUCT_NAME } from '@/utils/constants';

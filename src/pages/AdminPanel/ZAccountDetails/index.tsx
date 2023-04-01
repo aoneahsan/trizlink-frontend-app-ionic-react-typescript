@@ -68,8 +68,8 @@ import { UserAccountEmailType } from '@/types/UserAccount/index.type';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { ZaionsUserAccountEmails } from 'ZaionsStore/UserAccount/index.recoil';
-import { useZIonToastDanger } from 'ZaionsHooks/zionic-hooks';
+import { ZaionsUserAccountEmails } from '@/ZaionsStore/UserAccount/index.recoil';
+import { useZIonToastDanger } from '@/ZaionsHooks/zionic-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
 
 /**

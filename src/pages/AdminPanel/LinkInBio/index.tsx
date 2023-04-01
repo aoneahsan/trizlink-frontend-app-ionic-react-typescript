@@ -49,15 +49,15 @@ import {
   useZInvalidateReactQueries,
   useZRQDeleteRequest,
   useZRQGetRequest,
-} from 'ZaionsHooks/zreactquery-hooks';
+} from '@/ZaionsHooks/zreactquery-hooks';
 import {
   useZIonAlert,
   useZIonErrorAlert,
   useZIonLoading,
   useZIonModal,
   useZIonPopover,
-} from 'ZaionsHooks/zionic-hooks';
-import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
+} from '@/ZaionsHooks/zionic-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import ZaionsIonPage from '@/components/ZaionsIonPage';
 import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
 import ZRCheckbox from '@/components/CustomComponents/ZRCheckbox';
@@ -72,11 +72,11 @@ import { folderState, FormMode } from '@/types/AdminPanel/index.type';
 import { LinkFolderType, TimeFilterEnum } from '@/types/AdminPanel/linksType';
 
 // Recoil States
-import { FolderFormState } from 'ZaionsStore/FormStates/folderFormState.recoil';
+import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
 import {
   LinkInBiosFieldsDataSelector,
   LinkInBiosFilterOptionsRState,
-} from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioState.recoil';
+} from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioState.recoil';
 
 // Global Contents
 import CONSTANTS from '@/utils/constants';

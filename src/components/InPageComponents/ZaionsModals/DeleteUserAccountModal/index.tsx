@@ -51,8 +51,8 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { ZaionsAuthToken } from 'ZaionsStore/UserAccount/index.recoil';
-import { useZIonLoading } from 'ZaionsHooks/zionic-hooks';
+import { ZaionsAuthToken } from '@/ZaionsStore/UserAccount/index.recoil';
+import { useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
 import { zAxiosApiRequest, zStringify } from '@/utils/helpers';

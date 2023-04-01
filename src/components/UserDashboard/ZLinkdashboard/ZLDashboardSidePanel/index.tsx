@@ -69,7 +69,7 @@ import {
   settingsOutline,
 } from 'ionicons/icons';
 import { useRecoilState } from 'recoil';
-import { ZDashboardRState } from 'ZaionsStore/UserDashboard/ZDashboard';
+import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 import { ZIonButton } from '@/components/ZIonComponents';
 
 /**

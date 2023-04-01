@@ -46,7 +46,7 @@ import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { NewShortLinkFormState } from 'ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
+import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { ZaionsBusinessDetails } from '@/utils/constants';
 
 /**

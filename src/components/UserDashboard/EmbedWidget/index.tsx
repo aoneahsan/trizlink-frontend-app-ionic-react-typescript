@@ -21,7 +21,7 @@ import {
 // Recoil States
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZaionsEmbedWidgetsModal from '@/components/InPageComponents/ZaionsModals/AddEmbedWidgets';
 
 // Types

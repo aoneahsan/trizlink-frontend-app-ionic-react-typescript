@@ -25,8 +25,8 @@ import {
 } from '@/components/ZIonComponents';
 
 // Recoil State
-import { ZaionsPressState } from 'ZaionsStore/CompanySection/Press/Press.recoil';
-import { ZaionsPressProductImagesState } from 'ZaionsStore/CompanySection/Press/ProductImages.recoil';
+import { ZaionsPressState } from '@/ZaionsStore/CompanySection/Press/Press.recoil';
+import { ZaionsPressProductImagesState } from '@/ZaionsStore/CompanySection/Press/ProductImages.recoil';
 
 // Types
 import { ZaionsPressType } from '@/types/Company/PressPage/Press.type';

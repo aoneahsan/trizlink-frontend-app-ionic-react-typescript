@@ -27,7 +27,7 @@ import { ZaionsCardWithIconType } from '@/types/ZaionsCardWithIcon.type';
 import { TrustAndSafetyResourcesData } from '@/data/resources/TrustCenter/TrustAndSafetyResources.data';
 
 // Recoil
-import { ZaionsRTCState } from 'ZaionsStore/Resources/ZaionsRTrustCenter.recoil';
+import { ZaionsRTCState } from '@/ZaionsStore/Resources/ZaionsRTrustCenter.recoil';
 
 // Global Contents
 

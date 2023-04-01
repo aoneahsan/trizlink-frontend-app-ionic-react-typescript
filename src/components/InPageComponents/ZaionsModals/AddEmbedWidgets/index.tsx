@@ -36,8 +36,8 @@ import MESSAGES from '@/utils/messages';
 // Images
 
 // Recoil States
-import { ZaionsAppSettingsRState } from 'ZaionsStore/zaionsAppSettings.recoil';
-import { EmbedWidgetsFormState } from 'ZaionsStore/FormStates/embedWidgetsFormState.recoil';
+import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
+import { EmbedWidgetsFormState } from '@/ZaionsStore/FormStates/embedWidgetsFormState.recoil';
 
 // Types
 import {
@@ -48,7 +48,7 @@ import { resetFormType } from '@/types/ZaionsFormik.type';
 import {
   useZRQCreateRequest,
   useZRQUpdateRequest,
-} from 'ZaionsHooks/zreactquery-hooks';
+} from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM, VALIDATION_RULE } from '@/utils/enums';
 import { reportCustomError } from '@/utils/customErrorType';
 import CONSTANTS from '@/utils/constants';

@@ -31,7 +31,7 @@ import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.
 import { formatReactSelectOption } from '@/utils/helpers';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
 import { folderState } from '@/types/AdminPanel/index.type';
 

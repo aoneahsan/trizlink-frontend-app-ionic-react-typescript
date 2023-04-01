@@ -9,7 +9,7 @@ import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-com
 // Custom Imports
 import { ZIonIcon, ZIonImg, ZIonText } from '@/components/ZIonComponents';
 import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/FileUploadModal';
-import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 
 // Types
 import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';

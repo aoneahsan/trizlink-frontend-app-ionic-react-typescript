@@ -8,7 +8,7 @@
 // import { VALIDATION_RULE } from '@/utils/enums';
 // import { validateFields } from '@/utils/helpers';
 // import MESSAGES from '@/utils/messages';
-// import { useZIonAlert, useZIonLoading } from 'ZaionsHooks/zionic-hooks';
+// import { useZIonAlert, useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
 
 // enum AUTH_MODE {
 // 	LOGIN,

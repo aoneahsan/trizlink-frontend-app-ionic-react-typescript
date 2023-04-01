@@ -21,9 +21,9 @@ import {
   ZIonRow,
   ZIonText,
 } from '@/components/ZIonComponents';
-import { useZMediaQueryScale } from 'ZaionsHooks/ZGenericHooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
-import { useZIonPopover } from 'ZaionsHooks/zionic-hooks';
+import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import { calendar } from 'ionicons/icons';
 
 /**

@@ -43,7 +43,7 @@ import { LinkInBioCardStyleEnum } from '@/types/AdminPanel/linkInBioType/blockTy
 import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
 import ZReactMediaPlayer from '../ZCustomAudio';
 import { useRecoilValue } from 'recoil';
-import { NewLinkInBioFormState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';
+import { NewLinkInBioFormState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';
 
 /**
  * Recoil State Imports go down

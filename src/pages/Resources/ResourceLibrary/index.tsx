@@ -23,7 +23,7 @@ import {
 } from '@/components/ZIonComponents';
 
 // Recoil
-import { ZaionsSPSocialMarketersState } from 'ZaionsStore/SolutionPages/SocialMarketers/ZaionsSPSocialMarketers.recoil';
+import { ZaionsSPSocialMarketersState } from '@/ZaionsStore/SolutionPages/SocialMarketers/ZaionsSPSocialMarketers.recoil';
 
 // Data
 import { RSBlogData } from '@/data/resources/blog/RSBlog.data';

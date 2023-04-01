@@ -25,8 +25,8 @@ import {
 } from '@/components/ZIonComponents';
 
 // Recoil States
-import { ZaionsSPSMKeyFeaturesState } from 'ZaionsStore/SolutionPages/SocialMedia/ZaionsSPSM.recoil';
-import { ZaionsSPSocialMarketersState } from 'ZaionsStore/SolutionPages/SocialMarketers/ZaionsSPSocialMarketers.recoil';
+import { ZaionsSPSMKeyFeaturesState } from '@/ZaionsStore/SolutionPages/SocialMedia/ZaionsSPSM.recoil';
+import { ZaionsSPSocialMarketersState } from '@/ZaionsStore/SolutionPages/SocialMarketers/ZaionsSPSocialMarketers.recoil';
 
 // Global Constants
 import { BRACKPOINT_LG, BRACKPOINT_MD, PRODUCT_NAME } from '@/utils/constants';

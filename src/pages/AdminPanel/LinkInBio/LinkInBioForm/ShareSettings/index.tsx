@@ -42,8 +42,8 @@ import ZaionsCustomYourLink from '@/components/UserDashboard/shortUrlCustomYourL
 import LinksPixelsAccount from '@/components/UserDashboard/LinksPixelsAccount';
 import UTMTagTemplates from '@/components/UserDashboard/UTMTagTemplates';
 import DomainName from '@/components/UserDashboard/DomainName';
-import { useZRQUpdateRequest } from 'ZaionsHooks/zreactquery-hooks';
-import { useZValidateRequestResponse } from 'ZaionsHooks/zapi-hooks';
+import { useZRQUpdateRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 import LinkInBioFoldersHOC from '@/components/UserDashboard/LinkInBioFoldersHOC';
 
 /**
@@ -59,7 +59,7 @@ import CONSTANTS, { BRACKPOINT_LG, BRACKPOINT_MD } from '@/utils/constants';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { NewLinkInBioFormState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';
+import { NewLinkInBioFormState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';
 
 /**
  * Type Imports go down

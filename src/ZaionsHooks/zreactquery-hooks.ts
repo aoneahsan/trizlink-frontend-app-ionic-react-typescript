@@ -5,7 +5,7 @@ import { zAxiosApiRequest, emptyVoidReturnFunction } from '@/utils/helpers';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 // Custom Imports
-import { useZIonErrorAlert, useZIonLoading } from 'ZaionsHooks/zionic-hooks';
+import { useZIonErrorAlert, useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
 
 // Global constants
 import { reportCustomError } from '@/utils/customErrorType';

@@ -15,7 +15,7 @@ import {
 
 // Recoil State
 import { useRecoilState } from 'recoil';
-import { ZaionsUsersFeedBackCarouselState } from 'ZaionsStore/InpageComponents/ZaionsUsersFeedBack.recoil';
+import { ZaionsUsersFeedBackCarouselState } from '@/ZaionsStore/InpageComponents/ZaionsUsersFeedBack.recoil';
 
 // Images
 import { quotes, starsQuoteWidget } from '@/assets/images';

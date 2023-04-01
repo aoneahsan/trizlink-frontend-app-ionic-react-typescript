@@ -20,7 +20,7 @@ import {
 import { ZaionsHPGlobalType } from '@/types/ZaionsHPGlobalType';
 
 // Recoil State
-import { ZaionsHPGlobalData } from 'ZaionsStore/ZaionsHPGlobalRecoil';
+import { ZaionsHPGlobalData } from '@/ZaionsStore/ZaionsHPGlobalRecoil';
 
 // Global Constant
 import { BRACKPOINT_LG, BRACKPOINT_MD } from '@/utils/constants';

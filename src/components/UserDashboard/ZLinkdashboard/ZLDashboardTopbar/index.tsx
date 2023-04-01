@@ -19,7 +19,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import {
   ZIonCol,
   ZIonText,
@@ -73,8 +73,8 @@ import { productSmLogo } from '@/assets/images';
 import {
   ZaionsAuthTokenData,
   ZaionsUserAccountRState,
-} from 'ZaionsStore/UserAccount/index.recoil';
-import { useZIonLoading, useZIonPopover } from 'ZaionsHooks/zionic-hooks';
+} from '@/ZaionsStore/UserAccount/index.recoil';
+import { useZIonLoading, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
 
 /**

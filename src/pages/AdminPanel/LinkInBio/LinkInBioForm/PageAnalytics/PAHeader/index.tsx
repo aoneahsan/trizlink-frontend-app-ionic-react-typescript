@@ -33,7 +33,7 @@ import {
   ZIonRow,
   ZIonText,
 } from '@/components/ZIonComponents';
-import { useZMediaQueryScale } from 'ZaionsHooks/ZGenericHooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down

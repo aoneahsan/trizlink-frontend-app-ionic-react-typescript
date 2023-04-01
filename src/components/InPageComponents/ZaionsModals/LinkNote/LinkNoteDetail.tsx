@@ -21,8 +21,8 @@ import {
 // Images
 
 // Recoil States
-import { ZaionsAppSettingsRState } from 'ZaionsStore/zaionsAppSettings.recoil';
-import { ShortLinkFormState } from 'ZaionsStore/FormStates/shortLinkFormState';
+import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
+import { ShortLinkFormState } from '@/ZaionsStore/FormStates/shortLinkFormState';
 import { ZIonButton } from '@/components/ZIonComponents';
 
 // Types

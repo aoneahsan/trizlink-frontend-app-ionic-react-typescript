@@ -18,7 +18,7 @@ import {
 
 // Recoil States
 import { ZIonButton } from '@/components/ZIonComponents';
-import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZaionsAddPixelAccount from '@/components/InPageComponents/ZaionsModals/AddPixelsAccount';
 
 // Types

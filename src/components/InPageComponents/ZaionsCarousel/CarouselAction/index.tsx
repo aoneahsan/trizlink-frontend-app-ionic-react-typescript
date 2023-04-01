@@ -9,7 +9,7 @@ import classNames from 'classnames';
 
 // Recoil State
 import { useRecoilState } from 'recoil';
-import { ZaionsUsersFeedBackCarouselState } from 'ZaionsStore/InpageComponents/ZaionsUsersFeedBack.recoil';
+import { ZaionsUsersFeedBackCarouselState } from '@/ZaionsStore/InpageComponents/ZaionsUsersFeedBack.recoil';
 
 // Global Content
 import { showZCapErrorDialogAlert } from '@/utils/helpers';

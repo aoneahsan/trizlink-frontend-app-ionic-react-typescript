@@ -21,7 +21,7 @@ import {
 import { ZaionsHPFAQType } from '@/types/ZionsHPFAQType';
 
 // Recoil State
-import { ZaionsHPFAQData } from 'ZaionsStore/ZaionsHPFAQRecoil';
+import { ZaionsHPFAQData } from '@/ZaionsStore/ZaionsHPFAQRecoil';
 
 // Global Constant
 import { BRACKPOINT_MD } from '@/utils/constants';

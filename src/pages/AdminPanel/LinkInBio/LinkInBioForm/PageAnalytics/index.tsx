@@ -18,7 +18,7 @@ import { ZIonContent, ZIonGrid } from '@/components/ZIonComponents';
 import PageAnalyticsHeader from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics/PAHeader';
 import PageAnalyticsTimeFilter from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics/PATimeFilter';
 
-import { useZMediaQueryScale } from 'ZaionsHooks/ZGenericHooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import PageAnalyticsStateBlock from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics/PAStateBlock';
 import PageAnalyticsInfoBlocks from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics/PAInfoBlocks';
 

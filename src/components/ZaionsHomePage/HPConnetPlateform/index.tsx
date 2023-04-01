@@ -26,7 +26,7 @@ import {
 import { BRACKPOINT_MD, BRACKPOINT_SM, PRODUCT_NAME } from '@/utils/constants';
 
 // Recoil
-import { ZaionsHpCPData } from 'ZaionsStore/ZaionsHPBCP.recoil';
+import { ZaionsHpCPData } from '@/ZaionsStore/ZaionsHPBCP.recoil';
 
 // Type
 import { ZaionsHpCPDataType } from '@/types/ZaionsHPBCPType';

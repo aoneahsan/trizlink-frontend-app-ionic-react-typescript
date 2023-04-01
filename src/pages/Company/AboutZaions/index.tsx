@@ -30,8 +30,8 @@ import { ZaionsTeamType } from '@/types/Company/AboutZaionsPage/OurTeam.type';
 import { ZaionsOurCoreValuesType } from '@/types/Company/AboutZaionsPage/OurCoreValues.types';
 
 // Recoil State
-import { ZaionsOurTeamState } from 'ZaionsStore/CompanySection/AboutZaions/OurTeam.recoil';
-import { ZaionsOurCoreValuesState } from 'ZaionsStore/CompanySection/AboutZaions/OurCoreValue.recoil';
+import { ZaionsOurTeamState } from '@/ZaionsStore/CompanySection/AboutZaions/OurTeam.recoil';
+import { ZaionsOurCoreValuesState } from '@/ZaionsStore/CompanySection/AboutZaions/OurCoreValue.recoil';
 
 // Images
 import { ChaunceyExcitingImage } from '@/assets/images';

@@ -29,8 +29,8 @@ import { BRACKPOINT_LG, BRACKPOINT_MD, PRODUCT_NAME } from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Recoil State
-import { ZaionsSPSocialMarketersState } from 'ZaionsStore/SolutionPages/SocialMarketers/ZaionsSPSocialMarketers.recoil';
-import { ZaionsSPSMKeyFeaturesState } from 'ZaionsStore/SolutionPages/SocialMedia/ZaionsSPSM.recoil';
+import { ZaionsSPSocialMarketersState } from '@/ZaionsStore/SolutionPages/SocialMarketers/ZaionsSPSocialMarketers.recoil';
+import { ZaionsSPSMKeyFeaturesState } from '@/ZaionsStore/SolutionPages/SocialMedia/ZaionsSPSM.recoil';
 
 // types
 import { ZaionsKeyFeatureType } from '@/types/InPageComponentTypes/ZaionsKeyFeature.type';

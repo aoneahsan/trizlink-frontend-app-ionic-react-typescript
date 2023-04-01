@@ -37,7 +37,7 @@ import {
 import { ZaionsHPBrandsType } from '@/types/ZionsHPBrandType';
 
 // Recoil States
-import { ZaionsHPBrandsData } from 'ZaionsStore/ZaionsHPBrandsRecoil';
+import { ZaionsHPBrandsData } from '@/ZaionsStore/ZaionsHPBrandsRecoil';
 
 // Styles
 import classes from './styles.module.css';

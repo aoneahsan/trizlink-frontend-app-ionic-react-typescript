@@ -72,18 +72,18 @@ import {
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { ZaionsCountryCodeRState } from 'ZaionsStore/zaionsAppSettings.recoil';
+import { ZaionsCountryCodeRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
 import {
   ZaionsUserAccountEmails,
   ZaionsUserAccountRState,
-} from 'ZaionsStore/UserAccount/index.recoil';
+} from '@/ZaionsStore/UserAccount/index.recoil';
 
 /**
  * Style files Imports go down
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
-import { useZIonAlert, useZIonModal } from 'ZaionsHooks/zionic-hooks';
+import { useZIonAlert, useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZIonSelect from '@/components/ZIonComponents/ZIonSelect';
 

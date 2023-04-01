@@ -42,7 +42,7 @@ import CONSTANTS from '@/utils/constants';
 // Images
 
 // Recoil States
-import { PixelAccountFormState } from 'ZaionsStore/FormStates/pixelAccountFormState.recoil';
+import { PixelAccountFormState } from '@/ZaionsStore/FormStates/pixelAccountFormState.recoil';
 
 // Types
 import { PixelAccountType } from '@/types/AdminPanel/linksType';
@@ -51,12 +51,12 @@ import {
   useZIonAlert,
   useZIonErrorAlert,
   useZIonModal,
-} from 'ZaionsHooks/zionic-hooks';
+} from '@/ZaionsHooks/zionic-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
 import {
   useZRQDeleteRequest,
   useZRQGetRequest,
-} from 'ZaionsHooks/zreactquery-hooks';
+} from '@/ZaionsHooks/zreactquery-hooks';
 import { reportCustomError } from '@/utils/customErrorType';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZIonSelect from '@/components/ZIonComponents/ZIonSelect';

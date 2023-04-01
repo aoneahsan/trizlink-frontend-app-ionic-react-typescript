@@ -15,7 +15,7 @@ import { useRecoilState } from 'recoil';
  * ? Like import of custom components is a custom import
  * */
 import NewLinkFolder from '../NewLinkFolder';
-import { useZRQGetRequest } from 'ZaionsHooks/zreactquery-hooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -36,7 +36,7 @@ import { folderState } from '@/types/AdminPanel/index.type';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { LinkInBioFolderRState } from 'ZaionsStore/UserDashboard/LinkInBio/linkInBioFoldersState.recoil';
+import { LinkInBioFolderRState } from '@/ZaionsStore/UserDashboard/LinkInBio/linkInBioFoldersState.recoil';
 
 /**
  * Style files Imports go down

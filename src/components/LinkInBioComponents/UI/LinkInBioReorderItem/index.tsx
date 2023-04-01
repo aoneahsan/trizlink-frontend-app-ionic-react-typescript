@@ -37,9 +37,9 @@ import ZCountdown from '@/components/CustomComponents/ZCountDown';
 import ZVideoBlock from '@/components/LinkInBioComponents/UI/VideoBlock';
 import ZAudioBlock from '@/components/LinkInBioComponents/UI/AudioBlock';
 
-import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
-import { useZRQDeleteRequest } from 'ZaionsHooks/zreactquery-hooks';
-import { useZValidateRequestResponse } from 'ZaionsHooks/zapi-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import { useZRQDeleteRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 
 /**
  * Global Constants Imports go down
@@ -76,7 +76,7 @@ import {
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { LinkInBioBlocksRState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
+import { LinkInBioBlocksRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
 import ZCarouselBlock from '../ZCarouselBlock';
 import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
 import ZLinkInBioMusicBlock from '../MusicBlock';
@@ -87,7 +87,7 @@ import ZLinkInBioQAndABlock from '../QAndABlock';
 import ZLinkInBioVCardBlock from '../VCardBlock';
 import ZLinkInBioFormBlock from '../FromBlock';
 import ZLinkInBioMapBlock from '../MapBlock';
-import { NewLinkInBioFormState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';
+import { NewLinkInBioFormState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';
 import classNames from 'classnames';
 
 /**

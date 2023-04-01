@@ -20,7 +20,7 @@ import { LOCALSTORAGE_KEYS } from '@/utils/constants';
 import {
   ZaionsAuthTokenData,
   ZaionsUserAccountRState,
-} from 'ZaionsStore/UserAccount/index.recoil';
+} from '@/ZaionsStore/UserAccount/index.recoil';
 
 /* Theme variables */
 import './theme/variables.css';

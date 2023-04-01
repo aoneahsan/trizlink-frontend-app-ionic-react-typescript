@@ -20,7 +20,7 @@ import {
 import { ZaionsHPBrandsType } from '@/types/ZionsHPBrandType';
 
 // Recoil
-import { ZaionsHPBrandsData } from 'ZaionsStore/ZaionsHPBrandsRecoil';
+import { ZaionsHPBrandsData } from '@/ZaionsStore/ZaionsHPBrandsRecoil';
 
 // Global Constant
 import { BRACKPOINT_MD } from '@/utils/constants';

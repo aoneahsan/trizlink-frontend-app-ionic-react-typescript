@@ -25,8 +25,8 @@ import {
 } from '@/components/ZIonComponents';
 
 // Recoil States
-import { ZaionsSPSocialMarketersState } from 'ZaionsStore/SolutionPages/SocialMarketers/ZaionsSPSocialMarketers.recoil';
-import { ZaionsSPSMKeyFeaturesState } from 'ZaionsStore/SolutionPages/SocialMedia/ZaionsSPSM.recoil';
+import { ZaionsSPSocialMarketersState } from '@/ZaionsStore/SolutionPages/SocialMarketers/ZaionsSPSocialMarketers.recoil';
+import { ZaionsSPSMKeyFeaturesState } from '@/ZaionsStore/SolutionPages/SocialMedia/ZaionsSPSM.recoil';
 
 // Types
 import { ZaionsKeyFeatureType } from '@/types/InPageComponentTypes/ZaionsKeyFeature.type';

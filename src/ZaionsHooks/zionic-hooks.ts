@@ -1,4 +1,4 @@
-import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import {
   useIonAlert,
   useIonLoading,

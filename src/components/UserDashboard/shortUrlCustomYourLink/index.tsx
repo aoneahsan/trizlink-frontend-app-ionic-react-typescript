@@ -46,7 +46,7 @@ import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/li
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { ZaionsAppSettingsRState } from 'ZaionsStore/zaionsAppSettings.recoil';
+import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
 
 /**
  * Style files Imports go down
@@ -59,7 +59,7 @@ import classes from './styles.module.css';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { uploadImageBg, upload_send } from '@/assets/images';
-import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/FileUploadModal';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';

@@ -32,7 +32,7 @@ import {
   ZIonCheckbox,
   ZIonTitle,
 } from '@/components/ZIonComponents';
-import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
 
 // Global Constants
@@ -42,12 +42,12 @@ import { API_URL_ENUM } from '@/utils/enums';
 import {
   useZRQDeleteRequest,
   useZRQGetRequest,
-} from 'ZaionsHooks/zreactquery-hooks';
+} from '@/ZaionsHooks/zreactquery-hooks';
 import {
   useZIonAlert,
   useZIonErrorAlert,
   useZIonLoading,
-} from 'ZaionsHooks/zionic-hooks';
+} from '@/ZaionsHooks/zionic-hooks';
 
 // Types
 
@@ -57,7 +57,7 @@ import {
   FilteredLinkInBioLinksData,
   LinkInBiosFilterOptionsRState,
   LinkInBiosRState,
-} from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioState.recoil';
+} from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioState.recoil';
 import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 import CONSTANTS from '@/utils/constants';
 // import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';

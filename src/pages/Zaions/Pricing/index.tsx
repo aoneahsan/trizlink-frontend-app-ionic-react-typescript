@@ -27,8 +27,8 @@ import {
 } from '@/components/ZIonComponents';
 
 // Recoil State
-import { ZaionsPricingSubscriptionsState } from 'ZaionsStore/PricingPage/PricingSubscriptionsData';
-import { ZaionsPricingFeatureDetailState } from 'ZaionsStore/PricingPage/ZaionsPricingFeatureDetail.recoil';
+import { ZaionsPricingSubscriptionsState } from '@/ZaionsStore/PricingPage/PricingSubscriptionsData';
+import { ZaionsPricingFeatureDetailState } from '@/ZaionsStore/PricingPage/ZaionsPricingFeatureDetail.recoil';
 
 // Global Imports
 import { BRACKPOINT_MD } from '@/utils/constants';

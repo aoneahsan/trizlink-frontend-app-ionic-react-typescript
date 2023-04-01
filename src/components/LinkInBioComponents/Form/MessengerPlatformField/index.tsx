@@ -22,7 +22,7 @@ import {
 import LinkInBioLinkField from '../LinkField';
 import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedButton';
 
-import { useZRQGetRequest } from 'ZaionsHooks/zreactquery-hooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
 // Global constant
 import { API_URL_ENUM } from '@/utils/enums';
@@ -39,7 +39,7 @@ import {
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 // Recoil states
-import { LinkInBioPredefinedMessengerPlatformRState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
+import { LinkInBioPredefinedMessengerPlatformRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
 import LinkInBioIconField from '../IconField';
 import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
 import LinkInBioEmailField from '../EmailField';

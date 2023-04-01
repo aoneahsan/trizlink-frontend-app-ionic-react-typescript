@@ -42,7 +42,7 @@ import CONSTANTS, { ZAIONS_MODALS_IDS } from '@/utils/constants';
 // Images
 
 // Recoil States
-import { UTMTagsTemplateFormState } from 'ZaionsStore/FormStates/addUTMTagsFormState.recoil';
+import { UTMTagsTemplateFormState } from '@/ZaionsStore/FormStates/addUTMTagsFormState.recoil';
 
 // Types
 import { UTMTagTemplateType } from '@/types/AdminPanel/linksType';
@@ -51,11 +51,11 @@ import {
   useZIonAlert,
   useZIonErrorAlert,
   useZIonModal,
-} from 'ZaionsHooks/zionic-hooks';
+} from '@/ZaionsHooks/zionic-hooks';
 import {
   useZRQDeleteRequest,
   useZRQGetRequest,
-} from 'ZaionsHooks/zreactquery-hooks';
+} from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
 import { ZIonButton } from '@/components/ZIonComponents';
 import { showSuccessNotification } from '@/utils/notification';

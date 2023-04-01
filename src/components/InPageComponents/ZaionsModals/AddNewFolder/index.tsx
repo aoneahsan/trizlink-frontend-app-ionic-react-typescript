@@ -32,16 +32,16 @@ import MESSAGES from '@/utils/messages';
 // Images
 
 // Recoil States
-import { ZaionsAppSettingsRState } from 'ZaionsStore/zaionsAppSettings.recoil';
+import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
 
 // Types
 import { folderState, FormMode } from '@/types/AdminPanel/index.type';
-import { FolderFormState } from 'ZaionsStore/FormStates/folderFormState.recoil';
+import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
 import { FormikSetErrorsType, resetFormType } from '@/types/ZaionsFormik.type';
 import {
   useZRQCreateRequest,
   useZRQUpdateRequest,
-} from 'ZaionsHooks/zreactquery-hooks';
+} from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
 import { ZIonButton } from '@/components/ZIonComponents';
 import { showSuccessNotification } from '@/utils/notification';

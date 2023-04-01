@@ -43,8 +43,8 @@ import {
   ZIonContent,
   ZIonFooter,
 } from '@/components/ZIonComponents';
-import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
-import { useZIonLoading } from 'ZaionsHooks/zionic-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import { useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZaionsShortUrlOptionFields from '@/components/UserDashboard/shortLinkFormComponents/shortUrlLinkOptionFields';
 import ZaionsCustomYourLink from '@/components/UserDashboard/shortUrlCustomYourLink';
@@ -56,7 +56,7 @@ import {
   useZRQCreateRequest,
   useZRQGetRequest,
   useZRQUpdateRequest,
-} from 'ZaionsHooks/zreactquery-hooks';
+} from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -80,7 +80,7 @@ import {
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { NewShortLinkFormState } from 'ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
+import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 
 /**
  * Type Imports go down

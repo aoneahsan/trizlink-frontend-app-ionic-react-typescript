@@ -52,7 +52,7 @@ import {
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { LinkInBioFontFamilyRState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioFontFamilyState';
+import { LinkInBioFontFamilyRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioFontFamilyState';
 
 /**
  * Style files Imports go down
@@ -64,11 +64,11 @@ import { LinkInBioFontFamilyRState } from 'ZaionsStore/UserDashboard/LinkInBio/L
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import classes from '../styles.module.css';
-import { useZRQGetRequest } from 'ZaionsHooks/zreactquery-hooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
-import { LinkInBioPredefinedThemeRState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioPreDefinedThemesState.recoil';
+import { LinkInBioPredefinedThemeRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioPreDefinedThemesState.recoil';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import {
   formatReactSelectOption,

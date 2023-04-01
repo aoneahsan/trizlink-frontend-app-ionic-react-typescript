@@ -36,7 +36,7 @@ import { BRACKPOINT_MD, BRACKPOINT_XL, PRODUCT_NAME } from '@/utils/constants';
 import { ZaionsInpageColType } from '@/types/InPageComponentTypes/ZaionsInpageCol.type';
 
 // Recoil State
-import { ZaionsInpageColState } from 'ZaionsStore/InpageComponents/ZaionsInpageCol.recoil';
+import { ZaionsInpageColState } from '@/ZaionsStore/InpageComponents/ZaionsInpageCol.recoil';
 
 // Data
 import { ZaionsPartnerProgramData } from '@/data/Company/Partners/PartnerProgram.data';

@@ -14,7 +14,7 @@ import React from 'react';
  * ? Like import of custom components is a custom import
  * */
 import { ZIonCol, ZIonRow, ZIonText } from '@/components/ZIonComponents';
-import { useZMediaQueryScale } from 'ZaionsHooks/ZGenericHooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import classNames from 'classnames';
 
 /**

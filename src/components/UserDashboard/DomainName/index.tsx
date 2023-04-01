@@ -22,7 +22,7 @@ import {
 // Images
 
 // Recoil States
-import { DefaultDomainsState } from 'ZaionsStore/UserDashboard/CustomDomainState';
+import { DefaultDomainsState } from '@/ZaionsStore/UserDashboard/CustomDomainState';
 
 // Types
 import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';

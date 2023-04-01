@@ -19,10 +19,10 @@ import {
 // Images
 
 // Recoil States
-import { APIKeyState } from 'ZaionsStore/UserDashboard/APIKey';
+import { APIKeyState } from '@/ZaionsStore/UserDashboard/APIKey';
 import { ZIonButton } from '@/components/ZIonComponents';
 import { PRODUCT_NAME } from '@/utils/constants';
-import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZaionsAddAPIKeyModal from '@/components/InPageComponents/ZaionsModals/AddAPIKey';
 
 // Types

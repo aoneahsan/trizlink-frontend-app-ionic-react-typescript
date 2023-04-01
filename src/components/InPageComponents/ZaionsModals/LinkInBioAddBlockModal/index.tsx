@@ -20,7 +20,7 @@ import {
   ZIonText,
 } from '@/components/ZIonComponents';
 
-import { useZRQCreateRequest } from 'ZaionsHooks/zreactquery-hooks';
+import { useZRQCreateRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -55,7 +55,7 @@ import {
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { LinkInBioBlocksRState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
+import { LinkInBioBlocksRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
 import { useSetRecoilState } from 'recoil';
 import { closeOutline, toggleOutline } from 'ionicons/icons';
 import { LinkInBioBlocksDefaultData } from '@/data/UserDashboard/LinkInBio/Blocks/index.data';

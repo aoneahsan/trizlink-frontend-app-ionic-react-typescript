@@ -16,7 +16,7 @@ import { trashBin } from 'ionicons/icons';
  * ? Like import of custom components is a custom import
  * */
 import { ZIonButton, ZIonIcon, ZIonText } from '@/components/ZIonComponents';
-import { useZIonActionSheet } from 'ZaionsHooks/zionic-hooks';
+import { useZIonActionSheet } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down

@@ -34,7 +34,7 @@ import { formatReactSelectOption } from '@/utils/helpers';
 
 // Types
 import { ZIonButton } from '@/components/ZIonComponents';
-import { useZRQGetRequest } from 'ZaionsHooks/zreactquery-hooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import {
@@ -46,7 +46,7 @@ import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZaionsAddUtmTags from '@/components/InPageComponents/ZaionsModals/AddUtmTags';
 
 // Styles

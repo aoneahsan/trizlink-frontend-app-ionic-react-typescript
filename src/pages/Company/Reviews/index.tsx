@@ -37,7 +37,7 @@ import { PlaceholderAvatar } from '@/assets/images';
 import { ZaionsReviewType } from '@/types/Company/ReviewsPage/Review.type';
 
 // Recoil States
-import { ZaionsReviewState } from 'ZaionsStore/CompanySection/Reviews/review.recoil';
+import { ZaionsReviewState } from '@/ZaionsStore/CompanySection/Reviews/review.recoil';
 
 // Styles
 import classes from './styles.module.css';

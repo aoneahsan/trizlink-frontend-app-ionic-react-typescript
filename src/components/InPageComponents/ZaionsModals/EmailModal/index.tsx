@@ -47,7 +47,7 @@ import { getRandomKey } from '@/utils/helpers';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { ZaionsUserAccountEmails } from 'ZaionsStore/UserAccount/index.recoil';
+import { ZaionsUserAccountEmails } from '@/ZaionsStore/UserAccount/index.recoil';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
 

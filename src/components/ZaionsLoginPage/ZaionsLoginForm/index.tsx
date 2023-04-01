@@ -37,12 +37,12 @@ import { ZCustomError } from '@/utils/customErrorType';
 import {
   ZaionsAuthTokenData,
   ZaionsUserAccountRState,
-} from 'ZaionsStore/UserAccount/index.recoil';
+} from '@/ZaionsStore/UserAccount/index.recoil';
 import { useSetRecoilState } from 'recoil';
 import MESSAGES from '@/utils/messages';
 import { showSuccessNotification } from '@/utils/notification';
-import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
-import { useZIonErrorAlert, useZIonLoading } from 'ZaionsHooks/zionic-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import { useZIonErrorAlert, useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
 import { UserAuthData } from '@/types/ZaionsApis.type';
 import { ZIonButton } from '@/components/ZIonComponents';
 import { FormikSetErrorsType, resetFormType } from '@/types/ZaionsFormik.type';

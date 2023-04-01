@@ -42,9 +42,9 @@ import LinkInBioPageAnalytics from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/P
 import {
   useZRQGetRequest,
   useZRQUpdateRequest,
-} from 'ZaionsHooks/zreactquery-hooks';
-import { useZValidateRequestResponse } from 'ZaionsHooks/zapi-hooks';
-import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
+} from '@/ZaionsHooks/zreactquery-hooks';
+import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 /**
  * Global Constants Imports go down
@@ -87,7 +87,7 @@ import { FormMode } from '@/types/AdminPanel/index.type';
 import {
   LinkInBioFromPageRState,
   NewLinkInBioFormState,
-} from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';
+} from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';
 
 /**
  * Style files Imports go down

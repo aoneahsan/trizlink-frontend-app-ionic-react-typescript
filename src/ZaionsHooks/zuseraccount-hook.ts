@@ -3,7 +3,7 @@ import { zConsoleError } from '@/utils/helpers';
 import {
   ZaionsAuthToken,
   ZaionsUserAccountEmail,
-} from 'ZaionsStore/UserAccount/index.recoil';
+} from '@/ZaionsStore/UserAccount/index.recoil';
 
 export const useZIsAuthenticated = () => {
   try {

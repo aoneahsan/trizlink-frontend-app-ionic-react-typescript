@@ -33,7 +33,7 @@ import {
   ZIonCheckbox,
   ZIonTitle,
 } from '@/components/ZIonComponents';
-import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
 
 // Global Constants
@@ -44,25 +44,25 @@ import { API_URL_ENUM } from '@/utils/enums';
 import {
   useZRQDeleteRequest,
   useZRQGetRequest,
-} from 'ZaionsHooks/zreactquery-hooks';
+} from '@/ZaionsHooks/zreactquery-hooks';
 import {
   useZIonAlert,
   useZIonErrorAlert,
   useZIonLoading,
   useZIonModal,
-} from 'ZaionsHooks/zionic-hooks';
+} from '@/ZaionsHooks/zionic-hooks';
 
 // Types
 import { LinkTargetType, ShortLinkType } from '@/types/AdminPanel/linksType';
 
 // Recoil State
-import { ShortLinkFormState } from 'ZaionsStore/FormStates/shortLinkFormState';
+import { ShortLinkFormState } from '@/ZaionsStore/FormStates/shortLinkFormState';
 import { useParams } from 'react-router';
 import {
   FilteredShortLinkData,
   ShortLinksFilterOptionsRState,
   ShortLinksRState,
-} from 'ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
+} from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
 import { reportCustomError } from '@/utils/customErrorType';
 import ZaionsPixelAccountDetail from '../ZaionsModals/PixelAccount/pixelAccountDetailModal';
 

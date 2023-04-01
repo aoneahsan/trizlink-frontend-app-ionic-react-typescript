@@ -23,7 +23,7 @@ import { BRACKPOINT_MD } from '@/utils/constants';
 import { ZaionsHPBrandsType } from '@/types/ZionsHPBrandType';
 
 // Recoil
-import { ZaionsHPBrandsData } from 'ZaionsStore/ZaionsHPBrandsRecoil';
+import { ZaionsHPBrandsData } from '@/ZaionsStore/ZaionsHPBrandsRecoil';
 
 // Data
 import HPBrandData from '@/data/HPBrandListData';

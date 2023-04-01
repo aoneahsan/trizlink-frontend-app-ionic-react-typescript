@@ -28,7 +28,7 @@ import {
 import { Zaions4By4GridSysType } from '@/types/InPageComponentTypes/Zaions4By4GridSys.type';
 
 // Recoil
-import { ZaionsSPSocialMarketersState } from 'ZaionsStore/SolutionPages/SocialMarketers/ZaionsSPSocialMarketers.recoil';
+import { ZaionsSPSocialMarketersState } from '@/ZaionsStore/SolutionPages/SocialMarketers/ZaionsSPSocialMarketers.recoil';
 
 // Data
 import { RSBlogData } from '@/data/resources/blog/RSBlog.data';

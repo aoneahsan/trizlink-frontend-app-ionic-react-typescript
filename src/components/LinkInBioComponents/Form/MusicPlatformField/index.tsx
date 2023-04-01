@@ -22,7 +22,7 @@ import {
 import LinkInBioLinkField from '../LinkField';
 import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedButton';
 
-import { useZRQGetRequest } from 'ZaionsHooks/zreactquery-hooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
 // Global constant
 import { API_URL_ENUM } from '@/utils/enums';
@@ -40,7 +40,7 @@ import {
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 // Recoil states
-import { LinkInBioPredefinedMusicPlatformRState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
+import { LinkInBioPredefinedMusicPlatformRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
 import LinkInBioIconField from '../IconField';
 import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';

@@ -3,7 +3,7 @@ import {
   useZIonToastDanger,
   useZIonSuccessAlert,
   useZIonErrorAlert,
-} from 'ZaionsHooks/zionic-hooks';
+} from '@/ZaionsHooks/zionic-hooks';
 import { notificationTypeEnum } from '@/utils/enums';
 import { reportCustomError } from '@/utils/customErrorType';
 import {

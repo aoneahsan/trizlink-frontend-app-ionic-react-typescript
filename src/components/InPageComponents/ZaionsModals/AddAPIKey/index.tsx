@@ -29,14 +29,14 @@ import MESSAGES from '@/utils/messages';
 // Images
 
 // Recoil States
-import { ZaionsAppSettingsRState } from 'ZaionsStore/zaionsAppSettings.recoil';
-import { APIKeyFormState } from 'ZaionsStore/FormStates/apiKeyState.recoil';
-import { APIKeyState } from 'ZaionsStore/UserDashboard/APIKey';
+import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
+import { APIKeyFormState } from '@/ZaionsStore/FormStates/apiKeyState.recoil';
+import { APIKeyState } from '@/ZaionsStore/UserDashboard/APIKey';
 
 // Types
 import { FormMode } from '@/types/AdminPanel/index.type';
 import { resetFormType } from '@/types/ZaionsFormik.type';
-import { useZIonLoading } from 'ZaionsHooks/zionic-hooks';
+import { useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 

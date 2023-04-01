@@ -43,14 +43,14 @@ import CONSTANTS from '@/utils/constants';
 
 // Recoil States
 import { FormMode } from '@/types/AdminPanel/index.type';
-import { APIKeyState } from 'ZaionsStore/UserDashboard/APIKey';
-import { APIKeyFormState } from 'ZaionsStore/FormStates/apiKeyState.recoil';
+import { APIKeyState } from '@/ZaionsStore/UserDashboard/APIKey';
+import { APIKeyFormState } from '@/ZaionsStore/FormStates/apiKeyState.recoil';
 import {
   useZIonAlert,
   useZIonErrorAlert,
   useZIonLoading,
   useZIonModal,
-} from 'ZaionsHooks/zionic-hooks';
+} from '@/ZaionsHooks/zionic-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZIonSelect from '@/components/ZIonComponents/ZIonSelect';
 import ZaionsAddAPIKeyModal from '../ZaionsModals/AddAPIKey';

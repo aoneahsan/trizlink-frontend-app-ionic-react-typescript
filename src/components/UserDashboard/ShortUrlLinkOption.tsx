@@ -21,11 +21,11 @@ import {
 
 // Recoil States
 import classes from './styles.module.css';
-import { ZaionsShortUrlLinkOptionData } from 'ZaionsStore/UserDashboard/ShortLinks/ShortUrlLinkOption.recoil';
+import { ZaionsShortUrlLinkOptionData } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortUrlLinkOption.recoil';
 import {
   NewShortLinkFormState,
   NewShortLinkSelectTypeOption,
-} from 'ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
+} from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 
 // Types
 import {

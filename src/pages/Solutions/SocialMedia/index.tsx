@@ -16,7 +16,7 @@ import {
 } from '@/components/ZIonComponents';
 
 // Recoil State
-import { ZaionsSPSMKeyFeaturesState } from 'ZaionsStore/SolutionPages/SocialMedia/ZaionsSPSM.recoil';
+import { ZaionsSPSMKeyFeaturesState } from '@/ZaionsStore/SolutionPages/SocialMedia/ZaionsSPSM.recoil';
 
 // Types
 import { ZaionsKeyFeatureType } from '@/types/InPageComponentTypes/ZaionsKeyFeature.type';

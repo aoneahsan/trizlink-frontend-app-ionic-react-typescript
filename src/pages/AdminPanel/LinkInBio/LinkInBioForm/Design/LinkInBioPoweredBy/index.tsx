@@ -52,10 +52,10 @@ import {
 import classes from '../styles.module.css';
 import { closeOutline, heartOutline, toggleOutline } from 'ionicons/icons';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
-import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import { PRODUCT_NAME } from '@/utils/constants';
 // import { useRecoilValue } from 'recoil';
-// import { ZaionsAppSettingsRState } from 'ZaionsStore/zaionsAppSettings.recoil';
+// import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
 
 /**
  * Component props type go down
