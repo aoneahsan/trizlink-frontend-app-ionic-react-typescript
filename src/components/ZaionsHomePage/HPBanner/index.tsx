@@ -1,8 +1,8 @@
 // Core Imports
 
 // Packages Imports
-import { HomePageHeroDistopImage } from 'assets/images';
-import { ZIonButton } from 'components/ZIonComponents';
+import { HomePageHeroDistopImage } from '@/assets/images';
+import { ZIonButton } from '@/components/ZIonComponents';
 import { useMediaQuery } from 'react-responsive';
 
 // Custom Imports
@@ -13,11 +13,11 @@ import {
   ZIonRow,
   ZIonGrid,
   ZIonImg,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import { BRACKPOINT_LG, BRACKPOINT_MD, BRACKPOINT_SM } from 'utils/constants';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { BRACKPOINT_LG, BRACKPOINT_MD, BRACKPOINT_SM } from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Style
 import classes from './styles.module.css';

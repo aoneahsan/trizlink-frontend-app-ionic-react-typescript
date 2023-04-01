@@ -1,5 +1,5 @@
-import { ZaionsJobsType } from 'types/Company/CareersPage/AvalableJobs.type';
-import CONSTANTS from 'utils/constants';
+import { ZaionsJobsType } from '@/types/Company/CareersPage/AvalableJobs.type';
+import CONSTANTS from '@/utils/constants';
 
 export const ZaionsJobsData: ZaionsJobsType[] = [
   {

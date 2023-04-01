@@ -78,13 +78,13 @@ import {
   textIcon,
   calenderIcon,
   linkIcon,
-} from 'assets/images';
-import { messengerPlatformsBlockEnum } from 'types/AdminPanel/index.type';
+} from '@/assets/images';
+import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
 import {
   LinkInBioFormFieldsEnum,
   LinkInBioMusicPlatformEnum,
   LinkInBioSocialPlatformEnum,
-} from 'types/AdminPanel/linkInBioType/blockTypes';
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 export const ZIcons: {
   buttonBlock: string;

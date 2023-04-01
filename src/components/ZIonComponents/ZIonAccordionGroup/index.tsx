@@ -1,7 +1,7 @@
 // Core Import
 import { IonAccordionGroup } from '@ionic/react';
 import React, { ReactNode } from 'react';
-import { ZIonModeType } from 'types/zaionsAppSettings.type';
+import { ZIonModeType } from '@/types/zaionsAppSettings.type';
 
 // Packages Import
 

@@ -61,4 +61,4 @@ export { default as ZIonRange } from './ZIonRange';
 // 	ZIonItem,
 // 	ZIonInput,
 // 	ZIonFooter,
-// } from 'components/ZIonComponents';
+// } from '@/components/ZIonComponents';

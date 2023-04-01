@@ -31,8 +31,8 @@ import { Formik } from 'formik';
 import dayjs from 'dayjs';
 
 // Custom Imports
-import ZaionsCreateShortLinkUrlInput from 'components/InPageComponents/ZaionsCreateShortLinkUrlInput';
-import ZaionsShortLinkTable from 'components/InPageComponents/ZaionsTable/ShortLinkListTable';
+import ZaionsCreateShortLinkUrlInput from '@/components/InPageComponents/ZaionsCreateShortLinkUrlInput';
+import ZaionsShortLinkTable from '@/components/InPageComponents/ZaionsTable/ShortLinkListTable';
 import {
   ZIonCol,
   ZIonText,
@@ -48,29 +48,29 @@ import {
   ZIonMenuToggle,
   ZIonDatetimeButton,
   ZIonButton,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
-import ZRCheckbox from 'components/CustomComponents/ZRCheckbox';
-import ZaionsAddNewFolder from 'components/InPageComponents/ZaionsModals/AddNewFolder';
-import ZIonRefresher from 'components/ZIonComponents/ZIonRefresher';
-import ZIonRefresherContent from 'components/ZIonComponents/ZIonRefresherContent';
-import ZRScrollbars from 'components/CustomComponents/ZRScrollBar';
-import ZaionsIonPage from 'components/ZaionsIonPage';
+import ZRCheckbox from '@/components/CustomComponents/ZRCheckbox';
+import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
+import ZIonRefresher from '@/components/ZIonComponents/ZIonRefresher';
+import ZIonRefresherContent from '@/components/ZIonComponents/ZIonRefresherContent';
+import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
 
 // Types
-import { LinkFolderType, TimeFilterEnum } from 'types/AdminPanel/linksType';
+import { LinkFolderType, TimeFilterEnum } from '@/types/AdminPanel/linksType';
 import {
   folderState,
   FormMode,
   messengerPlatformsBlockEnum,
-} from 'types/AdminPanel/index.type';
+} from '@/types/AdminPanel/index.type';
 
 // Recoil States
 import { NewShortLinkFormState } from 'ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 
 // Global Contents
-import CONSTANTS from 'utils/constants';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import CONSTANTS from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Styles
 import classes from './styles.module.css';
@@ -80,7 +80,7 @@ import {
   useZRQGetRequest,
   useZRQUpdateRequest,
 } from 'ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from 'utils/enums';
+import { API_URL_ENUM } from '@/utils/enums';
 import {
   useZIonAlert,
   useZIonErrorAlert,
@@ -89,10 +89,10 @@ import {
   useZIonPopover,
 } from 'ZaionsHooks/zionic-hooks';
 import { FolderFormState } from 'ZaionsStore/FormStates/folderFormState.recoil';
-import { showSuccessNotification } from 'utils/notification';
+import { showSuccessNotification } from '@/utils/notification';
 import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
-import { replaceParams, zStringify } from 'utils/helpers';
-import { reportCustomError } from 'utils/customErrorType';
+import { replaceParams, zStringify } from '@/utils/helpers';
+import { reportCustomError } from '@/utils/customErrorType';
 import {
   ShortLinksFieldsDataSelector,
   ShortLinksFilterOptionsRState,

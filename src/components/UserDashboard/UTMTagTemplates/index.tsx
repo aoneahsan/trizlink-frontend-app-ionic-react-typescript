@@ -23,31 +23,31 @@ import {
   ZIonRow,
   ZIonList,
   ZIonGrid,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import { formatReactSelectOption } from 'utils/helpers';
+import { formatReactSelectOption } from '@/utils/helpers';
 
 // Images
 
 // Recoil States
 
 // Types
-import { ZIonButton } from 'components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 import { useZRQGetRequest } from 'ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from 'utils/enums';
-import CONSTANTS from 'utils/constants';
+import { API_URL_ENUM } from '@/utils/enums';
+import CONSTANTS from '@/utils/constants';
 import {
   UTMTagTemplateType,
   ZaionsShortUrlOptionFieldsValuesInterface,
-} from 'types/AdminPanel/linksType';
+} from '@/types/AdminPanel/linksType';
 import { useFormikContext } from 'formik';
-import ZaionsRSelect from 'components/CustomComponents/ZaionsRSelect';
-import { ZaionsRSelectOptions } from 'types/components/CustomComponents/index.type';
-import { ZGenericObject } from 'types/zaionsAppSettings.type';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
-import ZaionsAddUtmTags from 'components/InPageComponents/ZaionsModals/AddUtmTags';
+import ZaionsAddUtmTags from '@/components/InPageComponents/ZaionsModals/AddUtmTags';
 
 // Styles
 

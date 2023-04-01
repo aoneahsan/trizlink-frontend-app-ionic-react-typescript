@@ -4,10 +4,10 @@ import React from 'react';
 // Packages Imports
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import ZaionsHr from 'components/InPageComponents/Zaion_hr';
-import InPageFooter from 'components/InPageFooter';
-import ZaionsTopMenu from 'navigation/TopMenu';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
+import InPageFooter from '@/components/InPageFooter';
+import ZaionsTopMenu from '@/navigation/TopMenu';
 import {
   ZIonCol,
   ZIonText,
@@ -17,21 +17,21 @@ import {
   ZIonContent,
   ZIonImg,
   ZIonIcon,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Images
-import { MapImage } from 'assets/images';
+import { MapImage } from '@/assets/images';
 
 // Styles
-import CONSTANTS, { PRODUCT_NAME } from 'utils/constants';
+import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 import {
   logoFacebook,
   logoInstagram,
   logoLinkedin,
   logoTwitter,
 } from 'ionicons/icons';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
-import { ZIonButton } from 'components/ZIonComponents';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 const ZaionsContact: React.FC = () => {
   return (

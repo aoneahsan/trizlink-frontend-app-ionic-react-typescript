@@ -13,8 +13,8 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonCol, ZIonText } from 'components/ZIonComponents';
-import { LinkInBioThemeFontEnum } from 'types/AdminPanel/linkInBioType';
+import { ZIonCol, ZIonText } from '@/components/ZIonComponents';
+import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 import classNames from 'classnames';
 
 /**

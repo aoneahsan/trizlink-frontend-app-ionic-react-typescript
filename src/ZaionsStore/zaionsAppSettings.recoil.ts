@@ -1,12 +1,12 @@
 import {
   countryCodeData,
   ZaionsAppSettingsData,
-} from 'data/zaionsAppSettings.data';
+} from '@/data/zaionsAppSettings.data';
 import { atom } from 'recoil';
 import {
   ZaionsAppSettingsType,
   ZaionsCountryCodeType,
-} from 'types/zaionsAppSettings.type';
+} from '@/types/zaionsAppSettings.type';
 
 export const ZaionsAppSettingsRState = atom<ZaionsAppSettingsType>({
   key: 'ZaionsAppSettingsRState_key',

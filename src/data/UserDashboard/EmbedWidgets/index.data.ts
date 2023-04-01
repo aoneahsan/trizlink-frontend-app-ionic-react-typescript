@@ -2,7 +2,7 @@ import {
   EmbedWidgetsDisplayAtEnum,
   EmbedWidgetsPositionEnum,
   EmbedWidgetsType,
-} from 'types/AdminPanel/linksType';
+} from '@/types/AdminPanel/linksType';
 
 export const EmbedWidgetsData: EmbedWidgetsType[] = [
   {

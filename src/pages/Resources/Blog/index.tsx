@@ -9,11 +9,11 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import InPageFooter from 'components/InPageFooter';
-import ZaionsTopMenu from 'navigation/TopMenu';
-import Zaions4By4GridSystem from 'components/InPageComponents/Zaions4By4GridSystem';
-import ZaionsFeatureBanner from 'components/InPageComponents/ZaionsFeatureBanner';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import InPageFooter from '@/components/InPageFooter';
+import ZaionsTopMenu from '@/navigation/TopMenu';
+import Zaions4By4GridSystem from '@/components/InPageComponents/Zaions4By4GridSystem';
+import ZaionsFeatureBanner from '@/components/InPageComponents/ZaionsFeatureBanner';
 import {
   ZIonCol,
   ZIonText,
@@ -22,24 +22,24 @@ import {
   ZIonGrid,
   ZIonContent,
   ZIonList,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Type
-import { Zaions4By4GridSysType } from 'types/InPageComponentTypes/Zaions4By4GridSys.type';
+import { Zaions4By4GridSysType } from '@/types/InPageComponentTypes/Zaions4By4GridSys.type';
 
 // Recoil
 import { ZaionsSPSocialMarketersState } from 'ZaionsStore/SolutionPages/SocialMarketers/ZaionsSPSocialMarketers.recoil';
 
 // Data
-import { RSBlogData } from 'data/resources/blog/RSBlog.data';
+import { RSBlogData } from '@/data/resources/blog/RSBlog.data';
 
 // Global Imports
-import { PRODUCT_NAME } from 'utils/constants';
+import { PRODUCT_NAME } from '@/utils/constants';
 
 // Styles
 import classes from './styles.module.css';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 const ZaionsBlogs: React.FC = () => {
   const [BlogData, setBlogData] = useRecoilState<Zaions4By4GridSysType[]>(

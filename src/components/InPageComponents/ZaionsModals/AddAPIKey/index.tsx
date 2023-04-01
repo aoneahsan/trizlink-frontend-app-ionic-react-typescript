@@ -20,11 +20,11 @@ import {
   ZIonInput,
   ZIonFooter,
   ZIonLabel,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import { getRandomKey } from 'utils/helpers';
-import MESSAGES from 'utils/messages';
+import { getRandomKey } from '@/utils/helpers';
+import MESSAGES from '@/utils/messages';
 
 // Images
 
@@ -34,11 +34,11 @@ import { APIKeyFormState } from 'ZaionsStore/FormStates/apiKeyState.recoil';
 import { APIKeyState } from 'ZaionsStore/UserDashboard/APIKey';
 
 // Types
-import { FormMode } from 'types/AdminPanel/index.type';
-import { resetFormType } from 'types/ZaionsFormik.type';
+import { FormMode } from '@/types/AdminPanel/index.type';
+import { resetFormType } from '@/types/ZaionsFormik.type';
 import { useZIonLoading } from 'ZaionsHooks/zionic-hooks';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Styles
 

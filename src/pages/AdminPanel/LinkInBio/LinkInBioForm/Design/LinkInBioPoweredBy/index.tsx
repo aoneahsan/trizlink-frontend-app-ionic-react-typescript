@@ -22,7 +22,7 @@ import {
   ZIonIcon,
   ZIonRow,
   ZIonText,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
@@ -33,7 +33,7 @@ import {
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-// import { LinkInBioType } from 'types/AdminPanel/linkInBioType';
+// import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 
 /**
  * Recoil State Imports go down
@@ -51,9 +51,9 @@ import {
  * */
 import classes from '../styles.module.css';
 import { closeOutline, heartOutline, toggleOutline } from 'ionicons/icons';
-import ZRCSwitch from 'components/CustomComponents/ZRCSwitch';
+import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
-import { PRODUCT_NAME } from 'utils/constants';
+import { PRODUCT_NAME } from '@/utils/constants';
 // import { useRecoilValue } from 'recoil';
 // import { ZaionsAppSettingsRState } from 'ZaionsStore/zaionsAppSettings.recoil';
 

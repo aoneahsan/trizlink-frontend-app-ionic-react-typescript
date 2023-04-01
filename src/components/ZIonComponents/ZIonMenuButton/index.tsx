@@ -7,7 +7,7 @@ import {
   ZIonButtonType,
   ZIonColorType,
   ZIonModeType,
-} from 'types/zaionsAppSettings.type';
+} from '@/types/zaionsAppSettings.type';
 
 // Type
 type ZIonMenuButtonType = {

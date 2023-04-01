@@ -29,14 +29,14 @@ import {
   ZIonInput,
   ZIonFooter,
   ZIonLabel,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import MESSAGES from 'utils/messages';
-import { getRandomKey } from 'utils/helpers';
+import MESSAGES from '@/utils/messages';
+import { getRandomKey } from '@/utils/helpers';
 
 /**
  * Type Imports go down
@@ -48,8 +48,8 @@ import { getRandomKey } from 'utils/helpers';
  * ? Import of recoil states is a Recoil State import
  * */
 import { ZaionsUserAccountEmails } from 'ZaionsStore/UserAccount/index.recoil';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZIonTitle from 'components/ZIonComponents/ZIonTitle';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
 
 /**
  * Style files Imports go down

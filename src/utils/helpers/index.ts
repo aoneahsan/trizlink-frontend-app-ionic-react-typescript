@@ -1,53 +1,53 @@
-import { ZGenericObject } from 'types/zaionsAppSettings.type';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 // Packages Import
 import { ConfirmResult, Dialog, PromptResult } from '@capacitor/dialog';
 import { Preferences } from '@capacitor/preferences';
-import { PixelPlatformsEnum } from 'types/AdminPanel/linksType';
+import { PixelPlatformsEnum } from '@/types/AdminPanel/linksType';
 import isEmail from 'validator/lib/isEmail';
 import CONSTANTS, {
   API_URLS,
   LOCALSTORAGE_KEYS,
   NOTIFICATIONS,
   ZLinkApiRootUrl,
-} from 'utils/constants';
+} from '@/utils/constants';
 import {
   API_URL_ENUM,
   CONTAINS,
   extractInnerDataOptionsEnum,
   VALIDATION_RULE,
-} from 'utils/enums';
-import { ENVS } from 'utils/envKeys';
-import MESSAGES from 'utils/messages';
+} from '@/utils/enums';
+import { ENVS } from '@/utils/envKeys';
+import MESSAGES from '@/utils/messages';
 import { AES, enc } from 'crypto-js';
-import { UserAccountType } from 'types/UserAccount/index.type';
+import { UserAccountType } from '@/types/UserAccount/index.type';
 import axiosInstance from 'axiosInstance';
 import {
   ZCapDialogPropsType,
   ZConsolePropsType,
-} from 'types/ZaionsHelperFunction.type';
+} from '@/types/ZaionsHelperFunction.type';
 import {
   AxiosRequestResponseType,
   ZLinkMutateApiType,
-} from 'types/ZaionsApis.type';
+} from '@/types/ZaionsApis.type';
 import {
   reportCustomError,
   throwZCustomErrorRequestFailed,
   throwZCustomErrorUnAuthenticated,
   ZCustomError,
-} from 'utils/customErrorType';
+} from '@/utils/customErrorType';
 import { AxiosRequestConfig } from 'axios';
-import { ZaionsRSelectOptions } from 'types/components/CustomComponents/index.type';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 import VALIDATOR from 'validator';
 import {
   LinkInBioThemeBackgroundEnum,
   LinkInBioThemeBackgroundType,
-} from 'types/AdminPanel/linkInBioType';
+} from '@/types/AdminPanel/linkInBioType';
 import routeQueryString from 'qs';
 import dayjs from 'dayjs';
 import DayJsDurationPlugin from 'dayjs/plugin/duration';
-import { zAxiosApiRequestContentType } from 'types/CustomHooks/zapi-hooks.type';
-import { LinkInBioPageAnalyticsDataInterface } from 'types/InPageComponentTypes/ZaionsTables.type';
+import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
+import { LinkInBioPageAnalyticsDataInterface } from '@/types/InPageComponentTypes/ZaionsTables.type';
 
 dayjs.extend(DayJsDurationPlugin);
 

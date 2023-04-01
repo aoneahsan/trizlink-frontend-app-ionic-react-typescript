@@ -10,7 +10,7 @@ import {
   ZIonModeType,
   ZIonRouterDirection,
   ZIonTargetType,
-} from 'types/zaionsAppSettings.type';
+} from '@/types/zaionsAppSettings.type';
 
 type ZIonCardType = {
   children: ReactNode;

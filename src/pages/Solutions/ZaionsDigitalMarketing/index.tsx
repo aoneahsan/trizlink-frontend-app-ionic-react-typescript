@@ -6,15 +6,15 @@ import { useMediaQuery } from 'react-responsive';
 import { useRecoilState } from 'recoil';
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import ZaionsKeyFeatures from 'components/InPageComponents/ZaionsKeyFeatures';
-import ZaionsTopMenu from 'navigation/TopMenu';
-import ZaionsInpageHeader from 'components/InPageComponents/ZaionsInpageHeader';
-import ZaionsHPBrandList from 'components/ZaionsHomePage/HPBrandList';
-import ZaionsInpageCol from 'components/InPageComponents/ZaionsInpageGridsys';
-import InPageFooter from 'components/InPageFooter';
-import ZaionsHr from 'components/InPageComponents/Zaion_hr';
-import Zaions4By4GridSystem from 'components/InPageComponents/Zaions4By4GridSystem';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZaionsKeyFeatures from '@/components/InPageComponents/ZaionsKeyFeatures';
+import ZaionsTopMenu from '@/navigation/TopMenu';
+import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
+import ZaionsHPBrandList from '@/components/ZaionsHomePage/HPBrandList';
+import ZaionsInpageCol from '@/components/InPageComponents/ZaionsInpageGridsys';
+import InPageFooter from '@/components/InPageFooter';
+import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
+import Zaions4By4GridSystem from '@/components/InPageComponents/Zaions4By4GridSystem';
 
 import {
   ZIonCol,
@@ -22,23 +22,23 @@ import {
   ZIonRow,
   ZIonGrid,
   ZIonContent,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Recoil States
 import { ZaionsSPSocialMarketersState } from 'ZaionsStore/SolutionPages/SocialMarketers/ZaionsSPSocialMarketers.recoil';
 import { ZaionsSPSMKeyFeaturesState } from 'ZaionsStore/SolutionPages/SocialMedia/ZaionsSPSM.recoil';
 
 // Types
-import { ZaionsKeyFeatureType } from 'types/InPageComponentTypes/ZaionsKeyFeature.type';
-import { Zaions4By4GridSysType } from 'types/InPageComponentTypes/Zaions4By4GridSys.type';
+import { ZaionsKeyFeatureType } from '@/types/InPageComponentTypes/ZaionsKeyFeature.type';
+import { Zaions4By4GridSysType } from '@/types/InPageComponentTypes/Zaions4By4GridSys.type';
 
 // Data
-import { DMSMKeyFeaturesData } from 'data/DigitalMarkting/SocialMedia/DMSMkeyFeatures.data';
-import { DMSocialMarketerData } from 'data/DigitalMarkting/SocialMarketers/DMSocialMarketers.data';
+import { DMSMKeyFeaturesData } from '@/data/DigitalMarkting/SocialMedia/DMSMkeyFeatures.data';
+import { DMSocialMarketerData } from '@/data/DigitalMarkting/SocialMarketers/DMSocialMarketers.data';
 
 // Global Constants
-import { BRACKPOINT_LG, BRACKPOINT_MD, PRODUCT_NAME } from 'utils/constants';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { BRACKPOINT_LG, BRACKPOINT_MD, PRODUCT_NAME } from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Styles
 import classes from './styles.module.css';
@@ -49,7 +49,7 @@ import {
   iconLargeCloudServersMin,
   iconLargeCustomerServersMin,
   iconLargePasswordSecurityMin,
-} from 'assets/images';
+} from '@/assets/images';
 
 const ZaionsDigitalMarketing: React.FC = () => {
   const [keyFeaturesData, setkeyFeaturesData] = useRecoilState<

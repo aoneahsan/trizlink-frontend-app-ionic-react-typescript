@@ -10,7 +10,7 @@ import Select, {
 } from 'react-select';
 
 // Interface
-import { ZaionsRSelectOptions } from 'types/components/CustomComponents/index.type';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 interface ZaionsRSelectType {
   options: readonly ZaionsRSelectOptions[];

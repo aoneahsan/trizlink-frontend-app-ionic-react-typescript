@@ -1,9 +1,9 @@
-import CONSTANTS from 'utils/constants';
+import CONSTANTS from '@/utils/constants';
 
 import {
   LinkInBioButtonTypeEnum,
   LinkInBioThemeBackgroundEnum,
-} from 'types/AdminPanel/linkInBioType';
+} from '@/types/AdminPanel/linkInBioType';
 import {
   LinkInBioBlockAnimationEnum,
   LinkInBioBlockEnum,
@@ -13,8 +13,8 @@ import {
   LinkInBioMusicPlatformEnum,
   SeparatorTypeEnum,
   LinkInBioSocialPlatformEnum,
-} from 'types/AdminPanel/linkInBioType/blockTypes/index';
-import { messengerPlatformsBlockEnum } from 'types/AdminPanel/index.type';
+} from '@/types/AdminPanel/linkInBioType/blockTypes/index';
+import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
 
 const defaultTimezone = '(GMT +5:30) Bombay, Calcutta, Madras, New Delhi';
 

@@ -6,20 +6,20 @@ import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsHr from 'components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
 import {
   ZIonCol,
   ZIonText,
   ZIonRouterLink,
   ZIonRow,
   ZIonGrid,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Style
 import classes from './styles.module.css';
 
 // Images
-import { vector } from 'assets/images';
+import { vector } from '@/assets/images';
 
 // Global Constant
 import {
@@ -27,9 +27,9 @@ import {
   BRACKPOINT_SM,
   BRACKPOINT_XL,
   PRODUCT_NAME,
-} from 'utils/constants';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+} from '@/utils/constants';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 const ZaionsHPShortLink: React.FC = () => {
   const isXlScale = useMediaQuery({

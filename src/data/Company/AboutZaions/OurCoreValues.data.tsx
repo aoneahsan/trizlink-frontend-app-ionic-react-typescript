@@ -1,4 +1,4 @@
-import { ZaionsOurCoreValuesType } from 'types/Company/AboutZaionsPage/OurCoreValues.types';
+import { ZaionsOurCoreValuesType } from '@/types/Company/AboutZaionsPage/OurCoreValues.types';
 
 export const ZaionsOurCoreValuesData: ZaionsOurCoreValuesType[] = [
   {

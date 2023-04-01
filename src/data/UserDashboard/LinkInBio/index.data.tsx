@@ -1,11 +1,11 @@
-import CONSTANTS from 'utils/constants';
+import CONSTANTS from '@/utils/constants';
 
 // Types
 import {
   LinkInBioButtonTypeEnum,
   LinkInBioThemeBackgroundEnum,
   LinkInBioThemeFontEnum,
-} from 'types/AdminPanel/linkInBioType';
+} from '@/types/AdminPanel/linkInBioType';
 
 export const ZaionsLinkInBioDefaultData = {
   theme: {

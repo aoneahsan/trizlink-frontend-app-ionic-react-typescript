@@ -8,7 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { ZIonCol, ZIonRow } from 'components/ZIonComponents';
+import { ZIonCol, ZIonRow } from '@/components/ZIonComponents';
 import {
   ZTable,
   ZTableHeadCol,
@@ -16,8 +16,8 @@ import {
   ZTableRowCol,
   ZTableTBody,
   ZTableTHead,
-} from 'components/InPageComponents/ZaionsTable/table-styled-components.sc';
-import { LinkInBioPageAnalyticsDataInterface } from 'types/InPageComponentTypes/ZaionsTables.type';
+} from '@/components/InPageComponents/ZaionsTable/table-styled-components.sc';
+import { LinkInBioPageAnalyticsDataInterface } from '@/types/InPageComponentTypes/ZaionsTables.type';
 
 /**
  * Custom Imports go down

@@ -4,13 +4,13 @@ import React from 'react';
 // Packages Imports
 
 // Custom Imports
-import ZaionsCarousel from 'components/InPageComponents/ZaionsCarousel';
+import ZaionsCarousel from '@/components/InPageComponents/ZaionsCarousel';
 
 // Style
 
 // Global Constant
-import { PRODUCT_NAME } from 'utils/constants';
-import { ZIonText } from 'components/ZIonComponents';
+import { PRODUCT_NAME } from '@/utils/constants';
+import { ZIonText } from '@/components/ZIonComponents';
 
 const ZaionsHPUsersFeedBack: React.FC = () => {
   return (

@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import React from 'react';
 import ReactDropzone from 'react-dropzone';
-import { API_URL_ENUM } from 'utils/enums';
-import { zConsoleLog } from 'utils/helpers';
+import { API_URL_ENUM } from '@/utils/enums';
+import { zConsoleLog } from '@/utils/helpers';
 import { useZRQCreateRequest } from 'ZaionsHooks/zreactquery-hooks';
 
 import CLASSES from './styles.module.css';

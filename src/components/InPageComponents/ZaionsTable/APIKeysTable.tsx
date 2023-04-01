@@ -34,15 +34,15 @@ import {
   ZIonLabel,
   ZIonSelectOption,
   ZIonList,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 
 // Images
-import CONSTANTS from 'utils/constants';
+import CONSTANTS from '@/utils/constants';
 
 // Recoil States
-import { FormMode } from 'types/AdminPanel/index.type';
+import { FormMode } from '@/types/AdminPanel/index.type';
 import { APIKeyState } from 'ZaionsStore/UserDashboard/APIKey';
 import { APIKeyFormState } from 'ZaionsStore/FormStates/apiKeyState.recoil';
 import {
@@ -51,8 +51,8 @@ import {
   useZIonLoading,
   useZIonModal,
 } from 'ZaionsHooks/zionic-hooks';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZIonSelect from 'components/ZIonComponents/ZIonSelect';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZIonSelect from '@/components/ZIonComponents/ZIonSelect';
 import ZaionsAddAPIKeyModal from '../ZaionsModals/AddAPIKey';
 
 // Types

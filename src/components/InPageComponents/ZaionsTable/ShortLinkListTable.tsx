@@ -32,15 +32,15 @@ import {
   ZIonList,
   ZIonCheckbox,
   ZIonTitle,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
-import { ZIonButton } from 'components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 // Global Constants
-import CONSTANTS, { ZaionsBusinessDetails } from 'utils/constants';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
-import { replaceParams } from 'utils/helpers';
-import { API_URL_ENUM } from 'utils/enums';
+import CONSTANTS, { ZaionsBusinessDetails } from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { replaceParams } from '@/utils/helpers';
+import { API_URL_ENUM } from '@/utils/enums';
 import {
   useZRQDeleteRequest,
   useZRQGetRequest,
@@ -53,7 +53,7 @@ import {
 } from 'ZaionsHooks/zionic-hooks';
 
 // Types
-import { LinkTargetType, ShortLinkType } from 'types/AdminPanel/linksType';
+import { LinkTargetType, ShortLinkType } from '@/types/AdminPanel/linksType';
 
 // Recoil State
 import { ShortLinkFormState } from 'ZaionsStore/FormStates/shortLinkFormState';
@@ -63,7 +63,7 @@ import {
   ShortLinksFilterOptionsRState,
   ShortLinksRState,
 } from 'ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
-import { reportCustomError } from 'utils/customErrorType';
+import { reportCustomError } from '@/utils/customErrorType';
 import ZaionsPixelAccountDetail from '../ZaionsModals/PixelAccount/pixelAccountDetailModal';
 
 // Styles

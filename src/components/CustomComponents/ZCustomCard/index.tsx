@@ -22,13 +22,13 @@ import {
   ZIonCol,
   ZIonImg,
   ZIonText,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 import {
   videoBlockEmptyState,
   rssWithBackground,
   audioBlockEmptyState,
   carouselPreviewBlock,
-} from 'assets/images';
+} from '@/assets/images';
 
 /**
  * Global Constants Imports go down
@@ -39,8 +39,8 @@ import {
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkInBioCardStyleEnum } from 'types/AdminPanel/linkInBioType/blockTypes';
-import { ZMediaEnum } from 'types/zaionsAppSettings.type';
+import { LinkInBioCardStyleEnum } from '@/types/AdminPanel/linkInBioType/blockTypes';
+import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
 import ZReactMediaPlayer from '../ZCustomAudio';
 import { useRecoilValue } from 'recoil';
 import { NewLinkInBioFormState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';

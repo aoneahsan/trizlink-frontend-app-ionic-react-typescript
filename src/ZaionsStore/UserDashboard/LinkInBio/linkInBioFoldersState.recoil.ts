@@ -3,7 +3,7 @@ import { atom } from 'recoil';
 
 // Custom
 // Type
-import { FolderInterface } from 'types/AdminPanel/linksType';
+import { FolderInterface } from '@/types/AdminPanel/linksType';
 
 // Data
 

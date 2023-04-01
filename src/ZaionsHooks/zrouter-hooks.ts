@@ -4,7 +4,7 @@ import {
   emptyVoidReturnFunction,
   showZCapErrorDialogAlert,
   zConsoleError,
-} from 'utils/helpers';
+} from '@/utils/helpers';
 
 export const useZNavigate = () => {
   try {

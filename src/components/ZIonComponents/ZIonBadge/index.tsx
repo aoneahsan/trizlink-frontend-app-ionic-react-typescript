@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 
 // Packages Import
 import { IonBadge } from '@ionic/react';
-import { ZIonColorType, ZIonModeType } from 'types/zaionsAppSettings.type';
+import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
 
 // Type
 type ZIonBadgeType = {

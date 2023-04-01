@@ -15,33 +15,33 @@ import {
   ZIonLabel,
   ZIonNote,
   ZIonText,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 import { Formik } from 'formik';
 import { useZRQCreateRequest } from 'ZaionsHooks/zreactquery-hooks';
 
 // Global Constants
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from 'utils/enums';
-import { reportCustomError } from 'utils/customErrorType';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import { reportCustomError } from '@/utils/customErrorType';
 import {
   createRedirectRoute,
   extractInnerData,
   validateField,
   zStringify,
-} from 'utils/helpers';
-import CONSTANTS from 'utils/constants';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+} from '@/utils/helpers';
+import CONSTANTS from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Images
 
 // Recoil States
-import { ZaionsLinkInBioDefaultData } from 'data/UserDashboard/LinkInBio/index.data';
+import { ZaionsLinkInBioDefaultData } from '@/data/UserDashboard/LinkInBio/index.data';
 
 // Types
-import { LinkInBioType } from 'types/AdminPanel/linkInBioType';
+import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 import {
   ZLinkInBioPageEnum,
   ZLinkInBioRHSComponentEnum,
-} from 'types/AdminPanel/linkInBioType';
+} from '@/types/AdminPanel/linkInBioType';
 
 // Styles
 

@@ -12,9 +12,9 @@ import {
   Steffen,
   TaraRobertson2,
   Toby,
-} from 'assets/images';
-import { ZaionsTeamType } from 'types/Company/AboutZaionsPage/OurTeam.type';
-import { PRODUCT_NAME } from 'utils/constants';
+} from '@/assets/images';
+import { ZaionsTeamType } from '@/types/Company/AboutZaionsPage/OurTeam.type';
+import { PRODUCT_NAME } from '@/utils/constants';
 
 export const ZaionsOurTeamData: ZaionsTeamType[] = [
   {

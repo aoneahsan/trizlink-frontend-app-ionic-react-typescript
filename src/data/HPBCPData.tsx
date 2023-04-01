@@ -4,10 +4,10 @@
 import { checkmarkCircleOutline } from 'ionicons/icons';
 
 // Custom Imports
-import { ZaionsHpCPDataType } from 'types/ZaionsHPBCPType';
+import { ZaionsHpCPDataType } from '@/types/ZaionsHPBCPType';
 
 // Images
-import { linkInBio, linkMngt3, qrCode } from 'assets/images';
+import { linkInBio, linkMngt3, qrCode } from '@/assets/images';
 
 export const HPBCData: ZaionsHpCPDataType[] = [
   {

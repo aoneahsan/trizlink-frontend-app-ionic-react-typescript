@@ -19,23 +19,23 @@ import {
   ZIonRow,
   ZIonText,
   ZIonTitle,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
 import { useZRQGetRequest } from 'ZaionsHooks/zreactquery-hooks';
-import ZRScrollbars from 'components/CustomComponents/ZRScrollBar';
-import LinkInBioPDButton from 'components/LinkInBioComponents/UI/PerDefinedButton';
+import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
+import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedButton';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 import { ItemReorderEventDetail } from '@ionic/react';
-import ZCustomDeleteComponent from 'components/CustomComponents/ZCustomDeleteComponent';
+import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
 import LinkInBioTitleField from '../TitleField';
 
-import ZRCSwitch from 'components/CustomComponents/ZRCSwitch';
+import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 
 // Global Constants Imports
-import { API_URL_ENUM } from 'utils/enums';
-import { predefinedFormFieldsImages, ZIcons } from 'utils/ZIcons';
-import { reportCustomError } from 'utils/customErrorType';
-import CONSTANTS from 'utils/constants';
+import { API_URL_ENUM } from '@/utils/enums';
+import { predefinedFormFieldsImages, ZIcons } from '@/utils/ZIcons';
+import { reportCustomError } from '@/utils/customErrorType';
+import CONSTANTS from '@/utils/constants';
 
 // Type
 import {
@@ -43,14 +43,14 @@ import {
   linkInBioFromFieldItemInterface,
   LinkInBioPredefinedPlatformInterface,
   LinkInBioSingleBlockContentType,
-} from 'types/AdminPanel/linkInBioType/blockTypes';
-import { FormikSetFieldValueEventType } from 'types/ZaionsFormik.type';
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
+import { FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
 
 // Styles
 
 // Recoil
 import { LinkInBioPredefinedFormFieldsRState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
-import { linkInBioFormFieldsDefaultData } from 'data/UserDashboard/LinkInBio/BlockFormFields/index.data';
+import { linkInBioFormFieldsDefaultData } from '@/data/UserDashboard/LinkInBio/BlockFormFields/index.data';
 
 // Component Type
 

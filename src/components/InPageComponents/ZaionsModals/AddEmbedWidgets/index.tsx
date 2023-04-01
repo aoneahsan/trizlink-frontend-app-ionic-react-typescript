@@ -27,11 +27,11 @@ import {
   ZIonInput,
   ZIonFooter,
   ZIonLabel,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import { validateField, validateFields, zStringify } from 'utils/helpers';
-import MESSAGES from 'utils/messages';
+import { validateField, validateFields, zStringify } from '@/utils/helpers';
+import MESSAGES from '@/utils/messages';
 
 // Images
 
@@ -43,22 +43,22 @@ import { EmbedWidgetsFormState } from 'ZaionsStore/FormStates/embedWidgetsFormSt
 import {
   EmbedWidgetsDisplayAtEnum,
   EmbedWidgetsPositionEnum,
-} from 'types/AdminPanel/linksType';
-import { resetFormType } from 'types/ZaionsFormik.type';
+} from '@/types/AdminPanel/linksType';
+import { resetFormType } from '@/types/ZaionsFormik.type';
 import {
   useZRQCreateRequest,
   useZRQUpdateRequest,
 } from 'ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM, VALIDATION_RULE } from 'utils/enums';
-import { reportCustomError } from 'utils/customErrorType';
-import CONSTANTS from 'utils/constants';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZIonTitle from 'components/ZIonComponents/ZIonTitle';
-import { showSuccessNotification } from 'utils/notification';
-import { FormMode } from 'types/AdminPanel/index.type';
-import ZRCSwitch from 'components/CustomComponents/ZRCSwitch';
-import ZEditor from 'components/CustomComponents/ZEditor';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { API_URL_ENUM, VALIDATION_RULE } from '@/utils/enums';
+import { reportCustomError } from '@/utils/customErrorType';
+import CONSTANTS from '@/utils/constants';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
+import { showSuccessNotification } from '@/utils/notification';
+import { FormMode } from '@/types/AdminPanel/index.type';
+import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
+import ZEditor from '@/components/CustomComponents/ZEditor';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Styles
 

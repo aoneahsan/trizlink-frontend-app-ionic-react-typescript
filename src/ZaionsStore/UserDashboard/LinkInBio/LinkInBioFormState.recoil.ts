@@ -1,10 +1,10 @@
 import {
   LinkInBioFormPageInterface,
   LinkInBioType,
-} from 'types/AdminPanel/linkInBioType';
-import CONSTANTS from 'utils/constants';
+} from '@/types/AdminPanel/linkInBioType';
+import CONSTANTS from '@/utils/constants';
 import { atom } from 'recoil';
-import { FormMode } from 'types/AdminPanel/index.type';
+import { FormMode } from '@/types/AdminPanel/index.type';
 
 export const NewLinkInBioFormState = atom<LinkInBioType>({
   key: 'NewLinkInBioFormState_key',

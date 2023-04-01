@@ -1,4 +1,4 @@
-import { ZaionsAppSettingsType } from 'types/zaionsAppSettings.type';
+import { ZaionsAppSettingsType } from '@/types/zaionsAppSettings.type';
 
 export const ZaionsAppSettingsData: ZaionsAppSettingsType = {
   shortLinkSettings: {

@@ -4,9 +4,9 @@ import React from 'react';
 // Packages Imports
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import ZaionsTopMenu from 'navigation/TopMenu';
-import InPageFooter from 'components/InPageFooter';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZaionsTopMenu from '@/navigation/TopMenu';
+import InPageFooter from '@/components/InPageFooter';
 
 import {
   ZIonCol,
@@ -15,10 +15,10 @@ import {
   ZIonGrid,
   ZIonContent,
   ZIonTitle,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Imports
-import { PRODUCT_NAME, ZaionsBusinessDetails } from 'utils/constants';
+import { PRODUCT_NAME, ZaionsBusinessDetails } from '@/utils/constants';
 
 // Styles
 

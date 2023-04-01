@@ -16,15 +16,15 @@ import {
   ZIonIcon,
   ZIonCheckbox,
   ZIonFooter,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 
 // Images
 
 // Recoil States
-import { ZIonButton } from 'components/ZIonComponents';
-import { ZIonSelect } from 'components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
+import { ZIonSelect } from '@/components/ZIonComponents';
 
 // Types
 

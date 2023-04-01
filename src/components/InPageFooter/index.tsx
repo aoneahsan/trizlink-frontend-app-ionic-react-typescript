@@ -49,14 +49,14 @@ import {
   ZIonIcon,
   ZIonFooter,
   ZIonGrid,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import { BRACKPOINT_MD, BRACKPOINT_XS, PRODUCT_NAME } from 'utils/constants';
+import { BRACKPOINT_MD, BRACKPOINT_XS, PRODUCT_NAME } from '@/utils/constants';
 import { Accordion } from 'react-bootstrap';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
-import { ProductLogo } from 'assets/images';
-import { ZIonButton } from 'components/ZIonComponents';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { ProductLogo } from '@/assets/images';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 // Functional Component
 const InPageFooter: React.FC<{

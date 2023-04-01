@@ -13,8 +13,8 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZCustomCard from 'components/CustomComponents/ZCustomCard';
-import { ZMediaEnum } from 'types/zaionsAppSettings.type';
+import ZCustomCard from '@/components/CustomComponents/ZCustomCard';
+import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 /**
@@ -29,7 +29,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import {
   linkInBioBlockCardItemInterface,
   LinkInBioCardStyleEnum,
-} from 'types/AdminPanel/linkInBioType/blockTypes';
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 /**
  * Recoil State Imports go down

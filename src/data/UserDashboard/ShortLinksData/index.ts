@@ -1,5 +1,5 @@
-import { messengerPlatformsBlockEnum } from 'types/AdminPanel/index.type';
-import { ZaionsBusinessDetails } from 'utils/constants';
+import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
+import { ZaionsBusinessDetails } from '@/utils/constants';
 
 export const ZaionsShortLinkData = [
   {

@@ -11,12 +11,12 @@ import {
   ZIonText,
   ZIonRouterLink,
   ZIonImg,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 
 // Images
-import { noScript } from 'assets/images';
+import { noScript } from '@/assets/images';
 
 // Recoil States
 import { EmbedWidgetsState } from 'ZaionsStore/UserDashboard/EmbedWidgetsState';
@@ -25,10 +25,10 @@ import { EmbedWidgetsState } from 'ZaionsStore/UserDashboard/EmbedWidgetsState';
 
 // Styles
 
-import EmbedWidgetsTable from 'components/InPageComponents/ZaionsTable/embedWidgetsTable';
-import { ZIonButton } from 'components/ZIonComponents';
+import EmbedWidgetsTable from '@/components/InPageComponents/ZaionsTable/embedWidgetsTable';
+import { ZIonButton } from '@/components/ZIonComponents';
 import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
-import ZaionsEmbedWidgetsModal from 'components/InPageComponents/ZaionsModals/AddEmbedWidgets';
+import ZaionsEmbedWidgetsModal from '@/components/InPageComponents/ZaionsModals/AddEmbedWidgets';
 
 const APSettingsEmbedWidgets: React.FC = () => {
   const { presentZIonModal: presentZEmbedWidgetsModal } = useZIonModal(

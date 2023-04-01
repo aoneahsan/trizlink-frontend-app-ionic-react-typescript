@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import { ZIonText, ZIonTitle } from 'components/ZIonComponents';
+import { ZIonText, ZIonTitle } from '@/components/ZIonComponents';
 import React from 'react';
 
 /**
@@ -10,7 +10,7 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import Countdown, { CountdownRendererFn } from 'react-countdown';
-import { getRemainingTimeForCountDown } from 'utils/helpers';
+import { getRemainingTimeForCountDown } from '@/utils/helpers';
 
 /**
  * Custom Imports go down

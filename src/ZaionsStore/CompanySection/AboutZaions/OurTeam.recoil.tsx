@@ -3,10 +3,10 @@ import { atom } from 'recoil';
 
 // Custom Imports
 // Data
-import { ZaionsOurTeamData } from 'data/Company/AboutZaions/OurTeam.data';
+import { ZaionsOurTeamData } from '@/data/Company/AboutZaions/OurTeam.data';
 
 // Types
-import { ZaionsTeamType } from 'types/Company/AboutZaionsPage/OurTeam.type';
+import { ZaionsTeamType } from '@/types/Company/AboutZaionsPage/OurTeam.type';
 
 export const ZaionsOurTeamState = atom<ZaionsTeamType[]>({
   key: 'ZaionsOurTeam_Key',

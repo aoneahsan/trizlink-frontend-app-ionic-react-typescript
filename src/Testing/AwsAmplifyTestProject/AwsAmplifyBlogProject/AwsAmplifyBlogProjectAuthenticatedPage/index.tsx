@@ -1,6 +1,6 @@
 // import { useIonViewWillEnter } from '@ionic/react';
 // import { Auth } from 'aws-amplify';
-// import ZaionsIonPage from 'components/ZaionsIonPage';
+// import ZaionsIonPage from '@/components/ZaionsIonPage';
 // import {
 // 	ZIonCol,
 // 	ZIonContent,
@@ -8,7 +8,7 @@
 // 	ZIonHeader,
 // 	ZIonRow,
 // 	ZIonTitle,
-// } from 'components/ZIonComponents';
+// } from '@/components/ZIonComponents';
 // import React from 'react';
 
 // const AwsAmplifyBlogProjectAuthenticatedPage: React.FC = () => {

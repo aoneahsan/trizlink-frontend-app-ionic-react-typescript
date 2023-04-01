@@ -13,7 +13,7 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonCol } from 'components/ZIonComponents';
+import { ZIonCol } from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down

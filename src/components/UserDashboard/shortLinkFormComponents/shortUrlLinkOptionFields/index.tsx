@@ -19,7 +19,7 @@ import {
   ZIonNote,
   ZIonRow,
   ZIonTextarea,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 import { useFormikContext } from 'formik';
 import { refreshCircleOutline } from 'ionicons/icons';
 import { useRecoilValue } from 'recoil';
@@ -28,7 +28,7 @@ import { useRecoilValue } from 'recoil';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ShortUrlLinkOptions from 'components/UserDashboard/ShortUrlLinkOption';
+import ShortUrlLinkOptions from '@/components/UserDashboard/ShortUrlLinkOption';
 
 /**
  * Global Constants Imports go down
@@ -39,15 +39,15 @@ import ShortUrlLinkOptions from 'components/UserDashboard/ShortUrlLinkOption';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { ZaionsShortUrlOptionFieldsValuesInterface } from 'types/AdminPanel/linksType';
-import { messengerPlatformsBlockEnum } from 'types/AdminPanel/index.type';
+import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
+import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
 import { NewShortLinkFormState } from 'ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
-import { ZaionsBusinessDetails } from 'utils/constants';
+import { ZaionsBusinessDetails } from '@/utils/constants';
 
 /**
  * Style files Imports go down

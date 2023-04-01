@@ -2,12 +2,12 @@
 // import { IonPage } from '@ionic/react';
 // import { Auth } from 'aws-amplify';
 // import classNames from 'classnames';
-// import { ZIonButton, ZIonCol, ZIonContent, ZIonGrid, ZIonHeader, ZIonInput, ZIonItem, ZIonLabel, ZIonNote, ZIonRow, ZIonTitle } from 'components/ZIonComponents';
+// import { ZIonButton, ZIonCol, ZIonContent, ZIonGrid, ZIonHeader, ZIonInput, ZIonItem, ZIonLabel, ZIonNote, ZIonRow, ZIonTitle } from '@/components/ZIonComponents';
 // import { Form, Formik } from 'formik';
 // import React, { useState } from 'react';
-// import { VALIDATION_RULE } from 'utils/enums';
-// import { validateFields } from 'utils/helpers';
-// import MESSAGES from 'utils/messages';
+// import { VALIDATION_RULE } from '@/utils/enums';
+// import { validateFields } from '@/utils/helpers';
+// import MESSAGES from '@/utils/messages';
 // import { useZIonAlert, useZIonLoading } from 'ZaionsHooks/zionic-hooks';
 
 // enum AUTH_MODE {

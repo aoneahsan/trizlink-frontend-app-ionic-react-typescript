@@ -6,7 +6,7 @@ import { IonSelect, SelectChangeEventDetail } from '@ionic/react';
 import { IonSelectCustomEvent } from '@ionic/core/dist/types/components';
 
 // Type
-import { ZIonColorType, ZIonModeType } from 'types/zaionsAppSettings.type';
+import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
 type ZIonSelectType = {
   children: ReactNode;
   className?: string;

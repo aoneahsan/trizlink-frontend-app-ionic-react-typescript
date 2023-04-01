@@ -3,8 +3,8 @@
 // Packages Imports
 
 // Custom Imports
-import { ZaionsHPFAQType } from 'types/ZionsHPFAQType';
-import { PRODUCT_DOMAIN, PRODUCT_NAME } from 'utils/constants';
+import { ZaionsHPFAQType } from '@/types/ZionsHPFAQType';
+import { PRODUCT_DOMAIN, PRODUCT_NAME } from '@/utils/constants';
 
 export const HPFAQData: ZaionsHPFAQType[] = [
   {

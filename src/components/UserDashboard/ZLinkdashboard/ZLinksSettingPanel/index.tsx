@@ -9,7 +9,7 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import { caretDownCircleOutline } from 'ionicons/icons';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Custom Imports go down
@@ -23,7 +23,7 @@ import {
   ZIonList,
   ZIonAccordionGroup,
   ZIonAccordion,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
@@ -34,7 +34,7 @@ import {
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
  * */
-import { ZLinkIonPanelSettingsSidebarActiveLinkType } from 'types/AdminPanel/linksType';
+import { ZLinkIonPanelSettingsSidebarActiveLinkType } from '@/types/AdminPanel/linksType';
 
 /**
  * Recoil State Imports go down

@@ -14,7 +14,7 @@ import {
   ZIonIcon,
   ZIonFooter,
   ZIonGrid,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 
@@ -23,7 +23,7 @@ import {
 // Recoil States
 import { ZaionsAppSettingsRState } from 'ZaionsStore/zaionsAppSettings.recoil';
 import { ShortLinkFormState } from 'ZaionsStore/FormStates/shortLinkFormState';
-import { ZIonButton } from 'components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 // Types
 

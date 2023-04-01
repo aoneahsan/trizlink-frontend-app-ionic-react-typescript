@@ -17,11 +17,11 @@ import classNames from 'classnames';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import ZLinkIonPanelSidebar from 'components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
-import ZLinkDashboardTopBar from 'components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
-import AddEmailModal from 'components/InPageComponents/ZaionsModals/EmailModal';
-import DeleteUserAccountModal from 'components/InPageComponents/ZaionsModals/DeleteUserAccountModal';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZLinkIonPanelSidebar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
+import ZLinkDashboardTopBar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
+import AddEmailModal from '@/components/InPageComponents/ZaionsModals/EmailModal';
+import DeleteUserAccountModal from '@/components/InPageComponents/ZaionsModals/DeleteUserAccountModal';
 import {
   ZTable,
   ZTableTHead,
@@ -29,8 +29,8 @@ import {
   ZTableHeadCol,
   ZTableTBody,
   ZTableRowCol,
-} from 'components/InPageComponents/ZaionsTable/table-styled-components.sc';
-import ZaionsLinkSettingPanel from 'components/UserDashboard/ZLinkdashboard/ZLinksSettingPanel';
+} from '@/components/InPageComponents/ZaionsTable/table-styled-components.sc';
+import ZaionsLinkSettingPanel from '@/components/UserDashboard/ZLinkdashboard/ZLinksSettingPanel';
 import {
   ZIonCol,
   ZIonText,
@@ -45,7 +45,7 @@ import {
   ZIonIcon,
   ZIonCheckbox,
   ZIonSelectOption,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
@@ -56,8 +56,8 @@ import CONSTANTS, {
   BRACKPOINT_SM,
   DASHBOARD_SM_MENU_CONTENT_ID,
   PRODUCT_NAME,
-} from 'utils/constants';
-import { PAGE_MENU } from 'utils/enums';
+} from '@/utils/constants';
+import { PAGE_MENU } from '@/utils/enums';
 
 /**
  * Type Imports go down
@@ -66,7 +66,7 @@ import { PAGE_MENU } from 'utils/enums';
 import {
   ZLinkIonPanelSettingsSidebarActiveLinkType,
   ZLinkIonPanelSidebarActiveLinkType,
-} from 'types/AdminPanel/linksType';
+} from '@/types/AdminPanel/linksType';
 
 /**
  * Recoil State Imports go down
@@ -84,8 +84,8 @@ import {
  * */
 import classes from './styles.module.css';
 import { useZIonAlert, useZIonModal } from 'ZaionsHooks/zionic-hooks';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZIonSelect from 'components/ZIonComponents/ZIonSelect';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZIonSelect from '@/components/ZIonComponents/ZIonSelect';
 
 /**
  * Images Imports go down

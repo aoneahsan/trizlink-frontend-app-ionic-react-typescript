@@ -6,14 +6,14 @@ import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
-import { ZIonCol, ZIonText, ZIonImg } from 'components/ZIonComponents';
+import { ZIonCol, ZIonText, ZIonImg } from '@/components/ZIonComponents';
 
 // Constant
-import { BRACKPOINT_LG } from 'utils/constants';
+import { BRACKPOINT_LG } from '@/utils/constants';
 
 // Types
-import { ZaionsInpageColType } from 'types/InPageComponentTypes/ZaionsInpageCol.type';
-import ZIonTitle from 'components/ZIonComponents/ZIonTitle';
+import { ZaionsInpageColType } from '@/types/InPageComponentTypes/ZaionsInpageCol.type';
+import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
 
 const ZaionsInpageCol: React.FC<ZaionsInpageColType> = (props) => {
   // Medias

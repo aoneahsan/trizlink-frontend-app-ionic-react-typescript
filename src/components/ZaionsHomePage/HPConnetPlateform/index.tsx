@@ -8,7 +8,7 @@ import { IonItemDivider } from '@ionic/react';
 import { useMediaQuery } from 'react-responsive';
 
 // Custom Imports
-import ZaionsNewLabel from 'components/InPageComponents/ZaionsNewLable';
+import ZaionsNewLabel from '@/components/InPageComponents/ZaionsNewLable';
 import {
   ZIonCol,
   ZIonText,
@@ -20,18 +20,18 @@ import {
   ZIonCardHeader,
   ZIonCardTitle,
   ZIonCardContent,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constant
-import { BRACKPOINT_MD, BRACKPOINT_SM, PRODUCT_NAME } from 'utils/constants';
+import { BRACKPOINT_MD, BRACKPOINT_SM, PRODUCT_NAME } from '@/utils/constants';
 
 // Recoil
 import { ZaionsHpCPData } from 'ZaionsStore/ZaionsHPBCP.recoil';
 
 // Type
-import { ZaionsHpCPDataType } from 'types/ZaionsHPBCPType';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { ZaionsHpCPDataType } from '@/types/ZaionsHPBCPType';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 const { Item: CarouselItem } = Carousel;
 

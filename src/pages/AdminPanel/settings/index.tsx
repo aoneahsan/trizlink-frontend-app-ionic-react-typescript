@@ -6,15 +6,15 @@ import { useRouteMatch } from 'react-router';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import ZaionsCreateShortLinkUrlInput from 'components/InPageComponents/ZaionsCreateShortLinkUrlInput';
-import APSettingsPixels from 'components/UserDashboard/SettingsSection/Pixels';
-import APSettingsUtmTags from 'components/UserDashboard/SettingsSection/UtmTemplates';
-import APSettingsEmbedWidgets from 'components/UserDashboard/SettingsSection/EmbedWidgets';
-import APSettingsPrivacy from 'components/UserDashboard/SettingsSection/Privacy';
-import APSettingspassword from 'components/UserDashboard/SettingsSection/Password';
-import APSettingsApiKey from 'components/UserDashboard/SettingsSection/Integrations';
-import APSettingsCustomDomain from 'components/UserDashboard/SettingsSection/CustomDomain';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZaionsCreateShortLinkUrlInput from '@/components/InPageComponents/ZaionsCreateShortLinkUrlInput';
+import APSettingsPixels from '@/components/UserDashboard/SettingsSection/Pixels';
+import APSettingsUtmTags from '@/components/UserDashboard/SettingsSection/UtmTemplates';
+import APSettingsEmbedWidgets from '@/components/UserDashboard/SettingsSection/EmbedWidgets';
+import APSettingsPrivacy from '@/components/UserDashboard/SettingsSection/Privacy';
+import APSettingspassword from '@/components/UserDashboard/SettingsSection/Password';
+import APSettingsApiKey from '@/components/UserDashboard/SettingsSection/Integrations';
+import APSettingsCustomDomain from '@/components/UserDashboard/SettingsSection/CustomDomain';
 import {
   ZIonCol,
   ZIonText,
@@ -26,11 +26,11 @@ import {
   ZIonSplitPane,
   ZIonMenu,
   ZIonList,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import CONSTANTS from 'utils/constants';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import CONSTANTS from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Images
 
@@ -40,7 +40,7 @@ import ZaionsRoutes from 'utils/constants/RoutesConstants';
 
 // Styles
 import classes from './styles.module.css';
-import { PAGE_MENU } from 'utils/enums';
+import { PAGE_MENU } from '@/utils/enums';
 
 const ZaionsAdminPanelSettings: React.FC = () => {
   const customDomainSettingsPagePathMatch = useRouteMatch(

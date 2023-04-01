@@ -1,4 +1,4 @@
-import { apiTypeToValidateEnum, notificationTypeEnum } from 'utils/enums';
+import { apiTypeToValidateEnum, notificationTypeEnum } from '@/utils/enums';
 
 /**
  * Enums

@@ -8,10 +8,10 @@ import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import InPageFooter from 'components/InPageFooter';
-import ZaionsTopMenu from 'navigation/TopMenu';
-import ZaionsInpageHeader from 'components/InPageComponents/ZaionsInpageHeader';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import InPageFooter from '@/components/InPageFooter';
+import ZaionsTopMenu from '@/navigation/TopMenu';
+import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
 import {
   ZIonCol,
   ZIonText,
@@ -20,7 +20,7 @@ import {
   ZIonGrid,
   ZIonContent,
   ZIonImg,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Imports
 import CONSTANTS, {
@@ -28,13 +28,13 @@ import CONSTANTS, {
   BRACKPOINT_MD,
   BRACKPOINT_XL,
   PRODUCT_NAME,
-} from 'utils/constants';
+} from '@/utils/constants';
 
 // Images
-import { PlaceholderAvatar } from 'assets/images';
+import { PlaceholderAvatar } from '@/assets/images';
 
 // Types
-import { ZaionsReviewType } from 'types/Company/ReviewsPage/Review.type';
+import { ZaionsReviewType } from '@/types/Company/ReviewsPage/Review.type';
 
 // Recoil States
 import { ZaionsReviewState } from 'ZaionsStore/CompanySection/Reviews/review.recoil';

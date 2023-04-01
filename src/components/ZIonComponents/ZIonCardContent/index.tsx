@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 
 // Packages Import
 import { IonCardContent } from '@ionic/react';
-import { ZIonModeType } from 'types/zaionsAppSettings.type';
+import { ZIonModeType } from '@/types/zaionsAppSettings.type';
 
 // Type
 type ZIonCardContentType = {

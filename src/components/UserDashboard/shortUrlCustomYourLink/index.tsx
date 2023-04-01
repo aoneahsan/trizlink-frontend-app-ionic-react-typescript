@@ -20,7 +20,7 @@ import {
   ZIonRow,
   ZIonText,
   ZIonTextarea,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 import { useFormikContext } from 'formik';
 import { useRecoilValue } from 'recoil';
 import { documentTextOutline } from 'ionicons/icons';
@@ -34,13 +34,13 @@ import { documentTextOutline } from 'ionicons/icons';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { ZaionsShortUrlOptionFieldsValuesInterface } from 'types/AdminPanel/linksType';
+import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 
 /**
  * Recoil State Imports go down
@@ -58,12 +58,12 @@ import classes from './styles.module.css';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
-import { uploadImageBg, upload_send } from 'assets/images';
+import { uploadImageBg, upload_send } from '@/assets/images';
 import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
-import ZaionsFileUploadModal from 'components/InPageComponents/ZaionsModals/FileUploadModal';
+import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/FileUploadModal';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
-import { ZIonModalActionEnum } from 'types/ZaionsApis.type';
-import { zJsonParse } from 'utils/helpers';
+import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
+import { zJsonParse } from '@/utils/helpers';
 
 /**
  * Component props type go down

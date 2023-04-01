@@ -14,10 +14,10 @@ import classNames from 'classnames';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonCol, ZIonDatetime } from 'components/ZIonComponents';
-import ZRScrollbars from 'components/CustomComponents/ZRScrollBar';
-import ZTimezoneInput from 'components/CustomComponents/ZTimezone';
-import { LinkInBioThemeFontEnum } from 'types/AdminPanel/linkInBioType';
+import { ZIonCol, ZIonDatetime } from '@/components/ZIonComponents';
+import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
+import ZTimezoneInput from '@/components/CustomComponents/ZTimezone';
+import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 
 /**
  * Global Constants Imports go down

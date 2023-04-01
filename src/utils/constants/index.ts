@@ -1,4 +1,4 @@
-// import { zConsoleError } from 'utils/helpers';
+// import { zConsoleError } from '@/utils/helpers';
 // Custom Imports
 import {
   adrollSvgLogo,
@@ -17,9 +17,9 @@ import {
   tiktokSvgLogo,
   twitterSvgLogo,
   vkSvgLogo,
-} from 'assets/images';
-import { IonLoaderEnum } from 'types/AdminPanel/linksType';
-import { ENVS } from 'utils/envKeys';
+} from '@/assets/images';
+import { IonLoaderEnum } from '@/types/AdminPanel/linksType';
+import { ENVS } from '@/utils/envKeys';
 
 // Constant
 // const ZLinkApiRootUrl = 'https://zlinkbackend.zaions.com/public/api/zlink/v1';

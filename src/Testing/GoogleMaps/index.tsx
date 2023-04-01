@@ -1,8 +1,8 @@
 import { CreateAnimation } from '@ionic/react';
-import ZCapGMap from 'components/CustomComponents/GoogleMaps/ZCapGMap';
-// import ZRGAutoCompleteInput from 'components/CustomComponents/GoogleMaps/ZRGAutoCompleteInput';
+import ZCapGMap from '@/components/CustomComponents/GoogleMaps/ZCapGMap';
+// import ZRGAutoCompleteInput from '@/components/CustomComponents/GoogleMaps/ZRGAutoCompleteInput';
 import { useState } from 'react';
-import { GM_CONSTANTS } from 'utils/constants/googleMapsConstants';
+import { GM_CONSTANTS } from '@/utils/constants/googleMapsConstants';
 
 const GoogleMapsCapacitorPackageTest: React.FC = () => {
   const [mapCoordinates] = useState({

@@ -47,20 +47,20 @@ import {
   ZIonRow,
   ZIonText,
   ZIonTitle,
-} from 'components/ZIonComponents';
-import ZRCSwitch from 'components/CustomComponents/ZRCSwitch';
-import LinkInBioLinkField from 'components/LinkInBioComponents/Form/LinkField';
-import LinkInBioTitleField from 'components/LinkInBioComponents/Form/TitleField';
-import LinkInBioDescriptionField from 'components/LinkInBioComponents/Form/DescriptionField';
-import LinkInBioUploadField from 'components/LinkInBioComponents/Form/UploadField';
-import LinkInBioDateTimeField from 'components/LinkInBioComponents/Form/DateTimeField';
-import LinkInBioEnableField from 'components/LinkInBioComponents/Form/DateTimeField/enableField';
-import LinkInBioSearchField from 'components/LinkInBioComponents/Form/SearchField';
-import LinkInBioTimezoneField from 'components/LinkInBioComponents/Form/TimezoneField';
-import ZRoundedButton from 'components/CustomComponents/ZRoundedButton';
-import ZTextEditor from 'components/CustomComponents/ZTextEditor';
+} from '@/components/ZIonComponents';
+import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
+import LinkInBioLinkField from '@/components/LinkInBioComponents/Form/LinkField';
+import LinkInBioTitleField from '@/components/LinkInBioComponents/Form/TitleField';
+import LinkInBioDescriptionField from '@/components/LinkInBioComponents/Form/DescriptionField';
+import LinkInBioUploadField from '@/components/LinkInBioComponents/Form/UploadField';
+import LinkInBioDateTimeField from '@/components/LinkInBioComponents/Form/DateTimeField';
+import LinkInBioEnableField from '@/components/LinkInBioComponents/Form/DateTimeField/enableField';
+import LinkInBioSearchField from '@/components/LinkInBioComponents/Form/SearchField';
+import LinkInBioTimezoneField from '@/components/LinkInBioComponents/Form/TimezoneField';
+import ZRoundedButton from '@/components/CustomComponents/ZRoundedButton';
+import ZTextEditor from '@/components/CustomComponents/ZTextEditor';
 import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
-import ZaionsColorPiker from 'components/InPageComponents/ZaionsColorPiker';
+import ZaionsColorPiker from '@/components/InPageComponents/ZaionsColorPiker';
 
 import {
   useZRQDeleteRequest,
@@ -73,7 +73,7 @@ import { useZValidateRequestResponse } from 'ZaionsHooks/zapi-hooks';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import CONSTANTS, { TIMEZONES } from 'utils/constants';
+import CONSTANTS, { TIMEZONES } from '@/utils/constants';
 import {
   createRedirectRoute,
   extractInnerData,
@@ -81,10 +81,10 @@ import {
   zConsole,
   zJsonParse,
   zStringify,
-} from 'utils/helpers';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from 'utils/enums';
-import { reportCustomError } from 'utils/customErrorType';
+} from '@/utils/helpers';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import { reportCustomError } from '@/utils/customErrorType';
 
 /**
  * Type Imports go down
@@ -95,7 +95,7 @@ import {
   LinkInBioThemeBackgroundEnum,
   ZLinkInBioPageEnum,
   ZLinkInBioRHSComponentEnum,
-} from 'types/AdminPanel/linkInBioType';
+} from '@/types/AdminPanel/linkInBioType';
 import {
   LinkInBioBlockAnimationEnum,
   linkInBioBlockCardItemEnum,
@@ -105,10 +105,10 @@ import {
   LinkInBioCardViewEnum,
   LinkInBioSingleBlockContentType,
   SeparatorTypeEnum,
-} from 'types/AdminPanel/linkInBioType/blockTypes';
-import { ZRQGetRequestExtractEnum } from 'types/ZReactQuery/index.type';
-import { ZaionsRSelectOptions } from 'types/components/CustomComponents/index.type';
-import { ZGenericObject } from 'types/zaionsAppSettings.type';
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 
 /**
  * Recoil State Imports go down
@@ -148,22 +148,22 @@ import {
   thumb_style_2,
   wobbleAnimation,
   zoomAnimation,
-} from 'assets/images';
+} from '@/assets/images';
 import dayjs from 'dayjs';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
-import ZCustomDeleteComponent from 'components/CustomComponents/ZCustomDeleteComponent';
+import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
 import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
-import ZLinkInBioAddBlockModal from 'components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal';
-import LinkInBioCarouselCardField from 'components/LinkInBioComponents/Form/CarouselCardField';
-import LinkInBioQAndACardField from 'components/LinkInBioComponents/Form/QAndACardField';
-import LinkInBioMusicPlatformCardField from 'components/LinkInBioComponents/Form/MusicPlatformField';
-import LinkInBioMessengerPlatformCardField from 'components/LinkInBioComponents/Form/MessengerPlatformField';
-import LinkInBioSocialPlatformCardField from 'components/LinkInBioComponents/Form/socialPlatformField';
-import LinkInBioIconField from 'components/LinkInBioComponents/Form/IconField';
-import LinkInBioVCardField from 'components/LinkInBioComponents/Form/VCardField';
-import LinkInBioIframeField from 'components/LinkInBioComponents/Form/Iframe';
-import LinkInBioFormField from 'components/LinkInBioComponents/Form/FormField';
-import ZRGAutoCompleteInput from 'components/CustomComponents/GoogleMaps/ZRGAutoCompleteInput';
+import ZLinkInBioAddBlockModal from '@/components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal';
+import LinkInBioCarouselCardField from '@/components/LinkInBioComponents/Form/CarouselCardField';
+import LinkInBioQAndACardField from '@/components/LinkInBioComponents/Form/QAndACardField';
+import LinkInBioMusicPlatformCardField from '@/components/LinkInBioComponents/Form/MusicPlatformField';
+import LinkInBioMessengerPlatformCardField from '@/components/LinkInBioComponents/Form/MessengerPlatformField';
+import LinkInBioSocialPlatformCardField from '@/components/LinkInBioComponents/Form/socialPlatformField';
+import LinkInBioIconField from '@/components/LinkInBioComponents/Form/IconField';
+import LinkInBioVCardField from '@/components/LinkInBioComponents/Form/VCardField';
+import LinkInBioIframeField from '@/components/LinkInBioComponents/Form/Iframe';
+import LinkInBioFormField from '@/components/LinkInBioComponents/Form/FormField';
+import ZRGAutoCompleteInput from '@/components/CustomComponents/GoogleMaps/ZRGAutoCompleteInput';
 import classNames from 'classnames';
 
 /**

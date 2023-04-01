@@ -5,7 +5,7 @@ import React from 'react';
 import { IonIcon } from '@ionic/react';
 
 // Type
-import { ZIonColorType } from 'types/zaionsAppSettings.type';
+import { ZIonColorType } from '@/types/zaionsAppSettings.type';
 type ZIonIconType = {
   icon?: string;
   className?: string;

@@ -13,17 +13,17 @@ import {
 import { useMediaQuery } from 'react-responsive';
 
 // Custom Imports
-import ZaionsDropDown from 'components/InPageComponents/ZaionsDropdown';
+import ZaionsDropDown from '@/components/InPageComponents/ZaionsDropdown';
 
 // Global Constant
-import { BRACKPOINT_LG, BRACKPOINT_MD, PRODUCT_NAME } from 'utils/constants';
+import { BRACKPOINT_LG, BRACKPOINT_MD, PRODUCT_NAME } from '@/utils/constants';
 import ZaionsRoutes from '../../utils/constants/RoutesConstants';
 
 // Styles
 import classes from './styles.module.css';
 
 // Images
-import { ProductLogo } from 'assets/images';
+import { ProductLogo } from '@/assets/images';
 import classNames from 'classnames';
 import {
   ZIonButton,
@@ -33,8 +33,8 @@ import {
   ZIonMenuButton,
   ZIonRouterLink,
   ZIonRow,
-} from 'components/ZIonComponents';
-import ZIonTitle from 'components/ZIonComponents/ZIonTitle';
+} from '@/components/ZIonComponents';
+import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
 
 const ZaionsTopMenu: React.FC = () => {
   const isLgScale = useMediaQuery({

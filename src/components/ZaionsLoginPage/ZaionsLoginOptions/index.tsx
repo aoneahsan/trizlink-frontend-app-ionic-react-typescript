@@ -17,12 +17,12 @@ import {
   ZIonIcon,
   ZIonRouterLink,
   ZIonRow,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import { BRACKPOINT_SM } from 'utils/constants';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { BRACKPOINT_SM } from '@/utils/constants';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Style
 

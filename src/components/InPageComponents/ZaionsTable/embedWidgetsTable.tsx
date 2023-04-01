@@ -34,10 +34,10 @@ import {
   ZIonLabel,
   ZIonSelectOption,
   ZIonList,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import CONSTANTS from 'utils/constants';
+import CONSTANTS from '@/utils/constants';
 import {
   useZIonAlert,
   useZIonErrorAlert,
@@ -48,17 +48,17 @@ import {
 import { EmbedWidgetsFormState } from 'ZaionsStore/FormStates/embedWidgetsFormState.recoil';
 
 // Types
-import { EmbedWidgetsType } from 'types/AdminPanel/linksType';
-import { FormMode } from 'types/AdminPanel/index.type';
+import { EmbedWidgetsType } from '@/types/AdminPanel/linksType';
+import { FormMode } from '@/types/AdminPanel/index.type';
 import {
   useZRQDeleteRequest,
   useZRQGetRequest,
 } from 'ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from 'utils/enums';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZIonSelect from 'components/ZIonComponents/ZIonSelect';
-import { showSuccessNotification } from 'utils/notification';
-import MESSAGES from 'utils/messages';
+import { API_URL_ENUM } from '@/utils/enums';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZIonSelect from '@/components/ZIonComponents/ZIonSelect';
+import { showSuccessNotification } from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
 import ZaionsEmbedWidgetsModal from '../ZaionsModals/AddEmbedWidgets';
 
 // Styles

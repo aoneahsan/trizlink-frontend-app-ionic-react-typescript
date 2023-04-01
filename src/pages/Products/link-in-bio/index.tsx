@@ -7,15 +7,15 @@ import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import InPageFooter from 'components/InPageFooter';
-import ZaionsInpageHeader from 'components/InPageComponents/ZaionsInpageHeader';
-import ZaionsInpageBrandsList from 'components/InPageComponents/ZaionsBrandsList';
-import ZaionsHPUsersFeedBack from 'components/ZaionsHomePage/HPFeedback';
-import ZaionsInpageCol from 'components/InPageComponents/ZaionsInpageGridsys';
-import ZaionsTopMenu from 'navigation/TopMenu';
-import ZaionsTwoByTwoLeftCols from 'components/InPageComponents/Zaions2By2LeftCols';
-import ZaionsTwoByTwoRightCols from 'components/InPageComponents/Zaions2By2RightCols';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import InPageFooter from '@/components/InPageFooter';
+import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
+import ZaionsInpageBrandsList from '@/components/InPageComponents/ZaionsBrandsList';
+import ZaionsHPUsersFeedBack from '@/components/ZaionsHomePage/HPFeedback';
+import ZaionsInpageCol from '@/components/InPageComponents/ZaionsInpageGridsys';
+import ZaionsTopMenu from '@/navigation/TopMenu';
+import ZaionsTwoByTwoLeftCols from '@/components/InPageComponents/Zaions2By2LeftCols';
+import ZaionsTwoByTwoRightCols from '@/components/InPageComponents/Zaions2By2RightCols';
 import {
   ZIonCol,
   ZIonText,
@@ -26,7 +26,7 @@ import {
   ZIonContent,
   ZIonList,
   ZIonImg,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 import {
@@ -34,11 +34,11 @@ import {
   BRACKPOINT_MD,
   BRACKPOINT_XL,
   PRODUCT_NAME,
-} from 'utils/constants';
+} from '@/utils/constants';
 
 // Styles
 import classes from './styles.module.css';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import {
   brandingLIB,
   chartInspect,
@@ -48,8 +48,8 @@ import {
   linkInBioDriveTraffic,
   ManageLinksLIB,
   redirectLink1,
-} from 'assets/images';
-import { ZIonButton } from 'components/ZIonComponents';
+} from '@/assets/images';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 const ZaionsLinkInBio: React.FC = () => {
   const isXlScale = useMediaQuery({

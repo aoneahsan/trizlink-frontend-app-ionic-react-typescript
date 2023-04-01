@@ -7,7 +7,7 @@ import ZIonDatetime from '../ZIonDatetime';
 import ZIonModal from '../ZIonModal';
 
 //
-import { ZIonColorType, ZIonModeType } from 'types/zaionsAppSettings.type';
+import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
 import { IonDatetimeCustomEvent } from '@ionic/core/dist/types/components';
 
 // Type

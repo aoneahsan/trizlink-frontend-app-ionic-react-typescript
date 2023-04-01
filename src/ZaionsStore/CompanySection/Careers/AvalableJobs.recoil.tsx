@@ -5,10 +5,10 @@ import { atom } from 'recoil';
 
 // Custom Imports
 // Data
-import { ZaionsJobsData } from 'data/Company/Careers/AvalableJobs.data';
+import { ZaionsJobsData } from '@/data/Company/Careers/AvalableJobs.data';
 
 // Types
-import { ZaionsJobsType } from 'types/Company/CareersPage/AvalableJobs.type';
+import { ZaionsJobsType } from '@/types/Company/CareersPage/AvalableJobs.type';
 
 export const ZaionsJobsState = atom<ZaionsJobsType[]>({
   key: 'ZaionsJobsState_key',

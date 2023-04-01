@@ -1,14 +1,14 @@
-import CONSTANTS from 'utils/constants';
-import { LinkTypeOptionsData } from 'data/UserDashboard/Links/index';
+import CONSTANTS from '@/utils/constants';
+import { LinkTypeOptionsData } from '@/data/UserDashboard/Links/index';
 import { atom, selector } from 'recoil';
 import {
   ShortLinkType,
   ShortUrlLinkOptionType,
-} from 'types/AdminPanel/linksType';
+} from '@/types/AdminPanel/linksType';
 import {
   FormMode,
   messengerPlatformsBlockEnum,
-} from 'types/AdminPanel/index.type';
+} from '@/types/AdminPanel/index.type';
 
 export const NewShortLinkFormState = atom<ShortLinkType>({
   key: 'NewShortLinkFormState_key',

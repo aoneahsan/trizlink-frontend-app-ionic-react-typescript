@@ -4,7 +4,7 @@ import React from 'react';
 // Packages Imports
 
 // Custom Imports
-import ZaionsHr from 'components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
 import {
   ZIonCol,
   ZIonText,
@@ -12,14 +12,14 @@ import {
   ZIonImg,
   ZIonGrid,
   ZIonRow,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Imports
 
 // Styles
 import classes from './styles.module.css';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZIonTitle from 'components/ZIonComponents/ZIonTitle';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
 
 const ZaionsFeatureBanner: React.FC<{
   title?: string;

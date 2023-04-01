@@ -11,7 +11,7 @@ import React from 'react';
 import {} from '@ionic/react';
 import classNames from 'classnames';
 import { useMediaQuery } from 'react-responsive';
-import { BRACKPOINT_MD } from 'utils/constants';
+import { BRACKPOINT_MD } from '@/utils/constants';
 
 /**
  * Custom Imports go down
@@ -22,8 +22,8 @@ import {
   ZIonIcon,
   ZIonRow,
   ZIonText,
-} from 'components/ZIonComponents';
-import { ZIonColorType } from 'types/zaionsAppSettings.type';
+} from '@/components/ZIonComponents';
+import { ZIonColorType } from '@/types/zaionsAppSettings.type';
 
 /**
  * Global Constants Imports go down

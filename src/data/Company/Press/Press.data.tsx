@@ -1,12 +1,12 @@
 // Type
-import { ZaionsPressType } from 'types/Company/PressPage/Press.type';
+import { ZaionsPressType } from '@/types/Company/PressPage/Press.type';
 
 // Images
 import {
   ZaionsMomentumLeadershipPressPreview,
   ZaionsPress,
-} from 'assets/images';
-import { PRODUCT_NAME } from 'utils/constants';
+} from '@/assets/images';
+import { PRODUCT_NAME } from '@/utils/constants';
 
 export const ZaionsPressData: ZaionsPressType[] = [
   {

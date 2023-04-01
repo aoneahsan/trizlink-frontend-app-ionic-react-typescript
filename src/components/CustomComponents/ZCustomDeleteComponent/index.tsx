@@ -15,7 +15,7 @@ import { trashBin } from 'ionicons/icons';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonButton, ZIonIcon, ZIonText } from 'components/ZIonComponents';
+import { ZIonButton, ZIonIcon, ZIonText } from '@/components/ZIonComponents';
 import { useZIonActionSheet } from 'ZaionsHooks/zionic-hooks';
 
 /**
@@ -32,7 +32,7 @@ import { useZIonActionSheet } from 'ZaionsHooks/zionic-hooks';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { ZGenericObject, ZIonColorType } from 'types/zaionsAppSettings.type';
+import { ZGenericObject, ZIonColorType } from '@/types/zaionsAppSettings.type';
 
 /**
  * Style files Imports go down

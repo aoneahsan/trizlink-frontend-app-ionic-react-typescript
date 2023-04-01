@@ -11,7 +11,7 @@ import {
   ZIonDatetimeButton,
   ZIonIcon,
   ZIonItem,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Type
 import { IonDatetimeCustomEvent } from '@ionic/core/dist/types/components';

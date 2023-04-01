@@ -5,7 +5,7 @@ import React from 'react';
 
 // Custom Imports
 import ZaionsCarouselActions from './CarouselAction';
-import ZaionsHr from 'components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
 import ZaionsCarouselSlider from './CarouselSlider';
 
 // Style

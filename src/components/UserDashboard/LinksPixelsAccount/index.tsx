@@ -13,15 +13,15 @@ import {
   ZIonIcon,
   ZIonRouterLink,
   ZIonImg,
-} from 'components/ZIonComponents';
-import { ZIonButton } from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 // Global Constants
-import { API_URL_ENUM } from 'utils/enums';
-import CONSTANTS, { Platforms } from 'utils/constants';
+import { API_URL_ENUM } from '@/utils/enums';
+import CONSTANTS, { Platforms } from '@/utils/constants';
 import { useZRQGetRequest } from 'ZaionsHooks/zreactquery-hooks';
-import ZaionsRSelect from 'components/CustomComponents/ZaionsRSelect';
-import { formatReactSelectOptionsArray } from 'utils/helpers';
+import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
+import { formatReactSelectOptionsArray } from '@/utils/helpers';
 
 // Images
 
@@ -33,12 +33,12 @@ import {
   PixelAccountType,
   PixelPlatformsEnum,
   ZaionsShortUrlOptionFieldsValuesInterface,
-} from 'types/AdminPanel/linksType';
-import { ZGenericObject } from 'types/zaionsAppSettings.type';
+} from '@/types/AdminPanel/linksType';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { useFormikContext } from 'formik';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
-import ZaionsAddPixelAccount from 'components/InPageComponents/ZaionsModals/AddPixelsAccount';
+import ZaionsAddPixelAccount from '@/components/InPageComponents/ZaionsModals/AddPixelsAccount';
 
 // Styles
 

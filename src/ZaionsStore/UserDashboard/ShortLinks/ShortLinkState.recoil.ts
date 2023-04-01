@@ -1,15 +1,15 @@
 import { atom, selector } from 'recoil';
 
 // Data
-// import { ZaionsShortLinkData } from 'data/UserDashboard/ShortLinksData';
+// import { ZaionsShortLinkData } from '@/data/UserDashboard/ShortLinksData';
 
 import {
   ShortLinkType,
   ShortLinkFilterOptionsInterface,
   TimeFilterEnum,
   LinkTargetType,
-} from 'types/AdminPanel/linksType';
-import { getPrimaryDomain } from 'utils/helpers';
+} from '@/types/AdminPanel/linksType';
+import { getPrimaryDomain } from '@/utils/helpers';
 
 export const ShortLinksRState = atom<ShortLinkType[] | undefined>({
   key: 'ShortLinksRState_key',

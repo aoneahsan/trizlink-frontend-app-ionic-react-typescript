@@ -15,8 +15,8 @@ import { useFormikContext } from 'formik';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonCol, ZIonRow, ZIonText } from 'components/ZIonComponents';
-import ZEditor from 'components/CustomComponents/ZEditor';
+import { ZIonCol, ZIonRow, ZIonText } from '@/components/ZIonComponents';
+import ZEditor from '@/components/CustomComponents/ZEditor';
 
 /**
  * Global Constants Imports go down
@@ -27,7 +27,7 @@ import ZEditor from 'components/CustomComponents/ZEditor';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkInBioType } from 'types/AdminPanel/linkInBioType';
+import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 
 /**
  * Recoil State Imports go down

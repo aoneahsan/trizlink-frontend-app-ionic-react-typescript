@@ -9,7 +9,7 @@ import {
   ZIonColorType,
   ZIonModeType,
   ZIonRouterDirection,
-} from 'types/zaionsAppSettings.type';
+} from '@/types/zaionsAppSettings.type';
 type ZIonItemType = {
   children: ReactNode;
   className?: string;

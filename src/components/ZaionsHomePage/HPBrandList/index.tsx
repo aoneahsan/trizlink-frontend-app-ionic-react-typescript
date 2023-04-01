@@ -7,26 +7,26 @@ import { useMediaQuery } from 'react-responsive';
 import Carousel from 'react-bootstrap/Carousel';
 
 // Custom Imports
-import ZaionsHr from 'components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
 import {
   ZIonCol,
   ZIonText,
   ZIonImg,
   ZIonRow,
   ZIonGrid,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constant
-import { BRACKPOINT_MD } from 'utils/constants';
+import { BRACKPOINT_MD } from '@/utils/constants';
 
 // Type
-import { ZaionsHPBrandsType } from 'types/ZionsHPBrandType';
+import { ZaionsHPBrandsType } from '@/types/ZionsHPBrandType';
 
 // Recoil
 import { ZaionsHPBrandsData } from 'ZaionsStore/ZaionsHPBrandsRecoil';
 
 // Data
-import HPBrandData from 'data/HPBrandListData';
+import HPBrandData from '@/data/HPBrandListData';
 
 const { Item: CarouselItem } = Carousel;
 

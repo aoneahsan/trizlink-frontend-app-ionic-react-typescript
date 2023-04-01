@@ -12,11 +12,11 @@ import { useRecoilState } from 'recoil';
 import { ZaionsUsersFeedBackCarouselState } from 'ZaionsStore/InpageComponents/ZaionsUsersFeedBack.recoil';
 
 // Global Content
-import { showZCapErrorDialogAlert } from 'utils/helpers';
+import { showZCapErrorDialogAlert } from '@/utils/helpers';
 
 // Style
 import classes from './styles.module.css';
-import { ZIonButton, ZIonIcon } from 'components/ZIonComponents';
+import { ZIonButton, ZIonIcon } from '@/components/ZIonComponents';
 
 const CAROUSEL_ITEM_CHANGE_TYPE = {
   ARROW: 'arrow',

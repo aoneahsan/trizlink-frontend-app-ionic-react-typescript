@@ -2,10 +2,10 @@
 import React, { ReactNode } from 'react';
 
 // Packages Imports
-import { ZIonButton } from 'components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 // Types
-import { ZIonColorType } from 'types/zaionsAppSettings.type';
+import { ZIonColorType } from '@/types/zaionsAppSettings.type';
 
 // Component Type
 type ZRoundedButtonType = {

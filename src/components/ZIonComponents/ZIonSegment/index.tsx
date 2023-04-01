@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 
 // Packages Import
 import { IonSegment } from '@ionic/react';
-import { ZIonColorType, ZIonModeType } from 'types/zaionsAppSettings.type';
+import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
 
 type ZIonSegmentType = {
   children: ReactNode;

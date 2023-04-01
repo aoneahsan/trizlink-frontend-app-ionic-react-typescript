@@ -21,18 +21,18 @@ import { useMediaQuery } from 'react-responsive';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import AddNotes from 'components/UserDashboard/AddNotes';
-import EmbedWidget from 'components/UserDashboard/EmbedWidget';
-import DeepLinking from 'components/UserDashboard/DeepLinking';
-import LinkCloaking from 'components/UserDashboard/LinkCloaking';
-import Tags from 'components/UserDashboard/Tags';
-import RotatorABTesting from 'components/UserDashboard/RotatorABTesting';
-import GeoLocation from 'components/UserDashboard/GeoLocation';
-import LinkExpiration from 'components/UserDashboard/LinkExpiration';
-import LinkPassword from 'components/UserDashboard/Password';
-import LinkFavIcon from 'components/UserDashboard/Favicon';
-import GDPRPopup from 'components/UserDashboard/GDPRPopup';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import AddNotes from '@/components/UserDashboard/AddNotes';
+import EmbedWidget from '@/components/UserDashboard/EmbedWidget';
+import DeepLinking from '@/components/UserDashboard/DeepLinking';
+import LinkCloaking from '@/components/UserDashboard/LinkCloaking';
+import Tags from '@/components/UserDashboard/Tags';
+import RotatorABTesting from '@/components/UserDashboard/RotatorABTesting';
+import GeoLocation from '@/components/UserDashboard/GeoLocation';
+import LinkExpiration from '@/components/UserDashboard/LinkExpiration';
+import LinkPassword from '@/components/UserDashboard/Password';
+import LinkFavIcon from '@/components/UserDashboard/Favicon';
+import GDPRPopup from '@/components/UserDashboard/GDPRPopup';
 import {
   ZIonCol,
   ZIonText,
@@ -42,16 +42,16 @@ import {
   ZIonTitle,
   ZIonContent,
   ZIonFooter,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
 import { useZIonLoading } from 'ZaionsHooks/zionic-hooks';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZaionsShortUrlOptionFields from 'components/UserDashboard/shortLinkFormComponents/shortUrlLinkOptionFields';
-import ZaionsCustomYourLink from 'components/UserDashboard/shortUrlCustomYourLink';
-import LinksPixelsAccount from 'components/UserDashboard/LinksPixelsAccount';
-import UTMTagTemplates from 'components/UserDashboard/UTMTagTemplates';
-import DomainName from 'components/UserDashboard/DomainName';
-import ShortLinkFoldersHOC from 'components/UserDashboard/ShortLinkFoldersHOC';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZaionsShortUrlOptionFields from '@/components/UserDashboard/shortLinkFormComponents/shortUrlLinkOptionFields';
+import ZaionsCustomYourLink from '@/components/UserDashboard/shortUrlCustomYourLink';
+import LinksPixelsAccount from '@/components/UserDashboard/LinksPixelsAccount';
+import UTMTagTemplates from '@/components/UserDashboard/UTMTagTemplates';
+import DomainName from '@/components/UserDashboard/DomainName';
+import ShortLinkFoldersHOC from '@/components/UserDashboard/ShortLinkFoldersHOC';
 import {
   useZRQCreateRequest,
   useZRQGetRequest,
@@ -62,19 +62,19 @@ import {
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import MESSAGES from 'utils/messages';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
-import { replaceParams, validateField, zStringify } from 'utils/helpers';
-import { API_URL_ENUM, VALIDATION_RULE } from 'utils/enums';
-import CONSTANTS, { BRACKPOINT_LG, BRACKPOINT_MD } from 'utils/constants';
+import MESSAGES from '@/utils/messages';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { replaceParams, validateField, zStringify } from '@/utils/helpers';
+import { API_URL_ENUM, VALIDATION_RULE } from '@/utils/enums';
+import CONSTANTS, { BRACKPOINT_LG, BRACKPOINT_MD } from '@/utils/constants';
 import {
   reportCustomError,
   throwZCustomErrorRequestFailed,
-} from 'utils/customErrorType';
+} from '@/utils/customErrorType';
 import {
   showErrorNotification,
   showSuccessNotification,
-} from 'utils/notification';
+} from '@/utils/notification';
 
 /**
  * Recoil State Imports go down
@@ -86,12 +86,12 @@ import { NewShortLinkFormState } from 'ZaionsStore/UserDashboard/ShortLinks/Shor
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkTargetType, ShortLinkType } from 'types/AdminPanel/linksType';
+import { LinkTargetType, ShortLinkType } from '@/types/AdminPanel/linksType';
 import {
   FormMode,
   messengerPlatformsBlockEnum,
-} from 'types/AdminPanel/index.type';
-import { resetFormType } from 'types/ZaionsFormik.type';
+} from '@/types/AdminPanel/index.type';
+import { resetFormType } from '@/types/ZaionsFormik.type';
 import {
   UTMTagInfoInterface,
   ShortUrlInterface,
@@ -99,8 +99,8 @@ import {
   GeoLocationRotatorInterface,
   LinkExpirationInfoInterface,
   PasswordInterface,
-} from 'types/AdminPanel/index.type';
-import { ZRQGetRequestExtractEnum } from 'types/ZReactQuery/index.type';
+} from '@/types/AdminPanel/index.type';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Style files Imports go down

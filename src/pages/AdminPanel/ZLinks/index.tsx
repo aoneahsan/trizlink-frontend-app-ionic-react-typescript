@@ -35,9 +35,9 @@ import classNames from 'classnames';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import ZLinkIonPanelSidebar from 'components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
-import ZLinkDashboardTopBar from 'components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZLinkIonPanelSidebar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
+import ZLinkDashboardTopBar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
 
 import {
   ZIonCol,
@@ -54,14 +54,14 @@ import {
   ZIonImg,
   ZIonIcon,
   ZIonCheckbox,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import CONSTANTS, { DASHBOARD_SM_MENU_CONTENT_ID } from 'utils/constants';
-import { PAGE_MENU } from 'utils/enums';
+import CONSTANTS, { DASHBOARD_SM_MENU_CONTENT_ID } from '@/utils/constants';
+import { PAGE_MENU } from '@/utils/enums';
 
 /**
  * Type Imports go down
@@ -70,7 +70,7 @@ import { PAGE_MENU } from 'utils/enums';
 import {
   LinkTargetType,
   ZLinkIonPanelSidebarActiveLinkType,
-} from 'types/AdminPanel/linksType';
+} from '@/types/AdminPanel/linksType';
 
 /**
  * Recoil State Imports go down
@@ -89,11 +89,11 @@ import classes from './styles.module.css';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
-import { placeholderImage, qrCodeImage } from 'assets/images';
+import { placeholderImage, qrCodeImage } from '@/assets/images';
 import { useZIonModal, useZIonPopover } from 'ZaionsHooks/zionic-hooks';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
-import ZaionsDashboardFiltersModal from 'components/InPageComponents/ZaionsModals/DashboardFiltersModal.tsx';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import ZaionsDashboardFiltersModal from '@/components/InPageComponents/ZaionsModals/DashboardFiltersModal.tsx';
 
 /**
  * Component props type go down

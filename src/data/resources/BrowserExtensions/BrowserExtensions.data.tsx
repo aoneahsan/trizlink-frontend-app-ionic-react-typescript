@@ -1,6 +1,6 @@
-import { chromeLogo, edgeLogo, firefoxLogo } from 'assets/images';
-import { ZaionsCardWithIconType } from 'types/ZaionsCardWithIcon.type';
-import CONSTANTS, { PRODUCT_NAME } from 'utils/constants';
+import { chromeLogo, edgeLogo, firefoxLogo } from '@/assets/images';
+import { ZaionsCardWithIconType } from '@/types/ZaionsCardWithIcon.type';
+import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 
 export const BrowserExtensionData: ZaionsCardWithIconType[] = [
   {

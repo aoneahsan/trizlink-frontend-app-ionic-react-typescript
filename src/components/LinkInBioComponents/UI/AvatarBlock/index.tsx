@@ -14,7 +14,7 @@ import classNames from 'classnames';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonCol, ZIonImg, ZIonTitle } from 'components/ZIonComponents';
+import { ZIonCol, ZIonImg, ZIonTitle } from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down

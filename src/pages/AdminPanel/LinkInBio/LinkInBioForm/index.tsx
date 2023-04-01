@@ -20,7 +20,7 @@ import classNames from 'classnames';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsIonPage from 'components/ZaionsIonPage';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
 import {
   ZIonButton,
   ZIonCol,
@@ -32,12 +32,12 @@ import {
   ZIonLabel,
   ZIonRow,
   ZIonText,
-} from 'components/ZIonComponents';
-import ZIonSegment from 'components/ZIonComponents/ZIonSegment';
-import ZIonSegmentButton from 'components/ZIonComponents/ZIonSegmentButton';
-import LinkInBioDesignPage from 'pages/AdminPanel/LinkInBio/LinkInBioForm/Design';
-import LinkInBioShareSettings from 'pages/AdminPanel/LinkInBio/LinkInBioForm/ShareSettings';
-import LinkInBioPageAnalytics from 'pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics';
+} from '@/components/ZIonComponents';
+import ZIonSegment from '@/components/ZIonComponents/ZIonSegment';
+import ZIonSegmentButton from '@/components/ZIonComponents/ZIonSegmentButton';
+import LinkInBioDesignPage from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design';
+import LinkInBioShareSettings from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/ShareSettings';
+import LinkInBioPageAnalytics from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics';
 
 import {
   useZRQGetRequest,
@@ -55,12 +55,12 @@ import {
   replaceParams,
   zJsonParse,
   zStringify,
-} from 'utils/helpers';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
-import CONSTANTS from 'utils/constants';
-import { API_URL_ENUM } from 'utils/enums';
-import { showErrorNotification } from 'utils/notification';
-import { reportCustomError } from 'utils/customErrorType';
+} from '@/utils/helpers';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import CONSTANTS from '@/utils/constants';
+import { API_URL_ENUM } from '@/utils/enums';
+import { showErrorNotification } from '@/utils/notification';
+import { reportCustomError } from '@/utils/customErrorType';
 
 /**
  * Type Imports go down
@@ -75,10 +75,10 @@ import {
   LinkInBioType,
   ZLinkInBioPageEnum,
   ZLinkInBioRHSComponentEnum,
-} from 'types/AdminPanel/linkInBioType';
-import { LinkInBioBlockEnum } from 'types/AdminPanel/linkInBioType/blockTypes';
-import { ZRQGetRequestExtractEnum } from 'types/ZReactQuery/index.type';
-import { FormMode } from 'types/AdminPanel/index.type';
+} from '@/types/AdminPanel/linkInBioType';
+import { LinkInBioBlockEnum } from '@/types/AdminPanel/linkInBioType/blockTypes';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { FormMode } from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down

@@ -14,7 +14,7 @@ import classNames from 'classnames';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsHr from 'components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
 import {
   ZIonCol,
   ZIonRow,
@@ -22,7 +22,7 @@ import {
   ZIonButton,
   ZIonGrid,
   ZIonImg,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
@@ -45,7 +45,7 @@ import {
  * */
 import classes from './styles.module.css';
 import { useMediaQuery } from 'react-responsive';
-import { BRACKPOINT_MD } from 'utils/constants';
+import { BRACKPOINT_MD } from '@/utils/constants';
 
 /**
  * Images Imports go down

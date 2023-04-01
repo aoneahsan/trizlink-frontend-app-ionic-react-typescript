@@ -6,8 +6,8 @@ import { IonFab, IonFabButton, IonFabList } from '@ionic/react';
 import { chevronUpOutline, homeOutline } from 'ionicons/icons';
 
 // Custom Import
-import { ZIonIcon } from 'components/ZIonComponents';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { ZIonIcon } from '@/components/ZIonComponents';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 const TestingPackagesAndLogic: React.FC = () => {
   return (

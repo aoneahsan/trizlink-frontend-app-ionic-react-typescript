@@ -13,7 +13,7 @@ import {
   ZIonItem,
   ZIonReorder,
   ZIonReorderGroup,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 import LinkInBioLinkField from '../LinkField';
 import LinkInBioUploadField from '../UploadField';
 import LinkInBioTitleField from '../TitleField';
@@ -24,9 +24,9 @@ import {
   cardDisplayEnum,
   linkInBioBlockCardItemInterface,
   LinkInBioSingleBlockContentType,
-} from 'types/AdminPanel/linkInBioType/blockTypes';
-import ZCustomDeleteComponent from 'components/CustomComponents/ZCustomDeleteComponent';
-import { reportCustomError } from 'utils/customErrorType';
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
+import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
+import { reportCustomError } from '@/utils/customErrorType';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 
 // Styles

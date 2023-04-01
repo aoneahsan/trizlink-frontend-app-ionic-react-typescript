@@ -7,17 +7,17 @@ import { fileTrayOutline } from 'ionicons/icons';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 
 // Custom Imports
-import { ZIonIcon, ZIonImg, ZIonText } from 'components/ZIonComponents';
-import ZaionsFileUploadModal from 'components/InPageComponents/ZaionsModals/FileUploadModal';
+import { ZIonIcon, ZIonImg, ZIonText } from '@/components/ZIonComponents';
+import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/FileUploadModal';
 import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
 
 // Types
-import { ZIonModalActionEnum } from 'types/ZaionsApis.type';
-import { FormikSetFieldValueEventType } from 'types/ZaionsFormik.type';
-import { zJsonParse } from 'utils/helpers';
+import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
+import { FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
+import { zJsonParse } from '@/utils/helpers';
 
 // Images
-import { upload_send } from 'assets/images';
+import { upload_send } from '@/assets/images';
 
 // Styles
 import classes from './styles.module.css';

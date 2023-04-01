@@ -1,7 +1,7 @@
 import {
   LinkInBioFormFieldsEnum,
   linkInBioFromFieldItemInterface,
-} from 'types/AdminPanel/linkInBioType/blockTypes';
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 const LinkInBioFormTitleFiled: linkInBioFromFieldItemInterface = {
   title: 'New form 👋',

@@ -20,14 +20,14 @@ import { useMediaQuery } from 'react-responsive';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import AddNotes from 'components/UserDashboard/AddNotes';
-import Tags from 'components/UserDashboard/Tags';
-import RotatorABTesting from 'components/UserDashboard/RotatorABTesting';
-import GeoLocation from 'components/UserDashboard/GeoLocation';
-import LinkExpiration from 'components/UserDashboard/LinkExpiration';
-import LinkPassword from 'components/UserDashboard/Password';
-import LinkFavIcon from 'components/UserDashboard/Favicon';
-import GDPRPopup from 'components/UserDashboard/GDPRPopup';
+import AddNotes from '@/components/UserDashboard/AddNotes';
+import Tags from '@/components/UserDashboard/Tags';
+import RotatorABTesting from '@/components/UserDashboard/RotatorABTesting';
+import GeoLocation from '@/components/UserDashboard/GeoLocation';
+import LinkExpiration from '@/components/UserDashboard/LinkExpiration';
+import LinkPassword from '@/components/UserDashboard/Password';
+import LinkFavIcon from '@/components/UserDashboard/Favicon';
+import GDPRPopup from '@/components/UserDashboard/GDPRPopup';
 import {
   ZIonCol,
   ZIonText,
@@ -36,24 +36,24 @@ import {
   ZIonGrid,
   ZIonContent,
   ZIonFooter,
-} from 'components/ZIonComponents';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZaionsCustomYourLink from 'components/UserDashboard/shortUrlCustomYourLink';
-import LinksPixelsAccount from 'components/UserDashboard/LinksPixelsAccount';
-import UTMTagTemplates from 'components/UserDashboard/UTMTagTemplates';
-import DomainName from 'components/UserDashboard/DomainName';
+} from '@/components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZaionsCustomYourLink from '@/components/UserDashboard/shortUrlCustomYourLink';
+import LinksPixelsAccount from '@/components/UserDashboard/LinksPixelsAccount';
+import UTMTagTemplates from '@/components/UserDashboard/UTMTagTemplates';
+import DomainName from '@/components/UserDashboard/DomainName';
 import { useZRQUpdateRequest } from 'ZaionsHooks/zreactquery-hooks';
 import { useZValidateRequestResponse } from 'ZaionsHooks/zapi-hooks';
-import LinkInBioFoldersHOC from 'components/UserDashboard/LinkInBioFoldersHOC';
+import LinkInBioFoldersHOC from '@/components/UserDashboard/LinkInBioFoldersHOC';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import MESSAGES from 'utils/messages';
-import { validateField, zJsonParse, zStringify } from 'utils/helpers';
-import { API_URL_ENUM, VALIDATION_RULE } from 'utils/enums';
-import CONSTANTS, { BRACKPOINT_LG, BRACKPOINT_MD } from 'utils/constants';
+import MESSAGES from '@/utils/messages';
+import { validateField, zJsonParse, zStringify } from '@/utils/helpers';
+import { API_URL_ENUM, VALIDATION_RULE } from '@/utils/enums';
+import CONSTANTS, { BRACKPOINT_LG, BRACKPOINT_MD } from '@/utils/constants';
 
 /**
  * Recoil State Imports go down
@@ -72,8 +72,8 @@ import {
   GeoLocationRotatorInterface,
   LinkExpirationInfoInterface,
   PasswordInterface,
-} from 'types/AdminPanel/index.type';
-import { reportCustomError } from 'utils/customErrorType';
+} from '@/types/AdminPanel/index.type';
+import { reportCustomError } from '@/utils/customErrorType';
 
 /**
  * Style files Imports go down

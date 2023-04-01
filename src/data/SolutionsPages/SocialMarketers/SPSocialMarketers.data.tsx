@@ -3,9 +3,9 @@ import {
   secretsSocialSmbResource,
   WebinarPromoteBrandResource,
   WebinarSocialMediaStrategyUseV2Resource,
-} from 'assets/images';
-import { Zaions4By4GridSysType } from 'types/InPageComponentTypes/Zaions4By4GridSys.type';
-import CONSTANTS, { PRODUCT_NAME } from 'utils/constants';
+} from '@/assets/images';
+import { Zaions4By4GridSysType } from '@/types/InPageComponentTypes/Zaions4By4GridSys.type';
+import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 export const SPSocialMarketerData: Zaions4By4GridSysType[] = [
   {
     id: 1,

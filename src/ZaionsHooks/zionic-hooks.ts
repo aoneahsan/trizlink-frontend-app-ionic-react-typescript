@@ -8,15 +8,15 @@ import {
   useIonModal,
   useIonActionSheet,
 } from '@ionic/react';
-import MESSAGES from 'utils/messages';
+import MESSAGES from '@/utils/messages';
 import {
   emptyVoidReturnFunction,
   showZCapErrorDialogAlert,
   zConsoleError,
-} from 'utils/helpers';
-import { NOTIFICATIONS } from 'utils/constants';
-import CONSTANTS from 'utils/constants';
-import { ZIonColorType } from 'types/zaionsAppSettings.type';
+} from '@/utils/helpers';
+import { NOTIFICATIONS } from '@/utils/constants';
+import CONSTANTS from '@/utils/constants';
+import { ZIonColorType } from '@/types/zaionsAppSettings.type';
 import {
   useZIonAlertPropsType,
   UseZIonAlertReturnType,
@@ -26,7 +26,7 @@ import {
   useZIonToastDangerReturnType,
   useZIonToastReturnType,
   useZIonToastSuccessReturnType,
-} from 'types/CustomHooks/zionic-hooks.type';
+} from '@/types/CustomHooks/zionic-hooks.type';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 
 type GenericComponentType = JSX.Element | ReactComponentOrElement;

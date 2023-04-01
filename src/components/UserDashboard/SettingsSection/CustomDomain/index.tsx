@@ -1,7 +1,7 @@
 // Core Imports
 import React from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { BRACKPOINT_LG } from 'utils/constants';
+import { BRACKPOINT_LG } from '@/utils/constants';
 
 // Packages Import
 
@@ -16,13 +16,13 @@ import {
   ZIonInput,
   ZIonNote,
   ZIonImg,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 
 // Images
-import { drawCustomdomain } from 'assets/images';
-import { ZIonButton } from 'components/ZIonComponents';
+import { drawCustomdomain } from '@/assets/images';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 // Recoil States
 

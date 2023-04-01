@@ -5,7 +5,7 @@ import React, { ReactNode } from 'react';
 import { IonContent } from '@ionic/react';
 
 // Type
-import { ZIonColorType } from 'types/zaionsAppSettings.type';
+import { ZIonColorType } from '@/types/zaionsAppSettings.type';
 
 type ZIonContentType = {
   children: ReactNode;

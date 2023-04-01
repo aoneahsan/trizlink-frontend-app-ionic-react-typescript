@@ -3,7 +3,7 @@
 // Packages Imports
 
 // Custom Imports
-import { bose, buzzFeed, disney, ESPN, Gartner, nyTimes } from 'assets/images';
+import { bose, buzzFeed, disney, ESPN, Gartner, nyTimes } from '@/assets/images';
 import { ZaionsHPBrandsType } from '../types/ZionsHPBrandType';
 
 const DEBrandData: ZaionsHPBrandsType[] = [

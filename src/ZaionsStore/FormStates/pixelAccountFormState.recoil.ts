@@ -4,8 +4,8 @@
 import { atom } from 'recoil';
 
 // Custom Imports
-import { PixelAccountType } from 'types/AdminPanel/linksType';
-import { FormMode } from 'types/AdminPanel/index.type';
+import { PixelAccountType } from '@/types/AdminPanel/linksType';
+import { FormMode } from '@/types/AdminPanel/index.type';
 
 export const PixelAccountFormState = atom<PixelAccountType>({
   key: 'PixelAccountFormState_Key',

@@ -19,7 +19,7 @@ import React from 'react';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import CONSTANTS from 'utils/constants';
+import CONSTANTS from '@/utils/constants';
 
 /**
  * Type Imports go down

@@ -1,5 +1,5 @@
 import { toast, ToastContent, ToastOptions } from 'react-toastify';
-import { NOTIFICATIONS } from 'utils/constants';
+import { NOTIFICATIONS } from '@/utils/constants';
 
 export const showNotification = (
   content: ToastContent,

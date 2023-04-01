@@ -1,8 +1,8 @@
-import { ZaionsKeyFeatureType } from 'types/InPageComponentTypes/ZaionsKeyFeature.type';
+import { ZaionsKeyFeatureType } from '@/types/InPageComponentTypes/ZaionsKeyFeature.type';
 import {} from 'ionicons';
-import { BrandingGif, DashboardGif, ShortenMin } from 'assets/gif';
+import { BrandingGif, DashboardGif, ShortenMin } from '@/assets/gif';
 import { checkboxOutline, linkOutline, mailOutline } from 'ionicons/icons';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 export const DMSMKeyFeaturesData: ZaionsKeyFeatureType[] = [
   {

@@ -12,17 +12,17 @@ import {
   ZIonIcon,
   ZIonRouterLink,
   ZIonTitle,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 
 // Images
 
 // Recoil States
-import { ZIonButton } from 'components/ZIonComponents';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
-import ZaionsEmbedWidgetsModal from 'components/InPageComponents/ZaionsModals/AddEmbedWidgets';
+import ZaionsEmbedWidgetsModal from '@/components/InPageComponents/ZaionsModals/AddEmbedWidgets';
 
 // Types
 

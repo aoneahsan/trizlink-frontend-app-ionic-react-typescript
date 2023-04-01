@@ -34,10 +34,10 @@ import {
   ZIonSelectOption,
   ZIonList,
   ZIonSelect,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import CONSTANTS, { ZAIONS_MODALS_IDS } from 'utils/constants';
+import CONSTANTS, { ZAIONS_MODALS_IDS } from '@/utils/constants';
 
 // Images
 
@@ -45,8 +45,8 @@ import CONSTANTS, { ZAIONS_MODALS_IDS } from 'utils/constants';
 import { UTMTagsTemplateFormState } from 'ZaionsStore/FormStates/addUTMTagsFormState.recoil';
 
 // Types
-import { UTMTagTemplateType } from 'types/AdminPanel/linksType';
-import { FormMode } from 'types/AdminPanel/index.type';
+import { UTMTagTemplateType } from '@/types/AdminPanel/linksType';
+import { FormMode } from '@/types/AdminPanel/index.type';
 import {
   useZIonAlert,
   useZIonErrorAlert,
@@ -56,10 +56,10 @@ import {
   useZRQDeleteRequest,
   useZRQGetRequest,
 } from 'ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from 'utils/enums';
-import { ZIonButton } from 'components/ZIonComponents';
-import { showSuccessNotification } from 'utils/notification';
-import MESSAGES from 'utils/messages';
+import { API_URL_ENUM } from '@/utils/enums';
+import { ZIonButton } from '@/components/ZIonComponents';
+import { showSuccessNotification } from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
 import ZaionsAddUtmTags from '../ZaionsModals/AddUtmTags';
 
 // Styles

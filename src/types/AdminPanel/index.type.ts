@@ -1,4 +1,4 @@
-import { ZaionsRSelectOptions } from 'types/components/CustomComponents/index.type';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 // Enum's
 export enum FormMode {

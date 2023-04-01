@@ -17,23 +17,23 @@ import {
   ZIonLabel,
   ZIonInput,
   ZIonNote,
-} from 'components/ZIonComponents';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZaionsRSelect from 'components/CustomComponents/ZaionsRSelect';
+} from '@/components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 
 // Global Constants
-import { formatReactSelectOption, getRandomKey } from 'utils/helpers';
+import { formatReactSelectOption, getRandomKey } from '@/utils/helpers';
 
 // Images
 
 // Recoil States
-import { ZaionsDiscoverEnterpriseCountry } from 'data/DiscoverEnterprise/index.data';
+import { ZaionsDiscoverEnterpriseCountry } from '@/data/DiscoverEnterprise/index.data';
 
 // Types
-import { ZaionsRSelectOptions } from 'types/components/CustomComponents/index.type';
-import { ZaionsShortUrlOptionFieldsValuesInterface } from 'types/AdminPanel/linksType';
-import { ZGenericObject } from 'types/zaionsAppSettings.type';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Styles
 

@@ -14,19 +14,19 @@ import {
   ZIonText,
   ZIonGrid,
   ZIonImg,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Type
-import { ZaionsHPBrandsType } from 'types/ZionsHPBrandType';
+import { ZaionsHPBrandsType } from '@/types/ZionsHPBrandType';
 
 // Recoil
 import { ZaionsHPBrandsData } from 'ZaionsStore/ZaionsHPBrandsRecoil';
 
 // Global Constant
-import { BRACKPOINT_MD } from 'utils/constants';
+import { BRACKPOINT_MD } from '@/utils/constants';
 
 // Data
-import HPBrandData from 'data/HPBrandListData';
+import HPBrandData from '@/data/HPBrandListData';
 
 const { Item: CarouselItem } = Carousel;
 

@@ -2,7 +2,7 @@
 import React from 'react';
 // Packages Import
 import { IonToggle } from '@ionic/react';
-import { privacy } from 'assets/images';
+import { privacy } from '@/assets/images';
 import { useMediaQuery } from 'react-responsive';
 
 // Custom Imports
@@ -14,11 +14,11 @@ import {
   ZIonLabel,
   ZIonInput,
   ZIonImg,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import { BRACKPOINT_LG } from 'utils/constants';
-import { ZIonButton } from 'components/ZIonComponents';
+import { BRACKPOINT_LG } from '@/utils/constants';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 // Images
 

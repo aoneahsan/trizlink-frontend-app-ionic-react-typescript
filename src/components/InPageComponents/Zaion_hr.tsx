@@ -6,10 +6,10 @@ import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
-import { ZIonCol, ZIonGrid, ZIonRow } from 'components/ZIonComponents';
+import { ZIonCol, ZIonGrid, ZIonRow } from '@/components/ZIonComponents';
 
 // Global Constant
-import { BRACKPOINT_LG, BRACKPOINT_MD } from 'utils/constants';
+import { BRACKPOINT_LG, BRACKPOINT_MD } from '@/utils/constants';
 
 const ZaionsHr: React.FC = () => {
   const isLgScale = useMediaQuery({

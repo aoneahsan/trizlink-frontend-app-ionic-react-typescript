@@ -1,4 +1,4 @@
-import { messengerPlatformsBlockEnum } from 'types/AdminPanel/index.type';
+import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
 import { LinkInBioButtonTypeEnum, LinkInBioThemeBackgroundType } from '..';
 
 /**

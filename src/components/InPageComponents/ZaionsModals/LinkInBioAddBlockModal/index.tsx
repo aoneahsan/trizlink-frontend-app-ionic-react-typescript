@@ -18,7 +18,7 @@ import {
   ZIonContent,
   ZIonIcon,
   ZIonText,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 import { useZRQCreateRequest } from 'ZaionsHooks/zreactquery-hooks';
 
@@ -26,15 +26,15 @@ import { useZRQCreateRequest } from 'ZaionsHooks/zreactquery-hooks';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import CONSTANTS from 'utils/constants';
+import CONSTANTS from '@/utils/constants';
 import {
   createRedirectRoute,
   extractInnerData,
   zStringify,
-} from 'utils/helpers';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from 'utils/enums';
-import { reportCustomError } from 'utils/customErrorType';
+} from '@/utils/helpers';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import { reportCustomError } from '@/utils/customErrorType';
 
 /**
  * Type Imports go down
@@ -43,13 +43,13 @@ import { reportCustomError } from 'utils/customErrorType';
 import {
   ZLinkInBioPageEnum,
   ZLinkInBioRHSComponentEnum,
-} from 'types/AdminPanel/linkInBioType';
+} from '@/types/AdminPanel/linkInBioType';
 import {
   LinkInBioBlockEnum,
   LinkInBioBlockFromType,
   LinkInBioBlocksPositionEnum,
   LinkInBioSingleBlockContentType,
-} from 'types/AdminPanel/linkInBioType/blockTypes';
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 /**
  * Recoil State Imports go down
@@ -58,7 +58,7 @@ import {
 import { LinkInBioBlocksRState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
 import { useSetRecoilState } from 'recoil';
 import { closeOutline, toggleOutline } from 'ionicons/icons';
-import { LinkInBioBlocksDefaultData } from 'data/UserDashboard/LinkInBio/Blocks/index.data';
+import { LinkInBioBlocksDefaultData } from '@/data/UserDashboard/LinkInBio/Blocks/index.data';
 
 /**
  * Style files Imports go down

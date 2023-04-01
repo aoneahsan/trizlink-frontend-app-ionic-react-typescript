@@ -1,9 +1,9 @@
 // Types
-import { ZaionsCardWithIconType } from 'types/ZaionsCardWithIcon.type';
+import { ZaionsCardWithIconType } from '@/types/ZaionsCardWithIcon.type';
 
 // Images
-import { Checkmark } from 'assets/images';
-import { PRODUCT_NAME } from 'utils/constants';
+import { Checkmark } from '@/assets/images';
+import { PRODUCT_NAME } from '@/utils/constants';
 
 export const TrustAndSafetyResourcesData: ZaionsCardWithIconType[] = [
   {

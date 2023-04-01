@@ -1,4 +1,4 @@
-import { ENVS } from 'utils/envKeys';
+import { ENVS } from '@/utils/envKeys';
 
 export const GM_CONSTANTS = {
   DEFAULT_COORS: {

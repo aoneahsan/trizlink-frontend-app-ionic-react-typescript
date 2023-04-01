@@ -1,5 +1,5 @@
 // Type
-import { ZaionsPricingSubscriptionsType } from 'types/WhyZaions/PricingPage';
+import { ZaionsPricingSubscriptionsType } from '@/types/WhyZaions/PricingPage';
 
 // Images
 import {
@@ -18,9 +18,9 @@ import {
   XSScaleLinks,
   XSUptime,
   XSEnterpriseSupport,
-} from 'assets/images';
-import { PRODUCT_DOMAIN, PRODUCT_NAME } from 'utils/constants';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+} from '@/assets/images';
+import { PRODUCT_DOMAIN, PRODUCT_NAME } from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 export const ZaionsPricingPageData: ZaionsPricingSubscriptionsType[] = [
   {

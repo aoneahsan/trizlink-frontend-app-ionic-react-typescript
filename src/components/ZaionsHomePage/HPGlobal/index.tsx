@@ -7,29 +7,29 @@ import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsHr from 'components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
 import {
   ZIonCol,
   ZIonText,
   ZIonRow,
   ZIonGrid,
   ZIonImg,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Type
-import { ZaionsHPGlobalType } from 'types/ZaionsHPGlobalType';
+import { ZaionsHPGlobalType } from '@/types/ZaionsHPGlobalType';
 
 // Recoil State
 import { ZaionsHPGlobalData } from 'ZaionsStore/ZaionsHPGlobalRecoil';
 
 // Global Constant
-import { BRACKPOINT_LG, BRACKPOINT_MD } from 'utils/constants';
+import { BRACKPOINT_LG, BRACKPOINT_MD } from '@/utils/constants';
 
 // Data
-import HPGlobalData from 'data/HPGlobalData';
+import HPGlobalData from '@/data/HPGlobalData';
 
 // Images
-import { GlobeImage } from 'assets/images';
+import { GlobeImage } from '@/assets/images';
 
 const ZaionsHPGlobal: React.FC = () => {
   const [loadedHPGlobalData, setLoadedHPGlobalData] =

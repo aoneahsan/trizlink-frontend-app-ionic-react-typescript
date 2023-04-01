@@ -1,5 +1,5 @@
 // Type
-import { ZaionsPressProductImagesType } from 'types/Company/PressPage/ProductImages.type';
+import { ZaionsPressProductImagesType } from '@/types/Company/PressPage/ProductImages.type';
 
 // Images
 import {
@@ -9,8 +9,8 @@ import {
   GeneralProductMarketingImg,
   MobileOptimizerProductMarketingImgRetina,
   OneViewProductMarketingImgRetina1,
-} from 'assets/images';
-import { PRODUCT_NAME } from 'utils/constants';
+} from '@/assets/images';
+import { PRODUCT_NAME } from '@/utils/constants';
 
 export const ZaionsPressProductImagesData: ZaionsPressProductImagesType[] = [
   {

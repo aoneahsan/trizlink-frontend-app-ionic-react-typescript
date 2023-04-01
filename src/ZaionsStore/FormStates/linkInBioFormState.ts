@@ -6,7 +6,7 @@ import { atom } from 'recoil';
 // Custom Imports
 
 // Type
-import { genericZaionsRSelectOptions } from 'types/AdminPanel/index.type';
+import { genericZaionsRSelectOptions } from '@/types/AdminPanel/index.type';
 
 export const LinkInBioFormState = atom<{
   pixelAccountIds?: string[];

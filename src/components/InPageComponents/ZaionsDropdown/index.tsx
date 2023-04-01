@@ -17,13 +17,13 @@ import {
   ZIonRouterLink,
   ZIonIcon,
   ZIonList,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // style
 import classes from './styles.module.css';
 
 // Global Constants
-import { BRACKPOINT_XL } from 'utils/constants';
+import { BRACKPOINT_XL } from '@/utils/constants';
 
 type CustomToggleProps = {
   children?: React.ReactNode;

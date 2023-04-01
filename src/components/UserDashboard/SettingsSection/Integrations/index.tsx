@@ -1,18 +1,18 @@
 // Core Imports
 import React from 'react';
 
-import { noToken } from 'assets/images';
+import { noToken } from '@/assets/images';
 import { useRecoilValue } from 'recoil';
 
 // Custom Imports
-import ZaionsAPIKeysTable from 'components/InPageComponents/ZaionsTable/APIKeysTable';
+import ZaionsAPIKeysTable from '@/components/InPageComponents/ZaionsTable/APIKeysTable';
 import {
   ZIonCol,
   ZIonRow,
   ZIonText,
   ZIonRouterLink,
   ZIonImg,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 
@@ -20,10 +20,10 @@ import {
 
 // Recoil States
 import { APIKeyState } from 'ZaionsStore/UserDashboard/APIKey';
-import { ZIonButton } from 'components/ZIonComponents';
-import { PRODUCT_NAME } from 'utils/constants';
+import { ZIonButton } from '@/components/ZIonComponents';
+import { PRODUCT_NAME } from '@/utils/constants';
 import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
-import ZaionsAddAPIKeyModal from 'components/InPageComponents/ZaionsModals/AddAPIKey';
+import ZaionsAddAPIKeyModal from '@/components/InPageComponents/ZaionsModals/AddAPIKey';
 
 // Types
 

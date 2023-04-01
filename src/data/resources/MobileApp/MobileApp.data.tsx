@@ -1,9 +1,9 @@
 // Types
-import { ZaionsCardWithIconType } from 'types/ZaionsCardWithIcon.type';
+import { ZaionsCardWithIconType } from '@/types/ZaionsCardWithIcon.type';
 
 // Images
-import { AppleLogo, playStoreLogo } from 'assets/images';
-import CONSTANTS, { PRODUCT_NAME } from 'utils/constants';
+import { AppleLogo, playStoreLogo } from '@/assets/images';
+import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 
 export const MobileAppData: ZaionsCardWithIconType[] = [
   {

@@ -18,14 +18,14 @@ import {
   ZIonInput,
   ZIonNote,
   ZIonImg,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import { validateFields } from 'utils/helpers';
-import { VALIDATION_RULE } from 'utils/enums';
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import { ProductLogo } from 'assets/images';
-import { ZIonButton } from 'components/ZIonComponents';
+import { validateFields } from '@/utils/helpers';
+import { VALIDATION_RULE } from '@/utils/enums';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import { ProductLogo } from '@/assets/images';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 // Style
 

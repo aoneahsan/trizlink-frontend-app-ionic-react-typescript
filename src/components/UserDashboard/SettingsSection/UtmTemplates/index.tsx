@@ -4,22 +4,22 @@ import React from 'react';
 // Packages Import
 
 // Custom Imports
-import ZaionsUTMTagsTemplateTable from 'components/InPageComponents/ZaionsTable/UTMTagsTemplateTable';
+import ZaionsUTMTagsTemplateTable from '@/components/InPageComponents/ZaionsTable/UTMTagsTemplateTable';
 import {
   ZIonCol,
   ZIonRow,
   ZIonText,
   ZIonRouterLink,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 
 // Images
 
 // Recoil States
-import { ZIonButton } from 'components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
-import ZaionsAddUtmTags from 'components/InPageComponents/ZaionsModals/AddUtmTags';
+import ZaionsAddUtmTags from '@/components/InPageComponents/ZaionsModals/AddUtmTags';
 
 // Types
 

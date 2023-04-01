@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 
 // Packages Import
 import { IonCol } from '@ionic/react';
-import { ZIonColorType } from 'types/zaionsAppSettings.type';
+import { ZIonColorType } from '@/types/zaionsAppSettings.type';
 
 type ZIonColType = {
   offset?: string;

@@ -34,10 +34,10 @@ import {
   ZIonLabel,
   ZIonSelectOption,
   ZIonList,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import CONSTANTS from 'utils/constants';
+import CONSTANTS from '@/utils/constants';
 
 // Images
 
@@ -45,23 +45,23 @@ import CONSTANTS from 'utils/constants';
 import { PixelAccountFormState } from 'ZaionsStore/FormStates/pixelAccountFormState.recoil';
 
 // Types
-import { PixelAccountType } from 'types/AdminPanel/linksType';
-import { FormMode } from 'types/AdminPanel/index.type';
+import { PixelAccountType } from '@/types/AdminPanel/linksType';
+import { FormMode } from '@/types/AdminPanel/index.type';
 import {
   useZIonAlert,
   useZIonErrorAlert,
   useZIonModal,
 } from 'ZaionsHooks/zionic-hooks';
-import { API_URL_ENUM } from 'utils/enums';
+import { API_URL_ENUM } from '@/utils/enums';
 import {
   useZRQDeleteRequest,
   useZRQGetRequest,
 } from 'ZaionsHooks/zreactquery-hooks';
-import { reportCustomError } from 'utils/customErrorType';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZIonSelect from 'components/ZIonComponents/ZIonSelect';
-import { showSuccessNotification } from 'utils/notification';
-import MESSAGES from 'utils/messages';
+import { reportCustomError } from '@/utils/customErrorType';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZIonSelect from '@/components/ZIonComponents/ZIonSelect';
+import { showSuccessNotification } from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
 import ZaionsAddPixelAccount from '../ZaionsModals/AddPixelsAccount';
 
 // Styles

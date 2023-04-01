@@ -1,8 +1,8 @@
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import { ZIonButton, ZIonContent } from 'components/ZIonComponents';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import { ZIonButton, ZIonContent } from '@/components/ZIonComponents';
 import React, { useState } from 'react';
 
-import TestingReactDropzone from 'Testing/ReactDropZone';
+import TestingReactDropzone from '@/Testing/ReactDropZone';
 
 enum TestingTabEnum {
   TestingReactDropzone = 'TestingReactDropzone',

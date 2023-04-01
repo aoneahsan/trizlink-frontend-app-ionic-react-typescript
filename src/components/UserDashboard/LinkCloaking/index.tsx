@@ -12,8 +12,8 @@ import {
   ZIonIcon,
   ZIonRouterLink,
   ZIonTitle,
-} from 'components/ZIonComponents';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+} from '@/components/ZIonComponents';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Global Constants
 

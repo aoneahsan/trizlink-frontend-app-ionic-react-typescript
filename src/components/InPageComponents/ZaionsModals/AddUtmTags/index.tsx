@@ -28,10 +28,10 @@ import {
   ZIonInput,
   ZIonFooter,
   ZIonLabel,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import MESSAGES from 'utils/messages';
+import MESSAGES from '@/utils/messages';
 
 // Images
 
@@ -40,18 +40,18 @@ import { ZaionsAppSettingsRState } from 'ZaionsStore/zaionsAppSettings.recoil';
 import { UTMTagsTemplateFormState } from 'ZaionsStore/FormStates/addUTMTagsFormState.recoil';
 
 // Types
-import { FormMode } from 'types/AdminPanel/index.type';
-import { resetFormType } from 'types/ZaionsFormik.type';
+import { FormMode } from '@/types/AdminPanel/index.type';
+import { resetFormType } from '@/types/ZaionsFormik.type';
 import {
   useZRQCreateRequest,
   useZRQUpdateRequest,
 } from 'ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from 'utils/enums';
-import { zStringify } from 'utils/helpers';
-import CONSTANTS from 'utils/constants';
-import { ZIonButton } from 'components/ZIonComponents';
-import { showSuccessNotification } from 'utils/notification';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { API_URL_ENUM } from '@/utils/enums';
+import { zStringify } from '@/utils/helpers';
+import CONSTANTS from '@/utils/constants';
+import { ZIonButton } from '@/components/ZIonComponents';
+import { showSuccessNotification } from '@/utils/notification';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Styles
 

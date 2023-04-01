@@ -3,11 +3,11 @@ import React from 'react';
 
 // Custom Imports
 import classNames from 'classnames';
-import { ZIonButton, ZIonImg } from 'components/ZIonComponents';
+import { ZIonButton, ZIonImg } from '@/components/ZIonComponents';
 
 // Style
 import classes from './styles.module.css';
-import { ZIonColorType } from 'types/zaionsAppSettings.type';
+import { ZIonColorType } from '@/types/zaionsAppSettings.type';
 
 // Component type
 interface LinkInBioPDButtonInterface {

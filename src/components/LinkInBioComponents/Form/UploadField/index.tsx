@@ -5,8 +5,8 @@ import React from 'react';
 import { imageOutline } from 'ionicons/icons';
 
 // Custom Imports
-import { ZIonIcon, ZIonItem } from 'components/ZIonComponents';
-import ZDragAndDrop from 'components/CustomComponents/ZDragAndDrop';
+import { ZIonIcon, ZIonItem } from '@/components/ZIonComponents';
+import ZDragAndDrop from '@/components/CustomComponents/ZDragAndDrop';
 
 // Styles
 

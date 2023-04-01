@@ -15,7 +15,7 @@ import {
   ZIonItem,
   ZIonLabel,
   ZIonInput,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 
@@ -25,13 +25,13 @@ import {
 import { DefaultDomainsState } from 'ZaionsStore/UserDashboard/CustomDomainState';
 
 // Types
-import { ZaionsShortUrlOptionFieldsValuesInterface } from 'types/AdminPanel/linksType';
+import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 import { useFormikContext } from 'formik';
-import ZaionsRSelect from 'components/CustomComponents/ZaionsRSelect';
-import { formatReactSelectOption } from 'utils/helpers';
-import { ZGenericObject } from 'types/zaionsAppSettings.type';
-import { ZaionsRSelectOptions } from 'types/components/CustomComponents/index.type';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
+import { formatReactSelectOption } from '@/utils/helpers';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Styles
 

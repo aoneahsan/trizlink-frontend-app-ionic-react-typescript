@@ -14,7 +14,7 @@ import {
   ZIonImg,
   ZIonContent,
   ZIonHeader,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 import {
@@ -22,15 +22,15 @@ import {
   BRACKPOINT_MD,
   CONTENT_ID,
   PRODUCT_NAME,
-} from 'utils/constants';
+} from '@/utils/constants';
 
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Styles
 import classes from './styles.module.css';
-import { ProductLogo } from 'assets/images';
-import { PAGE_MENU_SIDE } from 'utils/enums';
-import { ZIonButton } from 'components/ZIonComponents';
+import { ProductLogo } from '@/assets/images';
+import { PAGE_MENU_SIDE } from '@/utils/enums';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 type SideBarMenuPropsType = {
   menuSide?: PAGE_MENU_SIDE;

@@ -34,14 +34,14 @@ import {
   ZIonRouterLink,
   ZIonRow,
   ZIonText,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
-import { BRACKPOINT_LG } from 'utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { BRACKPOINT_LG } from '@/utils/constants';
 
 /**
  * Type Imports go down
@@ -63,7 +63,7 @@ import classes from './styles.module.css';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
-import { blogAdWeelHero, linktreeLogoSymbol } from 'assets/images';
+import { blogAdWeelHero, linktreeLogoSymbol } from '@/assets/images';
 
 /**
  * Component props type go down

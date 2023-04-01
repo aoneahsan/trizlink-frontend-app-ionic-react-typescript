@@ -5,7 +5,7 @@ import React, { ReactNode } from 'react';
 import { IonRange } from '@ionic/react';
 
 // Type
-import { ZIonColorType, ZIonModeType } from 'types/zaionsAppSettings.type';
+import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
 import {
   IonRangeCustomEvent,
   RangeChangeEventDetail,

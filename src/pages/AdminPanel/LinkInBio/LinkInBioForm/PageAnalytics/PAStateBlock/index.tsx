@@ -13,8 +13,8 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonCol, ZIonImg, ZIonRow, ZIonText } from 'components/ZIonComponents';
-import LinkInBioPageAnalyticsTable from 'components/InPageComponents/ZaionsTable/linkInBioTables/PageAnalyticsTable';
+import { ZIonCol, ZIonImg, ZIonRow, ZIonText } from '@/components/ZIonComponents';
+import LinkInBioPageAnalyticsTable from '@/components/InPageComponents/ZaionsTable/linkInBioTables/PageAnalyticsTable';
 
 /**
  * Global Constants Imports go down
@@ -25,7 +25,7 @@ import LinkInBioPageAnalyticsTable from 'components/InPageComponents/ZaionsTable
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkInBioPageAnalyticsDataInterface } from 'types/InPageComponentTypes/ZaionsTables.type';
+import { LinkInBioPageAnalyticsDataInterface } from '@/types/InPageComponentTypes/ZaionsTables.type';
 
 /**
  * Recoil State Imports go down

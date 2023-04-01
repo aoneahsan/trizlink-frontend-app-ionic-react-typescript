@@ -19,18 +19,18 @@ import {
   ZIonBadge,
   ZIonAccordionGroup,
   ZIonAccordion,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Types
 
 // Recoil States
 
 // Global Contents
-import { BRACKPOINT_MD, DASHBOARD_SM_MENU_CONTENT_ID } from 'utils/constants';
-import { PAGE_MENU_SIDE } from 'utils/enums';
+import { BRACKPOINT_MD, DASHBOARD_SM_MENU_CONTENT_ID } from '@/utils/constants';
+import { PAGE_MENU_SIDE } from '@/utils/enums';
 import { useMediaQuery } from 'react-responsive';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
-import { productSmLogo } from 'assets/images';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { productSmLogo } from '@/assets/images';
 import classNames from 'classnames';
 import {
   analyticsOutline,
@@ -42,7 +42,7 @@ import {
   phonePortraitOutline,
   settingsOutline,
 } from 'ionicons/icons';
-import { ZIonButton } from 'components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 // Styles
 // import classes from './styles.module.css';

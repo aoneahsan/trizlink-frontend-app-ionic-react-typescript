@@ -4,19 +4,19 @@ import React from 'react';
 // Packages Imports
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import ZaionsTopMenu from 'navigation/TopMenu';
-import InPageFooter from 'components/InPageFooter';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZaionsTopMenu from '@/navigation/TopMenu';
+import InPageFooter from '@/components/InPageFooter';
 import {
   ZIonCol,
   ZIonText,
   ZIonRow,
   ZIonGrid,
   ZIonContent,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Imports
-import { PRODUCT_NAME } from 'utils/constants';
+import { PRODUCT_NAME } from '@/utils/constants';
 
 // Styles
 

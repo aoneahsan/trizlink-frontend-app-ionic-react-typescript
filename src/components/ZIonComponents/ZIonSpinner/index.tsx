@@ -3,7 +3,7 @@ import React from 'react';
 
 // Packages Import
 import { IonSpinner } from '@ionic/react';
-import { ZIonColorType } from 'types/zaionsAppSettings.type';
+import { ZIonColorType } from '@/types/zaionsAppSettings.type';
 
 // Type
 interface ZIonSpinnerInterface {

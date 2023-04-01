@@ -4,22 +4,22 @@ import React from 'react';
 // Packages Import
 
 // Custom Imports
-import ZaionsPixelAccountData from 'components/InPageComponents/ZaionsTable/pixelAccountTable';
+import ZaionsPixelAccountData from '@/components/InPageComponents/ZaionsTable/pixelAccountTable';
 import {
   ZIonCol,
   ZIonRow,
   ZIonText,
   ZIonRouterLink,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 
 // Images
 
 // Recoil States
-import { ZIonButton } from 'components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
-import ZaionsAddPixelAccount from 'components/InPageComponents/ZaionsModals/AddPixelsAccount';
+import ZaionsAddPixelAccount from '@/components/InPageComponents/ZaionsModals/AddPixelsAccount';
 
 // Types
 

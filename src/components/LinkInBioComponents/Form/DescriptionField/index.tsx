@@ -5,7 +5,7 @@ import React from 'react';
 import { reorderFourOutline } from 'ionicons/icons';
 
 // Custom Imports
-import { ZIonIcon, ZIonInput, ZIonItem } from 'components/ZIonComponents';
+import { ZIonIcon, ZIonInput, ZIonItem } from '@/components/ZIonComponents';
 import { InputChangeEventDetail, IonInputCustomEvent } from '@ionic/core';
 
 // Styles

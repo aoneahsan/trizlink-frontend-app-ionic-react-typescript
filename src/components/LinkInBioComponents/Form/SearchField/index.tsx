@@ -4,12 +4,12 @@ import React from 'react';
 // Packages Imports
 
 // Custom Imports
-import { ZIonItem } from 'components/ZIonComponents';
+import { ZIonItem } from '@/components/ZIonComponents';
 import {
   IonSearchbarCustomEvent,
   SearchbarChangeEventDetail,
 } from '@ionic/core';
-import ZIonSearchbar from 'components/ZIonComponents/ZIonSearchbar';
+import ZIonSearchbar from '@/components/ZIonComponents/ZIonSearchbar';
 import { closeOutline, searchOutline } from 'ionicons/icons';
 
 // Styles

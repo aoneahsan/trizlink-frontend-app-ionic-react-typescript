@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 
 // Packages Import
 import { IonTabButton } from '@ionic/react';
-import { ZIonModeType } from 'types/zaionsAppSettings.type';
+import { ZIonModeType } from '@/types/zaionsAppSettings.type';
 // import {  } from '@ionic/core/dist/types/components';
 
 // Type

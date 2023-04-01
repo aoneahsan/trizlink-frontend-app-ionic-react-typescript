@@ -26,20 +26,20 @@ import {
   ZIonImg,
   ZIonContent,
   ZIonBadge,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import CONSTANTS from 'utils/constants';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import CONSTANTS from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
  * */
-import { ZLinkIonPanelSidebarActiveLinkType } from 'types/AdminPanel/linksType';
+import { ZLinkIonPanelSidebarActiveLinkType } from '@/types/AdminPanel/linksType';
 
 /**
  * Recoil State Imports go down
@@ -56,7 +56,7 @@ import classes from './styles.module.css';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
-import { productSmLogo } from 'assets/images';
+import { productSmLogo } from '@/assets/images';
 import {
   addOutline,
   analyticsOutline,
@@ -70,7 +70,7 @@ import {
 } from 'ionicons/icons';
 import { useRecoilState } from 'recoil';
 import { ZDashboardRState } from 'ZaionsStore/UserDashboard/ZDashboard';
-import { ZIonButton } from 'components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 /**
  * Component props type go down

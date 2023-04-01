@@ -2,7 +2,7 @@ import {
   PixelAccountPlatformType,
   PixelAccountType,
   PixelPlatformsEnum,
-} from 'types/AdminPanel/linksType';
+} from '@/types/AdminPanel/linksType';
 
 export const PixelAccountsData: PixelAccountType[] = [
   {

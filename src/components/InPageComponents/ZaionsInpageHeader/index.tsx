@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { useMediaQuery } from 'react-responsive';
 
 // Custom Imports
-import ZaionsHr from 'components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
 import {
   ZIonCol,
   ZIonText,
@@ -14,14 +14,14 @@ import {
   ZIonImg,
   ZIonGrid,
   ZIonRow,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import { BRACKPOINT_LG, BRACKPOINT_MD, BRACKPOINT_XL } from 'utils/constants';
+import { BRACKPOINT_LG, BRACKPOINT_MD, BRACKPOINT_XL } from '@/utils/constants';
 
 // Styles
 import classes from './styles.module.css';
-import { ZIonButton } from 'components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 const ZaionsInpageHeader: React.FC<{
   lgImg?: string;

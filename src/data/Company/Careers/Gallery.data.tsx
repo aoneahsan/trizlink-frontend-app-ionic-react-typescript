@@ -1,5 +1,5 @@
 // Types
-import { ZaionsGalleryType } from 'types/Company/CareersPage/Gallery.type';
+import { ZaionsGalleryType } from '@/types/Company/CareersPage/Gallery.type';
 
 // Images
 import {
@@ -10,7 +10,7 @@ import {
   TeamTable,
   VolunteerCareers,
   WelcomeBanner,
-} from 'assets/images';
+} from '@/assets/images';
 
 export const ZaionsCareersPageGalleryData: ZaionsGalleryType[] = [
   {

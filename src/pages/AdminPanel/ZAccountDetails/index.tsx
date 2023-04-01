@@ -19,10 +19,10 @@ import { useMediaQuery } from 'react-responsive';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import ZLinkDashboardTopBar from 'components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
-import ZLinkIonPanelSidebar from 'components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
-import ZaionsLinkSettingPanel from 'components/UserDashboard/ZLinkdashboard/ZLinksSettingPanel';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZLinkDashboardTopBar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
+import ZLinkIonPanelSidebar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
+import ZaionsLinkSettingPanel from '@/components/UserDashboard/ZLinkdashboard/ZLinksSettingPanel';
 import {
   ZIonCol,
   ZIonText,
@@ -36,7 +36,7 @@ import {
   ZIonLabel,
   ZIonInput,
   ZIonNote,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
@@ -48,11 +48,11 @@ import CONSTANTS, {
   BRACKPOINT_SM,
   DASHBOARD_SM_MENU_CONTENT_ID,
   PRODUCT_NAME,
-} from 'utils/constants';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+} from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import classes from './styles.module.css';
-import { formatDataForZaionsRSelectOptions } from 'utils/helpers';
-import { PAGE_MENU } from 'utils/enums';
+import { formatDataForZaionsRSelectOptions } from '@/utils/helpers';
+import { PAGE_MENU } from '@/utils/enums';
 
 /**
  * Type Imports go down
@@ -61,8 +61,8 @@ import { PAGE_MENU } from 'utils/enums';
 import {
   ZLinkIonPanelSettingsSidebarActiveLinkType,
   ZLinkIonPanelSidebarActiveLinkType,
-} from 'types/AdminPanel/linksType';
-import { UserAccountEmailType } from 'types/UserAccount/index.type';
+} from '@/types/AdminPanel/linksType';
+import { UserAccountEmailType } from '@/types/UserAccount/index.type';
 
 /**
  * Recoil State Imports go down
@@ -70,7 +70,7 @@ import { UserAccountEmailType } from 'types/UserAccount/index.type';
  * */
 import { ZaionsUserAccountEmails } from 'ZaionsStore/UserAccount/index.recoil';
 import { useZIonToastDanger } from 'ZaionsHooks/zionic-hooks';
-import { ZIonButton } from 'components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 /**
  * Style files Imports go down

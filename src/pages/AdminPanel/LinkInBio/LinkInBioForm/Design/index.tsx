@@ -35,14 +35,14 @@ import {
   ZIonRouterLink,
   ZIonRow,
   ZIonText,
-} from 'components/ZIonComponents';
-import ZRScrollbars from 'components/CustomComponents/ZRScrollBar';
-import ZLinkInBioBlocksSection from 'pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioBlocks';
-import ZLinkInBioBlocksForm from 'pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioBlocksForm';
-import ZLinkInBioPoweredBySection from 'pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioPoweredBy';
-import ZLinkInBioSettingsSection from 'pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioSettings';
-import ZLinkInBioThemeSection from 'pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioTheme';
-import ZLinkInBioReorderItem from 'components/LinkInBioComponents/UI/LinkInBioReorderItem';
+} from '@/components/ZIonComponents';
+import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
+import ZLinkInBioBlocksSection from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioBlocks';
+import ZLinkInBioBlocksForm from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioBlocksForm';
+import ZLinkInBioPoweredBySection from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioPoweredBy';
+import ZLinkInBioSettingsSection from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioSettings';
+import ZLinkInBioThemeSection from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioTheme';
+import ZLinkInBioReorderItem from '@/components/LinkInBioComponents/UI/LinkInBioReorderItem';
 import {
   useZRQGetRequest,
   useZRQUpdateRequest,
@@ -53,16 +53,16 @@ import { useZValidateRequestResponse } from 'ZaionsHooks/zapi-hooks';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import CONSTANTS, { PRODUCT_NAME } from 'utils/constants';
+import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 import {
   createRedirectRoute,
   generatePredefinedThemeBackgroundValue,
   zStringify,
-} from 'utils/helpers';
+} from '@/utils/helpers';
 import { useParams } from 'react-router';
-import { API_URL_ENUM } from 'utils/enums';
-import { reportCustomError } from 'utils/customErrorType';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { API_URL_ENUM } from '@/utils/enums';
+import { reportCustomError } from '@/utils/customErrorType';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Type Imports go down
@@ -73,9 +73,9 @@ import {
   LinkInBioType,
   ZLinkInBioPageEnum,
   ZLinkInBioRHSComponentEnum,
-} from 'types/AdminPanel/linkInBioType';
-import { LinkInBioBlockFromType } from 'types/AdminPanel/linkInBioType/blockTypes';
-import { ZRQGetRequestExtractEnum } from 'types/ZReactQuery/index.type';
+} from '@/types/AdminPanel/linkInBioType';
+import { LinkInBioBlockFromType } from '@/types/AdminPanel/linkInBioType/blockTypes';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Recoil State Imports go down

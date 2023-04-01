@@ -14,7 +14,7 @@ import { useSetRecoilState } from 'recoil';
 import { STORAGE } from '@/utils/helpers';
 
 // global constants
-import { LOCALSTORAGE_KEYS } from 'utils/constants';
+import { LOCALSTORAGE_KEYS } from '@/utils/constants';
 
 // Recoil State
 import {
@@ -24,7 +24,7 @@ import {
 
 /* Theme variables */
 import './theme/variables.css';
-import { UserAccountType } from 'types/UserAccount/index.type';
+import { UserAccountType } from '@/types/UserAccount/index.type';
 
 const App: React.FC = () => {
   const setAuthTokenState = useSetRecoilState(ZaionsAuthTokenData);

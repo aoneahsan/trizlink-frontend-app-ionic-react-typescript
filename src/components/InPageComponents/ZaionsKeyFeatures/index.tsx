@@ -12,13 +12,13 @@ import {
   ZIonGrid,
   ZIonRow,
   ZIonIcon,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import { BRACKPOINT_MD } from 'utils/constants';
+import { BRACKPOINT_MD } from '@/utils/constants';
 
 // Types
-import { ZaionsKeyFeatureType } from 'types/InPageComponentTypes/ZaionsKeyFeature.type';
+import { ZaionsKeyFeatureType } from '@/types/InPageComponentTypes/ZaionsKeyFeature.type';
 type ZaionsKeyFeaturesType = {
   data: ZaionsKeyFeatureType[];
 };

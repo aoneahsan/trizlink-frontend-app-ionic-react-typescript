@@ -11,14 +11,14 @@ import {
   ZIonImg,
   ZIonRouterLink,
   ZIonRow,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import { PRODUCT_NAME } from 'utils/constants';
+import { PRODUCT_NAME } from '@/utils/constants';
 
 // Images
-import { ProductLogo } from 'assets/images';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { ProductLogo } from '@/assets/images';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 const ZaionsSecondaryHeader: React.FC<{ bottomHr?: boolean }> = ({
   bottomHr = true,

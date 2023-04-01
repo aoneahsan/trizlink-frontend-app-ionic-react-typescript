@@ -18,34 +18,34 @@ import {
   ZIonInput,
   ZIonButton,
   ZIonIcon,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 import {
   useZRQCreateRequest,
   useZRQUpdateRequest,
 } from 'ZaionsHooks/zreactquery-hooks';
 
 // Global Constants
-import { API_URL_ENUM } from 'utils/enums';
-import { reportCustomError } from 'utils/customErrorType';
-import { showSuccessNotification } from 'utils/notification';
-import MESSAGES from 'utils/messages';
-import { zStringify } from 'utils/helpers';
+import { API_URL_ENUM } from '@/utils/enums';
+import { reportCustomError } from '@/utils/customErrorType';
+import { showSuccessNotification } from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
+import { zStringify } from '@/utils/helpers';
 
 // Images
 import {
   uploadModalCamera,
   uploadModalFolder,
   uploadModalLink,
-} from 'assets/images';
+} from '@/assets/images';
 
 // Recoil States
 
 // Types
-import { zAxiosApiRequestContentType } from 'types/CustomHooks/zapi-hooks.type';
+import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
 
 // Styles
 import classes from './styles.module.css';
-import { ZIonModalActionEnum } from 'types/ZaionsApis.type';
+import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
 import { closeOutline } from 'ionicons/icons';
 
 // Inpage types

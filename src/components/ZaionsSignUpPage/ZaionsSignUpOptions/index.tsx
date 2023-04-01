@@ -11,11 +11,11 @@ import {
   ZIonIcon,
   ZIonRouterLink,
   ZIonRow,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
-import { ZIonButton } from 'components/ZIonComponents';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 // Style
 

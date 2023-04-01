@@ -5,8 +5,8 @@ import React from 'react';
 import { reorderTwoOutline } from 'ionicons/icons';
 
 // Custom Imports
-import { ZIonIcon, ZIonItem, ZIonText } from 'components/ZIonComponents';
-import ZRCSwitch from 'components/CustomComponents/ZRCSwitch';
+import { ZIonIcon, ZIonItem, ZIonText } from '@/components/ZIonComponents';
+import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import { SwitchChangeEventHandler } from 'rc-switch';
 
 // Styles

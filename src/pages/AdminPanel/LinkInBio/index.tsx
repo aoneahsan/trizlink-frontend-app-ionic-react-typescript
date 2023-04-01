@@ -29,7 +29,7 @@ import classNames from 'classnames';
 import { Formik } from 'formik';
 
 // Custom Imports
-import ZaionsCreateShortLinkUrlInput from 'components/InPageComponents/ZaionsCreateShortLinkUrlInput';
+import ZaionsCreateShortLinkUrlInput from '@/components/InPageComponents/ZaionsCreateShortLinkUrlInput';
 import {
   ZIonCol,
   ZIonText,
@@ -43,8 +43,8 @@ import {
   ZIonTitle,
   ZIonContent,
   ZIonMenuToggle,
-} from 'components/ZIonComponents';
-import { ZIonButton } from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 import {
   useZInvalidateReactQueries,
   useZRQDeleteRequest,
@@ -58,18 +58,18 @@ import {
   useZIonPopover,
 } from 'ZaionsHooks/zionic-hooks';
 import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import ZaionsAddNewFolder from 'components/InPageComponents/ZaionsModals/AddNewFolder';
-import ZRCheckbox from 'components/CustomComponents/ZRCheckbox';
-import ZIonRefresher from 'components/ZIonComponents/ZIonRefresher';
-import ZIonRefresherContent from 'components/ZIonComponents/ZIonRefresherContent';
-import ZaionsLinkInBioLinksTable from 'components/InPageComponents/ZaionsTable/linkInBioTables/LinkInBioTable';
-import ZaionsAddLinkInBioModal from 'components/InPageComponents/ZaionsModals/AddNewLinkInBioModal';
-import ZRScrollbars from 'components/CustomComponents/ZRScrollBar';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
+import ZRCheckbox from '@/components/CustomComponents/ZRCheckbox';
+import ZIonRefresher from '@/components/ZIonComponents/ZIonRefresher';
+import ZIonRefresherContent from '@/components/ZIonComponents/ZIonRefresherContent';
+import ZaionsLinkInBioLinksTable from '@/components/InPageComponents/ZaionsTable/linkInBioTables/LinkInBioTable';
+import ZaionsAddLinkInBioModal from '@/components/InPageComponents/ZaionsModals/AddNewLinkInBioModal';
+import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
 
 // Types
-import { folderState, FormMode } from 'types/AdminPanel/index.type';
-import { LinkFolderType, TimeFilterEnum } from 'types/AdminPanel/linksType';
+import { folderState, FormMode } from '@/types/AdminPanel/index.type';
+import { LinkFolderType, TimeFilterEnum } from '@/types/AdminPanel/linksType';
 
 // Recoil States
 import { FolderFormState } from 'ZaionsStore/FormStates/folderFormState.recoil';
@@ -79,12 +79,12 @@ import {
 } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioState.recoil';
 
 // Global Contents
-import CONSTANTS from 'utils/constants';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
-import { API_URL_ENUM } from 'utils/enums';
-import { showSuccessNotification } from 'utils/notification';
-import { replaceParams } from 'utils/helpers';
-import { reportCustomError } from 'utils/customErrorType';
+import CONSTANTS from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { API_URL_ENUM } from '@/utils/enums';
+import { showSuccessNotification } from '@/utils/notification';
+import { replaceParams } from '@/utils/helpers';
+import { reportCustomError } from '@/utils/customErrorType';
 
 // Styles
 import classes from './styles.module.css';

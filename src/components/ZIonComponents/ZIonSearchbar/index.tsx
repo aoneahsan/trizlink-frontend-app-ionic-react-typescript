@@ -3,7 +3,7 @@ import React from 'react';
 
 // Packages Import
 import { IonSearchbar, SearchbarChangeEventDetail } from '@ionic/react';
-import { ZIonColorType, ZIonModeType } from 'types/zaionsAppSettings.type';
+import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
 
 // Type
 import { IonSearchbarCustomEvent } from '@ionic/core/dist/types/components';

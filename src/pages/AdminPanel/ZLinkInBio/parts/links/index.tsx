@@ -29,8 +29,8 @@ import RCSwitch from 'rc-switch';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZLinkInBioNavigation from 'components/UserDashboard/ZLinkInBioComps/LinkInBioNavigation';
-import ZaionsIonPage from 'components/ZaionsIonPage';
+import ZLinkInBioNavigation from '@/components/UserDashboard/ZLinkInBioComps/LinkInBioNavigation';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
 import {
   ZIonAccordion,
   ZIonAccordionGroup,
@@ -44,7 +44,7 @@ import {
   ZIonList,
   ZIonRow,
   ZIonText,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
@@ -77,7 +77,7 @@ import {
   IonReorderGroup,
   ItemReorderEventDetail,
 } from '@ionic/react';
-import { ZaionsBusinessDetails } from 'utils/constants';
+import { ZaionsBusinessDetails } from '@/utils/constants';
 
 /**
  * Component props type go down

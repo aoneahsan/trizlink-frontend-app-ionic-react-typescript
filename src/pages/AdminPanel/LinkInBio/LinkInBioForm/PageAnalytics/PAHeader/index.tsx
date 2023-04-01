@@ -32,7 +32,7 @@ import {
   ZIonImg,
   ZIonRow,
   ZIonText,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 import { useZMediaQueryScale } from 'ZaionsHooks/ZGenericHooks';
 
 /**
@@ -59,7 +59,7 @@ import { useZMediaQueryScale } from 'ZaionsHooks/ZGenericHooks';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
-import { ProductLogo } from 'assets/images';
+import { ProductLogo } from '@/assets/images';
 
 /**
  * Component props type go down

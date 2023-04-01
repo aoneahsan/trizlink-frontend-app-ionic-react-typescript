@@ -7,7 +7,7 @@ import {
   ZIonColorType,
   ZIonRouterDirection,
   ZIonTargetType,
-} from 'types/zaionsAppSettings.type';
+} from '@/types/zaionsAppSettings.type';
 
 // Type
 type ZIonRouterLinkType = {

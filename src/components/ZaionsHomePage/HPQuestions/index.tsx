@@ -15,23 +15,23 @@ import {
   ZIonIcon,
   ZIonRow,
   ZIonGrid,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Types
-import { ZaionsHPFAQType } from 'types/ZionsHPFAQType';
+import { ZaionsHPFAQType } from '@/types/ZionsHPFAQType';
 
 // Recoil State
 import { ZaionsHPFAQData } from 'ZaionsStore/ZaionsHPFAQRecoil';
 
 // Global Constant
-import { BRACKPOINT_MD } from 'utils/constants';
+import { BRACKPOINT_MD } from '@/utils/constants';
 
 // Data
-import { HPFAQData } from 'data/HPFAQData';
+import { HPFAQData } from '@/data/HPFAQData';
 
 // Style
 import classes from './styles.module.css';
-import { ZIonButton } from 'components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 const ZaionsHPFAQuestions: React.FC<{ className?: string }> = ({
   className,

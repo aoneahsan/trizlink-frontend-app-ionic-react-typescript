@@ -13,7 +13,7 @@ import {
   ZIonIcon,
   ZIonInput,
   ZIonItem,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Custom Imports go down
@@ -29,7 +29,7 @@ import {
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { FormikSetFieldValueEventType } from 'types/ZaionsFormik.type';
+import { FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
 import { closeOutline } from 'ionicons/icons';
 
 /**

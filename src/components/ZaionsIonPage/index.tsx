@@ -6,13 +6,13 @@ import { IonPage } from '@ionic/react';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsRHelmet from 'components/CustomComponents/ZaionsRHelmet';
-import SideBarMenu from 'navigation/SideBarMenu';
+import ZaionsRHelmet from '@/components/CustomComponents/ZaionsRHelmet';
+import SideBarMenu from '@/navigation/SideBarMenu';
 
 // Global Constants
-import { CONTENT_ID } from 'utils/constants';
-import ZaionsDashboardResonsiveMenu from 'navigation/DashboardResponsiveMenu';
-import { PAGE_MENU, PAGE_MENU_SIDE } from 'utils/enums';
+import { CONTENT_ID } from '@/utils/constants';
+import ZaionsDashboardResonsiveMenu from '@/navigation/DashboardResponsiveMenu';
+import { PAGE_MENU, PAGE_MENU_SIDE } from '@/utils/enums';
 
 // Types
 type ZaionsIonPageType = {

@@ -17,8 +17,8 @@ import { useParams } from 'react-router';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonCol, ZIonRow, ZIonText } from 'components/ZIonComponents';
-import ZLinkInBioAddBlockModal from 'components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal';
+import { ZIonCol, ZIonRow, ZIonText } from '@/components/ZIonComponents';
+import ZLinkInBioAddBlockModal from '@/components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal';
 
 import { LinkInBioPredefinedBlocksRState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
 import { useZRQGetRequest } from 'ZaionsHooks/zreactquery-hooks';
@@ -28,28 +28,28 @@ import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { reportCustomError } from 'utils/customErrorType';
-import { API_URL_ENUM } from 'utils/enums';
+import { reportCustomError } from '@/utils/customErrorType';
+import { API_URL_ENUM } from '@/utils/enums';
 
-import CONSTANTS from 'utils/constants';
-import { ZIcons } from 'utils/ZIcons';
+import CONSTANTS from '@/utils/constants';
+import { ZIcons } from '@/utils/ZIcons';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkInBioType } from 'types/AdminPanel/linkInBioType';
+import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 
 import {
   LinkInBioBlockEnum,
   LinkInBioPredefinedBlocksInterface,
-} from 'types/AdminPanel/linkInBioType/blockTypes';
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { LinkInBioBlocksDefaultData } from 'data/UserDashboard/LinkInBio/Blocks/index.data';
+import { LinkInBioBlocksDefaultData } from '@/data/UserDashboard/LinkInBio/Blocks/index.data';
 
 /**
  * Style files Imports go down
@@ -61,7 +61,7 @@ import { LinkInBioBlocksDefaultData } from 'data/UserDashboard/LinkInBio/Blocks/
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import classes from '../styles.module.css';
-import LinkInBioPDButton from 'components/LinkInBioComponents/UI/PerDefinedButton';
+import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedButton';
 
 /**
  * Component props type go down

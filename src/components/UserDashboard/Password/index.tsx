@@ -15,7 +15,7 @@ import {
   ZIonLabel,
   ZIonInput,
   ZIonNote,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 
@@ -25,9 +25,9 @@ import {
 
 // Types
 import { useFormikContext } from 'formik';
-import { ZaionsShortUrlOptionFieldsValuesInterface } from 'types/AdminPanel/linksType';
+import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 import classNames from 'classnames';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Styles
 

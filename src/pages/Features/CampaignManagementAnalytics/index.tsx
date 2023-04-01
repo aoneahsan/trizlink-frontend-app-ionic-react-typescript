@@ -7,18 +7,18 @@ import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import ZaionsTwoByTwoRightCols from 'components/InPageComponents/Zaions2By2RightCols';
-import ZaionsTwoByTwoLeftCols from 'components/InPageComponents/Zaions2By2LeftCols';
-import ZaionsTopMenu from 'navigation/TopMenu';
-import InPageFooter from 'components/InPageFooter';
-import ZaionsHPBrandList from 'components/ZaionsHomePage/HPBrandList';
-import ZaionsInpageHeader from 'components/InPageComponents/ZaionsInpageHeader';
-import { ZIonText, ZIonContent } from 'components/ZIonComponents';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZaionsTwoByTwoRightCols from '@/components/InPageComponents/Zaions2By2RightCols';
+import ZaionsTwoByTwoLeftCols from '@/components/InPageComponents/Zaions2By2LeftCols';
+import ZaionsTopMenu from '@/navigation/TopMenu';
+import InPageFooter from '@/components/InPageFooter';
+import ZaionsHPBrandList from '@/components/ZaionsHomePage/HPBrandList';
+import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
+import { ZIonText, ZIonContent } from '@/components/ZIonComponents';
 
 // Global Constants
-import { BRACKPOINT_MD, BRACKPOINT_XL, PRODUCT_NAME } from 'utils/constants';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { BRACKPOINT_MD, BRACKPOINT_XL, PRODUCT_NAME } from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Images
 import {
@@ -26,7 +26,7 @@ import {
   DashMin,
   OneViewProductMarketingImg,
   organicShares,
-} from 'assets/images';
+} from '@/assets/images';
 
 // Styles
 import classes from './styles.module.css';

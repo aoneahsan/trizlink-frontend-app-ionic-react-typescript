@@ -14,7 +14,7 @@ import {
   ZIonMenuButton,
   ZIonMenuToggle,
   ZIonTitle,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 const MegaMenu: React.FC = () => {
   return (

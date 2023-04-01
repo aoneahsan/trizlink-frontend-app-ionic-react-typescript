@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 
 // Packages Imports
 import { IonModal } from '@ionic/react';
-import { ZIonColorType, ZIonModeType } from 'types/zaionsAppSettings.type';
+import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 import { IonModalCustomEvent } from '@ionic/core/dist/types/components';
 

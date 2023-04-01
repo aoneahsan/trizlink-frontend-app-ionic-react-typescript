@@ -13,12 +13,12 @@ import {
   ZIonCardHeader,
   ZIonCardContent,
   ZIonCardTitle,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Styles
 import classes from './styles.module.css';
 
-import { ZaionsCardWithIconType } from 'types/ZaionsCardWithIcon.type';
+import { ZaionsCardWithIconType } from '@/types/ZaionsCardWithIcon.type';
 
 const ZaionsCardWithIcon: React.FC<{
   data: ZaionsCardWithIconType[];

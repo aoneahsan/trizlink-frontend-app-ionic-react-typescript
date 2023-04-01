@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Packages Imports
-import { Zaions4By4GridSysType } from 'types/InPageComponentTypes/Zaions4By4GridSys.type';
+import { Zaions4By4GridSysType } from '@/types/InPageComponentTypes/Zaions4By4GridSys.type';
 
 // Custom Imports
 import {
@@ -13,7 +13,7 @@ import {
   ZIonCard,
   ZIonCardHeader,
   ZIonCardContent,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 type ZaionsCardType = {
   data: Zaions4By4GridSysType[];

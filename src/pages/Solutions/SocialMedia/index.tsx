@@ -5,21 +5,21 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import ZaionsKeyFeatures from 'components/InPageComponents/ZaionsKeyFeatures';
-import ZaionsTopMenu from 'navigation/TopMenu';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZaionsKeyFeatures from '@/components/InPageComponents/ZaionsKeyFeatures';
+import ZaionsTopMenu from '@/navigation/TopMenu';
 import {
   ZIonCol,
   ZIonContent,
   ZIonGrid,
   ZIonRow,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Recoil State
 import { ZaionsSPSMKeyFeaturesState } from 'ZaionsStore/SolutionPages/SocialMedia/ZaionsSPSM.recoil';
 
 // Types
-import { ZaionsKeyFeatureType } from 'types/InPageComponentTypes/ZaionsKeyFeature.type';
+import { ZaionsKeyFeatureType } from '@/types/InPageComponentTypes/ZaionsKeyFeature.type';
 
 const SocialMedia: React.FC = () => {
   const keyFeaturesData = useRecoilValue<ZaionsKeyFeatureType[]>(

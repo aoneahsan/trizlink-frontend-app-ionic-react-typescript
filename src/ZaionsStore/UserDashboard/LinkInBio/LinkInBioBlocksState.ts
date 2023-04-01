@@ -1,11 +1,11 @@
 // Packages Imports
 import { atom } from 'recoil';
-import { messengerPlatformsBlockEnum } from 'types/AdminPanel/index.type';
+import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
 import {
   LinkInBioFormFieldsEnum,
   LinkInBioMusicPlatformEnum,
   LinkInBioSocialPlatformEnum,
-} from 'types/AdminPanel/linkInBioType/blockTypes';
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 // Custom
 // Type
@@ -14,7 +14,7 @@ import {
   LinkInBioBlockFromType,
   LinkInBioBlockEnum,
   LinkInBioPredefinedPlatformInterface,
-} from 'types/AdminPanel/linkInBioType/blockTypes';
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 // Data
 

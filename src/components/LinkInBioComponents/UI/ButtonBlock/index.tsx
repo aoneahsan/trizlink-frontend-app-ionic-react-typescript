@@ -15,7 +15,7 @@ import classNames from 'classnames';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonButton, ZIonCol } from 'components/ZIonComponents';
+import { ZIonButton, ZIonCol } from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
@@ -26,9 +26,9 @@ import { ZIonButton, ZIonCol } from 'components/ZIonComponents';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { ZIonTargetType } from 'types/zaionsAppSettings.type';
-import { LinkInBioBlockAnimationEnum } from 'types/AdminPanel/linkInBioType/blockTypes';
-import { LinkInBioThemeFontEnum } from 'types/AdminPanel/linkInBioType';
+import { ZIonTargetType } from '@/types/zaionsAppSettings.type';
+import { LinkInBioBlockAnimationEnum } from '@/types/AdminPanel/linkInBioType/blockTypes';
+import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 
 /**
  * Recoil State Imports go down

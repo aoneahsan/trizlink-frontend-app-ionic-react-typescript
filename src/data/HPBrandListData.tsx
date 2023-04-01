@@ -12,7 +12,7 @@ import {
   marriott,
   newYorkTimes,
   novasol,
-} from 'assets/images';
+} from '@/assets/images';
 
 // Type
 import { ZaionsHPBrandsType } from '../types/ZionsHPBrandType';

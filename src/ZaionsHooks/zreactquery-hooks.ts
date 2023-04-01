@@ -1,4 +1,4 @@
-import { zAxiosApiRequest, emptyVoidReturnFunction } from 'utils/helpers';
+import { zAxiosApiRequest, emptyVoidReturnFunction } from '@/utils/helpers';
 // Core Imports
 
 // Packages Imports
@@ -8,11 +8,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useZIonErrorAlert, useZIonLoading } from 'ZaionsHooks/zionic-hooks';
 
 // Global constants
-import { reportCustomError } from 'utils/customErrorType';
-import { API_URL_ENUM } from 'utils/enums';
-import MESSAGES from 'utils/messages';
-import { ZRQGetRequestExtractEnum } from 'types/ZReactQuery/index.type';
-import { zAxiosApiRequestContentType } from 'types/CustomHooks/zapi-hooks.type';
+import { reportCustomError } from '@/utils/customErrorType';
+import { API_URL_ENUM } from '@/utils/enums';
+import MESSAGES from '@/utils/messages';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
 
 /**
  * The custom hook for getting data from an API using useQuery hook from react-query package.

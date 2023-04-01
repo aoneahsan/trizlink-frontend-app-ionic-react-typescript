@@ -5,7 +5,7 @@ import { atom } from 'recoil';
 // Data
 
 // Types
-import { ZaionsUserFeedBackCarouselType } from 'types/InPageComponentTypes/ZaionsUserFeedBack.type';
+import { ZaionsUserFeedBackCarouselType } from '@/types/InPageComponentTypes/ZaionsUserFeedBack.type';
 
 export const ZaionsUsersFeedBackCarouselState =
   atom<ZaionsUserFeedBackCarouselType>({

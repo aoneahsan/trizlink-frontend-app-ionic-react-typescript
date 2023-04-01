@@ -17,10 +17,10 @@ import { useRecoilState, useRecoilValue } from 'recoil';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsRSelect from 'components/CustomComponents/ZaionsRSelect';
-import ZDragAndDrop from 'components/CustomComponents/ZDragAndDrop';
-import ZRCSwitch from 'components/CustomComponents/ZRCSwitch';
-import ZaionsColorPiker from 'components/InPageComponents/ZaionsColorPiker';
+import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
+import ZDragAndDrop from '@/components/CustomComponents/ZDragAndDrop';
+import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
+import ZaionsColorPiker from '@/components/InPageComponents/ZaionsColorPiker';
 import {
   ZIonButton,
   ZIonCol,
@@ -28,7 +28,7 @@ import {
   ZIonRow,
   ZIonText,
   ZIonTitle,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
@@ -46,7 +46,7 @@ import {
   LinkInBioThemeBackgroundEnum,
   LinkInBioThemeBackgroundType,
   LinkInBioType,
-} from 'types/AdminPanel/linkInBioType';
+} from '@/types/AdminPanel/linkInBioType';
 
 /**
  * Recoil State Imports go down
@@ -65,17 +65,17 @@ import { LinkInBioFontFamilyRState } from 'ZaionsStore/UserDashboard/LinkInBio/L
  * */
 import classes from '../styles.module.css';
 import { useZRQGetRequest } from 'ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from 'utils/enums';
-import CONSTANTS from 'utils/constants';
-import { reportCustomError } from 'utils/customErrorType';
+import { API_URL_ENUM } from '@/utils/enums';
+import CONSTANTS from '@/utils/constants';
+import { reportCustomError } from '@/utils/customErrorType';
 import { LinkInBioPredefinedThemeRState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioPreDefinedThemesState.recoil';
-import { ZGenericObject } from 'types/zaionsAppSettings.type';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import {
   formatReactSelectOption,
   generatePredefinedThemeBackgroundValue,
   zJsonParse,
-} from 'utils/helpers';
-import { ZaionsRSelectOptions } from 'types/components/CustomComponents/index.type';
+} from '@/utils/helpers';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 /**
  * Component props type go down

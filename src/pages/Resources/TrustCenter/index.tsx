@@ -5,12 +5,12 @@ import React, { useLayoutEffect } from 'react';
 import { useRecoilState } from 'recoil';
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import InPageFooter from 'components/InPageFooter';
-import ZaionsTopMenu from 'navigation/TopMenu';
-import ZaionsInpageHeader from 'components/InPageComponents/ZaionsInpageHeader';
-import ZaionsCardWithIcon from 'components/InPageComponents/ZaionsCard';
-import ZaionsHPFAQuestions from 'components/ZaionsHomePage/HPQuestions';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import InPageFooter from '@/components/InPageFooter';
+import ZaionsTopMenu from '@/navigation/TopMenu';
+import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
+import ZaionsCardWithIcon from '@/components/InPageComponents/ZaionsCard';
+import ZaionsHPFAQuestions from '@/components/ZaionsHomePage/HPQuestions';
 import {
   ZIonCol,
   ZIonText,
@@ -18,13 +18,13 @@ import {
   ZIonGrid,
   ZIonContent,
   ZIonImg,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Type
-import { ZaionsCardWithIconType } from 'types/ZaionsCardWithIcon.type';
+import { ZaionsCardWithIconType } from '@/types/ZaionsCardWithIcon.type';
 
 // Data
-import { TrustAndSafetyResourcesData } from 'data/resources/TrustCenter/TrustAndSafetyResources.data';
+import { TrustAndSafetyResourcesData } from '@/data/resources/TrustCenter/TrustAndSafetyResources.data';
 
 // Recoil
 import { ZaionsRTCState } from 'ZaionsStore/Resources/ZaionsRTrustCenter.recoil';
@@ -35,8 +35,8 @@ import { ZaionsRTCState } from 'ZaionsStore/Resources/ZaionsRTrustCenter.recoil'
 import classes from './styles.module.css';
 
 // Images
-import { trustAndSafety } from 'assets/images';
-import { PRODUCT_NAME } from 'utils/constants';
+import { trustAndSafety } from '@/assets/images';
+import { PRODUCT_NAME } from '@/utils/constants';
 
 const ZaionsTrustCenter: React.FC = () => {
   const [zaionsTCData, setZaionsTCData] =

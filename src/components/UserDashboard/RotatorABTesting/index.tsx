@@ -17,16 +17,16 @@ import {
   ZIonLabel,
   ZIonInput,
   ZIonNote,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global constant
-import { getRandomKey } from 'utils/helpers';
+import { getRandomKey } from '@/utils/helpers';
 
 // Types
-import { ZaionsShortUrlOptionFieldsValuesInterface } from 'types/AdminPanel/linksType';
-import { ZIonButton } from 'components/ZIonComponents';
-import { ABTestingRotatorInterface } from 'types/AdminPanel/index.type';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
+import { ZIonButton } from '@/components/ZIonComponents';
+import { ABTestingRotatorInterface } from '@/types/AdminPanel/index.type';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 const FULL_PERCENTAGE = 100;
 

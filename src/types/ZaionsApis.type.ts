@@ -3,7 +3,7 @@ import {
   EmbedWidgetsType,
   PixelAccountType,
   UTMTagTemplateType,
-} from 'types/AdminPanel/linksType';
+} from '@/types/AdminPanel/linksType';
 import {
   AuthTokenResponseType,
   UserAccountType,

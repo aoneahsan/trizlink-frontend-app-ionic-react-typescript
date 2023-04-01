@@ -30,13 +30,13 @@ import {
   ZIonCard,
   ZIonCardHeader,
   ZIonCardContent,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
  * */
-import { Zaions4By4GridSysType } from 'types/InPageComponentTypes/Zaions4By4GridSys.type';
+import { Zaions4By4GridSysType } from '@/types/InPageComponentTypes/Zaions4By4GridSys.type';
 
 /**
  * Recoil State Imports go down

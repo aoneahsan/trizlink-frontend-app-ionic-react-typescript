@@ -1,4 +1,4 @@
-import { UTMTagTemplateType } from 'types/AdminPanel/linksType';
+import { UTMTagTemplateType } from '@/types/AdminPanel/linksType';
 
 export const UTMTagTemplatesData: UTMTagTemplateType[] = [
   {

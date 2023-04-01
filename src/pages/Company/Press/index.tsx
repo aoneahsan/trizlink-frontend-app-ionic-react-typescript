@@ -7,9 +7,9 @@ import { useRecoilValue } from 'recoil';
 import { cloudDownloadOutline } from 'ionicons/icons';
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import InPageFooter from 'components/InPageFooter';
-import ZaionsTopMenu from 'navigation/TopMenu';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import InPageFooter from '@/components/InPageFooter';
+import ZaionsTopMenu from '@/navigation/TopMenu';
 import {
   ZIonCol,
   ZIonText,
@@ -22,24 +22,24 @@ import {
   ZIonCardHeader,
   ZIonCardContent,
   ZIonIcon,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Recoil State
 import { ZaionsPressState } from 'ZaionsStore/CompanySection/Press/Press.recoil';
 import { ZaionsPressProductImagesState } from 'ZaionsStore/CompanySection/Press/ProductImages.recoil';
 
 // Types
-import { ZaionsPressType } from 'types/Company/PressPage/Press.type';
-import { ZaionsPressProductImagesType } from 'types/Company/PressPage/ProductImages.type';
+import { ZaionsPressType } from '@/types/Company/PressPage/Press.type';
+import { ZaionsPressProductImagesType } from '@/types/Company/PressPage/ProductImages.type';
 
 // Global Contant
-import { BRACKPOINT_MD, PRODUCT_NAME } from 'utils/constants';
+import { BRACKPOINT_MD, PRODUCT_NAME } from '@/utils/constants';
 
 // Images
-import { BlogoOrange, ProductLogo } from 'assets/images';
-import { ProductImagesZip, ProductLogoEsp } from 'assets/others';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { BlogoOrange, ProductLogo } from '@/assets/images';
+import { ProductImagesZip, ProductLogoEsp } from '@/assets/others';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 const ZaionsPress: React.FC = () => {
   const PressData = useRecoilValue<ZaionsPressType[]>(ZaionsPressState);

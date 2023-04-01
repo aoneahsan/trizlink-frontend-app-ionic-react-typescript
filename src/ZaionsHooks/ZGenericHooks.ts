@@ -4,17 +4,17 @@ import {
   useZIonSuccessAlert,
   useZIonErrorAlert,
 } from 'ZaionsHooks/zionic-hooks';
-import { notificationTypeEnum } from 'utils/enums';
-import { reportCustomError } from 'utils/customErrorType';
+import { notificationTypeEnum } from '@/utils/enums';
+import { reportCustomError } from '@/utils/customErrorType';
 import {
   showErrorNotification,
   showSuccessNotification,
-} from 'utils/notification';
+} from '@/utils/notification';
 import {
   useZMediaQueryScaleReturnInterface,
   zNotificationInterface,
   zNotificationSlotEnum,
-} from 'types/CustomHooks/zgeneric-hooks.type';
+} from '@/types/CustomHooks/zgeneric-hooks.type';
 import { useMediaQuery } from 'react-responsive';
 import {
   BRACKPOINT_MD,
@@ -22,7 +22,7 @@ import {
   BRACKPOINT_LG,
   BRACKPOINT_SM,
   BRACKPOINT_XS,
-} from 'utils/constants';
+} from '@/utils/constants';
 
 export const useZNotification = () => {
   const { presentZIonToastDanger, dismissZIonToastDanger } =

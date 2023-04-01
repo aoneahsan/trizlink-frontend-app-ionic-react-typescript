@@ -3,7 +3,7 @@ import { atom } from 'recoil';
 
 // Custom
 // Type
-import { LinkInBioType } from 'types/AdminPanel/linkInBioType';
+import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 
 // Data
 export const SelectedLinkInBioData = atom<LinkInBioType>({

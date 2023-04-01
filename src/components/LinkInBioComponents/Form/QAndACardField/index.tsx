@@ -7,7 +7,7 @@ import { ItemReorderEventDetail } from '@ionic/react';
 import { FieldArray, useFormikContext } from 'formik';
 
 // Custom Imports
-import ZTextEditor from 'components/CustomComponents/ZTextEditor';
+import ZTextEditor from '@/components/CustomComponents/ZTextEditor';
 import LinkInBioTitleField from '../TitleField';
 import {
   ZIonButton,
@@ -15,17 +15,17 @@ import {
   ZIonItem,
   ZIonReorder,
   ZIonReorderGroup,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Types
 import {
   cardDisplayEnum,
   linkInBioBlockCardItemInterface,
   LinkInBioSingleBlockContentType,
-} from 'types/AdminPanel/linkInBioType/blockTypes';
-import ZCustomDeleteComponent from 'components/CustomComponents/ZCustomDeleteComponent';
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
+import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
-import { reportCustomError } from 'utils/customErrorType';
+import { reportCustomError } from '@/utils/customErrorType';
 
 // Styles
 

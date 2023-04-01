@@ -19,8 +19,8 @@ import {
   ZIonCol,
   ZIonImg,
   ZIonText,
-} from 'components/ZIonComponents';
-import { predefinedMessengerPlatformImagesInWhite } from 'utils/ZIcons';
+} from '@/components/ZIonComponents';
+import { predefinedMessengerPlatformImagesInWhite } from '@/utils/ZIcons';
 
 /**
  * Global Constants Imports go down
@@ -31,9 +31,9 @@ import { predefinedMessengerPlatformImagesInWhite } from 'utils/ZIcons';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { linkInBioBlockCardItemInterface } from 'types/AdminPanel/linkInBioType/blockTypes';
-import { messengerPlatformsBlockEnum } from 'types/AdminPanel/index.type';
-import { LinkInBioThemeFontEnum } from 'types/AdminPanel/linkInBioType';
+import { linkInBioBlockCardItemInterface } from '@/types/AdminPanel/linkInBioType/blockTypes';
+import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
+import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 
 /**
  * Recoil State Imports go down

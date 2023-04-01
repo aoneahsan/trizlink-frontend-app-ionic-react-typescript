@@ -4,7 +4,7 @@ import React from 'react';
 // Packages Imports
 
 // Custom Imports
-import { ZIonInput, ZIonItem } from 'components/ZIonComponents';
+import { ZIonInput, ZIonItem } from '@/components/ZIonComponents';
 import { InputChangeEventDetail } from '@ionic/react';
 import { IonInputCustomEvent } from '@ionic/core';
 

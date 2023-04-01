@@ -13,8 +13,8 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonCol } from 'components/ZIonComponents';
-import ZCapGMap from 'components/CustomComponents/GoogleMaps/ZCapGMap';
+import { ZIonCol } from '@/components/ZIonComponents';
+import ZCapGMap from '@/components/CustomComponents/GoogleMaps/ZCapGMap';
 
 /**
  * Global Constants Imports go down

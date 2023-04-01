@@ -6,11 +6,11 @@ import {
   PasswordInterface,
   ShortUrlInterface,
   UTMTagInfoInterface,
-} from 'types/AdminPanel/index.type';
+} from '@/types/AdminPanel/index.type';
 
-import { FormMode } from 'types/AdminPanel/index.type';
+import { FormMode } from '@/types/AdminPanel/index.type';
 
-import { ZaionsRSelectOptions } from 'types/components/CustomComponents/index.type';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 /**
  * Enum's

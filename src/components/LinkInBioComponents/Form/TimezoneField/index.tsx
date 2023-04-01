@@ -5,10 +5,10 @@ import React from 'react';
 import { ActionMeta, MultiValue, PropsValue } from 'react-select';
 
 // Custom Imports
-import ZTimezoneInput from 'components/CustomComponents/ZTimezone';
+import ZTimezoneInput from '@/components/CustomComponents/ZTimezone';
 
 // Type
-import { ZaionsRSelectOptions } from 'types/components/CustomComponents/index.type';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 // Styles
 

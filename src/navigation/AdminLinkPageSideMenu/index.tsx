@@ -10,14 +10,14 @@ import {
   ZIonHeader,
   ZIonMenu,
   ZIonTitle,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Types
 
 // Recoil States
 
 // Global Contants
-import { ADMIN_LINK_PAGE_CONTENT_ID } from 'utils/constants';
+import { ADMIN_LINK_PAGE_CONTENT_ID } from '@/utils/constants';
 
 // Styles
 // import classes from './styles.module.css';

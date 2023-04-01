@@ -6,12 +6,12 @@ import { useMediaQuery } from 'react-responsive';
 import { useRecoilState } from 'recoil';
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import InPageFooter from 'components/InPageFooter';
-import ZaionsTopMenu from 'navigation/TopMenu';
-import ZaionsInpageHeader from 'components/InPageComponents/ZaionsInpageHeader';
-import ZaionsCardWithIcon from 'components/InPageComponents/ZaionsCard';
-import ZaionsInpageCol from 'components/InPageComponents/ZaionsInpageGridsys';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import InPageFooter from '@/components/InPageFooter';
+import ZaionsTopMenu from '@/navigation/TopMenu';
+import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
+import ZaionsCardWithIcon from '@/components/InPageComponents/ZaionsCard';
+import ZaionsInpageCol from '@/components/InPageComponents/ZaionsInpageGridsys';
 
 import {
   ZIonCol,
@@ -19,25 +19,25 @@ import {
   ZIonRow,
   ZIonGrid,
   ZIonContent,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Recoil
 import { ZaionsRTCState } from 'ZaionsStore/Resources/ZaionsRTrustCenter.recoil';
 
 // Global Constants
-import { BRACKPOINT_LG, PRODUCT_NAME } from 'utils/constants';
+import { BRACKPOINT_LG, PRODUCT_NAME } from '@/utils/constants';
 
 // Types
-import { ZaionsCardWithIconType } from 'types/ZaionsCardWithIcon.type';
+import { ZaionsCardWithIconType } from '@/types/ZaionsCardWithIcon.type';
 
 // Data
-import { MobileAppData } from 'data/resources/MobileApp/MobileApp.data';
+import { MobileAppData } from '@/data/resources/MobileApp/MobileApp.data';
 
 // Styles
 import classes from './styles.module.css';
 
 // Images
-import { branding2, manageLinks, QRCodeColor } from 'assets/images';
+import { branding2, manageLinks, QRCodeColor } from '@/assets/images';
 
 const ZaionsMobileApps: React.FC = () => {
   const [zaionsBEData, setZaionsBEData] =

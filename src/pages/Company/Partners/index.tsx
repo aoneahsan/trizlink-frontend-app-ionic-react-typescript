@@ -11,11 +11,11 @@ import Form from 'react-bootstrap/Form';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import InPageFooter from 'components/InPageFooter';
-import ZaionsTopMenu from 'navigation/TopMenu';
-import ZaionsInpageHeader from 'components/InPageComponents/ZaionsInpageHeader';
-import ZaionsInpageCol from 'components/InPageComponents/ZaionsInpageGridsys';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import InPageFooter from '@/components/InPageFooter';
+import ZaionsTopMenu from '@/navigation/TopMenu';
+import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
+import ZaionsInpageCol from '@/components/InPageComponents/ZaionsInpageGridsys';
 
 import {
   ZIonCol,
@@ -27,26 +27,26 @@ import {
   ZIonContent,
   ZIonList,
   ZIonIcon,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Imports
-import { BRACKPOINT_MD, BRACKPOINT_XL, PRODUCT_NAME } from 'utils/constants';
+import { BRACKPOINT_MD, BRACKPOINT_XL, PRODUCT_NAME } from '@/utils/constants';
 
 // Types
-import { ZaionsInpageColType } from 'types/InPageComponentTypes/ZaionsInpageCol.type';
+import { ZaionsInpageColType } from '@/types/InPageComponentTypes/ZaionsInpageCol.type';
 
 // Recoil State
 import { ZaionsInpageColState } from 'ZaionsStore/InpageComponents/ZaionsInpageCol.recoil';
 
 // Data
-import { ZaionsPartnerProgramData } from 'data/Company/Partners/PartnerProgram.data';
+import { ZaionsPartnerProgramData } from '@/data/Company/Partners/PartnerProgram.data';
 
 // Styles
 import classes from './styles.module.css';
 
 // Images
-import { IlloMobile } from 'assets/images';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { IlloMobile } from '@/assets/images';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 const ZaionsPartners: React.FC = () => {
   const [partnerProgramData, setpartnerProgramData] =

@@ -1,12 +1,12 @@
 import { ZLinkMutateApiType } from './../types/ZaionsApis.type';
 // zapi-hooks means "Zaions Api Hooks"
 
-// import { ZGenericObject } from 'types/zaionsAppSettings.type';
-import { reportCustomError } from 'utils/customErrorType';
-import { apiTypeToValidateEnum, notificationTypeEnum } from 'utils/enums';
-import { validateRequestResponseInterface } from 'types/CustomHooks/zapi-hooks.type';
+// import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { reportCustomError } from '@/utils/customErrorType';
+import { apiTypeToValidateEnum, notificationTypeEnum } from '@/utils/enums';
+import { validateRequestResponseInterface } from '@/types/CustomHooks/zapi-hooks.type';
 import { useZNotification } from './ZGenericHooks';
-import { zNotificationSlotEnum } from 'types/CustomHooks/zgeneric-hooks.type';
+import { zNotificationSlotEnum } from '@/types/CustomHooks/zgeneric-hooks.type';
 
 // Ahsan bhai said when ever I say verify change it to validate
 

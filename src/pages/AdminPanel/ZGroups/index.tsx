@@ -13,9 +13,9 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import ZLinkIonPanelSidebar from 'components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
-import ZLinkDashboardTopBar from 'components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZLinkIonPanelSidebar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
+import ZLinkDashboardTopBar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
 import {
   ZTable,
   ZTableTHead,
@@ -23,7 +23,7 @@ import {
   ZTableRow,
   ZTableHeadCol,
   ZTableRowCol,
-} from 'components/InPageComponents/ZaionsTable/table-styled-components.sc';
+} from '@/components/InPageComponents/ZaionsTable/table-styled-components.sc';
 
 import {
   ZIonCol,
@@ -33,7 +33,7 @@ import {
   ZIonGrid,
   ZIonContent,
   ZIonSplitPane,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
@@ -42,7 +42,7 @@ import {
 import CONSTANTS, {
   BRACKPOINT_MD,
   DASHBOARD_SM_MENU_CONTENT_ID,
-} from 'utils/constants';
+} from '@/utils/constants';
 
 /**
  * Type Imports go down
@@ -51,7 +51,7 @@ import CONSTANTS, {
 import {
   ZLinkIonPanelSettingsSidebarActiveLinkType,
   ZLinkIonPanelSidebarActiveLinkType,
-} from 'types/AdminPanel/linksType';
+} from '@/types/AdminPanel/linksType';
 
 /**
  * Recoil State Imports go down
@@ -68,10 +68,10 @@ import {
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import classNames from 'classnames';
-import ZaionsLinkSettingPanel from 'components/UserDashboard/ZLinkdashboard/ZLinksSettingPanel';
-import { PAGE_MENU } from 'utils/enums';
+import ZaionsLinkSettingPanel from '@/components/UserDashboard/ZLinkdashboard/ZLinksSettingPanel';
+import { PAGE_MENU } from '@/utils/enums';
 import { useMediaQuery } from 'react-responsive';
-import { ZIonButton } from 'components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 /**
  * Component props type go down

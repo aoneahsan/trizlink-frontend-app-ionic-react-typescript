@@ -4,8 +4,8 @@
  * */
 import React from 'react';
 import { ActionMeta, MultiValue, PropsValue } from 'react-select';
-import { ZaionsRSelectOptions } from 'types/components/CustomComponents/index.type';
-import { TIMEZONES } from 'utils/constants';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { TIMEZONES } from '@/utils/constants';
 import ZaionsRSelect from '../ZaionsRSelect';
 
 /**

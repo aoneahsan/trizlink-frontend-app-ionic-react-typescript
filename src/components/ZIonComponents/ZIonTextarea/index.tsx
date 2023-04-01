@@ -7,7 +7,7 @@ import { IonTextarea } from '@ionic/react';
 import { IonTextareaCustomEvent } from '@ionic/core/dist/types/components';
 
 // Type
-import { ZIonColorType, ZIonModeType } from 'types/zaionsAppSettings.type';
+import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
 type ZIonTextareaType = {
   className?: string;
   autoGrow?: boolean;

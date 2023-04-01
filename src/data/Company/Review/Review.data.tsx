@@ -1,9 +1,9 @@
 // Type
-import { ZaionsReviewType } from 'types/Company/ReviewsPage/Review.type';
+import { ZaionsReviewType } from '@/types/Company/ReviewsPage/Review.type';
 
 // Images
-import { MustafaA, DrReneeM, PaulaC, starsQuoteWidget } from 'assets/images';
-import { PRODUCT_NAME } from 'utils/constants';
+import { MustafaA, DrReneeM, PaulaC, starsQuoteWidget } from '@/assets/images';
+import { PRODUCT_NAME } from '@/utils/constants';
 
 export const ZaionsReviewData: ZaionsReviewType[] = [
   {

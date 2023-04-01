@@ -11,8 +11,8 @@ import {
   mailOutline,
   sendOutline,
 } from 'ionicons/icons';
-import { messengerPlatformsBlockEnum } from 'types/AdminPanel/index.type';
-import { ShortUrlLinkOptionType } from 'types/AdminPanel/linksType';
+import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
+import { ShortUrlLinkOptionType } from '@/types/AdminPanel/linksType';
 
 export const LinkTypeOptionsData: ShortUrlLinkOptionType[] = [
   {

@@ -4,7 +4,7 @@ import React from 'react';
 // Packages Imports
 
 // Custom Imports
-import { ZIonCol, ZIonRow, ZIonText } from 'components/ZIonComponents';
+import { ZIonCol, ZIonRow, ZIonText } from '@/components/ZIonComponents';
 
 // Global Constants
 

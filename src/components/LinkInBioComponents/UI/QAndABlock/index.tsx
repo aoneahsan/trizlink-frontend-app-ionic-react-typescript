@@ -19,7 +19,7 @@ import {
   ZIonCol,
   ZIonItem,
   ZIonLabel,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
@@ -30,8 +30,8 @@ import {
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { linkInBioBlockCardItemInterface } from 'types/AdminPanel/linkInBioType/blockTypes';
-import { LinkInBioThemeFontEnum } from 'types/AdminPanel/linkInBioType';
+import { linkInBioBlockCardItemInterface } from '@/types/AdminPanel/linkInBioType/blockTypes';
+import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 import classNames from 'classnames';
 
 /**

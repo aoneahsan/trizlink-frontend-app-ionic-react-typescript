@@ -29,18 +29,18 @@ import {
   ZIonInput,
   ZIonFooter,
   ZIonList,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import MESSAGES from 'utils/messages';
-import CONSTANTS, { PRODUCT_DOMAIN, PRODUCT_NAME } from 'utils/constants';
-import { API_URL_ENUM } from 'utils/enums';
-import { ZCustomError } from 'utils/customErrorType';
-import { showSuccessNotification } from 'utils/notification';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import MESSAGES from '@/utils/messages';
+import CONSTANTS, { PRODUCT_DOMAIN, PRODUCT_NAME } from '@/utils/constants';
+import { API_URL_ENUM } from '@/utils/enums';
+import { ZCustomError } from '@/utils/customErrorType';
+import { showSuccessNotification } from '@/utils/notification';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Type Imports go down
@@ -53,9 +53,9 @@ import ZaionsRoutes from 'utils/constants/RoutesConstants';
  * */
 import { ZaionsAuthToken } from 'ZaionsStore/UserAccount/index.recoil';
 import { useZIonLoading } from 'ZaionsHooks/zionic-hooks';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZIonTitle from 'components/ZIonComponents/ZIonTitle';
-import { zAxiosApiRequest, zStringify } from 'utils/helpers';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
+import { zAxiosApiRequest, zStringify } from '@/utils/helpers';
 
 /**
  * Style files Imports go down

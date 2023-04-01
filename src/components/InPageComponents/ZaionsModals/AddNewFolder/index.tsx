@@ -20,14 +20,14 @@ import {
   ZIonInput,
   ZIonFooter,
   ZIonLabel,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 import {
   formatApiRequestErrorForFormikFormField,
   zStringify,
-} from 'utils/helpers';
-import MESSAGES from 'utils/messages';
+} from '@/utils/helpers';
+import MESSAGES from '@/utils/messages';
 
 // Images
 
@@ -35,21 +35,21 @@ import MESSAGES from 'utils/messages';
 import { ZaionsAppSettingsRState } from 'ZaionsStore/zaionsAppSettings.recoil';
 
 // Types
-import { folderState, FormMode } from 'types/AdminPanel/index.type';
+import { folderState, FormMode } from '@/types/AdminPanel/index.type';
 import { FolderFormState } from 'ZaionsStore/FormStates/folderFormState.recoil';
-import { FormikSetErrorsType, resetFormType } from 'types/ZaionsFormik.type';
+import { FormikSetErrorsType, resetFormType } from '@/types/ZaionsFormik.type';
 import {
   useZRQCreateRequest,
   useZRQUpdateRequest,
 } from 'ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from 'utils/enums';
-import { ZIonButton } from 'components/ZIonComponents';
-import { showSuccessNotification } from 'utils/notification';
-import { reportCustomError, ZCustomError } from 'utils/customErrorType';
-import CONSTANTS from 'utils/constants';
-import { ZGenericObject } from 'types/zaionsAppSettings.type';
+import { API_URL_ENUM } from '@/utils/enums';
+import { ZIonButton } from '@/components/ZIonComponents';
+import { showSuccessNotification } from '@/utils/notification';
+import { reportCustomError, ZCustomError } from '@/utils/customErrorType';
+import CONSTANTS from '@/utils/constants';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { AxiosError } from 'axios';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Styles
 

@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-import { LinkInBioPageAnalyticsDataInterface } from 'types/InPageComponentTypes/ZaionsTables.type';
+import { LinkInBioPageAnalyticsDataInterface } from '@/types/InPageComponentTypes/ZaionsTables.type';
 
 /**
  * Recoil State to store link-in-bio page-analytics countries data

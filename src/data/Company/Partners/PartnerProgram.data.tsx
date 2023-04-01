@@ -1,12 +1,12 @@
 // Type
-import { ZaionsInpageColType } from 'types/InPageComponentTypes/ZaionsInpageCol.type';
+import { ZaionsInpageColType } from '@/types/InPageComponentTypes/ZaionsInpageCol.type';
 
 // Images
 import {
   brandAdvocacy,
   socialPublishing,
   trackingAndAnalytics,
-} from 'assets/images';
+} from '@/assets/images';
 
 export const ZaionsPartnerProgramData: ZaionsInpageColType[] = [
   {

@@ -5,12 +5,12 @@ import React, { useLayoutEffect } from 'react';
 import { useRecoilState } from 'recoil';
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import InPageFooter from 'components/InPageFooter';
-import ZaionsTopMenu from 'navigation/TopMenu';
-import ZaionsHr from 'components/InPageComponents/Zaion_hr';
-import ZaionsFeatureBanner from 'components/InPageComponents/ZaionsFeatureBanner';
-import ZaionsCard from 'components/InPageComponents/ZaionsCol';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import InPageFooter from '@/components/InPageFooter';
+import ZaionsTopMenu from '@/navigation/TopMenu';
+import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
+import ZaionsFeatureBanner from '@/components/InPageComponents/ZaionsFeatureBanner';
+import ZaionsCard from '@/components/InPageComponents/ZaionsCol';
 
 import {
   ZIonCol,
@@ -20,16 +20,16 @@ import {
   ZIonGrid,
   ZIonContent,
   ZIonList,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Recoil
 import { ZaionsSPSocialMarketersState } from 'ZaionsStore/SolutionPages/SocialMarketers/ZaionsSPSocialMarketers.recoil';
 
 // Data
-import { RSBlogData } from 'data/resources/blog/RSBlog.data';
+import { RSBlogData } from '@/data/resources/blog/RSBlog.data';
 
 // Type
-import { Zaions4By4GridSysType } from 'types/InPageComponentTypes/Zaions4By4GridSys.type';
+import { Zaions4By4GridSysType } from '@/types/InPageComponentTypes/Zaions4By4GridSys.type';
 
 // Global Constants
 
@@ -37,8 +37,8 @@ import { Zaions4By4GridSysType } from 'types/InPageComponentTypes/Zaions4By4Grid
 import classes from './styles.module.css';
 
 // Images
-import { Webinar4waysResource } from 'assets/images';
-import CONSTANTS, { PRODUCT_NAME } from 'utils/constants';
+import { Webinar4waysResource } from '@/assets/images';
+import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 
 const ZaionsResourceLibrary: React.FC = () => {
   const [BlogData, setBlogData] = useRecoilState<Zaions4By4GridSysType[]>(

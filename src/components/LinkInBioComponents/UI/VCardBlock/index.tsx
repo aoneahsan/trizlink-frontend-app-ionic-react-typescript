@@ -20,7 +20,7 @@ import {
   ZIonCol,
   ZIonIcon,
   ZIonText,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down

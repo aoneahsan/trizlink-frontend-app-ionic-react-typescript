@@ -4,8 +4,8 @@ import React from 'react';
 // Packages Imports
 import { FieldArray } from 'formik';
 import { gitPullRequestOutline, trashBin } from 'ionicons/icons';
-import { FormikHandleChangeEventType } from 'types/ZaionsFormik.type';
-import { ZIonButton, ZIonIcon } from 'components/ZIonComponents';
+import { FormikHandleChangeEventType } from '@/types/ZaionsFormik.type';
+import { ZIonButton, ZIonIcon } from '@/components/ZIonComponents';
 
 // Custom Imports
 import {
@@ -16,8 +16,8 @@ import {
   ZIonRow,
   ZIonLabel,
   ZIonInput,
-} from 'components/ZIonComponents';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+} from '@/components/ZIonComponents';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Global constant
 

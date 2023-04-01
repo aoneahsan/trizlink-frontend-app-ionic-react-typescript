@@ -13,7 +13,7 @@ import {
   ZIonInput,
   ZIonItem,
   ZIonTitle,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Styles
 

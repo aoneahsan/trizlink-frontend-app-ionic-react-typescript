@@ -19,8 +19,8 @@ import {
   ZIonCol,
   ZIonImg,
   ZIonText,
-} from 'components/ZIonComponents';
-import { predefinedMusicPlatformImagesInWhite } from 'utils/ZIcons';
+} from '@/components/ZIonComponents';
+import { predefinedMusicPlatformImagesInWhite } from '@/utils/ZIcons';
 
 /**
  * Global Constants Imports go down
@@ -29,13 +29,13 @@ import { predefinedMusicPlatformImagesInWhite } from 'utils/ZIcons';
 import {
   linkInBioBlockCardItemInterface,
   LinkInBioMusicPlatformEnum,
-} from 'types/AdminPanel/linkInBioType/blockTypes';
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkInBioThemeFontEnum } from 'types/AdminPanel/linkInBioType';
+import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 
 /**
  * Recoil State Imports go down

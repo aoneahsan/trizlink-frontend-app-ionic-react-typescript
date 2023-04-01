@@ -1,8 +1,8 @@
 import { GoogleMap } from '@capacitor/google-maps';
 import { useEffect, useRef } from 'react';
-import { ENVS } from 'utils/envKeys';
+import { ENVS } from '@/utils/envKeys';
 import RGAutoComplete, { usePlacesWidget } from 'react-google-autocomplete';
-import { ZIonInput } from 'components/ZIonComponents';
+import { ZIonInput } from '@/components/ZIonComponents';
 
 const GoogleMapsCapacitorPackageTest: React.FC = () => {
   const mapRef = useRef<HTMLElement>();

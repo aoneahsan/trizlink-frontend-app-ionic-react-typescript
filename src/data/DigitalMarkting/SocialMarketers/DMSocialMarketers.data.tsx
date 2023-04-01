@@ -1,4 +1,4 @@
-import { Zaions4By4GridSysType } from 'types/InPageComponentTypes/Zaions4By4GridSys.type';
+import { Zaions4By4GridSysType } from '@/types/InPageComponentTypes/Zaions4By4GridSys.type';
 
 // Images
 import {
@@ -6,8 +6,8 @@ import {
   Ebook30WaysResource,
   EbookHowMktUseSite,
   WebinarPromoteBrandResource,
-} from 'assets/images';
-import { PRODUCT_NAME } from 'utils/constants';
+} from '@/assets/images';
+import { PRODUCT_NAME } from '@/utils/constants';
 
 export const DMSocialMarketerData: Zaions4By4GridSysType[] = [
   {

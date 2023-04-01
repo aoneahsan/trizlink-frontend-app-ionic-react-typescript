@@ -31,14 +31,14 @@ import {
   ZIonList,
   ZIonCheckbox,
   ZIonTitle,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
-import { ZIonButton } from 'components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 // Global Constants
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
-import { replaceParams, zConsoleError } from 'utils/helpers';
-import { API_URL_ENUM } from 'utils/enums';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { replaceParams, zConsoleError } from '@/utils/helpers';
+import { API_URL_ENUM } from '@/utils/enums';
 import {
   useZRQDeleteRequest,
   useZRQGetRequest,
@@ -58,9 +58,9 @@ import {
   LinkInBiosFilterOptionsRState,
   LinkInBiosRState,
 } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioState.recoil';
-import { LinkInBioType } from 'types/AdminPanel/linkInBioType';
-import CONSTANTS from 'utils/constants';
-// import { LinkInBioType } from 'types/AdminPanel/linkInBioType';
+import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
+import CONSTANTS from '@/utils/constants';
+// import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 
 // Styles
 

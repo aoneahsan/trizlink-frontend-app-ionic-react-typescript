@@ -24,7 +24,7 @@ import {
   ZIonGrid,
   ZIonRouterLink,
   ZIonImg,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
@@ -57,15 +57,15 @@ import classes from './styles.module.css';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
-import { ProductLogo } from 'assets/images';
+import { ProductLogo } from '@/assets/images';
 
 /**
  * Component props type Imports go down
  * ? Like if you have a type for props it should be place Down
  * */
-import ZaionsDropDown from 'components/InPageComponents/ZaionsDropdown';
-import ZIonTitle from 'components/ZIonComponents/ZIonTitle';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import ZaionsDropDown from '@/components/InPageComponents/ZaionsDropdown';
+import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Functional Component

@@ -3,7 +3,7 @@ import { atom } from 'recoil';
 
 // Custom
 // Type
-import { LinkInBioPredefinedThemeType } from 'types/AdminPanel/linkInBioType';
+import { LinkInBioPredefinedThemeType } from '@/types/AdminPanel/linkInBioType';
 
 // Data
 

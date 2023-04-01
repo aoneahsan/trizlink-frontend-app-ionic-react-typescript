@@ -14,7 +14,7 @@ import {
   ZIonItem,
   ZIonLabel,
   ZIonInput,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 
@@ -23,8 +23,8 @@ import {
 // Recoil States
 import { useZIonToast } from 'ZaionsHooks/zionic-hooks';
 import { useFormikContext } from 'formik';
-import { ZaionsShortUrlOptionFieldsValuesInterface } from 'types/AdminPanel/linksType';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Types
 

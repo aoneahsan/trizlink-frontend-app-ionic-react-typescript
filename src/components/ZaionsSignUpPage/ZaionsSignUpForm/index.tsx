@@ -18,7 +18,7 @@ import {
   ZIonInput,
   ZIonRow,
   ZIonNote,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 import {
@@ -29,26 +29,26 @@ import {
   STORAGE,
   validateFields,
   zStringify,
-} from 'utils/helpers';
-import { API_URL_ENUM, CONTAINS, VALIDATION_RULE } from 'utils/enums';
-import MESSAGES from 'utils/messages';
+} from '@/utils/helpers';
+import { API_URL_ENUM, CONTAINS, VALIDATION_RULE } from '@/utils/enums';
+import MESSAGES from '@/utils/messages';
 
 // Recoil States
 import {
   ZaionsAuthTokenData,
   ZaionsUserAccountRState,
 } from 'ZaionsStore/UserAccount/index.recoil';
-import { LOCALSTORAGE_KEYS, PRODUCT_NAME } from 'utils/constants';
+import { LOCALSTORAGE_KEYS, PRODUCT_NAME } from '@/utils/constants';
 import { AxiosError } from 'axios';
-import { ZCustomError } from 'utils/customErrorType';
-import { showSuccessNotification } from 'utils/notification';
+import { ZCustomError } from '@/utils/customErrorType';
+import { showSuccessNotification } from '@/utils/notification';
 import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZIonErrorAlert, useZIonLoading } from 'ZaionsHooks/zionic-hooks';
-import { UserAuthData } from 'types/ZaionsApis.type';
-import { ZIonButton } from 'components/ZIonComponents';
-import { FormikSetErrorsType, resetFormType } from 'types/ZaionsFormik.type';
-import { ZGenericObject } from 'types/zaionsAppSettings.type';
+import { UserAuthData } from '@/types/ZaionsApis.type';
+import { ZIonButton } from '@/components/ZIonComponents';
+import { FormikSetErrorsType, resetFormType } from '@/types/ZaionsFormik.type';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 
 // Style
 

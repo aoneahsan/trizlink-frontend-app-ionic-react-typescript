@@ -21,7 +21,7 @@ import {
   ZIonFooter,
   ZIonLabel,
   ZIonSelectOption,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 import {
@@ -29,8 +29,8 @@ import {
   validateFields,
   validatePixelAccountID,
   zStringify,
-} from 'utils/helpers';
-import MESSAGES from 'utils/messages';
+} from '@/utils/helpers';
+import MESSAGES from '@/utils/messages';
 
 // Images
 
@@ -42,20 +42,20 @@ import { ZaionsAppSettingsRState } from 'ZaionsStore/zaionsAppSettings.recoil';
 import {
   PixelAccountType,
   PixelPlatformsEnum,
-} from 'types/AdminPanel/linksType';
-import { FormMode } from 'types/AdminPanel/index.type';
+} from '@/types/AdminPanel/linksType';
+import { FormMode } from '@/types/AdminPanel/index.type';
 import { PixelAccountFormState } from 'ZaionsStore/FormStates/pixelAccountFormState.recoil';
-import { resetFormType } from 'types/ZaionsFormik.type';
+import { resetFormType } from '@/types/ZaionsFormik.type';
 import {
   useZRQCreateRequest,
   useZRQUpdateRequest,
 } from 'ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM, VALIDATION_RULE } from 'utils/enums';
-import CONSTANTS from 'utils/constants';
-import { reportCustomError } from 'utils/customErrorType';
-import { ZIonButton } from 'components/ZIonComponents';
-import ZIonSelect from 'components/ZIonComponents/ZIonSelect';
-import { showSuccessNotification } from 'utils/notification';
+import { API_URL_ENUM, VALIDATION_RULE } from '@/utils/enums';
+import CONSTANTS from '@/utils/constants';
+import { reportCustomError } from '@/utils/customErrorType';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZIonSelect from '@/components/ZIonComponents/ZIonSelect';
+import { showSuccessNotification } from '@/utils/notification';
 
 // Styles
 

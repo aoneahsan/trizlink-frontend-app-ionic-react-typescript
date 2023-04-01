@@ -10,11 +10,11 @@ import {
   ZIonText,
   ZIonIcon,
   ZIonRouterLink,
-} from 'components/ZIonComponents';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
-import ZDragAndDrop from 'components/CustomComponents/ZDragAndDrop';
+} from '@/components/ZIonComponents';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import ZDragAndDrop from '@/components/CustomComponents/ZDragAndDrop';
 import { useFormikContext } from 'formik';
-import { ZaionsShortUrlOptionFieldsValuesInterface } from 'types/AdminPanel/linksType';
+import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 
 // Global Constants
 

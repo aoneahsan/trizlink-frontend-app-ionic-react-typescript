@@ -14,13 +14,13 @@ import classNames from 'classnames';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonContent, ZIonGrid } from 'components/ZIonComponents';
-import PageAnalyticsHeader from 'pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics/PAHeader';
-import PageAnalyticsTimeFilter from 'pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics/PATimeFilter';
+import { ZIonContent, ZIonGrid } from '@/components/ZIonComponents';
+import PageAnalyticsHeader from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics/PAHeader';
+import PageAnalyticsTimeFilter from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics/PATimeFilter';
 
 import { useZMediaQueryScale } from 'ZaionsHooks/ZGenericHooks';
-import PageAnalyticsStateBlock from 'pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics/PAStateBlock';
-import PageAnalyticsInfoBlocks from 'pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics/PAInfoBlocks';
+import PageAnalyticsStateBlock from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics/PAStateBlock';
+import PageAnalyticsInfoBlocks from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics/PAInfoBlocks';
 
 /**
  * Global Constants Imports go down
@@ -55,7 +55,7 @@ import {
   linkInBioPageAnalyticsReferersBlock,
   linkInBioPageAnalyticsRetargetingPixelsBlock,
   linkInBioPageAnalyticsUtmTagBlock,
-} from 'assets/images';
+} from '@/assets/images';
 
 /**
  * Component props type go down

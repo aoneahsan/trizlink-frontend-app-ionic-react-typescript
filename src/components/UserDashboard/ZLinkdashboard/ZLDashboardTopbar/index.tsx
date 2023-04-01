@@ -32,7 +32,7 @@ import {
   ZIonGrid,
   ZIonImg,
   ZIonMenuButton,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
@@ -40,7 +40,7 @@ import {
  * */
 import ZaionsRoutes, {
   ZRoutesRedirects,
-} from 'utils/constants/RoutesConstants';
+} from '@/utils/constants/RoutesConstants';
 import classes from './styles.module.css';
 import {
   BRACKPOINT_LG,
@@ -48,23 +48,23 @@ import {
   BRACKPOINT_SM,
   LOCALSTORAGE_KEYS,
   PRODUCT_NAME,
-} from 'utils/constants';
-import { API_URL_ENUM } from 'utils/enums';
+} from '@/utils/constants';
+import { API_URL_ENUM } from '@/utils/enums';
 import {
   showZCapErrorDialogAlert,
   STORAGE,
   zAxiosApiRequest,
   zConsoleError,
-} from 'utils/helpers';
-import { ZCustomError } from 'utils/customErrorType';
-import MESSAGES from 'utils/messages';
-import { showSuccessNotification } from 'utils/notification';
+} from '@/utils/helpers';
+import { ZCustomError } from '@/utils/customErrorType';
+import MESSAGES from '@/utils/messages';
+import { showSuccessNotification } from '@/utils/notification';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
  * */
-import { productSmLogo } from 'assets/images';
+import { productSmLogo } from '@/assets/images';
 
 /**
  * Recoil State Imports go down
@@ -75,7 +75,7 @@ import {
   ZaionsUserAccountRState,
 } from 'ZaionsStore/UserAccount/index.recoil';
 import { useZIonLoading, useZIonPopover } from 'ZaionsHooks/zionic-hooks';
-import { ZIonButton } from 'components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 /**
  * Style files Imports go down

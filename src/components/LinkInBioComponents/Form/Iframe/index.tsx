@@ -4,10 +4,10 @@ import React from 'react';
 // Packages Imports
 
 // Custom Imports
-import { ZIonCol } from 'components/ZIonComponents';
-import ZEditor from 'components/CustomComponents/ZEditor';
+import { ZIonCol } from '@/components/ZIonComponents';
+import ZEditor from '@/components/CustomComponents/ZEditor';
 import { useFormikContext } from 'formik';
-import { LinkInBioSingleBlockContentType } from 'types/AdminPanel/linkInBioType/blockTypes';
+import { LinkInBioSingleBlockContentType } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 // Styles
 

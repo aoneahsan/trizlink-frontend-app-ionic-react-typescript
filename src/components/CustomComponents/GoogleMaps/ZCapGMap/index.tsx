@@ -1,6 +1,6 @@
 import { GoogleMap } from '@capacitor/google-maps';
 import { useEffect, useRef } from 'react';
-import { GM_CONSTANTS } from 'utils/constants/googleMapsConstants';
+import { GM_CONSTANTS } from '@/utils/constants/googleMapsConstants';
 
 interface IZCapGMapProps {
   mapSize?: {

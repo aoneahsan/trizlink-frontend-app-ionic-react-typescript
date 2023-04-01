@@ -12,10 +12,10 @@ import {
   ZIonLabel,
   ZIonRow,
   ZIonTitle,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Type
-import { LinkInBioSingleBlockContentType } from 'types/AdminPanel/linkInBioType/blockTypes';
+import { LinkInBioSingleBlockContentType } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 // Styles
 

@@ -1,15 +1,15 @@
 import {
   UserAccountType,
   UserAccountAuthTokenType,
-} from 'types/UserAccount/index.type';
+} from '@/types/UserAccount/index.type';
 // Packages Imports
 import { atom, selector } from 'recoil';
 
 // Data
-import { userAccountEmailsData } from 'data/UserAccount';
+import { userAccountEmailsData } from '@/data/UserAccount';
 
 // Custom Imports
-import { UserAccountEmailType } from 'types/UserAccount/index.type';
+import { UserAccountEmailType } from '@/types/UserAccount/index.type';
 
 export const ZaionsUserAccountRState = atom<UserAccountType | null>({
   key: 'ZaionsUserAccountRState_Key',

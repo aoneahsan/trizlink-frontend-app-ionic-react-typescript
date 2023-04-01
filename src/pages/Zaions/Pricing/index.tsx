@@ -7,9 +7,9 @@ import { useMediaQuery } from 'react-responsive';
 import { useRecoilValue } from 'recoil';
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import InPageFooter from 'components/InPageFooter';
-import ZaionsTopMenu from 'navigation/TopMenu';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import InPageFooter from '@/components/InPageFooter';
+import ZaionsTopMenu from '@/navigation/TopMenu';
 
 import {
   ZIonCol,
@@ -24,30 +24,30 @@ import {
   ZIonCard,
   ZIonCardHeader,
   ZIonCardContent,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Recoil State
 import { ZaionsPricingSubscriptionsState } from 'ZaionsStore/PricingPage/PricingSubscriptionsData';
 import { ZaionsPricingFeatureDetailState } from 'ZaionsStore/PricingPage/ZaionsPricingFeatureDetail.recoil';
 
 // Global Imports
-import { BRACKPOINT_MD } from 'utils/constants';
+import { BRACKPOINT_MD } from '@/utils/constants';
 
 // Types
 import {
   ZaionsPricingFeatureDetailType,
   ZaionsPricingFeaturePlanType,
   ZaionsPricingSubscriptionsType,
-} from 'types/WhyZaions/PricingPage';
-import { getRandomKey } from 'utils/helpers';
+} from '@/types/WhyZaions/PricingPage';
+import { getRandomKey } from '@/utils/helpers';
 
 // Styles
 import classes from './styles.module.css';
 
 // Images
-import { iconInfo } from 'assets/images';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
-import { ZIonButton } from 'components/ZIonComponents';
+import { iconInfo } from '@/assets/images';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 const ZaionsPricing: React.FC = () => {
   const subscriptionPricingData = useRecoilValue<

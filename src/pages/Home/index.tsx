@@ -4,17 +4,17 @@ import React from 'react';
 // Package Imports
 
 // Custom Imports
-import InPageFooter from 'components/InPageFooter';
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import ZaionsHPBanner from 'components/ZaionsHomePage/HPBanner';
-import ZaionsHPShortLink from 'components/ZaionsHomePage/HPShortLink';
-import ZaionsHPConnetPlateform from 'components/ZaionsHomePage/HPConnetPlateform';
-import ZaionsHPGlobal from 'components/ZaionsHomePage/HPGlobal';
-import ZaionsHPBrandList from 'components/ZaionsHomePage/HPBrandList';
-import ZaionsHPFAQuestions from 'components/ZaionsHomePage/HPQuestions';
-import ZaionsHPUsersFeedBack from 'components/ZaionsHomePage/HPFeedback';
-import ZaionsTopMenu from 'navigation/TopMenu';
-import { ZIonContent } from 'components/ZIonComponents';
+import InPageFooter from '@/components/InPageFooter';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZaionsHPBanner from '@/components/ZaionsHomePage/HPBanner';
+import ZaionsHPShortLink from '@/components/ZaionsHomePage/HPShortLink';
+import ZaionsHPConnetPlateform from '@/components/ZaionsHomePage/HPConnetPlateform';
+import ZaionsHPGlobal from '@/components/ZaionsHomePage/HPGlobal';
+import ZaionsHPBrandList from '@/components/ZaionsHomePage/HPBrandList';
+import ZaionsHPFAQuestions from '@/components/ZaionsHomePage/HPQuestions';
+import ZaionsHPUsersFeedBack from '@/components/ZaionsHomePage/HPFeedback';
+import ZaionsTopMenu from '@/navigation/TopMenu';
+import { ZIonContent } from '@/components/ZIonComponents';
 
 // Styles
 import './styles.css';

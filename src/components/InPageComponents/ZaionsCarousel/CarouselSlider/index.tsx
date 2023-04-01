@@ -11,14 +11,14 @@ import {
   ZIonText,
   ZIonGrid,
   ZIonImg,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Recoil State
 import { useRecoilState } from 'recoil';
 import { ZaionsUsersFeedBackCarouselState } from 'ZaionsStore/InpageComponents/ZaionsUsersFeedBack.recoil';
 
 // Images
-import { quotes, starsQuoteWidget } from 'assets/images';
+import { quotes, starsQuoteWidget } from '@/assets/images';
 
 // Global Constant
 

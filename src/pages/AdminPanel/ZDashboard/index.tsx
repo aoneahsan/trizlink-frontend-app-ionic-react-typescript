@@ -13,9 +13,9 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import ZLinkIonPanelSidebar from 'components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
-import ZLinkDashboardTopBar from 'components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZLinkIonPanelSidebar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
+import ZLinkDashboardTopBar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
 import {
   ZIonText,
   ZIonRow,
@@ -24,7 +24,7 @@ import {
   ZIonSplitPane,
   ZIonTitle,
   ZIonImg,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
@@ -35,13 +35,13 @@ import CONSTANTS, {
   BRACKPOINT_MD,
   BRACKPOINT_SM,
   DASHBOARD_SM_MENU_CONTENT_ID,
-} from 'utils/constants';
+} from '@/utils/constants';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
  * */
-import { ZLinkIonPanelSidebarActiveLinkType } from 'types/AdminPanel/linksType';
+import { ZLinkIonPanelSidebarActiveLinkType } from '@/types/AdminPanel/linksType';
 
 /**
  * Recoil State Imports go down
@@ -57,12 +57,12 @@ import { ZLinkIonPanelSidebarActiveLinkType } from 'types/AdminPanel/linksType';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
-import { dashboardEmptyState } from 'assets/images';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { dashboardEmptyState } from '@/assets/images';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useMediaQuery } from 'react-responsive';
-import { PAGE_MENU } from 'utils/enums';
+import { PAGE_MENU } from '@/utils/enums';
 import classNames from 'classnames';
-import { ZIonButton } from 'components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 /**
  * Component props type go down

@@ -13,7 +13,7 @@ import {
   ZIonText,
   ZIonIcon,
   ZIonGrid,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 
@@ -31,10 +31,10 @@ import {
 import {
   ShortUrlLinkOptionType,
   ZaionsShortUrlOptionFieldsValuesInterface,
-} from 'types/AdminPanel/linksType';
+} from '@/types/AdminPanel/linksType';
 import { useFormikContext } from 'formik';
-import { reportCustomError } from 'utils/customErrorType';
-import { messengerPlatformsBlockEnum } from 'types/AdminPanel/index.type';
+import { reportCustomError } from '@/utils/customErrorType';
+import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
 
 // Styles
 

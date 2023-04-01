@@ -8,10 +8,10 @@ import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import InPageFooter from 'components/InPageFooter';
-import ZaionsTopMenu from 'components/InPageFooter';
-import ZaionsInpageCol from 'components/InPageComponents/ZaionsInpageGridsys';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import InPageFooter from '@/components/InPageFooter';
+import ZaionsTopMenu from '@/components/InPageFooter';
+import ZaionsInpageCol from '@/components/InPageComponents/ZaionsInpageGridsys';
 import {
   ZIonCol,
   ZIonText,
@@ -19,7 +19,7 @@ import {
   ZIonGrid,
   ZIonContent,
   ZIonImg,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Recoil States
 import { ZaionsCareersPageGalleryState } from 'ZaionsStore/CompanySection/Careers/Gallery.recoil';
@@ -27,22 +27,22 @@ import { ZaionsJobsState } from 'ZaionsStore/CompanySection/Careers/AvalableJobs
 import { ZaionsInpageColState } from 'ZaionsStore/InpageComponents/ZaionsInpageCol.recoil';
 
 // Types
-import { ZaionsGalleryType } from 'types/Company/CareersPage/Gallery.type';
-import { ZaionsJobsType } from 'types/Company/CareersPage/AvalableJobs.type';
-import { ZaionsInpageColType } from 'types/InPageComponentTypes/ZaionsInpageCol.type';
+import { ZaionsGalleryType } from '@/types/Company/CareersPage/Gallery.type';
+import { ZaionsJobsType } from '@/types/Company/CareersPage/AvalableJobs.type';
+import { ZaionsInpageColType } from '@/types/InPageComponentTypes/ZaionsInpageCol.type';
 
 // Data
-import { ZaionsEmployeeBenefitsData } from 'data/Company/Careers/EmployeeBenefits.data';
+import { ZaionsEmployeeBenefitsData } from '@/data/Company/Careers/EmployeeBenefits.data';
 
 // Global constants
-import { BRACKPOINT_LG, BRACKPOINT_MD, PRODUCT_NAME } from 'utils/constants';
+import { BRACKPOINT_LG, BRACKPOINT_MD, PRODUCT_NAME } from '@/utils/constants';
 
 // Styles
 import classes from './styles.module.css';
 
 // Images
-import { Awards } from 'assets/images';
-import { ZIonButton } from 'components/ZIonComponents';
+import { Awards } from '@/assets/images';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 const ZaionsCareers: React.FC = () => {
   const OurJobsData = useRecoilValue<ZaionsJobsType[]>(ZaionsJobsState);

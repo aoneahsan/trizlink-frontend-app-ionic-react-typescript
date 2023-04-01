@@ -3,13 +3,13 @@ import { atom } from 'recoil';
 
 // Custom
 // Type
-import { PixelAccountType } from 'types/AdminPanel/linksType';
-import { PixelAccountPlatformType } from 'types/AdminPanel/linksType/index';
+import { PixelAccountType } from '@/types/AdminPanel/linksType';
+import { PixelAccountPlatformType } from '@/types/AdminPanel/linksType/index';
 // Data
 import {
   PixelAccountPlatformOptionsData,
   // PixelAccountsData,
-} from 'data/UserDashboard/PixelAccountsData';
+} from '@/data/UserDashboard/PixelAccountsData';
 
 export const PixelAccountsRState = atom<PixelAccountType[]>({
   key: 'PixelAccountsRState_key',

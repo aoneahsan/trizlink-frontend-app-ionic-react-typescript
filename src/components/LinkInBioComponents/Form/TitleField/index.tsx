@@ -12,7 +12,7 @@ import {
   ZIonImg,
   ZIonInput,
   ZIonItem,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Styles
 

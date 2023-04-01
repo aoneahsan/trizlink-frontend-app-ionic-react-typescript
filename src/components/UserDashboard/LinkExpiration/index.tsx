@@ -17,20 +17,20 @@ import {
   ZIonLabel,
   ZIonInput,
   ZIonNote,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
-import { TIMEZONES } from 'utils/constants';
-import { formatReactSelectOption } from 'utils/helpers';
+import { TIMEZONES } from '@/utils/constants';
+import { formatReactSelectOption } from '@/utils/helpers';
 
 // Images
 
 // Recoil States
 import { useFormikContext } from 'formik';
-import { ZaionsShortUrlOptionFieldsValuesInterface } from 'types/AdminPanel/linksType';
-import ZaionsRSelect from 'components/CustomComponents/ZaionsRSelect';
-import { ZaionsRSelectOptions } from 'types/components/CustomComponents/index.type';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
+import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Types
 

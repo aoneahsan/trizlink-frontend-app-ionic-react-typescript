@@ -2,8 +2,8 @@ import RGAutoComplete from 'react-google-autocomplete';
 import {
   FormikSetFieldValueEventType,
   FormikSetFieldTouchedEventType,
-} from 'types/ZaionsFormik.type';
-import { GM_CONSTANTS } from 'utils/constants/googleMapsConstants';
+} from '@/types/ZaionsFormik.type';
+import { GM_CONSTANTS } from '@/utils/constants/googleMapsConstants';
 
 interface IZRGAutoCompleteInputProps {
   inputStyles?: {

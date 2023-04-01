@@ -18,17 +18,17 @@ import {
   ZIonReorder,
   ZIonReorderGroup,
   ZIonRow,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 import LinkInBioLinkField from '../LinkField';
-import LinkInBioPDButton from 'components/LinkInBioComponents/UI/PerDefinedButton';
+import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedButton';
 
 import { useZRQGetRequest } from 'ZaionsHooks/zreactquery-hooks';
 
 // Global constant
-import { API_URL_ENUM } from 'utils/enums';
-import CONSTANTS, { PRODUCT_NAME } from 'utils/constants';
-import { reportCustomError } from 'utils/customErrorType';
-import { predefinedMusicPlatformImages, ZIcons } from 'utils/ZIcons';
+import { API_URL_ENUM } from '@/utils/enums';
+import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
+import { reportCustomError } from '@/utils/customErrorType';
+import { predefinedMusicPlatformImages, ZIcons } from '@/utils/ZIcons';
 
 // Types
 import {
@@ -37,12 +37,12 @@ import {
   LinkInBioMusicPlatformEnum,
   LinkInBioPredefinedPlatformInterface,
   LinkInBioSingleBlockContentType,
-} from 'types/AdminPanel/linkInBioType/blockTypes';
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 // Recoil states
 import { LinkInBioPredefinedMusicPlatformRState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
 import LinkInBioIconField from '../IconField';
-import ZCustomDeleteComponent from 'components/CustomComponents/ZCustomDeleteComponent';
+import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 
 // Styles

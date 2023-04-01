@@ -5,7 +5,7 @@ import React from 'react';
 import { IonCheckbox } from '@ionic/react';
 
 // Type
-import { ZIonColorType, ZIonModeType } from 'types/zaionsAppSettings.type';
+import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
 type ZIonCheckboxType = {
   className?: string;
   checked?: boolean;

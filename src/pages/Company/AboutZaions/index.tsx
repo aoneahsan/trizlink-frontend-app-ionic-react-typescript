@@ -7,9 +7,9 @@ import { useRecoilValue } from 'recoil';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import InPageFooter from 'components/InPageFooter';
-import ZaionsTopMenu from 'components/InPageFooter';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import InPageFooter from '@/components/InPageFooter';
+import ZaionsTopMenu from '@/components/InPageFooter';
 import {
   ZIonCol,
   ZIonText,
@@ -23,22 +23,22 @@ import {
   ZIonCardContent,
   ZIonAccordion,
   ZIonAccordionGroup,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Type
-import { ZaionsTeamType } from 'types/Company/AboutZaionsPage/OurTeam.type';
-import { ZaionsOurCoreValuesType } from 'types/Company/AboutZaionsPage/OurCoreValues.types';
+import { ZaionsTeamType } from '@/types/Company/AboutZaionsPage/OurTeam.type';
+import { ZaionsOurCoreValuesType } from '@/types/Company/AboutZaionsPage/OurCoreValues.types';
 
 // Recoil State
 import { ZaionsOurTeamState } from 'ZaionsStore/CompanySection/AboutZaions/OurTeam.recoil';
 import { ZaionsOurCoreValuesState } from 'ZaionsStore/CompanySection/AboutZaions/OurCoreValue.recoil';
 
 // Images
-import { ChaunceyExcitingImage } from 'assets/images';
+import { ChaunceyExcitingImage } from '@/assets/images';
 
 // Global Constant
-import { BRACKPOINT_LG, BRACKPOINT_SM, PRODUCT_NAME } from 'utils/constants';
-import { ZIonButton } from 'components/ZIonComponents';
+import { BRACKPOINT_LG, BRACKPOINT_SM, PRODUCT_NAME } from '@/utils/constants';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 const ZaionsAbout: React.FC = () => {
   const OurCoreValuesStateData = useRecoilValue<ZaionsOurCoreValuesType[]>(

@@ -1,7 +1,7 @@
 import {
   LinkInBioThemeFontEnum,
   LinkInBioThemeFontFamilyInterface,
-} from 'types/AdminPanel/linkInBioType';
+} from '@/types/AdminPanel/linkInBioType';
 
 export const ZaionsShortLinkData: LinkInBioThemeFontFamilyInterface[] = [
   { id: '1', fontName: LinkInBioThemeFontEnum.lato },

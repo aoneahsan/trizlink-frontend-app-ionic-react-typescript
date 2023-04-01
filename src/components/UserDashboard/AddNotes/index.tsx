@@ -12,10 +12,10 @@ import {
   ZIonRouterLink,
   ZIonItem,
   ZIonTextarea,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 import { useFormikContext } from 'formik';
-import { ZaionsShortUrlOptionFieldsValuesInterface } from 'types/AdminPanel/linksType';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Global Constants
 

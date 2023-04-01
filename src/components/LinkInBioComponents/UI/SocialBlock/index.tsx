@@ -13,12 +13,12 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonCol, ZIonImg, ZIonRow } from 'components/ZIonComponents';
+import { ZIonCol, ZIonImg, ZIonRow } from '@/components/ZIonComponents';
 import {
   linkInBioBlockCardItemInterface,
   LinkInBioSocialPlatformEnum,
-} from 'types/AdminPanel/linkInBioType/blockTypes';
-import { predefinedSocialWhiteImages } from 'utils/ZIcons';
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
+import { predefinedSocialWhiteImages } from '@/utils/ZIcons';
 
 /**
  * Global Constants Imports go down

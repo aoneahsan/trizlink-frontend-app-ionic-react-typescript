@@ -1,13 +1,13 @@
-import { LinkInBioType } from 'types/AdminPanel/linkInBioType';
+import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 import { atom, selector } from 'recoil';
 
 // Data
-// import { ZaionsShortLinkData } from 'data/UserDashboard/LinkInBiosData';
+// import { ZaionsShortLinkData } from '@/data/UserDashboard/LinkInBiosData';
 
 import {
   ShortLinkFilterOptionsInterface,
   TimeFilterEnum,
-} from 'types/AdminPanel/linksType';
+} from '@/types/AdminPanel/linksType';
 
 export const LinkInBiosRState = atom<LinkInBioType[] | undefined>({
   key: 'LinkInBiosRState_key',

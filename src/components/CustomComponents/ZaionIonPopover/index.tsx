@@ -14,7 +14,7 @@ import { IonPopover } from '@ionic/react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonContent } from 'components/ZIonComponents';
+import { ZIonContent } from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down

@@ -3,7 +3,7 @@ import { atom } from 'recoil';
 
 // Custom
 // Type
-import { ShortLinkType } from 'types/AdminPanel/linksType/index';
+import { ShortLinkType } from '@/types/AdminPanel/linksType/index';
 // Data
 
 export const SelectedShortLinkData = atom<ShortLinkType>({

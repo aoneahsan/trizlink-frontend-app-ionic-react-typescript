@@ -10,7 +10,7 @@ import {
   ZIonRow,
   ZIonText,
   ZIonRouterLink,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 

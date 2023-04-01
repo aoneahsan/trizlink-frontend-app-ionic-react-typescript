@@ -24,15 +24,15 @@ import {
   ZIonInput,
   ZIonItem,
   ZIonText,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { reportCustomError } from 'utils/customErrorType';
-import CONSTANTS from 'utils/constants';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import { reportCustomError } from '@/utils/customErrorType';
+import CONSTANTS from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Type Imports go down
@@ -44,14 +44,14 @@ import ZaionsRoutes from 'utils/constants/RoutesConstants';
  * ? Import of recoil states is a Recoil State import
  * */
 import { NewShortLinkFormState } from 'ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
-import { validateField } from 'utils/helpers';
-import { VALIDATION_RULE } from 'utils/enums';
+import { validateField } from '@/utils/helpers';
+import { VALIDATION_RULE } from '@/utils/enums';
 import { IonNote } from '@ionic/react';
 import { searchOutline } from 'ionicons/icons';
 import {
   FormMode,
   messengerPlatformsBlockEnum,
-} from 'types/AdminPanel/index.type';
+} from '@/types/AdminPanel/index.type';
 
 /**
  * Style files Imports go down

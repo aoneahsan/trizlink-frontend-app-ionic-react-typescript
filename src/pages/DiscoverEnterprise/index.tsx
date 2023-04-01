@@ -8,8 +8,8 @@ import { useMediaQuery } from 'react-responsive';
 import { useRecoilState } from 'recoil';
 
 // Custom Imports
-import ZaionsIonPage from 'components/ZaionsIonPage';
-import ZaionsHr from 'components/InPageComponents/Zaion_hr';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
 import {
   ZIonCol,
   ZIonText,
@@ -21,30 +21,30 @@ import {
   ZIonList,
   ZIonImg,
   ZIonIcon,
-} from 'components/ZIonComponents';
-import ZaionsSecondaryHeader from 'components/InPageComponents/ZaionsSecondaryHeader';
+} from '@/components/ZIonComponents';
+import ZaionsSecondaryHeader from '@/components/InPageComponents/ZaionsSecondaryHeader';
 
 // Global Constants
-import { BRACKPOINT_MD, PRODUCT_DOMAIN, PRODUCT_NAME } from 'utils/constants';
+import { BRACKPOINT_MD, PRODUCT_DOMAIN, PRODUCT_NAME } from '@/utils/constants';
 import {
   ZaionsDiscoverEnterpriseCompanySize,
   ZaionsDiscoverEnterpriseCountry,
   ZaionsDiscoverEnterpriseJobTitle,
   ZaionsDiscoverEnterprisePrimaryUseCase,
-} from 'data/DiscoverEnterprise/index.data';
+} from '@/data/DiscoverEnterprise/index.data';
 
 // Types
-import { ZaionsHPBrandsType } from 'types/ZionsHPBrandType';
+import { ZaionsHPBrandsType } from '@/types/ZionsHPBrandType';
 
 // Recoil States
 import { ZaionsHPBrandsData } from 'ZaionsStore/ZaionsHPBrandsRecoil';
 
 // Styles
 import classes from './styles.module.css';
-import DEBrandData from 'data/DiscoverEnterprise.data';
+import DEBrandData from '@/data/DiscoverEnterprise.data';
 import { checkmarkSharp } from 'ionicons/icons';
-import InPageFooter from 'components/InPageFooter';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import InPageFooter from '@/components/InPageFooter';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 const ZaionsDiscoverEnterprise: React.FC = () => {
   const [loadedHPBrandsData, setLoadedHPBrandsData] =

@@ -10,7 +10,7 @@ import {
   ZIonText,
   ZIonIcon,
   ZIonRouterLink,
-} from 'components/ZIonComponents';
+} from '@/components/ZIonComponents';
 
 // Global Constants
 
@@ -19,21 +19,21 @@ import {
 // Recoil States
 
 // Types
-// import ZaionsRSelect from 'components/CustomComponents/ZaionsRSelect';
-import { ZIonButton } from 'components/ZIonComponents';
+// import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
+import { ZIonButton } from '@/components/ZIonComponents';
 import {
   FolderInterface,
   ZaionsShortUrlOptionFieldsValuesInterface,
-} from 'types/AdminPanel/linksType';
+} from '@/types/AdminPanel/linksType';
 import { useFormikContext } from 'formik';
-import ZaionsRSelect from 'components/CustomComponents/ZaionsRSelect';
-import { ZaionsRSelectOptions } from 'types/components/CustomComponents/index.type';
-import { formatReactSelectOption } from 'utils/helpers';
-import { ZGenericObject } from 'types/zaionsAppSettings.type';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
+import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { formatReactSelectOption } from '@/utils/helpers';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZIonModal } from 'ZaionsHooks/zionic-hooks';
-import ZaionsAddNewFolder from 'components/InPageComponents/ZaionsModals/AddNewFolder';
-import { folderState } from 'types/AdminPanel/index.type';
+import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
+import { folderState } from '@/types/AdminPanel/index.type';
 
 // Styles
 // import CLASSES from './styles.module.css';

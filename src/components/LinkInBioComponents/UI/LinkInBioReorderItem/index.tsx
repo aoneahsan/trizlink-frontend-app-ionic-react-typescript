@@ -26,16 +26,16 @@ import {
   ZIonItem,
   ZIonReorder,
   ZIonText,
-} from 'components/ZIonComponents';
-import ZLinkInBioAvatarBlock from 'components/LinkInBioComponents/UI/AvatarBlock';
-import ZLinkInBioButtonBlock from 'components/LinkInBioComponents/UI/ButtonBlock';
-import ZLinkInBioCardBlock from 'components/LinkInBioComponents/UI/CardBlock';
-import ZLinkInBioTextBlock from 'components/LinkInBioComponents/UI/TextBlock';
-import ZLinkInBioRSSBlock from 'components/LinkInBioComponents/UI/ZLinkInBioRSSBlock';
-import ZLinkInBioCalendarBlock from 'components/LinkInBioComponents/UI/CalendarBlock';
-import ZCountdown from 'components/CustomComponents/ZCountDown';
-import ZVideoBlock from 'components/LinkInBioComponents/UI/VideoBlock';
-import ZAudioBlock from 'components/LinkInBioComponents/UI/AudioBlock';
+} from '@/components/ZIonComponents';
+import ZLinkInBioAvatarBlock from '@/components/LinkInBioComponents/UI/AvatarBlock';
+import ZLinkInBioButtonBlock from '@/components/LinkInBioComponents/UI/ButtonBlock';
+import ZLinkInBioCardBlock from '@/components/LinkInBioComponents/UI/CardBlock';
+import ZLinkInBioTextBlock from '@/components/LinkInBioComponents/UI/TextBlock';
+import ZLinkInBioRSSBlock from '@/components/LinkInBioComponents/UI/ZLinkInBioRSSBlock';
+import ZLinkInBioCalendarBlock from '@/components/LinkInBioComponents/UI/CalendarBlock';
+import ZCountdown from '@/components/CustomComponents/ZCountDown';
+import ZVideoBlock from '@/components/LinkInBioComponents/UI/VideoBlock';
+import ZAudioBlock from '@/components/LinkInBioComponents/UI/AudioBlock';
 
 import { useZNavigate } from 'ZaionsHooks/zrouter-hooks';
 import { useZRQDeleteRequest } from 'ZaionsHooks/zreactquery-hooks';
@@ -45,15 +45,15 @@ import { useZValidateRequestResponse } from 'ZaionsHooks/zapi-hooks';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { reportCustomError } from 'utils/customErrorType';
+import { reportCustomError } from '@/utils/customErrorType';
 import {
   createRedirectRoute,
   generatePredefinedThemeBackgroundValue,
   zJsonParse,
-} from 'utils/helpers';
-import ZaionsRoutes from 'utils/constants/RoutesConstants';
-import CONSTANTS, { PRODUCT_NAME } from 'utils/constants';
-import { API_URL_ENUM } from 'utils/enums';
+} from '@/utils/helpers';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
+import { API_URL_ENUM } from '@/utils/enums';
 
 /**
  * Type Imports go down
@@ -65,12 +65,12 @@ import {
   LinkInBioType,
   ZLinkInBioPageEnum,
   ZLinkInBioRHSComponentEnum,
-} from 'types/AdminPanel/linkInBioType';
+} from '@/types/AdminPanel/linkInBioType';
 import {
   LinkInBioBlockEnum,
   LinkInBioBlockFromType,
   LinkInBioSingleBlockContentType,
-} from 'types/AdminPanel/linkInBioType/blockTypes';
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 /**
  * Recoil State Imports go down
@@ -78,7 +78,7 @@ import {
  * */
 import { LinkInBioBlocksRState } from 'ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
 import ZCarouselBlock from '../ZCarouselBlock';
-import ZCustomDeleteComponent from 'components/CustomComponents/ZCustomDeleteComponent';
+import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
 import ZLinkInBioMusicBlock from '../MusicBlock';
 import ZLinkInBioSocialBlock from '../SocialBlock';
 import ZLinkInBioSeparatorBlock from '../SeparatorBlock';

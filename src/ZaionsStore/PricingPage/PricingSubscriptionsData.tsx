@@ -3,8 +3,8 @@ import { atom } from 'recoil';
 
 // Custom Imports
 // Data
-import { ZaionsPricingPageData } from 'data/WhyZaions/PricingPage';
-import { ZaionsPricingSubscriptionsType } from 'types/WhyZaions/PricingPage';
+import { ZaionsPricingPageData } from '@/data/WhyZaions/PricingPage';
+import { ZaionsPricingSubscriptionsType } from '@/types/WhyZaions/PricingPage';
 
 // Types
 

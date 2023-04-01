@@ -1,4 +1,4 @@
-import CONSTANTS, { PRODUCT_DOMAIN, PRODUCT_NAME } from 'utils/constants';
+import CONSTANTS, { PRODUCT_DOMAIN, PRODUCT_NAME } from '@/utils/constants';
 import { ZaionsPricingFeatureDetailType } from '../../types/WhyZaions/PricingPage';
 
 export const ZaionsPricingFeatureDetailData: ZaionsPricingFeatureDetailType[] =

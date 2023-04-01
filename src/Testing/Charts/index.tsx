@@ -6,8 +6,8 @@ import {
   ZIonFooter,
   ZIonHeader,
   ZIonTitle,
-} from 'components/ZIonComponents';
-import ZaionsIonPage from 'components/ZaionsIonPage';
+} from '@/components/ZIonComponents';
+import ZaionsIonPage from '@/components/ZaionsIonPage';
 
 const ChartsExamples: React.FC = () => {
   return (

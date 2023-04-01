@@ -1,5 +1,5 @@
-import { zConsoleError } from 'utils/helpers';
-import MESSAGES from 'utils/messages';
+import { zConsoleError } from '@/utils/helpers';
+import MESSAGES from '@/utils/messages';
 
 export enum ErrorCodeEnum {
   RequestFailed = 'RequestFailed',
