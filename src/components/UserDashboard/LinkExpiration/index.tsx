@@ -75,15 +75,6 @@ const LinkExpiration: React.FC = () => {
 						unCheckedChildren='off'
 						className='ms-auto me-2'
 					/>
-					{/* <IonToggle
-						name='linkExpiration.enabled'
-						onIonChange={({ target }) => {
-							setFieldValue('linkExpiration.enabled', target.checked, false);
-							setFieldTouched('linkExpiration.enabled', true, true);
-						}}
-						defaultChecked={values.linkExpiration.enabled}
-						className='ms-auto me-2'
-					/> */}
 				</div>
 				{values.linkExpiration.enabled ? (
 					<div className='mt-4 d-block px-2 mb-4'>

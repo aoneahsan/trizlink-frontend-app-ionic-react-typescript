@@ -47,7 +47,6 @@ const DeepLinking: React.FC = () => {
               </ZIonRouterLink>
             </h6>
           </ZIonText>
-          {/* <IonToggle className='ms-auto' disabled></IonToggle> */}
           <RCSwitch
             className='ms-auto me-2'
             checked={false}

@@ -1,7 +1,6 @@
 // Core Imports
 import React from 'react';
 // Packages Import
-import { IonToggle } from '@ionic/react';
 import { privacy } from '@/assets/images';
 import { useMediaQuery } from 'react-responsive';
 
@@ -14,6 +13,7 @@ import {
 	ZIonInput,
 	ZIonImg,
 } from '@/components/ZIonComponents';
+import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 
 // Global Constants
 import { BRACKPOINT_LG } from '@/utils/constants';
@@ -95,7 +95,7 @@ const APSettingsPrivacy: React.FC = () => {
 					</ZIonText>
 				</ZIonCol>
 				<ZIonCol className='ion-text-end'>
-					<IonToggle />
+					<ZRCSwitch />
 				</ZIonCol>
 			</ZIonRow>
 		</>

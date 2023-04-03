@@ -873,19 +873,6 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 														<h5>🎈 Animation</h5>
 													</ZIonTitle>
 													<div className='mt-3'>
-														{/* <IonToggle
-																	name='animation'
-																	onIonChange={({ target }) => {
-																		setFieldTouched('animation');
-																		setFieldValue(
-																			'animation',
-																			target.checked,
-																			true
-																		);
-																	}}
-																	onIonBlur={handleBlur}
-																	defaultChecked={values.animation}
-																/> */}
 														<ZRCSwitch
 															onChange={(val) => {
 																setFieldTouched('animation', true, false);
@@ -895,7 +882,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 															checkedChildren='on'
 															unCheckedChildren='off'
 														/>
-														{/* Tomorroe Start from here ahsan */}
+
 														{/* <RBFormCheck isV /> */}
 													</div>
 												</div>
@@ -905,20 +892,6 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 														<h5>❌ Closing option</h5>
 													</ZIonTitle>
 													<div className='mt-3'>
-														{/* <IonToggle
-																	name='closingOption'
-																	onIonChange={({ target }) => {
-																		setFieldTouched('closingOption');
-																		setFieldValue(
-																			'closingOption',
-																			target.checked,
-																			true
-																		);
-																	}}
-																	onIonBlur={handleBlur}
-																	// value={values.closingOption.toString()}
-																	defaultChecked={values.closingOption}
-																/> */}
 														<ZRCSwitch
 															onChange={(val) => {
 																setFieldTouched('closingOption', true, false);
