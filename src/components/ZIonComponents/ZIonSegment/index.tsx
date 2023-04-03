@@ -17,7 +17,7 @@ type ZIonSegmentType = {
   scrollable?: boolean;
   selectOnFocus?: boolean;
   swipeGesture?: boolean;
-  value?: null | string;
+  value?: undefined | string;
 };
 
 const ZIonSegment = (props: ZIonSegmentType) => {
