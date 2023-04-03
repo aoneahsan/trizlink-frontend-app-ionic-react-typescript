@@ -29,17 +29,18 @@ const LinkInBioIconField: React.FC<LinkInBioIconFieldInterface> = ({
   onIonBlur,
 }) => {
   return (
-    <ZIonItem className={className}>
-      <ZIonIcon icon={addCircleOutline} slot='start' />
-      <ZIonInput
-        name={name}
-        placeholder={placeholder}
-        onIonChange={onIonChange}
-        onIonBlur={onIonBlur}
-        value={value}
-      />
-    </ZIonItem>
-  );
+		<ZIonItem className={className}>
+			<ZIonIcon icon={addCircleOutline} slot='start' />
+			<ZIonInput
+				name={name}
+				placeholder={placeholder}
+				onIonChange={onIonChange}
+				onIonBlur={onIonBlur}
+				value={value}
+				label=''
+			/>
+		</ZIonItem>
+	);
 };
 
 export default LinkInBioIconField;

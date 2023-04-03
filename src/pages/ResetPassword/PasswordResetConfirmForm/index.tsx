@@ -14,7 +14,6 @@ import {
 	ZIonGrid,
 	ZIonContent,
 	ZIonTitle,
-	ZIonLabel,
 	ZIonInput,
 	ZIonNote,
 	ZIonImg,
@@ -115,10 +114,9 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
 													(touched.emailAddress && !errors.emailAddress),
 											})}
 										>
-											<ZIonLabel position='floating'>
-												Username or Email Address:
-											</ZIonLabel>
 											<ZIonInput
+												label='Username or Email Address:'
+												labelPlacement='floating'
 												name='emailAddress'
 												type='email'
 												onIonChange={handleChange}

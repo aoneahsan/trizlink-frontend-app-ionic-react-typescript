@@ -14,21 +14,20 @@ import React from 'react';
  * ? Like import of custom components is a custom import
  * */
 import {
-  ZIonButton,
-  ZIonCheckbox,
-  ZIonCol,
-  ZIonFooter,
-  ZIonInput,
-  ZIonItem,
-  ZIonLabel,
-  ZIonRouterLink,
-  ZIonRow,
-  ZIonText,
-  ZIonTitle,
+	ZIonButton,
+	ZIonCheckbox,
+	ZIonCol,
+	ZIonFooter,
+	ZIonInput,
+	ZIonItem,
+	ZIonRouterLink,
+	ZIonRow,
+	ZIonText,
+	ZIonTitle,
 } from '@/components/ZIonComponents';
 import {
-  LinkInBioFormFieldsEnum,
-  linkInBioFromFieldItemInterface,
+	LinkInBioFormFieldsEnum,
+	linkInBioFromFieldItemInterface,
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 /**
@@ -70,24 +69,24 @@ import classNames from 'classnames';
  * */
 
 interface ZLinkInBioFromBlockInterface {
-  fromBlockData?: {
-    formFields?: linkInBioFromFieldItemInterface[];
-    isTermEnabled?: boolean;
-    submitButtonText?: string;
-    termText?: string;
-    termLink?: string;
-  };
-  fontFamily?: LinkInBioThemeFontEnum;
+	fromBlockData?: {
+		formFields?: linkInBioFromFieldItemInterface[];
+		isTermEnabled?: boolean;
+		submitButtonText?: string;
+		termText?: string;
+		termLink?: string;
+	};
+	fontFamily?: LinkInBioThemeFontEnum;
 }
 
 const ZLinkInBioFormBlock: React.FC<ZLinkInBioFromBlockInterface> = ({
-  fromBlockData,
-  fontFamily,
+	fromBlockData,
+	fontFamily,
 }) => {
-  return (
-    <ZIonRow className='zaions__w100 ion-justify-content-between ion-padding-vertical px-3 zaions__bg_light_opacity_point5 rounded row-gap-1-point-6-rem'>
-      {/* Header */}
-      {/* <ZIonHeader className='pb-2'>
+	return (
+		<ZIonRow className='zaions__w100 ion-justify-content-between ion-padding-vertical px-3 zaions__bg_light_opacity_point5 rounded row-gap-1-point-6-rem'>
+			{/* Header */}
+			{/* <ZIonHeader className='pb-2'>
         <ZIonButton
           expand='block'
           style={{ height: '40px' }}
@@ -99,166 +98,150 @@ const ZLinkInBioFormBlock: React.FC<ZLinkInBioFromBlockInterface> = ({
         </ZIonButton>
       </ZIonHeader> */}
 
-      {fromBlockData?.formFields?.map((element) => {
-        return (
-          <>
-            {/* Title */}
-            {element.type === LinkInBioFormFieldsEnum.title && (
-              <ZIonCol size='12'>
-                <ZIonTitle className='ion-no-padding ion-text-center'>
-                  <h5
-                    className={classNames(fontFamily, {
-                      'fw-bold ion-no-margin': true,
-                    })}
-                  >
-                    {element.title}
-                  </h5>
-                </ZIonTitle>
-              </ZIonCol>
-            )}
+			{fromBlockData?.formFields?.map((element) => {
+				return (
+					<>
+						{/* Title */}
+						{element.type === LinkInBioFormFieldsEnum.title && (
+							<ZIonCol size='12'>
+								<ZIonTitle className='ion-no-padding ion-text-center'>
+									<h5
+										className={classNames(fontFamily, {
+											'fw-bold ion-no-margin': true,
+										})}
+									>
+										{element.title}
+									</h5>
+								</ZIonTitle>
+							</ZIonCol>
+						)}
 
-            {/* First Name */}
-            {element.type === LinkInBioFormFieldsEnum.firstName && (
-              <ZIonCol size='12'>
-                <ZIonItem>
-                  <ZIonLabel
-                    position='floating'
-                    className={classNames(fontFamily)}
-                  >
-                    {element.placeholder}
-                  </ZIonLabel>
-                  <ZIonInput className={classNames(fontFamily)} />
-                </ZIonItem>
-              </ZIonCol>
-            )}
+						{/* First Name */}
+						{element.type === LinkInBioFormFieldsEnum.firstName && (
+							<ZIonCol size='12'>
+								<ZIonItem>
+									<ZIonInput
+										className={classNames(fontFamily)}
+										label={element.placeholder}
+										labelPlacement='floating'
+									/>
+								</ZIonItem>
+							</ZIonCol>
+						)}
 
-            {/* Last Name */}
-            {element.type === LinkInBioFormFieldsEnum.lastName && (
-              <ZIonCol size='12'>
-                <ZIonItem>
-                  <ZIonLabel
-                    position='floating'
-                    className={classNames(fontFamily)}
-                  >
-                    {element.placeholder}
-                  </ZIonLabel>
-                  <ZIonInput className={classNames(fontFamily)} />
-                </ZIonItem>
-              </ZIonCol>
-            )}
+						{/* Last Name */}
+						{element.type === LinkInBioFormFieldsEnum.lastName && (
+							<ZIonCol size='12'>
+								<ZIonItem>
+									<ZIonInput
+										className={classNames(fontFamily)}
+										label={element.placeholder}
+										labelPlacement='floating'
+									/>
+								</ZIonItem>
+							</ZIonCol>
+						)}
 
-            {/* Email Name */}
-            {element.type === LinkInBioFormFieldsEnum.email && (
-              <ZIonCol size='12'>
-                <ZIonItem>
-                  <ZIonLabel
-                    position='floating'
-                    className={classNames(fontFamily)}
-                  >
-                    {element.placeholder}
-                  </ZIonLabel>
-                  <ZIonInput className={classNames(fontFamily)} />
-                </ZIonItem>
-              </ZIonCol>
-            )}
+						{/* Email Name */}
+						{element.type === LinkInBioFormFieldsEnum.email && (
+							<ZIonCol size='12'>
+								<ZIonItem>
+									<ZIonInput
+										className={classNames(fontFamily)}
+										label={element.placeholder}
+										labelPlacement='floating'
+									/>
+								</ZIonItem>
+							</ZIonCol>
+						)}
 
-            {/* Phone Number */}
-            {element.type === LinkInBioFormFieldsEnum.phone && (
-              <ZIonCol size='12'>
-                <ZIonItem>
-                  <ZIonLabel
-                    position='floating'
-                    className={classNames(fontFamily)}
-                  >
-                    {element.placeholder}
-                  </ZIonLabel>
-                  <ZIonInput className={classNames(fontFamily)} />
-                </ZIonItem>
-              </ZIonCol>
-            )}
+						{/* Phone Number */}
+						{element.type === LinkInBioFormFieldsEnum.phone && (
+							<ZIonCol size='12'>
+								<ZIonItem>
+									<ZIonInput
+										className={classNames(fontFamily)}
+										label={element.placeholder}
+										labelPlacement='floating'
+									/>
+								</ZIonItem>
+							</ZIonCol>
+						)}
 
-            {/* Text */}
-            {element.type === LinkInBioFormFieldsEnum.text && (
-              <ZIonCol size='12'>
-                <ZIonItem>
-                  <ZIonLabel
-                    position='floating'
-                    className={classNames(fontFamily)}
-                  >
-                    {element.placeholder}
-                  </ZIonLabel>
-                  <ZIonInput className={classNames(fontFamily)} />
-                </ZIonItem>
-              </ZIonCol>
-            )}
+						{/* Text */}
+						{element.type === LinkInBioFormFieldsEnum.text && (
+							<ZIonCol size='12'>
+								<ZIonItem>
+									<ZIonInput
+										className={classNames(fontFamily)}
+										label={element.placeholder}
+										labelPlacement='floating'
+									/>
+								</ZIonItem>
+							</ZIonCol>
+						)}
 
-            {/* Date */}
-            {element.type === LinkInBioFormFieldsEnum.date && (
-              <ZIonCol size='12'>
-                <ZIonItem>
-                  <ZIonLabel
-                    position='stacked'
-                    className={classNames(fontFamily)}
-                  >
-                    {element.placeholder}
-                  </ZIonLabel>
-                  <ZIonInput
-                    type='datetime-local'
-                    className={classNames(fontFamily)}
-                  />
-                </ZIonItem>
-                {/* <LinkInBioDateTimeField /> */}
-              </ZIonCol>
-            )}
+						{/* Date */}
+						{element.type === LinkInBioFormFieldsEnum.date && (
+							<ZIonCol size='12'>
+								<ZIonItem>
+									<ZIonInput
+										type='datetime-local'
+										className={classNames(fontFamily)}
+										label={element.placeholder}
+										labelPlacement='stacked'
+									/>
+								</ZIonItem>
+								{/* <LinkInBioDateTimeField /> */}
+							</ZIonCol>
+						)}
 
-            {/* Website (url) */}
-            {element.type === LinkInBioFormFieldsEnum.website && (
-              <ZIonCol size='12'>
-                <ZIonItem>
-                  <ZIonLabel
-                    position='floating'
-                    className={classNames(fontFamily)}
-                  >
-                    {element.placeholder}
-                  </ZIonLabel>
-                  <ZIonInput className={classNames(fontFamily)} />
-                </ZIonItem>
-              </ZIonCol>
-            )}
-          </>
-        );
-      })}
-      {fromBlockData?.isTermEnabled && (
-        <ZIonCol size='12' className='d-flex ion-align-items-center'>
-          <div className=''>
-            <ZIonCheckbox className='ion-no-margin' />
-          </div>
-          <ZIonRouterLink
-            className='ms-2 zaions__underline'
-            routerLink={fromBlockData.termLink}
-            target='_blank'
-            color='dark'
-          >
-            <ZIonText className={classNames(fontFamily)}>
-              {fromBlockData?.termText}
-            </ZIonText>
-          </ZIonRouterLink>
-        </ZIonCol>
-      )}
-      {/* Footer */}
-      <ZIonFooter className='pt-2'>
-        <ZIonButton
-          expand='block'
-          style={{ height: '40px' }}
-          className={classNames(fontFamily, {
-            'text-transform-initial': true,
-          })}
-        >
-          {fromBlockData?.submitButtonText}
-        </ZIonButton>
-      </ZIonFooter>
-    </ZIonRow>
-  );
+						{/* Website (url) */}
+						{element.type === LinkInBioFormFieldsEnum.website && (
+							<ZIonCol size='12'>
+								<ZIonItem>
+									<ZIonInput
+										className={classNames(fontFamily)}
+										label={element.placeholder}
+										labelPlacement='floating'
+									/>
+								</ZIonItem>
+							</ZIonCol>
+						)}
+					</>
+				);
+			})}
+			{fromBlockData?.isTermEnabled && (
+				<ZIonCol size='12' className='d-flex ion-align-items-center'>
+					<div className=''>
+						<ZIonCheckbox className='ion-no-margin' />
+					</div>
+					<ZIonRouterLink
+						className='ms-2 zaions__underline'
+						routerLink={fromBlockData.termLink}
+						target='_blank'
+						color='dark'
+					>
+						<ZIonText className={classNames(fontFamily)}>
+							{fromBlockData?.termText}
+						</ZIonText>
+					</ZIonRouterLink>
+				</ZIonCol>
+			)}
+			{/* Footer */}
+			<ZIonFooter className='pt-2'>
+				<ZIonButton
+					expand='block'
+					style={{ height: '40px' }}
+					className={classNames(fontFamily, {
+						'text-transform-initial': true,
+					})}
+				>
+					{fromBlockData?.submitButtonText}
+				</ZIonButton>
+			</ZIonFooter>
+		</ZIonRow>
+	);
 };
 
 export default ZLinkInBioFormBlock;

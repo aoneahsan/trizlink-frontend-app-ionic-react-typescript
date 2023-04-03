@@ -12,37 +12,38 @@ import { InputChangeEventDetail, IonInputCustomEvent } from '@ionic/core';
 
 // Component Type
 interface LinkInBioDescriptionFieldInterface {
-  placeholder?: string;
-  value?: string | number | null;
-  name?: string;
-  className?: string;
-  onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
-  onIonBlur?: <A extends Event>(event: A) => void;
+	placeholder?: string;
+	value?: string | number | null;
+	name?: string;
+	className?: string;
+	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
+	onIonBlur?: <A extends Event>(event: A) => void;
 }
 
 const LinkInBioDescriptionField: React.FC<
-  LinkInBioDescriptionFieldInterface
+	LinkInBioDescriptionFieldInterface
 > = ({
-  placeholder = 'Your Description',
-  onIonChange,
-  onIonBlur,
-  value,
-  name,
-  className,
+	placeholder = 'Your Description',
+	onIonChange,
+	onIonBlur,
+	value,
+	name,
+	className,
 }) => {
-  return (
-    <ZIonItem className={className}>
-      <ZIonIcon icon={reorderFourOutline} slot='start' />
+	return (
+		<ZIonItem className={className}>
+			<ZIonIcon icon={reorderFourOutline} slot='start' />
 
-      <ZIonInput
-        placeholder={placeholder}
-        onIonChange={onIonChange}
-        onIonBlur={onIonBlur}
-        value={value}
-        name={name}
-      />
-    </ZIonItem>
-  );
+			<ZIonInput
+				placeholder={placeholder}
+				onIonChange={onIonChange}
+				onIonBlur={onIonBlur}
+				value={value}
+				name={name}
+				label=''
+			/>
+		</ZIonItem>
+	);
 };
 
 export default LinkInBioDescriptionField;

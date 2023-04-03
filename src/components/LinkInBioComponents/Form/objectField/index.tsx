@@ -12,33 +12,34 @@ import { IonInputCustomEvent } from '@ionic/core';
 
 // Component Type
 interface LinkInBioObjectFieldInterface {
-  placeholder?: string;
-  name?: string;
-  value?: string | number | null;
-  className?: string;
-  onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
-  onIonBlur?: <A extends Event>(event: A) => void;
+	placeholder?: string;
+	name?: string;
+	value?: string | number | null;
+	className?: string;
+	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
+	onIonBlur?: <A extends Event>(event: A) => void;
 }
 
 const LinkInBioObjectField: React.FC<LinkInBioObjectFieldInterface> = ({
-  placeholder = 'object',
-  value,
-  name,
-  className,
-  onIonChange,
-  onIonBlur,
+	placeholder = 'object',
+	value,
+	name,
+	className,
+	onIonChange,
+	onIonBlur,
 }) => {
-  return (
-    <ZIonItem className={className}>
-      <ZIonInput
-        name={name}
-        placeholder={placeholder}
-        onIonChange={onIonChange}
-        onIonBlur={onIonBlur}
-        value={value}
-      />
-    </ZIonItem>
-  );
+	return (
+		<ZIonItem className={className}>
+			<ZIonInput
+				name={name}
+				placeholder={placeholder}
+				onIonChange={onIonChange}
+				onIonBlur={onIonBlur}
+				value={value}
+				label=''
+			/>
+		</ZIonItem>
+	);
 };
 
 export default LinkInBioObjectField;

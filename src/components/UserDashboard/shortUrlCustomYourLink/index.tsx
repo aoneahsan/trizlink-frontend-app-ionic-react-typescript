@@ -10,16 +10,16 @@ import React from 'react';
  * */
 import classNames from 'classnames';
 import {
-  ZIonCol,
-  ZIonIcon,
-  ZIonImg,
-  ZIonInput,
-  ZIonItem,
-  ZIonNote,
-  ZIonRouterLink,
-  ZIonRow,
-  ZIonText,
-  ZIonTextarea,
+	ZIonCol,
+	ZIonIcon,
+	ZIonImg,
+	ZIonInput,
+	ZIonItem,
+	ZIonNote,
+	ZIonRouterLink,
+	ZIonRow,
+	ZIonText,
+	ZIonTextarea,
 } from '@/components/ZIonComponents';
 import { useFormikContext } from 'formik';
 import { useRecoilValue } from 'recoil';
@@ -77,136 +77,137 @@ import { zJsonParse } from '@/utils/helpers';
  * */
 
 const ZaionsCustomYourLink: React.FC = () => {
-  const zaionsAppSettings = useRecoilValue(ZaionsAppSettingsRState);
-  const { values, errors, touched, handleChange, handleBlur, setFieldValue } =
-    useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
+	const zaionsAppSettings = useRecoilValue(ZaionsAppSettingsRState);
+	const { values, errors, touched, handleChange, handleBlur, setFieldValue } =
+		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
-  const { presentZIonModal: presentZFileUploadModal } = useZIonModal(
-    ZaionsFileUploadModal
-  );
+	const { presentZIonModal: presentZFileUploadModal } = useZIonModal(
+		ZaionsFileUploadModal
+	);
 
-  return (
-    <ZIonCol
-      sizeXl='5.8'
-      sizeLg='5.8'
-      sizeMd='5.9'
-      sizeSm='12'
-      sizeXs='12'
-      className={`zaions__bg_white rounded`}
-    >
-      <ZIonRow className='border-bottom'>
-        <ZIonCol className='px-2 py-2 d-flex align-items-center'>
-          <ZIonIcon icon={documentTextOutline} size={'large'}></ZIonIcon>
-          <ZIonText>
-            <h6 className='fw-bold ion-no-margin ion-padding-start'>
-              Custom your link{' '}
-              <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-                (help)
-              </ZIonRouterLink>
-            </h6>
-          </ZIonText>
-        </ZIonCol>
-      </ZIonRow>
-      <ZIonRow className='my-3 mx-3'>
-        <ZIonCol
-          size='12'
-          className={classNames(classes['zaions-upload-image-box'], {
-            'd-flex ion-justify-content-center ion-align-items-center rounded position-relative zaions__cursor_pointer':
-              true,
-          })}
-          onClick={() => {
-            presentZFileUploadModal({
-              _cssClass: 'file-upload-modal-size',
-              _onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
-                if (ev.detail.role === ZIonModalActionEnum.success) {
-                  // Getting file data from fileUploadModal and parse it.
-                  const fileData = zJsonParse(String(ev.detail.data)) as {
-                    fileUrl: string;
-                    filePath: string;
-                  };
+	return (
+		<ZIonCol
+			sizeXl='5.8'
+			sizeLg='5.8'
+			sizeMd='5.9'
+			sizeSm='12'
+			sizeXs='12'
+			className={`zaions__bg_white rounded`}
+		>
+			<ZIonRow className='border-bottom'>
+				<ZIonCol className='px-2 py-2 d-flex align-items-center'>
+					<ZIonIcon icon={documentTextOutline} size={'large'}></ZIonIcon>
+					<ZIonText>
+						<h6 className='fw-bold ion-no-margin ion-padding-start'>
+							Custom your link{' '}
+							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
+								(help)
+							</ZIonRouterLink>
+						</h6>
+					</ZIonText>
+				</ZIonCol>
+			</ZIonRow>
+			<ZIonRow className='my-3 mx-3'>
+				<ZIonCol
+					size='12'
+					className={classNames(classes['zaions-upload-image-box'], {
+						'd-flex ion-justify-content-center ion-align-items-center rounded position-relative zaions__cursor_pointer':
+							true,
+					})}
+					onClick={() => {
+						presentZFileUploadModal({
+							_cssClass: 'file-upload-modal-size',
+							_onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
+								if (ev.detail.role === ZIonModalActionEnum.success) {
+									// Getting file data from fileUploadModal and parse it.
+									const fileData = zJsonParse(String(ev.detail.data)) as {
+										fileUrl: string;
+										filePath: string;
+									};
 
-                  // setting the url in the formik state.
-                  setFieldValue('featureImg', fileData.fileUrl, false);
-                }
-              },
-            });
-          }}
-          style={{
-            background: `url(${
-              values.featureImg.trim() ? values.featureImg : uploadImageBg
-            })`,
-          }}
-        >
-          <div
-            className={classNames(classes['zaions-upload-image-inner-box'], {
-              'ion-text-center py-5 rounded position-absolute': true,
-            })}
-          >
-            <ZIonText className='ion-no-margin'>
-              <ZIonImg
-                src={upload_send}
-                alt='send icon'
-                className='mx-auto'
-                style={{ width: '10rem' }}
-              />
-            </ZIonText>
-            <ZIonText color='light'>
-              <h4 className='fw-bold'>Upload a new picture</h4>
-            </ZIonText>
-            <ZIonText color='light'>
-              <h5 className='fw-bold'>
-                (
-                {
-                  zaionsAppSettings.shortLinkSettings.previewImage.dimension
-                    .width
-                }
-                x
-                {
-                  zaionsAppSettings.shortLinkSettings.previewImage.dimension
-                    .height
-                }
-                )
-              </h5>
-            </ZIonText>
-          </div>
-        </ZIonCol>
-        <ZIonCol size='12' className='pt-5'>
-          {/* Link Title */}
-          <ZIonItem
-            className={classNames({
-              zaions__w100: true,
-              'ion-touched': touched.title,
-              'ion-invalid': touched.title && errors.title,
-              'ion-valid': touched.title && !errors.title,
-            })}
-          >
-            <ZIonInput
-              type='text'
-              name='title'
-              placeholder='Title of you link*'
-              onIonChange={handleChange}
-              onIonBlur={handleBlur}
-              value={values.title}
-            ></ZIonInput>
-            <ZIonNote slot='error'>{errors.title}</ZIonNote>
-          </ZIonItem>
-          {/* Link Description */}
-          <ZIonItem className='border mt-4'>
-            <ZIonTextarea
-              placeholder='Type something here'
-              autoGrow={true}
-              name='linkDescription'
-              onIonChange={handleChange}
-              onIonBlur={handleBlur}
-              rows={6}
-              value={values.linkDescription}
-            ></ZIonTextarea>
-            <ZIonNote slot='error'>{errors.linkDescription}</ZIonNote>
-          </ZIonItem>
-        </ZIonCol>
-      </ZIonRow>
-    </ZIonCol>
-  );
+									// setting the url in the formik state.
+									setFieldValue('featureImg', fileData.fileUrl, false);
+								}
+							},
+						});
+					}}
+					style={{
+						background: `url(${
+							values.featureImg.trim() ? values.featureImg : uploadImageBg
+						})`,
+					}}
+				>
+					<div
+						className={classNames(classes['zaions-upload-image-inner-box'], {
+							'ion-text-center py-5 rounded position-absolute': true,
+						})}
+					>
+						<ZIonText className='ion-no-margin'>
+							<ZIonImg
+								src={upload_send}
+								alt='send icon'
+								className='mx-auto'
+								style={{ width: '10rem' }}
+							/>
+						</ZIonText>
+						<ZIonText color='light'>
+							<h4 className='fw-bold'>Upload a new picture</h4>
+						</ZIonText>
+						<ZIonText color='light'>
+							<h5 className='fw-bold'>
+								(
+								{
+									zaionsAppSettings.shortLinkSettings.previewImage.dimension
+										.width
+								}
+								x
+								{
+									zaionsAppSettings.shortLinkSettings.previewImage.dimension
+										.height
+								}
+								)
+							</h5>
+						</ZIonText>
+					</div>
+				</ZIonCol>
+				<ZIonCol size='12' className='pt-5'>
+					{/* Link Title */}
+					<ZIonItem
+						className={classNames({
+							zaions__w100: true,
+							'ion-touched': touched.title,
+							'ion-invalid': touched.title && errors.title,
+							'ion-valid': touched.title && !errors.title,
+						})}
+					>
+						<ZIonInput
+							type='text'
+							name='title'
+							placeholder='Title of you link*'
+							onIonChange={handleChange}
+							onIonBlur={handleBlur}
+							value={values.title}
+							label=''
+						/>
+						<ZIonNote slot='error'>{errors.title}</ZIonNote>
+					</ZIonItem>
+					{/* Link Description */}
+					<ZIonItem className='border mt-4'>
+						<ZIonTextarea
+							placeholder='Type something here'
+							autoGrow={true}
+							name='linkDescription'
+							onIonChange={handleChange}
+							onIonBlur={handleBlur}
+							rows={6}
+							value={values.linkDescription}
+						></ZIonTextarea>
+						<ZIonNote slot='error'>{errors.linkDescription}</ZIonNote>
+					</ZIonItem>
+				</ZIonCol>
+			</ZIonRow>
+		</ZIonCol>
+	);
 };
 
 export default ZaionsCustomYourLink;

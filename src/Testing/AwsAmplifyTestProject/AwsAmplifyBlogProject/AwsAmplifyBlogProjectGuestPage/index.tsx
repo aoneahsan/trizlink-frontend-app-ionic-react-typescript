@@ -150,8 +150,9 @@
 // 															'ion-valid': touched.email && !errors.email,
 // 														})}
 // 													>
-// 														<ZIonLabel position='floating'>Email</ZIonLabel>
 // 														<ZIonInput
+//                              label = 'Email'
+//                              labelPlacement = 'floating'
 // 															name='email'
 // 															type='email'
 // 															onIonChange={handleChange}
@@ -166,9 +167,12 @@
 // 															'ion-valid': touched.password && !errors.password,
 // 														})}
 // 													>
-// 														<ZIonLabel position='floating'>Password</ZIonLabel>
 // 														<ZIonInput
 // 															name='password'
+//                              label = 'Password'
+//                              labelPlacement = 'floating'
+//                              label = 'Password'
+//                              labelPlacement = 'floating'
 // 															type='password'
 // 															onIonChange={handleChange}
 // 															value={values.password}

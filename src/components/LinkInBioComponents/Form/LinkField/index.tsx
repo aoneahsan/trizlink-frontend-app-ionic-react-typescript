@@ -59,6 +59,7 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
         onIonChange={onIonChange}
         onIonBlur={onIonBlur}
         value={value}
+        label=''
       />
 
       {showRefreshBtn && (

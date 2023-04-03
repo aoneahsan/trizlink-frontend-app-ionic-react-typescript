@@ -9,10 +9,10 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import {
-  ZIonButton,
-  ZIonIcon,
-  ZIonInput,
-  ZIonItem,
+	ZIonButton,
+	ZIonIcon,
+	ZIonInput,
+	ZIonItem,
 } from '@/components/ZIonComponents';
 
 /**
@@ -53,11 +53,11 @@ import { closeOutline } from 'ionicons/icons';
  * */
 
 interface ZaionsColorPikerType {
-  value: string;
-  name: string;
-  showCloseIcon?: boolean;
-  setFieldValueFn?: FormikSetFieldValueEventType;
-  closeIconOnChangeFn?: React.MouseEventHandler<HTMLIonButtonElement>;
+	value: string;
+	name: string;
+	showCloseIcon?: boolean;
+	setFieldValueFn?: FormikSetFieldValueEventType;
+	closeIconOnChangeFn?: React.MouseEventHandler<HTMLIonButtonElement>;
 }
 
 /**
@@ -67,52 +67,53 @@ interface ZaionsColorPikerType {
  * */
 
 const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
-  name,
-  value,
-  setFieldValueFn,
-  showCloseIcon = false,
-  closeIconOnChangeFn,
+	name,
+	value,
+	setFieldValueFn,
+	showCloseIcon = false,
+	closeIconOnChangeFn,
 }) => {
-  return (
-    <ZIonItem
-      className='ion-no-padding d-flex align-item-center mt-3'
-      style={{
-        // '--border-color': value,
-        // '--highlight-color-focused': value,
-        '--inner-padding-end': '0px',
-      }}
-    >
-      <input
-        type='color'
-        name={name}
-        className='zaions-color-piker'
-        onChange={({ target }) => {
-          setFieldValueFn &&
-            setFieldValueFn(name, target.value || '#000', false);
-        }}
-        value={value}
-      />
-      <ZIonInput
-        type='text'
-        className='ms-2 zaions__fs_18'
-        onIonChange={({ target }) => {
-          setFieldValueFn &&
-            setFieldValueFn(name, target.value || '#000', false);
-        }}
-        value={value}
-      />
-      {showCloseIcon && (
-        <ZIonButton
-          slot='end'
-          fill='clear'
-          className='ion-no-padding ion-no-margin'
-          onClick={closeIconOnChangeFn}
-        >
-          <ZIonIcon icon={closeOutline} />
-        </ZIonButton>
-      )}
-    </ZIonItem>
-  );
+	return (
+		<ZIonItem
+			className='ion-no-padding d-flex align-item-center mt-3'
+			style={{
+				// '--border-color': value,
+				// '--highlight-color-focused': value,
+				'--inner-padding-end': '0px',
+			}}
+		>
+			<input
+				type='color'
+				name={name}
+				className='zaions-color-piker'
+				onChange={({ target }) => {
+					setFieldValueFn &&
+						setFieldValueFn(name, target.value || '#000', false);
+				}}
+				value={value}
+			/>
+			<ZIonInput
+				type='text'
+				className='ms-2 zaions__fs_18'
+				onIonChange={({ target }) => {
+					setFieldValueFn &&
+						setFieldValueFn(name, target.value || '#000', false);
+				}}
+				value={value}
+				label=''
+			/>
+			{showCloseIcon && (
+				<ZIonButton
+					slot='end'
+					fill='clear'
+					className='ion-no-padding ion-no-margin'
+					onClick={closeIconOnChangeFn}
+				>
+					<ZIonIcon icon={closeOutline} />
+				</ZIonButton>
+			)}
+		</ZIonItem>
+	);
 };
 
 export default ZaionsColorPiker;

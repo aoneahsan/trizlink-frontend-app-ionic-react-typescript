@@ -7,14 +7,13 @@ import { useRecoilValue } from 'recoil';
 
 // Custom Imports
 import {
-  ZIonCol,
-  ZIonRow,
-  ZIonText,
-  ZIonIcon,
-  ZIonRouterLink,
-  ZIonItem,
-  ZIonLabel,
-  ZIonInput,
+	ZIonCol,
+	ZIonRow,
+	ZIonText,
+	ZIonIcon,
+	ZIonRouterLink,
+	ZIonItem,
+	ZIonInput,
 } from '@/components/ZIonComponents';
 
 // Global Constants
@@ -36,65 +35,66 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 // Styles
 
 const DomainName: React.FC = () => {
-  const DefaultDomains = useRecoilValue(DefaultDomainsState);
-  const { values, handleChange, handleBlur, setFieldValue } =
-    useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
+	const DefaultDomains = useRecoilValue(DefaultDomainsState);
+	const { values, handleChange, handleBlur, setFieldValue } =
+		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
-  return (
-    <>
-      <ZIonRow className='border-bottom mt-4 pt-2 zaions__bg_white'>
-        <ZIonCol className='px-3 py-3 d-flex align-items-center '>
-          <ZIonIcon icon={laptopOutline} size={'large'}></ZIonIcon>
-          <ZIonText>
-            <h6 className='fw-bold ion-no-margin ion-padding-start'>
-              Choose domain name{' '}
-              <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-                (help)
-              </ZIonRouterLink>
-            </h6>
-          </ZIonText>
-        </ZIonCol>
-      </ZIonRow>
-      <ZIonRow className='zaions__bg_white px-3 pt-3 pb-3'>
-        <ZIonCol>
-          <ZaionsRSelect
-            className='ion-padding-top mt-1'
-            options={DefaultDomains?.map((el) => {
-              return { value: el.id, label: el.name };
-            })}
-            name='shortUrl.domain'
-            onChange={(_value) => {
-              setFieldValue(
-                'shortUrl.domain',
-                (_value as ZaionsRSelectOptions)?.value,
-                false
-              );
-            }}
-            value={
-              formatReactSelectOption(
-                values?.shortUrl?.domain as string,
-                DefaultDomains as ZGenericObject[],
-                'id',
-                'name'
-              ) || []
-            }
-          />
-        </ZIonCol>
-        <ZIonCol>
-          <ZIonItem className=''>
-            <ZIonLabel position='floating'>Customize</ZIonLabel>
-            <ZIonInput
-              name='shortUrl.url'
-              onIonChange={handleChange}
-              onIonBlur={handleBlur}
-              className='p-0'
-              value={values.shortUrl.url}
-            ></ZIonInput>
-          </ZIonItem>
-        </ZIonCol>
-      </ZIonRow>
-    </>
-  );
+	return (
+		<>
+			<ZIonRow className='border-bottom mt-4 pt-2 zaions__bg_white'>
+				<ZIonCol className='px-3 py-3 d-flex align-items-center '>
+					<ZIonIcon icon={laptopOutline} size={'large'}></ZIonIcon>
+					<ZIonText>
+						<h6 className='fw-bold ion-no-margin ion-padding-start'>
+							Choose domain name{' '}
+							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
+								(help)
+							</ZIonRouterLink>
+						</h6>
+					</ZIonText>
+				</ZIonCol>
+			</ZIonRow>
+			<ZIonRow className='zaions__bg_white px-3 pt-3 pb-3'>
+				<ZIonCol>
+					<ZaionsRSelect
+						className='ion-padding-top mt-1'
+						options={DefaultDomains?.map((el) => {
+							return { value: el.id, label: el.name };
+						})}
+						name='shortUrl.domain'
+						onChange={(_value) => {
+							setFieldValue(
+								'shortUrl.domain',
+								(_value as ZaionsRSelectOptions)?.value,
+								false
+							);
+						}}
+						value={
+							formatReactSelectOption(
+								values?.shortUrl?.domain as string,
+								DefaultDomains as ZGenericObject[],
+								'id',
+								'name'
+							) || []
+						}
+					/>
+				</ZIonCol>
+				<ZIonCol>
+					<ZIonItem className=''>
+						<ZIonInput
+							name='shortUrl.url'
+							label='Customize'
+							labelPlacement='floating'
+							onIonChange={handleChange}
+							onIonBlur={handleBlur}
+							className='p-0'
+							value={values.shortUrl.url}
+						/>
+					</ZIonItem>
+				</ZIonCol>
+			</ZIonRow>
+		</>
+	);
 };
 
 export default DomainName;

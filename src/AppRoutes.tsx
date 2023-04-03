@@ -67,78 +67,84 @@ import ZaionsAdminPanelSettings from '@/pages/AdminPanel/settings';
 import ZLinkInBioLinksSection from '@/pages/AdminPanel/ZLinkInBio/parts/links';
 import AdminLinkInBiosIndexPage from '@/pages/AdminPanel/LinkInBio';
 import ZaionsLinkInBioForm from '@/pages/AdminPanel/LinkInBio/LinkInBioForm';
+import TestingIonComponents from './Testing/TestingIonComponents';
 
 // Functional Component
 const AppRoutes: React.FC = () => {
-  return (
-    <IonReactRouter>
-      <IonRouterOutlet>
-        {/* Generic Routes */}
-        <Route exact path={ZaionsRoutes.HomeRoute} component={Home} />
+	return (
+		<IonReactRouter>
+			<IonRouterOutlet>
+				{/* Generic Routes */}
+				<Route exact path={ZaionsRoutes.HomeRoute} component={Home} />
 
-        <Route exact path={ZaionsRoutes.LoginRoute} component={Login} />
-        <Route exact path={ZaionsRoutes.SignUpRoute} component={SignUp} />
-        <Route
-          exact
-          path={ZaionsRoutes.PasswordResetEmailForm}
-          component={ZaionsPasswordResetConfirm}
-        />
+				<Route exact path={ZaionsRoutes.LoginRoute} component={Login} />
+				<Route exact path={ZaionsRoutes.SignUpRoute} component={SignUp} />
+				<Route
+					exact
+					path={ZaionsRoutes.PasswordResetEmailForm}
+					component={ZaionsPasswordResetConfirm}
+				/>
 
-        <Route
-          path={ZaionsRoutes.AdminPanel.ZaionsDashboard.DashboardInactive}
-          component={ZDashboard}
-        />
-        <Route
-          path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkInBioInactive}
-          component={ZLinkInBioLinksSection}
-        />
+				<Route
+					path={ZaionsRoutes.AdminPanel.ZaionsDashboard.DashboardInactive}
+					component={ZDashboard}
+				/>
+				<Route
+					path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkInBioInactive}
+					component={ZLinkInBioLinksSection}
+				/>
 
-        {/* Admin Panel Pages */}
-        <Route
-          exact
-          path={ZaionsRoutes.Legal.ZaionsTermsOfService}
-          component={ZaionsTermsOfService}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.AdminPanel.ZaionsAdminLinkIndexPageRoute}
-          component={AdminLinksIndexPage}
-        />
+				{/* Admin Panel Pages */}
+				<Route
+					exact
+					path={ZaionsRoutes.Legal.ZaionsTermsOfService}
+					component={ZaionsTermsOfService}
+				/>
+				<Route
+					exact
+					path={ZaionsRoutes.AdminPanel.ZaionsAdminLinkIndexPageRoute}
+					component={AdminLinksIndexPage}
+				/>
 
-        <Route
-          exact
-          path={ZaionsRoutes.AdminPanel.ZaionsAdminCreateNewLinkPageRoute}
-          component={AdminCreateNewLinkPages}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkPageRoute}
-          component={AdminCreateNewLinkPages}
-        />
+				<Route
+					exact
+					path={ZaionsRoutes.AdminPanel.ZaionsAdminCreateNewLinkPageRoute}
+					component={AdminCreateNewLinkPages}
+				/>
+				<Route
+					exact
+					path={ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkPageRoute}
+					component={AdminCreateNewLinkPages}
+				/>
 
-        <Route
-          exact
-          path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinkInBio}
-          component={AdminLinkInBiosIndexPage}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.AdminPanel.ZaionsAdminCreateNewLinkInBioRoute}
-          component={ZaionsLinkInBioForm}
-        />
+				<Route
+					exact
+					path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinkInBio}
+					component={AdminLinkInBiosIndexPage}
+				/>
+				<Route
+					exact
+					path={ZaionsRoutes.AdminPanel.ZaionsAdminCreateNewLinkInBioRoute}
+					component={ZaionsLinkInBioForm}
+				/>
 
-        <Route
-          exact
-          path={ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkInBioRoute}
-          component={ZaionsLinkInBioForm}
-        />
+				<Route
+					exact
+					path={ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkInBioRoute}
+					component={ZaionsLinkInBioForm}
+				/>
 
-        <Route
-          path={ZaionsRoutes.AdminPanel.Setting.Main}
-          component={ZaionsAdminPanelSettings}
-        />
+				<Route
+					path={ZaionsRoutes.AdminPanel.Setting.Main}
+					component={ZaionsAdminPanelSettings}
+				/>
 
-        {/* {ENVS.isProduction && (
+				<Route
+					path={ZaionsRoutes.Testing.IonComponents.Main}
+					component={TestingIonComponents}
+				/>
+
+				{/* {ENVS.isProduction && (
           <>
             <Route
               path={
@@ -373,9 +379,9 @@ const AppRoutes: React.FC = () => {
             />
           </>
         )} */}
-      </IonRouterOutlet>
-    </IonReactRouter>
-  );
+			</IonRouterOutlet>
+		</IonReactRouter>
+	);
 };
 
 export default AppRoutes;

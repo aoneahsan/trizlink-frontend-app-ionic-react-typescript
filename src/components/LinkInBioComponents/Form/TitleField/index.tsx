@@ -39,24 +39,25 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
   onIonBlur,
 }) => {
   return (
-    <ZIonItem className={className}>
-      {!showImageInSlot && !slotImageUrl?.trim() && (
-        <ZIonIcon icon={reorderTwoOutline} slot='start' />
-      )}
+		<ZIonItem className={className}>
+			{!showImageInSlot && !slotImageUrl?.trim() && (
+				<ZIonIcon icon={reorderTwoOutline} slot='start' />
+			)}
 
-      {showImageInSlot && slotImageUrl?.trim() && (
-        <ZIonImg src={slotImageUrl} style={{ width: '25px' }} slot='start' />
-      )}
+			{showImageInSlot && slotImageUrl?.trim() && (
+				<ZIonImg src={slotImageUrl} style={{ width: '25px' }} slot='start' />
+			)}
 
-      <ZIonInput
-        name={name}
-        placeholder={placeholder}
-        onIonChange={onIonChange}
-        onIonBlur={onIonBlur}
-        value={value}
-      />
-    </ZIonItem>
-  );
+			<ZIonInput
+				name={name}
+				placeholder={placeholder}
+				onIonChange={onIonChange}
+				onIonBlur={onIonBlur}
+				value={value}
+				label=''
+			/>
+		</ZIonItem>
+	);
 };
 
 export default LinkInBioTitleField;
