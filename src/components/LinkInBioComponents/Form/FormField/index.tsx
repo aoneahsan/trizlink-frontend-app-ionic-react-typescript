@@ -180,7 +180,7 @@ const LinkInBioFormField: React.FC = () => {
 
 														{_cardItem.type !==
 															LinkInBioFormFieldsEnum.title && (
-															<ZIonItem className='mt-3'>
+															<ZIonItem className='mt-3' lines='none'>
 																<ZIonInput
 																	label='Column Id*'
 																	labelPlacement='floating'

@@ -29,7 +29,7 @@ const LinkInBioObjectField: React.FC<LinkInBioObjectFieldInterface> = ({
 	onIonBlur,
 }) => {
 	return (
-		<ZIonItem className={className}>
+		<ZIonItem className={className} lines='none'>
 			<ZIonInput
 				name={name}
 				placeholder={placeholder}

@@ -101,6 +101,8 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
 				}}
 				value={value}
 				label=''
+				fill='solid'
+				style={{ '--background': '#fff' }}
 			/>
 			{showCloseIcon && (
 				<ZIonButton

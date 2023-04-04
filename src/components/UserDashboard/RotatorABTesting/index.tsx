@@ -13,10 +13,9 @@ import {
 	ZIonText,
 	ZIonIcon,
 	ZIonRouterLink,
-	ZIonItem,
 	ZIonInput,
-	ZIonNote,
 } from '@/components/ZIonComponents';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Global constant
 import { getRandomKey } from '@/utils/helpers';
@@ -70,25 +69,21 @@ const RotatorABTesting: React.FC = () => {
 				<div className='d-block px-2 mt-3 mb-4'>
 					<ZIonRow className='gap-1'>
 						<ZIonCol size='5.6'>
-							<ZIonItem>
-								<ZIonInput
-									disabled
-									className='ion-no-padding'
-									label='Redirection Links*'
-									labelPlacement='floating'
-								></ZIonInput>
-							</ZIonItem>
+							<ZIonInput
+								disabled
+								className='ion-no-padding'
+								label='Redirection Links*'
+								labelPlacement='floating'
+							/>
 						</ZIonCol>
-						<ZIonCol size='5.6'>
-							<ZIonItem>
-								<ZIonInput
-									type='number'
-									label='Percentage'
-									labelPlacement='floating'
-									value={FULL_PERCENTAGE}
-									disabled
-								></ZIonInput>
-							</ZIonItem>
+						<ZIonCol size='5.5'>
+							<ZIonInput
+								type='number'
+								label='Percentage'
+								labelPlacement='floating'
+								value={FULL_PERCENTAGE}
+								disabled
+							/>
 						</ZIonCol>
 					</ZIonRow>
 					<FieldArray name='rotatorABTesting'>
@@ -98,100 +93,95 @@ const RotatorABTesting: React.FC = () => {
 									values.rotatorABTesting.map((_rotatorAbTestingEl, _index) => (
 										<ZIonRow key={_index} className='mt-3 ion-align-items-top'>
 											<ZIonCol size='5.6'>
-												<ZIonItem
-													className={`${classNames({
-														'ion-touched':
-															touched.rotatorABTesting &&
-															touched.rotatorABTesting[_index]?.redirectionLink,
-														'ion-invalid':
-															touched.rotatorABTesting &&
-															errors.rotatorABTesting &&
-															touched.rotatorABTesting[_index]
-																?.redirectionLink &&
-															(
-																errors.rotatorABTesting[
-																	_index
-																] as RotatorABTestingErrorType
-															)?.redirectionLink,
+												<ZIonInputField
+													inputFieldProps={{
+														label: 'Redirection Links*',
+														labelPlacement: 'floating',
+														onIonChange: handleChange,
+														onIonBlur: handleBlur,
+														value:
+															values.rotatorABTesting[_index].redirectionLink,
+														name: `rotatorABTesting.${_index}.redirectionLink`,
+														errorText: errors.rotatorABTesting?.length
+															? ((
+																	errors.rotatorABTesting[
+																		_index
+																	] as RotatorABTestingErrorType
+															  )?.redirectionLink as string)
+															: undefined,
+														className: `${classNames({
+															'ion-touched':
+																touched.rotatorABTesting &&
+																touched.rotatorABTesting[_index]
+																	?.redirectionLink,
+															'ion-invalid':
+																touched.rotatorABTesting &&
+																errors.rotatorABTesting &&
+																touched.rotatorABTesting[_index]
+																	?.redirectionLink &&
+																(
+																	errors.rotatorABTesting[
+																		_index
+																	] as RotatorABTestingErrorType
+																)?.redirectionLink,
 
-														'ion-valid':
-															touched.rotatorABTesting &&
-															errors.rotatorABTesting &&
-															touched.rotatorABTesting[_index]
-																?.redirectionLink &&
-															!(
-																errors.rotatorABTesting[
-																	_index
-																] as RotatorABTestingErrorType
-															)?.redirectionLink,
-													})}`}
-												>
-													<ZIonInput
-														label='Redirection Links*'
-														labelPlacement='floating'
-														name={`rotatorABTesting.${_index}.redirectionLink`}
-														onIonChange={handleChange}
-														onIonBlur={handleBlur}
-														className='ion-no-padding'
-														value={
-															values.rotatorABTesting[_index].redirectionLink
-														}
-													></ZIonInput>
-													<ZIonNote slot='error'>
-														{errors.rotatorABTesting?.length &&
-															(
-																errors.rotatorABTesting[
-																	_index
-																] as RotatorABTestingErrorType
-															)?.redirectionLink}
-													</ZIonNote>
-												</ZIonItem>
+															'ion-valid':
+																touched.rotatorABTesting &&
+																errors.rotatorABTesting &&
+																touched.rotatorABTesting[_index]
+																	?.redirectionLink &&
+																!(
+																	errors.rotatorABTesting[
+																		_index
+																	] as RotatorABTestingErrorType
+																)?.redirectionLink,
+														})}`,
+													}}
+												/>
 											</ZIonCol>
 											<ZIonCol size='5.6'>
-												<ZIonItem
-													className={`${classNames({
-														'ion-touched':
-															touched.rotatorABTesting &&
-															touched.rotatorABTesting[_index]?.percentage,
-														'ion-invalid':
-															touched.rotatorABTesting &&
-															errors.rotatorABTesting &&
-															touched.rotatorABTesting[_index]?.percentage &&
-															(
-																errors.rotatorABTesting[
-																	_index
-																] as RotatorABTestingErrorType
-															)?.percentage,
+												<ZIonInputField
+													inputFieldProps={{
+														type: 'number',
+														label: 'Percentage*',
+														labelPlacement: 'floating',
+														onIonChange: handleChange,
+														onIonBlur: handleBlur,
+														value: values.rotatorABTesting[_index].percentage,
+														name: `rotatorABTesting.${_index}.percentage`,
+														errorText: errors.rotatorABTesting?.length
+															? ((
+																	errors.rotatorABTesting[
+																		_index
+																	] as RotatorABTestingErrorType
+															  )?.percentage as string)
+															: undefined,
+														className: `${classNames({
+															'ion-touched':
+																touched.rotatorABTesting &&
+																touched.rotatorABTesting[_index]?.percentage,
+															'ion-invalid':
+																touched.rotatorABTesting &&
+																errors.rotatorABTesting &&
+																touched.rotatorABTesting[_index]?.percentage &&
+																(
+																	errors.rotatorABTesting[
+																		_index
+																	] as RotatorABTestingErrorType
+																)?.percentage,
 
-														'ion-valid':
-															touched.rotatorABTesting &&
-															errors.rotatorABTesting &&
-															touched.rotatorABTesting[_index]?.percentage &&
-															!(
-																errors.rotatorABTesting[
-																	_index
-																] as RotatorABTestingErrorType
-															)?.percentage,
-													})}`}
-												>
-													<ZIonInput
-														type='number'
-														label='Percentage*'
-														labelPlacement='floating'
-														name={`rotatorABTesting.${_index}.percentage`}
-														onIonChange={handleChange}
-														onIonBlur={handleBlur}
-														value={values.rotatorABTesting[_index].percentage}
-													></ZIonInput>
-													<ZIonNote slot='error'>
-														{errors.rotatorABTesting?.length &&
-															(
-																errors.rotatorABTesting[
-																	_index
-																] as RotatorABTestingErrorType
-															)?.percentage}
-													</ZIonNote>
-												</ZIonItem>
+															'ion-valid':
+																touched.rotatorABTesting &&
+																errors.rotatorABTesting &&
+																touched.rotatorABTesting[_index]?.percentage &&
+																!(
+																	errors.rotatorABTesting[
+																		_index
+																	] as RotatorABTestingErrorType
+																)?.percentage,
+														})}`,
+													}}
+												/>
 											</ZIonCol>
 											<ZIonCol className='ion-padding-top mt-4'>
 												<ZIonIcon
@@ -201,6 +191,10 @@ const RotatorABTesting: React.FC = () => {
 													}}
 													color='danger'
 													className='zaions__nav_item'
+													style={{
+														width: '21px',
+														height: '21px',
+													}}
 												/>
 											</ZIonCol>
 										</ZIonRow>

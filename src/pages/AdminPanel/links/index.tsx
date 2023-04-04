@@ -43,13 +43,12 @@ import {
 	ZIonRow,
 	ZIonList,
 	ZIonGrid,
-	ZIonTitle,
 	ZIonContent,
 	ZIonMenuToggle,
 	ZIonDatetimeButton,
 	ZIonButton,
 } from '@/components/ZIonComponents';
-
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import ZRCheckbox from '@/components/CustomComponents/ZRCheckbox';
 import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
 import ZIonRefresher from '@/components/ZIonComponents/ZIonRefresher';
@@ -99,6 +98,8 @@ import {
 	ShortLinksRState,
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
+import AdminPanelMainSidebarMenu from '@/components/AdminPanelComponents/MainSideBarMenu';
+import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 
 const ShortLinksTimeRangeFilterPopover = () => {
 	const [shortLinksFilterOptions, setShortLinksFilterOptions] = useRecoilState(
@@ -618,7 +619,10 @@ const SearchQueryInputComponent = () => {
 			}}
 		>
 			{({ submitForm, handleChange }) => (
-				<ZIonItem className='border' style={{ '--inner-padding-end': '0px' }}>
+				<ZIonItem
+					className='border ion-item-start-no-padding'
+					style={{ '--inner-padding-end': '0px' }}
+				>
 					<ZIonInput
 						label='🔍'
 						clearInput={true}
@@ -626,6 +630,12 @@ const SearchQueryInputComponent = () => {
 						name='searchValue'
 						onIonChange={handleChange}
 						placeholder='Search link by title, domain...'
+						fill='solid'
+						style={{
+							'--background': '#fff',
+							'--padding-start': '11px',
+							'--border-color': '#fff',
+						}}
 					/>
 					<ZIonButton
 						onClick={() => void submitForm()}
@@ -779,6 +789,8 @@ const AdminLinksIndexPage: React.FC = () => {
 		},
 	});
 
+	const { is1250pxScale } = useZMediaQueryScale();
+
 	const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
 		event.detail.complete();
 
@@ -847,6 +859,8 @@ const AdminLinksIndexPage: React.FC = () => {
 		_queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
 	});
 
+	const ZDashboardState = useRecoilValue(ZDashboardRState);
+
 	const invalidedShortLinksQuery = async () => {
 		try {
 			await zInvalidateReactQueries([
@@ -896,14 +910,22 @@ const AdminLinksIndexPage: React.FC = () => {
 	};
 
 	return (
-		<ZaionsIonPage pageTitle='Short Links Page'>
+		<ZaionsIonPage pageTitle='zaions Short Links Page'>
 			<ZIonContent>
 				<ZIonRefresher onIonRefresh={(event) => void handleRefresh(event)}>
 					<ZIonRefresherContent />
 				</ZIonRefresher>
 				<ZIonGrid className='ion-no-padding zaions_h100'>
 					<ZIonRow className='zaions_h100'>
-						<ZIonCol size='2.6' className='ion-padding border-end'>
+						<AdminPanelMainSidebarMenu />
+						<ZIonCol
+							size={
+								ZDashboardState.dashboardMainSidebarIsCollabes.isCollabes
+									? '2'
+									: '2.4'
+							}
+							className='ion-padding border-end zaions-transition'
+						>
 							<div className='ion-padding-top'>
 								<ZIonList lines='none'>
 									<ZIonItem className='zaions__cursor_pointer mb-2'>
@@ -1031,7 +1053,14 @@ const AdminLinksIndexPage: React.FC = () => {
 								)}
 							</div>
 						</ZIonCol>
-						<ZIonCol size='9.4'>
+						<ZIonCol
+							size={
+								ZDashboardState.dashboardMainSidebarIsCollabes.isCollabes
+									? '8.1'
+									: '9'
+							}
+							className='zaions-transition'
+						>
 							<ZIonGrid className='py-4 zaions__bg_white'>
 								<ZIonRow className='px-3'>
 									<ZIonCol>
@@ -1046,7 +1075,7 @@ const AdminLinksIndexPage: React.FC = () => {
 											</h5>
 										</ZIonText>
 									</ZIonCol>
-									<ZIonCol className='' size='4'>
+									<ZIonCol size='4'>
 										<ZaionsCreateShortLinkUrlInput />
 									</ZIonCol>
 								</ZIonRow>
@@ -1054,7 +1083,7 @@ const AdminLinksIndexPage: React.FC = () => {
 
 							<ZIonGrid className='my-5'>
 								<ZIonRow className='py-4 px-3 zaions__bg_white rounded ion-align-items-center'>
-									<ZIonCol size='4'>
+									<ZIonCol sizeXl={is1250pxScale ? '12' : '4'} sizeLg='12'>
 										<SearchQueryInputComponent />
 									</ZIonCol>
 									<ZIonCol className=''>

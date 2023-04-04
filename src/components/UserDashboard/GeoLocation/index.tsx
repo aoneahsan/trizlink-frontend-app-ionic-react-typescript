@@ -33,6 +33,7 @@ import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.
 import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Styles
 
@@ -81,59 +82,50 @@ const GeoLocation: React.FC = () => {
 									? values.geoLocation.map((_geoLocationEl, _index) => (
 											<ZIonRow key={_index} className='ion-align-items-top'>
 												<ZIonCol size='5.6'>
-													<ZIonItem
-														className={`${classNames({
-															// 'pt-1 mt-1': true,
-															'ion-touched':
-																touched?.geoLocation &&
-																touched?.geoLocation[_index]?.redirectionLink,
-															'ion-invalid':
-																touched?.geoLocation &&
-																errors?.geoLocation &&
-																touched?.geoLocation[_index]?.redirectionLink &&
-																(
-																	errors.geoLocation[
-																		_index
-																	] as GeoLocationErrorsType
-																).redirectionLink,
-															'ion-valid':
-																touched?.geoLocation &&
-																errors?.geoLocation &&
-																touched?.geoLocation[_index]?.country &&
-																!(
-																	errors.geoLocation[
-																		_index
-																	] as GeoLocationErrorsType
-																).country,
-														})}`}
-													>
-														<ZIonInput
-															className='ion-no-padding'
-															label='Redirection Links*'
-															labelPlacement='floating'
-															name={`geoLocation.${_index}.redirectionLink`}
-															// onIonChange={({ target }) => {
-															//   setFieldValue(
-															//     `geoLocation.${_index}.redirectionLink`,
-															//     target.value,
-															//     false
-															//   );
-															// }}
-															onIonChange={handleChange}
-															onIonBlur={handleBlur}
-															value={
-																values.geoLocation[_index]?.redirectionLink
-															}
-														/>
-														<ZIonNote slot='error'>
-															{errors.geoLocation?.length &&
-																(
-																	errors.geoLocation[
-																		_index
-																	] as GeoLocationErrorsType
-																)?.redirectionLink}
-														</ZIonNote>
-													</ZIonItem>
+													<ZIonInputField
+														inputFieldProps={{
+															label: 'Redirection Links*',
+															labelPlacement: 'floating',
+															onIonChange: handleChange,
+															onIonBlur: handleBlur,
+															value:
+																values.geoLocation[_index]?.redirectionLink,
+															name: `geoLocation.${_index}.redirectionLink`,
+															errorText: errors.geoLocation?.length
+																? ((
+																		errors.geoLocation[
+																			_index
+																		] as GeoLocationErrorsType
+																  )?.redirectionLink as string)
+																: undefined,
+															type: 'url',
+															className: `${classNames({
+																// 'pt-1 mt-1': true,
+																'ion-touched':
+																	touched?.geoLocation &&
+																	touched?.geoLocation[_index]?.redirectionLink,
+																'ion-invalid':
+																	touched?.geoLocation &&
+																	errors?.geoLocation &&
+																	touched?.geoLocation[_index]
+																		?.redirectionLink &&
+																	(
+																		errors.geoLocation[
+																			_index
+																		] as GeoLocationErrorsType
+																	).redirectionLink,
+																'ion-valid':
+																	touched?.geoLocation &&
+																	errors?.geoLocation &&
+																	touched?.geoLocation[_index]?.country &&
+																	!(
+																		errors.geoLocation[
+																			_index
+																		] as GeoLocationErrorsType
+																	).country,
+															})}`,
+														}}
+													/>
 												</ZIonCol>
 
 												<ZIonCol size='5.6'>

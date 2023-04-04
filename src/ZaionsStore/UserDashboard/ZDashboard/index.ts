@@ -7,10 +7,10 @@ import { ZDashboardType } from '@/types/Dashboard';
 // Data
 
 export const ZDashboardRState = atom<ZDashboardType>({
-  key: 'ZDashboard_key',
-  default: {
-    dashboardMainSidebarIsCollabes: {
-      isCollades: false,
-    },
-  },
+	key: 'ZDashboard_key',
+	default: {
+		dashboardMainSidebarIsCollabes: {
+			isCollabes: false,
+		},
+	},
 });

@@ -52,6 +52,7 @@ import {
 	FormMode,
 	messengerPlatformsBlockEnum,
 } from '@/types/AdminPanel/index.type';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 /**
  * Style files Imports go down
@@ -122,21 +123,32 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{ className?: string }> = ({
 					<>
 						<ZIonItem
 							className={classNames(className, {
-								border: true,
+								'border-start border-top  ion-item-start-no-padding': true,
 								'ion-invalid': touched.domain && errors.domain,
 								'ion-valid': touched.domain && !errors.domain,
 							})}
 							style={{ '--inner-padding-end': '0px' }}
+							lines='none'
 						>
-							<ZIonInput
-								clearInput={true}
-								type='url'
-								name='domain'
-								placeholder='https://yourlink.com'
-								onIonChange={handleChange}
-								onIonBlur={handleBlur}
-								value={values.domain}
-								label=''
+							<ZIonInputField
+								inputFieldProps={{
+									className: classNames({
+										'ion-touched ion-invalid': touched.domain && errors.domain,
+										'ion-touched ion-valid': touched.domain && !errors.domain,
+									}),
+									label: '',
+									name: 'domain',
+									type: 'email',
+									onIonChange: handleChange,
+									onIonBlur: handleBlur,
+									value: values.domain,
+									fill: 'solid',
+									placeholder: 'https://yourlink.com',
+									style: {
+										'--background': '#fff',
+										'--padding-start': '11px',
+									},
+								}}
 							/>
 
 							<ZIonButton

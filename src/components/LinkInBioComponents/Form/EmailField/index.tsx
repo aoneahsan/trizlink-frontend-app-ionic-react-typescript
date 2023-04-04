@@ -12,34 +12,34 @@ import { IonInputCustomEvent } from '@ionic/core';
 
 // Component Type
 interface LinkInBioEmailFieldInterface {
-  placeholder?: string;
-  name?: string;
-  value?: string | number | null;
-  className?: string;
-  onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
-  onIonBlur?: <A extends Event>(event: A) => void;
+	placeholder?: string;
+	name?: string;
+	value?: string | number | null;
+	className?: string;
+	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
+	onIonBlur?: <A extends Event>(event: A) => void;
 }
 
 const LinkInBioEmailField: React.FC<LinkInBioEmailFieldInterface> = ({
-  placeholder = 'johndoe@gmail.com',
-  value,
-  name,
-  className,
-  onIonChange,
-  onIonBlur,
+	placeholder = 'johndoe@gmail.com',
+	value,
+	name,
+	className,
+	onIonChange,
+	onIonBlur,
 }) => {
-  return (
-    <ZIonItem className={className}>
-      <ZIonInput
-        name={name}
-        placeholder={placeholder}
-        onIonChange={onIonChange}
-        onIonBlur={onIonBlur}
-        value={value}
-        label=''
-      />
-    </ZIonItem>
-  );
+	return (
+		<ZIonItem className={className} lines='none'>
+			<ZIonInput
+				name={name}
+				placeholder={placeholder}
+				onIonChange={onIonChange}
+				onIonBlur={onIonBlur}
+				value={value}
+				label=''
+			/>
+		</ZIonItem>
+	);
 };
 
 export default LinkInBioEmailField;

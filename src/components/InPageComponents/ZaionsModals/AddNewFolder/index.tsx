@@ -16,8 +16,6 @@ import {
 	ZIonNote,
 	ZIonContent,
 	ZIonIcon,
-	ZIonItem,
-	ZIonInput,
 	ZIonFooter,
 } from '@/components/ZIonComponents';
 
@@ -49,6 +47,7 @@ import CONSTANTS from '@/utils/constants';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { AxiosError } from 'axios';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Styles
 
@@ -285,29 +284,24 @@ const ZaionsAddNewFolder: React.FC<{
 								</ZIonText>
 							</div>
 							<Form className='px-2'>
-								<ZIonItem
-									// className={`${errors.folderName && 'ion-invalid'}`}
-									className={classNames({
-										'ion-touched ion-invalid':
-											touched.folderName && errors.folderName,
-										'ion-touched ion-valid':
-											touched.folderName && !!errors.folderName,
-									})}
-								>
-									<ZIonInput
-										color='dark'
-										label='Folder name*'
-										labelPlacement='floating'
-										type='text'
-										placeholder='Folder name'
-										name='folderName'
-										value={values.folderName}
-										onIonChange={handleChange}
-										onIonBlur={handleBlur}
-										// className={} // error border class
-									></ZIonInput>
-									<ZIonNote slot='error'>{errors.folderName}</ZIonNote>
-								</ZIonItem>
+								<ZIonInputField
+									inputFieldProps={{
+										className: classNames({
+											'mt-4': true,
+											'ion-touched ion-invalid':
+												touched.folderName && errors.folderName,
+											'ion-touched ion-valid':
+												touched.folderName && !errors.folderName,
+										}),
+										label: 'Folder name*',
+										labelPlacement: 'floating',
+										name: 'folderName',
+										onIonChange: handleChange,
+										onIonBlur: handleBlur,
+										value: values.folderName,
+										errorText: errors.folderName,
+									}}
+								/>
 							</Form>
 						</ZIonContent>
 

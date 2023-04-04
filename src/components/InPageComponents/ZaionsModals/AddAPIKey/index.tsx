@@ -16,8 +16,6 @@ import {
 	ZIonNote,
 	ZIonContent,
 	ZIonIcon,
-	ZIonItem,
-	ZIonInput,
 	ZIonFooter,
 } from '@/components/ZIonComponents';
 
@@ -38,6 +36,7 @@ import { resetFormType } from '@/types/ZaionsFormik.type';
 import { useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Styles
 
@@ -237,29 +236,24 @@ const ZaionsAddAPIKeyModal: React.FC<{
 								</ZIonText>
 							</div>
 							<Form className='px-2'>
-								<ZIonItem
-									// className={classNames({
-									// 	'ion-invalid': errors.name,
-									// })}
-									className={classNames({
-										'ion-touched ion-invalid': touched.name && errors.name,
-										'ion-touched ion-valid': touched.name && !!errors.name,
-									})}
-								>
-									<ZIonInput
-										color='dark'
-										label='API name*'
-										labelPlacement='floating'
-										type='text'
-										placeholder='name'
-										value={values.name}
-										name='name'
-										onIonChange={handleChange}
-										onIonBlur={handleBlur}
-										// className={} // error border class
-									/>
-									<ZIonNote slot='error'>{errors.name}</ZIonNote>
-								</ZIonItem>
+								<ZIonInputField
+									inputFieldProps={{
+										className: classNames({
+											'mt-4': true,
+											'ion-touched ion-invalid': touched.name && errors.name,
+											'ion-touched ion-valid': touched.name && !errors.name,
+										}),
+										label: 'API name*',
+										type: 'text',
+										labelPlacement: 'floating',
+										name: 'name',
+										onIonChange: handleChange,
+										onIonBlur: handleBlur,
+										value: values.name,
+										errorText: errors.name,
+										color: 'dark',
+									}}
+								/>
 							</Form>
 						</ZIonContent>
 

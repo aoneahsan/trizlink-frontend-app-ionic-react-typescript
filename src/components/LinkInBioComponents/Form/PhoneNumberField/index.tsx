@@ -12,26 +12,26 @@ import { IonInputCustomEvent } from '@ionic/core';
 
 // Component Type
 interface LinkInBioPhoneNumberFieldInterface {
-  placeholder?: string;
-  name?: string;
-  value?: string | number | null;
-  className?: string;
-  onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
-  onIonBlur?: <A extends Event>(event: A) => void;
+	placeholder?: string;
+	name?: string;
+	value?: string | number | null;
+	className?: string;
+	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
+	onIonBlur?: <A extends Event>(event: A) => void;
 }
 
 const LinkInBioPhoneNumberField: React.FC<
-  LinkInBioPhoneNumberFieldInterface
+	LinkInBioPhoneNumberFieldInterface
 > = ({
-  placeholder = 'Phone number (eg +33 6 XX XX XX XX)',
-  value,
-  name,
-  className,
-  onIonChange,
-  onIonBlur,
+	placeholder = 'Phone number (eg +33 6 XX XX XX XX)',
+	value,
+	name,
+	className,
+	onIonChange,
+	onIonBlur,
 }) => {
-  return (
-		<ZIonItem className={className}>
+	return (
+		<ZIonItem className={className} lines='none'>
 			<ZIonInput
 				name={name}
 				placeholder={placeholder}

@@ -25,6 +25,7 @@ import { VALIDATION_RULE } from '@/utils/enums';
 import ZaionsIonPage from '@/components/ZaionsIonPage';
 import { ProductLogo } from '@/assets/images';
 import { ZIonButton } from '@/components/ZIonComponents';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Style
 
@@ -100,31 +101,28 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
 								{({ handleChange, handleBlur, values, touched, errors }) => (
 									<>
 										{/* Email Address Field */}
-										<ZIonItem
-											className={classNames({
-												'mb-4 ion-item-start-no-padding zaions__w80 mx-auto':
-													true,
-
-												'ion-touched ion-invalid':
-													touched.emailAddress && errors.emailAddress,
-												'ion-touched ion-valid':
-													touched.emailAddress && !errors.emailAddress,
-												zaions_item_input_bb:
-													!touched.emailAddress ||
-													(touched.emailAddress && !errors.emailAddress),
-											})}
-										>
-											<ZIonInput
-												label='Username or Email Address:'
-												labelPlacement='floating'
-												name='emailAddress'
-												type='email'
-												onIonChange={handleChange}
-												onIonBlur={handleBlur}
-												value={values.emailAddress}
-											/>
-											<ZIonNote slot='error'>{errors.emailAddress}</ZIonNote>
-										</ZIonItem>
+										{/* <ZIonInput
+											
+										/> */}
+										<ZIonInputField
+											inputFieldProps={{
+												className: classNames({
+													'mb-4 zaions__w80 mx-auto mt-4': true,
+													'ion-touched ion-invalid':
+														touched.emailAddress && errors.emailAddress,
+													'ion-touched ion-valid':
+														touched.emailAddress && !errors.emailAddress,
+												}),
+												label: 'Username or Email Address:',
+												labelPlacement: 'floating',
+												name: 'emailAddress',
+												type: 'email',
+												onIonChange: handleChange,
+												onIonBlur: handleBlur,
+												value: values.emailAddress,
+												errorText: errors.emailAddress,
+											}}
+										/>
 
 										{/* Submit Button */}
 										<ZIonButton

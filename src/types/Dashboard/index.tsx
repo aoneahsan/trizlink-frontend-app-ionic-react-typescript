@@ -1,5 +1,5 @@
 export type ZDashboardType = {
-  dashboardMainSidebarIsCollabes: {
-    isCollades: boolean;
-  };
+	dashboardMainSidebarIsCollabes: {
+		isCollabes: boolean;
+	};
 };

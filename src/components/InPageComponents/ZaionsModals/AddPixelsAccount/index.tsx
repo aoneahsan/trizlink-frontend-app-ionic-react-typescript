@@ -16,8 +16,6 @@ import {
 	ZIonNote,
 	ZIonContent,
 	ZIonIcon,
-	ZIonItem,
-	ZIonInput,
 	ZIonFooter,
 	ZIonSelectOption,
 } from '@/components/ZIonComponents';
@@ -55,6 +53,7 @@ import { reportCustomError } from '@/utils/customErrorType';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZIonSelect from '@/components/ZIonComponents/ZIonSelect';
 import { showSuccessNotification } from '@/utils/notification';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Styles
 
@@ -286,7 +285,7 @@ const ZaionsAddPixelAccount: React.FC<{
 										icon={toggleOutline}
 										className='mx-auto'
 										color='light'
-									></ZIonIcon>
+									/>
 								</h4>
 							</ZIonText>
 							<br />
@@ -295,12 +294,10 @@ const ZaionsAddPixelAccount: React.FC<{
 							</ZIonText>
 						</div>
 						<Form onSubmit={handleSubmit} className='px-4'>
-							<ZIonItem
-								// className={`mt-3 mb-4 pb-2 ${
-								// 	errors.platform && 'ion-invalid'
-								// }`}
+							{/* Pixel platform select */}
+							<div
 								className={classNames({
-									'mt-3 mb-4 pb-2': true,
+									'mt-4 mb-5 pb-2': true,
 									'ion-touched ion-invalid':
 										touched.platform && errors.platform,
 									'ion-touched ion-valid':
@@ -311,9 +308,9 @@ const ZaionsAddPixelAccount: React.FC<{
 									name='platform'
 									label='Select the platform*'
 									labelPlacement='stacked'
-									// value={values.platform}
 									selectedText={convertToTitleCase(values.platform)}
 									onIonChange={handleChange}
+									fill='outline'
 								>
 									{platformData.map((el) => {
 										return (
@@ -326,54 +323,48 @@ const ZaionsAddPixelAccount: React.FC<{
 								<ZIonNote slot='error'>
 									{touched.platform && errors.platform}
 								</ZIonNote>
-							</ZIonItem>
+							</div>
 
-							<ZIonItem
-								className={classNames({
-									'mt-3 mb-4 pb-2': true,
-									'ion-touched ion-invalid': touched.title && errors.title,
-									'ion-touched ion-valid': touched.title && !!errors.title,
-								})}
-							>
-								<ZIonInput
-									type='text'
-									label='Name your pixel*'
-									labelPlacement='floating'
-									placeholder='Enter Pixel Name'
-									clearInput={true}
-									name='title'
-									onIonChange={handleChange}
-									onIonBlur={handleBlur}
-									value={values.title}
-								/>
-								<ZIonNote slot='error'>
-									{touched.title && errors.title}
-								</ZIonNote>
-							</ZIonItem>
+							{/* Pixel Name Input */}
+							<ZIonInputField
+								inputFieldProps={{
+									className: classNames({
+										'mt-3 mb-5 pb-2': true,
+										'ion-touched ion-invalid': touched.title && errors.title,
+										'ion-touched ion-valid': touched.title && !errors.title,
+									}),
+									label: 'Name your pixel*',
+									labelPlacement: 'floating',
+									name: 'title',
+									onIonChange: handleChange,
+									onIonBlur: handleBlur,
+									value: values.title,
+									errorText: errors.title,
+									placeholder: 'Enter Pixel Name',
+									type: 'text',
+								}}
+							/>
 
-							<ZIonItem
-								// className={`mt-3 ${errors.pixelId && 'ion-invalid'}`}
-								className={classNames({
-									'mt-3': true,
-									'ion-touched ion-invalid': touched.pixelId && errors.pixelId,
-									'ion-touched ion-valid': touched.pixelId && !!errors.pixelId,
-								})}
-							>
-								<ZIonInput
-									type='text'
-									label='Pixel ID*'
-									labelPlacement='floating'
-									placeholder={PIXEL_ID_PLACEHOLDER(values?.platform)}
-									clearInput={true}
-									name='pixelId'
-									onIonChange={handleChange}
-									onIonBlur={handleBlur}
-									value={values.pixelId}
-								/>
-								<ZIonNote slot='error'>
-									{touched.pixelId && errors.pixelId}
-								</ZIonNote>
-							</ZIonItem>
+							{/* Pixel Id Input */}
+							<ZIonInputField
+								inputFieldProps={{
+									className: classNames({
+										'mt-3': true,
+										'ion-touched ion-invalid':
+											touched.pixelId && errors.pixelId,
+										'ion-touched ion-valid': touched.pixelId && !errors.pixelId,
+									}),
+									label: 'Pixel ID*',
+									labelPlacement: 'floating',
+									name: 'pixelId',
+									onIonChange: handleChange,
+									onIonBlur: handleBlur,
+									value: values.pixelId,
+									errorText: errors.pixelId,
+									placeholder: 'Enter Pixel Id',
+									type: 'text',
+								}}
+							/>
 						</Form>
 					</ZIonContent>
 

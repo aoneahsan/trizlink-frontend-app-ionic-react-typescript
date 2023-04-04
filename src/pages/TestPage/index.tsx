@@ -53,26 +53,22 @@ const ZaionsTextPage: React.FC<{
 				<div className='d-block px-2 mt-3 mb-4'>
 					<ZIonRow className='gap-1'>
 						<ZIonCol size='5.6'>
-							<ZIonItem>
-								<ZIonInput
-									// name={'rotatorABTesting.redirectionLink'}
-									disabled
-									label='Redirection Links'
-									labelPlacement='floating'
-									className='ion-no-padding'
-								></ZIonInput>
-							</ZIonItem>
+							<ZIonInput
+								// name={'rotatorABTesting.redirectionLink'}
+								disabled
+								label='Redirection Links'
+								labelPlacement='floating'
+								className='ion-no-padding'
+							/>
 						</ZIonCol>
 						<ZIonCol size='5.6'>
-							<ZIonItem>
-								<ZIonInput
-									label='Percentage'
-									labelPlacement='floating'
-									type='number'
-									value={FULL_PERCENTAGE}
-									disabled
-								></ZIonInput>
-							</ZIonItem>
+							<ZIonInput
+								label='Percentage'
+								labelPlacement='floating'
+								type='number'
+								value={FULL_PERCENTAGE}
+								disabled
+							/>
 						</ZIonCol>
 					</ZIonRow>
 					<FieldArray name='rotatorABTesting'>
@@ -82,26 +78,22 @@ const ZaionsTextPage: React.FC<{
 									testValue.map((friend, index) => (
 										<ZIonRow key={index} className='mt-3'>
 											<ZIonCol size='5.6'>
-												<ZIonItem>
-													<ZIonInput
-														label='Redirection Links*'
-														labelPlacement='floating'
-														name={`rotatorABTesting.${index}.redirectionLink`}
-														onIonChange={handleChange}
-														className='ion-no-padding'
-													></ZIonInput>
-												</ZIonItem>
+												<ZIonInput
+													label='Redirection Links*'
+													labelPlacement='floating'
+													name={`rotatorABTesting.${index}.redirectionLink`}
+													onIonChange={handleChange}
+													className='ion-no-padding'
+												/>
 											</ZIonCol>
 											<ZIonCol size='5.6'>
-												<ZIonItem>
-													<ZIonInput
-														type='number'
-														label='Percentage*'
-														labelPlacement='floating'
-														name={`rotatorABTesting.${index}.percentage`}
-														onIonChange={handleChange}
-													></ZIonInput>
-												</ZIonItem>
+												<ZIonInput
+													type='number'
+													label='Percentage*'
+													labelPlacement='floating'
+													name={`rotatorABTesting.${index}.percentage`}
+													onIonChange={handleChange}
+												/>
 											</ZIonCol>
 											<ZIonCol className='d-flex ion-align-items-end'>
 												<ZIonIcon

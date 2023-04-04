@@ -22,11 +22,8 @@ import {
 	ZIonCol,
 	ZIonRow,
 	ZIonText,
-	ZIonNote,
 	ZIonContent,
 	ZIonIcon,
-	ZIonItem,
-	ZIonInput,
 	ZIonFooter,
 } from '@/components/ZIonComponents';
 
@@ -49,6 +46,7 @@ import { getRandomKey } from '@/utils/helpers';
 import { ZaionsUserAccountEmails } from '@/ZaionsStore/UserAccount/index.recoil';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 /**
  * Style files Imports go down
@@ -149,24 +147,25 @@ const AddEmailModal: React.FC<{
 									</ZIonButton>
 								</ZIonCol>
 							</ZIonRow>
-							<ZIonItem
-								className={classNames({
-									'ion-margin-start ion-margin-end border': true,
-									'ion-touched ion-invalid': touched.email && errors.email,
-									'ion-touched ion-valid': touched.email && !!errors.email,
-								})}
-							>
-								<ZIonInput
-									name='email'
-									label='Email address*'
-									labelPlacement='floating'
-									onIonChange={handleChange}
-									onIonBlur={handleBlur}
-									value={values.email}
-								/>
-								<ZIonNote slot='error'>{errors.email}</ZIonNote>
-							</ZIonItem>
+
+							<ZIonInputField
+								inputFieldProps={{
+									className: classNames({
+										'ion-margin-start ion-margin-end': true,
+										'ion-touched ion-invalid': touched.email && errors.email,
+										'ion-touched ion-valid': touched.email && !errors.email,
+									}),
+									label: 'Email address*',
+									labelPlacement: 'floating',
+									name: 'email',
+									onIonChange: handleChange,
+									onIonBlur: handleBlur,
+									value: values.email,
+									errorText: errors.email,
+								}}
+							/>
 						</ZIonContent>
+
 						<ZIonFooter className='ion-text-end py-2'>
 							<ZIonButton
 								className='me-4'

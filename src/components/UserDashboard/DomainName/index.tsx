@@ -12,8 +12,6 @@ import {
 	ZIonText,
 	ZIonIcon,
 	ZIonRouterLink,
-	ZIonItem,
-	ZIonInput,
 } from '@/components/ZIonComponents';
 
 // Global Constants
@@ -31,6 +29,7 @@ import { formatReactSelectOption } from '@/utils/helpers';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Styles
 
@@ -80,17 +79,16 @@ const DomainName: React.FC = () => {
 					/>
 				</ZIonCol>
 				<ZIonCol>
-					<ZIonItem className=''>
-						<ZIonInput
-							name='shortUrl.url'
-							label='Customize'
-							labelPlacement='floating'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							className='p-0'
-							value={values.shortUrl.url}
-						/>
-					</ZIonItem>
+					<ZIonInputField
+						inputFieldProps={{
+							className: 'p-0',
+							label: 'Customize',
+							labelPlacement: 'floating',
+							onIonChange: handleChange,
+							onIonBlur: handleBlur,
+							value: values.shortUrl.url,
+						}}
+					/>
 				</ZIonCol>
 			</ZIonRow>
 		</>

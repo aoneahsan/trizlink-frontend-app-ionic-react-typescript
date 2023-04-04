@@ -245,6 +245,7 @@ const ZLinkDashboardTopBar: React.FC = () => {
 									className={classNames(classes.searchIonItem, {
 										'border d-inline-block': true,
 									})}
+									lines='none'
 								>
 									<ZIonInput
 										className='fw-bold ion-no-padding'

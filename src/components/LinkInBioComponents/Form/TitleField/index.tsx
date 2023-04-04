@@ -8,38 +8,38 @@ import { IonInputCustomEvent } from '@ionic/core';
 
 // Custom Imports
 import {
-  ZIonIcon,
-  ZIonImg,
-  ZIonInput,
-  ZIonItem,
+	ZIonIcon,
+	ZIonImg,
+	ZIonInput,
+	ZIonItem,
 } from '@/components/ZIonComponents';
 
 // Styles
 
 // Component Type
 interface LinkInBioTitleFieldInterface {
-  placeholder?: string;
-  name?: string;
-  value?: string | number | null;
-  className?: string;
-  showImageInSlot?: boolean;
-  slotImageUrl?: string;
-  onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
-  onIonBlur?: <A extends Event>(event: A) => void;
+	placeholder?: string;
+	name?: string;
+	value?: string | number | null;
+	className?: string;
+	showImageInSlot?: boolean;
+	slotImageUrl?: string;
+	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
+	onIonBlur?: <A extends Event>(event: A) => void;
 }
 
 const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
-  placeholder = 'Your Title',
-  value,
-  name,
-  className,
-  showImageInSlot = false,
-  slotImageUrl,
-  onIonChange,
-  onIonBlur,
+	placeholder = 'Your Title',
+	value,
+	name,
+	className,
+	showImageInSlot = false,
+	slotImageUrl,
+	onIonChange,
+	onIonBlur,
 }) => {
-  return (
-		<ZIonItem className={className}>
+	return (
+		<ZIonItem className={className} lines='none'>
 			{!showImageInSlot && !slotImageUrl?.trim() && (
 				<ZIonIcon icon={reorderTwoOutline} slot='start' />
 			)}

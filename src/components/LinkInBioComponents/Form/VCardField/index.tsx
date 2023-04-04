@@ -8,7 +8,6 @@ import { useFormikContext } from 'formik';
 import {
 	ZIonCol,
 	ZIonInput,
-	ZIonItem,
 	ZIonRow,
 	ZIonTitle,
 } from '@/components/ZIonComponents';
@@ -32,201 +31,173 @@ const LinkInBioVCardField: React.FC = () => {
 				📄 vCard
 			</ZIonTitle>
 
-			<ZIonRow className='ion-justify-content-between pb-4'>
+			<ZIonRow className='ion-justify-content-between pb-4 mt-4'>
 				{/* First Name */}
 				<ZIonCol size='5.5'>
-					<ZIonItem>
-						<ZIonInput
-							name='vcard.firstName'
-							label='First name'
-							labelPlacement='floating'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values.vcard?.firstName}
-						/>
-					</ZIonItem>
+					<ZIonInput
+						name='vcard.firstName'
+						label='First name'
+						labelPlacement='floating'
+						onIonChange={handleChange}
+						onIonBlur={handleBlur}
+						value={values.vcard?.firstName}
+					/>
 				</ZIonCol>
 
 				{/* Last Name */}
 				<ZIonCol size='5.5'>
-					<ZIonItem>
-						<ZIonInput
-							name='vcard.lastName'
-							label='Last name'
-							labelPlacement='floating'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values.vcard?.lastName}
-						/>
-					</ZIonItem>
+					<ZIonInput
+						name='vcard.lastName'
+						label='Last name'
+						labelPlacement='floating'
+						onIonChange={handleChange}
+						onIonBlur={handleBlur}
+						value={values.vcard?.lastName}
+					/>
 				</ZIonCol>
 
 				{/* Mobile */}
 				<ZIonCol size='5.5' className='mt-3'>
-					<ZIonItem>
-						<ZIonInput
-							name='vcard.mobile'
-							label='Mobile'
-							labelPlacement='floating'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values.vcard?.mobile}
-						/>
-					</ZIonItem>
+					<ZIonInput
+						name='vcard.mobile'
+						label='Mobile'
+						labelPlacement='floating'
+						onIonChange={handleChange}
+						onIonBlur={handleBlur}
+						value={values.vcard?.mobile}
+					/>
 				</ZIonCol>
 
 				{/* Phone */}
 				<ZIonCol size='5.5' className='mt-3'>
-					<ZIonItem>
-						<ZIonInput
-							name='vcard.phone'
-							label='Phone'
-							labelPlacement='floating'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values.vcard?.phone}
-						/>
-					</ZIonItem>
+					<ZIonInput
+						name='vcard.phone'
+						label='Phone'
+						labelPlacement='floating'
+						onIonChange={handleChange}
+						onIonBlur={handleBlur}
+						value={values.vcard?.phone}
+					/>
 				</ZIonCol>
 
 				{/* Fax */}
 				<ZIonCol size='5.5' className='mt-3'>
-					<ZIonItem>
-						<ZIonInput
-							name='vcard.fax'
-							label='Fax'
-							labelPlacement='floating'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values.vcard?.fax}
-						/>
-					</ZIonItem>
+					<ZIonInput
+						name='vcard.fax'
+						label='Fax'
+						labelPlacement='floating'
+						onIonChange={handleChange}
+						onIonBlur={handleBlur}
+						value={values.vcard?.fax}
+					/>
 				</ZIonCol>
 
 				{/* Email */}
 				<ZIonCol size='5.5' className='mt-3'>
-					<ZIonItem>
-						<ZIonInput
-							label='Email'
-							labelPlacement='floating'
-							name='vcard.email'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values.vcard?.email}
-						/>
-					</ZIonItem>
+					<ZIonInput
+						label='Email'
+						labelPlacement='floating'
+						name='vcard.email'
+						onIonChange={handleChange}
+						onIonBlur={handleBlur}
+						value={values.vcard?.email}
+					/>
 				</ZIonCol>
 
 				{/* Company */}
 				<ZIonCol size='5.5' className='mt-3'>
-					<ZIonItem>
-						<ZIonInput
-							label='Company'
-							labelPlacement='floating'
-							name='vcard.company'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values.vcard?.company}
-						/>
-					</ZIonItem>
+					<ZIonInput
+						label='Company'
+						labelPlacement='floating'
+						name='vcard.company'
+						onIonChange={handleChange}
+						onIonBlur={handleBlur}
+						value={values.vcard?.company}
+					/>
 				</ZIonCol>
 
 				{/* Your Job */}
 				<ZIonCol size='5.5' className='mt-3'>
-					<ZIonItem>
-						<ZIonInput
-							name='vcard.job'
-							label='Your Job'
-							labelPlacement='floating'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values.vcard?.job}
-						/>
-					</ZIonItem>
+					<ZIonInput
+						name='vcard.job'
+						label='Your Job'
+						labelPlacement='floating'
+						onIonChange={handleChange}
+						onIonBlur={handleBlur}
+						value={values.vcard?.job}
+					/>
 				</ZIonCol>
 
 				{/* Street */}
 				<ZIonCol size='5.5' className='mt-3'>
-					<ZIonItem>
-						<ZIonInput
-							name='vcard.street'
-							label='Street'
-							labelPlacement='floating'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values.vcard?.street}
-						/>
-					</ZIonItem>
+					<ZIonInput
+						name='vcard.street'
+						label='Street'
+						labelPlacement='floating'
+						onIonChange={handleChange}
+						onIonBlur={handleBlur}
+						value={values.vcard?.street}
+					/>
 				</ZIonCol>
 
 				{/* City */}
 				<ZIonCol size='5.5' className='mt-3'>
-					<ZIonItem>
-						<ZIonInput
-							name='vcard.city'
-							label='City'
-							labelPlacement='floating'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values.vcard?.city}
-						/>
-					</ZIonItem>
+					<ZIonInput
+						name='vcard.city'
+						label='City'
+						labelPlacement='floating'
+						onIonChange={handleChange}
+						onIonBlur={handleBlur}
+						value={values.vcard?.city}
+					/>
 				</ZIonCol>
 
 				{/* Zip */}
 				<ZIonCol size='5.5' className='mt-3'>
-					<ZIonItem>
-						<ZIonInput
-							name='vcard.zip'
-							label='Zip'
-							labelPlacement='floating'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values.vcard?.zip}
-						/>
-					</ZIonItem>
+					<ZIonInput
+						name='vcard.zip'
+						label='Zip'
+						labelPlacement='floating'
+						onIonChange={handleChange}
+						onIonBlur={handleBlur}
+						value={values.vcard?.zip}
+					/>
 				</ZIonCol>
 
 				{/* State */}
 				<ZIonCol size='5.5' className='mt-3'>
-					<ZIonItem>
-						<ZIonInput
-							name='vcard.state'
-							label='State'
-							labelPlacement='floating'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values.vcard?.state}
-						/>
-					</ZIonItem>
+					<ZIonInput
+						name='vcard.state'
+						label='State'
+						labelPlacement='floating'
+						onIonChange={handleChange}
+						onIonBlur={handleBlur}
+						value={values.vcard?.state}
+					/>
 				</ZIonCol>
 
 				{/* Country */}
 				<ZIonCol size='5.5' className='mt-3'>
-					<ZIonItem>
-						<ZIonInput
-							name='vcard.country'
-							label='Country'
-							labelPlacement='floating'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values.vcard?.country}
-						/>
-					</ZIonItem>
+					<ZIonInput
+						name='vcard.country'
+						label='Country'
+						labelPlacement='floating'
+						onIonChange={handleChange}
+						onIonBlur={handleBlur}
+						value={values.vcard?.country}
+					/>
 				</ZIonCol>
 
 				{/* Website */}
 				<ZIonCol size='5.5' className='mt-3'>
-					<ZIonItem>
-						<ZIonInput
-							name='vcard.website'
-							label='Website'
-							labelPlacement='floating'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values.vcard?.website}
-						/>
-					</ZIonItem>
+					<ZIonInput
+						name='vcard.website'
+						label='Website'
+						labelPlacement='floating'
+						onIonChange={handleChange}
+						onIonBlur={handleBlur}
+						value={values.vcard?.website}
+					/>
 				</ZIonCol>
 			</ZIonRow>
 		</ZIonCol>

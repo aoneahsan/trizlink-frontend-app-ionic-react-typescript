@@ -1,0 +1,21 @@
+/* zaions adminPanel mainSideMenu logo styles */
+.zaions-ap-msm-logo {
+	width: 42px; /* 80px */
+	height: 42px;
+}
+
+.zaions-ap-msm-logo::part(image) {
+	border-radius: 50%;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-ms-border-radius: 50%;
+	-o-border-radius: 50%;
+}
+
+.zaions-ap-msm-toggle-button {
+	z-index: 100;
+	--padding-top: 1rem;
+	--padding-bottom: 1rem;
+	--padding-start: 0.6rem;
+	--padding-end: 0.6rem;
+}

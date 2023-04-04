@@ -65,6 +65,7 @@ import ZIonRefresherContent from '@/components/ZIonComponents/ZIonRefresherConte
 import ZaionsLinkInBioLinksTable from '@/components/InPageComponents/ZaionsTable/linkInBioTables/LinkInBioTable';
 import ZaionsAddLinkInBioModal from '@/components/InPageComponents/ZaionsModals/AddNewLinkInBioModal';
 import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
+import AdminPanelMainSidebarMenu from '@/components/AdminPanelComponents/MainSideBarMenu';
 
 // Types
 import { folderState, FormMode } from '@/types/AdminPanel/index.type';
@@ -76,6 +77,7 @@ import {
 	LinkInBiosFieldsDataSelector,
 	LinkInBiosFilterOptionsRState,
 } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioState.recoil';
+import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 
 // Global Contents
 import CONSTANTS from '@/utils/constants';
@@ -96,6 +98,8 @@ const AdminLinkInBiosIndexPage: React.FC = () => {
 	const linkInBiosFilterOptionsState = useRecoilValue(
 		LinkInBiosFilterOptionsRState
 	);
+
+	const ZDashboardState = useRecoilValue(ZDashboardRState);
 
 	const setFolderFormState = useSetRecoilState(FolderFormState);
 	const { data: linkInBiosFoldersData } = useZRQGetRequest<LinkFolderType[]>({
@@ -146,14 +150,22 @@ const AdminLinkInBiosIndexPage: React.FC = () => {
 	};
 
 	return (
-		<ZaionsIonPage pageTitle='Zaions LinkInBio'>
+		<ZaionsIonPage pageTitle='Zaions Link-In-Bio page'>
 			<ZIonContent>
 				<ZIonRefresher onIonRefresh={(event) => void handleRefresh(event)}>
 					<ZIonRefresherContent />
 				</ZIonRefresher>
 				<ZIonGrid className='ion-no-padding zaions_h100'>
 					<ZIonRow className='zaions_h100'>
-						<ZIonCol size='2.6' className='ion-padding border-end'>
+						<AdminPanelMainSidebarMenu />
+						<ZIonCol
+							size={
+								ZDashboardState.dashboardMainSidebarIsCollabes.isCollabes
+									? '2'
+									: '2.4'
+							}
+							className='ion-padding border-end zaions-transition'
+						>
 							<div className='ion-padding-top'>
 								<ZIonList lines='none'>
 									<ZIonItem className='zaions__cursor_pointer mb-2'>
@@ -261,7 +273,14 @@ const AdminLinkInBiosIndexPage: React.FC = () => {
 								</ZIonButton>
 							</div>
 						</ZIonCol>
-						<ZIonCol size='9.4'>
+						<ZIonCol
+							className='zaions-transition'
+							size={
+								ZDashboardState.dashboardMainSidebarIsCollabes.isCollabes
+									? '8.1'
+									: '9'
+							}
+						>
 							<ZIonGrid className='py-4 zaions__bg_white'>
 								<ZIonRow className='px-3'>
 									<ZIonCol>
@@ -976,7 +995,10 @@ const SearchQueryInputComponent = () => {
 			}}
 		>
 			{({ submitForm, handleChange }) => (
-				<ZIonItem className='border' style={{ '--inner-padding-end': '0px' }}>
+				<ZIonItem
+					className='border ion-item-start-no-padding'
+					style={{ '--inner-padding-end': '0px' }}
+				>
 					<ZIonInput
 						label='🔍'
 						clearInput={true}
@@ -984,6 +1006,12 @@ const SearchQueryInputComponent = () => {
 						name='searchValue'
 						onIonChange={handleChange}
 						placeholder='Search link by title, domain...'
+						fill='solid'
+						style={{
+							'--background': '#fff',
+							'--padding-start': '11px',
+							'--border-color': '#fff',
+						}}
 					/>
 					<ZIonButton
 						onClick={() => void submitForm()}

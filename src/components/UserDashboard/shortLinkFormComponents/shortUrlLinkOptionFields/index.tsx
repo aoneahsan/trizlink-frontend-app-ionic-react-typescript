@@ -14,7 +14,6 @@ import {
 	ZIonCol,
 	ZIonGrid,
 	ZIonIcon,
-	ZIonInput,
 	ZIonItem,
 	ZIonNote,
 	ZIonRow,
@@ -48,6 +47,7 @@ import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
  * */
 import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { ZaionsBusinessDetails } from '@/utils/constants';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 /**
  * Style files Imports go down
@@ -128,25 +128,25 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 							messengerPlatformsBlockEnum.messenger) && (
 						<>
 							{/* Input of every links */}
-							<ZIonItem
-								className={classNames({
-									'zaions__w90 ion-margin-end': true,
-									'ion-touched': touched?.target?.url,
-									'ion-invalid': touched?.target?.url && errors?.target?.url,
-									'ion-valid': touched?.target?.url && !!errors?.target?.url,
-								})}
-							>
-								<ZIonInput
-									type='url'
-									name='target.url'
-									placeholder={ShortLinkPlaceholder()}
-									onIonChange={handleChange}
-									onIonBlur={handleBlur}
-									value={values?.target?.url}
-									label=''
-								/>
-								<ZIonNote slot='error'>{errors?.target?.url}</ZIonNote>
-							</ZIonItem>
+							<ZIonInputField
+								inputFieldProps={{
+									label: 'URL',
+									labelPlacement: 'floating',
+									onIonChange: handleChange,
+									onIonBlur: handleBlur,
+									value: values?.target?.url,
+									name: 'target.url',
+									errorText: errors?.password?.value,
+									type: 'url',
+									className: `${classNames({
+										'zaions__w90 ion-margin-end mx-auto': true,
+										'ion-touched': touched?.target?.url,
+										'ion-invalid': touched?.target?.url && errors?.target?.url,
+										'ion-valid': touched?.target?.url && !!errors?.target?.url,
+									})}`,
+									placeholder: ShortLinkPlaceholder(),
+								}}
+							/>
 						</>
 					)}
 
@@ -158,28 +158,29 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 							messengerPlatformsBlockEnum.call) && (
 						<>
 							{/* Input of every Phone Number */}
-							<ZIonItem
-								className={classNames({
-									'zaions__w90 ion-margin-end': true,
-									'ion-touched': touched?.target?.phoneNumber,
-									'ion-invalid':
-										touched?.target?.phoneNumber && errors?.target?.phoneNumber,
-									'ion-valid':
-										touched?.target?.phoneNumber &&
-										!!errors?.target?.phoneNumber,
-								})}
-							>
-								<ZIonInput
-									type='text'
-									name='target.phoneNumber'
-									placeholder={ShortLinkPlaceholder()}
-									onIonChange={handleChange}
-									onIonBlur={handleBlur}
-									value={values?.target?.phoneNumber}
-									label=''
-								/>
-								<ZIonNote slot='error'>{errors?.target?.phoneNumber}</ZIonNote>
-							</ZIonItem>
+							<ZIonInputField
+								inputFieldProps={{
+									label: 'Phone number',
+									labelPlacement: 'floating',
+									onIonChange: handleChange,
+									onIonBlur: handleBlur,
+									value: values?.target?.phoneNumber,
+									name: 'target.phoneNumber',
+									errorText: errors?.target?.phoneNumber,
+									type: 'text',
+									className: `${classNames({
+										'zaions__w90 ion-margin-end mx-auto': true,
+										'ion-touched': touched?.target?.phoneNumber,
+										'ion-invalid':
+											touched?.target?.phoneNumber &&
+											errors?.target?.phoneNumber,
+										'ion-valid':
+											touched?.target?.phoneNumber &&
+											!errors?.target?.phoneNumber,
+									})}`,
+									placeholder: ShortLinkPlaceholder(),
+								}}
+							/>
 						</>
 					)}
 
@@ -190,29 +191,27 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 							messengerPlatformsBlockEnum.skype) && (
 						<>
 							{/* Input of every Username */}
-							<ZIonItem
-								className={classNames({
-									'zaions__w90 ion-margin-end': true,
-									'ion-touched': touched?.target?.username,
-									'ion-invalid':
-										touched?.target?.username && errors?.target?.username,
-									'ion-valid':
-										touched?.target?.username && !!errors?.target?.username,
-								})}
-							>
-								<ZIonInput
-									type='text'
-									name='target.username'
-									placeholder={ShortLinkPlaceholder()}
-									onIonChange={(event) => {
-										handleChange(event);
-									}}
-									onIonBlur={handleBlur}
-									value={values?.target?.username}
-									label=''
-								/>
-								<ZIonNote slot='error'>{errors?.target?.username}</ZIonNote>
-							</ZIonItem>
+							<ZIonInputField
+								inputFieldProps={{
+									label: 'Username',
+									labelPlacement: 'floating',
+									onIonChange: handleChange,
+									onIonBlur: handleBlur,
+									value: values?.target?.username,
+									name: 'target.username',
+									errorText: errors?.target?.username,
+									type: 'text',
+									className: `${classNames({
+										'zaions__w90 ion-margin-end mx-auto': true,
+										'ion-touched': touched?.target?.username,
+										'ion-invalid':
+											touched?.target?.username && errors?.target?.username,
+										'ion-valid':
+											touched?.target?.username && !errors?.target?.username,
+									})}`,
+									placeholder: ShortLinkPlaceholder(),
+								}}
+							/>
 						</>
 					)}
 
@@ -223,27 +222,27 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 							messengerPlatformsBlockEnum.line) && (
 						<>
 							{/* Input of every Account Id */}
-							<ZIonItem
-								className={classNames({
-									'zaions__w90 ion-margin-end': true,
-									'ion-touched': touched?.target?.accountId,
-									'ion-invalid':
-										touched?.target?.accountId && errors?.target?.accountId,
-									'ion-valid':
-										touched?.target?.accountId && !!errors?.target?.accountId,
-								})}
-							>
-								<ZIonInput
-									type='text'
-									name='target.accountId'
-									placeholder={ShortLinkPlaceholder()}
-									onIonChange={handleChange}
-									onIonBlur={handleBlur}
-									value={values?.target?.accountId}
-									label=''
-								/>
-								<ZIonNote slot='error'>{errors?.target?.accountId}</ZIonNote>
-							</ZIonItem>
+							<ZIonInputField
+								inputFieldProps={{
+									label: 'Account Id',
+									labelPlacement: 'floating',
+									onIonChange: handleChange,
+									onIonBlur: handleBlur,
+									value: values?.target?.accountId,
+									name: 'target.accountId',
+									errorText: errors?.target?.accountId,
+									type: 'text',
+									className: `${classNames({
+										'zaions__w90 ion-margin-end mx-auto': true,
+										'ion-touched': touched?.target?.accountId,
+										'ion-invalid':
+											touched?.target?.accountId && errors?.target?.accountId,
+										'ion-valid':
+											touched?.target?.accountId && !errors?.target?.accountId,
+									})}`,
+									placeholder: ShortLinkPlaceholder(),
+								}}
+							/>
 						</>
 					)}
 
@@ -251,29 +250,27 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 					{newShortLinkFormState.type === messengerPlatformsBlockEnum.email && (
 						<>
 							{/* Input of every email */}
-							<ZIonItem
-								className={classNames({
-									'zaions__w90 ion-margin-end': true,
-									'ion-touched': touched?.target?.email,
-									'ion-invalid':
-										touched?.target?.email && errors?.target?.email,
-									'ion-valid':
-										touched?.target?.email && !!errors?.target?.email,
-								})}
-							>
-								<ZIonInput
-									type='email'
-									name='target.email'
-									placeholder={ShortLinkPlaceholder()}
-									onIonChange={(event) => {
-										handleChange(event);
-									}}
-									onIonBlur={handleBlur}
-									value={values?.target?.email}
-									label=''
-								/>
-								<ZIonNote slot='error'>{errors?.target?.email}</ZIonNote>
-							</ZIonItem>
+							<ZIonInputField
+								inputFieldProps={{
+									label: 'Email',
+									labelPlacement: 'floating',
+									onIonChange: handleChange,
+									onIonBlur: handleBlur,
+									value: values?.target?.email,
+									name: 'target.email',
+									errorText: errors?.target?.email,
+									type: 'email',
+									className: `${classNames({
+										'zaions__w90 ion-margin-end mx-auto': true,
+										'ion-touched': touched?.target?.email,
+										'ion-invalid':
+											touched?.target?.email && errors?.target?.email,
+										'ion-valid':
+											touched?.target?.email && !errors?.target?.email,
+									})}`,
+									placeholder: ShortLinkPlaceholder(),
+								}}
+							/>
 						</>
 					)}
 
@@ -289,26 +286,26 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 				<ZIonCol size='12' className=''>
 					{/* Subject Input */}
 					{newShortLinkFormState.type === messengerPlatformsBlockEnum.email && (
-						<ZIonItem
-							className={classNames({
-								'zaions__w90 ion-margin-end': true,
-								'ion-touched': touched?.target?.subject,
-								'ion-invalid':
-									touched?.target?.subject && errors?.target?.subject,
-								'ion-valid':
-									touched?.target?.subject && !!errors?.target?.subject,
-							})}
-						>
-							<ZIonInput
-								placeholder='Subject*'
-								name='target.subject'
-								onIonChange={handleChange}
-								onIonBlur={handleBlur}
-								value={values?.target?.subject}
-								label=''
-							/>
-							<ZIonNote slot='error'>{errors?.target?.subject}</ZIonNote>
-						</ZIonItem>
+						<ZIonInputField
+							inputFieldProps={{
+								label: 'Subject*',
+								labelPlacement: 'floating',
+								onIonChange: handleChange,
+								onIonBlur: handleBlur,
+								value: values?.target?.subject,
+								name: 'target.subject',
+								errorText: errors?.target?.subject,
+								className: `${classNames({
+									zaions__w95: true,
+									'ion-touched': touched?.target?.subject,
+									'ion-invalid':
+										touched?.target?.subject && errors?.target?.subject,
+									'ion-valid':
+										touched?.target?.subject && !!errors?.target?.subject,
+								})}`,
+								placeholder: ShortLinkPlaceholder(),
+							}}
+						/>
 					)}
 
 					{/* Message Textarea */}
@@ -319,12 +316,12 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 							messengerPlatformsBlockEnum.whatsapp) && (
 						<ZIonItem
 							className={classNames({
-								'zaions__w90 ion-margin-end': true,
+								'zaions__w95 ion-margin-end mt-4 border': true,
 								'ion-touched': touched?.target?.message,
 								'ion-invalid':
 									touched?.target?.message && errors?.target?.message,
 								'ion-valid':
-									touched?.target?.message && !!errors?.target?.message,
+									touched?.target?.message && !errors?.target?.message,
 							})}
 						>
 							<ZIonTextarea
@@ -332,13 +329,13 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 								name='target.message'
 								placeholder='Message*'
 								onIonChange={handleChange}
-								onIonBlur={handleBlur}
 								value={values?.target?.message}
-							></ZIonTextarea>
+								fill='outline'
+							/>
 							<ZIonNote slot='error'>{errors?.target?.message}</ZIonNote>
 						</ZIonItem>
 					)}
-				</ZIonCol>{' '}
+				</ZIonCol>
 			</ZIonRow>
 		</ZIonGrid>
 	);

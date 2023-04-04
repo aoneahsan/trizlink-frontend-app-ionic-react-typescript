@@ -64,7 +64,7 @@ type ZIonInputAutoCompleteType =
 	| 'impp'
 	| 'photo';
 
-type ZIonInputType = {
+export type ZIonInputType = {
 	className?: string;
 	autocapitalize?: 'off' | 'none' | 'on' | 'sentences' | 'words' | 'characters';
 	autocomplete?: ZIonInputAutoCompleteType;
@@ -132,17 +132,30 @@ type ZIonInputType = {
 	style?: {
 		[key: string]: unknown;
 	};
-	label?: string;
-	labelPlacement?: 'fixed' | 'floating' | 'stacked';
+
 	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
 	onIonBlur?: <A extends Event>(event: A) => void;
 	onChange?: React.FormEventHandler<HTMLIonInputElement>;
 	onKeyUp?: React.KeyboardEventHandler<HTMLIonInputElement>;
+
+	// Props Introduced in ionic 7
+	label?: string;
+	labelPlacement?: 'fixed' | 'floating' | 'stacked';
+	helperText?: string;
+	errorText?: string;
+	fill?: 'solid' | 'outline';
 };
 
 const ZIonInput = React.forwardRef(
 	(props: ZIonInputType, ref: React.Ref<HTMLIonInputElement>) => {
-		return <IonInput {...props} onIonInput={props.onIonChange} ref={ref} />;
+		return (
+			<IonInput
+				{...props}
+				onIonInput={props.onIonChange}
+				fill={props.fill || 'outline'}
+				ref={ref}
+			/>
+		);
 	}
 );
 

@@ -58,6 +58,7 @@ import { FormMode } from '@/types/AdminPanel/index.type';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import ZEditor from '@/components/CustomComponents/ZEditor';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Styles
 
@@ -211,7 +212,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 				return (
 					<>
 						{/**
-						 * Header of Modal will shown if the `showActionInModalHeader` is set to `true` in      appSetting and hide if it is `false`
+						 * Header of Modal will shown if the `showActionInModalHeader` is set to `true` in appSetting and hide if it is `false`
 						 * default: false
 						 *  */}
 						{appSettings.appModalsSetting.actions.showActionInModalHeader && (
@@ -290,28 +291,27 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 							</div>
 							<Form className='px-2'>
 								{/*-- Name Field --*/}
-								<ZIonItem
-									className={classNames({
-										'ion-touched ion-invalid': touched.name && errors.name,
-										'ion-touched ion-valid': touched.name && !!errors.name,
-									})}
-								>
-									<ZIonInput
-										color='dark'
-										type='text'
-										label='Name*'
-										labelPlacement='floating'
-										value={values.name}
-										placeholder='Template name'
-										name='name'
-										onIonChange={handleChange}
-										onIonBlur={handleBlur}
-									></ZIonInput>
-									<ZIonNote slot='error'>{errors.name}</ZIonNote>
-								</ZIonItem>
+								<ZIonInputField
+									inputFieldProps={{
+										className: classNames({
+											'px-2 pt-3': true,
+											'ion-touched ion-invalid': touched.name && errors.name,
+											'ion-touched ion-valid': touched.name && !errors.name,
+										}),
+										label: 'Template name*',
+										labelPlacement: 'floating',
+										name: 'name',
+										onIonChange: handleChange,
+										onIonBlur: handleBlur,
+										value: values.name,
+										errorText: errors.name,
+										color: 'dark',
+										type: 'text',
+									}}
+								/>
 
 								{/*-- Custom Javascript Field --*/}
-								<div className='mt-5'>
+								<div className='mt-4 pt-2'>
 									<ZIonRow>
 										<ZIonCol>
 											<ZIonTitle
@@ -548,31 +548,26 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 
 								{!!values.displayAt &&
 									values.displayAt === EmbedWidgetsDisplayAtEnum.Delay && (
-										<ZIonItem
-											className={classNames({
-												'border mt-4 zaions__w40 mx-auto': true,
-												'ion-touched ion-invalid':
-													touched.delay && errors.delay,
-												'ion-touched ion-valid': touched.delay && !errors.delay,
-											})}
-										>
-											<ZIonInput
-												type='number'
-												name='delay'
-												onIonChange={({ target }) => {
-													setFieldValue(
-														'delay',
-														target.value?.toString(),
-														true
-													);
-												}}
-												onIonBlur={handleBlur}
-												value={values.delay}
-												label=''
-											/>
-											<ZIonText className='ion-padding-start'>Second</ZIonText>
-											<ZIonNote slot='error'>{errors.delay}</ZIonNote>
-										</ZIonItem>
+										<ZIonInputField
+											inputFieldProps={{
+												className: classNames({
+													'mt-4 zaions__w40 mx-auto': true,
+													'ion-touched ion-invalid':
+														touched.delay && errors.delay,
+													'ion-touched ion-valid':
+														touched.delay && !errors.delay,
+												}),
+												label: 'Second',
+												labelPlacement: 'floating',
+												name: 'delay',
+												type: 'number',
+												onIonChange: handleChange,
+												onIonBlur: handleBlur,
+												value: values.delay,
+												errorText: errors.delay,
+												color: 'dark',
+											}}
+										/>
 									)}
 								<IonItemDivider className='mt-3' />
 

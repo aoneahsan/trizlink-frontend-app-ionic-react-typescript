@@ -47,6 +47,7 @@ import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZaionsAddUtmTags from '@/components/InPageComponents/ZaionsModals/AddUtmTags';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Styles
 
@@ -103,80 +104,83 @@ const UTMTagTemplates: React.FC = () => {
 						<ZIonGrid className='pb-0'>
 							<ZIonRow className='pb-0'>
 								<ZIonCol size='6'>
-									<ZIonItem className='mt-3'>
-										<ZIonInput
-											color='dark'
-											label='UTM Campaign'
-											labelPlacement='floating'
-											type='text'
-											name='UTMTags.utmCampaign'
-											value={values.UTMTags.utmCampaign}
-											placeholder='Enter text'
-											onIonChange={handleChange}
-											onIonBlur={handleBlur}
-										/>
-									</ZIonItem>
+									<ZIonInputField
+										inputFieldProps={{
+											label: 'UTM Campaign',
+											labelPlacement: 'floating',
+											className: 'mt-3',
+											onIonChange: handleChange,
+											onIonBlur: handleBlur,
+											value: values.UTMTags.utmCampaign,
+											name: 'UTMTags.utmCampaign',
+											placeholder: 'Enter text',
+											color: 'dark',
+										}}
+									/>
 								</ZIonCol>
 
 								<ZIonCol size='6'>
-									<ZIonItem className='mt-3'>
-										<ZIonInput
-											color='dark'
-											type='text'
-											label='UTM Medium'
-											labelPlacement='floating'
-											placeholder='Enter text'
-											name='UTMTags.utmMedium'
-											value={values.UTMTags.utmMedium}
-											onIonChange={handleChange}
-											onIonBlur={handleBlur}
-										/>
-									</ZIonItem>
+									<ZIonInputField
+										inputFieldProps={{
+											label: 'UTM Medium',
+											labelPlacement: 'floating',
+											className: 'mt-3',
+											onIonChange: handleChange,
+											onIonBlur: handleBlur,
+											value: values.UTMTags.utmMedium,
+											name: 'UTMTags.utmMedium',
+											placeholder: 'Enter text',
+											color: 'dark',
+										}}
+									/>
 								</ZIonCol>
 
 								<ZIonCol size='6'>
-									<ZIonItem className='mt-3'>
-										<ZIonInput
-											type='text'
-											label='UTM Source'
-											labelPlacement='floating'
-											placeholder='Enter text'
-											name='UTMTags.utmSource'
-											value={values.UTMTags.utmSource}
-											onIonChange={handleChange}
-											onIonBlur={handleBlur}
-										/>
-									</ZIonItem>
+									<ZIonInputField
+										inputFieldProps={{
+											label: 'UTM Source',
+											labelPlacement: 'floating',
+											className: 'mt-3',
+											onIonChange: handleChange,
+											onIonBlur: handleBlur,
+											value: values.UTMTags.utmSource,
+											name: 'UTMTags.utmSource',
+											placeholder: 'Enter text',
+											color: 'dark',
+										}}
+									/>
 								</ZIonCol>
 
 								<ZIonCol size='6'>
-									<ZIonItem className='mt-3'>
-										<ZIonInput
-											label='UTM Term'
-											labelPlacement='floating'
-											type='text'
-											placeholder='Enter text'
-											name='UTMTags.utmTerm'
-											value={values.UTMTags.utmTerm}
-											onIonChange={handleChange}
-											onIonBlur={handleBlur}
-										/>
-									</ZIonItem>
+									<ZIonInputField
+										inputFieldProps={{
+											label: 'UTM Term',
+											labelPlacement: 'floating',
+											className: 'mt-3',
+											onIonChange: handleChange,
+											onIonBlur: handleBlur,
+											value: values.UTMTags.utmTerm,
+											name: 'UTMTags.utmTerm',
+											placeholder: 'Enter text',
+											color: 'dark',
+										}}
+									/>
 								</ZIonCol>
 
 								<ZIonCol size='6'>
-									<ZIonItem className='mt-3'>
-										<ZIonInput
-											type='text'
-											label='UTM Content'
-											labelPlacement='floating'
-											placeholder='Enter text'
-											name='UTMTags.utmContent'
-											value={values.UTMTags.utmContent}
-											onIonChange={handleChange}
-											onIonBlur={handleBlur}
-										/>
-									</ZIonItem>
+									<ZIonInputField
+										inputFieldProps={{
+											label: 'UTM Content',
+											labelPlacement: 'floating',
+											className: 'mt-3',
+											onIonChange: handleChange,
+											onIonBlur: handleBlur,
+											value: values.UTMTags.utmContent,
+											name: 'UTMTags.utmContent',
+											placeholder: 'Enter text',
+											color: 'dark',
+										}}
+									/>
 								</ZIonCol>
 
 								<ZIonCol size='6' className='d-flex ion-align-items-center'>

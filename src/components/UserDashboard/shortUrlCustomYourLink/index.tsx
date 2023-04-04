@@ -13,7 +13,6 @@ import {
 	ZIonCol,
 	ZIonIcon,
 	ZIonImg,
-	ZIonInput,
 	ZIonItem,
 	ZIonNote,
 	ZIonRouterLink,
@@ -64,6 +63,7 @@ import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/Fi
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
 import { zJsonParse } from '@/utils/helpers';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 /**
  * Component props type go down
@@ -172,27 +172,27 @@ const ZaionsCustomYourLink: React.FC = () => {
 				</ZIonCol>
 				<ZIonCol size='12' className='pt-5'>
 					{/* Link Title */}
-					<ZIonItem
-						className={classNames({
-							zaions__w100: true,
-							'ion-touched': touched.title,
-							'ion-invalid': touched.title && errors.title,
-							'ion-valid': touched.title && !errors.title,
-						})}
-					>
-						<ZIonInput
-							type='text'
-							name='title'
-							placeholder='Title of you link*'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values.title}
-							label=''
-						/>
-						<ZIonNote slot='error'>{errors.title}</ZIonNote>
-					</ZIonItem>
+					<ZIonInputField
+						inputFieldProps={{
+							label: 'Title of you link*',
+							labelPlacement: 'floating',
+							onIonChange: handleChange,
+							onIonBlur: handleBlur,
+							value: values.title,
+							name: 'title',
+							errorText: errors.title,
+							className: `${classNames({
+								zaions__w100: true,
+								'ion-touched': touched.title,
+								'ion-invalid': touched.title && errors.title,
+								'ion-valid': touched.title && !errors.title,
+							})}`,
+							placeholder: 'Title of you link*',
+						}}
+					/>
+
 					{/* Link Description */}
-					<ZIonItem className='border mt-4'>
+					<ZIonItem className='border mt-4 rounded'>
 						<ZIonTextarea
 							placeholder='Type something here'
 							autoGrow={true}
@@ -201,7 +201,7 @@ const ZaionsCustomYourLink: React.FC = () => {
 							onIonBlur={handleBlur}
 							rows={6}
 							value={values.linkDescription}
-						></ZIonTextarea>
+						/>
 						<ZIonNote slot='error'>{errors.linkDescription}</ZIonNote>
 					</ZIonItem>
 				</ZIonCol>

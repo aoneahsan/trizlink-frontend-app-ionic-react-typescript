@@ -18,8 +18,6 @@ import {
 	ZIonCheckbox,
 	ZIonCol,
 	ZIonFooter,
-	ZIonInput,
-	ZIonItem,
 	ZIonRouterLink,
 	ZIonRow,
 	ZIonText,
@@ -41,6 +39,7 @@ import {
  * */
 import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 import classNames from 'classnames';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 /**
  * Recoil State Imports go down
@@ -84,7 +83,7 @@ const ZLinkInBioFormBlock: React.FC<ZLinkInBioFromBlockInterface> = ({
 	fontFamily,
 }) => {
 	return (
-		<ZIonRow className='zaions__w100 ion-justify-content-between ion-padding-vertical px-3 zaions__bg_light_opacity_point5 rounded row-gap-1-point-6-rem'>
+		<ZIonRow className='zaions__w100 ion-justify-content-between ion-padding-vertical px-3 zaions__light_bg rounded row-gap-1-point-6-rem'>
 			{/* Header */}
 			{/* <ZIonHeader className='pb-2'>
         <ZIonButton
@@ -117,95 +116,40 @@ const ZLinkInBioFormBlock: React.FC<ZLinkInBioFromBlockInterface> = ({
 						)}
 
 						{/* First Name */}
-						{element.type === LinkInBioFormFieldsEnum.firstName && (
+						{(element.type === LinkInBioFormFieldsEnum.firstName ||
+							element.type === LinkInBioFormFieldsEnum.lastName ||
+							element.type === LinkInBioFormFieldsEnum.email ||
+							element.type === LinkInBioFormFieldsEnum.phone ||
+							element.type === LinkInBioFormFieldsEnum.text ||
+							element.type === LinkInBioFormFieldsEnum.website) && (
 							<ZIonCol size='12'>
-								<ZIonItem>
-									<ZIonInput
-										className={classNames(fontFamily)}
-										label={element.placeholder}
-										labelPlacement='floating'
-									/>
-								</ZIonItem>
-							</ZIonCol>
-						)}
-
-						{/* Last Name */}
-						{element.type === LinkInBioFormFieldsEnum.lastName && (
-							<ZIonCol size='12'>
-								<ZIonItem>
-									<ZIonInput
-										className={classNames(fontFamily)}
-										label={element.placeholder}
-										labelPlacement='floating'
-									/>
-								</ZIonItem>
-							</ZIonCol>
-						)}
-
-						{/* Email Name */}
-						{element.type === LinkInBioFormFieldsEnum.email && (
-							<ZIonCol size='12'>
-								<ZIonItem>
-									<ZIonInput
-										className={classNames(fontFamily)}
-										label={element.placeholder}
-										labelPlacement='floating'
-									/>
-								</ZIonItem>
-							</ZIonCol>
-						)}
-
-						{/* Phone Number */}
-						{element.type === LinkInBioFormFieldsEnum.phone && (
-							<ZIonCol size='12'>
-								<ZIonItem>
-									<ZIonInput
-										className={classNames(fontFamily)}
-										label={element.placeholder}
-										labelPlacement='floating'
-									/>
-								</ZIonItem>
-							</ZIonCol>
-						)}
-
-						{/* Text */}
-						{element.type === LinkInBioFormFieldsEnum.text && (
-							<ZIonCol size='12'>
-								<ZIonItem>
-									<ZIonInput
-										className={classNames(fontFamily)}
-										label={element.placeholder}
-										labelPlacement='floating'
-									/>
-								</ZIonItem>
+								<ZIonInputField
+									inputFieldProps={{
+										className: classNames(fontFamily),
+										label: element.placeholder,
+										labelPlacement: 'floating',
+										style: {
+											'--padding-start': '11px',
+										},
+									}}
+								/>
 							</ZIonCol>
 						)}
 
 						{/* Date */}
 						{element.type === LinkInBioFormFieldsEnum.date && (
 							<ZIonCol size='12'>
-								<ZIonItem>
-									<ZIonInput
-										type='datetime-local'
-										className={classNames(fontFamily)}
-										label={element.placeholder}
-										labelPlacement='stacked'
-									/>
-								</ZIonItem>
-								{/* <LinkInBioDateTimeField /> */}
-							</ZIonCol>
-						)}
-
-						{/* Website (url) */}
-						{element.type === LinkInBioFormFieldsEnum.website && (
-							<ZIonCol size='12'>
-								<ZIonItem>
-									<ZIonInput
-										className={classNames(fontFamily)}
-										label={element.placeholder}
-										labelPlacement='floating'
-									/>
-								</ZIonItem>
+								<ZIonInputField
+									inputFieldProps={{
+										className: classNames(fontFamily),
+										label: element.placeholder,
+										labelPlacement: 'stacked',
+										style: {
+											'--padding-start': '11px',
+										},
+										type: 'datetime-local',
+									}}
+								/>
 							</ZIonCol>
 						)}
 					</>

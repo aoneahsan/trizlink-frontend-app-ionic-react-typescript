@@ -31,7 +31,7 @@ const LinkInBioDescriptionField: React.FC<
 	className,
 }) => {
 	return (
-		<ZIonItem className={className}>
+		<ZIonItem className={className} lines='none'>
 			<ZIonIcon icon={reorderFourOutline} slot='start' />
 
 			<ZIonInput

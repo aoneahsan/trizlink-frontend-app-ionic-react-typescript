@@ -11,9 +11,6 @@ import {
 	ZIonText,
 	ZIonIcon,
 	ZIonRouterLink,
-	ZIonItem,
-	ZIonInput,
-	ZIonNote,
 } from '@/components/ZIonComponents';
 
 // Global Constants
@@ -27,6 +24,7 @@ import { useFormikContext } from 'formik';
 import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 import classNames from 'classnames';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Styles
 
@@ -65,24 +63,25 @@ const LinkPassword: React.FC = () => {
 				</div>
 				{values.password.enabled ? (
 					<div className='d-block px-2 mt-3 mb-4'>
-						<ZIonItem
-							className={classNames({
-								'ion-invalid':
-									touched.password?.value && errors.password?.value,
-								'ion-valid': touched.password?.value && !errors.password?.value,
-							})}
-						>
-							<ZIonInput
-								type='password'
-								label='Password'
-								labelPlacement='floating'
-								name='password.value'
-								onIonChange={handleChange}
-								onIonBlur={handleBlur}
-								value={values.password.value}
-							></ZIonInput>
-							<ZIonNote slot='error'>{errors?.password?.value}</ZIonNote>
-						</ZIonItem>
+						<ZIonInputField
+							inputFieldProps={{
+								label: 'Password',
+								labelPlacement: 'floating',
+								onIonChange: handleChange,
+								onIonBlur: handleBlur,
+								value: values.password.value,
+								name: 'password.value',
+								errorText: errors?.password?.value,
+								type: 'password',
+								className: `${classNames({
+									'mt-5': true,
+									'ion-invalid':
+										touched.password?.value && errors.password?.value,
+									'ion-valid':
+										touched.password?.value && !errors.password?.value,
+								})}`,
+							}}
+						/>
 					</div>
 				) : (
 					<div className='ms-4 mt-4'>

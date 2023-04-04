@@ -12,14 +12,13 @@ import {
 	ZIonText,
 	ZIonIcon,
 	ZIonRouterLink,
-	ZIonItem,
 	ZIonInput,
 	ZIonRow,
 	ZIonNote,
 } from '@/components/ZIonComponents';
 
 // Global Constants
-import { LOCALSTORAGE_KEYS, PRODUCT_NAME } from '@/utils/constants';
+import CONSTANTS, { LOCALSTORAGE_KEYS, PRODUCT_NAME } from '@/utils/constants';
 import {
 	zAxiosApiRequest,
 	formatApiRequestErrorForFormikFormField,
@@ -28,6 +27,7 @@ import {
 	validateFields,
 	zStringify,
 	zConsoleError,
+	replaceParams,
 } from '@/utils/helpers';
 import { API_URL_ENUM, VALIDATION_RULE } from '@/utils/enums';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
@@ -50,7 +50,7 @@ import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 // Style
 
 const ZaionsLoginForm: React.FC = () => {
-	const [canViewPassword, setcanViewPassword] = useState<boolean>(false);
+	const [canViewPassword, setCanViewPassword] = useState<boolean>(false);
 
 	const setUserAccountState = useSetRecoilState(ZaionsUserAccountRState);
 
@@ -121,7 +121,13 @@ const ZaionsLoginForm: React.FC = () => {
 					resetForm();
 
 					// redirect to profile.
-					zNavigatePushRoute(ZaionsRoutes.AdminPanel.ZaionsDashboard.ZProfile);
+					zNavigatePushRoute(
+						replaceParams(
+							ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinkInBio,
+							CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+							''
+						)
+					);
 				} else {
 					// if there is any error in above then Throw Error..
 					throw new ZCustomError();
@@ -204,46 +210,34 @@ const ZaionsLoginForm: React.FC = () => {
 						}) => (
 							<>
 								{/* Email Address Field */}
-								<ZIonItem
+								<ZIonInput
 									className={classNames({
-										'mb-4 ion-item-start-no-padding': true,
+										'mb-4': true,
 
 										'ion-touched ion-invalid':
 											touched.emailAddress && errors.emailAddress,
 										'ion-touched ion-valid':
 											touched.emailAddress && !errors.emailAddress,
-										zaions_item_input_bb:
-											!touched.emailAddress ||
-											(touched.emailAddress && !errors.emailAddress),
 									})}
-								>
-									<ZIonInput
-										name='emailAddress'
-										label='Email Address'
-										labelPlacement='floating'
-										type='email'
-										onIonChange={handleChange}
-										onIonBlur={handleBlur}
-										value={values.emailAddress}
-									/>
-									<ZIonNote slot='error'>{errors.emailAddress}</ZIonNote>
-								</ZIonItem>
+									name='emailAddress'
+									label='Email Address'
+									labelPlacement='floating'
+									type='email'
+									onIonChange={handleChange}
+									onIonBlur={handleBlur}
+									value={values.emailAddress}
+									errorText={errors.emailAddress}
+								/>
 
 								{/* Password Field */}
-								<ZIonItem
-									className={classNames({
-										'ion-item-start-no-padding': true,
-
-										'ion-touched ion-invalid':
-											touched.password && errors.password,
-										'ion-touched ion-valid':
-											touched.password && !errors.password,
-										zaions_item_input_bb:
-											!touched.password ||
-											(touched.password && !errors.password),
-									})}
-								>
+								<div className='d-flex ion-align-items-center'>
 									<ZIonInput
+										className={classNames({
+											'ion-touched ion-invalid':
+												touched.password && errors.password,
+											'ion-touched ion-valid':
+												touched.password && !errors.password,
+										})}
 										name='password'
 										label='Password'
 										labelPlacement='floating'
@@ -251,22 +245,22 @@ const ZaionsLoginForm: React.FC = () => {
 										onIonChange={handleChange}
 										onIonBlur={handleBlur}
 										value={values.password}
+										errorText={errors.password}
 									/>
 									<ZIonButton
-										slot='end'
 										fill='clear'
 										size='large'
-										className='ion-no-padding'
-										onClick={() => setcanViewPassword((OldVal) => !OldVal)}
+										className='ion-no-padding ms-3 zaions__max_content'
+										onClick={() => setCanViewPassword((OldVal) => !OldVal)}
 										mode='ios'
 									>
 										<ZIonIcon
 											icon={canViewPassword ? eyeOffOutline : eyeOutline}
 										/>
 									</ZIonButton>
-									<ZIonNote slot='error'>{errors.password}</ZIonNote>
-								</ZIonItem>
-								<div className='ion-text-end '>
+								</div>
+
+								<div className='ion-text-end'>
 									<ZIonButton
 										fill='clear'
 										className='ion-no-padding ion-no-margin ion-text-capitalize text-decoration-underline'

@@ -26,14 +26,17 @@ type ZIonSelectType = {
 	value?: string | unknown;
 	defaultValue?: string | number | readonly string[];
 	color?: ZIonColorType;
-	label?: string;
-	labelPlacement?: 'fixed' | 'floating' | 'stacked';
 	onIonChange?: (
 		event: IonSelectCustomEvent<SelectChangeEventDetail<unknown>>
 	) => void;
 	onChange?: React.FormEventHandler<HTMLIonSelectElement>;
 	onIonCancel?: (event: IonSelectCustomEvent<void>) => void;
 	onIonBlur?: (event: IonSelectCustomEvent<void>) => void;
+
+	// Ionic 7
+	label?: string;
+	labelPlacement?: 'fixed' | 'floating' | 'stacked';
+	fill?: 'solid' | 'outline';
 };
 
 const ZIonSelect = (props: ZIonSelectType) => {

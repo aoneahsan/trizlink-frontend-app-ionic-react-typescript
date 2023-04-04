@@ -2,15 +2,7 @@
 import React from 'react';
 // Packages Import
 import { Formik, Form } from 'formik';
-import {
-	documentText,
-	documentTextOutline,
-	locationOutline,
-	megaphoneOutline,
-	optionsOutline,
-	toggleOutline,
-	tvOutline,
-} from 'ionicons/icons';
+import { toggleOutline } from 'ionicons/icons';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import classNames from 'classnames';
 
@@ -24,8 +16,6 @@ import {
 	ZIonNote,
 	ZIonContent,
 	ZIonIcon,
-	ZIonItem,
-	ZIonInput,
 	ZIonFooter,
 } from '@/components/ZIonComponents';
 
@@ -51,6 +41,7 @@ import CONSTANTS from '@/utils/constants';
 import { ZIonButton } from '@/components/ZIonComponents';
 import { showSuccessNotification } from '@/utils/notification';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Styles
 
@@ -268,115 +259,121 @@ const ZaionsAddUtmTags: React.FC<{
 							</ZIonText>
 						</div>
 						<Form onSubmit={handleSubmit} className='px-2'>
-							<ZIonItem
-								// className={`${errors.templateName && 'ion-invalid'}`}
-								className={classNames({
-									'ion-touched ion-invalid':
-										touched.templateName && errors.templateName,
-									'ion-touched ion-valid':
-										touched.templateName && !!errors.templateName,
-								})}
-							>
-								<ZIonInput
-									color='dark'
-									label='Template name*'
-									labelPlacement='floating'
-									type='text'
-									value={values.templateName}
-									placeholder='Template name'
-									name='templateName'
-									onIonChange={handleChange}
-									onIonBlur={handleBlur}
-								></ZIonInput>
-								<ZIonNote slot='error'>{errors.templateName}</ZIonNote>
-							</ZIonItem>
+							{/* Template Name Input */}
+							<ZIonInputField
+								inputFieldProps={{
+									className: classNames({
+										'ion-touched ion-invalid':
+											touched.templateName && errors.templateName,
+										'ion-touched ion-valid':
+											touched.templateName && !errors.templateName,
+									}),
+									label: 'Template name*',
+									labelPlacement: 'floating',
+									name: 'templateName',
+									onIonChange: handleChange,
+									onIonBlur: handleBlur,
+									value: values.templateName,
+									errorText: errors.templateName,
+									placeholder: 'Template name',
+									type: 'text',
+									color: 'dark',
+								}}
+							/>
 
-							<ZIonItem
-								// className={`mt-3 ${errors.utmCampaign && 'ion-invalid'}`}
-								className={classNames({
-									'mt-3': true,
-									'ion-touched ion-invalid':
-										touched.utmCampaign && errors.utmCampaign,
-									'ion-touched ion-valid':
-										touched.utmCampaign && !!errors.utmCampaign,
-								})}
-							>
-								<ZIonInput
-									color='dark'
-									type='text'
-									label='UTM Campaign*'
-									labelPlacement='floating'
-									placeholder='UTM Campaign'
-									name='utmCampaign'
-									onIonChange={handleChange}
-									value={values.utmCampaign}
-									onIonBlur={handleBlur}
-								></ZIonInput>
-								<ZIonNote slot='error'>{errors.utmCampaign}</ZIonNote>
-							</ZIonItem>
+							{/* UTM Campaign Input */}
+							<ZIonInputField
+								inputFieldProps={{
+									className: classNames({
+										'mt-4': true,
+										'ion-touched ion-invalid':
+											touched.utmCampaign && errors.utmCampaign,
+										'ion-touched ion-valid':
+											touched.utmCampaign && !errors.utmCampaign,
+									}),
+									label: 'UTM Campaign*',
+									labelPlacement: 'floating',
+									name: 'utmCampaign',
+									onIonChange: handleChange,
+									onIonBlur: handleBlur,
+									value: values.utmCampaign,
+									errorText: errors.utmCampaign,
+									placeholder: 'UTM Campaign',
+									type: 'text',
+									color: 'dark',
+								}}
+							/>
 
-							<ZIonItem
-								// className={`mt-3 ${errors.utmMedium && 'ion-invalid'}`}
-								className={classNames({
-									'mt-3': true,
-									'ion-touched ion-invalid':
-										touched.utmMedium && errors.utmMedium,
-									'ion-touched ion-valid':
-										touched.utmMedium && !!errors.utmMedium,
-								})}
-							>
-								<ZIonInput
-									color='dark'
-									type='text'
-									placeholder='UTM Medium'
-									label='UTM Medium*'
-									labelPlacement='floating'
-									name='utmMedium'
-									onIonChange={handleChange}
-									value={values.utmMedium}
-									onIonBlur={handleBlur}
-								></ZIonInput>
-								<ZIonNote slot='error'>{errors.utmMedium}</ZIonNote>
-							</ZIonItem>
+							{/* UTM Medium Input */}
+							<ZIonInputField
+								inputFieldProps={{
+									className: classNames({
+										'mt-4': true,
+										'ion-touched ion-invalid':
+											touched.utmMedium && errors.utmMedium,
+										'ion-touched ion-valid':
+											touched.utmMedium && !errors.utmMedium,
+									}),
+									label: 'UTM Medium*',
+									labelPlacement: 'floating',
+									name: 'utmMedium',
+									onIonChange: handleChange,
+									onIonBlur: handleBlur,
+									value: values.utmMedium,
+									errorText: errors.utmMedium,
+									placeholder: 'UTM Medium',
+									type: 'text',
+									color: 'dark',
+								}}
+							/>
 
-							<ZIonItem className='mt-3'>
-								<ZIonInput
-									color='dark'
-									type='text'
-									label='UTM Source*'
-									labelPlacement='floating'
-									placeholder='UTM Source'
-									name='utmSource'
-									value={values.utmSource}
-									onIonChange={handleChange}
-								></ZIonInput>
-							</ZIonItem>
+							{/* UTM Source Input */}
+							<ZIonInputField
+								inputFieldProps={{
+									className: 'mt-4',
+									label: 'UTM Source*',
+									labelPlacement: 'floating',
+									name: 'utmSource',
+									onIonChange: handleChange,
+									onIonBlur: handleBlur,
+									value: values.utmSource,
+									placeholder: 'UTM Source',
+									type: 'text',
+									color: 'dark',
+								}}
+							/>
 
-							<ZIonItem className='mt-3'>
-								<ZIonInput
-									color='dark'
-									type='text'
-									label='UTM Term*'
-									labelPlacement='floating'
-									placeholder='UTM Team'
-									name='utmTerm'
-									value={values.utmTerm}
-									onIonChange={handleChange}
-								></ZIonInput>
-							</ZIonItem>
+							{/* UTM Term Input */}
+							<ZIonInputField
+								inputFieldProps={{
+									className: 'mt-4',
+									label: 'UTM Term*',
+									labelPlacement: 'floating',
+									name: 'utmTerm',
+									onIonChange: handleChange,
+									onIonBlur: handleBlur,
+									value: values.utmTerm,
+									placeholder: 'UTM Term',
+									type: 'text',
+									color: 'dark',
+								}}
+							/>
 
-							<ZIonItem className='mt-3'>
-								<ZIonInput
-									color='dark'
-									type='text'
-									label='UTM Content'
-									labelPlacement='floating'
-									placeholder='UTM Content'
-									name='utmContent'
-									value={values.utmContent}
-									onIonChange={handleChange}
-								></ZIonInput>
-							</ZIonItem>
+							{/* UTM Content Input */}
+							<ZIonInputField
+								inputFieldProps={{
+									className: 'mt-4',
+									label: 'UTM Content*',
+									labelPlacement: 'floating',
+									name: 'utmContent',
+									onIonChange: handleChange,
+									onIonBlur: handleBlur,
+									value: values.utmContent,
+									placeholder: 'UTM Content',
+									type: 'text',
+									color: 'dark',
+								}}
+							/>
 						</Form>
 					</ZIonContent>
 

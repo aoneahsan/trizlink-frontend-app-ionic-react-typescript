@@ -344,21 +344,17 @@ const ZAccountDetails: React.FC = () => {
 														'my-0 px-0 border-bottom pb-3': !isMdScale,
 													})}
 												>
-													<ZIonItem
+													<ZIonInput
 														className={classNames({
 															zaions__w70: isMdScale,
 															'zaions__w100 mb-2': !isMdScale,
 														})}
-													>
-														<ZIonInput
-															placeholder='User Name'
-															label='Account Name'
-															labelPlacement='floating'
-														/>
-														<ZIonNote slot='helper' className='zaions__fs_16'>
-															Member since Sep 18, 2022
-														</ZIonNote>
-													</ZIonItem>
+														placeholder='User Name'
+														label='Account Name'
+														labelPlacement='floating'
+														helperText='Member since Sep 18, 2022'
+													/>
+
 													<ZIonButton
 														className={classNames({
 															'ion-no-margin ion-text-capitalize': true,

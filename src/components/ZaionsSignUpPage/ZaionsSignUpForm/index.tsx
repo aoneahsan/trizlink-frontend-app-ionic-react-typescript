@@ -13,7 +13,6 @@ import {
 	ZIonText,
 	ZIonIcon,
 	ZIonRouterLink,
-	ZIonItem,
 	ZIonInput,
 	ZIonRow,
 	ZIonNote,
@@ -48,6 +47,7 @@ import { UserAuthData } from '@/types/ZaionsApis.type';
 import { ZIonButton } from '@/components/ZIonComponents';
 import { FormikSetErrorsType, resetFormType } from '@/types/ZaionsFormik.type';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Style
 
@@ -233,87 +233,74 @@ const ZaionsSignUpForm: React.FC = (props) => {
 						}) => (
 							<Form>
 								{/* User Name Field */}
-								<ZIonItem
-									className={classNames({
-										'mb-4 ion-item-start-no-padding': true,
-
-										'ion-touched ion-invalid':
-											touched.username && errors.username,
-										'ion-touched ion-valid':
-											touched.username && !errors.username,
-										zaions_item_input_bb:
-											!touched.username ||
-											(touched.username && !errors.username),
-									})}
-								>
-									<ZIonInput
-										name='username'
-										label='Username*'
-										labelPlacement='floating'
-										type='text'
-										onIonChange={handleChange}
-										onIonBlur={handleBlur}
-										value={values.username}
-									/>
-									<ZIonNote slot='error'>{errors.username}</ZIonNote>
-								</ZIonItem>
+								<ZIonInputField
+									inputFieldProps={{
+										label: 'Username*',
+										labelPlacement: 'floating',
+										onIonChange: handleChange,
+										onIonBlur: handleBlur,
+										value: values.username,
+										name: 'username',
+										errorText: errors.username,
+										className: `${classNames({
+											'mb-4': true,
+											'ion-touched ion-invalid':
+												touched.username && errors.username,
+											'ion-touched ion-valid':
+												touched.username && !errors.username,
+										})}`,
+									}}
+								/>
 
 								{/* Email Address Field */}
-								<ZIonItem
-									className={classNames({
-										'mb-4 ion-item-start-no-padding': true,
-
-										'ion-touched ion-invalid':
-											touched.emailAddress && errors.emailAddress,
-										'ion-touched ion-valid':
-											touched.emailAddress && !errors.emailAddress,
-										zaions_item_input_bb:
-											!touched.emailAddress ||
-											(touched.emailAddress && !errors.emailAddress),
-									})}
-								>
-									<ZIonInput
-										label='Email Address*'
-										labelPlacement='floating'
-										name='emailAddress'
-										type='email'
-										onIonChange={handleChange}
-										onIonBlur={handleBlur}
-										value={values.emailAddress}
-									/>
-									<ZIonNote slot='error'>{errors.emailAddress}</ZIonNote>
-								</ZIonItem>
+								<ZIonInputField
+									inputFieldProps={{
+										label: 'Email Address*',
+										labelPlacement: 'floating',
+										onIonChange: handleChange,
+										onIonBlur: handleBlur,
+										value: values.emailAddress,
+										name: 'emailAddress',
+										type: 'email',
+										errorText: errors.emailAddress,
+										className: `${classNames({
+											'mb-4': true,
+											'ion-touched ion-invalid':
+												touched.emailAddress && errors.emailAddress,
+											'ion-touched ion-valid':
+												touched.emailAddress && !errors.emailAddress,
+										})}`,
+									}}
+								/>
 
 								{/* Password Field */}
-								<ZIonItem
-									className={classNames({
-										'mb-4 ion-item-start-no-padding': true,
-
-										'ion-touched ion-invalid':
-											touched.password && errors.password,
-										'ion-touched ion-valid':
-											touched.password && !errors.password,
-										zaions_item_input_bb:
-											!touched.password ||
-											(touched.password && !errors.password),
-									})}
-								>
-									<ZIonInput
-										label='Password*'
-										labelPlacement='floating'
-										name='password'
-										type={
-											zaionsSignUpState.canViewPassword ? 'text' : 'password'
-										}
-										onIonChange={handleChange}
-										onIonBlur={handleBlur}
-										value={values.password}
+								<div className='d-flex ion-align-items-center mb-4'>
+									<ZIonInputField
+										inputFieldProps={{
+											label: 'Password*',
+											labelPlacement: 'floating',
+											onIonChange: handleChange,
+											onIonBlur: handleBlur,
+											value: values.password,
+											name: 'password',
+											type: zaionsSignUpState.canViewPassword
+												? 'text'
+												: 'password',
+											errorText: errors.password,
+											className: `${classNames({
+												'ion-touched ion-invalid':
+													touched.password && errors.password,
+												'ion-touched ion-valid':
+													touched.password && !errors.password,
+											})}`,
+										}}
 									/>
+
 									<ZIonButton
 										slot='end'
 										fill='clear'
 										size='large'
-										className='ion-no-padding'
+										className='ion-no-padding ms-3 zaions__max_content'
 										onClick={() =>
 											setZaionsSignUpState((OldVals) => ({
 												...OldVals,
@@ -330,8 +317,8 @@ const ZaionsSignUpForm: React.FC = (props) => {
 											}
 										/>
 									</ZIonButton>
-									<ZIonNote slot='error'>{errors.password}</ZIonNote>
-								</ZIonItem>
+								</div>
+
 								<ZIonNote className='zaions__w100'>
 									<ZIonRow>
 										<ZIonCol size='6'>
@@ -396,37 +383,31 @@ const ZaionsSignUpForm: React.FC = (props) => {
 								</ZIonNote>
 
 								{/* Password Field */}
-								<ZIonItem
-									className={classNames({
-										'mb-4 ion-item-start-no-padding': true,
-
-										'ion-touched ion-invalid':
-											touched.confirm_password && errors.confirm_password,
-										'ion-touched ion-valid':
-											touched.confirm_password && !errors.confirm_password,
-										zaions_item_input_bb:
-											!touched.confirm_password ||
-											(touched.confirm_password && !errors.confirm_password),
-									})}
-								>
-									<ZIonInput
-										name='confirm_password'
-										type={
-											zaionsSignUpState.canViewConfirmPassword
+								<div className='d-flex ion-align-items-center mb-4'>
+									<ZIonInputField
+										inputFieldProps={{
+											label: 'Confirm Password*',
+											labelPlacement: 'floating',
+											onIonChange: handleChange,
+											onIonBlur: handleBlur,
+											value: values.confirm_password,
+											name: 'confirm_password',
+											type: zaionsSignUpState.canViewPassword
 												? 'text'
-												: 'password'
-										}
-										label='Confirm Password*'
-										labelPlacement='floating'
-										onIonChange={handleChange}
-										onIonBlur={handleBlur}
-										value={values.confirm_password}
+												: 'password',
+											errorText: errors.confirm_password,
+											className: `${classNames({
+												'ion-touched ion-invalid':
+													touched.confirm_password && errors.confirm_password,
+												'ion-touched ion-valid':
+													touched.confirm_password && !errors.confirm_password,
+											})}`,
+										}}
 									/>
 									<ZIonButton
-										slot='end'
 										fill='clear'
 										size='large'
-										className='ion-no-padding'
+										className='ion-no-padding ms-3 zaions__max_content'
 										onClick={() =>
 											setZaionsSignUpState((OldVals) => ({
 												...OldVals,
@@ -443,8 +424,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 											}
 										/>
 									</ZIonButton>
-									<ZIonNote slot='error'>{errors.confirm_password}</ZIonNote>
-								</ZIonItem>
+								</div>
 
 								{/* Submit Button */}
 								<ZIonButton

@@ -10,9 +10,6 @@ import {
 	ZIonButton,
 	ZIonContent,
 	ZIonIcon,
-	ZIonInput,
-	ZIonItem,
-	ZIonNote,
 	ZIonText,
 } from '@/components/ZIonComponents';
 import { Formik } from 'formik';
@@ -41,6 +38,7 @@ import {
 	ZLinkInBioPageEnum,
 	ZLinkInBioRHSComponentEnum,
 } from '@/types/AdminPanel/linkInBioType';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Styles
 
@@ -155,25 +153,25 @@ const ZaionsAddLinkInBioModal: React.FC<{
 					}) => {
 						return (
 							<>
-								<ZIonItem
-									className={classNames({
-										'my-2 mx-2 ion-item-start-no-padding': true,
-										'ion-touched ion-invalid':
-											touched.linkInBioTitle && errors.linkInBioTitle,
-										'ion-touched ion-valid':
-											touched.linkInBioTitle && !errors.linkInBioTitle,
-									})}
-								>
-									<ZIonInput
-										name='linkInBioTitle'
-										label='Link-in-bio title*'
-										labelPlacement='floating'
-										value={values.linkInBioTitle} // the title of the new-link-in-bio
-										onIonChange={handleChange}
-										onIonBlur={handleBlur}
-									/>
-									<ZIonNote slot='error'>{errors.linkInBioTitle}</ZIonNote>
-								</ZIonItem>
+								<ZIonInputField
+									inputFieldProps={{
+										className: classNames({
+											'mt-4 ion-text-start': true,
+											'ion-touched ion-invalid':
+												touched.linkInBioTitle && errors.linkInBioTitle,
+											'ion-touched ion-valid':
+												touched.linkInBioTitle && !errors.linkInBioTitle,
+										}),
+										label: 'Link-in-bio title*',
+										labelPlacement: 'floating',
+										name: 'linkInBioTitle',
+										onIonChange: handleChange,
+										onIonBlur: handleBlur,
+										value: values.linkInBioTitle, // the title of the new-link-in-bio
+										errorText: errors.linkInBioTitle,
+									}}
+								/>
+
 								<ZIonButton
 									expand='block'
 									className='mt-4'
