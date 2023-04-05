@@ -40,6 +40,8 @@ export type ZIonColorType =
 
 export type ZIonModeType = 'ios' | 'md';
 
+export type ZIonSlotType = 'start' | 'end';
+
 export type ZIonTargetType = '_blank' | '_self' | '_parent' | '_top';
 
 export type ZIonRouterDirection = 'back' | 'forward' | 'root';

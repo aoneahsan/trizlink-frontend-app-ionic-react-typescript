@@ -53,14 +53,13 @@ import {
 import CONSTANTS, {
 	BRACKPOINT_MD,
 	BRACKPOINT_SM,
-	DASHBOARD_SM_MENU_CONTENT_ID,
 	PRODUCT_NAME,
 } from '@/utils/constants';
 import { PAGE_MENU } from '@/utils/enums';
 
 /**
  * Type Imports go down
- * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
 	ZLinkIonPanelSettingsSidebarActiveLinkType,
@@ -164,7 +163,7 @@ const ZProfile: React.FC = () => {
 		<>
 			<ZaionsIonPage
 				pageTitle='Dashboard'
-				id={DASHBOARD_SM_MENU_CONTENT_ID}
+				id={CONSTANTS.MENU_IDS.DASHBOARD_SM_MENU_CONTENT_ID}
 				menu={PAGE_MENU.DASHBOARD_PAGE_MENU}
 			>
 				<ZIonSplitPane

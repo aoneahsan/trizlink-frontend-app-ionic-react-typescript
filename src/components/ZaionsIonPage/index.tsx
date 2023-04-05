@@ -11,48 +11,52 @@ import SideBarMenu from '@/navigation/SideBarMenu';
 
 // Global Constants
 import { CONTENT_ID } from '@/utils/constants';
-import ZaionsDashboardResonsiveMenu from '@/navigation/DashboardResponsiveMenu';
+import ZaionsDashboardResponsiveMenu from '@/navigation/DashboardResponsiveMenu';
 import { PAGE_MENU, PAGE_MENU_SIDE } from '@/utils/enums';
+import AdminPanelFoldersSidebarMenu from '@/navigation/AdminPanelFolderSideMenu';
+import AdminPanelShortLinksFolderSideMenu from '@/navigation/AdminPanelShortLinksFolderSideMenu';
 
 // Types
 type ZaionsIonPageType = {
-  children: ReactNode | ReactNode[];
-  className?: string;
-  id?: string;
-  pageTitle?: string;
-  menu?: PAGE_MENU | undefined;
-  menuSide?: PAGE_MENU_SIDE;
+	children: ReactNode | ReactNode[];
+	className?: string;
+	id?: string;
+	pageTitle?: string;
+	menu?: PAGE_MENU | undefined;
+	menuSide?: PAGE_MENU_SIDE;
 };
 
 // Functional Component
 const ZaionsIonPage: React.FC<ZaionsIonPageType> = ({
-  menu,
-  id,
-  children,
-  className,
-  menuSide,
-  pageTitle,
+	menu,
+	id,
+	children,
+	className,
+	menuSide,
+	pageTitle,
 }) => {
-  return (
-    <>
-      {menu === PAGE_MENU.UNAUTHENTICATED_PAGE_MENU ? (
-        <SideBarMenu menuSide={menuSide} />
-      ) : menu === PAGE_MENU.DASHBOARD_PAGE_MENU ? (
-        <ZaionsDashboardResonsiveMenu menuSide={menuSide} />
-      ) : (
-        ''
-      )}
+	return (
+		<>
+			{menu === PAGE_MENU.UNAUTHENTICATED_PAGE_MENU ? (
+				<SideBarMenu menuSide={menuSide} />
+			) : menu === PAGE_MENU.DASHBOARD_PAGE_MENU ? (
+				<ZaionsDashboardResponsiveMenu menuSide={menuSide} />
+			) : menu === PAGE_MENU.ADMIN_PANEL_FOLDERS_MENU ? (
+				<AdminPanelShortLinksFolderSideMenu />
+			) : (
+				''
+			)}
 
-      <IonPage
-        id={id ? id : CONTENT_ID}
-        // className={`${className}`}
-        className={classNames(className)}
-      >
-        <ZaionsRHelmet title={pageTitle} />
-        {children}
-      </IonPage>
-    </>
-  );
+			<IonPage
+				id={id ? id : CONTENT_ID}
+				// className={`${className}`}
+				className={classNames(className)}
+			>
+				<ZaionsRHelmet title={pageTitle} />
+				{children}
+			</IonPage>
+		</>
+	);
 };
 
 export default ZaionsIonPage;

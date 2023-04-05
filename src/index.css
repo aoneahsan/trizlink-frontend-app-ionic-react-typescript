@@ -833,6 +833,11 @@ ion-modal.zaions__modal_w100 {
 	--height: 380px;
 }
 
+/* Popovers */
+.zaions_present_folder_Action_popover_width {
+	--width: 150px;
+}
+
 /* Link-in-bio design-theme-customAppearance & design-block-customAppearance buttons styles */
 .inlineSquare {
 	--border-radius: 0;

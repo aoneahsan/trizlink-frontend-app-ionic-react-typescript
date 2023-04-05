@@ -60,39 +60,39 @@ import { LinkInBioFolderRState } from '@/ZaionsStore/UserDashboard/LinkInBio/lin
  * */
 
 const LinkInBioFoldersHOC: React.FC = () => {
-  const { data: getLinkInBioFoldersData } = useZRQGetRequest<LinkFolderType[]>({
-    _url: API_URL_ENUM.userAccount_LinkInBio_folders_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN],
-  });
+	const { data: getLinkInBioFoldersData } = useZRQGetRequest<LinkFolderType[]>({
+		_url: API_URL_ENUM.userAccount_LinkInBio_folders_create_list,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN],
+	});
 
-  const [linkInBioFoldersData, setLinkInBioFoldersData] = useRecoilState(
-    LinkInBioFolderRState
-  );
+	const [linkInBioFoldersData, setLinkInBioFoldersData] = useRecoilState(
+		LinkInBioFolderRState
+	);
 
-  useEffect(() => {
-    try {
-      if (getLinkInBioFoldersData) {
-        const formattedLinkInBioFoldersData = getLinkInBioFoldersData?.map(
-          (el) => {
-            return { value: el.id, label: el.title };
-          }
-        ) as FolderInterface[];
-        if (formattedLinkInBioFoldersData) {
-          setLinkInBioFoldersData(formattedLinkInBioFoldersData);
-        }
-      }
-    } catch (error) {
-      reportCustomError(error);
-    }
-    // eslint-disable-next-line
-  }, [getLinkInBioFoldersData]);
+	useEffect(() => {
+		try {
+			if (getLinkInBioFoldersData) {
+				const formattedLinkInBioFoldersData = getLinkInBioFoldersData?.map(
+					(el) => {
+						return { value: el.id, label: el.title };
+					}
+				) as FolderInterface[];
+				if (formattedLinkInBioFoldersData) {
+					setLinkInBioFoldersData(formattedLinkInBioFoldersData);
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+		// eslint-disable-next-line
+	}, [getLinkInBioFoldersData]);
 
-  return (
-    <NewLinkFolder
-      _foldersData={linkInBioFoldersData}
-      _state={folderState.LinkInBios}
-    />
-  );
+	return (
+		<NewLinkFolder
+			_foldersData={linkInBioFoldersData}
+			_state={folderState.LinkInBios}
+		/>
+	);
 };
 
 export default LinkInBioFoldersHOC;

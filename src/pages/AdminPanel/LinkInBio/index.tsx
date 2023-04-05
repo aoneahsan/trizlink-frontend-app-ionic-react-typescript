@@ -1031,17 +1031,34 @@ const SearchQueryInputComponent = () => {
 };
 
 const FolderActionsPopoverContent: React.FC = () => {
+	/**
+	 * hook to present folder form modal
+	 */
 	const { presentZIonModal: presentFolderModal } =
 		useZIonModal(ZaionsAddNewFolder);
-	const folderFormState = useRecoilValue(FolderFormState);
+
+	/**
+	 * recoil state which will hold the single folder data (for updating). when user click on edit button in action popover the data of that folder will storing in this state and present as initial value in the update folder form. here we are delete it folder by getting the id from folderFormState
+	 *
+	 */
+	const [folderFormState, setFolderFormState] = useRecoilState(FolderFormState);
+
+	/**
+	 * delete short link folder api.
+	 */
 	const { mutate: deleteLinkInBiosFoldersMutate } = useZRQDeleteRequest(
 		API_URL_ENUM.userAccount_LinkInBio_folders_update_delete,
 		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN]
 	);
+
+	// Custom hooks.
 	const { presentZIonAlert } = useZIonAlert();
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
 
+	/**
+	 * deleteFolderAccount will show the confirm alert before deleting short link folder.
+	 */
 	const deleteFolderAccount = async () => {
 		try {
 			if (folderFormState && folderFormState.id) {
@@ -1072,18 +1089,29 @@ const FolderActionsPopoverContent: React.FC = () => {
 			console.error(error);
 		}
 	};
+
 	/**
-	 *
-	 *
+	 * removeFolderAccount will hit delete short link folder api
 	 */
 	const removeFolderAccount = async () => {
 		await presentZIonLoader('Deleting Api Key...');
 		try {
 			if (folderFormState.id) {
+				// hitting the delete api
 				deleteLinkInBiosFoldersMutate({
 					itemIds: [folderFormState.id],
 					urlDynamicParts: [':folderId'],
 				});
+
+				// setting the folderFormState to initial state because the value of this recoil state is used as the initial values of the short link folder form, when we click on the delete button in popover it will store the value or that folder in this recoil state. because we need it in here for example the id to delete the folder.
+				setFolderFormState((oldVal) => ({
+					...oldVal,
+					id: '',
+					name: '',
+					formMode: FormMode.ADD,
+				}));
+
+				// show success message after deleting
 				showSuccessNotification(`Folder deleted successfully.`);
 			} else {
 				await presentZIonErrorAlert();

@@ -45,7 +45,6 @@ import CONSTANTS, {
 	BRACKPOINT_LG,
 	BRACKPOINT_MD,
 	BRACKPOINT_SM,
-	DASHBOARD_SM_MENU_CONTENT_ID,
 	PRODUCT_NAME,
 } from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
@@ -134,7 +133,7 @@ const ZAccountDetails: React.FC = () => {
 		<>
 			<ZaionsIonPage
 				pageTitle='Setting'
-				id={DASHBOARD_SM_MENU_CONTENT_ID}
+				id={CONSTANTS.MENU_IDS.DASHBOARD_SM_MENU_CONTENT_ID}
 				// if it in lg then the menu will appear
 				menu={!isLgScale ? PAGE_MENU.DASHBOARD_PAGE_MENU : undefined}
 			>

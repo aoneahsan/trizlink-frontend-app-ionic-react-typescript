@@ -2,10 +2,16 @@
 import React from 'react';
 
 // Packages Import
-import { IonCheckbox } from '@ionic/react';
+import { CheckboxChangeEventDetail, IonCheckbox } from '@ionic/react';
 
 // Type
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
+import {
+	ZIonColorType,
+	ZIonModeType,
+	ZIonSlotType,
+} from '@/types/zaionsAppSettings.type';
+import { IonCheckboxCustomEvent } from '@ionic/core/dist/types/components';
+
 type ZIonCheckboxType = {
 	className?: string;
 	checked?: boolean;
@@ -15,8 +21,11 @@ type ZIonCheckboxType = {
 	mode?: ZIonModeType;
 	name?: string;
 	value?: string;
+	slot?: ZIonSlotType;
 	onIonBlur?: (event: Event | CustomEvent<FocusEvent>) => void;
-	onIonChange?: (event: Event | CustomEvent<unknown>) => void;
+	onIonChange?: (
+		event: IonCheckboxCustomEvent<CheckboxChangeEventDetail<unknown>>
+	) => void;
 	onIonFocus?: (event: Event | FocusEvent) => void;
 	onClick?: () => void;
 };

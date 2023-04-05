@@ -1,22 +1,22 @@
 // import { zConsoleError } from '@/utils/helpers';
 // Custom Imports
 import {
-  adrollSvgLogo,
-  adwordsSvgLogo,
-  bingSvgLogo,
-  facebookSvgLogo,
-  googleAnalyticsSvgLogo,
-  googleTagManagerSvgLogo,
-  linkedinSvgLogo,
-  nexusSvgLogo,
-  pinterestSvgLogo,
-  ProductLogo,
-  productSmLogo,
-  quoraSvgLogo,
-  snapchatSvgLogo,
-  tiktokSvgLogo,
-  twitterSvgLogo,
-  vkSvgLogo,
+	adrollSvgLogo,
+	adwordsSvgLogo,
+	bingSvgLogo,
+	facebookSvgLogo,
+	googleAnalyticsSvgLogo,
+	googleTagManagerSvgLogo,
+	linkedinSvgLogo,
+	nexusSvgLogo,
+	pinterestSvgLogo,
+	ProductLogo,
+	productSmLogo,
+	quoraSvgLogo,
+	snapchatSvgLogo,
+	tiktokSvgLogo,
+	twitterSvgLogo,
+	vkSvgLogo,
 } from '@/assets/images';
 import { IonLoaderEnum } from '@/types/AdminPanel/linksType';
 import { ENVS } from '@/utils/envKeys';
@@ -25,61 +25,61 @@ import { ENVS } from '@/utils/envKeys';
 // const ZLinkApiRootUrl = 'https://zlinkbackend.zaions.com/public/api/zlink/v1';
 export const ZLinkApiRootUrl = ENVS.apiUrl;
 export const API_URLS = {
-  login: '/login',
-  logout: '/logout',
-  register: '/register',
-  csrf: '/sanctum/csrf-cookie',
-  delete: '/user/delete',
-  userPixelAccounts_create_list: '/user/pixel-accounts',
-  userAccountUtmTags_create_list: '/user/utm-tag-templates',
-  userAccountFolders_create_list: '/user/folders',
-  shortLinks_create_list: '/user/short-links',
-  userEmbedWidget_create_list: '/user/embedded-scripts',
-  userPixelAccounts_update_delete: '/user/pixel-accounts/:pixelId',
-  userAccountUtmTags_update_delete: '/user/utm-tag-templates/:utmTagId',
-  userAccountFolders_update_delete: '/user/folders/:folderId',
-  userEmbedWidget_update_delete: '/user/embedded-scripts/:embeddedId',
-  shortLinks_update_delete: '/user/short-links/:shortLinkId',
-  FolderShortLinks: '/user/folders/:folderId/short-links',
-  ShortLinks_folders_reorder: '/user/shortLinks/folders/reorder',
-  userAccount_LinkInBio_folders_create_list: '/user/link-in-bio-folders',
-  userAccount_LinkInBio_folders_update_delete: '/user/link-in-bio-folders',
-  linkInBio_create_list: '/user/link-in-bio',
-  linkInBio_update_delete: '/user/link-in-bio/:linkInBioId',
-  linkInBioPreDefinedThemes_create_list: '/user/link-in-bio-themes',
-  linkInBioPreDefinedBlocks_create_list: '/user/link-in-bio-predefined-blocks',
-  linkInBioPreDefinedBlocks_delete_update:
-    '/user/link-in-bio-predefined-blocks/:blockId',
-  linkInBioBlock_create_list: '/user/link-in-bio/:linkInBioId/blocks',
-  linkInBioBlock_delete_update_get:
-    '/user/link-in-bio/:linkInBioId/blocks/:blockId',
-  linInBioBlocks_reorder: '/user/link-in-bio/:linkInBioId/blocks/reorder',
-  linkInBioPreDefinedMusicPlatform_create_list:
-    '/user/link-in-bio-predefined-musicplatforms',
-  linkInBioPreDefinedMusicPlatform_delete_update:
-    '/user/link-in-bio-predefined-musicplatforms/:musicPlatformId',
+	login: '/login',
+	logout: '/logout',
+	register: '/register',
+	csrf: '/sanctum/csrf-cookie',
+	delete: '/user/delete',
+	userPixelAccounts_create_list: '/user/pixel-accounts',
+	userAccountUtmTags_create_list: '/user/utm-tag-templates',
+	userAccountFolders_create_list: '/user/folders',
+	shortLinks_create_list: '/user/short-links',
+	userEmbedWidget_create_list: '/user/embedded-scripts',
+	userPixelAccounts_update_delete: '/user/pixel-accounts/:pixelId',
+	userAccountUtmTags_update_delete: '/user/utm-tag-templates/:utmTagId',
+	userAccountFolders_update_delete: '/user/folders/:folderId',
+	userEmbedWidget_update_delete: '/user/embedded-scripts/:embeddedId',
+	shortLinks_update_delete: '/user/short-links/:shortLinkId',
+	FolderShortLinks: '/user/folders/:folderId/short-links',
+	ShortLinks_folders_reorder: '/user/shortLinks/folders/reorder',
+	userAccount_LinkInBio_folders_create_list: '/user/link-in-bio-folders',
+	userAccount_LinkInBio_folders_update_delete: '/user/link-in-bio-folders',
+	linkInBio_create_list: '/user/link-in-bio',
+	linkInBio_update_delete: '/user/link-in-bio/:linkInBioId',
+	linkInBioPreDefinedThemes_create_list: '/user/link-in-bio-themes',
+	linkInBioPreDefinedBlocks_create_list: '/user/link-in-bio-predefined-blocks',
+	linkInBioPreDefinedBlocks_delete_update:
+		'/user/link-in-bio-predefined-blocks/:blockId',
+	linkInBioBlock_create_list: '/user/link-in-bio/:linkInBioId/blocks',
+	linkInBioBlock_delete_update_get:
+		'/user/link-in-bio/:linkInBioId/blocks/:blockId',
+	linInBioBlocks_reorder: '/user/link-in-bio/:linkInBioId/blocks/reorder',
+	linkInBioPreDefinedMusicPlatform_create_list:
+		'/user/link-in-bio-predefined-musicplatforms',
+	linkInBioPreDefinedMusicPlatform_delete_update:
+		'/user/link-in-bio-predefined-musicplatforms/:musicPlatformId',
 
-  linkInBioPreDefinedMessengerPlatform_create_list:
-    '/user/link-in-bio-predefined-messengerplatforms',
-  linkInBioPreDefinedMessengerPlatform_delete_update:
-    '/user/link-in-bio-predefined-messengerplatforms/:messengerPlatformId',
+	linkInBioPreDefinedMessengerPlatform_create_list:
+		'/user/link-in-bio-predefined-messengerplatforms',
+	linkInBioPreDefinedMessengerPlatform_delete_update:
+		'/user/link-in-bio-predefined-messengerplatforms/:messengerPlatformId',
 
-  linkInBioPreDefinedSocialPlatform_create_list:
-    '/user/link-in-bio-predefined-socialplatforms',
-  linkInBioPreDefinedSocialPlatform_delete_update:
-    '/user/link-in-bio-predefined-messengerplatforms/:socialPlatformId',
+	linkInBioPreDefinedSocialPlatform_create_list:
+		'/user/link-in-bio-predefined-socialplatforms',
+	linkInBioPreDefinedSocialPlatform_delete_update:
+		'/user/link-in-bio-predefined-messengerplatforms/:socialPlatformId',
 
-  linkInBioPreDefinedFormFields_create_list:
-    '/user/link-in-bio-predefined-form-fields',
-  linkInBioPreDefinedFormFields_delete_update:
-    '/user/link-in-bio-predefined-form-fields/:formFieldId',
+	linkInBioPreDefinedFormFields_create_list:
+		'/user/link-in-bio-predefined-form-fields',
+	linkInBioPreDefinedFormFields_delete_update:
+		'/user/link-in-bio-predefined-form-fields/:formFieldId',
 
-  // File
-  getSingleFile: '/file-upload/getSingleFileUrl',
-  uploadSingleFile: '/file-upload/uploadSingleFile',
-  deleteSingleFile: '/file-upload/deleteSingleFile',
-  checkIfSingleFileExists: '/file-upload/checkIfSingleFileExists',
-  uploadFiles: '/file-upload/uploadFiles',
+	// File
+	getSingleFile: '/file-upload/getSingleFileUrl',
+	uploadSingleFile: '/file-upload/uploadSingleFile',
+	deleteSingleFile: '/file-upload/deleteSingleFile',
+	checkIfSingleFileExists: '/file-upload/checkIfSingleFileExists',
+	uploadFiles: '/file-upload/uploadFiles',
 };
 
 // Site
@@ -87,7 +87,7 @@ export const PRODUCT_NAME = 'ZLinks';
 export const PRODUCT_DOMAIN = 'prettylinks.zaions.com';
 export const GenaricExternalURL = 'https://prettylinks.zaions.com';
 export const CurrentProductDetails = {
-  Name: '',
+	Name: '',
 };
 
 // @Medias BrackPoint:
@@ -100,250 +100,254 @@ export const BRACKPOINT_XS = '100%';
 // Side menus
 
 export const CONTENT_ID = 'zaions_main-content';
-export const ADMIN_LINK_PAGE_CONTENT_ID = 'zaions-link-page-menu';
-export const DASHBOARD_SM_MENU_CONTENT_ID =
-  'zaions-dashboard-responsive-menu-content-id';
+
+const MENU_IDS = {
+	CONTENT_ID: 'zaions_main-content',
+	ADMIN_LINK_PAGE_CONTENT_ID: 'zaions-link-page-menu',
+	DASHBOARD_SM_MENU_CONTENT_ID: 'zaions-dashboard-responsive-menu-content-id',
+	ADMIN_PAGE_FOLDERS_MENU_ID: 'admin_page_folders_menu_id',
+};
 
 // Other
 // branch = v1-frontend-dev;
 
 // Pixels Account ID Validation Count
 const PIXEL_ACCOUNTS = {
-  FACEBOOK: {
-    WORD_COUNT: 16,
-    // WORD_COUNT: 2,
-  },
-  GOOGLE_ANALYTICS: {
-    SHOULD_INCLUDE: 'ua', // should be in lower case all the time
-    WORD_COUNT: 12,
-    // WORD_COUNT: 3,
-  },
-  LINKEDINANDBING: {
-    WORD_COUNT: 7,
-    // WORD_COUNT: 3,
-  },
-  TWITTER: {
-    WORD_COUNT: 5,
-  },
-  GOOGLE_ADS: {
-    WORD_COUNT: 9,
-    // WORD_COUNT: 3,
-  },
-  GOOGLE_TAG_MANAGER: {
-    SHOULD_INCLUDE: 'gmt-', // should be in lower case all the time
-    WORD_COUNT: 12,
-    // WORD_COUNT: 6,
-  },
-  QUORA: {
-    WORD_COUNT: 31,
-    // WORD_COUNT: 6,
-  },
-  SNAPCHAT: {
-    WORD_COUNT: 32,
-    // WORD_COUNT: 6,
-  },
-  PINTEREST: {
-    WORD_COUNT: 13,
-    // WORD_COUNT: 6,
-  },
-  TIKTOK: {
-    WORD_COUNT: 17,
-    // WORD_COUNT: 6,
-  },
-  VK: {
-    SHOULD_INCLUDE: 'vk-', // should be in lower case all the time
-    WORD_COUNT: 17,
-    // WORD_COUNT: 6,
-  },
+	FACEBOOK: {
+		WORD_COUNT: 16,
+		// WORD_COUNT: 2,
+	},
+	GOOGLE_ANALYTICS: {
+		SHOULD_INCLUDE: 'ua', // should be in lower case all the time
+		WORD_COUNT: 12,
+		// WORD_COUNT: 3,
+	},
+	LINKEDINANDBING: {
+		WORD_COUNT: 7,
+		// WORD_COUNT: 3,
+	},
+	TWITTER: {
+		WORD_COUNT: 5,
+	},
+	GOOGLE_ADS: {
+		WORD_COUNT: 9,
+		// WORD_COUNT: 3,
+	},
+	GOOGLE_TAG_MANAGER: {
+		SHOULD_INCLUDE: 'gmt-', // should be in lower case all the time
+		WORD_COUNT: 12,
+		// WORD_COUNT: 6,
+	},
+	QUORA: {
+		WORD_COUNT: 31,
+		// WORD_COUNT: 6,
+	},
+	SNAPCHAT: {
+		WORD_COUNT: 32,
+		// WORD_COUNT: 6,
+	},
+	PINTEREST: {
+		WORD_COUNT: 13,
+		// WORD_COUNT: 6,
+	},
+	TIKTOK: {
+		WORD_COUNT: 17,
+		// WORD_COUNT: 6,
+	},
+	VK: {
+		SHOULD_INCLUDE: 'vk-', // should be in lower case all the time
+		WORD_COUNT: 17,
+		// WORD_COUNT: 6,
+	},
 };
 
 const ION_LOADER_DEFAULTS = {
-  animated: true,
-  spinner: IonLoaderEnum.circles, // convert to enum with all values
-  duration: 1500,
+	animated: true,
+	spinner: IonLoaderEnum.circles, // convert to enum with all values
+	duration: 1500,
 };
 
 const ION_TOAST = {
-  TOAST_DURATION: 1500,
+	TOAST_DURATION: 1500,
 };
 export const ZaionsBusinessDetails = {
-  WebsiteUrl: 'https://zaions.com',
+	WebsiteUrl: 'https://zaions.com',
 };
 
 const ZaionsRHelmetDefaults = {
-  title: 'Zaions Url Shortener Web & Mobile App - Zaions',
-  description: 'Zaions Url Shortener Web & Mobile App',
-  keywords: 'zaions1, zaions2',
-  author: 'Ahsan Mahmood',
-  viewport: 'width=device-width, initial-scale=1.0',
-  refresh: '8100',
-  ogTitle: 'Zaions.com',
-  ogType: 'website',
-  ogUrl: ZaionsBusinessDetails.WebsiteUrl,
-  ogImage: ProductLogo,
-  ogDescription: 'Zaions The Group of Projects',
-  ogLocale: 'en_US',
-  ogSiteName: 'Zaions',
-  twitterCard: 'zaions_logo',
-  twitterSite: '@zaions',
-  twitterCreator: '#aoneahsan',
-  twitterTitle: 'Zaions',
-  twitterDescription: ' The Group of Projects',
-  twitterImage: ProductLogo,
-  shortcutIcon: productSmLogo,
-  contentSecurityPolicy:
-    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
-  XUACompatible: 'ie=edge',
-  copyRight: 'Copyright 2021',
-  roboto: 'index,follow',
-  // ...
+	title: 'Zaions Url Shortener Web & Mobile App - Zaions',
+	description: 'Zaions Url Shortener Web & Mobile App',
+	keywords: 'zaions1, zaions2',
+	author: 'Ahsan Mahmood',
+	viewport: 'width=device-width, initial-scale=1.0',
+	refresh: '8100',
+	ogTitle: 'Zaions.com',
+	ogType: 'website',
+	ogUrl: ZaionsBusinessDetails.WebsiteUrl,
+	ogImage: ProductLogo,
+	ogDescription: 'Zaions The Group of Projects',
+	ogLocale: 'en_US',
+	ogSiteName: 'Zaions',
+	twitterCard: 'zaions_logo',
+	twitterSite: '@zaions',
+	twitterCreator: '#aoneahsan',
+	twitterTitle: 'Zaions',
+	twitterDescription: ' The Group of Projects',
+	twitterImage: ProductLogo,
+	shortcutIcon: productSmLogo,
+	contentSecurityPolicy:
+		"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+	XUACompatible: 'ie=edge',
+	copyRight: 'Copyright 2021',
+	roboto: 'index,follow',
+	// ...
 };
 
 const SocialLinks = {
-  twitter: `${ZaionsBusinessDetails.WebsiteUrl}/twitter`,
-  instagram: `${ZaionsBusinessDetails.WebsiteUrl}/instagram`,
-  linkdin: `${ZaionsBusinessDetails.WebsiteUrl}/linkdin`,
+	twitter: `${ZaionsBusinessDetails.WebsiteUrl}/twitter`,
+	instagram: `${ZaionsBusinessDetails.WebsiteUrl}/instagram`,
+	linkdin: `${ZaionsBusinessDetails.WebsiteUrl}/linkdin`,
 };
 
 const DateTime = {
-  iso8601DateTime: 'YYYY-MM-DDTHH:mm:ssZ',
+	iso8601DateTime: 'YYYY-MM-DDTHH:mm:ssZ',
 };
 
 const RouteParams = {
-  editShortLinkIdParam: ':editLinkId',
-  editLinkInBioIdParam: ':editLinkInBioId',
-  editLinkInBioPageParam: ':editLinkInBioPage',
-  editLinkInBioStepParam: ':editLinkInBioStep',
-  folderIdToGetShortLinksOrLinkInBio: ':folderId?',
-  // folderIdToGetShortLinksOrLinkInBio: 'all',
+	editShortLinkIdParam: ':editLinkId',
+	editLinkInBioIdParam: ':editLinkInBioId',
+	editLinkInBioPageParam: ':editLinkInBioPage',
+	editLinkInBioStepParam: ':editLinkInBioStep',
+	folderIdToGetShortLinksOrLinkInBio: ':folderId?',
+	// folderIdToGetShortLinksOrLinkInBio: 'all',
 };
 
 // Default Values
 const DEFAULT_VALUES = {
-  DEFAULT_CUSTOM_DOMAIN: '1',
-  DEFAULT_FOLDER: 'default',
-  ZAIONS_SETTING_SPLIT_PANEL: 'ZAIONS_SETTING_PAGE_PANEL',
-  ZAIONS_SHORT_LINKS_LIST_SPLIT_PANEL: 'ZAIONS_SHORT_LINKS_LIST_SPLIT_PANEL',
-  ZAIONS_DASHBOARD_SPLIT_PANEL: 'ZAIONS_DASHBOARD_PAGE_PANEL',
-  API_TOKEN_PRIMARY_KEY: 'Bearer',
+	DEFAULT_CUSTOM_DOMAIN: '1',
+	DEFAULT_FOLDER: 'default',
+	ZAIONS_SETTING_SPLIT_PANEL: 'ZAIONS_SETTING_PAGE_PANEL',
+	ZAIONS_SHORT_LINKS_LIST_SPLIT_PANEL: 'ZAIONS_SHORT_LINKS_LIST_SPLIT_PANEL',
+	ZAIONS_DASHBOARD_SPLIT_PANEL: 'ZAIONS_DASHBOARD_PAGE_PANEL',
+	API_TOKEN_PRIMARY_KEY: 'Bearer',
 };
 export const LOCALSTORAGE_KEYS = {
-  USERDATA: 'udhsaf38h_3g-23g-c',
-  AUTHTOKEN: 'cewiuh4ggb284ghg',
+	USERDATA: 'udhsaf38h_3g-23g-c',
+	AUTHTOKEN: 'cewiuh4ggb284ghg',
 };
 
 export const Platforms = {
-  facebook: facebookSvgLogo,
-  linkedin: linkedinSvgLogo,
-  twitter: twitterSvgLogo,
-  google_analytics: googleAnalyticsSvgLogo,
-  google_analytics_4: googleAnalyticsSvgLogo,
-  google_ads: adwordsSvgLogo,
-  google_tag_manager: googleTagManagerSvgLogo,
-  quora: quoraSvgLogo,
-  snapchat: snapchatSvgLogo,
-  pinterest: pinterestSvgLogo,
-  bing: bingSvgLogo,
-  adroll: adrollSvgLogo,
-  nexus: nexusSvgLogo,
-  tiktok: tiktokSvgLogo,
-  vk: vkSvgLogo,
+	facebook: facebookSvgLogo,
+	linkedin: linkedinSvgLogo,
+	twitter: twitterSvgLogo,
+	google_analytics: googleAnalyticsSvgLogo,
+	google_analytics_4: googleAnalyticsSvgLogo,
+	google_ads: adwordsSvgLogo,
+	google_tag_manager: googleTagManagerSvgLogo,
+	quora: quoraSvgLogo,
+	snapchat: snapchatSvgLogo,
+	pinterest: pinterestSvgLogo,
+	bing: bingSvgLogo,
+	adroll: adrollSvgLogo,
+	nexus: nexusSvgLogo,
+	tiktok: tiktokSvgLogo,
+	vk: vkSvgLogo,
 };
 
 export const TIMEZONES = [
-  {
-    label: '(GMT +5:30) Bombay, Calcutta, Madras, New Delhi',
-    value: '(GMT +5:30) Bombay, Calcutta, Madras, New Delhi',
-  },
-  {
-    label: '(GMT) Western Europe Time, London, Lisbon, Casablanca',
-    value: '(GMT) Western Europe Time, London, Lisbon, Casablanca',
-  },
-  {
-    label: '(GMT +1:00) Brussels, Copenhagen, Madrid, Paris',
-    value: '(GMT +1:00) Brussels, Copenhagen, Madrid, Paris',
-  },
-  {
-    label: '(GMT +2:00) Kaliningrad, South Africa',
-    value: '(GMT +2:00) Kaliningrad, South Africa',
-  },
-  {
-    label: '(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg',
-    value: '(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg',
-  },
-  { label: '(GMT +3:30) Tehran', value: '(GMT +3:30) Tehran' },
-  {
-    label: '(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi',
-    value: '(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi',
-  },
-  { label: '(GMT +4:30) Kabul', value: '(GMT +4:30) Kabul' },
-  {
-    label: '(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent',
-    value: '(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent',
-  },
-  {
-    label: '(GMT +5:30) Bombay, Calcutta, Madras, New Delhi',
-    value: '(GMT +5:30) Bombay, Calcutta, Madras, New Delhi',
-  },
-  {
-    label: '(GMT +6:00) Almaty, Dhaka, Colombo',
-    value: '(GMT +6:00) Almaty, Dhaka, Colombo',
-  },
-  {
-    label: '(GMT +7:00) Bangkok, Hanoi, Jakarta',
-    value: '(GMT +7:00) Bangkok, Hanoi, Jakarta',
-  },
-  {
-    label: '(GMT +8:00) Beijing, Perth, Singapore, Hong Kong',
-    value: '(GMT +8:00) Beijing, Perth, Singapore, Hong Kong',
-  },
-  {
-    label: '(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk',
-    value: '(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk',
-  },
-  {
-    label: '(GMT +9:30) Adelaide, Darwin',
-    value: '(GMT +9:30) Adelaide, Darwin',
-  },
-  {
-    label: '(GMT +10:00) Eastern Australia, Guam, Vladivostok',
-    value: '(GMT +10:00) Eastern Australia, Guam, Vladivostok',
-  },
-  {
-    label: '(GMT +11:00) Magadan, Solomon Islands, New Caledonia',
-    value: '(GMT +11:00) Magadan, Solomon Islands, New Caledonia',
-  },
-  {
-    label: '(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka',
-    value: '(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka',
-  },
+	{
+		label: '(GMT +5:30) Bombay, Calcutta, Madras, New Delhi',
+		value: '(GMT +5:30) Bombay, Calcutta, Madras, New Delhi',
+	},
+	{
+		label: '(GMT) Western Europe Time, London, Lisbon, Casablanca',
+		value: '(GMT) Western Europe Time, London, Lisbon, Casablanca',
+	},
+	{
+		label: '(GMT +1:00) Brussels, Copenhagen, Madrid, Paris',
+		value: '(GMT +1:00) Brussels, Copenhagen, Madrid, Paris',
+	},
+	{
+		label: '(GMT +2:00) Kaliningrad, South Africa',
+		value: '(GMT +2:00) Kaliningrad, South Africa',
+	},
+	{
+		label: '(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg',
+		value: '(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg',
+	},
+	{ label: '(GMT +3:30) Tehran', value: '(GMT +3:30) Tehran' },
+	{
+		label: '(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi',
+		value: '(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi',
+	},
+	{ label: '(GMT +4:30) Kabul', value: '(GMT +4:30) Kabul' },
+	{
+		label: '(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent',
+		value: '(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent',
+	},
+	{
+		label: '(GMT +5:30) Bombay, Calcutta, Madras, New Delhi',
+		value: '(GMT +5:30) Bombay, Calcutta, Madras, New Delhi',
+	},
+	{
+		label: '(GMT +6:00) Almaty, Dhaka, Colombo',
+		value: '(GMT +6:00) Almaty, Dhaka, Colombo',
+	},
+	{
+		label: '(GMT +7:00) Bangkok, Hanoi, Jakarta',
+		value: '(GMT +7:00) Bangkok, Hanoi, Jakarta',
+	},
+	{
+		label: '(GMT +8:00) Beijing, Perth, Singapore, Hong Kong',
+		value: '(GMT +8:00) Beijing, Perth, Singapore, Hong Kong',
+	},
+	{
+		label: '(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk',
+		value: '(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk',
+	},
+	{
+		label: '(GMT +9:30) Adelaide, Darwin',
+		value: '(GMT +9:30) Adelaide, Darwin',
+	},
+	{
+		label: '(GMT +10:00) Eastern Australia, Guam, Vladivostok',
+		value: '(GMT +10:00) Eastern Australia, Guam, Vladivostok',
+	},
+	{
+		label: '(GMT +11:00) Magadan, Solomon Islands, New Caledonia',
+		value: '(GMT +11:00) Magadan, Solomon Islands, New Caledonia',
+	},
+	{
+		label: '(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka',
+		value: '(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka',
+	},
 ];
 
 // Modal Id's
 export const ZAIONS_MODALS_IDS = {
-  ADD_NEW_EMBED_WIDGETS: 'add-new-embed-widget',
-  ADD_NEW_UTM_TAG: 'add-new-utm-tag-template',
-  ADD_NEW_PIXEL_ID: 'add-new-pixel-account',
-  GENERATE_API_KEY: 'generate-api-key',
+	ADD_NEW_EMBED_WIDGETS: 'add-new-embed-widget',
+	ADD_NEW_UTM_TAG: 'add-new-utm-tag-template',
+	ADD_NEW_PIXEL_ID: 'add-new-pixel-account',
+	GENERATE_API_KEY: 'generate-api-key',
 };
 
 export const NOTIFICATIONS = {
-  MODAL_FORM_ERROR_TOAST: {
-    DURATION: 4000,
-  },
-  ReactToastify: {
-    autoclose: 5000,
-  },
-  ZIonAlerts: {
-    OKAY_BUTTON: {
-      TEXT: 'Okay',
-      ROLE: 'okay_dismiss',
-    },
-    CANCEL_BUTTON: {
-      TEXT: 'Cancel',
-      ROLE: 'cancel_dismiss',
-    },
-  },
+	MODAL_FORM_ERROR_TOAST: {
+		DURATION: 4000,
+	},
+	ReactToastify: {
+		autoclose: 5000,
+	},
+	ZIonAlerts: {
+		OKAY_BUTTON: {
+			TEXT: 'Okay',
+			ROLE: 'okay_dismiss',
+		},
+		CANCEL_BUTTON: {
+			TEXT: 'Cancel',
+			ROLE: 'cancel_dismiss',
+		},
+	},
 };
 
 /**
@@ -356,105 +360,106 @@ export const NOTIFICATIONS = {
  *
  */
 const REACT_QUERY = {
-  QUERIES_KEYS: {
-    PIXEL_ACCOUNT: {
-      MAIN: 'rq-pixel-account-list-key',
-      CREATE: 'rq-pixel-account-create-key',
-      UPDATE: 'rq-pixel-account-update-key',
-      DELETE: 'rq-pixel-account-delete-key',
-      GET: 'rq-pixel-account-get-key',
-    },
-    UTM_TAGS: {
-      MAIN: 'rq-utm-tags-list-key',
-    },
-    EMBED_WIDGET: {
-      MAIN: 'rq-embed-widget-list-key',
-    },
-    SHORT_LINKS: {
-      MAIN: 'rq-short-links-list-key',
-      GET: 'rq-short-link-get-key',
-    },
-    LINK_IN_BIO: {
-      MAIN: 'rq-link-in-bio-links-list-key',
-      GET: 'rq-link-in-bio-link-get-key',
-      BLOCK: {
-        MAIN: 'rq-link-in-bio-block-list-key',
-      },
-      SETTING_TAB: {
-        MAIN: 'rq-link-in-bio-setting-tab-key',
-      },
-    },
-    FOLDER: {
-      MAIN: 'rq-folders-list-key',
-      GET: 'rq-folder-get-key',
-      FOLDER_SHORT_LINKS: 'rq-folder-short-links-key',
-    },
-    LINK_IN_BIO_FOLDER: {
-      MAIN: 'rq-link-in-bio-folders-list-key',
-      GET: 'rq-link-in-bio-folder-get-key',
-      FOLDER_SHORT_LINKS: 'rq-link-in-bio-folder-short-links-key',
-    },
-    LINK_IN_BIO_PRE_DEFINED_THEMES: {
-      MAIN: 'rq-link-in-bio-pre-defined-themes',
-      GET: 'rq-link-in-bio-pre-defined-themes',
-    },
-    LINK_IN_BIO_PRE_DEFINED_BLOCKS: {
-      MAIN: 'rq-link-in-bio-predefined-blocks',
-      GET: 'rq-link-in-bio-predefined-blocks',
-    },
+	QUERIES_KEYS: {
+		PIXEL_ACCOUNT: {
+			MAIN: 'rq-pixel-account-list-key',
+			CREATE: 'rq-pixel-account-create-key',
+			UPDATE: 'rq-pixel-account-update-key',
+			DELETE: 'rq-pixel-account-delete-key',
+			GET: 'rq-pixel-account-get-key',
+		},
+		UTM_TAGS: {
+			MAIN: 'rq-utm-tags-list-key',
+		},
+		EMBED_WIDGET: {
+			MAIN: 'rq-embed-widget-list-key',
+		},
+		SHORT_LINKS: {
+			MAIN: 'rq-short-links-list-key',
+			GET: 'rq-short-link-get-key',
+		},
+		LINK_IN_BIO: {
+			MAIN: 'rq-link-in-bio-links-list-key',
+			GET: 'rq-link-in-bio-link-get-key',
+			BLOCK: {
+				MAIN: 'rq-link-in-bio-block-list-key',
+			},
+			SETTING_TAB: {
+				MAIN: 'rq-link-in-bio-setting-tab-key',
+			},
+		},
+		FOLDER: {
+			MAIN: 'rq-folders-list-key',
+			GET: 'rq-folder-get-key',
+			FOLDER_SHORT_LINKS: 'rq-folder-short-links-key',
+		},
+		LINK_IN_BIO_FOLDER: {
+			MAIN: 'rq-link-in-bio-folders-list-key',
+			GET: 'rq-link-in-bio-folder-get-key',
+			FOLDER_SHORT_LINKS: 'rq-link-in-bio-folder-short-links-key',
+		},
+		LINK_IN_BIO_PRE_DEFINED_THEMES: {
+			MAIN: 'rq-link-in-bio-pre-defined-themes',
+			GET: 'rq-link-in-bio-pre-defined-themes',
+		},
+		LINK_IN_BIO_PRE_DEFINED_BLOCKS: {
+			MAIN: 'rq-link-in-bio-predefined-blocks',
+			GET: 'rq-link-in-bio-predefined-blocks',
+		},
 
-    LINK_IN_BIO_PRE_DEFINED_MUSIC_PLATFORM: {
-      MAIN: 'rq-link-in-bio-predefined-music-platform',
-      GET: 'rq-link-in-bio-predefined-music-platform',
-    },
+		LINK_IN_BIO_PRE_DEFINED_MUSIC_PLATFORM: {
+			MAIN: 'rq-link-in-bio-predefined-music-platform',
+			GET: 'rq-link-in-bio-predefined-music-platform',
+		},
 
-    LINK_IN_BIO_PRE_DEFINED_MESSENGER_PLATFORM: {
-      MAIN: 'rq-link-in-bio-predefined-messenger-platform',
-      GET: 'rq-link-in-bio-predefined-messenger-platform',
-    },
+		LINK_IN_BIO_PRE_DEFINED_MESSENGER_PLATFORM: {
+			MAIN: 'rq-link-in-bio-predefined-messenger-platform',
+			GET: 'rq-link-in-bio-predefined-messenger-platform',
+		},
 
-    LINK_IN_BIO_PRE_FORM_FIELDS: {
-      MAIN: 'rq-link-in-bio-predefined-form-fields',
-      GET: 'rq-link-in-bio-predefined-form-fields',
-    },
+		LINK_IN_BIO_PRE_FORM_FIELDS: {
+			MAIN: 'rq-link-in-bio-predefined-form-fields',
+			GET: 'rq-link-in-bio-predefined-form-fields',
+		},
 
-    LINK_IN_BIO_PRE_DEFINED_SOCIAL_PLATFORM: {
-      MAIN: 'rq-link-in-bio-predefined-social-platform',
-      GET: 'rq-link-in-bio-predefined-social-platform',
-    },
+		LINK_IN_BIO_PRE_DEFINED_SOCIAL_PLATFORM: {
+			MAIN: 'rq-link-in-bio-predefined-social-platform',
+			GET: 'rq-link-in-bio-predefined-social-platform',
+		},
 
-    LINK_IN_BIO_BLOCK: {
-      MAIN: 'rq-link-in-bio-blocks',
-      GET: 'rq-link-in-bio-block',
-    },
-  },
+		LINK_IN_BIO_BLOCK: {
+			MAIN: 'rq-link-in-bio-blocks',
+			GET: 'rq-link-in-bio-block',
+		},
+	},
 };
 
 const LINK_In_BIO = {
-  FORM: {
-    DIRECTION_PRE_CLICKED: 45,
-  },
-  INITIAL_VALUES: {
-    BG_COLOR: '#4176f1',
-    BUTTON_COLOR: '#4176f1',
-    BUTTON_SHADOW_COLOR: '#aab1c4',
-  },
+	FORM: {
+		DIRECTION_PRE_CLICKED: 45,
+	},
+	INITIAL_VALUES: {
+		BG_COLOR: '#4176f1',
+		BUTTON_COLOR: '#4176f1',
+		BUTTON_SHADOW_COLOR: '#aab1c4',
+	},
 };
 
 const CONSTANTS = {
-  PIXEL_ACCOUNTS,
-  ION_LOADER_DEFAULTS,
-  ION_TOAST,
-  NO_VALUE_FOUND: '-',
-  ZaionsRHelmetDefaults,
-  RouteParams,
-  DEFAULT_VALUES,
-  USER_ACCOUNT_DELETE_CONFIRM_KEY: 'DELETE ACCOUNT',
-  GenaricExternalURL,
-  SocialLinks,
-  REACT_QUERY,
-  LINK_In_BIO,
-  DateTime,
+	PIXEL_ACCOUNTS,
+	ION_LOADER_DEFAULTS,
+	ION_TOAST,
+	NO_VALUE_FOUND: '-',
+	ZaionsRHelmetDefaults,
+	RouteParams,
+	DEFAULT_VALUES,
+	USER_ACCOUNT_DELETE_CONFIRM_KEY: 'DELETE ACCOUNT',
+	GenaricExternalURL,
+	SocialLinks,
+	REACT_QUERY,
+	LINK_In_BIO,
+	DateTime,
+	MENU_IDS,
 };
 
 export default CONSTANTS;

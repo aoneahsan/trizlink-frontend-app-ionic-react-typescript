@@ -19,29 +19,25 @@ import ZaionsIonPage from '@/components/ZaionsIonPage';
 import ZLinkIonPanelSidebar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
 import ZLinkDashboardTopBar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
 import {
-  ZIonText,
-  ZIonRow,
-  ZIonGrid,
-  ZIonContent,
-  ZIonSplitPane,
-  ZIonTitle,
-  ZIonImg,
+	ZIonText,
+	ZIonRow,
+	ZIonGrid,
+	ZIonContent,
+	ZIonSplitPane,
+	ZIonTitle,
+	ZIonImg,
 } from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import CONSTANTS, {
-  BRACKPOINT_MD,
-  BRACKPOINT_SM,
-  DASHBOARD_SM_MENU_CONTENT_ID,
-} from '@/utils/constants';
+import CONSTANTS, { BRACKPOINT_MD, BRACKPOINT_SM } from '@/utils/constants';
 import { PAGE_MENU } from '@/utils/enums';
 
 /**
  * Type Imports go down
- * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { ZLinkIonPanelSidebarActiveLinkType } from '@/types/AdminPanel/linksType';
 
@@ -74,70 +70,70 @@ import { ZIonButton } from '@/components/ZIonComponents';
  * */
 
 const ZLinkInBio: React.FC = () => {
-  const isMdScale = useMediaQuery({
-    query: `(min-width: ${BRACKPOINT_MD})`,
-  });
+	const isMdScale = useMediaQuery({
+		query: `(min-width: ${BRACKPOINT_MD})`,
+	});
 
-  const isSmScale = useMediaQuery({
-    query: `(min-width: ${BRACKPOINT_SM})`,
-  });
+	const isSmScale = useMediaQuery({
+		query: `(min-width: ${BRACKPOINT_SM})`,
+	});
 
-  return (
-    <>
-      <ZaionsIonPage
-        pageTitle='Dashboard'
-        id={DASHBOARD_SM_MENU_CONTENT_ID}
-        menu={PAGE_MENU.DASHBOARD_PAGE_MENU}
-      >
-        <ZIonSplitPane
-          when='lg'
-          contentId={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
-        >
-          {/* Side Bar */}
-          <ZLinkIonPanelSidebar
-            activeLink={ZLinkIonPanelSidebarActiveLinkType.linksInBio}
-          />
+	return (
+		<>
+			<ZaionsIonPage
+				pageTitle='Dashboard'
+				id={CONSTANTS.MENU_IDS.DASHBOARD_SM_MENU_CONTENT_ID}
+				menu={PAGE_MENU.DASHBOARD_PAGE_MENU}
+			>
+				<ZIonSplitPane
+					when='lg'
+					contentId={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
+				>
+					{/* Side Bar */}
+					<ZLinkIonPanelSidebar
+						activeLink={ZLinkIonPanelSidebarActiveLinkType.linksInBio}
+					/>
 
-          <div
-            className='ion-page zaionsPaneContent'
-            id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
-          >
-            <ZLinkDashboardTopBar />
-            <ZIonContent className='ion-padding'>
-              <ZIonGrid>
-                <ZIonRow className='ion-align-items-center ion-justify-content-center flex-column mt-3'>
-                  <ZIonImg
-                    src={Intro}
-                    alt='Link in bio Inactive state'
-                    className={classNames({
-                      zaions__w35: isMdScale,
-                      zaions__w60: !isMdScale && isSmScale,
-                      zaions__w100: !isSmScale,
-                    })}
-                  />
-                  <ZIonTitle className='fs-2 fw-bold mb-2 mt-4'>
-                    Showcase your links
-                  </ZIonTitle>
-                  <ZIonText className='fs-5 ion-text-center'>
-                    Display your most important links on one simple page. Then
-                    share <br /> one simple Link-in-bio to get people there.
-                  </ZIonText>
-                  <ZIonButton className='ion-text-capitalize mt-4 '>
-                    <ZIonText className='px-4 fw-bold'>
-                      Create a Link-in-bio
-                    </ZIonText>
-                  </ZIonButton>
-                  <ZIonButton fill='clear' className='mt-3 ion-text-capitalize'>
-                    Learn more
-                  </ZIonButton>
-                </ZIonRow>
-              </ZIonGrid>
-            </ZIonContent>
-          </div>
-        </ZIonSplitPane>
-      </ZaionsIonPage>
-    </>
-  );
+					<div
+						className='ion-page zaionsPaneContent'
+						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
+					>
+						<ZLinkDashboardTopBar />
+						<ZIonContent className='ion-padding'>
+							<ZIonGrid>
+								<ZIonRow className='ion-align-items-center ion-justify-content-center flex-column mt-3'>
+									<ZIonImg
+										src={Intro}
+										alt='Link in bio Inactive state'
+										className={classNames({
+											zaions__w35: isMdScale,
+											zaions__w60: !isMdScale && isSmScale,
+											zaions__w100: !isSmScale,
+										})}
+									/>
+									<ZIonTitle className='fs-2 fw-bold mb-2 mt-4'>
+										Showcase your links
+									</ZIonTitle>
+									<ZIonText className='fs-5 ion-text-center'>
+										Display your most important links on one simple page. Then
+										share <br /> one simple Link-in-bio to get people there.
+									</ZIonText>
+									<ZIonButton className='ion-text-capitalize mt-4 '>
+										<ZIonText className='px-4 fw-bold'>
+											Create a Link-in-bio
+										</ZIonText>
+									</ZIonButton>
+									<ZIonButton fill='clear' className='mt-3 ion-text-capitalize'>
+										Learn more
+									</ZIonButton>
+								</ZIonRow>
+							</ZIonGrid>
+						</ZIonContent>
+					</div>
+				</ZIonSplitPane>
+			</ZaionsIonPage>
+		</>
+	);
 };
 
 export default ZLinkInBio;

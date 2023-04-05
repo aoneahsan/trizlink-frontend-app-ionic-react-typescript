@@ -20,14 +20,14 @@ import ZLinkDashboardTopBar from '@/components/UserDashboard/ZLinkdashboard/ZLDa
 import ZLinkIonPanelSidebar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
 import ZaionsLinkSettingPanel from '@/components/UserDashboard/ZLinkdashboard/ZLinksSettingPanel';
 import {
-  ZIonCol,
-  ZIonText,
-  ZIonRow,
-  ZIonGrid,
-  ZIonContent,
-  ZIonSplitPane,
-  ZIonTitle,
-  ZIonImg,
+	ZIonCol,
+	ZIonText,
+	ZIonRow,
+	ZIonGrid,
+	ZIonContent,
+	ZIonSplitPane,
+	ZIonTitle,
+	ZIonImg,
 } from '@/components/ZIonComponents';
 
 /**
@@ -35,11 +35,10 @@ import {
  * ? Like import of Constant is a global constants import
  * */
 import CONSTANTS, {
-  // BRACKPOINT_LG,
-  BRACKPOINT_MD,
-  BRACKPOINT_SM,
-  DASHBOARD_SM_MENU_CONTENT_ID,
-  PRODUCT_NAME,
+	// BRACKPOINT_LG,
+	BRACKPOINT_MD,
+	BRACKPOINT_SM,
+	PRODUCT_NAME,
 } from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
@@ -48,8 +47,8 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
  * */
 import {
-  ZLinkIonPanelSettingsSidebarActiveLinkType,
-  ZLinkIonPanelSidebarActiveLinkType,
+	ZLinkIonPanelSettingsSidebarActiveLinkType,
+	ZLinkIonPanelSidebarActiveLinkType,
 } from '@/types/AdminPanel/linksType';
 
 /**
@@ -81,89 +80,92 @@ import { ZIonButton } from '@/components/ZIonComponents';
  * */
 
 const ZCSVBulkShortning: React.FC = () => {
-  // Medias Query
-  // const isLgScale = useMediaQuery({
-  // 	query: `(min-width: ${BRACKPOINT_LG})`,
-  // });
+	// Medias Query
+	// const isLgScale = useMediaQuery({
+	// 	query: `(min-width: ${BRACKPOINT_LG})`,
+	// });
 
-  const isMdScale = useMediaQuery({
-    query: `(min-width: ${BRACKPOINT_MD})`,
-  });
-  const isSmScale = useMediaQuery({
-    query: `(min-width: ${BRACKPOINT_SM})`,
-  });
-  return (
-    <>
-      <ZaionsIonPage pageTitle='Setting' id={DASHBOARD_SM_MENU_CONTENT_ID}>
-        <ZIonSplitPane
-          when='lg'
-          contentId={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
-        >
-          {/* Side Bar */}
-          <ZLinkIonPanelSidebar
-            activeLink={ZLinkIonPanelSidebarActiveLinkType.settings}
-          />
+	const isMdScale = useMediaQuery({
+		query: `(min-width: ${BRACKPOINT_MD})`,
+	});
+	const isSmScale = useMediaQuery({
+		query: `(min-width: ${BRACKPOINT_SM})`,
+	});
+	return (
+		<>
+			<ZaionsIonPage
+				pageTitle='Setting'
+				id={CONSTANTS.MENU_IDS.DASHBOARD_SM_MENU_CONTENT_ID}
+			>
+				<ZIonSplitPane
+					when='lg'
+					contentId={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
+				>
+					{/* Side Bar */}
+					<ZLinkIonPanelSidebar
+						activeLink={ZLinkIonPanelSidebarActiveLinkType.settings}
+					/>
 
-          <div
-            className='ion-page zaionsPaneContent'
-            id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
-          >
-            {/* Top bar */}
-            <ZLinkDashboardTopBar />
-            <ZIonContent className='ion-padding'>
-              <ZIonGrid>
-                <ZIonRow>
-                  {/* If it is in md then the setting side panel will be visiable */}
-                  {isMdScale && (
-                    <ZaionsLinkSettingPanel
-                      activeLink={
-                        ZLinkIonPanelSettingsSidebarActiveLinkType.csvBulkShortening
-                      }
-                    />
-                  )}
-                  <ZIonCol>
-                    <ZIonRow className='ion-align-items-center ion-justify-content-center flex-column mt-3'>
-                      <ZIonImg
-                        src={bulkUploadEmptyState}
-                        className={classNames({
-                          zaions__w43: isMdScale,
-                          zaions__w60: !isMdScale && isSmScale,
-                          zaions__w100: !isSmScale,
-                        })}
-                        alt='bulk upload Inactive state'
-                      />
-                      <ZIonTitle className='fs-2 fw-bold mb-2 mt-4'>
-                        Streamline your link creation
-                      </ZIonTitle>
-                      <ZIonText className='fs-5 ion-text-center'>
-                        Create a bunch of {PRODUCT_NAME} links in one sweeping
-                        step with a file upload. <br /> Less work for you. More
-                        time for, well, other work.
-                      </ZIonText>
-                      <ZIonButton
-                        className='ion-text-capitalize mt-5'
-                        routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
-                      >
-                        <ZIonText className='px-4 fw-bold'>
-                          View our plans
-                        </ZIonText>
-                      </ZIonButton>
-                      <ZIonButton
-                        fill='clear'
-                        className='mt-3 ion-text-capitalize'
-                      >
-                        Learn more
-                      </ZIonButton>
-                    </ZIonRow>
-                  </ZIonCol>
-                </ZIonRow>
-              </ZIonGrid>
-            </ZIonContent>
-          </div>
-        </ZIonSplitPane>
-      </ZaionsIonPage>
-    </>
-  );
+					<div
+						className='ion-page zaionsPaneContent'
+						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
+					>
+						{/* Top bar */}
+						<ZLinkDashboardTopBar />
+						<ZIonContent className='ion-padding'>
+							<ZIonGrid>
+								<ZIonRow>
+									{/* If it is in md then the setting side panel will be visiable */}
+									{isMdScale && (
+										<ZaionsLinkSettingPanel
+											activeLink={
+												ZLinkIonPanelSettingsSidebarActiveLinkType.csvBulkShortening
+											}
+										/>
+									)}
+									<ZIonCol>
+										<ZIonRow className='ion-align-items-center ion-justify-content-center flex-column mt-3'>
+											<ZIonImg
+												src={bulkUploadEmptyState}
+												className={classNames({
+													zaions__w43: isMdScale,
+													zaions__w60: !isMdScale && isSmScale,
+													zaions__w100: !isSmScale,
+												})}
+												alt='bulk upload Inactive state'
+											/>
+											<ZIonTitle className='fs-2 fw-bold mb-2 mt-4'>
+												Streamline your link creation
+											</ZIonTitle>
+											<ZIonText className='fs-5 ion-text-center'>
+												Create a bunch of {PRODUCT_NAME} links in one sweeping
+												step with a file upload. <br /> Less work for you. More
+												time for, well, other work.
+											</ZIonText>
+											<ZIonButton
+												className='ion-text-capitalize mt-5'
+												routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
+											>
+												<ZIonText className='px-4 fw-bold'>
+													View our plans
+												</ZIonText>
+											</ZIonButton>
+											<ZIonButton
+												fill='clear'
+												className='mt-3 ion-text-capitalize'
+											>
+												Learn more
+											</ZIonButton>
+										</ZIonRow>
+									</ZIonCol>
+								</ZIonRow>
+							</ZIonGrid>
+						</ZIonContent>
+					</div>
+				</ZIonSplitPane>
+			</ZaionsIonPage>
+		</>
+	);
 };
 
 export default ZCSVBulkShortning;

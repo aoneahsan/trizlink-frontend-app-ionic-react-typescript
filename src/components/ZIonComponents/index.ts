@@ -42,6 +42,7 @@ export { default as ZIonModal } from './ZIonModal';
 export { default as ZIonReorder } from './ZIonReorder';
 export { default as ZIonReorderGroup } from './ZIonReorderGroup';
 export { default as ZIonRange } from './ZIonRange';
+export { default as ZIonChip } from './ZIonChip';
 
 //
 // import {

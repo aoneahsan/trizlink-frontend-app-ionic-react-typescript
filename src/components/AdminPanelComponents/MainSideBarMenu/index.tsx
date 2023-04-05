@@ -101,7 +101,7 @@ const AdminPanelMainSidebarMenu: React.FC = () => {
 
 	return (
 		<ZIonCol
-			size={isCollabes ? '1.9' : '.5'}
+			size={isCollabes ? '2' : '.8'}
 			className='zaions__medium_bg zaions-transition'
 		>
 			<ZIonContent color='dark'>
@@ -230,7 +230,7 @@ const AdminPanelMainSidebarMenu: React.FC = () => {
 						</ZIonCol>
 
 						{/* Chrome extension */}
-						<ZIonCol size='12'>
+						<ZIonCol size='12' title='Extension'>
 							<ZIonButton
 								fill='clear'
 								color='light'
@@ -252,7 +252,7 @@ const AdminPanelMainSidebarMenu: React.FC = () => {
 											'd-none': !isCollabes,
 										})}
 									>
-										Chrome extension
+										Extension
 									</ZIonText>
 								</ZIonText>
 							</ZIonButton>

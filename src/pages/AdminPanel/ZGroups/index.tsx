@@ -17,40 +17,37 @@ import ZaionsIonPage from '@/components/ZaionsIonPage';
 import ZLinkIonPanelSidebar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
 import ZLinkDashboardTopBar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
 import {
-  ZTable,
-  ZTableTHead,
-  ZTableTBody,
-  ZTableRow,
-  ZTableHeadCol,
-  ZTableRowCol,
+	ZTable,
+	ZTableTHead,
+	ZTableTBody,
+	ZTableRow,
+	ZTableHeadCol,
+	ZTableRowCol,
 } from '@/components/InPageComponents/ZaionsTable/table-styled-components.sc';
 
 import {
-  ZIonCol,
-  ZIonText,
-  ZIonRouterLink,
-  ZIonRow,
-  ZIonGrid,
-  ZIonContent,
-  ZIonSplitPane,
+	ZIonCol,
+	ZIonText,
+	ZIonRouterLink,
+	ZIonRow,
+	ZIonGrid,
+	ZIonContent,
+	ZIonSplitPane,
 } from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import CONSTANTS, {
-  BRACKPOINT_MD,
-  DASHBOARD_SM_MENU_CONTENT_ID,
-} from '@/utils/constants';
+import CONSTANTS, { BRACKPOINT_MD } from '@/utils/constants';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
  * */
 import {
-  ZLinkIonPanelSettingsSidebarActiveLinkType,
-  ZLinkIonPanelSidebarActiveLinkType,
+	ZLinkIonPanelSettingsSidebarActiveLinkType,
+	ZLinkIonPanelSidebarActiveLinkType,
 } from '@/types/AdminPanel/linksType';
 
 /**
@@ -85,109 +82,109 @@ import { ZIonButton } from '@/components/ZIonComponents';
  * */
 
 const ZGroups: React.FC = () => {
-  // const isLgScale = useMediaQuery({
-  // 	query: `(min-width: ${BRACKPOINT_LG})`,
-  // });
+	// const isLgScale = useMediaQuery({
+	// 	query: `(min-width: ${BRACKPOINT_LG})`,
+	// });
 
-  const isMdScale = useMediaQuery({
-    query: `(min-width: ${BRACKPOINT_MD})`,
-  });
-  return (
-    <>
-      <ZaionsIonPage
-        pageTitle='Setting'
-        id={DASHBOARD_SM_MENU_CONTENT_ID}
-        menu={PAGE_MENU.DASHBOARD_PAGE_MENU}
-      >
-        <ZIonSplitPane
-          when='lg'
-          contentId={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
-        >
-          {/* Side Bar */}
-          <ZLinkIonPanelSidebar
-            activeLink={ZLinkIonPanelSidebarActiveLinkType.settings}
-          />
+	const isMdScale = useMediaQuery({
+		query: `(min-width: ${BRACKPOINT_MD})`,
+	});
+	return (
+		<>
+			<ZaionsIonPage
+				pageTitle='Setting'
+				id={CONSTANTS.MENU_IDS.DASHBOARD_SM_MENU_CONTENT_ID}
+				menu={PAGE_MENU.DASHBOARD_PAGE_MENU}
+			>
+				<ZIonSplitPane
+					when='lg'
+					contentId={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
+				>
+					{/* Side Bar */}
+					<ZLinkIonPanelSidebar
+						activeLink={ZLinkIonPanelSidebarActiveLinkType.settings}
+					/>
 
-          <div
-            className='ion-page zaionsPaneContent'
-            id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
-          >
-            <ZLinkDashboardTopBar />
-            <ZIonContent className='ion-padding'>
-              <ZIonGrid>
-                <ZIonRow>
-                  {/* If it is in md then the setting side panel will be visiable */}
-                  {isMdScale && (
-                    <ZaionsLinkSettingPanel
-                      activeLink={
-                        ZLinkIonPanelSettingsSidebarActiveLinkType.groups
-                      }
-                    />
-                  )}
-                  <ZIonCol>
-                    <ZIonRow>
-                      <ZIonCol
-                        size='12'
-                        className='d-flex io-align-items-center ion-justify-content-between'
-                      >
-                        <ZIonText>
-                          <h2 className='zaions__fw_900 d-inline-block'>
-                            Groups
-                          </h2>
-                        </ZIonText>
-                        <div
-                          className={classNames({
-                            zaions__cursor_nodrop: true,
-                          })}
-                        >
-                          <ZIonButton
-                            className='ion-text-capitalize'
-                            disabled
-                            color='medium'
-                          >
-                            Add new group
-                          </ZIonButton>
-                        </div>
-                      </ZIonCol>
+					<div
+						className='ion-page zaionsPaneContent'
+						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
+					>
+						<ZLinkDashboardTopBar />
+						<ZIonContent className='ion-padding'>
+							<ZIonGrid>
+								<ZIonRow>
+									{/* If it is in md then the setting side panel will be visiable */}
+									{isMdScale && (
+										<ZaionsLinkSettingPanel
+											activeLink={
+												ZLinkIonPanelSettingsSidebarActiveLinkType.groups
+											}
+										/>
+									)}
+									<ZIonCol>
+										<ZIonRow>
+											<ZIonCol
+												size='12'
+												className='d-flex io-align-items-center ion-justify-content-between'
+											>
+												<ZIonText>
+													<h2 className='zaions__fw_900 d-inline-block'>
+														Groups
+													</h2>
+												</ZIonText>
+												<div
+													className={classNames({
+														zaions__cursor_nodrop: true,
+													})}
+												>
+													<ZIonButton
+														className='ion-text-capitalize'
+														disabled
+														color='medium'
+													>
+														Add new group
+													</ZIonButton>
+												</div>
+											</ZIonCol>
 
-                      <ZIonCol size='12' className='mt-3'>
-                        <ZIonText color='medium'>Using 1 of 1 groups</ZIonText>
-                      </ZIonCol>
+											<ZIonCol size='12' className='mt-3'>
+												<ZIonText color='medium'>Using 1 of 1 groups</ZIonText>
+											</ZIonCol>
 
-                      <ZIonCol size='12'>
-                        <ZTable>
-                          <ZTableTHead>
-                            <ZTableRow>
-                              <ZTableHeadCol>Name</ZTableHeadCol>
-                              <ZTableHeadCol>Created</ZTableHeadCol>
-                              <ZTableHeadCol>Last modified</ZTableHeadCol>
-                            </ZTableRow>
-                          </ZTableTHead>
-                          <ZTableTBody>
-                            <ZTableRow>
-                              <ZTableRowCol>
-                                <ZIonRouterLink>talhairshad</ZIonRouterLink>
-                              </ZTableRowCol>
-                              <ZTableRowCol>
-                                Sep 18, 2022, 2:42 PM GMT+5
-                              </ZTableRowCol>
-                              <ZTableRowCol>
-                                Sep 18, 2022, 2:42 PM GMT+5
-                              </ZTableRowCol>
-                            </ZTableRow>
-                          </ZTableTBody>
-                        </ZTable>
-                      </ZIonCol>
-                    </ZIonRow>
-                  </ZIonCol>
-                </ZIonRow>
-              </ZIonGrid>
-            </ZIonContent>
-          </div>
-        </ZIonSplitPane>
-      </ZaionsIonPage>
-    </>
-  );
+											<ZIonCol size='12'>
+												<ZTable>
+													<ZTableTHead>
+														<ZTableRow>
+															<ZTableHeadCol>Name</ZTableHeadCol>
+															<ZTableHeadCol>Created</ZTableHeadCol>
+															<ZTableHeadCol>Last modified</ZTableHeadCol>
+														</ZTableRow>
+													</ZTableTHead>
+													<ZTableTBody>
+														<ZTableRow>
+															<ZTableRowCol>
+																<ZIonRouterLink>talhairshad</ZIonRouterLink>
+															</ZTableRowCol>
+															<ZTableRowCol>
+																Sep 18, 2022, 2:42 PM GMT+5
+															</ZTableRowCol>
+															<ZTableRowCol>
+																Sep 18, 2022, 2:42 PM GMT+5
+															</ZTableRowCol>
+														</ZTableRow>
+													</ZTableTBody>
+												</ZTable>
+											</ZIonCol>
+										</ZIonRow>
+									</ZIonCol>
+								</ZIonRow>
+							</ZIonGrid>
+						</ZIonContent>
+					</div>
+				</ZIonSplitPane>
+			</ZaionsIonPage>
+		</>
+	);
 };
 
 export default ZGroups;
