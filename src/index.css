@@ -287,6 +287,9 @@ span.new {
 .zaions__light_bg {
 	background-color: var(--ion-color-light);
 }
+.zaions_bg__dark {
+	background: var(--ion-color-dark);
+}
 
 .zaions__dark_bg_opacity_point_7 {
 	background: rgba(var(--ion-color-dark-rgb), 0.7);

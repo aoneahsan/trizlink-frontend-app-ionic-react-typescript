@@ -119,7 +119,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 			side={menuSide || 'end'}
 			menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_FOLDERS_MENU_ID}
 		>
-			<ZIonList lines='none'>
+			<ZIonList lines='none' style={{ overflow: 'scroll' }}>
 				<ZIonItem className='zaions__cursor_pointer mb-2'>
 					<h5 className='fw-bold m-0 p-0'>🔗 All links</h5>
 				</ZIonItem>
@@ -146,7 +146,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 						>
 							<ZIonLabel>Default</ZIonLabel>
 							<ZIonReorder slot='start' className='me-3'>
-								<ZIonIcon icon={appsOutline}></ZIonIcon>
+								<ZIonIcon icon={appsOutline} />
 							</ZIonReorder>
 						</ZIonItem>
 
@@ -197,7 +197,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 											<ZIonIcon icon={ellipsisVertical} />
 										</ZIonButton>
 										<ZIonReorder slot='start' className='me-3'>
-											<ZIonIcon icon={appsOutline}></ZIonIcon>
+											<ZIonIcon icon={appsOutline} />
 										</ZIonReorder>
 									</ZIonItem>
 								))}

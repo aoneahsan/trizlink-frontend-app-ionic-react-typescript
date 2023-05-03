@@ -43,6 +43,7 @@ export { default as ZIonReorder } from './ZIonReorder';
 export { default as ZIonReorderGroup } from './ZIonReorderGroup';
 export { default as ZIonRange } from './ZIonRange';
 export { default as ZIonChip } from './ZIonChip';
+export { default as ZIonButtons } from './ZIonButtons';
 
 //
 // import {

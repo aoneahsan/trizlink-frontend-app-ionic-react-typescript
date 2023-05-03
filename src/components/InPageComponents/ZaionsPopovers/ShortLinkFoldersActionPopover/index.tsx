@@ -30,7 +30,6 @@ import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNe
 import {
 	useZIonAlert,
 	useZIonErrorAlert,
-	useZIonLoading,
 	useZIonModal,
 } from '@/ZaionsHooks/zionic-hooks';
 import { useZRQDeleteRequest } from '@/ZaionsHooks/zreactquery-hooks';
@@ -86,7 +85,6 @@ const ShortLinksFolderActionsPopoverContent: React.FC = () => {
 	// Custom hooks.
 	const { presentZIonAlert } = useZIonAlert();
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
-	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
 
 	/**
 	 * recoil state which will hold the single folder data (for updating). when user click on edit button in action popover the data of that folder will storing in this state and present as initial value in the update folder form. here we are delete it folder by getting the id from folderFormState
@@ -139,7 +137,6 @@ const ShortLinksFolderActionsPopoverContent: React.FC = () => {
 	 * removeFolderAccount will hit delete short link folder api
 	 */
 	const removeFolderAccount = async () => {
-		await presentZIonLoader('Deleting Api Key...');
 		try {
 			if (folderFormState.id) {
 				// hitting the delete api
@@ -161,7 +158,6 @@ const ShortLinksFolderActionsPopoverContent: React.FC = () => {
 			} else {
 				await presentZIonErrorAlert();
 			}
-			await dismissZIonLoader();
 		} catch (error) {
 			console.error(error);
 		}

@@ -174,7 +174,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 
 	return (
 		<AdminPanelFoldersSidebarMenu
-			menuSide={PAGE_MENU_SIDE.END}
+			menuSide={PAGE_MENU_SIDE.START}
 			foldersData={shortLinksFolderState}
 			folderActionHandlerFn={(event: unknown) => {
 				presentFolderActionIonPopover({

@@ -91,9 +91,9 @@ export const CurrentProductDetails = {
 };
 
 // @Medias BrackPoint:
-export const BRACKPOINT_XL = '1140px';
+export const BRACKPOINT_XL = '1200px';
 export const BRACKPOINT_LG = '992px';
-export const BRACKPOINT_MD = '773px';
+export const BRACKPOINT_MD = '768px';
 export const BRACKPOINT_SM = '540px';
 export const BRACKPOINT_XS = '100%';
 

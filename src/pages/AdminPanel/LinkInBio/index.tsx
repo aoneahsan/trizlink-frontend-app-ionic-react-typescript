@@ -277,8 +277,8 @@ const AdminLinkInBiosIndexPage: React.FC = () => {
 							className='zaions-transition'
 							size={
 								ZDashboardState.dashboardMainSidebarIsCollabes.isCollabes
-									? '8.1'
-									: '9'
+									? '8'
+									: '8.8'
 							}
 						>
 							<ZIonGrid className='py-4 zaions__bg_white'>

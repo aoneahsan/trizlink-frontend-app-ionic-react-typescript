@@ -2,7 +2,11 @@
 import React, { useState } from 'react';
 
 // Packages Imports
-import { ItemReorderEventDetail, RefresherEventDetail } from '@ionic/react';
+import {
+	IonSegmentButton,
+	ItemReorderEventDetail,
+	RefresherEventDetail,
+} from '@ionic/react';
 import {
 	menuOutline,
 	appsOutline,
@@ -16,7 +20,12 @@ import {
 	refresh,
 } from 'ionicons/icons';
 import { Dropdown } from 'react-bootstrap';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+	selector,
+	useRecoilState,
+	useRecoilValue,
+	useSetRecoilState,
+} from 'recoil';
 import classNames from 'classnames';
 import { Formik } from 'formik';
 import dayjs from 'dayjs';
@@ -42,6 +51,7 @@ import {
 	ZIonReorder,
 	ZIonReorderGroup,
 	ZIonCheckbox,
+	ZIonButtons,
 } from '@/components/ZIonComponents';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import ZRCheckbox from '@/components/CustomComponents/ZRCheckbox';
@@ -88,6 +98,8 @@ import { reportCustomError } from '@/utils/customErrorType';
 
 // Styles
 import classes from './styles.module.css';
+import ZIonSegment from '@/components/ZIonComponents/ZIonSegment';
+import ZIonSegmentButton from '@/components/ZIonComponents/ZIonSegmentButton';
 
 const ShortLinksTimeRangeFilterPopover = () => {
 	const [shortLinksFilterOptions, setShortLinksFilterOptions] = useRecoilState(
@@ -787,7 +799,7 @@ const AdminLinksIndexPage: React.FC = () => {
 				</ZIonRefresher>
 				<ZIonGrid className='ion-no-padding zaions_h100'>
 					<ZIonRow className='zaions_h100'>
-						<AdminPanelMainSidebarMenu />
+						{isLgScale && <AdminPanelMainSidebarMenu />}
 						{/* Folders Side Menu */}
 						{isLgScale && (
 							<ZIonCol
@@ -928,8 +940,139 @@ const AdminLinksIndexPage: React.FC = () => {
 						)}
 
 						<ZIonCol className='zaions-transition'>
-							<ZIonGrid className='py-4 zaions__bg_white'>
-								<ZIonRow className='px-3 ion-align-items-center'>
+							<ZIonGrid className='pb-2 zaions__bg_white ion-no-padding'>
+								{!isLgScale && (
+									<ZIonRow className='mb-5 ion-align-items-center zaions__light_bg'>
+										<ZIonCol size='12' className='mt-1'>
+											<ZIonSegment
+												scrollable={true}
+												value={'short-links'}
+												// color='secondary'
+											>
+												{/* Short Links */}
+												<ZIonSegmentButton
+													value='short-links'
+													className='text-transform-initial'
+													onClick={() => {
+														zNavigatePushRoute(
+															replaceParams(
+																ZaionsRoutes.AdminPanel
+																	.ZaionsAdminLinkIndexPageRoute,
+																CONSTANTS.RouteParams
+																	.folderIdToGetShortLinksOrLinkInBio,
+																'all'
+															)
+														);
+													}}
+												>
+													Short links
+												</ZIonSegmentButton>
+
+												{/* Link-in-bio */}
+												<ZIonSegmentButton
+													value='link-in-bio'
+													className='text-transform-initial'
+													onClick={() => {
+														zNavigatePushRoute(
+															replaceParams(
+																ZaionsRoutes.AdminPanel.ZaionsDashboard
+																	.ZLinkInBio,
+																CONSTANTS.RouteParams
+																	.folderIdToGetShortLinksOrLinkInBio,
+																'all'
+															)
+														);
+													}}
+												>
+													Link-in-bio
+												</ZIonSegmentButton>
+
+												{/* Extension */}
+												<ZIonSegmentButton
+													value='extension'
+													className='text-transform-initial'
+													onClick={() => {
+														zNavigatePushRoute(
+															replaceParams(
+																ZaionsRoutes.AdminPanel
+																	.ZaionsAdminLinkIndexPageRoute,
+																CONSTANTS.RouteParams
+																	.folderIdToGetShortLinksOrLinkInBio,
+																'all'
+															)
+														);
+													}}
+												>
+													Extension
+												</ZIonSegmentButton>
+
+												{/* Integrations */}
+												<ZIonSegmentButton
+													value='integrations'
+													className='text-transform-initial'
+													onClick={() => {
+														zNavigatePushRoute(
+															replaceParams(
+																ZaionsRoutes.AdminPanel
+																	.ZaionsAdminLinkIndexPageRoute,
+																CONSTANTS.RouteParams
+																	.folderIdToGetShortLinksOrLinkInBio,
+																'all'
+															)
+														);
+													}}
+												>
+													Integrations
+												</ZIonSegmentButton>
+
+												{/* Help center */}
+												<ZIonSegmentButton
+													value='help-center'
+													className='text-transform-initial'
+													onClick={() => {
+														zNavigatePushRoute(
+															replaceParams(
+																ZaionsRoutes.AdminPanel
+																	.ZaionsAdminLinkIndexPageRoute,
+																CONSTANTS.RouteParams
+																	.folderIdToGetShortLinksOrLinkInBio,
+																'all'
+															)
+														);
+													}}
+												>
+													Help center
+												</ZIonSegmentButton>
+
+												{/* Settings */}
+												<ZIonSegmentButton
+													value='settings'
+													className='text-transform-initial'
+													onClick={() => {
+														zNavigatePushRoute(
+															replaceParams(
+																ZaionsRoutes.AdminPanel
+																	.ZaionsAdminLinkIndexPageRoute,
+																CONSTANTS.RouteParams
+																	.folderIdToGetShortLinksOrLinkInBio,
+																'all'
+															)
+														);
+													}}
+												>
+													Settings
+												</ZIonSegmentButton>
+											</ZIonSegment>
+										</ZIonCol>
+									</ZIonRow>
+								)}
+
+								<ZIonRow
+									className={classNames({
+										'px-3 ion-align-items-center': true,
+										'mt-4': isLgScale,
+									})}
+								>
 									<ZIonCol>
 										<ZIonText
 											className={classNames({
@@ -974,7 +1117,7 @@ const AdminLinksIndexPage: React.FC = () => {
 												menu={CONSTANTS.MENU_IDS.ADMIN_PAGE_FOLDERS_MENU_ID}
 											>
 												<ZIonButton
-													className={classNames({
+													className={classNames(classes['open-folder-menu-button'], {
 														'text-transform-initial': true,
 														'ion-margin-start': !isLgScale,
 														'mt-4 ms-0': !isMdScale,
@@ -983,7 +1126,7 @@ const AdminLinksIndexPage: React.FC = () => {
 													// menu={CONSTANTS.MENU_IDS.ADMIN_PAGE_FOLDERS_MENU_ID}
 													// autoHide={false}
 												>
-													Open Folders Menu
+													Open folders menu
 												</ZIonButton>
 											</ZIonMenuToggle>
 										</ZIonCol>
@@ -991,7 +1134,7 @@ const AdminLinksIndexPage: React.FC = () => {
 								</ZIonRow>
 							</ZIonGrid>
 
-							<ZIonGrid className='my-5'>
+							<ZIonGrid className='mt-3 mb-5'>
 								<ZIonRow className='py-4 px-3 zaions__bg_white rounded ion-align-items-center'>
 									<ZIonCol
 										sizeXl='4'
@@ -1010,9 +1153,69 @@ const AdminLinksIndexPage: React.FC = () => {
 												'row-gap-1-rem': !isLgScale,
 											})}
 										>
-											<ZIonCol
+											<ZIonButtons
+												className={classNames({
+													'w-100': true,
+													'ion-justify-content-between': !isXlScale,
+													'ion-justify-content-end gap-3': isXlScale,
+													'd-block': !isSmScale,
+												})}
+											>
+												<ZIonButton
+													id='dropdown-basic'
+													fill='outline'
+													color='primary'
+													expand={!isSmScale ? 'block' : undefined}
+													className={classNames({
+														'my-2': true,
+													})}
+												>
+													Export data's
+												</ZIonButton>
+
+												<ZIonButton
+													fill='outline'
+													color='primary'
+													expand={!isSmScale ? 'block' : undefined}
+													className={classNames({
+														'my-2': true,
+													})}
+												>
+													Bulk Import
+												</ZIonButton>
+
+												<ZIonButton
+													color='primary'
+													fill='solid'
+													className={classNames({
+														'my-2': true,
+													})}
+													expand={!isSmScale ? 'block' : undefined}
+													onClick={() =>
+														setNewShortLinkFormState((_) => ({
+															folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
+															shortUrl: {
+																domain:
+																	CONSTANTS.DEFAULT_VALUES
+																		.DEFAULT_CUSTOM_DOMAIN,
+															},
+															type: messengerPlatformsBlockEnum.link,
+															pixelIds: [],
+															tags: [],
+															formMode: FormMode.ADD,
+														}))
+													}
+													routerLink={
+														ZaionsRoutes.AdminPanel
+															.ZaionsAdminCreateNewLinkPageRoute
+													}
+												>
+													Create a new link
+												</ZIonButton>
+											</ZIonButtons>
+											{/* <ZIonCol
 												sizeXl='max-content'
-												sizeSm='3'
+												sizeSm='4'
 												sizeXs='6'
 												className={classNames({
 													'ion-text-end': isXlScale,
@@ -1049,7 +1252,7 @@ const AdminLinksIndexPage: React.FC = () => {
 
 											<ZIonCol
 												sizeXl='max-content'
-												sizeSm='3'
+												sizeSm='4'
 												sizeXs='6'
 												className={classNames({
 													'ion-text-end': isXlScale,
@@ -1068,7 +1271,7 @@ const AdminLinksIndexPage: React.FC = () => {
 
 											<ZIonCol
 												sizeXl='max-content'
-												sizeSm='3'
+												sizeSm='4'
 												sizeXs='6'
 												className={classNames({
 													'ion-text-end': isXlScale,
@@ -1098,7 +1301,7 @@ const AdminLinksIndexPage: React.FC = () => {
 												>
 													Create a new link
 												</ZIonButton>
-											</ZIonCol>
+											</ZIonCol> */}
 										</ZIonRow>
 									</ZIonCol>
 								</ZIonRow>
@@ -1114,11 +1317,12 @@ const AdminLinksIndexPage: React.FC = () => {
 											</h4>
 										</ZIonText>
 									</ZIonCol>
+
 									<ZIonCol
 										className={classNames({
 											'd-flex': true,
 											'justify-content-end': isXlScale,
-											'justify-content-between mt-4': !isXlScale,
+											'justify-content-between mt-2': !isXlScale,
 										})}
 										sizeXl='10'
 										size='12'
@@ -1129,21 +1333,21 @@ const AdminLinksIndexPage: React.FC = () => {
 												'row-gap-1-rem': !isLgScale,
 											})}
 										>
-											{/* Filter by days */}
-											<ZIonCol
-												sizeXl='max-content'
-												sizeSm='3'
-												sizeXs='6'
+											<ZIonButtons
 												className={classNames({
-													'ion-text-end': isXlScale,
-													'ion-text-start': !isXlScale,
+													'w-100': true,
+													'ion-justify-content-between': !isXlScale,
+													'ion-justify-content-end gap-3': isXlScale,
+													'd-block': !isMdScale,
 												})}
 											>
+												{/* Filter by days */}
 												<ZIonButton
 													fill='outline'
+													color='primary'
+													expand={!isMdScale ? 'block' : undefined}
 													className={classNames({
-														// 'me-3 ms-auto': isXlScale,
-														'me-1': !isXlScale,
+														'my-2': true,
 													})}
 													onClick={(event: unknown) => {
 														presentShortLinkTimeFilterModal({
@@ -1161,7 +1365,7 @@ const AdminLinksIndexPage: React.FC = () => {
 														});
 													}}
 												>
-													<ZIonIcon slot='start' icon={calendar}></ZIonIcon>
+													<ZIonIcon slot='start' icon={calendar} />
 													{shortLinksFilterOptions.timeFilter.daysToSubtract ===
 													TimeFilterEnum.allTime
 														? 'All Times'
@@ -1185,23 +1389,14 @@ const AdminLinksIndexPage: React.FC = () => {
 														? 'Custom Range'
 														: 'All Time'}
 												</ZIonButton>
-											</ZIonCol>
 
-											{/* Filter by tags */}
-											<ZIonCol
-												sizeXl='max-content'
-												sizeSm='3'
-												sizeXs='6'
-												className={classNames({
-													'ion-text-end': isXlScale,
-													'ion-text-start': !isXlScale,
-												})}
-											>
+												{/* Filter by tags */}
 												<ZIonButton
 													fill='outline'
+													color='primary'
+													expand={!isMdScale ? 'block' : undefined}
 													className={classNames({
-														// 'me-3 ms-auto': isXlScale,
-														'me-1': !isXlScale,
+														'my-2': true,
 													})}
 													onClick={(event: unknown) => {
 														presentShortLinkTagsFilterModal({
@@ -1212,10 +1407,7 @@ const AdminLinksIndexPage: React.FC = () => {
 														});
 													}}
 												>
-													<ZIonIcon
-														slot='start'
-														icon={pricetagOutline}
-													></ZIonIcon>
+													<ZIonIcon slot='start' icon={pricetagOutline} />
 													{shortLinksFilterOptions.tags
 														? shortLinksFilterOptions.tags?.length === 1
 															? shortLinksFilterOptions.tags[0]
@@ -1224,23 +1416,14 @@ const AdminLinksIndexPage: React.FC = () => {
 															: 'No values'
 														: 'No values'}
 												</ZIonButton>
-											</ZIonCol>
 
-											<ZIonCol
-												sizeXl='max-content'
-												sizeSm='3'
-												sizeXs='6'
-												className={classNames({
-													'ion-text-end': isXlScale,
-													'ion-text-start': !isXlScale,
-												})}
-											>
 												{/* Filter by Domains */}
 												<ZIonButton
 													fill='outline'
+													color='primary'
+													expand={!isMdScale ? 'block' : undefined}
 													className={classNames({
-														// 'me-3 ms-auto': isXlScale,
-														'me-1': !isXlScale,
+														'my-2': true,
 													})}
 													onClick={(event: unknown) => {
 														presentShortLinkDomainsFilterModal({
@@ -1251,10 +1434,7 @@ const AdminLinksIndexPage: React.FC = () => {
 														});
 													}}
 												>
-													<ZIonIcon
-														slot='start'
-														icon={businessOutline}
-													></ZIonIcon>
+													<ZIonIcon slot='start' icon={businessOutline} />
 													{shortLinksFilterOptions.domains
 														? shortLinksFilterOptions.domains?.length === 1
 															? shortLinksFilterOptions.domains[0]
@@ -1263,44 +1443,27 @@ const AdminLinksIndexPage: React.FC = () => {
 															: 'No values'
 														: 'No values'}
 												</ZIonButton>
-											</ZIonCol>
 
-											{/* Filter by Columns */}
-											<ZIonCol
-												sizeXl='max-content'
-												sizeSm='3'
-												sizeXs='6'
-												className={classNames({
-													'ion-text-end': isXlScale,
-													'ion-text-start': !isXlScale,
-												})}
-											>
+												{/* Filter by Columns */}
 												<ZIonButton
 													fill='outline'
+													color='primary'
+													expand={!isMdScale ? 'block' : undefined}
 													className={classNames({
-														// 'me-3 ms-auto': isXlScale,
-														'me-1': !isXlScale,
+														'my-2': true,
 													})}
 												>
 													<ZIonIcon slot='start' icon={menuOutline}></ZIonIcon>7
 													Columns
 												</ZIonButton>
-											</ZIonCol>
 
-											{/* Refetch data button */}
-											<ZIonCol
-												sizeXl='max-content'
-												sizeSm='3'
-												sizeXs='6'
-												className={classNames({
-													'ion-text-end': isXlScale,
-													'ion-text-start': !isXlScale,
-												})}
-											>
+												{/* Refetch data button */}
 												<ZIonButton
+													color='primary'
 													fill='outline'
+													expand={!isMdScale ? 'block' : undefined}
 													className={classNames({
-														// 'ms-auto': isXlScale,
+														'my-2': true,
 													})}
 													onClick={() => {
 														void invalidedShortLinksQuery();
@@ -1309,7 +1472,7 @@ const AdminLinksIndexPage: React.FC = () => {
 													<ZIonIcon slot='start' icon={refresh} />
 													Refetch
 												</ZIonButton>
-											</ZIonCol>
+											</ZIonButtons>
 										</ZIonRow>
 									</ZIonCol>
 								</ZIonRow>
