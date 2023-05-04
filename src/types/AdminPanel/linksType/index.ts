@@ -245,6 +245,11 @@ export type LinkFolderType = {
 	icon?: string;
 };
 
+// label?: string;
+// value?: string;
+// createAt?: string;
+// updateAt?: string;
+
 export type ShortLinkType = {
 	id?: string;
 

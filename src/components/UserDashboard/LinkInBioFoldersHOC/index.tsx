@@ -36,7 +36,7 @@ import { folderState } from '@/types/AdminPanel/index.type';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { LinkInBioFolderRState } from '@/ZaionsStore/UserDashboard/LinkInBio/linkInBioFoldersState.recoil';
+import { LinkInBioFolderFormattedRState } from '@/ZaionsStore/UserDashboard/LinkInBio/linkInBioFoldersState.recoil';
 
 /**
  * Style files Imports go down
@@ -66,7 +66,7 @@ const LinkInBioFoldersHOC: React.FC = () => {
 	});
 
 	const [linkInBioFoldersData, setLinkInBioFoldersData] = useRecoilState(
-		LinkInBioFolderRState
+		LinkInBioFolderFormattedRState
 	);
 
 	useEffect(() => {

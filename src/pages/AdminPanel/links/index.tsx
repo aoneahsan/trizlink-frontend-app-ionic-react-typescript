@@ -791,7 +791,7 @@ const AdminLinksIndexPage: React.FC = () => {
 			pageTitle='Zaions Short Links Page'
 			id={CONSTANTS.MENU_IDS.ADMIN_PAGE_FOLDERS_MENU_ID}
 			menu={PAGE_MENU.ADMIN_PANEL_FOLDERS_MENU}
-			menuSide={PAGE_MENU_SIDE.END}
+			menuSide={PAGE_MENU_SIDE.START}
 		>
 			<ZIonContent>
 				<ZIonRefresher onIonRefresh={(event) => void handleRefresh(event)}>

@@ -53,7 +53,7 @@ export const API_URLS = {
 	linkInBioBlock_create_list: '/user/link-in-bio/:linkInBioId/blocks',
 	linkInBioBlock_delete_update_get:
 		'/user/link-in-bio/:linkInBioId/blocks/:blockId',
-	linInBioBlocks_reorder: '/user/link-in-bio/:linkInBioId/blocks/reorder',
+	linkInBioBlocks_reorder: '/user/link-in-bio/:linkInBioId/blocks/reorder',
 	linkInBioPreDefinedMusicPlatform_create_list:
 		'/user/link-in-bio-predefined-musicplatforms',
 	linkInBioPreDefinedMusicPlatform_delete_update:

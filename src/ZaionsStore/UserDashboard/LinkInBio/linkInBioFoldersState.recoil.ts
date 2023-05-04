@@ -3,11 +3,16 @@ import { atom } from 'recoil';
 
 // Custom
 // Type
-import { FolderInterface } from '@/types/AdminPanel/linksType';
+import { FolderInterface, LinkFolderType } from '@/types/AdminPanel/linksType';
 
 // Data
 
-export const LinkInBioFolderRState = atom<FolderInterface[]>({
-  key: 'LinkInBioFolderRState_key',
-  default: [],
+export const LinkInBioFolderFormattedRState = atom<FolderInterface[]>({
+	key: 'LinkInBioFolderFormattedRState_key',
+	default: [],
+});
+
+export const LinkInBioFolderRState = atom<LinkFolderType[]>({
+	key: 'LinkInBioFolderRState_key',
+	default: [],
 });

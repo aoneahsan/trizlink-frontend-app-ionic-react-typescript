@@ -5,10 +5,10 @@ import { atom } from 'recoil';
 // Types
 import { FolderInterface } from '@/types/AdminPanel/linksType';
 
-// Datas
+// Data
 import { FoldersData } from '@/data/UserDashboard/Folders/index.data';
 
 export const FolderState = atom<FolderInterface[]>({
-  key: 'FolderState_Key',
-  default: FoldersData,
+	key: 'FolderState_Key',
+	default: FoldersData,
 });

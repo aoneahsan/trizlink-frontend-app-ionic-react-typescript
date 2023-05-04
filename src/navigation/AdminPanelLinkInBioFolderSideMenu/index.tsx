@@ -16,7 +16,7 @@ import { useRecoilState } from 'recoil';
  * ? Like import of custom components is a custom import
  * */
 import AdminPanelFoldersSidebarMenu from '@/navigation/AdminPanelFolderSideMenu';
-import ShortLinksFolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/ShortLinkFoldersActionPopover';
+import LinksInBioFolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/LinkInBioFoldersActionPopover';
 
 /**
  * Custom Hooks Imports go down
@@ -49,7 +49,7 @@ import { folderState } from '@/types/AdminPanel/index.type';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { ShortLinksFolderRStateAtom } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinksFoldersState.recoil';
+import { LinkInBioFolderRState } from '@/ZaionsStore/UserDashboard/LinkInBio/linkInBioFoldersState.recoil';
 
 /**
  * Style files Imports go down
@@ -85,11 +85,11 @@ const AdminPanelLinkInBioFolderSideMenu: React.FC = () => {
 	});
 
 	const { presentZIonPopover: presentFolderActionIonPopover } = useZIonPopover(
-		ShortLinksFolderActionsPopoverContent
+		LinksInBioFolderActionsPopoverContent
 	);
 
-	const [shortLinksFolderState, setShortLinksFolderState] = useRecoilState(
-		ShortLinksFolderRStateAtom
+	const [linkInBioFolderState, setLinkInBioFolderState] = useRecoilState(
+		LinkInBioFolderRState
 	);
 
 	const { validateRequestResponse } = useZValidateRequestResponse();
@@ -123,20 +123,20 @@ const AdminPanelLinkInBioFolderSideMenu: React.FC = () => {
 
 	// Getting short-links folders data from backend
 	const { data: _foldersData } = useZRQGetRequest<LinkFolderType[]>({
-		_url: API_URL_ENUM.userAccountFolders_create_list,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
+		_url: API_URL_ENUM.userAccount_LinkInBio_folders_create_list,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN],
 	});
 
 	// Update shortLinks folders reorder API
 	const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
-		_url: API_URL_ENUM.ShortLinks_folders_reorder,
+		_url: API_URL_ENUM.linkInBioBlocks_reorder,
 		_queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
 	});
 
 	useEffect(() => {
 		try {
 			if (_foldersData) {
-				setShortLinksFolderState(_foldersData);
+				setLinkInBioFolderState(_foldersData);
 			}
 		} catch (error) {
 			reportCustomError(error);
@@ -174,8 +174,8 @@ const AdminPanelLinkInBioFolderSideMenu: React.FC = () => {
 
 	return (
 		<AdminPanelFoldersSidebarMenu
-			menuSide={PAGE_MENU_SIDE.END}
-			foldersData={shortLinksFolderState}
+			menuSide={PAGE_MENU_SIDE.START}
+			foldersData={linkInBioFolderState}
 			folderActionHandlerFn={(event: unknown) => {
 				presentFolderActionIonPopover({
 					_event: event as Event,

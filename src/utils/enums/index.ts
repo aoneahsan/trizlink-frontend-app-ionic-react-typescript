@@ -74,7 +74,7 @@ export enum API_URL_ENUM {
 	linkInBioPreDefinedFormFields_create_list = 'linkInBioPreDefinedFormFields_create_list',
 	linkInBioPreDefinedFormFields_delete_update = 'linkInBioPreDefinedFormFields_delete_update',
 
-	linInBioBlocks_reorder = 'linInBioBlocks_reorder',
+	linkInBioBlocks_reorder = 'linkInBioBlocks_reorder',
 
 	// File Upload Routes
 	getSingleFile = 'getSingleFile',
