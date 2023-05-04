@@ -1,153 +1,163 @@
 import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
-import { atom, selector } from 'recoil';
+import { atom, selector, atomFamily } from 'recoil';
 
 // Data
 // import { ZaionsShortLinkData } from '@/data/UserDashboard/LinkInBiosData';
 
 import {
-  ShortLinkFilterOptionsInterface,
-  TimeFilterEnum,
+	ShortLinkFilterOptionsInterface,
+	TimeFilterEnum,
 } from '@/types/AdminPanel/linksType';
 
 export const LinkInBiosRState = atom<LinkInBioType[] | undefined>({
-  key: 'LinkInBiosRState_key',
-  default: [],
+	key: 'LinkInBiosRState_key',
+	default: [],
 });
 
 export const LinkInBiosFilterOptionsRState =
-  atom<ShortLinkFilterOptionsInterface>({
-    key: 'LinkInBiosFilterOptions_key',
-    default: {
-      timeFilter: { daysToSubtract: TimeFilterEnum.allTime },
-      tags: [],
-      folderId: 'all',
-    },
-  });
+	atom<ShortLinkFilterOptionsInterface>({
+		key: 'LinkInBiosFilterOptions_key',
+		default: {
+			timeFilter: { daysToSubtract: TimeFilterEnum.allTime },
+			tags: [],
+			folderId: 'all',
+		},
+	});
 
 const toLocaleStringOptions: Intl.DateTimeFormatOptions = {
-  weekday: 'short',
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
+	weekday: 'short',
+	month: 'short',
+	day: 'numeric',
+	year: 'numeric',
 };
 
 export const FilteredLinkInBioLinksData = selector<LinkInBioType[] | undefined>(
-  {
-    key: 'FilteredLinkInBioLinksData_key',
-    get: ({ get }) => {
-      // Variables
-      const _allLinksData = get(LinkInBiosRState);
-      const _filterOptions = get(LinkInBiosFilterOptionsRState);
-      let _filterLinksData: LinkInBioType[] | undefined = _allLinksData;
-      // check's
-      if (_allLinksData?.length) {
-        if (_filterOptions.folderId && _filterOptions.folderId !== 'all') {
-          _filterLinksData = _allLinksData.filter(
-            (el) => el.folderId === _filterOptions.folderId
-          );
-        }
+	{
+		key: 'FilteredLinkInBioLinksData_key',
+		get: ({ get }) => {
+			// Variables
+			const _allLinksData = get(LinkInBiosRState);
+			const _filterOptions = get(LinkInBiosFilterOptionsRState);
+			let _filterLinksData: LinkInBioType[] | undefined = _allLinksData;
+			// check's
+			if (_allLinksData?.length) {
+				if (_filterOptions.folderId && _filterOptions.folderId !== 'all') {
+					_filterLinksData = _allLinksData.filter(
+						(el) => el.folderId === _filterOptions.folderId
+					);
+				}
 
-        if (
-          _filterOptions.timeFilter.daysToSubtract &&
-          _filterOptions.timeFilter.daysToSubtract !== TimeFilterEnum.allTime
-        ) {
-          const endDate = new Date(
-            new Date().toLocaleString('en-US', toLocaleStringOptions)
-          );
+				if (
+					_filterOptions.timeFilter.daysToSubtract &&
+					_filterOptions.timeFilter.daysToSubtract !== TimeFilterEnum.allTime
+				) {
+					const endDate = new Date(
+						new Date().toLocaleString('en-US', toLocaleStringOptions)
+					);
 
-          let startDate = new Date(
-            endDate.getTime() -
-              +_filterOptions.timeFilter.daysToSubtract * 24 * 60 * 60 * 1000
-          );
+					let startDate = new Date(
+						endDate.getTime() -
+							+_filterOptions.timeFilter.daysToSubtract * 24 * 60 * 60 * 1000
+					);
 
-          if (
-            _filterOptions.timeFilter.daysToSubtract ===
-            TimeFilterEnum.thisMonth
-          ) {
-            startDate = new Date(endDate.getFullYear(), endDate.getMonth(), 1);
-          }
+					if (
+						_filterOptions.timeFilter.daysToSubtract ===
+						TimeFilterEnum.thisMonth
+					) {
+						startDate = new Date(endDate.getFullYear(), endDate.getMonth(), 1);
+					}
 
-          const _formattedStartDate = startDate.toLocaleString(
-            'en-US',
-            toLocaleStringOptions
-          );
+					const _formattedStartDate = startDate.toLocaleString(
+						'en-US',
+						toLocaleStringOptions
+					);
 
-          _filterLinksData = _allLinksData?.filter((el) => {
-            const _createdAt = new Date(
-              new Date(el.createdAt as string)
-            ).toLocaleString('en-US', toLocaleStringOptions);
+					_filterLinksData = _allLinksData?.filter((el) => {
+						const _createdAt = new Date(
+							new Date(el.createdAt as string)
+						).toLocaleString('en-US', toLocaleStringOptions);
 
-            if (
-              new Date(_createdAt) >= new Date(_formattedStartDate) &&
-              new Date(_createdAt) <= endDate
-            ) {
-              return el;
-            } else {
-              return undefined;
-            }
-          });
-        }
+						if (
+							new Date(_createdAt) >= new Date(_formattedStartDate) &&
+							new Date(_createdAt) <= endDate
+						) {
+							return el;
+						} else {
+							return undefined;
+						}
+					});
+				}
 
-        if (_filterOptions.tags?.length) {
-          _filterLinksData = _allLinksData.filter((el) => {
-            return (_filterOptions.tags as string[]).every((tag) =>
-              (el.tags as string[]).includes(tag)
-            );
-          });
-        }
+				if (_filterOptions.tags?.length) {
+					_filterLinksData = _allLinksData.filter((el) => {
+						return (_filterOptions.tags as string[]).every((tag) =>
+							(el.tags as string[]).includes(tag)
+						);
+					});
+				}
 
-        // if (_filterOptions.domains?.length) {
-        //   _filterLinksData = _allLinksData.filter((el) => {
-        //     return _filterOptions.domains?.includes(
-        //       getPrimaryDomain(
-        //         (JSON.parse(el.target as string) as LinkTargetType)
-        //           .url as string
-        //       )
-        //     );
-        //   });
-        // }
-        if (_filterOptions.searchQuery) {
-          _filterLinksData = _allLinksData.filter((el) => {
-            return el.title
-              ?.toLocaleLowerCase()
-              ?.includes(
-                (_filterOptions.searchQuery as string)?.toLocaleLowerCase()
-              );
-          });
-        }
-      }
+				// if (_filterOptions.domains?.length) {
+				//   _filterLinksData = _allLinksData.filter((el) => {
+				//     return _filterOptions.domains?.includes(
+				//       getPrimaryDomain(
+				//         (JSON.parse(el.target as string) as LinkTargetType)
+				//           .url as string
+				//       )
+				//     );
+				//   });
+				// }
+				if (_filterOptions.searchQuery) {
+					_filterLinksData = _allLinksData.filter((el) => {
+						return el.title
+							?.toLocaleLowerCase()
+							?.includes(
+								(_filterOptions.searchQuery as string)?.toLocaleLowerCase()
+							);
+					});
+				}
+			}
 
-      return _filterLinksData;
-    },
-  }
+			return _filterLinksData;
+		},
+	}
 );
 
 // selecting (storing) all tags and domain link from all short links data
 export const LinkInBiosFieldsDataSelector = selector({
-  key: 'LinkInBiosFieldsDataSelector_key',
-  get: ({ get }) => {
-    const _allLinksData = get(LinkInBiosRState);
+	key: 'LinkInBiosFieldsDataSelector_key',
+	get: ({ get }) => {
+		const _allLinksData = get(LinkInBiosRState);
 
-    const _tagsArray = new Set<string>();
+		const _tagsArray = new Set<string>();
 
-    // const _domains = new Set<string>();
+		// const _domains = new Set<string>();
 
-    _allLinksData?.forEach((el) => {
-      if ((el.tags as string[])?.length) {
-        (JSON.parse(el.tags as string) as string[]).forEach((tag) =>
-          _tagsArray.add(tag)
-        );
-      }
+		_allLinksData?.forEach((el) => {
+			if ((el.tags as string[])?.length) {
+				(JSON.parse(el.tags as string) as string[]).forEach((tag) =>
+					_tagsArray.add(tag)
+				);
+			}
 
-      // const _url = (JSON.parse(el.target as string) as LinkTargetType).url;
-      // if (_url) {
-      //   _domains.add(getPrimaryDomain(_url));
-      // }
-    });
+			// const _url = (JSON.parse(el.target as string) as LinkTargetType).url;
+			// if (_url) {
+			//   _domains.add(getPrimaryDomain(_url));
+			// }
+		});
 
-    return {
-      tags: Array.from(_tagsArray),
-      // domains: Array.from(_domains),
-    };
-  },
+		return {
+			tags: Array.from(_tagsArray),
+			// domains: Array.from(_domains),
+		};
+	},
+});
+
+export const LinkInBioRStateAtomFamily = atomFamily<LinkInBioType, string>({
+	key: 'LinkInBioRStateAtomFamily_key',
+	default: {
+		theme: {
+			button: {},
+		},
+		settings: {},
+	},
 });

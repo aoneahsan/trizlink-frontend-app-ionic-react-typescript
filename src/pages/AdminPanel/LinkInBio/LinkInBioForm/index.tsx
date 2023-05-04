@@ -22,16 +22,16 @@ import classNames from 'classnames';
  * */
 import ZaionsIonPage from '@/components/ZaionsIonPage';
 import {
-  ZIonButton,
-  ZIonCol,
-  ZIonGrid,
-  ZIonHeader,
-  ZIonIcon,
-  ZIonInput,
-  ZIonItem,
-  ZIonLabel,
-  ZIonRow,
-  ZIonText,
+	ZIonButton,
+	ZIonCol,
+	ZIonGrid,
+	ZIonHeader,
+	ZIonIcon,
+	ZIonInput,
+	ZIonItem,
+	ZIonLabel,
+	ZIonRow,
+	ZIonText,
 } from '@/components/ZIonComponents';
 import ZIonSegment from '@/components/ZIonComponents/ZIonSegment';
 import ZIonSegmentButton from '@/components/ZIonComponents/ZIonSegmentButton';
@@ -40,8 +40,8 @@ import LinkInBioShareSettings from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/S
 import LinkInBioPageAnalytics from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics';
 
 import {
-  useZRQGetRequest,
-  useZRQUpdateRequest,
+	useZRQGetRequest,
+	useZRQUpdateRequest,
 } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
@@ -51,10 +51,11 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * ? Like import of Constant is a global constants import
  * */
 import {
-  createRedirectRoute,
-  replaceParams,
-  zJsonParse,
-  zStringify,
+	createRedirectRoute,
+	replaceParams,
+	zConsole,
+	zJsonParse,
+	zStringify,
 } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import CONSTANTS from '@/utils/constants';
@@ -67,14 +68,14 @@ import { reportCustomError } from '@/utils/customErrorType';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  LinkInBioButtonTypeEnum,
-  LinkInBIoSettingType,
-  LinkInBioThemeBackgroundEnum,
-  LinkInBioThemeFontEnum,
-  LinkInBioThemeType,
-  LinkInBioType,
-  ZLinkInBioPageEnum,
-  ZLinkInBioRHSComponentEnum,
+	LinkInBioButtonTypeEnum,
+	LinkInBIoSettingType,
+	LinkInBioThemeBackgroundEnum,
+	LinkInBioThemeFontEnum,
+	LinkInBioThemeType,
+	LinkInBioType,
+	ZLinkInBioPageEnum,
+	ZLinkInBioRHSComponentEnum,
 } from '@/types/AdminPanel/linkInBioType';
 import { LinkInBioBlockEnum } from '@/types/AdminPanel/linkInBioType/blockTypes';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
@@ -85,8 +86,8 @@ import { FormMode } from '@/types/AdminPanel/index.type';
  * ? Import of recoil states is a Recoil State import
  * */
 import {
-  LinkInBioFromPageRState,
-  NewLinkInBioFormState,
+	LinkInBioFromPageRState,
+	NewLinkInBioFormState,
 } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';
 
 /**
@@ -94,6 +95,7 @@ import {
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
+import { LinkInBioRStateAtomFamily } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioState.recoil';
 /**
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
@@ -111,232 +113,254 @@ import classes from './styles.module.css';
  * */
 
 const ZaionsLinkInBioForm: React.FC = () => {
-  const location = useLocation();
+	const location = useLocation();
 
-  // getting search param from url with the help of 'qs' package
-  const routeQSearchParams = routeQueryString.parse(location.search, {
-    ignoreQueryPrefix: true,
-  });
+	// getting search param from url with the help of 'qs' package
+	const routeQSearchParams = routeQueryString.parse(location.search, {
+		ignoreQueryPrefix: true,
+	});
 
-  // Recoil state of managing current page. for example design, share settings etc.
-  const [linkInBioFromPageState, setLinkInBioFromPageState] = useRecoilState(
-    LinkInBioFromPageRState
-  );
+	// Recoil state of managing current page. for example design, share settings etc.
+	const [linkInBioFromPageState, setLinkInBioFromPageState] = useRecoilState(
+		LinkInBioFromPageRState
+	);
 
-  // Recoil state link-in-bio form state (for editing or creating link-in-bio)
-  const [linkInBioFormState, setLinkInBioFormState] = useRecoilState(
-    NewLinkInBioFormState
-  );
+	// Recoil state link-in-bio form state (for editing or creating link-in-bio)
+	const [linkInBioFormState, setLinkInBioFormState] = useRecoilState(
+		NewLinkInBioFormState
+	);
 
-  const parseLinkInBioSettingData = zJsonParse(
-    String(linkInBioFormState?.settings)
-  ) as LinkInBIoSettingType;
+	// useZNavigate for redirection
+	const { zNavigatePushRoute } = useZNavigate();
 
-  // useZNavigate for redirection
-  const { zNavigatePushRoute } = useZNavigate();
+	// validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
+	const { validateRequestResponse } = useZValidateRequestResponse();
 
-  // validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
-  const { validateRequestResponse } = useZValidateRequestResponse();
+	// getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio of that id will be fetch from backend and store in NewLinkInBioFormState recoil state.
+	const { editLinkInBioId } = useParams<{
+		editLinkInBioId: string;
+	}>();
 
-  // getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio of that id will be fetch from backend and store in NewLinkInBioFormState recoil state.
-  const { editLinkInBioId } = useParams<{
-    editLinkInBioId: string;
-  }>();
+	//
+	const [linkInBioStateAtomFamily, setLinkInBioStateAtomFamily] =
+		useRecoilState(LinkInBioRStateAtomFamily(editLinkInBioId));
 
-  // fetching link-in-bio with the editLinkInBioId data from backend.
-  const { data: selectedLinkInBio, refetch: refetchSelectedLinkInBio } =
-    useZRQGetRequest<LinkInBioType>({
-      _url: API_URL_ENUM.linkInBio_update_delete,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET],
-      _authenticated: true,
-      _itemsIds: [editLinkInBioId],
-      _urlDynamicParts: [':linkInBioId'],
-      _shouldFetchWhenIdPassed: !editLinkInBioId ? true : false,
-      _extractType: ZRQGetRequestExtractEnum.extractItem,
-    });
+	const parseLinkInBioSettingData = zJsonParse(
+		String(linkInBioStateAtomFamily?.settings)
+	) as LinkInBIoSettingType;
 
-  // Update Link-in-bio API
-  const { mutateAsync: UpdateLinkInBio } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.linkInBio_update_delete,
-    _queriesKeysToInvalidate: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-    ],
-  });
+	// fetching link-in-bio with the editLinkInBioId data from backend.
+	const { data: selectedLinkInBio, refetch: refetchSelectedLinkInBio } =
+		useZRQGetRequest<LinkInBioType>({
+			_url: API_URL_ENUM.linkInBio_update_delete,
+			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET],
+			_authenticated: true,
+			_itemsIds: [editLinkInBioId],
+			_urlDynamicParts: [':linkInBioId'],
+			_shouldFetchWhenIdPassed: !editLinkInBioId ? true : false,
+			_extractType: ZRQGetRequestExtractEnum.extractItem,
+		});
 
-  const linkInBioGetRequestFn = useCallback(async () => {
-    await refetchSelectedLinkInBio();
-    // eslint-disable-next-line
-  }, []);
+	// Update Link-in-bio API
+	const { mutateAsync: UpdateLinkInBio } = useZRQUpdateRequest({
+		_url: API_URL_ENUM.linkInBio_update_delete,
+		_queriesKeysToInvalidate: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
+		],
+	});
 
-  // Refetching if the editLinkInBioId changes and if the editLinkInBioId is undefined it will redirect user to link-in-bio page.
-  useEffect(() => {
-    try {
-      if (editLinkInBioId) {
-        void linkInBioGetRequestFn();
-      }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        zNavigatePushRoute(ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinkInBio);
-        showErrorNotification(error.message);
-      } else {
-        reportCustomError(error);
-      }
-    }
-    // eslint-disable-next-line
-  }, [editLinkInBioId]);
+	const linkInBioGetRequestFn = useCallback(async () => {
+		await refetchSelectedLinkInBio();
+		// eslint-disable-next-line
+	}, []);
 
-  // Storing link-in-bio data in recoil state.
-  useEffect(() => {
-    try {
-      if (selectedLinkInBio && selectedLinkInBio?.id && editLinkInBioId) {
-        setLinkInBioFormState((oldVal) => ({
-          ...oldVal,
-          ...selectedLinkInBio,
-          theme: zJsonParse(
-            String(selectedLinkInBio.theme)
-          ) as LinkInBioThemeType,
-          formMode: FormMode.EDIT,
-        }));
-      }
-    } catch (error) {
-      reportCustomError(error);
-    }
-    // eslint-disable-next-line
-  }, [selectedLinkInBio]);
+	// Refetching if the editLinkInBioId changes and if the editLinkInBioId is undefined it will redirect user to link-in-bio page.
+	useEffect(() => {
+		try {
+			if (editLinkInBioId) {
+				void linkInBioGetRequestFn();
+			}
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				zNavigatePushRoute(ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinkInBio);
+				showErrorNotification(error.message);
+			} else {
+				reportCustomError(error);
+			}
+		}
+		// eslint-disable-next-line
+	}, [editLinkInBioId]);
 
-  // storing the current page info in setLinkInBioFromPageState recoil state, so we can show the appropriate content.
-  useEffect(() => {
-    try {
-      if (routeQSearchParams && routeQSearchParams.page) {
-        setLinkInBioFromPageState((oldValues) => ({
-          ...oldValues,
-          page: ZLinkInBioPageEnum[
-            routeQSearchParams.page as ZLinkInBioPageEnum
-          ],
-        }));
-      }
-    } catch (error) {
-      reportCustomError(error);
-    }
-    // eslint-disable-next-line
-  }, [routeQSearchParams.page]);
+	// Storing link-in-bio data in recoil state.
+	useEffect(() => {
+		try {
+			if (selectedLinkInBio && selectedLinkInBio?.id && editLinkInBioId) {
+				setLinkInBioFormState((oldVal) => ({
+					...oldVal,
+					...selectedLinkInBio,
+					theme: zJsonParse(
+						String(selectedLinkInBio.theme)
+					) as LinkInBioThemeType,
+					formMode: FormMode.EDIT,
+				}));
 
-  // formik submit function
-  const formikSubmitHandler = async (reqDataStr: string) => {
-    try {
-      if (reqDataStr) {
-        // The update api...
-        const _result = await UpdateLinkInBio({
-          itemIds: [editLinkInBioId],
-          urlDynamicParts: [':linkInBioId'],
-          requestData: reqDataStr,
-        });
+				setLinkInBioStateAtomFamily((oldVal) => ({
+					...oldVal,
+					...selectedLinkInBio,
+					theme: zJsonParse(
+						String(selectedLinkInBio.theme)
+					) as LinkInBioThemeType,
+					formMode: FormMode.EDIT,
+				}));
 
-        // if _result of the updateLinkInBio api is success this showing success notification else not success then error notification.
-        await validateRequestResponse({
-          resultObj: _result,
-        });
-      }
-    } catch (error) {
-      reportCustomError(error);
-    }
-  };
+				//
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+		// eslint-disable-next-line
+	}, [selectedLinkInBio]);
 
-  return (
-    <ZaionsIonPage pageTitle='Link In Bio Form Page'>
-      <Formik
-        initialValues={{
-          designPageCurrentTab:
-            (routeQSearchParams as { step: ZLinkInBioRHSComponentEnum })
-              ?.step || ZLinkInBioRHSComponentEnum.theme,
-          LinkInBioBlock: LinkInBioBlockEnum.default, // REMOVE THIS
-          title: linkInBioFormState?.title || '',
-          linkInBioTitle: linkInBioFormState?.linkInBioTitle || '',
-          enableTitleInput: false,
-          theme: {
-            background: {
-              bgType:
-                linkInBioFormState?.theme?.background?.bgType ||
-                LinkInBioThemeBackgroundEnum.solidColor,
-              bgSolidColor:
-                linkInBioFormState?.theme?.background?.bgSolidColor || '',
-              bgGradientColors: {
-                startColor:
-                  linkInBioFormState?.theme?.background?.bgGradientColors
-                    ?.startColor || '',
-                endColor:
-                  linkInBioFormState?.theme?.background?.bgGradientColors
-                    ?.endColor || '',
-                direction:
-                  linkInBioFormState?.theme?.background?.bgGradientColors
-                    ?.direction || 0,
-              },
-              enableBgImage:
-                linkInBioFormState?.theme?.background?.enableBgImage || false,
-              bgImageUrl:
-                linkInBioFormState?.theme?.background?.bgImageUrl || '',
-            },
-            button: {
-              background: {
-                bgType:
-                  linkInBioFormState?.theme?.button?.background?.bgType ||
-                  LinkInBioThemeBackgroundEnum.solidColor,
-                bgSolidColor:
-                  linkInBioFormState?.theme?.button?.background?.bgSolidColor ||
-                  '',
-                bgGradientColors: {
-                  startColor:
-                    linkInBioFormState?.theme?.button?.background
-                      ?.bgGradientColors?.startColor || '',
-                  endColor:
-                    linkInBioFormState?.theme?.button?.background
-                      ?.bgGradientColors?.endColor || '',
-                  direction:
-                    linkInBioFormState?.theme?.button?.background
-                      ?.bgGradientColors?.direction || 0,
-                },
-                bgImageUrl:
-                  linkInBioFormState?.theme?.button?.background?.bgImageUrl ||
-                  '',
-              },
-              type:
-                linkInBioFormState?.theme?.button?.type ||
-                LinkInBioButtonTypeEnum.inlineSquare,
-              shadowColor:
-                linkInBioFormState?.theme?.button?.shadowColor ||
-                CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR,
-            },
-            font:
-              linkInBioFormState?.theme?.font || LinkInBioThemeFontEnum.lato,
-          },
-          settings: {
-            headerCode: parseLinkInBioSettingData?.headerCode || '',
-            bodyCode: parseLinkInBioSettingData?.bodyCode || '',
-          },
-        }}
-        //
-        enableReinitialize
-        // Submit function
-        onSubmit={(values) => {
-          const stringifyValue = zStringify({
-            linkInBioTitle: values.linkInBioTitle,
-            theme: zStringify(values.theme),
-            settings: zStringify(values.settings),
-          });
-          setLinkInBioFormState((oldVal) => ({
-            ...oldVal,
-            theme: values.theme,
-            formMode: FormMode.EDIT,
-          }));
-          void formikSubmitHandler(stringifyValue);
-        }}
-      >
-        {({ values, setFieldValue, handleChange, handleBlur }) => {
-          // zConsole({
-          //   message: 'link in bio values',
-          //   data: values,
-          // });
-          return (
+	console.log({
+		log: 'check atomFamily',
+		linkInBioStateAtomFamily,
+	});
+
+	// storing the current page info in setLinkInBioFromPageState recoil state, so we can show the appropriate content.
+	useEffect(() => {
+		try {
+			if (routeQSearchParams && routeQSearchParams.page) {
+				setLinkInBioFromPageState((oldValues) => ({
+					...oldValues,
+					page: ZLinkInBioPageEnum[
+						routeQSearchParams.page as ZLinkInBioPageEnum
+					],
+				}));
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+		// eslint-disable-next-line
+	}, [routeQSearchParams.page]);
+
+	// formik submit function
+	const formikSubmitHandler = async (reqDataStr: string) => {
+		try {
+			if (reqDataStr) {
+				// The update api...
+				const _result = await UpdateLinkInBio({
+					itemIds: [editLinkInBioId],
+					urlDynamicParts: [':linkInBioId'],
+					requestData: reqDataStr,
+				});
+
+				// if _result of the updateLinkInBio api is success this showing success notification else not success then error notification.
+				await validateRequestResponse({
+					resultObj: _result,
+				});
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
+	return (
+		<ZaionsIonPage pageTitle='Link In Bio Form Page'>
+			<Formik
+				initialValues={{
+					designPageCurrentTab:
+						(routeQSearchParams as { step: ZLinkInBioRHSComponentEnum })
+							?.step || ZLinkInBioRHSComponentEnum.theme,
+					LinkInBioBlock: LinkInBioBlockEnum.default, // REMOVE THIS
+					title: linkInBioStateAtomFamily?.title || '',
+					linkInBioTitle: linkInBioStateAtomFamily?.linkInBioTitle || '',
+					enableTitleInput: false,
+					theme: {
+						background: {
+							bgType:
+								linkInBioStateAtomFamily?.theme?.background?.bgType ||
+								LinkInBioThemeBackgroundEnum.solidColor,
+							bgSolidColor:
+								linkInBioStateAtomFamily?.theme?.background?.bgSolidColor || '',
+							bgGradientColors: {
+								startColor:
+									linkInBioStateAtomFamily?.theme?.background?.bgGradientColors
+										?.startColor || '',
+								endColor:
+									linkInBioStateAtomFamily?.theme?.background?.bgGradientColors
+										?.endColor || '',
+								direction:
+									linkInBioStateAtomFamily?.theme?.background?.bgGradientColors
+										?.direction || 0,
+							},
+							enableBgImage:
+								linkInBioStateAtomFamily?.theme?.background?.enableBgImage ||
+								false,
+							bgImageUrl:
+								linkInBioStateAtomFamily?.theme?.background?.bgImageUrl || '',
+						},
+						button: {
+							background: {
+								bgType:
+									linkInBioStateAtomFamily?.theme?.button?.background?.bgType ||
+									LinkInBioThemeBackgroundEnum.solidColor,
+								bgSolidColor:
+									linkInBioStateAtomFamily?.theme?.button?.background
+										?.bgSolidColor || '',
+								bgGradientColors: {
+									startColor:
+										linkInBioStateAtomFamily?.theme?.button?.background
+											?.bgGradientColors?.startColor || '',
+									endColor:
+										linkInBioStateAtomFamily?.theme?.button?.background
+											?.bgGradientColors?.endColor || '',
+									direction:
+										linkInBioStateAtomFamily?.theme?.button?.background
+											?.bgGradientColors?.direction || 0,
+								},
+								bgImageUrl:
+									linkInBioStateAtomFamily?.theme?.button?.background
+										?.bgImageUrl || '',
+							},
+							type:
+								linkInBioStateAtomFamily?.theme?.button?.type ||
+								LinkInBioButtonTypeEnum.inlineSquare,
+							shadowColor:
+								linkInBioStateAtomFamily?.theme?.button?.shadowColor ||
+								CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR,
+						},
+						font:
+							linkInBioStateAtomFamily?.theme?.font ||
+							LinkInBioThemeFontEnum.lato,
+					},
+					settings: {
+						headerCode: parseLinkInBioSettingData?.headerCode || '',
+						bodyCode: parseLinkInBioSettingData?.bodyCode || '',
+					},
+				}}
+				//
+				enableReinitialize
+				// Submit function
+				onSubmit={(values) => {
+					const stringifyValue = zStringify({
+						linkInBioTitle: values.linkInBioTitle,
+						theme: zStringify(values.theme),
+						settings: zStringify(values.settings),
+					});
+					setLinkInBioFormState((oldVal) => ({
+						...oldVal,
+						theme: values.theme,
+						formMode: FormMode.EDIT,
+					}));
+					void formikSubmitHandler(stringifyValue);
+				}}
+			>
+				{({ values, setFieldValue, handleChange, handleBlur }) => {
+					zConsole({
+						message: 'link in bio values',
+						data: values,
+					});
+					return (
 						<>
 							<ZIonHeader className='ion-padding-horizontal'>
 								<ZIonGrid className='ion-no-padding'>
@@ -553,14 +577,15 @@ const ZaionsLinkInBioForm: React.FC = () => {
 							{linkInBioFromPageState.page ===
 								ZLinkInBioPageEnum.shareSettings && <LinkInBioShareSettings />}
 
+							{/* Page Analytics */}
 							{linkInBioFromPageState.page ===
 								ZLinkInBioPageEnum.pageAnalytics && <LinkInBioPageAnalytics />}
 						</>
 					);
-        }}
-      </Formik>
-    </ZaionsIonPage>
-  );
+				}}
+			</Formik>
+		</ZaionsIonPage>
+	);
 };
 
 export default ZaionsLinkInBioForm;

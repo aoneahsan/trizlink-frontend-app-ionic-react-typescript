@@ -87,12 +87,12 @@ const ZaionsRoutes = {
 			CustomlinksInactive: '/short-links/customlinks-upgrade/',
 			ZLinks: '/short-links/links',
 			ZLinkInBio: `/link-in-bio/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
-			ZProfile: '/short-links/settings/profile/',
-			ZCustomDomain: '/short-links/settings/custom-domains/',
-			ZGroup: '/short-links/settings/groups/',
-			ZCSVBulk: '/short-links/settings/bulk-upload/',
-			ZAccountDetails: '/short-links/settings/organization/details/',
-			ZIntegration: '/short-links/settings/integrations/',
+			ZProfile: '/settings/profile/',
+			ZCustomDomain: '/settings/custom-domains/',
+			ZGroup: '/settings/groups/',
+			ZCSVBulk: '/settings/bulk-upload/',
+			ZAccountDetails: '/settings/organization/details/',
+			ZIntegration: '/settings/integrations/',
 		},
 	},
 
@@ -124,7 +124,11 @@ const ZaionsRoutes = {
 export const ZRoutesRedirects = {
 	// Redirects
 	// AUTHENTICATED_USER_REDIRECT
-	AUTHENTICATED_USER_REDIRECT: ZaionsRoutes.AdminPanel.ZaionsDashboard.ZProfile,
+	AUTHENTICATED_USER_REDIRECT:
+		ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinkInBio.replace(
+			':folderId',
+			'all'
+		),
 
 	// UNAUTHENTICATED_USER_REDIRECT
 	UNAUTHENTICATED_USER_REDIRECT: ZaionsRoutes.LoginRoute,
