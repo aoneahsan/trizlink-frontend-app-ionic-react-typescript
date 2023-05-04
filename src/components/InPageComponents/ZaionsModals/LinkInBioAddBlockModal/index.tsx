@@ -165,7 +165,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
           zNavigatePushRoute &&
             zNavigatePushRoute(
               createRedirectRoute({
-                url: ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkInBioRoute,
+                url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
                 params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
                 values: [editLinkInBioId],
                 routeSearchParams: {

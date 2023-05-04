@@ -105,7 +105,10 @@ const MENU_IDS = {
 	CONTENT_ID: 'zaions_main-content',
 	ADMIN_LINK_PAGE_CONTENT_ID: 'zaions-link-page-menu',
 	DASHBOARD_SM_MENU_CONTENT_ID: 'zaions-dashboard-responsive-menu-content-id',
-	ADMIN_PAGE_FOLDERS_MENU_ID: 'admin_page_folders_menu_id',
+	ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID:
+		'admin_page_short_links_folders_menu_id',
+	ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID:
+		'admin_page_links_in_bio_folders_menu_id',
 };
 
 // Other

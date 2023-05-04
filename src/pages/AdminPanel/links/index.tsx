@@ -65,7 +65,7 @@ import {
 	useZRQGetRequest,
 	useZRQUpdateRequest,
 } from '@/ZaionsHooks/zreactquery-hooks';
-import AdminPanelMainSidebarMenu from '@/components/AdminPanelComponents/MainSideBarMenu';
+import AdminPanelMainSidebarMenu from '@/components/AdminPanelComponents/Sidebar/ExpendableMenu';
 import ShortLinksFolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/ShortLinkFoldersActionPopover';
 import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
@@ -75,6 +75,7 @@ import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 // Types
 import { LinkFolderType, TimeFilterEnum } from '@/types/AdminPanel/linksType';
 import {
+	AdminPanelMainSidebarMenuPageEnum,
 	folderState,
 	FormMode,
 	messengerPlatformsBlockEnum,
@@ -98,8 +99,746 @@ import { reportCustomError } from '@/utils/customErrorType';
 
 // Styles
 import classes from './styles.module.css';
-import ZIonSegment from '@/components/ZIonComponents/ZIonSegment';
-import ZIonSegmentButton from '@/components/ZIonComponents/ZIonSegmentButton';
+
+const AdminLinksIndexPage: React.FC = () => {
+	// Component state
+	const [compState, setCompState] = useState<{
+		shortLinksFoldersReorder: {
+			Ids?: string[];
+			isEnable?: boolean;
+		};
+	}>({
+		shortLinksFoldersReorder: {
+			isEnable: false,
+		},
+	});
+
+	// Custom hooks
+	const { isXlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale(); // media query hook.
+	const { zNavigatePushRoute } = useZNavigate();
+	const { zInvalidateReactQueries } = useZInvalidateReactQueries();
+	const { validateRequestResponse } = useZValidateRequestResponse();
+
+	// Short links folders reorder function.
+	const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
+		event.detail.complete();
+
+		setTimeout(() => {
+			const _shortLinksFoldersEls = document.querySelectorAll(
+				'.zaions-short-link-folder'
+			);
+			const _shortLinksFoldersIds: string[] = [];
+			for (let i = 0; i < _shortLinksFoldersEls.length; i++) {
+				const _block = _shortLinksFoldersEls[i];
+				_shortLinksFoldersIds.push(
+					_block.getAttribute('data-folder-id') as string
+				);
+			}
+
+			if (_shortLinksFoldersIds.length) {
+				setCompState((_) => ({
+					shortLinksFoldersReorder: {
+						Ids: _shortLinksFoldersIds,
+						isEnable: _shortLinksFoldersIds.length > 1,
+					},
+				}));
+			}
+		}, 100);
+	};
+
+	// Recoil state for storing filter options for short-links.
+	const shortLinksFilterOptions = useRecoilValue(ShortLinksFilterOptionsRState);
+
+	//
+	const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
+
+	//
+	const setFolderFormState = useSetRecoilState(FolderFormState);
+
+	// Request for getting short links folders.
+	const { data: _foldersData } = useZRQGetRequest<LinkFolderType[]>({
+		_url: API_URL_ENUM.userAccountFolders_create_list,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
+	});
+
+	//
+	const { presentZIonPopover: presentFolderActionIonPopover } = useZIonPopover(
+		ShortLinksFolderActionsPopoverContent
+	);
+
+	//
+	const { presentZIonPopover: presentShortLinkTimeFilterModal } =
+		useZIonPopover(ShortLinksTimeRangeFilterPopover);
+
+	//
+	const { presentZIonPopover: presentShortLinkTagsFilterModal } =
+		useZIonPopover(ShortLinksTagsFiltersPopover);
+
+	//
+	const { presentZIonPopover: presentShortLinkDomainsFilterModal } =
+		useZIonPopover(ShortLinksDomainsFiltersPopover);
+
+	//
+	const _shortLinksData = useRecoilValue(ShortLinksRState);
+
+	//
+	const { presentZIonModal: presentFolderModal } = useZIonModal(
+		ZaionsAddNewFolder,
+		{
+			state: folderState.ShortLink,
+		}
+	);
+
+	// Update shortLinks folders reorder API
+	const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
+		_url: API_URL_ENUM.ShortLinks_folders_reorder,
+		_queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
+	});
+
+	const ZDashboardState = useRecoilValue(ZDashboardRState);
+
+	const invalidedShortLinksQuery = async () => {
+		try {
+			await zInvalidateReactQueries([
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+			]);
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
+	const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
+		try {
+			await invalidedShortLinksQuery();
+			event.detail.complete();
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
+	const shortLinksFoldersReOrderHandler = async () => {
+		try {
+			// The update api...
+			const _result = await UpdateShortLinksFoldersReorder({
+				requestData: zStringify({
+					folders: compState.shortLinksFoldersReorder.Ids,
+				}),
+				itemIds: [],
+				urlDynamicParts: [],
+			});
+
+			// if _result of the UpdateShortLinksFoldersReorder api is success this showing success notification else not success then error notification.
+			await validateRequestResponse({
+				resultObj: _result,
+			});
+
+			// hiding the reorder button by assigning isEnable to false
+			setCompState((oldValues) => ({
+				...oldValues,
+				shortLinksFoldersReorder: {
+					Ids: oldValues.shortLinksFoldersReorder.Ids,
+					isEnable: false,
+				},
+			}));
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
+	return (
+		<ZaionsIonPage
+			pageTitle='Zaions Short Links Page'
+			id={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
+			menu={PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU}
+		>
+			<ZIonContent>
+				{/* IonRefresher */}
+				<ZIonRefresher onIonRefresh={(event) => void handleRefresh(event)}>
+					<ZIonRefresherContent />
+				</ZIonRefresher>
+
+				{/*  */}
+				<ZIonGrid className='ion-no-padding zaions_h100'>
+					<ZIonRow className='zaions_h100'>
+						{/* Expendable Navigation in the left-hand side */}
+						<AdminPanelMainSidebarMenu
+							activePage={AdminPanelMainSidebarMenuPageEnum.shortLink}
+						/>
+
+						{/* Folders Side Menu */}
+						{isLgScale && (
+							<ZIonCol
+								size={
+									ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
+										? '2'
+										: '2.4'
+								}
+								className='ion-padding border-end zaions-transition'
+							>
+								<div className='ion-padding-top'>
+									<ZIonList lines='none'>
+										<ZIonItem className='zaions__cursor_pointer mb-2'>
+											<h5 className='fw-bold m-0 p-0'>🔗 All links</h5>
+										</ZIonItem>
+										<ZIonItem>
+											<ZIonList lines='none' className='zaions__w100'>
+												<ZIonItem className='ion-no-padding'>
+													<ZIonText color='primary' className='fw-bold'>
+														<h5 className='fw-bold d-block m-0 p-0'>
+															📂 Folders
+														</h5>
+													</ZIonText>
+												</ZIonItem>
+												<ZIonItem
+													className='zaions__cursor_pointer ms-2'
+													onClick={() => {
+														zNavigatePushRoute(
+															replaceParams(
+																ZaionsRoutes.AdminPanel.ShortLinks.Main,
+																CONSTANTS.RouteParams
+																	.folderIdToGetShortLinksOrLinkInBio,
+																'all'
+															)
+														);
+													}}
+												>
+													<ZIonLabel>Default</ZIonLabel>
+													<ZIonReorder slot='start' className='me-3'>
+														<ZIonIcon icon={appsOutline} />
+													</ZIonReorder>
+												</ZIonItem>
+												{_foldersData && _foldersData.length ? (
+													<ZIonReorderGroup
+														disabled={false}
+														onIonItemReorder={handleReorder}
+													>
+														{_foldersData.map((el) => (
+															<ZIonItem
+																className='zaions__cursor_pointer zaions-short-link-folder'
+																key={el.id}
+																data-folder-id={el.id}
+															>
+																<ZIonLabel
+																	onClick={() => {
+																		zNavigatePushRoute(
+																			replaceParams(
+																				ZaionsRoutes.AdminPanel.ShortLinks.Main,
+																				CONSTANTS.RouteParams
+																					.folderIdToGetShortLinksOrLinkInBio,
+																				el.id as string
+																			)
+																		);
+																	}}
+																>
+																	{el.title}
+																</ZIonLabel>
+																<ZIonButton
+																	fill='clear'
+																	color='dark'
+																	size='small'
+																	value={el.id}
+																	onClick={(event: unknown) => {
+																		presentFolderActionIonPopover({
+																			_event: event as Event,
+																			_cssClass: classNames(
+																				classes.zaions_present_folder_Action_popover_width
+																			),
+																		});
+																		setFolderFormState((oldVal) => ({
+																			...oldVal,
+																			id: el.id,
+																			name: el.title,
+																			formMode: FormMode.EDIT,
+																		}));
+																	}}
+																	className='ion-no-padding ms-auto'
+																>
+																	<ZIonIcon icon={ellipsisVertical} />
+																</ZIonButton>
+																<ZIonReorder slot='start' className='me-3'>
+																	<ZIonIcon icon={appsOutline}></ZIonIcon>
+																</ZIonReorder>
+															</ZIonItem>
+														))}
+													</ZIonReorderGroup>
+												) : (
+													''
+												)}
+											</ZIonList>
+										</ZIonItem>
+									</ZIonList>
+									<ZIonButton
+										className='ion-text-capitalize ion-margin-horizontal'
+										fill='outline'
+										expand='block'
+										onClick={() => {
+											setFolderFormState((oldVal) => ({
+												...oldVal,
+												id: '',
+												name: '',
+												formMode: FormMode.ADD,
+											}));
+											presentFolderModal({
+												_cssClass: 'link-in-bio-folder-modal',
+											});
+										}}
+									>
+										New Folder
+									</ZIonButton>
+
+									{compState?.shortLinksFoldersReorder?.isEnable && (
+										<ZIonButton
+											className='ion-text-capitalize ion-margin-horizontal position-absolute bottom-0'
+											expand='block'
+											onClick={() => {
+												void shortLinksFoldersReOrderHandler();
+											}}
+											style={{ width: '78%' }}
+										>
+											save reorder
+										</ZIonButton>
+									)}
+								</div>
+							</ZIonCol>
+						)}
+
+						<ZIonCol
+							className='zaions-transition'
+							sizeXl={
+								ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
+									? '8'
+									: '8.8'
+							}
+							sizeLg={
+								ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
+									? '8'
+									: '8.8'
+							}
+							sizeMd='12'
+							sizeSm='12'
+							sizeXs='12'
+						>
+							<ZIonGrid className='pb-2 zaions__bg_white ion-no-padding'>
+								<ZIonRow
+									className={classNames({
+										'px-3 ion-align-items-center': true,
+										'mt-4': isLgScale,
+									})}
+								>
+									<ZIonCol>
+										<ZIonText
+											className={classNames({
+												'ion-text-center': !isSmScale,
+											})}
+										>
+											<h4 className='fw-bold zaions__color_gray2'>
+												Create a new link
+											</h4>
+										</ZIonText>
+										<ZIonText
+											className={classNames({
+												'ion-text-center': !isSmScale,
+											})}
+										>
+											<h5 className='zaions__color_gray2'>
+												Create & manage your links
+											</h5>
+										</ZIonText>
+									</ZIonCol>
+									<ZIonCol
+										sizeXl='4'
+										sizeLg='5'
+										sizeMd='5'
+										sizeSm='12'
+										sizeXs='12'
+										className={classNames({
+											'mt-4': !isMdScale,
+										})}
+									>
+										<ZaionsCreateShortLinkUrlInput />
+									</ZIonCol>
+
+									{!isLgScale && (
+										<ZIonCol
+											size='max-content'
+											sizeSm='max-content'
+											sizeXs='12'
+										>
+											<ZIonMenuToggle
+												autoHide={false}
+												menu={
+													CONSTANTS.MENU_IDS
+														.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
+												}
+											>
+												<ZIonButton
+													className={classNames({
+														'text-transform-initial': true,
+														'ion-margin-start open-folder-menu-button':
+															!isLgScale,
+														'mt-4 ms-0': !isMdScale,
+													})}
+													expand={!isSmScale ? 'block' : undefined}
+													// menu={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
+													// autoHide={false}
+												>
+													Open folders menu
+												</ZIonButton>
+											</ZIonMenuToggle>
+										</ZIonCol>
+									)}
+								</ZIonRow>
+							</ZIonGrid>
+
+							<ZIonGrid className='mt-3 mb-5'>
+								<ZIonRow className='py-4 px-3 zaions__bg_white rounded ion-align-items-center'>
+									<ZIonCol
+										sizeXl='4'
+										sizeLg='12'
+										sizeMd='12'
+										sizeSm='12'
+										sizeXs='12'
+									>
+										<SearchQueryInputComponent />
+									</ZIonCol>
+
+									<ZIonCol>
+										<ZIonRow
+											className={classNames({
+												'justify-content-end': isXlScale,
+												'justify-content-start mt-4': !isXlScale,
+												'row-gap-1-rem': !isLgScale,
+											})}
+										>
+											<ZIonButtons
+												className={classNames({
+													'w-100': true,
+													'ion-justify-content-between': !isXlScale,
+													'ion-justify-content-end gap-3': isXlScale,
+													'd-block': !isSmScale,
+												})}
+											>
+												<ZIonButton
+													id='dropdown-basic'
+													fill='outline'
+													color='primary'
+													expand={!isSmScale ? 'block' : undefined}
+													className={classNames({
+														'my-2': true,
+													})}
+												>
+													Export data's
+												</ZIonButton>
+
+												<ZIonButton
+													fill='outline'
+													color='primary'
+													expand={!isSmScale ? 'block' : undefined}
+													className={classNames({
+														'my-2': true,
+													})}
+												>
+													Bulk Import
+												</ZIonButton>
+
+												<ZIonButton
+													color='primary'
+													fill='solid'
+													className={classNames({
+														'my-2': true,
+													})}
+													expand={!isSmScale ? 'block' : undefined}
+													onClick={() =>
+														setNewShortLinkFormState((_) => ({
+															folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
+															shortUrl: {
+																domain:
+																	CONSTANTS.DEFAULT_VALUES
+																		.DEFAULT_CUSTOM_DOMAIN,
+															},
+															type: messengerPlatformsBlockEnum.link,
+															pixelIds: [],
+															tags: [],
+															formMode: FormMode.ADD,
+														}))
+													}
+													routerLink={ZaionsRoutes.AdminPanel.ShortLinks.Create}
+												>
+													Create a new link
+												</ZIonButton>
+											</ZIonButtons>
+											{/* <ZIonCol
+												sizeXl='max-content'
+												sizeSm='4'
+												sizeXs='6'
+												className={classNames({
+													'ion-text-end': isXlScale,
+													'ion-text-start': !isXlScale,
+												})}
+											>
+												<Dropdown>
+													<Dropdown.Toggle
+														id='dropdown-custom-components'
+														className={`${classes.zaions__dropdown_toggle}`}
+													>
+														<ZIonButton
+															id='dropdown-basic'
+															fill='outline'
+															className='ms-auto'
+														>
+															Export data's
+														</ZIonButton>
+													</Dropdown.Toggle>
+													<Dropdown.Menu className='ms-auto'>
+														<Dropdown.Item
+															className={`${classes.zaions__dropdown_item}`}
+														>
+															Export all data's
+														</Dropdown.Item>
+														<Dropdown.Item
+															className={`${classes.zaions__dropdown_item}`}
+														>
+															Export folders data's
+														</Dropdown.Item>
+													</Dropdown.Menu>
+												</Dropdown>
+											</ZIonCol>
+
+											<ZIonCol
+												sizeXl='max-content'
+												sizeSm='4'
+												sizeXs='6'
+												className={classNames({
+													'ion-text-end': isXlScale,
+													'ion-text-start': !isXlScale,
+												})}
+											>
+												<ZIonMenuToggle
+													autoHide={false}
+													// menu={ADMIN_LINK_PAGE_CONTENT_ID}
+												>
+													<ZIonButton fill='outline' className='me-3'>
+														Bulk Import
+													</ZIonButton>
+												</ZIonMenuToggle>
+											</ZIonCol>
+
+											<ZIonCol
+												sizeXl='max-content'
+												sizeSm='4'
+												sizeXs='6'
+												className={classNames({
+													'ion-text-end': isXlScale,
+													'ion-text-start': !isXlScale,
+												})}
+											>
+												<ZIonButton
+													color='primary'
+													onClick={() =>
+														setNewShortLinkFormState((_) => ({
+															folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
+															shortUrl: {
+																domain:
+																	CONSTANTS.DEFAULT_VALUES
+																		.DEFAULT_CUSTOM_DOMAIN,
+															},
+															type: messengerPlatformsBlockEnum.link,
+															pixelIds: [],
+															tags: [],
+															formMode: FormMode.ADD,
+														}))
+													}
+													routerLink={
+														ZaionsRoutes.AdminPanel
+															.ShortLinks.Create
+													}
+												>
+													Create a new link
+												</ZIonButton>
+											</ZIonCol> */}
+										</ZIonRow>
+									</ZIonCol>
+								</ZIonRow>
+
+								<ZIonRow className='py-4 px-3 zaions__bg_white rounded ion-align-items-center mt-1'>
+									<ZIonCol className='d-flex ion-align-items-center'>
+										<ZIonText>
+											<h4 className='ion-no-margin'>
+												<ZIonText className='total_links fw-bold'>
+													{_shortLinksData?.length}
+												</ZIonText>{' '}
+												links
+											</h4>
+										</ZIonText>
+									</ZIonCol>
+
+									<ZIonCol
+										className={classNames({
+											'd-flex': true,
+											'justify-content-end': isXlScale,
+											'justify-content-between mt-2': !isXlScale,
+										})}
+										sizeXl='10'
+										size='12'
+									>
+										<ZIonRow
+											className={classNames({
+												'w-100 ion-justify-content-between': true,
+												'row-gap-1-rem': !isLgScale,
+											})}
+										>
+											<ZIonButtons
+												className={classNames({
+													'w-100': true,
+													'ion-justify-content-between': !isXlScale,
+													'ion-justify-content-end gap-3': isXlScale,
+													'd-block': !isMdScale,
+												})}
+											>
+												{/* Filter by days */}
+												<ZIonButton
+													fill='outline'
+													color='primary'
+													expand={!isMdScale ? 'block' : undefined}
+													className={classNames({
+														'my-2': true,
+													})}
+													onClick={(event: unknown) => {
+														presentShortLinkTimeFilterModal({
+															_event: event as Event,
+															_cssClass:
+																shortLinksFilterOptions.timeFilter
+																	.daysToSubtract === TimeFilterEnum.customRange
+																	? classes[
+																			'short-link-tags-filter-modal-custom-range-size'
+																	  ]
+																	: classes[
+																			'short-link-time-filter-modal-size'
+																	  ],
+															_dismissOnSelect: false,
+														});
+													}}
+												>
+													<ZIonIcon slot='start' icon={calendar} />
+													{shortLinksFilterOptions.timeFilter.daysToSubtract ===
+													TimeFilterEnum.allTime
+														? 'All Times'
+														: shortLinksFilterOptions.timeFilter
+																.daysToSubtract === TimeFilterEnum.today
+														? 'Today'
+														: shortLinksFilterOptions.timeFilter
+																.daysToSubtract === TimeFilterEnum.lastSevenDays
+														? 'Last 7 days'
+														: shortLinksFilterOptions.timeFilter
+																.daysToSubtract === TimeFilterEnum.last30days
+														? 'Last 30 days'
+														: shortLinksFilterOptions.timeFilter
+																.daysToSubtract === TimeFilterEnum.lastMonth
+														? 'Last Mouth'
+														: shortLinksFilterOptions.timeFilter
+																.daysToSubtract === TimeFilterEnum.thisMonth
+														? 'This Month'
+														: shortLinksFilterOptions.timeFilter
+																.daysToSubtract === TimeFilterEnum.customRange
+														? 'Custom Range'
+														: 'All Time'}
+												</ZIonButton>
+
+												{/* Filter by tags */}
+												<ZIonButton
+													fill='outline'
+													color='primary'
+													expand={!isMdScale ? 'block' : undefined}
+													className={classNames({
+														'my-2': true,
+													})}
+													onClick={(event: unknown) => {
+														presentShortLinkTagsFilterModal({
+															_event: event as Event,
+															_dismissOnSelect: false,
+															_cssClass:
+																classes['short-link-tags-filter-modal-size'],
+														});
+													}}
+												>
+													<ZIonIcon slot='start' icon={pricetagOutline} />
+													{shortLinksFilterOptions.tags
+														? shortLinksFilterOptions.tags?.length === 1
+															? shortLinksFilterOptions.tags[0]
+															: shortLinksFilterOptions.tags?.length > 1
+															? `${shortLinksFilterOptions.tags?.length} tags`
+															: 'No values'
+														: 'No values'}
+												</ZIonButton>
+
+												{/* Filter by Domains */}
+												<ZIonButton
+													fill='outline'
+													color='primary'
+													expand={!isMdScale ? 'block' : undefined}
+													className={classNames({
+														'my-2': true,
+													})}
+													onClick={(event: unknown) => {
+														presentShortLinkDomainsFilterModal({
+															_event: event as Event,
+															_dismissOnSelect: false,
+															_cssClass:
+																classes['short-link-tags-filter-modal-size'],
+														});
+													}}
+												>
+													<ZIonIcon slot='start' icon={businessOutline} />
+													{shortLinksFilterOptions.domains
+														? shortLinksFilterOptions.domains?.length === 1
+															? shortLinksFilterOptions.domains[0]
+															: shortLinksFilterOptions.domains?.length > 1
+															? `${shortLinksFilterOptions.domains?.length} domains`
+															: 'No values'
+														: 'No values'}
+												</ZIonButton>
+
+												{/* Filter by Columns */}
+												<ZIonButton
+													fill='outline'
+													color='primary'
+													expand={!isMdScale ? 'block' : undefined}
+													className={classNames({
+														'my-2': true,
+													})}
+												>
+													<ZIonIcon slot='start' icon={menuOutline}></ZIonIcon>7
+													Columns
+												</ZIonButton>
+
+												{/* Refetch data button */}
+												<ZIonButton
+													color='primary'
+													fill='outline'
+													expand={!isMdScale ? 'block' : undefined}
+													className={classNames({
+														'my-2': true,
+													})}
+													onClick={() => {
+														void invalidedShortLinksQuery();
+													}}
+												>
+													<ZIonIcon slot='start' icon={refresh} />
+													Refetch
+												</ZIonButton>
+											</ZIonButtons>
+										</ZIonRow>
+									</ZIonCol>
+								</ZIonRow>
+							</ZIonGrid>
+							<ZaionsShortLinkTable />
+						</ZIonCol>
+					</ZIonRow>
+				</ZIonGrid>
+			</ZIonContent>
+		</ZaionsIonPage>
+	);
+};
 
 const ShortLinksTimeRangeFilterPopover = () => {
 	const [shortLinksFilterOptions, setShortLinksFilterOptions] = useRecoilState(
@@ -651,838 +1390,6 @@ const SearchQueryInputComponent = () => {
 				</ZIonItem>
 			)}
 		</Formik>
-	);
-};
-
-const AdminLinksIndexPage: React.FC = () => {
-	const [compState, setCompState] = useState<{
-		shortLinksFoldersReorder: {
-			Ids?: string[];
-			isEnable?: boolean;
-		};
-	}>({
-		shortLinksFoldersReorder: {
-			isEnable: false,
-		},
-	});
-
-	const { isXlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale();
-
-	const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
-		event.detail.complete();
-
-		setTimeout(() => {
-			const _shortLinksFoldersEls = document.querySelectorAll(
-				'.zaions-short-link-folder'
-			);
-			const _shortLinksFoldersIds: string[] = [];
-			for (let i = 0; i < _shortLinksFoldersEls.length; i++) {
-				const _block = _shortLinksFoldersEls[i];
-				_shortLinksFoldersIds.push(
-					_block.getAttribute('data-folder-id') as string
-				);
-			}
-
-			if (_shortLinksFoldersIds.length) {
-				setCompState((_) => ({
-					shortLinksFoldersReorder: {
-						Ids: _shortLinksFoldersIds,
-						isEnable: _shortLinksFoldersIds.length > 1,
-					},
-				}));
-			}
-		}, 100);
-	};
-	const { zNavigatePushRoute } = useZNavigate();
-	const shortLinksFilterOptions = useRecoilValue(ShortLinksFilterOptionsRState);
-
-	const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
-
-	const setFolderFormState = useSetRecoilState(FolderFormState);
-
-	const { data: _foldersData } = useZRQGetRequest<LinkFolderType[]>({
-		_url: API_URL_ENUM.userAccountFolders_create_list,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
-	});
-
-	const { zInvalidateReactQueries } = useZInvalidateReactQueries();
-
-	const { presentZIonPopover: presentFolderActionIonPopover } = useZIonPopover(
-		ShortLinksFolderActionsPopoverContent
-	);
-	const { presentZIonPopover: presentShortLinkTimeFilterModal } =
-		useZIonPopover(ShortLinksTimeRangeFilterPopover);
-
-	const { presentZIonPopover: presentShortLinkTagsFilterModal } =
-		useZIonPopover(ShortLinksTagsFiltersPopover);
-
-	const { presentZIonPopover: presentShortLinkDomainsFilterModal } =
-		useZIonPopover(ShortLinksDomainsFiltersPopover);
-
-	const _shortLinksData = useRecoilValue(ShortLinksRState);
-
-	const { presentZIonModal: presentFolderModal } = useZIonModal(
-		ZaionsAddNewFolder,
-		{
-			state: folderState.ShortLink,
-		}
-	);
-
-	const { validateRequestResponse } = useZValidateRequestResponse();
-
-	// Update shortLinks folders reorder API
-	const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
-		_url: API_URL_ENUM.ShortLinks_folders_reorder,
-		_queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
-	});
-
-	const ZDashboardState = useRecoilValue(ZDashboardRState);
-
-	const invalidedShortLinksQuery = async () => {
-		try {
-			await zInvalidateReactQueries([
-				CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-			]);
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
-
-	const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
-		try {
-			await invalidedShortLinksQuery();
-			event.detail.complete();
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
-
-	const shortLinksFoldersReOrderHandler = async () => {
-		try {
-			// The update api...
-			const _result = await UpdateShortLinksFoldersReorder({
-				requestData: zStringify({
-					folders: compState.shortLinksFoldersReorder.Ids,
-				}),
-				itemIds: [],
-				urlDynamicParts: [],
-			});
-
-			// if _result of the UpdateShortLinksFoldersReorder api is success this showing success notification else not success then error notification.
-			await validateRequestResponse({
-				resultObj: _result,
-			});
-
-			// hiding the reorder button by assigning isEnable to false
-			setCompState((oldValues) => ({
-				...oldValues,
-				shortLinksFoldersReorder: {
-					Ids: oldValues.shortLinksFoldersReorder.Ids,
-					isEnable: false,
-				},
-			}));
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
-
-	return (
-		<ZaionsIonPage
-			pageTitle='Zaions Short Links Page'
-			id={CONSTANTS.MENU_IDS.ADMIN_PAGE_FOLDERS_MENU_ID}
-			menu={PAGE_MENU.ADMIN_PANEL_FOLDERS_MENU}
-			menuSide={PAGE_MENU_SIDE.START}
-		>
-			<ZIonContent>
-				<ZIonRefresher onIonRefresh={(event) => void handleRefresh(event)}>
-					<ZIonRefresherContent />
-				</ZIonRefresher>
-				<ZIonGrid className='ion-no-padding zaions_h100'>
-					<ZIonRow className='zaions_h100'>
-						{isLgScale && <AdminPanelMainSidebarMenu />}
-						{/* Folders Side Menu */}
-						{isLgScale && (
-							<ZIonCol
-								size={
-									ZDashboardState.dashboardMainSidebarIsCollabes.isCollabes
-										? '2'
-										: '2.4'
-								}
-								className='ion-padding border-end zaions-transition'
-							>
-								<div className='ion-padding-top'>
-									<ZIonList lines='none'>
-										<ZIonItem className='zaions__cursor_pointer mb-2'>
-											<h5 className='fw-bold m-0 p-0'>🔗 All links</h5>
-										</ZIonItem>
-										<ZIonItem>
-											<ZIonList lines='none' className='zaions__w100'>
-												<ZIonItem className='ion-no-padding'>
-													<ZIonText color='primary' className='fw-bold'>
-														<h5 className='fw-bold d-block m-0 p-0'>
-															📂 Folders
-														</h5>
-													</ZIonText>
-												</ZIonItem>
-												<ZIonItem
-													className='zaions__cursor_pointer ms-2'
-													onClick={() => {
-														zNavigatePushRoute(
-															replaceParams(
-																ZaionsRoutes.AdminPanel
-																	.ZaionsAdminLinkIndexPageRoute,
-																CONSTANTS.RouteParams
-																	.folderIdToGetShortLinksOrLinkInBio,
-																'all'
-															)
-														);
-													}}
-												>
-													<ZIonLabel>Default</ZIonLabel>
-													<ZIonReorder slot='start' className='me-3'>
-														<ZIonIcon icon={appsOutline}></ZIonIcon>
-													</ZIonReorder>
-												</ZIonItem>
-												{_foldersData && _foldersData.length ? (
-													<ZIonReorderGroup
-														disabled={false}
-														onIonItemReorder={handleReorder}
-													>
-														{_foldersData.map((el) => (
-															<ZIonItem
-																className='zaions__cursor_pointer zaions-short-link-folder'
-																key={el.id}
-																data-folder-id={el.id}
-															>
-																<ZIonLabel
-																	onClick={() => {
-																		zNavigatePushRoute(
-																			replaceParams(
-																				ZaionsRoutes.AdminPanel
-																					.ZaionsAdminLinkIndexPageRoute,
-																				CONSTANTS.RouteParams
-																					.folderIdToGetShortLinksOrLinkInBio,
-																				el.id as string
-																			)
-																		);
-																	}}
-																>
-																	{el.title}
-																</ZIonLabel>
-																<ZIonButton
-																	fill='clear'
-																	color='dark'
-																	size='small'
-																	value={el.id}
-																	onClick={(event: unknown) => {
-																		presentFolderActionIonPopover({
-																			_event: event as Event,
-																			_cssClass: classNames(
-																				classes.zaions_present_folder_Action_popover_width
-																			),
-																		});
-																		setFolderFormState((oldVal) => ({
-																			...oldVal,
-																			id: el.id,
-																			name: el.title,
-																			formMode: FormMode.EDIT,
-																		}));
-																	}}
-																	className='ion-no-padding ms-auto'
-																>
-																	<ZIonIcon icon={ellipsisVertical} />
-																</ZIonButton>
-																<ZIonReorder slot='start' className='me-3'>
-																	<ZIonIcon icon={appsOutline}></ZIonIcon>
-																</ZIonReorder>
-															</ZIonItem>
-														))}
-													</ZIonReorderGroup>
-												) : (
-													''
-												)}
-											</ZIonList>
-										</ZIonItem>
-									</ZIonList>
-									<ZIonButton
-										className='ion-text-capitalize ion-margin-horizontal'
-										fill='outline'
-										expand='block'
-										onClick={() => {
-											setFolderFormState((oldVal) => ({
-												...oldVal,
-												id: '',
-												name: '',
-												formMode: FormMode.ADD,
-											}));
-											presentFolderModal({
-												_cssClass: 'link-in-bio-folder-modal',
-											});
-										}}
-									>
-										New Folder
-									</ZIonButton>
-
-									{compState?.shortLinksFoldersReorder?.isEnable && (
-										<ZIonButton
-											className='ion-text-capitalize ion-margin-horizontal position-absolute bottom-0'
-											expand='block'
-											onClick={() => {
-												void shortLinksFoldersReOrderHandler();
-											}}
-											style={{ width: '78%' }}
-										>
-											save reorder
-										</ZIonButton>
-									)}
-								</div>
-							</ZIonCol>
-						)}
-
-						<ZIonCol className='zaions-transition'>
-							<ZIonGrid className='pb-2 zaions__bg_white ion-no-padding'>
-								{!isLgScale && (
-									<ZIonRow className='mb-5 ion-align-items-center zaions__light_bg'>
-										<ZIonCol size='12' className='mt-1'>
-											<ZIonSegment
-												scrollable={true}
-												value={'short-links'}
-												// color='secondary'
-											>
-												{/* Short Links */}
-												<ZIonSegmentButton
-													value='short-links'
-													className='text-transform-initial'
-													onClick={() => {
-														zNavigatePushRoute(
-															replaceParams(
-																ZaionsRoutes.AdminPanel
-																	.ZaionsAdminLinkIndexPageRoute,
-																CONSTANTS.RouteParams
-																	.folderIdToGetShortLinksOrLinkInBio,
-																'all'
-															)
-														);
-													}}
-												>
-													Short links
-												</ZIonSegmentButton>
-
-												{/* Link-in-bio */}
-												<ZIonSegmentButton
-													value='link-in-bio'
-													className='text-transform-initial'
-													onClick={() => {
-														zNavigatePushRoute(
-															replaceParams(
-																ZaionsRoutes.AdminPanel.ZaionsDashboard
-																	.ZLinkInBio,
-																CONSTANTS.RouteParams
-																	.folderIdToGetShortLinksOrLinkInBio,
-																'all'
-															)
-														);
-													}}
-												>
-													Link-in-bio
-												</ZIonSegmentButton>
-
-												{/* Extension */}
-												<ZIonSegmentButton
-													value='extension'
-													className='text-transform-initial'
-													onClick={() => {
-														zNavigatePushRoute(
-															replaceParams(
-																ZaionsRoutes.AdminPanel
-																	.ZaionsAdminLinkIndexPageRoute,
-																CONSTANTS.RouteParams
-																	.folderIdToGetShortLinksOrLinkInBio,
-																'all'
-															)
-														);
-													}}
-												>
-													Extension
-												</ZIonSegmentButton>
-
-												{/* Integrations */}
-												<ZIonSegmentButton
-													value='integrations'
-													className='text-transform-initial'
-													onClick={() => {
-														zNavigatePushRoute(
-															replaceParams(
-																ZaionsRoutes.AdminPanel
-																	.ZaionsAdminLinkIndexPageRoute,
-																CONSTANTS.RouteParams
-																	.folderIdToGetShortLinksOrLinkInBio,
-																'all'
-															)
-														);
-													}}
-												>
-													Integrations
-												</ZIonSegmentButton>
-
-												{/* Help center */}
-												<ZIonSegmentButton
-													value='help-center'
-													className='text-transform-initial'
-													onClick={() => {
-														zNavigatePushRoute(
-															replaceParams(
-																ZaionsRoutes.AdminPanel
-																	.ZaionsAdminLinkIndexPageRoute,
-																CONSTANTS.RouteParams
-																	.folderIdToGetShortLinksOrLinkInBio,
-																'all'
-															)
-														);
-													}}
-												>
-													Help center
-												</ZIonSegmentButton>
-
-												{/* Settings */}
-												<ZIonSegmentButton
-													value='settings'
-													className='text-transform-initial'
-													onClick={() => {
-														zNavigatePushRoute(
-															replaceParams(
-																ZaionsRoutes.AdminPanel
-																	.ZaionsAdminLinkIndexPageRoute,
-																CONSTANTS.RouteParams
-																	.folderIdToGetShortLinksOrLinkInBio,
-																'all'
-															)
-														);
-													}}
-												>
-													Settings
-												</ZIonSegmentButton>
-											</ZIonSegment>
-										</ZIonCol>
-									</ZIonRow>
-								)}
-
-								<ZIonRow
-									className={classNames({
-										'px-3 ion-align-items-center': true,
-										'mt-4': isLgScale,
-									})}
-								>
-									<ZIonCol>
-										<ZIonText
-											className={classNames({
-												'ion-text-center': !isSmScale,
-											})}
-										>
-											<h4 className='fw-bold zaions__color_gray2'>
-												Create a new link
-											</h4>
-										</ZIonText>
-										<ZIonText
-											className={classNames({
-												'ion-text-center': !isSmScale,
-											})}
-										>
-											<h5 className='zaions__color_gray2'>
-												Create & manage your links
-											</h5>
-										</ZIonText>
-									</ZIonCol>
-									<ZIonCol
-										sizeXl='4'
-										sizeLg='5'
-										sizeMd='5'
-										sizeSm='12'
-										sizeXs='12'
-										className={classNames({
-											'mt-4': !isMdScale,
-										})}
-									>
-										<ZaionsCreateShortLinkUrlInput />
-									</ZIonCol>
-
-									{!isLgScale && (
-										<ZIonCol
-											size='max-content'
-											sizeSm='max-content'
-											sizeXs='12'
-										>
-											<ZIonMenuToggle
-												autoHide={false}
-												menu={CONSTANTS.MENU_IDS.ADMIN_PAGE_FOLDERS_MENU_ID}
-											>
-												<ZIonButton
-													className={classNames(classes['open-folder-menu-button'], {
-														'text-transform-initial': true,
-														'ion-margin-start': !isLgScale,
-														'mt-4 ms-0': !isMdScale,
-													})}
-													expand={!isSmScale ? 'block' : undefined}
-													// menu={CONSTANTS.MENU_IDS.ADMIN_PAGE_FOLDERS_MENU_ID}
-													// autoHide={false}
-												>
-													Open folders menu
-												</ZIonButton>
-											</ZIonMenuToggle>
-										</ZIonCol>
-									)}
-								</ZIonRow>
-							</ZIonGrid>
-
-							<ZIonGrid className='mt-3 mb-5'>
-								<ZIonRow className='py-4 px-3 zaions__bg_white rounded ion-align-items-center'>
-									<ZIonCol
-										sizeXl='4'
-										sizeLg='12'
-										sizeMd='12'
-										sizeSm='12'
-										sizeXs='12'
-									>
-										<SearchQueryInputComponent />
-									</ZIonCol>
-									<ZIonCol>
-										<ZIonRow
-											className={classNames({
-												'justify-content-end': isXlScale,
-												'justify-content-start mt-4': !isXlScale,
-												'row-gap-1-rem': !isLgScale,
-											})}
-										>
-											<ZIonButtons
-												className={classNames({
-													'w-100': true,
-													'ion-justify-content-between': !isXlScale,
-													'ion-justify-content-end gap-3': isXlScale,
-													'd-block': !isSmScale,
-												})}
-											>
-												<ZIonButton
-													id='dropdown-basic'
-													fill='outline'
-													color='primary'
-													expand={!isSmScale ? 'block' : undefined}
-													className={classNames({
-														'my-2': true,
-													})}
-												>
-													Export data's
-												</ZIonButton>
-
-												<ZIonButton
-													fill='outline'
-													color='primary'
-													expand={!isSmScale ? 'block' : undefined}
-													className={classNames({
-														'my-2': true,
-													})}
-												>
-													Bulk Import
-												</ZIonButton>
-
-												<ZIonButton
-													color='primary'
-													fill='solid'
-													className={classNames({
-														'my-2': true,
-													})}
-													expand={!isSmScale ? 'block' : undefined}
-													onClick={() =>
-														setNewShortLinkFormState((_) => ({
-															folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
-															shortUrl: {
-																domain:
-																	CONSTANTS.DEFAULT_VALUES
-																		.DEFAULT_CUSTOM_DOMAIN,
-															},
-															type: messengerPlatformsBlockEnum.link,
-															pixelIds: [],
-															tags: [],
-															formMode: FormMode.ADD,
-														}))
-													}
-													routerLink={
-														ZaionsRoutes.AdminPanel
-															.ZaionsAdminCreateNewLinkPageRoute
-													}
-												>
-													Create a new link
-												</ZIonButton>
-											</ZIonButtons>
-											{/* <ZIonCol
-												sizeXl='max-content'
-												sizeSm='4'
-												sizeXs='6'
-												className={classNames({
-													'ion-text-end': isXlScale,
-													'ion-text-start': !isXlScale,
-												})}
-											>
-												<Dropdown>
-													<Dropdown.Toggle
-														id='dropdown-custom-components'
-														className={`${classes.zaions__dropdown_toggle}`}
-													>
-														<ZIonButton
-															id='dropdown-basic'
-															fill='outline'
-															className='ms-auto'
-														>
-															Export data's
-														</ZIonButton>
-													</Dropdown.Toggle>
-													<Dropdown.Menu className='ms-auto'>
-														<Dropdown.Item
-															className={`${classes.zaions__dropdown_item}`}
-														>
-															Export all data's
-														</Dropdown.Item>
-														<Dropdown.Item
-															className={`${classes.zaions__dropdown_item}`}
-														>
-															Export folders data's
-														</Dropdown.Item>
-													</Dropdown.Menu>
-												</Dropdown>
-											</ZIonCol>
-
-											<ZIonCol
-												sizeXl='max-content'
-												sizeSm='4'
-												sizeXs='6'
-												className={classNames({
-													'ion-text-end': isXlScale,
-													'ion-text-start': !isXlScale,
-												})}
-											>
-												<ZIonMenuToggle
-													autoHide={false}
-													// menu={ADMIN_LINK_PAGE_CONTENT_ID}
-												>
-													<ZIonButton fill='outline' className='me-3'>
-														Bulk Import
-													</ZIonButton>
-												</ZIonMenuToggle>
-											</ZIonCol>
-
-											<ZIonCol
-												sizeXl='max-content'
-												sizeSm='4'
-												sizeXs='6'
-												className={classNames({
-													'ion-text-end': isXlScale,
-													'ion-text-start': !isXlScale,
-												})}
-											>
-												<ZIonButton
-													color='primary'
-													onClick={() =>
-														setNewShortLinkFormState((_) => ({
-															folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
-															shortUrl: {
-																domain:
-																	CONSTANTS.DEFAULT_VALUES
-																		.DEFAULT_CUSTOM_DOMAIN,
-															},
-															type: messengerPlatformsBlockEnum.link,
-															pixelIds: [],
-															tags: [],
-															formMode: FormMode.ADD,
-														}))
-													}
-													routerLink={
-														ZaionsRoutes.AdminPanel
-															.ZaionsAdminCreateNewLinkPageRoute
-													}
-												>
-													Create a new link
-												</ZIonButton>
-											</ZIonCol> */}
-										</ZIonRow>
-									</ZIonCol>
-								</ZIonRow>
-
-								<ZIonRow className='py-4 px-3 zaions__bg_white rounded ion-align-items-center mt-1'>
-									<ZIonCol className='d-flex ion-align-items-center'>
-										<ZIonText>
-											<h4 className='ion-no-margin'>
-												<ZIonText className='total_links fw-bold'>
-													{_shortLinksData?.length}
-												</ZIonText>{' '}
-												links
-											</h4>
-										</ZIonText>
-									</ZIonCol>
-
-									<ZIonCol
-										className={classNames({
-											'd-flex': true,
-											'justify-content-end': isXlScale,
-											'justify-content-between mt-2': !isXlScale,
-										})}
-										sizeXl='10'
-										size='12'
-									>
-										<ZIonRow
-											className={classNames({
-												'w-100 ion-justify-content-between': true,
-												'row-gap-1-rem': !isLgScale,
-											})}
-										>
-											<ZIonButtons
-												className={classNames({
-													'w-100': true,
-													'ion-justify-content-between': !isXlScale,
-													'ion-justify-content-end gap-3': isXlScale,
-													'd-block': !isMdScale,
-												})}
-											>
-												{/* Filter by days */}
-												<ZIonButton
-													fill='outline'
-													color='primary'
-													expand={!isMdScale ? 'block' : undefined}
-													className={classNames({
-														'my-2': true,
-													})}
-													onClick={(event: unknown) => {
-														presentShortLinkTimeFilterModal({
-															_event: event as Event,
-															_cssClass:
-																shortLinksFilterOptions.timeFilter
-																	.daysToSubtract === TimeFilterEnum.customRange
-																	? classes[
-																			'short-link-tags-filter-modal-custom-range-size'
-																	  ]
-																	: classes[
-																			'short-link-time-filter-modal-size'
-																	  ],
-															_dismissOnSelect: false,
-														});
-													}}
-												>
-													<ZIonIcon slot='start' icon={calendar} />
-													{shortLinksFilterOptions.timeFilter.daysToSubtract ===
-													TimeFilterEnum.allTime
-														? 'All Times'
-														: shortLinksFilterOptions.timeFilter
-																.daysToSubtract === TimeFilterEnum.today
-														? 'Today'
-														: shortLinksFilterOptions.timeFilter
-																.daysToSubtract === TimeFilterEnum.lastSevenDays
-														? 'Last 7 days'
-														: shortLinksFilterOptions.timeFilter
-																.daysToSubtract === TimeFilterEnum.last30days
-														? 'Last 30 days'
-														: shortLinksFilterOptions.timeFilter
-																.daysToSubtract === TimeFilterEnum.lastMonth
-														? 'Last Mouth'
-														: shortLinksFilterOptions.timeFilter
-																.daysToSubtract === TimeFilterEnum.thisMonth
-														? 'This Month'
-														: shortLinksFilterOptions.timeFilter
-																.daysToSubtract === TimeFilterEnum.customRange
-														? 'Custom Range'
-														: 'All Time'}
-												</ZIonButton>
-
-												{/* Filter by tags */}
-												<ZIonButton
-													fill='outline'
-													color='primary'
-													expand={!isMdScale ? 'block' : undefined}
-													className={classNames({
-														'my-2': true,
-													})}
-													onClick={(event: unknown) => {
-														presentShortLinkTagsFilterModal({
-															_event: event as Event,
-															_dismissOnSelect: false,
-															_cssClass:
-																classes['short-link-tags-filter-modal-size'],
-														});
-													}}
-												>
-													<ZIonIcon slot='start' icon={pricetagOutline} />
-													{shortLinksFilterOptions.tags
-														? shortLinksFilterOptions.tags?.length === 1
-															? shortLinksFilterOptions.tags[0]
-															: shortLinksFilterOptions.tags?.length > 1
-															? `${shortLinksFilterOptions.tags?.length} tags`
-															: 'No values'
-														: 'No values'}
-												</ZIonButton>
-
-												{/* Filter by Domains */}
-												<ZIonButton
-													fill='outline'
-													color='primary'
-													expand={!isMdScale ? 'block' : undefined}
-													className={classNames({
-														'my-2': true,
-													})}
-													onClick={(event: unknown) => {
-														presentShortLinkDomainsFilterModal({
-															_event: event as Event,
-															_dismissOnSelect: false,
-															_cssClass:
-																classes['short-link-tags-filter-modal-size'],
-														});
-													}}
-												>
-													<ZIonIcon slot='start' icon={businessOutline} />
-													{shortLinksFilterOptions.domains
-														? shortLinksFilterOptions.domains?.length === 1
-															? shortLinksFilterOptions.domains[0]
-															: shortLinksFilterOptions.domains?.length > 1
-															? `${shortLinksFilterOptions.domains?.length} domains`
-															: 'No values'
-														: 'No values'}
-												</ZIonButton>
-
-												{/* Filter by Columns */}
-												<ZIonButton
-													fill='outline'
-													color='primary'
-													expand={!isMdScale ? 'block' : undefined}
-													className={classNames({
-														'my-2': true,
-													})}
-												>
-													<ZIonIcon slot='start' icon={menuOutline}></ZIonIcon>7
-													Columns
-												</ZIonButton>
-
-												{/* Refetch data button */}
-												<ZIonButton
-													color='primary'
-													fill='outline'
-													expand={!isMdScale ? 'block' : undefined}
-													className={classNames({
-														'my-2': true,
-													})}
-													onClick={() => {
-														void invalidedShortLinksQuery();
-													}}
-												>
-													<ZIonIcon slot='start' icon={refresh} />
-													Refetch
-												</ZIonButton>
-											</ZIonButtons>
-										</ZIonRow>
-									</ZIonCol>
-								</ZIonRow>
-							</ZIonGrid>
-							<ZaionsShortLinkTable />
-						</ZIonCol>
-					</ZIonRow>
-				</ZIonGrid>
-			</ZIonContent>
-		</ZaionsIonPage>
 	);
 };
 

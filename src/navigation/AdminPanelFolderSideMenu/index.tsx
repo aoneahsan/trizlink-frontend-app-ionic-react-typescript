@@ -81,6 +81,7 @@ interface AdminPanelFoldersSidebarMenuInterface {
 	handleReorderFn?: (
 		event: IonReorderGroupCustomEvent<ItemReorderEventDetail>
 	) => void;
+	menuId?: string;
 	folderActionHandlerFn?: React.MouseEventHandler<HTMLIonButtonElement>;
 	saveReorderButtonFn?: React.MouseEventHandler<HTMLIonButtonElement>;
 }
@@ -98,6 +99,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 	foldersData,
 	state,
 	showSaveReorderButton,
+	menuId,
 	handleReorderFn,
 	folderActionHandlerFn,
 	saveReorderButtonFn,
@@ -114,11 +116,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 	);
 
 	return (
-		<ZIonMenu
-			contentId={CONSTANTS.MENU_IDS.ADMIN_PAGE_FOLDERS_MENU_ID}
-			side={menuSide || 'end'}
-			menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_FOLDERS_MENU_ID}
-		>
+		<ZIonMenu contentId={menuId} side={menuSide || 'end'} menuId={menuId}>
 			<ZIonList lines='none' style={{ overflow: 'scroll' }}>
 				<ZIonItem className='zaions__cursor_pointer mb-2'>
 					<h5 className='fw-bold m-0 p-0'>🔗 All links</h5>
@@ -137,7 +135,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 							onClick={() => {
 								zNavigatePushRoute(
 									replaceParams(
-										ZaionsRoutes.AdminPanel.ZaionsAdminLinkIndexPageRoute,
+										ZaionsRoutes.AdminPanel.ShortLinks.Main,
 										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
 										'all'
 									)
@@ -168,7 +166,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 												zNavigatePushRoute(
 													replaceParams(
 														ZaionsRoutes.AdminPanel
-															.ZaionsAdminLinkIndexPageRoute,
+															.ShortLinks.Main,
 														CONSTANTS.RouteParams
 															.folderIdToGetShortLinksOrLinkInBio,
 														el.id as string

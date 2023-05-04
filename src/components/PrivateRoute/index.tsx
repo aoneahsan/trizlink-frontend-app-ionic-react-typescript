@@ -26,7 +26,7 @@ const PrivateRouteAsync = ({ component: Component, ...rest }: any) => {
 
 	return (
 		// Show the component only when the user is logged in
-		// Otherwise, redirect the user to /signin page
+		// Otherwise, redirect the user to /sign in page
 
 		<Route
 			{...rest}

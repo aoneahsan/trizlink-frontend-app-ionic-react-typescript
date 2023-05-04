@@ -169,9 +169,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 			}
 		} catch (error) {
 			if (error instanceof AxiosError) {
-				zNavigatePushRoute(
-					ZaionsRoutes.AdminPanel.ZaionsAdminLinkIndexPageRoute
-				);
+				zNavigatePushRoute(ZaionsRoutes.AdminPanel.ShortLinks.Main);
 				showErrorNotification(error.message);
 			} else {
 				reportCustomError(error);
@@ -267,7 +265,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
 			zNavigatePushRoute(
 				replaceParams(
-					ZaionsRoutes.AdminPanel.ZaionsAdminLinkIndexPageRoute,
+					ZaionsRoutes.AdminPanel.ShortLinks.Main,
 					CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
 					''
 				)
@@ -678,8 +676,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 													<ZIonButton
 														className='ion-text-capitalize'
 														routerLink={replaceParams(
-															ZaionsRoutes.AdminPanel
-																.ZaionsAdminLinkIndexPageRoute,
+															ZaionsRoutes.AdminPanel.ShortLinks.Main,
 															CONSTANTS.RouteParams
 																.folderIdToGetShortLinksOrLinkInBio,
 															''
@@ -712,8 +709,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 													<ZIonButton
 														className='ion-text-capitalize'
 														routerLink={
-															ZaionsRoutes.AdminPanel
-																.ZaionsAdminCreateNewLinkPageRoute
+															ZaionsRoutes.AdminPanel.ShortLinks.Create
 														}
 													>
 														{newShortLinkFormState.formMode === FormMode.ADD

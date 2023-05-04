@@ -68,25 +68,30 @@ const ZaionsRoutes = {
 
 	// Admin Panel
 	AdminPanel: {
-		ZaionsAdminLinkIndexPageRoute: `/short-links/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
-		ZaionsAdminShortLinksInFolder: `/short-links/folder/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}/list`,
-		ZaionsAdminCreateNewLinkPageRoute: '/short-links/create',
-		ZaionsAdminCreateNewLinkInBioRoute: '/link-in-bio/create',
-		ZaionsAdminEditLinkInBioRoute: `/link-in-bio/edit/${CONSTANTS.RouteParams.editLinkInBioIdParam}`,
-
-		ZaionsAdminEditLinkPageRoute: `/short-links/edit/${CONSTANTS.RouteParams.editShortLinkIdParam}`,
 		Setting: {
 			Main: '/settings',
 			ZaionsAdminPanelSettingsCustomDomain: '/settings/custom-domain',
 			ZaionsAdminPanelSettingsPixels: '/settings/pixels',
 		},
+
+		ShortLinks: {
+			Main: `/short-links/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
+			Create: '/short-links/create',
+			Edit: `/short-links/edit/${CONSTANTS.RouteParams.editShortLinkIdParam}`,
+		},
+
+		LinkInBio: {
+			Main: `/link-in-bio/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
+			Create: '/link-in-bio/create',
+			Edit: `/link-in-bio/edit/${CONSTANTS.RouteParams.editLinkInBioIdParam}`,
+		},
+
 		ZaionsDashboard: {
-			DashboardInactive: '/short-links/dashboard-upgrade/',
-			LinkInBioInactive: '/short-links/launchpads/default/intro',
-			LinkCampaignsInactive: '/short-links/campaigns-upgrade/',
-			CustomlinksInactive: '/short-links/customlinks-upgrade/',
-			ZLinks: '/short-links/links',
-			ZLinkInBio: `/link-in-bio/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
+			DashboardInactive: '/dashboard-upgrade/',
+			LinkInBioInactive: '/launchpads/default/intro',
+			LinkCampaignsInactive: '/campaigns-upgrade/',
+			CustomlinksInactive: '/custom-links-upgrade/',
+			ZLinks: '/links',
 			ZProfile: '/settings/profile/',
 			ZCustomDomain: '/settings/custom-domains/',
 			ZGroup: '/settings/groups/',
@@ -124,11 +129,10 @@ const ZaionsRoutes = {
 export const ZRoutesRedirects = {
 	// Redirects
 	// AUTHENTICATED_USER_REDIRECT
-	AUTHENTICATED_USER_REDIRECT:
-		ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinkInBio.replace(
-			':folderId',
-			'all'
-		),
+	AUTHENTICATED_USER_REDIRECT: ZaionsRoutes.AdminPanel.LinkInBio.Main.replace(
+		':folderId',
+		'all'
+	),
 
 	// UNAUTHENTICATED_USER_REDIRECT
 	UNAUTHENTICATED_USER_REDIRECT: ZaionsRoutes.LoginRoute,

@@ -146,7 +146,7 @@ const ZaionsShortLinkTable = () => {
 				// was using history here.
 				zNavigatePushRoute(
 					replaceParams(
-						ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkPageRoute,
+						ZaionsRoutes.AdminPanel.ShortLinks.Edit,
 						CONSTANTS.RouteParams.editShortLinkIdParam,
 						compState.selectedShortLinkId
 					)

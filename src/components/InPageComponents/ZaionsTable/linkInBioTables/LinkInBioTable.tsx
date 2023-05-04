@@ -137,7 +137,7 @@ const ZaionsLinkInBioLinksTable = () => {
 				// was using history here.
 				zNavigatePushRoute(
 					createRedirectRoute({
-						url: ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkInBioRoute,
+						url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
 						params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
 						values: [compState.selectedLinkInBioLinkId],
 						routeSearchParams: {

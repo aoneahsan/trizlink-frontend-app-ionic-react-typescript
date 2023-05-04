@@ -114,37 +114,37 @@ const AppRoutes: React.FC = () => {
 
 				<PrivateRoute
 					exact
-					path={ZaionsRoutes.AdminPanel.ZaionsAdminLinkIndexPageRoute}
+					path={ZaionsRoutes.AdminPanel.ShortLinks.Main}
 					component={AdminLinksIndexPage}
 				/>
 
 				<PrivateRoute
 					exact
-					path={ZaionsRoutes.AdminPanel.ZaionsAdminCreateNewLinkPageRoute}
+					path={ZaionsRoutes.AdminPanel.ShortLinks.Create}
 					component={AdminCreateNewLinkPages}
 				/>
 
 				<PrivateRoute
 					exact
-					path={ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkPageRoute}
+					path={ZaionsRoutes.AdminPanel.ShortLinks.Edit}
 					component={AdminCreateNewLinkPages}
 				/>
 
 				<PrivateRoute
 					exact
-					path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinkInBio}
+					path={ZaionsRoutes.AdminPanel.LinkInBio.Main}
 					component={AdminLinkInBiosIndexPage}
 				/>
 
 				<PrivateRoute
 					exact
-					path={ZaionsRoutes.AdminPanel.ZaionsAdminCreateNewLinkInBioRoute}
+					path={ZaionsRoutes.AdminPanel.LinkInBio.Create}
 					component={ZaionsLinkInBioForm}
 				/>
 
 				<PrivateRoute
 					exact
-					path={ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkInBioRoute}
+					path={ZaionsRoutes.AdminPanel.LinkInBio.Edit}
 					component={ZaionsLinkInBioForm}
 				/>
 

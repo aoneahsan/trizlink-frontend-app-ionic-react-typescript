@@ -123,7 +123,7 @@ const ZaionsLoginForm: React.FC = () => {
 					// redirect to profile.
 					zNavigatePushRoute(
 						replaceParams(
-							ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinkInBio,
+							ZaionsRoutes.AdminPanel.LinkInBio.Main,
 							CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
 							''
 						)

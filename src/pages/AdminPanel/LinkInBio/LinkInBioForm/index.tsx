@@ -182,7 +182,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 			}
 		} catch (error) {
 			if (error instanceof AxiosError) {
-				zNavigatePushRoute(ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinkInBio);
+				zNavigatePushRoute(ZaionsRoutes.AdminPanel.LinkInBio.Main);
 				showErrorNotification(error.message);
 			} else {
 				reportCustomError(error);
@@ -370,7 +370,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 												className='ion-text-capitalize ion-no-margin'
 												color='secondary'
 												routerLink={replaceParams(
-													ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinkInBio,
+													ZaionsRoutes.AdminPanel.LinkInBio.Main,
 													CONSTANTS.RouteParams
 														.folderIdToGetShortLinksOrLinkInBio,
 													''
@@ -448,7 +448,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 														zNavigatePushRoute(
 															createRedirectRoute({
 																url: ZaionsRoutes.AdminPanel
-																	.ZaionsAdminEditLinkInBioRoute,
+																	.LinkInBio.Edit,
 																params: [
 																	CONSTANTS.RouteParams.editLinkInBioIdParam,
 																],
@@ -473,7 +473,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 														zNavigatePushRoute(
 															createRedirectRoute({
 																url: ZaionsRoutes.AdminPanel
-																	.ZaionsAdminEditLinkInBioRoute,
+																	.LinkInBio.Edit,
 																params: [
 																	CONSTANTS.RouteParams.editLinkInBioIdParam,
 																],
@@ -497,7 +497,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 														zNavigatePushRoute(
 															createRedirectRoute({
 																url: ZaionsRoutes.AdminPanel
-																	.ZaionsAdminEditLinkInBioRoute,
+																	.LinkInBio.Edit,
 																params: [
 																	CONSTANTS.RouteParams.editLinkInBioIdParam,
 																],
@@ -521,7 +521,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 														zNavigatePushRoute(
 															createRedirectRoute({
 																url: ZaionsRoutes.AdminPanel
-																	.ZaionsAdminEditLinkInBioRoute,
+																	.LinkInBio.Edit,
 																params: [
 																	CONSTANTS.RouteParams.editLinkInBioIdParam,
 																],

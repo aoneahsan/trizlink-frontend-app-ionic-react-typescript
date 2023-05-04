@@ -36,7 +36,7 @@ import { folderState } from '@/types/AdminPanel/index.type';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { FolderState } from '@/ZaionsStore/UserDashboard/FolderState';
+import { ShortLinksFolderFormattedRStateAtom } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinksFoldersState.recoil';
 
 /**
  * Style files Imports go down
@@ -60,36 +60,36 @@ import { FolderState } from '@/ZaionsStore/UserDashboard/FolderState';
  * */
 
 const ShortLinkFoldersHOC: React.FC = () => {
-  const { data: getShortLinkFoldersData } = useZRQGetRequest<LinkFolderType[]>({
-    _url: API_URL_ENUM.userAccountFolders_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
-  });
+	const { data: getShortLinkFoldersData } = useZRQGetRequest<LinkFolderType[]>({
+		_url: API_URL_ENUM.userAccountFolders_create_list,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
+	});
 
-  const [shortLinkFoldersData, setShortLinkFoldersData] =
-    useRecoilState(FolderState);
+	const [shortLinksFolderFormattedState, setShortLinksFolderFormattedState] =
+		useRecoilState(ShortLinksFolderFormattedRStateAtom);
 
-  useEffect(() => {
-    try {
-      if (getShortLinkFoldersData) {
-        const formattedData = getShortLinkFoldersData?.map((el) => {
-          return { value: el.id, label: el.title };
-        }) as FolderInterface[];
-        if (formattedData) {
-          setShortLinkFoldersData(formattedData);
-        }
-      }
-    } catch (error) {
-      reportCustomError(error);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getShortLinkFoldersData]);
+	useEffect(() => {
+		try {
+			if (getShortLinkFoldersData) {
+				const formattedData = getShortLinkFoldersData?.map((el) => {
+					return { value: el.id, label: el.title };
+				}) as FolderInterface[];
+				if (formattedData) {
+					setShortLinksFolderFormattedState(formattedData);
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [getShortLinkFoldersData]);
 
-  return (
-    <NewLinkFolder
-      _foldersData={shortLinkFoldersData}
-      _state={folderState.ShortLink}
-    />
-  );
+	return (
+		<NewLinkFolder
+			_foldersData={shortLinksFolderFormattedState}
+			_state={folderState.ShortLink}
+		/>
+	);
 };
 
 export default ShortLinkFoldersHOC;

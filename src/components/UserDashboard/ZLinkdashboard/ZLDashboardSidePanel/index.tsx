@@ -94,7 +94,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 			className={classNames(classes.ZDashboardMenuWidth)}
 			style={{
 				'--side-min-width': ZDashboardState.dashboardMainSidebarIsCollabes
-					.isCollabes
+					.isExpand
 					? '84px'
 					: '240px',
 			}}
@@ -113,22 +113,18 @@ const ZLinkIonPanelSidebar: React.FC<{
 						/>
 					</ZIonRouterLink>
 				</ZIonTitle>
-				{!ZDashboardState.dashboardMainSidebarIsCollabes.isCollabes ? (
+				{!ZDashboardState.dashboardMainSidebarIsCollabes.isExpand ? (
 					<ZIonButton
 						expand='block'
 						className='ion-margin ion-text-capitalize fw-bold mb-1'
-						routerLink={
-							ZaionsRoutes.AdminPanel.ZaionsAdminCreateNewLinkPageRoute
-						}
+						routerLink={ZaionsRoutes.AdminPanel.ShortLinks.Create}
 					>
 						Create New
 					</ZIonButton>
 				) : (
 					<ZIonButton
 						className='ion-margin ion-text-capitalize fw-bold mb-1'
-						routerLink={
-							ZaionsRoutes.AdminPanel.ZaionsAdminCreateNewLinkPageRoute
-						}
+						routerLink={ZaionsRoutes.AdminPanel.ShortLinks.Create}
 						title='Create New Short Link'
 					>
 						<ZIonIcon icon={addOutline} />
@@ -136,7 +132,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 				)}
 			</IonToolbar>
 			<ZIonContent className=''>
-				{!ZDashboardState.dashboardMainSidebarIsCollabes.isCollabes ? (
+				{!ZDashboardState.dashboardMainSidebarIsCollabes.isExpand ? (
 					<ZIonList lines='none' className='px-2'>
 						{/* Dashboard */}
 						<ZIonRouterLink
@@ -580,8 +576,8 @@ const ZLinkIonPanelSidebar: React.FC<{
 							...oldVals,
 							dashboardMainSidebarIsCollabes: {
 								...oldVals.dashboardMainSidebarIsCollabes,
-								isCollabes:
-									!ZDashboardState.dashboardMainSidebarIsCollabes.isCollabes,
+								isExpand:
+									!ZDashboardState.dashboardMainSidebarIsCollabes.isExpand,
 							},
 						}))
 					}
@@ -589,7 +585,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 				>
 					<ZIonIcon
 						icon={
-							ZDashboardState.dashboardMainSidebarIsCollabes.isCollabes
+							ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
 								? chevronForwardOutline
 								: chevronBackOutline
 						}

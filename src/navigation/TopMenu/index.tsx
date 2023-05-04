@@ -141,7 +141,7 @@ const ZaionsTopMenu: React.FC = () => {
 
             <ZIonRouterLink
               // routerLink={`${ZaionsRoutes.WhyZaions.ZaionsPricingRoute}`}
-              routerLink={`${ZaionsRoutes.AdminPanel.ZaionsAdminLinkIndexPageRoute}`}
+              routerLink={`${ZaionsRoutes.AdminPanel.ShortLinks.Main}`}
               className={`zaions__nav_item  mb-4`}
               color='dark'
             >

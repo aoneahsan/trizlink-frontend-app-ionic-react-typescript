@@ -186,6 +186,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 			handleReorderFn={handleReorder}
 			saveReorderButtonFn={shortLinksFoldersReorderHandler}
 			state={folderState.ShortLink}
+			menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
 		/>
 	);
 };

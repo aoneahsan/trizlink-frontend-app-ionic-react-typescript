@@ -174,7 +174,7 @@ const AdminPanelLinkInBioFolderSideMenu: React.FC = () => {
 
 	return (
 		<AdminPanelFoldersSidebarMenu
-			menuSide={PAGE_MENU_SIDE.START}
+			menuSide={PAGE_MENU_SIDE.END}
 			foldersData={linkInBioFolderState}
 			folderActionHandlerFn={(event: unknown) => {
 				presentFolderActionIonPopover({
@@ -185,7 +185,8 @@ const AdminPanelLinkInBioFolderSideMenu: React.FC = () => {
 			showSaveReorderButton={compState.linkInBioFoldersReorder.isEnable}
 			handleReorderFn={handleReorder}
 			saveReorderButtonFn={shortLinksFoldersReorderHandler}
-			state={folderState.ShortLink}
+			state={folderState.LinkInBios}
+			menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID}
 		/>
 	);
 };
