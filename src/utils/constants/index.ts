@@ -43,7 +43,8 @@ export const API_URLS = {
 	FolderShortLinks: '/user/folders/:folderId/short-links',
 	ShortLinks_folders_reorder: '/user/shortLinks/folders/reorder',
 	userAccount_LinkInBio_folders_create_list: '/user/link-in-bio-folders',
-	userAccount_LinkInBio_folders_update_delete: '/user/link-in-bio-folders',
+	userAccount_LinkInBio_folders_update_delete:
+		'/user/link-in-bio-folders/:folderId',
 	linkInBio_create_list: '/user/link-in-bio',
 	linkInBio_update_delete: '/user/link-in-bio/:linkInBioId',
 	linkInBioPreDefinedThemes_create_list: '/user/link-in-bio-themes',
@@ -105,7 +106,10 @@ const MENU_IDS = {
 	CONTENT_ID: 'zaions_main-content',
 	ADMIN_LINK_PAGE_CONTENT_ID: 'zaions-link-page-menu',
 	DASHBOARD_SM_MENU_CONTENT_ID: 'zaions-dashboard-responsive-menu-content-id',
-	ADMIN_PAGE_FOLDERS_MENU_ID: 'admin_page_folders_menu_id',
+	ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID:
+		'admin_page_short_links_folders_menu_id',
+	ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID:
+		'admin_page_links_in_bio_folders_menu_id',
 };
 
 // Other

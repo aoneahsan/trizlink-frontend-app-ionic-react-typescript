@@ -67,7 +67,7 @@ const ZaionsAddNewFolder: React.FC<{
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN,
 		],
 	});
-	const { mutateAsync: updateFolder } = useZRQUpdateRequest({
+	const { mutateAsync: updateShortLinksFolder } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.userAccountFolders_update_delete,
 		_queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
 	});
@@ -101,13 +101,8 @@ const ZaionsAddNewFolder: React.FC<{
 				);
 			} else if (folderFormState.formMode === FormMode.EDIT) {
 				if (folderFormState.id) {
-					await updateFolder({
-						itemIds: [folderFormState.id],
-						urlDynamicParts: [':folderId'],
-						requestData: value,
-					});
 					if (state === folderState.ShortLink) {
-						await updateFolder({
+						await updateShortLinksFolder({
 							itemIds: [folderFormState.id],
 							urlDynamicParts: [':folderId'],
 							requestData: value,

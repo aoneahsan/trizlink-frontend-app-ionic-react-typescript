@@ -46,7 +46,7 @@ import { API_URL_ENUM } from '@/utils/enums';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { FormMode } from '@/types/AdminPanel/index.type';
+import { folderState, FormMode } from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down
@@ -79,8 +79,10 @@ const ShortLinksFolderActionsPopoverContent: React.FC = () => {
 	/**
 	 * hook to present folder form modal
 	 */
-	const { presentZIonModal: presentFolderModal } =
-		useZIonModal(ZaionsAddNewFolder);
+	const { presentZIonModal: presentFolderModal } = useZIonModal(
+		ZaionsAddNewFolder,
+		{ state: folderState.ShortLink }
+	);
 
 	// Custom hooks.
 	const { presentZIonAlert } = useZIonAlert();

@@ -15,6 +15,7 @@ import ZaionsDashboardResponsiveMenu from '@/navigation/DashboardResponsiveMenu'
 import { PAGE_MENU, PAGE_MENU_SIDE } from '@/utils/enums';
 import AdminPanelFoldersSidebarMenu from '@/navigation/AdminPanelFolderSideMenu';
 import AdminPanelShortLinksFolderSideMenu from '@/navigation/AdminPanelShortLinksFolderSideMenu';
+import AdminPanelLinkInBioFolderSideMenu from '@/navigation/AdminPanelLinkInBioFolderSideMenu';
 
 // Types
 type ZaionsIonPageType = {
@@ -41,8 +42,10 @@ const ZaionsIonPage: React.FC<ZaionsIonPageType> = ({
 				<SideBarMenu menuSide={menuSide} />
 			) : menu === PAGE_MENU.DASHBOARD_PAGE_MENU ? (
 				<ZaionsDashboardResponsiveMenu menuSide={menuSide} />
-			) : menu === PAGE_MENU.ADMIN_PANEL_FOLDERS_MENU ? (
+			) : menu === PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU ? (
 				<AdminPanelShortLinksFolderSideMenu />
+			) : menu === PAGE_MENU.ADMIN_PANEL_LINK_IN_BIO_FOLDERS_MENU ? (
+				<AdminPanelLinkInBioFolderSideMenu />
 			) : (
 				''
 			)}

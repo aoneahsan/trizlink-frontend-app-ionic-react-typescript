@@ -425,7 +425,7 @@ const LinkInBioDesignPage: React.FC = () => {
 										: 'outline'
 								}
 								routerLink={createRedirectRoute({
-									url: ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkInBioRoute,
+									url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
 									params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
 									values: [editLinkInBioId],
 									routeSearchParams: {
@@ -451,7 +451,7 @@ const LinkInBioDesignPage: React.FC = () => {
 										: 'outline'
 								}
 								routerLink={createRedirectRoute({
-									url: ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkInBioRoute,
+									url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
 									params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
 									values: [editLinkInBioId],
 									routeSearchParams: {
@@ -475,7 +475,7 @@ const LinkInBioDesignPage: React.FC = () => {
 										: 'outline'
 								}
 								routerLink={createRedirectRoute({
-									url: ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkInBioRoute,
+									url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
 									params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
 									values: [editLinkInBioId],
 									routeSearchParams: {
@@ -499,7 +499,7 @@ const LinkInBioDesignPage: React.FC = () => {
 										: 'outline'
 								}
 								routerLink={createRedirectRoute({
-									url: ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkInBioRoute,
+									url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
 									params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
 									values: [editLinkInBioId],
 									routeSearchParams: {

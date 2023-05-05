@@ -79,7 +79,7 @@ const ZaionsDashboardResponsiveMenu: React.FC<ZDashboardResponsiveMenu> = ({
 				<ZIonButton
 					expand='block'
 					className='ion-margin mt-0 ion-text-capitalize fw-bold mb-1'
-					routerLink={ZaionsRoutes.AdminPanel.ZaionsAdminCreateNewLinkPageRoute}
+					routerLink={ZaionsRoutes.AdminPanel.ShortLinks.Create}
 				>
 					Create New
 				</ZIonButton>

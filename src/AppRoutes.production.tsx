@@ -70,323 +70,323 @@ import { ENVS } from '@/utils/envKeys';
 
 // Functional Component
 const ProductionAppRoutes: React.FC = () => {
-  return (
-    <IonReactRouter>
-      <IonRouterOutlet>
-        {/* Generic Routes */}
-        <Route exact path={ZaionsRoutes.HomeRoute} component={Home} />
+	return (
+		<IonReactRouter>
+			<IonRouterOutlet>
+				{/* Generic Routes */}
+				<Route exact path={ZaionsRoutes.HomeRoute} component={Home} />
 
-        <Route exact path={ZaionsRoutes.LoginRoute} component={Login} />
-        <Route exact path={ZaionsRoutes.SignUpRoute} component={SignUp} />
-        <Route
-          exact
-          path={ZaionsRoutes.PasswordResetEmailForm}
-          component={ZaionsPasswordResetConfirm}
-        />
+				<Route exact path={ZaionsRoutes.LoginRoute} component={Login} />
+				<Route exact path={ZaionsRoutes.SignUpRoute} component={SignUp} />
+				<Route
+					exact
+					path={ZaionsRoutes.PasswordResetEmailForm}
+					component={ZaionsPasswordResetConfirm}
+				/>
 
-        <Route
-          path={ZaionsRoutes.AdminPanel.ZaionsDashboard.DashboardInactive}
-          component={ZDashboard}
-        />
-        <Route
-          path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkInBioInactive}
-          component={ZLinkInBioLinksSection}
-        />
+				<Route
+					path={ZaionsRoutes.AdminPanel.ZaionsDashboard.DashboardInactive}
+					component={ZDashboard}
+				/>
+				<Route
+					path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkInBioInactive}
+					component={ZLinkInBioLinksSection}
+				/>
 
-        {/* Admin Panel Pages */}
-        <Route
-          exact
-          path={ZaionsRoutes.Legal.ZaionsTermsOfService}
-          component={ZaionsTermsOfService}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.AdminPanel.ZaionsAdminLinkIndexPageRoute}
-          component={AdminLinksIndexPage}
-        />
+				{/* Admin Panel Pages */}
+				<Route
+					exact
+					path={ZaionsRoutes.Legal.ZaionsTermsOfService}
+					component={ZaionsTermsOfService}
+				/>
+				<Route
+					exact
+					path={ZaionsRoutes.AdminPanel.ShortLinks.Main}
+					component={AdminLinksIndexPage}
+				/>
 
-        <Route
-          exact
-          path={ZaionsRoutes.AdminPanel.ZaionsAdminCreateNewLinkPageRoute}
-          component={AdminCreateNewLinkPages}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkPageRoute}
-          component={AdminCreateNewLinkPages}
-        />
+				<Route
+					exact
+					path={ZaionsRoutes.AdminPanel.ShortLinks.Create}
+					component={AdminCreateNewLinkPages}
+				/>
+				<Route
+					exact
+					path={ZaionsRoutes.AdminPanel.ShortLinks.Edit}
+					component={AdminCreateNewLinkPages}
+				/>
 
-        <Route
-          exact
-          path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinkInBio}
-          component={AdminLinkInBiosIndexPage}
-        />
-        <Route
-          exact
-          path={ZaionsRoutes.AdminPanel.ZaionsAdminCreateNewLinkInBioRoute}
-          component={ZaionsLinkInBioForm}
-        />
+				<Route
+					exact
+					path={ZaionsRoutes.AdminPanel.LinkInBio.Main}
+					component={AdminLinkInBiosIndexPage}
+				/>
+				<Route
+					exact
+					path={ZaionsRoutes.AdminPanel.LinkInBio.Create}
+					component={ZaionsLinkInBioForm}
+				/>
 
-        <Route
-          exact
-          path={ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkInBioRoute}
-          component={ZaionsLinkInBioForm}
-        />
+				<Route
+					exact
+					path={ZaionsRoutes.AdminPanel.LinkInBio.Edit}
+					component={ZaionsLinkInBioForm}
+				/>
 
-        <Route
-          path={ZaionsRoutes.AdminPanel.Setting.Main}
-          component={ZaionsAdminPanelSettings}
-        />
+				<Route
+					path={ZaionsRoutes.AdminPanel.Setting.Main}
+					component={ZaionsAdminPanelSettings}
+				/>
 
-        {ENVS.isProduction && (
-          <>
-            <Route
-              path={
-                ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkCampaignsInactive
-              }
-              component={ZLinkCampaigns}
-            />
+				{ENVS.isProduction && (
+					<>
+						<Route
+							path={
+								ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkCampaignsInactive
+							}
+							component={ZLinkCampaigns}
+						/>
 
-            <Route
-              path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkInBioInactive}
-              component={ZLinkInBio}
-            />
+						<Route
+							path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkInBioInactive}
+							component={ZLinkInBio}
+						/>
 
-            <Route
-              path={ZaionsRoutes.AdminPanel.ZaionsDashboard.CustomlinksInactive}
-              component={ZCustomLinks}
-            />
+						<Route
+							path={ZaionsRoutes.AdminPanel.ZaionsDashboard.CustomlinksInactive}
+							component={ZCustomLinks}
+						/>
 
-            <Route
-              path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinks}
-              component={ZLinks}
-            />
+						<Route
+							path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinks}
+							component={ZLinks}
+						/>
 
-            <Route
-              path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZProfile}
-              component={ZProfile}
-            />
+						<Route
+							path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZProfile}
+							component={ZProfile}
+						/>
 
-            <Route
-              path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZCustomDomain}
-              component={ZCustomDomain}
-            />
+						<Route
+							path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZCustomDomain}
+							component={ZCustomDomain}
+						/>
 
-            <Route
-              path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZGroup}
-              component={ZGroups}
-            />
+						<Route
+							path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZGroup}
+							component={ZGroups}
+						/>
 
-            <Route
-              path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZCSVBulk}
-              component={ZCSVBulkShortening}
-            />
+						<Route
+							path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZCSVBulk}
+							component={ZCSVBulkShortening}
+						/>
 
-            <Route
-              path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZAccountDetails}
-              component={ZAccountDetails}
-            />
+						<Route
+							path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZAccountDetails}
+							component={ZAccountDetails}
+						/>
 
-            <Route
-              path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZIntegration}
-              component={ZIntegration}
-            />
+						<Route
+							path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZIntegration}
+							component={ZIntegration}
+						/>
 
-            <Route
-              exact
-              path={ZaionsRoutes.DiscoverEnterpriseRoute}
-              component={ZaionsDiscoverEnterprise}
-            />
+						<Route
+							exact
+							path={ZaionsRoutes.DiscoverEnterpriseRoute}
+							component={ZaionsDiscoverEnterprise}
+						/>
 
-            {/* Why zlink */}
-            <Route
-              exact
-              path={ZaionsRoutes.WhyZaions.Zaions101Route}
-              component={Zaions101}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.WhyZaions.ZaionsEnterpriseClassRoute}
-              component={ZaionsEnterpriseClass}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.WhyZaions.ZaionsIntegrationApiRoute}
-              component={ZaionsIntegrationApi}
-            />
+						{/* Why zlink */}
+						<Route
+							exact
+							path={ZaionsRoutes.WhyZaions.Zaions101Route}
+							component={Zaions101}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.WhyZaions.ZaionsEnterpriseClassRoute}
+							component={ZaionsEnterpriseClass}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.WhyZaions.ZaionsIntegrationApiRoute}
+							component={ZaionsIntegrationApi}
+						/>
 
-            {/* Producs */}
-            <Route
-              exact
-              path={ZaionsRoutes.Products.ZaionsQRCodeRoute}
-              component={ZaionsQRCode}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Products.ZaionsLinkManagmentRoute}
-              component={ZaionsLinkManagment}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Products.ZaionsLinkInBioRoute}
-              component={ZaionsLinkInBio}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
-              component={ZaionsPricing}
-            />
+						{/* Producs */}
+						<Route
+							exact
+							path={ZaionsRoutes.Products.ZaionsQRCodeRoute}
+							component={ZaionsQRCode}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Products.ZaionsLinkManagmentRoute}
+							component={ZaionsLinkManagment}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Products.ZaionsLinkInBioRoute}
+							component={ZaionsLinkInBio}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
+							component={ZaionsPricing}
+						/>
 
-            {/* All Solutions Routes */}
-            <Route
-              exact
-              path={ZaionsRoutes.Solution.ZaionsSocialMediaRoute}
-              component={ZaionsSocialMedia}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Solution.ZaionsDigitalMarketingRoute}
-              component={ZaionsDigitalMarketing}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Solution.ZaionsCustomerServiceRoute}
-              component={ZaionsCustomerService}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Solution.ZaionsForDevelopersRoute}
-              component={ZaionsForDevelopers}
-            />
+						{/* All Solutions Routes */}
+						<Route
+							exact
+							path={ZaionsRoutes.Solution.ZaionsSocialMediaRoute}
+							component={ZaionsSocialMedia}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Solution.ZaionsDigitalMarketingRoute}
+							component={ZaionsDigitalMarketing}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Solution.ZaionsCustomerServiceRoute}
+							component={ZaionsCustomerService}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Solution.ZaionsForDevelopersRoute}
+							component={ZaionsForDevelopers}
+						/>
 
-            {/* All Feature Routes */}
-            <Route
-              exact
-              path={ZaionsRoutes.Feature.ZaionsBrandedLinksRoute}
-              component={ZaionsBrandedLinks}
-            />
+						{/* All Feature Routes */}
+						<Route
+							exact
+							path={ZaionsRoutes.Feature.ZaionsBrandedLinksRoute}
+							component={ZaionsBrandedLinks}
+						/>
 
-            <Route
-              exact
-              path={ZaionsRoutes.Feature.ZaionsMobileLinksRoute}
-              component={ZaionsMobileLinks}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Feature.ZaionsCampaignManagementAnalyticsRoute}
-              component={ZaionsCampaignManagementAnalytics}
-            />
+						<Route
+							exact
+							path={ZaionsRoutes.Feature.ZaionsMobileLinksRoute}
+							component={ZaionsMobileLinks}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Feature.ZaionsCampaignManagementAnalyticsRoute}
+							component={ZaionsCampaignManagementAnalytics}
+						/>
 
-            {/* All Resources Routes */}
-            <Route
-              exact
-              path={ZaionsRoutes.Resources.ZaionsBlogsRoute}
-              component={ZaionsBlogs}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Resources.ZaionsResourceLibraryRoute}
-              component={ZaionsResourceLibrary}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Resources.ZaionsTrustCenterRoute}
-              component={ZaionsTrustCenter}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Resources.ZaionsBrowserExtensionsRoute}
-              component={ZaionsBrowserExtensions}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Resources.ZaionsMobileAppsRoute}
-              component={ZaionsMobileApps}
-            />
+						{/* All Resources Routes */}
+						<Route
+							exact
+							path={ZaionsRoutes.Resources.ZaionsBlogsRoute}
+							component={ZaionsBlogs}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Resources.ZaionsResourceLibraryRoute}
+							component={ZaionsResourceLibrary}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Resources.ZaionsTrustCenterRoute}
+							component={ZaionsTrustCenter}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Resources.ZaionsBrowserExtensionsRoute}
+							component={ZaionsBrowserExtensions}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Resources.ZaionsMobileAppsRoute}
+							component={ZaionsMobileApps}
+						/>
 
-            {/* All Legal Routes */}
-            <Route
-              exact
-              path={ZaionsRoutes.Legal.ZaionsPrivacyPolicyRoute}
-              component={ZaionsPrivacyPolicy}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Legal.ZaionsAcceptableUsePolicyRoute}
-              component={ZaionsAcceptableUsePolicy}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Legal.ZaionsCodeOfConductRoute}
-              component={ZaionsCodeOfConduct}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Legal.ZaionsTermsOfService}
-              component={ZaionsTermsOfService}
-            />
+						{/* All Legal Routes */}
+						<Route
+							exact
+							path={ZaionsRoutes.Legal.ZaionsPrivacyPolicyRoute}
+							component={ZaionsPrivacyPolicy}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Legal.ZaionsAcceptableUsePolicyRoute}
+							component={ZaionsAcceptableUsePolicy}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Legal.ZaionsCodeOfConductRoute}
+							component={ZaionsCodeOfConduct}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Legal.ZaionsTermsOfService}
+							component={ZaionsTermsOfService}
+						/>
 
-            {/* All Company Routes */}
-            <Route
-              exact
-              path={ZaionsRoutes.Company.ZaionsAboutRoute}
-              component={ZaionsAbout}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Company.ZaionsContactRoute}
-              component={ZaionsContact}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Company.ZaionsCareersRoute}
-              component={ZaionsCareers}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Company.ZaionsPartnersRoute}
-              component={ZaionsPartners}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Company.ZaionsPressRoute}
-              component={ZaionsPress}
-            />
-            <Route
-              exact
-              path={ZaionsRoutes.Company.ZaionsReviewsRoute}
-              component={ZaionsReviews}
-            />
+						{/* All Company Routes */}
+						<Route
+							exact
+							path={ZaionsRoutes.Company.ZaionsAboutRoute}
+							component={ZaionsAbout}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Company.ZaionsContactRoute}
+							component={ZaionsContact}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Company.ZaionsCareersRoute}
+							component={ZaionsCareers}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Company.ZaionsPartnersRoute}
+							component={ZaionsPartners}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Company.ZaionsPressRoute}
+							component={ZaionsPress}
+						/>
+						<Route
+							exact
+							path={ZaionsRoutes.Company.ZaionsReviewsRoute}
+							component={ZaionsReviews}
+						/>
 
-            <Route
-              path={ZaionsRoutes.Testing.ReactTable.Main}
-              component={TestingReactTable}
-            />
-            {/* Testing React area packages */}
-            <Route
-              path={ZaionsRoutes.Testing.ReactArea.Main}
-              component={ZaionsReactArea}
-            />
-            {/* Testing React area packages */}
-            <Route
-              path={ZaionsRoutes.Testing.ReactCharts.Main}
-              component={ChartsExamples}
-            />
-            {/* Testing Google Maps */}
-            <Route
-              path={ZaionsRoutes.Testing.GOOGLE_MAP.Main}
-              component={GoogleMapsCapacitorPackageTest}
-            />
-            {/* Testing Tabs - From now on, we will add all testing pages in this one page so disabling all testing pages will be easy and more manageable. */}
-            <Route
-              path={ZaionsRoutes.Testing.TestingTabs.Main}
-              component={TestingTabs}
-            />
-          </>
-        )}
-      </IonRouterOutlet>
-    </IonReactRouter>
-  );
+						<Route
+							path={ZaionsRoutes.Testing.ReactTable.Main}
+							component={TestingReactTable}
+						/>
+						{/* Testing React area packages */}
+						<Route
+							path={ZaionsRoutes.Testing.ReactArea.Main}
+							component={ZaionsReactArea}
+						/>
+						{/* Testing React area packages */}
+						<Route
+							path={ZaionsRoutes.Testing.ReactCharts.Main}
+							component={ChartsExamples}
+						/>
+						{/* Testing Google Maps */}
+						<Route
+							path={ZaionsRoutes.Testing.GOOGLE_MAP.Main}
+							component={GoogleMapsCapacitorPackageTest}
+						/>
+						{/* Testing Tabs - From now on, we will add all testing pages in this one page so disabling all testing pages will be easy and more manageable. */}
+						<Route
+							path={ZaionsRoutes.Testing.TestingTabs.Main}
+							component={TestingTabs}
+						/>
+					</>
+				)}
+			</IonRouterOutlet>
+		</IonReactRouter>
+	);
 };
 
 export default ProductionAppRoutes;

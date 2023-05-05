@@ -2,7 +2,6 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import ShortLinksFolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/ShortLinkFoldersActionPopover';
 import {
 	ZIonButton,
 	ZIonCol,
@@ -17,25 +16,19 @@ import {
 import {
 	AdminPanelMainSidebarMenuPageEnum,
 	FormMode,
+	ZDashboardFolderMenuInterface,
 } from '@/types/AdminPanel/index.type';
-import { LinkFolderType } from '@/types/AdminPanel/linksType';
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { replaceParams } from '@/utils/helpers';
-import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
-import {
-	IonReorderGroupCustomEvent,
-	ItemReorderEventDetail,
-} from '@ionic/core';
 import classNames from 'classnames';
 import { appsOutline, ellipsisVertical } from 'ionicons/icons';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 /**
- * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
 
@@ -65,12 +58,6 @@ import { useRecoilValue } from 'recoil';
  * */
 
 /**
- * Style files Imports go down
- * ? Import of style sheet is a style import
- * */
-import classes from './styles.module.css';
-
-/**
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
@@ -79,16 +66,6 @@ import classes from './styles.module.css';
  * Component props type go down
  * ? Like if you have a type for props it should be please Down
  * */
-interface ZDashboardFolderMenuInterface {
-	type: AdminPanelMainSidebarMenuPageEnum;
-	foldersData: LinkFolderType[];
-	showFoldersSaveReorderButton?: boolean;
-	handleFoldersReorder?: (
-		event: IonReorderGroupCustomEvent<ItemReorderEventDetail>
-	) => void;
-	addNewFolderButtonOnClickHandler?: React.MouseEventHandler<HTMLIonButtonElement>;
-	foldersSaveReorderButtonOnClickHandler?: React.MouseEventHandler<HTMLIonButtonElement>;
-}
 
 /**
  * Functional Component
@@ -103,6 +80,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 	handleFoldersReorder,
 	addNewFolderButtonOnClickHandler,
 	foldersSaveReorderButtonOnClickHandler,
+	folderActionsButtonOnClickHandler,
 }) => {
 	// Custom Hooks
 	const { zNavigatePushRoute } = useZNavigate();
@@ -110,9 +88,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 	const ZDashboardState = useRecoilValue(ZDashboardRState);
 
 	//
-	const { presentZIonPopover: presentFolderActionIonPopover } = useZIonPopover(
-		ShortLinksFolderActionsPopoverContent
-	);
+	const setFolderFormState = useSetRecoilState(FolderFormState);
 
 	return (
 		<ZIonCol
@@ -180,20 +156,41 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 								>
 									{foldersData.map((el) => (
 										<ZIonItem
-											className='zaions__cursor_pointer zaions-short-link-folder'
+											className={classNames({
+												'zaions__cursor_pointer ': true,
+												'zaions-short-link-folder':
+													type === AdminPanelMainSidebarMenuPageEnum.shortLink,
+												'zaions-link-in-bio-folder':
+													type === AdminPanelMainSidebarMenuPageEnum.linkInBio,
+											})}
 											key={el.id}
 											data-folder-id={el.id}
 										>
 											<ZIonLabel
 												onClick={() => {
-													zNavigatePushRoute(
-														replaceParams(
-															ZaionsRoutes.AdminPanel.ShortLinks.Main,
-															CONSTANTS.RouteParams
-																.folderIdToGetShortLinksOrLinkInBio,
-															el.id as string
-														)
-													);
+													switch (type) {
+														case AdminPanelMainSidebarMenuPageEnum.shortLink:
+															zNavigatePushRoute(
+																replaceParams(
+																	ZaionsRoutes.AdminPanel.ShortLinks.Main,
+																	CONSTANTS.RouteParams
+																		.folderIdToGetShortLinksOrLinkInBio,
+																	el.id as string
+																)
+															);
+															break;
+
+														case AdminPanelMainSidebarMenuPageEnum.linkInBio:
+															zNavigatePushRoute(
+																replaceParams(
+																	ZaionsRoutes.AdminPanel.LinkInBio.Main,
+																	CONSTANTS.RouteParams
+																		.folderIdToGetShortLinksOrLinkInBio,
+																	el.id as string
+																)
+															);
+															break;
+													}
 												}}
 											>
 												{el.title}
@@ -203,19 +200,16 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 												color='dark'
 												size='small'
 												value={el.id}
-												onClick={(event: unknown) => {
-													presentFolderActionIonPopover({
-														_event: event as Event,
-														_cssClass: classNames(
-															classes.zaions_present_folder_Action_popover_width
-														),
-													});
-													// setFolderFormState((oldVal) => ({
-													// 	...oldVal,
-													// 	id: el.id,
-													// 	name: el.title,
-													// 	formMode: FormMode.EDIT,
-													// }));
+												onClick={(event) => {
+													folderActionsButtonOnClickHandler &&
+														folderActionsButtonOnClickHandler(event);
+
+													setFolderFormState((oldVal) => ({
+														...oldVal,
+														id: el.id,
+														name: el.title,
+														formMode: FormMode.EDIT,
+													}));
 												}}
 												className='ion-no-padding ms-auto'
 											>

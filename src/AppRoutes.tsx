@@ -68,6 +68,8 @@ import ZLinkInBioLinksSection from '@/pages/AdminPanel/ZLinkInBio/parts/links';
 import AdminLinkInBiosIndexPage from '@/pages/AdminPanel/LinkInBio';
 import ZaionsLinkInBioForm from '@/pages/AdminPanel/LinkInBio/LinkInBioForm';
 import TestingIonComponents from './Testing/TestingIonComponents';
+import PublicRoute from './components/PublicRoute';
+import PrivateRoute from './components/PrivateRoute';
 
 // Functional Component
 const AppRoutes: React.FC = () => {
@@ -77,66 +79,10 @@ const AppRoutes: React.FC = () => {
 				{/* Generic Routes */}
 				<Route exact path={ZaionsRoutes.HomeRoute} component={Home} />
 
-				<Route exact path={ZaionsRoutes.LoginRoute} component={Login} />
-				<Route exact path={ZaionsRoutes.SignUpRoute} component={SignUp} />
-				<Route
-					exact
-					path={ZaionsRoutes.PasswordResetEmailForm}
-					component={ZaionsPasswordResetConfirm}
-				/>
-
-				<Route
-					path={ZaionsRoutes.AdminPanel.ZaionsDashboard.DashboardInactive}
-					component={ZDashboard}
-				/>
-				<Route
-					path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkInBioInactive}
-					component={ZLinkInBioLinksSection}
-				/>
-
-				{/* Admin Panel Pages */}
 				<Route
 					exact
 					path={ZaionsRoutes.Legal.ZaionsTermsOfService}
 					component={ZaionsTermsOfService}
-				/>
-				<Route
-					exact
-					path={ZaionsRoutes.AdminPanel.ZaionsAdminLinkIndexPageRoute}
-					component={AdminLinksIndexPage}
-				/>
-
-				<Route
-					exact
-					path={ZaionsRoutes.AdminPanel.ZaionsAdminCreateNewLinkPageRoute}
-					component={AdminCreateNewLinkPages}
-				/>
-				<Route
-					exact
-					path={ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkPageRoute}
-					component={AdminCreateNewLinkPages}
-				/>
-
-				<Route
-					exact
-					path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinkInBio}
-					component={AdminLinkInBiosIndexPage}
-				/>
-				<Route
-					exact
-					path={ZaionsRoutes.AdminPanel.ZaionsAdminCreateNewLinkInBioRoute}
-					component={ZaionsLinkInBioForm}
-				/>
-
-				<Route
-					exact
-					path={ZaionsRoutes.AdminPanel.ZaionsAdminEditLinkInBioRoute}
-					component={ZaionsLinkInBioForm}
-				/>
-
-				<Route
-					path={ZaionsRoutes.AdminPanel.Setting.Main}
-					component={ZaionsAdminPanelSettings}
 				/>
 
 				<Route
@@ -144,56 +90,119 @@ const AppRoutes: React.FC = () => {
 					component={TestingIonComponents}
 				/>
 
+				{/* Public Routes */}
+				<PublicRoute exact path={ZaionsRoutes.LoginRoute} component={Login} />
+
+				<PublicRoute exact path={ZaionsRoutes.SignUpRoute} component={SignUp} />
+
+				<PublicRoute
+					exact
+					path={ZaionsRoutes.PasswordResetEmailForm}
+					component={ZaionsPasswordResetConfirm}
+				/>
+
+				{/* Private Routes */}
+				{/* Admin Panel Pages */}
+				<PrivateRoute
+					path={ZaionsRoutes.AdminPanel.ZaionsDashboard.DashboardInactive}
+					component={ZDashboard}
+				/>
+				<PrivateRoute
+					path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkInBioInactive}
+					component={ZLinkInBioLinksSection}
+				/>
+
+				<PrivateRoute
+					exact
+					path={ZaionsRoutes.AdminPanel.ShortLinks.Main}
+					component={AdminLinksIndexPage}
+				/>
+
+				<PrivateRoute
+					exact
+					path={ZaionsRoutes.AdminPanel.ShortLinks.Create}
+					component={AdminCreateNewLinkPages}
+				/>
+
+				<PrivateRoute
+					exact
+					path={ZaionsRoutes.AdminPanel.ShortLinks.Edit}
+					component={AdminCreateNewLinkPages}
+				/>
+
+				<PrivateRoute
+					exact
+					path={ZaionsRoutes.AdminPanel.LinkInBio.Main}
+					component={AdminLinkInBiosIndexPage}
+				/>
+
+				<PrivateRoute
+					exact
+					path={ZaionsRoutes.AdminPanel.LinkInBio.Create}
+					component={ZaionsLinkInBioForm}
+				/>
+
+				<PrivateRoute
+					exact
+					path={ZaionsRoutes.AdminPanel.LinkInBio.Edit}
+					component={ZaionsLinkInBioForm}
+				/>
+
+				<PrivateRoute
+					path={ZaionsRoutes.AdminPanel.Setting.Main}
+					component={ZaionsAdminPanelSettings}
+				/>
+
 				{/* {ENVS.isProduction && (
           <>
-            <Route
+            <PrivateRoute
               path={
                 ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkCampaignsInactive
               }
               component={ZLinkCampaigns}
             />
 
-            <Route
+            <PrivateRoute
               path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkInBioInactive}
               component={ZLinkInBio}
             />
 
-            <Route
+            <PrivateRoute
               path={ZaionsRoutes.AdminPanel.ZaionsDashboard.CustomlinksInactive}
               component={ZCustomLinks}
             />
 
-            <Route
+            <PrivateRoute
               path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZLinks}
               component={ZLinks}
             />
 
-            <Route
+            <PrivateRoute
               path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZProfile}
               component={ZProfile}
             />
 
-            <Route
+            <PrivateRoute
               path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZCustomDomain}
               component={ZCustomDomain}
             />
 
-            <Route
+            <PrivateRoute
               path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZGroup}
               component={ZGroups}
             />
 
-            <Route
+            <PrivateRoute
               path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZCSVBulk}
               component={ZCSVBulkShortening}
             />
 
-            <Route
+            <PrivateRoute
               path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZAccountDetails}
               component={ZAccountDetails}
             />
 
-            <Route
+            <PrivateRoute
               path={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZIntegration}
               component={ZIntegration}
             />
@@ -361,6 +370,7 @@ const AppRoutes: React.FC = () => {
               path={ZaionsRoutes.Testing.ReactTable.Main}
               component={TestingReactTable}
             />
+            
             <Route
               path={ZaionsRoutes.Testing.ReactArea.Main}
               component={ZaionsReactArea}

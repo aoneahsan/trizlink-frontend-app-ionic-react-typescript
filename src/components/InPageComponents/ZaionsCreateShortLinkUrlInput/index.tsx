@@ -108,9 +108,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{ className?: string }> = ({
 							formMode: FormMode.ADD,
 						}));
 
-						zNavigatePushRoute(
-							ZaionsRoutes.AdminPanel.ZaionsAdminCreateNewLinkPageRoute
-						);
+						zNavigatePushRoute(ZaionsRoutes.AdminPanel.ShortLinks.Create);
 						resetForm();
 					}
 				} catch (error) {
