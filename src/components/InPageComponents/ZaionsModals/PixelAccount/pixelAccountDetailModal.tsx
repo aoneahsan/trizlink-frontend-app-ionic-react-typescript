@@ -7,24 +7,24 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 // Custom Imports
 
 import {
-  ZTable,
-  ZTableHeadCol,
-  ZTableRow,
-  ZTableRowCol,
-  ZTableTBody,
-  ZTableTHead,
+	ZTable,
+	ZTableHeadCol,
+	ZTableRow,
+	ZTableRowCol,
+	ZTableTBody,
+	ZTableTHead,
 } from '@/components/InPageComponents/ZaionsTable/table-styled-components.sc';
 
 // Global Constants
 import {
-  ZIonCol,
-  ZIonRow,
-  ZIonText,
-  ZIonHeader,
-  ZIonContent,
-  ZIonIcon,
-  ZIonFooter,
-  ZIonGrid,
+	ZIonCol,
+	ZIonRow,
+	ZIonText,
+	ZIonHeader,
+	ZIonContent,
+	ZIonIcon,
+	ZIonFooter,
+	ZIonGrid,
 } from '@/components/ZIonComponents';
 
 // Images
@@ -44,140 +44,142 @@ import CONSTANTS from '@/utils/constants';
 // Styles
 
 const ZaionsPixelAccountDetail: React.FC<{
-  dismissZIonModal: (data?: string, role?: string | undefined) => void;
+	dismissZIonModal: (data?: string, role?: string | undefined) => void;
 }> = ({ dismissZIonModal }) => {
-  const appSettings = useRecoilValue(ZaionsAppSettingsRState);
-  const [shortLinkFormState, SetShortLinkFormState] =
-    useRecoilState(ShortLinkFormState);
-  const { data: ___pixelAccountsData } = useZRQGetRequest({
-    _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
-  });
-  const __pixelAccountsData = (
-    ___pixelAccountsData as { data: { items: PixelAccountType[] } }
-  )?.data?.items;
+	const appSettings = useRecoilValue(ZaionsAppSettingsRState);
 
-  /**
-   * Handle Form Submission Function
-   * add a Api Key function
-   *  */
-  const SetDefaultShortLinkFormState = () => {
-    // Reset to default
-    SetShortLinkFormState((oldVal) => ({
-      ...oldVal,
-      mode: FormMode.ADD,
-      ApiKey: {},
-    }));
-  };
+	//
+	const [shortLinkFormState, SetShortLinkFormState] =
+		useRecoilState(ShortLinkFormState);
 
-  // JSX Code
-  return (
-    <>
-      {/**
-       * Header of Modal will shown if the `showActionInModalHeader` is set to `true` in      appSetting and hide if it is `false`
-       * default: false
-       *  */}
-      {appSettings.appModalsSetting.actions.showActionInModalHeader && (
-        <ZIonHeader>
-          <ZIonRow className='ion-align-items-center'>
-            <ZIonCol>
-              <ZIonButton
-                onClick={() => {
-                  // Close the Modal
-                  dismissZIonModal();
-                  SetDefaultShortLinkFormState();
-                }}
-                color='primary'
-                className='ion-text-capitalize'
-                fill='outline'
-              >
-                Close
-              </ZIonButton>
-            </ZIonCol>
-          </ZIonRow>
-        </ZIonHeader>
-      )}
+	// getting pixels
+	const { data: __pixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
+		_url: API_URL_ENUM.userPixelAccounts_create_list,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+	});
 
-      <ZIonContent className='ion-padding'>
-        <div className='d-flex ion-text-center ion-justify-content-center flex-column ion-padding-top ion-margin-top'>
-          <ZIonText className='' color={'primary'}>
-            <h1
-              className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}
-            >
-              <ZIonIcon
-                icon={toggleOutline}
-                className='mx-auto'
-                color='light'
-              ></ZIonIcon>
-            </h1>
-          </ZIonText>
-          <br />
-          <ZIonText color={'dark'}>
-            <h6 className='fw-bold'>SEO Home Zaions.com</h6>
-          </ZIonText>
-        </div>
-        <ZIonGrid>
-          <ZIonRow>
-            <ZIonCol>
-              <ZTable>
-                <ZTableTHead>
-                  <ZTableRow>
-                    <ZTableHeadCol>Plate Form</ZTableHeadCol>
-                    <ZTableHeadCol>Name</ZTableHeadCol>
-                  </ZTableRow>
-                </ZTableTHead>
-                <ZTableTBody>
-                  {shortLinkFormState.pixelAccountIds?.length ? (
-                    shortLinkFormState.pixelAccountIds?.map((el) => {
-                      const pixel =
-                        __pixelAccountsData &&
-                        __pixelAccountsData.find((_pixel) => _pixel.id === el);
-                      return (
-                        <ZTableRow key={el}>
-                          <ZTableRowCol>{pixel?.platform}</ZTableRowCol>
-                          <ZTableRowCol>{pixel?.title}</ZTableRowCol>
-                        </ZTableRow>
-                      );
-                    })
-                  ) : (
-                    <ZTableRow>
-                      <ZTableRowCol>-</ZTableRowCol>
-                      <ZTableRowCol>-</ZTableRowCol>
-                    </ZTableRow>
-                  )}
-                </ZTableTBody>
-              </ZTable>
-            </ZIonCol>
-          </ZIonRow>
-        </ZIonGrid>
-      </ZIonContent>
+	/**
+	 * Handle Form Submission Function
+	 * add a Api Key function
+	 *  */
+	const SetDefaultShortLinkFormState = () => {
+		// Reset to default
+		SetShortLinkFormState((oldVal) => ({
+			...oldVal,
+			mode: FormMode.ADD,
+			ApiKey: {},
+		}));
+	};
 
-      {/**
-       * Footer of Modal will shown if the `showActionInModalFooter` is set to `true` in      appSetting, and hide if it is `false`
-       * default: true
-       *  */}
-      {appSettings.appModalsSetting.actions.showActionInModalFooter && (
-        <ZIonFooter>
-          <ZIonRow className=' mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
-            <ZIonCol>
-              <ZIonButton
-                fill='outline'
-                size='default'
-                className='ion-text-capitalize'
-                onClick={() => {
-                  // Close The Modal
-                  dismissZIonModal();
-                  SetDefaultShortLinkFormState();
-                }}
-              >
-                Close
-              </ZIonButton>
-            </ZIonCol>
-          </ZIonRow>
-        </ZIonFooter>
-      )}
-    </>
-  );
+	// JSX Code
+	return (
+		<>
+			{/**
+			 * Header of Modal will shown if the `showActionInModalHeader` is set to `true` in      appSetting and hide if it is `false`
+			 * default: false
+			 *  */}
+			{appSettings.appModalsSetting.actions.showActionInModalHeader && (
+				<ZIonHeader>
+					<ZIonRow className='ion-align-items-center'>
+						<ZIonCol>
+							<ZIonButton
+								onClick={() => {
+									// Close the Modal
+									dismissZIonModal();
+									SetDefaultShortLinkFormState();
+								}}
+								color='primary'
+								className='ion-text-capitalize'
+								fill='outline'
+							>
+								Close
+							</ZIonButton>
+						</ZIonCol>
+					</ZIonRow>
+				</ZIonHeader>
+			)}
+
+			<ZIonContent className='ion-padding'>
+				<div className='d-flex ion-text-center ion-justify-content-center flex-column ion-padding-top ion-margin-top'>
+					<ZIonText className='' color={'primary'}>
+						<h1
+							className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}
+						>
+							<ZIonIcon
+								icon={toggleOutline}
+								className='mx-auto'
+								color='light'
+							/>
+						</h1>
+					</ZIonText>
+					<br />
+					<ZIonText color={'dark'}>
+						{/* <h6 className='fw-bold'>SEO Home Zaions.com</h6> */}
+						<h6 className='fw-bold'>Pixels Id's</h6>
+					</ZIonText>
+				</div>
+				<ZIonGrid>
+					<ZIonRow>
+						<ZIonCol>
+							<ZTable>
+								<ZTableTHead>
+									<ZTableRow>
+										<ZTableHeadCol>Plate Form</ZTableHeadCol>
+										<ZTableHeadCol>Name</ZTableHeadCol>
+									</ZTableRow>
+								</ZTableTHead>
+								<ZTableTBody>
+									{shortLinkFormState.pixelAccountIds?.length ? (
+										shortLinkFormState.pixelAccountIds?.map((el) => {
+											const pixel =
+												__pixelAccountsData &&
+												__pixelAccountsData.find((_pixel) => _pixel.id === el);
+											return (
+												<ZTableRow key={el}>
+													<ZTableRowCol>{pixel?.platform}</ZTableRowCol>
+													<ZTableRowCol>{pixel?.title}</ZTableRowCol>
+												</ZTableRow>
+											);
+										})
+									) : (
+										<ZTableRow>
+											<ZTableRowCol>-</ZTableRowCol>
+											<ZTableRowCol>-</ZTableRowCol>
+										</ZTableRow>
+									)}
+								</ZTableTBody>
+							</ZTable>
+						</ZIonCol>
+					</ZIonRow>
+				</ZIonGrid>
+			</ZIonContent>
+
+			{/**
+			 * Footer of Modal will shown if the `showActionInModalFooter` is set to `true` in      appSetting, and hide if it is `false`
+			 * default: true
+			 *  */}
+			{appSettings.appModalsSetting.actions.showActionInModalFooter && (
+				<ZIonFooter>
+					<ZIonRow className=' mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
+						<ZIonCol>
+							<ZIonButton
+								fill='outline'
+								size='default'
+								className='ion-text-capitalize'
+								onClick={() => {
+									// Close The Modal
+									dismissZIonModal();
+									SetDefaultShortLinkFormState();
+								}}
+							>
+								Close
+							</ZIonButton>
+						</ZIonCol>
+					</ZIonRow>
+				</ZIonFooter>
+			)}
+		</>
+	);
 };
 
 export default ZaionsPixelAccountDetail;

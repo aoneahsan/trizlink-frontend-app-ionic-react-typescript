@@ -65,6 +65,7 @@ import {
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
 import { reportCustomError } from '@/utils/customErrorType';
 import ZaionsPixelAccountDetail from '../ZaionsModals/PixelAccount/pixelAccountDetailModal';
+import ZaionsLinkNoteDetailModal from '../ZaionsModals/LinkNote/LinkNoteDetail';
 
 // Styles
 
@@ -98,6 +99,9 @@ const ZaionsShortLinkTable = () => {
 	const { zNavigatePushRoute } = useZNavigate();
 	const { presentZIonModal: presentPixelAccountDetailModal } = useZIonModal(
 		ZaionsPixelAccountDetail
+	);
+	const { presentZIonModal: presentShortLinkNoteModal } = useZIonModal(
+		ZaionsLinkNoteDetailModal
 	);
 
 	//
@@ -292,8 +296,7 @@ const ZaionsShortLinkTable = () => {
 															...oldVal,
 															note: el.notes,
 														}));
-														// Close The Modal
-														presentPixelAccountDetailModal({
+														presentShortLinkNoteModal({
 															_cssClass: 'pixel-account-detail-modal-size',
 														});
 													}}
