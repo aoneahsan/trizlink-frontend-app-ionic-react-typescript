@@ -56,6 +56,7 @@ export enum API_URL_ENUM {
 	linkInBio_create_list = 'linkInBio_create_list',
 	FolderShortLinks = 'FolderShortLinks',
 	ShortLinks_folders_reorder = 'ShortLinks_folders_reorder',
+
 	linkInBioPreDefinedThemes_create_list = 'linkInBioPreDefinedThemes_create_list',
 	linkInBioPreDefinedBlocks_create_list = 'linkInBioPreDefinedBlocks_create_list',
 	linkInBioPreDefinedBlocks_delete_update = 'linkInBioPreDefinedBlocks_delete_update',

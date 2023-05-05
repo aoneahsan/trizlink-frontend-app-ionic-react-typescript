@@ -43,7 +43,8 @@ export const API_URLS = {
 	FolderShortLinks: '/user/folders/:folderId/short-links',
 	ShortLinks_folders_reorder: '/user/shortLinks/folders/reorder',
 	userAccount_LinkInBio_folders_create_list: '/user/link-in-bio-folders',
-	userAccount_LinkInBio_folders_update_delete: '/user/link-in-bio-folders',
+	userAccount_LinkInBio_folders_update_delete:
+		'/user/link-in-bio-folders/:folderId',
 	linkInBio_create_list: '/user/link-in-bio',
 	linkInBio_update_delete: '/user/link-in-bio/:linkInBioId',
 	linkInBioPreDefinedThemes_create_list: '/user/link-in-bio-themes',

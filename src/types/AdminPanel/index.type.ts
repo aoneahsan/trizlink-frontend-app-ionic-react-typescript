@@ -1,4 +1,7 @@
+import { IonReorderGroupCustomEvent } from '@ionic/core';
+import { LinkFolderType } from './linksType/index';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { ItemReorderEventDetail } from '@ionic/react';
 
 // Enum's
 export enum FormMode {
@@ -71,6 +74,18 @@ export interface LinkExpirationInfoInterface {
 export interface PasswordInterface {
 	value?: string;
 	enabled?: boolean;
+}
+
+export interface ZDashboardFolderMenuInterface {
+	type: AdminPanelMainSidebarMenuPageEnum;
+	foldersData: LinkFolderType[];
+	showFoldersSaveReorderButton?: boolean;
+	handleFoldersReorder?: (
+		event: IonReorderGroupCustomEvent<ItemReorderEventDetail>
+	) => void;
+	addNewFolderButtonOnClickHandler?: React.MouseEventHandler<HTMLIonButtonElement>;
+	foldersSaveReorderButtonOnClickHandler?: React.MouseEventHandler<HTMLIonButtonElement>;
+	folderActionsButtonOnClickHandler?: React.MouseEventHandler<HTMLIonButtonElement>;
 }
 
 // Types

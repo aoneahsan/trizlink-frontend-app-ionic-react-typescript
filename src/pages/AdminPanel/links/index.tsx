@@ -99,9 +99,10 @@ import { reportCustomError } from '@/utils/customErrorType';
 
 // Styles
 import classes from './styles.module.css';
+import ZDashboardSidebar from '@/components/AdminPanelComponents/Sidebar';
 
 const AdminLinksIndexPage: React.FC = () => {
-	// Component state
+	// Component state.
 	const [compState, setCompState] = useState<{
 		shortLinksFoldersReorder: {
 			Ids?: string[];
@@ -113,7 +114,7 @@ const AdminLinksIndexPage: React.FC = () => {
 		},
 	});
 
-	// Custom hooks
+	// Custom hooks.
 	const { isXlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale(); // media query hook.
 	const { zNavigatePushRoute } = useZNavigate();
 	const { zInvalidateReactQueries } = useZInvalidateReactQueries();
@@ -156,7 +157,7 @@ const AdminLinksIndexPage: React.FC = () => {
 	const setFolderFormState = useSetRecoilState(FolderFormState);
 
 	// Request for getting short links folders.
-	const { data: _foldersData } = useZRQGetRequest<LinkFolderType[]>({
+	const { data: shortLinksFoldersData } = useZRQGetRequest<LinkFolderType[]>({
 		_url: API_URL_ENUM.userAccountFolders_create_list,
 		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
 	});
@@ -260,148 +261,45 @@ const AdminLinksIndexPage: React.FC = () => {
 				{/*  */}
 				<ZIonGrid className='ion-no-padding zaions_h100'>
 					<ZIonRow className='zaions_h100'>
-						{/* Expendable Navigation in the left-hand side */}
-						<AdminPanelMainSidebarMenu
-							activePage={AdminPanelMainSidebarMenuPageEnum.shortLink}
+						{/* Side bar */}
+						<ZDashboardSidebar
+							type={AdminPanelMainSidebarMenuPageEnum.shortLink}
+							//
+							foldersData={shortLinksFoldersData ? shortLinksFoldersData : []}
+							//
+							addNewFolderButtonOnClickHandler={() => {
+								setFolderFormState((oldVal) => ({
+									...oldVal,
+									id: '',
+									name: '',
+									formMode: FormMode.ADD,
+								}));
+								presentFolderModal({
+									_cssClass: 'link-in-bio-folder-modal',
+								});
+							}}
+							//
+							foldersSaveReorderButtonOnClickHandler={() => {
+								void shortLinksFoldersReOrderHandler();
+							}}
+							//
+							handleFoldersReorder={handleReorder}
+							//
+							showFoldersSaveReorderButton={
+								compState?.shortLinksFoldersReorder?.isEnable
+							}
+							//
+							folderActionsButtonOnClickHandler={(event: unknown) => {
+								presentFolderActionIonPopover({
+									_event: event as Event,
+									_cssClass: classNames(
+										classes.zaions_present_folder_Action_popover_width
+									),
+								});
+							}}
 						/>
 
-						{/* Folders Side Menu */}
-						{isLgScale && (
-							<ZIonCol
-								size={
-									ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-										? '2'
-										: '2.4'
-								}
-								className='ion-padding border-end zaions-transition'
-							>
-								<div className='ion-padding-top'>
-									<ZIonList lines='none'>
-										<ZIonItem className='zaions__cursor_pointer mb-2'>
-											<h5 className='fw-bold m-0 p-0'>🔗 All links</h5>
-										</ZIonItem>
-										<ZIonItem>
-											<ZIonList lines='none' className='zaions__w100'>
-												<ZIonItem className='ion-no-padding'>
-													<ZIonText color='primary' className='fw-bold'>
-														<h5 className='fw-bold d-block m-0 p-0'>
-															📂 Folders
-														</h5>
-													</ZIonText>
-												</ZIonItem>
-												<ZIonItem
-													className='zaions__cursor_pointer ms-2'
-													onClick={() => {
-														zNavigatePushRoute(
-															replaceParams(
-																ZaionsRoutes.AdminPanel.ShortLinks.Main,
-																CONSTANTS.RouteParams
-																	.folderIdToGetShortLinksOrLinkInBio,
-																'all'
-															)
-														);
-													}}
-												>
-													<ZIonLabel>Default</ZIonLabel>
-													<ZIonReorder slot='start' className='me-3'>
-														<ZIonIcon icon={appsOutline} />
-													</ZIonReorder>
-												</ZIonItem>
-												{_foldersData && _foldersData.length ? (
-													<ZIonReorderGroup
-														disabled={false}
-														onIonItemReorder={handleReorder}
-													>
-														{_foldersData.map((el) => (
-															<ZIonItem
-																className='zaions__cursor_pointer zaions-short-link-folder'
-																key={el.id}
-																data-folder-id={el.id}
-															>
-																<ZIonLabel
-																	onClick={() => {
-																		zNavigatePushRoute(
-																			replaceParams(
-																				ZaionsRoutes.AdminPanel.ShortLinks.Main,
-																				CONSTANTS.RouteParams
-																					.folderIdToGetShortLinksOrLinkInBio,
-																				el.id as string
-																			)
-																		);
-																	}}
-																>
-																	{el.title}
-																</ZIonLabel>
-																<ZIonButton
-																	fill='clear'
-																	color='dark'
-																	size='small'
-																	value={el.id}
-																	onClick={(event: unknown) => {
-																		presentFolderActionIonPopover({
-																			_event: event as Event,
-																			_cssClass: classNames(
-																				classes.zaions_present_folder_Action_popover_width
-																			),
-																		});
-																		setFolderFormState((oldVal) => ({
-																			...oldVal,
-																			id: el.id,
-																			name: el.title,
-																			formMode: FormMode.EDIT,
-																		}));
-																	}}
-																	className='ion-no-padding ms-auto'
-																>
-																	<ZIonIcon icon={ellipsisVertical} />
-																</ZIonButton>
-																<ZIonReorder slot='start' className='me-3'>
-																	<ZIonIcon icon={appsOutline}></ZIonIcon>
-																</ZIonReorder>
-															</ZIonItem>
-														))}
-													</ZIonReorderGroup>
-												) : (
-													''
-												)}
-											</ZIonList>
-										</ZIonItem>
-									</ZIonList>
-									<ZIonButton
-										className='ion-text-capitalize ion-margin-horizontal'
-										fill='outline'
-										expand='block'
-										onClick={() => {
-											setFolderFormState((oldVal) => ({
-												...oldVal,
-												id: '',
-												name: '',
-												formMode: FormMode.ADD,
-											}));
-											presentFolderModal({
-												_cssClass: 'link-in-bio-folder-modal',
-											});
-										}}
-									>
-										New Folder
-									</ZIonButton>
-
-									{compState?.shortLinksFoldersReorder?.isEnable && (
-										<ZIonButton
-											className='ion-text-capitalize ion-margin-horizontal position-absolute bottom-0'
-											expand='block'
-											onClick={() => {
-												void shortLinksFoldersReOrderHandler();
-											}}
-											style={{ width: '78%' }}
-										>
-											save reorder
-										</ZIonButton>
-									)}
-								</div>
-							</ZIonCol>
-						)}
-
+						{/* Main Container */}
 						<ZIonCol
 							className='zaions-transition'
 							sizeXl={

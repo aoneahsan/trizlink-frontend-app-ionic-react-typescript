@@ -1,5 +1,5 @@
 // Core Imports
-import React from 'react';
+import React, { useState } from 'react';
 
 // Packages Imports
 import {
@@ -49,6 +49,7 @@ import {
 	useZInvalidateReactQueries,
 	useZRQDeleteRequest,
 	useZRQGetRequest,
+	useZRQUpdateRequest,
 } from '@/ZaionsHooks/zreactquery-hooks';
 import {
 	useZIonAlert,
@@ -90,18 +91,56 @@ import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { API_URL_ENUM, PAGE_MENU, PAGE_MENU_SIDE } from '@/utils/enums';
 import { showSuccessNotification } from '@/utils/notification';
-import { replaceParams } from '@/utils/helpers';
+import { replaceParams, zStringify } from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
 
 // Styles
 import classes from './styles.module.css';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import ZDashboardSidebar from '@/components/AdminPanelComponents/Sidebar';
+import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 
 const AdminLinkInBiosIndexPage: React.FC = () => {
+	// Component state
+	const [compState, setCompState] = useState<{
+		LinkInBioFoldersReorder: {
+			Ids?: string[];
+			isEnable?: boolean;
+		};
+	}>({
+		LinkInBioFoldersReorder: {
+			isEnable: false,
+		},
+	});
+
+	// Link-in-bio folders reorder function.
 	const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
 		event.detail.complete();
+
+		setTimeout(() => {
+			const _linkInBioFoldersEls = document.querySelectorAll(
+				'.zaions-link-in-bio-folder'
+			);
+			const _linkInBioFoldersIds: string[] = [];
+			for (let i = 0; i < _linkInBioFoldersEls.length; i++) {
+				const _block = _linkInBioFoldersEls[i];
+				_linkInBioFoldersIds.push(
+					_block.getAttribute('data-folder-id') as string
+				);
+			}
+
+			if (_linkInBioFoldersIds.length) {
+				setCompState((_) => ({
+					LinkInBioFoldersReorder: {
+						Ids: _linkInBioFoldersIds,
+						isEnable: _linkInBioFoldersIds.length > 1,
+					},
+				}));
+			}
+		}, 100);
 	};
-	const { zNavigatePushRoute } = useZNavigate();
+
+	//
 	const linkInBiosFilterOptionsState = useRecoilValue(
 		LinkInBiosFilterOptionsRState
 	);
@@ -112,15 +151,14 @@ const AdminLinkInBiosIndexPage: React.FC = () => {
 
 	const linkInBioData = useRecoilValue(LinkInBiosRState);
 
-	const setFolderFormState = useSetRecoilState(FolderFormState);
+	//
 	const { data: linkInBiosFoldersData } = useZRQGetRequest<LinkFolderType[]>({
 		_url: API_URL_ENUM.userAccount_LinkInBio_folders_create_list,
 		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN],
 	});
 
-	const { presentZIonPopover: presentFolderActionIonPopover } = useZIonPopover(
-		FolderActionsPopoverContent
-	);
+	const { presentZIonPopover: presentLinkInBioFolderActionIonPopover } =
+		useZIonPopover(FolderActionsPopoverContent);
 
 	const { presentZIonModal: presentAddLinkInBioModal } = useZIonModal(
 		ZaionsAddLinkInBioModal
@@ -133,6 +171,8 @@ const AdminLinkInBiosIndexPage: React.FC = () => {
 	const { presentZIonPopover: presentLinkInBioTagsFilterModal } =
 		useZIonPopover(LinkInBiosTagsFiltersPopover);
 
+	const { validateRequestResponse } = useZValidateRequestResponse();
+
 	// const { presentZIonPopover: presentLinkInBioDomainsFilterModal } =
 	//   useZIonPopover(LinkInBiosDomainsFiltersPopover);
 
@@ -142,6 +182,8 @@ const AdminLinkInBiosIndexPage: React.FC = () => {
 			state: folderState.LinkInBios,
 		}
 	);
+
+	//
 	const invalidedLinkInBioQuery = async () => {
 		try {
 			await zInvalidateReactQueries([
@@ -151,10 +193,49 @@ const AdminLinkInBiosIndexPage: React.FC = () => {
 			reportCustomError(error);
 		}
 	};
+
+	// Update shortLinks folders reorder API
+	const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
+		_url: API_URL_ENUM.ShortLinks_folders_reorder,
+		_queriesKeysToInvalidate: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN,
+		],
+	});
+
+	//
 	const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
 		try {
 			await invalidedLinkInBioQuery();
 			event.detail.complete();
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
+	const linkInBioFoldersReOrderHandler = async () => {
+		try {
+			// The update api...
+			const _result = await UpdateShortLinksFoldersReorder({
+				requestData: zStringify({
+					folders: compState.LinkInBioFoldersReorder.Ids,
+				}),
+				itemIds: [],
+				urlDynamicParts: [],
+			});
+
+			// if _result of the UpdateShortLinksFoldersReorder api is success this showing success notification else not success then error notification.
+			await validateRequestResponse({
+				resultObj: _result,
+			});
+
+			// hiding the reorder button by assigning isEnable to false
+			setCompState((oldValues) => ({
+				...oldValues,
+				shortLinksFoldersReorder: {
+					Ids: oldValues.LinkInBioFoldersReorder.Ids,
+					isEnable: false,
+				},
+			}));
 		} catch (error) {
 			reportCustomError(error);
 		}
@@ -175,128 +256,37 @@ const AdminLinkInBiosIndexPage: React.FC = () => {
 				{/*  */}
 				<ZIonGrid className='ion-no-padding zaions_h100'>
 					<ZIonRow className='zaions_h100'>
-						{/* Page Navigation */}
-						<AdminPanelMainSidebarMenu
-							activePage={AdminPanelMainSidebarMenuPageEnum.linkInBio}
+						{/* Side bar */}
+						<ZDashboardSidebar
+							type={AdminPanelMainSidebarMenuPageEnum.linkInBio}
+							//
+							foldersData={linkInBiosFoldersData ? linkInBiosFoldersData : []}
+							//
+							addNewFolderButtonOnClickHandler={() => {
+								presentFolderModal({
+									_cssClass: 'folder-modal-size',
+								});
+							}}
+							//
+							foldersSaveReorderButtonOnClickHandler={() => {
+								void linkInBioFoldersReOrderHandler();
+							}}
+							//
+							handleFoldersReorder={handleReorder}
+							//
+							showFoldersSaveReorderButton={
+								compState?.LinkInBioFoldersReorder?.isEnable
+							}
+							//
+							folderActionsButtonOnClickHandler={(event: unknown) => {
+								presentLinkInBioFolderActionIonPopover({
+									_event: event as Event,
+									_cssClass: classNames(
+										classes.zaions_present_folder_Action_popover_width
+									),
+								});
+							}}
 						/>
-
-						{/* Folders Side Menu */}
-						{isLgScale && (
-							<ZIonCol
-								size={
-									ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-										? '2'
-										: '2.4'
-								}
-								className='ion-padding border-end zaions-transition'
-							>
-								<div className='ion-padding-top'>
-									<ZIonList lines='none'>
-										<ZIonItem className='zaions__cursor_pointer mb-2'>
-											<h5 className='fw-bold m-0 p-0'>🔗 All Link In Bios</h5>
-										</ZIonItem>
-										<ZIonItem>
-											<ZIonList lines='none' className='zaions__w100'>
-												<ZIonItem className='ion-no-padding'>
-													<ZIonText color={'primary'} className='fw-bold'>
-														<h5 className='fw-bold d-block m-0 p-0'>
-															📂 Folders
-														</h5>
-													</ZIonText>
-												</ZIonItem>
-												<ZIonItem
-													className='zaions__cursor_pointer ms-2'
-													onClick={() => {
-														zNavigatePushRoute(
-															replaceParams(
-																ZaionsRoutes.AdminPanel.LinkInBio.Main,
-																CONSTANTS.RouteParams
-																	.folderIdToGetShortLinksOrLinkInBio,
-																'all'
-															)
-														);
-													}}
-												>
-													<ZIonLabel>Default</ZIonLabel>
-													<IonReorder slot='start' className='me-3'>
-														<ZIonIcon icon={appsOutline}></ZIonIcon>
-													</IonReorder>
-												</ZIonItem>
-												{linkInBiosFoldersData &&
-												linkInBiosFoldersData.length ? (
-													<IonReorderGroup
-														disabled={false}
-														onIonItemReorder={handleReorder}
-													>
-														{linkInBiosFoldersData.map((el) => (
-															<ZIonItem
-																className='zaions__cursor_pointer'
-																key={el.id}
-															>
-																<ZIonLabel
-																	onClick={() => {
-																		zNavigatePushRoute(
-																			replaceParams(
-																				ZaionsRoutes.AdminPanel.LinkInBio.Main,
-																				CONSTANTS.RouteParams
-																					.folderIdToGetShortLinksOrLinkInBio,
-																				el.id as string
-																			)
-																		);
-																	}}
-																>
-																	{el.title}
-																</ZIonLabel>
-																<ZIonButton
-																	fill='clear'
-																	color='dark'
-																	size='small'
-																	value={el.id}
-																	onClick={(event: unknown) => {
-																		presentFolderActionIonPopover({
-																			_event: event as Event,
-																			_cssClass: classNames(
-																				classes.zaions_present_folder_Action_popover_width
-																			),
-																		});
-																		setFolderFormState((oldVal) => ({
-																			...oldVal,
-																			id: el.id,
-																			name: el.title,
-																			formMode: FormMode.EDIT,
-																		}));
-																	}}
-																	className='ion-no-padding ms-auto'
-																>
-																	<ZIonIcon icon={ellipsisVertical} />
-																</ZIonButton>
-																<IonReorder slot='start' className='me-3'>
-																	<ZIonIcon icon={appsOutline}></ZIonIcon>
-																</IonReorder>
-															</ZIonItem>
-														))}
-													</IonReorderGroup>
-												) : (
-													''
-												)}
-											</ZIonList>
-										</ZIonItem>
-									</ZIonList>
-									<ZIonButton
-										className='ion-text-capitalize ion-margin-horizontal'
-										fill='outline'
-										expand='block'
-										onClick={() => {
-											presentFolderModal({
-												_cssClass: 'folder-modal-size',
-											});
-										}}
-									>
-										New Folder
-									</ZIonButton>
-								</div>
-							</ZIonCol>
-						)}
 
 						<ZIonCol
 							className='zaions-transition'
@@ -1238,8 +1228,10 @@ const FolderActionsPopoverContent: React.FC = () => {
 	/**
 	 * hook to present folder form modal
 	 */
-	const { presentZIonModal: presentFolderModal } =
-		useZIonModal(ZaionsAddNewFolder);
+	const { presentZIonModal: presentFolderModal } = useZIonModal(
+		ZaionsAddNewFolder,
+		{ state: folderState.LinkInBios }
+	);
 
 	/**
 	 * recoil state which will hold the single folder data (for updating). when user click on edit button in action popover the data of that folder will storing in this state and present as initial value in the update folder form. here we are delete it folder by getting the id from folderFormState
