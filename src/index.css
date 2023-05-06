@@ -2,6 +2,10 @@
 body {
 	font-family: 'Proxima Nova', Georgia, sans-serif !important;
 } */
+/* Importing Tailwind CSS */
+@import url('theme/tailwind.css');
+
+
 @import url('theme/variables.css');
 a {
 	text-decoration: none;
