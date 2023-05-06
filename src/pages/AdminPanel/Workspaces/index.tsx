@@ -81,7 +81,7 @@ const ZWorkspaceListPage: React.FC = () => {
 
 	// Custom Hooks
 	const { presentZIonPopover: presentUserInfoPopover } =
-		useZIonPopover(ZUserInfoPopover);
+		useZIonPopover(ZUserInfoPopover); // popover hook to show UserInfoPopover
 	return (
 		<ZaionsIonPage pageTitle='Zaions workspaces list page'>
 			<ZIonContent>
@@ -117,8 +117,9 @@ const ZWorkspaceListPage: React.FC = () => {
 									{/* avatar and invite buttons col */}
 									<ZIonCol>
 										<ZIonButtons className='ion-align-items-center gap-3'>
+											{/* User avatar button */}
 											<ZUserAvatarInfo
-												onClick={(event: unknown) => {
+												onMouseEnter={(event: unknown) => {
 													presentUserInfoPopover({
 														_event: event as Event,
 														_cssClass: 'zaions_user_info_popover_size',
@@ -126,6 +127,8 @@ const ZWorkspaceListPage: React.FC = () => {
 												}}
 												userAvatar={ProductLogo}
 											/>
+
+											{/* Invite button */}
 											<ZIonButton
 												fill='solid'
 												color='primary'

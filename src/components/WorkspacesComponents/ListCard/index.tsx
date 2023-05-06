@@ -26,11 +26,13 @@ import {
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
+import ZUserInfoPopover from '@/components/InPageComponents/ZaionsPopovers/UserInfoPopover';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down
@@ -57,7 +59,6 @@ import classes from './styles.module.css';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
-import { ProductLogo } from '@/assets/images';
 
 /**
  * Component props type go down
@@ -84,6 +85,12 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 	userAvatar,
 	lastActive,
 }) => {
+	// Custom Hooks
+	const { presentZIonPopover: presentUserInfoPopover } = useZIonPopover(
+		ZUserInfoPopover,
+		{ showBadges: true }
+	); // popover hook to show UserInfoPopover
+
 	return (
 		<ZIonCard className='zaions__cursor_pointer'>
 			<ZIonCardHeader>
@@ -140,6 +147,18 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 							className={classNames(classes['workspace-user-avatar-button'], {
 								'position-relative': true,
 							})}
+							onMouseEnter={(event: unknown) => {
+								presentUserInfoPopover({
+									_event: event as Event,
+									_cssClass: 'zaions_user_info_popover_size',
+								});
+							}}
+							onClick={(event: unknown) => {
+								presentUserInfoPopover({
+									_event: event as Event,
+									_cssClass: 'zaions_user_info_popover_size',
+								});
+							}}
 						>
 							{/* MT */}
 							<ZIonImg
