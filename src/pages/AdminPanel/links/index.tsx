@@ -48,8 +48,6 @@ import {
 	ZIonMenuToggle,
 	ZIonDatetimeButton,
 	ZIonButton,
-	ZIonReorder,
-	ZIonReorderGroup,
 	ZIonCheckbox,
 	ZIonButtons,
 } from '@/components/ZIonComponents';
@@ -65,10 +63,8 @@ import {
 	useZRQGetRequest,
 	useZRQUpdateRequest,
 } from '@/ZaionsHooks/zreactquery-hooks';
-import AdminPanelMainSidebarMenu from '@/components/AdminPanelComponents/Sidebar/ExpendableMenu';
 import ShortLinksFolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/ShortLinkFoldersActionPopover';
 import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 
@@ -94,14 +90,14 @@ import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { API_URL_ENUM, PAGE_MENU, PAGE_MENU_SIDE } from '@/utils/enums';
-import { replaceParams, zStringify } from '@/utils/helpers';
+import { zStringify } from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
 
 // Styles
 import classes from './styles.module.css';
 import ZDashboardSidebar from '@/components/AdminPanelComponents/Sidebar';
 
-const AdminLinksIndexPage: React.FC = () => {
+const ZShortLinksListPage: React.FC = () => {
 	// Component state.
 	const [compState, setCompState] = useState<{
 		shortLinksFoldersReorder: {
@@ -116,7 +112,6 @@ const AdminLinksIndexPage: React.FC = () => {
 
 	// Custom hooks.
 	const { isXlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale(); // media query hook.
-	const { zNavigatePushRoute } = useZNavigate();
 	const { zInvalidateReactQueries } = useZInvalidateReactQueries();
 	const { validateRequestResponse } = useZValidateRequestResponse();
 
@@ -248,7 +243,7 @@ const AdminLinksIndexPage: React.FC = () => {
 
 	return (
 		<ZaionsIonPage
-			pageTitle='Zaions Short Links Page'
+			pageTitle='Zaions short-links list page'
 			id={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
 			menu={PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU}
 		>
@@ -1291,4 +1286,4 @@ const SearchQueryInputComponent = () => {
 	);
 };
 
-export default AdminLinksIndexPage;
+export default ZShortLinksListPage;

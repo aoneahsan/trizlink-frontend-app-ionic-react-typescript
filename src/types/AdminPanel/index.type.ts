@@ -35,6 +35,7 @@ export enum AdminPanelMainSidebarMenuPageEnum {
 	integration = 'integration',
 	helpCenter = 'helpCenter',
 	settings = 'settings',
+	workspaces = 'workspaces',
 }
 
 // Interfaces

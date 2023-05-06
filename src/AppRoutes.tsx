@@ -57,7 +57,7 @@ import { Route } from 'react-router-dom';
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
 import ZaionsTermsOfService from '@/pages/Legal/TermsOfService';
-import AdminLinksIndexPage from '@/pages/AdminPanel/links';
+import ZShortLinksListPage from '@/pages/AdminPanel/links';
 import AdminCreateNewLinkPages from '@/pages/AdminPanel/links/CreateNewLinks';
 import ZaionsRoutes from './utils/constants/RoutesConstants';
 import ZDashboard from '@/pages/AdminPanel/ZDashboard';
@@ -65,11 +65,12 @@ import SignUp from '@/pages/SignUp';
 import ZaionsPasswordResetConfirm from '@/pages/ResetPassword/PasswordResetConfirmForm';
 import ZaionsAdminPanelSettings from '@/pages/AdminPanel/settings';
 import ZLinkInBioLinksSection from '@/pages/AdminPanel/ZLinkInBio/parts/links';
-import AdminLinkInBiosIndexPage from '@/pages/AdminPanel/LinkInBio';
+import ZLinkInBiosListPage from '@/pages/AdminPanel/LinkInBio';
 import ZaionsLinkInBioForm from '@/pages/AdminPanel/LinkInBio/LinkInBioForm';
 import TestingIonComponents from './Testing/TestingIonComponents';
 import PublicRoute from './components/PublicRoute';
 import PrivateRoute from './components/PrivateRoute';
+import ZWorkspaceListPage from './pages/AdminPanel/Workspaces';
 
 // Functional Component
 const AppRoutes: React.FC = () => {
@@ -115,7 +116,7 @@ const AppRoutes: React.FC = () => {
 				<PrivateRoute
 					exact
 					path={ZaionsRoutes.AdminPanel.ShortLinks.Main}
-					component={AdminLinksIndexPage}
+					component={ZShortLinksListPage}
 				/>
 
 				<PrivateRoute
@@ -133,7 +134,7 @@ const AppRoutes: React.FC = () => {
 				<PrivateRoute
 					exact
 					path={ZaionsRoutes.AdminPanel.LinkInBio.Main}
-					component={AdminLinkInBiosIndexPage}
+					component={ZLinkInBiosListPage}
 				/>
 
 				<PrivateRoute
@@ -151,6 +152,11 @@ const AppRoutes: React.FC = () => {
 				<PrivateRoute
 					path={ZaionsRoutes.AdminPanel.Setting.Main}
 					component={ZaionsAdminPanelSettings}
+				/>
+
+				<PrivateRoute
+					path={ZaionsRoutes.AdminPanel.Workspaces.Main}
+					component={ZWorkspaceListPage}
 				/>
 
 				{/* {ENVS.isProduction && (

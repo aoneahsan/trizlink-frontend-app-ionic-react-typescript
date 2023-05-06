@@ -100,7 +100,7 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import ZDashboardSidebar from '@/components/AdminPanelComponents/Sidebar';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 
-const AdminLinkInBiosIndexPage: React.FC = () => {
+const ZLinkInBiosListPage: React.FC = () => {
 	// Component state
 	const [compState, setCompState] = useState<{
 		LinkInBioFoldersReorder: {
@@ -243,7 +243,7 @@ const AdminLinkInBiosIndexPage: React.FC = () => {
 
 	return (
 		<ZaionsIonPage
-			pageTitle='Zaions Link-In-Bio page'
+			pageTitle='Zaions link-in-bio list page'
 			id={CONSTANTS.MENU_IDS.ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID}
 			menu={PAGE_MENU.ADMIN_PANEL_LINK_IN_BIO_FOLDERS_MENU}
 		>
@@ -1350,4 +1350,4 @@ const FolderActionsPopoverContent: React.FC = () => {
 	);
 };
 
-export default AdminLinkInBiosIndexPage;
+export default ZLinkInBiosListPage;

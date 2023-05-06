@@ -86,6 +86,10 @@ const ZaionsRoutes = {
 			Edit: `/link-in-bio/edit/${CONSTANTS.RouteParams.editLinkInBioIdParam}`,
 		},
 
+		Workspaces: {
+			Main: '/workspaces/',
+		},
+
 		ZaionsDashboard: {
 			DashboardInactive: '/dashboard-upgrade/',
 			LinkInBioInactive: '/launchpads/default/intro',

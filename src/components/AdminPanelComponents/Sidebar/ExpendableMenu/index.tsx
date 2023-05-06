@@ -21,6 +21,7 @@ import {
 	ZIonText,
 } from '@/components/ZIonComponents';
 import {
+	albumsOutline,
 	chevronBackOutline,
 	chevronForwardOutline,
 	fileTrayStackedOutline,
@@ -68,7 +69,7 @@ import classes from './styles.module.css';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductLogo } from '@/assets/images';
-import { doesUrlIncludes, replaceParams } from '@/utils/helpers';
+import { replaceParams } from '@/utils/helpers';
 import { useLocation } from 'react-router';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import ZIonSegment from '@/components/ZIonComponents/ZIonSegment';
@@ -103,11 +104,6 @@ const AdminPanelMainSidebarMenu: React.FC<{
 	// });
 
 	const { zNavigatePushRoute } = useZNavigate();
-
-	const _searchStrings = {
-		shortLink: '/short-links/',
-		linkInBio: '/link-in-bio/',
-	};
 
 	return (
 		<>
@@ -170,10 +166,9 @@ const AdminPanelMainSidebarMenu: React.FC<{
 										className={classNames({
 											'ion-no-padding ion-no-margin text-transform-initial':
 												true,
-											zaions__primary_set: doesUrlIncludes(
-												location.pathname,
-												_searchStrings.shortLink
-											),
+											zaions__primary_set:
+												activePage ===
+												AdminPanelMainSidebarMenuPageEnum.shortLink,
 										})}
 										routerLink={replaceParams(
 											ZaionsRoutes.AdminPanel.ShortLinks.Main,
@@ -211,10 +206,9 @@ const AdminPanelMainSidebarMenu: React.FC<{
 										className={classNames({
 											'ion-no-padding ion-no-margin text-transform-initial':
 												true,
-											zaions__primary_set: doesUrlIncludes(
-												location.pathname,
-												_searchStrings.linkInBio
-											),
+											zaions__primary_set:
+												activePage ===
+												AdminPanelMainSidebarMenuPageEnum.linkInBio,
 										})}
 										routerLink={replaceParams(
 											ZaionsRoutes.AdminPanel.LinkInBio.Main,
@@ -296,6 +290,42 @@ const AdminPanelMainSidebarMenu: React.FC<{
 												})}
 											>
 												Integrations
+											</ZIonText>
+										</ZIonText>
+									</ZIonButton>
+								</ZIonCol>
+
+								{/* Workspaces */}
+								<ZIonCol size='12'>
+									<ZIonButton
+										fill='clear'
+										color='light'
+										expand='block'
+										className={classNames({
+											'ion-no-padding ion-no-margin text-transform-initial':
+												true,
+											zaions__primary_set:
+												activePage ===
+												AdminPanelMainSidebarMenuPageEnum.workspaces,
+										})}
+										routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}
+									>
+										<ZIonText
+											className={classNames({
+												'd-flex ion-align-items-center': true,
+												'ps-3 me-auto': isExpand,
+											})}
+										>
+											<ZIonIcon icon={albumsOutline} size='large' />
+
+											<ZIonText
+												className={classNames({
+													'ps-2 zaions-transition': true,
+													'd-inline-block': isExpand,
+													'd-none': !isExpand,
+												})}
+											>
+												Workspaces
 											</ZIonText>
 										</ZIonText>
 									</ZIonButton>
@@ -467,6 +497,23 @@ const AdminPanelMainSidebarMenu: React.FC<{
 							}}
 						>
 							Integrations
+						</ZIonSegmentButton>
+
+						{/* Workspaces */}
+						<ZIonSegmentButton
+							value='Workspaces'
+							className='text-transform-initial'
+							onClick={() => {
+								zNavigatePushRoute(
+									replaceParams(
+										ZaionsRoutes.AdminPanel.ShortLinks.Main,
+										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+										'all'
+									)
+								);
+							}}
+						>
+							Workspaces
 						</ZIonSegmentButton>
 
 						{/* Help center */}

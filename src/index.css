@@ -287,6 +287,10 @@ span.new {
 .zaions__light_bg {
 	background-color: var(--ion-color-light);
 }
+
+.zaions__primary_bg {
+	background-color: var(--ion-color-primary);
+}
 .zaions_bg__dark {
 	background: var(--ion-color-dark);
 }
@@ -350,9 +354,25 @@ span.new {
 	width: 20%;
 }
 
+.zaions__w100px {
+	width: 100px;
+}
+
+.zaions__w50px {
+	width: 50px;
+}
+
 /* Height's */
 .zaions_h100 {
 	height: 100%;
+}
+
+.zaions_h100vh {
+	height: 100vh;
+}
+
+.zaions_h90vh {
+	height: 90vh;
 }
 
 .zaions__h90 {
@@ -391,6 +411,10 @@ span.new {
 	height: 100px;
 }
 
+.zaions__h50px {
+	height: 50px !important;
+}
+
 .zaions_primary_color {
 	background-color: #2a5bd7 !important;
 }
@@ -404,6 +428,10 @@ span.new {
 }
 .accordion-button::after {
 	display: none;
+}
+
+.zaions-object-fit-cover {
+	object-fit: cover;
 }
 
 .zaions__nav_item {
@@ -498,6 +526,7 @@ span.new {
 .sc-ion-input-md-h input {
 	padding: 0 !important;
 }
+
 .border-rounded {
 	border-radius: 100vmax;
 	-webkit-border-radius: 100vmax;
@@ -839,6 +868,10 @@ ion-modal.zaions__modal_w100 {
 /* Popovers */
 .zaions_present_folder_Action_popover_width {
 	--width: 150px;
+}
+
+.zaions_user_info_popover_size {
+	--width: 300px;
 }
 
 /* Link-in-bio design-theme-customAppearance & design-block-customAppearance buttons styles */

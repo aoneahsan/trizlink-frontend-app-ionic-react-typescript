@@ -40,7 +40,7 @@ import ZaionsPartners from '@/pages/Company/Partners';
 import ZaionsPress from '@/pages/Company/Press';
 import ZaionsReviews from '@/pages/Company/Reviews';
 import ZaionsDiscoverEnterprise from '@/pages/DiscoverEnterprise';
-import AdminLinksIndexPage from '@/pages/AdminPanel/links';
+import ZShortLinksListPage from '@/pages/AdminPanel/links';
 import AdminCreateNewLinkPages from '@/pages/AdminPanel/links/CreateNewLinks';
 import TestingReactTable from '@/Testing/ReactTable';
 
@@ -62,7 +62,7 @@ import SignUp from '@/pages/SignUp';
 import ZaionsPasswordResetConfirm from '@/pages/ResetPassword/PasswordResetConfirmForm';
 import ZaionsAdminPanelSettings from '@/pages/AdminPanel/settings';
 import ZLinkInBioLinksSection from '@/pages/AdminPanel/ZLinkInBio/parts/links';
-import AdminLinkInBiosIndexPage from '@/pages/AdminPanel/LinkInBio';
+import ZLinkInBiosListPage from '@/pages/AdminPanel/LinkInBio';
 import ZaionsLinkInBioForm from '@/pages/AdminPanel/LinkInBio/LinkInBioForm';
 import GoogleMapsCapacitorPackageTest from '@/Testing/GoogleMaps';
 import TestingTabs from '@/Testing/TestingTabs';
@@ -102,7 +102,7 @@ const ProductionAppRoutes: React.FC = () => {
 				<Route
 					exact
 					path={ZaionsRoutes.AdminPanel.ShortLinks.Main}
-					component={AdminLinksIndexPage}
+					component={ZShortLinksListPage}
 				/>
 
 				<Route
@@ -119,7 +119,7 @@ const ProductionAppRoutes: React.FC = () => {
 				<Route
 					exact
 					path={ZaionsRoutes.AdminPanel.LinkInBio.Main}
-					component={AdminLinkInBiosIndexPage}
+					component={ZLinkInBiosListPage}
 				/>
 				<Route
 					exact

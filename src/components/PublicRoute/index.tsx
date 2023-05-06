@@ -1,23 +1,15 @@
-import { ZRoutesRedirects } from '@/utils/constants/RoutesConstants';
-import MESSAGES from '@/utils/messages';
-import { IsAuthenticatedRStateSelector } from '@/ZaionsStore/UserAccount/index.recoil';
-import { IonLoading } from '@ionic/react';
 import { Suspense } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
+import ZFallbackIonSpinner from '@/components/CustomComponents/FallbackSpinner';
+import { ZRoutesRedirects } from '@/utils/constants/RoutesConstants';
+import { IsAuthenticatedRStateSelector } from '@/ZaionsStore/UserAccount/index.recoil';
 
 const PublicRoute = ({ component, restricted = true, ...rest }: any) => {
 	return (
 		// restricted = false meaning public route
 		// restricted = true meaning restricted route
-		<Suspense
-			fallback={
-				<IonLoading
-					isOpen
-					message={MESSAGES.GENERAL.ROUTE_FALLBACK_SUSPENSE_MESSAGE}
-				/>
-			}
-		>
+		<Suspense fallback={<ZFallbackIonSpinner />}>
 			<PublicRouteAsync
 				component={component}
 				restricted={restricted}
