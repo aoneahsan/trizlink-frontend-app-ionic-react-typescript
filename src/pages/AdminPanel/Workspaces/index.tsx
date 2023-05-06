@@ -82,6 +82,7 @@ const ZWorkspaceListPage: React.FC = () => {
 	// Custom Hooks
 	const { presentZIonPopover: presentUserInfoPopover } =
 		useZIonPopover(ZUserInfoPopover); // popover hook to show UserInfoPopover
+
 	return (
 		<ZaionsIonPage pageTitle='Zaions workspaces list page'>
 			<ZIonContent>
@@ -116,7 +117,7 @@ const ZWorkspaceListPage: React.FC = () => {
 								<ZIonRow className='pt-2'>
 									{/* avatar and invite buttons col */}
 									<ZIonCol>
-										<ZIonButtons className='ion-align-items-center gap-3'>
+										<ZIonButtons className='gap-3 ion-align-items-center'>
 											{/* User avatar button */}
 											<ZUserAvatarInfo
 												onMouseEnter={(event: unknown) => {

@@ -5,7 +5,6 @@ body {
 /* Importing Tailwind CSS */
 @import url('theme/tailwind.css');
 
-
 @import url('theme/variables.css');
 a {
 	text-decoration: none;
@@ -841,7 +840,8 @@ ion-modal.zaions__modal_w100 {
 	--height: 300px;
 }
 
-.file-upload-modal-size {
+.file-upload-modal-size,
+.workspace-setting-modal-size {
 	--height: 94vh;
 	--width: 87.6vw;
 }
@@ -876,6 +876,10 @@ ion-modal.zaions__modal_w100 {
 
 .zaions_user_info_popover_size {
 	--width: 300px;
+}
+
+.zaions_workspaces_actions_popover_size {
+	--width: 256px;
 }
 
 /* Link-in-bio design-theme-customAppearance & design-block-customAppearance buttons styles */

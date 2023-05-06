@@ -415,10 +415,11 @@ import linkInBioPageAnalyticsUtmTagBlock from './svg/link-in-bio-page-analytics-
 
 import linkInBioPageAnalyticsReferersBlock from './svg/link-in-bio-page-analytics-referers-block.svg';
 
-// link-in-bio-page-analytics-retargeting-pixels.svg
 import linkInBioPageAnalyticsDeviceBlock from './svg/link-in-bio-page-analytics-device-block.svg';
 
 import linkInBioPageAnalyticsRetargetingPixelsBlock from './svg/link-in-bio-page-analytics-retargeting-pixels.svg';
+import WorkspaceSettingsTimetablePlaceholder from './svg/workspace-timesLots-placeholder.svg';
+import WorkspaceSettingsLabelPlaceholder from './svg/workspace-labels-placeholder.svg';
 
 // Features Section
 import yourBrndBranding from './pages/features/yourbrnd-branding.gif';
@@ -759,6 +760,8 @@ export {
 	linkInBioPageAnalyticsReferersBlock,
 	linkInBioPageAnalyticsDeviceBlock,
 	linkInBioPageAnalyticsRetargetingPixelsBlock,
+	WorkspaceSettingsTimetablePlaceholder,
+	WorkspaceSettingsLabelPlaceholder,
 	yourBrndBranding,
 	brandedLinksmobile,
 	brandedLinksHero,

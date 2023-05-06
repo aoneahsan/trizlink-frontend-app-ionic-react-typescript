@@ -24,95 +24,95 @@ import classes from './styles.module.css';
 
 // Component Type
 type ZDragAndDropType = {
-  className?: string;
-  style?: {
-    [key: string]: unknown;
-  };
-  fieldName?: string;
-  imageUrl?: string;
-  title?: string;
-  setFieldValue?: FormikSetFieldValueEventType;
+	className?: string;
+	style?: {
+		[key: string]: unknown;
+	};
+	fieldName?: string;
+	imageUrl?: string;
+	title?: string;
+	setFieldValue?: FormikSetFieldValueEventType;
 };
 
 const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
-  className,
-  style,
-  fieldName = '',
-  imageUrl,
-  title = 'Click to upload Picture or a GIF',
-  setFieldValue,
+	className,
+	style,
+	fieldName = '',
+	imageUrl,
+	title = 'Click to upload Picture or a GIF',
+	setFieldValue,
 }) => {
-  const { presentZIonModal: presentZFileUploadModal } = useZIonModal(
-    ZaionsFileUploadModal
-  );
+	const { presentZIonModal: presentZFileUploadModal } = useZIonModal(
+		ZaionsFileUploadModal
+	);
 
-  // const [compState, setCompState] = useState<{
-  //   filePath?: string;
-  // }>({});
+	// const [compState, setCompState] = useState<{
+	//   filePath?: string;
+	// }>({});
 
-  return (
-    <div
-      className={classNames(classes['zaions-drag-and-drop'], className, {
-        'd-flex flex-column ion-align-items-center ion-justify-content-center':
-          true,
-      })}
-      onClick={() => {
-        presentZFileUploadModal({
-          _cssClass: 'file-upload-modal-size',
-          _onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
-            if (ev.detail.role === ZIonModalActionEnum.success) {
-              // Getting file data from fileUploadModal and parse it.
-              const fileData = zJsonParse(String(ev.detail.data)) as {
-                fileUrl: string;
-                filePath: string;
-              };
+	return (
+		<div
+			className={classNames(classes['zaions-drag-and-drop'], className, {
+				'd-flex flex-column ion-align-items-center ion-justify-content-center':
+					true,
+			})}
+			onClick={() => {
+				presentZFileUploadModal({
+					_cssClass: 'file-upload-modal-size',
+					_onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
+						if (ev.detail.role === ZIonModalActionEnum.success) {
+							// Getting file data from fileUploadModal and parse it.
+							const fileData = zJsonParse(String(ev.detail.data)) as {
+								fileUrl: string;
+								filePath: string;
+							};
 
-              // Storing the filePath in component state.
-              // setCompState((oldState) => ({
-              //   ...oldState,
-              //   filePath: fileData.filePath,
-              // }));
+							// Storing the filePath in component state.
+							// setCompState((oldState) => ({
+							//   ...oldState,
+							//   filePath: fileData.filePath,
+							// }));
 
-              // setting the url in the recoil state which will be pass in props.
-              setFieldValue &&
-                setFieldValue(fieldName, fileData.fileUrl, false);
-            }
-          },
-        });
-      }}
-      style={style}
-    >
-      {imageUrl?.trim() ? (
-        <ZIonImg src={imageUrl} className='w-100 h-100' />
-      ) : (
-        <>
-          <ZIonText className='ion-no-margin'>
-            <h1 className='ion-no-margin'>
-              <ZIonIcon icon={fileTrayOutline} color='primary' />
-            </h1>
-          </ZIonText>
-          <ZIonText color='primary'>{title}</ZIonText>
-        </>
-      )}
-      <div
-        className={classNames(classes['zaions-drag-and-drop__overlay'], {
-          'd-flex flex-column ion-align-items-center ion-justify-content-center':
-            true,
-        })}
-      >
-        <ZIonText className='ion-no-margin'>
-          <ZIonImg
-            src={upload_send}
-            alt='send icon'
-            style={{ width: '4rem' }}
-          />
-        </ZIonText>
-        <ZIonText color='light' className='fw-bold mt-2'>
-          Upload a new Picture
-        </ZIonText>
-      </div>
-    </div>
-  );
+							// setting the url in the recoil state which will be pass in props.
+							setFieldValue &&
+								setFieldValue(fieldName, fileData.fileUrl, false);
+						}
+					},
+				});
+			}}
+			style={style}
+		>
+			{imageUrl?.trim() ? (
+				<ZIonImg src={imageUrl} className='w-100 h-100' />
+			) : (
+				<>
+					<ZIonText className='ion-no-margin'>
+						<h1 className='ion-no-margin'>
+							<ZIonIcon icon={fileTrayOutline} color='primary' />
+						</h1>
+					</ZIonText>
+					<ZIonText color='primary'>{title}</ZIonText>
+				</>
+			)}
+			<div
+				className={classNames(classes['zaions-drag-and-drop__overlay'], {
+					'd-flex flex-column ion-align-items-center ion-justify-content-center':
+						true,
+				})}
+			>
+				<ZIonText className='ion-no-margin'>
+					<ZIonImg
+						src={upload_send}
+						alt='send icon'
+						style={{ width: '4rem' }}
+					/>
+				</ZIonText>
+				<ZIonText color='light' className='mt-2 fw-bold'>
+					Upload a new Picture
+				</ZIonText>
+			</div>
+		</div>
+	);
 };
 
 export default ZDragAndDrop;

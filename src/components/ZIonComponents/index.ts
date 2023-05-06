@@ -45,6 +45,8 @@ export { default as ZIonRange } from './ZIonRange';
 export { default as ZIonChip } from './ZIonChip';
 export { default as ZIonButtons } from './ZIonButtons';
 export { default as ZIonSpinner } from './ZIonSpinner';
+export { default as ZIonSegment } from './ZIonSegment';
+export { default as ZIonSegmentButton } from './ZIonSegmentButton';
 
 //
 // import {
