@@ -27,7 +27,7 @@ import {
 	ZIonText,
 } from '@/components/ZIonComponents';
 import ZUserInfoPopover from '@/components/InPageComponents/ZaionsPopovers/UserInfoPopover';
-import ZWorkspacesActionPopover from '@/components/InPageComponents/ZaionsPopovers/WorkspacesActionsPopover';
+import ZWorkspacesActionPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ActionsPopover';
 
 /**
  * Custom Hooks Imports go down

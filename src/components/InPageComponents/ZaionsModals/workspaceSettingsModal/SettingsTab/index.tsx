@@ -22,7 +22,9 @@ import {
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import ZTimezoneInput from '@/components/CustomComponents/ZTimezone';
+import ZTimezoneInput, {
+	ZTimezoneSelector,
+} from '@/components/CustomComponents/ZTimezone';
 import { eyeOffOutline } from 'ionicons/icons';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 
@@ -81,7 +83,12 @@ const ZSettingsTab: React.FC = () => {
 					</ZIonCol>
 
 					<ZIonCol size='12' className='mt-4'>
-						<ZTimezoneInput className='ion-margin-top' />
+						{/* <ZTimezoneInput className='ion-margin-top' /> */}
+						<ZTimezoneSelector
+							className='ion-margin-top'
+							label='Workspace timezone'
+							labelPlacement='floating'
+						/>
 					</ZIonCol>
 
 					<ZIonCol size='12' className='pt-3 mt-4'>

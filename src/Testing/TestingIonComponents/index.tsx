@@ -19,6 +19,7 @@ import {
 } from '@/components/ZIonComponents';
 import { IonSelect, IonSelectOption } from '@ionic/react';
 import { Form, Formik } from 'formik';
+import { ZTimezoneSelector } from '@/components/CustomComponents/ZTimezone';
 
 /**
  * Custom Imports go down
@@ -72,7 +73,7 @@ const TestingIonComponents: React.FC = () => {
 						</ZIonCol>
 						<ZIonCol size='12'>
 							<Formik
-								initialValues={{ select: ['two', 'three'] }}
+								initialValues={{ select: '' }}
 								onSubmit={(values) => {
 									console.log(values);
 								}}
@@ -81,25 +82,13 @@ const TestingIonComponents: React.FC = () => {
 									return (
 										<>
 											<ZIonItem>
-												<IonSelect
+												<ZTimezoneSelector
 													name='select'
 													onIonChange={handleChange}
 													value={values.select}
-													multiple
 													label='testing ion select'
 													labelPlacement='floating'
-												>
-													<IonSelectOption value='one'>1</IonSelectOption>
-													<IonSelectOption value='two'>2</IonSelectOption>
-													<IonSelectOption value='three'>3</IonSelectOption>
-													<IonSelectOption value='four'>4</IonSelectOption>
-													<IonSelectOption value='five'>5</IonSelectOption>
-													<IonSelectOption value='six'>6</IonSelectOption>
-													<IonSelectOption value='seven'>7</IonSelectOption>
-													<IonSelectOption value='eight'>8</IonSelectOption>
-													<IonSelectOption value='nine'>9</IonSelectOption>
-													<IonSelectOption value='ten'>10</IonSelectOption>
-												</IonSelect>
+												/>
 											</ZIonItem>
 
 											<ZIonButton
@@ -115,6 +104,12 @@ const TestingIonComponents: React.FC = () => {
 								}}
 							</Formik>
 						</ZIonCol>
+
+						{/* <ZIonCol size='12'>
+							<ZIonItem>
+								<ZTimezoneSelector />
+							</ZIonItem>
+						</ZIonCol> */}
 					</ZIonRow>
 				</ZIonGrid>
 			</ZIonContent>

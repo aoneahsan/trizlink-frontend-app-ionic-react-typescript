@@ -845,6 +845,10 @@ ion-modal.zaions__modal_w100 {
 	--height: 94vh;
 	--width: 87.6vw;
 }
+.workspace-form-modal-size {
+	--height: 94vh;
+	--width: 94.6vw;
+}
 
 .folder-modal-size,
 .api-key-modal-size {
@@ -880,6 +884,10 @@ ion-modal.zaions__modal_w100 {
 
 .zaions_workspaces_actions_popover_size {
 	--width: 256px;
+}
+
+.workspace_form_role_popover_size {
+	--width: 500px;
 }
 
 /* Link-in-bio design-theme-customAppearance & design-block-customAppearance buttons styles */

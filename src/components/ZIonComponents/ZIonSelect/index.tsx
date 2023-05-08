@@ -6,7 +6,11 @@ import { IonSelect, SelectChangeEventDetail } from '@ionic/react';
 import { IonSelectCustomEvent } from '@ionic/core/dist/types/components';
 
 // Type
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
+import {
+	ZIonColorType,
+	ZIonModeType,
+	ZIonPlacementType,
+} from '@/types/zaionsAppSettings.type';
 type ZIonSelectType = {
 	children: ReactNode;
 	className?: string;
@@ -35,7 +39,7 @@ type ZIonSelectType = {
 
 	// Ionic 7
 	label?: string;
-	labelPlacement?: 'fixed' | 'floating' | 'stacked';
+	labelPlacement?: ZIonPlacementType;
 	fill?: 'solid' | 'outline';
 };
 

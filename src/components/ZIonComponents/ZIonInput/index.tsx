@@ -3,7 +3,11 @@ import React, { ReactNode } from 'react';
 
 // Packages Import
 import { InputChangeEventDetail, IonInput } from '@ionic/react';
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
+import {
+	ZIonColorType,
+	ZIonModeType,
+	ZIonPlacementType,
+} from '@/types/zaionsAppSettings.type';
 
 // Type
 import { IonInputCustomEvent } from '@ionic/core/dist/types/components';
@@ -140,7 +144,7 @@ export type ZIonInputType = {
 
 	// Props Introduced in ionic 7
 	label?: string;
-	labelPlacement?: 'fixed' | 'floating' | 'stacked';
+	labelPlacement?: ZIonPlacementType;
 	helperText?: string;
 	errorText?: string;
 	fill?: 'solid' | 'outline';
