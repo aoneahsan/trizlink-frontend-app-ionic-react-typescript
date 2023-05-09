@@ -84,6 +84,10 @@ export enum API_URL_ENUM {
 	deleteSingleFile = 'deleteSingleFile',
 	checkIfSingleFileExists = 'checkIfSingleFileExists',
 	uploadFiles = 'uploadFiles',
+
+	// External Third Party API URLs (need to be complete url, as we will hit them without any modification (except for dynamic parts))
+	// UI Avatars API
+	uiAvatarAPI= 'uiAvatarAPI'
 }
 export enum CSS_BACKGROUND_OPTION {
 	cover = 'cover',

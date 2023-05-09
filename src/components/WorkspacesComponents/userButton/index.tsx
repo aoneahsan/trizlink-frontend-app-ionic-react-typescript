@@ -9,6 +9,8 @@ import { ZIonButton, ZIonImg, ZIonText } from '@/components/ZIonComponents';
 
 // Style
 import classes from './styles.module.css';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 
 // Component Type
 interface ZUserAvatarInfo {
@@ -41,18 +43,10 @@ const ZUserAvatarInfo: React.FC<ZUserAvatarInfo> = ({
 			onMouseEnter={onMouseEnter}
 			onMouseLeave={onMouseLeave}
 		>
-			{userAvatar && (
-				<ZIonImg
-					src={userAvatar}
-					className='w-100 h-100 zaions-object-fit-cover'
-				/>
-			)}
-			{!userAvatar && (
-				<ZIonText color='light' className='fs-5'>
-					{/* {userName.charAt(0)} */}
-					MT
-				</ZIonText>
-			)}
+			<ZIonImg
+				src={userAvatar || getUiAvatarApiUrl({})}
+				className='w-100 h-100 zaions-object-fit-cover'
+			/>
 		</ZIonButton>
 	);
 };

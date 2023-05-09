@@ -24,6 +24,7 @@ import { ENVS } from '@/utils/envKeys';
 // Constant
 // const ZLinkApiRootUrl = 'https://zlinkbackend.zaions.com/public/api/zlink/v1';
 export const ZLinkApiRootUrl = ENVS.apiUrl;
+// left here as it will messup many imports, we can move this when we have some free time (i know that will add more imports to correct but we don't have time for it right now)
 export const API_URLS = {
 	login: '/login',
 	logout: '/logout',
@@ -81,6 +82,10 @@ export const API_URLS = {
 	deleteSingleFile: '/file-upload/deleteSingleFile',
 	checkIfSingleFileExists: '/file-upload/checkIfSingleFileExists',
 	uploadFiles: '/file-upload/uploadFiles',
+
+	// External Third Party API URLs (need to be complete url, as we will hit them without any modification (except for dynamic parts))
+	// UI Avatars API
+	uiAvatarAPI: 'https://ui-avatars.com/api/?name=:name&rounded=:rounded&bold=:bold&size=:size&background=:background&color=:color&font-size=:fontSize&length=:length'
 };
 
 // Site
