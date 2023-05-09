@@ -603,7 +603,6 @@ export const getApiUrl = (
           const itemId = itemIds[i]
           __url = __url.replace(dynamicPart, itemId)
         }
-        console.log({ dynamicPart, itemId: itemIds[i], __url, itemIds, urlDynamicParts })
       }
     } else if (itemIds?.length !== urlDynamicParts?.length) {
       throw new Error('length does not match. invalid length')
@@ -1109,12 +1108,6 @@ const formattedAnalyticsBlocksData = (
   }
 }
 
-// console.log(
-// 	formattedAnalyticsBlocksData(
-// 		[{ country: 'Pakistan', visit: '1', unique: '0', visitPercentage: '100%' }],
-// 		['values', 'visit', 'unique', 'visitPercentage']
-// 	)
-// );
 export const doesUrlIncludes = (_url: string, _searchString: string) => {
   try {
     if (_url && _searchString) {

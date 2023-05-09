@@ -1,4 +1,3 @@
-import { API_URLS } from '@/utils/constants'
 import { API_URL_ENUM } from '@/utils/enums'
 import { getApiUrl } from '@/utils/helpers'
 import {
@@ -19,7 +18,7 @@ export const getUiAvatarApiUrl = ({
   const _uiAvatar = API_DYNAMIC_PARTS.externalAPIs.uiAvatarAPI
   return getApiUrl(
     API_URL_ENUM.uiAvatarAPI,
-    ['ahsan', background, bold, color, fontSize, length, rounded, size],
+    [name, background, bold, color, fontSize, length, rounded, size],
     [
       _uiAvatar.name,
       _uiAvatar.background,
@@ -34,5 +33,3 @@ export const getUiAvatarApiUrl = ({
     true
   )
 }
-
-console.log({ test: getUiAvatarApiUrl({}) })

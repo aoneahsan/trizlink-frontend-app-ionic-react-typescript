@@ -55,6 +55,7 @@ import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
+import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 
 /**
  * Images Imports go down
@@ -109,14 +110,12 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 						>
 							{workspaceAvatar && (
 								<ZIonImg
-									src={workspaceAvatar}
+									src={
+										workspaceAvatar ||
+										getUiAvatarApiUrl({ name: workspaceName })
+									}
 									className='rounded overflow__hidden'
 								/>
-							)}
-							{!workspaceAvatar && (
-								<ZIonText color='light' className='fs-4'>
-									{workspaceName.charAt(0)}
-								</ZIonText>
 							)}
 						</div>
 						<div>
@@ -166,7 +165,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 						>
 							{/* MT */}
 							<ZIonImg
-								src={userAvatar}
+								src={userAvatar} // TODO: add getUIAvatar function here
 								className='w-100 h-100 zaions-object-fit-cover'
 							/>
 						</ZIonButton>

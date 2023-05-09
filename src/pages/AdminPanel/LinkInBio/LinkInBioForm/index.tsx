@@ -221,11 +221,6 @@ const ZaionsLinkInBioForm: React.FC = () => {
 		// eslint-disable-next-line
 	}, [selectedLinkInBio]);
 
-	console.log({
-		log: 'check atomFamily',
-		linkInBioStateAtomFamily,
-	});
-
 	// storing the current page info in setLinkInBioFromPageState recoil state, so we can show the appropriate content.
 	useEffect(() => {
 		try {
