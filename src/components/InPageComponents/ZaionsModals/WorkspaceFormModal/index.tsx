@@ -45,9 +45,10 @@ import {
 	workspaceFormPermissionEnum,
 	workspaceFormRoleEnum,
 } from '@/types/AdminPanel/workspace';
-import ZWorkspaceFormDetailTab from './WorkspaceDetailTab';
-import ZWorkspaceFormInviteClientsTab from './WorkspaceInviteClientsTab';
+import ZWorkspaceFormDetailTab from './DetailTab';
+import ZWorkspaceFormInviteClientsTab from './InviteClientsTab';
 import { closeOutline } from 'ionicons/icons';
+import ZWorkspaceFormConnectPagesTab from './ConnectPagesTab';
 
 /**
  * Recoil State Imports go down
@@ -81,9 +82,9 @@ const ZWorkspaceFormModal: React.FC<{
 	return (
 		<Formik
 			initialValues={{
-				workspaceName: '',
+				workspaceName: 'MTI',
 				workspaceTimezone: '',
-				CurrentTab: workspaceFormModalTabEnum.inviteClients,
+				CurrentTab: workspaceFormModalTabEnum.connectPages,
 				clients: [
 					{
 						email: 'test@zaions.com',
@@ -103,8 +104,7 @@ const ZWorkspaceFormModal: React.FC<{
 			}}
 			onSubmit={() => {}}
 		>
-			{({ errors, values, touched, handleChange, handleBlur }) => {
-				console.log(values);
+			{({ values }) => {
 				return (
 					<ZIonGrid className='pb-2 overflow-y-scroll mx-0'>
 						<ZIonRow className='ion-justify-content-end mb-2'>
@@ -155,7 +155,9 @@ const ZWorkspaceFormModal: React.FC<{
 							{/* tab's content */}
 							{/* <ZWorkspaceFormDetailTab /> */}
 
-							<ZWorkspaceFormInviteClientsTab />
+							{/* <ZWorkspaceFormInviteClientsTab /> */}
+
+							<ZWorkspaceFormConnectPagesTab />
 						</ZIonRow>
 					</ZIonGrid>
 				);

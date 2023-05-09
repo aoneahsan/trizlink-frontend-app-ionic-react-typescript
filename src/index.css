@@ -429,6 +429,11 @@ span.new {
 .zaions-ion-bg-color-light {
 	background-color: var(--ion-color-light);
 }
+
+.zaions-ion-bg-color-medium {
+	background-color: var(--ion-color-medium);
+}
+
 .accordion-button::after {
 	display: none;
 }
@@ -845,9 +850,15 @@ ion-modal.zaions__modal_w100 {
 	--height: 94vh;
 	--width: 87.6vw;
 }
+
 .workspace-form-modal-size {
 	--height: 94vh;
 	--width: 94.6vw;
+}
+
+.workspace-connect-pages-modal-size {
+	--height: 92vh;
+	--width: 87.6vw;
 }
 
 .folder-modal-size,

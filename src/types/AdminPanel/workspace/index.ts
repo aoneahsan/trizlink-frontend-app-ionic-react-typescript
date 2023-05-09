@@ -25,6 +25,18 @@ export enum workspaceFormPermissionEnum {
 	client = 'client',
 }
 
+export enum workspaceFormConnectPagesEnum {
+	facebook = 'facebook',
+	twitter = 'twitter',
+	instagram = 'instagram',
+	linkedin = 'linkedin',
+	googleBusiness = 'googleBusiness',
+	youtube = 'youtube',
+	tiktok = 'tiktok',
+	pinterest = 'pinterest',
+	universalContent = 'universalContent',
+}
+
 // Interfaces
 export interface workspaceInviteClientInterface {
 	avatar?: string;

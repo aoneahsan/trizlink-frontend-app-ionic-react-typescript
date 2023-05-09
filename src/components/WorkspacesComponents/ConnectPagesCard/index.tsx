@@ -1,0 +1,276 @@
+/**
+ * Core Imports go down
+ * ? Like Import of React is a Core Import
+ * */
+import React, { useEffect, useState } from 'react';
+
+/**
+ * Packages Imports go down
+ * ? Like import of ionic components is a packages import
+ * */
+import {
+	gridOutline,
+	logoFacebook,
+	logoGoogle,
+	logoInstagram,
+	logoLinkedin,
+	logoPinterest,
+	logoTiktok,
+	logoTwitter,
+	logoYoutube,
+} from 'ionicons/icons';
+
+/**
+ * Custom Imports go down
+ * ? Like import of custom components is a custom import
+ * */
+import {
+	ZIonCard,
+	ZIonCardContent,
+	ZIonIcon,
+	ZIonText,
+} from '@/components/ZIonComponents';
+
+/**
+ * Custom Hooks Imports go down
+ * ? Like import of custom Hook is a custom import
+ * */
+
+/**
+ * Global Constants Imports go down
+ * ? Like import of Constant is a global constants import
+ * */
+
+/**
+ * Type Imports go down
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
+ * */
+import { workspaceFormConnectPagesEnum } from '@/types/AdminPanel/workspace';
+import classNames from 'classnames';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
+import ZWorkspaceConnectPagesModal from '@/components/InPageComponents/ZaionsModals/WorkspaceFormModal/ConnectPagesModal';
+
+/**
+ * Recoil State Imports go down
+ * ? Import of recoil states is a Recoil State import
+ * */
+
+/**
+ * Style files Imports go down
+ * ? Import of style sheet is a style import
+ * */
+
+/**
+ * Images Imports go down
+ * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
+ * */
+
+/**
+ * Component props type go down
+ * ? Like if you have a type for props it should be please Down
+ * */
+interface ZWorkspaceFromConnectPagesCardInterface {
+	title?: string;
+	subTitle?: string;
+	icon?: string;
+	pageType?: workspaceFormConnectPagesEnum;
+	activeColor?: string;
+}
+/**
+ * Functional Component
+ * About: (Info of component here...)
+ * @type {*}
+ * */
+
+const ZWorkspaceFromConnectPagesCard: React.FC<
+	ZWorkspaceFromConnectPagesCardInterface
+> = ({ pageType, activeColor, icon, subTitle, title }) => {
+	const [compState, setCompSate] = useState<{
+		isActive: boolean;
+		iconName?: string;
+		title?: string;
+		activeColor?: string;
+		subTitle?: string;
+	}>({
+		isActive: false,
+	});
+
+	// Custom Hooks
+	const { presentZIonModal: presentWorkspaceConnectPagesModal } = useZIonModal(
+		ZWorkspaceConnectPagesModal
+	); // Modal hook to show workspace form modal (create/edit form)
+
+	// Setting the content of card accounting to type.
+	useEffect(() => {
+		switch (pageType) {
+			case workspaceFormConnectPagesEnum.facebook:
+				setCompSate((oldValues) => ({
+					...oldValues,
+					activeColor: '#1877F2',
+					title: 'Facebook',
+					subTitle: 'Page or group',
+					iconName: logoFacebook,
+				}));
+				break;
+
+			case workspaceFormConnectPagesEnum.instagram:
+				setCompSate((oldValues) => ({
+					...oldValues,
+					activeColor: '#E1306C',
+					title: 'Instagram',
+					subTitle: 'Business account or profile',
+					iconName: logoInstagram,
+				}));
+				break;
+
+			case workspaceFormConnectPagesEnum.twitter:
+				setCompSate((oldValues) => ({
+					...oldValues,
+					activeColor: '#1DA1F2',
+					title: 'Twitter',
+					subTitle: 'Profile',
+					iconName: logoTwitter,
+				}));
+				break;
+
+			case workspaceFormConnectPagesEnum.tiktok:
+				setCompSate((oldValues) => ({
+					...oldValues,
+					activeColor: '#333333',
+					title: 'Tiktok',
+					subTitle: 'Account',
+					iconName: logoTiktok,
+				}));
+				break;
+
+			case workspaceFormConnectPagesEnum.youtube:
+				setCompSate((oldValues) => ({
+					...oldValues,
+					activeColor: '#FF0000',
+					title: 'Youtube',
+					subTitle: 'Channel',
+					iconName: logoYoutube,
+				}));
+				break;
+
+			case workspaceFormConnectPagesEnum.googleBusiness:
+				setCompSate((oldValues) => ({
+					...oldValues,
+					activeColor: '#4758B8',
+					title: 'Google Business Profile',
+					subTitle: 'Business location',
+					iconName: logoGoogle,
+				}));
+				break;
+
+			case workspaceFormConnectPagesEnum.pinterest:
+				setCompSate((oldValues) => ({
+					...oldValues,
+					activeColor: '#cc0100',
+					title: 'Pinterest',
+					subTitle: 'Business account',
+					iconName: logoPinterest,
+				}));
+				break;
+
+			case workspaceFormConnectPagesEnum.linkedin:
+				setCompSate((oldValues) => ({
+					...oldValues,
+					activeColor: '#0966C1',
+					title: 'Linkedin',
+					subTitle: 'Company page or profile',
+					iconName: logoLinkedin,
+				}));
+				break;
+
+			case workspaceFormConnectPagesEnum.universalContent:
+				setCompSate((oldValues) => ({
+					...oldValues,
+					activeColor: '#333333',
+					title: 'Universal content',
+					subTitle: 'Page',
+					iconName: gridOutline,
+				}));
+				break;
+
+			default:
+				setCompSate((oldValues) => ({
+					...oldValues,
+					activeColor: activeColor,
+					title: title,
+					subTitle: subTitle,
+					iconName: icon,
+				}));
+				break;
+		}
+	}, [pageType]);
+
+	return (
+		<ZIonCard
+			className='zaions__cursor_pointer'
+			onMouseEnter={() => {
+				setCompSate((oldValues) => ({
+					...oldValues,
+					isActive: true,
+				}));
+			}}
+			onMouseLeave={() => {
+				setCompSate((oldValues) => ({
+					...oldValues,
+					isActive: false,
+				}));
+			}}
+			style={{
+				backgroundColor: compState.isActive ? compState.activeColor : '',
+			}}
+			onClick={() => {
+				presentWorkspaceConnectPagesModal({
+					_cssClass: 'workspace-connect-pages-modal-size',
+				});
+			}}
+		>
+			<ZIonCardContent className='ion-text-center py-4'>
+				<ZIonIcon
+					icon={compState.iconName}
+					className='w-10 h-10'
+					style={{ color: compState.activeColor }}
+					color={compState.isActive ? 'light' : undefined}
+				/>
+				{/*  */}
+				<ZIonText
+					className='ion-text-center d-block mt-1'
+					color={compState.isActive ? 'light' : 'dark'}
+				>
+					{compState.title}
+				</ZIonText>
+				{/*  */}
+
+				<ZIonText
+					className={classNames({
+						'ion-text-center d-block zaions__fs_13 text-muted': true,
+						'opacity-100': !compState.isActive,
+						'opacity-0': compState.isActive,
+					})}
+					color={compState.isActive ? 'light' : 'dark'}
+				>
+					{compState.subTitle}
+				</ZIonText>
+
+				{/*  */}
+
+				<ZIonText
+					className={classNames({
+						'ion-text-center d-block mt-4': true,
+						'opacity-100': compState.isActive,
+						'opacity-0': !compState.isActive,
+					})}
+					color={compState.isActive ? 'light' : 'dark'}
+				>
+					CONNECT
+				</ZIonText>
+			</ZIonCardContent>
+		</ZIonCard>
+	);
+};
+
+export default ZWorkspaceFromConnectPagesCard;
