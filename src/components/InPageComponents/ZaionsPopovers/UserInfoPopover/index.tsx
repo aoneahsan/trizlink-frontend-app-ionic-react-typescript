@@ -13,7 +13,12 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonCol, ZIonRow, ZIonText } from '@/components/ZIonComponents';
+import {
+	ZIonBadge,
+	ZIonCol,
+	ZIonRow,
+	ZIonText,
+} from '@/components/ZIonComponents';
 import ZUserAvatarInfo from '@/components/WorkspacesComponents/userButton';
 import { ProductLogo } from '@/assets/images';
 
@@ -51,6 +56,9 @@ import { ProductLogo } from '@/assets/images';
  * Component props type go down
  * ? Like if you have a type for props it should be please Down
  * */
+interface ZUserInfoPopoverInterface {
+	showBadges: boolean;
+}
 
 /**
  * Functional Component
@@ -58,7 +66,9 @@ import { ProductLogo } from '@/assets/images';
  * @type {*}
  * */
 
-const ZUserInfoPopover: React.FC = () => {
+const ZUserInfoPopover: React.FC<ZUserInfoPopoverInterface> = ({
+	showBadges = false,
+}) => {
 	return (
 		<ZIonRow className='px-2 ion-align-items-center my-2'>
 			{/* User avatar col */}
@@ -76,6 +86,13 @@ const ZUserInfoPopover: React.FC = () => {
 					talhaworking5@gmail.com
 				</ZIonText>
 			</ZIonCol>
+
+			{showBadges && (
+				<ZIonCol size='12' className='ps-5 d-flex gap-2'>
+					<ZIonBadge className='ms-4'>Team</ZIonBadge>
+					<ZIonBadge color='secondary'>Company owner</ZIonBadge>
+				</ZIonCol>
+			)}
 
 			<ZIonCol size='12' className=' mt-2 py-3 px-3 border-top'>
 				<ZIonText className='d-block zaions__fs_13'>

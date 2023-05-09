@@ -34,7 +34,7 @@ import ZWorkspacesCard from '@/components/WorkspacesComponents/ListCard';
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down
@@ -63,6 +63,7 @@ import { AdminPanelMainSidebarMenuPageEnum } from '@/types/AdminPanel/index.type
  * */
 import { ProductLogo } from '@/assets/images';
 import ZUserAvatarInfo from '@/components/WorkspacesComponents/userButton';
+import ZWorkspaceFormModal from '@/components/InPageComponents/ZaionsModals/WorkspaceFormModal';
 
 /**
  * Component props type go down
@@ -81,7 +82,11 @@ const ZWorkspaceListPage: React.FC = () => {
 
 	// Custom Hooks
 	const { presentZIonPopover: presentUserInfoPopover } =
-		useZIonPopover(ZUserInfoPopover);
+		useZIonPopover(ZUserInfoPopover); // popover hook to show UserInfoPopover
+
+	const { presentZIonModal: presentWorkspaceFormModal } =
+		useZIonModal(ZWorkspaceFormModal); // Modal hook to show workspace form modal (create/edit form)
+
 	return (
 		<ZaionsIonPage pageTitle='Zaions workspaces list page'>
 			<ZIonContent>
@@ -116,9 +121,10 @@ const ZWorkspaceListPage: React.FC = () => {
 								<ZIonRow className='pt-2'>
 									{/* avatar and invite buttons col */}
 									<ZIonCol>
-										<ZIonButtons className='ion-align-items-center gap-3'>
+										<ZIonButtons className='gap-3 ion-align-items-center'>
+											{/* User avatar button */}
 											<ZUserAvatarInfo
-												onClick={(event: unknown) => {
+												onMouseEnter={(event: unknown) => {
 													presentUserInfoPopover({
 														_event: event as Event,
 														_cssClass: 'zaions_user_info_popover_size',
@@ -126,6 +132,8 @@ const ZWorkspaceListPage: React.FC = () => {
 												}}
 												userAvatar={ProductLogo}
 											/>
+
+											{/* Invite button */}
 											<ZIonButton
 												fill='solid'
 												color='primary'
@@ -141,6 +149,11 @@ const ZWorkspaceListPage: React.FC = () => {
 										<ZIonButton
 											className='ion-no-margin text-transform-initial'
 											color='secondary'
+											onClick={() => {
+												presentWorkspaceFormModal({
+													_cssClass: 'workspace-form-modal-size',
+												});
+											}}
 										>
 											<ZIonIcon icon={addOutline} /> New workspace
 										</ZIonButton>

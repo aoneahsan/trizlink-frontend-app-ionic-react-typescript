@@ -48,6 +48,8 @@ export type ZIonRouterDirection = 'back' | 'forward' | 'root';
 
 export type ZIonButtonType = 'button' | 'reset' | 'submit';
 
+export type ZIonPlacementType = 'fixed' | 'floating' | 'stacked';
+
 export type ZGenericObject = { [key: string]: string };
 
 export enum ZMediaEnum {

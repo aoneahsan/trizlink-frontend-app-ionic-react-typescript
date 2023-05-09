@@ -347,10 +347,14 @@ export const useZIonPopover = <A extends object>(
 		_event,
 		_cssClass,
 		_dismissOnSelect,
+		_onDidDismiss,
+		_onWillDismiss,
 	}: {
 		_event: B;
 		_cssClass?: string | string[] | undefined;
 		_dismissOnSelect?: boolean;
+		_onDidDismiss?: (event: CustomEvent<OverlayEventDetail<unknown>>) => void;
+		_onWillDismiss?: (event: CustomEvent<OverlayEventDetail<any>>) => void;
 	}) => void;
 	dismissZIonPopover: (data?: unknown, role?: string | undefined) => void;
 } => {
@@ -366,10 +370,14 @@ export const useZIonPopover = <A extends object>(
 			_event,
 			_cssClass,
 			_dismissOnSelect = true,
+			_onDidDismiss,
+			_onWillDismiss,
 		}: {
 			_event: B;
 			_cssClass?: string | string[];
 			_dismissOnSelect?: boolean;
+			_onDidDismiss?: (event: CustomEvent<OverlayEventDetail<unknown>>) => void;
+			_onWillDismiss?: (event: CustomEvent<OverlayEventDetail<any>>) => void;
 		}): void => {
 			presentIonPopover({
 				event: _event,
@@ -379,6 +387,9 @@ export const useZIonPopover = <A extends object>(
 				alignment: 'start',
 				side: 'bottom',
 				cssClass: _cssClass,
+				animated: true,
+				onDidDismiss: _onDidDismiss,
+				onWillDismiss: _onWillDismiss,
 			});
 		};
 		return { presentZIonPopover, dismissZIonPopover };

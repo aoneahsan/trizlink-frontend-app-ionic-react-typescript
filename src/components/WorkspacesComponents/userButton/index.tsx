@@ -12,15 +12,19 @@ import classes from './styles.module.css';
 
 // Component Type
 interface ZUserAvatarInfo {
-	onClick?: React.MouseEventHandler<HTMLIonButtonElement>;
 	userAvatar?: string;
 	className?: string;
+	onClick?: React.MouseEventHandler<HTMLIonButtonElement>;
+	onMouseEnter?: React.MouseEventHandler<HTMLIonButtonElement>;
+	onMouseLeave?: React.MouseEventHandler<HTMLIonButtonElement>;
 }
 
 const ZUserAvatarInfo: React.FC<ZUserAvatarInfo> = ({
-	onClick,
 	userAvatar,
 	className,
+	onClick,
+	onMouseEnter,
+	onMouseLeave,
 }) => {
 	return (
 		<ZIonButton
@@ -34,6 +38,8 @@ const ZUserAvatarInfo: React.FC<ZUserAvatarInfo> = ({
 				}
 			)}
 			onClick={onClick}
+			onMouseEnter={onMouseEnter}
+			onMouseLeave={onMouseLeave}
 		>
 			{userAvatar && (
 				<ZIonImg

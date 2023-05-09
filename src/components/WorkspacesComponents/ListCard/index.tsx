@@ -26,11 +26,14 @@ import {
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
+import ZUserInfoPopover from '@/components/InPageComponents/ZaionsPopovers/UserInfoPopover';
+import ZWorkspacesActionPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ActionsPopover';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down
@@ -57,7 +60,6 @@ import classes from './styles.module.css';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
-import { ProductLogo } from '@/assets/images';
 
 /**
  * Component props type go down
@@ -84,11 +86,20 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 	userAvatar,
 	lastActive,
 }) => {
+	// Custom Hooks
+	const { presentZIonPopover: presentUserInfoPopover } = useZIonPopover(
+		ZUserInfoPopover,
+		{ showBadges: true }
+	); // popover hook to show UserInfoPopover
+
+	const { presentZIonPopover: presentWorkspacesActionsPopover } =
+		useZIonPopover(ZWorkspacesActionPopover); // popover hook to show UserInfoPopover
+
 	return (
 		<ZIonCard className='zaions__cursor_pointer'>
 			<ZIonCardHeader>
 				<ZIonRow className='ion-align-items-center'>
-					<ZIonCol className='d-flex gap-3 ion-align-items-center'>
+					<ZIonCol className='gap-3 d-flex ion-align-items-center'>
 						<div
 							className={classNames({
 								'zaions__w50px zaions__h50px rounded overflow__hidden': true,
@@ -122,7 +133,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 					<ZIonCol className='ion-text-end me-2'>
 						<ZIonButton
 							fill='clear'
-							className='ion-no-padding ion-no-margin h-auto mb-1'
+							className='h-auto mb-1 ion-no-padding ion-no-margin'
 						>
 							<ZIonIcon icon={starOutline} />
 						</ZIonButton>
@@ -140,6 +151,18 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 							className={classNames(classes['workspace-user-avatar-button'], {
 								'position-relative': true,
 							})}
+							onMouseEnter={(event: unknown) => {
+								presentUserInfoPopover({
+									_event: event as Event,
+									_cssClass: 'zaions_user_info_popover_size',
+								});
+							}}
+							onClick={(event: unknown) => {
+								presentUserInfoPopover({
+									_event: event as Event,
+									_cssClass: 'zaions_user_info_popover_size',
+								});
+							}}
 						>
 							{/* MT */}
 							<ZIonImg
@@ -151,12 +174,12 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 				</ZIonRow>
 
 				{/* Bottom row */}
-				<ZIonRow className='mt-5 mx-2'>
+				<ZIonRow className='mx-2 mt-5'>
 					{/* Last active */}
 					<ZIonCol>
 						<ZIonButton
 							fill='clear'
-							className='ion-no-padding ion-no-margin h-auto mb-1 text-transform-initial'
+							className='h-auto mb-1 ion-no-padding ion-no-margin text-transform-initial'
 							color='dark'
 						>
 							{lastActive}
@@ -167,8 +190,15 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 					<ZIonCol className='ion-text-end'>
 						<ZIonButton
 							fill='clear'
-							className='ion-no-padding ion-no-margin h-auto mb-1 text-transform-initial'
+							className='h-auto mb-1 ion-no-padding ion-no-margin text-transform-initial'
 							color='dark'
+							onClick={(event: unknown) => {
+								presentWorkspacesActionsPopover({
+									_event: event as Event,
+									_cssClass: 'zaions_workspaces_actions_popover_size',
+									_dismissOnSelect: false,
+								});
+							}}
 						>
 							<ZIonIcon icon={ellipsisHorizontalOutline} />
 						</ZIonButton>
