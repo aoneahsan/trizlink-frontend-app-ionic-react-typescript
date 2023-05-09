@@ -87,7 +87,8 @@ const ZaionsRoutes = {
 		},
 
 		Workspaces: {
-			Main: '/workspaces/',
+			Main: '/workspaces',
+			Create: '/workspaces/create',
 		},
 
 		ZaionsDashboard: {

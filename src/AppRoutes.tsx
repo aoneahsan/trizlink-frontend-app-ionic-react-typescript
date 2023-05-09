@@ -71,6 +71,7 @@ import TestingIonComponents from './Testing/TestingIonComponents';
 import PublicRoute from './components/PublicRoute';
 import PrivateRoute from './components/PrivateRoute';
 import ZWorkspaceListPage from './pages/AdminPanel/Workspaces';
+import ZWorkspaceForm from './pages/AdminPanel/Workspaces/Form';
 
 // Functional Component
 const AppRoutes: React.FC = () => {
@@ -157,6 +158,11 @@ const AppRoutes: React.FC = () => {
 				<PrivateRoute
 					path={ZaionsRoutes.AdminPanel.Workspaces.Main}
 					component={ZWorkspaceListPage}
+				/>
+
+				<PrivateRoute
+					path={ZaionsRoutes.AdminPanel.Workspaces.Create}
+					component={ZWorkspaceForm}
 				/>
 
 				{/* {ENVS.isProduction && (

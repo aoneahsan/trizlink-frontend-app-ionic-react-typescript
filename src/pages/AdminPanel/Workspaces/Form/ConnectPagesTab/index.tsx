@@ -13,7 +13,9 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonCol, ZIonGrid, ZIonRow } from '@/components/ZIonComponents';
+import { ZIonCol, ZIonRow } from '@/components/ZIonComponents';
+import ZWorkspaceFromConnectPagesCard from '@/components/WorkspacesComponents/ConnectPagesCard';
+import { workspaceFormConnectPagesEnum } from '@/types/AdminPanel/workspace';
 
 /**
  * Custom Hooks Imports go down
@@ -56,14 +58,33 @@ import { ZIonCol, ZIonGrid, ZIonRow } from '@/components/ZIonComponents';
  * @type {*}
  * */
 
-const ZWorkspaceConnectPagesModal: React.FC = () => {
+const pagesCards = [
+	workspaceFormConnectPagesEnum.facebook,
+	workspaceFormConnectPagesEnum.twitter,
+	workspaceFormConnectPagesEnum.instagram,
+	workspaceFormConnectPagesEnum.linkedin,
+	workspaceFormConnectPagesEnum.googleBusiness,
+	workspaceFormConnectPagesEnum.youtube,
+	workspaceFormConnectPagesEnum.tiktok,
+	workspaceFormConnectPagesEnum.pinterest,
+	workspaceFormConnectPagesEnum.universalContent,
+];
+
+const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 	return (
-		<ZIonGrid className='zaions-ion-bg-color-medium w-100'>
-			<ZIonRow>
-				<ZIonCol></ZIonCol>
+		<ZIonCol className='mt-4'>
+			<ZIonRow className='ion-align-items-center ion-justify-content-center mx-auto'>
+				{/* Facebook */}
+				{pagesCards.map((el) => {
+					return (
+						<ZIonCol size='6' sizeSm='4' sizeMd='4' sizeLg='3' sizeXl='2'>
+							<ZWorkspaceFromConnectPagesCard pageType={el} />
+						</ZIonCol>
+					);
+				})}
 			</ZIonRow>
-		</ZIonGrid>
+		</ZIonCol>
 	);
 };
 
-export default ZWorkspaceConnectPagesModal;
+export default ZWorkspaceFormConnectPagesTab;

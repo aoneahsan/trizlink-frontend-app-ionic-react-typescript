@@ -29,7 +29,7 @@ import {
 	timeOutline,
 } from 'ionicons/icons';
 import { ProductLogo } from '@/assets/images';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/userButton';
+import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 
 /**

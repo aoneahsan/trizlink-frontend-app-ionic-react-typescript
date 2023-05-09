@@ -62,8 +62,8 @@ import { AdminPanelMainSidebarMenuPageEnum } from '@/types/AdminPanel/index.type
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductLogo } from '@/assets/images';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/userButton';
-import ZWorkspaceFormModal from '@/components/InPageComponents/ZaionsModals/WorkspaceFormModal';
+import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Component props type go down
@@ -83,9 +83,6 @@ const ZWorkspaceListPage: React.FC = () => {
 	// Custom Hooks
 	const { presentZIonPopover: presentUserInfoPopover } =
 		useZIonPopover(ZUserInfoPopover); // popover hook to show UserInfoPopover
-
-	const { presentZIonModal: presentWorkspaceFormModal } =
-		useZIonModal(ZWorkspaceFormModal); // Modal hook to show workspace form modal (create/edit form)
 
 	return (
 		<ZaionsIonPage pageTitle='Zaions workspaces list page'>
@@ -149,11 +146,12 @@ const ZWorkspaceListPage: React.FC = () => {
 										<ZIonButton
 											className='ion-no-margin text-transform-initial'
 											color='secondary'
-											onClick={() => {
-												presentWorkspaceFormModal({
-													_cssClass: 'workspace-form-modal-size',
-												});
-											}}
+											// onClick={() => {
+											// 	presentWorkspaceFormModal({
+											// 		_cssClass: 'workspace-form-modal-size',
+											// 	});
+											// }}
+											routerLink={ZaionsRoutes.AdminPanel.Workspaces.Create}
 										>
 											<ZIonIcon icon={addOutline} /> New workspace
 										</ZIonButton>

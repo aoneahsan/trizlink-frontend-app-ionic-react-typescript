@@ -48,7 +48,7 @@ import {
 import { workspaceFormConnectPagesEnum } from '@/types/AdminPanel/workspace';
 import classNames from 'classnames';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
-import ZWorkspaceConnectPagesModal from '@/components/InPageComponents/ZaionsModals/WorkspaceFormModal/ConnectPagesModal';
+import ZWorkspaceConnectPagesModal from '@/components/InPageComponents/ZaionsModals/ConnectPagesModal';
 
 /**
  * Recoil State Imports go down
@@ -97,7 +97,10 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 
 	// Custom Hooks
 	const { presentZIonModal: presentWorkspaceConnectPagesModal } = useZIonModal(
-		ZWorkspaceConnectPagesModal
+		ZWorkspaceConnectPagesModal,
+		{
+			pageType: pageType,
+		}
 	); // Modal hook to show workspace form modal (create/edit form)
 
 	// Setting the content of card accounting to type.
@@ -229,10 +232,10 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 				});
 			}}
 		>
-			<ZIonCardContent className='ion-text-center py-4'>
+			<ZIonCardContent className='ion-text-center pb-3 pt-4'>
 				<ZIonIcon
-					icon={compState.iconName}
-					className='w-10 h-10'
+					icon={icon || compState.iconName}
+					className='w-10 h-10 pt-1'
 					style={{ color: compState.activeColor }}
 					color={compState.isActive ? 'light' : undefined}
 				/>
@@ -241,10 +244,10 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 					className='ion-text-center d-block mt-1'
 					color={compState.isActive ? 'light' : 'dark'}
 				>
-					{compState.title}
+					{title || compState.title}
 				</ZIonText>
-				{/*  */}
 
+				{/*  */}
 				<ZIonText
 					className={classNames({
 						'ion-text-center d-block zaions__fs_13 text-muted': true,
@@ -253,14 +256,14 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 					})}
 					color={compState.isActive ? 'light' : 'dark'}
 				>
-					{compState.subTitle}
+					{subTitle || compState.subTitle}
 				</ZIonText>
 
 				{/*  */}
 
 				<ZIonText
 					className={classNames({
-						'ion-text-center d-block mt-4': true,
+						'ion-text-center d-block': true,
 						'opacity-100': compState.isActive,
 						'opacity-0': !compState.isActive,
 					})}

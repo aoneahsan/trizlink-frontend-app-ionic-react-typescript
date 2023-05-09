@@ -19,7 +19,7 @@ import {
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/userButton';
+import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
 import { ProductLogo } from '@/assets/images';
 
 /**

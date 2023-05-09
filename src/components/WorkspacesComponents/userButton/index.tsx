@@ -13,7 +13,7 @@ import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 
 // Component Type
-interface ZUserAvatarInfo {
+interface ZUserAvatarInfoInterface {
 	userAvatar?: string;
 	className?: string;
 	onClick?: React.MouseEventHandler<HTMLIonButtonElement>;
@@ -21,7 +21,7 @@ interface ZUserAvatarInfo {
 	onMouseLeave?: React.MouseEventHandler<HTMLIonButtonElement>;
 }
 
-const ZUserAvatarInfo: React.FC<ZUserAvatarInfo> = ({
+const ZUserAvatarInfo: React.FC<ZUserAvatarInfoInterface> = ({
 	userAvatar,
 	className,
 	onClick,
