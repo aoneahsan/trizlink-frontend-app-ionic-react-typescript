@@ -104,8 +104,12 @@ export const ZTimezoneSelector: React.FC<ZTimezoneSelectorInterface> = (
 ) => {
 	return (
 		<ZIonSelect {...props} fill='outline' interface='popover'>
-			{TIMEZONES.map((el) => {
-				return <ZIonSelectOption value={el.label}>{el.value}</ZIonSelectOption>;
+			{TIMEZONES.map((el, index) => {
+				return (
+					<ZIonSelectOption value={el.label} key={index}>
+						{el.value}
+					</ZIonSelectOption>
+				);
 			})}
 		</ZIonSelect>
 	);

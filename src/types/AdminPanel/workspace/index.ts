@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 // Enum's
 export enum workspaceSettingsModalTabEnum {
 	timetable = 'timetable',
@@ -6,7 +8,7 @@ export enum workspaceSettingsModalTabEnum {
 	approvals = 'approvals',
 }
 
-export enum workspaceFormModalTabEnum {
+export enum workspaceFormTabEnum {
 	workspaceDetailForm = 'workspaceDetailForm',
 	inviteClients = 'inviteClients',
 	connectPages = 'connectPages',
@@ -23,6 +25,13 @@ export enum workspaceFormRoleEnum {
 export enum workspaceFormPermissionEnum {
 	team = 'team',
 	client = 'client',
+}
+
+export enum PageInfoCardItemTypeEnum {
+	heading = 'heading',
+	infoMessage = 'infoMessage',
+	simpleCard = 'simpleCard',
+	listCard = 'listCard',
 }
 
 export enum workspaceFormConnectPagesEnum {
@@ -51,22 +60,21 @@ export interface workspaceInterface {
 	clients?: workspaceInviteClientInterface[];
 }
 
-// Types
-
 // Pages info cards items types/enums
-export enum PageInfoCardItemTypeEnum {
-	heading = 'heading',
-	infoMessage = 'infoMessage',
-	simpleCard = 'simpleCard',
-	listCard = 'listCard',
+export interface WorkspacePageCardInfoPopoverItemType {
+	type: PageInfoCardItemTypeEnum;
+	text?: string;
+	htmlContent?: string;
+	items?: PageInfoCardSingleItemType[];
 }
-
-export interface PageInfoCardItemType {
+export interface PageInfoCardSingleItemType {
 	icon: string;
 	heading: string;
 	subheading?: string;
-	items?: {
+	listItems?: {
 		icon: string;
 		text: string;
 	}[];
 }
+
+// Types

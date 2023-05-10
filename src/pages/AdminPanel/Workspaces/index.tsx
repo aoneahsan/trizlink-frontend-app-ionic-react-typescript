@@ -34,7 +34,7 @@ import ZWorkspacesCard from '@/components/WorkspacesComponents/ListCard';
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down
@@ -64,6 +64,8 @@ import { AdminPanelMainSidebarMenuPageEnum } from '@/types/AdminPanel/index.type
 import { ProductLogo } from '@/assets/images';
 import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { createRedirectRoute } from '@/utils/helpers';
+import { workspaceFormTabEnum } from '@/types/AdminPanel/workspace';
 
 /**
  * Component props type go down
@@ -151,7 +153,18 @@ const ZWorkspaceListPage: React.FC = () => {
 											// 		_cssClass: 'workspace-form-modal-size',
 											// 	});
 											// }}
-											routerLink={ZaionsRoutes.AdminPanel.Workspaces.Create}
+											// createRedirectRoute({
+											// 		url: ZaionsRoutes.AdminPanel.Workspaces.Create,
+											// 		routeSearchParams: {
+											// 			tab: workspaceFormTabEnum.workspaceDetailForm,
+											// 		},
+											// 	})
+											routerLink={createRedirectRoute({
+												url: ZaionsRoutes.AdminPanel.Workspaces.Create,
+												routeSearchParams: {
+													tab: workspaceFormTabEnum.workspaceDetailForm,
+												},
+											})}
 										>
 											<ZIonIcon icon={addOutline} /> New workspace
 										</ZIonButton>

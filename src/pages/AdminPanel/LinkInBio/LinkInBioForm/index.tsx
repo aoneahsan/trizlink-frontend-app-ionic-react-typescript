@@ -442,8 +442,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 													onClick={() => {
 														zNavigatePushRoute(
 															createRedirectRoute({
-																url: ZaionsRoutes.AdminPanel
-																	.LinkInBio.Edit,
+																url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
 																params: [
 																	CONSTANTS.RouteParams.editLinkInBioIdParam,
 																],
@@ -467,8 +466,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 													onClick={() => {
 														zNavigatePushRoute(
 															createRedirectRoute({
-																url: ZaionsRoutes.AdminPanel
-																	.LinkInBio.Edit,
+																url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
 																params: [
 																	CONSTANTS.RouteParams.editLinkInBioIdParam,
 																],
@@ -491,8 +489,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 													onClick={() => {
 														zNavigatePushRoute(
 															createRedirectRoute({
-																url: ZaionsRoutes.AdminPanel
-																	.LinkInBio.Edit,
+																url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
 																params: [
 																	CONSTANTS.RouteParams.editLinkInBioIdParam,
 																],
@@ -515,8 +512,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 													onClick={() => {
 														zNavigatePushRoute(
 															createRedirectRoute({
-																url: ZaionsRoutes.AdminPanel
-																	.LinkInBio.Edit,
+																url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
 																params: [
 																	CONSTANTS.RouteParams.editLinkInBioIdParam,
 																],

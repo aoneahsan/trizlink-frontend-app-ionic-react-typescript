@@ -1,5 +1,9 @@
 import {
+	bagOutline,
 	businessOutline,
+	checkmarkOutline,
+	closeOutline,
+	cutOutline,
 	flagOutline,
 	gridOutline,
 	logoFacebook,
@@ -11,16 +15,18 @@ import {
 	logoTwitter,
 	logoYoutube,
 	medicalOutline,
+	megaphoneOutline,
 	peopleOutline,
 	personOutline,
+	phonePortraitOutline,
 	playCircleOutline,
 } from 'ionicons/icons';
 
 import { brandColors } from '@/utils/constants/index';
 import {
-	PageInfoCardItemType,
 	PageInfoCardItemTypeEnum,
 	workspaceFormConnectPagesEnum,
+	WorkspacePageCardInfoPopoverItemType,
 } from '@/types/AdminPanel/workspace';
 import { ReactNode } from 'react';
 
@@ -34,12 +40,7 @@ export const CardsByType: {
 			title: string;
 			showInfoIcon?: boolean;
 			onClick?: React.MouseEventHandler<HTMLIonCardElement>;
-			infoItems?: {
-				type: PageInfoCardItemTypeEnum;
-				text?: string;
-				htmlContent?: ReactNode;
-				items?: PageInfoCardItemType[];
-			}[];
+			infoItems?: WorkspacePageCardInfoPopoverItemType[];
 		}[];
 	};
 } = {
@@ -61,7 +62,14 @@ export const CardsByType: {
 			{
 				cardIcon: medicalOutline,
 				title: 'Create a mockup page',
-				showInfoIcon: false,
+				showInfoIcon: true,
+				infoItems: [
+					{
+						type: PageInfoCardItemTypeEnum.infoMessage,
+						htmlContent:
+							"<p>You can create a mockup Facebook page in Planable, without connecting to a live page. You can use it to draft, preview, plan and collaborate on your content, but you won't be able to publish.</p>",
+					},
+				],
 			},
 		],
 	},
@@ -79,7 +87,14 @@ export const CardsByType: {
 			{
 				cardIcon: medicalOutline,
 				title: 'Create a mockup page',
-				showInfoIcon: false,
+				showInfoIcon: true,
+				infoItems: [
+					{
+						type: PageInfoCardItemTypeEnum.infoMessage,
+						htmlContent:
+							"You can create a mockup Twitter page in Planable, without connecting to a live page. You can use it to draft, preview, plan and collaborate on your content, but you won't be able to publish.",
+					},
+				],
 			},
 		],
 	},
@@ -107,33 +122,40 @@ export const CardsByType: {
 						type: PageInfoCardItemTypeEnum.simpleCard,
 						items: [
 							{
-								icon: 'some icon',
-								heading: 'some heading',
-								subheading: 'sub heading text',
+								icon: businessOutline,
+								heading: 'Business Account',
+								subheading: 'Direct publishing is available',
 							},
 							{
-								icon: 'some icon',
-								heading: 'some heading',
-								subheading: 'sub heading text',
+								icon: megaphoneOutline,
+								heading: 'Creator Profile',
+								subheading: 'Publish with push notifications',
 							},
 							{
-								icon: 'some icon',
-								heading: 'some heading',
-								subheading: 'sub heading text',
+								icon: personOutline,
+								heading: 'Personal Profile',
+								subheading: 'Publish with push notifications',
 							},
 						],
 					},
 					{
 						type: PageInfoCardItemTypeEnum.infoMessage,
 						htmlContent:
-							'<>See our <a href="constant create ">help article</a> for more details.</>',
+							'<p>See our <a href="constant create">help article</a> for more details.</p>',
 					},
 				],
 			},
 			{
 				cardIcon: medicalOutline,
 				title: 'Create a mockup page',
-				showInfoIcon: false,
+				showInfoIcon: true,
+				infoItems: [
+					{
+						type: PageInfoCardItemTypeEnum.infoMessage,
+						htmlContent:
+							"You can create a mockup Instagram page in Planable, without connecting to a live page. You can use it to draft, preview, plan and collaborate on your content, but you won't be able to publish.",
+					},
+				],
 			},
 		],
 	},
@@ -147,16 +169,102 @@ export const CardsByType: {
 				cardIcon: playCircleOutline,
 				title: 'Add TikTok account',
 				showInfoIcon: true,
+				infoItems: [
+					{
+						type: PageInfoCardItemTypeEnum.simpleCard,
+						items: [
+							{
+								icon: bagOutline,
+								heading: 'Publish with Business Account',
+								listItems: [
+									{
+										icon: checkmarkOutline,
+										text: 'Publish directly to TikTok feed',
+									},
+									{
+										icon: closeOutline,
+										text: 'Add music to video before publishing',
+									},
+									{
+										icon: cutOutline,
+										text: 'Up to 1 minute videos',
+									},
+								],
+							},
+						],
+					},
+					{
+						type: PageInfoCardItemTypeEnum.infoMessage,
+						htmlContent:
+							'<p>See our <a href="constant create">help article</a> for more details.</p>',
+					},
+				],
 			},
 			{
 				cardIcon: playCircleOutline,
 				title: 'Add TikTok business profile',
 				showInfoIcon: true,
+				infoItems: [
+					{
+						type: PageInfoCardItemTypeEnum.simpleCard,
+						items: [
+							{
+								icon: personOutline,
+								heading: 'Publish from TikTok’s Inbox',
+								listItems: [
+									{
+										icon: logoTiktok,
+										text: 'Publish manually from TikTok’s inbox',
+									},
+									{
+										icon: checkmarkOutline,
+										text: 'Add music to video before publishing',
+									},
+									{
+										icon: cutOutline,
+										text: 'Up to 1 minute videos',
+									},
+								],
+							},
+
+							{
+								icon: phonePortraitOutline,
+								heading: 'Publish with Planable’s Mobile App',
+								listItems: [
+									{
+										icon: phonePortraitOutline,
+										text: 'Publish manually with our mobile app',
+									},
+									{
+										icon: checkmarkOutline,
+										text: 'Add music to video before publishing',
+									},
+									{
+										icon: checkmarkOutline,
+										text: 'Up to 10 minute videos',
+									},
+								],
+							},
+						],
+					},
+					{
+						type: PageInfoCardItemTypeEnum.infoMessage,
+						htmlContent:
+							'<p>See our <a href="constant create">help article</a> for more details.</p>',
+					},
+				],
 			},
 			{
 				cardIcon: medicalOutline,
 				title: 'Create a mockup page',
-				showInfoIcon: false,
+				showInfoIcon: true,
+				infoItems: [
+					{
+						type: PageInfoCardItemTypeEnum.infoMessage,
+						htmlContent:
+							"You can create a mockup TikTok page in Planable, without connecting to a live page. You can use it to draft, preview, plan and collaborate on your content, but you won't be able to publish.",
+					},
+				],
 			},
 		],
 	},
@@ -174,7 +282,14 @@ export const CardsByType: {
 			{
 				cardIcon: medicalOutline,
 				title: 'Create a mockup page',
-				showInfoIcon: false,
+				showInfoIcon: true,
+				infoItems: [
+					{
+						type: PageInfoCardItemTypeEnum.infoMessage,
+						htmlContent:
+							"You can create a mockup Google Business Profile page in Planable, without connecting to a live page. You can use it to draft, preview, plan and collaborate on your content, but you won't be able to publish.",
+					},
+				],
 			},
 		],
 	},
@@ -197,7 +312,14 @@ export const CardsByType: {
 			{
 				cardIcon: medicalOutline,
 				title: 'Create a mockup page',
-				showInfoIcon: false,
+				showInfoIcon: true,
+				infoItems: [
+					{
+						type: PageInfoCardItemTypeEnum.infoMessage,
+						htmlContent:
+							"You can create a mockup LinkedIn page in Planable, without connecting to a live page. You can use it to draft, preview, plan and collaborate on your content, but you won't be able to publish.",
+					},
+				],
 			},
 		],
 	},
@@ -215,7 +337,14 @@ export const CardsByType: {
 			{
 				cardIcon: medicalOutline,
 				title: 'Create a mockup page',
-				showInfoIcon: false,
+				showInfoIcon: true,
+				infoItems: [
+					{
+						type: PageInfoCardItemTypeEnum.infoMessage,
+						htmlContent:
+							"You can create a mockup Pinterest page in Planable, without connecting to a live page. You can use it to draft, preview, plan and collaborate on your content, but you won't be able to publish.",
+					},
+				],
 			},
 		],
 	},
@@ -233,7 +362,14 @@ export const CardsByType: {
 			{
 				cardIcon: medicalOutline,
 				title: 'Create a mockup page',
-				showInfoIcon: false,
+				showInfoIcon: true,
+				infoItems: [
+					{
+						type: PageInfoCardItemTypeEnum.infoMessage,
+						htmlContent:
+							"You can create a mockup YouTube page in Planable, without connecting to a live page. You can use it to draft, preview, plan and collaborate on your content, but you won't be able to publish.",
+					},
+				],
 			},
 		],
 	},

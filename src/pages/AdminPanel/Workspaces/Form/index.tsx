@@ -9,6 +9,7 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import { Formik } from 'formik';
+import routeQueryString from 'qs';
 
 /**
  * Custom Imports go down
@@ -36,7 +37,7 @@ import ZaionsIonPage from '@/components/ZaionsIonPage';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { validateField } from '@/utils/helpers';
+import { createRedirectRoute, validateField } from '@/utils/helpers';
 import { VALIDATION_RULE } from '@/utils/enums';
 
 /**
@@ -44,7 +45,7 @@ import { VALIDATION_RULE } from '@/utils/enums';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-	workspaceFormModalTabEnum,
+	workspaceFormTabEnum,
 	workspaceFormPermissionEnum,
 	workspaceFormRoleEnum,
 } from '@/types/AdminPanel/workspace';
@@ -52,6 +53,8 @@ import { arrowForward } from 'ionicons/icons';
 import ZWorkspaceFormInviteClientsTab from './InviteClientsTab';
 import ZWorkspaceFormDetailTab from './DetailTab';
 import classNames from 'classnames';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 /**
  * Recoil State Imports go down
@@ -80,13 +83,22 @@ import classNames from 'classnames';
  * */
 
 const ZWorkspaceForm: React.FC = () => {
+	// getting search param from url with the help of 'qs' package
+	const routeQSearchParams = routeQueryString.parse(location.search, {
+		ignoreQueryPrefix: true,
+	});
+
+	console.log(routeQSearchParams.tab);
+
+	// useZNavigate for redirection
+	const { zNavigatePushRoute } = useZNavigate();
+
 	return (
 		<ZaionsIonPage pageTitle='Zaions Workspace Form Page'>
 			<Formik
 				initialValues={{
 					workspaceName: 'MTI',
 					workspaceTimezone: '',
-					CurrentTab: workspaceFormModalTabEnum.workspaceDetailForm,
 					clients: [
 						{
 							email: 'test@zaions.com',
@@ -111,52 +123,53 @@ const ZWorkspaceForm: React.FC = () => {
 				}}
 				onSubmit={() => {}}
 			>
-				{({ values, isValid, setFieldValue }) => {
+				{({ values, isValid }) => {
 					return (
 						<>
 							<ZIonContent>
 								<ZIonGrid className='pb-2 mx-0'>
 									{/*  */}
-									<ZIonRow className='ion-justify-content-center pt-5'>
+									<ZIonRow className='pt-5 ion-justify-content-center ion-align-items-center'>
+										{/*  */}
 										<ZIonCol className='ion-text-center' size='11'>
 											{/* Tab Title */}
 											<ZIonText className='text-4xl d-block'>
-												{values.CurrentTab ===
-												workspaceFormModalTabEnum.workspaceDetailForm
+												{routeQSearchParams.tab ===
+												workspaceFormTabEnum.workspaceDetailForm
 													? 'Create a workspace'
-													: values.CurrentTab ===
-													  workspaceFormModalTabEnum.inviteClients
+													: routeQSearchParams.tab ===
+													  workspaceFormTabEnum.inviteClients
 													? 'Invite your clients'
-													: values.CurrentTab ===
-													  workspaceFormModalTabEnum.connectPages
+													: routeQSearchParams.tab ===
+													  workspaceFormTabEnum.connectPages
 													? `Connect ${values.workspaceName}'s pages`
 													: ''}
 											</ZIonText>
 
 											{/* Tab sub title */}
-											<ZIonText className='text-muted d-block mt-3'>
-												{values.CurrentTab ===
-												workspaceFormModalTabEnum.workspaceDetailForm
+											<ZIonText className='mt-3 text-muted d-block'>
+												{routeQSearchParams.tab ===
+												workspaceFormTabEnum.workspaceDetailForm
 													? 'A workspace is a group of channels and collaborators, a place where you can organize your campaigns, workflows and assets.'
-													: values.CurrentTab ===
-													  workspaceFormModalTabEnum.inviteClients
+													: routeQSearchParams.tab ===
+													  workspaceFormTabEnum.inviteClients
 													? 'Working with a client? Invite them in the workspace so they can approve and leave feedback on content.'
-													: values.CurrentTab ===
-													  workspaceFormModalTabEnum.connectPages
+													: routeQSearchParams.tab ===
+													  workspaceFormTabEnum.connectPages
 													? 'Add all your brands’ content channels. You can always add more later.'
 													: ''}
 											</ZIonText>
 										</ZIonCol>
 
 										{/* tab's content */}
-										{values.CurrentTab ===
-										workspaceFormModalTabEnum.workspaceDetailForm ? (
+										{routeQSearchParams.tab ===
+										workspaceFormTabEnum.workspaceDetailForm ? (
 											<ZWorkspaceFormDetailTab />
-										) : values.CurrentTab ===
-										  workspaceFormModalTabEnum.inviteClients ? (
+										) : routeQSearchParams.tab ===
+										  workspaceFormTabEnum.inviteClients ? (
 											<ZWorkspaceFormInviteClientsTab />
-										) : values.CurrentTab ===
-										  workspaceFormModalTabEnum.connectPages ? (
+										) : routeQSearchParams.tab ===
+										  workspaceFormTabEnum.connectPages ? (
 											<ZWorkspaceFormConnectPagesTab />
 										) : (
 											''
@@ -165,21 +178,21 @@ const ZWorkspaceForm: React.FC = () => {
 								</ZIonGrid>
 							</ZIonContent>
 
-							{/*  */}
+							{/* Footer */}
 							<ZIonFooter
-								className='flex align-items-center py-3'
+								className='flex py-3 align-items-center'
 								collapse='fade'
 							>
 								<div className='w-4/12 mx-auto'>
 									<ZIonRow
 										className={classNames({
 											'ion-justify-content-center':
-												values.CurrentTab ===
-												workspaceFormModalTabEnum.workspaceDetailForm,
+												routeQSearchParams.tab ===
+												workspaceFormTabEnum.workspaceDetailForm,
 										})}
 									>
-										{values.CurrentTab ===
-										workspaceFormModalTabEnum.workspaceDetailForm ? (
+										{routeQSearchParams.tab ===
+										workspaceFormTabEnum.workspaceDetailForm ? (
 											<ZIonCol size='6'>
 												{/* Next button */}
 												<ZIonButton
@@ -187,20 +200,23 @@ const ZWorkspaceForm: React.FC = () => {
 													className='text-transform-initial'
 													disabled={!isValid}
 													onClick={() => {
-														setFieldValue(
-															'CurrentTab',
-															workspaceFormModalTabEnum.inviteClients,
-															false
+														zNavigatePushRoute(
+															createRedirectRoute({
+																url: ZaionsRoutes.AdminPanel.Workspaces.Create,
+																routeSearchParams: {
+																	tab: workspaceFormTabEnum.inviteClients,
+																},
+															})
 														);
 													}}
 												>
 													Next <ZIonIcon className='ms-2' icon={arrowForward} />
 												</ZIonButton>
 											</ZIonCol>
-										) : values.CurrentTab ===
-												workspaceFormModalTabEnum.inviteClients ||
-										  values.CurrentTab ===
-												workspaceFormModalTabEnum.connectPages ? (
+										) : routeQSearchParams.tab ===
+												workspaceFormTabEnum.inviteClients ||
+										  routeQSearchParams.tab ===
+												workspaceFormTabEnum.connectPages ? (
 											<>
 												{/* Go Back button */}
 												<ZIonCol size='6'>
@@ -209,20 +225,28 @@ const ZWorkspaceForm: React.FC = () => {
 														fill='outline'
 														className='text-transform-initial'
 														onClick={() => {
-															switch (values.CurrentTab) {
-																case workspaceFormModalTabEnum.inviteClients:
-																	setFieldValue(
-																		'CurrentTab',
-																		workspaceFormModalTabEnum.workspaceDetailForm,
-																		false
+															switch (routeQSearchParams.tab) {
+																case workspaceFormTabEnum.inviteClients:
+																	zNavigatePushRoute(
+																		createRedirectRoute({
+																			url: ZaionsRoutes.AdminPanel.Workspaces
+																				.Create,
+																			routeSearchParams: {
+																				tab: workspaceFormTabEnum.workspaceDetailForm,
+																			},
+																		})
 																	);
 																	break;
 
-																case workspaceFormModalTabEnum.connectPages:
-																	setFieldValue(
-																		'CurrentTab',
-																		workspaceFormModalTabEnum.inviteClients,
-																		false
+																case workspaceFormTabEnum.connectPages:
+																	zNavigatePushRoute(
+																		createRedirectRoute({
+																			url: ZaionsRoutes.AdminPanel.Workspaces
+																				.Create,
+																			routeSearchParams: {
+																				tab: workspaceFormTabEnum.inviteClients,
+																			},
+																		})
 																	);
 																	break;
 															}
@@ -238,30 +262,30 @@ const ZWorkspaceForm: React.FC = () => {
 														expand='block'
 														className='text-transform-initial'
 														onClick={() => {
-															switch (values.CurrentTab) {
-																case workspaceFormModalTabEnum.inviteClients:
-																	setFieldValue(
-																		'CurrentTab',
-																		workspaceFormModalTabEnum.connectPages,
-																		false
+															switch (routeQSearchParams.tab) {
+																case workspaceFormTabEnum.inviteClients:
+																	zNavigatePushRoute(
+																		createRedirectRoute({
+																			url: ZaionsRoutes.AdminPanel.Workspaces
+																				.Create,
+																			routeSearchParams: {
+																				tab: workspaceFormTabEnum.connectPages,
+																			},
+																		})
 																	);
 																	break;
 
-																// case workspaceFormModalTabEnum.connectPages:
-																// 	setFieldValue(
-																// 		'CurrentTab',
-																// 		workspaceFormModalTabEnum.inviteClients,
-																// 		false
-																// 	);
+																// case workspaceFormTabEnum.connectPages:
+
 																// 	break;
 															}
 														}}
 													>
-														{values.CurrentTab ===
-														workspaceFormModalTabEnum.inviteClients
+														{routeQSearchParams.tab ===
+														workspaceFormTabEnum.inviteClients
 															? 'Invite'
-															: values.CurrentTab ===
-															  workspaceFormModalTabEnum.connectPages
+															: routeQSearchParams.tab ===
+															  workspaceFormTabEnum.connectPages
 															? 'Connect'
 															: ''}{' '}
 														Later
@@ -271,6 +295,40 @@ const ZWorkspaceForm: React.FC = () => {
 										) : (
 											''
 										)}
+									</ZIonRow>
+									<ZIonRow className='gap-1 mt-3 ion-align-items-center'>
+										<ZIonCol
+											className={classNames({
+												'h-2 p-0 m-0 rounded zaions-transition zaions__primary_bg':
+													true,
+											})}
+										></ZIonCol>
+										<ZIonCol
+											className={classNames({
+												'h-2 p-0 m-0 rounded zaions-transition': true,
+												zaions__primary_bg:
+													routeQSearchParams.tab ===
+														workspaceFormTabEnum.inviteClients ||
+													routeQSearchParams.tab ===
+														workspaceFormTabEnum.connectPages,
+												zaions__medium_bg:
+													routeQSearchParams.tab ===
+													workspaceFormTabEnum.workspaceDetailForm,
+											})}
+										></ZIonCol>
+										<ZIonCol
+											className={classNames({
+												'h-2 p-0 m-0 rounded zaions-transition': true,
+												zaions__primary_bg:
+													routeQSearchParams.tab ===
+													workspaceFormTabEnum.connectPages,
+												zaions__medium_bg:
+													routeQSearchParams.tab ===
+														workspaceFormTabEnum.workspaceDetailForm ||
+													routeQSearchParams.tab ===
+														workspaceFormTabEnum.inviteClients,
+											})}
+										></ZIonCol>
 									</ZIonRow>
 								</div>
 							</ZIonFooter>

@@ -379,7 +379,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 							</ZIonGrid>
 
 							<ZIonGrid className='my-5'>
-								<ZIonRow className='py-4 px-3 zaions__bg_white rounded ion-align-items-center'>
+								<ZIonRow className='px-3 py-4 rounded zaions__bg_white ion-align-items-center'>
 									<ZIonCol
 										sizeXl='4'
 										sizeLg='12'
@@ -447,7 +447,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 											</ZIonButtons>
 										</ZIonRow>
 
-										{/* <div className='d-flex gap-3 justify-content-end'>
+										{/* <div className='gap-3 d-flex justify-content-end'>
 											<Dropdown>
 												<Dropdown.Toggle
 													id='dropdown-custom-components'
@@ -496,7 +496,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 									</ZIonCol>
 								</ZIonRow>
 
-								<ZIonRow className='py-4 px-3 zaions__bg_white rounded ion-align-items-center mt-1'>
+								<ZIonRow className='px-3 py-4 mt-1 rounded zaions__bg_white ion-align-items-center'>
 									<ZIonCol className='d-flex ion-align-items-center'>
 										<ZIonText>
 											<h4 className='ion-no-margin'>
@@ -985,7 +985,7 @@ const LinkInBiosTagsFiltersPopover = () => {
 								{_LinkInBiosFieldsDataTagsSelector.map((el, i) => {
 									return (
 										<ZIonItem key={i}>
-											<IonChip className='zaions__fs_14 m-0'>{el}</IonChip>
+											<IonChip className='m-0 zaions__fs_14'>{el}</IonChip>
 											<IonCheckbox
 												slot='end'
 												checked={
@@ -1130,7 +1130,7 @@ const LinkInBiosTagsFiltersPopover = () => {
 //                 const domain = _domain.replace('.', '_');
 //                 return (
 //                   <ZIonItem key={i}>
-//                     <IonChip className='zaions__fs_14 m-0'>{_domain}</IonChip>
+//                     <IonChip className='m-0 zaions__fs_14'>{_domain}</IonChip>
 //                     <IonCheckbox
 //                       slot='end'
 //                       checked={

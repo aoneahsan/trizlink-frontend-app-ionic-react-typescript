@@ -73,11 +73,18 @@ const pagesCards = [
 const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 	return (
 		<ZIonCol className='mt-4'>
-			<ZIonRow className='ion-align-items-center ion-justify-content-center mx-auto'>
+			<ZIonRow className='mx-auto ion-align-items-center ion-justify-content-center'>
 				{/* Facebook */}
-				{pagesCards.map((el) => {
+				{pagesCards.map((el, index) => {
 					return (
-						<ZIonCol size='6' sizeSm='4' sizeMd='4' sizeLg='3' sizeXl='2'>
+						<ZIonCol
+							size='6'
+							sizeSm='4'
+							sizeMd='4'
+							sizeLg='3'
+							sizeXl='2'
+							key={index}
+						>
 							<ZWorkspaceFromConnectPagesCard pageType={el} />
 						</ZIonCol>
 					);

@@ -261,7 +261,6 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 				</ZIonText>
 
 				{/*  */}
-
 				<ZIonText
 					className={classNames({
 						'ion-text-center d-block': true,

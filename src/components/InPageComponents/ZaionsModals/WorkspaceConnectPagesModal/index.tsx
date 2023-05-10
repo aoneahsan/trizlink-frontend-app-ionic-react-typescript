@@ -49,7 +49,10 @@ import { CardsByType } from '@/data/UserDashboard/Workspace/ConnectPagesTab/inde
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { workspaceFormConnectPagesEnum } from '@/types/AdminPanel/workspace';
+import {
+	workspaceFormConnectPagesEnum,
+	WorkspacePageCardInfoPopoverItemType,
+} from '@/types/AdminPanel/workspace';
 import classNames from 'classnames';
 import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import ZWorkspaceConnectPagesCardInfoPopover from '../../ZaionsPopovers/Workspace/ConnectPageCardInfoPopover';
@@ -154,6 +157,7 @@ const ZWorkspaceConnectPagesModal: React.FC<{
 													icon={card.cardIcon}
 													title={card.title}
 													showInfoIcon={card.showInfoIcon}
+													infoCardItems={card.infoItems}
 												/>
 											</ZIonCol>
 										);
@@ -173,38 +177,43 @@ const SingleCard: React.FC<{
 	title: string;
 	onClick?: React.MouseEventHandler<HTMLIonCardElement>;
 	showInfoIcon?: boolean;
-}> = ({ icon, title, onClick, showInfoIcon = false }) => {
+	infoCardItems?: WorkspacePageCardInfoPopoverItemType[];
+}> = ({ icon, title, onClick, showInfoIcon = false, infoCardItems }) => {
 	const [compState, setCompState] = useState<{ isActive: boolean }>({
 		isActive: false,
 	});
 
 	const { presentZIonPopover: presentConnectPagesCardInfoPopover } =
 		useZIonPopover(ZWorkspaceConnectPagesCardInfoPopover, {
-			showTitle: true,
-			title: 'There are 3 different types of IG profiles:',
-			text: 'See our help article for more details.',
-			items: [
-				{
-					itemIcon: businessOutline,
-					itemTitle: 'Business Account',
-					itemSubtitle: 'Direct publishing is available',
-				},
-				{
-					itemIcon: businessOutline,
-					itemTitle: 'Business Account',
-					itemSubtitle: 'Direct publishing is available',
-				},
-				{
-					itemIcon: businessOutline,
-					itemTitle: 'Business Account',
-					itemSubtitle: 'Direct publishing is available',
-				},
-			],
+			items: infoCardItems,
 		}); // popover hook to show UserInfoPopover
+	// const { presentZIonPopover: presentConnectPagesCardInfoPopover } =
+	// 	useZIonPopover(ZWorkspaceConnectPagesCardInfoPopover, {
+	// 		showTitle: true,
+	// 		title: 'There are 3 different types of IG profiles:',
+	// 		text: 'See our help article for more details.',
+	// 		items: [
+	// 			{
+	// 				itemIcon: businessOutline,
+	// 				itemTitle: 'Business Account',
+	// 				itemSubtitle: 'Direct publishing is available',
+	// 			},
+	// 			{
+	// 				itemIcon: businessOutline,
+	// 				itemTitle: 'Business Account',
+	// 				itemSubtitle: 'Direct publishing is available',
+	// 			},
+	// 			{
+	// 				itemIcon: businessOutline,
+	// 				itemTitle: 'Business Account',
+	// 				itemSubtitle: 'Direct publishing is available',
+	// 			},
+	// 		],
+	// 	}); // popover hook to show UserInfoPopover
 
 	return (
 		<ZIonCard
-			className='px-2 zaions__cursor_pointer '
+			className='px-2 zaions__cursor_pointer'
 			onClick={onClick}
 			onMouseEnter={(event: unknown) => {
 				setCompState((oldValues) => ({
@@ -212,12 +221,12 @@ const SingleCard: React.FC<{
 					isActive: true,
 				}));
 
-				showInfoIcon &&
-					presentConnectPagesCardInfoPopover({
-						_event: event as Event,
-						_cssClass: 'zaions_workspaces_card_popover_size',
-						_dismissOnSelect: false,
-					});
+				// showInfoIcon &&
+				// 	presentConnectPagesCardInfoPopover({
+				// 		_event: event as Event,
+				// 		_cssClass: 'zaions_workspaces_card_popover_size',
+				// 		_dismissOnSelect: false,
+				// 	});
 			}}
 			onMouseLeave={() => {
 				setCompState((oldValues) => ({
@@ -230,7 +239,16 @@ const SingleCard: React.FC<{
 			<ZIonCardContent className='py-5 ion-text-center position-relative ion-justify-content-center'>
 				{/*  */}
 				{showInfoIcon && (
-					<div className='top-1 position-absolute start-0 w-max d-flex ion-align-items-center ion-justify-content-center'>
+					<div
+						className='top-1 position-absolute start-0 w-max d-flex ion-align-items-center ion-justify-content-center zaions__cursor_pointer'
+						onClick={() => {
+							presentConnectPagesCardInfoPopover({
+								_event: event as Event,
+								_cssClass: 'zaions_workspaces_card_popover_size',
+								_dismissOnSelect: false,
+							});
+						}}
+					>
 						<ZIonIcon
 							icon={alertCircleOutline}
 							className='w-7 h-7'
