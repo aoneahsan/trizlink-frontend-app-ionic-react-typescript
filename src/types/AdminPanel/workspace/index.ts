@@ -52,3 +52,21 @@ export interface workspaceInterface {
 }
 
 // Types
+
+// Pages info cards items types/enums
+export enum PageInfoCardItemTypeEnum {
+	heading = 'heading',
+	infoMessage = 'infoMessage',
+	simpleCard = 'simpleCard',
+	listCard = 'listCard',
+}
+
+export interface PageInfoCardItemType {
+	icon: string;
+	heading: string;
+	subheading?: string;
+	items?: {
+		icon: string;
+		text: string;
+	}[];
+}

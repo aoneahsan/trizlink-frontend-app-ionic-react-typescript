@@ -85,7 +85,8 @@ export const API_URLS = {
 
 	// External Third Party API URLs (need to be complete url, as we will hit them without any modification (except for dynamic parts))
 	// UI Avatars API
-	uiAvatarAPI: 'https://ui-avatars.com/api/?name=:name&rounded=:rounded&bold=:bold&size=:size&background=:background&color=:color&font-size=:fontSize&length=:length'
+	uiAvatarAPI:
+		'https://ui-avatars.com/api/?name=:name&rounded=:rounded&bold=:bold&size=:size&background=:background&color=:color&font-size=:fontSize&length=:length',
 };
 
 // Site
@@ -261,6 +262,17 @@ export const Platforms = {
 	nexus: nexusSvgLogo,
 	tiktok: tiktokSvgLogo,
 	vk: vkSvgLogo,
+};
+
+export const brandColors = {
+	facebook: '#1877F2',
+	twitter: '#1DA1F2',
+	instagram: '#E1306C',
+	tiktok: '#333333',
+	google: '#4758B8',
+	linkedin: '#0966C1',
+	pinterest: '#cc0100',
+	youtube: '#FF0000',
 };
 
 export const TIMEZONES = [

@@ -48,7 +48,8 @@ import {
 import { workspaceFormConnectPagesEnum } from '@/types/AdminPanel/workspace';
 import classNames from 'classnames';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
-import ZWorkspaceConnectPagesModal from '@/components/InPageComponents/ZaionsModals/ConnectPagesModal';
+import ZWorkspaceConnectPagesModal from '@/components/InPageComponents/ZaionsModals/WorkspaceConnectPagesModal';
+import { brandColors } from '@/utils/constants';
 
 /**
  * Recoil State Imports go down
@@ -109,7 +110,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 			case workspaceFormConnectPagesEnum.facebook:
 				setCompSate((oldValues) => ({
 					...oldValues,
-					activeColor: '#1877F2',
+					activeColor: brandColors.facebook,
 					title: 'Facebook',
 					subTitle: 'Page or group',
 					iconName: logoFacebook,
@@ -119,7 +120,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 			case workspaceFormConnectPagesEnum.instagram:
 				setCompSate((oldValues) => ({
 					...oldValues,
-					activeColor: '#E1306C',
+					activeColor: brandColors.instagram,
 					title: 'Instagram',
 					subTitle: 'Business account or profile',
 					iconName: logoInstagram,
@@ -129,7 +130,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 			case workspaceFormConnectPagesEnum.twitter:
 				setCompSate((oldValues) => ({
 					...oldValues,
-					activeColor: '#1DA1F2',
+					activeColor: brandColors.twitter,
 					title: 'Twitter',
 					subTitle: 'Profile',
 					iconName: logoTwitter,
@@ -139,7 +140,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 			case workspaceFormConnectPagesEnum.tiktok:
 				setCompSate((oldValues) => ({
 					...oldValues,
-					activeColor: '#333333',
+					activeColor: brandColors.tiktok,
 					title: 'Tiktok',
 					subTitle: 'Account',
 					iconName: logoTiktok,
@@ -149,7 +150,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 			case workspaceFormConnectPagesEnum.youtube:
 				setCompSate((oldValues) => ({
 					...oldValues,
-					activeColor: '#FF0000',
+					activeColor: brandColors.youtube,
 					title: 'Youtube',
 					subTitle: 'Channel',
 					iconName: logoYoutube,
@@ -159,7 +160,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 			case workspaceFormConnectPagesEnum.googleBusiness:
 				setCompSate((oldValues) => ({
 					...oldValues,
-					activeColor: '#4758B8',
+					activeColor: brandColors.google,
 					title: 'Google Business Profile',
 					subTitle: 'Business location',
 					iconName: logoGoogle,
@@ -169,7 +170,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 			case workspaceFormConnectPagesEnum.pinterest:
 				setCompSate((oldValues) => ({
 					...oldValues,
-					activeColor: '#cc0100',
+					activeColor: brandColors.pinterest,
 					title: 'Pinterest',
 					subTitle: 'Business account',
 					iconName: logoPinterest,
@@ -179,7 +180,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 			case workspaceFormConnectPagesEnum.linkedin:
 				setCompSate((oldValues) => ({
 					...oldValues,
-					activeColor: '#0966C1',
+					activeColor: brandColors.linkedin,
 					title: 'Linkedin',
 					subTitle: 'Company page or profile',
 					iconName: logoLinkedin,
@@ -189,7 +190,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 			case workspaceFormConnectPagesEnum.universalContent:
 				setCompSate((oldValues) => ({
 					...oldValues,
-					activeColor: '#333333',
+					activeColor: brandColors.tiktok,
 					title: 'Universal content',
 					subTitle: 'Page',
 					iconName: gridOutline,
@@ -232,7 +233,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 				});
 			}}
 		>
-			<ZIonCardContent className='ion-text-center pb-3 pt-4'>
+			<ZIonCardContent className='pt-4 pb-3 ion-text-center'>
 				<ZIonIcon
 					icon={icon || compState.iconName}
 					className='w-10 h-10 pt-1'
@@ -241,7 +242,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 				/>
 				{/*  */}
 				<ZIonText
-					className='ion-text-center d-block mt-1'
+					className='mt-1 ion-text-center d-block'
 					color={compState.isActive ? 'light' : 'dark'}
 				>
 					{title || compState.title}
