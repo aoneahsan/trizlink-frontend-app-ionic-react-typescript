@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 /**
  * Packages Imports go down
@@ -38,7 +38,7 @@ import ZaionsIonPage from '@/components/ZaionsIonPage';
  * ? Like import of Constant is a global constants import
  * */
 import { createRedirectRoute, validateField } from '@/utils/helpers';
-import { VALIDATION_RULE } from '@/utils/enums';
+import { API_URL_ENUM, VALIDATION_RULE } from '@/utils/enums';
 
 /**
  * Type Imports go down
@@ -48,6 +48,7 @@ import {
 	workspaceFormTabEnum,
 	workspaceFormPermissionEnum,
 	workspaceFormRoleEnum,
+	workspaceInterface,
 } from '@/types/AdminPanel/workspace';
 import { arrowForward } from 'ionicons/icons';
 import ZWorkspaceFormInviteClientsTab from './InviteClientsTab';
@@ -55,6 +56,15 @@ import ZWorkspaceFormDetailTab from './DetailTab';
 import classNames from 'classnames';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import { useParams } from 'react-router';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import CONSTANTS from '@/utils/constants';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { AxiosError } from 'axios';
+import { showErrorNotification } from '@/utils/notification';
+import { reportCustomError } from '@/utils/customErrorType';
+import { useRecoilState } from 'recoil';
+import { WorkspaceRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 /**
  * Recoil State Imports go down
@@ -88,20 +98,99 @@ const ZWorkspaceForm: React.FC = () => {
 		ignoreQueryPrefix: true,
 	});
 
-	console.log(routeQSearchParams.tab);
-
 	// useZNavigate for redirection
 	const { zNavigatePushRoute } = useZNavigate();
+
+	// getting workspace id from route (url), when user refresh the page the id from route will be get and workspace of that id will be fetch from backend.
+	const { editWorkspaceId } = useParams<{
+		editWorkspaceId: string;
+	}>();
+
+	// Recoil State that hold workspaces.
+	const [workspaceState, setWorkspaceState] = useRecoilState(
+		WorkspaceRStateAtom(editWorkspaceId)
+	);
+
+	// fetching link-in-bio with the editWorkspaceId data from backend.
+	const { data: selectedWorkspace, refetch: refetchSelectedWorkspace } =
+		useZRQGetRequest<workspaceInterface>({
+			_url: API_URL_ENUM.workspace_update_delete,
+			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET],
+			_authenticated: true,
+			_itemsIds: [editWorkspaceId],
+			_urlDynamicParts: [CONSTANTS.RouteParams.workspaceId],
+			_shouldFetchWhenIdPassed: !editWorkspaceId ? true : false,
+			_extractType: ZRQGetRequestExtractEnum.extractItem,
+		});
+
+	//
+	const WorkspaceGetRequestFn = useCallback(async () => {
+		await refetchSelectedWorkspace();
+		// eslint-disable-next-line
+	}, []);
+
+	// Refetching if the editLinkInBioId changes and if the editLinkInBioId is undefined it will redirect user to link-in-bio page.
+	useEffect(() => {
+		try {
+			if (editWorkspaceId) {
+				void WorkspaceGetRequestFn();
+
+				if (selectedWorkspace?.id) {
+					setWorkspaceState((prevState) => {
+						const newWorkspaceState = prevState.filter(
+							(workspace) => workspace.id !== editWorkspaceId
+						);
+						return [...newWorkspaceState, selectedWorkspace];
+					});
+				}
+			}
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				zNavigatePushRoute(ZaionsRoutes.AdminPanel.LinkInBio.Main);
+				showErrorNotification(error.message);
+			} else {
+				reportCustomError(error);
+			}
+		}
+		// eslint-disable-next-line
+	}, [editWorkspaceId]);
+
+	useEffect(() => {
+		try {
+			if (selectedWorkspace?.id) {
+				setWorkspaceState((prevState) => {
+					const newWorkspaceState = prevState.filter(
+						(workspace) => workspace.id !== editWorkspaceId
+					);
+					return [...newWorkspaceState, selectedWorkspace];
+				});
+			}
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				zNavigatePushRoute(ZaionsRoutes.AdminPanel.LinkInBio.Main);
+				showErrorNotification(error.message);
+			} else {
+				reportCustomError(error);
+			}
+		}
+		// eslint-disable-next-line
+	}, [selectedWorkspace]);
+
+	console.log({
+		workspaceState,
+		editWorkspaceId,
+		selectedWorkspace,
+	});
 
 	return (
 		<ZaionsIonPage pageTitle='Zaions Workspace Form Page'>
 			<Formik
 				initialValues={{
-					workspaceName: 'MTI',
+					workspaceName: '',
 					workspaceTimezone: '',
 					clients: [
 						{
-							email: 'test@zaions.com',
+							email: '',
 							role: workspaceFormRoleEnum.Approver,
 							permission: workspaceFormPermissionEnum.team,
 						},
@@ -123,7 +212,7 @@ const ZWorkspaceForm: React.FC = () => {
 				}}
 				onSubmit={() => {}}
 			>
-				{({ values, isValid }) => {
+				{({ values }) => {
 					return (
 						<>
 							<ZIonContent>
@@ -198,7 +287,7 @@ const ZWorkspaceForm: React.FC = () => {
 												<ZIonButton
 													expand='block'
 													className='text-transform-initial'
-													disabled={!isValid}
+													disabled={values.workspaceName.trim().length === 0}
 													onClick={() => {
 														zNavigatePushRoute(
 															createRedirectRoute({

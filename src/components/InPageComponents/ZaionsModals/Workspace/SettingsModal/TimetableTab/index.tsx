@@ -13,8 +13,8 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { WorkspaceSettingsLabelPlaceholder } from '@/assets/images';
-import ZWorkspaceSettingPlaceholderComp from '@/components/InPageComponents/ZaionsModals/workspaceSettingsModal/PlaceholderComp';
+import { WorkspaceSettingsTimetablePlaceholder } from '@/assets/images';
+import ZWorkspaceSettingPlaceholderComp from '@/components/InPageComponents/ZaionsModals/Workspace/SettingsModal/PlaceholderComp';
 
 /**
  * Custom Hooks Imports go down
@@ -57,16 +57,15 @@ import ZWorkspaceSettingPlaceholderComp from '@/components/InPageComponents/Zaio
  * @type {*}
  * */
 
-const ZLabelsTab: React.FC = () => {
+const ZTimetableTab: React.FC = () => {
 	return (
 		<>
 			<ZWorkspaceSettingPlaceholderComp
-				buttonText='Create label'
-				image={WorkspaceSettingsLabelPlaceholder}
+				buttonText='Add a time'
+				image={WorkspaceSettingsTimetablePlaceholder}
 				title={
 					<span>
-						Create labels to categorize posts and <br /> organize your campaigns
-						better
+						Add your preferred publishing times <br /> for faster scheduling
 					</span>
 				}
 			/>
@@ -74,4 +73,4 @@ const ZLabelsTab: React.FC = () => {
 	);
 };
 
-export default ZLabelsTab;
+export default ZTimetableTab;

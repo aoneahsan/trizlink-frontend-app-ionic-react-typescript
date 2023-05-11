@@ -462,10 +462,10 @@ const UploadTab: React.FC<{
 	});
 
 	const uploadFileToBackend = async (file: File) => {
-		console.dir({ file });
+		// console.dir({ file });
 		const formData = new FormData();
 		formData.append('file', file);
-		console.dir({ formData });
+		// console.dir({ formData });
 
 		// Uploading image to backend
 		const result = await uploadSingleFile(formData);

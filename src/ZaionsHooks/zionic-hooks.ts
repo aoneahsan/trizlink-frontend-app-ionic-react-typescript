@@ -411,16 +411,7 @@ export const useZIonPopover = <A extends object>(
 export const useZIonModal = <A extends object>(
 	component: GenericComponentType,
 	componentProps?: A
-): {
-	presentZIonModal: ({
-		_cssClass,
-		_onWillDismiss,
-	}: {
-		_cssClass?: string | string[];
-		_onWillDismiss?: (event: CustomEvent<OverlayEventDetail<unknown>>) => void;
-	}) => void | void;
-	dismissZIonModal: (data?: unknown, role?: string | undefined) => void | void;
-} => {
+) => {
 	const { zNavigatePushRoute } = useZNavigate();
 	const [presentIonModal, dismissZIonModal] = useIonModal(component, {
 		dismissZIonModal: (data: string, role: string) =>
@@ -432,15 +423,20 @@ export const useZIonModal = <A extends object>(
 		const presentZIonModal = ({
 			_cssClass,
 			_onWillDismiss,
+			_onDidDismiss,
 		}: {
 			_cssClass?: string | string[];
 			_onWillDismiss?: (
 				event: CustomEvent<OverlayEventDetail<unknown>>
 			) => void;
+			_onDidDismiss?:
+				| ((event: CustomEvent<OverlayEventDetail<any>>) => void)
+				| undefined;
 		}): void => {
 			presentIonModal({
 				cssClass: _cssClass,
 				onWillDismiss: _onWillDismiss,
+				onDidDismiss: _onDidDismiss,
 			});
 		};
 		return { presentZIonModal, dismissZIonModal };

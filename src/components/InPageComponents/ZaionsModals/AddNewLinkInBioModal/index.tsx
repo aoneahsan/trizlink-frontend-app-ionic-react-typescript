@@ -62,6 +62,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
 
 	return (
 		<ZIonContent className='ion-padding'>
+			{/* Close modal button */}
 			<div className='ion-text-end'>
 				<ZIonButton
 					className='ion-no-padding ion-no-margin'
@@ -71,11 +72,13 @@ const ZaionsAddLinkInBioModal: React.FC<{
 					fill='clear'
 					color='dark'
 				>
-					<h4 className='ion-no-margin mt-1'>
+					<h4 className='mt-1 ion-no-margin'>
 						<ZIonIcon icon={closeOutline} />
 					</h4>
 				</ZIonButton>
 			</div>
+
+			{/*  */}
 			<div className='d-flex ion-text-center ion-justify-content-center flex-column'>
 				<ZIonText className='' color={'primary'}>
 					<h1 className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}>
@@ -125,8 +128,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
 										zNavigatePushRoute &&
 											zNavigatePushRoute(
 												createRedirectRoute({
-													url: ZaionsRoutes.AdminPanel
-														.LinkInBio.Edit,
+													url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
 													params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
 													values: [_data.id],
 													routeSearchParams: {

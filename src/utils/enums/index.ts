@@ -37,6 +37,7 @@ export enum CONTAINS {
 export enum API_URL_ENUM {
 	login = 'login',
 	logout = 'logout',
+	verifyAuthenticationStatus = 'verifyAuthenticationStatus',
 	delete = 'delete',
 	register = 'register',
 	csrf = 'csrf',
@@ -78,6 +79,10 @@ export enum API_URL_ENUM {
 
 	linkInBioBlocks_reorder = 'linkInBioBlocks_reorder',
 
+	// Workspace
+	workspace_create_list = 'workspace_create_list',
+	workspace_update_delete = 'workspace_update_delete',
+
 	// File Upload Routes
 	getSingleFile = 'getSingleFile',
 	uploadSingleFile = 'uploadSingleFile',
@@ -87,7 +92,7 @@ export enum API_URL_ENUM {
 
 	// External Third Party API URLs (need to be complete url, as we will hit them without any modification (except for dynamic parts))
 	// UI Avatars API
-	uiAvatarAPI= 'uiAvatarAPI'
+	uiAvatarAPI = 'uiAvatarAPI',
 }
 export enum CSS_BACKGROUND_OPTION {
 	cover = 'cover',

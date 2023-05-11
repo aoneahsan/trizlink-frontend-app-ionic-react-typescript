@@ -34,11 +34,13 @@ import {
 	ZIonText,
 } from '@/components/ZIonComponents';
 import { CardsByType } from '@/data/UserDashboard/Workspace/ConnectPagesTab/index.data';
+import ZWorkspaceConnectPagesCardInfoPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ConnectPageCardInfoPopover';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down
@@ -50,12 +52,11 @@ import { CardsByType } from '@/data/UserDashboard/Workspace/ConnectPagesTab/inde
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
+	workspaceFormConnectPagesCardEnum,
 	workspaceFormConnectPagesEnum,
 	WorkspacePageCardInfoPopoverItemType,
 } from '@/types/AdminPanel/workspace';
-import classNames from 'classnames';
-import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
-import ZWorkspaceConnectPagesCardInfoPopover from '../../ZaionsPopovers/Workspace/ConnectPageCardInfoPopover';
+import ZWorkspaceMockupPageModal from '../MockupPageModal';
 
 /**
  * Recoil State Imports go down
@@ -89,6 +90,16 @@ const ZWorkspaceConnectPagesModal: React.FC<{
 }> = ({ dismissZIonModal, pageType }) => {
 	// getting the cards accounting to pageType
 	const { cards, logo, color } = CardsByType[pageType];
+
+	//
+	const { presentZIonModal: presentZWorkspaceMockupPageModal } = useZIonModal(
+		ZWorkspaceMockupPageModal,
+		{
+			pageType: pageType,
+			color: color,
+			logo: logo,
+		}
+	);
 
 	return (
 		<Formik
@@ -152,12 +163,27 @@ const ZWorkspaceConnectPagesModal: React.FC<{
 									{/*  */}
 									{cards.map((card, index) => {
 										return (
-											<ZIonCol size='3' key={index} className='h-[220px]'>
+											<ZIonCol
+												sizeXl='3'
+												sizeLg='4'
+												sizeMd='5'
+												sizeSm='6'
+												sizeXs='12'
+												key={index}
+												className='h-[220px]'
+											>
 												<SingleCard
 													icon={card.cardIcon}
 													title={card.title}
 													showInfoIcon={card.showInfoIcon}
 													infoCardItems={card.infoItems}
+													onClick={() => {
+														card.type ===
+															workspaceFormConnectPagesCardEnum.mockup &&
+															presentZWorkspaceMockupPageModal({
+																_cssClass: 'workspace-connect-pages-modal-size',
+															});
+													}}
 												/>
 											</ZIonCol>
 										);
@@ -187,29 +213,6 @@ const SingleCard: React.FC<{
 		useZIonPopover(ZWorkspaceConnectPagesCardInfoPopover, {
 			items: infoCardItems,
 		}); // popover hook to show UserInfoPopover
-	// const { presentZIonPopover: presentConnectPagesCardInfoPopover } =
-	// 	useZIonPopover(ZWorkspaceConnectPagesCardInfoPopover, {
-	// 		showTitle: true,
-	// 		title: 'There are 3 different types of IG profiles:',
-	// 		text: 'See our help article for more details.',
-	// 		items: [
-	// 			{
-	// 				itemIcon: businessOutline,
-	// 				itemTitle: 'Business Account',
-	// 				itemSubtitle: 'Direct publishing is available',
-	// 			},
-	// 			{
-	// 				itemIcon: businessOutline,
-	// 				itemTitle: 'Business Account',
-	// 				itemSubtitle: 'Direct publishing is available',
-	// 			},
-	// 			{
-	// 				itemIcon: businessOutline,
-	// 				itemTitle: 'Business Account',
-	// 				itemSubtitle: 'Direct publishing is available',
-	// 			},
-	// 		],
-	// 	}); // popover hook to show UserInfoPopover
 
 	return (
 		<ZIonCard
@@ -241,7 +244,7 @@ const SingleCard: React.FC<{
 				{showInfoIcon && (
 					<div
 						className='top-1 position-absolute start-0 w-max d-flex ion-align-items-center ion-justify-content-center zaions__cursor_pointer'
-						onClick={() => {
+						onClick={(event: unknown) => {
 							presentConnectPagesCardInfoPopover({
 								_event: event as Event,
 								_cssClass: 'zaions_workspaces_card_popover_size',

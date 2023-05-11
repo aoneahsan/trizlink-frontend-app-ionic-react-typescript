@@ -48,7 +48,7 @@ import {
 import { workspaceFormConnectPagesEnum } from '@/types/AdminPanel/workspace';
 import classNames from 'classnames';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
-import ZWorkspaceConnectPagesModal from '@/components/InPageComponents/ZaionsModals/WorkspaceConnectPagesModal';
+import ZWorkspaceConnectPagesModal from '@/components/InPageComponents/ZaionsModals/Workspace/ConnectPagesModal';
 import { brandColors } from '@/utils/constants';
 
 /**

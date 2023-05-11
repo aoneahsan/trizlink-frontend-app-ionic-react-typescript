@@ -31,6 +31,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // Custom Imports
 import ZaionsApp from './ZaionsApp';
+import AuthenticateHOC from './HOCs/AuthenticateHOC';
 
 // Global Constants
 
@@ -40,14 +41,16 @@ const queryClientObj = new QueryClient();
 
 // Functional Component
 const AppHOCWrapper: React.FC = () => {
-  return (
-    <QueryClientProvider client={queryClientObj}>
-      <RecoilRoot>
-        <ZaionsApp />
-      </RecoilRoot>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  );
+	return (
+		<QueryClientProvider client={queryClientObj}>
+			<RecoilRoot>
+				<AuthenticateHOC>
+					<ZaionsApp />
+				</AuthenticateHOC>
+			</RecoilRoot>
+			<ReactQueryDevtools initialIsOpen={false} />
+		</QueryClientProvider>
+	);
 };
 
 export default AppHOCWrapper;

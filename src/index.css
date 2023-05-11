@@ -862,6 +862,11 @@ ion-modal.zaions__modal_w100 {
 	--width: 33vw;
 }
 
+.create-workspace-modal-size {
+	--height: 67vh;
+	--width: 33vw;
+}
+
 .pixel-account-detail-modal-size,
 .note-detail-modal-size,
 .dashboard-filter-modal-size {

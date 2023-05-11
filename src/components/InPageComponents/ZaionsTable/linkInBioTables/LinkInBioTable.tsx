@@ -215,7 +215,7 @@ const ZaionsLinkInBioLinksTable = () => {
 
 	return (
 		<>
-			<ZIonRow className='pt-4 pb-1 px-4 zaions__bg_white  mt-5 ion-margin-bottom'>
+			<ZIonRow className='px-4 pt-4 pb-1 mt-5 zaions__bg_white ion-margin-bottom'>
 				<ZIonCol>
 					<ZTable>
 						<ZTableTHead>
@@ -373,7 +373,7 @@ const ZaionsLinkInBioLinksTable = () => {
 								size='small'
 								expand='full'
 								fill='clear'
-								className='ion-text-capitalize mx-auto'
+								className='mx-auto ion-text-capitalize'
 							>
 								<ZIonIcon
 									icon={pencilOutline}
@@ -392,7 +392,7 @@ const ZaionsLinkInBioLinksTable = () => {
 								size='small'
 								expand='full'
 								fill='clear'
-								className='ion-text-capitalize mx-auto'
+								className='mx-auto ion-text-capitalize'
 							>
 								<ZIonIcon
 									icon={trashBinOutline}

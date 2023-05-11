@@ -2,13 +2,13 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useEffect } from 'react';
 
 /**
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { addOutline } from 'ionicons/icons';
 
 /**
@@ -34,7 +34,7 @@ import ZWorkspacesCard from '@/components/WorkspacesComponents/ListCard';
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down
@@ -65,7 +65,17 @@ import { ProductLogo } from '@/assets/images';
 import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { createRedirectRoute } from '@/utils/helpers';
-import { workspaceFormTabEnum } from '@/types/AdminPanel/workspace';
+import {
+	workspaceFormTabEnum,
+	workspaceInterface,
+} from '@/types/AdminPanel/workspace';
+import ZAddNewWorkspaceModal from '@/components/InPageComponents/ZaionsModals/Workspace/CreateModal';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { API_URL_ENUM } from '@/utils/enums';
+import CONSTANTS from '@/utils/constants';
+import { WorkspaceRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
+import { reportCustomError } from '@/utils/customErrorType';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 /**
  * Component props type go down
@@ -82,9 +92,38 @@ const ZWorkspaceListPage: React.FC = () => {
 	//
 	const ZDashboardState = useRecoilValue(ZDashboardRState);
 
+	// Recoil State that hold workspaces.
+	const [workspaceState, setWorkspaceState] = useRecoilState(
+		WorkspaceRStateAtom('')
+	);
+
 	// Custom Hooks
 	const { presentZIonPopover: presentUserInfoPopover } =
 		useZIonPopover(ZUserInfoPopover); // popover hook to show UserInfoPopover
+
+	//
+	const { presentZIonModal: presentZWorkspaceCreateModal } = useZIonModal(
+		ZAddNewWorkspaceModal
+	);
+	const { zNavigatePushRoute } = useZNavigate();
+
+	// Get workspace data from backend.
+	const { data: getWorkspaceData } = useZRQGetRequest<workspaceInterface[]>({
+		_url: API_URL_ENUM.workspace_create_list,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
+	});
+
+	console.log({ getWorkspaceData });
+
+	useEffect(() => {
+		try {
+			if (getWorkspaceData) {
+				setWorkspaceState(getWorkspaceData);
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	}, [getWorkspaceData]);
 
 	return (
 		<ZaionsIonPage pageTitle='Zaions workspaces list page'>
@@ -123,7 +162,7 @@ const ZWorkspaceListPage: React.FC = () => {
 										<ZIonButtons className='gap-3 ion-align-items-center'>
 											{/* User avatar button */}
 											<ZUserAvatarInfo
-												onMouseEnter={(event: unknown) => {
+												onClick={(event: unknown) => {
 													presentUserInfoPopover({
 														_event: event as Event,
 														_cssClass: 'zaions_user_info_popover_size',
@@ -148,23 +187,48 @@ const ZWorkspaceListPage: React.FC = () => {
 										<ZIonButton
 											className='ion-no-margin text-transform-initial'
 											color='secondary'
-											// onClick={() => {
-											// 	presentWorkspaceFormModal({
-											// 		_cssClass: 'workspace-form-modal-size',
-											// 	});
-											// }}
-											// createRedirectRoute({
-											// 		url: ZaionsRoutes.AdminPanel.Workspaces.Create,
-											// 		routeSearchParams: {
-											// 			tab: workspaceFormTabEnum.workspaceDetailForm,
-											// 		},
-											// 	})
-											routerLink={createRedirectRoute({
-												url: ZaionsRoutes.AdminPanel.Workspaces.Create,
-												routeSearchParams: {
-													tab: workspaceFormTabEnum.workspaceDetailForm,
-												},
-											})}
+											onClick={() => {
+												presentZWorkspaceCreateModal({
+													_cssClass: 'create-workspace-modal-size',
+													_onDidDismiss: (event) => {
+														alert(
+															JSON.stringify(
+																{
+																	id: event.detail.data,
+																	role: event.detail.role,
+																	c: event.detail.role === 'success',
+																},
+																null,
+																2
+															)
+														);
+														if (
+															event.detail.data &&
+															event.detail.role === 'success'
+														) {
+															// after dismissing redirecting to edit workspace-page
+															zNavigatePushRoute(
+																createRedirectRoute({
+																	url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
+																	params: [
+																		CONSTANTS.RouteParams.editWorkspaceIdParam,
+																	],
+																	values: [event.detail.data],
+																	routeSearchParams: {
+																		tab: workspaceFormTabEnum.inviteClients,
+																	},
+																})
+															);
+														}
+													},
+												});
+											}}
+											// routerLink={createRedirectRoute({
+											// 	url: ZaionsRoutes.AdminPanel.Workspaces.Create,
+											// 	routeSearchParams: {
+											// 		tab: workspaceFormTabEnum.workspaceDetailForm,
+											// 	},
+											// })}
 										>
 											<ZIonIcon icon={addOutline} /> New workspace
 										</ZIonButton>
@@ -174,17 +238,25 @@ const ZWorkspaceListPage: React.FC = () => {
 								{/* cards row */}
 								<ZIonRow className='mt-5'>
 									{/* single card */}
-									<ZIonCol size='4'>
-										<ZWorkspacesCard
-											workspaceAvatar={ProductLogo}
-											workspaceName='Zaions'
-											workspacePagesCount='0'
-											userAvatar={ProductLogo}
-											lastActive='22h'
-										/>
-									</ZIonCol>
+									{workspaceState.map((el) => (
+										<ZIonCol
+											sizeXl='4'
+											sizeLg='6'
+											sizeMd='6'
+											sizeSm='6'
+											sizeXs='12'
+											key={el.id}
+										>
+											<ZWorkspacesCard
+												workspaceAvatar={ProductLogo}
+												workspaceName={el.workspaceName as string}
+												workspacePagesCount='0'
+												userAvatar={ProductLogo}
+												lastActive='22h'
+											/>
+										</ZIonCol>
+									))}
 								</ZIonRow>
-
 								{/*  */}
 							</ZIonGrid>
 						</ZIonCol>

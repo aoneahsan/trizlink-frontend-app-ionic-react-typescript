@@ -5,24 +5,20 @@ import ZFallbackIonSpinner from '@/components/CustomComponents/FallbackSpinner';
 import { ZRoutesRedirects } from '@/utils/constants/RoutesConstants';
 import { IsAuthenticatedRStateSelector } from '@/ZaionsStore/UserAccount/index.recoil';
 
-const PublicRoute = ({ component, restricted = true, ...rest }: any) => {
+const PublicRoute = ({ Component, restricted = true, ...rest }: any) => {
 	return (
 		// restricted = false meaning public route
 		// restricted = true meaning restricted route
 		<Suspense fallback={<ZFallbackIonSpinner />}>
 			<PublicRouteAsync
-				component={component}
+				Component={Component}
 				restricted={restricted}
 				{...rest}
 			/>
 		</Suspense>
 	);
 };
-const PublicRouteAsync = ({
-	component: Component,
-	restricted,
-	...rest
-}: any) => {
+const PublicRouteAsync = ({ Component, restricted, ...rest }: any) => {
 	const loggedIn = useRecoilValue(IsAuthenticatedRStateSelector);
 
 	return (

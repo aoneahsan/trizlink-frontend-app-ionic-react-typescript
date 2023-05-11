@@ -150,12 +150,6 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 							className={classNames(classes['workspace-user-avatar-button'], {
 								'position-relative': true,
 							})}
-							onMouseEnter={(event: unknown) => {
-								presentUserInfoPopover({
-									_event: event as Event,
-									_cssClass: 'zaions_user_info_popover_size',
-								});
-							}}
 							onClick={(event: unknown) => {
 								presentUserInfoPopover({
 									_event: event as Event,

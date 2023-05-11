@@ -274,14 +274,14 @@ const ZaionsLoginForm: React.FC = () => {
 								{/* Submit Button */}
 								<ZIonButton
 									expand='block'
-									className='ion-text-capitalize mt-4'
+									className='mt-4 ion-text-capitalize'
 									onClick={() => void submitForm()}
 								>
 									Log in
 								</ZIonButton>
 
 								{/* Some Text */}
-								<div className='ion-text-center	mt-3 mb-4'>
+								<div className='mt-3 mb-4 ion-text-center'>
 									<ZIonText className='zaions__fs_14 ' color='medium'>
 										By signing in with an account, you agree to <br />{' '}
 										{PRODUCT_NAME}

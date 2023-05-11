@@ -24,10 +24,11 @@ import { ENVS } from '@/utils/envKeys';
 // Constant
 // const ZLinkApiRootUrl = 'https://zlinkbackend.zaions.com/public/api/zlink/v1';
 export const ZLinkApiRootUrl = ENVS.apiUrl;
-// left here as it will messup many imports, we can move this when we have some free time (i know that will add more imports to correct but we don't have time for it right now)
+// left here as it will mess up many imports, we can move this when we have some free time (i know that will add more imports to correct but we don't have time for it right now)
 export const API_URLS = {
 	login: '/login',
 	logout: '/logout',
+	verifyAuthenticationStatus: '/verify-authentication-status',
 	register: '/register',
 	csrf: '/sanctum/csrf-cookie',
 	delete: '/user/delete',
@@ -76,6 +77,10 @@ export const API_URLS = {
 	linkInBioPreDefinedFormFields_delete_update:
 		'/user/link-in-bio-predefined-form-fields/:formFieldId',
 
+	// workspace
+	workspace_create_list: '/user/workspaces',
+	workspace_update_delete: '/user/workspaces/:workspaceId',
+
 	// File
 	getSingleFile: '/file-upload/getSingleFileUrl',
 	uploadSingleFile: '/file-upload/uploadSingleFile',
@@ -95,6 +100,10 @@ export const PRODUCT_DOMAIN = 'prettylinks.zaions.com';
 export const GenaricExternalURL = 'https://prettylinks.zaions.com';
 export const CurrentProductDetails = {
 	Name: '',
+};
+
+export const ZaionsInfo = {
+	name: 'Zaions',
 };
 
 // @Medias BrackPoint:
@@ -229,6 +238,10 @@ const RouteParams = {
 	editLinkInBioPageParam: ':editLinkInBioPage',
 	editLinkInBioStepParam: ':editLinkInBioStep',
 	folderIdToGetShortLinksOrLinkInBio: ':folderId?',
+	editWorkspaceIdParam: ':editWorkspaceId',
+
+	//
+	workspaceId: ':workspaceId',
 	// folderIdToGetShortLinksOrLinkInBio: 'all',
 };
 
@@ -408,6 +421,10 @@ const REACT_QUERY = {
 			SETTING_TAB: {
 				MAIN: 'rq-link-in-bio-setting-tab-key',
 			},
+		},
+		WORKSPACE: {
+			MAIN: 'rq-workspace-list-key',
+			GET: 'rq-workspace-get-key',
 		},
 		FOLDER: {
 			MAIN: 'rq-folders-list-key',

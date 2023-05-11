@@ -90,7 +90,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 					<ZIonGrid>
 						{values.clients?.map((el, index) => (
 							<ZIonRow
-								className='w-2/3 ion-align-items-center ion-justify-content-center mx-auto mt-2'
+								className='w-2/3 mx-auto mt-2 ion-align-items-center ion-justify-content-center'
 								key={index}
 							>
 								<ZIonCol size='1'>
@@ -135,7 +135,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 													});
 												}}
 												fill='outline'
-												className='d-flex h-100 m-0 text-transform-initial'
+												className='m-0 d-flex h-100 text-transform-initial'
 											>
 												{values.clients && values.clients[index].role}
 											</ZIonButton>
@@ -169,12 +169,12 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 								{/*  */}
 								<ZIonCol size='max-content'>
 									<ZIonButton fill='clear' onClick={() => remove(index)}>
-										<ZIonIcon icon={closeOutline} className='me-1 w-6 h-6' />
+										<ZIonIcon icon={closeOutline} className='w-6 h-6 me-1' />
 									</ZIonButton>
 								</ZIonCol>
 							</ZIonRow>
 						))}
-						<ZIonRow className='w-full ion-justify-content-center mt-4 ps-3'>
+						<ZIonRow className='w-full mt-4 ion-justify-content-center ps-3'>
 							<ZIonCol size='8.2'>
 								<ZIonButton
 									className='text-transform-initial'

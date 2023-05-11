@@ -25,10 +25,10 @@ import {
 import { brandColors } from '@/utils/constants/index';
 import {
 	PageInfoCardItemTypeEnum,
+	workspaceFormConnectPagesCardEnum,
 	workspaceFormConnectPagesEnum,
 	WorkspacePageCardInfoPopoverItemType,
 } from '@/types/AdminPanel/workspace';
-import { ReactNode } from 'react';
 
 // get data of cards by workspaceFormConnectPagesEnum to how in workspaceConnectPagesModal.
 export const CardsByType: {
@@ -41,6 +41,7 @@ export const CardsByType: {
 			showInfoIcon?: boolean;
 			onClick?: React.MouseEventHandler<HTMLIonCardElement>;
 			infoItems?: WorkspacePageCardInfoPopoverItemType[];
+			type: workspaceFormConnectPagesCardEnum;
 		}[];
 	};
 } = {
@@ -53,11 +54,13 @@ export const CardsByType: {
 				cardIcon: flagOutline,
 				title: 'Add Facebook pages',
 				showInfoIcon: false,
+				type: workspaceFormConnectPagesCardEnum.page,
 			},
 			{
 				cardIcon: peopleOutline,
 				title: 'Add Facebook groups',
 				showInfoIcon: false,
+				type: workspaceFormConnectPagesCardEnum.group,
 			},
 			{
 				cardIcon: medicalOutline,
@@ -70,6 +73,7 @@ export const CardsByType: {
 							"<p>You can create a mockup Facebook page in Planable, without connecting to a live page. You can use it to draft, preview, plan and collaborate on your content, but you won't be able to publish.</p>",
 					},
 				],
+				type: workspaceFormConnectPagesCardEnum.mockup,
 			},
 		],
 	},
@@ -83,11 +87,13 @@ export const CardsByType: {
 				cardIcon: personOutline,
 				title: 'Add Twitter profiles',
 				showInfoIcon: false,
+				type: workspaceFormConnectPagesCardEnum.page,
 			},
 			{
 				cardIcon: medicalOutline,
 				title: 'Create a mockup page',
 				showInfoIcon: true,
+				type: workspaceFormConnectPagesCardEnum.mockup,
 				infoItems: [
 					{
 						type: PageInfoCardItemTypeEnum.infoMessage,
@@ -108,10 +114,12 @@ export const CardsByType: {
 				cardIcon: businessOutline,
 				title: 'Add Instagram business pages',
 				showInfoIcon: false,
+				type: workspaceFormConnectPagesCardEnum.businessPages,
 			},
 			{
 				cardIcon: personOutline,
 				title: 'Add Instagram profiles or pages',
+				type: workspaceFormConnectPagesCardEnum.page,
 				showInfoIcon: true,
 				infoItems: [
 					{
@@ -148,6 +156,7 @@ export const CardsByType: {
 			{
 				cardIcon: medicalOutline,
 				title: 'Create a mockup page',
+				type: workspaceFormConnectPagesCardEnum.mockup,
 				showInfoIcon: true,
 				infoItems: [
 					{
@@ -169,6 +178,7 @@ export const CardsByType: {
 				cardIcon: playCircleOutline,
 				title: 'Add TikTok account',
 				showInfoIcon: true,
+				type: workspaceFormConnectPagesCardEnum.account,
 				infoItems: [
 					{
 						type: PageInfoCardItemTypeEnum.simpleCard,
@@ -204,6 +214,7 @@ export const CardsByType: {
 				cardIcon: playCircleOutline,
 				title: 'Add TikTok business profile',
 				showInfoIcon: true,
+				type: workspaceFormConnectPagesCardEnum.businessPages,
 				infoItems: [
 					{
 						type: PageInfoCardItemTypeEnum.simpleCard,
@@ -258,6 +269,7 @@ export const CardsByType: {
 				cardIcon: medicalOutline,
 				title: 'Create a mockup page',
 				showInfoIcon: true,
+				type: workspaceFormConnectPagesCardEnum.mockup,
 				infoItems: [
 					{
 						type: PageInfoCardItemTypeEnum.infoMessage,
@@ -278,11 +290,13 @@ export const CardsByType: {
 				cardIcon: logoGoogle,
 				title: 'Add Google Business Profile pages',
 				showInfoIcon: false,
+				type: workspaceFormConnectPagesCardEnum.businessPages,
 			},
 			{
 				cardIcon: medicalOutline,
 				title: 'Create a mockup page',
 				showInfoIcon: true,
+				type: workspaceFormConnectPagesCardEnum.mockup,
 				infoItems: [
 					{
 						type: PageInfoCardItemTypeEnum.infoMessage,
@@ -303,15 +317,18 @@ export const CardsByType: {
 				cardIcon: businessOutline,
 				title: 'Add LinkedIn company pages',
 				showInfoIcon: false,
+				type: workspaceFormConnectPagesCardEnum.companyPage,
 			},
 			{
 				cardIcon: personOutline,
 				title: 'Add Linkedin profiles',
 				showInfoIcon: false,
+				type: workspaceFormConnectPagesCardEnum.page,
 			},
 			{
 				cardIcon: medicalOutline,
 				title: 'Create a mockup page',
+				type: workspaceFormConnectPagesCardEnum.mockup,
 				showInfoIcon: true,
 				infoItems: [
 					{
@@ -333,11 +350,13 @@ export const CardsByType: {
 				cardIcon: businessOutline,
 				title: 'Add Pinterest business pages',
 				showInfoIcon: false,
+				type: workspaceFormConnectPagesCardEnum.businessPages,
 			},
 			{
 				cardIcon: medicalOutline,
 				title: 'Create a mockup page',
 				showInfoIcon: true,
+				type: workspaceFormConnectPagesCardEnum.mockup,
 				infoItems: [
 					{
 						type: PageInfoCardItemTypeEnum.infoMessage,
@@ -358,11 +377,13 @@ export const CardsByType: {
 				cardIcon: logoYoutube,
 				title: 'Add YouTube channels',
 				showInfoIcon: false,
+				type: workspaceFormConnectPagesCardEnum.channel,
 			},
 			{
 				cardIcon: medicalOutline,
 				title: 'Create a mockup page',
 				showInfoIcon: true,
+				type: workspaceFormConnectPagesCardEnum.mockup,
 				infoItems: [
 					{
 						type: PageInfoCardItemTypeEnum.infoMessage,

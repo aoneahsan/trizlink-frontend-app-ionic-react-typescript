@@ -28,7 +28,7 @@ import {
 	ZIonText,
 } from '@/components/ZIonComponents';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
-import ZWorkspacesSettingModal from '@/components/InPageComponents/ZaionsModals/workspaceSettingsModal';
+import ZWorkspacesSettingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SettingsModal';
 
 /**
  * Custom Hooks Imports go down

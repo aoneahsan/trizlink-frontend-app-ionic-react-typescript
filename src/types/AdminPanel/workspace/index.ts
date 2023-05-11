@@ -46,6 +46,16 @@ export enum workspaceFormConnectPagesEnum {
 	universalContent = 'universalContent',
 }
 
+export enum workspaceFormConnectPagesCardEnum {
+	page = 'page', // page or profile
+	group = 'group',
+	mockup = 'mockup',
+	businessPages = 'businessPages',
+	companyPage = 'companyPage',
+	channel = 'channel',
+	account = 'account',
+}
+
 // Interfaces
 export interface workspaceInviteClientInterface {
 	avatar?: string;
@@ -55,6 +65,7 @@ export interface workspaceInviteClientInterface {
 }
 
 export interface workspaceInterface {
+	id?: string;
 	workspaceName?: string;
 	workspaceTimezone?: string;
 	clients?: workspaceInviteClientInterface[];
