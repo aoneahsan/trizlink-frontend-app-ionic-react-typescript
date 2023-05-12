@@ -107,9 +107,9 @@ const ZWorkspaceForm: React.FC = () => {
 	}>();
 
 	// Recoil State that hold workspaces.
-	const [workspaceState, setWorkspaceState] = useRecoilState(
-		WorkspaceRStateAtomFamily(editWorkspaceId)
-	);
+	// const [workspaceState, setWorkspaceState] = useRecoilState(
+	// 	WorkspaceRStateAtomFamily(editWorkspaceId)
+	// );
 
 	// fetching link-in-bio with the editWorkspaceId data from backend.
 	const { data: selectedWorkspace, refetch: refetchSelectedWorkspace } =
@@ -134,15 +134,6 @@ const ZWorkspaceForm: React.FC = () => {
 		try {
 			if (editWorkspaceId) {
 				void WorkspaceGetRequestFn();
-
-				if (selectedWorkspace?.id) {
-					setWorkspaceState((prevState) => {
-						const newWorkspaceState = prevState.filter(
-							(workspace) => workspace.id !== editWorkspaceId
-						);
-						return [...newWorkspaceState, selectedWorkspace];
-					});
-				}
 			}
 		} catch (error) {
 			if (error instanceof AxiosError) {
@@ -155,39 +146,40 @@ const ZWorkspaceForm: React.FC = () => {
 		// eslint-disable-next-line
 	}, [editWorkspaceId]);
 
-	useEffect(() => {
-		try {
-			if (selectedWorkspace?.id) {
-				setWorkspaceState((prevState) => {
-					const newWorkspaceState = prevState.filter(
-						(workspace) => workspace.id !== editWorkspaceId
-					);
-					return [...newWorkspaceState, selectedWorkspace];
-				});
-			}
-		} catch (error) {
-			if (error instanceof AxiosError) {
-				zNavigatePushRoute(ZaionsRoutes.AdminPanel.LinkInBio.Main);
-				showErrorNotification(error.message);
-			} else {
-				reportCustomError(error);
-			}
-		}
-		// eslint-disable-next-line
-	}, [selectedWorkspace]);
+	// useEffect(() => {
+	// 	try {
+	// 		if (selectedWorkspace?.id) {
+	// 			setWorkspaceState((prevState) => {
+	// 				const newWorkspaceState = prevState.filter(
+	// 					(workspace) => workspace.id !== editWorkspaceId
+	// 				);
+	// 				return [...newWorkspaceState, selectedWorkspace];
+	// 			});
+	// 		}
+	// 	} catch (error) {
+	// 		if (error instanceof AxiosError) {
+	// 			zNavigatePushRoute(ZaionsRoutes.AdminPanel.LinkInBio.Main);
+	// 			showErrorNotification(error.message);
+	// 		} else {
+	// 			reportCustomError(error);
+	// 		}
+	// 	}
+	// 	// eslint-disable-next-line
+	// }, [selectedWorkspace]);
 
 	console.log({
-		workspaceState,
 		editWorkspaceId,
 		selectedWorkspace,
 	});
+
+	if (!selectedWorkspace) return null;
 
 	return (
 		<ZaionsIonPage pageTitle='Zaions Workspace Form Page'>
 			<Formik
 				initialValues={{
-					workspaceName: '',
-					workspaceTimezone: '',
+					workspaceName: selectedWorkspace?.workspaceName,
+					workspaceTimezone: selectedWorkspace?.workspaceTimezone,
 					clients: [
 						{
 							email: '',
@@ -287,11 +279,15 @@ const ZWorkspaceForm: React.FC = () => {
 												<ZIonButton
 													expand='block'
 													className='text-transform-initial'
-													disabled={values.workspaceName.trim().length === 0}
+													disabled={values.workspaceName?.trim().length === 0}
 													onClick={() => {
 														zNavigatePushRoute(
 															createRedirectRoute({
-																url: ZaionsRoutes.AdminPanel.Workspaces.Create,
+																url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
+																params: [
+																	CONSTANTS.RouteParams.editWorkspaceIdParam,
+																],
+																values: [editWorkspaceId],
 																routeSearchParams: {
 																	tab: workspaceFormTabEnum.inviteClients,
 																},
@@ -319,7 +315,12 @@ const ZWorkspaceForm: React.FC = () => {
 																	zNavigatePushRoute(
 																		createRedirectRoute({
 																			url: ZaionsRoutes.AdminPanel.Workspaces
-																				.Create,
+																				.Edit,
+																			params: [
+																				CONSTANTS.RouteParams
+																					.editWorkspaceIdParam,
+																			],
+																			values: [editWorkspaceId],
 																			routeSearchParams: {
 																				tab: workspaceFormTabEnum.workspaceDetailForm,
 																			},
@@ -331,7 +332,12 @@ const ZWorkspaceForm: React.FC = () => {
 																	zNavigatePushRoute(
 																		createRedirectRoute({
 																			url: ZaionsRoutes.AdminPanel.Workspaces
-																				.Create,
+																				.Edit,
+																			params: [
+																				CONSTANTS.RouteParams
+																					.editWorkspaceIdParam,
+																			],
+																			values: [editWorkspaceId],
 																			routeSearchParams: {
 																				tab: workspaceFormTabEnum.inviteClients,
 																			},
@@ -356,7 +362,12 @@ const ZWorkspaceForm: React.FC = () => {
 																	zNavigatePushRoute(
 																		createRedirectRoute({
 																			url: ZaionsRoutes.AdminPanel.Workspaces
-																				.Create,
+																				.Edit,
+																			params: [
+																				CONSTANTS.RouteParams
+																					.editWorkspaceIdParam,
+																			],
+																			values: [editWorkspaceId],
 																			routeSearchParams: {
 																				tab: workspaceFormTabEnum.connectPages,
 																			},

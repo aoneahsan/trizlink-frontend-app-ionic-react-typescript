@@ -65,7 +65,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
 		useFormikContext<workspaceInterface>();
 	return (
 		<ZIonCol className='my-5' size='11'>
-			<ZIonRow className='w-4/5 w-80 mx-auto'>
+			<ZIonRow className='w-4/5 mx-auto w-80'>
 				{/* Workspace name */}
 				<ZIonCol size='12'>
 					<ZIonInput

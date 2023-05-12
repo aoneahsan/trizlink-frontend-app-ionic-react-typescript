@@ -74,12 +74,12 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 	return (
 		<ZIonRow>
 			<ZIonCol size='12' className='mt-2'>
-				<ZIonText className='fw-bold mb-3 d-block ms-2'>
+				<ZIonText className='mb-3 fw-bold d-block ms-2'>
 					Granted permissions
 				</ZIonText>
 				<ZIonRow>
 					{/*  */}
-					<ZIonCol size='6' className='d-flex gap-1 ion-align-items-center'>
+					<ZIonCol size='6' className='gap-1 d-flex ion-align-items-center'>
 						<ZIonIcon
 							icon={checkmarkCircleOutline}
 							color='success'
@@ -89,7 +89,7 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 					</ZIonCol>
 
 					{/*  */}
-					<ZIonCol size='6' className='d-flex gap-1 ion-align-items-center'>
+					<ZIonCol size='6' className='gap-1 d-flex ion-align-items-center'>
 						<ZIonIcon
 							icon={checkmarkCircleOutline}
 							color='success'
@@ -99,7 +99,7 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 					</ZIonCol>
 
 					{/*  */}
-					<ZIonCol size='6' className='d-flex gap-1 ion-align-items-center'>
+					<ZIonCol size='6' className='gap-1 d-flex ion-align-items-center'>
 						<ZIonIcon
 							icon={closeCircleOutline}
 							color='danger'
@@ -109,7 +109,7 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 					</ZIonCol>
 
 					{/*  */}
-					<ZIonCol size='6' className='d-flex gap-1 ion-align-items-center'>
+					<ZIonCol size='6' className='gap-1 d-flex ion-align-items-center'>
 						<ZIonIcon
 							icon={checkmarkCircleOutline}
 							color='success'
@@ -119,7 +119,7 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 					</ZIonCol>
 
 					{/*  */}
-					<ZIonCol size='6' className='d-flex gap-1 ion-align-items-center'>
+					<ZIonCol size='6' className='gap-1 d-flex ion-align-items-center'>
 						<ZIonIcon
 							icon={checkmarkCircleOutline}
 							color='success'

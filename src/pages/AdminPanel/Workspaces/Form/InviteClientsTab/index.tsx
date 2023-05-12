@@ -43,6 +43,7 @@ import {
 	workspaceFormRoleEnum,
 	workspaceInterface,
 } from '@/types/AdminPanel/workspace';
+import ZInviteClientsPermissionPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/InviteClientPermissionPopover';
 
 /**
  * Type Imports go down
@@ -78,7 +79,10 @@ import {
 const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 	// Custom Hooks
 	const { presentZIonPopover: presentWorkspaceFormRoleSelectorPopover } =
-		useZIonPopover(ZWorkspaceFormRoleSelectorPopover, { showBadges: true }); // popover hook to show ZWorkspaceFormRoleSelectorPopover
+		useZIonPopover(ZWorkspaceFormRoleSelectorPopover); // popover hook to show ZWorkspaceFormRoleSelectorPopover
+
+	const { presentZIonPopover: presentInviteClientsPermissionPopover } =
+		useZIonPopover(ZInviteClientsPermissionPopover); // popover hook to show ZInviteClientsPermissionPopover
 
 	const { values, handleBlur, handleChange, setFieldValue } =
 		useFormikContext<workspaceInterface>();
@@ -145,25 +149,19 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 
 								{/*  */}
 								<ZIonCol size='1.7'>
-									<ZIonSelect
+									<ZIonButton
+										onClick={(event: unknown) => {
+											presentInviteClientsPermissionPopover({
+												_event: event as Event,
+												_cssClass: 'workspace_form_role_popover_size',
+												_dismissOnSelect: false,
+											});
+										}}
 										fill='outline'
-										label=''
-										className='zaions_max__content'
-										value={values.clients && values.clients[index].permission}
-										interface='popover'
-										name={`clients.${index}.permission`}
-										onIonChange={handleChange}
-										onIonBlur={handleBlur}
+										className='m-0 d-flex h-100 text-transform-initial'
 									>
-										<ZIonSelectOption value={workspaceFormPermissionEnum.team}>
-											Team
-										</ZIonSelectOption>
-										<ZIonSelectOption
-											value={workspaceFormPermissionEnum.client}
-										>
-											Client
-										</ZIonSelectOption>
-									</ZIonSelect>
+										{values.clients && values.clients[index].role}
+									</ZIonButton>
 								</ZIonCol>
 
 								{/*  */}

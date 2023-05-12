@@ -151,11 +151,13 @@ const AppRoutes: React.FC = () => {
 				/>
 
 				<PrivateRoute
+					exact
 					path={ZaionsRoutes.AdminPanel.Setting.Main}
 					Component={ZaionsAdminPanelSettings}
 				/>
 
 				<PrivateRoute
+					exact
 					path={ZaionsRoutes.AdminPanel.Workspaces.Main}
 					Component={ZWorkspaceListPage}
 				/>
