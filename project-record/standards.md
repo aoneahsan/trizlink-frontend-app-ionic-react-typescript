@@ -34,6 +34,10 @@
   - for all main/top-level "catch blocks" report their error using "reportCustomError" helper function
 - wrape in {}, for any function body, if condition body or loop body content, please wrap that in {}
 - No Relative import in project, go with absolute imports as that makes the refactoring easy.
+- async tasks takes time, so for any dynamic component (or any normal page), make sure to perform all required tasks before navigation or reload, as it will cause issues otherwise
+  - e.g:
+    - if you dismiss a modal first and then after that try to navigate that will cause issues (called the dismiss function first and then the navigate function)
+    - same if you reset some state first which will cause a navigate from smoe other part of app and other that you try to set some state, that will also cause issues.
 
 - ### FORM
 

@@ -3,7 +3,7 @@ import { API_URL_ENUM } from '@/utils/enums';
 import { STORAGE, zAxiosApiRequest } from '@/utils/helpers';
 import { ZaionsUserAccountRState } from '@/ZaionsStore/UserAccount/index.recoil';
 import React, { ReactNode } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useResetRecoilState } from 'recoil';
 
 interface AuthenticateHOCPropsType {
 	children: ReactNode;
@@ -12,8 +12,7 @@ interface AuthenticateHOCPropsType {
 const AuthenticateHOC: React.FC<AuthenticateHOCPropsType> = (props) => {
 	// const
 	// registering data
-
-	const setUserAccountState = useSetRecoilState(ZaionsUserAccountRState);
+	const resetUserAccountState = useResetRecoilState(ZaionsUserAccountRState);
 
 	React.useEffect(() => {
 		void (() => {
@@ -41,7 +40,7 @@ const AuthenticateHOC: React.FC<AuthenticateHOCPropsType> = (props) => {
 					STORAGE.CLEAR(LOCALSTORAGE_KEYS.AUTHTOKEN);
 
 					// Clear recoil state
-					setUserAccountState(null);
+					resetUserAccountState();
 				}
 			}
 		})();

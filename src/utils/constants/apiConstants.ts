@@ -26,3 +26,6 @@ export const uiAvatarApiDefaultParams = {
   fontSize: '0.33',
   length: '1'
 }
+export const errorCodes = {
+  unauthenticated: 401
+}
