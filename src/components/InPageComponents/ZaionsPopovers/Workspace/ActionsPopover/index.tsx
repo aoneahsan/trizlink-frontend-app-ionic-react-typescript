@@ -27,13 +27,13 @@ import {
 	ZIonList,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZWorkspacesSettingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SettingsModal';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down
@@ -71,7 +71,9 @@ import ZWorkspacesSettingModal from '@/components/InPageComponents/ZaionsModals/
  * @type {*}
  * */
 
-const ZWorkspacesActionPopover: React.FC = () => {
+const ZWorkspacesActionPopover: React.FC<{
+	deleteButtonOnClickHn?: (event?: unknown) => void;
+}> = ({ deleteButtonOnClickHn }) => {
 	const { presentZIonModal: presentWorkspaceSettingModal } = useZIonModal(
 		ZWorkspacesSettingModal
 	);
@@ -129,7 +131,7 @@ const ZWorkspacesActionPopover: React.FC = () => {
 
 			{/*  */}
 			<ZIonItem
-				onClick={() => console.log('yes')}
+				onClick={deleteButtonOnClickHn}
 				className='ion-activatable ion-focusable zaions__cursor_pointer'
 			>
 				<ZIonIcon icon={trashBinOutline} className='me-2' color='danger' />{' '}

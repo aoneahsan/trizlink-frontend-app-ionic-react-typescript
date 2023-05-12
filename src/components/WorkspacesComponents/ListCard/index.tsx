@@ -33,12 +33,20 @@ import ZWorkspacesActionPopover from '@/components/InPageComponents/ZaionsPopove
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import {
+	useZIonAlert,
+	useZIonErrorAlert,
+	useZIonPopover,
+} from '@/ZaionsHooks/zionic-hooks';
+import { useZRQDeleteRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
+import { API_URL_ENUM } from '@/utils/enums';
+import CONSTANTS from '@/utils/constants';
 
 /**
  * Type Imports go down
@@ -55,7 +63,7 @@ import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
-import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
+import { showSuccessNotification } from '@/utils/notification';
 
 /**
  * Images Imports go down
@@ -67,6 +75,7 @@ import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
  * ? Like if you have a type for props it should be please Down
  * */
 interface ZWorkspacesCardInterface {
+	id?: string;
 	workspaceName: string;
 	workspacePagesCount: string;
 	userAvatar: string;
@@ -81,6 +90,7 @@ interface ZWorkspacesCardInterface {
  * */
 
 const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
+	id,
 	workspaceAvatar,
 	workspaceName,
 	workspacePagesCount,
@@ -93,8 +103,77 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 		{ showBadges: true }
 	); // popover hook to show UserInfoPopover
 
-	const { presentZIonPopover: presentWorkspacesActionsPopover } =
-		useZIonPopover(ZWorkspacesActionPopover); // popover hook to show UserInfoPopover
+	const { presentZIonAlert } = useZIonAlert(); // hook to present alert
+	const { presentZIonErrorAlert } = useZIonErrorAlert(); // hook to present error alert
+
+	const {
+		presentZIonPopover: presentWorkspacesActionsPopover,
+		dismissZIonPopover: dismissWorkspacesActionsPopover,
+	} = useZIonPopover(ZWorkspacesActionPopover, {
+		deleteButtonOnClickHn: () => {
+			void deleteWorkspaceConfirmModal();
+		},
+	}); // popover hook to show UserInfoPopover
+
+	// delete workspace api.
+	const { mutateAsync: deleteWorkspaceMutate } = useZRQDeleteRequest(
+		API_URL_ENUM.workspace_update_delete,
+		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
+	);
+
+	// delete Workspace Confirm Modal.
+	const deleteWorkspaceConfirmModal = async () => {
+		try {
+			if (id && id) {
+				await presentZIonAlert({
+					header: `Delete Workspace "${workspaceName}"`,
+					subHeader: 'Remove workspace from user account.',
+					message: 'Are you sure you want to delete this workspace?',
+					buttons: [
+						{
+							text: 'Cancel',
+							role: 'cancel',
+						},
+						{
+							text: 'Delete',
+							role: 'danger',
+							handler: () => {
+								void removeWorkspace();
+							},
+						},
+					],
+				});
+			} else {
+				await presentZIonErrorAlert();
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	/**
+	 * removeWorkspace will hit delete workspace folder api
+	 */
+	const removeWorkspace = async () => {
+		try {
+			if (id) {
+				// hitting the delete api
+				await deleteWorkspaceMutate({
+					itemIds: [id],
+					urlDynamicParts: [CONSTANTS.RouteParams.workspaceId],
+				});
+
+				// show success message after deleting
+				showSuccessNotification(`Workspace deleted successfully.`);
+
+				dismissWorkspacesActionsPopover();
+			} else {
+				await presentZIonErrorAlert();
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	return (
 		<ZIonCard className='zaions__cursor_pointer'>
