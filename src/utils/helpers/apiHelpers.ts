@@ -1,9 +1,12 @@
 import { API_URL_ENUM } from '@/utils/enums'
-import { getApiUrl } from '@/utils/helpers'
+import { getApiUrl, STORAGE } from '@/utils/helpers'
 import {
   API_DYNAMIC_PARTS,
   uiAvatarApiDefaultParams
 } from '@/utils/constants/apiConstants'
+import { LOCALSTORAGE_KEYS } from '@/utils/constants'
+import { Resetter, SetterOrUpdater } from 'recoil'
+import { UserAccountType } from '@/types/UserAccount/index.type'
 
 export const getUiAvatarApiUrl = ({
   name = uiAvatarApiDefaultParams.name,
@@ -32,4 +35,23 @@ export const getUiAvatarApiUrl = ({
     false,
     true
   )
+}
+
+export const clearAuthDataFromLocalStorageAndRecoil = async (
+  resetUserAccountState: Resetter
+) => {
+  try {
+    const authToken = await STORAGE.GET(LOCALSTORAGE_KEYS.AUTHTOKEN)
+    if (authToken) {
+      await Promise.all([
+        STORAGE.REMOVE(LOCALSTORAGE_KEYS.USERDATA),
+        STORAGE.REMOVE(LOCALSTORAGE_KEYS.AUTHTOKEN)
+      ])
+
+      resetUserAccountState()
+    }
+    return true
+  } catch (error) {
+    return false
+  }
 }
