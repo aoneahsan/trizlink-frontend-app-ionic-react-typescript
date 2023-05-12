@@ -16,12 +16,22 @@ const AuthenticateHOC: React.FC<AuthenticateHOCPropsType> = (props) => {
 	const setUserAccountState = useSetRecoilState(ZaionsUserAccountRState);
 
 	React.useEffect(() => {
-		void (async () => {
+		void (() => {
 			try {
-				// check api result
-				const ___response = await zAxiosApiRequest({
-					_url: API_URL_ENUM.verifyAuthenticationStatus,
-					_method: 'post',
+				// Checking if there is some data in local storage, if there is some data then, run verifyAuthenticationStatus api to check it is valid or not.
+				Promise.all([
+					STORAGE.GET(LOCALSTORAGE_KEYS.AUTHTOKEN),
+					STORAGE.GET(LOCALSTORAGE_KEYS.USERDATA),
+				]).then(async ([authToken, userData]) => {
+					if (authToken && userData) {
+						// check api result
+						const ___response = await zAxiosApiRequest({
+							_url: API_URL_ENUM.verifyAuthenticationStatus,
+							_method: 'post',
+						});
+					} else {
+						return '';
+					}
 				});
 			} catch (error: any) {
 				// Checking if Unauthorized.
