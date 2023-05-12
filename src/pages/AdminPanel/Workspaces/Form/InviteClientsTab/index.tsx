@@ -8,7 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { addOutline, closeOutline } from 'ionicons/icons';
+import { addOutline, closeOutline, starOutline } from 'ionicons/icons';
 import { FieldArray, useFormikContext } from 'formik';
 
 /**
@@ -16,14 +16,20 @@ import { FieldArray, useFormikContext } from 'formik';
  * ? Like import of custom components is a custom import
  * */
 import {
+	ZIonBadge,
 	ZIonButton,
 	ZIonCol,
 	ZIonGrid,
 	ZIonIcon,
 	ZIonInput,
+	ZIonItem,
+	ZIonLabel,
+	ZIonList,
+	ZIonPopover,
 	ZIonRow,
 	ZIonSelect,
 	ZIonSelectOption,
+	ZIonText,
 } from '@/components/ZIonComponents';
 import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
 import ZWorkspaceFormRoleSelectorPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/RoleSelectorPopover';
@@ -104,7 +110,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 								{/*  */}
 								<ZIonCol>
 									<div className='flex'>
-										<div className='w-4/5'>
+										<div className='w-3/4'>
 											<ZIonInput
 												name={`clients.${index}.email`}
 												label='name@example.com'
@@ -115,53 +121,25 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 												value={values.clients && values.clients[index].email}
 											/>
 										</div>
-										<div className='zaions_max__content ms-2'>
+										<div className='gap-2 zaions_max__content ms-2 d-flex'>
 											<ZIonButton
-												onClick={(event: unknown) => {
-													presentWorkspaceFormRoleSelectorPopover({
-														_event: event as Event,
-														_cssClass: 'workspace_form_role_popover_size',
-														_onDidDismiss: ({ detail }) => {
-															setFieldValue(
-																`clients.${index}.role`,
-																workspaceFormRoleEnum[
-																	detail.role as workspaceFormRoleEnum
-																] !== undefined
-																	? workspaceFormRoleEnum[
-																			detail.role as workspaceFormRoleEnum
-																	  ]
-																	: values.clients &&
-																			values.clients[index].role,
-																false
-															);
-														},
-														_dismissOnSelect: false,
-													});
-												}}
+												id={`role-popover-index-${index}`}
 												fill='outline'
 												className='m-0 d-flex h-100 text-transform-initial'
 											>
 												{values.clients && values.clients[index].role}
 											</ZIonButton>
+
+											{/*  */}
+											<ZIonButton
+												fill='outline'
+												id={`permission-popover-index-${index}`}
+												className='m-0 d-flex h-100 text-transform-initial'
+											>
+												{values.clients && values.clients[index].permission}
+											</ZIonButton>
 										</div>
 									</div>
-								</ZIonCol>
-
-								{/*  */}
-								<ZIonCol size='1.7'>
-									<ZIonButton
-										onClick={(event: unknown) => {
-											presentInviteClientsPermissionPopover({
-												_event: event as Event,
-												_cssClass: 'workspace_form_role_popover_size',
-												_dismissOnSelect: false,
-											});
-										}}
-										fill='outline'
-										className='m-0 d-flex h-100 text-transform-initial'
-									>
-										{values.clients && values.clients[index].role}
-									</ZIonButton>
 								</ZIonCol>
 
 								{/*  */}
@@ -170,6 +148,63 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 										<ZIonIcon icon={closeOutline} className='w-6 h-6 me-1' />
 									</ZIonButton>
 								</ZIonCol>
+
+								{/* Role popover */}
+								<ZIonPopover
+									trigger={`role-popover-index-${index}`}
+									triggerAction='click'
+									showBackdrop={false}
+									backdropDismiss
+									className='workspace_form_role_popover_size'
+									side='bottom'
+								>
+									<ZWorkspaceFormRoleSelectorPopover
+										dismissZIonPopover={(role) => {
+											setFieldValue(
+												`clients.${index}.role`,
+												workspaceFormRoleEnum[role as workspaceFormRoleEnum] !==
+													undefined
+													? workspaceFormRoleEnum[role as workspaceFormRoleEnum]
+													: values.clients && values.clients[index].role,
+												false
+											);
+										}}
+										selectedRole={
+											(values.clients && values.clients[index].role) ||
+											workspaceFormRoleEnum.Contributor
+										}
+									/>
+								</ZIonPopover>
+
+								{/* Permission popover */}
+								<ZIonPopover
+									trigger={`permission-popover-index-${index}`}
+									triggerAction='click'
+									showBackdrop={false}
+									backdropDismiss
+									className='workspace_form_permission_popover_size'
+									side='bottom'
+								>
+									<ZInviteClientsPermissionPopover
+										dismissZIonPopover={(permission) => {
+											setFieldValue(
+												`clients.${index}.permission`,
+												workspaceFormPermissionEnum[
+													permission as workspaceFormPermissionEnum
+												] !== undefined
+													? workspaceFormPermissionEnum[
+															permission as workspaceFormPermissionEnum
+													  ]
+													: values.clients && values.clients[index].permission,
+												false
+											);
+										}}
+										selectedPermission={
+											(values.clients && values.clients[index].permission) ||
+											workspaceFormPermissionEnum.team
+										}
+									/>
+								</ZIonPopover>
 							</ZIonRow>
 						))}
 						<ZIonRow className='w-full mt-4 ion-justify-content-center ps-3'>

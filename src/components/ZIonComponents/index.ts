@@ -48,6 +48,7 @@ export { default as ZIonSpinner } from './ZIonSpinner';
 export { default as ZIonSegment } from './ZIonSegment';
 export { default as ZIonSegmentButton } from './ZIonSegmentButton';
 export { default as ZIonCardSubtitle } from './ZIonCardSubtitle';
+export { default as ZIonPopover } from './ZIonPopover';
 
 //
 // import {

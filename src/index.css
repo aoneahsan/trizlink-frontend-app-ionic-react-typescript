@@ -889,7 +889,8 @@ ion-modal.zaions__modal_w100 {
 	--width: 150px;
 }
 
-.zaions_user_info_popover_size {
+.zaions_user_info_popover_size,
+.workspace_form_permission_popover_size {
 	--width: 300px;
 }
 

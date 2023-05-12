@@ -70,7 +70,8 @@ import { workspaceFormRoleEnum } from '@/types/AdminPanel/workspace';
 
 const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 	dismissZIonPopover: (data?: string, role?: string | undefined) => void;
-}> = ({ dismissZIonPopover }) => {
+	selectedRole: workspaceFormRoleEnum;
+}> = ({ dismissZIonPopover, selectedRole }) => {
 	return (
 		<ZIonRow>
 			<ZIonCol size='12' className='mt-2'>
@@ -91,8 +92,26 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 					{/*  */}
 					<ZIonCol size='6' className='gap-1 d-flex ion-align-items-center'>
 						<ZIonIcon
-							icon={checkmarkCircleOutline}
-							color='success'
+							icon={
+								selectedRole === workspaceFormRoleEnum.Contributor ||
+								selectedRole === workspaceFormRoleEnum.Administrator ||
+								selectedRole === workspaceFormRoleEnum.Writer
+									? checkmarkCircleOutline
+									: selectedRole === workspaceFormRoleEnum.Guest ||
+									  selectedRole === workspaceFormRoleEnum.Approver
+									? closeCircleOutline
+									: ''
+							}
+							color={
+								selectedRole === workspaceFormRoleEnum.Contributor ||
+								selectedRole === workspaceFormRoleEnum.Administrator ||
+								selectedRole === workspaceFormRoleEnum.Writer
+									? 'success'
+									: selectedRole === workspaceFormRoleEnum.Guest ||
+									  selectedRole === workspaceFormRoleEnum.Approver
+									? 'danger'
+									: undefined
+							}
 							className='w-5 h-5'
 						/>
 						<ZIonText>Create & edit posts</ZIonText>
@@ -101,8 +120,26 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 					{/*  */}
 					<ZIonCol size='6' className='gap-1 d-flex ion-align-items-center'>
 						<ZIonIcon
-							icon={closeCircleOutline}
-							color='danger'
+							icon={
+								selectedRole === workspaceFormRoleEnum.Administrator ||
+								selectedRole === workspaceFormRoleEnum.Approver
+									? checkmarkCircleOutline
+									: selectedRole === workspaceFormRoleEnum.Contributor ||
+									  selectedRole === workspaceFormRoleEnum.Guest ||
+									  selectedRole === workspaceFormRoleEnum.Writer
+									? closeCircleOutline
+									: ''
+							}
+							color={
+								selectedRole === workspaceFormRoleEnum.Administrator ||
+								selectedRole === workspaceFormRoleEnum.Approver
+									? 'success'
+									: selectedRole === workspaceFormRoleEnum.Contributor ||
+									  selectedRole === workspaceFormRoleEnum.Guest ||
+									  selectedRole === workspaceFormRoleEnum.Writer
+									? 'danger'
+									: undefined
+							}
 							className='w-5 h-5'
 						/>
 						<ZIonText>Approve & disapprove</ZIonText>
@@ -111,8 +148,26 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 					{/*  */}
 					<ZIonCol size='6' className='gap-1 d-flex ion-align-items-center'>
 						<ZIonIcon
-							icon={checkmarkCircleOutline}
-							color='success'
+							icon={
+								selectedRole === workspaceFormRoleEnum.Contributor ||
+								selectedRole === workspaceFormRoleEnum.Administrator
+									? checkmarkCircleOutline
+									: selectedRole === workspaceFormRoleEnum.Guest ||
+									  selectedRole === workspaceFormRoleEnum.Writer ||
+									  selectedRole === workspaceFormRoleEnum.Approver
+									? closeCircleOutline
+									: ''
+							}
+							color={
+								selectedRole === workspaceFormRoleEnum.Contributor ||
+								selectedRole === workspaceFormRoleEnum.Administrator
+									? 'success'
+									: selectedRole === workspaceFormRoleEnum.Guest ||
+									  selectedRole === workspaceFormRoleEnum.Writer ||
+									  selectedRole === workspaceFormRoleEnum.Approver
+									? 'danger'
+									: undefined
+							}
 							className='w-5 h-5'
 						/>
 						<ZIonText>Publish & schedule</ZIonText>
@@ -121,22 +176,49 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 					{/*  */}
 					<ZIonCol size='6' className='gap-1 d-flex ion-align-items-center'>
 						<ZIonIcon
-							icon={checkmarkCircleOutline}
-							color='success'
+							icon={
+								selectedRole === workspaceFormRoleEnum.Administrator
+									? checkmarkCircleOutline
+									: selectedRole === workspaceFormRoleEnum.Contributor ||
+									  selectedRole === workspaceFormRoleEnum.Guest ||
+									  selectedRole === workspaceFormRoleEnum.Writer ||
+									  selectedRole === workspaceFormRoleEnum.Approver
+									? closeCircleOutline
+									: ''
+							}
+							color={
+								selectedRole === workspaceFormRoleEnum.Administrator
+									? 'success'
+									: selectedRole === workspaceFormRoleEnum.Contributor ||
+									  selectedRole === workspaceFormRoleEnum.Guest ||
+									  selectedRole === workspaceFormRoleEnum.Writer ||
+									  selectedRole === workspaceFormRoleEnum.Approver
+									? 'danger'
+									: undefined
+							}
 							className='w-5 h-5'
 						/>
 						<ZIonText>Manage users & pages</ZIonText>
 					</ZIonCol>
 				</ZIonRow>
 			</ZIonCol>
+
+			{/*  */}
 			<ZIonCol size='12'>
 				<ZIonList lines='none'>
 					{/* Contributor */}
 					<ZIonItem
 						className='ion-activatable zaions__cursor_pointer'
-						color='primary'
+						color={
+							selectedRole === workspaceFormRoleEnum.Contributor
+								? 'primary'
+								: undefined
+						}
 						onClick={() => {
-							dismissZIonPopover('', workspaceFormRoleEnum.Contributor);
+							dismissZIonPopover(
+								workspaceFormRoleEnum.Contributor,
+								workspaceFormRoleEnum.Contributor
+							);
 						}}
 					>
 						<ZIonLabel className='ion-text-wrap'>
@@ -151,8 +233,16 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 					<ZIonItem
 						className='ion-activatable zaions__cursor_pointer'
 						onClick={() => {
-							dismissZIonPopover('', workspaceFormRoleEnum.Administrator);
+							dismissZIonPopover(
+								workspaceFormRoleEnum.Administrator,
+								workspaceFormRoleEnum.Administrator
+							);
 						}}
+						color={
+							selectedRole === workspaceFormRoleEnum.Administrator
+								? 'primary'
+								: undefined
+						}
 					>
 						<ZIonLabel className='ion-text-wrap'>
 							<h2>Administrator</h2>
@@ -167,8 +257,16 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 					<ZIonItem
 						className='ion-activatable zaions__cursor_pointer'
 						onClick={() => {
-							dismissZIonPopover('', workspaceFormRoleEnum.Writer);
+							dismissZIonPopover(
+								workspaceFormRoleEnum.Writer,
+								workspaceFormRoleEnum.Writer
+							);
 						}}
+						color={
+							selectedRole === workspaceFormRoleEnum.Writer
+								? 'primary'
+								: undefined
+						}
 					>
 						<ZIonLabel className='ion-text-wrap'>
 							<h2>Writer</h2>
@@ -180,8 +278,16 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 					<ZIonItem
 						className='ion-activatable zaions__cursor_pointer'
 						onClick={() => {
-							dismissZIonPopover('', workspaceFormRoleEnum.Approver);
+							dismissZIonPopover(
+								workspaceFormRoleEnum.Approver,
+								workspaceFormRoleEnum.Approver
+							);
 						}}
+						color={
+							selectedRole === workspaceFormRoleEnum.Approver
+								? 'primary'
+								: undefined
+						}
 					>
 						<ZIonLabel className='ion-text-wrap'>
 							<h2>Approver</h2>
@@ -193,8 +299,16 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 					<ZIonItem
 						className='ion-activatable zaions__cursor_pointer'
 						onClick={() => {
-							dismissZIonPopover('', workspaceFormRoleEnum.Guest);
+							dismissZIonPopover(
+								workspaceFormRoleEnum.Guest,
+								workspaceFormRoleEnum.Guest
+							);
 						}}
+						color={
+							selectedRole === workspaceFormRoleEnum.Guest
+								? 'primary'
+								: undefined
+						}
 					>
 						<ZIonLabel className='ion-text-wrap'>
 							<h2>Guest</h2>

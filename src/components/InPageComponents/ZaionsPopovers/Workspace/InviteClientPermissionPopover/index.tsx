@@ -24,6 +24,7 @@ import {
 	ZIonText,
 } from '@/components/ZIonComponents';
 import { starOutline } from 'ionicons/icons';
+import { workspaceFormPermissionEnum } from '@/types/AdminPanel/workspace';
 
 /**
  * Custom Hooks Imports go down
@@ -68,7 +69,8 @@ import { starOutline } from 'ionicons/icons';
 
 const ZInviteClientsPermissionPopover: React.FC<{
 	dismissZIonPopover: (data?: string, role?: string | undefined) => void;
-}> = ({ dismissZIonPopover }) => {
+	selectedPermission: workspaceFormPermissionEnum;
+}> = ({ dismissZIonPopover, selectedPermission }) => {
 	return (
 		<ZIonRow>
 			<ZIonCol size='12'>
@@ -76,7 +78,17 @@ const ZInviteClientsPermissionPopover: React.FC<{
 					{/* Term */}
 					<ZIonItem
 						className='ion-activatable zaions__cursor_pointer'
-						color='primary'
+						color={
+							selectedPermission === workspaceFormPermissionEnum.team
+								? 'primary'
+								: undefined
+						}
+						onClick={() => {
+							dismissZIonPopover(
+								workspaceFormPermissionEnum.team,
+								workspaceFormPermissionEnum.team
+							);
+						}}
 					>
 						<ZIonLabel className='ion-text-wrap'>
 							<h2>Term</h2>
@@ -86,8 +98,18 @@ const ZInviteClientsPermissionPopover: React.FC<{
 
 					{/* Client */}
 					<ZIonItem
+						color={
+							selectedPermission === workspaceFormPermissionEnum.client
+								? 'primary'
+								: undefined
+						}
 						className='ion-activatable zaions__cursor_pointer'
-						color='primary'
+						onClick={() => {
+							dismissZIonPopover(
+								workspaceFormPermissionEnum.client,
+								workspaceFormPermissionEnum.client
+							);
+						}}
 					>
 						<ZIonLabel className='ion-text-wrap'>
 							<h2>
