@@ -25,12 +25,12 @@ const AuthenticateHOC: React.FC<AuthenticateHOCPropsType> = (props) => {
 				]).then(async ([authToken, userData]) => {
 					if (authToken && userData) {
 						// check api result
-						const ___response = await zAxiosApiRequest({
+						await zAxiosApiRequest({
 							_url: API_URL_ENUM.verifyAuthenticationStatus,
 							_method: 'post',
 						});
 					} else {
-						return '';
+						return null;
 					}
 				});
 			} catch (error: any) {

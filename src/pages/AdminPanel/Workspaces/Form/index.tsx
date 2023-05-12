@@ -64,7 +64,7 @@ import { AxiosError } from 'axios';
 import { showErrorNotification } from '@/utils/notification';
 import { reportCustomError } from '@/utils/customErrorType';
 import { useRecoilState } from 'recoil';
-import { WorkspaceRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
+import { WorkspaceRStateAtomFamily } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 
 /**
  * Recoil State Imports go down
@@ -108,7 +108,7 @@ const ZWorkspaceForm: React.FC = () => {
 
 	// Recoil State that hold workspaces.
 	const [workspaceState, setWorkspaceState] = useRecoilState(
-		WorkspaceRStateAtom(editWorkspaceId)
+		WorkspaceRStateAtomFamily(editWorkspaceId)
 	);
 
 	// fetching link-in-bio with the editWorkspaceId data from backend.

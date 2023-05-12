@@ -73,7 +73,7 @@ import ZAddNewWorkspaceModal from '@/components/InPageComponents/ZaionsModals/Wo
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
-import { WorkspaceRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
+import { WorkspaceRStateAtomFamily } from '@/ZaionsStore/UserDashboard/Workspace/index.recoil';
 import { reportCustomError } from '@/utils/customErrorType';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
@@ -94,7 +94,7 @@ const ZWorkspaceListPage: React.FC = () => {
 
 	// Recoil State that hold workspaces.
 	const [workspaceState, setWorkspaceState] = useRecoilState(
-		WorkspaceRStateAtom('')
+		WorkspaceRStateAtomFamily('')
 	);
 
 	// Custom Hooks
@@ -191,17 +191,6 @@ const ZWorkspaceListPage: React.FC = () => {
 												presentZWorkspaceCreateModal({
 													_cssClass: 'create-workspace-modal-size',
 													_onDidDismiss: (event) => {
-														alert(
-															JSON.stringify(
-																{
-																	id: event.detail.data,
-																	role: event.detail.role,
-																	c: event.detail.role === 'success',
-																},
-																null,
-																2
-															)
-														);
 														if (
 															event.detail.data &&
 															event.detail.role === 'success'
