@@ -8,34 +8,24 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import {
-	ZIonBadge,
-	ZIonCard,
-	ZIonCardContent,
-	ZIonCol,
-	ZIonGrid,
-	ZIonIcon,
-	ZIonImg,
-	ZIonRow,
-	ZIonText,
-} from '@/components/ZIonComponents';
-import {
-	checkmarkCircleOutline,
-	checkmarkDoneCircleOutline,
-	ellipseOutline,
-	lockClosedOutline,
-	shieldCheckmarkOutline,
-	starOutline,
-	timeOutline,
-} from 'ionicons/icons';
-import { ProductLogo } from '@/assets/images';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
-import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
+import { lockClosedOutline, timeOutline } from 'ionicons/icons';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
+import {
+	ZIonBadge,
+	ZIonCol,
+	ZIonGrid,
+	ZIonIcon,
+	ZIonRow,
+	ZIonText,
+} from '@/components/ZIonComponents';
+import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
+import ZWorkspaceApprovalCards from '@/components/WorkspacesComponents/ApprovalCards';
+import ZWorkspaceApprovalToggler from '@/components/WorkspacesComponents/ApprovalToggler';
 
 /**
  * Custom Hooks Imports go down
@@ -82,82 +72,7 @@ const ZApprovalTab: React.FC = () => {
 	return (
 		<ZIonGrid>
 			{/* Cards */}
-			<ZIonRow className='px-4'>
-				<ZIonCol>
-					<ZIonCard>
-						<ZIonCardContent>
-							<ZIonIcon icon={ellipseOutline} className='w-8 h-8' />
-							<ZIonText className='mt-2 d-block fs-5' color='dark'>
-								None
-							</ZIonText>
-							<ZIonText className='d-block'>
-								Approvals are disabled and not needed for publishing
-							</ZIonText>
-						</ZIonCardContent>
-					</ZIonCard>
-				</ZIonCol>
-
-				<ZIonCol>
-					<ZIonCard>
-						<ZIonCardContent>
-							<ZIonIcon icon={checkmarkCircleOutline} className='w-8 h-8' />
-							<ZIonText className='mt-2 d-block fs-5' color='dark'>
-								Optional
-							</ZIonText>
-							<ZIonText className='d-block'>
-								Approvals are enabled, but not required for publishing
-							</ZIonText>
-						</ZIonCardContent>
-					</ZIonCard>
-				</ZIonCol>
-
-				<ZIonCol>
-					<ZIonCard>
-						<ZIonCardContent>
-							<ZIonIcon icon={checkmarkDoneCircleOutline} className='w-8 h-8' />
-							<ZIonText
-								className='mt-2 d-flex ion-align-items-center gap-2 fs-5'
-								color='dark'
-							>
-								Required{' '}
-								<ZIonBadge className='d-flex ion-align-items-center gap-1'>
-									<ZIonIcon icon={starOutline} />{' '}
-									<ZIonText className='pt-1'>Pro</ZIonText>
-								</ZIonBadge>
-							</ZIonText>
-							<ZIonText className='d-block'>
-								A member has to approve the content before publishing
-							</ZIonText>
-						</ZIonCardContent>
-					</ZIonCard>
-				</ZIonCol>
-
-				<ZIonCol>
-					<ZIonCard>
-						<ZIonCardContent>
-							<ZIonIcon icon={shieldCheckmarkOutline} className='w-8 h-8' />
-							<ZIonText
-								className='mt-2 d-flex ion-align-items-center gap-2 fs-5'
-								color='dark'
-							>
-								Multi-level{' '}
-								<ZIonBadge
-									className='d-flex ion-align-items-center gap-1'
-									color='warning'
-								>
-									<ZIonIcon icon={starOutline} color='light' />{' '}
-									<ZIonText className='pt-1' color='light'>
-										ENT
-									</ZIonText>
-								</ZIonBadge>
-							</ZIonText>
-							<ZIonText className='d-block'>
-								2+ members need to approve content before publishing
-							</ZIonText>
-						</ZIonCardContent>
-					</ZIonCard>
-				</ZIonCol>
-			</ZIonRow>
+			<ZWorkspaceApprovalCards />
 
 			{/*  */}
 			<ZIonRow className='ion-justify-content-center mt-4'>
@@ -184,36 +99,16 @@ const ZApprovalTab: React.FC = () => {
 					</ZIonRow>
 
 					{/* Schedule posts approval */}
-					<ZIonRow className='mt-3 ion-align-items-center'>
-						<ZIonCol
-							className='d-flex ion-align-items-center gap-2 ps-0'
-							size='10'
-						>
-							<ZIonText className='d-flex ion-align-items-center gap-1 fs-5'>
-								<ZIonIcon icon={timeOutline} size='large' /> Schedule posts
-								automatically on approval
-							</ZIonText>
-						</ZIonCol>
-						<ZIonCol className='ion-text-end'>
-							<ZRCSwitch />
-						</ZIonCol>
-					</ZIonRow>
+					<ZWorkspaceApprovalToggler
+						icon={timeOutline}
+						text='Schedule posts automatically on approval'
+					/>
 
 					{/* Lock content approval */}
-					<ZIonRow className='mt-3 ion-align-items-center'>
-						<ZIonCol
-							className='d-flex ion-align-items-center gap-2 ps-0'
-							size='10'
-						>
-							<ZIonText className='d-flex ion-align-items-center gap-1 fs-5'>
-								<ZIonIcon icon={lockClosedOutline} size='large' /> Lock content
-								after approval
-							</ZIonText>
-						</ZIonCol>
-						<ZIonCol className='ion-text-end'>
-							<ZRCSwitch />
-						</ZIonCol>
-					</ZIonRow>
+					<ZWorkspaceApprovalToggler
+						icon={lockClosedOutline}
+						text='Lock content after approval'
+					/>
 				</ZIonCol>
 			</ZIonRow>
 		</ZIonGrid>

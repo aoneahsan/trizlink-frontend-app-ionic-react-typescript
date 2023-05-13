@@ -145,7 +145,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 							{/* Add Cover */}
 							<ZIonRow
 								className={classNames({
-									'mx-3 mt-3': true,
+									'mx-3 mt-3 zaions__cursor_pointer': true,
 									'h-[230px]':
 										pageType === workspaceFormConnectPagesEnum.facebook ||
 										pageType === workspaceFormConnectPagesEnum.pinterest,
@@ -189,7 +189,8 @@ const ZWorkspaceMockupPageModal: React.FC<{
 							{/* Add Profile Picture */}
 							<ZIonRow
 								className={classNames({
-									'mx-3 position-relative z-50 w-max': true,
+									'mx-3 position-relative z-50 w-max zaions__cursor_pointer':
+										true,
 
 									'mt-[-6.5rem]':
 										pageType === workspaceFormConnectPagesEnum.facebook ||

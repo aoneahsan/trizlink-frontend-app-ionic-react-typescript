@@ -150,12 +150,7 @@ const ZAddNewWorkspaceModal: React.FC<{
 						return errors;
 					}}
 					onSubmit={(values) => {
-						void formikSubmitHandler(
-							zStringify({
-								title: values.workspaceName,
-								timezone: values.workspaceTimezone,
-							})
-						);
+						void formikSubmitHandler(zStringify(values));
 					}}
 				>
 					{({

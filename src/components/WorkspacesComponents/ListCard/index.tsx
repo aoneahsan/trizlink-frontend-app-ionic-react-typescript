@@ -64,6 +64,10 @@ import CONSTANTS from '@/utils/constants';
  * */
 import classes from './styles.module.css';
 import { showSuccessNotification } from '@/utils/notification';
+import { createRedirectRoute } from '@/utils/helpers';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { workspaceFormTabEnum } from '@/types/AdminPanel/workspace';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 /**
  * Images Imports go down
@@ -105,6 +109,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 
 	const { presentZIonAlert } = useZIonAlert(); // hook to present alert
 	const { presentZIonErrorAlert } = useZIonErrorAlert(); // hook to present error alert
+	const { zNavigatePushRoute } = useZNavigate();
 
 	const {
 		presentZIonPopover: presentWorkspacesActionsPopover,
@@ -112,6 +117,21 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 	} = useZIonPopover(ZWorkspacesActionPopover, {
 		deleteButtonOnClickHn: () => {
 			void deleteWorkspaceConfirmModal();
+		},
+		EditButtonOnClickHn: () => {
+			if (id)
+				zNavigatePushRoute(
+					createRedirectRoute({
+						url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
+						params: [CONSTANTS.RouteParams.editWorkspaceIdParam],
+						values: [id],
+						routeSearchParams: {
+							tab: workspaceFormTabEnum.inviteClients,
+						},
+					})
+				);
+
+			dismissWorkspacesActionsPopover();
 		},
 	}); // popover hook to show UserInfoPopover
 

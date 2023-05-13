@@ -10,6 +10,7 @@ import React from 'react';
  * */
 import {
 	checkmarkOutline,
+	pencilOutline,
 	peopleOutline,
 	pricetagOutline,
 	settingsOutline,
@@ -73,7 +74,8 @@ import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 
 const ZWorkspacesActionPopover: React.FC<{
 	deleteButtonOnClickHn?: (event?: unknown) => void;
-}> = ({ deleteButtonOnClickHn }) => {
+	EditButtonOnClickHn?: (event?: unknown) => void;
+}> = ({ deleteButtonOnClickHn, EditButtonOnClickHn }) => {
 	const { presentZIonModal: presentWorkspaceSettingModal } = useZIonModal(
 		ZWorkspacesSettingModal
 	);
@@ -129,7 +131,16 @@ const ZWorkspacesActionPopover: React.FC<{
 				<ZIonText>Approvals settings</ZIonText>
 			</ZIonItem>
 
-			{/*  */}
+			{/* Edit */}
+			<ZIonItem
+				onClick={EditButtonOnClickHn}
+				className='ion-activatable ion-focusable zaions__cursor_pointer'
+			>
+				<ZIonIcon icon={pencilOutline} className='me-2' />{' '}
+				<ZIonText>Edit</ZIonText>
+			</ZIonItem>
+
+			{/* Delete */}
 			<ZIonItem
 				onClick={deleteButtonOnClickHn}
 				className='ion-activatable ion-focusable zaions__cursor_pointer'

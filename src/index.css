@@ -246,6 +246,14 @@ span.new {
 	border-bottom: 2px solid #edf5fd;
 }
 
+.z-ion-border-primary {
+	border: 1px solid var(--ion-color-primary);
+}
+
+.z-ion-border-secondary {
+	border: 1px solid var(--ion-color-secondary);
+}
+
 /* Color Set */
 .zaions__primary_set {
 	background: rgba(var(--ion-color-primary-rgb), 0.2);
@@ -904,6 +912,7 @@ ion-modal.zaions__modal_w100 {
 
 .workspace_form_role_popover_size {
 	--width: 500px;
+	--height: 350px;
 }
 
 /* Link-in-bio design-theme-customAppearance & design-block-customAppearance buttons styles */

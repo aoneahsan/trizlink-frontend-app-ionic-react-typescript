@@ -12,6 +12,7 @@ export enum workspaceFormTabEnum {
 	workspaceDetailForm = 'workspaceDetailForm',
 	inviteClients = 'inviteClients',
 	connectPages = 'connectPages',
+	Approval = 'Approval',
 }
 
 export enum workspaceFormRoleEnum {
@@ -56,6 +57,13 @@ export enum workspaceFormConnectPagesCardEnum {
 	account = 'account',
 }
 
+export enum workspaceApprovalCardEnum {
+	none = 'none',
+	optional = 'optional',
+	required = 'required',
+	multiLevel = 'multiLevel',
+}
+
 // Interfaces
 export interface workspaceInviteClientInterface {
 	avatar?: string;
@@ -69,6 +77,12 @@ export interface workspaceInterface {
 	workspaceName?: string;
 	workspaceTimezone?: string;
 	clients?: workspaceInviteClientInterface[];
+}
+export interface ApprovalCardInterface {
+	icon: string;
+	title: ReactNode;
+	subtitle: string;
+	cardType: workspaceApprovalCardEnum;
 }
 
 // Pages info cards items types/enums
