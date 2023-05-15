@@ -11,14 +11,18 @@ import { useParams } from 'react-router';
  * */
 import routeQueryString from 'qs';
 import { AxiosError } from 'axios';
+import { arrowBack } from 'ionicons/icons';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
+import ZWorkspaceFormApprovalTab from './ApprovalTab';
 import {
+	ZIonButton,
 	ZIonCol,
 	ZIonHeader,
+	ZIonIcon,
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
@@ -36,6 +40,7 @@ import {
 	useZRQGetRequest,
 	useZRQUpdateRequest,
 } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -56,7 +61,7 @@ import {
 	workspaceInterface,
 } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import ZWorkspaceFormApprovalTab from './ApprovalTab';
+import classNames from 'classnames';
 
 /**
  * Recoil State Imports go down
@@ -93,6 +98,10 @@ const ZWorkspaceForm: React.FC = () => {
 	// useZNavigate for redirection
 	const { zNavigatePushRoute } = useZNavigate();
 
+	// Media Query Scale
+	const { isXlScale, isLgScale, isMdScale, isSmScale, isXsScale } =
+		useZMediaQueryScale();
+
 	// getting workspace id from route (url), when user refresh the page the id from route will be get and workspace of that id will be fetch from backend.
 	const { editWorkspaceId } = useParams<{
 		editWorkspaceId: string;
@@ -110,7 +119,7 @@ const ZWorkspaceForm: React.FC = () => {
 			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET],
 			_authenticated: true,
 			_itemsIds: [editWorkspaceId],
-			_urlDynamicParts: [CONSTANTS.RouteParams.workspaceId],
+			_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 			_shouldFetchWhenIdPassed: !editWorkspaceId ? true : false,
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
 		});
@@ -152,6 +161,30 @@ const ZWorkspaceForm: React.FC = () => {
 		<ZaionsIonPage pageTitle='Zaions Workspace Form Page'>
 			<ZIonHeader className='ion-no-border'>
 				<ZIonRow className='pb-3 pt-2 ion-justify-content-center ion-align-items-center'>
+					{/*  */}
+					<ZIonCol
+						sizeXl='1'
+						sizeLg='1'
+						sizeMd='12'
+						sizeSm='12'
+						sizeXs='12'
+						className={classNames({
+							'z-50': true,
+							fixed: isLgScale,
+							'top-[5%] start-[1%]': isXlScale,
+							'top-[2%] start-[0%]': !isXlScale && isLgScale,
+							'mb-3': !isMdScale && isSmScale,
+						})}
+					>
+						<ZIonButton
+							expand={!isMdScale ? 'block' : undefined}
+							className='text-transform-initial ion-no-margin ms-2'
+							routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}
+						>
+							<ZIonIcon icon={arrowBack} className='me-2' /> Workspaces
+						</ZIonButton>
+					</ZIonCol>
+
 					{/*  */}
 					<ZIonCol className='ion-text-center' size='11'>
 						{/* Tab Title */}

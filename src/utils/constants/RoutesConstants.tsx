@@ -89,7 +89,8 @@ const ZaionsRoutes = {
 		Workspaces: {
 			Main: '/workspaces',
 			Create: '/workspaces/create',
-			Edit: `/workspaces/edit/${CONSTANTS.RouteParams.editWorkspaceIdParam}`,
+			Edit: `/workspaces/edit/${CONSTANTS.RouteParams.workspace.editWorkspaceIdParam}`,
+			View: `/workspaces/view/${CONSTANTS.RouteParams.workspace.workspaceId}`,
 		},
 
 		ZaionsDashboard: {

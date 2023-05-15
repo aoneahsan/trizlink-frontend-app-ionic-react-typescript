@@ -191,7 +191,9 @@ const ZWorkspaceFormApprovalTab: React.FC = () => {
 											className='text-transform-initial'
 											routerLink={createRedirectRoute({
 												url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
-												params: [CONSTANTS.RouteParams.editWorkspaceIdParam],
+												params: [
+													CONSTANTS.RouteParams.workspace.editWorkspaceIdParam,
+												],
 												values: [editWorkspaceId],
 												routeSearchParams: {
 													tab: workspaceFormTabEnum.connectPages,

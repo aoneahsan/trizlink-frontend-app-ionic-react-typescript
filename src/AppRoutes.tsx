@@ -72,6 +72,7 @@ import PublicRoute from './components/PublicRoute';
 import PrivateRoute from './components/PrivateRoute';
 import ZWorkspaceListPage from './pages/AdminPanel/Workspaces';
 import ZWorkspaceForm from './pages/AdminPanel/Workspaces/Form';
+import ViewSingleWorkspace from './pages/AdminPanel/Workspaces/ViewSingle';
 
 // Functional Component
 const AppRoutes: React.FC = () => {
@@ -171,6 +172,12 @@ const AppRoutes: React.FC = () => {
 					exact
 					path={ZaionsRoutes.AdminPanel.Workspaces.Edit}
 					Component={ZWorkspaceForm}
+				/>
+
+				<PrivateRoute
+					exact
+					path={ZaionsRoutes.AdminPanel.Workspaces.View}
+					Component={ViewSingleWorkspace}
 				/>
 
 				{/* {ENVS.isProduction && (

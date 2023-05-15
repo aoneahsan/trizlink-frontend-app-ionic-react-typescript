@@ -238,10 +238,13 @@ const RouteParams = {
 	editLinkInBioPageParam: ':editLinkInBioPage',
 	editLinkInBioStepParam: ':editLinkInBioStep',
 	folderIdToGetShortLinksOrLinkInBio: ':folderId?',
-	editWorkspaceIdParam: ':editWorkspaceId',
 
 	//
-	workspaceId: ':workspaceId',
+	workspace: {
+		workspaceId: ':workspaceId',
+		editWorkspaceIdParam: ':editWorkspaceId',
+	},
+
 	// folderIdToGetShortLinksOrLinkInBio: 'all',
 };
 

@@ -7,14 +7,14 @@ import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
 
 // Type
 type ZIonBadgeType = {
-  children: ReactNode;
-  className?: string;
-  color?: ZIonColorType;
-  mode?: ZIonModeType;
+	children?: ReactNode;
+	className?: string;
+	color?: ZIonColorType;
+	mode?: ZIonModeType;
 };
 
 const ZIonBadge = (props: ZIonBadgeType) => {
-  return <IonBadge {...props}>{props.children}</IonBadge>;
+	return <IonBadge {...props}>{props.children}</IonBadge>;
 };
 
 export default ZIonBadge;

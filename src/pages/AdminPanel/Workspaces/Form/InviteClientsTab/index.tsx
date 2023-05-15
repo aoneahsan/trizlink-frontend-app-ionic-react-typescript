@@ -392,7 +392,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 													routerLink={createRedirectRoute({
 														url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
 														params: [
-															CONSTANTS.RouteParams.editWorkspaceIdParam,
+															CONSTANTS.RouteParams.workspace.editWorkspaceIdParam,
 														],
 														values: [editWorkspaceId],
 														routeSearchParams: {
@@ -419,7 +419,8 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 													routerLink={createRedirectRoute({
 														url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
 														params: [
-															CONSTANTS.RouteParams.editWorkspaceIdParam,
+															CONSTANTS.RouteParams.workspace
+																.editWorkspaceIdParam,
 														],
 														values: [editWorkspaceId],
 														routeSearchParams: {
@@ -449,7 +450,8 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 														routerLink={createRedirectRoute({
 															url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
 															params: [
-																CONSTANTS.RouteParams.editWorkspaceIdParam,
+																CONSTANTS.RouteParams.workspace
+																	.editWorkspaceIdParam,
 															],
 															values: [editWorkspaceId],
 															routeSearchParams: {

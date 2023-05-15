@@ -50,6 +50,7 @@ import classNames from 'classnames';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZWorkspaceConnectPagesModal from '@/components/InPageComponents/ZaionsModals/Workspace/ConnectPagesModal';
 import { brandColors } from '@/utils/constants';
+import ZWorkspaceMockupPageModal from '@/components/InPageComponents/ZaionsModals/Workspace/MockupPageModal';
 
 /**
  * Recoil State Imports go down
@@ -103,6 +104,16 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 			pageType: pageType,
 		}
 	); // Modal hook to show workspace form modal (create/edit form)
+
+	//
+	const { presentZIonModal: presentZWorkspaceMockupPageModal } = useZIonModal(
+		ZWorkspaceMockupPageModal,
+		{
+			pageType: workspaceFormConnectPagesEnum.universalContent,
+			color: brandColors.tiktok,
+			logo: gridOutline,
+		}
+	);
 
 	// Setting the content of card accounting to type.
 	useEffect(() => {
@@ -211,7 +222,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 
 	return (
 		<ZIonCard
-			className='zaions__cursor_pointer'
+			className='zaions__cursor_pointer h-100'
 			onMouseEnter={() => {
 				setCompSate((oldValues) => ({
 					...oldValues,
@@ -228,15 +239,19 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 				backgroundColor: compState.isActive ? compState.activeColor : '',
 			}}
 			onClick={() => {
-				presentWorkspaceConnectPagesModal({
-					_cssClass: 'workspace-connect-pages-modal-size',
-				});
+				pageType === workspaceFormConnectPagesEnum.universalContent
+					? presentZWorkspaceMockupPageModal({
+							_cssClass: 'workspace-connect-pages-modal-size',
+					  })
+					: presentWorkspaceConnectPagesModal({
+							_cssClass: 'workspace-connect-pages-modal-size',
+					  });
 			}}
 		>
 			<ZIonCardContent className='pt-4 pb-3 ion-text-center'>
 				<ZIonIcon
 					icon={icon || compState.iconName}
-					className='w-10 h-10 pt-1'
+					className='w-10 h-10 pt-2 mt-1'
 					style={{ color: compState.activeColor }}
 					color={compState.isActive ? 'light' : undefined}
 				/>

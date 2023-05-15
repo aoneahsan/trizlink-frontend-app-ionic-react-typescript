@@ -17,8 +17,7 @@ import {
 	ZIonItem,
 	ZIonRow,
 } from '@/components/ZIonComponents';
-import { IonSelect, IonSelectOption } from '@ionic/react';
-import { Form, Formik } from 'formik';
+import {  Formik } from 'formik';
 import { ZTimezoneSelector } from '@/components/CustomComponents/ZTimezone';
 
 /**

@@ -64,6 +64,13 @@ export enum workspaceApprovalCardEnum {
 	multiLevel = 'multiLevel',
 }
 
+export enum contentStyleInterface {
+	default = 'default',
+	classic = 'classic',
+	modern = 'modern',
+	compact = 'compact',
+}
+
 // Interfaces
 export interface workspaceInviteClientInterface {
 	avatar?: string;

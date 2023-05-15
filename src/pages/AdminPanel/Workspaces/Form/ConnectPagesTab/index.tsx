@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Packages Imports go down
@@ -11,6 +11,14 @@ import React from 'react';
 import routeQueryString from 'qs';
 import { useParams } from 'react-router';
 import classNames from 'classnames';
+import {
+	addCircleOutline,
+	addOutline,
+	caretBackOutline,
+	caretForwardOutline,
+	closeCircle,
+} from 'ionicons/icons';
+import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 
 /**
  * Custom Imports go down
@@ -29,12 +37,13 @@ import {
 	ZIonText,
 } from '@/components/ZIonComponents';
 import ZWorkspaceFromConnectPagesCard from '@/components/WorkspacesComponents/ConnectPagesCard';
+import ZWorkspaceFooterSteps from '@/components/WorkspacesComponents/FooterSteps';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -52,10 +61,6 @@ import {
 	workspaceFormConnectPagesEnum,
 	workspaceFormTabEnum,
 } from '@/types/AdminPanel/workspace';
-import ZWorkspaceFooterSteps from '@/components/WorkspacesComponents/FooterSteps';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import { ProductLogo } from '@/assets/images';
-import { addCircleOutline, addOutline, closeCircle } from 'ionicons/icons';
 
 /**
  * Recoil State Imports go down
@@ -71,6 +76,7 @@ import { addCircleOutline, addOutline, closeCircle } from 'ionicons/icons';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
+import { ProductLogo } from '@/assets/images';
 
 /**
  * Component props type go down
@@ -113,7 +119,7 @@ const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 	return (
 		<>
 			<ZIonContent className='mt-4'>
-				<ZIonRow className='mx-auto ion-align-items-center ion-justify-content-center'>
+				<ZIonRow className='mx-auto ion-align-items-center ion-justify-content-center gap-y-4'>
 					{/* Facebook */}
 					{pagesCards.map((el, index) => {
 						return (
@@ -124,6 +130,7 @@ const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 								sizeLg='3'
 								sizeXl='2'
 								key={index}
+								className='h-[11rem]'
 							>
 								<ZWorkspaceFromConnectPagesCard pageType={el} />
 							</ZIonCol>
@@ -131,52 +138,75 @@ const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 					})}
 
 					{/* Just for Testing */}
-					<ZIonCol sizeXs='12' sizeSm='4' sizeMd='4' sizeLg='3' sizeXl='2'>
-						<ZIonCard className=''>
-							<ZIonCardContent className='pb-3 ion-text-center'>
-								<div className='w-100 flex ion-align-items-center ion-justify-content-between pb-1 '>
-									<ZIonButton
-										className='ion-no-padding ion-no-margin'
-										fill='default'
-									>
-										<ZIonIcon icon={addCircleOutline} className='w-7 h-7' />
-									</ZIonButton>
-									<ZIonButton
-										className='ion-no-padding ion-no-margin'
-										fill='default'
-									>
-										<ZIonIcon
-											icon={closeCircle}
-											color='danger'
-											className='w-7 h-7'
-										/>
-									</ZIonButton>
-								</div>
-								<ZIonImg src={ProductLogo} className='w-10 h-10 pt-1 mx-auto' />
-								{/*  */}
-								<ZIonText className='mt-1 ion-text-center d-block'>
-									zaions
-								</ZIonText>
+					<ZIonCol
+						sizeXs='12'
+						sizeSm='4'
+						sizeMd='4'
+						sizeLg='3'
+						sizeXl='2'
+						className='h-[11rem]'
+					>
+						<Swiper
+							className='h-[11rem]'
+							spaceBetween={0}
+							slidesPerView={1}
+							onSlideChange={() => {}}
+							onSwiper={(_) => {}}
+						>
+							{[1, 2, 3, 4].map((el) => (
+								<SwiperSlide className='h-100' key={el}>
+									<ZIonCard className='h-[94%]'>
+										<ZIonCardContent className='pb-3 ion-text-center ion-no-padding ion-padding-horizontal py-1'>
+											<div className='w-100 flex ion-align-items-center ion-justify-content-between pb-1 '>
+												<ZIonButton
+													className='ion-no-padding ion-no-margin'
+													fill='default'
+												>
+													<ZIonIcon
+														icon={addCircleOutline}
+														className='w-7 h-7'
+													/>
+												</ZIonButton>
+												<ZIonButton
+													className='ion-no-padding ion-no-margin'
+													fill='default'
+												>
+													<ZIonIcon
+														icon={closeCircle}
+														color='danger'
+														className='w-7 h-7'
+													/>
+												</ZIonButton>
+											</div>
 
-								{/*  */}
-								<ZIonText
-									className={classNames({
-										'ion-text-center d-block zaions__fs_13 text-muted': true,
-									})}
-								>
-									@zaions
-								</ZIonText>
+											{/*  */}
+											<ZIonImg
+												src={ProductLogo}
+												className='w-10 h-10 pt-1 mx-auto'
+											/>
+											{/*  */}
+											<ZIonText className='mt-1 ion-text-center d-block'>
+												zaions {el}
+											</ZIonText>
 
-								{/*  */}
-								<ZIonText
-									className={classNames({
-										'ion-text-center d-block': true,
-									})}
-								>
-									CONNECT
-								</ZIonText>
-							</ZIonCardContent>
-						</ZIonCard>
+											{/*  */}
+											<ZIonText
+												className={classNames({
+													'ion-text-center d-block zaions__fs_13 text-muted':
+														true,
+												})}
+											>
+												@zaions
+											</ZIonText>
+
+											{/* Navigation buttons */}
+											<ConnectPagesCardSwiperButtons />
+											{/*  */}
+										</ZIonCardContent>
+									</ZIonCard>
+								</SwiperSlide>
+							))}
+						</Swiper>
 					</ZIonCol>
 				</ZIonRow>
 			</ZIonContent>
@@ -217,7 +247,9 @@ const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 										className='text-transform-initial'
 										routerLink={createRedirectRoute({
 											url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
-											params: [CONSTANTS.RouteParams.editWorkspaceIdParam],
+											params: [
+												CONSTANTS.RouteParams.workspace.editWorkspaceIdParam,
+											],
 											values: [editWorkspaceId],
 											routeSearchParams: {
 												tab: workspaceFormTabEnum.inviteClients,
@@ -241,7 +273,9 @@ const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 										className='text-transform-initial'
 										routerLink={createRedirectRoute({
 											url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
-											params: [CONSTANTS.RouteParams.editWorkspaceIdParam],
+											params: [
+												CONSTANTS.RouteParams.workspace.editWorkspaceIdParam,
+											],
 											values: [editWorkspaceId],
 											routeSearchParams: {
 												tab: workspaceFormTabEnum.Approval,
@@ -262,6 +296,28 @@ const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 				</div>
 			</ZIonFooter>
 		</>
+	);
+};
+
+const ConnectPagesCardSwiperButtons: React.FC = () => {
+	const swiper = useSwiper();
+	return (
+		<div className='w-100 flex ion-align-items-center ion-justify-content-between pb-1 '>
+			<ZIonButton
+				className='ion-no-padding ion-no-margin'
+				fill='default'
+				onClick={() => swiper.slidePrev()}
+			>
+				<ZIonIcon icon={caretBackOutline} className='w-7 h-7' />
+			</ZIonButton>
+			<ZIonButton
+				className='ion-no-padding ion-no-margin'
+				fill='default'
+				onClick={() => swiper.slideNext()}
+			>
+				<ZIonIcon icon={caretForwardOutline} className='w-7 h-7' />
+			</ZIonButton>
+		</div>
 	);
 };
 

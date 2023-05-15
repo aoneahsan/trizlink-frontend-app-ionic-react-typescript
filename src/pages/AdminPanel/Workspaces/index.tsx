@@ -201,7 +201,8 @@ const ZWorkspaceListPage: React.FC = () => {
 																createRedirectRoute({
 																	url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
 																	params: [
-																		CONSTANTS.RouteParams.editWorkspaceIdParam,
+																		CONSTANTS.RouteParams.workspace
+																			.editWorkspaceIdParam,
 																	],
 																	values: [event.detail.data],
 																	routeSearchParams: {
@@ -274,7 +275,8 @@ const ZWorkspaceListPage: React.FC = () => {
 																createRedirectRoute({
 																	url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
 																	params: [
-																		CONSTANTS.RouteParams.editWorkspaceIdParam,
+																		CONSTANTS.RouteParams.workspace
+																			.editWorkspaceIdParam,
 																	],
 																	values: [event.detail.data],
 																	routeSearchParams: {

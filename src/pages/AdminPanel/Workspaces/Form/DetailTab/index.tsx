@@ -99,8 +99,7 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 const ZWorkspaceFormDetailTab: React.FC = () => {
 	// Media Query Scale
-	const { isXlScale, isLgScale, isMdScale, isSmScale, isXsScale } =
-		useZMediaQueryScale();
+	const { isLgScale, isMdScale } = useZMediaQueryScale();
 
 	// getting workspace id from route (url), when user refresh the page the id from route will be get and workspace of that id will be fetch from backend.
 	const { editWorkspaceId } = useParams<{
@@ -125,7 +124,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
 			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET],
 			_authenticated: true,
 			_itemsIds: [editWorkspaceId],
-			_urlDynamicParts: [CONSTANTS.RouteParams.workspaceId],
+			_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 			_shouldFetchWhenIdPassed: !editWorkspaceId ? true : false,
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
 		});
@@ -167,7 +166,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
 				// hitting workspace update api.
 				const _result = UpdateWorkspaceMutateAsync({
 					itemIds: [editWorkspaceId],
-					urlDynamicParts: [CONSTANTS.RouteParams.workspaceId],
+					urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 					requestData: reqDataStr,
 				});
 
@@ -220,7 +219,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
 						<>
 							<ZIonContent>
 								<ZIonGrid className='pb-2 flex ion-align-items-center mx-0 h-100'>
-									<ZIonRow className='on-justify-content-center ion-align-items-center w-4/5 mx-auto w-80'>
+									<ZIonRow className='on-justify-content-center ion-align-items-center mx-auto w-80'>
 										{/* Workspace name */}
 										<ZIonCol size='12'>
 											<ZIonInput
@@ -293,7 +292,8 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
 														createRedirectRoute({
 															url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
 															params: [
-																CONSTANTS.RouteParams.editWorkspaceIdParam,
+																CONSTANTS.RouteParams.workspace
+																	.editWorkspaceIdParam,
 															],
 															values: [editWorkspaceId],
 															routeSearchParams: {

@@ -123,7 +123,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 				zNavigatePushRoute(
 					createRedirectRoute({
 						url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
-						params: [CONSTANTS.RouteParams.editWorkspaceIdParam],
+						params: [CONSTANTS.RouteParams.workspace.editWorkspaceIdParam],
 						values: [id],
 						routeSearchParams: {
 							tab: workspaceFormTabEnum.inviteClients,
@@ -180,7 +180,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 				// hitting the delete api
 				await deleteWorkspaceMutate({
 					itemIds: [id],
-					urlDynamicParts: [CONSTANTS.RouteParams.workspaceId],
+					urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 				});
 
 				// show success message after deleting
@@ -196,7 +196,20 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 	};
 
 	return (
-		<ZIonCard className='zaions__cursor_pointer'>
+		<ZIonCard
+			className='zaions__cursor_pointer'
+			onClick={() => {
+				// Click on card will redirect to view workspace.
+				id &&
+					zNavigatePushRoute(
+						createRedirectRoute({
+							url: ZaionsRoutes.AdminPanel.Workspaces.View,
+							params: [CONSTANTS.RouteParams.workspace.workspaceId],
+							values: [id],
+						})
+					);
+			}}
+		>
 			<ZIonCardHeader>
 				<ZIonRow className='ion-align-items-center'>
 					<ZIonCol className='gap-3 d-flex ion-align-items-center'>

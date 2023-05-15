@@ -65,6 +65,30 @@ ion-app.ios ion-title {
 	font-family: 'IBM Plex Serif', sans-serif !important;
 }
 
+.source-serif-pro {
+	font-family: 'Source Serif Pro', sans-serif !important;
+}
+
+.roboto-slab {
+	font-family: 'Roboto Slab', sans-serif !important;
+}
+
+.roboto-condensed {
+	font-family: 'Roboto Condensed', sans-serif !important;
+}
+
+.poppins {
+	font-family: 'Poppins', sans-serif !important;
+}
+
+.source-serif-4 {
+	font-family: 'Source Serif 4', sans-serif !important;
+}
+
+.apple-system {
+	font-family: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji'";
+}
+
 /*  */
 .zaions_list_default li {
 	list-style: disc;
@@ -212,6 +236,10 @@ span.new {
 
 .zaions__color_gray_light {
 	color: #828387;
+}
+
+.zaions_ion_color_light {
+	color: var(--ion-color-light);
 }
 
 .zaions__bg_gray {
