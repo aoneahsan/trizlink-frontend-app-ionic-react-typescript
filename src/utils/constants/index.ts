@@ -97,9 +97,13 @@ export const API_URLS = {
 // Site
 export const PRODUCT_NAME = 'ZLinks';
 export const PRODUCT_DOMAIN = 'prettylinks.zaions.com';
-export const GenaricExternalURL = 'https://prettylinks.zaions.com';
 export const CurrentProductDetails = {
 	Name: '',
+};
+
+export const ExternalURL = {
+	GenericExternalURL: 'https://prettylinks.zaions.com',
+	FacebookUrl: 'https://www.facebook.com/',
 };
 
 export const ZaionsInfo = {
@@ -495,12 +499,12 @@ const CONSTANTS = {
 	RouteParams,
 	DEFAULT_VALUES,
 	USER_ACCOUNT_DELETE_CONFIRM_KEY: 'DELETE ACCOUNT',
-	GenaricExternalURL,
 	SocialLinks,
 	REACT_QUERY,
 	LINK_In_BIO,
 	DateTime,
 	MENU_IDS,
+	ExternalURL,
 };
 
 export default CONSTANTS;

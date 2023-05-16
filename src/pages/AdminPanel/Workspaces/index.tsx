@@ -8,7 +8,7 @@ import React, { useEffect } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { addOutline } from 'ionicons/icons';
 import classNames from 'classnames';
 

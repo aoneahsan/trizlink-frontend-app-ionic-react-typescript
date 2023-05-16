@@ -8,7 +8,16 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { helpCircleOutline, notificationsOutline } from 'ionicons/icons';
+import {
+	createOutline,
+	ellipsisVerticalOutline,
+	filterOutline,
+	helpCircleOutline,
+	imageOutline,
+	logoFacebook,
+	notificationsOutline,
+} from 'ionicons/icons';
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
@@ -18,20 +27,25 @@ import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
 import ZaionsIonPage from '@/components/ZaionsIonPage';
 import {
 	ZIonButton,
+	ZIonButtons,
 	ZIonCol,
 	ZIonContent,
 	ZIonGrid,
 	ZIonHeader,
 	ZIonIcon,
 	ZIonRow,
+	ZIonSegment,
+	ZIonSegmentButton,
 	ZIonText,
 } from '@/components/ZIonComponents';
 import ZIonSearchbar from '@/components/ZIonComponents/ZIonSearchbar';
+import ZWorkspaceLinkedinPageLayout from '@/components/WorkspacesComponents/PagesLayout/Linkedin';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -57,7 +71,12 @@ import ZIonSearchbar from '@/components/ZIonComponents/ZIonSearchbar';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
-import { placeholderImage, ProductLogo } from '@/assets/images';
+import { addIcon, ProductLogo } from '@/assets/images';
+import ZWorkspaceTiktokPageLayout from '@/components/WorkspacesComponents/PagesLayout/Tiktok';
+import ZWorkspacePinterestPageLayout from '@/components/WorkspacesComponents/PagesLayout/Pinterest';
+import ZWorkspaceYoutubePageLayout from '@/components/WorkspacesComponents/PagesLayout/Youtube';
+import ZWorkspaceTwitterPageLayout from '@/components/WorkspacesComponents/PagesLayout/Twitter';
+import ZWorkspaceInstagramPageLayout from '@/components/WorkspacesComponents/PagesLayout/Instagram';
 
 /**
  * Component props type go down
@@ -71,19 +90,48 @@ import { placeholderImage, ProductLogo } from '@/assets/images';
  * */
 
 const ViewSingleWorkspace: React.FC = () => {
+	// Media Query Scale
+	const { isXlScale, isLgScale, isMdScale, isSmScale, isXsScale } =
+		useZMediaQueryScale();
+
 	return (
 		<ZaionsIonPage pageTitle='Zaions view single workspace page'>
-			<ZIonHeader className='ion-padding-horizontal'>
-				<ZIonGrid>
+			<ZIonHeader
+				className={classNames({
+					'ion-padding-horizontal': true,
+					'p-0': !isLgScale,
+				})}
+			>
+				<ZIonGrid className='pb-0'>
 					{/* First row */}
 					<ZIonRow className='ion-align-items-center'>
 						{/* Go to workspaces button and Searchbar */}
-						<ZIonCol size='4' className='flex items-center gap-2'>
-							<ZIonButton expand='block' className='text-transform-initial'>
+						<ZIonCol
+							sizeXl='4'
+							sizeLg='5'
+							sizeMd='12'
+							sizeSm='12'
+							sizeXs='12'
+							className={classNames({
+								'flex items-center gap-2': true,
+								'order-3': !isLgScale,
+							})}
+						>
+							<ZIonButton
+								expand='block'
+								className={classNames({
+									'text-transform-initial': true,
+									'w-1/4': !isLgScale,
+								})}
+							>
 								Workspaces
 							</ZIonButton>
 
-							<div>
+							<div
+								className={classNames({
+									'w-3/4': !isLgScale,
+								})}
+							>
 								<ZIonSearchbar
 									animated
 									showClearButton='focus'
@@ -95,8 +143,17 @@ const ViewSingleWorkspace: React.FC = () => {
 
 						{/* workspace name & edit button */}
 						<ZIonCol
-							size='5'
-							className='flex items-center justify-center text-transform-initial'
+							sizeXl='5'
+							sizeLg='4'
+							sizeMd='6'
+							sizeSm='6'
+							sizeXs='4'
+							className={classNames({
+								'flex items-center justify-center text-transform-initial': true,
+								'ion-justify-content-center': isXlScale,
+								'ion-justify-content-start':
+									isLgScale || isMdScale || isSmScale || isXsScale,
+							})}
 						>
 							<ZIonButton fill='default' className='fs-4'>
 								MTI
@@ -104,7 +161,14 @@ const ViewSingleWorkspace: React.FC = () => {
 						</ZIonCol>
 
 						{/* Help Button, Notifications Button, and UserAvatarInfo */}
-						<ZIonCol size='3' className='flex items-center justify-end gap-2'>
+						<ZIonCol
+							sizeXl='3'
+							sizeLg='3'
+							sizeMd='6'
+							sizeSm='6'
+							sizeXs='8'
+							className='flex items-center justify-end gap-2'
+						>
 							<ZIonButton
 								fill='default'
 								className='ion-no-margin text-transform-initial'
@@ -122,9 +186,24 @@ const ViewSingleWorkspace: React.FC = () => {
 					</ZIonRow>
 
 					{/* Second row */}
-					<ZIonRow className='ion-align-items-center'>
+					<ZIonRow
+						className={classNames({
+							'ion-align-items-center pb-0': true,
+							'mt-2': !isXlScale,
+						})}
+					>
 						{/* Users buttons */}
-						<ZIonCol>
+						<ZIonCol
+							className={classNames({
+								'pb-0': true,
+								'mb-2': !isXlScale,
+							})}
+							sizeXl='2.5'
+							sizeLg='6'
+							sizeMd='6'
+							sizeSm='6'
+							sizeXs='6'
+						>
 							<ZUserAvatarInfo
 								className='w-[10px] h-[10px]'
 								userAvatar={ProductLogo}
@@ -134,14 +213,94 @@ const ViewSingleWorkspace: React.FC = () => {
 							{/* add user button */}
 							<ZUserAvatarInfo
 								className='ms-2'
-								userAvatar={placeholderImage}
+								userAvatar={addIcon}
 								style={{ height: '35px', width: '35px' }}
 							/>
+						</ZIonCol>
+
+						{/* Pages */}
+						<ZIonCol
+							className={classNames({
+								'pb-0': true,
+								'order-2': isXlScale,
+								'order-3': !isXlScale,
+							})}
+							sizeXl='6'
+							sizeLg='12'
+							sizeMd='12'
+							sizeSm='12'
+							sizeXs='12'
+						>
+							<ZIonSegment scrollable={true} value='1'>
+								{[1, 2, 3, 4].map((el) => (
+									<ZIonSegmentButton
+										className='text-transform-initial'
+										value={String(el)}
+									>
+										<ZIonIcon icon={logoFacebook} className='w-7 h-7 mb-2' />
+										<ZIonText className='pb-2'>page name</ZIonText>
+									</ZIonSegmentButton>
+								))}
+							</ZIonSegment>
+						</ZIonCol>
+
+						{/* Menu, filter, media, compose buttons */}
+						<ZIonCol
+							sizeXl='3.5'
+							sizeLg='6'
+							sizeMd='6'
+							sizeSm='6'
+							sizeXs='12'
+							className={classNames({
+								'pb-0 d-flex': true,
+								'order-3': isXlScale,
+								'order-2 mb-2': !isXlScale,
+								'ion-justify-content-end': isSmScale,
+								'ion-justify-content-start': !isSmScale,
+							})}
+						>
+							<ZIonButtons
+								className={classNames({
+									'gap-2': true,
+									'flex ion-justify-content-between w-100': !isSmScale,
+								})}
+							>
+								{/* Menu */}
+								<ZIonButton>
+									<ZIonIcon icon={ellipsisVerticalOutline} />
+								</ZIonButton>
+
+								{/* filter */}
+								<ZIonButton className='text-transform-initial'>
+									<ZIonIcon icon={filterOutline} />
+									<ZIonText className='ms-2'>Filter</ZIonText>
+								</ZIonButton>
+
+								{/* media */}
+								<ZIonButton className='text-transform-initial'>
+									<ZIonIcon icon={imageOutline} />
+									<ZIonText className='ms-2'>Media</ZIonText>
+								</ZIonButton>
+
+								{/* compose */}
+								<ZIonButton
+									color='primary'
+									fill='solid'
+									className='border-radius__100vmax'
+								>
+									<ZIonIcon icon={createOutline} />
+									<ZIonText className='ms-2'>Compose</ZIonText>
+								</ZIonButton>
+							</ZIonButtons>
 						</ZIonCol>
 					</ZIonRow>
 				</ZIonGrid>
 			</ZIonHeader>
-			<ZIonContent>view workspace</ZIonContent>
+
+			{/*  */}
+			<ZIonContent color='light'>
+				<ZWorkspaceInstagramPageLayout />
+			</ZIonContent>
 		</ZaionsIonPage>
 	);
 };

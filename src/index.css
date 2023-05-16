@@ -105,12 +105,12 @@ ion-app.ios ion-title {
 }
 
 .border-radius__100vmax {
-	--border-radius: 100vmax;
-	border-radius: 100vmax;
-	-webkit-border-radius: 100vmax;
-	-moz-border-radius: 100vmax;
-	-ms-border-radius: 100vmax;
-	-o-border-radius: 100vmax;
+	--border-radius: 100vmax !important;
+	border-radius: 100vmax !important;
+	-webkit-border-radius: 100vmax !important;
+	-moz-border-radius: 100vmax !important;
+	-ms-border-radius: 100vmax !important;
+	-o-border-radius: 100vmax !important;
 }
 .border-radius__50per {
 	--border-radius: 50%;
@@ -240,6 +240,12 @@ span.new {
 
 .zaions_ion_color_light {
 	color: var(--ion-color-light);
+}
+
+.zaions-background-set {
+	background-size: cover !important;
+	background-position: center !important;
+	background-repeat: no-repeat !important;
 }
 
 .zaions__bg_gray {

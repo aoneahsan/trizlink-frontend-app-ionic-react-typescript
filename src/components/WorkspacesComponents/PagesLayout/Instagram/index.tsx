@@ -1,0 +1,156 @@
+/**
+ * Core Imports go down
+ * ? Like Import of React is a Core Import
+ * */
+import React from 'react';
+
+/**
+ * Packages Imports go down
+ * ? Like import of ionic components is a packages import
+ * */
+import classNames from 'classnames';
+import { contractOutline, settingsOutline } from 'ionicons/icons';
+
+/**
+ * Custom Imports go down
+ * ? Like import of custom components is a custom import
+ * */
+import {
+	ZIonButton,
+	ZIonButtons,
+	ZIonCol,
+	ZIonIcon,
+	ZIonImg,
+	ZIonRouterLink,
+	ZIonRow,
+	ZIonText,
+} from '@/components/ZIonComponents';
+
+/**
+ * Custom Hooks Imports go down
+ * ? Like import of custom Hook is a custom import
+ * */
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+
+/**
+ * Global Constants Imports go down
+ * ? Like import of Constant is a global constants import
+ * */
+import CONSTANTS from '@/utils/constants';
+
+/**
+ * Type Imports go down
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
+ * */
+
+/**
+ * Recoil State Imports go down
+ * ? Import of recoil states is a Recoil State import
+ * */
+
+/**
+ * Style files Imports go down
+ * ? Import of style sheet is a style import
+ * */
+
+/**
+ * Images Imports go down
+ * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
+ * */
+import { ProductLogo } from '@/assets/images';
+
+/**
+ * Component props type go down
+ * ? Like if you have a type for props it should be please Down
+ * */
+
+/**
+ * Functional Component
+ * About: (Info of component here...)
+ * @type {*}
+ * */
+
+const ZWorkspaceInstagramPageLayout: React.FC = () => {
+	// Media Query Scale
+	const { isXlScale, isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
+
+	return (
+		<ZIonRow
+			className={classNames({
+				'mt-3 ion-justify-content-center': true,
+			})}
+		>
+			{/*  */}
+
+			{/*  */}
+			<ZIonCol
+				sizeXl='7'
+				sizeLg='9.5'
+				sizeMd='11'
+				sizeSm='11.5'
+				sizeXs='10'
+				className={classNames({
+					'ion-no-padding flex ion-align-items-start py-2 ps-2': true,
+				})}
+			>
+				<div
+					className={classNames({
+						'rounded-circle overflow-hidden': true,
+						'w-[7.2rem] h-[7.2rem]': isXlScale || isLgScale || isMdScale,
+						'w-[77px] h-[77px]': (!isMdScale && isSmScale) || !isSmScale,
+					})}
+				>
+					<ZIonImg
+						src='https://d2b57pa8jvjkcd.cloudfront.net/xGF9qraKHpDFhkqdC/dz5XmBCTYv-webearbearscrop.jpg'
+						className={classNames({
+							'w-100 h-100': true,
+						})}
+					/>
+				</div>
+
+				<div
+					className={classNames({
+						'flex flex-column mx-5 px-2 mb-3': true,
+					})}
+				>
+					<ZIonText className='fs-5'>
+						<ZIonRouterLink
+							routerLink={CONSTANTS.ExternalURL.FacebookUrl}
+							target='_blank'
+							color='dark'
+							className='fs-3 font-light zaions-transition'
+						>
+							MTI
+						</ZIonRouterLink>
+					</ZIonText>
+
+					{/*  */}
+					<ZIonText className='text-sm'>
+						<ZIonRouterLink
+							routerLink={CONSTANTS.ExternalURL.FacebookUrl}
+							target='_blank'
+							className='hover:underline fw-bold zaions-transition'
+							color='dark'
+						>
+							@zaions
+						</ZIonRouterLink>
+					</ZIonText>
+
+					<div className='w-[80%] h-[5rem] overflow-y-scroll'>
+						<ZIonText className='text-sm'>
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime
+							dolorem maiores officiis numquam repellat ad quo praesentium quam
+							harum doloribus. Vel, et. Sit ex molestias nam corrupti ipsam
+							ullam magnam. Lorem ipsum dolor sit amet consectetur adipisicing
+							elit. Et commodi quod pariatur deserunt nemo hic magnam nihil.
+							Alias, maiores animi officia totam enim eligendi minus, vitae
+							distinctio a quae assumenda.
+						</ZIonText>
+					</div>
+				</div>
+			</ZIonCol>
+		</ZIonRow>
+	);
+};
+
+export default ZWorkspaceInstagramPageLayout;

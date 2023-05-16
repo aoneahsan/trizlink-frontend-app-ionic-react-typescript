@@ -485,6 +485,11 @@ import uploadModalLink from './global-images/uploadModalLink.png';
 
 import uploadImageBg from './global-images/upload-image-bg.png';
 
+import addUserImage from './global-images/add-user-image.png';
+
+// add-icon.png
+import addIcon from './global-images/add-icon.png';
+
 // Products
 import libMobile from './pages/products/lib_mobile.png';
 import reportingLinkManagement from './pages/products/reporting-link-management.png';
@@ -810,6 +815,8 @@ export {
 	uploadModalFolder,
 	uploadModalLink,
 	uploadImageBg,
+	addUserImage,
+	addIcon,
 	libMobile,
 	reportingLinkManagement,
 	lmLinkManagement,
