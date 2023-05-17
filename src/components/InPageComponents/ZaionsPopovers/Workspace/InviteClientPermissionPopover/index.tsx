@@ -20,6 +20,7 @@ import {
 	ZIonItem,
 	ZIonLabel,
 	ZIonList,
+	ZIonPopover,
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';

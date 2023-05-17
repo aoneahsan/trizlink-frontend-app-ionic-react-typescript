@@ -9,7 +9,6 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import classNames from 'classnames';
-import { contractOutline, settingsOutline } from 'ionicons/icons';
 
 /**
  * Custom Imports go down
@@ -17,11 +16,9 @@ import { contractOutline, settingsOutline } from 'ionicons/icons';
  * */
 import {
 	ZIonButton,
-	ZIonButtons,
 	ZIonCol,
 	ZIonIcon,
 	ZIonImg,
-	ZIonRouterLink,
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
@@ -31,12 +28,12 @@ import {
  * ? Like import of custom Hook is a custom import
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { settingsOutline } from 'ionicons/icons';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import CONSTANTS from '@/utils/constants';
 
 /**
  * Type Imports go down
@@ -57,7 +54,6 @@ import CONSTANTS from '@/utils/constants';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
-import { ProductLogo } from '@/assets/images';
 
 /**
  * Component props type go down
@@ -70,7 +66,7 @@ import { ProductLogo } from '@/assets/images';
  * @type {*}
  * */
 
-const ZWorkspaceInstagramPageLayout: React.FC = () => {
+const ZWorkspaceUniversalContentPageLayout: React.FC = () => {
 	// Media Query Scale
 	const { isXlScale, isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
 
@@ -96,6 +92,8 @@ const ZWorkspaceInstagramPageLayout: React.FC = () => {
 			>
 				<ZIonRow
 					className={classNames({
+						'flex ion-align-items-center border-b-[1px] border-solid border-[#0000001a] pb-3':
+							true,
 						'w-[80%] mx-auto': (!isLgScale && isMdScale) || isSmScale,
 						'w-[95%]': !isSmScale,
 					})}
@@ -109,8 +107,8 @@ const ZWorkspaceInstagramPageLayout: React.FC = () => {
 					>
 						<div
 							className={classNames({
-								'rounded-circle overflow-hidden': true,
-								'w-[152px] h-[152px]': isXlScale || isLgScale,
+								'rounded-circle overflow-hidden flex justify-center': true,
+								'w-[92px] h-[92px]': isXlScale || isLgScale,
 								'w-[77px] h-[77px]':
 									(!isLgScale && isMdScale) || isSmScale || !isSmScale,
 							})}
@@ -124,90 +122,27 @@ const ZWorkspaceInstagramPageLayout: React.FC = () => {
 						</div>
 					</ZIonCol>
 					{/*  */}
-					<ZIonCol>
-						<div
-							className={classNames({
-								'flex flex-column px-2 mb-3': true,
-								'mx-5': isXlScale || isLgScale,
-								'mx-1': !isLgScale,
-							})}
-						>
+					<ZIonCol className='flex ion-align-items-center'>
+						<div className='w-1/2'>
 							<ZIonText
 								className={classNames({
-									'fs-5 mb-3 flex ': true,
-									'ion-align-items-center': isXlScale || isLgScale,
-									'flex-column ion-align-items-start': !isLgScale,
+									'fs-5 block fw-bold': true,
 								})}
 							>
-								<ZIonRouterLink
-									routerLink={CONSTANTS.ExternalURL.FacebookUrl}
-									target='_blank'
-									color='dark'
-									className='fs-3 font-light zaions-transition'
-								>
-									MTI
-								</ZIonRouterLink>
-
-								<div className=''>
-									<ZIonButton
-										className={classNames({
-											'ion-text-capitalize ion-no-margin': true,
-											'ms-4': isXlScale || isLgScale,
-											'ms-0':
-												(!isLgScale && isMdScale) || isSmScale || !isSmScale,
-										})}
-										fill='outline'
-										size='small'
-										color='dark'
-									>
-										Edit profile
-									</ZIonButton>
-
-									<ZIonButton
-										className={classNames({
-											'ion-text-capitalize ion-no-margin': true,
-											'ms-3': isXlScale || isLgScale,
-											'ms-0':
-												(!isLgScale && isMdScale) || isSmScale || !isSmScale,
-										})}
-										fill='clear'
-										size='small'
-										color='dark'
-									>
-										<ZIonIcon icon={contractOutline} className='w-6 h-6' />
-									</ZIonButton>
-								</div>
+								MTI
 							</ZIonText>
 
 							{/*  */}
-							<ZIonText className='text-sm'>
-								<ZIonRouterLink
-									routerLink={CONSTANTS.ExternalURL.FacebookUrl}
-									target='_blank'
-									className='hover:underline fw-bold zaions-transition'
-									color='dark'
-								>
-									@zaions
-								</ZIonRouterLink>
+							<ZIonText className='fs-6 block' color='medium'>
+								Universal content
 							</ZIonText>
+						</div>
 
-							<div
-								className={classNames({
-									'h-[5rem] overflow-y-scroll': true,
-									'w-[80%]': isXlScale || isLgScale,
-									'w-[100%]':
-										(!isLgScale && isMdScale) || isSmScale || !isSmScale,
-								})}
-							>
-								<ZIonText className='text-sm'>
-									Machine learning is a subset of artificial intelligence that
-									enables computer systems to learn and improve from experience
-									without being explicitly programmed. It involves the use of
-									algorithms and statistical models to analyze and identify
-									patterns in data and use those patterns to make predictions or
-									decisions.
-								</ZIonText>
-							</div>
+						{/*  */}
+						<div className='ion-text-end w-1/2'>
+							<ZIonButton size='small'>
+								<ZIonIcon icon={settingsOutline} />
+							</ZIonButton>
 						</div>
 					</ZIonCol>
 				</ZIonRow>
@@ -216,4 +151,4 @@ const ZWorkspaceInstagramPageLayout: React.FC = () => {
 	);
 };
 
-export default ZWorkspaceInstagramPageLayout;
+export default ZWorkspaceUniversalContentPageLayout;

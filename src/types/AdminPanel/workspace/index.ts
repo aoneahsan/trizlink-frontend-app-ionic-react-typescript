@@ -8,6 +8,13 @@ export enum workspaceSettingsModalTabEnum {
 	approvals = 'approvals',
 }
 
+export enum WorkspaceSharingTabEnum {
+	invite = 'invite',
+	members = 'members',
+	permissions = 'permissions',
+	notifications = 'notifications',
+}
+
 export enum workspaceFormTabEnum {
 	workspaceDetailForm = 'workspaceDetailForm',
 	inviteClients = 'inviteClients',

@@ -77,12 +77,14 @@ import ZApprovalTab from './ApprovalsTab';
  * @type {*}
  * */
 
-const ZWorkspacesSettingModal: React.FC = () => {
+const ZWorkspacesSettingModal: React.FC<{
+	Tab: workspaceSettingsModalTabEnum;
+}> = ({ Tab }) => {
 	// Component state
 	const [compState, setCompState] = useState<{
 		activeTab: workspaceSettingsModalTabEnum;
 	}>({
-		activeTab: workspaceSettingsModalTabEnum.timetable,
+		activeTab: Tab,
 	});
 
 	return (
@@ -157,7 +159,7 @@ const ZWorkspacesSettingModal: React.FC = () => {
 				</ZIonSegment>
 			</ZIonHeader>
 
-			{/*  */}
+			{/* Content */}
 			<ZIonContent>
 				<ZIonGrid>
 					<ZIonRow>

@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Packages Imports go down
@@ -17,6 +17,7 @@ import {
 	timeOutline,
 	trashBinOutline,
 } from 'ionicons/icons';
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
@@ -24,11 +25,13 @@ import {
  * */
 import {
 	ZIonIcon,
+	ZIonInput,
 	ZIonItem,
 	ZIonList,
 	ZIonText,
 } from '@/components/ZIonComponents';
 import ZWorkspacesSettingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SettingsModal';
+import ZWorkspacesSharingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SharingModal';
 
 /**
  * Custom Hooks Imports go down
@@ -45,6 +48,10 @@ import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import {
+	workspaceSettingsModalTabEnum,
+	WorkspaceSharingTabEnum,
+} from '@/types/AdminPanel/workspace';
 
 /**
  * Recoil State Imports go down
@@ -75,79 +82,189 @@ import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 const ZWorkspacesActionPopover: React.FC<{
 	deleteButtonOnClickHn?: (event?: unknown) => void;
 	EditButtonOnClickHn?: (event?: unknown) => void;
-}> = ({ deleteButtonOnClickHn, EditButtonOnClickHn }) => {
+	showDeleteWorkspaceOption?: boolean;
+	showEditWorkspaceOption?: boolean;
+	showManageUserOption?: boolean;
+}> = ({
+	deleteButtonOnClickHn,
+	EditButtonOnClickHn,
+	showDeleteWorkspaceOption = true,
+	showEditWorkspaceOption = true,
+	showManageUserOption = false,
+}) => {
+	//
+	const [modalTab, setModalTab] = useState<workspaceSettingsModalTabEnum>();
+
 	const { presentZIonModal: presentWorkspaceSettingModal } = useZIonModal(
-		ZWorkspacesSettingModal
+		ZWorkspacesSettingModal,
+		{
+			Tab: modalTab,
+		}
+	);
+
+	const { presentZIonModal: presentWorkspaceSharingModal } = useZIonModal(
+		ZWorkspacesSharingModal,
+		{
+			Tab: WorkspaceSharingTabEnum.invite,
+		}
 	);
 
 	return (
 		<ZIonList lines='none'>
+			{/*  */}
+			<ZIonInput
+				name='pageName'
+				label=''
+				// labelPlacement='floating'
+				// errorText={errors.pageName}
+				// placeholder={`${ZaionsInfo.name}`}
+				// onIonChange={handleChange}
+				// onIonBlur={handleBlur}
+				// value={values.pageName}
+				// className={classNames({
+				// 	'ion-touched ion-invalid': touched.pageName && errors.pageName,
+				// 	'ion-touched ion-valid': touched.pageName && !errors.pageName,
+				// })}
+				className='pt-2 px-3 fs-4 pb-2 ion-text-center'
+				value='MTI'
+				style={{
+					minHeight: '30px',
+				}}
+			/>
+
+			{/* Manage User */}
+			{showManageUserOption && (
+				<ZIonItem
+					onClick={() => {
+						presentWorkspaceSharingModal({
+							_cssClass: 'workspace-sharing-modal-size',
+						});
+					}}
+					className='ion-activatable ion-focusable zaions__cursor_pointer'
+					minHeight={'32px'}
+				>
+					<ZIonIcon icon={peopleOutline} className='me-2' />{' '}
+					<ZIonText className={classNames('text-sm')}>Manage users</ZIonText>
+				</ZIonItem>
+			)}
+
 			{/* Configure timetable */}
 			<ZIonItem
 				onClick={() => {
+					// setting the tab with should be active in modal
+					setModalTab(workspaceSettingsModalTabEnum.timetable);
+
+					// presenting modal
+					presentWorkspaceSettingModal({
+						_cssClass: 'workspace-setting-modal-size',
+					});
+				}}
+				className='ion-activatable ion-focusable zaions__cursor_pointer '
+				minHeight={'32px'}
+			>
+				<ZIonIcon icon={timeOutline} className='me-2' />{' '}
+				<ZIonText className={classNames('text-sm')}>
+					Configure timetable
+				</ZIonText>
+			</ZIonItem>
+
+			{/* Manage labels */}
+			<ZIonItem
+				onClick={() => {
+					// setting the tab with should be active in modal
+					setModalTab(workspaceSettingsModalTabEnum.labels);
+
+					// presenting modal
 					presentWorkspaceSettingModal({
 						_cssClass: 'workspace-setting-modal-size',
 					});
 				}}
 				className='ion-activatable ion-focusable zaions__cursor_pointer'
-			>
-				<ZIonIcon icon={timeOutline} className='me-2' />{' '}
-				<ZIonText>Configure timetable</ZIonText>
-			</ZIonItem>
-
-			{/* Manage labels */}
-			<ZIonItem
-				onClick={() => console.log('yes')}
-				className='ion-activatable ion-focusable zaions__cursor_pointer'
+				minHeight={'32px'}
 			>
 				<ZIonIcon icon={pricetagOutline} className='me-2' />{' '}
-				<ZIonText>Manage labels</ZIonText>
+				<ZIonText className={classNames('text-sm')}>Manage labels</ZIonText>
 			</ZIonItem>
 
 			{/* Manage people */}
-			<ZIonItem
-				onClick={() => console.log('yes')}
+			{/* <ZIonItem
+				onClick={() => {
+					// setting the tab with should be active in modal
+					setModalTab(workspaceSettingsModalTabEnum.timetable);
+
+					// presenting modal
+					presentWorkspaceSettingModal({
+						_cssClass: 'workspace-setting-modal-size',
+					});
+				}}
 				className='ion-activatable ion-focusable zaions__cursor_pointer'
+				minHeight={'32px'}
 			>
 				<ZIonIcon icon={peopleOutline} className='me-2' />{' '}
-				<ZIonText>Manage people</ZIonText>
-			</ZIonItem>
+				<ZIonText className={classNames('text-sm')}>Manage people</ZIonText>
+			</ZIonItem> */}
 
 			{/* Settings */}
 			<ZIonItem
-				onClick={() => console.log('yes')}
+				onClick={() => {
+					// setting the tab with should be active in modal
+					setModalTab(workspaceSettingsModalTabEnum.settings);
+
+					// presenting modal
+					presentWorkspaceSettingModal({
+						_cssClass: 'workspace-setting-modal-size',
+					});
+				}}
 				className='ion-activatable ion-focusable zaions__cursor_pointer'
+				minHeight={'32px'}
 			>
 				<ZIonIcon icon={settingsOutline} className='me-2' />{' '}
-				<ZIonText>Settings</ZIonText>
+				<ZIonText className={classNames('text-sm')}>Settings</ZIonText>
 			</ZIonItem>
 
 			{/* Approvals settings */}
 			<ZIonItem
-				onClick={() => console.log('yes')}
+				onClick={() => {
+					// setting the tab with should be active in modal
+					setModalTab(workspaceSettingsModalTabEnum.approvals);
+
+					// presenting modal
+					presentWorkspaceSettingModal({
+						_cssClass: 'workspace-setting-modal-size',
+					});
+				}}
 				className='ion-activatable ion-focusable zaions__cursor_pointer'
+				minHeight={'32px'}
 			>
 				<ZIonIcon icon={checkmarkOutline} className='me-2' />{' '}
-				<ZIonText>Approvals settings</ZIonText>
+				<ZIonText className={classNames('text-sm')}>
+					Approvals settings
+				</ZIonText>
 			</ZIonItem>
 
 			{/* Edit */}
-			<ZIonItem
-				onClick={EditButtonOnClickHn}
-				className='ion-activatable ion-focusable zaions__cursor_pointer'
-			>
-				<ZIonIcon icon={pencilOutline} className='me-2' />{' '}
-				<ZIonText>Edit</ZIonText>
-			</ZIonItem>
+			{showEditWorkspaceOption && (
+				<ZIonItem
+					onClick={EditButtonOnClickHn}
+					className='ion-activatable ion-focusable zaions__cursor_pointer'
+					minHeight={'32px'}
+				>
+					<ZIonIcon icon={pencilOutline} className='me-2' />{' '}
+					<ZIonText>Edit</ZIonText>
+				</ZIonItem>
+			)}
 
 			{/* Delete */}
-			<ZIonItem
-				onClick={deleteButtonOnClickHn}
-				className='ion-activatable ion-focusable zaions__cursor_pointer'
-			>
-				<ZIonIcon icon={trashBinOutline} className='me-2' color='danger' />{' '}
-				<ZIonText color='danger'>Delete</ZIonText>
-			</ZIonItem>
+			{showDeleteWorkspaceOption && (
+				<ZIonItem
+					onClick={deleteButtonOnClickHn}
+					className='ion-activatable ion-focusable zaions__cursor_pointer'
+					minHeight={'32px'}
+				>
+					<ZIonIcon icon={trashBinOutline} className='me-2' color='danger' />{' '}
+					<ZIonText color='danger'>Delete</ZIonText>
+				</ZIonItem>
+			)}
 		</ZIonList>
 	);
 };
