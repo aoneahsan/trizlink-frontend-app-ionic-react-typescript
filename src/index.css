@@ -894,8 +894,14 @@ ion-modal.zaions__modal_w100 {
 }
 
 .workspace-sharing-modal-size {
-	--height: 68vh;
-	--width: 48.6vw;
+	--height: 75vh;
+	--width: 650px;
+}
+
+@media only screen and (max-content: 768px) {
+	.workspace-sharing-modal-size {
+		--width: 95% !important;
+	}
 }
 
 .workspace-connect-pages-modal-size {
@@ -949,6 +955,17 @@ ion-modal.zaions__modal_w100 {
 	--width: 256px;
 }
 
+.zaions_workspaces_profile_popover_size {
+	--width: 270px;
+}
+
+.zaions_workspaces_notifications_popover_size {
+	--width: 560px;
+}
+
+.zaions_workspaces_import_export_popover_size {
+	--width: 191px;
+}
 .workspace_form_role_popover_size {
 	--width: 500px;
 	--height: 350px;

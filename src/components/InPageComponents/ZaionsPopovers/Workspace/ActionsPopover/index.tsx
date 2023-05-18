@@ -141,9 +141,9 @@ const ZWorkspacesActionPopover: React.FC<{
 						});
 					}}
 					className='ion-activatable ion-focusable zaions__cursor_pointer'
-					minHeight={'32px'}
+					minHeight='32px'
 				>
-					<ZIonIcon icon={peopleOutline} className='me-2' />{' '}
+					<ZIonIcon icon={peopleOutline} className='me-2' />
 					<ZIonText className={classNames('text-sm')}>Manage users</ZIonText>
 				</ZIonItem>
 			)}

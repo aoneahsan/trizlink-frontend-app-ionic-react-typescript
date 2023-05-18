@@ -48,6 +48,10 @@ import ZInviteTab from './InviteTab';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { WorkspaceSharingTabEnum } from '@/types/AdminPanel/workspace';
+import ZMembersTab from './MembersTab';
+import ZPermissionsTab from './PermissionsTab';
+import ZNotificationTab from './NotificationTab';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Recoil State Imports go down
@@ -86,6 +90,8 @@ const ZWorkspacesSharingModal: React.FC<{
 		activeTab: Tab,
 	});
 
+	const { isLgScale } = useZMediaQueryScale();
+
 	return (
 		<>
 			{/* header  */}
@@ -110,6 +116,7 @@ const ZWorkspacesSharingModal: React.FC<{
 					value={compState.activeTab}
 					className={classNames({
 						'w-[85%] mx-auto': true,
+						'w-100': !isLgScale,
 					})}
 				>
 					{/* Timetable */}
@@ -177,7 +184,17 @@ const ZWorkspacesSharingModal: React.FC<{
 			{/* Content */}
 			<ZIonContent>
 				<ZIonGrid>
-					<ZInviteTab />
+					{compState.activeTab === WorkspaceSharingTabEnum.invite ? (
+						<ZInviteTab />
+					) : compState.activeTab === WorkspaceSharingTabEnum.members ? (
+						<ZMembersTab />
+					) : compState.activeTab === WorkspaceSharingTabEnum.permissions ? (
+						<ZPermissionsTab />
+					) : compState.activeTab === WorkspaceSharingTabEnum.notifications ? (
+						<ZNotificationTab />
+					) : (
+						''
+					)}
 				</ZIonGrid>
 			</ZIonContent>
 		</>

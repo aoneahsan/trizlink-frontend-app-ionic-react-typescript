@@ -15,8 +15,8 @@ import { useRecoilState } from 'recoil';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import AdminPanelFoldersSidebarMenu from '@/navigation/AdminPanelFolderSideMenu';
-import ShortLinksFolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/ShortLinkFoldersActionPopover';
+import AdminPanelFoldersSidebarMenu from '@/navigation/AdminPanel/FolderSideMenu';
+import LinksInBioFolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/LinkInBioFoldersActionPopover';
 
 /**
  * Custom Hooks Imports go down
@@ -49,7 +49,7 @@ import { folderState } from '@/types/AdminPanel/index.type';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { ShortLinksFolderRStateAtom } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinksFoldersState.recoil';
+import { LinkInBioFolderRState } from '@/ZaionsStore/UserDashboard/LinkInBio/linkInBioFoldersState.recoil';
 
 /**
  * Style files Imports go down
@@ -72,24 +72,24 @@ import { ShortLinksFolderRStateAtom } from '@/ZaionsStore/UserDashboard/ShortLin
  * @type {*}
  * */
 
-const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
+const AdminPanelLinkInBioFolderSideMenu: React.FC = () => {
 	const [compState, setCompState] = useState<{
-		shortLinksFoldersReorder: {
+		linkInBioFoldersReorder: {
 			Ids?: string[];
 			isEnable?: boolean;
 		};
 	}>({
-		shortLinksFoldersReorder: {
+		linkInBioFoldersReorder: {
 			isEnable: false,
 		},
 	});
 
 	const { presentZIonPopover: presentFolderActionIonPopover } = useZIonPopover(
-		ShortLinksFolderActionsPopoverContent
+		LinksInBioFolderActionsPopoverContent
 	);
 
-	const [shortLinksFolderState, setShortLinksFolderState] = useRecoilState(
-		ShortLinksFolderRStateAtom
+	const [linkInBioFolderState, setLinkInBioFolderState] = useRecoilState(
+		LinkInBioFolderRState
 	);
 
 	const { validateRequestResponse } = useZValidateRequestResponse();
@@ -100,7 +100,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 
 		setTimeout(() => {
 			const _shortLinksFoldersEls = document.querySelectorAll(
-				`.zaions-short-link-folder-${folderState.ShortLink}`
+				`.zaions-short-link-folder-${folderState.LinkInBios}`
 			);
 			const _shortLinksFoldersIds: string[] = [];
 			for (let i = 0; i < _shortLinksFoldersEls.length; i++) {
@@ -112,7 +112,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 
 			if (_shortLinksFoldersIds) {
 				setCompState((_) => ({
-					shortLinksFoldersReorder: {
+					linkInBioFoldersReorder: {
 						Ids: _shortLinksFoldersIds,
 						isEnable: _shortLinksFoldersIds.length > 1,
 					},
@@ -123,20 +123,20 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 
 	// Getting short-links folders data from backend
 	const { data: _foldersData } = useZRQGetRequest<LinkFolderType[]>({
-		_url: API_URL_ENUM.userAccountFolders_create_list,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
+		_url: API_URL_ENUM.userAccount_LinkInBio_folders_create_list,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN],
 	});
 
 	// Update shortLinks folders reorder API
 	const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
-		_url: API_URL_ENUM.ShortLinks_folders_reorder,
+		_url: API_URL_ENUM.linkInBioBlocks_reorder,
 		_queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
 	});
 
 	useEffect(() => {
 		try {
 			if (_foldersData) {
-				setShortLinksFolderState(_foldersData);
+				setLinkInBioFolderState(_foldersData);
 			}
 		} catch (error) {
 			reportCustomError(error);
@@ -148,7 +148,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 			// The update api...
 			const _result = await UpdateShortLinksFoldersReorder({
 				requestData: zStringify({
-					folders: compState.shortLinksFoldersReorder.Ids,
+					folders: compState.linkInBioFoldersReorder.Ids,
 				}),
 				itemIds: [],
 				urlDynamicParts: [],
@@ -162,8 +162,8 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 			// hiding the reorder button by assigning isEnable to false
 			setCompState((oldValues) => ({
 				...oldValues,
-				shortLinksFoldersReorder: {
-					Ids: oldValues.shortLinksFoldersReorder.Ids,
+				linkInBioFoldersReorder: {
+					Ids: oldValues.linkInBioFoldersReorder.Ids,
 					isEnable: false,
 				},
 			}));
@@ -174,21 +174,21 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 
 	return (
 		<AdminPanelFoldersSidebarMenu
-			menuSide={PAGE_MENU_SIDE.START}
-			foldersData={shortLinksFolderState}
+			menuSide={PAGE_MENU_SIDE.END}
+			foldersData={linkInBioFolderState}
 			folderActionHandlerFn={(event: unknown) => {
 				presentFolderActionIonPopover({
 					_event: event as Event,
 					_cssClass: 'zaions_present_folder_Action_popover_width',
 				});
 			}}
-			showSaveReorderButton={compState.shortLinksFoldersReorder.isEnable}
+			showSaveReorderButton={compState.linkInBioFoldersReorder.isEnable}
 			handleReorderFn={handleReorder}
 			saveReorderButtonFn={shortLinksFoldersReorderHandler}
-			state={folderState.ShortLink}
-			menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
+			state={folderState.LinkInBios}
+			menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID}
 		/>
 	);
 };
 
-export default AdminPanelShortLinksFolderSideMenu;
+export default AdminPanelLinkInBioFolderSideMenu;

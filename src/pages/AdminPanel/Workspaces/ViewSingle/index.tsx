@@ -86,14 +86,22 @@ import ZWorkspaceYoutubePageLayout from '@/components/WorkspacesComponents/Pages
 import ZWorkspaceTwitterPageLayout from '@/components/WorkspacesComponents/PagesLayout/Twitter';
 import ZWorkspaceInstagramPageLayout from '@/components/WorkspacesComponents/PagesLayout/Instagram';
 import { workspacePagesDomeData } from '@/data/UserDashboard/Workspace/index.data';
-import { workspaceFormConnectPagesEnum } from '@/types/AdminPanel/workspace';
+import {
+	workspaceFormConnectPagesEnum,
+	WorkspaceSharingTabEnum,
+} from '@/types/AdminPanel/workspace';
 import { reportCustomError } from '@/utils/customErrorType';
 import { Formik } from 'formik';
 import ZWorkspaceFacebookPageLayout from '@/components/WorkspacesComponents/PagesLayout/Facebook';
 import ZWorkspaceUniversalContentPageLayout from '@/components/WorkspacesComponents/PagesLayout/UniversalContent';
-import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import ZWorkspacesActionPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ActionsPopover';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import ZWorkspacesSharingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SharingModal';
+import ZWorkspaceAppStatusPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/AppStatusPopover';
+import ZWorkspaceProfilePopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ProfilePopover';
+import ZWorkspaceNotificationPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/NotificationsPopover';
+import ZWorkspaceImportExportPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ImportExportPopover';
 
 /**
  * Component props type go down
@@ -171,6 +179,26 @@ const ViewSingleWorkspace: React.FC = () => {
 		showEditWorkspaceOption: false,
 		showManageUserOption: true,
 	}); // popover hook to show UserInfoPopover
+
+	const { presentZIonPopover: presentWorkspaceAppStatusPopover } =
+		useZIonPopover(ZWorkspaceAppStatusPopover); // popover hook to show ZWorkspaceAppStatusPopover
+
+	const { presentZIonPopover: presentWorkspaceProfilePopover } = useZIonPopover(
+		ZWorkspaceProfilePopover
+	); // popover hook to show ZWorkspaceProfilePopover
+
+	const { presentZIonPopover: presentWorkspaceNotificationPopover } =
+		useZIonPopover(ZWorkspaceNotificationPopover); // popover hook to show ZWorkspaceNotificationPopover
+
+	const { presentZIonPopover: presentWorkspaceImportExportPopover } =
+		useZIonPopover(ZWorkspaceImportExportPopover); // popover hook to show ZWorkspaceImportExportPopover
+
+	const { presentZIonModal: presentWorkspaceSharingModal } = useZIonModal(
+		ZWorkspacesSharingModal,
+		{
+			Tab: WorkspaceSharingTabEnum.invite,
+		}
+	);
 
 	return (
 		<ZaionsIonPage pageTitle='Zaions view single workspace page'>
@@ -277,6 +305,13 @@ const ViewSingleWorkspace: React.FC = () => {
 											<ZIonButton
 												fill='default'
 												className='ion-no-margin text-transform-initial'
+												onClick={(event: unknown) => {
+													presentWorkspaceAppStatusPopover({
+														_event: event as Event,
+														_cssClass: 'zaions_workspaces_actions_popover_size',
+														_dismissOnSelect: false,
+													});
+												}}
 											>
 												<ZIonText>Help</ZIonText>
 												<ZIonIcon
@@ -285,14 +320,34 @@ const ViewSingleWorkspace: React.FC = () => {
 												/>
 											</ZIonButton>
 
-											<ZIonButton fill='default' className='ion-no-margin me-2'>
+											<ZIonButton
+												fill='default'
+												className='ion-no-margin me-2'
+												onClick={(event: unknown) => {
+													presentWorkspaceNotificationPopover({
+														_event: event as Event,
+														_cssClass:
+															'zaions_workspaces_notifications_popover_size',
+														_dismissOnSelect: false,
+													});
+												}}
+											>
 												<ZIonIcon
 													icon={notificationsOutline}
 													className='w-6 h-6'
 												/>
 											</ZIonButton>
 
-											<ZUserAvatarInfo />
+											<ZUserAvatarInfo
+												style={{ height: '40px', width: '40px' }}
+												onClick={(event: unknown) => {
+													presentWorkspaceProfilePopover({
+														_event: event as Event,
+														_cssClass: 'zaions_workspaces_profile_popover_size',
+														_dismissOnSelect: false,
+													});
+												}}
+											/>
 										</ZIonCol>
 									</ZIonRow>
 
@@ -319,6 +374,11 @@ const ViewSingleWorkspace: React.FC = () => {
 												className='w-[10px] h-[10px]'
 												userAvatar={ProductLogo}
 												style={{ height: '35px', width: '35px' }}
+												onClick={() => {
+													presentWorkspaceSharingModal({
+														_cssClass: 'workspace-sharing-modal-size',
+													});
+												}}
 											/>
 
 											{/* add user button */}
@@ -326,6 +386,11 @@ const ViewSingleWorkspace: React.FC = () => {
 												className='ms-2'
 												userAvatar={addIcon}
 												style={{ height: '35px', width: '35px' }}
+												onClick={() => {
+													presentWorkspaceSharingModal({
+														_cssClass: 'workspace-sharing-modal-size',
+													});
+												}}
 											/>
 										</ZIonCol>
 
@@ -391,7 +456,16 @@ const ViewSingleWorkspace: React.FC = () => {
 												})}
 											>
 												{/* Menu */}
-												<ZIonButton>
+												<ZIonButton
+													onClick={(event: unknown) => {
+														presentWorkspaceImportExportPopover({
+															_event: event as Event,
+															_cssClass:
+																'zaions_workspaces_import_export_popover_size',
+															_dismissOnSelect: false,
+														});
+													}}
+												>
 													<ZIonIcon icon={ellipsisVerticalOutline} />
 												</ZIonButton>
 

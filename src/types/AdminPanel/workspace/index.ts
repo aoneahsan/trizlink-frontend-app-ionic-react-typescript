@@ -78,6 +78,11 @@ export enum contentStyleInterface {
 	compact = 'compact',
 }
 
+export enum workspaceViewNotificationsEnum {
+	approvalRequests = 'approvalRequests',
+	updates = 'updates',
+}
+
 // Interfaces
 export interface workspaceInviteClientInterface {
 	avatar?: string;
