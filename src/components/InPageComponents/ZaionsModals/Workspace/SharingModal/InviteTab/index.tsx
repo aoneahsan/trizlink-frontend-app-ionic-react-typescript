@@ -77,7 +77,7 @@ const ZInviteTab: React.FC = () => {
 		<ZIonRow className='mt-3 px-3'>
 			<Formik
 				initialValues={{
-					role: workspaceFormRoleEnum.Contributor,
+					role: workspaceFormRoleEnum.Approver,
 				}}
 				validate={() => {
 					const errors = {};
@@ -149,7 +149,7 @@ const ZInviteTab: React.FC = () => {
 									<ZIonCol size='6'>
 										<ZIonButton
 											fill='outline'
-											id={`role-popover-index`}
+											id='role-popover-index'
 											className={classNames({
 												'm-0 d-flex h-100 text-transform-initial ion-align-items-start':
 													true,
@@ -167,33 +167,32 @@ const ZInviteTab: React.FC = () => {
 												className='flex ms-auto'
 											/>
 										</ZIonButton>
-
-										<ZIonPopover
-											trigger={`role-popover-index`}
-											triggerAction='click'
-											showBackdrop={false}
-											backdropDismiss
-											className='workspace_form_role_popover_size'
-											side='bottom'
-										>
-											<ZWorkspaceFormRoleSelectorPopover
-												dismissZIonPopover={(role) => {
-													setFieldValue(
-														'role',
-														workspaceFormRoleEnum[
-															role as workspaceFormRoleEnum
-														] !== undefined
-															? workspaceFormRoleEnum[
-																	role as workspaceFormRoleEnum
-															  ]
-															: values.role,
-														false
-													);
-												}}
-												selectedRole={values.role}
-											/>
-										</ZIonPopover>
 									</ZIonCol>
+									<ZIonPopover
+										trigger='role-popover-index'
+										triggerAction='click'
+										showBackdrop={false}
+										backdropDismiss
+										className='workspace_form_role_popover_size'
+										side='bottom'
+									>
+										<ZWorkspaceFormRoleSelectorPopover
+											dismissZIonPopover={(role) => {
+												setFieldValue(
+													'role',
+													workspaceFormRoleEnum[
+														role as workspaceFormRoleEnum
+													] !== undefined
+														? workspaceFormRoleEnum[
+																role as workspaceFormRoleEnum
+														  ]
+														: values.role,
+													false
+												);
+											}}
+											selectedRole={values.role}
+										/>
+									</ZIonPopover>
 
 									<ZIonCol size='6'>
 										<ZIonButton
