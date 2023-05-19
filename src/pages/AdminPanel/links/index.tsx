@@ -321,21 +321,21 @@ const ZShortLinksListPage: React.FC = () => {
 									<ZIonCol>
 										<ZIonText
 											className={classNames({
-												'ion-text-center': !isSmScale,
+												'text-2xl fw-bold d-block': true,
+												'ion-text-center ': !isSmScale,
 											})}
+											color='medium'
 										>
-											<h4 className='fw-bold zaions__color_gray2'>
-												Create a new link
-											</h4>
+											Create a new link
 										</ZIonText>
 										<ZIonText
 											className={classNames({
+												'text-md d-block': true,
 												'ion-text-center': !isSmScale,
 											})}
+											color='medium'
 										>
-											<h5 className='zaions__color_gray2'>
-												Create & manage your links
-											</h5>
+											Create & manage your links
 										</ZIonText>
 									</ZIonCol>
 									<ZIonCol

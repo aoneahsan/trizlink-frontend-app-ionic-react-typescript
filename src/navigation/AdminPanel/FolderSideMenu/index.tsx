@@ -117,7 +117,10 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 
 	return (
 		<ZIonMenu contentId={menuId} side={menuSide || 'end'} menuId={menuId}>
-			<ZIonList lines='none' style={{ overflow: 'scroll' }}>
+			<ZIonList
+				lines='none'
+				className='zaions_pretty_scrollbar overflow-y-scroll'
+			>
 				<ZIonItem className='zaions__cursor_pointer mb-2'>
 					<h5 className='fw-bold m-0 p-0'>🔗 All links</h5>
 				</ZIonItem>
@@ -165,8 +168,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 											onClick={() => {
 												zNavigatePushRoute(
 													replaceParams(
-														ZaionsRoutes.AdminPanel
-															.ShortLinks.Main,
+														ZaionsRoutes.AdminPanel.ShortLinks.Main,
 														CONSTANTS.RouteParams
 															.folderIdToGetShortLinksOrLinkInBio,
 														el.id as string

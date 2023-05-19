@@ -97,7 +97,7 @@ const ZWorkspaceImportExportPopover: React.FC = () => {
 					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
 					minHeight='32px'
 				>
-					<ZIonIcon icon={shareOutline} className='me-1 w-5 h-5 me-2' />
+					<ZIonIcon icon={shareOutline} className='me-1 w-5 h-5' />
 					<ZIonLabel className='m-0'>Imports posts</ZIonLabel>
 				</ZIonItem>
 

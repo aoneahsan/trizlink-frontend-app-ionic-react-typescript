@@ -314,21 +314,21 @@ const ZLinkInBiosListPage: React.FC = () => {
 									<ZIonCol>
 										<ZIonText
 											className={classNames({
-												'ion-text-center': !isSmScale,
+												'text-2xl fw-bold d-block': true,
+												'ion-text-center ': !isSmScale,
 											})}
+											color='medium'
 										>
-											<h4 className='fw-bold zaions__color_gray2'>
-												Create a new Link In Bio
-											</h4>
+											Create a new Link In Bio
 										</ZIonText>
 										<ZIonText
 											className={classNames({
+												'text-md d-block': true,
 												'ion-text-center': !isSmScale,
 											})}
+											color='medium'
 										>
-											<h5 className='zaions__color_gray2'>
-												Create & manage your Link In Bios
-											</h5>
+											Create & manage your Link In Bios
 										</ZIonText>
 									</ZIonCol>
 

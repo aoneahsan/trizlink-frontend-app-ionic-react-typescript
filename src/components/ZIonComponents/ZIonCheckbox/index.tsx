@@ -1,5 +1,5 @@
 // Core Import
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 // Packages Import
 import { CheckboxChangeEventDetail, IonCheckbox } from '@ionic/react';
@@ -17,11 +17,13 @@ type ZIonCheckboxType = {
 	checked?: boolean;
 	color?: ZIonColorType;
 	disabled?: boolean;
+	children?: ReactNode;
 	indeterminate?: boolean;
 	mode?: ZIonModeType;
 	name?: string;
 	value?: string;
 	slot?: ZIonSlotType;
+	labelPlacement?: 'end' | 'fixed' | 'start';
 	onIonBlur?: (event: Event | CustomEvent<FocusEvent>) => void;
 	onIonChange?: (
 		event: IonCheckboxCustomEvent<CheckboxChangeEventDetail<unknown>>
@@ -35,7 +37,9 @@ const ZIonCheckbox = (props: ZIonCheckboxType) => {
 		<IonCheckbox
 			{...props}
 			aria-label={`zaions-checkbox-label-${props.name || ''}`}
-		/>
+		>
+			{props.children}
+		</IonCheckbox>
 	);
 };
 

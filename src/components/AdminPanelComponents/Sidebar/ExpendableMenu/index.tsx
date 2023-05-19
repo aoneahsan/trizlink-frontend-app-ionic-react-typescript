@@ -238,7 +238,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 								</ZIonCol>
 
 								{/* Chrome extension */}
-								<ZIonCol size='12' title='Extension'>
+								{/* <ZIonCol size='12' title='Extension'>
 									<ZIonButton
 										fill='clear'
 										color='light'
@@ -264,10 +264,10 @@ const AdminPanelMainSidebarMenu: React.FC<{
 											</ZIonText>
 										</ZIonText>
 									</ZIonButton>
-								</ZIonCol>
+								</ZIonCol> */}
 
 								{/* Integrations */}
-								<ZIonCol size='12'>
+								{/* <ZIonCol size='12'>
 									<ZIonButton
 										fill='clear'
 										color='light'
@@ -293,7 +293,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 											</ZIonText>
 										</ZIonText>
 									</ZIonButton>
-								</ZIonCol>
+								</ZIonCol> */}
 
 								{/* Workspaces */}
 								<ZIonCol size='12'>
@@ -332,7 +332,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 								</ZIonCol>
 
 								{/* Help center */}
-								<ZIonCol size='12'>
+								{/* <ZIonCol size='12'>
 									<ZIonButton
 										fill='clear'
 										color='light'
@@ -358,7 +358,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 											</ZIonText>
 										</ZIonText>
 									</ZIonButton>
-								</ZIonCol>
+								</ZIonCol> */}
 
 								{/* Account */}
 								<ZIonCol size='12'>
@@ -430,6 +430,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 						scrollable={true}
 						value={activePage}
 						// color='secondary'
+						className='zaions_pretty_scrollbar'
 					>
 						{/* Short Links */}
 						<ZIonSegmentButton

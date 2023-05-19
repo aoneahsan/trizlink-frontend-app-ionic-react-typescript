@@ -114,7 +114,8 @@ export const ZaionsInfo = {
 export const BRACKPOINT_XL = '1200px';
 export const BRACKPOINT_LG = '992px';
 export const BRACKPOINT_MD = '768px';
-export const BRACKPOINT_SM = '540px';
+// export const BRACKPOINT_SM = '540px'; old
+export const BRACKPOINT_SM = '576px';
 export const BRACKPOINT_XS = '100%';
 
 // Side menus
@@ -129,6 +130,8 @@ const MENU_IDS = {
 		'admin_page_short_links_folders_menu_id',
 	ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID:
 		'admin_page_links_in_bio_folders_menu_id',
+	ADMIN_PAGE_WORKSPACE_VIEW_FILTER_MENU_ID:
+		'admin_page_workspace_view_filter_menu_id',
 };
 
 // Other
