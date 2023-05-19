@@ -13,7 +13,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@capacitor/android": "^4.7.3",
+    "@capacitor/android": "4.7.3",
     "@capacitor/app": "^4.1.1",
     "@capacitor/clipboard": "^4.1.0",
     "@capacitor/core": "^4.7.3",
@@ -21,6 +21,7 @@
     "@capacitor/geolocation": "^4.1.0",
     "@capacitor/google-maps": "^4.5.0",
     "@capacitor/haptics": "4.1.0",
+    "@capacitor/ios": "4.7.3",
     "@capacitor/keyboard": "4.1.1",
     "@capacitor/preferences": "^4.0.2",
     "@capacitor/status-bar": "4.1.1",
@@ -93,5 +94,5 @@
     "vite": "^4.1.0",
     "vitest": "^0.29.2"
   },
-  "description": "An Ionic project"
+  "description": "ZLink project - Project of Zaions (https://zaions.com)."
 }
