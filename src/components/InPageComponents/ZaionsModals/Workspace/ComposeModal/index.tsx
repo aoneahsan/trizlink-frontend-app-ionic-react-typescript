@@ -2,6 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
+import { gifIcon, imageIcon, mediaIcon, thumbnailIcon } from '@/assets/images';
 import {
 	ZIonButton,
 	ZIonButtons,
@@ -10,6 +11,7 @@ import {
 	ZIonFooter,
 	ZIonHeader,
 	ZIonIcon,
+	ZIonImg,
 	ZIonModal,
 	ZIonRow,
 	ZIonSegment,
@@ -20,7 +22,15 @@ import {
 import { workspacePagesDomeData } from '@/data/UserDashboard/Workspace/index.data';
 import { getPlatformIcon } from '@/utils/helpers';
 import { WorkspaceComposeModalRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/ZCompose/index.recoil';
-import { addOutline, chevronDownOutline, eyeOutline } from 'ionicons/icons';
+import {
+	addOutline,
+	chevronDownOutline,
+	discOutline,
+	eyeOutline,
+	happyOutline,
+	locationOutline,
+	sparklesOutline,
+} from 'ionicons/icons';
 import React from 'react';
 import { useRecoilState } from 'recoil';
 
@@ -82,7 +92,7 @@ const ZWorkspaceComposeModal: React.FC = () => {
 	return (
 		<ZIonModal
 			isOpen={workspaceComposeModalStateAtom.isOpen}
-			className='workspace-sharing-modal-size'
+			className='workspace-compose-modal-size'
 			onDidDismiss={() => {
 				setWorkspaceComposeModalStateAtom((oldValues) => ({
 					...oldValues,
@@ -138,6 +148,52 @@ const ZWorkspaceComposeModal: React.FC = () => {
 				<ZIonRow className='ion-align-items-center ion-justify-content-center mt-2'>
 					<ZIonCol size='11.5'>
 						<ZIonTextarea placeholder='Write something... or type :balloon to inset a 🎈' />
+					</ZIonCol>
+
+					{/*  */}
+					<ZIonCol size='11.5' className='mt-2'>
+						<ZIonButton className='text-transform-initial'>
+							<ZIonIcon icon={sparklesOutline} className='pe-1' /> Generate with
+							AI
+						</ZIonButton>
+					</ZIonCol>
+
+					{/*  */}
+					<ZIonCol size='11.5' className='mt-2'>
+						<ZIonRow className='ion-align-items-center'>
+							<ZIonCol>
+								<ZIonButtons>
+									<ZIonButton className='m-0'>
+										<ZIonImg src={imageIcon} />
+									</ZIonButton>
+									<ZIonButton className='m-0'>
+										<ZIonImg src={gifIcon} />
+									</ZIonButton>
+									<ZIonButton className='m-0'>
+										<ZIonImg src={mediaIcon} />
+									</ZIonButton>
+									<ZIonButton className='m-0'>
+										<ZIonImg src={thumbnailIcon} />
+									</ZIonButton>
+								</ZIonButtons>
+							</ZIonCol>
+
+							<ZIonCol className='flex ion-justify-content-end'>
+								<ZIonButtons>
+									<ZIonButton className='m-0'>
+										<ZIonIcon icon={locationOutline} className='w-7 h-7' />
+									</ZIonButton>
+
+									<ZIonButton className='m-0'>
+										<ZIonIcon icon={discOutline} className='w-7 h-7' />
+									</ZIonButton>
+
+									<ZIonButton className='m-0'>
+										<ZIonIcon icon={happyOutline} className='w-7 h-7' />
+									</ZIonButton>
+								</ZIonButtons>
+							</ZIonCol>
+						</ZIonRow>
 					</ZIonCol>
 				</ZIonRow>
 			</ZIonContent>

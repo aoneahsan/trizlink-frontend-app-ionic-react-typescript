@@ -311,11 +311,47 @@ const ZLinkInBiosListPage: React.FC = () => {
 										'mt-4': isLgScale,
 									})}
 								>
-									<ZIonCol>
+									{!isLgScale && (
+										<ZIonCol
+											size='max-content'
+											sizeSm='max-content'
+											sizeXs='12'
+											className={classNames({
+												'order-3': !isMdScale,
+											})}
+										>
+											<ZIonMenuToggle
+												autoHide={false}
+												menu={
+													CONSTANTS.MENU_IDS
+														.ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID
+												}
+											>
+												<ZIonButton
+													className={classNames({
+														'text-transform-initial': true,
+														'open-folder-menu-button': isLgScale || isSmScale,
+														'mt-4 ms-0': !isMdScale,
+													})}
+													expand={!isSmScale ? 'block' : undefined}
+													// menu={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
+													// autoHide={false}
+												>
+													Open folders menu
+												</ZIonButton>
+											</ZIonMenuToggle>
+										</ZIonCol>
+									)}
+
+									<ZIonCol
+										className={classNames({
+											'order-1': !isMdScale,
+										})}
+									>
 										<ZIonText
 											className={classNames({
 												'text-2xl fw-bold d-block': true,
-												'ion-text-center ': !isSmScale,
+												'ion-text-center ': !isLgScale,
 											})}
 											color='medium'
 										>
@@ -324,7 +360,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 										<ZIonText
 											className={classNames({
 												'text-md d-block': true,
-												'ion-text-center': !isSmScale,
+												'ion-text-center': !isLgScale,
 											})}
 											color='medium'
 										>
@@ -339,42 +375,12 @@ const ZLinkInBiosListPage: React.FC = () => {
 										sizeSm='12'
 										sizeXs='12'
 										className={classNames({
-											'mt-4': !isMdScale,
+											'mt-4 order-2': !isMdScale,
 										})}
 									>
 										{/* This will create short link (not link-in-bio) */}
 										<ZaionsCreateShortLinkUrlInput />
 									</ZIonCol>
-
-									{!isLgScale && (
-										<ZIonCol
-											size='max-content'
-											sizeSm='max-content'
-											sizeXs='12'
-										>
-											<ZIonMenuToggle
-												autoHide={false}
-												menu={
-													CONSTANTS.MENU_IDS
-														.ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID
-												}
-											>
-												<ZIonButton
-													className={classNames({
-														'text-transform-initial': true,
-														'ion-margin-start open-folder-menu-button':
-															!isLgScale,
-														'mt-4 ms-0': !isMdScale,
-													})}
-													expand={!isSmScale ? 'block' : undefined}
-													// menu={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
-													// autoHide={false}
-												>
-													Open folders menu
-												</ZIonButton>
-											</ZIonMenuToggle>
-										</ZIonCol>
-									)}
 								</ZIonRow>
 							</ZIonGrid>
 

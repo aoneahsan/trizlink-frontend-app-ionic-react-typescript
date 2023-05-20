@@ -83,6 +83,22 @@ export enum workspaceViewNotificationsEnum {
 	updates = 'updates',
 }
 
+export enum workspaceFilterAccordionEnum {
+	approvalStatus = 'approvalStatus',
+	postStatus = 'postStatus',
+	feedbackAndActivity = 'feedbackAndActivity',
+	labels = 'labels',
+	period = 'period',
+	postType = 'postType',
+	content = 'content',
+	author = 'author',
+}
+
+export enum workspaceFilterAccordionContentEnum {
+	checkbox = 'checkbox',
+	radio = 'radio',
+}
+
 // Interfaces
 export interface workspaceInviteClientInterface {
 	avatar?: string;

@@ -158,20 +158,9 @@ const ZWorkspaceListPage: React.FC = () => {
 							<ZIonGrid className='px-4'>
 								{/* Top workspace menu */}
 								<ZIonRow className='pt-2'>
-									{/* avatar and invite buttons col */}
+									{/*  invite buttons col */}
 									<ZIonCol>
 										<ZIonButtons className='gap-3 ion-align-items-center'>
-											{/* User avatar button */}
-											<ZUserAvatarInfo
-												onClick={(event: unknown) => {
-													presentUserInfoPopover({
-														_event: event as Event,
-														_cssClass: 'zaions_user_info_popover_size',
-													});
-												}}
-												userAvatar={ProductLogo}
-											/>
-
 											{/* Invite button */}
 											<ZIonButton
 												fill='solid'

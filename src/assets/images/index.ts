@@ -421,6 +421,11 @@ import linkInBioPageAnalyticsRetargetingPixelsBlock from './svg/link-in-bio-page
 import WorkspaceSettingsTimetablePlaceholder from './svg/workspace-timesLots-placeholder.svg';
 import WorkspaceSettingsLabelPlaceholder from './svg/workspace-labels-placeholder.svg';
 
+import imageIcon from './svg/imageIcon.svg';
+import gifIcon from './svg/gifIcon.svg';
+import mediaIcon from './svg/mediaIcon.svg';
+import thumbnailIcon from './svg/thumbnailIcon.svg';
+
 // Features Section
 import yourBrndBranding from './pages/features/yourbrnd-branding.gif';
 import brandedLinksmobile from './pages/features/brandedlinksmobile.jpg';
@@ -817,6 +822,10 @@ export {
 	uploadImageBg,
 	addUserImage,
 	addIcon,
+	imageIcon,
+	gifIcon,
+	mediaIcon,
+	thumbnailIcon,
 	libMobile,
 	reportingLinkManagement,
 	lmLinkManagement,

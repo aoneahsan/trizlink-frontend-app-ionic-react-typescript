@@ -30,14 +30,31 @@ import {
 } from '@/components/ZIonComponents';
 import CONSTANTS from '@/utils/constants';
 import {
+	alertCircle,
 	arrowUpOutline,
+	chatbubbleEllipsesOutline,
+	chatbubbleOutline,
 	checkmarkCircle,
 	checkmarkCircleOutline,
 	checkmarkOutline,
+	cloudDownload,
+	cloudDownloadOutline,
+	eyeOffOutline,
+	fileTrayFullOutline,
+	fileTrayStackedOutline,
+	flag,
+	flagOutline,
+	megaphone,
+	navigateCircle,
 	navigateCircleOutline,
+	pencil,
+	searchOutline,
+	send,
 	time,
 	timeOutline,
 } from 'ionicons/icons';
+import { filterMenuOptions } from '@/data/UserDashboard/Workspace/FilterMenu/index.data';
+import { workspaceFilterAccordionContentEnum } from '@/types/AdminPanel/workspace';
 
 /**
  * Custom Hooks Imports go down
@@ -203,7 +220,7 @@ const ZWorkspaceViewPageFilterMenu: React.FC = () => {
 						</ZIonAccordionGroup>
 					</ZIonCol>
 
-					{/*  */}
+					{/* FILTER BY: */}
 					<ZIonCol size='12' className='border-bottom pb-4'>
 						<ZIonLabel
 							className='text-xs d-block mt-2 mb-1 ms-2 tracking-widest'
@@ -212,228 +229,132 @@ const ZWorkspaceViewPageFilterMenu: React.FC = () => {
 							FILTER BY:
 						</ZIonLabel>
 
-						{/*  */}
+						{/* Z Ion Accordion Group */}
 						<ZIonAccordionGroup>
-							<ZIonAccordion value='f'>
-								<ZIonItem
-									slot='header'
-									lines='full'
-									minHeight='46px'
-									color='light'
-								>
-									<ZIonIcon icon={checkmarkOutline} className='w-4 h-4' />
-									<ZIonText className='text-sm pt-1 ms-2'>
-										Approval Status
-									</ZIonText>
-								</ZIonItem>
-								<div
-									className='ion-padding zaions__light_bg mt-1'
-									slot='content'
-								>
-									<div className='pb-2'>
-										<ZIonCheckbox
-											labelPlacement='end'
-											className='text-sm ion-align-items-center'
-											value='Approved'
+							{filterMenuOptions.map((el, index) => {
+								return (
+									<ZIonAccordion value={el.value} key={index} className='mt-2'>
+										<ZIonItem
+											slot='header'
+											lines='none'
+											minHeight='46px'
+											color='light'
 										>
-											<ZIonLabel className='text-sm ion-align-items-center flex '>
-												<ZIonIcon
-													className='w-5 h-5'
-													icon={checkmarkCircleOutline}
-													color='success'
-												/>
-												<ZIonText className='ms-1'>Approved 2</ZIonText>
-											</ZIonLabel>
-										</ZIonCheckbox>
-									</div>
-
-									{/*  */}
-									<div className='pb-2'>
-										<ZIonCheckbox
-											labelPlacement='end'
-											className='text-sm ion-align-items-center'
-											value='notApproved'
+											<ZIonIcon icon={el.icon} className='w-4 h-4' />
+											<ZIonText className='text-sm pt-1 ms-2'>
+												{el.label}
+											</ZIonText>
+										</ZIonItem>
+										<div
+											className='ion-padding zaions__light_bg mt-1'
+											slot='content'
 										>
-											<ZIonLabel className='text-sm ion-align-items-center flex '>
-												<ZIonIcon
-													className='w-5 h-5'
-													icon={checkmarkCircle}
-													color='success'
-												/>
-												<ZIonText className='ms-1'>Not Approved 1</ZIonText>
-											</ZIonLabel>
-										</ZIonCheckbox>
-									</div>
-
-									{/*  */}
-									<div className='pb-2'>
-										<ZIonCheckbox
-											labelPlacement='end'
-											className='text-sm ion-align-items-center'
-											value='partiallyApproved'
-										>
-											<ZIonLabel className='text-sm ion-align-items-center flex '>
-												<ZIonIcon
-													className='w-5 h-5'
-													icon={checkmarkCircleOutline}
-												/>
-												<ZIonText className='ms-1'>
-													Partially approved 0
-												</ZIonText>
-											</ZIonLabel>
-										</ZIonCheckbox>
-									</div>
-
-									{/*  */}
-									<div className='pb-2'>
-										<ZIonCheckbox
-											labelPlacement='end'
-											className='text-sm ion-align-items-center'
-											value='pendingMyApproval'
-										>
-											<ZIonLabel className='text-sm ion-align-items-center flex '>
-												<ZIonIcon
-													className='w-5 h-5'
-													icon={checkmarkCircle}
-													color='warning'
-												/>
-												<ZIonText className='ms-1'>
-													Pending my approval 0
-												</ZIonText>
-											</ZIonLabel>
-										</ZIonCheckbox>
-									</div>
-
-									{/*  */}
-									<div className='pb-2'>
-										<ZIonCheckbox
-											labelPlacement='end'
-											className='text-sm ion-align-items-center'
-											value='requestedByMe'
-										>
-											<ZIonLabel className='text-sm ion-align-items-center flex '>
-												<ZIonIcon
-													className='w-5 h-5'
-													icon={checkmarkCircleOutline}
-													color='warning'
-												/>
-												<ZIonText className='ms-1'>Requested by me 0</ZIonText>
-											</ZIonLabel>
-										</ZIonCheckbox>
-									</div>
-								</div>
-							</ZIonAccordion>
+											{/* here we are looping the filter items, first we are checking if we have filter items, if we have filter items then we are checking that what type of items are they checkbox, ratio, etc. accounting to type we are showing content.  */}
+											{el.filterItems.length ? (
+												// checking id el.filterType is workspaceFilterAccordionContentEnum.checkbox then show this content
+												el.filterType ===
+												workspaceFilterAccordionContentEnum.checkbox ? (
+													el.filterItems.map((_item) => {
+														return (
+															<div className='pb-2'>
+																<ZIonCheckbox
+																	labelPlacement='end'
+																	className='text-sm ion-align-items-center'
+																	value={el.value}
+																>
+																	<ZIonLabel className='text-sm ion-align-items-center flex'>
+																		{_item.icon && (
+																			<ZIonIcon
+																				className='w-5 h-5'
+																				icon={_item.icon}
+																				color={_item.color}
+																			/>
+																		)}
+																		<ZIonText className='ms-1'>
+																			{_item.title}
+																		</ZIonText>
+																	</ZIonLabel>
+																</ZIonCheckbox>
+															</div>
+														);
+													})
+												) : // else checking if el.filterType is workspaceFilterAccordionContentEnum.radio then show this content
+												el.filterType ===
+												  workspaceFilterAccordionContentEnum.radio ? (
+													<ZIonRadioGroup>
+														{el.filterItems.map((_item) => {
+															return (
+																<div className='pb-2'>
+																	<div className='pb-2'>
+																		<ZIonRadio
+																			value={_item.title}
+																			labelPlacement='end'
+																			className='text-sm'
+																		>
+																			{_item.title}
+																		</ZIonRadio>
+																	</div>
+																</div>
+															);
+														})}
+													</ZIonRadioGroup>
+												) : null
+											) : (
+												// else if el.filterItems is empty then show this content
+												<div className='py-3 flex ion-align-items-center ion-justify-content-center flex-column'>
+													<ZIonIcon
+														icon={fileTrayStackedOutline}
+														className='w-7 h-7'
+														color='medium'
+													/>
+													<ZIonText className='mt-2 text-sm' color='medium'>
+														No {el.label}
+													</ZIonText>
+												</div>
+											)}
+										</div>
+									</ZIonAccordion>
+								);
+							})}
 						</ZIonAccordionGroup>
+					</ZIonCol>
 
-						{/*  */}
-						<ZIonAccordionGroup className='mt-2'>
-							<ZIonAccordion value='f'>
-								<ZIonItem
-									slot='header'
-									lines='full'
-									minHeight='46px'
-									color='light'
-								>
-									<ZIonIcon icon={timeOutline} className='w-4 h-4' />
-									<ZIonText className='text-sm pt-1 ms-2'>Post Status</ZIonText>
-								</ZIonItem>
-								<div
-									className='ion-padding zaions__light_bg mt-1'
-									slot='content'
-								>
-									<div className='pb-2'>
-										<ZIonCheckbox
-											labelPlacement='end'
-											className='text-sm ion-align-items-center'
-											value='Scheduled'
-										>
-											<ZIonLabel className='text-sm ion-align-items-center flex '>
-												<ZIonIcon
-													className='w-5 h-5'
-													icon={time}
-													color='primary'
-												/>
-												<ZIonText className='ms-1'>Scheduled 0</ZIonText>
-											</ZIonLabel>
-										</ZIonCheckbox>
-									</div>
+					<ZIonCol size='12' className='border-bottom py-4'>
+						<ZIonItem
+							lines='none'
+							minHeight='46px'
+							color='light'
+							className='ion-activatable ion-focusable zaions__cursor_pointer '
+						>
+							<ZIonIcon icon={searchOutline} className='w-4 h-4' />
+							<ZIonText className='text-sm pt-1 ms-2'>Search in posts</ZIonText>
+						</ZIonItem>
+					</ZIonCol>
 
-									{/*  */}
-									<div className='pb-2'>
-										<ZIonCheckbox
-											labelPlacement='end'
-											className='text-sm ion-align-items-center'
-											value='notScheduled'
-										>
-											<ZIonLabel className='text-sm ion-align-items-center flex '>
-												<ZIonIcon
-													className='w-5 h-5'
-													icon={timeOutline}
-													color='primary'
-												/>
-												<ZIonText className='ms-1'>Not scheduled 1</ZIonText>
-											</ZIonLabel>
-										</ZIonCheckbox>
-									</div>
+					<ZIonCol size='12' className='border-bottom py-4 mb-2'>
+						<ZIonItem
+							lines='none'
+							minHeight='46px'
+							color='light'
+							className='ion-activatable ion-focusable zaions__cursor_pointer '
+						>
+							<ZIonIcon icon={eyeOffOutline} className='w-4 h-4' />
+							<ZIonText className='text-sm pt-1 ms-2'>
+								Hide team only posts
+							</ZIonText>
+						</ZIonItem>
 
-									{/*  */}
-									<div className='pb-2'>
-										<ZIonCheckbox
-											labelPlacement='end'
-											className='text-sm ion-align-items-center'
-											value='Published'
-										>
-											<ZIonLabel className='text-sm ion-align-items-center flex '>
-												<ZIonIcon
-													className='w-5 h-5'
-													icon={navigateCircleOutline}
-													color='primary'
-												/>
-												<ZIonText className='ms-1'>Published 2</ZIonText>
-											</ZIonLabel>
-										</ZIonCheckbox>
-									</div>
-
-									{/*  */}
-									<div className='pb-2'>
-										<ZIonCheckbox
-											labelPlacement='end'
-											className='text-sm ion-align-items-center'
-											value='notPublished'
-										>
-											<ZIonLabel className='text-sm ion-align-items-center flex '>
-												<ZIonIcon
-													className='w-5 h-5'
-													icon={checkmarkCircle}
-													color='warning'
-												/>
-												<ZIonText className='ms-1'>
-													Pending my approval 0
-												</ZIonText>
-											</ZIonLabel>
-										</ZIonCheckbox>
-									</div>
-
-									{/*  */}
-									<div className='pb-2'>
-										<ZIonCheckbox
-											labelPlacement='end'
-											className='text-sm ion-align-items-center'
-											value='requestedByMe'
-										>
-											<ZIonLabel className='text-sm ion-align-items-center flex '>
-												<ZIonIcon
-													className='w-5 h-5'
-													icon={checkmarkCircleOutline}
-													color='warning'
-												/>
-												<ZIonText className='ms-1'>Requested by me 0</ZIonText>
-											</ZIonLabel>
-										</ZIonCheckbox>
-									</div>
-								</div>
-							</ZIonAccordion>
-						</ZIonAccordionGroup>
+						<ZIonItem
+							lines='none'
+							minHeight='46px'
+							color='light'
+							className='ion-activatable ion-focusable zaions__cursor_pointer mt-2'
+						>
+							<ZIonIcon icon={fileTrayFullOutline} className='w-4 h-4' />
+							<ZIonText className='text-sm pt-1 ms-2'>
+								Show archived posts
+							</ZIonText>
+						</ZIonItem>
 					</ZIonCol>
 				</ZIonRow>
 			</ZIonContent>

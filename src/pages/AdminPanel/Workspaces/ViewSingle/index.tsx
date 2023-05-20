@@ -9,6 +9,7 @@ import React, { useCallback, useEffect } from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import {
+	addCircleOutline,
 	createOutline,
 	ellipsisVerticalOutline,
 	filterOutline,
@@ -265,6 +266,28 @@ const ViewSingleWorkspace: React.FC = () => {
 											sizeXs='8'
 											className='flex items-center justify-end gap-2'
 										>
+											{/* Menu */}
+											<ZIonButton
+												size='default'
+												fill='default'
+												// onClick={(event: unknown) => {
+												// 	presentWorkspaceImportExportPopover({
+												// 		_event: event as Event,
+												// 		_cssClass:
+												// 			'zaions_workspaces_import_export_popover_size',
+												// 		_dismissOnSelect: false,
+												// 	});
+												// }}
+												className='ion-no-padding ion-no-margin text-transform-initial'
+												color='dark'
+											>
+												<ZIonIcon
+													icon={addCircleOutline}
+													className='w-6 h-6 me-1'
+												/>
+												<ZIonText>Add page</ZIonText>
+											</ZIonButton>
+
 											<ZIonButton
 												fill='default'
 												className='ion-no-margin text-transform-initial'
@@ -416,6 +439,7 @@ const ViewSingleWorkspace: React.FC = () => {
 												'ion-justify-content-start': !isSmScale,
 											})}
 										>
+											{/*  */}
 											<ZIonButtons
 												className={classNames({
 													'gap-2': true,

@@ -318,44 +318,14 @@ const ZShortLinksListPage: React.FC = () => {
 										'mt-4': isLgScale,
 									})}
 								>
-									<ZIonCol>
-										<ZIonText
-											className={classNames({
-												'text-2xl fw-bold d-block': true,
-												'ion-text-center ': !isSmScale,
-											})}
-											color='medium'
-										>
-											Create a new link
-										</ZIonText>
-										<ZIonText
-											className={classNames({
-												'text-md d-block': true,
-												'ion-text-center': !isSmScale,
-											})}
-											color='medium'
-										>
-											Create & manage your links
-										</ZIonText>
-									</ZIonCol>
-									<ZIonCol
-										sizeXl='4'
-										sizeLg='5'
-										sizeMd='5'
-										sizeSm='12'
-										sizeXs='12'
-										className={classNames({
-											'mt-4': !isMdScale,
-										})}
-									>
-										<ZaionsCreateShortLinkUrlInput />
-									</ZIonCol>
-
 									{!isLgScale && (
 										<ZIonCol
 											size='max-content'
 											sizeSm='max-content'
 											sizeXs='12'
+											className={classNames({
+												'order-3': !isMdScale,
+											})}
 										>
 											<ZIonMenuToggle
 												autoHide={false}
@@ -367,8 +337,7 @@ const ZShortLinksListPage: React.FC = () => {
 												<ZIonButton
 													className={classNames({
 														'text-transform-initial': true,
-														'ion-margin-start open-folder-menu-button':
-															!isLgScale,
+														'open-folder-menu-button': isLgScale || isSmScale,
 														'mt-4 ms-0': !isMdScale,
 													})}
 													expand={!isSmScale ? 'block' : undefined}
@@ -380,6 +349,44 @@ const ZShortLinksListPage: React.FC = () => {
 											</ZIonMenuToggle>
 										</ZIonCol>
 									)}
+
+									<ZIonCol
+										className={classNames({
+											'order-1': !isMdScale,
+										})}
+									>
+										<ZIonText
+											className={classNames({
+												'text-2xl fw-bold d-block': true,
+												'ion-text-center': !isLgScale,
+											})}
+											color='medium'
+										>
+											Create a new link
+										</ZIonText>
+										<ZIonText
+											className={classNames({
+												'text-md d-block': true,
+												'ion-text-center ms-3': !isLgScale,
+											})}
+											color='medium'
+										>
+											Create & manage your links
+										</ZIonText>
+									</ZIonCol>
+
+									<ZIonCol
+										sizeXl='4'
+										sizeLg='5'
+										sizeMd='5'
+										sizeSm='12'
+										sizeXs='12'
+										className={classNames({
+											'mt-4 order-2': !isMdScale,
+										})}
+									>
+										<ZaionsCreateShortLinkUrlInput />
+									</ZIonCol>
 								</ZIonRow>
 							</ZIonGrid>
 
