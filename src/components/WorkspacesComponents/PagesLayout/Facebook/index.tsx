@@ -83,21 +83,21 @@ const ZWorkspaceFacebookPageLayout: React.FC = () => {
 		>
 			{isXlScale && (
 				<ZIonCol size='2'>
-					<div className='rounded-circle overflow-hidden border-[5px] border-white border-solid w-[11rem] h-[11rem] mx-auto flex'>
-						<ZIonImg src={ProductLogo} className='w-100 h-100' />
+					<div className='rounded-full overflow-hidden border-[5px] border-white border-solid w-[11rem] h-[11rem] mx-auto flex'>
+						<ZIonImg src={ProductLogo} className='w-full h-full' />
 					</div>
-					<div className='w-[10rem] flex flex-column mx-auto mt-2'>
-						<ZIonText className='fs-5 '>
+					<div className='w-[10rem] flex flex-col mx-auto mt-2'>
+						<ZIonText className='text-lg '>
 							<ZIonRouterLink
 								routerLink={CONSTANTS.ExternalURL.FacebookUrl}
 								target='_blank'
 								color='dark'
-								className='fs-5 hover:underline zaions-transition'
+								className='text-lg hover:underline zaions-transition'
 							>
 								zaions
 							</ZIonRouterLink>
 						</ZIonText>
-						<ZIonText className='fw-bold' color='medium'>
+						<ZIonText className='font-bold' color='medium'>
 							<ZIonRouterLink
 								routerLink={CONSTANTS.ExternalURL.FacebookUrl}
 								target='_blank'
@@ -156,32 +156,32 @@ const ZWorkspaceFacebookPageLayout: React.FC = () => {
 				>
 					<div
 						className={classNames({
-							'rounded-circle overflow-hidden border-[5px] border-white border-solid':
+							'rounded-full overflow-hidden border-[5px] border-white border-solid':
 								true,
 							'w-[11rem] h-[11rem]': isXlScale,
 							'w-[4.5rem] h-[4.5rem]': !isXlScale,
 						})}
 					>
-						<ZIonImg src={ProductLogo} className='w-100 h-100' />
+						<ZIonImg src={ProductLogo} className='w-full h-full' />
 					</div>
 
 					<div
 						className={classNames({
-							'flex flex-column': true,
+							'flex flex-col': true,
 							'w-[10rem] mt-2 mx-auto': isXlScale,
 						})}
 					>
-						<ZIonText className='fs-5'>
+						<ZIonText className='text-lg'>
 							<ZIonRouterLink
 								routerLink={CONSTANTS.ExternalURL.FacebookUrl}
 								target='_blank'
 								color='dark'
-								className='fs-5 hover:underline zaions-transition'
+								className='text-lg hover:underline zaions-transition'
 							>
 								zaions
 							</ZIonRouterLink>
 						</ZIonText>
-						<ZIonText className='fw-bold' color='medium'>
+						<ZIonText className='font-bold' color='medium'>
 							<ZIonRouterLink
 								routerLink={CONSTANTS.ExternalURL.FacebookUrl}
 								target='_blank'

@@ -81,23 +81,21 @@ const ZUserInfoPopover: React.FC<ZUserInfoPopoverInterface> = ({
 
 			{/* User info col */}
 			<ZIonCol>
-				<ZIonText className='d-block'>Muhammad Talha (you)</ZIonText>
-				<ZIonText className='d-block zaions__fs_13'>
+				<ZIonText className='block'>Muhammad Talha (you)</ZIonText>
+				<ZIonText className='block zaions__fs_13'>
 					talhaworking5@gmail.com
 				</ZIonText>
 			</ZIonCol>
 
 			{showBadges && (
-				<ZIonCol size='12' className='ps-5 d-flex gap-2'>
+				<ZIonCol size='12' className='ps-5 flex gap-2'>
 					<ZIonBadge className='ms-4'>Team</ZIonBadge>
 					<ZIonBadge color='secondary'>Company owner</ZIonBadge>
 				</ZIonCol>
 			)}
 
 			<ZIonCol size='12' className=' mt-2 py-3 px-3 border-top'>
-				<ZIonText className='d-block zaions__fs_13'>
-					last seen: just now
-				</ZIonText>
+				<ZIonText className='block zaions__fs_13'>last seen: just now</ZIonText>
 			</ZIonCol>
 		</ZIonRow>
 	);

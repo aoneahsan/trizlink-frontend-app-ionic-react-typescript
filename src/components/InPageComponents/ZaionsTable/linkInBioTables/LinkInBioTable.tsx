@@ -226,9 +226,6 @@ const ZaionsLinkInBioLinksTable = () => {
 								<ZTableHeadCol>Title</ZTableHeadCol>
 								<ZTableHeadCol>Clicks</ZTableHeadCol>
 								<ZTableHeadCol>Date</ZTableHeadCol>
-								{/* <ZTableHeadCol>Pixels</ZTableHeadCol>
-                <ZTableHeadCol>Note</ZTableHeadCol> */}
-								{/* <ZTableHeadCol>Link To Share</ZTableHeadCol> */}
 								<ZTableHeadCol>Action</ZTableHeadCol>
 							</ZTableRow>
 						</ZTableTHead>
@@ -237,12 +234,34 @@ const ZaionsLinkInBioLinksTable = () => {
 								_filteredLinkInBioLinksData?.map((el) => {
 									return (
 										<ZTableRow key={el.id}>
-											<ZTableRowCol>
+											<ZTableRowCol className='ion-text-center'>
 												<ZIonCheckbox />
 											</ZTableRowCol>
-											<ZTableRowCol>{el.title}</ZTableRowCol>
-											<ZTableRowCol>{el.totalClicks || 0}</ZTableRowCol>
-											<ZTableRowCol>{el.createdAt}</ZTableRowCol>
+											<ZTableRowCol className='ion-text-center'>
+												{el.title}
+											</ZTableRowCol>
+											<ZTableRowCol className='ion-text-center'>
+												{el.totalClicks || 0}
+											</ZTableRowCol>
+											<ZTableRowCol className='ion-text-center'>
+												{el.createdAt}
+											</ZTableRowCol>
+											<ZTableRowCol className='ion-text-center'>
+												<ZIonButton
+													fill='clear'
+													color={'dark'}
+													onClick={(_event) => {
+														setCompState((oldVal) => ({
+															...oldVal,
+															selectedLinkInBioLinkId: el.id,
+															showActionPopover: true,
+														}));
+														showActionsPopover(_event);
+													}}
+												>
+													<ZIonIcon icon={ellipsisVerticalOutline} />
+												</ZIonButton>
+											</ZTableRowCol>
 											{/* <ZTableRowCol>
                         {(JSON.parse(el?.pixelIds as string) as string[])
                           ?.length ? (
@@ -307,22 +326,6 @@ const ZaionsLinkInBioLinksTable = () => {
                           {ZaionsBusinessDetails.WebsiteUrl}
                         </ZIonRouterLink>{' '}
                       </ZTableRowCol> */}
-											<ZTableRowCol>
-												<ZIonButton
-													fill='clear'
-													color={'dark'}
-													onClick={(_event) => {
-														setCompState((oldVal) => ({
-															...oldVal,
-															selectedLinkInBioLinkId: el.id,
-															showActionPopover: true,
-														}));
-														showActionsPopover(_event);
-													}}
-												>
-													<ZIonIcon icon={ellipsisVerticalOutline} />
-												</ZIonButton>
-											</ZTableRowCol>
 										</ZTableRow>
 									);
 								})}
@@ -330,7 +333,7 @@ const ZaionsLinkInBioLinksTable = () => {
 					</ZTable>
 					{!_filteredLinkInBioLinksData?.length && (
 						<ZIonCol className='ion-text-center'>
-							<ZIonTitle className='mt-5'>
+							<ZIonTitle className='mt-10'>
 								<ZIonIcon
 									icon={fileTrayFullOutline}
 									className='mx-auto'
@@ -339,9 +342,9 @@ const ZaionsLinkInBioLinksTable = () => {
 								/>
 							</ZIonTitle>
 							<ZIonTitle color='medium'>
-								No Link-in-bio's founds{' '}
-								{(folderId !== null || folderId !== 'all') && 'In this Folder'}.
-								please create a Link-in-bio.
+								No Link-in-bio's founds
+								{(folderId !== null || folderId !== 'all') && ' In this Folder'}
+								. please create a Link-in-bio.
 							</ZIonTitle>
 						</ZIonCol>
 					)}

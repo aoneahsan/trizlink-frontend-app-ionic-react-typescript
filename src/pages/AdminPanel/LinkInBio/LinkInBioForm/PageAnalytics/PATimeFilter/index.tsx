@@ -15,11 +15,11 @@ import classNames from 'classnames';
  * ? Like import of custom components is a custom import
  * */
 import {
-  ZIonButton,
-  ZIonCol,
-  ZIonIcon,
-  ZIonRow,
-  ZIonText,
+	ZIonButton,
+	ZIonCol,
+	ZIonIcon,
+	ZIonRow,
+	ZIonText,
 } from '@/components/ZIonComponents';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
@@ -63,107 +63,107 @@ import { calendar } from 'ionicons/icons';
  * */
 
 const PageAnalyticsTimeFilter: React.FC = () => {
-  const { isLgScale, isSmScale, isMdScale } = useZMediaQueryScale();
+	const { isLgScale, isSmScale, isMdScale } = useZMediaQueryScale();
 
-  const { presentZIonPopover: presentLinkInBioTimeFilterModal } =
-    useZIonPopover(LinkInBiosTimeRangeFilterPopover);
+	const { presentZIonPopover: presentLinkInBioTimeFilterModal } =
+		useZIonPopover(LinkInBiosTimeRangeFilterPopover);
 
-  return (
-    <ZIonRow
-      className={classNames({
-        'zaions__bg_white ion-align-items-center mt-4': true,
-        'ion-padding rounded border': isSmScale,
-        'ion-padding-vertical': !isSmScale,
-      })}
-    >
-      <ZIonCol
-        className={classNames({
-          'py-3 ps-3 d-flex ion-align-items-center': true,
-          'ion-justify-content-center': !isMdScale,
-        })}
-        sizeXl='6'
-        sizeLg='6'
-        sizeMd='6'
-        sizeSm='12'
-        sizeXs='12'
-      >
-        <ZIonText color='dark'>
-          <h5 className='fw-bold ion-no-margin'>⌚ Filters</h5>
-        </ZIonText>
-      </ZIonCol>
+	return (
+		<ZIonRow
+			className={classNames({
+				'zaions__bg_white ion-align-items-center mt-4': true,
+				'ion-padding rounded border': isSmScale,
+				'ion-padding-vertical': !isSmScale,
+			})}
+		>
+			<ZIonCol
+				className={classNames({
+					'py-3 ps-3 flex ion-align-items-center': true,
+					'ion-justify-content-center': !isMdScale,
+				})}
+				sizeXl='6'
+				sizeLg='6'
+				sizeMd='6'
+				sizeSm='12'
+				sizeXs='12'
+			>
+				<ZIonText color='dark'>
+					<h5 className='font-bold ion-no-margin'>⌚ Filters</h5>
+				</ZIonText>
+			</ZIonCol>
 
-      {/* Time filter button */}
-      <ZIonCol
-        className={classNames({
-          'ion-text-end': isMdScale,
-          'ion-text-center d-flex ion-justify-content-center': !isMdScale,
-        })}
-        sizeXl='6'
-        sizeLg='6'
-        sizeMd='6'
-        sizeSm='12'
-        sizeXs='12'
-      >
-        {/* Filter by days */}
-        <ZIonButton
-          fill='outline'
-          className={classNames({
-            'me-3': isLgScale,
-            'w-100': !isMdScale,
-          })}
-          onClick={(event: unknown) => {
-            presentLinkInBioTimeFilterModal({
-              _event: event as Event,
-              _cssClass: !isMdScale
-                ? 'file-upload-modal-size'
-                : 'link-in-bio-time-filter-modal-size',
-            });
-          }}
-          expand={!isMdScale ? 'block' : undefined}
-        >
-          <ZIonIcon slot='start' icon={calendar} />
-          All Time
-        </ZIonButton>
-      </ZIonCol>
-    </ZIonRow>
-  );
+			{/* Time filter button */}
+			<ZIonCol
+				className={classNames({
+					'ion-text-end': isMdScale,
+					'ion-text-center flex ion-justify-content-center': !isMdScale,
+				})}
+				sizeXl='6'
+				sizeLg='6'
+				sizeMd='6'
+				sizeSm='12'
+				sizeXs='12'
+			>
+				{/* Filter by days */}
+				<ZIonButton
+					fill='outline'
+					className={classNames({
+						'me-3': isLgScale,
+						'w-full': !isMdScale,
+					})}
+					onClick={(event: unknown) => {
+						presentLinkInBioTimeFilterModal({
+							_event: event as Event,
+							_cssClass: !isMdScale
+								? 'file-upload-modal-size'
+								: 'link-in-bio-time-filter-modal-size',
+						});
+					}}
+					expand={!isMdScale ? 'block' : undefined}
+				>
+					<ZIonIcon slot='start' icon={calendar} />
+					All Time
+				</ZIonButton>
+			</ZIonCol>
+		</ZIonRow>
+	);
 };
 
 const LinkInBiosTimeRangeFilterPopover = () => {
-  const { isMdScale } = useZMediaQueryScale();
+	const { isMdScale } = useZMediaQueryScale();
 
-  return (
-    <ZRScrollbars
-      style={{
-        width: !isMdScale ? '87.6vw' : 200,
-        height: !isMdScale ? '94vh' : 300,
-      }}
-    >
-      <div className='ion-padding-horizontal'>
-        <ZIonButton color={'secondary'} expand='block' className='mx-2 my-3'>
-          All Time
-        </ZIonButton>
-        <ZIonButton color={'secondary'} expand='block' className='mx-2 my-3'>
-          Today
-        </ZIonButton>
-        <ZIonButton color={'secondary'} expand='block' className='mx-2 my-3'>
-          Last 7 days
-        </ZIonButton>
-        <ZIonButton color={'secondary'} expand='block' className='mx-2 my-3'>
-          Last 30 days
-        </ZIonButton>
-        <ZIonButton color={'secondary'} expand='block' className='mx-2 my-3'>
-          This month
-        </ZIonButton>
-        <ZIonButton color={'secondary'} expand='block' className='mx-2 my-3'>
-          Last month
-        </ZIonButton>
-        <ZIonButton color={'secondary'} expand='block' className='mx-2 my-3'>
-          Custom Range
-        </ZIonButton>
-      </div>
-    </ZRScrollbars>
-  );
+	return (
+		<ZRScrollbars
+			style={{
+				width: !isMdScale ? '87.6vw' : 200,
+				height: !isMdScale ? '94vh' : 300,
+			}}
+		>
+			<div className='ion-padding-horizontal'>
+				<ZIonButton color={'secondary'} expand='block' className='mx-2 my-3'>
+					All Time
+				</ZIonButton>
+				<ZIonButton color={'secondary'} expand='block' className='mx-2 my-3'>
+					Today
+				</ZIonButton>
+				<ZIonButton color={'secondary'} expand='block' className='mx-2 my-3'>
+					Last 7 days
+				</ZIonButton>
+				<ZIonButton color={'secondary'} expand='block' className='mx-2 my-3'>
+					Last 30 days
+				</ZIonButton>
+				<ZIonButton color={'secondary'} expand='block' className='mx-2 my-3'>
+					This month
+				</ZIonButton>
+				<ZIonButton color={'secondary'} expand='block' className='mx-2 my-3'>
+					Last month
+				</ZIonButton>
+				<ZIonButton color={'secondary'} expand='block' className='mx-2 my-3'>
+					Custom Range
+				</ZIonButton>
+			</div>
+		</ZRScrollbars>
+	);
 };
 
 export default PageAnalyticsTimeFilter;

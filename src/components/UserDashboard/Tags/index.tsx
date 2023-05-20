@@ -65,10 +65,10 @@ const Tags: React.FC = () => {
 				sizeXs='12'
 				className='border py-3 zaions__bg_white'
 			>
-				<div className='d-flex align-items-center border-bottom ion-padding-start pb-2'>
+				<div className='flex ion-align-items-center border-bottom ion-padding-start pb-2'>
 					<ZIonIcon icon={pricetagsOutline} size={'large'}></ZIonIcon>
 					<ZIonText>
-						<h6 className='fw-bold ion-no-margin ion-padding-start'>
+						<h6 className='font-bold ion-no-margin ion-padding-start'>
 							Tags{' '}
 							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
 								(help)
@@ -76,22 +76,20 @@ const Tags: React.FC = () => {
 						</h6>
 					</ZIonText>
 				</div>
-				<div className='mt-4 d-block px-4 mb-4'>
-					<ZIonItem>
-						<ZIonInput
-							placeholder='Add tag'
-							onKeyUp={({ currentTarget, key }) => {
-								if (!!currentTarget?.value && key === 'Enter') {
-									void handleTagSubmit(
-										currentTarget?.value?.toString().toLowerCase()
-									);
-									currentTarget.value = '';
-								}
-							}}
-							name='tags'
-							label=''
-						/>
-					</ZIonItem>
+				<div className='mt-4 block px-4 mb-4'>
+					<ZIonInput
+						placeholder='Add tag'
+						onKeyUp={({ currentTarget, key }) => {
+							if (!!currentTarget?.value && key === 'Enter') {
+								void handleTagSubmit(
+									currentTarget?.value?.toString().toLowerCase()
+								);
+								currentTarget.value = '';
+							}
+						}}
+						name='tags'
+						label=''
+					/>
 					<div className='tags ion-padding-top'>
 						{values.tags && values.tags.length
 							? values.tags.map((el) => {

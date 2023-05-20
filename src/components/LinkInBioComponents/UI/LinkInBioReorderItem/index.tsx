@@ -355,9 +355,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 				}}
 			>
 				<ZIonText>
-					<h4 className='ion-no-margin'>
-						<ZIonIcon icon={pencilOutline} color='light' />
-					</h4>
+					<ZIonIcon icon={pencilOutline} color='light' className='w-6 h-6' />
 				</ZIonText>
 			</ZIonButton>
 
@@ -508,9 +506,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 				''
 			)}
 			<ZIonReorder slot='end' className='ms-3'>
-				<h4 className='ion-no-margin'>
-					<ZIonIcon icon={appsOutline} color='light' />
-				</h4>
+				<ZIonIcon icon={appsOutline} color='light' className='w-6 h-6' />
 			</ZIonReorder>
 		</ZIonItem>
 	);

@@ -111,7 +111,7 @@ const ZaionsReviews = () => {
 														<div className=''>
 															<ZIonRouterLink
 																routerLink={el.userLink}
-																className={`${'d-flex'}  ${
+																className={`${'flex'}  ${
 																	!isLgScale ? 'ion-justify-content-center' : ''
 																}`}
 															>
@@ -122,7 +122,7 @@ const ZaionsReviews = () => {
 																			: PlaceholderAvatar
 																	}
 																	className={`${classes.reviewAvater} ${
-																		!isLgScale ? 'mx-auto zaions__w100' : ''
+																		!isLgScale ? 'mx-auto w-full' : ''
 																	}`}
 																/>
 															</ZIonRouterLink>
@@ -132,7 +132,7 @@ const ZaionsReviews = () => {
 															<ZIonText
 																className={` ${
 																	!isLgScale
-																		? 'zaions__w100 zaions__fs_15'
+																		? 'w-full zaions__fs_15'
 																		: 'zaions__w60 zaions__fs_11'
 																}`}
 															>
@@ -140,12 +140,12 @@ const ZaionsReviews = () => {
 															</ZIonText>
 														</div>
 													</ZIonCol>
-													<ZIonCol className='d-flex'>
+													<ZIonCol className='flex'>
 														<div className='my-auto'>
 															<ZIonText>
 																<h4>{el.title}</h4>
 															</ZIonText>
-															<div className='d-flex'>
+															<div className='flex'>
 																<ZIonImg
 																	src={el.reviewStars}
 																	style={{ width: '83px' }}

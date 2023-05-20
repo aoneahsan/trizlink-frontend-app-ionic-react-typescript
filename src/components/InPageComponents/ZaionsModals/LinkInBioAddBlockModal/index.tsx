@@ -14,10 +14,10 @@ import React from 'react';
  * ? Like import of custom components is a custom import
  * */
 import {
-  ZIonButton,
-  ZIonContent,
-  ZIonIcon,
-  ZIonText,
+	ZIonButton,
+	ZIonContent,
+	ZIonIcon,
+	ZIonText,
 } from '@/components/ZIonComponents';
 
 import { useZRQCreateRequest } from '@/ZaionsHooks/zreactquery-hooks';
@@ -28,9 +28,9 @@ import { useZRQCreateRequest } from '@/ZaionsHooks/zreactquery-hooks';
  * */
 import CONSTANTS from '@/utils/constants';
 import {
-  createRedirectRoute,
-  extractInnerData,
-  zStringify,
+	createRedirectRoute,
+	extractInnerData,
+	zStringify,
 } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
@@ -41,14 +41,14 @@ import { reportCustomError } from '@/utils/customErrorType';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  ZLinkInBioPageEnum,
-  ZLinkInBioRHSComponentEnum,
+	ZLinkInBioPageEnum,
+	ZLinkInBioRHSComponentEnum,
 } from '@/types/AdminPanel/linkInBioType';
 import {
-  LinkInBioBlockEnum,
-  LinkInBioBlockFromType,
-  LinkInBioBlocksPositionEnum,
-  LinkInBioSingleBlockContentType,
+	LinkInBioBlockEnum,
+	LinkInBioBlockFromType,
+	LinkInBioBlocksPositionEnum,
+	LinkInBioSingleBlockContentType,
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 /**
@@ -81,115 +81,115 @@ import { LinkInBioBlocksDefaultData } from '@/data/UserDashboard/LinkInBio/Block
  * @type {*}
  * */
 const ZLinkInBioAddBlockModal: React.FC<{
-  dismissZIonModal: (data?: string, role?: string | undefined) => void;
-  _blockType: LinkInBioBlockEnum;
-  _blockContent: LinkInBioSingleBlockContentType;
-  editLinkInBioId: string;
-  modalHeading?: string;
-  modalSubHeading?: string;
-  zNavigatePushRoute?: (_url: string) => void;
+	dismissZIonModal: (data?: string, role?: string | undefined) => void;
+	_blockType: LinkInBioBlockEnum;
+	_blockContent: LinkInBioSingleBlockContentType;
+	editLinkInBioId: string;
+	modalHeading?: string;
+	modalSubHeading?: string;
+	zNavigatePushRoute?: (_url: string) => void;
 }> = ({
-  dismissZIonModal,
-  _blockType,
-  _blockContent = LinkInBioBlocksDefaultData[_blockType as string],
-  editLinkInBioId,
-  modalHeading = 'Add block 😊',
-  modalSubHeading = `Would you like add this ${_blockType} block in your page?`,
-  zNavigatePushRoute,
+	dismissZIonModal,
+	_blockType,
+	_blockContent = LinkInBioBlocksDefaultData[_blockType as string],
+	editLinkInBioId,
+	modalHeading = 'Add block 😊',
+	modalSubHeading = `Would you like add this ${_blockType} block in your page?`,
+	zNavigatePushRoute,
 }) => {
-  const setLinkInBioBlocksState = useSetRecoilState(LinkInBioBlocksRState);
+	const setLinkInBioBlocksState = useSetRecoilState(LinkInBioBlocksRState);
 
-  // API to create new block belong to this link-in-bio.
-  const { mutateAsync: createLinkInBioMutate } =
-    useZRQCreateRequest<LinkInBioBlockFromType>({
-      _url: API_URL_ENUM.linkInBioBlock_create_list,
-      _queriesKeysToInvalidate: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.BLOCK.MAIN,
-      ],
-      authenticated: true,
-      _itemsIds: [editLinkInBioId],
-      _urlDynamicParts: [':linkInBioId'],
-    });
+	// API to create new block belong to this link-in-bio.
+	const { mutateAsync: createLinkInBioMutate } =
+		useZRQCreateRequest<LinkInBioBlockFromType>({
+			_url: API_URL_ENUM.linkInBioBlock_create_list,
+			_queriesKeysToInvalidate: [
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.BLOCK.MAIN,
+			],
+			authenticated: true,
+			_itemsIds: [editLinkInBioId],
+			_urlDynamicParts: [':linkInBioId'],
+		});
 
-  const addBlockHandler = async (_position: LinkInBioBlocksPositionEnum) => {
-    try {
-      if (_position) {
-        const _stringifyValue = zStringify({
-          blockType: _blockType,
-          blockContent: zStringify(_blockContent),
-          position: _position,
-        });
+	const addBlockHandler = async (_position: LinkInBioBlocksPositionEnum) => {
+		try {
+			if (_position) {
+				const _stringifyValue = zStringify({
+					blockType: _blockType,
+					blockContent: zStringify(_blockContent),
+					position: _position,
+				});
 
-        const _response = await createLinkInBioMutate(_stringifyValue);
+				const _response = await createLinkInBioMutate(_stringifyValue);
 
-        if (_response) {
-          const _data = extractInnerData<LinkInBioBlockFromType>(
-            _response,
-            extractInnerDataOptionsEnum.createRequestResponseItem
-          );
+				if (_response) {
+					const _data = extractInnerData<LinkInBioBlockFromType>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
 
-          if (_position === LinkInBioBlocksPositionEnum.top) {
-            const _newLinkInBioBlock: LinkInBioBlockFromType = {
-              id: _data?.id,
-              blockType:
-                LinkInBioBlockEnum[_data?.blockType as LinkInBioBlockEnum],
-              blockContent:
-                _data?.blockContent as LinkInBioSingleBlockContentType,
-              // icon: 'string',
-              isActive: _data?.isActive,
-              orderNo: '-1', // as in API we always set orderNo from 0, so setting it, -1 mean this will have the lowest orderNo
-            };
-            setLinkInBioBlocksState((oldValues) => [
-              _newLinkInBioBlock,
-              ...oldValues,
-            ]);
-          } else if (_position === LinkInBioBlocksPositionEnum.bottom) {
-            const _newLinkInBioBlock: LinkInBioBlockFromType = {
-              id: _data?.id,
-              blockType:
-                LinkInBioBlockEnum[_data?.blockType as LinkInBioBlockEnum],
-              blockContent:
-                _data?.blockContent as LinkInBioSingleBlockContentType, // icon: 'string',
-              isActive: _data?.isActive,
-              orderNo: '100000', // as in API we always set orderNo from 0, so setting it, 100000 mean this will have the highest orderNo (hopefully)
-            };
-            setLinkInBioBlocksState((oldValues) => [
-              ...oldValues,
-              _newLinkInBioBlock,
-            ]);
-          }
+					if (_position === LinkInBioBlocksPositionEnum.top) {
+						const _newLinkInBioBlock: LinkInBioBlockFromType = {
+							id: _data?.id,
+							blockType:
+								LinkInBioBlockEnum[_data?.blockType as LinkInBioBlockEnum],
+							blockContent:
+								_data?.blockContent as LinkInBioSingleBlockContentType,
+							// icon: 'string',
+							isActive: _data?.isActive,
+							orderNo: '-1', // as in API we always set orderNo from 0, so setting it, -1 mean this will have the lowest orderNo
+						};
+						setLinkInBioBlocksState((oldValues) => [
+							_newLinkInBioBlock,
+							...oldValues,
+						]);
+					} else if (_position === LinkInBioBlocksPositionEnum.bottom) {
+						const _newLinkInBioBlock: LinkInBioBlockFromType = {
+							id: _data?.id,
+							blockType:
+								LinkInBioBlockEnum[_data?.blockType as LinkInBioBlockEnum],
+							blockContent:
+								_data?.blockContent as LinkInBioSingleBlockContentType, // icon: 'string',
+							isActive: _data?.isActive,
+							orderNo: '100000', // as in API we always set orderNo from 0, so setting it, 100000 mean this will have the highest orderNo (hopefully)
+						};
+						setLinkInBioBlocksState((oldValues) => [
+							...oldValues,
+							_newLinkInBioBlock,
+						]);
+					}
 
-          dismissZIonModal();
+					dismissZIonModal();
 
-          // after dismissing redirecting to blockForm
-          zNavigatePushRoute &&
-            zNavigatePushRoute(
-              createRedirectRoute({
-                url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-                params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
-                values: [editLinkInBioId],
-                routeSearchParams: {
-                  page: ZLinkInBioPageEnum.design,
-                  step: ZLinkInBioRHSComponentEnum.blockForm,
-                  blockId: _data?.id || '',
-                },
-              })
-            );
-        }
-      }
-    } catch (error) {
-      dismissZIonModal();
-      reportCustomError(error);
-    }
-  };
+					// after dismissing redirecting to blockForm
+					zNavigatePushRoute &&
+						zNavigatePushRoute(
+							createRedirectRoute({
+								url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+								params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
+								values: [editLinkInBioId],
+								routeSearchParams: {
+									page: ZLinkInBioPageEnum.design,
+									step: ZLinkInBioRHSComponentEnum.blockForm,
+									blockId: _data?.id || '',
+								},
+							})
+						);
+				}
+			}
+		} catch (error) {
+			dismissZIonModal();
+			reportCustomError(error);
+		}
+	};
 
-  return (
-    <>
-      {/**
-       * Header of Modal will shown if the `showActionInModalHeader` is set to `true` in  appSetting and hide if it is `false`
-       * default: false
-       *  */}
-      {/* {appSettings.appModalsSetting.actions.showActionInModalHeader && (
+	return (
+		<>
+			{/**
+			 * Header of Modal will shown if the `showActionInModalHeader` is set to `true` in  appSetting and hide if it is `false`
+			 * default: false
+			 *  */}
+			{/* {appSettings.appModalsSetting.actions.showActionInModalHeader && (
         <ZIonHeader>
           <ZIonRow className='ion-align-items-center'>
             <ZIonCol>
@@ -209,65 +209,58 @@ const ZLinkInBioAddBlockModal: React.FC<{
         </ZIonHeader>
       )} */}
 
-      <ZIonContent className='ion-padding'>
-        <div className='ion-text-end'>
-          <ZIonButton
-            className='ion-no-margin'
-            onClick={() => {
-              dismissZIonModal();
-            }}
-            fill='clear'
-            color='dark'
-          >
-            <h4 className='ion-no-margin mt-1'>
-              <ZIonIcon icon={closeOutline} />
-            </h4>
-          </ZIonButton>
-        </div>
-        <div className='d-flex ion-text-center ion-justify-content-center flex-column ion-padding-top ion-margin-top'>
-          <ZIonText className='' color={'primary'}>
-            <h1
-              className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}
-            >
-              <ZIonIcon
-                icon={toggleOutline}
-                className='mx-auto'
-                color='light'
-              ></ZIonIcon>
-            </h1>
-          </ZIonText>
-          <br />
-          <ZIonText color={'dark'}>
-            <h5 className='fw-bold'>{modalHeading}</h5>
-          </ZIonText>
-          <ZIonText className='mt-2 mb-2'>{modalSubHeading}</ZIonText>
-          <ZIonButton
-            expand='block'
-            className='mt-4'
-            onClick={() => {
-              void addBlockHandler(LinkInBioBlocksPositionEnum.top);
-            }}
-          >
-            Insert at top
-          </ZIonButton>
-          <ZIonButton
-            expand='block'
-            fill='outline'
-            className='mt-3'
-            onClick={() => {
-              void addBlockHandler(LinkInBioBlocksPositionEnum.bottom);
-            }}
-          >
-            Insert at bottom
-          </ZIonButton>
-        </div>
-      </ZIonContent>
+			<ZIonContent className='ion-padding'>
+				<div className='ion-text-end'>
+					<ZIonButton
+						className='ion-no-margin'
+						onClick={() => {
+							dismissZIonModal();
+						}}
+						fill='clear'
+						color='dark'
+					>
+						<h4 className='ion-no-margin mt-1'>
+							<ZIonIcon icon={closeOutline} className='w-6 h-6' />
+						</h4>
+					</ZIonButton>
+				</div>
+				<div className='flex ion-text-center ion-justify-content-center flex-col  ion-margin-top'>
+					<ZIonText className='mb-0 zaions__primary_bg w-[50px] h-[50px] zaions__modal_icon mx-auto ion-margin-bottom inline-block'>
+						<ZIonIcon icon={toggleOutline} className='mx-auto' color='light' />
+					</ZIonText>
 
-      {/**
-       * Footer of Modal will shown if the `showActionInModalFooter` is set to `true` in appSetting, and hide if it is `false`
-       * default: true
-       *  */}
-      {/* {appSettings.appModalsSetting.actions.showActionInModalFooter && (
+					<ZIonText color={'dark'} className='mt-3 text-xl font-bold'>
+						{modalHeading}
+					</ZIonText>
+
+					<ZIonText className='mt-2 mb-2'>{modalSubHeading}</ZIonText>
+					<ZIonButton
+						expand='block'
+						className='mt-4'
+						onClick={() => {
+							void addBlockHandler(LinkInBioBlocksPositionEnum.top);
+						}}
+					>
+						Insert at top
+					</ZIonButton>
+					<ZIonButton
+						expand='block'
+						fill='outline'
+						className='mt-3'
+						onClick={() => {
+							void addBlockHandler(LinkInBioBlocksPositionEnum.bottom);
+						}}
+					>
+						Insert at bottom
+					</ZIonButton>
+				</div>
+			</ZIonContent>
+
+			{/**
+			 * Footer of Modal will shown if the `showActionInModalFooter` is set to `true` in appSetting, and hide if it is `false`
+			 * default: true
+			 *  */}
+			{/* {appSettings.appModalsSetting.actions.showActionInModalFooter && (
         <ZIonFooter>
           <ZIonRow className=' mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
             <ZIonCol>
@@ -285,8 +278,8 @@ const ZLinkInBioAddBlockModal: React.FC<{
           </ZIonRow>
         </ZIonFooter>
       )} */}
-    </>
-  );
+		</>
+	);
 };
 
 export default ZLinkInBioAddBlockModal;

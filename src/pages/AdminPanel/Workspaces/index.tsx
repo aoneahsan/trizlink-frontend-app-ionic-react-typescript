@@ -278,9 +278,11 @@ const ZWorkspaceListPage: React.FC = () => {
 												});
 											}}
 										>
-											<ZIonCardContent className='d-flex flex-column ion-align-items-center ion-justify-content-center h-100'>
+											<ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
 												<ZIonIcon icon={addOutline} size='large' />
-												<ZIonText className='fs-5'>Create a workspace</ZIonText>
+												<ZIonText className='text-lg'>
+													Create a workspace
+												</ZIonText>
 											</ZIonCardContent>
 										</ZIonCard>
 									</ZIonCol>

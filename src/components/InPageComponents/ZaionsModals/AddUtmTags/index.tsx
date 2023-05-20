@@ -235,7 +235,7 @@ const ZaionsAddUtmTags: React.FC<{
 					)}
 
 					<ZIonContent className='ion-padding'>
-						<div className='d-flex ion-text-center ion-justify-content-center flex-column ion-padding-top ion-margin-top'>
+						<div className='flex ion-text-center ion-justify-content-center flex-col ion-padding-top ion-margin-top'>
 							<ZIonText className='' color={'primary'}>
 								<h1
 									className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}

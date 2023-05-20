@@ -274,7 +274,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 								/>
 
 								{/* Password Field */}
-								<div className='d-flex ion-align-items-center mb-4'>
+								<div className='flex ion-align-items-center mb-4'>
 									<ZIonInputField
 										inputFieldProps={{
 											label: 'Password*',
@@ -319,7 +319,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 									</ZIonButton>
 								</div>
 
-								<ZIonNote className='zaions__w100'>
+								<ZIonNote className='w-full'>
 									<ZIonRow>
 										<ZIonCol size='6'>
 											<ZIonText
@@ -383,7 +383,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 								</ZIonNote>
 
 								{/* Password Field */}
-								<div className='d-flex ion-align-items-center mb-4'>
+								<div className='flex ion-align-items-center mb-4'>
 									<ZIonInputField
 										inputFieldProps={{
 											label: 'Confirm Password*',
@@ -444,7 +444,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 										's{' '}
 										<ZIonRouterLink
 											routerLink={ZaionsRoutes.HomeRoute}
-											className='zaions__underline'
+											className='underline'
 											color='medium'
 										>
 											Terms of Service
@@ -452,7 +452,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 										,{' '}
 										<ZIonRouterLink
 											routerLink={ZaionsRoutes.HomeRoute}
-											className='zaions__underline'
+											className='underline'
 											color='medium'
 										>
 											Privacy Policy
@@ -460,7 +460,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 										and{' '}
 										<ZIonRouterLink
 											routerLink={ZaionsRoutes.HomeRoute}
-											className='zaions__underline'
+											className='underline'
 											color='medium'
 										>
 											Acceptable Use Policy

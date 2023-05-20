@@ -39,7 +39,7 @@ const ZUserAvatarInfo: React.FC<ZUserAvatarInfoInterface> = ({
 				classes['workspace-user-avatar-button'],
 				className,
 				{
-					'position-relative w-[50px] h-[50px] z-40': true,
+					'relative w-[50px] h-[50px] z-40': true,
 				}
 			)}
 			onClick={onClick}
@@ -48,14 +48,14 @@ const ZUserAvatarInfo: React.FC<ZUserAvatarInfoInterface> = ({
 			style={style}
 		>
 			{/* <ZIonBadge
-				className='w-[10%] h-[10%] absolute rounded-circle end-0 top-0 z-50'
+				className='w-[10%] h-[10%] absolute rounded-full end-0 top-0 z-50'
 				color='success'
 			>
 				<ZIonIcon icon={ellipseOutline} color='success' />
 			</ZIonBadge> */}
 			<ZIonImg
 				src={userAvatar || getUiAvatarApiUrl({})}
-				className='w-100 h-100 zaions-object-fit-cover'
+				className='w-full h-full zaions-object-fit-cover'
 			/>
 		</ZIonButton>
 	);

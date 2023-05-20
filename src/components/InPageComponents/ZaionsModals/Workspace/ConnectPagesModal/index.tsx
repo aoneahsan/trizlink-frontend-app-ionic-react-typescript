@@ -115,24 +115,24 @@ const ZWorkspaceConnectPagesModal: React.FC<{
 				return (
 					<>
 						<ZIonHeader>
-							<ZIonGrid className='w-100'>
+							<ZIonGrid className='w-full'>
 								{/*  */}
 								<ZIonRow className='ion-align-items-center'>
 									{/*  */}
-									<ZIonCol className='d-flex ion-align-items-center ms-3'>
+									<ZIonCol className='flex ion-align-items-center ms-3'>
 										{/*  */}
 										<div
-											className='w-10 h-10 rounded d-flex ion-align-items-center ion-justify-content-center'
+											className='w-10 h-10 rounded flex ion-align-items-center ion-justify-content-center'
 											style={{ backgroundColor: color }}
 										>
 											<ZIonIcon icon={logo} className='w-7 h-7' color='light' />
 										</div>
 										{/*  */}
 										<div className='ms-2'>
-											<ZIonText className='d-block fw-bold'>
+											<ZIonText className='block font-bold'>
 												Connect pages
 											</ZIonText>
-											<ZIonText className='d-block zaions__fs_13'>
+											<ZIonText className='block zaions__fs_13'>
 												Select what type of pages you want to connect
 											</ZIonText>
 										</div>
@@ -158,8 +158,8 @@ const ZWorkspaceConnectPagesModal: React.FC<{
 						</ZIonHeader>
 
 						<ZIonContent>
-							<ZIonGrid className='h-100'>
-								<ZIonRow className='flex flex-wrap h-100 ion-align-items-center ion-justify-content-center'>
+							<ZIonGrid className='h-full'>
+								<ZIonRow className='flex flex-wrap h-full ion-align-items-center ion-justify-content-center'>
 									{/*  */}
 									{cards.map((card, index) => {
 										return (
@@ -216,7 +216,7 @@ const SingleCard: React.FC<{
 
 	return (
 		<ZIonCard
-			className='px-2 zaions__cursor_pointer'
+			className='zaions__cursor_pointer'
 			onClick={onClick}
 			onMouseEnter={(event: unknown) => {
 				setCompState((oldValues) => ({
@@ -239,11 +239,11 @@ const SingleCard: React.FC<{
 			}}
 			color={compState.isActive ? 'primary' : undefined}
 		>
-			<ZIonCardContent className='py-5 ion-text-center position-relative ion-justify-content-center'>
+			<ZIonCardContent className='py-3 ion-text-center relative ion-justify-content-center h-[11rem] flex flex-col ion-align-items-center ion-justify-content-center'>
 				{/*  */}
 				{showInfoIcon && (
 					<div
-						className='top-1 position-absolute start-0 w-max d-flex ion-align-items-center ion-justify-content-center zaions__cursor_pointer'
+						className='top-1 absolute start-0 w-full flex  zaions__cursor_pointer ps-2'
 						onClick={(event: unknown) => {
 							presentConnectPagesCardInfoPopover({
 								_event: event as Event,
@@ -265,7 +265,7 @@ const SingleCard: React.FC<{
 
 				{/*  */}
 				<ZIonText
-					className='mt-1 ion-text-center d-block fw-bold fs-6'
+					className='mt-1 ion-text-center block font-bold text-base'
 					color={compState.isActive ? 'light' : 'dark'}
 				>
 					{title}

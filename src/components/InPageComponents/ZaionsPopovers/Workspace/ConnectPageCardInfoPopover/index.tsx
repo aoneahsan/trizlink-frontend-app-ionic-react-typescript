@@ -84,7 +84,7 @@ const ZWorkspaceConnectPagesCardInfoPopover: React.FC<{
 							<>
 								{item.type === PageInfoCardItemTypeEnum.heading && (
 									<ZIonCol size='12'>
-										<ZIonText className='text-[15px] fw-bold d-block'>
+										<ZIonText className='text-[15px] font-bold block'>
 											{item.text}
 										</ZIonText>
 									</ZIonCol>
@@ -107,11 +107,11 @@ const ZWorkspaceConnectPagesCardInfoPopover: React.FC<{
 
 														{/*  */}
 														<ZIonCol>
-															<ZIonText className='d-block fw-bold text-[13px]'>
+															<ZIonText className='block font-bold text-[13px]'>
 																{_simpleCardItem.heading}
 															</ZIonText>
 															{_simpleCardItem.subheading && (
-																<ZIonText className='d-block text-[13px]'>
+																<ZIonText className='block text-[13px]'>
 																	{_simpleCardItem.subheading}
 																</ZIonText>
 															)}

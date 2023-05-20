@@ -17,11 +17,11 @@ import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
 import Zaions4By4GridSystem from '@/components/InPageComponents/Zaions4By4GridSystem';
 
 import {
-  ZIonCol,
-  ZIonText,
-  ZIonRow,
-  ZIonGrid,
-  ZIonContent,
+	ZIonCol,
+	ZIonText,
+	ZIonRow,
+	ZIonGrid,
+	ZIonContent,
 } from '@/components/ZIonComponents';
 
 // Recoil States
@@ -45,198 +45,198 @@ import classes from './styles.module.css';
 
 // Images
 import {
-  digitalmarketingMobile2,
-  iconLargeCloudServersMin,
-  iconLargeCustomerServersMin,
-  iconLargePasswordSecurityMin,
+	digitalmarketingMobile2,
+	iconLargeCloudServersMin,
+	iconLargeCustomerServersMin,
+	iconLargePasswordSecurityMin,
 } from '@/assets/images';
 
 const ZaionsDigitalMarketing: React.FC = () => {
-  const [keyFeaturesData, setkeyFeaturesData] = useRecoilState<
-    ZaionsKeyFeatureType[]
-  >(ZaionsSPSMKeyFeaturesState);
-  const [SocialMarketersData, setSocialMarketersData] = useRecoilState<
-    Zaions4By4GridSysType[]
-  >(ZaionsSPSocialMarketersState);
+	const [keyFeaturesData, setkeyFeaturesData] = useRecoilState<
+		ZaionsKeyFeatureType[]
+	>(ZaionsSPSMKeyFeaturesState);
+	const [SocialMarketersData, setSocialMarketersData] = useRecoilState<
+		Zaions4By4GridSysType[]
+	>(ZaionsSPSocialMarketersState);
 
-  useLayoutEffect(() => {
-    setkeyFeaturesData(DMSMKeyFeaturesData);
-    setSocialMarketersData(DMSocialMarketerData);
-  }, [setkeyFeaturesData, setSocialMarketersData]);
-  const isLgScale = useMediaQuery({
-    query: `(min-width: ${BRACKPOINT_LG})`,
-  });
-  const isMdScale = useMediaQuery({
-    query: `(min-width: ${BRACKPOINT_MD})`,
-  });
+	useLayoutEffect(() => {
+		setkeyFeaturesData(DMSMKeyFeaturesData);
+		setSocialMarketersData(DMSocialMarketerData);
+	}, [setkeyFeaturesData, setSocialMarketersData]);
+	const isLgScale = useMediaQuery({
+		query: `(min-width: ${BRACKPOINT_LG})`,
+	});
+	const isMdScale = useMediaQuery({
+		query: `(min-width: ${BRACKPOINT_MD})`,
+	});
 
-  return (
-    <ZaionsIonPage pageTitle='Digital Marketing Page'>
-      {/* Page Content */}
-      <ZIonContent fullscreen>
-        <ZaionsTopMenu />
-        <ZaionsInpageHeader
-          lgImg={digitalmarketingMobile2}
-          label='Digital Marketing'
-          title={
-            <ZIonText style={{ lineHeight: !isMdScale ? '3rem' : '' }}>
-              Better links, better results
-            </ZIonText>
-          }
-          subTitle={
-            <ZIonText>
-              Convert clicks to customers with trusted call-to-action links.
-            </ZIonText>
-          }
-          primaryBtnLinkTo={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
-          seondaryBtnLinkTo={ZaionsRoutes.DiscoverEnterpriseRoute}
-          primaryBtnText='Get Started'
-          isSecondaryBtn={true}
-          secondaryBtnText='Get a Qoute'
-          className={`${classes.zaions__digital_marketing_bg}`}
-          colClassName='ms-0'
-        />
+	return (
+		<ZaionsIonPage pageTitle='Digital Marketing Page'>
+			{/* Page Content */}
+			<ZIonContent fullscreen>
+				<ZaionsTopMenu />
+				<ZaionsInpageHeader
+					lgImg={digitalmarketingMobile2}
+					label='Digital Marketing'
+					title={
+						<ZIonText style={{ lineHeight: !isMdScale ? '3rem' : '' }}>
+							Better links, better results
+						</ZIonText>
+					}
+					subTitle={
+						<ZIonText>
+							Convert clicks to customers with trusted call-to-action links.
+						</ZIonText>
+					}
+					primaryBtnLinkTo={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
+					seondaryBtnLinkTo={ZaionsRoutes.DiscoverEnterpriseRoute}
+					primaryBtnText='Get Started'
+					isSecondaryBtn={true}
+					secondaryBtnText='Get a Qoute'
+					className={`${classes.zaions__digital_marketing_bg}`}
+					colClassName='ms-0'
+				/>
 
-        <ZIonGrid>
-          <ZIonRow>
-            <ZIonCol
-              sizeXl='1'
-              sizeLg='1'
-              sizeMd='0'
-              sizeSm='0'
-              sizeXs='0'
-            ></ZIonCol>
-            <ZIonCol
-              size='10.5'
-              sizeLg='10.5'
-              sizeMd='11.8'
-              sizeSm='12'
-              sizeXs='12'
-            >
-              <ZaionsKeyFeatures data={keyFeaturesData} />
-            </ZIonCol>
-            <ZIonCol
-              size='.5'
-              sizeLg='.5'
-              sizeMd='0'
-              sizeSm='0'
-              sizeXs='0'
-            ></ZIonCol>
-          </ZIonRow>
-        </ZIonGrid>
-        <ZIonGrid>
-          <ZIonRow>
-            <ZIonCol></ZIonCol>
-            <ZIonCol
-              sizeXl='11.2'
-              sizeLg='12'
-              sizeMd='12'
-              sizeSm='12'
-              sizeXs='12'
-            >
-              <ZaionsHr></ZaionsHr>
-            </ZIonCol>
-            <ZIonCol></ZIonCol>
-          </ZIonRow>
-        </ZIonGrid>
+				<ZIonGrid>
+					<ZIonRow>
+						<ZIonCol
+							sizeXl='1'
+							sizeLg='1'
+							sizeMd='0'
+							sizeSm='0'
+							sizeXs='0'
+						></ZIonCol>
+						<ZIonCol
+							size='10.5'
+							sizeLg='10.5'
+							sizeMd='11.8'
+							sizeSm='12'
+							sizeXs='12'
+						>
+							<ZaionsKeyFeatures data={keyFeaturesData} />
+						</ZIonCol>
+						<ZIonCol
+							size='.5'
+							sizeLg='.5'
+							sizeMd='0'
+							sizeSm='0'
+							sizeXs='0'
+						></ZIonCol>
+					</ZIonRow>
+				</ZIonGrid>
+				<ZIonGrid>
+					<ZIonRow>
+						<ZIonCol></ZIonCol>
+						<ZIonCol
+							sizeXl='11.2'
+							sizeLg='12'
+							sizeMd='12'
+							sizeSm='12'
+							sizeXs='12'
+						>
+							<ZaionsHr></ZaionsHr>
+						</ZIonCol>
+						<ZIonCol></ZIonCol>
+					</ZIonRow>
+				</ZIonGrid>
 
-        <ZaionsHPBrandList />
+				<ZaionsHPBrandList />
 
-        <ZIonGrid
-          className={`mt-4 pb-3 mb-5 ${!isLgScale ? 'ion-text-center' : ''}`}
-        >
-          <ZIonRow className='mb-4 pt-2'>
-            <ZIonCol size='1' sizeMd='0' sizeSm='0' sizeXs='0'></ZIonCol>
-            <ZIonCol
-              size='10'
-              sizeMd='12'
-              sizeSm='12'
-              sizeXs='12'
-              className='ion-text-center'
-            >
-              <ZIonText>
-                <h2
-                  className='fw-bolder zaions__color_dark mt-2 pt-1'
-                  style={{ fontSize: '38px' }}
-                >
-                  The world’s leading link management platform
-                </h2>
-              </ZIonText>
-              <ZIonText className='pt-1 fs-5 zaions__color_gray2'>
-                Get the connections, security, and support you need from the
-                brand you can trust.
-              </ZIonText>
-            </ZIonCol>
-            <ZIonCol size='1' sizeMd='0' sizeSm='0' sizeXs='0'></ZIonCol>
-          </ZIonRow>
-          <ZIonRow>
-            <ZIonCol
-              sizeXl='1'
-              sizeLg='.7'
-              sizeMd='0'
-              sizeSm='0'
-              sizeXs='0'
-            ></ZIonCol>
-            <ZIonCol sizeXl='11' sizeLg='11' sizeMd='12'>
-              <ZIonGrid>
-                <ZIonRow>
-                  <ZaionsInpageCol
-                    icon={iconLargeCloudServersMin}
-                    title='Seamless integrations'
-                    text={
-                      <ZIonText className='zaions__color_gray2'>
-                        Integrate {PRODUCT_NAME} with your preferred social
-                        media management tools to easily share branded links in
-                        all of your social content.
-                      </ZIonText>
-                    }
-                  />
+				<ZIonGrid
+					className={`mt-4 pb-3 mb-5 ${!isLgScale ? 'ion-text-center' : ''}`}
+				>
+					<ZIonRow className='mb-4 pt-2'>
+						<ZIonCol size='1' sizeMd='0' sizeSm='0' sizeXs='0'></ZIonCol>
+						<ZIonCol
+							size='10'
+							sizeMd='12'
+							sizeSm='12'
+							sizeXs='12'
+							className='ion-text-center'
+						>
+							<ZIonText>
+								<h2
+									className='font-bolder zaions__color_dark mt-2 pt-1'
+									style={{ fontSize: '38px' }}
+								>
+									The world’s leading link management platform
+								</h2>
+							</ZIonText>
+							<ZIonText className='pt-1 text-lg zaions__color_gray2'>
+								Get the connections, security, and support you need from the
+								brand you can trust.
+							</ZIonText>
+						</ZIonCol>
+						<ZIonCol size='1' sizeMd='0' sizeSm='0' sizeXs='0'></ZIonCol>
+					</ZIonRow>
+					<ZIonRow>
+						<ZIonCol
+							sizeXl='1'
+							sizeLg='.7'
+							sizeMd='0'
+							sizeSm='0'
+							sizeXs='0'
+						></ZIonCol>
+						<ZIonCol sizeXl='11' sizeLg='11' sizeMd='12'>
+							<ZIonGrid>
+								<ZIonRow>
+									<ZaionsInpageCol
+										icon={iconLargeCloudServersMin}
+										title='Seamless integrations'
+										text={
+											<ZIonText className='zaions__color_gray2'>
+												Integrate {PRODUCT_NAME} with your preferred social
+												media management tools to easily share branded links in
+												all of your social content.
+											</ZIonText>
+										}
+									/>
 
-                  <ZaionsInpageCol
-                    icon={iconLargeCustomerServersMin}
-                    title='Seamless integrations'
-                    text={
-                      <ZIonText className='zaions__color_gray2'>
-                        If you have questions, you’ll have full access to
-                        {PRODUCT_NAME}’s extensive knowledge base and resource
-                        library. If you’re an Enterprise customer, you’ll also
-                        be paired up with a customer success manager.
-                      </ZIonText>
-                    }
-                  />
+									<ZaionsInpageCol
+										icon={iconLargeCustomerServersMin}
+										title='Seamless integrations'
+										text={
+											<ZIonText className='zaions__color_gray2'>
+												If you have questions, you’ll have full access to
+												{PRODUCT_NAME}’s extensive knowledge base and resource
+												library. If you’re an Enterprise customer, you’ll also
+												be paired up with a customer success manager.
+											</ZIonText>
+										}
+									/>
 
-                  <ZaionsInpageCol
-                    icon={iconLargePasswordSecurityMin}
-                    title='Seamless integrations'
-                    text={
-                      <ZIonText className='zaions__color_gray2'>
-                        {PRODUCT_NAME} handles over 10 billion clicks a month—no
-                        other platform comes close—and built the industry
-                        security standard for link management. Our 24 hour
-                        on-call teams monitor the availability and performance
-                        of your links all day, every day.
-                      </ZIonText>
-                    }
-                  />
-                </ZIonRow>
-              </ZIonGrid>
-            </ZIonCol>
-            <ZIonCol
-              sizeXl='0'
-              sizeLg=''
-              sizeMd='0'
-              sizeSm='0'
-              sizeXs='0'
-            ></ZIonCol>
-          </ZIonRow>
-        </ZIonGrid>
+									<ZaionsInpageCol
+										icon={iconLargePasswordSecurityMin}
+										title='Seamless integrations'
+										text={
+											<ZIonText className='zaions__color_gray2'>
+												{PRODUCT_NAME} handles over 10 billion clicks a month—no
+												other platform comes close—and built the industry
+												security standard for link management. Our 24 hour
+												on-call teams monitor the availability and performance
+												of your links all day, every day.
+											</ZIonText>
+										}
+									/>
+								</ZIonRow>
+							</ZIonGrid>
+						</ZIonCol>
+						<ZIonCol
+							sizeXl='0'
+							sizeLg=''
+							sizeMd='0'
+							sizeSm='0'
+							sizeXs='0'
+						></ZIonCol>
+					</ZIonRow>
+				</ZIonGrid>
 
-        <Zaions4By4GridSystem data={SocialMarketersData} className='pb-5' />
+				<Zaions4By4GridSystem data={SocialMarketersData} className='pb-5' />
 
-        <InPageFooter btnText='Start for free' />
-      </ZIonContent>
-    </ZaionsIonPage>
-  );
+				<InPageFooter btnText='Start for free' />
+			</ZIonContent>
+		</ZaionsIonPage>
+	);
 };
 
 export default ZaionsDigitalMarketing;

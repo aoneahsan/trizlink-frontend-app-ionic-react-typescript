@@ -360,7 +360,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 							<ZIonHeader className='ion-padding-horizontal'>
 								<ZIonGrid className='ion-no-padding'>
 									<ZIonRow>
-										<ZIonCol className='d-flex align-items-center' size='3'>
+										<ZIonCol className='flex ion-align-items-center' size='3'>
 											<ZIonButton
 												className='ion-text-capitalize ion-no-margin'
 												color='secondary'
@@ -416,7 +416,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 												)}
 												{!values.enableTitleInput && (
 													<ZIonText
-														className='zaions__fs_18 d-flex zaions__cursor_pointer ms-2'
+														className='zaions__fs_18 flex zaions__cursor_pointer ms-2'
 														onClick={() => {
 															setFieldValue('enableTitleInput', true, false);
 														}}
@@ -455,7 +455,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 														);
 													}}
 												>
-													<ZIonLabel className='fw-bold letter-spacing-0px'>
+													<ZIonLabel className='font-bold letter-spacing-0px'>
 														Design
 													</ZIonLabel>
 												</ZIonSegmentButton>
@@ -478,7 +478,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 														);
 													}}
 												>
-													<ZIonLabel className='fw-bold letter-spacing-0px'>
+													<ZIonLabel className='font-bold letter-spacing-0px'>
 														Share settings
 													</ZIonLabel>
 												</ZIonSegmentButton>
@@ -501,7 +501,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 														);
 													}}
 												>
-													<ZIonLabel className='fw-bold letter-spacing-0px'>
+													<ZIonLabel className='font-bold letter-spacing-0px'>
 														Page Analytics
 													</ZIonLabel>
 												</ZIonSegmentButton>
@@ -524,7 +524,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 														);
 													}}
 												>
-													<ZIonLabel className='fw-bold letter-spacing-0px'>
+													<ZIonLabel className='font-bold letter-spacing-0px'>
 														Lead
 													</ZIonLabel>
 												</ZIonSegmentButton>
@@ -533,14 +533,14 @@ const ZaionsLinkInBioForm: React.FC = () => {
 													value='block-analytics'
 													className='ion-text-capitalize'
 												>
-													<ZIonLabel className='fw-bold letter-spacing-0px'>
+													<ZIonLabel className='font-bold letter-spacing-0px'>
 														Block Analytics
 													</ZIonLabel>
 												</ZIonSegmentButton>
 											</ZIonSegment>
 										</ZIonCol>
 
-										<ZIonCol className='d-flex ion-align-items-center ion-justify-content-end'>
+										<ZIonCol className='flex ion-align-items-center ion-justify-content-end'>
 											<ZIonButton
 												className='ion-text-lowercase ion-no-margin me-4'
 												color='danger'

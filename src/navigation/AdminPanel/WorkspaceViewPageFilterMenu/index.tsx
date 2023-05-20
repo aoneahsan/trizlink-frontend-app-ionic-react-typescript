@@ -105,7 +105,7 @@ const ZWorkspaceViewPageFilterMenu: React.FC = () => {
 			menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_WORKSPACE_VIEW_FILTER_MENU_ID}
 		>
 			<ZIonContent>
-				<ZIonItem lines='full' className='fw-bold text-xl' minHeight='66px'>
+				<ZIonItem lines='full' className='font-bold text-xl' minHeight='66px'>
 					Filter & sort
 				</ZIonItem>
 
@@ -113,7 +113,7 @@ const ZWorkspaceViewPageFilterMenu: React.FC = () => {
 					{/*  */}
 					<ZIonCol size='12' className='border-bottom pb-4'>
 						<ZIonLabel
-							className='text-xs d-block mt-2 mb-1 ms-2 tracking-widest'
+							className='text-xs block mt-2 mb-1 ms-2 tracking-widest'
 							color='medium'
 						>
 							SORT BY:
@@ -223,7 +223,7 @@ const ZWorkspaceViewPageFilterMenu: React.FC = () => {
 					{/* FILTER BY: */}
 					<ZIonCol size='12' className='border-bottom pb-4'>
 						<ZIonLabel
-							className='text-xs d-block mt-2 mb-1 ms-2 tracking-widest'
+							className='text-xs block mt-2 mb-1 ms-2 tracking-widest'
 							color='medium'
 						>
 							FILTER BY:
@@ -301,7 +301,7 @@ const ZWorkspaceViewPageFilterMenu: React.FC = () => {
 												) : null
 											) : (
 												// else if el.filterItems is empty then show this content
-												<div className='py-3 flex ion-align-items-center ion-justify-content-center flex-column'>
+												<div className='py-3 flex ion-align-items-center ion-justify-content-center flex-col'>
 													<ZIonIcon
 														icon={fileTrayStackedOutline}
 														className='w-7 h-7'

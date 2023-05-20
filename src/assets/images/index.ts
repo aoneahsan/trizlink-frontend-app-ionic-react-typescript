@@ -6,7 +6,7 @@ type SVGFileRequireType = {
 // Home Page
 import vector from './pages/home-page/vector.png';
 import GlobeImage from './pages/home-page/global.png';
-import HomePageHeroDistopImage from './pages/home-page/home_page_hero_desktop.png';
+import HomePageHeroDesktopImage from './pages/home-page/home_page_hero_desktop.png';
 
 // Discover Enterprise
 import formBG from './pages/discover-enterprise/form-background.png';
@@ -527,7 +527,7 @@ import bulkUploadEmptyState from './pages/admin-panel/dashboard/bulk-upload-empt
 export {
 	vector,
 	GlobeImage,
-	HomePageHeroDistopImage,
+	HomePageHeroDesktopImage,
 	formBG,
 	Zaions101Image,
 	Zaions101MobileImage,

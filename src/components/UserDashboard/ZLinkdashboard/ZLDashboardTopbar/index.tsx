@@ -159,11 +159,11 @@ const DashboardTopBarUserAccountModal: React.FC = ({
 									minWidth: '100%',
 									maxWidth: '100%',
 								}}
-								className='me-2 rounded-circle'
+								className='me-2 rounded-full'
 							/>
 						</ZIonCol>
 						<ZIonCol className='ion-no-padding ps-3'>
-							<ZIonText className='d-block'>talhairshad</ZIonText>
+							<ZIonText className='block'>talhairshad</ZIonText>
 							<ZIonText className='zaions__fs_14'>
 								bhaiameer704@gmail.com
 							</ZIonText>
@@ -171,9 +171,9 @@ const DashboardTopBarUserAccountModal: React.FC = ({
 					</ZIonRow>
 				</ZIonItem>
 				<ZIonItem className='ion-no-padding'>
-					<ZIonRow className='py-2 ion-align-items-top ion-padding-start zaions__w100'>
+					<ZIonRow className='py-2 ion-align-items-top ion-padding-start w-full'>
 						<ZIonCol className='ion-no-padding ps-3'>
-							<ZIonText className='d-block'>talhairshad</ZIonText>
+							<ZIonText className='block'>talhairshad</ZIonText>
 							<ZIonText className='zaions__fs_14'>Free account</ZIonText>
 						</ZIonCol>
 						<ZIonCol className='ion-text-end'>
@@ -235,7 +235,7 @@ const ZLinkDashboardTopBar: React.FC = () => {
 					<ZIonRow>
 						<ZIonCol
 							size='12'
-							className='d-flex ion-align-items-center ion-justify-content-end border-bottom pb-2'
+							className='flex ion-align-items-center ion-justify-content-end border-bottom pb-2'
 						>
 							{!isLgScale && (
 								<ZIonMenuButton className='me-auto ms-2'></ZIonMenuButton>
@@ -243,12 +243,12 @@ const ZLinkDashboardTopBar: React.FC = () => {
 							{isSmScale && (
 								<ZIonItem
 									className={classNames(classes.searchIonItem, {
-										'border d-inline-block': true,
+										'border inline-block': true,
 									})}
 									lines='none'
 								>
 									<ZIonInput
-										className='fw-bold ion-no-padding'
+										className='font-bold ion-no-padding'
 										placeholder='Search...'
 										label='🔍'
 									/>

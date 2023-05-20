@@ -190,7 +190,7 @@ const ZInviteTab: React.FC = () => {
 											fill='outline'
 											id='role-popover-index'
 											className={classNames({
-												'm-0 d-flex h-100 text-transform-initial ion-align-items-start':
+												'm-0 flex h-full text-transform-initial ion-align-items-start':
 													true,
 											})}
 											size='small'
@@ -243,7 +243,7 @@ const ZInviteTab: React.FC = () => {
 										<ZIonButton
 											fill='outline'
 											id='permission-popover-index'
-											className='m-0 d-flex h-100 text-transform-initial'
+											className='m-0 flex h-full text-transform-initial'
 											size='small'
 											color='medium'
 											style={{
@@ -298,7 +298,7 @@ const ZInviteTab: React.FC = () => {
 											fill='solid'
 											id='role-popover-index'
 											className={classNames({
-												'm-0 d-flex h-100 text-transform-initial ion-align-items-start':
+												'm-0 flex h-full text-transform-initial ion-align-items-start':
 													true,
 											})}
 											size='small'
@@ -324,7 +324,7 @@ const ZInviteTab: React.FC = () => {
 											fill='outline'
 											id='role-popover-index'
 											className={classNames({
-												'm-0 d-flex h-100 text-transform-initial ion-align-items-start':
+												'm-0 flex h-full text-transform-initial ion-align-items-start':
 													true,
 											})}
 											size='small'
@@ -380,13 +380,13 @@ const ZInviteTab: React.FC = () => {
 							<ZIonCol className=''>
 								<ZIonRow
 									className={classNames({
-										'w-100  flex ion-align-items-center': true,
+										'w-full  flex ion-align-items-center': true,
 										'h-[35px]': isLgScale,
 									})}
 								>
 									<ZIonCol
 										className={classNames({
-											'border rounded-l h-100 px-2 ': true,
+											'border rounded-l h-full px-2 ': true,
 											'flex ion-align-items-center': isLgScale,
 										})}
 										sizeXl='10.5'
@@ -409,7 +409,7 @@ const ZInviteTab: React.FC = () => {
 
 									<ZIonCol
 										className={classNames({
-											'border rounded-r h-100 p-0 overflow-hidden': true,
+											'border rounded-r h-full p-0 overflow-hidden': true,
 											'mt-2': !isLgScale,
 										})}
 									>

@@ -125,20 +125,20 @@ const ZCustomdomain: React.FC = () => {
 										/>
 									)}
 									<ZIonCol>
-										<ZIonRow className='ion-align-items-center ion-justify-content-center flex-column mt-3'>
+										<ZIonRow className='ion-align-items-center ion-justify-content-center flex-col mt-3'>
 											<ZIonImg
 												src={customLinksEmptyState}
 												className={classNames({
 													zaions__w43: isMdScale,
 													zaions__w60: !isMdScale && isSmScale,
-													zaions__w100: !isSmScale,
+													w-full: !isSmScale,
 												})}
 												alt='Link in bio Inactive state'
 											/>
-											<ZIonTitle className='fs-2 fw-bold mb-2 mt-4'>
+											<ZIonTitle className='text-3xl font-bold mb-2 mt-4'>
 												People trust your links
 											</ZIonTitle>
-											<ZIonText className='fs-5 ion-text-center'>
+											<ZIonText className='text-lg ion-text-center'>
 												Create trusted links with your own branded domain.
 												Upgrade and <br /> choose a complimentary domain to get
 												started.
@@ -147,7 +147,7 @@ const ZCustomdomain: React.FC = () => {
 												className='ion-text-capitalize mt-4'
 												routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
 											>
-												<ZIonText className='px-4 fw-bold'>
+												<ZIonText className='px-4 font-bold'>
 													View our plans
 												</ZIonText>
 											</ZIonButton>

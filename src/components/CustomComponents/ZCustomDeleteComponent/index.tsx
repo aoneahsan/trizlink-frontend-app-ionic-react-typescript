@@ -33,6 +33,7 @@ import { useZIonActionSheet } from '@/ZaionsHooks/zionic-hooks';
  * ? Import of recoil states is a Recoil State import
  * */
 import { ZGenericObject, ZIonColorType } from '@/types/zaionsAppSettings.type';
+import classNames from 'classnames';
 
 /**
  * Style files Imports go down
@@ -49,15 +50,15 @@ import { ZGenericObject, ZIonColorType } from '@/types/zaionsAppSettings.type';
  * ? Like if you have a type for props it should be please Down
  * */
 interface ZCustomDeleteComponentInterface {
-  className?: string;
-  slot?: 'start' | 'end' | string;
-  actionSheetHeader?: string;
-  actionSheetSubHeader?: string;
-  data?: ZGenericObject;
-  iconColor?: ZIonColorType;
-  iconName?: string;
-  iconClassName?: string;
-  deleteFn?: (detail: OverlayEventDetail<unknown>) => Promise<void> | void;
+	className?: string;
+	slot?: 'start' | 'end' | string;
+	actionSheetHeader?: string;
+	actionSheetSubHeader?: string;
+	data?: ZGenericObject;
+	iconColor?: ZIonColorType;
+	iconName?: string;
+	iconClassName?: string;
+	deleteFn?: (detail: OverlayEventDetail<unknown>) => Promise<void> | void;
 }
 
 /**
@@ -67,67 +68,69 @@ interface ZCustomDeleteComponentInterface {
  * */
 
 const ZCustomDeleteComponent: React.FC<ZCustomDeleteComponentInterface> = ({
-  className,
-  slot = '',
-  actionSheetHeader,
-  actionSheetSubHeader,
-  data,
-  iconColor,
-  iconName = trashBin,
-  iconClassName,
-  deleteFn,
+	className,
+	slot = '',
+	actionSheetHeader,
+	actionSheetSubHeader,
+	data,
+	iconColor,
+	iconName = trashBin,
+	iconClassName,
+	deleteFn,
 }) => {
-  // IonActionSheet present went user went to delete a block.
-  const { presentZIonActionSheet } = useZIonActionSheet();
+	// IonActionSheet present went user went to delete a block.
+	const { presentZIonActionSheet } = useZIonActionSheet();
 
-  return (
-    <ZIonButton
-      slot={slot}
-      className={className}
-      fill='clear'
-      size='small'
-      style={{
-        '--background-hover-opacity': '0',
-      }}
-      onClick={() =>
-        void presentZIonActionSheet({
-          header: actionSheetHeader,
-          subHeader: actionSheetSubHeader,
-          buttons: [
-            {
-              text: 'Delete',
-              role: 'destructive',
-              data: {
-                action: 'delete',
-                ...data,
-              },
-            },
-            {
-              text: 'Cancel',
-              role: 'cancel',
-              data: {
-                action: 'cancel',
-              },
-            },
-          ],
-          mode: 'ios',
-          onDidDismiss: ({ detail }) => {
-            deleteFn && void deleteFn(detail);
-          },
-        })
-      }
-    >
-      <ZIonText>
-        <h4 className='ion-no-margin'>
-          <ZIonIcon
-            icon={iconName}
-            color={iconColor}
-            className={iconClassName}
-          />
-        </h4>
-      </ZIonText>
-    </ZIonButton>
-  );
+	return (
+		<ZIonButton
+			slot={slot}
+			className={className}
+			fill='clear'
+			size='small'
+			style={{
+				'--background-hover-opacity': '0',
+			}}
+			onClick={() =>
+				void presentZIonActionSheet({
+					header: actionSheetHeader,
+					subHeader: actionSheetSubHeader,
+					buttons: [
+						{
+							text: 'Delete',
+							role: 'destructive',
+							data: {
+								action: 'delete',
+								...data,
+							},
+						},
+						{
+							text: 'Cancel',
+							role: 'cancel',
+							data: {
+								action: 'cancel',
+							},
+						},
+					],
+					mode: 'ios',
+					onDidDismiss: ({ detail }) => {
+						deleteFn && void deleteFn(detail);
+					},
+				})
+			}
+		>
+			<ZIonText>
+				<h4 className='ion-no-margin'>
+					<ZIonIcon
+						icon={iconName}
+						color={iconColor}
+						className={classNames(iconClassName, {
+							'w-6 h-6': true,
+						})}
+					/>
+				</h4>
+			</ZIonText>
+		</ZIonButton>
+	);
 };
 
 export default ZCustomDeleteComponent;

@@ -110,21 +110,21 @@ const ZWorkspaceMockupPageModal: React.FC<{
 	return (
 		<>
 			<ZIonHeader>
-				<ZIonGrid className='w-100'>
+				<ZIonGrid className='w-full'>
 					{/*  */}
 					<ZIonRow className='ion-align-items-center'>
 						{/*  */}
-						<ZIonCol className='d-flex ion-align-items-center ms-3'>
+						<ZIonCol className='flex ion-align-items-center ms-3'>
 							{/*  */}
 							<div
-								className='w-10 h-10 rounded d-flex ion-align-items-center ion-justify-content-center'
+								className='w-10 h-10 rounded flex ion-align-items-center ion-justify-content-center'
 								style={{ backgroundColor: color }}
 							>
 								<ZIonIcon icon={logo} className='w-7 h-7' color='light' />
 							</div>
 							{/*  */}
 							<div className='ms-2'>
-								<ZIonText className='d-block fw-bold'>
+								<ZIonText className='block font-bold'>
 									Create a mockup page
 								</ZIonText>
 							</div>
@@ -202,7 +202,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 													pageType === workspaceFormConnectPagesEnum.pinterest,
 												'h-[210px]':
 													pageType === workspaceFormConnectPagesEnum.twitter,
-												'd-none':
+												hidden:
 													pageType ===
 														workspaceFormConnectPagesEnum.instagram ||
 													pageType === workspaceFormConnectPagesEnum.tiktok ||
@@ -254,7 +254,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 											<ZIonCol
 												size='12'
 												className={classNames({
-													'border-dashed border-inherit hover:border-indigo-500 border-[1px] flex ion-align-items-center ion-justify-content-center flex-column py-4 h-100 rounded ':
+													'border-dashed border-inherit hover:border-indigo-500 border-[1px] flex ion-align-items-center ion-justify-content-center flex-col py-4 h-full rounded ':
 														true,
 													zaions__dark_set: values.coverImage.trim().length,
 												})}
@@ -269,7 +269,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 												/>
 												<ZIonText
 													className={classNames({
-														'fs-6': true,
+														'text-base': true,
 														zaions_ion_color_light:
 															values.coverImage.trim().length,
 													})}
@@ -282,8 +282,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 										{/* Add Profile Picture */}
 										<ZIonRow
 											className={classNames({
-												'mx-3 position-relative z-50 w-max zaions__cursor_pointer':
-													true,
+												'mx-3 relative z-50 w-max zaions__cursor_pointer': true,
 
 												'mt-[-6.5rem]':
 													pageType === workspaceFormConnectPagesEnum.facebook ||
@@ -333,7 +332,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 											>
 												<div
 													className={classNames({
-														'border-dashed border-inherit hover:border-indigo-500 border-[1px] w-[96px] h-[96px] rounded-circle flex ion-text-center flex-column ion-align-items-center ion-justify-content-center':
+														'border-dashed border-inherit hover:border-indigo-500 border-[1px] w-[96px] h-[96px] rounded-full flex ion-text-center flex-col ion-align-items-center ion-justify-content-center':
 															true,
 														zaions__dark_set:
 															values.coverImage.trim().length ||
@@ -396,7 +395,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 											{/* username/location/subscriberCount */}
 											<ZIonCol
 												className={classNames({
-													'd-none':
+													hidden:
 														pageType ===
 														workspaceFormConnectPagesEnum.universalContent,
 												})}
@@ -619,16 +618,16 @@ const ContentStyle: React.FC = () => {
 							icon={checkmarkCircle}
 							color='primary'
 							className={classNames({
-								'w-6 h-6 ms-auto d-flex': true,
+								'w-6 h-6 ms-auto flex': true,
 								'opacity-0': el.contentStyleType !== values.contentStyle,
 								'opacity-100': el.contentStyleType === values.contentStyle,
 							})}
 						/>
 					}
-					<div className='d-flex ion-align-items-center ion-justify-content-center flex-column'>
+					<div className='flex ion-align-items-center ion-justify-content-center flex-col'>
 						<ZIonText
 							className={classNames(el.titleFontFamily, {
-								'fs-5': true,
+								'text-lg': true,
 							})}
 						>
 							Ab

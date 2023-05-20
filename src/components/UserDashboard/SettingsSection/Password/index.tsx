@@ -27,7 +27,7 @@ const APSettingspassword: React.FC = () => {
 		<>
 			<ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-5 ion-align-items-center mb-3'>
 				<ZIonCol sizeXl='4' sizeLg='5' sizeMd='6' sizeSm='8' sizeXs='12'>
-					<ZIonText className='p-0 mb-2 fw-bold' color={'dark'}>
+					<ZIonText className='p-0 mb-2 font-bold' color={'dark'}>
 						Pop-up with logo <ZIonRouterLink>(learn more)</ZIonRouterLink>
 					</ZIonText>
 				</ZIonCol>

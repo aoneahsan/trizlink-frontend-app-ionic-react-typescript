@@ -93,7 +93,7 @@ const ZWorkspacePinterestPageLayout: React.FC = () => {
 						'mx-auto rounded-[32px] zaions-background-set relative h-[369px]':
 							true,
 						// 'w-[656px]': isMdScale,
-						// 'w-100': !isMdScale,
+						// 'w-full': !isMdScale,
 					})}
 					style={{
 						backgroundImage: `url(https://d2b57pa8jvjkcd.cloudfront.net/xGF9qraKHpDFhkqdC/JHg2CLhHKG-tom-idea.jpg)`,
@@ -119,13 +119,17 @@ const ZWorkspacePinterestPageLayout: React.FC = () => {
 				sizeXs='11.7'
 				className='mx-auto'
 			>
-				<div className='rounded-circle mt-[-62px] overflow-hidden border-2 border-white border-solid w-[9rem] h-[9rem] mx-auto flex'>
-					<ZIonImg src={ProductLogo} className='w-100 h-100' />
+				<div className='rounded-full mt-[-62px] overflow-hidden border-2 border-white border-solid w-[9rem] h-[9rem] mx-auto flex'>
+					<ZIonImg src={ProductLogo} className='w-full h-full' />
 				</div>
 
 				<div className='flex flex-col ion-align-items-center justify-center'>
 					<ZIonText>
-						<ZIonRouterLink routerLink='' color='dark' className='fw-bold fs-2'>
+						<ZIonRouterLink
+							routerLink=''
+							color='dark'
+							className='font-bold text-3xl'
+						>
 							Zaions
 						</ZIonRouterLink>
 					</ZIonText>

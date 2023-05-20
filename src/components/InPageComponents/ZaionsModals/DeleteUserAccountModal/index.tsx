@@ -166,7 +166,7 @@ const DeleteUserAccountModal: React.FC<{
 						<>
 							<ZIonContent className='ion-padding-vertical'>
 								<ZIonRow className='ion-no-padding ion-no-margin'>
-									<ZIonCol className='d-flex ion-justify-content-end ion-align-items-start ion-no-padding ion-no-margin'>
+									<ZIonCol className='flex ion-justify-content-end ion-align-items-start ion-no-padding ion-no-margin'>
 										<ZIonButton
 											fill='clear'
 											className='ion-no-padding ion-no-margin me-2'
@@ -178,11 +178,11 @@ const DeleteUserAccountModal: React.FC<{
 									</ZIonCol>
 								</ZIonRow>
 								<ZIonRow className='ion-no-padding'>
-									<ZIonCol className='d-flex flex-column ion-justify-content-end pt-0 px-4 ms-2'>
+									<ZIonCol className='flex flex-col ion-justify-content-end pt-0 px-4 ms-2'>
 										<ZIonTitle className='ion-no-padding mb-3'>
-											<h3 className='fw-bold'>Delete user account</h3>
+											<h3 className='font-bold'>Delete user account</h3>
 										</ZIonTitle>
-										<ZIonText className='d-block fw-bold zaions__fs_16'>
+										<ZIonText className='block font-bold zaions__fs_16'>
 											How your account will be affected:
 										</ZIonText>
 										<ZIonList
@@ -206,7 +206,7 @@ const DeleteUserAccountModal: React.FC<{
 											</ZIonItem>
 										</ZIonList>
 
-										<ZIonText className='d-block fw-bold zaions__fs_16 mt-3'>
+										<ZIonText className='block font-bold zaions__fs_16 mt-3'>
 											How your links will be affected:
 										</ZIonText>
 										<ZIonList
@@ -234,7 +234,7 @@ const DeleteUserAccountModal: React.FC<{
 												Your name will not appear next to links you've created
 											</ZIonItem>
 
-											<ZIonText className='d-block fw-bold zaions__fs_16 mt-3'>
+											<ZIonText className='block font-bold zaions__fs_16 mt-3'>
 												We're sad to see you go. Can you tell us why you're
 												leaving?
 											</ZIonText>
@@ -315,7 +315,7 @@ const DeleteUserAccountModal: React.FC<{
 											</IonRadioGroup>
 										</ZIonList>
 
-										<ZIonText className='fw-bold zaions__fs_16 mt-4'>
+										<ZIonText className='font-bold zaions__fs_16 mt-4'>
 											To permanently delete your account, enter '
 											{CONSTANTS.USER_ACCOUNT_DELETE_CONFIRM_KEY}' below, and
 											then select Delete account.

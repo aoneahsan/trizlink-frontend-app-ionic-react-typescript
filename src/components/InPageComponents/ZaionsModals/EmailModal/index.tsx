@@ -126,17 +126,17 @@ const AddEmailModal: React.FC<{
 					<>
 						<ZIonContent className='ion-padding-vertical '>
 							<ZIonRow className='ion-padding'>
-								<ZIonCol className='d-flex flex-column ion-justify-content-end ion-align-items-center mt-3'>
+								<ZIonCol className='flex flex-col ion-justify-content-end ion-align-items-center mt-3'>
 									<ZIonTitle className='ion-no-padding mb-3'>
-										<h3 className='fw-bold'>Add a new email address</h3>
+										<h3 className='font-bold'>Add a new email address</h3>
 									</ZIonTitle>
-									<ZIonText className='d-block'>
+									<ZIonText className='block'>
 										A verification email will be sent to this address after
 										clicking Save. New email addresses cannot be designated as
 										primary until they have been verified.
 									</ZIonText>
 								</ZIonCol>
-								<ZIonCol className='d-flex ion-justify-content-end ion-align-items-start ion-no-padding'>
+								<ZIonCol className='flex ion-justify-content-end ion-align-items-start ion-no-padding'>
 									<ZIonButton
 										fill='clear'
 										className='ion-no-padding ion-no-margin me-2'

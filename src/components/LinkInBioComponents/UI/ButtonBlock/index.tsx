@@ -50,16 +50,16 @@ import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
  * ? Like if you have a type for props it should be please Down
  * */
 interface ZLinkInBioButtonBlockInterface {
-  title?: string;
-  style?: {
-    [key: string]: unknown;
-  };
-  url?: string;
-  target?: ZIonTargetType;
-  animationType?: LinkInBioBlockAnimationEnum;
-  className?: string;
-  fill?: 'clear' | 'default' | 'outline' | 'solid';
-  fontFamily?: LinkInBioThemeFontEnum;
+	title?: string;
+	style?: {
+		[key: string]: unknown;
+	};
+	url?: string;
+	target?: ZIonTargetType;
+	animationType?: LinkInBioBlockAnimationEnum;
+	className?: string;
+	fill?: 'clear' | 'default' | 'outline' | 'solid';
+	fontFamily?: LinkInBioThemeFontEnum;
 }
 
 /**
@@ -69,55 +69,55 @@ interface ZLinkInBioButtonBlockInterface {
  * */
 
 const ZLinkInBioButtonBlock: React.FC<ZLinkInBioButtonBlockInterface> = ({
-  title,
-  style,
-  url,
-  target,
-  animationType,
-  className,
-  fill,
-  fontFamily,
+	title,
+	style,
+	url,
+	target,
+	animationType,
+	className,
+	fill,
+	fontFamily,
 }) => {
-  // const variants = {
-  //   bounce: {
-  //     animationName: animationType,
-  //     animationDuration: '1s',
-  //     animationTimingFunction: 'ease-in-out',
-  //     animationIterationCount: 'infinite',
-  //   },
-  // };
+	// const variants = {
+	//   bounce: {
+	//     animationName: animationType,
+	//     animationDuration: '1s',
+	//     animationTimingFunction: 'ease-in-out',
+	//     animationIterationCount: 'infinite',
+	//   },
+	// };
 
-  // Recoil state link-in-bio form state (for editing or creating link-in-bio)
+	// Recoil state link-in-bio form state (for editing or creating link-in-bio)
 
-  return (
-    <ZIonCol style={{ padding: '0.6rem 0' }}>
-      {/* <motion.div animate={animationType} variants={variants}> */}
-      <ZIonButton
-        expand='block'
-        className={classNames(className, animationType, fontFamily, {
-          'ion-text-capitalize fw-bold zaions__fs_16 my-0 animated mx-auto':
-            true,
-        })}
-        style={{
-          ...style,
-          height: '3.5rem',
+	return (
+		<ZIonCol style={{ padding: '0.6rem 0' }}>
+			{/* <motion.div animate={animationType} variants={variants}> */}
+			<ZIonButton
+				expand='block'
+				className={classNames(className, animationType, fontFamily, {
+					'ion-text-capitalize font-bold zaions__fs_16 my-0 animated mx-auto':
+						true,
+				})}
+				style={{
+					...style,
+					height: '3.5rem',
 
-          color: '#fff',
-          // '--box-shadow': '0 10px 35px -5px rgb(0 0 0 / 20%)',
-          // '--border-radius': '0.8rem',
-          // borderRadius: '0.8rem',
-          width: '90%',
-        }}
-        target={target}
-        href={url}
-        fill={fill}
-        // color='light'
-      >
-        {title}
-      </ZIonButton>
-      {/* </motion.div> */}
-    </ZIonCol>
-  );
+					color: '#fff',
+					// '--box-shadow': '0 10px 35px -5px rgb(0 0 0 / 20%)',
+					// '--border-radius': '0.8rem',
+					// borderRadius: '0.8rem',
+					width: '90%',
+				}}
+				target={target}
+				href={url}
+				fill={fill}
+				// color='light'
+			>
+				{title}
+			</ZIonButton>
+			{/* </motion.div> */}
+		</ZIonCol>
+	);
 };
 
 export default ZLinkInBioButtonBlock;

@@ -278,7 +278,7 @@ const ZaionsAddPixelAccount: React.FC<{
 					)}
 
 					<ZIonContent className='ion-padding'>
-						<div className='d-flex ion-text-center ion-justify-content-center flex-column ion-padding-top ion-margin-top'>
+						<div className='flex ion-text-center ion-justify-content-center flex-col ion-padding-top ion-margin-top'>
 							<ZIonText className='' color={'primary'}>
 								<h4 className={`mb-0 bg-primary zaions__modal_icon`}>
 									<ZIonIcon
@@ -290,7 +290,7 @@ const ZaionsAddPixelAccount: React.FC<{
 							</ZIonText>
 							<br />
 							<ZIonText color={'dark'}>
-								<h6 className='fw-bold'>Add a new Pixel ID 🧞</h6>
+								<h6 className='font-bold'>Add a new Pixel ID 🧞</h6>
 							</ZIonText>
 						</div>
 						<Form onSubmit={handleSubmit} className='px-4'>

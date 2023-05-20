@@ -149,23 +149,6 @@ ion-app.ios ion-title {
 	-o-border-radius: 50%;
 }
 
-/* Font Weight's */
-.zaions__fw_700 {
-	font-weight: 700;
-}
-
-.zaions__fw_750 {
-	font-weight: 750;
-}
-
-.zaions__fw_800 {
-	font-weight: 800 !important;
-}
-
-.zaions__fw_900 {
-	font-weight: 900 !important;
-}
-
 /* Fonts Sizes */
 .zaions__fs_11 {
 	font-size: 11px !important;
@@ -196,7 +179,7 @@ ion-app.ios ion-title {
 	font-size: 3rem !important;
 }
 
-.zaions__headding {
+.zaions__heading {
 	line-height: 48px;
 }
 
@@ -242,7 +225,7 @@ span.new {
 	margin-top: -2px;
 }
 
-.zaions__underline {
+.underline {
 	text-decoration: underline;
 }
 
@@ -375,10 +358,6 @@ span.new {
 /* Width's */
 .zaions__max_content {
 	width: max-content;
-}
-
-.zaions__w100 {
-	width: 100%;
 }
 
 .zaions__w95 {

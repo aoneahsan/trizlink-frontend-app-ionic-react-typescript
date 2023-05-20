@@ -105,9 +105,9 @@ const ZMembersTab: React.FC = () => {
 					<div className=''>
 						<ZIonLabel
 							className={classNames({
-								'text-sm fw-bold d-flex': true,
+								'text-sm font-bold flex': true,
 								'ion-align-items-center': isLgScale,
-								'flex-column ion-align-items-start': !isLgScale,
+								'flex-col ion-align-items-start': !isLgScale,
 							})}
 						>
 							<ZIonText>Muhammad talha Irshad (you)</ZIonText>
@@ -119,7 +119,7 @@ const ZMembersTab: React.FC = () => {
 								TEAM
 							</ZIonBadge>
 						</ZIonLabel>
-						<ZIonLabel className='d-block text-sm' color='medium'>
+						<ZIonLabel className='block text-sm' color='medium'>
 							talhaarshaad5@gmail.com
 						</ZIonLabel>
 					</div>

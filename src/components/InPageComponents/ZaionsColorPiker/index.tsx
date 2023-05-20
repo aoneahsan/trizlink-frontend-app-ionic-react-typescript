@@ -75,12 +75,13 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
 }) => {
 	return (
 		<ZIonItem
-			className='ion-no-padding d-flex align-item-center mt-3'
+			className='ion-no-padding flex ion-align-items-center mt-3'
 			style={{
-				// '--border-color': value,
+				// '--border-color': '#000',
 				// '--highlight-color-focused': value,
 				'--inner-padding-end': '0px',
 			}}
+			lines='none'
 		>
 			<input
 				type='color'

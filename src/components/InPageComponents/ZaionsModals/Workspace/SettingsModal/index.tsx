@@ -91,8 +91,8 @@ const ZWorkspacesSettingModal: React.FC<{
 		<>
 			{/* header  */}
 			<ZIonHeader>
-				<div className='py-1 w-100 ion-text-center zaions__primary_bg'>
-					<ZIonText className='fs-3 fw-bold' color='light'>
+				<div className='py-1 w-full ion-text-center zaions__primary_bg'>
+					<ZIonText className='text-3xl font-bold' color='light'>
 						Zaions
 					</ZIonText>
 				</div>

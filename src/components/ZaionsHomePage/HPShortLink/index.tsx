@@ -1,18 +1,20 @@
 // Core Imports
 import React from 'react';
 // Packages Imports
-import Form from 'react-bootstrap/Form';
+// import Form from 'react-bootstrap/Form';
 import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
 import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
 import {
-  ZIonCol,
-  ZIonText,
-  ZIonRouterLink,
-  ZIonRow,
-  ZIonGrid,
+	ZIonCol,
+	ZIonText,
+	ZIonRouterLink,
+	ZIonRow,
+	ZIonGrid,
+	ZIonIcon,
+	ZIonInput,
 } from '@/components/ZIonComponents';
 
 // Style
@@ -23,74 +25,72 @@ import { vector } from '@/assets/images';
 
 // Global Constant
 import {
-  BRACKPOINT_LG,
-  BRACKPOINT_SM,
-  BRACKPOINT_XL,
-  PRODUCT_NAME,
+	BRACKPOINT_LG,
+	BRACKPOINT_SM,
+	BRACKPOINT_XL,
+	PRODUCT_NAME,
 } from '@/utils/constants';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { caretDownOutline } from 'ionicons/icons';
 
 const ZaionsHPShortLink: React.FC = () => {
-  const isXlScale = useMediaQuery({
-    query: `(min-width: ${BRACKPOINT_XL})`,
-  });
-  const isLgScale = useMediaQuery({
-    query: `(min-width: ${BRACKPOINT_LG})`,
-  });
-  const isSmScale = useMediaQuery({
-    query: `(min-width: ${BRACKPOINT_SM})`,
-  });
+	const isXlScale = useMediaQuery({
+		query: `(min-width: ${BRACKPOINT_XL})`,
+	});
+	const isLgScale = useMediaQuery({
+		query: `(min-width: ${BRACKPOINT_LG})`,
+	});
+	const isSmScale = useMediaQuery({
+		query: `(min-width: ${BRACKPOINT_SM})`,
+	});
 
-  return (
-    <>
-      <div
-        className={classNames({
-          'ion-text-center ion-margin-bottom': true,
-          'ion-padding-bottom': isSmScale,
-        })}
-      >
-        <ZaionsHr />
-        <ZIonText>
-          Bringing us all a <span style={{ color: '#ff6116' }}>bit</span>{' '}
-          closer. Discover our Connections Platform below.
-          <br />
-          <img
-            src={vector}
-            alt='vector'
-            style={{
-              maxWidth: '100%',
-            }}
-          />
-        </ZIonText>
-      </div>
-      <div
-        className={classNames({
-          'ion-text-center': true,
-          'mt-5': isSmScale,
-        })}
-      >
-        <ZIonGrid className='px-0'>
-          <ZIonRow
-            // className={`ion-align-items-start ion-padding-top ion-padding-bottom zaions_secondary_color  ${
-            // 	isXlScale && 'ion-text-center'
-            // }`}
-            className={classNames({
-              'ion-align-items-start ion-padding-top ion-padding-bottom zaions_secondary_color':
-                true,
-              'ion-text-center': isXlScale,
-            })}
-          >
-            <ZIonCol></ZIonCol>
-            <ZIonCol
-              sizeXl='6.8'
-              sizeLg='8'
-              sizeMd='12'
-              sizeSm='12'
-              sizeXs='12'
-              className='ion-margin-end'
-            >
-              <Form.Group
+	return (
+		<>
+			<div
+				className={classNames({
+					'ion-text-center ion-margin-bottom': true,
+					'ion-padding-bottom': isSmScale,
+				})}
+			>
+				<ZaionsHr />
+				<ZIonText>
+					Bringing us all a
+					<ZIonText color='secondary' className='mx-1'>
+						bit
+					</ZIonText>
+					closer. Discover our Connections Platform below.
+					<ZIonIcon
+						icon={caretDownOutline}
+						className='block mx-auto w-6 h-6'
+						color='secondary'
+					/>
+				</ZIonText>
+			</div>
+			<div
+				className={classNames({
+					'ion-text-center': true,
+					'mt-5': isSmScale,
+				})}
+			>
+				<ZIonGrid className='px-0'>
+					<ZIonRow
+						className={classNames({
+							'ion-align-items-start ion-padding-top ion-padding-bottom zaions_secondary_color':
+								true,
+							'ion-text-center': isXlScale,
+						})}
+					>
+						<ZIonCol></ZIonCol>
+						<ZIonCol
+							sizeXl='6.8'
+							sizeLg='8'
+							sizeMd='12'
+							sizeSm='12'
+							sizeXs='12'
+							className='ion-margin-end'
+						>
+							{/* <Form.Group
                 className='mb-1 input-group-lg'
                 controlId='formBasicLinkShorten'
               >
@@ -99,72 +99,77 @@ const ZaionsHPShortLink: React.FC = () => {
                   placeholder='Shorten your link'
                   style={{ padding: '0.9rem 1rem' }}
                 />
-              </Form.Group>
-              <ZIonText
-                className='zaions__color_gray'
-                style={{ fontSize: '13px' }}
-              >
-                By clicking SHORTEN, you are agreeing to {PRODUCT_NAME}'s{' '}
-                <ZIonRouterLink
-                  routerLink={ZaionsRoutes.Legal.ZaionsTermsOfService}
-                  className='zaions__color_gray zaions__underline'
-                >
-                  Terms of Service
-                </ZIonRouterLink>
-                ,{' '}
-                <ZIonRouterLink
-                  routerLink={ZaionsRoutes.Legal.ZaionsPrivacyPolicyRoute}
-                  className='zaions__color_gray zaions__underline'
-                >
-                  Privacy Policy
-                </ZIonRouterLink>
-                , and{' '}
-                <ZIonRouterLink
-                  routerLink={ZaionsRoutes.Legal.ZaionsAcceptableUsePolicyRoute}
-                  className='zaions__color_gray zaions__underline'
-                >
-                  Acceptable Use Policy
-                </ZIonRouterLink>
-              </ZIonText>
-            </ZIonCol>
-            <ZIonCol
-              sizeXl='2.6'
-              sizeLg='3'
-              sizeMd='12'
-              sizeSm='12'
-              sizeXs='12'
-              className={`${
-                !isLgScale ? '' : 'ion-padding-start'
-              } ion-text-start `}
-            >
-              {' '}
-              <ZIonRow>
-                <ZIonCol
-                  sizeXl='12'
-                  sizeLg='12'
-                  sizeMd='3'
-                  sizeSm='3'
-                  sizeXs='12'
-                  className={`${!isLgScale ? 'mx-auto' : ''} my-0 py-0`}
-                >
-                  <ZIonButton
-                    className={`${classes.zaions__shortlink_btn} ion-text-capitalize ion-margin-top`}
-                    color='light'
-                    fill='clear'
-                    size='large'
-                    expand='block'
-                  >
-                    Shorten
-                  </ZIonButton>
-                </ZIonCol>
-              </ZIonRow>
-            </ZIonCol>
-            <ZIonCol></ZIonCol>
-          </ZIonRow>
-        </ZIonGrid>
-      </div>
-    </>
-  );
+              </Form.Group> */}
+							<ZIonInput
+								label='Shorten your link'
+								labelPlacement='floating'
+								fill='solid'
+								className='ion-text-start mt-1'
+							/>
+							<ZIonText color='medium' style={{ fontSize: '13px' }}>
+								By clicking SHORTEN, you are agreeing to {PRODUCT_NAME}'s{' '}
+								<ZIonRouterLink
+									routerLink={ZaionsRoutes.Legal.ZaionsTermsOfService}
+									className='underline'
+									color='medium'
+								>
+									Terms of Service
+								</ZIonRouterLink>
+								,{' '}
+								<ZIonRouterLink
+									routerLink={ZaionsRoutes.Legal.ZaionsPrivacyPolicyRoute}
+									className='underline'
+									color='medium'
+								>
+									Privacy Policy
+								</ZIonRouterLink>
+								, and{' '}
+								<ZIonRouterLink
+									routerLink={ZaionsRoutes.Legal.ZaionsAcceptableUsePolicyRoute}
+									className='underline'
+									color='medium'
+								>
+									Acceptable Use Policy
+								</ZIonRouterLink>
+							</ZIonText>
+						</ZIonCol>
+						<ZIonCol
+							sizeXl='2.6'
+							sizeLg='3'
+							sizeMd='12'
+							sizeSm='12'
+							sizeXs='12'
+							className={`${
+								!isLgScale ? '' : 'ion-padding-start'
+							} ion-text-start `}
+						>
+							{' '}
+							<ZIonRow>
+								<ZIonCol
+									sizeXl='12'
+									sizeLg='12'
+									sizeMd='3'
+									sizeSm='3'
+									sizeXs='12'
+									className={`${!isLgScale ? 'mx-auto' : ''} my-0 py-0`}
+								>
+									<ZIonButton
+										className={`${classes.zaions__shortlink_btn} ion-text-capitalize`}
+										color='primary'
+										size='large'
+										expand='block'
+									>
+										Shorten
+									</ZIonButton>
+								</ZIonCol>
+							</ZIonRow>
+						</ZIonCol>
+						<ZIonCol></ZIonCol>
+					</ZIonRow>
+				</ZIonGrid>
+			</div>
+		</>
+	);
 };
 
 export default ZaionsHPShortLink;

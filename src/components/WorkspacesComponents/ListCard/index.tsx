@@ -212,11 +212,11 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 		>
 			<ZIonCardHeader>
 				<ZIonRow className='ion-align-items-center'>
-					<ZIonCol className='gap-3 d-flex ion-align-items-center'>
+					<ZIonCol className='gap-3 flex ion-align-items-center'>
 						<div
 							className={classNames({
 								'zaions__w50px zaions__h50px rounded overflow__hidden': true,
-								'd-flex ion-align-items-center ion-justify-content-center zaions__primary_bg':
+								'flex ion-align-items-center ion-justify-content-center zaions__primary_bg':
 									!workspaceAvatar,
 							})}
 						>
@@ -231,10 +231,10 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 							)}
 						</div>
 						<div>
-							<ZIonText className='fw-bold d-block fs-6' color='dark'>
+							<ZIonText className='font-bold block text-base' color='dark'>
 								{workspaceName}
 							</ZIonText>
-							<ZIonText className='d-block zaions__fs_11'>
+							<ZIonText className='block zaions__fs_11'>
 								{workspacePagesCount} pages
 							</ZIonText>
 						</div>
@@ -260,7 +260,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 							color='primary'
 							fill='solid'
 							className={classNames(classes['workspace-user-avatar-button'], {
-								'position-relative': true,
+								relative: true,
 							})}
 							onClick={(event: unknown) => {
 								presentUserInfoPopover({
@@ -269,10 +269,9 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 								});
 							}}
 						>
-							{/* MT */}
 							<ZIonImg
-								src={userAvatar} // TODO: add getUIAvatar function here
-								className='w-100 h-100 zaions-object-fit-cover'
+								src={userAvatar || getUiAvatarApiUrl({ name: workspaceName })}
+								className='w-[40px] h-[40px] zaions-object-fit-cover'
 							/>
 						</ZIonButton>
 					</ZIonCol>

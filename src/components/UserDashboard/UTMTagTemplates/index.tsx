@@ -85,10 +85,10 @@ const UTMTagTemplates: React.FC = () => {
 	return (
 		<>
 			<ZIonRow className='border-bottom zaions__bg_white mt-4'>
-				<ZIonCol className='px-3 py-3 d-flex align-items-center'>
+				<ZIonCol className='px-3 py-3 flex ion-align-items-center'>
 					<ZIonIcon icon={pricetagOutline} size={'large'}></ZIonIcon>
 					<ZIonText>
-						<h6 className='fw-bold ion-no-margin ion-padding-start'>
+						<h6 className='font-bold ion-no-margin ion-padding-start'>
 							Add UTMs tags{' '}
 							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
 								(help)
@@ -183,7 +183,7 @@ const UTMTagTemplates: React.FC = () => {
 									/>
 								</ZIonCol>
 
-								<ZIonCol size='6' className='d-flex ion-align-items-center'>
+								<ZIonCol size='6' className='flex ion-align-items-center'>
 									<ZIonButton
 										fill='clear'
 										className='ion-text-capitalize ion-no-margin ion-margin-start mt-5'

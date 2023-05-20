@@ -1,7 +1,7 @@
 // Core Imports
 
 // Packages Imports
-import { HomePageHeroDistopImage } from '@/assets/images';
+import { HomePageHeroDesktopImage } from '@/assets/images';
 import { ZIonButton } from '@/components/ZIonComponents';
 import { useMediaQuery } from 'react-responsive';
 
@@ -21,6 +21,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Style
 import classes from './styles.module.css';
+import classNames from 'classnames';
 
 const ZaionsHPBanner: React.FC = () => {
 	const isLgScale = useMediaQuery({
@@ -50,16 +51,17 @@ const ZaionsHPBanner: React.FC = () => {
 						className={`${!isLgScale ? 'ion-text-center' : ''}`}
 					>
 						<ZIonText>
-							<h1 className='ion-padding-top ion-margin-top zaions__fw_750 zaions__color_dark zaions__headding text-4xl'>
-								We’ve expanded! <br /> Shorten URLs. Generate QR Codes. <br />{' '}
+							<h1 className='ion-padding-top ion-margin-top font-bold zaions__color_dark zaions__heading text-4xl'>
+								We’ve expanded! <br /> Shorten URLs. Generate QR Codes. <br />
 								And now, create Link-in-bios.
 							</h1>
 						</ZIonText>
 
 						<div
-							className={`ion-text-center ${
-								!isLgScale ? '' : 'zaions__max_content'
-							}`}
+							className={classNames({
+								// 'ion-text-center': true,
+								'w-max': !isLgScale,
+							})}
 						>
 							<ZIonRouterLink
 								routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
@@ -78,7 +80,7 @@ const ZaionsHPBanner: React.FC = () => {
 							{/* <br /> */}
 							<ZIonRouterLink routerLink={ZaionsRoutes.DiscoverEnterpriseRoute}>
 								<ZIonText
-									className={`${classes.zaions__bannerQuote_btn} ion-text-capitalize ion-margin-top d-block`}
+									className={`${classes.zaions__bannerQuote_btn} ion-text-capitalize mt-1 block`}
 									color='primary'
 								>
 									Get a Quote
@@ -86,18 +88,9 @@ const ZaionsHPBanner: React.FC = () => {
 							</ZIonRouterLink>
 						</div>
 					</ZIonCol>
-					<ZIonCol
-						sizeXl='4'
-						sizeLg='12'
-						sizeMd='12'
-						sizeSm='12'
-						sizeXs='12'
-						// className={`${
-						// 	isXlScale ? classes.zaions__moveNagitive100pxLeft : ''
-						// } ${isXsScale ? classes.zaions__move100pxLeft : ''}`}
-					>
+					<ZIonCol sizeXl='4' sizeLg='12' sizeMd='12' sizeSm='12' sizeXs='12'>
 						<ZIonImg
-							src={HomePageHeroDistopImage}
+							src={HomePageHeroDesktopImage}
 							style={{
 								width: !isMdScale ? '100%' : '460px',
 								minWidth: isLgScale ? '60%' : '100%',

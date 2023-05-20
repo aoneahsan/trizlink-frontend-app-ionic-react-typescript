@@ -109,13 +109,13 @@ const ZaionsResourceLibrary: React.FC = () => {
 									sizeXs='12'
 								>
 									<ZIonText
-										className='fs-5 zaions__color_gray2'
+										className='text-lg zaions__color_gray2'
 										style={{ borderBottom: '1px #eff0f2 solid' }}
 									>
 										Filter Resources
 									</ZIonText>
 									<div className='zaions__color_gray2'>
-										<ZIonText className='d-block mb-3 mt-4'>By type</ZIonText>
+										<ZIonText className='block mb-3 mt-4'>By type</ZIonText>
 
 										<ZIonList lines={'none'} className='m-0 p-0'>
 											<ZIonItem className='m-0 p-0'>

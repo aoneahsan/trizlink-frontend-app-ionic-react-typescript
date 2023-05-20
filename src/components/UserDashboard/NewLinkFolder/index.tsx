@@ -62,10 +62,10 @@ const NewLinkFolder: React.FC<{
 				sizeXs='12'
 				className='border py-3 zaions__bg_white'
 			>
-				<div className='d-flex align-items-center border-bottom ion-padding-start'>
+				<div className='flex ion-align-items-center border-bottom ion-padding-start'>
 					<ZIonIcon icon={folderOpenOutline} size={'large'}></ZIonIcon>
 					<ZIonText>
-						<h6 className='fw-bold ion-no-margin ion-padding-start'>
+						<h6 className='font-bold ion-no-margin ion-padding-start'>
 							Folder{' '}
 							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
 								(help)
@@ -84,7 +84,7 @@ const NewLinkFolder: React.FC<{
 						<ZIonIcon icon={addCircleOutline} size={'large'} />
 					</ZIonButton>
 				</div>
-				<div className='mt-4 d-block px-4'>
+				<div className='mt-4 block px-4'>
 					<ZaionsRSelect
 						className='ion-padding-top'
 						options={_foldersData as unknown as ZaionsRSelectOptions[]}

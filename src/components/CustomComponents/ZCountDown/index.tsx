@@ -54,77 +54,77 @@ import { getRemainingTimeForCountDown } from '@/utils/helpers';
  * */
 
 const ZCustomRender: CountdownRendererFn = ({
-  days,
-  hours,
-  minutes,
-  seconds,
-  completed,
+	days,
+	hours,
+	minutes,
+	seconds,
+	completed,
 }) => {
-  return (
-    <div className='d-flex ion-justify-content-between mx-auto zaions__w80 ion-align-items-center'>
-      <div className='ion-text-center'>
-        <ZIonTitle className='ion-no-padding' color='light'>
-          {days}
-        </ZIonTitle>
-        <ZIonText className='zaions__fs_11' color='light'>
-          DAYS
-        </ZIonText>
-      </div>
-      <div className='mb-2'>
-        <ZIonText className='fw-bold zaions__fs_18' color='light'>
-          :
-        </ZIonText>
-      </div>
+	return (
+		<div className='flex ion-justify-content-between mx-auto zaions__w80 ion-align-items-center'>
+			<div className='ion-text-center'>
+				<ZIonTitle className='ion-no-padding' color='light'>
+					{days}
+				</ZIonTitle>
+				<ZIonText className='zaions__fs_11' color='light'>
+					DAYS
+				</ZIonText>
+			</div>
+			<div className='mb-2'>
+				<ZIonText className='font-bold zaions__fs_18' color='light'>
+					:
+				</ZIonText>
+			</div>
 
-      <div className='ion-text-center'>
-        <ZIonTitle className='ion-no-padding' color='light'>
-          {hours}
-        </ZIonTitle>
-        <ZIonText className='zaions__fs_11' color='light'>
-          HRS
-        </ZIonText>
-      </div>
-      <div className='mb-2'>
-        <ZIonText className='fw-bold zaions__fs_18' color='light'>
-          :
-        </ZIonText>
-      </div>
+			<div className='ion-text-center'>
+				<ZIonTitle className='ion-no-padding' color='light'>
+					{hours}
+				</ZIonTitle>
+				<ZIonText className='zaions__fs_11' color='light'>
+					HRS
+				</ZIonText>
+			</div>
+			<div className='mb-2'>
+				<ZIonText className='font-bold zaions__fs_18' color='light'>
+					:
+				</ZIonText>
+			</div>
 
-      <div className='ion-text-center'>
-        <ZIonTitle className='ion-no-padding' color='light'>
-          {minutes}
-        </ZIonTitle>
-        <ZIonText className='zaions__fs_11' color='light'>
-          MIN
-        </ZIonText>
-      </div>
-      <div className='mb-2'>
-        <ZIonText className='fw-bold zaions__fs_18' color='light'>
-          :
-        </ZIonText>
-      </div>
+			<div className='ion-text-center'>
+				<ZIonTitle className='ion-no-padding' color='light'>
+					{minutes}
+				</ZIonTitle>
+				<ZIonText className='zaions__fs_11' color='light'>
+					MIN
+				</ZIonText>
+			</div>
+			<div className='mb-2'>
+				<ZIonText className='font-bold zaions__fs_18' color='light'>
+					:
+				</ZIonText>
+			</div>
 
-      <div className='ion-text-center'>
-        <ZIonTitle className='ion-no-padding' color='light'>
-          {seconds}
-        </ZIonTitle>
-        <ZIonText className='zaions__fs_11' color='light'>
-          SEC
-        </ZIonText>
-      </div>
-    </div>
-  );
+			<div className='ion-text-center'>
+				<ZIonTitle className='ion-no-padding' color='light'>
+					{seconds}
+				</ZIonTitle>
+				<ZIonText className='zaions__fs_11' color='light'>
+					SEC
+				</ZIonText>
+			</div>
+		</div>
+	);
 };
 
 const ZCountdown: React.FC<{ countDownTime?: string }> = ({
-  countDownTime,
+	countDownTime,
 }) => {
-  return (
-    <Countdown
-      date={getRemainingTimeForCountDown(countDownTime)}
-      renderer={ZCustomRender}
-    />
-  );
+	return (
+		<Countdown
+			date={getRemainingTimeForCountDown(countDownTime)}
+			renderer={ZCustomRender}
+		/>
+	);
 };
 
 export default ZCountdown;

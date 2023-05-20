@@ -230,7 +230,7 @@ const ZaionsLoginForm: React.FC = () => {
 								/>
 
 								{/* Password Field */}
-								<div className='d-flex ion-align-items-center'>
+								<div className='flex ion-align-items-center'>
 									<ZIonInput
 										className={classNames({
 											'ion-touched ion-invalid':
@@ -288,7 +288,7 @@ const ZaionsLoginForm: React.FC = () => {
 										's{' '}
 										<ZIonRouterLink
 											routerLink={ZaionsRoutes.HomeRoute}
-											className='zaions__underline'
+											className='underline'
 											color='medium'
 										>
 											Terms of Service
@@ -296,7 +296,7 @@ const ZaionsLoginForm: React.FC = () => {
 										,{' '}
 										<ZIonRouterLink
 											routerLink={ZaionsRoutes.HomeRoute}
-											className='zaions__underline'
+											className='underline'
 											color='medium'
 										>
 											Privacy Policy
@@ -304,7 +304,7 @@ const ZaionsLoginForm: React.FC = () => {
 										and{' '}
 										<ZIonRouterLink
 											routerLink={ZaionsRoutes.HomeRoute}
-											className='zaions__underline'
+											className='underline'
 											color='medium'
 										>
 											Acceptable Use Policy

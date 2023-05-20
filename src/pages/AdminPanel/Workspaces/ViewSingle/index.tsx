@@ -244,7 +244,7 @@ const ViewSingleWorkspace: React.FC = () => {
 										>
 											<ZIonButton
 												fill='default'
-												className='fs-4'
+												className='text-2xl'
 												onClick={(event: unknown) => {
 													presentWorkspacesActionsPopover({
 														_event: event as Event,
@@ -432,7 +432,7 @@ const ViewSingleWorkspace: React.FC = () => {
 											sizeSm='6'
 											sizeXs='12'
 											className={classNames({
-												'pb-0 d-flex': true,
+												'pb-0 flex': true,
 												'order-3': isXlScale,
 												'order-2 mb-2': !isXlScale,
 												'ion-justify-content-end': isSmScale,
@@ -443,7 +443,7 @@ const ViewSingleWorkspace: React.FC = () => {
 											<ZIonButtons
 												className={classNames({
 													'gap-2': true,
-													'flex ion-justify-content-between w-100': !isSmScale,
+													'flex ion-justify-content-between w-full': !isSmScale,
 												})}
 											>
 												{/* Menu */}

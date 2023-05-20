@@ -49,7 +49,7 @@ import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
  * ? Like if you have a type for props it should be please Down
  * */
 interface ZLinkInBioCalendarBlockInterface {
-  fontFamily?: LinkInBioThemeFontEnum;
+	fontFamily?: LinkInBioThemeFontEnum;
 }
 
 /**
@@ -59,27 +59,27 @@ interface ZLinkInBioCalendarBlockInterface {
  * */
 
 const ZLinkInBioCalendarBlock: React.FC<ZLinkInBioCalendarBlockInterface> = ({
-  fontFamily,
+	fontFamily,
 }) => {
-  return (
-    <ZIonCol>
-      <ZRScrollbars
-        style={{
-          width: '100%',
-          height: '500px',
-        }}
-      >
-        <div className=' d-flex flex-column ion-align-items-center'>
-          <ZIonDatetime />
-          <ZTimezoneInput
-            className={classNames(fontFamily, {
-              'zaions__w90 ion-margin-top': true,
-            })}
-          />
-        </div>
-      </ZRScrollbars>
-    </ZIonCol>
-  );
+	return (
+		<ZIonCol>
+			<ZRScrollbars
+				style={{
+					width: '100%',
+					height: '500px',
+				}}
+			>
+				<div className=' flex flex-col ion-align-items-center'>
+					<ZIonDatetime />
+					<ZTimezoneInput
+						className={classNames(fontFamily, {
+							'zaions__w90 ion-margin-top': true,
+						})}
+					/>
+				</div>
+			</ZRScrollbars>
+		</ZIonCol>
+	);
 };
 
 export default ZLinkInBioCalendarBlock;

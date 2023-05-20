@@ -15,10 +15,10 @@ import classNames from 'classnames';
  * ? Like import of custom components is a custom import
  * */
 import {
-  ZIonButton,
-  ZIonCol,
-  ZIonImg,
-  ZIonText,
+	ZIonButton,
+	ZIonCol,
+	ZIonImg,
+	ZIonText,
 } from '@/components/ZIonComponents';
 import { predefinedMessengerPlatformImagesInWhite } from '@/utils/ZIcons';
 
@@ -62,56 +62,56 @@ import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
  * */
 
 interface ZLinkInBioMessengerBlockInterface {
-  messengerBlockData?: linkInBioBlockCardItemInterface[];
-  fontFamily?: LinkInBioThemeFontEnum;
+	messengerBlockData?: linkInBioBlockCardItemInterface[];
+	fontFamily?: LinkInBioThemeFontEnum;
 }
 
 const ZLinkInBioMessengerBlock: React.FC<ZLinkInBioMessengerBlockInterface> = ({
-  messengerBlockData,
-  fontFamily,
+	messengerBlockData,
+	fontFamily,
 }) => {
-  return (
-    <ZIonCol>
-      {messengerBlockData &&
-        messengerBlockData.map((element, index) => {
-          return (
-            <ZIonButton
-              expand='block'
-              className={classNames({
-                'ion-text-capitalize fw-bold zaions__fs_16 my-0 mb-2': true,
-                'mt-3': index >= 1,
-              })}
-              color='success'
-              style={{
-                height: '3.5rem',
-                '--border-radius': '0.8rem',
-                borderRadius: '0.8rem',
-              }}
-              routerLink={element.target?.url}
-            >
-              <ZIonImg
-                src={
-                  predefinedMessengerPlatformImagesInWhite[
-                    element.messengerCardType as messengerPlatformsBlockEnum
-                  ]
-                }
-                style={{ width: '25px' }}
-                className='me-2'
-              />
-              <ZIonText>
-                <h5
-                  className={classNames(fontFamily, {
-                    'ion-no-padding ion-no-margin': true,
-                  })}
-                >
-                  {element.title}
-                </h5>
-              </ZIonText>
-            </ZIonButton>
-          );
-        })}
-    </ZIonCol>
-  );
+	return (
+		<ZIonCol>
+			{messengerBlockData &&
+				messengerBlockData.map((element, index) => {
+					return (
+						<ZIonButton
+							expand='block'
+							className={classNames({
+								'ion-text-capitalize font-bold zaions__fs_16 my-0 mb-2': true,
+								'mt-3': index >= 1,
+							})}
+							color='success'
+							style={{
+								height: '3.5rem',
+								'--border-radius': '0.8rem',
+								borderRadius: '0.8rem',
+							}}
+							routerLink={element.target?.url}
+						>
+							<ZIonImg
+								src={
+									predefinedMessengerPlatformImagesInWhite[
+										element.messengerCardType as messengerPlatformsBlockEnum
+									]
+								}
+								style={{ width: '25px' }}
+								className='me-2'
+							/>
+							<ZIonText>
+								<h5
+									className={classNames(fontFamily, {
+										'ion-no-padding ion-no-margin': true,
+									})}
+								>
+									{element.title}
+								</h5>
+							</ZIonText>
+						</ZIonButton>
+					);
+				})}
+		</ZIonCol>
+	);
 };
 
 export default ZLinkInBioMessengerBlock;

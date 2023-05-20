@@ -96,7 +96,7 @@ const ZWorkspacesSharingModal: React.FC<{
 		<>
 			{/* header  */}
 			<ZIonHeader>
-				<div className='w-100 ion-text-end pe-3'>
+				<div className='w-full ion-text-end pe-3'>
 					<ZIonButton
 						className='ion-no-padding ion-no-margin h-max'
 						fill='clear'
@@ -108,15 +108,15 @@ const ZWorkspacesSharingModal: React.FC<{
 						<ZIonIcon icon={closeOutline} />
 					</ZIonButton>
 				</div>
-				<div className='pb-1 w-100 ion-text-center mt-[-13px]'>
-					<ZIonText className='fs-4 h-max'>Workspace sharing</ZIonText>
+				<div className='pb-1 w-full ion-text-center mt-[-13px]'>
+					<ZIonText className='text-xl h-max'>Workspace sharing</ZIonText>
 				</div>
 				<ZIonSegment
 					scrollable={true}
 					value={compState.activeTab}
 					className={classNames({
 						'w-[85%] mx-auto': true,
-						'w-100': !isLgScale,
+						'w-full': !isLgScale,
 					})}
 				>
 					{/* Timetable */}

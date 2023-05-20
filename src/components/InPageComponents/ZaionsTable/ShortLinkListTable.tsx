@@ -343,7 +343,7 @@ const ZaionsShortLinkTable = () => {
 					</ZTable>
 					{!_filteredShortLinkData?.length && (
 						<ZIonCol className='ion-text-center'>
-							<ZIonTitle className='mt-3'>
+							<ZIonTitle className='mt-10'>
 								<ZIonIcon
 									icon={fileTrayFullOutline}
 									className='mx-auto'
@@ -352,9 +352,9 @@ const ZaionsShortLinkTable = () => {
 								/>
 							</ZIonTitle>
 							<ZIonTitle color='medium'>
-								No short links founds{' '}
-								{(folderId !== null || folderId !== 'all') && 'In this Folder'}.
-								please create a short link.
+								No short links founds
+								{(folderId !== null || folderId !== 'all') && ' In this Folder'}
+								. please create a short link.
 							</ZIonTitle>
 						</ZIonCol>
 					)}

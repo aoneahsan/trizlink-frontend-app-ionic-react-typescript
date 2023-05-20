@@ -124,20 +124,20 @@ const ZCSVBulkShortning: React.FC = () => {
 										/>
 									)}
 									<ZIonCol>
-										<ZIonRow className='ion-align-items-center ion-justify-content-center flex-column mt-3'>
+										<ZIonRow className='ion-align-items-center ion-justify-content-center flex-col mt-3'>
 											<ZIonImg
 												src={bulkUploadEmptyState}
 												className={classNames({
 													zaions__w43: isMdScale,
 													zaions__w60: !isMdScale && isSmScale,
-													zaions__w100: !isSmScale,
+													w-full: !isSmScale,
 												})}
 												alt='bulk upload Inactive state'
 											/>
-											<ZIonTitle className='fs-2 fw-bold mb-2 mt-4'>
+											<ZIonTitle className='text-3xl font-bold mb-2 mt-4'>
 												Streamline your link creation
 											</ZIonTitle>
-											<ZIonText className='fs-5 ion-text-center'>
+											<ZIonText className='text-lg ion-text-center'>
 												Create a bunch of {PRODUCT_NAME} links in one sweeping
 												step with a file upload. <br /> Less work for you. More
 												time for, well, other work.
@@ -146,7 +146,7 @@ const ZCSVBulkShortning: React.FC = () => {
 												className='ion-text-capitalize mt-5'
 												routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
 											>
-												<ZIonText className='px-4 fw-bold'>
+												<ZIonText className='px-4 font-bold'>
 													View our plans
 												</ZIonText>
 											</ZIonButton>

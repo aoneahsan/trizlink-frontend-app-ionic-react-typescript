@@ -72,7 +72,7 @@ import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 const ZSettingsTab: React.FC = () => {
 	return (
 		<>
-			<ZIonGrid className='mt-4 w-100'>
+			<ZIonGrid className='mt-4 w-full'>
 				<ZIonRow className='w-4/5. w-80 mx-auto'>
 					<ZIonCol size='12'>
 						<ZIonInput
@@ -95,7 +95,7 @@ const ZSettingsTab: React.FC = () => {
 						<ZIonRow className='ion-align-items-center'>
 							<ZIonCol
 								size='max-content'
-								className='d-flex ion-align-items-center'
+								className='flex ion-align-items-center'
 							>
 								<ZIonIcon icon={eyeOffOutline} className='me-2' />
 								<ZIonText>Create new posts as internal</ZIonText>
@@ -108,10 +108,10 @@ const ZSettingsTab: React.FC = () => {
 					</ZIonCol>
 
 					<ZIonCol size='12' className='mt-4'>
-						<ZIonText className='d-block zaions__fs_14'>
+						<ZIonText className='block zaions__fs_14'>
 							Remove workspace
 						</ZIonText>
-						<ZIonText className='d-block zaions__fs_14 text-muted'>
+						<ZIonText className='block zaions__fs_14 text-muted'>
 							Remove this workspace and erase all data (posts, comments, pages
 							etc.). This action is irreversible.
 						</ZIonText>

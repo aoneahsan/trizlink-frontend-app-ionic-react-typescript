@@ -23,7 +23,6 @@ import {
 	filterOutline,
 	refresh,
 } from 'ionicons/icons';
-import { Dropdown } from 'react-bootstrap';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import classNames from 'classnames';
 import { Formik } from 'formik';
@@ -350,7 +349,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 									>
 										<ZIonText
 											className={classNames({
-												'text-2xl fw-bold d-block': true,
+												'text-2xl font-bold block': true,
 												'ion-text-center ': !isLgScale,
 											})}
 											color='medium'
@@ -359,7 +358,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 										</ZIonText>
 										<ZIonText
 											className={classNames({
-												'text-md d-block': true,
+												'text-md block': true,
 												'ion-text-center': !isLgScale,
 											})}
 											color='medium'
@@ -406,10 +405,10 @@ const ZLinkInBiosListPage: React.FC = () => {
 										>
 											<ZIonButtons
 												className={classNames({
-													'w-100': true,
+													'w-full': true,
 													'ion-justify-content-between': !isXlScale,
 													'ion-justify-content-end gap-3': isXlScale,
-													'd-block': !isSmScale,
+													block: !isSmScale,
 												})}
 											>
 												<ZIonButton
@@ -453,7 +452,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 											</ZIonButtons>
 										</ZIonRow>
 
-										{/* <div className='gap-3 d-flex justify-content-end'>
+										{/* <div className='gap-3 flex ion-justify-content-end'>
 											<Dropdown>
 												<Dropdown.Toggle
 													id='dropdown-custom-components'
@@ -503,20 +502,18 @@ const ZLinkInBiosListPage: React.FC = () => {
 								</ZIonRow>
 
 								<ZIonRow className='px-3 py-4 mt-1 rounded zaions__bg_white ion-align-items-center'>
-									<ZIonCol className='d-flex ion-align-items-center'>
-										<ZIonText>
-											<h4 className='ion-no-margin'>
-												<ZIonText className='total_links fw-bold'>
-													{linkInBioData?.length}
-												</ZIonText>{' '}
-												links
-											</h4>
+									<ZIonCol className='flex ion-align-items-center'>
+										<ZIonText className='text-2xl'>
+											<ZIonText className='total_links font-bold'>
+												{linkInBioData?.length}
+											</ZIonText>{' '}
+											links
 										</ZIonText>
 									</ZIonCol>
 
 									<ZIonCol
 										className={classNames({
-											'd-flex': true,
+											flex: true,
 											'justify-content-end': isXlScale,
 											'justify-content-between mt-3': !isXlScale,
 										})}
@@ -525,16 +522,16 @@ const ZLinkInBiosListPage: React.FC = () => {
 									>
 										<ZIonRow
 											className={classNames({
-												'w-100 ion-justify-content-between': true,
+												'w-full ion-justify-content-between': true,
 												'row-gap-1-rem': !isLgScale,
 											})}
 										>
 											<ZIonButtons
 												className={classNames({
-													'w-100': true,
+													'w-full': true,
 													'ion-justify-content-between': !isXlScale,
 													'ion-justify-content-end gap-3': isXlScale,
-													'd-block': !isMdScale,
+													block: !isMdScale,
 												})}
 											>
 												{/* Filter by days */}
@@ -685,7 +682,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 													<div className='ion-padding-horizontal'>
 														<ZIonList lines='none'>
 															<ZIonItem className='border-bottom'>
-																<ZIonText color={'primary'} className='fw-bold'>
+																<ZIonText color={'primary'} className='font-bold'>
 																	All Columns
 																</ZIonText>
 															</ZIonItem>
@@ -958,7 +955,7 @@ const LinkInBiosTagsFiltersPopover = () => {
 								<ZIonText>filter</ZIonText>
 							</ZIonButton>
 							<ZIonItem className='ion-no-padding'>
-								<ZIonText className='ms-3 fw-bold zaions__fs_14 zaions__color_gray2'>
+								<ZIonText className='ms-3 font-bold zaions__fs_14 zaions__color_gray2'>
 									All Tags
 								</ZIonText>
 								{/* <IonCheckbox
@@ -1108,7 +1105,7 @@ const LinkInBiosTagsFiltersPopover = () => {
 //               <ZIonText>filter</ZIonText>
 //             </ZIonButton>
 //             <ZIonItem className='ion-no-padding'>
-//               <ZIonText className='ms-3 fw-bold zaions__fs_14 zaions__color_gray2'>
+//               <ZIonText className='ms-3 font-bold zaions__fs_14 zaions__color_gray2'>
 //                 All Domains
 //               </ZIonText>
 //               {/* <IonCheckbox

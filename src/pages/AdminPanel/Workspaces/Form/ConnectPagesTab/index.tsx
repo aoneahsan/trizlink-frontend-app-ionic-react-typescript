@@ -154,10 +154,10 @@ const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 							onSwiper={(_) => {}}
 						>
 							{[1, 2, 3, 4].map((el) => (
-								<SwiperSlide className='h-100' key={el}>
+								<SwiperSlide className='h-full' key={el}>
 									<ZIonCard className='h-[94%]'>
 										<ZIonCardContent className='pb-3 ion-text-center ion-no-padding ion-padding-horizontal py-1'>
-											<div className='w-100 flex ion-align-items-center ion-justify-content-between pb-1 '>
+											<div className='w-full flex ion-align-items-center ion-justify-content-between pb-1 '>
 												<ZIonButton
 													className='ion-no-padding ion-no-margin'
 													fill='default'
@@ -185,14 +185,14 @@ const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 												className='w-10 h-10 pt-1 mx-auto'
 											/>
 											{/*  */}
-											<ZIonText className='mt-1 ion-text-center d-block'>
+											<ZIonText className='mt-1 ion-text-center block'>
 												zaions {el}
 											</ZIonText>
 
 											{/*  */}
 											<ZIonText
 												className={classNames({
-													'ion-text-center d-block zaions__fs_13 text-muted':
+													'ion-text-center block zaions__fs_13 text-muted':
 														true,
 												})}
 											>
@@ -220,7 +220,7 @@ const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 						'w-5/12': !isXlScale && isLgScale,
 						'w-6/12': !isLgScale && isMdScale,
 						'w-7/12': !isMdScale && isSmScale,
-						'w-100': !isSmScale,
+						'w-full': !isSmScale,
 					})}
 				>
 					<ZIonRow
@@ -302,7 +302,7 @@ const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 const ConnectPagesCardSwiperButtons: React.FC = () => {
 	const swiper = useSwiper();
 	return (
-		<div className='w-100 flex ion-align-items-center ion-justify-content-between pb-1 '>
+		<div className='w-full flex ion-align-items-center ion-justify-content-between pb-1 '>
 			<ZIonButton
 				className='ion-no-padding ion-no-margin'
 				fill='default'

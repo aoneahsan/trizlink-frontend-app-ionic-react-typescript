@@ -27,7 +27,7 @@ color: #686d7a;
 `;
 
 interface IZTableRowColProps {
-  large?: boolean;
+	large?: boolean;
 }
 
 export const ZTableRowCol = STYLED_COMPONENT.td<IZTableRowColProps>`

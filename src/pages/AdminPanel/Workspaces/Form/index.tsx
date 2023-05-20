@@ -188,7 +188,7 @@ const ZWorkspaceForm: React.FC = () => {
 					{/*  */}
 					<ZIonCol className='ion-text-center' size='11'>
 						{/* Tab Title */}
-						<ZIonText className='text-4xl d-block'>
+						<ZIonText className='text-4xl block'>
 							{routeQSearchParams.tab ===
 							workspaceFormTabEnum.workspaceDetailForm
 								? 'Create a workspace'
@@ -202,7 +202,7 @@ const ZWorkspaceForm: React.FC = () => {
 						</ZIonText>
 
 						{/* Tab sub title */}
-						<ZIonText className='mt-3 text-muted d-block'>
+						<ZIonText className='mt-3 text-muted block'>
 							{routeQSearchParams.tab === workspaceFormTabEnum.inviteClients
 								? 'Working with a client? Invite them in the workspace so they can approve and leave feedback on content.'
 								: routeQSearchParams.tab === workspaceFormTabEnum.connectPages

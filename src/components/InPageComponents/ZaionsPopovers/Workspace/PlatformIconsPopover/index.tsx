@@ -97,7 +97,7 @@ const ZPlatformIconsPopover: React.FC<{
 			))}
 
 			<ZIonCol size='12' className='mb-2'>
-				<ZIonItem className='ion-no-padding fs-6'>PLATFORM</ZIonItem>
+				<ZIonItem className='ion-no-padding text-base'>PLATFORM</ZIonItem>
 			</ZIonCol>
 
 			{PlatformIconsData.platformIcons.map((el, index) => (

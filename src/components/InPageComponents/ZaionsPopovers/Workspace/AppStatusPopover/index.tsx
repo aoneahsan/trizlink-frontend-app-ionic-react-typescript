@@ -77,7 +77,7 @@ import {
 const ZWorkspaceAppStatusPopover: React.FC = () => {
 	return (
 		<>
-			<ZIonText className='mt-2 d-block mx-3 tracking-widest text-xs'>
+			<ZIonText className='mt-2 block mx-3 tracking-widest text-xs'>
 				APP STATUS
 			</ZIonText>
 
@@ -136,7 +136,7 @@ const ZWorkspaceAppStatusPopover: React.FC = () => {
 				</ZIonItem>
 			</ZIonList>
 
-			<ZIonText className='mt-2 d-block mx-3 tracking-widest text-xs'>
+			<ZIonText className='mt-2 block mx-3 tracking-widest text-xs'>
 				DOWNLOAD APPS
 			</ZIonText>
 

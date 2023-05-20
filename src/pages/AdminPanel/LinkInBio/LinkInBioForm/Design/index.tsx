@@ -360,7 +360,7 @@ const LinkInBioDesignPage: React.FC = () => {
 												<ZIonRow className='my-2 ion-padding-end ion-padding-bottom'>
 													<ZIonList
 														lines='none'
-														className='zaions__w100 zaions__h100 zaions__bg_transparent'
+														className='w-full zaions__h100 zaions__bg_transparent'
 													>
 														<ZIonReorderGroup
 															onIonItemReorder={handleReorder}
@@ -413,7 +413,7 @@ const LinkInBioDesignPage: React.FC = () => {
 					<ZIonRow>
 						<ZIonCol></ZIonCol>
 
-						<ZIonCol size='6' className='d-flex justify-content-between'>
+						<ZIonCol size='6' className='flex ion-justify-content-between'>
 							{/* Theme button */}
 							<ZIonButton
 								title='Theme'

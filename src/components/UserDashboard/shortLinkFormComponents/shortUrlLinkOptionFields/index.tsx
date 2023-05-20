@@ -118,7 +118,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 			<ZIonRow
 				className={`zaions__bg_white py-4 px-4 rounded ion-align-items-center`}
 			>
-				<ZIonCol className='d-flex ion-align-items-center pb-4'>
+				<ZIonCol className='flex ion-align-items-center pb-4'>
 					{/* Options Dropdown (messengerPlatformsBlockEnum)  */}
 					<ShortUrlLinkOptions />
 

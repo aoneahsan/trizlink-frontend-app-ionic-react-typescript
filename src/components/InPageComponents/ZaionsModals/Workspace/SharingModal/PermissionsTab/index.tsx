@@ -95,32 +95,32 @@ const ZPermissionsTab: React.FC = () => {
 				<ZIonCol>
 					<ZIonRow>
 						<ZIonCol>
-							<ZIonIcon icon={eyeOutline} className='d-block mx-auto' />
-							<ZIonText className='d-block ion-text-center text-sm'>
+							<ZIonIcon icon={eyeOutline} className='block mx-auto' />
+							<ZIonText className='block ion-text-center text-sm'>
 								View
 							</ZIonText>
 						</ZIonCol>
 						<ZIonCol>
-							<ZIonIcon icon={checkmarkOutline} className='d-block mx-auto' />
-							<ZIonText className='d-block ion-text-center text-sm'>
+							<ZIonIcon icon={checkmarkOutline} className='block mx-auto' />
+							<ZIonText className='block ion-text-center text-sm'>
 								Approve
 							</ZIonText>
 						</ZIonCol>
 						<ZIonCol>
-							<ZIonIcon icon={pencilOutline} className='d-block mx-auto' />
-							<ZIonText className='d-block ion-text-center text-sm'>
+							<ZIonIcon icon={pencilOutline} className='block mx-auto' />
+							<ZIonText className='block ion-text-center text-sm'>
 								Edit
 							</ZIonText>
 						</ZIonCol>
 						<ZIonCol>
-							<ZIonIcon icon={sendOutline} className='d-block mx-auto' />
-							<ZIonText className='d-block ion-text-center text-sm'>
+							<ZIonIcon icon={sendOutline} className='block mx-auto' />
+							<ZIonText className='block ion-text-center text-sm'>
 								Publish
 							</ZIonText>
 						</ZIonCol>
 						<ZIonCol>
-							<ZIonIcon icon={peopleOutline} className='d-block mx-auto' />
-							<ZIonText className='d-block ion-text-center text-sm'>
+							<ZIonIcon icon={peopleOutline} className='block mx-auto' />
+							<ZIonText className='block ion-text-center text-sm'>
 								Admin
 							</ZIonText>
 						</ZIonCol>
@@ -159,12 +159,12 @@ const ZPermissionsTab: React.FC = () => {
 					<div className=''>
 						<ZIonText
 							className={classNames({
-								'd-flex': true,
+								flex: true,
 								'ion-align-items-center': isLgScale,
-								'flex-column ion-align-items-start': !isLgScale,
+								'flex-col ion-align-items-start': !isLgScale,
 							})}
 						>
-							<ZIonLabel className='text-sm fw-bold'>
+							<ZIonLabel className='text-sm font-bold'>
 								Muhammad talha Irshad (you)
 							</ZIonLabel>
 							<ZIonBadge
@@ -176,7 +176,7 @@ const ZPermissionsTab: React.FC = () => {
 								TEAM
 							</ZIonBadge>
 						</ZIonText>
-						<ZIonLabel className='d-block text-sm' color='medium'>
+						<ZIonLabel className='block text-sm' color='medium'>
 							talhaarshaad5@gmail.com
 						</ZIonLabel>
 					</div>

@@ -9,11 +9,11 @@ import Carousel from 'react-bootstrap/Carousel';
 // Custom Imports
 import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
 import {
-  ZIonCol,
-  ZIonText,
-  ZIonImg,
-  ZIonRow,
-  ZIonGrid,
+	ZIonCol,
+	ZIonText,
+	ZIonImg,
+	ZIonRow,
+	ZIonGrid,
 } from '@/components/ZIonComponents';
 
 // Global Constant
@@ -31,56 +31,58 @@ import HPBrandData from '@/data/HPBrandListData';
 const { Item: CarouselItem } = Carousel;
 
 const ZaionsHPBrandList: React.FC = () => {
-  const [loadedHPBrandsData, setLoadedHPBrandsData] =
-    useRecoilState<ZaionsHPBrandsType[]>(ZaionsHPBrandsData);
-  const isSMSclae = useMediaQuery({ query: `(max-width: ${BRACKPOINT_MD})` });
-  const ZaionsCarousel = isSMSclae ? Carousel : Fragment;
-  const ZaionsCarouselItem = isSMSclae ? CarouselItem : Fragment;
+	const [loadedHPBrandsData, setLoadedHPBrandsData] =
+		useRecoilState<ZaionsHPBrandsType[]>(ZaionsHPBrandsData);
+	const isSMSclae = useMediaQuery({ query: `(max-width: ${BRACKPOINT_MD})` });
+	const ZaionsCarousel = isSMSclae ? Carousel : Fragment;
+	const ZaionsCarouselItem = isSMSclae ? CarouselItem : Fragment;
 
-  useLayoutEffect(() => {
-    // Fetch Data From Database Later:-
-    setLoadedHPBrandsData(HPBrandData);
-  }, [setLoadedHPBrandsData]);
+	useLayoutEffect(() => {
+		// Fetch Data From Database Later:-
+		setLoadedHPBrandsData(HPBrandData);
+	}, [setLoadedHPBrandsData]);
 
-  return (
-    <>
-      <div className='ion-text-center ion-margin-top ion-padding-bottom'>
-        <br />
-        <ZIonText>
-          <h2 className='fw-bold'>Loved by big and small brands everywhere</h2>
-        </ZIonText>
-      </div>
-      <div className='ion-padding-vertical'>
-        <ZIonGrid>
-          <ZIonRow className='ion-justify-content-center'>
-            <ZaionsCarousel>
-              <ZIonCol sizeLg='0' sizeMd='0' sizeSm='0' sizeXs='0'></ZIonCol>
-              {loadedHPBrandsData.map((item) => (
-                <ZaionsCarouselItem key={item.id}>
-                  <ZIonCol
-                    sizeXl='1.5'
-                    sizeLg='2.2'
-                    sizeMd='3.2'
-                    sizeSm='4.2'
-                    sizeXs='5.2'
-                    key={item.id}
-                  >
-                    <ZIonImg
-                      src={item.image}
-                      style={{ width: 'auto' }}
-                      alt=''
-                    />
-                  </ZIonCol>
-                </ZaionsCarouselItem>
-              ))}
-              <ZIonCol sizeLg='0' sizeMd='0'></ZIonCol>
-            </ZaionsCarousel>
-          </ZIonRow>
-        </ZIonGrid>
-      </div>
-      <ZaionsHr />
-    </>
-  );
+	return (
+		<>
+			<div className='ion-text-center ion-margin-top ion-padding-bottom'>
+				<br />
+				<ZIonText>
+					<h2 className='font-bold'>
+						Loved by big and small brands everywhere
+					</h2>
+				</ZIonText>
+			</div>
+			<div className='ion-padding-vertical'>
+				<ZIonGrid>
+					<ZIonRow className='ion-justify-content-center'>
+						<ZaionsCarousel>
+							<ZIonCol sizeLg='0' sizeMd='0' sizeSm='0' sizeXs='0'></ZIonCol>
+							{loadedHPBrandsData.map((item) => (
+								<ZaionsCarouselItem key={item.id}>
+									<ZIonCol
+										sizeXl='1.5'
+										sizeLg='2.2'
+										sizeMd='3.2'
+										sizeSm='4.2'
+										sizeXs='5.2'
+										key={item.id}
+									>
+										<ZIonImg
+											src={item.image}
+											style={{ width: 'auto' }}
+											alt=''
+										/>
+									</ZIonCol>
+								</ZaionsCarouselItem>
+							))}
+							<ZIonCol sizeLg='0' sizeMd='0'></ZIonCol>
+						</ZaionsCarousel>
+					</ZIonRow>
+				</ZIonGrid>
+			</div>
+			<ZaionsHr />
+		</>
+	);
 };
 
 export default ZaionsHPBrandList;

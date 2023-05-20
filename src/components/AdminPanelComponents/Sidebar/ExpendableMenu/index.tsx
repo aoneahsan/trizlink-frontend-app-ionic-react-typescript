@@ -136,18 +136,18 @@ const AdminPanelMainSidebarMenu: React.FC<{
 							/>
 						</ZIonButton>
 
-						<ZIonGrid className='h-100'>
-							<ZIonRow className='h-100 ion-align-items-start'>
+						<ZIonGrid className='h-full'>
+							<ZIonRow className='h-full ion-align-items-start'>
 								<ZIonCol
 									size='12'
-									className='py-2 d-flex ion-justify-content-center'
+									className='py-4 flex ion-justify-content-center'
 								>
 									<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
 										<ZIonImg
 											src={ProductLogo}
 											alt={`${PRODUCT_NAME} logo`}
 											className={classNames(classes['zaions-ap-msm-logo'], {
-												'rounded-circle zaions-transition': true,
+												'rounded-full zaions-transition': true,
 											})}
 											style={{
 												width: isExpand ? '80px' : '42px',
@@ -158,7 +158,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 								</ZIonCol>
 
 								{/* Short Links */}
-								<ZIonCol size='12'>
+								<ZIonCol size='12' className='my-3'>
 									<ZIonButton
 										fill='clear'
 										color='light'
@@ -178,7 +178,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 									>
 										<ZIonText
 											className={classNames({
-												'd-flex ion-align-items-center': true,
+												'flex ion-align-items-center': true,
 												'ps-3 me-auto': isExpand,
 											})}
 										>
@@ -187,8 +187,8 @@ const AdminPanelMainSidebarMenu: React.FC<{
 											<ZIonText
 												className={classNames({
 													'ps-2 zaions-transition': true,
-													'd-inline-block': isExpand,
-													'd-none': !isExpand,
+													'inline-block': isExpand,
+													hidden: !isExpand,
 												})}
 											>
 												Short Links
@@ -198,7 +198,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 								</ZIonCol>
 
 								{/* Link-in-bio */}
-								<ZIonCol size='12'>
+								<ZIonCol size='12' className='my-3'>
 									<ZIonButton
 										fill='clear'
 										color='light'
@@ -218,7 +218,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 									>
 										<ZIonText
 											className={classNames({
-												'd-flex ion-align-items-center': true,
+												'flex ion-align-items-center': true,
 												'ps-3 me-auto': isExpand,
 											})}
 										>
@@ -227,8 +227,8 @@ const AdminPanelMainSidebarMenu: React.FC<{
 											<ZIonText
 												className={classNames({
 													'ps-2 zaions-transition': true,
-													'd-inline-block': isExpand,
-													'd-none': !isExpand,
+													'inline-block': isExpand,
+													hidden: !isExpand,
 												})}
 											>
 												Links-in-bio
@@ -247,7 +247,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 									>
 										<ZIonText
 											className={classNames({
-												'd-flex ion-align-items-center': true,
+												'flex ion-align-items-center': true,
 												'ps-3 me-auto': isExpand,
 											})}
 										>
@@ -256,8 +256,8 @@ const AdminPanelMainSidebarMenu: React.FC<{
 											<ZIonText
 												className={classNames({
 													'ps-2 zaions-transition': true,
-													'd-inline-block': isExpand,
-													'd-none': !isExpand,
+													'inline-block': isExpand,
+													'hidden': !isExpand,
 												})}
 											>
 												Extension
@@ -276,7 +276,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 									>
 										<ZIonText
 											className={classNames({
-												'd-flex ion-align-items-center': true,
+												'flex ion-align-items-center': true,
 												'ps-3 me-auto': isExpand,
 											})}
 										>
@@ -285,8 +285,8 @@ const AdminPanelMainSidebarMenu: React.FC<{
 											<ZIonText
 												className={classNames({
 													'ps-2 zaions-transition': true,
-													'd-inline-block': isExpand,
-													'd-none': !isExpand,
+													'inline-block': isExpand,
+													'hidden': !isExpand,
 												})}
 											>
 												Integrations
@@ -296,7 +296,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 								</ZIonCol> */}
 
 								{/* Workspaces */}
-								<ZIonCol size='12'>
+								<ZIonCol size='12' className='my-3'>
 									<ZIonButton
 										fill='clear'
 										color='light'
@@ -312,7 +312,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 									>
 										<ZIonText
 											className={classNames({
-												'd-flex ion-align-items-center': true,
+												'flex ion-align-items-center': true,
 												'ps-3 me-auto': isExpand,
 											})}
 										>
@@ -321,8 +321,8 @@ const AdminPanelMainSidebarMenu: React.FC<{
 											<ZIonText
 												className={classNames({
 													'ps-2 zaions-transition': true,
-													'd-inline-block': isExpand,
-													'd-none': !isExpand,
+													'inline-block': isExpand,
+													hidden: !isExpand,
 												})}
 											>
 												Workspaces
@@ -332,7 +332,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 								</ZIonCol>
 
 								{/* Help center */}
-								{/* <ZIonCol size='12'>
+								{/* <ZIonCol size='12' className='my-3'>
 									<ZIonButton
 										fill='clear'
 										color='light'
@@ -341,7 +341,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 									>
 										<ZIonText
 											className={classNames({
-												'd-flex ion-align-items-center': true,
+												'flex ion-align-items-center': true,
 												'ps-3 me-auto': isExpand,
 											})}
 										>
@@ -350,8 +350,8 @@ const AdminPanelMainSidebarMenu: React.FC<{
 											<ZIonText
 												className={classNames({
 													'ps-2 zaions-transition': true,
-													'd-inline-block': isExpand,
-													'd-none': !isExpand,
+													'inline-block': isExpand,
+													'hidden': !isExpand,
 												})}
 											>
 												Help center
@@ -361,7 +361,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 								</ZIonCol> */}
 
 								{/* Account */}
-								<ZIonCol size='12'>
+								<ZIonCol size='12' className='my-3'>
 									<ZIonButton
 										fill='clear'
 										color='light'
@@ -370,7 +370,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 									>
 										<ZIonText
 											className={classNames({
-												'd-flex ion-align-items-center': true,
+												'flex ion-align-items-center': true,
 												'ps-3 me-auto': isExpand,
 											})}
 										>
@@ -379,8 +379,8 @@ const AdminPanelMainSidebarMenu: React.FC<{
 											<ZIonText
 												className={classNames({
 													'ps-2 zaions-transition': true,
-													'd-inline-block': isExpand,
-													'd-none': !isExpand,
+													'inline-block': isExpand,
+													hidden: !isExpand,
 												})}
 											>
 												Account
@@ -390,7 +390,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 								</ZIonCol>
 
 								{/* Settings */}
-								<ZIonCol size='12'>
+								<ZIonCol size='12' className='my-3'>
 									<ZIonButton
 										fill='clear'
 										color='light'
@@ -399,7 +399,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 									>
 										<ZIonText
 											className={classNames({
-												'd-flex ion-align-items-center': true,
+												'flex ion-align-items-center': true,
 												'ps-3 me-auto': isExpand,
 											})}
 										>
@@ -408,8 +408,8 @@ const AdminPanelMainSidebarMenu: React.FC<{
 											<ZIonText
 												className={classNames({
 													'ps-2 zaions-transition': true,
-													'd-inline-block': isExpand,
-													'd-none': !isExpand,
+													'inline-block': isExpand,
+													hidden: !isExpand,
 												})}
 											>
 												Settings

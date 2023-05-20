@@ -105,20 +105,20 @@ const ZLinkCampaigns: React.FC = () => {
 						<ZLinkDashboardTopBar />
 						<ZIonContent className='ion-padding'>
 							<ZIonGrid>
-								<ZIonRow className='ion-align-items-center ion-justify-content-center flex-column mt-3'>
+								<ZIonRow className='ion-align-items-center ion-justify-content-center flex-col mt-3'>
 									<ZIonImg
 										src={campaignsEmptyState}
 										alt='Link in bio Inactive state'
 										className={classNames({
 											zaions__w43: isMdScale,
 											zaions__w60: !isMdScale && isSmScale,
-											zaions__w100: !isSmScale,
+											w-full: !isSmScale,
 										})}
 									/>
-									<ZIonTitle className='fs-2 fw-bold mb-2 mt-4'>
+									<ZIonTitle className='text-3xl font-bold mb-2 mt-4'>
 										Some links belong together
 									</ZIonTitle>
-									<ZIonText className='fs-5 ion-text-center'>
+									<ZIonText className='text-lg ion-text-center'>
 										Organize your links in ${PRODUCT_NAME} Campaigns and compare
 										performance <br /> across channels. Available on the Premium
 										plan. there.
@@ -127,7 +127,7 @@ const ZLinkCampaigns: React.FC = () => {
 										className='ion-text-capitalize mt-4'
 										routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
 									>
-										<ZIonText className='px-4 fw-bold'>view our plans</ZIonText>
+										<ZIonText className='px-4 font-bold'>view our plans</ZIonText>
 									</ZIonButton>
 									<ZIonButton fill='clear' className='mt-3 ion-text-capitalize'>
 										Learn more

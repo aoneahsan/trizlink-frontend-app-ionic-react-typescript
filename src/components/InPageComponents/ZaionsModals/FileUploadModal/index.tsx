@@ -113,9 +113,11 @@ const ZaionsFileUploadModal: React.FC<{
 							{/* Title */}
 							<ZIonText
 								color='dark'
-								className='d-flex ion-justify-content-center ion-align-items-center ion-padding-vertical ion-margin-top'
+								className='flex ion-justify-content-center ion-align-items-center ion-padding-vertical ion-margin-top'
 							>
-								<h5 className='ion-no-margin me-2 fw-bold'>Select an option</h5>
+								<h5 className='ion-no-margin me-2 font-bold'>
+									Select an option
+								</h5>
 								<h6 className='ion-no-margin zaions__fs_14 mt-1'>
 									<ZIonRouterLink>(help)</ZIonRouterLink>
 								</h6>
@@ -334,7 +336,7 @@ const ZaionsFileUploadModal: React.FC<{
 							size='9'
 							className={classNames({
 								'zaions__h100 ion-padding-bottom': true,
-								'd-flex flex-column ion-justify-content-center ion-align-items-center':
+								'flex flex-col ion-justify-content-center ion-align-items-center':
 									[
 										uploadFileModalTabEnum.screenshot,
 										uploadFileModalTabEnum.upload,
@@ -343,7 +345,7 @@ const ZaionsFileUploadModal: React.FC<{
 							})}
 						>
 							{/* Close modal button */}
-							<div className='w-100 ion-text-end ion-no-margin pb-2'>
+							<div className='w-full ion-text-end ion-no-margin pb-2'>
 								<ZIonButton
 									fill='clear'
 									className='ion-no-padding me-3 mt-2'
@@ -544,7 +546,7 @@ const UploadTab: React.FC<{
 				<div
 					className={classNames({
 						zaions__w90: true,
-						'd-flex flex-column ion-align-items-center ion-justify-content-center zaions__h90 rounded zaions__cursor_pointer':
+						'flex flex-col ion-align-items-center ion-justify-content-center zaions__h90 rounded zaions__cursor_pointer':
 							!uploadTabState.file?.isFileFetch,
 						zaions__success_set: isDragActive,
 						zaions__primary_set: !isDragActive,
@@ -565,13 +567,13 @@ const UploadTab: React.FC<{
 								/>
 							</ZIonText>
 							<ZIonText color='dark'>
-								<h5 className='fw-bold'>
+								<h5 className='font-bold'>
 									Drag & drop your image here or{' '}
 									<ZIonText color='primary'>Browse</ZIonText>
 								</h5>
 							</ZIonText>
-							<div className='d-flex flex-column ion-align-items-center ion-justify-content-center'>
-								<ZIonText color='medium' className='fw-bold mt-2'>
+							<div className='flex flex-col ion-align-items-center ion-justify-content-center'>
+								<ZIonText color='medium' className='font-bold mt-2'>
 									(5MB maximum - JPG, GIF, PNG)
 								</ZIonText>
 							</div>
@@ -587,11 +589,11 @@ const UploadTab: React.FC<{
 								<ZIonImg
 									src={uploadTabState.file?.fileUrl}
 									alt='send icon'
-									className='zaions__w100 zaions__h100'
+									className='w-full zaions__h100'
 								/>
 							</div>
-							<div className='my-5 zaions__w100 zaions__tertiary_set'>
-								<div className='zaions__w80 d-flex ion-align-item-center ion-justify-content-between mx-auto py-2'>
+							<div className='my-5 w-full zaions__tertiary_set'>
+								<div className='zaions__w80 flex ion-align-item-center ion-justify-content-between mx-auto py-2'>
 									<ZIonButton
 										color='danger'
 										className='text-transform-initial'
@@ -637,7 +639,7 @@ const UploadTab: React.FC<{
 
 const LinkTab: React.FC = () => {
 	return (
-		<div className='d-flex flex-column ion-align-items-center ion-justify-content-start mt-2 zaions__h100 zaions__w100 rounded'>
+		<div className='flex flex-col ion-align-items-center ion-justify-content-start mt-2 zaions__h100 w-full rounded'>
 			<ZIonText className='ion-no-margin'>
 				<ZIonImg
 					src={uploadModalLink}
@@ -647,15 +649,15 @@ const LinkTab: React.FC = () => {
 				/>
 			</ZIonText>
 			<ZIonText color='dark' className='mb-3'>
-				<h5 className='fw-bold'>Paste the link of an image 🔗</h5>
+				<h5 className='font-bold'>Paste the link of an image 🔗</h5>
 			</ZIonText>
-			<div className='d-flex flex-column ion-align-items-center ion-justify-content-center'>
-				<ZIonText color='medium' className='fw-bold mt-2'>
+			<div className='flex flex-col ion-align-items-center ion-justify-content-center'>
+				<ZIonText color='medium' className='font-bold mt-2'>
 					(5MB maximum - JPG, GIF, PNG)
 				</ZIonText>
 			</div>
 			<div
-				className='d-flex ion-justify-content-center ion-align-items-center zaions__w70 mt-5 pt-2'
+				className='flex ion-justify-content-center ion-align-items-center zaions__w70 mt-5 pt-2'
 				style={{ height: '3.5rem' }}
 			>
 				<ZIonInput
@@ -679,7 +681,7 @@ const LinkTab: React.FC = () => {
 
 const ScreenShotTab: React.FC = () => {
 	return (
-		<div className='d-flex flex-column ion-align-items-center ion-justify-content-start mt-2 zaions__h100 zaions__w100 rounded'>
+		<div className='flex flex-col ion-align-items-center ion-justify-content-start mt-2 zaions__h100 w-full rounded'>
 			<ZIonText className='ion-no-margin'>
 				<ZIonImg
 					src={uploadModalCamera}
@@ -689,15 +691,15 @@ const ScreenShotTab: React.FC = () => {
 				/>
 			</ZIonText>
 			<ZIonText color='dark' className='mb-3'>
-				<h5 className='fw-bold'>Take a screenshot of a website 📸</h5>
+				<h5 className='font-bold'>Take a screenshot of a website 📸</h5>
 			</ZIonText>
-			<div className='d-flex flex-column ion-align-items-center ion-justify-content-center'>
-				<ZIonText color='medium' className='fw-bold mt-2'>
+			<div className='flex flex-col ion-align-items-center ion-justify-content-center'>
+				<ZIonText color='medium' className='font-bold mt-2'>
 					Paste the link of the Website you want to take a screenshot
 				</ZIonText>
 			</div>
 			<div
-				className='d-flex ion-justify-content-center ion-align-items-center zaions__w70 mt-5 pt-2'
+				className='flex ion-justify-content-center ion-align-items-center zaions__w70 mt-5 pt-2'
 				style={{ height: '3.5rem' }}
 			>
 				<ZIonInput
@@ -738,7 +740,7 @@ const GalleryTab: React.FC<{ typeOfGallery: galleryEnum }> = ({
 		<>
 			<ZIonRow className='px-3 mb-3 ion-justify-content-center'>
 				<ZIonCol
-					className='d-flex ion-justify-content-center ion-align-items-center zaions__w70'
+					className='flex ion-justify-content-center ion-align-items-center zaions__w70'
 					style={{ height: '3.5rem' }}
 					size='12'
 				>
@@ -763,7 +765,7 @@ const GalleryTab: React.FC<{ typeOfGallery: galleryEnum }> = ({
 					return (
 						<ZIonCol
 							className={classNames(classes['zaions-gallery-card'], {
-								'zaions__primary_set ion-no-padding mb-3 d-flex ion-align-items-end zaions__cursor_pointer':
+								'zaions__primary_set ion-no-padding mb-3 flex ion-align-items-end zaions__cursor_pointer':
 									true,
 							})}
 							style={{
@@ -777,11 +779,11 @@ const GalleryTab: React.FC<{ typeOfGallery: galleryEnum }> = ({
 								className={classNames(
 									classes['zaions-gallery-card-block-data'],
 									{
-										'w-100 zaions__dark_bg_opacity_point_7': true,
+										'w-full zaions__dark_bg_opacity_point_7': true,
 									}
 								)}
 							>
-								<span className='fw-bold ps-2'>Ralphs_Fotos | Pixabay</span>
+								<span className='font-bold ps-2'>Ralphs_Fotos | Pixabay</span>
 							</div>
 						</ZIonCol>
 					);

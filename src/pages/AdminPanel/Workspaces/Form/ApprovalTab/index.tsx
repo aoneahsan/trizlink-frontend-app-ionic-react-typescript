@@ -167,7 +167,7 @@ const ZWorkspaceFormApprovalTab: React.FC = () => {
 									'w-5/12': !isXlScale && isLgScale,
 									'w-6/12': !isLgScale && isMdScale,
 									'w-7/12': !isMdScale && isSmScale,
-									'w-100': !isSmScale,
+									'w-full': !isSmScale,
 								})}
 							>
 								<ZIonRow

@@ -669,10 +669,10 @@ const AdminCreateNewLinkPages: React.FC = () => {
 						return (
 							<>
 								<ZIonContent className='' color={'light'}>
-									<div className={`zaions_h100 zaions__w100`}>
+									<div className={`zaions_h100 w-full`}>
 										<ZIonGrid className={`zaions__bg_white py-2 px-3`}>
 											<ZIonRow className='ion-align-items-center'>
-												<ZIonCol className='d-flex'>
+												<ZIonCol className='flex'>
 													<ZIonButton
 														className='ion-text-capitalize'
 														routerLink={replaceParams(
@@ -699,10 +699,11 @@ const AdminCreateNewLinkPages: React.FC = () => {
 													</ZIonTitle>
 												</ZIonCol>
 												<ZIonCol className='ion-text-center'>
-													<ZIonText color='medium'>
-														<h5 className='fw-bold ion-no-margin'>
-															Link settings
-														</h5>
+													<ZIonText
+														color='medium'
+														className='font-bold text-2xl'
+													>
+														Link settings
 													</ZIonText>
 												</ZIonCol>
 												<ZIonCol className='ion-text-end'>
@@ -775,7 +776,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 														className='ion-text-capitalize'
 													>
 														<ZIonText>
-															<h4 className='ion-no-margin d-flex ion-align-items-center ion-padding-top ion-padding-bottom'>
+															<h4 className='ion-no-margin flex ion-align-items-center ion-padding-top ion-padding-bottom'>
 																Advance Options
 															</h4>
 														</ZIonText>

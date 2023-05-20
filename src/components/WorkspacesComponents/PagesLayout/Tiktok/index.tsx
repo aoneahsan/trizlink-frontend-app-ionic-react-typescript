@@ -96,7 +96,7 @@ const ZWorkspaceTiktokPageLayout: React.FC = () => {
 			>
 				<div
 					className={classNames({
-						'rounded-circle overflow-hidden': true,
+						'rounded-full overflow-hidden': true,
 						'w-[7.2rem] h-[7.2rem]': !isLgScale,
 						'w-[77px] h-[77px]': isMdScale || isSmScale || !isSmScale,
 					})}
@@ -104,22 +104,22 @@ const ZWorkspaceTiktokPageLayout: React.FC = () => {
 					<ZIonImg
 						src={ProductLogo}
 						className={classNames({
-							'w-100 h-100': true,
+							'w-full h-full': true,
 						})}
 					/>
 				</div>
 
 				<div
 					className={classNames({
-						'flex flex-column mx-2 px-1 mb-3': true,
+						'flex flex-col mx-2 px-1 mb-3': true,
 					})}
 				>
-					<ZIonText className='fs-5'>
+					<ZIonText className='text-lg'>
 						<ZIonRouterLink
 							routerLink={CONSTANTS.ExternalURL.FacebookUrl}
 							target='_blank'
 							color='dark'
-							className='fs-3 fw-bolder zaions-transition'
+							className='text-3xl font-bolder zaions-transition'
 						>
 							testing
 						</ZIonRouterLink>
@@ -128,7 +128,7 @@ const ZWorkspaceTiktokPageLayout: React.FC = () => {
 						<ZIonRouterLink
 							routerLink={CONSTANTS.ExternalURL.FacebookUrl}
 							target='_blank'
-							className='hover:underline fw-bold zaions-transition'
+							className='hover:underline font-bold zaions-transition'
 							color='dark'
 						>
 							@zaions
