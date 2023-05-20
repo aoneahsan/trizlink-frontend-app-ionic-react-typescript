@@ -122,7 +122,7 @@ const ZWorkspaceConnectPagesModal: React.FC<{
 									<ZIonCol className='flex ion-align-items-center ms-3'>
 										{/*  */}
 										<div
-											className='w-10 h-10 rounded flex ion-align-items-center ion-justify-content-center'
+											className='flex w-10 h-10 rounded ion-align-items-center ion-justify-content-center'
 											style={{ backgroundColor: color }}
 										>
 											<ZIonIcon icon={logo} className='w-7 h-7' color='light' />
@@ -243,7 +243,7 @@ const SingleCard: React.FC<{
 				{/*  */}
 				{showInfoIcon && (
 					<div
-						className='top-1 absolute start-0 w-full flex  zaions__cursor_pointer ps-2'
+						className='absolute flex w-full top-1 start-0 zaions__cursor_pointer ps-2'
 						onClick={(event: unknown) => {
 							presentConnectPagesCardInfoPopover({
 								_event: event as Event,
@@ -265,7 +265,7 @@ const SingleCard: React.FC<{
 
 				{/*  */}
 				<ZIonText
-					className='mt-1 ion-text-center block font-bold text-base'
+					className='block mt-1 text-base font-bold ion-text-center'
 					color={compState.isActive ? 'light' : 'dark'}
 				>
 					{title}

@@ -8,20 +8,13 @@ import React, {
 
 // Packages Imports
 import {} from '@ionic/react';
-import Dropdown from 'react-bootstrap/Dropdown';
+// import Dropdown from 'react-bootstrap/Dropdown';
 import { useMediaQuery } from 'react-responsive';
 
 // Custom Imports
-import {
-	ZIonText,
-	ZIonRouterLink,
-	ZIonIcon,
-	ZIonList,
-} from '@/components/ZIonComponents';
+import { ZIonText, ZIonIcon, ZIonList } from '@/components/ZIonComponents';
 
 // style
-import classes from './styles.module.css';
-
 // Global Constants
 import { BRACKPOINT_XL } from '@/utils/constants';
 
@@ -94,54 +87,55 @@ const ZaionsDropDown = (props: {
 		query: `(min-width: ${BRACKPOINT_XL})`,
 	});
 	return (
-		<Dropdown
-			className={`${classes.zaions__max_content} ${
-				isXlScale ? 'pe-1' : ''
-			} mb-3`}
-		>
-			<Dropdown.Toggle as={CustomToggle} id='dropdown-custom-components'>
-				<ZIonText className={`${classValues}`}>{props.title}</ZIonText>
-			</Dropdown.Toggle>
+		<></>
+		// <Dropdown
+		// 	className={`${classes.zaions__max_content} ${
+		// 		isXlScale ? 'pe-1' : ''
+		// 	} mb-3`}
+		// >
+		// 	<Dropdown.Toggle as={CustomToggle} id='dropdown-custom-components'>
+		// 		<ZIonText className={`${classValues}`}>{props.title}</ZIonText>
+		// 	</Dropdown.Toggle>
 
-			<Dropdown.Menu
-				as={CustomMenu}
-				className={`${classes.zaions__dropdown_menu}  px-3 pt-2`}
-			>
-				{props.items.map((el) => {
-					return (
-						<ZIonRouterLink
-							routerLink={el.link}
-							key={el.id}
-							className={classes.zaions__dropdown_routeLink}
-						>
-							<Dropdown.Item
-								eventKey='1'
-								className={`${classes.zaions__dropdown_item} flex py-2 `}
-								// style={{ width: `${el.width}` }}
-							>
-								<div className='me-2 pe-1 pt-2'>
-									<ZIonIcon
-										icon={el.icon}
-										className={`zaions__fs_25 ${classes.zaions__dropdown_icon} ${classes.zaions__color_777}`}
-									/>
-								</div>
-								<div className=''>
-									<ZIonText
-										className={`font-bold  ${classes.zaions__dropdown_title}`}
-									>
-										{el.title}
-									</ZIonText>
-									<br />
-									<ZIonText className={`${classes.zaions__color_777}`}>
-										{el.text}
-									</ZIonText>
-								</div>
-							</Dropdown.Item>
-						</ZIonRouterLink>
-					);
-				})}
-			</Dropdown.Menu>
-		</Dropdown>
+		// 	<Dropdown.Menu
+		// 		as={CustomMenu}
+		// 		className={`${classes.zaions__dropdown_menu}  px-3 pt-2`}
+		// 	>
+		// 		{props.items.map((el) => {
+		// 			return (
+		// 				<ZIonRouterLink
+		// 					routerLink={el.link}
+		// 					key={el.id}
+		// 					className={classes.zaions__dropdown_routeLink}
+		// 				>
+		// 					<Dropdown.Item
+		// 						eventKey='1'
+		// 						className={`${classes.zaions__dropdown_item} flex py-2 `}
+		// 						// style={{ width: `${el.width}` }}
+		// 					>
+		// 						<div className='me-2 pe-1 pt-2'>
+		// 							<ZIonIcon
+		// 								icon={el.icon}
+		// 								className={`zaions__fs_25 ${classes.zaions__dropdown_icon} ${classes.zaions__color_777}`}
+		// 							/>
+		// 						</div>
+		// 						<div className=''>
+		// 							<ZIonText
+		// 								className={`font-bold  ${classes.zaions__dropdown_title}`}
+		// 							>
+		// 								{el.title}
+		// 							</ZIonText>
+		// 							<br />
+		// 							<ZIonText className={`${classes.zaions__color_777}`}>
+		// 								{el.text}
+		// 							</ZIonText>
+		// 						</div>
+		// 					</Dropdown.Item>
+		// 				</ZIonRouterLink>
+		// 			);
+		// 		})}
+		// 	</Dropdown.Menu>
+		// </Dropdown>
 	);
 };
 

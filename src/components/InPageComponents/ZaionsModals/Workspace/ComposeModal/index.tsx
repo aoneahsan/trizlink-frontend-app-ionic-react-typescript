@@ -117,11 +117,11 @@ const ZWorkspaceComposeModal: React.FC = () => {
 				<ZIonSegment
 					scrollable={true}
 					// value={values.pageId}
-					className='zaions_pretty_scrollbar mx-2'
+					className='mx-2 zaions_pretty_scrollbar'
 				>
 					{workspacePagesDomeData.map((el, index) => (
 						<ZIonSegmentButton
-							className='text-transform-initial px-1'
+							className='px-1 text-transform-initial'
 							value={String(index)}
 							// onClick={() => {
 							// 	setFieldValue('pageType', el.type, false);
@@ -135,7 +135,7 @@ const ZWorkspaceComposeModal: React.FC = () => {
 						>
 							<ZIonIcon
 								icon={getPlatformIcon(el.type)}
-								className='w-7 h-7 mb-2'
+								className='mb-2 w-7 h-7'
 							/>
 							<ZIonText className='pb-2 text-xs'>{el.pageName}</ZIonText>
 						</ZIonSegmentButton>
@@ -145,7 +145,7 @@ const ZWorkspaceComposeModal: React.FC = () => {
 
 			{/*  */}
 			<ZIonContent>
-				<ZIonRow className='ion-align-items-center ion-justify-content-center mt-2'>
+				<ZIonRow className='mt-2 ion-align-items-center ion-justify-content-center'>
 					<ZIonCol size='11.5'>
 						<ZIonTextarea placeholder='Write something... or type :balloon to inset a 🎈' />
 					</ZIonCol>
@@ -210,7 +210,7 @@ const ZWorkspaceComposeModal: React.FC = () => {
 
 						<ZIonButtons>
 							<ZIonButton
-								className='text-transform-initial m-0'
+								className='m-0 text-transform-initial'
 								color='primary'
 								fill='solid'
 								style={{ '--border-radius': '0px' }}
@@ -218,7 +218,7 @@ const ZWorkspaceComposeModal: React.FC = () => {
 								Save
 							</ZIonButton>
 							<ZIonButton
-								className='text-transform-initial m-0'
+								className='m-0 text-transform-initial'
 								color='primary'
 								fill='solid'
 								style={{ '--border-radius': '0px' }}

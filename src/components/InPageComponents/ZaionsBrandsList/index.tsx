@@ -4,7 +4,7 @@ import { Fragment, useLayoutEffect } from 'react';
 // Packages Imports
 import { useRecoilState } from 'recoil';
 import { useMediaQuery } from 'react-responsive';
-import Carousel from 'react-bootstrap/Carousel';
+// import Carousel from 'react-bootstrap/Carousel';
 import classNames from 'classnames';
 
 // Custom Imports
@@ -27,8 +27,7 @@ import { BRACKPOINT_MD } from '@/utils/constants';
 
 // Data
 import HPBrandData from '@/data/HPBrandListData';
-
-const { Item: CarouselItem } = Carousel;
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 const ZaionsInpageBrandsList: React.FC<{
 	title?: string;
@@ -37,8 +36,8 @@ const ZaionsInpageBrandsList: React.FC<{
 	const [loadedHPBrandsData, setLoadedHPBrandsData] =
 		useRecoilState<ZaionsHPBrandsType[]>(ZaionsHPBrandsData);
 	const isSMSclae = useMediaQuery({ query: `(max-width: ${BRACKPOINT_MD})` });
-	const ZaionsCarousel = isSMSclae ? Carousel : Fragment;
-	const ZaionsCarouselItem = isSMSclae ? CarouselItem : Fragment;
+	const ZaionsCarousel = isSMSclae ? Swiper : Fragment;
+	const ZaionsCarouselItem = isSMSclae ? SwiperSlide : Fragment;
 	useLayoutEffect(() => {
 		// Featch Data From Database Later:-
 		setLoadedHPBrandsData(HPBrandData);

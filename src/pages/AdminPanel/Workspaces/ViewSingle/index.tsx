@@ -110,6 +110,7 @@ import { useRecoilState } from 'recoil';
 import { WorkspaceComposeModalRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/ZCompose/index.recoil';
 import ZWorkspaceComposeModal from '@/components/InPageComponents/ZaionsModals/Workspace/ComposeModal';
 import { getPlatformIcon } from '@/utils/helpers';
+import ZWorkspaceCreatePageModal from '@/components/InPageComponents/ZaionsModals/Workspace/CreatePageModal';
 
 /**
  * Component props type go down
@@ -154,6 +155,10 @@ const ViewSingleWorkspace: React.FC = () => {
 		{
 			Tab: WorkspaceSharingTabEnum.invite,
 		}
+	);
+
+	const { presentZIonModal: presentWorkspaceCreatePageModal } = useZIonModal(
+		ZWorkspaceCreatePageModal
 	);
 
 	// Recoil state to manage ZWorkspaceComposeModal.
@@ -270,14 +275,11 @@ const ViewSingleWorkspace: React.FC = () => {
 											<ZIonButton
 												size='default'
 												fill='default'
-												// onClick={(event: unknown) => {
-												// 	presentWorkspaceImportExportPopover({
-												// 		_event: event as Event,
-												// 		_cssClass:
-												// 			'zaions_workspaces_import_export_popover_size',
-												// 		_dismissOnSelect: false,
-												// 	});
-												// }}
+												onClick={() => {
+													presentWorkspaceCreatePageModal({
+														_cssClass: 'workspace-sharing-modal-size',
+													});
+												}}
 												className='ion-no-padding ion-no-margin text-transform-initial'
 												color='dark'
 											>
@@ -400,7 +402,7 @@ const ViewSingleWorkspace: React.FC = () => {
 											>
 												{workspacePagesDomeData.map((el, index) => (
 													<ZIonSegmentButton
-														className='text-transform-initial px-1'
+														className='px-1 text-transform-initial'
 														value={String(index)}
 														onClick={() => {
 															setFieldValue('pageType', el.type, false);
@@ -414,7 +416,7 @@ const ViewSingleWorkspace: React.FC = () => {
 													>
 														<ZIonIcon
 															icon={getPlatformIcon(el.type)}
-															className='w-7 h-7 mb-2'
+															className='mb-2 w-7 h-7'
 														/>
 														<ZIonText className='pb-2 text-xs'>
 															{el.pageName}

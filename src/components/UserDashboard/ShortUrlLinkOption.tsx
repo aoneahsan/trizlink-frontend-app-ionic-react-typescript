@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Packages Import
-import { Dropdown } from 'react-bootstrap';
+// import { Dropdown } from 'react-bootstrap';
 import {} from '@ionic/react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -78,7 +78,7 @@ const ShortUrlLinkOptions: React.FC = () => {
 
 	return (
 		<>
-			<Dropdown>
+			{/* <Dropdown>
 				<Dropdown.Toggle
 					id='dropdown-custom-components'
 					className={`${classes.zaions__dropdown_toggle} text-primary flex ion-align-items-center`}
@@ -96,7 +96,7 @@ const ShortUrlLinkOptions: React.FC = () => {
 								className='ion-margin-start ion-margin-end ion-padding-end'
 								color={'dark'}
 							>
-								<h6 className='ion-no-margin font-bold d-inline'>
+								<h6 className='font-bold ion-no-margin d-inline'>
 									{newShortLinkTypeOptionData.text}
 								</h6>
 							</ZIonText>
@@ -127,7 +127,7 @@ const ShortUrlLinkOptions: React.FC = () => {
 						</ZIonRow>
 					</ZIonGrid>
 				</Dropdown.Menu>
-			</Dropdown>
+			</Dropdown> */}
 		</>
 	);
 };
