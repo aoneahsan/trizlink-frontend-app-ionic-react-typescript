@@ -21,14 +21,38 @@ import React from 'react';
 import { Formik } from 'formik';
 import {
 	ZIonButton,
+	ZIonCard,
+	ZIonCardContent,
 	ZIonCol,
+	ZIonContent,
 	ZIonGrid,
 	ZIonHeader,
 	ZIonIcon,
+	ZIonImg,
 	ZIonRow,
+	ZIonSegment,
+	ZIonSegmentButton,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import { closeOutline } from 'ionicons/icons';
+import {
+	addCircleOutline,
+	closeCircle,
+	closeOutline,
+	documentOutline,
+	ellipse,
+} from 'ionicons/icons';
+import { workspacePagesDomeData } from '@/data/UserDashboard/Workspace/index.data';
+import { getPlatformIcon } from '@/utils/helpers';
+import {
+	workspaceFormConnectPagesCardEnum,
+	workspaceFormConnectPagesEnum,
+} from '@/types/AdminPanel/workspace';
+import { CardsByType } from '@/data/UserDashboard/Workspace/ConnectPagesTab/index.data';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
+import ZWorkspaceMockupPageModal from '../MockupPageModal';
+import { SingleCard } from '@/components/WorkspacesComponents/SingleCard';
+import { ProductLogo } from '@/assets/images';
+import classNames from 'classnames';
 
 /**
  * Global Constants Imports go down
@@ -71,7 +95,10 @@ const ZWorkspaceCreatePageModal: React.FC<{
 }> = ({ dismissZIonModal }) => {
 	return (
 		<Formik
-			initialValues={{}}
+			initialValues={{
+				pageType: workspaceFormConnectPagesEnum.facebook,
+				pageId: '0',
+			}}
 			validate={() => {
 				const errors = {};
 
@@ -79,7 +106,18 @@ const ZWorkspaceCreatePageModal: React.FC<{
 			}}
 			onSubmit={() => {}}
 		>
-			{() => {
+			{({ values, setFieldValue }) => {
+				// getting the cards accounting to pageType
+				const { cards, color, logo } = CardsByType[values.pageType];
+
+				const { presentZIonModal: presentZWorkspaceMockupPageModal } =
+					useZIonModal(ZWorkspaceMockupPageModal, {
+						pageType: values.pageType,
+						color: color,
+						logo: logo,
+					});
+
+				//
 				return (
 					<>
 						<ZIonHeader>
@@ -87,9 +125,9 @@ const ZWorkspaceCreatePageModal: React.FC<{
 								{/*  */}
 								<ZIonRow className='ion-align-items-center'>
 									{/*  */}
-									<ZIonCol className='flex ion-align-items-center ion-justify-content-center ms-3'>
+									<ZIonCol className='flex ion-align-items-center' size='12'>
 										{/*  */}
-										<div className='ms-2'>
+										<div className='ms-2 text-xl w-[64%] ion-text-end'>
 											<ZIonText className='block font-bold'>
 												Add pages to Talha
 											</ZIonText>
@@ -111,23 +149,183 @@ const ZWorkspaceCreatePageModal: React.FC<{
 									</ZIonCol>
 
 									{/*  */}
-									{/* <ZIonCol className='ion-text-end'>
-										<ZIonButton
-											fill='clear'
-											onClick={() => {
-												dismissZIonModal();
-											}}
+									<ZIonCol>
+										<ZIonSegment
+											scrollable={true}
+											value={values.pageId}
+											className='zaions_pretty_scrollbar'
 										>
-											<ZIonIcon
-												icon={closeOutline}
-												className='w-6 h-6'
-												color='dark'
-											/>
-										</ZIonButton>
-									</ZIonCol> */}
+											{workspacePagesDomeData.map((el, index) => (
+												<ZIonSegmentButton
+													className='px-1 text-transform-initial'
+													value={String(index)}
+													onClick={() => {
+														setFieldValue('pageType', el.type, false);
+														setFieldValue('pageId', index, false);
+													}}
+													style={{
+														'--padding-end': '9px',
+														'--padding-start': '9px',
+													}}
+													key={index}
+												>
+													<ZIonIcon
+														icon={getPlatformIcon(el.type)}
+														className='mb-2 w-7 h-7'
+													/>
+													<ZIonText className='pb-2 text-xs'>
+														{el.pageName}
+													</ZIonText>
+												</ZIonSegmentButton>
+											))}
+										</ZIonSegment>
+									</ZIonCol>
 								</ZIonRow>
 							</ZIonGrid>
 						</ZIonHeader>
+
+						<ZIonContent>
+							<ZIonGrid>
+								<ZIonRow className='flex flex-wrap h-full ion-align-items-center'>
+									{/*  */}
+									{values.pageType !==
+										workspaceFormConnectPagesEnum.universalContent &&
+										cards.map((card, index) => {
+											return (
+												<ZIonCol
+													sizeXl='3.5'
+													sizeLg='4'
+													sizeMd='5'
+													sizeSm='6'
+													sizeXs='12'
+													key={index}
+													className='h-[170px]'
+												>
+													<SingleCard
+														icon={card.cardIcon}
+														title={card.title}
+														showInfoIcon={card.showInfoIcon}
+														infoCardItems={card.infoItems}
+														onClick={() => {
+															card.type ===
+																workspaceFormConnectPagesCardEnum.mockup &&
+																presentZWorkspaceMockupPageModal({
+																	_cssClass:
+																		'workspace-connect-pages-modal-size',
+																});
+														}}
+													/>
+												</ZIonCol>
+											);
+										})}
+
+									{values.pageType ===
+										workspaceFormConnectPagesEnum.universalContent && (
+										<ZIonCol
+											sizeXl='3.5'
+											sizeLg='4'
+											sizeMd='5'
+											sizeSm='6'
+											sizeXs='12'
+											className='h-[170px]'
+										>
+											<SingleCard
+												icon={documentOutline}
+												title={'Create a page for universal content'}
+												showInfoIcon={false}
+												onClick={() => {
+													presentZWorkspaceMockupPageModal({
+														_cssClass: 'workspace-connect-pages-modal-size',
+													});
+												}}
+											/>
+										</ZIonCol>
+									)}
+								</ZIonRow>
+
+								<ZIonRow className='flex flex-wrap h-full ion-align-items-center mt-7 pt-4 border-t-[1px]'>
+									<ZIonCol size='12'>
+										<ZIonText
+											className='flex ion-align-items-center gap-2 text-sm ion-text-uppercase'
+											color='medium'
+										>
+											<ZIonIcon icon={ellipse} color='success' /> Connected
+											Pages
+										</ZIonText>
+									</ZIonCol>
+
+									{/*  */}
+									<ZIonCol
+										sizeXs='12'
+										sizeSm='6'
+										sizeMd='5'
+										sizeLg='4'
+										sizeXl='3.5'
+										className='h-[11rem]'
+									>
+										<ZIonCard className='h-[94%]'>
+											<ZIonCardContent className='pb-3 ion-text-center ion-no-padding ion-padding-horizontal py-1'>
+												<div className='w-full flex ion-align-items-center ion-justify-content-between'>
+													<ZIonButton
+														className='ion-no-padding ion-no-margin'
+														fill='default'
+													>
+														<ZIonIcon
+															icon={addCircleOutline}
+															className='w-7 h-7'
+														/>
+													</ZIonButton>
+													<ZIonButton
+														className='ion-no-padding ion-no-margin'
+														fill='default'
+													>
+														<ZIonIcon
+															icon={closeCircle}
+															color='danger'
+															className='w-7 h-7'
+														/>
+													</ZIonButton>
+												</div>
+
+												{/*  */}
+												<ZIonImg
+													src={ProductLogo}
+													className='w-10 h-10 mx-auto'
+												/>
+												{/*  */}
+												<ZIonText className='mt-1 ion-text-center block'>
+													zaions
+												</ZIonText>
+
+												{/*  */}
+												<ZIonText
+													className={classNames({
+														'ion-text-center block zaions__fs_13 text-muted':
+															true,
+													})}
+												>
+													@zaions
+												</ZIonText>
+
+												{/*  */}
+												<ZIonText
+													className={classNames({
+														'ion-text-center block zaions__fs_13 text-muted ion-text-uppercase pt-2':
+															true,
+													})}
+												>
+													Mockup page
+												</ZIonText>
+
+												{/* Navigation buttons */}
+												{/* <ConnectPagesCardSwiperButtons /> */}
+												{/*  */}
+											</ZIonCardContent>
+										</ZIonCard>
+									</ZIonCol>
+								</ZIonRow>
+							</ZIonGrid>
+						</ZIonContent>
 					</>
 				);
 			}}

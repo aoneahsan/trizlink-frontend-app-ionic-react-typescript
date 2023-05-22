@@ -9,21 +9,22 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import {
-	downloadOutline,
-	shareOutline,
-	swapHorizontalOutline,
-} from 'ionicons/icons';
+	ZIonAccordion,
+	ZIonAccordionGroup,
+	ZIonCol,
+	ZIonIcon,
+	ZIonItem,
+	ZIonLabel,
+	ZIonRow,
+	ZIonText,
+} from '@/components/ZIonComponents';
+import { addOutline } from 'ionicons/icons';
+import { brandColors } from '@/utils/constants';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import {
-	ZIonIcon,
-	ZIonItem,
-	ZIonLabel,
-	ZIonList,
-} from '@/components/ZIonComponents';
 
 /**
  * Custom Hooks Imports go down
@@ -66,39 +67,30 @@ import {
  * @type {*}
  * */
 
-const ZWorkspaceImportExportPopover: React.FC = () => {
+const ZWorkspaceInstagramStoriesLayout: React.FC = () => {
 	return (
-		<>
-			<ZIonList lines='none'>
-				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
-					minHeight='32px'
-				>
-					<ZIonIcon icon={shareOutline} className='me-1 w-5 h-5' />
-					<ZIonLabel className='m-0'>Imports posts</ZIonLabel>
+		<ZIonAccordionGroup className='my-4'>
+			<ZIonAccordion value='e' toggleIcon={addOutline}>
+				<ZIonItem slot='header' color='light'>
+					<ZIonLabel className='text-sm'>Stories ()</ZIonLabel>
 				</ZIonItem>
 
-				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
-					minHeight='32px'
-				>
-					<ZIonIcon icon={downloadOutline} className='me-1 pe-1 w-5 h-5' />
-					<ZIonLabel className='pt-1 my-0'>Exports posts</ZIonLabel>
-				</ZIonItem>
-
-				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
-					minHeight='32px'
-				>
-					<ZIonIcon
-						icon={swapHorizontalOutline}
-						className='me-1 pe-1 w-5 h-5'
-					/>
-					<ZIonLabel className='pt-1 my-0'>Page settings</ZIonLabel>
-				</ZIonItem>
-			</ZIonList>
-		</>
+				<div className='ion-padding' slot='content'>
+					<ZIonRow className='gap-3'>
+						<ZIonCol
+							size='1.5'
+							className='h-[200px] flex cursor-pointer flex-col ion-text-center ion-align-items-center ion-justify-content-center shadow-lg'
+						>
+							<ZIonIcon icon={addOutline} color='medium' className='w-6 h-6' />
+							<ZIonText className='text-lg px-5 mt-3' color='medium'>
+								Create new story
+							</ZIonText>
+						</ZIonCol>
+					</ZIonRow>
+				</div>
+			</ZIonAccordion>
+		</ZIonAccordionGroup>
 	);
 };
 
-export default ZWorkspaceImportExportPopover;
+export default ZWorkspaceInstagramStoriesLayout;

@@ -31,6 +31,7 @@ ion-app.ios ion-title {
 /* Scrollbar */
 .zaions_pretty_scrollbar::-webkit-scrollbar {
 	height: 8px;
+	width: 8px;
 }
 
 .zaions_pretty_scrollbar::-webkit-scrollbar-track {
@@ -267,7 +268,7 @@ span.new {
 }
 
 .zaions__bg_white {
-	background-color: #fff;
+	background-color: #fff !important;
 }
 
 .zaions__bg_f5f6fa {
@@ -921,6 +922,11 @@ ion-modal.zaions__modal_w100 {
 	--width: 63.6vw;
 }
 
+.workspace-create-pages-modal-size {
+	--height: 95vh;
+	--width: 755px;
+}
+
 .folder-modal-size,
 .api-key-modal-size {
 	--height: 50vh;
@@ -1005,4 +1011,20 @@ ion-modal.zaions__modal_w100 {
 	--padding-bottom: 27px;
 	margin-top: 0;
 	margin-bottom: 17px;
+}
+
+/* Workspace */
+.zaions_comment_box {
+	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08))
+		drop-shadow(0 0 1px rgba(50, 79, 58, 0.15));
+}
+.zaions_comment_box::before {
+	background: inherit;
+	content: '';
+	height: 10px;
+	left: -5px;
+	position: absolute;
+	top: 16px;
+	transform: rotate(45deg);
+	width: 10px;
 }

@@ -111,6 +111,8 @@ import { WorkspaceComposeModalRStateAtom } from '@/ZaionsStore/UserDashboard/Wor
 import ZWorkspaceComposeModal from '@/components/InPageComponents/ZaionsModals/Workspace/ComposeModal';
 import { getPlatformIcon } from '@/utils/helpers';
 import ZWorkspaceCreatePageModal from '@/components/InPageComponents/ZaionsModals/Workspace/CreatePageModal';
+import ZWorkspacePostsLayout from '@/components/WorkspacesComponents/PostsLayout';
+import ZWorkspaceInstagramStoriesLayout from '@/components/WorkspacesComponents/PagesLayout/InstagramStories';
 
 /**
  * Component props type go down
@@ -184,6 +186,15 @@ const ViewSingleWorkspace: React.FC = () => {
 				onSubmit={() => {}}
 			>
 				{({ values, setFieldValue }) => {
+					const ZIonContentBg =
+						values.pageType === workspaceFormConnectPagesEnum.facebook ||
+						values.pageType === workspaceFormConnectPagesEnum.linkedin ||
+						values.pageType === workspaceFormConnectPagesEnum.youtube ||
+						values.pageType === workspaceFormConnectPagesEnum.googleBusiness ||
+						values.pageType === workspaceFormConnectPagesEnum.universalContent
+							? 'light'
+							: undefined;
+
 					return (
 						<>
 							<ZIonHeader
@@ -277,7 +288,7 @@ const ViewSingleWorkspace: React.FC = () => {
 												fill='default'
 												onClick={() => {
 													presentWorkspaceCreatePageModal({
-														_cssClass: 'workspace-sharing-modal-size',
+														_cssClass: 'workspace-create-pages-modal-size',
 													});
 												}}
 												className='ion-no-padding ion-no-margin text-transform-initial'
@@ -503,7 +514,7 @@ const ViewSingleWorkspace: React.FC = () => {
 							</ZIonHeader>
 
 							{/*  */}
-							<ZIonContent color='light'>
+							<ZIonContent color={ZIonContentBg}>
 								{values.pageType === workspaceFormConnectPagesEnum.facebook ? (
 									<ZWorkspaceFacebookPageLayout />
 								) : values.pageType ===
@@ -532,6 +543,43 @@ const ViewSingleWorkspace: React.FC = () => {
 								) : (
 									''
 								)}
+
+								{/*  */}
+								<ZIonRow className='ion-justify-content-center'>
+									{values.pageType ===
+										workspaceFormConnectPagesEnum.instagram && (
+										<ZIonCol
+											sizeXl='9.5'
+											sizeLg='10.5'
+											sizeMd='11.5'
+											sizeSm='11.9'
+											sizeXs='11.9'
+										>
+											<ZWorkspaceInstagramStoriesLayout />
+										</ZIonCol>
+									)}
+
+									{/*  */}
+									<ZIonCol
+										sizeXl={
+											values.pageType ===
+												workspaceFormConnectPagesEnum.facebook ||
+											values.pageType ===
+												workspaceFormConnectPagesEnum.instagram
+												? '9.5'
+												: values.pageType ===
+												  workspaceFormConnectPagesEnum.linkedin
+												? '8.7'
+												: '9.5'
+										}
+										sizeLg='10.5'
+										sizeMd='11'
+										sizeSm='11.5'
+										sizeXs='11.7'
+									>
+										<ZWorkspacePostsLayout pageType={values.pageType} />
+									</ZIonCol>
+								</ZIonRow>
 							</ZIonContent>
 						</>
 					);

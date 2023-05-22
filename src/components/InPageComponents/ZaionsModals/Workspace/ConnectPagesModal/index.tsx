@@ -57,6 +57,7 @@ import {
 	WorkspacePageCardInfoPopoverItemType,
 } from '@/types/AdminPanel/workspace';
 import ZWorkspaceMockupPageModal from '../MockupPageModal';
+import { SingleCard } from '@/components/WorkspacesComponents/SingleCard';
 
 /**
  * Recoil State Imports go down
@@ -195,83 +196,6 @@ const ZWorkspaceConnectPagesModal: React.FC<{
 				);
 			}}
 		</Formik>
-	);
-};
-
-const SingleCard: React.FC<{
-	icon: string;
-	title: string;
-	onClick?: React.MouseEventHandler<HTMLIonCardElement>;
-	showInfoIcon?: boolean;
-	infoCardItems?: WorkspacePageCardInfoPopoverItemType[];
-}> = ({ icon, title, onClick, showInfoIcon = false, infoCardItems }) => {
-	const [compState, setCompState] = useState<{ isActive: boolean }>({
-		isActive: false,
-	});
-
-	const { presentZIonPopover: presentConnectPagesCardInfoPopover } =
-		useZIonPopover(ZWorkspaceConnectPagesCardInfoPopover, {
-			items: infoCardItems,
-		}); // popover hook to show UserInfoPopover
-
-	return (
-		<ZIonCard
-			className='zaions__cursor_pointer'
-			onClick={onClick}
-			onMouseEnter={(event: unknown) => {
-				setCompState((oldValues) => ({
-					...oldValues,
-					isActive: true,
-				}));
-
-				// showInfoIcon &&
-				// 	presentConnectPagesCardInfoPopover({
-				// 		_event: event as Event,
-				// 		_cssClass: 'zaions_workspaces_card_popover_size',
-				// 		_dismissOnSelect: false,
-				// 	});
-			}}
-			onMouseLeave={() => {
-				setCompState((oldValues) => ({
-					...oldValues,
-					isActive: false,
-				}));
-			}}
-			color={compState.isActive ? 'primary' : undefined}
-		>
-			<ZIonCardContent className='py-3 ion-text-center relative ion-justify-content-center h-[11rem] flex flex-col ion-align-items-center ion-justify-content-center'>
-				{/*  */}
-				{showInfoIcon && (
-					<div
-						className='absolute flex w-full top-1 start-0 zaions__cursor_pointer ps-2'
-						onClick={(event: unknown) => {
-							presentConnectPagesCardInfoPopover({
-								_event: event as Event,
-								_cssClass: 'zaions_workspaces_card_popover_size',
-								_dismissOnSelect: false,
-							});
-						}}
-					>
-						<ZIonIcon
-							icon={alertCircleOutline}
-							className='w-7 h-7'
-							color={compState.isActive ? 'light' : 'dark'}
-						/>
-					</div>
-				)}
-
-				{/*  */}
-				<ZIonIcon icon={icon} className='w-10 h-10 mb-2' />
-
-				{/*  */}
-				<ZIonText
-					className='block mt-1 text-base font-bold ion-text-center'
-					color={compState.isActive ? 'light' : 'dark'}
-				>
-					{title}
-				</ZIonText>
-			</ZIonCardContent>
-		</ZIonCard>
 	);
 };
 

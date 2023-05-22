@@ -96,7 +96,7 @@ const ZWorkspaceInstagramPageLayout: React.FC = () => {
 			>
 				<ZIonRow
 					className={classNames({
-						'w-[80%] mx-auto': (!isLgScale && isMdScale) || isSmScale,
+						'w-[100%] mx-auto': (!isLgScale && isMdScale) || isSmScale,
 						'w-[95%]': !isSmScale,
 					})}
 				>
@@ -111,8 +111,7 @@ const ZWorkspaceInstagramPageLayout: React.FC = () => {
 							className={classNames({
 								'rounded-full overflow-hidden': true,
 								'w-[152px] h-[152px]': isXlScale || isLgScale,
-								'w-[77px] h-[77px]':
-									(!isLgScale && isMdScale) || isSmScale || !isSmScale,
+								'w-[77px] h-[77px]': !isLgScale,
 							})}
 						>
 							<ZIonImg
