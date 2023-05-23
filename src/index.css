@@ -896,10 +896,18 @@ ion-modal.zaions__modal_w100 {
 }
 
 .file-upload-modal-size,
-.workspace-setting-modal-size {
+.workspace-setting-modal-size,
+.workspace-post-detail-modal-size {
 	--height: 94vh;
 	--width: 87.6vw;
 }
+
+/* @media only screen and (max-content: 1012px) {
+	.workspace-post-detail-modal-size {
+		--height: 100% !important;
+		--width: 90% !important;
+	}
+} */
 
 .workspace-sharing-modal-size {
 	--height: 75vh;
@@ -1018,7 +1026,7 @@ ion-modal.zaions__modal_w100 {
 	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08))
 		drop-shadow(0 0 1px rgba(50, 79, 58, 0.15));
 }
-.zaions_comment_box::before {
+/* .zaions_comment_box::before {
 	background: inherit;
 	content: '';
 	height: 10px;
@@ -1027,4 +1035,4 @@ ion-modal.zaions__modal_w100 {
 	top: 16px;
 	transform: rotate(45deg);
 	width: 10px;
-}
+} */

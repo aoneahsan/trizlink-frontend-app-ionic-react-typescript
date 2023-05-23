@@ -254,9 +254,9 @@ const ZWorkspaceViewPageFilterMenu: React.FC = () => {
 												// checking id el.filterType is workspaceFilterAccordionContentEnum.checkbox then show this content
 												el.filterType ===
 												workspaceFilterAccordionContentEnum.checkbox ? (
-													el.filterItems.map((_item) => {
+													el.filterItems.map((_item, checkboxIndex) => {
 														return (
-															<div className='pb-2'>
+															<div className='pb-2' key={checkboxIndex}>
 																<ZIonCheckbox
 																	labelPlacement='end'
 																	className='text-sm ion-align-items-center'
@@ -282,9 +282,9 @@ const ZWorkspaceViewPageFilterMenu: React.FC = () => {
 												el.filterType ===
 												  workspaceFilterAccordionContentEnum.radio ? (
 													<ZIonRadioGroup>
-														{el.filterItems.map((_item) => {
+														{el.filterItems.map((_item, ratioIndex) => {
 															return (
-																<div className='pb-2'>
+																<div className='pb-2' key={ratioIndex}>
 																	<div className='pb-2'>
 																		<ZIonRadio
 																			value={_item.title}

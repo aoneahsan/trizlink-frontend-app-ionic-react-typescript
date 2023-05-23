@@ -54,6 +54,11 @@ export enum workspaceFormConnectPagesEnum {
 	universalContent = 'universalContent',
 }
 
+export enum workspacePostDetailTabEnum {
+	desktop = 'desktop',
+	mobile = 'mobile',
+}
+
 export enum workspaceFormConnectPagesCardEnum {
 	page = 'page', // page or profile
 	group = 'group',

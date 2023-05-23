@@ -30,6 +30,10 @@ type ZIonSelectType = {
 	value?: string | unknown;
 	defaultValue?: string | number | readonly string[];
 	color?: ZIonColorType;
+	style?: {
+		[key: string]: unknown;
+	};
+	minHeight?: 'auto' | string;
 	onIonChange?: (
 		event: IonSelectCustomEvent<SelectChangeEventDetail<unknown>>
 	) => void;
@@ -44,7 +48,21 @@ type ZIonSelectType = {
 };
 
 const ZIonSelect = (props: ZIonSelectType) => {
-	return <IonSelect {...props}>{props.children}</IonSelect>;
+	const compStyle =
+		props.style && props.minHeight
+			? { ...props.style, minHeight: props.minHeight }
+			: props.style && !props.minHeight
+			? { ...props.style }
+			: !props.style && props.minHeight
+			? { minHeight: props.minHeight }
+			: {};
+
+	//
+	return (
+		<IonSelect {...props} style={compStyle}>
+			{props.children}
+		</IonSelect>
+	);
 };
 
 export default ZIonSelect;

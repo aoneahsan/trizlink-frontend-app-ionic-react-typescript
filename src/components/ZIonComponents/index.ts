@@ -52,6 +52,7 @@ export { default as ZIonPopover } from './ZIonPopover';
 export { default as ZIonAvatar } from './ZIonAvatar';
 export { default as ZIonRadio } from './ZIonRadio';
 export { default as ZIonRadioGroup } from './ZIonRadioGroup';
+export { default as ZIonToolbar } from './ZIonToolbar';
 
 //
 // import {
