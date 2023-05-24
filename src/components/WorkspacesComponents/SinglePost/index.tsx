@@ -10,6 +10,7 @@ import React from 'react';
  * */
 import classNames from 'classnames';
 import {
+	chatbubbleOutline,
 	ellipsisHorizontalOutline,
 	menuOutline,
 	openOutline,
@@ -265,14 +266,21 @@ const ZWorkspaceSinglePost: React.FC<ZWorkspaceSinglePostInterface> = ({
 						<ZIonButton className='m-0'>
 							<ZIonImg src={imageIcon} />
 						</ZIonButton>
+
 						<ZIonButton className='m-0'>
 							<ZIonImg src={gifIcon} />
 						</ZIonButton>
+
 						<ZIonButton className='m-0'>
 							<ZIonImg src={mediaIcon} />
 						</ZIonButton>
+
 						<ZIonButton className='m-0'>
 							<ZIonImg src={thumbnailIcon} />
+						</ZIonButton>
+
+						<ZIonButton className='m-0'>
+							<ZIonImg src={chatbubbleOutline} />
 						</ZIonButton>
 					</ZIonButtons>
 				</div>
