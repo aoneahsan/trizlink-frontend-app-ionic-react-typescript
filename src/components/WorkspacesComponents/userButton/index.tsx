@@ -75,6 +75,7 @@ const ZUserAvatarButton: React.FC<ZUserAvatarButtonInterface> = ({
 	userAvatar,
 	className,
 	showStatus = false,
+	style,
 	onClick,
 	onMouseEnter,
 	onMouseLeave,
@@ -87,6 +88,7 @@ const ZUserAvatarButton: React.FC<ZUserAvatarButtonInterface> = ({
 			onClick={onClick}
 			onMouseEnter={onMouseEnter}
 			onMouseLeave={onMouseLeave}
+			style={style}
 		>
 			{showStatus && (
 				<ZIonIcon
