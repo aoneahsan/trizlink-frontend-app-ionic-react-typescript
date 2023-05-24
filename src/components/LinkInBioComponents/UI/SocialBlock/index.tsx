@@ -15,8 +15,8 @@ import React from 'react';
  * */
 import { ZIonCol, ZIonImg, ZIonRow } from '@/components/ZIonComponents';
 import {
-  linkInBioBlockCardItemInterface,
-  LinkInBioSocialPlatformEnum,
+	linkInBioBlockCardItemInterface,
+	LinkInBioSocialPlatformEnum,
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 import { predefinedSocialWhiteImages } from '@/utils/ZIcons';
 
@@ -57,41 +57,41 @@ import { predefinedSocialWhiteImages } from '@/utils/ZIcons';
  * */
 
 interface ZLinkInBioSocialBlockInterface {
-  socialBlockData?: linkInBioBlockCardItemInterface[];
+	socialBlockData?: linkInBioBlockCardItemInterface[];
 }
 
 const ZLinkInBioSocialBlock: React.FC<ZLinkInBioSocialBlockInterface> = ({
-  socialBlockData,
+	socialBlockData,
 }) => {
-  return (
-    <ZIonCol>
-      <ZIonRow className='ion-align-items-center ion-justify-content-center row-gap-1-point-6-rem'>
-        {socialBlockData &&
-          socialBlockData.map((el) => {
-            return (
-              <ZIonCol
-                size='3'
-                className='d-flex ion-align-items-center ion-justify-content-center'
-              >
-                <ZIonImg
-                  src={
-                    predefinedSocialWhiteImages[
-                      el.socialCardType as LinkInBioSocialPlatformEnum
-                    ]
-                  }
-                  style={{
-                    width:
-                      el.socialCardType === LinkInBioSocialPlatformEnum.facebook
-                        ? '1.2rem'
-                        : '1.5rem',
-                  }}
-                />
-              </ZIonCol>
-            );
-          })}
-      </ZIonRow>
-    </ZIonCol>
-  );
+	return (
+		<ZIonCol>
+			<ZIonRow className='ion-align-items-center ion-justify-content-center row-gap-1-point-6-rem'>
+				{socialBlockData &&
+					socialBlockData.map((el) => {
+						return (
+							<ZIonCol
+								size='3'
+								className='flex ion-align-items-center ion-justify-content-center'
+							>
+								<ZIonImg
+									src={
+										predefinedSocialWhiteImages[
+											el.socialCardType as LinkInBioSocialPlatformEnum
+										]
+									}
+									style={{
+										width:
+											el.socialCardType === LinkInBioSocialPlatformEnum.facebook
+												? '1.2rem'
+												: '1.5rem',
+									}}
+								/>
+							</ZIonCol>
+						);
+					})}
+			</ZIonRow>
+		</ZIonCol>
+	);
 };
 
 export default ZLinkInBioSocialBlock;

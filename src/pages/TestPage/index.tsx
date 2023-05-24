@@ -39,10 +39,10 @@ const ZaionsTextPage: React.FC<{
 				sizeXs='12'
 				className='border py-3 zaions__bg_white'
 			>
-				<div className='d-flex align-items-center border-bottom ion-padding-start pb-2'>
+				<div className='flex ion-align-items-center border-bottom ion-padding-start pb-2'>
 					<ZIonIcon icon={gitPullRequestOutline} size={'large'}></ZIonIcon>
 					<ZIonText>
-						<h6 className='fw-bold ion-no-margin ion-padding-start'>
+						<h6 className='font-bold ion-no-margin ion-padding-start'>
 							Rotator - AB Testing{' '}
 							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
 								(help)
@@ -50,7 +50,7 @@ const ZaionsTextPage: React.FC<{
 						</h6>
 					</ZIonText>
 				</div>
-				<div className='d-block px-2 mt-3 mb-4'>
+				<div className='block px-2 mt-3 mb-4'>
 					<ZIonRow className='gap-1'>
 						<ZIonCol size='5.6'>
 							<ZIonInput
@@ -95,7 +95,7 @@ const ZaionsTextPage: React.FC<{
 													onIonChange={handleChange}
 												/>
 											</ZIonCol>
-											<ZIonCol className='d-flex ion-align-items-end'>
+											<ZIonCol className='flex ion-align-items-end'>
 												<ZIonIcon
 													icon={trashBin}
 													onClick={() => remove(index)}

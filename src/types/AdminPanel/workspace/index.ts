@@ -54,6 +54,11 @@ export enum workspaceFormConnectPagesEnum {
 	universalContent = 'universalContent',
 }
 
+export enum workspacePostDetailTabEnum {
+	desktop = 'desktop',
+	mobile = 'mobile',
+}
+
 export enum workspaceFormConnectPagesCardEnum {
 	page = 'page', // page or profile
 	group = 'group',
@@ -81,6 +86,22 @@ export enum contentStyleInterface {
 export enum workspaceViewNotificationsEnum {
 	approvalRequests = 'approvalRequests',
 	updates = 'updates',
+}
+
+export enum workspaceFilterAccordionEnum {
+	approvalStatus = 'approvalStatus',
+	postStatus = 'postStatus',
+	feedbackAndActivity = 'feedbackAndActivity',
+	labels = 'labels',
+	period = 'period',
+	postType = 'postType',
+	content = 'content',
+	author = 'author',
+}
+
+export enum workspaceFilterAccordionContentEnum {
+	checkbox = 'checkbox',
+	radio = 'radio',
 }
 
 // Interfaces

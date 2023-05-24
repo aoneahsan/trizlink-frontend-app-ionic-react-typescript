@@ -9,6 +9,7 @@ import React, { useCallback, useEffect } from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import {
+	addCircleOutline,
 	createOutline,
 	ellipsisVerticalOutline,
 	filterOutline,
@@ -26,12 +27,13 @@ import {
 	notificationsOutline,
 } from 'ionicons/icons';
 import classNames from 'classnames';
+import { Formik } from 'formik';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import ZaionsIonPage from '@/components/ZaionsIonPage';
 import {
 	ZIonButton,
@@ -41,6 +43,7 @@ import {
 	ZIonGrid,
 	ZIonHeader,
 	ZIonIcon,
+	ZIonMenuToggle,
 	ZIonRow,
 	ZIonSegment,
 	ZIonSegmentButton,
@@ -48,6 +51,20 @@ import {
 } from '@/components/ZIonComponents';
 import ZIonSearchbar from '@/components/ZIonComponents/ZIonSearchbar';
 import ZWorkspaceLinkedinPageLayout from '@/components/WorkspacesComponents/PagesLayout/Linkedin';
+import ZWorkspaceFacebookPageLayout from '@/components/WorkspacesComponents/PagesLayout/Facebook';
+import ZWorkspaceUniversalContentPageLayout from '@/components/WorkspacesComponents/PagesLayout/UniversalContent';
+import ZWorkspacesActionPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ActionsPopover';
+import ZWorkspacesSharingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SharingModal';
+import ZWorkspaceAppStatusPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/AppStatusPopover';
+import ZWorkspaceTiktokPageLayout from '@/components/WorkspacesComponents/PagesLayout/Tiktok';
+import ZWorkspacePinterestPageLayout from '@/components/WorkspacesComponents/PagesLayout/Pinterest';
+import ZWorkspaceYoutubePageLayout from '@/components/WorkspacesComponents/PagesLayout/Youtube';
+import ZWorkspaceTwitterPageLayout from '@/components/WorkspacesComponents/PagesLayout/Twitter';
+import ZWorkspaceInstagramPageLayout from '@/components/WorkspacesComponents/PagesLayout/Instagram';
+import ZWorkspaceProfilePopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ProfilePopover';
+import ZWorkspaceNotificationPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/NotificationsPopover';
+import ZWorkspaceImportExportPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ImportExportPopover';
+import { workspacePagesDomeData } from '@/data/UserDashboard/Workspace/index.data';
 
 /**
  * Custom Hooks Imports go down
@@ -59,11 +76,20 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { reportCustomError } from '@/utils/customErrorType';
+import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import { PAGE_MENU } from '@/utils/enums';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import CONSTANTS from '@/utils/constants';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import {
+	workspaceFormConnectPagesEnum,
+	WorkspaceSharingTabEnum,
+} from '@/types/AdminPanel/workspace';
 
 /**
  * Recoil State Imports go down
@@ -80,28 +106,13 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { addIcon, ProductLogo } from '@/assets/images';
-import ZWorkspaceTiktokPageLayout from '@/components/WorkspacesComponents/PagesLayout/Tiktok';
-import ZWorkspacePinterestPageLayout from '@/components/WorkspacesComponents/PagesLayout/Pinterest';
-import ZWorkspaceYoutubePageLayout from '@/components/WorkspacesComponents/PagesLayout/Youtube';
-import ZWorkspaceTwitterPageLayout from '@/components/WorkspacesComponents/PagesLayout/Twitter';
-import ZWorkspaceInstagramPageLayout from '@/components/WorkspacesComponents/PagesLayout/Instagram';
-import { workspacePagesDomeData } from '@/data/UserDashboard/Workspace/index.data';
-import {
-	workspaceFormConnectPagesEnum,
-	WorkspaceSharingTabEnum,
-} from '@/types/AdminPanel/workspace';
-import { reportCustomError } from '@/utils/customErrorType';
-import { Formik } from 'formik';
-import ZWorkspaceFacebookPageLayout from '@/components/WorkspacesComponents/PagesLayout/Facebook';
-import ZWorkspaceUniversalContentPageLayout from '@/components/WorkspacesComponents/PagesLayout/UniversalContent';
-import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
-import ZWorkspacesActionPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ActionsPopover';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import ZWorkspacesSharingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SharingModal';
-import ZWorkspaceAppStatusPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/AppStatusPopover';
-import ZWorkspaceProfilePopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ProfilePopover';
-import ZWorkspaceNotificationPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/NotificationsPopover';
-import ZWorkspaceImportExportPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ImportExportPopover';
+import { useRecoilState } from 'recoil';
+import { WorkspaceComposeModalRStateAtom } from '@/ZaionsStore/UserDashboard/Workspace/ZCompose/index.recoil';
+import ZWorkspaceComposeModal from '@/components/InPageComponents/ZaionsModals/Workspace/ComposeModal';
+import { getPlatformIcon } from '@/utils/helpers';
+import ZWorkspaceCreatePageModal from '@/components/InPageComponents/ZaionsModals/Workspace/CreatePageModal';
+import ZWorkspacePostsLayout from '@/components/WorkspacesComponents/PostsLayout';
+import ZWorkspaceInstagramStoriesLayout from '@/components/WorkspacesComponents/PagesLayout/InstagramStories';
 
 /**
  * Component props type go down
@@ -118,58 +129,6 @@ const ViewSingleWorkspace: React.FC = () => {
 	// Media Query Scale
 	const { isXlScale, isLgScale, isMdScale, isSmScale, isXsScale } =
 		useZMediaQueryScale();
-
-	const getPlatformIcon = useCallback((type: workspaceFormConnectPagesEnum) => {
-		try {
-			if (type) {
-				let icon;
-				switch (type) {
-					case workspaceFormConnectPagesEnum.facebook:
-						icon = logoFacebook;
-						break;
-
-					case workspaceFormConnectPagesEnum.instagram:
-						icon = logoInstagram;
-						break;
-
-					case workspaceFormConnectPagesEnum.linkedin:
-						icon = logoLinkedin;
-						break;
-
-					case workspaceFormConnectPagesEnum.twitter:
-						icon = logoTwitter;
-						break;
-
-					case workspaceFormConnectPagesEnum.tiktok:
-						icon = logoTiktok;
-						break;
-
-					case workspaceFormConnectPagesEnum.pinterest:
-						icon = logoPinterest;
-						break;
-
-					case workspaceFormConnectPagesEnum.googleBusiness:
-						icon = logoGoogle;
-						break;
-
-					case workspaceFormConnectPagesEnum.youtube:
-						icon = logoYoutube;
-						break;
-
-					case workspaceFormConnectPagesEnum.universalContent:
-						icon = gridOutline;
-						break;
-
-					default:
-						icon = gridOutline;
-						break;
-				}
-				return icon;
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	}, []);
 
 	const {
 		presentZIonPopover: presentWorkspacesActionsPopover,
@@ -200,8 +159,20 @@ const ViewSingleWorkspace: React.FC = () => {
 		}
 	);
 
+	const { presentZIonModal: presentWorkspaceCreatePageModal } = useZIonModal(
+		ZWorkspaceCreatePageModal
+	);
+
+	// Recoil state to manage ZWorkspaceComposeModal.
+	const [workspaceComposeModalStateAtom, setWorkspaceComposeModalStateAtom] =
+		useRecoilState(WorkspaceComposeModalRStateAtom);
+
 	return (
-		<ZaionsIonPage pageTitle='Zaions view single workspace page'>
+		<ZaionsIonPage
+			pageTitle='Zaions view single workspace page'
+			menu={PAGE_MENU.ADMIN_PANEL_WORKSPACE_VIEW_FILTER_MENU}
+			id={CONSTANTS.MENU_IDS.ADMIN_PAGE_WORKSPACE_VIEW_FILTER_MENU_ID}
+		>
 			<Formik
 				initialValues={{
 					pageId: '1',
@@ -215,6 +186,15 @@ const ViewSingleWorkspace: React.FC = () => {
 				onSubmit={() => {}}
 			>
 				{({ values, setFieldValue }) => {
+					const ZIonContentBg =
+						values.pageType === workspaceFormConnectPagesEnum.facebook ||
+						values.pageType === workspaceFormConnectPagesEnum.linkedin ||
+						values.pageType === workspaceFormConnectPagesEnum.youtube ||
+						values.pageType === workspaceFormConnectPagesEnum.googleBusiness ||
+						values.pageType === workspaceFormConnectPagesEnum.universalContent
+							? 'light'
+							: undefined;
+
 					return (
 						<>
 							<ZIonHeader
@@ -280,7 +260,7 @@ const ViewSingleWorkspace: React.FC = () => {
 										>
 											<ZIonButton
 												fill='default'
-												className='fs-4'
+												className='text-2xl'
 												onClick={(event: unknown) => {
 													presentWorkspacesActionsPopover({
 														_event: event as Event,
@@ -302,6 +282,25 @@ const ViewSingleWorkspace: React.FC = () => {
 											sizeXs='8'
 											className='flex items-center justify-end gap-2'
 										>
+											{/* Menu */}
+											<ZIonButton
+												size='default'
+												fill='default'
+												onClick={() => {
+													presentWorkspaceCreatePageModal({
+														_cssClass: 'workspace-create-pages-modal-size',
+													});
+												}}
+												className='ion-no-padding ion-no-margin text-transform-initial'
+												color='dark'
+											>
+												<ZIonIcon
+													icon={addCircleOutline}
+													className='w-6 h-6 me-1'
+												/>
+												<ZIonText>Add page</ZIonText>
+											</ZIonButton>
+
 											<ZIonButton
 												fill='default'
 												className='ion-no-margin text-transform-initial'
@@ -338,7 +337,7 @@ const ViewSingleWorkspace: React.FC = () => {
 												/>
 											</ZIonButton>
 
-											<ZUserAvatarInfo
+											<ZUserAvatarButton
 												style={{ height: '40px', width: '40px' }}
 												onClick={(event: unknown) => {
 													presentWorkspaceProfilePopover({
@@ -361,31 +360,31 @@ const ViewSingleWorkspace: React.FC = () => {
 										{/* Users buttons */}
 										<ZIonCol
 											className={classNames({
-												'pb-0': true,
+												'pb-0 flex ion-align-items-center': true,
 												'mb-2': !isXlScale,
 											})}
 											sizeXl='2.5'
 											sizeLg='6'
 											sizeMd='6'
 											sizeSm='6'
-											sizeXs='6'
+											sizeXs='12'
 										>
-											<ZUserAvatarInfo
-												className='w-[10px] h-[10px]'
+											<ZUserAvatarButton
+												className='w-[35px!important] h-[35px!important]'
 												userAvatar={ProductLogo}
-												style={{ height: '35px', width: '35px' }}
 												onClick={() => {
 													presentWorkspaceSharingModal({
 														_cssClass: 'workspace-sharing-modal-size',
 													});
 												}}
+												showStatus={true}
+												active
 											/>
 
 											{/* add user button */}
-											<ZUserAvatarInfo
-												className='ms-2'
+											<ZUserAvatarButton
+												className='ms-2 w-[35px!important] h-[35px!important]'
 												userAvatar={addIcon}
-												style={{ height: '35px', width: '35px' }}
 												onClick={() => {
 													presentWorkspaceSharingModal({
 														_cssClass: 'workspace-sharing-modal-size',
@@ -407,10 +406,14 @@ const ViewSingleWorkspace: React.FC = () => {
 											sizeSm='12'
 											sizeXs='12'
 										>
-											<ZIonSegment scrollable={true} value={values.pageId}>
+											<ZIonSegment
+												scrollable={true}
+												value={values.pageId}
+												className='zaions_pretty_scrollbar'
+											>
 												{workspacePagesDomeData.map((el, index) => (
 													<ZIonSegmentButton
-														className='text-transform-initial px-1'
+														className='px-1 text-transform-initial'
 														value={String(index)}
 														onClick={() => {
 															setFieldValue('pageType', el.type, false);
@@ -424,7 +427,7 @@ const ViewSingleWorkspace: React.FC = () => {
 													>
 														<ZIonIcon
 															icon={getPlatformIcon(el.type)}
-															className='w-7 h-7 mb-2'
+															className='mb-2 w-7 h-7'
 														/>
 														<ZIonText className='pb-2 text-xs'>
 															{el.pageName}
@@ -442,17 +445,18 @@ const ViewSingleWorkspace: React.FC = () => {
 											sizeSm='6'
 											sizeXs='12'
 											className={classNames({
-												'pb-0 d-flex': true,
+												'pb-0 flex': true,
 												'order-3': isXlScale,
 												'order-2 mb-2': !isXlScale,
 												'ion-justify-content-end': isSmScale,
 												'ion-justify-content-start': !isSmScale,
 											})}
 										>
+											{/*  */}
 											<ZIonButtons
 												className={classNames({
 													'gap-2': true,
-													'flex ion-justify-content-between w-100': !isSmScale,
+													'flex ion-justify-content-between w-full': !isSmScale,
 												})}
 											>
 												{/* Menu */}
@@ -470,10 +474,18 @@ const ViewSingleWorkspace: React.FC = () => {
 												</ZIonButton>
 
 												{/* filter */}
-												<ZIonButton className='text-transform-initial'>
-													<ZIonIcon icon={filterOutline} />
-													<ZIonText className='ms-2'>Filter</ZIonText>
-												</ZIonButton>
+												<ZIonMenuToggle
+													autoHide={false}
+													menu={
+														CONSTANTS.MENU_IDS
+															.ADMIN_PAGE_WORKSPACE_VIEW_FILTER_MENU_ID
+													}
+												>
+													<ZIonButton className='text-transform-initial'>
+														<ZIonIcon icon={filterOutline} />
+														<ZIonText className='ms-2'>Filter</ZIonText>
+													</ZIonButton>
+												</ZIonMenuToggle>
 
 												{/* media */}
 												<ZIonButton className='text-transform-initial'>
@@ -485,7 +497,12 @@ const ViewSingleWorkspace: React.FC = () => {
 												<ZIonButton
 													color='primary'
 													fill='solid'
-													className='border-radius__100vmax'
+													onClick={() => {
+														setWorkspaceComposeModalStateAtom((oldValues) => ({
+															...oldValues,
+															isOpen: true,
+														}));
+													}}
 												>
 													<ZIonIcon icon={createOutline} />
 													<ZIonText className='ms-2'>Compose</ZIonText>
@@ -497,7 +514,7 @@ const ViewSingleWorkspace: React.FC = () => {
 							</ZIonHeader>
 
 							{/*  */}
-							<ZIonContent color='light'>
+							<ZIonContent color={ZIonContentBg}>
 								{values.pageType === workspaceFormConnectPagesEnum.facebook ? (
 									<ZWorkspaceFacebookPageLayout />
 								) : values.pageType ===
@@ -526,11 +543,51 @@ const ViewSingleWorkspace: React.FC = () => {
 								) : (
 									''
 								)}
+
+								{/*  */}
+								<ZIonRow className='ion-justify-content-center'>
+									{values.pageType ===
+										workspaceFormConnectPagesEnum.instagram && (
+										<ZIonCol
+											sizeXl='9.5'
+											sizeLg='10.5'
+											sizeMd='11.5'
+											sizeSm='11.9'
+											sizeXs='11.9'
+										>
+											<ZWorkspaceInstagramStoriesLayout />
+										</ZIonCol>
+									)}
+
+									{/*  */}
+									<ZIonCol
+										sizeXl={
+											values.pageType ===
+												workspaceFormConnectPagesEnum.facebook ||
+											values.pageType ===
+												workspaceFormConnectPagesEnum.instagram
+												? '9.5'
+												: values.pageType ===
+												  workspaceFormConnectPagesEnum.linkedin
+												? '8.7'
+												: '9.5'
+										}
+										sizeLg='10.5'
+										sizeMd='11'
+										sizeSm='11.5'
+										sizeXs='11.7'
+									>
+										<ZWorkspacePostsLayout pageType={values.pageType} />
+									</ZIonCol>
+								</ZIonRow>
 							</ZIonContent>
 						</>
 					);
 				}}
 			</Formik>
+
+			{/* Compose Modal */}
+			<ZWorkspaceComposeModal />
 		</ZaionsIonPage>
 	);
 };

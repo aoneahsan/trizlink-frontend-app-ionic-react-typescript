@@ -95,10 +95,10 @@ const ZaionsCustomYourLink: React.FC = () => {
 			className={`zaions__bg_white rounded`}
 		>
 			<ZIonRow className='border-bottom'>
-				<ZIonCol className='px-2 py-2 d-flex align-items-center'>
+				<ZIonCol className='px-2 py-2 flex ion-align-items-center'>
 					<ZIonIcon icon={documentTextOutline} size={'large'}></ZIonIcon>
 					<ZIonText>
-						<h6 className='fw-bold ion-no-margin ion-padding-start'>
+						<h6 className='font-bold ion-no-margin ion-padding-start'>
 							Custom your link{' '}
 							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
 								(help)
@@ -111,7 +111,7 @@ const ZaionsCustomYourLink: React.FC = () => {
 				<ZIonCol
 					size='12'
 					className={classNames(classes['zaions-upload-image-box'], {
-						'd-flex ion-justify-content-center ion-align-items-center rounded position-relative zaions__cursor_pointer':
+						'flex ion-justify-content-center ion-align-items-center rounded relative zaions__cursor_pointer':
 							true,
 					})}
 					onClick={() => {
@@ -139,7 +139,7 @@ const ZaionsCustomYourLink: React.FC = () => {
 				>
 					<div
 						className={classNames(classes['zaions-upload-image-inner-box'], {
-							'ion-text-center py-5 rounded position-absolute': true,
+							'ion-text-center py-5 rounded absolute': true,
 						})}
 					>
 						<ZIonText className='ion-no-margin'>
@@ -151,10 +151,10 @@ const ZaionsCustomYourLink: React.FC = () => {
 							/>
 						</ZIonText>
 						<ZIonText color='light'>
-							<h4 className='fw-bold'>Upload a new picture</h4>
+							<h4 className='font-bold'>Upload a new picture</h4>
 						</ZIonText>
 						<ZIonText color='light'>
-							<h5 className='fw-bold'>
+							<h5 className='font-bold'>
 								(
 								{
 									zaionsAppSettings.shortLinkSettings.previewImage.dimension
@@ -182,7 +182,7 @@ const ZaionsCustomYourLink: React.FC = () => {
 							name: 'title',
 							errorText: errors.title,
 							className: `${classNames({
-								zaions__w100: true,
+								'w-full': true,
 								'ion-touched': touched.title,
 								'ion-invalid': touched.title && errors.title,
 								'ion-valid': touched.title && !errors.title,

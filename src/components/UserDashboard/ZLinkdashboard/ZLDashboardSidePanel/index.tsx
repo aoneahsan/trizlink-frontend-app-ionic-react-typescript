@@ -102,10 +102,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 		>
 			<IonToolbar className='mt-3 border-bottom pb-2'>
 				<ZIonTitle className='ion-padding-bottom'>
-					<ZIonRouterLink
-						routerLink={ZaionsRoutes.HomeRoute}
-						className='d-flex'
-					>
+					<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute} className='flex'>
 						<ZIonImg
 							src={productSmLogo}
 							alt='product logo'
@@ -116,14 +113,14 @@ const ZLinkIonPanelSidebar: React.FC<{
 				{!ZDashboardState.dashboardMainSidebarIsCollabes.isExpand ? (
 					<ZIonButton
 						expand='block'
-						className='ion-margin ion-text-capitalize fw-bold mb-1'
+						className='ion-margin ion-text-capitalize font-bold mb-1'
 						routerLink={ZaionsRoutes.AdminPanel.ShortLinks.Create}
 					>
 						Create New
 					</ZIonButton>
 				) : (
 					<ZIonButton
-						className='ion-margin ion-text-capitalize fw-bold mb-1'
+						className='ion-margin ion-text-capitalize font-bold mb-1'
 						routerLink={ZaionsRoutes.AdminPanel.ShortLinks.Create}
 						title='Create New Short Link'
 					>
@@ -155,7 +152,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 							>
 								<ZIonIcon
 									icon={analyticsOutline}
-									className='fs-4 me-2'
+									className='text-xl me-2'
 									color={
 										activeLink === ZLinkIonPanelSidebarActiveLinkType.dashboard
 											? 'primary'
@@ -163,7 +160,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 									}
 								/>
 								<ZIonText
-									className='fs-6 fw-bold'
+									className='text-base font-bold'
 									color={
 										activeLink === ZLinkIonPanelSidebarActiveLinkType.dashboard
 											? 'primary'
@@ -194,7 +191,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 							>
 								<ZIonIcon
 									icon={linkOutline}
-									className='fs-4 me-2 fw-bold'
+									className='text-xl me-2 font-bold'
 									color={
 										activeLink === ZLinkIonPanelSidebarActiveLinkType.links
 											? 'primary'
@@ -202,7 +199,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 									}
 								/>
 								<ZIonText
-									className='fs-6 fw-bold'
+									className='text-base font-bold'
 									color={
 										activeLink === ZLinkIonPanelSidebarActiveLinkType.links
 											? 'primary'
@@ -236,7 +233,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 							>
 								<ZIonIcon
 									icon={phonePortraitOutline}
-									className='fs-4 me-2 fw-bold'
+									className='text-xl me-2 font-bold'
 									color={
 										activeLink === ZLinkIonPanelSidebarActiveLinkType.linksInBio
 											? 'primary'
@@ -244,7 +241,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 									}
 								/>
 								<ZIonText
-									className='fs-6 fw-bold me-2'
+									className='text-base font-bold me-2'
 									color={
 										activeLink === ZLinkIonPanelSidebarActiveLinkType.linksInBio
 											? 'primary'
@@ -278,7 +275,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 							>
 								<ZIonIcon
 									icon={folderOutline}
-									className='fs-4 me-2 fw-bold'
+									className='text-xl me-2 font-bold'
 									color={
 										activeLink === ZLinkIonPanelSidebarActiveLinkType.campaigns
 											? 'primary'
@@ -286,7 +283,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 									}
 								/>
 								<ZIonText
-									className='fs-6 fw-bold'
+									className='text-base font-bold'
 									color={
 										activeLink === ZLinkIonPanelSidebarActiveLinkType.campaigns
 											? 'primary'
@@ -320,7 +317,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 							>
 								<ZIonIcon
 									icon={globeOutline}
-									className='fs-4 me-2 fw-bold'
+									className='text-xl me-2 font-bold'
 									color={
 										activeLink ===
 										ZLinkIonPanelSidebarActiveLinkType.customLinks
@@ -329,7 +326,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 									}
 								/>
 								<ZIonText
-									className='fs-6 fw-bold'
+									className='text-base font-bold'
 									color={
 										activeLink ===
 										ZLinkIonPanelSidebarActiveLinkType.customLinks
@@ -361,7 +358,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 							>
 								<ZIonIcon
 									icon={settingsOutline}
-									className='fs-4 me-2 fw-bold'
+									className='text-xl me-2 font-bold'
 									color={
 										activeLink === ZLinkIonPanelSidebarActiveLinkType.settings
 											? 'primary'
@@ -369,7 +366,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 									}
 								/>
 								<ZIonText
-									className='fs-6 fw-bold'
+									className='text-base font-bold'
 									color={
 										activeLink === ZLinkIonPanelSidebarActiveLinkType.settings
 											? 'primary'
@@ -404,7 +401,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 							>
 								<ZIonIcon
 									icon={analyticsOutline}
-									className='fs-4 ms-2'
+									className='text-xl ms-2'
 									color={
 										activeLink === ZLinkIonPanelSidebarActiveLinkType.dashboard
 											? 'primary'
@@ -433,7 +430,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 							>
 								<ZIonIcon
 									icon={linkOutline}
-									className='fs-4 ms-2 fw-bold'
+									className='text-xl ms-2 font-bold'
 									color={
 										activeLink === ZLinkIonPanelSidebarActiveLinkType.links
 											? 'primary'
@@ -465,7 +462,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 							>
 								<ZIonIcon
 									icon={phonePortraitOutline}
-									className='fs-4 ms-2 fw-bold'
+									className='text-xl ms-2 font-bold'
 									color={
 										activeLink === ZLinkIonPanelSidebarActiveLinkType.linksInBio
 											? 'primary'
@@ -496,7 +493,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 							>
 								<ZIonIcon
 									icon={folderOutline}
-									className='fs-4 ms-2 fw-bold'
+									className='text-xl ms-2 font-bold'
 									color={
 										activeLink === ZLinkIonPanelSidebarActiveLinkType.campaigns
 											? 'primary'
@@ -528,7 +525,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 							>
 								<ZIonIcon
 									icon={globeOutline}
-									className='fs-4 ms-2 fw-bold'
+									className='text-xl ms-2 font-bold'
 									color={
 										activeLink ===
 										ZLinkIonPanelSidebarActiveLinkType.customLinks
@@ -558,7 +555,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 							>
 								<ZIonIcon
 									icon={settingsOutline}
-									className='fs-4 ms-2 fw-bold'
+									className='text-xl ms-2 font-bold'
 									color={
 										activeLink === ZLinkIonPanelSidebarActiveLinkType.settings
 											? 'primary'

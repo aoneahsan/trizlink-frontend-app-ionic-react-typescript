@@ -57,59 +57,59 @@ import classes from '../../styles.module.css';
  * */
 
 const ZLinkInBioSettingsSection: React.FC = () => {
-  const { values, setFieldValue } = useFormikContext<LinkInBioType>();
+	const { values, setFieldValue } = useFormikContext<LinkInBioType>();
 
-  return (
-    <ZIonCol
-      sizeXl='10'
-      sizeLg='11'
-      sizeMd='12'
-      sizeSm='12'
-      sizeXs='12'
-      className='ion-padding-vertical ion-margin-top ion-margin-start'
-      style={{ borderTop: '2px solid #edf5fd' }}
-    >
-      <ZIonRow
-        className={classNames(classes['row-gap-1-point-6-rem'], {
-          'ion-margin-top pt-2 ion-padding-bottom mb-2 ': true,
-        })}
-      >
-        {/* Header code editor */}
-        <ZIonCol size='12'>
-          <ZIonText className='fw-bold'>👩‍💻 Insert Header code</ZIonText>
-          <div className='ion-padding-top mt-3'>
-            <ZEditor
-              width={'100%'}
-              height={'240px'}
-              placeholder='Paste you HTML code here...'
-              fontSize={18}
-              onChange={(value) => {
-                setFieldValue('settings.headerCode', value, false);
-              }}
-              value={values.settings.headerCode}
-            />
-          </div>
-        </ZIonCol>
+	return (
+		<ZIonCol
+			sizeXl='10'
+			sizeLg='11'
+			sizeMd='12'
+			sizeSm='12'
+			sizeXs='12'
+			className='ion-padding-vertical ion-margin-top ion-margin-start'
+			style={{ borderTop: '2px solid #edf5fd' }}
+		>
+			<ZIonRow
+				className={classNames(classes['row-gap-1-point-6-rem'], {
+					'ion-margin-top pt-2 ion-padding-bottom mb-2 ': true,
+				})}
+			>
+				{/* Header code editor */}
+				<ZIonCol size='12'>
+					<ZIonText className='font-bold'>👩‍💻 Insert Header code</ZIonText>
+					<div className='ion-padding-top mt-3'>
+						<ZEditor
+							width={'100%'}
+							height={'240px'}
+							placeholder='Paste you HTML code here...'
+							fontSize={18}
+							onChange={(value) => {
+								setFieldValue('settings.headerCode', value, false);
+							}}
+							value={values.settings.headerCode}
+						/>
+					</div>
+				</ZIonCol>
 
-        {/* Body code editor */}
-        <ZIonCol size='12' className='ion-padding-top mt-1'>
-          <ZIonText className='fw-bold'>👨‍💻 Insert Body code</ZIonText>
-          <div className='ion-padding-top mt-3'>
-            <ZEditor
-              width={'100%'}
-              height={'240px'}
-              placeholder='Paste you HTML code here...'
-              fontSize={18}
-              onChange={(value) => {
-                setFieldValue('settings.bodyCode', value, false);
-              }}
-              value={values.settings.bodyCode}
-            />
-          </div>
-        </ZIonCol>
-      </ZIonRow>
-    </ZIonCol>
-  );
+				{/* Body code editor */}
+				<ZIonCol size='12' className='ion-padding-top mt-1'>
+					<ZIonText className='font-bold'>👨‍💻 Insert Body code</ZIonText>
+					<div className='ion-padding-top mt-3'>
+						<ZEditor
+							width={'100%'}
+							height={'240px'}
+							placeholder='Paste you HTML code here...'
+							fontSize={18}
+							onChange={(value) => {
+								setFieldValue('settings.bodyCode', value, false);
+							}}
+							value={values.settings.bodyCode}
+						/>
+					</div>
+				</ZIonCol>
+			</ZIonRow>
+		</ZIonCol>
+	);
 };
 
 export default ZLinkInBioSettingsSection;

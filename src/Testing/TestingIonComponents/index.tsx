@@ -9,7 +9,18 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import ZaionsIonPage from '@/components/ZaionsIonPage';
-import { ZIonContent, ZIonGrid, ZIonRow } from '@/components/ZIonComponents';
+import {
+	ZIonAvatar,
+	ZIonButton,
+	ZIonCol,
+	ZIonContent,
+	ZIonGrid,
+	ZIonIcon,
+	ZIonImg,
+	ZIonRow,
+} from '@/components/ZIonComponents';
+import { checkmarkCircle, closeCircle, ellipse } from 'ionicons/icons';
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
@@ -70,72 +81,31 @@ const TestingIonComponents: React.FC = () => {
 	// 	event.detail.complete();
 	// }
 
+	const active = false;
+
+	const buttonClasses = classNames('rounded-full', {
+		'bg-green-500': active,
+		'bg-red-500': !active,
+	});
+
+	const icon = active ? checkmarkCircle : closeCircle;
+	const iconColor = active ? 'primary' : 'secondary';
+
 	return (
 		<ZaionsIonPage>
 			<ZIonContent>
 				<ZIonGrid>
 					<ZIonRow>
-						{/* <ZIonCol>
-							<h1>IonSelect</h1>
+						<ZIonCol>
+							<ZIonAvatar className='relative cursor-pointer'>
+								<ZIonIcon
+									className='absolute top-0 right-0 w-5 h-5'
+									icon={ellipse}
+									color={active ? 'success' : 'secondary'}
+								/>
+								<ZIonImg src='https://ionicframework.com/docs/img/demos/avatar.svg' />
+							</ZIonAvatar>
 						</ZIonCol>
-						<ZIonCol size='12'>
-							<Formik
-								initialValues={{ select: '' }}
-								onSubmit={(values) => {
-									console.log(values);
-								}}
-							>
-								{({ values, handleChange, submitForm }) => {
-									return (
-										<>
-											<ZIonItem>
-												<ZTimezoneSelector
-													name='select'
-													onIonChange={handleChange}
-													value={values.select}
-													label='testing ion select'
-													labelPlacement='floating'
-												/>
-											</ZIonItem>
-
-											<ZIonButton
-												type='submit'
-												onClick={() => {
-													submitForm();
-												}}
-											>
-												Submit
-											</ZIonButton>
-										</>
-									);
-								}}
-							</Formik>
-						</ZIonCol> */}
-
-						{/* <ZIonCol size='12'>
-							<ZIonItem>
-								<ZTimezoneSelector />
-							</ZIonItem>
-						</ZIonCol> */}
-
-						{/* <ZIonCol>
-							<ZIonSegment>
-								<ZIonReorderGroup
-									disabled={false}
-									onIonItemReorder={handleReorder}
-									className='flex'
-								>
-									{[1, 2, 3, 4, 5, 6, 7].map((el, index) => (
-										<ZIonSegmentButton key={index} value={String(el)}>
-											<div className='flex ion-align-items-center'>
-												<ZIonReorder />
-												<ZIonLabel>{el}</ZIonLabel>
-											</div>
-										</ZIonSegmentButton>
-									))}
-								</ZIonReorderGroup>
-							</ZIonSegment>
-						</ZIonCol> */}
 					</ZIonRow>
 				</ZIonGrid>
 			</ZIonContent>

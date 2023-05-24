@@ -34,7 +34,7 @@ export const WorkspaceApprovalCards: ApprovalCardInterface[] = [
 		title: (
 			<>
 				Required
-				<ZIonBadge className='d-flex ion-align-items-center gap-1'>
+				<ZIonBadge className='flex ion-align-items-center gap-1'>
 					<ZIonIcon icon={starOutline} />
 					<ZIonText className='pt-1'>Pro</ZIonText>
 				</ZIonBadge>
@@ -49,7 +49,7 @@ export const WorkspaceApprovalCards: ApprovalCardInterface[] = [
 			<>
 				Multi-level
 				<ZIonBadge
-					className='d-flex ion-align-items-center gap-1'
+					className='flex ion-align-items-center gap-1'
 					color='warning'
 				>
 					<ZIonIcon icon={starOutline} color='light' />

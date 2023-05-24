@@ -53,8 +53,7 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
 	return (
 		<div
 			className={classNames(classes['zaions-drag-and-drop'], className, {
-				'd-flex flex-column ion-align-items-center ion-justify-content-center':
-					true,
+				'flex flex-col ion-align-items-center ion-justify-content-center': true,
 			})}
 			onClick={() => {
 				presentZFileUploadModal({
@@ -83,7 +82,7 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
 			style={style}
 		>
 			{imageUrl?.trim() ? (
-				<ZIonImg src={imageUrl} className='w-100 h-100' />
+				<ZIonImg src={imageUrl} className='w-full h-full' />
 			) : (
 				<>
 					<ZIonText className='ion-no-margin'>
@@ -96,7 +95,7 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
 			)}
 			<div
 				className={classNames(classes['zaions-drag-and-drop__overlay'], {
-					'd-flex flex-column ion-align-items-center ion-justify-content-center':
+					'flex flex-col ion-align-items-center ion-justify-content-center':
 						true,
 				})}
 			>
@@ -107,7 +106,7 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
 						style={{ width: '4rem' }}
 					/>
 				</ZIonText>
-				<ZIonText color='light' className='mt-2 fw-bold'>
+				<ZIonText color='light' className='mt-2 font-bold'>
 					Upload a new Picture
 				</ZIonText>
 			</div>

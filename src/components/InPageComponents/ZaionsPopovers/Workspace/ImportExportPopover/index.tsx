@@ -9,19 +9,7 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import {
-	addOutline,
-	bulbOutline,
-	cashOutline,
-	chatboxEllipsesOutline,
 	downloadOutline,
-	ellipse,
-	giftOutline,
-	helpCircleOutline,
-	logoAndroid,
-	logoApple,
-	logOutOutline,
-	notificationsOutline,
-	settingsOutline,
 	shareOutline,
 	swapHorizontalOutline,
 } from 'ionicons/icons';
@@ -31,22 +19,11 @@ import {
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonAvatar,
-	ZIonButton,
-	ZIonButtons,
-	ZIonCol,
 	ZIonIcon,
-	ZIonImg,
 	ZIonItem,
 	ZIonLabel,
 	ZIonList,
-	ZIonRow,
-	ZIonText,
 } from '@/components/ZIonComponents';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
-import { ProductLogo } from '@/assets/images';
-import classNames from 'classnames';
-import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 
 /**
  * Custom Hooks Imports go down
@@ -97,7 +74,7 @@ const ZWorkspaceImportExportPopover: React.FC = () => {
 					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
 					minHeight='32px'
 				>
-					<ZIonIcon icon={shareOutline} className='me-1 w-5 h-5 me-2' />
+					<ZIonIcon icon={shareOutline} className='me-1 w-5 h-5' />
 					<ZIonLabel className='m-0'>Imports posts</ZIonLabel>
 				</ZIonItem>
 

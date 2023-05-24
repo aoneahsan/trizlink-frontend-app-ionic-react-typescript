@@ -92,7 +92,7 @@ const ZWorkspaceApprovalCards: React.FC<{
 							})}
 						>
 							<ZIonCardContent>
-								<div className='w-100 flex my-1'>
+								<div className='w-full flex my-1'>
 									<ZIonIcon icon={el.icon} className='w-8 h-8' />
 									{el.cardType === type && (
 										<ZIonIcon
@@ -103,12 +103,12 @@ const ZWorkspaceApprovalCards: React.FC<{
 									)}
 								</div>
 								<ZIonText
-									className='mt-2 d-flex ion-align-items-center gap-2 fs-5'
+									className='mt-2 flex ion-align-items-center gap-2 text-lg'
 									color='dark'
 								>
 									{el.title}
 								</ZIonText>
-								<ZIonText className='d-block'>{el.subtitle}</ZIonText>
+								<ZIonText className='block'>{el.subtitle}</ZIonText>
 							</ZIonCardContent>
 						</ZIonCard>
 					</ZIonCol>

@@ -19,7 +19,7 @@ import {
 	filterOutline,
 	refresh,
 } from 'ionicons/icons';
-import { Dropdown } from 'react-bootstrap';
+// import { Dropdown } from 'react-bootstrap';
 import {
 	selector,
 	useRecoilState,
@@ -318,44 +318,14 @@ const ZShortLinksListPage: React.FC = () => {
 										'mt-4': isLgScale,
 									})}
 								>
-									<ZIonCol>
-										<ZIonText
-											className={classNames({
-												'ion-text-center': !isSmScale,
-											})}
-										>
-											<h4 className='fw-bold zaions__color_gray2'>
-												Create a new link
-											</h4>
-										</ZIonText>
-										<ZIonText
-											className={classNames({
-												'ion-text-center': !isSmScale,
-											})}
-										>
-											<h5 className='zaions__color_gray2'>
-												Create & manage your links
-											</h5>
-										</ZIonText>
-									</ZIonCol>
-									<ZIonCol
-										sizeXl='4'
-										sizeLg='5'
-										sizeMd='5'
-										sizeSm='12'
-										sizeXs='12'
-										className={classNames({
-											'mt-4': !isMdScale,
-										})}
-									>
-										<ZaionsCreateShortLinkUrlInput />
-									</ZIonCol>
-
 									{!isLgScale && (
 										<ZIonCol
 											size='max-content'
 											sizeSm='max-content'
 											sizeXs='12'
+											className={classNames({
+												'order-3': !isMdScale,
+											})}
 										>
 											<ZIonMenuToggle
 												autoHide={false}
@@ -367,8 +337,7 @@ const ZShortLinksListPage: React.FC = () => {
 												<ZIonButton
 													className={classNames({
 														'text-transform-initial': true,
-														'ion-margin-start open-folder-menu-button':
-															!isLgScale,
+														'open-folder-menu-button': isLgScale || isSmScale,
 														'mt-4 ms-0': !isMdScale,
 													})}
 													expand={!isSmScale ? 'block' : undefined}
@@ -380,6 +349,44 @@ const ZShortLinksListPage: React.FC = () => {
 											</ZIonMenuToggle>
 										</ZIonCol>
 									)}
+
+									<ZIonCol
+										className={classNames({
+											'order-1': !isMdScale,
+										})}
+									>
+										<ZIonText
+											className={classNames({
+												'text-2xl font-bold block': true,
+												'ion-text-center': !isLgScale,
+											})}
+											color='medium'
+										>
+											Create a new link
+										</ZIonText>
+										<ZIonText
+											className={classNames({
+												'text-md block': true,
+												'ion-text-center ms-3': !isLgScale,
+											})}
+											color='medium'
+										>
+											Create & manage your links
+										</ZIonText>
+									</ZIonCol>
+
+									<ZIonCol
+										sizeXl='4'
+										sizeLg='5'
+										sizeMd='5'
+										sizeSm='12'
+										sizeXs='12'
+										className={classNames({
+											'mt-4 order-2': !isMdScale,
+										})}
+									>
+										<ZaionsCreateShortLinkUrlInput />
+									</ZIonCol>
 								</ZIonRow>
 							</ZIonGrid>
 
@@ -405,10 +412,10 @@ const ZShortLinksListPage: React.FC = () => {
 										>
 											<ZIonButtons
 												className={classNames({
-													'w-100': true,
+													'w-full': true,
 													'ion-justify-content-between': !isXlScale,
 													'ion-justify-content-end gap-3': isXlScale,
-													'd-block': !isSmScale,
+													block: !isSmScale,
 												})}
 											>
 												<ZIonButton
@@ -554,20 +561,18 @@ const ZShortLinksListPage: React.FC = () => {
 								</ZIonRow>
 
 								<ZIonRow className='py-4 px-3 zaions__bg_white rounded ion-align-items-center mt-1'>
-									<ZIonCol className='d-flex ion-align-items-center'>
-										<ZIonText>
-											<h4 className='ion-no-margin'>
-												<ZIonText className='total_links fw-bold'>
-													{_shortLinksData?.length}
-												</ZIonText>{' '}
-												links
-											</h4>
+									<ZIonCol className='flex ion-align-items-center'>
+										<ZIonText className='text-2xl'>
+											<ZIonText className='total_links font-bold'>
+												{_shortLinksData?.length}
+											</ZIonText>{' '}
+											links
 										</ZIonText>
 									</ZIonCol>
 
 									<ZIonCol
 										className={classNames({
-											'd-flex': true,
+											flex: true,
 											'justify-content-end': isXlScale,
 											'justify-content-between mt-2': !isXlScale,
 										})}
@@ -576,16 +581,16 @@ const ZShortLinksListPage: React.FC = () => {
 									>
 										<ZIonRow
 											className={classNames({
-												'w-100 ion-justify-content-between': true,
+												'w-full ion-justify-content-between': true,
 												'row-gap-1-rem': !isLgScale,
 											})}
 										>
 											<ZIonButtons
 												className={classNames({
-													'w-100': true,
+													'w-full': true,
 													'ion-justify-content-between': !isXlScale,
 													'ion-justify-content-end gap-3': isXlScale,
-													'd-block': !isMdScale,
+													block: !isMdScale,
 												})}
 											>
 												{/* Filter by days */}
@@ -769,7 +774,7 @@ const ShortLinksTimeRangeFilterPopover = () => {
 				height: 300,
 			}}
 		>
-			<div className='d-flex'>
+			<div className='flex'>
 				<div className='ion-padding-horizontal'>
 					<ZIonButton
 						color={'secondary'}
@@ -885,7 +890,7 @@ const ShortLinksTimeRangeFilterPopover = () => {
 					TimeFilterEnum.customRange && (
 					<div className='mt-2'>
 						<div className='me-2'>
-							<ZIonLabel className='ms-2 fw-bold'>Start at:</ZIonLabel>
+							<ZIonLabel className='ms-2 font-bold'>Start at:</ZIonLabel>
 							<ZIonDatetimeButton
 								className='ion-justify-content-start mt-2 mx-2 my-3'
 								onIonChange={({ target }) => {
@@ -905,7 +910,7 @@ const ShortLinksTimeRangeFilterPopover = () => {
 						</div>
 
 						<div className='me-2 mt-4'>
-							<ZIonLabel className='ms-2 fw-bold'>End at:</ZIonLabel>
+							<ZIonLabel className='ms-2 font-bold'>End at:</ZIonLabel>
 							<ZIonDatetimeButton
 								className='ion-justify-content-start mt-2 mx-2 my-3'
 								onIonChange={({ target }) => {
@@ -1014,7 +1019,7 @@ const ShortLinksTagsFiltersPopover = () => {
 								<ZIonText>filter</ZIonText>
 							</ZIonButton>
 							<ZIonItem className='ion-no-padding'>
-								<ZIonText className='ms-3 fw-bold zaions__fs_14'>
+								<ZIonText className='ms-3 font-bold zaions__fs_14'>
 									All Tags
 								</ZIonText>
 								{/* <ZIonCheckbox
@@ -1164,7 +1169,7 @@ const ShortLinksDomainsFiltersPopover = () => {
 							<ZIonText>filter</ZIonText>
 						</ZIonButton>
 						<ZIonItem className='ion-no-padding'>
-							<ZIonText className='ms-3 fw-bold zaions__fs_14'>
+							<ZIonText className='ms-3 font-bold zaions__fs_14'>
 								All Domains
 							</ZIonText>
 							{/* <ZIonCheckbox

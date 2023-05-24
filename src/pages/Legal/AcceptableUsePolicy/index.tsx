@@ -39,11 +39,11 @@ const ZaionsAcceptableUsePolicy: React.FC = () => {
 							sizeXs='12'
 						>
 							<ZIonText>
-								<h2 className='zaions__fw_700'>
+								<h2 className='font-bold'>
 									{PRODUCT_NAME} Acceptable Use Policy
 								</h2>
 							</ZIonText>
-							<ZIonText className='fs-5 zaions__color_gray2'>
+							<ZIonText className='text-lg zaions__color_gray2'>
 								Effective Date: April 22, 2022
 							</ZIonText>{' '}
 							<br />
@@ -97,7 +97,7 @@ const ZaionsAcceptableUsePolicy: React.FC = () => {
 								and to (collectively, the “{PRODUCT_NAME} Terms”), as may be
 								modified from time to time.
 							</ZIonText>{' '}
-							<ZIonText className='zaions__fw_700'>Eligibility</ZIonText>{' '}
+							<ZIonText className='font-bold'>Eligibility</ZIonText>{' '}
 							<ZIonText className='mt-1 zaions__color_gray2'>
 								You may only use the {PRODUCT_NAME} Services in compliance with
 								the {PRODUCT_NAME}
@@ -110,7 +110,7 @@ const ZaionsAcceptableUsePolicy: React.FC = () => {
 								permanent disabling of such accounts and flagging them for
 								future enforcement purposes.
 							</ZIonText>{' '}
-							<ZIonText className='zaions__fw_700'>
+							<ZIonText className='font-bold'>
 								Never use the {PRODUCT_NAME} Services to distribute abusive,
 								dangerous, or illegal content
 							</ZIonText>{' '}
@@ -147,7 +147,7 @@ const ZaionsAcceptableUsePolicy: React.FC = () => {
 								<li>Any content that promotes terrorism</li>
 								<li>Any other content that is illegal</li>
 							</ul>
-							<ZIonText className='fs-5 zaions__fw_700'>
+							<ZIonText className='text-lg font-bold'>
 								Never engage in abusive, dangerous, or illegal behavior
 							</ZIonText>{' '}
 							<br />
@@ -187,7 +187,7 @@ const ZaionsAcceptableUsePolicy: React.FC = () => {
 									Infringing another person or entity’s intellectual property
 								</li>
 							</ul>
-							<ZIonText className='fs-5 zaions__fw_700'>
+							<ZIonText className='text-lg font-bold'>
 								Reporting abuse and violations
 							</ZIonText>
 							<br />
@@ -207,7 +207,7 @@ const ZaionsAcceptableUsePolicy: React.FC = () => {
 								appeal.
 							</ZIonText>
 							<br /> <br />
-							<ZIonText className='fs-5 zaions__fw_700'>
+							<ZIonText className='text-lg font-bold'>
 								Enforcement against non-compliance
 							</ZIonText>{' '}
 							<br />

@@ -3,7 +3,7 @@
  * ? Like Import of React is a Core Import
  * */
 import { ProductLogo } from '@/assets/images';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import {
 	ZIonAvatar,
 	ZIonButton,
@@ -172,9 +172,9 @@ const UpdatesTab = () => {
 				minHeight='32px'
 				className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
 			>
-				<ZIonRow className='ion-align-items-start w-100'>
+				<ZIonRow className='ion-align-items-start w-full'>
 					<ZIonCol size='max-content'>
-						<ZUserAvatarInfo
+						<ZUserAvatarButton
 							className='w-[10px] h-[10px] me-1'
 							userAvatar={ProductLogo}
 							style={{ height: '39px', width: '39px' }}
@@ -237,7 +237,7 @@ const UpdatesTab = () => {
 const ApprovalRequests = () => {
 	return (
 		<>
-			<div className='flex ion-align-items-center flex-column ion-justify-content-center py-5'>
+			<div className='flex ion-align-items-center flex-col ion-justify-content-center py-5'>
 				<ZIonIcon icon={fileTrayFullOutline} color='medium' size='large' />
 				<ZIonText color='medium' className='text-sm mt-2'>
 					There are currently no posts awaiting your approval.

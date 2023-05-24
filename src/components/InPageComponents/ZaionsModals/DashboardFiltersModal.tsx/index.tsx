@@ -38,12 +38,12 @@ const ZaionsDashboardFiltersModal: React.FC<{
 		<>
 			<ZIonContent className='ion-padding-vertical '>
 				<ZIonRow>
-					<ZIonCol className='d-flex ion-justify-content-end ion-align-items-center mt-3'>
+					<ZIonCol className='flex ion-justify-content-end ion-align-items-center mt-3'>
 						<ZIonTitle>
-							<h3 className='fw-bold'>Filters</h3>
+							<h3 className='font-bold'>Filters</h3>
 						</ZIonTitle>
 					</ZIonCol>
-					<ZIonCol className='d-flex ion-justify-content-end ion-align-items-start ion-no-padding'>
+					<ZIonCol className='flex ion-justify-content-end ion-align-items-start ion-no-padding'>
 						<ZIonButton
 							fill='clear'
 							className='ion-no-padding ion-no-margin me-2'

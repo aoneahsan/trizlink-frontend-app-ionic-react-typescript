@@ -141,7 +141,7 @@ const LinkInBioFormField: React.FC = () => {
 														</h4>
 													</ZIonReorder>
 
-													<div className='zaions__w100 pe-3'>
+													<div className='w-full pe-3'>
 														{_cardItem.type ===
 															LinkInBioFormFieldsEnum.title && (
 															<LinkInBioTitleField
@@ -199,7 +199,7 @@ const LinkInBioFormField: React.FC = () => {
 														{_cardItem.type !==
 															LinkInBioFormFieldsEnum.title && (
 															<>
-																<div className='d-flex ion-justify-content-between'>
+																<div className='flex ion-justify-content-between'>
 																	<>
 																		<ZIonItem
 																			lines='none'
@@ -208,7 +208,7 @@ const LinkInBioFormField: React.FC = () => {
 																				'--inner-padding-end': '0',
 																			}}
 																		>
-																			<ZIonText className='fw-bold zaions__fs_13'>
+																			<ZIonText className='font-bold zaions__fs_13'>
 																				Required
 																			</ZIonText>
 																			<ZRCSwitch
@@ -236,7 +236,7 @@ const LinkInBioFormField: React.FC = () => {
 																				'--inner-padding-end': '0',
 																			}}
 																		>
-																			<ZIonText className='fw-bold zaions__fs_13'>
+																			<ZIonText className='font-bold zaions__fs_13'>
 																				Is Active
 																			</ZIonText>
 																			<ZRCSwitch
@@ -325,7 +325,7 @@ const LinkInBiosFormFieldsModal: React.FC<{
 							<ZIonCol
 								size='3'
 								key={el.id}
-								className='d-flex ion-justify-content-center'
+								className='flex ion-justify-content-center'
 							>
 								<div className='ion-text-center me-3 zaions__max_content'>
 									<LinkInBioPDButton
@@ -334,7 +334,7 @@ const LinkInBiosFormFieldsModal: React.FC<{
 											addNewFormFieldHandler(el.type);
 										}}
 									/>
-									<ZIonText color='dark' className='d-block pt-3'>
+									<ZIonText color='dark' className='block pt-3'>
 										{el.title}
 									</ZIonText>
 								</div>

@@ -95,25 +95,26 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 			size={
 				ZDashboardState.dashboardMainSidebarIsCollabes.isExpand ? '2' : '2.4'
 			}
-			className='ion-padding border-end zaions-transition'
+			className='ion-padding border-e-[1px] zaions-transition'
 		>
 			<div className='ion-padding-top'>
 				<ZIonList lines='none'>
-					<ZIonItem className='zaions__cursor_pointer mb-2'>
-						<h5 className='fw-bold m-0 p-0'>
-							🔗 All{' '}
-							{type === AdminPanelMainSidebarMenuPageEnum.shortLink
-								? 'links'
-								: type === AdminPanelMainSidebarMenuPageEnum.linkInBio
-								? 'Link In Bios'
-								: ''}
-						</h5>
+					<ZIonItem className='zaions__cursor_pointer mb-2 font-bold p-0 text-xl'>
+						🔗 All{' '}
+						{type === AdminPanelMainSidebarMenuPageEnum.shortLink
+							? 'links'
+							: type === AdminPanelMainSidebarMenuPageEnum.linkInBio
+							? 'Link In Bios'
+							: ''}
 					</ZIonItem>
 					<ZIonItem>
-						<ZIonList lines='none' className='zaions__w100'>
+						<ZIonList lines='none' className='w-full'>
 							<ZIonItem className='ion-no-padding'>
-								<ZIonText color='primary' className='fw-bold'>
-									<h5 className='fw-bold d-block m-0 p-0'>📂 Folders</h5>
+								<ZIonText
+									color='primary'
+									className='font-bold font-bold block text-xl'
+								>
+									📂 Folders
 								</ZIonText>
 							</ZIonItem>
 							<ZIonItem
@@ -238,7 +239,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 
 				{showFoldersSaveReorderButton && (
 					<ZIonButton
-						className='ion-text-capitalize ion-margin-horizontal position-absolute bottom-0'
+						className='ion-text-capitalize ion-margin-horizontal absolute bottom-0'
 						expand='block'
 						onClick={foldersSaveReorderButtonOnClickHandler}
 						style={{ width: '78%' }}

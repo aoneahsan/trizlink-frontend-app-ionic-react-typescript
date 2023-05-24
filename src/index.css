@@ -28,6 +28,35 @@ ion-app.ios ion-title {
 	-o-transition: all 0.3s ease !important;
 }
 
+/* Scrollbar */
+.zaions_pretty_scrollbar::-webkit-scrollbar {
+	height: 8px;
+	width: 8px;
+}
+
+.zaions_pretty_scrollbar::-webkit-scrollbar-track {
+	background-color: rgba(var(--ion-color-medium-rgb), 0.25);
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-ms-border-radius: 5px;
+	-o-border-radius: 5px;
+}
+
+.zaions_pretty_scrollbar::-webkit-scrollbar-thumb {
+	background-color: rgba(var(--ion-color-light-rgb));
+	border-radius: 5px;
+	transition: background-color 0.5s ease;
+	-webkit-transition: background-color 0.5s ease;
+	-moz-transition: background-color 0.5s ease;
+	-ms-transition: background-color 0.5s ease;
+	-o-transition: background-color 0.5s ease;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-ms-border-radius: 5px;
+	-o-border-radius: 5px;
+}
+
 /* Fonts */
 .lato {
 	font-family: 'Lato', sans-serif !important;
@@ -121,23 +150,6 @@ ion-app.ios ion-title {
 	-o-border-radius: 50%;
 }
 
-/* Font Weight's */
-.zaions__fw_700 {
-	font-weight: 700;
-}
-
-.zaions__fw_750 {
-	font-weight: 750;
-}
-
-.zaions__fw_800 {
-	font-weight: 800 !important;
-}
-
-.zaions__fw_900 {
-	font-weight: 900 !important;
-}
-
 /* Fonts Sizes */
 .zaions__fs_11 {
 	font-size: 11px !important;
@@ -168,7 +180,7 @@ ion-app.ios ion-title {
 	font-size: 3rem !important;
 }
 
-.zaions__headding {
+.zaions__heading {
 	line-height: 48px;
 }
 
@@ -214,7 +226,7 @@ span.new {
 	margin-top: -2px;
 }
 
-.zaions__underline {
+.underline {
 	text-decoration: underline;
 }
 
@@ -256,7 +268,7 @@ span.new {
 }
 
 .zaions__bg_white {
-	background-color: #fff;
+	background-color: #fff !important;
 }
 
 .zaions__bg_f5f6fa {
@@ -347,10 +359,6 @@ span.new {
 /* Width's */
 .zaions__max_content {
 	width: max-content;
-}
-
-.zaions__w100 {
-	width: 100%;
 }
 
 .zaions__w95 {
@@ -888,13 +896,26 @@ ion-modal.zaions__modal_w100 {
 }
 
 .file-upload-modal-size,
-.workspace-setting-modal-size {
+.workspace-setting-modal-size,
+.workspace-post-detail-modal-size {
 	--height: 94vh;
 	--width: 87.6vw;
 }
 
+/* @media only screen and (max-content: 1012px) {
+	.workspace-post-detail-modal-size {
+		--height: 100% !important;
+		--width: 90% !important;
+	}
+} */
+
 .workspace-sharing-modal-size {
 	--height: 75vh;
+	--width: 650px;
+}
+
+.workspace-compose-modal-size {
+	--height: 59vh;
 	--width: 650px;
 }
 
@@ -907,6 +928,11 @@ ion-modal.zaions__modal_w100 {
 .workspace-connect-pages-modal-size {
 	--height: 92vh;
 	--width: 63.6vw;
+}
+
+.workspace-create-pages-modal-size {
+	--height: 95vh;
+	--width: 755px;
 }
 
 .folder-modal-size,
@@ -994,3 +1020,19 @@ ion-modal.zaions__modal_w100 {
 	margin-top: 0;
 	margin-bottom: 17px;
 }
+
+/* Workspace */
+.zaions_comment_box {
+	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08))
+		drop-shadow(0 0 1px rgba(50, 79, 58, 0.15));
+}
+/* .zaions_comment_box::before {
+	background: inherit;
+	content: '';
+	height: 10px;
+	left: -5px;
+	position: absolute;
+	top: 16px;
+	transform: rotate(45deg);
+	width: 10px;
+} */

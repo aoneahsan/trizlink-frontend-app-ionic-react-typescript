@@ -40,7 +40,7 @@ import {
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import { ProductLogo } from '@/assets/images';
 import classNames from 'classnames';
 import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
@@ -91,7 +91,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 		<>
 			<ZIonRow className='ion-align-items-center pt-2'>
 				<ZIonCol size='max-content'>
-					<ZUserAvatarInfo
+					<ZUserAvatarButton
 						className='w-[10px] h-[10px] me-1'
 						userAvatar={ProductLogo}
 						style={{ height: '39px', width: '39px' }}
@@ -100,12 +100,12 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 				<ZIonCol>
 					<ZIonLabel
 						className={classNames({
-							'text-sm fw-bold d-flex': true,
+							'text-sm font-bold flex': true,
 						})}
 					>
 						Muhammad talha Irshad (you)
 					</ZIonLabel>
-					<ZIonLabel className='d-block text-sm' color='medium'>
+					<ZIonLabel className='block text-sm' color='medium'>
 						talhaarshaad5@gmail.com
 					</ZIonLabel>
 				</ZIonCol>
@@ -139,7 +139,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 				</ZIonItem>
 
 				<ZIonText
-					className='mb-2 d-block mx-3 tracking-widest text-xs'
+					className='mb-2 block mx-3 tracking-widest text-xs'
 					color='medium'
 				>
 					COMPANY ACCOUNTS
@@ -155,7 +155,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 						<ZIonImg src={getUiAvatarApiUrl({})} />
 					</ZIonAvatar>
 					<ZIonLabel className='ms-2 my-0'>
-						<ZIonText className='d-block'>zaions</ZIonText>
+						<ZIonText className='block'>zaions</ZIonText>
 						<ZIonText color='medium' className='text-sm'>
 							Billing, members & usage
 						</ZIonText>

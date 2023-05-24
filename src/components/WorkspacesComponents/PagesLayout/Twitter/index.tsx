@@ -117,7 +117,7 @@ const ZWorkspaceTwitterPageLayout: React.FC = () => {
 			>
 				<div
 					className={classNames({
-						'rounded-circle overflow-hidden border-4 border-white border-solid flex':
+						'rounded-full overflow-hidden border-4 border-white border-solid flex':
 							true,
 						'mt-[-14%] w-[10.8rem] h-[10.8rem]': isXlScale,
 						'mt-[-15%] w-[9.8rem] h-[9.8rem]': !isXlScale && isLgScale,
@@ -126,7 +126,7 @@ const ZWorkspaceTwitterPageLayout: React.FC = () => {
 						'mt-[-24%] w-[7.8rem] h-[7.8rem]': !isSmScale,
 					})}
 				>
-					<ZIonImg src={ProductLogo} className='w-100 h-100 ' />
+					<ZIonImg src={ProductLogo} className='w-full h-full ' />
 				</div>
 			</ZIonCol>
 
@@ -140,7 +140,11 @@ const ZWorkspaceTwitterPageLayout: React.FC = () => {
 			>
 				<div className='flex flex-col justify-center ms-2'>
 					<ZIonText>
-						<ZIonRouterLink routerLink='' color='dark' className='fw-bold fs-5'>
+						<ZIonRouterLink
+							routerLink=''
+							color='dark'
+							className='font-bold text-lg'
+						>
 							Zaions
 						</ZIonRouterLink>
 					</ZIonText>

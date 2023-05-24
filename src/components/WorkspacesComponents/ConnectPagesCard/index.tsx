@@ -222,7 +222,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 
 	return (
 		<ZIonCard
-			className='zaions__cursor_pointer h-100'
+			className='zaions__cursor_pointer h-full'
 			onMouseEnter={() => {
 				setCompSate((oldValues) => ({
 					...oldValues,
@@ -257,7 +257,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 				/>
 				{/*  */}
 				<ZIonText
-					className='mt-1 ion-text-center d-block'
+					className='mt-1 ion-text-center block'
 					color={compState.isActive ? 'light' : 'dark'}
 				>
 					{title || compState.title}
@@ -266,7 +266,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 				{/*  */}
 				<ZIonText
 					className={classNames({
-						'ion-text-center d-block zaions__fs_13 text-muted': true,
+						'ion-text-center block zaions__fs_13 text-muted': true,
 						'opacity-100': !compState.isActive,
 						'opacity-0': compState.isActive,
 					})}
@@ -278,7 +278,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
 				{/*  */}
 				<ZIonText
 					className={classNames({
-						'ion-text-center d-block': true,
+						'ion-text-center block': true,
 						'opacity-100': compState.isActive,
 						'opacity-0': !compState.isActive,
 					})}

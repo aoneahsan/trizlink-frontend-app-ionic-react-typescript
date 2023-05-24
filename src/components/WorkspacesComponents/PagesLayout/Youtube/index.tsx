@@ -111,13 +111,17 @@ const ZWorkspaceYoutubePageLayout: React.FC = () => {
 				sizeXs='12'
 				className='mx-auto flex bg-white py-3 px-3'
 			>
-				<div className='rounded-circle overflow-hidden border-2 border-white border-solid w-[5rem] h-[5rem] flex'>
-					<ZIonImg src={ProductLogo} className='w-100 h-100' />
+				<div className='rounded-full overflow-hidden border-2 border-white border-solid w-[5rem] h-[5rem] flex'>
+					<ZIonImg src={ProductLogo} className='w-full h-full' />
 				</div>
 
 				<div className='flex flex-col justify-center ms-3'>
 					<ZIonText>
-						<ZIonRouterLink routerLink='' color='dark' className='fw-bold fs-3'>
+						<ZIonRouterLink
+							routerLink=''
+							color='dark'
+							className='font-bold text-3xl'
+						>
 							Zaions
 						</ZIonRouterLink>
 					</ZIonText>

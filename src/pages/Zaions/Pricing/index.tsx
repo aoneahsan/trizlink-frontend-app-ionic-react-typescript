@@ -93,12 +93,12 @@ const ZaionsPricing: React.FC = () => {
 						>
 							<div className='mx-auto zaions__max_content'>
 								<ZIonText>
-									<h1 className='zaions__fw_800 zaions__color_dark'>
+									<h1 className='font-extrabold zaions__color_dark'>
 										Pricing for brands and businesses of all sizes
 									</h1>
 								</ZIonText>
 								<ZIonText>
-									<h2 className='zaions__color_gray2 fs-4'>
+									<h2 className='zaions__color_gray2 text-xl'>
 										Connect to your audience with branded links, QR Codes, and a
 										Link-in-bio that will get their attention.
 									</h2>
@@ -119,10 +119,10 @@ const ZaionsPricing: React.FC = () => {
 							className='mt-3'
 						>
 							<div className={`${!isMdScale ? '' : 'ms-5 ps-5'}`}>
-								<ZIonText className='zaions__color_gray_light mb-0 d-block'>
+								<ZIonText className='zaions__color_gray_light mb-0 block'>
 									Save up to 34% when you pay annually
 								</ZIonText>
-								<div className='d-flex ion-align-items-center'>
+								<div className='flex ion-align-items-center'>
 									<ZIonText>Pay annually</ZIonText>
 									<ZIonText slot='end'>
 										<ZRCSwitch />
@@ -147,12 +147,12 @@ const ZaionsPricing: React.FC = () => {
 										>
 											<ZIonCard className='mx-0' style={{ height: '560px' }}>
 												<ZIonCardHeader className='px-0 pb-2'>
-													<ZIonText className='label mt-1 mb-0 zaions__fw_750 fs-6 text-center d-block'>
+													<ZIonText className='label mt-1 mb-0 font-bold text-base text-center block'>
 														{el.label}
 													</ZIonText>
 													<hr className='mb-2' />
-													<ZIonText className='price mb-0 d-block'>
-														<span className='fs-2 zaions__fw_750 ps-3 zaions__color_gray2'>
+													<ZIonText className='price mb-0 block'>
+														<span className='text-3xl font-bold ps-3 zaions__color_gray2'>
 															{el?.price || 0}
 														</span>
 														{el?.priceDuration || '-'}
@@ -170,23 +170,23 @@ const ZaionsPricing: React.FC = () => {
 													>
 														Get Started
 													</ZIonButton>
-													<ZIonText className='limits ms-2 mt-4 pt-1 ps-1 fs-6 d-block'>
+													<ZIonText className='limits ms-2 mt-4 pt-1 ps-1 text-base block'>
 														{el.limit_text}
 													</ZIonText>
 												</ZIonCardHeader>
 												<ZIonCardContent className='ps-2 pe-0'>
-													<ZIonText className='mb-0 zaions__fw_800 zaions__color_gray2'>
+													<ZIonText className='mb-0 font-extrabold zaions__color_gray2'>
 														{el.features_title}
 													</ZIonText>
 
 													<ZIonList
 														lines={'none'}
-														className='zaions__list_default ms-0 ps-0 zaions__w100'
+														className='zaions__list_default ms-0 ps-0 w-full'
 													>
 														{el.features_included.map((feature_item) => {
 															return (
 																<ZIonItem
-																	className='d-flex my-3 ion-align-items-start'
+																	className='flex my-3 ion-align-items-start'
 																	key={feature_item.feature_id}
 																>
 																	<ZIonImg
@@ -219,18 +219,18 @@ const ZaionsPricing: React.FC = () => {
 
 				<ZIonGrid>
 					<ZIonRow>
-						<ZIonCol className='mt-5 text-center fs-5'>
-							<ZIonText className='zaions__fw_800'>
+						<ZIonCol className='mt-5 text-center text-lg'>
+							<ZIonText className='font-extrabold'>
 								Detailed Feature Comparison
 							</ZIonText>
 						</ZIonCol>
 					</ZIonRow>
 					<ZIonRow>
 						<ZIonCol size='10.6' className='mx-auto'>
-							<table className='zaions__w100'>
+							<table className='w-full'>
 								<thead>
 									<tr>
-										<ZIonRow className='d-flex ion-align-items-center'>
+										<ZIonRow className='flex ion-align-items-center'>
 											<ZIonCol
 												sizeXl='4'
 												sizeLg=''
@@ -240,10 +240,10 @@ const ZaionsPricing: React.FC = () => {
 											>
 												<th className='pe-3'>
 													<div className='my-auto'>
-														<ZIonText className='zaions__color_gray_light fw-normal mb-0 d-block'>
+														<ZIonText className='zaions__color_gray_light fw-normal mb-0 block'>
 															Save up to 34% when you pay annually
 														</ZIonText>
-														<div className='d-flex ion-align-items-center'>
+														<div className='flex ion-align-items-center'>
 															<ZIonText className='fw-normal'>
 																Pay annually
 															</ZIonText>
@@ -268,16 +268,16 @@ const ZaionsPricing: React.FC = () => {
 													className='text-center zaions__bg_gray'
 													style={{ color: '#464c50' }}
 												>
-													<ZIonText className='label mt-1 mb-0 zaions__fw_750 fs-6 d-block'>
+													<ZIonText className='label mt-1 mb-0 font-bold text-base block'>
 														FREE
 													</ZIonText>
 													<ZIonText className='price mb-0 fw-normal mb-0'>
-														<ZIonText className='fs-2 zaions__color_gray2'>
+														<ZIonText className='text-3xl zaions__color_gray2'>
 															$0
 														</ZIonText>
 														/mo
 													</ZIonText>
-													<ZIonText className='zaions__fs_11 opacity-0 d-block'>
+													<ZIonText className='zaions__fs_11 opacity-0 block'>
 														Empty
 													</ZIonText>
 													<ZIonButton
@@ -293,11 +293,11 @@ const ZaionsPricing: React.FC = () => {
 													className='text-center'
 													style={{ color: '#464c50' }}
 												>
-													<ZIonText className='label mt-1 mb-0 zaions__fw_750 fs-6 d-dlock'>
+													<ZIonText className='label mt-1 mb-0 font-bold text-base d-dlock'>
 														STARTER
 													</ZIonText>
-													<ZIonText className='price mb-0 fw-normal mb-0 d-block'>
-														<ZIonText className='fs-2 zaions__color_gray2'>
+													<ZIonText className='price mb-0 fw-normal mb-0 block'>
+														<ZIonText className='text-3xl zaions__color_gray2'>
 															$8
 														</ZIonText>
 														/mo
@@ -317,11 +317,11 @@ const ZaionsPricing: React.FC = () => {
 													className='text-center zaions__bg_gray'
 													style={{ color: '#464c50' }}
 												>
-													<ZIonText className='label mt-1 mb-0 zaions__fw_750 fs-6 d-block'>
+													<ZIonText className='label mt-1 mb-0 font-bold text-base block'>
 														BASIC
 													</ZIonText>
-													<ZIonText className='price mb-0 fw-normal mb-0 d-block'>
-														<ZIonText className='fs-2 zaions__color_gray2'>
+													<ZIonText className='price mb-0 fw-normal mb-0 block'>
+														<ZIonText className='text-3xl zaions__color_gray2'>
 															$29
 														</ZIonText>
 														/mo
@@ -341,11 +341,11 @@ const ZaionsPricing: React.FC = () => {
 													className='text-center'
 													style={{ color: '#464c50' }}
 												>
-													<ZIonText className='label mt-1 mb-0 zaions__fw_750 fs-6 d-block'>
+													<ZIonText className='label mt-1 mb-0 font-bold text-base block'>
 														PREMIUM
 													</ZIonText>
-													<ZIonText className='price mb-0 fw-normal mb-0 d-block'>
-														<ZIonText className='fs-2 zaions__color_gray2'>
+													<ZIonText className='price mb-0 fw-normal mb-0 block'>
+														<ZIonText className='text-3xl zaions__color_gray2'>
 															$199
 														</ZIonText>
 														/mo
@@ -365,11 +365,11 @@ const ZaionsPricing: React.FC = () => {
 													className='text-center zaions__bg_gray'
 													style={{ color: '#464c50' }}
 												>
-													<ZIonText className='label mt-1 mb-0 zaions__fw_750 fs-6 d-block'>
+													<ZIonText className='label mt-1 mb-0 font-bold text-base block'>
 														ENTERPRISE
 													</ZIonText>
-													<ZIonText className='price mb-0 fw-normal mb-0 d-block'>
-														<ZIonText className='fs-2 zaions__color_gray2'>
+													<ZIonText className='price mb-0 fw-normal mb-0 block'>
+														<ZIonText className='text-3xl zaions__color_gray2'>
 															Custom
 														</ZIonText>
 													</ZIonText>
@@ -393,7 +393,7 @@ const ZaionsPricing: React.FC = () => {
 								return (
 									<ZIonRow key={el.id}>
 										<ZIonCol className='' sizeXl='12'>
-											<ZIonText className='zaions__fw_800 mb-0 ms-1 d-block'>
+											<ZIonText className='font-extrabold mb-0 ms-1 block'>
 												{el.section_heading}{' '}
 												{el.new === true ? (
 													<span className={classes.zaions__detal_price_new_tag}>
@@ -410,7 +410,7 @@ const ZaionsPricing: React.FC = () => {
 															<hr className='m-0' />
 
 															{item.type === 'feature' ? (
-																<ZIonText className='my-auto pt-2 d-flex ion-align-items-center '>
+																<ZIonText className='my-auto pt-2 flex ion-align-items-center '>
 																	{item.feature_title}
 																	<button
 																		id={`hover-trigger-${el.id || '-'}-${
@@ -443,7 +443,7 @@ const ZaionsPricing: React.FC = () => {
 															) : item.type === 'info' ? (
 																<>
 																	<ZIonText
-																		className={`my-auto d-flex ion-align-items-center ${classes.zaions__info}`}
+																		className={`my-auto flex ion-align-items-center ${classes.zaions__info}`}
 																	>
 																		<ZIonText className='mt-3'>
 																			{item.info?.text}{' '}
@@ -487,10 +487,10 @@ const ZaionsPricing: React.FC = () => {
 								);
 							})}
 							<hr />
-							<table className='zaions__w100'>
+							<table className='w-full'>
 								<thead>
 									<tr>
-										<ZIonRow className='d-flex ion-align-items-center'>
+										<ZIonRow className='flex ion-align-items-center'>
 											<ZIonCol
 												sizeXl='4'
 												sizeLg=''
@@ -504,7 +504,7 @@ const ZaionsPricing: React.FC = () => {
 												sizeMd=''
 												sizeSm=''
 												sizeXs=''
-												className='d-flex justify-content-center align-items-center'
+												className='flex ion-justify-content-center align-items-center'
 											>
 												<th
 													className='text-center'
@@ -581,7 +581,7 @@ const ZaionsPricing: React.FC = () => {
 				<ZIonGrid className='mt-5 pt-5 mb-5'>
 					<ZIonRow>
 						<ZIonCol className='text-center'>
-							<ZIonText className='d-block'>
+							<ZIonText className='block'>
 								*Custom domain registration included with subscription
 							</ZIonText>
 							<ZIonText className=''>

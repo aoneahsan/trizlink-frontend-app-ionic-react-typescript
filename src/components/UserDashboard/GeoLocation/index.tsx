@@ -63,10 +63,10 @@ const GeoLocation: React.FC = () => {
 				sizeXs='12'
 				className='zaions__bg_white border py-3'
 			>
-				<div className='d-flex align-items-center border-bottom ion-padding-start pb-2'>
+				<div className='flex ion-align-items-center border-bottom ion-padding-start pb-2'>
 					<ZIonIcon icon={globeOutline} size={'large'}></ZIonIcon>
 					<ZIonText>
-						<h6 className='fw-bold ion-no-margin ion-padding-start'>
+						<h6 className='font-bold ion-no-margin ion-padding-start'>
 							Geolocation{' '}
 							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
 								(help)
@@ -74,7 +74,7 @@ const GeoLocation: React.FC = () => {
 						</h6>
 					</ZIonText>
 				</div>
-				<div className='d-block px-2 mb-4  pt-3'>
+				<div className='block px-2 mb-4  pt-3'>
 					<FieldArray name='geoLocation'>
 						{({ remove, push }) => (
 							<div>

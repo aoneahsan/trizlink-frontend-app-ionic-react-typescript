@@ -117,16 +117,19 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 
 	return (
 		<ZIonMenu contentId={menuId} side={menuSide || 'end'} menuId={menuId}>
-			<ZIonList lines='none' style={{ overflow: 'scroll' }}>
+			<ZIonList
+				lines='none'
+				className='zaions_pretty_scrollbar overflow-y-scroll'
+			>
 				<ZIonItem className='zaions__cursor_pointer mb-2'>
-					<h5 className='fw-bold m-0 p-0'>🔗 All links</h5>
+					<h5 className='font-bold m-0 p-0'>🔗 All links</h5>
 				</ZIonItem>
 
 				<ZIonItem>
-					<ZIonList lines='none' className='zaions__w100'>
+					<ZIonList lines='none' className='w-full'>
 						<ZIonItem className='ion-no-padding'>
-							<ZIonText color='primary' className='fw-bold'>
-								<h5 className='fw-bold d-block m-0 p-0'>📂 Folders</h5>
+							<ZIonText color='primary' className='font-bold'>
+								<h5 className='font-bold block m-0 p-0'>📂 Folders</h5>
 							</ZIonText>
 						</ZIonItem>
 
@@ -165,8 +168,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 											onClick={() => {
 												zNavigatePushRoute(
 													replaceParams(
-														ZaionsRoutes.AdminPanel
-															.ShortLinks.Main,
+														ZaionsRoutes.AdminPanel.ShortLinks.Main,
 														CONSTANTS.RouteParams
 															.folderIdToGetShortLinksOrLinkInBio,
 														el.id as string
@@ -227,7 +229,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 
 			{showSaveReorderButton && (
 				<ZIonButton
-					className='ion-text-capitalize ion-margin-horizontal position-absolute bottom-0'
+					className='ion-text-capitalize ion-margin-horizontal absolute bottom-0'
 					expand='block'
 					onClick={(event) => {
 						saveReorderButtonFn && void saveReorderButtonFn(event);

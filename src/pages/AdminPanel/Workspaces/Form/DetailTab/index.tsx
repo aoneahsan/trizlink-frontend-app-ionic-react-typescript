@@ -218,7 +218,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
 					return (
 						<>
 							<ZIonContent>
-								<ZIonGrid className='pb-2 flex ion-align-items-center mx-0 h-100'>
+								<ZIonGrid className='pb-2 flex ion-align-items-center mx-0 h-full'>
 									<ZIonRow className='on-justify-content-center ion-align-items-center mx-auto w-80'>
 										{/* Workspace name */}
 										<ZIonCol size='12'>

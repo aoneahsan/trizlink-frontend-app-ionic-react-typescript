@@ -136,6 +136,7 @@ export type ZIonInputType = {
 	style?: {
 		[key: string]: unknown;
 	};
+	minHeight?: 'auto' | string;
 
 	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
 	onIonBlur?: <A extends Event>(event: A) => void;
@@ -152,12 +153,22 @@ export type ZIonInputType = {
 
 const ZIonInput = React.forwardRef(
 	(props: ZIonInputType, ref: React.Ref<HTMLIonInputElement>) => {
+		const compStyle =
+			props.style && props.minHeight
+				? { ...props.style, minHeight: props.minHeight }
+				: props.style && !props.minHeight
+				? { ...props.style }
+				: !props.style && props.minHeight
+				? { minHeight: props.minHeight }
+				: {};
+
 		return (
 			<IonInput
 				{...props}
 				onIonInput={props.onIonChange}
 				fill={props.fill || 'outline'}
 				ref={ref}
+				style={compStyle}
 			/>
 		);
 	}

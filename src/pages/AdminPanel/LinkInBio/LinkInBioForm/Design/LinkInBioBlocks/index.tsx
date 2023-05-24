@@ -41,8 +41,8 @@ import { ZIcons } from '@/utils/ZIcons';
 import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 
 import {
-  LinkInBioBlockEnum,
-  LinkInBioPredefinedBlocksInterface,
+	LinkInBioBlockEnum,
+	LinkInBioPredefinedBlocksInterface,
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 /**
@@ -75,121 +75,121 @@ import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedBut
  * */
 
 const ZLinkInBioBlocksSection: React.FC = () => {
-  // The formikContext to get the formik value and setFieldValue method...
-  const { values, setFieldValue } = useFormikContext<LinkInBioType>();
+	// The formikContext to get the formik value and setFieldValue method...
+	const { values, setFieldValue } = useFormikContext<LinkInBioType>();
 
-  // Recoil state for storing Link-in-bio blocks data that will fetch from backend.
-  const [linkInBioPredefinedBlocksState, setLinkInBioPredefinedBlocksState] =
-    useRecoilState(LinkInBioPredefinedBlocksRState);
+	// Recoil state for storing Link-in-bio blocks data that will fetch from backend.
+	const [linkInBioPredefinedBlocksState, setLinkInBioPredefinedBlocksState] =
+		useRecoilState(LinkInBioPredefinedBlocksRState);
 
-  // getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio blocks of that id will be fetch from backend.
-  const { editLinkInBioId } = useParams<{
-    editLinkInBioId: string;
-  }>();
+	// getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio blocks of that id will be fetch from backend.
+	const { editLinkInBioId } = useParams<{
+		editLinkInBioId: string;
+	}>();
 
-  // custom hook for presenting modal (the add block modal)
-  const { presentZIonModal: presentZLinkInBioAddBlockModal } = useZIonModal(
-    ZLinkInBioAddBlockModal,
-    {
-      _blockType: values.LinkInBioBlock, // passing values.LinkInBioBlock as blockType to ZLinkInBioAddBlockModal component.
-      _blockContent:
-        LinkInBioBlocksDefaultData[values.LinkInBioBlock as string],
-      setFieldValue, // passing setFieldValue to ZLinkInBioAddBlockModal component.
-      editLinkInBioId,
-    }
-  );
+	// custom hook for presenting modal (the add block modal)
+	const { presentZIonModal: presentZLinkInBioAddBlockModal } = useZIonModal(
+		ZLinkInBioAddBlockModal,
+		{
+			_blockType: values.LinkInBioBlock, // passing values.LinkInBioBlock as blockType to ZLinkInBioAddBlockModal component.
+			_blockContent:
+				LinkInBioBlocksDefaultData[values.LinkInBioBlock as string],
+			setFieldValue, // passing setFieldValue to ZLinkInBioAddBlockModal component.
+			editLinkInBioId,
+		}
+	);
 
-  // fetch block data from api and storing it in LinkInBioBlocksData variable...
-  const { data: LinkInBioPreDefinedBlocksData } = useZRQGetRequest<
-    LinkInBioPredefinedBlocksInterface[]
-  >({
-    _url: API_URL_ENUM.linkInBioPreDefinedBlocks_create_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_DEFINED_BLOCKS.MAIN,
-    ],
-  });
+	// fetch block data from api and storing it in LinkInBioBlocksData variable...
+	const { data: LinkInBioPreDefinedBlocksData } = useZRQGetRequest<
+		LinkInBioPredefinedBlocksInterface[]
+	>({
+		_url: API_URL_ENUM.linkInBioPreDefinedBlocks_create_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_DEFINED_BLOCKS.MAIN,
+		],
+	});
 
-  // After fetching data and storing it to LinkInBioBlocksData variable, setting data to LinkInBioPredefinedBlocksRState recoil state and making sure that if only the data refetch then again store the lates data in recoil state...
-  useEffect(() => {
-    try {
-      if (LinkInBioPreDefinedBlocksData) {
-        setLinkInBioPredefinedBlocksState(LinkInBioPreDefinedBlocksData);
-      }
-    } catch (error) {
-      reportCustomError(error);
-    }
-    // eslint-disable-next-line
-  }, [LinkInBioPreDefinedBlocksData]);
+	// After fetching data and storing it to LinkInBioBlocksData variable, setting data to LinkInBioPredefinedBlocksRState recoil state and making sure that if only the data refetch then again store the lates data in recoil state...
+	useEffect(() => {
+		try {
+			if (LinkInBioPreDefinedBlocksData) {
+				setLinkInBioPredefinedBlocksState(LinkInBioPreDefinedBlocksData);
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+		// eslint-disable-next-line
+	}, [LinkInBioPreDefinedBlocksData]);
 
-  // the LinkInBioBlockHandler function will run then the user click on any of the blocks this will execute the presentZLinkInBioAddBlockModal function which is coming from the useZIonModal to present modal...
-  const LinkInBioBlockHandler = (_type: LinkInBioBlockEnum) => {
-    try {
-      if (_type) {
-        presentZLinkInBioAddBlockModal({
-          _cssClass: 'lib-block-modal-size',
-        });
-        setFieldValue('LinkInBioBlock', _type, false);
-      }
-    } catch (error) {
-      reportCustomError(error);
-    }
-  };
+	// the LinkInBioBlockHandler function will run then the user click on any of the blocks this will execute the presentZLinkInBioAddBlockModal function which is coming from the useZIonModal to present modal...
+	const LinkInBioBlockHandler = (_type: LinkInBioBlockEnum) => {
+		try {
+			if (_type) {
+				presentZLinkInBioAddBlockModal({
+					_cssClass: 'lib-block-modal-size',
+				});
+				setFieldValue('LinkInBioBlock', _type, false);
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
 
-  return (
-    <>
-      <ZIonCol
-        sizeXl='10'
-        sizeLg='11'
-        sizeMd='12'
-        sizeSm='12'
-        sizeXs='12'
-        className='ion-padding-vertical ion-margin-top ion-margin-start'
-        style={{ borderTop: '2px solid #edf5fd' }}
-      >
-        <ZIonRow
-          className={classNames({
-            'ion-margin-top pt-2 ion-padding-bottom mb-2 row-gap-1-point-6-rem':
-              true,
-          })}
-        >
-          {/* After getting block data from api and storing it to the LinkInBioPredefinedBlocksRState recoil state, looping the recoil state value to make blocks */}
-          {linkInBioPredefinedBlocksState?.map((el) => {
-            return (
-              <ZIonCol
-                size='2.4'
-                key={el.id}
-                className='d-flex ion-justify-content-center'
-              >
-                <div className='ion-text-center me-3 zaions__max_content'>
-                  <LinkInBioPDButton
-                    icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
-                    onClick={() => {
-                      LinkInBioBlockHandler(LinkInBioBlockEnum[el.type]);
-                    }}
-                    onMouseEnter={() => {
-                      setFieldValue(
-                        'LinkInBioBlock',
-                        LinkInBioBlockEnum[el.type],
-                        false
-                      );
-                    }}
-                  />
-                  <ZIonText
-                    color='dark'
-                    className={classNames(classes['zaions-block-button-text'], {
-                      'fw-bold': false,
-                    })}
-                  >
-                    {el.title}
-                  </ZIonText>
-                </div>
-              </ZIonCol>
-            );
-          })}
-        </ZIonRow>
-      </ZIonCol>
-    </>
-  );
+	return (
+		<>
+			<ZIonCol
+				sizeXl='10'
+				sizeLg='11'
+				sizeMd='12'
+				sizeSm='12'
+				sizeXs='12'
+				className='ion-padding-vertical ion-margin-top ion-margin-start'
+				style={{ borderTop: '2px solid #edf5fd' }}
+			>
+				<ZIonRow
+					className={classNames({
+						'ion-margin-top pt-2 ion-padding-bottom mb-2 row-gap-1-point-6-rem':
+							true,
+					})}
+				>
+					{/* After getting block data from api and storing it to the LinkInBioPredefinedBlocksRState recoil state, looping the recoil state value to make blocks */}
+					{linkInBioPredefinedBlocksState?.map((el) => {
+						return (
+							<ZIonCol
+								size='2.4'
+								key={el.id}
+								className='flex ion-justify-content-center'
+							>
+								<div className='ion-text-center me-3 zaions__max_content'>
+									<LinkInBioPDButton
+										icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
+										onClick={() => {
+											LinkInBioBlockHandler(LinkInBioBlockEnum[el.type]);
+										}}
+										onMouseEnter={() => {
+											setFieldValue(
+												'LinkInBioBlock',
+												LinkInBioBlockEnum[el.type],
+												false
+											);
+										}}
+									/>
+									<ZIonText
+										color='dark'
+										className={classNames(classes['zaions-block-button-text'], {
+											'font-bold': false,
+										})}
+									>
+										{el.title}
+									</ZIonText>
+								</div>
+							</ZIonCol>
+						);
+					})}
+				</ZIonRow>
+			</ZIonCol>
+		</>
+	);
 };
 
 export default ZLinkInBioBlocksSection;

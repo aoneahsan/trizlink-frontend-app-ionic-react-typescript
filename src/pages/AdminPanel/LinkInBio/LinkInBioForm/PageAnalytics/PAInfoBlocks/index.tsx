@@ -54,106 +54,106 @@ import classNames from 'classnames';
  * */
 
 const PageAnalyticsInfoBlocks: React.FC = () => {
-  const { isXlScale } = useZMediaQueryScale();
+	const { isXlScale } = useZMediaQueryScale();
 
-  return (
-    <ZIonRow
-      className={classNames({
-        'mt-4 ion-justify-content-between': true,
-        'row-gap-1-rem': !isXlScale,
-      })}
-    >
-      {/* Click Info Block */}
-      <ZIonCol
-        className='border zaions__bg_white d-flex ion-align-items-center ion-justify-content-center py-4'
-        sizeXl='2.2'
-        sizeLg='2.9'
-        sizeMd='3.9'
-        sizeSm='5.9'
-        sizeXs='12'
-      >
-        <ZIonText className='fs-1'>🚀</ZIonText>
-        <div className='ms-3'>
-          <ZIonText className='fs-5 fw-bold d-block'>Clicks</ZIonText>
-          <ZIonText className='fs-4 fw-bold d-block' color='primary'>
-            1
-          </ZIonText>
-        </div>
-      </ZIonCol>
+	return (
+		<ZIonRow
+			className={classNames({
+				'mt-4 ion-justify-content-between': true,
+				'row-gap-1-rem': !isXlScale,
+			})}
+		>
+			{/* Click Info Block */}
+			<ZIonCol
+				className='border zaions__bg_white flex ion-align-items-center ion-justify-content-center py-4'
+				sizeXl='2.2'
+				sizeLg='2.9'
+				sizeMd='3.9'
+				sizeSm='5.9'
+				sizeXs='12'
+			>
+				<ZIonText className='text-5xl'>🚀</ZIonText>
+				<div className='ms-3'>
+					<ZIonText className='text-lg font-bold block'>Clicks</ZIonText>
+					<ZIonText className='text-xl font-bold block' color='primary'>
+						1
+					</ZIonText>
+				</div>
+			</ZIonCol>
 
-      {/* Users Info Block */}
-      <ZIonCol
-        className='border zaions__bg_white d-flex ion-align-items-center ion-justify-content-center py-4'
-        sizeXl='2.2'
-        sizeLg='2.9'
-        sizeMd='3.9'
-        sizeSm='5.9'
-        sizeXs='12'
-      >
-        <ZIonText className='fs-1'>🧙‍</ZIonText>
-        <div className='ms-3'>
-          <ZIonText className='fs-5 fw-bold d-block'>Users</ZIonText>
-          <ZIonText className='fs-4 fw-bold d-block' color='primary'>
-            1
-          </ZIonText>
-        </div>
-      </ZIonCol>
+			{/* Users Info Block */}
+			<ZIonCol
+				className='border zaions__bg_white flex ion-align-items-center ion-justify-content-center py-4'
+				sizeXl='2.2'
+				sizeLg='2.9'
+				sizeMd='3.9'
+				sizeSm='5.9'
+				sizeXs='12'
+			>
+				<ZIonText className='text-5xl'>🧙‍</ZIonText>
+				<div className='ms-3'>
+					<ZIonText className='text-lg font-bold block'>Users</ZIonText>
+					<ZIonText className='text-xl font-bold block' color='primary'>
+						1
+					</ZIonText>
+				</div>
+			</ZIonCol>
 
-      {/* Referrers Info Block */}
-      <ZIonCol
-        className='border zaions__bg_white d-flex ion-align-items-center ion-justify-content-center py-4'
-        sizeXl='2.2'
-        sizeLg='2.9'
-        sizeMd='3.9'
-        sizeSm='5.9'
-        sizeXs='12'
-      >
-        <ZIonText className='fs-1'>🧭‍</ZIonText>
-        <div className='ms-3'>
-          <ZIonText className='fs-5 fw-bold d-block'>Referrers</ZIonText>
-          <ZIonText className='fs-4 fw-bold d-block' color='primary'>
-            1
-          </ZIonText>
-        </div>
-      </ZIonCol>
+			{/* Referrers Info Block */}
+			<ZIonCol
+				className='border zaions__bg_white flex ion-align-items-center ion-justify-content-center py-4'
+				sizeXl='2.2'
+				sizeLg='2.9'
+				sizeMd='3.9'
+				sizeSm='5.9'
+				sizeXs='12'
+			>
+				<ZIonText className='text-5xl'>🧭‍</ZIonText>
+				<div className='ms-3'>
+					<ZIonText className='text-lg font-bold block'>Referrers</ZIonText>
+					<ZIonText className='text-xl font-bold block' color='primary'>
+						1
+					</ZIonText>
+				</div>
+			</ZIonCol>
 
-      {/* Conversion Info Block */}
-      <ZIonCol
-        className='border zaions__bg_white d-flex ion-align-items-center ion-justify-content-center py-4'
-        sizeXl='2.2'
-        sizeLg='2.9'
-        sizeMd='3.9'
-        sizeSm='5.9'
-        sizeXs='12'
-      >
-        <ZIonText className='fs-1'>🎈‍</ZIonText>
-        <div className='ms-3'>
-          <ZIonText className='fs-5 fw-bold d-block'>Conversion</ZIonText>
-          <ZIonText className='fs-4 fw-bold d-block' color='primary'>
-            1
-          </ZIonText>
-        </div>
-      </ZIonCol>
+			{/* Conversion Info Block */}
+			<ZIonCol
+				className='border zaions__bg_white flex ion-align-items-center ion-justify-content-center py-4'
+				sizeXl='2.2'
+				sizeLg='2.9'
+				sizeMd='3.9'
+				sizeSm='5.9'
+				sizeXs='12'
+			>
+				<ZIonText className='text-5xl'>🎈‍</ZIonText>
+				<div className='ms-3'>
+					<ZIonText className='text-lg font-bold block'>Conversion</ZIonText>
+					<ZIonText className='text-xl font-bold block' color='primary'>
+						1
+					</ZIonText>
+				</div>
+			</ZIonCol>
 
-      {/* Conversion Info Block */}
-      <ZIonCol
-        className='border zaions__bg_white d-flex ion-align-items-center ion-justify-content-center py-4'
-        sizeXl='2.2'
-        sizeLg='2.9'
-        sizeMd='3.9'
-        sizeSm='5.9'
-        sizeXs='12'
-      >
-        <ZIonText className='fs-1'>🌎‍</ZIonText>
-        <div className='ms-3'>
-          <ZIonText className='fs-5 fw-bold d-block'>Countries</ZIonText>
-          <ZIonText className='fs-4 fw-bold d-block' color='primary'>
-            1
-          </ZIonText>
-        </div>
-      </ZIonCol>
-    </ZIonRow>
-  );
+			{/* Conversion Info Block */}
+			<ZIonCol
+				className='border zaions__bg_white flex ion-align-items-center ion-justify-content-center py-4'
+				sizeXl='2.2'
+				sizeLg='2.9'
+				sizeMd='3.9'
+				sizeSm='5.9'
+				sizeXs='12'
+			>
+				<ZIonText className='text-5xl'>🌎‍</ZIonText>
+				<div className='ms-3'>
+					<ZIonText className='text-lg font-bold block'>Countries</ZIonText>
+					<ZIonText className='text-xl font-bold block' color='primary'>
+						1
+					</ZIonText>
+				</div>
+			</ZIonCol>
+		</ZIonRow>
+	);
 };
 
 export default PageAnalyticsInfoBlocks;

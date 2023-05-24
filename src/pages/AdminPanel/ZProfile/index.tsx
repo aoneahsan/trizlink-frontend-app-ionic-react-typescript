@@ -211,7 +211,7 @@ const ZProfile: React.FC = () => {
 													'ion-text-center': !isMdScale,
 												})}
 											>
-												<h2 className='zaions__fw_900'>Profile</h2>
+												<h2 className='font-black'>Profile</h2>
 											</ZIonTitle>
 										</ZIonRow>
 
@@ -219,12 +219,12 @@ const ZProfile: React.FC = () => {
 											<ZIonCol size='12'>
 												<ZIonTitle
 													className={classNames({
-														'ion-no-padding d-block': true,
+														'ion-no-padding block': true,
 														'ion-text-center pb-1': !isMdScale,
 														'pb-3': isMdScale,
 													})}
 												>
-													<h4 className='zaions__fw_700'>Preferences</h4>
+													<h4 className='font-bold'>Preferences</h4>
 												</ZIonTitle>
 											</ZIonCol>
 											<ZIonCol
@@ -276,7 +276,7 @@ const ZProfile: React.FC = () => {
 												})}
 											>
 												<ZIonTitle className='ion-no-padding'>
-													<h4 className='zaions__fw_700'>Email addresses</h4>
+													<h4 className='font-bold'>Email addresses</h4>
 												</ZIonTitle>
 												<ZIonText className='zaions__fs_18'>
 													Select or add a new email address to receive
@@ -308,20 +308,23 @@ const ZProfile: React.FC = () => {
 																	<ZTableRowCol className='py-2'>
 																		<ZIonText
 																			color='dark'
-																			className='mt-1 fs-6'
+																			className='mt-1 text-base'
 																		>
 																			{el.emailAddress}
 																		</ZIonText>
 																	</ZTableRowCol>
-																	<ZTableRowCol className='mt-1 py-2 d-flex ion-text-items-center'>
+																	<ZTableRowCol className='mt-1 py-2 flex ion-text-items-center'>
 																		{el.isVarified ? (
 																			<>
 																				<ZIonIcon
 																					icon={checkbox}
 																					color='success'
-																					className='fs-6 pt-1 me-1'
+																					className='text-base pt-1 me-1'
 																				/>{' '}
-																				<ZIonText color='dark' className='fs-6'>
+																				<ZIonText
+																					color='dark'
+																					className='text-base'
+																				>
 																					Verified
 																				</ZIonText>
 																			</>
@@ -330,9 +333,12 @@ const ZProfile: React.FC = () => {
 																				<ZIonIcon
 																					icon={closeCircleOutline}
 																					color='danger'
-																					className='fs-6 pt-1 me-1'
+																					className='text-base pt-1 me-1'
 																				/>{' '}
-																				<ZIonText color='dark' className='fs-6'>
+																				<ZIonText
+																					color='dark'
+																					className='text-base'
+																				>
 																					Not verified
 																				</ZIonText>
 																			</>
@@ -411,7 +417,7 @@ const ZProfile: React.FC = () => {
 												})}
 											>
 												<ZIonTitle className='ion-no-padding'>
-													<h4 className='zaions__fw_900'>
+													<h4 className='font-black'>
 														Security & authentication
 													</h4>
 												</ZIonTitle>
@@ -425,7 +431,7 @@ const ZProfile: React.FC = () => {
 												})}
 											>
 												<ZIonTitle className='ion-no-padding'>
-													<h5 className='zaions__fw_700'>Change password</h5>
+													<h5 className='font-bold'>Change password</h5>
 												</ZIonTitle>
 												<ZIonText className='zaions__fs_18'>
 													You will be required to login after changing your
@@ -434,8 +440,8 @@ const ZProfile: React.FC = () => {
 												<ZIonItem
 													className={classNames({
 														zaions__w35: isMdScale,
-														'zaions__w100 mx-auto px-3 mt-2': !isMdScale,
-														// zaions__w100: !isSmScale,
+														'w-full mx-auto px-3 mt-2': !isMdScale,
+														// w-full: !isSmScale,
 													})}
 												>
 													<ZIonInput
@@ -447,7 +453,7 @@ const ZProfile: React.FC = () => {
 													className={classNames({
 														'mt-4': true,
 														zaions__w35: isMdScale,
-														'zaions__w100 mx-auto px-3': !isMdScale,
+														'w-full mx-auto px-3': !isMdScale,
 													})}
 												>
 													<ZIonInput
@@ -459,8 +465,8 @@ const ZProfile: React.FC = () => {
 													className={classNames({
 														'mt-4': true,
 														zaions__w35: isMdScale,
-														'zaions__w100 mx-auto px-3': !isMdScale,
-														// zaions__w100: !isSmScale,
+														'w-full mx-auto px-3': !isMdScale,
+														// w-full: !isSmScale,
 													})}
 												>
 													<ZIonInput
@@ -488,14 +494,12 @@ const ZProfile: React.FC = () => {
 												})}
 											>
 												<ZIonTitle className='ion-no-padding'>
-													<h5 className='zaions__fw_700'>
-														2-Factor authentication
-													</h5>
+													<h5 className='font-bold'>2-Factor authentication</h5>
 												</ZIonTitle>
 												<ZIonItem
 													className={classNames({
 														zaions__w35: isMdScale,
-														'zaions__w100 mx-auto px-3 mt-2': !isMdScale,
+														'w-full mx-auto px-3 mt-2': !isMdScale,
 													})}
 												>
 													<ZIonSelect
@@ -514,8 +518,8 @@ const ZProfile: React.FC = () => {
 												<ZIonItem
 													className={classNames({
 														zaions__w35: isMdScale,
-														'zaions__w100 mx-auto px-3 mt-2': !isMdScale,
-														// zaions__w100: !isSmScale,
+														'w-full mx-auto px-3 mt-2': !isMdScale,
+														// w-full: !isSmScale,
 													})}
 												>
 													<ZIonInput
@@ -543,9 +547,9 @@ const ZProfile: React.FC = () => {
 												})}
 											>
 												<ZIonTitle className='ion-no-padding'>
-													<h4 className='zaions__fw_900'>Access history</h4>
+													<h4 className='font-black'>Access history</h4>
 												</ZIonTitle>
-												<ZIonText className='zaions__fs_18 d-block'>
+												<ZIonText className='zaions__fs_18 block'>
 													You're viewing recent activity on your account.
 													Logging out will apply to all devices currently
 													connected to {PRODUCT_NAME}.
@@ -573,10 +577,10 @@ const ZProfile: React.FC = () => {
 															sizeSm='12'
 															sizeXs='12'
 														>
-															<ZIonText className='fw-bold d-block'>
+															<ZIonText className='font-bold block'>
 																Log In With Google
 															</ZIonText>
-															<ZIonText className='d-block'>
+															<ZIonText className='block'>
 																from 180.178.188.126 (SHARP TELECOM (PRIVATE)
 																LIMITED) (Pakistan, Punjab, Lahore)
 															</ZIonText>
@@ -587,12 +591,10 @@ const ZProfile: React.FC = () => {
 																'ion-text-start': isSmScale,
 															})}
 														>
-															<ZIonText className='d-block'>
+															<ZIonText className='block'>
 																December 31, 2022 2:18 PM GMT+5
 															</ZIonText>
-															<ZIonText className='d-block'>
-																1 week ago
-															</ZIonText>
+															<ZIonText className='block'>1 week ago</ZIonText>
 														</ZIonCol>
 													</ZIonRow>
 												))}
@@ -606,9 +608,9 @@ const ZProfile: React.FC = () => {
 												})}
 											>
 												<ZIonTitle className='ion-no-padding'>
-													<h4 className='zaions__fw_900'>SAR Report</h4>
+													<h4 className='font-black'>SAR Report</h4>
 												</ZIonTitle>
-												<ZIonText className='zaions__fs_18 d-block'>
+												<ZIonText className='zaions__fs_18 block'>
 													Click to request a Subject Access Request (SAR) Report
 													of all your Personal Information stored by{' '}
 													{PRODUCT_NAME}. Once requested, in compliance with

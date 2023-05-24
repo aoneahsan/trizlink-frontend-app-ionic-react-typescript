@@ -125,12 +125,10 @@ const ZGroups: React.FC = () => {
 										<ZIonRow>
 											<ZIonCol
 												size='12'
-												className='d-flex io-align-items-center ion-justify-content-between'
+												className='flex io-align-items-center ion-justify-content-between'
 											>
 												<ZIonText>
-													<h2 className='zaions__fw_900 d-inline-block'>
-														Groups
-													</h2>
+													<h2 className='font-black inline-block'>Groups</h2>
 												</ZIonText>
 												<div
 													className={classNames({

@@ -96,7 +96,7 @@ const ZWorkspaceInstagramPageLayout: React.FC = () => {
 			>
 				<ZIonRow
 					className={classNames({
-						'w-[80%] mx-auto': (!isLgScale && isMdScale) || isSmScale,
+						'w-[100%] mx-auto': (!isLgScale && isMdScale) || isSmScale,
 						'w-[95%]': !isSmScale,
 					})}
 				>
@@ -109,16 +109,15 @@ const ZWorkspaceInstagramPageLayout: React.FC = () => {
 					>
 						<div
 							className={classNames({
-								'rounded-circle overflow-hidden': true,
+								'rounded-full overflow-hidden': true,
 								'w-[152px] h-[152px]': isXlScale || isLgScale,
-								'w-[77px] h-[77px]':
-									(!isLgScale && isMdScale) || isSmScale || !isSmScale,
+								'w-[77px] h-[77px]': !isLgScale,
 							})}
 						>
 							<ZIonImg
 								src='https://d2b57pa8jvjkcd.cloudfront.net/xGF9qraKHpDFhkqdC/dz5XmBCTYv-webearbearscrop.jpg'
 								className={classNames({
-									'w-100 h-100': true,
+									'w-full h-full': true,
 								})}
 							/>
 						</div>
@@ -127,23 +126,23 @@ const ZWorkspaceInstagramPageLayout: React.FC = () => {
 					<ZIonCol>
 						<div
 							className={classNames({
-								'flex flex-column px-2 mb-3': true,
+								'flex flex-col px-2 mb-3': true,
 								'mx-5': isXlScale || isLgScale,
 								'mx-1': !isLgScale,
 							})}
 						>
 							<ZIonText
 								className={classNames({
-									'fs-5 mb-3 flex ': true,
+									'text-lg mb-3 flex ': true,
 									'ion-align-items-center': isXlScale || isLgScale,
-									'flex-column ion-align-items-start': !isLgScale,
+									'flex-col ion-align-items-start': !isLgScale,
 								})}
 							>
 								<ZIonRouterLink
 									routerLink={CONSTANTS.ExternalURL.FacebookUrl}
 									target='_blank'
 									color='dark'
-									className='fs-3 font-light zaions-transition'
+									className='text-3xl font-light zaions-transition'
 								>
 									MTI
 								</ZIonRouterLink>
@@ -184,7 +183,7 @@ const ZWorkspaceInstagramPageLayout: React.FC = () => {
 								<ZIonRouterLink
 									routerLink={CONSTANTS.ExternalURL.FacebookUrl}
 									target='_blank'
-									className='hover:underline fw-bold zaions-transition'
+									className='hover:underline font-bold zaions-transition'
 									color='dark'
 								>
 									@zaions

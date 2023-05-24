@@ -22,7 +22,7 @@ import {
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import ZWorkspaceApprovalCards from '@/components/WorkspacesComponents/ApprovalCards';
 import ZWorkspaceApprovalToggler from '@/components/WorkspacesComponents/ApprovalToggler';
@@ -77,18 +77,20 @@ const ZApprovalTab: React.FC = () => {
 			{/*  */}
 			<ZIonRow className='ion-justify-content-center mt-4'>
 				<ZIonCol size='5'>
-					<ZIonText className='d-block fs-4'>Who can approve content?</ZIonText>
+					<ZIonText className='block text-xl'>
+						Who can approve content?
+					</ZIonText>
 					<ZIonRow>
 						<ZIonCol
-							className='d-flex ion-align-items-center gap-2 ps-0'
+							className='flex ion-align-items-center gap-2 ps-0'
 							size='10'
 						>
-							<ZUserAvatarInfo />
+							<ZUserAvatarButton />
 							<div>
-								<ZIonText className='d-flex ion-align-items-center gap-1'>
+								<ZIonText className='flex ion-align-items-center gap-1'>
 									Muhammad talha Irshad (you) <ZIonBadge>Team</ZIonBadge>
 								</ZIonText>
-								<ZIonText className='d-block zaions__fs_14'>
+								<ZIonText className='block zaions__fs_14'>
 									talhaarshaad5@gmail.com
 								</ZIonText>
 							</div>

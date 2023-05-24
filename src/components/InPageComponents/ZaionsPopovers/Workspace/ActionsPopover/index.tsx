@@ -125,7 +125,7 @@ const ZWorkspacesActionPopover: React.FC<{
 				// 	'ion-touched ion-invalid': touched.pageName && errors.pageName,
 				// 	'ion-touched ion-valid': touched.pageName && !errors.pageName,
 				// })}
-				className='pt-2 px-3 fs-4 pb-2 ion-text-center'
+				className='pt-2 px-3 text-xl pb-2 ion-text-center w-[90%] mx-auto'
 				value='MTI'
 				style={{
 					minHeight: '30px',

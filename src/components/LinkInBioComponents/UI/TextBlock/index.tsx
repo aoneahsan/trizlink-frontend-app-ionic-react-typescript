@@ -54,28 +54,28 @@ import classNames from 'classnames';
  * */
 
 interface ZLinkInBioTextBlockInterface {
-  children?: string;
-  fontFamily?: LinkInBioThemeFontEnum;
+	children?: string;
+	fontFamily?: LinkInBioThemeFontEnum;
 }
 
 const ZLinkInBioTextBlock: React.FC<ZLinkInBioTextBlockInterface> = ({
-  children,
-  fontFamily,
+	children,
+	fontFamily,
 }) => {
-  return (
-    <ZIonCol>
-      <ZIonText
-        className={classNames(fontFamily, {
-          'fw-bold zaions__fs_15': true,
-        })}
-        color='light'
-      >
-        {children ? (
-          <div dangerouslySetInnerHTML={{ __html: children }} />
-        ) : null}
-      </ZIonText>
-    </ZIonCol>
-  );
+	return (
+		<ZIonCol>
+			<ZIonText
+				className={classNames(fontFamily, {
+					'font-bold zaions__fs_15': true,
+				})}
+				color='light'
+			>
+				{children ? (
+					<div dangerouslySetInnerHTML={{ __html: children }} />
+				) : null}
+			</ZIonText>
+		</ZIonCol>
+	);
 };
 
 export default ZLinkInBioTextBlock;

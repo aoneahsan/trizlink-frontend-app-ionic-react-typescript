@@ -121,7 +121,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{ className?: string }> = ({
 					<>
 						<ZIonItem
 							className={classNames(className, {
-								'border-start border-top  ion-item-start-no-padding': true,
+								'ion-item-start-no-padding': true,
 								'ion-invalid': touched.domain && errors.domain,
 								'ion-valid': touched.domain && !errors.domain,
 							})}
@@ -131,6 +131,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{ className?: string }> = ({
 							<ZIonInputField
 								inputFieldProps={{
 									className: classNames({
+										'rounded-none': true,
 										'ion-touched ion-invalid': touched.domain && errors.domain,
 										'ion-touched ion-valid': touched.domain && !errors.domain,
 									}),
@@ -140,11 +141,12 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{ className?: string }> = ({
 									onIonChange: handleChange,
 									onIonBlur: handleBlur,
 									value: values.domain,
-									fill: 'solid',
+									fill: 'outline',
 									placeholder: 'https://yourlink.com',
 									style: {
 										'--background': '#fff',
 										'--padding-start': '11px',
+										'--border-radius': '0',
 									},
 								}}
 							/>
@@ -155,6 +157,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{ className?: string }> = ({
 								slot='end'
 								style={{
 									height: '100%',
+									'--border-radius': '0',
 								}}
 							>
 								<ZIonIcon icon={searchOutline} className='me-1' />{' '}

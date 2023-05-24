@@ -107,7 +107,7 @@ const ZWorkspaceUniversalContentPageLayout: React.FC = () => {
 					>
 						<div
 							className={classNames({
-								'rounded-circle overflow-hidden flex justify-center': true,
+								'rounded-full overflow-hidden flex justify-center': true,
 								'w-[92px] h-[92px]': isXlScale || isLgScale,
 								'w-[77px] h-[77px]':
 									(!isLgScale && isMdScale) || isSmScale || !isSmScale,
@@ -116,7 +116,7 @@ const ZWorkspaceUniversalContentPageLayout: React.FC = () => {
 							<ZIonImg
 								src='https://d2b57pa8jvjkcd.cloudfront.net/xGF9qraKHpDFhkqdC/dz5XmBCTYv-webearbearscrop.jpg'
 								className={classNames({
-									'w-100 h-100': true,
+									'w-full h-full': true,
 								})}
 							/>
 						</div>
@@ -126,14 +126,14 @@ const ZWorkspaceUniversalContentPageLayout: React.FC = () => {
 						<div className='w-1/2'>
 							<ZIonText
 								className={classNames({
-									'fs-5 block fw-bold': true,
+									'text-lg block font-bold': true,
 								})}
 							>
 								MTI
 							</ZIonText>
 
 							{/*  */}
-							<ZIonText className='fs-6 block' color='medium'>
+							<ZIonText className='text-base block' color='medium'>
 								Universal content
 							</ZIonText>
 						</div>

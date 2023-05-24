@@ -72,10 +72,10 @@ const ZWorkspaceSettingPlaceholderComp: React.FC<
 	ZWorkspaceSettingPlaceholderComp
 > = ({ buttonOnClick, buttonText, image, title }) => {
 	return (
-		<ZIonCol className='pt-4 mt-4 d-flex ion-align-items-center ion-justify-content-center flex-column ion-text-center'>
+		<ZIonCol className='pt-4 mt-4 flex ion-align-items-center ion-justify-content-center flex-col ion-text-center'>
 			<ZIonImg src={image} />
 
-			<ZIonText className='mt-3 fs-3 ion-text-center'>{title}</ZIonText>
+			<ZIonText className='mt-3 text-3xl ion-text-center'>{title}</ZIonText>
 
 			<ZIonButton
 				className='mt-4 text-transform-initial'

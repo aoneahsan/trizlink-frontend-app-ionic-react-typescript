@@ -74,11 +74,11 @@ const ZaionsContact: React.FC = () => {
 								className='text-center'
 							>
 								<ZIonText>
-									<h2 className='zaions__fw_800 zaions__color_dark '>
+									<h2 className='font-extrabold zaions__color_dark '>
 										Get Support
 									</h2>
 								</ZIonText>
-								<ZIonText className='fs-5 zaions__color_gray2 mb-2'>
+								<ZIonText className='text-lg zaions__color_gray2 mb-2'>
 									Browse our extensive knowledge base to find answers to all{' '}
 									<br />
 									your questions and help you get the most out of {PRODUCT_NAME}
@@ -123,7 +123,7 @@ const ZaionsContact: React.FC = () => {
 								className='text-center'
 							>
 								<ZIonText>
-									<h2 className='zaions__fw_800 zaions__color_dark '>Sales</h2>
+									<h2 className='font-extrabold zaions__color_dark '>Sales</h2>
 								</ZIonText>
 								<ZIonRouterLink
 									routerLink={ZaionsRoutes.DiscoverEnterpriseRoute}
@@ -144,7 +144,7 @@ const ZaionsContact: React.FC = () => {
 								className='text-center'
 							>
 								<ZIonText>
-									<h2 className='zaions__fw_800 zaions__color_dark '>
+									<h2 className='font-extrabold zaions__color_dark '>
 										Press inquiries
 									</h2>
 								</ZIonText>
@@ -163,9 +163,9 @@ const ZaionsContact: React.FC = () => {
 					<ZIonGrid>
 						<ZIonRow>
 							<ZIonCol className='zaions__bg_gray'>
-								<div className='zaions__w100 text-center py-5'>
+								<div className='w-full text-center py-5'>
 									<ZIonText>
-										<h2 className='zaions__fw_800 zaions__color_dark '>
+										<h2 className='font-extrabold zaions__color_dark '>
 											Follow us:{' '}
 											<ZIonRouterLink
 												routerLink={CONSTANTS.SocialLinks.twitter}
@@ -207,7 +207,7 @@ const ZaionsContact: React.FC = () => {
 									</ZIonText>
 								</div>
 
-								<ZIonImg src={MapImage} className='zaions__w100' />
+								<ZIonImg src={MapImage} className='w-full' />
 							</ZIonCol>
 						</ZIonRow>
 					</ZIonGrid>
@@ -230,7 +230,7 @@ const ZaionsContact: React.FC = () => {
 								className='text-start'
 							>
 								<ZIonText>
-									<h2 className='zaions__fw_800 zaions__color_dark '>
+									<h2 className='font-extrabold zaions__color_dark '>
 										New York City
 									</h2>
 								</ZIonText>
@@ -249,7 +249,7 @@ const ZaionsContact: React.FC = () => {
 								className='text-start'
 							>
 								<ZIonText>
-									<h2 className='zaions__fw_800 zaions__color_dark '>Denver</h2>
+									<h2 className='font-extrabold zaions__color_dark '>Denver</h2>
 								</ZIonText>
 								<ZIonText className='mb-0'>Suite 650</ZIonText>
 								<ZIonText className='mb-0'>Denver CO, 80202</ZIonText>
@@ -263,7 +263,7 @@ const ZaionsContact: React.FC = () => {
 								className='text-start'
 							>
 								<ZIonText>
-									<h2 className='zaions__fw_800 zaions__color_dark '>
+									<h2 className='font-extrabold zaions__color_dark '>
 										San Francisco
 									</h2>
 								</ZIonText>

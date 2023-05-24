@@ -83,7 +83,7 @@ const ZLinkInBioFormBlock: React.FC<ZLinkInBioFromBlockInterface> = ({
 	fontFamily,
 }) => {
 	return (
-		<ZIonRow className='zaions__w100 ion-justify-content-between ion-padding-vertical px-3 zaions__light_bg rounded row-gap-1-point-6-rem'>
+		<ZIonRow className='w-full ion-justify-content-between ion-padding-vertical px-3 zaions__light_bg rounded row-gap-1-point-6-rem'>
 			{/* Header */}
 			{/* <ZIonHeader className='pb-2'>
         <ZIonButton
@@ -106,7 +106,7 @@ const ZLinkInBioFormBlock: React.FC<ZLinkInBioFromBlockInterface> = ({
 								<ZIonTitle className='ion-no-padding ion-text-center'>
 									<h5
 										className={classNames(fontFamily, {
-											'fw-bold ion-no-margin': true,
+											'font-bold ion-no-margin': true,
 										})}
 									>
 										{element.title}
@@ -156,12 +156,12 @@ const ZLinkInBioFormBlock: React.FC<ZLinkInBioFromBlockInterface> = ({
 				);
 			})}
 			{fromBlockData?.isTermEnabled && (
-				<ZIonCol size='12' className='d-flex ion-align-items-center'>
+				<ZIonCol size='12' className='flex ion-align-items-center'>
 					<div className=''>
 						<ZIonCheckbox className='ion-no-margin' />
 					</div>
 					<ZIonRouterLink
-						className='ms-2 zaions__underline'
+						className='ms-2 underline'
 						routerLink={fromBlockData.termLink}
 						target='_blank'
 						color='dark'

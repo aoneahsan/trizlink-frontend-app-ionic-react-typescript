@@ -178,7 +178,7 @@ const ZAccountDetails: React.FC = () => {
 												})}
 											>
 												<ZIonText>
-													<h2 className='zaions__fw_900'>Account details</h2>
+													<h2 className='font-black'>Account details</h2>
 												</ZIonText>
 											</ZIonCol>
 											{isMdScale && (
@@ -219,13 +219,13 @@ const ZAccountDetails: React.FC = () => {
 													'ms-0 ps-0': !isMdScale,
 												})}
 											>
-												<ZIonText className='fw-bold d-block'>
+												<ZIonText className='font-bold block'>
 													You have all of these Free features:
 												</ZIonText>
 												<ZIonText
 													className={classNames({
 														'mt-3': true,
-														'd-block': isMdScale,
+														block: isMdScale,
 														'd-inline': !isMdScale,
 													})}
 												>
@@ -233,7 +233,7 @@ const ZAccountDetails: React.FC = () => {
 												</ZIonText>
 												<ZIonText
 													className={classNames({
-														'd-block': isMdScale,
+														block: isMdScale,
 														'd-inline ms-4': !isMdScale,
 													})}
 												>
@@ -266,7 +266,7 @@ const ZAccountDetails: React.FC = () => {
 														<ZIonItem className='ion-no-padding'>
 															<ZIonText
 																className={classNames({
-																	'mx-auto fw-bold': !isMdScale,
+																	'mx-auto font-bold': !isMdScale,
 																	'mx-auto': !isSmScale,
 																})}
 															>
@@ -274,7 +274,7 @@ const ZAccountDetails: React.FC = () => {
 															</ZIonText>
 														</ZIonItem>
 														<ZIonItem className='ion-no-padding'>
-															<ZIonRow className='zaions__w100 ion-align-items-center ion-no-padding'>
+															<ZIonRow className='w-full ion-align-items-center ion-no-padding'>
 																<ZIonCol
 																	sizeXl=''
 																	sizeLg=''
@@ -339,14 +339,14 @@ const ZAccountDetails: React.FC = () => {
 													sizeXs='12'
 													className={classNames({
 														'ion-align-items-center': true,
-														'my-3 d-flex': isMdScale,
+														'my-3 flex': isMdScale,
 														'my-0 px-0 border-bottom pb-3': !isMdScale,
 													})}
 												>
 													<ZIonInput
 														className={classNames({
 															zaions__w70: isMdScale,
-															'zaions__w100 mb-2': !isMdScale,
+															'w-full mb-2': !isMdScale,
 														})}
 														placeholder='User Name'
 														label='Account Name'
@@ -393,16 +393,16 @@ const ZAccountDetails: React.FC = () => {
 																<ZIonCol size='12' className='ion-no-padding'>
 																	<ZIonText
 																		className={classNames({
-																			'd-block': true,
+																			block: true,
 																			'mb-2': !isSmScale,
-																			'fw-bold': !isMdScale,
+																			'font-bold': !isMdScale,
 																		})}
 																	>
 																		Account notifications
 																	</ZIonText>
 																</ZIonCol>
 																<ZIonCol size='12' className='ion-no-padding'>
-																	<ZIonText className='d-block'>
+																	<ZIonText className='block'>
 																		Select which verified email address you
 																		would like to use to receive notifications
 																		for your accounts.
@@ -411,7 +411,7 @@ const ZAccountDetails: React.FC = () => {
 															</ZIonRow>
 														</ZIonItem>
 														<ZIonItem className='ion-no-padding'>
-															<ZIonRow className='zaions__w100 ion-align-items-center ion-no-padding'>
+															<ZIonRow className='w-full ion-align-items-center ion-no-padding'>
 																<ZIonCol
 																	className={classNames({
 																		'ion-no-padding': true,
@@ -498,7 +498,7 @@ const ZAccountDetails: React.FC = () => {
 																	sizeXs='12'
 																	className={classNames({
 																		'ion-align-items-end my-3': true,
-																		'd-flex': isMdScale,
+																		flex: isMdScale,
 																		'border-bottom pb-3 mb-0': !isMdScale,
 																	})}
 																>
@@ -510,7 +510,7 @@ const ZAccountDetails: React.FC = () => {
 																		)}
 																		className={classNames({
 																			zaions__w80: isMdScale,
-																			'zaions__w100 mb-3': !isMdScale,
+																			'w-full mb-3': !isMdScale,
 																		})}
 																		name='primaryEmail'
 																		onChange={(val) => {
@@ -551,7 +551,7 @@ const ZAccountDetails: React.FC = () => {
 													<ZIonItem className='ion-no-padding'>
 														<ZIonText
 															className={classNames({
-																'mx-auto fw-bold': !isMdScale,
+																'mx-auto font-bold': !isMdScale,
 															})}
 														>
 															Monthly usage
@@ -560,7 +560,7 @@ const ZAccountDetails: React.FC = () => {
 
 													{/* Short Links */}
 													<ZIonItem className='ion-no-padding'>
-														<ZIonRow className='zaions__w100 ion-align-items-center ion-no-padding'>
+														<ZIonRow className='w-full ion-align-items-center ion-no-padding'>
 															<ZIonCol
 																className={classNames({
 																	'ion-no-padding': true,
@@ -574,7 +574,7 @@ const ZAccountDetails: React.FC = () => {
 															>
 																<ZIonText
 																	className={classNames({
-																		'fw-bold': !isMdScale,
+																		'font-bold': !isMdScale,
 																	})}
 																>
 																	Short links
@@ -590,7 +590,7 @@ const ZAccountDetails: React.FC = () => {
 																sizeSm='12'
 																sizeXs='12'
 																className={classNames({
-																	'ion-no-padding d-flex ion-align-items-center':
+																	'ion-no-padding flex ion-align-items-center':
 																		true,
 																	'ion-justify-content-center mt-3 mb-2':
 																		!isMdScale,
@@ -598,7 +598,7 @@ const ZAccountDetails: React.FC = () => {
 															>
 																<IonProgressBar
 																	className={classNames({
-																		'd-inline-block me-2': true,
+																		'inline-block me-2': true,
 																		zaions__w80: isMdScale || !isSmScale,
 																		zaions__w90: !isMdScale && isSmScale,
 																	})}
@@ -634,7 +634,7 @@ const ZAccountDetails: React.FC = () => {
 
 													{/* Custom back-halves */}
 													<ZIonItem className='ion-no-padding'>
-														<ZIonRow className='zaions__w100 ion-align-items-center ion-no-padding'>
+														<ZIonRow className='w-full ion-align-items-center ion-no-padding'>
 															<ZIonCol
 																className={classNames({
 																	'ion-no-padding': true,
@@ -648,7 +648,7 @@ const ZAccountDetails: React.FC = () => {
 															>
 																<ZIonText
 																	className={classNames({
-																		'fw-bold': !isMdScale,
+																		'font-bold': !isMdScale,
 																	})}
 																>
 																	Custom back-halves
@@ -664,7 +664,7 @@ const ZAccountDetails: React.FC = () => {
 																sizeSm='12'
 																sizeXs='12'
 																className={classNames({
-																	'ion-no-padding d-flex ion-align-items-center':
+																	'ion-no-padding flex ion-align-items-center':
 																		true,
 																	'ion-justify-content-center mt-3 mb-2':
 																		!isMdScale,
@@ -672,7 +672,7 @@ const ZAccountDetails: React.FC = () => {
 															>
 																<IonProgressBar
 																	className={classNames({
-																		'd-inline-block me-2': true,
+																		'inline-block me-2': true,
 																		zaions__w80: isMdScale || !isSmScale,
 																		zaions__w90: !isMdScale && isSmScale,
 																	})}
@@ -708,7 +708,7 @@ const ZAccountDetails: React.FC = () => {
 
 													{/* zlink link redirects */}
 													<ZIonItem className='ion-no-padding'>
-														<ZIonRow className='zaions__w100 ion-align-items-center ion-no-padding'>
+														<ZIonRow className='w-full ion-align-items-center ion-no-padding'>
 															<ZIonCol
 																className={classNames({
 																	'ion-no-padding': true,
@@ -722,7 +722,7 @@ const ZAccountDetails: React.FC = () => {
 															>
 																<ZIonText
 																	className={classNames({
-																		'fw-bold': !isMdScale,
+																		'font-bold': !isMdScale,
 																	})}
 																>
 																	{PRODUCT_NAME} link redirects
@@ -738,7 +738,7 @@ const ZAccountDetails: React.FC = () => {
 																sizeSm='12'
 																sizeXs='12'
 																className={classNames({
-																	'ion-no-padding d-flex ion-align-items-center':
+																	'ion-no-padding flex ion-align-items-center':
 																		true,
 																	'ion-justify-content-center mt-3 mb-2':
 																		!isMdScale,
@@ -746,7 +746,7 @@ const ZAccountDetails: React.FC = () => {
 															>
 																<IonProgressBar
 																	className={classNames({
-																		'd-inline-block me-2': true,
+																		'inline-block me-2': true,
 																		zaions__w80: isMdScale || !isSmScale,
 																		zaions__w90: !isMdScale && isSmScale,
 																	})}
@@ -782,7 +782,7 @@ const ZAccountDetails: React.FC = () => {
 
 													{/* Custom link redirects */}
 													<ZIonItem className='ion-no-padding'>
-														<ZIonRow className='zaions__w100 ion-align-items-center ion-no-padding'>
+														<ZIonRow className='w-full ion-align-items-center ion-no-padding'>
 															<ZIonCol
 																className={classNames({
 																	'ion-no-padding': true,
@@ -796,7 +796,7 @@ const ZAccountDetails: React.FC = () => {
 															>
 																<ZIonText
 																	className={classNames({
-																		'fw-bold': !isMdScale,
+																		'font-bold': !isMdScale,
 																	})}
 																>
 																	Custom link redirects
@@ -812,7 +812,7 @@ const ZAccountDetails: React.FC = () => {
 																sizeSm='12'
 																sizeXs='12'
 																className={classNames({
-																	'ion-no-padding d-flex ion-align-items-center':
+																	'ion-no-padding flex ion-align-items-center':
 																		true,
 																	'ion-justify-content-center mt-3 mb-2':
 																		!isMdScale,
@@ -820,7 +820,7 @@ const ZAccountDetails: React.FC = () => {
 															>
 																<IonProgressBar
 																	className={classNames({
-																		'd-inline-block me-2': true,
+																		'inline-block me-2': true,
 																		zaions__w80: isMdScale || !isSmScale,
 																		zaions__w90: !isMdScale && isSmScale,
 																	})}

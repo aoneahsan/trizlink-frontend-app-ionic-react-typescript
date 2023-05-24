@@ -109,20 +109,20 @@ const ZDashboard: React.FC = () => {
 						<ZLinkDashboardTopBar />
 						<ZIonContent className='ion-padding'>
 							<ZIonGrid>
-								<ZIonRow className='ion-align-items-center ion-justify-content-center flex-column mt-3'>
+								<ZIonRow className='ion-align-items-center ion-justify-content-center flex-col mt-3'>
 									<ZIonImg
 										src={dashboardEmptyState}
 										alt='dashboard Inactive state'
 										className={classNames({
-											zaions__w40: isMdScale,
-											zaions__w60: !isMdScale && isSmScale,
-											zaions__w100: !isSmScale,
+											'w-[40%]': isMdScale,
+											'w-[60%]': !isMdScale && isSmScale,
+											'w-full': !isSmScale,
 										})}
 									/>
-									<ZIonTitle className='fs-2 fw-bold mb-2 mt-4'>
+									<ZIonTitle className='text-3xl font-bold mb-2 mt-4'>
 										Every click tell a story
 									</ZIonTitle>
-									<ZIonText className='fs-5 ion-text-center'>
+									<ZIonText className='text-lg ion-text-center'>
 										See all your link data in one dashboard. View click metrics
 										by <br /> location, device, referrers and more.
 									</ZIonText>
@@ -130,7 +130,9 @@ const ZDashboard: React.FC = () => {
 										className='ion-text-capitalize mt-4'
 										routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
 									>
-										<ZIonText className='px-4 fw-bold'>View our plans</ZIonText>
+										<ZIonText className='px-4 font-bold'>
+											View our plans
+										</ZIonText>
 									</ZIonButton>
 									<ZIonButton fill='clear' className='mt-3 ion-text-capitalize'>
 										Learn more

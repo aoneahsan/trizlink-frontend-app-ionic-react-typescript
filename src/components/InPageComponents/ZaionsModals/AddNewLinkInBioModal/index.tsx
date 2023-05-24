@@ -79,7 +79,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
 			</div>
 
 			{/*  */}
-			<div className='d-flex ion-text-center ion-justify-content-center flex-column'>
+			<div className='flex ion-text-center ion-justify-content-center flex-col'>
 				<ZIonText className='' color={'primary'}>
 					<h1 className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}>
 						<ZIonIcon
@@ -91,7 +91,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
 				</ZIonText>
 				<br />
 				<ZIonText color={'dark'}>
-					<h5 className='fw-bold'>Create a new Link-in-bio 😊</h5>
+					<h5 className='font-bold'>Create a new Link-in-bio 😊</h5>
 				</ZIonText>
 
 				<Formik

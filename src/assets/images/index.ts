@@ -6,7 +6,7 @@ type SVGFileRequireType = {
 // Home Page
 import vector from './pages/home-page/vector.png';
 import GlobeImage from './pages/home-page/global.png';
-import HomePageHeroDistopImage from './pages/home-page/home_page_hero_desktop.png';
+import HomePageHeroDesktopImage from './pages/home-page/home_page_hero_desktop.png';
 
 // Discover Enterprise
 import formBG from './pages/discover-enterprise/form-background.png';
@@ -76,8 +76,8 @@ import PlaceholderAvatar from './pages/company/reviews/download.jpg';
 import PaulaC from './pages/company/reviews/PaulaC.png';
 
 // SVG's
-// upload_send.svg
 import linkMngt3 from './svg/link-mngt-3.svg';
+import mobileLayout from './svg/mobileLayout.svg';
 import MedicalInstrumentStethoscope from './svg/icon-large-medical-instrument-stethoscope.svg';
 import iconLargePerformanceMoneyIncrease from './svg/icon-large-performance-money-increase.svg';
 
@@ -116,6 +116,8 @@ import drawCustomdomain from './svg/draw_custom_domain.svg';
 import noScript from './svg/no_script.svg';
 
 import noToken from './svg/no-token.svg';
+
+import avatar from './svg/avatar.svg';
 
 import privacy from './svg/privacy.svg';
 
@@ -421,6 +423,11 @@ import linkInBioPageAnalyticsRetargetingPixelsBlock from './svg/link-in-bio-page
 import WorkspaceSettingsTimetablePlaceholder from './svg/workspace-timesLots-placeholder.svg';
 import WorkspaceSettingsLabelPlaceholder from './svg/workspace-labels-placeholder.svg';
 
+import imageIcon from './svg/imageIcon.svg';
+import gifIcon from './svg/gifIcon.svg';
+import mediaIcon from './svg/mediaIcon.svg';
+import thumbnailIcon from './svg/thumbnailIcon.svg';
+
 // Features Section
 import yourBrndBranding from './pages/features/yourbrnd-branding.gif';
 import brandedLinksmobile from './pages/features/brandedlinksmobile.jpg';
@@ -522,7 +529,7 @@ import bulkUploadEmptyState from './pages/admin-panel/dashboard/bulk-upload-empt
 export {
 	vector,
 	GlobeImage,
-	HomePageHeroDistopImage,
+	HomePageHeroDesktopImage,
 	formBG,
 	Zaions101Image,
 	Zaions101MobileImage,
@@ -571,6 +578,7 @@ export {
 	PlaceholderAvatar,
 	PaulaC,
 	linkMngt3,
+	mobileLayout,
 	MedicalInstrumentStethoscope,
 	iconLargePerformanceMoneyIncrease,
 	ButtonIcon,
@@ -817,6 +825,11 @@ export {
 	uploadImageBg,
 	addUserImage,
 	addIcon,
+	imageIcon,
+	gifIcon,
+	mediaIcon,
+	thumbnailIcon,
+	avatar,
 	libMobile,
 	reportingLinkManagement,
 	lmLinkManagement,

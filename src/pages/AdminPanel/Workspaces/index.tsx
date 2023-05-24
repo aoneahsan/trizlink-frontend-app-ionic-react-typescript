@@ -33,7 +33,7 @@ import AdminPanelMainSidebarMenu from '@/components/AdminPanelComponents/Sidebar
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 import ZUserInfoPopover from '@/components/InPageComponents/ZaionsPopovers/UserInfoPopover';
 import ZWorkspacesCard from '@/components/WorkspacesComponents/ListCard';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import ZAddNewWorkspaceModal from '@/components/InPageComponents/ZaionsModals/Workspace/CreateModal';
 
 /**
@@ -158,20 +158,9 @@ const ZWorkspaceListPage: React.FC = () => {
 							<ZIonGrid className='px-4'>
 								{/* Top workspace menu */}
 								<ZIonRow className='pt-2'>
-									{/* avatar and invite buttons col */}
+									{/*  invite buttons col */}
 									<ZIonCol>
 										<ZIonButtons className='gap-3 ion-align-items-center'>
-											{/* User avatar button */}
-											<ZUserAvatarInfo
-												onClick={(event: unknown) => {
-													presentUserInfoPopover({
-														_event: event as Event,
-														_cssClass: 'zaions_user_info_popover_size',
-													});
-												}}
-												userAvatar={ProductLogo}
-											/>
-
 											{/* Invite button */}
 											<ZIonButton
 												fill='solid'
@@ -289,9 +278,11 @@ const ZWorkspaceListPage: React.FC = () => {
 												});
 											}}
 										>
-											<ZIonCardContent className='d-flex flex-column ion-align-items-center ion-justify-content-center h-100'>
+											<ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
 												<ZIonIcon icon={addOutline} size='large' />
-												<ZIonText className='fs-5'>Create a workspace</ZIonText>
+												<ZIonText className='text-lg'>
+													Create a workspace
+												</ZIonText>
 											</ZIonCardContent>
 										</ZIonCard>
 									</ZIonCol>

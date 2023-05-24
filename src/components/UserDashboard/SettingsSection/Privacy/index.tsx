@@ -36,17 +36,17 @@ const APSettingsPrivacy: React.FC = () => {
 			<ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-5'>
 				{' '}
 				<ZIonCol sizeXl='6' sizeLg='6' sizeMd='6' sizeSm='6' sizeXs='12'>
-					<ZIonText className='p-0 mb-2 fw-bold' color={'primary'}>
+					<ZIonText className='p-0 mb-2 font-bold' color={'primary'}>
 						Privacy popup
 					</ZIonText>
-					<ZIonText className='d-block mt-3' color={'medium'}>
+					<ZIonText className='block mt-3' color={'medium'}>
 						In order to be compliant with data-protection regulation, you can{' '}
 						<br />
 						add a privacy popup to let your users consent the use of cookies{' '}
 						<br /> and tracking solutions.name to get links like
 						links.company.com instead of hi.zaions.com.
 					</ZIonText>
-					<ZIonText className='d-block mt-3' color={'medium'}>
+					<ZIonText className='block mt-3' color={'medium'}>
 						Set-up your privacy Policy popup below.
 					</ZIonText>
 				</ZIonCol>
@@ -55,7 +55,7 @@ const APSettingsPrivacy: React.FC = () => {
 						<ZIonImg
 							src={privacy}
 							className={`mx-auto ${
-								!isLgScale ? 'zaions__w100 mt-5' : 'zaions__w60 '
+								!isLgScale ? 'w-full mt-5' : 'zaions__w60 '
 							}`}
 						/>
 					</div>
@@ -63,7 +63,7 @@ const APSettingsPrivacy: React.FC = () => {
 			</ZIonRow>
 			<ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-5 ion-align-items-center'>
 				<ZIonCol>
-					<ZIonText className='p-0 mb-2 fw-bold' color={'primary'}>
+					<ZIonText className='p-0 mb-2 font-bold' color={'primary'}>
 						Setup your GDPR/CCPA popup
 					</ZIonText>
 				</ZIonCol>

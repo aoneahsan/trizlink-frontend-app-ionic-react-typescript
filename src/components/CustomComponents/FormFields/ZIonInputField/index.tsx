@@ -2,8 +2,7 @@
 import React, { ReactNode } from 'react';
 
 // Packages Import
-import { InputChangeEventDetail, IonInput } from '@ionic/react';
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
+import { IonInput } from '@ionic/react';
 
 // Type
 import { IonInputCustomEvent } from '@ionic/core/dist/types/components';

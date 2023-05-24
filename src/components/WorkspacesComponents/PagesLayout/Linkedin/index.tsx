@@ -128,22 +128,22 @@ const ZWorkspaceLinkedinPageLayout: React.FC = () => {
 					<ZIonImg
 						src={ProductLogo}
 						className={classNames(classes['linkedin-profile-img'], {
-							'w-100 h-100': true,
+							'w-full h-full': true,
 						})}
 					/>
 				</div>
 
 				<div
 					className={classNames({
-						'flex flex-column mx-2 px-1 mb-3': true,
+						'flex flex-col mx-2 px-1 mb-3': true,
 					})}
 				>
-					<ZIonText className='fs-5'>
+					<ZIonText className='text-lg'>
 						<ZIonRouterLink
 							routerLink={CONSTANTS.ExternalURL.FacebookUrl}
 							target='_blank'
 							color='dark'
-							className='fs-5 hover:underline zaions-transition'
+							className='text-lg hover:underline zaions-transition'
 						>
 							zaions
 						</ZIonRouterLink>

@@ -41,10 +41,10 @@ const DomainName: React.FC = () => {
 	return (
 		<>
 			<ZIonRow className='border-bottom mt-4 pt-2 zaions__bg_white'>
-				<ZIonCol className='px-3 py-3 d-flex align-items-center '>
+				<ZIonCol className='px-3 py-3 flex ion-align-items-center '>
 					<ZIonIcon icon={laptopOutline} size={'large'}></ZIonIcon>
 					<ZIonText>
-						<h6 className='fw-bold ion-no-margin ion-padding-start'>
+						<h6 className='font-bold ion-no-margin ion-padding-start'>
 							Choose domain name{' '}
 							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
 								(help)

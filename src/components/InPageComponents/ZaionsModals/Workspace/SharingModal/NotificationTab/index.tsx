@@ -23,7 +23,7 @@ import {
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import { ProductLogo } from '@/assets/images';
 import {
 	chatbubblesOutline,
@@ -92,23 +92,23 @@ const ZNotificationTab: React.FC = () => {
 				<ZIonCol>
 					<ZIonRow>
 						<ZIonCol>
-							<ZIonIcon icon={imageOutline} className='d-block mx-auto' />
-							<ZIonText className='d-block ion-text-center text-sm'>
+							<ZIonIcon icon={imageOutline} className='block mx-auto' />
+							<ZIonText className='block ion-text-center text-sm'>
 								new posts
 							</ZIonText>
 						</ZIonCol>
 						<ZIonCol>
 							<ZIonIcon
 								icon={checkmarkCircleOutline}
-								className='d-block mx-auto'
+								className='block mx-auto'
 							/>
-							<ZIonText className='d-block ion-text-center text-sm'>
+							<ZIonText className='block ion-text-center text-sm'>
 								post updates
 							</ZIonText>
 						</ZIonCol>
 						<ZIonCol>
-							<ZIonIcon icon={chatbubblesOutline} className='d-block mx-auto' />
-							<ZIonText className='d-block ion-text-center text-sm'>
+							<ZIonIcon icon={chatbubblesOutline} className='block mx-auto' />
+							<ZIonText className='block ion-text-center text-sm'>
 								Conversations
 							</ZIonText>
 						</ZIonCol>
@@ -133,7 +133,7 @@ const ZNotificationTab: React.FC = () => {
 					className='flex ion-align-items-center'
 				>
 					{isSmScale && (
-						<ZUserAvatarInfo
+						<ZUserAvatarButton
 							className={classNames({
 								'w-[10px] h-[10px]': true,
 								'me-3': isLgScale,
@@ -147,12 +147,12 @@ const ZNotificationTab: React.FC = () => {
 					<div className=''>
 						<ZIonText
 							className={classNames({
-								'd-flex': true,
+								flex: true,
 								'ion-align-items-center': isLgScale,
-								'flex-column ion-align-items-start': !isLgScale,
+								'flex-col ion-align-items-start': !isLgScale,
 							})}
 						>
-							<ZIonLabel className='text-sm fw-bold'>
+							<ZIonLabel className='text-sm font-bold'>
 								Muhammad talha Irshad (you)
 							</ZIonLabel>
 							<ZIonBadge
@@ -164,7 +164,7 @@ const ZNotificationTab: React.FC = () => {
 								TEAM
 							</ZIonBadge>
 						</ZIonText>
-						<ZIonLabel className='d-block text-sm' color='medium'>
+						<ZIonLabel className='block text-sm' color='medium'>
 							talhaarshaad5@gmail.com
 						</ZIonLabel>
 					</div>

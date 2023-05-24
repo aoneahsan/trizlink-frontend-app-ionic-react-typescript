@@ -30,7 +30,7 @@ import {
 	ZIonPopover,
 	ZIonRow,
 } from '@/components/ZIonComponents';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import ZWorkspaceFormRoleSelectorPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/RoleSelectorPopover';
 import ZWorkspaceFooterSteps from '@/components/WorkspacesComponents/FooterSteps';
 import ZInviteClientsPermissionPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/InviteClientPermissionPopover';
@@ -147,8 +147,8 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 													'w-2/3': isXlScale,
 													'w-[80%]': !isXlScale && isLgScale,
 													'w-[90%]': !isLgScale && isMdScale,
-													'w-100 border-bottom py-3': !isMdScale && isSmScale,
-													// 'w-100': !isSmScale,
+													'w-full border-bottom py-3': !isMdScale && isSmScale,
+													// 'w-full': !isSmScale,
 												})}
 												key={index}
 											>
@@ -161,7 +161,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 														sizeSm='2'
 														sizeXs='2'
 													>
-														<ZUserAvatarInfo
+														<ZUserAvatarButton
 															userAvatar={el.avatar && el.avatar}
 														/>
 													</ZIonCol>
@@ -179,7 +179,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 														<div
 															className={classNames({
 																'w-3/4': isMdScale,
-																'w-100': !isMdScale,
+																'w-full': !isMdScale,
 															})}
 														>
 															{/* Email input */}
@@ -197,12 +197,12 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 														</div>
 
 														{/* Role & permission buttons */}
-														<div className='gap-2 zaions_max__content ms-2 d-flex'>
+														<div className='gap-2 zaions_max__content ms-2 flex'>
 															{/* Role popover button */}
 															<ZIonButton
 																id={`role-popover-index-${index}`}
 																fill='outline'
-																className='m-0 d-flex h-100 text-transform-initial'
+																className='m-0 flex h-full text-transform-initial'
 															>
 																{values.clients && values.clients[index].role}
 															</ZIonButton>
@@ -211,7 +211,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 															<ZIonButton
 																fill='outline'
 																id={`permission-popover-index-${index}`}
-																className='m-0 d-flex h-100 text-transform-initial'
+																className='m-0 flex h-full text-transform-initial'
 															>
 																{values.clients &&
 																	values.clients[index].permission}
@@ -368,7 +368,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 									'w-5/12': !isXlScale && isLgScale,
 									'w-6/12': !isLgScale && isMdScale,
 									'w-7/12': !isMdScale && isSmScale,
-									'w-100': !isSmScale,
+									'w-full': !isSmScale,
 								})}
 							>
 								<ZIonRow

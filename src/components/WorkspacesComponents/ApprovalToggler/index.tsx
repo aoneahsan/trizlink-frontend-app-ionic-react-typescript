@@ -27,8 +27,8 @@ const ZWorkspaceApprovalToggler: React.FC<{
 				'mt-3 ion-align-items-center': true,
 			})}
 		>
-			<ZIonCol className='d-flex ion-align-items-center gap-2 ps-0' size='10'>
-				<ZIonText className='d-flex ion-align-items-center gap-1 fs-5'>
+			<ZIonCol className='flex ion-align-items-center gap-2 ps-0' size='10'>
+				<ZIonText className='flex ion-align-items-center gap-1 text-lg'>
 					<ZIonIcon icon={icon} size='large' /> {text}
 				</ZIonText>
 			</ZIonCol>

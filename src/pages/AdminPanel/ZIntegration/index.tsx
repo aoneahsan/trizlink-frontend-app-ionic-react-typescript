@@ -146,7 +146,7 @@ const ZIntegration: React.FC = () => {
 												<ZIonText>
 													<h2
 														className={classNames({
-															zaions__fw_900: true,
+															font-black: true,
 															'ion-text-center': !isMdScale,
 														})}
 													>
@@ -167,7 +167,7 @@ const ZIntegration: React.FC = () => {
 												<ZIonText>
 													<h4
 														className={classNames({
-															zaions__fw_900: true,
+															font-black: true,
 															'ion-text-center': !isMdScale,
 															'pb-3': isMdScale,
 														})}
@@ -222,7 +222,7 @@ const ZIntegration: React.FC = () => {
 												})}
 											>
 												<ZIonText>
-													<h4 className='zaions__fw_900 pb-3'>
+													<h4 className='font-black pb-3'>
 														App connections
 													</h4>
 												</ZIonText>
@@ -253,8 +253,8 @@ const ZIntegration: React.FC = () => {
 												<ZIonRow className='ion-padding'>
 													<ZIonCol className='ps-3 pt-4 pb-5'>
 														<ZIonIcon icon={closeCircleOutline} size='large' />
-														<ZIonText className='d-block mt-2'>
-															<h5 className='fw-bold mb-0'>
+														<ZIonText className='block mt-2'>
+															<h5 className='font-bold mb-0'>
 																No apps connected
 															</h5>
 														</ZIonText>
