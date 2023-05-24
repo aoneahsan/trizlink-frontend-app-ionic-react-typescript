@@ -3,10 +3,6 @@ import React, { useLayoutEffect } from 'react';
 
 // Packages Imports
 import { IonSearchbar } from '@ionic/react';
-// import Button from 'react-bootstrap/Button';
-// import { useRecoilState } from 'recoil';
-// import Form from 'react-bootstrap/Form';
-// import InputGroup from 'react-bootstrap/InputGroup';
 
 // Custom Imports
 import ZaionsIonPage from '@/components/ZaionsIonPage';

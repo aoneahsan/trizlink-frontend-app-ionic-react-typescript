@@ -2,7 +2,6 @@
 import React from 'react';
 
 // Packages Import
-// import { Dropdown } from 'react-bootstrap';
 import {} from '@ionic/react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 

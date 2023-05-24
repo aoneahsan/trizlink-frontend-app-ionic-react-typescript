@@ -4,7 +4,6 @@ import { Fragment, useLayoutEffect } from 'react';
 // Packages Imports
 import { useRecoilState } from 'recoil';
 import { useMediaQuery } from 'react-responsive';
-// import Carousel from 'react-bootstrap/Carousel';
 import classNames from 'classnames';
 
 // Custom Imports

@@ -5,8 +5,6 @@ import React, { useLayoutEffect } from 'react';
 import { checkmarkSharp } from 'ionicons/icons';
 import { useRecoilState } from 'recoil';
 import { useMediaQuery } from 'react-responsive';
-// import Button from 'react-bootstrap/Button';
-// import Form from 'react-bootstrap/Form';
 
 import classNames from 'classnames';
 
