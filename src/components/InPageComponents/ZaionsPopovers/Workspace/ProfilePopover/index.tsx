@@ -40,7 +40,7 @@ import {
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import { ProductLogo } from '@/assets/images';
 import classNames from 'classnames';
 import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
@@ -91,7 +91,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 		<>
 			<ZIonRow className='ion-align-items-center pt-2'>
 				<ZIonCol size='max-content'>
-					<ZUserAvatarInfo
+					<ZUserAvatarButton
 						className='w-[10px] h-[10px] me-1'
 						userAvatar={ProductLogo}
 						style={{ height: '39px', width: '39px' }}

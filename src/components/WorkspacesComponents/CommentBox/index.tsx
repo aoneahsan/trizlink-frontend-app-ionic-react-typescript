@@ -16,7 +16,7 @@ import {
 	ZIonText,
 	ZIonTextarea,
 } from '@/components/ZIonComponents';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 
 const ZWorkspaceCommentBox: React.FC<{
@@ -44,7 +44,7 @@ const ZWorkspaceCommentBox: React.FC<{
 					}}
 				>
 					<div className='w-max flex ion-align-items-center'>
-						<ZUserAvatarInfo className='w-[24px!important] h-[24px!important]' />
+						<ZUserAvatarButton className='w-[24px!important] h-[24px!important]' />
 
 						<div className='ms-2'>
 							<ZIonText className='text-sm' color='medium'>
@@ -60,7 +60,7 @@ const ZWorkspaceCommentBox: React.FC<{
 			{showCommentBox && (
 				<ZIonCol size='12' className='ms-auto text-sm leading-6 py-0'>
 					<div className='w-full flex ion-align-items-center'>
-						<ZUserAvatarInfo className='w-[24px!important] h-[24px!important]' />
+						<ZUserAvatarButton className='w-[24px!important] h-[24px!important]' />
 
 						<div className='ms-auto flex'>
 							<ZIonText className='text-sm flex ion-align-items-center'>

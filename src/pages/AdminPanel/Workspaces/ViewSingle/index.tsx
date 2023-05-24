@@ -33,7 +33,7 @@ import { Formik } from 'formik';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import ZaionsIonPage from '@/components/ZaionsIonPage';
 import {
 	ZIonButton,
@@ -337,7 +337,7 @@ const ViewSingleWorkspace: React.FC = () => {
 												/>
 											</ZIonButton>
 
-											<ZUserAvatarInfo
+											<ZUserAvatarButton
 												style={{ height: '40px', width: '40px' }}
 												onClick={(event: unknown) => {
 													presentWorkspaceProfilePopover({
@@ -360,7 +360,7 @@ const ViewSingleWorkspace: React.FC = () => {
 										{/* Users buttons */}
 										<ZIonCol
 											className={classNames({
-												'pb-0': true,
+												'pb-0 flex ion-align-items-center': true,
 												'mb-2': !isXlScale,
 											})}
 											sizeXl='2.5'
@@ -369,22 +369,22 @@ const ViewSingleWorkspace: React.FC = () => {
 											sizeSm='6'
 											sizeXs='12'
 										>
-											<ZUserAvatarInfo
-												className='w-[10px] h-[10px]'
+											<ZUserAvatarButton
+												className='w-[35px!important] h-[35px!important]'
 												userAvatar={ProductLogo}
-												style={{ height: '35px', width: '35px' }}
 												onClick={() => {
 													presentWorkspaceSharingModal({
 														_cssClass: 'workspace-sharing-modal-size',
 													});
 												}}
+												showStatus={true}
+												active
 											/>
 
 											{/* add user button */}
-											<ZUserAvatarInfo
-												className='ms-2'
+											<ZUserAvatarButton
+												className='ms-2 w-[35px!important] h-[35px!important]'
 												userAvatar={addIcon}
-												style={{ height: '35px', width: '35px' }}
 												onClick={() => {
 													presentWorkspaceSharingModal({
 														_cssClass: 'workspace-sharing-modal-size',

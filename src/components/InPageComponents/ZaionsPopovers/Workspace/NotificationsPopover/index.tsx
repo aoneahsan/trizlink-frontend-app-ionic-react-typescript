@@ -3,7 +3,7 @@
  * ? Like Import of React is a Core Import
  * */
 import { ProductLogo } from '@/assets/images';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import {
 	ZIonAvatar,
 	ZIonButton,
@@ -174,7 +174,7 @@ const UpdatesTab = () => {
 			>
 				<ZIonRow className='ion-align-items-start w-full'>
 					<ZIonCol size='max-content'>
-						<ZUserAvatarInfo
+						<ZUserAvatarButton
 							className='w-[10px] h-[10px] me-1'
 							userAvatar={ProductLogo}
 							style={{ height: '39px', width: '39px' }}

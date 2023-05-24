@@ -13,11 +13,17 @@ import {
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
-const ZWorkspaceSingleComment: React.FC = () => {
+const ZWorkspaceSingleComment: React.FC<{
+	avatarWidth?: string;
+	avatarHeight?: string;
+}> = ({ avatarHeight, avatarWidth }) => {
 	const { isLgScale } = useZMediaQueryScale();
+
+	const _avatarWidth = avatarWidth?.trim().length && avatarWidth;
+	const _avatarHeight = avatarHeight?.trim().length && avatarHeight;
 
 	return (
 		<ZIonRow className='border rounded border-transparent hover:border-slate-200'>
@@ -29,9 +35,14 @@ const ZWorkspaceSingleComment: React.FC = () => {
 						'w-[50%]': !isLgScale,
 					})}
 				>
-					<ZUserAvatarInfo className='w-[24px!important] h-[24px!important]' />
+					<ZUserAvatarButton
+						className={classNames(_avatarWidth, _avatarHeight, {
+							'w-[24px!important]': !avatarWidth?.trim().length,
+							'h-[24px!important]': !avatarHeight?.trim().length,
+						})}
+					/>
 					<div className='ms-2'>
-						<ZIonText className='font-bold text-sm'>You</ZIonText>
+						<ZIonText className='fo nt-bold text-sm'>You</ZIonText>
 						<ZIonText className='text-sm ms-2' color='medium'>
 							. May 16
 						</ZIonText>
@@ -48,7 +59,8 @@ const ZWorkspaceSingleComment: React.FC = () => {
 					<ZIonButton
 						size='small'
 						className='mx-1 ion-no-padding'
-						fill='default'
+						fill='clear'
+						color='dark'
 					>
 						<ZIonIcon icon={createOutline} />
 					</ZIonButton>
@@ -56,7 +68,8 @@ const ZWorkspaceSingleComment: React.FC = () => {
 					<ZIonButton
 						size='small'
 						className='mx-1 ion-no-padding'
-						fill='default'
+						fill='clear'
+						color='dark'
 					>
 						<ZIonIcon icon={happyOutline} />
 					</ZIonButton>
@@ -64,7 +77,8 @@ const ZWorkspaceSingleComment: React.FC = () => {
 					<ZIonButton
 						size='small'
 						className='mx-1 ion-no-padding'
-						fill='default'
+						fill='clear'
+						color='dark'
 					>
 						<ZIonIcon icon={ellipseOutline} />
 					</ZIonButton>

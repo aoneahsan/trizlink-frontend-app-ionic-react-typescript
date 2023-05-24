@@ -19,7 +19,7 @@ import {
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import { ProductLogo } from '@/assets/images';
 
 /**
@@ -73,7 +73,7 @@ const ZUserInfoPopover: React.FC<ZUserInfoPopoverInterface> = ({
 		<ZIonRow className='px-2 ion-align-items-center my-2'>
 			{/* User avatar col */}
 			<ZIonCol size='max-content'>
-				<ZUserAvatarInfo
+				<ZUserAvatarButton
 					className='zaions__w50px zaions__h50px'
 					userAvatar={ProductLogo}
 				/>

@@ -29,7 +29,7 @@ import classNames from 'classnames';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import {
 	ZIonButton,
 	ZIonButtons,
@@ -123,7 +123,7 @@ const ZWorkspacePostDetailModal: React.FC = () => {
 										)}
 
 										<div className=''>
-											<ZUserAvatarInfo className='w-[24px!important] h-[24px!important]' />
+											<ZUserAvatarButton className='w-[24px!important] h-[24px!important]' />
 										</div>
 									</ZIonCol>
 
@@ -249,7 +249,7 @@ const ZWorkspacePostDetailModal: React.FC = () => {
 										className='h-[650px]'
 									>
 										{values.modalTab === workspacePostDetailTabEnum.desktop && (
-											<CardView />
+											<CardView type={workspacePostDetailTabEnum.desktop} />
 										)}
 
 										{values.modalTab === workspacePostDetailTabEnum.mobile && (
@@ -329,14 +329,16 @@ const ZWorkspacePostDetailModal: React.FC = () => {
 													{/*  */}
 													<div className='flex ion-align-items-center'>
 														<ZIonButton
-															fill='default'
+															fill='clear'
+															color='dark'
 															className='ion-no-padding ion-no-margin me-2'
 														>
 															<ZIonIcon icon={searchOutline} />
 														</ZIonButton>
 
 														<ZIonButton
-															fill='default'
+															fill='clear'
+															color='dark'
 															className='text-xs ion-no-padding ion-no-margin text-transform-initial'
 														>
 															Show resolved
@@ -355,7 +357,10 @@ const ZWorkspacePostDetailModal: React.FC = () => {
 												</div>
 
 												<div className='h-full px-2 py-1 mt-5'>
-													<ZWorkspaceSingleComment />
+													<ZWorkspaceSingleComment
+														avatarWidth='w-[40px!important]'
+														avatarHeight='h-[31px!important]'
+													/>
 												</div>
 											</div>
 										</ZIonCol>
@@ -441,7 +446,13 @@ const CardView: React.FC<{
 		>
 			<ZIonCardContent>
 				<div className='flex ion-align-items-center'>
-					<ZUserAvatarInfo
+					{/* <ZUserAvatarButton
+						className={classNames({
+							'w-[30px!important] h-[30px!important]':
+								type === workspacePostDetailTabEnum.mobile,
+						})}
+					/> */}
+					<ZUserAvatarButton
 						className={classNames({
 							'w-[30px!important] h-[30px!important]':
 								type === workspacePostDetailTabEnum.mobile,

@@ -30,7 +30,7 @@ import {
 	ZIonPopover,
 	ZIonRow,
 } from '@/components/ZIonComponents';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import ZWorkspaceFormRoleSelectorPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/RoleSelectorPopover';
 import ZWorkspaceFooterSteps from '@/components/WorkspacesComponents/FooterSteps';
 import ZInviteClientsPermissionPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/InviteClientPermissionPopover';
@@ -161,7 +161,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 														sizeSm='2'
 														sizeXs='2'
 													>
-														<ZUserAvatarInfo
+														<ZUserAvatarButton
 															userAvatar={el.avatar && el.avatar}
 														/>
 													</ZIonCol>

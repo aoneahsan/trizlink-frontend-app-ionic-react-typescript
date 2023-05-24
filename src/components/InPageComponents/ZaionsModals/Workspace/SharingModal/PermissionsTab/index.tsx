@@ -23,7 +23,7 @@ import {
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import { ProductLogo } from '@/assets/images';
 import {
 	checkmarkOutline,
@@ -145,7 +145,7 @@ const ZPermissionsTab: React.FC = () => {
 					className='flex ion-align-items-center'
 				>
 					{isSmScale && (
-						<ZUserAvatarInfo
+						<ZUserAvatarButton
 							className={classNames({
 								'w-[10px] h-[10px]': true,
 								'me-3': isLgScale,

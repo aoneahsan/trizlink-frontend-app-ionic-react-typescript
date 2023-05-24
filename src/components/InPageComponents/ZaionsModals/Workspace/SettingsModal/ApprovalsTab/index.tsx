@@ -22,7 +22,7 @@ import {
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import ZWorkspaceApprovalCards from '@/components/WorkspacesComponents/ApprovalCards';
 import ZWorkspaceApprovalToggler from '@/components/WorkspacesComponents/ApprovalToggler';
@@ -85,7 +85,7 @@ const ZApprovalTab: React.FC = () => {
 							className='flex ion-align-items-center gap-2 ps-0'
 							size='10'
 						>
-							<ZUserAvatarInfo />
+							<ZUserAvatarButton />
 							<div>
 								<ZIonText className='flex ion-align-items-center gap-1'>
 									Muhammad talha Irshad (you) <ZIonBadge>Team</ZIonBadge>

@@ -11,26 +11,18 @@ import React from 'react';
 import classNames from 'classnames';
 import { Formik } from 'formik';
 import {
-	addOutline,
 	checkmark,
-	createOutline,
-	ellipseOutline,
 	ellipsisHorizontalOutline,
 	gridOutline,
-	happyOutline,
 	menuOutline,
-	notificationsOutline,
 	openOutline,
 	pencil,
-	star,
 } from 'ionicons/icons';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
-import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import ZWorkspacePostDetailModal from '@/components/InPageComponents/ZaionsModals/Workspace/PostDetail';
 import ZWorkspacePostActionsPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/PostActionsPopover';
 import {
@@ -41,10 +33,8 @@ import {
 	ZIonGrid,
 	ZIonIcon,
 	ZIonImg,
-	ZIonItem,
 	ZIonRow,
 	ZIonText,
-	ZIonTextarea,
 } from '@/components/ZIonComponents';
 
 /**
@@ -63,7 +53,10 @@ import { getPlatformIcon } from '@/utils/helpers';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { workspaceFormConnectPagesEnum } from '@/types/AdminPanel/workspace';
+import {
+	workspaceFormConnectPagesEnum,
+	workspacePostDetailTabEnum,
+} from '@/types/AdminPanel/workspace';
 
 /**
  * Recoil State Imports go down
@@ -86,6 +79,9 @@ import {
 	ProductLogo,
 	thumbnailIcon,
 } from '@/assets/images';
+import ZWorkspaceSingleComment from '@/components/WorkspacesComponents/SingleComment';
+import ZWorkspaceCommentBox from '@/components/WorkspacesComponents/CommentBox';
+import ZWorkspaceSinglePost from '../SinglePost';
 
 /**
  * Component props type go down
@@ -157,13 +153,13 @@ const ZWorkspacePostsLayout: React.FC<{
 									</ZIonButton>
 								</ZIonCol>
 
-								{/* Post message box */}
+								{/* Posts col */}
 								<ZIonCol
 									size='6'
 									className={classNames({
-										'zaions__bg_white rounded px-2 py-1': true,
+										'zaions__bg_white rounded ': true,
 
-										// Checking if the pageType is one of this type blow then show border in post.
+										// Checking if the pageType is one of this type blow then show border in post. px-2 py-1
 										border:
 											pageType &&
 											[
@@ -186,8 +182,8 @@ const ZWorkspacePostsLayout: React.FC<{
 									})}
 								>
 									{/* Top bar. avatar, name & View post activity button & post action popover button */}
-									<ZIonRow className='ion-align-items-start'>
-										<ZIonCol
+									{/* <ZIonRow className='ion-align-items-start'> */}
+									{/* <ZIonCol
 											className={classNames({
 												flex: true,
 												'ion-align-items-center':
@@ -250,12 +246,12 @@ const ZWorkspacePostsLayout: React.FC<{
 													})}
 												>
 													Zaions
-													{/* If pageType is tiktok then show this Badge */}
+													{/* If pageType is tiktok then show this Badge * /}
 													{pageType ===
 														workspaceFormConnectPagesEnum.tiktok && (
 														<ZIonBadge color='light'>tiktok</ZIonBadge>
 													)}
-													{/* If pageType is twitter then show this text */}
+													{/* If pageType is twitter then show this text * /}
 													{pageType ===
 														workspaceFormConnectPagesEnum.twitter && (
 														<ZIonText color='medium' className='ms-1 text-sm'>
@@ -289,9 +285,9 @@ const ZWorkspacePostsLayout: React.FC<{
 													Select data & time
 												</ZIonText>
 											</div>
-										</ZIonCol>
+										</ZIonCol> */}
 
-										<ZIonCol className='ion-text-end'>
+									{/* <ZIonCol className='ion-text-end'>
 											<ZIonButton
 												fill='default'
 												className='ion-no-padding ion-no-margin me-2'
@@ -304,7 +300,7 @@ const ZWorkspacePostsLayout: React.FC<{
 												<ZIonIcon icon={openOutline} />
 											</ZIonButton>
 
-											{/*  */}
+											{/*  * /}
 											<ZIonButton
 												fill='default'
 												className='ion-no-padding ion-no-margin'
@@ -319,11 +315,11 @@ const ZWorkspacePostsLayout: React.FC<{
 											>
 												<ZIonIcon icon={ellipsisHorizontalOutline} />
 											</ZIonButton>
-										</ZIonCol>
-									</ZIonRow>
+										</ZIonCol> */}
+									{/* </ZIonRow> */}
 
 									{/* Message */}
-									<ZIonRow
+									{/* <ZIonRow
 										className={classNames({
 											'w-[90%] ms-auto':
 												pageType === workspaceFormConnectPagesEnum.tiktok ||
@@ -354,10 +350,10 @@ const ZWorkspacePostsLayout: React.FC<{
 												brands for sponsored posts.
 											</ZIonText>
 										</ZIonCol>
-									</ZIonRow>
+									</ZIonRow> */}
 
 									{/* Rewrite with AI & Continue buttons */}
-									<ZIonRow>
+									{/* <ZIonRow>
 										<ZIonCol size='12'>
 											<ZIonButton
 												className='text-transform-initial'
@@ -392,208 +388,37 @@ const ZWorkspacePostsLayout: React.FC<{
 												</ZIonButton>
 											</ZIonButtons>
 										</ZIonCol>
-									</ZIonRow>
+									</ZIonRow> */}
+									<ZWorkspaceSinglePost
+										className='shadow-none m-0'
+										type={workspacePostDetailTabEnum.desktop}
+										pageType={pageType}
+									/>
 								</ZIonCol>
 
-								{/*  */}
+								{/* Comments col */}
 								<ZIonCol
 									size='5.2'
 									className='zaions__bg_white rounded border ion-no-padding ms-auto zaions_comment_box relative max-h-[412px] h-auto min-h-[150px]'
 								>
 									<div className='h-full relative'>
+										{/* comment box pointer */}
 										<div className='absolute bg-white h-[10px] left-[-5px] top-[16px] w-[10px] rotate-45'></div>
+
 										<div className='overflow-y-scroll h-full  px-2 py-1 zaions_pretty_scrollbar'>
 											{/* Single comment */}
 											{[1].map((el) => (
-												<ZIonRow
-													className='border rounded border-transparent hover:border-slate-200'
-													key={el}
-												>
-													<ZIonCol
-														size='12'
-														className='flex ion-align-items-center py-0'
-													>
-														<div className='w-max flex ion-align-items-center'>
-															<ZUserAvatarInfo className='w-[24px!important] h-[24px!important]' />
-															<div className='ms-2'>
-																<ZIonText className='font-bold text-sm'>
-																	You
-																</ZIonText>
-																<ZIonText
-																	className='text-sm ms-2'
-																	color='medium'
-																>
-																	. May 16
-																</ZIonText>
-															</div>
-														</div>
-
-														<div className='w-[70%] flex ion-justify-content-end'>
-															<ZIonButton
-																size='small'
-																className='mx-1 ion-no-padding'
-																fill='default'
-															>
-																<ZIonIcon icon={createOutline} />
-															</ZIonButton>
-
-															<ZIonButton
-																size='small'
-																className='mx-1 ion-no-padding'
-																fill='default'
-															>
-																<ZIonIcon icon={happyOutline} />
-															</ZIonButton>
-
-															<ZIonButton
-																size='small'
-																className='mx-1 ion-no-padding'
-																fill='default'
-															>
-																<ZIonIcon icon={ellipseOutline} />
-															</ZIonButton>
-														</div>
-													</ZIonCol>
-
-													<ZIonCol
-														size='11'
-														className='ms-auto text-sm leading-6 py-0'
-													>
-														<ZIonText>
-															Hey there! I just wanted to say that I really
-															enjoyed your post. Your perspective on the topic
-															was really insightful and I learned a lot from
-															reading it. I also appreciate the way you
-															presented your ideas in a clear and concise
-															manner. It's always refreshing to see someone who
-															can communicate complex ideas in a way that is
-															easy to understand. Keep up the great work and I
-															look forward to reading more of your posts in the
-															future!
-														</ZIonText>
-
-														<div className='mt-4'>
-															<ZIonButton
-																fill='clear'
-																className='ion-no-padding ion-no-margin text-transform-initial text-xs'
-																color='medium'
-																size='small'
-															>
-																Replay
-															</ZIonButton>
-														</div>
-													</ZIonCol>
-												</ZIonRow>
+												<ZWorkspaceSingleComment key={el} />
 											))}
 
-											<ZIonRow className='border-t rounded px-2 py-1 bg-white sticky bottom-0'>
-												{/* absolute w-full bottom-0 start-0 */}
-												{!values.showCommentBox && (
-													<ZIonCol
-														size='12'
-														className='flex ion-align-items-center py-0'
-														onClick={() => {
-															setFieldValue('showCommentBox', true, false);
-														}}
-													>
-														<div className='w-max flex ion-align-items-center'>
-															<ZUserAvatarInfo className='w-[24px!important] h-[24px!important]' />
-
-															<div className='ms-2'>
-																<ZIonText className='text-sm' color='medium'>
-																	Comments...
-																</ZIonText>
-															</div>
-														</div>
-
-														<div className='w-[70%] flex ion-justify-content-end'></div>
-													</ZIonCol>
-												)}
-
-												{values.showCommentBox && (
-													<ZIonCol
-														size='12'
-														className='ms-auto text-sm leading-6 py-0'
-													>
-														<div className='w-full flex ion-align-items-center'>
-															<ZUserAvatarInfo className='w-[24px!important] h-[24px!important]' />
-
-															<div className='ms-auto flex'>
-																<ZIonText className='text-sm flex ion-align-items-center'>
-																	Internal note
-																	<ZIonIcon
-																		icon={star}
-																		color='secondary'
-																		className='ms-2 me-3 pb-[2px]'
-																	/>
-																</ZIonText>
-																<ZRCSwitch />
-															</div>
-														</div>
-
-														<div className='w-full mt-2'>
-															<ZIonItem
-																lines='full'
-																color='light'
-																className='rounded'
-															>
-																<ZIonTextarea
-																	label='Comments...'
-																	labelPlacement='floating'
-																	autoGrow={true}
-																	color='medium'
-																/>
-															</ZIonItem>
-														</div>
-
-														<div className='w-full mt-2 flex ion-justify-content-between'>
-															<div className='flex ion-align-items-center'>
-																<ZIonText className='flex ion-align-items-center'>
-																	<ZIonIcon
-																		icon={notificationsOutline}
-																		className='me-1'
-																	/>
-																	Notify 0 users
-																</ZIonText>
-
-																<ZIonButton
-																	fill='default'
-																	className='ion-no-padding ms-2'
-																>
-																	<ZIonIcon icon={addOutline} />
-																</ZIonButton>
-															</div>
-
-															<ZIonButtons>
-																<ZIonButton
-																	className='text-transform-initial'
-																	onClick={() => {
-																		setFieldValue(
-																			'showCommentBox',
-																			false,
-																			false
-																		);
-																	}}
-																>
-																	Cancel
-																</ZIonButton>
-																<ZIonButton
-																	className='text-transform-initial'
-																	fill='outline'
-																	color='medium'
-																>
-																	Post
-																</ZIonButton>
-															</ZIonButtons>
-														</div>
-													</ZIonCol>
-												)}
-											</ZIonRow>
+											{/* Comment box */}
+											<ZWorkspaceCommentBox className='border-t rounded px-2 py-2 sticky mt-2 bottom-0' />
 										</div>
 									</div>
 								</ZIonCol>
 							</ZIonRow>
 
+							{/* end col */}
 							<ZIonRow>
 								<ZIonCol className='ion-text-center py-14'>
 									<ZIonText color='medium' className='text-sm'>

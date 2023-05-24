@@ -15,6 +15,10 @@ type ZIonAvatarType = {
 	color?: ZIonColorType;
 	mode?: ZIonModeType;
 	slot?: 'start' | 'end';
+
+	onClick?: React.MouseEventHandler<HTMLIonAvatarElement>;
+	onMouseEnter?: React.MouseEventHandler<HTMLIonAvatarElement>;
+	onMouseLeave?: React.MouseEventHandler<HTMLIonAvatarElement>;
 };
 
 const ZIonAvatar = (props: ZIonAvatarType) => {

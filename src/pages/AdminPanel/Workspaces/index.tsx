@@ -33,7 +33,7 @@ import AdminPanelMainSidebarMenu from '@/components/AdminPanelComponents/Sidebar
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 import ZUserInfoPopover from '@/components/InPageComponents/ZaionsPopovers/UserInfoPopover';
 import ZWorkspacesCard from '@/components/WorkspacesComponents/ListCard';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import ZAddNewWorkspaceModal from '@/components/InPageComponents/ZaionsModals/Workspace/CreateModal';
 
 /**

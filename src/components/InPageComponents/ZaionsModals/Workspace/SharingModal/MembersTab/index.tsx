@@ -22,7 +22,7 @@ import {
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import ZUserAvatarInfo from '@/components/WorkspacesComponents/UserButton';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import { ProductLogo } from '@/assets/images';
 import { ellipsisHorizontalOutline } from 'ionicons/icons';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
@@ -95,7 +95,7 @@ const ZMembersTab: React.FC = () => {
 					className='flex ion-align-items-center'
 				>
 					{isSmScale && (
-						<ZUserAvatarInfo
+						<ZUserAvatarButton
 							className='w-[10px] h-[10px] me-3'
 							userAvatar={ProductLogo}
 							style={{ height: '35px', width: '35px' }}

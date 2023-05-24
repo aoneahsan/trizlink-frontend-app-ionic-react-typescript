@@ -117,6 +117,8 @@ import noScript from './svg/no_script.svg';
 
 import noToken from './svg/no-token.svg';
 
+import avatar from './svg/avatar.svg';
+
 import privacy from './svg/privacy.svg';
 
 import newYorkTimes from './svg/new-york-times.svg';
@@ -827,6 +829,7 @@ export {
 	gifIcon,
 	mediaIcon,
 	thumbnailIcon,
+	avatar,
 	libMobile,
 	reportingLinkManagement,
 	lmLinkManagement,
