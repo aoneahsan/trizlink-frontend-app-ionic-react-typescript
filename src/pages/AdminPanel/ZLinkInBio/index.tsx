@@ -108,7 +108,7 @@ const ZLinkInBio: React.FC = () => {
 										className={classNames({
 											zaions__w35: isMdScale,
 											zaions__w60: !isMdScale && isSmScale,
-											w-full: !isSmScale,
+											'w-full': !isSmScale,
 										})}
 									/>
 									<ZIonTitle className='text-3xl font-bold mb-2 mt-4'>

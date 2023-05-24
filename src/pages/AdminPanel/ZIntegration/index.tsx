@@ -73,7 +73,7 @@ import {
 
 /**
  * Component props type go down
- * ? Like if you have a type for props it should be pleace Down
+ * ? Like if you have a type for props it should be please Down
  * */
 
 /**
@@ -146,7 +146,7 @@ const ZIntegration: React.FC = () => {
 												<ZIonText>
 													<h2
 														className={classNames({
-															font-black: true,
+															'font-black': true,
 															'ion-text-center': !isMdScale,
 														})}
 													>
@@ -167,7 +167,7 @@ const ZIntegration: React.FC = () => {
 												<ZIonText>
 													<h4
 														className={classNames({
-															font-black: true,
+															'font-black': true,
 															'ion-text-center': !isMdScale,
 															'pb-3': isMdScale,
 														})}
@@ -222,9 +222,7 @@ const ZIntegration: React.FC = () => {
 												})}
 											>
 												<ZIonText>
-													<h4 className='font-black pb-3'>
-														App connections
-													</h4>
+													<h4 className='font-black pb-3'>App connections</h4>
 												</ZIonText>
 												<ZIonText>
 													Third-party integrations that you've connected to{' '}

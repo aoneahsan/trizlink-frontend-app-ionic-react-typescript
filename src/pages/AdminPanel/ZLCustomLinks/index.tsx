@@ -107,7 +107,7 @@ const ZCustomLinks: React.FC = () => {
 										className={classNames({
 											zaions__w43: isMdScale,
 											zaions__w60: !isMdScale && isSmScale,
-											w-full: !isSmScale,
+											'w-full': !isSmScale,
 										})}
 										alt='Link in bio Inactive state'
 									/>
@@ -122,7 +122,9 @@ const ZCustomLinks: React.FC = () => {
 										className='ion-text-capitalize mt-4'
 										routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
 									>
-										<ZIonText className='px-4 font-bold'>View our plans</ZIonText>
+										<ZIonText className='px-4 font-bold'>
+											View our plans
+										</ZIonText>
 									</ZIonButton>
 									<ZIonButton fill='clear' className='mt-3 ion-text-capitalize'>
 										Learn more

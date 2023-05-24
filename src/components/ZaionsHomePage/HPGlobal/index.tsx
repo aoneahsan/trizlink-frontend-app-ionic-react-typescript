@@ -7,7 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
 import {
 	ZIonCol,
 	ZIonText,

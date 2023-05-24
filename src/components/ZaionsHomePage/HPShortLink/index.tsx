@@ -5,7 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
 import {
 	ZIonCol,
 	ZIonText,
@@ -89,16 +89,6 @@ const ZaionsHPShortLink: React.FC = () => {
 							sizeXs='12'
 							className='ion-margin-end'
 						>
-							{/* <Form.Group
-                className='mb-1 input-group-lg'
-                controlId='formBasicLinkShorten'
-              >
-                <Form.Control
-                  type='text'
-                  placeholder='Shorten your link'
-                  style={{ padding: '0.9rem 1rem' }}
-                />
-              </Form.Group> */}
 							<ZIonInput
 								label='Shorten your link'
 								labelPlacement='floating'

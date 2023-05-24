@@ -81,11 +81,12 @@ const InPageFooter: React.FC<{
 						<div className='py-3' style={{ background: '#0b1736' }}>
 							<div className='ion-text-center ion-margin-top ion-padding-bottom py-5 flex ion-justify-content-center ion-align-items-center flex-col'>
 								<br />
-								<ZIonText color='light'>
+								<ZIonText color='light' className='text-2xl'>
 									{title === '' || title === null || title === undefined
 										? 'Get closer to your audience and customers today'
 										: title}
 								</ZIonText>
+
 								{/*  */}
 								<ZIonButton
 									size='large'

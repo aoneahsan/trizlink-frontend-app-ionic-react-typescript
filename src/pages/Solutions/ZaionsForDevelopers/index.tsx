@@ -13,7 +13,7 @@ import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader
 import ZaionsHPBrandList from '@/components/ZaionsHomePage/HPBrandList';
 import ZaionsInpageCol from '@/components/InPageComponents/ZaionsInpageGridsys';
 import InPageFooter from '@/components/InPageFooter';
-import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
 import Zaions4By4GridSystem from '@/components/InPageComponents/Zaions4By4GridSystem';
 
 import {

@@ -130,7 +130,7 @@ const ZCSVBulkShortning: React.FC = () => {
 												className={classNames({
 													zaions__w43: isMdScale,
 													zaions__w60: !isMdScale && isSmScale,
-													w-full: !isSmScale,
+													'w-full': !isSmScale,
 												})}
 												alt='bulk upload Inactive state'
 											/>

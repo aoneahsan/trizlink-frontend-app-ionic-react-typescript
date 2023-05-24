@@ -4,7 +4,7 @@ import React from 'react';
 // Packages Imports
 
 // Custom Imports
-import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
 import {
 	ZIonCol,
 	ZIonText,

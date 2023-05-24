@@ -3,7 +3,6 @@ import { Fragment, useLayoutEffect } from 'react';
 
 // Packages Imports
 import { useRecoilState } from 'recoil';
-import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
@@ -22,11 +21,11 @@ import { ZaionsHPBrandsType } from '@/types/ZionsHPBrandType';
 import { ZaionsHPBrandsData } from '@/ZaionsStore/ZaionsHPBrandsRecoil';
 
 // Global Constant
-import { BRACKPOINT_MD } from '@/utils/constants';
 
 // Data
 import HPBrandData from '@/data/HPBrandListData';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 const ZaionsInpageBrandsList: React.FC<{
 	title?: string;
@@ -34,11 +33,16 @@ const ZaionsInpageBrandsList: React.FC<{
 }> = (props) => {
 	const [loadedHPBrandsData, setLoadedHPBrandsData] =
 		useRecoilState<ZaionsHPBrandsType[]>(ZaionsHPBrandsData);
-	const isSMSclae = useMediaQuery({ query: `(max-width: ${BRACKPOINT_MD})` });
-	const ZaionsCarousel = isSMSclae ? Swiper : Fragment;
-	const ZaionsCarouselItem = isSMSclae ? SwiperSlide : Fragment;
+
+	const { isLgScale } = useZMediaQueryScale();
+
+	//
+	const ZaionsCarousel = !isLgScale ? Swiper : Fragment;
+	const ZaionsCarouselItem = !isLgScale ? SwiperSlide : Fragment;
+
+	//
 	useLayoutEffect(() => {
-		// Featch Data From Database Later:-
+		// Fetch Data From Database Later:-
 		setLoadedHPBrandsData(HPBrandData);
 	}, [setLoadedHPBrandsData]);
 
@@ -57,7 +61,13 @@ const ZaionsInpageBrandsList: React.FC<{
 			<div className='ion-padding-vertical'>
 				<ZIonGrid>
 					<ZIonRow className='ion-justify-content-center'>
-						<ZaionsCarousel>
+						<ZaionsCarousel
+							spaceBetween={0}
+							slidesPerView={1}
+							onSlideChange={() => {}}
+							onSwiper={(_) => {}}
+							style={{ width: '100%' }}
+						>
 							{loadedHPBrandsData.map((item) => (
 								<ZaionsCarouselItem key={item.id}>
 									<ZIonCol
@@ -68,7 +78,12 @@ const ZaionsInpageBrandsList: React.FC<{
 										sizeXs='12'
 										key={item.id}
 									>
-										<ZIonImg src={item.image} alt='' />
+										<ZIonImg
+											src={item.image}
+											className={classNames({
+												'w-[60%]': !isLgScale,
+											})}
+										/>
 									</ZIonCol>
 								</ZaionsCarouselItem>
 							))}

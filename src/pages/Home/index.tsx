@@ -28,7 +28,7 @@ const Home: React.FC = () => {
 				{/* <ZaionsHPShortLink /> */}
 				<ZaionsHPConnectPlatform />
 				<ZaionsHPGlobal />
-				{/* <ZaionsHPUsersFeedBack /> */}
+				<ZaionsHPUsersFeedBack />
 				<ZaionsHPBrandList />
 				<ZaionsHPFAQuestions />
 				{/* Page Footer */}

@@ -11,7 +11,7 @@ import ZaionsTopMenu from '@/navigation/TopMenu';
 import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
 import ZaionsInpageCol from '@/components/InPageComponents/ZaionsInpageGridsys';
 import InPageFooter from '@/components/InPageFooter';
-import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
 
 import {
 	ZIonCol,

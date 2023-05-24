@@ -131,7 +131,7 @@ const ZCustomdomain: React.FC = () => {
 												className={classNames({
 													zaions__w43: isMdScale,
 													zaions__w60: !isMdScale && isSmScale,
-													w-full: !isSmScale,
+													'w-full': !isSmScale,
 												})}
 												alt='Link in bio Inactive state'
 											/>

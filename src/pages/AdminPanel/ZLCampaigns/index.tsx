@@ -112,7 +112,7 @@ const ZLinkCampaigns: React.FC = () => {
 										className={classNames({
 											zaions__w43: isMdScale,
 											zaions__w60: !isMdScale && isSmScale,
-											w-full: !isSmScale,
+											'w-full': !isSmScale,
 										})}
 									/>
 									<ZIonTitle className='text-3xl font-bold mb-2 mt-4'>
@@ -127,7 +127,9 @@ const ZLinkCampaigns: React.FC = () => {
 										className='ion-text-capitalize mt-4'
 										routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
 									>
-										<ZIonText className='px-4 font-bold'>view our plans</ZIonText>
+										<ZIonText className='px-4 font-bold'>
+											view our plans
+										</ZIonText>
 									</ZIonButton>
 									<ZIonButton fill='clear' className='mt-3 ion-text-capitalize'>
 										Learn more

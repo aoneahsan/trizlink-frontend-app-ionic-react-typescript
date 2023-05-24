@@ -8,7 +8,7 @@ import { useRecoilState } from 'recoil';
 import ZaionsIonPage from '@/components/ZaionsIonPage';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsTopMenu from '@/navigation/TopMenu';
-import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
 import ZaionsFeatureBanner from '@/components/InPageComponents/ZaionsFeatureBanner';
 import ZaionsCard from '@/components/InPageComponents/ZaionsCol';
 

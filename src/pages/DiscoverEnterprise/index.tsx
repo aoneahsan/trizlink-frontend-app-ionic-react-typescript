@@ -2,18 +2,20 @@
 import React, { Fragment, useLayoutEffect } from 'react';
 
 // Packages Imports
-import { Button, Carousel, CarouselItem, Form } from 'react-bootstrap';
 
 import { useMediaQuery } from 'react-responsive';
 import { useRecoilState } from 'recoil';
 
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { checkmarkSharp } from 'ionicons/icons';
+import classNames from 'classnames';
+
 // Custom Imports
 import ZaionsIonPage from '@/components/ZaionsIonPage';
-import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
 import {
 	ZIonCol,
 	ZIonText,
-	ZIonRouterLink,
 	ZIonItem,
 	ZIonRow,
 	ZIonGrid,
@@ -21,17 +23,31 @@ import {
 	ZIonList,
 	ZIonImg,
 	ZIonIcon,
+	ZIonInput,
+	ZIonSelect,
+	ZIonSelectOption,
+	ZIonRouterLink,
+	ZIonButton,
 } from '@/components/ZIonComponents';
 import ZaionsSecondaryHeader from '@/components/InPageComponents/ZaionsSecondaryHeader';
+import InPageFooter from '@/components/InPageFooter';
 
 // Global Constants
-import { BRACKPOINT_MD, PRODUCT_DOMAIN, PRODUCT_NAME } from '@/utils/constants';
 import {
 	ZaionsDiscoverEnterpriseCompanySize,
 	ZaionsDiscoverEnterpriseCountry,
-	ZaionsDiscoverEnterpriseJobTitle,
 	ZaionsDiscoverEnterprisePrimaryUseCase,
 } from '@/data/DiscoverEnterprise/index.data';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { PRODUCT_DOMAIN, PRODUCT_NAME } from '@/utils/constants';
+// import {
+// 	ZaionsDiscoverEnterpriseCompanySize,
+// 	ZaionsDiscoverEnterpriseCountry,
+// 	ZaionsDiscoverEnterpriseJobTitle,
+// 	ZaionsDiscoverEnterprisePrimaryUseCase,
+// } from '@/data/DiscoverEnterprise/index.data';
+import DEBrandData from '@/data/DiscoverEnterprise.data';
 
 // Types
 import { ZaionsHPBrandsType } from '@/types/ZionsHPBrandType';
@@ -41,17 +57,15 @@ import { ZaionsHPBrandsData } from '@/ZaionsStore/ZaionsHPBrandsRecoil';
 
 // Styles
 import classes from './styles.module.css';
-import DEBrandData from '@/data/DiscoverEnterprise.data';
-import { checkmarkSharp } from 'ionicons/icons';
-import InPageFooter from '@/components/InPageFooter';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 const ZaionsDiscoverEnterprise: React.FC = () => {
 	const [loadedHPBrandsData, setLoadedHPBrandsData] =
 		useRecoilState<ZaionsHPBrandsType[]>(ZaionsHPBrandsData);
-	const isSMSclae = useMediaQuery({ query: `(max-width: ${BRACKPOINT_MD})` });
-	const ZaionsCarousel = isSMSclae ? Carousel : Fragment;
-	const ZaionsCarouselItem = isSMSclae ? CarouselItem : Fragment;
+
+	const { isSmScale, isLgScale } = useZMediaQueryScale();
+
+	const ZaionsCarousel = !isLgScale ? Swiper : Fragment;
+	const ZaionsCarouselItem = !isLgScale ? SwiperSlide : Fragment;
 
 	useLayoutEffect(() => {
 		// Fetch Data From Database Later:-
@@ -64,16 +78,14 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 				<ZaionsSecondaryHeader bottomHr={false} />
 
 				<ZIonGrid
-					className={`mt-5 pt-5 mb-5 ${classes.zaions__discover_enterpise_bg}`}
+					className={`mt-5 mb-5 ${classes.zaions__discover_enterpise_bg}`}
 				>
 					<ZIonRow className='mt-3 mb-4'>
 						<ZIonCol className='text-center'>
-							<ZIonText>
-								<h2 className='font-extrabold zaions__color_dark'>
-									Discover the {PRODUCT_NAME} solution that’s right for you
-								</h2>
+							<ZIonText className='font-extrabold zaions__color_dark text-xl block'>
+								Discover the {PRODUCT_NAME} solution that’s right for you
 							</ZIonText>
-							<ZIonText className='text-lg zaions__color_gray2 mb-2'>
+							<ZIonText className='text-md mt-2 zaions__color_gray2 mb-2'>
 								{PRODUCT_NAME} helps you build and protect your brand so you can
 								leverage it across your communication <br /> channels to drive
 								powerful business results.
@@ -83,160 +95,133 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 					<ZIonRow>
 						<ZIonCol></ZIonCol>
 						<ZIonCol
-							className='zaions__bg_gray py-3'
+							className='zaions__bg_gray p-3'
 							sizeXl='5'
 							sizeLg='6'
 							sizeMd='6'
 							sizeSm='6.5'
 							sizeXs='11.5'
 						>
-							<ZIonText>
-								<h2 className='font-extrabold text-center pt-4 zaions__color_dark'>
-									Let's get in touch
-								</h2>
+							<ZIonText className='font-extrabold ion-text-center text-xl block pt-4 zaions__color_dark'>
+								Let's get in touch
 							</ZIonText>
-							<Form className='px-4'>
-								<Form.Label>Name*</Form.Label>
-								<div className='mb-3 flex'>
-									<Form.Group className='me-2' controlId='firstName'>
-										<Form.Control type='text' size='lg' required />
-										<Form.Label className='zaions__fs_11'>
-											First Name
-										</Form.Label>
-									</Form.Group>
-									<Form.Group controlId='lastName'>
-										<Form.Control type='email' size='lg' required />
-										<Form.Label className='zaions__fs_11'>Last Name</Form.Label>
-									</Form.Group>
-								</div>
+							{/* name */}
+							<ZIonInput
+								fill='outline'
+								label='Name*'
+								labelPlacement='floating'
+								className='mt-4'
+							/>
 
-								<Form.Group className='mb-3' controlId='companyName'>
-									<Form.Label>Company Name*</Form.Label>
-									<Form.Control type='email' size='lg' />
-								</Form.Group>
+							{/* Company Name* */}
+							<ZIonInput
+								fill='outline'
+								label='Company Name*'
+								labelPlacement='floating'
+								className='mt-5'
+							/>
 
-								<Form.Group className='mb-3' controlId='businessEmailAddress'>
-									<Form.Label>Business Email Address*</Form.Label>
-									<Form.Control type='text' size='lg' />
-								</Form.Group>
+							{/* Email Address */}
+							<ZIonInput
+								fill='outline'
+								label='Email Address*'
+								labelPlacement='floating'
+								className='mt-5'
+								type='email'
+							/>
 
-								<Form.Group className='mb-3' controlId='phoneNumber'>
-									<Form.Label>Phone Number*</Form.Label>
-									<Form.Control type='text' size='lg' />
-								</Form.Group>
+							{/* Phone Number */}
+							<ZIonInput
+								fill='outline'
+								label='Phone Number*'
+								labelPlacement='floating'
+								className='mt-5'
+							/>
 
-								<Form.Group className='mb-3 text-base' controlId='jobTitle'>
-									<Form.Label>Job Title*</Form.Label>
-									<Form.Select
-										id='disabledSelect'
-										size='lg'
-										className='text-base'
-									>
-										<option value=''>&nbsp;</option>
-										{ZaionsDiscoverEnterpriseJobTitle.map((el) => {
-											return (
-												<option value={el} className='text-base'>
-													{el}
-												</option>
-											);
-										})}
-									</Form.Select>
-								</Form.Group>
+							{/* Job Title */}
+							<ZIonInput
+								fill='outline'
+								label='Job Title*'
+								labelPlacement='floating'
+								className='mt-5'
+							/>
 
-								<Form.Group className='mb-3' controlId='companySize'>
-									<Form.Label>Company Size*</Form.Label>
-									<Form.Select
-										id='disabledSelect'
-										size='lg'
-										className='text-base'
-									>
-										<option value=''>&nbsp;</option>
-										{ZaionsDiscoverEnterpriseCompanySize.map((el) => {
-											return (
-												<option value={el} className='text-base'>
-													{el}
-												</option>
-											);
-										})}
-									</Form.Select>
-								</Form.Group>
+							{/* Company Size */}
+							<ZIonSelect
+								fill='outline'
+								label='Company Size*'
+								labelPlacement='floating'
+								className='mt-5'
+								interface='popover'
+							>
+								{ZaionsDiscoverEnterpriseCompanySize.map((el) => {
+									return <ZIonSelectOption value={el}>{el}</ZIonSelectOption>;
+								})}
+							</ZIonSelect>
 
-								<Form.Group className='mb-3' controlId='PrimaryUseCase'>
-									<Form.Label>Primary Use Case*</Form.Label>
-									<Form.Select
-										id='disabledSelect'
-										size='lg'
-										className='text-base'
-									>
-										<option value=''>&nbsp;</option>
-										{ZaionsDiscoverEnterprisePrimaryUseCase.map((el) => {
-											return (
-												<option value={el} className='text-base'>
-													{el}
-												</option>
-											);
-										})}
-									</Form.Select>
-								</Form.Group>
+							{/* Primary Use Case */}
+							<ZIonSelect
+								fill='outline'
+								label='Primary Use Case*'
+								labelPlacement='floating'
+								className='mt-5'
+								interface='popover'
+							>
+								{ZaionsDiscoverEnterprisePrimaryUseCase.map((el) => {
+									return <ZIonSelectOption value={el}>{el}</ZIonSelectOption>;
+								})}
+							</ZIonSelect>
 
-								<Form.Group className='mb-3' controlId='Country'>
-									<Form.Label>Country*</Form.Label>
-									<Form.Select
-										id='disabledSelect'
-										size='lg'
-										className='text-base'
-									>
-										<option value=''>&nbsp;</option>
-										{ZaionsDiscoverEnterpriseCountry.map((el) => {
-											return (
-												<option value={el.value} className='text-base'>
-													{el.label}
-												</option>
-											);
-										})}
-									</Form.Select>
-								</Form.Group>
+							{/* Country */}
+							<ZIonSelect
+								fill='outline'
+								label='Country*'
+								labelPlacement='floating'
+								className='mt-5'
+								interface='popover'
+							>
+								{ZaionsDiscoverEnterpriseCountry.map((el, index) => {
+									return (
+										<ZIonSelectOption value={index}>
+											{el.value}
+										</ZIonSelectOption>
+									);
+								})}
+							</ZIonSelect>
 
-								<Form.Group className='mb-3' controlId='NatureOfIntegration'>
-									<Form.Text className='zaions__fs_11'>
-										By clicking the 'Submit' button below, you agree to the
-										{PRODUCT_NAME}
-										<ZIonRouterLink
-											routerLink={ZaionsRoutes.Legal.ZaionsTermsOfService}
-										>
-											Terms of Service
-										</ZIonRouterLink>
-										,{' '}
-										<ZIonRouterLink
-											routerLink={ZaionsRoutes.Legal.ZaionsPrivacyPolicyRoute}
-										>
-											Privacy Policy
-										</ZIonRouterLink>
-										, and{' '}
-										<ZIonRouterLink
-											routerLink={
-												ZaionsRoutes.Legal.ZaionsAcceptableUsePolicyRoute
-											}
-										>
-											Acceptable Use Policy
-										</ZIonRouterLink>
-										.
-									</Form.Text>
-								</Form.Group>
-
-								<Form.Group
-									className='mb-3 d-grid'
-									controlId='NatureOfIntegration'
+							<ZIonText className='mt-5 block ion-text-center' color='medium'>
+								By clicking the 'Submit' button below, you agree to the
+								{PRODUCT_NAME}
+								<ZIonRouterLink
+									routerLink={ZaionsRoutes.Legal.ZaionsTermsOfService}
+									className='inline-block ms-1'
 								>
-									<Button
-										variant='primary zaions_primary_color'
-										type='submit'
-										size='lg'
-									>
-										Apply Now
-									</Button>
-								</Form.Group>
-							</Form>
+									Terms of Service
+								</ZIonRouterLink>
+								,
+								<ZIonRouterLink
+									routerLink={ZaionsRoutes.Legal.ZaionsPrivacyPolicyRoute}
+									className='inline-block ms-1'
+								>
+									Privacy Policy
+								</ZIonRouterLink>
+								, and
+								<ZIonRouterLink
+									routerLink={ZaionsRoutes.Legal.ZaionsAcceptableUsePolicyRoute}
+									className='inline-block mx-1'
+								>
+									Acceptable Use Policy
+								</ZIonRouterLink>
+								.
+							</ZIonText>
+
+							{/* Button */}
+							<ZIonButton
+								className='text-transform-initial mx-3 mt-5'
+								expand='block'
+							>
+								Apply now
+							</ZIonButton>
 						</ZIonCol>
 						<ZIonCol></ZIonCol>
 					</ZIonRow>
@@ -255,16 +240,20 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 						<ZIonCol sizeXl='5' sizeLg='6' sizeMd='5' sizeSm='12' sizeXs='12'>
 							<ZIonRow>
 								<ZIonCol className='ion-text-center mb-5 mt-2'>
-									<ZIonText>
-										<h2 className='font-extrabold'>
-											{PRODUCT_NAME} is trusted by the world’s most pioneering
-											brands.
-										</h2>
+									<ZIonText className='font-extrabold text-xl'>
+										{PRODUCT_NAME} is trusted by the world’s most pioneering
+										brands.
 									</ZIonText>
 								</ZIonCol>
 							</ZIonRow>
 							<ZIonRow className='ion-justify-content-center ion-align-items-center'>
-								<ZaionsCarousel>
+								<ZaionsCarousel
+									spaceBetween={0}
+									slidesPerView={1}
+									onSlideChange={() => {}}
+									onSwiper={(_) => {}}
+									style={{ width: '100%' }}
+								>
 									{loadedHPBrandsData.map((item) => (
 										<ZaionsCarouselItem key={item.id}>
 											<ZIonCol
@@ -284,42 +273,50 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 						</ZIonCol>
 						<ZIonCol sizeXl='4' sizeLg='5' sizeMd='6' sizeSm='12' sizeXs='12'>
 							<ZIonList
-								className={`mt-4 pt-1 ps-3  ${!isSMSclae ? 'ms-5' : ''}`}
+								lines='none'
+								className={classNames({
+									'mt-4 pt-1 ps-3': true,
+									'ms-5': !isSmScale,
+								})}
 							>
 								<ZIonItem
-									className={`flex ion-align-items-center ${
-										!isSMSclae ? '' : 'mt-2 mb-3'
-									}`}
+									className={classNames({
+										'flex ion-align-items-start': true,
+										'mt-2 mb-3': !isSmScale,
+									})}
 								>
 									<ZIonIcon
 										icon={checkmarkSharp}
-										className={`text-5xl font-extrabold me-2  ${
-											!isSMSclae ? 'mb-4' : ''
-										}`}
+										className={classNames({
+											'text-5xl font-extrabold me-2': true,
+											'mb-4': !isSmScale,
+										})}
 										style={{ color: '#ee6123' }}
 									/>
 									<ZIonText className='zaions__fs_18 '>
-										<ZIonText className='font-bold'>
+										<ZIonText className='font-bold me-1'>
 											Custom Branded Domains
-										</ZIonText>{' '}
+										</ZIonText>
 										– Replace the “{PRODUCT_DOMAIN}” with your chosen domain
 										name
 									</ZIonText>
 								</ZIonItem>
 
 								<ZIonItem
-									className={`flex ion-align-items-center ${
-										!isSMSclae ? '' : 'mt-2 mb-3'
-									}`}
+									className={classNames({
+										'flex ion-align-items-center': true,
+										'mt-2 mb-3': !isSmScale,
+									})}
 								>
 									<ZIonIcon
 										icon={checkmarkSharp}
-										className={`text-5xl font-extrabold me-2  ${
-											!isSMSclae ? 'mb-4' : ''
-										}`}
+										className={classNames({
+											'text-5xl font-extrabold me-1': true,
+											'mb-4': !isSmScale,
+										})}
 										style={{ color: '#ee6123' }}
 									/>
-									<ZIonText className='zaions__fs_18 '>
+									<ZIonText className='zaions__fs_18'>
 										<ZIonText className='font-bold'>Auto Branding</ZIonText> –
 										Any link shortened in {PRODUCT_NAME} by a third-party will
 										use your custom branded domain
@@ -327,61 +324,67 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 								</ZIonItem>
 
 								<ZIonItem
-									className={`flex ion-align-items-center ${
-										!isSMSclae ? '' : 'mt-2 mb-3'
-									}`}
+									className={classNames({
+										'flex ion-align-items-center': true,
+										'mt-2 mb-3': !isSmScale,
+									})}
 								>
 									<ZIonIcon
 										icon={checkmarkSharp}
-										className={`text-5xl font-extrabold me-2  ${
-											!isSMSclae ? 'mb-4' : ''
-										}`}
+										className={classNames({
+											'text-5xl font-extrabold me-1': true,
+											'mb-4': !isSmScale,
+										})}
 										style={{ color: '#ee6123' }}
 									/>
-									<ZIonText className='zaions__fs_18 '>
-										<ZIonText className='font-bold'>
+									<ZIonText className='zaions__fs_18'>
+										<ZIonText className='font-bold me-1'>
 											Unlimited Link Redirects
-										</ZIonText>{' '}
+										</ZIonText>
 										– Easily change the destination page for any of your links
 									</ZIonText>
 								</ZIonItem>
 
 								<ZIonItem
-									className={`flex ion-align-items-center ${
-										!isSMSclae ? '' : 'mt-2 mb-3'
-									}`}
+									className={classNames({
+										'flex ion-align-items-center': true,
+										'mt-2 mb-3': !isSmScale,
+									})}
 								>
 									<ZIonIcon
 										icon={checkmarkSharp}
-										className={`text-5xl font-extrabold me-2  ${
-											!isSMSclae ? 'mb-4' : ''
-										}`}
+										className={classNames({
+											'text-5xl font-extrabold me-1': true,
+											'mb-4': !isSmScale,
+										})}
 										style={{ color: '#ee6123' }}
 									/>
 									<ZIonText className='zaions__fs_18 '>
 										<ZIonText className='font-bold'>
 											Campaign Management & Analytics
-										</ZIonText>{' '}
+										</ZIonText>
 										– Glean insights from link-level data points
 									</ZIonText>
 								</ZIonItem>
 
 								<ZIonItem
-									className={`flex ion-align-items-center ${
-										!isSMSclae ? '' : 'mt-2 mb-3'
-									}`}
+									className={classNames({
+										'flex ion-align-items-center': true,
+										'mt-2 mb-3': !isSmScale,
+									})}
 								>
 									<ZIonIcon
 										icon={checkmarkSharp}
-										className={`text-5xl font-extrabold me-2  ${
-											!isSMSclae ? 'mb-4' : ''
-										}`}
+										className={classNames({
+											'text-5xl font-extrabold me-1': true,
+											'mb-4': !isSmScale,
+										})}
 										style={{ color: '#ee6123' }}
 									/>
 									<ZIonText className='zaions__fs_18 '>
-										<ZIonText className='font-bold'>
+										<ZIonText className='font-bold me-1'>
 											Account Setup & Support
-										</ZIonText>{' '}
+										</ZIonText>
 										– Gain access to personalized onboarding and setup
 									</ZIonText>
 								</ZIonItem>

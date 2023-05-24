@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { useMediaQuery } from 'react-responsive';
 
 // Custom Imports
-import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
 import {
 	ZIonCol,
 	ZIonText,
@@ -85,7 +85,7 @@ const ZaionsInpageHeader: React.FC<{
 								src={lgImg}
 								className={classNames({
 									'mx-auto': true,
-									w-full: !isMdScale,
+									'w-full': !isMdScale,
 									zaions__w70: isMdScale,
 								})}
 							></ZIonImg>
@@ -104,7 +104,9 @@ const ZaionsInpageHeader: React.FC<{
 							// 'mx-3': true,
 						})}`}
 					>
-						<ZIonText className='font-bold ion-no-padding'>{label}</ZIonText>
+						<ZIonText className='font-bold ion-no-padding block'>
+							{label}
+						</ZIonText>
 						<ZIonText
 							className={classNames({
 								'zaions__page_title ion-no-padding': true,
@@ -148,7 +150,7 @@ const ZaionsInpageHeader: React.FC<{
 										className={classNames({
 											'zaions__getAQuote_btn ion-text-capitalize zaions__fs_14':
 												true,
-											'block': isLgScale,
+											block: isLgScale,
 										})}
 										color='primary'
 									>

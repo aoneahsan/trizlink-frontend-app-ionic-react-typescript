@@ -5,7 +5,7 @@ import React from 'react';
 
 // Custom Imports
 import ZaionsIonPage from '@/components/ZaionsIonPage';
-import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsTopMenu from '@/navigation/TopMenu';
 import {

@@ -6,7 +6,7 @@ import { useRecoilState } from 'recoil';
 import { useMediaQuery } from 'react-responsive';
 
 // Custom Imports
-import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
 import {
 	ZIonCol,
 	ZIonText,
@@ -27,15 +27,21 @@ import { ZaionsHPBrandsData } from '@/ZaionsStore/ZaionsHPBrandsRecoil';
 // Data
 import HPBrandData from '@/data/HPBrandListData';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import classNames from 'classnames';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // const { Item: CarouselItem } = Carousel;
 
 const ZaionsHPBrandList: React.FC = () => {
 	const [loadedHPBrandsData, setLoadedHPBrandsData] =
 		useRecoilState<ZaionsHPBrandsType[]>(ZaionsHPBrandsData);
-	const isSMSclae = useMediaQuery({ query: `(max-width: ${BRACKPOINT_MD})` });
-	const ZaionsCarousel = isSMSclae ? Swiper : Fragment;
-	const ZaionsCarouselItem = isSMSclae ? SwiperSlide : Fragment;
+
+	//
+	const { isMdScale } = useZMediaQueryScale();
+
+	//
+	const ZaionsCarousel = !isMdScale ? Swiper : Fragment;
+	const ZaionsCarouselItem = !isMdScale ? SwiperSlide : Fragment;
 
 	useLayoutEffect(() => {
 		// Fetch Data From Database Later:-
@@ -55,7 +61,13 @@ const ZaionsHPBrandList: React.FC = () => {
 			<div className='ion-padding-vertical'>
 				<ZIonGrid>
 					<ZIonRow className='ion-justify-content-center'>
-						<ZaionsCarousel>
+						<ZaionsCarousel
+							spaceBetween={0}
+							slidesPerView={1}
+							onSlideChange={() => {}}
+							onSwiper={(_) => {}}
+							style={{ width: '100%' }}
+						>
 							<ZIonCol sizeLg='0' sizeMd='0' sizeSm='0' sizeXs='0'></ZIonCol>
 							{loadedHPBrandsData.map((item) => (
 								<ZaionsCarouselItem key={item.id}>
@@ -69,7 +81,10 @@ const ZaionsHPBrandList: React.FC = () => {
 									>
 										<ZIonImg
 											src={item.image}
-											style={{ width: 'auto' }}
+											className={classNames({
+												'w-auto': true,
+												'w-[60%!important] mx-auto': !isMdScale,
+											})}
 											alt=''
 										/>
 									</ZIonCol>

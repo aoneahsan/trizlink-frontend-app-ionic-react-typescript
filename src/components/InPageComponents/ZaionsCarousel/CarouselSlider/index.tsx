@@ -2,7 +2,7 @@
 import React, { useLayoutEffect } from 'react';
 
 // Packages Imports
-import { Carousel, CarouselItem } from 'react-bootstrap';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Custom Imports
 import {
@@ -26,18 +26,6 @@ import { quotes, starsQuoteWidget } from '@/assets/images';
 import classes from './styles.module.css';
 
 const ZaionsCarouselSlider: React.FC = () => {
-	const [usersFeedBackCarouselState, setUsersFeedBackCarouselState] =
-		useRecoilState(ZaionsUsersFeedBackCarouselState);
-
-	useLayoutEffect(() => {
-		setUsersFeedBackCarouselState((oldVal) => ({
-			...oldVal,
-			activeIndex: 0,
-			totalItemCount: 2,
-			lastItemIndex: 1,
-		}));
-	}, [setUsersFeedBackCarouselState]);
-
 	return (
 		<>
 			<ZIonGrid>
@@ -50,15 +38,14 @@ const ZaionsCarouselSlider: React.FC = () => {
 						sizeXs='12'
 						className='mx-auto'
 					>
-						<Carousel
-							activeIndex={usersFeedBackCarouselState.activeIndex}
-							defaultValue={0}
-							touch={usersFeedBackCarouselState.touch}
+						<Swiper
+							spaceBetween={0}
+							slidesPerView={1}
+							onSlideChange={() => {}}
+							onSwiper={(_) => {}}
+							style={{ width: '100%' }}
 						>
-							<CarouselItem
-								key={0}
-								interval={usersFeedBackCarouselState.interval}
-							>
+							<SwiperSlide key={0}>
 								<ZIonCol></ZIonCol>
 								<>
 									<ZIonCol
@@ -111,8 +98,8 @@ const ZaionsCarouselSlider: React.FC = () => {
 									</ZIonCol>
 									<ZIonCol></ZIonCol>
 								</>
-							</CarouselItem>
-							<CarouselItem key={1}>
+							</SwiperSlide>
+							<SwiperSlide key={1}>
 								<>
 									<ZIonCol></ZIonCol>
 									<ZIonCol
@@ -162,8 +149,8 @@ const ZaionsCarouselSlider: React.FC = () => {
 									</ZIonCol>
 									<ZIonCol></ZIonCol>
 								</>
-							</CarouselItem>
-						</Carousel>
+							</SwiperSlide>
+						</Swiper>
 					</ZIonCol>
 				</ZIonRow>
 			</ZIonGrid>

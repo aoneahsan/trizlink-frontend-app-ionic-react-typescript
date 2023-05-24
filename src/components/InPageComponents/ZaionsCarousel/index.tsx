@@ -5,21 +5,21 @@ import React from 'react';
 
 // Custom Imports
 import ZaionsCarouselActions from './CarouselAction';
-import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
 import ZaionsCarouselSlider from './CarouselSlider';
 
 // Style
 
-// Global Contant
+// Global Constants
 
 const ZaionsCarousel: React.FC = () => {
-  return (
-    <>
-      <ZaionsCarouselSlider />
-      <ZaionsCarouselActions />
-      <ZaionsHr />
-    </>
-  );
+	return (
+		<>
+			<ZaionsCarouselSlider />
+			{/* <ZaionsCarouselActions /> */}
+			<ZaionsHr />
+		</>
+	);
 };
 
 export default ZaionsCarousel;

@@ -25,6 +25,8 @@ import {
 	ZIonContent,
 	ZIonList,
 	ZIonIcon,
+	ZIonButton,
+	ZIonInput,
 } from '@/components/ZIonComponents';
 
 // Global Imports
@@ -45,14 +47,15 @@ import classes from './styles.module.css';
 // Images
 import { IlloMobile } from '@/assets/images';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 
 const ZaionsPartners: React.FC = () => {
-	const [partnerProgramData, setpartnerProgramData] =
+	const [partnerProgramData, setPartnerProgramData] =
 		useRecoilState<ZaionsInpageColType[]>(ZaionsInpageColState);
 
 	useLayoutEffect(() => {
-		setpartnerProgramData(ZaionsPartnerProgramData);
-	}, [setpartnerProgramData]);
+		setPartnerProgramData(ZaionsPartnerProgramData);
+	}, [setPartnerProgramData]);
 	const isXlScale = useMediaQuery({
 		query: `(min-width: ${BRACKPOINT_XL})`,
 	});
@@ -291,10 +294,10 @@ const ZaionsPartners: React.FC = () => {
 					<ZIonGrid className='mt-5 pt-5 mb-5'>
 						<ZIonRow className='mt-3 mb-4'>
 							<ZIonCol className='text-center'>
-								<ZIonText>
-									<h2 className='font-extrabold'>Grow with {PRODUCT_NAME}</h2>
+								<ZIonText className='font-extrabold text-xl block ion-text-center'>
+									Grow with {PRODUCT_NAME}
 								</ZIonText>
-								<ZIonText className='text-lg zaions__color_gray2'>
+								<ZIonText className='text-md zaions__color_gray2'>
 									Apply today and discover new opportunities for success.
 								</ZIonText>
 							</ZIonCol>
@@ -302,126 +305,111 @@ const ZaionsPartners: React.FC = () => {
 						<ZIonRow>
 							<ZIonCol></ZIonCol>
 							<ZIonCol
-								className='zaions__bg_gray py-3'
+								className='zaions__bg_gray p-3'
 								sizeXl='5'
 								sizeLg='6'
 								sizeMd='6'
 								sizeSm='6.5'
 								sizeXs='11.5'
 							>
-								<ZIonText>
-									<h2 className='font-extrabold text-center pt-4 zaions__color_dark'>
-										{PRODUCT_NAME} Partner Program
-									</h2>
+								<ZIonText className='font-extrabold text-center pt-4 zaions__color_dark block text-xl'>
+									{PRODUCT_NAME} Partner Program
 								</ZIonText>
-								{/* <Form className='px-4'>
-									<Form.Label>Name*</Form.Label>
-									<div className='mb-3 flex'>
-										<Form.Group className='me-2' controlId='firstName'>
-											<Form.Control type='text' size='lg' required />
-											<Form.Label className='zaions__fs_11'>
-												First Name
-											</Form.Label>
-										</Form.Group>
-										<Form.Group controlId='lastName'>
-											<Form.Control type='email' size='lg' required />
-											<Form.Label className='zaions__fs_11'>
-												Last Name
-											</Form.Label>
-										</Form.Group>
-									</div>
 
-									<Form.Group className='mb-3' controlId='emailAddress'>
-										<Form.Label>Email Address*</Form.Label>
-										<Form.Control type='email' size='lg' />
-									</Form.Group>
+								{/* First Name */}
+								<ZIonInput
+									fill='outline'
+									label='First Name*'
+									labelPlacement='floating'
+									className='mt-4'
+								/>
+								{/* Last Name* */}
+								<ZIonInput
+									fill='outline'
+									label='Last Name*'
+									labelPlacement='floating'
+									className='mt-5'
+								/>
+								{/* Email Address */}
+								<ZIonInput
+									fill='outline'
+									label='Email Address*'
+									labelPlacement='floating'
+									className='mt-5'
+									type='email'
+								/>
 
-									<Form.Group className='mb-3' controlId='companyName'>
-										<Form.Label>Company Name*</Form.Label>
-										<Form.Control type='text' size='lg' />
-									</Form.Group>
+								{/* Company Name */}
+								<ZIonInput
+									fill='outline'
+									label='Company Name*'
+									labelPlacement='floating'
+									className='mt-5'
+								/>
 
-									<Form.Group className='mb-3' controlId='jobTitle'>
-										<Form.Label>Job Title*</Form.Label>
-										<Form.Control type='text' size='lg' />
-									</Form.Group>
+								{/* Job Title */}
+								<ZIonInput
+									fill='outline'
+									label='Job Title*'
+									labelPlacement='floating'
+									className='mt-5'
+								/>
 
-									<Form.Group
-										className='mb-3'
-										controlId='integratedWithZaions?'
+								{/* Job Title */}
+								<ZIonInput
+									fill='outline'
+									label='Job Title*'
+									labelPlacement='floating'
+									className='mt-5'
+								/>
+
+								<div className='flex ion-align-items-center gap-2 mt-5'>
+									<ZIonText>
+										Are you currently integrated with {PRODUCT_NAME}?*
+									</ZIonText>
+									<ZRCSwitch checkedChildren='Yes' unCheckedChildren='No' />
+								</div>
+
+								<div className='flex ion-align-items-center gap-2 mt-5'>
+									<ZIonText>What does your platform do?*</ZIonText>
+									<ZRCSwitch checkedChildren='Yes' unCheckedChildren='No' />
+								</div>
+
+								<ZIonText className='mt-5 block ion-text-center' color='medium'>
+									By clicking the 'Submit' button below, you agree to the
+									{PRODUCT_NAME}
+									<ZIonRouterLink
+										routerLink={ZaionsRoutes.Legal.ZaionsTermsOfService}
+										className='inline-block ms-1'
 									>
-										<Form.Label>
-											Are you currently integrated with {PRODUCT_NAME}?*
-										</Form.Label>{' '}
-										<br />
-										<Form.Check
-											inline
-											label='Yes'
-											name='group1'
-											type={'radio'}
-											id={`inline-Yes-1`}
-										/>
-										<Form.Check
-											inline
-											label='No'
-											name='group1'
-											type='radio'
-											id={`inline-No-1`}
-										/>
-									</Form.Group>
-
-									<Form.Group className='mb-3' controlId='plateform'>
-										<Form.Label>What does your platform do?*</Form.Label>
-										<Form.Control type='text' size='lg' />
-									</Form.Group>
-
-									<Form.Group className='mb-3' controlId='NatureOfIntegration'>
-										<Form.Label>
-											Nature of integration / Other notes:*
-										</Form.Label>
-										<Form.Control type='text' size='lg' />
-									</Form.Group>
-
-									<Form.Group className='mb-3' controlId='NatureOfIntegration'>
-										<Form.Text className='zaions__fs_11'>
-											By clicking the 'Submit' button below, you agree to the
-											{PRODUCT_NAME}
-											<ZIonRouterLink
-												routerLink={ZaionsRoutes.Legal.ZaionsTermsOfService}
-											>
-												Terms of Service
-											</ZIonRouterLink>
-											,{' '}
-											<ZIonRouterLink
-												routerLink={ZaionsRoutes.Legal.ZaionsPrivacyPolicyRoute}
-											>
-												Privacy Policy
-											</ZIonRouterLink>
-											, and{' '}
-											<ZIonRouterLink
-												routerLink={
-													ZaionsRoutes.Legal.ZaionsAcceptableUsePolicyRoute
-												}
-											>
-												Acceptable Use Policy
-											</ZIonRouterLink>
-											.
-										</Form.Text>
-									</Form.Group>
-
-									<Form.Group
-										className='mb-3 d-grid'
-										controlId='NatureOfIntegration'
+										Terms of Service
+									</ZIonRouterLink>
+									,
+									<ZIonRouterLink
+										routerLink={ZaionsRoutes.Legal.ZaionsPrivacyPolicyRoute}
+										className='inline-block ms-1'
 									>
-										<Button
-											variant='primary zaions_primary_color'
-											type='submit'
-											size='lg'
-										>
-											Apply Now
-										</Button>
-									</Form.Group>
-								</Form> */}
+										Privacy Policy
+									</ZIonRouterLink>
+									, and
+									<ZIonRouterLink
+										routerLink={
+											ZaionsRoutes.Legal.ZaionsAcceptableUsePolicyRoute
+										}
+										className='inline-block mx-1'
+									>
+										Acceptable Use Policy
+									</ZIonRouterLink>
+									.
+								</ZIonText>
+
+								{/* Button */}
+								<ZIonButton
+									className='text-transform-initial mx-3 mt-5'
+									expand='block'
+								>
+									Apply now
+								</ZIonButton>
 							</ZIonCol>
 							<ZIonCol></ZIonCol>
 						</ZIonRow>

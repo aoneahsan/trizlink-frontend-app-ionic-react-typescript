@@ -289,7 +289,7 @@ const ZaionsAbout: React.FC = () => {
 									</ZIonText>
 									<ZIonText
 										className={classNames({
-											w-full: !isSmScale,
+											'w-full': !isSmScale,
 											zaions__w80: isSmScale,
 										})}
 									>

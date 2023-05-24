@@ -280,7 +280,11 @@ const ZWorkspaceSinglePost: React.FC<ZWorkspaceSinglePostInterface> = ({
 						</ZIonButton>
 
 						<ZIonButton className='m-0'>
-							<ZIonImg src={chatbubbleOutline} />
+							<ZIonIcon
+								icon={chatbubbleOutline}
+								color='dark'
+								className='w-6 h-6 font-black'
+							/>
 						</ZIonButton>
 					</ZIonButtons>
 				</div>

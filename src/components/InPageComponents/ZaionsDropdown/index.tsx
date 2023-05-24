@@ -8,7 +8,6 @@ import React, {
 
 // Packages Imports
 import {} from '@ionic/react';
-// import Dropdown from 'react-bootstrap/Dropdown';
 import { useMediaQuery } from 'react-responsive';
 
 // Custom Imports

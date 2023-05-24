@@ -14,7 +14,7 @@ import ZaionsInpageBrandsList from '@/components/InPageComponents/ZaionsBrandsLi
 import ZaionsHPUsersFeedBack from '@/components/ZaionsHomePage/HPFeedback';
 import ZaionsInpageCol from '@/components/InPageComponents/ZaionsInpageGridsys';
 import ZaionsTopMenu from '@/navigation/TopMenu';
-import ZaionsHr from '@/components/InPageComponents/Zaion_hr';
+import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
 import {
 	ZIonCol,
 	ZIonText,
