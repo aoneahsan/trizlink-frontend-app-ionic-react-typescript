@@ -3,7 +3,6 @@ import React, { Fragment } from 'react';
 
 // Packages Imports
 import { useRecoilValue } from 'recoil';
-// import Carousel from 'react-bootstrap/Carousel';
 import { IonItemDivider } from '@ionic/react';
 import { useMediaQuery } from 'react-responsive';
 

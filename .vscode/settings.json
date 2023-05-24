@@ -1,0 +1,6 @@
+{
+	"css.format.enable": true,
+	"editor.formatOnSave": true,
+	"files.autoSave": "onFocusChange",
+	"prettier.enable": true
+}

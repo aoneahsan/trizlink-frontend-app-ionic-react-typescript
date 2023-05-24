@@ -1,7 +1,6 @@
 // Core Imports
 import React from 'react';
 // Packages Imports
-// import Form from 'react-bootstrap/Form';
 import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
