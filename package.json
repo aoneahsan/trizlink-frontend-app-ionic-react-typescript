@@ -14,7 +14,10 @@
     "url": "https://zaions.com"
   },
   "displayName": "ZLink",
-  "categories": ["Extension Packs", "Other"],
+  "categories": [
+    "Extension Packs",
+    "Other"
+  ],
   "engineStrict": true,
   "scripts": {
     "start": "vite",
@@ -25,7 +28,6 @@
     "test.unit": "vitest",
     "lint": "eslint",
     "preinstall": "node -e \"if (require('path').basename(process.env.npm_execpath) === 'npm-cli.js') throw new Error('Please use Yarn for installation: yarn install')\""
-
   },
   "dependencies": {
     "@capacitor/android": "4.7.3",
@@ -45,7 +47,6 @@
     "@ionic/react-router": "^7.0.0",
     "@tanstack/react-query": "^4.28.0",
     "@tanstack/react-query-devtools": "^4.28.0",
-    "@tippyjs/react": "^4.2.6",
     "axios": "^1.3.4",
     "classnames": "^2.3.2",
     "crypto-js": "^4.1.1",
@@ -70,6 +71,7 @@
     "react-router-dom": "^5.3.4",
     "react-select": "^5.7.2",
     "react-toastify": "^9.1.2",
+    "react-tooltip": "^5.13.1",
     "recoil": "^0.7.7",
     "styled-components": "^5.3.9",
     "swiper": "^9.2.0",
