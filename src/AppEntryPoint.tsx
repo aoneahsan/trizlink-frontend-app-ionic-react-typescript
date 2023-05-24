@@ -13,9 +13,6 @@ import './theme/fonts.css'; // All the fonts
 import './index.css'; // All custom css
 import './theme/animations.css'; // All animations
 
-// Tippyjs/react CSS
-import 'tippy.js/dist/tippy.css';
-
 // Configuring AWS
 // (Amplify as { configure: (config: unknown) => void }).configure(AWS_APP_CONFIG);
 
