@@ -12,9 +12,13 @@ import classNames from 'classnames';
 import {
 	chatbubbleOutline,
 	ellipsisHorizontalOutline,
+	filterCircleOutline,
 	menuOutline,
 	openOutline,
 	pencil,
+	tabletLandscapeOutline,
+	todayOutline,
+	videocamOutline,
 } from 'ionicons/icons';
 
 /**
@@ -71,6 +75,7 @@ import {
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { gifIcon, imageIcon, mediaIcon, thumbnailIcon } from '@/assets/images';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 /**
  * Component props type go down
@@ -188,6 +193,7 @@ const ZWorkspaceSinglePost: React.FC<ZWorkspaceSinglePostInterface> = ({
 
 					<div className='ms-auto'>
 						<ZIonButton
+							id='view-post-activity'
 							fill='default'
 							className='ion-no-padding ion-no-margin me-2'
 							onClick={() => {
@@ -198,6 +204,11 @@ const ZWorkspaceSinglePost: React.FC<ZWorkspaceSinglePostInterface> = ({
 						>
 							<ZIonIcon icon={openOutline} />
 						</ZIonButton>
+						<ZRTooltip
+							anchorSelect='#view-post-activity'
+							place='top'
+							content='View post activity and more options'
+						/>
 
 						<ZIonButton
 							fill='default'
@@ -262,31 +273,188 @@ const ZWorkspaceSinglePost: React.FC<ZWorkspaceSinglePostInterface> = ({
 						'mt-1': type === workspacePostDetailTabEnum.mobile,
 					})}
 				>
-					<ZIonButtons>
-						<ZIonButton className='m-0'>
-							<ZIonImg src={imageIcon} />
-						</ZIonButton>
+					{pageType && (
+						<ZIonButtons>
+							{/* images/videos */}
+							{[
+								workspaceFormConnectPagesEnum.facebook,
+								workspaceFormConnectPagesEnum.instagram,
+								workspaceFormConnectPagesEnum.linkedin,
+								workspaceFormConnectPagesEnum.pinterest,
+								workspaceFormConnectPagesEnum.twitter,
+								workspaceFormConnectPagesEnum.googleBusiness,
+							].includes(pageType) && (
+								<>
+									<ZIonButton id='z-images-videos-tooltip' className='m-0'>
+										<ZIonImg src={imageIcon} />
+									</ZIonButton>
+									<ZRTooltip
+										anchorSelect='#z-images-videos-tooltip'
+										place='bottom'
+										content='Upload images/videos from computer'
+									/>
+								</>
+							)}
 
-						<ZIonButton className='m-0'>
-							<ZIonImg src={gifIcon} />
-						</ZIonButton>
+							{/* GIF */}
+							{[
+								workspaceFormConnectPagesEnum.facebook,
+								workspaceFormConnectPagesEnum.instagram,
+								workspaceFormConnectPagesEnum.linkedin,
+								workspaceFormConnectPagesEnum.twitter,
+							].includes(pageType) && (
+								<>
+									<ZIonButton id='z-gif-tooltip' className='m-0'>
+										<ZIonImg src={gifIcon} />
+									</ZIonButton>
+									<ZRTooltip
+										anchorSelect='#z-gif-tooltip'
+										place='bottom'
+										content='Add a GIF'
+									/>
+								</>
+							)}
 
-						<ZIonButton className='m-0'>
-							<ZIonImg src={mediaIcon} />
-						</ZIonButton>
+							{/* Media Library */}
+							{[
+								workspaceFormConnectPagesEnum.facebook,
+								workspaceFormConnectPagesEnum.instagram,
+								workspaceFormConnectPagesEnum.linkedin,
+								workspaceFormConnectPagesEnum.pinterest,
+								workspaceFormConnectPagesEnum.tiktok,
+								workspaceFormConnectPagesEnum.youtube,
+								workspaceFormConnectPagesEnum.twitter,
+								workspaceFormConnectPagesEnum.googleBusiness,
+							].includes(pageType) && (
+								<>
+									<ZIonButton id='z-media-library-tooltip' className='m-0'>
+										<ZIonImg src={mediaIcon} />
+									</ZIonButton>
+									<ZRTooltip
+										anchorSelect='#z-media-library-tooltip'
+										place='bottom'
+										content='Add from Media Library'
+									/>
+								</>
+							)}
 
-						<ZIonButton className='m-0'>
-							<ZIonImg src={thumbnailIcon} />
-						</ZIonButton>
+							{/* thumbnail */}
+							{[
+								workspaceFormConnectPagesEnum.facebook,
+								workspaceFormConnectPagesEnum.linkedin,
+							].includes(pageType) && (
+								<>
+									<ZIonButton id='z-thumbnail-tooltip' className='m-0'>
+										<ZIonImg src={thumbnailIcon} />
+									</ZIonButton>
+									<ZRTooltip
+										anchorSelect='#z-thumbnail-tooltip'
+										place='bottom'
+										content='Add url thumbnail or carousel'
+									/>
+								</>
+							)}
 
-						<ZIonButton className='m-0'>
-							<ZIonIcon
-								icon={chatbubbleOutline}
-								color='dark'
-								className='w-6 h-6 font-black'
-							/>
-						</ZIonButton>
-					</ZIonButtons>
+							{/* Comments */}
+							{[workspaceFormConnectPagesEnum.instagram].includes(pageType) && (
+								<>
+									<ZIonButton id='z-comments-tooltip' className='m-0'>
+										<ZIonIcon
+											icon={chatbubbleOutline}
+											color='dark'
+											className='w-7 h-7 font-black'
+										/>
+									</ZIonButton>
+									<ZRTooltip
+										anchorSelect='#z-comments-tooltip'
+										place='bottom'
+										content='Include first comment'
+									/>
+								</>
+							)}
+
+							{/* Video */}
+							{[
+								workspaceFormConnectPagesEnum.tiktok,
+								workspaceFormConnectPagesEnum.youtube,
+							].includes(pageType) && (
+								<>
+									<ZIonButton id='z-video-tooltip' className='m-0'>
+										<ZIonIcon
+											icon={videocamOutline}
+											color='dark'
+											className='w-7 h-7 font-black'
+										/>
+									</ZIonButton>
+									<ZRTooltip
+										anchorSelect='#z-video-tooltip'
+										place='bottom'
+										content='Add video'
+									/>
+								</>
+							)}
+
+							{/* Offer */}
+							{[workspaceFormConnectPagesEnum.googleBusiness].includes(
+								pageType
+							) && (
+								<>
+									<ZIonButton id='z-offer-tooltip' className='m-0'>
+										<ZIonIcon
+											icon={filterCircleOutline}
+											color='dark'
+											className='w-7 h-7 font-black'
+										/>
+									</ZIonButton>
+									<ZRTooltip
+										anchorSelect='#z-offer-tooltip'
+										place='bottom'
+										content='Add offer'
+									/>
+								</>
+							)}
+
+							{/* event */}
+							{[workspaceFormConnectPagesEnum.googleBusiness].includes(
+								pageType
+							) && (
+								<>
+									<ZIonButton id='z-event-tooltip' className='m-0'>
+										<ZIonIcon
+											icon={todayOutline}
+											color='dark'
+											className='w-7 h-7 font-black'
+										/>
+									</ZIonButton>
+									<ZRTooltip
+										anchorSelect='#z-event-tooltip'
+										place='bottom'
+										content='Add event'
+									/>
+								</>
+							)}
+
+							{/* CTA */}
+							{[workspaceFormConnectPagesEnum.googleBusiness].includes(
+								pageType
+							) && (
+								<>
+									<ZIonButton id='z-CTA-tooltip' className='m-0'>
+										<ZIonIcon
+											icon={tabletLandscapeOutline}
+											color='dark'
+											className='w-7 h-7 font-black'
+										/>
+									</ZIonButton>
+									<ZRTooltip
+										anchorSelect='#z-CTA-tooltip'
+										place='bottom'
+										content='Add CTA Button'
+									/>
+								</>
+							)}
+						</ZIonButtons>
+					)}
 				</div>
 			</ZIonCardContent>
 		</ZIonCard>

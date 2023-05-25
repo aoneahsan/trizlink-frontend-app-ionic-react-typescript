@@ -16,6 +16,8 @@ type ZIonAvatarType = {
 	mode?: ZIonModeType;
 	slot?: 'start' | 'end';
 
+	id?: string;
+
 	onClick?: React.MouseEventHandler<HTMLIonAvatarElement>;
 	onMouseEnter?: React.MouseEventHandler<HTMLIonAvatarElement>;
 	onMouseLeave?: React.MouseEventHandler<HTMLIonAvatarElement>;

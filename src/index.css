@@ -919,6 +919,10 @@ ion-modal.zaions__modal_w100 {
 	--width: 650px;
 }
 
+.workspace-edit-page-modal {
+	--height: 79vh;
+	--width: 700px;
+}
 @media only screen and (max-content: 768px) {
 	.workspace-sharing-modal-size {
 		--width: 95% !important;

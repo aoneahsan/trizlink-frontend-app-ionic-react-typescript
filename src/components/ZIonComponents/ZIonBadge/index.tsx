@@ -11,6 +11,9 @@ type ZIonBadgeType = {
 	className?: string;
 	color?: ZIonColorType;
 	mode?: ZIonModeType;
+	style?: {
+		[key: string]: unknown;
+	};
 };
 
 const ZIonBadge = (props: ZIonBadgeType) => {

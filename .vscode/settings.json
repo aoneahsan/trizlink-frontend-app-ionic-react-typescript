@@ -3,5 +3,12 @@
 	"editor.formatOnSave": true,
 	"files.autoSave": "onFocusChange",
 	"prettier.enable": true,
-	"cSpell.words": ["chatbubble", "Swiper"]
+	"cSpell.words": [
+		"chatbubble",
+		"middlewares",
+		"Planable",
+		"Searchbar",
+		"Swiper",
+		"videocam"
+	]
 }

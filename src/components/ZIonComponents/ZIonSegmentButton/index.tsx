@@ -23,6 +23,7 @@ type ZIonSegmentButtonType = {
 		| 'icon-start'
 		| 'icon-top'
 		| 'label-hide';
+	id?: string;
 	onClick?: React.MouseEventHandler<HTMLIonSegmentButtonElement>;
 };
 

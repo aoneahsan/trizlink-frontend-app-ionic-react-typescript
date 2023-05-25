@@ -18,6 +18,7 @@ import {
 } from '@/components/ZIonComponents';
 import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 const ZWorkspaceCommentBox: React.FC<{
 	className?: string;
@@ -71,7 +72,14 @@ const ZWorkspaceCommentBox: React.FC<{
 									className='ms-2 me-3 pb-[2px]'
 								/>
 							</ZIonText>
-							<ZRCSwitch />
+
+							{/*  */}
+							<ZRCSwitch id='z-workspace-post-comments-visibility' />
+							<ZRTooltip
+								anchorSelect='#z-workspace-post-comments-visibility'
+								place='top'
+								content='Everyone can see this comments'
+							/>
 						</div>
 					</div>
 
@@ -111,9 +119,15 @@ const ZWorkspaceCommentBox: React.FC<{
 								className='text-transform-initial'
 								fill='outline'
 								color='medium'
+								id='z-workspace-post-comments-save'
 							>
 								Post
 							</ZIonButton>
+							<ZRTooltip
+								anchorSelect='#z-workspace-post-comments-save'
+								place='top'
+								content='Ctrl + Enter'
+							/>
 						</ZIonButtons>
 					</div>
 				</ZIonCol>

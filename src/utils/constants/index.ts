@@ -298,6 +298,10 @@ export const brandColors = {
 	youtube: '#FF0000',
 };
 
+const ZTooltipIds = {
+	ZUserAvatarButton_default_tooltip_id: 'z-workspace-ZUserAvatarButton-tooltip',
+};
+
 export const TIMEZONES = [
 	{
 		label: '(GMT +5:30) Bombay, Calcutta, Madras, New Delhi',
@@ -508,6 +512,7 @@ const CONSTANTS = {
 	DateTime,
 	MENU_IDS,
 	ExternalURL,
+	ZTooltipIds,
 };
 
 export default CONSTANTS;

@@ -15,6 +15,7 @@ import {
 } from '@/components/ZIonComponents';
 import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 const ZWorkspaceSingleComment: React.FC<{
 	avatarWidth?: string;
@@ -56,32 +57,53 @@ const ZWorkspaceSingleComment: React.FC<{
 						'w-[50%]': !isLgScale,
 					})}
 				>
+					{/* Edit Comments */}
 					<ZIonButton
 						size='small'
 						className='mx-1 ion-no-padding'
 						fill='clear'
 						color='dark'
+						id='edit-comments-mode'
 					>
 						<ZIonIcon icon={createOutline} />
 					</ZIonButton>
+					<ZRTooltip
+						anchorSelect='#edit-comments-mode'
+						place='left'
+						content='Edit mode'
+					/>
 
+					{/* Add Reaction */}
 					<ZIonButton
 						size='small'
 						className='mx-1 ion-no-padding'
 						fill='clear'
 						color='dark'
+						id='add-reaction-mode'
 					>
 						<ZIonIcon icon={happyOutline} />
 					</ZIonButton>
+					<ZRTooltip
+						anchorSelect='#add-reaction-mode'
+						place='top'
+						content='Add reaction'
+					/>
 
+					{/* Resolve Mode */}
 					<ZIonButton
 						size='small'
 						className='mx-1 ion-no-padding'
 						fill='clear'
 						color='dark'
+						id='resolve-mode'
 					>
 						<ZIonIcon icon={ellipseOutline} />
 					</ZIonButton>
+					<ZRTooltip
+						anchorSelect='#resolve-mode'
+						place='right'
+						content='Resolve'
+					/>
 				</div>
 			</ZIonCol>
 

@@ -11,26 +11,6 @@ import React, { ReactNode } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 /**
- * Custom Imports go down
- * ? Like import of custom components is a custom import
- * */
-
-/**
- * Global Constants Imports go down
- * ? Like import of Constant is a global constants import
- * */
-
-/**
- * Type Imports go down
- * ? Like import of type or type of some recoil state or any external type import is a Type import
- * */
-
-/**
- * Recoil State Imports go down
- * ? Import of recoil states is a Recoil State import
- * */
-
-/**
  * Style files Imports go down
  * ? Import of style sheet is a style import
  * */

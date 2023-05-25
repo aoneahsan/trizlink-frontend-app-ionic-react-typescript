@@ -24,8 +24,9 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
-// React-tostify package css
+// React-toastify package css
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-tooltip/dist/react-tooltip.css';
 
 // Custom Imports
 import ZaionsApp from './ZaionsApp';
