@@ -68,6 +68,7 @@ const ZaionsRoutes = {
 
 	// Admin Panel
 	AdminPanel: {
+		AppStartupPage: '/app/startup',
 		Setting: {
 			Main: '/settings',
 			ZaionsAdminPanelSettingsCustomDomain: '/settings/custom-domain',
@@ -136,10 +137,7 @@ const ZaionsRoutes = {
 export const ZRoutesRedirects = {
 	// Redirects
 	// AUTHENTICATED_USER_REDIRECT
-	AUTHENTICATED_USER_REDIRECT: ZaionsRoutes.AdminPanel.LinkInBio.Main.replace(
-		':folderId',
-		'all'
-	),
+	AUTHENTICATED_USER_REDIRECT: ZaionsRoutes.AdminPanel.AppStartupPage,
 
 	// UNAUTHENTICATED_USER_REDIRECT
 	UNAUTHENTICATED_USER_REDIRECT: ZaionsRoutes.LoginRoute,

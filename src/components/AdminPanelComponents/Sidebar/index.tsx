@@ -29,10 +29,7 @@ import AdminPanelMainSidebarMenu from '@/components/AdminPanelComponents/Sidebar
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import {
-	AdminPanelMainSidebarMenuPageEnum,
-	ZDashboardFolderMenuInterface,
-} from '@/types/AdminPanel/index.type';
+import { ZDashboardFolderMenuInterface } from '@/types/AdminPanel/index.type';
 import ZDashboardFolderMenu from './FolderMenu';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 

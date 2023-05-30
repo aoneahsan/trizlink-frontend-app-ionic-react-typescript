@@ -82,10 +82,10 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 				>
 					<ZIonRow className='mt-3 mb-4'>
 						<ZIonCol className='text-center'>
-							<ZIonText className='font-extrabold zaions__color_dark text-xl block'>
+							<ZIonText className='block text-xl font-extrabold zaions__color_dark'>
 								Discover the {PRODUCT_NAME} solution that’s right for you
 							</ZIonText>
-							<ZIonText className='text-md mt-2 zaions__color_gray2 mb-2'>
+							<ZIonText className='mt-2 mb-2 text-md zaions__color_gray2'>
 								{PRODUCT_NAME} helps you build and protect your brand so you can
 								leverage it across your communication <br /> channels to drive
 								powerful business results.
@@ -95,14 +95,14 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 					<ZIonRow>
 						<ZIonCol></ZIonCol>
 						<ZIonCol
-							className='zaions__bg_gray p-3'
+							className='p-3 zaions__bg_gray'
 							sizeXl='5'
 							sizeLg='6'
 							sizeMd='6'
 							sizeSm='6.5'
 							sizeXs='11.5'
 						>
-							<ZIonText className='font-extrabold ion-text-center text-xl block pt-4 zaions__color_dark'>
+							<ZIonText className='block pt-4 text-xl font-extrabold ion-text-center zaions__color_dark'>
 								Let's get in touch
 							</ZIonText>
 							{/* name */}
@@ -189,7 +189,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 								})}
 							</ZIonSelect>
 
-							<ZIonText className='mt-5 block ion-text-center' color='medium'>
+							<ZIonText className='block mt-5 ion-text-center' color='medium'>
 								By clicking the 'Submit' button below, you agree to the
 								{PRODUCT_NAME}
 								<ZIonRouterLink
@@ -217,7 +217,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 
 							{/* Button */}
 							<ZIonButton
-								className='text-transform-initial mx-3 mt-5'
+								className='mx-3 mt-5 text-transform-initial'
 								expand='block'
 							>
 								Apply now
@@ -228,7 +228,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 				</ZIonGrid>
 				<ZaionsHr />
 
-				<ZIonGrid className='mb-5 pb-4'>
+				<ZIonGrid className='pb-4 mb-5'>
 					<ZIonRow>
 						<ZIonCol
 							sizeXl='1'
@@ -239,8 +239,8 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 						></ZIonCol>
 						<ZIonCol sizeXl='5' sizeLg='6' sizeMd='5' sizeSm='12' sizeXs='12'>
 							<ZIonRow>
-								<ZIonCol className='ion-text-center mb-5 mt-2'>
-									<ZIonText className='font-extrabold text-xl'>
+								<ZIonCol className='mt-2 mb-5 ion-text-center'>
+									<ZIonText className='text-xl font-extrabold'>
 										{PRODUCT_NAME} is trusted by the world’s most pioneering
 										brands.
 									</ZIonText>

@@ -5,8 +5,11 @@
 	"prettier.enable": true,
 	"cSpell.words": [
 		"chatbubble",
+		"Collabes",
+		"Datetime",
 		"middlewares",
 		"Planable",
+		"prettylinks",
 		"Searchbar",
 		"Swiper",
 		"videocam"

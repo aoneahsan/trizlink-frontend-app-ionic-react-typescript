@@ -99,7 +99,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 		>
 			<div className='ion-padding-top'>
 				<ZIonList lines='none'>
-					<ZIonItem className='zaions__cursor_pointer mb-2 font-bold p-0 text-xl'>
+					<ZIonItem className='p-0 mb-2 text-xl font-bold zaions__cursor_pointer'>
 						🔗 All{' '}
 						{type === AdminPanelMainSidebarMenuPageEnum.shortLink
 							? 'links'
@@ -110,10 +110,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 					<ZIonItem>
 						<ZIonList lines='none' className='w-full'>
 							<ZIonItem className='ion-no-padding'>
-								<ZIonText
-									color='primary'
-									className='font-bold font-bold block text-xl'
-								>
+								<ZIonText color='primary' className='block text-xl font-bold'>
 									📂 Folders
 								</ZIonText>
 							</ZIonItem>
@@ -239,7 +236,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 
 				{showFoldersSaveReorderButton && (
 					<ZIonButton
-						className='ion-text-capitalize ion-margin-horizontal absolute bottom-0'
+						className='absolute bottom-0 ion-text-capitalize ion-margin-horizontal'
 						expand='block'
 						onClick={foldersSaveReorderButtonOnClickHandler}
 						style={{ width: '78%' }}

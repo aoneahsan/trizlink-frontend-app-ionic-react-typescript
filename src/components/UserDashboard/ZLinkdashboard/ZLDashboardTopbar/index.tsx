@@ -71,7 +71,7 @@ import { productSmLogo } from '@/assets/images';
  * */
 import {
 	ZaionsAuthTokenData,
-	ZaionsUserAccountRState,
+	ZaionsUserAccountRStateAtom,
 } from '@/ZaionsStore/UserAccount/index.recoil';
 import { useZIonLoading, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
@@ -104,7 +104,7 @@ const DashboardTopBarUserAccountModal: React.FC = ({
 }) => {
 	const [authTokenState, setAuthTokenState] =
 		useRecoilState(ZaionsAuthTokenData);
-	const setUserAccountState = useSetRecoilState(ZaionsUserAccountRState);
+	const setUserAccountStateAtom = useSetRecoilState(ZaionsUserAccountRStateAtom);
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
 
 	const signOutUser = async () => {
@@ -123,7 +123,7 @@ const DashboardTopBarUserAccountModal: React.FC = ({
 
 				// Emptings recoil states of userTokeState and userAccountState
 				setAuthTokenState(null);
-				setUserAccountState(null);
+				setUserAccountStateAtom(null);
 
 				// Dismiss the ion loader
 				await dismissZIonLoader();

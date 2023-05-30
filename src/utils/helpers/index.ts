@@ -1184,3 +1184,27 @@ export const getPlatformIcon = (type: workspaceFormConnectPagesEnum) => {
 		reportCustomError(error);
 	}
 };
+
+export const UserLogoutFn = async () => {
+	try {
+		const __response = await zAxiosApiRequest<{ isSuccess: boolean }>({
+			_url: API_URL_ENUM.logout,
+			_method: 'post',
+			_isAuthenticatedRequest: false,
+		});
+
+		if (__response?.isSuccess) {
+			// clear User token.
+			void STORAGE.CLEAR(LOCALSTORAGE_KEYS.USERDATA);
+			// clear auth token.
+			void STORAGE.CLEAR(LOCALSTORAGE_KEYS.AUTHTOKEN);
+
+			// redirect to home
+			window.location.replace('/');
+		} else {
+			throw new Error('Something went wrong please try again!');
+		}
+	} catch (error) {
+		reportCustomError(error);
+	}
+};

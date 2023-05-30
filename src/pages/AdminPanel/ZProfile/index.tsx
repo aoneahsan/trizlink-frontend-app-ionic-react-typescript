@@ -73,7 +73,7 @@ import {
 import { ZaionsCountryCodeRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
 import {
 	ZaionsUserAccountEmails,
-	ZaionsUserAccountRState,
+	ZaionsUserAccountRStateAtom,
 } from '@/ZaionsStore/UserAccount/index.recoil';
 
 /**
@@ -118,7 +118,7 @@ const ZProfile: React.FC = () => {
 	const [UserAccountEmails, setUserAccountEmails] = useRecoilState(
 		ZaionsUserAccountEmails
 	);
-	const [userAccountState] = useRecoilState(ZaionsUserAccountRState);
+	const [userAccountState] = useRecoilState(ZaionsUserAccountRStateAtom);
 
 	const setToPrimary = (id: string) => {
 		setUserAccountEmails(

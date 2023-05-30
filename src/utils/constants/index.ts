@@ -30,6 +30,7 @@ export const API_URLS = {
 	logout: '/logout',
 	verifyAuthenticationStatus: '/verify-authentication-status',
 	register: '/register',
+	getUserRolePermission: '/user/role/permissions',
 	csrf: '/sanctum/csrf-cookie',
 	delete: '/user/delete',
 	userPixelAccounts_create_list: '/user/pixel-accounts',
@@ -482,6 +483,10 @@ const REACT_QUERY = {
 		LINK_IN_BIO_BLOCK: {
 			MAIN: 'rq-link-in-bio-blocks',
 			GET: 'rq-link-in-bio-block',
+		},
+
+		USER: {
+			ROLE_PERMISSIONS: 'rq-user-roles-and-permissions',
 		},
 	},
 };

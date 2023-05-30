@@ -29,8 +29,6 @@ import {
  * */
 import {
 	ZIonAvatar,
-	ZIonButton,
-	ZIonButtons,
 	ZIonCol,
 	ZIonIcon,
 	ZIonImg,
@@ -43,7 +41,13 @@ import {
 import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import { ProductLogo } from '@/assets/images';
 import classNames from 'classnames';
+import { reportCustomError } from '@/utils/customErrorType';
+import { STORAGE, UserLogoutFn, zAxiosApiRequest } from '@/utils/helpers';
 import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
+import { useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
+import { LOCALSTORAGE_KEYS } from '@/utils/constants';
+import { API_URL_ENUM } from '@/utils/enums';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Custom Hooks Imports go down
@@ -87,9 +91,50 @@ import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
  * */
 
 const ZWorkspaceProfilePopover: React.FC = () => {
+	// Custom hooks.
+	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading(); // hook to show loader
+
+	const profileLogoutHandler = async () => {
+		try {
+			// Loading start...
+			await presentZIonLoader('Logging out. please wait a second.');
+
+			// logout user
+			const __response = await zAxiosApiRequest<{
+				data: { isSuccess: boolean };
+			}>({
+				_url: API_URL_ENUM.logout,
+				_method: 'post',
+				_isAuthenticatedRequest: false,
+			});
+
+			console.log(__response);
+
+			if (__response?.data.isSuccess) {
+				// clear User token.
+				void STORAGE.CLEAR(LOCALSTORAGE_KEYS.USERDATA);
+				// clear auth token.
+				void STORAGE.CLEAR(LOCALSTORAGE_KEYS.AUTHTOKEN);
+
+				// Dismiss the ion loader
+				await dismissZIonLoader();
+
+				// redirect to home
+				window.location.replace(ZaionsRoutes.LoginRoute);
+			} else {
+				throw new Error('Something went wrong please try again!');
+			}
+		} catch (error) {
+			// Dismiss the ion loader
+			await dismissZIonLoader();
+
+			reportCustomError(error);
+		}
+	};
+
 	return (
 		<>
-			<ZIonRow className='ion-align-items-center pt-2'>
+			<ZIonRow className='pt-2 ion-align-items-center'>
 				<ZIonCol size='max-content'>
 					<ZUserAvatarButton
 						className='w-[10px] h-[10px] me-1'
@@ -113,7 +158,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 
 			<ZIonList lines='none'>
 				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+					className='text-sm ion-activatable ion-focusable zaions__cursor_pointer'
 					minHeight='32px'
 					lines='full'
 				>
@@ -122,31 +167,32 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 				</ZIonItem>
 
 				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+					className='text-sm ion-activatable ion-focusable zaions__cursor_pointer'
 					minHeight='40px'
 				>
-					<ZIonIcon icon={notificationsOutline} className='me-1 pe-1 w-5 h-5' />
+					<ZIonIcon icon={notificationsOutline} className='w-5 h-5 me-1 pe-1' />
 					<ZIonLabel className='pt-1 my-0'>Notification settings</ZIonLabel>
 				</ZIonItem>
 
 				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+					className='text-sm ion-activatable ion-focusable zaions__cursor_pointer'
 					minHeight='40px'
 					lines='full'
+					onClick={() => void profileLogoutHandler()}
 				>
-					<ZIonIcon icon={logOutOutline} className='me-1 pe-1 w-5 h-5' />
+					<ZIonIcon icon={logOutOutline} className='w-5 h-5 me-1 pe-1' />
 					<ZIonLabel className='pt-1 my-0'>Logout</ZIonLabel>
 				</ZIonItem>
 
 				<ZIonText
-					className='mb-2 block mx-3 tracking-widest text-xs'
+					className='block mx-3 mb-2 text-xs tracking-widest'
 					color='medium'
 				>
 					COMPANY ACCOUNTS
 				</ZIonText>
 
 				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+					className='text-sm ion-activatable ion-focusable zaions__cursor_pointer'
 					minHeight='40px'
 				>
 					<ZIonAvatar
@@ -154,7 +200,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 					>
 						<ZIonImg src={getUiAvatarApiUrl({})} />
 					</ZIonAvatar>
-					<ZIonLabel className='ms-2 my-0'>
+					<ZIonLabel className='my-0 ms-2'>
 						<ZIonText className='block'>zaions</ZIonText>
 						<ZIonText color='medium' className='text-sm'>
 							Billing, members & usage
@@ -163,10 +209,10 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 				</ZIonItem>
 
 				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm mt-1'
+					className='mt-1 text-sm ion-activatable ion-focusable zaions__cursor_pointer'
 					minHeight='40px'
 				>
-					<ZIonIcon icon={addOutline} className='me-1 pe-1 w-5 h-5' />
+					<ZIonIcon icon={addOutline} className='w-5 h-5 me-1 pe-1' />
 					<ZIonLabel className='pt-1 my-0'>New company account</ZIonLabel>
 				</ZIonItem>
 			</ZIonList>

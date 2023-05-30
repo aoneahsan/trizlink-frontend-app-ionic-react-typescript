@@ -48,9 +48,9 @@ const ZaionsHPConnectPlatform: React.FC = () => {
 
 	return (
 		<>
-			<div className='ion-text-center ion-margin-bottom mt-4 pt-2 ion-padding-bottom'>
+			<div className='pt-2 mt-4 ion-text-center ion-margin-bottom ion-padding-bottom'>
 				<br />
-				<ZIonText className='text-3xl font-bold mb-2 d-inline-block'>
+				<ZIonText className='mb-2 text-3xl font-bold d-inline-block'>
 					{PRODUCT_NAME}’s Connections Platform
 				</ZIonText>
 				<br />
@@ -141,7 +141,7 @@ const ZaionsHPConnectPlatform: React.FC = () => {
 																{item.fetureText}
 															</ZIonText>
 														))}
-														<div className='ion-margin-horizontal pt-3'>
+														<div className='pt-3 ion-margin-horizontal'>
 															<ZIonRouterLink
 																routerLink={ZaionsRoutes.HomeRoute}
 															>
@@ -170,7 +170,7 @@ const ZaionsHPConnectPlatform: React.FC = () => {
 						<ZIonCol></ZIonCol>
 					</ZIonRow>
 				</ZIonGrid>
-			</div>{' '}
+			</div>
 		</>
 	);
 };

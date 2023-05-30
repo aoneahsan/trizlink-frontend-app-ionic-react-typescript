@@ -1,6 +1,7 @@
 import {
 	UserAccountType,
 	UserAccountAuthTokenType,
+	UserRoleAndPermissionsInterface,
 } from '@/types/UserAccount/index.type';
 // Packages Imports
 import { atom, selector } from 'recoil';
@@ -13,10 +14,21 @@ import { UserAccountEmailType } from '@/types/UserAccount/index.type';
 import { STORAGE } from '@/utils/helpers';
 import { LOCALSTORAGE_KEYS } from '@/utils/constants';
 
-export const ZaionsUserAccountRState = atom<UserAccountType | null>({
-	key: 'ZaionsUserAccountRState_Key',
+export const ZaionsUserAccountRStateAtom = atom<UserAccountType | null>({
+	key: 'ZaionsUserAccountRStateAtom_Key',
 	default: {},
 });
+
+export const currentLoggedInUserRoleAndPermissionsRStateAtom =
+	atom<UserRoleAndPermissionsInterface | null>({
+		key: 'currentLoginUserRoleAndPermissionsRStateAtom_Key',
+		default: {
+			result: {
+				roles: '',
+				permissions: [],
+			},
+		},
+	});
 
 export const ZaionsAuthTokenData = atom<UserAccountAuthTokenType | null>({
 	key: 'ZaionsAuthTokenData_Key',
@@ -44,7 +56,7 @@ export const ZaionsUserAccountEmails = atom<UserAccountEmailType[] | null>({
 export const ZaionsUserAccountEmail = selector<string | null>({
 	key: 'ZaionsUserAccountEmail_key',
 	get: ({ get }) => {
-		const _currentUser = get(ZaionsUserAccountRState);
+		const _currentUser = get(ZaionsUserAccountRStateAtom);
 		if (_currentUser && _currentUser.email) {
 			return _currentUser.email;
 		} else {

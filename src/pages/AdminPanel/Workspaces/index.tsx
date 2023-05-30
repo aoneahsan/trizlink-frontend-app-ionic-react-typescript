@@ -78,6 +78,7 @@ import {
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductLogo } from '@/assets/images';
+import ZUserProfileButton from '@/components/AdminPanelComponents/UserProfileButton';
 
 /**
  * Component props type go down
@@ -134,23 +135,15 @@ const ZWorkspaceListPage: React.FC = () => {
 					{/*  */}
 					<ZIonRow className='zaions_h100'>
 						{/* Expendable Navigation in the left-hand side */}
-						<AdminPanelMainSidebarMenu
+						{/* <AdminPanelMainSidebarMenu
 							activePage={AdminPanelMainSidebarMenuPageEnum.workspaces}
-						/>
+						/> */}
 
 						{/* Main Container */}
 						<ZIonCol
 							className='zaions-transition'
-							sizeXl={
-								ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-									? '10'
-									: '11.2'
-							}
-							sizeLg={
-								ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-									? '9'
-									: '8.8'
-							}
+							sizeXl='12'
+							sizeLg='12'
 							sizeMd='12'
 							sizeSm='12'
 							sizeXs='12'
@@ -173,7 +166,7 @@ const ZWorkspaceListPage: React.FC = () => {
 									</ZIonCol>
 
 									{/* new workspace button col */}
-									<ZIonCol className='ion-text-end'>
+									<ZIonCol className='flex gap-8 pe-3 ion-align-items-center ion-justify-content-end'>
 										<ZIonButton
 											className='ion-no-margin text-transform-initial'
 											color='secondary'
@@ -212,6 +205,9 @@ const ZWorkspaceListPage: React.FC = () => {
 										>
 											<ZIonIcon icon={addOutline} /> New workspace
 										</ZIonButton>
+
+										{/* User profile button */}
+										<ZUserProfileButton />
 									</ZIonCol>
 								</ZIonRow>
 

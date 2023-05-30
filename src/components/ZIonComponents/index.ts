@@ -39,6 +39,7 @@ export { default as ZIonRippleEffect } from './ZIonRippleEffect';
 export { default as ZIonDatetime } from './ZIonDatetime';
 export { default as ZIonDatetimeButton } from './ZIonDatetimeButton';
 export { default as ZIonModal } from './ZIonModal';
+export { default as ZIonLoading } from './ZIonLoading';
 export { default as ZIonReorder } from './ZIonReorder';
 export { default as ZIonReorderGroup } from './ZIonReorderGroup';
 export { default as ZIonRange } from './ZIonRange';

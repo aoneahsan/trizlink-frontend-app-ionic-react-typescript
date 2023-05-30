@@ -41,6 +41,7 @@ export enum API_URL_ENUM {
 	verifyAuthenticationStatus = 'verifyAuthenticationStatus',
 	delete = 'delete',
 	register = 'register',
+	getUserRolePermission = 'getUserRolePermission',
 	csrf = 'csrf',
 	userPixelAccounts_create_list = 'userPixelAccounts_create_list',
 	userPixelAccounts_update_delete = 'userPixelAccounts_update_delete',

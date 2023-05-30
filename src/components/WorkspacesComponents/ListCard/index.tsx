@@ -197,7 +197,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 
 	return (
 		<ZIonCard
-			className='zaions__cursor_pointer'
+			className='zaions__cursor_pointer h-[13.4rem]'
 			onClick={() => {
 				// Click on card will redirect to view workspace.
 				id &&
@@ -212,7 +212,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 		>
 			<ZIonCardHeader>
 				<ZIonRow className='ion-align-items-center'>
-					<ZIonCol className='gap-3 flex ion-align-items-center'>
+					<ZIonCol className='flex gap-3 ion-align-items-center'>
 						<div
 							className={classNames({
 								'zaions__w50px zaions__h50px rounded overflow__hidden': true,
@@ -231,7 +231,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 							)}
 						</div>
 						<div>
-							<ZIonText className='font-bold block text-base' color='dark'>
+							<ZIonText className='block text-base font-bold' color='dark'>
 								{workspaceName}
 							</ZIonText>
 							<ZIonText className='block zaions__fs_11'>
@@ -278,7 +278,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 				</ZIonRow>
 
 				{/* Bottom row */}
-				<ZIonRow className='mx-2 mt-5'>
+				<ZIonRow className='pt-5 mx-2 mt-8'>
 					{/* Last active */}
 					<ZIonCol>
 						<ZIonButton

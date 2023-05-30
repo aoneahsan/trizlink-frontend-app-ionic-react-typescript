@@ -53,7 +53,6 @@ import ZWorkspacePinterestPageLayout from '@/components/WorkspacesComponents/Pag
 import ZWorkspaceYoutubePageLayout from '@/components/WorkspacesComponents/PagesLayout/Youtube';
 import ZWorkspaceTwitterPageLayout from '@/components/WorkspacesComponents/PagesLayout/Twitter';
 import ZWorkspaceInstagramPageLayout from '@/components/WorkspacesComponents/PagesLayout/Instagram';
-import ZWorkspaceProfilePopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ProfilePopover';
 import ZWorkspaceNotificationPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/NotificationsPopover';
 import ZWorkspaceImportExportPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ImportExportPopover';
 import { workspacePagesDomeData } from '@/data/UserDashboard/Workspace/index.data';
@@ -106,6 +105,7 @@ import { WorkspaceComposeModalRStateAtom } from '@/ZaionsStore/UserDashboard/Wor
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { avatar, ProductLogo } from '@/assets/images';
+import ZUserProfileButton from '@/components/AdminPanelComponents/UserProfileButton';
 
 /**
  * Component props type go down
@@ -134,10 +134,6 @@ const ViewSingleWorkspace: React.FC = () => {
 
 	const { presentZIonPopover: presentWorkspaceAppStatusPopover } =
 		useZIonPopover(ZWorkspaceAppStatusPopover); // popover hook to show ZWorkspaceAppStatusPopover
-
-	const { presentZIonPopover: presentWorkspaceProfilePopover } = useZIonPopover(
-		ZWorkspaceProfilePopover
-	); // popover hook to show ZWorkspaceProfilePopover
 
 	const { presentZIonPopover: presentWorkspaceNotificationPopover } =
 		useZIonPopover(ZWorkspaceNotificationPopover); // popover hook to show ZWorkspaceNotificationPopover
@@ -338,16 +334,8 @@ const ViewSingleWorkspace: React.FC = () => {
 												/>
 											</ZIonButton>
 
-											<ZUserAvatarButton
-												style={{ height: '40px', width: '40px' }}
-												onClick={(event: unknown) => {
-													presentWorkspaceProfilePopover({
-														_event: event as Event,
-														_cssClass: 'zaions_workspaces_profile_popover_size',
-														_dismissOnSelect: false,
-													});
-												}}
-											/>
+											{/* User profile button */}
+											<ZUserProfileButton />
 										</ZIonCol>
 									</ZIonRow>
 

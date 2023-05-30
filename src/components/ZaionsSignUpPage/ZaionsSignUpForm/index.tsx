@@ -34,7 +34,7 @@ import MESSAGES from '@/utils/messages';
 // Recoil States
 import {
 	ZaionsAuthTokenData,
-	ZaionsUserAccountRState,
+	ZaionsUserAccountRStateAtom,
 } from '@/ZaionsStore/UserAccount/index.recoil';
 import { LOCALSTORAGE_KEYS, PRODUCT_NAME } from '@/utils/constants';
 import { AxiosError } from 'axios';
@@ -60,7 +60,9 @@ const ZaionsSignUpForm: React.FC = (props) => {
 		canViewPassword: false,
 	});
 
-	const setUserAccountState = useSetRecoilState(ZaionsUserAccountRState);
+	const setUserAccountStateAtom = useSetRecoilState(
+		ZaionsUserAccountRStateAtom
+	);
 	const setAuthTokenDataState = useSetRecoilState(ZaionsAuthTokenData);
 	// ZaionsAuthToken
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
@@ -108,7 +110,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 					void STORAGE.SET(LOCALSTORAGE_KEYS.AUTHTOKEN, userToken.token);
 
 					// Storing user data in userAccount Recoil State.
-					setUserAccountState((oldVals) => ({
+					setUserAccountStateAtom((oldVals) => ({
 						...oldVals,
 						...userData,
 					}));
@@ -125,8 +127,11 @@ const ZaionsSignUpForm: React.FC = (props) => {
 					// If success then show the success notification.
 					showSuccessNotification('Registration Completed');
 
-					// redirect to profile.
-					zNavigatePushRoute(ZaionsRoutes.AdminPanel.ZaionsDashboard.ZProfile);
+					// redirect to profile. (old 30/5/2023)
+					// zNavigatePushRoute(ZaionsRoutes.AdminPanel.ZaionsDashboard.ZProfile);
+
+					// Redirect to startup page
+					zNavigatePushRoute(ZaionsRoutes.AdminPanel.AppStartupPage);
 				} else {
 					// if there is any error in above then Throw Error..
 					throw new ZCustomError();
@@ -274,7 +279,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 								/>
 
 								{/* Password Field */}
-								<div className='flex ion-align-items-center mb-4'>
+								<div className='flex mb-4 ion-align-items-center'>
 									<ZIonInputField
 										inputFieldProps={{
 											label: 'Password*',
@@ -383,7 +388,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 								</ZIonNote>
 
 								{/* Password Field */}
-								<div className='flex ion-align-items-center mb-4'>
+								<div className='flex mb-4 ion-align-items-center'>
 									<ZIonInputField
 										inputFieldProps={{
 											label: 'Confirm Password*',
@@ -430,14 +435,14 @@ const ZaionsSignUpForm: React.FC = (props) => {
 								<ZIonButton
 									expand='block'
 									type='submit'
-									className='ion-text-capitalize mt-4'
+									className='mt-4 ion-text-capitalize'
 									disabled={touched && !isValid}
 								>
 									Sign up with Email
 								</ZIonButton>
 
 								{/* Some Text */}
-								<div className='ion-text-center	mt-3 mb-4'>
+								<div className='mt-3 mb-4 ion-text-center'>
 									<ZIonText className='zaions__fs_14 ' color='medium'>
 										By signing in with an account, you agree to <br />{' '}
 										{PRODUCT_NAME}
