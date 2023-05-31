@@ -1,5 +1,7 @@
 import CONSTANTS from '@/utils/constants';
 
+const workspaceIdParam = CONSTANTS.RouteParams.workspace.workspaceId;
+
 const ZaionsRoutes = {
 	// Main routes
 	HomeRoute: '/',
@@ -76,22 +78,22 @@ const ZaionsRoutes = {
 		},
 
 		ShortLinks: {
-			Main: `/short-links/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
-			Create: '/short-links/create',
-			Edit: `/short-links/edit/${CONSTANTS.RouteParams.editShortLinkIdParam}`,
+			Main: `/workspaces/${workspaceIdParam}/short-links/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
+			Create: `/workspaces/${workspaceIdParam}/short-links/create`,
+			Edit: `/workspaces/${workspaceIdParam}/short-links/edit/${CONSTANTS.RouteParams.editShortLinkIdParam}`,
 		},
 
 		LinkInBio: {
-			Main: `/link-in-bio/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
-			Create: '/link-in-bio/create',
-			Edit: `/link-in-bio/edit/${CONSTANTS.RouteParams.editLinkInBioIdParam}`,
+			Main: `/workspaces/${workspaceIdParam}/link-in-bio/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
+			Create: `/workspaces/${workspaceIdParam}/link-in-bio/create`,
+			Edit: `/workspaces/${workspaceIdParam}/link-in-bio/edit/${CONSTANTS.RouteParams.editLinkInBioIdParam}`,
 		},
 
 		Workspaces: {
 			Main: '/workspaces',
 			Create: '/workspaces/create',
 			Edit: `/workspaces/edit/${CONSTANTS.RouteParams.workspace.editWorkspaceIdParam}`,
-			View: `/workspaces/view/${CONSTANTS.RouteParams.workspace.workspaceId}`,
+			View: `/workspaces/${workspaceIdParam}/view`,
 		},
 
 		ZaionsDashboard: {

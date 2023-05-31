@@ -122,10 +122,10 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 	};
 
 	// Getting short-links folders data from backend
-	const { data: _foldersData } = useZRQGetRequest<LinkFolderType[]>({
-		_url: API_URL_ENUM.userAccountFolders_create_list,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
-	});
+	// const { data: _foldersData } = useZRQGetRequest<LinkFolderType[]>({
+	// 	_url: API_URL_ENUM.userAccountFolders_create_list,
+	// 	_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
+	// });
 
 	// Update shortLinks folders reorder API
 	const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
@@ -133,15 +133,15 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 		_queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
 	});
 
-	useEffect(() => {
-		try {
-			if (_foldersData) {
-				setShortLinksFolderState(_foldersData);
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	}, [_foldersData]);
+	// useEffect(() => {
+	// 	try {
+	// 		if (_foldersData) {
+	// 			setShortLinksFolderState(_foldersData);
+	// 		}
+	// 	} catch (error) {
+	// 		reportCustomError(error);
+	// 	}
+	// }, [_foldersData]);
 
 	const shortLinksFoldersReorderHandler = async () => {
 		try {

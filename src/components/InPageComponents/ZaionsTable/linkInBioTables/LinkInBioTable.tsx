@@ -68,6 +68,8 @@ import {
 	ZLinkInBioRHSComponentEnum,
 } from '@/types/AdminPanel/linkInBioType';
 import CONSTANTS from '@/utils/constants';
+import ZCan from '@/components/Can';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 // import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 
 // Styles
@@ -88,7 +90,10 @@ const ZaionsLinkInBioLinksTable = () => {
 		LinkInBiosFilterOptionsRState
 	);
 
-	const { folderId } = useParams<{ folderId: string }>();
+	const { folderId, workspaceId } = useParams<{
+		folderId: string;
+		workspaceId: string;
+	}>();
 	const actionsPopoverRef = useRef<HTMLIonPopoverElement>(null);
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
@@ -102,6 +107,8 @@ const ZaionsLinkInBioLinksTable = () => {
 	const { data: getLinkInBioLinkData } = useZRQGetRequest<LinkInBioType[]>({
 		_url: API_URL_ENUM.linkInBio_create_list,
 		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN],
+		_itemsIds: [workspaceId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 	});
 
 	useEffect(() => {
@@ -138,14 +145,23 @@ const ZaionsLinkInBioLinksTable = () => {
 				zNavigatePushRoute(
 					createRedirectRoute({
 						url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-						params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
-						values: [compState.selectedLinkInBioLinkId],
+						params: [
+							CONSTANTS.RouteParams.workspace.workspaceId,
+							CONSTANTS.RouteParams.editLinkInBioIdParam,
+						],
+						values: [workspaceId, compState.selectedLinkInBioLinkId],
 						routeSearchParams: {
 							page: ZLinkInBioPageEnum.design,
 							step: ZLinkInBioRHSComponentEnum.theme,
 						},
 					})
 				);
+
+				// _itemsIds: [editLinkInBioId, workspaceId],
+				// _urlDynamicParts: [
+				// 	CONSTANTS.RouteParams.linkInBio.linkInBioId,
+				// 	CONSTANTS.RouteParams.workspace.workspaceId,
+				// ],
 			} else {
 				await presentZIonErrorAlert();
 			}
@@ -251,6 +267,7 @@ const ZaionsLinkInBioLinksTable = () => {
 													fill='clear'
 													color={'dark'}
 													onClick={(_event) => {
+														console.log({ selectedLinkInBioLinkId: el });
 														setCompState((oldVal) => ({
 															...oldVal,
 															selectedLinkInBioLinkId: el.id,
@@ -365,46 +382,51 @@ const ZaionsLinkInBioLinksTable = () => {
 			>
 				<ZIonContent>
 					<ZIonList lines='none' className='ion-no-padding'>
-						<ZIonItem
-							button={true}
-							detail={false}
-							onClick={() => {
-								void editLinkInBioDetails();
-							}}
-						>
-							<ZIonButton
-								size='small'
-								expand='full'
-								fill='clear'
-								className='mx-auto ion-text-capitalize'
+						<ZCan havePermission={permissionsEnum.update_shortLink}>
+							<ZIonItem
+								button={true}
+								detail={false}
+								onClick={() => {
+									void editLinkInBioDetails();
+								}}
 							>
-								<ZIonIcon
-									icon={pencilOutline}
-									className='me-2'
-									color={'secondary'}
-								/>{' '}
-								<ZIonText color={'secondary'}>Edit</ZIonText>
-							</ZIonButton>
-						</ZIonItem>
-						<ZIonItem
-							button={true}
-							detail={false}
-							onClick={() => void deleteLinkInBio()}
-						>
-							<ZIonButton
-								size='small'
-								expand='full'
-								fill='clear'
-								className='mx-auto ion-text-capitalize'
+								<ZIonButton
+									size='small'
+									expand='full'
+									fill='clear'
+									className='mx-auto ion-text-capitalize'
+								>
+									<ZIonIcon
+										icon={pencilOutline}
+										className='me-2'
+										color={'secondary'}
+									/>
+									<ZIonText color={'secondary'}>Edit</ZIonText>
+								</ZIonButton>
+							</ZIonItem>
+						</ZCan>
+
+						<ZCan havePermission={permissionsEnum.delete_shortLink}>
+							<ZIonItem
+								button={true}
+								detail={false}
+								onClick={() => void deleteLinkInBio()}
 							>
-								<ZIonIcon
-									icon={trashBinOutline}
-									className='me-2'
-									color={'danger'}
-								/>{' '}
-								<ZIonText color={'danger'}>Delete</ZIonText>
-							</ZIonButton>
-						</ZIonItem>
+								<ZIonButton
+									size='small'
+									expand='full'
+									fill='clear'
+									className='mx-auto ion-text-capitalize'
+								>
+									<ZIonIcon
+										icon={trashBinOutline}
+										className='me-2'
+										color={'danger'}
+									/>
+									<ZIonText color={'danger'}>Delete</ZIonText>
+								</ZIonButton>
+							</ZIonItem>
+						</ZCan>
 					</ZIonList>
 				</ZIonContent>
 			</IonPopover>

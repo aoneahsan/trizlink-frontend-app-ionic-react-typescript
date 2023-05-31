@@ -80,12 +80,14 @@ const ZAppStartupPage: React.FC = () => {
 	const { zNavigatePushRoute } = useZNavigate(); // hook to navigate
 
 	// getting the role & permissions of the current log in user.
-	const { data: getUserRoleAndPermissions } =
-		useZRQGetRequest<UserRoleAndPermissionsInterface>({
-			_url: API_URL_ENUM.getUserRolePermission,
-			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.ROLE_PERMISSIONS],
-			_extractType: ZRQGetRequestExtractEnum.extractItem,
-		});
+	const { data: getUserRoleAndPermissions } = useZRQGetRequest<{
+		isSuccess: boolean;
+		result: UserRoleAndPermissionsInterface;
+	}>({
+		_url: API_URL_ENUM.getUserRolePermission,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.ROLE_PERMISSIONS],
+		_extractType: ZRQGetRequestExtractEnum.extractItem,
+	});
 
 	// storing the role & permissions in recoil state
 	useEffect(() => {
@@ -94,10 +96,9 @@ const ZAppStartupPage: React.FC = () => {
 				// Storing in recoil.
 				setCurrentLoginUserRoleAndPermissionsStateAtom((oldValues) => ({
 					...oldValues,
-					...getUserRoleAndPermissions,
+					role: getUserRoleAndPermissions.result.role,
+					permissions: getUserRoleAndPermissions.result.permissions,
 				}));
-
-				console.log(getUserRoleAndPermissions);
 
 				setLoadingIsOpen(false);
 

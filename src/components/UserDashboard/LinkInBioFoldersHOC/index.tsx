@@ -60,32 +60,32 @@ import { LinkInBioFolderFormattedRState } from '@/ZaionsStore/UserDashboard/Link
  * */
 
 const LinkInBioFoldersHOC: React.FC = () => {
-	const { data: getLinkInBioFoldersData } = useZRQGetRequest<LinkFolderType[]>({
-		_url: API_URL_ENUM.userAccount_LinkInBio_folders_create_list,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN],
-	});
+	// const { data: getLinkInBioFoldersData } = useZRQGetRequest<LinkFolderType[]>({
+	// 	_url: API_URL_ENUM.userAccount_LinkInBio_folders_create_list,
+	// 	_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN],
+	// });
 
 	const [linkInBioFoldersData, setLinkInBioFoldersData] = useRecoilState(
 		LinkInBioFolderFormattedRState
 	);
 
-	useEffect(() => {
-		try {
-			if (getLinkInBioFoldersData) {
-				const formattedLinkInBioFoldersData = getLinkInBioFoldersData?.map(
-					(el) => {
-						return { value: el.id, label: el.title };
-					}
-				) as FolderInterface[];
-				if (formattedLinkInBioFoldersData) {
-					setLinkInBioFoldersData(formattedLinkInBioFoldersData);
-				}
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-		// eslint-disable-next-line
-	}, [getLinkInBioFoldersData]);
+	// useEffect(() => {
+	// 	try {
+	// 		if (getLinkInBioFoldersData) {
+	// 			const formattedLinkInBioFoldersData = getLinkInBioFoldersData?.map(
+	// 				(el) => {
+	// 					return { value: el.id, label: el.title };
+	// 				}
+	// 			) as FolderInterface[];
+	// 			if (formattedLinkInBioFoldersData) {
+	// 				setLinkInBioFoldersData(formattedLinkInBioFoldersData);
+	// 			}
+	// 		}
+	// 	} catch (error) {
+	// 		reportCustomError(error);
+	// 	}
+	// 	// eslint-disable-next-line
+	// }, [getLinkInBioFoldersData]);
 
 	return (
 		<NewLinkFolder

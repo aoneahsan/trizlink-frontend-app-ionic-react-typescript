@@ -654,9 +654,8 @@ export const zAxiosApiRequest = async <T>({
 			data: _data,
 			url: getApiUrl(_url, _itemIds, _urlDynamicParts),
 			headers: {
-				Accept: 'application/json',
+				Accept: zAxiosApiRequestContentType.Json,
 				'Content-Type': _contentType,
-				// 'Content-Type': 'multipart/form-data;',
 				Authorization: `${CONSTANTS.DEFAULT_VALUES.API_TOKEN_PRIMARY_KEY} ${
 					_authToken || ''
 				}`,

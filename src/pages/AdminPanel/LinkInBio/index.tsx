@@ -98,6 +98,8 @@ import classes from './styles.module.css';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import ZDashboardSidebar from '@/components/AdminPanelComponents/Sidebar';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import ZCan from '@/components/Can';
 
 const ZLinkInBiosListPage: React.FC = () => {
 	// Component state
@@ -151,10 +153,10 @@ const ZLinkInBiosListPage: React.FC = () => {
 	const linkInBioData = useRecoilValue(LinkInBiosRState);
 
 	//
-	const { data: linkInBiosFoldersData } = useZRQGetRequest<LinkFolderType[]>({
-		_url: API_URL_ENUM.userAccount_LinkInBio_folders_create_list,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN],
-	});
+	// const { data: linkInBiosFoldersData } = useZRQGetRequest<LinkFolderType[]>({
+	// 	_url: API_URL_ENUM.userAccount_LinkInBio_folders_create_list,
+	// 	_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN],
+	// });
 
 	const { presentZIonPopover: presentLinkInBioFolderActionIonPopover } =
 		useZIonPopover(FolderActionsPopoverContent);
@@ -246,213 +248,221 @@ const ZLinkInBiosListPage: React.FC = () => {
 			id={CONSTANTS.MENU_IDS.ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID}
 			menu={PAGE_MENU.ADMIN_PANEL_LINK_IN_BIO_FOLDERS_MENU}
 		>
-			<ZIonContent>
-				{/* Page Navigation */}
-				<ZIonRefresher onIonRefresh={(event) => void handleRefresh(event)}>
-					<ZIonRefresherContent />
-				</ZIonRefresher>
+			<ZCan havePermission={permissionsEnum.viewAny_shortLink}>
+				<ZIonContent>
+					{/* Page Navigation */}
+					<ZIonRefresher onIonRefresh={(event) => void handleRefresh(event)}>
+						<ZIonRefresherContent />
+					</ZIonRefresher>
 
-				{/*  */}
-				<ZIonGrid className='ion-no-padding zaions_h100'>
-					<ZIonRow className='zaions_h100'>
-						{/* Side bar */}
-						<ZDashboardSidebar
-							type={AdminPanelMainSidebarMenuPageEnum.linkInBio}
-							//
-							foldersData={linkInBiosFoldersData ? linkInBiosFoldersData : []}
-							//
-							addNewFolderButtonOnClickHandler={() => {
-								presentFolderModal({
-									_cssClass: 'folder-modal-size',
-								});
-							}}
-							//
-							foldersSaveReorderButtonOnClickHandler={() => {
-								void linkInBioFoldersReOrderHandler();
-							}}
-							//
-							handleFoldersReorder={handleReorder}
-							//
-							showFoldersSaveReorderButton={
-								compState?.LinkInBioFoldersReorder?.isEnable
-							}
-							//
-							folderActionsButtonOnClickHandler={(event: unknown) => {
-								presentLinkInBioFolderActionIonPopover({
-									_event: event as Event,
-									_cssClass: classNames(
-										classes.zaions_present_folder_Action_popover_width
-									),
-								});
-							}}
-						/>
+					{/*  */}
+					<ZIonGrid className='ion-no-padding zaions_h100'>
+						<ZIonRow className='zaions_h100'>
+							{/* Side bar */}
+							<ZDashboardSidebar
+								type={AdminPanelMainSidebarMenuPageEnum.linkInBio}
+								//
+								// foldersData={linkInBiosFoldersData ? linkInBiosFoldersData : []}
+								foldersData={[]}
+								//
+								addNewFolderButtonOnClickHandler={() => {
+									presentFolderModal({
+										_cssClass: 'folder-modal-size',
+									});
+								}}
+								//
+								foldersSaveReorderButtonOnClickHandler={() => {
+									void linkInBioFoldersReOrderHandler();
+								}}
+								//
+								handleFoldersReorder={handleReorder}
+								//
+								showFoldersSaveReorderButton={
+									compState?.LinkInBioFoldersReorder?.isEnable
+								}
+								//
+								folderActionsButtonOnClickHandler={(event: unknown) => {
+									presentLinkInBioFolderActionIonPopover({
+										_event: event as Event,
+										_cssClass: classNames(
+											classes.zaions_present_folder_Action_popover_width
+										),
+									});
+								}}
+							/>
 
-						<ZIonCol
-							className='zaions-transition'
-							sizeXl={
-								ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-									? '8'
-									: '8.8'
-							}
-							sizeLg={
-								ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-									? '8'
-									: '8.8'
-							}
-							sizeMd='12'
-							sizeSm='12'
-							sizeXs='12'
-						>
-							<ZIonGrid className='pb-2 zaions__bg_white ion-no-padding'>
-								<ZIonRow
-									className={classNames({
-										'px-3 ion-align-items-center': true,
-										'mt-4': isLgScale,
-									})}
-								>
-									{!isLgScale && (
-										<ZIonCol
-											size='max-content'
-											sizeSm='max-content'
-											sizeXs='12'
-											className={classNames({
-												'order-3': !isMdScale,
-											})}
-										>
-											<ZIonMenuToggle
-												autoHide={false}
-												menu={
-													CONSTANTS.MENU_IDS
-														.ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID
-												}
-											>
-												<ZIonButton
-													className={classNames({
-														'text-transform-initial': true,
-														'open-folder-menu-button': isLgScale || isSmScale,
-														'mt-4 ms-0': !isMdScale,
-													})}
-													expand={!isSmScale ? 'block' : undefined}
-													// menu={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
-													// autoHide={false}
-												>
-													Open folders menu
-												</ZIonButton>
-											</ZIonMenuToggle>
-										</ZIonCol>
-									)}
-
-									<ZIonCol
+							<ZIonCol
+								className='zaions-transition'
+								sizeXl={
+									ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
+										? '8'
+										: '8.8'
+								}
+								sizeLg={
+									ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
+										? '8'
+										: '8.8'
+								}
+								sizeMd='12'
+								sizeSm='12'
+								sizeXs='12'
+							>
+								<ZIonGrid className='pb-2 zaions__bg_white ion-no-padding'>
+									<ZIonRow
 										className={classNames({
-											'order-1': !isMdScale,
+											'px-3 ion-align-items-center': true,
+											'mt-4': isLgScale,
 										})}
 									>
-										<ZIonText
-											className={classNames({
-												'text-2xl font-bold block': true,
-												'ion-text-center ': !isLgScale,
-											})}
-											color='medium'
-										>
-											Create a new Link In Bio
-										</ZIonText>
-										<ZIonText
-											className={classNames({
-												'text-md block': true,
-												'ion-text-center': !isLgScale,
-											})}
-											color='medium'
-										>
-											Create & manage your Link In Bios
-										</ZIonText>
-									</ZIonCol>
-
-									<ZIonCol
-										sizeXl='4'
-										sizeLg='5'
-										sizeMd='5'
-										sizeSm='12'
-										sizeXs='12'
-										className={classNames({
-											'mt-4 order-2': !isMdScale,
-										})}
-									>
-										{/* This will create short link (not link-in-bio) */}
-										<ZaionsCreateShortLinkUrlInput />
-									</ZIonCol>
-								</ZIonRow>
-							</ZIonGrid>
-
-							<ZIonGrid className='my-5'>
-								<ZIonRow className='px-3 py-4 rounded zaions__bg_white ion-align-items-center'>
-									<ZIonCol
-										sizeXl='4'
-										sizeLg='12'
-										sizeMd='12'
-										sizeSm='12'
-										sizeXs='12'
-									>
-										<SearchQueryInputComponent />
-									</ZIonCol>
-
-									<ZIonCol>
-										<ZIonRow
-											className={classNames({
-												'justify-content-end': isXlScale,
-												'justify-content-start mt-4': !isXlScale,
-												'row-gap-1-rem': !isLgScale,
-											})}
-										>
-											<ZIonButtons
+										{!isLgScale && (
+											<ZIonCol
+												size='max-content'
+												sizeSm='max-content'
+												sizeXs='12'
 												className={classNames({
-													'w-full': true,
-													'ion-justify-content-between': !isXlScale,
-													'ion-justify-content-end gap-3': isXlScale,
-													block: !isSmScale,
+													'order-3': !isMdScale,
 												})}
 											>
-												<ZIonButton
-													id='dropdown-basic'
-													fill='outline'
-													color='primary'
-													expand={!isSmScale ? 'block' : undefined}
+												<ZIonMenuToggle
+													autoHide={false}
+													menu={
+														CONSTANTS.MENU_IDS
+															.ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID
+													}
+												>
+													<ZIonButton
+														className={classNames({
+															'text-transform-initial': true,
+															'open-folder-menu-button': isLgScale || isSmScale,
+															'mt-4 ms-0': !isMdScale,
+														})}
+														expand={!isSmScale ? 'block' : undefined}
+														// menu={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
+														// autoHide={false}
+													>
+														Open folders menu
+													</ZIonButton>
+												</ZIonMenuToggle>
+											</ZIonCol>
+										)}
+
+										<ZIonCol
+											className={classNames({
+												'order-1': !isMdScale,
+											})}
+										>
+											<ZIonText
+												className={classNames({
+													'text-2xl font-bold block': true,
+													'ion-text-center ': !isLgScale,
+												})}
+												color='medium'
+											>
+												Create a new Link In Bio
+											</ZIonText>
+											<ZIonText
+												className={classNames({
+													'text-md block': true,
+													'ion-text-center': !isLgScale,
+												})}
+												color='medium'
+											>
+												Create & manage your Link In Bios
+											</ZIonText>
+										</ZIonCol>
+
+										<ZCan havePermission={permissionsEnum.create_shortLink}>
+											<ZIonCol
+												sizeXl='4'
+												sizeLg='5'
+												sizeMd='5'
+												sizeSm='12'
+												sizeXs='12'
+												className={classNames({
+													'mt-4 order-2': !isMdScale,
+												})}
+											>
+												{/* This will create short link (not link-in-bio) */}
+												<ZaionsCreateShortLinkUrlInput />
+											</ZIonCol>
+										</ZCan>
+									</ZIonRow>
+								</ZIonGrid>
+
+								<ZIonGrid className='my-5'>
+									<ZIonRow className='px-3 py-4 rounded zaions__bg_white ion-align-items-center'>
+										<ZIonCol
+											sizeXl='4'
+											sizeLg='12'
+											sizeMd='12'
+											sizeSm='12'
+											sizeXs='12'
+										>
+											<SearchQueryInputComponent />
+										</ZIonCol>
+
+										<ZIonCol>
+											<ZIonRow
+												className={classNames({
+													'justify-content-end': isXlScale,
+													'justify-content-start mt-4': !isXlScale,
+													'row-gap-1-rem': !isLgScale,
+												})}
+											>
+												<ZIonButtons
 													className={classNames({
-														'my-2': true,
+														'w-full': true,
+														'ion-justify-content-between': !isXlScale,
+														'ion-justify-content-end gap-3': isXlScale,
+														block: !isSmScale,
 													})}
 												>
-													Export data's
-												</ZIonButton>
+													<ZIonButton
+														id='dropdown-basic'
+														fill='outline'
+														color='primary'
+														expand={!isSmScale ? 'block' : undefined}
+														className={classNames({
+															'my-2': true,
+														})}
+													>
+														Export data's
+													</ZIonButton>
 
-												<ZIonButton
-													fill='outline'
-													color='primary'
-													expand={!isSmScale ? 'block' : undefined}
-													className={classNames({
-														'my-2': true,
-													})}
-												>
-													Bulk Import
-												</ZIonButton>
+													<ZIonButton
+														fill='outline'
+														color='primary'
+														expand={!isSmScale ? 'block' : undefined}
+														className={classNames({
+															'my-2': true,
+														})}
+													>
+														Bulk Import
+													</ZIonButton>
 
-												<ZIonButton
-													color='primary'
-													fill='solid'
-													// className={classNames({
-													// 	'my-2': true,
-													// })}
-													expand={!isSmScale ? 'block' : undefined}
-													onClick={() => {
-														presentAddLinkInBioModal({
-															_cssClass: 'folder-modal-size',
-														});
-													}}
-												>
-													Create a new Link In Bio
-												</ZIonButton>
-											</ZIonButtons>
-										</ZIonRow>
+													<ZCan
+														havePermission={permissionsEnum.create_shortLink}
+													>
+														<ZIonButton
+															color='primary'
+															fill='solid'
+															// className={classNames({
+															// 	'my-2': true,
+															// })}
+															expand={!isSmScale ? 'block' : undefined}
+															onClick={() => {
+																presentAddLinkInBioModal({
+																	_cssClass: 'folder-modal-size',
+																});
+															}}
+														>
+															Create a new Link In Bio
+														</ZIonButton>
+													</ZCan>
+												</ZIonButtons>
+											</ZIonRow>
 
-										{/* <div className='gap-3 flex ion-justify-content-end'>
+											{/* <div className='flex gap-3 ion-justify-content-end'>
 											<Dropdown>
 												<Dropdown.Toggle
 													id='dropdown-custom-components'
@@ -498,149 +508,151 @@ const ZLinkInBiosListPage: React.FC = () => {
 												Create a new Link In Bio
 											</ZIonButton>
 										</div> */}
-									</ZIonCol>
-								</ZIonRow>
+										</ZIonCol>
+									</ZIonRow>
 
-								<ZIonRow className='px-3 py-4 mt-1 rounded zaions__bg_white ion-align-items-center'>
-									<ZIonCol className='flex ion-align-items-center'>
-										<ZIonText className='text-2xl'>
-											<ZIonText className='total_links font-bold'>
-												{linkInBioData?.length}
-											</ZIonText>{' '}
-											links
-										</ZIonText>
-									</ZIonCol>
+									<ZIonRow className='px-3 py-4 mt-1 rounded zaions__bg_white ion-align-items-center'>
+										<ZIonCol className='flex ion-align-items-center'>
+											<ZIonText className='text-2xl'>
+												<ZIonText className='font-bold total_links me-1'>
+													{linkInBioData?.length}
+												</ZIonText>
+												links
+											</ZIonText>
+										</ZIonCol>
 
-									<ZIonCol
-										className={classNames({
-											flex: true,
-											'justify-content-end': isXlScale,
-											'justify-content-between mt-3': !isXlScale,
-										})}
-										sizeXl='8'
-										size='12'
-									>
-										<ZIonRow
+										<ZIonCol
 											className={classNames({
-												'w-full ion-justify-content-between': true,
-												'row-gap-1-rem': !isLgScale,
+												flex: true,
+												'justify-content-end': isXlScale,
+												'justify-content-between mt-3': !isXlScale,
 											})}
+											sizeXl='8'
+											size='12'
 										>
-											<ZIonButtons
+											<ZIonRow
 												className={classNames({
-													'w-full': true,
-													'ion-justify-content-between': !isXlScale,
-													'ion-justify-content-end gap-3': isXlScale,
-													block: !isMdScale,
+													'w-full ion-justify-content-between': true,
+													'row-gap-1-rem': !isLgScale,
 												})}
 											>
-												{/* Filter by days */}
-												<ZIonButton
-													fill='outline'
-													color='primary'
-													expand={!isMdScale ? 'block' : undefined}
+												<ZIonButtons
 													className={classNames({
-														'ms-auto me-3': isXlScale,
-														'my-2': !isMdScale,
-													})}
-													onClick={(event: unknown) => {
-														presentLinkInBioTimeFilterModal({
-															_event: event as Event,
-															_cssClass:
-																classes['link-in-bio-time-filter-modal-size'],
-														});
-													}}
-												>
-													<ZIonIcon slot='start' icon={calendar} />
-													{linkInBiosFilterOptionsState.timeFilter
-														.daysToSubtract === TimeFilterEnum.allTime
-														? 'All Times'
-														: linkInBiosFilterOptionsState.timeFilter
-																.daysToSubtract === TimeFilterEnum.today
-														? 'Today'
-														: linkInBiosFilterOptionsState.timeFilter
-																.daysToSubtract === TimeFilterEnum.lastSevenDays
-														? 'Last 7 days'
-														: linkInBiosFilterOptionsState.timeFilter
-																.daysToSubtract === TimeFilterEnum.last30days
-														? 'Last 30 days'
-														: linkInBiosFilterOptionsState.timeFilter
-																.daysToSubtract === TimeFilterEnum.lastMonth
-														? 'Last Mouth'
-														: linkInBiosFilterOptionsState.timeFilter
-																.daysToSubtract === TimeFilterEnum.thisMonth
-														? 'This Month'
-														: linkInBiosFilterOptionsState.timeFilter
-																.daysToSubtract === TimeFilterEnum.customRange
-														? 'Custom Range'
-														: 'All Time'}
-												</ZIonButton>
-
-												{/* Filter by tags */}
-												<ZIonButton
-													fill='outline'
-													color='primary'
-													expand={!isMdScale ? 'block' : undefined}
-													className={classNames({
-														'ms-auto me-3': isXlScale,
-														'my-2': !isMdScale,
-													})}
-													onClick={(event: unknown) => {
-														presentLinkInBioTagsFilterModal({
-															_event: event as Event,
-															_dismissOnSelect: false,
-															_cssClass:
-																classes['link-in-bio-tags-filter-modal-size'],
-														});
-													}}
-												>
-													<ZIonIcon
-														slot='start'
-														icon={pricetagOutline}
-													></ZIonIcon>
-													{linkInBiosFilterOptionsState.tags
-														? linkInBiosFilterOptionsState.tags?.length === 1
-															? linkInBiosFilterOptionsState.tags[0]
-															: linkInBiosFilterOptionsState.tags?.length > 1
-															? `${linkInBiosFilterOptionsState.tags?.length} tags`
-															: 'No values'
-														: 'No values'}
-												</ZIonButton>
-
-												{/* Filter by Columns */}
-												<ZIonButton
-													fill='outline'
-													color='primary'
-													expand={!isMdScale ? 'block' : undefined}
-													className={classNames({
-														'ms-auto me-3': isXlScale,
-														'my-2': !isMdScale,
+														'w-full': true,
+														'ion-justify-content-between': !isXlScale,
+														'ion-justify-content-end gap-3': isXlScale,
+														block: !isMdScale,
 													})}
 												>
-													<ZIonIcon slot='start' icon={menuOutline} />7 Columns
-												</ZIonButton>
+													{/* Filter by days */}
+													<ZIonButton
+														fill='outline'
+														color='primary'
+														expand={!isMdScale ? 'block' : undefined}
+														className={classNames({
+															'ms-auto me-3': isXlScale,
+															'my-2': !isMdScale,
+														})}
+														onClick={(event: unknown) => {
+															presentLinkInBioTimeFilterModal({
+																_event: event as Event,
+																_cssClass:
+																	classes['link-in-bio-time-filter-modal-size'],
+															});
+														}}
+													>
+														<ZIonIcon slot='start' icon={calendar} />
+														{linkInBiosFilterOptionsState.timeFilter
+															.daysToSubtract === TimeFilterEnum.allTime
+															? 'All Times'
+															: linkInBiosFilterOptionsState.timeFilter
+																	.daysToSubtract === TimeFilterEnum.today
+															? 'Today'
+															: linkInBiosFilterOptionsState.timeFilter
+																	.daysToSubtract ===
+															  TimeFilterEnum.lastSevenDays
+															? 'Last 7 days'
+															: linkInBiosFilterOptionsState.timeFilter
+																	.daysToSubtract === TimeFilterEnum.last30days
+															? 'Last 30 days'
+															: linkInBiosFilterOptionsState.timeFilter
+																	.daysToSubtract === TimeFilterEnum.lastMonth
+															? 'Last Mouth'
+															: linkInBiosFilterOptionsState.timeFilter
+																	.daysToSubtract === TimeFilterEnum.thisMonth
+															? 'This Month'
+															: linkInBiosFilterOptionsState.timeFilter
+																	.daysToSubtract === TimeFilterEnum.customRange
+															? 'Custom Range'
+															: 'All Time'}
+													</ZIonButton>
 
-												{/* Refetch data button */}
-												<ZIonButton
-													color='primary'
-													fill='outline'
-													expand={!isMdScale ? 'block' : undefined}
-													className={classNames({
-														'ms-auto': isXlScale,
-														'my-2': !isMdScale,
-													})}
-													onClick={() => {
-														void invalidedLinkInBioQuery();
-													}}
-												>
-													<ZIonIcon slot='start' icon={refresh} />
-													Refetch
-												</ZIonButton>
-											</ZIonButtons>
-										</ZIonRow>
+													{/* Filter by tags */}
+													<ZIonButton
+														fill='outline'
+														color='primary'
+														expand={!isMdScale ? 'block' : undefined}
+														className={classNames({
+															'ms-auto me-3': isXlScale,
+															'my-2': !isMdScale,
+														})}
+														onClick={(event: unknown) => {
+															presentLinkInBioTagsFilterModal({
+																_event: event as Event,
+																_dismissOnSelect: false,
+																_cssClass:
+																	classes['link-in-bio-tags-filter-modal-size'],
+															});
+														}}
+													>
+														<ZIonIcon
+															slot='start'
+															icon={pricetagOutline}
+														></ZIonIcon>
+														{linkInBiosFilterOptionsState.tags
+															? linkInBiosFilterOptionsState.tags?.length === 1
+																? linkInBiosFilterOptionsState.tags[0]
+																: linkInBiosFilterOptionsState.tags?.length > 1
+																? `${linkInBiosFilterOptionsState.tags?.length} tags`
+																: 'No values'
+															: 'No values'}
+													</ZIonButton>
 
-										{/* Filter by Domains */}
-										{/* <ZIonButton
+													{/* Filter by Columns */}
+													<ZIonButton
+														fill='outline'
+														color='primary'
+														expand={!isMdScale ? 'block' : undefined}
+														className={classNames({
+															'ms-auto me-3': isXlScale,
+															'my-2': !isMdScale,
+														})}
+													>
+														<ZIonIcon slot='start' icon={menuOutline} />7
+														Columns
+													</ZIonButton>
+
+													{/* Refetch data button */}
+													<ZIonButton
+														color='primary'
+														fill='outline'
+														expand={!isMdScale ? 'block' : undefined}
+														className={classNames({
+															'ms-auto': isXlScale,
+															'my-2': !isMdScale,
+														})}
+														onClick={() => {
+															void invalidedLinkInBioQuery();
+														}}
+													>
+														<ZIonIcon slot='start' icon={refresh} />
+														Refetch
+													</ZIonButton>
+												</ZIonButtons>
+											</ZIonRow>
+
+											{/* Filter by Domains */}
+											{/* <ZIonButton
                       fill='outline'
                       className='ms-auto me-3'
                       onClick={(event: unknown) => {
@@ -662,8 +674,8 @@ const ZLinkInBiosListPage: React.FC = () => {
                         : 'No values'}
                     </ZIonButton> */}
 
-										{/* Filter by Columns */}
-										{/* <Dropdown>
+											{/* Filter by Columns */}
+											{/* <Dropdown>
 											<Dropdown.Toggle
 												id='dropdown-custom-components'
 												className={`${classes.zaions__dropdown_toggle}`}
@@ -738,14 +750,15 @@ const ZLinkInBiosListPage: React.FC = () => {
 												</ZRScrollbars>
 											</Dropdown.Menu>
 										</Dropdown> */}
-									</ZIonCol>
-								</ZIonRow>
-							</ZIonGrid>
-							<ZaionsLinkInBioLinksTable />
-						</ZIonCol>
-					</ZIonRow>
-				</ZIonGrid>
-			</ZIonContent>
+										</ZIonCol>
+									</ZIonRow>
+								</ZIonGrid>
+								<ZaionsLinkInBioLinksTable />
+							</ZIonCol>
+						</ZIonRow>
+					</ZIonGrid>
+				</ZIonContent>
+			</ZCan>
 		</ZaionsIonPage>
 	);
 };
@@ -955,7 +968,7 @@ const LinkInBiosTagsFiltersPopover = () => {
 								<ZIonText>filter</ZIonText>
 							</ZIonButton>
 							<ZIonItem className='ion-no-padding'>
-								<ZIonText className='ms-3 font-bold zaions__fs_14 zaions__color_gray2'>
+								<ZIonText className='font-bold ms-3 zaions__fs_14 zaions__color_gray2'>
 									All Tags
 								</ZIonText>
 								{/* <IonCheckbox
@@ -1105,7 +1118,7 @@ const LinkInBiosTagsFiltersPopover = () => {
 //               <ZIonText>filter</ZIonText>
 //             </ZIonButton>
 //             <ZIonItem className='ion-no-padding'>
-//               <ZIonText className='ms-3 font-bold zaions__fs_14 zaions__color_gray2'>
+//               <ZIonText className='font-bold ms-3 zaions__fs_14 zaions__color_gray2'>
 //                 All Domains
 //               </ZIonText>
 //               {/* <IonCheckbox

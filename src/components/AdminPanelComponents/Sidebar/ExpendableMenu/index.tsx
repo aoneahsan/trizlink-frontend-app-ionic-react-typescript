@@ -69,8 +69,8 @@ import classes from './styles.module.css';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductLogo } from '@/assets/images';
-import { replaceParams } from '@/utils/helpers';
-import { useLocation } from 'react-router';
+import { replaceParams, replaceRouteParams } from '@/utils/helpers';
+import { useLocation, useParams } from 'react-router';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import ZIonSegment from '@/components/ZIonComponents/ZIonSegment';
 import ZIonSegmentButton from '@/components/ZIonComponents/ZIonSegmentButton';
@@ -94,7 +94,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 	const { isLgScale } = useZMediaQueryScale();
 	const [ZDashboardState, setZDashboardState] =
 		useRecoilState(ZDashboardRState);
-	const location = useLocation();
+
 	// Made this constant for readability.
 	const isExpand = ZDashboardState.dashboardMainSidebarIsCollabes.isExpand;
 
@@ -104,6 +104,10 @@ const AdminPanelMainSidebarMenu: React.FC<{
 	// });
 
 	const { zNavigatePushRoute } = useZNavigate();
+
+	const { workspaceId } = useParams<{
+		workspaceId: string;
+	}>();
 
 	return (
 		<>
@@ -140,7 +144,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 							<ZIonRow className='h-full ion-align-items-start'>
 								<ZIonCol
 									size='12'
-									className='py-4 flex ion-justify-content-center'
+									className='flex py-4 ion-justify-content-center'
 								>
 									<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
 										<ZIonImg
@@ -170,10 +174,14 @@ const AdminPanelMainSidebarMenu: React.FC<{
 												activePage ===
 												AdminPanelMainSidebarMenuPageEnum.shortLink,
 										})}
-										routerLink={replaceParams(
+										routerLink={replaceRouteParams(
 											ZaionsRoutes.AdminPanel.ShortLinks.Main,
-											CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-											'all'
+											[
+												CONSTANTS.RouteParams.workspace.workspaceId,
+												CONSTANTS.RouteParams
+													.folderIdToGetShortLinksOrLinkInBio,
+											],
+											[workspaceId, 'all']
 										)}
 									>
 										<ZIonText
@@ -210,10 +218,14 @@ const AdminPanelMainSidebarMenu: React.FC<{
 												activePage ===
 												AdminPanelMainSidebarMenuPageEnum.linkInBio,
 										})}
-										routerLink={replaceParams(
+										routerLink={replaceRouteParams(
 											ZaionsRoutes.AdminPanel.LinkInBio.Main,
-											CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-											'all'
+											[
+												CONSTANTS.RouteParams.workspace.workspaceId,
+												CONSTANTS.RouteParams
+													.folderIdToGetShortLinksOrLinkInBio,
+											],
+											[workspaceId, 'all']
 										)}
 									>
 										<ZIonText
@@ -308,7 +320,11 @@ const AdminPanelMainSidebarMenu: React.FC<{
 												activePage ===
 												AdminPanelMainSidebarMenuPageEnum.workspaces,
 										})}
-										routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}
+										routerLink={replaceRouteParams(
+											ZaionsRoutes.AdminPanel.Workspaces.View,
+											[CONSTANTS.RouteParams.workspace.workspaceId],
+											[workspaceId]
+										)}
 									>
 										<ZIonText
 											className={classNames({
@@ -325,7 +341,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 													hidden: !isExpand,
 												})}
 											>
-												Workspaces
+												Workspace detail
 											</ZIonText>
 										</ZIonText>
 									</ZIonButton>
@@ -438,10 +454,13 @@ const AdminPanelMainSidebarMenu: React.FC<{
 							className='text-transform-initial'
 							onClick={() => {
 								zNavigatePushRoute(
-									replaceParams(
+									replaceRouteParams(
 										ZaionsRoutes.AdminPanel.ShortLinks.Main,
-										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-										'all'
+										[
+											CONSTANTS.RouteParams.workspace.workspaceId,
+											CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+										],
+										[workspaceId, 'all']
 									)
 								);
 							}}
@@ -455,10 +474,13 @@ const AdminPanelMainSidebarMenu: React.FC<{
 							className='text-transform-initial'
 							onClick={() => {
 								zNavigatePushRoute(
-									replaceParams(
+									replaceRouteParams(
 										ZaionsRoutes.AdminPanel.LinkInBio.Main,
-										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-										'all'
+										[
+											CONSTANTS.RouteParams.workspace.workspaceId,
+											CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+										],
+										[workspaceId, 'all']
 									)
 								);
 							}}
@@ -507,9 +529,9 @@ const AdminPanelMainSidebarMenu: React.FC<{
 							onClick={() => {
 								zNavigatePushRoute(
 									replaceParams(
-										ZaionsRoutes.AdminPanel.ShortLinks.Main,
+										ZaionsRoutes.AdminPanel.Workspaces.View,
 										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-										'all'
+										workspaceId
 									)
 								);
 							}}

@@ -71,9 +71,6 @@ const LinkPixelsAccount: React.FC = () => {
 		_url: API_URL_ENUM.userPixelAccounts_create_list,
 		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
 	});
-	// const pixelAccountsData = (
-	//   ___pixelAccountsData as { data: { items: PixelAccountType[] } }
-	// )?.data?.items;
 
 	useEffect(() => {
 		if (pixelAccountsData) {
@@ -85,7 +82,7 @@ const LinkPixelsAccount: React.FC = () => {
 	return (
 		<>
 			<ZIonRow className='border-bottom zaions__bg_white'>
-				<ZIonCol className='px-2 py-2 flex ion-align-items-center'>
+				<ZIonCol className='flex px-2 py-2 ion-align-items-center'>
 					<ZIonIcon icon={apertureOutline} size={'large'}></ZIonIcon>
 					<ZIonText>
 						<h6 className='font-bold ion-no-margin ion-padding-start'>
@@ -100,7 +97,7 @@ const LinkPixelsAccount: React.FC = () => {
 			<ZIonRow className='zaions__bg_white'>
 				<ZIonCol>
 					<ZaionsRSelect
-						className='ion-padding pb-0 mx-2'
+						className='pb-0 mx-2 ion-padding'
 						isMulti
 						options={
 							pixelAccountsState

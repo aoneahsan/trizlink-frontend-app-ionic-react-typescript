@@ -56,6 +56,9 @@ import {
  * ? Import of recoil states is a Recoil State import
  * */
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { LinkFolderType } from '@/types/AdminPanel/linksType';
+import { API_URL_ENUM } from '@/utils/enums';
 
 /**
  * Images Imports go down
@@ -89,6 +92,13 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 
 	//
 	const setFolderFormState = useSetRecoilState(FolderFormState);
+
+	// Request for getting short links folders.
+	const { data: shortLinksFoldersData } = useZRQGetRequest<LinkFolderType[]>({
+		_url: API_URL_ENUM.folders_create_list,
+		// _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
+		_key: ['make'],
+	});
 
 	return (
 		<ZIonCol

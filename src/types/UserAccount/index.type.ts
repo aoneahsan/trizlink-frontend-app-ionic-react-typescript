@@ -2,11 +2,8 @@
 
 // Interfaces
 export interface UserRoleAndPermissionsInterface {
-	isSuccess?: boolean;
-	result: {
-		roles: string;
-		permissions: string[];
-	};
+	role: string;
+	permissions: string[];
 }
 
 // Type

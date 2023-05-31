@@ -24,6 +24,31 @@ import { ENVS } from '@/utils/envKeys';
 // Constant
 // const ZLinkApiRootUrl = 'https://zlinkbackend.zaions.com/public/api/zlink/v1';
 export const ZLinkApiRootUrl = ENVS.apiUrl;
+
+const RouteParams = {
+	editShortLinkIdParam: ':editLinkId',
+	editLinkInBioIdParam: ':editLinkInBioId',
+	editLinkInBioPageParam: ':editLinkInBioPage',
+	editLinkInBioStepParam: ':editLinkInBioStep',
+	folderIdToGetShortLinksOrLinkInBio: ':folderId?',
+
+	// workspace
+	workspace: {
+		workspaceId: ':workspaceId',
+		editWorkspaceIdParam: ':editWorkspaceId',
+	},
+
+	shortLink: {
+		shortLinkId: ':shortLinkId',
+	},
+
+	linkInBio: {
+		linkInBioId: ':linkInBioId',
+	},
+
+	// folderIdToGetShortLinksOrLinkInBio: 'all',
+};
+
 // left here as it will mess up many imports, we can move this when we have some free time (i know that will add more imports to correct but we don't have time for it right now)
 export const API_URLS = {
 	login: '/login',
@@ -33,23 +58,27 @@ export const API_URLS = {
 	getUserRolePermission: '/user/role/permissions',
 	csrf: '/sanctum/csrf-cookie',
 	delete: '/user/delete',
-	userPixelAccounts_create_list: '/user/pixel-accounts',
-	userAccountUtmTags_create_list: '/user/utm-tag-templates',
+	userPixelAccounts_create_list: '/user/pixel',
+	userAccountUtmTags_create_list: '/user/utm-tag',
 	userAccountFolders_create_list: '/user/folders',
-	shortLinks_create_list: '/user/short-links',
 	userEmbedWidget_create_list: '/user/embedded-scripts',
-	userPixelAccounts_update_delete: '/user/pixel-accounts/:pixelId',
-	userAccountUtmTags_update_delete: '/user/utm-tag-templates/:utmTagId',
+	userPixelAccounts_update_delete: '/user/pixel/:pixelId',
+	userAccountUtmTags_update_delete: '/user/utm-tag/:utmTagId',
 	userAccountFolders_update_delete: '/user/folders/:folderId',
 	userEmbedWidget_update_delete: '/user/embedded-scripts/:embeddedId',
-	shortLinks_update_delete: '/user/short-links/:shortLinkId',
+	shortLinks_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links`,
+	shortLinks_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links/${RouteParams.shortLink.shortLinkId}`,
 	FolderShortLinks: '/user/folders/:folderId/short-links',
 	ShortLinks_folders_reorder: '/user/shortLinks/folders/reorder',
 	userAccount_LinkInBio_folders_create_list: '/user/link-in-bio-folders',
+
+	folders_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder/${RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
+	folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder`,
+
 	userAccount_LinkInBio_folders_update_delete:
 		'/user/link-in-bio-folders/:folderId',
-	linkInBio_create_list: '/user/link-in-bio',
-	linkInBio_update_delete: '/user/link-in-bio/:linkInBioId',
+	linkInBio_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/link-in-bio`,
+	linkInBio_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/link-in-bio/${RouteParams.linkInBio.linkInBioId}`,
 	linkInBioPreDefinedThemes_create_list: '/user/link-in-bio-themes',
 	linkInBioPreDefinedBlocks_create_list: '/user/link-in-bio-predefined-blocks',
 	linkInBioPreDefinedBlocks_delete_update:
@@ -238,22 +267,6 @@ const SocialLinks = {
 
 const DateTime = {
 	iso8601DateTime: 'YYYY-MM-DDTHH:mm:ssZ',
-};
-
-const RouteParams = {
-	editShortLinkIdParam: ':editLinkId',
-	editLinkInBioIdParam: ':editLinkInBioId',
-	editLinkInBioPageParam: ':editLinkInBioPage',
-	editLinkInBioStepParam: ':editLinkInBioStep',
-	folderIdToGetShortLinksOrLinkInBio: ':folderId?',
-
-	//
-	workspace: {
-		workspaceId: ':workspaceId',
-		editWorkspaceIdParam: ':editWorkspaceId',
-	},
-
-	// folderIdToGetShortLinksOrLinkInBio: 'all',
 };
 
 // Default Values

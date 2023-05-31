@@ -106,6 +106,8 @@ import { WorkspaceComposeModalRStateAtom } from '@/ZaionsStore/UserDashboard/Wor
  * */
 import { avatar, ProductLogo } from '@/assets/images';
 import ZUserProfileButton from '@/components/AdminPanelComponents/UserProfileButton';
+import ZCan from '@/components/Can';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Component props type go down
@@ -170,440 +172,448 @@ const ViewSingleWorkspace: React.FC = () => {
 			menu={PAGE_MENU.ADMIN_PANEL_WORKSPACE_VIEW_FILTER_MENU}
 			id={CONSTANTS.MENU_IDS.ADMIN_PAGE_WORKSPACE_VIEW_FILTER_MENU_ID}
 		>
-			<Formik
-				initialValues={{
-					pageId: '1',
-					pageType: workspaceFormConnectPagesEnum.facebook,
-				}}
-				validate={() => {
-					const errors = {};
+			<ZCan havePermission={permissionsEnum.view_workspace}>
+				<Formik
+					initialValues={{
+						pageId: '1',
+						pageType: workspaceFormConnectPagesEnum.facebook,
+					}}
+					validate={() => {
+						const errors = {};
 
-					return errors;
-				}}
-				onSubmit={() => {}}
-			>
-				{({ values, setFieldValue }) => {
-					const ZIonContentBg =
-						values.pageType === workspaceFormConnectPagesEnum.facebook ||
-						values.pageType === workspaceFormConnectPagesEnum.linkedin ||
-						values.pageType === workspaceFormConnectPagesEnum.youtube ||
-						values.pageType === workspaceFormConnectPagesEnum.googleBusiness ||
-						values.pageType === workspaceFormConnectPagesEnum.universalContent
-							? 'light'
-							: undefined;
+						return errors;
+					}}
+					onSubmit={() => {}}
+				>
+					{({ values, setFieldValue }) => {
+						const ZIonContentBg =
+							values.pageType === workspaceFormConnectPagesEnum.facebook ||
+							values.pageType === workspaceFormConnectPagesEnum.linkedin ||
+							values.pageType === workspaceFormConnectPagesEnum.youtube ||
+							values.pageType ===
+								workspaceFormConnectPagesEnum.googleBusiness ||
+							values.pageType === workspaceFormConnectPagesEnum.universalContent
+								? 'light'
+								: undefined;
 
-					return (
-						<>
-							<ZIonHeader
-								className={classNames({
-									'ion-padding-horizontal': true,
-									'p-0': !isLgScale,
-								})}
-							>
-								<ZIonGrid className='pb-0'>
-									{/* First row */}
-									<ZIonRow className='ion-align-items-center'>
-										{/* Go to workspaces button and Search bar */}
-										<ZIonCol
-											sizeXl='4'
-											sizeLg='5'
-											sizeMd='12'
-											sizeSm='12'
-											sizeXs='12'
-											className={classNames({
-												'flex items-center gap-2': true,
-												'order-3': !isLgScale,
-											})}
-										>
-											<ZIonButton
-												expand='block'
+						return (
+							<>
+								<ZIonHeader
+									className={classNames({
+										'ion-padding-horizontal': true,
+										'p-0': !isLgScale,
+									})}
+								>
+									<ZIonGrid className='pb-0'>
+										{/* First row */}
+										<ZIonRow className='ion-align-items-center'>
+											{/* Go to workspaces button and Search bar */}
+											<ZIonCol
+												sizeXl='4'
+												sizeLg='5'
+												sizeMd='12'
+												sizeSm='12'
+												sizeXs='12'
 												className={classNames({
-													'text-transform-initial': true,
-													'w-1/4': !isLgScale,
-												})}
-												routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}
-											>
-												Workspaces
-											</ZIonButton>
-
-											<div
-												className={classNames({
-													'w-3/4': !isLgScale,
+													'flex items-center gap-2': true,
+													'order-3': !isLgScale,
 												})}
 											>
-												<ZIonSearchbar
-													animated
-													showClearButton='focus'
-													color='light'
-													style={{ '--box-shadow': 'none' }}
-												/>
-											</div>
-										</ZIonCol>
-
-										{/* workspace name & edit button */}
-										<ZIonCol
-											sizeXl='5'
-											sizeLg='4'
-											sizeMd='6'
-											sizeSm='6'
-											sizeXs='4'
-											className={classNames({
-												'flex items-center justify-center text-transform-initial':
-													true,
-												'ion-justify-content-center': isXlScale,
-												'ion-justify-content-start':
-													isLgScale || isMdScale || isSmScale || isXsScale,
-											})}
-										>
-											<ZIonButton
-												fill='default'
-												className='text-2xl'
-												onClick={(event: unknown) => {
-													presentWorkspacesActionsPopover({
-														_event: event as Event,
-														_cssClass: 'zaions_workspaces_actions_popover_size',
-														_dismissOnSelect: false,
-													});
-												}}
-											>
-												MTI
-											</ZIonButton>
-										</ZIonCol>
-
-										{/* Help Button, Notifications Button, and UserAvatarInfo */}
-										<ZIonCol
-											sizeXl='3'
-											sizeLg='3'
-											sizeMd='6'
-											sizeSm='6'
-											sizeXs='8'
-											className='flex items-center justify-end gap-2'
-										>
-											{/* Menu */}
-											<ZIonButton
-												size='default'
-												fill='default'
-												onClick={() => {
-													presentWorkspaceCreatePageModal({
-														_cssClass: 'workspace-create-pages-modal-size',
-													});
-												}}
-												className='ion-no-padding ion-no-margin text-transform-initial'
-												color='dark'
-											>
-												<ZIonIcon
-													icon={addCircleOutline}
-													className='w-6 h-6 me-1'
-												/>
-												<ZIonText>Add page</ZIonText>
-											</ZIonButton>
-
-											<ZIonButton
-												fill='default'
-												className='ion-no-margin text-transform-initial'
-												onClick={(event: unknown) => {
-													presentWorkspaceAppStatusPopover({
-														_event: event as Event,
-														_cssClass: 'zaions_workspaces_actions_popover_size',
-														_dismissOnSelect: false,
-													});
-												}}
-											>
-												<ZIonText>Help</ZIonText>
-												<ZIonIcon
-													icon={helpCircleOutline}
-													className='w-6 h-6 ms-2'
-												/>
-											</ZIonButton>
-
-											<ZIonButton
-												fill='default'
-												className='ion-no-margin me-2'
-												onClick={(event: unknown) => {
-													presentWorkspaceNotificationPopover({
-														_event: event as Event,
-														_cssClass:
-															'zaions_workspaces_notifications_popover_size',
-														_dismissOnSelect: false,
-													});
-												}}
-											>
-												<ZIonIcon
-													icon={notificationsOutline}
-													className='w-6 h-6'
-												/>
-											</ZIonButton>
-
-											{/* User profile button */}
-											<ZUserProfileButton />
-										</ZIonCol>
-									</ZIonRow>
-
-									{/* Second row */}
-									<ZIonRow
-										className={classNames({
-											'ion-align-items-center pb-0': true,
-											'mt-2': !isXlScale,
-										})}
-									>
-										{/* Users buttons */}
-										<ZIonCol
-											className={classNames({
-												'pb-0 flex ion-align-items-center': true,
-												'mb-2': !isXlScale,
-											})}
-											sizeXl='2.5'
-											sizeLg='6'
-											sizeMd='6'
-											sizeSm='6'
-											sizeXs='12'
-										>
-											<ZUserAvatarButton
-												className='w-[35px!important] h-[35px!important]'
-												userAvatar={ProductLogo}
-												onClick={() => {
-													presentWorkspaceSharingModal({
-														_cssClass: 'workspace-sharing-modal-size',
-													});
-												}}
-												showStatus={true}
-												active
-												id={
-													CONSTANTS.ZTooltipIds
-														.ZUserAvatarButton_default_tooltip_id
-												}
-											/>
-
-											{/* add user button */}
-											<ZUserAvatarButton
-												className='ms-2 w-[35px!important] h-[35px!important]'
-												userAvatar={avatar}
-												onClick={() => {
-													presentWorkspaceSharingModal({
-														_cssClass: 'workspace-sharing-modal-size',
-													});
-												}}
-												id='z-workspace-add-or-manage-people'
-											/>
-											<ZRTooltip
-												anchorSelect='#z-workspace-add-or-manage-people'
-												place='top'
-												content='Add or manage people'
-											/>
-										</ZIonCol>
-
-										{/* Pages Segment col */}
-										<ZIonCol
-											className={classNames({
-												'pb-0': true,
-												'order-2': isXlScale,
-												'order-3': !isXlScale,
-											})}
-											sizeXl='6'
-											sizeLg='12'
-											sizeMd='12'
-											sizeSm='12'
-											sizeXs='12'
-										>
-											<ZIonSegment
-												scrollable={true}
-												value={values.pageId}
-												className='zaions_pretty_scrollbar'
-											>
-												{workspacePagesDomeData.map((el, index) => (
-													<ZIonSegmentButton
-														className='px-1 text-transform-initial'
-														value={String(index)}
-														onClick={() => {
-															setFieldValue('pageType', el.type, false);
-															setFieldValue('pageId', index, false);
-														}}
-														style={{
-															'--padding-end': '9px',
-															'--padding-start': '9px',
-														}}
-														key={index}
-													>
-														<ZIonIcon
-															icon={getPlatformIcon(el.type)}
-															className='mb-2 w-7 h-7'
-														/>
-														<ZIonText className='pb-2 text-xs'>
-															{el.pageName}
-														</ZIonText>
-													</ZIonSegmentButton>
-												))}
-											</ZIonSegment>
-										</ZIonCol>
-
-										{/* Menu, filter, media, compose buttons */}
-										<ZIonCol
-											sizeXl='3.5'
-											sizeLg='6'
-											sizeMd='6'
-											sizeSm='6'
-											sizeXs='12'
-											className={classNames({
-												'pb-0 flex': true,
-												'order-3': isXlScale,
-												'order-2 mb-2': !isXlScale,
-												'ion-justify-content-end': isSmScale,
-												'ion-justify-content-start': !isSmScale,
-											})}
-										>
-											{/*  */}
-											<ZIonButtons
-												className={classNames({
-													'gap-2': true,
-													'flex ion-justify-content-between w-full': !isSmScale,
-												})}
-											>
-												{/* Menu */}
 												<ZIonButton
+													expand='block'
+													className={classNames({
+														'text-transform-initial': true,
+														'w-1/4': !isLgScale,
+													})}
+													routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}
+												>
+													Workspaces
+												</ZIonButton>
+
+												<div
+													className={classNames({
+														'w-3/4': !isLgScale,
+													})}
+												>
+													<ZIonSearchbar
+														animated
+														showClearButton='focus'
+														color='light'
+														style={{ '--box-shadow': 'none' }}
+													/>
+												</div>
+											</ZIonCol>
+
+											{/* workspace name & edit button */}
+											<ZIonCol
+												sizeXl='5'
+												sizeLg='4'
+												sizeMd='6'
+												sizeSm='6'
+												sizeXs='4'
+												className={classNames({
+													'flex items-center justify-center text-transform-initial':
+														true,
+													'ion-justify-content-center': isXlScale,
+													'ion-justify-content-start':
+														isLgScale || isMdScale || isSmScale || isXsScale,
+												})}
+											>
+												<ZIonButton
+													fill='default'
+													className='text-2xl'
 													onClick={(event: unknown) => {
-														presentWorkspaceImportExportPopover({
+														presentWorkspacesActionsPopover({
 															_event: event as Event,
 															_cssClass:
-																'zaions_workspaces_import_export_popover_size',
+																'zaions_workspaces_actions_popover_size',
 															_dismissOnSelect: false,
 														});
 													}}
 												>
-													<ZIonIcon icon={ellipsisVerticalOutline} />
+													MTI
 												</ZIonButton>
+											</ZIonCol>
 
-												{/* filter */}
-												<ZIonMenuToggle
-													autoHide={false}
-													menu={
-														CONSTANTS.MENU_IDS
-															.ADMIN_PAGE_WORKSPACE_VIEW_FILTER_MENU_ID
-													}
-												>
-													<ZIonButton
-														className='text-transform-initial'
-														id='z-workspace-view-filters'
-													>
-														<ZIonIcon icon={filterOutline} />
-														<ZIonText className='ms-2'>Filter</ZIonText>
-													</ZIonButton>
-												</ZIonMenuToggle>
-												<ZRTooltip
-													anchorSelect='#z-workspace-view-filters'
-													place='bottom'
-													content='Some posts may be hidden. Check your filters.'
-												/>
-
-												{/* media */}
+											{/* Help Button, Notifications Button, and UserAvatarInfo */}
+											<ZIonCol
+												sizeXl='3'
+												sizeLg='3'
+												sizeMd='6'
+												sizeSm='6'
+												sizeXs='8'
+												className='flex items-center justify-end gap-2'
+											>
+												{/* Menu */}
 												<ZIonButton
-													className='text-transform-initial'
-													id='z-workspace-view-media'
-												>
-													<ZIonIcon icon={imageOutline} />
-													<ZIonText className='ms-2'>Media</ZIonText>
-												</ZIonButton>
-												<ZRTooltip
-													anchorSelect='#z-workspace-view-media'
-													place='bottom'
-													content='View uploaded assets'
-												/>
-
-												{/* compose */}
-												<ZIonButton
-													color='primary'
-													fill='solid'
+													size='default'
+													fill='default'
 													onClick={() => {
-														// setWorkspaceComposeModalStateAtom((oldValues) => ({
-														// 	...oldValues,
-														// 	isOpen: true,
-														// }));
+														presentWorkspaceCreatePageModal({
+															_cssClass: 'workspace-create-pages-modal-size',
+														});
+													}}
+													className='ion-no-padding ion-no-margin text-transform-initial'
+													color='dark'
+												>
+													<ZIonIcon
+														icon={addCircleOutline}
+														className='w-6 h-6 me-1'
+													/>
+													<ZIonText>Add page</ZIonText>
+												</ZIonButton>
 
-														presentWorkspaceEditPageModal({
-															_cssClass: 'workspace-edit-page-modal',
+												<ZIonButton
+													fill='default'
+													className='ion-no-margin text-transform-initial'
+													onClick={(event: unknown) => {
+														presentWorkspaceAppStatusPopover({
+															_event: event as Event,
+															_cssClass:
+																'zaions_workspaces_actions_popover_size',
+															_dismissOnSelect: false,
 														});
 													}}
 												>
-													<ZIonIcon icon={createOutline} />
-													<ZIonText className='ms-2'>Compose</ZIonText>
+													<ZIonText>Help</ZIonText>
+													<ZIonIcon
+														icon={helpCircleOutline}
+														className='w-6 h-6 ms-2'
+													/>
 												</ZIonButton>
-											</ZIonButtons>
-										</ZIonCol>
-									</ZIonRow>
-								</ZIonGrid>
-							</ZIonHeader>
 
-							{/* Page accounting to type */}
-							<ZIonContent color={ZIonContentBg}>
-								{values.pageType === workspaceFormConnectPagesEnum.facebook ? (
-									<ZWorkspaceFacebookPageLayout />
-								) : values.pageType ===
-								  workspaceFormConnectPagesEnum.instagram ? (
-									<ZWorkspaceInstagramPageLayout />
-								) : values.pageType === workspaceFormConnectPagesEnum.tiktok ? (
-									<ZWorkspaceTiktokPageLayout />
-								) : values.pageType ===
-								  workspaceFormConnectPagesEnum.twitter ? (
-									<ZWorkspaceTwitterPageLayout />
-								) : values.pageType ===
-								  workspaceFormConnectPagesEnum.linkedin ? (
-									<ZWorkspaceLinkedinPageLayout />
-								) : values.pageType ===
-								  workspaceFormConnectPagesEnum.googleBusiness ? (
-									<ZWorkspaceFacebookPageLayout />
-								) : values.pageType ===
-								  workspaceFormConnectPagesEnum.pinterest ? (
-									<ZWorkspacePinterestPageLayout />
-								) : values.pageType ===
-								  workspaceFormConnectPagesEnum.youtube ? (
-									<ZWorkspaceYoutubePageLayout />
-								) : values.pageType ===
-								  workspaceFormConnectPagesEnum.universalContent ? (
-									<ZWorkspaceUniversalContentPageLayout />
-								) : (
-									''
-								)}
+												<ZIonButton
+													fill='default'
+													className='ion-no-margin me-2'
+													onClick={(event: unknown) => {
+														presentWorkspaceNotificationPopover({
+															_event: event as Event,
+															_cssClass:
+																'zaions_workspaces_notifications_popover_size',
+															_dismissOnSelect: false,
+														});
+													}}
+												>
+													<ZIonIcon
+														icon={notificationsOutline}
+														className='w-6 h-6'
+													/>
+												</ZIonButton>
 
-								{/* Instagram stories */}
-								<ZIonRow className='ion-justify-content-center'>
-									{values.pageType ===
-										workspaceFormConnectPagesEnum.instagram && (
-										<ZIonCol
-											sizeXl='9.5'
-											sizeLg='10.5'
-											sizeMd='11.5'
-											sizeSm='11.9'
-											sizeXs='11.9'
+												{/* User profile button */}
+												<ZUserProfileButton />
+											</ZIonCol>
+										</ZIonRow>
+
+										{/* Second row */}
+										<ZIonRow
+											className={classNames({
+												'ion-align-items-center pb-0': true,
+												'mt-2': !isXlScale,
+											})}
 										>
-											<ZWorkspaceInstagramStoriesLayout />
-										</ZIonCol>
+											{/* Users buttons */}
+											<ZIonCol
+												className={classNames({
+													'pb-0 flex ion-align-items-center': true,
+													'mb-2': !isXlScale,
+												})}
+												sizeXl='2.5'
+												sizeLg='6'
+												sizeMd='6'
+												sizeSm='6'
+												sizeXs='12'
+											>
+												<ZUserAvatarButton
+													className='w-[35px!important] h-[35px!important]'
+													userAvatar={ProductLogo}
+													onClick={() => {
+														presentWorkspaceSharingModal({
+															_cssClass: 'workspace-sharing-modal-size',
+														});
+													}}
+													showStatus={true}
+													active
+													id={
+														CONSTANTS.ZTooltipIds
+															.ZUserAvatarButton_default_tooltip_id
+													}
+												/>
+
+												{/* add user button */}
+												<ZUserAvatarButton
+													className='ms-2 w-[35px!important] h-[35px!important]'
+													userAvatar={avatar}
+													onClick={() => {
+														presentWorkspaceSharingModal({
+															_cssClass: 'workspace-sharing-modal-size',
+														});
+													}}
+													id='z-workspace-add-or-manage-people'
+												/>
+												<ZRTooltip
+													anchorSelect='#z-workspace-add-or-manage-people'
+													place='top'
+													content='Add or manage people'
+												/>
+											</ZIonCol>
+
+											{/* Pages Segment col */}
+											<ZIonCol
+												className={classNames({
+													'pb-0': true,
+													'order-2': isXlScale,
+													'order-3': !isXlScale,
+												})}
+												sizeXl='6'
+												sizeLg='12'
+												sizeMd='12'
+												sizeSm='12'
+												sizeXs='12'
+											>
+												<ZIonSegment
+													scrollable={true}
+													value={values.pageId}
+													className='zaions_pretty_scrollbar'
+												>
+													{workspacePagesDomeData.map((el, index) => (
+														<ZIonSegmentButton
+															className='px-1 text-transform-initial'
+															value={String(index)}
+															onClick={() => {
+																setFieldValue('pageType', el.type, false);
+																setFieldValue('pageId', index, false);
+															}}
+															style={{
+																'--padding-end': '9px',
+																'--padding-start': '9px',
+															}}
+															key={index}
+														>
+															<ZIonIcon
+																icon={getPlatformIcon(el.type)}
+																className='mb-2 w-7 h-7'
+															/>
+															<ZIonText className='pb-2 text-xs'>
+																{el.pageName}
+															</ZIonText>
+														</ZIonSegmentButton>
+													))}
+												</ZIonSegment>
+											</ZIonCol>
+
+											{/* Menu, filter, media, compose buttons */}
+											<ZIonCol
+												sizeXl='3.5'
+												sizeLg='6'
+												sizeMd='6'
+												sizeSm='6'
+												sizeXs='12'
+												className={classNames({
+													'pb-0 flex': true,
+													'order-3': isXlScale,
+													'order-2 mb-2': !isXlScale,
+													'ion-justify-content-end': isSmScale,
+													'ion-justify-content-start': !isSmScale,
+												})}
+											>
+												{/*  */}
+												<ZIonButtons
+													className={classNames({
+														'gap-2': true,
+														'flex ion-justify-content-between w-full':
+															!isSmScale,
+													})}
+												>
+													{/* Menu */}
+													<ZIonButton
+														onClick={(event: unknown) => {
+															presentWorkspaceImportExportPopover({
+																_event: event as Event,
+																_cssClass:
+																	'zaions_workspaces_import_export_popover_size',
+																_dismissOnSelect: false,
+															});
+														}}
+													>
+														<ZIonIcon icon={ellipsisVerticalOutline} />
+													</ZIonButton>
+
+													{/* filter */}
+													<ZIonMenuToggle
+														autoHide={false}
+														menu={
+															CONSTANTS.MENU_IDS
+																.ADMIN_PAGE_WORKSPACE_VIEW_FILTER_MENU_ID
+														}
+													>
+														<ZIonButton
+															className='text-transform-initial'
+															id='z-workspace-view-filters'
+														>
+															<ZIonIcon icon={filterOutline} />
+															<ZIonText className='ms-2'>Filter</ZIonText>
+														</ZIonButton>
+													</ZIonMenuToggle>
+													<ZRTooltip
+														anchorSelect='#z-workspace-view-filters'
+														place='bottom'
+														content='Some posts may be hidden. Check your filters.'
+													/>
+
+													{/* media */}
+													<ZIonButton
+														className='text-transform-initial'
+														id='z-workspace-view-media'
+													>
+														<ZIonIcon icon={imageOutline} />
+														<ZIonText className='ms-2'>Media</ZIonText>
+													</ZIonButton>
+													<ZRTooltip
+														anchorSelect='#z-workspace-view-media'
+														place='bottom'
+														content='View uploaded assets'
+													/>
+
+													{/* compose */}
+													<ZIonButton
+														color='primary'
+														fill='solid'
+														onClick={() => {
+															// setWorkspaceComposeModalStateAtom((oldValues) => ({
+															// 	...oldValues,
+															// 	isOpen: true,
+															// }));
+
+															presentWorkspaceEditPageModal({
+																_cssClass: 'workspace-edit-page-modal',
+															});
+														}}
+													>
+														<ZIonIcon icon={createOutline} />
+														<ZIonText className='ms-2'>Compose</ZIonText>
+													</ZIonButton>
+												</ZIonButtons>
+											</ZIonCol>
+										</ZIonRow>
+									</ZIonGrid>
+								</ZIonHeader>
+
+								{/* Page accounting to type */}
+								<ZIonContent color={ZIonContentBg}>
+									{values.pageType ===
+									workspaceFormConnectPagesEnum.facebook ? (
+										<ZWorkspaceFacebookPageLayout />
+									) : values.pageType ===
+									  workspaceFormConnectPagesEnum.instagram ? (
+										<ZWorkspaceInstagramPageLayout />
+									) : values.pageType ===
+									  workspaceFormConnectPagesEnum.tiktok ? (
+										<ZWorkspaceTiktokPageLayout />
+									) : values.pageType ===
+									  workspaceFormConnectPagesEnum.twitter ? (
+										<ZWorkspaceTwitterPageLayout />
+									) : values.pageType ===
+									  workspaceFormConnectPagesEnum.linkedin ? (
+										<ZWorkspaceLinkedinPageLayout />
+									) : values.pageType ===
+									  workspaceFormConnectPagesEnum.googleBusiness ? (
+										<ZWorkspaceFacebookPageLayout />
+									) : values.pageType ===
+									  workspaceFormConnectPagesEnum.pinterest ? (
+										<ZWorkspacePinterestPageLayout />
+									) : values.pageType ===
+									  workspaceFormConnectPagesEnum.youtube ? (
+										<ZWorkspaceYoutubePageLayout />
+									) : values.pageType ===
+									  workspaceFormConnectPagesEnum.universalContent ? (
+										<ZWorkspaceUniversalContentPageLayout />
+									) : (
+										''
 									)}
 
-									{/* Post layout */}
-									<ZIonCol
-										sizeXl={
-											values.pageType ===
-												workspaceFormConnectPagesEnum.facebook ||
-											values.pageType ===
-												workspaceFormConnectPagesEnum.instagram
-												? '9.5'
-												: values.pageType ===
-												  workspaceFormConnectPagesEnum.linkedin
-												? '8.7'
-												: '9.5'
-										}
-										sizeLg='10.5'
-										sizeMd='11'
-										sizeSm='11.5'
-										sizeXs='11.7'
-									>
-										<ZWorkspacePostsLayout pageType={values.pageType} />
-									</ZIonCol>
-								</ZIonRow>
-							</ZIonContent>
-						</>
-					);
-				}}
-			</Formik>
+									{/* Instagram stories */}
+									<ZIonRow className='ion-justify-content-center'>
+										{values.pageType ===
+											workspaceFormConnectPagesEnum.instagram && (
+											<ZIonCol
+												sizeXl='9.5'
+												sizeLg='10.5'
+												sizeMd='11.5'
+												sizeSm='11.9'
+												sizeXs='11.9'
+											>
+												<ZWorkspaceInstagramStoriesLayout />
+											</ZIonCol>
+										)}
+
+										{/* Post layout */}
+										<ZIonCol
+											sizeXl={
+												values.pageType ===
+													workspaceFormConnectPagesEnum.facebook ||
+												values.pageType ===
+													workspaceFormConnectPagesEnum.instagram
+													? '9.5'
+													: values.pageType ===
+													  workspaceFormConnectPagesEnum.linkedin
+													? '8.7'
+													: '9.5'
+											}
+											sizeLg='10.5'
+											sizeMd='11'
+											sizeSm='11.5'
+											sizeXs='11.7'
+										>
+											<ZWorkspacePostsLayout pageType={values.pageType} />
+										</ZIonCol>
+									</ZIonRow>
+								</ZIonContent>
+							</>
+						);
+					}}
+				</Formik>
+			</ZCan>
 
 			{/* Compose Modal */}
 			<ZWorkspaceComposeModal />

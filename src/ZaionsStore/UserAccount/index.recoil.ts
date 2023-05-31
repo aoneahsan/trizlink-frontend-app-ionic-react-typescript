@@ -23,10 +23,8 @@ export const currentLoggedInUserRoleAndPermissionsRStateAtom =
 	atom<UserRoleAndPermissionsInterface | null>({
 		key: 'currentLoginUserRoleAndPermissionsRStateAtom_Key',
 		default: {
-			result: {
-				roles: '',
-				permissions: [],
-			},
+			role: '',
+			permissions: [],
 		},
 	});
 

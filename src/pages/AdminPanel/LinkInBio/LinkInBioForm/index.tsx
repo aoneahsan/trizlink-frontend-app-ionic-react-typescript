@@ -137,8 +137,9 @@ const ZaionsLinkInBioForm: React.FC = () => {
 	const { validateRequestResponse } = useZValidateRequestResponse();
 
 	// getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio of that id will be fetch from backend and store in NewLinkInBioFormState recoil state.
-	const { editLinkInBioId } = useParams<{
+	const { editLinkInBioId, workspaceId } = useParams<{
 		editLinkInBioId: string;
+		workspaceId: string;
 	}>();
 
 	//
@@ -155,8 +156,11 @@ const ZaionsLinkInBioForm: React.FC = () => {
 			_url: API_URL_ENUM.linkInBio_update_delete,
 			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET],
 			_authenticated: true,
-			_itemsIds: [editLinkInBioId],
-			_urlDynamicParts: [':linkInBioId'],
+			_itemsIds: [editLinkInBioId, workspaceId],
+			_urlDynamicParts: [
+				CONSTANTS.RouteParams.linkInBio.linkInBioId,
+				CONSTANTS.RouteParams.workspace.workspaceId,
+			],
 			_shouldFetchWhenIdPassed: !editLinkInBioId ? true : false,
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
 		});
@@ -416,7 +420,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 												)}
 												{!values.enableTitleInput && (
 													<ZIonText
-														className='zaions__fs_18 flex zaions__cursor_pointer ms-2'
+														className='flex zaions__fs_18 zaions__cursor_pointer ms-2'
 														onClick={() => {
 															setFieldValue('enableTitleInput', true, false);
 														}}

@@ -203,9 +203,12 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 				id &&
 					zNavigatePushRoute(
 						createRedirectRoute({
-							url: ZaionsRoutes.AdminPanel.Workspaces.View,
-							params: [CONSTANTS.RouteParams.workspace.workspaceId],
-							values: [id],
+							url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+							params: [
+								CONSTANTS.RouteParams.workspace.workspaceId,
+								CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+							],
+							values: [id, 'all'],
 						})
 					);
 			}}
