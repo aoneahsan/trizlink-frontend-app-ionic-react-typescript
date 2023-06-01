@@ -42,13 +42,13 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { replaceParams, replaceRouteParams } from '@/utils/helpers';
 import { API_URL_ENUM } from '@/utils/enums';
 import {
+	useZInvalidateReactQueries,
 	useZRQDeleteRequest,
 	useZRQGetRequest,
 } from '@/ZaionsHooks/zreactquery-hooks';
 import {
 	useZIonAlert,
 	useZIonErrorAlert,
-	useZIonLoading,
 	useZIonModal,
 } from '@/ZaionsHooks/zionic-hooks';
 
@@ -68,6 +68,11 @@ import ZaionsPixelAccountDetail from '../ZaionsModals/PixelAccount/pixelAccountD
 import ZaionsLinkNoteDetailModal from '../ZaionsModals/LinkNote/LinkNoteDetail';
 import ZCan from '@/components/Can';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import { FormMode } from '@/types/AdminPanel/index.type';
+import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
+import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { showSuccessNotification } from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
 
 // Styles
 
@@ -98,7 +103,6 @@ const ZaionsShortLinkTable = () => {
 	const actionsPopoverRef = useRef<HTMLIonPopoverElement>(null);
 
 	// custom hooks.
-	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
 	const { presentZIonAlert } = useZIonAlert();
 	const { zNavigatePushRoute } = useZNavigate();
@@ -112,8 +116,11 @@ const ZaionsShortLinkTable = () => {
 	//
 	const setShortLinkFormState = useSetRecoilState(ShortLinkFormState);
 
+	//
+	const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
+
 	// Request for deleting short link.
-	const { mutate: deleteShortLinkMutate } = useZRQDeleteRequest(
+	const { mutateAsync: deleteShortLinkMutate } = useZRQDeleteRequest(
 		API_URL_ENUM.shortLinks_update_delete,
 		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN]
 	);
@@ -154,7 +161,11 @@ const ZaionsShortLinkTable = () => {
 	const editShortLinkDetails = async () => {
 		try {
 			if (compState && compState.selectedShortLinkId) {
-				// was using history here.
+				setNewShortLinkFormState((_oldValues) => ({
+					..._oldValues,
+					formMode: FormMode.EDIT,
+				}));
+
 				zNavigatePushRoute(
 					replaceRouteParams(
 						ZaionsRoutes.AdminPanel.ShortLinks.Edit,
@@ -211,22 +222,27 @@ const ZaionsShortLinkTable = () => {
 
 	// on the delete short link confirm alert, when user click on delete button this function will firs which will trigger delete request and delete the short link.
 	const removeShortLink = async () => {
-		// await presentZIonLoader('Deleting Short Link...');
 		try {
 			if (
 				compState.selectedShortLinkId?.trim() &&
 				_filteredShortLinkData?.length
 			) {
 				if (compState.selectedShortLinkId) {
-					deleteShortLinkMutate({
-						itemIds: [workspaceId, compState.selectedShortLinkId],
-						urlDynamicParts: [
-							CONSTANTS.RouteParams.workspace.workspaceId,
-							CONSTANTS.RouteParams.shortLink.shortLinkId,
-						],
-					});
+					const _response: unknown | ZLinkMutateApiType<ShortLinkType> =
+						await deleteShortLinkMutate({
+							itemIds: [workspaceId, compState.selectedShortLinkId],
+							urlDynamicParts: [
+								CONSTANTS.RouteParams.workspace.workspaceId,
+								CONSTANTS.RouteParams.shortLink.shortLinkId,
+							],
+						});
+
+					if ((_response as ZLinkMutateApiType<ShortLinkType>).success) {
+						showSuccessNotification(
+							MESSAGES.GENERAL.SHORT_LINKS.SHORT_LINK_DELTE_SUCCESSD_MESSAGE
+						);
+					}
 				}
-				// await dismissZIonLoader();
 			} else {
 				void presentZIonErrorAlert();
 			}
@@ -237,7 +253,7 @@ const ZaionsShortLinkTable = () => {
 
 	return (
 		<>
-			<ZIonRow className='px-4 pt-4 pb-1 mx-1 mt-5 zaions__bg_white ion-margin-bottom '>
+			<ZIonRow className='px-4 pt-4 pb-1 mx-1 mt-5 overflow-y-scroll zaions_pretty_scrollbar zaions__bg_white ion-margin-bottom'>
 				<ZIonCol>
 					<ZTable>
 						<ZTableTHead>

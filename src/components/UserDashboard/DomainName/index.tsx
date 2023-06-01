@@ -12,6 +12,7 @@ import {
 	ZIonText,
 	ZIonIcon,
 	ZIonRouterLink,
+	ZIonInput,
 } from '@/components/ZIonComponents';
 
 // Global Constants
@@ -40,23 +41,26 @@ const DomainName: React.FC = () => {
 
 	return (
 		<>
-			<ZIonRow className='border-bottom mt-4 pt-2 zaions__bg_white'>
-				<ZIonCol className='px-3 py-3 flex ion-align-items-center '>
+			<ZIonRow className='pt-2 mt-4 border-bottom zaions__bg_white'>
+				<ZIonCol className='flex px-3 py-3 ion-align-items-center '>
 					<ZIonIcon icon={laptopOutline} size={'large'}></ZIonIcon>
 					<ZIonText>
 						<h6 className='font-bold ion-no-margin ion-padding-start'>
-							Choose domain name{' '}
-							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
+							Choose domain name
+							<ZIonRouterLink
+								routerLink={ZaionsRoutes.HomeRoute}
+								className='ms-1'
+							>
 								(help)
 							</ZIonRouterLink>
 						</h6>
 					</ZIonText>
 				</ZIonCol>
 			</ZIonRow>
-			<ZIonRow className='zaions__bg_white px-3 pt-3 pb-3'>
+			<ZIonRow className='px-3 pt-3 pb-3 zaions__bg_white'>
 				<ZIonCol>
 					<ZaionsRSelect
-						className='ion-padding-top mt-1'
+						className='mt-1 ion-padding-top'
 						options={DefaultDomains?.map((el) => {
 							return { value: el.id, label: el.name };
 						})}
@@ -79,7 +83,7 @@ const DomainName: React.FC = () => {
 					/>
 				</ZIonCol>
 				<ZIonCol>
-					<ZIonInputField
+					{/* <ZIonInputField
 						inputFieldProps={{
 							className: 'p-0',
 							label: 'Customize',
@@ -88,6 +92,16 @@ const DomainName: React.FC = () => {
 							onIonBlur: handleBlur,
 							value: values.shortUrl.url,
 						}}
+					/> */}
+					<ZIonInput
+						name='shortUrl.url'
+						className='p-0'
+						label='Customize'
+						labelPlacement='floating'
+						onIonChange={handleChange}
+						onIonBlur={handleBlur}
+						value={values.shortUrl.url}
+						fill='outline'
 					/>
 				</ZIonCol>
 			</ZIonRow>

@@ -43,7 +43,6 @@ import {
 	ZIonFooter,
 } from '@/components/ZIonComponents';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-import { useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZaionsShortUrlOptionFields from '@/components/UserDashboard/shortLinkFormComponents/shortUrlLinkOptionFields';
 import ZaionsCustomYourLink from '@/components/UserDashboard/shortUrlCustomYourLink';
@@ -56,6 +55,7 @@ import {
 	useZRQGetRequest,
 	useZRQUpdateRequest,
 } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -63,8 +63,18 @@ import {
  * */
 import MESSAGES from '@/utils/messages';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { replaceParams, validateField, zStringify } from '@/utils/helpers';
-import { API_URL_ENUM, VALIDATION_RULE } from '@/utils/enums';
+import {
+	areAllObjectsFilled,
+	extractInnerData,
+	replaceRouteParams,
+	validateField,
+	zStringify,
+} from '@/utils/helpers';
+import {
+	API_URL_ENUM,
+	extractInnerDataOptionsEnum,
+	VALIDATION_RULE,
+} from '@/utils/enums';
 import {
 	reportCustomError,
 	throwZCustomErrorRequestFailed,
@@ -73,6 +83,7 @@ import {
 	showErrorNotification,
 	showSuccessNotification,
 } from '@/utils/notification';
+import CONSTANTS from '@/utils/constants';
 
 /**
  * Recoil State Imports go down
@@ -99,8 +110,8 @@ import {
 	PasswordInterface,
 } from '@/types/AdminPanel/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import CONSTANTS from '@/utils/constants';
+import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { useIonViewWillEnter } from '@ionic/react';
 
 /**
  * Style files Imports go down
@@ -140,11 +151,11 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
 	// Custom hooks
 	const { zNavigatePushRoute } = useZNavigate(); // useZNavigate hook use for redirection
-	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading(); // useZIonLoading hook use for showing loader
+
 	const { isLgScale, isMdScale } = useZMediaQueryScale(); //
 
 	// create short link api.
-	const { mutate: createShortLink } = useZRQCreateRequest({
+	const { mutateAsync: createShortLink } = useZRQCreateRequest({
 		_url: API_URL_ENUM.shortLinks_create_list,
 		_queriesKeysToInvalidate: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
@@ -154,7 +165,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 	});
 
 	// update short link api.
-	const { mutate: updateShortLink } = useZRQUpdateRequest({
+	const { mutateAsync: updateShortLink } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.shortLinks_update_delete,
 		_queriesKeysToInvalidate: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
@@ -165,7 +176,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 	const { data: selectedShortLink, refetch: refetchSelectedShortLink } =
 		useZRQGetRequest<ShortLinkType>({
 			_url: API_URL_ENUM.shortLinks_update_delete,
-			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET],
+			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET, editLinkId],
 			_authenticated: true,
 			_itemsIds: [workspaceId, editLinkId],
 			_urlDynamicParts: [
@@ -174,6 +185,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 			],
 			_shouldFetchWhenIdPassed: !editLinkId ? true : false,
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
+			_staleTime: 0,
 		});
 
 	//
@@ -182,21 +194,30 @@ const AdminCreateNewLinkPages: React.FC = () => {
 		// eslint-disable-next-line
 	}, []);
 
-	useEffect(() => {
+	useIonViewWillEnter(() => {
 		try {
 			if (editLinkId) {
 				void shortLinkGetRequestFn();
 			}
 		} catch (error) {
 			if (error instanceof AxiosError) {
-				zNavigatePushRoute(ZaionsRoutes.AdminPanel.ShortLinks.Main);
+				zNavigatePushRoute(
+					replaceRouteParams(
+						ZaionsRoutes.AdminPanel.ShortLinks.Main,
+						[
+							CONSTANTS.RouteParams.workspace.workspaceId,
+							CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+						],
+						[workspaceId, 'all']
+					)
+				);
 				showErrorNotification(error.message);
 			} else {
 				reportCustomError(error);
 			}
 		}
 		// eslint-disable-next-line
-	}, [editLinkId]);
+	});
 
 	// after getting data store in recoil state.
 	useEffect(() => {
@@ -204,32 +225,6 @@ const AdminCreateNewLinkPages: React.FC = () => {
 			if (selectedShortLink && selectedShortLink?.id && editLinkId) {
 				setNewShortLinkFormState((oldVal) => ({
 					...oldVal,
-					...selectedShortLink,
-					geoLocationRotatorLinks: JSON.parse(
-						selectedShortLink?.geoLocationRotatorLinks as string
-					) as GeoLocationRotatorInterface[],
-					abTestingRotatorLinks: JSON.parse(
-						selectedShortLink?.abTestingRotatorLinks as string
-					) as ABTestingRotatorInterface[],
-					linkExpirationInfo: JSON.parse(
-						selectedShortLink?.linkExpirationInfo as string
-					) as LinkExpirationInfoInterface,
-					shortUrl: JSON.parse(
-						selectedShortLink?.shortUrl as string
-					) as ShortUrlInterface,
-					tags: JSON.parse(selectedShortLink?.tags as string) as string[],
-					target: JSON.parse(
-						selectedShortLink?.target as string
-					) as LinkTargetType,
-					utmTagInfo: JSON.parse(
-						selectedShortLink?.utmTagInfo as string
-					) as UTMTagInfoInterface,
-					pixelIds: JSON.parse(
-						selectedShortLink?.pixelIds as string
-					) as string[],
-					password: JSON.parse(
-						selectedShortLink?.password as string
-					) as PasswordInterface,
 					formMode: FormMode.EDIT,
 				}));
 			}
@@ -245,51 +240,82 @@ const AdminCreateNewLinkPages: React.FC = () => {
 		resetForm: resetFormType
 	) => {
 		try {
-			// await presentZIonLoader(
-			// 	newShortLinkFormState.formMode === FormMode.ADD
-			// 		? 'Adding Short Link...'
-			// 		: newShortLinkFormState.formMode === FormMode.EDIT
-			// 		? 'Updating Short Link...'
-			// 		: ''
-			// );
-
 			if (newShortLinkFormState.formMode === FormMode.ADD) {
-				createShortLink(_values);
-				showSuccessNotification(
-					MESSAGES.GENERAL.SHORT_LINKS.NEW_SHORT_LINK_CREATED_SUCCEED_MESSAGE
-				);
+				// Making an api call creating new short link
+				const _response: unknown | ZLinkMutateApiType<ShortLinkType> =
+					await createShortLink(_values);
+
+				// if we have a successful response then...
+				if ((_response as ZLinkMutateApiType<ShortLinkType>).success) {
+					// extract Data from _response.
+					const _data = extractInnerData<ShortLinkType>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					// if we have data then show success message.
+					if (_data && _data.id) {
+						showSuccessNotification(
+							MESSAGES.GENERAL.SHORT_LINKS
+								.NEW_SHORT_LINK_CREATED_SUCCEED_MESSAGE
+						);
+					}
+				} else {
+					throw new Error(
+						(_response as ZLinkMutateApiType<ShortLinkType>).message ||
+							'something went wrong please try again! :('
+					);
+				}
 			} else if (
 				newShortLinkFormState.formMode === FormMode.EDIT &&
 				editLinkId
 			) {
-				updateShortLink({
-					requestData: _values,
-					itemIds: [workspaceId, editLinkId],
-					urlDynamicParts: [
-						CONSTANTS.RouteParams.workspace.workspaceId,
-						CONSTANTS.RouteParams.shortLink.shortLinkId,
-					],
-				});
-				showSuccessNotification(
-					MESSAGES.GENERAL.SHORT_LINKS.SHORT_LINK_UPDATED_SUCCEED_MESSAGE
+				const _response: unknown | ZLinkMutateApiType<ShortLinkType> =
+					await updateShortLink({
+						requestData: _values,
+						itemIds: [workspaceId, editLinkId],
+						urlDynamicParts: [
+							CONSTANTS.RouteParams.workspace.workspaceId,
+							CONSTANTS.RouteParams.shortLink.shortLinkId,
+						],
+					});
+
+				// extract Data from _response.
+				const _data = extractInnerData<ShortLinkType>(
+					_response,
+					extractInnerDataOptionsEnum.createRequestResponseItem
 				);
+
+				// if we have data then show success message.
+				if (_data && _data.id) {
+					showSuccessNotification(
+						MESSAGES.GENERAL.SHORT_LINKS.SHORT_LINK_UPDATED_SUCCEED_MESSAGE
+					);
+				} else {
+					throw new Error(
+						(_response as ZLinkMutateApiType<ShortLinkType>).message ||
+							'something went wrong please try again! :('
+					);
+				}
 			} else {
 				throwZCustomErrorRequestFailed(MESSAGES.GENERAL.INVALID_REQUEST);
 			}
 
-			// await dismissZIonLoader();
-
 			resetForm();
 
+			setShowAdvanceOptions(false);
+
 			zNavigatePushRoute(
-				replaceParams(
+				replaceRouteParams(
 					ZaionsRoutes.AdminPanel.ShortLinks.Main,
-					CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-					''
+					[
+						CONSTANTS.RouteParams.workspace.workspaceId,
+						CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+					],
+					[workspaceId, 'all']
 				)
 			);
 		} catch (error) {
-			// await dismissZIonLoader();
 			reportCustomError(error);
 		}
 	};
@@ -301,91 +327,95 @@ const AdminCreateNewLinkPages: React.FC = () => {
 				// ( Initial Values Start  ) //
 				initialValues={{
 					target: {
-						url: (newShortLinkFormState.target as LinkTargetType)?.url || '',
+						url: (selectedShortLink?.target as LinkTargetType)?.url || '',
 						phoneNumber:
-							(newShortLinkFormState.target as LinkTargetType)?.phoneNumber ||
-							'',
+							(selectedShortLink?.target as LinkTargetType)?.phoneNumber || '',
 						username:
-							(newShortLinkFormState.target as LinkTargetType)?.username || '',
-						email:
-							(newShortLinkFormState.target as LinkTargetType)?.email || '',
+							(selectedShortLink?.target as LinkTargetType)?.username || '',
+						email: (selectedShortLink?.target as LinkTargetType)?.email || '',
 						accountId:
-							(newShortLinkFormState.target as LinkTargetType)?.accountId || '',
+							(selectedShortLink?.target as LinkTargetType)?.accountId || '',
 						subject:
-							(newShortLinkFormState.target as LinkTargetType)?.subject || '',
+							(selectedShortLink?.target as LinkTargetType)?.subject || '',
 						message:
-							(newShortLinkFormState.target as LinkTargetType)?.message || '',
+							(selectedShortLink?.target as LinkTargetType)?.message || '',
 					},
-					title: newShortLinkFormState.title || '',
-					linkDescription: newShortLinkFormState.description || '',
-					featureImg: newShortLinkFormState.featureImg || '',
+					title: selectedShortLink?.title || '',
+					linkDescription: selectedShortLink?.description || '',
+					featureImg: selectedShortLink?.featureImg || '',
 					password: {
 						value:
-							(newShortLinkFormState.password as PasswordInterface)?.value ||
+							(selectedShortLink?.password as PasswordInterface)?.password ||
 							'',
 						enabled:
-							(newShortLinkFormState.password as PasswordInterface)?.enabled ||
+							(selectedShortLink?.password as PasswordInterface)?.enabled ||
 							false,
 					},
 					folderId:
-						newShortLinkFormState.folderId ||
+						selectedShortLink?.folderId ||
 						CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
-					linkNote: newShortLinkFormState.notes || '',
-					tags: (newShortLinkFormState.tags as string[]) || [],
+					linkNote: selectedShortLink?.notes || '',
+					tags:
+						(selectedShortLink?.tags &&
+							(JSON.parse(selectedShortLink?.tags as string) as string[])) ||
+						[],
 					linkExpiration: {
 						enabled:
 							(
-								newShortLinkFormState.linkExpirationInfo as LinkExpirationInfoInterface
+								selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
 							)?.enabled || false,
 						expirationDate:
 							(
-								newShortLinkFormState.linkExpirationInfo as LinkExpirationInfoInterface
+								selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
 							)?.expirationDate || '',
 						timezone:
 							(
-								newShortLinkFormState.linkExpirationInfo as LinkExpirationInfoInterface
+								selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
 							)?.timezone || '',
 						redirectionLink:
 							(
-								newShortLinkFormState.linkExpirationInfo as LinkExpirationInfoInterface
+								selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
 							)?.redirectionLink || '',
 					},
 					rotatorABTesting:
-						(newShortLinkFormState.abTestingRotatorLinks as ABTestingRotatorInterface[]) ||
+						(selectedShortLink?.abTestingRotatorLinks as ABTestingRotatorInterface[]) ||
 						[],
 					geoLocation:
-						(newShortLinkFormState.geoLocationRotatorLinks as GeoLocationRotatorInterface[]) ||
+						(selectedShortLink?.geoLocationRotatorLinks as GeoLocationRotatorInterface[]) ||
 						[],
 					shortUrl: {
 						domain:
-							(newShortLinkFormState.shortUrl as ShortUrlInterface)?.domain ||
-							'',
-						url:
-							(newShortLinkFormState.shortUrl as ShortUrlInterface)?.url || '',
+							(selectedShortLink?.shortUrl as ShortUrlInterface)?.domain || '',
+						url: (selectedShortLink?.shortUrl as ShortUrlInterface)?.url || '',
 					},
-					linkPixelsAccount: (newShortLinkFormState.pixelIds as string[]) || [],
+					linkPixelsAccount:
+						(selectedShortLink?.pixelIds &&
+							(JSON.parse(
+								selectedShortLink?.pixelIds as string
+							) as string[])) ||
+						[],
 					UTMTags: {
 						templateId:
-							(newShortLinkFormState.utmTagInfo as UTMTagInfoInterface)
+							(selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
 								?.templateId || '',
 						utmCampaign:
-							(newShortLinkFormState.utmTagInfo as UTMTagInfoInterface)
+							(selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
 								?.utmCampaign || '',
 						utmMedium:
-							(newShortLinkFormState.utmTagInfo as UTMTagInfoInterface)
+							(selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
 								?.utmMedium || '',
 						utmSource:
-							(newShortLinkFormState.utmTagInfo as UTMTagInfoInterface)
+							(selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
 								?.utmSource || '',
 						utmTerm:
-							(newShortLinkFormState.utmTagInfo as UTMTagInfoInterface)
-								?.utmTerm || '',
+							(selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmTerm ||
+							'',
 						utmContent:
-							(newShortLinkFormState.utmTagInfo as UTMTagInfoInterface)
+							(selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
 								?.utmContent || '',
 					},
 
-					favicon: newShortLinkFormState.favicon || '',
+					favicon: selectedShortLink?.favicon || '',
 					// complete page fields here
 				}}
 				enableReinitialize={true}
@@ -606,7 +636,6 @@ const AdminCreateNewLinkPages: React.FC = () => {
 						);
 					}
 					// Rotator Geo Location Field Validation End
-
 					// check for errors if there are any return errors object otherwise return []
 					if (
 						errors.target?.url?.trim() ||
@@ -616,21 +645,26 @@ const AdminCreateNewLinkPages: React.FC = () => {
 						errors.target?.username?.trim() ||
 						errors.target?.phoneNumber?.trim() ||
 						errors.target?.subject?.trim() ||
-						Object.keys(errors.geoLocation).length ||
 						errors.linkExpiration?.redirectionLink?.trim() ||
 						errors.title?.trim() ||
 						errors.password?.value?.trim() ||
-						Object.keys(errors.rotatorABTesting).length
+						!areAllObjectsFilled(
+							(errors.rotatorABTesting as Array<object>) || []
+						) ||
+						!areAllObjectsFilled((errors.geoLocation as Array<object>) || [])
 					) {
 						return errors;
 					} else {
 						return [];
 					}
+					// return errors;
 				}}
 				// ( Handling Validation & Errors End  ) //
 				onSubmit={async (values, { resetForm }) => {
+					console.log(selectedShortLink);
 					await FormikSubmissionHandler(
 						zStringify({
+							type: newShortLinkFormState.type,
 							target: zStringify({
 								url: values.target.url,
 								accountId: values.target.accountId,
@@ -642,27 +676,26 @@ const AdminCreateNewLinkPages: React.FC = () => {
 							}),
 							title: values.title,
 							featureImg: values.featureImg,
-							password: zStringify({
-								password: values.password.value,
-								enabled: values.password.enabled,
-							}),
+							description: values.linkDescription,
+							pixelIds: zStringify(values.linkPixelsAccount),
+							utmTagInfo: zStringify(values.UTMTags),
+							shortUrl: zStringify(values.shortUrl),
+							folderId: values.folderId,
+							notes: values.linkNote,
+							tags: zStringify(values.tags),
+							abTestingRotatorLinks: zStringify(values.rotatorABTesting),
+							geoLocationRotatorLinks: zStringify(values.geoLocation),
 							linkExpirationInfo: zStringify({
 								redirectionLink: values.linkExpiration.redirectionLink,
 								expirationDate: values.linkExpiration.expirationDate,
 								timezone: values.linkExpiration.timezone,
 								enabled: values.linkExpiration.enabled,
 							}),
-							abTestingRotatorLinks: zStringify(values.rotatorABTesting),
-							geoLocationRotatorLinks: zStringify(values.geoLocation),
-							description: values.linkDescription,
-							folderId: values.folderId,
-							notes: values.linkNote,
-							pixelIds: zStringify(values.linkPixelsAccount),
-							tags: zStringify(values.tags),
-							utmTagInfo: zStringify(values.UTMTags),
+							password: zStringify({
+								password: values.password.value,
+								enabled: values.password.enabled,
+							}),
 							createdAt: Date.now().toString(),
-							type: newShortLinkFormState.type,
-							shortUrl: zStringify(values.shortUrl),
 							favicon: values.favicon,
 						}),
 						resetForm
@@ -679,11 +712,14 @@ const AdminCreateNewLinkPages: React.FC = () => {
 											<ZIonCol className='flex'>
 												<ZIonButton
 													className='ion-text-capitalize'
-													routerLink={replaceParams(
+													routerLink={replaceRouteParams(
 														ZaionsRoutes.AdminPanel.ShortLinks.Main,
-														CONSTANTS.RouteParams
-															.folderIdToGetShortLinksOrLinkInBio,
-														''
+														[
+															CONSTANTS.RouteParams.workspace.workspaceId,
+															CONSTANTS.RouteParams
+																.folderIdToGetShortLinksOrLinkInBio,
+														],
+														[workspaceId, 'all']
 													)}
 													onClick={() => {
 														resetForm();
@@ -709,7 +745,15 @@ const AdminCreateNewLinkPages: React.FC = () => {
 											<ZIonCol className='ion-text-end'>
 												<ZIonButton
 													className='ion-text-capitalize'
-													routerLink={ZaionsRoutes.AdminPanel.ShortLinks.Create}
+													routerLink={replaceRouteParams(
+														ZaionsRoutes.AdminPanel.ShortLinks.Main,
+														[
+															CONSTANTS.RouteParams.workspace.workspaceId,
+															CONSTANTS.RouteParams
+																.folderIdToGetShortLinksOrLinkInBio,
+														],
+														[workspaceId, 'all']
+													)}
 												>
 													{newShortLinkFormState.formMode === FormMode.ADD
 														? 'Get my new link'

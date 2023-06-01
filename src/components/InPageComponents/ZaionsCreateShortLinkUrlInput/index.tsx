@@ -44,7 +44,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * ? Import of recoil states is a Recoil State import
  * */
 import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
-import { validateField } from '@/utils/helpers';
+import { replaceParams, validateField } from '@/utils/helpers';
 import { VALIDATION_RULE } from '@/utils/enums';
 import { IonNote } from '@ionic/react';
 import { searchOutline } from 'ionicons/icons';
@@ -53,6 +53,7 @@ import {
 	messengerPlatformsBlockEnum,
 } from '@/types/AdminPanel/index.type';
 import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
+import { useParams } from 'react-router';
 
 /**
  * Style files Imports go down
@@ -77,6 +78,11 @@ import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputFi
 const ZaionsCreateShortLinkUrlInput: React.FC<{ className?: string }> = ({
 	className,
 }) => {
+	// getting current workspace id form params.
+	const { workspaceId } = useParams<{
+		workspaceId: string;
+	}>();
+
 	const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
 
 	const { zNavigatePushRoute } = useZNavigate();
@@ -108,7 +114,13 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{ className?: string }> = ({
 							formMode: FormMode.ADD,
 						}));
 
-						zNavigatePushRoute(ZaionsRoutes.AdminPanel.ShortLinks.Create);
+						zNavigatePushRoute(
+							replaceParams(
+								ZaionsRoutes.AdminPanel.ShortLinks.Create,
+								CONSTANTS.RouteParams.workspace.workspaceId,
+								workspaceId
+							)
+						);
 						resetForm();
 					}
 				} catch (error) {
@@ -166,9 +178,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{ className?: string }> = ({
 						</ZIonItem>
 						{errors.domain && touched.domain && (
 							<div className='ps-1 zaions__fs_14'>
-								<IonNote color='danger' className=''>
-									{errors.domain}
-								</IonNote>
+								<IonNote color='danger'>{errors.domain}</IonNote>
 							</div>
 						)}
 					</>

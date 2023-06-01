@@ -89,7 +89,7 @@ import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { API_URL_ENUM, PAGE_MENU, PAGE_MENU_SIDE } from '@/utils/enums';
-import { zStringify } from '@/utils/helpers';
+import { replaceParams, zStringify } from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
 
 // Styles
@@ -97,6 +97,7 @@ import classes from './styles.module.css';
 import ZDashboardSidebar from '@/components/AdminPanelComponents/Sidebar';
 import ZCan from '@/components/Can';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import { useParams } from 'react-router';
 
 const ZShortLinksListPage: React.FC = () => {
 	// Component state.
@@ -110,6 +111,11 @@ const ZShortLinksListPage: React.FC = () => {
 			isEnable: false,
 		},
 	});
+
+	// getting current workspace id form params.
+	const { workspaceId } = useParams<{
+		workspaceId: string;
+	}>();
 
 	// Custom hooks.
 	const { isXlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale(); // media query hook.
@@ -471,9 +477,11 @@ const ZShortLinksListPage: React.FC = () => {
 																	formMode: FormMode.ADD,
 																}))
 															}
-															routerLink={
-																ZaionsRoutes.AdminPanel.ShortLinks.Create
-															}
+															routerLink={replaceParams(
+																ZaionsRoutes.AdminPanel.ShortLinks.Create,
+																CONSTANTS.RouteParams.workspace.workspaceId,
+																workspaceId
+															)}
 														>
 															Create a new link
 														</ZIonButton>

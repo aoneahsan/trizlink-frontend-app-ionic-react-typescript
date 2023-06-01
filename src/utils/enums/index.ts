@@ -63,6 +63,9 @@ export enum API_URL_ENUM {
 	folders_update_delete = 'folders_update_delete',
 	folders_create_list = 'folders_create_list',
 
+	linkInBioPreData_create_list = 'linkInBioPreData_create_list',
+	linkInBioPreData_delete_update = 'linkInBioPreData_delete_update',
+
 	linkInBioPreDefinedThemes_create_list = 'linkInBioPreDefinedThemes_create_list',
 	linkInBioPreDefinedBlocks_create_list = 'linkInBioPreDefinedBlocks_create_list',
 	linkInBioPreDefinedBlocks_delete_update = 'linkInBioPreDefinedBlocks_delete_update',

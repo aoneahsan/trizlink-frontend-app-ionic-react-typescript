@@ -128,14 +128,14 @@ const ZAddNewWorkspaceModal: React.FC<{
 			</div>
 
 			{/*  */}
-			<div className='flex ion-justify-content-center flex-col'>
+			<div className='flex flex-col ion-justify-content-center'>
 				<ZIonText className='block ion-text-center' color='primary'>
 					<h1 className='mb-0 ion-padding-top bg-primary zaions__modal_icon'>
 						<ZIonIcon icon={toggleOutline} className='mx-auto' color='light' />
 					</h1>
 				</ZIonText>
 
-				<ZIonText color='dark' className='mt-3 block ion-text-center'>
+				<ZIonText color='dark' className='block mt-3 ion-text-center'>
 					<h5 className='font-bold'>Create a new Workspace 😊</h5>
 				</ZIonText>
 

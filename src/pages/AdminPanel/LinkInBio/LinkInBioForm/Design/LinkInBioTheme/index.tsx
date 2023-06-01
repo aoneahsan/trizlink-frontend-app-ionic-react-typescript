@@ -227,7 +227,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							/>
 							<ZIonButton
 								shape='round'
-								className='direction-button ion-margin-horizontal mt-3'
+								className='mt-3 direction-button ion-margin-horizontal'
 								color='secondary'
 								style={{
 									'--padding-top': '1.3rem',
@@ -278,7 +278,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					{values?.theme?.background?.bgType ===
 						LinkInBioThemeBackgroundEnum.solidColor && (
 						<ZIonButton
-							className='ion-text-capitalize mt-3 ms-4'
+							className='mt-3 ion-text-capitalize ms-4'
 							shape='round'
 							onClick={() => {
 								setFieldValue(
@@ -334,7 +334,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 
 							<ZIonButton
 								shape='round'
-								className='direction-button ion-margin-horizontal mt-3'
+								className='mt-3 direction-button ion-margin-horizontal'
 								color='secondary'
 								style={{
 									'--padding-top': '1.3rem',
@@ -385,7 +385,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					{values?.theme?.button?.background?.bgType ===
 						LinkInBioThemeBackgroundEnum.solidColor && (
 						<ZIonButton
-							className='ion-text-capitalize mt-3 ms-4'
+							className='mt-3 ion-text-capitalize ms-4'
 							shape='round'
 							onClick={() => {
 								setFieldValue(
@@ -705,7 +705,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 				sizeMd='12'
 				sizeSm='12'
 				sizeXs='12'
-				className='ion-padding-vertical mb-5 ion-margin-start'
+				className='mb-5 ion-padding-vertical ion-margin-start'
 			>
 				<ZIonRow>
 					<ZIonCol>
@@ -737,7 +737,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 				</ZIonRow>
 
 				{values?.theme?.background?.enableBgImage && (
-					<div className='flex ion-align-items-center ion-padding-bottom mt-4'>
+					<div className='flex mt-4 ion-align-items-center ion-padding-bottom'>
 						<ZDragAndDrop
 							setFieldValue={setFieldValue}
 							fieldName='theme.background.bgImageUrl'

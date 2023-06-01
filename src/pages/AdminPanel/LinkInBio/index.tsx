@@ -6,18 +6,13 @@ import {
 	IonCheckbox,
 	IonChip,
 	IonList,
-	IonReorder,
-	IonReorderGroup,
 	ItemReorderEventDetail,
 	RefresherEventDetail,
 } from '@ionic/react';
 import {
 	menuOutline,
-	appsOutline,
 	calendar,
 	pricetagOutline,
-	search,
-	ellipsisVertical,
 	trashOutline,
 	pencilOutline,
 	filterOutline,
@@ -34,7 +29,6 @@ import {
 	ZIonText,
 	ZIonIcon,
 	ZIonItem,
-	ZIonLabel,
 	ZIonInput,
 	ZIonRow,
 	ZIonList,
@@ -44,20 +38,6 @@ import {
 	ZIonButtons,
 } from '@/components/ZIonComponents';
 import { ZIonButton } from '@/components/ZIonComponents';
-import {
-	useZInvalidateReactQueries,
-	useZRQDeleteRequest,
-	useZRQGetRequest,
-	useZRQUpdateRequest,
-} from '@/ZaionsHooks/zreactquery-hooks';
-import {
-	useZIonAlert,
-	useZIonErrorAlert,
-	useZIonLoading,
-	useZIonModal,
-	useZIonPopover,
-} from '@/ZaionsHooks/zionic-hooks';
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import ZaionsIonPage from '@/components/ZaionsIonPage';
 import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
 import ZRCheckbox from '@/components/CustomComponents/ZRCheckbox';
@@ -66,7 +46,8 @@ import ZIonRefresherContent from '@/components/ZIonComponents/ZIonRefresherConte
 import ZaionsLinkInBioLinksTable from '@/components/InPageComponents/ZaionsTable/linkInBioTables/LinkInBioTable';
 import ZaionsAddLinkInBioModal from '@/components/InPageComponents/ZaionsModals/AddNewLinkInBioModal';
 import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
-import AdminPanelMainSidebarMenu from '@/components/AdminPanelComponents/Sidebar/ExpendableMenu';
+import ZDashboardSidebar from '@/components/AdminPanelComponents/Sidebar';
+import ZCan from '@/components/Can';
 
 // Types
 import {
@@ -74,7 +55,7 @@ import {
 	folderState,
 	FormMode,
 } from '@/types/AdminPanel/index.type';
-import { LinkFolderType, TimeFilterEnum } from '@/types/AdminPanel/linksType';
+import { TimeFilterEnum } from '@/types/AdminPanel/linksType';
 
 // Recoil States
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
@@ -86,20 +67,30 @@ import {
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 
 // Global Contents
+import {
+	useZInvalidateReactQueries,
+	useZRQDeleteRequest,
+	useZRQUpdateRequest,
+} from '@/ZaionsHooks/zreactquery-hooks';
+import {
+	useZIonAlert,
+	useZIonErrorAlert,
+	useZIonLoading,
+	useZIonModal,
+	useZIonPopover,
+} from '@/ZaionsHooks/zionic-hooks';
 import CONSTANTS from '@/utils/constants';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { API_URL_ENUM, PAGE_MENU, PAGE_MENU_SIDE } from '@/utils/enums';
 import { showSuccessNotification } from '@/utils/notification';
-import { replaceParams, zStringify } from '@/utils/helpers';
+import { zStringify } from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 
 // Styles
 import classes from './styles.module.css';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import ZDashboardSidebar from '@/components/AdminPanelComponents/Sidebar';
-import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
-import ZCan from '@/components/Can';
+import { useParams } from 'react-router';
 
 const ZLinkInBiosListPage: React.FC = () => {
 	// Component state
@@ -113,6 +104,11 @@ const ZLinkInBiosListPage: React.FC = () => {
 			isEnable: false,
 		},
 	});
+
+	// getting link-in-bio and workspace ids from url with the help of useParams.
+	const { workspaceId } = useParams<{
+		workspaceId: string;
+	}>();
 
 	// Link-in-bio folders reorder function.
 	const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
@@ -162,7 +158,10 @@ const ZLinkInBiosListPage: React.FC = () => {
 		useZIonPopover(FolderActionsPopoverContent);
 
 	const { presentZIonModal: presentAddLinkInBioModal } = useZIonModal(
-		ZaionsAddLinkInBioModal
+		ZaionsAddLinkInBioModal,
+		{
+			workspaceId: workspaceId,
+		}
 	);
 
 	const { zInvalidateReactQueries } = useZInvalidateReactQueries();

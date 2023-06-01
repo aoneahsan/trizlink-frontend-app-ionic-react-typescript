@@ -74,6 +74,7 @@ export interface LinkExpirationInfoInterface {
 
 export interface PasswordInterface {
 	value?: string;
+	password?: string;
 	enabled?: boolean;
 }
 

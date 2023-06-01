@@ -120,8 +120,9 @@ const LinkInBioDesignPage: React.FC = () => {
 	});
 
 	// getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio of that id will be fetch from backend and store in NewLinkInBioFormState recoil state.
-	const { editLinkInBioId } = useParams<{
+	const { editLinkInBioId, workspaceId } = useParams<{
 		editLinkInBioId: string;
+		workspaceId: string;
 	}>();
 
 	// validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
@@ -142,8 +143,12 @@ const LinkInBioDesignPage: React.FC = () => {
 		_url: API_URL_ENUM.linkInBioBlock_create_list,
 		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN],
 		_authenticated: true,
-		_itemsIds: [editLinkInBioId],
-		_urlDynamicParts: [':linkInBioId'],
+
+		_itemsIds: [workspaceId, editLinkInBioId],
+		_urlDynamicParts: [
+			CONSTANTS.RouteParams.workspace.workspaceId,
+			CONSTANTS.RouteParams.linkInBio.linkInBioId,
+		],
 		_shouldFetchWhenIdPassed: !editLinkInBioId ? true : false,
 		_extractType: ZRQGetRequestExtractEnum.extractItems,
 	});
@@ -204,8 +209,11 @@ const LinkInBioDesignPage: React.FC = () => {
 		try {
 			// The update api...
 			const _result = await UpdateLinkInBioBlocksReorder({
-				itemIds: [editLinkInBioId],
-				urlDynamicParts: [':linkInBioId'],
+				itemIds: [workspaceId, editLinkInBioId],
+				urlDynamicParts: [
+					CONSTANTS.RouteParams.workspace.workspaceId,
+					CONSTANTS.RouteParams.linkInBio.linkInBioId,
+				],
 				requestData: zStringify({
 					items: compState.linkInBioBlocksReorder.Ids,
 				}),

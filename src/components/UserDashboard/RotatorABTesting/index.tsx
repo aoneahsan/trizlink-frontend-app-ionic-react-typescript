@@ -53,9 +53,9 @@ const RotatorABTesting: React.FC = () => {
 				sizeMd='5.6'
 				sizeSm='12'
 				sizeXs='12'
-				className='border py-3 zaions__bg_white'
+				className='py-3 border zaions__bg_white'
 			>
-				<div className='flex ion-align-items-center border-bottom ion-padding-start pb-2'>
+				<div className='flex pb-2 ion-align-items-center border-bottom ion-padding-start'>
 					<ZIonIcon icon={gitPullRequestOutline} size={'large'}></ZIonIcon>
 					<ZIonText>
 						<h6 className='font-bold ion-no-margin ion-padding-start'>
@@ -183,7 +183,7 @@ const RotatorABTesting: React.FC = () => {
 													}}
 												/>
 											</ZIonCol>
-											<ZIonCol className='ion-padding-top mt-4'>
+											<ZIonCol className='mt-4 ion-padding-top'>
 												<ZIonIcon
 													icon={trashBin}
 													onClick={() => {
@@ -204,7 +204,7 @@ const RotatorABTesting: React.FC = () => {
 									<ZIonButton
 										disabled
 										color={'dark'}
-										className='ion-text-capitalize mt-3'
+										className='mt-3 ion-text-capitalize'
 										fill='clear'
 									>
 										You can't add a redirection if Geolocation is activated
@@ -212,9 +212,15 @@ const RotatorABTesting: React.FC = () => {
 								) : (
 									<ZIonButton
 										fill='clear'
-										className='ion-text-capitalize mt-3'
+										className='mt-3 ion-text-capitalize'
 										size='small'
-										onClick={() => push(getNewRotatorABTestingEmptyObj)}
+										onClick={() =>
+											push({
+												id: getRandomKey(),
+												redirectionLink: '',
+												percentage: 0,
+											})
+										}
 									>
 										Add a destination
 									</ZIonButton>

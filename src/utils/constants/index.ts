@@ -44,6 +44,7 @@ const RouteParams = {
 
 	linkInBio: {
 		linkInBioId: ':linkInBioId',
+		libPddId: ':libPddId',
 	},
 
 	// folderIdToGetShortLinksOrLinkInBio: 'all',
@@ -83,10 +84,9 @@ export const API_URLS = {
 	linkInBioPreDefinedBlocks_create_list: '/user/link-in-bio-predefined-blocks',
 	linkInBioPreDefinedBlocks_delete_update:
 		'/user/link-in-bio-predefined-blocks/:blockId',
-	linkInBioBlock_create_list: '/user/link-in-bio/:linkInBioId/blocks',
-	linkInBioBlock_delete_update_get:
-		'/user/link-in-bio/:linkInBioId/blocks/:blockId',
-	linkInBioBlocks_reorder: '/user/link-in-bio/:linkInBioId/blocks/reorder',
+	linkInBioBlock_create_list: `/user/link-in-bio/${RouteParams.linkInBio.linkInBioId}/blocks`,
+	linkInBioBlock_delete_update_get: `/user/link-in-bio/${RouteParams.linkInBio.linkInBioId}/blocks/:blockId`,
+	linkInBioBlocks_reorder: `/user/link-in-bio/${RouteParams.linkInBio.linkInBioId}/blocks/reorder`,
 	linkInBioPreDefinedMusicPlatform_create_list:
 		'/user/link-in-bio-predefined-musicplatforms',
 	linkInBioPreDefinedMusicPlatform_delete_update:
@@ -96,6 +96,9 @@ export const API_URLS = {
 		'/user/link-in-bio-predefined-messengerplatforms',
 	linkInBioPreDefinedMessengerPlatform_delete_update:
 		'/user/link-in-bio-predefined-messengerplatforms/:messengerPlatformId',
+
+	linkInBioPreData_create_list: `/user/lib-pdd`,
+	linkInBioPreData_delete_update: `/user/lib-pdd/${RouteParams.linkInBio.libPddId}`,
 
 	linkInBioPreDefinedSocialPlatform_create_list:
 		'/user/link-in-bio-predefined-socialplatforms',
@@ -272,7 +275,7 @@ const DateTime = {
 // Default Values
 const DEFAULT_VALUES = {
 	DEFAULT_CUSTOM_DOMAIN: '1',
-	DEFAULT_FOLDER: 'default',
+	DEFAULT_FOLDER: 1,
 	ZAIONS_SETTING_SPLIT_PANEL: 'ZAIONS_SETTING_PAGE_PANEL',
 	ZAIONS_SHORT_LINKS_LIST_SPLIT_PANEL: 'ZAIONS_SHORT_LINKS_LIST_SPLIT_PANEL',
 	ZAIONS_DASHBOARD_SPLIT_PANEL: 'ZAIONS_DASHBOARD_PAGE_PANEL',

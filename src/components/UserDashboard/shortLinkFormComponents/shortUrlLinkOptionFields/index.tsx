@@ -114,11 +114,11 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 	};
 
 	return (
-		<ZIonGrid className='my-3 mx-3'>
+		<ZIonGrid className='mx-3 my-3'>
 			<ZIonRow
 				className={`zaions__bg_white py-4 px-4 rounded ion-align-items-center`}
 			>
-				<ZIonCol className='flex ion-align-items-center pb-4'>
+				<ZIonCol className='flex pb-4 ion-align-items-center'>
 					{/* Options Dropdown (messengerPlatformsBlockEnum)  */}
 					<ShortUrlLinkOptions />
 
@@ -136,7 +136,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 									onIonBlur: handleBlur,
 									value: values?.target?.url,
 									name: 'target.url',
-									errorText: errors?.password?.value,
+									errorText: errors?.target?.url,
 									type: 'url',
 									className: `${classNames({
 										'zaions__w90 ion-margin-end mx-auto': true,

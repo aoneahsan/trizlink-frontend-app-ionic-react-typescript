@@ -49,7 +49,7 @@ export const useZRQGetRequest = <T>({
 	_itemsIds?: string[];
 	_urlDynamicParts?: string[];
 	_shouldFetchWhenIdPassed?: boolean;
-	_staleTime?: number;
+	_staleTime?: number | typeof Infinity;
 	_queryOptions?: {
 		refetchOnWindowFocus?: boolean;
 		networkMode?: 'always' | 'offlineFirst' | 'online';

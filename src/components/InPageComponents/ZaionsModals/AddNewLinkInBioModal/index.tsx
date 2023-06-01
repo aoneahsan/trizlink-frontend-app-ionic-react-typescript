@@ -14,6 +14,7 @@ import {
 } from '@/components/ZIonComponents';
 import { Formik } from 'formik';
 import { useZRQCreateRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Global Constants
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
@@ -38,7 +39,6 @@ import {
 	ZLinkInBioPageEnum,
 	ZLinkInBioRHSComponentEnum,
 } from '@/types/AdminPanel/linkInBioType';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Styles
 
@@ -50,7 +50,8 @@ import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputFi
 const ZaionsAddLinkInBioModal: React.FC<{
 	dismissZIonModal: (data?: string, role?: string | undefined) => void;
 	zNavigatePushRoute?: (_url: string) => void;
-}> = ({ dismissZIonModal, zNavigatePushRoute }) => {
+	workspaceId: string;
+}> = ({ dismissZIonModal, zNavigatePushRoute, workspaceId }) => {
 	// Create new link-in-bio API.
 	const { mutateAsync: createLinkInBioMutate } =
 		useZRQCreateRequest<LinkInBioType>({
@@ -58,6 +59,8 @@ const ZaionsAddLinkInBioModal: React.FC<{
 			_queriesKeysToInvalidate: [
 				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
 			],
+			_itemsIds: [workspaceId],
+			_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 		});
 
 	return (
@@ -79,7 +82,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
 			</div>
 
 			{/*  */}
-			<div className='flex ion-text-center ion-justify-content-center flex-col'>
+			<div className='flex flex-col ion-text-center ion-justify-content-center'>
 				<ZIonText className='' color={'primary'}>
 					<h1 className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}>
 						<ZIonIcon
@@ -111,6 +114,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
 									zStringify({
 										linkInBioTitle: values.linkInBioTitle,
 										theme: zStringify(ZaionsLinkInBioDefaultData.theme), // passing default data with title
+										folderId: 1,
 									})
 								);
 

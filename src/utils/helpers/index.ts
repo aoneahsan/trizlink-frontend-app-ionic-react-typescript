@@ -1207,3 +1207,13 @@ export const UserLogoutFn = async () => {
 		reportCustomError(error);
 	}
 };
+
+export const areAllObjectsFilled = (array: Array<object>): boolean => {
+	let isValid = true;
+	for (let i = 0; i < array.length; i++) {
+		if (Object.keys(array[i]).length) {
+			isValid = false;
+		}
+	}
+	return isValid;
+};

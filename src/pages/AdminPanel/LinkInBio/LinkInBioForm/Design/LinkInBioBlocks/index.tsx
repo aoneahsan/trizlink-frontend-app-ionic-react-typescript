@@ -21,6 +21,7 @@ import { ZIonCol, ZIonRow, ZIonText } from '@/components/ZIonComponents';
 import ZLinkInBioAddBlockModal from '@/components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal';
 
 import { LinkInBioPredefinedBlocksRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
+import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedButton';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 
@@ -61,7 +62,6 @@ import { LinkInBioBlocksDefaultData } from '@/data/UserDashboard/LinkInBio/Block
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import classes from '../styles.module.css';
-import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedButton';
 
 /**
  * Component props type go down

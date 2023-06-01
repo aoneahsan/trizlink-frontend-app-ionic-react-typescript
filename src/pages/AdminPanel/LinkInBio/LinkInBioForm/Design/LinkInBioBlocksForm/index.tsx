@@ -522,7 +522,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 									<ZIonButton
 										fill='clear'
 										size='small'
-										className='ion-no-padding me-2 mb-1'
+										className='mb-1 ion-no-padding me-2'
 										color='dark'
 										onClick={() => {
 											zNavigatePushRoute(
@@ -846,7 +846,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										LinkInBioBlockEnum.Iframe ||
 									linkInBioSelectedBlockFromState.blockType ===
 										LinkInBioBlockEnum.form) && (
-									<ZIonCol size='12' className='mt-4 pt-2'>
+									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioTitleField
 											name='title'
 											value={values.title}
@@ -864,7 +864,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								{/* Form Component */}
 								{linkInBioSelectedBlockFromState.blockType ===
 									LinkInBioBlockEnum.form && (
-									<ZIonCol size='12' className='mt-4 pt-3 mb-2'>
+									<ZIonCol size='12' className='pt-3 mt-4 mb-2'>
 										<LinkInBioFormField />
 									</ZIonCol>
 								)}
@@ -876,7 +876,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding ms-3'>
 											✅ Submit button
 										</ZIonTitle>
-										<div className='mb-5 mt-2'>
+										<div className='mt-2 mb-5'>
 											<LinkInBioTitleField
 												name='form.submitButtonText'
 												value={values.form?.submitButtonText}
@@ -891,7 +891,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								{/* Icon Component */}
 								{linkInBioSelectedBlockFromState.blockType ===
 									LinkInBioBlockEnum.VCard && (
-									<ZIonCol size='12' className='mt-4 pt-2'>
+									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioIconField
 											name='icon'
 											value={values.icon}
@@ -907,7 +907,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										LinkInBioBlockEnum.card ||
 									linkInBioSelectedBlockFromState.blockType ===
 										LinkInBioBlockEnum.avatar) && (
-									<ZIonCol size='12' className='mt-4 pt-2'>
+									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioDescriptionField
 											name='description'
 											value={values.description}
@@ -919,7 +919,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								{/* Text area */}
 								{linkInBioSelectedBlockFromState.blockType ===
 									LinkInBioBlockEnum.text && (
-									<ZIonCol size='12' className='mt-4 pt-2 mb-4'>
+									<ZIonCol size='12' className='pt-2 mt-4 mb-4'>
 										<ZTextEditor
 											value={values.text}
 											onChange={(_value) => {
@@ -938,7 +938,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										LinkInBioBlockEnum.avatar ||
 									linkInBioSelectedBlockFromState.blockType ===
 										LinkInBioBlockEnum.music) && (
-									<ZIonCol size='12' className='mt-4 pt-2'>
+									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioUploadField />
 									</ZIonCol>
 								)}
@@ -946,7 +946,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								{/* DateTime Component */}
 								{linkInBioSelectedBlockFromState.blockType ===
 									LinkInBioBlockEnum.countdown && (
-									<ZIonCol size='12' className='mt-4 pt-2'>
+									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioDateTimeField
 											name='date'
 											value={values.date}
@@ -958,7 +958,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								{/* Timezone */}
 								{linkInBioSelectedBlockFromState.blockType ===
 									LinkInBioBlockEnum.countdown && (
-									<ZIonCol size='12' className='mt-4 pt-2'>
+									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioTimezoneField
 											name='timezone'
 											onChange={(_value) => {
@@ -991,7 +991,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                     LinkInBioBlockEnum.wordpress ||
                   linkInBioSelectedBlockFromState.blockType ===
                     LinkInBioBlockEnum.map) && (
-                  <ZIonCol size='12' className='mt-4 pt-2'>
+                  <ZIonCol size='12' className='pt-2 mt-4'>
                     <LinkInBioSearchField
                       placeholder={
                         linkInBioSelectedBlockFromState.blockType ===
@@ -1031,7 +1031,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								{/* RSS Feed */}
 								{linkInBioSelectedBlockFromState.blockType ===
 									LinkInBioBlockEnum.RSS && (
-									<ZIonCol size='12' className='mt-4 pt-2'>
+									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioSearchField
 											placeholder='RSS Feed'
 											searchIcon={wifiOutline}
@@ -1046,7 +1046,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								{/* Shopify */}
 								{linkInBioSelectedBlockFromState.blockType ===
 									LinkInBioBlockEnum.shopify && (
-									<ZIonCol size='12' className='mt-4 pt-2'>
+									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioSearchField
 											placeholder='Shopify link'
 											searchIcon={linkOutline}
@@ -1061,7 +1061,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								{/* Magento */}
 								{linkInBioSelectedBlockFromState.blockType ===
 									LinkInBioBlockEnum.magento && (
-									<ZIonCol size='12' className='mt-4 pt-2'>
+									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioSearchField
 											placeholder='Magento link'
 											searchIcon={linkOutline}
@@ -1076,7 +1076,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								{/* Wordpress */}
 								{linkInBioSelectedBlockFromState.blockType ===
 									LinkInBioBlockEnum.wordpress && (
-									<ZIonCol size='12' className='mt-4 pt-2'>
+									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioSearchField
 											placeholder='Wordpress link'
 											searchIcon={linkOutline}
@@ -1091,7 +1091,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								{/* Maps */}
 								{linkInBioSelectedBlockFromState.blockType ===
 									LinkInBioBlockEnum.map && (
-									<ZIonCol size='12' className='mt-4 mt-1'>
+									<ZIonCol size='12' className='mt-4'>
 										<ZIonItem className='ion-item-start-no-padding'>
 											<ZRGAutoCompleteInput
 												onLocationSelectHandler={(
@@ -1138,7 +1138,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										LinkInBioBlockEnum.magento ||
 									linkInBioSelectedBlockFromState.blockType ===
 										LinkInBioBlockEnum.wordpress) && (
-									<ZIonCol size='12' className='mt-4 mt-1'>
+									<ZIonCol size='12' className='mt-4'>
 										<LinkInBioEnableField
 											onChange={(value) => {
 												setFieldValue('titleIsEnable', value, false);
@@ -1248,7 +1248,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 													value={values.form?.termLink}
 													onIonChange={handleChange}
 													placeholder='Link to your T&C'
-													className='mt-3 pt-2'
+													className='pt-2 mt-3'
 													showRefreshBtn={false}
 												/>
 											</div>
@@ -1263,7 +1263,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
 											➖ Type
 										</ZIonTitle>
-										<div className='mb-2 mt-2'>
+										<div className='mt-2 mb-2'>
 											{/* Solid */}
 											<ZRoundedButton
 												className='me-2'
@@ -1342,7 +1342,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								{/* 🎨 Color  */}
 								{linkInBioSelectedBlockFromState.blockType ===
 									LinkInBioBlockEnum.separator && (
-									<ZIonCol size='12' className='mt-4 pt-2'>
+									<ZIonCol size='12' className='pt-2 mt-4'>
 										<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
 											🎨 Color
 										</ZIonTitle>
@@ -1455,7 +1455,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
 									{/* 🖍️ Button color */}
 									{values.customAppearance.isEnabled && (
-										<ZIonCol className='mb-2 mt-3' size='12'>
+										<ZIonCol className='mt-3 mb-2' size='12'>
 											<div className='flex ion-align-items-center ion-padding-bottom'>
 												{values?.customAppearance?.background?.bgType ===
 													LinkInBioThemeBackgroundEnum.solidColor && (
@@ -1481,7 +1481,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 														/>
 														<ZIonButton
 															shape='round'
-															className='direction-button ion-margin-horizontal mt-3'
+															className='mt-3 direction-button ion-margin-horizontal'
 															color='secondary'
 															style={{
 																'--padding-top': '1.3rem',
@@ -1534,7 +1534,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 												{values?.customAppearance?.background?.bgType ===
 													LinkInBioThemeBackgroundEnum.solidColor && (
 													<ZIonButton
-														className='ion-text-capitalize mt-3 ms-4'
+														className='mt-3 ion-text-capitalize ms-4'
 														shape='round'
 														onClick={() => {
 															setFieldValue(
@@ -1885,10 +1885,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								sizeXs='12'
 								className='ion-padding-vertical ion-margin-top ion-margin-start border-bottom__violet'
 							>
-								<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding mb-3'>
+								<ZIonTitle className='mb-3 font-bold zaions__fs_16 ion-no-padding'>
 									✨ Style
 								</ZIonTitle>
-								<div className='ion-padding-bottom mb-2'>
+								<div className='mb-2 ion-padding-bottom'>
 									{linkInBioSelectedBlockFromState.blockType !==
 										LinkInBioBlockEnum.avatar && (
 										<>
@@ -2119,10 +2119,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								sizeXs='12'
 								className='ion-padding-vertical ion-margin-top ion-margin-start border-bottom__violet'
 							>
-								<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding mb-3'>
+								<ZIonTitle className='mb-3 font-bold zaions__fs_16 ion-no-padding'>
 									👓 View
 								</ZIonTitle>
-								<div className='ion-padding-bottom mb-2'>
+								<div className='mb-2 ion-padding-bottom'>
 									<ZRoundedButton
 										className='me-2'
 										color={
@@ -2218,7 +2218,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								sizeXs='12'
 								className='ion-padding-vertical ion-margin-top ion-margin-start border-bottom__violet'
 							>
-								<ZIonRow className='ion-padding-bottom mb-2'>
+								<ZIonRow className='mb-2 ion-padding-bottom'>
 									<ZIonCol>
 										<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
 											🎈 Animation <ZIonRouterLink>(help)</ZIonRouterLink>
@@ -2439,12 +2439,12 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										<ZIonRow>
 											<ZIonCol size='5.9' className='me-2'>
 												{/* <ZIonItem className='ion-no-padding ion-no-margin'> */}
-												<ZIonLabel className='ms-2 font-bold'>
+												<ZIonLabel className='font-bold ms-2'>
 													Start at:
 												</ZIonLabel>
 												<ZIonDatetimeButton
 													name='schedule.startAt'
-													className='ion-justify-content-start mt-2 zaions-datetime-btn'
+													className='mt-2 ion-justify-content-start zaions-datetime-btn'
 													onIonChange={({ target }) => {
 														setFieldValue(
 															'schedule.startAt',
@@ -2461,11 +2461,11 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 											</ZIonCol>
 
 											<ZIonCol size='5.9'>
-												<ZIonLabel className='ms-2 font-bold'>
+												<ZIonLabel className='font-bold ms-2'>
 													End at:
 												</ZIonLabel>
 												<ZIonDatetimeButton
-													className='ion-justify-content-start mt-2 zaions-datetime-btn'
+													className='mt-2 ion-justify-content-start zaions-datetime-btn'
 													name='schedule.endAt'
 													onIonChange={({ target }) => {
 														setFieldValue(

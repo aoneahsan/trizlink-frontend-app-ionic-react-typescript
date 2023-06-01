@@ -262,7 +262,7 @@ export type ShortLinkType = {
 	pixelIds?: ZaionsRSelectOptions[] | string[] | string;
 	utmTagInfo?: UTMTagInfoInterface | string;
 	shortUrl?: ShortUrlInterface | string;
-	folderId?: string; // default if non is given
+	folderId?: string | number; // default if non is given
 	notes?: string | null;
 	tags?: string[] | string;
 	abTestingRotatorLinks?: ABTestingRotatorInterface[] | string;
