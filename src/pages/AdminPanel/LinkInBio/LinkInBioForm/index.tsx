@@ -137,31 +137,33 @@ const ZaionsLinkInBioForm: React.FC = () => {
 	const { validateRequestResponse } = useZValidateRequestResponse();
 
 	// getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio of that id will be fetch from backend and store in NewLinkInBioFormState recoil state.
-	const { editLinkInBioId, workspaceId } = useParams<{
-		editLinkInBioId: string;
+	const { linkInBioId, workspaceId } = useParams<{
+		linkInBioId: string;
 		workspaceId: string;
 	}>();
 
+	console.log({ workspaceId, linkInBioId });
+
 	//
 	const [linkInBioStateAtomFamily, setLinkInBioStateAtomFamily] =
-		useRecoilState(LinkInBioRStateAtomFamily(editLinkInBioId));
+		useRecoilState(LinkInBioRStateAtomFamily(linkInBioId));
 
 	const parseLinkInBioSettingData = zJsonParse(
 		String(linkInBioStateAtomFamily?.settings)
 	) as LinkInBIoSettingType;
 
-	// fetching link-in-bio with the editLinkInBioId data from backend.
+	// fetching link-in-bio with the linkInBioId data from backend.
 	const { data: selectedLinkInBio, refetch: refetchSelectedLinkInBio } =
 		useZRQGetRequest<LinkInBioType>({
 			_url: API_URL_ENUM.linkInBio_update_delete,
 			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET],
 			_authenticated: true,
-			_itemsIds: [editLinkInBioId, workspaceId],
+			_itemsIds: [linkInBioId, workspaceId],
 			_urlDynamicParts: [
 				CONSTANTS.RouteParams.linkInBio.linkInBioId,
 				CONSTANTS.RouteParams.workspace.workspaceId,
 			],
-			_shouldFetchWhenIdPassed: !editLinkInBioId ? true : false,
+			_shouldFetchWhenIdPassed: !linkInBioId ? true : false,
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
 		});
 
@@ -178,10 +180,10 @@ const ZaionsLinkInBioForm: React.FC = () => {
 		// eslint-disable-next-line
 	}, []);
 
-	// Refetching if the editLinkInBioId changes and if the editLinkInBioId is undefined it will redirect user to link-in-bio page.
+	// Refetching if the linkInBioId changes and if the linkInBioId is undefined it will redirect user to link-in-bio page.
 	useEffect(() => {
 		try {
-			if (editLinkInBioId) {
+			if (linkInBioId) {
 				void linkInBioGetRequestFn();
 			}
 		} catch (error) {
@@ -193,12 +195,12 @@ const ZaionsLinkInBioForm: React.FC = () => {
 			}
 		}
 		// eslint-disable-next-line
-	}, [editLinkInBioId]);
+	}, [linkInBioId]);
 
 	// Storing link-in-bio data in recoil state.
 	useEffect(() => {
 		try {
-			if (selectedLinkInBio && selectedLinkInBio?.id && editLinkInBioId) {
+			if (selectedLinkInBio && selectedLinkInBio?.id && linkInBioId) {
 				setLinkInBioFormState((oldVal) => ({
 					...oldVal,
 					...selectedLinkInBio,
@@ -248,8 +250,11 @@ const ZaionsLinkInBioForm: React.FC = () => {
 			if (reqDataStr) {
 				// The update api...
 				const _result = await UpdateLinkInBio({
-					itemIds: [editLinkInBioId],
-					urlDynamicParts: [':linkInBioId'],
+					itemIds: [workspaceId, linkInBioId],
+					urlDynamicParts: [
+						CONSTANTS.RouteParams.workspace.workspaceId,
+						CONSTANTS.RouteParams.linkInBio.linkInBioId,
+					],
 					requestData: reqDataStr,
 				});
 
@@ -448,9 +453,10 @@ const ZaionsLinkInBioForm: React.FC = () => {
 															createRedirectRoute({
 																url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
 																params: [
-																	CONSTANTS.RouteParams.editLinkInBioIdParam,
+																	CONSTANTS.RouteParams.workspace.workspaceId,
+																	CONSTANTS.RouteParams.linkInBio.linkInBioId,
 																],
-																values: [editLinkInBioId],
+																values: [workspaceId, linkInBioId],
 																routeSearchParams: {
 																	page: ZLinkInBioPageEnum.design,
 																	step: ZLinkInBioRHSComponentEnum.theme,
@@ -472,9 +478,10 @@ const ZaionsLinkInBioForm: React.FC = () => {
 															createRedirectRoute({
 																url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
 																params: [
-																	CONSTANTS.RouteParams.editLinkInBioIdParam,
+																	CONSTANTS.RouteParams.workspace.workspaceId,
+																	CONSTANTS.RouteParams.linkInBio.linkInBioId,
 																],
-																values: [editLinkInBioId],
+																values: [workspaceId, linkInBioId],
 																routeSearchParams: {
 																	page: ZLinkInBioPageEnum.shareSettings,
 																},
@@ -495,9 +502,10 @@ const ZaionsLinkInBioForm: React.FC = () => {
 															createRedirectRoute({
 																url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
 																params: [
-																	CONSTANTS.RouteParams.editLinkInBioIdParam,
+																	CONSTANTS.RouteParams.workspace.workspaceId,
+																	CONSTANTS.RouteParams.linkInBio.linkInBioId,
 																],
-																values: [editLinkInBioId],
+																values: [workspaceId, linkInBioId],
 																routeSearchParams: {
 																	page: ZLinkInBioPageEnum.pageAnalytics,
 																},
@@ -518,9 +526,10 @@ const ZaionsLinkInBioForm: React.FC = () => {
 															createRedirectRoute({
 																url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
 																params: [
-																	CONSTANTS.RouteParams.editLinkInBioIdParam,
+																	CONSTANTS.RouteParams.workspace.workspaceId,
+																	CONSTANTS.RouteParams.linkInBio.linkInBioId,
 																],
-																values: [editLinkInBioId],
+																values: [workspaceId, linkInBioId],
 																routeSearchParams: {
 																	page: ZLinkInBioPageEnum.lead,
 																},

@@ -84,17 +84,19 @@ const ZLinkInBioAddBlockModal: React.FC<{
 	dismissZIonModal: (data?: string, role?: string | undefined) => void;
 	_blockType: LinkInBioBlockEnum;
 	_blockContent: LinkInBioSingleBlockContentType;
-	editLinkInBioId: string;
+	linkInBioId: string;
 	modalHeading?: string;
 	modalSubHeading?: string;
+	workspaceId: string;
 	zNavigatePushRoute?: (_url: string) => void;
 }> = ({
 	dismissZIonModal,
 	_blockType,
 	_blockContent = LinkInBioBlocksDefaultData[_blockType as string],
-	editLinkInBioId,
+	linkInBioId,
 	modalHeading = 'Add block 😊',
 	modalSubHeading = `Would you like add this ${_blockType} block in your page?`,
+	workspaceId,
 	zNavigatePushRoute,
 }) => {
 	const setLinkInBioBlocksState = useSetRecoilState(LinkInBioBlocksRState);
@@ -107,7 +109,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
 				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.BLOCK.MAIN,
 			],
 			authenticated: true,
-			_itemsIds: [editLinkInBioId],
+			_itemsIds: [linkInBioId],
 			_urlDynamicParts: [':linkInBioId'],
 		});
 
@@ -166,8 +168,11 @@ const ZLinkInBioAddBlockModal: React.FC<{
 						zNavigatePushRoute(
 							createRedirectRoute({
 								url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-								params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
-								values: [editLinkInBioId],
+								params: [
+									CONSTANTS.RouteParams.workspace.workspaceId,
+									CONSTANTS.RouteParams.linkInBio.linkInBioId,
+								],
+								values: [workspaceId, linkInBioId],
 								routeSearchParams: {
 									page: ZLinkInBioPageEnum.design,
 									step: ZLinkInBioRHSComponentEnum.blockForm,

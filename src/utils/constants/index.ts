@@ -45,6 +45,7 @@ const RouteParams = {
 	linkInBio: {
 		linkInBioId: ':linkInBioId',
 		libPddId: ':libPddId',
+		libBlockId: ':libBlockId',
 	},
 
 	// folderIdToGetShortLinksOrLinkInBio: 'all',
@@ -80,35 +81,33 @@ export const API_URLS = {
 		'/user/link-in-bio-folders/:folderId',
 	linkInBio_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/link-in-bio`,
 	linkInBio_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/link-in-bio/${RouteParams.linkInBio.linkInBioId}`,
-	linkInBioPreDefinedThemes_create_list: '/user/link-in-bio-themes',
-	linkInBioPreDefinedBlocks_create_list: '/user/link-in-bio-predefined-blocks',
-	linkInBioPreDefinedBlocks_delete_update:
-		'/user/link-in-bio-predefined-blocks/:blockId',
-	linkInBioBlock_create_list: `/user/link-in-bio/${RouteParams.linkInBio.linkInBioId}/blocks`,
-	linkInBioBlock_delete_update_get: `/user/link-in-bio/${RouteParams.linkInBio.linkInBioId}/blocks/:blockId`,
+	linkInBioPreDefinedThemes_create_list: '/user/lib-pre-dd/themes',
+	linkInBioPreDefinedBlocks_create_list: '/user/lib-pre-dd/blocks',
+	linkInBioPreDefinedBlocks_delete_update: '/user/lib-pre-dd/blocks/:blockId',
+	linkInBioBlock_create_list: `/user/ws/${RouteParams.workspace.workspaceId}/lib/${RouteParams.linkInBio.linkInBioId}/lib-block`,
+	linkInBioBlock_delete_update_get: `/user/ws/${RouteParams.workspace.workspaceId}/lib/${RouteParams.linkInBio.linkInBioId}/lib-block/${RouteParams.linkInBio.libBlockId}`,
 	linkInBioBlocks_reorder: `/user/link-in-bio/${RouteParams.linkInBio.linkInBioId}/blocks/reorder`,
 	linkInBioPreDefinedMusicPlatform_create_list:
-		'/user/link-in-bio-predefined-musicplatforms',
+		'/user/lib-pre-dd/musicPlatform',
 	linkInBioPreDefinedMusicPlatform_delete_update:
-		'/user/link-in-bio-predefined-musicplatforms/:musicPlatformId',
+		'/user/lib-pre-dd/musicPlatform/:musicPlatformId',
 
 	linkInBioPreDefinedMessengerPlatform_create_list:
-		'/user/link-in-bio-predefined-messengerplatforms',
+		'/user/lib-pre-dd/messengerPlatform',
 	linkInBioPreDefinedMessengerPlatform_delete_update:
-		'/user/link-in-bio-predefined-messengerplatforms/:messengerPlatformId',
+		'/user/lib-pre-dd/messengerPlatform/:messengerPlatformId',
 
 	linkInBioPreData_create_list: `/user/lib-pdd`,
 	linkInBioPreData_delete_update: `/user/lib-pdd/${RouteParams.linkInBio.libPddId}`,
 
 	linkInBioPreDefinedSocialPlatform_create_list:
-		'/user/link-in-bio-predefined-socialplatforms',
+		'/user/lib-pre-dd/socialPlatform',
 	linkInBioPreDefinedSocialPlatform_delete_update:
-		'/user/link-in-bio-predefined-messengerplatforms/:socialPlatformId',
+		'/user/lib-pre-dd/socialPlatform/:socialPlatformId',
 
-	linkInBioPreDefinedFormFields_create_list:
-		'/user/link-in-bio-predefined-form-fields',
+	linkInBioPreDefinedFormFields_create_list: '/user/lib-pre-dd/formField',
 	linkInBioPreDefinedFormFields_delete_update:
-		'/user/link-in-bio-predefined-form-fields/:formFieldId',
+		'/user/lib-pre-dd/formField/:formFieldId',
 
 	// workspace
 	workspace_create_list: '/user/workspaces',

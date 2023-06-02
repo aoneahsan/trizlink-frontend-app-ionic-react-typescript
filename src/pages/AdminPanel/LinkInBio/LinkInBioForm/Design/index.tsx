@@ -434,8 +434,11 @@ const LinkInBioDesignPage: React.FC = () => {
 								}
 								routerLink={createRedirectRoute({
 									url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-									params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
-									values: [editLinkInBioId],
+									params: [
+										CONSTANTS.RouteParams.workspace.workspaceId,
+										CONSTANTS.RouteParams.linkInBio.linkInBioId,
+									],
+									values: [workspaceId, editLinkInBioId],
 									routeSearchParams: {
 										page: ZLinkInBioPageEnum.design,
 										step: ZLinkInBioRHSComponentEnum.theme,
@@ -460,8 +463,11 @@ const LinkInBioDesignPage: React.FC = () => {
 								}
 								routerLink={createRedirectRoute({
 									url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-									params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
-									values: [editLinkInBioId],
+									params: [
+										CONSTANTS.RouteParams.workspace.workspaceId,
+										CONSTANTS.RouteParams.linkInBio.linkInBioId,
+									],
+									values: [workspaceId, editLinkInBioId],
 									routeSearchParams: {
 										page: ZLinkInBioPageEnum.design,
 										step: ZLinkInBioRHSComponentEnum.blocks,
@@ -484,8 +490,11 @@ const LinkInBioDesignPage: React.FC = () => {
 								}
 								routerLink={createRedirectRoute({
 									url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-									params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
-									values: [editLinkInBioId],
+									params: [
+										CONSTANTS.RouteParams.workspace.workspaceId,
+										CONSTANTS.RouteParams.linkInBio.linkInBioId,
+									],
+									values: [workspaceId, editLinkInBioId],
 									routeSearchParams: {
 										page: ZLinkInBioPageEnum.design,
 										step: ZLinkInBioRHSComponentEnum.settings,
@@ -508,8 +517,11 @@ const LinkInBioDesignPage: React.FC = () => {
 								}
 								routerLink={createRedirectRoute({
 									url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-									params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
-									values: [editLinkInBioId],
+									params: [
+										CONSTANTS.RouteParams.workspace.workspaceId,
+										CONSTANTS.RouteParams.linkInBio.linkInBioId,
+									],
+									values: [workspaceId, editLinkInBioId],
 									routeSearchParams: {
 										page: ZLinkInBioPageEnum.design,
 										step: ZLinkInBioRHSComponentEnum.poweredBy,

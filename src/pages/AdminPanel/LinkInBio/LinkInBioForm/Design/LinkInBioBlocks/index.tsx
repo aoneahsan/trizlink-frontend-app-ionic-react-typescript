@@ -62,6 +62,7 @@ import { LinkInBioBlocksDefaultData } from '@/data/UserDashboard/LinkInBio/Block
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import classes from '../styles.module.css';
+import { string } from 'yup';
 
 /**
  * Component props type go down
@@ -83,8 +84,9 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 		useRecoilState(LinkInBioPredefinedBlocksRState);
 
 	// getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio blocks of that id will be fetch from backend.
-	const { editLinkInBioId } = useParams<{
+	const { editLinkInBioId, workspaceId } = useParams<{
 		editLinkInBioId: string;
+		workspaceId: string;
 	}>();
 
 	// custom hook for presenting modal (the add block modal)
@@ -96,6 +98,7 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 				LinkInBioBlocksDefaultData[values.LinkInBioBlock as string],
 			setFieldValue, // passing setFieldValue to ZLinkInBioAddBlockModal component.
 			editLinkInBioId,
+			workspaceId,
 		}
 	);
 

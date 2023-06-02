@@ -147,7 +147,7 @@ const ZaionsLinkInBioLinksTable = () => {
 						url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
 						params: [
 							CONSTANTS.RouteParams.workspace.workspaceId,
-							CONSTANTS.RouteParams.editLinkInBioIdParam,
+							CONSTANTS.RouteParams.linkInBio.linkInBioId,
 						],
 						values: [workspaceId, compState.selectedLinkInBioLinkId],
 						routeSearchParams: {

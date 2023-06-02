@@ -142,8 +142,9 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 	);
 
 	// link-in-bio id get from route(url).
-	const { editLinkInBioId } = useParams<{
-		editLinkInBioId: string;
+	const { linkInBioId, workspaceId } = useParams<{
+		linkInBioId: string;
+		workspaceId: string;
 	}>();
 
 	const { setFieldValue } = useFormikContext<LinkInBioType>();
@@ -167,7 +168,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 				);
 
 				const _result = await deleteLinkInBioBlockMutate({
-					itemIds: [editLinkInBioId, (detail.data as { id: string }).id],
+					itemIds: [linkInBioId, (detail.data as { id: string }).id],
 					urlDynamicParts: [':linkInBioId', ':blockId'],
 				});
 
@@ -178,8 +179,11 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 					zNavigatePushRoute(
 						createRedirectRoute({
 							url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-							params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
-							values: [editLinkInBioId],
+							params: [
+								CONSTANTS.RouteParams.workspace.workspaceId,
+								CONSTANTS.RouteParams.linkInBio.linkInBioId,
+							],
+							values: [workspaceId, linkInBioId],
 							routeSearchParams: {
 								page: ZLinkInBioPageEnum.design,
 								step: ZLinkInBioRHSComponentEnum.blocks,
@@ -210,8 +214,11 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 			zNavigatePushRoute(
 				createRedirectRoute({
 					url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-					params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
-					values: [editLinkInBioId],
+					params: [
+						CONSTANTS.RouteParams.workspace.workspaceId,
+						CONSTANTS.RouteParams.linkInBio.linkInBioId,
+					],
+					values: [workspaceId, linkInBioId],
 					routeSearchParams: {
 						page: ZLinkInBioPageEnum.design,
 						step: ZLinkInBioRHSComponentEnum.blockForm,

@@ -86,7 +86,7 @@ const ZaionsRoutes = {
 		LinkInBio: {
 			Main: `/workspaces/${workspaceIdParam}/link-in-bio/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
 			Create: `/workspaces/${workspaceIdParam}/link-in-bio/create`,
-			Edit: `/workspaces/${workspaceIdParam}/link-in-bio/edit/${CONSTANTS.RouteParams.editLinkInBioIdParam}`,
+			Edit: `/workspaces/${workspaceIdParam}/link-in-bio/edit/${CONSTANTS.RouteParams.linkInBio.linkInBioId}`,
 		},
 
 		Workspaces: {

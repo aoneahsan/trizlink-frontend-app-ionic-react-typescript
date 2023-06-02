@@ -199,8 +199,9 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 	const { validateRequestResponse } = useZValidateRequestResponse();
 
 	// current Link-in-bio id.
-	const { editLinkInBioId } = useParams<{
+	const { editLinkInBioId, workspaceId } = useParams<{
 		editLinkInBioId: string;
+		workspaceId: string;
 	}>();
 
 	// getting search param from url with the help of 'qs' package.
@@ -255,6 +256,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 			editLinkInBioId,
 			modalHeading: 'Clone block 😊',
 			modalSubHeading: `Would you like clone this ${linkInBioSelectedBlockFromState.blockType} block in your page?`,
+			workspaceId,
 		}
 	);
 
@@ -329,8 +331,11 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 				zNavigatePushRoute(
 					createRedirectRoute({
 						url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-						params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
-						values: [editLinkInBioId],
+						params: [
+							CONSTANTS.RouteParams.workspace.workspaceId,
+							CONSTANTS.RouteParams.linkInBio.linkInBioId,
+						],
+						values: [workspaceId, editLinkInBioId],
 						routeSearchParams: {
 							page: ZLinkInBioPageEnum.design,
 							step: ZLinkInBioRHSComponentEnum.blocks,
@@ -528,8 +533,11 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 											zNavigatePushRoute(
 												createRedirectRoute({
 													url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-													params: [CONSTANTS.RouteParams.editLinkInBioIdParam],
-													values: [editLinkInBioId],
+													params: [
+														CONSTANTS.RouteParams.workspace.workspaceId,
+														CONSTANTS.RouteParams.linkInBio.linkInBioId,
+													],
+													values: [workspaceId, editLinkInBioId],
 													routeSearchParams: {
 														page: ZLinkInBioPageEnum.design,
 														step: ZLinkInBioRHSComponentEnum.blocks,
