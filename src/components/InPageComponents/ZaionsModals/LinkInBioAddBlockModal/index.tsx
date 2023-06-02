@@ -106,11 +106,14 @@ const ZLinkInBioAddBlockModal: React.FC<{
 		useZRQCreateRequest<LinkInBioBlockFromType>({
 			_url: API_URL_ENUM.linkInBioBlock_create_list,
 			_queriesKeysToInvalidate: [
-				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.BLOCK.MAIN,
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
 			],
 			authenticated: true,
-			_itemsIds: [linkInBioId],
-			_urlDynamicParts: [':linkInBioId'],
+			_itemsIds: [workspaceId, linkInBioId],
+			_urlDynamicParts: [
+				CONSTANTS.RouteParams.workspace.workspaceId,
+				CONSTANTS.RouteParams.linkInBio.linkInBioId,
+			],
 		});
 
 	const addBlockHandler = async (_position: LinkInBioBlocksPositionEnum) => {
@@ -161,8 +164,6 @@ const ZLinkInBioAddBlockModal: React.FC<{
 						]);
 					}
 
-					dismissZIonModal();
-
 					// after dismissing redirecting to blockForm
 					zNavigatePushRoute &&
 						zNavigatePushRoute(
@@ -180,6 +181,8 @@ const ZLinkInBioAddBlockModal: React.FC<{
 								},
 							})
 						);
+
+					dismissZIonModal();
 				}
 			}
 		} catch (error) {

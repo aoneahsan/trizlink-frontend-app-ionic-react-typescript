@@ -80,12 +80,12 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 	const { values, setFieldValue } = useFormikContext<LinkInBioType>();
 
 	// Recoil state for storing Link-in-bio blocks data that will fetch from backend.
-	const [linkInBioPredefinedBlocksState, setLinkInBioPredefinedBlocksState] =
-		useRecoilState(LinkInBioPredefinedBlocksRState);
+	// const [linkInBioPredefinedBlocksState, setLinkInBioPredefinedBlocksState] =
+	// 	useRecoilState(LinkInBioPredefinedBlocksRState);
 
 	// getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio blocks of that id will be fetch from backend.
-	const { editLinkInBioId, workspaceId } = useParams<{
-		editLinkInBioId: string;
+	const { linkInBioId, workspaceId } = useParams<{
+		linkInBioId: string;
 		workspaceId: string;
 	}>();
 
@@ -97,7 +97,7 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 			_blockContent:
 				LinkInBioBlocksDefaultData[values.LinkInBioBlock as string],
 			setFieldValue, // passing setFieldValue to ZLinkInBioAddBlockModal component.
-			editLinkInBioId,
+			linkInBioId,
 			workspaceId,
 		}
 	);
@@ -113,16 +113,16 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 	});
 
 	// After fetching data and storing it to LinkInBioBlocksData variable, setting data to LinkInBioPredefinedBlocksRState recoil state and making sure that if only the data refetch then again store the lates data in recoil state...
-	useEffect(() => {
-		try {
-			if (LinkInBioPreDefinedBlocksData) {
-				setLinkInBioPredefinedBlocksState(LinkInBioPreDefinedBlocksData);
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-		// eslint-disable-next-line
-	}, [LinkInBioPreDefinedBlocksData]);
+	// useEffect(() => {
+	// 	try {
+	// 		if (LinkInBioPreDefinedBlocksData) {
+	// 			setLinkInBioPredefinedBlocksState(LinkInBioPreDefinedBlocksData);
+	// 		}
+	// 	} catch (error) {
+	// 		reportCustomError(error);
+	// 	}
+	// 	// eslint-disable-next-line
+	// }, [LinkInBioPreDefinedBlocksData]);
 
 	// the LinkInBioBlockHandler function will run then the user click on any of the blocks this will execute the presentZLinkInBioAddBlockModal function which is coming from the useZIonModal to present modal...
 	const LinkInBioBlockHandler = (_type: LinkInBioBlockEnum) => {
@@ -131,6 +131,7 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 				presentZLinkInBioAddBlockModal({
 					_cssClass: 'lib-block-modal-size',
 				});
+
 				setFieldValue('LinkInBioBlock', _type, false);
 			}
 		} catch (error) {
@@ -156,7 +157,7 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 					})}
 				>
 					{/* After getting block data from api and storing it to the LinkInBioPredefinedBlocksRState recoil state, looping the recoil state value to make blocks */}
-					{linkInBioPredefinedBlocksState?.map((el) => {
+					{LinkInBioPreDefinedBlocksData?.map((el) => {
 						return (
 							<ZIonCol
 								size='2.4'

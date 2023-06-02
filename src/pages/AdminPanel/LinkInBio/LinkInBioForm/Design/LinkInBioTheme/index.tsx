@@ -91,8 +91,8 @@ import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.
 const ZLinkInBioThemeSection: React.FC = () => {
 	const linkInBioFontFamilyState = useRecoilValue(LinkInBioFontFamilyRState);
 
-	const [linkInBioPredefinedThemesState, setLinkInBioPredefinedThemesState] =
-		useRecoilState(LinkInBioPredefinedThemeRState);
+	// const [linkInBioPredefinedThemesState, setLinkInBioPredefinedThemesState] =
+	// 	useRecoilState(LinkInBioPredefinedThemeRState);
 
 	const { values, setFieldValue } = useFormikContext<LinkInBioType>();
 
@@ -105,28 +105,28 @@ const ZLinkInBioThemeSection: React.FC = () => {
 		],
 	});
 
-	useEffect(() => {
-		try {
-			if (LinkInBioPreDefinedThemesData) {
-				const _updatedData = LinkInBioPreDefinedThemesData.map((el) => {
-					const _predefinedTheme: LinkInBioPredefinedThemeType = {
-						id: el.id,
-						background: zJsonParse<LinkInBioThemeBackgroundType>(
-							el.background as string
-						),
-						isActive: el.isActive,
-						createdAt: el.createdAt,
-						updatedAt: el.updatedAt,
-					};
-					return _predefinedTheme;
-				});
-				setLinkInBioPredefinedThemesState(_updatedData);
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-		// eslint-disable-next-line
-	}, [LinkInBioPreDefinedThemesData]);
+	// useEffect(() => {
+	// 	try {
+	// 		if (LinkInBioPreDefinedThemesData) {
+	// 			const _updatedData = LinkInBioPreDefinedThemesData.map((el) => {
+	// 				const _predefinedTheme: LinkInBioPredefinedThemeType = {
+	// 					id: el.id,
+	// 					background: zJsonParse<LinkInBioThemeBackgroundType>(
+	// 						el.background as string
+	// 					),
+	// 					isActive: el.isActive,
+	// 					createdAt: el.createdAt,
+	// 					updatedAt: el.updatedAt,
+	// 				};
+	// 				return _predefinedTheme;
+	// 			});
+	// 			setLinkInBioPredefinedThemesState(_updatedData);
+	// 		}
+	// 	} catch (error) {
+	// 		reportCustomError(error);
+	// 	}
+	// 	// eslint-disable-next-line
+	// }, [LinkInBioPreDefinedThemesData]);
 
 	return (
 		<>
@@ -147,7 +147,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 						'ion-margin-top pt-2 ion-padding-bottom mb-2 ': true,
 					})}
 				>
-					{linkInBioPredefinedThemesState.map((el, i) => {
+					{LinkInBioPreDefinedThemesData?.map((el, i) => {
 						return (
 							<ZIonCol size='1.9' key={i}>
 								<ZIonButton

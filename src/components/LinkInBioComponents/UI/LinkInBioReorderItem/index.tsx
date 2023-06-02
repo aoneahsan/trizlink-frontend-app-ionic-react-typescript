@@ -38,7 +38,10 @@ import ZVideoBlock from '@/components/LinkInBioComponents/UI/VideoBlock';
 import ZAudioBlock from '@/components/LinkInBioComponents/UI/AudioBlock';
 
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-import { useZRQDeleteRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+	useZRQDeleteRequest,
+	useZRQGetRequest,
+} from '@/ZaionsHooks/zreactquery-hooks';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 
 /**
@@ -89,6 +92,7 @@ import ZLinkInBioFormBlock from '../FromBlock';
 import ZLinkInBioMapBlock from '../MapBlock';
 import { NewLinkInBioFormState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';
 import classNames from 'classnames';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Style files Imports go down
@@ -120,10 +124,6 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 }) => {
 	const location = useLocation();
 
-	// parse blockContent data from element.
-	const parseLinkInBioSelectedBlockData =
-		zJsonParse<LinkInBioSingleBlockContentType>(String(element.blockContent));
-
 	// IonActionSheet present went user went to delete a block.
 
 	// validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
@@ -147,6 +147,20 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 		workspaceId: string;
 	}>();
 
+	// fetching link-in-bio with the linkInBioId data from backend.
+	const { data: selectedLinkInBio } = useZRQGetRequest<LinkInBioType>({
+		_url: API_URL_ENUM.linkInBio_update_delete,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET],
+		_authenticated: true,
+		_itemsIds: [linkInBioId, workspaceId],
+		_urlDynamicParts: [
+			CONSTANTS.RouteParams.linkInBio.linkInBioId,
+			CONSTANTS.RouteParams.workspace.workspaceId,
+		],
+		_shouldFetchWhenIdPassed: !linkInBioId ? true : false,
+		_extractType: ZRQGetRequestExtractEnum.extractItem,
+	});
+
 	const { setFieldValue } = useFormikContext<LinkInBioType>();
 
 	// delete link-in-bio block api where use went to delete the block on preview panel and click on the delete button in ActionSheet (useZIonActionSheet) the deleteBlockHandler will execute with will hit this api and delete the block.
@@ -168,8 +182,16 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 				);
 
 				const _result = await deleteLinkInBioBlockMutate({
-					itemIds: [linkInBioId, (detail.data as { id: string }).id],
-					urlDynamicParts: [':linkInBioId', ':blockId'],
+					itemIds: [
+						workspaceId,
+						linkInBioId,
+						(detail.data as { id: string }).id,
+					],
+					urlDynamicParts: [
+						CONSTANTS.RouteParams.workspace.workspaceId,
+						CONSTANTS.RouteParams.linkInBio.linkInBioId,
+						CONSTANTS.RouteParams.linkInBio.libBlockId,
+					],
 				});
 
 				if (
@@ -203,9 +225,6 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 		}
 	};
 
-	// getting the custom style for all the buttons from linkInBioFormState recoil.
-	const linkInBioFormState = useRecoilValue(NewLinkInBioFormState);
-
 	// Edit block function this will execute when user went to edit the block and click on the pencil button present in every block side by side of delete button, this will navigate the user to block form page where from route the the blockID will be get and the data of that id will fetch from backend and placed as initial value.
 	const blockEditHandler = () => {
 		try {
@@ -234,71 +253,71 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 	// ----- Buttons Types ----- //
 	// Outlines.
 	const currentBlockCustomAppearanceButtonOutlineType =
-		parseLinkInBioSelectedBlockData?.customAppearance?.buttonType &&
+		element.blockContent?.customAppearance?.buttonType &&
 		[
 			LinkInBioButtonTypeEnum.inlineSquareOutline,
 			LinkInBioButtonTypeEnum.inlineRoundOutline,
 			LinkInBioButtonTypeEnum.inlineCircleOutline,
-		].includes(parseLinkInBioSelectedBlockData?.customAppearance.buttonType);
+		].includes(element.blockContent?.customAppearance.buttonType);
 
 	const linkInBioThemeButtonOutlineType =
-		linkInBioFormState.theme.button.type &&
+		selectedLinkInBio?.theme?.button?.type &&
 		[
 			LinkInBioButtonTypeEnum.inlineSquareOutline,
 			LinkInBioButtonTypeEnum.inlineRoundOutline,
 			LinkInBioButtonTypeEnum.inlineCircleOutline,
-		].includes(linkInBioFormState.theme.button.type);
+		].includes(selectedLinkInBio?.theme?.button?.type);
 
 	// Square
 	const currentBlockCustomAppearanceButtonSquareType =
-		parseLinkInBioSelectedBlockData?.customAppearance?.buttonType &&
+		element.blockContent?.customAppearance?.buttonType &&
 		[
 			LinkInBioButtonTypeEnum.inlineSquare,
 			LinkInBioButtonTypeEnum.inlineSquareOutline,
 			LinkInBioButtonTypeEnum.inlineSquareShadow,
-		].includes(parseLinkInBioSelectedBlockData?.customAppearance.buttonType);
+		].includes(element.blockContent?.customAppearance.buttonType);
 
 	const linkInBioThemeButtonSquareType =
-		linkInBioFormState.theme.button.type &&
+		selectedLinkInBio?.theme?.button?.type &&
 		[
 			LinkInBioButtonTypeEnum.inlineSquare,
 			LinkInBioButtonTypeEnum.inlineSquareOutline,
 			LinkInBioButtonTypeEnum.inlineSquareShadow,
-		].includes(linkInBioFormState.theme.button.type);
+		].includes(selectedLinkInBio?.theme?.button?.type);
 
 	// Circle
 	const currentBlockCustomAppearanceButtonCircleType =
-		parseLinkInBioSelectedBlockData?.customAppearance?.buttonType &&
+		element.blockContent?.customAppearance?.buttonType &&
 		[
 			LinkInBioButtonTypeEnum.inlineCircle,
 			LinkInBioButtonTypeEnum.inlineCircleOutline,
 			LinkInBioButtonTypeEnum.inlineCircleShadow,
-		].includes(parseLinkInBioSelectedBlockData?.customAppearance.buttonType);
+		].includes(element.blockContent?.customAppearance.buttonType);
 
 	const linkInBioThemeButtonCircleType =
-		linkInBioFormState.theme.button.type &&
+		selectedLinkInBio?.theme?.button?.type &&
 		[
 			LinkInBioButtonTypeEnum.inlineCircle,
 			LinkInBioButtonTypeEnum.inlineCircleOutline,
 			LinkInBioButtonTypeEnum.inlineCircleShadow,
-		].includes(linkInBioFormState.theme.button.type);
+		].includes(selectedLinkInBio?.theme?.button?.type);
 
 	// Shadow
 	const currentBlockCustomAppearanceButtonShadowType =
-		parseLinkInBioSelectedBlockData?.customAppearance?.buttonType &&
+		element.blockContent?.customAppearance?.buttonType &&
 		[
 			LinkInBioButtonTypeEnum.inlineSquareShadow,
 			LinkInBioButtonTypeEnum.inlineRoundShadow,
 			LinkInBioButtonTypeEnum.inlineCircleShadow,
-		].includes(parseLinkInBioSelectedBlockData?.customAppearance.buttonType);
+		].includes(element.blockContent?.customAppearance.buttonType);
 
 	const linkInBioThemeButtonShadowType =
-		linkInBioFormState.theme.button.type &&
+		selectedLinkInBio?.theme?.button?.type &&
 		[
 			LinkInBioButtonTypeEnum.inlineSquareShadow,
 			LinkInBioButtonTypeEnum.inlineRoundShadow,
 			LinkInBioButtonTypeEnum.inlineCircleShadow,
-		].includes(linkInBioFormState.theme.button.type);
+		].includes(selectedLinkInBio?.theme?.button?.type);
 
 	// ----- Buttons style ----- //
 
@@ -310,24 +329,22 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 		'--box-shadow': 'none',
 	};
 
-	const _buttonStyle = parseLinkInBioSelectedBlockData?.customAppearance
-		?.isEnabled
+	const _buttonStyle = element.blockContent?.customAppearance?.isEnabled
 		? currentBlockCustomAppearanceButtonOutlineType
 			? _buttonOutlineStyle
 			: generatePredefinedThemeBackgroundValue(
-					parseLinkInBioSelectedBlockData?.customAppearance
+					element.blockContent?.customAppearance
 						.background as LinkInBioThemeBackgroundType
 			  )
 		: linkInBioThemeButtonOutlineType
 		? _buttonOutlineStyle
 		: generatePredefinedThemeBackgroundValue(
-				linkInBioFormState.theme.button
-					.background as LinkInBioThemeBackgroundType
+				selectedLinkInBio?.theme?.button
+					?.background as LinkInBioThemeBackgroundType
 		  );
 
 	// ----- Buttons Fill value ----- //
-	const _buttonFillValue = parseLinkInBioSelectedBlockData?.customAppearance
-		?.isEnabled
+	const _buttonFillValue = element.blockContent?.customAppearance?.isEnabled
 		? currentBlockCustomAppearanceButtonOutlineType
 			? 'outline'
 			: 'default'
@@ -370,144 +387,138 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 				<ZLinkInBioAvatarBlock />
 			) : element?.blockType === LinkInBioBlockEnum.text ? (
 				<ZLinkInBioTextBlock
-					children={parseLinkInBioSelectedBlockData?.text || 'text'}
-					fontFamily={linkInBioFormState.theme.font}
+					children={element.blockContent?.text || 'text'}
+					fontFamily={selectedLinkInBio?.theme?.font}
 				/>
 			) : element?.blockType === LinkInBioBlockEnum.card ? (
 				<ZLinkInBioCardBlock />
 			) : element?.blockType === LinkInBioBlockEnum.button ? (
 				<ZLinkInBioButtonBlock
-					fontFamily={linkInBioFormState.theme.font}
+					fontFamily={selectedLinkInBio?.theme?.font}
 					style={{
 						..._buttonStyle,
-						'--box-shadow': parseLinkInBioSelectedBlockData?.customAppearance
-							?.isEnabled
+						'--box-shadow': element.blockContent?.customAppearance?.isEnabled
 							? currentBlockCustomAppearanceButtonShadowType
 								? `6px 6px ${
-										parseLinkInBioSelectedBlockData?.customAppearance
-											?.shadowColor ||
+										element.blockContent?.customAppearance?.shadowColor ||
 										CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
 								  }`
 								: ''
 							: linkInBioThemeButtonShadowType
 							? `6px 6px ${
-									linkInBioFormState?.theme?.button?.shadowColor ||
+									selectedLinkInBio?.theme?.button?.shadowColor ||
 									CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
 							  }`
 							: '',
 					}}
-					title={parseLinkInBioSelectedBlockData?.title || 'button'}
-					url={parseLinkInBioSelectedBlockData?.target?.url}
+					title={element.blockContent?.title || 'button'}
+					url={element.blockContent?.target?.url}
 					// TODO: make this a option in frontend, so user will be able to select whether to open the link in new tab or not - (will be theme and block wise)
 					target='_blank'
 					animationType={
-						parseLinkInBioSelectedBlockData?.animation?.isEnabled
-							? parseLinkInBioSelectedBlockData?.animation?.type
+						element.blockContent?.animation?.isEnabled
+							? element.blockContent?.animation?.type
 							: undefined
 					}
 					fill={_buttonFillValue}
 					className={classNames({
 						// inlineSquare
-						inlineSquare: parseLinkInBioSelectedBlockData?.customAppearance
-							?.isEnabled
+						inlineSquare: element.blockContent?.customAppearance?.isEnabled
 							? currentBlockCustomAppearanceButtonSquareType
 							: linkInBioThemeButtonSquareType,
 						// inlineRound
-						inlineRound: parseLinkInBioSelectedBlockData?.customAppearance
-							?.isEnabled
-							? parseLinkInBioSelectedBlockData?.customAppearance?.buttonType &&
+						inlineRound: element.blockContent?.customAppearance?.isEnabled
+							? element.blockContent?.customAppearance?.buttonType &&
 							  [
 									LinkInBioButtonTypeEnum.inlineRound,
 									LinkInBioButtonTypeEnum.inlineRoundOutline,
 									LinkInBioButtonTypeEnum.inlineRoundShadow,
-							  ].includes(
-									parseLinkInBioSelectedBlockData?.customAppearance.buttonType
-							  )
-							: linkInBioFormState.theme.button.type &&
+							  ].includes(element.blockContent?.customAppearance.buttonType)
+							: selectedLinkInBio?.theme?.button?.type &&
 							  [
 									LinkInBioButtonTypeEnum.inlineRound,
 									LinkInBioButtonTypeEnum.inlineRoundOutline,
 									LinkInBioButtonTypeEnum.inlineRoundShadow,
-							  ].includes(linkInBioFormState.theme.button.type),
+							  ].includes(selectedLinkInBio?.theme?.button?.type),
 
 						// inlineCircle
-						'border-radius__100vmax': parseLinkInBioSelectedBlockData
-							?.customAppearance?.isEnabled
+						'border-radius__100vmax': element.blockContent?.customAppearance
+							?.isEnabled
 							? currentBlockCustomAppearanceButtonCircleType
 							: linkInBioThemeButtonCircleType,
 					})}
 				/>
 			) : element?.blockType === LinkInBioBlockEnum.RSS ? (
 				<ZLinkInBioRSSBlock
-					data={parseLinkInBioSelectedBlockData?.cardItems}
-					cardStyle={parseLinkInBioSelectedBlockData?.style}
+					data={element.blockContent?.cardItems}
+					cardStyle={element.blockContent?.style}
 				/>
 			) : element?.blockType === LinkInBioBlockEnum.calendar ? (
-				<ZLinkInBioCalendarBlock fontFamily={linkInBioFormState.theme.font} />
+				<ZLinkInBioCalendarBlock fontFamily={selectedLinkInBio?.theme?.font} />
 			) : element?.blockType === LinkInBioBlockEnum.countdown ? (
-				<ZCountdown countDownTime={parseLinkInBioSelectedBlockData?.date} />
+				<ZCountdown countDownTime={element.blockContent?.date} />
 			) : element?.blockType === LinkInBioBlockEnum.video ? (
 				<ZVideoBlock
-					videoLink={parseLinkInBioSelectedBlockData?.target?.url}
-					title={parseLinkInBioSelectedBlockData?.title}
+					videoLink={element.blockContent?.target?.url}
+					title={element.blockContent?.title}
 				/>
 			) : element?.blockType === LinkInBioBlockEnum.audio ? (
 				<ZAudioBlock
-					audioLink={parseLinkInBioSelectedBlockData?.target?.url}
-					title={parseLinkInBioSelectedBlockData?.title}
+					audioLink={element.blockContent?.target?.url}
+					title={element.blockContent?.title}
 				/>
 			) : element?.blockType === LinkInBioBlockEnum.carousel ? (
 				<ZCarouselBlock
-					data={parseLinkInBioSelectedBlockData?.cardItems}
-					cardStyle={parseLinkInBioSelectedBlockData?.style}
+					data={element.blockContent?.cardItems}
+					cardStyle={element.blockContent?.style}
 				/>
 			) : element?.blockType === LinkInBioBlockEnum.music ? (
 				<ZLinkInBioMusicBlock
-					fontFamily={linkInBioFormState.theme.font}
-					musicBlockData={parseLinkInBioSelectedBlockData?.cardItems}
+					fontFamily={selectedLinkInBio?.theme?.font}
+					musicBlockData={element.blockContent?.cardItems}
 				/>
 			) : element?.blockType === LinkInBioBlockEnum.social ? (
 				<ZLinkInBioSocialBlock
-					socialBlockData={parseLinkInBioSelectedBlockData?.cardItems}
+					socialBlockData={element.blockContent?.cardItems}
 				/>
 			) : element?.blockType === LinkInBioBlockEnum.spacing ? (
 				<ZIonCol
 					style={{
-						height: `${parseLinkInBioSelectedBlockData?.spacing as number}px`,
+						height: `${element.blockContent?.spacing as number}px`,
 					}}
 				/>
 			) : element?.blockType === LinkInBioBlockEnum.separator ? (
 				<ZLinkInBioSeparatorBlock
-					_borderColor={parseLinkInBioSelectedBlockData?.separatorColor}
-					_borderStyle={parseLinkInBioSelectedBlockData?.separatorType}
-					_marginVertical={parseLinkInBioSelectedBlockData?.separatorMargin}
+					_borderColor={element.blockContent?.separatorColor}
+					_borderStyle={element.blockContent?.separatorType}
+					_marginVertical={element.blockContent?.separatorMargin}
 				/>
 			) : element?.blockType === LinkInBioBlockEnum.messenger ? (
 				<ZLinkInBioMessengerBlock
-					messengerBlockData={parseLinkInBioSelectedBlockData?.cardItems}
-					fontFamily={linkInBioFormState.theme.font}
+					messengerBlockData={element.blockContent?.cardItems}
+					fontFamily={selectedLinkInBio?.theme?.font}
 				/>
 			) : element?.blockType === LinkInBioBlockEnum.QAndA ? (
 				<ZLinkInBioQAndABlock
-					QAndABlockData={parseLinkInBioSelectedBlockData?.cardItems}
-					fontFamily={linkInBioFormState.theme.font}
+					QAndABlockData={element.blockContent?.cardItems}
+					fontFamily={selectedLinkInBio?.theme?.font}
 				/>
 			) : element?.blockType === LinkInBioBlockEnum.VCard ? (
 				<ZLinkInBioVCardBlock
-					VCardBlockData={parseLinkInBioSelectedBlockData?.vcard}
-					title={parseLinkInBioSelectedBlockData?.title}
-					// icon={parseLinkInBioSelectedBlockData?.icon}
+					VCardBlockData={element.blockContent?.vcard}
+					title={element.blockContent?.title}
+					// icon={element.blockContent?.icon}
 				/>
 			) : element?.blockType === LinkInBioBlockEnum.form ? (
 				<ZLinkInBioFormBlock
-					fromBlockData={parseLinkInBioSelectedBlockData?.form}
-					fontFamily={linkInBioFormState.theme.font}
+					fromBlockData={element.blockContent?.form}
+					fontFamily={selectedLinkInBio?.theme?.font}
 				/>
 			) : element?.blockType === LinkInBioBlockEnum.map ? (
 				<ZLinkInBioMapBlock
 					mapId={`${PRODUCT_NAME}-map-block-${element.id || ''}`}
-					latitude={parseLinkInBioSelectedBlockData?.map?.lat}
-					longitude={parseLinkInBioSelectedBlockData?.map?.lng}
+					latitude={element.blockContent?.map?.lat}
+					longitude={element.blockContent?.map?.lng}
 				/>
 			) : (
 				''

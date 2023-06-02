@@ -512,7 +512,7 @@ const LINK_In_BIO = {
 	},
 	INITIAL_VALUES: {
 		BG_COLOR: '#4176f1',
-		BUTTON_COLOR: '#4176f1',
+		BUTTON_COLOR: '#11ee1f',
 		BUTTON_SHADOW_COLOR: '#aab1c4',
 	},
 };

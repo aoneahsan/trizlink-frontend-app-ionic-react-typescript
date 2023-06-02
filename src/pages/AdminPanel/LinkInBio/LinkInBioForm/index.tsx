@@ -11,7 +11,7 @@ import { useLocation, useParams } from 'react-router';
  * */
 import { Formik } from 'formik';
 import { pencilOutline } from 'ionicons/icons';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import routeQueryString from 'qs';
 import { AxiosError } from 'axios';
 import classNames from 'classnames';
@@ -52,8 +52,7 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * */
 import {
 	createRedirectRoute,
-	replaceParams,
-	zConsole,
+	replaceRouteParams,
 	zJsonParse,
 	zStringify,
 } from '@/utils/helpers';
@@ -95,7 +94,6 @@ import {
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
-import { LinkInBioRStateAtomFamily } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioState.recoil';
 /**
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
@@ -126,9 +124,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 	);
 
 	// Recoil state link-in-bio form state (for editing or creating link-in-bio)
-	const [linkInBioFormState, setLinkInBioFormState] = useRecoilState(
-		NewLinkInBioFormState
-	);
+	const setLinkInBioFormState = useSetRecoilState(NewLinkInBioFormState);
 
 	// useZNavigate for redirection
 	const { zNavigatePushRoute } = useZNavigate();
@@ -141,16 +137,6 @@ const ZaionsLinkInBioForm: React.FC = () => {
 		linkInBioId: string;
 		workspaceId: string;
 	}>();
-
-	console.log({ workspaceId, linkInBioId });
-
-	//
-	const [linkInBioStateAtomFamily, setLinkInBioStateAtomFamily] =
-		useRecoilState(LinkInBioRStateAtomFamily(linkInBioId));
-
-	const parseLinkInBioSettingData = zJsonParse(
-		String(linkInBioStateAtomFamily?.settings)
-	) as LinkInBIoSettingType;
 
 	// fetching link-in-bio with the linkInBioId data from backend.
 	const { data: selectedLinkInBio, refetch: refetchSelectedLinkInBio } =
@@ -188,7 +174,16 @@ const ZaionsLinkInBioForm: React.FC = () => {
 			}
 		} catch (error) {
 			if (error instanceof AxiosError) {
-				zNavigatePushRoute(ZaionsRoutes.AdminPanel.LinkInBio.Main);
+				zNavigatePushRoute(
+					replaceRouteParams(
+						ZaionsRoutes.AdminPanel.LinkInBio.Main,
+						[
+							CONSTANTS.RouteParams.workspace.workspaceId,
+							CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+						],
+						[workspaceId, 'all']
+					)
+				);
 				showErrorNotification(error.message);
 			} else {
 				reportCustomError(error);
@@ -203,19 +198,6 @@ const ZaionsLinkInBioForm: React.FC = () => {
 			if (selectedLinkInBio && selectedLinkInBio?.id && linkInBioId) {
 				setLinkInBioFormState((oldVal) => ({
 					...oldVal,
-					...selectedLinkInBio,
-					theme: zJsonParse(
-						String(selectedLinkInBio.theme)
-					) as LinkInBioThemeType,
-					formMode: FormMode.EDIT,
-				}));
-
-				setLinkInBioStateAtomFamily((oldVal) => ({
-					...oldVal,
-					...selectedLinkInBio,
-					theme: zJsonParse(
-						String(selectedLinkInBio.theme)
-					) as LinkInBioThemeType,
 					formMode: FormMode.EDIT,
 				}));
 
@@ -276,70 +258,67 @@ const ZaionsLinkInBioForm: React.FC = () => {
 						(routeQSearchParams as { step: ZLinkInBioRHSComponentEnum })
 							?.step || ZLinkInBioRHSComponentEnum.theme,
 					LinkInBioBlock: LinkInBioBlockEnum.default, // REMOVE THIS
-					title: linkInBioStateAtomFamily?.title || '',
-					linkInBioTitle: linkInBioStateAtomFamily?.linkInBioTitle || '',
+					title: selectedLinkInBio?.title || '',
+					linkInBioTitle: selectedLinkInBio?.linkInBioTitle || '',
 					enableTitleInput: false,
 					theme: {
 						background: {
 							bgType:
-								linkInBioStateAtomFamily?.theme?.background?.bgType ||
+								selectedLinkInBio?.theme?.background?.bgType ||
 								LinkInBioThemeBackgroundEnum.solidColor,
 							bgSolidColor:
-								linkInBioStateAtomFamily?.theme?.background?.bgSolidColor || '',
+								selectedLinkInBio?.theme?.background?.bgSolidColor || '',
 							bgGradientColors: {
 								startColor:
-									linkInBioStateAtomFamily?.theme?.background?.bgGradientColors
+									selectedLinkInBio?.theme?.background?.bgGradientColors
 										?.startColor || '',
 								endColor:
-									linkInBioStateAtomFamily?.theme?.background?.bgGradientColors
+									selectedLinkInBio?.theme?.background?.bgGradientColors
 										?.endColor || '',
 								direction:
-									linkInBioStateAtomFamily?.theme?.background?.bgGradientColors
+									selectedLinkInBio?.theme?.background?.bgGradientColors
 										?.direction || 0,
 							},
 							enableBgImage:
-								linkInBioStateAtomFamily?.theme?.background?.enableBgImage ||
-								false,
+								selectedLinkInBio?.theme?.background?.enableBgImage || false,
 							bgImageUrl:
-								linkInBioStateAtomFamily?.theme?.background?.bgImageUrl || '',
+								selectedLinkInBio?.theme?.background?.bgImageUrl || '',
 						},
 						button: {
 							background: {
 								bgType:
-									linkInBioStateAtomFamily?.theme?.button?.background?.bgType ||
+									selectedLinkInBio?.theme?.button?.background?.bgType ||
 									LinkInBioThemeBackgroundEnum.solidColor,
 								bgSolidColor:
-									linkInBioStateAtomFamily?.theme?.button?.background
-										?.bgSolidColor || '',
+									selectedLinkInBio?.theme?.button?.background?.bgSolidColor ||
+									'',
 								bgGradientColors: {
 									startColor:
-										linkInBioStateAtomFamily?.theme?.button?.background
+										selectedLinkInBio?.theme?.button?.background
 											?.bgGradientColors?.startColor || '',
 									endColor:
-										linkInBioStateAtomFamily?.theme?.button?.background
+										selectedLinkInBio?.theme?.button?.background
 											?.bgGradientColors?.endColor || '',
 									direction:
-										linkInBioStateAtomFamily?.theme?.button?.background
+										selectedLinkInBio?.theme?.button?.background
 											?.bgGradientColors?.direction || 0,
 								},
 								bgImageUrl:
-									linkInBioStateAtomFamily?.theme?.button?.background
-										?.bgImageUrl || '',
+									selectedLinkInBio?.theme?.button?.background?.bgImageUrl ||
+									'',
 							},
 							type:
-								linkInBioStateAtomFamily?.theme?.button?.type ||
+								selectedLinkInBio?.theme?.button?.type ||
 								LinkInBioButtonTypeEnum.inlineSquare,
 							shadowColor:
-								linkInBioStateAtomFamily?.theme?.button?.shadowColor ||
+								selectedLinkInBio?.theme?.button?.shadowColor ||
 								CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR,
 						},
-						font:
-							linkInBioStateAtomFamily?.theme?.font ||
-							LinkInBioThemeFontEnum.lato,
+						font: selectedLinkInBio?.theme?.font || LinkInBioThemeFontEnum.lato,
 					},
 					settings: {
-						headerCode: parseLinkInBioSettingData?.headerCode || '',
-						bodyCode: parseLinkInBioSettingData?.bodyCode || '',
+						headerCode: selectedLinkInBio?.settings?.headerCode || '',
+						bodyCode: selectedLinkInBio?.settings?.bodyCode || '',
 					},
 				}}
 				//
@@ -350,6 +329,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 						linkInBioTitle: values.linkInBioTitle,
 						theme: zStringify(values.theme),
 						settings: zStringify(values.settings),
+						folderId: 1,
 					});
 					setLinkInBioFormState((oldVal) => ({
 						...oldVal,
@@ -360,10 +340,6 @@ const ZaionsLinkInBioForm: React.FC = () => {
 				}}
 			>
 				{({ values, setFieldValue, handleChange, handleBlur }) => {
-					zConsole({
-						message: 'link in bio values',
-						data: values,
-					});
 					return (
 						<>
 							<ZIonHeader className='ion-padding-horizontal'>
@@ -373,11 +349,14 @@ const ZaionsLinkInBioForm: React.FC = () => {
 											<ZIonButton
 												className='ion-text-capitalize ion-no-margin'
 												color='secondary'
-												routerLink={replaceParams(
+												routerLink={replaceRouteParams(
 													ZaionsRoutes.AdminPanel.LinkInBio.Main,
-													CONSTANTS.RouteParams
-														.folderIdToGetShortLinksOrLinkInBio,
-													''
+													[
+														CONSTANTS.RouteParams.workspace.workspaceId,
+														CONSTANTS.RouteParams
+															.folderIdToGetShortLinksOrLinkInBio,
+													],
+													[workspaceId, 'all']
 												)}
 											>
 												<ZIonText className='ion-no-padding zaions__fs_16'>

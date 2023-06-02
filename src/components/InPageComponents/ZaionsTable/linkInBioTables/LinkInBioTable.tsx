@@ -94,6 +94,7 @@ const ZaionsLinkInBioLinksTable = () => {
 		folderId: string;
 		workspaceId: string;
 	}>();
+
 	const actionsPopoverRef = useRef<HTMLIonPopoverElement>(null);
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
@@ -156,12 +157,6 @@ const ZaionsLinkInBioLinksTable = () => {
 						},
 					})
 				);
-
-				// _itemsIds: [editLinkInBioId, workspaceId],
-				// _urlDynamicParts: [
-				// 	CONSTANTS.RouteParams.linkInBio.linkInBioId,
-				// 	CONSTANTS.RouteParams.workspace.workspaceId,
-				// ],
 			} else {
 				await presentZIonErrorAlert();
 			}
@@ -216,8 +211,11 @@ const ZaionsLinkInBioLinksTable = () => {
 			) {
 				if (compState.selectedLinkInBioLinkId) {
 					deleteLinkInBioLinkMutate({
-						itemIds: [compState.selectedLinkInBioLinkId],
-						urlDynamicParts: [':linkInBioId'],
+						itemIds: [workspaceId, compState.selectedLinkInBioLinkId],
+						urlDynamicParts: [
+							CONSTANTS.RouteParams.workspace.workspaceId,
+							CONSTANTS.RouteParams.linkInBio.linkInBioId,
+						],
 					});
 				}
 				await dismissZIonLoader();

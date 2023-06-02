@@ -182,13 +182,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
 	// recoil state of single block data.
 	// state for storing data of block. because when we go to edit page (blockFrom page) of any block or create a new block and redirect to blockFrom page we need data of that block, initial data or updated data we need it in blockFrom page for editing that block, so we store the data of block in setLinkInBioSelectedBlockFromState then we will initialized this to the initial value of the blockFrom page formik initial value. with the id of the current block.
-	const [linkInBioSelectedBlockFromState, setLinkInBioSelectedBlockFromState] =
-		useRecoilState(LinkInBioSelectedBlockFromRState);
-
-	const parseLinkInBioSelectedBlockData =
-		zJsonParse<LinkInBioSingleBlockContentType>(
-			String(linkInBioSelectedBlockFromState.blockContent)
-		);
+	// const [linkInBioSelectedBlockFromState, setLinkInBioSelectedBlockFromState] =
+	// 	useRecoilState(LinkInBioSelectedBlockFromRState);
 
 	// Recoil state of blocks of preview panel.
 	const [linkInBioBlocksState, setLinkInBioBlocksState] = useRecoilState(
@@ -199,8 +194,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 	const { validateRequestResponse } = useZValidateRequestResponse();
 
 	// current Link-in-bio id.
-	const { editLinkInBioId, workspaceId } = useParams<{
-		editLinkInBioId: string;
+	const { linkInBioId, workspaceId } = useParams<{
+		linkInBioId: string;
 		workspaceId: string;
 	}>();
 
@@ -212,9 +207,9 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
 	const { zNavigatePushRoute } = useZNavigate();
 
-	const [linkInBioBlockState, setLinkInBioBlockState] = useRecoilState(
-		LinkInBioBlocksRState
-	);
+	// const [linkInBioBlockState, setLinkInBioBlockState] = useRecoilState(
+	// 	LinkInBioBlocksRState
+	// );
 
 	// Update Link-in-bio block API.
 	const { mutateAsync: UpdateLinkInBioBlock } = useZRQUpdateRequest({
@@ -226,7 +221,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 		// [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN]
 	});
 
-	// fetching link-in-bio block data with the help of editLinkInBioId and id from backend.
+	// fetching link-in-bio block data with the help of linkInBioId and id from backend.
 	const { data: linkInBioBlockData } = useZRQGetRequest<LinkInBioBlockFromType>(
 		{
 			_url: API_URL_ENUM.linkInBioBlock_delete_update_get,
@@ -234,8 +229,12 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.GET,
 				_blockId,
 			],
-			_itemsIds: [editLinkInBioId, _blockId],
-			_urlDynamicParts: [':linkInBioId', ':blockId'],
+			_itemsIds: [workspaceId, linkInBioId, _blockId],
+			_urlDynamicParts: [
+				CONSTANTS.RouteParams.workspace.workspaceId,
+				CONSTANTS.RouteParams.linkInBio.linkInBioId,
+				CONSTANTS.RouteParams.linkInBio.libBlockId,
+			],
 			_shouldFetchWhenIdPassed: _blockId ? false : true,
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
 		}
@@ -251,39 +250,27 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 	const { presentZIonModal: presentZLinkInBioAddBlockModal } = useZIonModal(
 		ZLinkInBioAddBlockModal,
 		{
-			_blockType: linkInBioSelectedBlockFromState.blockType, // passing values.LinkInBioBlock as blockType to ZLinkInBioAddBlockModal component.
-			_blockContent: parseLinkInBioSelectedBlockData,
-			editLinkInBioId,
+			_blockType: linkInBioBlockData?.blockType, // passing values.LinkInBioBlock as blockType to ZLinkInBioAddBlockModal component.
+			_blockContent: linkInBioBlockData?.blockContent,
+			linkInBioId,
 			modalHeading: 'Clone block 😊',
-			modalSubHeading: `Would you like clone this ${linkInBioSelectedBlockFromState.blockType} block in your page?`,
+			modalSubHeading: `Would you like clone this ${linkInBioBlockData?.blockType} block in your page?`,
 			workspaceId,
 		}
 	);
-
-	useEffect(() => {
-		try {
-			if (linkInBioBlockData) {
-				// after creating block store the default data in setLinkInBioSelectedBlockFromState and redirecting to blockFrom page for editing.
-				setLinkInBioSelectedBlockFromState(linkInBioBlockData);
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-		// eslint-disable-next-line
-	}, [linkInBioBlockData]);
 
 	// formik submit function.
 	const formikSubmitHandler = async (reqDataStr: string) => {
 		try {
 			if (reqDataStr) {
-				zConsole({
-					message: 'checking the reExecution og the formikSubmitHandler',
-					data: reqDataStr,
-				});
 				// The update api...
 				const _result = await UpdateLinkInBioBlock({
-					itemIds: [editLinkInBioId, _blockId],
-					urlDynamicParts: [':linkInBioId', ':blockId'],
+					itemIds: [workspaceId, linkInBioId, _blockId],
+					urlDynamicParts: [
+						CONSTANTS.RouteParams.workspace.workspaceId,
+						CONSTANTS.RouteParams.linkInBio.linkInBioId,
+						CONSTANTS.RouteParams.linkInBio.libBlockId,
+					],
 					requestData: reqDataStr,
 				});
 
@@ -318,13 +305,17 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 	const deleteBlockHandler = async (detail: OverlayEventDetail<unknown>) => {
 		try {
 			if (detail && detail.role === 'destructive' && _blockId) {
-				const _updateLinkInBioBlockState = linkInBioBlockState.filter(
-					(el) => el.id !== _blockId
-				);
+				// const _updateLinkInBioBlockState = linkInBioBlockState.filter(
+				// 	(el) => el.id !== _blockId
+				// );
 
 				const _result = await deleteLinkInBioBlockMutate({
-					itemIds: [editLinkInBioId, _blockId],
-					urlDynamicParts: [':linkInBioId', ':blockId'],
+					itemIds: [workspaceId, linkInBioId, _blockId],
+					urlDynamicParts: [
+						CONSTANTS.RouteParams.workspace.workspaceId,
+						CONSTANTS.RouteParams.linkInBio.linkInBioId,
+						CONSTANTS.RouteParams.linkInBio.libBlockId,
+					],
 				});
 
 				// Redirect to block
@@ -335,7 +326,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 							CONSTANTS.RouteParams.workspace.workspaceId,
 							CONSTANTS.RouteParams.linkInBio.linkInBioId,
 						],
-						values: [workspaceId, editLinkInBioId],
+						values: [workspaceId, linkInBioId],
 						routeSearchParams: {
 							page: ZLinkInBioPageEnum.design,
 							step: ZLinkInBioRHSComponentEnum.blocks,
@@ -343,7 +334,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 					})
 				);
 
-				setLinkInBioBlockState(_updateLinkInBioBlockState);
+				// setLinkInBioBlockState(_updateLinkInBioBlockState);
 				// if _result of the updateLinkInBio api is success this showing success notification else not success then error notification.
 				await validateRequestResponse({
 					resultObj: _result,
@@ -358,66 +349,66 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 		<Formik
 			initialValues={{
 				target: {
-					url: parseLinkInBioSelectedBlockData?.target?.url || '',
+					url: linkInBioBlockData?.blockContent?.target?.url || '',
 
-					email: parseLinkInBioSelectedBlockData?.target?.email || '',
+					email: linkInBioBlockData?.blockContent?.target?.email || '',
 
 					phoneNumber:
-						parseLinkInBioSelectedBlockData?.target?.phoneNumber || '',
+						linkInBioBlockData?.blockContent?.target?.phoneNumber || '',
 
-					username: parseLinkInBioSelectedBlockData?.target?.username || '',
+					username: linkInBioBlockData?.blockContent?.target?.username || '',
 
-					accountId: parseLinkInBioSelectedBlockData?.target?.accountId || '',
+					accountId: linkInBioBlockData?.blockContent?.target?.accountId || '',
 
-					subject: parseLinkInBioSelectedBlockData?.target?.subject || '',
-					message: parseLinkInBioSelectedBlockData?.target?.message || '',
+					subject: linkInBioBlockData?.blockContent?.target?.subject || '',
+					message: linkInBioBlockData?.blockContent?.target?.message || '',
 					type:
-						parseLinkInBioSelectedBlockData?.target?.type ||
+						linkInBioBlockData?.blockContent?.target?.type ||
 						linkInBioBlockCardItemEnum.whatsapp,
 				},
 				vcard: {
-					firstName: parseLinkInBioSelectedBlockData?.vcard?.firstName || '',
-					lastName: parseLinkInBioSelectedBlockData?.vcard?.lastName || '',
-					mobile: parseLinkInBioSelectedBlockData?.vcard?.mobile || '',
-					phone: parseLinkInBioSelectedBlockData?.vcard?.phone || '',
-					fax: parseLinkInBioSelectedBlockData?.vcard?.fax || '',
-					email: parseLinkInBioSelectedBlockData?.vcard?.email || '',
-					company: parseLinkInBioSelectedBlockData?.vcard?.company || '',
-					job: parseLinkInBioSelectedBlockData?.vcard?.job || '',
-					street: parseLinkInBioSelectedBlockData?.vcard?.street || '',
-					city: parseLinkInBioSelectedBlockData?.vcard?.city || '',
-					zip: parseLinkInBioSelectedBlockData?.vcard?.zip || 0,
-					state: parseLinkInBioSelectedBlockData?.vcard?.state || '',
-					country: parseLinkInBioSelectedBlockData?.vcard?.country || '',
-					website: parseLinkInBioSelectedBlockData?.vcard?.website || '',
+					firstName: linkInBioBlockData?.blockContent?.vcard?.firstName || '',
+					lastName: linkInBioBlockData?.blockContent?.vcard?.lastName || '',
+					mobile: linkInBioBlockData?.blockContent?.vcard?.mobile || '',
+					phone: linkInBioBlockData?.blockContent?.vcard?.phone || '',
+					fax: linkInBioBlockData?.blockContent?.vcard?.fax || '',
+					email: linkInBioBlockData?.blockContent?.vcard?.email || '',
+					company: linkInBioBlockData?.blockContent?.vcard?.company || '',
+					job: linkInBioBlockData?.blockContent?.vcard?.job || '',
+					street: linkInBioBlockData?.blockContent?.vcard?.street || '',
+					city: linkInBioBlockData?.blockContent?.vcard?.city || '',
+					zip: linkInBioBlockData?.blockContent?.vcard?.zip || 0,
+					state: linkInBioBlockData?.blockContent?.vcard?.state || '',
+					country: linkInBioBlockData?.blockContent?.vcard?.country || '',
+					website: linkInBioBlockData?.blockContent?.vcard?.website || '',
 				},
-				title: parseLinkInBioSelectedBlockData?.title || '',
-				icon: parseLinkInBioSelectedBlockData?.icon || '',
-				text: parseLinkInBioSelectedBlockData?.text || '',
-				description: parseLinkInBioSelectedBlockData?.description || '',
-				titleIsEnable: parseLinkInBioSelectedBlockData?.titleIsEnable || false,
+				title: linkInBioBlockData?.blockContent?.title || '',
+				icon: linkInBioBlockData?.blockContent?.icon || '',
+				text: linkInBioBlockData?.blockContent?.text || '',
+				description: linkInBioBlockData?.blockContent?.description || '',
+				titleIsEnable: linkInBioBlockData?.blockContent?.titleIsEnable || false,
 				descriptionIsEnable:
-					parseLinkInBioSelectedBlockData?.descriptionIsEnable || false,
+					linkInBioBlockData?.blockContent?.descriptionIsEnable || false,
 				pictureIsEnable:
-					parseLinkInBioSelectedBlockData?.pictureIsEnable || false,
-				priceIsEnable: parseLinkInBioSelectedBlockData?.priceIsEnable || false,
-				cardIsEnable: parseLinkInBioSelectedBlockData?.cardIsEnable || false,
-				cardNumber: parseLinkInBioSelectedBlockData?.cardNumber || 0,
-				searchString: parseLinkInBioSelectedBlockData?.searchString || '',
-				spacing: parseLinkInBioSelectedBlockData?.spacing || 0,
-				customHeight: parseLinkInBioSelectedBlockData?.customHeight || 0,
-				date: parseLinkInBioSelectedBlockData?.date || '',
-				timezone: parseLinkInBioSelectedBlockData?.timezone || '',
-				imageUrl: parseLinkInBioSelectedBlockData?.imageUrl || '',
-				avatarShadow: parseLinkInBioSelectedBlockData?.avatarShadow || false,
-				cardMode: parseLinkInBioSelectedBlockData?.cardMode || false,
-				iframe: parseLinkInBioSelectedBlockData?.iframe || '',
+					linkInBioBlockData?.blockContent?.pictureIsEnable || false,
+				priceIsEnable: linkInBioBlockData?.blockContent?.priceIsEnable || false,
+				cardIsEnable: linkInBioBlockData?.blockContent?.cardIsEnable || false,
+				cardNumber: linkInBioBlockData?.blockContent?.cardNumber || 0,
+				searchString: linkInBioBlockData?.blockContent?.searchString || '',
+				spacing: linkInBioBlockData?.blockContent?.spacing || 0,
+				customHeight: linkInBioBlockData?.blockContent?.customHeight || 0,
+				date: linkInBioBlockData?.blockContent?.date || '',
+				timezone: linkInBioBlockData?.blockContent?.timezone || '',
+				imageUrl: linkInBioBlockData?.blockContent?.imageUrl || '',
+				avatarShadow: linkInBioBlockData?.blockContent?.avatarShadow || false,
+				cardMode: linkInBioBlockData?.blockContent?.cardMode || false,
+				iframe: linkInBioBlockData?.blockContent?.iframe || '',
 				separatorType:
-					parseLinkInBioSelectedBlockData?.separatorType ||
+					linkInBioBlockData?.blockContent?.separatorType ||
 					SeparatorTypeEnum.solid,
-				separatorColor: parseLinkInBioSelectedBlockData?.separatorColor || '',
-				separatorMargin: parseLinkInBioSelectedBlockData?.separatorMargin || 0,
-				margin: parseLinkInBioSelectedBlockData?.margin || 0,
+				separatorColor: linkInBioBlockData?.blockContent?.separatorColor || '',
+				separatorMargin: linkInBioBlockData?.blockContent?.separatorMargin || 0,
+				margin: linkInBioBlockData?.blockContent?.margin || 0,
 
 				map: {
 					formattedAddress: 'okay',
@@ -428,83 +419,85 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
 				customAppearance: {
 					isEnabled:
-						parseLinkInBioSelectedBlockData?.customAppearance?.isEnabled ||
+						linkInBioBlockData?.blockContent?.customAppearance?.isEnabled ||
 						false,
 					background: {
 						bgType:
-							parseLinkInBioSelectedBlockData?.customAppearance?.background
+							linkInBioBlockData?.blockContent?.customAppearance?.background
 								?.bgType || LinkInBioThemeBackgroundEnum.solidColor,
 						bgSolidColor:
-							parseLinkInBioSelectedBlockData?.customAppearance?.background
+							linkInBioBlockData?.blockContent?.customAppearance?.background
 								?.bgSolidColor || CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BG_COLOR,
 						bgGradientColors: {
 							startColor:
-								parseLinkInBioSelectedBlockData?.customAppearance?.background
+								linkInBioBlockData?.blockContent?.customAppearance?.background
 									?.bgGradientColors?.startColor || '',
 							endColor:
-								parseLinkInBioSelectedBlockData?.customAppearance?.background
+								linkInBioBlockData?.blockContent?.customAppearance?.background
 									?.bgGradientColors?.endColor || '',
 							direction:
-								parseLinkInBioSelectedBlockData?.customAppearance?.background
+								linkInBioBlockData?.blockContent?.customAppearance?.background
 									?.bgGradientColors?.direction || 0,
 						},
 					},
-					color: parseLinkInBioSelectedBlockData?.customAppearance?.color || '',
+					color:
+						linkInBioBlockData?.blockContent?.customAppearance?.color || '',
 					buttonType:
-						parseLinkInBioSelectedBlockData?.customAppearance?.buttonType ||
+						linkInBioBlockData?.blockContent?.customAppearance?.buttonType ||
 						LinkInBioButtonTypeEnum.inlineSquare,
 					shadowColor:
-						parseLinkInBioSelectedBlockData?.customAppearance?.shadowColor ||
+						linkInBioBlockData?.blockContent?.customAppearance?.shadowColor ||
 						CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR,
 				},
 
 				animation: {
 					isEnabled:
-						parseLinkInBioSelectedBlockData?.animation?.isEnabled || false,
-					type: parseLinkInBioSelectedBlockData?.animation?.type,
+						linkInBioBlockData?.blockContent?.animation?.isEnabled || false,
+					type: linkInBioBlockData?.blockContent?.animation?.type,
 				},
 
 				style:
-					parseLinkInBioSelectedBlockData?.style ||
+					linkInBioBlockData?.blockContent?.style ||
 					LinkInBioCardStyleEnum.square,
 
 				view:
-					parseLinkInBioSelectedBlockData?.view ||
+					linkInBioBlockData?.blockContent?.view ||
 					LinkInBioCardViewEnum.carousel,
 
-				cardItems: parseLinkInBioSelectedBlockData?.cardItems || [],
+				cardItems: linkInBioBlockData?.blockContent?.cardItems || [],
 
 				form: {
-					formFields: parseLinkInBioSelectedBlockData?.form?.formFields || [],
+					formFields: linkInBioBlockData?.blockContent?.form?.formFields || [],
 					isTermEnabled:
-						parseLinkInBioSelectedBlockData?.form?.isTermEnabled || false,
+						linkInBioBlockData?.blockContent?.form?.isTermEnabled || false,
 					submitButtonText:
-						parseLinkInBioSelectedBlockData?.form?.submitButtonText || 'Submit',
+						linkInBioBlockData?.blockContent?.form?.submitButtonText ||
+						'Submit',
 					termText:
-						parseLinkInBioSelectedBlockData?.form?.termText ||
+						linkInBioBlockData?.blockContent?.form?.termText ||
 						'I Agree to Terms & Conditions',
-					termLink: parseLinkInBioSelectedBlockData?.form?.termLink,
+					termLink: linkInBioBlockData?.blockContent?.form?.termLink,
 				},
 
 				schedule: {
 					isEnabled:
-						parseLinkInBioSelectedBlockData?.schedule?.isEnabled || false,
-					// startAt: parseLinkInBioSelectedBlockData?.schedule?.startAt || '',
+						linkInBioBlockData?.blockContent?.schedule?.isEnabled || false,
+					// startAt: linkInBioBlockData?.blockContent?.schedule?.startAt || '',
 					startAt:
-						parseLinkInBioSelectedBlockData?.schedule?.startAt ||
+						linkInBioBlockData?.blockContent?.schedule?.startAt ||
 						new Date().toISOString(),
 					endAt:
-						parseLinkInBioSelectedBlockData?.schedule?.endAt ||
+						linkInBioBlockData?.blockContent?.schedule?.endAt ||
 						new Date().toISOString(),
-					timezone: parseLinkInBioSelectedBlockData?.schedule?.timezone || '',
+					timezone: linkInBioBlockData?.blockContent?.schedule?.timezone || '',
 				},
 
-				isActive: linkInBioSelectedBlockFromState.isActive,
+				isActive: linkInBioBlockData?.isActive,
 			}}
 			enableReinitialize
 			onSubmit={(values) => {
 				const stringifyValue = zStringify({
-					blockType: linkInBioSelectedBlockFromState.blockType,
+					blockType: linkInBioBlockData?.blockType,
 					blockContent: zStringify(values),
 					isActive: values.isActive,
 				});
@@ -537,7 +530,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 														CONSTANTS.RouteParams.workspace.workspaceId,
 														CONSTANTS.RouteParams.linkInBio.linkInBioId,
 													],
-													values: [workspaceId, editLinkInBioId],
+													values: [workspaceId, linkInBioId],
 													routeSearchParams: {
 														page: ZLinkInBioPageEnum.design,
 														step: ZLinkInBioRHSComponentEnum.blocks,
@@ -549,73 +542,70 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										<ZIonIcon icon={chevronBackOutline} />
 									</ZIonButton>
 									<ZIonText className='zaions__fs_18'>
-										{linkInBioSelectedBlockFromState.blockType ===
-										LinkInBioBlockEnum.button
+										{linkInBioBlockData?.blockType === LinkInBioBlockEnum.button
 											? 'Button'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.text
 											? 'Text'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.countdown
 											? 'Countdown'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.card
 											? 'Card'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.carousel
 											? 'Carousel'
-											: linkInBioSelectedBlockFromState.blockType ===
-											  LinkInBioBlockEnum.RSS
+											: linkInBioBlockData?.blockType === LinkInBioBlockEnum.RSS
 											? 'RSS'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.audio
 											? 'Audio'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.video
 											? 'Video'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.calendar
 											? 'Calendar'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.shopify
 											? 'Shopify'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.magento
 											? 'Magento'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.wordpress
 											? 'Wordpress'
-											: linkInBioSelectedBlockFromState.blockType ===
-											  LinkInBioBlockEnum.map
+											: linkInBioBlockData?.blockType === LinkInBioBlockEnum.map
 											? 'Maps'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.music
 											? 'Music'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.QAndA
 											? 'Q&A'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.form
 											? 'Forms'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.social
 											? 'Social'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.Iframe
 											? 'Iframe'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.avatar
 											? 'Avatar'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.VCard
 											? 'Vcard'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.messenger
 											? 'Messenger'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.spacing
 											? 'Spacing'
-											: linkInBioSelectedBlockFromState.blockType ===
+											: linkInBioBlockData?.blockType ===
 											  LinkInBioBlockEnum.separator
 											? 'Separator'
 											: ''}{' '}
@@ -704,70 +694,54 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 							className='ion-padding-vertical ion-margin-top ion-margin-start border-bottom__violet'
 						>
 							<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
-								{linkInBioSelectedBlockFromState.blockType ===
-									LinkInBioBlockEnum.button ||
-								linkInBioSelectedBlockFromState.blockType ===
-									LinkInBioBlockEnum.VCard
+								{linkInBioBlockData?.blockType === LinkInBioBlockEnum.button ||
+								linkInBioBlockData?.blockType === LinkInBioBlockEnum.VCard
 									? '👉 Button'
-									: linkInBioSelectedBlockFromState.blockType ===
-									  LinkInBioBlockEnum.text
+									: linkInBioBlockData?.blockType === LinkInBioBlockEnum.text
 									? '✒️ Text'
-									: linkInBioSelectedBlockFromState.blockType ===
+									: linkInBioBlockData?.blockType ===
 									  LinkInBioBlockEnum.countdown
 									? '⏱ Countdown'
-									: linkInBioSelectedBlockFromState.blockType ===
-											LinkInBioBlockEnum.card ||
-									  linkInBioSelectedBlockFromState.blockType ===
+									: linkInBioBlockData?.blockType === LinkInBioBlockEnum.card ||
+									  linkInBioBlockData?.blockType ===
 											LinkInBioBlockEnum.carousel
 									? '👉 Card'
-									: linkInBioSelectedBlockFromState.blockType ===
-									  LinkInBioBlockEnum.RSS
+									: linkInBioBlockData?.blockType === LinkInBioBlockEnum.RSS
 									? '👉 RSS'
-									: linkInBioSelectedBlockFromState.blockType ===
-									  LinkInBioBlockEnum.audio
+									: linkInBioBlockData?.blockType === LinkInBioBlockEnum.audio
 									? '🔊 Audio player'
-									: linkInBioSelectedBlockFromState.blockType ===
-									  LinkInBioBlockEnum.video
+									: linkInBioBlockData?.blockType === LinkInBioBlockEnum.video
 									? '🎬 Video'
-									: linkInBioSelectedBlockFromState.blockType ===
+									: linkInBioBlockData?.blockType ===
 									  LinkInBioBlockEnum.calendar
 									? '📆 Calendar'
-									: linkInBioSelectedBlockFromState.blockType ===
-									  LinkInBioBlockEnum.shopify
+									: linkInBioBlockData?.blockType === LinkInBioBlockEnum.shopify
 									? '👉 Shopify'
-									: linkInBioSelectedBlockFromState.blockType ===
-									  LinkInBioBlockEnum.magento
+									: linkInBioBlockData?.blockType === LinkInBioBlockEnum.magento
 									? '👉 Magento'
-									: linkInBioSelectedBlockFromState.blockType ===
+									: linkInBioBlockData?.blockType ===
 									  LinkInBioBlockEnum.wordpress
 									? '🖥 Wordpress'
-									: linkInBioSelectedBlockFromState.blockType ===
-									  LinkInBioBlockEnum.map
+									: linkInBioBlockData?.blockType === LinkInBioBlockEnum.map
 									? '🗺️ Maps'
-									: linkInBioSelectedBlockFromState.blockType ===
-									  LinkInBioBlockEnum.music
+									: linkInBioBlockData?.blockType === LinkInBioBlockEnum.music
 									? '🎵 Add music platforms'
-									: linkInBioSelectedBlockFromState.blockType ===
-									  LinkInBioBlockEnum.QAndA
+									: linkInBioBlockData?.blockType === LinkInBioBlockEnum.QAndA
 									? '💬 Add Question - Answer'
-									: linkInBioSelectedBlockFromState.blockType ===
-									  LinkInBioBlockEnum.form
+									: linkInBioBlockData?.blockType === LinkInBioBlockEnum.form
 									? '📝 Forms'
-									: linkInBioSelectedBlockFromState.blockType ===
-									  LinkInBioBlockEnum.social
+									: linkInBioBlockData?.blockType === LinkInBioBlockEnum.social
 									? '🧳 Add Social platforms'
-									: linkInBioSelectedBlockFromState.blockType ===
-									  LinkInBioBlockEnum.Iframe
+									: linkInBioBlockData?.blockType === LinkInBioBlockEnum.Iframe
 									? '💻 Iframe (Typeform, Acast, etc.)'
-									: linkInBioSelectedBlockFromState.blockType ===
-									  LinkInBioBlockEnum.avatar
+									: linkInBioBlockData?.blockType === LinkInBioBlockEnum.avatar
 									? '👋 Avatar'
 									: ''}
 							</ZIonTitle>
 
 							<ZIonRow className='ion-padding-bottom'>
 								{/* Carousel card field */}
-								{linkInBioSelectedBlockFromState.blockType ===
+								{linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.carousel && (
 									<ZIonCol size='12' className='mt-3'>
 										<LinkInBioCarouselCardField />
@@ -775,28 +749,26 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Q and A card field */}
-								{linkInBioSelectedBlockFromState.blockType ===
-									LinkInBioBlockEnum.QAndA && (
+								{linkInBioBlockData?.blockType === LinkInBioBlockEnum.QAndA && (
 									<ZIonCol size='12' className='mt-3'>
 										<LinkInBioQAndACardField />
 									</ZIonCol>
 								)}
 
-								{linkInBioSelectedBlockFromState.blockType ===
-									LinkInBioBlockEnum.music && (
+								{linkInBioBlockData?.blockType === LinkInBioBlockEnum.music && (
 									<ZIonCol size='12' className='mt-3'>
 										<LinkInBioMusicPlatformCardField />
 									</ZIonCol>
 								)}
 
-								{linkInBioSelectedBlockFromState.blockType ===
+								{linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.messenger && (
 									<ZIonCol size='12'>
 										<LinkInBioMessengerPlatformCardField />
 									</ZIonCol>
 								)}
 
-								{linkInBioSelectedBlockFromState.blockType ===
+								{linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.social && (
 									<ZIonCol size='12'>
 										<LinkInBioSocialPlatformCardField />
@@ -804,19 +776,15 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Link Component */}
-								{(linkInBioSelectedBlockFromState.blockType ===
-									LinkInBioBlockEnum.button ||
-									linkInBioSelectedBlockFromState.blockType ===
+								{(linkInBioBlockData?.blockType === LinkInBioBlockEnum.button ||
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.countdown ||
-									linkInBioSelectedBlockFromState.blockType ===
-										LinkInBioBlockEnum.card ||
-									linkInBioSelectedBlockFromState.blockType ===
-										LinkInBioBlockEnum.audio ||
-									linkInBioSelectedBlockFromState.blockType ===
-										LinkInBioBlockEnum.video ||
-									linkInBioSelectedBlockFromState.blockType ===
+									linkInBioBlockData?.blockType === LinkInBioBlockEnum.card ||
+									linkInBioBlockData?.blockType === LinkInBioBlockEnum.audio ||
+									linkInBioBlockData?.blockType === LinkInBioBlockEnum.video ||
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.calendar ||
-									linkInBioSelectedBlockFromState.blockType ===
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.avatar) && (
 									<ZIonCol size='12' className='mt-3'>
 										<LinkInBioLinkField
@@ -828,31 +796,23 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Iframe component */}
-								{linkInBioSelectedBlockFromState.blockType ===
+								{linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.Iframe && <LinkInBioIframeField />}
 
 								{/* Title Component */}
-								{(linkInBioSelectedBlockFromState.blockType ===
-									LinkInBioBlockEnum.button ||
-									linkInBioSelectedBlockFromState.blockType ===
+								{(linkInBioBlockData?.blockType === LinkInBioBlockEnum.button ||
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.countdown ||
-									linkInBioSelectedBlockFromState.blockType ===
-										LinkInBioBlockEnum.card ||
-									linkInBioSelectedBlockFromState.blockType ===
-										LinkInBioBlockEnum.audio ||
-									linkInBioSelectedBlockFromState.blockType ===
-										LinkInBioBlockEnum.video ||
-									linkInBioSelectedBlockFromState.blockType ===
+									linkInBioBlockData?.blockType === LinkInBioBlockEnum.card ||
+									linkInBioBlockData?.blockType === LinkInBioBlockEnum.audio ||
+									linkInBioBlockData?.blockType === LinkInBioBlockEnum.video ||
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.calendar ||
-									linkInBioSelectedBlockFromState.blockType ===
-										LinkInBioBlockEnum.avatar ||
-									linkInBioSelectedBlockFromState.blockType ===
-										LinkInBioBlockEnum.map ||
-									linkInBioSelectedBlockFromState.blockType ===
-										LinkInBioBlockEnum.VCard ||
-									linkInBioSelectedBlockFromState.blockType ===
-										LinkInBioBlockEnum.Iframe ||
-									linkInBioSelectedBlockFromState.blockType ===
+									linkInBioBlockData?.blockType === LinkInBioBlockEnum.avatar ||
+									linkInBioBlockData?.blockType === LinkInBioBlockEnum.map ||
+									linkInBioBlockData?.blockType === LinkInBioBlockEnum.VCard ||
+									linkInBioBlockData?.blockType === LinkInBioBlockEnum.Iframe ||
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.form) && (
 									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioTitleField
@@ -860,7 +820,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 											value={values.title}
 											onIonChange={handleChange}
 											placeholder={
-												linkInBioSelectedBlockFromState.blockType ===
+												linkInBioBlockData?.blockType ===
 												LinkInBioBlockEnum.form
 													? 'Form Name'
 													: 'Your Title'
@@ -870,16 +830,14 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Form Component */}
-								{linkInBioSelectedBlockFromState.blockType ===
-									LinkInBioBlockEnum.form && (
+								{linkInBioBlockData?.blockType === LinkInBioBlockEnum.form && (
 									<ZIonCol size='12' className='pt-3 mt-4 mb-2'>
 										<LinkInBioFormField />
 									</ZIonCol>
 								)}
 
 								{/* ✅ Submit button */}
-								{linkInBioSelectedBlockFromState.blockType ===
-									LinkInBioBlockEnum.form && (
+								{linkInBioBlockData?.blockType === LinkInBioBlockEnum.form && (
 									<ZIonCol size='12' className='mt-3 border-bottom__violet'>
 										<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding ms-3'>
 											✅ Submit button
@@ -897,8 +855,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Icon Component */}
-								{linkInBioSelectedBlockFromState.blockType ===
-									LinkInBioBlockEnum.VCard && (
+								{linkInBioBlockData?.blockType === LinkInBioBlockEnum.VCard && (
 									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioIconField
 											name='icon'
@@ -909,11 +866,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Description Component */}
-								{(linkInBioSelectedBlockFromState.blockType ===
+								{(linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.countdown ||
-									linkInBioSelectedBlockFromState.blockType ===
-										LinkInBioBlockEnum.card ||
-									linkInBioSelectedBlockFromState.blockType ===
+									linkInBioBlockData?.blockType === LinkInBioBlockEnum.card ||
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.avatar) && (
 									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioDescriptionField
@@ -925,8 +881,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Text area */}
-								{linkInBioSelectedBlockFromState.blockType ===
-									LinkInBioBlockEnum.text && (
+								{linkInBioBlockData?.blockType === LinkInBioBlockEnum.text && (
 									<ZIonCol size='12' className='pt-2 mt-4 mb-4'>
 										<ZTextEditor
 											value={values.text}
@@ -938,13 +893,11 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Upload Component */}
-								{(linkInBioSelectedBlockFromState.blockType ===
+								{(linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.countdown ||
-									linkInBioSelectedBlockFromState.blockType ===
-										LinkInBioBlockEnum.card ||
-									linkInBioSelectedBlockFromState.blockType ===
-										LinkInBioBlockEnum.avatar ||
-									linkInBioSelectedBlockFromState.blockType ===
+									linkInBioBlockData?.blockType === LinkInBioBlockEnum.card ||
+									linkInBioBlockData?.blockType === LinkInBioBlockEnum.avatar ||
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.music) && (
 									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioUploadField />
@@ -952,7 +905,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* DateTime Component */}
-								{linkInBioSelectedBlockFromState.blockType ===
+								{linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.countdown && (
 									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioDateTimeField
@@ -964,7 +917,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Timezone */}
-								{linkInBioSelectedBlockFromState.blockType ===
+								{linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.countdown && (
 									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioTimezoneField
@@ -989,45 +942,45 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/**** Search *****/}
-								{/* {(linkInBioSelectedBlockFromState.blockType ===
+								{/* {(linkInBioBlockData?.blockType ===
                   LinkInBioBlockEnum.RSS ||
-                  linkInBioSelectedBlockFromState.blockType ===
+                  linkInBioBlockData?.blockType ===
                     LinkInBioBlockEnum.shopify ||
-                  linkInBioSelectedBlockFromState.blockType ===
+                  linkInBioBlockData?.blockType ===
                     LinkInBioBlockEnum.magento ||
-                  linkInBioSelectedBlockFromState.blockType ===
+                  linkInBioBlockData?.blockType ===
                     LinkInBioBlockEnum.wordpress ||
-                  linkInBioSelectedBlockFromState.blockType ===
+                  linkInBioBlockData?.blockType ===
                     LinkInBioBlockEnum.map) && (
                   <ZIonCol size='12' className='pt-2 mt-4'>
                     <LinkInBioSearchField
                       placeholder={
-                        linkInBioSelectedBlockFromState.blockType ===
+                        linkInBioBlockData?.blockType ===
                         LinkInBioBlockEnum.RSS
                           ? 'RSS Feed'
-                          : linkInBioSelectedBlockFromState.blockType ===
+                          : linkInBioBlockData?.blockType ===
                             LinkInBioBlockEnum.shopify
                           ? 'Shopify link'
-                          : linkInBioSelectedBlockFromState.blockType ===
+                          : linkInBioBlockData?.blockType ===
                             LinkInBioBlockEnum.magento
                           ? 'Magento link'
-                          : linkInBioSelectedBlockFromState.blockType ===
+                          : linkInBioBlockData?.blockType ===
                             LinkInBioBlockEnum.wordpress
                           ? 'Wordpress link'
-                          : linkInBioSelectedBlockFromState.blockType ===
+                          : linkInBioBlockData?.blockType ===
                             LinkInBioBlockEnum.map
                           ? 'Search an address'
                           : ''
                       }
                       searchIcon={
-                        linkInBioSelectedBlockFromState.blockType ===
+                        linkInBioBlockData?.blockType ===
                         LinkInBioBlockEnum.RSS
                           ? wifiOutline
-                          : linkInBioSelectedBlockFromState.blockType ===
+                          : linkInBioBlockData?.blockType ===
                               LinkInBioBlockEnum.shopify ||
-                            linkInBioSelectedBlockFromState.blockType ===
+                            linkInBioBlockData?.blockType ===
                               LinkInBioBlockEnum.magento ||
-                            linkInBioSelectedBlockFromState.blockType ===
+                            linkInBioBlockData?.blockType ===
                               LinkInBioBlockEnum.wordpress
                           ? linkOutline
                           : ''
@@ -1037,8 +990,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                 )} */}
 
 								{/* RSS Feed */}
-								{linkInBioSelectedBlockFromState.blockType ===
-									LinkInBioBlockEnum.RSS && (
+								{linkInBioBlockData?.blockType === LinkInBioBlockEnum.RSS && (
 									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioSearchField
 											placeholder='RSS Feed'
@@ -1052,7 +1004,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Shopify */}
-								{linkInBioSelectedBlockFromState.blockType ===
+								{linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.shopify && (
 									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioSearchField
@@ -1067,7 +1019,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Magento */}
-								{linkInBioSelectedBlockFromState.blockType ===
+								{linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.magento && (
 									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioSearchField
@@ -1082,7 +1034,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Wordpress */}
-								{linkInBioSelectedBlockFromState.blockType ===
+								{linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.wordpress && (
 									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioSearchField
@@ -1097,8 +1049,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Maps */}
-								{linkInBioSelectedBlockFromState.blockType ===
-									LinkInBioBlockEnum.map && (
+								{linkInBioBlockData?.blockType === LinkInBioBlockEnum.map && (
 									<ZIonCol size='12' className='mt-4'>
 										<ZIonItem className='ion-item-start-no-padding'>
 											<ZRGAutoCompleteInput
@@ -1138,13 +1089,12 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                 /> */}
 
 								{/* Title enable */}
-								{(linkInBioSelectedBlockFromState.blockType ===
-									LinkInBioBlockEnum.RSS ||
-									linkInBioSelectedBlockFromState.blockType ===
+								{(linkInBioBlockData?.blockType === LinkInBioBlockEnum.RSS ||
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.shopify ||
-									linkInBioSelectedBlockFromState.blockType ===
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.magento ||
-									linkInBioSelectedBlockFromState.blockType ===
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.wordpress) && (
 									<ZIonCol size='12' className='mt-4'>
 										<LinkInBioEnableField
@@ -1157,13 +1107,12 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Description enable */}
-								{(linkInBioSelectedBlockFromState.blockType ===
-									LinkInBioBlockEnum.RSS ||
-									linkInBioSelectedBlockFromState.blockType ===
+								{(linkInBioBlockData?.blockType === LinkInBioBlockEnum.RSS ||
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.shopify ||
-									linkInBioSelectedBlockFromState.blockType ===
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.magento ||
-									linkInBioSelectedBlockFromState.blockType ===
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.wordpress) && (
 									<ZIonCol size='12' className='mt-3'>
 										<LinkInBioEnableField
@@ -1178,13 +1127,12 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Picture enable */}
-								{(linkInBioSelectedBlockFromState.blockType ===
-									LinkInBioBlockEnum.RSS ||
-									linkInBioSelectedBlockFromState.blockType ===
+								{(linkInBioBlockData?.blockType === LinkInBioBlockEnum.RSS ||
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.shopify ||
-									linkInBioSelectedBlockFromState.blockType ===
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.magento ||
-									linkInBioSelectedBlockFromState.blockType ===
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.wordpress) && (
 									<ZIonCol size='12' className='mt-3'>
 										<LinkInBioEnableField
@@ -1199,9 +1147,9 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Card enable */}
-								{(linkInBioSelectedBlockFromState.blockType ===
+								{(linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.calendar ||
-									linkInBioSelectedBlockFromState.blockType ===
+									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.Iframe) && (
 									<ZIonCol size='12' className='mt-3'>
 										<LinkInBioEnableField
@@ -1216,7 +1164,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Price enable */}
-								{linkInBioSelectedBlockFromState.blockType ===
+								{linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.shopify && (
 									<ZIonCol size='12' className='mt-3'>
 										<LinkInBioEnableField
@@ -1231,8 +1179,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* Terms checkbox */}
-								{linkInBioSelectedBlockFromState.blockType ===
-									LinkInBioBlockEnum.form && (
+								{linkInBioBlockData?.blockType === LinkInBioBlockEnum.form && (
 									<ZIonCol size='12' className='mt-3'>
 										<LinkInBioEnableField
 											title='Terms checkbox'
@@ -1265,7 +1212,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* ➖ Type  */}
-								{linkInBioSelectedBlockFromState.blockType ===
+								{linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.separator && (
 									<ZIonCol size='12'>
 										<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
@@ -1348,7 +1295,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* 🎨 Color  */}
-								{linkInBioSelectedBlockFromState.blockType ===
+								{linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.separator && (
 									<ZIonCol size='12' className='pt-2 mt-4'>
 										<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
@@ -1365,7 +1312,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								)}
 
 								{/* ☄️ Spacing  */}
-								{linkInBioSelectedBlockFromState.blockType ===
+								{linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.spacing && (
 									<ZIonCol size='12'>
 										<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
@@ -1393,12 +1340,12 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 						</ZIonCol>
 
 						{/* 📄 vCard */}
-						{linkInBioSelectedBlockFromState.blockType ===
-							LinkInBioBlockEnum.VCard && <LinkInBioVCardField />}
+						{linkInBioBlockData?.blockType === LinkInBioBlockEnum.VCard && (
+							<LinkInBioVCardField />
+						)}
 
 						{/* 📏 Margin  */}
-						{linkInBioSelectedBlockFromState.blockType ===
-							LinkInBioBlockEnum.separator && (
+						{linkInBioBlockData?.blockType === LinkInBioBlockEnum.separator && (
 							<ZIonCol
 								sizeXl='11'
 								sizeLg='12'
@@ -1430,12 +1377,9 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 						)}
 
 						{/* 🎨 Custom appearance */}
-						{(linkInBioSelectedBlockFromState.blockType ===
-							LinkInBioBlockEnum.button ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.VCard ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.form) && (
+						{(linkInBioBlockData?.blockType === LinkInBioBlockEnum.button ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.VCard ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.form) && (
 							<ZIonCol
 								size='11'
 								className='ion-padding-vertical ion-margin-top ion-margin-start border-bottom__violet'
@@ -1838,13 +1782,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 						)}
 
 						{/* 🗃️ Card number */}
-						{(linkInBioSelectedBlockFromState.blockType ===
-							LinkInBioBlockEnum.RSS ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.shopify ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.magento ||
-							linkInBioSelectedBlockFromState.blockType ===
+						{(linkInBioBlockData?.blockType === LinkInBioBlockEnum.RSS ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.shopify ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.magento ||
+							linkInBioBlockData?.blockType ===
 								LinkInBioBlockEnum.wordpress) && (
 							<ZIonCol
 								size='11'
@@ -1869,22 +1810,14 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 						)}
 
 						{/* ✨ Style */}
-						{(linkInBioSelectedBlockFromState.blockType ===
-							LinkInBioBlockEnum.countdown ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.card ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.carousel ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.RSS ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.shopify ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.wordpress ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.magento ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.avatar) && (
+						{(linkInBioBlockData?.blockType === LinkInBioBlockEnum.countdown ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.card ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.carousel ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.RSS ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.shopify ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.wordpress ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.magento ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.avatar) && (
 							<ZIonCol
 								sizeXl='11'
 								sizeLg='12'
@@ -1897,7 +1830,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 									✨ Style
 								</ZIonTitle>
 								<div className='mb-2 ion-padding-bottom'>
-									{linkInBioSelectedBlockFromState.blockType !==
+									{linkInBioBlockData?.blockType !==
 										LinkInBioBlockEnum.avatar && (
 										<>
 											<ZRoundedButton
@@ -1948,17 +1881,15 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										</>
 									)}
 
-									{(linkInBioSelectedBlockFromState.blockType ===
-										LinkInBioBlockEnum.card ||
-										linkInBioSelectedBlockFromState.blockType ===
+									{(linkInBioBlockData?.blockType === LinkInBioBlockEnum.card ||
+										linkInBioBlockData?.blockType ===
 											LinkInBioBlockEnum.carousel ||
-										linkInBioSelectedBlockFromState.blockType ===
-											LinkInBioBlockEnum.RSS ||
-										linkInBioSelectedBlockFromState.blockType ===
+										linkInBioBlockData?.blockType === LinkInBioBlockEnum.RSS ||
+										linkInBioBlockData?.blockType ===
 											LinkInBioBlockEnum.shopify ||
-										linkInBioSelectedBlockFromState.blockType ===
+										linkInBioBlockData?.blockType ===
 											LinkInBioBlockEnum.magento ||
-										linkInBioSelectedBlockFromState.blockType ===
+										linkInBioBlockData?.blockType ===
 											LinkInBioBlockEnum.wordpress) && (
 										<>
 											<ZRoundedButton
@@ -2031,7 +1962,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 											</ZRoundedButton>
 										</>
 									)}
-									{linkInBioSelectedBlockFromState.blockType ===
+									{linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.avatar && (
 										<>
 											<ZRoundedButton
@@ -2109,15 +2040,11 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 						)}
 
 						{/* 👓 View */}
-						{(linkInBioSelectedBlockFromState.blockType ===
-							LinkInBioBlockEnum.magento ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.wordpress ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.shopify ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.RSS ||
-							linkInBioSelectedBlockFromState.blockType ===
+						{(linkInBioBlockData?.blockType === LinkInBioBlockEnum.magento ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.wordpress ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.shopify ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.RSS ||
+							linkInBioBlockData?.blockType ===
 								LinkInBioBlockEnum.carousel) && (
 							<ZIonCol
 								sizeXl='11'
@@ -2196,28 +2123,17 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 						)}
 
 						{/* 🎈 Animation */}
-						{(linkInBioSelectedBlockFromState.blockType ===
-							LinkInBioBlockEnum.button ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.text ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.countdown ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.card ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.carousel ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.music ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.QAndA ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.messenger ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.form ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.social ||
-							linkInBioSelectedBlockFromState.blockType ===
-								LinkInBioBlockEnum.VCard) && (
+						{(linkInBioBlockData?.blockType === LinkInBioBlockEnum.button ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.text ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.countdown ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.card ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.carousel ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.music ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.QAndA ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.messenger ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.form ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.social ||
+							linkInBioBlockData?.blockType === LinkInBioBlockEnum.VCard) && (
 							<ZIonCol
 								sizeXl='11'
 								sizeLg='12'

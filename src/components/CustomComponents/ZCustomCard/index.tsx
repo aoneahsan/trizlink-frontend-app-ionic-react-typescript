@@ -211,7 +211,7 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
 						})}
 					>
 						<ZIonCardTitle
-							className={classNames(linkInBioFormState.theme.font, {
+							className={classNames(linkInBioFormState?.theme?.font, {
 								'font-bold': true,
 								'mb-2':
 									type === LinkInBioCardStyleEnum.horizontal ||
@@ -233,7 +233,7 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
 										? '200px'
 										: '100%',
 							}}
-							className={classNames(linkInBioFormState.theme.font, {
+							className={classNames(linkInBioFormState?.theme?.font, {
 								'inline-block': true,
 							})}
 						>

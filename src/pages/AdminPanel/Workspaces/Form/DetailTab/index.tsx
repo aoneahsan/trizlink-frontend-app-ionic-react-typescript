@@ -52,6 +52,7 @@ import { showErrorNotification } from '@/utils/notification';
 import { reportCustomError } from '@/utils/customErrorType';
 import {
 	createRedirectRoute,
+	replaceRouteParams,
 	validateField,
 	zStringify,
 } from '@/utils/helpers';
@@ -151,7 +152,16 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
 			// }
 		} catch (error) {
 			if (error instanceof AxiosError) {
-				zNavigatePushRoute(ZaionsRoutes.AdminPanel.LinkInBio.Main);
+				zNavigatePushRoute(
+					replaceRouteParams(
+						ZaionsRoutes.AdminPanel.LinkInBio.Main,
+						[
+							CONSTANTS.RouteParams.workspace.workspaceId,
+							CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+						],
+						[editWorkspaceId, 'all']
+					)
+				);
 				showErrorNotification(error.message);
 			} else {
 				reportCustomError(error);
