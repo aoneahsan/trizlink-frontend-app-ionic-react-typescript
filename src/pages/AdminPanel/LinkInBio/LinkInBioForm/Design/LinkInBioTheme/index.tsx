@@ -76,6 +76,7 @@ import {
 	zJsonParse,
 } from '@/utils/helpers';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { useParams } from 'react-router';
 
 /**
  * Component props type go down
@@ -94,6 +95,11 @@ const ZLinkInBioThemeSection: React.FC = () => {
 	// const [linkInBioPredefinedThemesState, setLinkInBioPredefinedThemesState] =
 	// 	useRecoilState(LinkInBioPredefinedThemeRState);
 
+	// current Link-in-bio id.
+	const { linkInBioId } = useParams<{
+		linkInBioId: string;
+	}>();
+
 	const { values, setFieldValue } = useFormikContext<LinkInBioType>();
 
 	const { data: LinkInBioPreDefinedThemesData } = useZRQGetRequest<
@@ -102,6 +108,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 		_url: API_URL_ENUM.linkInBioPreDefinedThemes_create_list,
 		_key: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_DEFINED_THEMES.MAIN,
+			linkInBioId,
 		],
 	});
 

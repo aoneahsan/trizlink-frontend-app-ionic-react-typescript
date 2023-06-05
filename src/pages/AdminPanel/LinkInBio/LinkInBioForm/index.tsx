@@ -142,7 +142,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 	const { data: selectedLinkInBio, refetch: refetchSelectedLinkInBio } =
 		useZRQGetRequest<LinkInBioType>({
 			_url: API_URL_ENUM.linkInBio_update_delete,
-			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET],
+			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET, linkInBioId],
 			_authenticated: true,
 			_itemsIds: [linkInBioId, workspaceId],
 			_urlDynamicParts: [
@@ -158,6 +158,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 		_url: API_URL_ENUM.linkInBio_update_delete,
 		_queriesKeysToInvalidate: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
+			linkInBioId,
 		],
 	});
 

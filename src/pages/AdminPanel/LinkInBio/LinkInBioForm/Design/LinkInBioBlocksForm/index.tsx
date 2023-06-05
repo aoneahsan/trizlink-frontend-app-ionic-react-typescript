@@ -63,6 +63,7 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import ZaionsColorPiker from '@/components/InPageComponents/ZaionsColorPiker';
 
 import {
+	useUpdateRQCacheData,
 	useZRQDeleteRequest,
 	useZRQGetRequest,
 	useZRQUpdateRequest,
@@ -207,6 +208,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
 	const { zNavigatePushRoute } = useZNavigate();
 
+	const { updateRQCDataHandler } = useUpdateRQCacheData();
+
 	// const [linkInBioBlockState, setLinkInBioBlockState] = useRecoilState(
 	// 	LinkInBioBlocksRState
 	// );
@@ -243,7 +246,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 	// delete link-in-bio block api where use went to delete the block on preview panel and click on the delete button in ActionSheet (useZIonActionSheet) the deleteBlockHandler will execute with will hit this api and delete the block.
 	const { mutateAsync: deleteLinkInBioBlockMutate } = useZRQDeleteRequest(
 		API_URL_ENUM.linkInBioBlock_delete_update_get,
-		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN]
+		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN, linkInBioId]
 	);
 
 	// custom hook for presenting modal (the add block modal)
@@ -295,6 +298,21 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 					});
 
 				setLinkInBioBlocksState(_updatedLinkInBioBlocksState);
+
+				if (_extractItemFromResult?.id) {
+					console.log({
+						log: 'check 1',
+						id: _extractItemFromResult?.id,
+					});
+					updateRQCDataHandler({
+						key: [
+							CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
+							linkInBioId,
+						],
+						data: _extractItemFromResult,
+						id: _extractItemFromResult?.id,
+					});
+				}
 			}
 		} catch (error) {
 			reportCustomError(error);

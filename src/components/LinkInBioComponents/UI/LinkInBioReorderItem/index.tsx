@@ -150,7 +150,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 	// fetching link-in-bio with the linkInBioId data from backend.
 	const { data: selectedLinkInBio } = useZRQGetRequest<LinkInBioType>({
 		_url: API_URL_ENUM.linkInBio_update_delete,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET],
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET, linkInBioId],
 		_authenticated: true,
 		_itemsIds: [linkInBioId, workspaceId],
 		_urlDynamicParts: [
@@ -166,7 +166,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 	// delete link-in-bio block api where use went to delete the block on preview panel and click on the delete button in ActionSheet (useZIonActionSheet) the deleteBlockHandler will execute with will hit this api and delete the block.
 	const { mutateAsync: deleteLinkInBioBlockMutate } = useZRQDeleteRequest(
 		API_URL_ENUM.linkInBioBlock_delete_update_get,
-		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN]
+		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN, linkInBioId]
 	);
 
 	// delete block function.

@@ -422,3 +422,73 @@ export const useZInvalidateReactQueries = () => {
 		return { zInvalidateReactQueries: emptyVoidReturnFunction };
 	}
 };
+
+export const useUpdateRQCacheData = () => {
+	try {
+		const queryClient = useQueryClient();
+
+		const updateRQCDataHandler = <T>({
+			key,
+			data,
+			id,
+			updateHoleData = false,
+		}: {
+			key: string | string[];
+			id: string;
+			data: T;
+			updateHoleData?: boolean;
+		}) => {
+			if (updateHoleData) {
+				queryClient.setQueryData([...key], data);
+			} else {
+				const _res = queryClient.setQueryData([...key], (oldData: unknown) => {
+					if (oldData) {
+						if (Array.isArray(oldData)) {
+							const updatedData = [...oldData];
+							const index = updatedData.findIndex((el) => el.id === id);
+							if (index != -1) {
+								updatedData[index] = data;
+							}
+							return updatedData;
+						} else if (typeof oldData === 'object') {
+							const updatedData = structuredClone(oldData);
+							const actualDataItems = (
+								updatedData as { data: { items: unknown[] } }
+							)?.data?.items;
+							if (
+								actualDataItems &&
+								Array.isArray(actualDataItems) &&
+								actualDataItems.length
+							) {
+								const updatedDataItems = [...actualDataItems];
+								const index = updatedDataItems.findIndex((el) => el.id === id);
+								if (index != -1) {
+									updatedDataItems[index] = data;
+								}
+								(updatedData as { data: { items: unknown[] } }).data.items =
+									updatedDataItems;
+							}
+							return updatedData;
+						}
+					}
+					return oldData;
+				});
+
+				console.log({
+					log: 'check 2',
+					id: id,
+					data,
+					_res,
+					key,
+				});
+
+				return _res;
+			}
+		};
+
+		return { updateRQCDataHandler };
+	} catch (error) {
+		reportCustomError(error);
+		return { updateRQCDataHandler: emptyVoidReturnFunction };
+	}
+};

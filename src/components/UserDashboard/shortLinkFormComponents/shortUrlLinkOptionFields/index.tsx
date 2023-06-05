@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 /**
  * Packages Imports go down
@@ -17,11 +17,12 @@ import {
 	ZIonItem,
 	ZIonNote,
 	ZIonRow,
+	ZIonText,
 	ZIonTextarea,
 } from '@/components/ZIonComponents';
 import { useFormikContext } from 'formik';
 import { refreshCircleOutline } from 'ionicons/icons';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -38,16 +39,31 @@ import ShortUrlLinkOptions from '@/components/UserDashboard/ShortUrlLinkOption';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
+import {
+	ShortLinkType,
+	ShortUrlLinkOptionType,
+	ZaionsShortUrlOptionFieldsValuesInterface,
+} from '@/types/AdminPanel/linksType';
 import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
-import { ZaionsBusinessDetails } from '@/utils/constants';
+import {
+	NewShortLinkFormState,
+	NewShortLinkSelectTypeOption,
+} from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
+import CONSTANTS, { ZaionsBusinessDetails } from '@/utils/constants';
 import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
+import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import ZShortLinkOptionsPopover from '@/components/InPageComponents/ZaionsPopovers/ShortLinkOptionsPopover';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { API_URL_ENUM } from '@/utils/enums';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { useParams } from 'react-router';
+import { reportCustomError } from '@/utils/customErrorType';
+import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
 
 /**
  * Style files Imports go down
@@ -71,45 +87,93 @@ import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputFi
  * */
 
 const ZaionsShortUrlOptionFields: React.FC = () => {
-	const newShortLinkFormState = useRecoilValue(NewShortLinkFormState);
-	const { values, errors, touched, handleChange, handleBlur } =
+	const { values, errors, touched, handleChange, handleBlur, setFieldValue } =
 		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
+	const [newShortLinkTypeOptionDataAtom, setNewShortLinkTypeOptionDataAtom] =
+		useRecoilState(NewShortLinkSelectTypeOption);
+
+	// getting link-in-bio and workspace ids from url with the help of useParams.
+	const { editLinkId, workspaceId } = useParams<{
+		editLinkId: string;
+		workspaceId: string;
+	}>();
+
+	// get short link data api.
+	const { data: selectedShortLink } = useZRQGetRequest<ShortLinkType>({
+		_url: API_URL_ENUM.shortLinks_update_delete,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET, editLinkId],
+		_authenticated: true,
+		_itemsIds: [workspaceId, editLinkId],
+		_urlDynamicParts: [
+			CONSTANTS.RouteParams.workspace.workspaceId,
+			CONSTANTS.RouteParams.shortLink.shortLinkId,
+		],
+		_shouldFetchWhenIdPassed: !editLinkId ? true : false,
+		_extractType: ZRQGetRequestExtractEnum.extractItem,
+		_staleTime: 0,
+	});
+
+	const { presentZIonPopover: presentShortLinkOptionsPopover } = useZIonPopover(
+		ZShortLinkOptionsPopover,
+		{
+			setFieldValue,
+		}
+	); // popover hook to show ZShortLinkOptionsPopover
+
+	useEffect(() => {
+		try {
+			const selectedTypeOptionData = LinkTypeOptionsData.find(
+				(el) => el.type === selectedShortLink?.type
+			);
+
+			if (selectedShortLink && selectedTypeOptionData) {
+				setNewShortLinkTypeOptionDataAtom((_) => ({
+					...selectedTypeOptionData,
+				}));
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	}, [selectedShortLink]);
+
 	const ShortLinkPlaceholder = () => {
-		switch (newShortLinkFormState.type) {
-			case messengerPlatformsBlockEnum.link:
-				return 'https://yourlink.com';
-			case messengerPlatformsBlockEnum.call:
-				return 'Phone number (eg +33 6 XX XX XX XX)';
+		if (newShortLinkTypeOptionDataAtom) {
+			switch (newShortLinkTypeOptionDataAtom?.type) {
+				case messengerPlatformsBlockEnum.link:
+					return 'https://yourlink.com';
+				case messengerPlatformsBlockEnum.call:
+					return 'Phone number (eg +33 6 XX XX XX XX)';
 
-			case messengerPlatformsBlockEnum.whatsapp:
-				return 'Phone number (eg +33 6 XX XX XX XX)';
+				case messengerPlatformsBlockEnum.whatsapp:
+					return 'Phone number (eg +33 6 XX XX XX XX)';
 
-			case messengerPlatformsBlockEnum.sms:
-				return 'Phone number (eg +33 6 XX XX XX XX)';
+				case messengerPlatformsBlockEnum.sms:
+					return 'Phone number (eg +33 6 XX XX XX XX)';
 
-			case messengerPlatformsBlockEnum.email:
-				return 'johndoe@gmail.com';
+				case messengerPlatformsBlockEnum.email:
+					return 'johndoe@gmail.com';
 
-			case messengerPlatformsBlockEnum.messenger:
-				return 'Messenger link (https://m/me/zaions.com)';
+				case messengerPlatformsBlockEnum.messenger:
+					return 'Messenger link (https://m/me/zaions.com)';
 
-			case messengerPlatformsBlockEnum.telegram:
-				return 'Telegram username (eg: @myId)';
+				case messengerPlatformsBlockEnum.telegram:
+					return 'Telegram username (eg: @myId)';
 
-			case messengerPlatformsBlockEnum.skype:
-				return 'Skype username';
+				case messengerPlatformsBlockEnum.skype:
+					return 'Skype username';
 
-			case messengerPlatformsBlockEnum.wechat:
-				return 'WeChat ID';
+				case messengerPlatformsBlockEnum.wechat:
+					return 'WeChat ID';
 
-			case messengerPlatformsBlockEnum.line:
-				return 'Line ID';
+				case messengerPlatformsBlockEnum.line:
+					return 'Line ID';
 
-			case messengerPlatformsBlockEnum.viber:
-				return 'Viber ID';
-			default:
-				return ZaionsBusinessDetails.WebsiteUrl;
+				case messengerPlatformsBlockEnum.viber:
+					return 'Viber ID';
+				default:
+					return ZaionsBusinessDetails.WebsiteUrl;
+			}
 		}
 	};
 
@@ -120,11 +184,47 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 			>
 				<ZIonCol className='flex pb-4 ion-align-items-center'>
 					{/* Options Dropdown (messengerPlatformsBlockEnum)  */}
-					<ShortUrlLinkOptions />
+					{/* <ShortUrlLinkOptions /> */}
+					{newShortLinkTypeOptionDataAtom && (
+						<ZIonButton
+							fill='default'
+							className='text-transform-initial ion-no-margin flex ion-align-items-center ion-justify-content-center'
+							style={{
+								minHeight: '53px',
+							}}
+							onClick={(event: unknown) => {
+								presentShortLinkOptionsPopover({
+									_event: event as Event,
+									_cssClass: 'short_link_options_popover_size',
+									_dismissOnSelect: false,
+								});
+							}}
+						>
+							{newShortLinkTypeOptionDataAtom.icon.iconName && (
+								<ZIonIcon
+									icon={newShortLinkTypeOptionDataAtom.icon.iconName}
+									size='large'
+									color='primary'
+								/>
+							)}
+							<ZIonText
+								className='ion-margin-start ion-margin-end ion-padding-end'
+								color={'dark'}
+							>
+								<h6 className='font-bold ion-no-margin d-inline'>
+									{newShortLinkTypeOptionDataAtom.text}
+								</h6>
+							</ZIonText>
+						</ZIonButton>
+					)}
+					{!newShortLinkTypeOptionDataAtom && (
+						<>Invalid Option Type Selected.</>
+					)}
 
 					{/* Link Input */}
-					{(newShortLinkFormState.type === messengerPlatformsBlockEnum.link ||
-						newShortLinkFormState.type ===
+					{(newShortLinkTypeOptionDataAtom?.type ===
+						messengerPlatformsBlockEnum.link ||
+						newShortLinkTypeOptionDataAtom?.type ===
 							messengerPlatformsBlockEnum.messenger) && (
 						<>
 							{/* Input of every links */}
@@ -151,10 +251,11 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 					)}
 
 					{/* Phone Number Input */}
-					{(newShortLinkFormState.type ===
+					{(newShortLinkTypeOptionDataAtom?.type ===
 						messengerPlatformsBlockEnum.whatsapp ||
-						newShortLinkFormState.type === messengerPlatformsBlockEnum.sms ||
-						newShortLinkFormState.type ===
+						newShortLinkTypeOptionDataAtom?.type ===
+							messengerPlatformsBlockEnum.sms ||
+						newShortLinkTypeOptionDataAtom?.type ===
 							messengerPlatformsBlockEnum.call) && (
 						<>
 							{/* Input of every Phone Number */}
@@ -185,9 +286,9 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 					)}
 
 					{/* Username Input */}
-					{(newShortLinkFormState.type ===
+					{(newShortLinkTypeOptionDataAtom?.type ===
 						messengerPlatformsBlockEnum.telegram ||
-						newShortLinkFormState.type ===
+						newShortLinkTypeOptionDataAtom?.type ===
 							messengerPlatformsBlockEnum.skype) && (
 						<>
 							{/* Input of every Username */}
@@ -216,9 +317,11 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 					)}
 
 					{/* Account Id Input */}
-					{(newShortLinkFormState.type === messengerPlatformsBlockEnum.wechat ||
-						newShortLinkFormState.type === messengerPlatformsBlockEnum.viber ||
-						newShortLinkFormState.type ===
+					{(newShortLinkTypeOptionDataAtom?.type ===
+						messengerPlatformsBlockEnum.wechat ||
+						newShortLinkTypeOptionDataAtom?.type ===
+							messengerPlatformsBlockEnum.viber ||
+						newShortLinkTypeOptionDataAtom?.type ===
 							messengerPlatformsBlockEnum.line) && (
 						<>
 							{/* Input of every Account Id */}
@@ -247,7 +350,8 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 					)}
 
 					{/* Email Input */}
-					{newShortLinkFormState.type === messengerPlatformsBlockEnum.email && (
+					{newShortLinkTypeOptionDataAtom?.type ===
+						messengerPlatformsBlockEnum.email && (
 						<>
 							{/* Input of every email */}
 							<ZIonInputField
@@ -285,7 +389,8 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 				{/*  */}
 				<ZIonCol size='12' className=''>
 					{/* Subject Input */}
-					{newShortLinkFormState.type === messengerPlatformsBlockEnum.email && (
+					{newShortLinkTypeOptionDataAtom?.type ===
+						messengerPlatformsBlockEnum.email && (
 						<ZIonInputField
 							inputFieldProps={{
 								label: 'Subject*',
@@ -309,10 +414,13 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 					)}
 
 					{/* Message Textarea */}
-					{(newShortLinkFormState.type === messengerPlatformsBlockEnum.email ||
-						newShortLinkFormState.type === messengerPlatformsBlockEnum.sms ||
-						newShortLinkFormState.type === messengerPlatformsBlockEnum.viber ||
-						newShortLinkFormState.type ===
+					{(newShortLinkTypeOptionDataAtom?.type ===
+						messengerPlatformsBlockEnum.email ||
+						newShortLinkTypeOptionDataAtom?.type ===
+							messengerPlatformsBlockEnum.sms ||
+						newShortLinkTypeOptionDataAtom?.type ===
+							messengerPlatformsBlockEnum.viber ||
+						newShortLinkTypeOptionDataAtom?.type ===
 							messengerPlatformsBlockEnum.whatsapp) && (
 						<ZIonItem
 							className={classNames({

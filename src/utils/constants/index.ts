@@ -468,7 +468,7 @@ const REACT_QUERY = {
 		},
 		LINK_IN_BIO_PRE_DEFINED_THEMES: {
 			MAIN: 'rq-link-in-bio-pre-defined-themes',
-			GET: 'rq-link-in-bio-pre-defined-themes',
+			GET: 'rq-link-in-bio-pre-defined-theme',
 		},
 		LINK_IN_BIO_PRE_DEFINED_BLOCKS: {
 			MAIN: 'rq-link-in-bio-predefined-blocks',

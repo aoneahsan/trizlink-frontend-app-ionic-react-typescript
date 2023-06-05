@@ -101,6 +101,10 @@ const LinkInBioShareSettings: React.FC = () => {
 
 	const [showAdvanceOptions, setShowAdvanceOptions] = useState(false);
 
+	const { linkInBioId } = useParams<{
+		linkInBioId: string;
+	}>();
+
 	// validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
 	const { validateRequestResponse } = useZValidateRequestResponse();
 
@@ -112,6 +116,7 @@ const LinkInBioShareSettings: React.FC = () => {
 		_url: API_URL_ENUM.linkInBio_update_delete,
 		_queriesKeysToInvalidate: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
+			linkInBioId,
 		],
 	});
 
@@ -466,7 +471,7 @@ const LinkInBioShareSettings: React.FC = () => {
 												className='ion-text-capitalize'
 											>
 												<ZIonText>
-													<h4 className='ion-no-margin flex ion-align-items-center ion-padding-top ion-padding-bottom'>
+													<h4 className='flex ion-no-margin ion-align-items-center ion-padding-top ion-padding-bottom'>
 														Advance Options
 													</h4>
 												</ZIonText>

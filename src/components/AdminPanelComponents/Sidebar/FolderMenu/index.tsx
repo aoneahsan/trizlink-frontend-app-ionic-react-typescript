@@ -94,11 +94,11 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 	const setFolderFormState = useSetRecoilState(FolderFormState);
 
 	// Request for getting short links folders.
-	const { data: shortLinksFoldersData } = useZRQGetRequest<LinkFolderType[]>({
-		_url: API_URL_ENUM.folders_create_list,
-		// _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
-		_key: ['make'],
-	});
+	// const { data: shortLinksFoldersData } = useZRQGetRequest<LinkFolderType[]>({
+	// 	_url: API_URL_ENUM.folders_create_list,
+	// 	// _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
+	// 	_key: ['make'],
+	// });
 
 	return (
 		<ZIonCol

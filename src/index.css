@@ -976,6 +976,9 @@ ion-modal.zaions__modal_w100 {
 .workspace_form_permission_popover_size {
 	--width: 300px;
 }
+.short_link_options_popover_size {
+	--width: 400px;
+}
 
 .zaions_workspaces_card_popover_size {
 	--width: 350px;

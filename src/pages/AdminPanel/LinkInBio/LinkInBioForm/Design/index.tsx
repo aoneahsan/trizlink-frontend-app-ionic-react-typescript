@@ -133,6 +133,7 @@ const LinkInBioDesignPage: React.FC = () => {
 		_url: API_URL_ENUM.linkInBioBlocks_reorder,
 		_queriesKeysToInvalidate: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
+			linkInBioId,
 		],
 	});
 
@@ -141,7 +142,10 @@ const LinkInBioDesignPage: React.FC = () => {
 		LinkInBioBlockFromType[]
 	>({
 		_url: API_URL_ENUM.linkInBioBlock_create_list,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN],
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
+			linkInBioId,
+		],
 		// _authenticated: true,
 
 		_itemsIds: [workspaceId, linkInBioId],

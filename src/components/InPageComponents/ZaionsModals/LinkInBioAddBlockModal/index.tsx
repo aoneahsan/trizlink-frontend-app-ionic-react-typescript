@@ -107,6 +107,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
 			_url: API_URL_ENUM.linkInBioBlock_create_list,
 			_queriesKeysToInvalidate: [
 				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
+				linkInBioId,
 			],
 			authenticated: true,
 			_itemsIds: [workspaceId, linkInBioId],
@@ -227,12 +228,12 @@ const ZLinkInBioAddBlockModal: React.FC<{
 						fill='clear'
 						color='dark'
 					>
-						<h4 className='ion-no-margin mt-1'>
+						<h4 className='mt-1 ion-no-margin'>
 							<ZIonIcon icon={closeOutline} className='w-6 h-6' />
 						</h4>
 					</ZIonButton>
 				</div>
-				<div className='flex ion-text-center ion-justify-content-center flex-col  ion-margin-top'>
+				<div className='flex flex-col ion-text-center ion-justify-content-center ion-margin-top'>
 					<ZIonText className='mb-0 zaions__primary_bg w-[50px] h-[50px] zaions__modal_icon mx-auto ion-margin-bottom inline-block'>
 						<ZIonIcon icon={toggleOutline} className='mx-auto' color='light' />
 					</ZIonText>
@@ -270,7 +271,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
 			 *  */}
 			{/* {appSettings.appModalsSetting.actions.showActionInModalFooter && (
         <ZIonFooter>
-          <ZIonRow className=' mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
+          <ZIonRow className='mx-3 mt-2  ion-justify-content-between ion-align-items-center'>
             <ZIonCol>
               <ZIonButton
                 fill='outline'
