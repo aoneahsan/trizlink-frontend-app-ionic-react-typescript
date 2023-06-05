@@ -104,8 +104,6 @@ const AppRoutes: React.FC = () => {
 					Component={ZaionsPasswordResetConfirm}
 				/>
 
-				{/* Private Routes */}
-				{/* Admin Panel Pages */}
 				<PrivateRoute
 					exact
 					path={ZaionsRoutes.AdminPanel.AppStartupPage}
