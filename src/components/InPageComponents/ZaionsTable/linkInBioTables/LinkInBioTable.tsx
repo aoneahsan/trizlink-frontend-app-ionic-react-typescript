@@ -58,9 +58,9 @@ import {
 // Recoil State
 import { useParams } from 'react-router';
 import {
-	FilteredLinkInBioLinksData,
-	LinkInBiosFilterOptionsRState,
-	LinkInBiosRState,
+	FilteredLinkInBioLinksDataSelector,
+	LinkInBiosFilterOptionsRStateAtom,
+	LinkInBiosRStateAtom,
 } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioState.recoil';
 import {
 	LinkInBioType,
@@ -80,14 +80,14 @@ const ZaionsLinkInBioLinksTable = () => {
 		showActionPopover: boolean;
 	}>({ showActionPopover: false });
 
-	const _setLinkInBiosData = useSetRecoilState(LinkInBiosRState);
+	const setLinkInBiosStateAtom = useSetRecoilState(LinkInBiosRStateAtom);
 
-	const _filteredLinkInBioLinksData = useRecoilValue(
-		FilteredLinkInBioLinksData
+	const _FilteredLinkInBioLinksDataSelector = useRecoilValue(
+		FilteredLinkInBioLinksDataSelector
 	);
 
 	const _linkInBiosFilterOptionsState = useSetRecoilState(
-		LinkInBiosFilterOptionsRState
+		LinkInBiosFilterOptionsRStateAtom
 	);
 
 	const { folderId, workspaceId } = useParams<{
@@ -102,12 +102,12 @@ const ZaionsLinkInBioLinksTable = () => {
 	const { zNavigatePushRoute } = useZNavigate();
 	const { mutate: deleteLinkInBioLinkMutate } = useZRQDeleteRequest(
 		API_URL_ENUM.linkInBio_update_delete,
-		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN]
+		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN, workspaceId]
 	);
 
 	const { data: getLinkInBioLinkData } = useZRQGetRequest<LinkInBioType[]>({
 		_url: API_URL_ENUM.linkInBio_create_list,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN],
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN, workspaceId],
 		_itemsIds: [workspaceId],
 		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 	});
@@ -119,7 +119,7 @@ const ZaionsLinkInBioLinksTable = () => {
 				folderId: folderId,
 			}));
 			if (getLinkInBioLinkData) {
-				_setLinkInBiosData(getLinkInBioLinkData);
+				setLinkInBiosStateAtom(getLinkInBioLinkData);
 			}
 		} catch (error) {
 			zConsoleError({
@@ -169,11 +169,12 @@ const ZaionsLinkInBioLinksTable = () => {
 		try {
 			if (
 				compState.selectedLinkInBioLinkId?.trim() &&
-				_filteredLinkInBioLinksData?.length
+				_FilteredLinkInBioLinksDataSelector?.length
 			) {
-				const selectedLinkInBioLinkId = _filteredLinkInBioLinksData?.find(
-					(el) => el.id === compState.selectedLinkInBioLinkId
-				);
+				const selectedLinkInBioLinkId =
+					_FilteredLinkInBioLinksDataSelector?.find(
+						(el) => el.id === compState.selectedLinkInBioLinkId
+					);
 				await presentZIonAlert({
 					header: `Delete Link-in-bio "${
 						selectedLinkInBioLinkId?.title || ''
@@ -207,7 +208,7 @@ const ZaionsLinkInBioLinksTable = () => {
 		try {
 			if (
 				compState.selectedLinkInBioLinkId?.trim() &&
-				_filteredLinkInBioLinksData?.length
+				_FilteredLinkInBioLinksDataSelector?.length
 			) {
 				if (compState.selectedLinkInBioLinkId) {
 					deleteLinkInBioLinkMutate({
@@ -244,8 +245,8 @@ const ZaionsLinkInBioLinksTable = () => {
 							</ZTableRow>
 						</ZTableTHead>
 						<ZTableTBody>
-							{_filteredLinkInBioLinksData &&
-								_filteredLinkInBioLinksData?.map((el) => {
+							{_FilteredLinkInBioLinksDataSelector &&
+								_FilteredLinkInBioLinksDataSelector?.map((el) => {
 									return (
 										<ZTableRow key={el.id}>
 											<ZTableRowCol className='ion-text-center'>
@@ -346,7 +347,7 @@ const ZaionsLinkInBioLinksTable = () => {
 								})}
 						</ZTableTBody>
 					</ZTable>
-					{!_filteredLinkInBioLinksData?.length && (
+					{!_FilteredLinkInBioLinksDataSelector?.length && (
 						<ZIonCol className='ion-text-center'>
 							<ZIonTitle className='mt-10'>
 								<ZIonIcon

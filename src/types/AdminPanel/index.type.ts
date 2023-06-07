@@ -10,8 +10,8 @@ export enum FormMode {
 }
 
 export enum folderState {
-	ShortLink = 'Short-links-folder-state',
-	LinkInBios = 'LinkInBio-folder-state',
+	shortlink = 'shortlink',
+	linkInBio = 'linkInBio',
 }
 
 export enum messengerPlatformsBlockEnum {

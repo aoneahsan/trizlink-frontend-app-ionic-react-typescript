@@ -12,15 +12,15 @@ import {
 import { getPrimaryDomain } from '@/utils/helpers';
 
 // Recoil state for storing all the short links fetch from backend.
-export const ShortLinksRState = atom<ShortLinkType[] | undefined>({
-	key: 'ShortLinksRState_key',
+export const ShortLinksRStateAtom = atom<ShortLinkType[] | undefined>({
+	key: 'ShortLinksRStateAtom_key',
 	default: [],
 });
 
 // Recoil state that will store all the filter options for short links for example folderId, etc.
-export const ShortLinksFilterOptionsRState =
+export const ShortLinksFilterOptionsRStateAtom =
 	atom<ShortLinkFilterOptionsInterface>({
-		key: 'ShortLinksFilterOptions_key',
+		key: 'ShortLinksFilterOptionsRStateAtom_key',
 		default: {
 			timeFilter: {
 				daysToSubtract: TimeFilterEnum.allTime,
@@ -40,18 +40,20 @@ const toLocaleStringOptions: Intl.DateTimeFormatOptions = {
 };
 
 // Recoil selector that will filtered short links (we are using this selector to list short links in frontend in short links table in short links list page).
-export const FilteredShortLinkData = selector<ShortLinkType[] | undefined>({
-	key: 'FilteredShortLinkData_key',
+export const FilteredShortLinkDataSelector = selector<
+	ShortLinkType[] | undefined
+>({
+	key: 'FilteredShortLinkDataSelector_key',
 	get: ({ get }) => {
 		// Variables
-		const _allLinksData = get(ShortLinksRState);
-		const _filterOptions = get(ShortLinksFilterOptionsRState);
-		let _filterLinksData: ShortLinkType[] | undefined = _allLinksData;
+		const shortLinksRStateAtom = get(ShortLinksRStateAtom);
+		const _filterOptions = get(ShortLinksFilterOptionsRStateAtom);
+		let _filterLinksData: ShortLinkType[] | undefined = shortLinksRStateAtom;
 
 		// check's
-		if (_allLinksData?.length) {
+		if (shortLinksRStateAtom?.length) {
 			if (_filterOptions.folderId && _filterOptions.folderId !== 'all') {
-				_filterLinksData = _allLinksData.filter(
+				_filterLinksData = shortLinksRStateAtom.filter(
 					(el) => el.folderId === _filterOptions.folderId
 				);
 			}
@@ -93,7 +95,7 @@ export const FilteredShortLinkData = selector<ShortLinkType[] | undefined>({
 					toLocaleStringOptions
 				);
 
-				_filterLinksData = _allLinksData?.filter((el) => {
+				_filterLinksData = shortLinksRStateAtom?.filter((el) => {
 					const _createdAt = new Date(
 						new Date(el.createdAt as string)
 					).toLocaleString('en-US', toLocaleStringOptions);
@@ -110,7 +112,7 @@ export const FilteredShortLinkData = selector<ShortLinkType[] | undefined>({
 			}
 
 			if (_filterOptions.tags?.length) {
-				_filterLinksData = _allLinksData.filter((el) => {
+				_filterLinksData = shortLinksRStateAtom.filter((el) => {
 					return (_filterOptions.tags as string[]).every((tag) =>
 						(el.tags as string[]).includes(tag)
 					);
@@ -119,15 +121,15 @@ export const FilteredShortLinkData = selector<ShortLinkType[] | undefined>({
 
 			if (_filterOptions.domains?.length) {
 				// eslint-disable-next-line
-				_filterLinksData = _allLinksData.filter((el) => {
-					const _url = (JSON.parse(el.target as string) as LinkTargetType).url;
+				_filterLinksData = shortLinksRStateAtom.filter((el) => {
+					const _url = (el.target as LinkTargetType).url;
 					if (_url) {
 						return _filterOptions.domains?.includes(getPrimaryDomain(_url));
 					}
 				});
 			}
 			if (_filterOptions.searchQuery) {
-				_filterLinksData = _allLinksData.filter((el) => {
+				_filterLinksData = shortLinksRStateAtom.filter((el) => {
 					return (
 						el.title
 							?.toLocaleLowerCase()
@@ -149,23 +151,23 @@ export const FilteredShortLinkData = selector<ShortLinkType[] | undefined>({
 });
 
 // selecting (storing) all tags and domain link from all short links data
-export const ShortLinksFieldsDataSelector = selector({
-	key: 'ShortLinksFieldsDataSelector_key',
+export const ShortLinksFieldsDataRStateSelector = selector({
+	key: 'ShortLinksFieldsDataRStateSelector_key',
 	get: ({ get }) => {
-		const _allLinksData = get(ShortLinksRState);
+		const shortLinksRStateAtom = get(ShortLinksRStateAtom);
 
 		const _tagsArray = new Set<string>();
 
 		const _domains = new Set<string>();
 
-		_allLinksData?.forEach((el) => {
+		shortLinksRStateAtom?.forEach((el) => {
 			if ((el.tags as string[])?.length) {
 				(JSON.parse(el.tags as string) as string[]).forEach((tag) =>
 					_tagsArray.add(tag)
 				);
 			}
 
-			const _url = (JSON.parse(el.target as string) as LinkTargetType).url;
+			const _url = (el.target as LinkTargetType).url;
 			if (_url) {
 				_domains.add(getPrimaryDomain(_url));
 			}

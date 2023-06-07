@@ -16,7 +16,7 @@ import { useRecoilState } from 'recoil';
  * ? Like import of custom components is a custom import
  * */
 import AdminPanelFoldersSidebarMenu from '@/navigation/AdminPanel/FolderSideMenu';
-import ShortLinksFolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/ShortLinkFoldersActionPopover';
+import FolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/FoldersActionPopover';
 
 /**
  * Custom Hooks Imports go down
@@ -72,7 +72,9 @@ import { ShortLinksFolderRStateAtom } from '@/ZaionsStore/UserDashboard/ShortLin
  * @type {*}
  * */
 
-const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
+const AdminPanelShortLinksFolderSideMenu: React.FC<{ workspaceId: string }> = ({
+	workspaceId,
+}) => {
 	const [compState, setCompState] = useState<{
 		shortLinksFoldersReorder: {
 			Ids?: string[];
@@ -85,7 +87,8 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 	});
 
 	const { presentZIonPopover: presentFolderActionIonPopover } = useZIonPopover(
-		ShortLinksFolderActionsPopoverContent
+		FolderActionsPopoverContent,
+		{ workspaceId, state: folderState.linkInBio }
 	);
 
 	const [shortLinksFolderState, setShortLinksFolderState] = useRecoilState(
@@ -100,7 +103,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 
 		setTimeout(() => {
 			const _shortLinksFoldersEls = document.querySelectorAll(
-				`.zaions-short-link-folder-${folderState.ShortLink}`
+				`.zaions-short-link-folder-${folderState.shortlink}`
 			);
 			const _shortLinksFoldersIds: string[] = [];
 			for (let i = 0; i < _shortLinksFoldersEls.length; i++) {
@@ -123,7 +126,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 
 	// Getting short-links folders data from backend
 	// const { data: _foldersData } = useZRQGetRequest<LinkFolderType[]>({
-	// 	_url: API_URL_ENUM.userAccountFolders_create_list,
+	// 	_url: API_URL_ENUM.ShortLink_folders_create_list,
 	// 	_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
 	// });
 
@@ -185,7 +188,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 			showSaveReorderButton={compState.shortLinksFoldersReorder.isEnable}
 			handleReorderFn={handleReorder}
 			saveReorderButtonFn={shortLinksFoldersReorderHandler}
-			state={folderState.ShortLink}
+			state={folderState.shortlink}
 			menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
 		/>
 	);

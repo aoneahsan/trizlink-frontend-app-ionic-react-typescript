@@ -1,13 +1,16 @@
 import { atom } from 'recoil';
 import { ShortLinkType } from 'types/AdminPanel/linksType';
-import { FormMode, messengerPlatformsBlockEnum } from 'types/AdminPanel/index.type';
+import {
+	FormMode,
+	messengerPlatformsBlockEnum,
+} from 'types/AdminPanel/index.type';
 
-export const ShortLinksRState = atom<{
+export const ShortLinksRStateAtom = atom<{
 	ShortLinks: ShortLinkType[];
 	mode: FormMode;
 	ShortLinkFormState: ShortLinkType;
 }>({
-	key: 'ShortLinksRState_key',
+	key: 'ShortLinksRStateAtom_key',
 	default: {
 		ShortLinks: [
 			{

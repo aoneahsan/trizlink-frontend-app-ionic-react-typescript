@@ -8,6 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import { closeOutline, heartOutline, toggleOutline } from 'ionicons/icons';
 import classNames from 'classnames';
 // import { useFormikContext } from 'formik';
 
@@ -23,11 +24,14 @@ import {
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
+import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
+import { PRODUCT_NAME } from '@/utils/constants';
 
 /**
  * Type Imports go down
@@ -50,10 +54,6 @@ import {
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import classes from '../styles.module.css';
-import { closeOutline, heartOutline, toggleOutline } from 'ionicons/icons';
-import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
-import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
-import { PRODUCT_NAME } from '@/utils/constants';
 // import { useRecoilValue } from 'recoil';
 // import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
 

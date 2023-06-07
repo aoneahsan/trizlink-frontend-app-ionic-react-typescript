@@ -101,8 +101,9 @@ const LinkInBioShareSettings: React.FC = () => {
 
 	const [showAdvanceOptions, setShowAdvanceOptions] = useState(false);
 
-	const { linkInBioId } = useParams<{
+	const { linkInBioId, workspaceId } = useParams<{
 		linkInBioId: string;
+		workspaceId: string;
 	}>();
 
 	// validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
@@ -116,6 +117,7 @@ const LinkInBioShareSettings: React.FC = () => {
 		_url: API_URL_ENUM.linkInBio_update_delete,
 		_queriesKeysToInvalidate: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
+			workspaceId,
 			linkInBioId,
 		],
 	});

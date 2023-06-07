@@ -58,6 +58,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
 			_url: API_URL_ENUM.linkInBio_create_list,
 			_queriesKeysToInvalidate: [
 				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+				workspaceId,
 			],
 			_itemsIds: [workspaceId],
 			_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],

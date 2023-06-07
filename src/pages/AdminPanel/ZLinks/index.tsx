@@ -76,7 +76,7 @@ import {
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { ShortLinksRState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
+import { ShortLinksRStateAtom } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
 import { SelectedShortLinkData } from '@/ZaionsStore/UserDashboard/ShortLinks/SelectedShortLinkData.recoil';
 
 /**
@@ -142,8 +142,7 @@ const ZLinks: React.FC = () => {
 	const [selectedShortLinkData, setSelectedShortLinkData] = useRecoilState(
 		SelectedShortLinkData
 	);
-	const shortLinksRState = useRecoilValue(ShortLinksRState);
-	const [shortLinks] = useRecoilState(ShortLinksRState);
+	const shortLinksRStateAtom = useRecoilValue(ShortLinksRStateAtom);
 
 	const { presentZIonPopover: presentCopyIonPopover } = useZIonPopover(
 		DashboardLinkCopyPopoverContent
@@ -153,7 +152,9 @@ const ZLinks: React.FC = () => {
 	);
 
 	const getShortLinkData = (id: string | undefined) => {
-		const updatedShortLinkData = shortLinksRState?.find((el) => el.id === id);
+		const updatedShortLinkData = shortLinksRStateAtom?.find(
+			(el) => el.id === id
+		);
 		setSelectedShortLinkData({ ...updatedShortLinkData });
 	};
 
@@ -264,7 +265,7 @@ const ZLinks: React.FC = () => {
 												Engagements all time
 											</ZIonText>
 											<ZIonList className='pt-0 zaions__light_set'>
-												{shortLinks?.map((el) => {
+												{shortLinksRStateAtom?.map((el) => {
 													return (
 														<ZIonItem
 															className={classNames({

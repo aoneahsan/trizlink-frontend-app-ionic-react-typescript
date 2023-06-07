@@ -37,6 +37,7 @@ import { folderState } from '@/types/AdminPanel/index.type';
  * ? Import of recoil states is a Recoil State import
  * */
 import { LinkInBioFolderFormattedRState } from '@/ZaionsStore/UserDashboard/LinkInBio/linkInBioFoldersState.recoil';
+import { useParams } from 'react-router';
 
 /**
  * Style files Imports go down
@@ -61,13 +62,20 @@ import { LinkInBioFolderFormattedRState } from '@/ZaionsStore/UserDashboard/Link
 
 const LinkInBioFoldersHOC: React.FC = () => {
 	// const { data: getLinkInBioFoldersData } = useZRQGetRequest<LinkFolderType[]>({
-	// 	_url: API_URL_ENUM.userAccount_LinkInBio_folders_create_list,
-	// 	_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN],
+	// 	_url: API_URL_ENUM.LinkInBio_folders_create_list,
+	// 	_key: [			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+	// workspaceId,
+	// folderState.linkInBio,],
 	// });
 
 	const [linkInBioFoldersData, setLinkInBioFoldersData] = useRecoilState(
 		LinkInBioFolderFormattedRState
 	);
+
+	// getting current workspace id form params.
+	const { workspaceId } = useParams<{
+		workspaceId: string;
+	}>();
 
 	// useEffect(() => {
 	// 	try {
@@ -90,7 +98,8 @@ const LinkInBioFoldersHOC: React.FC = () => {
 	return (
 		<NewLinkFolder
 			_foldersData={linkInBioFoldersData}
-			_state={folderState.LinkInBios}
+			_state={folderState.linkInBio}
+			workspaceId={workspaceId}
 		/>
 	);
 };

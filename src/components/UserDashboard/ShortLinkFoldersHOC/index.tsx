@@ -61,7 +61,7 @@ import { ShortLinksFolderFormattedRStateAtom } from '@/ZaionsStore/UserDashboard
 
 const ShortLinkFoldersHOC: React.FC = () => {
 	// const { data: getShortLinkFoldersData } = useZRQGetRequest<LinkFolderType[]>({
-	// 	_url: API_URL_ENUM.userAccountFolders_create_list,
+	// 	_url: API_URL_ENUM.ShortLink_folders_create_list,
 	// 	_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
 	// });
 
@@ -87,7 +87,7 @@ const ShortLinkFoldersHOC: React.FC = () => {
 	return (
 		<NewLinkFolder
 			_foldersData={shortLinksFolderFormattedState}
-			_state={folderState.ShortLink}
+			_state={folderState.shortlink}
 		/>
 	);
 };

@@ -159,6 +159,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 		_url: API_URL_ENUM.shortLinks_create_list,
 		_queriesKeysToInvalidate: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+			workspaceId,
 		],
 		_itemsIds: [workspaceId],
 		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
@@ -169,6 +170,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 		_url: API_URL_ENUM.shortLinks_update_delete,
 		_queriesKeysToInvalidate: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+			workspaceId,
 		],
 	});
 
@@ -176,7 +178,11 @@ const AdminCreateNewLinkPages: React.FC = () => {
 	const { data: selectedShortLink, refetch: refetchSelectedShortLink } =
 		useZRQGetRequest<ShortLinkType>({
 			_url: API_URL_ENUM.shortLinks_update_delete,
-			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET, editLinkId],
+			_key: [
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
+				workspaceId,
+				editLinkId,
+			],
 			_authenticated: true,
 			_itemsIds: [workspaceId, editLinkId],
 			_urlDynamicParts: [
@@ -225,6 +231,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 			if (selectedShortLink && selectedShortLink?.id && editLinkId) {
 				setNewShortLinkFormState((oldVal) => ({
 					...oldVal,
+					type: selectedShortLink.type,
 					formMode: FormMode.EDIT,
 				}));
 			}

@@ -96,8 +96,9 @@ const ZLinkInBioThemeSection: React.FC = () => {
 	// 	useRecoilState(LinkInBioPredefinedThemeRState);
 
 	// current Link-in-bio id.
-	const { linkInBioId } = useParams<{
+	const { linkInBioId, workspaceId } = useParams<{
 		linkInBioId: string;
+		workspaceId: string;
 	}>();
 
 	const { values, setFieldValue } = useFormikContext<LinkInBioType>();
@@ -108,6 +109,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 		_url: API_URL_ENUM.linkInBioPreDefinedThemes_create_list,
 		_key: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_DEFINED_THEMES.MAIN,
+			workspaceId,
 			linkInBioId,
 		],
 	});

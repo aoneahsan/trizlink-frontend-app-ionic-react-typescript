@@ -17,6 +17,7 @@ import AdminPanelFoldersSidebarMenu from '@/navigation/AdminPanel/FolderSideMenu
 import AdminPanelShortLinksFolderSideMenu from '@/navigation/AdminPanel/ShortLinksFolderSideMenu';
 import AdminPanelLinkInBioFolderSideMenu from '@/navigation/AdminPanel/LinkInBioFolderSideMenu';
 import ZWorkspaceViewPageFilterMenu from '@/navigation/AdminPanel/WorkspaceViewPageFilterMenu';
+import { useParams } from 'react-router';
 
 // Types
 type ZaionsIonPageType = {
@@ -37,6 +38,9 @@ const ZaionsIonPage: React.FC<ZaionsIonPageType> = ({
 	menuSide,
 	pageTitle,
 }) => {
+	const { workspaceId } = useParams<{
+		workspaceId: string;
+	}>();
 	return (
 		<>
 			{menu === PAGE_MENU.UNAUTHENTICATED_PAGE_MENU ? (
@@ -44,9 +48,9 @@ const ZaionsIonPage: React.FC<ZaionsIonPageType> = ({
 			) : menu === PAGE_MENU.DASHBOARD_PAGE_MENU ? (
 				<ZaionsDashboardResponsiveMenu menuSide={menuSide} />
 			) : menu === PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU ? (
-				<AdminPanelShortLinksFolderSideMenu />
+				<AdminPanelShortLinksFolderSideMenu workspaceId={workspaceId} />
 			) : menu === PAGE_MENU.ADMIN_PANEL_LINK_IN_BIO_FOLDERS_MENU ? (
-				<AdminPanelLinkInBioFolderSideMenu />
+				<AdminPanelLinkInBioFolderSideMenu workspaceId={workspaceId} />
 			) : menu === PAGE_MENU.ADMIN_PANEL_WORKSPACE_VIEW_FILTER_MENU ? (
 				<ZWorkspaceViewPageFilterMenu />
 			) : (

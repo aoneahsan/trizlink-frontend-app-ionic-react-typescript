@@ -102,7 +102,11 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 	// get short link data api.
 	const { data: selectedShortLink } = useZRQGetRequest<ShortLinkType>({
 		_url: API_URL_ENUM.shortLinks_update_delete,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET, editLinkId],
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
+			workspaceId,
+			editLinkId,
+		],
 		_authenticated: true,
 		_itemsIds: [workspaceId, editLinkId],
 		_urlDynamicParts: [
@@ -422,7 +426,14 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 							messengerPlatformsBlockEnum.viber ||
 						newShortLinkTypeOptionDataAtom?.type ===
 							messengerPlatformsBlockEnum.whatsapp) && (
-						<ZIonItem
+						<ZIonTextarea
+							rows={3}
+							name='target.message'
+							placeholder='Message*'
+							onIonChange={handleChange}
+							value={values?.target?.message}
+							fill='outline'
+							errorText={errors?.target?.message}
 							className={classNames({
 								'zaions__w95 ion-margin-end mt-4 border': true,
 								'ion-touched': touched?.target?.message,
@@ -431,17 +442,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 								'ion-valid':
 									touched?.target?.message && !errors?.target?.message,
 							})}
-						>
-							<ZIonTextarea
-								rows={3}
-								name='target.message'
-								placeholder='Message*'
-								onIonChange={handleChange}
-								value={values?.target?.message}
-								fill='outline'
-							/>
-							<ZIonNote slot='error'>{errors?.target?.message}</ZIonNote>
-						</ZIonItem>
+						/>
 					)}
 				</ZIonCol>
 			</ZIonRow>

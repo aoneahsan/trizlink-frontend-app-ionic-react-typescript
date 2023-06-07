@@ -474,14 +474,6 @@ export const useUpdateRQCacheData = () => {
 					return oldData;
 				});
 
-				console.log({
-					log: 'check 2',
-					id: id,
-					data,
-					_res,
-					key,
-				});
-
 				return _res;
 			}
 		};

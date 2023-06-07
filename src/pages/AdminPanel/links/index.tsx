@@ -9,13 +9,9 @@ import {
 } from '@ionic/react';
 import {
 	menuOutline,
-	appsOutline,
 	businessOutline,
 	calendar,
 	pricetagOutline,
-	ellipsisVertical,
-	trashOutline,
-	pencilOutline,
 	filterOutline,
 	refresh,
 } from 'ionicons/icons';
@@ -62,7 +58,7 @@ import {
 	useZRQGetRequest,
 	useZRQUpdateRequest,
 } from '@/ZaionsHooks/zreactquery-hooks';
-import ShortLinksFolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/ShortLinkFoldersActionPopover';
+import FolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/FoldersActionPopover';
 import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
@@ -79,9 +75,9 @@ import {
 // Recoil States
 import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import {
-	ShortLinksFieldsDataSelector,
-	ShortLinksFilterOptionsRState,
-	ShortLinksRState,
+	ShortLinksFieldsDataRStateSelector,
+	ShortLinksFilterOptionsRStateAtom,
+	ShortLinksRStateAtom,
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
 
@@ -150,7 +146,9 @@ const ZShortLinksListPage: React.FC = () => {
 	};
 
 	// Recoil state for storing filter options for short-links.
-	const shortLinksFilterOptions = useRecoilValue(ShortLinksFilterOptionsRState);
+	const shortLinksFilterOptions = useRecoilValue(
+		ShortLinksFilterOptionsRStateAtom
+	);
 
 	//
 	const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
@@ -159,14 +157,24 @@ const ZShortLinksListPage: React.FC = () => {
 	const setFolderFormState = useSetRecoilState(FolderFormState);
 
 	// Request for getting short links folders.
-	// const { data: shortLinksFoldersData } = useZRQGetRequest<LinkFolderType[]>({
-	// 	_url: API_URL_ENUM.userAccountFolders_create_list,
-	// 	_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
-	// });
+	const { data: shortLinksFoldersData } = useZRQGetRequest<LinkFolderType[]>({
+		_url: API_URL_ENUM.ShortLink_folders_create_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+			workspaceId,
+			folderState.shortlink,
+		],
+		_itemsIds: [workspaceId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+	});
 
 	//
 	const { presentZIonPopover: presentFolderActionIonPopover } = useZIonPopover(
-		ShortLinksFolderActionsPopoverContent
+		FolderActionsPopoverContent,
+		{
+			workspaceId,
+			state: folderState.shortlink,
+		}
 	);
 
 	//
@@ -182,20 +190,25 @@ const ZShortLinksListPage: React.FC = () => {
 		useZIonPopover(ShortLinksDomainsFiltersPopover);
 
 	//
-	const _shortLinksData = useRecoilValue(ShortLinksRState);
+	const shortLinksStateAtom = useRecoilValue(ShortLinksRStateAtom);
 
 	//
 	const { presentZIonModal: presentFolderModal } = useZIonModal(
 		ZaionsAddNewFolder,
 		{
-			state: folderState.ShortLink,
+			state: folderState.shortlink,
+			workspaceId,
 		}
 	);
 
 	// Update shortLinks folders reorder API
 	const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.ShortLinks_folders_reorder,
-		_queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
+		_queriesKeysToInvalidate: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+			workspaceId,
+			folderState.shortlink,
+		],
 	});
 
 	const ZDashboardState = useRecoilValue(ZDashboardRState);
@@ -204,6 +217,7 @@ const ZShortLinksListPage: React.FC = () => {
 		try {
 			await zInvalidateReactQueries([
 				CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+				workspaceId,
 			]);
 		} catch (error) {
 			reportCustomError(error);
@@ -268,8 +282,8 @@ const ZShortLinksListPage: React.FC = () => {
 							<ZDashboardSidebar
 								type={AdminPanelMainSidebarMenuPageEnum.shortLink}
 								//
-								foldersData={[]}
-								// foldersData={shortLinksFoldersData ? shortLinksFoldersData : []}
+								// foldersData={[]}
+								foldersData={shortLinksFoldersData ? shortLinksFoldersData : []}
 								//
 								addNewFolderButtonOnClickHandler={() => {
 									setFolderFormState((oldVal) => ({
@@ -584,7 +598,7 @@ const ZShortLinksListPage: React.FC = () => {
 										<ZIonCol className='flex ion-align-items-center'>
 											<ZIonText className='text-2xl'>
 												<ZIonText className='font-bold total_links pe-1'>
-													{_shortLinksData?.length}
+													{shortLinksStateAtom?.length}
 												</ZIonText>
 												links
 											</ZIonText>
@@ -766,7 +780,7 @@ const ZShortLinksListPage: React.FC = () => {
 
 const ShortLinksTimeRangeFilterPopover = () => {
 	const [shortLinksFilterOptions, setShortLinksFilterOptions] = useRecoilState(
-		ShortLinksFilterOptionsRState
+		ShortLinksFilterOptionsRStateAtom
 	);
 
 	const timeRangeFilterSubmission = (
@@ -965,12 +979,12 @@ const ShortLinksTimeRangeFilterPopover = () => {
 const ShortLinksTagsFiltersPopover = () => {
 	// For getting all tags data
 	const { tags: _shortLinksFieldsDataTagsSelector } = useRecoilValue(
-		ShortLinksFieldsDataSelector
+		ShortLinksFieldsDataRStateSelector
 	);
 
 	// For getting filter.
 	const [shortLinksFilterOptions, setShortLinksFilterOptions] = useRecoilState(
-		ShortLinksFilterOptionsRState
+		ShortLinksFilterOptionsRStateAtom
 	);
 
 	// function for generating initialValue for formik below.
@@ -1112,12 +1126,12 @@ const ShortLinksTagsFiltersPopover = () => {
 const ShortLinksDomainsFiltersPopover = () => {
 	// For getting all domains data
 	const { domains: _shortLinksFieldsDataDomainsSelector } = useRecoilValue(
-		ShortLinksFieldsDataSelector
+		ShortLinksFieldsDataRStateSelector
 	);
 
 	// For getting filter.
 	const [shortLinksFilterOptions, setShortLinksFilterOptions] = useRecoilState(
-		ShortLinksFilterOptionsRState
+		ShortLinksFilterOptionsRStateAtom
 	);
 
 	// function for generating initialValue for formik below.
@@ -1256,7 +1270,7 @@ const ShortLinksDomainsFiltersPopover = () => {
 
 const SearchQueryInputComponent = () => {
 	const setShortLinksFilterOptions = useSetRecoilState(
-		ShortLinksFilterOptionsRState
+		ShortLinksFilterOptionsRStateAtom
 	);
 	return (
 		<Formik

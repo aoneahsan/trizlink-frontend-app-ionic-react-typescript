@@ -54,28 +54,40 @@ import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputFi
 const ZaionsAddNewFolder: React.FC<{
 	dismissZIonModal: (data?: string, role?: string | undefined) => void;
 	state: folderState;
-}> = ({ dismissZIonModal, state }) => {
+	workspaceId: string;
+}> = ({ dismissZIonModal, state = folderState.shortlink, workspaceId }) => {
 	const appSettings = useRecoilValue(ZaionsAppSettingsRState);
+
 	const [folderFormState, setFolderFormState] = useRecoilState(FolderFormState);
+
 	const { mutateAsync: createNewFolder } = useZRQCreateRequest({
-		_url: API_URL_ENUM.userAccountFolders_create_list,
-		_queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
-	});
-	const { mutateAsync: createNewLinkInBiosFolder } = useZRQCreateRequest({
-		_url: API_URL_ENUM.userAccount_LinkInBio_folders_create_list,
+		_url: API_URL_ENUM.folders_create_list,
 		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN,
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+			workspaceId,
+			state,
 		],
-	});
-	const { mutateAsync: updateShortLinksFolder } = useZRQUpdateRequest({
-		_url: API_URL_ENUM.userAccountFolders_update_delete,
-		_queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
+		_itemsIds: [workspaceId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 	});
 
-	const { mutateAsync: updateLinkInBiosFolder } = useZRQUpdateRequest({
-		_url: API_URL_ENUM.userAccount_LinkInBio_folders_update_delete,
+	// const { mutateAsync: createNewLinkInBiosFolder } = useZRQCreateRequest({
+	// 	_url: API_URL_ENUM.folders_create_list,
+	// 	_queriesKeysToInvalidate: [
+	// 					CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+	// workspaceId,
+	// folderState.linkInBio,
+	// 	],
+	// 	_itemsIds: [workspaceId],
+	// 	_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+	// });
+
+	const { mutateAsync: updateFolder } = useZRQUpdateRequest({
+		_url: API_URL_ENUM.folders_update_delete,
 		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN,
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+			workspaceId,
+			state,
 		],
 	});
 
@@ -91,29 +103,22 @@ const ZaionsAddNewFolder: React.FC<{
 		try {
 			// ADD API Request to add this new Folder to user account in DB.
 			if (folderFormState.formMode === FormMode.ADD) {
-				if (state === folderState.ShortLink) {
-					await createNewFolder(value);
-				} else if (state === folderState.LinkInBios) {
-					await createNewLinkInBiosFolder(value);
-				}
+				await createNewFolder(value);
+
 				showSuccessNotification(
 					MESSAGES.GENERAL.FOLDER.NEW_FOLDER_CREATED_SUCCEED_MESSAGE
 				);
 			} else if (folderFormState.formMode === FormMode.EDIT) {
 				if (folderFormState.id) {
-					if (state === folderState.ShortLink) {
-						await updateShortLinksFolder({
-							itemIds: [folderFormState.id],
-							urlDynamicParts: [':folderId'],
-							requestData: value,
-						});
-					} else if (state === folderState.LinkInBios) {
-						await updateLinkInBiosFolder({
-							itemIds: [folderFormState.id],
-							urlDynamicParts: [':folderId'],
-							requestData: value,
-						});
-					}
+					await updateFolder({
+						itemIds: [workspaceId, folderFormState.id],
+						urlDynamicParts: [
+							CONSTANTS.RouteParams.workspace.workspaceId,
+							':folderId',
+						],
+						requestData: value,
+					});
+
 					showSuccessNotification(
 						MESSAGES.GENERAL.FOLDER.FOLDER_UPDATED_SUCCEED_MESSAGE
 					);
@@ -181,6 +186,7 @@ const ZaionsAddNewFolder: React.FC<{
 			onSubmit={(values, { resetForm, setErrors }) => {
 				const stringifyValue = zStringify({
 					title: values.folderName,
+					folderForModel: state,
 				});
 				void handleFormSubmit(stringifyValue, resetForm, setErrors);
 			}}

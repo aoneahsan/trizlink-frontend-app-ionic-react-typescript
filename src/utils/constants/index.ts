@@ -62,7 +62,7 @@ export const API_URLS = {
 	delete: '/user/delete',
 	userPixelAccounts_create_list: '/user/pixel',
 	userAccountUtmTags_create_list: '/user/utm-tag',
-	userAccountFolders_create_list: '/user/folders',
+	ShortLink_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/shortLink/folders`,
 	userEmbedWidget_create_list: '/user/embedded-scripts',
 	userPixelAccounts_update_delete: '/user/pixel/:pixelId',
 	userAccountUtmTags_update_delete: '/user/utm-tag/:utmTagId',
@@ -72,7 +72,7 @@ export const API_URLS = {
 	shortLinks_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links/${RouteParams.shortLink.shortLinkId}`,
 	FolderShortLinks: '/user/folders/:folderId/short-links',
 	ShortLinks_folders_reorder: '/user/shortLinks/folders/reorder',
-	userAccount_LinkInBio_folders_create_list: '/user/link-in-bio-folders',
+	LinkInBio_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/linkInBio/folders`,
 
 	folders_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder/${RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
 	folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder`,

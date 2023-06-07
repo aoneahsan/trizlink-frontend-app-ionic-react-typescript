@@ -59,9 +59,9 @@ import { LinkTargetType, ShortLinkType } from '@/types/AdminPanel/linksType';
 import { ShortLinkFormState } from '@/ZaionsStore/FormStates/shortLinkFormState';
 import { useParams } from 'react-router';
 import {
-	FilteredShortLinkData,
-	ShortLinksFilterOptionsRState,
-	ShortLinksRState,
+	FilteredShortLinkDataSelector,
+	ShortLinksFilterOptionsRStateAtom,
+	ShortLinksRStateAtom,
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
 import { reportCustomError } from '@/utils/customErrorType';
 import ZaionsPixelAccountDetail from '../ZaionsModals/PixelAccount/pixelAccountDetailModal';
@@ -84,14 +84,16 @@ const ZaionsShortLinkTable = () => {
 	}>({ showActionPopover: false });
 
 	// Recoil state for storing all short links of a user.
-	const _setShortLinksData = useSetRecoilState(ShortLinksRState);
+	const setShortLinksStateAtom = useSetRecoilState(ShortLinksRStateAtom);
 
-	// Recoil selector that will filter from all short links state(ShortLinksRState) and give the filter short links.
-	const _filteredShortLinkData = useRecoilValue(FilteredShortLinkData);
+	// Recoil selector that will filter from all short links state(ShortLinksRStateAtom) and give the filter short links.
+	const _FilteredShortLinkDataSelector = useRecoilValue(
+		FilteredShortLinkDataSelector
+	);
 
 	// Recoil state for storing filter options. for example folderId, time, etc.
 	const _setShortLinksFilterOptions = useSetRecoilState(
-		ShortLinksFilterOptionsRState
+		ShortLinksFilterOptionsRStateAtom
 	);
 
 	// Folder id getting from url. (use when use when to filter short links by folder listed on the left-side, when user click on the folder from listed folder the id of that folder the Id of folder will set in the url and we will fetch it here by useParams).
@@ -122,18 +124,18 @@ const ZaionsShortLinkTable = () => {
 	// Request for deleting short link.
 	const { mutateAsync: deleteShortLinkMutate } = useZRQDeleteRequest(
 		API_URL_ENUM.shortLinks_update_delete,
-		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN]
+		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId]
 	);
 
 	// Request for getting short links data.
 	const { data: getShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
 		_url: API_URL_ENUM.shortLinks_create_list,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN],
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
 		_itemsIds: [workspaceId],
 		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 	});
 
-	// When the short links data fetch from backend, storing it in ShortLinksRState recoil state.
+	// When the short links data fetch from backend, storing it in ShortLinksRStateAtom recoil state.
 	useEffect(() => {
 		try {
 			_setShortLinksFilterOptions((oldState) => ({
@@ -141,7 +143,7 @@ const ZaionsShortLinkTable = () => {
 				folderId: folderId,
 			}));
 			if (getShortLinksData) {
-				_setShortLinksData(getShortLinksData);
+				setShortLinksStateAtom(getShortLinksData);
 			}
 		} catch (error) {
 			reportCustomError(error);
@@ -189,9 +191,9 @@ const ZaionsShortLinkTable = () => {
 		try {
 			if (
 				compState.selectedShortLinkId?.trim() &&
-				_filteredShortLinkData?.length
+				_FilteredShortLinkDataSelector?.length
 			) {
-				const selectedShortLinkId = _filteredShortLinkData?.find(
+				const selectedShortLinkId = _FilteredShortLinkDataSelector?.find(
 					(el) => el.id === compState.selectedShortLinkId
 				);
 				await presentZIonAlert({
@@ -225,7 +227,7 @@ const ZaionsShortLinkTable = () => {
 		try {
 			if (
 				compState.selectedShortLinkId?.trim() &&
-				_filteredShortLinkData?.length
+				_FilteredShortLinkDataSelector?.length
 			) {
 				if (compState.selectedShortLinkId) {
 					const _response: unknown | ZLinkMutateApiType<ShortLinkType> =
@@ -272,8 +274,8 @@ const ZaionsShortLinkTable = () => {
 							</ZTableRow>
 						</ZTableTHead>
 						<ZTableTBody>
-							{_filteredShortLinkData &&
-								_filteredShortLinkData?.map((el) => (
+							{_FilteredShortLinkDataSelector &&
+								_FilteredShortLinkDataSelector?.map((el) => (
 									<ZTableRow key={el.id}>
 										<ZTableRowCol>
 											<ZIonCheckbox />
@@ -370,7 +372,7 @@ const ZaionsShortLinkTable = () => {
 								))}
 						</ZTableTBody>
 					</ZTable>
-					{!_filteredShortLinkData?.length && (
+					{!_FilteredShortLinkDataSelector?.length && (
 						<ZIonCol className='ion-text-center'>
 							<ZIonTitle className='mt-10'>
 								<ZIonIcon

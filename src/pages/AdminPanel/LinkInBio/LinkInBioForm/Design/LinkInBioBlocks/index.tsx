@@ -62,7 +62,6 @@ import { LinkInBioBlocksDefaultData } from '@/data/UserDashboard/LinkInBio/Block
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import classes from '../styles.module.css';
-import { string } from 'yup';
 
 /**
  * Component props type go down
@@ -109,6 +108,8 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 		_url: API_URL_ENUM.linkInBioPreDefinedBlocks_create_list,
 		_key: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_DEFINED_BLOCKS.MAIN,
+			workspaceId,
+			linkInBioId,
 		],
 	});
 

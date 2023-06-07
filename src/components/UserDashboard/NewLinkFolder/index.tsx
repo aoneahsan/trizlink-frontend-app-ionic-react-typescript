@@ -41,7 +41,8 @@ import { folderState } from '@/types/AdminPanel/index.type';
 const NewLinkFolder: React.FC<{
 	_foldersData: FolderInterface[];
 	_state: folderState;
-}> = ({ _foldersData, _state }) => {
+	workspaceId: string;
+}> = ({ _foldersData, _state, workspaceId }) => {
 	const { values, setFieldValue } =
 		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
@@ -49,6 +50,7 @@ const NewLinkFolder: React.FC<{
 		ZaionsAddNewFolder,
 		{
 			state: _state,
+			workspaceId,
 		}
 	);
 
@@ -81,7 +83,7 @@ const NewLinkFolder: React.FC<{
 							});
 						}}
 					>
-						<ZIonIcon icon={addCircleOutline} size={'large'} />
+						<ZIonIcon icon={addCircleOutline} size='large' />
 					</ZIonButton>
 				</div>
 				<div className='mt-4 block px-4'>

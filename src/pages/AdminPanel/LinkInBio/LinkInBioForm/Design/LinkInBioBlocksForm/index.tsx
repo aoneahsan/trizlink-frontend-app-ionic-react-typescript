@@ -219,6 +219,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 		_url: API_URL_ENUM.linkInBioBlock_delete_update_get,
 		_queriesKeysToInvalidate: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.GET,
+			workspaceId,
+			linkInBioId,
 			_blockId,
 		],
 		// [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN]
@@ -230,6 +232,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 			_url: API_URL_ENUM.linkInBioBlock_delete_update_get,
 			_key: [
 				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.GET,
+				workspaceId,
+				linkInBioId,
 				_blockId,
 			],
 			_itemsIds: [workspaceId, linkInBioId, _blockId],
@@ -246,7 +250,11 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 	// delete link-in-bio block api where use went to delete the block on preview panel and click on the delete button in ActionSheet (useZIonActionSheet) the deleteBlockHandler will execute with will hit this api and delete the block.
 	const { mutateAsync: deleteLinkInBioBlockMutate } = useZRQDeleteRequest(
 		API_URL_ENUM.linkInBioBlock_delete_update_get,
-		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN, linkInBioId]
+		[
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
+			workspaceId,
+			linkInBioId,
+		]
 	);
 
 	// custom hook for presenting modal (the add block modal)
@@ -307,6 +315,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 					updateRQCDataHandler({
 						key: [
 							CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
+							workspaceId,
 							linkInBioId,
 						],
 						data: _extractItemFromResult,

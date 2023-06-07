@@ -13,13 +13,12 @@ import {
 	menuOutline,
 	calendar,
 	pricetagOutline,
-	trashOutline,
-	pencilOutline,
 	filterOutline,
 	refresh,
 } from 'ionicons/icons';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import classNames from 'classnames';
+import { useParams } from 'react-router';
 import { Formik } from 'formik';
 
 // Custom Imports
@@ -31,7 +30,6 @@ import {
 	ZIonItem,
 	ZIonInput,
 	ZIonRow,
-	ZIonList,
 	ZIonGrid,
 	ZIonContent,
 	ZIonMenuToggle,
@@ -48,40 +46,32 @@ import ZaionsAddLinkInBioModal from '@/components/InPageComponents/ZaionsModals/
 import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
 import ZDashboardSidebar from '@/components/AdminPanelComponents/Sidebar';
 import ZCan from '@/components/Can';
+import FolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/FoldersActionPopover';
 
 // Types
 import {
 	AdminPanelMainSidebarMenuPageEnum,
 	folderState,
-	FormMode,
 } from '@/types/AdminPanel/index.type';
-import { TimeFilterEnum } from '@/types/AdminPanel/linksType';
+import { LinkFolderType, TimeFilterEnum } from '@/types/AdminPanel/linksType';
 
 // Recoil States
-import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
 import {
-	LinkInBiosFieldsDataSelector,
-	LinkInBiosFilterOptionsRState,
-	LinkInBiosRState,
+	LinkInBiosFieldsDataRStateSelector,
+	LinkInBiosFilterOptionsRStateAtom,
+	LinkInBiosRStateAtom,
 } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioState.recoil';
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 
 // Global Contents
 import {
 	useZInvalidateReactQueries,
-	useZRQDeleteRequest,
+	useZRQGetRequest,
 	useZRQUpdateRequest,
 } from '@/ZaionsHooks/zreactquery-hooks';
-import {
-	useZIonAlert,
-	useZIonErrorAlert,
-	useZIonLoading,
-	useZIonModal,
-	useZIonPopover,
-} from '@/ZaionsHooks/zionic-hooks';
+import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import CONSTANTS from '@/utils/constants';
 import { API_URL_ENUM, PAGE_MENU, PAGE_MENU_SIDE } from '@/utils/enums';
-import { showSuccessNotification } from '@/utils/notification';
 import { zStringify } from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
@@ -90,7 +80,6 @@ import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 
 // Styles
 import classes from './styles.module.css';
-import { useParams } from 'react-router';
 
 const ZLinkInBiosListPage: React.FC = () => {
 	// Component state
@@ -139,23 +128,32 @@ const ZLinkInBiosListPage: React.FC = () => {
 
 	//
 	const linkInBiosFilterOptionsState = useRecoilValue(
-		LinkInBiosFilterOptionsRState
+		LinkInBiosFilterOptionsRStateAtom
 	);
 
 	const { isXlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale();
 
 	const ZDashboardState = useRecoilValue(ZDashboardRState);
 
-	const linkInBioData = useRecoilValue(LinkInBiosRState);
+	const linkInBiosStateAtom = useRecoilValue(LinkInBiosRStateAtom);
 
 	//
-	// const { data: linkInBiosFoldersData } = useZRQGetRequest<LinkFolderType[]>({
-	// 	_url: API_URL_ENUM.userAccount_LinkInBio_folders_create_list,
-	// 	_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN],
-	// });
+	const { data: linkInBiosFoldersData } = useZRQGetRequest<LinkFolderType[]>({
+		_url: API_URL_ENUM.LinkInBio_folders_create_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+			workspaceId,
+			folderState.linkInBio,
+		],
+		_itemsIds: [workspaceId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+	});
 
 	const { presentZIonPopover: presentLinkInBioFolderActionIonPopover } =
-		useZIonPopover(FolderActionsPopoverContent);
+		useZIonPopover(FolderActionsPopoverContent, {
+			workspaceId,
+			state: folderState.linkInBio,
+		});
 
 	const { presentZIonModal: presentAddLinkInBioModal } = useZIonModal(
 		ZaionsAddLinkInBioModal,
@@ -179,7 +177,8 @@ const ZLinkInBiosListPage: React.FC = () => {
 	const { presentZIonModal: presentFolderModal } = useZIonModal(
 		ZaionsAddNewFolder,
 		{
-			state: folderState.LinkInBios,
+			state: folderState.linkInBio,
+			workspaceId,
 		}
 	);
 
@@ -188,6 +187,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 		try {
 			await zInvalidateReactQueries([
 				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+				workspaceId,
 			]);
 		} catch (error) {
 			reportCustomError(error);
@@ -198,7 +198,9 @@ const ZLinkInBiosListPage: React.FC = () => {
 	const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.ShortLinks_folders_reorder,
 		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN,
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+			workspaceId,
+			folderState.linkInBio,
 		],
 	});
 
@@ -261,8 +263,8 @@ const ZLinkInBiosListPage: React.FC = () => {
 							<ZDashboardSidebar
 								type={AdminPanelMainSidebarMenuPageEnum.linkInBio}
 								//
-								// foldersData={linkInBiosFoldersData ? linkInBiosFoldersData : []}
-								foldersData={[]}
+								foldersData={linkInBiosFoldersData ? linkInBiosFoldersData : []}
+								// foldersData={[]}
 								//
 								addNewFolderButtonOnClickHandler={() => {
 									presentFolderModal({
@@ -514,7 +516,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 										<ZIonCol className='flex ion-align-items-center'>
 											<ZIonText className='text-2xl'>
 												<ZIonText className='font-bold total_links me-1'>
-													{linkInBioData?.length}
+													{linkInBiosStateAtom?.length}
 												</ZIonText>
 												links
 											</ZIonText>
@@ -764,7 +766,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 
 const LinkInBiosTimeRangeFilterPopover = () => {
 	const [linkInBiosFilterOptionsState, setLinkInBiosFilterOptionsState] =
-		useRecoilState(LinkInBiosFilterOptionsRState);
+		useRecoilState(LinkInBiosFilterOptionsRStateAtom);
 
 	const timeRangeFilterSubmission = (_value: TimeFilterEnum) => {
 		try {
@@ -888,12 +890,12 @@ const LinkInBiosTimeRangeFilterPopover = () => {
 const LinkInBiosTagsFiltersPopover = () => {
 	// For getting all tags data
 	const { tags: _LinkInBiosFieldsDataTagsSelector } = useRecoilValue(
-		LinkInBiosFieldsDataSelector
+		LinkInBiosFieldsDataRStateSelector
 	);
 
 	// For getting filter.
 	const [linkInBiosFilterOptionsState, setLinkInBiosFilterOptionsState] =
-		useRecoilState(LinkInBiosFilterOptionsRState);
+		useRecoilState(LinkInBiosFilterOptionsRStateAtom);
 
 	// function for generating initialValue for formik below.
 	const generateInitialValueOfTagsFormik = (
@@ -1034,12 +1036,12 @@ const LinkInBiosTagsFiltersPopover = () => {
 // const LinkInBiosDomainsFiltersPopover = () => {
 //   // For getting all domains data
 //   const { domains: _LinkInBiosFieldsDataDomainsSelector } = useRecoilValue(
-//     LinkInBiosFieldsDataSelector
+//     LinkInBiosFieldsDataRStateSelector
 //   );
 
 //   // For getting filter.
 //   const [linkInBiosFilterOptions, setLinkInBiosFilterOptions] = useRecoilState(
-//     LinkInBiosFilterOptionsRState
+//     LinkInBiosFilterOptionsRStateAtom
 //   );
 
 //   // function for generating initialValue for formik below.
@@ -1178,7 +1180,7 @@ const LinkInBiosTagsFiltersPopover = () => {
 
 const SearchQueryInputComponent = () => {
 	const setLinkInBiosFilterOptionsState = useSetRecoilState(
-		LinkInBiosFilterOptionsRState
+		LinkInBiosFilterOptionsRStateAtom
 	);
 	return (
 		<Formik
@@ -1230,138 +1232,12 @@ const SearchQueryInputComponent = () => {
 						}}
 						slot='end'
 					>
-						<ZIonIcon icon={filterOutline} className='me-2' />{' '}
+						<ZIonIcon icon={filterOutline} className='me-2' />
 						<ZIonText>Filter</ZIonText>
 					</ZIonButton>
 				</ZIonItem>
 			)}
 		</Formik>
-	);
-};
-
-const FolderActionsPopoverContent: React.FC = () => {
-	/**
-	 * hook to present folder form modal
-	 */
-	const { presentZIonModal: presentFolderModal } = useZIonModal(
-		ZaionsAddNewFolder,
-		{ state: folderState.LinkInBios }
-	);
-
-	/**
-	 * recoil state which will hold the single folder data (for updating). when user click on edit button in action popover the data of that folder will storing in this state and present as initial value in the update folder form. here we are delete it folder by getting the id from folderFormState
-	 *
-	 */
-	const [folderFormState, setFolderFormState] = useRecoilState(FolderFormState);
-
-	/**
-	 * delete short link folder api.
-	 */
-	const { mutate: deleteLinkInBiosFoldersMutate } = useZRQDeleteRequest(
-		API_URL_ENUM.userAccount_LinkInBio_folders_update_delete,
-		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_FOLDER.MAIN]
-	);
-
-	// Custom hooks.
-	const { presentZIonAlert } = useZIonAlert();
-	const { presentZIonErrorAlert } = useZIonErrorAlert();
-	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
-
-	/**
-	 * deleteFolderAccount will show the confirm alert before deleting short link folder.
-	 */
-	const deleteFolderAccount = async () => {
-		try {
-			if (folderFormState && folderFormState.id) {
-				await presentZIonAlert({
-					header: `Delete Folder "${
-						folderFormState.name ? folderFormState.name : ''
-					}"`,
-					subHeader: 'Remove folder from user account.',
-					message: 'Are you sure you want to delete this folder?',
-					buttons: [
-						{
-							text: 'Cancel',
-							role: 'cancel',
-						},
-						{
-							text: 'Delete',
-							role: 'danger',
-							handler: () => {
-								void removeFolderAccount();
-							},
-						},
-					],
-				});
-			} else {
-				await presentZIonErrorAlert();
-			}
-		} catch (error) {
-			console.error(error);
-		}
-	};
-
-	/**
-	 * removeFolderAccount will hit delete short link folder api
-	 */
-	const removeFolderAccount = async () => {
-		await presentZIonLoader('Deleting Api Key...');
-		try {
-			if (folderFormState.id) {
-				// hitting the delete api
-				deleteLinkInBiosFoldersMutate({
-					itemIds: [folderFormState.id],
-					urlDynamicParts: [':folderId'],
-				});
-
-				// setting the folderFormState to initial state because the value of this recoil state is used as the initial values of the short link folder form, when we click on the delete button in popover it will store the value or that folder in this recoil state. because we need it in here for example the id to delete the folder.
-				setFolderFormState((oldVal) => ({
-					...oldVal,
-					id: '',
-					name: '',
-					formMode: FormMode.ADD,
-				}));
-
-				// show success message after deleting
-				showSuccessNotification(`Folder deleted successfully.`);
-			} else {
-				await presentZIonErrorAlert();
-			}
-			await dismissZIonLoader();
-		} catch (error) {
-			console.error(error);
-		}
-	};
-
-	return (
-		<>
-			<ZIonList lines='none'>
-				<ZIonButton
-					fill='clear'
-					className='ion-no-padding ion-text-capitalize'
-					expand='block'
-					onClick={() => {
-						presentFolderModal({
-							_cssClass: 'folder-modal-size',
-						});
-					}}
-				>
-					<ZIonIcon icon={pencilOutline} className={'me-2'} />{' '}
-					<ZIonText>Rename</ZIonText>
-				</ZIonButton>
-				<ZIonButton
-					fill='clear'
-					className='ion-no-padding ion-text-capitalize'
-					expand='block'
-					onClick={() => {
-						void deleteFolderAccount();
-					}}
-				>
-					<ZIonIcon icon={trashOutline} className={'me-2'} color='danger' />{' '}
-					<ZIonText color='danger'>Delete</ZIonText>
-				</ZIonButton>
-			</ZIonList>
-		</>
 	);
 };
 

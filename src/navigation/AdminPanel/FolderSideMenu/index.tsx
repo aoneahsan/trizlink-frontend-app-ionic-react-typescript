@@ -53,6 +53,7 @@ import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil
 import { useSetRecoilState } from 'recoil';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
+import { useParams } from 'react-router';
 
 /**
  * Recoil State Imports go down
@@ -108,10 +109,15 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 
 	const setFolderFormState = useSetRecoilState(FolderFormState);
 
+	const { workspaceId } = useParams<{
+		workspaceId: string;
+	}>();
+
 	const { presentZIonModal: presentFolderModal } = useZIonModal(
 		ZaionsAddNewFolder,
 		{
 			state: state,
+			workspaceId,
 		}
 	);
 
