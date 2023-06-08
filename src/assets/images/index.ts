@@ -8,73 +8,6 @@ import vector from './pages/home-page/vector.png';
 import GlobeImage from './pages/home-page/global.png';
 import HomePageHeroDesktopImage from './pages/home-page/home_page_hero_desktop.png';
 
-// Discover Enterprise
-import formBG from './pages/discover-enterprise/form-background.png';
-
-// WhyZaions
-import Zaions101Image from './pages/why-zaions/zaions-101/101.jpg';
-import Zaions101MobileImage from './pages/why-zaions/zaions-101/101_mobile2.jpg';
-import ChaunceyExcitingImage from './pages/company/about-zaions/chauncey_exciting.png';
-import enterprise02 from './pages/why-zaions/enterprise-02.jpg';
-import integrationsCloudMobile3 from './pages/why-zaions/integrationscloud_mobile3.jpg';
-import digitalMarketingApipage02 from './pages/why-zaions/digitalmarketing_apipage02.jpg';
-import linkshorteningApipage02 from './pages/why-zaions/linkshortening_apipage02.jpg';
-import LinkShorteningCenterModule from './pages/why-zaions/zaions-101/Link-shortening-2_Center-Module.png';
-import brandedlinks1 from './pages/why-zaions/zaions-101/brandedlinks-1.jpg';
-import apiandintegrations from './pages/why-zaions/zaions-101/apiandintegrations.jpg';
-
-// company / about-zaions / OurTeam Page (images)
-import CassieB1 from './pages/company/about-zaions/zaions-team/Cassie-B-1.png';
-import Jackie from './pages/company/about-zaions/zaions-team/jackie.png';
-import Natalie21 from './pages/company/about-zaions/zaions-team/natalie-2-1.png';
-import Oran2 from './pages/company/about-zaions/zaions-team/oran-2.png';
-import Raghu3 from './pages/company/about-zaions/zaions-team/Raghu_3.png';
-import RaleighH4 from './pages/company/about-zaions/zaions-team/Raleigh_H-4.png';
-import Sabrina2 from './pages/company/about-zaions/zaions-team/Sabrina-2.png';
-import SamOh2 from './pages/company/about-zaions/zaions-team/Sam-Oh_2.png';
-import ScottHan from './pages/company/about-zaions/zaions-team/scott-han.jpg';
-import Steffen from './pages/company/about-zaions/zaions-team/Steffen.png';
-import TaraRobertson2 from './pages/company/about-zaions/zaions-team/Tara_Robertson-2.png';
-import Toby from './pages/company/about-zaions/zaions-team/toby.png';
-import Kelly1 from './pages/company/about-zaions/zaions-team/kelly-1.png';
-
-// company / Contact pages (images)
-import MapImage from './pages/company/contact/MapImage_3200x1200_3cities.png';
-
-// company /  careers Page (images)
-import Awards from './pages/company/careers/awards-1024x166.png';
-
-// company /  careers Page Gallery (images)
-import Artboard1 from './pages/company/careers/gallery/Artboard_1.png';
-import CareersTeamCelebration from './pages/company/careers/gallery/Careers_Team-Celebration_5-1024x779.png';
-import KevinBhagat from './pages/company/careers/gallery/kevin-bhagat-zNRITe8NPqY-unsplash-1024x683.jpg';
-import WelcomeBanner from './pages/company/careers/gallery/WelcomeBanner.png';
-import Team from './pages/company/careers/gallery/Team.png';
-import TeamTable from './pages/company/careers/gallery/TeamTable.png';
-import VolunteerCareers from './pages/company/careers/gallery/volunteer_Careers-1024x1024.png';
-
-// company / Partners Page (images)
-import IlloDesktop from './pages/company/partners/illo-desktop-1440x651-1.jpg';
-import IlloMobile from './pages/company/partners/illo-mobile-810x480-1.jpg';
-
-// company / Press Page (images)
-import ZaionsMomentumLeadershipPressPreview from './pages/company/press/zlink-momentum-leadership-press-preview-888x650-1.png';
-import ZaionsPress from './pages/company/press/zlink-press.png';
-
-// company / Press Page / Products (images)
-import GeneralProductMarketingImg from './pages/company/press/products-images/General_ProductMarketing_Img.png';
-import BrandingProductMarketingImgRetina from './pages/company/press/products-images/Branding_ProductMarketing_Img-retina.png';
-import CustomBitlinksProductMarketingImgRetina from './pages/company/press/products-images/CustomBitlinks_ProductMarketing_Img-retina.png';
-import DashboardProductMarketingImgRetina from './pages/company/press/products-images/Dashboard_ProductMarketing_Img-retina.png';
-import MobileOptimizerProductMarketingImgRetina from './pages/company/press/products-images/MobileOptimizer_ProductMarketing_Img-retina.png';
-import OneViewProductMarketingImgRetina1 from './pages/company/press/products-images/OneView_ProductMarketing_Img-retina-1.png';
-
-// company / Review (images)
-import MustafaA from './pages/company/reviews/MustafaA.jpg';
-import DrReneeM from './pages/company/reviews/DrReneeM.webp';
-import PlaceholderAvatar from './pages/company/reviews/download.jpg';
-import PaulaC from './pages/company/reviews/PaulaC.png';
-
 // SVG's
 import linkMngt3 from './svg/link-mngt-3.svg';
 import mobileLayout from './svg/mobileLayout.svg';
@@ -428,37 +361,6 @@ import gifIcon from './svg/gifIcon.svg';
 import mediaIcon from './svg/mediaIcon.svg';
 import thumbnailIcon from './svg/thumbnailIcon.svg';
 
-// Features Section
-import yourBrndBranding from './pages/features/yourbrnd-branding.gif';
-import brandedLinksmobile from './pages/features/brandedlinksmobile.jpg';
-import brandedLinksHero from './pages/features/brandedlinkshero.jpg';
-import autoBrandMin from './pages/features/autobrand-min.gif';
-import customizationMin1 from './pages/features/customization-min-1.gif';
-import smsMin from './pages/features/sms-min.gif';
-import domainSearch from './pages/features/yourbrnd-branding.gif';
-import deepLink from './pages/features/deeplink-min.gif';
-import IntegrationsCloudMobile from './pages/features/integrationscloud_mobile2.jpg';
-import SiteQRCodesSubSection from './pages/features/Site_QR-Codes_Sub-section.png';
-
-// campaign-management-analytics
-import DashMin from './pages/campaign-management-analytics/dash-min.gif';
-import Mobile2 from './pages/campaign-management-analytics/mobile_mobile2.jpg';
-import OneViewProductMarketingImg from './pages/campaign-management-analytics/OneView_ProductMarketing_Img.png';
-import organicShares from './pages/campaign-management-analytics/organic-shares.png';
-import CampaignAndAnalytics from './pages/campaign-management-analytics/campaignandanalytics-01.jpg';
-
-// Social Media
-import WebinarPromoteBrandResource from './pages/solution/Webinar-Promote-Brand-Resource.png';
-import Ebook30WaysResource from './pages/solution/Ebook_30-ways_Resource.png';
-import EbookHowMktUseSite from './pages/solution/Ebook-How-Mkt-Use-zlink-Site.png';
-import DemoCreateSMSResource from './pages/solution/Demo_Create-SMS_Resource.png';
-import WebinarSocialMediaStrategyUseV2Resource from './pages/solution/Webinar_Social-Media-Strategy-Use_v2_Resource.png';
-import brandConsistencyResource from './pages/solution/brand-consistency_resource.png';
-import secretsSocialSmbResource from './pages/solution/secrets_social_smb_resource.png';
-import digitalmarketingMobile2 from './pages/solution/digitalmarketing_mobile2.jpg';
-import socialmediaMobile2 from './pages/solution/socialmedia_mobile2.jpg';
-import developerHeroMobile2 from './pages/solution/socialmedia_mobile2.jpg';
-
 // Global
 import starsQuoteWidget from './global-images/stars-quote-widget.png';
 import quotes from './global-images/quotes.png';
@@ -497,27 +399,6 @@ import addUserImage from './global-images/add-user-image.png';
 // add-icon.png
 import addIcon from './global-images/add-icon.png';
 
-// Products
-import libMobile from './pages/products/lib_mobile.png';
-import reportingLinkManagement from './pages/products/reporting-link-management.png';
-import lmLinkManagement from './pages/products/lm-link-management.png';
-import campaignManagementLinkMangement from './pages/products/campaign-management_link-mangement.png';
-import smsLinkManagement from './pages/products/sms-link-management.png';
-import brandingLinkManagement from './pages/products/branding_link-management.png';
-import linkManagementMobile from './pages/products/link-management_mobile.png';
-import ManageLinksLIB from './pages/products/Manage-Links-LIB.png';
-import brandingLIB from './pages/products/zlink-branding-LIB.png';
-import linkInBioDriveTraffic from './pages/products/link-in-bio-drive-traffic.png';
-
-import qrCodesMobile from './pages/products/qr-codes_mobile.png';
-
-// Resources
-import Webinar4waysResource from './pages/resources/Webinar-4-ways_Resource.png';
-
-import trustAndSafety from './pages/resources/Trust-and-Safety-V2-XL@2x.png';
-
-import customerSupportMobile2 from './pages/resources/customersupport_mobile2.jpg';
-
 // Admin Panel
 import dashboardEmptyState from './pages/admin-panel/dashboard/dashboard-empty-state.png';
 import campaignsEmptyState from './pages/admin-panel/dashboard/campaigns-empty-state.png';
@@ -530,53 +411,6 @@ export {
 	vector,
 	GlobeImage,
 	HomePageHeroDesktopImage,
-	formBG,
-	Zaions101Image,
-	Zaions101MobileImage,
-	ChaunceyExcitingImage,
-	enterprise02,
-	integrationsCloudMobile3,
-	digitalMarketingApipage02,
-	linkshorteningApipage02,
-	LinkShorteningCenterModule,
-	brandedlinks1,
-	apiandintegrations,
-	CassieB1,
-	Jackie,
-	Natalie21,
-	Oran2,
-	Raghu3,
-	RaleighH4,
-	Sabrina2,
-	SamOh2,
-	ScottHan,
-	Steffen,
-	TaraRobertson2,
-	Toby,
-	Kelly1,
-	MapImage,
-	Awards,
-	Artboard1,
-	CareersTeamCelebration,
-	KevinBhagat,
-	WelcomeBanner,
-	Team,
-	TeamTable,
-	VolunteerCareers,
-	IlloDesktop,
-	IlloMobile,
-	ZaionsMomentumLeadershipPressPreview,
-	ZaionsPress,
-	GeneralProductMarketingImg,
-	BrandingProductMarketingImgRetina,
-	CustomBitlinksProductMarketingImgRetina,
-	DashboardProductMarketingImgRetina,
-	MobileOptimizerProductMarketingImgRetina,
-	OneViewProductMarketingImgRetina1,
-	MustafaA,
-	DrReneeM,
-	PlaceholderAvatar,
-	PaulaC,
 	linkMngt3,
 	mobileLayout,
 	MedicalInstrumentStethoscope,
@@ -775,31 +609,6 @@ export {
 	linkInBioPageAnalyticsRetargetingPixelsBlock,
 	WorkspaceSettingsTimetablePlaceholder,
 	WorkspaceSettingsLabelPlaceholder,
-	yourBrndBranding,
-	brandedLinksmobile,
-	brandedLinksHero,
-	autoBrandMin,
-	customizationMin1,
-	smsMin,
-	domainSearch,
-	deepLink,
-	IntegrationsCloudMobile,
-	SiteQRCodesSubSection,
-	DashMin,
-	Mobile2,
-	OneViewProductMarketingImg,
-	organicShares,
-	CampaignAndAnalytics,
-	WebinarPromoteBrandResource,
-	Ebook30WaysResource,
-	EbookHowMktUseSite,
-	DemoCreateSMSResource,
-	WebinarSocialMediaStrategyUseV2Resource,
-	brandConsistencyResource,
-	secretsSocialSmbResource,
-	digitalmarketingMobile2,
-	socialmediaMobile2,
-	developerHeroMobile2,
 	starsQuoteWidget,
 	quotes,
 	edgeLogo,
@@ -830,20 +639,6 @@ export {
 	mediaIcon,
 	thumbnailIcon,
 	avatar,
-	libMobile,
-	reportingLinkManagement,
-	lmLinkManagement,
-	campaignManagementLinkMangement,
-	smsLinkManagement,
-	brandingLinkManagement,
-	linkManagementMobile,
-	ManageLinksLIB,
-	brandingLIB,
-	linkInBioDriveTraffic,
-	qrCodesMobile,
-	Webinar4waysResource,
-	trustAndSafety,
-	customerSupportMobile2,
 	dashboardEmptyState,
 	campaignsEmptyState,
 	customLinksEmptyState,
