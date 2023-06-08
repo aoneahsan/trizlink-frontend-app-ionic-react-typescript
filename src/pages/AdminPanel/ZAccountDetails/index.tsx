@@ -170,7 +170,7 @@ const ZAccountDetails: React.FC = () => {
 											'px-0': !isSmScale,
 										})}
 									>
-										<ZIonRow className='border-bottom pb-3'>
+										<ZIonRow className='pb-3 border-bottom'>
 											<ZIonCol
 												className={classNames({
 													'ion-text-center': !isMdScale,
@@ -219,7 +219,7 @@ const ZAccountDetails: React.FC = () => {
 													'ms-0 ps-0': !isMdScale,
 												})}
 											>
-												<ZIonText className='font-bold block'>
+												<ZIonText className='block font-bold'>
 													You have all of these Free features:
 												</ZIonText>
 												<ZIonText
@@ -252,7 +252,7 @@ const ZAccountDetails: React.FC = () => {
 														'ion-text-capitalize zaions__fs_16': true,
 														'ion-no-padding ion-no-margin': !isMdScale,
 													})}
-													routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
+													routerLink=''
 												>
 													Manage
 												</ZIonButton>
@@ -622,9 +622,7 @@ const ZAccountDetails: React.FC = () => {
 																<ZIonButton
 																	fill='clear'
 																	className='ion-text-capitalize zaions__fs_16 ion-no-padding'
-																	routerLink={
-																		ZaionsRoutes.WhyZaions.ZaionsPricingRoute
-																	}
+																	routerLink=''
 																>
 																	Need more?
 																</ZIonButton>
@@ -696,9 +694,7 @@ const ZAccountDetails: React.FC = () => {
 																<ZIonButton
 																	fill='clear'
 																	className='ion-text-capitalize zaions__fs_16 ion-no-padding'
-																	routerLink={
-																		ZaionsRoutes.WhyZaions.ZaionsPricingRoute
-																	}
+																	routerLink=''
 																>
 																	Need more?
 																</ZIonButton>
@@ -770,9 +766,7 @@ const ZAccountDetails: React.FC = () => {
 																<ZIonButton
 																	fill='clear'
 																	className='ion-text-capitalize zaions__fs_16 ion-no-padding'
-																	routerLink={
-																		ZaionsRoutes.WhyZaions.ZaionsPricingRoute
-																	}
+																	routerLink=''
 																>
 																	Need more?
 																</ZIonButton>
@@ -844,9 +838,7 @@ const ZAccountDetails: React.FC = () => {
 																<ZIonButton
 																	fill='clear'
 																	className='ion-text-capitalize zaions__fs_16 ion-no-padding'
-																	routerLink={
-																		ZaionsRoutes.WhyZaions.ZaionsPricingRoute
-																	}
+																	routerLink=''
 																>
 																	Need more?
 																</ZIonButton>

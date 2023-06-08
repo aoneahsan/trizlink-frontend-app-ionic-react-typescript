@@ -5,7 +5,6 @@ import React, { ReactNode } from 'react';
 import { IonInput } from '@ionic/react';
 
 // Type
-import { IonInputCustomEvent } from '@ionic/core/dist/types/components';
 import { ZIonInputType } from '@/components/ZIonComponents/ZIonInput';
 
 type ZIonInputFieldType = {

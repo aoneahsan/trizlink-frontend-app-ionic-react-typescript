@@ -139,7 +139,7 @@ const ZWorkspaceForm: React.FC = () => {
 		// eslint-disable-next-line
 	}, []);
 
-	// Refetching if the editLinkInBioId changes and if the editLinkInBioId is undefined it will redirect user to link-in-bio page.
+	// Refetching if the editLinkInBioId changes and if the editLinkInBioId is undefined it will redirect user to ShortLinks page.
 	useEffect(() => {
 		try {
 			if (editWorkspaceId) {
@@ -149,7 +149,7 @@ const ZWorkspaceForm: React.FC = () => {
 			if (error instanceof AxiosError) {
 				zNavigatePushRoute(
 					replaceRouteParams(
-						ZaionsRoutes.AdminPanel.LinkInBio.Main,
+						ZaionsRoutes.AdminPanel.ShortLinks.Main,
 						[
 							CONSTANTS.RouteParams.workspace.workspaceId,
 							CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
@@ -170,7 +170,7 @@ const ZWorkspaceForm: React.FC = () => {
 	return (
 		<ZaionsIonPage pageTitle='Zaions Workspace Form Page'>
 			<ZIonHeader className='ion-no-border'>
-				<ZIonRow className='pb-3 pt-2 ion-justify-content-center ion-align-items-center'>
+				<ZIonRow className='pt-2 pb-3 ion-justify-content-center ion-align-items-center'>
 					{/*  */}
 					<ZIonCol
 						sizeXl='1'
@@ -198,7 +198,7 @@ const ZWorkspaceForm: React.FC = () => {
 					{/*  */}
 					<ZIonCol className='ion-text-center' size='11'>
 						{/* Tab Title */}
-						<ZIonText className='text-4xl block'>
+						<ZIonText className='block text-4xl'>
 							{routeQSearchParams.tab ===
 							workspaceFormTabEnum.workspaceDetailForm
 								? 'Create a workspace'
@@ -212,7 +212,7 @@ const ZWorkspaceForm: React.FC = () => {
 						</ZIonText>
 
 						{/* Tab sub title */}
-						<ZIonText className='mt-3 text-muted block'>
+						<ZIonText className='block mt-3 text-muted'>
 							{routeQSearchParams.tab === workspaceFormTabEnum.inviteClients
 								? 'Working with a client? Invite them in the workspace so they can approve and leave feedback on content.'
 								: routeQSearchParams.tab === workspaceFormTabEnum.connectPages

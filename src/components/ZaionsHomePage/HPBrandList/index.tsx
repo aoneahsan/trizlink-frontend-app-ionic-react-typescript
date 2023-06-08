@@ -52,10 +52,8 @@ const ZaionsHPBrandList: React.FC = () => {
 		<>
 			<div className='ion-text-center ion-margin-top ion-padding-bottom'>
 				<br />
-				<ZIonText>
-					<h2 className='font-bold'>
-						Loved by big and small brands everywhere
-					</h2>
+				<ZIonText className='text-3xl font-bold'>
+					Loved by big and small brands everywhere
 				</ZIonText>
 			</div>
 			<div className='ion-padding-vertical'>

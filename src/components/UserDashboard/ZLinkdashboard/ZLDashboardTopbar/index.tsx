@@ -61,7 +61,7 @@ import { showSuccessNotification } from '@/utils/notification';
 
 /**
  * Type Imports go down
- * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { productSmLogo } from '@/assets/images';
 
@@ -104,7 +104,9 @@ const DashboardTopBarUserAccountModal: React.FC = ({
 }) => {
 	const [authTokenState, setAuthTokenState] =
 		useRecoilState(ZaionsAuthTokenData);
-	const setUserAccountStateAtom = useSetRecoilState(ZaionsUserAccountRStateAtom);
+	const setUserAccountStateAtom = useSetRecoilState(
+		ZaionsUserAccountRStateAtom
+	);
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
 
 	const signOutUser = async () => {
@@ -159,7 +161,7 @@ const DashboardTopBarUserAccountModal: React.FC = ({
 									minWidth: '100%',
 									maxWidth: '100%',
 								}}
-								className='me-2 rounded-full'
+								className='rounded-full me-2'
 							/>
 						</ZIonCol>
 						<ZIonCol className='ion-no-padding ps-3'>
@@ -171,7 +173,7 @@ const DashboardTopBarUserAccountModal: React.FC = ({
 					</ZIonRow>
 				</ZIonItem>
 				<ZIonItem className='ion-no-padding'>
-					<ZIonRow className='py-2 ion-align-items-top ion-padding-start w-full'>
+					<ZIonRow className='w-full py-2 ion-align-items-top ion-padding-start'>
 						<ZIonCol className='ion-no-padding ps-3'>
 							<ZIonText className='block'>talhairshad</ZIonText>
 							<ZIonText className='zaions__fs_14'>Free account</ZIonText>
@@ -235,7 +237,7 @@ const ZLinkDashboardTopBar: React.FC = () => {
 					<ZIonRow>
 						<ZIonCol
 							size='12'
-							className='flex ion-align-items-center ion-justify-content-end border-bottom pb-2'
+							className='flex pb-2 ion-align-items-center ion-justify-content-end border-bottom'
 						>
 							{!isLgScale && (
 								<ZIonMenuButton className='me-auto ms-2'></ZIonMenuButton>
@@ -256,7 +258,7 @@ const ZLinkDashboardTopBar: React.FC = () => {
 							)}
 							<ZIonButton
 								color='tertiary'
-								routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
+								routerLink=''
 								className={classNames({
 									'ion-text-capitalize my-0': true,
 									'me-2 ms-3': isMdScale,

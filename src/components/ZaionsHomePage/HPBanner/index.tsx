@@ -51,7 +51,7 @@ const ZaionsHPBanner: React.FC = () => {
 						className={`${!isLgScale ? 'ion-text-center' : ''}`}
 					>
 						<ZIonText>
-							<h1 className='ion-padding-top ion-margin-top font-bold zaions__color_dark zaions__heading text-4xl'>
+							<h1 className='text-4xl font-bold ion-padding-top ion-margin-top zaions__color_dark zaions__heading'>
 								We’ve expanded! <br /> Shorten URLs. Generate QR Codes. <br />
 								And now, create Link-in-bios.
 							</h1>
@@ -63,11 +63,9 @@ const ZaionsHPBanner: React.FC = () => {
 								'w-max': !isLgScale,
 							})}
 						>
-							<ZIonRouterLink
-								routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
-							>
+							<ZIonRouterLink routerLink=''>
 								<ZIonButton
-									className='ion-text-capitalize ion-margin-top mb-3'
+									className='mb-3 ion-text-capitalize ion-margin-top'
 									color='primary'
 									fill='solid'
 									// size='default'
@@ -78,14 +76,12 @@ const ZaionsHPBanner: React.FC = () => {
 								</ZIonButton>
 							</ZIonRouterLink>
 							{/* <br /> */}
-							<ZIonRouterLink routerLink={ZaionsRoutes.DiscoverEnterpriseRoute}>
-								<ZIonText
-									className={`${classes.zaions__bannerQuote_btn} ion-text-capitalize mt-1 block`}
-									color='primary'
-								>
-									Get a Quote
-								</ZIonText>
-							</ZIonRouterLink>
+							<ZIonText
+								className={`${classes.zaions__bannerQuote_btn} ion-text-capitalize mt-1 block`}
+								color='primary'
+							>
+								Get a Quote
+							</ZIonText>
 						</div>
 					</ZIonCol>
 					<ZIonCol sizeXl='4' sizeLg='12' sizeMd='12' sizeSm='12' sizeXs='12'>

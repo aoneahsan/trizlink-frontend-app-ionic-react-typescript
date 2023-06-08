@@ -109,7 +109,7 @@ const ZDashboard: React.FC = () => {
 						<ZLinkDashboardTopBar />
 						<ZIonContent className='ion-padding'>
 							<ZIonGrid>
-								<ZIonRow className='ion-align-items-center ion-justify-content-center flex-col mt-3'>
+								<ZIonRow className='flex-col mt-3 ion-align-items-center ion-justify-content-center'>
 									<ZIonImg
 										src={dashboardEmptyState}
 										alt='dashboard Inactive state'
@@ -119,7 +119,7 @@ const ZDashboard: React.FC = () => {
 											'w-full': !isSmScale,
 										})}
 									/>
-									<ZIonTitle className='text-3xl font-bold mb-2 mt-4'>
+									<ZIonTitle className='mt-4 mb-2 text-3xl font-bold'>
 										Every click tell a story
 									</ZIonTitle>
 									<ZIonText className='text-lg ion-text-center'>
@@ -127,8 +127,8 @@ const ZDashboard: React.FC = () => {
 										by <br /> location, device, referrers and more.
 									</ZIonText>
 									<ZIonButton
-										className='ion-text-capitalize mt-4'
-										routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
+										className='mt-4 ion-text-capitalize'
+										routerLink=''
 									>
 										<ZIonText className='px-4 font-bold'>
 											View our plans

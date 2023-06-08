@@ -38,7 +38,7 @@ import { PAGE_MENU } from '@/utils/enums';
 
 /**
  * Type Imports go down
- * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { ZLinkIonPanelSidebarActiveLinkType } from '@/types/AdminPanel/linksType';
 
@@ -61,7 +61,7 @@ import { ZIonButton } from '@/components/ZIonComponents';
 
 /**
  * Component props type go down
- * ? Like if you have a type for props it should be pleace Down
+ * ? Like if you have a type for props it should be place Down
  * */
 
 /**
@@ -101,7 +101,7 @@ const ZCustomLinks: React.FC = () => {
 						<ZLinkDashboardTopBar />
 						<ZIonContent className='ion-padding'>
 							<ZIonGrid>
-								<ZIonRow className='ion-align-items-center ion-justify-content-center flex-col mt-3'>
+								<ZIonRow className='flex-col mt-3 ion-align-items-center ion-justify-content-center'>
 									<ZIonImg
 										src={customLinksEmptyState}
 										className={classNames({
@@ -111,7 +111,7 @@ const ZCustomLinks: React.FC = () => {
 										})}
 										alt='Link in bio Inactive state'
 									/>
-									<ZIonTitle className='text-3xl font-bold mb-2 mt-4'>
+									<ZIonTitle className='mt-4 mb-2 text-3xl font-bold'>
 										People trust your links
 									</ZIonTitle>
 									<ZIonText className='text-lg ion-text-center'>
@@ -119,8 +119,8 @@ const ZCustomLinks: React.FC = () => {
 										and <br /> choose a complimentary domain to get started.
 									</ZIonText>
 									<ZIonButton
-										className='ion-text-capitalize mt-4'
-										routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
+										className='mt-4 ion-text-capitalize'
+										routerLink=''
 									>
 										<ZIonText className='px-4 font-bold'>
 											View our plans

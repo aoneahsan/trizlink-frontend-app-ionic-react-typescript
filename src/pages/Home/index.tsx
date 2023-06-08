@@ -7,7 +7,6 @@ import React from 'react';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsIonPage from '@/components/ZaionsIonPage';
 import ZaionsHPBanner from '@/components/ZaionsHomePage/HPBanner';
-import ZaionsHPShortLink from '@/components/ZaionsHomePage/HPShortLink';
 import ZaionsHPConnectPlatform from '@/components/ZaionsHomePage/HPConnetPlateform';
 import ZaionsHPGlobal from '@/components/ZaionsHomePage/HPGlobal';
 import ZaionsHPBrandList from '@/components/ZaionsHomePage/HPBrandList';

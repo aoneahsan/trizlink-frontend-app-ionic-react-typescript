@@ -22,7 +22,7 @@ import React from 'react';
 
 /**
  * Type Imports go down
- * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 
 /**
@@ -52,9 +52,9 @@ import React from 'react';
  * */
 
 const ZRouteProtection: React.FC = () => {
-  // const { authenticated } = useZIsAuthenticated();
+	// const { authenticated } = useZIsAuthenticated();
 
-  return <></>;
+	return <></>;
 };
 
 export default ZRouteProtection;

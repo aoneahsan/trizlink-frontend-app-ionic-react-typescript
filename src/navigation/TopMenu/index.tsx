@@ -80,7 +80,7 @@ const ZaionsTopMenu: React.FC = () => {
 				</ZIonCol>
 				{isLgScale && (
 					<ZIonCol
-						className='flex ion-justify-content-between pb-0 mt-2 pt-2'
+						className='flex pt-2 pb-0 mt-2 ion-justify-content-between'
 						size='4'
 					>
 						<ZaionsDropDown
@@ -90,21 +90,21 @@ const ZaionsTopMenu: React.FC = () => {
 								{
 									id: '1',
 									title: `${PRODUCT_NAME} 101`,
-									link: `${ZaionsRoutes.WhyZaions.Zaions101Route}`,
+									link: '',
 									text: `An Introduction to ${PRODUCT_NAME}’s features`,
 									icon: bookOutline,
 								},
 								{
 									id: '2',
 									title: `Enterprise Class`,
-									link: `${ZaionsRoutes.WhyZaions.ZaionsEnterpriseClassRoute}`,
+									link: '',
 									text: `${PRODUCT_NAME} scale of the size you need`,
 									icon: earthOutline,
 								},
 								{
 									id: '3',
 									title: `Integrations & API`,
-									link: `${ZaionsRoutes.WhyZaions.ZaionsIntegrationApiRoute}`,
+									link: '',
 									text: `connect ${PRODUCT_NAME} with the tool you love`,
 									icon: codeOutline,
 								},
@@ -118,63 +118,62 @@ const ZaionsTopMenu: React.FC = () => {
 								{
 									id: '1',
 									title: 'Link Managment',
-									link: `${ZaionsRoutes.Products.ZaionsLinkManagmentRoute}`,
-									text: `Customize, share, and track links`,
+									link: '',
+									text: 'Customize, share, and track links',
 									icon: link,
 								},
 								{
 									id: '2',
 									title: 'QR Code',
-									link: `${ZaionsRoutes.Products.ZaionsQRCodeRoute}`,
-									text: `Dynamic solutions to fit every business need`,
+									link: '',
+									text: 'Dynamic solutions to fit every business need',
 									icon: qrCode,
 								},
 								{
 									id: '3',
 									title: 'Link-in-bio',
-									link: `${ZaionsRoutes.Products.ZaionsLinkInBioRoute}`,
-									text: `Curate and track links for social media profiles`,
+									link: '',
+									text: 'Curate and track links for social media profiles',
 									icon: tabletPortrait,
 								},
 							]}
 						/>
 
 						<ZIonRouterLink
-							// routerLink={`${ZaionsRoutes.WhyZaions.ZaionsPricingRoute}`}
-							routerLink={`${ZaionsRoutes.AdminPanel.ShortLinks.Main}`}
-							className={`zaions__nav_item  mb-4`}
+							routerLink=''
+							className='mb-4 zaions__nav_item'
 							color='dark'
 						>
 							<span>Pricing</span>
 						</ZIonRouterLink>
 
 						<ZaionsDropDown
-							title={`Resources`}
-							className='zaions__nav_item '
+							title='Resources'
+							className='zaions__nav_item'
 							items={[
 								{
 									id: '1',
 									title: 'Developers',
-									link: `${ZaionsRoutes.HomeRoute}`,
+									link: '',
 									text: 'API documentation and resources',
 									width: 'max-content',
 								},
 								{
 									id: '2',
 									title: 'Resource Library',
-									link: `${ZaionsRoutes.Resources.ZaionsResourceLibraryRoute}`,
+									link: '',
 									text: 'Ebooks and webinars',
 								},
 								{
 									id: '3',
 									title: 'Blog',
-									link: `${ZaionsRoutes.Resources.ZaionsBlogsRoute}`,
+									link: '',
 									text: 'Tips, best practices and more',
 								},
 								{
 									id: '4',
 									title: 'Support',
-									link: `${ZaionsRoutes.HomeRoute}`,
+									link: '',
 									text: 'FAQs and help articles',
 								},
 							]}
@@ -183,7 +182,7 @@ const ZaionsTopMenu: React.FC = () => {
 				)}
 				{isMdScale && (
 					<ZIonCol
-						className='flex ion-align-items-center ion-justify-content-end pb-0'
+						className='flex pb-0 ion-align-items-center ion-justify-content-end'
 						sizeXl='4'
 						sizeLg='4.4'
 						sizeMd='5'
@@ -205,14 +204,12 @@ const ZaionsTopMenu: React.FC = () => {
 								Sign up Free
 							</ZIonTitle>
 						</ZIonRouterLink>
-						<ZIonRouterLink routerLink={ZaionsRoutes.DiscoverEnterpriseRoute}>
-							<ZIonButton
-								className={`${classes.zaions_nav_button} ion-text-capitalize ms-2 mb-4`}
-								color='tertiary'
-							>
-								Get a Quote
-							</ZIonButton>
-						</ZIonRouterLink>
+						<ZIonButton
+							className={`${classes.zaions_nav_button} ion-text-capitalize ms-2 mb-4`}
+							color='tertiary'
+						>
+							Get a Quote
+						</ZIonButton>
 					</ZIonCol>
 				)}
 				{!isLgScale && (
@@ -222,7 +219,7 @@ const ZaionsTopMenu: React.FC = () => {
 						sizeMd='3.5'
 						sizeSm='2.5'
 						sizeXs='2.5'
-						className='flex ion-align-items-center ion-justify-content-end pb-0'
+						className='flex pb-0 ion-align-items-center ion-justify-content-end'
 					>
 						<ZIonMenuButton className='mb-3'></ZIonMenuButton>
 					</ZIonCol>

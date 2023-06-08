@@ -144,7 +144,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
 	// 	// eslint-disable-next-line
 	// }, []);
 
-	// Refetching if the editLinkInBioId changes and if the editLinkInBioId is undefined it will redirect user to link-in-bio page.
+	// Refetching if the editLinkInBioId changes and if the editLinkInBioId is undefined it will redirect user to ShortLinks page.
 	useEffect(() => {
 		try {
 			// if (editWorkspaceId) {
@@ -154,7 +154,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
 			if (error instanceof AxiosError) {
 				zNavigatePushRoute(
 					replaceRouteParams(
-						ZaionsRoutes.AdminPanel.LinkInBio.Main,
+						ZaionsRoutes.AdminPanel.ShortLinks.Main,
 						[
 							CONSTANTS.RouteParams.workspace.workspaceId,
 							CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
@@ -228,8 +228,8 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
 					return (
 						<>
 							<ZIonContent>
-								<ZIonGrid className='pb-2 flex ion-align-items-center mx-0 h-full'>
-									<ZIonRow className='on-justify-content-center ion-align-items-center mx-auto w-80'>
+								<ZIonGrid className='flex h-full pb-2 mx-0 ion-align-items-center'>
+									<ZIonRow className='mx-auto on-justify-content-center ion-align-items-center w-80'>
 										{/* Workspace name */}
 										<ZIonCol size='12'>
 											<ZIonInput

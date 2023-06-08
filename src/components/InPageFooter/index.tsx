@@ -60,6 +60,7 @@ import { BRACKPOINT_MD, BRACKPOINT_XS, PRODUCT_NAME } from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { ProductLogo } from '@/assets/images';
 import { ZIonButton } from '@/components/ZIonComponents';
+import classNames from 'classnames';
 
 // Functional Component
 const InPageFooter: React.FC<{
@@ -79,7 +80,7 @@ const InPageFooter: React.FC<{
 				<>
 					{blueSec === true ? (
 						<div className='py-3' style={{ background: '#0b1736' }}>
-							<div className='ion-text-center ion-margin-top ion-padding-bottom py-5 flex ion-justify-content-center ion-align-items-center flex-col'>
+							<div className='flex flex-col py-5 ion-text-center ion-margin-top ion-padding-bottom ion-justify-content-center ion-align-items-center'>
 								<br />
 								<ZIonText color='light' className='text-2xl'>
 									{title === '' || title === null || title === undefined
@@ -124,58 +125,33 @@ const InPageFooter: React.FC<{
 									className={`mb-2 ${isXmScale ? 'mb-4' : ''}`}
 								>
 									<b className='mb-4'>Why {PRODUCT_NAME}?</b> <br />
-									<ZIonRouterLink
-										routerLink={ZaionsRoutes.WhyZaions.Zaions101Route}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>{PRODUCT_NAME} 101</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={
-											ZaionsRoutes.WhyZaions.ZaionsIntegrationApiRoute
-										}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Integrations & API</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={
-											ZaionsRoutes.WhyZaions.ZaionsEnterpriseClassRoute
-										}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Enterprise Class</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Pricing</ZIonText>
 									</ZIonRouterLink>
 									<br /> <br />
 									{/* PRODUCTS */}
 									<b className='mb-4'>Products</b> <br />
-									<ZIonRouterLink
-										routerLink={ZaionsRoutes.Products.ZaionsLinkManagmentRoute}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Link Management</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={ZaionsRoutes.Products.ZaionsQRCodeRoute}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>QR Codes</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={ZaionsRoutes.Products.ZaionsLinkInBioRoute}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Link-in-bio</ZIonText>
 									</ZIonRouterLink>
 									<br />
@@ -187,63 +163,39 @@ const InPageFooter: React.FC<{
 									sizeMd='2.9'
 									sizeSm='3'
 									sizeXs='12'
-									className={`mb-2 ${isXmScale ? 'mb-3' : ''}`}
+									// className={`mb-2 ${isXmScale ? 'mb-3' : ''}`}
+									className={classNames({
+										'mb-2': !isXmScale,
+										'mb-3': isXmScale,
+									})}
 								>
 									<b className='mb-4'>Solutions</b> <br />
-									<ZIonRouterLink
-										routerLink={ZaionsRoutes.Solution.ZaionsSocialMediaRoute}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Social Media</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={
-											ZaionsRoutes.Solution.ZaionsDigitalMarketingRoute
-										}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Digital Marketing</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={
-											ZaionsRoutes.Solution.ZaionsCustomerServiceRoute
-										}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Customer Service</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={ZaionsRoutes.Solution.ZaionsForDevelopersRoute}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>For Developers</ZIonText>
 									</ZIonRouterLink>
 									<br /> <br />
 									<b className='mb-4'>Features</b> <br />
-									<ZIonRouterLink
-										routerLink={ZaionsRoutes.Feature.ZaionsBrandedLinksRoute}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Branded Links</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={ZaionsRoutes.Feature.ZaionsMobileLinksRoute}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Mobile Links</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={
-											ZaionsRoutes.Feature
-												.ZaionsCampaignManagementAnalyticsRoute
-										}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>
 											Campaign <br /> Management & <br /> Analytics
 										</ZIonText>
@@ -260,19 +212,11 @@ const InPageFooter: React.FC<{
 									className={`mb-2 ${isXmScale ? 'mb-3' : ''}`}
 								>
 									<b className='mb-4'>Resources</b> <br />
-									<ZIonRouterLink
-										routerLink={ZaionsRoutes.Resources.ZaionsBlogsRoute}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Blog</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={
-											ZaionsRoutes.Resources.ZaionsResourceLibraryRoute
-										}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Resource Library</ZIonText>
 									</ZIonRouterLink>
 									<br />
@@ -290,57 +234,32 @@ const InPageFooter: React.FC<{
 										<ZIonText>Support</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={ZaionsRoutes.Resources.ZaionsTrustCenterRoute}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Trust Center</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={
-											ZaionsRoutes.Resources.ZaionsBrowserExtensionsRoute
-										}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Browser Extension</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={ZaionsRoutes.Resources.ZaionsMobileAppsRoute}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Mobile App</ZIonText>
 									</ZIonRouterLink>
 									<br /> <br />
 									<b className='mb-4'>Legal</b> <br />
-									<ZIonRouterLink
-										routerLink={ZaionsRoutes.Legal.ZaionsPrivacyPolicyRoute}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Privacy Policy</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={ZaionsRoutes.Legal.ZaionsTermsOfService}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Terms of Service</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={
-											ZaionsRoutes.Legal.ZaionsAcceptableUsePolicyRoute
-										}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Acceptable Use Policy</ZIonText>
 									</ZIonRouterLink>
 									<br />
-									<ZIonRouterLink
-										routerLink={ZaionsRoutes.Legal.ZaionsCodeOfConductRoute}
-										color='dark'
-									>
+									<ZIonRouterLink routerLink='' color='dark'>
 										<ZIonText>Code of Conduct</ZIonText>
 									</ZIonRouterLink>
 									<br />
@@ -462,19 +381,16 @@ const InPageFooter: React.FC<{
 
 							<div className='ion-padding' slot='content'>
 								{/* 101 */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.WhyZaions.Zaions101Route}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom pb-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='pb-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={bookOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												{PRODUCT_NAME} 101
 											</ZIonText>
-											<ZIonText className='text-lg block'>
+											<ZIonText className='block text-lg'>
 												an introduction to {PRODUCT_NAME}’s features
 											</ZIonText>
 										</ZIonCol>
@@ -482,19 +398,16 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* Integrations & API */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.WhyZaions.ZaionsIntegrationApiRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={earthOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Integrations & API
 											</ZIonText>
-											<ZIonText className='text-lg block'>
+											<ZIonText className='block text-lg'>
 												{PRODUCT_NAME} scale of the size you need
 											</ZIonText>
 										</ZIonCol>
@@ -502,19 +415,16 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* Enterprise Class */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.WhyZaions.ZaionsEnterpriseClassRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={codeOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Enterprise Class
 											</ZIonText>
-											<ZIonText className='text-lg block'>
+											<ZIonText className='block text-lg'>
 												connest {PRODUCT_NAME} with the tool you love
 											</ZIonText>
 										</ZIonCol>
@@ -522,19 +432,16 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* Pricing */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={pricetags} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Pricing
 											</ZIonText>
-											<ZIonText className='text-lg block'></ZIonText>
+											<ZIonText className='block text-lg'></ZIonText>
 										</ZIonCol>
 									</ZIonRow>
 								</ZIonRouterLink>
@@ -548,19 +455,16 @@ const InPageFooter: React.FC<{
 							</ZIonItem>
 							<div className='ion-padding' slot='content'>
 								{/* Link Management */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Products.ZaionsLinkManagmentRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={link} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Link Management
 											</ZIonText>
-											<ZIonText className='text-base block'>
+											<ZIonText className='block text-base'>
 												Customize, share, and track links
 											</ZIonText>
 										</ZIonCol>
@@ -568,19 +472,16 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* QR Codes */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Products.ZaionsQRCodeRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={qrCode} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												QR Codes
 											</ZIonText>
-											<ZIonText className='text-base block'>
+											<ZIonText className='block text-base'>
 												Dynamic solutions to fit every business need
 											</ZIonText>
 										</ZIonCol>
@@ -588,19 +489,16 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* Link-in-bio */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Products.ZaionsLinkInBioRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={tabletPortrait} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Link-in-bio
 											</ZIonText>
-											<ZIonText className='text-base block'>
+											<ZIonText className='block text-base'>
 												Curate and track links for social media profiles
 											</ZIonText>
 										</ZIonCol>
@@ -616,16 +514,13 @@ const InPageFooter: React.FC<{
 							</ZIonItem>
 							<div className='ion-padding' slot='content'>
 								{/* Social Media */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Solution.ZaionsSocialMediaRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={bulbOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Social Media
 											</ZIonText>
 										</ZIonCol>
@@ -633,16 +528,13 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* Digital Marketing */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Solution.ZaionsDigitalMarketingRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={pieChartOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Digital Marketing
 											</ZIonText>
 										</ZIonCol>
@@ -650,11 +542,8 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* Customer Service */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Solution.ZaionsCustomerServiceRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon
 												icon={peopleCircleOutline}
@@ -662,7 +551,7 @@ const InPageFooter: React.FC<{
 											/>
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Customer Service
 											</ZIonText>
 										</ZIonCol>
@@ -670,16 +559,13 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* For Developers */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Solution.ZaionsForDevelopersRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={codeSlashOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												For Developers
 											</ZIonText>
 										</ZIonCol>
@@ -695,16 +581,13 @@ const InPageFooter: React.FC<{
 							</ZIonItem>
 							<div className='ion-padding' slot='content'>
 								{/* Branded Links */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Feature.ZaionsBrandedLinksRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={unlinkOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Branded Links
 											</ZIonText>
 										</ZIonCol>
@@ -712,11 +595,8 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* Mobile Links */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Feature.ZaionsMobileLinksRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon
 												icon={phonePortraitOutline}
@@ -724,7 +604,7 @@ const InPageFooter: React.FC<{
 											/>
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Mobile Links
 											</ZIonText>
 										</ZIonCol>
@@ -732,18 +612,13 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* Campaign Management & Analytics */}
-								<ZIonRouterLink
-									routerLink={
-										ZaionsRoutes.Feature.ZaionsCampaignManagementAnalyticsRoute
-									}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={analyticsOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Campaign Management & Analytics
 											</ZIonText>
 										</ZIonCol>
@@ -759,16 +634,13 @@ const InPageFooter: React.FC<{
 							</ZIonItem>
 							<div className='ion-padding' slot='content'>
 								{/* Blog */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Resources.ZaionsBlogsRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={videocamOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Blog
 											</ZIonText>
 										</ZIonCol>
@@ -776,16 +648,13 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* Resource Library */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Resources.ZaionsResourceLibraryRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={libraryOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Resource Library
 											</ZIonText>
 										</ZIonCol>
@@ -797,12 +666,12 @@ const InPageFooter: React.FC<{
 									routerLink={ZaionsRoutes.HomeRoute}
 									color='dark'
 								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={codeOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Developers
 											</ZIonText>
 										</ZIonCol>
@@ -814,7 +683,7 @@ const InPageFooter: React.FC<{
 									routerLink={ZaionsRoutes.HomeRoute}
 									color='dark'
 								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon
 												icon={informationCircleOutline}
@@ -822,7 +691,7 @@ const InPageFooter: React.FC<{
 											/>
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Support
 											</ZIonText>
 										</ZIonCol>
@@ -830,11 +699,8 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* Trust Center */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Resources.ZaionsTrustCenterRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon
 												icon={heartCircleOutline}
@@ -842,7 +708,7 @@ const InPageFooter: React.FC<{
 											/>
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Trust Center
 											</ZIonText>
 										</ZIonCol>
@@ -850,18 +716,13 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* Browser Extension */}
-								<ZIonRouterLink
-									routerLink={
-										ZaionsRoutes.Resources.ZaionsBrowserExtensionsRoute
-									}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={browsersOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Browser Extension
 											</ZIonText>
 										</ZIonCol>
@@ -869,16 +730,13 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* Mobile App */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Resources.ZaionsMobileAppsRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={appsOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Mobile App
 											</ZIonText>
 										</ZIonCol>
@@ -893,16 +751,13 @@ const InPageFooter: React.FC<{
 							</ZIonItem>
 							<div className='ion-padding' slot='content'>
 								{/* Privacy Policy */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Legal.ZaionsPrivacyPolicyRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={lockClosedOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Privacy Policy
 											</ZIonText>
 										</ZIonCol>
@@ -910,16 +765,13 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* Terms of Service */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Legal.ZaionsTermsOfService}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={peopleOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Terms of Service
 											</ZIonText>
 										</ZIonCol>
@@ -927,11 +779,8 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* Acceptable Use Policy */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Legal.ZaionsAcceptableUsePolicyRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon
 												icon={checkmarkCircleOutline}
@@ -939,7 +788,7 @@ const InPageFooter: React.FC<{
 											/>
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Acceptable Use Policy
 											</ZIonText>
 										</ZIonCol>
@@ -947,11 +796,8 @@ const InPageFooter: React.FC<{
 								</ZIonRouterLink>
 
 								{/* Code of Conduct */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Legal.ZaionsCodeOfConductRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon
 												icon={codeWorkingOutline}
@@ -959,7 +805,7 @@ const InPageFooter: React.FC<{
 											/>
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Code of Conduct
 											</ZIonText>
 										</ZIonCol>
@@ -975,16 +821,13 @@ const InPageFooter: React.FC<{
 							</ZIonItem>
 							<div className='ion-padding' slot='content'>
 								{/* About Product */}
-								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Legal.ZaionsAcceptableUsePolicyRoute}
-									color='dark'
-								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+								<ZIonRouterLink routerLink='' color='dark'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={homeOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												About {PRODUCT_NAME}
 											</ZIonText>
 										</ZIonCol>
@@ -996,12 +839,12 @@ const InPageFooter: React.FC<{
 									routerLink={ZaionsRoutes.Company.ZaionsAboutRoute}
 									color='dark'
 								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={briefcaseOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Careers
 											</ZIonText>
 										</ZIonCol>
@@ -1013,12 +856,12 @@ const InPageFooter: React.FC<{
 									routerLink={ZaionsRoutes.Company.ZaionsPartnersRoute}
 									color='dark'
 								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={personAddOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Partners
 											</ZIonText>
 										</ZIonCol>
@@ -1030,12 +873,12 @@ const InPageFooter: React.FC<{
 									routerLink={ZaionsRoutes.Company.ZaionsPressRoute}
 									color='dark'
 								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={newspaperOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Press
 											</ZIonText>
 										</ZIonCol>
@@ -1047,12 +890,12 @@ const InPageFooter: React.FC<{
 									routerLink={ZaionsRoutes.Company.ZaionsContactRoute}
 									color='dark'
 								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={callOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Contact
 											</ZIonText>
 										</ZIonCol>
@@ -1064,12 +907,12 @@ const InPageFooter: React.FC<{
 									routerLink={ZaionsRoutes.Company.ZaionsReviewsRoute}
 									color='dark'
 								>
-									<ZIonRow className='ion-align-items-start border-bottom py-2'>
+									<ZIonRow className='py-2 ion-align-items-start border-bottom'>
 										<ZIonCol size='1.5' className='pt-2 mt-1'>
 											<ZIonIcon icon={eyeOutline} className='text-3xl' />
 										</ZIonCol>
 										<ZIonCol>
-											<ZIonText className='font-bold text-xl block'>
+											<ZIonText className='block text-xl font-bold'>
 												Reviews
 											</ZIonText>
 										</ZIonCol>
@@ -1084,7 +927,7 @@ const InPageFooter: React.FC<{
 								<ZIonLabel className='font-bold'>{PRODUCT_NAME}</ZIonLabel>
 							</ZIonItem>
 							<div className='ion-text-center ion-padding' slot='content'>
-								<img src={ProductLogo} className='logo mt-3' alt='' />
+								<img src={ProductLogo} className='mt-3 logo' alt='' />
 								<br />
 								<small>
 									© 2022 {PRODUCT_NAME} | Handmade in San Francisco, Denver, New

@@ -15,7 +15,6 @@ import ZaionsDashboardResponsiveMenu from '@/navigation/AdminPanel/DashboardResp
 import { PAGE_MENU, PAGE_MENU_SIDE } from '@/utils/enums';
 import AdminPanelFoldersSidebarMenu from '@/navigation/AdminPanel/FolderSideMenu';
 import AdminPanelShortLinksFolderSideMenu from '@/navigation/AdminPanel/ShortLinksFolderSideMenu';
-import AdminPanelLinkInBioFolderSideMenu from '@/navigation/AdminPanel/LinkInBioFolderSideMenu';
 import ZWorkspaceViewPageFilterMenu from '@/navigation/AdminPanel/WorkspaceViewPageFilterMenu';
 import { useParams } from 'react-router';
 
@@ -49,8 +48,6 @@ const ZaionsIonPage: React.FC<ZaionsIonPageType> = ({
 				<ZaionsDashboardResponsiveMenu menuSide={menuSide} />
 			) : menu === PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU ? (
 				<AdminPanelShortLinksFolderSideMenu workspaceId={workspaceId} />
-			) : menu === PAGE_MENU.ADMIN_PANEL_LINK_IN_BIO_FOLDERS_MENU ? (
-				<AdminPanelLinkInBioFolderSideMenu workspaceId={workspaceId} />
 			) : menu === PAGE_MENU.ADMIN_PANEL_WORKSPACE_VIEW_FILTER_MENU ? (
 				<ZWorkspaceViewPageFilterMenu />
 			) : (

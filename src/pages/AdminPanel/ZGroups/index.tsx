@@ -43,7 +43,7 @@ import CONSTANTS, { BRACKPOINT_MD } from '@/utils/constants';
 
 /**
  * Type Imports go down
- * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
 	ZLinkIonPanelSettingsSidebarActiveLinkType,

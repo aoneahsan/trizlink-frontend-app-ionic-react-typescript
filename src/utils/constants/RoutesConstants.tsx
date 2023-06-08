@@ -8,55 +8,6 @@ const ZaionsRoutes = {
 	LoginRoute: '/sign-in',
 	SignUpRoute: '/sign-up',
 	PasswordResetEmailForm: '/forgot-password',
-	DiscoverEnterpriseRoute: '/pages/landing/discover-enterprise',
-
-	// Why Zaions Section
-	WhyZaions: {
-		Zaions101Route: '/pages/why-zlink/zlink-101',
-		ZaionsEnterpriseClassRoute: '/pages/why-zlink/enterprise-class',
-		ZaionsIntegrationApiRoute: '/pages/why-zlink/integrations-api',
-		ZaionsPricingRoute: '/pages/pricing/v1',
-	},
-
-	// Product Section
-	Products: {
-		ZaionsQRCodeRoute: '/pages/products/qr-codes',
-		ZaionsLinkManagmentRoute: '/pages/products/link-management',
-		ZaionsLinkInBioRoute: '/pages/products/link-in-bio',
-	},
-
-	// Solution Section
-	Solution: {
-		ZaionsSocialMediaRoute: '/pages/solutions/social-media',
-		ZaionsDigitalMarketingRoute: '/pages/solutions/digital-marketing',
-		ZaionsCustomerServiceRoute: '/pages/solutions/customer-services',
-		ZaionsForDevelopersRoute: '/pages/solutions/for-developers',
-	},
-
-	// Feature Section
-	Feature: {
-		ZaionsBrandedLinksRoute: '/pages/features/branded-links',
-		ZaionsMobileLinksRoute: '/pages/features/mobile-links',
-		ZaionsCampaignManagementAnalyticsRoute:
-			'/pages/features/campaign-management-analytics',
-	},
-
-	// Resources Section
-	Resources: {
-		ZaionsBlogsRoute: '/blog/',
-		ZaionsResourceLibraryRoute: '/resources',
-		ZaionsTrustCenterRoute: '/pages/trust',
-		ZaionsBrowserExtensionsRoute: '/pages/browser-extension',
-		ZaionsMobileAppsRoute: '/pages/mobile-app',
-	},
-
-	// Legal Section
-	Legal: {
-		ZaionsPrivacyPolicyRoute: '/pages/privacy',
-		ZaionsAcceptableUsePolicyRoute: '/pages/acceptable-use',
-		ZaionsCodeOfConductRoute: '/pages/code-of-conduct',
-		ZaionsTermsOfService: '/pages/terms-of-service',
-	},
 
 	// Company Section
 	Company: {
@@ -81,12 +32,6 @@ const ZaionsRoutes = {
 			Main: `/workspaces/${workspaceIdParam}/short-links/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
 			Create: `/workspaces/${workspaceIdParam}/short-links/create`,
 			Edit: `/workspaces/${workspaceIdParam}/short-links/edit/${CONSTANTS.RouteParams.editShortLinkIdParam}`,
-		},
-
-		LinkInBio: {
-			Main: `/workspaces/${workspaceIdParam}/link-in-bio/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
-			Create: `/workspaces/${workspaceIdParam}/link-in-bio/create`,
-			Edit: `/workspaces/${workspaceIdParam}/link-in-bio/edit/${CONSTANTS.RouteParams.linkInBio.linkInBioId}`,
 		},
 
 		Workspaces: {

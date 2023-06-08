@@ -36,14 +36,16 @@ const ZaionsHr: React.FC = () => {
 					sizeMd='12'
 					sizeSm='12'
 					sizeXs='12'
-					className='mx-auto px-0'
+					className='px-0 mx-auto'
 				>
 					<div
 						className={classNames({
 							'mb-4': !isLgScale,
 						})}
 					>
-						<hr className={`zaions_hr w-full ${!isLgScale ? '' : 'my-0'}`} />
+						<hr
+							className={`zaions_hr w-full mx-auto ${!isLgScale ? '' : 'my-0'}`}
+						/>
 					</div>
 				</ZIonCol>
 				{/* <ZIonCol></ZIonCol> */}

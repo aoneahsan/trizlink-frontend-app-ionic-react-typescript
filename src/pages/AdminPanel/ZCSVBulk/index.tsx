@@ -44,7 +44,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Type Imports go down
- * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
 	ZLinkIonPanelSettingsSidebarActiveLinkType,
@@ -124,7 +124,7 @@ const ZCSVBulkShortning: React.FC = () => {
 										/>
 									)}
 									<ZIonCol>
-										<ZIonRow className='ion-align-items-center ion-justify-content-center flex-col mt-3'>
+										<ZIonRow className='flex-col mt-3 ion-align-items-center ion-justify-content-center'>
 											<ZIonImg
 												src={bulkUploadEmptyState}
 												className={classNames({
@@ -134,7 +134,7 @@ const ZCSVBulkShortning: React.FC = () => {
 												})}
 												alt='bulk upload Inactive state'
 											/>
-											<ZIonTitle className='text-3xl font-bold mb-2 mt-4'>
+											<ZIonTitle className='mt-4 mb-2 text-3xl font-bold'>
 												Streamline your link creation
 											</ZIonTitle>
 											<ZIonText className='text-lg ion-text-center'>
@@ -143,8 +143,8 @@ const ZCSVBulkShortning: React.FC = () => {
 												time for, well, other work.
 											</ZIonText>
 											<ZIonButton
-												className='ion-text-capitalize mt-5'
-												routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
+												className='mt-5 ion-text-capitalize'
+												routerLink=''
 											>
 												<ZIonText className='px-4 font-bold'>
 													View our plans

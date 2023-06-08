@@ -61,7 +61,7 @@ const ZaionsHPShortLink: React.FC = () => {
 					closer. Discover our Connections Platform below.
 					<ZIonIcon
 						icon={caretDownOutline}
-						className='block mx-auto w-6 h-6'
+						className='block w-6 h-6 mx-auto'
 						color='secondary'
 					/>
 				</ZIonText>
@@ -93,12 +93,12 @@ const ZaionsHPShortLink: React.FC = () => {
 								label='Shorten your link'
 								labelPlacement='floating'
 								fill='solid'
-								className='ion-text-start mt-1'
+								className='mt-1 ion-text-start'
 							/>
 							<ZIonText color='medium' style={{ fontSize: '13px' }}>
 								By clicking SHORTEN, you are agreeing to {PRODUCT_NAME}'s{' '}
 								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Legal.ZaionsTermsOfService}
+									routerLink=''
 									className='underline'
 									color='medium'
 								>
@@ -106,7 +106,7 @@ const ZaionsHPShortLink: React.FC = () => {
 								</ZIonRouterLink>
 								,{' '}
 								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Legal.ZaionsPrivacyPolicyRoute}
+									routerLink=''
 									className='underline'
 									color='medium'
 								>
@@ -114,7 +114,7 @@ const ZaionsHPShortLink: React.FC = () => {
 								</ZIonRouterLink>
 								, and{' '}
 								<ZIonRouterLink
-									routerLink={ZaionsRoutes.Legal.ZaionsAcceptableUsePolicyRoute}
+									routerLink=''
 									className='underline'
 									color='medium'
 								>

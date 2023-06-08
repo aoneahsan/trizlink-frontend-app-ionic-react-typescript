@@ -218,15 +218,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 												activePage ===
 												AdminPanelMainSidebarMenuPageEnum.linkInBio,
 										})}
-										routerLink={replaceRouteParams(
-											ZaionsRoutes.AdminPanel.LinkInBio.Main,
-											[
-												CONSTANTS.RouteParams.workspace.workspaceId,
-												CONSTANTS.RouteParams
-													.folderIdToGetShortLinksOrLinkInBio,
-											],
-											[workspaceId, 'all']
-										)}
+										routerLink={''}
 									>
 										<ZIonText
 											className={classNames({
@@ -472,18 +464,9 @@ const AdminPanelMainSidebarMenu: React.FC<{
 						<ZIonSegmentButton
 							value={AdminPanelMainSidebarMenuPageEnum.linkInBio}
 							className='text-transform-initial'
-							onClick={() => {
-								zNavigatePushRoute(
-									replaceRouteParams(
-										ZaionsRoutes.AdminPanel.LinkInBio.Main,
-										[
-											CONSTANTS.RouteParams.workspace.workspaceId,
-											CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-										],
-										[workspaceId, 'all']
-									)
-								);
-							}}
+							// onClick={() => {
+							// 	zNavigatePushRoute('');
+							// }}
 						>
 							Link-in-bio
 						</ZIonSegmentButton>

@@ -42,7 +42,7 @@ import { PAGE_MENU } from '@/utils/enums';
 
 /**
  * Type Imports go down
- * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { ZLinkIonPanelSidebarActiveLinkType } from '@/types/AdminPanel/linksType';
 
@@ -105,7 +105,7 @@ const ZLinkCampaigns: React.FC = () => {
 						<ZLinkDashboardTopBar />
 						<ZIonContent className='ion-padding'>
 							<ZIonGrid>
-								<ZIonRow className='ion-align-items-center ion-justify-content-center flex-col mt-3'>
+								<ZIonRow className='flex-col mt-3 ion-align-items-center ion-justify-content-center'>
 									<ZIonImg
 										src={campaignsEmptyState}
 										alt='Link in bio Inactive state'
@@ -115,7 +115,7 @@ const ZLinkCampaigns: React.FC = () => {
 											'w-full': !isSmScale,
 										})}
 									/>
-									<ZIonTitle className='text-3xl font-bold mb-2 mt-4'>
+									<ZIonTitle className='mt-4 mb-2 text-3xl font-bold'>
 										Some links belong together
 									</ZIonTitle>
 									<ZIonText className='text-lg ion-text-center'>
@@ -124,8 +124,8 @@ const ZLinkCampaigns: React.FC = () => {
 										plan. there.
 									</ZIonText>
 									<ZIonButton
-										className='ion-text-capitalize mt-4'
-										routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
+										className='mt-4 ion-text-capitalize'
+										routerLink=''
 									>
 										<ZIonText className='px-4 font-bold'>
 											view our plans

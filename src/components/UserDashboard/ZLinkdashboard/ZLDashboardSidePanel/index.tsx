@@ -37,7 +37,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Type Imports go down
- * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { ZLinkIonPanelSidebarActiveLinkType } from '@/types/AdminPanel/linksType';
 
