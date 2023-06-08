@@ -11,7 +11,6 @@ export enum FormMode {
 
 export enum folderState {
 	shortlink = 'shortlink',
-	linkInBio = 'linkInBio',
 }
 
 export enum messengerPlatformsBlockEnum {

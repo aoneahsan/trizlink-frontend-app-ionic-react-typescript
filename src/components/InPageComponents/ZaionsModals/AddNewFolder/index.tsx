@@ -71,17 +71,6 @@ const ZaionsAddNewFolder: React.FC<{
 		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 	});
 
-	// const { mutateAsync: createNewLinkInBiosFolder } = useZRQCreateRequest({
-	// 	_url: API_URL_ENUM.folders_create_list,
-	// 	_queriesKeysToInvalidate: [
-	// 					CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-	// workspaceId,
-	// folderState.linkInBio,
-	// 	],
-	// 	_itemsIds: [workspaceId],
-	// 	_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-	// });
-
 	const { mutateAsync: updateFolder } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.folders_update_delete,
 		_queriesKeysToInvalidate: [

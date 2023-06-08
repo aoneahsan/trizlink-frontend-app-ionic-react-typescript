@@ -114,13 +114,6 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{ className?: string }> = ({
 							formMode: FormMode.ADD,
 						}));
 
-						zNavigatePushRoute(
-							replaceParams(
-								ZaionsRoutes.AdminPanel.ShortLinks.Create,
-								CONSTANTS.RouteParams.workspace.workspaceId,
-								workspaceId
-							)
-						);
 						resetForm();
 					}
 				} catch (error) {

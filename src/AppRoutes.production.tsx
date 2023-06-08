@@ -11,7 +11,6 @@ import Home from '@/pages/Home';
 import ZaionsReactArea from '@/Testing/ReactArea';
 import Login from '@/pages/Login';
 import ZShortLinksListPage from '@/pages/AdminPanel/links';
-import AdminCreateNewLinkPages from '@/pages/AdminPanel/links/CreateNewLinks';
 import TestingReactTable from '@/Testing/ReactTable';
 
 // Routes
@@ -67,17 +66,6 @@ const ProductionAppRoutes: React.FC = () => {
 					exact
 					path={ZaionsRoutes.AdminPanel.ShortLinks.Main}
 					component={ZShortLinksListPage}
-				/>
-
-				<Route
-					exact
-					path={ZaionsRoutes.AdminPanel.ShortLinks.Create}
-					component={AdminCreateNewLinkPages}
-				/>
-				<Route
-					exact
-					path={ZaionsRoutes.AdminPanel.ShortLinks.Edit}
-					component={AdminCreateNewLinkPages}
 				/>
 
 				<Route

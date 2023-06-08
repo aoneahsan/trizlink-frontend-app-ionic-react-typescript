@@ -128,7 +128,7 @@ const ZWorkspaceFormApprovalTab: React.FC = () => {
 								/>
 
 								{/* Schedule posts approval */}
-								<ZIonRow className='ion-align-items-center ion-justify-content-center mt-4'>
+								<ZIonRow className='mt-4 ion-align-items-center ion-justify-content-center'>
 									<ZIonCol sizeXl='5'>
 										{/* Schedule posts approval */}
 										<ZWorkspaceApprovalToggler
@@ -215,6 +215,14 @@ const ZWorkspaceFormApprovalTab: React.FC = () => {
 										<ZIonButton
 											expand='block'
 											className='text-transform-initial'
+											routerLink={createRedirectRoute({
+												url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+												params: [
+													CONSTANTS.RouteParams.workspace.workspaceId,
+													CONSTANTS.RouteParams.folderIdToGetShortLinks,
+												],
+												values: [editWorkspaceId, 'all'],
+											})}
 										>
 											Finish
 										</ZIonButton>

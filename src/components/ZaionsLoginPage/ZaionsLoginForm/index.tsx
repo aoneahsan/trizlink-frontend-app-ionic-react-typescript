@@ -131,7 +131,7 @@ const ZaionsLoginForm: React.FC = () => {
 					// zNavigatePushRoute(
 					// 	replaceParams(
 					// 		ZaionsRoutes.AdminPanel.LinkInBio.Main,
-					// 		CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+					// 		CONSTANTS.RouteParams.folderIdToGetShortLinks,
 					// 		''
 					// 	)
 					// );

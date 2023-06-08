@@ -63,7 +63,7 @@ const ZaionsDashboardResponsiveMenu: React.FC<ZDashboardResponsiveMenu> = ({
 			side={menuSide || 'end'}
 			menuId='zaions-dashboard-sidebar-menu'
 		>
-			<IonToolbar className='mt-3 border-bottom pb-2'>
+			<IonToolbar className='pb-2 mt-3 border-bottom'>
 				<ZIonTitle className='ion-padding-bottom'>
 					<ZIonRouterLink
 						routerLink={ZaionsRoutes.HomeRoute}
@@ -72,14 +72,13 @@ const ZaionsDashboardResponsiveMenu: React.FC<ZDashboardResponsiveMenu> = ({
 						<ZIonImg
 							src={productSmLogo}
 							alt='product logo'
-							className='logo mx-auto'
+							className='mx-auto logo'
 						/>
 					</ZIonRouterLink>
 				</ZIonTitle>
 				<ZIonButton
 					expand='block'
-					className='ion-margin mt-0 ion-text-capitalize font-bold mb-1'
-					routerLink={ZaionsRoutes.AdminPanel.ShortLinks.Create}
+					className='mt-0 mb-1 font-bold ion-margin ion-text-capitalize'
 				>
 					Create New
 				</ZIonButton>
@@ -115,7 +114,7 @@ const ZaionsDashboardResponsiveMenu: React.FC<ZDashboardResponsiveMenu> = ({
 						>
 							<ZIonIcon
 								icon={linkOutline}
-								className='text-3xl me-3 font-bold'
+								className='text-3xl font-bold me-3'
 							/>
 							<ZIonText className='text-lg font-bold'>Links</ZIonText>
 						</ZIonItem>
@@ -135,7 +134,7 @@ const ZaionsDashboardResponsiveMenu: React.FC<ZDashboardResponsiveMenu> = ({
 						>
 							<ZIonIcon
 								icon={phonePortraitOutline}
-								className='text-3xl me-3 font-bold'
+								className='text-3xl font-bold me-3'
 							/>
 							<ZIonText className='text-lg font-bold me-2'>
 								Link-in-bio
@@ -158,7 +157,7 @@ const ZaionsDashboardResponsiveMenu: React.FC<ZDashboardResponsiveMenu> = ({
 						>
 							<ZIonIcon
 								icon={folderOutline}
-								className='text-3xl me-3 font-bold'
+								className='text-3xl font-bold me-3'
 							/>
 							<ZIonText className='text-lg font-bold'>Campaigns</ZIonText>
 						</ZIonItem>
@@ -178,7 +177,7 @@ const ZaionsDashboardResponsiveMenu: React.FC<ZDashboardResponsiveMenu> = ({
 						>
 							<ZIonIcon
 								icon={globeOutline}
-								className='text-3xl me-3 font-bold'
+								className='text-3xl font-bold me-3'
 							/>
 							<ZIonText className='text-lg font-bold'>Custom links</ZIonText>
 						</ZIonItem>
@@ -196,7 +195,7 @@ const ZaionsDashboardResponsiveMenu: React.FC<ZDashboardResponsiveMenu> = ({
 						>
 							<ZIonIcon
 								icon={settingsOutline}
-								className='text-3xl me-3 font-bold'
+								className='text-3xl font-bold me-3'
 							/>
 							<ZIonText className='text-lg font-bold'>Settings</ZIonText>
 						</ZIonItem>
@@ -205,30 +204,30 @@ const ZaionsDashboardResponsiveMenu: React.FC<ZDashboardResponsiveMenu> = ({
 						<ZIonList lines='none' className='ms-5 ps-1'>
 							{/* Profile */}
 							<ZIonRouterLink
-								className='ion-no-padding ion-no-margin mb-1'
+								className='mb-1 ion-no-padding ion-no-margin'
 								routerLink={ZaionsRoutes.AdminPanel.ZaionsDashboard.ZProfile}
 								color='dark'
 							>
-								<ZIonText className='text-base ps-2 font-bold block mb-3'>
+								<ZIonText className='block mb-3 text-base font-bold ps-2'>
 									Profile
 								</ZIonText>
 							</ZIonRouterLink>
 
 							{/* Integrations */}
 							<ZIonRouterLink
-								className='ion-no-padding ion-no-margin mb-1'
+								className='mb-1 ion-no-padding ion-no-margin'
 								routerLink={
 									ZaionsRoutes.AdminPanel.ZaionsDashboard.ZIntegration
 								}
 								color='dark'
 							>
-								<ZIonText className='text-base ps-2 font-bold block mb-3'>
+								<ZIonText className='block mb-3 text-base font-bold ps-2'>
 									Integrations
 								</ZIonText>
 							</ZIonRouterLink>
 
 							{/* Account Settings */}
-							<ZIonText className='font-bold ps-2 block' color='secondary'>
+							<ZIonText className='block font-bold ps-2' color='secondary'>
 								Account settings
 							</ZIonText>
 
@@ -242,7 +241,7 @@ const ZaionsDashboardResponsiveMenu: React.FC<ZDashboardResponsiveMenu> = ({
 										slot='header'
 										className='ion-no-padding ion-no-margin'
 									>
-										<ZIonLabel className='ps-2 font-bold' color='medium'>
+										<ZIonLabel className='font-bold ps-2' color='medium'>
 											talhairshad
 										</ZIonLabel>
 									</ZIonItem>
@@ -253,46 +252,46 @@ const ZaionsDashboardResponsiveMenu: React.FC<ZDashboardResponsiveMenu> = ({
 									>
 										{/* Account details */}
 										<ZIonItem
-											className='ion-no-padding ion-no-margin mb-1 '
+											className='mb-1 ion-no-padding ion-no-margin '
 											routerLink={
 												ZaionsRoutes.AdminPanel.ZaionsDashboard.ZAccountDetails
 											}
 										>
-											<ZIonText className='ps-2 font-bold'>
+											<ZIonText className='font-bold ps-2'>
 												Account details
 											</ZIonText>
 										</ZIonItem>
 
 										{/* Custom domains */}
 										<ZIonItem
-											className='ion-no-padding ion-no-margin mb-1'
+											className='mb-1 ion-no-padding ion-no-margin'
 											routerLink={
 												ZaionsRoutes.AdminPanel.ZaionsDashboard.ZCustomDomain
 											}
 										>
-											<ZIonText className='ps-2 font-bold'>
+											<ZIonText className='font-bold ps-2'>
 												Custom domains
 											</ZIonText>
 										</ZIonItem>
 
 										{/* Group */}
 										<ZIonItem
-											className='ion-no-padding ion-no-margin mb-1'
+											className='mb-1 ion-no-padding ion-no-margin'
 											routerLink={
 												ZaionsRoutes.AdminPanel.ZaionsDashboard.ZGroup
 											}
 										>
-											<ZIonText className='ps-2 font-bold'>Groups</ZIonText>
+											<ZIonText className='font-bold ps-2'>Groups</ZIonText>
 										</ZIonItem>
 
 										{/* CVS Bulk Shortening */}
 										<ZIonItem
-											className='ion-no-padding ion-no-margin mb-1'
+											className='mb-1 ion-no-padding ion-no-margin'
 											routerLink={
 												ZaionsRoutes.AdminPanel.ZaionsDashboard.ZCSVBulk
 											}
 										>
-											<ZIonText className='ps-2 font-bold'>
+											<ZIonText className='font-bold ps-2'>
 												CSV bulk shortening
 											</ZIonText>
 										</ZIonItem>
@@ -315,7 +314,7 @@ const ZaionsDashboardResponsiveMenu: React.FC<ZDashboardResponsiveMenu> = ({
 								>
 									<ZIonIcon
 										icon={gitMergeOutline}
-										className='text-3xl me-3 font-bold'
+										className='text-3xl font-bold me-3'
 									/>
 									<ZIonText className='text-lg font-bold'>Api</ZIonText>
 								</ZIonItem>

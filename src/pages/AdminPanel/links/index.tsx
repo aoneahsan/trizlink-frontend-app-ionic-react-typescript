@@ -491,11 +491,6 @@ const ZShortLinksListPage: React.FC = () => {
 																	formMode: FormMode.ADD,
 																}))
 															}
-															routerLink={replaceParams(
-																ZaionsRoutes.AdminPanel.ShortLinks.Create,
-																CONSTANTS.RouteParams.workspace.workspaceId,
-																workspaceId
-															)}
 														>
 															Create a new link
 														</ZIonButton>
@@ -582,10 +577,7 @@ const ZShortLinksListPage: React.FC = () => {
 															formMode: FormMode.ADD,
 														}))
 													}
-													routerLink={
-														ZaionsRoutes.AdminPanel
-															.ShortLinks.Create
-													}
+													
 												>
 													Create a new link
 												</ZIonButton>

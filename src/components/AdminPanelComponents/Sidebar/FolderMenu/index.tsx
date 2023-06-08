@@ -132,8 +132,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 											zNavigatePushRoute(
 												replaceParams(
 													ZaionsRoutes.AdminPanel.ShortLinks.Main,
-													CONSTANTS.RouteParams
-														.folderIdToGetShortLinksOrLinkInBio,
+													CONSTANTS.RouteParams.folderIdToGetShortLinks,
 													'all'
 												)
 											);
@@ -143,8 +142,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 											zNavigatePushRoute(
 												replaceParams(
 													ZaionsRoutes.AdminPanel.LinkInBio.Main,
-													CONSTANTS.RouteParams
-														.folderIdToGetShortLinksOrLinkInBio,
+													CONSTANTS.RouteParams.folderIdToGetShortLinks,
 													'all'
 												)
 											);
@@ -181,8 +179,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 															zNavigatePushRoute(
 																replaceParams(
 																	ZaionsRoutes.AdminPanel.ShortLinks.Main,
-																	CONSTANTS.RouteParams
-																		.folderIdToGetShortLinksOrLinkInBio,
+																	CONSTANTS.RouteParams.folderIdToGetShortLinks,
 																	el.id as string
 																)
 															);
@@ -192,8 +189,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 															zNavigatePushRoute(
 																replaceParams(
 																	ZaionsRoutes.AdminPanel.LinkInBio.Main,
-																	CONSTANTS.RouteParams
-																		.folderIdToGetShortLinksOrLinkInBio,
+																	CONSTANTS.RouteParams.folderIdToGetShortLinks,
 																	el.id as string
 																)
 															);

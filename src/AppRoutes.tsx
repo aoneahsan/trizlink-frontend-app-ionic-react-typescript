@@ -27,7 +27,6 @@ import TestingTabs from '@/Testing/TestingTabs';
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
 import ZShortLinksListPage from '@/pages/AdminPanel/links';
-import AdminCreateNewLinkPages from '@/pages/AdminPanel/links/CreateNewLinks';
 import ZaionsRoutes from './utils/constants/RoutesConstants';
 import ZDashboard from '@/pages/AdminPanel/ZDashboard';
 import SignUp from '@/pages/SignUp';
@@ -87,18 +86,6 @@ const AppRoutes: React.FC = () => {
 					exact
 					path={ZaionsRoutes.AdminPanel.ShortLinks.Main}
 					Component={ZShortLinksListPage}
-				/>
-
-				<PrivateRoute
-					exact
-					path={ZaionsRoutes.AdminPanel.ShortLinks.Create}
-					Component={AdminCreateNewLinkPages}
-				/>
-
-				<PrivateRoute
-					exact
-					path={ZaionsRoutes.AdminPanel.ShortLinks.Edit}
-					Component={AdminCreateNewLinkPages}
 				/>
 
 				<PrivateRoute

@@ -99,24 +99,6 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 		workspaceId: string;
 	}>();
 
-	// get short link data api.
-	const { data: selectedShortLink } = useZRQGetRequest<ShortLinkType>({
-		_url: API_URL_ENUM.shortLinks_update_delete,
-		_key: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
-			workspaceId,
-			editLinkId,
-		],
-		_authenticated: true,
-		_itemsIds: [workspaceId, editLinkId],
-		_urlDynamicParts: [
-			CONSTANTS.RouteParams.workspace.workspaceId,
-			CONSTANTS.RouteParams.shortLink.shortLinkId,
-		],
-		_shouldFetchWhenIdPassed: !editLinkId ? true : false,
-		_extractType: ZRQGetRequestExtractEnum.extractItem,
-		_staleTime: 0,
-	});
 
 	const { presentZIonPopover: presentShortLinkOptionsPopover } = useZIonPopover(
 		ZShortLinkOptionsPopover,
@@ -125,21 +107,6 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 		}
 	); // popover hook to show ZShortLinkOptionsPopover
 
-	useEffect(() => {
-		try {
-			const selectedTypeOptionData = LinkTypeOptionsData.find(
-				(el) => el.type === selectedShortLink?.type
-			);
-
-			if (selectedShortLink && selectedTypeOptionData) {
-				setNewShortLinkTypeOptionDataAtom((_) => ({
-					...selectedTypeOptionData,
-				}));
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	}, [selectedShortLink]);
 
 	const ShortLinkPlaceholder = () => {
 		if (newShortLinkTypeOptionDataAtom) {

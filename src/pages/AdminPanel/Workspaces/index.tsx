@@ -181,16 +181,15 @@ const ZWorkspaceListPage: React.FC = () => {
 																	// after dismissing redirecting to edit workspace-page
 																	zNavigatePushRoute(
 																		createRedirectRoute({
-																			url: ZaionsRoutes.AdminPanel.Workspaces
-																				.Edit,
+																			url: ZaionsRoutes.AdminPanel.ShortLinks
+																				.Main,
 																			params: [
 																				CONSTANTS.RouteParams.workspace
-																					.editWorkspaceIdParam,
+																					.workspaceId,
+																				CONSTANTS.RouteParams
+																					.folderIdToGetShortLinks,
 																			],
-																			values: [event.detail.data],
-																			routeSearchParams: {
-																				tab: workspaceFormTabEnum.inviteClients,
-																			},
+																			values: [event.detail.data, 'all'],
 																		})
 																	);
 																}
@@ -253,18 +252,32 @@ const ZWorkspaceListPage: React.FC = () => {
 																	event.detail.role === 'success'
 																) {
 																	// after dismissing redirecting to edit workspace-page
+																	// zNavigatePushRoute(
+																	// 	createRedirectRoute({
+																	// 		url: ZaionsRoutes.AdminPanel.Workspaces
+																	// 			.Edit,
+																	// 		params: [
+																	// 			CONSTANTS.RouteParams.workspace
+																	// 				.editWorkspaceIdParam,
+																	// 		],
+																	// 		values: [event.detail.data],
+																	// 		routeSearchParams: {
+																	// 			tab: workspaceFormTabEnum.inviteClients,
+																	// 		},
+																	// 	})
+																	// );
+
 																	zNavigatePushRoute(
 																		createRedirectRoute({
-																			url: ZaionsRoutes.AdminPanel.Workspaces
-																				.Edit,
+																			url: ZaionsRoutes.AdminPanel.ShortLinks
+																				.Main,
 																			params: [
 																				CONSTANTS.RouteParams.workspace
-																					.editWorkspaceIdParam,
+																					.workspaceId,
+																				CONSTANTS.RouteParams
+																					.folderIdToGetShortLinks,
 																			],
-																			values: [event.detail.data],
-																			routeSearchParams: {
-																				tab: workspaceFormTabEnum.inviteClients,
-																			},
+																			values: [event.detail.data, 'all'],
 																		})
 																	);
 																}

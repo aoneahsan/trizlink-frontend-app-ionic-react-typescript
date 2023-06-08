@@ -152,7 +152,7 @@ const ZWorkspaceForm: React.FC = () => {
 						ZaionsRoutes.AdminPanel.ShortLinks.Main,
 						[
 							CONSTANTS.RouteParams.workspace.workspaceId,
-							CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+							CONSTANTS.RouteParams.folderIdToGetShortLinks,
 						],
 						[editWorkspaceId, 'all']
 					)

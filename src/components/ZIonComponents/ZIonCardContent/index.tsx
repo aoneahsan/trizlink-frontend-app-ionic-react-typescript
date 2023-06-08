@@ -10,6 +10,7 @@ type ZIonCardContentType = {
   children: ReactNode;
   className?: string;
   mode?: ZIonModeType;
+	onClick?: React.MouseEventHandler<HTMLIonCardElement>;
 };
 
 const ZIonCardContent = (props: ZIonCardContentType) => {

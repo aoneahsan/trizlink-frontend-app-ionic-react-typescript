@@ -88,7 +88,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC<{ workspaceId: string }> = ({
 
 	const { presentZIonPopover: presentFolderActionIonPopover } = useZIonPopover(
 		FolderActionsPopoverContent,
-		{ workspaceId, state: folderState.linkInBio }
+		{ workspaceId, state: folderState.shortlink }
 	);
 
 	const [shortLinksFolderState, setShortLinksFolderState] = useRecoilState(

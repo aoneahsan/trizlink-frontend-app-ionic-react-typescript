@@ -114,14 +114,13 @@ const ZLinkIonPanelSidebar: React.FC<{
 					<ZIonButton
 						expand='block'
 						className='ion-margin ion-text-capitalize font-bold mb-1'
-						routerLink={ZaionsRoutes.AdminPanel.ShortLinks.Create}
+						
 					>
 						Create New
 					</ZIonButton>
 				) : (
 					<ZIonButton
 						className='ion-margin ion-text-capitalize font-bold mb-1'
-						routerLink={ZaionsRoutes.AdminPanel.ShortLinks.Create}
 						title='Create New Short Link'
 					>
 						<ZIonIcon icon={addOutline} />

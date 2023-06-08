@@ -8,7 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { ellipsisHorizontalOutline, starOutline } from 'ionicons/icons';
+import { ellipsisVerticalOutline, starOutline } from 'ionicons/icons';
 import classNames from 'classnames';
 
 /**
@@ -196,23 +196,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 	};
 
 	return (
-		<ZIonCard
-			className='zaions__cursor_pointer h-[13.4rem]'
-			onClick={() => {
-				// Click on card will redirect to view workspace.
-				id &&
-					zNavigatePushRoute(
-						createRedirectRoute({
-							url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-							params: [
-								CONSTANTS.RouteParams.workspace.workspaceId,
-								CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-							],
-							values: [id, 'all'],
-						})
-					);
-			}}
-		>
+		<ZIonCard className='h-[13.4rem]'>
 			<ZIonCardHeader>
 				<ZIonRow className='ion-align-items-center'>
 					<ZIonCol className='flex gap-3 ion-align-items-center'>
@@ -244,19 +228,50 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 					</ZIonCol>
 
 					{/* Add to Favorites button col */}
-					<ZIonCol className='ion-text-end me-2'>
+					<ZIonCol className='ion-text-end'>
 						<ZIonButton
 							fill='clear'
 							className='h-auto mb-1 ion-no-padding ion-no-margin'
 						>
 							<ZIonIcon icon={starOutline} />
 						</ZIonButton>
+
+						<ZIonButton
+							fill='clear'
+							className='h-auto mb-1 ion-no-padding ion-no-margin text-transform-initial ms-2'
+							color='dark'
+							onClick={(event: unknown) => {
+								presentWorkspacesActionsPopover({
+									_event: event as Event,
+									_cssClass: 'zaions_workspaces_actions_popover_size',
+									_dismissOnSelect: false,
+								});
+							}}
+						>
+							<ZIonIcon icon={ellipsisVerticalOutline} />
+						</ZIonButton>
 					</ZIonCol>
 				</ZIonRow>
 			</ZIonCardHeader>
 
 			{/* Card body */}
-			<ZIonCardContent>
+			<ZIonCardContent
+				className='zaions__cursor_pointer'
+				onClick={() => {
+					// Click on card will redirect to view workspace.
+					id &&
+						zNavigatePushRoute(
+							createRedirectRoute({
+								url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+								params: [
+									CONSTANTS.RouteParams.workspace.workspaceId,
+									CONSTANTS.RouteParams.folderIdToGetShortLinks,
+								],
+								values: [id, 'all'],
+							})
+						);
+				}}
+			>
 				<ZIonRow>
 					<ZIonCol>
 						<ZIonButton
@@ -294,22 +309,6 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 					</ZIonCol>
 
 					{/* actions popover button */}
-					<ZIonCol className='ion-text-end'>
-						<ZIonButton
-							fill='clear'
-							className='h-auto mb-1 ion-no-padding ion-no-margin text-transform-initial'
-							color='dark'
-							onClick={(event: unknown) => {
-								presentWorkspacesActionsPopover({
-									_event: event as Event,
-									_cssClass: 'zaions_workspaces_actions_popover_size',
-									_dismissOnSelect: false,
-								});
-							}}
-						>
-							<ZIonIcon icon={ellipsisHorizontalOutline} />
-						</ZIonButton>
-					</ZIonCol>
 				</ZIonRow>
 			</ZIonCardContent>
 		</ZIonCard>

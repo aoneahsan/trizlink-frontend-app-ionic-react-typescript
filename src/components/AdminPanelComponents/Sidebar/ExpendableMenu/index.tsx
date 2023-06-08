@@ -178,8 +178,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 											ZaionsRoutes.AdminPanel.ShortLinks.Main,
 											[
 												CONSTANTS.RouteParams.workspace.workspaceId,
-												CONSTANTS.RouteParams
-													.folderIdToGetShortLinksOrLinkInBio,
+												CONSTANTS.RouteParams.folderIdToGetShortLinks,
 											],
 											[workspaceId, 'all']
 										)}
@@ -450,7 +449,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 										ZaionsRoutes.AdminPanel.ShortLinks.Main,
 										[
 											CONSTANTS.RouteParams.workspace.workspaceId,
-											CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+											CONSTANTS.RouteParams.folderIdToGetShortLinks,
 										],
 										[workspaceId, 'all']
 									)
@@ -479,7 +478,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 								zNavigatePushRoute(
 									replaceParams(
 										ZaionsRoutes.AdminPanel.ShortLinks.Main,
-										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+										CONSTANTS.RouteParams.folderIdToGetShortLinks,
 										'all'
 									)
 								);
@@ -496,7 +495,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 								zNavigatePushRoute(
 									replaceParams(
 										ZaionsRoutes.AdminPanel.ShortLinks.Main,
-										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+										CONSTANTS.RouteParams.folderIdToGetShortLinks,
 										'all'
 									)
 								);
@@ -513,7 +512,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 								zNavigatePushRoute(
 									replaceParams(
 										ZaionsRoutes.AdminPanel.Workspaces.View,
-										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+										CONSTANTS.RouteParams.folderIdToGetShortLinks,
 										workspaceId
 									)
 								);
@@ -530,7 +529,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 								zNavigatePushRoute(
 									replaceParams(
 										ZaionsRoutes.AdminPanel.ShortLinks.Main,
-										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+										CONSTANTS.RouteParams.folderIdToGetShortLinks,
 										'all'
 									)
 								);
@@ -547,7 +546,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 								zNavigatePushRoute(
 									replaceParams(
 										ZaionsRoutes.AdminPanel.ShortLinks.Main,
-										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+										CONSTANTS.RouteParams.folderIdToGetShortLinks,
 										'all'
 									)
 								);

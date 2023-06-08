@@ -141,12 +141,12 @@ const ZAddNewWorkspaceModal: React.FC<{
 
 				<Formik
 					initialValues={{
-						workspaceName: '',
-						workspaceTimezone: '',
+						title: '',
+						timezone: '',
 					}}
 					validate={(values) => {
 						const errors = {};
-						validateField('workspaceName', values, errors);
+						validateField('title', values, errors);
 						return errors;
 					}}
 					onSubmit={(values) => {
@@ -168,31 +168,29 @@ const ZAddNewWorkspaceModal: React.FC<{
 								<ZIonCol size='12'>
 									<ZIonInput
 										className={classNames({
-											'ion-touched ion-invalid':
-												touched.workspaceName && errors.workspaceName,
-											'ion-touched ion-valid':
-												touched.workspaceName && !errors.workspaceName,
+											'ion-touched ion-invalid': touched.title && errors.title,
+											'ion-touched ion-valid': touched.title && !errors.title,
 										})}
-										name='workspaceName'
+										name='title'
 										label='Workspace Name'
 										labelPlacement='stacked'
 										placeholder='Workspace Name'
 										onIonChange={handleChange}
 										onIonBlur={handleBlur}
-										errorText={errors.workspaceName}
-										value={values.workspaceName}
+										errorText={errors.title}
+										value={values.title}
 									/>
 								</ZIonCol>
 
 								{/* Workspace timezone */}
 								<ZIonCol size='12' className='mt-2'>
 									<ZTimezoneSelector
-										name='workspaceTimezone'
+										name='timezone'
 										className='ion-margin-top'
 										label='Workspace timezone (Optional)'
 										labelPlacement='stacked'
 										placeholder='Workspace timezone'
-										value={values.workspaceTimezone}
+										value={values.timezone}
 										onIonChange={handleChange}
 										onIonBlur={handleBlur}
 									/>

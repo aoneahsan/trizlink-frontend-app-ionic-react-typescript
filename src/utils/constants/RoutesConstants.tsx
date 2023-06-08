@@ -29,7 +29,7 @@ const ZaionsRoutes = {
 		},
 
 		ShortLinks: {
-			Main: `/workspaces/${workspaceIdParam}/short-links/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
+			Main: `/workspaces/${workspaceIdParam}/short-links/list/${CONSTANTS.RouteParams.folderIdToGetShortLinks}`,
 			Create: `/workspaces/${workspaceIdParam}/short-links/create`,
 			Edit: `/workspaces/${workspaceIdParam}/short-links/edit/${CONSTANTS.RouteParams.editShortLinkIdParam}`,
 		},

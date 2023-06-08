@@ -27,10 +27,7 @@ export const ZLinkApiRootUrl = ENVS.apiUrl;
 
 const RouteParams = {
 	editShortLinkIdParam: ':editLinkId',
-	editLinkInBioIdParam: ':editLinkInBioId',
-	editLinkInBioPageParam: ':editLinkInBioPage',
-	editLinkInBioStepParam: ':editLinkInBioStep',
-	folderIdToGetShortLinksOrLinkInBio: ':folderId?',
+	folderIdToGetShortLinks: ':folderId?',
 
 	// workspace
 	workspace: {
@@ -42,13 +39,7 @@ const RouteParams = {
 		shortLinkId: ':shortLinkId',
 	},
 
-	linkInBio: {
-		linkInBioId: ':linkInBioId',
-		libPddId: ':libPddId',
-		libBlockId: ':libBlockId',
-	},
-
-	// folderIdToGetShortLinksOrLinkInBio: 'all',
+	// folderIdToGetShortLinks: 'all',
 };
 
 // left here as it will mess up many imports, we can move this when we have some free time (i know that will add more imports to correct but we don't have time for it right now)
@@ -60,54 +51,19 @@ export const API_URLS = {
 	getUserRolePermission: '/user/role/permissions',
 	csrf: '/sanctum/csrf-cookie',
 	delete: '/user/delete',
-	userPixelAccounts_create_list: '/user/pixel',
-	userAccountUtmTags_create_list: '/user/utm-tag',
-	ShortLink_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/shortLink/folders`,
+
 	userEmbedWidget_create_list: '/user/embedded-scripts',
-	userPixelAccounts_update_delete: '/user/pixel/:pixelId',
+
 	userAccountUtmTags_update_delete: '/user/utm-tag/:utmTagId',
-	userAccountFolders_update_delete: '/user/folders/:folderId',
+
 	userEmbedWidget_update_delete: '/user/embedded-scripts/:embeddedId',
-	shortLinks_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links`,
-	shortLinks_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links/${RouteParams.shortLink.shortLinkId}`,
-	FolderShortLinks: '/user/folders/:folderId/short-links',
+
+	ShortLink_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/shortLink/folders`,
+
 	ShortLinks_folders_reorder: '/user/shortLinks/folders/reorder',
-	LinkInBio_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/linkInBio/folders`,
 
-	folders_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder/${RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
+	folders_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder/${RouteParams.folderIdToGetShortLinks}`,
 	folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder`,
-
-	userAccount_LinkInBio_folders_update_delete:
-		'/user/link-in-bio-folders/:folderId',
-	linkInBio_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/link-in-bio`,
-	linkInBio_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/link-in-bio/${RouteParams.linkInBio.linkInBioId}`,
-	linkInBioPreDefinedThemes_create_list: '/user/lib-pre-dd/themes',
-	linkInBioPreDefinedBlocks_create_list: '/user/lib-pre-dd/blocks',
-	linkInBioPreDefinedBlocks_delete_update: '/user/lib-pre-dd/blocks/:blockId',
-	linkInBioBlock_create_list: `/user/ws/${RouteParams.workspace.workspaceId}/lib/${RouteParams.linkInBio.linkInBioId}/lib-block`,
-	linkInBioBlock_delete_update_get: `/user/ws/${RouteParams.workspace.workspaceId}/lib/${RouteParams.linkInBio.linkInBioId}/lib-block/${RouteParams.linkInBio.libBlockId}`,
-	linkInBioBlocks_reorder: `/user/link-in-bio/${RouteParams.linkInBio.linkInBioId}/blocks/reorder`,
-	linkInBioPreDefinedMusicPlatform_create_list:
-		'/user/lib-pre-dd/musicPlatform',
-	linkInBioPreDefinedMusicPlatform_delete_update:
-		'/user/lib-pre-dd/musicPlatform/:musicPlatformId',
-
-	linkInBioPreDefinedMessengerPlatform_create_list:
-		'/user/lib-pre-dd/messengerPlatform',
-	linkInBioPreDefinedMessengerPlatform_delete_update:
-		'/user/lib-pre-dd/messengerPlatform/:messengerPlatformId',
-
-	linkInBioPreData_create_list: `/user/lib-pdd`,
-	linkInBioPreData_delete_update: `/user/lib-pdd/${RouteParams.linkInBio.libPddId}`,
-
-	linkInBioPreDefinedSocialPlatform_create_list:
-		'/user/lib-pre-dd/socialPlatform',
-	linkInBioPreDefinedSocialPlatform_delete_update:
-		'/user/lib-pre-dd/socialPlatform/:socialPlatformId',
-
-	linkInBioPreDefinedFormFields_create_list: '/user/lib-pre-dd/formField',
-	linkInBioPreDefinedFormFields_delete_update:
-		'/user/lib-pre-dd/formField/:formFieldId',
 
 	// workspace
 	workspace_create_list: '/user/workspaces',
