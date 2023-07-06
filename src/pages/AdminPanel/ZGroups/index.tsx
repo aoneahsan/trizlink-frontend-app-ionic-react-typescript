@@ -106,7 +106,7 @@ const ZGroups: React.FC = () => {
 					/>
 
 					<div
-						className='ion-page overflow-y-scroll'
+						className='overflow-y-scroll ion-page'
 						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
 					>
 						<ZLinkDashboardTopBar />
@@ -128,11 +128,11 @@ const ZGroups: React.FC = () => {
 												className='flex io-align-items-center ion-justify-content-between'
 											>
 												<ZIonText>
-													<h2 className='font-black inline-block'>Groups</h2>
+													<h2 className='inline-block font-black'>Groups</h2>
 												</ZIonText>
 												<div
 													className={classNames({
-														cursor-no-drop: true,
+														'cursor-no-drop': true,
 													})}
 												>
 													<ZIonButton

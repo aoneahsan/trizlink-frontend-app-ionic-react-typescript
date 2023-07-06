@@ -41,6 +41,11 @@ const ZaionsRoutes = {
 			View: `/workspaces/${workspaceIdParam}/view`,
 		},
 
+		Projects: {
+			Main: '/projects',
+			Create: '/projects/new',
+		},
+
 		ZaionsDashboard: {
 			DashboardInactive: '/dashboard-upgrade/',
 			LinkInBioInactive: '/launchpads/default/intro',

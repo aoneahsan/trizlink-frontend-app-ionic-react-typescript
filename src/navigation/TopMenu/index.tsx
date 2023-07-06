@@ -139,14 +139,6 @@ const ZaionsTopMenu: React.FC = () => {
 							]}
 						/>
 
-						<ZIonRouterLink
-							routerLink=''
-							className='mb-4 zaions__nav_item'
-							color='dark'
-						>
-							<span>Pricing</span>
-						</ZIonRouterLink>
-
 						<ZaionsDropDown
 							title='Resources'
 							className='zaions__nav_item'

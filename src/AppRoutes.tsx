@@ -40,6 +40,8 @@ import ZWorkspaceListPage from './pages/AdminPanel/Workspaces';
 import ZWorkspaceForm from './pages/AdminPanel/Workspaces/Form';
 import ViewSingleWorkspace from './pages/AdminPanel/Workspaces/ViewSingle';
 import ZAppStartupPage from './pages/AdminPanel/StartUpPage';
+import ZProjects from './pages/AdminPanel/Projects';
+import ZProjectCreatePage from './pages/AdminPanel/Projects/Create';
 
 // Functional Component
 const AppRoutes: React.FC = () => {
@@ -101,8 +103,21 @@ const AppRoutes: React.FC = () => {
 				/>
 
 				<PrivateRoute
+					exact
 					path={ZaionsRoutes.AdminPanel.Workspaces.Create}
 					Component={ZWorkspaceForm}
+				/>
+
+				<PrivateRoute
+					exact
+					path={ZaionsRoutes.AdminPanel.Projects.Main}
+					Component={ZProjects}
+				/>
+
+				<PrivateRoute
+					exact
+					path={ZaionsRoutes.AdminPanel.Projects.Create}
+					Component={ZProjectCreatePage}
 				/>
 
 				<PrivateRoute
