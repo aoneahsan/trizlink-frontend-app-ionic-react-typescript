@@ -166,7 +166,7 @@ const DashboardTopBarUserAccountModal: React.FC = ({
 						</ZIonCol>
 						<ZIonCol className='ion-no-padding ps-3'>
 							<ZIonText className='block'>talhairshad</ZIonText>
-							<ZIonText className='zaions__fs_14'>
+							<ZIonText className='text-[14px]'>
 								bhaiameer704@gmail.com
 							</ZIonText>
 						</ZIonCol>
@@ -176,7 +176,7 @@ const DashboardTopBarUserAccountModal: React.FC = ({
 					<ZIonRow className='w-full py-2 ion-align-items-top ion-padding-start'>
 						<ZIonCol className='ion-no-padding ps-3'>
 							<ZIonText className='block'>talhairshad</ZIonText>
-							<ZIonText className='zaions__fs_14'>Free account</ZIonText>
+							<ZIonText className='text-[14px]'>Free account</ZIonText>
 						</ZIonCol>
 						<ZIonCol className='ion-text-end'>
 							<ZIonButton

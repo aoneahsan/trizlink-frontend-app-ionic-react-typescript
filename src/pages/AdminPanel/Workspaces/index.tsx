@@ -130,9 +130,9 @@ const ZWorkspaceListPage: React.FC = () => {
 			<ZIonContent>
 				<ZCan havePermission={permissionsEnum.viewAny_workspace}>
 					{/* Main grid */}
-					<ZIonGrid className='ion-no-padding zaions_h100'>
+					<ZIonGrid className='ion-no-padding h-full'>
 						{/*  */}
-						<ZIonRow className='zaions_h100'>
+						<ZIonRow className='h-full'>
 							{/* Expendable Navigation in the left-hand side */}
 							{/* <AdminPanelMainSidebarMenu
 							activePage={AdminPanelMainSidebarMenuPageEnum.workspaces}
@@ -157,7 +157,7 @@ const ZWorkspaceListPage: React.FC = () => {
 												<ZIonButton
 													fill='solid'
 													color='primary'
-													className='ion-no-margin text-transform-initial'
+													className='ion-no-margin normal-case'
 												>
 													<ZIonIcon icon={addOutline} /> Invite
 												</ZIonButton>
@@ -168,7 +168,7 @@ const ZWorkspaceListPage: React.FC = () => {
 										<ZIonCol className='flex gap-8 pe-3 ion-align-items-center ion-justify-content-end'>
 											<ZCan havePermission={permissionsEnum.create_workspace}>
 												<ZIonButton
-													className='ion-no-margin text-transform-initial'
+													className='ion-no-margin normal-case'
 													color='secondary'
 													onClick={() => {
 														presentZWorkspaceCreateModal({
@@ -241,7 +241,7 @@ const ZWorkspaceListPage: React.FC = () => {
 											>
 												<ZIonCard
 													className={classNames({
-														'h-[13.4rem] zaions__cursor_pointer': true,
+														'h-[13.4rem] cursor-pointer': true,
 													})}
 													onClick={() => {
 														presentZWorkspaceCreateModal({

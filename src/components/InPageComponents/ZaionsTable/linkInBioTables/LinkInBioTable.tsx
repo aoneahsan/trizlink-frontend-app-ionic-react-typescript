@@ -290,7 +290,7 @@ const ZaionsLinkInBioLinksTable = () => {
                             </div>
                             <ZIonText
                               color='primary'
-                              className='mt-1 zaions__cursor_pointer'
+                              className='mt-1 cursor-pointer'
                               onClick={() => {
                                 setLinkInBioFormState((oldVal) => ({
                                   ...oldVal,
@@ -316,7 +316,7 @@ const ZaionsLinkInBioLinksTable = () => {
                         {el.notes ? (
                           <ZIonText
                             color='primary'
-                            className='mt-1 zaions__cursor_pointer'
+                            className='mt-1 cursor-pointer'
                             onClick={() => {
                               setLinkInBioFormState((oldVal) => ({
                                 ...oldVal,

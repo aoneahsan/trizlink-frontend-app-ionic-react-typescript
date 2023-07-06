@@ -259,7 +259,7 @@ const ZaionsLoginForm: React.FC = () => {
 								<ZIonButton
 									fill='clear'
 									size='large'
-									className='ion-no-padding ms-3 zaions__max_content'
+									className='ion-no-padding ms-3 w-max'
 									onClick={() => setCanViewPassword((OldVal) => !OldVal)}
 									mode='ios'
 								>
@@ -291,7 +291,7 @@ const ZaionsLoginForm: React.FC = () => {
 
 							{/* Some Text */}
 							<div className='mt-3 mb-4 ion-text-center'>
-								<ZIonText className='zaions__fs_14 ' color='medium'>
+								<ZIonText className='text-[14px] ' color='medium'>
 									By signing in with an account, you agree to <br />{' '}
 									{PRODUCT_NAME}
 									's{' '}

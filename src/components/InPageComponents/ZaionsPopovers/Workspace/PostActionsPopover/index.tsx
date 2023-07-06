@@ -76,7 +76,7 @@ const ZWorkspacePostActionsPopover: React.FC = () => {
 		<ZIonList lines='none'>
 			{/* Manage labels */}
 			<ZIonItem
-				className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+				className='ion-activatable ion-focusable cursor-pointer text-sm'
 				minHeight='35px'
 			>
 				<ZIonIcon icon={pricetagOutline} className='me-1 w-5 h-5' />
@@ -85,7 +85,7 @@ const ZWorkspacePostActionsPopover: React.FC = () => {
 
 			{/* Repost */}
 			<ZIonItem
-				className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+				className='ion-activatable ion-focusable cursor-pointer text-sm'
 				minHeight='35px'
 			>
 				<ZIonIcon icon={syncOutline} className='me-1 w-5 h-5' />
@@ -94,7 +94,7 @@ const ZWorkspacePostActionsPopover: React.FC = () => {
 
 			{/* Hide from clients */}
 			<ZIonItem
-				className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+				className='ion-activatable ion-focusable cursor-pointer text-sm'
 				minHeight='35px'
 			>
 				<ZIonIcon icon={eyeOffOutline} className='me-1 w-5 h-5' />
@@ -106,7 +106,7 @@ const ZWorkspacePostActionsPopover: React.FC = () => {
 
 			{/* Copy public share link */}
 			<ZIonItem
-				className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+				className='ion-activatable ion-focusable cursor-pointer text-sm'
 				minHeight='35px'
 			>
 				<ZIonIcon icon={linkOutline} className='me-1 w-5 h-5' />
@@ -115,7 +115,7 @@ const ZWorkspacePostActionsPopover: React.FC = () => {
 
 			{/* Copy to... */}
 			<ZIonItem
-				className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+				className='ion-activatable ion-focusable cursor-pointer text-sm'
 				minHeight='35px'
 			>
 				<ZIonIcon icon={copyOutline} className='me-1 w-5 h-5' />
@@ -124,7 +124,7 @@ const ZWorkspacePostActionsPopover: React.FC = () => {
 
 			{/* Preferred audience */}
 			<ZIonItem
-				className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+				className='ion-activatable ion-focusable cursor-pointer text-sm'
 				minHeight='35px'
 				lines='full'
 			>
@@ -134,7 +134,7 @@ const ZWorkspacePostActionsPopover: React.FC = () => {
 
 			{/* Archive post */}
 			<ZIonItem
-				className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+				className='ion-activatable ion-focusable cursor-pointer text-sm'
 				minHeight='35px'
 			>
 				<ZIonIcon icon={fileTrayFullOutline} className='me-1 w-5 h-5' />

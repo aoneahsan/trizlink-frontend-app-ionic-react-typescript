@@ -8,9 +8,9 @@ import React from 'react';
 
 const ZFallbackIonSpinner: React.FC = () => {
 	return (
-		<div className='w-full zaions_h90vh relative'>
+		<div className='w-full relative'>
 			<div
-				className='absolute top-50 start-50 flex flex-col gap-2'
+				className='absolute flex flex-col gap-2 top-50 start-50'
 				style={{ transform: 'translate(-50%, -50%)' }}
 			>
 				<ZIonSpinner

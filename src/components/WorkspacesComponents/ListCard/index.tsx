@@ -202,7 +202,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 					<ZIonCol className='flex gap-3 ion-align-items-center'>
 						<div
 							className={classNames({
-								'zaions__w50px zaions__h50px rounded overflow__hidden': true,
+								'w-[50px] h-[50px] rounded overflow-hidden': true,
 								'flex ion-align-items-center ion-justify-content-center zaions__primary_bg':
 									!workspaceAvatar,
 							})}
@@ -213,7 +213,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 										workspaceAvatar ||
 										getUiAvatarApiUrl({ name: workspaceName })
 									}
-									className='rounded overflow__hidden'
+									className='overflow-hidden rounded'
 								/>
 							)}
 						</div>
@@ -221,7 +221,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 							<ZIonText className='block text-base font-bold' color='dark'>
 								{workspaceName}
 							</ZIonText>
-							<ZIonText className='block zaions__fs_11'>
+							<ZIonText className='block text-[11px]'>
 								{workspacePagesCount} pages
 							</ZIonText>
 						</div>
@@ -238,7 +238,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 
 						<ZIonButton
 							fill='clear'
-							className='h-auto mb-1 ion-no-padding ion-no-margin text-transform-initial ms-2'
+							className='h-auto mb-1 ion-no-padding ion-no-margin normal-case ms-2'
 							color='dark'
 							onClick={(event: unknown) => {
 								presentWorkspacesActionsPopover({
@@ -256,7 +256,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 
 			{/* Card body */}
 			<ZIonCardContent
-				className='zaions__cursor_pointer'
+				className='cursor-pointer'
 				onClick={() => {
 					// Click on card will redirect to view workspace.
 					id &&
@@ -289,7 +289,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 						>
 							<ZIonImg
 								src={userAvatar || getUiAvatarApiUrl({ name: workspaceName })}
-								className='w-[40px] h-[40px] zaions-object-fit-cover'
+								className='w-[40px] h-[40px] object-fill'
 							/>
 						</ZIonButton>
 					</ZIonCol>
@@ -301,7 +301,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 					<ZIonCol>
 						<ZIonButton
 							fill='clear'
-							className='h-auto mb-1 ion-no-padding ion-no-margin text-transform-initial'
+							className='h-auto mb-1 ion-no-padding ion-no-margin normal-case'
 							color='dark'
 						>
 							{lastActive}

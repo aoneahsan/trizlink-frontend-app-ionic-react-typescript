@@ -61,12 +61,12 @@ const ZCustomRender: CountdownRendererFn = ({
 	completed,
 }) => {
 	return (
-		<div className='flex ion-justify-content-between mx-auto zaions__w80 ion-align-items-center'>
+		<div className='flex mx-auto ion-justify-content-between w-[80%] ion-align-items-center'>
 			<div className='ion-text-center'>
 				<ZIonTitle className='ion-no-padding' color='light'>
 					{days}
 				</ZIonTitle>
-				<ZIonText className='zaions__fs_11' color='light'>
+				<ZIonText className='text-[11px]' color='light'>
 					DAYS
 				</ZIonText>
 			</div>
@@ -80,7 +80,7 @@ const ZCustomRender: CountdownRendererFn = ({
 				<ZIonTitle className='ion-no-padding' color='light'>
 					{hours}
 				</ZIonTitle>
-				<ZIonText className='zaions__fs_11' color='light'>
+				<ZIonText className='text-[11px]' color='light'>
 					HRS
 				</ZIonText>
 			</div>
@@ -94,7 +94,7 @@ const ZCustomRender: CountdownRendererFn = ({
 				<ZIonTitle className='ion-no-padding' color='light'>
 					{minutes}
 				</ZIonTitle>
-				<ZIonText className='zaions__fs_11' color='light'>
+				<ZIonText className='text-[11px]' color='light'>
 					MIN
 				</ZIonText>
 			</div>
@@ -108,7 +108,7 @@ const ZCustomRender: CountdownRendererFn = ({
 				<ZIonTitle className='ion-no-padding' color='light'>
 					{seconds}
 				</ZIonTitle>
-				<ZIonText className='zaions__fs_11' color='light'>
+				<ZIonText className='text-[11px]' color='light'>
 					SEC
 				</ZIonText>
 			</div>

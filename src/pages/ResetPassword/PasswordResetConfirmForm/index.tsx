@@ -36,17 +36,17 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
 				<ZIonGrid className=''>
 					<ZIonRow className='ion-justify-content-center ion-align-items-top '>
 						<ZIonCol
-							className='ion-text-start border py-5 zaions__bg_white mt-5'
+							className='py-5 mt-5 border ion-text-start zaions__bg_white'
 							sizeXl='4'
 							sizeLg='5'
 							sizeMd='6.2'
 							sizeSm='8.2'
 							sizeXs='11.5'
 						>
-							<div className='zaions__w80 mx-auto'>
-								<ZIonImg src={ProductLogo} className='logo mx-auto' />
+							<div className='mx-auto w-[80%]'>
+								<ZIonImg src={ProductLogo} className='mx-auto logo' />
 								<ZIonTitle color='dark'>
-									<h5 className='ion-text-center mt-4 mb-3'>
+									<h5 className='mt-4 mb-3 ion-text-center'>
 										FORGOT YOUR PASSWORD?
 									</h5>
 								</ZIonTitle>
@@ -107,7 +107,7 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
 										<ZIonInputField
 											inputFieldProps={{
 												className: classNames({
-													'mb-4 zaions__w80 mx-auto mt-4': true,
+													'mb-4 w-[80%] mx-auto mt-4': true,
 													'ion-touched ion-invalid':
 														touched.emailAddress && errors.emailAddress,
 													'ion-touched ion-valid':
@@ -127,7 +127,7 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
 										{/* Submit Button */}
 										<ZIonButton
 											expand='block'
-											className='ion-text-capitalize mt-4 zaions__w80 mx-auto mt-3 mb-5'
+											className='mx-auto mt-3 mb-5 ion-text-capitalize w-[80%]'
 										>
 											Log in
 										</ZIonButton>

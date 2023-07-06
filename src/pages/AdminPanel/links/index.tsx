@@ -276,8 +276,8 @@ const ZShortLinksListPage: React.FC = () => {
 					</ZIonRefresher>
 
 					{/*  */}
-					<ZIonGrid className='ion-no-padding zaions_h100'>
-						<ZIonRow className='zaions_h100'>
+					<ZIonGrid className='ion-no-padding h-full'>
+						<ZIonRow className='h-full'>
 							{/* Side bar */}
 							<ZDashboardSidebar
 								type={AdminPanelMainSidebarMenuPageEnum.shortLink}
@@ -359,7 +359,7 @@ const ZShortLinksListPage: React.FC = () => {
 												>
 													<ZIonButton
 														className={classNames({
-															'text-transform-initial': true,
+															'normal-case': true,
 															'open-folder-menu-button': isLgScale || isSmScale,
 															'mt-4 ms-0': !isMdScale,
 														})}
@@ -1051,7 +1051,7 @@ const ShortLinksTagsFiltersPopover = () => {
 								<ZIonText>filter</ZIonText>
 							</ZIonButton>
 							<ZIonItem className='ion-no-padding'>
-								<ZIonText className='font-bold ms-3 zaions__fs_14'>
+								<ZIonText className='font-bold ms-3 text-[14px]'>
 									All Tags
 								</ZIonText>
 								{/* <ZIonCheckbox
@@ -1084,7 +1084,7 @@ const ShortLinksTagsFiltersPopover = () => {
 								{_shortLinksFieldsDataTagsSelector.map((el, i) => {
 									return (
 										<ZIonItem key={i}>
-											<ZIonChip className='m-0 zaions__fs_14'>{el}</ZIonChip>
+											<ZIonChip className='m-0 text-[14px]'>{el}</ZIonChip>
 											<ZIonCheckbox
 												slot='end'
 												checked={
@@ -1201,7 +1201,7 @@ const ShortLinksDomainsFiltersPopover = () => {
 							<ZIonText>filter</ZIonText>
 						</ZIonButton>
 						<ZIonItem className='ion-no-padding'>
-							<ZIonText className='font-bold ms-3 zaions__fs_14'>
+							<ZIonText className='font-bold ms-3 text-[14px]'>
 								All Domains
 							</ZIonText>
 							{/* <ZIonCheckbox
@@ -1229,7 +1229,7 @@ const ShortLinksDomainsFiltersPopover = () => {
 								const domain = _domain.replace('.', '_');
 								return (
 									<ZIonItem key={i}>
-										<ZIonChip className='m-0 zaions__fs_14'>{_domain}</ZIonChip>
+										<ZIonChip className='m-0 text-[14px]'>{_domain}</ZIonChip>
 										<ZIonCheckbox
 											slot='end'
 											checked={

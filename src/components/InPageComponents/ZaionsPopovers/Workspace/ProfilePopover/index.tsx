@@ -158,7 +158,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 
 			<ZIonList lines='none'>
 				<ZIonItem
-					className='text-sm ion-activatable ion-focusable zaions__cursor_pointer'
+					className='text-sm ion-activatable ion-focusable cursor-pointer'
 					minHeight='32px'
 					lines='full'
 				>
@@ -167,7 +167,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 				</ZIonItem>
 
 				<ZIonItem
-					className='text-sm ion-activatable ion-focusable zaions__cursor_pointer'
+					className='text-sm ion-activatable ion-focusable cursor-pointer'
 					minHeight='40px'
 				>
 					<ZIonIcon icon={notificationsOutline} className='w-5 h-5 me-1 pe-1' />
@@ -175,7 +175,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 				</ZIonItem>
 
 				<ZIonItem
-					className='text-sm ion-activatable ion-focusable zaions__cursor_pointer'
+					className='text-sm ion-activatable ion-focusable cursor-pointer'
 					minHeight='40px'
 					lines='full'
 					onClick={() => void profileLogoutHandler()}
@@ -192,7 +192,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 				</ZIonText>
 
 				<ZIonItem
-					className='text-sm ion-activatable ion-focusable zaions__cursor_pointer'
+					className='text-sm ion-activatable ion-focusable cursor-pointer'
 					minHeight='40px'
 				>
 					<ZIonAvatar
@@ -209,7 +209,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 				</ZIonItem>
 
 				<ZIonItem
-					className='mt-1 text-sm ion-activatable ion-focusable zaions__cursor_pointer'
+					className='mt-1 text-sm ion-activatable ion-focusable cursor-pointer'
 					minHeight='40px'
 				>
 					<ZIonIcon icon={addOutline} className='w-5 h-5 me-1 pe-1' />

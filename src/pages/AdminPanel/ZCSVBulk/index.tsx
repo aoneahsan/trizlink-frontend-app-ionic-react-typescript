@@ -107,7 +107,7 @@ const ZCSVBulkShortning: React.FC = () => {
 					/>
 
 					<div
-						className='ion-page zaionsPaneContent'
+						className='ion-page overflow-y-scroll'
 						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
 					>
 						{/* Top bar */}
@@ -128,8 +128,8 @@ const ZCSVBulkShortning: React.FC = () => {
 											<ZIonImg
 												src={bulkUploadEmptyState}
 												className={classNames({
-													zaions__w43: isMdScale,
-													zaions__w60: !isMdScale && isSmScale,
+													'w-[43%]': isMdScale,
+													'w-[60%]': !isMdScale && isSmScale,
 													'w-full': !isSmScale,
 												})}
 												alt='bulk upload Inactive state'

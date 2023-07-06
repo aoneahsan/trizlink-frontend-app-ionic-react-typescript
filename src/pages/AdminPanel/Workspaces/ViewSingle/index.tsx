@@ -222,7 +222,7 @@ const ViewSingleWorkspace: React.FC = () => {
 												<ZIonButton
 													expand='block'
 													className={classNames({
-														'text-transform-initial': true,
+														'normal-case': true,
 														'w-1/4': !isLgScale,
 													})}
 													routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}
@@ -252,8 +252,7 @@ const ViewSingleWorkspace: React.FC = () => {
 												sizeSm='6'
 												sizeXs='4'
 												className={classNames({
-													'flex items-center justify-center text-transform-initial':
-														true,
+													'flex items-center justify-center normal-case': true,
 													'ion-justify-content-center': isXlScale,
 													'ion-justify-content-start':
 														isLgScale || isMdScale || isSmScale || isXsScale,
@@ -293,7 +292,7 @@ const ViewSingleWorkspace: React.FC = () => {
 															_cssClass: 'workspace-create-pages-modal-size',
 														});
 													}}
-													className='ion-no-padding ion-no-margin text-transform-initial'
+													className='ion-no-padding ion-no-margin normal-case'
 													color='dark'
 												>
 													<ZIonIcon
@@ -305,7 +304,7 @@ const ViewSingleWorkspace: React.FC = () => {
 
 												<ZIonButton
 													fill='default'
-													className='ion-no-margin text-transform-initial'
+													className='ion-no-margin normal-case'
 													onClick={(event: unknown) => {
 														presentWorkspaceAppStatusPopover({
 															_event: event as Event,
@@ -418,7 +417,7 @@ const ViewSingleWorkspace: React.FC = () => {
 												>
 													{workspacePagesDomeData.map((el, index) => (
 														<ZIonSegmentButton
-															className='px-1 text-transform-initial'
+															className='px-1 normal-case'
 															value={String(index)}
 															onClick={() => {
 																setFieldValue('pageType', el.type, false);
@@ -488,7 +487,7 @@ const ViewSingleWorkspace: React.FC = () => {
 														}
 													>
 														<ZIonButton
-															className='text-transform-initial'
+															className='normal-case'
 															id='z-workspace-view-filters'
 														>
 															<ZIonIcon icon={filterOutline} />
@@ -503,7 +502,7 @@ const ViewSingleWorkspace: React.FC = () => {
 
 													{/* media */}
 													<ZIonButton
-														className='text-transform-initial'
+														className='normal-case'
 														id='z-workspace-view-media'
 													>
 														<ZIonIcon icon={imageOutline} />

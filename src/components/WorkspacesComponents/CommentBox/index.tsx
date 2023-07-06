@@ -108,7 +108,7 @@ const ZWorkspaceCommentBox: React.FC<{
 
 						<ZIonButtons>
 							<ZIonButton
-								className='text-transform-initial'
+								className='normal-case'
 								onClick={() => {
 									setShowCommentBox(false);
 								}}
@@ -116,7 +116,7 @@ const ZWorkspaceCommentBox: React.FC<{
 								Cancel
 							</ZIonButton>
 							<ZIonButton
-								className='text-transform-initial'
+								className='normal-case'
 								fill='outline'
 								color='medium'
 								id='z-workspace-post-comments-save'

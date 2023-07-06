@@ -83,7 +83,7 @@ export const SingleCard: React.FC<{
 
 	return (
 		<ZIonCard
-			className='zaions__cursor_pointer h-full'
+			className='cursor-pointer h-full'
 			onClick={onClick}
 			onMouseEnter={(event: unknown) => {
 				setCompState((oldValues) => ({
@@ -110,7 +110,7 @@ export const SingleCard: React.FC<{
 				{/*  */}
 				{showInfoIcon && (
 					<div
-						className='absolute flex w-full top-1 start-0 zaions__cursor_pointer ps-2'
+						className='absolute flex w-full top-1 start-0 cursor-pointer ps-2'
 						onClick={(event: unknown) => {
 							presentConnectPagesCardInfoPopover({
 								_event: event as Event,

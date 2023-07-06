@@ -176,7 +176,7 @@ const ZProfile: React.FC = () => {
 					/>
 
 					<div
-						className='ion-page zaionsPaneContent'
+						className='ion-page overflow-y-scroll'
 						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
 					>
 						<ZLinkDashboardTopBar />
@@ -215,7 +215,7 @@ const ZProfile: React.FC = () => {
 											</ZIonTitle>
 										</ZIonRow>
 
-										<ZIonRow className='py-4 px-1'>
+										<ZIonRow className='px-1 py-4'>
 											<ZIonCol size='12'>
 												<ZIonTitle
 													className={classNames({
@@ -248,14 +248,14 @@ const ZProfile: React.FC = () => {
 												</ZIonItem>
 												<div
 													className={classNames({
-														'zaions__cursor_nodrop mt-4 ': true,
-														zaions__max_content: isMdScale,
+														'cursor-no-drop mt-4': true,
+														'w-max': isMdScale,
 													})}
 												>
 													<ZIonButton
 														disabled
 														expand={!isMdScale ? 'block' : undefined}
-														className='ion-text-capitalize mt-0'
+														className='mt-0 ion-text-capitalize'
 													>
 														Update display name
 													</ZIonButton>
@@ -313,13 +313,13 @@ const ZProfile: React.FC = () => {
 																			{el.emailAddress}
 																		</ZIonText>
 																	</ZTableRowCol>
-																	<ZTableRowCol className='mt-1 py-2 flex ion-text-items-center'>
+																	<ZTableRowCol className='flex py-2 mt-1 ion-text-items-center'>
 																		{el.isVarified ? (
 																			<>
 																				<ZIonIcon
 																					icon={checkbox}
 																					color='success'
-																					className='text-base pt-1 me-1'
+																					className='pt-1 text-base me-1'
 																				/>{' '}
 																				<ZIonText
 																					color='dark'
@@ -333,7 +333,7 @@ const ZProfile: React.FC = () => {
 																				<ZIonIcon
 																					icon={closeCircleOutline}
 																					color='danger'
-																					className='text-base pt-1 me-1'
+																					className='pt-1 text-base me-1'
 																				/>{' '}
 																				<ZIonText
 																					color='dark'
@@ -393,13 +393,13 @@ const ZProfile: React.FC = () => {
 												<br />
 												<div
 													className={classNames({
-														zaions__cursor_nodrop: true,
-														'zaions__max_content mt-3': isMdScale,
+														'cursor-no-drop': true,
+														'w-max mt-3': isMdScale,
 													})}
 												>
 													<ZIonButton
 														disabled
-														className='ion-text-capitalize mt-0'
+														className='mt-0 ion-text-capitalize'
 														expand={!isMdScale ? 'block' : undefined}
 													>
 														Update primary email
@@ -439,7 +439,7 @@ const ZProfile: React.FC = () => {
 												</ZIonText>
 												<ZIonItem
 													className={classNames({
-														zaions__w35: isMdScale,
+														'w-[35%]': isMdScale,
 														'w-full mx-auto px-3 mt-2': !isMdScale,
 														// w-full: !isSmScale,
 													})}
@@ -452,7 +452,7 @@ const ZProfile: React.FC = () => {
 												<ZIonItem
 													className={classNames({
 														'mt-4': true,
-														zaions__w35: isMdScale,
+														'w-[35%]': isMdScale,
 														'w-full mx-auto px-3': !isMdScale,
 													})}
 												>
@@ -464,7 +464,7 @@ const ZProfile: React.FC = () => {
 												<ZIonItem
 													className={classNames({
 														'mt-4': true,
-														zaions__w35: isMdScale,
+														'w-[35%]': isMdScale,
 														'w-full mx-auto px-3': !isMdScale,
 														// w-full: !isSmScale,
 													})}
@@ -498,7 +498,7 @@ const ZProfile: React.FC = () => {
 												</ZIonTitle>
 												<ZIonItem
 													className={classNames({
-														zaions__w35: isMdScale,
+														'w-[35%]': isMdScale,
 														'w-full mx-auto px-3 mt-2': !isMdScale,
 													})}
 												>
@@ -517,7 +517,7 @@ const ZProfile: React.FC = () => {
 
 												<ZIonItem
 													className={classNames({
-														zaions__w35: isMdScale,
+														'w-[35%]': isMdScale,
 														'w-full mx-auto px-3 mt-2': !isMdScale,
 														// w-full: !isSmScale,
 													})}
@@ -549,7 +549,7 @@ const ZProfile: React.FC = () => {
 												<ZIonTitle className='ion-no-padding'>
 													<h4 className='font-black'>Access history</h4>
 												</ZIonTitle>
-												<ZIonText className='zaions__fs_18 block'>
+												<ZIonText className='block zaions__fs_18'>
 													You're viewing recent activity on your account.
 													Logging out will apply to all devices currently
 													connected to {PRODUCT_NAME}.
@@ -569,7 +569,7 @@ const ZProfile: React.FC = () => {
 
 											<ZIonCol size='12' className='mt-2'>
 												{[1, 2, 3, 4, 5, 6, 7, 8].map((el) => (
-													<ZIonRow key={el} className='border-bottom py-3'>
+													<ZIonRow key={el} className='py-3 border-bottom'>
 														<ZIonCol
 															sizeXl='8'
 															sizeLg='8'
@@ -577,7 +577,7 @@ const ZProfile: React.FC = () => {
 															sizeSm='12'
 															sizeXs='12'
 														>
-															<ZIonText className='font-bold block'>
+															<ZIonText className='block font-bold'>
 																Log In With Google
 															</ZIonText>
 															<ZIonText className='block'>
@@ -610,7 +610,7 @@ const ZProfile: React.FC = () => {
 												<ZIonTitle className='ion-no-padding'>
 													<h4 className='font-black'>SAR Report</h4>
 												</ZIonTitle>
-												<ZIonText className='zaions__fs_18 block'>
+												<ZIonText className='block zaions__fs_18'>
 													Click to request a Subject Access Request (SAR) Report
 													of all your Personal Information stored by{' '}
 													{PRODUCT_NAME}. Once requested, in compliance with

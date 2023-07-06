@@ -103,7 +103,7 @@ const ZIntegration: React.FC = () => {
 					/>
 
 					<div
-						className='ion-page zaionsPaneContent'
+						className='ion-page overflow-y-scroll'
 						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
 					>
 						<ZLinkDashboardTopBar />

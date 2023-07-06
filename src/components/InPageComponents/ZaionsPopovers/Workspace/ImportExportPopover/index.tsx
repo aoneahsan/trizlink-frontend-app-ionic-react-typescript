@@ -71,7 +71,7 @@ const ZWorkspaceImportExportPopover: React.FC = () => {
 		<>
 			<ZIonList lines='none'>
 				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+					className='ion-activatable ion-focusable cursor-pointer text-sm'
 					minHeight='32px'
 				>
 					<ZIonIcon icon={shareOutline} className='me-1 w-5 h-5' />
@@ -79,7 +79,7 @@ const ZWorkspaceImportExportPopover: React.FC = () => {
 				</ZIonItem>
 
 				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+					className='ion-activatable ion-focusable cursor-pointer text-sm'
 					minHeight='32px'
 				>
 					<ZIonIcon icon={downloadOutline} className='me-1 pe-1 w-5 h-5' />
@@ -87,7 +87,7 @@ const ZWorkspaceImportExportPopover: React.FC = () => {
 				</ZIonItem>
 
 				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+					className='ion-activatable ion-focusable cursor-pointer text-sm'
 					minHeight='32px'
 				>
 					<ZIonIcon

@@ -86,7 +86,7 @@ const ZaionsInpageHeader: React.FC<{
 								className={classNames({
 									'mx-auto': true,
 									'w-full': !isMdScale,
-									zaions__w70: isMdScale,
+									'w-[70%]': isMdScale,
 								})}
 							></ZIonImg>
 						) : (
@@ -104,22 +104,25 @@ const ZaionsInpageHeader: React.FC<{
 							// 'mx-3': true,
 						})}`}
 					>
-						<ZIonText className='font-bold ion-no-padding block'>
+						<ZIonText className='block font-bold ion-no-padding'>
 							{label}
 						</ZIonText>
 						<ZIonText
 							className={classNames({
-								'zaions__page_title ion-no-padding': true,
+								'text-[3.3rem] font-extrabold leading-[56px] ion-no-padding':
+									true,
 								'text-5xl': !isXlScale,
 							})}
+							color='dark'
 						>
 							{title}
 						</ZIonText>
 						<ZIonText
 							className={classNames({
-								'zaions__page_subtitle ion-no-padding mt-1': true,
+								'text-[24px] font-bold ion-no-padding mt-1': true,
 								'text-xl': isLgScale,
 							})}
+							color='medium'
 						>
 							{subTitle}
 						</ZIonText>
@@ -127,7 +130,7 @@ const ZaionsInpageHeader: React.FC<{
 							className={classNames({
 								'ion-text-center mt-4 pt-2 ': true,
 								'ion-text-start': !isXlScale,
-								'zaions__max_content ion-text-center': isXlScale,
+								'w-max ion-text-center': isXlScale,
 							})}
 						>
 							{isPrimaryBtn === true ? (
@@ -148,7 +151,7 @@ const ZaionsInpageHeader: React.FC<{
 								<ZIonRouterLink routerLink={seondaryBtnLinkTo}>
 									<ZIonText
 										className={classNames({
-											'zaions__getAQuote_btn ion-text-capitalize zaions__fs_14':
+											'ion-text-capitalize text-[14px] tracking-[1px] cursor-pointer':
 												true,
 											block: isLgScale,
 										})}

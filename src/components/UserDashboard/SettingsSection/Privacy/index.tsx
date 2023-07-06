@@ -33,7 +33,7 @@ const APSettingsPrivacy: React.FC = () => {
 	});
 	return (
 		<>
-			<ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-5'>
+			<ZIonRow className='px-4 py-4 mx-4 mt-5 zaions__bg_white'>
 				{' '}
 				<ZIonCol sizeXl='6' sizeLg='6' sizeMd='6' sizeSm='6' sizeXs='12'>
 					<ZIonText className='p-0 mb-2 font-bold' color={'primary'}>
@@ -54,14 +54,12 @@ const APSettingsPrivacy: React.FC = () => {
 					<div className=''>
 						<ZIonImg
 							src={privacy}
-							className={`mx-auto ${
-								!isLgScale ? 'w-full mt-5' : 'zaions__w60 '
-							}`}
+							className={`mx-auto ${!isLgScale ? 'w-full mt-5' : 'w-[60%]'}`}
 						/>
 					</div>
 				</ZIonCol>
 			</ZIonRow>
-			<ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-5 ion-align-items-center'>
+			<ZIonRow className='px-4 py-4 mx-4 mt-5 zaions__bg_white ion-align-items-center'>
 				<ZIonCol>
 					<ZIonText className='p-0 mb-2 font-bold' color={'primary'}>
 						Setup your GDPR/CCPA popup
@@ -71,14 +69,14 @@ const APSettingsPrivacy: React.FC = () => {
 					<ZIonButton>Save</ZIonButton>
 				</ZIonCol>
 			</ZIonRow>
-			<ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-1 ion-align-items-center'>
+			<ZIonRow className='px-4 py-4 mx-4 mt-1 zaions__bg_white ion-align-items-center'>
 				<ZIonCol sizeXl='4' sizeLg='5' sizeMd='6' sizeSm='8' sizeXs='12'>
 					<ZIonItem>
 						<ZIonInput label='Company Name' labelPlacement='floating' />
 					</ZIonItem>
 				</ZIonCol>
 			</ZIonRow>
-			<ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-1 ion-align-items-center'>
+			<ZIonRow className='px-4 py-4 mx-4 mt-1 zaions__bg_white ion-align-items-center'>
 				<ZIonCol sizeXl='4' sizeLg='5' sizeMd='6' sizeSm='8' sizeXs='12'>
 					<ZIonItem>
 						<ZIonInput
@@ -88,7 +86,7 @@ const APSettingsPrivacy: React.FC = () => {
 					</ZIonItem>
 				</ZIonCol>
 			</ZIonRow>
-			<ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-1 ion-align-items-center mb-3'>
+			<ZIonRow className='px-4 py-4 mx-4 mt-1 mb-3 zaions__bg_white ion-align-items-center'>
 				<ZIonCol sizeXl='4' sizeLg='5' sizeMd='6' sizeSm='8' sizeXs='12'>
 					<ZIonText className='p-0 mb-2' color={'dark'}>
 						Activate on all my links with Pixels - Off

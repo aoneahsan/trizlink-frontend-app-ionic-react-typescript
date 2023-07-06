@@ -37,7 +37,7 @@ const APSettingsEmbedWidgets: React.FC = () => {
 	const embedWidgetsData = useRecoilValue(EmbedWidgetsState);
 	return (
 		<>
-			<ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-5 ion-align-items-center'>
+			<ZIonRow className='px-4 py-4 mx-4 mt-5 zaions__bg_white ion-align-items-center'>
 				<ZIonCol
 					sizeXl='6'
 					sizeLg='6'
@@ -75,10 +75,10 @@ const APSettingsEmbedWidgets: React.FC = () => {
 			{embedWidgetsData.length ? (
 				<EmbedWidgetsTable />
 			) : (
-				<ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-5 ion-align-items-center'>
-					<ZIonCol className='ion-text-center pt-5'>
+				<ZIonRow className='px-4 py-4 mx-4 mt-5 zaions__bg_white ion-align-items-center'>
+					<ZIonCol className='pt-5 ion-text-center'>
 						<ZIonText
-							className='p-0 font-bold inline-block mb-4'
+							className='inline-block p-0 mb-4 font-bold'
 							color={'dark'}
 						>
 							Integrate any embed third-party widgets on your links!
@@ -93,7 +93,7 @@ const APSettingsEmbedWidgets: React.FC = () => {
 							possibilities are unlimited 💫
 						</ZIonText>
 						<br />
-						<ZIonImg src={noScript} className='zaions__w50 mx-auto mt-5' />
+						<ZIonImg src={noScript} className='w-1/2 mx-auto mt-5' />
 					</ZIonCol>
 				</ZIonRow>
 			)}

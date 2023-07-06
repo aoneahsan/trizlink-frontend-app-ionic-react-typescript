@@ -99,14 +99,12 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 		workspaceId: string;
 	}>();
 
-
 	const { presentZIonPopover: presentShortLinkOptionsPopover } = useZIonPopover(
 		ZShortLinkOptionsPopover,
 		{
 			setFieldValue,
 		}
 	); // popover hook to show ZShortLinkOptionsPopover
-
 
 	const ShortLinkPlaceholder = () => {
 		if (newShortLinkTypeOptionDataAtom) {
@@ -159,7 +157,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 					{newShortLinkTypeOptionDataAtom && (
 						<ZIonButton
 							fill='default'
-							className='text-transform-initial ion-no-margin flex ion-align-items-center ion-justify-content-center'
+							className='flex normal-case ion-no-margin ion-align-items-center ion-justify-content-center'
 							style={{
 								minHeight: '53px',
 							}}
@@ -210,7 +208,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 									errorText: errors?.target?.url,
 									type: 'url',
 									className: `${classNames({
-										'zaions__w90 ion-margin-end mx-auto': true,
+										'w-[90%] ion-margin-end mx-auto': true,
 										'ion-touched': touched?.target?.url,
 										'ion-invalid': touched?.target?.url && errors?.target?.url,
 										'ion-valid': touched?.target?.url && !!errors?.target?.url,
@@ -241,7 +239,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 									errorText: errors?.target?.phoneNumber,
 									type: 'text',
 									className: `${classNames({
-										'zaions__w90 ion-margin-end mx-auto': true,
+										'w-[90%] ion-margin-end mx-auto': true,
 										'ion-touched': touched?.target?.phoneNumber,
 										'ion-invalid':
 											touched?.target?.phoneNumber &&
@@ -274,7 +272,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 									errorText: errors?.target?.username,
 									type: 'text',
 									className: `${classNames({
-										'zaions__w90 ion-margin-end mx-auto': true,
+										'w-[90%] ion-margin-end mx-auto': true,
 										'ion-touched': touched?.target?.username,
 										'ion-invalid':
 											touched?.target?.username && errors?.target?.username,
@@ -307,7 +305,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 									errorText: errors?.target?.accountId,
 									type: 'text',
 									className: `${classNames({
-										'zaions__w90 ion-margin-end mx-auto': true,
+										'w-[90%] ion-margin-end mx-auto': true,
 										'ion-touched': touched?.target?.accountId,
 										'ion-invalid':
 											touched?.target?.accountId && errors?.target?.accountId,
@@ -336,7 +334,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 									errorText: errors?.target?.email,
 									type: 'email',
 									className: `${classNames({
-										'zaions__w90 ion-margin-end mx-auto': true,
+										'w-[90%] ion-margin-end mx-auto': true,
 										'ion-touched': touched?.target?.email,
 										'ion-invalid':
 											touched?.target?.email && errors?.target?.email,
@@ -372,7 +370,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 								name: 'target.subject',
 								errorText: errors?.target?.subject,
 								className: `${classNames({
-									zaions__w95: true,
+									'w-[95%]': true,
 									'ion-touched': touched?.target?.subject,
 									'ion-invalid':
 										touched?.target?.subject && errors?.target?.subject,
@@ -402,7 +400,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 							fill='outline'
 							errorText={errors?.target?.message}
 							className={classNames({
-								'zaions__w95 ion-margin-end mt-4 border': true,
+								'w-[95%] ion-margin-end mt-4 border': true,
 								'ion-touched': touched?.target?.message,
 								'ion-invalid':
 									touched?.target?.message && errors?.target?.message,

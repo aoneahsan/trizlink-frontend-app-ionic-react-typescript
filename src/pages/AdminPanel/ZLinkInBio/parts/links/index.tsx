@@ -131,7 +131,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 												Analytics
 											</ZIonText>
 											<ZIonIcon
-												className='ps-3 text-lg'
+												className='text-lg ps-3'
 												icon={helpCircleOutline}
 												title='info'
 											/>
@@ -144,13 +144,13 @@ const ZLinkInBioLinksSection: React.FC = () => {
 							</ZIonAccordionGroup>
 
 							{/* Container Start */}
-							<ZIonRow className='ion-justify-content-center mt-4'>
+							<ZIonRow className='mt-4 ion-justify-content-center'>
 								{/* ------ Add Link Button ------ */}
 								<ZIonCol size='10.5'>
 									<ZIonButton
 										expand='block'
 										shape='round'
-										className='ion-text-capitalize font-bold zaions__fs_16'
+										className='font-bold ion-text-capitalize zaions__fs_16'
 										style={{
 											'--padding-top': '1.4rem',
 											'--padding-bottom': '1.4rem',
@@ -190,7 +190,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 
 								{/* List below header button */}
 								<ZIonCol size='10.5'>
-									<ZIonList lines='none' className='zaions__bg_transparent'>
+									<ZIonList lines='none' className='bg-transparent'>
 										{/* The reorder gesture is disabled by default, enable it to drag and drop items */}
 										<IonReorderGroup
 											disabled={false}
@@ -214,7 +214,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 														<div className=''>
 															{/* <ZIonInput
 															value={'Seo Home - Zaions'}
-															className='zaions__fs_14'
+															className='text-[14px]'
 														/> */}
 															<ZIonButton
 																fill='clear'
@@ -227,7 +227,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 																	'margin-right': '2rem',
 																}}
 															>
-																<ZIonText className='me-2 font-bold zaions__fs_14 letter-spacing-0px'>
+																<ZIonText className='me-2 font-bold text-[14px] tracking-normal'>
 																	Seo Home - Zaions
 																</ZIonText>
 																<ZIonIcon icon={pencil} />
@@ -237,7 +237,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 														<div className=''>
 															{/* <ZIonInput
 																value={ZaionsBusinessDetails.WebsiteUrl}
-																className='zaions__fs_14'
+																className='text-[14px]'
 															/> */}
 															<ZIonButton
 																fill='clear'
@@ -250,7 +250,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 																	'margin-right': '2rem',
 																}}
 															>
-																<ZIonText className='me-2 font-bold zaions__fs_13 letter-spacing-0px'>
+																<ZIonText className='me-2 font-bold text-[13px] tracking-normal'>
 																	{ZaionsBusinessDetails.WebsiteUrl}
 																</ZIonText>
 																<ZIonIcon icon={pencil} />
@@ -260,7 +260,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 													<ZIonCol className='flex ion-align-items-center ion-justify-content-end'>
 														<ZIonButton
 															fill='clear'
-															className='ion-text-capitalize mx-2'
+															className='mx-2 ion-text-capitalize'
 															shape='round'
 															style={{
 																'--padding-top': '.8rem',
@@ -277,7 +277,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 														<RCSwitch />
 													</ZIonCol>
 
-													<ZIonCol size='12' className='ps-0 flex'>
+													<ZIonCol size='12' className='flex ps-0'>
 														<div>
 															<ZIonButton
 																fill='clear'
@@ -374,7 +374,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 															>
 																<ZIonIcon icon={cellularOutline} />
 																<ZIonText
-																	className='ms-1 mt-1 ps-1 font-bold'
+																	className='mt-1 font-bold ms-1 ps-1'
 																	color='medium'
 																>
 																	0 clicks

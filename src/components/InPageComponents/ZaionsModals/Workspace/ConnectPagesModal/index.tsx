@@ -133,7 +133,7 @@ const ZWorkspaceConnectPagesModal: React.FC<{
 											<ZIonText className='block font-bold'>
 												Connect pages
 											</ZIonText>
-											<ZIonText className='block zaions__fs_13'>
+											<ZIonText className='block text-[13px]'>
 												Select what type of pages you want to connect
 											</ZIonText>
 										</div>

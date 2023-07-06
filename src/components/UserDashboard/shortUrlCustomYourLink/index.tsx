@@ -111,7 +111,7 @@ const ZaionsCustomYourLink: React.FC = () => {
 				<ZIonCol
 					size='12'
 					className={classNames(classes['zaions-upload-image-box'], {
-						'flex ion-justify-content-center ion-align-items-center rounded relative zaions__cursor_pointer':
+						'flex ion-justify-content-center ion-align-items-center rounded relative cursor-pointer':
 							true,
 					})}
 					onClick={() => {

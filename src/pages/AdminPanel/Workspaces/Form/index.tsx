@@ -188,7 +188,7 @@ const ZWorkspaceForm: React.FC = () => {
 					>
 						<ZIonButton
 							expand={!isMdScale ? 'block' : undefined}
-							className='text-transform-initial ion-no-margin ms-2'
+							className='normal-case ion-no-margin ms-2'
 							routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}
 						>
 							<ZIonIcon icon={arrowBack} className='me-2' /> Workspaces

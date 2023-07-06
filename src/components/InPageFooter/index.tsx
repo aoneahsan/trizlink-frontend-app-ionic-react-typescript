@@ -342,14 +342,14 @@ const InPageFooter: React.FC<{
 									<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
 										<ZIonIcon
 											size='large'
-											className='ion-padding-end zaions__color_gray2'
+											className='ion-padding-end zaions_ion_color_medium'
 											icon={logoInstagram}
 										></ZIonIcon>
 									</ZIonRouterLink>
 									<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
 										<ZIonIcon
 											size='large'
-											className='ion-padding-end zaions__color_gray2'
+											className='ion-padding-end zaions_ion_color_medium'
 											icon={logoLinkedin}
 										></ZIonIcon>
 									</ZIonRouterLink>
@@ -357,7 +357,7 @@ const InPageFooter: React.FC<{
 										<ZIonIcon
 											size='large'
 											icon={logoFacebook}
-											className='zaions__color_gray2'
+											className='zaions_ion_color_medium'
 										></ZIonIcon>
 									</ZIonRouterLink>
 								</ZIonCol>
@@ -945,14 +945,14 @@ const InPageFooter: React.FC<{
 								<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
 									<ZIonIcon
 										size='large'
-										className='ion-padding-end zaions__color_gray2'
+										className='ion-padding-end zaions_ion_color_medium'
 										icon={logoInstagram}
 									></ZIonIcon>
 								</ZIonRouterLink>
 								<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
 									<ZIonIcon
 										size='large'
-										className='ion-padding-end zaions__color_gray2'
+										className='ion-padding-end zaions_ion_color_medium'
 										icon={logoLinkedin}
 									></ZIonIcon>
 								</ZIonRouterLink>
@@ -960,7 +960,7 @@ const InPageFooter: React.FC<{
 									<ZIonIcon
 										size='large'
 										icon={logoFacebook}
-										className='zaions__color_gray2'
+										className='zaions_ion_color_medium'
 									></ZIonIcon>
 								</ZIonRouterLink>
 							</div>

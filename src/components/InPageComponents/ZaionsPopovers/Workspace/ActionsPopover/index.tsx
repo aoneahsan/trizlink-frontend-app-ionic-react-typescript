@@ -142,7 +142,7 @@ const ZWorkspacesActionPopover: React.FC<{
 							_cssClass: 'workspace-sharing-modal-size',
 						});
 					}}
-					className='ion-activatable ion-focusable zaions__cursor_pointer'
+					className='ion-activatable ion-focusable cursor-pointer'
 					minHeight='32px'
 				>
 					<ZIonIcon icon={peopleOutline} className='me-2' />
@@ -161,7 +161,7 @@ const ZWorkspacesActionPopover: React.FC<{
 						_cssClass: 'workspace-setting-modal-size',
 					});
 				}}
-				className='ion-activatable ion-focusable zaions__cursor_pointer '
+				className='ion-activatable ion-focusable cursor-pointer '
 				minHeight={'32px'}
 			>
 				<ZIonIcon icon={timeOutline} className='me-2' />
@@ -181,7 +181,7 @@ const ZWorkspacesActionPopover: React.FC<{
 						_cssClass: 'workspace-setting-modal-size',
 					});
 				}}
-				className='ion-activatable ion-focusable zaions__cursor_pointer'
+				className='ion-activatable ion-focusable cursor-pointer'
 				minHeight={'32px'}
 			>
 				<ZIonIcon icon={pricetagOutline} className='me-2' />
@@ -199,7 +199,7 @@ const ZWorkspacesActionPopover: React.FC<{
 						_cssClass: 'workspace-setting-modal-size',
 					});
 				}}
-				className='ion-activatable ion-focusable zaions__cursor_pointer'
+				className='ion-activatable ion-focusable cursor-pointer'
 				minHeight={'32px'}
 			>
 				<ZIonIcon icon={peopleOutline} className='me-2' />
@@ -217,7 +217,7 @@ const ZWorkspacesActionPopover: React.FC<{
 						_cssClass: 'workspace-setting-modal-size',
 					});
 				}}
-				className='ion-activatable ion-focusable zaions__cursor_pointer'
+				className='ion-activatable ion-focusable cursor-pointer'
 				minHeight={'32px'}
 			>
 				<ZIonIcon icon={settingsOutline} className='me-2' />
@@ -235,7 +235,7 @@ const ZWorkspacesActionPopover: React.FC<{
 						_cssClass: 'workspace-setting-modal-size',
 					});
 				}}
-				className='ion-activatable ion-focusable zaions__cursor_pointer'
+				className='ion-activatable ion-focusable cursor-pointer'
 				minHeight={'32px'}
 			>
 				<ZIonIcon icon={checkmarkOutline} className='me-2' />
@@ -249,7 +249,7 @@ const ZWorkspacesActionPopover: React.FC<{
 				<ZCan havePermission={permissionsEnum.update_workspace}>
 					<ZIonItem
 						onClick={EditButtonOnClickHn}
-						className='ion-activatable ion-focusable zaions__cursor_pointer'
+						className='ion-activatable ion-focusable cursor-pointer'
 						minHeight={'32px'}
 					>
 						<ZIonIcon icon={pencilOutline} className='me-2' />
@@ -263,7 +263,7 @@ const ZWorkspacesActionPopover: React.FC<{
 				<ZCan havePermission={permissionsEnum.delete_workspace}>
 					<ZIonItem
 						onClick={deleteButtonOnClickHn}
-						className='ion-activatable ion-focusable zaions__cursor_pointer'
+						className='ion-activatable ion-focusable cursor-pointer'
 						minHeight={'32px'}
 					>
 						<ZIonIcon icon={trashBinOutline} className='me-2' color='danger' />

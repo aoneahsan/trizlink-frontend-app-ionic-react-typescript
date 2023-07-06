@@ -33,7 +33,7 @@ const ZWorkspaceSingleComment: React.FC<{
 					className={classNames({
 						'flex ion-align-items-center': true,
 						'w-max': isLgScale,
-						'w-[50%]': !isLgScale,
+						'w-1/2': !isLgScale,
 					})}
 				>
 					<ZUserAvatarButton
@@ -54,7 +54,7 @@ const ZWorkspaceSingleComment: React.FC<{
 					className={classNames({
 						'w-[70%] flex ion-justify-content-end': true,
 						'w-[70%]': isLgScale,
-						'w-[50%]': !isLgScale,
+						'w-1/2': !isLgScale,
 					})}
 				>
 					{/* Edit Comments */}
@@ -121,7 +121,7 @@ const ZWorkspaceSingleComment: React.FC<{
 				<div className='mt-4'>
 					<ZIonButton
 						fill='clear'
-						className='ion-no-padding ion-no-margin text-transform-initial text-xs'
+						className='ion-no-padding ion-no-margin normal-case text-xs'
 						color='medium'
 						size='small'
 					>

@@ -168,7 +168,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 										color='light'
 										expand='block'
 										className={classNames({
-											'ion-no-padding ion-no-margin text-transform-initial':
+											'ion-no-padding ion-no-margin normal-case':
 												true,
 											zaions__primary_set:
 												activePage ===
@@ -211,7 +211,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 										color='light'
 										expand='block'
 										className={classNames({
-											'ion-no-padding ion-no-margin text-transform-initial':
+											'ion-no-padding ion-no-margin normal-case':
 												true,
 											zaions__primary_set:
 												activePage ===
@@ -246,7 +246,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 										fill='clear'
 										color='light'
 										expand='block'
-										className='ion-no-padding ion-no-margin text-transform-initial'
+										className='ion-no-padding ion-no-margin normal-case'
 									>
 										<ZIonText
 											className={classNames({
@@ -275,7 +275,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 										fill='clear'
 										color='light'
 										expand='block'
-										className='ion-no-padding ion-no-margin text-transform-initial'
+										className='ion-no-padding ion-no-margin normal-case'
 									>
 										<ZIonText
 											className={classNames({
@@ -305,7 +305,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 										color='light'
 										expand='block'
 										className={classNames({
-											'ion-no-padding ion-no-margin text-transform-initial':
+											'ion-no-padding ion-no-margin normal-case':
 												true,
 											zaions__primary_set:
 												activePage ===
@@ -344,7 +344,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 										fill='clear'
 										color='light'
 										expand='block'
-										className='ion-no-padding ion-no-margin text-transform-initial'
+										className='ion-no-padding ion-no-margin normal-case'
 									>
 										<ZIonText
 											className={classNames({
@@ -373,7 +373,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 										fill='clear'
 										color='light'
 										expand='block'
-										className='ion-no-padding ion-no-margin text-transform-initial'
+										className='ion-no-padding ion-no-margin normal-case'
 									>
 										<ZIonText
 											className={classNames({
@@ -402,7 +402,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 										fill='clear'
 										color='light'
 										expand='block'
-										className='ion-no-padding ion-no-margin text-transform-initial'
+										className='ion-no-padding ion-no-margin normal-case'
 									>
 										<ZIonText
 											className={classNames({
@@ -431,7 +431,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 			) : (
 				<ZIonCol
 					size='12'
-					className='mb-5 ion-align-items-center zaions__light_bg'
+					className='mb-5 ion-align-items-center zaions-ion-bg-color-light'
 				>
 					<ZIonSegment
 						scrollable={true}
@@ -442,7 +442,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 						{/* Short Links */}
 						<ZIonSegmentButton
 							value={AdminPanelMainSidebarMenuPageEnum.shortLink}
-							className='text-transform-initial'
+							className='normal-case'
 							onClick={() => {
 								zNavigatePushRoute(
 									replaceRouteParams(
@@ -462,7 +462,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 						{/* Link-in-bio */}
 						<ZIonSegmentButton
 							value={AdminPanelMainSidebarMenuPageEnum.linkInBio}
-							className='text-transform-initial'
+							className='normal-case'
 							// onClick={() => {
 							// 	zNavigatePushRoute('');
 							// }}
@@ -473,7 +473,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 						{/* Extension */}
 						<ZIonSegmentButton
 							value='extension'
-							className='text-transform-initial'
+							className='normal-case'
 							onClick={() => {
 								zNavigatePushRoute(
 									replaceParams(
@@ -490,7 +490,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 						{/* Integrations */}
 						<ZIonSegmentButton
 							value='integrations'
-							className='text-transform-initial'
+							className='normal-case'
 							onClick={() => {
 								zNavigatePushRoute(
 									replaceParams(
@@ -507,7 +507,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 						{/* Workspaces */}
 						<ZIonSegmentButton
 							value='Workspaces'
-							className='text-transform-initial'
+							className='normal-case'
 							onClick={() => {
 								zNavigatePushRoute(
 									replaceParams(
@@ -524,7 +524,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 						{/* Help center */}
 						<ZIonSegmentButton
 							value='help-center'
-							className='text-transform-initial'
+							className='normal-case'
 							onClick={() => {
 								zNavigatePushRoute(
 									replaceParams(
@@ -541,7 +541,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 						{/* Settings */}
 						<ZIonSegmentButton
 							value='settings'
-							className='text-transform-initial'
+							className='normal-case'
 							onClick={() => {
 								zNavigatePushRoute(
 									replaceParams(

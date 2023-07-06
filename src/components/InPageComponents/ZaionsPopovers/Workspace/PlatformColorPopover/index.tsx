@@ -75,7 +75,7 @@ const ZPlatformColorPopover: React.FC<{
 			{PlatformColorsData.map((el, index) => (
 				<ZIonCol size='3' key={index}>
 					<div
-						className='w-8 h-8 rounded zaions__cursor_pointer flex ion-align-items-center ion-justify-content-center'
+						className='w-8 h-8 rounded cursor-pointer flex ion-align-items-center ion-justify-content-center'
 						style={{ backgroundColor: el.colorCode }}
 						title={el.colorName}
 						onClick={() => {

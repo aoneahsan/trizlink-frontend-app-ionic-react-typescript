@@ -180,7 +180,7 @@ const ZLinks: React.FC = () => {
 						/>
 
 						<div
-							className='ion-page zaionsPaneContent'
+							className='ion-page overflow-y-scroll'
 							id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
 						>
 							<ZLinkDashboardTopBar />
@@ -261,7 +261,7 @@ const ZLinks: React.FC = () => {
 											sizeSm='12'
 											className='border-end'
 										>
-											<ZIonText className='ion-text-end border-bottom block py-3 pe-4'>
+											<ZIonText className='block py-3 ion-text-end border-bottom pe-4'>
 												Engagements all time
 											</ZIonText>
 											<ZIonList className='pt-0 zaions__light_set'>
@@ -269,7 +269,7 @@ const ZLinks: React.FC = () => {
 													return (
 														<ZIonItem
 															className={classNames({
-																'ion-no-padding zaions__cursor_pointer': true,
+																'ion-no-padding cursor-pointer': true,
 																zaions__bg_white:
 																	el.id === selectedShortLinkData.id,
 															})}
@@ -286,14 +286,14 @@ const ZLinks: React.FC = () => {
 																	<ZIonCheckbox className='ms-auto me-2' />
 																</ZIonCol>
 																<ZIonCol size='8'>
-																	<ZIonText className='block zaions__fs_11'>
+																	<ZIonText className='block text-[11px]'>
 																		{el.createdAt || CONSTANTS.NO_VALUE_FOUND}
 																	</ZIonText>
 																	<ZIonText className='block mb-1'>
 																		{el.title || CONSTANTS.NO_VALUE_FOUND}
 																	</ZIonText>
 																	<ZIonText
-																		className='block zaions__fs_13'
+																		className='block text-[13px]'
 																		color='success'
 																	>
 																		{(el.target as LinkTargetType)?.url ||
@@ -321,7 +321,7 @@ const ZLinks: React.FC = () => {
 											</ZIonList>
 										</ZIonCol>
 										<ZIonCol sizeXl='8' className='pb-4 ps-5 pe-3'>
-											<ZIonRow className='rounded zaions__bg_white py-4 px-4 mt-3'>
+											<ZIonRow className='px-4 py-4 mt-3 rounded zaions__bg_white'>
 												<ZIonCol sizeXl='8'>
 													<ZIonText>
 														<h4 className='font-bold'>
@@ -329,7 +329,7 @@ const ZLinks: React.FC = () => {
 																CONSTANTS.NO_VALUE_FOUND}
 														</h4>
 													</ZIonText>
-													<ZIonText className='flex ion-align-items-center mt-2'>
+													<ZIonText className='flex mt-2 ion-align-items-center'>
 														<ZIonIcon
 															icon={calendarClearOutline}
 															className='pe-1'
@@ -372,7 +372,7 @@ const ZLinks: React.FC = () => {
 												</ZIonCol>
 											</ZIonRow>
 
-											<ZIonRow className='rounded zaions__bg_white py-4 px-4 mt-4'>
+											<ZIonRow className='px-4 py-4 mt-4 rounded zaions__bg_white'>
 												<ZIonCol sizeXl='8'>
 													<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
 														<h4 className='font-bold'>
@@ -389,7 +389,7 @@ const ZLinks: React.FC = () => {
 																CONSTANTS.NO_VALUE_FOUND}
 														</h4>
 													</ZIonRouterLink>
-													<ZIonText className='flex ion-align-items-center mt-2'>
+													<ZIonText className='flex mt-2 ion-align-items-center'>
 														<ZIonText>
 															<ZIonText className='font-bold'>
 																{selectedShortLinkData.totalClicks}
@@ -453,7 +453,7 @@ const ZLinks: React.FC = () => {
 															<div className='flex'>
 																<ZIonImg
 																	src={qrCodeImage}
-																	className='zaions__w35'
+																	className='w-[35%]'
 																/>
 																<div className='pt-2 ms-3'>
 																	<ZIonButton
@@ -491,7 +491,7 @@ const ZLinks: React.FC = () => {
 															<div className='flex'>
 																<ZIonImg
 																	src={placeholderImage}
-																	className='zaions__w35 rounded-full'
+																	className='rounded-full w-[35%]'
 																/>
 																<div className='pt-2 ms-3'>
 																	<ZIonButton
@@ -507,15 +507,15 @@ const ZLinks: React.FC = () => {
 													</ZIonRow>
 												</ZIonCol>
 
-												<ZIonCol className='flex ion-align-items-center mt-3 ms-2'>
+												<ZIonCol className='flex mt-3 ion-align-items-center ms-2'>
 													<ZIonIcon
 														className='text-lg me-3'
 														icon={pricetagOutline}
 													/>
-													<IonChip className='ion-no-padding px-2'>
+													<IonChip className='px-2 ion-no-padding'>
 														health_tech <ZIonIcon icon={closeOutline} />
 													</IonChip>
-													<IonChip className='ion-no-padding px-2'>
+													<IonChip className='px-2 ion-no-padding'>
 														MTI <ZIonIcon icon={closeOutline} />
 													</IonChip>
 													<ZIonButton fill='clear' className='ion-no-padding'>
@@ -528,17 +528,17 @@ const ZLinks: React.FC = () => {
 												</ZIonCol>
 											</ZIonRow>
 
-											<ZIonRow className='rounded zaions__bg_white py-4 px-4 mt-4'>
+											<ZIonRow className='px-4 py-4 mt-4 rounded zaions__bg_white'>
 												<ZIonCol className='' size='12'>
 													<ZIonText>
 														<h2 className='font-bold d-inline'>3</h2>
 														<ZIonIcon
 															icon={statsChart}
-															className='mt-2 pt-1 ms-1'
+															className='pt-1 mt-2 ms-1'
 														/>
 													</ZIonText>
 												</ZIonCol>
-												<ZIonText className='block zaions__fs_13'>
+												<ZIonText className='block text-[13px]'>
 													TOTAL ENGAGEMENTS
 												</ZIonText>
 											</ZIonRow>

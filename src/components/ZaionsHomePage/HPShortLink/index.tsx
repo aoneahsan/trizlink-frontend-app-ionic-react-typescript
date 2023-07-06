@@ -75,7 +75,7 @@ const ZaionsHPShortLink: React.FC = () => {
 				<ZIonGrid className='px-0'>
 					<ZIonRow
 						className={classNames({
-							'ion-align-items-start ion-padding-top ion-padding-bottom zaions_secondary_color':
+							'ion-align-items-start ion-padding-top ion-padding-bottom zaions-ion-bg-color-secondary':
 								true,
 							'ion-text-center': isXlScale,
 						})}

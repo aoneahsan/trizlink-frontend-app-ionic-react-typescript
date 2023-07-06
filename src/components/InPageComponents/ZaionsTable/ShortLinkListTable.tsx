@@ -241,7 +241,7 @@ const ZaionsShortLinkTable = () => {
 													</div>
 													<ZIonText
 														color='primary'
-														className='mt-1 zaions__cursor_pointer'
+														className='mt-1 cursor-pointer'
 														onClick={() => {
 															setShortLinkFormState((oldVal) => ({
 																...oldVal,
@@ -267,7 +267,7 @@ const ZaionsShortLinkTable = () => {
 											{el.notes ? (
 												<ZIonText
 													color='primary'
-													className='mt-1 zaions__cursor_pointer'
+													className='mt-1 cursor-pointer'
 													onClick={() => {
 														setShortLinkFormState((oldVal) => ({
 															...oldVal,

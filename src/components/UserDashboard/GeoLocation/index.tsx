@@ -185,7 +185,7 @@ const GeoLocation: React.FC = () => {
 														?.country &&
 													touched?.geoLocation[_index]?.country ? (
 														<ZIonNote
-															className='ion-padding-start zaions__fs_12'
+															className='ion-padding-start text-[12px]'
 															color='danger'
 														>
 															{errors.geoLocation?.length &&

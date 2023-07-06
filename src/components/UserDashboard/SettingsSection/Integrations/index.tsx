@@ -35,7 +35,7 @@ const APSettingsApiKey: React.FC = () => {
 		useZIonModal(ZaionsAddAPIKeyModal);
 	return (
 		<>
-			<ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-5 ion-align-items-center mb-3'>
+			<ZIonRow className='px-4 py-4 mx-4 mt-5 mb-3 zaions__bg_white ion-align-items-center'>
 				<ZIonCol sizeXl='4' sizeLg='5' sizeMd='6' sizeSm='8' sizeXs='12'>
 					<ZIonText className='p-0 mb-2 font-bold' color={'dark'}>
 						Generate a new API Key <ZIonRouterLink>(learn more)</ZIonRouterLink>
@@ -57,10 +57,10 @@ const APSettingsApiKey: React.FC = () => {
 			{ApiKeysData ? (
 				<ZaionsAPIKeysTable />
 			) : (
-				<ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-5 ion-align-items-center'>
-					<ZIonCol className='ion-text-center pt-5'>
+				<ZIonRow className='px-4 py-4 mx-4 mt-5 zaions__bg_white ion-align-items-center'>
+					<ZIonCol className='pt-5 ion-text-center'>
 						<ZIonText
-							className='p-0 font-bold inline-block mb-4'
+							className='inline-block p-0 mb-4 font-bold'
 							color={'dark'}
 						>
 							Add new API key
@@ -71,7 +71,7 @@ const APSettingsApiKey: React.FC = () => {
 							so, keep them safe 😉
 						</ZIonText>
 						<br />
-						<ZIonImg src={noToken} className='zaions__w40 mx-auto mt-5' />
+						<ZIonImg src={noToken} className='mx-auto mt-5 w-[40%]' />
 					</ZIonCol>
 				</ZIonRow>
 			)}

@@ -10,19 +10,19 @@ import classNames from 'classnames';
 import classes from './style.module.css';
 
 const ZaionsNewLabel: React.FC<{
-  className?: string;
-  title: string | JSX.Element | null;
+	className?: string;
+	title: string | JSX.Element | null;
 }> = (props: { className?: string; title: string | JSX.Element | null }) => {
-  return (
-    <div
-      className={classNames(props.className, {
-        zaions_secondary_color: true,
-        [classes.zaions_label_new]: true,
-      })}
-    >
-      {props.title}
-    </div>
-  );
+	return (
+		<div
+			className={classNames(props.className, {
+				'zaions-ion-bg-color-secondary': true,
+				[classes.zaions_label_new]: true,
+			})}
+		>
+			{props.title}
+		</div>
+	);
 };
 
 export default ZaionsNewLabel;

@@ -100,7 +100,7 @@ const ZWorkspacesSettingModal: React.FC<{
 					{/* Timetable */}
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.timetable}
-						className='text-transform-initial ion-text-center'
+						className='normal-case ion-text-center'
 						onClick={() => {
 							setCompState((oldValues) => ({
 								...oldValues,
@@ -115,7 +115,7 @@ const ZWorkspacesSettingModal: React.FC<{
 					{/* Labels */}
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.labels}
-						className='text-transform-initial ion-text-center'
+						className='normal-case ion-text-center'
 						onClick={() => {
 							setCompState((oldValues) => ({
 								...oldValues,
@@ -130,7 +130,7 @@ const ZWorkspacesSettingModal: React.FC<{
 					{/* Settings */}
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.settings}
-						className='text-transform-initial ion-text-center'
+						className='normal-case ion-text-center'
 						onClick={() => {
 							setCompState((oldValues) => ({
 								...oldValues,
@@ -145,7 +145,7 @@ const ZWorkspacesSettingModal: React.FC<{
 					{/* Approvals */}
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.approvals}
-						className='text-transform-initial ion-text-center'
+						className='normal-case ion-text-center'
 						onClick={() => {
 							setCompState((oldValues) => ({
 								...oldValues,

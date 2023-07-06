@@ -109,7 +109,7 @@ const ZCustomdomain: React.FC = () => {
 					/>
 
 					<div
-						className='ion-page zaionsPaneContent'
+						className='ion-page overflow-y-scroll'
 						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
 					>
 						<ZLinkDashboardTopBar />
@@ -129,8 +129,8 @@ const ZCustomdomain: React.FC = () => {
 											<ZIonImg
 												src={customLinksEmptyState}
 												className={classNames({
-													zaions__w43: isMdScale,
-													zaions__w60: !isMdScale && isSmScale,
+													'w-[43%]': isMdScale,
+													'w-[60%]': !isMdScale && isSmScale,
 													'w-full': !isSmScale,
 												})}
 												alt='Link in bio Inactive state'

@@ -178,7 +178,7 @@ const ZInviteTab: React.FC = () => {
 									</ZIonCol>
 								</ZIonRow>
 
-								<ZIonRow className='mt-4 pt-2'>
+								<ZIonRow className='pt-2 mt-4'>
 									<ZIonCol
 										sizeXl='6'
 										size='6'
@@ -190,7 +190,7 @@ const ZInviteTab: React.FC = () => {
 											fill='outline'
 											id='role-popover-index'
 											className={classNames({
-												'm-0 flex h-full text-transform-initial ion-align-items-start':
+												'm-0 flex h-full normal-case ion-align-items-start':
 													true,
 											})}
 											size='small'
@@ -243,7 +243,7 @@ const ZInviteTab: React.FC = () => {
 										<ZIonButton
 											fill='outline'
 											id='permission-popover-index'
-											className='m-0 flex h-full text-transform-initial'
+											className='flex h-full m-0 normal-case'
 											size='small'
 											color='medium'
 											style={{
@@ -286,7 +286,7 @@ const ZInviteTab: React.FC = () => {
 									</ZIonPopover>
 								</ZIonRow>
 
-								<ZIonRow className='mt-4 pt-2'>
+								<ZIonRow className='pt-2 mt-4'>
 									<ZIonCol
 										sizeXl='6'
 										size='6'
@@ -298,7 +298,7 @@ const ZInviteTab: React.FC = () => {
 											fill='solid'
 											id='role-popover-index'
 											className={classNames({
-												'm-0 flex h-full text-transform-initial ion-align-items-start':
+												'm-0 flex h-full normal-case ion-align-items-start':
 													true,
 											})}
 											size='small'
@@ -324,7 +324,7 @@ const ZInviteTab: React.FC = () => {
 											fill='outline'
 											id='role-popover-index'
 											className={classNames({
-												'm-0 flex h-full text-transform-initial ion-align-items-start':
+												'm-0 flex h-full normal-case ion-align-items-start':
 													true,
 											})}
 											size='small'
@@ -352,19 +352,19 @@ const ZInviteTab: React.FC = () => {
 							{/*  */}
 							<ZIonCol
 								size='12'
-								className='flex ion-align-items-center ion-justify-content-center mt-2'
+								className='flex mt-2 ion-align-items-center ion-justify-content-center'
 							>
 								<ZIonText className='me-2'>Invite links</ZIonText>
 								<ZIonIcon
 									icon={helpCircleOutline}
-									className='w-5 h-5 zaions__cursor_pointer'
+									className='w-5 h-5 cursor-pointer'
 								/>
 							</ZIonCol>
 							{/* Copy Invite link button */}
 							<ZIonCol size='max-content'>
 								<ZIonButton
 									size='small'
-									className='border-radius__50per m-0 mb-1'
+									className=' rounded-[50%] m-0 mb-1'
 									style={{
 										'--padding-bottom': '16px',
 										'--padding-top': '16px',
@@ -395,11 +395,11 @@ const ZInviteTab: React.FC = () => {
 										sizeSm='12'
 										sizeXs='12'
 									>
-										<ZIonText className='text-sm pt-1'>
+										<ZIonText className='pt-1 text-sm'>
 											http://plnbl.io/ws/Yxugg59eLfj5
 										</ZIonText>
 
-										<div className='ms-auto flex ion-align-items-center gap-2'>
+										<div className='flex gap-2 ms-auto ion-align-items-center'>
 											<ZIonBadge className='text-sm' color='medium'>
 												Contributor
 											</ZIonBadge>

@@ -290,7 +290,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
 											{/* Next button */}
 											<ZIonButton
 												expand='block'
-												className='text-transform-initial'
+												className='normal-case'
 												disabled={!isValid}
 												onClick={() => {
 													if (dirty) {

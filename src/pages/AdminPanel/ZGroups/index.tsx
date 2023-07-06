@@ -106,7 +106,7 @@ const ZGroups: React.FC = () => {
 					/>
 
 					<div
-						className='ion-page zaionsPaneContent'
+						className='ion-page overflow-y-scroll'
 						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
 					>
 						<ZLinkDashboardTopBar />
@@ -132,7 +132,7 @@ const ZGroups: React.FC = () => {
 												</ZIonText>
 												<div
 													className={classNames({
-														zaions__cursor_nodrop: true,
+														cursor-no-drop: true,
 													})}
 												>
 													<ZIonButton

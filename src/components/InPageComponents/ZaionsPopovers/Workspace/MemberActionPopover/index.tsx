@@ -60,21 +60,21 @@ const ZWorkspaceMemberActionPopover: React.FC = () => {
 	return (
 		<ZIonList lines='none'>
 			<ZIonItem
-				className='ion-activatable ion-focusable zaions__cursor_pointer'
+				className='ion-activatable ion-focusable cursor-pointer'
 				minHeight='32px'
 			>
 				<ZIonLabel>Set as workspace owner...</ZIonLabel>
 			</ZIonItem>
 
 			<ZIonItem
-				className='ion-activatable ion-focusable zaions__cursor_pointer'
+				className='ion-activatable ion-focusable cursor-pointer'
 				minHeight='32px'
 			>
 				<ZIonLabel>Change permission...</ZIonLabel>
 			</ZIonItem>
 
 			<ZIonItem
-				className='ion-activatable ion-focusable zaions__cursor_pointer'
+				className='ion-activatable ion-focusable cursor-pointer'
 				minHeight='32px'
 				lines='full'
 			>
@@ -82,7 +82,7 @@ const ZWorkspaceMemberActionPopover: React.FC = () => {
 			</ZIonItem>
 
 			<ZIonItem
-				className='ion-activatable ion-focusable zaions__cursor_pointer'
+				className='ion-activatable ion-focusable cursor-pointer'
 				minHeight='32px'
 			>
 				<ZIonLabel color='danger'>Remove from workspace</ZIonLabel>

@@ -208,7 +208,7 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 				<ZIonList lines='none'>
 					{/* Contributor */}
 					<ZIonItem
-						className='ion-activatable zaions__cursor_pointer'
+						className='ion-activatable cursor-pointer'
 						color={
 							selectedRole === workspaceFormRoleEnum.Contributor
 								? 'primary'
@@ -231,7 +231,7 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 
 					{/* Administrator */}
 					<ZIonItem
-						className='ion-activatable zaions__cursor_pointer'
+						className='ion-activatable cursor-pointer'
 						onClick={() => {
 							dismissZIonPopover(
 								workspaceFormRoleEnum.Administrator,
@@ -255,7 +255,7 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 
 					{/* Writer */}
 					<ZIonItem
-						className='ion-activatable zaions__cursor_pointer'
+						className='ion-activatable cursor-pointer'
 						onClick={() => {
 							dismissZIonPopover(
 								workspaceFormRoleEnum.Writer,
@@ -276,7 +276,7 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 
 					{/* Approver */}
 					<ZIonItem
-						className='ion-activatable zaions__cursor_pointer'
+						className='ion-activatable cursor-pointer'
 						onClick={() => {
 							dismissZIonPopover(
 								workspaceFormRoleEnum.Approver,
@@ -297,7 +297,7 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
 
 					{/* Guest */}
 					<ZIonItem
-						className='ion-activatable zaions__cursor_pointer'
+						className='ion-activatable cursor-pointer'
 						onClick={() => {
 							dismissZIonPopover(
 								workspaceFormRoleEnum.Guest,

@@ -108,10 +108,8 @@ const ZSettingsTab: React.FC = () => {
 					</ZIonCol>
 
 					<ZIonCol size='12' className='mt-4'>
-						<ZIonText className='block zaions__fs_14'>
-							Remove workspace
-						</ZIonText>
-						<ZIonText className='block zaions__fs_14 text-muted'>
+						<ZIonText className='block text-[14px]'>Remove workspace</ZIonText>
+						<ZIonText className='block text-[14px] text-muted'>
 							Remove this workspace and erase all data (posts, comments, pages
 							etc.). This action is irreversible.
 						</ZIonText>
@@ -119,7 +117,7 @@ const ZSettingsTab: React.FC = () => {
 						<ZIonButton
 							color='danger'
 							fill='clear'
-							className='mt-3 ion-no-padding text-transform-initial'
+							className='mt-3 ion-no-padding normal-case'
 						>
 							Remove this workspace
 						</ZIonButton>

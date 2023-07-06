@@ -117,7 +117,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 						<ZIonCol className='flex ion-align-items-center ms-3'>
 							{/*  */}
 							<div
-								className='w-10 h-10 rounded flex ion-align-items-center ion-justify-content-center'
+								className='flex w-10 h-10 rounded ion-align-items-center ion-justify-content-center'
 								style={{ backgroundColor: color }}
 							>
 								<ZIonIcon icon={logo} className='w-7 h-7' color='light' />
@@ -196,7 +196,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 										{/* Add Cover */}
 										<ZIonRow
 											className={classNames({
-												'mx-3 mt-3 zaions__cursor_pointer': true,
+												'mx-3 mt-3 cursor-pointer': true,
 												'h-[230px]':
 													pageType === workspaceFormConnectPagesEnum.facebook ||
 													pageType === workspaceFormConnectPagesEnum.pinterest,
@@ -282,7 +282,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 										{/* Add Profile Picture */}
 										<ZIonRow
 											className={classNames({
-												'mx-3 relative z-50 w-max zaions__cursor_pointer': true,
+												'mx-3 relative z-50 w-max cursor-pointer': true,
 
 												'mt-[-6.5rem]':
 													pageType === workspaceFormConnectPagesEnum.facebook ||
@@ -358,7 +358,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 													/>
 													<ZIonLabel
 														className={classNames({
-															zaions__fs_13: true,
+															'text-[13px]': true,
 															'zaions_ion_color_light hidden hover:block':
 																values.coverImage.trim().length ||
 																values.profilePhoto.trim().length,
@@ -490,7 +490,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 										<ZIonRow className='mx-3'>
 											<ZIonCol size='3' className='ion-text-end ms-auto'>
 												<ZIonButton
-													className='text-transform-initial'
+													className='normal-case'
 													expand='block'
 													type='submit'
 													disabled={!isValid}
@@ -537,7 +537,7 @@ const PlatformColorAndIcon: React.FC = () => {
 		<ZIonRow className='mx-3 mt-3'>
 			<ZIonCol>
 				<ZIonButton
-					className='ion-no-margin text-transform-initial'
+					className='ion-no-margin normal-case'
 					fill='clear'
 					color='dark'
 					onClick={(event: unknown) => {
@@ -553,7 +553,7 @@ const PlatformColorAndIcon: React.FC = () => {
 					}}
 				>
 					<div
-						className='w-8 h-8 rounded zaions_secondary_color'
+						className='w-8 h-8 rounded zaions-ion-bg-color-secondary'
 						style={{ backgroundColor: values.platformColor }}
 					></div>
 					<ZIonText className='ms-3'>Platform color</ZIonText>
@@ -563,7 +563,7 @@ const PlatformColorAndIcon: React.FC = () => {
 			{/*  */}
 			<ZIonCol>
 				<ZIonButton
-					className='ion-no-margin text-transform-initial'
+					className='ion-no-margin normal-case'
 					fill='clear'
 					color='dark'
 					onClick={(event: unknown) => {
@@ -583,7 +583,7 @@ const PlatformColorAndIcon: React.FC = () => {
 						icon={values.platformIcon}
 						style={{ color: values.platformColor }}
 					/>
-					<ZIonText className='ms-3 mt-1'>Platform icon</ZIonText>
+					<ZIonText className='mt-1 ms-3'>Platform icon</ZIonText>
 				</ZIonButton>
 			</ZIonCol>
 		</ZIonRow>
@@ -597,7 +597,7 @@ const ContentStyle: React.FC = () => {
 	}>();
 
 	return (
-		<ZIonRow className='mx-3 mt-3 ion-align-items-center ion-justify-content-between mb-3'>
+		<ZIonRow className='mx-3 mt-3 mb-3 ion-align-items-center ion-justify-content-between'>
 			<ZIonCol size='12' className='mb-2'>
 				<ZIonText>Content style</ZIonText>
 			</ZIonCol>
@@ -605,7 +605,7 @@ const ContentStyle: React.FC = () => {
 				<ZIonCol
 					size='2'
 					className={classNames({
-						'pb-4 rounded border zaions__cursor_pointer': true,
+						'pb-4 rounded border cursor-pointer': true,
 						zaions__bg_white: el.contentStyleType === values.contentStyle,
 					})}
 					key={index}
@@ -624,7 +624,7 @@ const ContentStyle: React.FC = () => {
 							})}
 						/>
 					}
-					<div className='flex ion-align-items-center ion-justify-content-center flex-col'>
+					<div className='flex flex-col ion-align-items-center ion-justify-content-center'>
 						<ZIonText
 							className={classNames(el.titleFontFamily, {
 								'text-lg': true,

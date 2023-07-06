@@ -11,10 +11,6 @@ import HomePageHeroDesktopImage from './pages/home-page/home_page_hero_desktop.p
 // SVG's
 import linkMngt3 from './svg/link-mngt-3.svg';
 import mobileLayout from './svg/mobileLayout.svg';
-import MedicalInstrumentStethoscope from './svg/icon-large-medical-instrument-stethoscope.svg';
-import iconLargePerformanceMoneyIncrease from './svg/icon-large-performance-money-increase.svg';
-
-import ButtonIcon from './svg/button.svg';
 
 import linkInBio from './svg/link-in-bio-1.svg';
 
@@ -27,24 +23,7 @@ import disney from './svg/brands-images/disney.svg';
 import electronicArts from './svg/brands-images/electronic-arts.svg';
 import marriott from './svg/brands-images/marriott.svg';
 import novasol from './svg/brands-images/novasol.svg';
-import chromeLogo from './svg/chrome.svg';
 
-import firefoxLogo from './svg/firefox.svg';
-
-import buzzFeed from './svg/brands-images/recognizable-brands-buzzfeed.svg';
-import ESPN from './svg/brands-images/recognizable-brands-espn.svg';
-import nyTimes from './svg/brands-images/recognizable-brands-nytimes.svg';
-import Gartner from './svg/brands-images/recognizable-brands-gartner.svg';
-
-import bose from './svg/brands-images/recognizable-brands-bose.svg';
-
-import iconLargePavingPiggyDollars from './svg/icon-large-saving-piggy-dollars.svg';
-import iconLargeSavingMoneySeedling from './svg/icon-large-saving-money-seedling.svg';
-import iconLargeRailRoadFastTrain from './svg/icon-large-railroad-fast-train.svg';
-import iconLargeBeachPalmWater from './svg/icon-large-beach-palm-water-1.svg';
-import socialPublishing from './svg/social-publishing.svg';
-import brandAdvocacy from './svg/brand-advocacy.svg';
-import trackingAndAnalytics from './svg/tracking-and-analytics.svg';
 import drawCustomdomain from './svg/draw_custom_domain.svg';
 import noScript from './svg/no_script.svg';
 
@@ -78,41 +57,6 @@ import XSScaleLinks from './svg/xs-scale-links.svg';
 import XSUptime from './svg/xs-uptime.svg';
 
 import XSEnterpriseSupport from './svg/xs-enterprise-support.svg';
-import checkVector from './svg/check-vector.svg';
-import customDomain from './svg/custom-domain-4-1.svg';
-import chartInspect from './svg/chart-inspect-2.svg';
-import redirectLink1 from './svg/redirect-link-1.svg';
-import increaseConversions from './svg/increase-conversions.svg';
-import maintainConsistency from './svg/maintain-consistency.svg';
-
-import chartInspect1 from './svg/chart-inspect-1.svg';
-import generateQrCode from './svg/generate-qr-code.svg';
-import printedMaterial from './svg/printed-material.svg';
-import customizeColorQr from './svg/customize-color-qr.svg';
-
-import analizeCampaigns2 from './svg/analize-campaigns-2.svg';
-
-import branding2 from './svg/branding-2.svg';
-
-import manageLinks from './svg/manage-links.svg';
-
-import QRCodeColor from './svg/QR-code-color.svg';
-
-import iconLargeCloudServersMin from './svg/icon-large-cloud-servers.min.svg';
-
-import iconLargeCustomerServersMin from './svg/icon-large-customer-service.min.svg';
-
-import iconLargePasswordSecurityMin from './svg/icon-large-password-security.min.svg';
-
-import integrations from './svg/integrations.svg';
-
-import iconLargeChartReviewMin from './svg/icon-large-chart-review.min.svg';
-
-import iconLargeDatabaseMin from './svg/icon-large-database.min.svg';
-
-import iconLargeClockSecurityMin from './svg/icon-large-clock-security.min.svg';
-
-import iconLargeLaptopUserMin from './svg/icon-large-laptop-user.min.svg';
 
 import facebookSvgLogo from './svg/facebook.svg';
 import linkedinSvgLogo from './svg/linkedin.svg';
@@ -413,9 +357,6 @@ export {
 	HomePageHeroDesktopImage,
 	linkMngt3,
 	mobileLayout,
-	MedicalInstrumentStethoscope,
-	iconLargePerformanceMoneyIncrease,
-	ButtonIcon,
 	linkInBio,
 	upload_send,
 	qrCode,
@@ -424,20 +365,6 @@ export {
 	electronicArts,
 	marriott,
 	novasol,
-	chromeLogo,
-	firefoxLogo,
-	buzzFeed,
-	ESPN,
-	nyTimes,
-	Gartner,
-	bose,
-	iconLargePavingPiggyDollars,
-	iconLargeSavingMoneySeedling,
-	iconLargeRailRoadFastTrain,
-	iconLargeBeachPalmWater,
-	socialPublishing,
-	brandAdvocacy,
-	trackingAndAnalytics,
 	drawCustomdomain,
 	noScript,
 	noToken,
@@ -462,28 +389,6 @@ export {
 	XSScaleLinks,
 	XSUptime,
 	XSEnterpriseSupport,
-	checkVector,
-	customDomain,
-	chartInspect,
-	redirectLink1,
-	increaseConversions,
-	maintainConsistency,
-	chartInspect1,
-	generateQrCode,
-	printedMaterial,
-	customizeColorQr,
-	analizeCampaigns2,
-	branding2,
-	manageLinks,
-	QRCodeColor,
-	iconLargeCloudServersMin,
-	iconLargeCustomerServersMin,
-	iconLargePasswordSecurityMin,
-	integrations,
-	iconLargeChartReviewMin,
-	iconLargeDatabaseMin,
-	iconLargeClockSecurityMin,
-	iconLargeLaptopUserMin,
 	facebookSvgLogo,
 	linkedinSvgLogo,
 	twitterSvgLogo,

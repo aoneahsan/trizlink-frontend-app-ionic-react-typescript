@@ -95,30 +95,30 @@ const ZLinkInBio: React.FC = () => {
 					/>
 
 					<div
-						className='ion-page zaionsPaneContent'
+						className='ion-page overflow-y-scroll'
 						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
 					>
 						<ZLinkDashboardTopBar />
 						<ZIonContent className='ion-padding'>
 							<ZIonGrid>
-								<ZIonRow className='ion-align-items-center ion-justify-content-center flex-col mt-3'>
+								<ZIonRow className='flex-col mt-3 ion-align-items-center ion-justify-content-center'>
 									<ZIonImg
 										src={Intro}
 										alt='Link in bio Inactive state'
 										className={classNames({
-											zaions__w35: isMdScale,
-											zaions__w60: !isMdScale && isSmScale,
+											'w-[35%]': isMdScale,
+											'w-[60%]': !isMdScale && isSmScale,
 											'w-full': !isSmScale,
 										})}
 									/>
-									<ZIonTitle className='text-3xl font-bold mb-2 mt-4'>
+									<ZIonTitle className='mt-4 mb-2 text-3xl font-bold'>
 										Showcase your links
 									</ZIonTitle>
 									<ZIonText className='text-lg ion-text-center'>
 										Display your most important links on one simple page. Then
 										share <br /> one simple Link-in-bio to get people there.
 									</ZIonText>
-									<ZIonButton className='ion-text-capitalize mt-4 '>
+									<ZIonButton className='mt-4 ion-text-capitalize '>
 										<ZIonText className='px-4 font-bold'>
 											Create a Link-in-bio
 										</ZIonText>

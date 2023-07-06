@@ -36,7 +36,7 @@ const APSettingsCustomDomain: React.FC = () => {
 
 	return (
 		<>
-			<ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-5'>
+			<ZIonRow className='px-4 py-4 mx-4 mt-5 zaions__bg_white'>
 				{' '}
 				<ZIonCol sizeXl='6' sizeLg='6' sizeMd='6' sizeSm='6' sizeXs='12'>
 					<ZIonText className='p-0 mb-2 font-bold' color={'primary'}>
@@ -54,9 +54,7 @@ const APSettingsCustomDomain: React.FC = () => {
 					<div className=''>
 						<ZIonImg
 							src={drawCustomdomain}
-							className={`mx-auto ${
-								!isLgScale ? 'w-full mt-5' : 'zaions__w60 '
-							}`}
+							className={`mx-auto ${!isLgScale ? 'w-full mt-5' : 'w-[60%]'}`}
 						/>
 					</div>
 				</ZIonCol>
@@ -68,7 +66,7 @@ const APSettingsCustomDomain: React.FC = () => {
 					sizeMd='12'
 					sizeSm='12'
 					sizeXs='12'
-					className='py-4 px-4 zaions__bg_white me-2 rounded'
+					className='px-4 py-4 rounded zaions__bg_white me-2'
 				>
 					<ZIonText className='p-0 mb-2 font-bold'>
 						How add your domain name?
@@ -101,12 +99,12 @@ const APSettingsCustomDomain: React.FC = () => {
 					sizeXs='12'
 					className={`${!isLgScale ? 'mt-3' : 'ms-2'}`}
 				>
-					<div className='py-4 px-4 zaions__bg_white rounded'>
+					<div className='px-4 py-4 rounded zaions__bg_white'>
 						<ZIonText className='p-0 mb-2 font-bold' color={'primary'}>
 							How add your domain name?
 						</ZIonText>
-						<div className='flex ion-align-items-center mb-3'>
-							<ZIonItem slot='start' className='zaions__w88 me-auto'>
+						<div className='flex mb-3 ion-align-items-center'>
+							<ZIonItem slot='start' className='w-[88%] me-auto'>
 								<ZIonInput
 									label='link.yourBrand.com'
 									labelPlacement='floating'

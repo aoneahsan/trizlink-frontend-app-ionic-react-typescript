@@ -113,7 +113,7 @@ const ZaionsInfoPanel: React.FC<ZaionsInfoPanelType> = ({
 						})}
 						color={iconColor}
 					/>
-					<ZIonText className='zaions__fs_14 ps-2 block' color={textColor}>
+					<ZIonText className='text-[14px] ps-2 block' color={textColor}>
 						{text}
 					</ZIonText>
 				</ZIonCol>

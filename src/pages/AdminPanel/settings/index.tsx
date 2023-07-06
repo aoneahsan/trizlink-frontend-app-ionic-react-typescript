@@ -8,8 +8,6 @@ import classNames from 'classnames';
 // Custom Imports
 import ZaionsIonPage from '@/components/ZaionsIonPage';
 import ZaionsCreateShortLinkUrlInput from '@/components/InPageComponents/ZaionsCreateShortLinkUrlInput';
-import APSettingsPixels from '@/components/UserDashboard/SettingsSection/Pixels';
-import APSettingsUtmTags from '@/components/UserDashboard/SettingsSection/UtmTemplates';
 import APSettingsEmbedWidgets from '@/components/UserDashboard/SettingsSection/EmbedWidgets';
 import APSettingsPrivacy from '@/components/UserDashboard/SettingsSection/Privacy';
 import APSettingspassword from '@/components/UserDashboard/SettingsSection/Password';
@@ -46,12 +44,6 @@ const ZaionsAdminPanelSettings: React.FC = () => {
 	const customDomainSettingsPagePathMatch = useRouteMatch(
 		ZaionsRoutes.AdminPanel.Setting.Main + '/custom-domain'
 	)?.isExact;
-	const pixelsSettingsPagePathMatch = useRouteMatch(
-		ZaionsRoutes.AdminPanel.Setting.Main + '/pixels'
-	)?.isExact;
-	const utmTagsSettingsPagePathMatch = useRouteMatch(
-		ZaionsRoutes.AdminPanel.Setting.Main + '/utm-templates'
-	)?.isExact;
 	const embedWidgetsSettingsPagePathMatch = useRouteMatch(
 		ZaionsRoutes.AdminPanel.Setting.Main + '/scripts'
 	)?.isExact;
@@ -72,7 +64,7 @@ const ZaionsAdminPanelSettings: React.FC = () => {
 				menu={PAGE_MENU.DASHBOARD_PAGE_MENU}
 			>
 				<ZIonContent color='light'>
-					<ZIonGrid className='zaions__bg_white px-4 ion-no-padding'>
+					<ZIonGrid className='px-4 zaions__bg_white ion-no-padding'>
 						<ZIonSplitPane
 							when='lg'
 							contentId={CONSTANTS.DEFAULT_VALUES.ZAIONS_SETTING_SPLIT_PANEL}
@@ -98,34 +90,7 @@ const ZaionsAdminPanelSettings: React.FC = () => {
 												💻 Custom domains
 											</ZIonRouterLink>
 										</ZIonItem>
-										<ZIonItem className='py-1'>
-											<ZIonRouterLink
-												routerLink={
-													ZaionsRoutes.AdminPanel.Setting.Main + '/pixels'
-												}
-												className={classNames({
-													'text-primary font-bold': pixelsSettingsPagePathMatch,
-												})}
-												color={'dark'}
-											>
-												🎯 Pixels
-											</ZIonRouterLink>
-										</ZIonItem>
-										<ZIonItem className='py-1'>
-											<ZIonRouterLink
-												routerLink={
-													ZaionsRoutes.AdminPanel.Setting.Main +
-													'/utm-templates'
-												}
-												className={classNames({
-													'text-primary font-bold':
-														utmTagsSettingsPagePathMatch,
-												})}
-												color={'dark'}
-											>
-												🎫 UTMs tracking
-											</ZIonRouterLink>
-										</ZIonItem>
+										
 										<ZIonItem className='py-1'>
 											<ZIonRouterLink
 												routerLink={
@@ -191,11 +156,11 @@ const ZaionsAdminPanelSettings: React.FC = () => {
 								</ZIonContent>
 							</ZIonMenu>
 							<div
-								className='ion-page zaionsPaneContent'
+								className='overflow-y-scroll ion-page'
 								id={CONSTANTS.DEFAULT_VALUES.ZAIONS_SETTING_SPLIT_PANEL}
 							>
 								<ZIonGrid className='w-full mt-2'>
-									<ZIonRow className='py-3 px-3 zaions__bg_white'>
+									<ZIonRow className='px-3 py-3 zaions__bg_white'>
 										<ZIonCol
 											sizeXl='7'
 											sizeLg='7'
@@ -209,14 +174,8 @@ const ZaionsAdminPanelSettings: React.FC = () => {
 											{customDomainSettingsPagePathMatch && (
 												<ZIonText>Set your own custom domain easily</ZIonText>
 											)}
-											{pixelsSettingsPagePathMatch && (
-												<ZIonText>Add & manage your Tracking Pixels</ZIonText>
-											)}
-											{utmTagsSettingsPagePathMatch && (
-												<ZIonText>
-													Add & manage your Tracking UTM Templates
-												</ZIonText>
-											)}
+											
+
 											{embedWidgetsSettingsPagePathMatch && (
 												<ZIonText>
 													Add third-party widgets & embed scripts
@@ -243,8 +202,6 @@ const ZaionsAdminPanelSettings: React.FC = () => {
 									{customDomainSettingsPagePathMatch && (
 										<APSettingsCustomDomain />
 									)}
-									{pixelsSettingsPagePathMatch && <APSettingsPixels />}
-									{utmTagsSettingsPagePathMatch && <APSettingsUtmTags />}
 									{embedWidgetsSettingsPagePathMatch && (
 										<APSettingsEmbedWidgets />
 									)}

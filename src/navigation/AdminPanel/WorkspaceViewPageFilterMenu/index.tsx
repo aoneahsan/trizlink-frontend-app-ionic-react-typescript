@@ -134,7 +134,7 @@ const ZWorkspaceViewPageFilterMenu: React.FC = () => {
 									</ZIonText>
 								</ZIonItem>
 								<div
-									className='ion-padding zaions__light_bg mt-1'
+									className='ion-padding zaions-ion-bg-color-light mt-1'
 									slot='content'
 								>
 									<ZIonRadioGroup>
@@ -246,7 +246,7 @@ const ZWorkspaceViewPageFilterMenu: React.FC = () => {
 											</ZIonText>
 										</ZIonItem>
 										<div
-											className='ion-padding zaions__light_bg mt-1'
+											className='ion-padding zaions-ion-bg-color-light mt-1'
 											slot='content'
 										>
 											{/* here we are looping the filter items, first we are checking if we have filter items, if we have filter items then we are checking that what type of items are they checkbox, ratio, etc. accounting to type we are showing content.  */}
@@ -324,7 +324,7 @@ const ZWorkspaceViewPageFilterMenu: React.FC = () => {
 							lines='none'
 							minHeight='46px'
 							color='light'
-							className='ion-activatable ion-focusable zaions__cursor_pointer '
+							className='ion-activatable ion-focusable cursor-pointer '
 						>
 							<ZIonIcon icon={searchOutline} className='w-4 h-4' />
 							<ZIonText className='text-sm pt-1 ms-2'>Search in posts</ZIonText>
@@ -336,7 +336,7 @@ const ZWorkspaceViewPageFilterMenu: React.FC = () => {
 							lines='none'
 							minHeight='46px'
 							color='light'
-							className='ion-activatable ion-focusable zaions__cursor_pointer '
+							className='ion-activatable ion-focusable cursor-pointer '
 						>
 							<ZIonIcon icon={eyeOffOutline} className='w-4 h-4' />
 							<ZIonText className='text-sm pt-1 ms-2'>
@@ -348,7 +348,7 @@ const ZWorkspaceViewPageFilterMenu: React.FC = () => {
 							lines='none'
 							minHeight='46px'
 							color='light'
-							className='ion-activatable ion-focusable zaions__cursor_pointer mt-2'
+							className='ion-activatable ion-focusable cursor-pointer mt-2'
 						>
 							<ZIonIcon icon={fileTrayFullOutline} className='w-4 h-4' />
 							<ZIonText className='text-sm pt-1 ms-2'>

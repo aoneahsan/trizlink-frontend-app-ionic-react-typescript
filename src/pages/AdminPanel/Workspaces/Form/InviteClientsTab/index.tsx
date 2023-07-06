@@ -202,7 +202,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 															<ZIonButton
 																id={`role-popover-index-${index}`}
 																fill='outline'
-																className='m-0 flex h-full text-transform-initial'
+																className='m-0 flex h-full normal-case'
 															>
 																{values.clients && values.clients[index].role}
 															</ZIonButton>
@@ -211,7 +211,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 															<ZIonButton
 																fill='outline'
 																id={`permission-popover-index-${index}`}
-																className='m-0 flex h-full text-transform-initial'
+																className='m-0 flex h-full normal-case'
 															>
 																{values.clients &&
 																	values.clients[index].permission}
@@ -241,7 +241,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 														}
 														onClick={() => remove(index)}
 														color={!isMdScale ? 'danger' : undefined}
-														className='text-transform-initial'
+														className='normal-case'
 														expand={!isMdScale ? 'block' : undefined}
 													>
 														{isMdScale && (
@@ -336,7 +336,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 												sizeXs='12'
 											>
 												<ZIonButton
-													className='text-transform-initial'
+													className='normal-case'
 													onClick={() =>
 														push({
 															email: '',
@@ -388,7 +388,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 												<ZIonButton
 													expand='block'
 													fill='outline'
-													className='text-transform-initial'
+													className='normal-case'
 													routerLink={createRedirectRoute({
 														url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
 														params: [
@@ -415,7 +415,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 											>
 												<ZIonButton
 													expand='block'
-													className='text-transform-initial'
+													className='normal-case'
 													routerLink={createRedirectRoute({
 														url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
 														params: [
@@ -446,7 +446,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 												>
 													<ZIonButton
 														expand='block'
-														className='text-transform-initial'
+														className='normal-case'
 														routerLink={createRedirectRoute({
 															url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
 															params: [

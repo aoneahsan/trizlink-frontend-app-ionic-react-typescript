@@ -264,7 +264,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 						)}
 
 						<ZIonContent className='ion-padding'>
-							<div className='flex ion-text-center ion-justify-content-center flex-col ion-padding-top ion-margin-top ion-margin-bottom'>
+							<div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top ion-margin-bottom'>
 								<ZIonText className='' color={'primary'}>
 									<h1
 										className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}
@@ -311,7 +311,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 								/>
 
 								{/*-- Custom Javascript Field --*/}
-								<div className='mt-4 pt-2'>
+								<div className='pt-2 mt-4'>
 									<ZIonRow>
 										<ZIonCol>
 											<ZIonTitle
@@ -444,13 +444,13 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 									<ZIonTitle className='p-0 mb-2'>
 										<h5>⏱ Display after</h5>
 									</ZIonTitle>
-									<ZIonRow className='ion-justify-content-between mt-3'>
+									<ZIonRow className='mt-3 ion-justify-content-between'>
 										{/* Landing */}
 										<ZIonCol className='me-3 ion-text-center'>
 											<ZIonIcon
 												icon={airplaneOutline}
 												size='large'
-												className={`rounded-full p-3 zaions__cursor_pointer ${
+												className={`rounded-full p-3 cursor-pointer ${
 													!!values.displayAt &&
 													values.displayAt === EmbedWidgetsDisplayAtEnum.Landing
 														? 'zaions__primary_set'
@@ -483,7 +483,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 											<ZIonIcon
 												icon={timeOutline}
 												size='large'
-												className={`rounded-full p-3 zaions__cursor_pointer ${
+												className={`rounded-full p-3 cursor-pointer ${
 													!!values.displayAt &&
 													values.displayAt === EmbedWidgetsDisplayAtEnum.Delay
 														? 'zaions__primary_set'
@@ -516,7 +516,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 											<ZIonIcon
 												icon={logOutOutline}
 												size='large'
-												className={`zaions__cursor_pointer rounded-full p-3 ${
+												className={`cursor-pointer rounded-full p-3 ${
 													!!values.displayAt &&
 													values.displayAt === EmbedWidgetsDisplayAtEnum.Exit
 														? 'zaions__primary_set'
@@ -551,7 +551,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 										<ZIonInputField
 											inputFieldProps={{
 												className: classNames({
-													'mt-4 zaions__w40 mx-auto': true,
+													'mt-4 w-[40%] mx-auto': true,
 													'ion-touched ion-invalid':
 														touched.delay && errors.delay,
 													'ion-touched ion-valid':
@@ -579,12 +579,12 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 									<ZIonGrid>
 										<ZIonRow>
 											<ZIonCol sizeXl='7'>
-												<ZIonRow className='mt-3 gap-2'>
+												<ZIonRow className='gap-2 mt-3'>
 													{/* Position Top Start */}
 													<ZIonCol
 														size='3.5'
 														color={'medium'}
-														className={`ion-activatable ripple-parent zaions__cursor_pointer zaions__h100px ${
+														className={`ion-activatable ripple-parent cursor-pointer h-[100px] ${
 															!!values.position &&
 															values.position ===
 																EmbedWidgetsPositionEnum.TopStart
@@ -602,7 +602,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													>
 														<IonRippleEffect />
 														<div
-															className={`zaions__w20 zaions__h40 rounded ${
+															className={`w-[20%] h-[40%] rounded ${
 																!!values.position &&
 																values.position ===
 																	EmbedWidgetsPositionEnum.TopStart
@@ -615,7 +615,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													{/* Position Top Center */}
 													<ZIonCol
 														size='3.5'
-														className={`ion-activatable ripple-parent zaions__cursor_pointer zaions__h100px ${
+														className={`ion-activatable ripple-parent cursor-pointer h-[100px] ${
 															!!values.position &&
 															values.position ===
 																EmbedWidgetsPositionEnum.TopCenter
@@ -633,7 +633,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													>
 														<IonRippleEffect></IonRippleEffect>
 														<div
-															className={`zaions__w20 zaions__h40 mx-auto rounded ${
+															className={`w-[20%] h-[40%] mx-auto rounded ${
 																!!values.position &&
 																values.position ===
 																	EmbedWidgetsPositionEnum.TopCenter
@@ -646,7 +646,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													{/* Position Top End */}
 													<ZIonCol
 														size='3.5'
-														className={`ion-activatable ripple-parent zaions__cursor_pointer zaions__h100px ${
+														className={`ion-activatable ripple-parent cursor-pointer h-[100px] ${
 															!!values.position &&
 															values.position ===
 																EmbedWidgetsPositionEnum.TopEnd
@@ -664,7 +664,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													>
 														<IonRippleEffect></IonRippleEffect>
 														<div
-															className={`zaions__w20 zaions__h40 rounded ms-auto ${
+															className={`w-[20%] h-[40%] rounded ms-auto ${
 																!!values.position &&
 																values.position ===
 																	EmbedWidgetsPositionEnum.TopEnd
@@ -677,7 +677,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													{/* Position Center Start */}
 													<ZIonCol
 														size='3.5'
-														className={`ion-activatable ripple-parent zaions__cursor_pointer flex ion-align-items-center zaions__h100px ${
+														className={`ion-activatable ripple-parent cursor-pointer flex ion-align-items-center h-[100px] ${
 															!!values.position &&
 															values.position ===
 																EmbedWidgetsPositionEnum.CenterStart
@@ -695,7 +695,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													>
 														<IonRippleEffect></IonRippleEffect>
 														<div
-															className={`zaions__w20 zaions__h40 rounded ${
+															className={`w-[20%] h-[40%] rounded ${
 																!!values.position &&
 																values.position ===
 																	EmbedWidgetsPositionEnum.CenterStart
@@ -708,7 +708,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													{/* Position Center Center */}
 													<ZIonCol
 														size='3.5'
-														className={`ion-activatable ripple-parent zaions__cursor_pointer flex ion-align-items-center ion-justify-content-center zaions__h100px ${
+														className={`ion-activatable ripple-parent cursor-pointer flex ion-align-items-center ion-justify-content-center h-[100px] ${
 															!!values.position &&
 															values.position ===
 																EmbedWidgetsPositionEnum.CenterCenter
@@ -726,7 +726,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													>
 														<IonRippleEffect></IonRippleEffect>
 														<div
-															className={`zaions__w20 zaions__h40 rounded ${
+															className={`w-[20%] h-[40%] rounded ${
 																!!values.position &&
 																values.position ===
 																	EmbedWidgetsPositionEnum.CenterCenter
@@ -739,7 +739,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													{/* position Center End */}
 													<ZIonCol
 														size='3.5'
-														className={`ion-activatable ripple-parent zaions__cursor_pointer flex ion-align-items-center ion-justify-content-end zaions__h100px ${
+														className={`ion-activatable ripple-parent cursor-pointer flex ion-align-items-center ion-justify-content-end h-[100px] ${
 															!!values.position &&
 															values.position ===
 																EmbedWidgetsPositionEnum.CenterEnd
@@ -757,7 +757,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													>
 														<IonRippleEffect></IonRippleEffect>
 														<div
-															className={`zaions__w20 zaions__h40 rounded ${
+															className={`w-[20%] h-[40%] rounded ${
 																!!values.position &&
 																values.position ===
 																	EmbedWidgetsPositionEnum.CenterEnd
@@ -770,7 +770,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													{/* position Bottom Start */}
 													<ZIonCol
 														size='3.5'
-														className={`ion-activatable ripple-parent zaions__cursor_pointer flex ion-align-items-end zaions__h100px ${
+														className={`ion-activatable ripple-parent cursor-pointer flex ion-align-items-end h-[100px] ${
 															!!values.position &&
 															values.position ===
 																EmbedWidgetsPositionEnum.BottomStart
@@ -788,7 +788,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													>
 														<IonRippleEffect></IonRippleEffect>
 														<div
-															className={`zaions__w20 zaions__h40 rounded ${
+															className={`w-[20%] h-[40%] rounded ${
 																!!values.position &&
 																values.position ===
 																	EmbedWidgetsPositionEnum.BottomStart
@@ -801,7 +801,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													{/* Position Bottom Center */}
 													<ZIonCol
 														size='3.5'
-														className={`ion-activatable ripple-parent zaions__cursor_pointer flex ion-align-items-end ion-justify-content-center zaions__h100px ${
+														className={`ion-activatable ripple-parent cursor-pointer flex ion-align-items-end ion-justify-content-center h-[100px] ${
 															!!values.position &&
 															values.position ===
 																EmbedWidgetsPositionEnum.BottomCenter
@@ -819,7 +819,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													>
 														<IonRippleEffect></IonRippleEffect>
 														<div
-															className={`zaions__w20 zaions__h40 rounded ${
+															className={`w-[20%] h-[40%] rounded ${
 																!!values.position &&
 																values.position ===
 																	EmbedWidgetsPositionEnum.BottomCenter
@@ -832,7 +832,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													{/* Position Bottom End */}
 													<ZIonCol
 														size='3.5'
-														className={`ion-activatable ripple-parent zaions__cursor_pointer flex ion-align-items-end ion-justify-content-end zaions__h100px ${
+														className={`ion-activatable ripple-parent cursor-pointer flex ion-align-items-end ion-justify-content-end h-[100px] ${
 															!!values.position &&
 															values.position ===
 																EmbedWidgetsPositionEnum.BottomEnd
@@ -850,7 +850,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 													>
 														<IonRippleEffect></IonRippleEffect>
 														<div
-															className={`zaions__w20 zaions__h40 rounded ${
+															className={`w-[20%] h-[40%] rounded ${
 																!!values.position &&
 																values.position ===
 																	EmbedWidgetsPositionEnum.BottomEnd
@@ -911,7 +911,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 						 *  */}
 						{appSettings.appModalsSetting.actions.showActionInModalFooter && (
 							<ZIonFooter>
-								<ZIonRow className=' mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
+								<ZIonRow className='mx-3 mt-2  ion-justify-content-between ion-align-items-center'>
 									<ZIonCol>
 										<ZIonButton
 											fill='outline'

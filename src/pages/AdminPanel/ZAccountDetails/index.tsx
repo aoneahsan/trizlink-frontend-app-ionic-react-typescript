@@ -147,7 +147,7 @@ const ZAccountDetails: React.FC = () => {
 					/>
 
 					<div
-						className='ion-page zaionsPaneContent'
+						className='ion-page overflow-y-scroll'
 						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
 					>
 						{/* Top bar */}
@@ -345,7 +345,7 @@ const ZAccountDetails: React.FC = () => {
 												>
 													<ZIonInput
 														className={classNames({
-															zaions__w70: isMdScale,
+															'w-[70%]': isMdScale,
 															'w-full mb-2': !isMdScale,
 														})}
 														placeholder='User Name'
@@ -509,7 +509,7 @@ const ZAccountDetails: React.FC = () => {
 																			'emailAddress'
 																		)}
 																		className={classNames({
-																			zaions__w80: isMdScale,
+																			'w-[80%]': isMdScale,
 																			'w-full mb-3': !isMdScale,
 																		})}
 																		name='primaryEmail'
@@ -599,8 +599,8 @@ const ZAccountDetails: React.FC = () => {
 																<IonProgressBar
 																	className={classNames({
 																		'inline-block me-2': true,
-																		zaions__w80: isMdScale || !isSmScale,
-																		zaions__w90: !isMdScale && isSmScale,
+																		'w-[80%]': isMdScale || !isSmScale,
+																		'w-[90%]': !isMdScale && isSmScale,
 																	})}
 																/>{' '}
 																<ZIonText className='ion-hide-md-down'>
@@ -671,8 +671,8 @@ const ZAccountDetails: React.FC = () => {
 																<IonProgressBar
 																	className={classNames({
 																		'inline-block me-2': true,
-																		zaions__w80: isMdScale || !isSmScale,
-																		zaions__w90: !isMdScale && isSmScale,
+																		'w-[80%]': isMdScale || !isSmScale,
+																		'w-[90%]': !isMdScale && isSmScale,
 																	})}
 																/>{' '}
 																<ZIonText className='ms-2 ion-hide-md-down'>
@@ -743,8 +743,8 @@ const ZAccountDetails: React.FC = () => {
 																<IonProgressBar
 																	className={classNames({
 																		'inline-block me-2': true,
-																		zaions__w80: isMdScale || !isSmScale,
-																		zaions__w90: !isMdScale && isSmScale,
+																		'w-[80%]': isMdScale || !isSmScale,
+																		'w-[90%]': !isMdScale && isSmScale,
 																	})}
 																/>{' '}
 																<ZIonText className='ms-2 ion-hide-md-down'>
@@ -815,8 +815,8 @@ const ZAccountDetails: React.FC = () => {
 																<IonProgressBar
 																	className={classNames({
 																		'inline-block me-2': true,
-																		zaions__w80: isMdScale || !isSmScale,
-																		zaions__w90: !isMdScale && isSmScale,
+																		'w-[80%]': isMdScale || !isSmScale,
+																		'w-[90%]': !isMdScale && isSmScale,
 																	})}
 																/>{' '}
 																<ZIonText className='ion-hide-md-down'>
