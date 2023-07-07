@@ -8,6 +8,7 @@ export enum ProjectCreatePageTabEnum {
 
 // Interfaces
 export interface ZProjectInterface {
+	id?: string;
 	projectName: string;
 	subDomain: string;
 	image: string;

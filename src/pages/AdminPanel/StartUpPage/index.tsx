@@ -103,7 +103,7 @@ const ZAppStartupPage: React.FC = () => {
 				setLoadingIsOpen(false);
 
 				// Redirect to workspaces index page
-				zNavigatePushRoute(ZaionsRoutes.AdminPanel.Workspaces.Main);
+				zNavigatePushRoute(ZaionsRoutes.AdminPanel.Projects.Main);
 			}
 		} catch (error) {
 			reportCustomError(error);

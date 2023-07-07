@@ -108,7 +108,7 @@ const ZaionsFileUploadModal: React.FC<{
 					<ZIonRow className='h-full'>
 						<ZIonCol
 							size='3'
-							className='zaions-ion-bg-color-light h-full ion-padding-vertical'
+							className='h-full zaions-ion-bg-color-light ion-padding-vertical'
 						>
 							{/* Title */}
 							<ZIonText
@@ -636,7 +636,7 @@ const UploadTab: React.FC<{
 
 const LinkTab: React.FC = () => {
 	return (
-		<div className='flex flex-col w-full mt-2 rounded ion-align-items-center ion-justify-content-start h-full'>
+		<div className='flex flex-col w-full h-full mt-2 rounded ion-align-items-center ion-justify-content-start'>
 			<ZIonText className='ion-no-margin'>
 				<ZIonImg
 					src={uploadModalLink}
@@ -666,7 +666,7 @@ const LinkTab: React.FC = () => {
 					label=''
 				/>
 				<ZIonButton
-					className='h-full ion-no-margin normal-case'
+					className='h-full normal-case ion-no-margin'
 					style={{ '--border-radius': '0', '--box-shadow': 'none' }}
 				>
 					Select
@@ -678,7 +678,7 @@ const LinkTab: React.FC = () => {
 
 const ScreenShotTab: React.FC = () => {
 	return (
-		<div className='flex flex-col w-full mt-2 rounded ion-align-items-center ion-justify-content-start h-full'>
+		<div className='flex flex-col w-full h-full mt-2 rounded ion-align-items-center ion-justify-content-start'>
 			<ZIonText className='ion-no-margin'>
 				<ZIonImg
 					src={uploadModalCamera}
@@ -708,7 +708,7 @@ const ScreenShotTab: React.FC = () => {
 					label=''
 				/>
 				<ZIonButton
-					className='h-full ion-no-margin normal-case'
+					className='h-full normal-case ion-no-margin'
 					style={{ '--border-radius': '0', '--box-shadow': 'none' }}
 				>
 					Take a screenshot
@@ -750,7 +750,7 @@ const GalleryTab: React.FC<{ typeOfGallery: galleryEnum }> = ({
 						label=''
 					/>
 					<ZIonButton
-						className='h-full ion-no-margin normal-case'
+						className='h-full normal-case ion-no-margin'
 						style={{ '--border-radius': '0', '--box-shadow': 'none' }}
 					>
 						Search

@@ -35,6 +35,11 @@ const RouteParams = {
 		editWorkspaceIdParam: ':editWorkspaceId',
 	},
 
+	// project
+	project: {
+		projectId: ':projectId',
+	},
+
 	shortLink: {
 		shortLinkId: ':shortLinkId',
 	},
@@ -67,7 +72,11 @@ export const API_URLS = {
 
 	// workspace
 	workspace_create_list: '/user/workspaces',
-	workspace_update_delete: '/user/workspaces/:workspaceId',
+	workspace_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}`,
+
+	// Project
+	project_create_list: '/user/project',
+	project_update_delete: `/user/project/${RouteParams.project.projectId}`,
 
 	// File
 	getSingleFile: '/file-upload/getSingleFileUrl',
@@ -411,6 +420,10 @@ const REACT_QUERY = {
 		WORKSPACE: {
 			MAIN: 'rq-workspace-list-key',
 			GET: 'rq-workspace-get-key',
+		},
+		PROJECT: {
+			MAIN: 'rq-project-list-key',
+			GET: 'rq-project-get-key',
 		},
 		FOLDER: {
 			MAIN: 'rq-folders-list-key',

@@ -27,18 +27,35 @@ import {
 	ZIonInput,
 	ZIonRow,
 	ZIonText,
+	ZIonTitle,
 } from '@/components/ZIonComponents';
+import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/FileUploadModal';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
+import { useZRQCreateRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { PRODUCT_NAME } from '@/utils/constants';
+import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
+import {
+	extractInnerData,
+	validateFields,
+	zJsonParse,
+	zStringify,
+} from '@/utils/helpers';
+import {
+	API_URL_ENUM,
+	extractInnerDataOptionsEnum,
+	VALIDATION_RULE,
+} from '@/utils/enums';
+import { reportCustomError } from '@/utils/customErrorType';
 
 /**
  * Type Imports go down
@@ -47,7 +64,9 @@ import { PRODUCT_NAME } from '@/utils/constants';
 import {
 	ProjectCreatePageTabEnum,
 	ZProjectInterface,
-} from '@/types/AdminPanel/Project';
+} from '@/types/AdminPanel/Project/index.type';
+import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
 
 /**
  * Recoil State Imports go down
@@ -65,6 +84,11 @@ import classes from './styles.module.css';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductLogo } from '@/assets/images';
+import {
+	showErrorNotification,
+	showSuccessNotification,
+} from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
 
 /**
  * Component props type go down
@@ -78,6 +102,42 @@ import { ProductLogo } from '@/assets/images';
  * */
 
 const ZProjectCreatePage: React.FC = () => {
+	//
+	const { isLgScale } = useZMediaQueryScale();
+
+	// Create new project API.
+	const { mutateAsync: createProjectMutate } = useZRQCreateRequest({
+		_url: API_URL_ENUM.project_create_list,
+		_queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.MAIN],
+	});
+
+	// Formik submit function
+	const formikSubmitHandler = async (value: string) => {
+		try {
+			if (value) {
+				// Making an api call creating new project
+				const _response = await createProjectMutate(value);
+
+				if (_response) {
+					const _data = extractInnerData<ZProjectInterface>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (_data && _data.id) {
+						showSuccessNotification(
+							MESSAGES.GENERAL.PROJECT.PROJECT_CREATED_SUCCESSFULLY
+						);
+					} else {
+						showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+					}
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
 	return (
 		<ZaionsIonPage>
 			<ZIonContent>
@@ -87,12 +147,51 @@ const ZProjectCreatePage: React.FC = () => {
 						projectName: '',
 						subDomain: '',
 						image: '',
-						featureRequests: '',
+						featureRequests: 'Feature requests',
 						completedRecently: '',
 						inProgress: '',
 						plannedNext: '',
 					}}
-					onSubmit={() => {}}
+					validate={(values) => {
+						const errors: {
+							projectName?: string;
+							subDomain?: string;
+							featureRequests?: string;
+							completedRecently?: string;
+							inProgress?: string;
+							plannedNext?: string;
+						} = {};
+
+						validateFields(
+							['projectName', 'subDomain', 'featureRequests'],
+							values,
+							errors,
+							[
+								VALIDATION_RULE.string,
+								VALIDATION_RULE.string,
+								VALIDATION_RULE.string,
+							]
+						);
+
+						return errors;
+					}}
+					onSubmit={(values) => {
+						try {
+							formikSubmitHandler(
+								zStringify({
+									projectName: values.projectName,
+									subDomain: values.subDomain,
+									image: values.image,
+									featureRequests: values.featureRequests,
+									completedRecently: values.completedRecently,
+									inProgress: values.inProgress,
+									plannedNext: values.plannedNext,
+								})
+							);
+						} catch (error) {
+							reportCustomError(error);
+						}
+					}}
 				>
 					{({ values }) => {
 						return (
@@ -183,75 +282,278 @@ const ZProjectCreatePage: React.FC = () => {
 								</ZIonCol>
 
 								{/* Right (Preview col) */}
-								<ZIonCol className='flex zaions__bg_light_opacity_point5 ion-align-items-center ion-justify-content-center'>
-									{/* Browser window */}
-									<div
-										className={classNames(classes['z-browser-window'], {
-											'h-[21rem] w-full max-w-[32rem] bg-[#f7f4f2] rounded-[0.375rem] overflow-hidden':
-												true,
-										})}
-									>
-										{/* Window tab */}
+								{isLgScale && (
+									<ZIonCol className='flex zaions__bg_light_opacity_point5 ion-align-items-center ion-justify-content-center'>
+										{/* Browser window */}
 										<div
-											className={classNames({
-												'flex w-full h-10 ion-align-items-end bg-[#cbcfd4]':
+											className={classNames(classes['z-browser-window'], {
+												'h-[21rem] w-full max-w-[32rem] bg-[#f7f4f2] rounded-[0.375rem] overflow-hidden':
 													true,
 											})}
 										>
-											<span className='relative z-10 flex w-48 h-8 ion-align-items-center bg-[#eaecee] px-2 text-sm leading-5 text-[#2e4052] ms-2 rounded-t font-normal'>
-												New Project Feedback
-											</span>
-										</div>
-
-										{/* Window tab url */}
-										<div className='relative z-0 flex w-full h-10 ion-align-items-center bg-[#eaecee]'>
-											<span className='block w-full h-6 px-2 mx-2 text-sm leading-5 bg-white rounded-full'>
-												<span className='text-[rgba(46,64,82,1)] font-normal'>
-													https://
+											{/* Window tab */}
+											<div
+												className={classNames({
+													'flex w-full h-10 ion-align-items-end bg-[#cbcfd4]':
+														true,
+												})}
+											>
+												<span className='relative z-10 flex w-48 h-8 ion-align-items-center bg-[#eaecee] px-2 text-sm leading-5 text-[#2e4052] ms-2 rounded-t font-normal'>
+													{values.projectName.trim().length > 0
+														? values.projectName
+														: 'New Project'}{' '}
+													Feedback
 												</span>
-												<span className='text-[rgba(46,64,82,1)] font-normal'>
-													new-project
-												</span>
-												<span className='text-dblue-500'>.feedbear.com</span>
-											</span>
-										</div>
-
-										{/* Window body */}
-										<div className='px-3 pt-2'>
-											{/* Project Name */}
-											<div className='w-full'>
-												<ZIonText className='text-[rgba(109,121,134,1)] font-bold'>
-													New Project
-												</ZIonText>
 											</div>
 
-											{/*  */}
-											<div className='flex'>
-												<div className='w-16 h-3 mt-2 mr-1 rounded-lg bg-[rgba(203,207,212,1)]'></div>
-												<div className='w-20 h-3 mt-2 mr-1 rounded-lg bg-[rgba(203,207,212,1)]'></div>
+											{/* Window tab url */}
+											<div className='relative z-0 flex w-full h-10 ion-align-items-center bg-[#eaecee]'>
+												<span className='block w-full h-6 px-2 mx-2 text-sm leading-5 bg-white rounded-full'>
+													<span className='text-[rgba(46,64,82,1)] font-normal'>
+														https://
+													</span>
+													<span className='text-[rgba(46,64,82,1)] font-normal'>
+														{values.subDomain.trim().length > 0
+															? values.subDomain
+															: 'new-project'}
+													</span>
+													<span className='text-dblue-500'>.feedbear.com</span>
+												</span>
 											</div>
 
-											{/*  */}
-											<div className='flex mt-3 ion-align-items-start'>
-												<div className='w-1/3 p-2 mr-1 bg-white rounded'>
-													<div className='w-16 h-3 rounded bg-[rgba(234,236,238,1)]'></div>
+											{/* Window body */}
+											<div className='px-3 pt-2'>
+												{/* Project Name */}
+												<div className='w-full'>
+													{values.image.trim().length === 0 && (
+														<ZIonText className='text-[rgba(109,121,134,1)] font-bold'>
+															{values.projectName.trim().length > 0
+																? values.projectName
+																: 'New Project'}
+														</ZIonText>
+													)}
 
-													<div className='w-full h-24 mt-2 rounded bg-[rgba(234,236,238,1)]'></div>
-
-													<div className='w-12 h-5 mx-auto mt-2 rounded bg-[rgba(234,236,238,1)]'></div>
+													{/* image */}
+													{values.image.trim().length > 0 && (
+														<ZIonImg
+															className='max-w-max w-[7rem] h-[3rem] max-h-[2rem]'
+															src={values.image}
+														/>
+													)}
 												</div>
 
-												<div className='w-2/3 p-2 ml-1 bg-white rounded'>
-													<div className='flex flex-col h-[2.5rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-2 text-sm leading-5 bg-white rounded px-2'></div>
-
-													<div className='flex flex-col h-[2.5rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-2 text-sm leading-5 bg-white rounded px-2'></div>
-
-													<div className='flex flex-col h-[2.5rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-2 text-sm leading-5 bg-white rounded px-2'></div>
+												{/*  */}
+												<div className='flex'>
+													<div
+														className={classNames({
+															'mr-1 text-sm font-bold rounded-lg': true,
+															'w-16 h-3 mt-2 bg-[rgba(203,207,212,1)]':
+																values.currentTab !==
+																ProjectCreatePageTabEnum.roadMap,
+															'mt-1 pr-1':
+																values.currentTab ===
+																ProjectCreatePageTabEnum.roadMap,
+														})}
+													>
+														{values.currentTab ===
+														ProjectCreatePageTabEnum.roadMap
+															? 'Roadmap'
+															: ''}
+													</div>
+													<div
+														className={classNames({
+															'mr-1 rounded-lg text-sm': true,
+															'w-20 h-3 mt-2 bg-[rgba(203,207,212,1)]':
+																values.currentTab ===
+																ProjectCreatePageTabEnum.detailForm,
+															'mt-1':
+																values.currentTab !==
+																ProjectCreatePageTabEnum.detailForm,
+														})}
+													>
+														{values.featureRequests.trim().length > 0 &&
+														values.currentTab !==
+															ProjectCreatePageTabEnum.detailForm
+															? values.featureRequests
+															: ''}
+													</div>
 												</div>
+
+												{/*  */}
+												{(values.currentTab ===
+													ProjectCreatePageTabEnum.detailForm ||
+													values.currentTab ===
+														ProjectCreatePageTabEnum.board ||
+													values.currentTab ===
+														ProjectCreatePageTabEnum.ideas) && (
+													<div className='flex mt-3 ion-align-items-start'>
+														<div className='w-1/3 p-2 mr-1 bg-white rounded'>
+															<div
+																className={classNames({
+																	'text-sm rounded font-bold': true,
+																	'w-16 h-3 bg-[rgba(234,236,238,1)]':
+																		values.currentTab ===
+																			ProjectCreatePageTabEnum.detailForm ||
+																		values.currentTab ===
+																			ProjectCreatePageTabEnum.board,
+																})}
+															>
+																{values.currentTab ===
+																ProjectCreatePageTabEnum.ideas
+																	? 'New idea'
+																	: ''}
+															</div>
+
+															<div className='w-full h-24 mt-2 rounded bg-[rgba(234,236,238,1)]'></div>
+
+															<div className='w-12 h-5 mx-auto mt-2 rounded bg-[rgba(234,236,238,1)]'></div>
+														</div>
+
+														<div className='w-2/3 p-2 ml-1 bg-white rounded'>
+															<div className='flex flex-col h-[2.5rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-2 text-sm leading-5 bg-white rounded px-2'>
+																{values.completedRecently.trim().length > 0 ? (
+																	<>
+																		<ZIonTitle className='p-0 text-sm leading-none'>
+																			{values.completedRecently}
+																		</ZIonTitle>
+																		<ZIonText
+																			className='text-sm mb-[2px] font-bold leading-none'
+																			color='success'
+																		>
+																			Done
+																		</ZIonText>
+																	</>
+																) : (
+																	''
+																)}
+															</div>
+
+															<div className='flex flex-col h-[2.5rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-2 text-sm leading-5 bg-white rounded px-2'>
+																{values.inProgress.trim().length > 0 ? (
+																	<>
+																		<ZIonTitle className='p-0 text-sm leading-none'>
+																			{values.inProgress}
+																		</ZIonTitle>
+																		<ZIonText
+																			className='text-sm mb-[2px] font-bold leading-none'
+																			color='secondary'
+																		>
+																			In progress
+																		</ZIonText>
+																	</>
+																) : (
+																	''
+																)}
+															</div>
+
+															<div className='flex flex-col h-[2.5rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-2 text-sm leading-5 bg-white rounded px-2'>
+																{values.plannedNext.trim().length > 0 ? (
+																	<>
+																		<ZIonTitle className='p-0 text-sm leading-none'>
+																			{values.plannedNext}
+																		</ZIonTitle>
+																		<ZIonText
+																			className='text-sm mb-[2px] font-bold leading-none'
+																			color='tertiary'
+																		>
+																			planned
+																		</ZIonText>
+																	</>
+																) : (
+																	''
+																)}
+															</div>
+														</div>
+													</div>
+												)}
+
+												{/*  */}
+												{values.currentTab ===
+													ProjectCreatePageTabEnum.roadMap && (
+													<div className='flex mt-2'>
+														{/* Planned */}
+														<div className='relative w-1/3 pt-2 pb-1 mr-1 bg-white rounded ion-text-center h-max'>
+															<ZIonText
+																color='tertiary'
+																className='text-sm font-bold'
+															>
+																Planned
+															</ZIonText>
+
+															<div className='flex flex-col h-[2rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-1 text-sm leading-5 bg-white rounded px-2 ion-text-start'>
+																{values.plannedNext.trim().length > 0 ? (
+																	<>
+																		<ZIonTitle className='p-0 text-sm leading-none'>
+																			{values.plannedNext}
+																		</ZIonTitle>
+																	</>
+																) : (
+																	''
+																)}
+															</div>
+
+															<div className='flex flex-col h-[2rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-1 text-sm leading-5 bg-white rounded px-2'></div>
+
+															<div className='flex flex-col h-[2rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-1 text-sm leading-5 bg-white rounded px-2'></div>
+														</div>
+
+														{/* In progress */}
+														<div className='relative w-1/3 pt-2 pb-1 mx-1 bg-white rounded ion-text-center h-max'>
+															<ZIonText
+																color='secondary'
+																className='text-sm font-bold'
+															>
+																In progress
+															</ZIonText>
+
+															<div className='flex flex-col h-[2rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-1 text-sm leading-5 bg-white rounded px-2 ion-text-start'>
+																{values.inProgress.trim().length > 0 ? (
+																	<>
+																		<ZIonTitle className='p-0 text-sm leading-none'>
+																			{values.inProgress}
+																		</ZIonTitle>
+																	</>
+																) : (
+																	''
+																)}
+															</div>
+
+															<div className='flex flex-col h-[2rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-1 text-sm leading-5 bg-white rounded px-2'></div>
+														</div>
+
+														{/* Done */}
+														<div className='relative w-1/3 pt-2 pb-1 mx-1 bg-white rounded ion-text-center h-max'>
+															<ZIonText
+																color='success'
+																className='text-sm font-bold'
+															>
+																Done
+															</ZIonText>
+
+															<div className='flex flex-col h-[2rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-1 text-sm leading-5 bg-white rounded px-2 ion-text-start'>
+																{values.completedRecently.trim().length > 0 ? (
+																	<>
+																		<ZIonTitle className='p-0 text-sm leading-none'>
+																			{values.completedRecently}
+																		</ZIonTitle>
+																	</>
+																) : (
+																	''
+																)}
+															</div>
+
+															<div className='flex flex-col h-[2rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-1 text-sm leading-5 bg-white rounded px-2'></div>
+
+															<div className='flex flex-col h-[2rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-1 text-sm leading-5 bg-white rounded px-2'></div>
+
+															<div className='flex flex-col h-[2rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-1 text-sm leading-5 bg-white rounded px-2'></div>
+														</div>
+													</div>
+												)}
 											</div>
 										</div>
-									</div>
-								</ZIonCol>
+									</ZIonCol>
+								)}
 							</ZIonRow>
 						);
 					}}
@@ -261,9 +563,23 @@ const ZProjectCreatePage: React.FC = () => {
 	);
 };
 
+// Project Detail From Tab UI
 const ZDetailFormTab: React.FC = () => {
-	const { values, setFieldValue, handleBlur, handleChange } =
-		useFormikContext<ZProjectInterface>();
+	const {
+		values,
+		errors,
+		touched,
+		setFieldValue,
+		handleBlur,
+		handleChange,
+		setFieldTouched,
+		submitForm,
+	} = useFormikContext<ZProjectInterface>();
+
+	// File upload modal
+	const { presentZIonModal: presentZFileUploadModal } = useZIonModal(
+		ZaionsFileUploadModal
+	);
 
 	return (
 		<>
@@ -278,66 +594,107 @@ const ZDetailFormTab: React.FC = () => {
 				{/* Project Name */}
 				<ZIonInput
 					name='projectName'
-					label='Project name'
+					label='Project name*'
 					labelPlacement='floating'
 					value={values.projectName}
+					onIonBlur={handleBlur}
+					errorText={errors.projectName}
 					onIonChange={(e) => {
 						handleChange(e);
-
 						//
-						setFieldValue('subDomain', values.projectName.toLowerCase(), false);
+
+						if (e.target.value) {
+							setFieldValue(
+								'subDomain',
+								String(e.target.value).toLowerCase(),
+								false
+							);
+
+							setFieldTouched('subDomain', true, false);
+						}
 					}}
-					onIonBlur={handleBlur}
+					className={classNames({
+						'ion-touched ion-invalid':
+							touched.projectName && errors.projectName,
+						'ion-touched ion-valid': touched.projectName && !errors.projectName,
+					})}
 				/>
 
 				{/* Sub domain */}
 				<ZIonInput
 					name='subDomain'
-					label='Subdomain'
+					label='Subdomain*'
 					labelPlacement='floating'
-					className='mt-5'
-					onIonChange={handleChange}
-					onIonBlur={handleBlur}
 					value={values.subDomain}
+					errorText={errors.subDomain}
+					onIonBlur={handleBlur}
+					onIonChange={handleChange}
+					className={classNames({
+						'mt-5': true,
+						'ion-touched ion-invalid': touched.subDomain && errors.subDomain,
+						'ion-touched ion-valid': touched.subDomain && !errors.subDomain,
+					})}
 				/>
 
 				{/* File */}
-				<ReactDropzone
-					multiple={false}
-					accept={{ '*': ['.png', '.gif', '.jpeg', '.jpg'] }}
-					autoFocus
-					disabled={false}
-					maxSize={1250000}
-					minSize={10000}
-					// noClick={false}
-					maxFiles={10}
-				>
-					{({ getRootProps, getInputProps, isDragActive, acceptedFiles }) => {
-						// console.log({
-						// 	message: 'acceptedFiles',
-						// 	data: acceptedFiles[0].name,
-						// });
-						return (
-							<div
-								{...getRootProps()}
-								className='mt-5 transition duration-150 ease-in cursor-pointer bg-dirty input'
-							>
-								<ZIonInput
-									// disabled
-									label={
-										(acceptedFiles && acceptedFiles[0]?.name) ||
-										'Select file... (Optional)'
+				<div className='mt-5 transition duration-150 ease-in cursor-pointer bg-dirty input'>
+					<ZIonInput
+						label={
+							(values.image.trim().length > 0 && values.image) ||
+							'Select file... (Optional)'
+						}
+						onClick={() => {
+							presentZFileUploadModal({
+								_cssClass: 'file-upload-modal-size',
+								_onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
+									if (ev.detail.role === ZIonModalActionEnum.success) {
+										// Getting file data from fileUploadModal and parse it.
+										const fileData = zJsonParse(String(ev.detail.data)) as {
+											fileUrl: string;
+											filePath: string;
+										};
+
+										// setting the url in the formik state (setting image).
+										setFieldValue('image', fileData.fileUrl, false);
 									}
-									readonly
-								/>
-								<input {...getInputProps()} />
-							</div>
-						);
-					}}
-				</ReactDropzone>
+								},
+							});
+						}}
+						readonly
+					/>
+				</div>
 
 				{/* Continue Button */}
-				<ZIonButton expand='block' className='mt-8' size='large'>
+				<ZIonButton
+					expand='block'
+					className='mt-8'
+					size='large'
+					disabled={
+						(touched?.projectName || false) &&
+						!errors?.projectName?.trim().length &&
+						!errors?.subDomain?.trim().length
+							? false
+							: true
+					}
+					onClick={async () => {
+						try {
+							if (
+								values.projectName.trim().length > 0 &&
+								values.subDomain.trim().length > 0
+							) {
+								await submitForm();
+
+								setFieldValue(
+									'currentTab',
+									ProjectCreatePageTabEnum.board,
+									false
+								);
+							}
+						} catch (error) {
+							reportCustomError(error);
+						}
+					}}
+				>
 					Continue
 					<ZIonIcon icon={arrowForward} className='w-5 h-5 ms-1' />
 				</ZIonButton>
@@ -346,7 +703,11 @@ const ZDetailFormTab: React.FC = () => {
 	);
 };
 
+// Project Board Tab UI
 const ZBoardTab: React.FC = () => {
+	const { values, errors, touched, setFieldValue, handleBlur, handleChange } =
+		useFormikContext<ZProjectInterface>();
+
 	return (
 		<>
 			<ZIonText>
@@ -363,11 +724,38 @@ const ZBoardTab: React.FC = () => {
 					name='featureRequests'
 					label='Most people start with'
 					labelPlacement='floating'
-					value='Feature requests'
+					value={values.featureRequests}
+					errorText={errors.featureRequests}
+					onIonBlur={handleBlur}
+					onIonChange={handleChange}
+					className={classNames({
+						'ion-touched ion-invalid':
+							touched.featureRequests && errors.featureRequests,
+						'ion-touched ion-valid':
+							touched.featureRequests && !errors.featureRequests,
+					})}
 				/>
 
 				{/* Continue Button */}
-				<ZIonButton expand='block' className='mt-8' size='large'>
+				<ZIonButton
+					expand='block'
+					className='mt-8'
+					size='large'
+					disabled={!errors.featureRequests?.trim().length ? false : true}
+					onClick={() => {
+						try {
+							if (values.featureRequests.trim().length > 0) {
+								setFieldValue(
+									'currentTab',
+									ProjectCreatePageTabEnum.ideas,
+									false
+								);
+							}
+						} catch (error) {
+							reportCustomError(error);
+						}
+					}}
+				>
 					Continue
 					<ZIonIcon icon={arrowForward} className='w-5 h-5 ms-1' />
 				</ZIonButton>
@@ -376,7 +764,11 @@ const ZBoardTab: React.FC = () => {
 	);
 };
 
+// Project Ideas Tab UI
 const ZIdeasTab: React.FC = () => {
+	const { values, setFieldValue, handleBlur, handleChange } =
+		useFormikContext<ZProjectInterface>();
+
 	return (
 		<>
 			<ZIonText>
@@ -391,9 +783,12 @@ const ZIdeasTab: React.FC = () => {
 			<div className='mt-8'>
 				{/* recentlyCompleted */}
 				<ZIonInput
-					name='recentlyCompleted'
+					name='completedRecently'
 					label='What have you completed recently?'
 					labelPlacement='floating'
+					value={values.completedRecently}
+					onIonBlur={handleBlur}
+					onIonChange={handleChange}
 				/>
 
 				{/* inProgress */}
@@ -401,6 +796,9 @@ const ZIdeasTab: React.FC = () => {
 					name='inProgress'
 					label="What's in progress right now?"
 					labelPlacement='floating'
+					value={values.inProgress}
+					onIonBlur={handleBlur}
+					onIonChange={handleChange}
 					className='mt-5'
 				/>
 
@@ -409,11 +807,29 @@ const ZIdeasTab: React.FC = () => {
 					name='plannedNext'
 					label="What's planned next?"
 					labelPlacement='floating'
+					value={values.plannedNext}
+					onIonBlur={handleBlur}
+					onIonChange={handleChange}
 					className='mt-5'
 				/>
 
 				{/* Continue Button */}
-				<ZIonButton expand='block' className='mt-8' size='large'>
+				<ZIonButton
+					expand='block'
+					className='mt-8'
+					size='large'
+					onClick={() => {
+						try {
+							setFieldValue(
+								'currentTab',
+								ProjectCreatePageTabEnum.roadMap,
+								false
+							);
+						} catch (error) {
+							reportCustomError(error);
+						}
+					}}
+				>
 					Continue
 					<ZIonIcon icon={arrowForward} className='w-5 h-5 ms-1' />
 				</ZIonButton>
@@ -422,7 +838,10 @@ const ZIdeasTab: React.FC = () => {
 	);
 };
 
+// Project Road Map Tab UI
 const ZRoadMapTab: React.FC = () => {
+	const { setFieldValue } = useFormikContext<ZProjectInterface>();
+
 	return (
 		<>
 			<ZIonText>
@@ -438,9 +857,24 @@ const ZRoadMapTab: React.FC = () => {
 				users to start getting new ideas right now.
 			</ZIonText>
 
-			{/* Continue Button */}
-			<ZIonButton expand='block' className='mt-8' size='large'>
-				Continue
+			{/* Go to your project Button */}
+			<ZIonButton
+				expand='block'
+				className='mt-8'
+				size='large'
+				onClick={() => {
+					try {
+						setFieldValue(
+							'currentTab',
+							ProjectCreatePageTabEnum.detailForm,
+							false
+						);
+					} catch (error) {
+						reportCustomError(error);
+					}
+				}}
+			>
+				Go to your project
 				<ZIonIcon icon={arrowForward} className='w-5 h-5 ms-1' />
 			</ZIonButton>
 		</>

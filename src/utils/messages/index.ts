@@ -4,6 +4,9 @@ const GENERAL = {
 	FILE: {
 		FILE_DELETED_SUCCESS_MESSAGE: 'File deleted successfully.',
 	},
+	PROJECT: {
+		PROJECT_CREATED_SUCCESSFULLY: 'Project created successfully.',
+	},
 	SHORT_LINKS: {
 		NEW_SHORT_LINK_CREATED_SUCCEED_MESSAGE: 'Short link created successfully.',
 		SHORT_LINK_UPDATED_SUCCEED_MESSAGE: 'Short link updated successfully.',
@@ -42,7 +45,7 @@ const GENERAL = {
 	REGISTER_USER_SUCCESSED: 'Registered successfully.',
 	LOGIN_SUCCESSFULLY: 'Login successfully.',
 	LOGOUT_SUCCESSFULLY: 'Logout successfully.',
-	REGISTER_USER_FAILD: 'Something went wrong! 😐.',
+	SOMETHING_WENT_WRONG: 'Something went wrong! 😐.',
 	FAILED: 'Request Failed.',
 	FAILED_SUBHEADING: 'Something went wrong :(',
 	FAILED_MESSAGE: 'Error Occurred, request failed, please try again.',

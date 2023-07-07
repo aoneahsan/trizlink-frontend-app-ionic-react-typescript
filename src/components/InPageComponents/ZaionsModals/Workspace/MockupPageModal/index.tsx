@@ -537,7 +537,7 @@ const PlatformColorAndIcon: React.FC = () => {
 		<ZIonRow className='mx-3 mt-3'>
 			<ZIonCol>
 				<ZIonButton
-					className='ion-no-margin normal-case'
+					className='normal-case ion-no-margin'
 					fill='clear'
 					color='dark'
 					onClick={(event: unknown) => {
@@ -563,7 +563,7 @@ const PlatformColorAndIcon: React.FC = () => {
 			{/*  */}
 			<ZIonCol>
 				<ZIonButton
-					className='ion-no-margin normal-case'
+					className='normal-case ion-no-margin'
 					fill='clear'
 					color='dark'
 					onClick={(event: unknown) => {

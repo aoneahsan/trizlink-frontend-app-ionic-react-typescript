@@ -85,7 +85,7 @@ const ZAddNewWorkspaceModal: React.FC<{
 		],
 	});
 
-	//
+	// Formik submit function
 	const formikSubmitHandler = async (values: string) => {
 		try {
 			if (values) {

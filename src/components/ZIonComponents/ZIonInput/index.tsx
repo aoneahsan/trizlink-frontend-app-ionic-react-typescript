@@ -142,6 +142,7 @@ export type ZIonInputType = {
 	onIonBlur?: <A extends Event>(event: A) => void;
 	onChange?: React.FormEventHandler<HTMLIonInputElement>;
 	onKeyUp?: React.KeyboardEventHandler<HTMLIonInputElement>;
+	onClick?: React.MouseEventHandler<HTMLIonInputElement>;
 
 	// Props Introduced in ionic 7
 	label?: string;

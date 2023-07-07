@@ -32,18 +32,21 @@ import {
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { PRODUCT_NAME } from '@/utils/constants';
+import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { API_URL_ENUM } from '@/utils/enums';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import { ZProjectInterface } from '@/types/AdminPanel/Project/index.type';
 
 /**
  * Recoil State Imports go down
@@ -73,6 +76,12 @@ import { ProductLogo } from '@/assets/images';
  * */
 
 const ZProjects: React.FC = () => {
+	// Get projects data from backend.
+	const { data: ProjectsData } = useZRQGetRequest<ZProjectInterface[]>({
+		_url: API_URL_ENUM.project_create_list,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.MAIN],
+	});
+
 	return (
 		<ZaionsIonPage>
 			<ZIonContent>
@@ -111,44 +120,40 @@ const ZProjects: React.FC = () => {
 							</ZIonText>
 						</div>
 						<div className='flex flex-col max-w-md px-2 py-2 mx-auto mt-4 mb-8 bg-white rounded-lg shadow-md w-[28rem]'>
-							<ZIonList lines='none' className='my-2'>
-								<ZIonItem
-									className='flex w-full rounded cursor-pointer ms-2 ion-activatable'
-									style={{ '--inner-padding-end': '0px' }}
-									minHeight='40px'
-								>
-									<div className='font-bold'>Zlink</div>
-									<ZIonButton
-										className='pe-3'
-										fill='clear'
-										slot='end'
-										color='dark'
-									>
-										<ZIonIcon icon={settingsOutline} className='w-5 h-5' />
-									</ZIonButton>
-								</ZIonItem>
-
-								<ZIonItem
-									className='flex w-full mt-2 rounded cursor-pointer ms-2 ion-activatable'
-									style={{ '--inner-padding-end': '0px' }}
-									minHeight='40px'
-								>
-									<div className='font-bold'>Zlink</div>
-									<ZIonButton
-										className='pe-3'
-										fill='clear'
-										slot='end'
-										color='dark'
-									>
-										<ZIonIcon icon={settingsOutline} className='w-5 h-5' />
-									</ZIonButton>
-								</ZIonItem>
-							</ZIonList>
+							{ProjectsData && ProjectsData?.length > 0 && (
+								<ZIonList lines='none' className='my-2'>
+									{ProjectsData?.map((el, index) => {
+										return (
+											<ZIonItem
+												className='flex w-full mt-2 rounded cursor-pointer ms-2 ion-activatable'
+												style={{ '--inner-padding-end': '0px' }}
+												minHeight='40px'
+												key={index}
+											>
+												<div className='font-bold'>{el.projectName}</div>
+												<ZIonButton
+													className='pe-3'
+													fill='clear'
+													slot='end'
+													color='dark'
+												>
+													<ZIonIcon
+														icon={settingsOutline}
+														className='w-5 h-5'
+													/>
+												</ZIonButton>
+											</ZIonItem>
+										);
+									})}
+								</ZIonList>
+							)}
 
 							{/*  */}
-							<ZIonText className='mt-2 mb-2 text-center'>
-								You don’t have any projects yet
-							</ZIonText>
+							{ProjectsData?.length === 0 && (
+								<ZIonText className='mt-2 mb-2 text-center'>
+									You don’t have any projects yet
+								</ZIonText>
+							)}
 
 							{/* border */}
 							<div className='my-2 border-b border-dblue-100'></div>
