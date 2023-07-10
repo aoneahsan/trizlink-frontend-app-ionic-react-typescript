@@ -33,16 +33,27 @@ type ZIonButtonType = {
 		[key: string]: unknown;
 	};
 	href?: string;
+	height?: '36px' | string;
 	ref?: React.Ref<HTMLIonButtonElement>;
 	onClick?: React.MouseEventHandler<HTMLIonButtonElement>;
 	onMouseEnter?: React.MouseEventHandler<HTMLIonButtonElement>;
 	onMouseLeave?: React.MouseEventHandler<HTMLIonButtonElement>;
 };
 const ZIonButton = (props: ZIonButtonType) => {
+	const compStyle =
+		props.style && props.height
+			? { ...props.style, height: props.height }
+			: props.style && !props.height
+			? { ...props.style }
+			: !props.style && props.height
+			? { height: props.height }
+			: {};
+
 	return (
 		<IonButton
 			{...props}
 			className={classNames(props.className, { 'normal-case': true })}
+			style={compStyle}
 		>
 			{props.children}
 		</IonButton>

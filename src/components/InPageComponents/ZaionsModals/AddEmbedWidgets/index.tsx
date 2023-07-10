@@ -911,7 +911,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 						 *  */}
 						{appSettings.appModalsSetting.actions.showActionInModalFooter && (
 							<ZIonFooter>
-								<ZIonRow className='mx-3 mt-2  ion-justify-content-between ion-align-items-center'>
+								<ZIonRow className='mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
 									<ZIonCol>
 										<ZIonButton
 											fill='outline'

@@ -11,7 +11,7 @@ import {
 	ZIonRouterDirection,
 } from '@/types/zaionsAppSettings.type';
 type ZIonItemType = {
-	children: ReactNode;
+	children?: ReactNode;
 	className?: string;
 	button?: boolean;
 	color?: ZIonColorType;

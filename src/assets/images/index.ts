@@ -351,6 +351,8 @@ import qrCodeImage from './pages/admin-panel/dashboard/qr-code-images.png';
 import customDomainsEmptyState from './pages/admin-panel/dashboard/custom-domains-empty-state.png';
 import bulkUploadEmptyState from './pages/admin-panel/dashboard/bulk-upload-empty-state.png';
 
+import zEmptyPosts from './pages/admin-panel/project/empty_posts.png';
+
 export {
 	vector,
 	GlobeImage,
@@ -550,4 +552,5 @@ export {
 	qrCodeImage,
 	customDomainsEmptyState,
 	bulkUploadEmptyState,
+	zEmptyPosts,
 };

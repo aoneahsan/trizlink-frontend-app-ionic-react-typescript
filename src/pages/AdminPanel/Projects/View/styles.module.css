@@ -1,0 +1,8 @@
+@import url('../../../../theme/variables.css');
+.z-admin-tools-bg {
+	--background: rgba(var(--ion-color-medium-rgb), 0.8);
+}
+
+.z-admin-tools-bg:hover {
+	--background: rgba(var(--ion-color-light-rgb), 0.3);
+}

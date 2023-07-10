@@ -6,11 +6,12 @@ const GENERAL = {
 	},
 	PROJECT: {
 		PROJECT_CREATED_SUCCESSFULLY: 'Project created successfully.',
+		PROJECT_UPDATED_SUCCESSFULLY: 'Project updated successfully.',
 	},
 	SHORT_LINKS: {
 		NEW_SHORT_LINK_CREATED_SUCCEED_MESSAGE: 'Short link created successfully.',
 		SHORT_LINK_UPDATED_SUCCEED_MESSAGE: 'Short link updated successfully.',
-		SHORT_LINK_DELTE_SUCCESSD_MESSAGE: 'Short link deleted successfully.',
+		SHORT_LINK_DELETE_SUCCEED_MESSAGE: 'Short link deleted successfully.',
 	},
 	PIXEL_ACCOUNT: {
 		NEW_PIXEL_ACCOUNT_CREATED_SUCCEED_MESSAGE:

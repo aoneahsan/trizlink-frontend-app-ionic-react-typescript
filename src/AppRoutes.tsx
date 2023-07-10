@@ -42,6 +42,8 @@ import ViewSingleWorkspace from './pages/AdminPanel/Workspaces/ViewSingle';
 import ZAppStartupPage from './pages/AdminPanel/StartUpPage';
 import ZProjects from './pages/AdminPanel/Projects';
 import ZProjectCreatePage from './pages/AdminPanel/Projects/Create';
+import ZProjectViewPage from './pages/AdminPanel/Projects/View';
+import ZProjectSinglePost from './pages/AdminPanel/Projects/Post';
 
 // Functional Component
 const AppRoutes: React.FC = () => {
@@ -118,6 +120,18 @@ const AppRoutes: React.FC = () => {
 					exact
 					path={ZaionsRoutes.AdminPanel.Projects.Create}
 					Component={ZProjectCreatePage}
+				/>
+
+				<PrivateRoute
+					exact
+					path={ZaionsRoutes.AdminPanel.Projects.View}
+					Component={ZProjectViewPage}
+				/>
+
+				<PrivateRoute
+					exact
+					path={ZaionsRoutes.AdminPanel.Projects.Post}
+					Component={ZProjectSinglePost}
 				/>
 
 				<PrivateRoute

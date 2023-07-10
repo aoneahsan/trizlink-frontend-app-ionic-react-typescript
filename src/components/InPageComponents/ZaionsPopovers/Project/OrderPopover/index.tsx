@@ -8,8 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import ZWorkspaceProfilePopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ProfilePopover';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import { ZIonItem, ZIonList } from '@/components/ZIonComponents';
 
 /**
  * Custom Imports go down
@@ -20,7 +19,6 @@ import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down
@@ -51,9 +49,6 @@ import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
  * Component props type go down
  * ? Like if you have a type for props it should be please Down
  * */
-interface ZUserProfileButtonInterface {
-	className?: string;
-}
 
 /**
  * Functional Component
@@ -61,26 +56,26 @@ interface ZUserProfileButtonInterface {
  * @type {*}
  * */
 
-const ZUserProfileButton: React.FC<ZUserProfileButtonInterface> = ({
-	className,
-}) => {
-	const { presentZIonPopover: presentWorkspaceProfilePopover } = useZIonPopover(
-		ZWorkspaceProfilePopover
-	); // popover hook to show ZWorkspaceProfilePopover
-
+const ZProjectOrderPopover: React.FC = () => {
 	return (
-		<ZUserAvatarButton
-			style={{ height: '40px', width: '40px' }}
-			className={className}
-			onClick={(event: unknown) => {
-				presentWorkspaceProfilePopover({
-					_event: event as Event,
-					_cssClass: 'zaions_workspaces_profile_popover_size',
-					_dismissOnSelect: false,
-				});
-			}}
-		/>
+		<ZIonList
+			lines='none'
+			className='py-2 border rounded-md border-[rgba(234,236,238,1)]'
+		>
+			<ZIonItem className='cursor-pointer ion-activatable' minHeight='35px'>
+				Trending
+			</ZIonItem>
+			<ZIonItem className='cursor-pointer ion-activatable' minHeight='35px'>
+				Most votes
+			</ZIonItem>
+			<ZIonItem className='cursor-pointer ion-activatable' minHeight='35px'>
+				Recent
+			</ZIonItem>
+			<ZIonItem className='cursor-pointer ion-activatable' minHeight='35px'>
+				Most discussed
+			</ZIonItem>
+		</ZIonList>
 	);
 };
 
-export default ZUserProfileButton;
+export default ZProjectOrderPopover;

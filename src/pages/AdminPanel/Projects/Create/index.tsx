@@ -37,7 +37,10 @@ import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/Fi
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
-import { useZRQCreateRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+	useZRQCreateRequest,
+	useZRQUpdateRequest,
+} from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -55,6 +58,11 @@ import {
 	extractInnerDataOptionsEnum,
 	VALIDATION_RULE,
 } from '@/utils/enums';
+import {
+	showErrorNotification,
+	showSuccessNotification,
+} from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
 import { reportCustomError } from '@/utils/customErrorType';
 
 /**
@@ -67,6 +75,7 @@ import {
 } from '@/types/AdminPanel/Project/index.type';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
+import { FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
 
 /**
  * Recoil State Imports go down
@@ -84,11 +93,6 @@ import classes from './styles.module.css';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductLogo } from '@/assets/images';
-import {
-	showErrorNotification,
-	showSuccessNotification,
-} from '@/utils/notification';
-import MESSAGES from '@/utils/messages';
 
 /**
  * Component props type go down
@@ -112,7 +116,10 @@ const ZProjectCreatePage: React.FC = () => {
 	});
 
 	// Formik submit function
-	const formikSubmitHandler = async (value: string) => {
+	const formikSubmitHandler = async (
+		value: string,
+		setFieldValue: FormikSetFieldValueEventType
+	) => {
 		try {
 			if (value) {
 				// Making an api call creating new project
@@ -125,6 +132,8 @@ const ZProjectCreatePage: React.FC = () => {
 					);
 
 					if (_data && _data.id) {
+						setFieldValue('id', _data.id, false);
+
 						showSuccessNotification(
 							MESSAGES.GENERAL.PROJECT.PROJECT_CREATED_SUCCESSFULLY
 						);
@@ -175,9 +184,9 @@ const ZProjectCreatePage: React.FC = () => {
 
 						return errors;
 					}}
-					onSubmit={(values) => {
+					onSubmit={async (values, { setFieldValue }) => {
 						try {
-							formikSubmitHandler(
+							await formikSubmitHandler(
 								zStringify({
 									projectName: values.projectName,
 									subDomain: values.subDomain,
@@ -186,7 +195,8 @@ const ZProjectCreatePage: React.FC = () => {
 									completedRecently: values.completedRecently,
 									inProgress: values.inProgress,
 									plannedNext: values.plannedNext,
-								})
+								}),
+								setFieldValue
 							);
 						} catch (error) {
 							reportCustomError(error);
@@ -840,7 +850,42 @@ const ZIdeasTab: React.FC = () => {
 
 // Project Road Map Tab UI
 const ZRoadMapTab: React.FC = () => {
-	const { setFieldValue } = useFormikContext<ZProjectInterface>();
+	const { values, setFieldValue } = useFormikContext<ZProjectInterface>();
+
+	// Update project API.
+	const { mutateAsync: UpdateProjectMutateAsync } = useZRQUpdateRequest({
+		_url: API_URL_ENUM.project_update_delete,
+		_queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.MAIN],
+	});
+
+	const UpdateProjectHandler = async (value: string) => {
+		try {
+			if (value && values.id) {
+				const _response = await UpdateProjectMutateAsync({
+					itemIds: [values.id],
+					urlDynamicParts: [CONSTANTS.RouteParams.project.projectId],
+					requestData: value,
+				});
+
+				if (_response) {
+					const _data = extractInnerData<ZProjectInterface>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (_data && _data.id) {
+						showSuccessNotification(
+							MESSAGES.GENERAL.PROJECT.PROJECT_UPDATED_SUCCESSFULLY
+						);
+					} else {
+						showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+					}
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
 
 	return (
 		<>
@@ -864,10 +909,22 @@ const ZRoadMapTab: React.FC = () => {
 				size='large'
 				onClick={() => {
 					try {
-						setFieldValue(
-							'currentTab',
-							ProjectCreatePageTabEnum.detailForm,
-							false
+						// setFieldValue(
+						// 	'currentTab',
+						// 	ProjectCreatePageTabEnum.detailForm,
+						// 	false
+						// );
+
+						UpdateProjectHandler(
+							zStringify({
+								projectName: values.projectName,
+								subDomain: values.subDomain,
+								image: values.image,
+								featureRequests: values.featureRequests,
+								completedRecently: values.completedRecently,
+								inProgress: values.inProgress,
+								plannedNext: values.plannedNext,
+							})
 						);
 					} catch (error) {
 						reportCustomError(error);
