@@ -150,6 +150,8 @@ export type ZIonInputType = {
 	helperText?: string;
 	errorText?: string;
 	fill?: 'solid' | 'outline';
+	counter?: boolean;
+	counterFormatter?: (inputLength: number, maxLength: number) => string;
 };
 
 const ZIonInput = React.forwardRef(

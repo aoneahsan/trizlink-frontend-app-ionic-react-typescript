@@ -238,7 +238,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 
 						<ZIonButton
 							fill='clear'
-							className='h-auto mb-1 ion-no-padding ion-no-margin normal-case ms-2'
+							className='h-auto mb-1 normal-case ion-no-padding ion-no-margin ms-2'
 							color='dark'
 							onClick={(event: unknown) => {
 								presentWorkspacesActionsPopover({
@@ -301,7 +301,7 @@ const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
 					<ZIonCol>
 						<ZIonButton
 							fill='clear'
-							className='h-auto mb-1 ion-no-padding ion-no-margin normal-case'
+							className='h-auto mb-1 normal-case ion-no-padding ion-no-margin'
 							color='dark'
 						>
 							{lastActive}

@@ -48,7 +48,9 @@ import {
  * */
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 import {
+	createRedirectRoute,
 	extractInnerData,
+	validateField,
 	validateFields,
 	zJsonParse,
 	zStringify,
@@ -71,6 +73,7 @@ import { reportCustomError } from '@/utils/customErrorType';
  * */
 import {
 	ProjectCreatePageTabEnum,
+	ZProjectBoardInterface,
 	ZProjectInterface,
 } from '@/types/AdminPanel/Project/index.type';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
@@ -93,6 +96,8 @@ import classes from './styles.module.css';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductLogo } from '@/assets/images';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Component props type go down
@@ -156,7 +161,10 @@ const ZProjectCreatePage: React.FC = () => {
 						projectName: '',
 						subDomain: '',
 						image: '',
-						featureRequests: 'Feature requests',
+						board: {
+							id: '',
+							title: 'Feature requests',
+						},
 						completedRecently: '',
 						inProgress: '',
 						plannedNext: '',
@@ -165,24 +173,37 @@ const ZProjectCreatePage: React.FC = () => {
 						const errors: {
 							projectName?: string;
 							subDomain?: string;
-							featureRequests?: string;
+							board: {
+								title?: string;
+							};
 							completedRecently?: string;
 							inProgress?: string;
 							plannedNext?: string;
-						} = {};
+						} = {
+							board: {},
+						};
 
-						validateFields(
-							['projectName', 'subDomain', 'featureRequests'],
-							values,
-							errors,
-							[
-								VALIDATION_RULE.string,
-								VALIDATION_RULE.string,
-								VALIDATION_RULE.string,
-							]
+						validateFields(['projectName', 'subDomain'], values, errors, [
+							VALIDATION_RULE.string,
+							VALIDATION_RULE.string,
+						]);
+
+						validateField(
+							'title',
+							values.board,
+							errors.board,
+							VALIDATION_RULE.string
 						);
 
-						return errors;
+						if (
+							(errors.board.title && errors.board.title?.trim().length > 0) ||
+							(errors.projectName && errors.projectName?.trim().length > 0) ||
+							(errors.subDomain && errors.subDomain?.trim().length > 0)
+						) {
+							return errors;
+						} else {
+							return {};
+						}
 					}}
 					onSubmit={async (values, { setFieldValue }) => {
 						try {
@@ -191,10 +212,6 @@ const ZProjectCreatePage: React.FC = () => {
 									projectName: values.projectName,
 									subDomain: values.subDomain,
 									image: values.image,
-									featureRequests: values.featureRequests,
-									completedRecently: values.completedRecently,
-									inProgress: values.inProgress,
-									plannedNext: values.plannedNext,
 								}),
 								setFieldValue
 							);
@@ -203,7 +220,11 @@ const ZProjectCreatePage: React.FC = () => {
 						}
 					}}
 				>
-					{({ values }) => {
+					{({ values, errors }) => {
+						console.log({
+							values,
+							errors,
+						});
 						return (
 							<ZIonRow>
 								{/* Left (Form col) */}
@@ -381,10 +402,10 @@ const ZProjectCreatePage: React.FC = () => {
 																ProjectCreatePageTabEnum.detailForm,
 														})}
 													>
-														{values.featureRequests.trim().length > 0 &&
+														{values.board?.title.trim().length > 0 &&
 														values.currentTab !==
 															ProjectCreatePageTabEnum.detailForm
-															? values.featureRequests
+															? values.board?.title
 															: ''}
 													</div>
 												</div>
@@ -692,6 +713,7 @@ const ZDetailFormTab: React.FC = () => {
 								values.projectName.trim().length > 0 &&
 								values.subDomain.trim().length > 0
 							) {
+								console.log('me');
 								await submitForm();
 
 								setFieldValue(
@@ -718,6 +740,17 @@ const ZBoardTab: React.FC = () => {
 	const { values, errors, touched, setFieldValue, handleBlur, handleChange } =
 		useFormikContext<ZProjectInterface>();
 
+	// Create new project API.
+	const { mutateAsync: createProjectBoardMutate } = useZRQCreateRequest({
+		_url: API_URL_ENUM.board_create_list,
+		_queriesKeysToInvalidate: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD.MAIN,
+			values.id || '',
+		],
+		_itemsIds: [values.id || ''],
+		_urlDynamicParts: [CONSTANTS.RouteParams.project.projectId],
+	});
+
 	return (
 		<>
 			<ZIonText>
@@ -731,18 +764,18 @@ const ZBoardTab: React.FC = () => {
 			<div className='mt-8'>
 				{/* Feature requests */}
 				<ZIonInput
-					name='featureRequests'
+					name='board.title'
 					label='Most people start with'
 					labelPlacement='floating'
-					value={values.featureRequests}
-					errorText={errors.featureRequests}
+					value={values.board.title}
+					errorText={errors.board?.title}
 					onIonBlur={handleBlur}
 					onIonChange={handleChange}
 					className={classNames({
 						'ion-touched ion-invalid':
-							touched.featureRequests && errors.featureRequests,
+							touched.board?.title && errors.board?.title,
 						'ion-touched ion-valid':
-							touched.featureRequests && !errors.featureRequests,
+							touched.board?.title && !errors.board?.title,
 					})}
 				/>
 
@@ -751,10 +784,34 @@ const ZBoardTab: React.FC = () => {
 					expand='block'
 					className='mt-8'
 					size='large'
-					disabled={!errors.featureRequests?.trim().length ? false : true}
-					onClick={() => {
+					disabled={!errors.board?.title?.trim().length ? false : true}
+					onClick={async () => {
 						try {
-							if (values.featureRequests.trim().length > 0) {
+							// Making an api call creating new project
+							const _response = await createProjectBoardMutate(
+								zStringify({
+									title: values.board.title,
+								})
+							);
+
+							if (_response) {
+								const _data = extractInnerData<ZProjectBoardInterface>(
+									_response,
+									extractInnerDataOptionsEnum.createRequestResponseItem
+								);
+
+								if (_data && _data.id) {
+									setFieldValue('board.id', _data.id, false);
+
+									showSuccessNotification(
+										MESSAGES.GENERAL.PROJECT.BOARD_CREATED_SUCCESSFULLY
+									);
+								} else {
+									showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+								}
+							}
+
+							if (values.board.title.trim().length > 0) {
 								setFieldValue(
 									'currentTab',
 									ProjectCreatePageTabEnum.ideas,
@@ -850,7 +907,9 @@ const ZIdeasTab: React.FC = () => {
 
 // Project Road Map Tab UI
 const ZRoadMapTab: React.FC = () => {
-	const { values, setFieldValue } = useFormikContext<ZProjectInterface>();
+	const { values } = useFormikContext<ZProjectInterface>();
+
+	const { zNavigatePushRoute } = useZNavigate();
 
 	// Update project API.
 	const { mutateAsync: UpdateProjectMutateAsync } = useZRQUpdateRequest({
@@ -909,23 +968,33 @@ const ZRoadMapTab: React.FC = () => {
 				size='large'
 				onClick={() => {
 					try {
+						if (values.id && values.board.id) {
+							zNavigatePushRoute(
+								createRedirectRoute({
+									url: ZaionsRoutes.AdminPanel.Projects.Board.Main,
+									params: [
+										CONSTANTS.RouteParams.project.projectId,
+										CONSTANTS.RouteParams.project.board.boardId,
+									],
+									values: [values.id, values.board.id],
+								})
+							);
+						}
 						// setFieldValue(
 						// 	'currentTab',
 						// 	ProjectCreatePageTabEnum.detailForm,
 						// 	false
 						// );
-
-						UpdateProjectHandler(
-							zStringify({
-								projectName: values.projectName,
-								subDomain: values.subDomain,
-								image: values.image,
-								featureRequests: values.featureRequests,
-								completedRecently: values.completedRecently,
-								inProgress: values.inProgress,
-								plannedNext: values.plannedNext,
-							})
-						);
+						// UpdateProjectHandler(
+						// 	zStringify({
+						// 		projectName: values.projectName,
+						// 		subDomain: values.subDomain,
+						// 		image: values.image,
+						// 		// completedRecently: values.completedRecently,
+						// 		// inProgress: values.inProgress,
+						// 		// plannedNext: values.plannedNext,
+						// 	})
+						// );
 					} catch (error) {
 						reportCustomError(error);
 					}

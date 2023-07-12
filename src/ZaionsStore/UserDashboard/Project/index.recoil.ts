@@ -1,4 +1,7 @@
-import { ZProjectInterface } from '@/types/AdminPanel/Project/index.type';
+import {
+	ZProjectBoardInterface,
+	ZProjectInterface,
+} from '@/types/AdminPanel/Project/index.type';
 import { atom } from 'recoil';
 //
 
@@ -9,9 +12,18 @@ export const ZNewProjectRStateAtom = atom<ZProjectInterface>({
 		projectName: '',
 		subDomain: '',
 		image: '',
-		featureRequests: 'Feature requests',
+		board: { title: 'Feature requests' },
 		completedRecently: '',
 		inProgress: '',
 		plannedNext: '',
 	},
+});
+
+// Recoil state to store current project boards. so we can show it to pleases needed like in board popover etc.
+export const ZProjectBoardsRStateAtom = atom<{
+	currentBoard: ZProjectBoardInterface;
+	allBoards: ZProjectBoardInterface[];
+}>({
+	key: 'ZProjectBoardsRStateAtom_key',
+	default: { currentBoard: { title: '' }, allBoards: [] },
 });

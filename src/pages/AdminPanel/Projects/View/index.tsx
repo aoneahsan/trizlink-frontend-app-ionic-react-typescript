@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useEffect } from 'react';
 
 /**
  * Packages Imports go down
@@ -10,6 +10,7 @@ import React from 'react';
  * */
 import {
 	add,
+	alertCircle,
 	attachOutline,
 	chatbubblesOutline,
 	chevronDownOutline,
@@ -82,7 +83,20 @@ import classes from './styles.module.css';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
-import { zEmptyPosts } from '@/assets/images';
+import { ProductLogo, zEmptyPosts } from '@/assets/images';
+import { useParams } from 'react-router';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { API_URL_ENUM } from '@/utils/enums';
+import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
+import {
+	ZProjectBoardInterface,
+	ZProjectInterface,
+} from '@/types/AdminPanel/Project/index.type';
+import { reportCustomError } from '@/utils/customErrorType';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { ZProjectBoardsRStateAtom } from '@/ZaionsStore/UserDashboard/Project/index.recoil';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { AxiosError } from 'axios';
 
 /**
  * Component props type go down
@@ -98,6 +112,15 @@ import { zEmptyPosts } from '@/assets/images';
 const ZProjectViewPage: React.FC = () => {
 	const { isXlScale, isMdScale, isSmScale } = useZMediaQueryScale();
 
+	const { projectId } = useParams<{
+		projectId: string;
+	}>();
+
+	// Recoil state to store current project boards
+	const [zProjectBoardsStateAtom, setZProjectBoardsStateAtom] = useRecoilState(
+		ZProjectBoardsRStateAtom
+	);
+
 	// Order popover
 	const { presentZIonPopover: presentZProjectOrderPopover } =
 		useZIonPopover(ZProjectOrderPopover);
@@ -106,6 +129,26 @@ const ZProjectViewPage: React.FC = () => {
 	const { presentZIonPopover: presentZProjectStatusPopover } = useZIonPopover(
 		ZProjectStatusPopover
 	);
+
+	// Getting boards of project from backend.
+	const { data: ZCurrentProjectData, error: ZProjectError } =
+		useZRQGetRequest<ZProjectInterface>({
+			_url: API_URL_ENUM.project_update_delete,
+			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.GET, projectId],
+			_itemsIds: [projectId],
+			_urlDynamicParts: [CONSTANTS.RouteParams.project.projectId],
+			_extractType: ZRQGetRequestExtractEnum.extractItem,
+		});
+
+	// if we don't have projectId and boardId in param redirect or show something else.
+	if (
+		Object.keys(
+			((ZProjectError as AxiosError)?.response?.data as { errors: {} })
+				?.errors || {}
+		)?.length > 0
+	) {
+		return <ZProjectNotFound />;
+	}
 
 	return (
 		<ZaionsIonPage>
@@ -136,7 +179,7 @@ const ZProjectViewPage: React.FC = () => {
 							{/* new idea form div */}
 							<div className='px-5 py-4 bg-white rounded-lg shadow'>
 								<ZIonText className='block text-lg font-bold'>
-									New idea
+									New idea {zProjectBoardsStateAtom.currentBoard.title}
 								</ZIonText>
 
 								<ZIonText className='block mt-2 whitespace-pre-line'>
@@ -405,7 +448,7 @@ const ZProjectPostsState: React.FC = () => {
 
 				<ZIonCol>
 					<ZIonRouterLink
-						routerLink={ZaionsRoutes.AdminPanel.Projects.Post}
+						routerLink={ZaionsRoutes.AdminPanel.Projects.BoardIdea.Main}
 						color='dark'
 					>
 						<ZIonText
@@ -449,6 +492,68 @@ const ZProjectPostsState: React.FC = () => {
 				</ZIonCol>
 			</ZIonRow>
 		</ZIonGrid>
+	);
+};
+
+// Project not found UI
+const ZProjectNotFound: React.FC = () => {
+	return (
+		<ZIonContent color='light'>
+			<ZIonGrid>
+				<ZIonRow className='pt-32'>
+					<ZIonCol
+						className='flex ion-align-items-center ion-justify-content-center mb-16'
+						size='12'
+					>
+						{/* Logo */}
+						<div className='flex ion-align-items-center'>
+							<ZIonImg
+								src={ProductLogo}
+								className='w-[2.5rem] me-3 h-auto rounded-xl overflow-hidden'
+							/>
+							<ZIonText
+								className='text-2xl font-extrabold tracking-wider'
+								color='dark'
+							>
+								{PRODUCT_NAME}
+							</ZIonText>
+						</div>
+					</ZIonCol>
+
+					{/*  */}
+					<ZIonCol
+						size='12'
+						className='flex ion-justify-content-center ion-align-items-center'
+					>
+						<div className='child-div pl-16 pr-16 py-16 rounded-lg shadow-lg flex ion-justify-content-center ion-align-items-center flex-col bg-white'>
+							<ZIonIcon
+								icon={alertCircle}
+								className='w-[8rem] h-[8rem]'
+								color='medium'
+							/>
+
+							<ZIonText
+								className='mt-4 block text-3xl font-bold leading-9 tracking-normal text-center'
+								color='medium'
+							>
+								Project not found
+							</ZIonText>
+
+							<ZIonText className='mt-2 block text-sm font-normal leading-5 tracking-normal text-center'>
+								The project you are looking for doesn't exist anymore
+							</ZIonText>
+
+							<ZIonButton
+								className='mt-4 font-bold text-lg'
+								routerLink={ZaionsRoutes.AdminPanel.Projects.Main}
+							>
+								Go to {PRODUCT_NAME}
+							</ZIonButton>
+						</div>
+					</ZIonCol>
+				</ZIonRow>
+			</ZIonGrid>
+		</ZIonContent>
 	);
 };
 

@@ -61,6 +61,7 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * ? Like import of Constant is a global constants import
  * */
 import { PRODUCT_NAME } from '@/utils/constants';
+import { useParams } from 'react-router';
 
 /**
  * Type Imports go down
@@ -93,7 +94,7 @@ import { PRODUCT_NAME } from '@/utils/constants';
  * @type {*}
  * */
 
-const ZProjectSinglePost: React.FC = () => {
+const ZProjectSingleIdea: React.FC = () => {
 	const { isXlScale, isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
 
 	return (
@@ -551,4 +552,4 @@ const ZProjectSingleComment: React.FC = () => {
 	);
 };
 
-export default ZProjectSinglePost;
+export default ZProjectSingleIdea;

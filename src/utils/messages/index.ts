@@ -7,6 +7,9 @@ const GENERAL = {
 	PROJECT: {
 		PROJECT_CREATED_SUCCESSFULLY: 'Project created successfully.',
 		PROJECT_UPDATED_SUCCESSFULLY: 'Project updated successfully.',
+
+		BOARD_CREATED_SUCCESSFULLY: 'Board created successfully.',
+		BOARD_UPDATED_SUCCESSFULLY: 'Board updated successfully.',
 	},
 	SHORT_LINKS: {
 		NEW_SHORT_LINK_CREATED_SUCCEED_MESSAGE: 'Short link created successfully.',

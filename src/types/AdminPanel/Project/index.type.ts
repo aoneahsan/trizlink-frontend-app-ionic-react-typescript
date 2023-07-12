@@ -12,12 +12,20 @@ export interface ZProjectInterface {
 	projectName: string;
 	subDomain: string;
 	image: string;
-	featureRequests: string;
+	board: {
+		id?: string;
+		title: string;
+	};
 	completedRecently: string;
 	inProgress: string;
 	plannedNext: string;
 
 	currentTab?: ProjectCreatePageTabEnum; // just for frontend
+}
+
+export interface ZProjectBoardInterface {
+	id?: string;
+	title: string;
 }
 
 // Types

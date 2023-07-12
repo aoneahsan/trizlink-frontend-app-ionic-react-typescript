@@ -38,6 +38,14 @@ const RouteParams = {
 	// project
 	project: {
 		projectId: ':projectId',
+
+		board: {
+			boardId: ':boardId',
+		},
+
+		boardIdea: {
+			boardIdeaId: ':boardIdeaId',
+		},
 	},
 
 	shortLink: {
@@ -77,6 +85,14 @@ export const API_URLS = {
 	// Project
 	project_create_list: '/user/project',
 	project_update_delete: `/user/project/${RouteParams.project.projectId}`,
+
+	// Project board
+	board_create_list: `/user/project/${RouteParams.project.projectId}/board`,
+	board_update_delete: `/user/project/${RouteParams.project.projectId}/board/${RouteParams.project.board.boardId}`,
+
+	// Project board boardIdea
+	boardIdea_create_list: `/user/board/${RouteParams.project.board.boardId}/boardIdeas`,
+	boardIdea_update_delete: `/user/board/${RouteParams.project.board.boardId}/boardIdeas/${RouteParams.project.boardIdea.boardIdeaId}`,
 
 	// File
 	getSingleFile: '/file-upload/getSingleFileUrl',
@@ -424,6 +440,16 @@ const REACT_QUERY = {
 		PROJECT: {
 			MAIN: 'rq-project-list-key',
 			GET: 'rq-project-get-key',
+
+			BOARD: {
+				MAIN: 'rq-project-board-list-key',
+				GET: 'rq-project-board-get-key',
+			},
+
+			BOARD_IDEA: {
+				MAIN: 'rq-project-board-idea-list-key',
+				GET: 'rq-project-board-idea-get-key',
+			},
 		},
 		FOLDER: {
 			MAIN: 'rq-folders-list-key',

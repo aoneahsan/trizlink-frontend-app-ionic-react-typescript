@@ -55,6 +55,7 @@ type ZIonTextareaType = {
 	helperText?: string;
 	errorText?: string;
 	fill?: 'solid' | 'outline';
+	counter?: boolean;
 };
 
 const ZIonTextarea = (props: ZIonTextareaType) => {

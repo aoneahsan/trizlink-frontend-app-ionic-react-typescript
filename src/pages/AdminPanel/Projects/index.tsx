@@ -33,6 +33,7 @@ import {
  * ? Like import of custom Hook is a custom import
  * */
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 /**
  * Global Constants Imports go down
@@ -41,6 +42,7 @@ import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { API_URL_ENUM } from '@/utils/enums';
+import { createRedirectRoute } from '@/utils/helpers';
 
 /**
  * Type Imports go down
@@ -81,6 +83,8 @@ const ZProjects: React.FC = () => {
 		_url: API_URL_ENUM.project_create_list,
 		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.MAIN],
 	});
+
+	const { zNavigatePushRoute } = useZNavigate();
 
 	return (
 		<ZaionsIonPage>
@@ -130,7 +134,26 @@ const ZProjects: React.FC = () => {
 												minHeight='40px'
 												key={index}
 											>
-												<div className='font-bold'>{el.projectName}</div>
+												<div
+													className='font-bold'
+													onClick={() => {
+														if (el.id) {
+															zNavigatePushRoute(
+																createRedirectRoute({
+																	url: ZaionsRoutes.AdminPanel.Projects.Board
+																		.Main,
+																	params: [
+																		CONSTANTS.RouteParams.project.projectId,
+																		CONSTANTS.RouteParams.project.board.boardId,
+																	],
+																	values: [el.id, 'all'],
+																})
+															);
+														}
+													}}
+												>
+													{el.projectName}
+												</div>
 												<ZIonButton
 													className='pe-3'
 													fill='clear'
