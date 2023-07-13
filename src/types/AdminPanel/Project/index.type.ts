@@ -6,9 +6,19 @@ export enum ProjectCreatePageTabEnum {
 	roadMap = 'roadMap',
 }
 
+export enum ProjectBoardStatusEnum {
+	needYourOpinion = 'needYourOpinion',
+	planned = 'planned',
+	inProgress = 'inProgress',
+	done = 'done',
+	notNow = 'notNow',
+	notSet = 'notSet',
+}
+
 // Interfaces
 export interface ZProjectInterface {
 	id?: string;
+	firstBoardId?: string;
 	projectName: string;
 	subDomain: string;
 	image: string;
@@ -26,6 +36,26 @@ export interface ZProjectInterface {
 export interface ZProjectBoardInterface {
 	id?: string;
 	title: string;
+	slug: string;
+	pageHeading?: string;
+	pageDescription?: string;
+	formCustomization: {
+		intoHeading?: string;
+		intoText?: string;
+		title?: string;
+		titlePlaceholder?: string;
+		body?: string;
+		bodyPlaceholder?: string;
+		footerText?: string;
+		buttonText?: string;
+	};
+	defaultStatus: {
+		state?: ProjectBoardStatusEnum;
+		hideIdeaWithNoSet?: boolean;
+	};
+	votingSetting: {
+		hideVotingCount?: boolean;
+	};
 }
 
 // Types

@@ -199,7 +199,7 @@ const ZProjectHeader: React.FC = () => {
 								{/*  */}
 								<ZIonText className='flex h-full px-1 py-2 mr-3 font-semibold border-b-2 border-transparent cursor-pointer lg:mt-1 z-ion-border-color-danger_opacity_point7 ion-align-items-center ion-justify-content-center'>
 									<ZIonText className='tracking-wide ms-1 md:text-md lg:text-[.9rem] sm:text-sm'>
-										{zProjectBoardsStateAtom?.currentBoard?.title}
+										{zProjectBoardsStateAtom?.currentBoard?.title || 'Boards'}
 									</ZIonText>
 									<ZIonText
 										className=''

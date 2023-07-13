@@ -135,9 +135,9 @@ const ZProjects: React.FC = () => {
 												key={index}
 											>
 												<div
-													className='font-bold'
+													className='w-full font-bold'
 													onClick={() => {
-														if (el.id) {
+														if (el.id && el.firstBoardId) {
 															zNavigatePushRoute(
 																createRedirectRoute({
 																	url: ZaionsRoutes.AdminPanel.Projects.Board
@@ -146,7 +146,7 @@ const ZProjects: React.FC = () => {
 																		CONSTANTS.RouteParams.project.projectId,
 																		CONSTANTS.RouteParams.project.board.boardId,
 																	],
-																	values: [el.id, 'all'],
+																	values: [el.id, el.firstBoardId],
 																})
 															);
 														}

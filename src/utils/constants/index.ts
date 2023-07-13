@@ -19,6 +19,7 @@ import {
 	vkSvgLogo,
 } from '@/assets/images';
 import { IonLoaderEnum } from '@/types/AdminPanel/linksType';
+import { ProjectBoardStatusEnum } from '@/types/AdminPanel/Project/index.type';
 import { ENVS } from '@/utils/envKeys';
 
 // Constant
@@ -209,6 +210,7 @@ const ION_LOADER_DEFAULTS = {
 const ION_TOAST = {
 	TOAST_DURATION: 1500,
 };
+
 export const ZaionsBusinessDetails = {
 	WebsiteUrl: 'https://zaions.com',
 };
@@ -509,6 +511,28 @@ const LINK_In_BIO = {
 		BG_COLOR: '#4176f1',
 		BUTTON_COLOR: '#11ee1f',
 		BUTTON_SHADOW_COLOR: '#aab1c4',
+	},
+};
+
+// Project -> board default data
+export const ProjectBoardDefaultData = {
+	formCustomization: {
+		intoHeading: 'Add your idea',
+		intoText:
+			'We value your feedback. You can vote for existing ideas, discuss them or add your own.',
+		title: 'Title',
+		titlePlaceholder: 'Something short',
+		body: 'Description',
+		bodyPlaceholder: 'Write about your idea in more detail here',
+		// footerText: '',
+		buttonText: 'Add idea',
+	},
+	defaultStatus: {
+		state: ProjectBoardStatusEnum.notSet,
+		hideIdeaWithNoSet: false,
+	},
+	votingSetting: {
+		hideVotingCount: false,
 	},
 };
 

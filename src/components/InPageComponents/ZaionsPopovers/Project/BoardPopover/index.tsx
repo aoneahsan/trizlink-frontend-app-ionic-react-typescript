@@ -25,8 +25,7 @@ import { ZProjectBoardsRStateAtom } from '@/ZaionsStore/UserDashboard/Project/in
 import classNames from 'classnames';
 import { createRedirectRoute } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import CONSTANTS from '@/utils/constants';
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import CONSTANTS, { ProjectBoardDefaultData } from '@/utils/constants';
 
 /**
  * Custom Hooks Imports go down
@@ -69,15 +68,14 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * @type {*}
  * */
 
-const ZProjectBoardsPopover: React.FC<{ projectId: string }> = ({
-	projectId,
-}) => {
+const ZProjectBoardsPopover: React.FC<{
+	projectId: string;
+	zNavigatePushRoute: (_url: string) => void;
+}> = ({ projectId, zNavigatePushRoute }) => {
 	// Recoil state to store current project boards
 	const [zProjectBoardsStateAtom, setZProjectBoardsStateAtom] = useRecoilState(
 		ZProjectBoardsRStateAtom
 	);
-
-	const { zNavigatePushRoute } = useZNavigate();
 
 	return (
 		<ZIonList
@@ -91,13 +89,46 @@ const ZProjectBoardsPopover: React.FC<{ projectId: string }> = ({
 							className='cursor-pointer ion-activatable'
 							key={index}
 							onClick={() => {
-								setZProjectBoardsStateAtom((oldValues) => ({
-									...oldValues,
-									currentBoard: {
-										id: el.id,
-										title: el.title,
-									},
-								}));
+								if (el.id) {
+									setZProjectBoardsStateAtom((oldValues) => ({
+										...oldValues,
+										currentBoard: {
+											id: el.id,
+											title: el.title,
+											slug: el.slug,
+											pageHeading: el.pageHeading,
+											pageDescription: el.pageDescription,
+											formCustomization: {
+												intoHeading: el.formCustomization.intoHeading,
+												intoText: el.formCustomization.intoText,
+												title: el.formCustomization.title,
+												titlePlaceholder: el.formCustomization.titlePlaceholder,
+												body: el.formCustomization.body,
+												bodyPlaceholder: el.formCustomization.bodyPlaceholder,
+												footerText: el.formCustomization.footerText,
+												buttonText: el.formCustomization.buttonText,
+											},
+											defaultStatus: {
+												state: el.defaultStatus.state,
+												hideIdeaWithNoSet: el.defaultStatus.hideIdeaWithNoSet,
+											},
+											votingSetting: {
+												hideVotingCount: el.votingSetting.hideVotingCount,
+											},
+										},
+									}));
+
+									zNavigatePushRoute(
+										createRedirectRoute({
+											url: ZaionsRoutes.AdminPanel.Projects.Board.Main,
+											params: [
+												CONSTANTS.RouteParams.project.projectId,
+												CONSTANTS.RouteParams.project.board.boardId,
+											],
+											values: [projectId, el.id],
+										})
+									);
+								}
 							}}
 						>
 							<ZIonText
@@ -121,6 +152,40 @@ const ZProjectBoardsPopover: React.FC<{ projectId: string }> = ({
 				className='cursor-pointer ion-activatable'
 				lines='none'
 				onClick={() => {
+					setZProjectBoardsStateAtom((oldValues) => ({
+						...oldValues,
+						currentBoard: {
+							id: '',
+							title: '',
+							slug: '',
+							pageHeading: '',
+							pageDescription: '',
+							formCustomization: {
+								intoHeading:
+									ProjectBoardDefaultData.formCustomization.intoHeading,
+								intoText: ProjectBoardDefaultData.formCustomization.intoText,
+								title: ProjectBoardDefaultData.formCustomization.title,
+								titlePlaceholder:
+									ProjectBoardDefaultData.formCustomization.titlePlaceholder,
+								body: ProjectBoardDefaultData.formCustomization.body,
+								bodyPlaceholder:
+									ProjectBoardDefaultData.formCustomization.bodyPlaceholder,
+								footerText: '',
+								buttonText:
+									ProjectBoardDefaultData.formCustomization.buttonText,
+							},
+							defaultStatus: {
+								state: ProjectBoardDefaultData.defaultStatus.state,
+								hideIdeaWithNoSet:
+									ProjectBoardDefaultData.defaultStatus.hideIdeaWithNoSet,
+							},
+							votingSetting: {
+								hideVotingCount:
+									ProjectBoardDefaultData.votingSetting.hideVotingCount,
+							},
+						},
+					}));
+
 					zNavigatePushRoute(
 						createRedirectRoute({
 							url: ZaionsRoutes.AdminPanel.Projects.Board.Create,

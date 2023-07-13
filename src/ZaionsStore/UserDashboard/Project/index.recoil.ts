@@ -2,6 +2,7 @@ import {
 	ZProjectBoardInterface,
 	ZProjectInterface,
 } from '@/types/AdminPanel/Project/index.type';
+import { ProjectBoardDefaultData } from '@/utils/constants';
 import { atom } from 'recoil';
 //
 
@@ -25,5 +26,33 @@ export const ZProjectBoardsRStateAtom = atom<{
 	allBoards: ZProjectBoardInterface[];
 }>({
 	key: 'ZProjectBoardsRStateAtom_key',
-	default: { currentBoard: { title: '' }, allBoards: [] },
+	default: {
+		currentBoard: {
+			title: '',
+			slug: '',
+			pageHeading: '',
+			pageDescription: '',
+			formCustomization: {
+				intoHeading: ProjectBoardDefaultData.formCustomization.intoHeading,
+				intoText: ProjectBoardDefaultData.formCustomization.intoText,
+				title: ProjectBoardDefaultData.formCustomization.title,
+				titlePlaceholder:
+					ProjectBoardDefaultData.formCustomization.titlePlaceholder,
+				body: ProjectBoardDefaultData.formCustomization.body,
+				bodyPlaceholder:
+					ProjectBoardDefaultData.formCustomization.bodyPlaceholder,
+				footerText: '',
+				buttonText: ProjectBoardDefaultData.formCustomization.buttonText,
+			},
+			defaultStatus: {
+				state: ProjectBoardDefaultData.defaultStatus.state,
+				hideIdeaWithNoSet:
+					ProjectBoardDefaultData.defaultStatus.hideIdeaWithNoSet,
+			},
+			votingSetting: {
+				hideVotingCount: ProjectBoardDefaultData.votingSetting.hideVotingCount,
+			},
+		},
+		allBoards: [],
+	},
 });

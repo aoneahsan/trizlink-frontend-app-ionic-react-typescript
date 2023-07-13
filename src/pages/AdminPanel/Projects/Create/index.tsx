@@ -46,7 +46,10 @@ import {
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
+import CONSTANTS, {
+	PRODUCT_NAME,
+	ProjectBoardDefaultData,
+} from '@/utils/constants';
 import {
 	createRedirectRoute,
 	extractInnerData,
@@ -72,6 +75,7 @@ import { reportCustomError } from '@/utils/customErrorType';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
+	ProjectBoardStatusEnum,
 	ProjectCreatePageTabEnum,
 	ZProjectBoardInterface,
 	ZProjectInterface,
@@ -791,6 +795,37 @@ const ZBoardTab: React.FC = () => {
 							const _response = await createProjectBoardMutate(
 								zStringify({
 									title: values.board.title,
+									slug: String(values.board.title)
+										.split(' ')
+										.join('_')
+										.toLowerCase(),
+									pageHeading: '',
+									pageDescription: '',
+									formCustomization: zStringify({
+										intoHeading:
+											ProjectBoardDefaultData.formCustomization.intoHeading,
+										intoText:
+											ProjectBoardDefaultData.formCustomization.intoText,
+										title: ProjectBoardDefaultData.formCustomization.title,
+										titlePlaceholder:
+											ProjectBoardDefaultData.formCustomization
+												.titlePlaceholder,
+										body: ProjectBoardDefaultData.formCustomization.body,
+										bodyPlaceholder:
+											ProjectBoardDefaultData.formCustomization.bodyPlaceholder,
+										footerText: '',
+										buttonText:
+											ProjectBoardDefaultData.formCustomization.buttonText,
+									}),
+									defaultStatus: zStringify({
+										state: ProjectBoardDefaultData.defaultStatus.state,
+										hideIdeaWithNoSet:
+											ProjectBoardDefaultData.defaultStatus.hideIdeaWithNoSet,
+									}),
+									votingSetting: zStringify({
+										hideVotingCount:
+											ProjectBoardDefaultData.votingSetting.hideVotingCount,
+									}),
 								})
 							);
 
