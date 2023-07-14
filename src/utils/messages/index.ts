@@ -10,6 +10,7 @@ const GENERAL = {
 
 		BOARD_CREATED_SUCCESSFULLY: 'Board created successfully.',
 		BOARD_UPDATED_SUCCESSFULLY: 'Board updated successfully.',
+		BOARD_DELETED_SUCCESSFULLY: 'Board deleted successfully.',
 	},
 	SHORT_LINKS: {
 		NEW_SHORT_LINK_CREATED_SUCCEED_MESSAGE: 'Short link created successfully.',

@@ -219,12 +219,12 @@ const ZProjectSingleIdea: React.FC = () => {
 							<div className='relative flex flex-col justify-between gap-4 p-4 pt-6 mt-4 mb-4 bg-white border-2 rounded-lg lg:flex-row xl:justify-around items-justify lg:items-center md:p-6 lg:p-4 xl:px-12'>
 								<div className='flex flex-col gap-1 xl:-ml-8 2xl:-ml-36 max-w-[32rem]'>
 									<ZIonText className='text-xl font-bold'>
-										FeedBear can help you reply!
+										{PRODUCT_NAME} can help you reply!
 									</ZIonText>
 									<ZIonText className='' color='medium'>
-										Use FeedBear's AI tools to generate replies for new ideas.
-										Demonstrate to your users that you are listening to their
-										feedback.
+										Use {PRODUCT_NAME}'s AI tools to generate replies for new
+										ideas. Demonstrate to your users that you are listening to
+										their feedback.
 									</ZIonText>
 								</div>
 
@@ -499,8 +499,8 @@ const ZProjectSingleComment: React.FC = () => {
 				className='block mt-3 break-words whitespace-pre-wrap offset'
 				style={{ marginLeft: 'calc(36px + 1rem)' }}
 			>
-				Use FeedBear's AI tools to generate replies for new ideas. Demonstrate
-				to your users that you are listening to their feedback.
+				Use {PRODUCT_NAME}'s AI tools to generate replies for new ideas.
+				Demonstrate to your users that you are listening to their feedback.
 			</ZIonText>
 
 			{/* Action buttons */}

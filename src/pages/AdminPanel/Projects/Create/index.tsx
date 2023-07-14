@@ -329,30 +329,34 @@ const ZProjectCreatePage: React.FC = () => {
 											{/* Window tab */}
 											<div
 												className={classNames({
-													'flex w-full h-10 ion-align-items-end bg-[#cbcfd4]':
+													'flex overflow-hidden h-10 ion-align-items-end w-full bg-[#cbcfd4]':
 														true,
 												})}
 											>
-												<span className='relative z-10 flex w-48 h-8 ion-align-items-center bg-[#eaecee] px-2 text-sm leading-5 text-[#2e4052] ms-2 rounded-t font-normal'>
-													{values.projectName.trim().length > 0
-														? values.projectName
-														: 'New Project'}{' '}
-													Feedback
-												</span>
+												<div className='w-48'>
+													<ZIonTitle className='ion-no-padding relative z-10 flex w-full h-8 ion-align-items-center bg-[#eaecee] px-2 text-sm leading-5 text-[#2e4052] mx-2 rounded-t font-normal'>
+														{values.projectName.trim().length > 0
+															? values.projectName
+															: 'New Project'}{' '}
+														Feedback
+													</ZIonTitle>
+												</div>
 											</div>
 
 											{/* Window tab url */}
 											<div className='relative z-0 flex w-full h-10 ion-align-items-center bg-[#eaecee]'>
-												<span className='block w-full h-6 px-2 mx-2 text-sm leading-5 bg-white rounded-full'>
-													<span className='text-[rgba(46,64,82,1)] font-normal'>
+												<span className='flex w-full h-6 px-2 mx-2 text-sm leading-5 bg-white rounded-full'>
+													<ZIonTitle className='w-min max-w-max ion-no-padding text-[rgba(46,64,82,1)] text-sm font-normal'>
 														https://
-													</span>
-													<span className='text-[rgba(46,64,82,1)] font-normal'>
+													</ZIonTitle>
+													<ZIonTitle className='ion-no-padding text-sm text-[rgba(46,64,82,1)] font-normal w-min max-w-max'>
 														{values.subDomain.trim().length > 0
 															? values.subDomain
 															: 'new-project'}
-													</span>
-													<span className='text-dblue-500'>.feedbear.com</span>
+													</ZIonTitle>
+													<ZIonTitle className='text-sm ion-no-padding w-min max-w-max text-dblue-500'>
+														.zaions.com
+													</ZIonTitle>
 												</span>
 											</div>
 
@@ -361,11 +365,11 @@ const ZProjectCreatePage: React.FC = () => {
 												{/* Project Name */}
 												<div className='w-full'>
 													{values.image.trim().length === 0 && (
-														<ZIonText className='text-[rgba(109,121,134,1)] font-bold'>
+														<ZIonTitle className='ion-no-padding text-[rgba(109,121,134,1)] font-bold'>
 															{values.projectName.trim().length > 0
 																? values.projectName
 																: 'New Project'}
-														</ZIonText>
+														</ZIonTitle>
 													)}
 
 													{/* image */}
@@ -619,7 +623,7 @@ const ZDetailFormTab: React.FC = () => {
 	return (
 		<>
 			<ZIonText>
-				<h1 className='block text-3xl font-bold'>Welcome to FeedBear</h1>
+				<h1 className='block text-3xl font-bold'>Welcome to {PRODUCT_NAME}</h1>
 			</ZIonText>
 			<ZIonText className='block mt-1 text-lg'>
 				Start by creating your project.
@@ -641,7 +645,7 @@ const ZDetailFormTab: React.FC = () => {
 						if (e.target.value) {
 							setFieldValue(
 								'subDomain',
-								String(e.target.value).toLowerCase(),
+								String(e.target.value).split(' ').join('_').toLowerCase(),
 								false
 							);
 

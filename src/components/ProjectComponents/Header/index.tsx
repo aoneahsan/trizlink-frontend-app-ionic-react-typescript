@@ -90,8 +90,9 @@ import { reportCustomError } from '@/utils/customErrorType';
 const ZProjectHeader: React.FC = () => {
 	const { isXlScale, isLgScale, isSmScale, isMdScale } = useZMediaQueryScale();
 
-	const { projectId } = useParams<{
+	const { projectId, boardId } = useParams<{
 		projectId: string;
+		boardId: string;
 	}>();
 
 	// Status popover
@@ -124,19 +125,36 @@ const ZProjectHeader: React.FC = () => {
 		_urlDynamicParts: [CONSTANTS.RouteParams.project.projectId],
 	});
 
+	// Getting project board from backend.
+	const { data: ZCurrentBoardData, error: ZBoardError } =
+		useZRQGetRequest<ZProjectBoardInterface>({
+			_url: API_URL_ENUM.boardIdea_update_delete,
+			_key: [
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD.GET,
+				projectId,
+				boardId,
+			],
+			_itemsIds: [projectId, boardId],
+			_urlDynamicParts: [
+				CONSTANTS.RouteParams.project.projectId,
+				CONSTANTS.RouteParams.project.board.boardId,
+			],
+			_extractType: ZRQGetRequestExtractEnum.extractItem,
+		});
+
 	// After getting boards storing it to recoil.
 	useEffect(() => {
 		try {
-			if (BoardsData && BoardsData?.length > 0) {
-				setZProjectBoardsStateAtom({
-					currentBoard: BoardsData[0],
+			if (BoardsData && BoardsData?.length > 0 && ZCurrentBoardData?.id) {
+				setZProjectBoardsStateAtom((oldValues) => ({
+					currentBoard: ZCurrentBoardData,
 					allBoards: BoardsData,
-				});
+				}));
 			}
 		} catch (error) {
 			reportCustomError(error);
 		}
-	}, [BoardsData]);
+	}, [BoardsData, ZCurrentBoardData]);
 
 	return (
 		<ZIonHeader>

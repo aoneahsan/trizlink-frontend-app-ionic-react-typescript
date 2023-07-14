@@ -85,61 +85,77 @@ const ZProjectBoardsPopover: React.FC<{
 			{zProjectBoardsStateAtom?.allBoards?.length &&
 				zProjectBoardsStateAtom?.allBoards?.map((el, index) => {
 					return (
-						<ZIonItem
-							className='cursor-pointer ion-activatable'
-							key={index}
-							onClick={() => {
-								if (el.id) {
-									setZProjectBoardsStateAtom((oldValues) => ({
-										...oldValues,
-										currentBoard: {
-											id: el.id,
-											title: el.title,
-											slug: el.slug,
-											pageHeading: el.pageHeading,
-											pageDescription: el.pageDescription,
-											formCustomization: {
-												intoHeading: el.formCustomization.intoHeading,
-												intoText: el.formCustomization.intoText,
-												title: el.formCustomization.title,
-												titlePlaceholder: el.formCustomization.titlePlaceholder,
-												body: el.formCustomization.body,
-												bodyPlaceholder: el.formCustomization.bodyPlaceholder,
-												footerText: el.formCustomization.footerText,
-												buttonText: el.formCustomization.buttonText,
+						<ZIonItem className='cursor-pointer ion-activatable' key={index}>
+							<div
+								className='w-full'
+								onClick={() => {
+									if (el.id) {
+										setZProjectBoardsStateAtom((oldValues) => ({
+											...oldValues,
+											currentBoard: {
+												id: el.id,
+												title: el.title,
+												slug: el.slug,
+												pageHeading: el.pageHeading,
+												pageDescription: el.pageDescription,
+												formCustomization: {
+													intoHeading: el.formCustomization.intoHeading,
+													intoText: el.formCustomization.intoText,
+													title: el.formCustomization.title,
+													titlePlaceholder:
+														el.formCustomization.titlePlaceholder,
+													body: el.formCustomization.body,
+													bodyPlaceholder: el.formCustomization.bodyPlaceholder,
+													footerText: el.formCustomization.footerText,
+													buttonText: el.formCustomization.buttonText,
+												},
+												defaultStatus: {
+													state: el.defaultStatus.state,
+													hideIdeaWithNoSet: el.defaultStatus.hideIdeaWithNoSet,
+												},
+												votingSetting: {
+													hideVotingCount: el.votingSetting.hideVotingCount,
+												},
 											},
-											defaultStatus: {
-												state: el.defaultStatus.state,
-												hideIdeaWithNoSet: el.defaultStatus.hideIdeaWithNoSet,
-											},
-											votingSetting: {
-												hideVotingCount: el.votingSetting.hideVotingCount,
-											},
-										},
-									}));
+										}));
 
-									zNavigatePushRoute(
-										createRedirectRoute({
-											url: ZaionsRoutes.AdminPanel.Projects.Board.Main,
-											params: [
-												CONSTANTS.RouteParams.project.projectId,
-												CONSTANTS.RouteParams.project.board.boardId,
-											],
-											values: [projectId, el.id],
-										})
-									);
-								}
-							}}
-						>
-							<ZIonText
-								className={classNames({
-									'font-bold':
-										el.id === zProjectBoardsStateAtom.currentBoard.id,
-								})}
+										zNavigatePushRoute(
+											createRedirectRoute({
+												url: ZaionsRoutes.AdminPanel.Projects.Board.Main,
+												params: [
+													CONSTANTS.RouteParams.project.projectId,
+													CONSTANTS.RouteParams.project.board.boardId,
+												],
+												values: [projectId, el.id],
+											})
+										);
+									}
+								}}
 							>
-								{el.title}
-							</ZIonText>
+								<ZIonText
+									className={classNames({
+										'font-bold w-full':
+											el.id === zProjectBoardsStateAtom.currentBoard.id,
+									})}
+								>
+									{el.title}
+								</ZIonText>
+							</div>
 							<ZIonIcon
+								onClick={() => {
+									if (el.id) {
+										zNavigatePushRoute(
+											createRedirectRoute({
+												url: ZaionsRoutes.AdminPanel.Projects.Board.Edit,
+												params: [
+													CONSTANTS.RouteParams.project.projectId,
+													CONSTANTS.RouteParams.project.board.boardId,
+												],
+												values: [projectId, el.id],
+											})
+										);
+									}
+								}}
 								className='cursor-pointer'
 								slot='end'
 								icon={createOutline}

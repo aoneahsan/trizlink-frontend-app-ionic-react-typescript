@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
 
 /**
@@ -138,10 +138,10 @@ const ZProjectViewPage: React.FC = () => {
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
 		});
 
-	// Getting project from backend.
+	// Getting project board from backend.
 	const { data: ZCurrentBoardData, error: ZBoardError } =
 		useZRQGetRequest<ZProjectBoardInterface>({
-			_url: API_URL_ENUM.boardIdea_update_delete,
+			_url: API_URL_ENUM.board_update_delete,
 			_key: [
 				CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD.GET,
 				projectId,
@@ -258,6 +258,12 @@ const ZProjectViewPage: React.FC = () => {
 										</ZIonButton>
 									</div>
 
+									{ZCurrentBoardData?.formCustomization?.footerText && (
+										<ZIonText className='block w-full mt-2 text-left break-words whitespace-pre-line'>
+											{ZCurrentBoardData?.formCustomization?.footerText}
+										</ZIonText>
+									)}
+
 									{/* add idea button */}
 									<ZIonButton className='mt-4' expand='block'>
 										{ZCurrentBoardData?.formCustomization?.buttonText}
@@ -325,7 +331,7 @@ const ZProjectViewPage: React.FC = () => {
 										color='dark'
 										className='underline ms-1 text-md'
 									>
-										FeedBear
+										{PRODUCT_NAME}
 									</ZIonRouterLink>
 								</ZIonText>
 							</div>
@@ -334,7 +340,7 @@ const ZProjectViewPage: React.FC = () => {
 						{/* Col-2 */}
 						<ZIonCol className='ion-no-margin ion-no-padding'>
 							{/*  */}
-							<div className='bg-white rounded-lg shadow '>
+							<div className='bg-white rounded-lg shadow'>
 								{/* Top bar */}
 								<div className='px-4 py-4 border-b rounded-t-lg z-ion-border-color-light_opacity_point8'>
 									<ZIonRow className='ion-no-padding ion-no-margin'>

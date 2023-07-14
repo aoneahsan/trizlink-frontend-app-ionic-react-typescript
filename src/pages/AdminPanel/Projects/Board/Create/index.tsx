@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
 
 /**
@@ -24,6 +24,7 @@ import {
 	ZIonCol,
 	ZIonContent,
 	ZIonGrid,
+	ZIonIcon,
 	ZIonInput,
 	ZIonRow,
 	ZIonSelect,
@@ -37,7 +38,13 @@ import {
  * ? Like import of custom Hook is a custom import
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import { useZRQCreateRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+	useZInvalidateReactQueries,
+	useZRQCreateRequest,
+	useZRQDeleteRequest,
+	useZRQGetRequest,
+	useZRQUpdateRequest,
+} from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -63,6 +70,7 @@ import CONSTANTS, { ProjectBoardDefaultData } from '@/utils/constants';
 import {
 	ProjectBoardStatusEnum,
 	ZProjectBoardInterface,
+	ZProjectInterface,
 } from '@/types/AdminPanel/Project/index.type';
 import {
 	showErrorNotification,
@@ -74,6 +82,10 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { useRecoilState } from 'recoil';
 import { ZProjectBoardsRStateAtom } from '@/ZaionsStore/UserDashboard/Project/index.recoil';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { trashBinOutline } from 'ionicons/icons';
+import { useZIonAlert, useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 /**
  * Recoil State Imports go down
@@ -104,32 +116,151 @@ import { ZProjectBoardsRStateAtom } from '@/ZaionsStore/UserDashboard/Project/in
 const ZProjectBoardFormPage: React.FC = () => {
 	const { isXlScale, isSmScale, isLgScale } = useZMediaQueryScale();
 
-	const { projectId } = useParams<{
+	const { projectId, boardId } = useParams<{
 		projectId: string;
+		boardId: string;
 	}>();
 
+	/**
+	 * Custom hooks.
+	 */
 	const { zNavigatePushRoute } = useZNavigate();
+	const { presentZIonAlert } = useZIonAlert();
+	const { presentZIonErrorAlert } = useZIonErrorAlert();
+	const { zInvalidateReactQueries } = useZInvalidateReactQueries();
 
-	// Recoil state to store current project boards
+	/**
+	 * Recoil state to store current project boards.
+	 */
 	const [zProjectBoardsStateAtom, setZProjectBoardsStateAtom] = useRecoilState(
 		ZProjectBoardsRStateAtom
 	);
 
-	// Create new project board API.
+	/**
+	 * Getting project from backend.
+	 */
+	const { data: ZCurrentProjectData } = useZRQGetRequest<ZProjectInterface>({
+		_url: API_URL_ENUM.project_update_delete,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.GET, projectId],
+		_itemsIds: [projectId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.project.projectId],
+		_extractType: ZRQGetRequestExtractEnum.extractItem,
+	});
+
+	/**
+	 * Create new project board API
+	 */
 	const { mutateAsync: createProjectBoardMutate } = useZRQCreateRequest({
 		_url: API_URL_ENUM.board_create_list,
 		_queriesKeysToInvalidate: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD.MAIN,
+			projectId,
 		],
 		_itemsIds: [projectId],
 		_urlDynamicParts: [CONSTANTS.RouteParams.project.projectId],
 	});
 
+	/**
+	 * Update board API.
+	 */
+	const { mutateAsync: updateProjectBoardMutate } = useZRQUpdateRequest({
+		_url: API_URL_ENUM.board_update_delete,
+		_queriesKeysToInvalidate: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD.GET,
+			projectId,
+			boardId,
+		],
+	});
+
+	/**
+	 * Getting board data from backend with boardId.
+	 */
+	const {
+		data: selectedBoard,
+		// refetch: refetchSelectedBoard,
+		isFetched: isSelectBoardFetched,
+	} = useZRQGetRequest<ZProjectBoardInterface>({
+		_url: API_URL_ENUM.board_update_delete,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD.GET,
+			projectId,
+			boardId,
+		],
+		_authenticated: true,
+		_itemsIds: [projectId, boardId],
+		_urlDynamicParts: [
+			CONSTANTS.RouteParams.project.projectId,
+			CONSTANTS.RouteParams.project.board.boardId,
+		],
+		_shouldFetchWhenIdPassed: !boardId ? true : false,
+		_extractType: ZRQGetRequestExtractEnum.extractItem,
+		// _staleTime: 0,
+	});
+
+	useEffect(() => {
+		try {
+			if (boardId && selectedBoard) {
+				setZProjectBoardsStateAtom((oldValues) => ({
+					...oldValues,
+					currentBoard: {
+						id: selectedBoard?.id,
+						title: selectedBoard?.title,
+						slug: selectedBoard?.slug,
+						pageHeading: selectedBoard?.pageHeading,
+						pageDescription: selectedBoard?.pageDescription,
+						formCustomization: {
+							intoHeading: selectedBoard?.formCustomization?.intoHeading,
+							intoText: selectedBoard?.formCustomization?.intoText,
+							title: selectedBoard?.formCustomization?.title,
+							titlePlaceholder:
+								selectedBoard?.formCustomization?.titlePlaceholder,
+							body: selectedBoard?.formCustomization?.body,
+							bodyPlaceholder:
+								selectedBoard?.formCustomization?.bodyPlaceholder,
+							footerText: selectedBoard?.formCustomization?.footerText,
+							buttonText: selectedBoard?.formCustomization?.buttonText,
+						},
+						defaultStatus: {
+							state: selectedBoard?.defaultStatus?.state,
+							hideIdeaWithNoSet:
+								selectedBoard?.defaultStatus?.hideIdeaWithNoSet,
+						},
+						votingSetting: {
+							hideVotingCount: selectedBoard?.votingSetting?.hideVotingCount,
+						},
+					},
+				}));
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	}, [boardId]);
+
+	/**
+	 * Formik submit handler
+	 */
 	const formikSubmitHandler = async (data: string) => {
 		try {
 			if (data) {
 				// Making an api call creating new project board
-				const _response = await createProjectBoardMutate(data);
+				let _response;
+				if (boardId) {
+					_response = await updateProjectBoardMutate({
+						itemIds: [projectId, boardId],
+						urlDynamicParts: [
+							CONSTANTS.RouteParams.project.projectId,
+							CONSTANTS.RouteParams.project.board.boardId,
+						],
+						requestData: data,
+					});
+
+					zInvalidateReactQueries([
+						CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD.MAIN,
+						projectId,
+					]);
+				} else {
+					_response = await createProjectBoardMutate(data);
+				}
 
 				if (_response) {
 					const _data = extractInnerData<ZProjectBoardInterface>(
@@ -138,9 +269,15 @@ const ZProjectBoardFormPage: React.FC = () => {
 					);
 
 					if (_data && _data.id) {
-						showSuccessNotification(
-							MESSAGES.GENERAL.PROJECT.BOARD_CREATED_SUCCESSFULLY
-						);
+						if (boardId) {
+							showSuccessNotification(
+								MESSAGES.GENERAL.PROJECT.BOARD_UPDATED_SUCCESSFULLY
+							);
+						} else {
+							showSuccessNotification(
+								MESSAGES.GENERAL.PROJECT.BOARD_CREATED_SUCCESSFULLY
+							);
+						}
 
 						setZProjectBoardsStateAtom((oldValues) => ({
 							...oldValues,
@@ -190,6 +327,101 @@ const ZProjectBoardFormPage: React.FC = () => {
 		}
 	};
 
+	/**
+	 * delete short link folder api.
+	 */
+	const { mutateAsync: deleteProjectBoardMutate } = useZRQDeleteRequest(
+		API_URL_ENUM.board_update_delete,
+		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD.MAIN, projectId]
+	);
+
+	/**
+	 * deleteBoardFn will show the confirm alert before deleting short link folder.
+	 */
+	const deleteBoardFn = async () => {
+		try {
+			if (boardId && selectedBoard?.id) {
+				await presentZIonAlert({
+					header: `Delete board "${selectedBoard?.title}"`,
+					subHeader: 'Remove board from project.',
+					message: 'Are you sure you want to delete this board?',
+					buttons: [
+						{
+							text: 'Cancel',
+							role: 'cancel',
+						},
+						{
+							text: 'Delete',
+							role: 'danger',
+							handler: () => {
+								void removeBoard();
+							},
+						},
+					],
+				});
+			} else {
+				await presentZIonErrorAlert();
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	/**
+	 * removeBoard will hit delete short link folder api
+	 */
+	const removeBoard = async () => {
+		try {
+			if (selectedBoard?.id) {
+				// hitting the delete api
+				const _response = await deleteProjectBoardMutate({
+					itemIds: [projectId, selectedBoard?.id],
+					urlDynamicParts: [
+						CONSTANTS.RouteParams.project.projectId,
+						CONSTANTS.RouteParams.project.board.boardId,
+					],
+				});
+
+				if (_response) {
+					const _data = extractInnerData<{ success: boolean }>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (_data && _data?.success) {
+						showSuccessNotification(
+							MESSAGES.GENERAL.PROJECT.BOARD_DELETED_SUCCESSFULLY
+						);
+
+						await zInvalidateReactQueries([
+							CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.GET,
+							projectId,
+						]);
+
+						ZCurrentProjectData?.firstBoardId &&
+							zNavigatePushRoute(
+								createRedirectRoute({
+									url: ZaionsRoutes.AdminPanel.Projects.Board.Main,
+									params: [
+										CONSTANTS.RouteParams.project.projectId,
+										CONSTANTS.RouteParams.project.board.boardId,
+									],
+									values: [projectId, ZCurrentProjectData?.firstBoardId],
+								})
+							);
+					}
+				} else {
+					await presentZIonErrorAlert();
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
+	if (!isSelectBoardFetched) {
+		return null;
+	}
 	return (
 		<ZaionsIonPage>
 			{/* Header */}
@@ -208,31 +440,45 @@ const ZProjectBoardFormPage: React.FC = () => {
 					{/* Formik */}
 					<Formik
 						initialValues={{
-							title: '',
-							slug: '',
-							pageHeading: '',
-							pageDescription: '',
+							title: selectedBoard?.title,
+							slug: selectedBoard?.slug || '',
+							pageHeading: selectedBoard?.pageHeading || '',
+							pageDescription: selectedBoard?.pageDescription || '',
 							formCustomization: {
 								intoHeading:
+									selectedBoard?.formCustomization?.intoHeading ||
 									ProjectBoardDefaultData.formCustomization.intoHeading,
-								intoText: ProjectBoardDefaultData.formCustomization.intoText,
-								title: ProjectBoardDefaultData.formCustomization.title,
+								intoText:
+									selectedBoard?.formCustomization?.intoText ||
+									ProjectBoardDefaultData.formCustomization.intoText,
+								title:
+									selectedBoard?.formCustomization?.title ||
+									ProjectBoardDefaultData.formCustomization.title,
 								titlePlaceholder:
+									selectedBoard?.formCustomization?.titlePlaceholder ||
 									ProjectBoardDefaultData.formCustomization.titlePlaceholder,
-								body: ProjectBoardDefaultData.formCustomization.body,
+								body:
+									selectedBoard?.formCustomization?.body ||
+									ProjectBoardDefaultData.formCustomization.body,
 								bodyPlaceholder:
+									selectedBoard?.formCustomization?.bodyPlaceholder ||
 									ProjectBoardDefaultData.formCustomization.bodyPlaceholder,
-								footerText: '',
+								footerText: selectedBoard?.formCustomization?.footerText || '',
 								buttonText:
+									selectedBoard?.formCustomization?.buttonText ||
 									ProjectBoardDefaultData.formCustomization.buttonText,
 							},
 							defaultStatus: {
-								state: ProjectBoardDefaultData.defaultStatus.state,
+								state:
+									selectedBoard?.defaultStatus?.state ||
+									ProjectBoardDefaultData.defaultStatus.state,
 								hideIdeaWithNoSet:
+									selectedBoard?.defaultStatus?.hideIdeaWithNoSet ||
 									ProjectBoardDefaultData.defaultStatus.hideIdeaWithNoSet,
 							},
 							votingSetting: {
 								hideVotingCount:
+									selectedBoard?.votingSetting?.hideVotingCount ||
 									ProjectBoardDefaultData.votingSetting.hideVotingCount,
 							},
 						}}
@@ -305,6 +551,7 @@ const ZProjectBoardFormPage: React.FC = () => {
 								reportCustomError(error);
 							}
 						}}
+						enableReinitialize={true}
 					>
 						{({
 							values,
@@ -327,9 +574,31 @@ const ZProjectBoardFormPage: React.FC = () => {
 										sizeSm='12'
 										sizeXs='12'
 									>
-										<ZIonText className='block text-2xl font-semibold'>
-											New feedback board
-										</ZIonText>
+										<div className='flex w-full ion-align-items-center ion-justify-content-between'>
+											<ZIonText className='block text-2xl font-semibold'>
+												{boardId ? 'Board settings' : 'New feedback board'}
+											</ZIonText>
+
+											{boardId && (
+												<>
+													<ZIonIcon
+														icon={trashBinOutline}
+														onClick={() => {
+															deleteBoardFn();
+														}}
+														color='danger'
+														id='z-project-board-delete'
+														className='w-5 h-5 cursor-pointer'
+													/>
+
+													<ZRTooltip
+														anchorSelect='#z-project-board-delete'
+														place='right'
+														content='Delete board.'
+													/>
+												</>
+											)}
+										</div>
 
 										<ZIonText className='block mt-4 text-lg font-semibold'>
 											General
@@ -383,7 +652,7 @@ const ZProjectBoardFormPage: React.FC = () => {
 												onIonBlur={handleBlur}
 												onIonChange={handleChange}
 												counterFormatter={() =>
-													`https://mti.feedbear.com/boards/`
+													`https://mti.zaions.com/boards/`
 												}
 												className={classNames({
 													'mt-4': true,

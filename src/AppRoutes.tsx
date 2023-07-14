@@ -137,6 +137,12 @@ const AppRoutes: React.FC = () => {
 
 				<PrivateRoute
 					exact
+					path={ZaionsRoutes.AdminPanel.Projects.Board.Edit}
+					Component={ZProjectBoardFormPage}
+				/>
+
+				<PrivateRoute
+					exact
 					path={ZaionsRoutes.AdminPanel.Projects.BoardIdea.Main}
 					Component={ZProjectSingleIdea}
 				/>

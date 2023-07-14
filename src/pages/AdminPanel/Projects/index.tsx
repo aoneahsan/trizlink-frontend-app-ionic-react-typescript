@@ -88,7 +88,7 @@ const ZProjects: React.FC = () => {
 
 	return (
 		<ZaionsIonPage>
-			<ZIonContent>
+			<ZIonContent color='light'>
 				{/* bg-[#f7f4f2] */}
 				<ZIonRow>
 					{/* Logo */}
