@@ -58,4 +58,13 @@ export interface ZProjectBoardInterface {
 	};
 }
 
+export interface ZProjectBoardIdeasInterface {
+	id?: string;
+	title: string;
+	description: string;
+	status?: ProjectBoardStatusEnum;
+	internalNotes?: string;
+	image?: string;
+}
+
 // Types

@@ -41,6 +41,7 @@ import {
 	useZRQCreateRequest,
 	useZRQUpdateRequest,
 } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 /**
  * Global Constants Imports go down
@@ -69,6 +70,7 @@ import {
 } from '@/utils/notification';
 import MESSAGES from '@/utils/messages';
 import { reportCustomError } from '@/utils/customErrorType';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Type Imports go down
@@ -100,8 +102,6 @@ import classes from './styles.module.css';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductLogo } from '@/assets/images';
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Component props type go down
@@ -160,6 +160,7 @@ const ZProjectCreatePage: React.FC = () => {
 		<ZaionsIonPage>
 			<ZIonContent>
 				<Formik
+					enableReinitialize={true}
 					initialValues={{
 						currentTab: ProjectCreatePageTabEnum.detailForm,
 						projectName: '',
@@ -225,10 +226,6 @@ const ZProjectCreatePage: React.FC = () => {
 					}}
 				>
 					{({ values, errors }) => {
-						console.log({
-							values,
-							errors,
-						});
 						return (
 							<ZIonRow>
 								{/* Left (Form col) */}

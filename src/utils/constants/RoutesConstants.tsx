@@ -52,7 +52,7 @@ const ZaionsRoutes = {
 			},
 
 			BoardIdea: {
-				Main: `/projects/boards/idea/${CONSTANTS.RouteParams.project.boardIdea.boardIdeaId}`,
+				Main: `/projects/${CONSTANTS.RouteParams.project.projectId}/board/${CONSTANTS.RouteParams.project.board.boardId}/idea/${CONSTANTS.RouteParams.project.boardIdea.boardIdeaId}`,
 			},
 		},
 

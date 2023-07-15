@@ -128,7 +128,7 @@ const ZProjectHeader: React.FC = () => {
 	// Getting project board from backend.
 	const { data: ZCurrentBoardData, error: ZBoardError } =
 		useZRQGetRequest<ZProjectBoardInterface>({
-			_url: API_URL_ENUM.boardIdea_update_delete,
+			_url: API_URL_ENUM.board_update_delete,
 			_key: [
 				CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD.GET,
 				projectId,

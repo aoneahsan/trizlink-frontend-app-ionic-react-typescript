@@ -25,6 +25,7 @@ import {
 import classNames from 'classnames';
 import { useRecoilState } from 'recoil';
 import { AxiosError } from 'axios';
+import { Form, Formik } from 'formik';
 
 /**
  * Custom Imports go down
@@ -57,21 +58,34 @@ import ZProjectOrderPopover from '@/components/InPageComponents/ZaionsPopovers/P
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+	useZRQCreateRequest,
+	useZRQGetRequest,
+} from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
+import { reportCustomError } from '@/utils/customErrorType';
+import {
+	createRedirectRoute,
+	extractInnerData,
+	zStringify,
+} from '@/utils/helpers';
+import { showSuccessNotification } from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
+	ProjectBoardStatusEnum,
+	ZProjectBoardIdeasInterface,
 	ZProjectBoardInterface,
 	ZProjectInterface,
 } from '@/types/AdminPanel/Project/index.type';
@@ -155,6 +169,58 @@ const ZProjectViewPage: React.FC = () => {
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
 		});
 
+	// Getting project board boardIdeas from backend.
+	const { data: ZBoardIdeasData } = useZRQGetRequest<
+		ZProjectBoardIdeasInterface[]
+	>({
+		_url: API_URL_ENUM.boardIdea_create_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.MAIN,
+			projectId,
+			boardId,
+		],
+		_itemsIds: [boardId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.project.board.boardId],
+		_shouldFetchWhenIdPassed: !boardId ? true : false,
+	});
+
+	// Create new idea API
+	const { mutateAsync: createBoardIdeaAsyncMutate } =
+		useZRQCreateRequest<ZProjectBoardIdeasInterface>({
+			_url: API_URL_ENUM.boardIdea_create_list,
+			_queriesKeysToInvalidate: [
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.MAIN,
+				projectId,
+				boardId,
+			],
+			_urlDynamicParts: [CONSTANTS.RouteParams.project.board.boardId],
+			_itemsIds: [boardId],
+		});
+
+	// Idea Formik submit handler.
+	const IdeaFormikSubmitHandler = async (_data: string) => {
+		try {
+			if (_data) {
+				const _response = await createBoardIdeaAsyncMutate(_data);
+
+				if (_response) {
+					const _item = extractInnerData<ZProjectBoardIdeasInterface>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (_item && _item?.id) {
+						showSuccessNotification(
+							MESSAGES.GENERAL.PROJECT.BOARD_IDEA_CREATED_SUCCESSFULLY
+						);
+					}
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
 	// if we don't have project with ProjectId show no project found UI.
 	if (
 		Object.keys(
@@ -211,64 +277,143 @@ const ZProjectViewPage: React.FC = () => {
 									{ZCurrentBoardData?.formCustomization?.intoText}
 								</ZIonText>
 
-								<div className='mt-4'>
-									{/* Author Name */}
-									<ZIonInput label='Author Name' labelPlacement='floating' />
+								{/* Idea form */}
+								<Formik
+									initialValues={{
+										authorName: '',
+										title: '',
+										description: '',
+									}}
+									onSubmit={async (values, { resetForm }) => {
+										try {
+											if (
+												values.title.trim().length > 0 &&
+												values.description.trim().length > 0
+											) {
+												const _stringifyValue = zStringify({
+													title: values.title,
+													description: values.description,
+													status: ProjectBoardStatusEnum.notSet,
+												});
+												await IdeaFormikSubmitHandler(_stringifyValue);
 
-									{/* Title */}
-									<ZIonInput
-										label={ZCurrentBoardData?.formCustomization?.title}
-										labelPlacement='floating'
-										placeholder={
-											ZCurrentBoardData?.formCustomization?.titlePlaceholder
+												resetForm({});
+											}
+										} catch (error) {
+											reportCustomError(error);
 										}
-										className='mt-4'
-									/>
+									}}
+								>
+									{({
+										values,
+										touched,
+										handleChange,
+										handleBlur,
+										submitForm,
+									}) => {
+										return (
+											<Form className='mt-4'>
+												{/* Author Name */}
+												<ZIonInput
+													label='Author Name'
+													labelPlacement='floating'
+												/>
 
-									{/* Description */}
-									<ZIonTextarea
-										fill='outline'
-										label={ZCurrentBoardData?.formCustomization?.body}
-										labelPlacement='floating'
-										placeholder={
-											ZCurrentBoardData?.formCustomization?.bodyPlaceholder
-										}
-										className='mt-4'
-										autoGrow
-										rows={3}
-									/>
+												{/* Title */}
+												<ZIonInput
+													label={ZCurrentBoardData?.formCustomization?.title}
+													labelPlacement='floating'
+													name='title'
+													value={values.title}
+													className='mt-4'
+													required
+													onIonChange={handleChange}
+													onIonBlur={handleBlur}
+													placeholder={
+														ZCurrentBoardData?.formCustomization
+															?.titlePlaceholder
+													}
+												/>
 
-									{/* Attach/Replace image button */}
-									<div className='mt-4'>
-										<div className='w-20 h-20 mb-2 mr-2 border rounded-md shadow-lg border-neutral-200'>
-											<ZIonImg
-												className='w-full h-full'
-												src='http://localhost:8000/storage/uploaded-files/fNsHPbYOTDiJ99Io0l9JnWJnSvnj8eqXb4AcxJUE.jpg'
-											/>
-										</div>
-										<ZIonButton
-											className='ion-no-padding ion-no-margin'
-											size='small'
-											fill='default'
-										>
-											<ZIonIcon icon={attachOutline} className='mr-1' />
-											<ZIonText className='text-[.9rem]'>
-												Attach images
-											</ZIonText>
-										</ZIonButton>
-									</div>
+												{/* Description */}
+												<ZIonTextarea
+													name='description'
+													value={values.description}
+													fill='outline'
+													label={ZCurrentBoardData?.formCustomization?.body}
+													labelPlacement='floating'
+													className='mt-4'
+													autoGrow
+													rows={3}
+													required
+													onIonChange={handleChange}
+													onIonBlur={handleBlur}
+													placeholder={
+														ZCurrentBoardData?.formCustomization
+															?.bodyPlaceholder
+													}
+												/>
 
-									{ZCurrentBoardData?.formCustomization?.footerText && (
-										<ZIonText className='block w-full mt-2 text-left break-words whitespace-pre-line'>
-											{ZCurrentBoardData?.formCustomization?.footerText}
-										</ZIonText>
-									)}
+												{/* Attach/Replace image button */}
+												<div className='mt-4'>
+													<div className='w-20 h-20 mb-2 mr-2 border rounded-md shadow-lg border-neutral-200'>
+														<ZIonImg
+															className='w-full h-full'
+															src='http://localhost:8000/storage/uploaded-files/fNsHPbYOTDiJ99Io0l9JnWJnSvnj8eqXb4AcxJUE.jpg'
+														/>
+													</div>
+													<ZIonButton
+														className='ion-no-padding ion-no-margin'
+														size='small'
+														fill='default'
+													>
+														<ZIonIcon icon={attachOutline} className='mr-1' />
+														<ZIonText className='text-[.9rem]'>
+															Attach images
+														</ZIonText>
+													</ZIonButton>
+												</div>
 
-									{/* add idea button */}
-									<ZIonButton className='mt-4' expand='block'>
-										{ZCurrentBoardData?.formCustomization?.buttonText}
-									</ZIonButton>
-								</div>
+												{ZCurrentBoardData?.formCustomization?.footerText && (
+													<ZIonText className='block w-full mt-2 text-left break-words whitespace-pre-line'>
+														{ZCurrentBoardData?.formCustomization?.footerText}
+													</ZIonText>
+												)}
+												{touched.title &&
+												touched.description &&
+												values.title.trim().length === 0 &&
+												values.description.trim().length === 0 ? (
+													<ZIonText className='block' color='danger'>
+														title and description are required.
+													</ZIonText>
+												) : (
+													''
+												)}
+												{/* add idea button */}
+												<ZIonButton
+													className='mt-4'
+													expand='block'
+													disabled={
+														values.title.trim().length > 0 &&
+														values.description.trim().length > 0
+															? false
+															: true
+													}
+													onClick={() => {
+														if (
+															values.title.trim().length > 0 &&
+															values.description.trim().length > 0
+														) {
+															submitForm();
+														}
+													}}
+												>
+													{ZCurrentBoardData?.formCustomization?.buttonText}
+												</ZIonButton>
+											</Form>
+										);
+									}}
+								</Formik>
 							</div>
 
 							{/*  */}
@@ -433,8 +578,11 @@ const ZProjectViewPage: React.FC = () => {
 								</div>
 
 								{/*  */}
-								{/* <ZProjectEmptyPostState /> */}
-								<ZProjectPostsState />
+								{ZBoardIdeasData && ZBoardIdeasData?.length > 0 ? (
+									<ZProjectPostsState />
+								) : (
+									<ZProjectEmptyPostState />
+								)}
 							</div>
 						</ZIonCol>
 					</ZIonRow>
@@ -458,73 +606,105 @@ const ZProjectEmptyPostState: React.FC = () => {
 const ZProjectPostsState: React.FC = () => {
 	const { isMdScale } = useZMediaQueryScale();
 
+	const { projectId, boardId } = useParams<{
+		projectId: string;
+		boardId: string;
+	}>();
+
+	// Getting project board boardIdeas from backend.
+	const { data: ZBoardIdeasData } = useZRQGetRequest<
+		ZProjectBoardIdeasInterface[]
+	>({
+		_url: API_URL_ENUM.boardIdea_create_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.MAIN,
+			projectId,
+			boardId,
+		],
+		_itemsIds: [boardId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.project.board.boardId],
+		_shouldFetchWhenIdPassed: !boardId ? true : false,
+	});
+
 	return (
-		<ZIonGrid>
-			<ZIonRow
-				className={classNames({
-					'ion-align-items-center': true,
-					'px-4': isMdScale,
-					'px-2': isMdScale,
+		<ZIonGrid className='flex flex-col gap-4 pt-2'>
+			{ZBoardIdeasData &&
+				ZBoardIdeasData.map((el) => {
+					return (
+						<ZIonRow
+							className={classNames({
+								'ion-align-items-center': true,
+								'px-4': isMdScale,
+								'px-2': isMdScale,
+							})}
+						>
+							<ZIonCol className='mr-4 ps-2' size='max-content'>
+								<ZIonButton height='50px' fill='clear' color='medium'>
+									<ZIonLabel color='light'>
+										<p className='m-[0px!important] z_ion_color_danger'>
+											<ZIonIcon icon={chevronUpOutline} className='w-5 h-5' />
+										</p>
+										<p className='m-[0px!important] font-bold z_ion_color_danger text-lg'>
+											1
+										</p>
+									</ZIonLabel>
+								</ZIonButton>
+							</ZIonCol>
+
+							<ZIonCol>
+								{el.id && (
+									<ZIonRouterLink
+										routerLink={createRedirectRoute({
+											url: ZaionsRoutes.AdminPanel.Projects.BoardIdea.Main,
+											params: [
+												CONSTANTS.RouteParams.project.projectId,
+												CONSTANTS.RouteParams.project.board.boardId,
+												CONSTANTS.RouteParams.project.boardIdea.boardIdeaId,
+											],
+											values: [projectId, boardId, el?.id],
+										})}
+										color='dark'
+									>
+										<ZIonText
+											className={classNames({
+												'block font-semibold': true,
+												'text-lg': isMdScale,
+												'text-md': !isMdScale,
+											})}
+										>
+											{el.title}
+										</ZIonText>
+									</ZIonRouterLink>
+								)}
+
+								<ZIonText
+									className={classNames({
+										'block mt-1 break-words force-break-words': true,
+										'text-sm': !isMdScale,
+									})}
+								>
+									{el.description}
+								</ZIonText>
+
+								<div className='flex flex-wrap mt-1 text-sm'>
+									<ZIonIcon
+										icon={chatbubblesOutline}
+										color='medium'
+										className='mt-[2px] mr-2'
+									/>
+									<ZIonText
+										color='medium'
+										className={classNames({
+											'text-sm': !isMdScale,
+										})}
+									>
+										2 comments
+									</ZIonText>
+								</div>
+							</ZIonCol>
+						</ZIonRow>
+					);
 				})}
-			>
-				<ZIonCol className='mr-4 ps-2' size='max-content'>
-					<ZIonButton height='50px' fill='clear' color='medium'>
-						<ZIonLabel color='light'>
-							<p className='m-[0px!important] z_ion_color_danger'>
-								<ZIonIcon icon={chevronUpOutline} className='w-5 h-5' />
-							</p>
-							<p className='m-[0px!important] font-bold z_ion_color_danger text-lg'>
-								1
-							</p>
-						</ZIonLabel>
-					</ZIonButton>
-				</ZIonCol>
-
-				<ZIonCol>
-					<ZIonRouterLink
-						routerLink={ZaionsRoutes.AdminPanel.Projects.BoardIdea.Main}
-						color='dark'
-					>
-						<ZIonText
-							className={classNames({
-								'block font-semibold': true,
-								'text-lg': isMdScale,
-								'text-md': !isMdScale,
-							})}
-						>
-							Make it
-						</ZIonText>
-					</ZIonRouterLink>
-
-					<ZIonText
-						className={classNames({
-							'block mt-1 break-words force-break-words': true,
-							'text-sm': !isMdScale,
-						})}
-					>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima
-						dolor dolores laudantium sint vitae repellendus esse totam quasi
-						molestias nulla modi culpa quisquam in, explicabo consequatur
-						voluptas ducimus quae dolorem.
-					</ZIonText>
-
-					<div className='flex flex-wrap mt-1 text-sm'>
-						<ZIonIcon
-							icon={chatbubblesOutline}
-							color='medium'
-							className='mt-[2px] mr-2'
-						/>
-						<ZIonText
-							color='medium'
-							className={classNames({
-								'text-sm': !isMdScale,
-							})}
-						>
-							2 comments
-						</ZIonText>
-					</div>
-				</ZIonCol>
-			</ZIonRow>
 		</ZIonGrid>
 	);
 };
