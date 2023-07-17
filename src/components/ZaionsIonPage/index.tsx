@@ -17,6 +17,7 @@ import AdminPanelFoldersSidebarMenu from '@/navigation/AdminPanel/FolderSideMenu
 import AdminPanelShortLinksFolderSideMenu from '@/navigation/AdminPanel/ShortLinksFolderSideMenu';
 import ZWorkspaceViewPageFilterMenu from '@/navigation/AdminPanel/WorkspaceViewPageFilterMenu';
 import { useParams } from 'react-router';
+import ZProjectBoardStatusMenu from '@/navigation/AdminPanel/ProjectBoardStatusMenu';
 
 // Types
 type ZaionsIonPageType = {
@@ -50,6 +51,8 @@ const ZaionsIonPage: React.FC<ZaionsIonPageType> = ({
 				<AdminPanelShortLinksFolderSideMenu workspaceId={workspaceId} />
 			) : menu === PAGE_MENU.ADMIN_PANEL_WORKSPACE_VIEW_FILTER_MENU ? (
 				<ZWorkspaceViewPageFilterMenu />
+			) : menu === PAGE_MENU.ADMIN_PROJECT_BOARD_STATUS_MENU ? (
+				<ZProjectBoardStatusMenu />
 			) : (
 				''
 			)}

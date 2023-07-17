@@ -137,16 +137,6 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 												)
 											);
 											break;
-
-										case AdminPanelMainSidebarMenuPageEnum.linkInBio:
-											zNavigatePushRoute(
-												replaceParams(
-													ZaionsRoutes.AdminPanel.LinkInBio.Main,
-													CONSTANTS.RouteParams.folderIdToGetShortLinks,
-													'all'
-												)
-											);
-											break;
 									}
 								}}
 							>
@@ -163,7 +153,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 									{foldersData.map((el) => (
 										<ZIonItem
 											className={classNames({
-												'cursor-pointer ': true,
+												'cursor-pointer': true,
 												'zaions-short-link-folder':
 													type === AdminPanelMainSidebarMenuPageEnum.shortLink,
 												'zaions-link-in-bio-folder':
@@ -179,16 +169,6 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 															zNavigatePushRoute(
 																replaceParams(
 																	ZaionsRoutes.AdminPanel.ShortLinks.Main,
-																	CONSTANTS.RouteParams.folderIdToGetShortLinks,
-																	el.id as string
-																)
-															);
-															break;
-
-														case AdminPanelMainSidebarMenuPageEnum.linkInBio:
-															zNavigatePushRoute(
-																replaceParams(
-																	ZaionsRoutes.AdminPanel.LinkInBio.Main,
 																	CONSTANTS.RouteParams.folderIdToGetShortLinks,
 																	el.id as string
 																)

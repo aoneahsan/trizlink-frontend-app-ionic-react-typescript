@@ -12,9 +12,9 @@ const GENERAL = {
 		BOARD_UPDATED_SUCCESSFULLY: 'Board updated successfully.',
 		BOARD_DELETED_SUCCESSFULLY: 'Board deleted successfully.',
 
-		BOARD_IDEA_CREATED_SUCCESSFULLY: 'Board idea created successfully.',
-		BOARD_IDEA_UPDATED_SUCCESSFULLY: 'Board idea updated successfully.',
-		BOARD_IDEA_DELETED_SUCCESSFULLY: 'Board idea deleted successfully.',
+		BOARD_IDEA_CREATED_SUCCESSFULLY: 'Idea created successfully.',
+		BOARD_IDEA_UPDATED_SUCCESSFULLY: 'Idea updated successfully.',
+		BOARD_IDEA_DELETED_SUCCESSFULLY: 'Idea deleted successfully.',
 	},
 	SHORT_LINKS: {
 		NEW_SHORT_LINK_CREATED_SUCCEED_MESSAGE: 'Short link created successfully.',

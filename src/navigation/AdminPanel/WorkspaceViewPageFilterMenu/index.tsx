@@ -8,6 +8,13 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import {
+	arrowUpOutline,
+	eyeOffOutline,
+	fileTrayFullOutline,
+	fileTrayStackedOutline,
+	searchOutline,
+} from 'ionicons/icons';
 
 /**
  * Custom Imports go down
@@ -28,33 +35,6 @@ import {
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import CONSTANTS from '@/utils/constants';
-import {
-	alertCircle,
-	arrowUpOutline,
-	chatbubbleEllipsesOutline,
-	chatbubbleOutline,
-	checkmarkCircle,
-	checkmarkCircleOutline,
-	checkmarkOutline,
-	cloudDownload,
-	cloudDownloadOutline,
-	eyeOffOutline,
-	fileTrayFullOutline,
-	fileTrayStackedOutline,
-	flag,
-	flagOutline,
-	megaphone,
-	navigateCircle,
-	navigateCircleOutline,
-	pencil,
-	searchOutline,
-	send,
-	time,
-	timeOutline,
-} from 'ionicons/icons';
-import { filterMenuOptions } from '@/data/UserDashboard/Workspace/FilterMenu/index.data';
-import { workspaceFilterAccordionContentEnum } from '@/types/AdminPanel/workspace';
 
 /**
  * Custom Hooks Imports go down
@@ -65,16 +45,19 @@ import { workspaceFilterAccordionContentEnum } from '@/types/AdminPanel/workspac
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import CONSTANTS from '@/utils/constants';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import { workspaceFilterAccordionContentEnum } from '@/types/AdminPanel/workspace';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
+import { filterMenuOptions } from '@/data/UserDashboard/Workspace/FilterMenu/index.data';
 
 /**
  * Style files Imports go down

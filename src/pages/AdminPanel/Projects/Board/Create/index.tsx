@@ -11,6 +11,8 @@ import { useParams } from 'react-router';
  * */
 import classNames from 'classnames';
 import { Formik } from 'formik';
+import { useRecoilState } from 'recoil';
+import { trashBinOutline } from 'ionicons/icons';
 
 /**
  * Custom Imports go down
@@ -32,6 +34,7 @@ import {
 	ZIonText,
 	ZIonTextarea,
 } from '@/components/ZIonComponents';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 /**
  * Custom Hooks Imports go down
@@ -45,6 +48,8 @@ import {
 	useZRQGetRequest,
 	useZRQUpdateRequest,
 } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import { useZIonAlert, useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down
@@ -62,6 +67,13 @@ import {
 	VALIDATION_RULE,
 } from '@/utils/enums';
 import CONSTANTS, { ProjectBoardDefaultData } from '@/utils/constants';
+import {
+	showErrorNotification,
+	showSuccessNotification,
+} from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
+import { reportCustomError } from '@/utils/customErrorType';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Type Imports go down
@@ -72,25 +84,13 @@ import {
 	ZProjectBoardInterface,
 	ZProjectInterface,
 } from '@/types/AdminPanel/Project/index.type';
-import {
-	showErrorNotification,
-	showSuccessNotification,
-} from '@/utils/notification';
-import MESSAGES from '@/utils/messages';
-import { reportCustomError } from '@/utils/customErrorType';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-import { useRecoilState } from 'recoil';
-import { ZProjectBoardsRStateAtom } from '@/ZaionsStore/UserDashboard/Project/index.recoil';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { trashBinOutline } from 'ionicons/icons';
-import { useZIonAlert, useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
-import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
+import { ZProjectBoardsRStateAtom } from '@/ZaionsStore/UserDashboard/Project/index.recoil';
 
 /**
  * Style files Imports go down
@@ -135,7 +135,6 @@ const ZProjectBoardFormPage: React.FC = () => {
 	const [zProjectBoardsStateAtom, setZProjectBoardsStateAtom] = useRecoilState(
 		ZProjectBoardsRStateAtom
 	);
-
 	/**
 	 * Getting project from backend.
 	 */
@@ -328,7 +327,7 @@ const ZProjectBoardFormPage: React.FC = () => {
 	};
 
 	/**
-	 * delete short link folder api.
+	 * delete board API.
 	 */
 	const { mutateAsync: deleteProjectBoardMutate } = useZRQDeleteRequest(
 		API_URL_ENUM.board_update_delete,
@@ -336,7 +335,7 @@ const ZProjectBoardFormPage: React.FC = () => {
 	);
 
 	/**
-	 * deleteBoardFn will show the confirm alert before deleting short link folder.
+	 * deleteBoardFn will show the confirm alert before deleting board.
 	 */
 	const deleteBoardFn = async () => {
 		try {
@@ -368,7 +367,7 @@ const ZProjectBoardFormPage: React.FC = () => {
 	};
 
 	/**
-	 * removeBoard will hit delete short link folder api
+	 * removeBoard will hit delete board api.
 	 */
 	const removeBoard = async () => {
 		try {

@@ -64,7 +64,11 @@ export interface ZProjectBoardIdeasInterface {
 	description: string;
 	status?: ProjectBoardStatusEnum;
 	internalNotes?: string;
-	image?: string;
+	image: {
+		fileUrl?: string;
+		filePath?: string;
+	};
+	tags: string[];
 }
 
 // Types

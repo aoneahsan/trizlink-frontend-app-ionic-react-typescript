@@ -16,6 +16,7 @@ type ZIonChipType = {
 	disabled?: boolean;
 	mode?: ZIonModeType;
 	outline?: boolean;
+	onClick?: React.MouseEventHandler<HTMLIonChipElement>;
 };
 
 const ZIonChip = (props: ZIonChipType) => {

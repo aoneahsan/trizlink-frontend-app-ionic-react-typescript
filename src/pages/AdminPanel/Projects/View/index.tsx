@@ -629,7 +629,7 @@ const ZProjectPostsState: React.FC = () => {
 	return (
 		<ZIonGrid className='flex flex-col gap-4 pt-2'>
 			{ZBoardIdeasData &&
-				ZBoardIdeasData.map((el) => {
+				ZBoardIdeasData.map((el, index) => {
 					return (
 						<ZIonRow
 							className={classNames({
@@ -637,6 +637,7 @@ const ZProjectPostsState: React.FC = () => {
 								'px-4': isMdScale,
 								'px-2': isMdScale,
 							})}
+							key={index}
 						>
 							<ZIonCol className='mr-4 ps-2' size='max-content'>
 								<ZIonButton height='50px' fill='clear' color='medium'>

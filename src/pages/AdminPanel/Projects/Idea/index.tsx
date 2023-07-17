@@ -3,6 +3,7 @@
  * ? Like Import of React is a Core Import
  * */
 import React from 'react';
+import { useParams } from 'react-router';
 
 /**
  * Packages Imports go down
@@ -26,6 +27,7 @@ import {
 	trashBinOutline,
 } from 'ionicons/icons';
 import classNames from 'classnames';
+import { Formik } from 'formik';
 
 /**
  * Custom Imports go down
@@ -44,6 +46,7 @@ import {
 	ZIonInput,
 	ZIonItem,
 	ZIonLabel,
+	ZIonMenuToggle,
 	ZIonRouterLink,
 	ZIonRow,
 	ZIonSelect,
@@ -51,36 +54,39 @@ import {
 	ZIonText,
 	ZIonTextarea,
 } from '@/components/ZIonComponents';
+import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/FileUploadModal';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import {
+	useZRQDeleteRequest,
+	useZRQGetRequest,
+	useZRQUpdateRequest,
+} from '@/ZaionsHooks/zreactquery-hooks';
+import {
+	useZIonAlert,
+	useZIonErrorAlert,
+	useZIonModal,
+	useZIonToast,
+} from '@/ZaionsHooks/zionic-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
-import { useParams } from 'react-router';
-import {
-	useZRQGetRequest,
-	useZRQUpdateRequest,
-} from '@/ZaionsHooks/zreactquery-hooks';
-import {
-	ProjectBoardStatusEnum,
-	ZProjectBoardIdeasInterface,
-	ZProjectBoardInterface,
-} from '@/types/AdminPanel/Project/index.type';
 import {
 	API_URL_ENUM,
 	extractInnerDataOptionsEnum,
+	PAGE_MENU,
 	VALIDATION_RULE,
 } from '@/utils/enums';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { Formik } from 'formik';
 import {
+	createRedirectRoute,
 	extractInnerData,
 	validateFields,
 	zJsonParse,
@@ -92,15 +98,19 @@ import {
 	showSuccessNotification,
 } from '@/utils/notification';
 import MESSAGES from '@/utils/messages';
-import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
-import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/FileUploadModal';
-import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
-import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
+import {
+	ProjectBoardStatusEnum,
+	ZProjectBoardIdeasInterface,
+} from '@/types/AdminPanel/Project/index.type';
 
 /**
  * Recoil State Imports go down
@@ -116,6 +126,7 @@ import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
+import { ProductLogo } from '@/assets/images';
 
 /**
  * Component props type go down
@@ -136,6 +147,12 @@ const ZProjectSingleIdea: React.FC = () => {
 		boardId: string;
 		boardIdeaId: string;
 	}>();
+
+	// Custom hook
+	const { presentZIonToast } = useZIonToast();
+	const { zNavigatePushRoute } = useZNavigate();
+	const { presentZIonAlert } = useZIonAlert();
+	const { presentZIonErrorAlert } = useZIonErrorAlert();
 
 	//
 	const { presentZIonModal: presentZFileUploadModal } = useZIonModal(
@@ -161,7 +178,7 @@ const ZProjectSingleIdea: React.FC = () => {
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
 		});
 
-	// Update BoardIdea API
+	// Update BoardIdea API.
 	const { mutateAsync: updateBoardIdeaMutate } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.boardIdea_update_delete,
 		_queriesKeysToInvalidate: [
@@ -172,7 +189,22 @@ const ZProjectSingleIdea: React.FC = () => {
 		],
 	});
 
-	// Formik submit handler
+	// Delete file api.
+	const { mutateAsync: deleteSingleFile } = useZRQUpdateRequest({
+		_url: API_URL_ENUM.deleteSingleFile,
+	});
+
+	// Delete board idea API.
+	const { mutateAsync: deleteBoardIdeaMutate } = useZRQDeleteRequest(
+		API_URL_ENUM.boardIdea_update_delete,
+		[
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.MAIN,
+			projectId,
+			boardId,
+		]
+	);
+
+	// Formik submit handler.
 	const FormikSubmitHandler = async (_data: string) => {
 		try {
 			if (_data) {
@@ -205,8 +237,101 @@ const ZProjectSingleIdea: React.FC = () => {
 		}
 	};
 
+	// deleteBoardIdeaFn will show the confirm alert before deleting boardIdea.
+	const deleteBoardIdeaFn = async () => {
+		try {
+			if (boardId && ZCurrentBoardIdeaData?.id) {
+				await presentZIonAlert({
+					header: `Delete board "${ZCurrentBoardIdeaData?.title}"`,
+					subHeader: 'Remove board from project.',
+					message: 'Are you sure you want to delete this board?',
+					buttons: [
+						{
+							text: 'Cancel',
+							role: 'cancel',
+						},
+						{
+							text: 'Delete',
+							role: 'danger',
+							handler: () => {
+								void removeBoardIdea();
+							},
+						},
+					],
+				});
+			} else {
+				await presentZIonErrorAlert();
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	// removeBoardIdea will hit delete boardIdea api.
+	const removeBoardIdea = async () => {
+		try {
+			if (ZCurrentBoardIdeaData?.id) {
+				if (
+					ZCurrentBoardIdeaData?.image?.filePath &&
+					ZCurrentBoardIdeaData?.image?.filePath?.trim()?.length > 0
+				) {
+					// Deleting the file from storage
+					await deleteSingleFile({
+						requestData: zStringify({
+							filePath: ZCurrentBoardIdeaData?.image?.filePath,
+						}),
+						itemIds: [],
+						urlDynamicParts: [],
+					});
+				}
+
+				// hitting the delete api
+				const _response = await deleteBoardIdeaMutate({
+					itemIds: [projectId, boardId, ZCurrentBoardIdeaData?.id],
+					urlDynamicParts: [
+						CONSTANTS.RouteParams.project.projectId,
+						CONSTANTS.RouteParams.project.board.boardId,
+						CONSTANTS.RouteParams.project.boardIdea.boardIdeaId,
+					],
+				});
+
+				if (_response) {
+					const _data = extractInnerData<{ success: boolean }>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (_data && _data?.success) {
+						showSuccessNotification(
+							MESSAGES.GENERAL.PROJECT.BOARD_IDEA_DELETED_SUCCESSFULLY
+						);
+
+						zNavigatePushRoute(
+							createRedirectRoute({
+								url: ZaionsRoutes.AdminPanel.Projects.Board.Main,
+								params: [
+									CONSTANTS.RouteParams.project.projectId,
+									CONSTANTS.RouteParams.project.board.boardId,
+								],
+								values: [projectId, boardId],
+							})
+						);
+					}
+				} else {
+					await presentZIonErrorAlert();
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
 	return (
-		<ZaionsIonPage>
+		<ZaionsIonPage
+			pageTitle='Zaions Idea Page'
+			menu={PAGE_MENU.ADMIN_PROJECT_BOARD_STATUS_MENU}
+			id={CONSTANTS.MENU_IDS.ADMIN_PROJECT_BOARD_STATUS_MENU_ID}
+		>
 			{/* Header */}
 			<ZProjectHeader />
 
@@ -228,8 +353,14 @@ const ZProjectSingleIdea: React.FC = () => {
 							status:
 								ZCurrentBoardIdeaData?.status || ProjectBoardStatusEnum.notSet,
 							internalNotes: ZCurrentBoardIdeaData?.internalNotes || '',
-							image: ZCurrentBoardIdeaData?.image || '',
+							image: {
+								fileUrl: ZCurrentBoardIdeaData?.image?.fileUrl || '',
+								filePath: ZCurrentBoardIdeaData?.image?.filePath || '',
+							},
+							tags: ZCurrentBoardIdeaData?.tags || [],
+
 							editMode: false,
+							addTag: false,
 						}}
 						enableReinitialize={true}
 						validate={(values) => {
@@ -251,7 +382,8 @@ const ZProjectSingleIdea: React.FC = () => {
 									description: values.description,
 									status: values.status,
 									internalNotes: values.internalNotes,
-									image: values.image,
+									image: zStringify(values.image),
+									tags: zStringify(values.tags),
 								});
 
 								await FormikSubmitHandler(_stringifyValue);
@@ -271,6 +403,7 @@ const ZProjectSingleIdea: React.FC = () => {
 							setFieldValue,
 							submitForm,
 						}) => {
+							console.log({ values, ZCurrentBoardIdeaData });
 							return (
 								<ZIonRow
 									className={classNames({
@@ -321,7 +454,7 @@ const ZProjectSingleIdea: React.FC = () => {
 														</ZIonText>
 
 														{/* Status */}
-														{values.status !==
+														{ZCurrentBoardIdeaData?.status !==
 															ProjectBoardStatusEnum.notSet && (
 															<ZIonText className='block text-base font-medium tracking-wide rounded-full'>
 																{ZCurrentBoardIdeaData?.status}
@@ -349,16 +482,16 @@ const ZProjectSingleIdea: React.FC = () => {
 													Attached images
 												</ZIonText>
 
-												{values.image.trim().length > 0 && (
+												{values.image?.fileUrl?.trim().length > 0 && (
 													<ZIonImg
 														className='w-20 h-20 mr-2 transition duration-150 ease-in-out transform border rounded-md shadow-lg hover:scale-105 hover:shadow-xl'
-														src={values.image}
+														src={values?.image?.fileUrl}
 													/>
 												)}
 
 												<div className='flex flex-wrap mt-6 ion-align-items-center ion-justify-content-start'>
 													<ZIonImg
-														src='http://localhost:8000/storage/uploaded-files/699N97z3ta22YCNfRpKC7P9AvwIVI00iwRN38pfd.png'
+														src={ProductLogo}
 														className='w-[28px] h-[28px] shadow-md mr-2 rounded-[.7rem!important] cursor-pointer overflow-hidden'
 													/>
 
@@ -378,9 +511,19 @@ const ZProjectSingleIdea: React.FC = () => {
 
 										{values.editMode && (
 											<div className='w-full px-6 py-5 mt-3 bg-white rounded-lg shadow'>
-												<ZIonText className='block text-2xl font-bold'>
-													Editing post
-												</ZIonText>
+												<div className='w-full flex ion-align-items-center'>
+													<ZIonText className='block text-2xl font-bold'>
+														Editing post
+													</ZIonText>
+
+													<ZIonIcon
+														className='w-5 h-5 cursor-pointer ms-auto'
+														onClick={() => {
+															setFieldValue('editMode', false, false);
+														}}
+														icon={closeOutline}
+													/>
+												</div>
 
 												<ZIonInput
 													minHeight='42px'
@@ -440,13 +583,20 @@ const ZProjectSingleIdea: React.FC = () => {
 													To attach more images, upload them here.
 												</ZIonText>
 
+												{values.image?.fileUrl?.trim().length > 0 && (
+													<ZIonImg
+														className='w-20 h-20 mr-2 mt-4 transition duration-150 ease-in-out transform border rounded-md shadow-lg hover:scale-105 hover:shadow-xl'
+														src={values?.image?.fileUrl}
+													/>
+												)}
+
 												<ZIonButton
 													className='mx-0 ion-no-padding'
 													fill='default'
 													onClick={() => {
 														presentZFileUploadModal({
 															_cssClass: 'file-upload-modal-size',
-															_onWillDismiss: (
+															_onWillDismiss: async (
 																ev: CustomEvent<OverlayEventDetail>
 															) => {
 																if (
@@ -460,9 +610,27 @@ const ZProjectSingleIdea: React.FC = () => {
 																		filePath: string;
 																	};
 
+																	if (
+																		values?.image?.filePath.trim().length > 0 &&
+																		fileData.filePath !==
+																			values?.image?.filePath
+																	) {
+																		// Deleting the file from storage
+																		await deleteSingleFile({
+																			requestData: zStringify({
+																				filePath: values?.image?.filePath,
+																			}),
+																			itemIds: [],
+																			urlDynamicParts: [],
+																		});
+																	}
+
 																	setFieldValue(
 																		'image',
-																		fileData.fileUrl,
+																		{
+																			fileUrl: fileData.fileUrl,
+																			filePath: fileData.filePath,
+																		},
 																		false
 																	);
 																}
@@ -475,7 +643,12 @@ const ZProjectSingleIdea: React.FC = () => {
 														size='small'
 														className='w-5 h-5'
 													/>
-													<ZIonText>Attach images</ZIonText>
+													<ZIonText>
+														{values.image?.fileUrl?.trim().length === 0
+															? 'Attach'
+															: 'Replace'}{' '}
+														images
+													</ZIonText>
 												</ZIonButton>
 
 												<div className='w-full'>
@@ -665,27 +838,34 @@ const ZProjectSingleIdea: React.FC = () => {
 										</div>
 
 										{/* Edit status */}
-										<ZIonItem
-											className='mt-2 mb-8 rounded cursor-pointer'
-											lines='none'
-											minHeight='41px'
+										<ZIonMenuToggle
+											autoHide={false}
+											menu={
+												CONSTANTS.MENU_IDS.ADMIN_PROJECT_BOARD_STATUS_MENU_ID
+											}
 										>
-											<ZIonIcon icon={optionsOutline} className='mr-2' />
-											<ZIonText>Edit Statuses</ZIonText>
-										</ZIonItem>
+											<ZIonItem
+												className='mt-2 mb-8 rounded cursor-pointer'
+												lines='none'
+												minHeight='41px'
+											>
+												<ZIonIcon icon={optionsOutline} className='mr-2' />
+												<ZIonText>Edit Statuses</ZIonText>
+											</ZIonItem>
+										</ZIonMenuToggle>
 
 										{/* Actions */}
 										<ZIonText className='block font-semibold'>Actions</ZIonText>
 
 										{/* Edit */}
-										<ZIonItem
+										{/* <ZIonItem
 											className='mt-2 rounded cursor-pointer'
 											lines='none'
 											minHeight='41px'
 										>
 											<ZIonIcon icon={pencilOutline} className='mr-2' />
 											<ZIonText>Edit</ZIonText>
-										</ZIonItem>
+										</ZIonItem> */}
 
 										{/* Move to another board */}
 										<ZIonItem
@@ -709,9 +889,15 @@ const ZProjectSingleIdea: React.FC = () => {
 
 										{/* Delete */}
 										<ZIonItem
-											className='mt-2 mb-8 rounded cursor-pointer'
+											className={classNames({
+												'mt-2 mb-8 rounded cursor-pointer ion-color ion-color-danger':
+													true,
+											})}
 											lines='none'
 											minHeight='41px'
+											onClick={() => {
+												void deleteBoardIdeaFn();
+											}}
 										>
 											<ZIonIcon icon={trashBinOutline} className='mr-2' />
 											<ZIonText>Delete</ZIonText>
@@ -740,26 +926,89 @@ const ZProjectSingleIdea: React.FC = () => {
 										</div>
 
 										<div className='flex flex-wrap mt-2 mb-8 ion-align-items-center ion-justify-content-start'>
-											{[1, 2, 3, 4, 5].map((el) => (
+											{values.tags?.map((el, index) => (
 												<ZIonChip
 													className='zaions__warning_bg_opacity_point_5'
-													key={el}
+													key={index}
 												>
-													<ZIonLabel>Avatar Chip</ZIonLabel>
-													<ZIonIcon icon={closeCircle} />
+													<ZIonLabel>{el}</ZIonLabel>
+													<ZIonIcon
+														icon={closeCircle}
+														onClick={() => {
+															if (values.tags?.includes(el)) {
+																const _tags = values.tags?.filter(
+																	(_tag) => _tag !== el
+																);
+																setFieldValue('tags', _tags, true);
+															}
+														}}
+													/>
 												</ZIonChip>
 											))}
 
-											{/* <ZIonInput
-									minHeight='42px'
-									className='mt-2'
-									placeholder='Try to search or add new...'
-								/> */}
+											{values.addTag && (
+												<ZIonInput
+													minHeight='42px'
+													className='mt-2'
+													autofocus
+													onKeyUp={async ({ currentTarget, key }) => {
+														try {
+															if (
+																currentTarget?.value &&
+																currentTarget?.value?.toString()?.trim()
+																	.length > 0 &&
+																key === 'Enter'
+															) {
+																const _tag = currentTarget?.value
+																	?.toString()
+																	.toLowerCase()
+																	.trim();
 
-											<ZIonChip className='bg-transparent'>
-												<ZIonIcon icon={addOutline} />
-												<ZIonLabel>Add tag</ZIonLabel>
-											</ZIonChip>
+																if (!values.tags.includes(_tag)) {
+																	const __tags = [...values.tags];
+
+																	__tags.push(_tag);
+
+																	setFieldValue('tags', __tags, true);
+																} else {
+																	await presentZIonToast(
+																		`"${_tag}" Tag already exists.`
+																	);
+																}
+																currentTarget.value = '';
+
+																setFieldValue('addTag', false, false);
+															}
+														} catch (error) {
+															console.error(error);
+														}
+													}}
+													placeholder='Try to search or add new...'
+												/>
+											)}
+
+											{!values.addTag && (
+												<ZIonChip
+													className='bg-transparent'
+													onClick={() => {
+														setFieldValue('addTag', true, false);
+													}}
+												>
+													<ZIonIcon icon={addOutline} />
+													<ZIonLabel>Add tag</ZIonLabel>
+												</ZIonChip>
+											)}
+
+											{ZCurrentBoardIdeaData?.tags.length !==
+												values.tags?.length && (
+												<ZIonChip
+													onClick={() => {
+														void submitForm();
+													}}
+												>
+													<ZIonLabel>Save</ZIonLabel>
+												</ZIonChip>
+											)}
 										</div>
 
 										{/* Voters */}

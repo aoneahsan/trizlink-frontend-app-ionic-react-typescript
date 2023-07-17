@@ -146,6 +146,7 @@ const MENU_IDS = {
 		'admin_page_links_in_bio_folders_menu_id',
 	ADMIN_PAGE_WORKSPACE_VIEW_FILTER_MENU_ID:
 		'admin_page_workspace_view_filter_menu_id',
+	ADMIN_PROJECT_BOARD_STATUS_MENU_ID: 'admin_project_board_status_menu_id',
 };
 
 // Other
