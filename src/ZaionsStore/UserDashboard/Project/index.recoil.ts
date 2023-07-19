@@ -12,7 +12,10 @@ export const ZNewProjectRStateAtom = atom<ZProjectInterface>({
 	default: {
 		projectName: '',
 		subDomain: '',
-		image: '',
+		image: {
+			filePath: '',
+			fileUrl: '',
+		},
 		board: { title: 'Feature requests' },
 		completedRecently: '',
 		inProgress: '',

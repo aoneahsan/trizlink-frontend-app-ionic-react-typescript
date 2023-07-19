@@ -4,6 +4,7 @@
 	"files.autoSave": "onFocusChange",
 	"prettier.enable": true,
 	"cSpell.words": [
+		"chatbox",
 		"chatbubble",
 		"chatbubbles",
 		"Collabes",
@@ -19,6 +20,7 @@
 		"Searchbar",
 		"shortlink",
 		"Swiper",
-		"videocam"
+		"videocam",
+		"zrouter"
 	]
 }

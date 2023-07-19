@@ -165,7 +165,10 @@ const ZProjectCreatePage: React.FC = () => {
 						currentTab: ProjectCreatePageTabEnum.detailForm,
 						projectName: '',
 						subDomain: '',
-						image: '',
+						image: {
+							fileUrl: '',
+							filePath: '',
+						},
 						board: {
 							id: '',
 							title: 'Feature requests',
@@ -216,7 +219,7 @@ const ZProjectCreatePage: React.FC = () => {
 								zStringify({
 									projectName: values.projectName,
 									subDomain: values.subDomain,
-									image: values.image,
+									image: zStringify(values.image),
 								}),
 								setFieldValue
 							);
@@ -225,7 +228,7 @@ const ZProjectCreatePage: React.FC = () => {
 						}
 					}}
 				>
-					{({ values, errors }) => {
+					{({ values }) => {
 						return (
 							<ZIonRow>
 								{/* Left (Form col) */}
@@ -361,7 +364,7 @@ const ZProjectCreatePage: React.FC = () => {
 											<div className='px-3 pt-2'>
 												{/* Project Name */}
 												<div className='w-full'>
-													{values.image.trim().length === 0 && (
+													{values.image?.fileUrl?.trim().length === 0 && (
 														<ZIonTitle className='ion-no-padding text-[rgba(109,121,134,1)] font-bold'>
 															{values.projectName.trim().length > 0
 																? values.projectName
@@ -370,10 +373,10 @@ const ZProjectCreatePage: React.FC = () => {
 													)}
 
 													{/* image */}
-													{values.image.trim().length > 0 && (
+													{values.image?.fileUrl?.trim().length > 0 && (
 														<ZIonImg
 															className='max-w-max w-[7rem] h-[3rem] max-h-[2rem]'
-															src={values.image}
+															src={values.image?.fileUrl}
 														/>
 													)}
 												</div>
@@ -617,6 +620,11 @@ const ZDetailFormTab: React.FC = () => {
 		ZaionsFileUploadModal
 	);
 
+	// Delete file api.
+	const { mutateAsync: deleteSingleFile } = useZRQUpdateRequest({
+		_url: API_URL_ENUM.deleteSingleFile,
+	});
+
 	return (
 		<>
 			<ZIonText>
@@ -676,13 +684,15 @@ const ZDetailFormTab: React.FC = () => {
 				<div className='mt-5 transition duration-150 ease-in cursor-pointer bg-dirty input'>
 					<ZIonInput
 						label={
-							(values.image.trim().length > 0 && values.image) ||
+							(values.image.fileUrl &&
+								values.image.fileUrl?.trim().length > 0 &&
+								values.image.fileUrl) ||
 							'Select file... (Optional)'
 						}
 						onClick={() => {
 							presentZFileUploadModal({
 								_cssClass: 'file-upload-modal-size',
-								_onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
+								_onWillDismiss: async (ev: CustomEvent<OverlayEventDetail>) => {
 									if (ev.detail.role === ZIonModalActionEnum.success) {
 										// Getting file data from fileUploadModal and parse it.
 										const fileData = zJsonParse(String(ev.detail.data)) as {
@@ -690,8 +700,30 @@ const ZDetailFormTab: React.FC = () => {
 											filePath: string;
 										};
 
+										if (
+											values?.image?.filePath &&
+											values?.image?.filePath.trim().length > 0 &&
+											fileData.filePath !== values?.image?.filePath
+										) {
+											// Deleting the file from storage
+											await deleteSingleFile({
+												requestData: zStringify({
+													filePath: values?.image?.filePath,
+												}),
+												itemIds: [],
+												urlDynamicParts: [],
+											});
+										}
+
 										// setting the url in the formik state (setting image).
-										setFieldValue('image', fileData.fileUrl, false);
+										setFieldValue(
+											'image',
+											{
+												fileUrl: fileData.fileUrl,
+												filePath: fileData.filePath,
+											},
+											false
+										);
 									}
 								},
 							});

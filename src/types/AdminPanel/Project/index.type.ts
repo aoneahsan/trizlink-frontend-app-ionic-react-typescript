@@ -15,13 +15,27 @@ export enum ProjectBoardStatusEnum {
 	notSet = 'notSet',
 }
 
+export enum ProjectHeaderActiveLinkEnum {
+	boards = 'boards',
+	roadmap = 'roadmap',
+	changelog = 'changelog',
+}
+
 // Interfaces
 export interface ZProjectInterface {
 	id?: string;
 	firstBoardId?: string;
 	projectName: string;
 	subDomain: string;
-	image: string;
+	image: {
+		fileUrl?: string;
+		filePath?: string;
+	};
+	accentColor?: string;
+	squaredIcon?: {
+		fileUrl?: string;
+		filePath?: string;
+	};
 	board: {
 		id?: string;
 		title: string;

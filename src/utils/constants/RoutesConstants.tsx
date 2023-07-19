@@ -44,6 +44,7 @@ const ZaionsRoutes = {
 		Projects: {
 			Main: '/projects',
 			Create: '/projects/new',
+			Roadmap: `/projects/${CONSTANTS.RouteParams.project.projectId}/roadmap`,
 			Edit: `/projects/${CONSTANTS.RouteParams.project.projectId}/edit`,
 
 			Board: {

@@ -46,6 +46,7 @@ import ZProjectViewPage from './pages/AdminPanel/Projects/View';
 import ZProjectSingleIdea from './pages/AdminPanel/Projects/Idea';
 import ZProjectBoardFormPage from './pages/AdminPanel/Projects/Board/Create';
 import ZProjectEditPage from './pages/AdminPanel/Projects/Edit';
+import ZProjectRoadmapPage from './pages/AdminPanel/Projects/Roadmap';
 
 // Functional Component
 const AppRoutes: React.FC = () => {
@@ -128,6 +129,12 @@ const AppRoutes: React.FC = () => {
 					exact
 					path={ZaionsRoutes.AdminPanel.Projects.Edit}
 					Component={ZProjectEditPage}
+				/>
+
+				<PrivateRoute
+					exact
+					path={ZaionsRoutes.AdminPanel.Projects.Roadmap}
+					Component={ZProjectRoadmapPage}
 				/>
 
 				<PrivateRoute

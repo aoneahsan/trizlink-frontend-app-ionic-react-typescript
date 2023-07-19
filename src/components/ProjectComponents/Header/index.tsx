@@ -45,16 +45,19 @@ import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import {
+	ProjectHeaderActiveLinkEnum,
 	ZProjectBoardInterface,
 	ZProjectInterface,
 } from '@/types/AdminPanel/Project/index.type';
 import { API_URL_ENUM } from '@/utils/enums';
-import CONSTANTS from '@/utils/constants';
+import CONSTANTS, { ProjectBoardDefaultData } from '@/utils/constants';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { useParams } from 'react-router';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { ZProjectBoardsRStateAtom } from '@/ZaionsStore/UserDashboard/Project/index.recoil';
 import { reportCustomError } from '@/utils/customErrorType';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import { createRedirectRoute } from '@/utils/helpers';
 
 /**
  * Type Imports go down
@@ -87,8 +90,13 @@ import { reportCustomError } from '@/utils/customErrorType';
  * @type {*}
  * */
 
-const ZProjectHeader: React.FC = () => {
+const ZProjectHeader: React.FC<{
+	activeLink?: ProjectHeaderActiveLinkEnum;
+}> = ({ activeLink = ProjectHeaderActiveLinkEnum.boards }) => {
 	const { isXlScale, isLgScale, isSmScale, isMdScale } = useZMediaQueryScale();
+
+	//
+	const { zNavigatePushRoute } = useZNavigate();
 
 	const { projectId, boardId } = useParams<{
 		projectId: string;
@@ -140,21 +148,22 @@ const ZProjectHeader: React.FC = () => {
 				CONSTANTS.RouteParams.project.board.boardId,
 			],
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
+			_shouldFetchWhenIdPassed: !boardId ? true : false,
 		});
 
 	// After getting boards storing it to recoil.
 	useEffect(() => {
 		try {
-			if (BoardsData && BoardsData?.length > 0 && ZCurrentBoardData?.id) {
-				setZProjectBoardsStateAtom((oldValues) => ({
-					currentBoard: ZCurrentBoardData,
+			if (BoardsData && BoardsData?.length > 0) {
+				setZProjectBoardsStateAtom((_) => ({
+					currentBoard: ZCurrentBoardData || ProjectBoardDefaultData,
 					allBoards: BoardsData,
 				}));
 			}
 		} catch (error) {
 			reportCustomError(error);
 		}
-	}, [BoardsData, ZCurrentBoardData]);
+	}, [BoardsData]);
 
 	return (
 		<ZIonHeader>
@@ -190,15 +199,15 @@ const ZProjectHeader: React.FC = () => {
 									color='dark'
 								>
 									{ZCurrentProjectData &&
-										ZCurrentProjectData?.image !== null && (
+										ZCurrentProjectData?.image?.fileUrl !== null && (
 											<ZIonImg
 												className='h-6 sm:h-8'
-												src={ZCurrentProjectData?.image}
+												src={ZCurrentProjectData?.image?.fileUrl}
 											/>
 										)}
 
 									{ZCurrentProjectData &&
-										ZCurrentProjectData?.image === null && (
+										ZCurrentProjectData?.image?.fileUrl === null && (
 											<ZIonTitle className='block text-base font-medium truncate transition duration-150 ease-in-out ion-no-padding hover:no-underline md:text-lg lg:text-xl sm:text-md lg:mt-1'>
 												{ZCurrentProjectData.projectName}
 											</ZIonTitle>
@@ -215,7 +224,14 @@ const ZProjectHeader: React.FC = () => {
 								})}
 							>
 								{/*  */}
-								<ZIonText className='flex h-full px-1 py-2 mr-3 font-semibold border-b-2 border-transparent cursor-pointer lg:mt-1 z-ion-border-color-danger_opacity_point7 ion-align-items-center ion-justify-content-center'>
+								<ZIonText
+									className={classNames({
+										'flex h-full px-1 py-2 mr-3 font-semibold border-b-2 border-transparent cursor-pointer lg:mt-1 ion-align-items-center ion-justify-content-center':
+											true,
+										'z-ion-border-color-danger_opacity_point7':
+											activeLink === ProjectHeaderActiveLinkEnum.boards,
+									})}
+								>
 									<ZIonText className='tracking-wide ms-1 md:text-md lg:text-[.9rem] sm:text-sm'>
 										{zProjectBoardsStateAtom?.currentBoard?.title || 'Boards'}
 									</ZIonText>
@@ -244,9 +260,22 @@ const ZProjectHeader: React.FC = () => {
 								{/*  */}
 								<ZIonText
 									className={classNames({
-										'px-1 mr-3 border-b-2 border-transparent cursor-pointer py-2 sm:flex hover:no-underline lg:mt-1 ms-1 md:text-md lg:text-[.9rem] sm:text-sm z-hover-color-danger':
+										'px-1 mr-3 border-b-2 border-transparent cursor-pointer py-[0.90rem] h-full sm:flex hover:no-underline lg:mt-1 ms-1 md:text-md lg:text-[.9rem] sm:text-sm z-hover-color-danger':
 											true,
+										'z-ion-border-color-danger_opacity_point7 z_ion_color_danger':
+											activeLink === ProjectHeaderActiveLinkEnum.roadmap,
 									})}
+									onClick={() => {
+										if (projectId) {
+											zNavigatePushRoute(
+												createRedirectRoute({
+													url: ZaionsRoutes.AdminPanel.Projects.Roadmap,
+													params: [CONSTANTS.RouteParams.project.projectId],
+													values: [projectId],
+												})
+											);
+										}
+									}}
 								>
 									Roadmap
 								</ZIonText>
@@ -254,8 +283,10 @@ const ZProjectHeader: React.FC = () => {
 								{/*  */}
 								<ZIonText
 									className={classNames({
-										'px-1 py-2 mr-3 border-b-2 border-transparent cursor-pointer sm:flex hover:no-underline lg:mt-1 ms-1 md:text-md lg:text-[.9rem] sm:text-sm z-hover-color-danger':
+										'px-1 py-[0.90rem] mr-3 border-b-2 border-transparent cursor-pointer sm:flex hover:no-underline lg:mt-1 ms-1 md:text-md lg:text-[.9rem] sm:text-sm z-hover-color-danger':
 											true,
+										'z-ion-border-color-danger_opacity_point7 z_ion_color_danger':
+											activeLink === ProjectHeaderActiveLinkEnum.changelog,
 									})}
 								>
 									Changelog

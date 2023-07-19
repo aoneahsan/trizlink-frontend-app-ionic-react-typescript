@@ -517,6 +517,10 @@ const LINK_In_BIO = {
 
 // Project -> board default data
 export const ProjectBoardDefaultData = {
+	title: '',
+	slug: '',
+	pageHeading: '',
+	pageDescription: '',
 	formCustomization: {
 		intoHeading: 'Add your idea',
 		intoText:

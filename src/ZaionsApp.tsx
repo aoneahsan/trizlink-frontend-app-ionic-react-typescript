@@ -27,9 +27,16 @@ import {
 import './theme/variables.css';
 import { UserAccountType } from '@/types/UserAccount/index.type';
 
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
 const App: React.FC = () => {
 	const setAuthTokenState = useSetRecoilState(ZaionsAuthTokenData);
-	const setUserAccountStateAtom = useSetRecoilState(ZaionsUserAccountRStateAtom);
+	const setUserAccountStateAtom = useSetRecoilState(
+		ZaionsUserAccountRStateAtom
+	);
 	// check for userData and authtoken in localstorage set that in recoil state and redirect user to authenticated screen (like dashboard), from guest screen, (mean user can not visit login screen, he is already logged in)
 	useEffect(() => {
 		void (async () => {

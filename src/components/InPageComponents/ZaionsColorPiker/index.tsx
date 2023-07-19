@@ -8,17 +8,19 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import { closeOutline } from 'ionicons/icons';
+import classNames from 'classnames';
+
+/**
+ * Custom Imports go down
+ * ? Like import of custom components is a custom import
+ * */
 import {
 	ZIonButton,
 	ZIonIcon,
 	ZIonInput,
 	ZIonItem,
 } from '@/components/ZIonComponents';
-
-/**
- * Custom Imports go down
- * ? Like import of custom components is a custom import
- * */
 
 /**
  * Global Constants Imports go down
@@ -30,7 +32,6 @@ import {
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
-import { closeOutline } from 'ionicons/icons';
 
 /**
  * Recoil State Imports go down
@@ -55,6 +56,8 @@ import { closeOutline } from 'ionicons/icons';
 interface ZaionsColorPikerType {
 	value: string;
 	name: string;
+	className?: string;
+	label?: string;
 	showCloseIcon?: boolean;
 	setFieldValueFn?: FormikSetFieldValueEventType;
 	closeIconOnChangeFn?: React.MouseEventHandler<HTMLIonButtonElement>;
@@ -69,19 +72,24 @@ interface ZaionsColorPikerType {
 const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
 	name,
 	value,
+	className,
+	label,
 	setFieldValueFn,
 	showCloseIcon = false,
 	closeIconOnChangeFn,
 }) => {
 	return (
 		<ZIonItem
-			className='ion-no-padding flex ion-align-items-center mt-3'
+			className={classNames(className, {
+				'flex mt-3 ion-no-padding ion-align-items-center': true,
+			})}
 			style={{
 				// '--border-color': '#000',
 				// '--highlight-color-focused': value,
 				'--inner-padding-end': '0px',
 			}}
 			lines='none'
+			minHeight='42px'
 		>
 			<input
 				type='color'
@@ -101,9 +109,11 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
 						setFieldValueFn(name, target.value || '#000', false);
 				}}
 				value={value}
-				label=''
-				fill='solid'
-				style={{ '--background': '#fff' }}
+				label={label}
+				labelPlacement='stacked'
+				fill='outline'
+				minHeight='42px'
+				style={{ '--background': '#fff', '--padding-start': '10px' }}
 			/>
 			{showCloseIcon && (
 				<ZIonButton

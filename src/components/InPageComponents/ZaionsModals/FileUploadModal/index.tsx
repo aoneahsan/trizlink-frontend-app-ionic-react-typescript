@@ -336,12 +336,11 @@ const ZaionsFileUploadModal: React.FC<{
 							size='9'
 							className={classNames({
 								'h-full ion-padding-bottom': true,
-								'flex flex-col ion-justify-content-center ion-align-items-center':
-									[
-										uploadFileModalTabEnum.screenshot,
-										uploadFileModalTabEnum.upload,
-										uploadFileModalTabEnum.url,
-									].includes(compState.currentTab),
+								'flex flex-col ion-align-items-center': [
+									uploadFileModalTabEnum.screenshot,
+									uploadFileModalTabEnum.upload,
+									uploadFileModalTabEnum.url,
+								].includes(compState.currentTab),
 							})}
 						>
 							{/* Close modal button */}
@@ -545,7 +544,7 @@ const UploadTab: React.FC<{
 			{({ getRootProps, getInputProps, isDragActive }) => (
 				<div
 					className={classNames({
-						'w-[90%]': true,
+						'w-[90%] h-full': true,
 						'flex flex-col ion-align-items-center ion-justify-content-center w-[90%] rounded cursor-pointer':
 							!uploadTabState.file?.isFileFetch,
 						zaions__success_set: isDragActive,

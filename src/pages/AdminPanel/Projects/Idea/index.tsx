@@ -403,7 +403,6 @@ const ZProjectSingleIdea: React.FC = () => {
 							setFieldValue,
 							submitForm,
 						}) => {
-							console.log({ values, ZCurrentBoardIdeaData });
 							return (
 								<ZIonRow
 									className={classNames({
@@ -511,7 +510,7 @@ const ZProjectSingleIdea: React.FC = () => {
 
 										{values.editMode && (
 											<div className='w-full px-6 py-5 mt-3 bg-white rounded-lg shadow'>
-												<div className='w-full flex ion-align-items-center'>
+												<div className='flex w-full ion-align-items-center'>
 													<ZIonText className='block text-2xl font-bold'>
 														Editing post
 													</ZIonText>
@@ -585,7 +584,7 @@ const ZProjectSingleIdea: React.FC = () => {
 
 												{values.image?.fileUrl?.trim().length > 0 && (
 													<ZIonImg
-														className='w-20 h-20 mr-2 mt-4 transition duration-150 ease-in-out transform border rounded-md shadow-lg hover:scale-105 hover:shadow-xl'
+														className='w-20 h-20 mt-4 mr-2 transition duration-150 ease-in-out transform border rounded-md shadow-lg hover:scale-105 hover:shadow-xl'
 														src={values?.image?.fileUrl}
 													/>
 												)}

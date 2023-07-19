@@ -23,7 +23,6 @@ import {
 	reorderFourOutline,
 } from 'ionicons/icons';
 import classNames from 'classnames';
-import { useRecoilState } from 'recoil';
 import { AxiosError } from 'axios';
 import { Form, Formik } from 'formik';
 
@@ -95,7 +94,6 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { ZProjectBoardsRStateAtom } from '@/ZaionsStore/UserDashboard/Project/index.recoil';
 
 /**
  * Style files Imports go down
@@ -127,11 +125,6 @@ const ZProjectViewPage: React.FC = () => {
 		projectId: string;
 		boardId: string;
 	}>();
-
-	// Recoil state to store current project boards
-	const [zProjectBoardsStateAtom, setZProjectBoardsStateAtom] = useRecoilState(
-		ZProjectBoardsRStateAtom
-	);
 
 	// Order popover
 	const { presentZIonPopover: presentZProjectOrderPopover } =
@@ -429,6 +422,14 @@ const ZProjectViewPage: React.FC = () => {
 									className={classNames(classes['z-admin-tools-bg'], {
 										'mt-2 rounded cursor-pointer ion-activatable': true,
 									})}
+									routerLink={createRedirectRoute({
+										url: ZaionsRoutes.AdminPanel.Projects.Board.Edit,
+										params: [
+											CONSTANTS.RouteParams.project.projectId,
+											CONSTANTS.RouteParams.project.board.boardId,
+										],
+										values: [projectId, boardId],
+									})}
 								>
 									<ZIonIcon icon={pencil} color='dark' className='mr-2' />
 									<ZIonText color='dark'>Board settings</ZIonText>
@@ -464,6 +465,11 @@ const ZProjectViewPage: React.FC = () => {
 									minHeight='38px'
 									className={classNames(classes['z-admin-tools-bg'], {
 										'mt-2 rounded cursor-pointer ion-activatable': true,
+									})}
+									routerLink={createRedirectRoute({
+										url: ZaionsRoutes.AdminPanel.Projects.Board.Create,
+										params: [CONSTANTS.RouteParams.project.projectId],
+										values: [projectId],
 									})}
 								>
 									<ZIonIcon icon={add} color='dark' className='mr-2' />
@@ -592,7 +598,7 @@ const ZProjectViewPage: React.FC = () => {
 	);
 };
 
-// Empty posts state UI
+// Empty posts state UI.
 const ZProjectEmptyPostState: React.FC = () => {
 	return (
 		<div className='flex flex-col items-center justify-center p-10'>
@@ -602,7 +608,7 @@ const ZProjectEmptyPostState: React.FC = () => {
 	);
 };
 
-// Posts list UI
+// Posts list UI.
 const ZProjectPostsState: React.FC = () => {
 	const { isMdScale } = useZMediaQueryScale();
 
@@ -710,7 +716,7 @@ const ZProjectPostsState: React.FC = () => {
 	);
 };
 
-// Project not found UI
+// Project not found UI.
 const ZProjectNotFound: React.FC = () => {
 	return (
 		<ZIonContent color='light'>
@@ -772,6 +778,7 @@ const ZProjectNotFound: React.FC = () => {
 	);
 };
 
+// Board not found UI.
 const ZProjectBoardNotFound: React.FC = () => {
 	return (
 		<ZIonContent color='light'>

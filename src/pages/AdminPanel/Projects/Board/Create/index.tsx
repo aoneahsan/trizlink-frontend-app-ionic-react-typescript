@@ -147,7 +147,7 @@ const ZProjectBoardFormPage: React.FC = () => {
 	});
 
 	/**
-	 * Create new project board API
+	 * Create new project board API.
 	 */
 	const { mutateAsync: createProjectBoardMutate } = useZRQCreateRequest({
 		_url: API_URL_ENUM.board_create_list,
@@ -174,27 +174,24 @@ const ZProjectBoardFormPage: React.FC = () => {
 	/**
 	 * Getting board data from backend with boardId.
 	 */
-	const {
-		data: selectedBoard,
-		// refetch: refetchSelectedBoard,
-		isFetched: isSelectBoardFetched,
-	} = useZRQGetRequest<ZProjectBoardInterface>({
-		_url: API_URL_ENUM.board_update_delete,
-		_key: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD.GET,
-			projectId,
-			boardId,
-		],
-		_authenticated: true,
-		_itemsIds: [projectId, boardId],
-		_urlDynamicParts: [
-			CONSTANTS.RouteParams.project.projectId,
-			CONSTANTS.RouteParams.project.board.boardId,
-		],
-		_shouldFetchWhenIdPassed: !boardId ? true : false,
-		_extractType: ZRQGetRequestExtractEnum.extractItem,
-		// _staleTime: 0,
-	});
+	const { data: selectedBoard, isFetched: isSelectBoardFetched } =
+		useZRQGetRequest<ZProjectBoardInterface>({
+			_url: API_URL_ENUM.board_update_delete,
+			_key: [
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD.GET,
+				projectId,
+				boardId,
+			],
+			_authenticated: true,
+			_itemsIds: [projectId, boardId],
+			_urlDynamicParts: [
+				CONSTANTS.RouteParams.project.projectId,
+				CONSTANTS.RouteParams.project.board.boardId,
+			],
+			_shouldFetchWhenIdPassed: !boardId ? true : false,
+			_extractType: ZRQGetRequestExtractEnum.extractItem,
+			// _staleTime: 0,
+		});
 
 	useEffect(() => {
 		try {
