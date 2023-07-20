@@ -20,6 +20,10 @@ ion-app.ios ion-title {
 	display: inline !important;
 }
 
+/* .ionicon-stroke-width {
+	stroke-width: 50px !important;
+} */
+
 /* Scrollbar */
 .zaions_pretty_scrollbar::-webkit-scrollbar {
 	height: 8px;

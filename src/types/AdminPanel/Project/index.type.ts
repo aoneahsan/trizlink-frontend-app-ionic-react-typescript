@@ -94,6 +94,9 @@ export interface ZBoardStatusInterface {
 	isDefault?: boolean;
 	isEditable?: boolean;
 	isDeletable?: boolean;
+
+	// for frontend
+	editMode?: boolean;
 }
 
 // Types

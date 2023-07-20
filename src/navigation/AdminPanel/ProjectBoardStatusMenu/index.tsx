@@ -40,12 +40,37 @@ import {
 import CONSTANTS from '@/utils/constants';
 import {
 	addCircleOutline,
+	addOutline,
 	checkmarkOutline,
 	closeOutline,
+	trashBin,
 	trashBinOutline,
 } from 'ionicons/icons';
 import { ItemReorderEventDetail } from '@ionic/react';
-import { Formik } from 'formik';
+import { FieldArray, Formik } from 'formik';
+import {
+	useZRQCreateRequest,
+	useZRQDeleteRequest,
+	useZRQGetRequest,
+	useZRQUpdateRequest,
+} from '@/ZaionsHooks/zreactquery-hooks';
+import { ZBoardStatusInterface } from '@/types/AdminPanel/Project/index.type';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import { useParams } from 'react-router';
+import { reportCustomError } from '@/utils/customErrorType';
+import { extractInnerData, zStringify } from '@/utils/helpers';
+import {
+	showErrorNotification,
+	showSuccessNotification,
+} from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
+import {
+	useZIonAlert,
+	useZIonErrorAlert,
+	useZIonToast,
+} from '@/ZaionsHooks/zionic-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import ZaionsColorPiker from '@/components/InPageComponents/ZaionsColorPiker';
 
 /**
  * Type Imports go down
@@ -90,6 +115,151 @@ const ZProjectBoardStatusMenu: React.FC = () => {
 		event.detail.complete();
 	}
 
+	const { projectId, boardId } = useParams<{
+		projectId: string;
+		boardId: string;
+	}>();
+
+	// Custom hook
+	const { presentZIonAlert } = useZIonAlert();
+	const { presentZIonErrorAlert } = useZIonErrorAlert();
+
+	// Getting project boardStatuses from backend.
+	const { data: ZCurrentBoardStatues } = useZRQGetRequest<
+		ZBoardStatusInterface[]
+	>({
+		_url: API_URL_ENUM.boardStatus_create_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_STATUS.MAIN,
+			projectId,
+			boardId,
+		],
+		_itemsIds: [boardId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.project.board.boardId],
+		_shouldFetchWhenIdPassed: !boardId ? true : false,
+	});
+
+	// Create new boardStatus API.
+	const { mutateAsync: ZCreateBoardStatuesAsyncMutate } =
+		useZRQCreateRequest<ZBoardStatusInterface>({
+			_url: API_URL_ENUM.boardStatus_create_list,
+			_queriesKeysToInvalidate: [
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_STATUS.MAIN,
+				projectId,
+				boardId,
+			],
+			_itemsIds: [boardId],
+			_urlDynamicParts: [CONSTANTS.RouteParams.project.board.boardId],
+		});
+
+	// Update boardStatus API.
+	const { mutateAsync: updateBoardStatusMutate } = useZRQUpdateRequest({
+		_url: API_URL_ENUM.boardStatus_update_delete,
+		_queriesKeysToInvalidate: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_STATUS.MAIN,
+			projectId,
+			boardId,
+		],
+	});
+
+	// Delete boardStatus API.
+	const { mutateAsync: deleteBoardStatusAsyncMutate } = useZRQDeleteRequest(
+		API_URL_ENUM.boardStatus_update_delete,
+		[
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_STATUS.MAIN,
+			projectId,
+			boardId,
+		]
+	);
+
+	const formikSubmitHandlerFn = async (_data: string) => {
+		try {
+			if (_data) {
+				const _response = await ZCreateBoardStatuesAsyncMutate(_data);
+
+				if (_response) {
+					const _item = extractInnerData<ZBoardStatusInterface>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (_item && _item.id) {
+						showSuccessNotification(
+							MESSAGES.GENERAL.PROJECT.BOARD_STATUS_CREATED_SUCCESSFULLY
+						);
+					} else {
+						showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+					}
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
+	// deleteBoardIdeaFn will show the confirm alert before deleting boardIdea.
+	const deleteBoardIdeaFn = async (boardStatusId: string) => {
+		try {
+			if (boardId && boardStatusId) {
+				await presentZIonAlert({
+					header: `Delete board status`,
+					subHeader: 'Remove status from board.',
+					message: 'Are you sure you want to delete this status?',
+					buttons: [
+						{
+							text: 'Cancel',
+							role: 'cancel',
+						},
+						{
+							text: 'Delete',
+							role: 'danger',
+							handler: () => {
+								void removeBoardIdea(boardStatusId);
+							},
+						},
+					],
+				});
+			} else {
+				await presentZIonErrorAlert();
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	// removeBoardIdea will hit delete boardIdea api.
+	const removeBoardIdea = async (boardStatusId: string) => {
+		try {
+			if (boardStatusId) {
+				// hitting the delete api
+				const _response = await deleteBoardStatusAsyncMutate({
+					itemIds: [boardId, boardStatusId],
+					urlDynamicParts: [
+						CONSTANTS.RouteParams.project.board.boardId,
+						CONSTANTS.RouteParams.project.boardStatus.boardStatusId,
+					],
+				});
+
+				if (_response) {
+					const _data = extractInnerData<{ success: boolean }>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (_data && _data?.success) {
+						showSuccessNotification(
+							MESSAGES.GENERAL.PROJECT.BOARD_STATUS_DELETED_SUCCESSFULLY
+						);
+					}
+				} else {
+					await presentZIonErrorAlert();
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
 	return (
 		<ZIonMenu
 			contentId={CONSTANTS.MENU_IDS.ADMIN_PROJECT_BOARD_STATUS_MENU_ID}
@@ -99,15 +269,15 @@ const ZProjectBoardStatusMenu: React.FC = () => {
 		>
 			<ZIonContent>
 				<ZIonGrid className='px-[2rem] py-[1rem]'>
-					<div className='w-full flex ion-align-items-center'>
-						<ZIonText className='mt-2 font-bold text-xl'>
+					<div className='flex w-full ion-align-items-center'>
+						<ZIonText className='mt-2 text-xl font-bold'>
 							Edit Statuses
 						</ZIonText>
 
 						<ZIonMenuToggle className='ms-auto'>
 							<ZIonIcon
 								icon={closeOutline}
-								className='pt-1 cursor-pointer w-6 h-6'
+								className='w-6 h-6 pt-1 cursor-pointer'
 							/>
 						</ZIonMenuToggle>
 					</div>
@@ -118,68 +288,280 @@ const ZProjectBoardStatusMenu: React.FC = () => {
 					<Formik
 						initialValues={{
 							addStatus: false,
+							statusTitle: '',
+							statusColor: '#828282',
+							editMode: false,
+
+							statues: ZCurrentBoardStatues || [],
 						}}
-						onSubmit={() => {}}
+						enableReinitialize={true}
+						onSubmit={async (values, { setFieldValue }) => {
+							try {
+								const zStringifyValues = zStringify({
+									title: values.statusTitle,
+									color: values.statusColor,
+								});
+
+								await formikSubmitHandlerFn(zStringifyValues);
+
+								setFieldValue('addStatus', false, false);
+								setFieldValue('statusTitle', '', false);
+							} catch (error) {
+								reportCustomError(error);
+							}
+						}}
 					>
-						{({ values, setFieldValue }) => {
+						{({
+							values,
+							setFieldValue,
+							handleChange,
+							handleBlur,
+							submitForm,
+						}) => {
 							return (
 								<>
 									<div className='mt-8'>
-										<ZIonReorderGroup
-											disabled={false}
-											onIonItemReorder={handleReorder}
-										>
-											{[1, 2, 3].map((el) => {
+										<FieldArray name=''>
+											{() => {
 												return (
-													<div
-														className='flex ion-align-items-center mt-4'
-														key={el}
+													<ZIonReorderGroup
+														disabled={false}
+														onIonItemReorder={handleReorder}
 													>
-														<ZIonReorder></ZIonReorder>
-														<ZIonButton
-															className='ion-no-margin mx-2'
-															color='primary'
-															style={{ '--padding-start': '1rem' }}
-															height='27px'
-														></ZIonButton>
-														<ZIonItem
-															lines='none'
-															className='w-full ion-activatable rounded-lg cursor-pointer'
-															minHeight='40px'
-															style={{ '--padding-start': '9px' }}
-														>
-															MTI {el}
-														</ZIonItem>
-														<ZIonButton
-															className='ion-no-margin ms-3'
-															height='34px'
-															color='medium'
-														>
-															<ZIonIcon icon={trashBinOutline} />
-														</ZIonButton>
-													</div>
+														{ZCurrentBoardStatues?.map((el, index) => {
+															return (
+																<div
+																	className='flex mt-4 ion-align-items-center'
+																	key={index}
+																>
+																	<ZIonReorder></ZIonReorder>
+																	{/* <ZIonButton
+																			className='mx-2 ion-no-margin'
+																			style={{
+																				'--padding-start': '1rem',
+																				'--background': el.color,
+																			}}
+																			height='27px'
+																		></ZIonButton> */}
+																	<div>
+																		<ZaionsColorPiker
+																			showInput={false}
+																			value={values.statues[index]?.color}
+																			name={`statues.${index}.color`}
+																			setFieldValueFn={setFieldValue}
+																			className='mt-[0px!important]'
+																			colorInputClassName='h-[2.3rem!important] w-[2.3rem!important]'
+																			onClick={() => {
+																				values.statues.map((el, _index) => {
+																					setFieldValue(
+																						`statues.${_index}.editMode`,
+																						false,
+																						false
+																					);
+																				});
+																				setFieldValue(
+																					`statues.${index}.editMode`,
+																					true,
+																					false
+																				);
+																			}}
+																		/>
+																	</div>
+																	{!values.statues[index]?.editMode && (
+																		<ZIonItem
+																			lines='none'
+																			className='w-full rounded-lg cursor-pointer ion-activatable'
+																			minHeight='40px'
+																			style={{ '--padding-start': '9px' }}
+																			onClick={() => {
+																				values.statues.map((el, _index) => {
+																					setFieldValue(
+																						`statues.${_index}.editMode`,
+																						false,
+																						false
+																					);
+																				});
+																				setFieldValue(
+																					`statues.${index}.editMode`,
+																					true,
+																					false
+																				);
+																			}}
+																		>
+																			{el.title}
+																		</ZIonItem>
+																	)}
+																	{values.statues[index]?.editMode && (
+																		<>
+																			<ZIonInput
+																				minHeight='37px'
+																				value={values.statues[index]?.title}
+																				autofocus={true}
+																				onIonChange={handleChange}
+																				onIonBlur={handleBlur}
+																				name={`statues.${index}.title`}
+																			/>
+																		</>
+																	)}
+																	{values.statues[index]?.editMode && (
+																		<>
+																			<ZIonButton
+																				className='ion-no-margin ion-no-padding ms-3'
+																				height='34px'
+																				size='small'
+																				color='success'
+																				disabled={
+																					values.statues[index]?.title?.trim()
+																						?.length > 0
+																						? false
+																						: true
+																				}
+																				onClick={async () => {
+																					if (
+																						values.statues[index]?.title?.trim()
+																							?.length > 0 &&
+																						el?.id
+																					) {
+																						const _response =
+																							await updateBoardStatusMutate({
+																								itemIds: [boardId, el?.id],
+																								urlDynamicParts: [
+																									CONSTANTS.RouteParams.project
+																										.board.boardId,
+																									CONSTANTS.RouteParams.project
+																										.boardStatus.boardStatusId,
+																								],
+																								requestData: zStringify({
+																									title:
+																										values.statues[index]
+																											?.title,
+																									color:
+																										values.statues[index]
+																											?.color,
+																								}),
+																							});
+
+																						if (_response) {
+																							const _item =
+																								extractInnerData<ZBoardStatusInterface>(
+																									_response,
+																									extractInnerDataOptionsEnum.createRequestResponseItem
+																								);
+
+																							if (_item && _item.id) {
+																								showSuccessNotification(
+																									MESSAGES.GENERAL.PROJECT
+																										.BOARD_IDEA_UPDATED_SUCCESSFULLY
+																								);
+																							} else {
+																								showErrorNotification(
+																									MESSAGES.GENERAL
+																										.SOMETHING_WENT_WRONG
+																								);
+																							}
+
+																							setFieldValue(
+																								`statues.${index}.editMode`,
+																								false,
+																								false
+																							);
+																						}
+																					}
+																				}}
+																			>
+																				<ZIonIcon
+																					icon={checkmarkOutline}
+																					className='px-1'
+																				/>
+																			</ZIonButton>
+
+																			<ZIonButton
+																				className='ion-no-margin ion-no-padding ms-3'
+																				height='34px'
+																				size='small'
+																				color='secondary'
+																				onClick={() => {
+																					setFieldValue(
+																						'addStatus',
+																						false,
+																						false
+																					);
+																				}}
+																			>
+																				<ZIonIcon
+																					icon={closeOutline}
+																					className='px-1'
+																				/>
+																			</ZIonButton>
+																		</>
+																	)}
+
+																	{!values.statues[index]?.editMode && (
+																		<ZIonButton
+																			className='ion-no-margin ion-no-padding ms-3'
+																			height='30px'
+																			color='danger'
+																			onClick={() => {
+																				try {
+																					if (el.id) {
+																						deleteBoardIdeaFn(el.id);
+																					}
+																				} catch (error) {
+																					reportCustomError(error);
+																				}
+																			}}
+																		>
+																			<ZIonIcon
+																				// color='danger'
+																				icon={trashBinOutline}
+																				className='w-4 h-4 px-1'
+																			/>
+																		</ZIonButton>
+																	)}
+																</div>
+															);
+														})}
+													</ZIonReorderGroup>
 												);
-											})}
-										</ZIonReorderGroup>
+											}}
+										</FieldArray>
 									</div>
 
 									{values.addStatus && (
 										<ZIonReorderGroup>
-											<div className='flex ion-align-items-center mt-4'>
+											<div className='flex mt-4 ion-align-items-center'>
 												<ZIonReorder></ZIonReorder>
 												<ZIonButton
-													className='ion-no-margin mx-2'
-													color='primary'
-													style={{ '--padding-start': '1rem' }}
+													className='mx-2 ion-no-margin'
+													style={{
+														'--padding-start': '1rem',
+														'--background': values.statusColor,
+													}}
 													height='27px'
 												></ZIonButton>
 
-												<ZIonInput minHeight='34px' autofocus />
+												<ZIonInput
+													minHeight='34px'
+													autofocus
+													placeholder='State title*'
+													name='statusTitle'
+													value={values.statusTitle}
+													onIonChange={handleChange}
+													onIonBlur={handleBlur}
+												/>
 
 												<ZIonButton
 													className='ion-no-margin ms-3'
 													height='34px'
 													color='success'
+													disabled={
+														values.statusTitle.trim().length > 0 ? false : true
+													}
+													onClick={() => {
+														if (values.statusTitle.trim().length > 0) {
+															submitForm();
+														}
+													}}
 												>
 													<ZIonIcon icon={checkmarkOutline} />
 												</ZIonButton>
@@ -199,13 +581,13 @@ const ZProjectBoardStatusMenu: React.FC = () => {
 									)}
 
 									{!values.addStatus && (
-										<div className='w-full mt-3 flex ion-justify-content-end'>
+										<div className='flex w-full mt-3 ion-justify-content-end'>
 											<ZIonButton
 												onClick={() => {
-													setFieldValue('addStatus', true, false);
+													void setFieldValue('addStatus', true, false);
 												}}
 											>
-												<ZIonIcon icon={addCircleOutline} />
+												<ZIonIcon icon={addOutline} className='mti' />
 												<ZIonText>Add status</ZIonText>
 											</ZIonButton>
 										</div>

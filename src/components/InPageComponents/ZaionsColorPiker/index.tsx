@@ -57,10 +57,13 @@ interface ZaionsColorPikerType {
 	value: string;
 	name: string;
 	className?: string;
+	colorInputClassName?: string;
 	label?: string;
 	showCloseIcon?: boolean;
+	showInput?: boolean;
 	setFieldValueFn?: FormikSetFieldValueEventType;
 	closeIconOnChangeFn?: React.MouseEventHandler<HTMLIonButtonElement>;
+	onClick?: (event?: unknown) => void;
 }
 
 /**
@@ -73,10 +76,13 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
 	name,
 	value,
 	className,
+	colorInputClassName,
 	label,
 	setFieldValueFn,
 	showCloseIcon = false,
+	showInput = false,
 	closeIconOnChangeFn,
+	onClick,
 }) => {
 	return (
 		<ZIonItem
@@ -90,31 +96,36 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
 			}}
 			lines='none'
 			minHeight='42px'
+			onClick={onClick}
 		>
 			<input
 				type='color'
 				name={name}
-				className='zaions-color-piker'
+				className={classNames(colorInputClassName, {
+					'zaions-color-piker': true,
+				})}
 				onChange={({ target }) => {
 					setFieldValueFn &&
 						setFieldValueFn(name, target.value || '#000', false);
 				}}
 				value={value}
 			/>
-			<ZIonInput
-				type='text'
-				className='ms-2 zaions__fs_18'
-				onIonChange={({ target }) => {
-					setFieldValueFn &&
-						setFieldValueFn(name, target.value || '#000', false);
-				}}
-				value={value}
-				label={label}
-				labelPlacement='stacked'
-				fill='outline'
-				minHeight='42px'
-				style={{ '--background': '#fff', '--padding-start': '10px' }}
-			/>
+			{showInput && (
+				<ZIonInput
+					type='text'
+					className='ms-2 zaions__fs_18'
+					onIonChange={({ target }) => {
+						setFieldValueFn &&
+							setFieldValueFn(name, target.value || '#000', false);
+					}}
+					value={value}
+					label={label}
+					labelPlacement='stacked'
+					fill='outline'
+					minHeight='42px'
+					style={{ '--background': '#fff', '--padding-start': '10px' }}
+				/>
+			)}
 			{showCloseIcon && (
 				<ZIonButton
 					slot='end'

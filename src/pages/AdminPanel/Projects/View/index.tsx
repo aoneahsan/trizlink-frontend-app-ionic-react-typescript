@@ -78,7 +78,10 @@ import {
 	zJsonParse,
 	zStringify,
 } from '@/utils/helpers';
-import { showSuccessNotification } from '@/utils/notification';
+import {
+	showErrorNotification,
+	showSuccessNotification,
+} from '@/utils/notification';
 import MESSAGES from '@/utils/messages';
 
 /**
@@ -113,6 +116,8 @@ import { ProductLogo, zEmptyPosts } from '@/assets/images';
 import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/FileUploadModal';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
+import { useSetRecoilState } from 'recoil';
+import { ZProjectBoardStatesRStateAtom } from '@/ZaionsStore/UserDashboard/Project/index.recoil';
 
 /**
  * Component props type go down
@@ -138,11 +143,16 @@ const ZProjectViewPage: React.FC = () => {
 		ZaionsFileUploadModal
 	);
 
-	// Order popover
+	// Recoil state to store boardStatus
+	const setZProjectBoardStatesStateAtom = useSetRecoilState(
+		ZProjectBoardStatesRStateAtom
+	);
+
+	// Order popover.
 	const { presentZIonPopover: presentZProjectOrderPopover } =
 		useZIonPopover(ZProjectOrderPopover);
 
-	// Status popover
+	// Status popover.
 	const { presentZIonPopover: presentZProjectStatusPopover } = useZIonPopover(
 		ZProjectStatusPopover
 	);
@@ -189,8 +199,6 @@ const ZProjectViewPage: React.FC = () => {
 		_shouldFetchWhenIdPassed: !boardId ? true : false,
 	});
 
-	console.log({ ZCurrentBoardStatues });
-
 	// Getting project board boardIdeas from backend.
 	const { data: ZBoardIdeasData } = useZRQGetRequest<
 		ZProjectBoardIdeasInterface[]
@@ -206,7 +214,7 @@ const ZProjectViewPage: React.FC = () => {
 		_shouldFetchWhenIdPassed: !boardId ? true : false,
 	});
 
-	// Create new idea API
+	// Create new idea API.
 	const { mutateAsync: createBoardIdeaAsyncMutate } =
 		useZRQCreateRequest<ZProjectBoardIdeasInterface>({
 			_url: API_URL_ENUM.boardIdea_create_list,
@@ -224,11 +232,12 @@ const ZProjectViewPage: React.FC = () => {
 		_url: API_URL_ENUM.deleteSingleFile,
 	});
 
-	// After getting the boardStatus from backend storing it to recoil state
+	// After getting the boardStatus from backend storing it to recoil state.
 	useEffect(() => {
 		if (ZCurrentBoardStatues && ZCurrentBoardStatues?.length) {
+			setZProjectBoardStatesStateAtom(ZCurrentBoardStatues);
 		}
-	}, []);
+	}, [ZCurrentBoardStatues]);
 
 	// Idea Formik submit handler.
 	const IdeaFormikSubmitHandler = async (_data: string) => {
@@ -246,6 +255,8 @@ const ZProjectViewPage: React.FC = () => {
 						showSuccessNotification(
 							MESSAGES.GENERAL.PROJECT.BOARD_IDEA_CREATED_SUCCESSFULLY
 						);
+					} else {
+						showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
 					}
 				}
 			}
@@ -331,6 +342,7 @@ const ZProjectViewPage: React.FC = () => {
 													title: values.title,
 													description: values.description,
 													status: ProjectBoardStatusEnum.notSet,
+													image: zStringify(values.image),
 												});
 												await IdeaFormikSubmitHandler(_stringifyValue);
 

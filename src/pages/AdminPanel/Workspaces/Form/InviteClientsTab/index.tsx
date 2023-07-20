@@ -197,12 +197,12 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 														</div>
 
 														{/* Role & permission buttons */}
-														<div className='gap-2 zaions_max__content ms-2 flex'>
+														<div className='flex gap-2 zaions_max__content ms-2'>
 															{/* Role popover button */}
 															<ZIonButton
 																id={`role-popover-index-${index}`}
 																fill='outline'
-																className='m-0 flex h-full normal-case'
+																className='flex h-full m-0 normal-case'
 															>
 																{values.clients && values.clients[index].role}
 															</ZIonButton>
@@ -211,7 +211,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 															<ZIonButton
 																fill='outline'
 																id={`permission-popover-index-${index}`}
-																className='m-0 flex h-full normal-case'
+																className='flex h-full m-0 normal-case'
 															>
 																{values.clients &&
 																	values.clients[index].permission}

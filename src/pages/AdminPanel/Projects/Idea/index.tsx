@@ -110,6 +110,7 @@ import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-com
 import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
 import {
 	ProjectBoardStatusEnum,
+	ZBoardStatusInterface,
 	ZProjectBoardIdeasInterface,
 } from '@/types/AdminPanel/Project/index.type';
 
@@ -179,6 +180,21 @@ const ZProjectSingleIdea: React.FC = () => {
 			],
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
 		});
+
+	// Getting project boardStatuses from backend.
+	const { data: ZCurrentBoardStatues } = useZRQGetRequest<
+		ZBoardStatusInterface[]
+	>({
+		_url: API_URL_ENUM.boardStatus_create_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_STATUS.MAIN,
+			projectId,
+			boardId,
+		],
+		_itemsIds: [boardId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.project.board.boardId],
+		_shouldFetchWhenIdPassed: !boardId ? true : false,
+	});
 
 	// Update BoardIdea API.
 	const { mutateAsync: updateBoardIdeaMutate } = useZRQUpdateRequest({
@@ -388,7 +404,7 @@ const ZProjectSingleIdea: React.FC = () => {
 								const _stringifyValue = zStringify({
 									title: values.title,
 									description: values.description,
-									status: values.status,
+									statusId: values.status,
 									internalNotes: values.internalNotes,
 									image: zStringify(values.image),
 									tags: zStringify(values.tags),
@@ -797,30 +813,18 @@ const ZProjectSingleIdea: React.FC = () => {
 												onIonBlur={handleBlur}
 												style={{ '--background': '#fff' }}
 											>
-												<ZIonSelectOption
-													value={ProjectBoardStatusEnum.needYourOpinion}
-												>
-													Need Your Opinion
-												</ZIonSelectOption>
-												<ZIonSelectOption
-													value={ProjectBoardStatusEnum.planned}
-												>
-													Planned
-												</ZIonSelectOption>
-												<ZIonSelectOption
-													value={ProjectBoardStatusEnum.inProgress}
-												>
-													In progress
-												</ZIonSelectOption>
-												<ZIonSelectOption value={ProjectBoardStatusEnum.done}>
-													Done
-												</ZIonSelectOption>
-												<ZIonSelectOption value={ProjectBoardStatusEnum.notNow}>
-													Not Now
-												</ZIonSelectOption>
 												<ZIonSelectOption value={ProjectBoardStatusEnum.notSet}>
 													Not set
 												</ZIonSelectOption>
+												{/*  */}
+												{ZCurrentBoardStatues &&
+													ZCurrentBoardStatues?.map((el, index) => {
+														return (
+															<ZIonSelectOption value={el.id} key={index}>
+																{el.title}
+															</ZIonSelectOption>
+														);
+													})}
 											</ZIonSelect>
 
 											<ZIonButton

@@ -15,6 +15,8 @@ import {
 	ZIonText,
 } from '@/components/ZIonComponents';
 import { ellipse } from 'ionicons/icons';
+import { useRecoilValue } from 'recoil';
+import { ZProjectBoardStatesRStateAtom } from '@/ZaionsStore/UserDashboard/Project/index.recoil';
 
 /**
  * Custom Imports go down
@@ -63,12 +65,17 @@ import { ellipse } from 'ionicons/icons';
  * */
 
 const ZProjectStatusPopover: React.FC = () => {
+	// Recoil state that hold boardStatues.
+	const zProjectBoardStatesStateAtom = useRecoilValue(
+		ZProjectBoardStatesRStateAtom
+	);
+
 	return (
 		<ZIonList
 			lines='none'
 			className='py-2 border rounded-md border-[rgba(234,236,238,1)]'
 		>
-			{/* All */}
+			{/* Default */}
 			<ZIonItem className='cursor-pointer ion-activatable' minHeight='35px'>
 				<ZIonIcon icon={ellipse} className='w-[0.7rem] h-[0.7rem] mb-[2px]' />
 
@@ -77,7 +84,6 @@ const ZProjectStatusPopover: React.FC = () => {
 				</ZIonText>
 			</ZIonItem>
 
-			{/* Not Done */}
 			<ZIonItem className='cursor-pointer ion-activatable' minHeight='35px'>
 				<ZIonIcon icon={ellipse} className='w-[0.7rem] h-[0.7rem] mb-[2px]' />
 
@@ -86,7 +92,6 @@ const ZProjectStatusPopover: React.FC = () => {
 				</ZIonText>
 			</ZIonItem>
 
-			{/* Not set */}
 			<ZIonItem className='cursor-pointer ion-activatable' minHeight='35px'>
 				<ZIonIcon icon={ellipse} className='w-[0.7rem] h-[0.7rem] mb-[2px]' />
 
@@ -95,69 +100,28 @@ const ZProjectStatusPopover: React.FC = () => {
 				</ZIonText>
 			</ZIonItem>
 
-			{/* Done */}
-			<ZIonItem className='cursor-pointer ion-activatable' minHeight='35px'>
-				<ZIonIcon
-					icon={ellipse}
-					className='w-[0.7rem] h-[0.7rem] mb-[2px]'
-					color='success'
-				/>
-
-				<ZIonText className='ms-2' color='medium'>
-					Done
-				</ZIonText>
-			</ZIonItem>
-
 			{/*  */}
 			<ZIonItem minHeight='2px' lines='full' className='my-4'></ZIonItem>
 
-			{/* Need your opinion */}
-			<ZIonItem className='cursor-pointer ion-activatable' minHeight='35px'>
-				<ZIonIcon
-					icon={ellipse}
-					className='w-[0.7rem] h-[0.7rem] mb-[2px]'
-					color='tertiary'
-				/>
+			{zProjectBoardStatesStateAtom.map((el, index) => {
+				return (
+					<ZIonItem
+						className='cursor-pointer ion-activatable'
+						minHeight='35px'
+						key={index}
+					>
+						<ZIonIcon
+							icon={ellipse}
+							className='w-[0.7rem] h-[0.7rem] mb-[2px]'
+							style={{ color: el.color }}
+						/>
 
-				<ZIonText className='ms-2' color='medium'>
-					Need your opinion
-				</ZIonText>
-			</ZIonItem>
-
-			{/* Planned */}
-			<ZIonItem className='cursor-pointer ion-activatable' minHeight='35px'>
-				<ZIonIcon
-					icon={ellipse}
-					className='w-[0.7rem] h-[0.7rem] mb-[2px]'
-					color='secondary'
-				/>
-
-				<ZIonText className='ms-2' color='medium'>
-					Planned
-				</ZIonText>
-			</ZIonItem>
-
-			{/* In progress */}
-			<ZIonItem className='cursor-pointer ion-activatable' minHeight='35px'>
-				<ZIonIcon
-					icon={ellipse}
-					className='w-[0.7rem] h-[0.7rem] mb-[2px]'
-					color='success'
-				/>
-
-				<ZIonText className='ms-2' color='medium'>
-					In progress
-				</ZIonText>
-			</ZIonItem>
-
-			{/* Not yet */}
-			<ZIonItem className='cursor-pointer ion-activatable' minHeight='35px'>
-				<ZIonIcon icon={ellipse} className='w-[0.7rem] h-[0.7rem] mb-[2px]' />
-
-				<ZIonText className='ms-2' color='medium'>
-					Not yet
-				</ZIonText>
-			</ZIonItem>
+						<ZIonText className='ms-2' color='medium'>
+							{el.title}
+						</ZIonText>
+					</ZIonItem>
+				);
+			})}
 		</ZIonList>
 	);
 };
