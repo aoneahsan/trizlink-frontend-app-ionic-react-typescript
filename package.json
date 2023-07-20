@@ -111,5 +111,37 @@
 		"vite": "^4.1.0",
 		"vitest": "^0.29.2"
 	},
-	"description": "ZLink project - Project of Zaions (https://zaions.com)."
+	"description": "ZLink project - Project of Zaions (https://zaions.com).",
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"eslintConfig": {
+		"extends": [
+			"eslint:recommended",
+			"plugin:@typescript-eslint/recommended",
+			"plugin:@typescript-eslint/recommended-requiring-type-checking",
+			"react-app",
+			"react-app/jest",
+			"prettier"
+		],
+		"parserOptions": {
+			"project": [
+				"./tsconfig.json"
+			]
+		},
+		"parser": "@typescript-eslint/parser",
+		"plugins": [
+			"@typescript-eslint"
+		],
+		"root": true
+	}
 }

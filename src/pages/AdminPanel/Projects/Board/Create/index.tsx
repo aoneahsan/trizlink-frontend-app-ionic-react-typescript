@@ -513,17 +513,17 @@ const ZProjectBoardFormPage: React.FC = () => {
 
 							if (
 								(errors.formCustomization.title &&
-									errors.formCustomization.title?.trim().length > 0) ||
+									errors.formCustomization.title?.trim()?.length > 0) ||
 								(errors.formCustomization.body &&
-									errors.formCustomization.body?.trim().length > 0) ||
+									errors.formCustomization.body?.trim()?.length > 0) ||
 								(errors.formCustomization.buttonText &&
-									errors.formCustomization.buttonText?.trim().length > 0) ||
+									errors.formCustomization.buttonText?.trim()?.length > 0) ||
 								(errors.formCustomization.intoHeading &&
-									errors.formCustomization.intoHeading?.trim().length > 0) ||
+									errors.formCustomization.intoHeading?.trim()?.length > 0) ||
 								(errors.formCustomization.intoText &&
-									errors.formCustomization.intoText?.trim().length > 0) ||
-								(errors.title && errors.title?.trim().length > 0) ||
-								(errors.slug && errors.slug?.trim().length > 0)
+									errors.formCustomization.intoText?.trim()?.length > 0) ||
+								(errors.title && errors.title?.trim()?.length > 0) ||
+								(errors.slug && errors.slug?.trim()?.length > 0)
 							) {
 								return errors;
 							} else {

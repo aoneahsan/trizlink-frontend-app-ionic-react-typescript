@@ -123,7 +123,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 		>
 			{({ values, handleBlur, handleChange, setFieldValue }) => {
 				const shouldShowNextButton = values.clients?.some(
-					(client) => client.email?.trim().length && isEmail(client.email)
+					(client) => client.email?.trim()?.length && isEmail(client.email)
 				);
 				return (
 					<>

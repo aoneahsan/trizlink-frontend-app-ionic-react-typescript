@@ -47,6 +47,10 @@ const RouteParams = {
 		boardIdea: {
 			boardIdeaId: ':boardIdeaId',
 		},
+
+		boardStatus: {
+			boardStatusId: ':boardStatusId',
+		},
 	},
 
 	shortLink: {
@@ -90,6 +94,10 @@ export const API_URLS = {
 	// Project board
 	board_create_list: `/user/project/${RouteParams.project.projectId}/board`,
 	board_update_delete: `/user/project/${RouteParams.project.projectId}/board/${RouteParams.project.board.boardId}`,
+
+	// Board Status
+	boardStatus_create_list: `/user/board/${RouteParams.project.board.boardId}/boardStatus`,
+	boardStatus_update_delete: `/user/board/${RouteParams.project.board.boardId}/boardStatus/${RouteParams.project.boardStatus.boardStatusId}`,
 
 	// Project board boardIdea
 	boardIdea_create_list: `/user/board/${RouteParams.project.board.boardId}/boardIdeas`,
@@ -452,6 +460,11 @@ const REACT_QUERY = {
 			BOARD_IDEA: {
 				MAIN: 'rq-project-board-idea-list-key',
 				GET: 'rq-project-board-idea-get-key',
+			},
+
+			BOARD_STATUS: {
+				MAIN: 'rq-project-board-status-list-key',
+				GET: 'rq-project-board-status-get-key',
 			},
 		},
 		FOLDER: {

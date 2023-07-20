@@ -62,6 +62,7 @@ import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/Fi
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import {
+	useZInvalidateReactQueries,
 	useZRQDeleteRequest,
 	useZRQGetRequest,
 	useZRQUpdateRequest,
@@ -153,6 +154,7 @@ const ZProjectSingleIdea: React.FC = () => {
 	const { zNavigatePushRoute } = useZNavigate();
 	const { presentZIonAlert } = useZIonAlert();
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
+	const { zInvalidateReactQueries } = useZInvalidateReactQueries();
 
 	//
 	const { presentZIonModal: presentZFileUploadModal } = useZIonModal(
@@ -224,6 +226,12 @@ const ZProjectSingleIdea: React.FC = () => {
 					);
 
 					if (_item && _item.id) {
+						await zInvalidateReactQueries([
+							CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.MAIN,
+							projectId,
+							boardId,
+						]);
+
 						showSuccessNotification(
 							MESSAGES.GENERAL.PROJECT.BOARD_IDEA_UPDATED_SUCCESSFULLY
 						);
@@ -469,10 +477,11 @@ const ZProjectSingleIdea: React.FC = () => {
 														icon={createOutline}
 													/>
 												</div>
-
-												<ZIonText className='block mt-4 break-words whitespace-pre-wrap'>
-													{ZCurrentBoardIdeaData?.description}
-												</ZIonText>
+												<div className='overflow-hidden line-clamp-3'>
+													<ZIonText className='block mt-4 break-words whitespace-pre-wrap'>
+														{ZCurrentBoardIdeaData?.description}
+													</ZIonText>
+												</div>
 
 												<ZIonText
 													className='block mt-5 text-lg font-medium'
@@ -481,7 +490,7 @@ const ZProjectSingleIdea: React.FC = () => {
 													Attached images
 												</ZIonText>
 
-												{values.image?.fileUrl?.trim().length > 0 && (
+												{values.image?.fileUrl?.trim()?.length > 0 && (
 													<ZIonImg
 														className='w-20 h-20 mr-2 transition duration-150 ease-in-out transform border rounded-md shadow-lg hover:scale-105 hover:shadow-xl'
 														src={values?.image?.fileUrl}
@@ -582,7 +591,7 @@ const ZProjectSingleIdea: React.FC = () => {
 													To attach more images, upload them here.
 												</ZIonText>
 
-												{values.image?.fileUrl?.trim().length > 0 && (
+												{values.image?.fileUrl?.trim()?.length > 0 && (
 													<ZIonImg
 														className='w-20 h-20 mt-4 mr-2 transition duration-150 ease-in-out transform border rounded-md shadow-lg hover:scale-105 hover:shadow-xl'
 														src={values?.image?.fileUrl}
@@ -610,7 +619,8 @@ const ZProjectSingleIdea: React.FC = () => {
 																	};
 
 																	if (
-																		values?.image?.filePath.trim().length > 0 &&
+																		values?.image?.filePath.trim()?.length >
+																			0 &&
 																		fileData.filePath !==
 																			values?.image?.filePath
 																	) {
@@ -643,9 +653,9 @@ const ZProjectSingleIdea: React.FC = () => {
 														className='w-5 h-5'
 													/>
 													<ZIonText>
-														{values.image?.fileUrl?.trim().length === 0
-															? 'Attach'
-															: 'Replace'}{' '}
+														{values.image?.fileUrl?.trim()?.length === 0
+															? 'Attach '
+															: 'Replace '}
 														images
 													</ZIonText>
 												</ZIonButton>
@@ -673,7 +683,7 @@ const ZProjectSingleIdea: React.FC = () => {
 													Internal Notes
 												</ZIonText>
 
-												<div className='px-5 py-4 mb-4 bg-white mt-[8px] shadow rounded-xl'>
+												<div className='px-5 overflow-hidden line-clamp-3 py-4 mb-4 bg-white mt-[8px] shadow rounded-xl'>
 													<ZIonTextarea
 														fill='outline'
 														autoGrow
@@ -692,7 +702,7 @@ const ZProjectSingleIdea: React.FC = () => {
 												<ZIonText className='text-xl font-bold'>
 													{PRODUCT_NAME} can help you reply!
 												</ZIonText>
-												<ZIonText className='' color='medium'>
+												<ZIonText color='medium'>
 													Use {PRODUCT_NAME}'s AI tools to generate replies for
 													new ideas. Demonstrate to your users that you are
 													listening to their feedback.
@@ -998,7 +1008,7 @@ const ZProjectSingleIdea: React.FC = () => {
 												</ZIonChip>
 											)}
 
-											{ZCurrentBoardIdeaData?.tags.length !==
+											{ZCurrentBoardIdeaData?.tags?.length !==
 												values.tags?.length && (
 												<ZIonChip
 													onClick={() => {

@@ -85,4 +85,15 @@ export interface ZProjectBoardIdeasInterface {
 	tags: string[];
 }
 
+export interface ZBoardStatusInterface {
+	id?: string;
+	title: string;
+	description: string;
+	color: string;
+	isActive?: boolean;
+	isDefault?: boolean;
+	isEditable?: boolean;
+	isDeletable?: boolean;
+}
+
 // Types

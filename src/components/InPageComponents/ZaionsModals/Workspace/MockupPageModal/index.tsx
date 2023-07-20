@@ -216,7 +216,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 											})}
 											style={{
 												background:
-													values.coverImage.trim().length &&
+													values.coverImage.trim()?.length &&
 													`url(${values.coverImage})`,
 
 												backgroundSize: 'cover',
@@ -256,7 +256,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 												className={classNames({
 													'border-dashed border-inherit hover:border-indigo-500 border-[1px] flex ion-align-items-center ion-justify-content-center flex-col py-4 h-full rounded ':
 														true,
-													zaions__dark_set: values.coverImage.trim().length,
+													zaions__dark_set: values.coverImage.trim()?.length,
 												})}
 											>
 												<ZIonIcon
@@ -264,14 +264,14 @@ const ZWorkspaceMockupPageModal: React.FC<{
 													className={classNames({
 														'w-7 h-7': true,
 														zaions_ion_color_light:
-															values.coverImage.trim().length,
+															values.coverImage.trim()?.length,
 													})}
 												/>
 												<ZIonText
 													className={classNames({
 														'text-base': true,
 														zaions_ion_color_light:
-															values.coverImage.trim().length,
+															values.coverImage.trim()?.length,
 													})}
 												>
 													Add Cover (Optional)
@@ -335,15 +335,15 @@ const ZWorkspaceMockupPageModal: React.FC<{
 														'border-dashed border-inherit hover:border-indigo-500 border-[1px] w-[96px] h-[96px] rounded-full flex ion-text-center flex-col ion-align-items-center ion-justify-content-center':
 															true,
 														zaions__dark_set:
-															values.coverImage.trim().length ||
-															values.profilePhoto.trim().length,
+															values.coverImage.trim()?.length ||
+															values.profilePhoto.trim()?.length,
 													})}
 													style={{
 														backgroundSize: 'cover',
 														backgroundPosition: 'center',
 														backgroundRepeat: 'no-repeat',
 														background:
-															values.profilePhoto.trim().length &&
+															values.profilePhoto.trim()?.length &&
 															`url(${values.profilePhoto})`,
 													}}
 												>
@@ -352,16 +352,16 @@ const ZWorkspaceMockupPageModal: React.FC<{
 														className={classNames({
 															'w-7 h-7': true,
 															'zaions_ion_color_light hidden hover:inline-block':
-																values.coverImage.trim().length ||
-																values.profilePhoto.trim().length,
+																values.coverImage.trim()?.length ||
+																values.profilePhoto.trim()?.length,
 														})}
 													/>
 													<ZIonLabel
 														className={classNames({
 															'text-[13px]': true,
 															'zaions_ion_color_light hidden hover:block':
-																values.coverImage.trim().length ||
-																values.profilePhoto.trim().length,
+																values.coverImage.trim()?.length ||
+																values.profilePhoto.trim()?.length,
 														})}
 													>
 														Add Profile Picture

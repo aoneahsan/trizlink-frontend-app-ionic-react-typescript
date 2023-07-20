@@ -1,4 +1,5 @@
 import {
+	ZBoardStatusInterface,
 	ZProjectBoardInterface,
 	ZProjectInterface,
 } from '@/types/AdminPanel/Project/index.type';
@@ -58,4 +59,10 @@ export const ZProjectBoardsRStateAtom = atom<{
 		},
 		allBoards: [],
 	},
+});
+
+// Recoil state to store current boardStates. so we can show it to pleases needed like in status popover etc.
+export const ZProjectBoardStatesRStateAtom = atom<ZBoardStatusInterface[]>({
+	key: 'ZProjectBoardStatesRStateAtom_key',
+	default: [],
 });

@@ -155,8 +155,8 @@ const ZProjectHeader: React.FC<{
 	useEffect(() => {
 		try {
 			if (BoardsData && BoardsData?.length > 0) {
-				setZProjectBoardsStateAtom((_) => ({
-					currentBoard: ZCurrentBoardData || ProjectBoardDefaultData,
+				setZProjectBoardsStateAtom((oldData) => ({
+					...oldData,
 					allBoards: BoardsData,
 				}));
 			}
@@ -164,6 +164,20 @@ const ZProjectHeader: React.FC<{
 			reportCustomError(error);
 		}
 	}, [BoardsData]);
+
+	// After getting current board data storing it to recoil.
+	useEffect(() => {
+		try {
+			if (ZCurrentBoardData && ZCurrentBoardData.id) {
+				setZProjectBoardsStateAtom((oldData) => ({
+					...oldData,
+					currentBoard: ZCurrentBoardData,
+				}));
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	}, [ZCurrentBoardData]);
 
 	return (
 		<ZIonHeader>
@@ -198,20 +212,17 @@ const ZProjectHeader: React.FC<{
 									routerLink={ZaionsRoutes.AdminPanel.Projects.Board.Main}
 									color='dark'
 								>
-									{ZCurrentProjectData &&
-										ZCurrentProjectData?.image?.fileUrl !== null && (
-											<ZIonImg
-												className='h-6 sm:h-8'
-												src={ZCurrentProjectData?.image?.fileUrl}
-											/>
-										)}
-
-									{ZCurrentProjectData &&
-										ZCurrentProjectData?.image?.fileUrl === null && (
-											<ZIonTitle className='block text-base font-medium truncate transition duration-150 ease-in-out ion-no-padding hover:no-underline md:text-lg lg:text-xl sm:text-md lg:mt-1'>
-												{ZCurrentProjectData.projectName}
-											</ZIonTitle>
-										)}
+									{ZCurrentProjectData?.image?.fileUrl &&
+									ZCurrentProjectData?.image?.fileUrl?.trim()?.length > 0 ? (
+										<ZIonImg
+											className='h-6 sm:h-8'
+											src={ZCurrentProjectData?.image?.fileUrl}
+										/>
+									) : (
+										<ZIonTitle className='block text-base font-medium truncate transition duration-150 ease-in-out ion-no-padding hover:no-underline md:text-lg lg:text-xl sm:text-md lg:mt-1'>
+											{ZCurrentProjectData?.projectName}
+										</ZIonTitle>
+									)}
 								</ZIonRouterLink>
 							</div>
 

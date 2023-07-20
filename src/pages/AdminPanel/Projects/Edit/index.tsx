@@ -786,7 +786,7 @@ const ZGeneralSettingsTab: React.FC = () => {
 													onClick={async () => {
 														if (
 															values?.image?.filePath &&
-															values?.image?.filePath.trim().length > 0
+															values?.image?.filePath.trim()?.length > 0
 														) {
 															// Deleting the file from storage
 															await deleteSingleFile({
@@ -830,7 +830,7 @@ const ZGeneralSettingsTab: React.FC = () => {
 
 													if (
 														values?.image?.filePath &&
-														values?.image?.filePath.trim().length > 0 &&
+														values?.image?.filePath.trim()?.length > 0 &&
 														fileData.filePath !== values?.image?.filePath
 													) {
 														// Deleting the file from storage
@@ -881,7 +881,7 @@ const ZGeneralSettingsTab: React.FC = () => {
 													onClick={async () => {
 														if (
 															values?.squaredIcon?.filePath &&
-															values?.squaredIcon?.filePath.trim().length > 0
+															values?.squaredIcon?.filePath.trim()?.length > 0
 														) {
 															// Deleting the file from storage
 															await deleteSingleFile({
@@ -925,7 +925,7 @@ const ZGeneralSettingsTab: React.FC = () => {
 
 													if (
 														values?.squaredIcon?.filePath &&
-														values?.squaredIcon?.filePath.trim().length > 0 &&
+														values?.squaredIcon?.filePath.trim()?.length > 0 &&
 														fileData.filePath !== values?.squaredIcon?.filePath
 													) {
 														// Deleting the file from storage

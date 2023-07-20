@@ -66,6 +66,10 @@ export enum API_URL_ENUM {
 	board_create_list = 'board_create_list',
 	board_update_delete = 'board_update_delete',
 
+	// Board Status
+	boardStatus_create_list = 'boardStatus_create_list',
+	boardStatus_update_delete = 'boardStatus_update_delete',
+
 	// Project Board BoardIdeas
 	boardIdea_create_list = 'boardIdea_create_list',
 	boardIdea_update_delete = 'boardIdea_update_delete',

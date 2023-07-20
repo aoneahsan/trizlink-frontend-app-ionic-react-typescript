@@ -23,8 +23,8 @@ const ZWorkspaceSingleComment: React.FC<{
 }> = ({ avatarHeight, avatarWidth }) => {
 	const { isLgScale } = useZMediaQueryScale();
 
-	const _avatarWidth = avatarWidth?.trim().length && avatarWidth;
-	const _avatarHeight = avatarHeight?.trim().length && avatarHeight;
+	const _avatarWidth = avatarWidth?.trim()?.length && avatarWidth;
+	const _avatarHeight = avatarHeight?.trim()?.length && avatarHeight;
 
 	return (
 		<ZIonRow className='border rounded border-transparent hover:border-slate-200'>
@@ -38,8 +38,8 @@ const ZWorkspaceSingleComment: React.FC<{
 				>
 					<ZUserAvatarButton
 						className={classNames(_avatarWidth, _avatarHeight, {
-							'w-[24px!important]': !avatarWidth?.trim().length,
-							'h-[24px!important]': !avatarHeight?.trim().length,
+							'w-[24px!important]': !avatarWidth?.trim()?.length,
+							'h-[24px!important]': !avatarHeight?.trim()?.length,
 						})}
 					/>
 					<div className='ms-2'>

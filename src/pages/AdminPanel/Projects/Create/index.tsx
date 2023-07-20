@@ -204,9 +204,9 @@ const ZProjectCreatePage: React.FC = () => {
 						);
 
 						if (
-							(errors.board.title && errors.board.title?.trim().length > 0) ||
-							(errors.projectName && errors.projectName?.trim().length > 0) ||
-							(errors.subDomain && errors.subDomain?.trim().length > 0)
+							(errors.board.title && errors.board.title?.trim()?.length > 0) ||
+							(errors.projectName && errors.projectName?.trim()?.length > 0) ||
+							(errors.subDomain && errors.subDomain?.trim()?.length > 0)
 						) {
 							return errors;
 						} else {
@@ -335,7 +335,7 @@ const ZProjectCreatePage: React.FC = () => {
 											>
 												<div className='w-48'>
 													<ZIonTitle className='ion-no-padding relative z-10 flex w-full h-8 ion-align-items-center bg-[#eaecee] px-2 text-sm leading-5 text-[#2e4052] mx-2 rounded-t font-normal'>
-														{values.projectName.trim().length > 0
+														{values.projectName.trim()?.length > 0
 															? values.projectName
 															: 'New Project'}{' '}
 														Feedback
@@ -350,7 +350,7 @@ const ZProjectCreatePage: React.FC = () => {
 														https://
 													</ZIonTitle>
 													<ZIonTitle className='ion-no-padding text-sm text-[rgba(46,64,82,1)] font-normal w-min max-w-max'>
-														{values.subDomain.trim().length > 0
+														{values.subDomain.trim()?.length > 0
 															? values.subDomain
 															: 'new-project'}
 													</ZIonTitle>
@@ -364,16 +364,16 @@ const ZProjectCreatePage: React.FC = () => {
 											<div className='px-3 pt-2'>
 												{/* Project Name */}
 												<div className='w-full'>
-													{values.image?.fileUrl?.trim().length === 0 && (
+													{values.image?.fileUrl?.trim()?.length === 0 && (
 														<ZIonTitle className='ion-no-padding text-[rgba(109,121,134,1)] font-bold'>
-															{values.projectName.trim().length > 0
+															{values.projectName.trim()?.length > 0
 																? values.projectName
 																: 'New Project'}
 														</ZIonTitle>
 													)}
 
 													{/* image */}
-													{values.image?.fileUrl?.trim().length > 0 && (
+													{values.image?.fileUrl?.trim()?.length > 0 && (
 														<ZIonImg
 															className='max-w-max w-[7rem] h-[3rem] max-h-[2rem]'
 															src={values.image?.fileUrl}
@@ -410,7 +410,7 @@ const ZProjectCreatePage: React.FC = () => {
 																ProjectCreatePageTabEnum.detailForm,
 														})}
 													>
-														{values.board?.title.trim().length > 0 &&
+														{values.board?.title.trim()?.length > 0 &&
 														values.currentTab !==
 															ProjectCreatePageTabEnum.detailForm
 															? values.board?.title
@@ -450,7 +450,7 @@ const ZProjectCreatePage: React.FC = () => {
 
 														<div className='w-2/3 p-2 ml-1 bg-white rounded'>
 															<div className='flex flex-col h-[2.5rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-2 text-sm leading-5 bg-white rounded px-2'>
-																{values.completedRecently.trim().length > 0 ? (
+																{values.completedRecently.trim()?.length > 0 ? (
 																	<>
 																		<ZIonTitle className='p-0 text-sm leading-none'>
 																			{values.completedRecently}
@@ -468,7 +468,7 @@ const ZProjectCreatePage: React.FC = () => {
 															</div>
 
 															<div className='flex flex-col h-[2.5rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-2 text-sm leading-5 bg-white rounded px-2'>
-																{values.inProgress.trim().length > 0 ? (
+																{values.inProgress.trim()?.length > 0 ? (
 																	<>
 																		<ZIonTitle className='p-0 text-sm leading-none'>
 																			{values.inProgress}
@@ -486,7 +486,7 @@ const ZProjectCreatePage: React.FC = () => {
 															</div>
 
 															<div className='flex flex-col h-[2.5rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-2 text-sm leading-5 bg-white rounded px-2'>
-																{values.plannedNext.trim().length > 0 ? (
+																{values.plannedNext.trim()?.length > 0 ? (
 																	<>
 																		<ZIonTitle className='p-0 text-sm leading-none'>
 																			{values.plannedNext}
@@ -520,7 +520,7 @@ const ZProjectCreatePage: React.FC = () => {
 															</ZIonText>
 
 															<div className='flex flex-col h-[2rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-1 text-sm leading-5 bg-white rounded px-2 ion-text-start'>
-																{values.plannedNext.trim().length > 0 ? (
+																{values.plannedNext.trim()?.length > 0 ? (
 																	<>
 																		<ZIonTitle className='p-0 text-sm leading-none'>
 																			{values.plannedNext}
@@ -546,7 +546,7 @@ const ZProjectCreatePage: React.FC = () => {
 															</ZIonText>
 
 															<div className='flex flex-col h-[2rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-1 text-sm leading-5 bg-white rounded px-2 ion-text-start'>
-																{values.inProgress.trim().length > 0 ? (
+																{values.inProgress.trim()?.length > 0 ? (
 																	<>
 																		<ZIonTitle className='p-0 text-sm leading-none'>
 																			{values.inProgress}
@@ -570,7 +570,7 @@ const ZProjectCreatePage: React.FC = () => {
 															</ZIonText>
 
 															<div className='flex flex-col h-[2rem] m-1 border-2 ion-justify-content-center border-[rgba(234,236,238,1)] mx-1 text-sm leading-5 bg-white rounded px-2 ion-text-start'>
-																{values.completedRecently.trim().length > 0 ? (
+																{values.completedRecently.trim()?.length > 0 ? (
 																	<>
 																		<ZIonTitle className='p-0 text-sm leading-none'>
 																			{values.completedRecently}
@@ -685,7 +685,7 @@ const ZDetailFormTab: React.FC = () => {
 					<ZIonInput
 						label={
 							(values.image.fileUrl &&
-								values.image.fileUrl?.trim().length > 0 &&
+								values.image.fileUrl?.trim()?.length > 0 &&
 								values.image.fileUrl) ||
 							'Select file... (Optional)'
 						}
@@ -702,7 +702,7 @@ const ZDetailFormTab: React.FC = () => {
 
 										if (
 											values?.image?.filePath &&
-											values?.image?.filePath.trim().length > 0 &&
+											values?.image?.filePath.trim()?.length > 0 &&
 											fileData.filePath !== values?.image?.filePath
 										) {
 											// Deleting the file from storage
@@ -739,16 +739,16 @@ const ZDetailFormTab: React.FC = () => {
 					size='large'
 					disabled={
 						(touched?.projectName || false) &&
-						!errors?.projectName?.trim().length &&
-						!errors?.subDomain?.trim().length
+						!errors?.projectName?.trim()?.length &&
+						!errors?.subDomain?.trim()?.length
 							? false
 							: true
 					}
 					onClick={async () => {
 						try {
 							if (
-								values.projectName.trim().length > 0 &&
-								values.subDomain.trim().length > 0
+								values.projectName.trim()?.length > 0 &&
+								values.subDomain.trim()?.length > 0
 							) {
 								console.log('me');
 								await submitForm();
@@ -821,7 +821,7 @@ const ZBoardTab: React.FC = () => {
 					expand='block'
 					className='mt-8'
 					size='large'
-					disabled={!errors.board?.title?.trim().length ? false : true}
+					disabled={!errors.board?.title?.trim()?.length ? false : true}
 					onClick={async () => {
 						try {
 							// Making an api call creating new project
@@ -879,7 +879,7 @@ const ZBoardTab: React.FC = () => {
 								}
 							}
 
-							if (values.board.title.trim().length > 0) {
+							if (values.board.title.trim()?.length > 0) {
 								setFieldValue(
 									'currentTab',
 									ProjectCreatePageTabEnum.ideas,

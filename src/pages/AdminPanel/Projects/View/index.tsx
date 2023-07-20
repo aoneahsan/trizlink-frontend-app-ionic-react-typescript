@@ -46,6 +46,7 @@ import {
 	ZIonRow,
 	ZIonText,
 	ZIonTextarea,
+	ZIonTitle,
 } from '@/components/ZIonComponents';
 import ZProjectHeader from '@/components/ProjectComponents/Header';
 import ZProjectStatusPopover from '@/components/InPageComponents/ZaionsPopovers/Project/StatusPopover';
@@ -56,10 +57,11 @@ import ZProjectOrderPopover from '@/components/InPageComponents/ZaionsPopovers/P
  * ? Like import of custom Hook is a custom import
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import {
 	useZRQCreateRequest,
 	useZRQGetRequest,
+	useZRQUpdateRequest,
 } from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
@@ -73,6 +75,7 @@ import { reportCustomError } from '@/utils/customErrorType';
 import {
 	createRedirectRoute,
 	extractInnerData,
+	zJsonParse,
 	zStringify,
 } from '@/utils/helpers';
 import { showSuccessNotification } from '@/utils/notification';
@@ -84,6 +87,7 @@ import MESSAGES from '@/utils/messages';
  * */
 import {
 	ProjectBoardStatusEnum,
+	ZBoardStatusInterface,
 	ZProjectBoardIdeasInterface,
 	ZProjectBoardInterface,
 	ZProjectInterface,
@@ -106,6 +110,9 @@ import classes from './styles.module.css';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductLogo, zEmptyPosts } from '@/assets/images';
+import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/FileUploadModal';
+import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
 
 /**
  * Component props type go down
@@ -125,6 +132,11 @@ const ZProjectViewPage: React.FC = () => {
 		projectId: string;
 		boardId: string;
 	}>();
+
+	//
+	const { presentZIonModal: presentZFileUploadModal } = useZIonModal(
+		ZaionsFileUploadModal
+	);
 
 	// Order popover
 	const { presentZIonPopover: presentZProjectOrderPopover } =
@@ -162,6 +174,23 @@ const ZProjectViewPage: React.FC = () => {
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
 		});
 
+	// Getting project boardStatuses from backend.
+	const { data: ZCurrentBoardStatues } = useZRQGetRequest<
+		ZBoardStatusInterface[]
+	>({
+		_url: API_URL_ENUM.boardStatus_create_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_STATUS.MAIN,
+			projectId,
+			boardId,
+		],
+		_itemsIds: [boardId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.project.board.boardId],
+		_shouldFetchWhenIdPassed: !boardId ? true : false,
+	});
+
+	console.log({ ZCurrentBoardStatues });
+
 	// Getting project board boardIdeas from backend.
 	const { data: ZBoardIdeasData } = useZRQGetRequest<
 		ZProjectBoardIdeasInterface[]
@@ -189,6 +218,17 @@ const ZProjectViewPage: React.FC = () => {
 			_urlDynamicParts: [CONSTANTS.RouteParams.project.board.boardId],
 			_itemsIds: [boardId],
 		});
+
+	// Delete file api.
+	const { mutateAsync: deleteSingleFile } = useZRQUpdateRequest({
+		_url: API_URL_ENUM.deleteSingleFile,
+	});
+
+	// After getting the boardStatus from backend storing it to recoil state
+	useEffect(() => {
+		if (ZCurrentBoardStatues && ZCurrentBoardStatues?.length) {
+		}
+	}, []);
 
 	// Idea Formik submit handler.
 	const IdeaFormikSubmitHandler = async (_data: string) => {
@@ -276,12 +316,16 @@ const ZProjectViewPage: React.FC = () => {
 										authorName: '',
 										title: '',
 										description: '',
+										image: {
+											fileUrl: '',
+											filePath: '',
+										},
 									}}
 									onSubmit={async (values, { resetForm }) => {
 										try {
 											if (
-												values.title.trim().length > 0 &&
-												values.description.trim().length > 0
+												values.title?.trim()?.length > 0 &&
+												values.description?.trim()?.length > 0
 											) {
 												const _stringifyValue = zStringify({
 													title: values.title,
@@ -303,6 +347,7 @@ const ZProjectViewPage: React.FC = () => {
 										handleChange,
 										handleBlur,
 										submitForm,
+										setFieldValue,
 									}) => {
 										return (
 											<Form className='mt-4'>
@@ -349,20 +394,72 @@ const ZProjectViewPage: React.FC = () => {
 
 												{/* Attach/Replace image button */}
 												<div className='mt-4'>
-													<div className='w-20 h-20 mb-2 mr-2 border rounded-md shadow-lg border-neutral-200'>
-														<ZIonImg
-															className='w-full h-full'
-															src='http://localhost:8000/storage/uploaded-files/fNsHPbYOTDiJ99Io0l9JnWJnSvnj8eqXb4AcxJUE.jpg'
-														/>
-													</div>
+													{values.image.fileUrl.trim()?.length > 0 && (
+														<div className='w-20 h-20 mb-2 mr-2 border rounded-md shadow-lg border-neutral-200'>
+															<ZIonImg
+																className='w-full h-full'
+																src={values.image?.fileUrl}
+															/>
+														</div>
+													)}
 													<ZIonButton
 														className='ion-no-padding ion-no-margin'
 														size='small'
 														fill='default'
+														onClick={() => {
+															presentZFileUploadModal({
+																_cssClass: 'file-upload-modal-size',
+																_onWillDismiss: async (
+																	ev: CustomEvent<OverlayEventDetail>
+																) => {
+																	if (
+																		ev.detail.role ===
+																		ZIonModalActionEnum.success
+																	) {
+																		// Getting file data from fileUploadModal and parse it.
+																		const fileData = zJsonParse(
+																			String(ev.detail.data)
+																		) as {
+																			fileUrl: string;
+																			filePath: string;
+																		};
+
+																		if (
+																			values?.image?.filePath &&
+																			values?.image?.filePath.trim()?.length >
+																				0 &&
+																			fileData.filePath !==
+																				values?.image?.filePath
+																		) {
+																			// Deleting the file from storage
+																			await deleteSingleFile({
+																				requestData: zStringify({
+																					filePath: values?.image?.filePath,
+																				}),
+																				itemIds: [],
+																				urlDynamicParts: [],
+																			});
+																		}
+
+																		setFieldValue(
+																			'image',
+																			{
+																				fileUrl: fileData.fileUrl,
+																				filePath: fileData.filePath,
+																			},
+																			false
+																		);
+																	}
+																},
+															});
+														}}
 													>
 														<ZIonIcon icon={attachOutline} className='mr-1' />
 														<ZIonText className='text-[.9rem]'>
-															Attach images
+															{values.image?.fileUrl?.trim()?.length > 0
+																? 'Replace'
+																: 'Attach'}{' '}
+															images
 														</ZIonText>
 													</ZIonButton>
 												</div>
@@ -374,8 +471,8 @@ const ZProjectViewPage: React.FC = () => {
 												)}
 												{touched.title &&
 												touched.description &&
-												values.title.trim().length === 0 &&
-												values.description.trim().length === 0 ? (
+												values.title.trim()?.length === 0 &&
+												values.description.trim()?.length === 0 ? (
 													<ZIonText className='block' color='danger'>
 														title and description are required.
 													</ZIonText>
@@ -387,15 +484,15 @@ const ZProjectViewPage: React.FC = () => {
 													className='mt-4'
 													expand='block'
 													disabled={
-														values.title.trim().length > 0 &&
-														values.description.trim().length > 0
+														values.title.trim()?.length > 0 &&
+														values.description.trim()?.length > 0
 															? false
 															: true
 													}
 													onClick={() => {
 														if (
-															values.title.trim().length > 0 &&
-															values.description.trim().length > 0
+															values.title.trim()?.length > 0 &&
+															values.description.trim()?.length > 0
 														) {
 															submitForm();
 														}
@@ -672,26 +769,28 @@ const ZProjectPostsState: React.FC = () => {
 										})}
 										color='dark'
 									>
-										<ZIonText
+										<ZIonTitle
 											className={classNames({
-												'block font-semibold': true,
+												'block ion-no-padding font-semibold': true,
 												'text-lg': isMdScale,
 												'text-md': !isMdScale,
 											})}
 										>
 											{el.title}
-										</ZIonText>
+										</ZIonTitle>
 									</ZIonRouterLink>
 								)}
 
-								<ZIonText
-									className={classNames({
-										'block mt-1 break-words force-break-words': true,
-										'text-sm': !isMdScale,
-									})}
-								>
-									{el.description}
-								</ZIonText>
+								<div className='overflow-hidden line-clamp-3'>
+									<ZIonText
+										className={classNames({
+											'block mt-1 break-words force-break-words': true,
+											'text-sm': !isMdScale,
+										})}
+									>
+										{el.description}
+									</ZIonText>
+								</div>
 
 								<div className='flex flex-wrap mt-1 text-sm'>
 									<ZIonIcon
