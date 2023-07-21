@@ -42,10 +42,17 @@ import {
 	chevronUpOutline,
 	reorderFourOutline,
 } from 'ionicons/icons';
-import { ProjectHeaderActiveLinkEnum } from '@/types/AdminPanel/Project/index.type';
+import {
+	ProjectHeaderActiveLinkEnum,
+	ZBoardStatusInterface,
+	ZProjectBoardIdeasInterface,
+} from '@/types/AdminPanel/Project/index.type';
 import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import ZProjectOrderPopover from '@/components/InPageComponents/ZaionsPopovers/Project/OrderPopover';
-import { PRODUCT_NAME } from '@/utils/constants';
+import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
+import { API_URL_ENUM } from '@/utils/enums';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { useParams } from 'react-router';
 
 /**
  * Global Constants Imports go down
@@ -86,9 +93,44 @@ import { PRODUCT_NAME } from '@/utils/constants';
 const ZProjectRoadmapPage: React.FC = () => {
 	const { isXlScale, isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
 
+	const { projectId, boardId } = useParams<{
+		projectId: string;
+		boardId: string;
+	}>();
+
 	// Order popover
 	const { presentZIonPopover: presentZProjectOrderPopover } =
 		useZIonPopover(ZProjectOrderPopover);
+
+	// Getting project board boardIdeas from backend.
+	const { data: ZBoardIdeasData } = useZRQGetRequest<
+		ZProjectBoardIdeasInterface[]
+	>({
+		_url: API_URL_ENUM.boardIdea_create_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.MAIN,
+			projectId,
+			boardId,
+		],
+		_itemsIds: [boardId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.project.board.boardId],
+		_shouldFetchWhenIdPassed: !boardId ? true : false,
+	});
+
+	// Getting project boardStatuses from backend.
+	const { data: ZCurrentBoardStatues } = useZRQGetRequest<
+		ZBoardStatusInterface[]
+	>({
+		_url: API_URL_ENUM.boardStatus_create_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_STATUS.MAIN,
+			projectId,
+			boardId,
+		],
+		_itemsIds: [boardId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.project.board.boardId],
+		_shouldFetchWhenIdPassed: !boardId ? true : false,
+	});
 
 	return (
 		<ZaionsIonPage>
@@ -272,78 +314,94 @@ const ZProjectRoadmapPage: React.FC = () => {
 							className='py-3'
 							loop
 						>
-							<SwiperSlide
-								key={0}
-								className={classNames({
-									'bg-white rounded-lg shadow mr-8 h-[42rem]': true,
-									'overflow-y-scroll zaions_pretty_scrollbar': false,
-								})}
-							>
-								<div className='text-center py-4 capitalize relative'>
-									<ZIonText>Planned (1)</ZIonText>
-								</div>
+							{ZCurrentBoardStatues?.map((el) => {
+								if (el?.isActive) {
+									return (
+										<SwiperSlide
+											key={el.id}
+											className={classNames({
+												'bg-white rounded-lg shadow mr-8 h-[42rem]': true,
+												'overflow-y-scroll zaions_pretty_scrollbar': false,
+											})}
+										>
+											<div className='relative py-4 text-center capitalize'>
+												<ZIonText>
+													{el.title} (
+													{
+														ZBoardIdeasData?.filter(
+															(_idea) => _idea.statusUniqueId === el.id
+														)?.length
+													}
+													)
+												</ZIonText>
+											</div>
 
-								<div
-									className='h-[1px] w-full'
-									style={{
-										boxShadow: 'rgb(90, 115, 193) 0px 0px 2px 0px',
-										backgroundColor: 'rgb(90, 115, 193)',
-									}}
-								></div>
+											<div
+												className='h-[1px] w-full'
+												style={{
+													boxShadow: `${el.color} 0px 0px 2px 0px`,
+													backgroundColor: el.color,
+												}}
+											></div>
 
-								<div className=''>
-									<ZIonList lines='none'>
-										{[1, 2].map((el) => {
-											return (
-												<ZIonItem
-													className='m-4 mb-5 break-words ion-no-padding'
-													// color='medium'
-													key={el}
-												>
-													<ZIonButton
-														height='60px'
-														fill='clear'
-														color='medium'
-														style={{
-															'--padding-start': '11px',
-															'--padding-end': '11px',
-														}}
-														className='mr-2 ion-no-margin'
-													>
-														<ZIonLabel color='light'>
-															<p className='m-[0px!important] z_ion_color_danger'>
-																<ZIonIcon
-																	icon={chevronUpOutline}
-																	className='w-5 h-5'
-																/>
-															</p>
-															<p className='m-[0px!important] font-bold z_ion_color_danger text-lg'>
-																1
-															</p>
-														</ZIonLabel>
-													</ZIonButton>
+											<div className=''>
+												<ZIonList lines='none'>
+													{ZBoardIdeasData?.filter(
+														(_idea) => _idea.statusUniqueId === el.id
+													)?.map((_singleIdea) => {
+														return (
+															<ZIonItem
+																className='m-4 mb-5 break-words ion-no-padding'
+																// color='medium'
+																key={_singleIdea.id}
+															>
+																<ZIonButton
+																	height='60px'
+																	fill='clear'
+																	color='medium'
+																	style={{
+																		'--padding-start': '11px',
+																		'--padding-end': '11px',
+																	}}
+																	className='mr-2 ion-no-margin'
+																>
+																	<ZIonLabel color='light'>
+																		<p className='m-[0px!important] z_ion_color_danger'>
+																			<ZIonIcon
+																				icon={chevronUpOutline}
+																				className='w-5 h-5'
+																			/>
+																		</p>
+																		<p className='m-[0px!important] font-bold z_ion_color_danger text-lg'>
+																			1
+																		</p>
+																	</ZIonLabel>
+																</ZIonButton>
 
-													<ZIonLabel>
-														<ZIonText className='z-hover-color-danger cursor-pointer mb-1 font-bold text-lg transition duration-150 ease-in-out'>
-															Talha
-														</ZIonText>
-														<p>talha-bin-irshad</p>
-													</ZIonLabel>
-												</ZIonItem>
-											);
-										})}
-									</ZIonList>
-								</div>
-							</SwiperSlide>
+																<ZIonLabel>
+																	<ZIonText className='mb-1 text-lg font-bold transition duration-150 ease-in-out cursor-pointer z-hover-color-danger'>
+																		{_singleIdea.title}
+																	</ZIonText>
+																	<p>talha-bin-irshad</p>
+																</ZIonLabel>
+															</ZIonItem>
+														);
+													})}
+												</ZIonList>
+											</div>
+										</SwiperSlide>
+									);
+								}
+							})}
 
-							<SwiperSlide
+							{/* <SwiperSlide
 								key={1}
 								className={classNames({
 									'bg-white rounded-lg shadow mr-8 h-[42rem]': true,
 									'overflow-y-scroll zaions_pretty_scrollbar': false,
 								})}
 							>
-								<div className='text-center py-4 capitalize relative'>
+								<div className='relative py-4 text-center capitalize'>
 									<ZIonText>In Progress (0)</ZIonText>
 								</div>
 
@@ -388,7 +446,7 @@ const ZProjectRoadmapPage: React.FC = () => {
 													</ZIonButton>
 
 													<ZIonLabel>
-														<ZIonText className='z-hover-color-danger cursor-pointer mb-1 font-bold text-lg transition duration-150 ease-in-out'>
+														<ZIonText className='mb-1 text-lg font-bold transition duration-150 ease-in-out cursor-pointer z-hover-color-danger'>
 															Talha
 														</ZIonText>
 														<p>talha-bin-irshad</p>
@@ -407,7 +465,7 @@ const ZProjectRoadmapPage: React.FC = () => {
 									'overflow-y-scroll zaions_pretty_scrollbar': false,
 								})}
 							>
-								<div className='text-center py-4 capitalize relative'>
+								<div className='relative py-4 text-center capitalize'>
 									<ZIonText>In Progress (0)</ZIonText>
 								</div>
 
@@ -452,7 +510,7 @@ const ZProjectRoadmapPage: React.FC = () => {
 													</ZIonButton>
 
 													<ZIonLabel>
-														<ZIonText className='z-hover-color-danger cursor-pointer mb-1 font-bold text-lg transition duration-150 ease-in-out'>
+														<ZIonText className='mb-1 text-lg font-bold transition duration-150 ease-in-out cursor-pointer z-hover-color-danger'>
 															Talha
 														</ZIonText>
 														<p>talha-bin-irshad</p>
@@ -471,7 +529,7 @@ const ZProjectRoadmapPage: React.FC = () => {
 									'overflow-y-scroll zaions_pretty_scrollbar': false,
 								})}
 							>
-								<div className='text-center py-4 capitalize relative'>
+								<div className='relative py-4 text-center capitalize'>
 									<ZIonText>In Progress (0)</ZIonText>
 								</div>
 
@@ -516,7 +574,7 @@ const ZProjectRoadmapPage: React.FC = () => {
 													</ZIonButton>
 
 													<ZIonLabel>
-														<ZIonText className='z-hover-color-danger cursor-pointer mb-1 font-bold text-lg transition duration-150 ease-in-out'>
+														<ZIonText className='mb-1 text-lg font-bold transition duration-150 ease-in-out cursor-pointer z-hover-color-danger'>
 															Talha
 														</ZIonText>
 														<p>talha-bin-irshad</p>
@@ -526,10 +584,10 @@ const ZProjectRoadmapPage: React.FC = () => {
 										})}
 									</ZIonList>
 								</div>
-							</SwiperSlide>
+							</SwiperSlide> */}
 						</Swiper>
 
-						<ZIonCol size='12' className='ion-text-center my-4'>
+						<ZIonCol size='12' className='my-4 ion-text-center'>
 							<ZIonText color='medium'>
 								Powered by
 								<ZIonRouterLink className='ms-1 hover:underline'>

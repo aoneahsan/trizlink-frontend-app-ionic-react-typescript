@@ -209,7 +209,14 @@ const ZProjectHeader: React.FC<{
 						>
 							<div className='max-w-[9rem] h-full py-3 w-max lg:mr-6 md:mr-3'>
 								<ZIonRouterLink
-									routerLink={ZaionsRoutes.AdminPanel.Projects.Board.Main}
+									routerLink={createRedirectRoute({
+										url: ZaionsRoutes.AdminPanel.Projects.Board.Main,
+										params: [
+											CONSTANTS.RouteParams.project.projectId,
+											CONSTANTS.RouteParams.project.board.boardId,
+										],
+										values: [projectId, boardId],
+									})}
 									color='dark'
 								>
 									{ZCurrentProjectData?.image?.fileUrl &&
@@ -281,8 +288,11 @@ const ZProjectHeader: React.FC<{
 											zNavigatePushRoute(
 												createRedirectRoute({
 													url: ZaionsRoutes.AdminPanel.Projects.Roadmap,
-													params: [CONSTANTS.RouteParams.project.projectId],
-													values: [projectId],
+													params: [
+														CONSTANTS.RouteParams.project.projectId,
+														CONSTANTS.RouteParams.project.board.boardId,
+													],
+													values: [projectId, boardId],
 												})
 											);
 										}

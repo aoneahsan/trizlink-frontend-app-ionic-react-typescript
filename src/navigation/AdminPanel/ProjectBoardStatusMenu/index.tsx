@@ -172,6 +172,7 @@ const ZProjectBoardStatusMenu: React.FC = () => {
 		]
 	);
 
+	// Formik submit handler
 	const formikSubmitHandlerFn = async (_data: string) => {
 		try {
 			if (_data) {
@@ -374,24 +375,27 @@ const ZProjectBoardStatusMenu: React.FC = () => {
 																			minHeight='40px'
 																			style={{ '--padding-start': '9px' }}
 																			onClick={() => {
-																				values.statues.map((el, _index) => {
+																				if (values.statues[index]?.isEditable) {
+																					values.statues.map((el, _index) => {
+																						setFieldValue(
+																							`statues.${_index}.editMode`,
+																							false,
+																							false
+																						);
+																					});
 																					setFieldValue(
-																						`statues.${_index}.editMode`,
-																						false,
+																						`statues.${index}.editMode`,
+																						true,
 																						false
 																					);
-																				});
-																				setFieldValue(
-																					`statues.${index}.editMode`,
-																					true,
-																					false
-																				);
+																				}
 																			}}
 																		>
 																			{el.title}
 																		</ZIonItem>
 																	)}
-																	{values.statues[index]?.editMode && (
+																	{values.statues[index]?.editMode &&
+																	values.statues[index].isEditable ? (
 																		<>
 																			<ZIonInput
 																				minHeight='37px'
@@ -400,10 +404,14 @@ const ZProjectBoardStatusMenu: React.FC = () => {
 																				onIonChange={handleChange}
 																				onIonBlur={handleBlur}
 																				name={`statues.${index}.title`}
+																				className='ms-2'
 																			/>
 																		</>
+																	) : (
+																		''
 																	)}
-																	{values.statues[index]?.editMode && (
+																	{values.statues[index]?.editMode &&
+																	values.statues[index].isEditable ? (
 																		<>
 																			<ZIonButton
 																				className='ion-no-margin ion-no-padding ms-3'
@@ -494,9 +502,12 @@ const ZProjectBoardStatusMenu: React.FC = () => {
 																				/>
 																			</ZIonButton>
 																		</>
+																	) : (
+																		''
 																	)}
 
-																	{!values.statues[index]?.editMode && (
+																	{!values.statues[index]?.editMode &&
+																	values.statues[index].isDeletable ? (
 																		<ZIonButton
 																			className='ion-no-margin ion-no-padding ms-3'
 																			height='30px'
@@ -517,6 +528,8 @@ const ZProjectBoardStatusMenu: React.FC = () => {
 																				className='w-4 h-4 px-1'
 																			/>
 																		</ZIonButton>
+																	) : (
+																		''
 																	)}
 																</div>
 															);
@@ -531,14 +544,16 @@ const ZProjectBoardStatusMenu: React.FC = () => {
 										<ZIonReorderGroup>
 											<div className='flex mt-4 ion-align-items-center'>
 												<ZIonReorder></ZIonReorder>
-												<ZIonButton
-													className='mx-2 ion-no-margin'
-													style={{
-														'--padding-start': '1rem',
-														'--background': values.statusColor,
-													}}
-													height='27px'
-												></ZIonButton>
+												<div className='me-2'>
+													<ZaionsColorPiker
+														showInput={false}
+														value={values.statusColor}
+														name='statusColor'
+														setFieldValueFn={setFieldValue}
+														className='mt-[2px!important]'
+														colorInputClassName='h-[2.3rem!important] w-[2.3rem!important]'
+													/>
+												</div>
 
 												<ZIonInput
 													minHeight='34px'

@@ -374,8 +374,7 @@ const ZProjectSingleIdea: React.FC = () => {
 						initialValues={{
 							title: ZCurrentBoardIdeaData?.title || '',
 							description: ZCurrentBoardIdeaData?.description || '',
-							status:
-								ZCurrentBoardIdeaData?.status || ProjectBoardStatusEnum.notSet,
+							statusId: ZCurrentBoardIdeaData?.statusUniqueId || null,
 							internalNotes: ZCurrentBoardIdeaData?.internalNotes || '',
 							image: {
 								fileUrl: ZCurrentBoardIdeaData?.image?.fileUrl || '',
@@ -404,7 +403,7 @@ const ZProjectSingleIdea: React.FC = () => {
 								const _stringifyValue = zStringify({
 									title: values.title,
 									description: values.description,
-									statusId: values.status,
+									statusUniqueId: values.statusId,
 									internalNotes: values.internalNotes,
 									image: zStringify(values.image),
 									tags: zStringify(values.tags),
@@ -427,6 +426,7 @@ const ZProjectSingleIdea: React.FC = () => {
 							setFieldValue,
 							submitForm,
 						}) => {
+							console.log({ values });
 							return (
 								<ZIonRow
 									className={classNames({
@@ -477,10 +477,26 @@ const ZProjectSingleIdea: React.FC = () => {
 														</ZIonText>
 
 														{/* Status */}
-														{ZCurrentBoardIdeaData?.status !==
+														{ZCurrentBoardIdeaData?.statusUniqueId !==
 															ProjectBoardStatusEnum.notSet && (
-															<ZIonText className='block text-base font-medium tracking-wide rounded-full'>
-																{ZCurrentBoardIdeaData?.status}
+															<ZIonText
+																className='block text-base font-bold tracking-wide rounded-full'
+																style={{
+																	color: ZCurrentBoardStatues?.find(
+																		(el) =>
+																			el.id ===
+																			ZCurrentBoardIdeaData?.statusUniqueId
+																	)?.color,
+																}}
+															>
+																{ZCurrentBoardStatues?.find(
+																	(el) =>
+																		el.id ===
+																		ZCurrentBoardIdeaData?.statusUniqueId
+																)?.title ||
+																	(ZCurrentBoardIdeaData?.statusUniqueId ===
+																		null &&
+																		'')}
 															</ZIonText>
 														)}
 													</div>
@@ -806,14 +822,16 @@ const ZProjectSingleIdea: React.FC = () => {
 											<ZIonSelect
 												minHeight='45px'
 												fill='outline'
-												name='status'
-												value={values.status}
+												name='statusId'
+												label='board status'
+												labelPlacement='stacked'
+												value={values.statusId}
 												interface='popover'
 												onIonChange={handleChange}
 												onIonBlur={handleBlur}
 												style={{ '--background': '#fff' }}
 											>
-												<ZIonSelectOption value={ProjectBoardStatusEnum.notSet}>
+												<ZIonSelectOption value={null}>
 													Not set
 												</ZIonSelectOption>
 												{/*  */}
@@ -834,7 +852,7 @@ const ZProjectSingleIdea: React.FC = () => {
 												onClick={() => {
 													try {
 														if (
-															ZCurrentBoardIdeaData?.status !== values.status
+															ZCurrentBoardIdeaData?.status !== values.statusId
 														) {
 															submitForm();
 														}
@@ -843,7 +861,7 @@ const ZProjectSingleIdea: React.FC = () => {
 													}
 												}}
 												disabled={
-													ZCurrentBoardIdeaData?.status === values.status
+													ZCurrentBoardIdeaData?.status === values.statusId
 												}
 											>
 												Save

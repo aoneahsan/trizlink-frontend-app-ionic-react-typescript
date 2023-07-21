@@ -7,11 +7,8 @@ export enum ProjectCreatePageTabEnum {
 }
 
 export enum ProjectBoardStatusEnum {
-	needYourOpinion = 'needYourOpinion',
-	planned = 'planned',
-	inProgress = 'inProgress',
-	done = 'done',
-	notNow = 'notNow',
+	all = 'all',
+	notDone = 'notDone',
 	notSet = 'notSet',
 }
 
@@ -77,6 +74,7 @@ export interface ZProjectBoardIdeasInterface {
 	title: string;
 	description: string;
 	status?: ProjectBoardStatusEnum;
+	statusUniqueId?: string;
 	internalNotes?: string;
 	image: {
 		fileUrl?: string;
@@ -88,8 +86,8 @@ export interface ZProjectBoardIdeasInterface {
 export interface ZBoardStatusInterface {
 	id?: string;
 	title: string;
-	description: string;
 	color: string;
+	description?: string;
 	isActive?: boolean;
 	isDefault?: boolean;
 	isEditable?: boolean;

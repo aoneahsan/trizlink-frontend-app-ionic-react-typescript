@@ -25,6 +25,7 @@ import {
 import classNames from 'classnames';
 import { AxiosError } from 'axios';
 import { Form, Formik } from 'formik';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -51,6 +52,7 @@ import {
 import ZProjectHeader from '@/components/ProjectComponents/Header';
 import ZProjectStatusPopover from '@/components/InPageComponents/ZaionsPopovers/Project/StatusPopover';
 import ZProjectOrderPopover from '@/components/InPageComponents/ZaionsPopovers/Project/OrderPopover';
+import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/FileUploadModal';
 
 /**
  * Custom Hooks Imports go down
@@ -96,11 +98,18 @@ import {
 	ZProjectInterface,
 } from '@/types/AdminPanel/Project/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
+import {
+	ZAllIdeasAndFilterOptionsRStateAtom,
+	ZFiltratedIdeasRStateSelector,
+	ZProjectBoardStatesRStateAtom,
+} from '@/ZaionsStore/UserDashboard/Project/index.recoil';
 
 /**
  * Style files Imports go down
@@ -113,11 +122,6 @@ import classes from './styles.module.css';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductLogo, zEmptyPosts } from '@/assets/images';
-import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/FileUploadModal';
-import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
-import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
-import { useSetRecoilState } from 'recoil';
-import { ZProjectBoardStatesRStateAtom } from '@/ZaionsStore/UserDashboard/Project/index.recoil';
 
 /**
  * Component props type go down
@@ -138,19 +142,28 @@ const ZProjectViewPage: React.FC = () => {
 		boardId: string;
 	}>();
 
-	//
+	// Recoil state that will hold all the ideas and filter options.
+	const setZAllIdeasAndFilterOptionsStateAtom = useSetRecoilState(
+		ZAllIdeasAndFilterOptionsRStateAtom
+	);
+
+	// file upload modal.
 	const { presentZIonModal: presentZFileUploadModal } = useZIonModal(
 		ZaionsFileUploadModal
 	);
 
-	// Recoil state to store boardStatus
-	const setZProjectBoardStatesStateAtom = useSetRecoilState(
-		ZProjectBoardStatesRStateAtom
-	);
+	// Recoil state to store boardStatus.
+	const [zProjectBoardStatesStateAtom, setZProjectBoardStatesStateAtom] =
+		useRecoilState(ZProjectBoardStatesRStateAtom);
 
 	// Order popover.
 	const { presentZIonPopover: presentZProjectOrderPopover } =
 		useZIonPopover(ZProjectOrderPopover);
+
+	// Recoil state that hold filtrated Ideas.
+	const zFiltratedIdeasStateSelector = useRecoilValue(
+		ZFiltratedIdeasRStateSelector
+	);
 
 	// Status popover.
 	const { presentZIonPopover: presentZProjectStatusPopover } = useZIonPopover(
@@ -235,9 +248,26 @@ const ZProjectViewPage: React.FC = () => {
 	// After getting the boardStatus from backend storing it to recoil state.
 	useEffect(() => {
 		if (ZCurrentBoardStatues && ZCurrentBoardStatues?.length) {
-			setZProjectBoardStatesStateAtom(ZCurrentBoardStatues);
+			setZProjectBoardStatesStateAtom((oldValues) => ({
+				...oldValues,
+				allStatus: ZCurrentBoardStatues,
+			}));
 		}
 	}, [ZCurrentBoardStatues]);
+
+	// After getting all the ideas from backend storing it to recoil state.
+	useEffect(() => {
+		try {
+			if (ZBoardIdeasData && ZBoardIdeasData?.length) {
+				setZAllIdeasAndFilterOptionsStateAtom((oldValues) => ({
+					...oldValues,
+					allIdeas: ZBoardIdeasData,
+				}));
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	}, [ZBoardIdeasData]);
 
 	// Idea Formik submit handler.
 	const IdeaFormikSubmitHandler = async (_data: string) => {
@@ -259,6 +289,20 @@ const ZProjectViewPage: React.FC = () => {
 						showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
 					}
 				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
+	// function to set ideas filter options
+	const zSetIdeasFilterOptions = ({ _status }: { _status: string | null }) => {
+		try {
+			if (_status || _status === null) {
+				setZAllIdeasAndFilterOptionsStateAtom((oldValues) => ({
+					...oldValues,
+					filterOptions: { state: _status, order: '' },
+				}));
 			}
 		} catch (error) {
 			reportCustomError(error);
@@ -624,7 +668,10 @@ const ZProjectViewPage: React.FC = () => {
 														_cssClass: '',
 														// _dismissOnSelect: false,
 														// _onWillDismiss: ({ detail }) => {
-														// 	detail.data !== undefined && setFieldValue();
+														// 	console.log({ detail });
+														// },
+														// _onDidDismiss: (event) => {
+														// 	console.log({ event });
 														// },
 													});
 												}}
@@ -656,10 +703,44 @@ const ZProjectViewPage: React.FC = () => {
 													presentZProjectStatusPopover({
 														_event: event as Event,
 														_cssClass: '',
-														// _dismissOnSelect: false,
-														// _onWillDismiss: ({ detail }) => {
-														// 	detail.data !== undefined && setFieldValue();
-														// },
+														_dismissOnSelect: false,
+														_onWillDismiss: ({ detail }) => {
+															zSetIdeasFilterOptions({
+																_status: detail.data,
+															});
+
+															if (
+																detail.role ||
+																detail.data === ProjectBoardStatusEnum.all ||
+																detail.data ===
+																	ProjectBoardStatusEnum.notDone ||
+																detail.data === ProjectBoardStatusEnum.notSet
+															) {
+																setZProjectBoardStatesStateAtom(
+																	(oldValues) => ({
+																		...oldValues,
+																		currentStatus: {
+																			title: detail.role as string,
+																			id: detail.data,
+																			color: '',
+																		},
+																	})
+																);
+															} else {
+																const _status =
+																	zProjectBoardStatesStateAtom?.allStatus?.find(
+																		(el) => el.id === detail.data
+																	);
+
+																_status &&
+																	setZProjectBoardStatesStateAtom(
+																		(oldValues) => ({
+																			...oldValues,
+																			currentStatus: { ..._status },
+																		})
+																	);
+															}
+														},
 													});
 												}}
 											>
@@ -671,7 +752,7 @@ const ZProjectViewPage: React.FC = () => {
 													Status:
 												</ZIonText>
 												<ZIonText className='mx-1 text-[1rem] font-normal'>
-													Not done
+													{zProjectBoardStatesStateAtom?.currentStatus?.title}
 												</ZIonText>
 												<ZIonIcon icon={chevronDownOutline} color='dark' />
 											</ZIonButton>
@@ -693,7 +774,8 @@ const ZProjectViewPage: React.FC = () => {
 								</div>
 
 								{/*  */}
-								{ZBoardIdeasData && ZBoardIdeasData?.length > 0 ? (
+								{zFiltratedIdeasStateSelector &&
+								zFiltratedIdeasStateSelector?.length > 0 ? (
 									<ZProjectPostsState />
 								) : (
 									<ZProjectEmptyPostState />
@@ -726,25 +808,15 @@ const ZProjectPostsState: React.FC = () => {
 		boardId: string;
 	}>();
 
-	// Getting project board boardIdeas from backend.
-	const { data: ZBoardIdeasData } = useZRQGetRequest<
-		ZProjectBoardIdeasInterface[]
-	>({
-		_url: API_URL_ENUM.boardIdea_create_list,
-		_key: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.MAIN,
-			projectId,
-			boardId,
-		],
-		_itemsIds: [boardId],
-		_urlDynamicParts: [CONSTANTS.RouteParams.project.board.boardId],
-		_shouldFetchWhenIdPassed: !boardId ? true : false,
-	});
+	// Recoil state that hold filtrated Ideas.
+	const zFiltratedIdeasStateSelector = useRecoilValue(
+		ZFiltratedIdeasRStateSelector
+	);
 
 	return (
 		<ZIonGrid className='flex flex-col gap-4 pt-2'>
-			{ZBoardIdeasData &&
-				ZBoardIdeasData.map((el, index) => {
+			{zFiltratedIdeasStateSelector &&
+				zFiltratedIdeasStateSelector?.map((el, index) => {
 					return (
 						<ZIonRow
 							className={classNames({

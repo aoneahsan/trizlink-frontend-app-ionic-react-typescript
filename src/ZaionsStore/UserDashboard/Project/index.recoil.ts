@@ -1,26 +1,65 @@
 import {
+	ProjectBoardStatusEnum,
 	ZBoardStatusInterface,
+	ZProjectBoardIdeasInterface,
 	ZProjectBoardInterface,
 	ZProjectInterface,
 } from '@/types/AdminPanel/Project/index.type';
 import { ProjectBoardDefaultData } from '@/utils/constants';
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 //
 
-// If user create new project this recoil state will store the data that user entry to show data in preview window browser component which is present in CreateProject page. // we don't need it know because we are handling it with formik.
-export const ZNewProjectRStateAtom = atom<ZProjectInterface>({
-	key: 'ZNewProjectRStateAtom_key',
+// Recoil state that will hold the all ideas and filter options.
+export const ZAllIdeasAndFilterOptionsRStateAtom = atom<{
+	allIdeas: ZProjectBoardIdeasInterface[];
+	filterOptions: {
+		state: string | null;
+		order: string;
+	};
+}>({
+	key: 'ZAllIdeasAndFilterOptionsRStateAtom_key',
 	default: {
-		projectName: '',
-		subDomain: '',
-		image: {
-			filePath: '',
-			fileUrl: '',
+		allIdeas: [],
+		filterOptions: {
+			state: '',
+			order: '',
 		},
-		board: { title: 'Feature requests' },
-		completedRecently: '',
-		inProgress: '',
-		plannedNext: '',
+	},
+});
+
+// Selector that will filter ideas.
+export const ZFiltratedIdeasRStateSelector = selector<
+	ZProjectBoardIdeasInterface[] | null
+>({
+	key: 'ZFiltratedIdeasRStateSelector_key',
+	get: ({ get }) => {
+		// Getting all the ideas and filter options
+		const { allIdeas: _allIdeas, filterOptions: _ideasFilterOptions } = get(
+			ZAllIdeasAndFilterOptionsRStateAtom
+		);
+
+		//
+		let _filtratedIdeas: ZProjectBoardIdeasInterface[] | undefined = _allIdeas;
+
+		//
+		if (_allIdeas?.length > 0) {
+			// Filtering status
+			if (_ideasFilterOptions?.state !== ProjectBoardStatusEnum.all) {
+				if (_ideasFilterOptions?.state || _ideasFilterOptions?.state === null) {
+					_filtratedIdeas = _allIdeas.filter(
+						(el) => el.statusUniqueId === _ideasFilterOptions.state
+					);
+				}
+
+				if (_ideasFilterOptions?.state === ProjectBoardStatusEnum.notSet) {
+					_filtratedIdeas = _allIdeas.filter(
+						(el) => el.statusUniqueId === null
+					);
+				}
+			}
+		}
+
+		return _filtratedIdeas;
 	},
 });
 
@@ -62,7 +101,17 @@ export const ZProjectBoardsRStateAtom = atom<{
 });
 
 // Recoil state to store current boardStates. so we can show it to pleases needed like in status popover etc.
-export const ZProjectBoardStatesRStateAtom = atom<ZBoardStatusInterface[]>({
+export const ZProjectBoardStatesRStateAtom = atom<{
+	allStatus: ZBoardStatusInterface[];
+	currentStatus: ZBoardStatusInterface;
+}>({
 	key: 'ZProjectBoardStatesRStateAtom_key',
-	default: [],
+	default: {
+		allStatus: [],
+		currentStatus: {
+			id: ProjectBoardStatusEnum.notDone,
+			color: '',
+			title: 'Not done',
+		},
+	},
 });

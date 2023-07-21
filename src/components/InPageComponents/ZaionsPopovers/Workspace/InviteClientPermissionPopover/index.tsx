@@ -78,7 +78,7 @@ const ZInviteClientsPermissionPopover: React.FC<{
 				<ZIonList lines='none'>
 					{/* Term */}
 					<ZIonItem
-						className='ion-activatable cursor-pointer'
+						className='cursor-pointer ion-activatable'
 						color={
 							selectedPermission === workspaceFormPermissionEnum.team
 								? 'primary'
@@ -104,7 +104,7 @@ const ZInviteClientsPermissionPopover: React.FC<{
 								? 'primary'
 								: undefined
 						}
-						className='ion-activatable cursor-pointer'
+						className='cursor-pointer ion-activatable'
 						onClick={() => {
 							dismissZIonPopover(
 								workspaceFormPermissionEnum.client,
