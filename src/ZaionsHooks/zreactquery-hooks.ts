@@ -16,8 +16,9 @@ import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type
 import { AxiosError } from 'axios';
 import { errorCodes } from '@/utils/constants/apiConstants';
 import { clearAuthDataFromLocalStorageAndRecoil } from '@/utils/helpers/apiHelpers';
-import { useResetRecoilState } from 'recoil';
+import { useResetRecoilState, useRecoilValue } from 'recoil';
 import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import { appWiseIonicAlertIsOpenedRSelector } from '@/ZaionsStore/AppRStates';
 
 /**
  * The custom hook for getting data from an API using useQuery hook from react-query package.
@@ -60,6 +61,9 @@ export const useZRQGetRequest = <T>({
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
 	const resetUserAccountState = useResetRecoilState(
 		ZaionsUserAccountRStateAtom
+	);
+	const zAppWiseIonicAlertIsOpenedSelector = useRecoilValue(
+		appWiseIonicAlertIsOpenedRSelector
 	);
 
 	return useQuery({
@@ -107,7 +111,7 @@ export const useZRQGetRequest = <T>({
 			void dismissZIonLoader();
 
 			// showing error alert...
-			void presentZIonErrorAlert();
+			if (!zAppWiseIonicAlertIsOpenedSelector) void presentZIonErrorAlert();
 
 			// throw the request_failed error
 			reportCustomError(_error);
@@ -171,7 +175,7 @@ export const useZRQCreateRequest = <T>({
 
 	return useMutation({
 		mutationFn: async (
-			_requestData: string | FormData
+			_requestData: string | FormData | null
 		): Promise<T | undefined> => {
 			// Present ion loading before api start
 			await presentZIonLoader(MESSAGES.GENERAL.API_REQUEST.CREATING);
@@ -186,7 +190,7 @@ export const useZRQCreateRequest = <T>({
 				_url: _url,
 				_method: 'post',
 				_isAuthenticatedRequest: authenticated,
-				_data: _requestData,
+				_data: _requestData || '',
 				_itemIds: _itemsIds,
 				_urlDynamicParts: _urlDynamicParts,
 				_contentType: _contentType,

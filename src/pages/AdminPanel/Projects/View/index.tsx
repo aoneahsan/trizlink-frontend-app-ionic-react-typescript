@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 /**
@@ -61,6 +61,7 @@ import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/Fi
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import {
+	useUpdateRQCacheData,
 	useZRQCreateRequest,
 	useZRQGetRequest,
 	useZRQUpdateRequest,
@@ -92,6 +93,7 @@ import MESSAGES from '@/utils/messages';
  * */
 import {
 	ProjectBoardStatusEnum,
+	ZBoardIdeaVoteInterface,
 	ZBoardStatusInterface,
 	ZProjectBoardIdeasInterface,
 	ZProjectBoardInterface,
@@ -708,38 +710,6 @@ const ZProjectViewPage: React.FC = () => {
 															zSetIdeasFilterOptions({
 																_status: detail.data,
 															});
-
-															if (
-																detail.role ||
-																detail.data === ProjectBoardStatusEnum.all ||
-																detail.data ===
-																	ProjectBoardStatusEnum.notDone ||
-																detail.data === ProjectBoardStatusEnum.notSet
-															) {
-																setZProjectBoardStatesStateAtom(
-																	(oldValues) => ({
-																		...oldValues,
-																		currentStatus: {
-																			title: detail.role as string,
-																			id: detail.data,
-																			color: '',
-																		},
-																	})
-																);
-															} else {
-																const _status =
-																	zProjectBoardStatesStateAtom?.allStatus?.find(
-																		(el) => el.id === detail.data
-																	);
-
-																_status &&
-																	setZProjectBoardStatesStateAtom(
-																		(oldValues) => ({
-																			...oldValues,
-																			currentStatus: { ..._status },
-																		})
-																	);
-															}
 														},
 													});
 												}}
@@ -803,6 +773,17 @@ const ZProjectEmptyPostState: React.FC = () => {
 const ZProjectPostsState: React.FC = () => {
 	const { isMdScale } = useZMediaQueryScale();
 
+	const [compState, setCompState] = useState<{
+		boardIdeaId: string;
+		voteCount: number;
+		currentData?: ZProjectBoardIdeasInterface;
+	}>({
+		boardIdeaId: '',
+		voteCount: 0,
+	});
+
+	const { updateRQCDataHandler } = useUpdateRQCacheData();
+
 	const { projectId, boardId } = useParams<{
 		projectId: string;
 		boardId: string;
@@ -812,6 +793,67 @@ const ZProjectPostsState: React.FC = () => {
 	const zFiltratedIdeasStateSelector = useRecoilValue(
 		ZFiltratedIdeasRStateSelector
 	);
+
+	// Add/Remove vote from idea.
+	const { mutateAsync: createBoardIdeaVoteAsyncMutate } =
+		useZRQCreateRequest<ZBoardIdeaVoteInterface>({
+			_url: API_URL_ENUM.boardIdeaVote_create_delete,
+			_queriesKeysToInvalidate: [],
+			_urlDynamicParts: [
+				CONSTANTS.RouteParams.project.projectId,
+				CONSTANTS.RouteParams.project.board.boardId,
+				CONSTANTS.RouteParams.project.boardIdea.boardIdeaId,
+			],
+			_itemsIds: [projectId, boardId, compState.boardIdeaId],
+		});
+
+	const addOrRemoveVote = async (
+		_id: string,
+		_data: ZProjectBoardIdeasInterface
+	) => {
+		try {
+			if (_id?.trim()?.length > 0) {
+				const _response = await createBoardIdeaVoteAsyncMutate(null);
+
+				if (_response) {
+					const _item = extractInnerData<ZBoardIdeaVoteInterface>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (_item && _item.success) {
+						if (_item.voteUsAdded) {
+							// TODO: remove this, as also remove the loader on this vote API, add a new parameter
+							// showSuccessNotification(MESSAGES.GENERAL.PROJECT.IDEA_VOTE_ADDED);
+						} else {
+							showSuccessNotification(
+								MESSAGES.GENERAL.PROJECT.IDEA_VOTE_REMOVE
+							);
+						}
+
+						await updateRQCDataHandler<ZProjectBoardIdeasInterface | undefined>(
+							{
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.MAIN,
+									projectId,
+									boardId,
+								],
+								data: {
+									..._data,
+									votesCount: _item.totalVotes,
+								} as ZProjectBoardIdeasInterface,
+								id: _id,
+							}
+						);
+					} else {
+						showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+					}
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
 
 	return (
 		<ZIonGrid className='flex flex-col gap-4 pt-2'>
@@ -827,13 +869,28 @@ const ZProjectPostsState: React.FC = () => {
 							key={index}
 						>
 							<ZIonCol className='mr-4 ps-2' size='max-content'>
-								<ZIonButton height='50px' fill='clear' color='medium'>
+								<ZIonButton
+									height='50px'
+									fill='clear'
+									color='medium'
+									onClick={async () => {
+										if (el?.id) {
+											setCompState((oldValues) => ({
+												...oldValues,
+												boardIdeaId: el.id as string,
+												currentData: el,
+											}));
+
+											await addOrRemoveVote(el.id, el);
+										}
+									}}
+								>
 									<ZIonLabel color='light'>
 										<p className='m-[0px!important] z_ion_color_danger'>
 											<ZIonIcon icon={chevronUpOutline} className='w-5 h-5' />
 										</p>
 										<p className='m-[0px!important] font-bold z_ion_color_danger text-lg'>
-											1
+											{el?.votesCount}
 										</p>
 									</ZIonLabel>
 								</ZIonButton>
@@ -855,7 +912,7 @@ const ZProjectPostsState: React.FC = () => {
 									>
 										<ZIonTitle
 											className={classNames({
-												'block ion-no-padding font-semibold': true,
+												'inline-block ion-no-padding font-semibold': true,
 												'text-lg': isMdScale,
 												'text-md': !isMdScale,
 											})}
@@ -868,7 +925,7 @@ const ZProjectPostsState: React.FC = () => {
 								<div className='overflow-hidden line-clamp-3'>
 									<ZIonText
 										className={classNames({
-											'block mt-1 break-words force-break-words': true,
+											'block  break-words force-break-words': true,
 											'text-sm': !isMdScale,
 										})}
 									>

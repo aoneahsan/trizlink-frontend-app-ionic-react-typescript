@@ -103,6 +103,9 @@ export const API_URLS = {
 	boardIdea_create_list: `/user/board/${RouteParams.project.board.boardId}/boardIdeas`,
 	boardIdea_update_delete: `/user/board/${RouteParams.project.board.boardId}/boardIdeas/${RouteParams.project.boardIdea.boardIdeaId}`,
 
+	// Board idea vote
+	boardIdeaVote_create_delete: `/user/p/${RouteParams.project.projectId}/b/${RouteParams.project.board.boardId}/bi/${RouteParams.project.boardIdea.boardIdeaId}/vote`,
+
 	// File
 	getSingleFile: '/file-upload/getSingleFileUrl',
 	uploadSingleFile: '/file-upload/uploadSingleFile',

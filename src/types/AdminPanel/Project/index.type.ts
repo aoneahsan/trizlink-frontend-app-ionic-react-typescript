@@ -10,6 +10,7 @@ export enum ProjectBoardStatusEnum {
 	all = 'all',
 	notDone = 'notDone',
 	notSet = 'notSet',
+	done = 'done',
 }
 
 export enum ProjectHeaderActiveLinkEnum {
@@ -80,7 +81,9 @@ export interface ZProjectBoardIdeasInterface {
 		fileUrl?: string;
 		filePath?: string;
 	};
+	isCompleted?: boolean;
 	tags: string[];
+	votesCount?: number;
 }
 
 export interface ZBoardStatusInterface {
@@ -95,6 +98,12 @@ export interface ZBoardStatusInterface {
 
 	// for frontend
 	editMode?: boolean;
+}
+
+export interface ZBoardIdeaVoteInterface {
+	success: boolean;
+	voteUsAdded: boolean;
+	totalVotes: number;
 }
 
 // Types

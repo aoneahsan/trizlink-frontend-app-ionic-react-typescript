@@ -74,6 +74,9 @@ export enum API_URL_ENUM {
 	boardIdea_create_list = 'boardIdea_create_list',
 	boardIdea_update_delete = 'boardIdea_update_delete',
 
+	// Board Idea Vote
+	boardIdeaVote_create_delete = 'boardIdeaVote_create_delete',
+
 	// File Upload Routes
 	getSingleFile = 'getSingleFile',
 	uploadSingleFile = 'uploadSingleFile',

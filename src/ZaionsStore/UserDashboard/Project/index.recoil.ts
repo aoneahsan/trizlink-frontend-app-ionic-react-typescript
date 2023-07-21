@@ -51,10 +51,23 @@ export const ZFiltratedIdeasRStateSelector = selector<
 					);
 				}
 
+				// Not set
 				if (_ideasFilterOptions?.state === ProjectBoardStatusEnum.notSet) {
 					_filtratedIdeas = _allIdeas.filter(
-						(el) => el.statusUniqueId === null
+						(el) => el.statusUniqueId === null && !el.isCompleted
 					);
+				}
+
+				// Done
+				if (_ideasFilterOptions?.state === ProjectBoardStatusEnum.done) {
+					_filtratedIdeas = _allIdeas.filter(
+						(el) => el.statusUniqueId === null && el.isCompleted
+					);
+				}
+
+				// Not done
+				if (_ideasFilterOptions?.state === ProjectBoardStatusEnum.notDone) {
+					_filtratedIdeas = _allIdeas.filter((el) => !el.isCompleted);
 				}
 			}
 		}

@@ -15,7 +15,7 @@ import {
 	ZIonText,
 } from '@/components/ZIonComponents';
 import { ellipse } from 'ionicons/icons';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { ZProjectBoardStatesRStateAtom } from '@/ZaionsStore/UserDashboard/Project/index.recoil';
 import classNames from 'classnames';
 import { ProjectBoardStatusEnum } from '@/types/AdminPanel/Project/index.type';
@@ -70,54 +70,157 @@ const ZProjectStatusPopover: React.FC<{
 	dismissZIonPopover: (data?: string, role?: string | undefined) => void;
 }> = ({ dismissZIonPopover }) => {
 	// Recoil state that hold boardStatues.
-	const { allStatus: _ZAllStatues, currentStatus: _ZCurrentStatus } =
-		useRecoilValue(ZProjectBoardStatesRStateAtom);
+	const [
+		{ allStatus: _ZAllStatues, currentStatus: _ZCurrentStatus },
+		setZProjectBoardStatesStateAtom,
+	] = useRecoilState(ZProjectBoardStatesRStateAtom);
 
 	return (
 		<ZIonList
 			lines='none'
 			className='py-2 border rounded-md border-[rgba(234,236,238,1)]'
 		>
-			{/* Default */}
+			{/* All */}
 			<ZIonItem
-				className='cursor-pointer ion-activatable'
+				className={classNames({
+					'cursor-pointer ion-activatable': true,
+					'zaions-ion-bg-color-medium_point_1':
+						_ZCurrentStatus.id === ProjectBoardStatusEnum.all,
+				})}
 				minHeight='35px'
 				onClick={() => {
-					dismissZIonPopover(ProjectBoardStatusEnum.all, 'All');
+					setZProjectBoardStatesStateAtom((oldValues) => ({
+						...oldValues,
+						currentStatus: {
+							title: 'All',
+							id: ProjectBoardStatusEnum.all,
+							color: '',
+						},
+					}));
+					dismissZIonPopover(ProjectBoardStatusEnum.all);
 				}}
 			>
-				<ZIonIcon icon={ellipse} className='w-[0.7rem] h-[0.7rem] mb-[2px]' />
-
-				<ZIonText className='ms-2' color='medium'>
+				<ZIonIcon
+					color='primary'
+					icon={ellipse}
+					className='w-[0.7rem] h-[0.7rem] mb-[2px]'
+				/>
+				<ZIonText
+					className={classNames({
+						'ms-2': true,
+						'font-bold': _ZCurrentStatus.id === ProjectBoardStatusEnum.all,
+					})}
+					color='medium'
+				>
 					All
 				</ZIonText>
 			</ZIonItem>
 
+			{/* Not done */}
 			<ZIonItem
-				className='cursor-pointer ion-activatable'
+				className={classNames({
+					'cursor-pointer ion-activatable': true,
+					'zaions-ion-bg-color-medium_point_1':
+						_ZCurrentStatus.id === ProjectBoardStatusEnum.notDone,
+				})}
 				minHeight='35px'
 				onClick={() => {
-					dismissZIonPopover(ProjectBoardStatusEnum.notDone, 'Not done');
+					setZProjectBoardStatesStateAtom((oldValues) => ({
+						...oldValues,
+						currentStatus: {
+							title: 'Not done',
+							id: ProjectBoardStatusEnum.notDone,
+							color: '',
+						},
+					}));
+					dismissZIonPopover(ProjectBoardStatusEnum.notDone);
 				}}
 			>
-				<ZIonIcon icon={ellipse} className='w-[0.7rem] h-[0.7rem] mb-[2px]' />
-
-				<ZIonText className='ms-2' color='medium'>
+				<ZIonIcon
+					color='secondary'
+					icon={ellipse}
+					className='w-[0.7rem] h-[0.7rem] mb-[2px]'
+				/>
+				<ZIonText
+					className={classNames({
+						'ms-2': true,
+						'font-bold': _ZCurrentStatus.id === ProjectBoardStatusEnum.notDone,
+					})}
+					color='medium'
+				>
 					Not done
 				</ZIonText>
 			</ZIonItem>
 
+			{/* Not set */}
 			<ZIonItem
-				className='cursor-pointer ion-activatable'
+				className={classNames({
+					'cursor-pointer ion-activatable': true,
+					'zaions-ion-bg-color-medium_point_1':
+						_ZCurrentStatus.id === ProjectBoardStatusEnum.notSet,
+				})}
 				minHeight='35px'
 				onClick={() => {
-					dismissZIonPopover(ProjectBoardStatusEnum.notSet, 'Not set');
+					setZProjectBoardStatesStateAtom((oldValues) => ({
+						...oldValues,
+						currentStatus: {
+							title: 'Not set',
+							id: ProjectBoardStatusEnum.notSet,
+							color: '',
+						},
+					}));
+					dismissZIonPopover(ProjectBoardStatusEnum.notSet);
 				}}
 			>
-				<ZIonIcon icon={ellipse} className='w-[0.7rem] h-[0.7rem] mb-[2px]' />
-
-				<ZIonText className='ms-2' color='medium'>
+				<ZIonIcon
+					color='medium'
+					icon={ellipse}
+					className='w-[0.7rem] h-[0.7rem] mb-[2px]'
+				/>
+				<ZIonText
+					className={classNames({
+						'ms-2': true,
+						'font-bold': _ZCurrentStatus.id === ProjectBoardStatusEnum.notSet,
+					})}
+					color='medium'
+				>
 					Not set
+				</ZIonText>
+			</ZIonItem>
+
+			{/* Done */}
+			<ZIonItem
+				className={classNames({
+					'cursor-pointer ion-activatable': true,
+					'zaions-ion-bg-color-medium_point_1':
+						_ZCurrentStatus.id === ProjectBoardStatusEnum.done,
+				})}
+				minHeight='35px'
+				onClick={() => {
+					setZProjectBoardStatesStateAtom((oldValues) => ({
+						...oldValues,
+						currentStatus: {
+							title: 'Done',
+							id: ProjectBoardStatusEnum.done,
+							color: '',
+						},
+					}));
+					dismissZIonPopover(ProjectBoardStatusEnum.done);
+				}}
+			>
+				<ZIonIcon
+					icon={ellipse}
+					color='success'
+					className='w-[0.7rem] h-[0.7rem] mb-[2px]'
+				/>
+				<ZIonText
+					className={classNames({
+						'ms-2': true,
+						'font-bold': _ZCurrentStatus.id === ProjectBoardStatusEnum.done,
+					})}
+					color='medium'
+				>
+					Done
 				</ZIonText>
 			</ZIonItem>
 
@@ -135,7 +238,15 @@ const ZProjectStatusPopover: React.FC<{
 						minHeight='35px'
 						key={index}
 						onClick={() => {
-							dismissZIonPopover(el.id, el.title);
+							setZProjectBoardStatesStateAtom((oldValues) => ({
+								...oldValues,
+								currentStatus: {
+									title: el.title,
+									id: el.id,
+									color: el.color,
+								},
+							}));
+							dismissZIonPopover(el.id);
 						}}
 					>
 						<ZIonIcon

@@ -507,7 +507,7 @@ const ZProjectBoardStatusMenu: React.FC = () => {
 																	)}
 
 																	{!values.statues[index]?.editMode &&
-																	values.statues[index].isDeletable ? (
+																	values.statues[index]?.isDeletable ? (
 																		<ZIonButton
 																			className='ion-no-margin ion-no-padding ms-3'
 																			height='30px'

@@ -374,13 +374,16 @@ const ZProjectSingleIdea: React.FC = () => {
 						initialValues={{
 							title: ZCurrentBoardIdeaData?.title || '',
 							description: ZCurrentBoardIdeaData?.description || '',
-							statusId: ZCurrentBoardIdeaData?.statusUniqueId || null,
+							statusId: ZCurrentBoardIdeaData?.isCompleted
+								? ProjectBoardStatusEnum.done
+								: ZCurrentBoardIdeaData?.statusUniqueId || null,
 							internalNotes: ZCurrentBoardIdeaData?.internalNotes || '',
 							image: {
 								fileUrl: ZCurrentBoardIdeaData?.image?.fileUrl || '',
 								filePath: ZCurrentBoardIdeaData?.image?.filePath || '',
 							},
 							tags: ZCurrentBoardIdeaData?.tags || [],
+							isCompleted: ZCurrentBoardIdeaData?.isCompleted || false,
 
 							editMode: false,
 							addTag: false,
@@ -403,8 +406,12 @@ const ZProjectSingleIdea: React.FC = () => {
 								const _stringifyValue = zStringify({
 									title: values.title,
 									description: values.description,
-									statusUniqueId: values.statusId,
+									statusUniqueId:
+										values.statusId === ProjectBoardStatusEnum.done
+											? null
+											: values.statusId,
 									internalNotes: values.internalNotes,
+									isCompleted: values.isCompleted,
 									image: zStringify(values.image),
 									tags: zStringify(values.tags),
 								});
@@ -827,12 +834,26 @@ const ZProjectSingleIdea: React.FC = () => {
 												labelPlacement='stacked'
 												value={values.statusId}
 												interface='popover'
-												onIonChange={handleChange}
+												onIonChange={(event) => {
+													handleChange(event);
+
+													if (
+														event.target.value === ProjectBoardStatusEnum.done
+													) {
+														setFieldValue('isCompleted', true, false);
+													} else {
+														setFieldValue('isCompleted', false, false);
+													}
+												}}
 												onIonBlur={handleBlur}
 												style={{ '--background': '#fff' }}
 											>
 												<ZIonSelectOption value={null}>
 													Not set
+												</ZIonSelectOption>
+
+												<ZIonSelectOption value={ProjectBoardStatusEnum.done}>
+													Done
 												</ZIonSelectOption>
 												{/*  */}
 												{ZCurrentBoardStatues &&
