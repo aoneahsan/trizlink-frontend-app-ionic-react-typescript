@@ -102,7 +102,7 @@ export interface ZBoardStatusInterface {
 
 export interface ZBoardIdeaVoteInterface {
 	success: boolean;
-	voteUsAdded: boolean;
+	voteWasAdded: boolean;
 	totalVotes: number;
 }
 

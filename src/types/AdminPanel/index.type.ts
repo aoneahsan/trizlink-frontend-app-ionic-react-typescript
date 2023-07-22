@@ -1,3 +1,4 @@
+import { UserAccountType } from '@/types/UserAccount/index.type';
 import { IonReorderGroupCustomEvent } from '@ionic/core';
 import { LinkFolderType } from './linksType/index';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
@@ -37,6 +38,12 @@ export enum AdminPanelMainSidebarMenuPageEnum {
 	workspaces = 'workspaces',
 }
 
+//
+export enum commentReplyEnum {
+	comment = 'comment',
+	reply = 'reply',
+}
+
 // Interfaces
 export interface UTMTagInfoInterface {
 	templateId?: string;
@@ -50,6 +57,14 @@ export interface UTMTagInfoInterface {
 export interface ShortUrlInterface {
 	domain?: string;
 	url?: string;
+}
+
+export interface ZCommentInterface {
+	id?: string;
+	commentableId?: string;
+	content?: string;
+	user: UserAccountType;
+	replies?: { id?: string; content?: string; user: UserAccountType };
 }
 
 export interface ABTestingRotatorInterface {

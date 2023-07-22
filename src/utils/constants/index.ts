@@ -36,6 +36,15 @@ const RouteParams = {
 		editWorkspaceIdParam: ':editWorkspaceId',
 	},
 
+	// Comment
+	comment: {
+		commentId: ':commentId',
+	},
+
+	reply: {
+		replyId: ':replyId',
+	},
+
 	// project
 	project: {
 		projectId: ':projectId',
@@ -87,6 +96,10 @@ export const API_URLS = {
 	workspace_create_list: '/user/workspaces',
 	workspace_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}`,
 
+	// Reply
+	reply_create_list: `/user/comment/${RouteParams.comment.commentId}/replies`,
+	reply_update_delete: `/user/comment/${RouteParams.comment.commentId}/replies/${RouteParams.reply.replyId}`,
+
 	// Project
 	project_create_list: '/user/project',
 	project_update_delete: `/user/project/${RouteParams.project.projectId}`,
@@ -102,6 +115,9 @@ export const API_URLS = {
 	// Project board boardIdea
 	boardIdea_create_list: `/user/board/${RouteParams.project.board.boardId}/boardIdeas`,
 	boardIdea_update_delete: `/user/board/${RouteParams.project.board.boardId}/boardIdeas/${RouteParams.project.boardIdea.boardIdeaId}`,
+	// Ideas Comments
+	boardIdeaComments_create_list: `/user/board/${RouteParams.project.board.boardId}/boardIdeas/${RouteParams.project.boardIdea.boardIdeaId}/comments`,
+	boardIdeaComments_update_delete: `/user/board/${RouteParams.project.board.boardId}/boardIdeas/${RouteParams.project.boardIdea.boardIdeaId}/comments/${RouteParams.comment.commentId}`,
 
 	// Board idea vote
 	boardIdeaVote_create_delete: `/user/p/${RouteParams.project.projectId}/b/${RouteParams.project.board.boardId}/bi/${RouteParams.project.boardIdea.boardIdeaId}/vote`,
@@ -427,6 +443,9 @@ const REACT_QUERY = {
 			DELETE: 'rq-pixel-account-delete-key',
 			GET: 'rq-pixel-account-get-key',
 		},
+		REPLY: {
+			MAIN: 'rq-reply-list-key',
+		},
 		UTM_TAGS: {
 			MAIN: 'rq-utm-tags-list-key',
 		},
@@ -463,6 +482,8 @@ const REACT_QUERY = {
 			BOARD_IDEA: {
 				MAIN: 'rq-project-board-idea-list-key',
 				GET: 'rq-project-board-idea-get-key',
+
+				COMMENTS: 'rq-project-board-idea-comments-list-key',
 			},
 
 			BOARD_STATUS: {

@@ -1,6 +1,16 @@
 import CONSTANTS from '@/utils/constants';
 
 const GENERAL = {
+	COMMENT: {
+		COMMENT_ADDED: 'Comment added successfully.',
+		COMMENT_DELETE: 'Comment deleted successfully.',
+		COMMENT_Update: 'Comment updated successfully.',
+	},
+	REPLY: {
+		REPLY_ADDED: 'Reply added successfully.',
+		REPLY_DELETE: 'Reply deleted successfully.',
+		REPLY_UPDATE: 'Reply updated successfully.',
+	},
 	FILE: {
 		FILE_DELETED_SUCCESS_MESSAGE: 'File deleted successfully.',
 	},

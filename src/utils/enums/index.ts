@@ -58,6 +58,10 @@ export enum API_URL_ENUM {
 	workspace_create_list = 'workspace_create_list',
 	workspace_update_delete = 'workspace_update_delete',
 
+	// Reply
+	reply_create_list = 'reply_create_list',
+	reply_update_delete = 'reply_update_delete',
+
 	// Project
 	project_create_list = 'project_create_list',
 	project_update_delete = 'project_update_delete',
@@ -73,6 +77,9 @@ export enum API_URL_ENUM {
 	// Project Board BoardIdeas
 	boardIdea_create_list = 'boardIdea_create_list',
 	boardIdea_update_delete = 'boardIdea_update_delete',
+	// Idea Comments
+	boardIdeaComments_create_list = 'boardIdeaComments_create_list',
+	boardIdeaComments_update_delete = 'boardIdeaComments_update_delete',
 
 	// Board Idea Vote
 	boardIdeaVote_create_delete = 'boardIdeaVote_create_delete',

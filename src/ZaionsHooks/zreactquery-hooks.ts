@@ -41,6 +41,7 @@ export const useZRQGetRequest = <T>({
 		networkMode: 'offlineFirst',
 		retry: 2,
 	},
+	_showLoader = true,
 }: {
 	_url: API_URL_ENUM;
 	_key: string[];
@@ -56,6 +57,7 @@ export const useZRQGetRequest = <T>({
 		networkMode?: 'always' | 'offlineFirst' | 'online';
 		retry?: number;
 	};
+	_showLoader?: boolean;
 }) => {
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
@@ -73,11 +75,12 @@ export const useZRQGetRequest = <T>({
 				return null;
 			} else {
 				// Present ion loading before api start
-				await presentZIonLoader(
-					_itemsIds?.length
-						? MESSAGES.GENERAL.API_REQUEST.FETCHING_SINGLE_DATA
-						: MESSAGES.GENERAL.API_REQUEST.FETCHING
-				);
+				_showLoader &&
+					(await presentZIonLoader(
+						_itemsIds?.length
+							? MESSAGES.GENERAL.API_REQUEST.FETCHING_SINGLE_DATA
+							: MESSAGES.GENERAL.API_REQUEST.FETCHING
+					));
 
 				/**
 				 * @_url - takes the get url to fetch data from api.
@@ -98,7 +101,7 @@ export const useZRQGetRequest = <T>({
 		},
 		onSuccess: (_data) => {
 			// onSucceed dismissing loader...
-			void dismissZIonLoader();
+			_showLoader && void dismissZIonLoader();
 			// zConsoleLog({
 			// 	message:
 			// 		'From ZaionsHook -> useZRQCreateRequest -> useQuery -> onSuccess',
@@ -108,7 +111,7 @@ export const useZRQGetRequest = <T>({
 		onError: async (_error) => {
 			// need to dismiss the loader first, then showing error just so, user will not get redirected to login without knowing that there was a authenticated error
 			// OnError dismissing loader...
-			void dismissZIonLoader();
+			_showLoader && void dismissZIonLoader();
 
 			// showing error alert...
 			if (!zAppWiseIonicAlertIsOpenedSelector) void presentZIonErrorAlert();
@@ -158,6 +161,7 @@ export const useZRQCreateRequest = <T>({
 	_itemsIds,
 	_urlDynamicParts,
 	_contentType = zAxiosApiRequestContentType.Json,
+	_showLoader = true,
 }: {
 	_url: API_URL_ENUM;
 	_queriesKeysToInvalidate?: string[];
@@ -165,6 +169,7 @@ export const useZRQCreateRequest = <T>({
 	_itemsIds?: string[];
 	_urlDynamicParts?: string[];
 	_contentType?: zAxiosApiRequestContentType;
+	_showLoader?: boolean;
 }) => {
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
@@ -178,7 +183,8 @@ export const useZRQCreateRequest = <T>({
 			_requestData: string | FormData | null
 		): Promise<T | undefined> => {
 			// Present ion loading before api start
-			await presentZIonLoader(MESSAGES.GENERAL.API_REQUEST.CREATING);
+			_showLoader &&
+				(await presentZIonLoader(MESSAGES.GENERAL.API_REQUEST.CREATING));
 			/**
 			 * @_url - takes the post url to post data to api.
 			 *  second argument take the method (post | get | update | delete). as this is the post api so it  will be post
@@ -201,7 +207,7 @@ export const useZRQCreateRequest = <T>({
 		},
 		onSuccess: async (_data) => {
 			// onSucceed dismissing loader...
-			await dismissZIonLoader();
+			_showLoader && (await dismissZIonLoader());
 			if (_queriesKeysToInvalidate?.length) {
 				await queryClient.invalidateQueries({
 					queryKey: _queriesKeysToInvalidate,
@@ -210,7 +216,7 @@ export const useZRQCreateRequest = <T>({
 		},
 		onError: async (_error) => {
 			// OnError dismissing loader...
-			void dismissZIonLoader();
+			_showLoader && void dismissZIonLoader();
 
 			// showing error alert...
 			void presentZIonErrorAlert();
@@ -242,11 +248,13 @@ export const useZRQUpdateRequest = <T>({
 	_queriesKeysToInvalidate,
 	authenticated,
 	_contentType = zAxiosApiRequestContentType.Json,
+	_showLoader = true,
 }: {
 	_url: API_URL_ENUM;
 	_queriesKeysToInvalidate?: string[];
 	authenticated?: boolean;
 	_contentType?: zAxiosApiRequestContentType;
+	_showLoader?: boolean;
 }) => {
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
@@ -275,7 +283,8 @@ export const useZRQUpdateRequest = <T>({
 			requestData: string;
 		}): Promise<T | undefined> => {
 			// Present ion loading before api start
-			await presentZIonLoader(MESSAGES.GENERAL.API_REQUEST.UPDATING);
+			_showLoader &&
+				(await presentZIonLoader(MESSAGES.GENERAL.API_REQUEST.UPDATING));
 			/**
 			 * @_url - takes the post url to post data to api.
 			 *  second argument take the method (post | get | update | delete). as this is the put api for updating so it  will be put
@@ -299,7 +308,7 @@ export const useZRQUpdateRequest = <T>({
 		},
 		onSuccess: (_data) => {
 			// onSucceed dismissing loader...
-			void dismissZIonLoader();
+			_showLoader && void dismissZIonLoader();
 			if (_queriesKeysToInvalidate?.length) {
 				void queryClient.invalidateQueries({
 					queryKey: _queriesKeysToInvalidate,
@@ -308,11 +317,10 @@ export const useZRQUpdateRequest = <T>({
 		},
 		onError: async (_error) => {
 			// OnError dismissing loader...
-			void dismissZIonLoader();
+			_showLoader && void dismissZIonLoader();
 
 			// showing error alert...
 			void presentZIonErrorAlert();
-			// TODO create a helper function to throw a ZCustomError so if we add sentry or some other error logging then it will be easy to track that as well
 
 			// throw the request_failed error
 			reportCustomError(_error);

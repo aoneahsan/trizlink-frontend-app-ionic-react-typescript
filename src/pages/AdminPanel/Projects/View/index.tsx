@@ -795,7 +795,7 @@ const ZProjectPostsState: React.FC = () => {
 	);
 
 	// Add/Remove vote from idea.
-	const { mutateAsync: createBoardIdeaVoteAsyncMutate } =
+	const { mutateAsync: updateBoardIdeaVoteAsyncMutate } =
 		useZRQCreateRequest<ZBoardIdeaVoteInterface>({
 			_url: API_URL_ENUM.boardIdeaVote_create_delete,
 			_queriesKeysToInvalidate: [],
@@ -805,6 +805,7 @@ const ZProjectPostsState: React.FC = () => {
 				CONSTANTS.RouteParams.project.boardIdea.boardIdeaId,
 			],
 			_itemsIds: [projectId, boardId, compState.boardIdeaId],
+			_showLoader: false,
 		});
 
 	const addOrRemoveVote = async (
@@ -813,7 +814,7 @@ const ZProjectPostsState: React.FC = () => {
 	) => {
 		try {
 			if (_id?.trim()?.length > 0) {
-				const _response = await createBoardIdeaVoteAsyncMutate(null);
+				const _response = await updateBoardIdeaVoteAsyncMutate(null);
 
 				if (_response) {
 					const _item = extractInnerData<ZBoardIdeaVoteInterface>(
@@ -822,15 +823,6 @@ const ZProjectPostsState: React.FC = () => {
 					);
 
 					if (_item && _item.success) {
-						if (_item.voteUsAdded) {
-							// TODO: remove this, as also remove the loader on this vote API, add a new parameter
-							// showSuccessNotification(MESSAGES.GENERAL.PROJECT.IDEA_VOTE_ADDED);
-						} else {
-							showSuccessNotification(
-								MESSAGES.GENERAL.PROJECT.IDEA_VOTE_REMOVE
-							);
-						}
-
 						await updateRQCDataHandler<ZProjectBoardIdeasInterface | undefined>(
 							{
 								key: [

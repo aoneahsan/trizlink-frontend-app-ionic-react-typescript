@@ -63,6 +63,7 @@ import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/Fi
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import {
 	useZInvalidateReactQueries,
+	useZRQCreateRequest,
 	useZRQDeleteRequest,
 	useZRQGetRequest,
 	useZRQUpdateRequest,
@@ -129,6 +130,11 @@ import {
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductLogo } from '@/assets/images';
+import {
+	commentReplyEnum,
+	ZCommentInterface,
+} from '@/types/AdminPanel/index.type';
+import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 
 /**
  * Component props type go down
@@ -214,13 +220,71 @@ const ZProjectSingleIdea: React.FC = () => {
 
 	// Delete board idea API.
 	const { mutateAsync: deleteBoardIdeaMutate } = useZRQDeleteRequest(
-		API_URL_ENUM.boardIdea_update_delete,
+		API_URL_ENUM.boardIdeaComments_create_list,
 		[
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.MAIN,
 			projectId,
 			boardId,
 		]
 	);
+
+	// Get ideas comments API.
+	const { data: ZCurrentBoardIdeaCommentsData } = useZRQGetRequest<
+		ZCommentInterface[]
+	>({
+		_url: API_URL_ENUM.boardIdeaComments_create_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.COMMENTS,
+			projectId,
+			boardId,
+			boardIdeaId,
+		],
+		_itemsIds: [boardId, boardIdeaId],
+		_urlDynamicParts: [
+			CONSTANTS.RouteParams.project.board.boardId,
+			CONSTANTS.RouteParams.project.boardIdea.boardIdeaId,
+		],
+	});
+
+	// Create new project API.
+	const { mutateAsync: createIdeaCommentMutate } =
+		useZRQCreateRequest<ZCommentInterface>({
+			_url: API_URL_ENUM.boardIdeaComments_create_list,
+			_queriesKeysToInvalidate: [
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.COMMENTS,
+				projectId,
+				boardId,
+				boardIdeaId,
+			],
+			_itemsIds: [boardId, boardIdeaId],
+			_urlDynamicParts: [
+				CONSTANTS.RouteParams.project.board.boardId,
+				CONSTANTS.RouteParams.project.boardIdea.boardIdeaId,
+			],
+		});
+
+	const addCommentOnIdeaHandle = async (_data: string) => {
+		try {
+			if (_data) {
+				const _response = await createIdeaCommentMutate(_data);
+
+				if (_response) {
+					const _item = extractInnerData<ZCommentInterface>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (_item && _item.id) {
+						showSuccessNotification(MESSAGES.GENERAL.COMMENT.COMMENT_ADDED);
+					} else {
+						showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+					}
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
 
 	// Formik submit handler.
 	const FormikSubmitHandler = async (_data: string) => {
@@ -387,6 +451,9 @@ const ZProjectSingleIdea: React.FC = () => {
 
 							editMode: false,
 							addTag: false,
+
+							// Comment
+							commentContent: '',
 						}}
 						enableReinitialize={true}
 						validate={(values) => {
@@ -433,7 +500,6 @@ const ZProjectSingleIdea: React.FC = () => {
 							setFieldValue,
 							submitForm,
 						}) => {
-							console.log({ values });
 							return (
 								<ZIonRow
 									className={classNames({
@@ -473,7 +539,7 @@ const ZProjectSingleIdea: React.FC = () => {
 																className='m-[0px!important] font-extrabold z_ion_color_danger'
 																style={{ fontSize: '1.1rem!important' }}
 															>
-																1
+																{ZCurrentBoardIdeaData?.votesCount}
 															</p>
 														</ZIonLabel>
 													</ZIonButton>
@@ -781,9 +847,20 @@ const ZProjectSingleIdea: React.FC = () => {
 															src='http://localhost:8000/storage/uploaded-files/699N97z3ta22YCNfRpKC7P9AvwIVI00iwRN38pfd.png'
 															className='w-[36px] h-[36px] shadow-md mr-2 rounded-[.7rem!important] cursor-pointer overflow-hidden'
 														/>
-														<ZIonInput
+														<ZIonTextarea
 															placeholder='What do you think?'
-															minHeight='45px'
+															// minHeight='45px'
+															fill='outline'
+															rows={1}
+															style={{
+																minHeight: '41px',
+																'--padding-top': '12px',
+															}}
+															onIonChange={handleChange}
+															onIonBlur={handleBlur}
+															name='commentContent'
+															autoGrow={true}
+															value={values?.commentContent}
 														/>
 													</div>
 
@@ -800,7 +877,27 @@ const ZProjectSingleIdea: React.FC = () => {
 														</ZIonButton>
 
 														<div className=''>
-															<ZIonButton className='' color='tertiary'>
+															<ZIonButton
+																className=''
+																disabled={
+																	values?.commentContent?.trim()?.length === 0
+																}
+																color='tertiary'
+																onClick={async () => {
+																	if (
+																		values?.commentContent?.trim()?.length > 0
+																	) {
+																		const _stringifyData = zStringify({
+																			content: values.commentContent,
+																		});
+																		await addCommentOnIdeaHandle(
+																			_stringifyData
+																		);
+
+																		setFieldValue('commentContent', '', false);
+																	}
+																}}
+															>
 																<ZIonText className='text-md'>Comment</ZIonText>
 															</ZIonButton>
 														</div>
@@ -810,12 +907,41 @@ const ZProjectSingleIdea: React.FC = () => {
 												{/* Comments */}
 												<div className=''>
 													{/* single comment */}
-													<div className=''>
-														<ZProjectSingleComment />
-														<div className='ml-6 border-l-4 border-neutral-200'>
-															<ZProjectSingleComment />
-														</div>
-													</div>
+													{ZCurrentBoardIdeaCommentsData?.map((el, index) => {
+														if (el.id) {
+															return (
+																// <div className=''>
+																// 	<ZProjectSingleComment
+																// 		id={el.id}
+																// 		text={el?.text}
+																// 		username={el?.username}
+																// 		userAvatar={el?.userAvatar}
+																// 		type={commentReplyEnum.comment}
+																// 	/>
+																// 	{ZCurrentCommentReplies &&
+																// 		ZCurrentCommentReplies?.map((el) => {
+																// 			if (el.id) {
+																// 				return (
+																// 					<div className='ml-6 border-l-4 border-neutral-200'>
+																// 						<ZProjectSingleComment
+																// 							id={el.id}
+																// 							commentId={id} // comment id which the reply is belong
+																// 							text={el?.content}
+																// 							username={el?.user?.username}
+																// 							userAvatar={
+																// 								el?.user?.profilePitcher
+																// 							}
+																// 							type={commentReplyEnum.reply}
+																// 						/>
+																// 					</div>
+																// 				);
+																// 			}
+																// 		})}
+																// </div>
+																<></>
+															);
+														}
+													})}
 												</div>
 											</div>
 										</div>
@@ -1115,80 +1241,468 @@ const ZProjectSingleIdea: React.FC = () => {
 	);
 };
 
-const ZProjectSingleComment: React.FC = () => {
+const ZIdeaComments: React.FC<{
+	id: string;
+	text?: string;
+	userAvatar?: string;
+	username?: string;
+}> = ({ id, text, userAvatar, username }) => {
+	const { projectId, boardId, boardIdeaId } = useParams<{
+		projectId: string;
+		boardId: string;
+		boardIdeaId: string;
+	}>();
+
+	// Getting reply on comment from backend.
+	const { data: ZCurrentCommentReplies } = useZRQGetRequest<
+		ZCommentInterface[]
+	>({
+		_url: API_URL_ENUM.reply_create_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.REPLY.MAIN,
+			projectId,
+			boardId,
+			boardIdeaId,
+			id,
+		],
+		_itemsIds: [id],
+		_urlDynamicParts: [CONSTANTS.RouteParams.comment.commentId],
+		_shouldFetchWhenIdPassed: !id ? true : false,
+	});
+
 	return (
-		<div className='mt-4 md:pl-4 pt-2 pb-2 pl-2.5'>
-			<div className='flex ion-align-items-center'>
-				<ZIonImg
-					src='http://localhost:8000/storage/uploaded-files/699N97z3ta22YCNfRpKC7P9AvwIVI00iwRN38pfd.png'
-					className='w-[36px] h-[36px] shadow-md mr-2 rounded-[.7rem!important] cursor-pointer overflow-hidden'
-				/>
-
-				<div className='ms-2'>
-					<ZIonText className='block text-sm font-semibold leading-snug cursor-pointer'>
-						Talha Bin Irshad
-					</ZIonText>
-					<ZIonText className='block text-sm leading-snug' color='medium'>
-						1 day ago
-					</ZIonText>
-				</div>
-			</div>
-
-			{/* Comment message */}
-			<ZIonText
-				className='block mt-3 break-words whitespace-pre-wrap offset'
-				style={{ marginLeft: 'calc(36px + 1rem)' }}
-			>
-				Use {PRODUCT_NAME}'s AI tools to generate replies for new ideas.
-				Demonstrate to your users that you are listening to their feedback.
-			</ZIonText>
-
-			{/* Action buttons */}
-			<div
-				className='flex mt-3 offset'
-				style={{ marginLeft: 'calc(27px + 1rem)' }}
-			>
-				{/* Replay */}
-				<ZIonButton
-					color='medium'
-					fill='clear'
-					className='mr-3 ion-no-padding ion-no-margin'
-				>
-					<ZIonIcon icon={arrowUndoOutline} className='mr-1 font-extrabold' />
-					<ZIonText className='font-bold'>REPLAY</ZIonText>
-				</ZIonButton>
-
-				{/* Delete */}
-				<ZIonButton
-					color='medium'
-					fill='clear'
-					className='mr-3 ion-no-padding ion-no-margin'
-				>
-					<ZIonIcon icon={trashBinOutline} className='mr-1 font-extrabold' />
-					<ZIonText className='font-bold'>DELETE</ZIonText>
-				</ZIonButton>
-
-				{/* Edit */}
-				<ZIonButton
-					color='medium'
-					fill='clear'
-					className='mr-3 ion-no-padding ion-no-margin'
-				>
-					<ZIonIcon icon={pencilOutline} className='mr-1 font-extrabold' />
-					<ZIonText className='font-bold'>EDIT</ZIonText>
-				</ZIonButton>
-
-				{/* Pin */}
-				<ZIonButton
-					color='medium'
-					fill='clear'
-					className='mr-3 ion-no-padding ion-no-margin'
-				>
-					<ZIonIcon icon={pinOutline} className='mr-1 font-extrabold' />
-					<ZIonText className='font-bold'>PIN TO TOP</ZIonText>
-				</ZIonButton>
-			</div>
+		<div className=''>
+			<ZProjectSingleComment
+				id={id}
+				text={text}
+				username={username}
+				userAvatar={userAvatar}
+				type={commentReplyEnum.comment}
+			/>
+			{ZCurrentCommentReplies &&
+				ZCurrentCommentReplies?.map((el) => {
+					if (el.id) {
+						return (
+							<div className='ml-6 border-l-4 border-neutral-200'>
+								<ZProjectSingleComment
+									id={el.id}
+									commentId={id} // comment id which the reply is belong
+									text={el?.content}
+									username={el?.user?.username}
+									userAvatar={el?.user?.profilePitcher}
+									type={commentReplyEnum.reply}
+								/>
+							</div>
+						);
+					}
+				})}
 		</div>
+	);
+};
+
+const ZProjectSingleComment: React.FC<{
+	id: string;
+	commentId?: string; // if reply we need to pass comment id to.
+	text?: string;
+	userAvatar?: string;
+	username?: string;
+	type?: commentReplyEnum;
+}> = ({
+	id,
+	text,
+	userAvatar,
+	username,
+	type = commentReplyEnum.comment,
+	commentId,
+}) => {
+	const { projectId, boardId, boardIdeaId } = useParams<{
+		projectId: string;
+		boardId: string;
+		boardIdeaId: string;
+	}>();
+
+	// custom hook
+	const { presentZIonAlert } = useZIonAlert();
+	const { presentZIonErrorAlert } = useZIonErrorAlert();
+	const { zInvalidateReactQueries } = useZInvalidateReactQueries();
+
+	// Create new project API.
+	const { mutateAsync: createCommentReplyMutate } =
+		useZRQCreateRequest<ZCommentInterface>({
+			_url: API_URL_ENUM.reply_create_list,
+			_queriesKeysToInvalidate: [
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.REPLY.MAIN,
+				projectId,
+				boardId,
+				boardIdeaId,
+				id,
+			],
+			_itemsIds: [id],
+			_urlDynamicParts: [CONSTANTS.RouteParams.comment.commentId],
+		});
+
+	// Delete comment API.
+	const { mutateAsync: deleteCommentMutate } = useZRQDeleteRequest(
+		API_URL_ENUM.boardIdeaComments_update_delete,
+		[
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.COMMENTS,
+			projectId,
+			boardId,
+			boardIdeaId,
+		]
+	);
+
+	// Delete comment API.
+	const { mutateAsync: deleteReplyMutate } = useZRQDeleteRequest(
+		API_URL_ENUM.reply_update_delete,
+		[
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.REPLY.MAIN,
+			projectId,
+			boardId,
+			boardIdeaId,
+			commentId || '',
+		]
+	);
+
+	// create a new reply on comment handler
+	const addReplyOnIdeaHandle = async (_data: string) => {
+		try {
+			if (_data) {
+				const _response = await createCommentReplyMutate(_data);
+
+				if (_response) {
+					const _item = extractInnerData<ZCommentInterface>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (_item && _item.id) {
+						showSuccessNotification(MESSAGES.GENERAL.REPLY.REPLY_ADDED);
+					} else {
+						showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+					}
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
+	// deleteCommentFn will show the confirm alert before deleting boardIdea.
+	const deleteCommentOrReplyFn = async () => {
+		try {
+			if (id) {
+				await presentZIonAlert({
+					header: `Delete ${
+						type === commentReplyEnum.comment
+							? 'Comment'
+							: type === commentReplyEnum.reply
+							? 'Reply'
+							: ''
+					}.`,
+					subHeader: `Remove ${
+						type === commentReplyEnum.comment
+							? 'Comment'
+							: type === commentReplyEnum.reply
+							? 'Reply'
+							: ''
+					} from ${
+						type === commentReplyEnum.comment
+							? 'Idea'
+							: type === commentReplyEnum.reply
+							? 'Comment'
+							: ''
+					}.`,
+					message: `Are you sure you want to delete this ${
+						type === commentReplyEnum.comment
+							? 'comment'
+							: type === commentReplyEnum.reply
+							? 'reply'
+							: ''
+					}?`,
+					buttons: [
+						{
+							text: 'Cancel',
+							role: 'cancel',
+						},
+						{
+							text: 'Delete',
+							role: 'danger',
+							handler: () => {
+								void removeCommentOrReply();
+							},
+						},
+					],
+				});
+			} else {
+				await presentZIonErrorAlert();
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	// removeCommentOrReply will hit delete comment/reply api.
+	const removeCommentOrReply = async () => {
+		try {
+			if (id) {
+				// hitting the delete api
+				let _response;
+
+				switch (type) {
+					case commentReplyEnum.comment:
+						_response = await deleteCommentMutate({
+							itemIds: [boardId, boardIdeaId, id],
+							urlDynamicParts: [
+								CONSTANTS.RouteParams.project.board.boardId,
+								CONSTANTS.RouteParams.project.boardIdea.boardIdeaId,
+								CONSTANTS.RouteParams.comment.commentId,
+							],
+						});
+						break;
+
+					case commentReplyEnum.reply:
+						if (commentId) {
+							_response = await deleteReplyMutate({
+								itemIds: [commentId, id],
+								urlDynamicParts: [
+									CONSTANTS.RouteParams.comment.commentId,
+									CONSTANTS.RouteParams.reply.replyId,
+								],
+							});
+
+							// await zInvalidateReactQueries([
+							// 	CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.COMMENTS,
+							// 	projectId,
+							// 	boardId,
+							// 	boardIdeaId,
+							// ]);
+						}
+						break;
+				}
+
+				if (_response) {
+					const _data = extractInnerData<{ success: boolean }>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (_data && _data?.success) {
+						switch (type) {
+							case commentReplyEnum.comment:
+								showSuccessNotification(
+									MESSAGES.GENERAL.COMMENT.COMMENT_DELETE
+								);
+								break;
+
+							case commentReplyEnum.reply:
+								showSuccessNotification(MESSAGES.GENERAL.REPLY.REPLY_DELETE);
+								break;
+						}
+					}
+				} else {
+					await presentZIonErrorAlert();
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
+	return (
+		<Formik
+			initialValues={{
+				addReplyMode: false,
+				replyText: '',
+			}}
+			onSubmit={async (values) => {
+				try {
+					const _stringifyData = zStringify({
+						content: values.replyText,
+					});
+
+					await addReplyOnIdeaHandle(_stringifyData);
+				} catch (error) {
+					reportCustomError(error);
+				}
+			}}
+		>
+			{({
+				values,
+				setFieldValue,
+				resetForm,
+				handleChange,
+				handleBlur,
+				submitForm,
+			}) => {
+				return (
+					<div
+						className={classNames({
+							'mt-4 md:pl-4 pt-2 pb-2 pl-2.5 ': true,
+							'border-l-4 border-neutral-200': values?.addReplyMode,
+						})}
+					>
+						<div className='flex ion-align-items-center'>
+							<ZIonImg
+								src={userAvatar || getUiAvatarApiUrl({ name: username })}
+								className='w-[36px] h-[36px] shadow-md mr-2 rounded-[.7rem!important] cursor-pointer overflow-hidden'
+							/>
+
+							<div className='ms-2'>
+								<ZIonText className='block text-sm font-semibold leading-snug cursor-pointer'>
+									{username}
+								</ZIonText>
+								<ZIonText className='block text-sm leading-snug' color='medium'>
+									1 day ago
+								</ZIonText>
+							</div>
+						</div>
+
+						{/* Comment message */}
+						<div className='overflow-hidden line-clamp-3'>
+							<ZIonText
+								className='block mt-3 break-words whitespace-pre-wrap offset'
+								style={{ marginLeft: 'calc(36px + 1rem)' }}
+							>
+								{text}
+							</ZIonText>
+						</div>
+
+						{/* Action buttons */}
+						<div
+							className='flex mt-3 offset'
+							style={{ marginLeft: 'calc(27px + 1rem)' }}
+						>
+							{/* Replay */}
+							<ZIonButton
+								color='medium'
+								fill='clear'
+								className='mr-3 ion-no-padding ion-no-margin'
+								onClick={() => {
+									setFieldValue('addReplyMode', true, false);
+								}}
+							>
+								<ZIonIcon
+									icon={arrowUndoOutline}
+									className='mr-1 font-extrabold'
+								/>
+								<ZIonText className='font-bold'>REPLAY</ZIonText>
+							</ZIonButton>
+
+							{/* Delete */}
+							<ZIonButton
+								color='medium'
+								fill='clear'
+								className='mr-3 ion-no-padding ion-no-margin'
+								onClick={async () => {
+									await deleteCommentOrReplyFn();
+								}}
+							>
+								<ZIonIcon
+									icon={trashBinOutline}
+									className='mr-1 font-extrabold'
+								/>
+								<ZIonText className='font-bold'>DELETE</ZIonText>
+							</ZIonButton>
+
+							{/* Edit */}
+							<ZIonButton
+								color='medium'
+								fill='clear'
+								className='mr-3 ion-no-padding ion-no-margin'
+							>
+								<ZIonIcon
+									icon={pencilOutline}
+									className='mr-1 font-extrabold'
+								/>
+								<ZIonText className='font-bold'>EDIT</ZIonText>
+							</ZIonButton>
+
+							{/* Pin */}
+							<ZIonButton
+								color='medium'
+								fill='clear'
+								className='mr-3 ion-no-padding ion-no-margin'
+							>
+								<ZIonIcon icon={pinOutline} className='mr-1 font-extrabold' />
+								<ZIonText className='font-bold'>PIN TO TOP</ZIonText>
+							</ZIonButton>
+						</div>
+
+						{/* Replay form */}
+						{values?.addReplyMode && (
+							<div className='mt-4 md:pl-4 pt-2 pb-2 pl-2.5'>
+								<div className='flex ion-align-items-start'>
+									<ZIonImg
+										src={userAvatar || getUiAvatarApiUrl({ name: username })}
+										className='w-[36px] h-[36px] shadow-md mr-2 rounded-[.7rem!important] cursor-pointer overflow-hidden'
+									/>
+
+									<div className='w-full ms-2'>
+										<ZIonTextarea
+											placeholder='What do you think?'
+											fill='outline'
+											className='w-full'
+											rows={1}
+											style={{
+												minHeight: '41px',
+												'--padding-top': '12px',
+											}}
+											onIonChange={handleChange}
+											onIonBlur={handleBlur}
+											name='replyText'
+											autoGrow={true}
+											value={values?.replyText}
+										/>
+
+										<div className='flex gap-1 ion-align-items-start ion-justify-content-between comment_button md:mt-2'>
+											<ZIonButton
+												className='ion-no-padding'
+												fill='clear'
+												color='dark'
+											>
+												<ZIonIcon icon={attachOutline} className='mr-1' />
+												<ZIonText className='text-md'>Attach image</ZIonText>
+											</ZIonButton>
+
+											<div>
+												<ZIonButton
+													className='me-2'
+													color='medium'
+													onClick={() => {
+														resetForm({
+															values: { addReplyMode: false, replyText: '' },
+														});
+													}}
+												>
+													<ZIonText className='text-md'>Cancel</ZIonText>
+												</ZIonButton>
+												<ZIonButton
+													color='tertiary'
+													disabled={values?.replyText?.trim()?.length === 0}
+													onClick={async () => {
+														try {
+															await submitForm();
+
+															setFieldValue('addReplyMode', false, false);
+															setFieldValue('replyText', '', false);
+														} catch (error) {
+															reportCustomError(error);
+														}
+													}}
+												>
+													<ZIonText className='text-md'>Comment</ZIonText>
+												</ZIonButton>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						)}
+					</div>
+				);
+			}}
+		</Formik>
 	);
 };
 
