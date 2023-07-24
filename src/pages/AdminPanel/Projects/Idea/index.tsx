@@ -21,9 +21,11 @@ import {
 	createOutline,
 	documentsOutline,
 	informationCircleOutline,
+	linkOutline,
 	optionsOutline,
 	pencilOutline,
 	pinOutline,
+	refreshOutline,
 	trashBinOutline,
 } from 'ionicons/icons';
 import classNames from 'classnames';
@@ -51,6 +53,7 @@ import {
 	ZIonRow,
 	ZIonSelect,
 	ZIonSelectOption,
+	ZIonSkeletonText,
 	ZIonText,
 	ZIonTextarea,
 } from '@/components/ZIonComponents';
@@ -62,11 +65,13 @@ import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/Fi
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import {
+	useZUpdateRQCacheData,
 	useZInvalidateReactQueries,
 	useZRQCreateRequest,
 	useZRQDeleteRequest,
 	useZRQGetRequest,
 	useZRQUpdateRequest,
+	useZGetRQCacheData,
 } from '@/ZaionsHooks/zreactquery-hooks';
 import {
 	useZIonAlert,
@@ -129,12 +134,17 @@ import {
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
-import { ProductLogo } from '@/assets/images';
+import { noComments, ProductLogo } from '@/assets/images';
 import {
 	commentReplyEnum,
 	ZCommentInterface,
+	ZReplyInterface,
 } from '@/types/AdminPanel/index.type';
 import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
+import { RefresherEventDetail } from '@ionic/react';
+import ZIonRefresher from '@/components/ZIonComponents/ZIonRefresher';
+import ZIonRefresherContent from '@/components/ZIonComponents/ZIonRefresherContent';
+import ZProjectBoardIdeaVoteButton from '@/components/ProjectComponents/VoteButton';
 
 /**
  * Component props type go down
@@ -162,6 +172,7 @@ const ZProjectSingleIdea: React.FC = () => {
 	const { presentZIonAlert } = useZIonAlert();
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
 	const { zInvalidateReactQueries } = useZInvalidateReactQueries();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
 	//
 	const { presentZIonModal: presentZFileUploadModal } = useZIonModal(
@@ -169,28 +180,33 @@ const ZProjectSingleIdea: React.FC = () => {
 	);
 
 	// Getting project board from backend.
-	const { data: ZCurrentBoardIdeaData, error: ZBoardIdeaError } =
-		useZRQGetRequest<ZProjectBoardIdeasInterface>({
-			_url: API_URL_ENUM.boardIdea_update_delete,
-			_key: [
-				CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.GET,
-				projectId,
-				boardId,
-				boardIdeaId,
-			],
-			_itemsIds: [projectId, boardId, boardIdeaId],
-			_urlDynamicParts: [
-				CONSTANTS.RouteParams.project.projectId,
-				CONSTANTS.RouteParams.project.board.boardId,
-				CONSTANTS.RouteParams.project.boardIdea.boardIdeaId,
-			],
-			_extractType: ZRQGetRequestExtractEnum.extractItem,
-		});
+	const {
+		data: ZCurrentBoardIdeaData,
+		refetch: refetchZCurrentBoardIdeaData,
+		isFetching: isZCurrentBoardIdeaDataFetching,
+	} = useZRQGetRequest<ZProjectBoardIdeasInterface>({
+		_url: API_URL_ENUM.boardIdea_update_delete,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.GET,
+			projectId,
+			boardId,
+			boardIdeaId,
+		],
+		_itemsIds: [projectId, boardId, boardIdeaId],
+		_urlDynamicParts: [
+			CONSTANTS.RouteParams.project.projectId,
+			CONSTANTS.RouteParams.project.board.boardId,
+			CONSTANTS.RouteParams.project.boardIdea.boardIdeaId,
+		],
+		_extractType: ZRQGetRequestExtractEnum.extractItem,
+	});
 
 	// Getting project boardStatuses from backend.
-	const { data: ZCurrentBoardStatues } = useZRQGetRequest<
-		ZBoardStatusInterface[]
-	>({
+	const {
+		data: ZCurrentBoardStatues,
+		refetch: refetchZCurrentBoardStatues,
+		isFetching: isZCurrentBoardStatuesFetching,
+	} = useZRQGetRequest<ZBoardStatusInterface[]>({
 		_url: API_URL_ENUM.boardStatus_create_list,
 		_key: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_STATUS.MAIN,
@@ -205,12 +221,12 @@ const ZProjectSingleIdea: React.FC = () => {
 	// Update BoardIdea API.
 	const { mutateAsync: updateBoardIdeaMutate } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.boardIdea_update_delete,
-		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.GET,
-			projectId,
-			boardId,
-			boardIdeaId,
-		],
+		// _queriesKeysToInvalidate: [
+		// 	CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.GET,
+		// 	projectId,
+		// 	boardId,
+		// 	boardIdeaId,
+		// ],
 	});
 
 	// Delete file api.
@@ -229,9 +245,10 @@ const ZProjectSingleIdea: React.FC = () => {
 	);
 
 	// Get ideas comments API.
-	const { data: ZCurrentBoardIdeaCommentsData } = useZRQGetRequest<
-		ZCommentInterface[]
-	>({
+	const {
+		data: ZCurrentBoardIdeaCommentsData,
+		isFetching: isZCurrentBoardIdeaCommentsDataFetching,
+	} = useZRQGetRequest<ZCommentInterface[]>({
 		_url: API_URL_ENUM.boardIdeaComments_create_list,
 		_key: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.COMMENTS,
@@ -306,11 +323,41 @@ const ZProjectSingleIdea: React.FC = () => {
 					);
 
 					if (_item && _item.id) {
-						await zInvalidateReactQueries([
-							CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.MAIN,
-							projectId,
-							boardId,
-						]);
+						// await zInvalidateReactQueries([
+						// 	CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.MAIN,
+						// 	projectId,
+						// 	boardId,
+						// ]);
+
+						await updateRQCDataHandler<ZProjectBoardIdeasInterface | undefined>(
+							{
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.MAIN,
+									projectId,
+									boardId,
+								],
+								data: {
+									..._item,
+								} as ZProjectBoardIdeasInterface,
+								id: boardIdeaId,
+							}
+						);
+
+						await updateRQCDataHandler<ZProjectBoardIdeasInterface | undefined>(
+							{
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.GET,
+									projectId,
+									boardId,
+									boardIdeaId,
+								],
+								data: {
+									..._item,
+								} as ZProjectBoardIdeasInterface,
+								id: boardIdeaId,
+								updateHoleData: true,
+							}
+						);
 
 						showSuccessNotification(
 							MESSAGES.GENERAL.PROJECT.BOARD_IDEA_UPDATED_SUCCESSFULLY
@@ -414,6 +461,32 @@ const ZProjectSingleIdea: React.FC = () => {
 		}
 	};
 
+	// Refresh handler
+	const refetchDataHandler = async () => {
+		try {
+			// Refetch Boards Idea
+			await refetchZCurrentBoardIdeaData();
+
+			// Refetch Board Status
+			await refetchZCurrentBoardStatues();
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
+	// Refresh handler
+	const zIonRefresherRefreshHandler = async (
+		event: CustomEvent<RefresherEventDetail>
+	) => {
+		try {
+			await refetchDataHandler();
+			//
+			event.detail.complete();
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
 	return (
 		<ZaionsIonPage
 			pageTitle='Zaions Idea Page'
@@ -425,6 +498,10 @@ const ZProjectSingleIdea: React.FC = () => {
 
 			{/* Content */}
 			<ZIonContent color='light'>
+				<ZIonRefresher slot='fixed' onIonRefresh={zIonRefresherRefreshHandler}>
+					<ZIonRefresherContent />
+				</ZIonRefresher>
+
 				{/* Grid */}
 				<ZIonGrid
 					className={classNames({
@@ -518,7 +595,107 @@ const ZProjectSingleIdea: React.FC = () => {
 										sizeSm='12'
 										sizeXs='12'
 									>
-										{!values.editMode && (
+										{!isZCurrentBoardIdeaDataFetching &&
+											ZCurrentBoardIdeaData &&
+											!values.editMode && (
+												<div className='w-full px-6 py-5 bg-white rounded-lg shadow'>
+													<div className='flex ion-align-items-start'>
+														{/* Vote button */}
+														<ZProjectBoardIdeaVoteButton
+															boarIdea={ZCurrentBoardIdeaData}
+															projectId={projectId}
+															boardId={boardId}
+															buttonHeight='65px'
+															buttonFill='outline'
+															buttonStyle={{ '--border-width': '1px' }}
+															buttonClassName='mr-4'
+														/>
+
+														<div className=''>
+															<ZIonText className='block text-lg font-semibold leading-tight md:text-2xl'>
+																{ZCurrentBoardIdeaData?.title}
+															</ZIonText>
+
+															{/* Status */}
+															{ZCurrentBoardIdeaData?.statusUniqueId !==
+																ProjectBoardStatusEnum.notSet && (
+																<ZIonText
+																	className='block text-base font-bold tracking-wide rounded-full'
+																	style={{
+																		color: ZCurrentBoardStatues?.find(
+																			(el) =>
+																				el.id ===
+																				ZCurrentBoardIdeaData?.statusUniqueId
+																		)?.color,
+																	}}
+																>
+																	{ZCurrentBoardStatues?.find(
+																		(el) =>
+																			el.id ===
+																			ZCurrentBoardIdeaData?.statusUniqueId
+																	)?.title ||
+																		(ZCurrentBoardIdeaData?.statusUniqueId ===
+																			null &&
+																			'')}
+																</ZIonText>
+															)}
+														</div>
+
+														<ZIonIcon
+															className='w-5 h-5 cursor-pointer ms-auto'
+															onClick={() => {
+																setFieldValue('editMode', true, false);
+															}}
+															icon={createOutline}
+														/>
+													</div>
+
+													<div className='overflow-hidden line-clamp-3'>
+														<ZIonText className='block mt-4 break-words whitespace-pre-wrap'>
+															{ZCurrentBoardIdeaData?.description}
+														</ZIonText>
+													</div>
+
+													<ZIonText
+														className='block mt-5 text-lg font-medium'
+														color='medium'
+													>
+														Attached images
+													</ZIonText>
+
+													{values.image?.fileUrl?.trim()?.length > 0 && (
+														<ZIonImg
+															className='w-20 h-20 mr-2 transition duration-150 ease-in-out transform border rounded-md shadow-lg hover:scale-105 hover:shadow-xl'
+															src={values?.image?.fileUrl}
+														/>
+													)}
+
+													<div className='flex flex-wrap mt-6 ion-align-items-center ion-justify-content-start'>
+														<ZIonImg
+															src={
+																ZCurrentBoardIdeaData?.user?.profilePitcher ||
+																getUiAvatarApiUrl({
+																	name: ZCurrentBoardIdeaData?.user?.username,
+																})
+															}
+															className='w-[28px] h-[28px] shadow-md mr-2 rounded-[.7rem!important] cursor-pointer overflow-hidden'
+														/>
+
+														<ZIonText className='pr-1 font-semibold cursor-pointer'>
+															{ZCurrentBoardIdeaData?.user?.username}
+														</ZIonText>
+
+														<ZIonText
+															className='pr-1 font-light cursor-pointer text-md'
+															color='medium'
+														>
+															posted {ZCurrentBoardIdeaData?.createdAt}
+														</ZIonText>
+													</div>
+												</div>
+											)}
+
+										{isZCurrentBoardIdeaDataFetching && (
 											<div className='w-full px-6 py-5 bg-white rounded-lg shadow'>
 												<div className='flex ion-align-items-start'>
 													<ZIonButton
@@ -530,61 +707,54 @@ const ZProjectSingleIdea: React.FC = () => {
 													>
 														<ZIonLabel color='light'>
 															<p className='m-[0px!important] z_ion_color_danger'>
-																<ZIonIcon
-																	icon={chevronUpOutline}
-																	className='w-5 h-5 font-extrabold'
-																/>
+																<ZIonSkeletonText
+																	animated={true}
+																	style={{ width: '17px', height: '15px' }}
+																></ZIonSkeletonText>
 															</p>
 															<p
 																className='m-[0px!important] font-extrabold z_ion_color_danger'
 																style={{ fontSize: '1.1rem!important' }}
 															>
-																{ZCurrentBoardIdeaData?.votesCount}
+																<ZIonSkeletonText
+																	animated={true}
+																	style={{ width: '17px', height: '15px' }}
+																></ZIonSkeletonText>
 															</p>
 														</ZIonLabel>
 													</ZIonButton>
 
 													<div className=''>
 														<ZIonText className='block text-lg font-semibold leading-tight md:text-2xl'>
-															{ZCurrentBoardIdeaData?.title}
+															<ZIonSkeletonText
+																animated={true}
+																style={{ width: '100%', height: '19px' }}
+															></ZIonSkeletonText>
 														</ZIonText>
 
 														{/* Status */}
-														{ZCurrentBoardIdeaData?.statusUniqueId !==
-															ProjectBoardStatusEnum.notSet && (
-															<ZIonText
-																className='block text-base font-bold tracking-wide rounded-full'
-																style={{
-																	color: ZCurrentBoardStatues?.find(
-																		(el) =>
-																			el.id ===
-																			ZCurrentBoardIdeaData?.statusUniqueId
-																	)?.color,
-																}}
-															>
-																{ZCurrentBoardStatues?.find(
-																	(el) =>
-																		el.id ===
-																		ZCurrentBoardIdeaData?.statusUniqueId
-																)?.title ||
-																	(ZCurrentBoardIdeaData?.statusUniqueId ===
-																		null &&
-																		'')}
-															</ZIonText>
-														)}
+														<ZIonText className='block text-base font-bold tracking-wide rounded-full'>
+															<ZIonSkeletonText
+																animated={true}
+																style={{ width: '60px', height: '15px' }}
+															></ZIonSkeletonText>
+														</ZIonText>
 													</div>
 
-													<ZIonIcon
-														className='w-5 h-5 cursor-pointer ms-auto'
-														onClick={() => {
-															setFieldValue('editMode', true, false);
-														}}
-														icon={createOutline}
-													/>
+													<ZIonText className='ms-auto'>
+														<ZIonSkeletonText
+															animated={true}
+															style={{ width: '17px', height: '15px' }}
+														></ZIonSkeletonText>
+													</ZIonText>
 												</div>
+
 												<div className='overflow-hidden line-clamp-3'>
 													<ZIonText className='block mt-4 break-words whitespace-pre-wrap'>
-														{ZCurrentBoardIdeaData?.description}
+														<ZIonSkeletonText
+															animated={true}
+															style={{ width: '100%', height: '60px' }}
+														></ZIonSkeletonText>
 													</ZIonText>
 												</div>
 
@@ -592,31 +762,42 @@ const ZProjectSingleIdea: React.FC = () => {
 													className='block mt-5 text-lg font-medium'
 													color='medium'
 												>
-													Attached images
+													<ZIonSkeletonText
+														animated={true}
+														style={{ width: '20%', height: '17px' }}
+													></ZIonSkeletonText>
 												</ZIonText>
 
-												{values.image?.fileUrl?.trim()?.length > 0 && (
-													<ZIonImg
-														className='w-20 h-20 mr-2 transition duration-150 ease-in-out transform border rounded-md shadow-lg hover:scale-105 hover:shadow-xl'
-														src={values?.image?.fileUrl}
-													/>
-												)}
+												<ZIonImg className='w-20 h-20 transition duration-150 ease-in-out transform border rounded-md shadow-lg hover:scale-105 hover:shadow-xl'>
+													<ZIonSkeletonText
+														animated={true}
+														style={{ width: '100%', height: '100%' }}
+													></ZIonSkeletonText>
+												</ZIonImg>
 
 												<div className='flex flex-wrap mt-6 ion-align-items-center ion-justify-content-start'>
-													<ZIonImg
-														src={ProductLogo}
-														className='w-[28px] h-[28px] shadow-md mr-2 rounded-[.7rem!important] cursor-pointer overflow-hidden'
-													/>
+													<ZIonImg className='w-[28px] h-[28px] shadow-md mr-2 rounded-[.7rem!important] cursor-pointer overflow-hidden'>
+														<ZIonSkeletonText
+															animated={true}
+															style={{ width: '100%', height: '100%' }}
+														></ZIonSkeletonText>
+													</ZIonImg>
 
 													<ZIonText className='pr-1 font-semibold cursor-pointer'>
-														Talha Bin Irshad
+														<ZIonSkeletonText
+															animated={true}
+															style={{ width: '35px', height: '17px' }}
+														></ZIonSkeletonText>
 													</ZIonText>
 
 													<ZIonText
 														className='pr-1 font-light cursor-pointer text-md'
 														color='medium'
 													>
-														posted 2 days ago
+														<ZIonSkeletonText
+															animated={true}
+															style={{ width: '65px', height: '17px' }}
+														></ZIonSkeletonText>
 													</ZIonText>
 												</div>
 											</div>
@@ -789,14 +970,23 @@ const ZProjectSingleIdea: React.FC = () => {
 												</ZIonText>
 
 												<div className='px-5 overflow-hidden line-clamp-3 py-4 mb-4 bg-white mt-[8px] shadow rounded-xl'>
-													<ZIonTextarea
-														fill='outline'
-														autoGrow
-														className='break-words whitespace-pre-wrap'
-														value={ZCurrentBoardIdeaData?.internalNotes}
-														readonly
-														style={{ '--padding-top': '10px' }}
-													/>
+													{isZCurrentBoardIdeaDataFetching ? (
+														<ZIonText className='block mt-4 break-words whitespace-pre-wrap rounded-lg'>
+															<ZIonSkeletonText
+																animated={true}
+																style={{ width: '100%', height: '60px' }}
+															></ZIonSkeletonText>
+														</ZIonText>
+													) : (
+														<ZIonTextarea
+															fill='outline'
+															autoGrow
+															className='break-words whitespace-pre-wrap'
+															value={ZCurrentBoardIdeaData?.internalNotes}
+															readonly
+															style={{ '--padding-top': '10px' }}
+														/>
+													)}
 												</div>
 											</div>
 										)}
@@ -814,10 +1004,7 @@ const ZProjectSingleIdea: React.FC = () => {
 												</ZIonText>
 											</div>
 
-											<ZIonButton
-												className='flex px-2 text-lg rounded-lg text-md whitespace-nowrap xl:px-14 2xl:-mr-36'
-												size='large'
-											>
+											<ZIonButton className='flex px-2 text-lg rounded-lg text-md whitespace-nowrap xl:px-14 2xl:-mr-36'>
 												Try it now!
 											</ZIonButton>
 
@@ -844,7 +1031,12 @@ const ZProjectSingleIdea: React.FC = () => {
 												<div className='p-4 rounded-lg bg-neutral-100 comment-input-container'>
 													<div className='flex ion-align-items-center'>
 														<ZIonImg
-															src='http://localhost:8000/storage/uploaded-files/699N97z3ta22YCNfRpKC7P9AvwIVI00iwRN38pfd.png'
+															src={
+																ZCurrentBoardIdeaData?.user?.profilePitcher ||
+																getUiAvatarApiUrl({
+																	name: ZCurrentBoardIdeaData?.user?.username,
+																})
+															}
 															className='w-[36px] h-[36px] shadow-md mr-2 rounded-[.7rem!important] cursor-pointer overflow-hidden'
 														/>
 														<ZIonTextarea
@@ -907,41 +1099,72 @@ const ZProjectSingleIdea: React.FC = () => {
 												{/* Comments */}
 												<div className=''>
 													{/* single comment */}
-													{ZCurrentBoardIdeaCommentsData?.map((el, index) => {
-														if (el.id) {
-															return (
-																// <div className=''>
-																// 	<ZProjectSingleComment
-																// 		id={el.id}
-																// 		text={el?.text}
-																// 		username={el?.username}
-																// 		userAvatar={el?.userAvatar}
-																// 		type={commentReplyEnum.comment}
-																// 	/>
-																// 	{ZCurrentCommentReplies &&
-																// 		ZCurrentCommentReplies?.map((el) => {
-																// 			if (el.id) {
-																// 				return (
-																// 					<div className='ml-6 border-l-4 border-neutral-200'>
-																// 						<ZProjectSingleComment
-																// 							id={el.id}
-																// 							commentId={id} // comment id which the reply is belong
-																// 							text={el?.content}
-																// 							username={el?.user?.username}
-																// 							userAvatar={
-																// 								el?.user?.profilePitcher
-																// 							}
-																// 							type={commentReplyEnum.reply}
-																// 						/>
-																// 					</div>
-																// 				);
-																// 			}
-																// 		})}
-																// </div>
-																<></>
-															);
-														}
-													})}
+													{isZCurrentBoardIdeaCommentsDataFetching && (
+														<ZSingleCommentSkeleton />
+													)}
+													{!isZCurrentBoardIdeaCommentsDataFetching &&
+														ZCurrentBoardIdeaCommentsData?.map(
+															(_comment, _commentIndex) => {
+																if (_comment.id) {
+																	return (
+																		// Comment
+																		<div key={_commentIndex}>
+																			<ZProjectSingleComment
+																				id={_comment.id}
+																				text={_comment?.content}
+																				username={_comment?.user?.username}
+																				userAvatar={
+																					_comment?.user?.profilePitcher
+																				}
+																				type={commentReplyEnum.comment}
+																				createdAt={_comment.createdAt}
+																			/>
+
+																			{/* Replies */}
+																			{_comment?.replies &&
+																				_comment?.replies?.map(
+																					(_reply, _replyIndex) => {
+																						if (_reply.id) {
+																							return (
+																								<div
+																									className='ml-6 border-l-4 border-neutral-200'
+																									key={_replyIndex}
+																								>
+																									<ZProjectSingleComment
+																										id={_reply.id}
+																										commentId={_comment.id} // comment id which the reply is belong
+																										text={_reply?.content}
+																										username={
+																											_reply?.user?.username
+																										}
+																										userAvatar={
+																											_reply?.user
+																												?.profilePitcher
+																										}
+																										type={
+																											commentReplyEnum.reply
+																										}
+																										createdAt={_reply.createdAt}
+																									/>
+																								</div>
+																							);
+																						}
+																					}
+																				)}
+																		</div>
+																	);
+																}
+															}
+														)}
+
+													{ZCurrentBoardIdeaCommentsData?.length === 0 && (
+														<div className='flex flex-col ion-align-items-center'>
+															<ZIonImg src={noComments} className='h-auto' />
+															<ZIonText className='block'>
+																No comments yet …
+															</ZIonText>
+														</div>
+													)}
 												</div>
 											</div>
 										</div>
@@ -952,67 +1175,95 @@ const ZProjectSingleIdea: React.FC = () => {
 										{/* Post status */}
 										<ZIonText className='block font-semibold'>Status</ZIonText>
 										<div className='flex mt-4'>
-											<ZIonSelect
-												minHeight='45px'
-												fill='outline'
-												name='statusId'
-												label='board status'
-												labelPlacement='stacked'
-												value={values.statusId}
-												interface='popover'
-												onIonChange={(event) => {
-													handleChange(event);
+											{!isZCurrentBoardStatuesFetching && (
+												<>
+													<ZIonSelect
+														minHeight='45px'
+														fill='outline'
+														name='statusId'
+														label='board status'
+														labelPlacement='stacked'
+														value={values.statusId}
+														interface='popover'
+														onIonChange={(event) => {
+															handleChange(event);
 
-													if (
-														event.target.value === ProjectBoardStatusEnum.done
-													) {
-														setFieldValue('isCompleted', true, false);
-													} else {
-														setFieldValue('isCompleted', false, false);
-													}
-												}}
-												onIonBlur={handleBlur}
-												style={{ '--background': '#fff' }}
-											>
-												<ZIonSelectOption value={null}>
-													Not set
-												</ZIonSelectOption>
+															if (
+																event.target.value ===
+																ProjectBoardStatusEnum.done
+															) {
+																setFieldValue('isCompleted', true, false);
+															} else {
+																setFieldValue('isCompleted', false, false);
+															}
+														}}
+														onIonBlur={handleBlur}
+														style={{ '--background': '#fff' }}
+													>
+														<ZIonSelectOption value={null}>
+															Not set
+														</ZIonSelectOption>
 
-												<ZIonSelectOption value={ProjectBoardStatusEnum.done}>
-													Done
-												</ZIonSelectOption>
-												{/*  */}
-												{ZCurrentBoardStatues &&
-													ZCurrentBoardStatues?.map((el, index) => {
-														return (
-															<ZIonSelectOption value={el.id} key={index}>
-																{el.title}
-															</ZIonSelectOption>
-														);
-													})}
-											</ZIonSelect>
+														<ZIonSelectOption
+															value={ProjectBoardStatusEnum.done}
+														>
+															Done
+														</ZIonSelectOption>
+														{/*  */}
+														{ZCurrentBoardStatues &&
+															ZCurrentBoardStatues?.map((el, index) => {
+																return (
+																	<ZIonSelectOption value={el.id} key={index}>
+																		{el.title}
+																	</ZIonSelectOption>
+																);
+															})}
+													</ZIonSelect>
 
-											<ZIonButton
-												height='41px'
-												className='ion-no-margin ms-2'
-												color='medium'
-												onClick={() => {
-													try {
-														if (
-															ZCurrentBoardIdeaData?.status !== values.statusId
-														) {
-															submitForm();
+													<ZIonButton
+														height='41px'
+														className='ion-no-margin ms-2'
+														color='primary'
+														onClick={() => {
+															try {
+																if (
+																	ZCurrentBoardIdeaData?.status !==
+																	values.statusId
+																) {
+																	submitForm();
+																}
+															} catch (error) {
+																reportCustomError(errors);
+															}
+														}}
+														disabled={
+															ZCurrentBoardIdeaData?.status === values.statusId
 														}
-													} catch (error) {
-														reportCustomError(errors);
-													}
-												}}
-												disabled={
-													ZCurrentBoardIdeaData?.status === values.statusId
-												}
-											>
-												Save
-											</ZIonButton>
+													>
+														Save
+													</ZIonButton>
+												</>
+											)}
+
+											{isZCurrentBoardStatuesFetching && (
+												<>
+													<ZIonSkeletonText
+														animated={true}
+														style={{ width: '100%', height: '40px' }}
+													></ZIonSkeletonText>
+
+													<ZIonButton
+														height='41px'
+														className='ion-no-margin ms-2'
+														color='medium'
+													>
+														<ZIonSkeletonText
+															animated={true}
+															style={{ width: '41px', height: '45px' }}
+														></ZIonSkeletonText>
+													</ZIonButton>
+												</>
+											)}
 										</div>
 
 										{/* Edit status */}
@@ -1036,14 +1287,17 @@ const ZProjectSingleIdea: React.FC = () => {
 										<ZIonText className='block font-semibold'>Actions</ZIonText>
 
 										{/* Edit */}
-										{/* <ZIonItem
+										<ZIonItem
 											className='mt-2 rounded cursor-pointer'
 											lines='none'
 											minHeight='41px'
+											onClick={async () => {
+												await refetchDataHandler();
+											}}
 										>
-											<ZIonIcon icon={pencilOutline} className='mr-2' />
-											<ZIonText>Edit</ZIonText>
-										</ZIonItem> */}
+											<ZIonIcon icon={refreshOutline} className='mr-2' />
+											<ZIonText>Refetch</ZIonText>
+										</ZIonItem>
 
 										{/* Move to another board */}
 										<ZIonItem
@@ -1200,12 +1454,17 @@ const ZProjectSingleIdea: React.FC = () => {
 
 										<div className='flex flex-row items-center mt-2'>
 											<ZIonImg
-												src='http://localhost:8000/storage/uploaded-files/699N97z3ta22YCNfRpKC7P9AvwIVI00iwRN38pfd.png'
+												src={
+													ZCurrentBoardIdeaData?.user?.profilePitcher ||
+													getUiAvatarApiUrl({
+														name: ZCurrentBoardIdeaData?.user?.username,
+													})
+												}
 												className='w-[32px] h-[32px] shadow-md mr-2 rounded-[.7rem!important] cursor-pointer overflow-hidden'
 											/>
 
 											<ZIonText className='pr-1 font-semibold cursor-pointer'>
-												Talha Bin Irshad
+												{ZCurrentBoardIdeaData?.user?.username}
 											</ZIonText>
 										</div>
 
@@ -1241,65 +1500,6 @@ const ZProjectSingleIdea: React.FC = () => {
 	);
 };
 
-const ZIdeaComments: React.FC<{
-	id: string;
-	text?: string;
-	userAvatar?: string;
-	username?: string;
-}> = ({ id, text, userAvatar, username }) => {
-	const { projectId, boardId, boardIdeaId } = useParams<{
-		projectId: string;
-		boardId: string;
-		boardIdeaId: string;
-	}>();
-
-	// Getting reply on comment from backend.
-	const { data: ZCurrentCommentReplies } = useZRQGetRequest<
-		ZCommentInterface[]
-	>({
-		_url: API_URL_ENUM.reply_create_list,
-		_key: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.REPLY.MAIN,
-			projectId,
-			boardId,
-			boardIdeaId,
-			id,
-		],
-		_itemsIds: [id],
-		_urlDynamicParts: [CONSTANTS.RouteParams.comment.commentId],
-		_shouldFetchWhenIdPassed: !id ? true : false,
-	});
-
-	return (
-		<div className=''>
-			<ZProjectSingleComment
-				id={id}
-				text={text}
-				username={username}
-				userAvatar={userAvatar}
-				type={commentReplyEnum.comment}
-			/>
-			{ZCurrentCommentReplies &&
-				ZCurrentCommentReplies?.map((el) => {
-					if (el.id) {
-						return (
-							<div className='ml-6 border-l-4 border-neutral-200'>
-								<ZProjectSingleComment
-									id={el.id}
-									commentId={id} // comment id which the reply is belong
-									text={el?.content}
-									username={el?.user?.username}
-									userAvatar={el?.user?.profilePitcher}
-									type={commentReplyEnum.reply}
-								/>
-							</div>
-						);
-					}
-				})}
-		</div>
-	);
-};
-
 const ZProjectSingleComment: React.FC<{
 	id: string;
 	commentId?: string; // if reply we need to pass comment id to.
@@ -1307,6 +1507,7 @@ const ZProjectSingleComment: React.FC<{
 	userAvatar?: string;
 	username?: string;
 	type?: commentReplyEnum;
+	createdAt?: string;
 }> = ({
 	id,
 	text,
@@ -1314,6 +1515,7 @@ const ZProjectSingleComment: React.FC<{
 	username,
 	type = commentReplyEnum.comment,
 	commentId,
+	createdAt,
 }) => {
 	const { projectId, boardId, boardIdeaId } = useParams<{
 		projectId: string;
@@ -1324,9 +1526,10 @@ const ZProjectSingleComment: React.FC<{
 	// custom hook
 	const { presentZIonAlert } = useZIonAlert();
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
-	const { zInvalidateReactQueries } = useZInvalidateReactQueries();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+	const { getRQCDataHandler } = useZGetRQCacheData();
 
-	// Create new project API.
+	// Create new reply API.
 	const { mutateAsync: createCommentReplyMutate } =
 		useZRQCreateRequest<ZCommentInterface>({
 			_url: API_URL_ENUM.reply_create_list,
@@ -1339,6 +1542,20 @@ const ZProjectSingleComment: React.FC<{
 			],
 			_itemsIds: [id],
 			_urlDynamicParts: [CONSTANTS.RouteParams.comment.commentId],
+		});
+
+	// Update comment API.
+	const { mutateAsync: updateCommentMutate } =
+		useZRQUpdateRequest<ZCommentInterface>({
+			_url: API_URL_ENUM.boardIdeaComments_update_delete,
+			_queriesKeysToInvalidate: [],
+		});
+
+	// Update comment API.
+	const { mutateAsync: updateReplyMutate } =
+		useZRQUpdateRequest<ZReplyInterface>({
+			_url: API_URL_ENUM.reply_update_delete,
+			_queriesKeysToInvalidate: [],
 		});
 
 	// Delete comment API.
@@ -1365,19 +1582,214 @@ const ZProjectSingleComment: React.FC<{
 	);
 
 	// create a new reply on comment handler
-	const addReplyOnIdeaHandle = async (_data: string) => {
+	const addReplyOnCommentHandler = async (_data: string) => {
 		try {
 			if (_data) {
+				// Creating reply.
 				const _response = await createCommentReplyMutate(_data);
 
 				if (_response) {
+					// Extracting item from response.
+					const _item = extractInnerData<ZReplyInterface>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (_item && _item.id && id) {
+						// Getting current idea all comments from react-query by key.
+						const _currentIdeaCommentsData = extractInnerData<
+							ZCommentInterface[]
+						>(
+							getRQCDataHandler<ZCommentInterface[]>({
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA
+										.COMMENTS,
+									projectId,
+									boardId,
+									boardIdeaId,
+								],
+							}) as ZCommentInterface[],
+							extractInnerDataOptionsEnum.createRequestResponseItems
+						);
+
+						if (_currentIdeaCommentsData) {
+							// Selecting current comment from comments
+							const _currentComment = _currentIdeaCommentsData?.find(
+								(el) => el.id === id
+							);
+
+							if (_currentComment) {
+								// Updating react-query data.
+								await updateRQCDataHandler<ZCommentInterface | undefined>({
+									key: [
+										CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA
+											.COMMENTS,
+										projectId,
+										boardId,
+										boardIdeaId,
+									],
+									data: {
+										..._currentComment,
+										replies: [..._currentComment.replies, _item],
+									},
+									id: id,
+								});
+							}
+						}
+
+						showSuccessNotification(MESSAGES.GENERAL.REPLY.REPLY_ADDED);
+					} else {
+						showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+					}
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
+	// Update comment
+	const updateCommentHandler = async (_data: string) => {
+		try {
+			if (_data && type === commentReplyEnum.comment && id) {
+				// Update comment mutate.
+				const _response = await updateCommentMutate({
+					itemIds: [boardId, boardIdeaId, id],
+					urlDynamicParts: [
+						CONSTANTS.RouteParams.project.board.boardId,
+						CONSTANTS.RouteParams.project.boardIdea.boardIdeaId,
+						CONSTANTS.RouteParams.comment.commentId,
+					],
+					requestData: _data,
+				});
+
+				if (_response) {
+					// Extracting item from response.
 					const _item = extractInnerData<ZCommentInterface>(
 						_response,
 						extractInnerDataOptionsEnum.createRequestResponseItem
 					);
 
 					if (_item && _item.id) {
-						showSuccessNotification(MESSAGES.GENERAL.REPLY.REPLY_ADDED);
+						// Getting current idea all comments from react-query by key.
+						const _currentIdeaCommentsData = extractInnerData<
+							ZCommentInterface[]
+						>(
+							getRQCDataHandler<ZCommentInterface[]>({
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA
+										.COMMENTS,
+									projectId,
+									boardId,
+									boardIdeaId,
+								],
+							}) as ZCommentInterface[],
+							extractInnerDataOptionsEnum.createRequestResponseItems
+						);
+
+						if (_currentIdeaCommentsData) {
+							// Selecting current comment from comments
+							const _currentComment = _currentIdeaCommentsData?.find(
+								(el) => el.id === id
+							);
+
+							if (_currentComment) {
+								// Updating react-query data.
+								await updateRQCDataHandler<ZCommentInterface | undefined>({
+									key: [
+										CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA
+											.COMMENTS,
+										projectId,
+										boardId,
+										boardIdeaId,
+									],
+									data: {
+										..._item,
+									},
+									id: id,
+								});
+								showSuccessNotification(
+									MESSAGES.GENERAL.COMMENT.COMMENT_UPDATE
+								);
+							}
+						}
+					} else {
+						showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+					}
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
+	// Update reply
+	const updateReplyHandler = async (_data: string) => {
+		try {
+			if (_data && type === commentReplyEnum.reply && id && commentId) {
+				// Update comment mutate.
+				const _response = await updateReplyMutate({
+					itemIds: [commentId, id],
+					urlDynamicParts: [
+						CONSTANTS.RouteParams.comment.commentId,
+						CONSTANTS.RouteParams.reply.replyId,
+					],
+					requestData: _data,
+				});
+
+				if (_response) {
+					// Extracting item from response.
+					const _item = extractInnerData<ZReplyInterface>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (_item && _item.id) {
+						// Getting current idea all comments from react-query by key.
+						const _currentIdeaCommentsData = extractInnerData<
+							ZCommentInterface[]
+						>(
+							getRQCDataHandler<ZCommentInterface[]>({
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA
+										.COMMENTS,
+									projectId,
+									boardId,
+									boardIdeaId,
+								],
+							}) as ZCommentInterface[],
+							extractInnerDataOptionsEnum.createRequestResponseItems
+						);
+
+						if (_currentIdeaCommentsData) {
+							// Selecting current comment from comments
+							const _currentComment = _currentIdeaCommentsData?.find(
+								(el) => el.id === commentId
+							);
+
+							const _updatedReplies = _currentComment?.replies?.map((_reply) =>
+								_reply.id === _item.id ? _item : _reply
+							);
+
+							if (_currentComment && _updatedReplies) {
+								// Updating react-query data.
+								await updateRQCDataHandler<ZCommentInterface | undefined>({
+									key: [
+										CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA
+											.COMMENTS,
+										projectId,
+										boardId,
+										boardIdeaId,
+									],
+									data: {
+										..._currentComment,
+										replies: _updatedReplies,
+									},
+									id: commentId,
+								});
+								showSuccessNotification(MESSAGES.GENERAL.REPLY.REPLY_UPDATE);
+							}
+						}
 					} else {
 						showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
 					}
@@ -1471,12 +1883,50 @@ const ZProjectSingleComment: React.FC<{
 								],
 							});
 
-							// await zInvalidateReactQueries([
-							// 	CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA.COMMENTS,
-							// 	projectId,
-							// 	boardId,
-							// 	boardIdeaId,
-							// ]);
+							// Getting current idea all comments from react-query by key.
+							const _currentIdeaCommentsData = extractInnerData<
+								ZCommentInterface[]
+							>(
+								getRQCDataHandler<ZCommentInterface[]>({
+									key: [
+										CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA
+											.COMMENTS,
+										projectId,
+										boardId,
+										boardIdeaId,
+									],
+								}) as ZCommentInterface[],
+								extractInnerDataOptionsEnum.createRequestResponseItems
+							);
+
+							if (_currentIdeaCommentsData) {
+								// Selecting current comment from comments
+								const _currentComment = _currentIdeaCommentsData?.find(
+									(el) => el.id === commentId
+								) as ZCommentInterface;
+
+								const _updateReplies = _currentComment?.replies.filter(
+									(_reply) => _reply.id !== id
+								);
+
+								if (_currentComment && _updateReplies) {
+									// Updating react-query data.
+									await updateRQCDataHandler<ZCommentInterface | undefined>({
+										key: [
+											CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.BOARD_IDEA
+												.COMMENTS,
+											projectId,
+											boardId,
+											boardIdeaId,
+										],
+										data: {
+											..._currentComment,
+											replies: _updateReplies,
+										},
+										id: commentId,
+									});
+								}
+							}
 						}
 						break;
 				}
@@ -1514,6 +1964,9 @@ const ZProjectSingleComment: React.FC<{
 			initialValues={{
 				addReplyMode: false,
 				replyText: '',
+
+				editMode: false,
+				content: text || '',
 			}}
 			onSubmit={async (values) => {
 				try {
@@ -1521,20 +1974,13 @@ const ZProjectSingleComment: React.FC<{
 						content: values.replyText,
 					});
 
-					await addReplyOnIdeaHandle(_stringifyData);
+					await addReplyOnCommentHandler(_stringifyData);
 				} catch (error) {
 					reportCustomError(error);
 				}
 			}}
 		>
-			{({
-				values,
-				setFieldValue,
-				resetForm,
-				handleChange,
-				handleBlur,
-				submitForm,
-			}) => {
+			{({ values, setFieldValue, handleChange, handleBlur, submitForm }) => {
 				return (
 					<div
 						className={classNames({
@@ -1553,81 +1999,158 @@ const ZProjectSingleComment: React.FC<{
 									{username}
 								</ZIonText>
 								<ZIonText className='block text-sm leading-snug' color='medium'>
-									1 day ago
+									{createdAt}
 								</ZIonText>
 							</div>
 						</div>
 
-						{/* Comment message */}
-						<div className='overflow-hidden line-clamp-3'>
-							<ZIonText
-								className='block mt-3 break-words whitespace-pre-wrap offset'
-								style={{ marginLeft: 'calc(36px + 1rem)' }}
-							>
-								{text}
-							</ZIonText>
-						</div>
-
-						{/* Action buttons */}
-						<div
-							className='flex mt-3 offset'
-							style={{ marginLeft: 'calc(27px + 1rem)' }}
-						>
-							{/* Replay */}
-							<ZIonButton
-								color='medium'
-								fill='clear'
-								className='mr-3 ion-no-padding ion-no-margin'
-								onClick={() => {
-									setFieldValue('addReplyMode', true, false);
-								}}
-							>
-								<ZIonIcon
-									icon={arrowUndoOutline}
-									className='mr-1 font-extrabold'
+						{/* Edit comment/reply form */}
+						{values.editMode && (
+							<div className='rounded-lg bg-neutral-100 p-4 pb-1 mt-3 mx-[52px]'>
+								<ZIonTextarea
+									autoGrow
+									fill='outline'
+									rows={4}
+									name='content'
+									value={values.content}
+									onIonChange={handleChange}
+									onIonBlur={handleBlur}
 								/>
-								<ZIonText className='font-bold'>REPLAY</ZIonText>
-							</ZIonButton>
 
-							{/* Delete */}
-							<ZIonButton
-								color='medium'
-								fill='clear'
-								className='mr-3 ion-no-padding ion-no-margin'
-								onClick={async () => {
-									await deleteCommentOrReplyFn();
-								}}
-							>
-								<ZIonIcon
-									icon={trashBinOutline}
-									className='mr-1 font-extrabold'
-								/>
-								<ZIonText className='font-bold'>DELETE</ZIonText>
-							</ZIonButton>
+								<div className='flex mt-2 ion-align-items-center ion-justify-content-between'>
+									<ZIonButton
+										className='ion-no-padding'
+										fill='clear'
+										color='dark'
+									>
+										<ZIonIcon icon={attachOutline} className='mr-1' />
+										<ZIonText className='text-md'>Attach image</ZIonText>
+									</ZIonButton>
 
-							{/* Edit */}
-							<ZIonButton
-								color='medium'
-								fill='clear'
-								className='mr-3 ion-no-padding ion-no-margin'
-							>
-								<ZIonIcon
-									icon={pencilOutline}
-									className='mr-1 font-extrabold'
-								/>
-								<ZIonText className='font-bold'>EDIT</ZIonText>
-							</ZIonButton>
+									<div>
+										<ZIonButton
+											className='me-2'
+											color='medium'
+											size='small'
+											onClick={() => {
+												setFieldValue('editMode', false, false);
+												setFieldValue('content', text, false);
+											}}
+										>
+											<ZIonText className='text-md'>Cancel</ZIonText>
+										</ZIonButton>
+										<ZIonButton
+											color='tertiary'
+											size='small'
+											disabled={values?.content?.trim()?.length === 0}
+											onClick={async () => {
+												try {
+													const _zStringifyData = zStringify({
+														content: values.content,
+													});
 
-							{/* Pin */}
-							<ZIonButton
-								color='medium'
-								fill='clear'
-								className='mr-3 ion-no-padding ion-no-margin'
-							>
-								<ZIonIcon icon={pinOutline} className='mr-1 font-extrabold' />
-								<ZIonText className='font-bold'>PIN TO TOP</ZIonText>
-							</ZIonButton>
-						</div>
+													if (type === commentReplyEnum.comment) {
+														await updateCommentHandler(_zStringifyData);
+													} else if (type === commentReplyEnum.reply) {
+														await updateReplyHandler(_zStringifyData);
+													}
+
+													setFieldValue('editMode', false, false);
+													// setFieldValue('content', text, false);
+												} catch (error) {
+													reportCustomError(error);
+												}
+											}}
+										>
+											<ZIonText className='text-md'>Save</ZIonText>
+										</ZIonButton>
+									</div>
+								</div>
+							</div>
+						)}
+
+						{!values.editMode && (
+							<>
+								{/* Comment message */}
+								<div className='overflow-hidden line-clamp-3'>
+									<ZIonText
+										className='block mt-3 break-words whitespace-pre-wrap offset'
+										style={{ marginLeft: 'calc(36px + 1rem)' }}
+									>
+										{text}
+									</ZIonText>
+								</div>
+
+								{/* Action buttons */}
+								<div
+									className='flex mt-3 offset'
+									style={{ marginLeft: 'calc(27px + 1rem)' }}
+								>
+									{/* Replay */}
+									{type === commentReplyEnum.comment && (
+										<ZIonButton
+											color='primary'
+											fill='clear'
+											className='mr-3 ion-no-padding ion-no-margin'
+											onClick={() => {
+												setFieldValue('addReplyMode', true, false);
+											}}
+										>
+											<ZIonIcon
+												icon={arrowUndoOutline}
+												className='mr-1 text-lg font-extrabold'
+											/>
+											<ZIonText className='text-xs font-bold'>REPLAY</ZIonText>
+										</ZIonButton>
+									)}
+
+									{/* Delete */}
+									<ZIonButton
+										color='danger'
+										fill='clear'
+										className='mr-3 ion-no-padding ion-no-margin'
+										onClick={async () => {
+											await deleteCommentOrReplyFn();
+										}}
+									>
+										<ZIonIcon
+											icon={trashBinOutline}
+											className='mr-1 text-lg font-extrabold'
+										/>
+										<ZIonText className='text-xs font-bold'>DELETE</ZIonText>
+									</ZIonButton>
+
+									{/* Edit */}
+									<ZIonButton
+										color='secondary'
+										fill='clear'
+										className='mr-3 ion-no-padding ion-no-margin'
+										onClick={() => {
+											setFieldValue('editMode', true, false);
+										}}
+									>
+										<ZIonIcon
+											icon={pencilOutline}
+											className='mr-1 text-lg font-extrabold'
+										/>
+										<ZIonText className='text-xs font-bold'>EDIT</ZIonText>
+									</ZIonButton>
+
+									{/* Copy link */}
+									<ZIonButton
+										color='warning'
+										fill='clear'
+										className='mr-3 ion-no-padding ion-no-margin'
+									>
+										<ZIonIcon
+											icon={linkOutline}
+											className='mr-1 text-lg font-extrabold'
+										/>
+										<ZIonText className='text-xs font-bold'>Copy link</ZIonText>
+									</ZIonButton>
+								</div>
+							</>
+						)}
 
 						{/* Replay form */}
 						{values?.addReplyMode && (
@@ -1670,9 +2193,8 @@ const ZProjectSingleComment: React.FC<{
 													className='me-2'
 													color='medium'
 													onClick={() => {
-														resetForm({
-															values: { addReplyMode: false, replyText: '' },
-														});
+														setFieldValue('addReplyMode', false, false);
+														setFieldValue('replyText', '', false);
 													}}
 												>
 													<ZIonText className='text-md'>Cancel</ZIonText>
@@ -1703,6 +2225,130 @@ const ZProjectSingleComment: React.FC<{
 				);
 			}}
 		</Formik>
+	);
+};
+
+const ZSingleCommentSkeleton: React.FC = () => {
+	return (
+		<div className='mt-4 md:pl-4 pt-2 pb-2 pl-2.5 '>
+			<div className='flex ion-align-items-center'>
+				<ZIonImg className='w-[36px] h-[36px] shadow-md mr-2 rounded-[.7rem!important] cursor-pointer overflow-hidden'>
+					<ZIonText className='block text-lg font-bold'>
+						<ZIonSkeletonText
+							animated={true}
+							style={{ width: '100%', height: '100%' }}
+						></ZIonSkeletonText>
+					</ZIonText>
+				</ZIonImg>
+
+				<div className='ms-2'>
+					<ZIonText className='block text-sm font-semibold leading-snug cursor-pointer'>
+						<ZIonSkeletonText
+							animated={true}
+							style={{ width: '20%', height: '17px' }}
+						></ZIonSkeletonText>
+					</ZIonText>
+					<ZIonText className='block text-sm leading-snug' color='medium'>
+						<ZIonSkeletonText
+							animated={true}
+							style={{ width: '20%', height: '17px' }}
+						></ZIonSkeletonText>
+					</ZIonText>
+				</div>
+			</div>
+
+			{/* Comment message */}
+			<div className='overflow-hidden line-clamp-3'>
+				<ZIonText
+					className='block mt-3 break-words whitespace-pre-wrap offset'
+					style={{ marginLeft: 'calc(36px + 1rem)' }}
+				>
+					<ZIonSkeletonText
+						animated={true}
+						style={{ width: '100%', height: '17px' }}
+					></ZIonSkeletonText>
+				</ZIonText>
+			</div>
+
+			{/* Action buttons */}
+			<div
+				className='flex mt-3 offset'
+				style={{ marginLeft: 'calc(27px + 1rem)' }}
+			>
+				{/* Replay */}
+
+				<ZIonButton
+					color='primary'
+					fill='clear'
+					className='mr-3 ion-no-padding ion-no-margin'
+				>
+					<ZIonSkeletonText
+						animated={true}
+						style={{ width: '17px', height: '17px' }}
+					></ZIonSkeletonText>
+					<ZIonText className='text-xs font-bold'>
+						<ZIonSkeletonText
+							animated={true}
+							style={{ width: '30px', height: '17px' }}
+						></ZIonSkeletonText>
+					</ZIonText>
+				</ZIonButton>
+
+				{/* Delete */}
+				<ZIonButton
+					color='primary'
+					fill='clear'
+					className='mr-3 ion-no-padding ion-no-margin'
+				>
+					<ZIonSkeletonText
+						animated={true}
+						style={{ width: '17px', height: '17px' }}
+					></ZIonSkeletonText>
+					<ZIonText className='text-xs font-bold'>
+						<ZIonSkeletonText
+							animated={true}
+							style={{ width: '30px', height: '17px' }}
+						></ZIonSkeletonText>
+					</ZIonText>
+				</ZIonButton>
+
+				{/* Edit */}
+				<ZIonButton
+					color='primary'
+					fill='clear'
+					className='mr-3 ion-no-padding ion-no-margin'
+				>
+					<ZIonSkeletonText
+						animated={true}
+						style={{ width: '17px', height: '17px' }}
+					></ZIonSkeletonText>
+					<ZIonText className='text-xs font-bold'>
+						<ZIonSkeletonText
+							animated={true}
+							style={{ width: '30px', height: '17px' }}
+						></ZIonSkeletonText>
+					</ZIonText>
+				</ZIonButton>
+
+				{/* Copy link */}
+				<ZIonButton
+					color='primary'
+					fill='clear'
+					className='mr-3 ion-no-padding ion-no-margin'
+				>
+					<ZIonSkeletonText
+						animated={true}
+						style={{ width: '17px', height: '17px' }}
+					></ZIonSkeletonText>
+					<ZIonText className='text-xs font-bold'>
+						<ZIonSkeletonText
+							animated={true}
+							style={{ width: '30px', height: '17px' }}
+						></ZIonSkeletonText>
+					</ZIonText>
+				</ZIonButton>
+			</div>
+		</div>
 	);
 };
 

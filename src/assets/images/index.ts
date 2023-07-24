@@ -304,6 +304,7 @@ import imageIcon from './svg/imageIcon.svg';
 import gifIcon from './svg/gifIcon.svg';
 import mediaIcon from './svg/mediaIcon.svg';
 import thumbnailIcon from './svg/thumbnailIcon.svg';
+import noComments from './svg/no_comments.svg';
 
 // Global
 import starsQuoteWidget from './global-images/stars-quote-widget.png';
@@ -545,6 +546,7 @@ export {
 	gifIcon,
 	mediaIcon,
 	thumbnailIcon,
+	noComments,
 	avatar,
 	dashboardEmptyState,
 	campaignsEmptyState,

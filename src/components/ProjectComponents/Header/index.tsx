@@ -24,6 +24,7 @@ import {
 	ZIonImg,
 	ZIonRouterLink,
 	ZIonRow,
+	ZIonSkeletonText,
 	ZIonText,
 	ZIonTitle,
 	ZIonToolbar,
@@ -117,7 +118,10 @@ const ZProjectHeader: React.FC<{
 	);
 
 	// Getting current project data from backend.
-	const { data: ZCurrentProjectData } = useZRQGetRequest<ZProjectInterface>({
+	const {
+		data: ZCurrentProjectData,
+		isFetching: isZCurrentProjectDataFetching,
+	} = useZRQGetRequest<ZProjectInterface>({
 		_url: API_URL_ENUM.project_update_delete,
 		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PROJECT.GET, projectId],
 		_itemsIds: [projectId],
@@ -207,31 +211,42 @@ const ZProjectHeader: React.FC<{
 							sizeSm='12'
 							sizeXs='12'
 						>
-							<div className='max-w-[9rem] h-full py-3 w-max lg:mr-6 md:mr-3'>
-								<ZIonRouterLink
-									routerLink={createRedirectRoute({
-										url: ZaionsRoutes.AdminPanel.Projects.Board.Main,
-										params: [
-											CONSTANTS.RouteParams.project.projectId,
-											CONSTANTS.RouteParams.project.board.boardId,
-										],
-										values: [projectId, boardId],
-									})}
-									color='dark'
-								>
-									{ZCurrentProjectData?.image?.fileUrl &&
-									ZCurrentProjectData?.image?.fileUrl?.trim()?.length > 0 ? (
-										<ZIonImg
-											className='h-6 sm:h-8'
-											src={ZCurrentProjectData?.image?.fileUrl}
-										/>
-									) : (
-										<ZIonTitle className='block text-base font-medium truncate transition duration-150 ease-in-out ion-no-padding hover:no-underline md:text-lg lg:text-xl sm:text-md lg:mt-1'>
-											{ZCurrentProjectData?.projectName}
-										</ZIonTitle>
-									)}
-								</ZIonRouterLink>
-							</div>
+							{isZCurrentProjectDataFetching ? (
+								<div className='max-w-[9rem] h-full py-3 w-max lg:mr-6 md:mr-3'>
+									<ZIonTitle className='block text-base font-medium truncate transition duration-150 ease-in-out ion-no-padding hover:no-underline md:text-lg lg:text-xl sm:text-md lg:mt-1'>
+										<ZIonSkeletonText
+											animated={true}
+											style={{ width: '100px', height: '22px' }}
+										></ZIonSkeletonText>
+									</ZIonTitle>
+								</div>
+							) : (
+								<div className='max-w-[9rem] h-full py-3 w-max lg:mr-6 md:mr-3'>
+									<ZIonRouterLink
+										routerLink={createRedirectRoute({
+											url: ZaionsRoutes.AdminPanel.Projects.Board.Main,
+											params: [
+												CONSTANTS.RouteParams.project.projectId,
+												CONSTANTS.RouteParams.project.board.boardId,
+											],
+											values: [projectId, boardId],
+										})}
+										color='dark'
+									>
+										{ZCurrentProjectData?.image?.fileUrl &&
+										ZCurrentProjectData?.image?.fileUrl?.trim()?.length > 0 ? (
+											<ZIonImg
+												className='h-6 sm:h-8'
+												src={ZCurrentProjectData?.image?.fileUrl}
+											/>
+										) : (
+											<ZIonTitle className='block text-base font-medium truncate transition duration-150 ease-in-out ion-no-padding hover:no-underline md:text-lg lg:text-xl sm:text-md lg:mt-1'>
+												{ZCurrentProjectData?.projectName}
+											</ZIonTitle>
+										)}
+									</ZIonRouterLink>
+								</div>
+							)}
 
 							{/*  */}
 							<div
@@ -242,38 +257,63 @@ const ZProjectHeader: React.FC<{
 								})}
 							>
 								{/*  */}
-								<ZIonText
-									className={classNames({
-										'flex h-full px-1 py-2 mr-3 font-semibold border-b-2 border-transparent cursor-pointer lg:mt-1 ion-align-items-center ion-justify-content-center':
-											true,
-										'z-ion-border-color-danger_opacity_point7':
-											activeLink === ProjectHeaderActiveLinkEnum.boards,
-									})}
-								>
-									<ZIonText className='tracking-wide ms-1 md:text-md lg:text-[.9rem] sm:text-sm'>
-										{zProjectBoardsStateAtom?.currentBoard?.title || 'Boards'}
-									</ZIonText>
+								{isZCurrentProjectDataFetching ? (
 									<ZIonText
-										className=''
-										onClick={(event: unknown) => {
-											presentZProjectBoardsPopover({
-												_event: event as Event,
-												_cssClass: '',
-												// _dismissOnSelect: false,
-												// _onWillDismiss: ({ detail }) => {
-												// 	detail.data !== undefined && setFieldValue();
-												// },
-											});
-										}}
+										className={classNames({
+											'flex h-full px-1 py-2 mr-3 font-semibold border-b-2 border-transparent cursor-pointer lg:mt-1 ion-align-items-center ion-justify-content-center':
+												true,
+											'z-ion-border-color-danger_opacity_point7':
+												activeLink === ProjectHeaderActiveLinkEnum.boards,
+										})}
 									>
-										<ZIonIcon
-											icon={chevronDownOutline}
-											className={classNames({
-												'w-5 h-5 pt-[2px] ms-1 mt-1 z-hover-color-danger': true,
-											})}
-										/>
+										<ZIonText className='tracking-wide ms-1 me-2 md:text-md lg:text-[.9rem] sm:text-sm'>
+											<ZIonSkeletonText
+												animated={true}
+												style={{ width: '40px', height: '22px' }}
+											></ZIonSkeletonText>
+										</ZIonText>
+										<ZIonText>
+											<ZIonSkeletonText
+												animated={true}
+												style={{ width: '17px', height: '16px' }}
+											></ZIonSkeletonText>
+										</ZIonText>
 									</ZIonText>
-								</ZIonText>
+								) : (
+									<ZIonText
+										className={classNames({
+											'flex h-full px-1 py-2 mr-3 font-semibold border-b-2 border-transparent cursor-pointer lg:mt-1 ion-align-items-center ion-justify-content-center':
+												true,
+											'z-ion-border-color-danger_opacity_point7':
+												activeLink === ProjectHeaderActiveLinkEnum.boards,
+										})}
+									>
+										<ZIonText className='tracking-wide ms-1 md:text-md lg:text-[.9rem] sm:text-sm'>
+											{zProjectBoardsStateAtom?.currentBoard?.title || 'Boards'}
+										</ZIonText>
+										<ZIonText
+											className=''
+											onClick={(event: unknown) => {
+												presentZProjectBoardsPopover({
+													_event: event as Event,
+													_cssClass: '',
+													// _dismissOnSelect: false,
+													// _onWillDismiss: ({ detail }) => {
+													// 	detail.data !== undefined && setFieldValue();
+													// },
+												});
+											}}
+										>
+											<ZIonIcon
+												icon={chevronDownOutline}
+												className={classNames({
+													'w-5 h-5 pt-[2px] ms-1 mt-1 z-hover-color-danger':
+														true,
+												})}
+											/>
+										</ZIonText>
+									</ZIonText>
+								)}
 
 								{/*  */}
 								<ZIonText
@@ -315,7 +355,7 @@ const ZProjectHeader: React.FC<{
 							</div>
 						</ZIonCol>
 
-						{/* Col-1 */}
+						{/* Col-2 */}
 						<ZIonCol
 							sizeXl=''
 							sizeLg=''

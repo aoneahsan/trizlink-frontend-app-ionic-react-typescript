@@ -4,7 +4,7 @@ const GENERAL = {
 	COMMENT: {
 		COMMENT_ADDED: 'Comment added successfully.',
 		COMMENT_DELETE: 'Comment deleted successfully.',
-		COMMENT_Update: 'Comment updated successfully.',
+		COMMENT_UPDATE: 'Comment updated successfully.',
 	},
 	REPLY: {
 		REPLY_ADDED: 'Reply added successfully.',

@@ -54,6 +54,7 @@ export { default as ZIonAvatar } from './ZIonAvatar';
 export { default as ZIonRadio } from './ZIonRadio';
 export { default as ZIonRadioGroup } from './ZIonRadioGroup';
 export { default as ZIonToolbar } from './ZIonToolbar';
+export { default as ZIonSkeletonText } from './ZIonSkeletonText';
 
 //
 // import {

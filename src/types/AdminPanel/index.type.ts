@@ -62,9 +62,19 @@ export interface ShortUrlInterface {
 export interface ZCommentInterface {
 	id?: string;
 	commentableId?: string;
-	content?: string;
+	content: string;
 	user: UserAccountType;
-	replies?: { id?: string; content?: string; user: UserAccountType };
+	replies: ZReplyInterface[];
+	createdAt?: string;
+	updatedAt?: string;
+}
+
+export interface ZReplyInterface {
+	id?: string;
+	content: string;
+	user: UserAccountType;
+	createdAt?: string;
+	updatedAt?: string;
 }
 
 export interface ABTestingRotatorInterface {

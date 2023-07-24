@@ -435,7 +435,7 @@ export const useZInvalidateReactQueries = () => {
 	}
 };
 
-export const useUpdateRQCacheData = () => {
+export const useZUpdateRQCacheData = () => {
 	try {
 		const queryClient = useQueryClient();
 
@@ -451,7 +451,14 @@ export const useUpdateRQCacheData = () => {
 			updateHoleData?: boolean;
 		}) => {
 			if (updateHoleData) {
-				queryClient.setQueryData([...key], data);
+				queryClient.setQueryData([...key], (oldData: unknown) => {
+					const updatedData = structuredClone(oldData);
+					if (updatedData) {
+						(updatedData as { data: { item: T } })!.data!.item = data;
+					}
+
+					return updatedData;
+				});
 			} else {
 				const _res = queryClient.setQueryData([...key], (oldData: unknown) => {
 					if (oldData) {
@@ -494,5 +501,27 @@ export const useUpdateRQCacheData = () => {
 	} catch (error) {
 		reportCustomError(error);
 		return { updateRQCDataHandler: emptyVoidReturnFunction };
+	}
+};
+
+//
+export const useZGetRQCacheData = () => {
+	try {
+		const QueryClient = useQueryClient();
+
+		const getRQCDataHandler = <T>({
+			key,
+		}: {
+			key: string[];
+		}): T | undefined => {
+			const _res = QueryClient.getQueryData<T>(key);
+
+			return _res;
+		};
+
+		return { getRQCDataHandler };
+	} catch (error) {
+		reportCustomError(error);
+		return { getRQCDataHandler: emptyVoidReturnFunction };
 	}
 };

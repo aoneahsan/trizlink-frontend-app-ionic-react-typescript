@@ -28,6 +28,7 @@ import {
 } from '@/types/ZaionsHelperFunction.type';
 import {
 	AxiosRequestResponseType,
+	ZLinkGetAllApiType,
 	ZLinkMutateApiType,
 } from '@/types/ZaionsApis.type';
 import {
@@ -947,6 +948,9 @@ export const extractInnerData = <T>(
 			switch (_type) {
 				case extractInnerDataOptionsEnum.createRequestResponseItem:
 					return (_object as unknown as ZLinkMutateApiType<T>).data.item;
+
+				case extractInnerDataOptionsEnum.createRequestResponseItems:
+					return (_object as unknown as ZLinkGetAllApiType<T>).data.items;
 
 				default:
 					throw new ZCustomError({

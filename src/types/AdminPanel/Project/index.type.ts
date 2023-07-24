@@ -1,3 +1,6 @@
+import { UserAccountType } from './../../UserAccount/index.type';
+import { ZCommentInterface } from '../index.type';
+
 // Enums
 export enum ProjectCreatePageTabEnum {
 	detailForm = 'detailForm',
@@ -81,9 +84,14 @@ export interface ZProjectBoardIdeasInterface {
 		fileUrl?: string;
 		filePath?: string;
 	};
+	user: UserAccountType;
 	isCompleted?: boolean;
+	comments: ZCommentInterface[];
 	tags: string[];
 	votesCount?: number;
+	commentsCount?: number;
+	createdAt?: string;
+	updatedAt?: string;
 }
 
 export interface ZBoardStatusInterface {
