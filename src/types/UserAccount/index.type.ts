@@ -10,10 +10,12 @@ export interface UserRoleAndPermissionsInterface {
 export type UserAccountType = {
 	id?: string;
 	username?: string;
+	name?: string;
 	email?: string;
+	profilePitcher?: string;
 	password?: string;
-	created_at?: string;
-	updated_at?: string;
+	createdAt?: string;
+	updatedAt?: string;
 	email_verified_at?: string | null;
 };
 

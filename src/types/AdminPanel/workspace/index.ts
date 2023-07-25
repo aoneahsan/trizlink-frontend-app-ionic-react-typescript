@@ -1,3 +1,4 @@
+import { UserAccountType } from '@/types/UserAccount/index.type';
 import { ReactNode } from 'react';
 
 // Enum's
@@ -116,7 +117,11 @@ export interface workspaceInterface {
 	id?: string;
 	workspaceName?: string;
 	workspaceTimezone?: string;
+	workspaceImage?: string;
 	clients?: workspaceInviteClientInterface[];
+	user: UserAccountType;
+	createdAt?: string;
+	updatedAt?: string;
 }
 export interface ApprovalCardInterface {
 	icon: string;

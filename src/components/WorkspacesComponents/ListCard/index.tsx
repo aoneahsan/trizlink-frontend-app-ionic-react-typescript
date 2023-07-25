@@ -23,7 +23,9 @@ import {
 	ZIonCol,
 	ZIonIcon,
 	ZIonImg,
+	ZIonRouterLink,
 	ZIonRow,
+	ZIonSkeletonText,
 	ZIonText,
 } from '@/components/ZIonComponents';
 import ZUserInfoPopover from '@/components/InPageComponents/ZaionsPopovers/UserInfoPopover';
@@ -33,25 +35,23 @@ import ZWorkspacesActionPopover from '@/components/InPageComponents/ZaionsPopove
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import {
-	useZIonAlert,
-	useZIonErrorAlert,
-	useZIonPopover,
-} from '@/ZaionsHooks/zionic-hooks';
-import { useZRQDeleteRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
 import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
-import { API_URL_ENUM } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
+import { createRedirectRoute } from '@/utils/helpers';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import { workspaceInterface } from '@/types/AdminPanel/workspace';
 
 /**
  * Recoil State Imports go down
@@ -63,11 +63,6 @@ import CONSTANTS from '@/utils/constants';
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
-import { showSuccessNotification } from '@/utils/notification';
-import { createRedirectRoute } from '@/utils/helpers';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { workspaceFormTabEnum } from '@/types/AdminPanel/workspace';
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 /**
  * Images Imports go down
@@ -78,14 +73,6 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * Component props type go down
  * ? Like if you have a type for props it should be please Down
  * */
-interface ZWorkspacesCardInterface {
-	id?: string;
-	workspaceName: string;
-	workspacePagesCount: string;
-	userAvatar: string;
-	lastActive: string;
-	workspaceAvatar?: string;
-}
 
 /**
  * Functional Component
@@ -93,226 +80,305 @@ interface ZWorkspacesCardInterface {
  * @type {*}
  * */
 
-const ZWorkspacesCard: React.FC<ZWorkspacesCardInterface> = ({
+const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 	id,
-	workspaceAvatar,
+	workspaceImage,
 	workspaceName,
-	workspacePagesCount,
-	userAvatar,
-	lastActive,
+	createdAt,
+	user,
 }) => {
-	// Custom Hooks
-	const { presentZIonPopover: presentUserInfoPopover } = useZIonPopover(
-		ZUserInfoPopover,
-		{ showBadges: true }
-	); // popover hook to show UserInfoPopover
-
-	const { presentZIonAlert } = useZIonAlert(); // hook to present alert
-	const { presentZIonErrorAlert } = useZIonErrorAlert(); // hook to present error alert
+	//
 	const { zNavigatePushRoute } = useZNavigate();
 
-	const {
-		presentZIonPopover: presentWorkspacesActionsPopover,
-		dismissZIonPopover: dismissWorkspacesActionsPopover,
-	} = useZIonPopover(ZWorkspacesActionPopover, {
-		deleteButtonOnClickHn: () => {
-			void deleteWorkspaceConfirmModal();
-		},
-		EditButtonOnClickHn: () => {
-			if (id)
-				zNavigatePushRoute(
-					createRedirectRoute({
-						url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
-						params: [CONSTANTS.RouteParams.workspace.editWorkspaceIdParam],
-						values: [id],
-						routeSearchParams: {
-							tab: workspaceFormTabEnum.inviteClients,
-						},
-					})
-				);
+	const { presentZIonPopover: presentUserInfoPopover } = useZIonPopover(
+		ZUserInfoPopover,
+		{ showBadges: true, user: user }
+	); // popover hook to show UserInfoPopover
 
-			dismissWorkspacesActionsPopover();
-		},
-	}); // popover hook to show UserInfoPopover
-
-	// delete workspace api.
-	const { mutateAsync: deleteWorkspaceMutate } = useZRQDeleteRequest(
-		API_URL_ENUM.workspace_update_delete,
-		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
-	);
-
-	// delete Workspace Confirm Modal.
-	const deleteWorkspaceConfirmModal = async () => {
-		try {
-			if (id && id) {
-				await presentZIonAlert({
-					header: `Delete Workspace "${workspaceName}"`,
-					subHeader: 'Remove workspace from user account.',
-					message: 'Are you sure you want to delete this workspace?',
-					buttons: [
-						{
-							text: 'Cancel',
-							role: 'cancel',
-						},
-						{
-							text: 'Delete',
-							role: 'danger',
-							handler: () => {
-								void removeWorkspace();
-							},
-						},
-					],
-				});
-			} else {
-				await presentZIonErrorAlert();
-			}
-		} catch (error) {
-			console.error(error);
-		}
-	};
-
-	/**
-	 * removeWorkspace will hit delete workspace folder api
-	 */
-	const removeWorkspace = async () => {
-		try {
-			if (id) {
-				// hitting the delete api
-				await deleteWorkspaceMutate({
-					itemIds: [id],
-					urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-				});
-
-				// show success message after deleting
-				showSuccessNotification(`Workspace deleted successfully.`);
-
-				dismissWorkspacesActionsPopover();
-			} else {
-				await presentZIonErrorAlert();
-			}
-		} catch (error) {
-			console.error(error);
-		}
-	};
+	const { presentZIonPopover: presentWorkspacesActionsPopover } =
+		useZIonPopover(ZWorkspacesActionPopover, {
+			workspaceId: id,
+		}); // popover hook to show UserInfoPopover
 
 	return (
-		<ZIonCard
-			className='zaions__cursor_pointer h-[13.4rem]'
-			onClick={() => {
-				// Click on card will redirect to view workspace.
-				id &&
-					zNavigatePushRoute(
-						createRedirectRoute({
-							url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-							params: [
-								CONSTANTS.RouteParams.workspace.workspaceId,
-								CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-							],
-							values: [id, 'all'],
-						})
-					);
-			}}
-		>
-			<ZIonCardHeader>
-				<ZIonRow className='ion-align-items-center'>
-					<ZIonCol className='flex gap-3 ion-align-items-center'>
-						<div
-							className={classNames({
-								'zaions__w50px zaions__h50px rounded overflow__hidden': true,
-								'flex ion-align-items-center ion-justify-content-center zaions__primary_bg':
-									!workspaceAvatar,
-							})}
-						>
-							{workspaceAvatar && (
-								<ZIonImg
-									src={
-										workspaceAvatar ||
-										getUiAvatarApiUrl({ name: workspaceName })
-									}
-									className='rounded overflow__hidden'
-								/>
-							)}
-						</div>
-						<div>
-							<ZIonText className='block text-base font-bold' color='dark'>
-								{workspaceName}
-							</ZIonText>
-							<ZIonText className='block zaions__fs_11'>
-								{workspacePagesCount} pages
-							</ZIonText>
-						</div>
-					</ZIonCol>
+		<ZIonCard className='h-[13.4rem]'>
+			<ZIonRow className='flex-col h-full'>
+				<ZIonCol className='flex-1'>
+					{/* Card header */}
+					<ZIonCardHeader>
+						<ZIonRow className='ion-align-items-center'>
+							<ZIonCol className='flex gap-3 ion-align-items-center'>
+								<div
+									className={classNames({
+										'zaions__w50px zaions__h50px rounded overflow__hidden':
+											true,
+										'flex ion-align-items-center ion-justify-content-center zaions__primary_bg':
+											!workspaceImage,
+									})}
+								>
+									<ZIonRouterLink
+										routerLink={createRedirectRoute({
+											url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+											params: [
+												CONSTANTS.RouteParams.workspace.workspaceId,
+												CONSTANTS.RouteParams
+													.folderIdToGetShortLinksOrLinkInBio,
+											],
+											values: [id || '', 'all'],
+										})}
+										color='dark'
+									>
+										<ZIonImg
+											src={
+												workspaceImage ||
+												getUiAvatarApiUrl({
+													name: workspaceName,
+												})
+											}
+											className='rounded overflow__hidden'
+										/>
+									</ZIonRouterLink>
+								</div>
+								<div>
+									{/* workspace name */}
+									<ZIonRouterLink
+										routerLink={createRedirectRoute({
+											url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+											params: [
+												CONSTANTS.RouteParams.workspace.workspaceId,
+												CONSTANTS.RouteParams
+													.folderIdToGetShortLinksOrLinkInBio,
+											],
+											values: [id || '', 'all'],
+										})}
+									>
+										<ZIonText
+											className='block text-base font-bold'
+											color='dark'
+										>
+											{workspaceName}
+										</ZIonText>
+									</ZIonRouterLink>
 
-					{/* Add to Favorites button col */}
-					<ZIonCol className='ion-text-end me-2'>
-						<ZIonButton
-							fill='clear'
-							className='h-auto mb-1 ion-no-padding ion-no-margin'
-						>
-							<ZIonIcon icon={starOutline} />
-						</ZIonButton>
-					</ZIonCol>
-				</ZIonRow>
-			</ZIonCardHeader>
+									{/*  */}
+									<ZIonText className='block zaions__fs_11'>
+										{createdAt}
+									</ZIonText>
+								</div>
+							</ZIonCol>
 
-			{/* Card body */}
-			<ZIonCardContent>
-				<ZIonRow>
-					<ZIonCol>
-						<ZIonButton
-							color='primary'
-							fill='solid'
-							className={classNames(classes['workspace-user-avatar-button'], {
-								relative: true,
-							})}
-							onClick={(event: unknown) => {
-								presentUserInfoPopover({
-									_event: event as Event,
-									_cssClass: 'zaions_user_info_popover_size',
-								});
-							}}
-						>
-							<ZIonImg
-								src={userAvatar || getUiAvatarApiUrl({ name: workspaceName })}
-								className='w-[40px] h-[40px] zaions-object-fit-cover'
-							/>
-						</ZIonButton>
-					</ZIonCol>
-				</ZIonRow>
+							{/* Add to Favorites button col */}
+							<ZIonCol className='ion-text-end me-2'>
+								<ZIonButton
+									fill='clear'
+									className='h-auto mb-1 ion-no-padding ion-no-margin'
+								>
+									<ZIonIcon icon={starOutline} />
+								</ZIonButton>
+							</ZIonCol>
 
-				{/* Bottom row */}
-				<ZIonRow className='pt-5 mx-2 mt-8'>
-					{/* Last active */}
-					<ZIonCol>
-						<ZIonButton
-							fill='clear'
-							className='h-auto mb-1 ion-no-padding ion-no-margin text-transform-initial'
-							color='dark'
-						>
-							{lastActive}
-						</ZIonButton>
-					</ZIonCol>
+							{/* user avatar */}
+							<ZIonCol size='12' className='mt-2 ion-no-margin ion-no-padding'>
+								{/* Row */}
+								<ZIonRow>
+									{/* Col */}
+									<ZIonCol>
+										<ZIonButton
+											color='primary'
+											fill='solid'
+											className={classNames(
+												classes['workspace-user-avatar-button'],
+												{
+													relative: true,
+												}
+											)}
+											onClick={(event: unknown) => {
+												presentUserInfoPopover({
+													_event: event as Event,
+													_cssClass: 'zaions_user_info_popover_size',
+												});
+											}}
+										>
+											<ZIonImg
+												src={
+													user?.profilePitcher ||
+													getUiAvatarApiUrl({ name: user?.name })
+												}
+												className='w-[38px] h-[40px] zaions-object-fit-cover'
+											/>
+										</ZIonButton>
+									</ZIonCol>
+								</ZIonRow>
+							</ZIonCol>
+						</ZIonRow>
+					</ZIonCardHeader>
+				</ZIonCol>
 
-					{/* actions popover button */}
-					<ZIonCol className='ion-text-end'>
-						<ZIonButton
-							fill='clear'
-							className='h-auto mb-1 ion-no-padding ion-no-margin text-transform-initial'
-							color='dark'
-							onClick={(event: unknown) => {
-								presentWorkspacesActionsPopover({
-									_event: event as Event,
-									_cssClass: 'zaions_workspaces_actions_popover_size',
-									_dismissOnSelect: false,
-								});
-							}}
-						>
-							<ZIonIcon icon={ellipsisHorizontalOutline} />
-						</ZIonButton>
-					</ZIonCol>
-				</ZIonRow>
-			</ZIonCardContent>
+				<ZIonCol className=''>
+					{/* Card body */}
+					<ZIonCardContent className='flex flex-col h-full ion-justify-content-end ion-align-items-end'>
+						{/* Bottom row */}
+						<ZIonRow className='w-full ion-align-items-center'>
+							{/* Last active */}
+							<ZIonCol>
+								<ZIonButton
+									className=' text-transform-initial'
+									color='secondary'
+									size='default'
+									onClick={() => {
+										// Click on card will redirect to view workspace.
+										if (id) {
+											zNavigatePushRoute(
+												createRedirectRoute({
+													url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+													params: [
+														CONSTANTS.RouteParams.workspace.workspaceId,
+														CONSTANTS.RouteParams
+															.folderIdToGetShortLinksOrLinkInBio,
+													],
+													values: [id, 'all'],
+												})
+											);
+										}
+									}}
+								>
+									View
+								</ZIonButton>
+							</ZIonCol>
+
+							{/* actions popover button */}
+							<ZIonCol className='ion-text-end'>
+								<ZIonButton
+									fill='clear'
+									className='h-auto mb-1 ion-no-padding ion-no-margin text-transform-initial'
+									color='dark'
+									onClick={(event: unknown) => {
+										presentWorkspacesActionsPopover({
+											_event: event as Event,
+											_cssClass: 'zaions_workspaces_actions_popover_size',
+											_dismissOnSelect: false,
+										});
+									}}
+								>
+									<ZIonIcon icon={ellipsisHorizontalOutline} />
+								</ZIonButton>
+							</ZIonCol>
+						</ZIonRow>
+					</ZIonCardContent>
+				</ZIonCol>
+			</ZIonRow>
 		</ZIonCard>
+	);
+};
+
+export const ZWorkspacesCardSkeleton: React.FC = () => {
+	return (
+		<ZIonCol sizeXl='4' sizeLg='6' sizeMd='6' sizeSm='6' sizeXs='12'>
+			<ZIonCard className='zaions__cursor_pointer h-[13.4rem]'>
+				<ZIonRow className='flex-col h-full'>
+					<ZIonCol className='flex-1'>
+						{/* Card header */}
+						<ZIonCardHeader>
+							<ZIonRow className='ion-align-items-center'>
+								<ZIonCol className='flex gap-3 ion-align-items-center'>
+									<div className='rounded zaions__w50px zaions__h50px overflow__hidden'>
+										<ZIonSkeletonText
+											animated={true}
+											style={{ width: '100%', height: '100%' }}
+										></ZIonSkeletonText>
+									</div>
+									<div>
+										<ZIonText
+											className='block text-base font-bold'
+											color='dark'
+										>
+											<ZIonSkeletonText
+												animated={true}
+												style={{ width: '100px', height: '15px' }}
+											></ZIonSkeletonText>
+										</ZIonText>
+										<ZIonText className='block zaions__fs_11'>
+											<ZIonSkeletonText
+												animated={true}
+												style={{ width: '80px', height: '15px' }}
+											></ZIonSkeletonText>
+										</ZIonText>
+									</div>
+								</ZIonCol>
+
+								{/* Add to Favorites button col */}
+								<ZIonCol className='ion-text-end me-2'>
+									<ZIonButton
+										fill='clear'
+										className='h-auto mb-1 ion-no-padding ion-no-margin'
+									>
+										<ZIonSkeletonText
+											animated={true}
+											style={{ width: '17px', height: '17px' }}
+										></ZIonSkeletonText>
+									</ZIonButton>
+								</ZIonCol>
+
+								{/* user avatar */}
+								<ZIonCol
+									size='12'
+									className='mt-2 ion-no-margin ion-no-padding'
+								>
+									{/* Row */}
+									<ZIonRow>
+										{/* Col */}
+										<ZIonCol>
+											<div className='w-[38px] h-[40px] rounded-full zaions-object-fit-cover'>
+												<ZIonSkeletonText
+													animated={true}
+													style={{ width: '100%', height: '100%' }}
+												></ZIonSkeletonText>
+											</div>
+										</ZIonCol>
+									</ZIonRow>
+								</ZIonCol>
+							</ZIonRow>
+						</ZIonCardHeader>
+					</ZIonCol>
+
+					<ZIonCol>
+						{/* Card body */}
+						<ZIonCardContent className='flex flex-col h-full ion-justify-content-end ion-align-items-end'>
+							{/* Bottom row */}
+							<ZIonRow className='w-full ion-align-items-center'>
+								{/* Last active */}
+								<ZIonCol>
+									<ZIonButton
+										className=' text-transform-initial'
+										color='secondary'
+										size='default'
+									>
+										<ZIonSkeletonText
+											animated={true}
+											style={{ width: '40px', height: '17px' }}
+										></ZIonSkeletonText>
+									</ZIonButton>
+								</ZIonCol>
+
+								{/* actions popover button */}
+								<ZIonCol className='ion-text-end'>
+									<ZIonButton
+										fill='clear'
+										className='h-auto mt-1 mb-1 ion-no-padding ion-no-margin text-transform-initial'
+										color='dark'
+									>
+										<ZIonSkeletonText
+											animated={true}
+											style={{ width: '30px', height: '17px' }}
+										></ZIonSkeletonText>
+									</ZIonButton>
+								</ZIonCol>
+							</ZIonRow>
+						</ZIonCardContent>
+					</ZIonCol>
+				</ZIonRow>
+			</ZIonCard>
+		</ZIonCol>
 	);
 };
 

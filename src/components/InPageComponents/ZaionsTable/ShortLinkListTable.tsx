@@ -39,12 +39,18 @@ import { ZIonButton } from '@/components/ZIonComponents';
 // Global Constants
 import CONSTANTS, { ZaionsBusinessDetails } from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { replaceParams, replaceRouteParams } from '@/utils/helpers';
-import { API_URL_ENUM } from '@/utils/enums';
 import {
+	extractInnerData,
+	replaceParams,
+	replaceRouteParams,
+} from '@/utils/helpers';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+	useZGetRQCacheData,
 	useZInvalidateReactQueries,
 	useZRQDeleteRequest,
 	useZRQGetRequest,
+	useZUpdateRQCacheData,
 } from '@/ZaionsHooks/zreactquery-hooks';
 import {
 	useZIonAlert,
@@ -71,21 +77,34 @@ import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import { FormMode } from '@/types/AdminPanel/index.type';
 import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
-import { showSuccessNotification } from '@/utils/notification';
+import {
+	showErrorNotification,
+	showSuccessNotification,
+} from '@/utils/notification';
 import MESSAGES from '@/utils/messages';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 // Styles
 
 const ZaionsShortLinkTable = () => {
-	// Component state.
+	// #region Component state.
 	const [compState, setCompState] = useState<{
 		selectedShortLinkId?: string;
 		showActionPopover: boolean;
 	}>({ showActionPopover: false });
+	// #endregion
 
+	const actionsPopoverRef = useRef<HTMLIonPopoverElement>(null);
+
+	// Folder id getting from url. (use when use when to filter short links by folder listed on the left-side, when user click on the folder from listed folder the id of that folder the Id of folder will set in the url and we will fetch it here by useParams).
+	const { folderId, workspaceId } = useParams<{
+		folderId: string;
+		workspaceId: string;
+	}>();
+
+	// #region Recoils.
 	// Recoil state for storing all short links of a user.
 	const setShortLinksStateAtom = useSetRecoilState(ShortLinksRStateAtom);
-
 	// Recoil selector that will filter from all short links state(ShortLinksRStateAtom) and give the filter short links.
 	const _FilteredShortLinkDataSelector = useRecoilValue(
 		FilteredShortLinkDataSelector
@@ -95,45 +114,40 @@ const ZaionsShortLinkTable = () => {
 	const _setShortLinksFilterOptions = useSetRecoilState(
 		ShortLinksFilterOptionsRStateAtom
 	);
-
-	// Folder id getting from url. (use when use when to filter short links by folder listed on the left-side, when user click on the folder from listed folder the id of that folder the Id of folder will set in the url and we will fetch it here by useParams).
-	const { folderId, workspaceId } = useParams<{
-		folderId: string;
-		workspaceId: string;
-	}>();
-
-	const actionsPopoverRef = useRef<HTMLIonPopoverElement>(null);
-
-	// custom hooks.
-	const { presentZIonErrorAlert } = useZIonErrorAlert();
-	const { presentZIonAlert } = useZIonAlert();
-	const { zNavigatePushRoute } = useZNavigate();
-	const { presentZIonModal: presentPixelAccountDetailModal } = useZIonModal(
-		ZaionsPixelAccountDetail
-	);
-	const { presentZIonModal: presentShortLinkNoteModal } = useZIonModal(
-		ZaionsLinkNoteDetailModal
-	);
-
 	//
 	const setShortLinkFormState = useSetRecoilState(ShortLinkFormState);
 
 	//
 	const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
+	// #endregion
 
+	// #region custom hooks.
+	const { presentZIonErrorAlert } = useZIonErrorAlert();
+	const { presentZIonAlert } = useZIonAlert();
+	const { zNavigatePushRoute } = useZNavigate();
+	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+	// #endregion
+
+	const { presentZIonModal: presentShortLinkNoteModal } = useZIonModal(
+		ZaionsLinkNoteDetailModal
+	);
+
+	// #region APIS requests.
 	// Request for deleting short link.
 	const { mutateAsync: deleteShortLinkMutate } = useZRQDeleteRequest(
 		API_URL_ENUM.shortLinks_update_delete,
-		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId]
+		[]
 	);
 
 	// Request for getting short links data.
-	const { data: getShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
+	const { data: ShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
 		_url: API_URL_ENUM.shortLinks_create_list,
 		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
 		_itemsIds: [workspaceId],
 		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 	});
+	// #endregion
 
 	// When the short links data fetch from backend, storing it in ShortLinksRStateAtom recoil state.
 	useEffect(() => {
@@ -142,15 +156,16 @@ const ZaionsShortLinkTable = () => {
 				...oldState,
 				folderId: folderId,
 			}));
-			if (getShortLinksData) {
-				setShortLinksStateAtom(getShortLinksData);
+			if (ShortLinksData) {
+				setShortLinksStateAtom(ShortLinksData);
 			}
 		} catch (error) {
 			reportCustomError(error);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [folderId, getShortLinksData]);
+	}, [folderId, ShortLinksData]);
 
+	// #region Functions.
 	const showActionsPopover = (
 		_event: React.MouseEvent<HTMLIonButtonElement, MouseEvent>
 	) => {
@@ -230,19 +245,56 @@ const ZaionsShortLinkTable = () => {
 				_FilteredShortLinkDataSelector?.length
 			) {
 				if (compState.selectedShortLinkId) {
-					const _response: unknown | ZLinkMutateApiType<ShortLinkType> =
-						await deleteShortLinkMutate({
-							itemIds: [workspaceId, compState.selectedShortLinkId],
-							urlDynamicParts: [
-								CONSTANTS.RouteParams.workspace.workspaceId,
-								CONSTANTS.RouteParams.shortLink.shortLinkId,
-							],
-						});
+					const _response = await deleteShortLinkMutate({
+						itemIds: [workspaceId, compState.selectedShortLinkId],
+						urlDynamicParts: [
+							CONSTANTS.RouteParams.workspace.workspaceId,
+							CONSTANTS.RouteParams.shortLink.shortLinkId,
+						],
+					});
 
-					if ((_response as ZLinkMutateApiType<ShortLinkType>).success) {
-						showSuccessNotification(
-							MESSAGES.GENERAL.SHORT_LINKS.SHORT_LINK_DELTE_SUCCESSD_MESSAGE
+					if (_response) {
+						const _data = extractInnerData<{ success: boolean }>(
+							_response,
+							extractInnerDataOptionsEnum.createRequestResponseItem
 						);
+
+						if (_data && _data?.success) {
+							// getting all the shortLinks from RQ cache.
+							const _oldShortLinks =
+								extractInnerData<ShortLinkType[]>(
+									getRQCDataHandler<ShortLinkType[]>({
+										key: [
+											CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+											workspaceId,
+										],
+									}) as ShortLinkType[],
+									extractInnerDataOptionsEnum.createRequestResponseItems
+								) || [];
+
+							// removing deleted shortLinks from cache.
+							const _updatedShortLinks = _oldShortLinks.filter(
+								(el) => el.id !== compState.selectedShortLinkId
+							);
+
+							// Updating data in RQ cache.
+							await updateRQCDataHandler<ShortLinkType[] | undefined>({
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+									workspaceId,
+								],
+								data: _updatedShortLinks as ShortLinkType[],
+								id: '',
+								extractType: ZRQGetRequestExtractEnum.extractItems,
+								updateHoleData: true,
+							});
+
+							showSuccessNotification(
+								MESSAGES.GENERAL.SHORT_LINKS.SHORT_LINK_DELETE
+							);
+						} else {
+							showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+						}
 					}
 				}
 			} else {
@@ -252,10 +304,11 @@ const ZaionsShortLinkTable = () => {
 			reportCustomError(error);
 		}
 	};
+	// #endregion
 
 	return (
 		<>
-			<ZIonRow className='px-4 pt-4 pb-1 mx-1 mt-5 overflow-y-scroll zaions_pretty_scrollbar zaions__bg_white ion-margin-bottom'>
+			<ZIonRow className='px-4 pt-2 pb-1 mx-1 mt-5 overflow-y-scroll zaions_pretty_scrollbar ion-margin-bottom'>
 				<ZIonCol>
 					<ZTable>
 						<ZTableTHead>

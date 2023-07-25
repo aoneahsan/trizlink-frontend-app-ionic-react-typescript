@@ -75,7 +75,7 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import ZIonSegment from '@/components/ZIonComponents/ZIonSegment';
 import ZIonSegmentButton from '@/components/ZIonComponents/ZIonSegmentButton';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-import { AdminPanelMainSidebarMenuPageEnum } from '@/types/AdminPanel/index.type';
+import { AdminPanelSidebarMenuPageEnum } from '@/types/AdminPanel/index.type';
 
 /**
  * Component props type go down
@@ -88,8 +88,8 @@ import { AdminPanelMainSidebarMenuPageEnum } from '@/types/AdminPanel/index.type
  * @type {*}
  * */
 
-const AdminPanelMainSidebarMenu: React.FC<{
-	activePage: AdminPanelMainSidebarMenuPageEnum;
+const AdminPanelSidebarMenu: React.FC<{
+	activePage: AdminPanelSidebarMenuPageEnum;
 }> = ({ activePage }) => {
 	const { isLgScale } = useZMediaQueryScale();
 	const [ZDashboardState, setZDashboardState] =
@@ -114,7 +114,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 			{isLgScale ? (
 				<ZIonCol
 					size={isExpand ? '2' : '.8'}
-					className='zaions__medium_bg zaions-transition'
+					className='h-full zaions__medium_bg zaions-transition'
 				>
 					<ZIonContent color='dark'>
 						{/* Toggler menu button */}
@@ -171,8 +171,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 											'ion-no-padding ion-no-margin text-transform-initial':
 												true,
 											zaions__primary_set:
-												activePage ===
-												AdminPanelMainSidebarMenuPageEnum.shortLink,
+												activePage === AdminPanelSidebarMenuPageEnum.shortLink,
 										})}
 										routerLink={replaceRouteParams(
 											ZaionsRoutes.AdminPanel.ShortLinks.Main,
@@ -215,8 +214,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 											'ion-no-padding ion-no-margin text-transform-initial':
 												true,
 											zaions__primary_set:
-												activePage ===
-												AdminPanelMainSidebarMenuPageEnum.linkInBio,
+												activePage === AdminPanelSidebarMenuPageEnum.linkInBio,
 										})}
 										routerLink={replaceRouteParams(
 											ZaionsRoutes.AdminPanel.LinkInBio.Main,
@@ -317,8 +315,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 											'ion-no-padding ion-no-margin text-transform-initial':
 												true,
 											zaions__primary_set:
-												activePage ===
-												AdminPanelMainSidebarMenuPageEnum.workspaces,
+												activePage === AdminPanelSidebarMenuPageEnum.workspaces,
 										})}
 										routerLink={replaceRouteParams(
 											ZaionsRoutes.AdminPanel.Workspaces.View,
@@ -450,7 +447,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 					>
 						{/* Short Links */}
 						<ZIonSegmentButton
-							value={AdminPanelMainSidebarMenuPageEnum.shortLink}
+							value={AdminPanelSidebarMenuPageEnum.shortLink}
 							className='text-transform-initial'
 							onClick={() => {
 								zNavigatePushRoute(
@@ -470,7 +467,7 @@ const AdminPanelMainSidebarMenu: React.FC<{
 
 						{/* Link-in-bio */}
 						<ZIonSegmentButton
-							value={AdminPanelMainSidebarMenuPageEnum.linkInBio}
+							value={AdminPanelSidebarMenuPageEnum.linkInBio}
 							className='text-transform-initial'
 							onClick={() => {
 								zNavigatePushRoute(
@@ -579,4 +576,4 @@ const AdminPanelMainSidebarMenu: React.FC<{
 	);
 };
 
-export default AdminPanelMainSidebarMenu;
+export default AdminPanelSidebarMenu;

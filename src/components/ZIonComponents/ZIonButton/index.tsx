@@ -10,6 +10,7 @@ import {
 	ZIonModeType,
 	ZIonTargetType,
 } from '@/types/zaionsAppSettings.type';
+import classNames from 'classnames';
 type ZIonButtonType = {
 	children?: ReactNode;
 	className?: string;
@@ -32,12 +33,30 @@ type ZIonButtonType = {
 		[key: string]: unknown;
 	};
 	href?: string;
+	height?: '36px' | string;
 	ref?: React.Ref<HTMLIonButtonElement>;
 	onClick?: React.MouseEventHandler<HTMLIonButtonElement>;
 	onMouseEnter?: React.MouseEventHandler<HTMLIonButtonElement>;
 	onMouseLeave?: React.MouseEventHandler<HTMLIonButtonElement>;
 };
 const ZIonButton = (props: ZIonButtonType) => {
-	return <IonButton {...props}>{props.children}</IonButton>;
+	const compStyle =
+		props.style && props.height
+			? { ...props.style, height: props.height }
+			: props.style && !props.height
+			? { ...props.style }
+			: !props.style && props.height
+			? { height: props.height }
+			: {};
+
+	return (
+		<IonButton
+			style={compStyle}
+			className={classNames(props.className, { 'normal-case': true })}
+			{...props}
+		>
+			{props.children}
+		</IonButton>
+	);
 };
 export default ZIonButton;

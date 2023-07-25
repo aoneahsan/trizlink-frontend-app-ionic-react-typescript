@@ -108,6 +108,7 @@ export enum CSS_BACKGROUND_OPTION {
 
 export enum extractInnerDataOptionsEnum {
 	createRequestResponseItem = 'createRequestResponseItem',
+	createRequestResponseItems = 'createRequestResponseItems',
 }
 
 // notificationTypeEnum of notification

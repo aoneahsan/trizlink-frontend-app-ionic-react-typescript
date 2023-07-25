@@ -29,7 +29,7 @@ export enum messengerPlatformsBlockEnum {
 	default = 'default',
 }
 
-export enum AdminPanelMainSidebarMenuPageEnum {
+export enum AdminPanelSidebarMenuPageEnum {
 	shortLink = 'shortLink',
 	linkInBio = 'linkInBio',
 	integration = 'integration',
@@ -79,7 +79,7 @@ export interface PasswordInterface {
 }
 
 export interface ZDashboardFolderMenuInterface {
-	type: AdminPanelMainSidebarMenuPageEnum;
+	type: AdminPanelSidebarMenuPageEnum;
 	foldersData: LinkFolderType[];
 	showFoldersSaveReorderButton?: boolean;
 	handleFoldersReorder?: (

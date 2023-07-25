@@ -31,7 +31,11 @@ import { ZTimezoneSelector } from '@/components/CustomComponents/ZTimezone';
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import { useZRQCreateRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+	useZGetRQCacheData,
+	useZRQCreateRequest,
+	useZUpdateRQCacheData,
+} from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -47,6 +51,7 @@ import CONSTANTS from '@/utils/constants';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Recoil State Imports go down
@@ -77,29 +82,53 @@ import { workspaceInterface } from '@/types/AdminPanel/workspace';
 const ZAddNewWorkspaceModal: React.FC<{
 	dismissZIonModal: (data?: string, role?: string | undefined) => void;
 }> = ({ dismissZIonModal }) => {
+	// Custom hooks
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+	const { getRQCDataHandler } = useZGetRQCacheData();
+
 	// Create new workspace API.
 	const { mutateAsync: createWorkspaceMutate } = useZRQCreateRequest({
 		_url: API_URL_ENUM.workspace_create_list,
-		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN,
-		],
+		_queriesKeysToInvalidate: [],
 	});
 
-	//
+	// Formik submit handler
 	const formikSubmitHandler = async (values: string) => {
 		try {
 			if (values) {
-				// Making an api call creating new workspace
+				// Making an api call creating new workspace.
 				const _response = await createWorkspaceMutate(values);
 
 				if (_response) {
+					// extracting data from _response.
 					const _data = extractInnerData<workspaceInterface>(
 						_response,
 						extractInnerDataOptionsEnum.createRequestResponseItem
 					);
 
 					if (_data && _data.id) {
-						// After api dismissing modal
+						// getting all the workspace from RQ cache.
+						const _oldWorkspaces =
+							extractInnerData<workspaceInterface[]>(
+								getRQCDataHandler<workspaceInterface[]>({
+									key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
+								}) as workspaceInterface[],
+								extractInnerDataOptionsEnum.createRequestResponseItems
+							) || [];
+
+						// Adding newly created workspace data.
+						const updatedWorkspaces = [..._oldWorkspaces, _data];
+
+						// Updating data in RQ cache.
+						await updateRQCDataHandler<workspaceInterface[] | undefined>({
+							key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
+							data: updatedWorkspaces as workspaceInterface[],
+							id: '',
+							extractType: ZRQGetRequestExtractEnum.extractItems,
+							updateHoleData: true,
+						});
+
+						// After updating cache dismissing modal.
 						dismissZIonModal(_data.id, 'success');
 					}
 				}
@@ -150,7 +179,11 @@ const ZAddNewWorkspaceModal: React.FC<{
 						return errors;
 					}}
 					onSubmit={(values) => {
-						void formikSubmitHandler(zStringify(values));
+						const zStringifyData = zStringify({
+							title: values.workspaceName,
+							timezone: values.workspaceTimezone,
+						});
+						void formikSubmitHandler(zStringifyData);
 					}}
 				>
 					{({

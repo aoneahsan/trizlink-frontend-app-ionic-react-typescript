@@ -20,7 +20,6 @@ import {
 	ZIonText,
 } from '@/components/ZIonComponents';
 import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
-import { ProductLogo } from '@/assets/images';
 
 /**
  * Custom Hooks Imports go down
@@ -36,6 +35,7 @@ import { ProductLogo } from '@/assets/images';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import { UserAccountType } from '@/types/UserAccount/index.type';
 
 /**
  * Recoil State Imports go down
@@ -46,6 +46,8 @@ import { ProductLogo } from '@/assets/images';
  * Style files Imports go down
  * ? Import of style sheet is a style import
  * */
+import { ProductLogo } from '@/assets/images';
+import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 
 /**
  * Images Imports go down
@@ -58,6 +60,7 @@ import { ProductLogo } from '@/assets/images';
  * */
 interface ZUserInfoPopoverInterface {
 	showBadges: boolean;
+	user: UserAccountType;
 }
 
 /**
@@ -68,33 +71,37 @@ interface ZUserInfoPopoverInterface {
 
 const ZUserInfoPopover: React.FC<ZUserInfoPopoverInterface> = ({
 	showBadges = false,
+	user,
 }) => {
 	return (
-		<ZIonRow className='px-2 ion-align-items-center my-2'>
+		<ZIonRow className='px-2 my-2 ion-align-items-center'>
 			{/* User avatar col */}
 			<ZIonCol size='max-content'>
 				<ZUserAvatarButton
 					className='zaions__w50px zaions__h50px'
-					userAvatar={ProductLogo}
+					userAvatar={
+						user?.profilePitcher ||
+						getUiAvatarApiUrl({
+							name: user?.username,
+						})
+					}
 				/>
 			</ZIonCol>
 
 			{/* User info col */}
 			<ZIonCol>
-				<ZIonText className='block'>Muhammad Talha (you)</ZIonText>
-				<ZIonText className='block zaions__fs_13'>
-					talhaworking5@gmail.com
-				</ZIonText>
+				<ZIonText className='block'>{user?.username}</ZIonText>
+				<ZIonText className='block zaions__fs_13'>{user?.email}</ZIonText>
 			</ZIonCol>
 
 			{showBadges && (
-				<ZIonCol size='12' className='ps-5 flex gap-2'>
+				<ZIonCol size='12' className='flex gap-2 ps-5'>
 					<ZIonBadge className='ms-4'>Team</ZIonBadge>
 					<ZIonBadge color='secondary'>Company owner</ZIonBadge>
 				</ZIonCol>
 			)}
 
-			<ZIonCol size='12' className=' mt-2 py-3 px-3 border-top'>
+			<ZIonCol size='12' className='px-3 py-3 mt-2 border-top'>
 				<ZIonText className='block zaions__fs_13'>last seen: just now</ZIonText>
 			</ZIonCol>
 		</ZIonRow>

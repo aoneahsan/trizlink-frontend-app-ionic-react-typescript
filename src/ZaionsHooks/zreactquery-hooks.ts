@@ -1,3 +1,4 @@
+import { extractInnerDataOptionsEnum } from './../utils/enums/index';
 import { zAxiosApiRequest, emptyVoidReturnFunction } from '@/utils/helpers';
 // Core Imports
 
@@ -423,7 +424,8 @@ export const useZInvalidateReactQueries = () => {
 	}
 };
 
-export const useUpdateRQCacheData = () => {
+// Update data in React-Query
+export const useZUpdateRQCacheData = () => {
 	try {
 		const queryClient = useQueryClient();
 
@@ -432,14 +434,31 @@ export const useUpdateRQCacheData = () => {
 			data,
 			id,
 			updateHoleData = false,
+			extractType = ZRQGetRequestExtractEnum.extractItems,
 		}: {
 			key: string | string[];
 			id: string;
 			data: T;
 			updateHoleData?: boolean;
+			extractType?: ZRQGetRequestExtractEnum;
 		}) => {
 			if (updateHoleData) {
-				queryClient.setQueryData([...key], data);
+				queryClient.setQueryData([...key], (oldData: unknown) => {
+					const updatedData = structuredClone(oldData);
+					if (updatedData) {
+						switch (extractType) {
+							case ZRQGetRequestExtractEnum.extractItem:
+								(updatedData as { data: { item: T } })!.data!.item = data;
+								break;
+
+							case ZRQGetRequestExtractEnum.extractItems:
+								(updatedData as { data: { items: T } })!.data!.items = data;
+								break;
+						}
+					}
+
+					return updatedData;
+				});
 			} else {
 				const _res = queryClient.setQueryData([...key], (oldData: unknown) => {
 					if (oldData) {
@@ -482,5 +501,28 @@ export const useUpdateRQCacheData = () => {
 	} catch (error) {
 		reportCustomError(error);
 		return { updateRQCDataHandler: emptyVoidReturnFunction };
+	}
+};
+
+// Get data from React-query cache.
+// Made this hook just because to use QueryClient.getQueryData in one place so if in feature we change it, just have to change this in this hook. (as same for all above).
+export const useZGetRQCacheData = () => {
+	try {
+		const QueryClient = useQueryClient();
+
+		const getRQCDataHandler = <T>({
+			key,
+		}: {
+			key: string[];
+		}): T | undefined => {
+			const _res = QueryClient.getQueryData<T>(key);
+
+			return _res;
+		};
+
+		return { getRQCDataHandler };
+	} catch (error) {
+		reportCustomError(error);
+		return { getRQCDataHandler: emptyVoidReturnFunction };
 	}
 };

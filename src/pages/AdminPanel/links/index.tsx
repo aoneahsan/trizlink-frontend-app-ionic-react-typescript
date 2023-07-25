@@ -1,12 +1,14 @@
-// Core Imports
+/**
+ * Core Imports go down
+ * ? Like Import of React is a Core Import
+ * */
 import React, { useState } from 'react';
 
-// Packages Imports
-import {
-	IonSegmentButton,
-	ItemReorderEventDetail,
-	RefresherEventDetail,
-} from '@ionic/react';
+/**
+ * Packages Imports go down
+ * ? Like import of ionic components is a packages import
+ * */
+import { ItemReorderEventDetail, RefresherEventDetail } from '@ionic/react';
 import {
 	menuOutline,
 	businessOutline,
@@ -15,17 +17,16 @@ import {
 	filterOutline,
 	refresh,
 } from 'ionicons/icons';
-import {
-	selector,
-	useRecoilState,
-	useRecoilValue,
-	useSetRecoilState,
-} from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import classNames from 'classnames';
 import { Formik } from 'formik';
 import dayjs from 'dayjs';
+import { useParams } from 'react-router';
 
-// Custom Imports
+/**
+ * Custom Imports go down
+ * ? Like import of custom components is a custom import
+ * */
 import ZaionsCreateShortLinkUrlInput from '@/components/InPageComponents/ZaionsCreateShortLinkUrlInput';
 import ZaionsShortLinkTable from '@/components/InPageComponents/ZaionsTable/ShortLinkListTable';
 import {
@@ -53,26 +54,50 @@ import ZIonRefresher from '@/components/ZIonComponents/ZIonRefresher';
 import ZIonRefresherContent from '@/components/ZIonComponents/ZIonRefresherContent';
 import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
 import ZaionsIonPage from '@/components/ZaionsIonPage';
+import FolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/FoldersActionPopover';
+import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
+import ZDashboardSidebar from '@/components/AdminPanelComponents/Sidebar';
+import ZCan from '@/components/Can';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+
+/**
+ * Custom Hooks Imports go down
+ * ? Like import of custom Hook is a custom import
+ * */
 import {
 	useZInvalidateReactQueries,
 	useZRQGetRequest,
 	useZRQUpdateRequest,
 } from '@/ZaionsHooks/zreactquery-hooks';
-import FolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/FoldersActionPopover';
 import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
-import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 
-// Types
+/**
+ * Global Constants Imports go down
+ * ? Like import of Constant is a global constants import
+ * */
+import CONSTANTS from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { API_URL_ENUM, PAGE_MENU } from '@/utils/enums';
+import { replaceParams, zStringify } from '@/utils/helpers';
+import { reportCustomError } from '@/utils/customErrorType';
+
+/**
+ * Type Imports go down
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
+ * */
 import { LinkFolderType, TimeFilterEnum } from '@/types/AdminPanel/linksType';
 import {
-	AdminPanelMainSidebarMenuPageEnum,
+	AdminPanelSidebarMenuPageEnum,
 	folderState,
 	FormMode,
 	messengerPlatformsBlockEnum,
 } from '@/types/AdminPanel/index.type';
 
-// Recoil States
+/**
+ * Recoil State Imports go down
+ * ? Import of recoil states is a Recoil State import
+ * */
 import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import {
 	ShortLinksFieldsDataRStateSelector,
@@ -81,22 +106,31 @@ import {
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
 
-// Global Contents
-import CONSTANTS from '@/utils/constants';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { API_URL_ENUM, PAGE_MENU, PAGE_MENU_SIDE } from '@/utils/enums';
-import { replaceParams, zStringify } from '@/utils/helpers';
-import { reportCustomError } from '@/utils/customErrorType';
-
-// Styles
+/**
+ * Style files Imports go down
+ * ? Import of style sheet is a style import
+ * */
 import classes from './styles.module.css';
-import ZDashboardSidebar from '@/components/AdminPanelComponents/Sidebar';
-import ZCan from '@/components/Can';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
-import { useParams } from 'react-router';
+import ZDashboardFolderMenu from '@/components/AdminPanelComponents/Sidebar/FolderMenu';
+import AdminPanelSidebarMenu from '@/components/AdminPanelComponents/Sidebar/ExpendableMenu';
 
+/**
+ * Images Imports go down
+ * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
+ * */
+
+/**
+ * Component props type go down
+ * ? Like if you have a type for props it should be please Down
+ * */
+
+/**
+ * Functional Component
+ * About: (Info of component here...)
+ * @type {*}
+ * */
 const ZShortLinksListPage: React.FC = () => {
-	// Component state.
+	// #region Component state.
 	const [compState, setCompState] = useState<{
 		shortLinksFoldersReorder: {
 			Ids?: string[];
@@ -107,16 +141,18 @@ const ZShortLinksListPage: React.FC = () => {
 			isEnable: false,
 		},
 	});
+	// #endregion
 
 	// getting current workspace id form params.
 	const { workspaceId } = useParams<{
 		workspaceId: string;
 	}>();
 
-	// Custom hooks.
+	// #region Custom hooks.
 	const { isXlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale(); // media query hook.
 	const { zInvalidateReactQueries } = useZInvalidateReactQueries();
 	const { validateRequestResponse } = useZValidateRequestResponse();
+	// #endregion
 
 	// Short links folders reorder function.
 	const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
@@ -145,17 +181,22 @@ const ZShortLinksListPage: React.FC = () => {
 		}, 100);
 	};
 
+	// #region Recoils.
 	// Recoil state for storing filter options for short-links.
 	const shortLinksFilterOptions = useRecoilValue(
 		ShortLinksFilterOptionsRStateAtom
 	);
-
+	// Recoil state that control the dashboard.
+	const ZDashboardState = useRecoilValue(ZDashboardRState);
+	// Recoil state for shortLinks.
+	const shortLinksStateAtom = useRecoilValue(ShortLinksRStateAtom);
 	//
 	const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
-
 	//
 	const setFolderFormState = useSetRecoilState(FolderFormState);
+	// #endregion
 
+	// #region APIS requests.
 	// Request for getting short links folders.
 	const { data: shortLinksFoldersData } = useZRQGetRequest<LinkFolderType[]>({
 		_url: API_URL_ENUM.ShortLink_folders_create_list,
@@ -168,39 +209,6 @@ const ZShortLinksListPage: React.FC = () => {
 		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 	});
 
-	//
-	const { presentZIonPopover: presentFolderActionIonPopover } = useZIonPopover(
-		FolderActionsPopoverContent,
-		{
-			workspaceId,
-			state: folderState.shortlink,
-		}
-	);
-
-	//
-	const { presentZIonPopover: presentShortLinkTimeFilterModal } =
-		useZIonPopover(ShortLinksTimeRangeFilterPopover);
-
-	//
-	const { presentZIonPopover: presentShortLinkTagsFilterModal } =
-		useZIonPopover(ShortLinksTagsFiltersPopover);
-
-	//
-	const { presentZIonPopover: presentShortLinkDomainsFilterModal } =
-		useZIonPopover(ShortLinksDomainsFiltersPopover);
-
-	//
-	const shortLinksStateAtom = useRecoilValue(ShortLinksRStateAtom);
-
-	//
-	const { presentZIonModal: presentFolderModal } = useZIonModal(
-		ZaionsAddNewFolder,
-		{
-			state: folderState.shortlink,
-			workspaceId,
-		}
-	);
-
 	// Update shortLinks folders reorder API
 	const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.ShortLinks_folders_reorder,
@@ -210,9 +218,41 @@ const ZShortLinksListPage: React.FC = () => {
 			folderState.shortlink,
 		],
 	});
+	// #endregion
 
-	const ZDashboardState = useRecoilValue(ZDashboardRState);
+	// #region Popovers.
+	//
+	const { presentZIonPopover: presentFolderActionIonPopover } = useZIonPopover(
+		FolderActionsPopoverContent,
+		{
+			workspaceId,
+			state: folderState.shortlink,
+		}
+	);
+	//
+	const { presentZIonPopover: presentShortLinkTimeFilterModal } =
+		useZIonPopover(ShortLinksTimeRangeFilterPopover);
+	//
+	const { presentZIonPopover: presentShortLinkTagsFilterModal } =
+		useZIonPopover(ShortLinksTagsFiltersPopover);
+	//
+	const { presentZIonPopover: presentShortLinkDomainsFilterModal } =
+		useZIonPopover(ShortLinksDomainsFiltersPopover);
 
+	// #endregion
+
+	// #region Modals.
+	//
+	const { presentZIonModal: presentFolderModal } = useZIonModal(
+		ZaionsAddNewFolder,
+		{
+			state: folderState.shortlink,
+			workspaceId,
+		}
+	);
+	// #endregion
+
+	// #region Functions.
 	const invalidedShortLinksQuery = async () => {
 		try {
 			await zInvalidateReactQueries([
@@ -261,6 +301,7 @@ const ZShortLinksListPage: React.FC = () => {
 			reportCustomError(error);
 		}
 	};
+	// #endregion
 
 	return (
 		<ZaionsIonPage
@@ -269,57 +310,61 @@ const ZShortLinksListPage: React.FC = () => {
 			menu={PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU}
 		>
 			<ZCan havePermission={permissionsEnum.viewAny_shortLink}>
+				{/* Content */}
 				<ZIonContent>
 					{/* IonRefresher */}
 					<ZIonRefresher onIonRefresh={(event) => void handleRefresh(event)}>
 						<ZIonRefresherContent />
 					</ZIonRefresher>
 
-					{/*  */}
-					<ZIonGrid className='ion-no-padding zaions_h100'>
-						<ZIonRow className='zaions_h100'>
+					{/* Grid */}
+					<ZIonGrid className='h-full ion-no-padding'>
+						{/* Row */}
+						<ZIonRow className='h-full'>
 							{/* Side bar */}
-							<ZDashboardSidebar
-								type={AdminPanelMainSidebarMenuPageEnum.shortLink}
-								//
-								// foldersData={[]}
-								foldersData={shortLinksFoldersData ? shortLinksFoldersData : []}
-								//
-								addNewFolderButtonOnClickHandler={() => {
-									setFolderFormState((oldVal) => ({
-										...oldVal,
-										id: '',
-										name: '',
-										formMode: FormMode.ADD,
-									}));
-									presentFolderModal({
-										_cssClass: 'link-in-bio-folder-modal',
-									});
-								}}
-								//
-								foldersSaveReorderButtonOnClickHandler={() => {
-									void shortLinksFoldersReOrderHandler();
-								}}
-								//
-								handleFoldersReorder={handleReorder}
-								//
-								showFoldersSaveReorderButton={
-									compState?.shortLinksFoldersReorder?.isEnable
-								}
-								//
-								folderActionsButtonOnClickHandler={(event: unknown) => {
-									presentFolderActionIonPopover({
-										_event: event as Event,
-										_cssClass: classNames(
-											classes.zaions_present_folder_Action_popover_width
-										),
-									});
-								}}
+							<AdminPanelSidebarMenu
+								activePage={AdminPanelSidebarMenuPageEnum.shortLink}
 							/>
+
+							{/* Folder menu after Expendable Navigation */}
+							{isLgScale && (
+								<ZDashboardFolderMenu
+									type={AdminPanelSidebarMenuPageEnum.shortLink}
+									foldersData={
+										shortLinksFoldersData ? shortLinksFoldersData : []
+									}
+									showFoldersSaveReorderButton={
+										compState?.shortLinksFoldersReorder?.isEnable
+									}
+									handleFoldersReorder={handleReorder}
+									addNewFolderButtonOnClickHandler={() => {
+										setFolderFormState((oldVal) => ({
+											...oldVal,
+											id: '',
+											name: '',
+											formMode: FormMode.ADD,
+										}));
+										presentFolderModal({
+											_cssClass: 'link-in-bio-folder-modal',
+										});
+									}}
+									foldersSaveReorderButtonOnClickHandler={() => {
+										void shortLinksFoldersReOrderHandler();
+									}}
+									folderActionsButtonOnClickHandler={(event: unknown) => {
+										presentFolderActionIonPopover({
+											_event: event as Event,
+											_cssClass: classNames(
+												classes.zaions_present_folder_Action_popover_width
+											),
+										});
+									}}
+								/>
+							)}
 
 							{/* Main Container */}
 							<ZIonCol
-								className='zaions-transition'
+								className='flex flex-col gap-10 zaions-transition'
 								sizeXl={
 									ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
 										? '8'
@@ -334,7 +379,8 @@ const ZShortLinksListPage: React.FC = () => {
 								sizeSm='12'
 								sizeXs='12'
 							>
-								<ZIonGrid className='pb-2 zaions__bg_white ion-no-padding'>
+								<div className='flex flex-col gap-8 bg-white ion-no-margin ion-no-padding'>
+									{/* Switch it button & page heading */}
 									<ZIonRow
 										className={classNames({
 											'px-3 ion-align-items-center': true,
@@ -413,10 +459,9 @@ const ZShortLinksListPage: React.FC = () => {
 											</ZIonCol>
 										</ZCan>
 									</ZIonRow>
-								</ZIonGrid>
 
-								<ZIonGrid className='mt-3 mb-5'>
-									<ZIonRow className='px-3 py-4 rounded zaions__bg_white ion-align-items-center'>
+									{/* filter input, export, import, & create short links buttons */}
+									<ZIonRow className='px-3 mt-3 bg-white rounded ion-align-items-center'>
 										<ZIonCol
 											sizeXl='4'
 											sizeLg='12'
@@ -427,81 +472,75 @@ const ZShortLinksListPage: React.FC = () => {
 											<SearchQueryInputComponent />
 										</ZIonCol>
 
-										<ZIonCol>
-											<ZIonRow
+										<ZIonCol
+											className={classNames({
+												'justify-content-end': isXlScale,
+												'justify-content-start mt-4': !isXlScale,
+												'row-gap-1-rem': !isLgScale,
+											})}
+										>
+											<ZIonButtons
 												className={classNames({
-													'justify-content-end': isXlScale,
-													'justify-content-start mt-4': !isXlScale,
-													'row-gap-1-rem': !isLgScale,
+													'w-full': true,
+													'ion-justify-content-between': !isXlScale,
+													'ion-justify-content-end gap-3': isXlScale,
+													block: !isSmScale,
 												})}
 											>
-												<ZIonButtons
-													className={classNames({
-														'w-full': true,
-														'ion-justify-content-between': !isXlScale,
-														'ion-justify-content-end gap-3': isXlScale,
-														block: !isSmScale,
-													})}
+												<ZIonButton
+													id='dropdown-basic'
+													fill='outline'
+													color='primary'
+													expand={!isSmScale ? 'block' : undefined}
+													className='my-2 normal-case'
+													height='39px'
 												>
-													<ZIonButton
-														id='dropdown-basic'
-														fill='outline'
-														color='primary'
-														expand={!isSmScale ? 'block' : undefined}
-														className={classNames({
-															'my-2': true,
-														})}
-													>
-														Export data's
-													</ZIonButton>
+													Export data's
+												</ZIonButton>
 
-													<ZIonButton
-														fill='outline'
-														color='primary'
-														expand={!isSmScale ? 'block' : undefined}
-														className={classNames({
-															'my-2': true,
-														})}
-													>
-														Bulk Import
-													</ZIonButton>
+												<ZIonButton
+													fill='outline'
+													color='primary'
+													expand={!isSmScale ? 'block' : undefined}
+													className='my-2 normal-case'
+													height='39px'
+												>
+													Bulk Import
+												</ZIonButton>
 
-													<ZCan
-														havePermission={permissionsEnum.create_shortLink}
+												<ZCan havePermission={permissionsEnum.create_shortLink}>
+													<ZIonButton
+														color='primary'
+														fill='solid'
+														className='my-2 normal-case'
+														expand={!isSmScale ? 'block' : undefined}
+														height='39px'
+														onClick={() =>
+															setNewShortLinkFormState((_) => ({
+																folderId:
+																	CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
+																shortUrl: {
+																	domain:
+																		CONSTANTS.DEFAULT_VALUES
+																			.DEFAULT_CUSTOM_DOMAIN,
+																},
+																type: messengerPlatformsBlockEnum.link,
+																pixelIds: [],
+																tags: [],
+																formMode: FormMode.ADD,
+															}))
+														}
+														routerLink={replaceParams(
+															ZaionsRoutes.AdminPanel.ShortLinks.Create,
+															CONSTANTS.RouteParams.workspace.workspaceId,
+															workspaceId
+														)}
 													>
-														<ZIonButton
-															color='primary'
-															fill='solid'
-															className={classNames({
-																'my-2': true,
-															})}
-															expand={!isSmScale ? 'block' : undefined}
-															onClick={() =>
-																setNewShortLinkFormState((_) => ({
-																	folderId:
-																		CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
-																	shortUrl: {
-																		domain:
-																			CONSTANTS.DEFAULT_VALUES
-																				.DEFAULT_CUSTOM_DOMAIN,
-																	},
-																	type: messengerPlatformsBlockEnum.link,
-																	pixelIds: [],
-																	tags: [],
-																	formMode: FormMode.ADD,
-																}))
-															}
-															routerLink={replaceParams(
-																ZaionsRoutes.AdminPanel.ShortLinks.Create,
-																CONSTANTS.RouteParams.workspace.workspaceId,
-																workspaceId
-															)}
-														>
-															Create a new link
-														</ZIonButton>
-													</ZCan>
-												</ZIonButtons>
-												{/* <ZIonCol
+														Create a new link
+													</ZIonButton>
+												</ZCan>
+											</ZIonButtons>
+											{/* <ZIonCol
 												sizeXl='max-content'
 												sizeSm='4'
 												sizeXs='6'
@@ -590,12 +629,12 @@ const ZShortLinksListPage: React.FC = () => {
 													Create a new link
 												</ZIonButton>
 											</ZIonCol> */}
-											</ZIonRow>
 										</ZIonCol>
 									</ZIonRow>
 
-									<ZIonRow className='px-3 py-4 mt-1 rounded zaions__bg_white ion-align-items-center'>
-										<ZIonCol className='flex ion-align-items-center'>
+									{/* total links count and filters buttons */}
+									<ZIonRow className='px-3 mt-1 bg-white rounded ion-align-items-center'>
+										<ZIonCol className='flex ps-1 ion-align-items-center'>
 											<ZIonText className='text-2xl'>
 												<ZIonText className='font-bold total_links pe-1'>
 													{shortLinksStateAtom?.length}
@@ -632,9 +671,8 @@ const ZShortLinksListPage: React.FC = () => {
 														fill='outline'
 														color='primary'
 														expand={!isMdScale ? 'block' : undefined}
-														className={classNames({
-															'my-2': true,
-														})}
+														className='my-2 normal-case'
+														height='39px'
 														onClick={(event: unknown) => {
 															presentShortLinkTimeFilterModal({
 																_event: event as Event,
@@ -683,9 +721,8 @@ const ZShortLinksListPage: React.FC = () => {
 														fill='outline'
 														color='primary'
 														expand={!isMdScale ? 'block' : undefined}
-														className={classNames({
-															'my-2': true,
-														})}
+														className='my-2 normal-case'
+														height='39px'
 														onClick={(event: unknown) => {
 															presentShortLinkTagsFilterModal({
 																_event: event as Event,
@@ -710,9 +747,8 @@ const ZShortLinksListPage: React.FC = () => {
 														fill='outline'
 														color='primary'
 														expand={!isMdScale ? 'block' : undefined}
-														className={classNames({
-															'my-2': true,
-														})}
+														className='my-2 normal-case'
+														height='39px'
 														onClick={(event: unknown) => {
 															presentShortLinkDomainsFilterModal({
 																_event: event as Event,
@@ -737,9 +773,8 @@ const ZShortLinksListPage: React.FC = () => {
 														fill='outline'
 														color='primary'
 														expand={!isMdScale ? 'block' : undefined}
-														className={classNames({
-															'my-2': true,
-														})}
+														className='my-2 normal-case'
+														height='39px'
 													>
 														<ZIonIcon
 															slot='start'
@@ -753,9 +788,8 @@ const ZShortLinksListPage: React.FC = () => {
 														color='primary'
 														fill='outline'
 														expand={!isMdScale ? 'block' : undefined}
-														className={classNames({
-															'my-2': true,
-														})}
+														className='my-2 normal-case'
+														height='39px'
 														onClick={() => {
 															void invalidedShortLinksQuery();
 														}}
@@ -767,7 +801,9 @@ const ZShortLinksListPage: React.FC = () => {
 											</ZIonRow>
 										</ZIonCol>
 									</ZIonRow>
-								</ZIonGrid>
+								</div>
+
+								{/* Shortlink Table */}
 								<ZaionsShortLinkTable />
 							</ZIonCol>
 						</ZIonRow>
@@ -1299,6 +1335,8 @@ const SearchQueryInputComponent = () => {
 				<ZIonItem
 					className='border ion-item-start-no-padding'
 					style={{ '--inner-padding-end': '0px' }}
+					lines='none'
+					minHeight='40px'
 				>
 					<ZIonInput
 						label='🔍'
@@ -1313,6 +1351,7 @@ const SearchQueryInputComponent = () => {
 							'--padding-start': '11px',
 							'--border-color': '#fff',
 						}}
+						minHeight='40px'
 					/>
 					<ZIonButton
 						onClick={() => void submitForm()}

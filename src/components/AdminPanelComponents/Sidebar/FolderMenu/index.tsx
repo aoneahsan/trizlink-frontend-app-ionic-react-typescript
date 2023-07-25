@@ -46,7 +46,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-	AdminPanelMainSidebarMenuPageEnum,
+	AdminPanelSidebarMenuPageEnum,
 	FormMode,
 	ZDashboardFolderMenuInterface,
 } from '@/types/AdminPanel/index.type';
@@ -111,9 +111,9 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 				<ZIonList lines='none'>
 					<ZIonItem className='p-0 mb-2 text-xl font-bold zaions__cursor_pointer'>
 						🔗 All{' '}
-						{type === AdminPanelMainSidebarMenuPageEnum.shortLink
+						{type === AdminPanelSidebarMenuPageEnum.shortLink
 							? 'links'
-							: type === AdminPanelMainSidebarMenuPageEnum.linkInBio
+							: type === AdminPanelSidebarMenuPageEnum.linkInBio
 							? 'Link In Bios'
 							: ''}
 					</ZIonItem>
@@ -128,7 +128,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 								className='zaions__cursor_pointer ms-2'
 								onClick={() => {
 									switch (type) {
-										case AdminPanelMainSidebarMenuPageEnum.shortLink:
+										case AdminPanelSidebarMenuPageEnum.shortLink:
 											zNavigatePushRoute(
 												replaceParams(
 													ZaionsRoutes.AdminPanel.ShortLinks.Main,
@@ -139,7 +139,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 											);
 											break;
 
-										case AdminPanelMainSidebarMenuPageEnum.linkInBio:
+										case AdminPanelSidebarMenuPageEnum.linkInBio:
 											zNavigatePushRoute(
 												replaceParams(
 													ZaionsRoutes.AdminPanel.LinkInBio.Main,
@@ -167,9 +167,9 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 											className={classNames({
 												'zaions__cursor_pointer ': true,
 												'zaions-short-link-folder':
-													type === AdminPanelMainSidebarMenuPageEnum.shortLink,
+													type === AdminPanelSidebarMenuPageEnum.shortLink,
 												'zaions-link-in-bio-folder':
-													type === AdminPanelMainSidebarMenuPageEnum.linkInBio,
+													type === AdminPanelSidebarMenuPageEnum.linkInBio,
 											})}
 											key={el.id}
 											data-folder-id={el.id}
@@ -177,7 +177,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 											<ZIonLabel
 												onClick={() => {
 													switch (type) {
-														case AdminPanelMainSidebarMenuPageEnum.shortLink:
+														case AdminPanelSidebarMenuPageEnum.shortLink:
 															zNavigatePushRoute(
 																replaceParams(
 																	ZaionsRoutes.AdminPanel.ShortLinks.Main,
@@ -188,7 +188,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 															);
 															break;
 
-														case AdminPanelMainSidebarMenuPageEnum.linkInBio:
+														case AdminPanelSidebarMenuPageEnum.linkInBio:
 															zNavigatePushRoute(
 																replaceParams(
 																	ZaionsRoutes.AdminPanel.LinkInBio.Main,

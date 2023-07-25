@@ -13,7 +13,7 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import AdminPanelMainSidebarMenu from '@/components/AdminPanelComponents/Sidebar/ExpendableMenu';
+import AdminPanelSidebarMenu from '@/components/AdminPanelComponents/Sidebar/ExpendableMenu';
 
 /**
  * Custom Hooks Imports go down
@@ -29,7 +29,10 @@ import AdminPanelMainSidebarMenu from '@/components/AdminPanelComponents/Sidebar
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { ZDashboardFolderMenuInterface } from '@/types/AdminPanel/index.type';
+import {
+	AdminPanelSidebarMenuPageEnum,
+	ZDashboardFolderMenuInterface,
+} from '@/types/AdminPanel/index.type';
 import ZDashboardFolderMenu from './FolderMenu';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
@@ -52,7 +55,6 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * Component props type go down
  * ? Like if you have a type for props it should be please Down
  * */
-interface ZDashboardSidebarInterface extends ZDashboardFolderMenuInterface {}
 
 /**
  * Functional Component
@@ -60,36 +62,13 @@ interface ZDashboardSidebarInterface extends ZDashboardFolderMenuInterface {}
  * @type {*}
  * */
 
-const ZDashboardSidebar: React.FC<ZDashboardSidebarInterface> = ({
-	type,
-	foldersData,
-	showFoldersSaveReorderButton,
-	handleFoldersReorder,
-	addNewFolderButtonOnClickHandler,
-	foldersSaveReorderButtonOnClickHandler,
-	folderActionsButtonOnClickHandler,
-}) => {
-	const { isLgScale } = useZMediaQueryScale(); // media query hook.
-
+const ZDashboardSidebar: React.FC<{
+	type: AdminPanelSidebarMenuPageEnum;
+}> = ({ type }) => {
 	return (
 		<>
 			{/* Expendable Navigation in the left-hand side */}
-			<AdminPanelMainSidebarMenu activePage={type} />
-
-			{/* Folder menu after Expendable Navigation */}
-			{isLgScale && (
-				<ZDashboardFolderMenu
-					type={type}
-					foldersData={foldersData}
-					showFoldersSaveReorderButton={showFoldersSaveReorderButton}
-					handleFoldersReorder={handleFoldersReorder}
-					addNewFolderButtonOnClickHandler={addNewFolderButtonOnClickHandler}
-					foldersSaveReorderButtonOnClickHandler={
-						foldersSaveReorderButtonOnClickHandler
-					}
-					folderActionsButtonOnClickHandler={folderActionsButtonOnClickHandler}
-				/>
-			)}
+			<AdminPanelSidebarMenu activePage={type} />
 		</>
 	);
 };

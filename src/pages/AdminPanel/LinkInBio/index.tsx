@@ -50,7 +50,7 @@ import FolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPop
 
 // Types
 import {
-	AdminPanelMainSidebarMenuPageEnum,
+	AdminPanelSidebarMenuPageEnum,
 	folderState,
 } from '@/types/AdminPanel/index.type';
 import { LinkFolderType, TimeFilterEnum } from '@/types/AdminPanel/linksType';
@@ -257,11 +257,11 @@ const ZLinkInBiosListPage: React.FC = () => {
 					</ZIonRefresher>
 
 					{/*  */}
-					<ZIonGrid className='ion-no-padding zaions_h100'>
-						<ZIonRow className='zaions_h100'>
+					<ZIonGrid className='ion-no-padding h-full'>
+						<ZIonRow className='h-full'>
 							{/* Side bar */}
 							<ZDashboardSidebar
-								type={AdminPanelMainSidebarMenuPageEnum.linkInBio}
+								type={AdminPanelSidebarMenuPageEnum.linkInBio}
 								//
 								foldersData={linkInBiosFoldersData ? linkInBiosFoldersData : []}
 								// foldersData={[]}

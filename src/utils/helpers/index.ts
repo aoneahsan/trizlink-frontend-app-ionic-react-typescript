@@ -28,6 +28,7 @@ import {
 } from '@/types/ZaionsHelperFunction.type';
 import {
 	AxiosRequestResponseType,
+	ZLinkGetApiType,
 	ZLinkMutateApiType,
 } from '@/types/ZaionsApis.type';
 import {
@@ -680,8 +681,8 @@ export const getUserDataObjectForm = (_user: UserAccountType) => {
 		email: _user?.email,
 		email_verified_at: _user?.email_verified_at,
 		password: _user?.password,
-		created_at: _user?.created_at,
-		updated_at: _user?.updated_at,
+		created_at: _user?.createdAt,
+		updated_at: _user?.updatedAt,
 	};
 };
 
@@ -947,6 +948,9 @@ export const extractInnerData = <T>(
 			switch (_type) {
 				case extractInnerDataOptionsEnum.createRequestResponseItem:
 					return (_object as unknown as ZLinkMutateApiType<T>).data.item;
+
+				case extractInnerDataOptionsEnum.createRequestResponseItems:
+					return (_object as unknown as ZLinkGetApiType<T>).data.items;
 
 				default:
 					throw new ZCustomError({

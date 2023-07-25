@@ -422,7 +422,7 @@ const LinkInBioShareSettings: React.FC = () => {
 				return (
 					<>
 						<ZIonContent color='light'>
-							<div className={`zaions_h100 w-full`}>
+							<div className={`h-full w-full`}>
 								{/* Custom your link Grid */}
 								<ZIonGrid
 									className={classNames({

@@ -8,7 +8,6 @@ import React, { useEffect } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { useRecoilValue } from 'recoil';
 import { addOutline } from 'ionicons/icons';
 import classNames from 'classnames';
 
@@ -27,10 +26,13 @@ import {
 	ZIonGrid,
 	ZIonIcon,
 	ZIonRow,
+	ZIonSkeletonText,
 	ZIonText,
 } from '@/components/ZIonComponents';
 import ZUserInfoPopover from '@/components/InPageComponents/ZaionsPopovers/UserInfoPopover';
-import ZWorkspacesCard from '@/components/WorkspacesComponents/ListCard';
+import ZWorkspacesCard, {
+	ZWorkspacesCardSkeleton,
+} from '@/components/WorkspacesComponents/ListCard';
 import ZAddNewWorkspaceModal from '@/components/InPageComponents/ZaionsModals/Workspace/CreateModal';
 
 /**
@@ -91,51 +93,28 @@ import { ProductLogo } from '@/assets/images';
 
 const ZWorkspaceListPage: React.FC = () => {
 	//
-	// const ZDashboardState = useRecoilValue(ZDashboardRState);
-
-	// Recoil State that hold workspaces.
-	// const [workspaceState, setWorkspaceState] = useRecoilState(
-	// 	WorkspaceRStateAtomFamily('')
-	// );
-
-	// Custom Hooks
-	const { presentZIonPopover: presentUserInfoPopover } =
-		useZIonPopover(ZUserInfoPopover); // popover hook to show UserInfoPopover
-
-	//
 	const { presentZIonModal: presentZWorkspaceCreateModal } = useZIonModal(
 		ZAddNewWorkspaceModal
 	);
-	const { zNavigatePushRoute } = useZNavigate();
 
-	// Get workspace data from backend.
-	const { data: WorkspacesData } = useZRQGetRequest<workspaceInterface[]>({
-		_url: API_URL_ENUM.workspace_create_list,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
-	});
-
-	// Using this when save in recoil
-	// useEffect(() => {
-	// 	try {
-	// 		if (getWorkspaceData) {
-	// 			setWorkspaceState(getWorkspaceData);
-	// 		}
-	// 	} catch (error) {
-	// 		reportCustomError(error);
-	// 	}
-	// }, [getWorkspaceData]);
+	// Get workspaces data from backend.
+	const { data: WorkspacesData, isFetching: isWorkspacesDataFetching } =
+		useZRQGetRequest<workspaceInterface[]>({
+			_url: API_URL_ENUM.workspace_create_list,
+			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
+		});
 
 	return (
 		<ZaionsIonPage pageTitle='Zaions workspaces list page'>
 			<ZIonContent>
 				<ZCan havePermission={permissionsEnum.viewAny_workspace}>
 					{/* Main grid */}
-					<ZIonGrid className='ion-no-padding zaions_h100'>
+					<ZIonGrid className='ion-no-padding h-full'>
 						{/*  */}
-						<ZIonRow className='zaions_h100'>
+						<ZIonRow className='h-full'>
 							{/* Expendable Navigation in the left-hand side */}
-							{/* <AdminPanelMainSidebarMenu
-							activePage={AdminPanelMainSidebarMenuPageEnum.workspaces}
+							{/* <AdminPanelSidebarMenu
+							activePage={AdminPanelSidebarMenuPageEnum.workspaces}
 						/> */}
 
 							{/* Main Container */}
@@ -167,39 +146,59 @@ const ZWorkspaceListPage: React.FC = () => {
 										{/* new workspace button col */}
 										<ZIonCol className='flex gap-8 pe-3 ion-align-items-center ion-justify-content-end'>
 											<ZCan havePermission={permissionsEnum.create_workspace}>
-												<ZIonButton
-													className='ion-no-margin text-transform-initial'
-													color='secondary'
-													onClick={() => {
-														presentZWorkspaceCreateModal({
-															_cssClass: 'create-workspace-modal-size',
-															_onDidDismiss: (event) => {
-																if (
-																	event.detail.data &&
-																	event.detail.role === 'success'
-																) {
-																	// after dismissing redirecting to edit workspace-page
-																	zNavigatePushRoute(
-																		createRedirectRoute({
-																			url: ZaionsRoutes.AdminPanel.Workspaces
-																				.Edit,
-																			params: [
-																				CONSTANTS.RouteParams.workspace
-																					.editWorkspaceIdParam,
-																			],
-																			values: [event.detail.data],
-																			routeSearchParams: {
-																				tab: workspaceFormTabEnum.inviteClients,
-																			},
-																		})
-																	);
-																}
-															},
-														});
-													}}
-												>
-													<ZIonIcon icon={addOutline} /> New workspace
-												</ZIonButton>
+												{!isWorkspacesDataFetching && (
+													<ZIonButton
+														className='ion-no-margin text-transform-initial'
+														color='secondary'
+														onClick={() => {
+															presentZWorkspaceCreateModal({
+																_cssClass: 'create-workspace-modal-size',
+																_onDidDismiss: (event) => {
+																	if (
+																		event.detail.data &&
+																		event.detail.role === 'success'
+																	) {
+																		// after dismissing redirecting to edit workspace-page
+																		// zNavigatePushRoute(
+																		// 	createRedirectRoute({
+																		// 		url: ZaionsRoutes.AdminPanel.Workspaces
+																		// 			.Edit,
+																		// 		params: [
+																		// 			CONSTANTS.RouteParams.workspace
+																		// 				.editWorkspaceIdParam,
+																		// 		],
+																		// 		values: [event.detail.data],
+																		// 		routeSearchParams: {
+																		// 			tab: workspaceFormTabEnum.inviteClients,
+																		// 		},
+																		// 	})
+																		// );
+																	}
+																},
+															});
+														}}
+													>
+														<ZIonIcon icon={addOutline} /> New workspace
+													</ZIonButton>
+												)}
+
+												{isWorkspacesDataFetching && (
+													<ZIonButton
+														className='ion-no-margin text-transform-initial'
+														color='secondary'
+													>
+														<ZIonSkeletonText
+															animated={true}
+															style={{ width: '20px', height: '20px' }}
+														></ZIonSkeletonText>
+														<ZIonText className='ms-2'>
+															<ZIonSkeletonText
+																animated={true}
+																style={{ width: '100px', height: '17px' }}
+															></ZIonSkeletonText>
+														</ZIonText>
+													</ZIonButton>
+												)}
 											</ZCan>
 
 											{/* User profile button */}
@@ -210,7 +209,8 @@ const ZWorkspaceListPage: React.FC = () => {
 									{/* cards row */}
 									<ZIonRow className='mt-5'>
 										{/* single card */}
-										{WorkspacesData &&
+										{!isWorkspacesDataFetching &&
+											WorkspacesData &&
 											WorkspacesData.map((el) => (
 												<ZIonCol
 													sizeXl='4'
@@ -221,15 +221,16 @@ const ZWorkspaceListPage: React.FC = () => {
 													key={el.id}
 												>
 													<ZWorkspacesCard
-														workspaceAvatar={ProductLogo}
+														workspaceImage={el.workspaceImage}
 														workspaceName={el.workspaceName as string}
-														workspacePagesCount='0'
-														userAvatar={ProductLogo}
-														lastActive='22h'
+														user={el.user}
 														id={el.id}
+														createdAt={el.createdAt}
 													/>
 												</ZIonCol>
 											))}
+
+										{isWorkspacesDataFetching && <ZWorkspacesCardSkeleton />}
 
 										{/* add a workspace card */}
 										<ZCan havePermission={permissionsEnum.create_workspace}>
@@ -240,45 +241,68 @@ const ZWorkspaceListPage: React.FC = () => {
 												sizeSm='6'
 												sizeXs='12'
 											>
-												<ZIonCard
-													className={classNames({
-														'h-[13.4rem] zaions__cursor_pointer': true,
-													})}
-													onClick={() => {
-														presentZWorkspaceCreateModal({
-															_cssClass: 'create-workspace-modal-size',
-															_onDidDismiss: (event) => {
-																if (
-																	event.detail.data &&
-																	event.detail.role === 'success'
-																) {
-																	// after dismissing redirecting to edit workspace-page
-																	zNavigatePushRoute(
-																		createRedirectRoute({
-																			url: ZaionsRoutes.AdminPanel.Workspaces
-																				.Edit,
-																			params: [
-																				CONSTANTS.RouteParams.workspace
-																					.editWorkspaceIdParam,
-																			],
-																			values: [event.detail.data],
-																			routeSearchParams: {
-																				tab: workspaceFormTabEnum.inviteClients,
-																			},
-																		})
-																	);
-																}
-															},
-														});
-													}}
-												>
-													<ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
-														<ZIonIcon icon={addOutline} size='large' />
-														<ZIonText className='text-lg'>
-															Create a workspace
-														</ZIonText>
-													</ZIonCardContent>
-												</ZIonCard>
+												{!isWorkspacesDataFetching && (
+													<ZIonCard
+														className={classNames({
+															'h-[13.4rem] zaions__cursor_pointer': true,
+														})}
+														onClick={() => {
+															presentZWorkspaceCreateModal({
+																_cssClass: 'create-workspace-modal-size',
+																_onDidDismiss: (event) => {
+																	if (
+																		event.detail.data &&
+																		event.detail.role === 'success'
+																	) {
+																		// after dismissing redirecting to edit workspace-page
+																		// zNavigatePushRoute(
+																		// 	createRedirectRoute({
+																		// 		url: ZaionsRoutes.AdminPanel.Workspaces
+																		// 			.Edit,
+																		// 		params: [
+																		// 			CONSTANTS.RouteParams.workspace
+																		// 				.editWorkspaceIdParam,
+																		// 		],
+																		// 		values: [event.detail.data],
+																		// 		routeSearchParams: {
+																		// 			tab: workspaceFormTabEnum.inviteClients,
+																		// 		},
+																		// 	})
+																		// );
+																	}
+																},
+															});
+														}}
+													>
+														<ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
+															<ZIonIcon icon={addOutline} size='large' />
+															<ZIonText className='text-lg'>
+																Create a workspace
+															</ZIonText>
+														</ZIonCardContent>
+													</ZIonCard>
+												)}
+
+												{isWorkspacesDataFetching && (
+													<ZIonCard
+														className={classNames({
+															'h-[13.4rem] zaions__cursor_pointer': true,
+														})}
+													>
+														<ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
+															<ZIonSkeletonText
+																animated={true}
+																style={{ width: '20px', height: '20px' }}
+															></ZIonSkeletonText>
+															<ZIonText className='text-lg'>
+																<ZIonSkeletonText
+																	animated={true}
+																	style={{ width: '150px', height: '17px' }}
+																></ZIonSkeletonText>
+															</ZIonText>
+														</ZIonCardContent>
+													</ZIonCard>
+												)}
 											</ZIonCol>
 										</ZCan>
 									</ZIonRow>

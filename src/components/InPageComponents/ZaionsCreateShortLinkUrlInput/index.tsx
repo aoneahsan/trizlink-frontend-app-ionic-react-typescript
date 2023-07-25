@@ -139,28 +139,28 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{ className?: string }> = ({
 							})}
 							style={{ '--inner-padding-end': '0px' }}
 							lines='none'
+							minHeight='40px'
 						>
-							<ZIonInputField
-								inputFieldProps={{
-									className: classNames({
-										'rounded-none': true,
-										'ion-touched ion-invalid': touched.domain && errors.domain,
-										'ion-touched ion-valid': touched.domain && !errors.domain,
-									}),
-									label: '',
-									name: 'domain',
-									type: 'email',
-									onIonChange: handleChange,
-									onIonBlur: handleBlur,
-									value: values.domain,
-									fill: 'outline',
-									placeholder: 'https://yourlink.com',
-									style: {
-										'--background': '#fff',
-										'--padding-start': '11px',
-										'--border-radius': '0',
-									},
+							<ZIonInput
+								className={classNames({
+									'rounded-none': true,
+									'ion-touched ion-invalid': touched.domain && errors.domain,
+									'ion-touched ion-valid': touched.domain && !errors.domain,
+								})}
+								label=''
+								name='domain'
+								type='email'
+								onIonChange={handleChange}
+								onIonBlur={handleBlur}
+								value={values.domain}
+								fill='outline'
+								placeholder='https://yourlink.com'
+								style={{
+									'--background': '#fff',
+									'--padding-start': '3px',
+									'--border-radius': '0',
 								}}
+								minHeight='40px'
 							/>
 
 							<ZIonButton

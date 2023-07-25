@@ -1,21 +1,26 @@
 // Core Import
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 // Packages Import
 import { IonImg } from '@ionic/react';
 
 type ZIonImgType = {
-  src?: string;
-  alt?: string;
-  className?: string;
-  style?: {
-    [key: string]: unknown;
-  };
-  slot?: 'start' | 'end';
+	src?: string;
+	alt?: string;
+	children?: ReactNode;
+	className?: string;
+	style?: {
+		[key: string]: unknown;
+	};
+	slot?: 'start' | 'end';
 };
 
 const ZIonImg = (props: ZIonImgType) => {
-  return <IonImg {...props} style={props.style} />;
+	return (
+		<IonImg {...props} style={props.style}>
+			{props.children}
+		</IonImg>
+	);
 };
 
 export default ZIonImg;

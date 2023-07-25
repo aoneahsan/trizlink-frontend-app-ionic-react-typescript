@@ -4,10 +4,15 @@ const GENERAL = {
 	FILE: {
 		FILE_DELETED_SUCCESS_MESSAGE: 'File deleted successfully.',
 	},
+	WORKSPACE: {
+		WORKSPACE_CREATED: 'Workspace created successfully.',
+		WORKSPACE_UPDATED: 'Workspace updated successfully.',
+		WORKSPACE_DELETED: 'Workspace deleted successfully.',
+	},
 	SHORT_LINKS: {
-		NEW_SHORT_LINK_CREATED_SUCCEED_MESSAGE: 'Short link created successfully.',
-		SHORT_LINK_UPDATED_SUCCEED_MESSAGE: 'Short link updated successfully.',
-		SHORT_LINK_DELTE_SUCCESSD_MESSAGE: 'Short link deleted successfully.',
+		SHORT_LINK_CREATED: 'Short link created successfully.',
+		SHORT_LINK_UPDATED: 'Short link updated successfully.',
+		SHORT_LINK_DELETE: 'Short link deleted successfully.',
 	},
 	PIXEL_ACCOUNT: {
 		NEW_PIXEL_ACCOUNT_CREATED_SUCCEED_MESSAGE:
@@ -42,7 +47,7 @@ const GENERAL = {
 	REGISTER_USER_SUCCESSED: 'Registered successfully.',
 	LOGIN_SUCCESSFULLY: 'Login successfully.',
 	LOGOUT_SUCCESSFULLY: 'Logout successfully.',
-	REGISTER_USER_FAILD: 'Something went wrong! 😐.',
+	SOMETHING_WENT_WRONG: 'Something went wrong! 😐.',
 	FAILED: 'Request Failed.',
 	FAILED_SUBHEADING: 'Something went wrong :(',
 	FAILED_MESSAGE: 'Error Occurred, request failed, please try again.',

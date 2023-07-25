@@ -63,7 +63,7 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import ZaionsColorPiker from '@/components/InPageComponents/ZaionsColorPiker';
 
 import {
-	useUpdateRQCacheData,
+	useZUpdateRQCacheData,
 	useZRQDeleteRequest,
 	useZRQGetRequest,
 	useZRQUpdateRequest,
@@ -208,7 +208,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
 	const { zNavigatePushRoute } = useZNavigate();
 
-	const { updateRQCDataHandler } = useUpdateRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
 	// const [linkInBioBlockState, setLinkInBioBlockState] = useRecoilState(
 	// 	LinkInBioBlocksRState

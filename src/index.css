@@ -300,6 +300,10 @@ span.new {
 	border: 1px solid var(--ion-color-secondary);
 }
 
+.z-ion-border-width-1px {
+	--border-width: 1px !important;
+}
+
 /* Color Set */
 .zaions__primary_set {
 	background: rgba(var(--ion-color-primary-rgb), 0.2);
@@ -416,11 +420,7 @@ span.new {
 }
 
 /* Height's */
-.zaions_h100 {
-	height: 100%;
-}
-
-.zaions_h100vh {
+.h-100vh {
 	height: 100vh;
 }
 
