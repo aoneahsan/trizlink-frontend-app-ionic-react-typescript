@@ -56,70 +56,65 @@ const Tags: React.FC = () => {
 		}
 	};
 	return (
-		<>
-			<ZIonCol
-				sizeXl='5.9'
-				sizeLg='5.9'
-				sizeMd='5.9'
-				sizeSm='12'
-				sizeXs='12'
-				className='py-2 border zaions__bg_white'
-			>
-				<div className='flex pb-2 ion-align-items-center border-bottom ion-padding-start'>
-					{/* Icon */}
-					<ZIonIcon icon={pricetagsOutline} size='large' />
+		<ZIonCol
+			sizeXl='5.9'
+			sizeLg='5.9'
+			sizeMd='5.9'
+			sizeSm='12'
+			sizeXs='12'
+			className='py-2 border zaions__bg_white'
+		>
+			<div className='flex pb-2 ion-align-items-center border-bottom ion-padding-start'>
+				{/* Icon */}
+				<ZIonIcon icon={pricetagsOutline} size='large' />
 
-					{/* Text */}
-					<ZIonText className='font-bold ion-no-margin ps-2'>
-						Tags
-						<ZIonRouterLink
-							className='ms-1'
-							routerLink={ZaionsRoutes.HomeRoute}
-						>
-							(help)
-						</ZIonRouterLink>
-					</ZIonText>
-				</div>
+				{/* Text */}
+				<ZIonText className='font-bold ion-no-margin ps-2'>
+					Tags
+					<ZIonRouterLink className='ms-1' routerLink={ZaionsRoutes.HomeRoute}>
+						(help)
+					</ZIonRouterLink>
+				</ZIonText>
+			</div>
 
-				{/*  */}
-				<div className='block px-4 mt-4'>
-					<ZIonInput
-						placeholder='Add tag'
-						onKeyUp={({ currentTarget, key }) => {
-							if (!!currentTarget?.value && key === 'Enter') {
-								void handleTagSubmit(
-									currentTarget?.value?.toString().toLowerCase()
+			{/*  */}
+			<div className='block px-4 mt-4'>
+				<ZIonInput
+					placeholder='Add tag'
+					onKeyUp={({ currentTarget, key }) => {
+						if (!!currentTarget?.value && key === 'Enter') {
+							void handleTagSubmit(
+								currentTarget?.value?.toString().toLowerCase()
+							);
+							currentTarget.value = '';
+						}
+					}}
+					name='tags'
+					label=''
+					minHeight='40px'
+					style={{
+						'--padding-start': '0px',
+					}}
+				/>
+				<div className='tags ion-padding-top'>
+					{values.tags && values.tags.length
+						? values.tags.map((el) => {
+								return (
+									<IonChip
+										onClick={() => {
+											removeTags(el);
+										}}
+										key={el}
+									>
+										<ZIonLabel>{el}</ZIonLabel>
+										<ZIonIcon icon={close}></ZIonIcon>
+									</IonChip>
 								);
-								currentTarget.value = '';
-							}
-						}}
-						name='tags'
-						label=''
-						minHeight='40px'
-						style={{
-							'--padding-start': '0px',
-						}}
-					/>
-					<div className='tags ion-padding-top'>
-						{values.tags && values.tags.length
-							? values.tags.map((el) => {
-									return (
-										<IonChip
-											onClick={() => {
-												removeTags(el);
-											}}
-											key={el}
-										>
-											<ZIonLabel>{el}</ZIonLabel>
-											<ZIonIcon icon={close}></ZIonIcon>
-										</IonChip>
-									);
-							  })
-							: ''}
-					</div>
+						  })
+						: ''}
 				</div>
-			</ZIonCol>
-		</>
+			</div>
+		</ZIonCol>
 	);
 };
 

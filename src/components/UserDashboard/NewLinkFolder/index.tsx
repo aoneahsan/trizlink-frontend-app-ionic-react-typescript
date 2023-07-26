@@ -12,6 +12,7 @@ import {
 	ZIonIcon,
 	ZIonRouterLink,
 	ZIonButton,
+	ZIonSkeletonText,
 } from '@/components/ZIonComponents';
 import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
@@ -55,72 +56,113 @@ const NewLinkFolder: React.FC<{
 	);
 
 	return (
-		<>
-			{/* Col-1 */}
-			<ZIonCol
-				sizeXl='5.9'
-				sizeLg='5.9'
-				sizeMd='5.9'
-				sizeSm='12'
-				sizeXs='12'
-				className='py-2 border zaions__bg_white'
-			>
-				<div className='flex ion-align-items-center border-bottom ion-padding-start'>
-					{/* Icon */}
-					<ZIonIcon icon={folderOpenOutline} size='large' />
+		<ZIonCol
+			sizeXl='5.9'
+			sizeLg='5.9'
+			sizeMd='5.9'
+			sizeSm='12'
+			sizeXs='12'
+			className='py-2 border zaions__bg_white'
+		>
+			<div className='flex ion-align-items-center border-bottom ion-padding-start'>
+				{/* Icon */}
+				<ZIonIcon icon={folderOpenOutline} size='large' />
 
-					{/* Text */}
-					<ZIonText className='font-bold ion-no-margin ps-2'>
-						Folder
-						<ZIonRouterLink
-							className='ms-1'
-							routerLink={ZaionsRoutes.HomeRoute}
-						>
-							(help)
-						</ZIonRouterLink>
-					</ZIonText>
+				{/* Text */}
+				<ZIonText className='font-bold ion-no-margin ps-2'>
+					Folder
+					<ZIonRouterLink className='ms-1' routerLink={ZaionsRoutes.HomeRoute}>
+						(help)
+					</ZIonRouterLink>
+				</ZIonText>
 
-					{/* Add folder button */}
-					<ZIonButton
-						fill='clear'
-						className='ms-auto'
-						onClick={() => {
-							presentFolderModal({
-								_cssClass: 'folder-modal-size',
-							});
-						}}
-					>
-						<ZIonIcon icon={addCircleOutline} size='large' />
-					</ZIonButton>
-				</div>
+				{/* Add folder button */}
+				<ZIonButton
+					fill='clear'
+					className='ms-auto'
+					onClick={() => {
+						presentFolderModal({
+							_cssClass: 'folder-modal-size',
+						});
+					}}
+				>
+					<ZIonIcon icon={addCircleOutline} size='large' />
+				</ZIonButton>
+			</div>
 
-				{/*  */}
-				<div className='block px-4 mt-4'>
-					{/* Folder select */}
-					<ZaionsRSelect
-						className=''
-						options={_foldersData as unknown as ZaionsRSelectOptions[]}
-						name='folderId'
-						onChange={(_value) => {
-							setFieldValue(
-								'folderId',
-								(_value as ZaionsRSelectOptions)?.value,
-								false
-							);
-						}}
-						value={
-							formatReactSelectOption(
-								values?.folderId,
-								_foldersData as ZGenericObject[],
-								'value',
-								'label'
-							) || []
-						}
-					/>
-				</div>
-			</ZIonCol>
-		</>
+			{/*  */}
+			<div className='block px-4 mt-4'>
+				{/* Folder select */}
+				<ZaionsRSelect
+					className=''
+					options={_foldersData as unknown as ZaionsRSelectOptions[]}
+					name='folderId'
+					onChange={(_value) => {
+						setFieldValue(
+							'folderId',
+							(_value as ZaionsRSelectOptions)?.value,
+							false
+						);
+					}}
+					value={
+						formatReactSelectOption(
+							values?.folderId,
+							_foldersData as ZGenericObject[],
+							'value',
+							'label'
+						) || []
+					}
+				/>
+			</div>
+		</ZIonCol>
 	);
 };
+
+export const FolderSkeleton: React.FC = React.memo(() => {
+	return (
+		<ZIonCol
+			sizeXl='5.9'
+			sizeLg='5.9'
+			sizeMd='5.9'
+			sizeSm='12'
+			sizeXs='12'
+			className='py-2 border zaions__bg_white'
+		>
+			<div className='flex ion-align-items-center border-bottom ion-padding-start'>
+				{/* Icon */}
+				<ZIonIcon icon={folderOpenOutline} size='large' />
+
+				{/* Text */}
+				<ZIonText className='font-bold ion-no-margin ps-2'>
+					Folder
+					<ZIonRouterLink className='ms-1' routerLink={ZaionsRoutes.HomeRoute}>
+						(help)
+					</ZIonRouterLink>
+				</ZIonText>
+
+				{/* Add folder button */}
+				<ZIonButton fill='clear' className='ms-auto'>
+					<ZIonSkeletonText
+						className='mt-3'
+						width='20px'
+						height='20px'
+						animated={true}
+					/>
+				</ZIonButton>
+			</div>
+
+			{/*  */}
+			<div className='block px-4 mt-4'>
+				{/* Folder select */}
+				<ZIonSkeletonText
+					className='mt-3'
+					width='100%'
+					height='40px'
+					animated={true}
+				/>
+			</div>
+		</ZIonCol>
+	);
+});
 
 export default NewLinkFolder;

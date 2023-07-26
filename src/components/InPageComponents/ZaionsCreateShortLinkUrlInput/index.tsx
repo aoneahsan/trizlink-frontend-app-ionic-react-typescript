@@ -43,7 +43,10 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
+import {
+	NewShortLinkFormState,
+	NewShortLinkSelectTypeOption,
+} from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { replaceParams, validateField } from '@/utils/helpers';
 import { VALIDATION_RULE } from '@/utils/enums';
 import { IonNote } from '@ionic/react';
@@ -54,6 +57,7 @@ import {
 } from '@/types/AdminPanel/index.type';
 import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 import { useParams } from 'react-router';
+import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
 
 /**
  * Style files Imports go down
@@ -85,6 +89,10 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{ className?: string }> = ({
 
 	const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
 
+	const setNewShortLinkTypeOptionDataAtom = useSetRecoilState(
+		NewShortLinkSelectTypeOption
+	);
+
 	const { zNavigatePushRoute } = useZNavigate();
 
 	return (
@@ -113,6 +121,16 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{ className?: string }> = ({
 							tags: [],
 							formMode: FormMode.ADD,
 						}));
+
+						const selectedTypeOptionData = LinkTypeOptionsData.find(
+							(el) => el.type === messengerPlatformsBlockEnum.link
+						);
+
+						if (selectedTypeOptionData) {
+							setNewShortLinkTypeOptionDataAtom((_) => ({
+								...selectedTypeOptionData,
+							}));
+						}
 
 						zNavigatePushRoute(
 							replaceParams(

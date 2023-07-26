@@ -10,7 +10,7 @@ import React, { useCallback, useEffect, useState } from 'react';
  * */
 import VALIDATOR from 'validator';
 import { settingsOutline } from 'ionicons/icons';
-import { Formik } from 'formik';
+import { Formik, useFormikContext } from 'formik';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import classNames from 'classnames';
 import { useParams } from 'react-router';
@@ -22,7 +22,9 @@ import { useIonViewWillEnter } from '@ionic/react';
  * ? Like import of custom components is a custom import
  * */
 import ZaionsIonPage from '@/components/ZaionsIonPage';
-import AddNotes from '@/components/UserDashboard/AddNotes';
+import AddNotes, {
+	AddNotesSkeleton,
+} from '@/components/UserDashboard/AddNotes';
 import EmbedWidget from '@/components/UserDashboard/EmbedWidget';
 import DeepLinking from '@/components/UserDashboard/DeepLinking';
 import LinkCloaking from '@/components/UserDashboard/LinkCloaking';
@@ -42,14 +44,23 @@ import {
 	ZIonTitle,
 	ZIonContent,
 	ZIonFooter,
+	ZIonSkeletonText,
 } from '@/components/ZIonComponents';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZaionsShortUrlOptionFields from '@/components/UserDashboard/shortLinkFormComponents/shortUrlLinkOptionFields';
-import ZaionsCustomYourLink from '@/components/UserDashboard/shortUrlCustomYourLink';
-import LinksPixelsAccount from '@/components/UserDashboard/LinksPixelsAccount';
-import UTMTagTemplates from '@/components/UserDashboard/UTMTagTemplates';
-import DomainName from '@/components/UserDashboard/DomainName';
+import ZaionsCustomYourLink, {
+	ZaionsCustomYourLinkSkeleton,
+} from '@/components/UserDashboard/shortUrlCustomYourLink';
+import LinksPixelsAccount, {
+	LinkPixelsAccountSkeleton,
+} from '@/components/UserDashboard/LinksPixelsAccount';
+import UTMTagTemplates, {
+	UTMTagTemplatesSkeleton,
+} from '@/components/UserDashboard/UTMTagTemplates';
+import DomainName, {
+	DomainNameSkeleton,
+} from '@/components/UserDashboard/DomainName';
 import ShortLinkFoldersHOC from '@/components/UserDashboard/ShortLinkFoldersHOC';
 import {
 	useZGetRQCacheData,
@@ -117,6 +128,7 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import AdminPanelSidebarMenu from '@/components/AdminPanelComponents/Sidebar/ExpendableMenu';
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
+import { FolderSkeleton } from '@/components/UserDashboard/NewLinkFolder';
 
 /**
  * Style files Imports go down
@@ -183,7 +195,9 @@ const AdminCreateNewLinkPages: React.FC = () => {
 	});
 
 	// Request for getting short links data.
-	const { data: ShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
+	const { isFetching: isShortLinksFetching } = useZRQGetRequest<
+		ShortLinkType[]
+	>({
 		_url: API_URL_ENUM.shortLinks_create_list,
 		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
 		_itemsIds: [workspaceId],
@@ -191,7 +205,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 	});
 
 	// get short link data api.
-	const { data: selectedShortLink, refetch: refetchSelectedShortLink } =
+	const { data: selectedShortLink, isFetching: isSelectedShortLinkFetching } =
 		useZRQGetRequest<ShortLinkType>({
 			_url: API_URL_ENUM.shortLinks_update_delete,
 			_key: [
@@ -207,40 +221,8 @@ const AdminCreateNewLinkPages: React.FC = () => {
 			],
 			_shouldFetchWhenIdPassed: !editLinkId ? true : false,
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
-			_staleTime: 0,
 		});
 	// #endregion
-
-	//
-	const shortLinkGetRequestFn = useCallback(async () => {
-		await refetchSelectedShortLink();
-		// eslint-disable-next-line
-	}, []);
-
-	useIonViewWillEnter(() => {
-		try {
-			if (editLinkId) {
-				void shortLinkGetRequestFn();
-			}
-		} catch (error) {
-			if (error instanceof AxiosError) {
-				zNavigatePushRoute(
-					replaceRouteParams(
-						ZaionsRoutes.AdminPanel.ShortLinks.Main,
-						[
-							CONSTANTS.RouteParams.workspace.workspaceId,
-							CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-						],
-						[workspaceId, 'all']
-					)
-				);
-				showErrorNotification(error.message);
-			} else {
-				reportCustomError(error);
-			}
-		}
-		// eslint-disable-next-line
-	});
 
 	// after getting data store in recoil state.
 	useEffect(() => {
@@ -291,12 +273,10 @@ const AdminCreateNewLinkPages: React.FC = () => {
 								extractInnerDataOptionsEnum.createRequestResponseItems
 							) || [];
 
-						console.log({ _oldShortLinks });
-
-						// added shortLinks to cache.
+						// added shortLink to all shortLinks data in cache.
 						const _updatedShortLinks = [..._oldShortLinks, _data];
 
-						// Updating data in RQ cache.
+						// Updating all shortLinks data in RQ cache.
 						await updateRQCDataHandler<ShortLinkType[] | undefined>({
 							key: [
 								CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
@@ -340,6 +320,29 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
 				// if we have data then show success message.
 				if (_data && _data.id) {
+					// Updating data all shortLinks in RQ cache.
+					await updateRQCDataHandler<ShortLinkType | undefined>({
+						key: [
+							CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+							workspaceId,
+						],
+						data: { ..._data },
+						id: editLinkId,
+					});
+
+					// Updating current short link in cache in RQ cache.
+					await updateRQCDataHandler<ShortLinkType | undefined>({
+						key: [
+							CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
+							workspaceId,
+							editLinkId,
+						],
+						data: { ..._data },
+						id: '',
+						extractType: ZRQGetRequestExtractEnum.extractItem,
+						updateHoleData: true,
+					});
+
 					showSuccessNotification(
 						MESSAGES.GENERAL.SHORT_LINKS.SHORT_LINK_UPDATED
 					);
@@ -373,14 +376,20 @@ const AdminCreateNewLinkPages: React.FC = () => {
 	};
 	// #endregion
 
+	// is fetching.
+	const isZFetching = isSelectedShortLinkFetching || isShortLinksFetching;
+
 	return (
 		<ZaionsIonPage pageTitle='Create New Page'>
 			{/* Formik Start */}
 			<Formik
-				// ( Initial Values Start  ) //
+				// #region Initial values
 				initialValues={{
 					target: {
-						url: (selectedShortLink?.target as LinkTargetType)?.url || '',
+						url:
+							(selectedShortLink?.target as LinkTargetType)?.url ||
+							(newShortLinkFormState?.target as LinkTargetType)?.url ||
+							'',
 						phoneNumber:
 							(selectedShortLink?.target as LinkTargetType)?.phoneNumber || '',
 						username:
@@ -472,9 +481,9 @@ const AdminCreateNewLinkPages: React.FC = () => {
 					// complete page fields here
 				}}
 				enableReinitialize={true}
-				// ( Initial Values End  ) //
+				// #endregion
 
-				// ( Handling Validation & Errors Start  ) //
+				// #region Handling validation & errors
 				validate={(values) => {
 					const errors: {
 						target: {
@@ -713,7 +722,9 @@ const AdminCreateNewLinkPages: React.FC = () => {
 					}
 					// return errors;
 				}}
-				// ( Handling Validation & Errors End  ) //
+				// #endregion
+
+				// #region submit function.
 				onSubmit={async (values, { resetForm }) => {
 					console.log(selectedShortLink);
 					await FormikSubmissionHandler(
@@ -755,9 +766,10 @@ const AdminCreateNewLinkPages: React.FC = () => {
 						resetForm
 					);
 				}}
+				// #endregion
 			>
 				{/* Content */}
-				{({ isSubmitting, isValid, submitForm, resetForm }) => {
+				{({ isSubmitting, isValid, errors, submitForm }) => {
 					return (
 						<ZIonContent color='light'>
 							{/* Grid-1 */}
@@ -785,78 +797,8 @@ const AdminCreateNewLinkPages: React.FC = () => {
 										sizeSm='12'
 										sizeXs='12'
 									>
-										{/* Grid-1 -> Grid-1 */}
-										<ZIonGrid className='px-3 py-2 zaions__bg_white'>
-											{/* Row */}
-											<ZIonRow className='ion-align-items-center'>
-												{/* Col-1 */}
-												<ZIonCol className='flex'>
-													{/* Home button */}
-													<ZIonButton
-														className='ion-text-capitalize'
-														routerLink={replaceRouteParams(
-															ZaionsRoutes.AdminPanel.ShortLinks.Main,
-															[
-																CONSTANTS.RouteParams.workspace.workspaceId,
-																CONSTANTS.RouteParams
-																	.folderIdToGetShortLinksOrLinkInBio,
-															],
-															[workspaceId, 'all']
-														)}
-														onClick={() => {
-															resetForm();
-														}}
-													>
-														Home
-													</ZIonButton>
-
-													{/* Title */}
-													<ZIonTitle color='medium'>
-														<h5 className='ion-no-margin'>
-															{newShortLinkFormState.formMode === FormMode.ADD
-																? 'Create a New link'
-																: newShortLinkFormState.formMode ===
-																  FormMode.EDIT
-																? 'Update Link'
-																: ''}
-														</h5>
-													</ZIonTitle>
-												</ZIonCol>
-
-												{/* Col-2 */}
-												<ZIonCol className='ion-text-center'>
-													<ZIonText
-														color='medium'
-														className='text-2xl font-bold'
-													>
-														Link settings
-													</ZIonText>
-												</ZIonCol>
-
-												{/* Col-3 */}
-												<ZIonCol className='ion-text-end'>
-													{/* get my link button */}
-													<ZIonButton
-														className='ion-text-capitalize'
-														routerLink={replaceRouteParams(
-															ZaionsRoutes.AdminPanel.ShortLinks.Main,
-															[
-																CONSTANTS.RouteParams.workspace.workspaceId,
-																CONSTANTS.RouteParams
-																	.folderIdToGetShortLinksOrLinkInBio,
-															],
-															[workspaceId, 'all']
-														)}
-													>
-														{newShortLinkFormState.formMode === FormMode.ADD
-															? 'Get my new link'
-															: newShortLinkFormState.formMode === FormMode.EDIT
-															? 'Get my updated link'
-															: ''}
-													</ZIonButton>
-												</ZIonCol>
-											</ZIonRow>
-										</ZIonGrid>
+										{/* Grid-1 -> Grid-1 top-bar */}
+										{isZFetching ? <ZTopBarSkeleton /> : <ZTopBar />}
 
 										{/* Short link Grid-1 -> Grid-2 */}
 										<ZaionsShortUrlOptionFields />
@@ -865,7 +807,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 										<ZIonGrid
 											className={classNames({
 												'my-1': true,
-												'ms-3': isMdScale,
+												'ms-3 mr-4': isMdScale,
 												'mx-2': !isMdScale,
 											})}
 										>
@@ -876,24 +818,43 @@ const AdminCreateNewLinkPages: React.FC = () => {
 												})}
 											>
 												{/* Custom Your Link */}
-												<ZaionsCustomYourLink />
+												{isZFetching ? (
+													<ZaionsCustomYourLinkSkeleton />
+												) : (
+													<ZaionsCustomYourLink />
+												)}
 
 												{/* Pixel Account, Utm Tags, Custom Domain */}
 												<ZIonCol
 													sizeXl='5.9'
 													sizeLg='5.8'
-													sizeMd='5.9'
+													sizeMd='12'
 													sizeSm='12'
 													sizeXs='12'
+													className={classNames({
+														'mt-4': !isLgScale,
+													})}
 												>
 													{/* Pixels */}
-													<LinksPixelsAccount />
+													{isZFetching ? (
+														<LinkPixelsAccountSkeleton />
+													) : (
+														<LinksPixelsAccount />
+													)}
 
 													{/* UTMTags */}
-													<UTMTagTemplates />
+													{isZFetching ? (
+														<UTMTagTemplatesSkeleton />
+													) : (
+														<UTMTagTemplates />
+													)}
 
 													{/* Choose Domain Name */}
-													<DomainName />
+													{isZFetching ? (
+														<DomainNameSkeleton />
+													) : (
+														<DomainName />
+													)}
 												</ZIonCol>
 											</ZIonRow>
 										</ZIonGrid>
@@ -929,10 +890,18 @@ const AdminCreateNewLinkPages: React.FC = () => {
 													{showAdvanceOptions && (
 														<ZIonRow className='gap-3 ion-margin-top'>
 															{/* Folder */}
-															<ShortLinkFoldersHOC />
+															{isZFetching ? (
+																<FolderSkeleton />
+															) : (
+																<ShortLinkFoldersHOC />
+															)}
 
 															{/* Add Notes */}
-															<AddNotes />
+															{isZFetching ? (
+																<AddNotesSkeleton />
+															) : (
+																<AddNotes />
+															)}
 
 															{/* Add Embed Widget */}
 															<EmbedWidget />
@@ -969,7 +938,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 											</ZIonRow>
 										</ZIonGrid>
 
-										{/* Footer   className='fixed bottom-0 z-50 w-[94%] h-max zaions__light_bg'*/}
+										{/* Footer */}
 										<ZIonFooter>
 											{/* Gird */}
 											<ZIonGrid className='mx-4 mt-3'>
@@ -1002,6 +971,269 @@ const AdminCreateNewLinkPages: React.FC = () => {
 				}}
 			</Formik>
 		</ZaionsIonPage>
+	);
+};
+
+// Top bar
+const ZTopBar: React.FC = () => {
+	// getting link-in-bio and workspace ids from url with the help of useParams.
+	const { workspaceId } = useParams<{
+		workspaceId: string;
+	}>();
+
+	// #region custom hooks
+	const { isXlScale, isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
+	// #endregion
+
+	// Formik Context.
+	const { resetForm, submitForm, isSubmitting, isValid } = useFormikContext();
+
+	// #region Recoils.
+	//
+	const [newShortLinkFormState, setNewShortLinkFormState] = useRecoilState(
+		NewShortLinkFormState
+	);
+	// #endregion
+
+	return (
+		<ZIonGrid className='px-3 py-2 zaions__bg_white'>
+			{/* Row */}
+			<ZIonRow className='ion-align-items-center'>
+				{/* Col-1 */}
+				<ZIonCol
+					sizeXl=''
+					sizeLg=''
+					sizeMd=''
+					sizeSm='12'
+					sizeXs='12'
+					className={classNames({
+						flex: true,
+						'flex-col-reverse ion-align-items-center':
+							(!isMdScale && isSmScale) || (!isMdScale && !isSmScale),
+					})}
+				>
+					{/* Home button */}
+					<ZIonButton
+						size={
+							(!isMdScale && isSmScale) || (!isMdScale && !isSmScale)
+								? 'small'
+								: 'default'
+						}
+						className={classNames({
+							'ion-text-capitalize': true,
+							'w-full': (!isMdScale && isSmScale) || (!isMdScale && !isSmScale),
+						})}
+						routerLink={replaceRouteParams(
+							ZaionsRoutes.AdminPanel.ShortLinks.Main,
+							[
+								CONSTANTS.RouteParams.workspace.workspaceId,
+								CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+							],
+							[workspaceId, 'all']
+						)}
+						onClick={() => {
+							resetForm();
+						}}
+					>
+						Home
+					</ZIonButton>
+
+					{/* Title */}
+					<ZIonTitle
+						color='medium'
+						className={classNames({
+							'text-xl': isXlScale || isLgScale,
+							'text-lg': isMdScale && !isSmScale,
+							'text-md ion-no-padding ps-2': !isMdScale && isSmScale,
+							'text-sm ion-no-padding ps-2': !isMdScale && !isSmScale,
+						})}
+					>
+						{newShortLinkFormState.formMode === FormMode.ADD
+							? 'Create a New link'
+							: newShortLinkFormState.formMode === FormMode.EDIT
+							? 'Update Link'
+							: ''}
+					</ZIonTitle>
+				</ZIonCol>
+
+				{/* Col-2 */}
+				{isMdScale && (
+					<ZIonCol
+						sizeXl=''
+						sizeLg=''
+						sizeMd=''
+						sizeSm='12'
+						sizeXs='12'
+						className='ion-text-center'
+					>
+						<ZIonText
+							color='medium'
+							className={classNames({
+								'font-bold': true,
+								'text-2xl': isXlScale || isLgScale,
+								'text-xl': isMdScale && !isLgScale,
+								'text-lg': !isMdScale && isSmScale,
+								'text-md': !isMdScale && !isSmScale,
+							})}
+						>
+							Link settings
+						</ZIonText>
+					</ZIonCol>
+				)}
+
+				{/* Col-3 */}
+				<ZIonCol
+					sizeXl=''
+					sizeLg=''
+					sizeMd=''
+					sizeSm='12'
+					sizeXs='12'
+					className={classNames({
+						'ion-text-end': isMdScale,
+					})}
+				>
+					{/* get my link button */}
+					<ZIonButton
+						onClick={() => void submitForm()}
+						disabled={isSubmitting || !isValid}
+						className={classNames({
+							'ion-text-capitalize': true,
+							'mx-0 mt-2':
+								(!isMdScale && isSmScale) || (!isMdScale && !isSmScale),
+						})}
+						expand={
+							(!isMdScale && isSmScale) || (!isMdScale && !isSmScale)
+								? 'block'
+								: undefined
+						}
+						size={
+							(!isMdScale && isSmScale) || (!isMdScale && !isSmScale)
+								? 'small'
+								: 'default'
+						}
+					>
+						{newShortLinkFormState.formMode === FormMode.ADD
+							? 'Get my new link'
+							: newShortLinkFormState.formMode === FormMode.EDIT
+							? 'Get my updated link'
+							: ''}
+					</ZIonButton>
+				</ZIonCol>
+			</ZIonRow>
+		</ZIonGrid>
+	);
+};
+
+// Tob bar skeleton
+const ZTopBarSkeleton: React.FC = () => {
+	// #region custom hooks
+	const { isMdScale, isSmScale } = useZMediaQueryScale();
+	// #endregion
+
+	return (
+		<ZIonGrid className='px-3 py-2 zaions__bg_white'>
+			{/* Row */}
+			<ZIonRow className='ion-align-items-center'>
+				{/* Col-1 */}
+				<ZIonCol
+					sizeXl=''
+					sizeLg=''
+					sizeMd=''
+					sizeSm='12'
+					sizeXs='12'
+					className={classNames({
+						flex: true,
+						'flex-col-reverse ion-align-items-center':
+							(!isMdScale && isSmScale) || (!isMdScale && !isSmScale),
+					})}
+				>
+					{/* Home button */}
+					<ZIonButton
+						size={
+							(!isMdScale && isSmScale) || (!isMdScale && !isSmScale)
+								? 'small'
+								: 'default'
+						}
+						className={classNames({
+							'ion-text-capitalize': true,
+							'w-full': (!isMdScale && isSmScale) || (!isMdScale && !isSmScale),
+						})}
+					>
+						<ZIonSkeletonText
+							animated={true}
+							width={isMdScale ? '40px' : !isMdScale ? '100%' : '40px'}
+							height='17px'
+						></ZIonSkeletonText>
+					</ZIonButton>
+
+					{/* Title */}
+					<ZIonTitle color='medium'>
+						<ZIonSkeletonText
+							animated={true}
+							width='120px'
+							height='17px'
+						></ZIonSkeletonText>
+					</ZIonTitle>
+				</ZIonCol>
+
+				{/* Col-2 */}
+				{isMdScale && (
+					<ZIonCol
+						sizeXl=''
+						sizeLg=''
+						sizeMd=''
+						sizeSm='12'
+						sizeXs='12'
+						className='flex ion-text-center ion-align-items-center ion-justify-content-center'
+					>
+						<ZIonText color='medium' className='text-2xl font-bold'>
+							<ZIonSkeletonText
+								animated={true}
+								width='150px'
+								height='30px'
+							></ZIonSkeletonText>
+						</ZIonText>
+					</ZIonCol>
+				)}
+
+				{/* Col-3 */}
+				<ZIonCol
+					sizeXl=''
+					sizeLg=''
+					sizeMd=''
+					sizeSm='12'
+					sizeXs='12'
+					className={classNames({
+						'ion-text-end': isMdScale,
+					})}
+				>
+					{/* get my link button */}
+					<ZIonButton
+						className={classNames({
+							'ion-text-capitalize': true,
+							'mx-0 mt-2':
+								(!isMdScale && isSmScale) || (!isMdScale && !isSmScale),
+						})}
+						expand={
+							(!isMdScale && isSmScale) || (!isMdScale && !isSmScale)
+								? 'block'
+								: undefined
+						}
+						size={
+							(!isMdScale && isSmScale) || (!isMdScale && !isSmScale)
+								? 'small'
+								: 'default'
+						}
+					>
+						<ZIonSkeletonText
+							animated={true}
+							width={isMdScale ? '140px' : !isMdScale ? '100%' : '140px'}
+							height='17px'
+						></ZIonSkeletonText>
+					</ZIonButton>
+				</ZIonCol>
+			</ZIonRow>
+		</ZIonGrid>
 	);
 };
 

@@ -8,7 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -83,8 +83,9 @@ const ZShortLinkOptionsPopover: React.FC<{
 	);
 	const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
 
-	const [newShortLinkTypeOptionDataAtom, setNewShortLinkTypeOptionDataAtom] =
-		useRecoilState(NewShortLinkSelectTypeOption);
+	const setNewShortLinkTypeOptionDataAtom = useSetRecoilState(
+		NewShortLinkSelectTypeOption
+	);
 
 	// const { setFieldValue } =
 	// 	useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
@@ -133,7 +134,7 @@ const ZShortLinkOptionsPopover: React.FC<{
 					return (
 						<ZIonCol size='5' key={el.id}>
 							<ZIonText
-								className='flex gap-3 ion-align-items-center ion-margin-bottom cursor-pointer'
+								className='flex gap-3 cursor-pointer ion-align-items-center ion-margin-bottom'
 								onClick={() => {
 									shortLinkTypeOptionChangeHandler(el.type);
 								}}

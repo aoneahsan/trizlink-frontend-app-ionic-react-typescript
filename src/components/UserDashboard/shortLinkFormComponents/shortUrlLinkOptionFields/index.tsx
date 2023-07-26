@@ -18,6 +18,7 @@ import {
 	ZIonItem,
 	ZIonNote,
 	ZIonRow,
+	ZIonSkeletonText,
 	ZIonText,
 	ZIonTextarea,
 } from '@/components/ZIonComponents';
@@ -29,7 +30,6 @@ import { useRecoilState, useRecoilValue } from 'recoil';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ShortUrlLinkOptions from '@/components/UserDashboard/ShortUrlLinkOption';
 
 /**
  * Global Constants Imports go down
@@ -65,6 +65,7 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { useParams } from 'react-router';
 import { reportCustomError } from '@/utils/customErrorType';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Style files Imports go down
@@ -91,6 +92,9 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 	const { values, errors, touched, handleChange, handleBlur, setFieldValue } =
 		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
+	const { isXlScale, isLgScale, isMdScale, isSmScale, isXsScale } =
+		useZMediaQueryScale();
+
 	const [newShortLinkTypeOptionDataAtom, setNewShortLinkTypeOptionDataAtom] =
 		useRecoilState(NewShortLinkSelectTypeOption);
 
@@ -101,23 +105,23 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 	}>();
 
 	// get short link data api.
-	const { data: selectedShortLink } = useZRQGetRequest<ShortLinkType>({
-		_url: API_URL_ENUM.shortLinks_update_delete,
-		_key: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
-			workspaceId,
-			editLinkId,
-		],
-		_authenticated: true,
-		_itemsIds: [workspaceId, editLinkId],
-		_urlDynamicParts: [
-			CONSTANTS.RouteParams.workspace.workspaceId,
-			CONSTANTS.RouteParams.shortLink.shortLinkId,
-		],
-		_shouldFetchWhenIdPassed: !editLinkId ? true : false,
-		_extractType: ZRQGetRequestExtractEnum.extractItem,
-		_staleTime: 0,
-	});
+	const { data: selectedShortLink, isFetching: isSelectedShortLinkFetching } =
+		useZRQGetRequest<ShortLinkType>({
+			_url: API_URL_ENUM.shortLinks_update_delete,
+			_key: [
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
+				workspaceId,
+				editLinkId,
+			],
+			_authenticated: true,
+			_itemsIds: [workspaceId, editLinkId],
+			_urlDynamicParts: [
+				CONSTANTS.RouteParams.workspace.workspaceId,
+				CONSTANTS.RouteParams.shortLink.shortLinkId,
+			],
+			_shouldFetchWhenIdPassed: !editLinkId ? true : false,
+			_extractType: ZRQGetRequestExtractEnum.extractItem,
+		});
 
 	const { presentZIonPopover: presentShortLinkOptionsPopover } = useZIonPopover(
 		ZShortLinkOptionsPopover,
@@ -183,391 +187,352 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 	};
 
 	return (
-		<ZIonGrid className='mx-3 mt-2'>
-			<ZIonRow
-				className={`zaions__bg_white py-4 px-4 rounded ion-align-items-center`}
-			>
-				<ZIonCol className='flex pt-2 ion-align-items-start'>
-					{/* Options Dropdown (messengerPlatformsBlockEnum)  */}
-					{/* <ShortUrlLinkOptions /> */}
-					{newShortLinkTypeOptionDataAtom && (
-						<ZIonButton
-							fill='default'
-							className='flex text-transform-initial ion-no-margin ion-align-items-center ion-justify-content-center'
-							onClick={(event: unknown) => {
-								presentShortLinkOptionsPopover({
-									_event: event as Event,
-									_cssClass: 'short_link_options_popover_size',
-									_dismissOnSelect: false,
-								});
-							}}
-							height='39px'
+		<>
+			{!isSelectedShortLinkFetching && (
+				<ZIonGrid
+					className={classNames({
+						'mt-2': true,
+						'mx-3': isLgScale,
+						'ms-2 mr-3': !isLgScale,
+					})}
+				>
+					<ZIonRow className='px-4 py-4 rounded zaions__bg_white ion-align-items-center'>
+						<ZIonCol
+							className={classNames({
+								'flex pt-2 ion-align-items-start': true,
+								'flex-col': !isMdScale,
+							})}
 						>
-							{newShortLinkTypeOptionDataAtom.icon.iconName && (
+							{/* Options Dropdown (messengerPlatformsBlockEnum)  */}
+							{newShortLinkTypeOptionDataAtom && (
+								<ZIonButton
+									fill={isMdScale ? 'default' : 'outline'}
+									className={classNames({
+										'flex text-transform-initial ion-no-margin ion-align-items-center ion-justify-content-center':
+											true,
+										'mb-4': !isMdScale,
+										'w-full': !isSmScale,
+									})}
+									onClick={(event: unknown) => {
+										presentShortLinkOptionsPopover({
+											_event: event as Event,
+											_cssClass: 'short_link_options_popover_size',
+											_dismissOnSelect: false,
+										});
+									}}
+									height='39px'
+								>
+									{newShortLinkTypeOptionDataAtom.icon.iconName && (
+										<ZIonIcon
+											icon={newShortLinkTypeOptionDataAtom.icon.iconName}
+											size={isMdScale ? 'large' : 'default'}
+											color='primary'
+										/>
+									)}
+									<ZIonText
+										className={classNames({
+											'pt-[3px] ms-2 ion-padding-end': true,
+											'text-lg': isMdScale,
+											'text-md': !isMdScale,
+										})}
+										color='dark'
+									>
+										<h6 className='font-bold ion-no-margin d-inline'>
+											{newShortLinkTypeOptionDataAtom.text}
+										</h6>
+									</ZIonText>
+								</ZIonButton>
+							)}
+							{!newShortLinkTypeOptionDataAtom && (
+								<>Invalid Option Type Selected.</>
+							)}
+
+							{/* Link Input */}
+							{(newShortLinkTypeOptionDataAtom?.type ===
+								messengerPlatformsBlockEnum.link ||
+								newShortLinkTypeOptionDataAtom?.type ===
+									messengerPlatformsBlockEnum.messenger) && (
+								<>
+									{/* Input of every links */}
+									<ZIonInput
+										label='URL'
+										labelPlacement='stacked'
+										onIonChange={handleChange}
+										onIonBlur={handleBlur}
+										value={values?.target?.url}
+										name='target.url'
+										errorText={errors?.target?.url}
+										type='url'
+										className={classNames({
+											'w-full ion-margin-end ': true,
+											'ion-touched': touched?.target?.url,
+											'ion-invalid':
+												touched?.target?.url && errors?.target?.url,
+											'ion-valid':
+												touched?.target?.url && !!errors?.target?.url,
+										})}
+										placeholder={ShortLinkPlaceholder()}
+										minHeight='40px'
+									/>
+								</>
+							)}
+
+							{/* Phone Number Input */}
+							{(newShortLinkTypeOptionDataAtom?.type ===
+								messengerPlatformsBlockEnum.whatsapp ||
+								newShortLinkTypeOptionDataAtom?.type ===
+									messengerPlatformsBlockEnum.sms ||
+								newShortLinkTypeOptionDataAtom?.type ===
+									messengerPlatformsBlockEnum.call) && (
+								<>
+									{/* Input of every Phone Number */}
+									<ZIonInput
+										label='Phone number'
+										labelPlacement='stacked'
+										onIonChange={handleChange}
+										onIonBlur={handleBlur}
+										value={values?.target?.phoneNumber}
+										name='target.phoneNumber'
+										errorText={errors?.target?.phoneNumber}
+										type='text'
+										className={classNames({
+											'w-full ion-margin-end': true,
+											'ion-touched': touched?.target?.phoneNumber,
+											'ion-invalid':
+												touched?.target?.phoneNumber &&
+												errors?.target?.phoneNumber,
+											'ion-valid':
+												touched?.target?.phoneNumber &&
+												!errors?.target?.phoneNumber,
+										})}
+										minHeight='40px'
+										placeholder={ShortLinkPlaceholder()}
+									/>
+								</>
+							)}
+
+							{/* Username Input */}
+							{(newShortLinkTypeOptionDataAtom?.type ===
+								messengerPlatformsBlockEnum.telegram ||
+								newShortLinkTypeOptionDataAtom?.type ===
+									messengerPlatformsBlockEnum.skype) && (
+								<>
+									{/* Input of every Username */}
+									<ZIonInput
+										label='Username'
+										labelPlacement='stacked'
+										onIonChange={handleChange}
+										onIonBlur={handleBlur}
+										value={values?.target?.username}
+										name='target.username'
+										errorText={errors?.target?.username}
+										type='text'
+										className={classNames({
+											'w-full ion-margin-end': true,
+											'ion-touched': touched?.target?.username,
+											'ion-invalid':
+												touched?.target?.username && errors?.target?.username,
+											'ion-valid':
+												touched?.target?.username && !errors?.target?.username,
+										})}
+										placeholder={ShortLinkPlaceholder()}
+										minHeight='40px'
+									/>
+								</>
+							)}
+
+							{/* Account Id Input */}
+							{(newShortLinkTypeOptionDataAtom?.type ===
+								messengerPlatformsBlockEnum.wechat ||
+								newShortLinkTypeOptionDataAtom?.type ===
+									messengerPlatformsBlockEnum.viber ||
+								newShortLinkTypeOptionDataAtom?.type ===
+									messengerPlatformsBlockEnum.line) && (
+								<>
+									{/* Input of every Account Id */}
+									<ZIonInput
+										label='Account Id'
+										labelPlacement='stacked'
+										onIonChange={handleChange}
+										onIonBlur={handleBlur}
+										value={values?.target?.accountId}
+										name='target.accountId'
+										errorText={errors?.target?.accountId}
+										type='text'
+										className={classNames({
+											'w-full ion-margin-end': true,
+											'ion-touched': touched?.target?.accountId,
+											'ion-invalid':
+												touched?.target?.accountId && errors?.target?.accountId,
+											'ion-valid':
+												touched?.target?.accountId &&
+												!errors?.target?.accountId,
+										})}
+										placeholder={ShortLinkPlaceholder()}
+										minHeight='40px'
+									/>
+								</>
+							)}
+
+							{/* Email Input */}
+							{newShortLinkTypeOptionDataAtom?.type ===
+								messengerPlatformsBlockEnum.email && (
+								<>
+									{/* Input of every email */}
+									<ZIonInput
+										label='Email'
+										labelPlacement='stacked'
+										onIonChange={handleChange}
+										onIonBlur={handleBlur}
+										value={values?.target?.email}
+										name='target.email'
+										errorText={errors?.target?.email}
+										type='email'
+										className={classNames({
+											'w-full ion-margin-end': true,
+											'ion-touched': touched?.target?.email,
+											'ion-invalid':
+												touched?.target?.email && errors?.target?.email,
+											'ion-valid':
+												touched?.target?.email && !errors?.target?.email,
+										})}
+										placeholder={ShortLinkPlaceholder()}
+										minHeight='40px'
+									/>
+								</>
+							)}
+
+							<ZIonButton
+								fill={isMdScale ? 'clear' : 'solid'}
+								className={classNames({
+									'ion-no-margin normal-case': true,
+									'mt-3': !isMdScale,
+									'w-full': !isSmScale,
+								})}
+								height='39px'
+							>
+								{!isMdScale && <ZIonText>Refresh the preview</ZIonText>}
 								<ZIonIcon
-									icon={newShortLinkTypeOptionDataAtom.icon.iconName}
+									icon={refreshCircleOutline}
 									size='large'
-									color='primary'
+									color={isMdScale ? 'primary' : 'light'}
+								></ZIonIcon>
+							</ZIonButton>
+						</ZIonCol>
+
+						{/*  */}
+						<ZIonCol size='12' className=''>
+							{/* Subject Input */}
+							{newShortLinkTypeOptionDataAtom?.type ===
+								messengerPlatformsBlockEnum.email && (
+								<ZIonInput
+									label='Subject*'
+									labelPlacement='stacked'
+									onIonChange={handleChange}
+									onIonBlur={handleBlur}
+									value={values?.target?.subject}
+									name='target.subject'
+									errorText={errors?.target?.subject}
+									className={classNames({
+										'w-full mt-4': true,
+										'ion-touched': touched?.target?.subject,
+										'ion-invalid':
+											touched?.target?.subject && errors?.target?.subject,
+										'ion-valid':
+											touched?.target?.subject && !!errors?.target?.subject,
+									})}
+									placeholder='Something short...'
+									minHeight='40px'
 								/>
 							)}
-							<ZIonText
-								className='pt-[3px] ms-2 text-lg ion-padding-end'
-								color={'dark'}
-							>
-								<h6 className='font-bold ion-no-margin d-inline'>
-									{newShortLinkTypeOptionDataAtom.text}
-								</h6>
-							</ZIonText>
-						</ZIonButton>
-					)}
-					{!newShortLinkTypeOptionDataAtom && (
-						<>Invalid Option Type Selected.</>
-					)}
+
+							{/* Message Textarea */}
+							{(newShortLinkTypeOptionDataAtom?.type ===
+								messengerPlatformsBlockEnum.email ||
+								newShortLinkTypeOptionDataAtom?.type ===
+									messengerPlatformsBlockEnum.sms ||
+								newShortLinkTypeOptionDataAtom?.type ===
+									messengerPlatformsBlockEnum.viber ||
+								newShortLinkTypeOptionDataAtom?.type ===
+									messengerPlatformsBlockEnum.whatsapp) && (
+								<ZIonTextarea
+									rows={4}
+									name='target.message'
+									placeholder='Message*'
+									onIonChange={handleChange}
+									value={values?.target?.message}
+									fill='outline'
+									errorText={errors?.target?.message}
+									className={classNames({
+										'w-full ion-margin-end mt-4': true,
+										'ion-touched': touched?.target?.message,
+										'ion-invalid':
+											touched?.target?.message && errors?.target?.message,
+										'ion-valid':
+											touched?.target?.message && !errors?.target?.message,
+									})}
+								/>
+							)}
+						</ZIonCol>
+					</ZIonRow>
+				</ZIonGrid>
+			)}
+
+			{isSelectedShortLinkFetching && <ZaionsShortUrlOptionFieldsSkeleton />}
+		</>
+	);
+};
+
+const ZaionsShortUrlOptionFieldsSkeleton = () => {
+	return (
+		<ZIonGrid className='mx-3 mt-2'>
+			<ZIonRow className='px-4 py-4 rounded zaions__bg_white ion-align-items-center'>
+				<ZIonCol className='flex pt-2 ion-align-items-start'>
+					<ZIonButton
+						fill='default'
+						className='flex pt-2 text-transform-initial ion-no-margin ion-align-items-center ion-justify-content-center'
+						height='39px'
+					>
+						<ZIonSkeletonText
+							animated={true}
+							width='30px'
+							height='20px'
+						></ZIonSkeletonText>
+
+						{/*  */}
+						<ZIonText className='pt-[3px] ms-2 text-lg ion-padding-end'>
+							<ZIonSkeletonText
+								animated={true}
+								width='60px'
+								height='20px'
+							></ZIonSkeletonText>
+						</ZIonText>
+					</ZIonButton>
 
 					{/* Link Input */}
-					{(newShortLinkTypeOptionDataAtom?.type ===
-						messengerPlatformsBlockEnum.link ||
-						newShortLinkTypeOptionDataAtom?.type ===
-							messengerPlatformsBlockEnum.messenger) && (
-						<>
-							{/* Input of every links */}
-							{/* <ZIonInputField
-								inputFieldProps={{
-									label: 'URL',
-									labelPlacement: 'floating',
-									onIonChange: handleChange,
-									onIonBlur: handleBlur,
-									value: values?.target?.url,
-									name: 'target.url',
-									errorText: errors?.target?.url,
-									type: 'url',
-									className: `${classNames({
-										'zaions__w90 ion-margin-end mx-auto': true,
-										'ion-touched': touched?.target?.url,
-										'ion-invalid': touched?.target?.url && errors?.target?.url,
-										'ion-valid': touched?.target?.url && !!errors?.target?.url,
-									})}`,
-									placeholder: ShortLinkPlaceholder(),
-									minHeight: '40px',
-								}}
-							/> */}
+					{/* <ZIonInput
+						label='URL'
+						labelPlacement='stacked'
+						type='url'
+						className='w-full ion-margin-end'
+						minHeight='40px'
+					></ZIonInput> */}
+					<ZIonSkeletonText
+						animated={true}
+						width='100%'
+						height='40px'
+					></ZIonSkeletonText>
 
-							<ZIonInput
-								label='URL'
-								labelPlacement='stacked'
-								onIonChange={handleChange}
-								onIonBlur={handleBlur}
-								value={values?.target?.url}
-								name='target.url'
-								errorText={errors?.target?.url}
-								type='url'
-								className={classNames({
-									'zaions__w90 ion-margin-end mx-auto': true,
-									'ion-touched': touched?.target?.url,
-									'ion-invalid': touched?.target?.url && errors?.target?.url,
-									'ion-valid': touched?.target?.url && !!errors?.target?.url,
-								})}
-								placeholder={ShortLinkPlaceholder()}
-								minHeight='40px'
-							/>
-						</>
-					)}
-
-					{/* Phone Number Input */}
-					{(newShortLinkTypeOptionDataAtom?.type ===
-						messengerPlatformsBlockEnum.whatsapp ||
-						newShortLinkTypeOptionDataAtom?.type ===
-							messengerPlatformsBlockEnum.sms ||
-						newShortLinkTypeOptionDataAtom?.type ===
-							messengerPlatformsBlockEnum.call) && (
-						<>
-							{/* Input of every Phone Number */}
-							{/* <ZIonInputField
-								inputFieldProps={{
-									label: 'Phone number',
-									labelPlacement: 'floating',
-									onIonChange: handleChange,
-									onIonBlur: handleBlur,
-									value: values?.target?.phoneNumber,
-									name: 'target.phoneNumber',
-									errorText: errors?.target?.phoneNumber,
-									type: 'text',
-									className: `${classNames({
-										'zaions__w90 ion-margin-end mx-auto': true,
-										'ion-touched': touched?.target?.phoneNumber,
-										'ion-invalid':
-											touched?.target?.phoneNumber &&
-											errors?.target?.phoneNumber,
-										'ion-valid':
-											touched?.target?.phoneNumber &&
-											!errors?.target?.phoneNumber,
-									})}`,
-									placeholder: ShortLinkPlaceholder(),
-								}}
-							/> */}
-
-							<ZIonInput
-								label='Phone number'
-								labelPlacement='stacked'
-								onIonChange={handleChange}
-								onIonBlur={handleBlur}
-								value={values?.target?.phoneNumber}
-								name='target.phoneNumber'
-								errorText={errors?.target?.phoneNumber}
-								type='text'
-								className={classNames({
-									'zaions__w90 ion-margin-end mx-auto': true,
-									'ion-touched': touched?.target?.phoneNumber,
-									'ion-invalid':
-										touched?.target?.phoneNumber && errors?.target?.phoneNumber,
-									'ion-valid':
-										touched?.target?.phoneNumber &&
-										!errors?.target?.phoneNumber,
-								})}
-								minHeight='40px'
-								placeholder={ShortLinkPlaceholder()}
-							/>
-						</>
-					)}
-
-					{/* Username Input */}
-					{(newShortLinkTypeOptionDataAtom?.type ===
-						messengerPlatformsBlockEnum.telegram ||
-						newShortLinkTypeOptionDataAtom?.type ===
-							messengerPlatformsBlockEnum.skype) && (
-						<>
-							{/* Input of every Username */}
-							{/* <ZIonInputField
-								inputFieldProps={{
-									label: 'Username',
-									labelPlacement: 'floating',
-									onIonChange: handleChange,
-									onIonBlur: handleBlur,
-									value: values?.target?.username,
-									name: 'target.username',
-									errorText: errors?.target?.username,
-									type: 'text',
-									className: `${classNames({
-										'zaions__w90 ion-margin-end mx-auto': true,
-										'ion-touched': touched?.target?.username,
-										'ion-invalid':
-											touched?.target?.username && errors?.target?.username,
-										'ion-valid':
-											touched?.target?.username && !errors?.target?.username,
-									})}`,
-									placeholder: ShortLinkPlaceholder(),
-								}}
-							/> */}
-
-							<ZIonInput
-								label='Username'
-								labelPlacement='stacked'
-								onIonChange={handleChange}
-								onIonBlur={handleBlur}
-								value={values?.target?.username}
-								name='target.username'
-								errorText={errors?.target?.username}
-								type='text'
-								className={classNames({
-									'zaions__w90 ion-margin-end mx-auto': true,
-									'ion-touched': touched?.target?.username,
-									'ion-invalid':
-										touched?.target?.username && errors?.target?.username,
-									'ion-valid':
-										touched?.target?.username && !errors?.target?.username,
-								})}
-								placeholder={ShortLinkPlaceholder()}
-								minHeight='40px'
-							/>
-						</>
-					)}
-
-					{/* Account Id Input */}
-					{(newShortLinkTypeOptionDataAtom?.type ===
-						messengerPlatformsBlockEnum.wechat ||
-						newShortLinkTypeOptionDataAtom?.type ===
-							messengerPlatformsBlockEnum.viber ||
-						newShortLinkTypeOptionDataAtom?.type ===
-							messengerPlatformsBlockEnum.line) && (
-						<>
-							{/* Input of every Account Id */}
-							{/* <ZIonInputField
-								inputFieldProps={{
-									label: 'Account Id',
-									labelPlacement: 'floating',
-									onIonChange: handleChange,
-									onIonBlur: handleBlur,
-									value: values?.target?.accountId,
-									name: 'target.accountId',
-									errorText: errors?.target?.accountId,
-									type: 'text',
-									className: `${classNames({
-										'zaions__w90 ion-margin-end mx-auto': true,
-										'ion-touched': touched?.target?.accountId,
-										'ion-invalid':
-											touched?.target?.accountId && errors?.target?.accountId,
-										'ion-valid':
-											touched?.target?.accountId && !errors?.target?.accountId,
-									})}`,
-									placeholder: ShortLinkPlaceholder(),
-								}}
-							/> */}
-
-							<ZIonInput
-								label='Account Id'
-								labelPlacement='stacked'
-								onIonChange={handleChange}
-								onIonBlur={handleBlur}
-								value={values?.target?.accountId}
-								name='target.accountId'
-								errorText={errors?.target?.accountId}
-								type='text'
-								className={classNames({
-									'zaions__w90 ion-margin-end mx-auto': true,
-									'ion-touched': touched?.target?.accountId,
-									'ion-invalid':
-										touched?.target?.accountId && errors?.target?.accountId,
-									'ion-valid':
-										touched?.target?.accountId && !errors?.target?.accountId,
-								})}
-								placeholder={ShortLinkPlaceholder()}
-								minHeight='40px'
-							/>
-						</>
-					)}
-
-					{/* Email Input */}
-					{newShortLinkTypeOptionDataAtom?.type ===
-						messengerPlatformsBlockEnum.email && (
-						<>
-							{/* Input of every email */}
-							{/* <ZIonInputField
-								inputFieldProps={{
-									label: 'Email',
-									labelPlacement: 'floating',
-									onIonChange: handleChange,
-									onIonBlur: handleBlur,
-									value: values?.target?.email,
-									name: 'target.email',
-									errorText: errors?.target?.email,
-									type: 'email',
-									className: `${classNames({
-										'zaions__w90 ion-margin-end mx-auto': true,
-										'ion-touched': touched?.target?.email,
-										'ion-invalid':
-											touched?.target?.email && errors?.target?.email,
-										'ion-valid':
-											touched?.target?.email && !errors?.target?.email,
-									})}`,
-									placeholder: ShortLinkPlaceholder(),
-								}}
-							/> */}
-
-							<ZIonInput
-								label='Email'
-								labelPlacement='stacked'
-								onIonChange={handleChange}
-								onIonBlur={handleBlur}
-								value={values?.target?.email}
-								name='target.email'
-								errorText={errors?.target?.email}
-								type='email'
-								className={classNames({
-									'zaions__w90 ion-margin-end mx-auto': true,
-									'ion-touched': touched?.target?.email,
-									'ion-invalid':
-										touched?.target?.email && errors?.target?.email,
-									'ion-valid': touched?.target?.email && !errors?.target?.email,
-								})}
-								placeholder={ShortLinkPlaceholder()}
-								minHeight='40px'
-							/>
-						</>
-					)}
-
-					<ZIonButton fill='clear' className='ion-no-margin' height='39px'>
-						<ZIonIcon
-							icon={refreshCircleOutline}
-							size={'large'}
-							color='primary'
-						></ZIonIcon>
+					<ZIonButton fill='clear' className='pt-2 ion-no-margin' height='39px'>
+						<ZIonSkeletonText
+							animated={true}
+							width='25px'
+							height='25px'
+						></ZIonSkeletonText>
 					</ZIonButton>
 				</ZIonCol>
 
 				{/*  */}
-				<ZIonCol size='12' className=''>
-					{/* Subject Input */}
-					{newShortLinkTypeOptionDataAtom?.type ===
-						messengerPlatformsBlockEnum.email && (
-						// <ZIonInputField
-						// 	inputFieldProps={{
-						// 		label: 'Subject*',
-						// 		labelPlacement: 'floating',
-						// 		onIonChange: handleChange,
-						// 		onIonBlur: handleBlur,
-						// 		value: values?.target?.subject,
-						// 		name: 'target.subject',
-						// 		errorText: errors?.target?.subject,
-						// 		className: `${classNames({
-						// 			zaions__w95: true,
-						// 			'ion-touched': touched?.target?.subject,
-						// 			'ion-invalid':
-						// 				touched?.target?.subject && errors?.target?.subject,
-						// 			'ion-valid':
-						// 				touched?.target?.subject && !!errors?.target?.subject,
-						// 		})}`,
-						// 		placeholder: ShortLinkPlaceholder(),
-						// 	}}
-						// />
-						<ZIonInput
-							label='Subject*'
-							labelPlacement='stacked'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values?.target?.subject}
-							name='target.subject'
-							errorText={errors?.target?.subject}
-							className={classNames({
-								'zaions__w95 mt-4': true,
-								'ion-touched': touched?.target?.subject,
-								'ion-invalid':
-									touched?.target?.subject && errors?.target?.subject,
-								'ion-valid':
-									touched?.target?.subject && !!errors?.target?.subject,
-							})}
-							placeholder='Something short...'
-							minHeight='40px'
-						/>
-					)}
-
-					{/* Message Textarea */}
-					{(newShortLinkTypeOptionDataAtom?.type ===
-						messengerPlatformsBlockEnum.email ||
-						newShortLinkTypeOptionDataAtom?.type ===
-							messengerPlatformsBlockEnum.sms ||
-						newShortLinkTypeOptionDataAtom?.type ===
-							messengerPlatformsBlockEnum.viber ||
-						newShortLinkTypeOptionDataAtom?.type ===
-							messengerPlatformsBlockEnum.whatsapp) && (
-						<ZIonTextarea
-							rows={4}
-							name='target.message'
-							placeholder='Message*'
-							onIonChange={handleChange}
-							value={values?.target?.message}
-							fill='outline'
-							errorText={errors?.target?.message}
-							className={classNames({
-								'zaions__w95 ion-margin-end mt-4': true,
-								'ion-touched': touched?.target?.message,
-								'ion-invalid':
-									touched?.target?.message && errors?.target?.message,
-								'ion-valid':
-									touched?.target?.message && !errors?.target?.message,
-							})}
-						/>
-					)}
-				</ZIonCol>
 			</ZIonRow>
 		</ZIonGrid>
 	);

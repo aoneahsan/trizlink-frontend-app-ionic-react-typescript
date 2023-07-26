@@ -22,6 +22,7 @@ import {
 	ZIonRow,
 	ZIonList,
 	ZIonGrid,
+	ZIonSkeletonText,
 } from '@/components/ZIonComponents';
 
 // Global Constants
@@ -117,19 +118,6 @@ const UTMTagTemplates: React.FC = () => {
 								{/* List -> Row -> Col-1 */}
 								<ZIonCol size='6' className='pr-2 h-max'>
 									{/* utm campaign input */}
-									{/* <ZIonInputField
-										inputFieldProps={{
-											label: 'UTM Campaign',
-											labelPlacement: 'floating',
-											className: 'mt-3',
-											onIonChange: handleChange,
-											onIonBlur: handleBlur,
-											value: values.UTMTags.utmCampaign,
-											name: 'UTMTags.utmCampaign',
-											placeholder: 'Enter text',
-											color: 'dark',
-										}}
-									/> */}
 									<ZIonInput
 										label='UTM Campaign'
 										labelPlacement='stacked'
@@ -146,19 +134,6 @@ const UTMTagTemplates: React.FC = () => {
 								{/* List -> Row -> Col-2 */}
 								<ZIonCol size='6' className='h-max'>
 									{/* utm medium input */}
-									{/* <ZIonInputField
-										inputFieldProps={{
-											label: 'UTM Medium',
-											labelPlacement: 'floating',
-											className: 'mt-3',
-											onIonChange: handleChange,
-											onIonBlur: handleBlur,
-											value: values.UTMTags.utmMedium,
-											name: 'UTMTags.utmMedium',
-											placeholder: 'Enter text',
-											color: 'dark',
-										}}
-									/> */}
 									<ZIonInput
 										label='UTM Medium'
 										labelPlacement='stacked'
@@ -175,20 +150,6 @@ const UTMTagTemplates: React.FC = () => {
 								{/* List -> Row -> Col-3 */}
 								<ZIonCol size='6' className='pr-2 mt-2 h-max'>
 									{/* utm source input */}
-									{/* <ZIonInputField
-										inputFieldProps={{
-											label: 'UTM Source',
-											labelPlacement: 'floating',
-											className: 'mt-3',
-											onIonChange: handleChange,
-											onIonBlur: handleBlur,
-											value: values.UTMTags.utmSource,
-											name: 'UTMTags.utmSource',
-											placeholder: 'Enter text',
-											color: 'dark',
-										}}
-									/> */}
-
 									<ZIonInput
 										label='UTM Source'
 										labelPlacement='stacked'
@@ -205,20 +166,6 @@ const UTMTagTemplates: React.FC = () => {
 								{/* List -> Row -> Col-4 */}
 								<ZIonCol size='6' className='mt-2 h-max'>
 									{/* utm term input */}
-									{/* <ZIonInputField
-										inputFieldProps={{
-											label: 'UTM Term',
-											labelPlacement: 'floating',
-											className: 'mt-3',
-											onIonChange: handleChange,
-											onIonBlur: handleBlur,
-											value: values.UTMTags.utmTerm,
-											name: 'UTMTags.utmTerm',
-											placeholder: 'Enter text',
-											color: 'dark',
-										}}
-									/> */}
-
 									<ZIonInput
 										label='UTM Term'
 										labelPlacement='stacked'
@@ -235,20 +182,6 @@ const UTMTagTemplates: React.FC = () => {
 								{/* List -> Row -> Col-5 */}
 								<ZIonCol size='6' className='pr-2 mt-2 h-max'>
 									{/* utm content input */}
-									{/* <ZIonInputField
-										inputFieldProps={{
-											label: 'UTM Content',
-											labelPlacement: 'floating',
-											className: 'mt-3',
-											onIonChange: handleChange,
-											onIonBlur: handleBlur,
-											value: values.UTMTags.utmContent,
-											name: 'UTMTags.utmContent',
-											placeholder: 'Enter text',
-											color: 'dark',
-										}}
-									/> */}
-
 									<ZIonInput
 										label='UTM Content'
 										labelPlacement='stacked'
@@ -315,5 +248,126 @@ const UTMTagTemplates: React.FC = () => {
 		</>
 	);
 };
+
+export const UTMTagTemplatesSkeleton: React.FC = React.memo(() => {
+	return (
+		<>
+			{/* Row-1 */}
+			<ZIonRow className='pt-1 mt-4 border-bottom zaions__bg_white'>
+				{/* Col-1 */}
+				<ZIonCol className='flex px-3 py-2 ion-align-items-center'>
+					{/* Icon */}
+					<ZIonIcon icon={pricetagOutline} size='large' />
+
+					{/* Text */}
+					<ZIonText className='font-bold ms-2 ion-no-margin'>
+						Add UTMs tags
+						<ZIonRouterLink
+							className='ms-1'
+							routerLink={ZaionsRoutes.HomeRoute}
+						>
+							(help)
+						</ZIonRouterLink>
+					</ZIonText>
+				</ZIonCol>
+			</ZIonRow>
+
+			{/* Row-2 */}
+			<ZIonRow className='zaions__bg_white'>
+				{/* Col-1 */}
+				<ZIonCol>
+					{/* List */}
+					<ZIonList className='pb-0 zaions__bg_white'>
+						{/* List -> Gird */}
+						<ZIonGrid className='pt-0 pb-0'>
+							{/* List -> Row */}
+							<ZIonRow className='px-2 py-0 pb-0'>
+								{/* List -> Row -> Col-1 */}
+								<ZIonCol size='6' className='pr-2 h-max'>
+									{/* utm campaign input */}
+									<ZIonSkeletonText
+										animated={true}
+										className='mt-3'
+										width='100%'
+										height='40px'
+									/>
+								</ZIonCol>
+
+								{/* List -> Row -> Col-2 */}
+								<ZIonCol size='6' className='h-max'>
+									{/* utm medium input */}
+									<ZIonSkeletonText
+										animated={true}
+										className='mt-3'
+										width='100%'
+										height='40px'
+									/>
+								</ZIonCol>
+
+								{/* List -> Row -> Col-3 */}
+								<ZIonCol size='6' className='pr-2 mt-2 h-max'>
+									{/* utm source input */}
+									<ZIonSkeletonText
+										animated={true}
+										className='mt-3'
+										width='100%'
+										height='40px'
+									/>
+								</ZIonCol>
+
+								{/* List -> Row -> Col-4 */}
+								<ZIonCol size='6' className='mt-2 h-max'>
+									{/* utm term input */}
+									<ZIonSkeletonText
+										animated={true}
+										className='mt-3'
+										width='100%'
+										height='40px'
+									/>
+								</ZIonCol>
+
+								{/* List -> Row -> Col-5 */}
+								<ZIonCol size='6' className='pr-2 mt-2 h-max'>
+									{/* utm content input */}
+									<ZIonSkeletonText
+										animated={true}
+										className='mt-3'
+										width='100%'
+										height='40px'
+									/>
+								</ZIonCol>
+
+								{/* List -> Row -> Col-6 */}
+								<ZIonCol
+									size='6'
+									className='flex mt-2 ion-align-items-center ps-2'
+								>
+									{/* Add a template button */}
+									<ZIonButton
+										fill='clear'
+										className='mt-5 text-md ion-text-capitalize ion-no-margin ion-no-padding'
+										size='small'
+									>
+										<ZIonSkeletonText
+											animated={true}
+											className='mt-3'
+											width='140px'
+											height='17px'
+										/>
+									</ZIonButton>
+								</ZIonCol>
+							</ZIonRow>
+						</ZIonGrid>
+					</ZIonList>
+
+					{/* select from templates. */}
+					<ZIonText className='w-[50%] mr-2 block pt-4 pb-3 ms-3'>
+						<ZIonSkeletonText animated={true} width='93%' height='40px' />
+					</ZIonText>
+				</ZIonCol>
+			</ZIonRow>
+		</>
+	);
+});
 
 export default UTMTagTemplates;

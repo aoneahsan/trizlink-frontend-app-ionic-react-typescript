@@ -13,6 +13,7 @@ import {
 	ZIonIcon,
 	ZIonRouterLink,
 	ZIonImg,
+	ZIonSkeletonText,
 } from '@/components/ZIonComponents';
 import { ZIonButton } from '@/components/ZIonComponents';
 
@@ -49,7 +50,7 @@ const selectOptionComponent = (_el: PixelAccountType) => {
 				src={Platforms[_el.platform as PixelPlatformsEnum]}
 				style={{ width: '30px' }}
 				className='pe-3'
-			/>{' '}
+			/>
 			{_el.title}
 		</div>
 	);
@@ -152,5 +153,54 @@ const LinkPixelsAccount: React.FC = () => {
 		</>
 	);
 };
+
+export const LinkPixelsAccountSkeleton = React.memo(() => {
+	return (
+		<>
+			{/* Row-1 */}
+			<ZIonRow className='pt-1 border-bottom zaions__bg_white'>
+				{/* Col-1 */}
+				<ZIonCol className='flex px-2 py-2 ion-align-items-center'>
+					{/* Icon */}
+					<ZIonIcon icon={apertureOutline} size='large' />
+
+					{/* Text */}
+					<ZIonText className='font-bold ms-2 ion-no-margin'>
+						Add Pixels ID
+						<ZIonRouterLink
+							className='ms-1'
+							routerLink={ZaionsRoutes.HomeRoute}
+						>
+							(help)
+						</ZIonRouterLink>
+					</ZIonText>
+				</ZIonCol>
+			</ZIonRow>
+
+			{/* Row-2 */}
+			<ZIonRow className='pb-1 zaions__bg_white'>
+				{/* Col-1 */}
+				<ZIonCol>
+					{/* Select */}
+					<ZIonSkeletonText
+						animated={true}
+						width='95%'
+						height='30px'
+						className='mx-auto'
+					/>
+
+					{/* add a pixel button */}
+					<ZIonButton
+						fill='clear'
+						className='ion-text-capitalize ion-no-padding ps-1 ion-no-margin ion-margin-start'
+						size='small'
+					>
+						<ZIonSkeletonText animated={true} width='100px' height='17px' />
+					</ZIonButton>
+				</ZIonCol>
+			</ZIonRow>
+		</>
+	);
+});
 
 export default React.memo(LinkPixelsAccount);

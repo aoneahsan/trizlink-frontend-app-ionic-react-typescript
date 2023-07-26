@@ -18,6 +18,7 @@ import {
 	ZIonNote,
 	ZIonRouterLink,
 	ZIonRow,
+	ZIonSkeletonText,
 	ZIonText,
 	ZIonTextarea,
 } from '@/components/ZIonComponents';
@@ -90,7 +91,7 @@ const ZaionsCustomYourLink: React.FC = () => {
 		<ZIonCol
 			sizeXl='5.8'
 			sizeLg='5.8'
-			sizeMd='5.9'
+			sizeMd='12'
 			sizeSm='12'
 			sizeXs='12'
 			className='py-1 rounded h-max zaions__bg_white'
@@ -184,24 +185,6 @@ const ZaionsCustomYourLink: React.FC = () => {
 				{/* Col-2 Title & content input */}
 				<ZIonCol size='12' className='pt-5'>
 					{/* Link Title */}
-					{/* <ZIonInputField
-						inputFieldProps={{
-							label='Title of you link*'
-							labelPlacement='floating'
-							onIonChange={handleChange}
-							onIonBlur={handleBlur}
-							value={values.title}
-							name='title'
-							errorText={errors.title}
-							className={classNames({
-								'w-full': true,
-								'ion-touched': touched.title,
-								'ion-invalid': touched.title && errors.title,
-								'ion-valid': touched.title && !errors.title,
-							})}
-							placeholder='Title of you link*'
-						}}
-					/> */}
 					<ZIonInput
 						label='Title of you link*'
 						labelPlacement='stacked'
@@ -237,5 +220,63 @@ const ZaionsCustomYourLink: React.FC = () => {
 		</ZIonCol>
 	);
 };
+
+export const ZaionsCustomYourLinkSkeleton: React.FC = React.memo(() => {
+	return (
+		<ZIonCol
+			sizeXl='5.8'
+			sizeLg='5.8'
+			sizeMd='12'
+			sizeSm='12'
+			sizeXs='12'
+			className='py-1 rounded h-max zaions__bg_white'
+		>
+			{/* Row */}
+			<ZIonRow className='border-bottom'>
+				{/* Col-1 */}
+				<ZIonCol className='flex px-2 py-2 ion-align-items-center'>
+					{/* Icon */}
+					<ZIonIcon icon={documentTextOutline} size='large'></ZIonIcon>
+
+					{/* Text */}
+					<ZIonText className='mt-1 font-bold ion-no-margin ms-2'>
+						Custom your link
+						<ZIonRouterLink
+							className='ms-1'
+							routerLink={ZaionsRoutes.HomeRoute}
+						>
+							(help)
+						</ZIonRouterLink>
+					</ZIonText>
+				</ZIonCol>
+			</ZIonRow>
+
+			{/* Row-2 */}
+			<ZIonRow className='mx-3 my-3'>
+				{/* Col-1 Image */}
+				<ZIonCol
+					size='12'
+					className={classNames(classes['zaions-upload-image-box'], {
+						'flex ion-justify-content-center ion-align-items-center rounded relative zaions__cursor_pointer':
+							true,
+					})}
+				>
+					<ZIonSkeletonText animated={true} width='100%' height='100%' />
+				</ZIonCol>
+
+				{/* Col-2 Title & content input */}
+				<ZIonCol size='12' className='pt-5'>
+					{/* Link Title */}
+					<ZIonSkeletonText animated={true} width='100%' height='40px' />
+
+					{/* Link Description */}
+					<ZIonText className='block mt-3'>
+						<ZIonSkeletonText animated={true} width='100%' height='85px' />
+					</ZIonText>
+				</ZIonCol>
+			</ZIonRow>
+		</ZIonCol>
+	);
+});
 
 export default ZaionsCustomYourLink;

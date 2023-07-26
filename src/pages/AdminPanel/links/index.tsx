@@ -98,7 +98,10 @@ import {
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
+import {
+	NewShortLinkFormState,
+	NewShortLinkSelectTypeOption,
+} from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import {
 	ShortLinksFieldsDataRStateSelector,
 	ShortLinksFilterOptionsRStateAtom,
@@ -113,6 +116,7 @@ import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil
 import classes from './styles.module.css';
 import ZDashboardFolderMenu from '@/components/AdminPanelComponents/Sidebar/FolderMenu';
 import AdminPanelSidebarMenu from '@/components/AdminPanelComponents/Sidebar/ExpendableMenu';
+import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
 
 /**
  * Images Imports go down
@@ -194,6 +198,10 @@ const ZShortLinksListPage: React.FC = () => {
 	const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
 	//
 	const setFolderFormState = useSetRecoilState(FolderFormState);
+
+	const setNewShortLinkTypeOptionDataAtom = useSetRecoilState(
+		NewShortLinkSelectTypeOption
+	);
 	// #endregion
 
 	// #region APIS requests.
@@ -297,6 +305,33 @@ const ZShortLinksListPage: React.FC = () => {
 					isEnable: false,
 				},
 			}));
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
+	const resetShortLinkFormHandler = () => {
+		try {
+			setNewShortLinkFormState((_) => ({
+				folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
+				shortUrl: {
+					domain: CONSTANTS.DEFAULT_VALUES.DEFAULT_CUSTOM_DOMAIN,
+				},
+				type: messengerPlatformsBlockEnum.link,
+				pixelIds: [],
+				tags: [],
+				formMode: FormMode.ADD,
+			}));
+
+			const selectedTypeOptionData = LinkTypeOptionsData.find(
+				(el) => el.type === messengerPlatformsBlockEnum.link
+			);
+
+			if (selectedTypeOptionData) {
+				setNewShortLinkTypeOptionDataAtom((_) => ({
+					...selectedTypeOptionData,
+				}));
+			}
 		} catch (error) {
 			reportCustomError(error);
 		}
@@ -515,21 +550,7 @@ const ZShortLinksListPage: React.FC = () => {
 														className='my-2 normal-case'
 														expand={!isSmScale ? 'block' : undefined}
 														height='39px'
-														onClick={() =>
-															setNewShortLinkFormState((_) => ({
-																folderId:
-																	CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
-																shortUrl: {
-																	domain:
-																		CONSTANTS.DEFAULT_VALUES
-																			.DEFAULT_CUSTOM_DOMAIN,
-																},
-																type: messengerPlatformsBlockEnum.link,
-																pixelIds: [],
-																tags: [],
-																formMode: FormMode.ADD,
-															}))
-														}
+														onClick={() => resetShortLinkFormHandler()}
 														routerLink={replaceParams(
 															ZaionsRoutes.AdminPanel.ShortLinks.Create,
 															CONSTANTS.RouteParams.workspace.workspaceId,

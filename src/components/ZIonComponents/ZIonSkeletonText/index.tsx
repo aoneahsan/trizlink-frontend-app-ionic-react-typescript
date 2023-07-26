@@ -14,10 +14,19 @@ type ZIonSkeletonTextType = {
 	style?: {
 		[key: string]: unknown;
 	};
+	height?: string;
+	width?: string;
 };
 
 const ZIonSkeletonText = (props: ZIonSkeletonTextType) => {
-	return <IonSkeletonText {...props}>{props.children}</IonSkeletonText>;
+	return (
+		<IonSkeletonText
+			{...props}
+			style={{ ...props.style, width: props.width, height: props.height }}
+		>
+			{props.children}
+		</IonSkeletonText>
+	);
 };
 
 export default ZIonSkeletonText;
