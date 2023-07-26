@@ -15,7 +15,6 @@ import { useRecoilState } from 'recoil';
  * ? Like import of custom components is a custom import
  * */
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import NewLinkFolder from '../NewLinkFolder';
 
 /**
  * Global Constants Imports go down
@@ -37,6 +36,7 @@ import { folderState } from '@/types/AdminPanel/index.type';
  * ? Import of recoil states is a Recoil State import
  * */
 import { ShortLinksFolderFormattedRStateAtom } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinksFoldersState.recoil';
+import NewLinkFolder from '../NewLinkFolder';
 
 /**
  * Style files Imports go down
@@ -88,6 +88,7 @@ const ShortLinkFoldersHOC: React.FC = () => {
 		<NewLinkFolder
 			_foldersData={shortLinksFolderFormattedState}
 			_state={folderState.shortlink}
+			workspaceId={''}
 		/>
 	);
 };

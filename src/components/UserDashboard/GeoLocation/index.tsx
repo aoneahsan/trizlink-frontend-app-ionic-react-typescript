@@ -56,33 +56,40 @@ const GeoLocation: React.FC = () => {
 	return (
 		<>
 			<ZIonCol
-				sizeXl='5.8'
-				sizeLg='5.7'
-				sizeMd='5.6'
+				sizeXl='5.9'
+				sizeLg='5.9'
+				sizeMd='5.9'
 				sizeSm='12'
 				sizeXs='12'
-				className='zaions__bg_white border py-3'
+				className='py-3 border zaions__bg_white'
 			>
-				<div className='flex ion-align-items-center border-bottom ion-padding-start pb-2'>
-					<ZIonIcon icon={globeOutline} size={'large'}></ZIonIcon>
-					<ZIonText>
-						<h6 className='font-bold ion-no-margin ion-padding-start'>
-							Geolocation{' '}
-							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-								(help)
-							</ZIonRouterLink>
-						</h6>
+				<div className='flex pb-2 ion-align-items-center border-bottom ion-padding-start'>
+					<ZIonIcon icon={globeOutline} size='large' />
+					<ZIonText className='font-bold ion-no-margin ps-2'>
+						Geolocation
+						<ZIonRouterLink
+							className='ms-1'
+							routerLink={ZaionsRoutes.HomeRoute}
+						>
+							(help)
+						</ZIonRouterLink>
 					</ZIonText>
 				</div>
-				<div className='block px-2 mb-4  pt-3'>
+				<div className='block px-2 pt-2'>
 					<FieldArray name='geoLocation'>
 						{({ remove, push }) => (
 							<div>
 								{values.geoLocation.length
 									? values.geoLocation.map((_geoLocationEl, _index) => (
-											<ZIonRow key={_index} className='ion-align-items-top'>
+											<ZIonRow
+												key={_index}
+												className={classNames({
+													'gap-2 ion-align-items-top': true,
+													'mt-2': _index !== 0,
+												})}
+											>
 												<ZIonCol size='5.6'>
-													<ZIonInputField
+													{/* <ZIonInputField
 														inputFieldProps={{
 															label: 'Redirection Links*',
 															labelPlacement: 'floating',
@@ -125,14 +132,57 @@ const GeoLocation: React.FC = () => {
 																	).country,
 															})}`,
 														}}
+													/> */}
+
+													<ZIonInput
+														label='Redirection Links*'
+														labelPlacement='stacked'
+														onIonChange={handleChange}
+														onIonBlur={handleBlur}
+														value={values.geoLocation[_index]?.redirectionLink}
+														name={`geoLocation.${_index}.redirectionLink`}
+														errorText={
+															errors.geoLocation?.length
+																? ((
+																		errors.geoLocation[
+																			_index
+																		] as GeoLocationErrorsType
+																  )?.redirectionLink as string)
+																: undefined
+														}
+														type='url'
+														className={classNames({
+															// 'pt-1 mt-1': true,
+															'ion-touched':
+																touched?.geoLocation &&
+																touched?.geoLocation[_index]?.redirectionLink,
+															'ion-invalid':
+																touched?.geoLocation &&
+																errors?.geoLocation &&
+																touched?.geoLocation[_index]?.redirectionLink &&
+																(
+																	errors.geoLocation[
+																		_index
+																	] as GeoLocationErrorsType
+																).redirectionLink,
+															'ion-valid':
+																touched?.geoLocation &&
+																errors?.geoLocation &&
+																touched?.geoLocation[_index]?.country &&
+																!(
+																	errors.geoLocation[
+																		_index
+																	] as GeoLocationErrorsType
+																).country,
+														})}
+														minHeight='40px'
 													/>
 												</ZIonCol>
 
 												<ZIonCol size='5.6'>
 													<ZaionsRSelect
 														className={classNames({
-															'ion-padding-top pb-0 mb-0 geo-location-country-field':
-																true,
+															'pb-0 mb-0 geo-location-country-field': true,
 															invalid:
 																touched?.geoLocation &&
 																errors?.geoLocation &&
@@ -199,12 +249,12 @@ const GeoLocation: React.FC = () => {
 														''
 													)}
 												</ZIonCol>
-												<ZIonCol className='ion-padding-top mt-4'>
+												<ZIonCol className='mt-5'>
 													<ZIonIcon
 														icon={trashBin}
 														onClick={() => remove(_index)}
 														color='danger'
-														className='zaions__nav_item'
+														className='w-[21px] h-[21px] zaions__nav_item'
 													/>
 												</ZIonCol>
 											</ZIonRow>
@@ -214,7 +264,7 @@ const GeoLocation: React.FC = () => {
 								{!values.rotatorABTesting.length ? (
 									<ZIonButton
 										fill='clear'
-										className='ion-text-capitalize mt-3'
+										className='mt-3 ion-text-capitalize ion-no-padding'
 										size='small'
 										onClick={() =>
 											push({
@@ -230,7 +280,7 @@ const GeoLocation: React.FC = () => {
 									<ZIonButton
 										disabled
 										color={'dark'}
-										className='ion-text-capitalize mt-3'
+										className='mt-3 ion-text-capitalize ion-no-padding'
 										fill='clear'
 									>
 										You can't add a redirection if AB testing is activated

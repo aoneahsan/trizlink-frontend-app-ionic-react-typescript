@@ -52,9 +52,11 @@ import UTMTagTemplates from '@/components/UserDashboard/UTMTagTemplates';
 import DomainName from '@/components/UserDashboard/DomainName';
 import ShortLinkFoldersHOC from '@/components/UserDashboard/ShortLinkFoldersHOC';
 import {
+	useZGetRQCacheData,
 	useZRQCreateRequest,
 	useZRQGetRequest,
 	useZRQUpdateRequest,
+	useZUpdateRQCacheData,
 } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
@@ -161,16 +163,15 @@ const AdminCreateNewLinkPages: React.FC = () => {
 	// #region Custom hooks
 	const { isLgScale, isMdScale } = useZMediaQueryScale(); //
 	const { zNavigatePushRoute } = useZNavigate(); // useZNavigate hook use for redirection
+	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
 	// #endregion
 
 	// #region APIs.
 	// create short link api.
 	const { mutateAsync: createShortLink } = useZRQCreateRequest({
 		_url: API_URL_ENUM.shortLinks_create_list,
-		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-			workspaceId,
-		],
+		_queriesKeysToInvalidate: [],
 		_itemsIds: [workspaceId],
 		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 	});
@@ -178,10 +179,15 @@ const AdminCreateNewLinkPages: React.FC = () => {
 	// update short link api.
 	const { mutateAsync: updateShortLink } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.shortLinks_update_delete,
-		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-			workspaceId,
-		],
+		_queriesKeysToInvalidate: [],
+	});
+
+	// Request for getting short links data.
+	const { data: ShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
+		_url: API_URL_ENUM.shortLinks_create_list,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
+		_itemsIds: [workspaceId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 	});
 
 	// get short link data api.
@@ -274,6 +280,34 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
 					// if we have data then show success message.
 					if (_data && _data.id) {
+						const _oldShortLinks =
+							extractInnerData<ShortLinkType[]>(
+								getRQCDataHandler<ShortLinkType[]>({
+									key: [
+										CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+										workspaceId,
+									],
+								}) as ShortLinkType[],
+								extractInnerDataOptionsEnum.createRequestResponseItems
+							) || [];
+
+						console.log({ _oldShortLinks });
+
+						// added shortLinks to cache.
+						const _updatedShortLinks = [..._oldShortLinks, _data];
+
+						// Updating data in RQ cache.
+						await updateRQCDataHandler<ShortLinkType[] | undefined>({
+							key: [
+								CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+								workspaceId,
+							],
+							data: _updatedShortLinks as ShortLinkType[],
+							id: '',
+							extractType: ZRQGetRequestExtractEnum.extractItems,
+							updateHoleData: true,
+						});
+
 						showSuccessNotification(
 							MESSAGES.GENERAL.SHORT_LINKS.SHORT_LINK_CREATED
 						);
@@ -439,6 +473,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 				}}
 				enableReinitialize={true}
 				// ( Initial Values End  ) //
+
 				// ( Handling Validation & Errors Start  ) //
 				validate={(values) => {
 					const errors: {
@@ -721,98 +756,232 @@ const AdminCreateNewLinkPages: React.FC = () => {
 					);
 				}}
 			>
+				{/* Content */}
 				{({ isSubmitting, isValid, submitForm, resetForm }) => {
 					return (
-						<>
-							{/* Content */}
-							<ZIonContent color='light'>
-								{/* Grid-1 */}
-								<ZIonGrid className='h-full ion-no-padding'>
-									<ZIonRow className='h-full'>
-										{/* Side bar */}
-										<AdminPanelSidebarMenu
-											activePage={AdminPanelSidebarMenuPageEnum.shortLink}
-										/>
+						<ZIonContent color='light'>
+							{/* Grid-1 */}
+							<ZIonGrid className='h-full ion-no-padding'>
+								<ZIonRow className='h-full'>
+									{/* Side bar */}
+									<AdminPanelSidebarMenu
+										activePage={AdminPanelSidebarMenuPageEnum.shortLink}
+									/>
 
-										{/* Right-col */}
-										<ZIonCol
-											className='w-full h-screen overflow-y-scroll zaions-transition'
-											sizeXl={
-												ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-													? '10'
-													: '11.2'
-											}
-											sizeLg={
-												ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-													? '10'
-													: '11.2'
-											}
-											sizeMd='12'
-											sizeSm='12'
-											sizeXs='12'
+									{/* Right-col */}
+									<ZIonCol
+										className='w-full h-screen overflow-y-scroll zaions-transition'
+										sizeXl={
+											ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
+												? '10'
+												: '11.2'
+										}
+										sizeLg={
+											ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
+												? '10'
+												: '11.2'
+										}
+										sizeMd='12'
+										sizeSm='12'
+										sizeXs='12'
+									>
+										{/* Grid-1 -> Grid-1 */}
+										<ZIonGrid className='px-3 py-2 zaions__bg_white'>
+											{/* Row */}
+											<ZIonRow className='ion-align-items-center'>
+												{/* Col-1 */}
+												<ZIonCol className='flex'>
+													{/* Home button */}
+													<ZIonButton
+														className='ion-text-capitalize'
+														routerLink={replaceRouteParams(
+															ZaionsRoutes.AdminPanel.ShortLinks.Main,
+															[
+																CONSTANTS.RouteParams.workspace.workspaceId,
+																CONSTANTS.RouteParams
+																	.folderIdToGetShortLinksOrLinkInBio,
+															],
+															[workspaceId, 'all']
+														)}
+														onClick={() => {
+															resetForm();
+														}}
+													>
+														Home
+													</ZIonButton>
+
+													{/* Title */}
+													<ZIonTitle color='medium'>
+														<h5 className='ion-no-margin'>
+															{newShortLinkFormState.formMode === FormMode.ADD
+																? 'Create a New link'
+																: newShortLinkFormState.formMode ===
+																  FormMode.EDIT
+																? 'Update Link'
+																: ''}
+														</h5>
+													</ZIonTitle>
+												</ZIonCol>
+
+												{/* Col-2 */}
+												<ZIonCol className='ion-text-center'>
+													<ZIonText
+														color='medium'
+														className='text-2xl font-bold'
+													>
+														Link settings
+													</ZIonText>
+												</ZIonCol>
+
+												{/* Col-3 */}
+												<ZIonCol className='ion-text-end'>
+													{/* get my link button */}
+													<ZIonButton
+														className='ion-text-capitalize'
+														routerLink={replaceRouteParams(
+															ZaionsRoutes.AdminPanel.ShortLinks.Main,
+															[
+																CONSTANTS.RouteParams.workspace.workspaceId,
+																CONSTANTS.RouteParams
+																	.folderIdToGetShortLinksOrLinkInBio,
+															],
+															[workspaceId, 'all']
+														)}
+													>
+														{newShortLinkFormState.formMode === FormMode.ADD
+															? 'Get my new link'
+															: newShortLinkFormState.formMode === FormMode.EDIT
+															? 'Get my updated link'
+															: ''}
+													</ZIonButton>
+												</ZIonCol>
+											</ZIonRow>
+										</ZIonGrid>
+
+										{/* Short link Grid-1 -> Grid-2 */}
+										<ZaionsShortUrlOptionFields />
+
+										{/* Custom your link Grid-1 -> Grid-3 */}
+										<ZIonGrid
+											className={classNames({
+												'my-1': true,
+												'ms-3': isMdScale,
+												'mx-2': !isMdScale,
+											})}
 										>
-											{/* Grid-1 -> Grid-1 */}
-											<ZIonGrid className='px-3 py-2 zaions__bg_white'>
-												{/* Row */}
-												<ZIonRow className='ion-align-items-center'>
-													{/* Col-1 */}
-													<ZIonCol className='flex'>
-														{/* Home button */}
-														<ZIonButton
-															className='ion-text-capitalize'
-															routerLink={replaceRouteParams(
-																ZaionsRoutes.AdminPanel.ShortLinks.Main,
-																[
-																	CONSTANTS.RouteParams.workspace.workspaceId,
-																	CONSTANTS.RouteParams
-																		.folderIdToGetShortLinksOrLinkInBio,
-																],
-																[workspaceId, 'all']
-															)}
-															onClick={() => {
-																resetForm();
-															}}
-														>
-															Home
-														</ZIonButton>
+											<ZIonRow
+												className={classNames({
+													'gap-4': isLgScale,
+													'gap-0': !isLgScale,
+												})}
+											>
+												{/* Custom Your Link */}
+												<ZaionsCustomYourLink />
 
-														{/* Title */}
-														<ZIonTitle color='medium'>
-															<h5 className='ion-no-margin'>
-																{newShortLinkFormState.formMode === FormMode.ADD
-																	? 'Create a New link'
-																	: newShortLinkFormState.formMode ===
-																	  FormMode.EDIT
-																	? 'Update Link'
-																	: ''}
-															</h5>
-														</ZIonTitle>
-													</ZIonCol>
+												{/* Pixel Account, Utm Tags, Custom Domain */}
+												<ZIonCol
+													sizeXl='5.9'
+													sizeLg='5.8'
+													sizeMd='5.9'
+													sizeSm='12'
+													sizeXs='12'
+												>
+													{/* Pixels */}
+													<LinksPixelsAccount />
 
-													{/* Col-2 */}
-													<ZIonCol className='ion-text-center'>
-														<ZIonText
-															color='medium'
-															className='text-2xl font-bold'
-														>
-															Link settings
+													{/* UTMTags */}
+													<UTMTagTemplates />
+
+													{/* Choose Domain Name */}
+													<DomainName />
+												</ZIonCol>
+											</ZIonRow>
+										</ZIonGrid>
+
+										{/* Advance Options Grid-1 -> Grid-4 */}
+										<ZIonGrid className='mr-3 ms-3'>
+											{/* Row-1 */}
+											<ZIonRow>
+												{/* Col-1 */}
+												<ZIonCol>
+													{/* advance options toggler button */}
+													<ZIonButton
+														onClick={() =>
+															setShowAdvanceOptions((oldVal) => !oldVal)
+														}
+														expand='block'
+														size='large'
+														className='ion-text-capitalize'
+													>
+														<ZIonText>
+															<h4 className='flex ion-no-margin ion-align-items-center ion-padding-top ion-padding-bottom'>
+																Advance Options
+															</h4>
 														</ZIonText>
-													</ZIonCol>
+														<ZIonIcon
+															slot='end'
+															icon={settingsOutline}
+															className='ms-auto'
+														/>
+													</ZIonButton>
 
-													{/* Col-3 */}
-													<ZIonCol className='ion-text-end'>
+													{/* advance options row */}
+													{showAdvanceOptions && (
+														<ZIonRow className='gap-3 ion-margin-top'>
+															{/* Folder */}
+															<ShortLinkFoldersHOC />
+
+															{/* Add Notes */}
+															<AddNotes />
+
+															{/* Add Embed Widget */}
+															<EmbedWidget />
+
+															{/* Deep Linking */}
+															<DeepLinking />
+
+															{/* Link Cloaking */}
+															<LinkCloaking />
+
+															{/* Tags */}
+															<Tags />
+
+															{/* Rotator - AB Testing */}
+															<RotatorABTesting />
+
+															{/* Geo Location */}
+															<GeoLocation />
+
+															{/* Link Expiration */}
+															<LinkExpiration />
+
+															{/* Link Password */}
+															<LinkPassword />
+
+															{/* Link Favicon */}
+															<LinkFavIcon />
+
+															{/* GDPR Popup */}
+															<GDPRPopup />
+														</ZIonRow>
+													)}
+												</ZIonCol>
+											</ZIonRow>
+										</ZIonGrid>
+
+										{/* Footer   className='fixed bottom-0 z-50 w-[94%] h-max zaions__light_bg'*/}
+										<ZIonFooter>
+											{/* Gird */}
+											<ZIonGrid className='mx-4 mt-3'>
+												{/* Row */}
+												<ZIonRow>
+													{/* Col-1 */}
+													<ZIonCol>
 														{/* get my link button */}
 														<ZIonButton
-															className='ion-text-capitalize'
-															routerLink={replaceRouteParams(
-																ZaionsRoutes.AdminPanel.ShortLinks.Main,
-																[
-																	CONSTANTS.RouteParams.workspace.workspaceId,
-																	CONSTANTS.RouteParams
-																		.folderIdToGetShortLinksOrLinkInBio,
-																],
-																[workspaceId, 'all']
-															)}
+															expand='full'
+															onClick={() => void submitForm()}
+															disabled={isSubmitting || !isValid}
 														>
 															{newShortLinkFormState.formMode === FormMode.ADD
 																? 'Get my new link'
@@ -824,143 +993,11 @@ const AdminCreateNewLinkPages: React.FC = () => {
 													</ZIonCol>
 												</ZIonRow>
 											</ZIonGrid>
-
-											{/* Short link Grid-1 -> Grid-2 */}
-											<ZaionsShortUrlOptionFields />
-
-											{/* Custom your link Grid-1 -> Grid-3 */}
-											<ZIonGrid
-												className={classNames({
-													'my-5': true,
-													'ms-3': isMdScale,
-													'mx-2': !isMdScale,
-												})}
-											>
-												<ZIonRow
-													className={classNames({
-														'gap-4': isLgScale,
-														'gap-0': !isLgScale,
-													})}
-												>
-													{/* Custom Your Link */}
-													<ZaionsCustomYourLink />
-
-													{/* Pixel Account, Utm Tags, Custom Domain */}
-													<ZIonCol
-														sizeXl='5.9'
-														sizeLg='5.8'
-														sizeMd='5.9'
-														sizeSm='12'
-														sizeXs='12'
-													>
-														{/* Pixels */}
-														<LinksPixelsAccount />
-
-														{/* UTMTags */}
-														<UTMTagTemplates />
-
-														{/* Choose Domain Name */}
-														<DomainName />
-													</ZIonCol>
-												</ZIonRow>
-											</ZIonGrid>
-
-											{/* Advance Options Grid-1 -> Grid-4 */}
-											<ZIonGrid className='ms-3 me-1'>
-												<ZIonRow>
-													<ZIonCol>
-														<ZIonButton
-															onClick={() =>
-																setShowAdvanceOptions((oldVal) => !oldVal)
-															}
-															expand='block'
-															size='large'
-															className='ion-text-capitalize'
-														>
-															<ZIonText>
-																<h4 className='flex ion-no-margin ion-align-items-center ion-padding-top ion-padding-bottom'>
-																	Advance Options
-																</h4>
-															</ZIonText>
-															<ZIonIcon
-																slot='end'
-																icon={settingsOutline}
-																className='ion-margin-end ms-auto'
-															></ZIonIcon>
-														</ZIonButton>
-														{showAdvanceOptions && (
-															<ZIonRow className='gap-5 ion-margin-top'>
-																{/* Folder */}
-																<ShortLinkFoldersHOC />
-
-																{/* Add Notes */}
-																<AddNotes />
-
-																{/* Add Embed Widget */}
-																<EmbedWidget />
-
-																{/* Deep Linking */}
-																<DeepLinking />
-
-																{/* Link Cloaking */}
-																<LinkCloaking />
-
-																{/* Tags */}
-																<Tags />
-
-																{/* Rotator - AB Testing */}
-																<RotatorABTesting />
-
-																{/* Geo Location */}
-																<GeoLocation />
-
-																{/* Link Expiration */}
-																<LinkExpiration />
-
-																{/* Link Password */}
-																<LinkPassword />
-
-																{/* Link Favicon */}
-																<LinkFavIcon />
-
-																{/* GDPR Popup */}
-																<GDPRPopup />
-															</ZIonRow>
-														)}
-													</ZIonCol>
-												</ZIonRow>
-											</ZIonGrid>
-
-											{/* Footer */}
-											<ZIonFooter className='fixed bottom-0 z-50 w-[94%] h-max zaions__light_bg'>
-												{/* Gird */}
-												<ZIonGrid className='mx-4 mt-3'>
-													{/* Row */}
-													<ZIonRow>
-														{/* Col-1 */}
-														<ZIonCol>
-															{/* get my link button */}
-															<ZIonButton
-																expand='full'
-																onClick={() => void submitForm()}
-																disabled={isSubmitting || !isValid}
-															>
-																{newShortLinkFormState.formMode === FormMode.ADD
-																	? 'Get my new link'
-																	: newShortLinkFormState.formMode ===
-																	  FormMode.EDIT
-																	? 'Get my updated link'
-																	: ''}
-															</ZIonButton>
-														</ZIonCol>
-													</ZIonRow>
-												</ZIonGrid>
-											</ZIonFooter>
-										</ZIonCol>
-									</ZIonRow>
-								</ZIonGrid>
-							</ZIonContent>
-						</>
+										</ZIonFooter>
+									</ZIonCol>
+								</ZIonRow>
+							</ZIonGrid>
+						</ZIonContent>
 					);
 				}}
 			</Formik>

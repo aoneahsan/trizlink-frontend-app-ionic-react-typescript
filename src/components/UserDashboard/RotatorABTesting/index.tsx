@@ -48,52 +48,60 @@ const RotatorABTesting: React.FC = () => {
 	return (
 		<>
 			<ZIonCol
-				sizeXl='5.7'
-				sizeLg='5.6'
-				sizeMd='5.6'
+				sizeXl='5.9'
+				sizeLg='5.9'
+				sizeMd='5.9'
 				sizeSm='12'
 				sizeXs='12'
-				className='py-3 border zaions__bg_white'
+				className='py-2 border zaions__bg_white'
 			>
 				<div className='flex pb-2 ion-align-items-center border-bottom ion-padding-start'>
-					<ZIonIcon icon={gitPullRequestOutline} size={'large'}></ZIonIcon>
-					<ZIonText>
-						<h6 className='font-bold ion-no-margin ion-padding-start'>
-							Rotator - AB Testing{' '}
-							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-								(help)
-							</ZIonRouterLink>
-						</h6>
+					<ZIonIcon icon={gitPullRequestOutline} size='large' />
+					<ZIonText className='font-bold ion-no-margin ps-2'>
+						Rotator - AB Testing
+						<ZIonRouterLink
+							className='ms-1'
+							routerLink={ZaionsRoutes.HomeRoute}
+						>
+							(help)
+						</ZIonRouterLink>
 					</ZIonText>
 				</div>
-				<div className='block px-2 mt-3 mb-4'>
-					<ZIonRow className='gap-1'>
-						<ZIonCol size='5.6'>
+				<div className='block px-2 mt-3'>
+					<ZIonRow className='gap-2 pb-1'>
+						<ZIonCol size='5.9'>
 							<ZIonInput
 								disabled
 								className='ion-no-padding'
 								label='Redirection Links*'
-								labelPlacement='floating'
+								labelPlacement='stacked'
+								minHeight='40px'
 							/>
 						</ZIonCol>
-						<ZIonCol size='5.5'>
+						<ZIonCol size='5.9'>
 							<ZIonInput
 								type='number'
 								label='Percentage'
-								labelPlacement='floating'
 								value={FULL_PERCENTAGE}
 								disabled
+								labelPlacement='stacked'
+								minHeight='40px'
 							/>
 						</ZIonCol>
 					</ZIonRow>
+
+					{/*  */}
 					<FieldArray name='rotatorABTesting'>
 						{({ remove, push }) => (
 							<div>
 								{values.rotatorABTesting.length > 0 &&
 									values.rotatorABTesting.map((_rotatorAbTestingEl, _index) => (
-										<ZIonRow key={_index} className='mt-3 ion-align-items-top'>
+										<ZIonRow
+											key={_index}
+											className='gap-2 mt-3 ion-align-items-top'
+										>
 											<ZIonCol size='5.6'>
-												<ZIonInputField
+												{/* <ZIonInputField
 													inputFieldProps={{
 														label: 'Redirection Links*',
 														labelPlacement: 'floating',
@@ -137,10 +145,59 @@ const RotatorABTesting: React.FC = () => {
 																)?.redirectionLink,
 														})}`,
 													}}
+												/> */}
+
+												<ZIonInput
+													label='Redirection Links*'
+													labelPlacement='stacked'
+													onIonChange={handleChange}
+													onIonBlur={handleBlur}
+													minHeight='40px'
+													value={
+														values.rotatorABTesting[_index].redirectionLink
+													}
+													name={`rotatorABTesting.${_index}.redirectionLink`}
+													errorText={
+														errors.rotatorABTesting?.length
+															? ((
+																	errors.rotatorABTesting[
+																		_index
+																	] as RotatorABTestingErrorType
+															  )?.redirectionLink as string)
+															: undefined
+													}
+													className={classNames({
+														'ion-touched':
+															touched.rotatorABTesting &&
+															touched.rotatorABTesting[_index]?.redirectionLink,
+														'ion-invalid':
+															touched.rotatorABTesting &&
+															errors.rotatorABTesting &&
+															touched.rotatorABTesting[_index]
+																?.redirectionLink &&
+															(
+																errors.rotatorABTesting[
+																	_index
+																] as RotatorABTestingErrorType
+															)?.redirectionLink,
+
+														'ion-valid':
+															touched.rotatorABTesting &&
+															errors.rotatorABTesting &&
+															touched.rotatorABTesting[_index]
+																?.redirectionLink &&
+															!(
+																errors.rotatorABTesting[
+																	_index
+																] as RotatorABTestingErrorType
+															)?.redirectionLink,
+													})}
 												/>
 											</ZIonCol>
+
+											{/*  */}
 											<ZIonCol size='5.6'>
-												<ZIonInputField
+												{/* <ZIonInputField
 													inputFieldProps={{
 														type: 'number',
 														label: 'Percentage*',
@@ -181,20 +238,61 @@ const RotatorABTesting: React.FC = () => {
 																)?.percentage,
 														})}`,
 													}}
+												/> */}
+
+												<ZIonInput
+													type='number'
+													label='Percentage*'
+													labelPlacement='stacked'
+													minHeight='40px'
+													onIonChange={handleChange}
+													onIonBlur={handleBlur}
+													value={values.rotatorABTesting[_index].percentage}
+													name={`rotatorABTesting.${_index}.percentage`}
+													errorText={
+														errors.rotatorABTesting?.length
+															? ((
+																	errors.rotatorABTesting[
+																		_index
+																	] as RotatorABTestingErrorType
+															  )?.percentage as string)
+															: undefined
+													}
+													className={classNames({
+														'ion-touched':
+															touched.rotatorABTesting &&
+															touched.rotatorABTesting[_index]?.percentage,
+														'ion-invalid':
+															touched.rotatorABTesting &&
+															errors.rotatorABTesting &&
+															touched.rotatorABTesting[_index]?.percentage &&
+															(
+																errors.rotatorABTesting[
+																	_index
+																] as RotatorABTestingErrorType
+															)?.percentage,
+
+														'ion-valid':
+															touched.rotatorABTesting &&
+															errors.rotatorABTesting &&
+															touched.rotatorABTesting[_index]?.percentage &&
+															!(
+																errors.rotatorABTesting[
+																	_index
+																] as RotatorABTestingErrorType
+															)?.percentage,
+													})}
 												/>
 											</ZIonCol>
-											<ZIonCol className='mt-4 ion-padding-top'>
+
+											<ZIonCol className='ion-padding-top'>
 												<ZIonIcon
 													icon={trashBin}
 													onClick={() => {
 														remove(_index);
 													}}
 													color='danger'
-													className='zaions__nav_item'
-													style={{
-														width: '21px',
-														height: '21px',
-													}}
+													className='w-[21px] h-[21px] zaions__nav_item'
 												/>
 											</ZIonCol>
 										</ZIonRow>
@@ -203,8 +301,8 @@ const RotatorABTesting: React.FC = () => {
 								{values.geoLocation.length ? (
 									<ZIonButton
 										disabled
-										color={'dark'}
-										className='mt-3 ion-text-capitalize'
+										color='dark'
+										className='mt-3 ion-text-capitalize ion-no-padding'
 										fill='clear'
 									>
 										You can't add a redirection if Geolocation is activated
@@ -212,7 +310,7 @@ const RotatorABTesting: React.FC = () => {
 								) : (
 									<ZIonButton
 										fill='clear'
-										className='mt-3 ion-text-capitalize'
+										className='mt-2 ion-text-capitalize ion-no-padding ps-1'
 										size='small'
 										onClick={() =>
 											push({

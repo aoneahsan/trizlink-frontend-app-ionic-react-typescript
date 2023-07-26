@@ -56,24 +56,31 @@ const NewLinkFolder: React.FC<{
 
 	return (
 		<>
+			{/* Col-1 */}
 			<ZIonCol
-				sizeXl='5.7'
-				sizeLg='5.6'
-				sizeMd='5.6'
+				sizeXl='5.9'
+				sizeLg='5.9'
+				sizeMd='5.9'
 				sizeSm='12'
 				sizeXs='12'
-				className='border py-3 zaions__bg_white'
+				className='py-2 border zaions__bg_white'
 			>
 				<div className='flex ion-align-items-center border-bottom ion-padding-start'>
-					<ZIonIcon icon={folderOpenOutline} size={'large'}></ZIonIcon>
-					<ZIonText>
-						<h6 className='font-bold ion-no-margin ion-padding-start'>
-							Folder{' '}
-							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-								(help)
-							</ZIonRouterLink>
-						</h6>
+					{/* Icon */}
+					<ZIonIcon icon={folderOpenOutline} size='large' />
+
+					{/* Text */}
+					<ZIonText className='font-bold ion-no-margin ps-2'>
+						Folder
+						<ZIonRouterLink
+							className='ms-1'
+							routerLink={ZaionsRoutes.HomeRoute}
+						>
+							(help)
+						</ZIonRouterLink>
 					</ZIonText>
+
+					{/* Add folder button */}
 					<ZIonButton
 						fill='clear'
 						className='ms-auto'
@@ -86,9 +93,12 @@ const NewLinkFolder: React.FC<{
 						<ZIonIcon icon={addCircleOutline} size='large' />
 					</ZIonButton>
 				</div>
-				<div className='mt-4 block px-4'>
+
+				{/*  */}
+				<div className='block px-4 mt-4'>
+					{/* Folder select */}
 					<ZaionsRSelect
-						className='ion-padding-top'
+						className=''
 						options={_foldersData as unknown as ZaionsRSelectOptions[]}
 						name='folderId'
 						onChange={(_value) => {

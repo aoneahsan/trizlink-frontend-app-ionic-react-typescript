@@ -58,25 +58,31 @@ const Tags: React.FC = () => {
 	return (
 		<>
 			<ZIonCol
-				sizeXl='5.8'
-				sizeLg='5.7'
-				sizeMd='5.6'
+				sizeXl='5.9'
+				sizeLg='5.9'
+				sizeMd='5.9'
 				sizeSm='12'
 				sizeXs='12'
-				className='border py-3 zaions__bg_white'
+				className='py-2 border zaions__bg_white'
 			>
-				<div className='flex ion-align-items-center border-bottom ion-padding-start pb-2'>
-					<ZIonIcon icon={pricetagsOutline} size={'large'}></ZIonIcon>
-					<ZIonText>
-						<h6 className='font-bold ion-no-margin ion-padding-start'>
-							Tags{' '}
-							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-								(help)
-							</ZIonRouterLink>
-						</h6>
+				<div className='flex pb-2 ion-align-items-center border-bottom ion-padding-start'>
+					{/* Icon */}
+					<ZIonIcon icon={pricetagsOutline} size='large' />
+
+					{/* Text */}
+					<ZIonText className='font-bold ion-no-margin ps-2'>
+						Tags
+						<ZIonRouterLink
+							className='ms-1'
+							routerLink={ZaionsRoutes.HomeRoute}
+						>
+							(help)
+						</ZIonRouterLink>
 					</ZIonText>
 				</div>
-				<div className='mt-4 block px-4 mb-4'>
+
+				{/*  */}
+				<div className='block px-4 mt-4'>
 					<ZIonInput
 						placeholder='Add tag'
 						onKeyUp={({ currentTarget, key }) => {
@@ -89,6 +95,10 @@ const Tags: React.FC = () => {
 						}}
 						name='tags'
 						label=''
+						minHeight='40px'
+						style={{
+							'--padding-start': '0px',
+						}}
 					/>
 					<div className='tags ion-padding-top'>
 						{values.tags && values.tags.length

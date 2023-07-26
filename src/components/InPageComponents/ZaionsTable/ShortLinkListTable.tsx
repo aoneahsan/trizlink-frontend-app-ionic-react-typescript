@@ -156,6 +156,14 @@ const ZaionsShortLinkTable = () => {
 				...oldState,
 				folderId: folderId,
 			}));
+		} catch (error) {
+			reportCustomError(error);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [folderId]);
+
+	useEffect(() => {
+		try {
 			if (ShortLinksData) {
 				setShortLinksStateAtom(ShortLinksData);
 			}
@@ -163,7 +171,7 @@ const ZaionsShortLinkTable = () => {
 			reportCustomError(error);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [folderId, ShortLinksData]);
+	}, [ShortLinksData]);
 
 	// #region Functions.
 	const showActionsPopover = (

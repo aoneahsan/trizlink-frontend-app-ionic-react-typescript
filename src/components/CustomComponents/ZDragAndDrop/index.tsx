@@ -86,9 +86,11 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
 			) : (
 				<>
 					<ZIonText className='ion-no-margin'>
-						<h1 className='ion-no-margin'>
-							<ZIonIcon icon={fileTrayOutline} color='primary' />
-						</h1>
+						<ZIonIcon
+							icon={fileTrayOutline}
+							color='primary'
+							className='w-8 h-8'
+						/>
 					</ZIonText>
 					<ZIonText color='primary'>{title}</ZIonText>
 				</>

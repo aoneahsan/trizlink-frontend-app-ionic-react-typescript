@@ -48,26 +48,28 @@ const LinkExpiration: React.FC = () => {
 	return (
 		<>
 			<ZIonCol
-				sizeXl='5.7'
-				sizeLg='5.6'
-				sizeMd='5.6'
+				sizeXl='5.9'
+				sizeLg='5.9'
+				sizeMd='5.9'
 				sizeSm='12'
 				sizeXs='12'
-				className='border py-3 zaions__bg_white'
+				className='py-3 border zaions__bg_white'
 			>
-				<div className='flex ion-align-items-center border-bottom ion-padding-start pb-2'>
-					<ZIonIcon icon={alarmOutline} size={'large'}></ZIonIcon>
-					<ZIonText>
-						<h6 className='font-bold ion-no-margin ion-padding-start'>
-							Link Expiration{' '}
-							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-								(help)
-							</ZIonRouterLink>
-						</h6>
+				<div className='flex pb-2 ion-align-items-center border-bottom ion-padding-start'>
+					<ZIonIcon icon={alarmOutline} size='large' />
+					<ZIonText className='font-bold ion-no-margin ps-2'>
+						Link Expiration
+						<ZIonRouterLink
+							className='ms-1'
+							routerLink={ZaionsRoutes.HomeRoute}
+						>
+							(help)
+						</ZIonRouterLink>
 					</ZIonText>
+
 					<RCSwitch
-						onChange={(val) => {
-							setFieldValue('linkExpiration.enabled', val, true);
+						onChange={(value) => {
+							setFieldValue('linkExpiration.enabled', value, true);
 						}}
 						checked={values.linkExpiration.enabled}
 						checkedChildren='on'
@@ -76,10 +78,11 @@ const LinkExpiration: React.FC = () => {
 					/>
 				</div>
 				{values.linkExpiration.enabled ? (
-					<div className='mt-4 block px-2 mb-4'>
-						<ZIonRow>
-							<ZIonCol>
-								<ZIonInputField
+					<div className='block px-2 mt-4 '>
+						<ZIonRow className='ion-justify-content-between'>
+							{/* expirationDate */}
+							<ZIonCol size='5.9'>
+								{/* <ZIonInputField
 									inputFieldProps={{
 										label: 'End at:',
 										labelPlacement: 'stacked',
@@ -89,11 +92,24 @@ const LinkExpiration: React.FC = () => {
 										name: 'linkExpiration.expirationDate',
 										type: 'datetime-local',
 									}}
+								/> */}
+
+								<ZIonInput
+									label='End at:'
+									labelPlacement='stacked'
+									onIonChange={handleChange}
+									onIonBlur={handleBlur}
+									value={values.linkExpiration.expirationDate}
+									name='linkExpiration.expirationDate'
+									type='datetime-local'
+									minHeight='40px'
 								/>
 							</ZIonCol>
-							<ZIonCol>
+
+							{/* timezone */}
+							<ZIonCol size='5.9'>
 								<ZaionsRSelect
-									className='mt-2'
+									className=''
 									placeholder='country*'
 									name='linkExpiration.timezone'
 									options={
@@ -120,7 +136,7 @@ const LinkExpiration: React.FC = () => {
 							</ZIonCol>
 						</ZIonRow>
 
-						<ZIonInputField
+						{/* <ZIonInputField
 							inputFieldProps={{
 								label: 'Redirection Links*',
 								labelPlacement: 'floating',
@@ -149,10 +165,40 @@ const LinkExpiration: React.FC = () => {
 										!errors.linkExpiration?.redirectionLink,
 								})}`,
 							}}
+						/> */}
+						{/* redirectionLink */}
+						<ZIonInput
+							label='Redirection Links*'
+							labelPlacement='stacked'
+							value={values.linkExpiration.redirectionLink}
+							name='linkExpiration.redirectionLink'
+							errorText={errors.linkExpiration?.redirectionLink}
+							type='url'
+							minHeight='40px'
+							onIonChange={(event) => {
+								setFieldValue(
+									'linkExpiration.redirectionLink',
+									event.target.value,
+									true
+								);
+							}}
+							onIonBlur={() => {
+								setFieldTouched('linkExpiration.redirectionLink', true, true);
+							}}
+							className={classNames({
+								'mt-5 mx-auto': true,
+								'ion-touched': touched.linkExpiration?.redirectionLink,
+								'ion-invalid':
+									touched.linkExpiration?.redirectionLink &&
+									errors.linkExpiration?.redirectionLink,
+								'ion-valid':
+									touched.linkExpiration?.redirectionLink &&
+									!errors.linkExpiration?.redirectionLink,
+							})}
 						/>
 					</div>
 				) : (
-					<div className='ms-4 mt-4'>
+					<div className='mt-2 ion-padding-start'>
 						<ZIonText className='text-base'>
 							Activate this option to change destination after expiration
 							date/time

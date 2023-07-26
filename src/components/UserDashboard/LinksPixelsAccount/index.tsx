@@ -81,23 +81,33 @@ const LinkPixelsAccount: React.FC = () => {
 
 	return (
 		<>
-			<ZIonRow className='border-bottom zaions__bg_white'>
+			{/* Row-1 */}
+			<ZIonRow className='pt-1 border-bottom zaions__bg_white'>
+				{/* Col-1 */}
 				<ZIonCol className='flex px-2 py-2 ion-align-items-center'>
-					<ZIonIcon icon={apertureOutline} size={'large'}></ZIonIcon>
-					<ZIonText>
-						<h6 className='font-bold ion-no-margin ion-padding-start'>
-							Add Pixels ID{' '}
-							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-								(help)
-							</ZIonRouterLink>
-						</h6>
+					{/* Icon */}
+					<ZIonIcon icon={apertureOutline} size='large' />
+
+					{/* Text */}
+					<ZIonText className='font-bold ms-2 ion-no-margin'>
+						Add Pixels ID
+						<ZIonRouterLink
+							className='ms-1'
+							routerLink={ZaionsRoutes.HomeRoute}
+						>
+							(help)
+						</ZIonRouterLink>
 					</ZIonText>
 				</ZIonCol>
 			</ZIonRow>
-			<ZIonRow className='zaions__bg_white'>
+
+			{/* Row-2 */}
+			<ZIonRow className='pb-1 zaions__bg_white'>
+				{/* Col-1 */}
 				<ZIonCol>
+					{/* Select */}
 					<ZaionsRSelect
-						className='pb-0 mx-2 ion-padding'
+						className='pt-0 pb-0 ion-padding'
 						isMulti
 						options={
 							pixelAccountsState
@@ -123,9 +133,11 @@ const LinkPixelsAccount: React.FC = () => {
 							) || []
 						}
 					/>
+
+					{/* add a pixel button */}
 					<ZIonButton
 						fill='clear'
-						className='ion-text-capitalize ion-no-margin ion-margin-start'
+						className='ion-text-capitalize ion-no-padding ps-1 ion-no-margin ion-margin-start'
 						size='small'
 						onClick={() => {
 							presentZAddPixelAccount({

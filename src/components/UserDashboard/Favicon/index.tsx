@@ -32,25 +32,27 @@ const LinkFavIcon: React.FC = () => {
 	return (
 		<>
 			<ZIonCol
-				sizeXl='5.7'
-				sizeLg='5.6'
-				sizeMd='5.6'
+				sizeXl='5.9'
+				sizeLg='5.9'
+				sizeMd='5.9'
 				sizeSm='12'
 				sizeXs='12'
-				className='border py-3 zaions__bg_white'
+				className='py-2 border zaions__bg_white'
 			>
-				<div className='flex ion-align-items-center border-bottom ion-padding-start pb-2'>
-					<ZIonIcon icon={laptopOutline} size={'large'}></ZIonIcon>
-					<ZIonText>
-						<h6 className='font-bold ion-no-margin ion-padding-start'>
-							Favicon{' '}
-							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-								(help)
-							</ZIonRouterLink>
-						</h6>
+				<div className='flex pb-2 ion-align-items-center border-bottom ion-padding-start'>
+					<ZIonIcon icon={laptopOutline} size='large' />
+					<ZIonText className='font-bold ion-no-margin ps-2'>
+						Favicon
+						<ZIonRouterLink
+							className='ms-1'
+							routerLink={ZaionsRoutes.HomeRoute}
+						>
+							(help)
+						</ZIonRouterLink>
 					</ZIonText>
 				</div>
-				<div className='flex ion-align-items-center ion-padding-bottom mt-4  px-2'>
+
+				<div className='flex px-2 mt-2 ion-align-items-center ion-padding-bottom'>
 					<ZDragAndDrop
 						setFieldValue={setFieldValue}
 						fieldName='favicon'

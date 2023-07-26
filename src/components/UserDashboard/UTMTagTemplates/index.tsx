@@ -84,27 +84,40 @@ const UTMTagTemplates: React.FC = () => {
 
 	return (
 		<>
-			<ZIonRow className='border-bottom zaions__bg_white mt-4'>
-				<ZIonCol className='px-3 py-3 flex ion-align-items-center'>
-					<ZIonIcon icon={pricetagOutline} size={'large'}></ZIonIcon>
-					<ZIonText>
-						<h6 className='font-bold ion-no-margin ion-padding-start'>
-							Add UTMs tags{' '}
-							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-								(help)
-							</ZIonRouterLink>
-						</h6>
+			{/* Row-1 */}
+			<ZIonRow className='pt-1 mt-4 border-bottom zaions__bg_white'>
+				{/* Col-1 */}
+				<ZIonCol className='flex px-3 py-2 ion-align-items-center'>
+					{/* Icon */}
+					<ZIonIcon icon={pricetagOutline} size='large' />
+
+					{/* Text */}
+					<ZIonText className='font-bold ms-2 ion-no-margin'>
+						Add UTMs tags
+						<ZIonRouterLink
+							className='ms-1'
+							routerLink={ZaionsRoutes.HomeRoute}
+						>
+							(help)
+						</ZIonRouterLink>
 					</ZIonText>
 				</ZIonCol>
 			</ZIonRow>
 
+			{/* Row-2 */}
 			<ZIonRow className='zaions__bg_white'>
+				{/* Col-1 */}
 				<ZIonCol>
-					<ZIonList className='zaions__bg_white pb-0'>
-						<ZIonGrid className='pb-0'>
-							<ZIonRow className='pb-0'>
-								<ZIonCol size='6'>
-									<ZIonInputField
+					{/* List */}
+					<ZIonList className='pb-0 zaions__bg_white'>
+						{/* List -> Gird */}
+						<ZIonGrid className='pt-0 pb-0'>
+							{/* List -> Row */}
+							<ZIonRow className='px-2 py-0 pb-0'>
+								{/* List -> Row -> Col-1 */}
+								<ZIonCol size='6' className='pr-2 h-max'>
+									{/* utm campaign input */}
+									{/* <ZIonInputField
 										inputFieldProps={{
 											label: 'UTM Campaign',
 											labelPlacement: 'floating',
@@ -116,11 +129,24 @@ const UTMTagTemplates: React.FC = () => {
 											placeholder: 'Enter text',
 											color: 'dark',
 										}}
+									/> */}
+									<ZIonInput
+										label='UTM Campaign'
+										labelPlacement='stacked'
+										className='mt-3'
+										onIonChange={handleChange}
+										onIonBlur={handleBlur}
+										value={values.UTMTags.utmCampaign}
+										name='UTMTags.utmCampaign'
+										placeholder='Enter text'
+										minHeight='40px'
 									/>
 								</ZIonCol>
 
-								<ZIonCol size='6'>
-									<ZIonInputField
+								{/* List -> Row -> Col-2 */}
+								<ZIonCol size='6' className='h-max'>
+									{/* utm medium input */}
+									{/* <ZIonInputField
 										inputFieldProps={{
 											label: 'UTM Medium',
 											labelPlacement: 'floating',
@@ -132,11 +158,24 @@ const UTMTagTemplates: React.FC = () => {
 											placeholder: 'Enter text',
 											color: 'dark',
 										}}
+									/> */}
+									<ZIonInput
+										label='UTM Medium'
+										labelPlacement='stacked'
+										className='mt-3'
+										onIonChange={handleChange}
+										onIonBlur={handleBlur}
+										value={values.UTMTags.utmMedium}
+										name='UTMTags.utmMedium'
+										placeholder='Enter text'
+										minHeight='40px'
 									/>
 								</ZIonCol>
 
-								<ZIonCol size='6'>
-									<ZIonInputField
+								{/* List -> Row -> Col-3 */}
+								<ZIonCol size='6' className='pr-2 mt-2 h-max'>
+									{/* utm source input */}
+									{/* <ZIonInputField
 										inputFieldProps={{
 											label: 'UTM Source',
 											labelPlacement: 'floating',
@@ -148,11 +187,25 @@ const UTMTagTemplates: React.FC = () => {
 											placeholder: 'Enter text',
 											color: 'dark',
 										}}
+									/> */}
+
+									<ZIonInput
+										label='UTM Source'
+										labelPlacement='stacked'
+										className='mt-3'
+										onIonChange={handleChange}
+										onIonBlur={handleBlur}
+										value={values.UTMTags.utmSource}
+										name='UTMTags.utmSource'
+										placeholder='Enter text'
+										minHeight='40px'
 									/>
 								</ZIonCol>
 
-								<ZIonCol size='6'>
-									<ZIonInputField
+								{/* List -> Row -> Col-4 */}
+								<ZIonCol size='6' className='mt-2 h-max'>
+									{/* utm term input */}
+									{/* <ZIonInputField
 										inputFieldProps={{
 											label: 'UTM Term',
 											labelPlacement: 'floating',
@@ -164,11 +217,25 @@ const UTMTagTemplates: React.FC = () => {
 											placeholder: 'Enter text',
 											color: 'dark',
 										}}
+									/> */}
+
+									<ZIonInput
+										label='UTM Term'
+										labelPlacement='stacked'
+										className='mt-3'
+										onIonChange={handleChange}
+										onIonBlur={handleBlur}
+										value={values.UTMTags.utmTerm}
+										name='UTMTags.utmTerm'
+										placeholder='Enter text'
+										minHeight='40px'
 									/>
 								</ZIonCol>
 
-								<ZIonCol size='6'>
-									<ZIonInputField
+								{/* List -> Row -> Col-5 */}
+								<ZIonCol size='6' className='pr-2 mt-2 h-max'>
+									{/* utm content input */}
+									{/* <ZIonInputField
 										inputFieldProps={{
 											label: 'UTM Content',
 											labelPlacement: 'floating',
@@ -180,13 +247,30 @@ const UTMTagTemplates: React.FC = () => {
 											placeholder: 'Enter text',
 											color: 'dark',
 										}}
+									/> */}
+
+									<ZIonInput
+										label='UTM Content'
+										labelPlacement='stacked'
+										className='mt-3'
+										onIonChange={handleChange}
+										onIonBlur={handleBlur}
+										value={values.UTMTags.utmContent}
+										name='UTMTags.utmContent'
+										placeholder='Enter text'
+										minHeight='40px'
 									/>
 								</ZIonCol>
 
-								<ZIonCol size='6' className='flex ion-align-items-center'>
+								{/* List -> Row -> Col-6 */}
+								<ZIonCol
+									size='6'
+									className='flex mt-2 ion-align-items-center ps-2'
+								>
+									{/* Add a template button */}
 									<ZIonButton
 										fill='clear'
-										className='ion-text-capitalize ion-no-margin ion-margin-start mt-5'
+										className='mt-5 text-md ion-text-capitalize ion-no-margin ion-no-padding'
 										size='small'
 										onClick={() => {
 											presentUtmTagsModal({
@@ -200,8 +284,10 @@ const UTMTagTemplates: React.FC = () => {
 							</ZIonRow>
 						</ZIonGrid>
 					</ZIonList>
+
+					{/* select from templates. */}
 					<ZaionsRSelect
-						className='pt-4 pb-3 zaions__w50 ps-2'
+						className='pt-4 pb-3 pr-2 ps-4 zaions__w50'
 						options={
 							_UTMTagsData?.map((el) => {
 								return { value: el.id, label: el.templateName };

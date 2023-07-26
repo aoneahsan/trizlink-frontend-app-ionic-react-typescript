@@ -1,6 +1,6 @@
 import { ZIonColorType } from './../../types/zaionsAppSettings.type';
 import { ToastOptions } from 'react-toastify';
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 
 // Types
 import { AlertOptions, LoadingOptions } from '@ionic/react';
@@ -18,6 +18,15 @@ export const appWiseIonicLoaderRStateAtom = atom<{
 			showBackdrop: true,
 			keyboardClose: true,
 		},
+	},
+});
+
+export const appWiseIonicLoaderIsOpenedRSelector = selector<boolean>({
+	key: 'appWiseIonicLoaderIsOpenedRSelector_key',
+	get: ({ get }) => {
+		const _appWiseIonicAlertRStateAtom = get(appWiseIonicLoaderRStateAtom);
+
+		return _appWiseIonicAlertRStateAtom.showLoader;
 	},
 });
 
@@ -40,6 +49,15 @@ export const appWiseIonicAlertRStateAtom = atom<{
 			],
 			backdropDismiss: true,
 		},
+	},
+});
+
+export const appWiseIonicAlertIsOpenedRSelector = selector<boolean>({
+	key: 'appWiseIonicAlertIsOpenedRSelector_key',
+	get: ({ get }) => {
+		const _appWiseIonicAlertRStateAtom = get(appWiseIonicAlertRStateAtom);
+
+		return _appWiseIonicAlertRStateAtom.showAlert;
 	},
 });
 

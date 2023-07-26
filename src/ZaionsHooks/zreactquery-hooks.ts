@@ -17,8 +17,12 @@ import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type
 import { AxiosError } from 'axios';
 import { errorCodes } from '@/utils/constants/apiConstants';
 import { clearAuthDataFromLocalStorageAndRecoil } from '@/utils/helpers/apiHelpers';
-import { useResetRecoilState } from 'recoil';
+import { useResetRecoilState, useRecoilValue } from 'recoil';
 import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import {
+	appWiseIonicLoaderIsOpenedRSelector,
+	appWiseIonicLoaderRStateAtom,
+} from '@/ZaionsStore/AppRStates';
 
 /**
  * The custom hook for getting data from an API using useQuery hook from react-query package.
@@ -62,6 +66,9 @@ export const useZRQGetRequest = <T>({
 	const resetUserAccountState = useResetRecoilState(
 		ZaionsUserAccountRStateAtom
 	);
+	const zAppWiseIonicLoaderIsOpenedRSelector = useRecoilValue(
+		appWiseIonicLoaderIsOpenedRSelector
+	);
 
 	return useQuery({
 		queryKey: [..._key],
@@ -70,11 +77,12 @@ export const useZRQGetRequest = <T>({
 				return null;
 			} else {
 				// Present ion loading before api start
-				await presentZIonLoader(
-					_itemsIds?.length
-						? MESSAGES.GENERAL.API_REQUEST.FETCHING_SINGLE_DATA
-						: MESSAGES.GENERAL.API_REQUEST.FETCHING
-				);
+				!zAppWiseIonicLoaderIsOpenedRSelector &&
+					(await presentZIonLoader(
+						_itemsIds?.length
+							? MESSAGES.GENERAL.API_REQUEST.FETCHING_SINGLE_DATA
+							: MESSAGES.GENERAL.API_REQUEST.FETCHING
+					));
 
 				/**
 				 * @_url - takes the get url to fetch data from api.
@@ -95,7 +103,7 @@ export const useZRQGetRequest = <T>({
 		},
 		onSuccess: (_data) => {
 			// onSucceed dismissing loader...
-			void dismissZIonLoader();
+			zAppWiseIonicLoaderIsOpenedRSelector && void dismissZIonLoader();
 			// zConsoleLog({
 			// 	message:
 			// 		'From ZaionsHook -> useZRQCreateRequest -> useQuery -> onSuccess',
@@ -105,7 +113,7 @@ export const useZRQGetRequest = <T>({
 		onError: async (_error) => {
 			// need to dismiss the loader first, then showing error just so, user will not get redirected to login without knowing that there was a authenticated error
 			// OnError dismissing loader...
-			void dismissZIonLoader();
+			zAppWiseIonicLoaderIsOpenedRSelector && void dismissZIonLoader();
 
 			// showing error alert...
 			void presentZIonErrorAlert();

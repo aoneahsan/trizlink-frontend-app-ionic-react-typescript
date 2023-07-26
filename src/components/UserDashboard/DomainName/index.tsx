@@ -41,26 +41,32 @@ const DomainName: React.FC = () => {
 
 	return (
 		<>
+			{/* Row-1 */}
 			<ZIonRow className='pt-2 mt-4 border-bottom zaions__bg_white'>
-				<ZIonCol className='flex px-3 py-3 ion-align-items-center '>
-					<ZIonIcon icon={laptopOutline} size={'large'}></ZIonIcon>
-					<ZIonText>
-						<h6 className='font-bold ion-no-margin ion-padding-start'>
-							Choose domain name
-							<ZIonRouterLink
-								routerLink={ZaionsRoutes.HomeRoute}
-								className='ms-1'
-							>
-								(help)
-							</ZIonRouterLink>
-						</h6>
+				{/* Col-1 */}
+				<ZIonCol className='flex px-3 py-1 ion-align-items-center'>
+					{/* Icon */}
+					<ZIonIcon icon={laptopOutline} size='large' />
+
+					{/* Text */}
+					<ZIonText className='font-bold ion-no-margin ps-2'>
+						Choose domain name
+						<ZIonRouterLink
+							routerLink={ZaionsRoutes.HomeRoute}
+							className='ms-1'
+						>
+							(help)
+						</ZIonRouterLink>
 					</ZIonText>
 				</ZIonCol>
 			</ZIonRow>
-			<ZIonRow className='px-3 pt-3 pb-3 zaions__bg_white'>
-				<ZIonCol>
+
+			{/* Row-2 */}
+			<ZIonRow className='px-3 pt-2 pb-3 zaions__bg_white'>
+				{/* Col-1 */}
+				<ZIonCol className='pr-2'>
+					{/* Select */}
 					<ZaionsRSelect
-						className='mt-1 ion-padding-top'
 						options={DefaultDomains?.map((el) => {
 							return { value: el.id, label: el.name };
 						})}
@@ -82,6 +88,8 @@ const DomainName: React.FC = () => {
 						}
 					/>
 				</ZIonCol>
+
+				{/* Col-2 */}
 				<ZIonCol>
 					{/* <ZIonInputField
 						inputFieldProps={{
@@ -93,15 +101,17 @@ const DomainName: React.FC = () => {
 							value: values.shortUrl.url,
 						}}
 					/> */}
+					{/* Customize input */}
 					<ZIonInput
 						name='shortUrl.url'
 						className='p-0'
 						label='Customize'
-						labelPlacement='floating'
+						labelPlacement='stacked'
 						onIonChange={handleChange}
 						onIonBlur={handleBlur}
 						value={values.shortUrl.url}
 						fill='outline'
+						minHeight='40px'
 					/>
 				</ZIonCol>
 			</ZIonRow>

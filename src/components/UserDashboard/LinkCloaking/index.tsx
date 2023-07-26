@@ -29,22 +29,23 @@ const LinkCloaking: React.FC = () => {
 	return (
 		<>
 			<ZIonCol
-				sizeXl='5.7'
-				sizeLg='5.6'
-				sizeMd='5.6'
+				sizeXl='5.9'
+				sizeLg='5.9'
+				sizeMd='5.9'
 				sizeSm='12'
 				sizeXs='12'
-				className='border py-3 zaions__bg_white'
+				className='py-3 border zaions__bg_white'
 			>
-				<div className='flex ion-align-items-center border-bottom ion-padding-start pb-2'>
-					<ZIonIcon icon={eyeOffOutline} size={'large'}></ZIonIcon>
-					<ZIonText>
-						<h6 className='font-bold ion-no-margin ion-padding-start'>
-							Link cloaking{' '}
-							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-								(help)
-							</ZIonRouterLink>
-						</h6>
+				<div className='flex pb-2 ion-align-items-center border-bottom ion-padding-start'>
+					<ZIonIcon icon={eyeOffOutline} size='large' />
+					<ZIonText className='font-bold ion-no-margin ps-2'>
+						Link cloaking
+						<ZIonRouterLink
+							className='ms-1'
+							routerLink={ZaionsRoutes.HomeRoute}
+						>
+							(help)
+						</ZIonRouterLink>
 					</ZIonText>
 					<RCSwitch
 						className='ms-auto me-2'
@@ -53,9 +54,9 @@ const LinkCloaking: React.FC = () => {
 						unCheckedChildren='off'
 					/>
 				</div>
-				<div className='mt-4 block px-4 mb-4'>
+				<div className='block px-4 mt-4 mb-2'>
 					<ZIonTitle
-						className='border border-warning block py-2 px-3 rounded flex ion-align-items-center'
+						className='block px-3 py-2 border rounded border-warning ion-align-items-center'
 						color={'warning'}
 						size='small'
 					>
