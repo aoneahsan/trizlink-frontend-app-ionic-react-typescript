@@ -51,9 +51,9 @@ const ZIonButton = (props: ZIonButtonType) => {
 
 	return (
 		<IonButton
+			{...props}
 			style={compStyle}
 			className={classNames(props.className, { 'normal-case': true })}
-			{...props}
 		>
 			{props.children}
 		</IonButton>

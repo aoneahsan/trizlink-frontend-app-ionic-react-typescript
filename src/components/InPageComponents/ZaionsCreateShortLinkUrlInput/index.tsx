@@ -23,6 +23,7 @@ import {
 	ZIonIcon,
 	ZIonInput,
 	ZIonItem,
+	ZIonSkeletonText,
 	ZIonText,
 } from '@/components/ZIonComponents';
 
@@ -79,9 +80,10 @@ import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
  * About: (Info of component here...)
  * @type {*}
  * */
-const ZaionsCreateShortLinkUrlInput: React.FC<{ className?: string }> = ({
-	className,
-}) => {
+const ZaionsCreateShortLinkUrlInput: React.FC<{
+	className?: string;
+	showSkeleton?: boolean;
+}> = ({ className, showSkeleton = false }) => {
 	// getting current workspace id form params.
 	const { workspaceId } = useParams<{
 		workspaceId: string;
@@ -149,61 +151,94 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{ className?: string }> = ({
 			{({ submitForm, handleChange, handleBlur, errors, values, touched }) => {
 				return (
 					<>
-						<ZIonItem
-							className={classNames(className, {
-								'ion-item-start-no-padding': true,
-								'ion-invalid': touched.domain && errors.domain,
-								'ion-valid': touched.domain && !errors.domain,
-							})}
-							style={{ '--inner-padding-end': '0px' }}
-							lines='none'
-							minHeight='40px'
-						>
-							<ZIonInput
-								className={classNames({
-									'rounded-none': true,
-									'ion-touched ion-invalid': touched.domain && errors.domain,
-									'ion-touched ion-valid': touched.domain && !errors.domain,
+						{!showSkeleton && (
+							<ZIonItem
+								className={classNames(className, {
+									'ion-item-start-no-padding': true,
+									'ion-invalid': touched.domain && errors.domain,
+									'ion-valid': touched.domain && !errors.domain,
 								})}
-								label=''
-								name='domain'
-								type='email'
-								onIonChange={handleChange}
-								onIonBlur={handleBlur}
-								value={values.domain}
-								fill='outline'
-								placeholder='https://yourlink.com'
-								style={{
-									'--background': '#fff',
-									'--padding-start': '3px',
-									'--border-radius': '0',
-								}}
+								style={{ '--inner-padding-end': '0px' }}
+								lines='none'
 								minHeight='40px'
-							/>
-
-							<ZIonButton
-								onClick={() => void submitForm()}
-								className='ion-no-margin ion-text-capitalize'
-								slot='end'
-								style={{
-									height: '100%',
-									'--border-radius': '0',
-								}}
 							>
-								<ZIonIcon icon={searchOutline} className='me-1' />{' '}
-								<ZIonText className='pt-1 me-1'>Switch it</ZIonText>
-							</ZIonButton>
-						</ZIonItem>
-						{errors.domain && touched.domain && (
+								<ZIonInput
+									className={classNames({
+										'rounded-none': true,
+										'ion-touched ion-invalid': touched.domain && errors.domain,
+										'ion-touched ion-valid': touched.domain && !errors.domain,
+									})}
+									label=''
+									name='domain'
+									type='email'
+									onIonChange={handleChange}
+									onIonBlur={handleBlur}
+									value={values.domain}
+									fill='outline'
+									placeholder='https://yourlink.com'
+									style={{
+										'--background': '#fff',
+										'--padding-start': '3px',
+										'--border-radius': '0',
+									}}
+									minHeight='40px'
+								/>
+
+								<ZIonButton
+									onClick={() => void submitForm()}
+									className='ion-no-margin ion-text-capitalize'
+									slot='end'
+									style={{
+										height: '100%',
+										'--border-radius': '0',
+									}}
+								>
+									<ZIonIcon icon={searchOutline} className='me-1' />{' '}
+									<ZIonText className='pt-1 me-1'>Switch it</ZIonText>
+								</ZIonButton>
+							</ZIonItem>
+						)}
+						{!showSkeleton && errors.domain && touched.domain && (
 							<div className='ps-1 zaions__fs_14'>
 								<IonNote color='danger'>{errors.domain}</IonNote>
 							</div>
 						)}
+
+						{/* Skeleton */}
+						{showSkeleton && <ZaionsCreateShortLinkUrlInputSkeleton />}
 					</>
 				);
 			}}
 		</Formik>
 	);
 };
+
+export const ZaionsCreateShortLinkUrlInputSkeleton: React.FC = React.memo(
+	() => {
+		return (
+			<ZIonItem
+				className='ion-item-start-no-padding'
+				style={{ '--inner-padding-end': '0px' }}
+				lines='none'
+				minHeight='40px'
+			>
+				{/* <ZIonInput className='rounded-none' minHeight='40px' /> */}
+				<ZIonSkeletonText width='100%' height='40px' animated={true} />
+
+				<ZIonButton
+					className='ion-no-margin shadow-none'
+					slot='end'
+					style={{
+						height: '40px',
+						'--border-radius': '0',
+						'--box-shadow': 'none',
+					}}
+				>
+					<ZIonSkeletonText width='75px' height='20px' animated={true} />
+				</ZIonButton>
+			</ZIonItem>
+		);
+	}
+);
 
 export default ZaionsCreateShortLinkUrlInput;

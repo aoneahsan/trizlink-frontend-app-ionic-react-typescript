@@ -129,6 +129,7 @@ import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import AdminPanelSidebarMenu from '@/components/AdminPanelComponents/Sidebar/ExpendableMenu';
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 import { FolderSkeleton } from '@/components/UserDashboard/NewLinkFolder';
+import { workspaceInterface } from '@/types/AdminPanel/workspace';
 
 /**
  * Style files Imports go down
@@ -312,45 +313,47 @@ const AdminCreateNewLinkPages: React.FC = () => {
 						],
 					});
 
-				// extract Data from _response.
-				const _data = extractInnerData<ShortLinkType>(
-					_response,
-					extractInnerDataOptionsEnum.createRequestResponseItem
-				);
-
-				// if we have data then show success message.
-				if (_data && _data.id) {
-					// Updating data all shortLinks in RQ cache.
-					await updateRQCDataHandler<ShortLinkType | undefined>({
-						key: [
-							CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-							workspaceId,
-						],
-						data: { ..._data },
-						id: editLinkId,
-					});
-
-					// Updating current short link in cache in RQ cache.
-					await updateRQCDataHandler<ShortLinkType | undefined>({
-						key: [
-							CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
-							workspaceId,
-							editLinkId,
-						],
-						data: { ..._data },
-						id: '',
-						extractType: ZRQGetRequestExtractEnum.extractItem,
-						updateHoleData: true,
-					});
-
-					showSuccessNotification(
-						MESSAGES.GENERAL.SHORT_LINKS.SHORT_LINK_UPDATED
+				if (_response) {
+					// extract Data from _response.
+					const _data = extractInnerData<ShortLinkType>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
 					);
-				} else {
-					throw new Error(
-						(_response as ZLinkMutateApiType<ShortLinkType>).message ||
-							'something went wrong please try again! :('
-					);
+
+					// if we have data then show success message.
+					if (_data && _data.id) {
+						// Updating data all shortLinks in RQ cache.
+						await updateRQCDataHandler<ShortLinkType | undefined>({
+							key: [
+								CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+								workspaceId,
+							],
+							data: { ..._data },
+							id: editLinkId,
+						});
+
+						// Updating current short link in cache in RQ cache.
+						await updateRQCDataHandler<ShortLinkType | undefined>({
+							key: [
+								CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
+								workspaceId,
+								editLinkId,
+							],
+							data: { ..._data },
+							id: '',
+							extractType: ZRQGetRequestExtractEnum.extractItem,
+							updateHoleData: true,
+						});
+
+						showSuccessNotification(
+							MESSAGES.GENERAL.SHORT_LINKS.SHORT_LINK_UPDATED
+						);
+					} else {
+						throw new Error(
+							(_response as ZLinkMutateApiType<ShortLinkType>).message ||
+								'something went wrong please try again! :('
+						);
+					}
 				}
 			} else {
 				throwZCustomErrorRequestFailed(MESSAGES.GENERAL.INVALID_REQUEST);
@@ -782,7 +785,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
 									{/* Right-col */}
 									<ZIonCol
-										className='w-full h-screen overflow-y-scroll zaions-transition'
+										className='w-full h-screen overflow-y-scroll zaions_pretty_scrollbar zaions-transition'
 										sizeXl={
 											ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
 												? '10'
@@ -871,8 +874,11 @@ const AdminCreateNewLinkPages: React.FC = () => {
 															setShowAdvanceOptions((oldVal) => !oldVal)
 														}
 														expand='block'
-														size='large'
-														className='ion-text-capitalize'
+														size={isMdScale ? 'large' : 'default'}
+														className={classNames({
+															'ion-text-capitalize': true,
+															'mx-0': !isMdScale,
+														})}
 													>
 														<ZIonText>
 															<h4 className='flex ion-no-margin ion-align-items-center ion-padding-top ion-padding-bottom'>

@@ -18,6 +18,7 @@ import {
 	ZIonItem,
 	ZIonRouterLink,
 	ZIonRow,
+	ZIonSkeletonText,
 	ZIonText,
 } from '@/components/ZIonComponents';
 import {
@@ -76,6 +77,11 @@ import ZIonSegment from '@/components/ZIonComponents/ZIonSegment';
 import ZIonSegmentButton from '@/components/ZIonComponents/ZIonSegmentButton';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { AdminPanelSidebarMenuPageEnum } from '@/types/AdminPanel/index.type';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { API_URL_ENUM } from '@/utils/enums';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 
 /**
  * Component props type go down
@@ -95,6 +101,23 @@ const AdminPanelSidebarMenu: React.FC<{
 	const [ZDashboardState, setZDashboardState] =
 		useRecoilState(ZDashboardRState);
 
+	// getting workspace ids from url with the help of useParams.
+	const { workspaceId } = useParams<{
+		workspaceId: string;
+	}>();
+
+	// get workspace data api.
+	const { data: selectedWorkspace, isFetching: isSelectedWorkspaceFetching } =
+		useZRQGetRequest<workspaceInterface>({
+			_url: API_URL_ENUM.workspace_update_delete,
+			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId],
+			_authenticated: true,
+			_itemsIds: [workspaceId],
+			_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+			_shouldFetchWhenIdPassed: !workspaceId ? true : false,
+			_extractType: ZRQGetRequestExtractEnum.extractItem,
+		});
+
 	// Made this constant for readability.
 	const isExpand = ZDashboardState.dashboardMainSidebarIsCollabes.isExpand;
 
@@ -105,9 +128,8 @@ const AdminPanelSidebarMenu: React.FC<{
 
 	const { zNavigatePushRoute } = useZNavigate();
 
-	const { workspaceId } = useParams<{
-		workspaceId: string;
-	}>();
+	// is fetching.
+	const isZFetching = isSelectedWorkspaceFetching;
 
 	return (
 		<>
@@ -146,19 +168,42 @@ const AdminPanelSidebarMenu: React.FC<{
 									size='12'
 									className='flex py-4 ion-justify-content-center'
 								>
-									<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-										<ZIonImg
-											src={ProductLogo}
-											alt={`${PRODUCT_NAME} logo`}
-											className={classNames(classes['zaions-ap-msm-logo'], {
-												'rounded-full zaions-transition': true,
-											})}
+									{!isZFetching && (
+										<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
+											<ZIonImg
+												src={
+													selectedWorkspace?.workspaceImage ||
+													getUiAvatarApiUrl({
+														name: selectedWorkspace?.workspaceName,
+													})
+												}
+												alt={`${PRODUCT_NAME} logo`}
+												className={classNames(classes['zaions-ap-msm-logo'], {
+													'rounded-full zaions-transition': true,
+												})}
+												style={{
+													width: isExpand ? '80px' : '42px',
+													height: isExpand ? '80px' : '42px',
+												}}
+											/>
+										</ZIonRouterLink>
+									)}
+
+									{isZFetching && (
+										<div
+											className='rounded-full zaions-transition'
 											style={{
 												width: isExpand ? '80px' : '42px',
 												height: isExpand ? '80px' : '42px',
 											}}
-										/>
-									</ZIonRouterLink>
+										>
+											<ZIonSkeletonText
+												width='100%'
+												height='100%'
+												animated={true}
+											/>
+										</div>
+									)}
 								</ZIonCol>
 
 								{/* Short Links */}

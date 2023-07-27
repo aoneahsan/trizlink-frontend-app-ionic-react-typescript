@@ -10,7 +10,7 @@ import { useLocation, useParams } from 'react-router';
  * ? Like import of ionic components is a packages import
  * */
 import { Formik } from 'formik';
-import { pencilOutline } from 'ionicons/icons';
+import { createOutline, pencilOutline } from 'ionicons/icons';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import routeQueryString from 'qs';
 import { AxiosError } from 'axios';
@@ -31,7 +31,9 @@ import {
 	ZIonItem,
 	ZIonLabel,
 	ZIonRow,
+	ZIonSkeletonText,
 	ZIonText,
+	ZIonTitle,
 } from '@/components/ZIonComponents';
 import ZIonSegment from '@/components/ZIonComponents/ZIonSegment';
 import ZIonSegmentButton from '@/components/ZIonComponents/ZIonSegmentButton';
@@ -113,6 +115,13 @@ import classes from './styles.module.css';
 const ZaionsLinkInBioForm: React.FC = () => {
 	const location = useLocation();
 
+	// getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio of that id will be fetch from backend and store in NewLinkInBioFormState recoil state.
+	const { linkInBioId, workspaceId } = useParams<{
+		linkInBioId: string;
+		workspaceId: string;
+	}>();
+
+	// #region Recoil states.
 	// getting search param from url with the help of 'qs' package
 	const routeQSearchParams = routeQueryString.parse(location.search, {
 		ignoreQueryPrefix: true,
@@ -125,37 +134,38 @@ const ZaionsLinkInBioForm: React.FC = () => {
 
 	// Recoil state link-in-bio form state (for editing or creating link-in-bio)
 	const setLinkInBioFormState = useSetRecoilState(NewLinkInBioFormState);
+	//#endregion
 
+	// #region Custom hooks.
 	// useZNavigate for redirection
 	const { zNavigatePushRoute } = useZNavigate();
 
 	// validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
 	const { validateRequestResponse } = useZValidateRequestResponse();
+	//#endregion
 
-	// getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio of that id will be fetch from backend and store in NewLinkInBioFormState recoil state.
-	const { linkInBioId, workspaceId } = useParams<{
-		linkInBioId: string;
-		workspaceId: string;
-	}>();
-
+	//#region APIS
 	// fetching link-in-bio with the linkInBioId data from backend.
-	const { data: selectedLinkInBio, refetch: refetchSelectedLinkInBio } =
-		useZRQGetRequest<LinkInBioType>({
-			_url: API_URL_ENUM.linkInBio_update_delete,
-			_key: [
-				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-				workspaceId,
-				linkInBioId,
-			],
-			_authenticated: true,
-			_itemsIds: [linkInBioId, workspaceId],
-			_urlDynamicParts: [
-				CONSTANTS.RouteParams.linkInBio.linkInBioId,
-				CONSTANTS.RouteParams.workspace.workspaceId,
-			],
-			_shouldFetchWhenIdPassed: !linkInBioId ? true : false,
-			_extractType: ZRQGetRequestExtractEnum.extractItem,
-		});
+	const {
+		data: selectedLinkInBio,
+		refetch: refetchSelectedLinkInBio,
+		isFetching: isSelectedLinkInBioFetching,
+	} = useZRQGetRequest<LinkInBioType>({
+		_url: API_URL_ENUM.linkInBio_update_delete,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
+			workspaceId,
+			linkInBioId,
+		],
+		_authenticated: true,
+		_itemsIds: [linkInBioId, workspaceId],
+		_urlDynamicParts: [
+			CONSTANTS.RouteParams.linkInBio.linkInBioId,
+			CONSTANTS.RouteParams.workspace.workspaceId,
+		],
+		_shouldFetchWhenIdPassed: !linkInBioId ? true : false,
+		_extractType: ZRQGetRequestExtractEnum.extractItem,
+	});
 
 	// Update Link-in-bio API
 	const { mutateAsync: UpdateLinkInBio } = useZRQUpdateRequest({
@@ -166,6 +176,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 			linkInBioId,
 		],
 	});
+	// #endregion
 
 	const linkInBioGetRequestFn = useCallback(async () => {
 		await refetchSelectedLinkInBio();
@@ -256,9 +267,12 @@ const ZaionsLinkInBioForm: React.FC = () => {
 		}
 	};
 
+	const isZFetching = isSelectedLinkInBioFetching;
+
 	return (
 		<ZaionsIonPage pageTitle='Link In Bio Form Page'>
 			<Formik
+				// #region initial values
 				initialValues={{
 					designPageCurrentTab:
 						(routeQSearchParams as { step: ZLinkInBioRHSComponentEnum })
@@ -329,7 +343,9 @@ const ZaionsLinkInBioForm: React.FC = () => {
 				}}
 				//
 				enableReinitialize
-				// Submit function
+				// #endregion
+
+				// #region Submit function
 				onSubmit={(values) => {
 					const stringifyValue = zStringify({
 						linkInBioTitle: values.linkInBioTitle,
@@ -344,218 +360,229 @@ const ZaionsLinkInBioForm: React.FC = () => {
 					}));
 					void formikSubmitHandler(stringifyValue);
 				}}
+				// #endregion
 			>
 				{({ values, setFieldValue, handleChange, handleBlur }) => {
 					return (
 						<>
-							<ZIonHeader className='ion-padding-horizontal'>
-								<ZIonGrid className='ion-no-padding'>
-									<ZIonRow>
-										<ZIonCol className='flex ion-align-items-center' size='3'>
-											<ZIonButton
-												className='ion-text-capitalize ion-no-margin'
-												color='secondary'
-												routerLink={replaceRouteParams(
-													ZaionsRoutes.AdminPanel.LinkInBio.Main,
-													[
-														CONSTANTS.RouteParams.workspace.workspaceId,
-														CONSTANTS.RouteParams
-															.folderIdToGetShortLinksOrLinkInBio,
-													],
-													[workspaceId, 'all']
-												)}
-											>
-												<ZIonText className='ion-no-padding zaions__fs_16'>
-													Home
-												</ZIonText>
-											</ZIonButton>
-											<div className='ms-2'>
-												{values.enableTitleInput && (
-													<ZIonItem
-														className={classNames({
-															'ion-no-padding ion-no-margin me-2 border': true,
-														})}
-														lines='none'
-														style={{
-															'--min-height': '46px',
-															'--inner-padding-end': '0',
-														}}
-													>
-														<ZIonInput
-															name='linkInBioTitle'
-															value={values.linkInBioTitle}
-															onIonChange={handleChange}
-															onIonBlur={handleBlur}
-															className={classNames(
-																classes['link-in-bio-title-field'],
-																{
-																	'zaions__fs_18 m-2': true,
-																}
-															)}
-															label=''
-														/>
-														<ZIonButton
-															className='ion-text-capitalize ion-no-margin zaions__h100'
-															expand='full'
-															size='large'
+							{!isZFetching ? (
+								<ZIonHeader className='ion-padding-horizontal'>
+									<ZIonGrid className='ion-no-padding'>
+										<ZIonRow>
+											<ZIonCol className='flex ion-align-items-center' size='3'>
+												<ZIonButton
+													className='ion-text-capitalize ion-no-margin'
+													color='secondary'
+													routerLink={replaceRouteParams(
+														ZaionsRoutes.AdminPanel.LinkInBio.Main,
+														[
+															CONSTANTS.RouteParams.workspace.workspaceId,
+															CONSTANTS.RouteParams
+																.folderIdToGetShortLinksOrLinkInBio,
+														],
+														[workspaceId, 'all']
+													)}
+												>
+													<ZIonText className='ion-no-padding zaions__fs_16'>
+														Home
+													</ZIonText>
+												</ZIonButton>
+
+												<div className='ms-2 w-[71%]'>
+													{values.enableTitleInput && (
+														<ZIonItem
+															className={classNames({
+																'ion-no-padding ion-no-margin me-2': true,
+															})}
+															lines='none'
+															style={{
+																'--inner-padding-end': '0',
+															}}
+															minHeight='40px'
+														>
+															<ZIonInput
+																name='linkInBioTitle'
+																value={values.linkInBioTitle}
+																onIonChange={handleChange}
+																onIonBlur={handleBlur}
+																className={classNames(
+																	classes['link-in-bio-title-field'],
+																	{
+																		zaions__fs_18: true,
+																	}
+																)}
+																label=''
+																minHeight='40px'
+															/>
+															<ZIonButton
+																className='ion-text-capitalize ion-no-margin zaions__h100'
+																expand='full'
+																size='large'
+																onClick={() => {
+																	setFieldValue(
+																		'enableTitleInput',
+																		false,
+																		false
+																	);
+																}}
+															>
+																<ZIonText className='zaions__fs_12'>
+																	save
+																</ZIonText>
+															</ZIonButton>
+														</ZIonItem>
+													)}
+													{!values.enableTitleInput && (
+														<div
+															className='flex w-full zaions__fs_18 zaions__cursor_pointer ms-2'
 															onClick={() => {
-																setFieldValue('enableTitleInput', false, false);
+																setFieldValue('enableTitleInput', true, false);
 															}}
 														>
-															<ZIonText className='zaions__fs_12'>
-																save
-															</ZIonText>
-														</ZIonButton>
-													</ZIonItem>
-												)}
-												{!values.enableTitleInput && (
-													<ZIonText
-														className='flex zaions__fs_18 zaions__cursor_pointer ms-2'
+															<ZIonTitle className='me-1 w-min max-w-max overflow-hidden ion-no-padding text-md'>
+																{values.linkInBioTitle}
+															</ZIonTitle>
+															<ZIonIcon
+																icon={createOutline}
+																className='mt-1 w-6 h-6'
+																color='dark'
+															/>
+														</div>
+													)}
+												</div>
+											</ZIonCol>
+
+											<ZIonCol size='6'>
+												<ZIonSegment value={linkInBioFromPageState.page}>
+													<ZIonSegmentButton
+														value='design'
+														className='ion-text-capitalize'
 														onClick={() => {
-															setFieldValue('enableTitleInput', true, false);
+															zNavigatePushRoute(
+																createRedirectRoute({
+																	url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+																	params: [
+																		CONSTANTS.RouteParams.workspace.workspaceId,
+																		CONSTANTS.RouteParams.linkInBio.linkInBioId,
+																	],
+																	values: [workspaceId, linkInBioId],
+																	routeSearchParams: {
+																		page: ZLinkInBioPageEnum.design,
+																		step: ZLinkInBioRHSComponentEnum.theme,
+																	},
+																})
+															);
 														}}
 													>
-														<ZIonText className='me-2'>
-															{values.linkInBioTitle}
-														</ZIonText>
-														<ZIonIcon
-															icon={pencilOutline}
-															className='mt-1'
-															color='primary'
-														/>
+														<ZIonLabel className='font-bold letter-spacing-0px'>
+															Design
+														</ZIonLabel>
+													</ZIonSegmentButton>
+
+													<ZIonSegmentButton
+														value='shareSettings'
+														className='ion-text-capitalize'
+														onClick={() => {
+															zNavigatePushRoute(
+																createRedirectRoute({
+																	url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+																	params: [
+																		CONSTANTS.RouteParams.workspace.workspaceId,
+																		CONSTANTS.RouteParams.linkInBio.linkInBioId,
+																	],
+																	values: [workspaceId, linkInBioId],
+																	routeSearchParams: {
+																		page: ZLinkInBioPageEnum.shareSettings,
+																	},
+																})
+															);
+														}}
+													>
+														<ZIonLabel className='font-bold letter-spacing-0px'>
+															Share settings
+														</ZIonLabel>
+													</ZIonSegmentButton>
+
+													<ZIonSegmentButton
+														value='pageAnalytics'
+														className='ion-text-capitalize'
+														onClick={() => {
+															zNavigatePushRoute(
+																createRedirectRoute({
+																	url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+																	params: [
+																		CONSTANTS.RouteParams.workspace.workspaceId,
+																		CONSTANTS.RouteParams.linkInBio.linkInBioId,
+																	],
+																	values: [workspaceId, linkInBioId],
+																	routeSearchParams: {
+																		page: ZLinkInBioPageEnum.pageAnalytics,
+																	},
+																})
+															);
+														}}
+													>
+														<ZIonLabel className='font-bold letter-spacing-0px'>
+															Page Analytics
+														</ZIonLabel>
+													</ZIonSegmentButton>
+
+													<ZIonSegmentButton
+														value='lead'
+														className='ion-text-capitalize'
+														onClick={() => {
+															zNavigatePushRoute(
+																createRedirectRoute({
+																	url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+																	params: [
+																		CONSTANTS.RouteParams.workspace.workspaceId,
+																		CONSTANTS.RouteParams.linkInBio.linkInBioId,
+																	],
+																	values: [workspaceId, linkInBioId],
+																	routeSearchParams: {
+																		page: ZLinkInBioPageEnum.lead,
+																	},
+																})
+															);
+														}}
+													>
+														<ZIonLabel className='font-bold letter-spacing-0px'>
+															Lead
+														</ZIonLabel>
+													</ZIonSegmentButton>
+
+													<ZIonSegmentButton
+														value='block-analytics'
+														className='ion-text-capitalize'
+													>
+														<ZIonLabel className='font-bold letter-spacing-0px'>
+															Block Analytics
+														</ZIonLabel>
+													</ZIonSegmentButton>
+												</ZIonSegment>
+											</ZIonCol>
+
+											<ZIonCol className='flex ion-align-items-center ion-justify-content-end'>
+												<ZIonButton
+													className='ion-text-lowercase ion-no-margin me-4'
+													color='danger'
+												>
+													<ZIonText className='ion-no-padding zaions__fs_16'>
+														errors
 													</ZIonText>
-												)}
-											</div>
-										</ZIonCol>
-
-										<ZIonCol size='6'>
-											<ZIonSegment value={linkInBioFromPageState.page}>
-												<ZIonSegmentButton
-													value='design'
-													className='ion-text-capitalize'
-													onClick={() => {
-														zNavigatePushRoute(
-															createRedirectRoute({
-																url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-																params: [
-																	CONSTANTS.RouteParams.workspace.workspaceId,
-																	CONSTANTS.RouteParams.linkInBio.linkInBioId,
-																],
-																values: [workspaceId, linkInBioId],
-																routeSearchParams: {
-																	page: ZLinkInBioPageEnum.design,
-																	step: ZLinkInBioRHSComponentEnum.theme,
-																},
-															})
-														);
-													}}
-												>
-													<ZIonLabel className='font-bold letter-spacing-0px'>
-														Design
-													</ZIonLabel>
-												</ZIonSegmentButton>
-
-												<ZIonSegmentButton
-													value='shareSettings'
-													className='ion-text-capitalize'
-													onClick={() => {
-														zNavigatePushRoute(
-															createRedirectRoute({
-																url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-																params: [
-																	CONSTANTS.RouteParams.workspace.workspaceId,
-																	CONSTANTS.RouteParams.linkInBio.linkInBioId,
-																],
-																values: [workspaceId, linkInBioId],
-																routeSearchParams: {
-																	page: ZLinkInBioPageEnum.shareSettings,
-																},
-															})
-														);
-													}}
-												>
-													<ZIonLabel className='font-bold letter-spacing-0px'>
-														Share settings
-													</ZIonLabel>
-												</ZIonSegmentButton>
-
-												<ZIonSegmentButton
-													value='pageAnalytics'
-													className='ion-text-capitalize'
-													onClick={() => {
-														zNavigatePushRoute(
-															createRedirectRoute({
-																url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-																params: [
-																	CONSTANTS.RouteParams.workspace.workspaceId,
-																	CONSTANTS.RouteParams.linkInBio.linkInBioId,
-																],
-																values: [workspaceId, linkInBioId],
-																routeSearchParams: {
-																	page: ZLinkInBioPageEnum.pageAnalytics,
-																},
-															})
-														);
-													}}
-												>
-													<ZIonLabel className='font-bold letter-spacing-0px'>
-														Page Analytics
-													</ZIonLabel>
-												</ZIonSegmentButton>
-
-												<ZIonSegmentButton
-													value='lead'
-													className='ion-text-capitalize'
-													onClick={() => {
-														zNavigatePushRoute(
-															createRedirectRoute({
-																url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-																params: [
-																	CONSTANTS.RouteParams.workspace.workspaceId,
-																	CONSTANTS.RouteParams.linkInBio.linkInBioId,
-																],
-																values: [workspaceId, linkInBioId],
-																routeSearchParams: {
-																	page: ZLinkInBioPageEnum.lead,
-																},
-															})
-														);
-													}}
-												>
-													<ZIonLabel className='font-bold letter-spacing-0px'>
-														Lead
-													</ZIonLabel>
-												</ZIonSegmentButton>
-
-												<ZIonSegmentButton
-													value='block-analytics'
-													className='ion-text-capitalize'
-												>
-													<ZIonLabel className='font-bold letter-spacing-0px'>
-														Block Analytics
-													</ZIonLabel>
-												</ZIonSegmentButton>
-											</ZIonSegment>
-										</ZIonCol>
-
-										<ZIonCol className='flex ion-align-items-center ion-justify-content-end'>
-											<ZIonButton
-												className='ion-text-lowercase ion-no-margin me-4'
-												color='danger'
-											>
-												<ZIonText className='ion-no-padding zaions__fs_16'>
-													errors
-												</ZIonText>
-											</ZIonButton>
-											<ZIonButton className='ion-text-capitalize ion-no-margin'>
-												<ZIonText className='ion-no-padding zaions__fs_16'>
-													Upgrade
-												</ZIonText>
-											</ZIonButton>
-										</ZIonCol>
-									</ZIonRow>
-								</ZIonGrid>
-							</ZIonHeader>
+												</ZIonButton>
+												<ZIonButton className='ion-text-capitalize ion-no-margin'>
+													<ZIonText className='ion-no-padding zaions__fs_16'>
+														Upgrade
+													</ZIonText>
+												</ZIonButton>
+											</ZIonCol>
+										</ZIonRow>
+									</ZIonGrid>
+								</ZIonHeader>
+							) : (
+								<ZHeaderSkeleton />
+							)}
 
 							{/* Design  */}
 							{linkInBioFromPageState.page === ZLinkInBioPageEnum.design && (
@@ -576,5 +603,116 @@ const ZaionsLinkInBioForm: React.FC = () => {
 		</ZaionsIonPage>
 	);
 };
+
+const ZHeaderSkeleton: React.FC = React.memo(() => {
+	return (
+		<ZIonHeader className='ion-padding-horizontal'>
+			<ZIonGrid className='ion-no-padding'>
+				<ZIonRow>
+					<ZIonCol className='flex ion-align-items-center' size='3'>
+						<ZIonButton
+							className='ion-text-capitalize ion-no-margin'
+							color='secondary'
+						>
+							<ZIonText className='ion-no-padding zaions__fs_16'>
+								<ZIonSkeletonText width='45px' height='20px' animated={true} />
+							</ZIonText>
+						</ZIonButton>
+
+						<div className='ms-2 w-[71%]'>
+							<div className='flex w-full zaions__fs_18 zaions__cursor_pointer ms-2'>
+								<ZIonTitle className='me-1 w-min max-w-max overflow-hidden ion-no-padding text-md'>
+									<ZIonSkeletonText width='100px' height='25px' />
+								</ZIonTitle>
+								<ZIonTitle className='me-1 w-min max-w-max overflow-hidden ion-no-padding text-md'>
+									<ZIonSkeletonText width='1.5rem' height='1.5rem' />
+								</ZIonTitle>
+							</div>
+						</div>
+					</ZIonCol>
+
+					<ZIonCol size='6'>
+						<ZIonSegment disabled={true}>
+							<ZIonSegmentButton value='design' className='ion-text-capitalize'>
+								<ZIonLabel className='font-bold letter-spacing-0px'>
+									<ZIonSkeletonText
+										width='50px'
+										height='20px'
+										animated={true}
+									/>
+								</ZIonLabel>
+							</ZIonSegmentButton>
+
+							<ZIonSegmentButton
+								value='shareSettings'
+								className='ion-text-capitalize'
+							>
+								<ZIonLabel className='font-bold letter-spacing-0px'>
+									<ZIonSkeletonText
+										width='85px'
+										height='20px'
+										animated={true}
+									/>
+								</ZIonLabel>
+							</ZIonSegmentButton>
+
+							<ZIonSegmentButton
+								value='pageAnalytics'
+								className='ion-text-capitalize'
+							>
+								<ZIonLabel className='font-bold letter-spacing-0px'>
+									<ZIonSkeletonText
+										width='95px'
+										height='20px'
+										animated={true}
+									/>
+								</ZIonLabel>
+							</ZIonSegmentButton>
+
+							<ZIonSegmentButton value='lead' className='ion-text-capitalize'>
+								<ZIonLabel className='font-bold letter-spacing-0px'>
+									<ZIonSkeletonText
+										width='40px'
+										height='20px'
+										animated={true}
+									/>
+								</ZIonLabel>
+							</ZIonSegmentButton>
+
+							<ZIonSegmentButton
+								value='block-analytics'
+								className='ion-text-capitalize'
+							>
+								<ZIonLabel className='font-bold letter-spacing-0px'>
+									<ZIonSkeletonText
+										width='100px'
+										height='20px'
+										animated={true}
+									/>
+								</ZIonLabel>
+							</ZIonSegmentButton>
+						</ZIonSegment>
+					</ZIonCol>
+
+					<ZIonCol className='flex ion-align-items-center ion-justify-content-end'>
+						<ZIonButton
+							className='ion-text-lowercase ion-no-margin me-4'
+							color='danger'
+						>
+							<ZIonText className='ion-no-padding zaions__fs_16'>
+								<ZIonSkeletonText width='45px' height='20px' animated={true} />
+							</ZIonText>
+						</ZIonButton>
+						<ZIonButton className='ion-text-capitalize ion-no-margin'>
+							<ZIonText className='ion-no-padding zaions__fs_16'>
+								<ZIonSkeletonText width='65px' height='20px' animated={true} />
+							</ZIonText>
+						</ZIonButton>
+					</ZIonCol>
+				</ZIonRow>
+			</ZIonGrid>
+		</ZIonHeader>
+	);
+});
 
 export default ZaionsLinkInBioForm;

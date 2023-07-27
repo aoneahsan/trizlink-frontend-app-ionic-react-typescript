@@ -31,6 +31,7 @@ import {
 	ZIonList,
 	ZIonCheckbox,
 	ZIonTitle,
+	ZIonSkeletonText,
 } from '@/components/ZIonComponents';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
@@ -39,13 +40,16 @@ import { ZIonButton } from '@/components/ZIonComponents';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import {
 	createRedirectRoute,
+	extractInnerData,
 	replaceParams,
 	zConsoleError,
 } from '@/utils/helpers';
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import {
+	useZGetRQCacheData,
 	useZRQDeleteRequest,
 	useZRQGetRequest,
+	useZUpdateRQCacheData,
 } from '@/ZaionsHooks/zreactquery-hooks';
 import {
 	useZIonAlert,
@@ -70,15 +74,24 @@ import {
 import CONSTANTS from '@/utils/constants';
 import ZCan from '@/components/Can';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import { reportCustomError } from '@/utils/customErrorType';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { showSuccessNotification } from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
 // import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 
 // Styles
 
-const ZaionsLinkInBioLinksTable = () => {
+const ZaionsLinkInBioLinksTable: React.FC<{
+	showSkeleton?: boolean;
+}> = ({ showSkeleton = false }) => {
 	const [compState, setCompState] = useState<{
 		selectedLinkInBioLinkId?: string;
 		showActionPopover: boolean;
 	}>({ showActionPopover: false });
+
+	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
 	const setLinkInBiosStateAtom = useSetRecoilState(LinkInBiosRStateAtom);
 
@@ -96,13 +109,12 @@ const ZaionsLinkInBioLinksTable = () => {
 	}>();
 
 	const actionsPopoverRef = useRef<HTMLIonPopoverElement>(null);
-	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
 	const { presentZIonAlert } = useZIonAlert();
 	const { zNavigatePushRoute } = useZNavigate();
-	const { mutate: deleteLinkInBioLinkMutate } = useZRQDeleteRequest(
+	const { mutateAsync: deleteLinkInBioLinkMutateAsync } = useZRQDeleteRequest(
 		API_URL_ENUM.linkInBio_update_delete,
-		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN, workspaceId]
+		[]
 	);
 
 	const { data: getLinkInBioLinkData } = useZRQGetRequest<LinkInBioType[]>({
@@ -161,7 +173,7 @@ const ZaionsLinkInBioLinksTable = () => {
 				await presentZIonErrorAlert();
 			}
 		} catch (error) {
-			console.error(error);
+			reportCustomError(error);
 		}
 	};
 
@@ -171,14 +183,8 @@ const ZaionsLinkInBioLinksTable = () => {
 				compState.selectedLinkInBioLinkId?.trim() &&
 				_FilteredLinkInBioLinksDataSelector?.length
 			) {
-				const selectedLinkInBioLinkId =
-					_FilteredLinkInBioLinksDataSelector?.find(
-						(el) => el.id === compState.selectedLinkInBioLinkId
-					);
 				await presentZIonAlert({
-					header: `Delete Link-in-bio "${
-						selectedLinkInBioLinkId?.title || ''
-					}"`,
+					header: `Delete Link-in-bio`,
 					subHeader: 'Remove Link-in-bio from user account.',
 					message: 'Are you sure you want to delete this Link-in-bio?',
 					buttons: [
@@ -204,81 +210,122 @@ const ZaionsLinkInBioLinksTable = () => {
 	};
 
 	const removeLinkInBio = async () => {
-		await presentZIonLoader('Deleting Link-in-bio...');
 		try {
 			if (
 				compState.selectedLinkInBioLinkId?.trim() &&
 				_FilteredLinkInBioLinksDataSelector?.length
 			) {
 				if (compState.selectedLinkInBioLinkId) {
-					deleteLinkInBioLinkMutate({
+					const _response = await deleteLinkInBioLinkMutateAsync({
 						itemIds: [workspaceId, compState.selectedLinkInBioLinkId],
 						urlDynamicParts: [
 							CONSTANTS.RouteParams.workspace.workspaceId,
 							CONSTANTS.RouteParams.linkInBio.linkInBioId,
 						],
 					});
+
+					if (_response) {
+						const _data = extractInnerData<{ success: boolean }>(
+							_response,
+							extractInnerDataOptionsEnum.createRequestResponseItem
+						);
+
+						if (_data && _data.success) {
+							// getting all the LinkInBios from RQ cache.
+							const _oldLinkInBios =
+								extractInnerData<LinkInBioType[]>(
+									getRQCDataHandler<LinkInBioType[]>({
+										key: [
+											CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+											workspaceId,
+										],
+									}) as LinkInBioType[],
+									extractInnerDataOptionsEnum.createRequestResponseItems
+								) || [];
+
+							// removing deleted LinkInBios from cache.
+							const _updatedLinkInBios = _oldLinkInBios.filter(
+								(el) => el.id !== compState.selectedLinkInBioLinkId
+							);
+
+							console.log({ _oldLinkInBios, _updatedLinkInBios });
+
+							// Updating data in RQ cache.
+							await updateRQCDataHandler<LinkInBioType[] | undefined>({
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+									workspaceId,
+								],
+								data: _updatedLinkInBios as LinkInBioType[],
+								id: '',
+								extractType: ZRQGetRequestExtractEnum.extractItems,
+								updateHoleData: true,
+							});
+
+							showSuccessNotification(MESSAGES.GENERAL.LINK_IN_BIO.DELETE);
+						}
+					}
 				}
-				await dismissZIonLoader();
 			} else {
 				void presentZIonErrorAlert();
 			}
 		} catch (error) {
-			console.error(error);
+			reportCustomError(error);
 		}
 	};
 
 	return (
 		<>
-			<ZIonRow className='px-4 pt-4 pb-1 mt-5 zaions__bg_white ion-margin-bottom'>
-				<ZIonCol>
-					<ZTable>
-						<ZTableTHead>
-							<ZTableRow>
-								<ZTableHeadCol>
-									<ZIonCheckbox />
-								</ZTableHeadCol>
-								<ZTableHeadCol>Title</ZTableHeadCol>
-								<ZTableHeadCol>Clicks</ZTableHeadCol>
-								<ZTableHeadCol>Date</ZTableHeadCol>
-								<ZTableHeadCol>Action</ZTableHeadCol>
-							</ZTableRow>
-						</ZTableTHead>
-						<ZTableTBody>
-							{_FilteredLinkInBioLinksDataSelector &&
-								_FilteredLinkInBioLinksDataSelector?.map((el) => {
-									return (
-										<ZTableRow key={el.id}>
-											<ZTableRowCol className='ion-text-center'>
-												<ZIonCheckbox />
-											</ZTableRowCol>
-											<ZTableRowCol className='ion-text-center'>
-												{el.title}
-											</ZTableRowCol>
-											<ZTableRowCol className='ion-text-center'>
-												{el.totalClicks || 0}
-											</ZTableRowCol>
-											<ZTableRowCol className='ion-text-center'>
-												{el.createdAt}
-											</ZTableRowCol>
-											<ZTableRowCol className='ion-text-center'>
-												<ZIonButton
-													fill='clear'
-													color={'dark'}
-													onClick={(_event) => {
-														console.log({ selectedLinkInBioLinkId: el });
-														setCompState((oldVal) => ({
-															...oldVal,
-															selectedLinkInBioLinkId: el.id,
-															showActionPopover: true,
-														}));
-														showActionsPopover(_event);
-													}}
-												>
-													<ZIonIcon icon={ellipsisVerticalOutline} />
-												</ZIonButton>
-											</ZTableRowCol>
-											{/* <ZTableRowCol>
+			{!showSkeleton && (
+				<ZIonRow className='px-4 pt-4 pb-1 mt-5 zaions__bg_white ion-margin-bottom'>
+					<ZIonCol>
+						<ZTable>
+							<ZTableTHead>
+								<ZTableRow>
+									<ZTableHeadCol>
+										<ZIonCheckbox />
+									</ZTableHeadCol>
+									<ZTableHeadCol>Title</ZTableHeadCol>
+									<ZTableHeadCol>Clicks</ZTableHeadCol>
+									<ZTableHeadCol>Date</ZTableHeadCol>
+									<ZTableHeadCol>Action</ZTableHeadCol>
+								</ZTableRow>
+							</ZTableTHead>
+							<ZTableTBody>
+								{_FilteredLinkInBioLinksDataSelector &&
+									_FilteredLinkInBioLinksDataSelector?.map((el) => {
+										return (
+											<ZTableRow key={el.id}>
+												<ZTableRowCol className='ion-text-center'>
+													<ZIonCheckbox />
+												</ZTableRowCol>
+												<ZTableRowCol className='ion-text-center'>
+													{el.linkInBioTitle}
+												</ZTableRowCol>
+												<ZTableRowCol className='ion-text-center'>
+													{el.totalClicks || 0}
+												</ZTableRowCol>
+												<ZTableRowCol className='ion-text-center'>
+													{el.createdAt}
+												</ZTableRowCol>
+												<ZTableRowCol className='ion-text-center'>
+													<ZIonButton
+														fill='clear'
+														color={'dark'}
+														onClick={(_event) => {
+															console.log({ selectedLinkInBioLinkId: el });
+															setCompState((oldVal) => ({
+																...oldVal,
+																selectedLinkInBioLinkId: el.id,
+																showActionPopover: true,
+															}));
+															showActionsPopover(_event);
+														}}
+													>
+														<ZIonIcon icon={ellipsisVerticalOutline} />
+													</ZIonButton>
+												</ZTableRowCol>
+												{/* <ZTableRowCol>
                         {(JSON.parse(el?.pixelIds as string) as string[])
                           ?.length ? (
                           <>
@@ -342,30 +389,34 @@ const ZaionsLinkInBioLinksTable = () => {
                           {ZaionsBusinessDetails.WebsiteUrl}
                         </ZIonRouterLink>{' '}
                       </ZTableRowCol> */}
-										</ZTableRow>
-									);
-								})}
-						</ZTableTBody>
-					</ZTable>
-					{!_FilteredLinkInBioLinksDataSelector?.length && (
-						<ZIonCol className='ion-text-center'>
-							<ZIonTitle className='mt-10'>
-								<ZIonIcon
-									icon={fileTrayFullOutline}
-									className='mx-auto'
-									size='large'
-									color='medium'
-								/>
-							</ZIonTitle>
-							<ZIonTitle color='medium'>
-								No Link-in-bio's founds
-								{(folderId !== null || folderId !== 'all') && ' In this Folder'}
-								. please create a Link-in-bio.
-							</ZIonTitle>
-						</ZIonCol>
-					)}
-				</ZIonCol>
-			</ZIonRow>
+											</ZTableRow>
+										);
+									})}
+							</ZTableTBody>
+						</ZTable>
+						{!_FilteredLinkInBioLinksDataSelector?.length && (
+							<ZIonCol className='ion-text-center'>
+								<ZIonTitle className='mt-10'>
+									<ZIonIcon
+										icon={fileTrayFullOutline}
+										className='mx-auto'
+										size='large'
+										color='medium'
+									/>
+								</ZIonTitle>
+								<ZIonTitle color='medium'>
+									No Link-in-bio's founds
+									{(folderId !== null || folderId !== 'all') &&
+										' In this Folder'}
+									. please create a Link-in-bio.
+								</ZIonTitle>
+							</ZIonCol>
+						)}
+					</ZIonCol>
+				</ZIonRow>
+			)}
+
+			{showSkeleton && <ZaionsShortLinkTableSkeleton />}
 
 			{/* Popovers */}
 			<IonPopover
@@ -432,5 +483,63 @@ const ZaionsLinkInBioLinksTable = () => {
 		</>
 	);
 };
+
+const ZaionsShortLinkTableSkeleton: React.FC = React.memo(() => {
+	return (
+		<ZIonRow className='px-4 pt-2 pb-1 mx-1 mt-5 overflow-y-scroll zaions_pretty_scrollbar ion-margin-bottom'>
+			<ZIonCol>
+				<ZTable>
+					<ZTableTHead>
+						<ZTableRow>
+							<ZTableHeadCol>
+								<ZIonSkeletonText width='20px' height='20px' animated={true} />
+							</ZTableHeadCol>
+							<ZTableHeadCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableHeadCol>
+							<ZTableHeadCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableHeadCol>
+							<ZTableHeadCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableHeadCol>
+							<ZTableHeadCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableHeadCol>
+						</ZTableRow>
+					</ZTableTHead>
+					<ZTableTBody>
+						<ZTableRow>
+							<ZTableRowCol>
+								<ZIonSkeletonText width='20px' height='20px' animated={true} />
+							</ZTableRowCol>
+							<ZTableRowCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableRowCol>
+							<ZTableRowCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableRowCol>
+							<ZTableRowCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableRowCol>
+							<ZTableRowCol>
+								<ZIonText
+									color='primary'
+									className='mt-1 zaions__cursor_pointer'
+								>
+									<ZIonSkeletonText
+										width='40px'
+										height='17px'
+										animated={true}
+									/>
+								</ZIonText>
+							</ZTableRowCol>
+						</ZTableRow>
+					</ZTableTBody>
+				</ZTable>
+			</ZIonCol>
+		</ZIonRow>
+	);
+});
 
 export default ZaionsLinkInBioLinksTable;

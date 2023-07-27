@@ -92,8 +92,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 	const { values, errors, touched, handleChange, handleBlur, setFieldValue } =
 		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
-	const { isXlScale, isLgScale, isMdScale, isSmScale, isXsScale } =
-		useZMediaQueryScale();
+	const { isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
 
 	const [newShortLinkTypeOptionDataAtom, setNewShortLinkTypeOptionDataAtom] =
 		useRecoilState(NewShortLinkSelectTypeOption);
@@ -484,13 +483,25 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 };
 
 const ZaionsShortUrlOptionFieldsSkeleton = () => {
+	const { isXlScale, isLgScale, isMdScale, isSmScale, isXsScale } =
+		useZMediaQueryScale();
 	return (
 		<ZIonGrid className='mx-3 mt-2'>
 			<ZIonRow className='px-4 py-4 rounded zaions__bg_white ion-align-items-center'>
-				<ZIonCol className='flex pt-2 ion-align-items-start'>
+				<ZIonCol
+					className={classNames({
+						'flex pt-2 ion-align-items-start': true,
+						'flex-col': !isMdScale,
+					})}
+				>
 					<ZIonButton
 						fill='default'
-						className='flex pt-2 text-transform-initial ion-no-margin ion-align-items-center ion-justify-content-center'
+						className={classNames({
+							'flex text-transform-initial ion-no-margin ion-align-items-center ion-justify-content-center':
+								true,
+							'mb-4': !isMdScale,
+							'w-full': !isSmScale,
+						})}
 						height='39px'
 					>
 						<ZIonSkeletonText
@@ -523,11 +534,28 @@ const ZaionsShortUrlOptionFieldsSkeleton = () => {
 						height='40px'
 					></ZIonSkeletonText>
 
-					<ZIonButton fill='clear' className='pt-2 ion-no-margin' height='39px'>
+					<ZIonButton
+						fill='clear'
+						className={classNames({
+							'ion-no-margin normal-case': true,
+							'mt-3': !isMdScale,
+							'w-full': !isSmScale,
+						})}
+						height='39px'
+					>
+						{!isMdScale && (
+							<ZIonText className='me-2'>
+								<ZIonSkeletonText
+									animated={true}
+									width='80px'
+									height='17px'
+								></ZIonSkeletonText>
+							</ZIonText>
+						)}
 						<ZIonSkeletonText
 							animated={true}
-							width='25px'
-							height='25px'
+							width={isMdScale ? '25px' : !isMdScale ? '17px' : '25px'}
+							height={isMdScale ? '25px' : !isMdScale ? '17px' : '25px'}
 						></ZIonSkeletonText>
 					</ZIonButton>
 				</ZIonCol>

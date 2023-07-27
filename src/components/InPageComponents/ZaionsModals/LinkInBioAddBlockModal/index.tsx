@@ -20,7 +20,11 @@ import {
 	ZIonText,
 } from '@/components/ZIonComponents';
 
-import { useZRQCreateRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+	useZGetRQCacheData,
+	useZRQCreateRequest,
+	useZUpdateRQCacheData,
+} from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -59,6 +63,7 @@ import { LinkInBioBlocksRState } from '@/ZaionsStore/UserDashboard/LinkInBio/Lin
 import { useSetRecoilState } from 'recoil';
 import { closeOutline, toggleOutline } from 'ionicons/icons';
 import { LinkInBioBlocksDefaultData } from '@/data/UserDashboard/LinkInBio/Blocks/index.data';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Style files Imports go down
@@ -99,17 +104,19 @@ const ZLinkInBioAddBlockModal: React.FC<{
 	workspaceId,
 	zNavigatePushRoute,
 }) => {
+	//#region Custom Hooks.
+	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+	//#endregion
+
 	const setLinkInBioBlocksState = useSetRecoilState(LinkInBioBlocksRState);
 
+	//#region APIS.
 	// API to create new block belong to this link-in-bio.
 	const { mutateAsync: createLinkInBioMutate } =
 		useZRQCreateRequest<LinkInBioBlockFromType>({
 			_url: API_URL_ENUM.linkInBioBlock_create_list,
-			_queriesKeysToInvalidate: [
-				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-				workspaceId,
-				linkInBioId,
-			],
+			_queriesKeysToInvalidate: [],
 			authenticated: true,
 			_itemsIds: [workspaceId, linkInBioId],
 			_urlDynamicParts: [
@@ -117,6 +124,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
 				CONSTANTS.RouteParams.linkInBio.linkInBioId,
 			],
 		});
+	//#endregion
 
 	const addBlockHandler = async (_position: LinkInBioBlocksPositionEnum) => {
 		try {
@@ -135,54 +143,90 @@ const ZLinkInBioAddBlockModal: React.FC<{
 						extractInnerDataOptionsEnum.createRequestResponseItem
 					);
 
-					if (_position === LinkInBioBlocksPositionEnum.top) {
-						const _newLinkInBioBlock: LinkInBioBlockFromType = {
-							id: _data?.id,
-							blockType:
-								LinkInBioBlockEnum[_data?.blockType as LinkInBioBlockEnum],
-							blockContent:
-								_data?.blockContent as LinkInBioSingleBlockContentType,
-							// icon: 'string',
-							isActive: _data?.isActive,
-							orderNo: '-1', // as in API we always set orderNo from 0, so setting it, -1 mean this will have the lowest orderNo
-						};
-						setLinkInBioBlocksState((oldValues) => [
-							_newLinkInBioBlock,
-							...oldValues,
-						]);
-					} else if (_position === LinkInBioBlocksPositionEnum.bottom) {
-						const _newLinkInBioBlock: LinkInBioBlockFromType = {
-							id: _data?.id,
-							blockType:
-								LinkInBioBlockEnum[_data?.blockType as LinkInBioBlockEnum],
-							blockContent:
-								_data?.blockContent as LinkInBioSingleBlockContentType, // icon: 'string',
-							isActive: _data?.isActive,
-							orderNo: '100000', // as in API we always set orderNo from 0, so setting it, 100000 mean this will have the highest orderNo (hopefully)
-						};
-						setLinkInBioBlocksState((oldValues) => [
-							...oldValues,
-							_newLinkInBioBlock,
-						]);
-					}
-
-					// after dismissing redirecting to blockForm
-					zNavigatePushRoute &&
-						zNavigatePushRoute(
-							createRedirectRoute({
-								url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-								params: [
-									CONSTANTS.RouteParams.workspace.workspaceId,
-									CONSTANTS.RouteParams.linkInBio.linkInBioId,
+					if (_data && _data.id) {
+						const _oldBlocks = extractInnerData<LinkInBioBlockFromType[]>(
+							getRQCDataHandler({
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
+									workspaceId,
+									linkInBioId,
 								],
-								values: [workspaceId, linkInBioId],
-								routeSearchParams: {
-									page: ZLinkInBioPageEnum.design,
-									step: ZLinkInBioRHSComponentEnum.blockForm,
-									blockId: _data?.id || '',
-								},
-							})
+							}),
+							extractInnerDataOptionsEnum.createRequestResponseItems
 						);
+
+						if (_oldBlocks) {
+							let _updatedBlocks = [..._oldBlocks];
+
+							if (_position === LinkInBioBlocksPositionEnum.top && _oldBlocks) {
+								_updatedBlocks = [_data, ..._oldBlocks];
+
+								//
+								const _newLinkInBioBlock: LinkInBioBlockFromType = {
+									id: _data?.id,
+									blockType:
+										LinkInBioBlockEnum[_data?.blockType as LinkInBioBlockEnum],
+									blockContent:
+										_data?.blockContent as LinkInBioSingleBlockContentType,
+									// icon: 'string',
+									isActive: _data?.isActive,
+									orderNo: '-1', // as in API we always set orderNo from 0, so setting it, -1 mean this will have the lowest orderNo
+								};
+
+								//
+								setLinkInBioBlocksState((oldValues) => [
+									_newLinkInBioBlock,
+									...oldValues,
+								]);
+							} else if (_position === LinkInBioBlocksPositionEnum.bottom) {
+								_updatedBlocks = [..._oldBlocks, _data];
+
+								//
+								const _newLinkInBioBlock: LinkInBioBlockFromType = {
+									id: _data?.id,
+									blockType:
+										LinkInBioBlockEnum[_data?.blockType as LinkInBioBlockEnum],
+									blockContent:
+										_data?.blockContent as LinkInBioSingleBlockContentType, // icon: 'string',
+									isActive: _data?.isActive,
+									orderNo: '100000', // as in API we always set orderNo from 0, so setting it, 100000 mean this will have the highest orderNo (hopefully)
+								};
+								setLinkInBioBlocksState((oldValues) => [
+									...oldValues,
+									_newLinkInBioBlock,
+								]);
+							}
+
+							await updateRQCDataHandler({
+								id: '',
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
+									workspaceId,
+									linkInBioId,
+								],
+								data: _updatedBlocks,
+								updateHoleData: true,
+								extractType: ZRQGetRequestExtractEnum.extractItems,
+							});
+						}
+						// after dismissing redirecting to blockForm
+						zNavigatePushRoute &&
+							zNavigatePushRoute(
+								createRedirectRoute({
+									url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+									params: [
+										CONSTANTS.RouteParams.workspace.workspaceId,
+										CONSTANTS.RouteParams.linkInBio.linkInBioId,
+									],
+									values: [workspaceId, linkInBioId],
+									routeSearchParams: {
+										page: ZLinkInBioPageEnum.design,
+										step: ZLinkInBioRHSComponentEnum.blockForm,
+										blockId: _data?.id || '',
+									},
+								})
+							);
+					}
 
 					dismissZIonModal();
 				}

@@ -21,6 +21,7 @@ import {
 
 // Global Constants
 import {
+	extractInnerData,
 	formatApiRequestErrorForFormikFormField,
 	zStringify,
 } from '@/utils/helpers';
@@ -36,10 +37,12 @@ import { folderState, FormMode } from '@/types/AdminPanel/index.type';
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
 import { FormikSetErrorsType, resetFormType } from '@/types/ZaionsFormik.type';
 import {
+	useZGetRQCacheData,
 	useZRQCreateRequest,
 	useZRQUpdateRequest,
+	useZUpdateRQCacheData,
 } from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import { ZIonButton } from '@/components/ZIonComponents';
 import { showSuccessNotification } from '@/utils/notification';
 import { reportCustomError, ZCustomError } from '@/utils/customErrorType';
@@ -48,6 +51,9 @@ import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { AxiosError } from 'axios';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
+import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { LinkFolderType } from '@/types/AdminPanel/linksType';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 // Styles
 
@@ -57,16 +63,14 @@ const ZaionsAddNewFolder: React.FC<{
 	workspaceId: string;
 }> = ({ dismissZIonModal, state = folderState.shortlink, workspaceId }) => {
 	const appSettings = useRecoilValue(ZaionsAppSettingsRState);
+	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
 	const [folderFormState, setFolderFormState] = useRecoilState(FolderFormState);
 
 	const { mutateAsync: createNewFolder } = useZRQCreateRequest({
 		_url: API_URL_ENUM.folders_create_list,
-		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-			workspaceId,
-			state,
-		],
+		_queriesKeysToInvalidate: [],
 		_itemsIds: [workspaceId],
 		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 	});
@@ -84,11 +88,7 @@ const ZaionsAddNewFolder: React.FC<{
 
 	const { mutateAsync: updateFolder } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.folders_update_delete,
-		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-			workspaceId,
-			state,
-		],
+		_queriesKeysToInvalidate: [],
 	});
 
 	/**
@@ -103,25 +103,84 @@ const ZaionsAddNewFolder: React.FC<{
 		try {
 			// ADD API Request to add this new Folder to user account in DB.
 			if (folderFormState.formMode === FormMode.ADD) {
-				await createNewFolder(value);
+				const _response: unknown | ZLinkMutateApiType<LinkFolderType> =
+					await createNewFolder(value);
 
-				showSuccessNotification(
-					MESSAGES.GENERAL.FOLDER.NEW_FOLDER_CREATED_SUCCEED_MESSAGE
-				);
+				if (_response) {
+					const _data = extractInnerData<LinkFolderType>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (_data && _data.id) {
+						const _oldShortLinks =
+							extractInnerData<LinkFolderType[]>(
+								getRQCDataHandler<LinkFolderType[]>({
+									key: [
+										CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+										workspaceId,
+										state,
+									],
+								}) as LinkFolderType[],
+								extractInnerDataOptionsEnum.createRequestResponseItems
+							) || [];
+
+						// added shortLink to all shortLinks data in cache.
+						const _updatedShortLinks = [..._oldShortLinks, _data];
+
+						// Updating all shortLinks data in RQ cache.
+						await updateRQCDataHandler<LinkFolderType[] | undefined>({
+							key: [
+								CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+								workspaceId,
+								state,
+							],
+							data: _updatedShortLinks as LinkFolderType[],
+							id: '',
+							extractType: ZRQGetRequestExtractEnum.extractItems,
+							updateHoleData: true,
+						});
+
+						showSuccessNotification(
+							MESSAGES.GENERAL.FOLDER.NEW_FOLDER_CREATED_SUCCEED_MESSAGE
+						);
+					}
+				}
 			} else if (folderFormState.formMode === FormMode.EDIT) {
 				if (folderFormState.id) {
-					await updateFolder({
-						itemIds: [workspaceId, folderFormState.id],
-						urlDynamicParts: [
-							CONSTANTS.RouteParams.workspace.workspaceId,
-							':folderId',
-						],
-						requestData: value,
-					});
+					const _response: unknown | ZLinkMutateApiType<LinkFolderType> =
+						await updateFolder({
+							itemIds: [workspaceId, folderFormState.id],
+							urlDynamicParts: [
+								CONSTANTS.RouteParams.workspace.workspaceId,
+								CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+							],
+							requestData: value,
+						});
 
-					showSuccessNotification(
-						MESSAGES.GENERAL.FOLDER.FOLDER_UPDATED_SUCCEED_MESSAGE
-					);
+					if (_response) {
+						const _data = extractInnerData<LinkFolderType>(
+							_response,
+							extractInnerDataOptionsEnum.createRequestResponseItem
+						);
+
+						if (_data && _data.id) {
+							// Updating current short link in cache in RQ cache.
+							await updateRQCDataHandler<LinkFolderType | undefined>({
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+									workspaceId,
+									state,
+								],
+								data: { ..._data },
+								id: _data.id,
+							});
+						}
+
+						showSuccessNotification(
+							MESSAGES.GENERAL.FOLDER.FOLDER_UPDATED_SUCCEED_MESSAGE
+						);
+					}
 				} else {
 					throw new ZCustomError({ message: 'Not a valid folder id!' });
 				}

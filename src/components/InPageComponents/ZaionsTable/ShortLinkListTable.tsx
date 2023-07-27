@@ -32,6 +32,7 @@ import {
 	ZIonList,
 	ZIonCheckbox,
 	ZIonTitle,
+	ZIonSkeletonText,
 } from '@/components/ZIonComponents';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
@@ -39,15 +40,10 @@ import { ZIonButton } from '@/components/ZIonComponents';
 // Global Constants
 import CONSTANTS, { ZaionsBusinessDetails } from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import {
-	extractInnerData,
-	replaceParams,
-	replaceRouteParams,
-} from '@/utils/helpers';
+import { extractInnerData, replaceRouteParams } from '@/utils/helpers';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import {
 	useZGetRQCacheData,
-	useZInvalidateReactQueries,
 	useZRQDeleteRequest,
 	useZRQGetRequest,
 	useZUpdateRQCacheData,
@@ -76,7 +72,6 @@ import ZCan from '@/components/Can';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import { FormMode } from '@/types/AdminPanel/index.type';
 import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
-import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import {
 	showErrorNotification,
 	showSuccessNotification,
@@ -86,7 +81,9 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 // Styles
 
-const ZaionsShortLinkTable = () => {
+const ZaionsShortLinkTable: React.FC<{
+	showSkeleton?: boolean;
+}> = ({ showSkeleton = false }) => {
 	// #region Component state.
 	const [compState, setCompState] = useState<{
 		selectedShortLinkId?: string;
@@ -316,35 +313,36 @@ const ZaionsShortLinkTable = () => {
 
 	return (
 		<>
-			<ZIonRow className='px-4 pt-2 pb-1 mx-1 mt-5 overflow-y-scroll zaions_pretty_scrollbar ion-margin-bottom'>
-				<ZIonCol>
-					<ZTable>
-						<ZTableTHead>
-							<ZTableRow>
-								<ZTableHeadCol>
-									<ZIonCheckbox />
-								</ZTableHeadCol>
-								<ZTableHeadCol>Title</ZTableHeadCol>
-								<ZTableHeadCol>Clicks</ZTableHeadCol>
-								<ZTableHeadCol>Data</ZTableHeadCol>
-								{/* <ZTableHeadCol>Pixels</ZTableHeadCol> */}
-								<ZTableHeadCol>Note</ZTableHeadCol>
-								<ZTableHeadCol>Url</ZTableHeadCol>
-								<ZTableHeadCol>Link To Share</ZTableHeadCol>
-								<ZTableHeadCol>Action</ZTableHeadCol>
-							</ZTableRow>
-						</ZTableTHead>
-						<ZTableTBody>
-							{_FilteredShortLinkDataSelector &&
-								_FilteredShortLinkDataSelector?.map((el) => (
-									<ZTableRow key={el.id}>
-										<ZTableRowCol>
-											<ZIonCheckbox />
-										</ZTableRowCol>
-										<ZTableRowCol>{el.title}</ZTableRowCol>
-										<ZTableRowCol>{el.totalClicks || 0}</ZTableRowCol>
-										<ZTableRowCol>{el.createdAt}</ZTableRowCol>
-										{/* <ZTableRowCol>
+			{!showSkeleton && (
+				<ZIonRow className='px-4 pt-2 pb-1 mx-1 mt-5 ion-margin-bottom'>
+					<ZIonCol>
+						<ZTable>
+							<ZTableTHead>
+								<ZTableRow>
+									<ZTableHeadCol>
+										<ZIonCheckbox />
+									</ZTableHeadCol>
+									<ZTableHeadCol>Title</ZTableHeadCol>
+									<ZTableHeadCol>Clicks</ZTableHeadCol>
+									<ZTableHeadCol>Data</ZTableHeadCol>
+									{/* <ZTableHeadCol>Pixels</ZTableHeadCol> */}
+									<ZTableHeadCol>Note</ZTableHeadCol>
+									<ZTableHeadCol>Url</ZTableHeadCol>
+									<ZTableHeadCol>Link To Share</ZTableHeadCol>
+									<ZTableHeadCol>Action</ZTableHeadCol>
+								</ZTableRow>
+							</ZTableTHead>
+							<ZTableTBody>
+								{_FilteredShortLinkDataSelector &&
+									_FilteredShortLinkDataSelector?.map((el) => (
+										<ZTableRow key={el.id}>
+											<ZTableRowCol>
+												<ZIonCheckbox />
+											</ZTableRowCol>
+											<ZTableRowCol>{el.title}</ZTableRowCol>
+											<ZTableRowCol>{el.totalClicks || 0}</ZTableRowCol>
+											<ZTableRowCol>{el.createdAt}</ZTableRowCol>
+											{/* <ZTableRowCol>
 											{(JSON.parse(el?.pixelIds as string) as string[])
 												?.length ? (
 												<>
@@ -377,81 +375,85 @@ const ZaionsShortLinkTable = () => {
 												CONSTANTS.NO_VALUE_FOUND
 											)}
 										</ZTableRowCol> */}
-										<ZTableRowCol>
-											<div className='ZaionsTextEllipsis'>{el.notes}</div>
-											{el.notes ? (
-												<ZIonText
-													color='primary'
-													className='mt-1 zaions__cursor_pointer'
-													onClick={() => {
-														setShortLinkFormState((oldVal) => ({
+											<ZTableRowCol>
+												<div className='ZaionsTextEllipsis'>{el.notes}</div>
+												{el.notes ? (
+													<ZIonText
+														color='primary'
+														className='mt-1 zaions__cursor_pointer'
+														onClick={() => {
+															setShortLinkFormState((oldVal) => ({
+																...oldVal,
+																note: el.notes,
+															}));
+															presentShortLinkNoteModal({
+																_cssClass: 'pixel-account-detail-modal-size',
+															});
+														}}
+													>
+														Read more
+													</ZIonText>
+												) : (
+													CONSTANTS.NO_VALUE_FOUND
+												)}
+											</ZTableRowCol>
+											<ZTableRowCol>
+												<ZIonRouterLink
+													routerLink={ZaionsBusinessDetails.WebsiteUrl}
+												>
+													{(el.target as LinkTargetType)?.url}
+												</ZIonRouterLink>
+											</ZTableRowCol>
+											<ZTableRowCol>
+												<ZIonRouterLink
+													routerLink={ZaionsBusinessDetails.WebsiteUrl}
+												>
+													{ZaionsBusinessDetails.WebsiteUrl}
+												</ZIonRouterLink>{' '}
+											</ZTableRowCol>
+											<ZTableRowCol>
+												<ZIonButton
+													fill='clear'
+													color={'dark'}
+													onClick={(_event) => {
+														setCompState((oldVal) => ({
 															...oldVal,
-															note: el.notes,
+															selectedShortLinkId: el.id,
+															showActionPopover: true,
 														}));
-														presentShortLinkNoteModal({
-															_cssClass: 'pixel-account-detail-modal-size',
-														});
+														showActionsPopover(_event);
 													}}
 												>
-													Read more
-												</ZIonText>
-											) : (
-												CONSTANTS.NO_VALUE_FOUND
-											)}
-										</ZTableRowCol>
-										<ZTableRowCol>
-											<ZIonRouterLink
-												routerLink={ZaionsBusinessDetails.WebsiteUrl}
-											>
-												{(el.target as LinkTargetType)?.url}
-											</ZIonRouterLink>
-										</ZTableRowCol>
-										<ZTableRowCol>
-											<ZIonRouterLink
-												routerLink={ZaionsBusinessDetails.WebsiteUrl}
-											>
-												{ZaionsBusinessDetails.WebsiteUrl}
-											</ZIonRouterLink>{' '}
-										</ZTableRowCol>
-										<ZTableRowCol>
-											<ZIonButton
-												fill='clear'
-												color={'dark'}
-												onClick={(_event) => {
-													setCompState((oldVal) => ({
-														...oldVal,
-														selectedShortLinkId: el.id,
-														showActionPopover: true,
-													}));
-													showActionsPopover(_event);
-												}}
-											>
-												<ZIonIcon icon={ellipsisVerticalOutline} />
-											</ZIonButton>
-										</ZTableRowCol>
-									</ZTableRow>
-								))}
-						</ZTableTBody>
-					</ZTable>
-					{!_FilteredShortLinkDataSelector?.length && (
-						<ZIonCol className='ion-text-center'>
-							<ZIonTitle className='mt-10'>
-								<ZIonIcon
-									icon={fileTrayFullOutline}
-									className='mx-auto'
-									size='large'
-									color='medium'
-								/>
-							</ZIonTitle>
-							<ZIonTitle color='medium'>
-								No short links founds
-								{(folderId !== null || folderId !== 'all') && ' In this Folder'}
-								. please create a short link.
-							</ZIonTitle>
-						</ZIonCol>
-					)}
-				</ZIonCol>
-			</ZIonRow>
+													<ZIonIcon icon={ellipsisVerticalOutline} />
+												</ZIonButton>
+											</ZTableRowCol>
+										</ZTableRow>
+									))}
+							</ZTableTBody>
+						</ZTable>
+						{!_FilteredShortLinkDataSelector?.length && (
+							<ZIonCol className='ion-text-center'>
+								<ZIonTitle className='mt-10'>
+									<ZIonIcon
+										icon={fileTrayFullOutline}
+										className='mx-auto'
+										size='large'
+										color='medium'
+									/>
+								</ZIonTitle>
+								<ZIonTitle color='medium'>
+									No short links founds
+									{(folderId !== null || folderId !== 'all') &&
+										' In this Folder'}
+									. please create a short link.
+								</ZIonTitle>
+							</ZIonCol>
+						)}
+					</ZIonCol>
+				</ZIonRow>
+			)}
+
+			{showSkeleton && <ZaionsShortLinkTableSkeleton />}
 
 			{/* Popovers */}
 			<IonPopover
@@ -518,5 +520,99 @@ const ZaionsShortLinkTable = () => {
 		</>
 	);
 };
+
+const ZaionsShortLinkTableSkeleton: React.FC = React.memo(() => {
+	return (
+		<ZIonRow className='px-4 pt-2 pb-1 mx-1 mt-5 overflow-y-scroll zaions_pretty_scrollbar ion-margin-bottom'>
+			<ZIonCol>
+				<ZTable>
+					<ZTableTHead>
+						<ZTableRow>
+							<ZTableHeadCol>
+								<ZIonSkeletonText width='20px' height='20px' animated={true} />
+							</ZTableHeadCol>
+							<ZTableHeadCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableHeadCol>
+							<ZTableHeadCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableHeadCol>
+							<ZTableHeadCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableHeadCol>
+							<ZTableHeadCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableHeadCol>
+							<ZTableHeadCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableHeadCol>
+							<ZTableHeadCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableHeadCol>
+							<ZTableHeadCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableHeadCol>
+						</ZTableRow>
+					</ZTableTHead>
+					<ZTableTBody>
+						<ZTableRow>
+							<ZTableRowCol>
+								<ZIonSkeletonText width='20px' height='20px' animated={true} />
+							</ZTableRowCol>
+							<ZTableRowCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableRowCol>
+							<ZTableRowCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableRowCol>
+							<ZTableRowCol>
+								<ZIonSkeletonText width='40px' height='17px' animated={true} />
+							</ZTableRowCol>
+							<ZTableRowCol>
+								<ZIonText
+									color='primary'
+									className='mt-1 zaions__cursor_pointer'
+								>
+									<ZIonSkeletonText
+										width='40px'
+										height='17px'
+										animated={true}
+									/>
+								</ZIonText>
+							</ZTableRowCol>
+							<ZTableRowCol>
+								<ZIonText>
+									<ZIonSkeletonText
+										width='40px'
+										height='17px'
+										animated={true}
+									/>
+								</ZIonText>
+							</ZTableRowCol>
+							<ZTableRowCol>
+								<ZIonText>
+									<ZIonSkeletonText
+										width='40px'
+										height='17px'
+										animated={true}
+									/>
+								</ZIonText>
+							</ZTableRowCol>
+							<ZTableRowCol>
+								<ZIonButton fill='clear' color={'dark'}>
+									<ZIonSkeletonText
+										width='18px'
+										height='30px'
+										animated={true}
+									/>
+								</ZIonButton>
+							</ZTableRowCol>
+						</ZTableRow>
+					</ZTableTBody>
+				</ZTable>
+			</ZIonCol>
+		</ZIonRow>
+	);
+});
 
 export default ZaionsShortLinkTable;

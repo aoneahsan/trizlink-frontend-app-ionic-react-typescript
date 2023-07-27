@@ -80,9 +80,14 @@ import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 
 // Styles
 import classes from './styles.module.css';
+import ZDashboardFolderMenu from '@/components/AdminPanelComponents/Sidebar/FolderMenu';
+import AdminPanelSidebarMenu from '@/components/AdminPanelComponents/Sidebar/ExpendableMenu';
+import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
+import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 const ZLinkInBiosListPage: React.FC = () => {
-	// Component state
+	// #region Component state.
 	const [compState, setCompState] = useState<{
 		LinkInBioFoldersReorder: {
 			Ids?: string[];
@@ -93,11 +98,134 @@ const ZLinkInBiosListPage: React.FC = () => {
 			isEnable: false,
 		},
 	});
+	// #endregion
 
 	// getting link-in-bio and workspace ids from url with the help of useParams.
 	const { workspaceId } = useParams<{
 		workspaceId: string;
 	}>();
+
+	// #region Custom hooks.
+	const { isXlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale();
+	const { zInvalidateReactQueries } = useZInvalidateReactQueries();
+	const { validateRequestResponse } = useZValidateRequestResponse();
+	// #endregion
+
+	// #region Recoils.
+	const linkInBiosFilterOptionsState = useRecoilValue(
+		LinkInBiosFilterOptionsRStateAtom
+	);
+	const ZDashboardState = useRecoilValue(ZDashboardRState);
+	const linkInBiosStateAtom = useRecoilValue(LinkInBiosRStateAtom);
+	// #endregion
+
+	// #region APIS requests.
+	// get workspace data api.
+	const { isFetching: isSelectedWorkspaceFetching } =
+		useZRQGetRequest<workspaceInterface>({
+			_url: API_URL_ENUM.workspace_update_delete,
+			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId],
+			_authenticated: true,
+			_itemsIds: [workspaceId],
+			_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+			_shouldFetchWhenIdPassed: !workspaceId ? true : false,
+			_extractType: ZRQGetRequestExtractEnum.extractItem,
+		});
+
+	const {
+		data: linkInBiosFoldersData,
+		isFetching: isLinkInBiosFoldersDataFetching,
+	} = useZRQGetRequest<LinkFolderType[]>({
+		_url: API_URL_ENUM.LinkInBio_folders_create_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+			workspaceId,
+			folderState.linkInBio,
+		],
+		_itemsIds: [workspaceId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+	});
+
+	const { isFetching: isLinkInBioLinkDataFetching } = useZRQGetRequest<
+		LinkInBioType[]
+	>({
+		_url: API_URL_ENUM.linkInBio_create_list,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN, workspaceId],
+		_itemsIds: [workspaceId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+	});
+
+	// Update shortLinks folders reorder API
+	const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
+		_url: API_URL_ENUM.ShortLinks_folders_reorder,
+		_queriesKeysToInvalidate: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+			workspaceId,
+			folderState.linkInBio,
+		],
+	});
+	// #endregion
+
+	// #region Popovers.
+	const { presentZIonPopover: presentLinkInBioFolderActionIonPopover } =
+		useZIonPopover(FolderActionsPopoverContent, {
+			workspaceId,
+			state: folderState.linkInBio,
+		});
+
+	const { presentZIonPopover: presentLinkInBioTimeFilterModal } =
+		useZIonPopover(LinkInBiosTimeRangeFilterPopover);
+
+	const { presentZIonPopover: presentLinkInBioTagsFilterModal } =
+		useZIonPopover(LinkInBiosTagsFiltersPopover);
+
+	// const { presentZIonPopover: presentLinkInBioDomainsFilterModal } =
+	//   useZIonPopover(LinkInBiosDomainsFiltersPopover);
+
+	// #endregion
+
+	// #region Modals.
+	const { presentZIonModal: presentFolderModal } = useZIonModal(
+		ZaionsAddNewFolder,
+		{
+			state: folderState.linkInBio,
+			workspaceId,
+		}
+	);
+
+	const { presentZIonModal: presentAddLinkInBioModal } = useZIonModal(
+		ZaionsAddLinkInBioModal,
+		{
+			workspaceId: workspaceId,
+		}
+	);
+	// #endregion
+
+	// #region Functions.
+	const invalidedQueries = async () => {
+		try {
+			// Workspace.
+			await zInvalidateReactQueries([
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
+				workspaceId,
+			]);
+
+			// Link in bio.
+			await zInvalidateReactQueries([
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+				workspaceId,
+			]);
+
+			// Folder.
+			await zInvalidateReactQueries([
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+				workspaceId,
+				folderState.linkInBio,
+			]);
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
 
 	// Link-in-bio folders reorder function.
 	const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
@@ -127,87 +255,9 @@ const ZLinkInBiosListPage: React.FC = () => {
 	};
 
 	//
-	const linkInBiosFilterOptionsState = useRecoilValue(
-		LinkInBiosFilterOptionsRStateAtom
-	);
-
-	const { isXlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale();
-
-	const ZDashboardState = useRecoilValue(ZDashboardRState);
-
-	const linkInBiosStateAtom = useRecoilValue(LinkInBiosRStateAtom);
-
-	//
-	const { data: linkInBiosFoldersData } = useZRQGetRequest<LinkFolderType[]>({
-		_url: API_URL_ENUM.LinkInBio_folders_create_list,
-		_key: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-			workspaceId,
-			folderState.linkInBio,
-		],
-		_itemsIds: [workspaceId],
-		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-	});
-
-	const { presentZIonPopover: presentLinkInBioFolderActionIonPopover } =
-		useZIonPopover(FolderActionsPopoverContent, {
-			workspaceId,
-			state: folderState.linkInBio,
-		});
-
-	const { presentZIonModal: presentAddLinkInBioModal } = useZIonModal(
-		ZaionsAddLinkInBioModal,
-		{
-			workspaceId: workspaceId,
-		}
-	);
-
-	const { zInvalidateReactQueries } = useZInvalidateReactQueries();
-	const { presentZIonPopover: presentLinkInBioTimeFilterModal } =
-		useZIonPopover(LinkInBiosTimeRangeFilterPopover);
-
-	const { presentZIonPopover: presentLinkInBioTagsFilterModal } =
-		useZIonPopover(LinkInBiosTagsFiltersPopover);
-
-	const { validateRequestResponse } = useZValidateRequestResponse();
-
-	// const { presentZIonPopover: presentLinkInBioDomainsFilterModal } =
-	//   useZIonPopover(LinkInBiosDomainsFiltersPopover);
-
-	const { presentZIonModal: presentFolderModal } = useZIonModal(
-		ZaionsAddNewFolder,
-		{
-			state: folderState.linkInBio,
-			workspaceId,
-		}
-	);
-
-	//
-	const invalidedLinkInBioQuery = async () => {
-		try {
-			await zInvalidateReactQueries([
-				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-				workspaceId,
-			]);
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
-
-	// Update shortLinks folders reorder API
-	const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
-		_url: API_URL_ENUM.ShortLinks_folders_reorder,
-		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-			workspaceId,
-			folderState.linkInBio,
-		],
-	});
-
-	//
 	const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
 		try {
-			await invalidedLinkInBioQuery();
+			await invalidedQueries();
 			event.detail.complete();
 		} catch (error) {
 			reportCustomError(error);
@@ -242,6 +292,12 @@ const ZLinkInBiosListPage: React.FC = () => {
 			reportCustomError(error);
 		}
 	};
+	// #endregion
+
+	const isZFetching =
+		isLinkInBiosFoldersDataFetching ||
+		isLinkInBioLinkDataFetching ||
+		isSelectedWorkspaceFetching;
 
 	return (
 		<ZaionsIonPage
@@ -260,37 +316,40 @@ const ZLinkInBiosListPage: React.FC = () => {
 					<ZIonGrid className='ion-no-padding h-full'>
 						<ZIonRow className='h-full'>
 							{/* Side bar */}
-							<ZDashboardSidebar
-								type={AdminPanelSidebarMenuPageEnum.linkInBio}
-								//
-								foldersData={linkInBiosFoldersData ? linkInBiosFoldersData : []}
-								// foldersData={[]}
-								//
-								addNewFolderButtonOnClickHandler={() => {
-									presentFolderModal({
-										_cssClass: 'folder-modal-size',
-									});
-								}}
-								//
-								foldersSaveReorderButtonOnClickHandler={() => {
-									void linkInBioFoldersReOrderHandler();
-								}}
-								//
-								handleFoldersReorder={handleReorder}
-								//
-								showFoldersSaveReorderButton={
-									compState?.LinkInBioFoldersReorder?.isEnable
-								}
-								//
-								folderActionsButtonOnClickHandler={(event: unknown) => {
-									presentLinkInBioFolderActionIonPopover({
-										_event: event as Event,
-										_cssClass: classNames(
-											classes.zaions_present_folder_Action_popover_width
-										),
-									});
-								}}
+							<AdminPanelSidebarMenu
+								activePage={AdminPanelSidebarMenuPageEnum.linkInBio}
 							/>
+
+							{/* Folder menu after Expendable Navigation */}
+							{isLgScale && (
+								<ZDashboardFolderMenu
+									showSkeleton={isZFetching}
+									type={AdminPanelSidebarMenuPageEnum.linkInBio}
+									foldersData={
+										linkInBiosFoldersData ? linkInBiosFoldersData : []
+									}
+									showFoldersSaveReorderButton={
+										compState?.LinkInBioFoldersReorder?.isEnable
+									}
+									handleFoldersReorder={handleReorder}
+									addNewFolderButtonOnClickHandler={() => {
+										presentFolderModal({
+											_cssClass: 'folder-modal-size',
+										});
+									}}
+									foldersSaveReorderButtonOnClickHandler={() => {
+										void linkInBioFoldersReOrderHandler();
+									}}
+									folderActionsButtonOnClickHandler={(event: unknown) => {
+										presentLinkInBioFolderActionIonPopover({
+											_event: event as Event,
+											_cssClass: classNames(
+												classes.zaions_present_folder_Action_popover_width
+											),
+										});
+									}}
+								/>
+							)}
 
 							<ZIonCol
 								className='zaions-transition'
@@ -384,7 +443,9 @@ const ZLinkInBiosListPage: React.FC = () => {
 												})}
 											>
 												{/* This will create short link (not link-in-bio) */}
-												<ZaionsCreateShortLinkUrlInput />
+												<ZaionsCreateShortLinkUrlInput
+													showSkeleton={isZFetching}
+												/>
 											</ZIonCol>
 										</ZCan>
 									</ZIonRow>
@@ -426,6 +487,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 														className={classNames({
 															'my-2': true,
 														})}
+														height='39px'
 													>
 														Export data's
 													</ZIonButton>
@@ -437,6 +499,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 														className={classNames({
 															'my-2': true,
 														})}
+														height='39px'
 													>
 														Bulk Import
 													</ZIonButton>
@@ -456,6 +519,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 																	_cssClass: 'folder-modal-size',
 																});
 															}}
+															height='39px'
 														>
 															Create a new Link In Bio
 														</ZIonButton>
@@ -561,8 +625,13 @@ const ZLinkInBiosListPage: React.FC = () => {
 																	classes['link-in-bio-time-filter-modal-size'],
 															});
 														}}
+														height='39px'
 													>
-														<ZIonIcon slot='start' icon={calendar} />
+														<ZIonIcon
+															slot='start'
+															className='pb-1'
+															icon={calendar}
+														/>
 														{linkInBiosFilterOptionsState.timeFilter
 															.daysToSubtract === TimeFilterEnum.allTime
 															? 'All Times'
@@ -593,6 +662,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 														fill='outline'
 														color='primary'
 														expand={!isMdScale ? 'block' : undefined}
+														height='39px'
 														className={classNames({
 															'ms-auto me-3': isXlScale,
 															'my-2': !isMdScale,
@@ -606,10 +676,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 															});
 														}}
 													>
-														<ZIonIcon
-															slot='start'
-															icon={pricetagOutline}
-														></ZIonIcon>
+														<ZIonIcon slot='start' icon={pricetagOutline} />
 														{linkInBiosFilterOptionsState.tags
 															? linkInBiosFilterOptionsState.tags?.length === 1
 																? linkInBiosFilterOptionsState.tags[0]
@@ -624,13 +691,18 @@ const ZLinkInBiosListPage: React.FC = () => {
 														fill='outline'
 														color='primary'
 														expand={!isMdScale ? 'block' : undefined}
+														height='39px'
 														className={classNames({
 															'ms-auto me-3': isXlScale,
 															'my-2': !isMdScale,
 														})}
 													>
-														<ZIonIcon slot='start' icon={menuOutline} />7
-														Columns
+														<ZIonIcon
+															slot='start'
+															className='pb-[3px]'
+															icon={menuOutline}
+														/>
+														7 Columns
 													</ZIonButton>
 
 													{/* Refetch data button */}
@@ -638,12 +710,13 @@ const ZLinkInBiosListPage: React.FC = () => {
 														color='primary'
 														fill='outline'
 														expand={!isMdScale ? 'block' : undefined}
+														height='39px'
 														className={classNames({
 															'ms-auto': isXlScale,
 															'my-2': !isMdScale,
 														})}
 														onClick={() => {
-															void invalidedLinkInBioQuery();
+															void invalidedQueries();
 														}}
 													>
 														<ZIonIcon slot='start' icon={refresh} />
@@ -754,7 +827,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 										</ZIonCol>
 									</ZIonRow>
 								</ZIonGrid>
-								<ZaionsLinkInBioLinksTable />
+								<ZaionsLinkInBioLinksTable showSkeleton={isZFetching} />
 							</ZIonCol>
 						</ZIonRow>
 					</ZIonGrid>
@@ -1209,6 +1282,8 @@ const SearchQueryInputComponent = () => {
 				<ZIonItem
 					className='border ion-item-start-no-padding'
 					style={{ '--inner-padding-end': '0px' }}
+					lines='none'
+					minHeight='40px'
 				>
 					<ZIonInput
 						label='🔍'
@@ -1218,6 +1293,7 @@ const SearchQueryInputComponent = () => {
 						onIonChange={handleChange}
 						placeholder='Search link by title, domain...'
 						fill='solid'
+						minHeight='40px'
 						style={{
 							'--background': '#fff',
 							'--padding-start': '11px',

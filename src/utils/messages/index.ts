@@ -14,6 +14,11 @@ const GENERAL = {
 		SHORT_LINK_UPDATED: 'Short link updated successfully.',
 		SHORT_LINK_DELETE: 'Short link deleted successfully.',
 	},
+	LINK_IN_BIO: {
+		CREATED: 'Short link created successfully.',
+		UPDATED: 'Short link updated successfully.',
+		DELETE: 'Short link deleted successfully.',
+	},
 	PIXEL_ACCOUNT: {
 		NEW_PIXEL_ACCOUNT_CREATED_SUCCEED_MESSAGE:
 			'Pixel account created successfully.',

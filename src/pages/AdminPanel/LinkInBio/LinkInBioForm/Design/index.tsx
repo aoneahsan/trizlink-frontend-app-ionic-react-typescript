@@ -34,6 +34,7 @@ import {
 	ZIonReorderGroup,
 	ZIonRouterLink,
 	ZIonRow,
+	ZIonSkeletonText,
 	ZIonText,
 } from '@/components/ZIonComponents';
 import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
@@ -108,6 +109,7 @@ import classes from './styles.module.css';
 const LinkInBioDesignPage: React.FC = () => {
 	const { values, dirty, submitForm } = useFormikContext<LinkInBioType>();
 
+	// #region Component states
 	const [compState, setCompState] = useState<{
 		linkInBioBlocksReorder: {
 			Ids?: string[];
@@ -118,6 +120,7 @@ const LinkInBioDesignPage: React.FC = () => {
 			isEnable: false,
 		},
 	});
+	//#endregion
 
 	// getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio of that id will be fetch from backend and store in NewLinkInBioFormState recoil state.
 	const { linkInBioId, workspaceId } = useParams<{
@@ -125,9 +128,12 @@ const LinkInBioDesignPage: React.FC = () => {
 		workspaceId: string;
 	}>();
 
+	//#region Custom hooks.
 	// validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
 	const { validateRequestResponse } = useZValidateRequestResponse();
+	// #endregion
 
+	// #region APIS
 	// Update Link-in-bio blocks reorder API
 	const { mutateAsync: UpdateLinkInBioBlocksReorder } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.linkInBioBlocks_reorder,
@@ -139,17 +145,16 @@ const LinkInBioDesignPage: React.FC = () => {
 	});
 
 	// fetching link-in-bio - blocks with the linkInBioId data from backend.
-	const { data: selectedLinkInBioBlocks } = useZRQGetRequest<
-		LinkInBioBlockFromType[]
-	>({
+	const {
+		data: selectedLinkInBioBlocks,
+		isFetching: isSelectedLinkInBioBlocksFetching,
+	} = useZRQGetRequest<LinkInBioBlockFromType[]>({
 		_url: API_URL_ENUM.linkInBioBlock_create_list,
 		_key: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
 			workspaceId,
 			linkInBioId,
 		],
-		// _authenticated: true,
-
 		_itemsIds: [workspaceId, linkInBioId],
 		_urlDynamicParts: [
 			CONSTANTS.RouteParams.workspace.workspaceId,
@@ -158,7 +163,9 @@ const LinkInBioDesignPage: React.FC = () => {
 		_shouldFetchWhenIdPassed: !linkInBioId ? true : false,
 		_extractType: ZRQGetRequestExtractEnum.extractItems,
 	});
+	// #endregion
 
+	// #region Functions.
 	// handle reorder function (preview panel)
 	const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
 		// The `from` and `to` properties contain the index of the item
@@ -225,6 +232,9 @@ const LinkInBioDesignPage: React.FC = () => {
 			reportCustomError(error);
 		}
 	};
+	// #endregion
+
+	const isZFetching = isSelectedLinkInBioBlocksFetching;
 
 	return (
 		<>
@@ -233,14 +243,14 @@ const LinkInBioDesignPage: React.FC = () => {
 					className='ion-no-padding ion-margin-horizontal overflow__hidden'
 					style={{ height: 'calc(112% - 70px)' }}
 				>
-					<ZIonRow className='zaions__h100'>
+					<ZIonRow className='h-full'>
 						<ZIonCol
 							sizeXl='6.4'
 							sizeLg='6.1'
 							sizeMd='6'
 							sizeSm='12'
 							sizeXs='12'
-							className='zaions__h100'
+							className='h-full'
 						>
 							<ZRScrollbars style={{ width: '100%', height: '100%' }}>
 								<ZIonRow className='ion-padding-horizontal ion-margin-horizontal'>
@@ -267,7 +277,7 @@ const LinkInBioDesignPage: React.FC = () => {
 																	ZLinkInBioRHSComponentEnum.settings),
 													})}
 												>
-													<ZIonText className='zaions__fs_18'>
+													<ZIonText className='text-2xl font-bold'>
 														{values.designPageCurrentTab ===
 														ZLinkInBioRHSComponentEnum.theme
 															? 'Link In Bio Theme'
@@ -286,6 +296,7 @@ const LinkInBioDesignPage: React.FC = () => {
 														</ZIonRouterLink>
 													</ZIonText>
 												</ZIonCol>
+
 												{(dirty &&
 													values.designPageCurrentTab ===
 														ZLinkInBioRHSComponentEnum.theme) ||
@@ -336,47 +347,65 @@ const LinkInBioDesignPage: React.FC = () => {
 							sizeMd='6'
 							sizeSm='12'
 							sizeXs='12'
-							className='zaions-ion-bg-color-light '
+							className='zaions-ion-bg-color-light'
 						>
 							<ZRScrollbars style={{ width: '100%', height: '100%' }}>
 								<ZIonContent>
-									<ZIonRow className='ion-justify-content-center ion-align-items-center zaions__h100'>
-										<ZIonCol
-											size='11'
-											style={{
-												...generatePredefinedThemeBackgroundValue(
-													values.theme
-														.background as LinkInBioThemeBackgroundType
-												),
-											}}
-											className={classNames(classes['zaions__view_panel'], {
-												'zaions__h85 ion-padding-start rounded': true,
-											})}
-										>
-											<ZRScrollbars style={{ width: '100%', height: '100%' }}>
-												<ZIonRow className='my-2 ion-padding-end ion-padding-bottom'>
-													<ZIonList
-														lines='none'
-														className='w-full zaions__h100 zaions__bg_transparent'
-													>
-														<ZIonReorderGroup
-															onIonItemReorder={handleReorder}
-															disabled={false}
+									<ZIonRow className='ion-justify-content-center ion-align-items-center h-full'>
+										{!isZFetching && (
+											<ZIonCol
+												size='11'
+												style={{
+													...generatePredefinedThemeBackgroundValue(
+														values.theme
+															.background as LinkInBioThemeBackgroundType
+													),
+												}}
+												className={classNames(classes['zaions__view_panel'], {
+													'zaions__h85 ion-padding-start rounded': true,
+												})}
+											>
+												<ZRScrollbars style={{ width: '100%', height: '100%' }}>
+													<ZIonRow className='my-2 ion-padding-end ion-padding-bottom'>
+														<ZIonList
+															lines='none'
+															className='w-full h-full zaions__bg_transparent'
 														>
-															{/* RHS review panel blocks. */}
-															{selectedLinkInBioBlocks?.map((el, index) => {
-																return (
-																	<ZLinkInBioReorderItem
-																		element={el}
-																		key={index}
-																	/>
-																);
-															})}
-														</ZIonReorderGroup>
-													</ZIonList>
-												</ZIonRow>
-											</ZRScrollbars>
-										</ZIonCol>
+															<ZIonReorderGroup
+																onIonItemReorder={handleReorder}
+																disabled={false}
+															>
+																{/* RHS review panel blocks. */}
+																{selectedLinkInBioBlocks?.map((el, index) => {
+																	return (
+																		<ZLinkInBioReorderItem
+																			element={el}
+																			key={index}
+																		/>
+																	);
+																})}
+															</ZIonReorderGroup>
+														</ZIonList>
+													</ZIonRow>
+												</ZRScrollbars>
+											</ZIonCol>
+										)}
+
+										{/* Skeleton */}
+										{isZFetching && (
+											<ZIonCol
+												size='11'
+												className={classNames(classes['zaions__view_panel'], {
+													'h-[85%] rounded': true,
+												})}
+											>
+												<ZIonSkeletonText
+													width='100%'
+													height='100%'
+													animated={true}
+												/>
+											</ZIonCol>
+										)}
 									</ZIonRow>
 
 									{compState?.linkInBioBlocksReorder?.isEnable && (

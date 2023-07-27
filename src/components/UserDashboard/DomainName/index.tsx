@@ -4,6 +4,8 @@ import React from 'react';
 // Packages Import
 import { laptopOutline } from 'ionicons/icons';
 import { useRecoilValue } from 'recoil';
+import { useFormikContext } from 'formik';
+import classNames from 'classnames';
 
 // Custom Imports
 import {
@@ -15,8 +17,12 @@ import {
 	ZIonInput,
 	ZIonSkeletonText,
 } from '@/components/ZIonComponents';
+import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 
 // Global Constants
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { formatReactSelectOption } from '@/utils/helpers';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Images
 
@@ -25,13 +31,8 @@ import { DefaultDomainsState } from '@/ZaionsStore/UserDashboard/CustomDomainSta
 
 // Types
 import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
-import { useFormikContext } from 'formik';
-import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
-import { formatReactSelectOption } from '@/utils/helpers';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Styles
 
@@ -39,6 +40,8 @@ const DomainName: React.FC = () => {
 	const DefaultDomains = useRecoilValue(DefaultDomainsState);
 	const { values, handleChange, handleBlur, setFieldValue } =
 		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
+
+	const { isSmScale } = useZMediaQueryScale();
 
 	return (
 		<>
@@ -65,7 +68,17 @@ const DomainName: React.FC = () => {
 			{/* Row-2 */}
 			<ZIonRow className='px-3 pt-2 pb-3 zaions__bg_white'>
 				{/* Col-1 */}
-				<ZIonCol className='pr-2'>
+				<ZIonCol
+					className={classNames({
+						'pr-2': isSmScale,
+						'mb-4': !isSmScale,
+					})}
+					sizeXl='6'
+					sizeLg='6'
+					sizeMd='6'
+					sizeSm='6'
+					sizeXs='12'
+				>
 					{/* Select */}
 					<ZaionsRSelect
 						options={DefaultDomains?.map((el) => {
@@ -91,7 +104,7 @@ const DomainName: React.FC = () => {
 				</ZIonCol>
 
 				{/* Col-2 */}
-				<ZIonCol>
+				<ZIonCol sizeXl='6' sizeLg='6' sizeMd='6' sizeSm='6' sizeXs='12'>
 					{/* Customize input */}
 					<ZIonInput
 						name='shortUrl.url'

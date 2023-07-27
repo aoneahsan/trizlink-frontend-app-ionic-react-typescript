@@ -101,7 +101,7 @@ const ZaionsCustomYourLink: React.FC = () => {
 				{/* Col-1 */}
 				<ZIonCol className='flex px-2 py-2 ion-align-items-center'>
 					{/* Icon */}
-					<ZIonIcon icon={documentTextOutline} size='large'></ZIonIcon>
+					<ZIonIcon icon={documentTextOutline} size='large' />
 
 					{/* Text */}
 					<ZIonText className='mt-1 font-bold ion-no-margin ms-2'>

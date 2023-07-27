@@ -32,7 +32,11 @@ import {
 	useZIonErrorAlert,
 	useZIonModal,
 } from '@/ZaionsHooks/zionic-hooks';
-import { useZRQDeleteRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+	useZGetRQCacheData,
+	useZRQDeleteRequest,
+	useZUpdateRQCacheData,
+} from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -40,7 +44,7 @@ import { useZRQDeleteRequest } from '@/ZaionsHooks/zreactquery-hooks';
  * */
 import CONSTANTS from '@/utils/constants';
 import { showSuccessNotification } from '@/utils/notification';
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 
 /**
  * Type Imports go down
@@ -53,6 +57,9 @@ import { folderState, FormMode } from '@/types/AdminPanel/index.type';
  * ? Import of recoil states is a Recoil State import
  * */
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
+import { extractInnerData } from '@/utils/helpers';
+import { LinkFolderType } from '@/types/AdminPanel/linksType';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Style files Imports go down
@@ -90,6 +97,8 @@ const FolderActionsPopoverContent: React.FC<{
 	// Custom hooks.
 	const { presentZIonAlert } = useZIonAlert();
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
+	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
 	/**
 	 * recoil state which will hold the single folder data (for updating). when user click on edit button in action popover the data of that folder will storing in this state and present as initial value in the update folder form. here we are delete it folder by getting the id from folderFormState
@@ -102,7 +111,7 @@ const FolderActionsPopoverContent: React.FC<{
 	 */
 	const { mutateAsync: deleteFolderMutate } = useZRQDeleteRequest(
 		API_URL_ENUM.folders_update_delete,
-		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN, workspaceId, state]
+		[]
 	);
 
 	/**
@@ -145,24 +154,64 @@ const FolderActionsPopoverContent: React.FC<{
 		try {
 			if (folderFormState.id) {
 				// hitting the delete api
-				await deleteFolderMutate({
+				const _response = await deleteFolderMutate({
 					itemIds: [workspaceId, folderFormState.id],
 					urlDynamicParts: [
 						CONSTANTS.RouteParams.workspace.workspaceId,
-						':folderId',
+						CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
 					],
 				});
 
-				// setting the folderFormState to initial state because the value of this recoil state is used as the initial values of the short link folder form, when we click on the delete button in popover it will store the value or that folder in this recoil state. because we need it in here for example the id to delete the folder.
-				setFolderFormState((oldVal) => ({
-					...oldVal,
-					id: '',
-					name: '',
-					formMode: FormMode.ADD,
-				}));
+				if (_response) {
+					const _data = extractInnerData<{ success: boolean }>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
 
-				// show success message after deleting
-				showSuccessNotification(`Folder deleted successfully.`);
+					if (_data && _data?.success) {
+						// getting all the folders from RQ cache.
+						const _oldFoldersData =
+							extractInnerData<LinkFolderType[]>(
+								getRQCDataHandler<LinkFolderType[]>({
+									key: [
+										CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+										workspaceId,
+										state,
+									],
+								}) as LinkFolderType[],
+								extractInnerDataOptionsEnum.createRequestResponseItems
+							) || [];
+
+						// removing deleted folder from cache.
+						const _updatedFolders = _oldFoldersData.filter(
+							(el) => el.id !== folderFormState.id
+						);
+
+						// Updating data in RQ cache.
+						await updateRQCDataHandler<LinkFolderType[] | undefined>({
+							key: [
+								CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+								workspaceId,
+								state,
+							],
+							data: _updatedFolders as LinkFolderType[],
+							id: '',
+							extractType: ZRQGetRequestExtractEnum.extractItems,
+							updateHoleData: true,
+						});
+
+						// setting the folderFormState to initial state because the value of this recoil state is used as the initial values of the short link folder form, when we click on the delete button in popover it will store the value or that folder in this recoil state. because we need it in here for example the id to delete the folder.
+						setFolderFormState((oldVal) => ({
+							...oldVal,
+							id: '',
+							name: '',
+							formMode: FormMode.ADD,
+						}));
+
+						// show success message after deleting
+						showSuccessNotification(`Folder deleted successfully.`);
+					}
+				}
 			} else {
 				await presentZIonErrorAlert();
 			}

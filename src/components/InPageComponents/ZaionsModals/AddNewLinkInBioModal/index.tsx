@@ -13,7 +13,11 @@ import {
 	ZIonText,
 } from '@/components/ZIonComponents';
 import { Formik } from 'formik';
-import { useZRQCreateRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+	useZGetRQCacheData,
+	useZRQCreateRequest,
+	useZUpdateRQCacheData,
+} from '@/ZaionsHooks/zreactquery-hooks';
 import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Global Constants
@@ -39,6 +43,8 @@ import {
 	ZLinkInBioPageEnum,
 	ZLinkInBioRHSComponentEnum,
 } from '@/types/AdminPanel/linkInBioType';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { folderState } from '@/types/AdminPanel/index.type';
 
 // Styles
 
@@ -52,17 +58,80 @@ const ZaionsAddLinkInBioModal: React.FC<{
 	zNavigatePushRoute?: (_url: string) => void;
 	workspaceId: string;
 }> = ({ dismissZIonModal, zNavigatePushRoute, workspaceId }) => {
+	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+
 	// Create new link-in-bio API.
 	const { mutateAsync: createLinkInBioMutate } =
 		useZRQCreateRequest<LinkInBioType>({
 			_url: API_URL_ENUM.linkInBio_create_list,
-			_queriesKeysToInvalidate: [
-				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-				workspaceId,
-			],
+			_queriesKeysToInvalidate: [],
 			_itemsIds: [workspaceId],
 			_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 		});
+
+	const FormikSubmitHandler = async (data: string) => {
+		try {
+			if (data) {
+				const _response = await createLinkInBioMutate(data);
+
+				if (_response) {
+					const _data = extractInnerData<LinkInBioType>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (_data && _data.id) {
+						const _oldLinkInBios =
+							extractInnerData<LinkInBioType[]>(
+								getRQCDataHandler<LinkInBioType[]>({
+									key: [
+										CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+										workspaceId,
+									],
+								}) as LinkInBioType[],
+								extractInnerDataOptionsEnum.createRequestResponseItems
+							) || [];
+
+						// added LinkInBio to all LinkInBios data in cache.
+						const _updatedLinkInBios = [..._oldLinkInBios, _data];
+
+						// Updating all shortLinks data in RQ cache.
+						await updateRQCDataHandler<LinkInBioType[] | undefined>({
+							key: [
+								CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+								workspaceId,
+							],
+							data: _updatedLinkInBios as LinkInBioType[],
+							id: '',
+							extractType: ZRQGetRequestExtractEnum.extractItems,
+							updateHoleData: true,
+						});
+
+						// after dismissing redirecting to edit link-in-bio-page
+						zNavigatePushRoute &&
+							zNavigatePushRoute(
+								createRedirectRoute({
+									url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+									params: [
+										CONSTANTS.RouteParams.workspace.workspaceId,
+										CONSTANTS.RouteParams.linkInBio.linkInBioId,
+									],
+									values: [workspaceId, _data.id],
+									routeSearchParams: {
+										page: ZLinkInBioPageEnum.design,
+										step: ZLinkInBioRHSComponentEnum.theme,
+									},
+								})
+							);
+
+						// After api and recoil storing dismissing modal
+						dismissZIonModal();
+					}
+				}
+			}
+		} catch (error) {}
+	};
 
 	return (
 		<ZIonContent className='ion-padding'>
@@ -86,15 +155,11 @@ const ZaionsAddLinkInBioModal: React.FC<{
 			<div className='flex flex-col ion-text-center ion-justify-content-center'>
 				<ZIonText className='' color={'primary'}>
 					<h1 className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}>
-						<ZIonIcon
-							icon={toggleOutline}
-							className='mx-auto'
-							color='light'
-						></ZIonIcon>
+						<ZIonIcon icon={toggleOutline} className='mx-auto' color='light' />
 					</h1>
 				</ZIonText>
 				<br />
-				<ZIonText color={'dark'}>
+				<ZIonText color='dark'>
 					<h5 className='font-bold'>Create a new Link-in-bio 😊</h5>
 				</ZIonText>
 
@@ -111,42 +176,12 @@ const ZaionsAddLinkInBioModal: React.FC<{
 						try {
 							if (values && values.linkInBioTitle) {
 								// Making an api call creating new link in bio
-								const _response = await createLinkInBioMutate(
-									zStringify({
-										linkInBioTitle: values.linkInBioTitle,
-										theme: zStringify(ZaionsLinkInBioDefaultData.theme), // passing default data with title
-										folderId: 1,
-									})
-								);
-
-								if (_response) {
-									const _data = extractInnerData<LinkInBioType>(
-										_response,
-										extractInnerDataOptionsEnum.createRequestResponseItem
-									);
-
-									if (_data && _data.id) {
-										// After api and recoil storing dismissing modal
-										dismissZIonModal();
-
-										// after dismissing redirecting to edit link-in-bio-page
-										zNavigatePushRoute &&
-											zNavigatePushRoute(
-												createRedirectRoute({
-													url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-													params: [
-														CONSTANTS.RouteParams.workspace.workspaceId,
-														CONSTANTS.RouteParams.linkInBio.linkInBioId,
-													],
-													values: [workspaceId, _data.id],
-													routeSearchParams: {
-														page: ZLinkInBioPageEnum.design,
-														step: ZLinkInBioRHSComponentEnum.theme,
-													},
-												})
-											);
-									}
-								}
+								const zStringifyData = zStringify({
+									linkInBioTitle: values.linkInBioTitle,
+									theme: zStringify(ZaionsLinkInBioDefaultData.theme), // passing default data with title
+									folderId: 1,
+								});
+								await FormikSubmitHandler(zStringifyData);
 							}
 						} catch (error) {
 							reportCustomError(error);

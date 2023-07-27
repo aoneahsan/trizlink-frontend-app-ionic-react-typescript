@@ -13,6 +13,7 @@ import {
 	ZIonIcon,
 	ZIonInput,
 	ZIonItem,
+	ZIonSkeletonText,
 } from '@/components/ZIonComponents';
 
 /**
@@ -30,7 +31,7 @@ import {
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
-import { closeOutline } from 'ionicons/icons';
+import { closeCircleOutline, closeOutline } from 'ionicons/icons';
 
 /**
  * Recoil State Imports go down
@@ -56,6 +57,7 @@ interface ZaionsColorPikerType {
 	value: string;
 	name: string;
 	showCloseIcon?: boolean;
+	showSkeleton?: boolean;
 	setFieldValueFn?: FormikSetFieldValueEventType;
 	closeIconOnChangeFn?: React.MouseEventHandler<HTMLIonButtonElement>;
 }
@@ -71,52 +73,84 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
 	value,
 	setFieldValueFn,
 	showCloseIcon = false,
+	showSkeleton = false,
 	closeIconOnChangeFn,
 }) => {
 	return (
+		<>
+			{!showSkeleton && (
+				<ZIonItem
+					className='ion-no-padding flex ion-align-items-center mt-3'
+					lines='none'
+					minHeight='40px'
+					style={{
+						// '--border-color': '#000',
+						// '--highlight-color-focused': value,
+						'--inner-padding-end': '0px',
+					}}
+				>
+					<input
+						type='color'
+						name={name}
+						className='zaions-color-piker'
+						value={value}
+						onChange={({ target }) => {
+							setFieldValueFn &&
+								setFieldValueFn(name, target.value || '#000', false);
+						}}
+					/>
+					<ZIonInput
+						type='text'
+						className='ms-2 zaions__fs_18'
+						value={value}
+						label=''
+						fill='outline'
+						minHeight='40px'
+						style={{ '--background': '#fff' }}
+						onIonChange={({ target }) => {
+							setFieldValueFn &&
+								setFieldValueFn(name, target.value || '#000', false);
+						}}
+					/>
+					{showCloseIcon && (
+						<ZIonButton
+							slot='end'
+							fill='clear'
+							className='ion-no-padding ion-no-margin ms-2'
+							onClick={closeIconOnChangeFn}
+						>
+							<ZIonIcon icon={closeCircleOutline} className='w-6 h-6' />
+						</ZIonButton>
+					)}
+				</ZIonItem>
+			)}
+
+			{showSkeleton && <ZaionsColorPikerSkeleton />}
+		</>
+	);
+};
+
+const ZaionsColorPikerSkeleton: React.FC = React.memo(() => {
+	return (
 		<ZIonItem
 			className='ion-no-padding flex ion-align-items-center mt-3'
+			lines='none'
+			minHeight='40px'
 			style={{
 				// '--border-color': '#000',
 				// '--highlight-color-focused': value,
 				'--inner-padding-end': '0px',
 			}}
-			lines='none'
 		>
-			<input
-				type='color'
-				name={name}
-				className='zaions-color-piker'
-				onChange={({ target }) => {
-					setFieldValueFn &&
-						setFieldValueFn(name, target.value || '#000', false);
-				}}
-				value={value}
+			<ZIonSkeletonText
+				width='2.5rem'
+				height='40px'
+				className='me-2'
+				animated={true}
 			/>
-			<ZIonInput
-				type='text'
-				className='ms-2 zaions__fs_18'
-				onIonChange={({ target }) => {
-					setFieldValueFn &&
-						setFieldValueFn(name, target.value || '#000', false);
-				}}
-				value={value}
-				label=''
-				fill='solid'
-				style={{ '--background': '#fff' }}
-			/>
-			{showCloseIcon && (
-				<ZIonButton
-					slot='end'
-					fill='clear'
-					className='ion-no-padding ion-no-margin'
-					onClick={closeIconOnChangeFn}
-				>
-					<ZIonIcon icon={closeOutline} />
-				</ZIonButton>
-			)}
+			<ZIonSkeletonText width='15.2rem' height='40px' animated={true} />
 		</ZIonItem>
 	);
-};
+});
 
 export default ZaionsColorPiker;

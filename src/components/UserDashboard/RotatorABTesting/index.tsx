@@ -25,6 +25,7 @@ import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/li
 import { ZIonButton } from '@/components/ZIonComponents';
 import { ABTestingRotatorInterface } from '@/types/AdminPanel/index.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 const FULL_PERCENTAGE = 100;
 
@@ -44,6 +45,8 @@ const getNewRotatorABTestingEmptyObj: () => ABTestingRotatorInterface = () => {
 const RotatorABTesting: React.FC = () => {
 	const { values, errors, touched, handleChange, handleBlur } =
 		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
+
+	const { isMdScale, isSmScale } = useZMediaQueryScale();
 
 	return (
 		<>
@@ -69,7 +72,13 @@ const RotatorABTesting: React.FC = () => {
 				</div>
 				<div className='block px-2 mt-3'>
 					<ZIonRow className='gap-2 pb-1'>
-						<ZIonCol size='5.9'>
+						<ZIonCol
+							sizeXl='5.6'
+							sizeLg='5.6'
+							sizeMd='5.6'
+							sizeSm='12'
+							sizeXs='12'
+						>
 							<ZIonInput
 								disabled
 								className='ion-no-padding'
@@ -78,7 +87,13 @@ const RotatorABTesting: React.FC = () => {
 								minHeight='40px'
 							/>
 						</ZIonCol>
-						<ZIonCol size='5.9'>
+						<ZIonCol
+							sizeXl='5.6'
+							sizeLg='5.6'
+							sizeMd='5.6'
+							sizeSm='12'
+							sizeXs='12'
+						>
 							<ZIonInput
 								type='number'
 								label='Percentage'
@@ -98,55 +113,20 @@ const RotatorABTesting: React.FC = () => {
 									values.rotatorABTesting.map((_rotatorAbTestingEl, _index) => (
 										<ZIonRow
 											key={_index}
-											className='gap-2 mt-3 ion-align-items-top'
+											className={classNames({
+												'gap-2 ion-align-items-top': true,
+												'mt-3': isSmScale,
+												'pt-4 mt-2 border-t':
+													(!isMdScale && isSmScale) || !isSmScale,
+											})}
 										>
-											<ZIonCol size='5.6'>
-												{/* <ZIonInputField
-													inputFieldProps={{
-														label: 'Redirection Links*',
-														labelPlacement: 'floating',
-														onIonChange: handleChange,
-														onIonBlur: handleBlur,
-														value:
-															values.rotatorABTesting[_index].redirectionLink,
-														name: `rotatorABTesting.${_index}.redirectionLink`,
-														errorText: errors.rotatorABTesting?.length
-															? ((
-																	errors.rotatorABTesting[
-																		_index
-																	] as RotatorABTestingErrorType
-															  )?.redirectionLink as string)
-															: undefined,
-														className: `${classNames({
-															'ion-touched':
-																touched.rotatorABTesting &&
-																touched.rotatorABTesting[_index]
-																	?.redirectionLink,
-															'ion-invalid':
-																touched.rotatorABTesting &&
-																errors.rotatorABTesting &&
-																touched.rotatorABTesting[_index]
-																	?.redirectionLink &&
-																(
-																	errors.rotatorABTesting[
-																		_index
-																	] as RotatorABTestingErrorType
-																)?.redirectionLink,
-
-															'ion-valid':
-																touched.rotatorABTesting &&
-																errors.rotatorABTesting &&
-																touched.rotatorABTesting[_index]
-																	?.redirectionLink &&
-																!(
-																	errors.rotatorABTesting[
-																		_index
-																	] as RotatorABTestingErrorType
-																)?.redirectionLink,
-														})}`,
-													}}
-												/> */}
-
+											<ZIonCol
+												sizeXl='5.6'
+												sizeLg='5.6'
+												sizeMd='5.6'
+												sizeSm='12'
+												sizeXs='12'
+											>
 												<ZIonInput
 													label='Redirection Links*'
 													labelPlacement='stacked'
@@ -196,50 +176,13 @@ const RotatorABTesting: React.FC = () => {
 											</ZIonCol>
 
 											{/*  */}
-											<ZIonCol size='5.6'>
-												{/* <ZIonInputField
-													inputFieldProps={{
-														type: 'number',
-														label: 'Percentage*',
-														labelPlacement: 'floating',
-														onIonChange: handleChange,
-														onIonBlur: handleBlur,
-														value: values.rotatorABTesting[_index].percentage,
-														name: `rotatorABTesting.${_index}.percentage`,
-														errorText: errors.rotatorABTesting?.length
-															? ((
-																	errors.rotatorABTesting[
-																		_index
-																	] as RotatorABTestingErrorType
-															  )?.percentage as string)
-															: undefined,
-														className: `${classNames({
-															'ion-touched':
-																touched.rotatorABTesting &&
-																touched.rotatorABTesting[_index]?.percentage,
-															'ion-invalid':
-																touched.rotatorABTesting &&
-																errors.rotatorABTesting &&
-																touched.rotatorABTesting[_index]?.percentage &&
-																(
-																	errors.rotatorABTesting[
-																		_index
-																	] as RotatorABTestingErrorType
-																)?.percentage,
-
-															'ion-valid':
-																touched.rotatorABTesting &&
-																errors.rotatorABTesting &&
-																touched.rotatorABTesting[_index]?.percentage &&
-																!(
-																	errors.rotatorABTesting[
-																		_index
-																	] as RotatorABTestingErrorType
-																)?.percentage,
-														})}`,
-													}}
-												/> */}
-
+											<ZIonCol
+												sizeXl='5.6'
+												sizeLg='5.6'
+												sizeMd='5.6'
+												sizeSm='11'
+												sizeXs='11'
+											>
 												<ZIonInput
 													type='number'
 													label='Percentage*'

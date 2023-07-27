@@ -77,6 +77,7 @@ import {
 } from '@/utils/helpers';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import { useParams } from 'react-router';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Component props type go down
@@ -90,10 +91,14 @@ import { useParams } from 'react-router';
  * */
 
 const ZLinkInBioThemeSection: React.FC = () => {
+	const { values, setFieldValue } = useFormikContext<LinkInBioType>();
+
+	// #region Recoil state.
 	const linkInBioFontFamilyState = useRecoilValue(LinkInBioFontFamilyRState);
 
 	// const [linkInBioPredefinedThemesState, setLinkInBioPredefinedThemesState] =
 	// 	useRecoilState(LinkInBioPredefinedThemeRState);
+	// #endregion
 
 	// current Link-in-bio id.
 	const { linkInBioId, workspaceId } = useParams<{
@@ -101,8 +106,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 		workspaceId: string;
 	}>();
 
-	const { values, setFieldValue } = useFormikContext<LinkInBioType>();
-
+	// #region APIS.
 	const { data: LinkInBioPreDefinedThemesData } = useZRQGetRequest<
 		LinkInBioPredefinedThemeType[]
 	>({
@@ -114,28 +118,27 @@ const ZLinkInBioThemeSection: React.FC = () => {
 		],
 	});
 
-	// useEffect(() => {
-	// 	try {
-	// 		if (LinkInBioPreDefinedThemesData) {
-	// 			const _updatedData = LinkInBioPreDefinedThemesData.map((el) => {
-	// 				const _predefinedTheme: LinkInBioPredefinedThemeType = {
-	// 					id: el.id,
-	// 					background: zJsonParse<LinkInBioThemeBackgroundType>(
-	// 						el.background as string
-	// 					),
-	// 					isActive: el.isActive,
-	// 					createdAt: el.createdAt,
-	// 					updatedAt: el.updatedAt,
-	// 				};
-	// 				return _predefinedTheme;
-	// 			});
-	// 			setLinkInBioPredefinedThemesState(_updatedData);
-	// 		}
-	// 	} catch (error) {
-	// 		reportCustomError(error);
-	// 	}
-	// 	// eslint-disable-next-line
-	// }, [LinkInBioPreDefinedThemesData]);
+	// fetching link-in-bio with the linkInBioId data from backend.
+	const { isFetching: isSelectedLinkInBioFetching } =
+		useZRQGetRequest<LinkInBioType>({
+			_url: API_URL_ENUM.linkInBio_update_delete,
+			_key: [
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
+				workspaceId,
+				linkInBioId,
+			],
+			_authenticated: true,
+			_itemsIds: [linkInBioId, workspaceId],
+			_urlDynamicParts: [
+				CONSTANTS.RouteParams.linkInBio.linkInBioId,
+				CONSTANTS.RouteParams.workspace.workspaceId,
+			],
+			_shouldFetchWhenIdPassed: !linkInBioId ? true : false,
+			_extractType: ZRQGetRequestExtractEnum.extractItem,
+		});
+	// #endregion
+
+	const isZFetching = isSelectedLinkInBioFetching;
 
 	return (
 		<>
@@ -146,9 +149,9 @@ const ZLinkInBioThemeSection: React.FC = () => {
 				sizeMd='12'
 				sizeSm='12'
 				sizeXs='12'
-				className='ion-padding-vertical ion-margin-top ion-margin-start '
+				className='mt-3 ion-margin-start '
 			>
-				<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
+				<ZIonTitle className='font-bold text-lg ion-no-padding'>
 					🎨 Pre-defined
 				</ZIonTitle>
 				<ZIonRow
@@ -207,9 +210,9 @@ const ZLinkInBioThemeSection: React.FC = () => {
 				sizeMd='12'
 				sizeSm='12'
 				sizeXs='12'
-				className='ion-padding-vertical ion-margin-top ion-margin-start border-bottom__violet'
+				className='mt-3 ion-margin-start border-bottom__violet'
 			>
-				<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
+				<ZIonTitle className='font-bold text-lg ion-no-padding'>
 					🖌️ Background
 				</ZIonTitle>
 
@@ -217,6 +220,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					{values?.theme?.background?.bgType ===
 						LinkInBioThemeBackgroundEnum.solidColor && (
 						<ZaionsColorPiker
+							showSkeleton={isZFetching}
 							name='theme.background.bgSolidColor'
 							value={values.theme.background.bgSolidColor as string}
 							setFieldValueFn={setFieldValue}
@@ -228,11 +232,12 @@ const ZLinkInBioThemeSection: React.FC = () => {
 						<>
 							<ZaionsColorPiker
 								name='theme.background.bgGradientColors.startColor'
+								showSkeleton={isZFetching}
+								setFieldValueFn={setFieldValue}
 								value={
 									values?.theme.background?.bgGradientColors
 										?.startColor as string
 								}
-								setFieldValueFn={setFieldValue}
 							/>
 							<ZIonButton
 								shape='round'
@@ -268,12 +273,13 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							</ZIonButton>
 							<ZaionsColorPiker
 								name='theme.background.bgGradientColors.endColor'
+								showSkeleton={isZFetching}
+								setFieldValueFn={setFieldValue}
+								showCloseIcon={true}
 								value={
 									values?.theme?.background?.bgGradientColors
 										?.endColor as string
 								}
-								setFieldValueFn={setFieldValue}
-								showCloseIcon={true}
 								closeIconOnChangeFn={() => {
 									setFieldValue(
 										'theme.background.bgType',
@@ -288,7 +294,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 						LinkInBioThemeBackgroundEnum.solidColor && (
 						<ZIonButton
 							className='mt-3 ion-text-capitalize ms-4'
-							shape='round'
+							height='40px'
 							onClick={() => {
 								setFieldValue(
 									'theme.background.bgType',
@@ -312,7 +318,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 				sizeMd='12'
 				sizeSm='12'
 				sizeXs='12'
-				className='ion-padding-vertical ion-margin-top ion-margin-start border-bottom__violet'
+				className='mt-3 ion-margin-start border-bottom__violet'
 			>
 				{/* 🖍️ Button color */}
 				<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
@@ -323,6 +329,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					{values?.theme?.button?.background?.bgType ===
 						LinkInBioThemeBackgroundEnum.solidColor && (
 						<ZaionsColorPiker
+							showSkeleton={isZFetching}
 							name='theme.button.background.bgSolidColor'
 							value={values?.theme?.button?.background?.bgSolidColor as string}
 							setFieldValueFn={setFieldValue}
@@ -334,11 +341,12 @@ const ZLinkInBioThemeSection: React.FC = () => {
 						<>
 							<ZaionsColorPiker
 								name='theme.button.background.bgGradientColors.startColor'
+								setFieldValueFn={setFieldValue}
+								showSkeleton={isZFetching}
 								value={
 									values?.theme?.button?.background?.bgGradientColors
 										?.startColor as string
 								}
-								setFieldValueFn={setFieldValue}
 							/>
 
 							<ZIonButton
@@ -375,12 +383,13 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							</ZIonButton>
 							<ZaionsColorPiker
 								name='theme.button.background.bgGradientColors.endColor'
+								setFieldValueFn={setFieldValue}
+								showCloseIcon={true}
+								showSkeleton={isZFetching}
 								value={
 									values?.theme?.button?.background?.bgGradientColors
 										?.endColor as string
 								}
-								setFieldValueFn={setFieldValue}
-								showCloseIcon={true}
 								closeIconOnChangeFn={() => {
 									setFieldValue(
 										'theme.button.background.bgType',
@@ -395,7 +404,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 						LinkInBioThemeBackgroundEnum.solidColor && (
 						<ZIonButton
 							className='mt-3 ion-text-capitalize ms-4'
-							shape='round'
+							height='40px'
 							onClick={() => {
 								setFieldValue(
 									'theme.button.background.bgType',
@@ -654,6 +663,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 								LinkInBioButtonTypeEnum.inlineCircleShadow,
 							].includes(values?.theme?.button?.type) && (
 								<ZaionsColorPiker
+									showSkeleton={isZFetching}
 									name='theme.button.shadowColor'
 									value={values?.theme?.button?.shadowColor as string}
 									setFieldValueFn={setFieldValue}
@@ -671,7 +681,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 				sizeMd='12'
 				sizeSm='12'
 				sizeXs='12'
-				className='ion-padding-vertical ion-margin-top ion-margin-start'
+				className='mt-3 ion-margin-start'
 			>
 				<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
 					📝 Font
@@ -714,7 +724,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 				sizeMd='12'
 				sizeSm='12'
 				sizeXs='12'
-				className='mb-5 ion-padding-vertical ion-margin-start'
+				className='mb-5 mt-3 ion-margin-start'
 			>
 				<ZIonRow>
 					<ZIonCol>

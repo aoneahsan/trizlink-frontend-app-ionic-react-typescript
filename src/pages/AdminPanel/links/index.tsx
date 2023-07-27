@@ -46,6 +46,7 @@ import {
 	ZIonButton,
 	ZIonCheckbox,
 	ZIonButtons,
+	ZIonSkeletonText,
 } from '@/components/ZIonComponents';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import ZRCheckbox from '@/components/CustomComponents/ZRCheckbox';
@@ -58,6 +59,8 @@ import FolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPop
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 import ZDashboardSidebar from '@/components/AdminPanelComponents/Sidebar';
 import ZCan from '@/components/Can';
+import ZDashboardFolderMenu from '@/components/AdminPanelComponents/Sidebar/FolderMenu';
+import AdminPanelSidebarMenu from '@/components/AdminPanelComponents/Sidebar/ExpendableMenu';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 
 /**
@@ -81,12 +84,17 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { API_URL_ENUM, PAGE_MENU } from '@/utils/enums';
 import { replaceParams, zStringify } from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
+import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkFolderType, TimeFilterEnum } from '@/types/AdminPanel/linksType';
+import {
+	LinkFolderType,
+	ShortLinkType,
+	TimeFilterEnum,
+} from '@/types/AdminPanel/linksType';
 import {
 	AdminPanelSidebarMenuPageEnum,
 	folderState,
@@ -114,9 +122,8 @@ import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
-import ZDashboardFolderMenu from '@/components/AdminPanelComponents/Sidebar/FolderMenu';
-import AdminPanelSidebarMenu from '@/components/AdminPanelComponents/Sidebar/ExpendableMenu';
-import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
+import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Images Imports go down
@@ -205,8 +212,23 @@ const ZShortLinksListPage: React.FC = () => {
 	// #endregion
 
 	// #region APIS requests.
+	// get workspace data api.
+	const { isFetching: isSelectedWorkspaceFetching } =
+		useZRQGetRequest<workspaceInterface>({
+			_url: API_URL_ENUM.workspace_update_delete,
+			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId],
+			_authenticated: true,
+			_itemsIds: [workspaceId],
+			_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+			_shouldFetchWhenIdPassed: !workspaceId ? true : false,
+			_extractType: ZRQGetRequestExtractEnum.extractItem,
+		});
+
 	// Request for getting short links folders.
-	const { data: shortLinksFoldersData } = useZRQGetRequest<LinkFolderType[]>({
+	const {
+		data: shortLinksFoldersData,
+		isFetching: isShortLinksFoldersDataFetching,
+	} = useZRQGetRequest<LinkFolderType[]>({
 		_url: API_URL_ENUM.ShortLink_folders_create_list,
 		_key: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
@@ -225,6 +247,16 @@ const ZShortLinksListPage: React.FC = () => {
 			workspaceId,
 			folderState.shortlink,
 		],
+	});
+
+	// Request for getting short links data.
+	const { isFetching: isShortLinksDataFetching } = useZRQGetRequest<
+		ShortLinkType[]
+	>({
+		_url: API_URL_ENUM.shortLinks_create_list,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
+		_itemsIds: [workspaceId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 	});
 	// #endregion
 
@@ -261,11 +293,25 @@ const ZShortLinksListPage: React.FC = () => {
 	// #endregion
 
 	// #region Functions.
-	const invalidedShortLinksQuery = async () => {
+	const invalidedQueries = async () => {
 		try {
+			// Workspace.
+			await zInvalidateReactQueries([
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
+				workspaceId,
+			]);
+
+			// Shorts links.
 			await zInvalidateReactQueries([
 				CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
 				workspaceId,
+			]);
+
+			// Folder.
+			await zInvalidateReactQueries([
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+				workspaceId,
+				folderState.shortlink,
 			]);
 		} catch (error) {
 			reportCustomError(error);
@@ -274,7 +320,7 @@ const ZShortLinksListPage: React.FC = () => {
 
 	const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
 		try {
-			await invalidedShortLinksQuery();
+			await invalidedQueries();
 			event.detail.complete();
 		} catch (error) {
 			reportCustomError(error);
@@ -338,6 +384,11 @@ const ZShortLinksListPage: React.FC = () => {
 	};
 	// #endregion
 
+	const isZFetching =
+		isShortLinksFoldersDataFetching ||
+		isShortLinksDataFetching ||
+		isSelectedWorkspaceFetching;
+
 	return (
 		<ZaionsIonPage
 			pageTitle='Zaions short-links list page'
@@ -364,6 +415,7 @@ const ZShortLinksListPage: React.FC = () => {
 							{/* Folder menu after Expendable Navigation */}
 							{isLgScale && (
 								<ZDashboardFolderMenu
+									showSkeleton={isZFetching}
 									type={AdminPanelSidebarMenuPageEnum.shortLink}
 									foldersData={
 										shortLinksFoldersData ? shortLinksFoldersData : []
@@ -399,7 +451,7 @@ const ZShortLinksListPage: React.FC = () => {
 
 							{/* Main Container */}
 							<ZIonCol
-								className='flex flex-col gap-10 zaions-transition'
+								className='flex flex-col gap-10 h-screen overflow-y-scroll zaions_pretty_scrollbar zaions-transition'
 								sizeXl={
 									ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
 										? '8'
@@ -490,7 +542,9 @@ const ZShortLinksListPage: React.FC = () => {
 													'mt-4 order-2': !isMdScale,
 												})}
 											>
-												<ZaionsCreateShortLinkUrlInput />
+												<ZaionsCreateShortLinkUrlInput
+													showSkeleton={isZFetching}
+												/>
 											</ZIonCol>
 										</ZCan>
 									</ZIonRow>
@@ -658,7 +712,7 @@ const ZShortLinksListPage: React.FC = () => {
 										<ZIonCol className='flex ps-1 ion-align-items-center'>
 											<ZIonText className='text-2xl'>
 												<ZIonText className='font-bold total_links pe-1'>
-													{shortLinksStateAtom?.length}
+													{shortLinksStateAtom?.length || 0}
 												</ZIonText>
 												links
 											</ZIonText>
@@ -812,7 +866,7 @@ const ZShortLinksListPage: React.FC = () => {
 														className='my-2 normal-case'
 														height='39px'
 														onClick={() => {
-															void invalidedShortLinksQuery();
+															void invalidedQueries();
 														}}
 													>
 														<ZIonIcon slot='start' icon={refresh} />
@@ -825,7 +879,7 @@ const ZShortLinksListPage: React.FC = () => {
 								</div>
 
 								{/* Shortlink Table */}
-								<ZaionsShortLinkTable />
+								<ZaionsShortLinkTable showSkeleton={isZFetching} />
 							</ZIonCol>
 						</ZIonRow>
 					</ZIonGrid>
@@ -1382,7 +1436,7 @@ const SearchQueryInputComponent = () => {
 						}}
 						slot='end'
 					>
-						<ZIonIcon icon={filterOutline} className='me-2' />{' '}
+						<ZIonIcon icon={filterOutline} className='me-2' />
 						<ZIonText>Filter</ZIonText>
 					</ZIonButton>
 				</ZIonItem>

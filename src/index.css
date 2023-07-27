@@ -841,10 +841,13 @@ ion-modal.zaions__modal_w100 {
 .zaions-color-piker {
 	width: 3rem;
 	height: 3rem;
-	border: none;
-	margin-bottom: 0.2rem;
+	border: none !important;
 	cursor: pointer;
-	-webkit-appearance: none;
+	outline: none !important;
+	appearance: none !important;
+	-webkit-appearance: none !important;
+	padding: 0 !important;
+	height: 40px;
 }
 
 .zaions-border-primary {

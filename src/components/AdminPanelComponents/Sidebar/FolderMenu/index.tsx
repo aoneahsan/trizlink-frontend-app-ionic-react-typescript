@@ -23,6 +23,7 @@ import {
 	ZIonList,
 	ZIonReorder,
 	ZIonReorderGroup,
+	ZIonSkeletonText,
 	ZIonText,
 } from '@/components/ZIonComponents';
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
@@ -56,10 +57,6 @@ import {
  * ? Import of recoil states is a Recoil State import
  * */
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import { LinkFolderType } from '@/types/AdminPanel/linksType';
-import { API_URL_ENUM } from '@/utils/enums';
-
 /**
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
@@ -80,6 +77,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 	type,
 	foldersData,
 	showFoldersSaveReorderButton,
+	showSkeleton = false,
 	handleFoldersReorder,
 	addNewFolderButtonOnClickHandler,
 	foldersSaveReorderButtonOnClickHandler,
@@ -102,10 +100,10 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 
 	return (
 		<ZIonCol
+			className='ion-padding border-e-[1px] zaions-transition h-screen zaions_pretty_scrollbar overflow-y-scroll'
 			size={
 				ZDashboardState.dashboardMainSidebarIsCollabes.isExpand ? '2' : '2.4'
 			}
-			className='ion-padding border-e-[1px] zaions-transition'
 		>
 			<div className='ion-padding-top'>
 				<ZIonList lines='none'>
@@ -124,6 +122,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 									📂 Folders
 								</ZIonText>
 							</ZIonItem>
+
 							<ZIonItem
 								className='zaions__cursor_pointer ms-2'
 								onClick={() => {
@@ -157,7 +156,8 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 									<ZIonIcon icon={appsOutline} />
 								</ZIonReorder>
 							</ZIonItem>
-							{foldersData && foldersData.length ? (
+
+							{!showSkeleton && foldersData && foldersData.length ? (
 								<ZIonReorderGroup
 									disabled={false}
 									onIonItemReorder={handleFoldersReorder}
@@ -165,7 +165,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 									{foldersData.map((el) => (
 										<ZIonItem
 											className={classNames({
-												'zaions__cursor_pointer ': true,
+												zaions__cursor_pointer: true,
 												'zaions-short-link-folder':
 													type === AdminPanelSidebarMenuPageEnum.shortLink,
 												'zaions-link-in-bio-folder':
@@ -229,12 +229,52 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 										</ZIonItem>
 									))}
 								</ZIonReorderGroup>
-							) : (
-								''
-							)}
+							) : null}
+
+							{showSkeleton &&
+								[1, 2, 3].map((el) => (
+									<ZIonItem
+										key={el}
+										className={classNames({
+											'zaions__cursor_pointer ': true,
+											'zaions-short-link-folder':
+												type === AdminPanelSidebarMenuPageEnum.shortLink,
+											'zaions-link-in-bio-folder':
+												type === AdminPanelSidebarMenuPageEnum.linkInBio,
+										})}
+									>
+										<ZIonText slot='start' className='me-3'>
+											<ZIonSkeletonText
+												height='1rem'
+												width='1rem'
+												animated={true}
+											/>
+										</ZIonText>
+										<ZIonLabel>
+											<ZIonSkeletonText
+												height='1rem'
+												width='7rem'
+												animated={true}
+											/>
+										</ZIonLabel>
+										<ZIonButton
+											fill='clear'
+											color='dark'
+											size='small'
+											className='ion-no-padding ms-auto'
+										>
+											<ZIonSkeletonText
+												height='1rem'
+												width='1rem'
+												animated={true}
+											/>
+										</ZIonButton>
+									</ZIonItem>
+								))}
 						</ZIonList>
 					</ZIonItem>
 				</ZIonList>
+
 				<ZIonButton
 					className='ion-text-capitalize ion-margin-horizontal'
 					fill='outline'

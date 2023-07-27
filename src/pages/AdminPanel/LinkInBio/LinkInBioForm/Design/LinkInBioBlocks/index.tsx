@@ -10,14 +10,20 @@ import React, { useEffect } from 'react';
  * */
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
-import { useRecoilState } from 'recoil';
 import { useParams } from 'react-router';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonCol, ZIonRow, ZIonText } from '@/components/ZIonComponents';
+import {
+	ZIonButton,
+	ZIonCol,
+	ZIonImg,
+	ZIonRow,
+	ZIonSkeletonText,
+	ZIonText,
+} from '@/components/ZIonComponents';
 import ZLinkInBioAddBlockModal from '@/components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal';
 
 import { LinkInBioPredefinedBlocksRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
@@ -101,10 +107,11 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 		}
 	);
 
-	// fetch block data from api and storing it in LinkInBioBlocksData variable...
-	const { data: LinkInBioPreDefinedBlocksData } = useZRQGetRequest<
-		LinkInBioPredefinedBlocksInterface[]
-	>({
+	// fetch block data from api and storing.
+	const {
+		data: LinkInBioPreDefinedBlocksData,
+		isFetching: isLinkInBioPreDefinedBlocksDataFetching,
+	} = useZRQGetRequest<LinkInBioPredefinedBlocksInterface[]>({
 		_url: API_URL_ENUM.linkInBioPreDefinedBlocks_create_list,
 		_key: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_DEFINED_BLOCKS.MAIN,
@@ -112,18 +119,6 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 			linkInBioId,
 		],
 	});
-
-	// After fetching data and storing it to LinkInBioBlocksData variable, setting data to LinkInBioPredefinedBlocksRState recoil state and making sure that if only the data refetch then again store the lates data in recoil state...
-	// useEffect(() => {
-	// 	try {
-	// 		if (LinkInBioPreDefinedBlocksData) {
-	// 			setLinkInBioPredefinedBlocksState(LinkInBioPreDefinedBlocksData);
-	// 		}
-	// 	} catch (error) {
-	// 		reportCustomError(error);
-	// 	}
-	// 	// eslint-disable-next-line
-	// }, [LinkInBioPreDefinedBlocksData]);
 
 	// the LinkInBioBlockHandler function will run then the user click on any of the blocks this will execute the presentZLinkInBioAddBlockModal function which is coming from the useZIonModal to present modal...
 	const LinkInBioBlockHandler = (_type: LinkInBioBlockEnum) => {
@@ -139,6 +134,8 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 			reportCustomError(error);
 		}
 	};
+
+	const isZFetching = isLinkInBioPreDefinedBlocksDataFetching;
 
 	return (
 		<>
@@ -157,6 +154,43 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 							true,
 					})}
 				>
+					{isZFetching &&
+						[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((el) => {
+							return (
+								<ZIonCol
+									key={el}
+									size='2.4'
+									className='flex ion-justify-content-center'
+								>
+									<div className='ion-text-center me-3 zaions__max_content'>
+										<ZIonButton
+											size='large'
+											fill='outline'
+											color='medium'
+											height='4.5rem'
+										>
+											<ZIonSkeletonText
+												width='25px'
+												height='25px'
+												animated={true}
+											/>
+										</ZIonButton>
+										{/*  */}
+										<ZIonText
+											color='dark'
+											className='font-bold flex ion-justify-content-center'
+										>
+											<ZIonSkeletonText
+												width='2.5rem'
+												height='17px'
+												animated={true}
+											/>
+										</ZIonText>
+									</div>
+								</ZIonCol>
+							);
+						})}
+
 					{/* After getting block data from api and storing it to the LinkInBioPredefinedBlocksRState recoil state, looping the recoil state value to make blocks */}
 					{LinkInBioPreDefinedBlocksData?.map((el) => {
 						return (

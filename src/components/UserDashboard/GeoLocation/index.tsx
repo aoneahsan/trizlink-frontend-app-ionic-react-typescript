@@ -34,6 +34,7 @@ import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/li
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Styles
 
@@ -52,6 +53,8 @@ const GeoLocation: React.FC = () => {
 		handleBlur,
 		setFieldTouched,
 	} = useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
+
+	const { isMdScale, isSmScale } = useZMediaQueryScale();
 
 	return (
 		<>
@@ -84,56 +87,20 @@ const GeoLocation: React.FC = () => {
 											<ZIonRow
 												key={_index}
 												className={classNames({
-													'gap-2 ion-align-items-top': true,
+													'ion-align-items-top': true,
 													'mt-2': _index !== 0,
+													'mt-3 gap-2 ': isSmScale,
+													'py-2 gap-1 mt-2 border-b':
+														(!isMdScale && isSmScale) || !isSmScale,
 												})}
 											>
-												<ZIonCol size='5.6'>
-													{/* <ZIonInputField
-														inputFieldProps={{
-															label: 'Redirection Links*',
-															labelPlacement: 'floating',
-															onIonChange: handleChange,
-															onIonBlur: handleBlur,
-															value:
-																values.geoLocation[_index]?.redirectionLink,
-															name: `geoLocation.${_index}.redirectionLink`,
-															errorText: errors.geoLocation?.length
-																? ((
-																		errors.geoLocation[
-																			_index
-																		] as GeoLocationErrorsType
-																  )?.redirectionLink as string)
-																: undefined,
-															type: 'url',
-															className: `${classNames({
-																// 'pt-1 mt-1': true,
-																'ion-touched':
-																	touched?.geoLocation &&
-																	touched?.geoLocation[_index]?.redirectionLink,
-																'ion-invalid':
-																	touched?.geoLocation &&
-																	errors?.geoLocation &&
-																	touched?.geoLocation[_index]
-																		?.redirectionLink &&
-																	(
-																		errors.geoLocation[
-																			_index
-																		] as GeoLocationErrorsType
-																	).redirectionLink,
-																'ion-valid':
-																	touched?.geoLocation &&
-																	errors?.geoLocation &&
-																	touched?.geoLocation[_index]?.country &&
-																	!(
-																		errors.geoLocation[
-																			_index
-																		] as GeoLocationErrorsType
-																	).country,
-															})}`,
-														}}
-													/> */}
-
+												<ZIonCol
+													sizeXl='5.6'
+													sizeLg='5.6'
+													sizeMd='5.6'
+													sizeSm='12'
+													sizeXs='12'
+												>
 													<ZIonInput
 														label='Redirection Links*'
 														labelPlacement='stacked'
@@ -179,7 +146,13 @@ const GeoLocation: React.FC = () => {
 													/>
 												</ZIonCol>
 
-												<ZIonCol size='5.6'>
+												<ZIonCol
+													sizeXl='5.6'
+													sizeLg='5.6'
+													sizeMd='5.6'
+													sizeSm='11'
+													sizeXs='11'
+												>
 													<ZaionsRSelect
 														className={classNames({
 															'pb-0 mb-0 geo-location-country-field': true,
@@ -249,6 +222,8 @@ const GeoLocation: React.FC = () => {
 														''
 													)}
 												</ZIonCol>
+
+												{/* delete */}
 												<ZIonCol className='mt-5'>
 													<ZIonIcon
 														icon={trashBin}

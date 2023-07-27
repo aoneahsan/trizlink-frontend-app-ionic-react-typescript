@@ -88,6 +88,7 @@ export interface ZDashboardFolderMenuInterface {
 	addNewFolderButtonOnClickHandler?: React.MouseEventHandler<HTMLIonButtonElement>;
 	foldersSaveReorderButtonOnClickHandler?: React.MouseEventHandler<HTMLIonButtonElement>;
 	folderActionsButtonOnClickHandler?: React.MouseEventHandler<HTMLIonButtonElement>;
+	showSkeleton?: boolean
 }
 
 // Types
