@@ -77,10 +77,10 @@ const ZLinkInBioSettingsSection: React.FC = () => {
 				{/* Header code editor */}
 				<ZIonCol size='12'>
 					<ZIonText className='font-bold'>👩‍💻 Insert Header code</ZIonText>
-					<div className='ion-padding-top mt-3'>
+					<div className='mt-3 ion-padding-top'>
 						<ZEditor
-							width={'100%'}
-							height={'240px'}
+							width='100%'
+							height='240px'
 							placeholder='Paste you HTML code here...'
 							fontSize={18}
 							onChange={(value) => {
@@ -92,9 +92,9 @@ const ZLinkInBioSettingsSection: React.FC = () => {
 				</ZIonCol>
 
 				{/* Body code editor */}
-				<ZIonCol size='12' className='ion-padding-top mt-1'>
+				<ZIonCol size='12' className='mt-1 ion-padding-top'>
 					<ZIonText className='font-bold'>👨‍💻 Insert Body code</ZIonText>
-					<div className='ion-padding-top mt-3'>
+					<div className='mt-3 ion-padding-top'>
 						<ZEditor
 							width={'100%'}
 							height={'240px'}

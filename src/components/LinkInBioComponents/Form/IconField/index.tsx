@@ -30,7 +30,7 @@ const LinkInBioIconField: React.FC<LinkInBioIconFieldInterface> = ({
 }) => {
 	return (
 		<ZIonItem className={className} lines='none'>
-			<ZIonIcon icon={addCircleOutline} slot='start' />
+			<ZIonIcon icon={addCircleOutline} slot='start' className='w-7 h-7 me-2' />
 			<ZIonInput
 				name={name}
 				placeholder={placeholder}
@@ -38,6 +38,7 @@ const LinkInBioIconField: React.FC<LinkInBioIconFieldInterface> = ({
 				onIonBlur={onIonBlur}
 				value={value}
 				label=''
+				minHeight='40px'
 			/>
 		</ZIonItem>
 	);

@@ -39,7 +39,7 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * ? Like import of Constant is a global constants import
  * */
 import CONSTANTS from '@/utils/constants';
-import { replaceParams } from '@/utils/helpers';
+import { createRedirectRoute, replaceParams } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
@@ -57,6 +57,7 @@ import {
  * ? Import of recoil states is a Recoil State import
  * */
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
+import { useParams } from 'react-router';
 /**
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
@@ -85,6 +86,11 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 }) => {
 	// Custom Hooks
 	const { zNavigatePushRoute } = useZNavigate();
+
+	// getting current workspace id form params.
+	const { workspaceId } = useParams<{
+		workspaceId: string;
+	}>();
 
 	const ZDashboardState = useRecoilValue(ZDashboardRState);
 
@@ -129,23 +135,29 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 									switch (type) {
 										case AdminPanelSidebarMenuPageEnum.shortLink:
 											zNavigatePushRoute(
-												replaceParams(
-													ZaionsRoutes.AdminPanel.ShortLinks.Main,
-													CONSTANTS.RouteParams
-														.folderIdToGetShortLinksOrLinkInBio,
-													'all'
-												)
+												createRedirectRoute({
+													url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+													params: [
+														CONSTANTS.RouteParams.workspace.workspaceId,
+														CONSTANTS.RouteParams
+															.folderIdToGetShortLinksOrLinkInBio,
+													],
+													values: [workspaceId, 'all'],
+												})
 											);
 											break;
 
 										case AdminPanelSidebarMenuPageEnum.linkInBio:
 											zNavigatePushRoute(
-												replaceParams(
-													ZaionsRoutes.AdminPanel.LinkInBio.Main,
-													CONSTANTS.RouteParams
-														.folderIdToGetShortLinksOrLinkInBio,
-													'all'
-												)
+												createRedirectRoute({
+													url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
+													params: [
+														CONSTANTS.RouteParams.workspace.workspaceId,
+														CONSTANTS.RouteParams
+															.folderIdToGetShortLinksOrLinkInBio,
+													],
+													values: [workspaceId, 'all'],
+												})
 											);
 											break;
 									}
@@ -176,28 +188,39 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 										>
 											<ZIonLabel
 												onClick={() => {
-													switch (type) {
-														case AdminPanelSidebarMenuPageEnum.shortLink:
-															zNavigatePushRoute(
-																replaceParams(
-																	ZaionsRoutes.AdminPanel.ShortLinks.Main,
-																	CONSTANTS.RouteParams
-																		.folderIdToGetShortLinksOrLinkInBio,
-																	el.id as string
-																)
-															);
-															break;
+													if (el.id) {
+														switch (type) {
+															case AdminPanelSidebarMenuPageEnum.shortLink:
+																zNavigatePushRoute(
+																	createRedirectRoute({
+																		url: ZaionsRoutes.AdminPanel.ShortLinks
+																			.Main,
+																		params: [
+																			CONSTANTS.RouteParams.workspace
+																				.workspaceId,
+																			CONSTANTS.RouteParams
+																				.folderIdToGetShortLinksOrLinkInBio,
+																		],
+																		values: [workspaceId, el.id],
+																	})
+																);
+																break;
 
-														case AdminPanelSidebarMenuPageEnum.linkInBio:
-															zNavigatePushRoute(
-																replaceParams(
-																	ZaionsRoutes.AdminPanel.LinkInBio.Main,
-																	CONSTANTS.RouteParams
-																		.folderIdToGetShortLinksOrLinkInBio,
-																	el.id as string
-																)
-															);
-															break;
+															case AdminPanelSidebarMenuPageEnum.linkInBio:
+																zNavigatePushRoute(
+																	createRedirectRoute({
+																		url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
+																		params: [
+																			CONSTANTS.RouteParams.workspace
+																				.workspaceId,
+																			CONSTANTS.RouteParams
+																				.folderIdToGetShortLinksOrLinkInBio,
+																		],
+																		values: [workspaceId, el.id],
+																	})
+																);
+																break;
+														}
 													}
 												}}
 											>

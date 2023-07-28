@@ -66,6 +66,7 @@ import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-com
 import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
 import { zJsonParse } from '@/utils/helpers';
 import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
+import { reportCustomError } from '@/utils/customErrorType';
 
 /**
  * Component props type go down
@@ -86,6 +87,17 @@ const ZaionsCustomYourLink: React.FC = () => {
 	const { presentZIonModal: presentZFileUploadModal } = useZIonModal(
 		ZaionsFileUploadModal
 	);
+
+	const addUTMInUrl = () => {
+		try {
+			let __targetUrl = values.target.url;
+			if (values.UTMTags.utmCampaign?.trim().length) {
+				__targetUrl = `${__targetUrl}?utm_campaign=${values.UTMTags.utmCampaign}`;
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
 
 	return (
 		<ZIonCol

@@ -13,6 +13,8 @@ import {
 	ZIonRouterLink,
 	ZIonButton,
 	ZIonSkeletonText,
+	ZIonSelect,
+	ZIonSelectOption,
 } from '@/components/ZIonComponents';
 import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
@@ -30,6 +32,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 // import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 import {
 	FolderInterface,
+	LinkFolderType,
 	ZaionsShortUrlOptionFieldsValuesInterface,
 } from '@/types/AdminPanel/linksType';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
@@ -40,11 +43,11 @@ import { folderState } from '@/types/AdminPanel/index.type';
 // import CLASSES from './styles.module.css';
 
 const NewLinkFolder: React.FC<{
-	_foldersData: FolderInterface[];
+	_foldersData: LinkFolderType[];
 	_state: folderState;
 	workspaceId: string;
 }> = ({ _foldersData, _state, workspaceId }) => {
-	const { values, setFieldValue } =
+	const { values, handleChange, handleBlur, setFieldValue } =
 		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
 	const { presentZIonModal: presentFolderModal } = useZIonModal(
@@ -93,7 +96,7 @@ const NewLinkFolder: React.FC<{
 			{/*  */}
 			<div className='block px-4 mt-4'>
 				{/* Folder select */}
-				<ZaionsRSelect
+				{/* <ZaionsRSelect
 					className=''
 					options={_foldersData as unknown as ZaionsRSelectOptions[]}
 					name='folderId'
@@ -108,11 +111,29 @@ const NewLinkFolder: React.FC<{
 						formatReactSelectOption(
 							values?.folderId,
 							_foldersData as ZGenericObject[],
-							'value',
-							'label'
+							'title',
+							'id'
 						) || []
 					}
-				/>
+				/> */}
+				<ZIonSelect
+					onIonChange={handleChange}
+					onIonBlur={handleBlur}
+					name='folderId'
+					value={values?.folderId}
+					interface='popover'
+					fill='outline'
+					minHeight='40px'
+				>
+					{_foldersData &&
+						_foldersData.map((el, index) => {
+							return (
+								<ZIonSelectOption key={index} value={el.id}>
+									{el.title}
+								</ZIonSelectOption>
+							);
+						})}
+				</ZIonSelect>
 			</div>
 		</ZIonCol>
 	);

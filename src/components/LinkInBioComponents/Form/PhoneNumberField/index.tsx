@@ -39,6 +39,7 @@ const LinkInBioPhoneNumberField: React.FC<
 				onIonBlur={onIonBlur}
 				value={value}
 				label=''
+				minHeight='40px'
 			/>
 		</ZIonItem>
 	);

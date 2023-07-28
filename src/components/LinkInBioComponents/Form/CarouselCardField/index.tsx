@@ -86,17 +86,19 @@ const LinkInBioCarouselCardField: React.FC = () => {
 								{values.cardItems?.length
 									? values.cardItems.map((_cardItem, _index) => (
 											<ZIonItem
-												className='my-4 zaions-linkInBio-block border py-3'
+												className='py-3 my-3 border zaions-linkInBio-block'
 												style={{
 													'--background': 'transparent',
 												}}
 												lines='none'
 												key={_index}
 											>
-												<ZIonReorder slot='start' className='ms-3'>
-													<h4 className='ion-no-margin'>
-														<ZIonIcon icon={appsOutline} color='dark' />
-													</h4>
+												<ZIonReorder slot='start' className='ms-3 me-3'>
+													<ZIonIcon
+														icon={appsOutline}
+														color='dark'
+														className='w-6 h-6'
+													/>
 												</ZIonReorder>
 
 												<div className='w-full pe-3'>
@@ -111,8 +113,8 @@ const LinkInBioCarouselCardField: React.FC = () => {
 													/>
 
 													<LinkInBioUploadField
-														className='mt-3'
-														dropdownHeight='8rem'
+														className='mt-2'
+														dropdownHeight='7rem'
 													/>
 
 													<LinkInBioTitleField
@@ -122,7 +124,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
 														value={
 															values.cardItems && values.cardItems[_index].title
 														}
-														className='mt-3'
+														className='mt-2'
 													/>
 
 													<LinkInBioDescriptionField
@@ -133,7 +135,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
 															values.cardItems &&
 															values.cardItems[_index].description
 														}
-														className='mt-3'
+														className='mt-2'
 													/>
 												</div>
 
@@ -148,7 +150,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
 															reportCustomError(error);
 														}
 													}}
-													className='ion-no-padding me-1'
+													className='ion-no-padding ms-3 me-1'
 													slot='end'
 													iconColor='danger'
 												/>

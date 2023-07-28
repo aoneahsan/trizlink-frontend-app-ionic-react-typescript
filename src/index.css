@@ -477,7 +477,7 @@ span.new {
 	background-color: var(--ion-color-secondary);
 }
 .zaions-ion-bg-color-light {
-	background-color: var(--ion-color-light);
+	background-color: var(--ion-color-light) !important;
 }
 
 .zaions-ion-bg-color-medium {

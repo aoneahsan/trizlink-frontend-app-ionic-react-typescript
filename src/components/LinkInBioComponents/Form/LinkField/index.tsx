@@ -46,7 +46,7 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
 	return (
 		<ZIonItem className={className} lines='none'>
 			{!showImageInSlot && !slotImageUrl?.trim() && (
-				<ZIonIcon icon={linkOutline} slot='start' />
+				<ZIonIcon icon={linkOutline} slot='start' className='w-7 h-7 me-2' />
 			)}
 
 			{showImageInSlot && slotImageUrl?.trim() && (
@@ -60,28 +60,26 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
 				onIonBlur={onIonBlur}
 				value={value}
 				label=''
+				minHeight='40px'
 			/>
 
 			{showRefreshBtn && (
 				<ZIonButton
 					fill='clear'
-					className='ion-no-padding'
+					className='ion-no-padding ms-2'
 					color='dark'
 					slot='end'
 					style={{
 						'--background-hover-opacity': '0',
 					}}
 					onClick={RefreshBtnClickFn}
+					height='35px'
 				>
-					<ZIonTitle className='ion-no-padding'>
-						<h4 className='ion-no-margin'>
-							<ZIonIcon
-								icon={refreshCircleOutline}
-								className='mt-1'
-								color='primary'
-							/>
-						</h4>
-					</ZIonTitle>
+					<ZIonIcon
+						icon={refreshCircleOutline}
+						className='w-7 h-7'
+						color='primary'
+					/>
 				</ZIonButton>
 			)}
 		</ZIonItem>

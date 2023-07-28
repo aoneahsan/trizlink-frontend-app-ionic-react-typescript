@@ -109,9 +109,14 @@ import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/Sh
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkTargetType, ShortLinkType } from '@/types/AdminPanel/linksType';
+import {
+	LinkFolderType,
+	LinkTargetType,
+	ShortLinkType,
+} from '@/types/AdminPanel/linksType';
 import {
 	AdminPanelSidebarMenuPageEnum,
+	folderState,
 	FormMode,
 	messengerPlatformsBlockEnum,
 } from '@/types/AdminPanel/index.type';
@@ -128,7 +133,9 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import AdminPanelSidebarMenu from '@/components/AdminPanelComponents/Sidebar/ExpendableMenu';
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
-import { FolderSkeleton } from '@/components/UserDashboard/NewLinkFolder';
+import NewLinkFolder, {
+	FolderSkeleton,
+} from '@/components/UserDashboard/NewLinkFolder';
 import { workspaceInterface } from '@/types/AdminPanel/workspace';
 
 /**
@@ -223,6 +230,21 @@ const AdminCreateNewLinkPages: React.FC = () => {
 			_shouldFetchWhenIdPassed: !editLinkId ? true : false,
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
 		});
+
+	// Request for getting short links folders.
+	const {
+		data: shortLinksFoldersData,
+		isFetching: isShortLinksFoldersDataFetching,
+	} = useZRQGetRequest<LinkFolderType[]>({
+		_url: API_URL_ENUM.ShortLink_folders_create_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+			workspaceId,
+			folderState.shortlink,
+		],
+		_itemsIds: [workspaceId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+	});
 	// #endregion
 
 	// after getting data store in recoil state.
@@ -772,7 +794,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 				// #endregion
 			>
 				{/* Content */}
-				{({ isSubmitting, isValid, errors, submitForm }) => {
+				{({ isSubmitting, isValid, submitForm }) => {
 					return (
 						<ZIonContent color='light'>
 							{/* Grid-1 */}
@@ -899,7 +921,12 @@ const AdminCreateNewLinkPages: React.FC = () => {
 															{isZFetching ? (
 																<FolderSkeleton />
 															) : (
-																<ShortLinkFoldersHOC />
+																// <ShortLinkFoldersHOC />
+																<NewLinkFolder
+																	_foldersData={shortLinksFoldersData || []}
+																	_state={folderState.shortlink}
+																	workspaceId={workspaceId}
+																/>
 															)}
 
 															{/* Add Notes */}

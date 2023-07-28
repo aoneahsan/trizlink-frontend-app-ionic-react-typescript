@@ -80,7 +80,7 @@ const LinkInBioQAndACardField: React.FC = () => {
 								{values.cardItems?.length
 									? values.cardItems.map((_cardItem, _index) => (
 											<ZIonItem
-												className='my-4 zaions-linkInBio-block border py-3'
+												className='pb-3 my-4 border  zaions-linkInBio-block'
 												style={{
 													'--background': 'transparent',
 												}}
@@ -88,12 +88,14 @@ const LinkInBioQAndACardField: React.FC = () => {
 												key={_index}
 											>
 												<ZIonReorder slot='start' className='ms-3'>
-													<h4 className='ion-no-margin'>
-														<ZIonIcon icon={appsOutline} color='dark' />
-													</h4>
+													<ZIonIcon
+														icon={appsOutline}
+														color='dark'
+														className='w-6 h-6'
+													/>
 												</ZIonReorder>
 
-												<div className='w-full pe-3'>
+												<div className='w-full'>
 													<LinkInBioTitleField
 														name={`cardItems.${_index}.title`}
 														onIonChange={handleChange}

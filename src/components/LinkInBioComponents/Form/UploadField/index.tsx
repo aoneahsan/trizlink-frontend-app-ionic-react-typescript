@@ -12,20 +12,20 @@ import ZDragAndDrop from '@/components/CustomComponents/ZDragAndDrop';
 
 // Component Type
 interface LinkInBioUploadFieldInterface {
-  className?: string;
-  dropdownHeight?: string;
+	className?: string;
+	dropdownHeight?: string;
 }
 
 const LinkInBioUploadField: React.FC<LinkInBioUploadFieldInterface> = ({
-  className,
-  dropdownHeight,
+	className,
+	dropdownHeight,
 }) => {
-  return (
-    <ZIonItem lines='none' className={className}>
-      <ZIonIcon icon={imageOutline} slot='start' />
-      <ZDragAndDrop style={{ height: dropdownHeight }} />
-    </ZIonItem>
-  );
+	return (
+		<ZIonItem lines='none' className={className}>
+			<ZIonIcon icon={imageOutline} slot='start' className='w-7 h-7 me-2' />
+			<ZDragAndDrop style={{ height: dropdownHeight }} />
+		</ZIonItem>
+	);
 };
 
 export default LinkInBioUploadField;

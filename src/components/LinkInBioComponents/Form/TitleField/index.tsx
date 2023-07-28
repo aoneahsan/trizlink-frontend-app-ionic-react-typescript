@@ -41,7 +41,11 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
 	return (
 		<ZIonItem className={className} lines='none'>
 			{!showImageInSlot && !slotImageUrl?.trim() && (
-				<ZIonIcon icon={reorderTwoOutline} slot='start' />
+				<ZIonIcon
+					icon={reorderTwoOutline}
+					slot='start'
+					className='w-7 h-7 me-2'
+				/>
 			)}
 
 			{showImageInSlot && slotImageUrl?.trim() && (
@@ -55,6 +59,7 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
 				onIonBlur={onIonBlur}
 				value={value}
 				label=''
+				minHeight='40px'
 			/>
 		</ZIonItem>
 	);

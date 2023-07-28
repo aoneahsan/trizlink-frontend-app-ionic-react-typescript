@@ -17,6 +17,7 @@ import {
 	ZIonReorderGroup,
 	ZIonRow,
 	ZIonText,
+	ZIonTextarea,
 	ZIonTitle,
 } from '@/components/ZIonComponents';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
@@ -128,20 +129,22 @@ const LinkInBioFormField: React.FC = () => {
 									? values.form?.formFields.map((_cardItem, _index) => {
 											return (
 												<ZIonItem
-													className='my-4 zaions-linkInBio-block border py-3'
+													className='pt-3 my-4 border zaions-linkInBio-block'
 													style={{
 														'--background': 'transparent',
 													}}
 													lines='none'
 													key={_index}
 												>
-													<ZIonReorder slot='start' className='ms-3'>
-														<h4 className='ion-no-margin'>
-															<ZIonIcon icon={appsOutline} color='dark' />
-														</h4>
+													<ZIonReorder slot='start' className='ms-3 me-2'>
+														<ZIonIcon
+															icon={appsOutline}
+															color='dark'
+															className='w-6 h-6'
+														/>
 													</ZIonReorder>
 
-													<div className='w-full pe-3'>
+													<div className='w-full pe-2'>
 														{_cardItem.type ===
 															LinkInBioFormFieldsEnum.title && (
 															<LinkInBioTitleField
@@ -152,7 +155,6 @@ const LinkInBioFormField: React.FC = () => {
 																	values.form?.formFields &&
 																	values.form?.formFields[_index].title
 																}
-																className='mt-3'
 																placeholder='Title'
 															/>
 														)}
@@ -167,7 +169,7 @@ const LinkInBioFormField: React.FC = () => {
 																	values.form?.formFields &&
 																	values.form?.formFields[_index].placeholder
 																}
-																className='mt-3'
+																className='mt-1'
 																placeholder='placeholder'
 																showImageInSlot={true}
 																slotImageUrl={
@@ -180,82 +182,80 @@ const LinkInBioFormField: React.FC = () => {
 
 														{_cardItem.type !==
 															LinkInBioFormFieldsEnum.title && (
-															<ZIonItem className='mt-3' lines='none'>
-																<ZIonInput
-																	label='Column Id*'
-																	labelPlacement='floating'
-																	name={`form.formFields.${_index}.columnId`}
-																	onIonChange={handleChange}
-																	onIonBlur={handleBlur}
-																	value={
-																		values.form?.formFields &&
-																		values.form?.formFields[_index].columnId
-																	}
-																	placeholder='column ID'
-																/>
-															</ZIonItem>
+															// <ZIonItem className='mt-1' lines='none'>
+															<ZIonTextarea
+																fill='outline'
+																className='px-4 mt-3'
+																label='Column Id*'
+																labelPlacement='floating'
+																name={`form.formFields.${_index}.columnId`}
+																onIonChange={handleChange}
+																onIonBlur={handleBlur}
+																value={
+																	values.form?.formFields &&
+																	values.form?.formFields[_index].columnId
+																}
+																style={{ '--padding-start': '16px' }}
+																placeholder='column ID'
+															/>
 														)}
+														{/* </ZIonItem> */}
 
 														{_cardItem.type !==
 															LinkInBioFormFieldsEnum.title && (
 															<>
 																<div className='flex ion-justify-content-between'>
-																	<>
-																		<ZIonItem
-																			lines='none'
-																			className='mt-3 pt-2 ion-item-start-no-padding'
-																			style={{
-																				'--inner-padding-end': '0',
+																	<ZIonItem
+																		lines='none'
+																		className='ion-item-start-no-padding'
+																		style={{
+																			'--inner-padding-end': '0',
+																		}}
+																	>
+																		<ZIonText className='font-bold zaions__fs_13'>
+																			Required
+																		</ZIonText>
+																		<ZRCSwitch
+																			className='me-auto ms-3'
+																			onChange={(value) => {
+																				setFieldValue(
+																					`form.formFields.${_index}.required`,
+																					value,
+																					false
+																				);
 																			}}
-																		>
-																			<ZIonText className='font-bold zaions__fs_13'>
-																				Required
-																			</ZIonText>
-																			<ZRCSwitch
-																				className='me-auto ms-3'
-																				onChange={(value) => {
-																					setFieldValue(
-																						`form.formFields.${_index}.required`,
-																						value,
-																						false
-																					);
-																				}}
-																				checked={
-																					values.form?.formFields &&
-																					values.form?.formFields[_index]
-																						.required
-																				}
-																			/>
-																		</ZIonItem>
-																	</>
-																	<>
-																		<ZIonItem
-																			lines='none'
-																			className='mt-3 pt-2 ion-item-start-no-padding'
-																			style={{
-																				'--inner-padding-end': '0',
+																			checked={
+																				values.form?.formFields &&
+																				values.form?.formFields[_index].required
+																			}
+																		/>
+																	</ZIonItem>
+
+																	<ZIonItem
+																		lines='none'
+																		className='ion-item-start-no-padding'
+																		style={{
+																			'--inner-padding-end': '0',
+																		}}
+																	>
+																		<ZIonText className='font-bold zaions__fs_13'>
+																			Is Active
+																		</ZIonText>
+																		<ZRCSwitch
+																			className='me-auto ms-3'
+																			onChange={(value) => {
+																				setFieldValue(
+																					`form.formFields.${_index}.isActive`,
+																					value,
+																					false
+																				);
 																			}}
-																		>
-																			<ZIonText className='font-bold zaions__fs_13'>
-																				Is Active
-																			</ZIonText>
-																			<ZRCSwitch
-																				className='me-auto ms-3'
-																				onChange={(value) => {
-																					setFieldValue(
-																						`form.formFields.${_index}.isActive`,
-																						value,
-																						false
-																					);
-																				}}
-																				checked={
-																					values.form?.formFields &&
-																					values.form?.formFields[_index]
-																						.isActive
-																				}
-																			/>
-																		</ZIonItem>
-																	</>
+																			checked={
+																				values.form?.formFields &&
+																				values.form?.formFields[_index].isActive
+																			}
+																		/>
+																	</ZIonItem>
 																</div>
 															</>
 														)}
@@ -272,7 +272,7 @@ const LinkInBioFormField: React.FC = () => {
 																reportCustomError(error);
 															}
 														}}
-														className='ion-no-padding me-1'
+														className='ion-no-padding me-1 ms-1'
 														slot='end'
 														iconColor='danger'
 													/>
@@ -315,7 +315,7 @@ const LinkInBiosFormFieldsModal: React.FC<{
 	};
 	return (
 		<ZRScrollbars style={{ width: '100%', height: '100%' }}>
-			<ZIonTitle className='ion-text-center py-3 border-bottom__violet'>
+			<ZIonTitle className='py-3 ion-text-center border-bottom__violet'>
 				Add a new field
 			</ZIonTitle>
 			<ZIonRow className='ion-padding ion-margin-top row-gap-1-rem'>

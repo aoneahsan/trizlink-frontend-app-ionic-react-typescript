@@ -37,6 +37,7 @@ const LinkInBioEmailField: React.FC<LinkInBioEmailFieldInterface> = ({
 				onIonBlur={onIonBlur}
 				value={value}
 				label=''
+				minHeight='40px'
 			/>
 		</ZIonItem>
 	);

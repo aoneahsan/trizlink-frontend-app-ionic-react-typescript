@@ -248,8 +248,6 @@ const ZaionsLinkInBioLinksTable: React.FC<{
 								(el) => el.id !== compState.selectedLinkInBioLinkId
 							);
 
-							console.log({ _oldLinkInBios, _updatedLinkInBios });
-
 							// Updating data in RQ cache.
 							await updateRQCDataHandler<LinkInBioType[] | undefined>({
 								key: [

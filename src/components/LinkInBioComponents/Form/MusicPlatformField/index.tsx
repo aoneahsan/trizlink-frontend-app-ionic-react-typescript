@@ -154,7 +154,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 							{/* After getting MusicPlatform data from api and storing it to the LinkInBioPredefinedMusicPlatformsRState recoil state, looping the recoil state value to make MusicPlatforms */}
 							<ZIonRow
 								className={classNames({
-									'ion-margin-top pt-2 ion-padding-bottom mb-3 row-gap-1-point-6-rem zaions__w90':
+									'ion-padding-bottom mb-3 row-gap-1-point-6-rem zaions__w90':
 										true,
 								})}
 							>
@@ -164,9 +164,9 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 									) as number;
 									return (
 										<ZIonCol
-											size='2.4'
+											size='2'
 											key={el.id}
-											className='flex ion-justify-content-center'
+											className='flex ion-justify-content-start'
 										>
 											<div className='ion-text-center me-3 zaions__max_content'>
 												<LinkInBioPDButton
@@ -212,17 +212,19 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 									? values.cardItems.map((_cardItem, _index) => {
 											return (
 												<ZIonItem
-													className='my-4 zaions-linkInBio-block border py-3'
+													className='py-3 my-3 border zaions-linkInBio-block'
 													style={{
 														'--background': 'transparent',
 													}}
 													lines='none'
 													key={_index}
 												>
-													<ZIonReorder slot='start' className='ms-3'>
-														<h4 className='ion-no-margin'>
-															<ZIonIcon icon={appsOutline} color='dark' />
-														</h4>
+													<ZIonReorder slot='start' className='ms-3 me-2'>
+														<ZIonIcon
+															icon={appsOutline}
+															color='dark'
+															className='w-6 h-6'
+														/>
 													</ZIonReorder>
 
 													<div className='w-full pe-3'>
@@ -234,7 +236,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 																values.cardItems &&
 																values.cardItems[_index].title
 															}
-															className='mt-3'
+															className='mt-1'
 															placeholder='Title'
 															showImageInSlot={true}
 															slotImageUrl={
@@ -252,7 +254,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 																values.cardItems &&
 																values.cardItems[_index].target?.url
 															}
-															className='mt-3'
+															className='mt-1'
 														/>
 
 														{_cardItem.musicCardType ===
@@ -281,7 +283,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 																reportCustomError(error);
 															}
 														}}
-														className='ion-no-padding me-1'
+														className='ion-no-padding me-1 ms-2'
 														slot='end'
 														iconColor='danger'
 													/>

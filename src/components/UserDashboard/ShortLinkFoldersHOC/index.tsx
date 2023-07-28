@@ -86,7 +86,7 @@ const ShortLinkFoldersHOC: React.FC = () => {
 
 	return (
 		<NewLinkFolder
-			_foldersData={shortLinksFolderFormattedState}
+			_foldersData={[]}
 			_state={folderState.shortlink}
 			workspaceId={''}
 		/>

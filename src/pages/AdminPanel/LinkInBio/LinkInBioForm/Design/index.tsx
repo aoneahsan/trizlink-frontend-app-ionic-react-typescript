@@ -347,11 +347,10 @@ const LinkInBioDesignPage: React.FC = () => {
 							sizeMd='6'
 							sizeSm='12'
 							sizeXs='12'
-							className='zaions-ion-bg-color-light'
 						>
 							<ZRScrollbars style={{ width: '100%', height: '100%' }}>
 								<ZIonContent>
-									<ZIonRow className='ion-justify-content-center ion-align-items-center h-full'>
+									<ZIonRow className='h-full ion-justify-content-center ion-align-items-center'>
 										{!isZFetching && (
 											<ZIonCol
 												size='11'

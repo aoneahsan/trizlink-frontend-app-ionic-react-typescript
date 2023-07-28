@@ -5,7 +5,12 @@ import React from 'react';
 import { reorderFourOutline } from 'ionicons/icons';
 
 // Custom Imports
-import { ZIonIcon, ZIonInput, ZIonItem } from '@/components/ZIonComponents';
+import {
+	ZIonIcon,
+	ZIonInput,
+	ZIonItem,
+	ZIonTextarea,
+} from '@/components/ZIonComponents';
 import { InputChangeEventDetail, IonInputCustomEvent } from '@ionic/core';
 
 // Styles
@@ -13,10 +18,10 @@ import { InputChangeEventDetail, IonInputCustomEvent } from '@ionic/core';
 // Component Type
 interface LinkInBioDescriptionFieldInterface {
 	placeholder?: string;
-	value?: string | number | null;
+	value?: string | null;
 	name?: string;
 	className?: string;
-	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
+	onIonChange?: (event: Event) => void;
 	onIonBlur?: <A extends Event>(event: A) => void;
 }
 
@@ -32,15 +37,21 @@ const LinkInBioDescriptionField: React.FC<
 }) => {
 	return (
 		<ZIonItem className={className} lines='none'>
-			<ZIonIcon icon={reorderFourOutline} slot='start' />
+			<ZIonIcon
+				icon={reorderFourOutline}
+				slot='start'
+				className='w-7 h-7 me-2'
+			/>
 
-			<ZIonInput
+			<ZIonTextarea
 				placeholder={placeholder}
 				onIonChange={onIonChange}
 				onIonBlur={onIonBlur}
 				value={value}
+				rows={3}
 				name={name}
 				label=''
+				fill='outline'
 			/>
 		</ZIonItem>
 	);

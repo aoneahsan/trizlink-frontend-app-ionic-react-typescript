@@ -44,6 +44,7 @@ import LinkInBioPageAnalytics from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/P
 import {
 	useZRQGetRequest,
 	useZRQUpdateRequest,
+	useZUpdateRQCacheData,
 } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
@@ -54,13 +55,14 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * */
 import {
 	createRedirectRoute,
+	extractInnerData,
 	replaceRouteParams,
 	zJsonParse,
 	zStringify,
 } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import CONSTANTS from '@/utils/constants';
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import { showErrorNotification } from '@/utils/notification';
 import { reportCustomError } from '@/utils/customErrorType';
 
@@ -139,6 +141,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 	// #region Custom hooks.
 	// useZNavigate for redirection
 	const { zNavigatePushRoute } = useZNavigate();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
 	// validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
 	const { validateRequestResponse } = useZValidateRequestResponse();
@@ -170,11 +173,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 	// Update Link-in-bio API
 	const { mutateAsync: UpdateLinkInBio } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.linkInBio_update_delete,
-		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-			workspaceId,
-			linkInBioId,
-		],
+		_queriesKeysToInvalidate: [],
 	});
 	// #endregion
 
@@ -244,23 +243,56 @@ const ZaionsLinkInBioForm: React.FC = () => {
 	}, [routeQSearchParams.page]);
 
 	// formik submit function
-	const formikSubmitHandler = async (reqDataStr: string) => {
+	const formikSubmitHandler = async (_reqDataStr: string) => {
 		try {
-			if (reqDataStr) {
+			if (_reqDataStr) {
 				// The update api...
-				const _result = await UpdateLinkInBio({
+				const __response = await UpdateLinkInBio({
 					itemIds: [workspaceId, linkInBioId],
 					urlDynamicParts: [
 						CONSTANTS.RouteParams.workspace.workspaceId,
 						CONSTANTS.RouteParams.linkInBio.linkInBioId,
 					],
-					requestData: reqDataStr,
+					requestData: _reqDataStr,
 				});
 
-				// if _result of the updateLinkInBio api is success this showing success notification else not success then error notification.
-				await validateRequestResponse({
-					resultObj: _result,
-				});
+				if (__response) {
+					// if __response of the updateLinkInBio api is success this showing success notification else not success then error notification.
+					await validateRequestResponse({
+						resultObj: __response,
+					});
+
+					// extracting data from result.
+					const __extractItemFromResult = extractInnerData<LinkInBioType>(
+						__response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (__extractItemFromResult?.id) {
+						// Updating single link-in-bio in all link-in-bios data in RQ cache.
+						await updateRQCDataHandler({
+							key: [
+								CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+								workspaceId,
+							],
+							data: __extractItemFromResult,
+							id: __extractItemFromResult?.id,
+						});
+
+						// Updating single link-in-bio data in RQ cache.
+						await updateRQCDataHandler<LinkInBioType | undefined>({
+							key: [
+								CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
+								workspaceId,
+								linkInBioId,
+							],
+							data: __extractItemFromResult as LinkInBioType,
+							id: '',
+							extractType: ZRQGetRequestExtractEnum.extractItem,
+							updateHoleData: true,
+						});
+					}
+				}
 			}
 		} catch (error) {
 			reportCustomError(error);
@@ -439,12 +471,12 @@ const ZaionsLinkInBioForm: React.FC = () => {
 																setFieldValue('enableTitleInput', true, false);
 															}}
 														>
-															<ZIonTitle className='me-1 w-min max-w-max overflow-hidden ion-no-padding text-md'>
+															<ZIonTitle className='overflow-hidden me-1 w-min max-w-max ion-no-padding text-md'>
 																{values.linkInBioTitle}
 															</ZIonTitle>
 															<ZIonIcon
 																icon={createOutline}
-																className='mt-1 w-6 h-6'
+																className='w-6 h-6 mt-1'
 																color='dark'
 															/>
 														</div>
@@ -621,10 +653,10 @@ const ZHeaderSkeleton: React.FC = React.memo(() => {
 
 						<div className='ms-2 w-[71%]'>
 							<div className='flex w-full zaions__fs_18 zaions__cursor_pointer ms-2'>
-								<ZIonTitle className='me-1 w-min max-w-max overflow-hidden ion-no-padding text-md'>
+								<ZIonTitle className='overflow-hidden me-1 w-min max-w-max ion-no-padding text-md'>
 									<ZIonSkeletonText width='100px' height='25px' />
 								</ZIonTitle>
-								<ZIonTitle className='me-1 w-min max-w-max overflow-hidden ion-no-padding text-md'>
+								<ZIonTitle className='overflow-hidden me-1 w-min max-w-max ion-no-padding text-md'>
 									<ZIonSkeletonText width='1.5rem' height='1.5rem' />
 								</ZIonTitle>
 							</div>

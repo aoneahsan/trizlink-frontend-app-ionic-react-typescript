@@ -48,6 +48,9 @@ type ZIonTextareaType = {
 	wrap?: 'hard' | 'off' | 'soft';
 	onIonChange?: (event: Event) => void;
 	onIonBlur?: (event: IonTextareaCustomEvent<FocusEvent>) => void;
+	style?: {
+		[key: string]: unknown;
+	};
 
 	// Ionic 7
 	label?: string;

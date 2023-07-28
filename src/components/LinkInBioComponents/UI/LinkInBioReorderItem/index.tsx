@@ -39,8 +39,10 @@ import ZAudioBlock from '@/components/LinkInBioComponents/UI/AudioBlock';
 
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import {
+	useZGetRQCacheData,
 	useZRQDeleteRequest,
 	useZRQGetRequest,
+	useZUpdateRQCacheData,
 } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 
@@ -51,12 +53,13 @@ import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 import { reportCustomError } from '@/utils/customErrorType';
 import {
 	createRedirectRoute,
+	extractInnerData,
 	generatePredefinedThemeBackgroundValue,
 	zJsonParse,
 } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 
 /**
  * Type Imports go down
@@ -90,7 +93,6 @@ import ZLinkInBioQAndABlock from '../QAndABlock';
 import ZLinkInBioVCardBlock from '../VCardBlock';
 import ZLinkInBioFormBlock from '../FromBlock';
 import ZLinkInBioMapBlock from '../MapBlock';
-import { NewLinkInBioFormState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';
 import classNames from 'classnames';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
@@ -141,6 +143,9 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 		LinkInBioBlocksRState
 	);
 
+	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+
 	// link-in-bio id get from route(url).
 	const { linkInBioId, workspaceId } = useParams<{
 		linkInBioId: string;
@@ -170,59 +175,84 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 	// delete link-in-bio block api where use went to delete the block on preview panel and click on the delete button in ActionSheet (useZIonActionSheet) the deleteBlockHandler will execute with will hit this api and delete the block.
 	const { mutateAsync: deleteLinkInBioBlockMutate } = useZRQDeleteRequest(
 		API_URL_ENUM.linkInBioBlock_delete_update_get,
-		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN, workspaceId, linkInBioId]
+		[]
 	);
 
 	// delete block function.
 	const deleteBlockHandler = async (detail: OverlayEventDetail<unknown>) => {
 		try {
-			if (
-				detail &&
-				detail.role === 'destructive' &&
-				(detail.data as { id: string }).id
-			) {
+			if (detail && detail.role === 'destructive' && element.id) {
 				const _updateLinkInBioBlockState = linkInBioBlockState.filter(
-					(el) => el.id !== (detail.data as { id: string }).id
+					(el) => el.id !== element.id
 				);
 
-				const _result = await deleteLinkInBioBlockMutate({
-					itemIds: [
-						workspaceId,
-						linkInBioId,
-						(detail.data as { id: string }).id,
-					],
+				const __response = await deleteLinkInBioBlockMutate({
+					itemIds: [workspaceId, linkInBioId, element.id],
 					urlDynamicParts: [
 						CONSTANTS.RouteParams.workspace.workspaceId,
 						CONSTANTS.RouteParams.linkInBio.linkInBioId,
 						CONSTANTS.RouteParams.linkInBio.libBlockId,
 					],
 				});
+				if (__response) {
+					// getting all the LinkInBioBlocks from RQ cache.
+					const __oldLinkInBioBlocks =
+						extractInnerData<LinkInBioBlockFromType[]>(
+							getRQCDataHandler<LinkInBioBlockFromType[]>({
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
+									workspaceId,
+									linkInBioId,
+								],
+							}) as LinkInBioBlockFromType[],
+							extractInnerDataOptionsEnum.createRequestResponseItems
+						) || [];
 
-				if (
-					(routeQSearchParams as { blockId: string }).blockId ===
-					(detail.data as { id: string }).id
-				) {
-					zNavigatePushRoute(
-						createRedirectRoute({
-							url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-							params: [
-								CONSTANTS.RouteParams.workspace.workspaceId,
-								CONSTANTS.RouteParams.linkInBio.linkInBioId,
-							],
-							values: [workspaceId, linkInBioId],
-							routeSearchParams: {
-								page: ZLinkInBioPageEnum.design,
-								step: ZLinkInBioRHSComponentEnum.blocks,
-							},
-						})
+					// removing deleted LinkInBioBlocks from cache.
+					const __updatedLinkInBioBlocks = __oldLinkInBioBlocks.filter(
+						(el) => el.id !== element.id
 					);
-				}
 
-				setLinkInBioBlockState(_updateLinkInBioBlockState);
-				// if _result of the updateLinkInBio api is success this showing success notification else not success then error notification.
-				await validateRequestResponse({
-					resultObj: _result,
-				});
+					// Updating data in RQ cache.
+					await updateRQCDataHandler<LinkInBioBlockFromType[] | undefined>({
+						key: [
+							CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
+							workspaceId,
+							linkInBioId,
+						],
+						data: __updatedLinkInBioBlocks as LinkInBioBlockFromType[],
+						id: '',
+						extractType: ZRQGetRequestExtractEnum.extractItems,
+						updateHoleData: true,
+					});
+
+					// setLinkInBioBlockState(_updateLinkInBioBlockState);
+					// if _response of the updateLinkInBio api is success this showing success notification else not success then error notification.
+					await validateRequestResponse({
+						resultObj: __response,
+					});
+
+					setLinkInBioBlockState(_updateLinkInBioBlockState);
+
+					if (
+						element.id === (routeQSearchParams as { blockId: string }).blockId
+					)
+						// Redirect to block
+						zNavigatePushRoute(
+							createRedirectRoute({
+								url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+								params: [
+									CONSTANTS.RouteParams.workspace.workspaceId,
+									CONSTANTS.RouteParams.linkInBio.linkInBioId,
+								],
+								values: [workspaceId, linkInBioId],
+								routeSearchParams: {
+									page: ZLinkInBioPageEnum.design,
+									step: ZLinkInBioRHSComponentEnum.blocks,
+								},
+							})
+						);
+				}
 			}
 		} catch (error) {
 			reportCustomError(error);
