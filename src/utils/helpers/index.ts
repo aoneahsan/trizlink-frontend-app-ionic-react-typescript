@@ -45,7 +45,7 @@ import {
 	LinkInBioThemeBackgroundEnum,
 	LinkInBioThemeBackgroundType,
 } from '@/types/AdminPanel/linkInBioType';
-import routeQueryString from 'qs';
+import zQueryString from 'qs';
 import dayjs from 'dayjs';
 import DayJsDurationPlugin from 'dayjs/plugin/duration';
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
@@ -381,8 +381,29 @@ export const replaceRouteParams = (
 	}
 };
 
-export const stringifyRouteQueryString = (_object: ZGenericObject) => {
-	return routeQueryString.stringify(_object);
+/**
+ * The purpose of this function is to just use (zQueryString.stringify) in one place if we change or replace zQueryString.stringify we just have to updated this function.
+ * @param _object
+ * @returns stringify object.
+ */
+export const stringifyZQueryString = (_object: ZGenericObject) => {
+	return zQueryString.stringify(_object);
+};
+
+/**
+ * The purpose of this function is to just use (ZQueryString.parse) in one place if we change or replace ZQueryString.parse we just have to updated this function.
+ * @param _value
+ * @returns parse value.
+ */
+export const parseZQueryString = (_value: string) => {
+	const __urlData = new URL(_value);
+	const __queryStringData = zQueryString.parse(
+		__urlData.search.replace('?', '')
+	);
+	return {
+		__queryStringData,
+		__urlData,
+	};
 };
 
 export const createRedirectRoute = ({
@@ -400,11 +421,11 @@ export const createRedirectRoute = ({
 }): string => {
 	let _route = replaceRouteParams(url, params, values);
 	if (routeSearchParams) {
-		_route = `${_route}?${stringifyRouteQueryString(routeSearchParams)}`;
+		_route = `${_route}?${stringifyZQueryString(routeSearchParams)}`;
 	}
 	// The hash parameter must be placed after search parameter in url
 	if (routeHashParams) {
-		_route = `${_route}#${stringifyRouteQueryString(routeHashParams)}`;
+		_route = `${_route}#${stringifyZQueryString(routeHashParams)}`;
 	}
 
 	return _route;
@@ -1220,4 +1241,15 @@ export const areAllObjectsFilled = (array: Array<object>): boolean => {
 		}
 	}
 	return isValid;
+};
+
+/**
+ * The purpose of this function is to just use (new URL()) in one place if we change or replace new URL() we just have to updated this function.
+ * @param _url
+ * @returns parts of url.
+ */
+export const zExtractUrlParts = (_url: string) => {
+	const __zExtractedUrl = new URL(_url);
+
+	return __zExtractedUrl;
 };

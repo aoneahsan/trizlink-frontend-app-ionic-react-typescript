@@ -46,24 +46,24 @@ import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
  * ? Like if you have a type for props it should be please Down
  * */
 interface ZAudioBlockInterface {
-  audioLink?: string;
-  title?: string;
+	audioLink?: string;
+	title?: string;
 }
 
 /**
  * Functional Component
- * About: This component will handle RSS data, ZCustomCard is a genetic component used in multiple places, this ZLinkInBioRSSBlock is specific for handling RSS data and RSS UI.
+ * About: This component will handle AudioBlock data, ZCustomCard is a genetic component used in multiple places, this ZAudioBlock is specific for handling AudioBlock data and AudioBlock UI.
  * @type {*}
  * */
 
 const ZAudioBlock: React.FC<ZAudioBlockInterface> = ({ audioLink, title }) => {
-  return (
-    <ZCustomCard
-      mediaType={ZMediaEnum.audio}
-      mediaLink={audioLink}
-      title={title}
-    />
-  );
+	return (
+		<ZCustomCard
+			mediaType={ZMediaEnum.audio}
+			mediaLink={audioLink}
+			title={title}
+		/>
+	);
 };
 
 export default ZAudioBlock;

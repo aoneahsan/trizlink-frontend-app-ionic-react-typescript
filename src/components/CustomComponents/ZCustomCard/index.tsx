@@ -44,6 +44,7 @@ import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
 import ZReactMediaPlayer from '../ZCustomAudio';
 import { useRecoilValue } from 'recoil';
 import { NewLinkInBioFormState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';
+import ZCountdown from '../ZCountDown';
 
 /**
  * Recoil State Imports go down
@@ -72,6 +73,7 @@ interface ZCustomCardInterface {
 	type?: LinkInBioCardStyleEnum;
 	mediaType?: ZMediaEnum;
 	image?: string;
+	countDownTime?: string;
 }
 
 /**
@@ -79,7 +81,6 @@ interface ZCustomCardInterface {
  * About: Generic card...
  * @type {*}
  * */
-
 const ZCustomCard: React.FC<ZCustomCardInterface> = ({
 	title,
 	description,
@@ -87,6 +88,7 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
 	type = LinkInBioCardStyleEnum.horizontal,
 	mediaType = ZMediaEnum.image,
 	image,
+	countDownTime,
 }) => {
 	// getting the custom style for all the buttons from linkInBioFormState recoil.
 	const linkInBioFormState = useRecoilValue(NewLinkInBioFormState);
@@ -140,7 +142,7 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
 					}}
 				>
 					{/* If no image provided or get from api the default image */}
-					{!mediaLink && (
+					{(!mediaLink || mediaType !== ZMediaEnum.countDown) && (
 						<ZIonImg
 							src={
 								image?.trim()
@@ -169,17 +171,19 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
 					)}
 
 					{/* For Image */}
-					{mediaLink && mediaType === ZMediaEnum.image && (
-						<ZIonImg
-							src={mediaLink}
-							style={{
-								width: '100%',
-								height: '100%',
-								position: 'absolute',
-								objectFit: 'cover',
-							}}
-						/>
-					)}
+					{mediaLink &&
+						(mediaType === ZMediaEnum.image ||
+							mediaType === ZMediaEnum.countDown) && (
+							<ZIonImg
+								src={mediaLink}
+								style={{
+									width: '100%',
+									height: '100%',
+									position: 'absolute',
+									objectFit: 'cover',
+								}}
+							/>
+						)}
 
 					{/* For Video */}
 					{mediaLink && mediaType === ZMediaEnum.video && (
@@ -197,7 +201,8 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
 						/>
 					)}
 				</ZIonCardHeader>
-				{(title || description) && (
+
+				{(title || description || mediaType === ZMediaEnum.countDown) && (
 					<ZIonCardContent
 						className={classNames({
 							'ion-margin-top': true,
@@ -210,35 +215,47 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
 								type === LinkInBioCardStyleEnum.thumbStrip,
 						})}
 					>
-						<ZIonCardTitle
-							className={classNames(linkInBioFormState?.theme?.font, {
-								'font-bold': true,
-								'mb-2':
-									type === LinkInBioCardStyleEnum.horizontal ||
-									type === LinkInBioCardStyleEnum.vertical,
-								'flex flex-col ion-justify-content-center':
-									type === LinkInBioCardStyleEnum.thumbCircle ||
-									type === LinkInBioCardStyleEnum.thumbRound ||
-									type === LinkInBioCardStyleEnum.thumbStrip,
-							})}
-						>
-							{title}
-						</ZIonCardTitle>
-						<ZIonText
-							style={{
-								width:
-									type === LinkInBioCardStyleEnum.thumbCircle ||
-									type === LinkInBioCardStyleEnum.thumbRound ||
-									type === LinkInBioCardStyleEnum.thumbStrip
-										? '200px'
-										: '100%',
-							}}
-							className={classNames(linkInBioFormState?.theme?.font, {
-								'inline-block': true,
-							})}
-						>
-							{description}
-						</ZIonText>
+						{title && title?.trim()?.length > 0 && (
+							<ZIonCardTitle
+								className={classNames(linkInBioFormState?.theme?.font, {
+									'font-bold': true,
+									'mb-2':
+										type === LinkInBioCardStyleEnum.horizontal ||
+										type === LinkInBioCardStyleEnum.vertical,
+									'flex flex-col ion-justify-content-center':
+										type === LinkInBioCardStyleEnum.thumbCircle ||
+										type === LinkInBioCardStyleEnum.thumbRound ||
+										type === LinkInBioCardStyleEnum.thumbStrip,
+								})}
+							>
+								{title}
+							</ZIonCardTitle>
+						)}
+
+						{/*  */}
+						{description && description?.trim()?.length > 0 && (
+							<div>
+								<ZIonText
+									style={{
+										width:
+											type === LinkInBioCardStyleEnum.thumbCircle ||
+											type === LinkInBioCardStyleEnum.thumbRound ||
+											type === LinkInBioCardStyleEnum.thumbStrip
+												? '200px'
+												: '100%',
+									}}
+									className={classNames(linkInBioFormState?.theme?.font, {
+										'inline-block w-full': true,
+									})}
+								>
+									{description}
+								</ZIonText>
+							</div>
+						)}
+
+						{mediaType === ZMediaEnum.countDown && (
+							<ZCountdown color='dark' countDownTime={countDownTime} />
+						)}
 					</ZIonCardContent>
 				)}
 			</ZIonCard>

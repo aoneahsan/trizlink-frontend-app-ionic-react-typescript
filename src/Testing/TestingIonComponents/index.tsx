@@ -18,9 +18,12 @@ import {
 	ZIonIcon,
 	ZIonImg,
 	ZIonRow,
+	ZIonText,
 } from '@/components/ZIonComponents';
 import { checkmarkCircle, closeCircle, ellipse } from 'ionicons/icons';
 import classNames from 'classnames';
+import ZReactMediaPlayer from '@/components/CustomComponents/ZCustomAudio';
+import ReactPlayer from 'react-player';
 
 /**
  * Custom Imports go down
@@ -96,15 +99,28 @@ const TestingIonComponents: React.FC = () => {
 			<ZIonContent>
 				<ZIonGrid>
 					<ZIonRow>
+						<ZIonCol size='5'>
+							{/* <ZReactMediaPlayer
+								playerProps={{
+									url: 'https://open.spotify.com/track/4Ifu8HPmQGUnJwwaXcG2Mj?si=2e9e9edef4b1490b',
+									width: '100%',
+									height: '100%',
+								}}
+								mediaType='audio'
+							/> */}
+							<ReactPlayer
+								url='https://www.youtube.com/watch?v=ysz5S6PUM-U'
+								width='100%'
+								height='100%'
+							/>
+						</ZIonCol>
 						<ZIonCol>
-							<ZIonAvatar className='relative cursor-pointer'>
-								<ZIonIcon
-									className='absolute top-0 right-0 w-5 h-5'
-									icon={ellipse}
-									color={active ? 'success' : 'secondary'}
-								/>
-								<ZIonImg src='https://ionicframework.com/docs/img/demos/avatar.svg' />
-							</ZIonAvatar>
+							<ZIonText>
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet
+								reiciendis nisi, esse optio pariatur, recusandae in tenetur
+								saepe, quisquam iste deserunt tempore quae? Saepe labore
+								perspiciatis distinctio hic dolorum assumenda.
+							</ZIonText>
 						</ZIonCol>
 					</ZIonRow>
 				</ZIonGrid>

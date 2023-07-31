@@ -66,6 +66,8 @@ import { useParams } from 'react-router';
 import { reportCustomError } from '@/utils/customErrorType';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { parseZQueryString } from '@/utils/helpers';
+import { InputChangeEventDetail, IonInputCustomEvent } from '@ionic/core';
 
 /**
  * Style files Imports go down
@@ -185,6 +187,73 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 		}
 	};
 
+	const linkInputChangeHandler = (
+		event: IonInputCustomEvent<InputChangeEventDetail>
+	) => {
+		handleChange(event);
+
+		const { __queryStringData } = parseZQueryString(
+			event.target.value as string
+		);
+		console.log(__queryStringData);
+
+		// utmCampaign
+		if (__queryStringData['utm_campaign']) {
+			setFieldValue(
+				'UTMTags.utmCampaign',
+				__queryStringData['utm_campaign'],
+				false
+			);
+		} else {
+			setFieldValue('UTMTags.utmCampaign', '', false);
+		}
+
+		// utmMedium
+		if (__queryStringData['utm_medium']) {
+			setFieldValue(
+				'UTMTags.utmMedium',
+				__queryStringData['utm_medium'],
+				false
+			);
+		} else {
+			setFieldValue('UTMTags.utmMedium', '', false);
+		}
+
+		// utmSource
+		if (__queryStringData['utm_source']) {
+			setFieldValue(
+				'UTMTags.utmSource',
+				__queryStringData['utm_source'],
+				false
+			);
+		} else {
+			setFieldValue('UTMTags.utmSource', '', false);
+		}
+
+		// utmTerm
+		if (__queryStringData['utm_term']) {
+			setFieldValue('UTMTags.utmTerm', __queryStringData['utm_term'], false);
+		} else {
+			setFieldValue('UTMTags.utmTerm', '', false);
+		}
+
+		// utmContent
+		if (__queryStringData['utm_content']) {
+			setFieldValue(
+				'UTMTags.utmContent',
+				__queryStringData['utm_content'],
+				false
+			);
+		} else {
+			setFieldValue('UTMTags.utmContent', '', false);
+		}
+
+		try {
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
 	return (
 		<>
 			{!isSelectedShortLinkFetching && (
@@ -256,7 +325,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 									<ZIonInput
 										label='URL'
 										labelPlacement='stacked'
-										onIonChange={handleChange}
+										onIonChange={linkInputChangeHandler}
 										onIonBlur={handleBlur}
 										value={values?.target?.url}
 										name='target.url'

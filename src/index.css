@@ -360,6 +360,11 @@ span.new {
 	background: rgba(var(--ion-color-dark-rgb), 0.7);
 }
 
+.zaions__light_bg_opacity_point_2 {
+	background: rgba(var(--ion-color-light-rgb), 0.2) !important;
+	--background: rgba(var(--ion-color-light-rgb), 0.2) !important;
+}
+
 /* Width's */
 .zaions__max_content {
 	width: max-content;
@@ -820,6 +825,11 @@ ion-modal.zaions__modal_w100 {
 .link-in-bio-folder-modal {
 	--height: 50vh;
 	--width: 33vw;
+}
+
+.short-link-modal {
+	--height: 45vh;
+	--width: 35vw;
 }
 
 .row-gap-1-rem {

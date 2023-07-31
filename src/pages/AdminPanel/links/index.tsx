@@ -451,7 +451,7 @@ const ZShortLinksListPage: React.FC = () => {
 
 							{/* Main Container */}
 							<ZIonCol
-								className='flex flex-col gap-10 h-screen overflow-y-scroll zaions_pretty_scrollbar zaions-transition'
+								className='flex flex-col h-screen gap-10 overflow-y-scroll zaions_pretty_scrollbar zaions-transition'
 								sizeXl={
 									ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
 										? '8'

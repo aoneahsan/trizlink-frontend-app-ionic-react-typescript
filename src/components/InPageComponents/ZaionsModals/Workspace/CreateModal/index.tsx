@@ -150,22 +150,25 @@ const ZAddNewWorkspaceModal: React.FC<{
 					fill='clear'
 					color='dark'
 				>
-					<h4 className='mt-1 ion-no-margin'>
-						<ZIonIcon icon={closeOutline} className='w-7 h-7' />
-					</h4>
+					<ZIonIcon icon={closeOutline} className='w-7 h-7' />
 				</ZIonButton>
 			</div>
 
 			{/*  */}
 			<div className='flex flex-col ion-justify-content-center'>
-				<ZIonText className='block ion-text-center' color='primary'>
-					<h1 className='mb-0 ion-padding-top bg-primary zaions__modal_icon'>
-						<ZIonIcon icon={toggleOutline} className='mx-auto' color='light' />
-					</h1>
-				</ZIonText>
+				<div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
+					<ZIonIcon
+						icon={toggleOutline}
+						className='w-8 h-8 mx-auto'
+						color='light'
+					/>
+				</div>
 
-				<ZIonText color='dark' className='block mt-3 ion-text-center'>
-					<h5 className='font-bold'>Create a new Workspace 😊</h5>
+				<ZIonText
+					color='dark'
+					className='block mt-3 text-lg font-bold ion-text-center'
+				>
+					Create a new Workspace 😊
 				</ZIonText>
 
 				<Formik
@@ -200,20 +203,21 @@ const ZAddNewWorkspaceModal: React.FC<{
 								{/* Workspace name */}
 								<ZIonCol size='12'>
 									<ZIonInput
-										className={classNames({
-											'ion-touched ion-invalid':
-												touched.workspaceName && errors.workspaceName,
-											'ion-touched ion-valid':
-												touched.workspaceName && !errors.workspaceName,
-										})}
 										name='workspaceName'
 										label='Workspace Name'
+										minHeight='40px'
 										labelPlacement='stacked'
 										placeholder='Workspace Name'
 										onIonChange={handleChange}
 										onIonBlur={handleBlur}
 										errorText={errors.workspaceName}
 										value={values.workspaceName}
+										className={classNames({
+											'ion-touched ion-invalid':
+												touched.workspaceName && errors.workspaceName,
+											'ion-touched ion-valid':
+												touched.workspaceName && !errors.workspaceName,
+										})}
 									/>
 								</ZIonCol>
 

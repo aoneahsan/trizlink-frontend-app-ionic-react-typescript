@@ -111,7 +111,7 @@ export const API_URLS = {
 
 	// workspace
 	workspace_create_list: '/user/workspaces',
-	workspace_update_delete: '/user/workspaces/:workspaceId',
+	workspace_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}`,
 
 	// File
 	getSingleFile: '/file-upload/getSingleFileUrl',

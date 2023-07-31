@@ -79,7 +79,9 @@ import ZApprovalTab from './ApprovalsTab';
 
 const ZWorkspacesSettingModal: React.FC<{
 	Tab: workspaceSettingsModalTabEnum;
-}> = ({ Tab }) => {
+	workspaceId: string;
+	dismissZIonModal: (data?: string, role?: string | undefined) => void;
+}> = ({ Tab, workspaceId, dismissZIonModal }) => {
 	// Component state
 	const [compState, setCompState] = useState<{
 		activeTab: workspaceSettingsModalTabEnum;
@@ -91,16 +93,20 @@ const ZWorkspacesSettingModal: React.FC<{
 		<>
 			{/* header  */}
 			<ZIonHeader>
-				<div className='py-1 w-full ion-text-center zaions__primary_bg'>
-					<ZIonText className='text-3xl font-bold' color='light'>
+				<div className='w-full py-1 mt-3 mb-1 ion-text-center'>
+					<ZIonText className='text-3xl font-bold' color='dark'>
 						Zaions
 					</ZIonText>
 				</div>
-				<ZIonSegment scrollable={true} value={compState.activeTab}>
+				<ZIonSegment
+					scrollable={true}
+					value={compState.activeTab}
+					className='h-[4rem] w-[40%] mx-auto'
+				>
 					{/* Timetable */}
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.timetable}
-						className='text-transform-initial ion-text-center'
+						className='text-transform-initial ion-no-padding ion-text-center'
 						onClick={() => {
 							setCompState((oldValues) => ({
 								...oldValues,
@@ -109,13 +115,13 @@ const ZWorkspacesSettingModal: React.FC<{
 						}}
 					>
 						<ZIonIcon icon={timeOutline} className='pt-1' />
-						<ZIonText className='pb-3'>Timetable</ZIonText>
+						<ZIonText className='pb-3 mb-2'>Timetable</ZIonText>
 					</ZIonSegmentButton>
 
 					{/* Labels */}
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.labels}
-						className='text-transform-initial ion-text-center'
+						className='text-transform-initial ion-no-padding ion-text-center'
 						onClick={() => {
 							setCompState((oldValues) => ({
 								...oldValues,
@@ -124,13 +130,13 @@ const ZWorkspacesSettingModal: React.FC<{
 						}}
 					>
 						<ZIonIcon icon={pricetagOutline} className='pt-1' />
-						<ZIonText className='pb-3'>Labels</ZIonText>
+						<ZIonText className='pb-3 mb-2'>Labels</ZIonText>
 					</ZIonSegmentButton>
 
 					{/* Settings */}
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.settings}
-						className='text-transform-initial ion-text-center'
+						className='text-transform-initial ion-no-padding ion-text-center'
 						onClick={() => {
 							setCompState((oldValues) => ({
 								...oldValues,
@@ -139,13 +145,13 @@ const ZWorkspacesSettingModal: React.FC<{
 						}}
 					>
 						<ZIonIcon icon={settingsOutline} className='pt-1' />
-						<ZIonText className='pb-3'>Settings</ZIonText>
+						<ZIonText className='pb-3 mb-2'>Settings</ZIonText>
 					</ZIonSegmentButton>
 
 					{/* Approvals */}
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.approvals}
-						className='text-transform-initial ion-text-center'
+						className='text-transform-initial ion-no-padding ion-text-center'
 						onClick={() => {
 							setCompState((oldValues) => ({
 								...oldValues,
@@ -154,22 +160,25 @@ const ZWorkspacesSettingModal: React.FC<{
 						}}
 					>
 						<ZIonIcon icon={checkmarkOutline} className='pt-1' />
-						<ZIonText className='pb-3'>Approvals</ZIonText>
+						<ZIonText className='pb-3 mb-2'>Approvals</ZIonText>
 					</ZIonSegmentButton>
 				</ZIonSegment>
 			</ZIonHeader>
 
 			{/* Content */}
 			<ZIonContent>
-				<ZIonGrid>
-					<ZIonRow>
+				<ZIonGrid className='h-full'>
+					<ZIonRow className='h-full ion-align-items-center'>
 						{compState.activeTab === workspaceSettingsModalTabEnum.timetable ? (
 							<ZTimetableTab />
 						) : compState.activeTab === workspaceSettingsModalTabEnum.labels ? (
 							<ZLabelsTab />
 						) : compState.activeTab ===
 						  workspaceSettingsModalTabEnum.settings ? (
-							<ZSettingsTab />
+							<ZSettingsTab
+								workspaceId={workspaceId}
+								dismissZIonModal={dismissZIonModal}
+							/>
 						) : compState.activeTab ===
 						  workspaceSettingsModalTabEnum.approvals ? (
 							<ZApprovalTab />

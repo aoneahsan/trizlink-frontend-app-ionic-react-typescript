@@ -63,7 +63,7 @@ const ZLinkInBioTextBlock: React.FC<ZLinkInBioTextBlockInterface> = ({
 	fontFamily,
 }) => {
 	return (
-		<ZIonCol>
+		<ZIonCol className='overflow-hidden line-clamp-3'>
 			<ZIonText
 				className={classNames(fontFamily, {
 					'font-bold zaions__fs_15': true,

@@ -131,7 +131,7 @@ const ZWorkspaceEditPageModal: React.FC<{
 									</div>
 								</ZIonCol>
 
-								<ZIonCol className='flex ion-align-items-end ion-justify-content-between relative'>
+								<ZIonCol className='relative flex ion-align-items-end ion-justify-content-between'>
 									<ZUserAvatarButton className='w-[150px] h-[150px] absolute bottom-[-3rem] border-4 border-white border-solid' />
 
 									<ZIonButton
@@ -156,7 +156,7 @@ const ZWorkspaceEditPageModal: React.FC<{
 										minHeight='40px'
 									/>
 
-									<div className='mt-3 flex ion-align-items-center'>
+									<div className='flex mt-3 ion-align-items-center'>
 										<ZIonBadge>
 											<ZIonIcon
 												icon={getPlatformIcon(
@@ -168,18 +168,18 @@ const ZWorkspaceEditPageModal: React.FC<{
 											<ZIonText>Page</ZIonText>
 										</ZIonBadge>
 
-										<ZIonText className='ms-2 text-sm' color='medium'>
+										<ZIonText className='text-sm ms-2' color='medium'>
 											@Zaions
 										</ZIonText>
 									</div>
 								</ZIonCol>
 							</ZIonRow>
 
-							<ZIonRow className='py-5 px-4 border-b'>
+							<ZIonRow className='px-4 py-5 border-b'>
 								<ZIonCol className='flex ion-align-items-center'>
 									<ZIonText className='text-xl me-3'>Connection</ZIonText>
 									<ZIonBadge
-										className='flex ion-align-items-center zaions__warning_set border'
+										className='flex border ion-align-items-center zaions__warning_set'
 										style={{ borderColor: 'var(--ion-color-warning)' }}
 									>
 										<ZIonIcon
@@ -198,13 +198,13 @@ const ZWorkspaceEditPageModal: React.FC<{
 								</ZIonCol>
 							</ZIonRow>
 
-							<ZIonRow className='pt-5 px-4 ion-align-items-center'>
+							<ZIonRow className='px-4 pt-5 ion-align-items-center'>
 								<ZIonCol>
-									<ZIonText className='text-xl me-3 block'>
+									<ZIonText className='block text-xl me-3'>
 										Remove from workspace
 									</ZIonText>
 
-									<ZIonText className='text-sm me-3 mt-2 block' color='medium'>
+									<ZIonText className='block mt-2 text-sm me-3' color='medium'>
 										Remove this page from Planable and delete all the posts and
 										comments.
 									</ZIonText>

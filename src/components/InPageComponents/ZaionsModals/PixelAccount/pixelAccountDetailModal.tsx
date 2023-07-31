@@ -100,7 +100,7 @@ const ZaionsPixelAccountDetail: React.FC<{
 			)}
 
 			<ZIonContent className='ion-padding'>
-				<div className='flex ion-text-center ion-justify-content-center flex-col ion-padding-top ion-margin-top'>
+				<div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top'>
 					<ZIonText className='' color={'primary'}>
 						<h1
 							className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}
@@ -160,7 +160,7 @@ const ZaionsPixelAccountDetail: React.FC<{
 			 *  */}
 			{appSettings.appModalsSetting.actions.showActionInModalFooter && (
 				<ZIonFooter>
-					<ZIonRow className=' mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
+					<ZIonRow className='mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
 						<ZIonCol>
 							<ZIonButton
 								fill='outline'

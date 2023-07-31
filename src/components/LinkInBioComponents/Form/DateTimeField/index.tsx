@@ -18,6 +18,8 @@ import { IonDatetimeCustomEvent } from '@ionic/core/dist/types/components';
 
 // Styles
 import classes from './styles.module.css';
+import dayjs from 'dayjs';
+import CONSTANTS from '@/utils/constants';
 
 // Component Type
 interface LinkInBioDateTimeFieldInterface {
@@ -40,17 +42,15 @@ const LinkInBioDateTimeField: React.FC<LinkInBioDateTimeFieldInterface> = ({
 			style={{ '--background-hover': 'transparent', '--min-height': '31px' }}
 		>
 			<ZIonIcon icon={calendarOutline} slot='start' className='my-0 me-2' />
+
 			<ZIonDatetimeButton
-				id={id}
-				className={classNames(classes['zaions-datetime-field'], {
-					'zaions-datetime-btn': true,
-				})}
-				style={{
-					width: '100%',
-				}}
-				value={value}
 				name={name}
+				className={classNames(classes['zaions-datetime-field'], {
+					'zaions-datetime-btn w-full': true,
+				})}
 				onIonChange={onIonChange}
+				id={id}
+				value={dayjs(value).format(CONSTANTS.DateTime.iso8601DateTime)}
 				min={new Date().toISOString()}
 			/>
 		</ZIonItem>

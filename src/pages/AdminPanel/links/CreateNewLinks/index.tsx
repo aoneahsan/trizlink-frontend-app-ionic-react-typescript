@@ -137,6 +137,8 @@ import NewLinkFolder, {
 	FolderSkeleton,
 } from '@/components/UserDashboard/NewLinkFolder';
 import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
+import ZShortLinkModal from '@/components/InPageComponents/ZaionsModals/ShortLinkModal';
 
 /**
  * Style files Imports go down
@@ -158,7 +160,6 @@ import { workspaceInterface } from '@/types/AdminPanel/workspace';
  * About: (Info of component here...)
  * @type {*}
  * */
-
 const AdminCreateNewLinkPages: React.FC = () => {
 	// #region Component state.
 	// state to manage showAdvanceOptions
@@ -262,6 +263,11 @@ const AdminCreateNewLinkPages: React.FC = () => {
 		}
 		// eslint-disable-next-line
 	}, [selectedShortLink]);
+
+	const { presentZIonModal: presentZShortLinkModal } = useZIonModal(
+		ZShortLinkModal,
+		{ workspaceId: workspaceId }
+	);
 
 	// #region Functions.
 	// Formik submit handler.
@@ -385,16 +391,20 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
 			setShowAdvanceOptions(false);
 
-			zNavigatePushRoute(
-				replaceRouteParams(
-					ZaionsRoutes.AdminPanel.ShortLinks.Main,
-					[
-						CONSTANTS.RouteParams.workspace.workspaceId,
-						CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-					],
-					[workspaceId, 'all']
-				)
-			);
+			presentZShortLinkModal({
+				_cssClass: 'short-link-modal',
+			});
+
+			// zNavigatePushRoute(
+			// 	replaceRouteParams(
+			// 		ZaionsRoutes.AdminPanel.ShortLinks.Main,
+			// 		[
+			// 			CONSTANTS.RouteParams.workspace.workspaceId,
+			// 			CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+			// 		],
+			// 		[workspaceId, 'all']
+			// 	)
+			// );
 		} catch (error) {
 			reportCustomError(error);
 		}
@@ -1128,6 +1138,11 @@ const ZTopBar: React.FC = () => {
 					{/* get my link button */}
 					<ZIonButton
 						onClick={() => void submitForm()}
+						// onClick={() => {
+						// 	presentZShortLinkModal({
+						// 		_cssClass: 'short-link-modal',
+						// 	});
+						// }}
 						disabled={isSubmitting || !isValid}
 						className={classNames({
 							'ion-text-capitalize': true,

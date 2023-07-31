@@ -46,57 +46,57 @@ import { OnProgressProps, SourceProps } from 'react-player/base';
  * ? Like if you have a type for props it should be please Down
  * */
 interface ZReactMediaPlayerInterface {
-  playerProps: {
-    url?: string | string[] | SourceProps[] | MediaStream;
-    playing?: boolean;
-    loop?: boolean;
-    controls?: boolean;
-    light?: boolean;
-    volume?: number;
-    muted?: boolean;
-    playbackRate?: number;
-    width?: string | number;
-    height?: string | number;
-    style?: React.CSSProperties;
-    progressInterval?: number;
-    playsinline?: boolean;
-    pip?: boolean;
-    stopOnUnmount?: boolean;
-    fallback?: React.ReactElement<
-      unknown,
-      string | React.JSXElementConstructor<unknown>
-    >;
-    playIcon?: React.ReactElement<
-      unknown,
-      string | React.JSXElementConstructor<unknown>
-    >;
-    previewTabIndex?: number | null;
-    config?: Config;
-    onPlaybackRateChange?: boolean;
-    wrapper?: React.ComponentType<{
-      children: React.ReactNode;
-    }>;
-    onReady?: (player: ReactPlayer) => void;
-    onStart?: () => void;
-    onPlay?: () => void;
-    onProgress?: (state: OnProgressProps) => void;
-    onDuration?: (duration: number) => void;
-    onPause?: () => void;
-    onBuffer?: () => void;
-    onBufferEnd?: () => void;
-    onSeek?: (seconds: number) => void;
-    onEnded?: () => void;
-    onError?: (
-      error: unknown,
-      data?: unknown,
-      hlsInstance?: unknown,
-      hlsGlobal?: unknown
-    ) => void;
-    onClickPreview?: (event: unknown) => void;
-    onEnablePIP?: () => void;
-    onDisablePIP?: () => void;
-  };
-  mediaType: 'video' | 'audio';
+	playerProps: {
+		url?: string | string[] | SourceProps[] | MediaStream;
+		playing?: boolean;
+		loop?: boolean;
+		controls?: boolean;
+		light?: boolean;
+		volume?: number;
+		muted?: boolean;
+		playbackRate?: number;
+		width?: string | number;
+		height?: string | number;
+		style?: React.CSSProperties;
+		progressInterval?: number;
+		playsinline?: boolean;
+		pip?: boolean;
+		stopOnUnmount?: boolean;
+		fallback?: React.ReactElement<
+			unknown,
+			string | React.JSXElementConstructor<unknown>
+		>;
+		playIcon?: React.ReactElement<
+			unknown,
+			string | React.JSXElementConstructor<unknown>
+		>;
+		previewTabIndex?: number | null;
+		config?: Config;
+		onPlaybackRateChange?: boolean;
+		wrapper?: React.ComponentType<{
+			children: React.ReactNode;
+		}>;
+		onReady?: (player: ReactPlayer) => void;
+		onStart?: () => void;
+		onPlay?: () => void;
+		onProgress?: (state: OnProgressProps) => void;
+		onDuration?: (duration: number) => void;
+		onPause?: () => void;
+		onBuffer?: () => void;
+		onBufferEnd?: () => void;
+		onSeek?: (seconds: number) => void;
+		onEnded?: () => void;
+		onError?: (
+			error: unknown,
+			data?: unknown,
+			hlsInstance?: unknown,
+			hlsGlobal?: unknown
+		) => void;
+		onClickPreview?: (event: unknown) => void;
+		onEnablePIP?: () => void;
+		onDisablePIP?: () => void;
+	};
+	mediaType: 'video' | 'audio';
 }
 
 /**
@@ -106,7 +106,7 @@ interface ZReactMediaPlayerInterface {
  * */
 
 const ZReactMediaPlayer: React.FC<ZReactMediaPlayerInterface> = (props) => {
-  return <ReactPlayer {...props.playerProps} />;
+	return <ReactPlayer {...props.playerProps} />;
 };
 
 export default ZReactMediaPlayer;

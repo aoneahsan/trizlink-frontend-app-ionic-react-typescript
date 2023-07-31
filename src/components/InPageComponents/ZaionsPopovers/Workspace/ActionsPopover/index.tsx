@@ -132,6 +132,7 @@ const ZWorkspacesActionPopover: React.FC<{
 		ZWorkspacesSettingModal,
 		{
 			Tab: modalTab,
+			workspaceId: workspaceId,
 		}
 	);
 	const { presentZIonModal: presentWorkspaceSharingModal } = useZIonModal(
@@ -264,6 +265,8 @@ const ZWorkspacesActionPopover: React.FC<{
 					presentWorkspaceSettingModal({
 						_cssClass: 'workspace-setting-modal-size',
 					});
+
+					dismissZIonPopover();
 				}}
 				className='ion-activatable ion-focusable zaions__cursor_pointer '
 				minHeight={'32px'}
@@ -284,6 +287,8 @@ const ZWorkspacesActionPopover: React.FC<{
 					presentWorkspaceSettingModal({
 						_cssClass: 'workspace-setting-modal-size',
 					});
+
+					dismissZIonPopover();
 				}}
 				className='ion-activatable ion-focusable zaions__cursor_pointer'
 				minHeight={'32px'}
@@ -320,6 +325,8 @@ const ZWorkspacesActionPopover: React.FC<{
 					presentWorkspaceSettingModal({
 						_cssClass: 'workspace-setting-modal-size',
 					});
+
+					dismissZIonPopover();
 				}}
 				className='ion-activatable ion-focusable zaions__cursor_pointer'
 				minHeight={'32px'}
@@ -338,6 +345,8 @@ const ZWorkspacesActionPopover: React.FC<{
 					presentWorkspaceSettingModal({
 						_cssClass: 'workspace-setting-modal-size',
 					});
+
+					dismissZIonPopover();
 				}}
 				className='ion-activatable ion-focusable zaions__cursor_pointer'
 				minHeight={'32px'}

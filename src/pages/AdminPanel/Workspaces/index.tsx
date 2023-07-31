@@ -109,7 +109,7 @@ const ZWorkspaceListPage: React.FC = () => {
 			<ZIonContent>
 				<ZCan havePermission={permissionsEnum.viewAny_workspace}>
 					{/* Main grid */}
-					<ZIonGrid className='ion-no-padding h-full'>
+					<ZIonGrid className='h-full ion-no-padding'>
 						{/*  */}
 						<ZIonRow className='h-full'>
 							{/* Expendable Navigation in the left-hand side */}
@@ -190,12 +190,12 @@ const ZWorkspaceListPage: React.FC = () => {
 														<ZIonSkeletonText
 															animated={true}
 															style={{ width: '20px', height: '20px' }}
-														></ZIonSkeletonText>
+														/>
 														<ZIonText className='ms-2'>
 															<ZIonSkeletonText
 																animated={true}
 																style={{ width: '100px', height: '17px' }}
-															></ZIonSkeletonText>
+															/>
 														</ZIonText>
 													</ZIonButton>
 												)}

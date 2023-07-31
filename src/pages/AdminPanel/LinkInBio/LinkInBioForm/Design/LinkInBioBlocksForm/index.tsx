@@ -1032,7 +1032,12 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 									linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.music) && (
 									<ZIonCol size='12' className='mt-4'>
-										<LinkInBioUploadField dropdownHeight='6rem' />
+										<LinkInBioUploadField
+											dropdownHeight='6rem'
+											setFieldValue={setFieldValue}
+											fieldName='imageUrl'
+											imageUrl={values.imageUrl}
+										/>
 									</ZIonCol>
 								)}
 

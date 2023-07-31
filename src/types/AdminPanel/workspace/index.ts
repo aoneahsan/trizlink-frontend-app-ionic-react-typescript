@@ -118,6 +118,7 @@ export interface workspaceInterface {
 	workspaceName?: string;
 	workspaceTimezone?: string;
 	workspaceImage?: string;
+	internalPost?: boolean;
 	clients?: workspaceInviteClientInterface[];
 	user: UserAccountType;
 	createdAt?: string;

@@ -136,6 +136,7 @@ export interface LinkTargetType {
 
 export interface ZaionsShortUrlOptionFieldsValuesInterface {
 	target: LinkTargetType;
+	type?: messengerPlatformsBlockEnum;
 	title: string;
 	linkDescription: string;
 	featureImg: string;

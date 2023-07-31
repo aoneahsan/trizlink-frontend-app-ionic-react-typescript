@@ -95,6 +95,8 @@ import ZLinkInBioFormBlock from '../FromBlock';
 import ZLinkInBioMapBlock from '../MapBlock';
 import classNames from 'classnames';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import ZCustomCard from '@/components/CustomComponents/ZCustomCard';
+import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
 
 /**
  * Style files Imports go down
@@ -388,7 +390,11 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 
 	return (
 		<ZIonItem
-			className='my-4 zaions-linkInBio-block'
+			className={classNames({
+				'my-4 zaions-linkInBio-block': true,
+				zaions__light_bg_opacity_point_2:
+					element.id === (routeQSearchParams as { blockId: string }).blockId,
+			})}
 			style={{
 				'--background': 'transparent',
 				opacity: element.isActive ? '1' : '0.4',
@@ -425,7 +431,13 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 					fontFamily={selectedLinkInBio?.theme?.font}
 				/>
 			) : element?.blockType === LinkInBioBlockEnum.card ? (
-				<ZLinkInBioCardBlock />
+				<ZCustomCard
+					mediaType={ZMediaEnum.image}
+					title={element.blockContent?.title}
+					description={element.blockContent?.description}
+					image={element.blockContent?.imageUrl}
+					type={element.blockContent?.style}
+				/>
 			) : element?.blockType === LinkInBioBlockEnum.button ? (
 				<ZLinkInBioButtonBlock
 					fontFamily={selectedLinkInBio?.theme?.font}
@@ -490,7 +502,21 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 			) : element?.blockType === LinkInBioBlockEnum.calendar ? (
 				<ZLinkInBioCalendarBlock fontFamily={selectedLinkInBio?.theme?.font} />
 			) : element?.blockType === LinkInBioBlockEnum.countdown ? (
-				<ZCountdown countDownTime={element.blockContent?.date} />
+				<>
+					{element.blockContent?.imageUrl &&
+					element.blockContent?.imageUrl?.trim()?.length > 0 ? (
+						<ZCustomCard
+							mediaType={ZMediaEnum.countDown}
+							title={element.blockContent?.title}
+							description={element.blockContent?.description}
+							image={element.blockContent?.imageUrl}
+							type={element.blockContent?.style}
+							countDownTime={element.blockContent?.date}
+						/>
+					) : (
+						<ZCountdown countDownTime={element.blockContent?.date} />
+					)}
+				</>
 			) : element?.blockType === LinkInBioBlockEnum.video ? (
 				<ZVideoBlock
 					videoLink={element.blockContent?.target?.url}
