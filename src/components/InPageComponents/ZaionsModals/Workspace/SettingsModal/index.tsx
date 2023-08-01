@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 /**
  * Packages Imports go down
@@ -31,10 +31,18 @@ import {
 	ZIonCol,
 } from '@/components/ZIonComponents';
 import ZTimetableTab from './TimetableTab';
-import { workspaceSettingsModalTabEnum } from '@/types/AdminPanel/workspace';
+import {
+	workspaceInterface,
+	workspaceSettingsModalTabEnum,
+} from '@/types/AdminPanel/workspace';
 import ZLabelsTab from './LabelsTab';
 import ZSettingsTab from './SettingsTab';
 import ZApprovalTab from './ApprovalsTab';
+import { extractInnerDataOptionsEnum } from '@/utils/enums';
+import { reportCustomError } from '@/utils/customErrorType';
+import CONSTANTS from '@/utils/constants';
+import { extractInnerData } from '@/utils/helpers';
+import { useZGetRQCacheData } from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Custom Hooks Imports go down
@@ -85,9 +93,38 @@ const ZWorkspacesSettingModal: React.FC<{
 	// Component state
 	const [compState, setCompState] = useState<{
 		activeTab: workspaceSettingsModalTabEnum;
+		workspace?: workspaceInterface;
 	}>({
 		activeTab: Tab,
 	});
+
+	const { getRQCDataHandler } = useZGetRQCacheData();
+
+	useEffect(() => {
+		try {
+			if (workspaceId) {
+				// getting all the workspace from RQ cache.
+				const _allWorkspaces =
+					extractInnerData<workspaceInterface[]>(
+						getRQCDataHandler<workspaceInterface[]>({
+							key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
+						}) as workspaceInterface[],
+						extractInnerDataOptionsEnum.createRequestResponseItems
+					) || [];
+
+				const _currentWorkspace = _allWorkspaces.filter(
+					(el) => el.id === workspaceId
+				);
+
+				setCompState((oldValues) => ({
+					...oldValues,
+					workspace: _currentWorkspace[0],
+				}));
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	}, [workspaceId]);
 
 	return (
 		<>
@@ -95,7 +132,7 @@ const ZWorkspacesSettingModal: React.FC<{
 			<ZIonHeader>
 				<div className='w-full py-1 mt-3 mb-1 ion-text-center'>
 					<ZIonText className='text-3xl font-bold' color='dark'>
-						Zaions
+						{compState.workspace?.workspaceName}
 					</ZIonText>
 				</div>
 				<ZIonSegment
@@ -166,11 +203,11 @@ const ZWorkspacesSettingModal: React.FC<{
 			</ZIonHeader>
 
 			{/* Content */}
-			<ZIonContent>
+			<ZIonContent color='light'>
 				<ZIonGrid className='h-full'>
 					<ZIonRow className='h-full ion-align-items-center'>
 						{compState.activeTab === workspaceSettingsModalTabEnum.timetable ? (
-							<ZTimetableTab />
+							<ZTimetableTab workspaceId={workspaceId} />
 						) : compState.activeTab === workspaceSettingsModalTabEnum.labels ? (
 							<ZLabelsTab />
 						) : compState.activeTab ===

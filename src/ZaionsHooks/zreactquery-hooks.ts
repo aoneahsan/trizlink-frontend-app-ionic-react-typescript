@@ -37,6 +37,7 @@ export const useZRQGetRequest = <T>({
 	_urlDynamicParts,
 	_shouldFetchWhenIdPassed,
 	_authenticated,
+	_showLoader = true,
 	_shouldExtractData = true,
 	_extractType = ZRQGetRequestExtractEnum.extractItems,
 	_staleTime = 10 * 60000,
@@ -51,6 +52,7 @@ export const useZRQGetRequest = <T>({
 	_shouldExtractData?: boolean;
 	_extractType?: ZRQGetRequestExtractEnum;
 	_authenticated?: boolean;
+	_showLoader?: boolean;
 	_itemsIds?: string[];
 	_urlDynamicParts?: string[];
 	_shouldFetchWhenIdPassed?: boolean;
@@ -78,6 +80,7 @@ export const useZRQGetRequest = <T>({
 			} else {
 				// Present ion loading before api start
 				!zAppWiseIonicLoaderIsOpenedRSelector &&
+					_showLoader &&
 					(await presentZIonLoader(
 						_itemsIds?.length
 							? MESSAGES.GENERAL.API_REQUEST.FETCHING_SINGLE_DATA
@@ -103,7 +106,9 @@ export const useZRQGetRequest = <T>({
 		},
 		onSuccess: (_data) => {
 			// onSucceed dismissing loader...
-			zAppWiseIonicLoaderIsOpenedRSelector && void dismissZIonLoader();
+			zAppWiseIonicLoaderIsOpenedRSelector &&
+				_showLoader &&
+				void dismissZIonLoader();
 			// zConsoleLog({
 			// 	message:
 			// 		'From ZaionsHook -> useZRQCreateRequest -> useQuery -> onSuccess',
@@ -113,7 +118,9 @@ export const useZRQGetRequest = <T>({
 		onError: async (_error) => {
 			// need to dismiss the loader first, then showing error just so, user will not get redirected to login without knowing that there was a authenticated error
 			// OnError dismissing loader...
-			zAppWiseIonicLoaderIsOpenedRSelector && void dismissZIonLoader();
+			zAppWiseIonicLoaderIsOpenedRSelector &&
+				_showLoader &&
+				void dismissZIonLoader();
 
 			// showing error alert...
 			void presentZIonErrorAlert();

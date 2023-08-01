@@ -38,6 +38,19 @@ export enum AdminPanelSidebarMenuPageEnum {
 	workspaces = 'workspaces',
 }
 
+export enum daysEnum {
+	monday = 'monday',
+	tuesday = 'tuesday',
+	wednesday = 'wednesday',
+	thursday = 'thursday',
+	friday = 'friday',
+	saturday = 'saturday',
+	sunday = 'sunday',
+	weekday = 'weekday',
+	weekends = 'weekends',
+	allDays = 'allDays',
+}
+
 // Interfaces
 export interface UTMTagInfoInterface {
 	templateId?: string;
@@ -51,6 +64,14 @@ export interface UTMTagInfoInterface {
 export interface ShortUrlInterface {
 	domain?: string;
 	url?: string;
+}
+
+export interface TimeSlotInterface {
+	id?: string;
+	time: string;
+	day: daysEnum;
+	color: string;
+	isActive?: boolean;
 }
 
 export interface ABTestingRotatorInterface {
@@ -88,7 +109,7 @@ export interface ZDashboardFolderMenuInterface {
 	addNewFolderButtonOnClickHandler?: React.MouseEventHandler<HTMLIonButtonElement>;
 	foldersSaveReorderButtonOnClickHandler?: React.MouseEventHandler<HTMLIonButtonElement>;
 	folderActionsButtonOnClickHandler?: React.MouseEventHandler<HTMLIonButtonElement>;
-	showSkeleton?: boolean
+	showSkeleton?: boolean;
 }
 
 // Types

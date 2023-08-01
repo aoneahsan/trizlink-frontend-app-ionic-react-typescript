@@ -58,6 +58,8 @@ interface ZaionsColorPikerType {
 	name: string;
 	showCloseIcon?: boolean;
 	showSkeleton?: boolean;
+	minHeight?: string;
+	setDefaultColor?: string;
 	setFieldValueFn?: FormikSetFieldValueEventType;
 	closeIconOnChangeFn?: React.MouseEventHandler<HTMLIonButtonElement>;
 }
@@ -74,15 +76,17 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
 	setFieldValueFn,
 	showCloseIcon = false,
 	showSkeleton = false,
+	minHeight = '40px',
+	setDefaultColor = '#000', //if color is values is empty the when color is be set.
 	closeIconOnChangeFn,
 }) => {
 	return (
 		<>
 			{!showSkeleton && (
 				<ZIonItem
-					className='ion-no-padding flex ion-align-items-center mt-3'
+					className='flex mt-3 ion-no-padding ion-align-items-center'
 					lines='none'
-					minHeight='40px'
+					minHeight={minHeight}
 					style={{
 						// '--border-color': '#000',
 						// '--highlight-color-focused': value,
@@ -96,7 +100,7 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
 						value={value}
 						onChange={({ target }) => {
 							setFieldValueFn &&
-								setFieldValueFn(name, target.value || '#000', false);
+								setFieldValueFn(name, target.value || setDefaultColor, false);
 						}}
 					/>
 					<ZIonInput
@@ -105,11 +109,11 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
 						value={value}
 						label=''
 						fill='outline'
-						minHeight='40px'
+						minHeight={minHeight}
 						style={{ '--background': '#fff' }}
 						onIonChange={({ target }) => {
 							setFieldValueFn &&
-								setFieldValueFn(name, target.value || '#000', false);
+								setFieldValueFn(name, target.value || setDefaultColor, false);
 						}}
 					/>
 					{showCloseIcon && (
@@ -133,7 +137,7 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
 const ZaionsColorPikerSkeleton: React.FC = React.memo(() => {
 	return (
 		<ZIonItem
-			className='ion-no-padding flex ion-align-items-center mt-3'
+			className='flex mt-3 ion-no-padding ion-align-items-center'
 			lines='none'
 			minHeight='40px'
 			style={{
@@ -148,7 +152,7 @@ const ZaionsColorPikerSkeleton: React.FC = React.memo(() => {
 				className='me-2'
 				animated={true}
 			/>
-			<ZIonSkeletonText width='15.2rem' height='40px' animated={true} />
+			<ZIonSkeletonText width='100%' height='40px' animated={true} />
 		</ZIonItem>
 	);
 });

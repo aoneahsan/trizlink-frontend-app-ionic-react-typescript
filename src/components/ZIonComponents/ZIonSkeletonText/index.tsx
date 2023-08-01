@@ -22,6 +22,7 @@ const ZIonSkeletonText = (props: ZIonSkeletonTextType) => {
 	return (
 		<IonSkeletonText
 			{...props}
+			animated={props.animated || true}
 			style={{ ...props.style, width: props.width, height: props.height }}
 		>
 			{props.children}

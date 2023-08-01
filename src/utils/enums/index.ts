@@ -91,6 +91,10 @@ export enum API_URL_ENUM {
 	workspace_create_list = 'workspace_create_list',
 	workspace_update_delete = 'workspace_update_delete',
 
+	// Time slot
+	time_slot_create_list = 'time_slot_create_list',
+	time_slot_update_delete = 'time_slot_update_delete',
+
 	// File Upload Routes
 	getSingleFile = 'getSingleFile',
 	uploadSingleFile = 'uploadSingleFile',

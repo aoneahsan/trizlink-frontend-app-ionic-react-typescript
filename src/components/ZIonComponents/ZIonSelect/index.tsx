@@ -45,6 +45,8 @@ type ZIonSelectType = {
 	label?: string;
 	labelPlacement?: ZIonPlacementType;
 	fill?: 'solid' | 'outline';
+	helperText?: string;
+	errorText?: string;
 };
 
 const ZIonSelect = (props: ZIonSelectType) => {

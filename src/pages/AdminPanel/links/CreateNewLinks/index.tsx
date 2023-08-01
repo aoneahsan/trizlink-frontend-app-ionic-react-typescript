@@ -183,7 +183,6 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
 	// #region Custom hooks
 	const { isLgScale, isMdScale } = useZMediaQueryScale(); //
-	const { zNavigatePushRoute } = useZNavigate(); // useZNavigate hook use for redirection
 	const { getRQCDataHandler } = useZGetRQCacheData();
 	const { updateRQCDataHandler } = useZUpdateRQCacheData();
 	// #endregion
@@ -761,7 +760,6 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
 				// #region submit function.
 				onSubmit={async (values, { resetForm }) => {
-					console.log(selectedShortLink);
 					await FormikSubmissionHandler(
 						zStringify({
 							type: newShortLinkFormState.type,

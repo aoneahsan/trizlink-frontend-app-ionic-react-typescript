@@ -103,7 +103,6 @@ const ZSettingsTab: React.FC<{
 	const { getRQCDataHandler } = useZGetRQCacheData();
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
 	const { presentZIonAlert } = useZIonAlert();
-	const { zNavigatePushRoute } = useZNavigate();
 	//#endregion
 
 	//#region APIS

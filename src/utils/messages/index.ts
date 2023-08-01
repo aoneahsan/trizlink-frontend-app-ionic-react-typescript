@@ -14,10 +14,15 @@ const GENERAL = {
 		SHORT_LINK_UPDATED: 'Short link updated successfully.',
 		SHORT_LINK_DELETE: 'Short link deleted successfully.',
 	},
+	TIME_SLOT: {
+		CREATED: 'Time slot created successfully.',
+		UPDATED: 'Time slot updated successfully.',
+		DELETE: 'Time slot deleted successfully.',
+	},
 	LINK_IN_BIO: {
-		CREATED: 'Short link created successfully.',
-		UPDATED: 'Short link updated successfully.',
-		DELETE: 'Short link deleted successfully.',
+		CREATED: 'Link-in-bio created successfully.',
+		UPDATED: 'Link-in-bio updated successfully.',
+		DELETE: 'Link-in-bio deleted successfully.',
 	},
 	PIXEL_ACCOUNT: {
 		NEW_PIXEL_ACCOUNT_CREATED_SUCCEED_MESSAGE:

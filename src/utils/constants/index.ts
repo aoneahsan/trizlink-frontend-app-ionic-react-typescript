@@ -38,6 +38,10 @@ const RouteParams = {
 		editWorkspaceIdParam: ':editWorkspaceId',
 	},
 
+	timeSlot: {
+		timeSlotId: ':timeSlotId',
+	},
+
 	shortLink: {
 		shortLinkId: ':shortLinkId',
 	},
@@ -112,6 +116,10 @@ export const API_URLS = {
 	// workspace
 	workspace_create_list: '/user/workspaces',
 	workspace_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}`,
+
+	// Time slot
+	time_slot_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/time-slot`,
+	time_slot_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/time-slot/${RouteParams.timeSlot.timeSlotId}`,
 
 	// File
 	getSingleFile: '/file-upload/getSingleFileUrl',
@@ -451,6 +459,10 @@ const REACT_QUERY = {
 			SETTING_TAB: {
 				MAIN: 'rq-link-in-bio-setting-tab-key',
 			},
+		},
+		TIME_SLOT: {
+			MAIN: 'rq-time-slot-list-key',
+			GET: 'rq-time-slot-get-key',
 		},
 		WORKSPACE: {
 			MAIN: 'rq-workspace-list-key',

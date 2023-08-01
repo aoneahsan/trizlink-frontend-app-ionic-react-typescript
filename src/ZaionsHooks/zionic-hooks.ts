@@ -6,6 +6,7 @@ import {
 	ReactComponentOrElement,
 	useIonModal,
 	useIonActionSheet,
+	createAnimation,
 } from '@ionic/react';
 import MESSAGES from '@/utils/messages';
 import {
@@ -420,6 +421,31 @@ export const useZIonModal = <A extends object>(
 		...componentProps,
 	});
 	try {
+		const _enterAnimation = (baseEl: HTMLElement) => {
+			const root = baseEl.shadowRoot;
+
+			const backdropAnimation = createAnimation()
+				.addElement(root?.querySelector('ion-backdrop')!)
+				.fromTo('opacity', '0.01', 'var(--backdrop-opacity)');
+
+			const wrapperAnimation = createAnimation()
+				.addElement(root?.querySelector('.modal-wrapper')!)
+				.keyframes([
+					{ offset: 0, opacity: '0', transform: 'scale(0)' },
+					{ offset: 1, opacity: '0.99', transform: 'scale(1)' },
+				]);
+
+			return createAnimation()
+				.addElement(baseEl)
+				.easing('ease-out')
+				.duration(500)
+				.addAnimation([backdropAnimation, wrapperAnimation]);
+		};
+
+		const _leaveAnimation = (baseEl: HTMLElement) => {
+			return _enterAnimation(baseEl).direction('reverse');
+		};
+
 		const presentZIonModal = ({
 			_cssClass,
 			_onWillDismiss,
@@ -437,6 +463,8 @@ export const useZIonModal = <A extends object>(
 				cssClass: _cssClass,
 				onWillDismiss: _onWillDismiss,
 				onDidDismiss: _onDidDismiss,
+				leaveAnimation: _leaveAnimation,
+				enterAnimation: _enterAnimation,
 			});
 		};
 		return { presentZIonModal, dismissZIonModal };

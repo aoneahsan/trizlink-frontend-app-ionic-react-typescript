@@ -34,3 +34,13 @@ export const workspacePagesDomeData: {
 		type: workspaceFormConnectPagesEnum.universalContent,
 	},
 ];
+
+export const DefaultTimeSlotColors = [
+	{ id: '1', color: '#fbe085' },
+	{ id: '2', color: '#00a8ff' },
+	{ id: '3', color: '#9c88ff' },
+	{ id: '4', color: '#fbc531' },
+	{ id: '5', color: '#4cd137' },
+	{ id: '6', color: '#487eb0' },
+	{ id: '7', color: '#e84118' },
+];
