@@ -31,10 +31,19 @@ yarn-error.log*
 
 
 dist
+www
+build
 
-yarn.lock
+*yarn.lock*
 
-package-lock.json
+package-lock*
 
 cypress/screenshots/**/*
 cypress/videos/**/*
+
+*.ignore.*
+
+**/node_modules/**/*
+node_modules
+vendor
+**/vendor/**/*
