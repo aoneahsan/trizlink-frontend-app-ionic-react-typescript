@@ -37,10 +37,6 @@ const ZaionsInpageBrandsList: React.FC<{
 	const { isLgScale } = useZMediaQueryScale();
 
 	//
-	const ZaionsCarousel = !isLgScale ? Swiper : Fragment;
-	const ZaionsCarouselItem = !isLgScale ? SwiperSlide : Fragment;
-
-	//
 	useLayoutEffect(() => {
 		// Fetch Data From Database Later:-
 		setLoadedHPBrandsData(HPBrandData);
@@ -61,33 +57,46 @@ const ZaionsInpageBrandsList: React.FC<{
 			<div className='ion-padding-vertical'>
 				<ZIonGrid>
 					<ZIonRow className='ion-justify-content-center'>
-						<ZaionsCarousel
-							spaceBetween={0}
-							slidesPerView={1}
-							onSlideChange={() => {}}
-							onSwiper={(_) => {}}
-							style={{ width: '100%' }}
-						>
-							{loadedHPBrandsData.map((item) => (
-								<ZaionsCarouselItem key={item.id}>
-									<ZIonCol
-										sizeXl='1.4'
-										sizeLg='2.2'
-										sizeMd='3.2'
-										sizeSm='12'
-										sizeXs='12'
-										key={item.id}
-									>
-										<ZIonImg
-											src={item.image}
-											className={classNames({
-												'w-[60%]': !isLgScale,
-											})}
-										/>
-									</ZIonCol>
-								</ZaionsCarouselItem>
-							))}
-						</ZaionsCarousel>
+						{isLgScale ? (
+							loadedHPBrandsData.map((item) => (
+								<ZIonCol
+									sizeXl='1.4'
+									sizeLg='2.2'
+									sizeMd='3.2'
+									sizeSm='12'
+									sizeXs='12'
+									key={item.id}
+								>
+									<ZIonImg
+										src={item.image}
+										className={classNames({
+											'w-[60%]': !isLgScale,
+										})}
+									/>
+								</ZIonCol>
+							))
+						) : !isLgScale ? (
+							<Swiper>
+								{loadedHPBrandsData.map((item) => (
+									<SwiperSlide key={item.id}>
+										<ZIonCol
+											sizeXl='1.4'
+											sizeLg='2.2'
+											sizeMd='3.2'
+											sizeSm='12'
+											sizeXs='12'
+										>
+											<ZIonImg
+												src={item.image}
+												className={classNames({
+													'w-[60%]': !isLgScale,
+												})}
+											/>
+										</ZIonCol>
+									</SwiperSlide>
+								))}
+							</Swiper>
+						) : null}
 					</ZIonRow>
 				</ZIonGrid>
 			</div>

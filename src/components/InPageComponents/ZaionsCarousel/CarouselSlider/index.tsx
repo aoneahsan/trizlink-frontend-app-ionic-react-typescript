@@ -39,10 +39,10 @@ const ZaionsCarouselSlider: React.FC = () => {
 						className='mx-auto'
 					>
 						<Swiper
-							spaceBetween={0}
-							slidesPerView={1}
-							onSlideChange={() => {}}
-							onSwiper={(_) => {}}
+							// spaceBetween={0}
+							// slidesPerView={1}
+							// onSlideChange={() => {}}
+							// onSwiper={(_) => {}}
 							style={{ width: '100%' }}
 						>
 							<SwiperSlide key={0}>
@@ -65,7 +65,7 @@ const ZaionsCarouselSlider: React.FC = () => {
 												&#8221;
 											</ZIonText> */}
 											<ZIonGrid>
-												<ZIonRow className='py-4 mt-2 px-4 mx-2'>
+												<ZIonRow className='px-4 py-4 mx-2 mt-2'>
 													<ZIonCol
 														className={`${classes.zaions__stars_box} mb-2`}
 														size='12'
@@ -116,7 +116,7 @@ const ZaionsCarouselSlider: React.FC = () => {
 												alt='Quotes'
 											/>
 											<ZIonGrid>
-												<ZIonRow className='py-4 mt-2 px-4 mx-2'>
+												<ZIonRow className='px-4 py-4 mx-2 mt-2'>
 													<ZIonCol
 														className={`${classes.zaions__stars_box} mb-2`}
 														size='12'

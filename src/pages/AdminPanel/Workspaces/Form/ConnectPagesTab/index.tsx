@@ -146,18 +146,12 @@ const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 						sizeXl='2'
 						className='h-[11rem]'
 					>
-						<Swiper
-							className='h-[11rem]'
-							spaceBetween={0}
-							slidesPerView={1}
-							onSlideChange={() => {}}
-							onSwiper={(_) => {}}
-						>
+						<Swiper className='h-[11rem]'>
 							{[1, 2, 3, 4].map((el) => (
 								<SwiperSlide className='h-full' key={el}>
 									<ZIonCard className='h-[94%]'>
-										<ZIonCardContent className='pb-3 ion-text-center ion-no-padding ion-padding-horizontal py-1'>
-											<div className='w-full flex ion-align-items-center ion-justify-content-between pb-1 '>
+										<ZIonCardContent className='py-1 pb-3 ion-text-center ion-no-padding ion-padding-horizontal'>
+											<div className='flex w-full pb-1 ion-align-items-center ion-justify-content-between '>
 												<ZIonButton
 													className='ion-no-padding ion-no-margin'
 													fill='default'
@@ -185,7 +179,7 @@ const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 												className='w-10 h-10 pt-1 mx-auto'
 											/>
 											{/*  */}
-											<ZIonText className='mt-1 ion-text-center block'>
+											<ZIonText className='block mt-1 ion-text-center'>
 												zaions {el}
 											</ZIonText>
 
@@ -302,7 +296,7 @@ const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 const ConnectPagesCardSwiperButtons: React.FC = () => {
 	const swiper = useSwiper();
 	return (
-		<div className='w-full flex ion-align-items-center ion-justify-content-between pb-1 '>
+		<div className='flex w-full pb-1 ion-align-items-center ion-justify-content-between '>
 			<ZIonButton
 				className='ion-no-padding ion-no-margin'
 				fill='default'

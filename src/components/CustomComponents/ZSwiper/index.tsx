@@ -9,6 +9,9 @@ import React, { ReactNode } from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { register } from 'swiper/element/bundle';
+
+register();
 
 /**
  * Style files Imports go down
@@ -61,10 +64,10 @@ export const ZSwiper: React.FC<ZSwiperInterface> = ({
 }) => {
 	return (
 		<Swiper
-			spaceBetween={spaceBetween}
-			slidesPerView={slidesPerView}
-			onSlideChange={onSlideChange}
-			onSwiper={onSwiper}
+			// spaceBetween={spaceBetween}
+			// slidesPerView={slidesPerView}
+			// onSlideChange={onSlideChange}
+			// onSwiper={onSwiper}
 			style={{ width: '100%', ...style }}
 			className={className}
 		>
@@ -72,6 +75,12 @@ export const ZSwiper: React.FC<ZSwiperInterface> = ({
 		</Swiper>
 	);
 };
+
+// export const ZSwiper = React.forwardRef(
+// 	(props: ZSwiperInterface, ref: React.Ref<any>) => {
+// 		return <swiper-container></swiper-container>;
+// 	}
+// );
 
 export const ZSwiperSlide: React.FC<ZSwiperSlideInterface> = ({
 	children,

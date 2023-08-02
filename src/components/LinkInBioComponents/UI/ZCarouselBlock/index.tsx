@@ -68,10 +68,10 @@ const ZCarouselBlock: React.FC<ZCarouselBlockInterface> = ({
 	return (
 		<>
 			<Swiper
-				spaceBetween={0}
-				slidesPerView={1}
-				onSlideChange={() => {}}
-				onSwiper={(_) => {}}
+				// spaceBetween={0}
+				// slidesPerView={1}
+				// onSlideChange={() => {}}
+				// onSwiper={(_) => {}}
 				style={{ width: '100%' }}
 			>
 				{data?.length ? (

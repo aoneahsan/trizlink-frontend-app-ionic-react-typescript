@@ -64,9 +64,6 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 
 	const { isSmScale, isLgScale } = useZMediaQueryScale();
 
-	const ZaionsCarousel = !isLgScale ? Swiper : Fragment;
-	const ZaionsCarouselItem = !isLgScale ? SwiperSlide : Fragment;
-
 	useLayoutEffect(() => {
 		// Fetch Data From Database Later:-
 		setLoadedHPBrandsData(DEBrandData);
@@ -154,8 +151,12 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 								className='mt-5'
 								interface='popover'
 							>
-								{ZaionsDiscoverEnterpriseCompanySize.map((el) => {
-									return <ZIonSelectOption value={el}>{el}</ZIonSelectOption>;
+								{ZaionsDiscoverEnterpriseCompanySize.map((el, index) => {
+									return (
+										<ZIonSelectOption value={el} key={index}>
+											{el}
+										</ZIonSelectOption>
+									);
 								})}
 							</ZIonSelect>
 
@@ -167,8 +168,12 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 								className='mt-5'
 								interface='popover'
 							>
-								{ZaionsDiscoverEnterprisePrimaryUseCase.map((el) => {
-									return <ZIonSelectOption value={el}>{el}</ZIonSelectOption>;
+								{ZaionsDiscoverEnterprisePrimaryUseCase.map((el, index) => {
+									return (
+										<ZIonSelectOption value={el} key={index}>
+											{el}
+										</ZIonSelectOption>
+									);
 								})}
 							</ZIonSelect>
 
@@ -182,7 +187,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 							>
 								{ZaionsDiscoverEnterpriseCountry.map((el, index) => {
 									return (
-										<ZIonSelectOption value={index}>
+										<ZIonSelectOption value={index} key={index}>
 											{el.value}
 										</ZIonSelectOption>
 									);
@@ -247,28 +252,43 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 								</ZIonCol>
 							</ZIonRow>
 							<ZIonRow className='ion-justify-content-center ion-align-items-center'>
-								<ZaionsCarousel
-									spaceBetween={0}
-									slidesPerView={1}
-									onSlideChange={() => {}}
-									onSwiper={(_) => {}}
-									style={{ width: '100%' }}
-								>
-									{loadedHPBrandsData.map((item) => (
-										<ZaionsCarouselItem key={item.id}>
-											<ZIonCol
-												sizeXl='3'
-												sizeLg='3.5'
-												sizeMd='5'
-												sizeSm='12'
-												sizeXs='12'
-												key={item.id}
-											>
-												<ZIonImg src={item.image} alt='' />
-											</ZIonCol>
-										</ZaionsCarouselItem>
-									))}
-								</ZaionsCarousel>
+								{isLgScale ? (
+									loadedHPBrandsData.map((item) => (
+										<ZIonCol
+											sizeXl='3'
+											sizeLg='3.5'
+											sizeMd='5'
+											sizeSm='12'
+											sizeXs='12'
+											key={item.id}
+										>
+											<ZIonImg src={item.image} alt='' />
+										</ZIonCol>
+									))
+								) : !isLgScale ? (
+									<Swiper className='h-[10rem]'>
+										{loadedHPBrandsData.map((item) => (
+											<SwiperSlide key={item.id}>
+												<ZIonCol
+													sizeXl='3'
+													sizeLg='3.5'
+													sizeMd='5'
+													sizeSm='12'
+													sizeXs='12'
+													key={item.id}
+												>
+													<ZIonImg
+														className='w-full h-full'
+														src={item.image}
+														alt=''
+													/>
+												</ZIonCol>
+											</SwiperSlide>
+										))}
+									</Swiper>
+								) : (
+									''
+								)}
 							</ZIonRow>
 						</ZIonCol>
 						<ZIonCol sizeXl='4' sizeLg='5' sizeMd='6' sizeSm='12' sizeXs='12'>

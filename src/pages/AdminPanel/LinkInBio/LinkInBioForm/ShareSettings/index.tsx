@@ -72,8 +72,10 @@ import {
 	GeoLocationRotatorInterface,
 	LinkExpirationInfoInterface,
 	PasswordInterface,
+	folderState,
 } from '@/types/AdminPanel/index.type';
 import { reportCustomError } from '@/utils/customErrorType';
+import NewLinkFolder from '@/components/UserDashboard/NewLinkFolder';
 
 /**
  * Style files Imports go down
@@ -486,7 +488,11 @@ const LinkInBioShareSettings: React.FC = () => {
 											{showAdvanceOptions && (
 												<ZIonRow className='gap-5 ion-margin-top'>
 													{/* Folder */}
-													<LinkInBioFoldersHOC />
+													<NewLinkFolder
+														_foldersData={[]}
+														_state={folderState.linkInBio}
+														workspaceId={workspaceId}
+													/>
 
 													{/* Add Notes */}
 													<AddNotes />

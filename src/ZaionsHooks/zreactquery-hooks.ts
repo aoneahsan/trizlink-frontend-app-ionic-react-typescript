@@ -495,7 +495,9 @@ export const useZUpdateRQCacheData = () => {
 								actualDataItems.length
 							) {
 								const updatedDataItems = [...actualDataItems];
-								const index = updatedDataItems.findIndex((el) => el.id === id);
+								const index = updatedDataItems.findIndex(
+									(el: unknown) => (el as { id: string })?.id === id
+								);
 								if (index != -1) {
 									updatedDataItems[index] = data;
 								}

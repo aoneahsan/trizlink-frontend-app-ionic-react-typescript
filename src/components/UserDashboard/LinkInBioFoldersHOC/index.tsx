@@ -21,15 +21,11 @@ import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import CONSTANTS from '@/utils/constants';
-import { API_URL_ENUM } from '@/utils/enums';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { FolderInterface, LinkFolderType } from '@/types/AdminPanel/linksType';
-import { reportCustomError } from '@/utils/customErrorType';
 import { folderState } from '@/types/AdminPanel/index.type';
 
 /**
@@ -97,7 +93,7 @@ const LinkInBioFoldersHOC: React.FC = () => {
 
 	return (
 		<NewLinkFolder
-			_foldersData={linkInBioFoldersData}
+			_foldersData={[]}
 			_state={folderState.linkInBio}
 			workspaceId={workspaceId}
 		/>
