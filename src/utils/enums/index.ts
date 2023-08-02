@@ -95,6 +95,10 @@ export enum API_URL_ENUM {
 	time_slot_create_list = 'time_slot_create_list',
 	time_slot_update_delete = 'time_slot_update_delete',
 
+	// Label
+	label_create_list = 'label_create_list',
+	label_update_delete = 'label_update_delete',
+
 	// File Upload Routes
 	getSingleFile = 'getSingleFile',
 	uploadSingleFile = 'uploadSingleFile',

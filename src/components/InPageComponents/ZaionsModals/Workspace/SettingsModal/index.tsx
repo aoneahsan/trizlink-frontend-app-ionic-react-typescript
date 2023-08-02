@@ -35,7 +35,6 @@ import {
 	workspaceInterface,
 	workspaceSettingsModalTabEnum,
 } from '@/types/AdminPanel/workspace';
-import ZLabelsTab from './LabelsTab';
 import ZSettingsTab from './SettingsTab';
 import ZApprovalTab from './ApprovalsTab';
 import { extractInnerDataOptionsEnum } from '@/utils/enums';
@@ -43,6 +42,7 @@ import { reportCustomError } from '@/utils/customErrorType';
 import CONSTANTS from '@/utils/constants';
 import { extractInnerData } from '@/utils/helpers';
 import { useZGetRQCacheData } from '@/ZaionsHooks/zreactquery-hooks';
+import ZLabelsTab from './LabelsTab';
 
 /**
  * Custom Hooks Imports go down
@@ -209,7 +209,7 @@ const ZWorkspacesSettingModal: React.FC<{
 						{compState.activeTab === workspaceSettingsModalTabEnum.timetable ? (
 							<ZTimetableTab workspaceId={workspaceId} />
 						) : compState.activeTab === workspaceSettingsModalTabEnum.labels ? (
-							<ZLabelsTab />
+							<ZLabelsTab workspaceId={workspaceId} />
 						) : compState.activeTab ===
 						  workspaceSettingsModalTabEnum.settings ? (
 							<ZSettingsTab

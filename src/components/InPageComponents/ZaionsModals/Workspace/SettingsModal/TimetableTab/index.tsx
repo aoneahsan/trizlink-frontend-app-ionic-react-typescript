@@ -33,16 +33,35 @@ import {
 	timeOutline,
 	trashBinOutline,
 } from 'ionicons/icons';
-import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import {
+	useZIonAlert,
+	useZIonErrorAlert,
+	useZIonModal,
+	useZIonPopover,
+	useZIonToastSuccess,
+} from '@/ZaionsHooks/zionic-hooks';
 import ZWorkspaceTimeSlotFormModal from '../../TimeSlotFormModal';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from '@/utils/enums';
+import {
+	useZGetRQCacheData,
+	useZRQDeleteRequest,
+	useZRQGetRequest,
+	useZUpdateRQCacheData,
+} from '@/ZaionsHooks/zreactquery-hooks';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import {
 	daysEnum,
 	FormMode,
 	TimeSlotInterface,
 } from '@/types/AdminPanel/index.type';
+import { reportCustomError } from '@/utils/customErrorType';
+import {
+	showErrorNotification,
+	showSuccessNotification,
+} from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { extractInnerData } from '@/utils/helpers';
 
 /**
  * Custom Hooks Imports go down
@@ -126,13 +145,13 @@ const ZTimetableTab: React.FC<{
 	const isZFetching = isTimeSlotDataFetching;
 
 	const ZDays = [
-		daysEnum.monday,
-		daysEnum.tuesday,
-		daysEnum.wednesday,
-		daysEnum.thursday,
-		daysEnum.friday,
-		daysEnum.saturday,
-		daysEnum.sunday,
+		{ day: daysEnum.monday, loop: 2 },
+		{ day: daysEnum.tuesday, loop: 4 },
+		{ day: daysEnum.wednesday, loop: 5 },
+		{ day: daysEnum.thursday, loop: 3 },
+		{ day: daysEnum.friday, loop: 1 },
+		{ day: daysEnum.saturday, loop: 2 },
+		{ day: daysEnum.sunday, loop: 3 },
 	];
 
 	return (
@@ -175,13 +194,13 @@ const ZTimetableTab: React.FC<{
 						</ZIonRow>
 
 						<ZIonRow className='h-[92%] gap-2 mt-3 ion-text-center'>
-							{ZDays.map((_day, _dayIndex) => {
+							{ZDays.map((_element, _elementIndex) => {
 								return (
-									<ZIonCol className='h-full bg-white' key={_dayIndex}>
+									<ZIonCol className='h-full bg-white' key={_elementIndex}>
 										{!isZFetching &&
 											timeSlotData &&
 											timeSlotData?.map((_timeSlot, _timeSlotIndex) => {
-												if (_day === _timeSlot?.day) {
+												if (_element.day === _timeSlot?.day) {
 													return (
 														<div
 															key={_timeSlotIndex}
@@ -222,11 +241,11 @@ const ZTimetableTab: React.FC<{
 											})}
 
 										{isZFetching &&
-											[1, 2].map((el) => {
+											[...Array(_element.loop)].map((el, _loopIndex) => {
 												return (
 													<div
 														className='w-full h-[2.4rem] mb-3 shadow-sm bg-white rounded border flex ion-align-items-center ion-justify-content-between px-2'
-														key={el}
+														key={_loopIndex}
 													>
 														<ZIonText className='flex ion-align-items-center'>
 															<ZIonIcon
@@ -253,7 +272,7 @@ const ZTimetableTab: React.FC<{
 											onClick={() => {
 												setCompState((oldValues) => ({
 													...oldValues,
-													timeSlotDay: _day,
+													timeSlotDay: _element.day,
 												}));
 
 												presentZWorkspaceTimeSlotFormModal({
@@ -267,12 +286,6 @@ const ZTimetableTab: React.FC<{
 									</ZIonCol>
 								);
 							})}
-							{/* <ZIonCol></ZIonCol>
-							<ZIonCol></ZIonCol>
-							<ZIonCol></ZIonCol>
-							<ZIonCol></ZIonCol>
-							<ZIonCol></ZIonCol>
-							<ZIonCol></ZIonCol> */}
 						</ZIonRow>
 					</div>
 				);
@@ -294,6 +307,115 @@ const ZTimeSlotActionPopover: React.FC<{
 			mode: FormMode.EDIT,
 		}
 	);
+
+	// #region APIS.
+	// Request for deleting time slot.
+	const { mutateAsync: deleteTimeSlotMutate } = useZRQDeleteRequest(
+		API_URL_ENUM.time_slot_update_delete
+	);
+	// #endregion
+
+	// #region Custom hooks
+	// const { isLgScale, isMdScale } = useZMediaQueryScale(); //
+	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+	const { presentZIonErrorAlert } = useZIonErrorAlert();
+	const { presentZIonAlert } = useZIonAlert();
+	const { presentZIonToastSuccess } = useZIonToastSuccess();
+	// #endregion
+
+	// #region Functions.
+	// when user won't to delete time slot and click on the delete button this function will fire and show the confirm alert.
+	const deleteTimeSlot = async () => {
+		try {
+			if (timeSlotId) {
+				await presentZIonAlert({
+					header: `Delete time slot`,
+					subHeader: 'Remove time slot from workspace.',
+					message: 'Are you sure you want to delete this time slot?',
+					buttons: [
+						{
+							text: 'Cancel',
+							role: 'cancel',
+						},
+						{
+							text: 'Delete',
+							role: 'danger',
+							handler: () => {
+								void removeTimeSlot();
+							},
+						},
+					],
+				});
+			} else {
+				await presentZIonErrorAlert();
+			}
+		} catch (error) {
+			await presentZIonErrorAlert();
+		}
+	};
+
+	// on the delete time slot confirm alert, when user click on delete button this function will first which will trigger delete request and delete the time slot.
+	const removeTimeSlot = async () => {
+		try {
+			if (timeSlotId) {
+				const __response = await deleteTimeSlotMutate({
+					itemIds: [workspaceId, timeSlotId],
+					urlDynamicParts: [
+						CONSTANTS.RouteParams.workspace.workspaceId,
+						CONSTANTS.RouteParams.timeSlot.timeSlotId,
+					],
+				});
+
+				if (__response) {
+					const __data = extractInnerData<{ success: boolean }>(
+						__response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (__data && __data?.success) {
+						// getting all the shortLinks from RQ cache.
+						const __oldTimeSlots =
+							extractInnerData<TimeSlotInterface[]>(
+								getRQCDataHandler<TimeSlotInterface[]>({
+									key: [
+										CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
+										workspaceId,
+									],
+								}) as TimeSlotInterface[],
+								extractInnerDataOptionsEnum.createRequestResponseItems
+							) || [];
+
+						// removing deleted shortLinks from cache.
+						const __updatedTimeSlots = __oldTimeSlots.filter(
+							(el) => el.id !== timeSlotId
+						);
+
+						// Updating data in RQ cache.
+						await updateRQCDataHandler<TimeSlotInterface[] | undefined>({
+							key: [
+								CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
+								workspaceId,
+							],
+							data: __updatedTimeSlots as TimeSlotInterface[],
+							id: '',
+							extractType: ZRQGetRequestExtractEnum.extractItems,
+							updateHoleData: true,
+						});
+
+						presentZIonToastSuccess(MESSAGES.GENERAL.TIME_SLOT.DELETED);
+					} else {
+						showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+					}
+				}
+			} else {
+				void presentZIonErrorAlert();
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+	// #endregion
 
 	return (
 		<ZIonList lines='full' className='ion-no-padding'>
@@ -324,6 +446,11 @@ const ZTimeSlotActionPopover: React.FC<{
 				minHeight='2.1rem'
 				lines='none'
 				className='cursor-pointer ion-activatable'
+				onClick={() => {
+					deleteTimeSlot();
+
+					dismissZIonPopover('', '');
+				}}
 			>
 				<ZIonIcon
 					icon={trashBinOutline}

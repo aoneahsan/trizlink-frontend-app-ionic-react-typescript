@@ -74,6 +74,16 @@ export interface TimeSlotInterface {
 	isActive?: boolean;
 }
 
+export interface LabelInterface {
+	id?: string;
+	title?: string;
+	postsCount?: string;
+	color: string;
+	isActive?: boolean;
+
+	editMode?: boolean; // just for frontend.
+}
+
 export interface ABTestingRotatorInterface {
 	id?: string;
 	redirectionLink?: string;

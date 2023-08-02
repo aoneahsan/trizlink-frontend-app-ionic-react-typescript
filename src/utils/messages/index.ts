@@ -17,7 +17,12 @@ const GENERAL = {
 	TIME_SLOT: {
 		CREATED: 'Time slot created successfully.',
 		UPDATED: 'Time slot updated successfully.',
-		DELETE: 'Time slot deleted successfully.',
+		DELETED: 'Time slot deleted successfully.',
+	},
+	LABEL: {
+		CREATED: 'Label created successfully.',
+		UPDATED: 'Label updated successfully.',
+		DELETED: 'Label deleted successfully.',
 	},
 	LINK_IN_BIO: {
 		CREATED: 'Link-in-bio created successfully.',
