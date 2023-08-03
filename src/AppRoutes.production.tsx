@@ -42,7 +42,7 @@ import ZaionsReviews from '@/pages/Company/Reviews';
 import ZaionsDiscoverEnterprise from '@/pages/DiscoverEnterprise';
 import ZShortLinksListPage from '@/pages/AdminPanel/links';
 import AdminCreateNewLinkPages from '@/pages/AdminPanel/links/CreateNewLinks';
-import TestingReactTable from '@/Testing/ReactTable';
+import TestingReactTable from '@/Testing/ReactTable/index';
 
 // Routes
 import ZaionsRoutes from './utils/constants/RoutesConstants';

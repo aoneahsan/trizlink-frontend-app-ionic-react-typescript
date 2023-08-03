@@ -37,7 +37,7 @@ import ZaionsPartners from '@/pages/Company/Partners';
 import ZaionsPress from '@/pages/Company/Press';
 import ZaionsReviews from '@/pages/Company/Reviews';
 import ZaionsDiscoverEnterprise from '@/pages/DiscoverEnterprise';
-import TestingReactTable from '@/Testing/ReactTable';
+import TestingReactTable from '@/Testing/ReactTable/index';
 import ZLinkInBio from '@/pages/AdminPanel/ZLinkInBio';
 import ZLinkCampaigns from '@/pages/AdminPanel/ZLCampaigns';
 import ZCustomLinks from '@/pages/AdminPanel/ZLCustomLinks';
