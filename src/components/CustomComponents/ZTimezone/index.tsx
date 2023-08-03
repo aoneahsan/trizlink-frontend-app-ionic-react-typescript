@@ -73,10 +73,13 @@ interface ZTimezoneSelectorInterface {
 	multiple?: boolean;
 	label?: string;
 	labelPlacement?: ZIonPlacementType;
+	onIonBlur?: (event: IonSelectCustomEvent<void>) => void;
 	onIonChange?: (
 		event: IonSelectCustomEvent<SelectChangeEventDetail<unknown>>
 	) => void;
-	onIonBlur?: (event: IonSelectCustomEvent<void>) => void;
+	style?: {
+		[key: string]: unknown;
+	};
 }
 
 /**

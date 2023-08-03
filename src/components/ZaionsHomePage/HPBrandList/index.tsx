@@ -40,8 +40,6 @@ const ZaionsHPBrandList: React.FC = () => {
 	const { isMdScale } = useZMediaQueryScale();
 
 	//
-	const ZaionsCarousel = !isMdScale ? Swiper : Fragment;
-	const ZaionsCarouselItem = !isMdScale ? SwiperSlide : Fragment;
 
 	useLayoutEffect(() => {
 		// Fetch Data From Database Later:-
@@ -61,7 +59,53 @@ const ZaionsHPBrandList: React.FC = () => {
 			<div className='ion-padding-vertical'>
 				<ZIonGrid>
 					<ZIonRow className='ion-justify-content-center'>
-						<ZaionsCarousel
+						{isMdScale ? (
+							loadedHPBrandsData.map((item) => (
+								<ZIonCol
+									sizeXl='1.5'
+									sizeLg='2.2'
+									sizeMd='3.2'
+									sizeSm='4.2'
+									sizeXs='5.2'
+									key={item.id}
+								>
+									<ZIonImg
+										src={item.image}
+										className={classNames({
+											'w-auto': true,
+											'w-[60%!important] mx-auto': !isMdScale,
+										})}
+										alt=''
+									/>
+								</ZIonCol>
+							))
+						) : !isMdScale ? (
+							<Swiper>
+								{loadedHPBrandsData.map((item) => (
+									<SwiperSlide key={item.id}>
+										<ZIonCol
+											sizeXl='1.5'
+											sizeLg='2.2'
+											sizeMd='3.2'
+											sizeSm='4.2'
+											sizeXs='5.2'
+										>
+											<ZIonImg
+												src={item.image}
+												className={classNames({
+													'w-auto': true,
+													'w-[60%!important] mx-auto': !isMdScale,
+												})}
+												alt=''
+											/>
+										</ZIonCol>
+									</SwiperSlide>
+								))}
+							</Swiper>
+						) : (
+							''
+						)}
+						{/* <ZaionsCarousel
 							spaceBetween={0}
 							slidesPerView={1}
 							onSlideChange={() => {}}
@@ -91,7 +135,7 @@ const ZaionsHPBrandList: React.FC = () => {
 								</ZaionsCarouselItem>
 							))}
 							<ZIonCol sizeLg='0' sizeMd='0'></ZIonCol>
-						</ZaionsCarousel>
+						</ZaionsCarousel> */}
 					</ZIonRow>
 				</ZIonGrid>
 			</div>

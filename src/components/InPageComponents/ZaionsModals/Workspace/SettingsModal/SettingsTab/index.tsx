@@ -143,6 +143,11 @@ const ZSettingsTab: React.FC<{
 							id: _data.id,
 						});
 
+						setCompState((oldValues) => ({
+							...oldValues,
+							workspace: _data,
+						}));
+
 						showSuccessNotification(
 							MESSAGES.GENERAL.WORKSPACE.WORKSPACE_UPDATED
 						);
@@ -301,6 +306,7 @@ const ZSettingsTab: React.FC<{
 						values,
 						errors,
 						touched,
+						initialValues,
 						handleChange,
 						handleBlur,
 						setFieldValue,
@@ -319,15 +325,14 @@ const ZSettingsTab: React.FC<{
 									errorText={errors.workspaceName}
 									value={values.workspaceName}
 									className={classNames({
-										'ion-touched ion-invalid':
-											touched.workspaceName && errors.workspaceName,
-										'ion-touched ion-valid':
-											touched.workspaceName && !errors.workspaceName,
+										'bg-white': true,
+										'ion-touched': touched.workspaceName,
+										'ion-invalid': errors.workspaceName,
+										'ion-valid': !errors.workspaceName,
 									})}
 								/>
 
 								<ZTimezoneSelector
-									className='pt-2 ion-margin-top'
 									labelPlacement='stacked'
 									label='Workspace timezone (Optional)'
 									placeholder='Workspace timezone'
@@ -335,6 +340,15 @@ const ZSettingsTab: React.FC<{
 									value={values.workspaceTimezone}
 									onIonChange={handleChange}
 									onIonBlur={handleBlur}
+									className={classNames({
+										'pt-2 ion-margin-top': true,
+										'ion-touched': touched.workspaceTimezone,
+										'ion-invalid': errors.workspaceTimezone,
+										'ion-valid': !errors.workspaceTimezone,
+									})}
+									style={{
+										'--background': '#fff',
+									}}
 								/>
 
 								<ZIonRow className='pt-4 ion-align-items-center'>
@@ -368,8 +382,24 @@ const ZSettingsTab: React.FC<{
 
 								<div className='w-full mt-2 ion-text-end'>
 									<ZIonButton
+										disabled={
+											values.workspaceName ===
+												compState.workspace?.workspaceName &&
+											values.workspaceTimezone ===
+												compState.workspace?.workspaceTimezone &&
+											values.internalPost === initialValues?.internalPost
+										}
 										onClick={() => {
-											void submitForm();
+											if (
+												values.workspaceName !==
+													compState.workspace?.workspaceName ||
+												values.workspaceTimezone !==
+													compState.workspace?.workspaceTimezone ||
+												values.internalPost !==
+													compState.workspace?.internalPost
+											) {
+												void submitForm();
+											}
 										}}
 									>
 										Update

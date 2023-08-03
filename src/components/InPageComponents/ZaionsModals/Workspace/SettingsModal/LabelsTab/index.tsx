@@ -427,6 +427,7 @@ const ZLabelsTab: React.FC<{
 													onIonChange={handleChange}
 													onIonBlur={handleBlur}
 													className={classNames({
+														'bg-white': true,
 														'ion-touched': touched.title,
 														'ion-invalid': errors.title,
 														'ion-valid': !errors.title,
@@ -531,7 +532,7 @@ const ZLabelsTab: React.FC<{
 																						</ZIonTitle>
 																					</ZIonBadge>
 																					<ZIonText className='mx-2 text-sm'>
-																						{el.postsCount} posts
+																						{el.postsCount || 0} posts
 																					</ZIonText>
 
 																					<ZIonIcon
@@ -591,13 +592,34 @@ const ZLabelsTab: React.FC<{
 																					<ZIonInput
 																						placeholder='Label name'
 																						minHeight='2rem'
+																						onIonChange={handleChange}
+																						onIonBlur={handleBlur}
+																						errorText={
+																							values.allLabels[
+																								index
+																							]?.title?.trim().length === 0
+																								? 'Title is required'
+																								: undefined
+																						}
 																						name={`allLabels.${index}.title`}
+																						className={classNames({
+																							'w-full bg-white ps-2': true,
+																							'ion-touched':
+																								touched.allLabels &&
+																								touched.allLabels[index]?.title,
+																							'ion-invalid':
+																								values.allLabels &&
+																								values.allLabels[
+																									index
+																								]?.title?.trim().length === 0,
+																							'ion-valid':
+																								values.allLabels[
+																									index
+																								].title?.trim().length,
+																						})}
 																						value={
 																							values.allLabels[index].title
 																						}
-																						onIonChange={handleChange}
-																						onIonBlur={handleBlur}
-																						className='w-full ps-2'
 																						style={{
 																							'--padding-start': '12px',
 																						}}
@@ -627,26 +649,46 @@ const ZLabelsTab: React.FC<{
 																						size='small'
 																						color='success'
 																						fill='clear'
+																						disabled={
+																							values.allLabels &&
+																							values.allLabels[
+																								index
+																							]?.title?.trim().length === 0
+																						}
 																						onClick={async () => {
 																							try {
-																								const __zStringifyData =
-																									zStringify({
-																										title:
-																											values.allLabels[index]
-																												.title,
-																									});
+																								if (
+																									values.allLabels &&
+																									(values.allLabels[
+																										index
+																									]?.title?.trim().length ||
+																										0) > 0
+																								) {
+																									const __zStringifyData =
+																										zStringify({
+																											title:
+																												values.allLabels[index]
+																													.title,
+																										});
 
-																								await FormikSubmissionHandler(
-																									__zStringifyData,
-																									values.mode,
-																									el.id
-																								);
+																									await FormikSubmissionHandler(
+																										__zStringifyData,
+																										values.mode,
+																										el.id
+																									);
 
-																								setFieldValue(
-																									'mode',
-																									FormMode.ADD,
-																									false
-																								);
+																									setFieldValue(
+																										`allLabels.${index}.editMode`,
+																										false,
+																										false
+																									);
+
+																									setFieldValue(
+																										'mode',
+																										FormMode.ADD,
+																										false
+																									);
+																								}
 																							} catch (error) {
 																								reportCustomError(error);
 																							}
