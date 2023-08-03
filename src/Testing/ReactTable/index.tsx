@@ -10,6 +10,7 @@ import ZaionsIonPage from '@/components/ZaionsIonPage';
 import PRODUCTS from './_data.json';
 import { createColumnHelper, getCoreRowModel } from '@tanstack/table-core';
 import { flexRender, useReactTable } from '@tanstack/react-table';
+import classNames from 'classnames';
 
 const TestingReactTable: React.FC = () => {
 	//
@@ -24,23 +25,70 @@ const TestingReactTable: React.FC = () => {
 
 		columnHelper.display({
 			id: 'id',
-			cell: (props) => <ZIonCheckbox />,
+			header: 'Select',
+			footer: 'Select Column Footer',
+			cell: (props) => {
+				console.log({ props });
+				return (
+					<>
+						<ZIonCheckbox />
+					</>
+				);
+			},
 		}),
 
 		columnHelper.accessor((itemData) => itemData.title, {
 			header: 'title',
 			id: '__z_title__',
+			footer: 'Title Footer',
 		}),
+		// columnHelper.group({
+		// 	id: 'title_parent',
+		// 	header: 'title parent',
+		// 	columns: [
+		// 		columnHelper.display({
+		// 			id: 'title_child',
+		// 			header: 'title child',
+		// 		}),
+		// 	],
+		// }),
 
 		columnHelper.accessor((itemData) => itemData.price, {
-			header: 'Price',
 			id: '__z_price__',
+			header: 'Price',
+			footer: 'Price Footer',
 		}),
 
 		columnHelper.accessor('category', {
 			header: 'Category',
 			id: '__z_category__',
 			cell: (row) => row.getValue(),
+			footer: 'Category Footer',
+		}),
+
+		columnHelper.group({
+			id: 'ratingsColumn',
+			header: 'Rating',
+			footer: 'Rating Footer',
+			columns: [
+				// columnHelper.display({
+				// 	id: 'ratingsColumn__rate',
+				// 	header: 'rate',
+				// 	footer: 'rate footer',
+				// 	cell: (props) => {
+				// 		return <span>rating</span>;
+				// 	},
+				// }),
+
+				columnHelper.accessor((props) => props.rating.rate, {
+					header: 'Rate',
+					footer: 'Rate Column Footer',
+				}),
+				columnHelper.accessor((props) => props.rating.count, {
+					header: 'Count',
+					footer: 'Count Column Footer',
+				}),
+			],
 		}),
 	];
 
@@ -55,13 +103,22 @@ const TestingReactTable: React.FC = () => {
 	return (
 		<ZaionsIonPage>
 			<ZIonContent>
+				{/* Main Container */}
 				<ZIonGrid>
+					{/* Header Section */}
+					{/* Header Groups test */}
 					{zTable.getHeaderGroups().map((_headerInfo, _headerIndex) => {
 						return (
-							<ZIonRow key={_headerIndex} className='border'>
+							<ZIonRow key={_headerIndex} className='border bg-lime-500'>
 								{_headerInfo.headers.map((_columnInfo, _columnIndex) => {
 									return (
-										<ZIonCol key={_columnIndex} className='border-r'>
+										<ZIonCol
+											key={_columnIndex}
+											className={classNames('border-r', {
+												'text-red-500':
+													_columnInfo.column.id === 'ratingsColumn',
+											})}
+										>
 											{_columnInfo.column.columnDef.header?.toString()}
 										</ZIonCol>
 									);
@@ -69,11 +126,34 @@ const TestingReactTable: React.FC = () => {
 							</ZIonRow>
 						);
 					})}
+					{/* Flat Headers */}
+					{/* <ZIonRow className='border bg-lime-500'>
+						<>
+							{zTable
+								.getCenterLeafHeaders()
+								.map((_headerInfo, _headerIndex) => {
+									return (
+										<ZIonCol key={_headerIndex} className='border-r'>
+											{_headerInfo.column.columnDef.header?.toString()}
+										</ZIonCol>
+									);
+								})}
+						</>
+					</ZIonRow> */}
+					<br />
+
+					{/* Body Section */}
 					<ZIonRow className='border'>
 						<ZIonCol size='12' className='ion-no-padding'>
 							{zTable.getCoreRowModel().rows.map((_rowInfo, _rowIndex) => {
 								return (
-									<ZIonRow key={_rowIndex} className='border-b'>
+									<ZIonRow
+										key={_rowIndex}
+										className={classNames('border-b', {
+											'bg-slate-50': _rowIndex % 2 === 0,
+											'bg-slate-300': _rowIndex % 2 !== 0,
+										})}
+									>
 										{_rowInfo.getAllCells().map((_cellInfo, _cellIndex) => {
 											return (
 												<ZIonCol key={_cellIndex} className='border-r'>
@@ -89,6 +169,22 @@ const TestingReactTable: React.FC = () => {
 							})}
 						</ZIonCol>
 					</ZIonRow>
+
+					{/* Footer Section */}
+					<br />
+					{zTable.getFooterGroups().map((_footerInfo, _footerIndex) => {
+						return (
+							<ZIonRow key={_footerIndex} className='border bg-orange-300'>
+								{_footerInfo.headers.map((_columnInfo, _columnIndex) => {
+									return (
+										<ZIonCol key={_columnIndex} className='border-r'>
+											{_columnInfo.column.columnDef.footer?.toString()}
+										</ZIonCol>
+									);
+								})}
+							</ZIonRow>
+						);
+					})}
 				</ZIonGrid>
 			</ZIonContent>
 		</ZaionsIonPage>
