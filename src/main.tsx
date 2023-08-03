@@ -5,7 +5,8 @@ import AppEntryPoint from './AppEntryPoint';
 const container = document.getElementById('root');
 const root = createRoot(container!);
 root.render(
-  <React.StrictMode>
-    <AppEntryPoint />
-  </React.StrictMode>
+	// TODO: Must re-add the "React.StrictMode back"
+	<>
+		<AppEntryPoint />
+	</>
 );

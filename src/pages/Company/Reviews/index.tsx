@@ -42,7 +42,7 @@ import { ZaionsReviewState } from '@/ZaionsStore/CompanySection/Reviews/review.r
 // Styles
 import classes from './styles.module.css';
 
-const ZaionsReviews = () => {
+const ZaionsReviews: React.FC = () => {
 	const ReviewData = useRecoilValue<ZaionsReviewType[]>(ZaionsReviewState);
 	const isXlScale = useMediaQuery({
 		query: `(min-width: ${BRACKPOINT_XL})`,
