@@ -1,16 +1,19 @@
 import React from 'react';
 import {
+	ZIonButton,
 	ZIonCheckbox,
 	ZIonCol,
 	ZIonContent,
 	ZIonGrid,
 	ZIonRow,
+	ZIonTitle,
 } from '@/components/ZIonComponents';
 import ZaionsIonPage from '@/components/ZaionsIonPage';
 import PRODUCTS from './_data.json';
 import { createColumnHelper, getCoreRowModel } from '@tanstack/table-core';
 import { flexRender, useReactTable } from '@tanstack/react-table';
 import classNames from 'classnames';
+import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 
 const TestingReactTable: React.FC = () => {
 	//
@@ -105,6 +108,26 @@ const TestingReactTable: React.FC = () => {
 			<ZIonContent>
 				{/* Main Container */}
 				<ZIonGrid>
+					<ZIonRow>
+						<ZIonCol>
+							<ZIonTitle>All Columns</ZIonTitle>
+							<ZRCSwitch
+								checked={zTable.getIsAllColumnsVisible()}
+								onChange={(isChecked) => {
+									zTable.toggleAllColumnsVisible(isChecked);
+								}}
+							/>
+							<ZIonTitle>Price Column</ZIonTitle>
+							<ZRCSwitch
+								checked={zTable.getColumn('__z_price__')?.getIsVisible()}
+								onChange={(isChecked) => {
+									zTable.getColumn('__z_price__')?.toggleVisibility(isChecked);
+								}}
+							/>
+						</ZIonCol>
+					</ZIonRow>
+
+					<br />
 					{/* Header Section */}
 					{/* Header Groups test */}
 					{zTable.getHeaderGroups().map((_headerInfo, _headerIndex) => {
@@ -147,24 +170,32 @@ const TestingReactTable: React.FC = () => {
 						<ZIonCol size='12' className='ion-no-padding'>
 							{zTable.getCoreRowModel().rows.map((_rowInfo, _rowIndex) => {
 								return (
-									<ZIonRow
-										key={_rowIndex}
-										className={classNames('border-b', {
-											'bg-slate-50': _rowIndex % 2 === 0,
-											'bg-slate-300': _rowIndex % 2 !== 0,
-										})}
-									>
-										{_rowInfo.getAllCells().map((_cellInfo, _cellIndex) => {
-											return (
-												<ZIonCol key={_cellIndex} className='border-r'>
-													{flexRender(
-														_cellInfo.column.columnDef.cell,
-														_cellInfo.getContext()
-													)}
-												</ZIonCol>
-											);
-										})}
-									</ZIonRow>
+									<>
+										{
+											<ZIonRow
+												key={_rowIndex}
+												className={classNames('border-b', {
+													'bg-slate-50': _rowIndex % 2 === 0,
+													'bg-slate-300': _rowIndex % 2 !== 0,
+												})}
+											>
+												{_rowInfo.getAllCells().map((_cellInfo, _cellIndex) => {
+													return (
+														<>
+															{_cellInfo.column.getIsVisible() ? (
+																<ZIonCol key={_cellIndex} className='border-r'>
+																	{flexRender(
+																		_cellInfo.column.columnDef.cell,
+																		_cellInfo.getContext()
+																	)}
+																</ZIonCol>
+															) : null}
+														</>
+													);
+												})}
+											</ZIonRow>
+										}
+									</>
 								);
 							})}
 						</ZIonCol>
