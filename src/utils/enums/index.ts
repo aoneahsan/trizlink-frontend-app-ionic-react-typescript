@@ -63,6 +63,9 @@ export enum API_URL_ENUM {
 	folders_update_delete = 'folders_update_delete',
 	folders_create_list = 'folders_create_list',
 
+	user_setting_list_create = 'user_setting_list_create',
+	user_setting_delete_update = 'user_setting_delete_update',
+
 	linkInBioPreData_create_list = 'linkInBioPreData_create_list',
 	linkInBioPreData_delete_update = 'linkInBioPreData_delete_update',
 

@@ -626,8 +626,9 @@ ion-modal.zaions__modal_w100 {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	width: 100px;
-	max-width: 100px;
+	width: 90%;
+	max-width: 90%;
+	min-width: 4rem;
 }
 
 .rc-switch {

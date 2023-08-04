@@ -11,7 +11,11 @@ import {
 } from '@/components/ZIonComponents';
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { replaceParams, replaceRouteParams } from '@/utils/helpers';
+import {
+	createRedirectRoute,
+	replaceParams,
+	replaceRouteParams,
+} from '@/utils/helpers';
 import { showInfoNotification } from '@/utils/notification';
 import { useZIonToast } from '@/ZaionsHooks/zionic-hooks';
 import React from 'react';
@@ -74,7 +78,7 @@ const ZShortLinkModal: React.FC<{
 	const { presentZIonToast } = useZIonToast();
 	return (
 		<>
-			<ZIonContent className='ion-padding '>
+			<ZIonContent className='ion-padding'>
 				<div className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
 					<ZIonText className='text-xl font-bold'>Well done 🧙</ZIonText>
 					<ZIonText className='text-lg font-normal'>
@@ -108,11 +112,11 @@ const ZShortLinkModal: React.FC<{
 					<div className='flex w-[90%] ion-justify-content-between'>
 						<ZIonButton
 							fill='outline'
-							routerLink={replaceParams(
-								ZaionsRoutes.AdminPanel.ShortLinks.Create,
-								CONSTANTS.RouteParams.workspace.workspaceId,
-								workspaceId
-							)}
+							routerLink={createRedirectRoute({
+								url: ZaionsRoutes.AdminPanel.ShortLinks.Create,
+								params: [CONSTANTS.RouteParams.workspace.workspaceId],
+								values: [workspaceId],
+							})}
 						>
 							Create a new link
 						</ZIonButton>

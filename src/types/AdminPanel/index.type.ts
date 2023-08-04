@@ -51,6 +51,10 @@ export enum daysEnum {
 	allDays = 'allDays',
 }
 
+export enum ZUserSettingTypeEnum {
+	shortLinkListPageTable = 'shortLinkListPageTable',
+}
+
 // Interfaces
 export interface UTMTagInfoInterface {
 	templateId?: string;
@@ -120,6 +124,18 @@ export interface ZDashboardFolderMenuInterface {
 	foldersSaveReorderButtonOnClickHandler?: React.MouseEventHandler<HTMLIonButtonElement>;
 	folderActionsButtonOnClickHandler?: React.MouseEventHandler<HTMLIonButtonElement>;
 	showSkeleton?: boolean;
+}
+
+export interface ZUserSettingInterface {
+	id?: string;
+	type?: ZUserSettingTypeEnum;
+	settings: {
+		shortLinkColumn: {
+			name: string;
+			isVisible: boolean;
+			orderNumber: number;
+		}[];
+	};
 }
 
 // Types

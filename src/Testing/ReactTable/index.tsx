@@ -31,7 +31,6 @@ const TestingReactTable: React.FC = () => {
 			header: 'Select',
 			footer: 'Select Column Footer',
 			cell: (props) => {
-				console.log({ props });
 				return (
 					<>
 						<ZIonCheckbox />
@@ -205,7 +204,7 @@ const TestingReactTable: React.FC = () => {
 					<br />
 					{zTable.getFooterGroups().map((_footerInfo, _footerIndex) => {
 						return (
-							<ZIonRow key={_footerIndex} className='border bg-orange-300'>
+							<ZIonRow key={_footerIndex} className='bg-orange-300 border'>
 								{_footerInfo.headers.map((_columnInfo, _columnIndex) => {
 									return (
 										<ZIonCol key={_columnIndex} className='border-r'>

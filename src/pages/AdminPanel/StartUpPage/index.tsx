@@ -80,7 +80,10 @@ const ZAppStartupPage: React.FC = () => {
 	const { zNavigatePushRoute } = useZNavigate(); // hook to navigate
 
 	// getting the role & permissions of the current log in user.
-	const { data: getUserRoleAndPermissions } = useZRQGetRequest<{
+	const {
+		data: getUserRoleAndPermissions,
+		isFetching: isUserRoleAndPermissionsFetching,
+	} = useZRQGetRequest<{
 		isSuccess: boolean;
 		result: UserRoleAndPermissionsInterface;
 	}>({
@@ -89,7 +92,14 @@ const ZAppStartupPage: React.FC = () => {
 		_extractType: ZRQGetRequestExtractEnum.extractItem,
 	});
 
+	//
+	const { isFetching: isUserSettingFetching } = useZRQGetRequest({
+		_url: API_URL_ENUM.user_setting_list_create,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.MAIN],
+	});
+
 	// storing the role & permissions in recoil state
+	const isZFetching = isUserRoleAndPermissionsFetching && isUserSettingFetching;
 	useEffect(() => {
 		try {
 			if (getUserRoleAndPermissions?.isSuccess) {
@@ -103,18 +113,20 @@ const ZAppStartupPage: React.FC = () => {
 				setLoadingIsOpen(false);
 
 				// Redirect to workspaces index page
-				zNavigatePushRoute(ZaionsRoutes.AdminPanel.Workspaces.Main);
+				if (!isZFetching) {
+					zNavigatePushRoute(ZaionsRoutes.AdminPanel.Workspaces.Main);
+				}
 			}
 		} catch (error) {
 			reportCustomError(error);
 		}
-	}, [getUserRoleAndPermissions]);
+	}, [getUserRoleAndPermissions, isZFetching]);
 
 	return (
 		<ZaionsIonPage pageTitle='zaions startup page'>
 			<ZIonContent>
 				<ZIonLoading
-					isOpen={loadingIsOpen}
+					isOpen={isZFetching}
 					message='Loading dashboard please await a second!'
 				/>
 			</ZIonContent>

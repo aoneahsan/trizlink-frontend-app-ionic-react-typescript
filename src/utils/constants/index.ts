@@ -38,6 +38,12 @@ const RouteParams = {
 		editWorkspaceIdParam: ':editWorkspaceId',
 	},
 
+	user: {
+		setting: {
+			type: ':type',
+		},
+	},
+
 	timeSlot: {
 		timeSlotId: ':timeSlotId',
 	},
@@ -84,6 +90,9 @@ export const API_URLS = {
 
 	folders_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder/${RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
 	folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder`,
+
+	user_setting_list_create: `/user/settings`,
+	user_setting_delete_update: `/user/settings/${RouteParams.user.setting.type}`,
 
 	userAccount_LinkInBio_folders_update_delete:
 		'/user/link-in-bio-folders/:folderId',
@@ -172,8 +181,10 @@ export const CONTENT_ID = 'zaions_main-content';
 
 const MENU_IDS = {
 	CONTENT_ID: 'zaions_main-content',
+	ADMIN_PANEL_CONTENT_ID: 'admin-panel-content-id',
 	ADMIN_LINK_PAGE_CONTENT_ID: 'zaions-link-page-menu',
 	DASHBOARD_SM_MENU_CONTENT_ID: 'zaions-dashboard-responsive-menu-content-id',
+	USER_SETTINGS_MENU_ID: 'user-settings-menu-id',
 	ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID:
 		'admin_page_short_links_folders_menu_id',
 	ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID:
@@ -526,6 +537,10 @@ const REACT_QUERY = {
 
 		USER: {
 			ROLE_PERMISSIONS: 'rq-user-roles-and-permissions',
+			SETTING: {
+				MAIN: 'rq-user-setting-key',
+				GET: 're-user-setting-get',
+			},
 		},
 	},
 };
@@ -540,6 +555,16 @@ const LINK_In_BIO = {
 		BUTTON_SHADOW_COLOR: '#aab1c4',
 	},
 };
+
+export const ShortLinksTableColumns = [
+	{ name: 'title', isVisible: true },
+	{ name: 'clicks', isVisible: true },
+	{ name: 'date', isVisible: true },
+	{ name: 'pixels', isVisible: true },
+	{ name: 'notes', isVisible: true },
+	{ name: 'url', isVisible: true },
+	{ name: 'linkToShare', isVisible: true },
+];
 
 const CONSTANTS = {
 	PIXEL_ACCOUNTS,

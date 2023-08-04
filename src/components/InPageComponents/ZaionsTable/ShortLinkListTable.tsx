@@ -33,6 +33,7 @@ import {
 	ZIonCheckbox,
 	ZIonTitle,
 	ZIonSkeletonText,
+	ZIonGrid,
 } from '@/components/ZIonComponents';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
@@ -78,6 +79,9 @@ import {
 } from '@/utils/notification';
 import MESSAGES from '@/utils/messages';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { createColumnHelper, getCoreRowModel } from '@tanstack/table-core';
+import { flexRender, useReactTable } from '@tanstack/react-table';
+import classNames from 'classnames';
 
 // Styles
 
@@ -178,6 +182,10 @@ const ZaionsShortLinkTable: React.FC<{
 			actionsPopoverRef.current.event = _event;
 		}
 	};
+
+	const { presentZIonModal: presentPixelAccountDetailModal } = useZIonModal(
+		ZaionsPixelAccountDetail
+	);
 
 	//
 	const editShortLinkDetails = async () => {
@@ -311,147 +319,237 @@ const ZaionsShortLinkTable: React.FC<{
 	};
 	// #endregion
 
+	// #region Managing table data with react-table.
+	const columnHelper = createColumnHelper<ShortLinkType>();
+
+	const defaultColumns = [
+		columnHelper.display({
+			id: '__z_short_link_id__',
+			header: 'Select',
+			footer: 'Select Column Footer',
+			cell: (props) => {
+				console.log({ props });
+				return (
+					<>
+						<ZIonCheckbox />
+					</>
+				);
+			},
+		}),
+
+		// Title
+		columnHelper.accessor((itemData) => itemData.title, {
+			header: 'Title',
+			id: '__z_short_link_title__',
+			footer: 'Title',
+		}),
+
+		// Date
+		columnHelper.accessor((itemData) => itemData.createdAt, {
+			header: 'Date',
+			id: '__z_short_link_date__',
+			footer: 'Date',
+		}),
+
+		// Pixels
+		columnHelper.accessor((itemData) => itemData.pixelIds, {
+			header: 'No of attached pixels',
+			id: '__z_short_link_pixels__',
+			footer: 'Pixels',
+			cell: (row) => {
+				return (
+					<>
+						{(JSON.parse(row?.getValue()!.toString()) as string[])?.length >
+						0 ? (
+							<div className='flex gap-1 ion-align-items-center ZaionsTextEllipsis'>
+								<div className=''>
+									{
+										(JSON.parse(row?.getValue()!.toString()) as string[])
+											?.length
+									}
+								</div>
+								<ZIonText
+									color='primary'
+									className='zaions__cursor_pointer'
+									onClick={() => {
+										setShortLinkFormState((oldVal) => ({
+											...oldVal,
+											pixelAccountIds: JSON.parse(
+												row?.getValue()!.toString()
+											) as string[],
+										}));
+										// Open The Modal
+										presentPixelAccountDetailModal({
+											_cssClass: 'pixel-account-detail-modal-size',
+										});
+									}}
+								>
+									View Pixels
+								</ZIonText>
+							</div>
+						) : (
+							CONSTANTS.NO_VALUE_FOUND
+						)}
+					</>
+				);
+			},
+		}),
+
+		// Notes
+		columnHelper.accessor((itemData) => itemData.notes, {
+			id: '__z_short_link_notes__',
+			header: 'Notes',
+			footer: 'Notes',
+			cell: (row) => {
+				return (
+					<>
+						{row.getValue() ? (
+							<div className='flex ion-align-items-center'>
+								<div className='text-sm ZaionsTextEllipsis'>
+									{row.getValue()}
+								</div>
+								<ZIonText
+									color='primary'
+									className='text-sm cursor-pointer'
+									onClick={() => {
+										setShortLinkFormState((oldVal) => ({
+											...oldVal,
+											note: row.getValue(),
+										}));
+										presentShortLinkNoteModal({
+											_cssClass: 'pixel-account-detail-modal-size',
+										});
+									}}
+								>
+									Read more
+								</ZIonText>
+							</div>
+						) : (
+							CONSTANTS.NO_VALUE_FOUND
+						)}
+					</>
+				);
+			},
+		}),
+
+		columnHelper.accessor(
+			(itemData) => {
+				if (itemData.target) {
+					return (itemData.target as LinkTargetType).url;
+				}
+			},
+			{
+				header: 'Url',
+				id: '__z_short_link_target_url__',
+				cell: (row) => row.getValue(),
+				footer: 'Url Footer',
+			}
+		),
+
+		// link to share
+		columnHelper.accessor('link_to_share', {
+			header: 'Link to share',
+			id: '__z_short_link_link_to_share__',
+			footer: 'Link to share',
+			cell: () => <div>https://linktoshare.com</div>,
+		}),
+	];
+
+	const zShortLinksTable = useReactTable({
+		columns: defaultColumns,
+		data: _FilteredShortLinkDataSelector || [],
+		getCoreRowModel: getCoreRowModel(),
+	});
+
+	// #endregion
+
 	return (
 		<>
-			{!showSkeleton && (
-				<ZIonRow className='px-4 pt-2 pb-1 mx-1 mt-5 ion-margin-bottom'>
-					<ZIonCol>
-						<ZTable>
-							<ZTableTHead>
-								<ZTableRow>
-									<ZTableHeadCol>
-										<ZIonCheckbox />
-									</ZTableHeadCol>
-									<ZTableHeadCol>Title</ZTableHeadCol>
-									<ZTableHeadCol>Clicks</ZTableHeadCol>
-									<ZTableHeadCol>Data</ZTableHeadCol>
-									{/* <ZTableHeadCol>Pixels</ZTableHeadCol> */}
-									<ZTableHeadCol>Note</ZTableHeadCol>
-									<ZTableHeadCol>Url</ZTableHeadCol>
-									<ZTableHeadCol>Link To Share</ZTableHeadCol>
-									<ZTableHeadCol>Action</ZTableHeadCol>
-								</ZTableRow>
-							</ZTableTHead>
-							<ZTableTBody>
-								{_FilteredShortLinkDataSelector &&
-									_FilteredShortLinkDataSelector?.map((el) => (
-										<ZTableRow key={el.id}>
-											<ZTableRowCol>
-												<ZIonCheckbox />
-											</ZTableRowCol>
-											<ZTableRowCol>{el.title}</ZTableRowCol>
-											<ZTableRowCol>{el.totalClicks || 0}</ZTableRowCol>
-											<ZTableRowCol>{el.createdAt}</ZTableRowCol>
-											{/* <ZTableRowCol>
-											{(JSON.parse(el?.pixelIds as string) as string[])
-												?.length ? (
-												<>
-													<div className='ZaionsTextEllipsis'>
-														{
-															(JSON.parse(el?.pixelIds as string) as string[])
-																?.length
-														}
-													</div>
-													<ZIonText
-														color='primary'
-														className='mt-1 zaions__cursor_pointer'
-														onClick={() => {
-															setShortLinkFormState((oldVal) => ({
-																...oldVal,
-																pixelAccountIds: JSON.parse(
-																	el?.pixelIds as string
-																) as string[],
-															}));
-															// Open The Modal
-															presentPixelAccountDetailModal({
-																_cssClass: 'pixel-account-detail-modal-size',
-															});
-														}}
-													>
-														View Pixels
-													</ZIonText>
-												</>
-											) : (
-												CONSTANTS.NO_VALUE_FOUND
-											)}
-										</ZTableRowCol> */}
-											<ZTableRowCol>
-												<div className='ZaionsTextEllipsis'>{el.notes}</div>
-												{el.notes ? (
-													<ZIonText
-														color='primary'
-														className='mt-1 zaions__cursor_pointer'
-														onClick={() => {
-															setShortLinkFormState((oldVal) => ({
-																...oldVal,
-																note: el.notes,
-															}));
-															presentShortLinkNoteModal({
-																_cssClass: 'pixel-account-detail-modal-size',
-															});
-														}}
-													>
-														Read more
-													</ZIonText>
-												) : (
-													CONSTANTS.NO_VALUE_FOUND
-												)}
-											</ZTableRowCol>
-											<ZTableRowCol>
-												<ZIonRouterLink
-													routerLink={ZaionsBusinessDetails.WebsiteUrl}
-												>
-													{(el.target as LinkTargetType)?.url}
-												</ZIonRouterLink>
-											</ZTableRowCol>
-											<ZTableRowCol>
-												<ZIonRouterLink
-													routerLink={ZaionsBusinessDetails.WebsiteUrl}
-												>
-													{ZaionsBusinessDetails.WebsiteUrl}
-												</ZIonRouterLink>{' '}
-											</ZTableRowCol>
-											<ZTableRowCol>
-												<ZIonButton
-													fill='clear'
-													color={'dark'}
-													onClick={(_event) => {
-														setCompState((oldVal) => ({
-															...oldVal,
-															selectedShortLinkId: el.id,
-															showActionPopover: true,
-														}));
-														showActionsPopover(_event);
-													}}
-												>
-													<ZIonIcon icon={ellipsisVerticalOutline} />
-												</ZIonButton>
-											</ZTableRowCol>
-										</ZTableRow>
-									))}
-							</ZTableTBody>
-						</ZTable>
-						{!_FilteredShortLinkDataSelector?.length && (
-							<ZIonCol className='ion-text-center'>
-								<ZIonTitle className='mt-10'>
-									<ZIonIcon
-										icon={fileTrayFullOutline}
-										className='mx-auto'
-										size='large'
-										color='medium'
-									/>
-								</ZIonTitle>
-								<ZIonTitle color='medium'>
-									No short links founds
-									{(folderId !== null || folderId !== 'all') &&
-										' In this Folder'}
-									. please create a short link.
-								</ZIonTitle>
-							</ZIonCol>
-						)}
+			<div className='w-full overflow-y-scroll border rounded -lg h-max zaions_pretty_scrollbar ion-no-padding ms-2'>
+				{zShortLinksTable.getHeaderGroups().map((_headerInfo, _headerIndex) => {
+					return (
+						<ZIonRow key={_headerIndex} className='flex mb-2 flex-nowrap'>
+							{_headerInfo.headers.map((_columnInfo, _columnIndex) => {
+								return (
+									<ZIonCol
+										size={
+											_columnInfo.column.id === '__z_short_link_id__'
+												? '.8'
+												: '3'
+										}
+										key={_columnIndex}
+										className={classNames({
+											'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
+												true,
+											'border-r': false,
+										})}
+									>
+										{_columnInfo.column.columnDef.header?.toString()}
+									</ZIonCol>
+								);
+							})}
+						</ZIonRow>
+					);
+				})}
+
+				{/* Body Section */}
+				<ZIonRow className='rounded-b-lg'>
+					<ZIonCol size='12' className='w-full ion-no-padding'>
+						{zShortLinksTable
+							.getCoreRowModel()
+							.rows.map((_rowInfo, _rowIndex) => {
+								return (
+									<>
+										{
+											<ZIonRow key={_rowIndex} className='flex-nowrap'>
+												{_rowInfo.getAllCells().map((_cellInfo, _cellIndex) => {
+													return (
+														<>
+															{_cellInfo.column.getIsVisible() ? (
+																<ZIonCol
+																	size={
+																		_cellInfo.column.id ===
+																		'__z_short_link_id__'
+																			? '.8'
+																			: '3'
+																	}
+																	key={_cellIndex}
+																	className={classNames({
+																		'py-1 mt-1 border-b ps-2 flex ion-align-items-center':
+																			true,
+																		'border-r': false,
+																		'ion-justify-content-center':
+																			_cellInfo.column.id ===
+																			'__z_short_link_id__',
+																	})}
+																>
+																	<div
+																		className={classNames({
+																			' w-full text-sm ZaionsTextEllipsis':
+																				true,
+																			'ion-justify-content-center flex ion-align-items-center':
+																				_cellInfo.column.id ===
+																				'__z_short_link_id__',
+																		})}
+																	>
+																		{flexRender(
+																			_cellInfo.column.columnDef.cell,
+																			_cellInfo.getContext()
+																		)}
+																	</div>
+																</ZIonCol>
+															) : null}
+														</>
+													);
+												})}
+											</ZIonRow>
+										}
+									</>
+								);
+							})}
 					</ZIonCol>
 				</ZIonRow>
-			)}
+			</div>
 
 			{showSkeleton && <ZaionsShortLinkTableSkeleton />}
 
@@ -521,6 +619,7 @@ const ZaionsShortLinkTable: React.FC<{
 	);
 };
 
+// Skeleton.
 const ZaionsShortLinkTableSkeleton: React.FC = React.memo(() => {
 	return (
 		<ZIonRow className='px-4 pt-2 pb-1 mx-1 mt-5 overflow-y-scroll zaions_pretty_scrollbar ion-margin-bottom'>
