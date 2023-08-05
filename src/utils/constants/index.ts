@@ -18,7 +18,10 @@ import {
 	twitterSvgLogo,
 	vkSvgLogo,
 } from '@/assets/images';
-import { IonLoaderEnum } from '@/types/AdminPanel/linksType';
+import {
+	IonLoaderEnum,
+	ZShortLinkListPageTableColumnsEnum,
+} from '@/types/AdminPanel/linksType';
 import { ENVS } from '@/utils/envKeys';
 
 // Constant
@@ -557,13 +560,13 @@ const LINK_In_BIO = {
 };
 
 export const ShortLinksTableColumns = [
-	{ name: 'title', isVisible: true },
-	{ name: 'clicks', isVisible: true },
-	{ name: 'date', isVisible: true },
-	{ name: 'pixels', isVisible: true },
-	{ name: 'notes', isVisible: true },
-	{ name: 'url', isVisible: true },
-	{ name: 'linkToShare', isVisible: true },
+	{ name: ZShortLinkListPageTableColumnsEnum.title, isVisible: true },
+	{ name: ZShortLinkListPageTableColumnsEnum.clicks, isVisible: true },
+	{ name: ZShortLinkListPageTableColumnsEnum.date, isVisible: true },
+	{ name: ZShortLinkListPageTableColumnsEnum.pixels, isVisible: true },
+	{ name: ZShortLinkListPageTableColumnsEnum.notes, isVisible: true },
+	{ name: ZShortLinkListPageTableColumnsEnum.url, isVisible: true },
+	{ name: ZShortLinkListPageTableColumnsEnum.linkToShare, isVisible: true },
 ];
 
 const CONSTANTS = {

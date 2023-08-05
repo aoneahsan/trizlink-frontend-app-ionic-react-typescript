@@ -470,20 +470,22 @@ const LinkInBioShareSettings: React.FC = () => {
 												onClick={() =>
 													setShowAdvanceOptions((oldVal) => !oldVal)
 												}
+												// size='large'
 												expand='block'
-												size='large'
-												className='ion-text-capitalize'
+												// size={isMdScale ? 'large' : 'default'}
+												className={classNames({
+													'ion-text-capitalize': true,
+													'mx-0': !isMdScale,
+												})}
 											>
-												<ZIonText>
-													<h4 className='flex ion-no-margin ion-align-items-center ion-padding-top ion-padding-bottom'>
-														Advance Options
-													</h4>
+												<ZIonText className='flex py-2 text-lg ion-no-margin ion-align-items-center'>
+													Advance Options
 												</ZIonText>
 												<ZIonIcon
 													slot='end'
 													icon={settingsOutline}
-													className='ion-margin-end ms-auto'
-												></ZIonIcon>
+													className='w-6 h-6 ms-auto me-1'
+												/>
 											</ZIonButton>
 											{showAdvanceOptions && (
 												<ZIonRow className='gap-5 ion-margin-top'>

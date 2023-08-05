@@ -143,7 +143,8 @@ const AdminPanelSidebarMenu: React.FC<{
 						<ZIonButton
 							slot='fixed'
 							className={classNames(classes['zaions-ap-msm-toggle-button'], {
-								'zaions-transition': true,
+								'zaions-transition z-10 w-11 h-11 ion-no-padding ion-no-margin':
+									true,
 							})}
 							shape='round'
 							onClick={() => {
@@ -155,7 +156,7 @@ const AdminPanelSidebarMenu: React.FC<{
 									},
 								}));
 							}}
-							style={{ right: isExpand ? '-9%' : '-30%', top: '12%' }}
+							style={{ right: isExpand ? '-9%' : '-25%', top: '12%' }}
 						>
 							<ZIonIcon
 								icon={isExpand ? chevronBackOutline : chevronForwardOutline}

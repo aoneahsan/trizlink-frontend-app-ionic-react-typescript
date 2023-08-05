@@ -75,7 +75,6 @@ import {
 import {
 	LinkInBioBlockEnum,
 	LinkInBioBlockFromType,
-	LinkInBioSingleBlockContentType,
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 /**

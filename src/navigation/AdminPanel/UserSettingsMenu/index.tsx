@@ -201,7 +201,6 @@ const ZUserSettingsMenu: React.FC = () => {
 		}
 	};
 	// #endregion
-	console.log(getUserSetting);
 	return (
 		<ZIonMenu
 			contentId={CONSTANTS.MENU_IDS.ADMIN_PANEL_CONTENT_ID}
@@ -245,7 +244,7 @@ const ZUserSettingsMenu: React.FC = () => {
 						}
 					}}
 				>
-					{({ values, setFieldValue, submitForm }) => {
+					{({ values, initialValues, setFieldValue, submitForm }) => {
 						return (
 							<>
 								<ZIonAccordionGroup>
@@ -284,10 +283,7 @@ const ZUserSettingsMenu: React.FC = () => {
 																'--padding-start': '2px',
 															}}
 														>
-															<ZIonReorder
-																slot='start'
-																className='me-3'
-															></ZIonReorder>
+															<ZIonReorder slot='start' className='me-3' />
 															<ZIonText className='text-sm font-bold'>
 																{el.name}
 															</ZIonText>
@@ -312,6 +308,8 @@ const ZUserSettingsMenu: React.FC = () => {
 									</ZIonAccordion>
 								</ZIonAccordionGroup>
 								<ZIonButton
+									expand='block'
+									className='mx-1 mt-2'
 									onClick={() => {
 										void submitForm();
 									}}

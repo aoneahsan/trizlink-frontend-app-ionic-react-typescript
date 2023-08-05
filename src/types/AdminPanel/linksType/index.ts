@@ -113,6 +113,16 @@ export enum TimeFilterEnum {
 	customRange = 'Custom range',
 }
 
+export enum ZShortLinkListPageTableColumnsEnum {
+	title = 'title',
+	clicks = 'clicks',
+	date = 'date',
+	pixels = 'pixels',
+	notes = 'notes',
+	url = 'url',
+	linkToShare = 'linkToShare',
+}
+
 // Interface
 export interface FolderInterface {
 	label?: string;

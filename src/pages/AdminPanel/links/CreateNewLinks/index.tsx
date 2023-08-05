@@ -904,21 +904,19 @@ const AdminCreateNewLinkPages: React.FC = () => {
 															setShowAdvanceOptions((oldVal) => !oldVal)
 														}
 														expand='block'
-														size={isMdScale ? 'large' : 'default'}
+														// size={isMdScale ? 'large' : 'default'}
 														className={classNames({
 															'ion-text-capitalize': true,
 															'mx-0': !isMdScale,
 														})}
 													>
-														<ZIonText>
-															<h4 className='flex ion-no-margin ion-align-items-center ion-padding-top ion-padding-bottom'>
-																Advance Options
-															</h4>
+														<ZIonText className='flex py-2 text-lg ion-no-margin ion-align-items-center'>
+															Advance Options
 														</ZIonText>
 														<ZIonIcon
 															slot='end'
 															icon={settingsOutline}
-															className='ms-auto'
+															className='w-6 h-6 ms-auto me-1'
 														/>
 													</ZIonButton>
 
