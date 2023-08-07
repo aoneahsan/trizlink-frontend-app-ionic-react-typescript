@@ -82,18 +82,6 @@ const LinkExpiration: React.FC = () => {
 						<ZIonRow className='ion-justify-content-between'>
 							{/* expirationDate */}
 							<ZIonCol size='5.9'>
-								{/* <ZIonInputField
-									inputFieldProps={{
-										label: 'End at:',
-										labelPlacement: 'stacked',
-										onIonChange: handleChange,
-										onIonBlur: handleBlur,
-										value: values.linkExpiration.expirationDate,
-										name: 'linkExpiration.expirationDate',
-										type: 'datetime-local',
-									}}
-								/> */}
-
 								<ZIonInput
 									label='End at:'
 									labelPlacement='stacked'
@@ -136,54 +124,28 @@ const LinkExpiration: React.FC = () => {
 							</ZIonCol>
 						</ZIonRow>
 
-						{/* <ZIonInputField
-							inputFieldProps={{
-								label: 'Redirection Links*',
-								labelPlacement: 'floating',
-								onIonChange: (event) => {
-									setFieldValue(
-										'linkExpiration.redirectionLink',
-										event.target.value,
-										true
-									);
-								},
-								onIonBlur: () => {
-									setFieldTouched('linkExpiration.redirectionLink', true, true);
-								},
-								value: values.linkExpiration.redirectionLink,
-								name: 'linkExpiration.redirectionLink',
-								errorText: errors.linkExpiration?.redirectionLink,
-								type: 'url',
-								className: `${classNames({
-									'mt-2 mx-auto': true,
-									'ion-touched': touched.linkExpiration?.redirectionLink,
-									'ion-invalid':
-										touched.linkExpiration?.redirectionLink &&
-										errors.linkExpiration?.redirectionLink,
-									'ion-valid':
-										touched.linkExpiration?.redirectionLink &&
-										!errors.linkExpiration?.redirectionLink,
-								})}`,
-							}}
-						/> */}
 						{/* redirectionLink */}
 						<ZIonInput
-							label='Redirection Links*'
-							labelPlacement='stacked'
-							value={values.linkExpiration.redirectionLink}
-							name='linkExpiration.redirectionLink'
-							errorText={errors.linkExpiration?.redirectionLink}
 							type='url'
 							minHeight='40px'
+							label='Redirection Links*'
+							labelPlacement='stacked'
+							name='linkExpiration.redirectionLink'
+							value={values.linkExpiration.redirectionLink}
+							errorText={
+								touched.linkExpiration?.redirectionLink
+									? errors.linkExpiration?.redirectionLink
+									: undefined
+							}
+							onIonBlur={() => {
+								setFieldTouched('linkExpiration.redirectionLink', true, true);
+							}}
 							onIonChange={(event) => {
 								setFieldValue(
 									'linkExpiration.redirectionLink',
 									event.target.value,
 									true
 								);
-							}}
-							onIonBlur={() => {
-								setFieldTouched('linkExpiration.redirectionLink', true, true);
 							}}
 							className={classNames({
 								'mt-5 mx-auto': true,

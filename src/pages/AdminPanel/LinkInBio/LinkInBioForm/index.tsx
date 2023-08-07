@@ -434,22 +434,22 @@ const ZaionsLinkInBioForm: React.FC = () => {
 														>
 															<ZIonInput
 																name='linkInBioTitle'
-																value={values.linkInBioTitle}
+																label=''
+																minHeight='40px'
 																onIonChange={handleChange}
 																onIonBlur={handleBlur}
+																value={values.linkInBioTitle}
 																className={classNames(
 																	classes['link-in-bio-title-field'],
 																	{
 																		zaions__fs_18: true,
 																	}
 																)}
-																label=''
-																minHeight='40px'
 															/>
 															<ZIonButton
-																className='ion-text-capitalize ion-no-margin zaions__h100'
+																className='ion-text-capitalize ion-no-margin'
+																height='40px'
 																expand='full'
-																size='large'
 																onClick={() => {
 																	setFieldValue(
 																		'enableTitleInput',
@@ -458,9 +458,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 																	);
 																}}
 															>
-																<ZIonText className='zaions__fs_12'>
-																	save
-																</ZIonText>
+																<ZIonText className='text-sm'>save</ZIonText>
 															</ZIonButton>
 														</ZIonItem>
 													)}

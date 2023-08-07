@@ -58,6 +58,8 @@ import {
 } from '@/types/AdminPanel/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { reportCustomError } from '@/utils/customErrorType';
+import { useParams } from 'react-router';
+import { ZShortLinkListPageTableColumnsIds } from '@/types/AdminPanel/linksType';
 
 /**
  * Type Imports go down
@@ -94,12 +96,20 @@ const ZUserSettingsMenu: React.FC = () => {
 	// #region compState.
 	const [compState, setCompState] = useState<{
 		shortLinkColumn?: {
+			id?: string;
 			name: string;
 			isVisible: boolean;
 			orderNumber: number;
 		}[];
-	}>();
+		columnOrderIds: string[];
+	}>({
+		columnOrderIds: [],
+	});
 	// #endregion
+
+	const { workspaceId } = useParams<{
+		workspaceId: string;
+	}>();
 
 	// #region custom hooks.
 	const { getRQCDataHandler } = useZGetRQCacheData();
@@ -121,13 +131,16 @@ const ZUserSettingsMenu: React.FC = () => {
 			_url: API_URL_ENUM.user_setting_delete_update,
 			_key: [
 				CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+				workspaceId,
 				ZUserSettingTypeEnum.shortLinkListPageTable,
 			],
-			_itemsIds: [ZUserSettingTypeEnum.shortLinkListPageTable],
-			_urlDynamicParts: [CONSTANTS.RouteParams.user.setting.type],
+			_itemsIds: [ZUserSettingTypeEnum.shortLinkListPageTable, workspaceId],
+			_urlDynamicParts: [
+				CONSTANTS.RouteParams.user.setting.type,
+				CONSTANTS.RouteParams.workspace.workspaceId,
+			],
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
 		});
-
 	// #endregion
 
 	useEffect(() => {
@@ -141,20 +154,33 @@ const ZUserSettingsMenu: React.FC = () => {
 		} catch (error) {
 			reportCustomError(error);
 		}
-	}, [getUserSetting]);
+	}, [getUserSetting, workspaceId]);
 
 	// #region Functions.
 	const handleCarouselCardReorder = (
 		event: CustomEvent<ItemReorderEventDetail>
 	) => {
-		// The `from` and `to` properties contain the index of the item
-		// when the drag started and ended, respectively
-
-		// Finish the reorder and position the item in the DOM based on
-		// where the gesture ended. This method can also be called directly
-		// by the reorder group
-		// eslint-disable-next-line
 		event.detail.complete();
+
+		setTimeout(() => {
+			const _shortLinksListColumnsEls = document.querySelectorAll(
+				`.zaions-short-link-list-table-column`
+			);
+			const _shortLinksColumnIds: string[] = [
+				ZShortLinkListPageTableColumnsIds.id,
+			];
+			for (let i = 0; i < _shortLinksListColumnsEls.length; i++) {
+				const _block = _shortLinksListColumnsEls[i];
+				_shortLinksColumnIds.push(_block.getAttribute('data-id') as string);
+			}
+
+			if (_shortLinksColumnIds) {
+				setCompState((oldValues) => ({
+					...oldValues,
+					columnOrderIds: _shortLinksColumnIds,
+				}));
+			}
+		}, 100);
 	};
 
 	const FormikSubmitHandler = async (_data: string) => {
@@ -163,11 +189,16 @@ const ZUserSettingsMenu: React.FC = () => {
 				let __response;
 
 				if (
-					getUserSetting?.type === ZUserSettingTypeEnum.shortLinkListPageTable
+					getUserSetting?.type ===
+						ZUserSettingTypeEnum.shortLinkListPageTable &&
+					getUserSetting?.workspaceUniqueId !== null
 				) {
 					__response = await updateUserSettingsAsyncMutate({
-						itemIds: [ZUserSettingTypeEnum.shortLinkListPageTable],
-						urlDynamicParts: [CONSTANTS.RouteParams.user.setting.type],
+						itemIds: [ZUserSettingTypeEnum.shortLinkListPageTable, ''],
+						urlDynamicParts: [
+							CONSTANTS.RouteParams.user.setting.type,
+							CONSTANTS.RouteParams.workspace.workspaceId,
+						],
 						requestData: _data,
 					});
 				} else {
@@ -186,6 +217,7 @@ const ZUserSettingsMenu: React.FC = () => {
 						await updateRQCDataHandler<ZUserSettingInterface | undefined>({
 							key: [
 								CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+								workspaceId,
 								ZUserSettingTypeEnum.shortLinkListPageTable,
 							],
 							data: __data,
@@ -201,6 +233,7 @@ const ZUserSettingsMenu: React.FC = () => {
 		}
 	};
 	// #endregion
+
 	return (
 		<ZIonMenu
 			contentId={CONSTANTS.MENU_IDS.ADMIN_PANEL_CONTENT_ID}
@@ -227,14 +260,17 @@ const ZUserSettingsMenu: React.FC = () => {
 				<Formik
 					initialValues={{
 						columns: compState?.shortLinkColumn || ShortLinksTableColumns,
+						// columns: ShortLinksTableColumns,
 					}}
 					enableReinitialize={true}
 					onSubmit={async (values) => {
 						try {
 							const zStringifyData = zStringify({
 								type: ZUserSettingTypeEnum.shortLinkListPageTable,
+								workspaceUniqueId: workspaceId,
 								settings: zStringify({
 									shortLinkColumn: values.columns,
+									columnOrderIds: compState.columnOrderIds,
 								}),
 							});
 
@@ -277,6 +313,8 @@ const ZUserSettingsMenu: React.FC = () => {
 															lines='full'
 															minHeight='2rem'
 															color='light'
+															className='zaions-short-link-list-table-column'
+															data-id={el?.id}
 															style={{
 																'--padding-bottom': '.1rem',
 																'--padding-top': '.1rem',
@@ -290,6 +328,13 @@ const ZUserSettingsMenu: React.FC = () => {
 
 															<ZIonText slot='end'>
 																<ZRCSwitch
+																	// checked={
+																	// 	compState?.shortLinkColumn &&
+																	// 	compState.shortLinkColumn[index]
+																	// 		.isVisible === false
+																	// 		? false
+																	// 		: el.isVisible
+																	// }
 																	checked={el.isVisible}
 																	onChange={(_value) => {
 																		setFieldValue(

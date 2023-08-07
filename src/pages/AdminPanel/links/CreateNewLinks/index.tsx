@@ -22,9 +22,7 @@ import { useIonViewWillEnter } from '@ionic/react';
  * ? Like import of custom components is a custom import
  * */
 import ZaionsIonPage from '@/components/ZaionsIonPage';
-import AddNotes, {
-	AddNotesSkeleton,
-} from '@/components/UserDashboard/AddNotes';
+import AddNotes from '@/components/UserDashboard/AddNotes';
 import EmbedWidget from '@/components/UserDashboard/EmbedWidget';
 import DeepLinking from '@/components/UserDashboard/DeepLinking';
 import LinkCloaking from '@/components/UserDashboard/LinkCloaking';
@@ -49,18 +47,10 @@ import {
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZaionsShortUrlOptionFields from '@/components/UserDashboard/shortLinkFormComponents/shortUrlLinkOptionFields';
-import ZaionsCustomYourLink, {
-	ZaionsCustomYourLinkSkeleton,
-} from '@/components/UserDashboard/shortUrlCustomYourLink';
-import LinksPixelsAccount, {
-	LinkPixelsAccountSkeleton,
-} from '@/components/UserDashboard/LinksPixelsAccount';
-import UTMTagTemplates, {
-	UTMTagTemplatesSkeleton,
-} from '@/components/UserDashboard/UTMTagTemplates';
-import DomainName, {
-	DomainNameSkeleton,
-} from '@/components/UserDashboard/DomainName';
+import ZaionsCustomYourLink from '@/components/UserDashboard/shortUrlCustomYourLink';
+import LinksPixelsAccount from '@/components/UserDashboard/LinksPixelsAccount';
+import UTMTagTemplates from '@/components/UserDashboard/UTMTagTemplates';
+import DomainName from '@/components/UserDashboard/DomainName';
 import ShortLinkFoldersHOC from '@/components/UserDashboard/ShortLinkFoldersHOC';
 import {
 	useZGetRQCacheData,
@@ -851,11 +841,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 												})}
 											>
 												{/* Custom Your Link */}
-												{isZFetching ? (
-													<ZaionsCustomYourLinkSkeleton />
-												) : (
-													<ZaionsCustomYourLink />
-												)}
+												<ZaionsCustomYourLink showSkeleton={isZFetching} />
 
 												{/* Pixel Account, Utm Tags, Custom Domain */}
 												<ZIonCol
@@ -869,25 +855,13 @@ const AdminCreateNewLinkPages: React.FC = () => {
 													})}
 												>
 													{/* Pixels */}
-													{isZFetching ? (
-														<LinkPixelsAccountSkeleton />
-													) : (
-														<LinksPixelsAccount />
-													)}
+													<LinksPixelsAccount showSkeleton={isZFetching} />
 
 													{/* UTMTags */}
-													{isZFetching ? (
-														<UTMTagTemplatesSkeleton />
-													) : (
-														<UTMTagTemplates />
-													)}
+													<UTMTagTemplates showSkeleton={isZFetching} />
 
 													{/* Choose Domain Name */}
-													{isZFetching ? (
-														<DomainNameSkeleton />
-													) : (
-														<DomainName />
-													)}
+													<DomainName showSkeleton={isZFetching} />
 												</ZIonCol>
 											</ZIonRow>
 										</ZIonGrid>
@@ -936,11 +910,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 															)}
 
 															{/* Add Notes */}
-															{isZFetching ? (
-																<AddNotesSkeleton />
-															) : (
-																<AddNotes />
-															)}
+															<AddNotes showSkeleton={isZFetching} />
 
 															{/* Add Embed Widget */}
 															<EmbedWidget />

@@ -38,6 +38,7 @@ import {
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { folderState } from '@/types/AdminPanel/index.type';
+import CONSTANTS from '@/utils/constants';
 
 // Styles
 // import CLASSES from './styles.module.css';
@@ -125,6 +126,9 @@ const NewLinkFolder: React.FC<{
 					fill='outline'
 					minHeight='40px'
 				>
+					<ZIonSelectOption value={CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER}>
+						default
+					</ZIonSelectOption>
 					{_foldersData &&
 						_foldersData.map((el, index) => {
 							return (

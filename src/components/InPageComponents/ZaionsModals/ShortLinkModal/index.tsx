@@ -73,8 +73,9 @@ import React from 'react';
 
 const ZShortLinkModal: React.FC<{
 	dismissZIonModal: (data?: string, role?: string | undefined) => void;
+	zNavigatePushRoute: (_url: string) => void;
 	workspaceId: string;
-}> = ({ dismissZIonModal, workspaceId }) => {
+}> = ({ dismissZIonModal, zNavigatePushRoute, workspaceId }) => {
 	const { presentZIonToast } = useZIonToast();
 	return (
 		<>
@@ -112,24 +113,32 @@ const ZShortLinkModal: React.FC<{
 					<div className='flex w-[90%] ion-justify-content-between'>
 						<ZIonButton
 							fill='outline'
-							routerLink={createRedirectRoute({
-								url: ZaionsRoutes.AdminPanel.ShortLinks.Create,
-								params: [CONSTANTS.RouteParams.workspace.workspaceId],
-								values: [workspaceId],
-							})}
+							onClick={() => {
+								zNavigatePushRoute(
+									createRedirectRoute({
+										url: ZaionsRoutes.AdminPanel.ShortLinks.Create,
+										params: [CONSTANTS.RouteParams.workspace.workspaceId],
+										values: [workspaceId],
+									})
+								);
+							}}
 						>
 							Create a new link
 						</ZIonButton>
 
 						<ZIonButton
-							routerLink={replaceRouteParams(
-								ZaionsRoutes.AdminPanel.ShortLinks.Main,
-								[
-									CONSTANTS.RouteParams.workspace.workspaceId,
-									CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-								],
-								[workspaceId, 'all']
-							)}
+							onClick={() => {
+								zNavigatePushRoute(
+									replaceRouteParams(
+										ZaionsRoutes.AdminPanel.ShortLinks.Main,
+										[
+											CONSTANTS.RouteParams.workspace.workspaceId,
+											CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+										],
+										[workspaceId, 'all']
+									)
+								);
+							}}
 						>
 							Go to dashboard
 						</ZIonButton>

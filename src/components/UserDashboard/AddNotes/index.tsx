@@ -27,9 +27,16 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Styles
 
-const AddNotes: React.FC = () => {
+const AddNotes: React.FC<{ showSkeleton?: boolean }> = ({
+	showSkeleton = false,
+}) => {
 	const { values, handleChange } =
 		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
+
+	if (showSkeleton) {
+		return <AddNotesSkeleton />;
+	}
+
 	return (
 		<ZIonCol
 			sizeXl='5.9'
@@ -63,7 +70,7 @@ const AddNotes: React.FC = () => {
 	);
 };
 
-export const AddNotesSkeleton: React.FC = React.memo(() => {
+const AddNotesSkeleton: React.FC = React.memo(() => {
 	return (
 		<ZIonCol
 			sizeXl='5.9'

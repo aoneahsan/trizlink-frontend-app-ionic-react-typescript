@@ -56,47 +56,31 @@ const LinkPassword: React.FC = () => {
 
 					<RCSwitch
 						className='ms-auto me-2'
-						onChange={(val) => {
-							setFieldValue('password.enabled', val, true);
-						}}
 						defaultChecked={values.password.enabled}
 						checkedChildren='on'
 						unCheckedChildren='off'
+						onChange={(val) => {
+							setFieldValue('password.enabled', val, false);
+						}}
 					/>
 				</div>
 				{values.password.enabled ? (
 					<div className='block px-2 mt-1'>
-						{/* <ZIonInputField
-							inputFieldProps={{
-								label: 'Password',
-								labelPlacement: 'floating',
-								onIonChange: handleChange,
-								onIonBlur: handleBlur,
-								value: values.password.value,
-								name: 'password.value',
-								errorText: errors?.password?.value,
-								type: 'password',
-								className: `${classNames({
-									'mt-5': true,
-									'ion-invalid':
-										touched.password?.value && errors.password?.value,
-									'ion-valid':
-										touched.password?.value && !errors.password?.value,
-								})}`,
-							}}
-						/> */}
 						<ZIonInput
 							label='Password'
 							labelPlacement='stacked'
 							minHeight='40px'
+							name='password.value'
+							type='password'
 							onIonChange={handleChange}
 							onIonBlur={handleBlur}
 							value={values.password.value}
-							name='password.value'
-							errorText={errors?.password?.value}
-							type='password'
+							errorText={
+								touched.password?.value ? errors?.password?.value : undefined
+							}
 							className={classNames({
 								'mt-5': true,
+								'ion-touched': touched.password?.value,
 								'ion-invalid':
 									touched.password?.value && errors.password?.value,
 								'ion-valid': touched.password?.value && !errors.password?.value,

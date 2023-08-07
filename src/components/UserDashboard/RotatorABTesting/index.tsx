@@ -121,9 +121,9 @@ const RotatorABTesting: React.FC = () => {
 											})}
 										>
 											<ZIonCol
-												sizeXl='5.6'
-												sizeLg='5.6'
-												sizeMd='5.6'
+												sizeXl='5.5'
+												sizeLg='5.5'
+												sizeMd='5.5'
 												sizeSm='12'
 												sizeXs='12'
 											>
@@ -177,9 +177,9 @@ const RotatorABTesting: React.FC = () => {
 
 											{/*  */}
 											<ZIonCol
-												sizeXl='5.6'
-												sizeLg='5.6'
-												sizeMd='5.6'
+												sizeXl='5.5'
+												sizeLg='5.5'
+												sizeMd='5.5'
 												sizeSm='11'
 												sizeXs='11'
 											>

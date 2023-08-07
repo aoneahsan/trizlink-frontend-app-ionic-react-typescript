@@ -79,7 +79,9 @@ import { reportCustomError } from '@/utils/customErrorType';
  * @type {*}
  * */
 
-const ZaionsCustomYourLink: React.FC = () => {
+const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
+	showSkeleton = false,
+}) => {
 	const zaionsAppSettings = useRecoilValue(ZaionsAppSettingsRState);
 	const { values, errors, touched, handleChange, handleBlur, setFieldValue } =
 		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
@@ -88,16 +90,9 @@ const ZaionsCustomYourLink: React.FC = () => {
 		ZaionsFileUploadModal
 	);
 
-	const addUTMInUrl = () => {
-		try {
-			let __targetUrl = values.target.url;
-			if (values.UTMTags.utmCampaign?.trim().length) {
-				__targetUrl = `${__targetUrl}?utm_campaign=${values.UTMTags.utmCampaign}`;
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
+	if (showSkeleton) {
+		return <ZaionsCustomYourLinkSkeleton />;
+	}
 
 	return (
 		<ZIonCol
@@ -198,21 +193,21 @@ const ZaionsCustomYourLink: React.FC = () => {
 				<ZIonCol size='12' className='pt-5'>
 					{/* Link Title */}
 					<ZIonInput
+						name='title'
 						label='Title of you link*'
 						labelPlacement='stacked'
+						minHeight='40px'
+						placeholder='Title of you link*'
 						onIonChange={handleChange}
 						onIonBlur={handleBlur}
 						value={values.title}
-						name='title'
-						errorText={errors.title}
+						errorText={touched.title ? errors.title : undefined}
 						className={classNames({
 							'w-full': true,
 							'ion-touched': touched.title,
 							'ion-invalid': touched.title && errors.title,
 							'ion-valid': touched.title && !errors.title,
 						})}
-						placeholder='Title of you link*'
-						minHeight='40px'
 					/>
 
 					{/* Link Description */}
@@ -233,7 +228,7 @@ const ZaionsCustomYourLink: React.FC = () => {
 	);
 };
 
-export const ZaionsCustomYourLinkSkeleton: React.FC = React.memo(() => {
+const ZaionsCustomYourLinkSkeleton: React.FC = React.memo(() => {
 	return (
 		<ZIonCol
 			sizeXl='5.8'

@@ -36,12 +36,18 @@ import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.
 
 // Styles
 
-const DomainName: React.FC = () => {
+const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
+	showSkeleton = false,
+}) => {
 	const DefaultDomains = useRecoilValue(DefaultDomainsState);
 	const { values, handleChange, handleBlur, setFieldValue } =
 		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
 	const { isSmScale } = useZMediaQueryScale();
+
+	if (showSkeleton) {
+		return <DomainNameSkeleton />;
+	}
 
 	return (
 		<>

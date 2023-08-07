@@ -123,6 +123,17 @@ export enum ZShortLinkListPageTableColumnsEnum {
 	linkToShare = 'linkToShare',
 }
 
+export enum ZShortLinkListPageTableColumnsIds {
+	id = '__z_short_link_id__',
+	title = '__z_short_link_title__',
+	date = '__z_short_link_date__',
+	pixel = '__z_short_link_pixels__',
+	notes = '__z_short_link_notes__',
+	url = '__z_short_link_target_url__',
+	linkToShare = '__z_short_link_link_to_share__',
+	click = '__z_short_link_click__',
+}
+
 // Interface
 export interface FolderInterface {
 	label?: string;

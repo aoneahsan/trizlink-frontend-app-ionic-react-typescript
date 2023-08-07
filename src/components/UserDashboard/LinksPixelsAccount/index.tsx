@@ -56,7 +56,9 @@ const selectOptionComponent = (_el: PixelAccountType) => {
 	);
 };
 
-const LinkPixelsAccount: React.FC = () => {
+const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
+	showSkeleton = false,
+}) => {
 	const [pixelAccountsState, setPixelAccountsState] =
 		useRecoilState(PixelAccountsRState);
 
@@ -79,6 +81,10 @@ const LinkPixelsAccount: React.FC = () => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [pixelAccountsData]);
+
+	if (showSkeleton) {
+		return <LinkPixelsAccountSkeleton />;
+	}
 
 	return (
 		<>
@@ -154,7 +160,7 @@ const LinkPixelsAccount: React.FC = () => {
 	);
 };
 
-export const LinkPixelsAccountSkeleton = React.memo(() => {
+const LinkPixelsAccountSkeleton = React.memo(() => {
 	return (
 		<>
 			{/* Row-1 */}

@@ -220,14 +220,6 @@ const ZaionsLoginForm: React.FC = () => {
 						<>
 							{/* Email Address Field */}
 							<ZIonInput
-								className={classNames({
-									'mb-4': true,
-
-									'ion-touched ion-invalid':
-										touched.emailAddress && errors.emailAddress,
-									'ion-touched ion-valid':
-										touched.emailAddress && !errors.emailAddress,
-								})}
 								name='emailAddress'
 								label='Email Address'
 								labelPlacement='floating'
@@ -235,18 +227,20 @@ const ZaionsLoginForm: React.FC = () => {
 								onIonChange={handleChange}
 								onIonBlur={handleBlur}
 								value={values.emailAddress}
-								errorText={errors.emailAddress}
+								errorText={
+									touched.emailAddress ? errors.emailAddress : undefined
+								}
+								className={classNames({
+									'mb-4': true,
+									'ion-touched': touched.emailAddress,
+									'ion-invalid': errors.emailAddress,
+									'ion-valid': touched.emailAddress && !errors.emailAddress,
+								})}
 							/>
 
 							{/* Password Field */}
 							<div className='flex ion-align-items-center'>
 								<ZIonInput
-									className={classNames({
-										'ion-touched ion-invalid':
-											touched.password && errors.password,
-										'ion-touched ion-valid':
-											touched.password && !errors.password,
-									})}
 									name='password'
 									label='Password'
 									labelPlacement='floating'
@@ -254,7 +248,12 @@ const ZaionsLoginForm: React.FC = () => {
 									onIonChange={handleChange}
 									onIonBlur={handleBlur}
 									value={values.password}
-									errorText={errors.password}
+									errorText={touched.password ? errors.password : undefined}
+									className={classNames({
+										'ion-touched': touched.password,
+										'ion-invalid': errors.password,
+										'ion-valid': touched.password && !errors.password,
+									})}
 								/>
 								<ZIonButton
 									fill='clear'

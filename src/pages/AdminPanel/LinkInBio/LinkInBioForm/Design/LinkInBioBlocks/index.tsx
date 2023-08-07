@@ -25,8 +25,6 @@ import {
 	ZIonText,
 } from '@/components/ZIonComponents';
 import ZLinkInBioAddBlockModal from '@/components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal';
-
-import { LinkInBioPredefinedBlocksRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
 import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedButton';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
@@ -178,7 +176,7 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 										{/*  */}
 										<ZIonText
 											color='dark'
-											className='font-bold flex ion-justify-content-center'
+											className='flex font-bold ion-justify-content-center'
 										>
 											<ZIonSkeletonText
 												width='2.5rem'

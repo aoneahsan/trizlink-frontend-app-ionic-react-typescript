@@ -42,7 +42,12 @@ import ZaionsCustomYourLink from '@/components/UserDashboard/shortUrlCustomYourL
 import LinksPixelsAccount from '@/components/UserDashboard/LinksPixelsAccount';
 import UTMTagTemplates from '@/components/UserDashboard/UTMTagTemplates';
 import DomainName from '@/components/UserDashboard/DomainName';
-import { useZRQUpdateRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+	useZGetRQCacheData,
+	useZRQGetRequest,
+	useZRQUpdateRequest,
+	useZUpdateRQCacheData,
+} from '@/ZaionsHooks/zreactquery-hooks';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 import LinkInBioFoldersHOC from '@/components/UserDashboard/LinkInBioFoldersHOC';
 
@@ -51,8 +56,18 @@ import LinkInBioFoldersHOC from '@/components/UserDashboard/LinkInBioFoldersHOC'
  * ? Like import of Constant is a global constants import
  * */
 import MESSAGES from '@/utils/messages';
-import { validateField, zJsonParse, zStringify } from '@/utils/helpers';
-import { API_URL_ENUM, VALIDATION_RULE } from '@/utils/enums';
+import {
+	extractInnerData,
+	validateField,
+	zJsonParse,
+	zStringify,
+} from '@/utils/helpers';
+import {
+	API_URL_ENUM,
+	extractInnerDataOptionsEnum,
+	notificationTypeEnum,
+	VALIDATION_RULE,
+} from '@/utils/enums';
 import CONSTANTS, { BRACKPOINT_LG, BRACKPOINT_MD } from '@/utils/constants';
 
 /**
@@ -76,6 +91,10 @@ import {
 } from '@/types/AdminPanel/index.type';
 import { reportCustomError } from '@/utils/customErrorType';
 import NewLinkFolder from '@/components/UserDashboard/NewLinkFolder';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { showSuccessNotification } from '@/utils/notification';
 
 /**
  * Style files Imports go down
@@ -99,8 +118,6 @@ import NewLinkFolder from '@/components/UserDashboard/NewLinkFolder';
  * */
 
 const LinkInBioShareSettings: React.FC = () => {
-	const { editLinkInBioId } = useParams<{ editLinkInBioId: string }>();
-
 	const [showAdvanceOptions, setShowAdvanceOptions] = useState(false);
 
 	const { linkInBioId, workspaceId } = useParams<{
@@ -108,162 +125,172 @@ const LinkInBioShareSettings: React.FC = () => {
 		workspaceId: string;
 	}>();
 
+	// #region Custom hooks.
+	const { isLgScale, isMdScale } = useZMediaQueryScale();
+	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+
 	// validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
 	const { validateRequestResponse } = useZValidateRequestResponse();
+	// #endregion
 
+	// #region recoils.
 	// Recoil state link-in-bio form state (for editing or creating link-in-bio)
 	const linkInBioFormState = useRecoilValue(NewLinkInBioFormState);
+	//#endregion
 
-	// Update Link-in-bio API
+	// #region APIS
+	// fetching link-in-bio with the linkInBioId data from backend.
+	const { data: selectedLinkInBio, isFetching: isSelectedLinkInBioFetching } =
+		useZRQGetRequest<LinkInBioType>({
+			_url: API_URL_ENUM.linkInBio_update_delete,
+			_key: [
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
+				workspaceId,
+				linkInBioId,
+			],
+			_authenticated: true,
+			_itemsIds: [linkInBioId, workspaceId],
+			_urlDynamicParts: [
+				CONSTANTS.RouteParams.linkInBio.linkInBioId,
+				CONSTANTS.RouteParams.workspace.workspaceId,
+			],
+			_shouldFetchWhenIdPassed: !linkInBioId ? true : false,
+			_extractType: ZRQGetRequestExtractEnum.extractItem,
+		});
+
+	// Update Link-in-bio API.
 	const { mutateAsync: UpdateLinkInBio } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.linkInBio_update_delete,
-		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-			workspaceId,
-			linkInBioId,
-		],
 	});
 
-	const isLgScale = useMediaQuery({
-		query: `(min-width: ${BRACKPOINT_LG})`,
-	});
+	// #endregion
 
-	const isMdScale = useMediaQuery({
-		query: `(min-width: ${BRACKPOINT_MD})`,
-	});
-
-	const FormikSubmissionHandler = async (reqDataStr: string) => {
+	// #region Functions.
+	// Formik submit handler.
+	const FormikSubmissionHandler = async (_reqDataStr: string) => {
 		try {
-			if (reqDataStr) {
+			if (_reqDataStr) {
 				// The update api...
-				const _result = await UpdateLinkInBio({
-					itemIds: [editLinkInBioId],
-					urlDynamicParts: [':linkInBioId'],
-					requestData: reqDataStr,
+				const __response = await UpdateLinkInBio({
+					itemIds: [workspaceId, linkInBioId],
+					urlDynamicParts: [
+						CONSTANTS.RouteParams.workspace.workspaceId,
+						CONSTANTS.RouteParams.linkInBio.linkInBioId,
+					],
+					requestData: _reqDataStr,
 				});
 
-				// if _result of the updateLinkInBio api is success this showing success notification else not success then error notification.
-				await validateRequestResponse({
-					resultObj: _result,
-				});
+				if (__response) {
+					// extract Data from _response.
+					const __data = extractInnerData<LinkInBioType>(
+						__response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					// if we have data then show success message.
+					if (__data && __data.id) {
+						const __oldLinkInBios =
+							extractInnerData<LinkInBioType[]>(
+								getRQCDataHandler<LinkInBioType[]>({
+									key: [
+										CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+										workspaceId,
+									],
+								}) || [],
+								extractInnerDataOptionsEnum.createRequestResponseItems
+							) || [];
+
+						// Updating all link in bio data in RQ cache.
+						await updateRQCDataHandler<LinkInBioType | undefined>({
+							key: [
+								CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
+								workspaceId,
+								linkInBioId,
+							],
+							data: __data as LinkInBioType,
+							id: '',
+							extractType: ZRQGetRequestExtractEnum.extractItem,
+							updateHoleData: true,
+						});
+
+						if (__oldLinkInBios && __oldLinkInBios?.length) {
+							await updateRQCDataHandler<LinkInBioType | undefined>({
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+									workspaceId,
+								],
+								data: __data as LinkInBioType,
+								id: __data?.id,
+							});
+						}
+						// Updating current link in bio data in RQ cache.
+					}
+				}
+
+				showSuccessNotification(MESSAGES.GENERAL.LINK_IN_BIO.UPDATED);
+
+				// if __response of the updateLinkInBio api is success this showing success notification else not success then error notification.
+				// await validateRequestResponse({
+				// 	resultObj: __response,
+				// 	successNotificationType: notificationTypeEnum.sideNotification,
+				// });
 			}
 		} catch (error) {
 			reportCustomError(error);
 		}
 	};
+	// #endregion
+
+	const isZFetching = isSelectedLinkInBioFetching;
 
 	return (
 		<Formik
-			// ( Initial Values Start  ) //
+			// #region ( Initial Values Start  )
 			initialValues={{
-				title: linkInBioFormState.title || '',
-				linkDescription: linkInBioFormState.description || '',
-				featureImg: linkInBioFormState.featureImg || '',
+				title: selectedLinkInBio?.title || '',
+				linkDescription: selectedLinkInBio?.description || '',
+				featureImg: selectedLinkInBio?.featureImg || '',
 				password: {
-					value:
-						(
-							zJsonParse(
-								String(linkInBioFormState.password)
-							) as PasswordInterface
-						)?.value || '',
-					enabled:
-						(
-							zJsonParse(
-								String(linkInBioFormState.password)
-							) as PasswordInterface
-						)?.enabled || false,
+					value: selectedLinkInBio?.password?.value || '',
+					enabled: selectedLinkInBio?.password?.enabled || false,
 				},
 				folderId:
-					linkInBioFormState.folderId ||
+					selectedLinkInBio?.folderId ||
 					CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
-				linkNote: linkInBioFormState.notes || '',
-				tags: (zJsonParse(String(linkInBioFormState.tags)) as string[]) || [],
+				linkNote: selectedLinkInBio?.notes || '',
+				tags: (zJsonParse(String(selectedLinkInBio?.tags)) as string[]) || [],
 				linkExpiration: {
-					enabled:
-						(
-							zJsonParse(
-								String(linkInBioFormState.linkExpirationInfo)
-							) as LinkExpirationInfoInterface
-						)?.enabled || false,
+					enabled: selectedLinkInBio?.linkExpirationInfo?.enabled || false,
 					expirationDate:
-						(
-							zJsonParse(
-								String(linkInBioFormState.linkExpirationInfo)
-							) as LinkExpirationInfoInterface
-						)?.expirationDate || '',
-					timezone:
-						(
-							zJsonParse(
-								String(linkInBioFormState.linkExpirationInfo)
-							) as LinkExpirationInfoInterface
-						)?.timezone || '',
+						selectedLinkInBio?.linkExpirationInfo?.expirationDate || '',
+					timezone: selectedLinkInBio?.linkExpirationInfo?.timezone || '',
 					redirectionLink:
-						(
-							zJsonParse(
-								String(linkInBioFormState.linkExpirationInfo)
-							) as LinkExpirationInfoInterface
-						)?.redirectionLink || '',
+						selectedLinkInBio?.linkExpirationInfo?.redirectionLink || '',
 				},
-				rotatorABTesting:
-					(zJsonParse(
-						String(linkInBioFormState.abTestingRotatorLinks)
-					) as ABTestingRotatorInterface[]) || [],
-				geoLocation:
-					(zJsonParse(
-						String(linkInBioFormState.geoLocationRotatorLinks)
-					) as GeoLocationRotatorInterface[]) || [],
+				rotatorABTesting: selectedLinkInBio?.abTestingRotatorLinks || [],
+				geoLocation: selectedLinkInBio?.geoLocationRotatorLinks || [],
 				shortUrl: {
-					domain:
-						(linkInBioFormState.shortUrl as ShortUrlInterface)?.domain || '',
-					url: (linkInBioFormState.shortUrl as ShortUrlInterface)?.url || '',
+					domain: selectedLinkInBio?.shortUrl?.domain || '',
+					url: selectedLinkInBio?.shortUrl?.url || '',
 				},
-				linkPixelsAccount:
-					(zJsonParse(String(linkInBioFormState.pixelIds)) as string[]) || [],
+				linkPixelsAccount: selectedLinkInBio?.pixelIds || [],
 				UTMTags: {
-					templateId:
-						(
-							zJsonParse(
-								String(linkInBioFormState.utmTagInfo)
-							) as UTMTagInfoInterface
-						)?.templateId || '',
-					utmCampaign:
-						(
-							zJsonParse(
-								String(linkInBioFormState.utmTagInfo)
-							) as UTMTagInfoInterface
-						)?.utmCampaign || '',
-					utmMedium:
-						(
-							zJsonParse(
-								String(linkInBioFormState.utmTagInfo)
-							) as UTMTagInfoInterface
-						)?.utmMedium || '',
-					utmSource:
-						(
-							zJsonParse(
-								String(linkInBioFormState.utmTagInfo)
-							) as UTMTagInfoInterface
-						)?.utmSource || '',
-					utmTerm:
-						(
-							zJsonParse(
-								String(linkInBioFormState.utmTagInfo)
-							) as UTMTagInfoInterface
-						)?.utmTerm || '',
-					utmContent:
-						(
-							zJsonParse(
-								String(linkInBioFormState.utmTagInfo)
-							) as UTMTagInfoInterface
-						)?.utmContent || '',
+					templateId: selectedLinkInBio?.utmTagInfo?.templateId || '',
+					utmCampaign: selectedLinkInBio?.utmTagInfo?.utmCampaign || '',
+					utmMedium: selectedLinkInBio?.utmTagInfo?.utmMedium || '',
+					utmSource: selectedLinkInBio?.utmTagInfo?.utmSource || '',
+					utmTerm: selectedLinkInBio?.utmTagInfo?.utmTerm || '',
+					utmContent: selectedLinkInBio?.utmTagInfo?.utmContent || '',
 				},
-				favicon: linkInBioFormState.favicon || '',
+				favicon: selectedLinkInBio?.favicon || '',
 
 				// complete page fields here
 			}}
 			enableReinitialize={true}
-			// ( Initial Values End  ) //
-			// ( Handling Validation & Errors Start  ) //
+			// #endregion ( Initial Values End  )
+
+			// #region ( Handling Validation & Errors Start  )
 			validate={(values) => {
 				const errors: {
 					target: {
@@ -322,7 +349,7 @@ const LinkInBioShareSettings: React.FC = () => {
 						VALIDATION_RULE.url
 					);
 				}
-				// Link Expiration Validation End
+				//  Link Expiration Validation End
 
 				// Rotator AB Testing Field Validation Start
 				if (values.rotatorABTesting.length) {
@@ -386,13 +413,14 @@ const LinkInBioShareSettings: React.FC = () => {
 					return [];
 				}
 			}}
-			// ( Handling Validation & Errors End  ) //
+			// #endregion ( Handling Validation & Errors End  )
+
 			onSubmit={async (values, { resetForm }) => {
 				await FormikSubmissionHandler(
 					zStringify({
-						...linkInBioFormState,
-						theme: zStringify(linkInBioFormState.theme),
-						settings: zStringify(linkInBioFormState.settings),
+						...selectedLinkInBio,
+						theme: zStringify(selectedLinkInBio?.theme),
+						settings: zStringify(selectedLinkInBio?.settings),
 						title: values.title,
 						featureImg: values.featureImg,
 						password: zStringify({
@@ -424,7 +452,7 @@ const LinkInBioShareSettings: React.FC = () => {
 				return (
 					<>
 						<ZIonContent color='light'>
-							<div className={`h-full w-full`}>
+							<div className='w-full h-full'>
 								{/* Custom your link Grid */}
 								<ZIonGrid
 									className={classNames({
@@ -440,7 +468,7 @@ const LinkInBioShareSettings: React.FC = () => {
 										})}
 									>
 										{/* Custom Your Link */}
-										<ZaionsCustomYourLink />
+										<ZaionsCustomYourLink showSkeleton={isZFetching} />
 
 										{/* Pixel Account, Utm Tags, Custom Domain */}
 										<ZIonCol
@@ -451,13 +479,13 @@ const LinkInBioShareSettings: React.FC = () => {
 											sizeXs='12'
 										>
 											{/* Pixels */}
-											<LinksPixelsAccount />
+											<LinksPixelsAccount showSkeleton={isZFetching} />
 
 											{/* UTMTags */}
-											<UTMTagTemplates />
+											<UTMTagTemplates showSkeleton={isZFetching} />
 
 											{/* Choose Domain Name */}
-											<DomainName />
+											<DomainName showSkeleton={isZFetching} />
 										</ZIonCol>
 									</ZIonRow>
 								</ZIonGrid>
@@ -467,12 +495,15 @@ const LinkInBioShareSettings: React.FC = () => {
 									<ZIonRow>
 										<ZIonCol>
 											<ZIonButton
-												onClick={() =>
-													setShowAdvanceOptions((oldVal) => !oldVal)
-												}
 												// size='large'
-												expand='block'
 												// size={isMdScale ? 'large' : 'default'}
+												expand='block'
+												disabled={isZFetching}
+												onClick={() => {
+													if (!isZFetching) {
+														setShowAdvanceOptions((oldVal) => !oldVal);
+													}
+												}}
 												className={classNames({
 													'ion-text-capitalize': true,
 													'mx-0': !isMdScale,

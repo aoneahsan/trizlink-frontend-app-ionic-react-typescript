@@ -136,15 +136,15 @@ export type LinkInBioType = {
 	linkInBioTitle?: string;
 	description?: string;
 	pixelIds?: ZaionsRSelectOptions[] | string[] | string;
-	utmTagInfo?: UTMTagInfoInterface | string;
-	shortUrl?: ShortUrlInterface | string;
+	utmTagInfo?: UTMTagInfoInterface;
+	shortUrl?: ShortUrlInterface;
 	folderId?: string; // default if non is given
 	notes?: string | null;
-	tags?: string[] | string;
-	abTestingRotatorLinks?: ABTestingRotatorInterface[] | string;
-	geoLocationRotatorLinks?: GeoLocationRotatorInterface[] | string;
-	linkExpirationInfo?: LinkExpirationInfoInterface | string;
-	password?: string | PasswordInterface;
+	tags?: string[];
+	abTestingRotatorLinks?: ABTestingRotatorInterface[];
+	geoLocationRotatorLinks?: GeoLocationRotatorInterface[];
+	linkExpirationInfo?: LinkExpirationInfoInterface;
+	password?: PasswordInterface;
 	// favicon?: {
 	//   url?: string;
 	//   type?: string;

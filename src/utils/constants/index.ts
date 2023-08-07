@@ -21,6 +21,7 @@ import {
 import {
 	IonLoaderEnum,
 	ZShortLinkListPageTableColumnsEnum,
+	ZShortLinkListPageTableColumnsIds,
 } from '@/types/AdminPanel/linksType';
 import { ENVS } from '@/utils/envKeys';
 
@@ -95,7 +96,7 @@ export const API_URLS = {
 	folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder`,
 
 	user_setting_list_create: `/user/settings`,
-	user_setting_delete_update: `/user/settings/${RouteParams.user.setting.type}`,
+	user_setting_delete_update: `/user/settings/${RouteParams.user.setting.type}/${RouteParams.workspace.workspaceId}`,
 
 	userAccount_LinkInBio_folders_update_delete:
 		'/user/link-in-bio-folders/:folderId',
@@ -560,13 +561,41 @@ const LINK_In_BIO = {
 };
 
 export const ShortLinksTableColumns = [
-	{ name: ZShortLinkListPageTableColumnsEnum.title, isVisible: true },
-	{ name: ZShortLinkListPageTableColumnsEnum.clicks, isVisible: true },
-	{ name: ZShortLinkListPageTableColumnsEnum.date, isVisible: true },
-	{ name: ZShortLinkListPageTableColumnsEnum.pixels, isVisible: true },
-	{ name: ZShortLinkListPageTableColumnsEnum.notes, isVisible: true },
-	{ name: ZShortLinkListPageTableColumnsEnum.url, isVisible: true },
-	{ name: ZShortLinkListPageTableColumnsEnum.linkToShare, isVisible: true },
+	{
+		id: ZShortLinkListPageTableColumnsIds.title,
+		name: ZShortLinkListPageTableColumnsEnum.title,
+		isVisible: true,
+	},
+	// {
+	// 	id: ZShortLinkListPageTableColumnsIds.click,
+	// 	name: ZShortLinkListPageTableColumnsEnum.clicks,
+	// 	isVisible: true,
+	// },
+	{
+		id: ZShortLinkListPageTableColumnsIds.date,
+		name: ZShortLinkListPageTableColumnsEnum.date,
+		isVisible: true,
+	},
+	{
+		id: ZShortLinkListPageTableColumnsIds.pixel,
+		name: ZShortLinkListPageTableColumnsEnum.pixels,
+		isVisible: true,
+	},
+	{
+		id: ZShortLinkListPageTableColumnsIds.notes,
+		name: ZShortLinkListPageTableColumnsEnum.notes,
+		isVisible: true,
+	},
+	{
+		id: ZShortLinkListPageTableColumnsIds.url,
+		name: ZShortLinkListPageTableColumnsEnum.url,
+		isVisible: true,
+	},
+	{
+		id: ZShortLinkListPageTableColumnsIds.linkToShare,
+		name: ZShortLinkListPageTableColumnsEnum.linkToShare,
+		isVisible: true,
+	},
 ];
 
 const CONSTANTS = {

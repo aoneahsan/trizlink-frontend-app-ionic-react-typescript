@@ -6,7 +6,7 @@
 
 .zaions-block-button-text {
 	display: block;
-	padding-top: 1rem;
+	/* padding-top: 1rem; */
 }
 
 .map-auto-complete-input:focus-visible {

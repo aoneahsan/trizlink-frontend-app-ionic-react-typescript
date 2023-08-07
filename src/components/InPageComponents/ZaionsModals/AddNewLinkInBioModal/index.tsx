@@ -10,6 +10,7 @@ import {
 	ZIonButton,
 	ZIonContent,
 	ZIonIcon,
+	ZIonInput,
 	ZIonText,
 } from '@/components/ZIonComponents';
 import { Formik } from 'formik';
@@ -137,30 +138,26 @@ const ZaionsAddLinkInBioModal: React.FC<{
 		<ZIonContent className='ion-padding'>
 			{/* Close modal button */}
 			<div className='ion-text-end'>
-				<ZIonButton
-					className='ion-no-padding ion-no-margin'
+				<ZIonIcon
+					icon={closeOutline}
+					className='cursor-pointer w-7 h-7'
 					onClick={() => {
 						dismissZIonModal();
 					}}
-					fill='clear'
-					color='dark'
-				>
-					<h4 className='mt-1 ion-no-margin'>
-						<ZIonIcon icon={closeOutline} />
-					</h4>
-				</ZIonButton>
+				/>
 			</div>
 
 			{/*  */}
 			<div className='flex flex-col ion-text-center ion-justify-content-center'>
-				<ZIonText className='' color={'primary'}>
-					<h1 className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}>
-						<ZIonIcon icon={toggleOutline} className='mx-auto' color='light' />
-					</h1>
-				</ZIonText>
-				<br />
-				<ZIonText color='dark'>
-					<h5 className='font-bold'>Create a new Link-in-bio 😊</h5>
+				<div className='flex mx-auto mb-2 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
+					<ZIonIcon
+						icon={toggleOutline}
+						className='w-8 h-8 mx-auto'
+						color='light'
+					/>
+				</div>
+				<ZIonText color='dark' className='text-lg font-bold'>
+					Create a new Link-in-bio 😊
 				</ZIonText>
 
 				<Formik
@@ -179,7 +176,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
 								const zStringifyData = zStringify({
 									linkInBioTitle: values.linkInBioTitle,
 									theme: zStringify(ZaionsLinkInBioDefaultData.theme), // passing default data with title
-									folderId: 1,
+									folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
 								});
 								await FormikSubmitHandler(zStringifyData);
 							}
@@ -198,23 +195,47 @@ const ZaionsAddLinkInBioModal: React.FC<{
 					}) => {
 						return (
 							<>
-								<ZIonInputField
+								{/* <ZIonInputField
 									inputFieldProps={{
-										className: classNames({
-											'mt-4 ion-text-start': true,
-											'ion-touched ion-invalid':
-												touched.linkInBioTitle && errors.linkInBioTitle,
-											'ion-touched ion-valid':
-												touched.linkInBioTitle && !errors.linkInBioTitle,
-										}),
 										label: 'Link-in-bio title*',
 										labelPlacement: 'floating',
 										name: 'linkInBioTitle',
 										onIonChange: handleChange,
 										onIonBlur: handleBlur,
+										minHeight: '2.3rem',
 										value: values.linkInBioTitle, // the title of the new-link-in-bio
-										errorText: errors.linkInBioTitle,
+										errorText: touched.linkInBioTitle
+											? errors.linkInBioTitle
+											: undefined,
+										className: classNames({
+											'mt-4 ion-text-start': true,
+											'ion-touched': touched.linkInBioTitle,
+											'ion-invalid': errors.linkInBioTitle,
+											'ion-valid':
+												touched.linkInBioTitle && !errors.linkInBioTitle,
+										}),
 									}}
+								/> */}
+
+								<ZIonInput
+									label='Link-in-bio title*'
+									labelPlacement='stacked'
+									name='linkInBioTitle'
+									minHeight='2.3rem'
+									placeholder='title'
+									onIonChange={handleChange}
+									onIonBlur={handleBlur}
+									value={values.linkInBioTitle} // the title of the new-link-in-bio
+									errorText={
+										touched.linkInBioTitle ? errors.linkInBioTitle : undefined
+									}
+									className={classNames({
+										'mt-5 ion-text-start': true,
+										'ion-touched': touched.linkInBioTitle,
+										'ion-invalid': errors.linkInBioTitle,
+										'ion-valid':
+											touched.linkInBioTitle && !errors.linkInBioTitle,
+									})}
 								/>
 
 								<ZIonButton

@@ -129,12 +129,15 @@ export interface ZDashboardFolderMenuInterface {
 export interface ZUserSettingInterface {
 	id?: string;
 	type?: ZUserSettingTypeEnum;
+	workspaceUniqueId?: string;
 	settings: {
 		shortLinkColumn: {
+			id?: string;
 			name: string;
 			isVisible: boolean;
 			orderNumber: number;
 		}[];
+		columnOrderIds: string[];
 	};
 }
 

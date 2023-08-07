@@ -325,22 +325,23 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 									<ZIonInput
 										label='URL'
 										labelPlacement='stacked'
+										name='target.url'
+										minHeight='40px'
+										type='url'
 										onIonChange={linkInputChangeHandler}
 										onIonBlur={handleBlur}
 										value={values?.target?.url}
-										name='target.url'
-										errorText={errors?.target?.url}
-										type='url'
+										placeholder={ShortLinkPlaceholder()}
+										errorText={
+											touched?.target?.url ? errors?.target?.url : undefined
+										}
 										className={classNames({
 											'w-full ion-margin-end ': true,
 											'ion-touched': touched?.target?.url,
 											'ion-invalid':
 												touched?.target?.url && errors?.target?.url,
-											'ion-valid':
-												touched?.target?.url && !!errors?.target?.url,
+											'ion-valid': touched?.target?.url && !errors?.target?.url,
 										})}
-										placeholder={ShortLinkPlaceholder()}
-										minHeight='40px'
 									/>
 								</>
 							)}
@@ -357,12 +358,18 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 									<ZIonInput
 										label='Phone number'
 										labelPlacement='stacked'
+										name='target.phoneNumber'
+										type='text'
+										minHeight='40px'
 										onIonChange={handleChange}
 										onIonBlur={handleBlur}
 										value={values?.target?.phoneNumber}
-										name='target.phoneNumber'
-										errorText={errors?.target?.phoneNumber}
-										type='text'
+										placeholder={ShortLinkPlaceholder()}
+										errorText={
+											touched?.target?.phoneNumber
+												? errors?.target?.phoneNumber
+												: undefined
+										}
 										className={classNames({
 											'w-full ion-margin-end': true,
 											'ion-touched': touched?.target?.phoneNumber,
@@ -373,8 +380,6 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 												touched?.target?.phoneNumber &&
 												!errors?.target?.phoneNumber,
 										})}
-										minHeight='40px'
-										placeholder={ShortLinkPlaceholder()}
 									/>
 								</>
 							)}
@@ -389,12 +394,18 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 									<ZIonInput
 										label='Username'
 										labelPlacement='stacked'
+										name='target.username'
+										type='text'
+										minHeight='40px'
 										onIonChange={handleChange}
 										onIonBlur={handleBlur}
 										value={values?.target?.username}
-										name='target.username'
-										errorText={errors?.target?.username}
-										type='text'
+										placeholder={ShortLinkPlaceholder()}
+										errorText={
+											touched?.target?.username
+												? errors?.target?.username
+												: undefined
+										}
 										className={classNames({
 											'w-full ion-margin-end': true,
 											'ion-touched': touched?.target?.username,
@@ -403,8 +414,6 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 											'ion-valid':
 												touched?.target?.username && !errors?.target?.username,
 										})}
-										placeholder={ShortLinkPlaceholder()}
-										minHeight='40px'
 									/>
 								</>
 							)}
@@ -421,12 +430,18 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 									<ZIonInput
 										label='Account Id'
 										labelPlacement='stacked'
+										name='target.accountId'
+										type='text'
+										minHeight='40px'
 										onIonChange={handleChange}
 										onIonBlur={handleBlur}
 										value={values?.target?.accountId}
-										name='target.accountId'
-										errorText={errors?.target?.accountId}
-										type='text'
+										placeholder={ShortLinkPlaceholder()}
+										errorText={
+											touched?.target?.accountId
+												? errors?.target?.accountId
+												: undefined
+										}
 										className={classNames({
 											'w-full ion-margin-end': true,
 											'ion-touched': touched?.target?.accountId,
@@ -436,8 +451,6 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 												touched?.target?.accountId &&
 												!errors?.target?.accountId,
 										})}
-										placeholder={ShortLinkPlaceholder()}
-										minHeight='40px'
 									/>
 								</>
 							)}
@@ -450,12 +463,16 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 									<ZIonInput
 										label='Email'
 										labelPlacement='stacked'
+										name='target.email'
+										type='email'
+										minHeight='40px'
 										onIonChange={handleChange}
 										onIonBlur={handleBlur}
 										value={values?.target?.email}
-										name='target.email'
-										errorText={errors?.target?.email}
-										type='email'
+										placeholder={ShortLinkPlaceholder()}
+										errorText={
+											touched?.target?.email ? errors?.target?.email : undefined
+										}
 										className={classNames({
 											'w-full ion-margin-end': true,
 											'ion-touched': touched?.target?.email,
@@ -464,8 +481,6 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 											'ion-valid':
 												touched?.target?.email && !errors?.target?.email,
 										})}
-										placeholder={ShortLinkPlaceholder()}
-										minHeight='40px'
 									/>
 								</>
 							)}
@@ -496,21 +511,25 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 								<ZIonInput
 									label='Subject*'
 									labelPlacement='stacked'
+									placeholder='Something short...'
+									minHeight='40px'
+									name='target.subject'
 									onIonChange={handleChange}
 									onIonBlur={handleBlur}
 									value={values?.target?.subject}
-									name='target.subject'
-									errorText={errors?.target?.subject}
+									errorText={
+										touched?.target?.subject
+											? errors?.target?.subject
+											: undefined
+									}
 									className={classNames({
 										'w-full mt-4': true,
 										'ion-touched': touched?.target?.subject,
 										'ion-invalid':
 											touched?.target?.subject && errors?.target?.subject,
 										'ion-valid':
-											touched?.target?.subject && !!errors?.target?.subject,
+											touched?.target?.subject && !errors?.target?.subject,
 									})}
-									placeholder='Something short...'
-									minHeight='40px'
 								/>
 							)}
 
@@ -527,10 +546,14 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 									rows={4}
 									name='target.message'
 									placeholder='Message*'
+									fill='outline'
 									onIonChange={handleChange}
 									value={values?.target?.message}
-									fill='outline'
-									errorText={errors?.target?.message}
+									errorText={
+										touched?.target?.message
+											? errors?.target?.message
+											: undefined
+									}
 									className={classNames({
 										'w-full ion-margin-end mt-4': true,
 										'ion-touched': touched?.target?.message,

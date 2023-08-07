@@ -54,15 +54,13 @@ import {
 } from '@/types/AdminPanel/linksType';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
-import {
-	messengerPlatformsBlockEnum,
-	UTMTagInfoInterface,
-} from '@/types/AdminPanel/index.type';
 import { reportCustomError } from '@/utils/customErrorType';
 
 // Styles
 
-const UTMTagTemplates: React.FC = () => {
+const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
+	showSkeleton = false,
+}) => {
 	const { data: _UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
 		_url: API_URL_ENUM.userAccountUtmTags_create_list,
 		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
@@ -94,37 +92,6 @@ const UTMTagTemplates: React.FC = () => {
 	};
 
 	const { isSmScale } = useZMediaQueryScale();
-
-	// const buildURLWithUTMParams = (utm: UTMTagInfoInterface): string => {
-	// 	const { utmCampaign, utmMedium, utmSource, utmTerm, utmContent } = utm;
-	// 	const _baseURL = values.target.url;
-
-	// 	const _queryParams = new URLSearchParams();
-
-	// 	if (utmCampaign && utmCampaign.length > 0) {
-	// 		_queryParams.append('utm_campaign', utmCampaign);
-	// 	}
-
-	// 	if (utmMedium && utmMedium.length > 0) {
-	// 		_queryParams.append('utm_medium', utmMedium);
-	// 	}
-
-	// 	if (utmSource && utmSource.length > 0) {
-	// 		_queryParams.append('utm_source', utmSource);
-	// 	}
-
-	// 	if (utmTerm && utmTerm.length > 0) {
-	// 		_queryParams.append('utm_term', utmTerm);
-	// 	}
-
-	// 	if (utmContent && utmContent.length > 0) {
-	// 		_queryParams.append('utm_content', utmContent);
-	// 	}
-
-	// 	return `${_baseURL}${
-	// 		_queryParams.toString() ? `?${_queryParams.toString()}` : ''
-	// 	}`;
-	// };
 
 	useEffect(() => {
 		try {
@@ -175,6 +142,10 @@ const UTMTagTemplates: React.FC = () => {
 		values.UTMTags.utmSource,
 		values.UTMTags.utmTerm,
 	]);
+
+	if (showSkeleton) {
+		return <UTMTagTemplatesSkeleton />;
+	}
 
 	return (
 		<>
@@ -388,7 +359,7 @@ const UTMTagTemplates: React.FC = () => {
 	);
 };
 
-export const UTMTagTemplatesSkeleton: React.FC = React.memo(() => {
+const UTMTagTemplatesSkeleton: React.FC = React.memo(() => {
 	const { isSmScale } = useZMediaQueryScale();
 	return (
 		<>
