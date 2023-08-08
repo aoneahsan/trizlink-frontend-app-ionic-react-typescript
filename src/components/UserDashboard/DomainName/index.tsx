@@ -1,8 +1,8 @@
 // Core Imports
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // Packages Import
-import { laptopOutline } from 'ionicons/icons';
+import { checkmarkOutline, laptopOutline } from 'ionicons/icons';
 import { useRecoilValue } from 'recoil';
 import { useFormikContext } from 'formik';
 import classNames from 'classnames';
@@ -16,6 +16,9 @@ import {
 	ZIonRouterLink,
 	ZIonInput,
 	ZIonSkeletonText,
+	ZIonButton,
+	ZIonSelect,
+	ZIonSelectOption,
 } from '@/components/ZIonComponents';
 import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 
@@ -33,6 +36,14 @@ import { DefaultDomainsState } from '@/ZaionsStore/UserDashboard/CustomDomainSta
 import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { API_URL_ENUM } from '@/utils/enums';
+import CONSTANTS from '@/utils/constants';
+import { useParams } from 'react-router';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { reportCustomError } from '@/utils/customErrorType';
+import { useZIonToast } from '@/ZaionsHooks/zionic-hooks';
 
 // Styles
 
@@ -40,10 +51,43 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
 	showSkeleton = false,
 }) => {
 	const DefaultDomains = useRecoilValue(DefaultDomainsState);
-	const { values, handleChange, handleBlur, setFieldValue } =
+	const { initialValues, values, touched, errors, handleChange, handleBlur } =
 		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
 	const { isSmScale } = useZMediaQueryScale();
+	const { presentZIonToast } = useZIonToast();
+
+	// getting workspace ids from url with the help of useParams.
+	const { workspaceId } = useParams<{
+		workspaceId: string;
+	}>();
+
+	const {
+		data: zIsPathAvailable,
+		refetch: refetchZIsPathAvailable,
+		error,
+	} = useZRQGetRequest<{ isAvailable: boolean; message: string }>({
+		_url: API_URL_ENUM.shortLinks_is_path_available,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.IS_PATH_AVAILABLE,
+			workspaceId,
+		],
+		_shouldFetchWhenIdPassed:
+			values?.shortUrlPath &&
+			values?.shortUrlPath?.trim()?.length > 0 &&
+			initialValues?.shortUrlPath !== values?.shortUrlPath
+				? false
+				: true,
+		_itemsIds: [workspaceId, values?.shortUrlPath || ''],
+		_urlDynamicParts: [
+			CONSTANTS.RouteParams.workspace.workspaceId,
+			CONSTANTS.RouteParams.shortLink.path,
+		],
+		_extractType: ZRQGetRequestExtractEnum.extractItem,
+		_showLoader: false,
+	});
+
+	console.log({ error });
 
 	if (showSkeleton) {
 		return <DomainNameSkeleton />;
@@ -86,42 +130,114 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
 					sizeXs='12'
 				>
 					{/* Select */}
-					<ZaionsRSelect
+					{/* <ZaionsRSelect
 						options={DefaultDomains?.map((el) => {
 							return { value: el.id, label: el.name };
 						})}
-						name='shortUrl.domain'
+						name='shortUrlDomain'
 						onChange={(_value) => {
 							setFieldValue(
-								'shortUrl.domain',
+								'shortUrlDomain',
 								(_value as ZaionsRSelectOptions)?.value,
 								false
 							);
 						}}
 						value={
 							formatReactSelectOption(
-								values?.shortUrl?.domain as string,
+								values?.shortUrlDomain as string,
 								DefaultDomains as ZGenericObject[],
 								'id',
 								'name'
 							) || []
 						}
-					/>
+					/> */}
+					<ZIonSelect
+						name='shortUrlDomain'
+						label='Customize'
+						labelPlacement='stacked'
+						fill='outline'
+						minHeight='2.3rem'
+						interface='popover'
+						onIonChange={handleChange}
+						onIonBlur={handleBlur}
+						value={values?.shortUrlDomain}
+					>
+						{DefaultDomains?.map((el, index) => {
+							return (
+								<ZIonSelectOption key={index} value={el.id}>
+									{el.name}
+								</ZIonSelectOption>
+							);
+						})}
+					</ZIonSelect>
 				</ZIonCol>
 
 				{/* Col-2 */}
-				<ZIonCol sizeXl='6' sizeLg='6' sizeMd='6' sizeSm='6' sizeXs='12'>
+				<ZIonCol
+					sizeXl='6'
+					sizeLg='6'
+					sizeMd='6'
+					sizeSm='6'
+					sizeXs='12'
+					className='flex'
+				>
 					{/* Customize input */}
 					<ZIonInput
-						name='shortUrl.url'
-						className='p-0'
+						name='shortUrlPath'
 						label='Customize'
 						labelPlacement='stacked'
-						onIonChange={handleChange}
-						onIonBlur={handleBlur}
-						value={values.shortUrl.url}
 						fill='outline'
-						minHeight='40px'
+						minHeight='2.3rem'
+						onIonBlur={handleBlur}
+						value={values?.shortUrlPath}
+						counter={true}
+						maxlength={6}
+						onIonChange={handleChange}
+						errorText={touched?.shortUrlPath ? errors?.shortUrlPath : undefined}
+						className={classNames({
+							'p-0': true,
+							'ion-touched': touched?.shortUrlPath,
+							'ion-valid':
+								touched?.shortUrlPath &&
+								values.shortUrlPath &&
+								values.shortUrlPath?.trim().length > 0 &&
+								!errors?.shortUrlPath,
+							'ion-invalid': touched?.shortUrlPath && errors?.shortUrlPath,
+						})}
+					/>
+
+					{values?.shortUrlPath &&
+						values?.shortUrlPath?.trim()?.length > 0 &&
+						initialValues?.shortUrlPath !== values?.shortUrlPath && (
+							<ZIonButton
+								className='ion-no-margin ms-1'
+								height='2.2rem'
+								id='z-shortlink-check-domain-url-path-available-tooltip'
+								disabled={errors?.shortUrlPath?.trim() ? true : false}
+								onClick={async () => {
+									try {
+										if (
+											values?.shortUrlPath &&
+											values?.shortUrlPath?.trim()?.length > 0 &&
+											initialValues?.shortUrlPath !== values?.shortUrlPath
+										) {
+											await refetchZIsPathAvailable();
+
+											presentZIonToast(zIsPathAvailable?.message, 'warning');
+										}
+									} catch (error) {
+										reportCustomError(error);
+									}
+								}}
+							>
+								<ZIonIcon icon={checkmarkOutline} />
+							</ZIonButton>
+						)}
+
+					<ZRTooltip
+						anchorSelect='#z-shortlink-check-domain-url-path-available-tooltip'
+						place='top'
+						content='Check'
 					/>
 				</ZIonCol>
 			</ZIonRow>
@@ -129,6 +245,7 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
 	);
 };
 
+// Skeleton
 export const DomainNameSkeleton: React.FC = React.memo(() => {
 	return (
 		<>

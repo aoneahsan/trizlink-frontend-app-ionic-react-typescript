@@ -44,14 +44,12 @@ import {
 	ZIonFooter,
 	ZIonSkeletonText,
 } from '@/components/ZIonComponents';
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZaionsShortUrlOptionFields from '@/components/UserDashboard/shortLinkFormComponents/shortUrlLinkOptionFields';
 import ZaionsCustomYourLink from '@/components/UserDashboard/shortUrlCustomYourLink';
 import LinksPixelsAccount from '@/components/UserDashboard/LinksPixelsAccount';
 import UTMTagTemplates from '@/components/UserDashboard/UTMTagTemplates';
 import DomainName from '@/components/UserDashboard/DomainName';
-import ShortLinkFoldersHOC from '@/components/UserDashboard/ShortLinkFoldersHOC';
 import {
 	useZGetRQCacheData,
 	useZRQCreateRequest,
@@ -65,6 +63,7 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+const _env = import.meta.env;
 import MESSAGES from '@/utils/messages';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import {
@@ -83,10 +82,7 @@ import {
 	reportCustomError,
 	throwZCustomErrorRequestFailed,
 } from '@/utils/customErrorType';
-import {
-	showErrorNotification,
-	showSuccessNotification,
-} from '@/utils/notification';
+import { showSuccessNotification } from '@/utils/notification';
 import CONSTANTS from '@/utils/constants';
 
 /**
@@ -126,7 +122,6 @@ import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 import NewLinkFolder, {
 	FolderSkeleton,
 } from '@/components/UserDashboard/NewLinkFolder';
-import { workspaceInterface } from '@/types/AdminPanel/workspace';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZShortLinkModal from '@/components/InPageComponents/ZaionsModals/ShortLinkModal';
 
@@ -413,7 +408,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 						url:
 							(selectedShortLink?.target as LinkTargetType)?.url ||
 							(newShortLinkFormState?.target as LinkTargetType)?.url ||
-							'',
+							'https://',
 						phoneNumber:
 							(selectedShortLink?.target as LinkTargetType)?.phoneNumber || '',
 						username:
@@ -469,11 +464,10 @@ const AdminCreateNewLinkPages: React.FC = () => {
 					geoLocation:
 						(selectedShortLink?.geoLocationRotatorLinks as GeoLocationRotatorInterface[]) ||
 						[],
-					shortUrl: {
-						domain:
-							(selectedShortLink?.shortUrl as ShortUrlInterface)?.domain || '',
-						url: (selectedShortLink?.shortUrl as ShortUrlInterface)?.url || '',
-					},
+					shortUrlDomain:
+						selectedShortLink?.shortUrlDomain ||
+						_env.VITE_DEFAULT_SHORT_URL_DOMAIN,
+					shortUrlPath: selectedShortLink?.shortUrlPath || '',
 					linkPixelsAccount:
 						(selectedShortLink?.pixelIds &&
 							(JSON.parse(
@@ -534,6 +528,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 							redirectionLink?: string;
 							country?: string;
 						}[];
+						shortUrlPath?: string;
 					} = {
 						target: {},
 						linkExpiration: {},
@@ -722,6 +717,15 @@ const AdminCreateNewLinkPages: React.FC = () => {
 							}
 						);
 					}
+
+					//
+					if (
+						String(values?.shortUrlPath)?.trim()?.length > 0 &&
+						String(values?.shortUrlPath)?.trim()?.length < 6
+					) {
+						errors.shortUrlPath = 'value must be exeat to 6';
+					}
+
 					// Rotator Geo Location Field Validation End
 					// check for errors if there are any return errors object otherwise return []
 					if (
@@ -734,6 +738,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 						errors.target?.subject?.trim() ||
 						errors.linkExpiration?.redirectionLink?.trim() ||
 						errors.title?.trim() ||
+						errors.shortUrlPath?.trim() ||
 						errors.password?.value?.trim() ||
 						!areAllObjectsFilled(
 							(errors.rotatorABTesting as Array<object>) || []
@@ -767,7 +772,8 @@ const AdminCreateNewLinkPages: React.FC = () => {
 							description: values.linkDescription,
 							pixelIds: zStringify(values.linkPixelsAccount),
 							utmTagInfo: zStringify(values.UTMTags),
-							shortUrl: zStringify(values.shortUrl),
+							shortUrlDomain: values.shortUrlDomain,
+							shortUrlPath: values.shortUrlPath,
 							folderId: values.folderId,
 							notes: values.linkNote,
 							tags: zStringify(values.tags),

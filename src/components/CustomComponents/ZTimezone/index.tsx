@@ -10,6 +10,7 @@ import ZaionsRSelect from '../ZaionsRSelect';
 import { ZIonSelect, ZIonSelectOption } from '@/components/ZIonComponents';
 import { IonSelectCustomEvent, SelectChangeEventDetail } from '@ionic/core';
 import { ZIonPlacementType } from '@/types/zaionsAppSettings.type';
+import classNames from 'classnames';
 
 /**
  * Packages Imports go down
@@ -73,6 +74,8 @@ interface ZTimezoneSelectorInterface {
 	multiple?: boolean;
 	label?: string;
 	labelPlacement?: ZIonPlacementType;
+	helperText?: string;
+	errorText?: string;
 	onIonBlur?: (event: IonSelectCustomEvent<void>) => void;
 	onIonChange?: (
 		event: IonSelectCustomEvent<SelectChangeEventDetail<unknown>>
@@ -109,8 +112,10 @@ export const ZTimezoneSelector: React.FC<ZTimezoneSelectorInterface> = (
 		<ZIonSelect
 			{...props}
 			fill='outline'
+			errorText={props.errorText}
 			minHeight='2.5rem'
 			interface='popover'
+			className={classNames(props.className)}
 		>
 			{TIMEZONES.map((el, index) => {
 				return (

@@ -604,7 +604,7 @@ const ZaionsShortLinkTable: React.FC<{
 								return (
 									<ZIonRow
 										key={_headerIndex}
-										className='flex mb-2 flex-nowrap zaions__light_bg'
+										className='flex flex-nowrap zaions__light_bg'
 									>
 										{_headerInfo.headers.map((_columnInfo, _columnIndex) => {
 											return (
@@ -637,7 +637,7 @@ const ZaionsShortLinkTable: React.FC<{
 										.getRowModel()
 										.rows.map((_rowInfo, _rowIndex) => {
 											return (
-												<ZIonRow key={_rowIndex} className='flex-nowrap'>
+												<ZIonRow key={_rowIndex} className='flex-nowrap py-2'>
 													{_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
 														_cellInfo.column.getIsVisible() ? (
 															<ZIonCol

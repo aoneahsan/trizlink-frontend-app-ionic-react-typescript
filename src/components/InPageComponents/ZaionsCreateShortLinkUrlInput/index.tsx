@@ -51,7 +51,6 @@ import {
 import { replaceParams, validateField } from '@/utils/helpers';
 import { VALIDATION_RULE } from '@/utils/enums';
 import { IonNote } from '@ionic/react';
-import { searchOutline } from 'ionicons/icons';
 import {
 	FormMode,
 	messengerPlatformsBlockEnum,
@@ -193,8 +192,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
 										'--border-radius': '0',
 									}}
 								>
-									<ZIonIcon icon={searchOutline} className='me-1' />{' '}
-									<ZIonText className='pt-1 me-1'>Switch it</ZIonText>
+									<ZIonText className='me-1'>Switch it</ZIonText>
 								</ZIonButton>
 							</ZIonItem>
 						)}

@@ -173,6 +173,8 @@ export interface ZaionsShortUrlOptionFieldsValuesInterface {
 	linkPixelsAccount: string[];
 	UTMTags: UTMTagInfoInterface;
 	favicon: string;
+	shortUrlDomain?: string;
+	shortUrlPath?: string;
 }
 
 export interface ShortLinkFilterOptionsInterface {
@@ -284,6 +286,8 @@ export type ShortLinkType = {
 	pixelIds?: ZaionsRSelectOptions[] | string[] | string;
 	utmTagInfo?: UTMTagInfoInterface | string;
 	shortUrl?: ShortUrlInterface | string;
+	shortUrlDomain?: string;
+	shortUrlPath?: string;
 	folderId?: string | number; // default if non is given
 	notes?: string | null;
 	tags?: string[] | string;

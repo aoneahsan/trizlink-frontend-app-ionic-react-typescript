@@ -5,10 +5,10 @@ import { atom } from 'recoil';
 // Types
 import { IdNameType } from '@/types/AdminPanel/linksType';
 
-// Datas
+// Data
 import { DefaultDomainsData } from '@/data/UserDashboard/CustomDomains';
 
 export const DefaultDomainsState = atom<IdNameType[]>({
-  key: 'DefaultDomainsState_Key',
-  default: DefaultDomainsData,
+	key: 'DefaultDomainsState_Key',
+	default: DefaultDomainsData,
 });

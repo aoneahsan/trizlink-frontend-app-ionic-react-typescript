@@ -581,18 +581,19 @@ export const formatApiRequestErrorForFormikFormField = (
 		if (_apiErrorsObj && Object.keys(_apiErrorsObj).length) {
 			const __error: ZGenericObject = {};
 			for (let i = 0; i < _formFieldKeys.length; i++) {
-				const __formFieldkey = _formFieldKeys[i];
+				const __formFiledKey = _formFieldKeys[i];
 				const __apiErrorFieldKey = _apiErrorObjectKeys[i];
+				const ___data = _apiErrorsObj[__apiErrorFieldKey] as unknown;
 
 				if (
 					Object.prototype.hasOwnProperty.call(
 						_apiErrorsObj,
 						__apiErrorFieldKey
 					) &&
-					Array.isArray(_apiErrorsObj[__apiErrorFieldKey]) &&
-					_apiErrorsObj[__apiErrorFieldKey][0]
+					Array.isArray(___data) &&
+					___data[0]
 				) {
-					__error[__formFieldkey] = _apiErrorsObj[__apiErrorFieldKey][0];
+					__error[__formFiledKey] = ___data[0];
 				}
 			}
 
@@ -828,7 +829,7 @@ export const formatReactSelectOption = (
 		Object.prototype.hasOwnProperty.call(__item, _labelKeyName)
 	) {
 		return {
-			value: __item[_idKeyName],
+			value: __item[_idKeyName] as string,
 			label: __item[_labelKeyName],
 		};
 	} else {
@@ -1252,4 +1253,16 @@ export const zExtractUrlParts = (_url: string) => {
 	const __zExtractedUrl = new URL(_url);
 
 	return __zExtractedUrl;
+};
+
+/**
+ * Function that will check if giving string contains https/http protocol if not then add it.
+ * @param _url
+ * @returns string.
+ */
+export const zAddUrlProtocol = (url: string): string => {
+	if (!url.startsWith('http://') && !url.startsWith('https://')) {
+		return `https://${url}`;
+	}
+	return url;
 };

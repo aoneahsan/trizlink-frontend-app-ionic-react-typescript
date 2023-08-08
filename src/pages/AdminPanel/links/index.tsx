@@ -17,6 +17,7 @@ import {
 	pricetagOutline,
 	filterOutline,
 	refresh,
+	searchOutline,
 } from 'ionicons/icons';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import classNames from 'classnames';
@@ -47,7 +48,6 @@ import {
 	ZIonButton,
 	ZIonCheckbox,
 	ZIonButtons,
-	ZIonSkeletonText,
 } from '@/components/ZIonComponents';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import ZRCheckbox from '@/components/CustomComponents/ZRCheckbox';
@@ -58,7 +58,6 @@ import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
 import ZaionsIonPage from '@/components/ZaionsIonPage';
 import FolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/FoldersActionPopover';
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
-import ZDashboardSidebar from '@/components/AdminPanelComponents/Sidebar';
 import ZCan from '@/components/Can';
 import ZDashboardFolderMenu from '@/components/AdminPanelComponents/Sidebar/FolderMenu';
 import AdminPanelSidebarMenu from '@/components/AdminPanelComponents/Sidebar/ExpendableMenu';
@@ -82,7 +81,7 @@ import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
  * */
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { API_URL_ENUM, PAGE_MENU } from '@/utils/enums';
+import { API_URL_ENUM } from '@/utils/enums';
 import { replaceParams, zStringify } from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
@@ -601,6 +600,7 @@ const ZShortLinksListPage: React.FC = () => {
 															);
 														}}
 													>
+														<ZIonIcon icon={filterOutline} className='pr-1' />
 														Filter
 													</ZIonButton>
 
@@ -1451,7 +1451,7 @@ const SearchQueryInputComponent = () => {
 					minHeight='40px'
 				>
 					<ZIonInput
-						label='🔍'
+						label=''
 						clearInput={true}
 						type='text'
 						name='searchValue'
@@ -1473,7 +1473,7 @@ const SearchQueryInputComponent = () => {
 						}}
 						slot='end'
 					>
-						<ZIonIcon icon={filterOutline} className='me-2' />
+						<ZIonIcon icon={searchOutline} className='me-2' />
 						<ZIonText>search</ZIonText>
 					</ZIonButton>
 				</ZIonItem>

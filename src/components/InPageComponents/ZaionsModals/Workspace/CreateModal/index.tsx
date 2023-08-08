@@ -22,6 +22,7 @@ import {
 	ZIonContent,
 	ZIonIcon,
 	ZIonInput,
+	ZIonNote,
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
@@ -41,8 +42,13 @@ import {
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { extractInnerData, validateField, zStringify } from '@/utils/helpers';
-import { reportCustomError } from '@/utils/customErrorType';
+import {
+	extractInnerData,
+	formatApiRequestErrorForFormikFormField,
+	validateField,
+	zStringify,
+} from '@/utils/helpers';
+import { reportCustomError, ZCustomError } from '@/utils/customErrorType';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 
@@ -52,6 +58,9 @@ import CONSTANTS from '@/utils/constants';
  * */
 import { workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { AxiosError } from 'axios';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { FormikSetErrorsType } from '@/types/ZaionsFormik.type';
 
 /**
  * Recoil State Imports go down
@@ -87,17 +96,21 @@ const ZAddNewWorkspaceModal: React.FC<{
 	const { getRQCDataHandler } = useZGetRQCacheData();
 
 	// Create new workspace API.
-	const { mutateAsync: createWorkspaceMutate } = useZRQCreateRequest({
+	const { mutateAsync: createWorkspaceMutate, error } = useZRQCreateRequest({
 		_url: API_URL_ENUM.workspace_create_list,
 		_queriesKeysToInvalidate: [],
 	});
 
 	// Formik submit handler
-	const formikSubmitHandler = async (values: string) => {
+	const formikSubmitHandler = async (
+		values: string,
+		setErrors: FormikSetErrorsType
+	) => {
 		try {
 			if (values) {
 				// Making an api call creating new workspace.
 				const _response = await createWorkspaceMutate(values);
+				console.log({ line: 101, _response, error });
 
 				if (_response) {
 					// extracting data from _response.
@@ -134,7 +147,19 @@ const ZAddNewWorkspaceModal: React.FC<{
 				}
 			}
 		} catch (error) {
-			reportCustomError(error);
+			if (error instanceof AxiosError) {
+				const __apiErrors = (error.response?.data as { errors: ZGenericObject })
+					?.errors;
+				const __errors = formatApiRequestErrorForFormikFormField(
+					['title', 'workspaceTimezone'],
+					['title', 'timezone'],
+					__apiErrors
+				);
+
+				setErrors(__errors);
+			} else if (error instanceof ZCustomError || error instanceof Error) {
+				reportCustomError(error);
+			}
 		}
 	};
 
@@ -173,20 +198,20 @@ const ZAddNewWorkspaceModal: React.FC<{
 
 				<Formik
 					initialValues={{
-						workspaceName: '',
-						workspaceTimezone: '',
+						title: '',
+						workspaceTimezone: CONSTANTS.DEFAULT_VALUES.TIMEZONE_DEFAULT,
 					}}
 					validate={(values) => {
 						const errors = {};
-						validateField('workspaceName', values, errors);
+						validateField('title', values, errors);
 						return errors;
 					}}
-					onSubmit={(values) => {
+					onSubmit={(values, { setErrors }) => {
 						const zStringifyData = zStringify({
-							title: values.workspaceName,
+							title: values.title,
 							timezone: values.workspaceTimezone,
 						});
-						void formikSubmitHandler(zStringifyData);
+						void formikSubmitHandler(zStringifyData, setErrors);
 					}}
 				>
 					{({
@@ -203,20 +228,18 @@ const ZAddNewWorkspaceModal: React.FC<{
 								{/* Workspace name */}
 								<ZIonCol size='12'>
 									<ZIonInput
-										name='workspaceName'
+										name='title'
 										label='Workspace Name'
 										minHeight='40px'
 										labelPlacement='stacked'
 										placeholder='Workspace Name'
 										onIonChange={handleChange}
 										onIonBlur={handleBlur}
-										errorText={errors.workspaceName}
-										value={values.workspaceName}
+										value={values.title}
+										errorText={touched.title ? errors.title : undefined}
 										className={classNames({
-											'ion-touched ion-invalid':
-												touched.workspaceName && errors.workspaceName,
-											'ion-touched ion-valid':
-												touched.workspaceName && !errors.workspaceName,
+											'ion-touched ion-invalid': touched.title && errors.title,
+											'ion-touched ion-valid': touched.title && !errors.title,
 										})}
 									/>
 								</ZIonCol>
@@ -225,7 +248,7 @@ const ZAddNewWorkspaceModal: React.FC<{
 								<ZIonCol size='12' className='mt-2'>
 									<ZTimezoneSelector
 										name='workspaceTimezone'
-										className='ion-margin-top'
+										className='mt-3'
 										label='Workspace timezone (Optional)'
 										labelPlacement='stacked'
 										placeholder='Workspace timezone'

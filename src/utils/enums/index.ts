@@ -53,10 +53,14 @@ export enum API_URL_ENUM {
 	userAccount_LinkInBio_folders_update_delete = 'userAccount_LinkInBio_folders_update_delete',
 	userEmbedWidget_create_list = 'userEmbedWidget_create_list',
 	userEmbedWidget_update_delete = 'userEmbedWidget_update_delete',
+
 	shortLinks_create_list = 'shortLinks_create_list',
 	shortLinks_update_delete = 'shortLinks_update_delete',
+	shortLinks_is_path_available = 'shortLinks_is_path_available',
+
 	linkInBio_update_delete = 'linkInBio_update_delete',
 	linkInBio_create_list = 'linkInBio_create_list',
+
 	FolderShortLinks = 'FolderShortLinks',
 	ShortLinks_folders_reorder = 'ShortLinks_folders_reorder',
 

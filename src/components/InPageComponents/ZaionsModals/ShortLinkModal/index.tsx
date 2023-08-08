@@ -114,6 +114,8 @@ const ZShortLinkModal: React.FC<{
 						<ZIonButton
 							fill='outline'
 							onClick={() => {
+								dismissZIonModal();
+
 								zNavigatePushRoute(
 									createRedirectRoute({
 										url: ZaionsRoutes.AdminPanel.ShortLinks.Create,
@@ -128,6 +130,8 @@ const ZShortLinkModal: React.FC<{
 
 						<ZIonButton
 							onClick={() => {
+								dismissZIonModal();
+
 								zNavigatePushRoute(
 									replaceRouteParams(
 										ZaionsRoutes.AdminPanel.ShortLinks.Main,

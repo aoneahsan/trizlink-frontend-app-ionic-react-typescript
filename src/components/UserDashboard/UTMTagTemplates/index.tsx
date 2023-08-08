@@ -33,6 +33,7 @@ import ZaionsAddUtmTags from '@/components/InPageComponents/ZaionsModals/AddUtmT
 import {
 	formatReactSelectOption,
 	stringifyZQueryString,
+	zAddUrlProtocol,
 	zExtractUrlParts,
 } from '@/utils/helpers';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
@@ -55,6 +56,7 @@ import {
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { reportCustomError } from '@/utils/customErrorType';
+import isURL from 'validator/lib/isURL';
 
 // Styles
 
@@ -98,8 +100,11 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
 			const { utmCampaign, utmMedium, utmSource, utmTerm, utmContent } =
 				values.UTMTags;
 			const _queryParams: { [key: string]: string } = {};
-			const _baseURL = values.target.url;
-			if (_baseURL) {
+			const _baseURL = zAddUrlProtocol(values?.target?.url || '');
+
+			if (_baseURL && isURL(_baseURL)) {
+				const _baseUrlWithoutParams = zExtractUrlParts(_baseURL).origin;
+
 				if (utmCampaign && utmCampaign.length > 0) {
 					_queryParams.utm_campaign = utmCampaign;
 				}
@@ -121,8 +126,6 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
 				}
 
 				const _queryStringParams = stringifyZQueryString(_queryParams);
-
-				const _baseUrlWithoutParams = zExtractUrlParts(_baseURL).origin;
 
 				setFieldValue(
 					'target.url',

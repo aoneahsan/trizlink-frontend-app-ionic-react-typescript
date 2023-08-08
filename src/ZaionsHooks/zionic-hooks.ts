@@ -1,3 +1,4 @@
+import { addCircleOutline } from 'ionicons/icons';
 import { useSetRecoilState } from 'recoil';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import {
@@ -33,6 +34,7 @@ import {
 	appWiseIonicLoaderRStateAtom,
 	appWiseIonicToastRStateAtom,
 } from '@/ZaionsStore/AppRStates';
+import { ToastOptions } from 'react-toastify';
 
 type GenericComponentType = JSX.Element | ReactComponentOrElement;
 
@@ -235,7 +237,8 @@ export const useZIonToast = (): useZIonToastReturnType => {
 	try {
 		const presentZIonToast = async (
 			message?: string,
-			color?: ZIonColorType
+			color?: ZIonColorType,
+			toastProps?: ToastOptions
 		): Promise<void> => {
 			await new Promise((res, rej) => {
 				res('ok');
@@ -251,6 +254,7 @@ export const useZIonToast = (): useZIonToastReturnType => {
 					showToast: true,
 					message: message || '',
 					color: color || 'primary',
+					toastProps: toastProps || {},
 				}));
 			}, 0);
 		};
@@ -322,6 +326,7 @@ export const useZIonToastSuccess = (): useZIonToastSuccessReturnType => {
 					showToast: true,
 					message: message || MESSAGES.GENERAL.SUCCESS,
 					color: 'success',
+					toastProps: {},
 				}));
 			}, 0);
 		};

@@ -18,6 +18,7 @@ import {
 	ZIonIcon,
 	ZIonFooter,
 	ZIonSelectOption,
+	ZIonInput,
 } from '@/components/ZIonComponents';
 
 // Global Constants
@@ -45,6 +46,7 @@ import { PixelAccountFormState } from '@/ZaionsStore/FormStates/pixelAccountForm
 import { resetFormType } from '@/types/ZaionsFormik.type';
 import {
 	useZRQCreateRequest,
+	useZRQGetRequest,
 	useZRQUpdateRequest,
 } from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM, VALIDATION_RULE } from '@/utils/enums';
@@ -139,8 +141,6 @@ const ZaionsAddPixelAccount: React.FC<{
 					MESSAGES.GENERAL.PIXEL_ACCOUNT.PIXEL_ACCOUNT_UPDATED_SUCCEED_MESSAGE
 				);
 			}
-			// Close modal after action.
-			dismissZIonModal();
 
 			// Reset to default
 			SetDefaultPixelAccountFormState();
@@ -149,6 +149,9 @@ const ZaionsAddPixelAccount: React.FC<{
 			if (resetForm) {
 				resetForm();
 			}
+
+			// Close modal after action.
+			dismissZIonModal();
 		} catch (error) {
 			reportCustomError(error);
 		}
@@ -225,7 +228,7 @@ const ZaionsAddPixelAccount: React.FC<{
 			}) => (
 				<>
 					{/**
-					 * Header of Modal will shown if the `showActionInModalHeader` is set to `true` in      appSetting and hide if it is `false`
+					 * Header of Modal will shown if the `showActionInModalHeader` is set to `true` in appSetting and hide if it is `false`
 					 * default: false
 					 *  */}
 					{appSettings.appModalsSetting.actions.showActionInModalHeader && (
@@ -250,12 +253,13 @@ const ZaionsAddPixelAccount: React.FC<{
 								<ZIonCol className='ion-text-end'>
 									<ZIonButton
 										type='submit'
-										onClick={() => {
-											void submitForm();
-										}}
 										color={'primary'}
 										className='ion-text-capitalize'
 										fill='solid'
+										disabled={!isValid}
+										onClick={() => {
+											void submitForm();
+										}}
 									>
 										{pixelAccountFormState.formMode === FormMode.ADD
 											? 'Create'
@@ -265,7 +269,7 @@ const ZaionsAddPixelAccount: React.FC<{
 									</ZIonButton>
 								</ZIonCol>
 							</ZIonRow>
-							{!isValid && (
+							{/* {!isValid && (
 								<ZIonRow>
 									<ZIonCol className='ion-text-center'>
 										<ZIonNote color='danger'>
@@ -273,80 +277,99 @@ const ZaionsAddPixelAccount: React.FC<{
 										</ZIonNote>
 									</ZIonCol>
 								</ZIonRow>
-							)}
+							)} */}
 						</ZIonHeader>
 					)}
 
 					<ZIonContent className='ion-padding'>
 						<div className='flex ion-text-center ion-justify-content-center flex-col ion-padding-top ion-margin-top'>
-							<ZIonText className='' color={'primary'}>
-								<h4 className={`mb-0 bg-primary zaions__modal_icon`}>
-									<ZIonIcon
-										icon={toggleOutline}
-										className='mx-auto'
-										color='light'
-									/>
-								</h4>
-							</ZIonText>
-							<br />
-							<ZIonText color={'dark'}>
-								<h6 className='font-bold'>Add a new Pixel ID 🧞</h6>
-							</ZIonText>
-						</div>
-						<Form onSubmit={handleSubmit} className='px-4'>
-							{/* Pixel platform select */}
-							<div
-								className={classNames({
-									'mt-4 mb-5 pb-2': true,
-									'ion-touched ion-invalid':
-										touched.platform && errors.platform,
-									'ion-touched ion-valid':
-										touched.platform && !!errors.platform,
-								})}
-							>
-								<ZIonSelect
-									name='platform'
-									label='Select the platform*'
-									labelPlacement='stacked'
-									selectedText={convertToTitleCase(values.platform)}
-									onIonChange={handleChange}
-									fill='outline'
-								>
-									{platformData.map((el) => {
-										return (
-											<ZIonSelectOption value={el.type} key={el.id}>
-												{el.title}
-											</ZIonSelectOption>
-										);
-									})}
-								</ZIonSelect>
-								<ZIonNote slot='error'>
-									{touched.platform && errors.platform}
-								</ZIonNote>
+							<div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
+								<ZIonIcon
+									icon={toggleOutline}
+									className='w-8 h-8 mx-auto'
+									color='light'
+								/>
 							</div>
 
+							<ZIonText
+								color='dark'
+								className='block mt-3 text-lg font-bold ion-text-center'
+							>
+								Add a new Pixel ID 🧞
+							</ZIonText>
+						</div>
+
+						{/*  */}
+						<Form onSubmit={handleSubmit} className='px-4'>
+							{/* Pixel platform select */}
+							<ZIonSelect
+								name='platform'
+								label='Select the platform*'
+								labelPlacement='stacked'
+								selectedText={convertToTitleCase(values.platform)}
+								onIonChange={handleChange}
+								fill='outline'
+								minHeight='2.3rem'
+								interface='popover'
+								errorText={touched.platform ? errors.platform : undefined}
+								className={classNames({
+									'mt-5': true,
+									'ion-touched': touched.platform,
+									'ion-invalid': touched.platform && errors.platform,
+									'ion-valid': touched.platform && !errors.platform,
+								})}
+							>
+								{platformData.map((el) => {
+									return (
+										<ZIonSelectOption value={el.type} key={el.id}>
+											{el.title}
+										</ZIonSelectOption>
+									);
+								})}
+							</ZIonSelect>
+
 							{/* Pixel Name Input */}
-							<ZIonInputField
+							{/* <ZIonInputField
 								inputFieldProps={{
+									label: 'Name your pixel*',
+									labelPlacement: 'floating',
+									name: 'title',
+									value: values.title,
+									errorText: errors.title,
+									placeholder: 'Enter Pixel Name',
+									type: 'text',
+									onIonChange: handleChange,
+									onIonBlur: handleBlur,
+									minHeight: '2.3rem',
 									className: classNames({
 										'mt-3 mb-5 pb-2': true,
 										'ion-touched ion-invalid': touched.title && errors.title,
 										'ion-touched ion-valid': touched.title && !errors.title,
 									}),
-									label: 'Name your pixel*',
-									labelPlacement: 'floating',
-									name: 'title',
-									onIonChange: handleChange,
-									onIonBlur: handleBlur,
-									value: values.title,
-									errorText: errors.title,
-									placeholder: 'Enter Pixel Name',
-									type: 'text',
 								}}
+							/> */}
+
+							<ZIonInput
+								label='Name your pixel*'
+								labelPlacement='stacked'
+								name='title'
+								value={values.title}
+								errorText={touched.title ? errors.title : undefined}
+								placeholder='Enter Pixel Name'
+								type='text'
+								onIonChange={handleChange}
+								onIonBlur={handleBlur}
+								minHeight='2.3rem'
+								className={classNames({
+									'mt-6 mb-5 pb-2': true,
+									'ion-touched': touched.title,
+									'ion-invalid': touched.title && errors.title,
+									'ion-valid': touched.title && !errors.title,
+								})}
 							/>
 
 							{/* Pixel Id Input */}
-							<ZIonInputField
+							{/* <ZIonInputField
 								inputFieldProps={{
 									className: classNames({
 										'mt-3': true,
@@ -364,6 +387,25 @@ const ZaionsAddPixelAccount: React.FC<{
 									placeholder: 'Enter Pixel Id',
 									type: 'text',
 								}}
+							/> */}
+
+							<ZIonInput
+								label='Pixel ID*'
+								labelPlacement='stacked'
+								name='pixelId'
+								placeholder='Enter Pixel Id'
+								type='text'
+								onIonChange={handleChange}
+								onIonBlur={handleBlur}
+								value={values.pixelId}
+								errorText={touched.pixelId ? errors.pixelId : undefined}
+								minHeight='2.3rem'
+								className={classNames({
+									'mt-6': true,
+									'ion-touched': touched.pixelId,
+									'ion-invalid': touched.pixelId && errors.pixelId,
+									'ion-valid': touched.pixelId && !errors.pixelId,
+								})}
 							/>
 						</Form>
 					</ZIonContent>
@@ -374,7 +416,7 @@ const ZaionsAddPixelAccount: React.FC<{
 					 *  */}
 					{appSettings.appModalsSetting.actions.showActionInModalFooter && (
 						<ZIonFooter>
-							<ZIonRow className='mt-2 px-3 ion-justify-content-between'>
+							<ZIonRow className='mt-1 px-3 ion-justify-content-between'>
 								<ZIonCol>
 									<ZIonButton
 										fill='outline'
@@ -396,7 +438,7 @@ const ZaionsAddPixelAccount: React.FC<{
 										fill='solid'
 										size='default'
 										className='ion-text-capitalize'
-										// disabled
+										disabled={!isValid}
 										type='submit'
 										onClick={() => void submitForm()}
 									>
@@ -408,7 +450,7 @@ const ZaionsAddPixelAccount: React.FC<{
 									</ZIonButton>
 								</ZIonCol>
 							</ZIonRow>
-							{!isValid && (
+							{/* {!isValid && (
 								<ZIonRow>
 									<ZIonCol className='ion-text-center'>
 										<ZIonNote color='danger'>
@@ -416,7 +458,7 @@ const ZaionsAddPixelAccount: React.FC<{
 										</ZIonNote>
 									</ZIonCol>
 								</ZIonRow>
-							)}
+							)} */}
 						</ZIonFooter>
 					)}
 				</>

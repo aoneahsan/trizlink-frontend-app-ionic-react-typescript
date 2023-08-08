@@ -58,6 +58,7 @@ const RouteParams = {
 
 	shortLink: {
 		shortLinkId: ':shortLinkId',
+		path: ':path',
 	},
 
 	linkInBio: {
@@ -88,6 +89,9 @@ export const API_URLS = {
 	userEmbedWidget_update_delete: '/user/embedded-scripts/:embeddedId',
 	shortLinks_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links`,
 	shortLinks_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links/${RouteParams.shortLink.shortLinkId}`,
+
+	shortLinks_is_path_available: `/user/workspaces/${RouteParams.workspace.workspaceId}/sl/is-path-available/${RouteParams.shortLink.path}`,
+
 	FolderShortLinks: '/user/folders/:folderId/short-links',
 	ShortLinks_folders_reorder: '/user/shortLinks/folders/reorder',
 	LinkInBio_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/linkInBio/folders`,
@@ -305,6 +309,7 @@ const DateTime = {
 // Default Values
 const DEFAULT_VALUES = {
 	DEFAULT_CUSTOM_DOMAIN: '1',
+	TIMEZONE_DEFAULT: '(GMT) Western Europe Time, London, Lisbon, Casablanca',
 	DEFAULT_FOLDER: 'all',
 	ZAIONS_SETTING_SPLIT_PANEL: 'ZAIONS_SETTING_PAGE_PANEL',
 	ZAIONS_SHORT_LINKS_LIST_SPLIT_PANEL: 'ZAIONS_SHORT_LINKS_LIST_SPLIT_PANEL',
@@ -472,6 +477,7 @@ const REACT_QUERY = {
 		SHORT_LINKS: {
 			MAIN: 'rq-short-links-list-key',
 			GET: 'rq-short-link-get-key',
+			IS_PATH_AVAILABLE: 'rq-short-link-is-path-available-key',
 		},
 		LINK_IN_BIO: {
 			MAIN: 'rq-link-in-bio-links-list-key',

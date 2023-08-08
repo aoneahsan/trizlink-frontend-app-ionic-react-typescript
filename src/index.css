@@ -895,8 +895,8 @@ ion-modal.zaions__modal_w100 {
 /* Modals */
 .pixel-account-modal-size,
 .utm-tags-modal-size {
-	--height: 85vh;
-	--width: 30.6vw;
+	--height: 27rem;
+	--width: 29rem;
 }
 
 .embed-widget-modal-size {

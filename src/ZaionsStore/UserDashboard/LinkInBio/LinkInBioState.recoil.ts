@@ -133,7 +133,7 @@ export const LinkInBiosFieldsDataRStateSelector = selector({
 
 		linkInBiosStateAtom?.forEach((el) => {
 			if ((el.tags as string[])?.length) {
-				(JSON.parse(el.tags as string) as string[]).forEach((tag) =>
+				(JSON.parse(el.tags as unknown as string) as string[]).forEach((tag) =>
 					_tagsArray.add(tag)
 				);
 			}

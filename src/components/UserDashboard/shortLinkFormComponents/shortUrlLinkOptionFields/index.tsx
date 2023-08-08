@@ -66,8 +66,9 @@ import { useParams } from 'react-router';
 import { reportCustomError } from '@/utils/customErrorType';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import { parseZQueryString } from '@/utils/helpers';
+import { parseZQueryString, zAddUrlProtocol } from '@/utils/helpers';
 import { InputChangeEventDetail, IonInputCustomEvent } from '@ionic/core';
+import isURL from 'validator/lib/isURL';
 
 /**
  * Style files Imports go down
@@ -190,65 +191,69 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 	const linkInputChangeHandler = (
 		event: IonInputCustomEvent<InputChangeEventDetail>
 	) => {
-		handleChange(event);
-
-		const { __queryStringData } = parseZQueryString(
-			event.target.value as string
-		);
-		console.log(__queryStringData);
-
-		// utmCampaign
-		if (__queryStringData['utm_campaign']) {
-			setFieldValue(
-				'UTMTags.utmCampaign',
-				__queryStringData['utm_campaign'],
-				false
-			);
-		} else {
-			setFieldValue('UTMTags.utmCampaign', '', false);
-		}
-
-		// utmMedium
-		if (__queryStringData['utm_medium']) {
-			setFieldValue(
-				'UTMTags.utmMedium',
-				__queryStringData['utm_medium'],
-				false
-			);
-		} else {
-			setFieldValue('UTMTags.utmMedium', '', false);
-		}
-
-		// utmSource
-		if (__queryStringData['utm_source']) {
-			setFieldValue(
-				'UTMTags.utmSource',
-				__queryStringData['utm_source'],
-				false
-			);
-		} else {
-			setFieldValue('UTMTags.utmSource', '', false);
-		}
-
-		// utmTerm
-		if (__queryStringData['utm_term']) {
-			setFieldValue('UTMTags.utmTerm', __queryStringData['utm_term'], false);
-		} else {
-			setFieldValue('UTMTags.utmTerm', '', false);
-		}
-
-		// utmContent
-		if (__queryStringData['utm_content']) {
-			setFieldValue(
-				'UTMTags.utmContent',
-				__queryStringData['utm_content'],
-				false
-			);
-		} else {
-			setFieldValue('UTMTags.utmContent', '', false);
-		}
-
 		try {
+			handleChange(event);
+
+			if (isURL(event.target.value as string)) {
+				const { __queryStringData } = parseZQueryString(
+					zAddUrlProtocol(String(event.target.value))
+				);
+
+				// utmCampaign
+				if (__queryStringData['utm_campaign']) {
+					setFieldValue(
+						'UTMTags.utmCampaign',
+						__queryStringData['utm_campaign'],
+						false
+					);
+				} else {
+					setFieldValue('UTMTags.utmCampaign', '', false);
+				}
+
+				// utmMedium
+				if (__queryStringData['utm_medium']) {
+					setFieldValue(
+						'UTMTags.utmMedium',
+						__queryStringData['utm_medium'],
+						false
+					);
+				} else {
+					setFieldValue('UTMTags.utmMedium', '', false);
+				}
+
+				// utmSource
+				if (__queryStringData['utm_source']) {
+					setFieldValue(
+						'UTMTags.utmSource',
+						__queryStringData['utm_source'],
+						false
+					);
+				} else {
+					setFieldValue('UTMTags.utmSource', '', false);
+				}
+
+				// utmTerm
+				if (__queryStringData['utm_term']) {
+					setFieldValue(
+						'UTMTags.utmTerm',
+						__queryStringData['utm_term'],
+						false
+					);
+				} else {
+					setFieldValue('UTMTags.utmTerm', '', false);
+				}
+
+				// utmContent
+				if (__queryStringData['utm_content']) {
+					setFieldValue(
+						'UTMTags.utmContent',
+						__queryStringData['utm_content'],
+						false
+					);
+				} else {
+					setFieldValue('UTMTags.utmContent', '', false);
+				}
+			}
 		} catch (error) {
 			reportCustomError(error);
 		}
@@ -329,9 +334,14 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 										minHeight='40px'
 										type='url'
 										onIonChange={linkInputChangeHandler}
-										onIonBlur={handleBlur}
 										value={values?.target?.url}
 										placeholder={ShortLinkPlaceholder()}
+										onIonBlur={(e) => {
+											handleBlur(e);
+											const inputUrl = values?.target?.url;
+											const formattedUrl = zAddUrlProtocol(inputUrl || '');
+											setFieldValue('target.url', formattedUrl);
+										}}
 										errorText={
 											touched?.target?.url ? errors?.target?.url : undefined
 										}

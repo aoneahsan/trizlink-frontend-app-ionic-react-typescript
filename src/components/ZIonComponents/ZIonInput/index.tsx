@@ -149,6 +149,7 @@ export type ZIonInputType = {
 	helperText?: string;
 	errorText?: string;
 	fill?: 'solid' | 'outline';
+	counter?: boolean;
 };
 
 const ZIonInput = React.forwardRef(
