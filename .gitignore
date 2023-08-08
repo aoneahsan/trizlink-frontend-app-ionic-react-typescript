@@ -47,3 +47,5 @@ cypress/videos/**/*
 node_modules
 vendor
 **/vendor/**/*
+
+.env
