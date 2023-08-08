@@ -172,7 +172,7 @@ const TestingReactTable: React.FC = () => {
 									>
 										{_rowInfo.getAllCells().map((_cellInfo, _cellIndex) => {
 											return (
-												<>
+												<React.Fragment key={_cellIndex}>
 													{_cellInfo.column.getIsVisible() ? (
 														<ZIonCol key={_cellIndex} className='border-r'>
 															{flexRender(
@@ -181,7 +181,7 @@ const TestingReactTable: React.FC = () => {
 															)}
 														</ZIonCol>
 													) : null}
-												</>
+												</React.Fragment>
 											);
 										})}
 									</ZIonRow>
