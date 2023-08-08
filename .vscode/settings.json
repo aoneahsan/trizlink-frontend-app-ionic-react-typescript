@@ -4,6 +4,7 @@
 	"files.autoSave": "onFocusChange",
 	"prettier.enable": true,
 	"cSpell.words": [
+		"chartjs",
 		"chatbubble",
 		"Collabes",
 		"Datetime",

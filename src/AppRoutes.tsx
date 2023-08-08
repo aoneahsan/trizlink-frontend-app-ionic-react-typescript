@@ -42,7 +42,6 @@ import ZLinkInBio from '@/pages/AdminPanel/ZLinkInBio';
 import ZLinkCampaigns from '@/pages/AdminPanel/ZLCampaigns';
 import ZCustomLinks from '@/pages/AdminPanel/ZLCustomLinks';
 import ZLinks from '@/pages/AdminPanel/ZLinks';
-import ChartsExamples from '@/Testing/Charts';
 import ZProfile from '@/pages/AdminPanel/ZProfile';
 import ZCustomDomain from '@/pages/AdminPanel/ZCustomDomin';
 import ZGroups from '@/pages/AdminPanel/ZGroups';
@@ -73,6 +72,7 @@ import ZWorkspaceListPage from './pages/AdminPanel/Workspaces';
 import ZWorkspaceForm from './pages/AdminPanel/Workspaces/Form';
 import ViewSingleWorkspace from './pages/AdminPanel/Workspaces/ViewSingle';
 import ZAppStartupPage from './pages/AdminPanel/StartUpPage';
+import ChartsExamples from './Testing/Charts';
 
 // Functional Component
 const AppRoutes: React.FC = () => {
@@ -405,6 +405,7 @@ const AppRoutes: React.FC = () => {
 					component={ZaionsReactArea}
 				/>
 				<Route
+					exact
 					path={ZaionsRoutes.Testing.ReactCharts.Main}
 					component={ChartsExamples}
 				/>
