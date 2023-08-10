@@ -1,31 +1,32 @@
 // Core Imports
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Packages Imports
-import { IonPopover } from '@ionic/react';
 import {
+	createOutline,
+	ellipsisVerticalOutline,
 	fileTrayFullOutline,
-	pencilOutline,
 	trashBinOutline,
 } from 'ionicons/icons';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useParams } from 'react-router';
 import routeQueryString from 'qs';
+import {
+	createColumnHelper,
+	getCoreRowModel,
+	getPaginationRowModel,
+} from '@tanstack/table-core';
+import { flexRender, useReactTable } from '@tanstack/react-table';
+import classNames from 'classnames';
 
 // Custom Imports
-import {
-	ZTable,
-	ZTableHeadCol,
-	ZTableRow,
-	ZTableRowCol,
-	ZTableTBody,
-	ZTableTHead,
-} from './table-styled-components.sc';
-
+import ZaionsPixelAccountDetail from '../ZaionsModals/PixelAccount/pixelAccountDetailModal';
+import ZaionsLinkNoteDetailModal from '../ZaionsModals/LinkNote/LinkNoteDetail';
+import ZCan from '@/components/Can';
 import {
 	ZIonCol,
 	ZIonRow,
 	ZIonText,
-	ZIonContent,
 	ZIonIcon,
 	ZIonItem,
 	ZIonList,
@@ -34,16 +35,19 @@ import {
 	ZIonSelect,
 	ZIonSelectOption,
 	ZIonTitle,
+	ZIonButton,
+	ZIonRouterLink,
 } from '@/components/ZIonComponents';
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-import { ZIonButton } from '@/components/ZIonComponents';
 
 // Global Constants
-import CONSTANTS, { ZaionsBusinessDetails } from '@/utils/constants';
+import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import {
 	createRedirectRoute,
 	extractInnerData,
+	generateShortLink,
 	replaceRouteParams,
 } from '@/utils/helpers';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
@@ -57,7 +61,14 @@ import {
 	useZIonAlert,
 	useZIonErrorAlert,
 	useZIonModal,
+	useZIonPopover,
+	useZIonToast,
 } from '@/ZaionsHooks/zionic-hooks';
+import {
+	showErrorNotification,
+	showSuccessNotification,
+} from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
 
 // Types
 import {
@@ -66,40 +77,23 @@ import {
 	ZShortLinkListPageTableColumnsEnum,
 	ZShortLinkListPageTableColumnsIds,
 } from '@/types/AdminPanel/linksType';
+import {
+	FormMode,
+	ZUserSettingInterface,
+	ZUserSettingTypeEnum,
+} from '@/types/AdminPanel/index.type';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 // Recoil State
 import { ShortLinkFormState } from '@/ZaionsStore/FormStates/shortLinkFormState';
-import { useParams } from 'react-router';
 import {
 	FilteredShortLinkDataSelector,
 	ShortLinksFilterOptionsRStateAtom,
 	ShortLinksRStateAtom,
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
 import { reportCustomError } from '@/utils/customErrorType';
-import ZaionsPixelAccountDetail from '../ZaionsModals/PixelAccount/pixelAccountDetailModal';
-import ZaionsLinkNoteDetailModal from '../ZaionsModals/LinkNote/LinkNoteDetail';
-import ZCan from '@/components/Can';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
-import {
-	FormMode,
-	ZUserSettingInterface,
-	ZUserSettingTypeEnum,
-} from '@/types/AdminPanel/index.type';
 import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
-import {
-	showErrorNotification,
-	showSuccessNotification,
-} from '@/utils/notification';
-import MESSAGES from '@/utils/messages';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import {
-	ColumnOrderState,
-	createColumnHelper,
-	getCoreRowModel,
-	getPaginationRowModel,
-} from '@tanstack/table-core';
-import { flexRender, useReactTable } from '@tanstack/react-table';
-import classNames from 'classnames';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 // Styles
 
@@ -109,13 +103,8 @@ const ZaionsShortLinkTable: React.FC<{
 	// #region Component state.
 	const [compState, setCompState] = useState<{
 		selectedShortLinkId?: string;
-		showActionPopover: boolean;
-	}>({
-		showActionPopover: false,
-	});
+	}>({});
 	// #endregion
-
-	const actionsPopoverRef = useRef<HTMLIonPopoverElement>(null);
 
 	// Folder id getting from url. (use when use when to filter short links by folder listed on the left-side, when user click on the folder from listed folder the id of that folder the Id of folder will set in the url and we will fetch it here by useParams).
 	const { folderId, workspaceId } = useParams<{
@@ -148,6 +137,7 @@ const ZaionsShortLinkTable: React.FC<{
 	const { zNavigatePushRoute } = useZNavigate();
 	const { getRQCDataHandler } = useZGetRQCacheData();
 	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+	const { presentZIonToast } = useZIonToast();
 	// getting search param from url with the help of 'qs' package.
 	const routeQSearchParams = routeQueryString.parse(location.search, {
 		ignoreQueryPrefix: true,
@@ -214,14 +204,6 @@ const ZaionsShortLinkTable: React.FC<{
 	}, [ShortLinksData]);
 
 	// #region Functions.
-	const showActionsPopover = (
-		_event: React.MouseEvent<HTMLIonButtonElement, MouseEvent>
-	) => {
-		if (actionsPopoverRef.current) {
-			actionsPopoverRef.current.event = _event;
-		}
-	};
-
 	const { presentZIonModal: presentPixelAccountDetailModal } = useZIonModal(
 		ZaionsPixelAccountDetail
 	);
@@ -358,6 +340,14 @@ const ZaionsShortLinkTable: React.FC<{
 	};
 	// #endregion
 
+	const { presentZIonPopover: presentZShortLinkActionPopover } = useZIonPopover(
+		ZShortLinkActionPopover,
+		{
+			workspaceId: workspaceId,
+			shortLinkId: compState.selectedShortLinkId,
+		}
+	);
+
 	// #region Managing table data with react-table.
 	const columnHelper = createColumnHelper<ShortLinkType>();
 
@@ -367,11 +357,7 @@ const ZaionsShortLinkTable: React.FC<{
 			header: 'Select',
 			footer: 'Select Column Footer',
 			cell: (props) => {
-				return (
-					<>
-						<ZIonCheckbox />
-					</>
-				);
+				return <ZIonCheckbox />;
 			},
 		}),
 
@@ -480,7 +466,16 @@ const ZaionsShortLinkTable: React.FC<{
 			{
 				header: 'Url',
 				id: ZShortLinkListPageTableColumnsIds.url,
-				cell: (row) => row.getValue(),
+				cell: (row) => (
+					<ZIonRouterLink
+						routerLink={String(row.getValue())}
+						color='dark'
+						className='hover:underline'
+						target='_blank'
+					>
+						{row.getValue()}
+					</ZIonRouterLink>
+				),
 				footer: 'Url Footer',
 			}
 		),
@@ -490,7 +485,38 @@ const ZaionsShortLinkTable: React.FC<{
 			header: 'Link to share',
 			id: ZShortLinkListPageTableColumnsIds.linkToShare,
 			footer: 'Link to share',
-			cell: () => <div>https://linktoshare.com</div>,
+			cell: ({ row }) => {
+				const _shortLink = generateShortLink({
+					domain: row?.original?.shortUrlDomain,
+					urlPath: row?.original?.shortUrlPath,
+				});
+				return (
+					<div className='ZaionsTextEllipsis'>
+						<ZIonText
+							color='primary'
+							className='block cursor-pointer hover:underline'
+							id={`z-shortlink-${row?.original?.id}`}
+							onClick={() => {
+								navigator.clipboard.writeText(_shortLink || '');
+
+								presentZIonToast('✨ Copied', 'tertiary');
+							}}
+						>
+							{_shortLink}
+						</ZIonText>
+
+						<ZRTooltip
+							anchorSelect={`#z-shortlink-${row?.original?.id}`}
+							place='top'
+							onArrow={true}
+							variant='info'
+							className='z-50'
+						>
+							<ZIonText>{_shortLink}</ZIonText>
+						</ZRTooltip>
+					</div>
+				);
+			},
 		}),
 	];
 
@@ -610,9 +636,12 @@ const ZaionsShortLinkTable: React.FC<{
 											return (
 												<ZIonCol
 													size={
-														_columnInfo.column.id === '__z_short_link_id__'
+														_columnInfo.column.id ===
+															ZShortLinkListPageTableColumnsIds.id ||
+														_columnInfo.column.id ===
+															ZShortLinkListPageTableColumnsIds.actions
 															? '.8'
-															: '3'
+															: '2.5'
 													}
 													key={_columnInfo.id}
 													className={classNames({
@@ -625,6 +654,17 @@ const ZaionsShortLinkTable: React.FC<{
 												</ZIonCol>
 											);
 										})}
+
+										<ZIonCol
+											size='.8'
+											className={classNames({
+												'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
+													true,
+												'border-r': false,
+											})}
+										>
+											Actions
+										</ZIonCol>
 									</ZIonRow>
 								);
 							})}
@@ -637,29 +677,35 @@ const ZaionsShortLinkTable: React.FC<{
 										.getRowModel()
 										.rows.map((_rowInfo, _rowIndex) => {
 											return (
-												<ZIonRow key={_rowIndex} className='flex-nowrap py-2'>
+												<ZIonRow key={_rowIndex} className='flex-nowrap'>
 													{_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
 														_cellInfo.column.getIsVisible() ? (
 															<ZIonCol
 																size={
-																	_cellInfo.column.id === '__z_short_link_id__'
+																	_cellInfo.column.id ===
+																		ZShortLinkListPageTableColumnsIds.id ||
+																	_cellInfo.column.id ===
+																		ZShortLinkListPageTableColumnsIds.actions
 																		? '.8'
-																		: '3'
+																		: '2.5'
 																}
 																key={_cellIndex}
 																className={classNames({
-																	'py-1 mt-1 border-b ps-2 flex ion-align-items-center':
+																	'py-1 mt-1 border-b flex ion-align-items-center':
 																		true,
 																	'border-r': false,
-																	'ion-justify-content-center':
+																	'ps-2':
+																		_cellInfo.column.id !==
+																		'__z_short_link_id__',
+																	'ps-0':
 																		_cellInfo.column.id ===
 																		'__z_short_link_id__',
 																})}
 															>
 																<div
 																	className={classNames({
-																		' w-full text-sm ZaionsTextEllipsis': true,
-																		'ion-justify-content-center flex ion-align-items-center':
+																		'w-full text-sm ZaionsTextEllipsis': true,
+																		'ps-3':
 																			_cellInfo.column.id ===
 																			'__z_short_link_id__',
 																	})}
@@ -672,6 +718,39 @@ const ZaionsShortLinkTable: React.FC<{
 															</ZIonCol>
 														) : null
 													)}
+
+													<ZIonCol
+														size='.8'
+														className={classNames({
+															'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
+																true,
+															'border-r': false,
+														})}
+													>
+														<ZIonButton
+															fill='clear'
+															color='dark'
+															className='ion-no-padding ion-no-margin'
+															size='small'
+															onClick={(_event: unknown) => {
+																setCompState((oldVal) => ({
+																	...oldVal,
+																	selectedShortLinkId:
+																		_rowInfo.original.id || '',
+																}));
+
+																//
+																presentZShortLinkActionPopover({
+																	_event: _event as Event,
+																	_cssClass:
+																		'zaions_present_folder_Action_popover_width',
+																	_dismissOnSelect: false,
+																});
+															}}
+														>
+															<ZIonIcon icon={ellipsisVerticalOutline} />
+														</ZIonButton>
+													</ZIonCol>
 												</ZIonRow>
 											);
 										})}
@@ -845,6 +924,7 @@ const ZaionsShortLinkTable: React.FC<{
 							</ZIonButton>
 						</ZIonCol>
 
+						{/* Col for pagination number like 1,2,3,...,n */}
 						<ZIonCol></ZIonCol>
 
 						<ZIonCol className='flex ion-align-items-center ion-justify-content-end'>
@@ -890,70 +970,216 @@ const ZaionsShortLinkTable: React.FC<{
 			)}
 
 			{showSkeleton && <ZaionsShortLinkTableSkeleton />}
-
-			{/* Popovers */}
-			<IonPopover
-				ref={actionsPopoverRef}
-				isOpen={compState?.showActionPopover}
-				dismissOnSelect
-				showBackdrop={false}
-				keepContentsMounted
-				className='zaions__ion_popover'
-				onDidDismiss={() =>
-					setCompState((oldVal) => ({ ...oldVal, showActionPopover: false }))
-				}
-			>
-				<ZIonContent>
-					<ZIonList lines='none' className='ion-no-padding'>
-						<ZCan havePermission={permissionsEnum.update_shortLink}>
-							<ZIonItem
-								button={true}
-								detail={false}
-								onClick={() => {
-									void editShortLinkDetails();
-								}}
-							>
-								<ZIonButton
-									size='small'
-									expand='full'
-									fill='clear'
-									className='mx-auto ion-text-capitalize'
-								>
-									<ZIonIcon
-										icon={pencilOutline}
-										className='me-2'
-										color='secondary'
-									/>
-									<ZIonText color='secondary'>Edit</ZIonText>
-								</ZIonButton>
-							</ZIonItem>
-						</ZCan>
-
-						<ZCan havePermission={permissionsEnum.delete_shortLink}>
-							<ZIonItem
-								button={true}
-								detail={false}
-								onClick={() => void deleteShortLink()}
-							>
-								<ZIonButton
-									size='small'
-									expand='full'
-									fill='clear'
-									className='mx-auto ion-text-capitalize'
-								>
-									<ZIonIcon
-										icon={trashBinOutline}
-										className='me-2'
-										color='danger'
-									/>
-									<ZIonText color='danger'>Delete</ZIonText>
-								</ZIonButton>
-							</ZIonItem>
-						</ZCan>
-					</ZIonList>
-				</ZIonContent>
-			</IonPopover>
 		</>
+	);
+};
+
+// Shortlink action popover
+const ZShortLinkActionPopover: React.FC<{
+	dismissZIonPopover: (data?: string, role?: string | undefined) => void;
+	zNavigatePushRoute: (_url: string) => void;
+	workspaceId: string;
+	shortLinkId: string;
+}> = ({ dismissZIonPopover, workspaceId, shortLinkId, zNavigatePushRoute }) => {
+	const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
+	// Recoil selector that will filter from all short links state(ShortLinksRStateAtom) and give the filter short links.
+	const _FilteredShortLinkDataSelector = useRecoilValue(
+		FilteredShortLinkDataSelector
+	);
+
+	const { presentZIonErrorAlert } = useZIonErrorAlert();
+	const { presentZIonAlert } = useZIonAlert();
+	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+
+	// Request for deleting short link.
+	const { mutateAsync: deleteShortLinkMutate } = useZRQDeleteRequest(
+		API_URL_ENUM.shortLinks_update_delete,
+		[]
+	);
+
+	// when user won't to delete short link and click on the delete button this function will fire and show the confirm alert.
+	const deleteShortLink = async () => {
+		try {
+			if (shortLinkId?.trim() && _FilteredShortLinkDataSelector?.length) {
+				const selectedShortLinkId = _FilteredShortLinkDataSelector?.find(
+					(el) => el.id === shortLinkId
+				);
+				await presentZIonAlert({
+					header: `Delete Short Link "${selectedShortLinkId?.title || ''}"`,
+					subHeader: 'Remove Short Link from user account.',
+					message: 'Are you sure you want to delete this Short Link?',
+					buttons: [
+						{
+							text: 'Cancel',
+							role: 'cancel',
+						},
+						{
+							text: 'Delete',
+							role: 'danger',
+							handler: () => {
+								void removeShortLink();
+							},
+						},
+					],
+				});
+			} else {
+				await presentZIonErrorAlert();
+			}
+		} catch (error) {
+			await presentZIonErrorAlert();
+		}
+	};
+
+	// on the delete short link confirm alert, when user click on delete button this function will firs which will trigger delete request and delete the short link.
+	const removeShortLink = async () => {
+		try {
+			if (shortLinkId?.trim() && _FilteredShortLinkDataSelector?.length) {
+				if (shortLinkId) {
+					const _response = await deleteShortLinkMutate({
+						itemIds: [workspaceId, shortLinkId],
+						urlDynamicParts: [
+							CONSTANTS.RouteParams.workspace.workspaceId,
+							CONSTANTS.RouteParams.shortLink.shortLinkId,
+						],
+					});
+
+					if (_response) {
+						const _data = extractInnerData<{ success: boolean }>(
+							_response,
+							extractInnerDataOptionsEnum.createRequestResponseItem
+						);
+
+						if (_data && _data?.success) {
+							// getting all the shortLinks from RQ cache.
+							const _oldShortLinks =
+								extractInnerData<ShortLinkType[]>(
+									getRQCDataHandler<ShortLinkType[]>({
+										key: [
+											CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+											workspaceId,
+										],
+									}) as ShortLinkType[],
+									extractInnerDataOptionsEnum.createRequestResponseItems
+								) || [];
+
+							// removing deleted shortLinks from cache.
+							const _updatedShortLinks = _oldShortLinks.filter(
+								(el) => el.id !== shortLinkId
+							);
+
+							// Updating data in RQ cache.
+							await updateRQCDataHandler<ShortLinkType[] | undefined>({
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+									workspaceId,
+								],
+								data: _updatedShortLinks as ShortLinkType[],
+								id: '',
+								extractType: ZRQGetRequestExtractEnum.extractItems,
+								updateHoleData: true,
+							});
+
+							showSuccessNotification(
+								MESSAGES.GENERAL.SHORT_LINKS.SHORT_LINK_DELETE
+							);
+
+							dismissZIonPopover('', '');
+						} else {
+							showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+
+							dismissZIonPopover('', '');
+						}
+					}
+				}
+			} else {
+				void presentZIonErrorAlert();
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+
+	return (
+		<ZIonList lines='none' className='ion-no-padding'>
+			<ZCan havePermissions={[permissionsEnum.update_shortLink]}>
+				<ZIonItem
+					button={true}
+					detail={false}
+					minHeight='2.5rem'
+					onClick={async () => {
+						try {
+							if (shortLinkId) {
+								setNewShortLinkFormState((_oldValues) => ({
+									..._oldValues,
+									formMode: FormMode.EDIT,
+								}));
+
+								zNavigatePushRoute(
+									replaceRouteParams(
+										ZaionsRoutes.AdminPanel.ShortLinks.Edit,
+										[
+											CONSTANTS.RouteParams.workspace.workspaceId,
+											CONSTANTS.RouteParams.editShortLinkIdParam,
+										],
+										[workspaceId, shortLinkId]
+									)
+								);
+
+								dismissZIonPopover('', '');
+							} else {
+								await presentZIonErrorAlert();
+							}
+						} catch (error) {
+							reportCustomError(error);
+						}
+					}}
+				>
+					<ZIonButton
+						size='small'
+						expand='full'
+						fill='clear'
+						color='light'
+						className='ion-text-capitalize'
+					>
+						<ZIonIcon
+							icon={createOutline}
+							className='w-5 h-5 me-2'
+							color='secondary'
+						/>
+						<ZIonText color='secondary' className='text-[.9rem] pt-1'>
+							Edit
+						</ZIonText>
+					</ZIonButton>
+				</ZIonItem>
+			</ZCan>
+
+			<ZCan havePermissions={[permissionsEnum.delete_shortLink]}>
+				<ZIonItem
+					button={true}
+					detail={false}
+					minHeight='2.5rem'
+					onClick={() => void deleteShortLink()}
+				>
+					<ZIonButton
+						size='small'
+						expand='full'
+						fill='clear'
+						color='light'
+						className='ion-text-capitalize'
+					>
+						<ZIonIcon
+							icon={trashBinOutline}
+							className='w-4 h-4 me-2'
+							color='danger'
+						/>
+						<ZIonText color='danger' className='text-[.9rem] pt-1'>
+							Delete
+						</ZIonText>
+					</ZIonButton>
+				</ZIonItem>
+			</ZCan>
+		</ZIonList>
 	);
 };
 

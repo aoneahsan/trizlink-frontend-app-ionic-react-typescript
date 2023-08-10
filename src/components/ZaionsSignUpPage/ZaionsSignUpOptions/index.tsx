@@ -16,6 +16,7 @@ import {
 // Global Constants
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { ZIonButton } from '@/components/ZIonComponents';
+import CONSTANTS from '@/utils/constants';
 
 // Style
 
@@ -24,15 +25,15 @@ const ZaionsSignUpOptions: React.FC = () => {
 		<>
 			<ZIonRow>
 				<ZIonCol
-					className='flex ion-justify-content-center mx-auto'
+					className='flex mx-auto ion-justify-content-center'
 					sizeXl='6'
 					sizeLg='6.7'
 					sizeMd='7.5'
 					sizeSm='10'
 					sizeXs='12'
 				>
-					<div className='ion-text-center w-full'>
-						<ZIonText className='block text-2xl mb-3 font-bold'>
+					<div className='w-full ion-text-center'>
+						<ZIonText className='block mb-3 text-2xl font-bold'>
 							Sign up and start shortening
 						</ZIonText>
 						<ZIonText className='block'>
@@ -40,6 +41,9 @@ const ZaionsSignUpOptions: React.FC = () => {
 							<ZIonRouterLink
 								className='underline'
 								routerLink={ZaionsRoutes.LoginRoute}
+								testingSelector={
+									CONSTANTS.testingSelectors.signupPage.loginButton
+								}
 							>
 								Login
 							</ZIonRouterLink>{' '}
@@ -47,6 +51,9 @@ const ZaionsSignUpOptions: React.FC = () => {
 							<ZIonRouterLink
 								className='underline'
 								routerLink={ZaionsRoutes.LoginRoute}
+								testingSelector={
+									CONSTANTS.testingSelectors.signupPage.SSOLoginButton
+								}
 							>
 								Log in with SSO
 							</ZIonRouterLink>
@@ -59,7 +66,7 @@ const ZaionsSignUpOptions: React.FC = () => {
 				{/* <ZIonCol className="ion-text-center" size="3.6"> */}
 				{/* </ZIonCol> */}
 				<ZIonCol
-					className='ion-text-center mx-auto mt-3'
+					className='mx-auto mt-3 ion-text-center'
 					sizeXl='5'
 					sizeLg='5.7'
 					sizeMd='6.5'
@@ -69,9 +76,12 @@ const ZaionsSignUpOptions: React.FC = () => {
 					<ZIonButton
 						className='me-2 ion-text-capitalize'
 						color='tertiary'
-						expand={'block'}
+						expand='block'
+						testingSelector={
+							CONSTANTS.testingSelectors.signupPage.googleSignupButton
+						}
 					>
-						<ZIonIcon icon={logoGoogle} className='me-1 font-bold'></ZIonIcon>{' '}
+						<ZIonIcon icon={logoGoogle} className='font-bold me-1' />
 						Sign Up with Google
 					</ZIonButton>
 				</ZIonCol>

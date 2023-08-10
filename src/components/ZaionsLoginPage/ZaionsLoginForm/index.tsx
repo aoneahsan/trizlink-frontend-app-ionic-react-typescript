@@ -147,7 +147,6 @@ const ZaionsLoginForm: React.FC = () => {
 				throw new AxiosError();
 			}
 		} catch (error) {
-			zConsoleError({ err: error });
 			await dismissZIonLoader();
 			if (error instanceof AxiosError) {
 				// await presentZIonErrorAlert();
@@ -212,10 +211,11 @@ const ZaionsLoginForm: React.FC = () => {
 					{({
 						handleChange,
 						handleBlur,
+						submitForm,
+						isValid,
 						values,
 						touched,
 						errors,
-						submitForm,
 					}) => (
 						<>
 							{/* Email Address Field */}
@@ -227,6 +227,9 @@ const ZaionsLoginForm: React.FC = () => {
 								onIonChange={handleChange}
 								onIonBlur={handleBlur}
 								value={values.emailAddress}
+								testingSelector={
+									CONSTANTS.testingSelectors.loginPage.emailInput
+								}
 								errorText={
 									touched.emailAddress ? errors.emailAddress : undefined
 								}
@@ -249,6 +252,9 @@ const ZaionsLoginForm: React.FC = () => {
 									onIonBlur={handleBlur}
 									value={values.password}
 									errorText={touched.password ? errors.password : undefined}
+									testingSelector={
+										CONSTANTS.testingSelectors.loginPage.passwordInput
+									}
 									className={classNames({
 										'ion-touched': touched.password,
 										'ion-invalid': errors.password,
@@ -261,6 +267,9 @@ const ZaionsLoginForm: React.FC = () => {
 									className='ion-no-padding ms-3 zaions__max_content'
 									onClick={() => setCanViewPassword((OldVal) => !OldVal)}
 									mode='ios'
+									testingSelector={
+										CONSTANTS.testingSelectors.loginPage.canViewPasswordButton
+									}
 								>
 									<ZIonIcon
 										icon={canViewPassword ? eyeOffOutline : eyeOutline}
@@ -274,6 +283,9 @@ const ZaionsLoginForm: React.FC = () => {
 									className='ion-no-padding ion-no-margin ion-text-capitalize text-decoration-underline'
 									mode='ios'
 									routerLink={ZaionsRoutes.PasswordResetEmailForm}
+									testingSelector={
+										CONSTANTS.testingSelectors.loginPage.forgetPasswordButton
+									}
 								>
 									Forgot your password?
 								</ZIonButton>
@@ -282,8 +294,12 @@ const ZaionsLoginForm: React.FC = () => {
 							{/* Submit Button */}
 							<ZIonButton
 								expand='block'
+								disabled={!isValid}
 								className='mt-4 ion-text-capitalize'
 								onClick={() => void submitForm()}
+								testingSelector={
+									CONSTANTS.testingSelectors.loginPage.loginButton
+								}
 							>
 								Log in
 							</ZIonButton>

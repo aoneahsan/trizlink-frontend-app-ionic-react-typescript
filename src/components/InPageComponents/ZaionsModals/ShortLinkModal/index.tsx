@@ -2,6 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
+import ZCan from '@/components/Can';
 import {
 	ZIonButton,
 	ZIonContent,
@@ -9,8 +10,14 @@ import {
 	ZIonText,
 	ZIonTitle,
 } from '@/components/ZIonComponents';
+import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
+import {
+	FormMode,
+	messengerPlatformsBlockEnum,
+} from '@/types/AdminPanel/index.type';
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import {
 	createRedirectRoute,
 	replaceParams,
@@ -18,7 +25,12 @@ import {
 } from '@/utils/helpers';
 import { showInfoNotification } from '@/utils/notification';
 import { useZIonToast } from '@/ZaionsHooks/zionic-hooks';
+import {
+	NewShortLinkFormState,
+	NewShortLinkSelectTypeOption,
+} from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import React from 'react';
+import { useSetRecoilState } from 'recoil';
 
 /**
  * Packages Imports go down
@@ -75,8 +87,16 @@ const ZShortLinkModal: React.FC<{
 	dismissZIonModal: (data?: string, role?: string | undefined) => void;
 	zNavigatePushRoute: (_url: string) => void;
 	workspaceId: string;
-}> = ({ dismissZIonModal, zNavigatePushRoute, workspaceId }) => {
+	shortUrl: string;
+}> = ({ dismissZIonModal, zNavigatePushRoute, workspaceId, shortUrl }) => {
 	const { presentZIonToast } = useZIonToast();
+	//
+	const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
+
+	const setNewShortLinkTypeOptionDataAtom = useSetRecoilState(
+		NewShortLinkSelectTypeOption
+	);
+
 	return (
 		<>
 			<ZIonContent className='ion-padding'>
@@ -90,7 +110,7 @@ const ZShortLinkModal: React.FC<{
 					<div className='flex w-[90%] rounded-lg overflow-hidden my-5'>
 						<div className='zaions__medium_bg h-[2.5rem] w-[90%] overflow-hidden line-clamp-1  flex ion-align-items-center ps-2'>
 							<ZIonTitle className='text-sm ion-no-padding' color='light'>
-								https://generatedshortlink.com
+								{shortUrl}
 							</ZIonTitle>
 						</div>
 						<ZIonButton
@@ -100,7 +120,7 @@ const ZShortLinkModal: React.FC<{
 								'--border-radius': '0px',
 							}}
 							onClick={() => {
-								navigator.clipboard.writeText('text will go there');
+								navigator.clipboard.writeText(shortUrl);
 
 								presentZIonToast('✨ Copied', 'tertiary');
 							}}
@@ -111,22 +131,45 @@ const ZShortLinkModal: React.FC<{
 
 					{/* Buttons */}
 					<div className='flex w-[90%] ion-justify-content-between'>
-						<ZIonButton
-							fill='outline'
-							onClick={() => {
-								dismissZIonModal();
+						<ZCan havePermissions={[permissionsEnum.create_shortLink]}>
+							<ZIonButton
+								fill='outline'
+								onClick={() => {
+									dismissZIonModal();
 
-								zNavigatePushRoute(
-									createRedirectRoute({
-										url: ZaionsRoutes.AdminPanel.ShortLinks.Create,
-										params: [CONSTANTS.RouteParams.workspace.workspaceId],
-										values: [workspaceId],
-									})
-								);
-							}}
-						>
-							Create a new link
-						</ZIonButton>
+									setNewShortLinkFormState((_) => ({
+										folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
+										shortUrl: {
+											domain: CONSTANTS.DEFAULT_VALUES.DEFAULT_CUSTOM_DOMAIN,
+										},
+										type: messengerPlatformsBlockEnum.link,
+										pixelIds: [],
+										tags: [],
+										formMode: FormMode.ADD,
+									}));
+
+									const selectedTypeOptionData = LinkTypeOptionsData.find(
+										(el) => el.type === messengerPlatformsBlockEnum.link
+									);
+
+									if (selectedTypeOptionData) {
+										setNewShortLinkTypeOptionDataAtom((_) => ({
+											...selectedTypeOptionData,
+										}));
+									}
+
+									zNavigatePushRoute(
+										createRedirectRoute({
+											url: ZaionsRoutes.AdminPanel.ShortLinks.Create,
+											params: [CONSTANTS.RouteParams.workspace.workspaceId],
+											values: [workspaceId],
+										})
+									);
+								}}
+							>
+								Create a new link
+							</ZIonButton>
+						</ZCan>
 
 						<ZIonButton
 							onClick={() => {

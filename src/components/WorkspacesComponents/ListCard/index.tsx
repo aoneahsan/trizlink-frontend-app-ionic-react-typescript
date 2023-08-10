@@ -127,6 +127,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 											values: [id || '', 'all'],
 										})}
 										color='dark'
+										testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardImg}-${id}`}
 									>
 										<ZIonImg
 											src={
@@ -151,6 +152,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 											],
 											values: [id || '', 'all'],
 										})}
+										testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardTitle}-${id}`}
 									>
 										<ZIonText
 											className='block text-base font-bold'
@@ -172,6 +174,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 								<ZIonButton
 									fill='clear'
 									className='h-auto mb-1 ion-no-padding ion-no-margin'
+									testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardFavoritesButton}-${id}`}
 								>
 									<ZIonIcon icon={starOutline} />
 								</ZIonButton>
@@ -186,6 +189,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 										<ZIonButton
 											color='primary'
 											fill='solid'
+											testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardUserButton}-${id}`}
 											className={classNames(
 												classes['workspace-user-avatar-button'],
 												{
@@ -225,6 +229,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 									className=' text-transform-initial'
 									color='secondary'
 									size='default'
+									testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.viewWorkspaceButton}-${id}`}
 									onClick={() => {
 										// Click on card will redirect to view workspace.
 										if (id) {
@@ -252,6 +257,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 									fill='clear'
 									className='h-auto mb-1 ion-no-padding ion-no-margin text-transform-initial'
 									color='dark'
+									testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardActionPopoverButton}-${id}`}
 									onClick={(event: unknown) => {
 										presentWorkspacesActionsPopover({
 											_event: event as Event,

@@ -20,7 +20,7 @@ import {
 } from '@/components/ZIonComponents';
 
 // Global Constants
-import { BRACKPOINT_SM } from '@/utils/constants';
+import CONSTANTS, { BRACKPOINT_SM } from '@/utils/constants';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
@@ -35,8 +35,8 @@ const ZaionsLoginOptions: React.FC = () => {
 		<>
 			<ZIonRow>
 				<ZIonCol className='flex ion-justify-content-center'>
-					<div className='ion-text-center w-full'>
-						<ZIonText className='block ion-text-center text-2xl mb-3 font-bold'>
+					<div className='w-full ion-text-center'>
+						<ZIonText className='block mb-3 text-2xl font-bold ion-text-center'>
 							Log in and start sharing
 						</ZIonText>
 						<ZIonText className='block'>
@@ -44,6 +44,9 @@ const ZaionsLoginOptions: React.FC = () => {
 							<ZIonRouterLink
 								className='underline'
 								routerLink={ZaionsRoutes.SignUpRoute}
+								testingSelector={
+									CONSTANTS.testingSelectors.loginPage.signupButton
+								}
 							>
 								Sign up
 							</ZIonRouterLink>
@@ -66,32 +69,44 @@ const ZaionsLoginOptions: React.FC = () => {
 						className='me-2 ion-text-capitalize'
 						color='tertiary'
 						expand={!isXsScale ? 'block' : undefined}
+						testingSelector={
+							CONSTANTS.testingSelectors.loginPage.googleLoginButton
+						}
 					>
-						<ZIonIcon icon={logoGoogle} className='me-1 font-bold '></ZIonIcon>{' '}
+						<ZIonIcon icon={logoGoogle} className='font-bold me-1 '></ZIonIcon>{' '}
 						Google
 					</ZIonButton>
 					<ZIonButton
 						className='me-2 ion-text-capitalize'
 						color='tertiary'
 						expand={!isXsScale ? 'block' : undefined}
+						testingSelector={
+							CONSTANTS.testingSelectors.loginPage.twitterLoginButton
+						}
 					>
-						<ZIonIcon icon={logoTwitter} className='me-1 font-bold'></ZIonIcon>{' '}
+						<ZIonIcon icon={logoTwitter} className='font-bold me-1'></ZIonIcon>{' '}
 						Twitter
 					</ZIonButton>
 					<ZIonButton
 						className='me-2 ion-text-capitalize'
 						color='tertiary'
 						expand={!isXsScale ? 'block' : undefined}
+						testingSelector={
+							CONSTANTS.testingSelectors.loginPage.facebookLoginButton
+						}
 					>
-						<ZIonIcon icon={logoFacebook} className='me-1 font-bold'></ZIonIcon>{' '}
+						<ZIonIcon icon={logoFacebook} className='font-bold me-1'></ZIonIcon>{' '}
 						Facebook
 					</ZIonButton>
 					<ZIonButton
 						className='me-2 ion-text-capitalize'
 						color='tertiary'
 						expand={!isXsScale ? 'block' : undefined}
+						testingSelector={
+							CONSTANTS.testingSelectors.loginPage.appleLoginButton
+						}
 					>
-						<ZIonIcon icon={logoApple} className='me-1 font-bold'></ZIonIcon>{' '}
+						<ZIonIcon icon={logoApple} className='font-bold me-1'></ZIonIcon>{' '}
 						Apple
 					</ZIonButton>
 				</ZIonCol>

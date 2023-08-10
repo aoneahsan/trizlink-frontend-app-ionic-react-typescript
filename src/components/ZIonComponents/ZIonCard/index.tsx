@@ -11,6 +11,8 @@ import {
 	ZIonRouterDirection,
 	ZIonTargetType,
 } from '@/types/zaionsAppSettings.type';
+import { PRODUCT_NAME } from '@/utils/constants';
+import { createElementTestingSelector } from '@/utils/helpers';
 
 type ZIonCardType = {
 	children: ReactNode;
@@ -32,11 +34,18 @@ type ZIonCardType = {
 	onMouseEnter?: React.MouseEventHandler<HTMLIonCardElement>;
 	onMouseLeave?: React.MouseEventHandler<HTMLIonCardElement>;
 	onClick?: React.MouseEventHandler<HTMLIonCardElement>;
+
+	//
+	testingSelector?: string;
 };
 
 const ZIonCard = (props: ZIonCardType) => {
 	return (
-		<IonCard {...props} style={props.style}>
+		<IonCard
+			{...props}
+			style={props.style}
+			{...createElementTestingSelector(props.testingSelector || PRODUCT_NAME)}
+		>
 			{props.children}
 		</IonCard>
 	);

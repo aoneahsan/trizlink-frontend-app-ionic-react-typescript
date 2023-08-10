@@ -254,6 +254,16 @@ span.new {
 	color: var(--ion-color-light);
 }
 
+.zaions_ion_color_success {
+	color: var(--ion-color-success);
+	--color: var(--ion-color-success);
+}
+
+.zaions_ion_color_danger {
+	color: var(--ion-color-danger);
+	--color: var(--ion-color-danger);
+}
+
 .zaions-background-set {
 	background-size: cover !important;
 	background-position: center !important;
@@ -874,6 +884,15 @@ ion-modal.zaions__modal_w100 {
 	--border-style: solid;
 	--border-color: transparent;
 }
+
+.z_border_color_success {
+	--border-color: var(--ion-color-success) !important;
+}
+
+.z_border_color_danger {
+	--border-color: var(--ion-color-danger) !important;
+}
+
 .zaions-datetime-btn::part(native) {
 	/* background: var(--ion-color-primary);
   color: #fff;
@@ -893,9 +912,12 @@ ion-modal.zaions__modal_w100 {
 }
 
 /* Modals */
-.pixel-account-modal-size,
-.utm-tags-modal-size {
+.pixel-account-modal-size {
 	--height: 27rem;
+	--width: 29rem;
+}
+.utm-tags-modal-size {
+	--height: 37rem;
 	--width: 29rem;
 }
 

@@ -239,16 +239,19 @@ const ZWorkspacesActionPopover: React.FC<{
 
 	return (
 		<ZIonList lines='none'>
-			{/* Manage User */}
+			{/* Manage Users */}
 			{showManageUserOption && (
 				<ZIonItem
+					minHeight='2.3rem'
+					className='ion-activatable ion-focusable zaions__cursor_pointer'
+					testingSelector={
+						CONSTANTS.testingSelectors.workspace.actionsPopover.manageUsers
+					}
 					onClick={() => {
 						presentWorkspaceSharingModal({
 							_cssClass: 'workspace-sharing-modal-size',
 						});
 					}}
-					className='ion-activatable ion-focusable zaions__cursor_pointer'
-					minHeight='32px'
 				>
 					<ZIonIcon icon={peopleOutline} className='me-2' />
 					<ZIonText className={classNames('text-sm')}>Manage users</ZIonText>
@@ -257,6 +260,11 @@ const ZWorkspacesActionPopover: React.FC<{
 
 			{/* Configure timetable */}
 			<ZIonItem
+				minHeight='2.3rem'
+				className='ion-activatable ion-focusable zaions__cursor_pointer '
+				testingSelector={
+					CONSTANTS.testingSelectors.workspace.actionsPopover.configureTimetable
+				}
 				onClick={() => {
 					// setting the tab with should be active in modal
 					setModalTab(workspaceSettingsModalTabEnum.timetable);
@@ -268,8 +276,6 @@ const ZWorkspacesActionPopover: React.FC<{
 
 					dismissZIonPopover();
 				}}
-				className='ion-activatable ion-focusable zaions__cursor_pointer '
-				minHeight={'32px'}
 			>
 				<ZIonIcon icon={timeOutline} className='me-2' />
 				<ZIonText className={classNames('text-sm')}>
@@ -279,6 +285,11 @@ const ZWorkspacesActionPopover: React.FC<{
 
 			{/* Manage labels */}
 			<ZIonItem
+				className='ion-activatable ion-focusable zaions__cursor_pointer'
+				minHeight='2.3rem'
+				testingSelector={
+					CONSTANTS.testingSelectors.workspace.actionsPopover.manageLabels
+				}
 				onClick={() => {
 					// setting the tab with should be active in modal
 					setModalTab(workspaceSettingsModalTabEnum.labels);
@@ -290,8 +301,6 @@ const ZWorkspacesActionPopover: React.FC<{
 
 					dismissZIonPopover();
 				}}
-				className='ion-activatable ion-focusable zaions__cursor_pointer'
-				minHeight={'32px'}
 			>
 				<ZIonIcon icon={pricetagOutline} className='me-2' />
 				<ZIonText className={classNames('text-sm')}>Manage labels</ZIonText>
@@ -317,6 +326,11 @@ const ZWorkspacesActionPopover: React.FC<{
 
 			{/* Settings */}
 			<ZIonItem
+				minHeight='2.3rem'
+				className='ion-activatable ion-focusable zaions__cursor_pointer'
+				testingSelector={
+					CONSTANTS.testingSelectors.workspace.actionsPopover.settings
+				}
 				onClick={() => {
 					// setting the tab with should be active in modal
 					setModalTab(workspaceSettingsModalTabEnum.settings);
@@ -328,8 +342,6 @@ const ZWorkspacesActionPopover: React.FC<{
 
 					dismissZIonPopover();
 				}}
-				className='ion-activatable ion-focusable zaions__cursor_pointer'
-				minHeight={'32px'}
 			>
 				<ZIonIcon icon={settingsOutline} className='me-2' />
 				<ZIonText className={classNames('text-sm')}>Settings</ZIonText>
@@ -337,6 +349,11 @@ const ZWorkspacesActionPopover: React.FC<{
 
 			{/* Approvals settings */}
 			<ZIonItem
+				minHeight='2.3rem'
+				className='ion-activatable ion-focusable zaions__cursor_pointer'
+				testingSelector={
+					CONSTANTS.testingSelectors.workspace.actionsPopover.approvalSettings
+				}
 				onClick={() => {
 					// setting the tab with should be active in modal
 					setModalTab(workspaceSettingsModalTabEnum.approvals);
@@ -348,8 +365,6 @@ const ZWorkspacesActionPopover: React.FC<{
 
 					dismissZIonPopover();
 				}}
-				className='ion-activatable ion-focusable zaions__cursor_pointer'
-				minHeight={'32px'}
 			>
 				<ZIonIcon icon={checkmarkOutline} className='me-2' />
 				<ZIonText className={classNames('text-sm')}>
@@ -359,8 +374,13 @@ const ZWorkspacesActionPopover: React.FC<{
 
 			{/* Edit */}
 			{showEditWorkspaceOption && (
-				<ZCan havePermission={permissionsEnum.update_workspace}>
+				<ZCan havePermissions={[permissionsEnum.update_workspace]}>
 					<ZIonItem
+						minHeight='2.3rem'
+						className='ion-activatable ion-focusable zaions__cursor_pointer'
+						testingSelector={
+							CONSTANTS.testingSelectors.workspace.actionsPopover.edit
+						}
 						onClick={() => {
 							if (workspaceId) {
 								zNavigatePushRoute(
@@ -379,8 +399,6 @@ const ZWorkspacesActionPopover: React.FC<{
 								dismissZIonPopover();
 							}
 						}}
-						className='ion-activatable ion-focusable zaions__cursor_pointer'
-						minHeight={'32px'}
 					>
 						<ZIonIcon icon={pencilOutline} className='me-2' />
 						<ZIonText>Edit</ZIonText>
@@ -390,13 +408,16 @@ const ZWorkspacesActionPopover: React.FC<{
 
 			{/* Delete */}
 			{showDeleteWorkspaceOption && (
-				<ZCan havePermission={permissionsEnum.delete_workspace}>
+				<ZCan havePermissions={[permissionsEnum.delete_workspace]}>
 					<ZIonItem
+						minHeight='2.3rem'
+						className='ion-activatable ion-focusable zaions__cursor_pointer'
+						testingSelector={
+							CONSTANTS.testingSelectors.workspace.actionsPopover.delete
+						}
 						onClick={async () => {
 							await deleteWorkspaceConfirmModal();
 						}}
-						className='ion-activatable ion-focusable zaions__cursor_pointer'
-						minHeight={'32px'}
 					>
 						<ZIonIcon icon={trashBinOutline} className='me-2' color='danger' />
 						<ZIonText color='danger'>Delete</ZIonText>

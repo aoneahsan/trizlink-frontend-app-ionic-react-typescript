@@ -21,7 +21,11 @@ import { ZIonButton } from '@/components/ZIonComponents';
 import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 
 // Global Constants
-import { formatReactSelectOption, getRandomKey } from '@/utils/helpers';
+import {
+	formatReactSelectOption,
+	getRandomKey,
+	zAddUrlProtocol,
+} from '@/utils/helpers';
 
 // Images
 
@@ -102,12 +106,25 @@ const GeoLocation: React.FC = () => {
 													sizeXs='12'
 												>
 													<ZIonInput
-														label='Redirection Links*'
+														type='url'
+														minHeight='40px'
 														labelPlacement='stacked'
+														label='Redirection Links*'
 														onIonChange={handleChange}
-														onIonBlur={handleBlur}
 														value={values.geoLocation[_index]?.redirectionLink}
 														name={`geoLocation.${_index}.redirectionLink`}
+														onIonBlur={(e) => {
+															handleBlur(e);
+															const inputUrl =
+																values?.geoLocation[_index]?.redirectionLink;
+															const formattedUrl = zAddUrlProtocol(
+																inputUrl || ''
+															);
+															setFieldValue(
+																`geoLocation.${_index}.redirectionLink`,
+																formattedUrl
+															);
+														}}
 														errorText={
 															errors.geoLocation?.length
 																? ((
@@ -117,7 +134,6 @@ const GeoLocation: React.FC = () => {
 																  )?.redirectionLink as string)
 																: undefined
 														}
-														type='url'
 														className={classNames({
 															// 'pt-1 mt-1': true,
 															'ion-touched':
@@ -142,7 +158,6 @@ const GeoLocation: React.FC = () => {
 																	] as GeoLocationErrorsType
 																).country,
 														})}
-														minHeight='40px'
 													/>
 												</ZIonCol>
 
@@ -244,7 +259,7 @@ const GeoLocation: React.FC = () => {
 										onClick={() =>
 											push({
 												id: getRandomKey(),
-												redirectionLink: '',
+												redirectionLink: 'https://',
 												country: '',
 											})
 										}

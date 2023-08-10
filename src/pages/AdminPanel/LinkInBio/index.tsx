@@ -305,7 +305,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 			id={CONSTANTS.MENU_IDS.ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID}
 			menu={PAGE_MENU.ADMIN_PANEL_LINK_IN_BIO_FOLDERS_MENU}
 		>
-			<ZCan havePermission={permissionsEnum.viewAny_shortLink}>
+			<ZCan havePermissions={[permissionsEnum.viewAny_shortLink]}>
 				<ZIonContent>
 					{/* Page Navigation */}
 					<ZIonRefresher onIonRefresh={(event) => void handleRefresh(event)}>
@@ -313,7 +313,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 					</ZIonRefresher>
 
 					{/*  */}
-					<ZIonGrid className='ion-no-padding h-full'>
+					<ZIonGrid className='h-full ion-no-padding'>
 						<ZIonRow className='h-full'>
 							{/* Side bar */}
 							<AdminPanelSidebarMenu
@@ -431,7 +431,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 											</ZIonText>
 										</ZIonCol>
 
-										<ZCan havePermission={permissionsEnum.create_shortLink}>
+										<ZCan havePermissions={[permissionsEnum.create_shortLink]}>
 											<ZIonCol
 												sizeXl='4'
 												sizeLg='5'
@@ -505,7 +505,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 													</ZIonButton>
 
 													<ZCan
-														havePermission={permissionsEnum.create_shortLink}
+														havePermissions={[permissionsEnum.create_shortLink]}
 													>
 														<ZIonButton
 															color='primary'

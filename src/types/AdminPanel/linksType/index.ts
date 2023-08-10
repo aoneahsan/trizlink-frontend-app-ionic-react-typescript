@@ -132,6 +132,7 @@ export enum ZShortLinkListPageTableColumnsIds {
 	url = '__z_short_link_target_url__',
 	linkToShare = '__z_short_link_link_to_share__',
 	click = '__z_short_link_click__',
+	actions = '__z_short_link_actions__',
 }
 
 // Interface
@@ -175,6 +176,8 @@ export interface ZaionsShortUrlOptionFieldsValuesInterface {
 	favicon: string;
 	shortUrlDomain?: string;
 	shortUrlPath?: string;
+	formMode?: FormMode;
+	isShortUrlPathValid?: boolean;
 }
 
 export interface ShortLinkFilterOptionsInterface {

@@ -24,6 +24,7 @@ import {
 // Global Constants
 import {
 	convertToTitleCase,
+	extractInnerData,
 	validateFields,
 	validatePixelAccountID,
 	zStringify,
@@ -38,6 +39,7 @@ import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil'
 
 // Types
 import {
+	PixelAccountPlatformType,
 	PixelAccountType,
 	PixelPlatformsEnum,
 } from '@/types/AdminPanel/linksType';
@@ -45,17 +47,24 @@ import { FormMode } from '@/types/AdminPanel/index.type';
 import { PixelAccountFormState } from '@/ZaionsStore/FormStates/pixelAccountFormState.recoil';
 import { resetFormType } from '@/types/ZaionsFormik.type';
 import {
-	useZRQCreateRequest,
-	useZRQGetRequest,
+	useZGetRQCacheData,
 	useZRQUpdateRequest,
+	useZRQCreateRequest,
+	useZUpdateRQCacheData,
 } from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM, VALIDATION_RULE } from '@/utils/enums';
+import {
+	API_URL_ENUM,
+	extractInnerDataOptionsEnum,
+	VALIDATION_RULE,
+} from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZIonSelect from '@/components/ZIonComponents/ZIonSelect';
 import { showSuccessNotification } from '@/utils/notification';
 import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
+import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 // Styles
 
@@ -103,43 +112,90 @@ const ZaionsAddPixelAccount: React.FC<{
 		PixelAccountFormState
 	);
 
-	const { mutate: createPixelAccount } = useZRQCreateRequest({
+	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+
+	const { mutateAsync: createPixelAccount } = useZRQCreateRequest({
 		_url: API_URL_ENUM.userPixelAccounts_create_list,
-		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
-		],
+		_queriesKeysToInvalidate: [],
 	});
-	const { mutate: updatePixelAccount } = useZRQUpdateRequest({
+	const { mutateAsync: updatePixelAccount } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.userPixelAccounts_update_delete,
-		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
-		],
+		_queriesKeysToInvalidate: [],
 	});
 
 	/**
 	 * Handle Form Submission Function
 	 * add a new pixel function
 	 *  */
-	const handleFormSubmit = (value: string, resetForm: resetFormType) => {
+	const handleFormSubmit = async (_value: string, resetForm: resetFormType) => {
 		try {
+			let __response;
+
 			// if in from add mode then add a new pixel account
 			if (pixelAccountFormState.formMode === FormMode.ADD) {
-				createPixelAccount(value);
-				showSuccessNotification(
-					MESSAGES.GENERAL.PIXEL_ACCOUNT
-						.NEW_PIXEL_ACCOUNT_CREATED_SUCCEED_MESSAGE
-				);
+				__response = await createPixelAccount(_value);
 			} // if in from edit mode then edit  pixel account
-			else if (pixelAccountFormState.formMode === FormMode.EDIT) {
-				pixelAccountFormState.id &&
-					updatePixelAccount({
-						itemIds: [pixelAccountFormState.id],
-						urlDynamicParts: [':pixelId'],
-						requestData: value,
-					});
-				showSuccessNotification(
-					MESSAGES.GENERAL.PIXEL_ACCOUNT.PIXEL_ACCOUNT_UPDATED_SUCCEED_MESSAGE
+			else if (
+				pixelAccountFormState.formMode === FormMode.EDIT &&
+				pixelAccountFormState.id
+			) {
+				__response = await updatePixelAccount({
+					itemIds: [pixelAccountFormState.id],
+					urlDynamicParts: [CONSTANTS.RouteParams.pixel.pixelId],
+					requestData: _value,
+				});
+			}
+
+			if (
+				(__response as ZLinkMutateApiType<PixelAccountPlatformType>).success
+			) {
+				const __data = extractInnerData<PixelAccountPlatformType>(
+					__response,
+					extractInnerDataOptionsEnum.createRequestResponseItem
 				);
+
+				if (__data && __data.id) {
+					const __pixelsDataFromCache =
+						getRQCDataHandler<PixelAccountPlatformType[]>({
+							key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+						}) || [];
+
+					const __oldPixelsData = extractInnerData<PixelAccountPlatformType[]>(
+						__pixelsDataFromCache,
+						extractInnerDataOptionsEnum.createRequestResponseItems
+					);
+
+					if (__oldPixelsData) {
+						if (pixelAccountFormState.formMode === FormMode.ADD) {
+							// added pixels to all pixels data in cache.
+							const __updatedPixelsData = [...__oldPixelsData, __data];
+
+							// Updating all pixels data in RQ cache.
+							await updateRQCDataHandler<
+								PixelAccountPlatformType[] | undefined
+							>({
+								key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+								data: __updatedPixelsData as PixelAccountPlatformType[],
+								id: '',
+								extractType: ZRQGetRequestExtractEnum.extractItems,
+								updateHoleData: true,
+							});
+
+							showSuccessNotification(MESSAGES.GENERAL.PIXEL_ACCOUNT.CREATED);
+						} else if (pixelAccountFormState.formMode === FormMode.EDIT) {
+							// Updating all pixels data in RQ cache.
+							await updateRQCDataHandler<PixelAccountPlatformType | undefined>({
+								key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+								data: __data,
+								id: __data.id,
+								extractType: ZRQGetRequestExtractEnum.extractItem,
+							});
+
+							showSuccessNotification(MESSAGES.GENERAL.PIXEL_ACCOUNT.UPDATED);
+						}
+					}
+				}
 			}
 
 			// Reset to default
@@ -219,12 +275,12 @@ const ZaionsAddPixelAccount: React.FC<{
 			{({
 				errors,
 				values,
-				handleChange,
+				isValid,
 				touched,
+				handleChange,
 				submitForm,
 				handleSubmit,
 				handleBlur,
-				isValid,
 			}) => (
 				<>
 					{/**
@@ -282,7 +338,7 @@ const ZaionsAddPixelAccount: React.FC<{
 					)}
 
 					<ZIonContent className='ion-padding'>
-						<div className='flex ion-text-center ion-justify-content-center flex-col ion-padding-top ion-margin-top'>
+						<div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top'>
 							<div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
 								<ZIonIcon
 									icon={toggleOutline}
@@ -329,26 +385,6 @@ const ZaionsAddPixelAccount: React.FC<{
 							</ZIonSelect>
 
 							{/* Pixel Name Input */}
-							{/* <ZIonInputField
-								inputFieldProps={{
-									label: 'Name your pixel*',
-									labelPlacement: 'floating',
-									name: 'title',
-									value: values.title,
-									errorText: errors.title,
-									placeholder: 'Enter Pixel Name',
-									type: 'text',
-									onIonChange: handleChange,
-									onIonBlur: handleBlur,
-									minHeight: '2.3rem',
-									className: classNames({
-										'mt-3 mb-5 pb-2': true,
-										'ion-touched ion-invalid': touched.title && errors.title,
-										'ion-touched ion-valid': touched.title && !errors.title,
-									}),
-								}}
-							/> */}
-
 							<ZIonInput
 								label='Name your pixel*'
 								labelPlacement='stacked'
@@ -369,26 +405,6 @@ const ZaionsAddPixelAccount: React.FC<{
 							/>
 
 							{/* Pixel Id Input */}
-							{/* <ZIonInputField
-								inputFieldProps={{
-									className: classNames({
-										'mt-3': true,
-										'ion-touched ion-invalid':
-											touched.pixelId && errors.pixelId,
-										'ion-touched ion-valid': touched.pixelId && !errors.pixelId,
-									}),
-									label: 'Pixel ID*',
-									labelPlacement: 'floating',
-									name: 'pixelId',
-									onIonChange: handleChange,
-									onIonBlur: handleBlur,
-									value: values.pixelId,
-									errorText: errors.pixelId,
-									placeholder: 'Enter Pixel Id',
-									type: 'text',
-								}}
-							/> */}
-
 							<ZIonInput
 								label='Pixel ID*'
 								labelPlacement='stacked'
@@ -416,7 +432,7 @@ const ZaionsAddPixelAccount: React.FC<{
 					 *  */}
 					{appSettings.appModalsSetting.actions.showActionInModalFooter && (
 						<ZIonFooter>
-							<ZIonRow className='mt-1 px-3 ion-justify-content-between'>
+							<ZIonRow className='px-3 mt-1 ion-justify-content-between'>
 								<ZIonCol>
 									<ZIonButton
 										fill='outline'

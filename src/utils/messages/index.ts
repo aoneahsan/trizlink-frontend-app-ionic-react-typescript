@@ -30,18 +30,14 @@ const GENERAL = {
 		DELETE: 'Link-in-bio deleted successfully.',
 	},
 	PIXEL_ACCOUNT: {
-		NEW_PIXEL_ACCOUNT_CREATED_SUCCEED_MESSAGE:
-			'Pixel account created successfully.',
-		PIXEL_ACCOUNT_UPDATED_SUCCEED_MESSAGE:
-			'Pixel account updated successfully.',
-		PIXEL_ACCOUNT_DELETED_SUCCEED_MESSAGE:
-			'Pixel account deleted successfully.',
+		CREATED: 'Pixel account created successfully.',
+		UPDATED: 'Pixel account updated successfully.',
+		DELETED: 'Pixel account deleted successfully.',
 	},
 	UTM_TAGS_TEMPLATE: {
-		NEW_UTM_TAGS_TEMPLATE_CREATED_SUCCEED_MESSAGE:
-			'UTM Tag created successfully.',
-		UTM_TAGS_TEMPLATE_UPDATED_SUCCEED_MESSAGE: 'UTM Tag updated successfully.',
-		UTM_TAGS_TEMPLATE_DELETED_SUCCEED_MESSAGE: 'UTM Tag deleted successfully.',
+		CREATED: 'UTM Tag created successfully.',
+		UPDATED: 'UTM Tag updated successfully.',
+		DELETED: 'UTM Tag deleted successfully.',
 	},
 	FOLDER: {
 		NEW_FOLDER_CREATED_SUCCEED_MESSAGE: 'Folder created successfully.',

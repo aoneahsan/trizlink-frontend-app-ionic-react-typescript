@@ -17,6 +17,7 @@ import {
 	ZIonContent,
 	ZIonIcon,
 	ZIonFooter,
+	ZIonInput,
 } from '@/components/ZIonComponents';
 
 // Global Constants
@@ -302,7 +303,7 @@ const ZaionsAddNewFolder: React.FC<{
 										</ZIonButton>
 									</ZIonCol>
 								</ZIonRow>
-								{!isValid && (
+								{/* {!isValid && (
 									<ZIonRow>
 										<ZIonCol className='ion-text-center'>
 											<ZIonNote color='danger'>
@@ -310,57 +311,55 @@ const ZaionsAddNewFolder: React.FC<{
 											</ZIonNote>
 										</ZIonCol>
 									</ZIonRow>
-								)}
+								)} */}
 								{/* </IonToolbar> */}
 							</ZIonHeader>
 						)}
 
 						<ZIonContent className='ion-padding'>
-							<div className='flex ion-text-center ion-justify-content-center flex-col ion-padding-top ion-margin-top'>
-								<ZIonText className='' color={'primary'}>
-									<h1
-										className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}
+							<div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top'>
+								<div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
+									<ZIonIcon
+										icon={toggleOutline}
+										className='w-8 h-8 mx-auto'
+										color='light'
+									/>
+								</div>
+
+								<ZIonText
+									color='dark'
+									className='block mt-3 text-lg font-bold ion-text-center'
+								>
+									{folderFormState.formMode === FormMode.ADD
+										? 'Create a new folder'
+										: folderFormState.formMode === FormMode.EDIT
+										? 'Rename Folder'
+										: ''}
+									<ZIonRouterLink
+										routerLink={ZaionsRoutes.HomeRoute}
+										className='mx-1'
 									>
-										<ZIonIcon
-											icon={toggleOutline}
-											className='mx-auto'
-											color='light'
-										></ZIonIcon>
-									</h1>
-								</ZIonText>
-								<br />
-								<ZIonText color={'dark'}>
-									<h6 className='font-bold'>
-										{folderFormState.formMode === FormMode.ADD
-											? 'Create a new folder '
-											: folderFormState.formMode === FormMode.EDIT
-											? 'Rename Folder '
-											: ''}
-										<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-											(help)
-										</ZIonRouterLink>{' '}
-										📁
-									</h6>
+										(help)
+									</ZIonRouterLink>
+									📁
 								</ZIonText>
 							</div>
 							<Form className='px-2'>
-								<ZIonInputField
-									inputFieldProps={{
-										className: classNames({
-											'mt-4': true,
-											'ion-touched ion-invalid':
-												touched.folderName && errors.folderName,
-											'ion-touched ion-valid':
-												touched.folderName && !errors.folderName,
-										}),
-										label: 'Folder name*',
-										labelPlacement: 'floating',
-										name: 'folderName',
-										onIonChange: handleChange,
-										onIonBlur: handleBlur,
-										value: values.folderName,
-										errorText: errors.folderName,
-									}}
+								<ZIonInput
+									label='Folder name*'
+									labelPlacement='stacked'
+									minHeight='2.3rem'
+									name='folderName'
+									onIonChange={handleChange}
+									onIonBlur={handleBlur}
+									value={values.folderName}
+									errorText={touched.folderName ? errors.folderName : undefined}
+									className={classNames({
+										'mt-5': true,
+										'ion-touched': touched.folderName,
+										'ion-invalid': touched.folderName && errors.folderName,
+										'ion-valid': touched.folderName && !errors.folderName,
+									})}
 								/>
 							</Form>
 						</ZIonContent>
@@ -371,7 +370,7 @@ const ZaionsAddNewFolder: React.FC<{
 						 *  */}
 						{appSettings.appModalsSetting.actions.showActionInModalFooter && (
 							<ZIonFooter>
-								<ZIonRow className=' mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
+								<ZIonRow className='mx-3 mt-1 ion-justify-content-between ion-align-items-center'>
 									<ZIonCol>
 										<ZIonButton
 											fill='outline'
@@ -405,7 +404,7 @@ const ZaionsAddNewFolder: React.FC<{
 										</ZIonButton>
 									</ZIonCol>
 								</ZIonRow>
-								{!isValid && (
+								{/* {!isValid && (
 									<ZIonRow>
 										<ZIonCol className='ion-text-center'>
 											<ZIonNote color='danger'>
@@ -413,7 +412,7 @@ const ZaionsAddNewFolder: React.FC<{
 											</ZIonNote>
 										</ZIonCol>
 									</ZIonRow>
-								)}
+								)} */}
 							</ZIonFooter>
 						)}
 					</>

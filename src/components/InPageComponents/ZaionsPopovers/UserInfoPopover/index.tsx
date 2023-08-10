@@ -46,7 +46,6 @@ import { UserAccountType } from '@/types/UserAccount/index.type';
  * Style files Imports go down
  * ? Import of style sheet is a style import
  * */
-import { ProductLogo } from '@/assets/images';
 import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 
 /**

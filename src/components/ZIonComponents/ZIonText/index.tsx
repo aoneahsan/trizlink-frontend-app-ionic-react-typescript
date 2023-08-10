@@ -11,6 +11,7 @@ type ZIonTextType = {
 	color?: ZIonColorType;
 	mode?: ZIonModeType;
 	className?: string;
+	id?: string;
 	style?: {
 		[key: string]: unknown;
 	};

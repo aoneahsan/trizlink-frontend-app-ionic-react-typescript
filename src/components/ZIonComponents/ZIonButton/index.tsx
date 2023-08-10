@@ -11,6 +11,8 @@ import {
 	ZIonTargetType,
 } from '@/types/zaionsAppSettings.type';
 import classNames from 'classnames';
+import { createElementTestingSelector } from '@/utils/helpers';
+import { PRODUCT_NAME } from '@/utils/constants';
 type ZIonButtonType = {
 	children?: ReactNode;
 	className?: string;
@@ -38,6 +40,9 @@ type ZIonButtonType = {
 	onClick?: React.MouseEventHandler<HTMLIonButtonElement>;
 	onMouseEnter?: React.MouseEventHandler<HTMLIonButtonElement>;
 	onMouseLeave?: React.MouseEventHandler<HTMLIonButtonElement>;
+
+	//
+	testingSelector?: string;
 };
 const ZIonButton = (props: ZIonButtonType) => {
 	const compStyle =
@@ -54,6 +59,7 @@ const ZIonButton = (props: ZIonButtonType) => {
 			{...props}
 			style={compStyle}
 			className={classNames(props.className, { 'normal-case': true })}
+			{...createElementTestingSelector(props.testingSelector || PRODUCT_NAME)}
 		>
 			{props.children}
 		</IonButton>

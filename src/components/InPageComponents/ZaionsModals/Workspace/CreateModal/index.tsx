@@ -169,11 +169,14 @@ const ZAddNewWorkspaceModal: React.FC<{
 			<div className='ion-text-end'>
 				<ZIonButton
 					className='ion-no-padding ion-no-margin'
+					fill='clear'
+					color='dark'
+					testingSelector={
+						CONSTANTS.testingSelectors.workspace.createModal.closeButton
+					}
 					onClick={() => {
 						dismissZIonModal();
 					}}
-					fill='clear'
-					color='dark'
 				>
 					<ZIonIcon icon={closeOutline} className='w-7 h-7' />
 				</ZIonButton>
@@ -237,6 +240,9 @@ const ZAddNewWorkspaceModal: React.FC<{
 										onIonBlur={handleBlur}
 										value={values.title}
 										errorText={touched.title ? errors.title : undefined}
+										testingSelector={
+											CONSTANTS.testingSelectors.workspace.createModal.nameInput
+										}
 										className={classNames({
 											'ion-touched ion-invalid': touched.title && errors.title,
 											'ion-touched ion-valid': touched.title && !errors.title,
@@ -255,6 +261,10 @@ const ZAddNewWorkspaceModal: React.FC<{
 										value={values.workspaceTimezone}
 										onIonChange={handleChange}
 										onIonBlur={handleBlur}
+										testingSelector={
+											CONSTANTS.testingSelectors.workspace.createModal
+												.timezoneInput
+										}
 									/>
 								</ZIonCol>
 
@@ -265,6 +275,10 @@ const ZAddNewWorkspaceModal: React.FC<{
 										className='mt-4 '
 										onClick={() => void submitForm()}
 										disabled={!isValid}
+										testingSelector={
+											CONSTANTS.testingSelectors.workspace.createModal
+												.createButton
+										}
 									>
 										Create
 									</ZIonButton>

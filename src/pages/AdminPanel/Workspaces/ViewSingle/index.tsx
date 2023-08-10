@@ -172,7 +172,7 @@ const ViewSingleWorkspace: React.FC = () => {
 			menu={PAGE_MENU.ADMIN_PANEL_WORKSPACE_VIEW_FILTER_MENU}
 			id={CONSTANTS.MENU_IDS.ADMIN_PAGE_WORKSPACE_VIEW_FILTER_MENU_ID}
 		>
-			<ZCan havePermission={permissionsEnum.view_workspace}>
+			<ZCan havePermissions={[permissionsEnum.view_workspace]}>
 				<Formik
 					initialValues={{
 						pageId: '1',

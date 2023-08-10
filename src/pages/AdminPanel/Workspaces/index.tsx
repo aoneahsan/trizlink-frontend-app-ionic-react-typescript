@@ -107,7 +107,7 @@ const ZWorkspaceListPage: React.FC = () => {
 	return (
 		<ZaionsIonPage pageTitle='Zaions workspaces list page'>
 			<ZIonContent>
-				<ZCan havePermission={permissionsEnum.viewAny_workspace}>
+				<ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
 					{/* Main grid */}
 					<ZIonGrid className='h-full ion-no-padding'>
 						{/*  */}
@@ -137,6 +137,10 @@ const ZWorkspaceListPage: React.FC = () => {
 													fill='solid'
 													color='primary'
 													className='ion-no-margin text-transform-initial'
+													testingSelector={
+														CONSTANTS.testingSelectors.workspace.listPage
+															.inviteButton
+													}
 												>
 													<ZIonIcon icon={addOutline} /> Invite
 												</ZIonButton>
@@ -145,11 +149,17 @@ const ZWorkspaceListPage: React.FC = () => {
 
 										{/* new workspace button col */}
 										<ZIonCol className='flex gap-8 pe-3 ion-align-items-center ion-justify-content-end'>
-											<ZCan havePermission={permissionsEnum.create_workspace}>
+											<ZCan
+												havePermissions={[permissionsEnum.create_workspace]}
+											>
 												{!isWorkspacesDataFetching && (
 													<ZIonButton
 														className='ion-no-margin text-transform-initial'
 														color='secondary'
+														testingSelector={
+															CONSTANTS.testingSelectors.workspace.listPage
+																.createWorkspaceButton
+														}
 														onClick={() => {
 															presentZWorkspaceCreateModal({
 																_cssClass: 'create-workspace-modal-size',
@@ -233,7 +243,7 @@ const ZWorkspaceListPage: React.FC = () => {
 										{isWorkspacesDataFetching && <ZWorkspacesCardSkeleton />}
 
 										{/* add a workspace card */}
-										<ZCan havePermission={permissionsEnum.create_workspace}>
+										<ZCan havePermissions={[permissionsEnum.create_workspace]}>
 											<ZIonCol
 												sizeXl='4'
 												sizeLg='6'
@@ -246,6 +256,10 @@ const ZWorkspaceListPage: React.FC = () => {
 														className={classNames({
 															'h-[13.4rem] zaions__cursor_pointer': true,
 														})}
+														testingSelector={
+															CONSTANTS.testingSelectors.workspace.listPage
+																.createWorkspaceCardButton
+														}
 														onClick={() => {
 															presentZWorkspaceCreateModal({
 																_cssClass: 'create-workspace-modal-size',

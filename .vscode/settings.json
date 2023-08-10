@@ -4,6 +4,7 @@
 	"files.autoSave": "onFocusChange",
 	"prettier.enable": true,
 	"cSpell.words": [
+		"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz",
 		"chartjs",
 		"chatbubble",
 		"Collabes",
@@ -21,6 +22,7 @@
 		"shortlink",
 		"Swiper",
 		"videocam",
-		"wechat"
+		"wechat",
+		"ztes"
 	]
 }

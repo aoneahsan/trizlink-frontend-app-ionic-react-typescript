@@ -58,6 +58,9 @@ const ZUserAvatarButton: React.FC<ZUserAvatarButtonInterface> = ({
 				onMouseLeave={onMouseLeave}
 				style={style}
 				data-tooltip-id={id}
+				testingSelector={
+					CONSTANTS.testingSelectors.user.userProfilePopoverButton
+				}
 			>
 				{showStatus && (
 					<ZIonIcon
@@ -86,11 +89,11 @@ const ZUserAvatarButton: React.FC<ZUserAvatarButtonInterface> = ({
 							</ZIonAvatar>
 						</div>
 						<div className='ms-2'>
-							<ZIonText className='font-bold block'>
+							<ZIonText className='block font-bold'>
 								Muhammad talha Irshad (you)
 							</ZIonText>
 
-							<ZIonText className='text-sm block' color='medium'>
+							<ZIonText className='block text-sm' color='medium'>
 								Muhammad talha Irshad (you)
 							</ZIonText>
 						</div>

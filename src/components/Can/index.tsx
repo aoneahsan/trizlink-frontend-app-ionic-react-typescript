@@ -14,14 +14,14 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 
 interface CanComponentProps {
 	children: React.ReactNode;
-	havePermission: permissionsEnum;
+	havePermissions: permissionsEnum[];
 	permissionType?: permissionsTypeEnum;
 	returnPermissionDeniedView?: boolean;
 }
 
 const ZCan: React.FC<CanComponentProps> = ({
 	children,
-	havePermission,
+	havePermissions,
 	returnPermissionDeniedView = false,
 	permissionType,
 }) => {
@@ -62,7 +62,10 @@ const ZCan: React.FC<CanComponentProps> = ({
 	// extracting permissions from currentLoggedInUserRoleAndPermissionsStateAtom
 	const userPermissions =
 		currentLoggedInUserRoleAndPermissionsStateAtom?.permissions;
-	const haveRequiredPermission = userPermissions?.includes(havePermission);
+	// const haveRequiredPermission = userPermissions?.includes(havePermission);
+	const haveRequiredPermission = havePermissions.every((el) =>
+		userPermissions?.includes(el)
+	);
 
 	//
 	let content = null;

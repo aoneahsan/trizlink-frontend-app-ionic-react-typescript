@@ -543,3 +543,21 @@ export const useZGetRQCacheData = () => {
 		return { getRQCDataHandler: emptyVoidReturnFunction };
 	}
 };
+
+export const useZRemoveRQCacheData = () => {
+	try {
+		const QueryClient = useQueryClient();
+
+		const removeRQCDataHandler = ({ key }: { key: string[] }) => {
+			return QueryClient.removeQueries({
+				queryKey: key,
+				exact: true,
+			});
+		};
+
+		return { removeRQCDataHandler };
+	} catch (error) {
+		reportCustomError(error);
+		return { removeRQCDataHandler: emptyVoidReturnFunction };
+	}
+};

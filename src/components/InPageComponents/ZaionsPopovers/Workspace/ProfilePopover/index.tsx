@@ -45,7 +45,7 @@ import { reportCustomError } from '@/utils/customErrorType';
 import { STORAGE, UserLogoutFn, zAxiosApiRequest } from '@/utils/helpers';
 import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 import { useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
-import { LOCALSTORAGE_KEYS } from '@/utils/constants';
+import CONSTANTS, { LOCALSTORAGE_KEYS } from '@/utils/constants';
 import { API_URL_ENUM } from '@/utils/enums';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
@@ -161,6 +161,9 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 					className='text-sm ion-activatable ion-focusable zaions__cursor_pointer'
 					minHeight='32px'
 					lines='full'
+					testingSelector={
+						CONSTANTS.testingSelectors.user.profilePopover.profileSettings
+					}
 				>
 					<ZIonIcon icon={settingsOutline} className='w-5 h-5 me-2' />
 					<ZIonLabel className='pt-1'>Profile settings</ZIonLabel>
@@ -169,6 +172,9 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 				<ZIonItem
 					className='text-sm ion-activatable ion-focusable zaions__cursor_pointer'
 					minHeight='40px'
+					testingSelector={
+						CONSTANTS.testingSelectors.user.profilePopover.notificationSettings
+					}
 				>
 					<ZIonIcon icon={notificationsOutline} className='w-5 h-5 me-1 pe-1' />
 					<ZIonLabel className='pt-1 my-0'>Notification settings</ZIonLabel>
@@ -179,13 +185,16 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 					minHeight='40px'
 					lines='full'
 					onClick={() => void profileLogoutHandler()}
+					testingSelector={
+						CONSTANTS.testingSelectors.user.profilePopover.logout
+					}
 				>
 					<ZIonIcon icon={logOutOutline} className='w-5 h-5 me-1 pe-1' />
 					<ZIonLabel className='pt-1 my-0'>Logout</ZIonLabel>
 				</ZIonItem>
 
 				<ZIonText
-					className='block mx-3 mb-2 text-xs tracking-widest'
+					className='block mx-3 mt-2 mb-2 text-xs tracking-widest'
 					color='medium'
 				>
 					COMPANY ACCOUNTS
@@ -211,6 +220,9 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 				<ZIonItem
 					className='mt-1 text-sm ion-activatable ion-focusable zaions__cursor_pointer'
 					minHeight='40px'
+					testingSelector={
+						CONSTANTS.testingSelectors.user.profilePopover.addNewCompanyAccount
+					}
 				>
 					<ZIonIcon icon={addOutline} className='w-5 h-5 me-1 pe-1' />
 					<ZIonLabel className='pt-1 my-0'>New company account</ZIonLabel>

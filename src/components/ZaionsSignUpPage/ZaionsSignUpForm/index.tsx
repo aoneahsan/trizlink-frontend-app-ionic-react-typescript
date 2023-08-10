@@ -36,7 +36,7 @@ import {
 	ZaionsAuthTokenData,
 	ZaionsUserAccountRStateAtom,
 } from '@/ZaionsStore/UserAccount/index.recoil';
-import { LOCALSTORAGE_KEYS, PRODUCT_NAME } from '@/utils/constants';
+import CONSTANTS, { LOCALSTORAGE_KEYS, PRODUCT_NAME } from '@/utils/constants';
 import { AxiosError } from 'axios';
 import { ZCustomError } from '@/utils/customErrorType';
 import { showSuccessNotification } from '@/utils/notification';
@@ -165,320 +165,326 @@ const ZaionsSignUpForm: React.FC = (props) => {
 	};
 
 	return (
-		<>
-			<ZIonRow className='ion-justify-content-center'>
-				<ZIonCol
-					className='ion-text-start'
-					size='4.2'
-					sizeLg='5'
-					sizeMd='6.2'
-					sizeSm='8.2'
-					sizeXs='11.5'
-				>
-					<Formik
-						// Initial Values of sign up form fields
-						initialValues={{
-							username: '',
-							emailAddress: '',
-							password: '',
-							confirm_password: '',
-						}}
-						// Validations of sign up form fields
-						validate={(values) => {
-							try {
-								// Error object
-								const errors: {
-									username?: string;
-									emailAddress?: string;
-									password?: string;
-									confirm_password?: string;
-								} = {};
+		<ZIonRow className='ion-justify-content-center'>
+			<ZIonCol
+				className='ion-text-start'
+				size='4.2'
+				sizeLg='5'
+				sizeMd='6.2'
+				sizeSm='8.2'
+				sizeXs='11.5'
+			>
+				<Formik
+					// Initial Values of sign up form fields
+					initialValues={{
+						username: '',
+						emailAddress: '',
+						password: '',
+						confirm_password: '',
+					}}
+					// Validations of sign up form fields
+					validate={(values) => {
+						try {
+							// Error object
+							const errors: {
+								username?: string;
+								emailAddress?: string;
+								password?: string;
+								confirm_password?: string;
+							} = {};
 
-								// validating the fields and checking for error and error ? setting the errors : validated
-								validateFields(
-									['username', 'emailAddress', 'password', 'confirm_password'],
-									values,
-									errors,
-									[
-										VALIDATION_RULE.username,
-										VALIDATION_RULE.email,
-										VALIDATION_RULE.password,
-										VALIDATION_RULE.confirm_password,
-									]
-								);
+							// validating the fields and checking for error and error ? setting the errors : validated
+							validateFields(
+								['username', 'emailAddress', 'password', 'confirm_password'],
+								values,
+								errors,
+								[
+									VALIDATION_RULE.username,
+									VALIDATION_RULE.email,
+									VALIDATION_RULE.password,
+									VALIDATION_RULE.confirm_password,
+								]
+							);
 
-								// checking the confirm password is === password ? validated : setting an error + invalidate
-								if (values.confirm_password !== values.password) {
-									errors.confirm_password =
-										MESSAGES.GENERAL.FORM.PASSWORD_NOT_MATCH;
-								}
-
-								// returning errors object
-								return errors;
-							} catch (error) {
-								console.error({
-									errorPlacement:
-										'From components - InPageComponents - ZaionsSignUpPage - ZaionsSignUpForm Formik validate Catch',
-									error,
-								});
+							// checking the confirm password is === password ? validated : setting an error + invalidate
+							if (values.confirm_password !== values.password) {
+								errors.confirm_password =
+									MESSAGES.GENERAL.FORM.PASSWORD_NOT_MATCH;
 							}
-						}}
-						// Submit function
-						onSubmit={async (_values, { resetForm, setErrors }) => {
-							await FormikSubmissionHandler(_values, resetForm, setErrors);
-						}}
-					>
-						{({
-							handleChange,
-							handleBlur,
-							values,
-							touched,
-							errors,
-							isValid,
-						}) => (
-							<Form>
-								{/* User Name Field */}
-								<ZIonInputField
-									inputFieldProps={{
-										label: 'Username*',
-										labelPlacement: 'floating',
-										onIonChange: handleChange,
-										onIonBlur: handleBlur,
-										value: values.username,
-										name: 'username',
-										errorText: errors.username,
-										className: `${classNames({
-											'mb-4': true,
-											'ion-touched ion-invalid':
-												touched.username && errors.username,
-											'ion-touched ion-valid':
-												touched.username && !errors.username,
-										})}`,
-									}}
+
+							// returning errors object
+							return errors;
+						} catch (error) {
+							console.error({
+								errorPlacement:
+									'From components - InPageComponents - ZaionsSignUpPage - ZaionsSignUpForm Formik validate Catch',
+								error,
+							});
+						}
+					}}
+					// Submit function
+					onSubmit={async (_values, { resetForm, setErrors }) => {
+						await FormikSubmissionHandler(_values, resetForm, setErrors);
+					}}
+				>
+					{({ handleChange, handleBlur, values, touched, errors, isValid }) => (
+						<Form>
+							{/* User Name Field */}
+							<ZIonInput
+								label='Username*'
+								name='username'
+								labelPlacement='floating'
+								onIonChange={handleChange}
+								onIonBlur={handleBlur}
+								value={values.username}
+								errorText={touched.username ? errors.username : undefined}
+								testingSelector={
+									CONSTANTS.testingSelectors.signupPage.usernameInput
+								}
+								className={classNames({
+									'mb-4': true,
+									'ion-touched': touched.username,
+									'ion-invalid': touched.username && errors.username,
+									'ion-valid': touched.username && !errors.username,
+								})}
+							/>
+
+							{/* Email Address Field */}
+							<ZIonInput
+								type='email'
+								name='emailAddress'
+								label='Email Address*'
+								labelPlacement='floating'
+								onIonChange={handleChange}
+								onIonBlur={handleBlur}
+								value={values.emailAddress}
+								testingSelector={
+									CONSTANTS.testingSelectors.signupPage.emailInput
+								}
+								errorText={
+									touched.emailAddress ? errors.emailAddress : undefined
+								}
+								className={classNames({
+									'mb-3': true,
+									'ion-touched': touched.emailAddress,
+									'ion-invalid': touched.emailAddress && errors.emailAddress,
+									'ion-valid': touched.emailAddress && !errors.emailAddress,
+								})}
+							/>
+
+							{/* Password Field */}
+							<div className='flex mb-4 ion-align-items-center'>
+								<ZIonInput
+									name='password'
+									label='Password*'
+									labelPlacement='floating'
+									onIonChange={handleChange}
+									onIonBlur={handleBlur}
+									value={values.password}
+									errorText={touched.password ? errors.password : undefined}
+									type={zaionsSignUpState.canViewPassword ? 'text' : 'password'}
+									testingSelector={
+										CONSTANTS.testingSelectors.signupPage.passwordInput
+									}
+									className={classNames({
+										'ion-touched': touched.password,
+										'ion-invalid': touched.password && errors.password,
+										'ion-touched ion-valid':
+											touched.password && !errors.password,
+									})}
 								/>
 
-								{/* Email Address Field */}
-								<ZIonInputField
-									inputFieldProps={{
-										label: 'Email Address*',
-										labelPlacement: 'floating',
-										onIonChange: handleChange,
-										onIonBlur: handleBlur,
-										value: values.emailAddress,
-										name: 'emailAddress',
-										type: 'email',
-										errorText: errors.emailAddress,
-										className: `${classNames({
-											'mb-4': true,
-											'ion-touched ion-invalid':
-												touched.emailAddress && errors.emailAddress,
-											'ion-touched ion-valid':
-												touched.emailAddress && !errors.emailAddress,
-										})}`,
-									}}
-								/>
-
-								{/* Password Field */}
-								<div className='flex mb-4 ion-align-items-center'>
-									<ZIonInputField
-										inputFieldProps={{
-											label: 'Password*',
-											labelPlacement: 'floating',
-											onIonChange: handleChange,
-											onIonBlur: handleBlur,
-											value: values.password,
-											name: 'password',
-											type: zaionsSignUpState.canViewPassword
-												? 'text'
-												: 'password',
-											errorText: errors.password,
-											className: `${classNames({
-												'ion-touched ion-invalid':
-													touched.password && errors.password,
-												'ion-touched ion-valid':
-													touched.password && !errors.password,
-											})}`,
-										}}
-									/>
-
-									<ZIonButton
-										slot='end'
-										fill='clear'
-										size='large'
-										className='ion-no-padding ms-3 zaions__max_content'
-										onClick={() =>
-											setZaionsSignUpState((OldVals) => ({
-												...OldVals,
-												canViewPassword: !OldVals.canViewPassword,
-											}))
-										}
-										mode='ios'
-									>
-										<ZIonIcon
-											icon={
-												zaionsSignUpState.canViewPassword
-													? eyeOffOutline
-													: eyeOutline
-											}
-										/>
-									</ZIonButton>
-								</div>
-
-								<ZIonNote className='w-full'>
-									<ZIonRow>
-										<ZIonCol size='6'>
-											<ZIonText
-												color={
-													touched.password
-														? checkIfContains(
-																values.password,
-																CONTAINS.minCharacter
-														  )
-															? 'success'
-															: 'danger'
-														: 'medium'
-												}
-											>
-												8 or more characters
-											</ZIonText>
-										</ZIonCol>
-										<ZIonCol size='6'>
-											<ZIonText
-												color={
-													touched.password
-														? checkIfContains(values.password, CONTAINS.number)
-															? 'success'
-															: 'danger'
-														: 'medium'
-												}
-											>
-												One number
-											</ZIonText>
-										</ZIonCol>
-										<ZIonCol size='6'>
-											<ZIonText
-												color={
-													touched.password
-														? checkIfContains(values.password, CONTAINS.letter)
-															? 'success'
-															: 'danger'
-														: 'medium'
-												}
-											>
-												One letter
-											</ZIonText>
-										</ZIonCol>
-										<ZIonCol size='6'>
-											<ZIonText
-												color={
-													touched.password
-														? checkIfContains(
-																values.password,
-																CONTAINS.specialSymbol
-														  )
-															? 'success'
-															: 'danger'
-														: 'medium'
-												}
-											>
-												One special character
-											</ZIonText>
-										</ZIonCol>
-									</ZIonRow>
-								</ZIonNote>
-
-								{/* Password Field */}
-								<div className='flex mb-4 ion-align-items-center'>
-									<ZIonInputField
-										inputFieldProps={{
-											label: 'Confirm Password*',
-											labelPlacement: 'floating',
-											onIonChange: handleChange,
-											onIonBlur: handleBlur,
-											value: values.confirm_password,
-											name: 'confirm_password',
-											type: zaionsSignUpState.canViewPassword
-												? 'text'
-												: 'password',
-											errorText: errors.confirm_password,
-											className: `${classNames({
-												'ion-touched ion-invalid':
-													touched.confirm_password && errors.confirm_password,
-												'ion-touched ion-valid':
-													touched.confirm_password && !errors.confirm_password,
-											})}`,
-										}}
-									/>
-									<ZIonButton
-										fill='clear'
-										size='large'
-										className='ion-no-padding ms-3 zaions__max_content'
-										onClick={() =>
-											setZaionsSignUpState((OldVals) => ({
-												...OldVals,
-												canViewConfirmPassword: !OldVals.canViewConfirmPassword,
-											}))
-										}
-										mode='ios'
-									>
-										<ZIonIcon
-											icon={
-												zaionsSignUpState.canViewConfirmPassword
-													? eyeOffOutline
-													: eyeOutline
-											}
-										/>
-									</ZIonButton>
-								</div>
-
-								{/* Submit Button */}
 								<ZIonButton
-									expand='block'
-									type='submit'
-									className='mt-4 ion-text-capitalize'
-									disabled={touched && !isValid}
+									slot='end'
+									fill='clear'
+									size='large'
+									className='ion-no-padding ms-3 zaions__max_content'
+									testingSelector={
+										CONSTANTS.testingSelectors.signupPage.canViewPasswordButton
+									}
+									onClick={() =>
+										setZaionsSignUpState((oldValues) => ({
+											...oldValues,
+											canViewPassword: !oldValues.canViewPassword,
+										}))
+									}
+									mode='ios'
 								>
-									Sign up with Email
+									<ZIonIcon
+										icon={
+											zaionsSignUpState.canViewPassword
+												? eyeOffOutline
+												: eyeOutline
+										}
+									/>
 								</ZIonButton>
+							</div>
 
-								{/* Some Text */}
-								<div className='mt-3 mb-4 ion-text-center'>
-									<ZIonText className='zaions__fs_14 ' color='medium'>
-										By signing in with an account, you agree to <br />{' '}
-										{PRODUCT_NAME}
-										's{' '}
-										<ZIonRouterLink
-											routerLink={ZaionsRoutes.HomeRoute}
-											className='underline'
-											color='medium'
+							<ZIonNote className='w-full'>
+								<ZIonRow>
+									<ZIonCol size='6'>
+										<ZIonText
+											color={
+												touched.password
+													? checkIfContains(
+															values.password,
+															CONTAINS.minCharacter
+													  )
+														? 'success'
+														: 'danger'
+													: 'medium'
+											}
 										>
-											Terms of Service
-										</ZIonRouterLink>
-										,{' '}
-										<ZIonRouterLink
-											routerLink={ZaionsRoutes.HomeRoute}
-											className='underline'
-											color='medium'
+											8 or more characters
+										</ZIonText>
+									</ZIonCol>
+									<ZIonCol size='6'>
+										<ZIonText
+											color={
+												touched.password
+													? checkIfContains(values.password, CONTAINS.number)
+														? 'success'
+														: 'danger'
+													: 'medium'
+											}
 										>
-											Privacy Policy
-										</ZIonRouterLink>{' '}
-										and{' '}
-										<ZIonRouterLink
-											routerLink={ZaionsRoutes.HomeRoute}
-											className='underline'
-											color='medium'
+											One number
+										</ZIonText>
+									</ZIonCol>
+									<ZIonCol size='6'>
+										<ZIonText
+											color={
+												touched.password
+													? checkIfContains(values.password, CONTAINS.letter)
+														? 'success'
+														: 'danger'
+													: 'medium'
+											}
 										>
-											Acceptable Use Policy
-										</ZIonRouterLink>
-										.
-									</ZIonText>
-								</div>
-							</Form>
-						)}
-					</Formik>
-				</ZIonCol>
-			</ZIonRow>
-		</>
+											One letter
+										</ZIonText>
+									</ZIonCol>
+									<ZIonCol size='6'>
+										<ZIonText
+											color={
+												touched.password
+													? checkIfContains(
+															values.password,
+															CONTAINS.specialSymbol
+													  )
+														? 'success'
+														: 'danger'
+													: 'medium'
+											}
+										>
+											One special character
+										</ZIonText>
+									</ZIonCol>
+								</ZIonRow>
+							</ZIonNote>
+
+							{/* Confirm Password Field */}
+							<div className='flex mb-4 ion-align-items-center'>
+								<ZIonInput
+									label='Confirm Password*'
+									labelPlacement='floating'
+									onIonChange={handleChange}
+									onIonBlur={handleBlur}
+									value={values.confirm_password}
+									name='confirm_password'
+									type={zaionsSignUpState.canViewPassword ? 'text' : 'password'}
+									testingSelector={
+										CONSTANTS.testingSelectors.signupPage.confirmPasswordInput
+									}
+									errorText={
+										touched.confirm_password
+											? errors.confirm_password
+											: undefined
+									}
+									className={classNames({
+										'ion-touched': touched.confirm_password,
+										'ion-invalid':
+											touched.confirm_password && errors.confirm_password,
+										'ion-valid':
+											touched.confirm_password && !errors.confirm_password,
+									})}
+								/>
+								<ZIonButton
+									fill='clear'
+									size='large'
+									className='ion-no-padding ms-3 zaions__max_content'
+									mode='ios'
+									testingSelector={
+										CONSTANTS.testingSelectors.signupPage
+											.canViewConfirmPasswordButton
+									}
+									onClick={() =>
+										setZaionsSignUpState((oldValues) => ({
+											...oldValues,
+											canViewConfirmPassword: !oldValues.canViewConfirmPassword,
+										}))
+									}
+								>
+									<ZIonIcon
+										icon={
+											zaionsSignUpState.canViewConfirmPassword
+												? eyeOffOutline
+												: eyeOutline
+										}
+									/>
+								</ZIonButton>
+							</div>
+
+							{/* Submit Button */}
+							<ZIonButton
+								expand='block'
+								type='submit'
+								className='mt-4 ion-text-capitalize'
+								disabled={touched && !isValid}
+								testingSelector={
+									CONSTANTS.testingSelectors.signupPage.signupButton
+								}
+							>
+								Sign up with Email
+							</ZIonButton>
+
+							{/* Some Text */}
+							<div className='mt-3 mb-4 ion-text-center'>
+								<ZIonText className='zaions__fs_14 ' color='medium'>
+									By signing in with an account, you agree to <br />{' '}
+									{PRODUCT_NAME}
+									's{' '}
+									<ZIonRouterLink
+										routerLink={ZaionsRoutes.HomeRoute}
+										className='underline'
+										color='medium'
+									>
+										Terms of Service
+									</ZIonRouterLink>
+									,{' '}
+									<ZIonRouterLink
+										routerLink={ZaionsRoutes.HomeRoute}
+										className='underline'
+										color='medium'
+									>
+										Privacy Policy
+									</ZIonRouterLink>{' '}
+									and{' '}
+									<ZIonRouterLink
+										routerLink={ZaionsRoutes.HomeRoute}
+										className='underline'
+										color='medium'
+									>
+										Acceptable Use Policy
+									</ZIonRouterLink>
+									.
+								</ZIonText>
+							</div>
+						</Form>
+					)}
+				</Formik>
+			</ZIonCol>
+		</ZIonRow>
 	);
 };
 

@@ -83,6 +83,7 @@ interface ZTimezoneSelectorInterface {
 	style?: {
 		[key: string]: unknown;
 	};
+	testingSelector?: string;
 }
 
 /**

@@ -10,6 +10,8 @@ import {
 	ZIonModeType,
 	ZIonRouterDirection,
 } from '@/types/zaionsAppSettings.type';
+import { createElementTestingSelector } from '@/utils/helpers';
+import { PRODUCT_NAME } from '@/utils/constants';
 type ZIonItemType = {
 	children: ReactNode;
 	className?: string;
@@ -39,6 +41,7 @@ type ZIonItemType = {
 	};
 	onClick?: (event?: unknown) => void;
 	minHeight?: 'auto' | string;
+	testingSelector?: string;
 };
 
 const ZIonItem = (props: ZIonItemType) => {
@@ -51,7 +54,11 @@ const ZIonItem = (props: ZIonItemType) => {
 			? { '--min-height': props.minHeight }
 			: {};
 	return (
-		<IonItem {...props} style={compStyle}>
+		<IonItem
+			{...props}
+			style={compStyle}
+			{...createElementTestingSelector(props.testingSelector || PRODUCT_NAME)}
+		>
 			{props.children}
 		</IonItem>
 	);

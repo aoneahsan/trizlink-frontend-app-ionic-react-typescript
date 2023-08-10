@@ -16,7 +16,11 @@ import { useMediaQuery } from 'react-responsive';
 import ZaionsDropDown from '@/components/InPageComponents/ZaionsDropdown';
 
 // Global Constant
-import { BRACKPOINT_LG, BRACKPOINT_MD, PRODUCT_NAME } from '@/utils/constants';
+import CONSTANTS, {
+	BRACKPOINT_LG,
+	BRACKPOINT_MD,
+	PRODUCT_NAME,
+} from '@/utils/constants';
 import ZaionsRoutes from '../../utils/constants/RoutesConstants';
 
 // Styles
@@ -80,7 +84,7 @@ const ZaionsTopMenu: React.FC = () => {
 				</ZIonCol>
 				{isLgScale && (
 					<ZIonCol
-						className='flex ion-justify-content-between pb-0 mt-2 pt-2'
+						className='flex pt-2 pb-0 mt-2 ion-justify-content-between'
 						size='4'
 					>
 						<ZaionsDropDown
@@ -183,14 +187,18 @@ const ZaionsTopMenu: React.FC = () => {
 				)}
 				{isMdScale && (
 					<ZIonCol
-						className='flex ion-align-items-center ion-justify-content-end pb-0'
+						className='flex pb-0 ion-align-items-center ion-justify-content-end'
 						sizeXl='4'
 						sizeLg='4.4'
 						sizeMd='5'
 						sizeSm='5'
 						sizeXs='5'
 					>
-						<ZIonRouterLink routerLink={ZaionsRoutes.LoginRoute} color='dark'>
+						<ZIonRouterLink
+							routerLink={ZaionsRoutes.LoginRoute}
+							color='dark'
+							testingSelector={CONSTANTS.testingSelectors.homePageLoginButton}
+						>
 							<ZIonTitle className={`${classes.zaions_nav_button} mb-4`}>
 								Login
 							</ZIonTitle>
@@ -222,7 +230,7 @@ const ZaionsTopMenu: React.FC = () => {
 						sizeMd='3.5'
 						sizeSm='2.5'
 						sizeXs='2.5'
-						className='flex ion-align-items-center ion-justify-content-end pb-0'
+						className='flex pb-0 ion-align-items-center ion-justify-content-end'
 					>
 						<ZIonMenuButton className='mb-3'></ZIonMenuButton>
 					</ZIonCol>

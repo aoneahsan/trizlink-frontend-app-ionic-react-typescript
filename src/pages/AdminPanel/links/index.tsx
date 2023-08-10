@@ -401,7 +401,7 @@ const ZShortLinksListPage: React.FC = () => {
 				// menu={PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU}
 				id={CONSTANTS.MENU_IDS.ADMIN_PANEL_CONTENT_ID}
 			>
-				<ZCan havePermission={permissionsEnum.viewAny_shortLink}>
+				<ZCan havePermissions={[permissionsEnum.viewAny_shortLink]}>
 					{/* Content */}
 					<ZIonContent>
 						{/* IonRefresher */}
@@ -538,7 +538,9 @@ const ZShortLinksListPage: React.FC = () => {
 												</ZIonText>
 											</ZIonCol>
 
-											<ZCan havePermission={permissionsEnum.create_shortLink}>
+											<ZCan
+												havePermissions={[permissionsEnum.create_shortLink]}
+											>
 												<ZIonCol
 													sizeXl='4'
 													sizeLg='5'
@@ -626,7 +628,7 @@ const ZShortLinksListPage: React.FC = () => {
 													</ZIonButton>
 
 													<ZCan
-														havePermission={permissionsEnum.create_shortLink}
+														havePermissions={[permissionsEnum.create_shortLink]}
 													>
 														<ZIonButton
 															color='primary'

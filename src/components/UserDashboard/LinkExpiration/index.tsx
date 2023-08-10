@@ -18,7 +18,7 @@ import {
 
 // Global Constants
 import { TIMEZONES } from '@/utils/constants';
-import { formatReactSelectOption } from '@/utils/helpers';
+import { formatReactSelectOption, zAddUrlProtocol } from '@/utils/helpers';
 
 // Images
 
@@ -85,12 +85,12 @@ const LinkExpiration: React.FC = () => {
 								<ZIonInput
 									label='End at:'
 									labelPlacement='stacked'
-									onIonChange={handleChange}
-									onIonBlur={handleBlur}
-									value={values.linkExpiration.expirationDate}
 									name='linkExpiration.expirationDate'
 									type='datetime-local'
 									minHeight='40px'
+									onIonChange={handleChange}
+									onIonBlur={handleBlur}
+									value={values.linkExpiration.expirationDate}
 								/>
 							</ZIonCol>
 
@@ -139,6 +139,9 @@ const LinkExpiration: React.FC = () => {
 							}
 							onIonBlur={() => {
 								setFieldTouched('linkExpiration.redirectionLink', true, true);
+								const inputUrl = values?.linkExpiration?.redirectionLink;
+								const formattedUrl = zAddUrlProtocol(inputUrl || '');
+								setFieldValue('linkExpiration.redirectionLink', formattedUrl);
 							}}
 							onIonChange={(event) => {
 								setFieldValue(

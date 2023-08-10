@@ -1266,3 +1266,57 @@ export const zAddUrlProtocol = (url: string): string => {
 	}
 	return url;
 };
+
+/**
+ * Function which will generate a random-unique string of giving length for short-link url path.
+ * @param _length
+ * @returns
+ */
+export const zGenerateRandomString = (
+	_length: number | undefined = CONSTANTS.SHORT_LINK.urlPathLength
+): string => {
+	const __characters =
+		'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
+	const __charactersLength = __characters.length;
+
+	const __randomStringCharts = new Array(_length);
+
+	for (let _i = 0; _i < _length; _i++) {
+		const _randomIndex = Math.floor(Math.random() * __charactersLength);
+		__randomStringCharts[_i] = __characters.charAt(_randomIndex);
+	}
+
+	return __randomStringCharts.join('');
+};
+
+export const generateShortLink = ({
+	domain,
+	urlPath,
+}: {
+	domain?: string;
+	urlPath?: string;
+}) => {
+	try {
+		if (domain && urlPath) {
+			return `${domain}/${CONSTANTS.SHORT_LINK.urlStaticPath}/${urlPath}`;
+		} else {
+			throw new ZCustomError({
+				message: 'generateShortLink: params domain & urlPath are required',
+			});
+		}
+	} catch (error) {
+		reportCustomError(error);
+	}
+};
+
+export const createElementTestingSelector = (
+	_value: string
+): { 'cy-es': string } => {
+	const __prefix = CONSTANTS.testingSelectorsPrefix;
+
+	const __attributeValue = `${__prefix}${_value}`;
+
+	return {
+		'cy-es': __attributeValue,
+	};
+};

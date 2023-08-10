@@ -81,17 +81,18 @@ const NewLinkFolder: React.FC<{
 				</ZIonText>
 
 				{/* Add folder button */}
-				<ZIonButton
-					fill='clear'
-					className='ms-auto'
+
+				<ZIonIcon
+					className='cursor-pointer ms-auto me-3'
+					icon={addCircleOutline}
+					size='large'
+					color='primary'
 					onClick={() => {
 						presentFolderModal({
 							_cssClass: 'folder-modal-size',
 						});
 					}}
-				>
-					<ZIonIcon icon={addCircleOutline} size='large' />
-				</ZIonButton>
+				/>
 			</div>
 
 			{/*  */}

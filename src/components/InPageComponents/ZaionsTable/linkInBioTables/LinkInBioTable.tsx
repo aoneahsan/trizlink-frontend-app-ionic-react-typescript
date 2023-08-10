@@ -430,7 +430,7 @@ const ZaionsLinkInBioLinksTable: React.FC<{
 			>
 				<ZIonContent>
 					<ZIonList lines='none' className='ion-no-padding'>
-						<ZCan havePermission={permissionsEnum.update_shortLink}>
+						<ZCan havePermissions={[permissionsEnum.update_shortLink]}>
 							<ZIonItem
 								button={true}
 								detail={false}
@@ -454,7 +454,7 @@ const ZaionsLinkInBioLinksTable: React.FC<{
 							</ZIonItem>
 						</ZCan>
 
-						<ZCan havePermission={permissionsEnum.delete_shortLink}>
+						<ZCan havePermissions={[permissionsEnum.delete_shortLink]}>
 							<ZIonItem
 								button={true}
 								detail={false}

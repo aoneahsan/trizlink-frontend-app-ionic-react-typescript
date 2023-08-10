@@ -181,9 +181,7 @@ const ZaionsPixelAccountData: React.FC = () => {
 						itemIds: [selectedPixelAccount?.id],
 						urlDynamicParts: [':pixelId'],
 					});
-					showSuccessNotification(
-						MESSAGES.GENERAL.PIXEL_ACCOUNT.PIXEL_ACCOUNT_DELETED_SUCCEED_MESSAGE
-					);
+					showSuccessNotification(MESSAGES.GENERAL.PIXEL_ACCOUNT.DELETED);
 				}
 			} else {
 				await presentZIonErrorAlert();

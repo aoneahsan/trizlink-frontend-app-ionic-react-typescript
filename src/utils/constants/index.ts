@@ -29,6 +29,8 @@ import { ENVS } from '@/utils/envKeys';
 // const ZLinkApiRootUrl = 'https://zlinkbackend.zaions.com/public/api/zlink/v1';
 export const ZLinkApiRootUrl = ENVS.apiUrl;
 
+const testingSelectorsPrefix = 'ztes__';
+
 const RouteParams = {
 	editShortLinkIdParam: ':editLinkId',
 	editLinkInBioIdParam: ':editLinkInBioId',
@@ -67,6 +69,14 @@ const RouteParams = {
 		libBlockId: ':libBlockId',
 	},
 
+	utmTag: {
+		utmTagId: ':utmTagId',
+	},
+
+	pixel: {
+		pixelId: ':pixelId',
+	},
+
 	// folderIdToGetShortLinksOrLinkInBio: 'all',
 };
 
@@ -83,8 +93,8 @@ export const API_URLS = {
 	userAccountUtmTags_create_list: '/user/utm-tag',
 	ShortLink_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/shortLink/folders`,
 	userEmbedWidget_create_list: '/user/embedded-scripts',
-	userPixelAccounts_update_delete: '/user/pixel/:pixelId',
-	userAccountUtmTags_update_delete: '/user/utm-tag/:utmTagId',
+	userPixelAccounts_update_delete: `/user/pixel/${RouteParams.pixel.pixelId}`,
+	userAccountUtmTags_update_delete: `/user/utm-tag/${RouteParams.utmTag.utmTagId}`,
 	userAccountFolders_update_delete: '/user/folders/:folderId',
 	userEmbedWidget_update_delete: '/user/embedded-scripts/:embeddedId',
 	shortLinks_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links`,
@@ -263,6 +273,7 @@ const ION_LOADER_DEFAULTS = {
 const ION_TOAST = {
 	TOAST_DURATION: 1500,
 };
+
 export const ZaionsBusinessDetails = {
 	WebsiteUrl: 'https://zaions.com',
 };
@@ -316,6 +327,7 @@ const DEFAULT_VALUES = {
 	ZAIONS_DASHBOARD_SPLIT_PANEL: 'ZAIONS_DASHBOARD_PAGE_PANEL',
 	API_TOKEN_PRIMARY_KEY: 'Bearer',
 };
+
 export const LOCALSTORAGE_KEYS = {
 	USERDATA: 'udhsaf38h_3g-23g-c',
 	AUTHTOKEN: 'cewiuh4ggb284ghg',
@@ -352,6 +364,75 @@ export const brandColors = {
 
 const ZTooltipIds = {
 	ZUserAvatarButton_default_tooltip_id: 'z-workspace-ZUserAvatarButton-tooltip',
+};
+
+const testingSelectors = {
+	homePageLoginButton: 'home-page-login-button',
+	loginPage: {
+		loginButton: 'login-page-login-button',
+		forgetPasswordButton: 'login-page-forget-password-button',
+		canViewPasswordButton: 'login-page-see-password-button',
+		googleLoginButton: 'login-page-google-login-button',
+		twitterLoginButton: 'login-page-twitter-login-button',
+		facebookLoginButton: 'login-page-facebook-login-button',
+		appleLoginButton: 'login-page-apple-login-button',
+		signupButton: 'login-page-sign-in-button',
+		emailInput: 'login-page-email-input',
+		passwordInput: 'login-page-password-input',
+	},
+
+	signupPage: {
+		loginButton: 'signup-page-login-button',
+		SSOLoginButton: 'signup-page-sso-login-button',
+		googleSignupButton: 'signup-page-google-signup-button',
+		signupButton: 'signup-page-signup-button',
+		usernameInput: 'signup-page-username-input',
+		emailInput: 'signup-page-email-input',
+		passwordInput: 'signup-page-password-input',
+		canViewPasswordButton: 'signup-page-see-password-button',
+		confirmPasswordInput: 'signup-page-confirm-password-input',
+		canViewConfirmPasswordButton: 'signup-page-see-confirm-password-button',
+	},
+
+	workspace: {
+		listPage: {
+			inviteButton: 'workspace-list-page-invite-button',
+			createWorkspaceButton: 'workspace-list-page-create-button',
+			createWorkspaceCardButton: 'workspace-list-page-create-card-button',
+			viewWorkspaceButton: 'workspace-list-page-view-button',
+			workspaceCardImg: 'workspace-list-page-card-image',
+			workspaceCardTitle: 'workspace-list-page-card-title',
+			workspaceCardFavoritesButton: 'workspace-list-page-card-favorites-button',
+			workspaceCardUserButton: 'workspace-list-page-card-user-button',
+			workspaceCardActionPopoverButton:
+				'workspace-list-page-card-action-button',
+		},
+		createModal: {
+			nameInput: 'workspace-create-modal-name-input',
+			timezoneInput: 'workspace-create-modal-timezone-input',
+			createButton: 'workspace-create-modal-create-button',
+			closeButton: 'workspace-create-modal-close-button',
+		},
+		actionsPopover: {
+			manageUsers: 'workspace-action-popover-manage-user-button',
+			configureTimetable: 'workspace-action-popover-configure-timetable-button',
+			manageLabels: 'workspace-action-popover-manage-labels-button',
+			settings: 'workspace-action-popover-settings-button',
+			approvalSettings: 'workspace-action-popover-approval-settings-button',
+			edit: 'workspace-action-popover-edit-button',
+			delete: 'workspace-action-popover-delete-button',
+		},
+	},
+
+	user: {
+		userProfilePopoverButton: 'user-profile-popover-button',
+		profilePopover: {
+			profileSettings: 'profile-popover-profile-settings-button',
+			notificationSettings: 'profile-popover-profile-settings-button',
+			logout: 'profile-popover-logout-button',
+			addNewCompanyAccount: 'profile-popover-add-company-account-button',
+		},
+	},
 };
 
 export const TIMEZONES = [
@@ -566,6 +647,11 @@ const LINK_In_BIO = {
 	},
 };
 
+const SHORT_LINK = {
+	urlPathLength: 6,
+	urlStaticPath: 's',
+};
+
 export const ShortLinksTableColumns = [
 	{
 		id: ZShortLinkListPageTableColumnsIds.title,
@@ -615,11 +701,14 @@ const CONSTANTS = {
 	USER_ACCOUNT_DELETE_CONFIRM_KEY: 'DELETE ACCOUNT',
 	SocialLinks,
 	REACT_QUERY,
+	SHORT_LINK,
 	LINK_In_BIO,
 	DateTime,
 	MENU_IDS,
 	ExternalURL,
 	ZTooltipIds,
+	testingSelectors,
+	testingSelectorsPrefix,
 };
 
 export default CONSTANTS;

@@ -18,7 +18,7 @@ import {
 import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Global constant
-import { getRandomKey } from '@/utils/helpers';
+import { getRandomKey, zAddUrlProtocol } from '@/utils/helpers';
 
 // Types
 import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
@@ -43,7 +43,7 @@ const getNewRotatorABTestingEmptyObj: () => ABTestingRotatorInterface = () => {
 };
 
 const RotatorABTesting: React.FC = () => {
-	const { values, errors, touched, handleChange, handleBlur } =
+	const { values, errors, touched, handleChange, handleBlur, setFieldValue } =
 		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
 	const { isMdScale, isSmScale } = useZMediaQueryScale();
@@ -131,19 +131,34 @@ const RotatorABTesting: React.FC = () => {
 													label='Redirection Links*'
 													labelPlacement='stacked'
 													onIonChange={handleChange}
-													onIonBlur={handleBlur}
+													name={`rotatorABTesting.${_index}.redirectionLink`}
 													minHeight='40px'
+													onIonBlur={(e) => {
+														handleBlur(e);
+														const inputUrl =
+															values?.rotatorABTesting[_index]?.redirectionLink;
+														const formattedUrl = zAddUrlProtocol(
+															inputUrl || ''
+														);
+														setFieldValue(
+															`rotatorABTesting.${_index}.redirectionLink`,
+															formattedUrl
+														);
+													}}
 													value={
 														values.rotatorABTesting[_index].redirectionLink
 													}
-													name={`rotatorABTesting.${_index}.redirectionLink`}
 													errorText={
 														errors.rotatorABTesting?.length
-															? ((
-																	errors.rotatorABTesting[
-																		_index
-																	] as RotatorABTestingErrorType
-															  )?.redirectionLink as string)
+															? touched?.rotatorABTesting &&
+															  touched?.rotatorABTesting[_index]
+																	?.redirectionLink
+																? ((
+																		errors.rotatorABTesting[
+																			_index
+																		] as RotatorABTestingErrorType
+																  )?.redirectionLink as string)
+																: undefined
 															: undefined
 													}
 													className={classNames({
@@ -194,11 +209,14 @@ const RotatorABTesting: React.FC = () => {
 													name={`rotatorABTesting.${_index}.percentage`}
 													errorText={
 														errors.rotatorABTesting?.length
-															? ((
-																	errors.rotatorABTesting[
-																		_index
-																	] as RotatorABTestingErrorType
-															  )?.percentage as string)
+															? touched?.rotatorABTesting &&
+															  touched?.rotatorABTesting[_index]?.percentage
+																? ((
+																		errors.rotatorABTesting[
+																			_index
+																		] as RotatorABTestingErrorType
+																  )?.percentage as string)
+																: undefined
 															: undefined
 													}
 													className={classNames({
@@ -258,7 +276,7 @@ const RotatorABTesting: React.FC = () => {
 										onClick={() =>
 											push({
 												id: getRandomKey(),
-												redirectionLink: '',
+												redirectionLink: 'https://',
 												percentage: 0,
 											})
 										}

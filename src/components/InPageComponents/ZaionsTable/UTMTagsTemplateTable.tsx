@@ -165,10 +165,7 @@ const ZaionsUTMTagsTemplateTable: React.FC = () => {
 						itemIds: [selectedUtmTag?.id],
 						urlDynamicParts: [':utmTagId'],
 					});
-				showSuccessNotification(
-					MESSAGES.GENERAL.UTM_TAGS_TEMPLATE
-						.UTM_TAGS_TEMPLATE_DELETED_SUCCEED_MESSAGE
-				);
+				showSuccessNotification(MESSAGES.GENERAL.UTM_TAGS_TEMPLATE.DELETED);
 			} else {
 				await presentZIonErrorAlert();
 			}

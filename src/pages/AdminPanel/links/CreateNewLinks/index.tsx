@@ -69,8 +69,11 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import {
 	areAllObjectsFilled,
 	extractInnerData,
+	formatApiRequestErrorForFormikFormField,
+	generateShortLink,
 	replaceRouteParams,
 	validateField,
+	zGenerateRandomString,
 	zStringify,
 } from '@/utils/helpers';
 import {
@@ -106,7 +109,11 @@ import {
 	FormMode,
 	messengerPlatformsBlockEnum,
 } from '@/types/AdminPanel/index.type';
-import { resetFormType } from '@/types/ZaionsFormik.type';
+import {
+	FormikSetErrorsType,
+	FormikSetFieldTouchedEventType,
+	resetFormType,
+} from '@/types/ZaionsFormik.type';
 import {
 	UTMTagInfoInterface,
 	ShortUrlInterface,
@@ -124,6 +131,7 @@ import NewLinkFolder, {
 } from '@/components/UserDashboard/NewLinkFolder';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZShortLinkModal from '@/components/InPageComponents/ZaionsModals/ShortLinkModal';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 
 /**
  * Style files Imports go down
@@ -149,6 +157,9 @@ const AdminCreateNewLinkPages: React.FC = () => {
 	// #region Component state.
 	// state to manage showAdvanceOptions
 	const [showAdvanceOptions, setShowAdvanceOptions] = useState(false);
+	const [compState, setCompState] = useState<{
+		shortUrl?: string;
+	}>();
 	// #endregion
 
 	// #region Recoils.
@@ -250,14 +261,15 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
 	const { presentZIonModal: presentZShortLinkModal } = useZIonModal(
 		ZShortLinkModal,
-		{ workspaceId: workspaceId }
+		{ workspaceId: workspaceId, shortUrl: compState?.shortUrl }
 	);
 
 	// #region Functions.
 	// Formik submit handler.
 	const FormikSubmissionHandler = async (
 		_values: string,
-		resetForm: resetFormType
+		resetForm: resetFormType,
+		setErrors: FormikSetErrorsType
 	) => {
 		try {
 			if (newShortLinkFormState.formMode === FormMode.ADD) {
@@ -273,8 +285,18 @@ const AdminCreateNewLinkPages: React.FC = () => {
 						extractInnerDataOptionsEnum.createRequestResponseItem
 					);
 
-					// if we have data then show success message.
+					// if we have data then update cache and show success message.
 					if (_data && _data.id) {
+						const __generatedShortLink = generateShortLink({
+							domain: _data.shortUrlDomain,
+							urlPath: _data.shortUrlPath,
+						});
+
+						setCompState((oldValues) => ({
+							...oldValues,
+							shortUrl: __generatedShortLink,
+						}));
+
 						const _oldShortLinks =
 							extractInnerData<ShortLinkType[]>(
 								getRQCDataHandler<ShortLinkType[]>({
@@ -334,6 +356,16 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
 					// if we have data then show success message.
 					if (_data && _data.id) {
+						const __generatedShortLink = generateShortLink({
+							domain: _data.shortUrlDomain,
+							urlPath: _data.shortUrlPath,
+						});
+
+						setCompState((oldValues) => ({
+							...oldValues,
+							shortUrl: __generatedShortLink,
+						}));
+
 						// Updating data all shortLinks in RQ cache.
 						await updateRQCDataHandler<ShortLinkType | undefined>({
 							key: [
@@ -390,6 +422,17 @@ const AdminCreateNewLinkPages: React.FC = () => {
 			// 	)
 			// );
 		} catch (error) {
+			if (error instanceof AxiosError) {
+				const __apiErrors = (error.response?.data as { errors: ZGenericObject })
+					?.errors;
+
+				const __errors = formatApiRequestErrorForFormikFormField(
+					['title'],
+					['title'],
+					__apiErrors
+				);
+				setErrors(__errors);
+			}
 			reportCustomError(error);
 		}
 	};
@@ -456,7 +499,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 						redirectionLink:
 							(
 								selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-							)?.redirectionLink || '',
+							)?.redirectionLink || 'https://',
 					},
 					rotatorABTesting:
 						(selectedShortLink?.abTestingRotatorLinks as ABTestingRotatorInterface[]) ||
@@ -464,10 +507,15 @@ const AdminCreateNewLinkPages: React.FC = () => {
 					geoLocation:
 						(selectedShortLink?.geoLocationRotatorLinks as GeoLocationRotatorInterface[]) ||
 						[],
+
+					//
 					shortUrlDomain:
 						selectedShortLink?.shortUrlDomain ||
 						_env.VITE_DEFAULT_SHORT_URL_DOMAIN,
 					shortUrlPath: selectedShortLink?.shortUrlPath || '',
+					isShortUrlPathValid: true,
+					//
+
 					linkPixelsAccount:
 						(selectedShortLink?.pixelIds &&
 							(JSON.parse(
@@ -723,7 +771,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 						String(values?.shortUrlPath)?.trim()?.length > 0 &&
 						String(values?.shortUrlPath)?.trim()?.length < 6
 					) {
-						errors.shortUrlPath = 'value must be exeat to 6';
+						errors.shortUrlPath = 'Path must be exact 6 character long';
 					}
 
 					// Rotator Geo Location Field Validation End
@@ -740,6 +788,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 						errors.title?.trim() ||
 						errors.shortUrlPath?.trim() ||
 						errors.password?.value?.trim() ||
+						// !values.isShortUrlPathValid ||
 						!areAllObjectsFilled(
 							(errors.rotatorABTesting as Array<object>) || []
 						) ||
@@ -754,51 +803,50 @@ const AdminCreateNewLinkPages: React.FC = () => {
 				// #endregion
 
 				// #region submit function.
-				onSubmit={async (values, { resetForm }) => {
-					await FormikSubmissionHandler(
-						zStringify({
-							type: newShortLinkFormState.type,
-							target: zStringify({
-								url: values.target.url,
-								accountId: values.target.accountId,
-								email: values.target.email,
-								message: values.target.message,
-								phoneNumber: values.target.phoneNumber,
-								subject: values.target.subject,
-								username: values.target.username,
-							}),
-							title: values.title,
-							featureImg: values.featureImg,
-							description: values.linkDescription,
-							pixelIds: zStringify(values.linkPixelsAccount),
-							utmTagInfo: zStringify(values.UTMTags),
-							shortUrlDomain: values.shortUrlDomain,
-							shortUrlPath: values.shortUrlPath,
-							folderId: values.folderId,
-							notes: values.linkNote,
-							tags: zStringify(values.tags),
-							abTestingRotatorLinks: zStringify(values.rotatorABTesting),
-							geoLocationRotatorLinks: zStringify(values.geoLocation),
-							linkExpirationInfo: zStringify({
-								redirectionLink: values.linkExpiration.redirectionLink,
-								expirationDate: values.linkExpiration.expirationDate,
-								timezone: values.linkExpiration.timezone,
-								enabled: values.linkExpiration.enabled,
-							}),
-							password: zStringify({
-								password: values.password.value,
-								enabled: values.password.enabled,
-							}),
-							createdAt: Date.now().toString(),
-							favicon: values.favicon,
+				onSubmit={async (values, { resetForm, setErrors }) => {
+					const _zStringifyData = zStringify({
+						type: newShortLinkFormState.type,
+						target: zStringify({
+							url: values.target.url,
+							accountId: values.target.accountId,
+							email: values.target.email,
+							message: values.target.message,
+							phoneNumber: values.target.phoneNumber,
+							subject: values.target.subject,
+							username: values.target.username,
 						}),
-						resetForm
-					);
+						title: values.title,
+						featureImg: values.featureImg,
+						description: values.linkDescription,
+						pixelIds: zStringify(values.linkPixelsAccount),
+						utmTagInfo: zStringify(values.UTMTags),
+						shortUrlDomain: values.shortUrlDomain,
+						shortUrlPath: values.shortUrlPath,
+						folderId: values.folderId,
+						notes: values.linkNote,
+						tags: zStringify(values.tags),
+						abTestingRotatorLinks: zStringify(values.rotatorABTesting),
+						geoLocationRotatorLinks: zStringify(values.geoLocation),
+						linkExpirationInfo: zStringify({
+							redirectionLink: values.linkExpiration.redirectionLink,
+							expirationDate: values.linkExpiration.expirationDate,
+							timezone: values.linkExpiration.timezone,
+							enabled: values.linkExpiration.enabled,
+						}),
+						password: zStringify({
+							password: values.password.value,
+							enabled: values.password.enabled,
+						}),
+						createdAt: Date.now().toString(),
+						favicon: values.favicon,
+					});
+
+					await FormikSubmissionHandler(_zStringifyData, resetForm, setErrors);
 				}}
 				// #endregion
 			>
 				{/* Content */}
-				{({ isSubmitting, isValid, submitForm }) => {
+				{({ isSubmitting, isValid, errors, submitForm }) => {
 					return (
 						<ZIonContent color='light'>
 							{/* Grid-1 */}

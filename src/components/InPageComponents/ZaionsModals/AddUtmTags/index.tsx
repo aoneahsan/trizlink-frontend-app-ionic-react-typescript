@@ -17,6 +17,7 @@ import {
 	ZIonContent,
 	ZIonIcon,
 	ZIonFooter,
+	ZIonInput,
 } from '@/components/ZIonComponents';
 
 // Global Constants
@@ -33,15 +34,19 @@ import { FormMode } from '@/types/AdminPanel/index.type';
 import { resetFormType } from '@/types/ZaionsFormik.type';
 import {
 	useZRQCreateRequest,
+	useZGetRQCacheData,
 	useZRQUpdateRequest,
+	useZUpdateRQCacheData,
 } from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from '@/utils/enums';
-import { zStringify } from '@/utils/helpers';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import { extractInnerData, zStringify } from '@/utils/helpers';
 import CONSTANTS from '@/utils/constants';
 import { ZIonButton } from '@/components/ZIonComponents';
 import { showSuccessNotification } from '@/utils/notification';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
+import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { UTMTagTemplateType } from '@/types/AdminPanel/linksType';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 // Styles
 
@@ -52,45 +57,90 @@ const ZaionsAddUtmTags: React.FC<{
 	const [ZaionsUTMTagsTemplateFormState, setZaionsUTMTagsTemplateFormState] =
 		useRecoilState(UTMTagsTemplateFormState);
 
-	const { mutate: CreateUTMTag } = useZRQCreateRequest({
+	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+
+	const { mutateAsync: createUTMTagAsyncMutate } = useZRQCreateRequest({
 		_url: API_URL_ENUM.userAccountUtmTags_create_list,
-		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
-		],
+		_queriesKeysToInvalidate: [],
 	});
-	const { mutate: UpdateUTMTag } = useZRQUpdateRequest({
+
+	const { mutateAsync: updateUTMTagAsyncMutate } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.userAccountUtmTags_update_delete,
-		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
-		],
+		_queriesKeysToInvalidate: [],
 	});
 
 	/**
 	 * Handle Form Submission Function
 	 * add a new UTM Tag function
 	 *  */
-	const handleFormSubmit = (value: string, resetForm?: resetFormType) => {
+	const handleFormSubmit = async (value: string, resetForm?: resetFormType) => {
 		try {
+			let __response;
 			// ADD API Request to add this UTM Tag to user account in DB.
 			if (ZaionsUTMTagsTemplateFormState.formMode === FormMode.ADD) {
-				CreateUTMTag(value);
-				showSuccessNotification(
-					MESSAGES.GENERAL.UTM_TAGS_TEMPLATE
-						.NEW_UTM_TAGS_TEMPLATE_CREATED_SUCCEED_MESSAGE
-				);
-			} else if (ZaionsUTMTagsTemplateFormState.formMode === FormMode.EDIT) {
-				ZaionsUTMTagsTemplateFormState.id &&
-					UpdateUTMTag({
-						itemIds: [ZaionsUTMTagsTemplateFormState.id],
-						urlDynamicParts: [':utmTagId'],
-						requestData: value,
-					});
-				showSuccessNotification(
-					MESSAGES.GENERAL.UTM_TAGS_TEMPLATE
-						.UTM_TAGS_TEMPLATE_UPDATED_SUCCEED_MESSAGE
-				);
+				__response = await createUTMTagAsyncMutate(value);
+			} else if (
+				ZaionsUTMTagsTemplateFormState.formMode === FormMode.EDIT &&
+				ZaionsUTMTagsTemplateFormState.id
+			) {
+				__response = await updateUTMTagAsyncMutate({
+					itemIds: [ZaionsUTMTagsTemplateFormState.id],
+					urlDynamicParts: [CONSTANTS.RouteParams.utmTag.utmTagId],
+					requestData: value,
+				});
 			}
 
+			if ((__response as ZLinkMutateApiType<UTMTagTemplateType>).success) {
+				const __data = extractInnerData<UTMTagTemplateType>(
+					__response,
+					extractInnerDataOptionsEnum.createRequestResponseItem
+				);
+
+				if (__data && __data.id) {
+					const __utmDataFromCache =
+						getRQCDataHandler<UTMTagTemplateType[]>({
+							key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
+						}) || [];
+
+					const __oldUtmData = extractInnerData<UTMTagTemplateType[]>(
+						__utmDataFromCache,
+						extractInnerDataOptionsEnum.createRequestResponseItems
+					);
+					console.log({ __utmDataFromCache, __oldUtmData, __data });
+
+					if (__oldUtmData) {
+						if (ZaionsUTMTagsTemplateFormState.formMode === FormMode.ADD) {
+							const __updatedUtmTagsData = [...__oldUtmData, __data];
+
+							await updateRQCDataHandler({
+								key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
+								data: __updatedUtmTagsData,
+								id: '',
+								extractType: ZRQGetRequestExtractEnum.extractItems,
+								updateHoleData: true,
+							});
+
+							showSuccessNotification(
+								MESSAGES.GENERAL.UTM_TAGS_TEMPLATE.CREATED
+							);
+						} else if (
+							ZaionsUTMTagsTemplateFormState.formMode === FormMode.EDIT
+						) {
+							await updateRQCDataHandler({
+								key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
+								data: __data,
+								id: __data.id,
+								extractType: ZRQGetRequestExtractEnum.extractItems,
+							});
+
+							showSuccessNotification(
+								MESSAGES.GENERAL.UTM_TAGS_TEMPLATE.UPDATED
+							);
+						}
+					}
+				}
+			}
 			// Close modal after action.
 			dismissZIonModal();
 
@@ -221,7 +271,7 @@ const ZaionsAddUtmTags: React.FC<{
 									</ZIonButton>
 								</ZIonCol>
 							</ZIonRow>
-							{!isValid && (
+							{/* {!isValid && (
 								<ZIonRow>
 									<ZIonCol className='ion-text-center'>
 										<ZIonNote color='danger'>
@@ -229,150 +279,144 @@ const ZaionsAddUtmTags: React.FC<{
 										</ZIonNote>
 									</ZIonCol>
 								</ZIonRow>
-							)}
+							)} */}
 							{/* </IonToolbar> */}
 						</ZIonHeader>
 					)}
 
 					<ZIonContent className='ion-padding'>
-						<div className='flex ion-text-center ion-justify-content-center flex-col ion-padding-top ion-margin-top'>
-							<ZIonText className='' color={'primary'}>
-								<h1
-									className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}
+						<div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top'>
+							<div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
+								<ZIonIcon
+									icon={toggleOutline}
+									className='w-8 h-8 mx-auto'
+									color='light'
+								/>
+							</div>
+
+							<ZIonText
+								color='dark'
+								className='block mt-3 text-lg font-bold ion-text-center'
+							>
+								Create UTMs preset
+								<ZIonRouterLink
+									routerLink={ZaionsRoutes.HomeRoute}
+									className='mx-1'
 								>
-									<ZIonIcon
-										icon={toggleOutline}
-										className='mx-auto'
-										color='light'
-									></ZIonIcon>
-								</h1>
-							</ZIonText>
-							<br />
-							<ZIonText color={'dark'}>
-								<h6 className='fw-blod'>
-									Create UTMs preset{' '}
-									<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-										(help)
-									</ZIonRouterLink>{' '}
-									🎫
-								</h6>
+									(help)
+								</ZIonRouterLink>
+								🎫
 							</ZIonText>
 						</div>
 						<Form onSubmit={handleSubmit} className='px-2'>
 							{/* Template Name Input */}
-							<ZIonInputField
-								inputFieldProps={{
-									className: classNames({
-										'ion-touched ion-invalid':
-											touched.templateName && errors.templateName,
-										'ion-touched ion-valid':
-											touched.templateName && !errors.templateName,
-									}),
-									label: 'Template name*',
-									labelPlacement: 'floating',
-									name: 'templateName',
-									onIonChange: handleChange,
-									onIonBlur: handleBlur,
-									value: values.templateName,
-									errorText: errors.templateName,
-									placeholder: 'Template name',
-									type: 'text',
-									color: 'dark',
-								}}
+							<ZIonInput
+								type='text'
+								color='dark'
+								label='Template name*'
+								labelPlacement='stacked'
+								name='templateName'
+								placeholder='Template name'
+								onIonChange={handleChange}
+								onIonBlur={handleBlur}
+								value={values.templateName}
+								errorText={
+									touched.templateName ? errors.templateName : undefined
+								}
+								minHeight='2.3rem'
+								className={classNames({
+									'mt-5': true,
+									'ion-touched': touched.templateName,
+									'ion-invalid': touched.templateName && errors.templateName,
+									'ion-valid': touched.templateName && !errors.templateName,
+								})}
 							/>
 
 							{/* UTM Campaign Input */}
-							<ZIonInputField
-								inputFieldProps={{
-									className: classNames({
-										'mt-4': true,
-										'ion-touched ion-invalid':
-											touched.utmCampaign && errors.utmCampaign,
-										'ion-touched ion-valid':
-											touched.utmCampaign && !errors.utmCampaign,
-									}),
-									label: 'UTM Campaign*',
-									labelPlacement: 'floating',
-									name: 'utmCampaign',
-									onIonChange: handleChange,
-									onIonBlur: handleBlur,
-									value: values.utmCampaign,
-									errorText: errors.utmCampaign,
-									placeholder: 'UTM Campaign',
-									type: 'text',
-									color: 'dark',
-								}}
+							<ZIonInput
+								type='text'
+								color='dark'
+								minHeight='2.3rem'
+								label='UTM Campaign*'
+								labelPlacement='stacked'
+								placeholder='UTM Campaign'
+								name='utmCampaign'
+								onIonChange={handleChange}
+								onIonBlur={handleBlur}
+								value={values.utmCampaign}
+								errorText={touched.utmCampaign ? errors.utmCampaign : undefined}
+								className={classNames({
+									'mt-6': true,
+									'ion-touched': touched.utmCampaign,
+									'ion-invalid': touched.utmCampaign && errors.utmCampaign,
+									'ion-valid': touched.utmCampaign && !errors.utmCampaign,
+								})}
 							/>
 
 							{/* UTM Medium Input */}
-							<ZIonInputField
-								inputFieldProps={{
-									className: classNames({
-										'mt-4': true,
-										'ion-touched ion-invalid':
-											touched.utmMedium && errors.utmMedium,
-										'ion-touched ion-valid':
-											touched.utmMedium && !errors.utmMedium,
-									}),
-									label: 'UTM Medium*',
-									labelPlacement: 'floating',
-									name: 'utmMedium',
-									onIonChange: handleChange,
-									onIonBlur: handleBlur,
-									value: values.utmMedium,
-									errorText: errors.utmMedium,
-									placeholder: 'UTM Medium',
-									type: 'text',
-									color: 'dark',
-								}}
+							<ZIonInput
+								type='text'
+								color='dark'
+								minHeight='2.3rem'
+								label='UTM Medium*'
+								labelPlacement='stacked'
+								name='utmMedium'
+								placeholder='UTM Medium'
+								onIonChange={handleChange}
+								onIonBlur={handleBlur}
+								value={values.utmMedium}
+								errorText={touched.utmMedium ? errors.utmMedium : undefined}
+								className={classNames({
+									'mt-6': true,
+									'ion-touched': touched.utmMedium,
+									'ion-invalid': touched.utmMedium && errors.utmMedium,
+									'ion-valid': touched.utmMedium && !errors.utmMedium,
+								})}
 							/>
 
 							{/* UTM Source Input */}
-							<ZIonInputField
-								inputFieldProps={{
-									className: 'mt-4',
-									label: 'UTM Source*',
-									labelPlacement: 'floating',
-									name: 'utmSource',
-									onIonChange: handleChange,
-									onIonBlur: handleBlur,
-									value: values.utmSource,
-									placeholder: 'UTM Source',
-									type: 'text',
-									color: 'dark',
-								}}
+							<ZIonInput
+								type='text'
+								color='dark'
+								minHeight='2.3rem'
+								className='mt-6'
+								label='UTM Source*'
+								name='utmSource'
+								labelPlacement='stacked'
+								placeholder='UTM Source'
+								onIonChange={handleChange}
+								onIonBlur={handleBlur}
+								value={values.utmSource}
 							/>
 
 							{/* UTM Term Input */}
-							<ZIonInputField
-								inputFieldProps={{
-									className: 'mt-4',
-									label: 'UTM Term*',
-									labelPlacement: 'floating',
-									name: 'utmTerm',
-									onIonChange: handleChange,
-									onIonBlur: handleBlur,
-									value: values.utmTerm,
-									placeholder: 'UTM Term',
-									type: 'text',
-									color: 'dark',
-								}}
+							<ZIonInput
+								type='text'
+								color='dark'
+								minHeight='2.3rem'
+								className='mt-6'
+								label='UTM Term*'
+								name='utmTerm'
+								labelPlacement='stacked'
+								placeholder='UTM Term'
+								onIonChange={handleChange}
+								onIonBlur={handleBlur}
+								value={values.utmTerm}
 							/>
 
 							{/* UTM Content Input */}
-							<ZIonInputField
-								inputFieldProps={{
-									className: 'mt-4',
-									label: 'UTM Content*',
-									labelPlacement: 'floating',
-									name: 'utmContent',
-									onIonChange: handleChange,
-									onIonBlur: handleBlur,
-									value: values.utmContent,
-									placeholder: 'UTM Content',
-									type: 'text',
-									color: 'dark',
-								}}
+							<ZIonInput
+								type='text'
+								color='dark'
+								minHeight='2.3rem'
+								className='mt-6'
+								label='UTM Content*'
+								name='utmContent'
+								labelPlacement='stacked'
+								placeholder='UTM Content'
+								onIonChange={handleChange}
+								onIonBlur={handleBlur}
+								value={values.utmContent}
 							/>
 						</Form>
 					</ZIonContent>
@@ -383,7 +427,7 @@ const ZaionsAddUtmTags: React.FC<{
 					 *  */}
 					{appSettings.appModalsSetting.actions.showActionInModalFooter && (
 						<ZIonFooter>
-							<ZIonRow className='mt-2 px-3 ion-justify-content-between'>
+							<ZIonRow className='px-3 mt-1 ion-justify-content-between'>
 								<ZIonCol>
 									<ZIonButton
 										fill='outline'

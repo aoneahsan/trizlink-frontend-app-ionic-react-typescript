@@ -101,7 +101,7 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
 			sizeMd='12'
 			sizeSm='12'
 			sizeXs='12'
-			className='py-1 rounded h-max zaions__bg_white'
+			className='py-1 rounded zaions__bg_white'
 		>
 			{/* Row */}
 			<ZIonRow className='border-bottom'>
