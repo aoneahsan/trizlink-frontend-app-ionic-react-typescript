@@ -58,6 +58,7 @@ import {
  * */
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
 import { useParams } from 'react-router';
+import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 /**
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
@@ -106,12 +107,15 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 
 	return (
 		<ZIonCol
-			className='ion-padding border-e-[1px] zaions-transition h-screen zaions_pretty_scrollbar overflow-y-scroll'
-			size={
-				ZDashboardState.dashboardMainSidebarIsCollabes.isExpand ? '2' : '2.4'
-			}
+			className='border-e-[1px] zaions-transition h-full'
+			// size={
+			// 	ZDashboardState.dashboardMainSidebarIsCollabes.isExpand ? '2' : '2.4'
+			// }
 		>
-			<div className='ion-padding-top'>
+			<ZCustomScrollable
+				className='w-full h-full ion-padding-top ion-padding'
+				scrollY={true}
+			>
 				<ZIonList lines='none'>
 					<ZIonItem className='p-0 mb-2 text-xl font-bold zaions__cursor_pointer'>
 						🔗 All{' '}
@@ -130,7 +134,11 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 							</ZIonItem>
 
 							<ZIonItem
-								className='zaions__cursor_pointer ms-2'
+								className='zaions__cursor_pointer'
+								style={{
+									'--inner-padding-end': '0px',
+									'--padding-start': '0px',
+								}}
 								onClick={() => {
 									switch (type) {
 										case AdminPanelSidebarMenuPageEnum.shortLink:
@@ -164,9 +172,11 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 								}}
 							>
 								<ZIonLabel>Default</ZIonLabel>
-								<ZIonReorder slot='start' className='me-3'>
-									<ZIonIcon icon={appsOutline} />
-								</ZIonReorder>
+								<ZIonIcon
+									slot='start'
+									icon={appsOutline}
+									className='w-4 h-4 me-3'
+								/>
 							</ZIonItem>
 
 							{!showSkeleton && foldersData && foldersData.length ? (
@@ -176,6 +186,12 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 								>
 									{foldersData.map((el) => (
 										<ZIonItem
+											key={el.id}
+											data-folder-id={el.id}
+											style={{
+												'--inner-padding-end': '0px',
+												'--padding-start': '0px',
+											}}
 											className={classNames({
 												zaions__cursor_pointer: true,
 												'zaions-short-link-folder':
@@ -183,8 +199,6 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 												'zaions-link-in-bio-folder':
 													type === AdminPanelSidebarMenuPageEnum.linkInBio,
 											})}
-											key={el.id}
-											data-folder-id={el.id}
 										>
 											<ZIonLabel
 												onClick={() => {
@@ -317,7 +331,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 						save reorder
 					</ZIonButton>
 				)}
-			</div>
+			</ZCustomScrollable>
 		</ZIonCol>
 	);
 };

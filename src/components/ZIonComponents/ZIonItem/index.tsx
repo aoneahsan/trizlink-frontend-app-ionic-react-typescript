@@ -14,7 +14,7 @@ import { createElementTestingSelector } from '@/utils/helpers';
 import { PRODUCT_NAME } from '@/utils/constants';
 import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
 type ZIonItemType = {
-	children: ReactNode;
+	children?: ReactNode;
 	className?: string;
 	button?: boolean;
 	color?: ZIonColorType;

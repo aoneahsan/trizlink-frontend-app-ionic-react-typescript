@@ -65,7 +65,7 @@ const ZUserProfileButton: React.FC = () => {
 
 	return (
 		<ZUserAvatarButton
-			style={{ height: '40px', width: '40px' }}
+			style={{ height: '44px', width: '44px' }}
 			onClick={(event: unknown) => {
 				presentWorkspaceProfilePopover({
 					_event: event as Event,

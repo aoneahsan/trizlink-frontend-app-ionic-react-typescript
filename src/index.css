@@ -1048,6 +1048,11 @@ ion-modal.zaions__modal_w100 {
 	--height: 350px;
 }
 
+.z-help-center-popover-size {
+	--width: 300px;
+	--height: 350px;
+}
+
 /* Link-in-bio design-theme-customAppearance & design-block-customAppearance buttons styles */
 .inlineSquare {
 	--border-radius: 0;

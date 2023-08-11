@@ -94,6 +94,7 @@ import {
 import { reportCustomError } from '@/utils/customErrorType';
 import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
+import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 
 // Styles
 
@@ -126,36 +127,20 @@ const ZaionsShortLinkTable: React.FC<{
 	);
 	//
 	const setShortLinkFormState = useSetRecoilState(ShortLinkFormState);
-
-	//
-	const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
 	// #endregion
 
 	// #region custom hooks.
-	const { presentZIonErrorAlert } = useZIonErrorAlert();
-	const { presentZIonAlert } = useZIonAlert();
 	const { zNavigatePushRoute } = useZNavigate();
-	const { getRQCDataHandler } = useZGetRQCacheData();
-	const { updateRQCDataHandler } = useZUpdateRQCacheData();
 	const { presentZIonToast } = useZIonToast();
 	// getting search param from url with the help of 'qs' package.
 	const routeQSearchParams = routeQueryString.parse(location.search, {
 		ignoreQueryPrefix: true,
 	});
-
 	const { pageindex, pagesize } = routeQSearchParams;
 	// #endregion
 
-	const { presentZIonModal: presentShortLinkNoteModal } = useZIonModal(
-		ZaionsLinkNoteDetailModal
-	);
-
 	// #region APIS requests.
 	// Request for deleting short link.
-	const { mutateAsync: deleteShortLinkMutate } = useZRQDeleteRequest(
-		API_URL_ENUM.shortLinks_update_delete,
-		[]
-	);
 
 	// Request for getting short links data.
 	const { data: ShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
@@ -179,166 +164,14 @@ const ZaionsShortLinkTable: React.FC<{
 		});
 	// #endregion
 
-	// When the short links data fetch from backend, storing it in ShortLinksRStateAtom recoil state.
-	useEffect(() => {
-		try {
-			_setShortLinksFilterOptions((oldState) => ({
-				...oldState,
-				folderId: folderId,
-			}));
-		} catch (error) {
-			reportCustomError(error);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [folderId]);
-
-	useEffect(() => {
-		try {
-			if (ShortLinksData) {
-				setShortLinksStateAtom(ShortLinksData);
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [ShortLinksData]);
-
-	// #region Functions.
+	// #region Modal & Popovers.
 	const { presentZIonModal: presentPixelAccountDetailModal } = useZIonModal(
 		ZaionsPixelAccountDetail
 	);
 
-	//
-	const editShortLinkDetails = async () => {
-		try {
-			if (compState && compState.selectedShortLinkId) {
-				setNewShortLinkFormState((_oldValues) => ({
-					..._oldValues,
-					formMode: FormMode.EDIT,
-				}));
-
-				zNavigatePushRoute(
-					replaceRouteParams(
-						ZaionsRoutes.AdminPanel.ShortLinks.Edit,
-						[
-							CONSTANTS.RouteParams.workspace.workspaceId,
-							CONSTANTS.RouteParams.editShortLinkIdParam,
-						],
-						[workspaceId, compState.selectedShortLinkId]
-					)
-				);
-			} else {
-				await presentZIonErrorAlert();
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
-
-	// when user won't to delete short link and click on the delete button this function will fire and show the confirm alert.
-	const deleteShortLink = async () => {
-		try {
-			if (
-				compState.selectedShortLinkId?.trim() &&
-				_FilteredShortLinkDataSelector?.length
-			) {
-				const selectedShortLinkId = _FilteredShortLinkDataSelector?.find(
-					(el) => el.id === compState.selectedShortLinkId
-				);
-				await presentZIonAlert({
-					header: `Delete Short Link "${selectedShortLinkId?.title || ''}"`,
-					subHeader: 'Remove Short Link from user account.',
-					message: 'Are you sure you want to delete this Short Link?',
-					buttons: [
-						{
-							text: 'Cancel',
-							role: 'cancel',
-						},
-						{
-							text: 'Delete',
-							role: 'danger',
-							handler: () => {
-								void removeShortLink();
-							},
-						},
-					],
-				});
-			} else {
-				await presentZIonErrorAlert();
-			}
-		} catch (error) {
-			await presentZIonErrorAlert();
-		}
-	};
-
-	// on the delete short link confirm alert, when user click on delete button this function will firs which will trigger delete request and delete the short link.
-	const removeShortLink = async () => {
-		try {
-			if (
-				compState.selectedShortLinkId?.trim() &&
-				_FilteredShortLinkDataSelector?.length
-			) {
-				if (compState.selectedShortLinkId) {
-					const _response = await deleteShortLinkMutate({
-						itemIds: [workspaceId, compState.selectedShortLinkId],
-						urlDynamicParts: [
-							CONSTANTS.RouteParams.workspace.workspaceId,
-							CONSTANTS.RouteParams.shortLink.shortLinkId,
-						],
-					});
-
-					if (_response) {
-						const _data = extractInnerData<{ success: boolean }>(
-							_response,
-							extractInnerDataOptionsEnum.createRequestResponseItem
-						);
-
-						if (_data && _data?.success) {
-							// getting all the shortLinks from RQ cache.
-							const _oldShortLinks =
-								extractInnerData<ShortLinkType[]>(
-									getRQCDataHandler<ShortLinkType[]>({
-										key: [
-											CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-											workspaceId,
-										],
-									}) as ShortLinkType[],
-									extractInnerDataOptionsEnum.createRequestResponseItems
-								) || [];
-
-							// removing deleted shortLinks from cache.
-							const _updatedShortLinks = _oldShortLinks.filter(
-								(el) => el.id !== compState.selectedShortLinkId
-							);
-
-							// Updating data in RQ cache.
-							await updateRQCDataHandler<ShortLinkType[] | undefined>({
-								key: [
-									CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-									workspaceId,
-								],
-								data: _updatedShortLinks as ShortLinkType[],
-								id: '',
-								extractType: ZRQGetRequestExtractEnum.extractItems,
-								updateHoleData: true,
-							});
-
-							showSuccessNotification(
-								MESSAGES.GENERAL.SHORT_LINKS.SHORT_LINK_DELETE
-							);
-						} else {
-							showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
-						}
-					}
-				}
-			} else {
-				void presentZIonErrorAlert();
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
-	// #endregion
+	const { presentZIonModal: presentShortLinkNoteModal } = useZIonModal(
+		ZaionsLinkNoteDetailModal
+	);
 
 	const { presentZIonPopover: presentZShortLinkActionPopover } = useZIonPopover(
 		ZShortLinkActionPopover,
@@ -347,6 +180,7 @@ const ZaionsShortLinkTable: React.FC<{
 			shortLinkId: compState.selectedShortLinkId,
 		}
 	);
+	// #endregion
 
 	// #region Managing table data with react-table.
 	const columnHelper = createColumnHelper<ShortLinkType>();
@@ -535,6 +369,7 @@ const ZaionsShortLinkTable: React.FC<{
 
 	// #endregion
 
+	// #region useEffect's
 	useEffect(() => {
 		try {
 			if (getUserSetting?.settings?.shortLinkColumn) {
@@ -619,11 +454,39 @@ const ZaionsShortLinkTable: React.FC<{
 		zShortLinksTable.setPageSize(Number(pagesize) || 2);
 	}, [pageindex, pagesize]);
 
+	// When the short links data fetch from backend, storing it in ShortLinksRStateAtom recoil state.
+	useEffect(() => {
+		try {
+			_setShortLinksFilterOptions((oldState) => ({
+				...oldState,
+				folderId: folderId,
+			}));
+		} catch (error) {
+			reportCustomError(error);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [folderId]);
+
+	useEffect(() => {
+		try {
+			if (ShortLinksData) {
+				setShortLinksStateAtom(ShortLinksData);
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [ShortLinksData]);
+	// #endregion
+
 	return (
 		<>
 			{!showSkeleton && (
-				<div className='ps-2'>
-					<div className='w-full overflow-y-scroll border rounded-lg h-max zaions_pretty_scrollbar ion-no-padding'>
+				<div>
+					<ZCustomScrollable
+						className='w-full border rounded-lg h-max ion-no-padding'
+						scrollX={true}
+					>
 						{zShortLinksTable
 							.getHeaderGroups()
 							.map((_headerInfo, _headerIndex) => {
@@ -774,7 +637,7 @@ const ZaionsShortLinkTable: React.FC<{
 								</ZIonCol>
 							)}
 						</ZIonRow>
-					</div>
+					</ZCustomScrollable>
 
 					{/*  */}
 					<ZIonRow className='w-full px-2 pt-1 pb-2 mt-1 overflow-hidden rounded-lg zaions__light_bg'>

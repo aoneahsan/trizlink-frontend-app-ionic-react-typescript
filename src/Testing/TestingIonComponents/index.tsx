@@ -24,6 +24,7 @@ import { checkmarkCircle, closeCircle, ellipse } from 'ionicons/icons';
 import classNames from 'classnames';
 import ZReactMediaPlayer from '@/components/CustomComponents/ZCustomAudio';
 import ReactPlayer from 'react-player';
+import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 
 /**
  * Custom Imports go down
@@ -67,60 +68,59 @@ import ReactPlayer from 'react-player';
  * */
 
 const TestingIonComponents: React.FC = () => {
-	// const [segmentButtons, setSegmentButtons] = useState([
-	// 	'Button 1',
-	// 	'Button 2',
-	// 	'Button 3',
-	// ]);
-
-	// function handleReorder(event: CustomEvent<ItemReorderEventDetail>) {
-	// 	// The `from` and `to` properties contain the index of the item
-	// 	// when the drag started and ended, respectively
-	// 	console.log('Dragged from index', event.detail.from, 'to', event.detail.to);
-
-	// 	// Finish the reorder and position the item in the DOM based on
-	// 	// where the gesture ended. This method can also be called directly
-	// 	// by the reorder group
-	// 	event.detail.complete();
-	// }
-
-	const active = false;
-
-	const buttonClasses = classNames('rounded-full', {
-		'bg-green-500': active,
-		'bg-red-500': !active,
-	});
-
-	const icon = active ? checkmarkCircle : closeCircle;
-	const iconColor = active ? 'primary' : 'secondary';
-
 	return (
 		<ZaionsIonPage>
 			<ZIonContent>
-				<ZIonGrid>
-					<ZIonRow>
-						<ZIonCol size='5'>
-							{/* <ZReactMediaPlayer
-								playerProps={{
-									url: 'https://open.spotify.com/track/4Ifu8HPmQGUnJwwaXcG2Mj?si=2e9e9edef4b1490b',
-									width: '100%',
-									height: '100%',
-								}}
-								mediaType='audio'
-							/> */}
-							<ReactPlayer
-								url='https://www.youtube.com/watch?v=ysz5S6PUM-U'
-								width='100%'
-								height='100%'
-							/>
+				{/* Grid-1 */}
+				<ZIonGrid
+					className={classNames({
+						'h-screen ion-no-padding': true,
+						'max-w-[200rem] mx-auto': false,
+					})}
+				>
+					{/* Row-1 */}
+					<ZIonRow className='h-full'>
+						{/* Col-1 Side bar */}
+						<ZIonCol size='.8' className='h-full bg-slate-700'>
+							<ZCustomScrollable
+								className='w-full h-full'
+								scrollY={true}
+								// scrollX={true}
+							>
+								{/* <div className='w-[20rem]'>
+									Lorem ipsum dolor sit amet consectetur adipisicing elit.
+									Accusamus a temporibus repudiandae et cupiditate. In ducimus
+									qui officia inventore eos, a facere recusandae enim. Delectus
+									ad velit quae repellat aut!
+								</div> */}
+								<ZIonText>
+									Lorem ipsum dolor sit ametconsectetur adipisicing elit.
+									Eveniet reiciendis nisi, esse optio pariatur, recusandae in
+									tenetur saepe, quisquam iste deserunt tempore qua Lorem ipsum
+									dolor sit amet consectetur adipisicing elit. Eveniet
+									reiciendis nisi, esse optio pariatur
+								</ZIonText>
+							</ZCustomScrollable>
 						</ZIonCol>
-						<ZIonCol>
-							<ZIonText>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet
-								reiciendis nisi, esse optio pariatur, recusandae in tenetur
-								saepe, quisquam iste deserunt tempore quae? Saepe labore
-								perspiciatis distinctio hic dolorum assumenda.
-							</ZIonText>
+
+						{/* Col-2 Right-side Main Container */}
+						<ZIonCol size='' className='h-auto bg-red-600'>
+							<ZIonGrid className='h-full ion-no-padding'>
+								<ZIonRow className='h-max'>
+									<ZIonCol size='12' className='h-[5rem] bg-cyan-500'></ZIonCol>
+								</ZIonRow>
+								{/* Col-2 Row-1 */}
+								<ZIonRow style={{ height: 'calc(100% - 4rem)' }}>
+									{/* Col-2 Row-1 col-1 Folder menu */}
+									<ZIonCol
+										size='2.4'
+										className='h-full bg-orange-400'
+									></ZIonCol>
+
+									{/* Col-2 Row-1 col-2 Table & filters etc. */}
+									<ZIonCol className='h-full bg-lime-400'></ZIonCol>
+								</ZIonRow>
+							</ZIonGrid>
 						</ZIonCol>
 					</ZIonRow>
 				</ZIonGrid>
