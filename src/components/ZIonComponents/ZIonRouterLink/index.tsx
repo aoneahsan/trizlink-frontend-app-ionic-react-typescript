@@ -10,6 +10,7 @@ import {
 } from '@/types/zaionsAppSettings.type';
 import { createElementTestingSelector } from '@/utils/helpers';
 import { PRODUCT_NAME } from '@/utils/constants';
+import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 // Type
 type ZIonRouterLinkType = {
@@ -25,14 +26,28 @@ type ZIonRouterLinkType = {
 
 	//
 	testingSelector?: string;
+	testingListSelector?: string;
 };
 
 const ZIonRouterLink = (props: ZIonRouterLinkType) => {
+	const _testingListSelector = props.testingListSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingListSelector || PRODUCT_NAME,
+					_key: createElementTestingSelectorKeyEnum.listSelector,
+				}),
+		  }
+		: {};
+
+	const _testingSelector = props.testingSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingSelector || PRODUCT_NAME,
+				}),
+		  }
+		: {};
 	return (
-		<IonRouterLink
-			{...props}
-			{...createElementTestingSelector(props.testingSelector || PRODUCT_NAME)}
-		>
+		<IonRouterLink {...props} {..._testingSelector} {..._testingListSelector}>
 			{props.children}
 		</IonRouterLink>
 	);

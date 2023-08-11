@@ -14,6 +14,7 @@ import CONSTANTS, {
 import {
 	API_URL_ENUM,
 	CONTAINS,
+	createElementTestingSelectorKeyEnum,
 	extractInnerDataOptionsEnum,
 	VALIDATION_RULE,
 } from '@/utils/enums';
@@ -1309,14 +1310,31 @@ export const generateShortLink = ({
 	}
 };
 
-export const createElementTestingSelector = (
-	_value: string
-): { 'cy-es': string } => {
+export const createElementTestingSelector = ({
+	_value,
+	_key = createElementTestingSelectorKeyEnum.selector,
+}: {
+	_value: string;
+	_key?: createElementTestingSelectorKeyEnum;
+}): { [key: string]: string } => {
 	const __prefix = CONSTANTS.testingSelectorsPrefix;
 
 	const __attributeValue = `${__prefix}${_value}`;
 
-	return {
-		'cy-es': __attributeValue,
-	};
+	switch (_key) {
+		case createElementTestingSelectorKeyEnum.selector:
+			return {
+				'cy-es': __attributeValue,
+			};
+
+		case createElementTestingSelectorKeyEnum.listSelector:
+			return {
+				'cy-els': __attributeValue,
+			};
+
+		default:
+			return {
+				'cy-es': __attributeValue,
+			};
+	}
 };

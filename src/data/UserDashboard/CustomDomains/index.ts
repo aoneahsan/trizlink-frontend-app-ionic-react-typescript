@@ -1,5 +1,5 @@
 // Type
-const _env = import.meta.env;
+import { ENVS } from '@/utils/envKeys';
 import { IdNameType } from '../../../types/AdminPanel/linksType/index';
 
 export const DefaultDomainsData: IdNameType[] = [
@@ -13,7 +13,7 @@ export const DefaultDomainsData: IdNameType[] = [
 	// },
 
 	{
-		id: _env.VITE_DEFAULT_SHORT_URL_DOMAIN,
-		name: _env.VITE_DEFAULT_SHORT_URL_DOMAIN,
+		id: ENVS.defaultShortUrlDomain,
+		name: ENVS.defaultShortUrlDomain,
 	},
 ];

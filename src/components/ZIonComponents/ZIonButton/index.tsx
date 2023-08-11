@@ -13,6 +13,7 @@ import {
 import classNames from 'classnames';
 import { createElementTestingSelector } from '@/utils/helpers';
 import { PRODUCT_NAME } from '@/utils/constants';
+import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
 type ZIonButtonType = {
 	children?: ReactNode;
 	className?: string;
@@ -43,6 +44,7 @@ type ZIonButtonType = {
 
 	//
 	testingSelector?: string;
+	testingListSelector?: string;
 };
 const ZIonButton = (props: ZIonButtonType) => {
 	const compStyle =
@@ -54,12 +56,30 @@ const ZIonButton = (props: ZIonButtonType) => {
 			? { height: props.height }
 			: {};
 
+	const _testingListSelector = props.testingListSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingListSelector || PRODUCT_NAME,
+					_key: createElementTestingSelectorKeyEnum.listSelector,
+				}),
+		  }
+		: {};
+
+	const _testingSelector = props.testingSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingSelector || PRODUCT_NAME,
+				}),
+		  }
+		: {};
+
 	return (
 		<IonButton
 			{...props}
 			style={compStyle}
 			className={classNames(props.className, { 'normal-case': true })}
-			{...createElementTestingSelector(props.testingSelector || PRODUCT_NAME)}
+			{..._testingSelector}
+			{..._testingListSelector}
 		>
 			{props.children}
 		</IonButton>

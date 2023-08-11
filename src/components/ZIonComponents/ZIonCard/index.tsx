@@ -13,6 +13,7 @@ import {
 } from '@/types/zaionsAppSettings.type';
 import { PRODUCT_NAME } from '@/utils/constants';
 import { createElementTestingSelector } from '@/utils/helpers';
+import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 type ZIonCardType = {
 	children: ReactNode;
@@ -37,14 +38,32 @@ type ZIonCardType = {
 
 	//
 	testingSelector?: string;
+	testingListSelector?: string;
 };
 
 const ZIonCard = (props: ZIonCardType) => {
+	const _testingListSelector = props.testingListSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingListSelector || PRODUCT_NAME,
+					_key: createElementTestingSelectorKeyEnum.listSelector,
+				}),
+		  }
+		: {};
+
+	const _testingSelector = props.testingSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingSelector || PRODUCT_NAME,
+				}),
+		  }
+		: {};
 	return (
 		<IonCard
 			{...props}
 			style={props.style}
-			{...createElementTestingSelector(props.testingSelector || PRODUCT_NAME)}
+			{..._testingSelector}
+			{..._testingListSelector}
 		>
 			{props.children}
 		</IonCard>

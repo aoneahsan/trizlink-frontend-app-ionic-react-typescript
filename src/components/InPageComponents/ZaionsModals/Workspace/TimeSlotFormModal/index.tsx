@@ -274,6 +274,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
 					) || [];
 
 				if (__oldTimeSlot) {
+					console.log({ currentTimeSlotData });
 					// Updating all TimeSlot data in RQ cache.
 					void updateRQCDataHandler<TimeSlotInterface | undefined>({
 						key: [
@@ -346,7 +347,8 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
 									{/* Title */}
 									<ZIonCol>
 										<ZIonText className='text-lg font-bold'>
-											Create time slot
+											{mode === FormMode.EDIT ? 'Update ' : 'Create '}
+											time slot
 										</ZIonText>
 									</ZIonCol>
 									{/* Close modal button */}
@@ -355,6 +357,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
 											className='ion-no-padding ion-no-margin'
 											size='small'
 											fill='clear'
+											testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.formModal.closeBtn}-1`}
 											onClick={() => {
 												dismissZIonModal();
 											}}
@@ -388,9 +391,14 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
 										minHeight='2.3rem'
 										type='time'
 										value={values.time}
-										errorText={errors.time}
 										onIonChange={handleChange}
 										onIonBlur={handleBlur}
+										errorText={touched.time ? errors.time : undefined}
+										testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.formModal.timeInput}-${timeSlotId}`}
+										testingListSelector={
+											CONSTANTS.testingSelectors.workspace.settingsModal
+												.timetable.formModal.timeInput
+										}
 										className={classNames({
 											'ion-touched': touched.time,
 											'ion-invalid': errors.time,
@@ -420,7 +428,12 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
 										interface='popover'
 										name='day'
 										value={values.day}
-										errorText={errors.day}
+										errorText={touched.day ? errors.day : undefined}
+										testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.formModal.daySelector}-${timeSlotId}`}
+										testingListSelector={
+											CONSTANTS.testingSelectors.workspace.settingsModal
+												.timetable.formModal.daySelector
+										}
 										onIonChange={(e) => {
 											if (mode === FormMode.ADD) {
 												handleChange(e);
@@ -458,7 +471,6 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
 								<ZIonText className='block text-sm font-bold'>
 									Select color
 								</ZIonText>
-
 								<div className='flex mt-3 ion-align-items-center'>
 									{/* <div className='border-e selected'>
 										<div className='w-[1.3rem] cursor-pointer flex ion-align-items-center ion-justify-content-center h-[1.3rem] rounded-full mx-1 bg-slate-800'>
@@ -469,18 +481,26 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
 									{/*  */}
 									{DefaultTimeSlotColors.map((el, index) => {
 										return (
-											<div
+											<ZIonButton
 												key={index}
+												shape='round'
+												size='small'
+												fill='default'
+												className='w-[1.7rem] shadow-none cursor-pointer ion-no-margin ion-no-padding flex ion-align-items-center ion-justify-content-center h-[1.3rem] rounded-full mx-1'
+												style={{ '--background': el.color }}
+												testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.formModal.colorBtn}-${el.id}`}
+												testingListSelector={
+													CONSTANTS.testingSelectors.workspace.settingsModal
+														.timetable.formModal.colorBtn
+												}
 												onClick={() => {
 													setFieldValue('color', el.color, false);
 												}}
-												className='w-[1.3rem] cursor-pointer flex ion-align-items-center ion-justify-content-center h-[1.3rem] rounded-full mx-1'
-												style={{ backgroundColor: el.color }}
 											>
 												{values.color === el.color && (
 													<ZIonIcon icon={checkmark} color='light' />
 												)}
-											</div>
+											</ZIonButton>
 										);
 									})}
 								</div>
@@ -491,6 +511,11 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
 									minHeight='2.3rem'
 									showSkeleton={isZFetching}
 									setDefaultColor={DefaultTimeSlotColors[0].color}
+									testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.formModal.colorInput}-${timeSlotId}`}
+									testingListSelector={
+										CONSTANTS.testingSelectors.workspace.settingsModal.timetable
+											.formModal.colorInput
+									}
 								/>
 							</ZIonCol>
 
@@ -501,6 +526,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
 							>
 								<ZIonButton
 									fill='outline'
+									testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.formModal.closeBtn}-2`}
 									onClick={() => {
 										dismissZIonModal();
 									}}
@@ -509,6 +535,10 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
 								</ZIonButton>
 								<ZIonButton
 									disabled={!isValid}
+									testingSelector={
+										CONSTANTS.testingSelectors.workspace.settingsModal.timetable
+											.formModal.submitBtn
+									}
 									onClick={() => {
 										void submitForm();
 									}}

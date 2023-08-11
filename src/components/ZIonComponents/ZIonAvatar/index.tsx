@@ -32,7 +32,9 @@ const ZIonAvatar = (props: ZIonAvatarType) => {
 	return (
 		<IonAvatar
 			{...props}
-			{...createElementTestingSelector(props.testingSelector || PRODUCT_NAME)}
+			{...createElementTestingSelector({
+				_value: props.testingSelector || PRODUCT_NAME
+			})}
 		>
 			{props.children}
 		</IonAvatar>

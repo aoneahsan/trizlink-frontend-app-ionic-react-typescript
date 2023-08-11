@@ -13,6 +13,7 @@ import {
 } from '@/types/zaionsAppSettings.type';
 import { createElementTestingSelector } from '@/utils/helpers';
 import { PRODUCT_NAME } from '@/utils/constants';
+import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
 type ZIonSelectType = {
 	children: ReactNode;
 	className?: string;
@@ -37,6 +38,7 @@ type ZIonSelectType = {
 	};
 	minHeight?: 'auto' | string;
 	testingSelector?: string;
+	testingListSelector?: string;
 	onIonChange?: (
 		event: IonSelectCustomEvent<SelectChangeEventDetail<unknown>>
 	) => void;
@@ -62,12 +64,30 @@ const ZIonSelect = (props: ZIonSelectType) => {
 			? { minHeight: props.minHeight }
 			: {};
 
+	const _testingListSelector = props.testingListSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingListSelector || PRODUCT_NAME,
+					_key: createElementTestingSelectorKeyEnum.listSelector,
+				}),
+		  }
+		: {};
+
+	const _testingSelector = props.testingSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingSelector || PRODUCT_NAME,
+				}),
+		  }
+		: {};
+
 	//
 	return (
 		<IonSelect
 			{...props}
 			style={compStyle}
-			{...createElementTestingSelector(props.testingSelector || PRODUCT_NAME)}
+			{..._testingSelector}
+			{..._testingListSelector}
 		>
 			{props.children}
 		</IonSelect>

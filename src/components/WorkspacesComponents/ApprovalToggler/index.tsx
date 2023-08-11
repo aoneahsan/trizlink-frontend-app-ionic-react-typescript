@@ -15,25 +15,42 @@ import {
 import { SwitchChangeEventHandler } from 'rc-switch';
 
 const ZWorkspaceApprovalToggler: React.FC<{
+	workspaceId?: string;
 	icon?: string;
 	text?: string;
 	className?: string;
 	onChange?: SwitchChangeEventHandler;
 	checked?: boolean;
-}> = ({ className, icon, text, onChange, checked }) => {
+	testingSelector?: string;
+	testingListSelector?: string;
+}> = ({
+	className,
+	icon,
+	text,
+	onChange,
+	checked,
+	workspaceId,
+	testingListSelector,
+	testingSelector,
+}) => {
 	return (
 		<ZIonRow
 			className={classNames(className, {
 				'mt-3 ion-align-items-center': true,
 			})}
 		>
-			<ZIonCol className='flex ion-align-items-center gap-2 ps-0' size='10'>
-				<ZIonText className='flex ion-align-items-center gap-1 text-lg'>
+			<ZIonCol className='flex gap-2 ion-align-items-center ps-0' size='10'>
+				<ZIonText className='flex gap-1 text-lg ion-align-items-center'>
 					<ZIonIcon icon={icon} size='large' /> {text}
 				</ZIonText>
 			</ZIonCol>
 			<ZIonCol className='ion-text-end'>
-				<ZRCSwitch onChange={onChange} checked={checked} />
+				<ZRCSwitch
+					onChange={onChange}
+					testingSelector={testingSelector}
+					testingListSelector={testingListSelector}
+					checked={checked}
+				/>
 			</ZIonCol>
 		</ZIonRow>
 	);

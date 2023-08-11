@@ -35,6 +35,7 @@ import { WorkspaceApprovalCards } from '@/data/UserDashboard/Workspace/ApprovalP
 import { checkmarkCircle } from 'ionicons/icons';
 import { workspaceApprovalCardEnum } from '@/types/AdminPanel/workspace';
 import classNames from 'classnames';
+import CONSTANTS from '@/utils/constants';
 
 /**
  * Type Imports go down
@@ -68,9 +69,10 @@ import classNames from 'classnames';
  * */
 
 const ZWorkspaceApprovalCards: React.FC<{
+	workspaceId: string;
 	type?: workspaceApprovalCardEnum;
 	onClick?: (type: workspaceApprovalCardEnum) => void;
-}> = ({ type, onClick }) => {
+}> = ({ type, onClick, workspaceId }) => {
 	return (
 		<ZIonRow className='px-4'>
 			{WorkspaceApprovalCards.map((el, index) => {
@@ -85,6 +87,8 @@ const ZWorkspaceApprovalCards: React.FC<{
 						onClick={() => onClick && onClick(el.cardType)}
 					>
 						<ZIonCard
+							testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.card}-${el.cardType}-${workspaceId}`}
+							testingListSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.card}-${el.cardType}`}
 							className={classNames({
 								'zaions__cursor_pointer border-t-[1px] border-b-[1px] border-s-[1px] border-e-[1px] border-solid':
 									true,
@@ -92,7 +96,7 @@ const ZWorkspaceApprovalCards: React.FC<{
 							})}
 						>
 							<ZIonCardContent>
-								<div className='w-full flex my-1'>
+								<div className='flex w-full my-1'>
 									<ZIonIcon icon={el.icon} className='w-8 h-8' />
 									{el.cardType === type && (
 										<ZIonIcon
@@ -103,7 +107,7 @@ const ZWorkspaceApprovalCards: React.FC<{
 									)}
 								</div>
 								<ZIonText
-									className='mt-2 flex ion-align-items-center gap-2 text-lg'
+									className='flex gap-2 mt-2 text-lg ion-align-items-center'
 									color='dark'
 								>
 									{el.title}

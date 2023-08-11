@@ -1,6 +1,9 @@
 import React from 'react';
 
 import RCSwitch, { SwitchChangeEventHandler } from 'rc-switch';
+import { createElementTestingSelector } from '@/utils/helpers';
+import { PRODUCT_NAME } from '@/utils/constants';
+import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 type ZRCSwitchType = {
 	className?: string;
@@ -14,10 +17,33 @@ type ZRCSwitchType = {
 		[key: string]: unknown;
 	};
 	id?: string;
+
+	//
+	testingSelector?: string;
+	testingListSelector?: string;
 };
 
 const ZRCSwitch: React.FC<ZRCSwitchType> = (props) => {
-	return <RCSwitch {...props} />;
+	const _testingListSelector = props.testingListSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingListSelector || PRODUCT_NAME,
+					_key: createElementTestingSelectorKeyEnum.listSelector,
+				}),
+		  }
+		: {};
+
+	const _testingSelector = props.testingSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingSelector || PRODUCT_NAME,
+				}),
+		  }
+		: {};
+
+	return (
+		<RCSwitch {...props} {..._testingSelector} {..._testingListSelector} />
+	);
 };
 
 export default ZRCSwitch;

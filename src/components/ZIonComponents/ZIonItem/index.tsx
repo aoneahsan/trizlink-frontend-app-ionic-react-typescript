@@ -12,6 +12,7 @@ import {
 } from '@/types/zaionsAppSettings.type';
 import { createElementTestingSelector } from '@/utils/helpers';
 import { PRODUCT_NAME } from '@/utils/constants';
+import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
 type ZIonItemType = {
 	children: ReactNode;
 	className?: string;
@@ -42,6 +43,7 @@ type ZIonItemType = {
 	onClick?: (event?: unknown) => void;
 	minHeight?: 'auto' | string;
 	testingSelector?: string;
+	testingListSelector?: string;
 };
 
 const ZIonItem = (props: ZIonItemType) => {
@@ -53,11 +55,30 @@ const ZIonItem = (props: ZIonItemType) => {
 			: !props.style && props.minHeight
 			? { '--min-height': props.minHeight }
 			: {};
+
+	const _testingListSelector = props.testingListSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingListSelector || PRODUCT_NAME,
+					_key: createElementTestingSelectorKeyEnum.listSelector,
+				}),
+		  }
+		: {};
+
+	const _testingSelector = props.testingSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingSelector || PRODUCT_NAME,
+				}),
+		  }
+		: {};
+
 	return (
 		<IonItem
 			{...props}
 			style={compStyle}
-			{...createElementTestingSelector(props.testingSelector || PRODUCT_NAME)}
+			{..._testingSelector}
+			{..._testingListSelector}
 		>
 			{props.children}
 		</IonItem>

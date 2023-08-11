@@ -366,71 +366,125 @@ const ZTooltipIds = {
 	ZUserAvatarButton_default_tooltip_id: 'z-workspace-ZUserAvatarButton-tooltip',
 };
 
+// abbrivations comment
+/**
+ * pw: password
+ * hp: home-page
+ */
+
 const testingSelectors = {
-	homePageLoginButton: 'home-page-login-button',
+	homePageLoginButton: 'hp-nav-login-btn',
 	loginPage: {
-		loginButton: 'login-page-login-button',
-		forgetPasswordButton: 'login-page-forget-password-button',
-		canViewPasswordButton: 'login-page-see-password-button',
-		googleLoginButton: 'login-page-google-login-button',
-		twitterLoginButton: 'login-page-twitter-login-button',
-		facebookLoginButton: 'login-page-facebook-login-button',
-		appleLoginButton: 'login-page-apple-login-button',
-		signupButton: 'login-page-sign-in-button',
-		emailInput: 'login-page-email-input',
-		passwordInput: 'login-page-password-input',
+		loginButton: 'lp-login-btn',
+		forgetPasswordButton: 'lp-forget-pw-btn',
+		canViewPasswordButton: 'lp-see-password-btn',
+		googleLoginButton: 'lp-google-btn',
+		twitterLoginButton: 'lp-twitter-btn',
+		facebookLoginButton: 'lp-facebook-btn',
+		appleLoginButton: 'lp-apple-btn',
+		signupButton: 'lp-sign-in-btn',
+		emailInput: 'lp-email-input',
+		passwordInput: 'lp-password-input',
 	},
 
 	signupPage: {
-		loginButton: 'signup-page-login-button',
-		SSOLoginButton: 'signup-page-sso-login-button',
-		googleSignupButton: 'signup-page-google-signup-button',
-		signupButton: 'signup-page-signup-button',
-		usernameInput: 'signup-page-username-input',
-		emailInput: 'signup-page-email-input',
-		passwordInput: 'signup-page-password-input',
-		canViewPasswordButton: 'signup-page-see-password-button',
-		confirmPasswordInput: 'signup-page-confirm-password-input',
-		canViewConfirmPasswordButton: 'signup-page-see-confirm-password-button',
+		loginButton: 'sp-login-btn',
+		SSOLoginButton: 'sp-sso-btn',
+		googleSignupButton: 'sp-google-btn',
+		signupButton: 'sp-form-submit-btn',
+		usernameInput: 'sp-username-input',
+		emailInput: 'sp-email-input',
+		passwordInput: 'sp-password-input',
+		canViewPasswordButton: 'sp-see-password-btn',
+		confirmPasswordInput: 'sp-confirm-password-input',
+		canViewConfirmPasswordButton: 'sp-see-confirm-password-btn',
 	},
 
 	workspace: {
 		listPage: {
-			inviteButton: 'workspace-list-page-invite-button',
-			createWorkspaceButton: 'workspace-list-page-create-button',
-			createWorkspaceCardButton: 'workspace-list-page-create-card-button',
-			viewWorkspaceButton: 'workspace-list-page-view-button',
-			workspaceCardImg: 'workspace-list-page-card-image',
-			workspaceCardTitle: 'workspace-list-page-card-title',
-			workspaceCardFavoritesButton: 'workspace-list-page-card-favorites-button',
-			workspaceCardUserButton: 'workspace-list-page-card-user-button',
-			workspaceCardActionPopoverButton:
-				'workspace-list-page-card-action-button',
+			inviteButton: 'wlp-invite-btn',
+			createWorkspaceButton: 'wlp-create-btn',
+			createWorkspaceCardButton: 'wlp-create-card-btn',
+			viewWorkspaceButton: 'wlp-view-btn',
+			workspaceCardImg: 'wlp-card-image',
+			workspaceCardTitle: 'wlp-card-title',
+			workspaceCardFavoritesButton: 'wlp-card-favorites-btn',
+			workspaceCardUserButton: 'wlp-card-user-btn',
+			workspaceCardActionPopoverButton: 'wlp-card-action-btn',
 		},
 		createModal: {
-			nameInput: 'workspace-create-modal-name-input',
-			timezoneInput: 'workspace-create-modal-timezone-input',
-			createButton: 'workspace-create-modal-create-button',
-			closeButton: 'workspace-create-modal-close-button',
+			nameInput: 'wcm-name-input',
+			timezoneInput: 'wcm-timezone-input',
+			createButton: 'wcm-create-btn',
+			closeButton: 'wcm-close-btn',
 		},
+
 		actionsPopover: {
-			manageUsers: 'workspace-action-popover-manage-user-button',
-			configureTimetable: 'workspace-action-popover-configure-timetable-button',
-			manageLabels: 'workspace-action-popover-manage-labels-button',
-			settings: 'workspace-action-popover-settings-button',
-			approvalSettings: 'workspace-action-popover-approval-settings-button',
-			edit: 'workspace-action-popover-edit-button',
-			delete: 'workspace-action-popover-delete-button',
+			// wap: workspace action popover
+			manageUsers: 'wap-manage-user-btn',
+			configureTimetable: 'wap-configure-timetable-btn',
+			manageLabels: 'wap-manage-labels-btn',
+			settings: 'wap-settings-btn',
+			approvalSettings: 'wap-approval-settings-btn',
+			edit: 'wap-edit-btn',
+			delete: 'wap-delete-btn',
+		},
+
+		settingsModal: {
+			tabs: {
+				timetable: 'wsm-timetable-tab',
+				labels: 'wsm-labels-tab',
+				settings: 'wsm-settings-tab',
+				approvals: 'wsm-approvals-tab',
+			},
+			timetable: {
+				addTimeButton: 'wsm-tt-add-time-btn',
+				timeActionButton: 'wsm-tt-time-actions-btn',
+				timeEditButton: 'wsm-tt-time-edit-btn',
+				timeDeleteButton: 'wsm-tt-time-delete-btn',
+
+				formModal: {
+					timeInput: 'wsm-tfm-time-input',
+					daySelector: 'wsm-tfm-day-selector',
+					colorInput: 'wsm-tfm-color-input',
+					colorBtn: 'wsm-tfm-color-btn',
+					closeBtn: 'wsm-tfm-close-modal-btn',
+					submitBtn: 'wsm-tfm-form-submit-btn',
+				},
+			},
+			labels: {
+				addNewLabelButton: 'wsm-lt-add-btn',
+				addNewLabelInfoButton: 'wsm-lt-add-info-btn',
+				labelNameInput: 'wsm-lt-name-input',
+				closedCreateModeButton: 'wsm-lt-close-create-form-btn',
+				createLabelButton: 'wsm-lt-create-label-btn',
+				editLabelButton: 'wsm-lt-edit-label-btn',
+				deleteLabelButton: 'wsm-lt-delete-label-btn',
+			},
+			settings: {
+				//
+				workspaceNameInput: 'wsm-st-name-input',
+				workspaceTimezoneInput: 'wsm-st-timezone-input',
+				internalPostInfoButton: 'wsm-st-internal-post-info-btn',
+				internalPostToggler: 'wsm-st-internal-post-toggler',
+				updateButton: 'wsm-st-update-btn',
+				deleteButton: 'wsm-st-delete-btn',
+			},
+			approvals: {
+				card: 'wsm-at-card',
+				schedulePostToggler: 'wsm-at-schedule-post-toggler',
+				lockContent: 'wsm-at-lock-content',
+			},
 		},
 	},
 
 	user: {
-		userProfilePopoverButton: 'user-profile-popover-button',
+		userProfilePopoverButton: 'user-profile-popover-btn',
 		profilePopover: {
-			profileSettings: 'profile-popover-profile-settings-button',
-			notificationSettings: 'profile-popover-profile-settings-button',
-			logout: 'profile-popover-logout-button',
-			addNewCompanyAccount: 'profile-popover-add-company-account-button',
+			profileSettings: 'profile-popover-profile-settings-btn',
+			notificationSettings: 'profile-popover-profile-settings-btn',
+			logout: 'profile-popover-logout-btn',
+			addNewCompanyAccount: 'profile-popover-add-company-account-btn',
 		},
 	},
 };

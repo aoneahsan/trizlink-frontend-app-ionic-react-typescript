@@ -144,6 +144,10 @@ const ZWorkspacesSettingModal: React.FC<{
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.timetable}
 						className='text-transform-initial ion-no-padding ion-text-center'
+						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.timetable}-${workspaceId}`}
+						testingListSelector={
+							CONSTANTS.testingSelectors.workspace.settingsModal.tabs.timetable
+						}
 						onClick={() => {
 							setCompState((oldValues) => ({
 								...oldValues,
@@ -159,6 +163,10 @@ const ZWorkspacesSettingModal: React.FC<{
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.labels}
 						className='text-transform-initial ion-no-padding ion-text-center'
+						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.labels}-${workspaceId}`}
+						testingListSelector={
+							CONSTANTS.testingSelectors.workspace.settingsModal.tabs.labels
+						}
 						onClick={() => {
 							setCompState((oldValues) => ({
 								...oldValues,
@@ -174,6 +182,10 @@ const ZWorkspacesSettingModal: React.FC<{
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.settings}
 						className='text-transform-initial ion-no-padding ion-text-center'
+						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.settings}-${workspaceId}`}
+						testingListSelector={
+							CONSTANTS.testingSelectors.workspace.settingsModal.tabs.settings
+						}
 						onClick={() => {
 							setCompState((oldValues) => ({
 								...oldValues,
@@ -189,6 +201,10 @@ const ZWorkspacesSettingModal: React.FC<{
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.approvals}
 						className='text-transform-initial ion-no-padding ion-text-center'
+						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.approvals}-${workspaceId}`}
+						testingListSelector={
+							CONSTANTS.testingSelectors.workspace.settingsModal.tabs.approvals
+						}
 						onClick={() => {
 							setCompState((oldValues) => ({
 								...oldValues,
@@ -218,7 +234,7 @@ const ZWorkspacesSettingModal: React.FC<{
 							/>
 						) : compState.activeTab ===
 						  workspaceSettingsModalTabEnum.approvals ? (
-							<ZApprovalTab />
+							<ZApprovalTab workspaceId={workspaceId} />
 						) : (
 							''
 						)}

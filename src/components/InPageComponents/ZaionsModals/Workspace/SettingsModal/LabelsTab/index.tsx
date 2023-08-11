@@ -381,6 +381,10 @@ const ZLabelsTab: React.FC<{
 											size='small'
 											fill='clear'
 											disabled={values.enableAddLabel}
+											testingSelector={
+												CONSTANTS.testingSelectors.workspace.settingsModal
+													.labels.addNewLabelButton
+											}
 											onClick={() => {
 												setFieldValue('enableAddLabel', true, false);
 												setFieldValue('mode', FormMode.ADD, false);
@@ -397,6 +401,10 @@ const ZLabelsTab: React.FC<{
 											fill='clear'
 											color='medium'
 											id='z-workspace-add-label-tooltip'
+											testingSelector={
+												CONSTANTS.testingSelectors.workspace.settingsModal
+													.labels.addNewLabelInfoButton
+											}
 										>
 											<ZIonIcon icon={alertCircleOutline} />
 										</ZIonButton>
@@ -423,9 +431,13 @@ const ZLabelsTab: React.FC<{
 													minHeight='2.3rem'
 													name='title'
 													value={values.title}
-													errorText={errors.title}
 													onIonChange={handleChange}
 													onIonBlur={handleBlur}
+													errorText={touched.title ? errors.title : undefined}
+													testingSelector={
+														CONSTANTS.testingSelectors.workspace.settingsModal
+															.labels.labelNameInput
+													}
 													className={classNames({
 														'bg-white': true,
 														'ion-touched': touched.title,
@@ -438,6 +450,10 @@ const ZLabelsTab: React.FC<{
 													className='mx-1 ion-no-margin ion-no-padding'
 													size='small'
 													fill='clear'
+													testingSelector={
+														CONSTANTS.testingSelectors.workspace.settingsModal
+															.labels.closedCreateModeButton
+													}
 													onClick={() => {
 														setFieldValue('enableAddLabel', false, false);
 													}}
@@ -455,6 +471,10 @@ const ZLabelsTab: React.FC<{
 													color='success'
 													fill='clear'
 													disabled={!isValid}
+													testingSelector={
+														CONSTANTS.testingSelectors.workspace.settingsModal
+															.labels.closedCreateModeButton
+													}
 													onClick={() => {
 														void submitForm();
 													}}
@@ -540,6 +560,12 @@ const ZLabelsTab: React.FC<{
 																						icon={createOutline}
 																						className='w-5 h-5 cursor-pointer'
 																						id={`z-workspace-add-label-edit-${index}`}
+																						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.labels.editLabelButton}-${el.id}`}
+																						testingListSelector={
+																							CONSTANTS.testingSelectors
+																								.workspace.settingsModal.labels
+																								.editLabelButton
+																						}
 																						onClick={() => {
 																							setFieldValue(
 																								`allLabels.${index}.editMode`,
@@ -570,6 +596,12 @@ const ZLabelsTab: React.FC<{
 																						icon={trashBinOutline}
 																						className='w-4 h-4 cursor-pointer ms-2'
 																						id={`z-workspace-add-label-delete-${index}`}
+																						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.labels.deleteLabelButton}-${el.id}`}
+																						testingListSelector={
+																							CONSTANTS.testingSelectors
+																								.workspace.settingsModal.labels
+																								.deleteLabelButton
+																						}
 																						onClick={async () => {
 																							if (el.id) {
 																								await deleteLabel(el.id);

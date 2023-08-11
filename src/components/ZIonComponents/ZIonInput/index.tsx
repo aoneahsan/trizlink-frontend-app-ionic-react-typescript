@@ -13,6 +13,7 @@ import {
 import { IonInputCustomEvent } from '@ionic/core/dist/types/components';
 import { createElementTestingSelector } from '@/utils/helpers';
 import { PRODUCT_NAME } from '@/utils/constants';
+import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 type ZIonInputAutoCompleteType =
 	| 'name'
@@ -140,6 +141,7 @@ export type ZIonInputType = {
 	};
 	minHeight?: 'auto' | string;
 	testingSelector?: string;
+	testingListSelector?: string;
 
 	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
 	onIonBlur?: <A extends Event>(event: A) => void;
@@ -166,6 +168,23 @@ const ZIonInput = React.forwardRef(
 				? { minHeight: props.minHeight }
 				: {};
 
+		const _testingListSelector = props.testingListSelector
+			? {
+					...createElementTestingSelector({
+						_value: props.testingListSelector || PRODUCT_NAME,
+						_key: createElementTestingSelectorKeyEnum.listSelector,
+					}),
+			  }
+			: {};
+
+		const _testingSelector = props.testingSelector
+			? {
+					...createElementTestingSelector({
+						_value: props.testingSelector || PRODUCT_NAME,
+					}),
+			  }
+			: {};
+
 		return (
 			<IonInput
 				{...props}
@@ -173,7 +192,8 @@ const ZIonInput = React.forwardRef(
 				fill={props.fill || 'outline'}
 				ref={ref}
 				style={compStyle}
-				{...createElementTestingSelector(props.testingSelector || PRODUCT_NAME)}
+				{..._testingSelector}
+				{..._testingListSelector}
 			/>
 		);
 	}

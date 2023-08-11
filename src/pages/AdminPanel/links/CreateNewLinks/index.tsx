@@ -132,6 +132,7 @@ import NewLinkFolder, {
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZShortLinkModal from '@/components/InPageComponents/ZaionsModals/ShortLinkModal';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { ENVS } from '@/utils/envKeys';
 
 /**
  * Style files Imports go down
@@ -510,8 +511,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
 					//
 					shortUrlDomain:
-						selectedShortLink?.shortUrlDomain ||
-						_env.VITE_DEFAULT_SHORT_URL_DOMAIN,
+						selectedShortLink?.shortUrlDomain || ENVS.defaultShortUrlDomain,
 					shortUrlPath: selectedShortLink?.shortUrlPath || '',
 					isShortUrlPathValid: true,
 					//

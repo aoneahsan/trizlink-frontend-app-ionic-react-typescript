@@ -18,7 +18,6 @@ import {
 	ZIonBadge,
 	ZIonCol,
 	ZIonGrid,
-	ZIonIcon,
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
@@ -26,6 +25,7 @@ import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import ZWorkspaceApprovalCards from '@/components/WorkspacesComponents/ApprovalCards';
 import ZWorkspaceApprovalToggler from '@/components/WorkspacesComponents/ApprovalToggler';
+import CONSTANTS from '@/utils/constants';
 
 /**
  * Custom Hooks Imports go down
@@ -68,26 +68,26 @@ import ZWorkspaceApprovalToggler from '@/components/WorkspacesComponents/Approva
  * @type {*}
  * */
 
-const ZApprovalTab: React.FC = () => {
+const ZApprovalTab: React.FC<{ workspaceId: string }> = ({ workspaceId }) => {
 	return (
 		<ZIonGrid>
 			{/* Cards */}
-			<ZWorkspaceApprovalCards />
+			<ZWorkspaceApprovalCards workspaceId={workspaceId} />
 
 			{/*  */}
-			<ZIonRow className='ion-justify-content-center mt-4'>
+			<ZIonRow className='mt-4 ion-justify-content-center'>
 				<ZIonCol size='5'>
 					<ZIonText className='block text-xl'>
 						Who can approve content?
 					</ZIonText>
 					<ZIonRow>
 						<ZIonCol
-							className='flex ion-align-items-center gap-2 ps-0'
+							className='flex gap-2 ion-align-items-center ps-0'
 							size='10'
 						>
 							<ZUserAvatarButton />
 							<div>
-								<ZIonText className='flex ion-align-items-center gap-1'>
+								<ZIonText className='flex gap-1 ion-align-items-center'>
 									Muhammad talha Irshad (you) <ZIonBadge>Team</ZIonBadge>
 								</ZIonText>
 								<ZIonText className='block zaions__fs_14'>
@@ -103,13 +103,25 @@ const ZApprovalTab: React.FC = () => {
 					{/* Schedule posts approval */}
 					<ZWorkspaceApprovalToggler
 						icon={timeOutline}
+						workspaceId={workspaceId}
 						text='Schedule posts automatically on approval'
+						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.schedulePostToggler}-${workspaceId}`}
+						testingListSelector={
+							CONSTANTS.testingSelectors.workspace.settingsModal.approvals
+								.schedulePostToggler
+						}
 					/>
 
 					{/* Lock content approval */}
 					<ZWorkspaceApprovalToggler
 						icon={lockClosedOutline}
+						workspaceId={workspaceId}
 						text='Lock content after approval'
+						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.lockContent}-${workspaceId}`}
+						testingListSelector={
+							CONSTANTS.testingSelectors.workspace.settingsModal.approvals
+								.lockContent
+						}
 					/>
 				</ZIonCol>
 			</ZIonRow>

@@ -4,6 +4,9 @@ import React, { ReactNode } from 'react';
 // Packages Import
 import { IonSegmentButton } from '@ionic/react';
 import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
+import { createElementTestingSelector } from '@/utils/helpers';
+import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
+import { PRODUCT_NAME } from '@/utils/constants';
 
 type ZIonSegmentButtonType = {
 	children: ReactNode;
@@ -16,6 +19,8 @@ type ZIonSegmentButtonType = {
 	mode?: ZIonModeType;
 	value?: string;
 	type?: 'button' | 'reset' | 'submit';
+	testingSelector?: string;
+	testingListSelector?: string;
 	layout?:
 		| 'icon-bottom'
 		| 'icon-end'
@@ -28,7 +33,32 @@ type ZIonSegmentButtonType = {
 };
 
 const ZIonSegmentButton = (props: ZIonSegmentButtonType) => {
-	return <IonSegmentButton {...props}>{props.children}</IonSegmentButton>;
+	const _testingListSelector = props.testingListSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingListSelector || PRODUCT_NAME,
+					_key: createElementTestingSelectorKeyEnum.listSelector,
+				}),
+		  }
+		: {};
+
+	const _testingSelector = props.testingSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingSelector || PRODUCT_NAME,
+				}),
+		  }
+		: {};
+
+	return (
+		<IonSegmentButton
+			{...props}
+			{..._testingSelector}
+			{..._testingListSelector}
+		>
+			{props.children}
+		</IonSegmentButton>
+	);
 };
 
 export default ZIonSegmentButton;

@@ -84,6 +84,7 @@ interface ZTimezoneSelectorInterface {
 		[key: string]: unknown;
 	};
 	testingSelector?: string;
+	testingListSelector?: string;
 }
 
 /**

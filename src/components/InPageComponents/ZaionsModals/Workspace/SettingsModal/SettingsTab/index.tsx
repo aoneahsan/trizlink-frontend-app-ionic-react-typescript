@@ -324,6 +324,11 @@ const ZSettingsTab: React.FC<{
 									onIonBlur={handleBlur}
 									errorText={errors.workspaceName}
 									value={values.workspaceName}
+									testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.workspaceNameInput}-${workspaceId}`}
+									testingListSelector={
+										CONSTANTS.testingSelectors.workspace.settingsModal.settings
+											.workspaceNameInput
+									}
 									className={classNames({
 										'bg-white': true,
 										'ion-touched': touched.workspaceName,
@@ -340,15 +345,20 @@ const ZSettingsTab: React.FC<{
 									value={values.workspaceTimezone}
 									onIonChange={handleChange}
 									onIonBlur={handleBlur}
+									style={{
+										'--background': '#fff',
+									}}
+									testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.workspaceTimezoneInput}-${workspaceId}`}
+									testingListSelector={
+										CONSTANTS.testingSelectors.workspace.settingsModal.settings
+											.workspaceTimezoneInput
+									}
 									className={classNames({
 										'pt-2 ion-margin-top': true,
 										'ion-touched': touched.workspaceTimezone,
 										'ion-invalid': errors.workspaceTimezone,
 										'ion-valid': !errors.workspaceTimezone,
 									})}
-									style={{
-										'--background': '#fff',
-									}}
 								/>
 
 								<ZIonRow className='pt-4 ion-align-items-center'>
@@ -362,6 +372,11 @@ const ZSettingsTab: React.FC<{
 											icon={alertCircleOutline}
 											className='w-6 h-6 cursor-pointer ms-2'
 											id='z-workspace-internal-post'
+											testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.internalPostInfoButton}-${workspaceId}`}
+											testingListSelector={
+												CONSTANTS.testingSelectors.workspace.settingsModal
+													.settings.internalPostInfoButton
+											}
 										/>
 										<ZRTooltip
 											anchorSelect='#z-workspace-internal-post'
@@ -373,6 +388,11 @@ const ZSettingsTab: React.FC<{
 
 									<ZIonCol className='ion-text-end'>
 										<ZRCSwitch
+											testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.internalPostToggler}-${workspaceId}`}
+											testingListSelector={
+												CONSTANTS.testingSelectors.workspace.settingsModal
+													.settings.internalPostToggler
+											}
 											onChange={(value) => {
 												setFieldValue('internalPost', value, false);
 											}}
@@ -382,6 +402,11 @@ const ZSettingsTab: React.FC<{
 
 								<div className='w-full mt-2 ion-text-end'>
 									<ZIonButton
+										testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.updateButton}-${workspaceId}`}
+										testingListSelector={
+											CONSTANTS.testingSelectors.workspace.settingsModal
+												.settings.updateButton
+										}
 										disabled={
 											values.workspaceName ===
 												compState.workspace?.workspaceName &&
@@ -420,6 +445,11 @@ const ZSettingsTab: React.FC<{
 					<ZIonButton
 						color='danger'
 						className='mt-2 ion-no-margin text-transform-initial'
+						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.deleteButton}-${workspaceId}`}
+						testingListSelector={
+							CONSTANTS.testingSelectors.workspace.settingsModal.settings
+								.deleteButton
+						}
 						onClick={() => {
 							void deleteWorkspace();
 						}}

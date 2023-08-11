@@ -76,7 +76,6 @@ import classes from './styles.module.css';
 
 /**
  * Functional Component
- * About: (Info of component here...)
  * @type {*}
  * */
 
@@ -128,6 +127,10 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 										})}
 										color='dark'
 										testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardImg}-${id}`}
+										testingListSelector={
+											CONSTANTS.testingSelectors.workspace.listPage
+												.workspaceCardImg
+										}
 									>
 										<ZIonImg
 											src={
@@ -153,6 +156,10 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 											values: [id || '', 'all'],
 										})}
 										testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardTitle}-${id}`}
+										testingListSelector={
+											CONSTANTS.testingSelectors.workspace.listPage
+												.workspaceCardTitle
+										}
 									>
 										<ZIonText
 											className='block text-base font-bold'
@@ -175,6 +182,10 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 									fill='clear'
 									className='h-auto mb-1 ion-no-padding ion-no-margin'
 									testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardFavoritesButton}-${id}`}
+									testingListSelector={
+										CONSTANTS.testingSelectors.workspace.listPage
+											.workspaceCardFavoritesButton
+									}
 								>
 									<ZIonIcon icon={starOutline} />
 								</ZIonButton>
@@ -190,6 +201,10 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 											color='primary'
 											fill='solid'
 											testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardUserButton}-${id}`}
+											testingListSelector={
+												CONSTANTS.testingSelectors.workspace.listPage
+													.workspaceCardUserButton
+											}
 											className={classNames(
 												classes['workspace-user-avatar-button'],
 												{
@@ -230,6 +245,10 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 									color='secondary'
 									size='default'
 									testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.viewWorkspaceButton}-${id}`}
+									testingListSelector={
+										CONSTANTS.testingSelectors.workspace.listPage
+											.viewWorkspaceButton
+									}
 									onClick={() => {
 										// Click on card will redirect to view workspace.
 										if (id) {
@@ -258,6 +277,10 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 									className='h-auto mb-1 ion-no-padding ion-no-margin text-transform-initial'
 									color='dark'
 									testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardActionPopoverButton}-${id}`}
+									testingListSelector={
+										CONSTANTS.testingSelectors.workspace.listPage
+											.workspaceCardActionPopoverButton
+									}
 									onClick={(event: unknown) => {
 										presentWorkspacesActionsPopover({
 											_event: event as Event,

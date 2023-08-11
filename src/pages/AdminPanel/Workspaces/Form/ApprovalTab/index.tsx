@@ -123,12 +123,13 @@ const ZWorkspaceFormApprovalTab: React.FC = () => {
 							>
 								{/* Approval Cards */}
 								<ZWorkspaceApprovalCards
+									workspaceId={editWorkspaceId}
 									type={values.approval}
 									onClick={(type) => setFieldValue('approval', type, false)}
 								/>
 
 								{/* Schedule posts approval */}
-								<ZIonRow className='ion-align-items-center ion-justify-content-center mt-4'>
+								<ZIonRow className='mt-4 ion-align-items-center ion-justify-content-center'>
 									<ZIonCol sizeXl='5'>
 										{/* Schedule posts approval */}
 										<ZWorkspaceApprovalToggler
