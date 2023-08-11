@@ -373,7 +373,10 @@ const ZTooltipIds = {
  */
 
 const testingSelectors = {
-	homePageLoginButton: 'hp-nav-login-btn',
+	homePage: {
+		loginButton: 'hp-nav-login-btn',
+		signupButton: 'hp-nav-signup-btn',
+	},
 	loginPage: {
 		loginButton: 'lp-login-btn',
 		forgetPasswordButton: 'lp-forget-pw-btn',
