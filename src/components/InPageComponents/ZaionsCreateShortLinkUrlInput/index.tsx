@@ -197,7 +197,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
 							</ZIonItem>
 						)}
 						{!showSkeleton && errors.domain && touched.domain && (
-							<div className='ps-1 zaions__fs_14'>
+							<div className='ps-1 text-[14px]'>
 								<IonNote color='danger'>{errors.domain}</IonNote>
 							</div>
 						)}

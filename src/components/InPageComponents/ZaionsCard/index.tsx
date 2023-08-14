@@ -42,7 +42,7 @@ const ZaionsCardWithIcon: React.FC<{
 								style={{ height: 'max-content' }}
 							>
 								<ZIonCardHeader>
-									<ZIonImg className='zaions__w40' src={el.icon} />
+									<ZIonImg className='w-[40%]' src={el.icon} />
 
 									<ZIonCardTitle className='text-xl mt-3 font-bold'>
 										{el.title}
@@ -50,11 +50,11 @@ const ZaionsCardWithIcon: React.FC<{
 								</ZIonCardHeader>
 
 								<ZIonCardContent>
-									<ZIonText className='mb-4 pb-1 zaions__fs_15'>
+									<ZIonText className='mb-4 pb-1 text-[15px]'>
 										{el.text}
 									</ZIonText>
 									<ZIonRouterLink
-										className={`pt-4 ${classes.ZaionsCardBtn} zaions__fs_15`}
+										className={`pt-4 ${classes.ZaionsCardBtn} text-[15px]`}
 										color='dark'
 										// onMouseEnter={() => {}}
 									>

@@ -90,7 +90,7 @@ const ZWorkspaceApprovalCards: React.FC<{
 							testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.card}-${el.cardType}-${workspaceId}`}
 							testingListSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.card}-${el.cardType}`}
 							className={classNames({
-								'zaions__cursor_pointer border-t-[1px] border-b-[1px] border-s-[1px] border-e-[1px] border-solid':
+								'cursor-pointer border-t-[1px] border-b-[1px] border-s-[1px] border-e-[1px] border-solid':
 									true,
 								'zaions-border-color-secondary': el.cardType === type,
 							})}

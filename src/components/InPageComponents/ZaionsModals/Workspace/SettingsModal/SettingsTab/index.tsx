@@ -444,7 +444,7 @@ const ZSettingsTab: React.FC<{
 
 					<ZIonButton
 						color='danger'
-						className='mt-2 ion-no-margin text-transform-initial'
+						className='mt-2 ion-no-margin normal-case'
 						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.deleteButton}-${workspaceId}`}
 						testingListSelector={
 							CONSTANTS.testingSelectors.workspace.settingsModal.settings

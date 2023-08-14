@@ -121,7 +121,7 @@ const ZWorkspaceSingleComment: React.FC<{
 				<div className='mt-4'>
 					<ZIonButton
 						fill='clear'
-						className='ion-no-padding ion-no-margin text-transform-initial text-xs'
+						className='ion-no-padding ion-no-margin normal-case text-xs'
 						color='medium'
 						size='small'
 					>

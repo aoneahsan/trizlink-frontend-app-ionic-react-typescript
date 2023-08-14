@@ -54,9 +54,7 @@ const APSettingsCustomDomain: React.FC = () => {
 					<div className=''>
 						<ZIonImg
 							src={drawCustomdomain}
-							className={`mx-auto ${
-								!isLgScale ? 'w-full mt-5' : 'zaions__w60 '
-							}`}
+							className={`mx-auto ${!isLgScale ? 'w-full mt-5' : 'w-[60%] '}`}
 						/>
 					</div>
 				</ZIonCol>
@@ -106,7 +104,7 @@ const APSettingsCustomDomain: React.FC = () => {
 							How add your domain name?
 						</ZIonText>
 						<div className='flex ion-align-items-center mb-3'>
-							<ZIonItem slot='start' className='zaions__w88 me-auto'>
+							<ZIonItem slot='start' className='w-[88%] me-auto'>
 								<ZIonInput
 									label='link.yourBrand.com'
 									labelPlacement='floating'

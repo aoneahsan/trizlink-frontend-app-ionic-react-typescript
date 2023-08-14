@@ -17,29 +17,23 @@ import {
 	ZIonSelectOption,
 	ZIonSpinner,
 } from '@/components/ZIonComponents';
-import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 
 // Global Constants
-import { formatReactSelectOption } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import CONSTANTS from '@/utils/constants';
 
 // Images
 
 // Recoil States
 
 // Types
-// import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 import {
-	FolderInterface,
 	LinkFolderType,
 	ZaionsShortUrlOptionFieldsValuesInterface,
 } from '@/types/AdminPanel/linksType';
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { folderState } from '@/types/AdminPanel/index.type';
-import CONSTANTS from '@/utils/constants';
 
 // Styles
 // import CLASSES from './styles.module.css';
@@ -50,7 +44,7 @@ const NewLinkFolder: React.FC<{
 	workspaceId: string;
 	showSkeleton?: boolean;
 }> = ({ _foldersData, _state, workspaceId, showSkeleton = false }) => {
-	const { values, handleChange, handleBlur, setFieldValue } =
+	const { values, handleChange, handleBlur } =
 		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
 	const { presentZIonModal: presentFolderModal } = useZIonModal(

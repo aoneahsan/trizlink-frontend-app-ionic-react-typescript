@@ -93,7 +93,7 @@ const APSettingsEmbedWidgets: React.FC = () => {
 							possibilities are unlimited 💫
 						</ZIonText>
 						<br />
-						<ZIonImg src={noScript} className='zaions__w50 mx-auto mt-5' />
+						<ZIonImg src={noScript} className='w-1/2 mx-auto mt-5' />
 					</ZIonCol>
 				</ZIonRow>
 			)}

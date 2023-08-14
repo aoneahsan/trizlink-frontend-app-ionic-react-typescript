@@ -19,7 +19,7 @@ import { useMediaQuery } from 'react-responsive';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZLinkDashboardTopBar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
 import ZLinkIonPanelSidebar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
 import ZaionsLinkSettingPanel from '@/components/UserDashboard/ZLinkdashboard/ZLinksSettingPanel';
@@ -131,7 +131,7 @@ const ZAccountDetails: React.FC = () => {
 	const { presentZIonToastDanger } = useZIonToastDanger();
 	return (
 		<>
-			<ZaionsIonPage
+			<ZIonPage
 				pageTitle='Setting'
 				id={CONSTANTS.MENU_IDS.DASHBOARD_SM_MENU_CONTENT_ID}
 				// if it in lg then the menu will appear
@@ -147,7 +147,7 @@ const ZAccountDetails: React.FC = () => {
 					/>
 
 					<div
-						className='ion-page zaionsPaneContent'
+						className='ion-page  overflow-y-scroll'
 						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
 					>
 						{/* Top bar */}
@@ -183,7 +183,7 @@ const ZAccountDetails: React.FC = () => {
 											</ZIonCol>
 											{isMdScale && (
 												<ZIonCol className='ion-text-end'>
-													<ZIonButton className='ion-text-capitalize zaions__fs_18'>
+													<ZIonButton className='ion-text-capitalize text-[18px]'>
 														Upgrade
 													</ZIonButton>
 												</ZIonCol>
@@ -249,7 +249,7 @@ const ZAccountDetails: React.FC = () => {
 												<ZIonButton
 													fill='clear'
 													className={classNames({
-														'ion-text-capitalize zaions__fs_16': true,
+														'ion-text-capitalize text-[16px]': true,
 														'ion-no-padding ion-no-margin': !isMdScale,
 													})}
 													routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
@@ -315,7 +315,7 @@ const ZAccountDetails: React.FC = () => {
 																>
 																	<ZIonButton
 																		fill='clear'
-																		className='ion-text-capitalize zaions__fs_16 ion-no-padding'
+																		className='ion-text-capitalize text-[16px] ion-no-padding'
 																		onClick={() =>
 																			setAccountDetailsState((oldVals) => ({
 																				...oldVals,
@@ -345,7 +345,7 @@ const ZAccountDetails: React.FC = () => {
 												>
 													<ZIonInput
 														className={classNames({
-															zaions__w70: isMdScale,
+															'w-[70%]': isMdScale,
 															'w-full mb-2': !isMdScale,
 														})}
 														placeholder='User Name'
@@ -442,7 +442,7 @@ const ZAccountDetails: React.FC = () => {
 																>
 																	<ZIonButton
 																		fill='clear'
-																		className='ion-text-capitalize zaions__fs_16 ion-no-padding'
+																		className='ion-text-capitalize text-[16px] ion-no-padding'
 																		onClick={() =>
 																			setAccountDetailsState((oldVals) => ({
 																				...oldVals,
@@ -509,7 +509,7 @@ const ZAccountDetails: React.FC = () => {
 																			'emailAddress'
 																		)}
 																		className={classNames({
-																			zaions__w80: isMdScale,
+																			'w-[80%]': isMdScale,
 																			'w-full mb-3': !isMdScale,
 																		})}
 																		name='primaryEmail'
@@ -599,8 +599,8 @@ const ZAccountDetails: React.FC = () => {
 																<IonProgressBar
 																	className={classNames({
 																		'inline-block me-2': true,
-																		zaions__w80: isMdScale || !isSmScale,
-																		zaions__w90: !isMdScale && isSmScale,
+																		'w-[80%]': isMdScale || !isSmScale,
+																		'w-[90%]': !isMdScale && isSmScale,
 																	})}
 																/>{' '}
 																<ZIonText className='ion-hide-md-down'>
@@ -621,7 +621,7 @@ const ZAccountDetails: React.FC = () => {
 															>
 																<ZIonButton
 																	fill='clear'
-																	className='ion-text-capitalize zaions__fs_16 ion-no-padding'
+																	className='ion-text-capitalize text-[16px] ion-no-padding'
 																	routerLink={
 																		ZaionsRoutes.WhyZaions.ZaionsPricingRoute
 																	}
@@ -673,8 +673,8 @@ const ZAccountDetails: React.FC = () => {
 																<IonProgressBar
 																	className={classNames({
 																		'inline-block me-2': true,
-																		zaions__w80: isMdScale || !isSmScale,
-																		zaions__w90: !isMdScale && isSmScale,
+																		'w-[80%]': isMdScale || !isSmScale,
+																		'w-[90%]': !isMdScale && isSmScale,
 																	})}
 																/>{' '}
 																<ZIonText className='ms-2 ion-hide-md-down'>
@@ -695,7 +695,7 @@ const ZAccountDetails: React.FC = () => {
 															>
 																<ZIonButton
 																	fill='clear'
-																	className='ion-text-capitalize zaions__fs_16 ion-no-padding'
+																	className='ion-text-capitalize text-[16px] ion-no-padding'
 																	routerLink={
 																		ZaionsRoutes.WhyZaions.ZaionsPricingRoute
 																	}
@@ -747,8 +747,8 @@ const ZAccountDetails: React.FC = () => {
 																<IonProgressBar
 																	className={classNames({
 																		'inline-block me-2': true,
-																		zaions__w80: isMdScale || !isSmScale,
-																		zaions__w90: !isMdScale && isSmScale,
+																		'w-[80%]': isMdScale || !isSmScale,
+																		'w-[90%]': !isMdScale && isSmScale,
 																	})}
 																/>{' '}
 																<ZIonText className='ms-2 ion-hide-md-down'>
@@ -769,7 +769,7 @@ const ZAccountDetails: React.FC = () => {
 															>
 																<ZIonButton
 																	fill='clear'
-																	className='ion-text-capitalize zaions__fs_16 ion-no-padding'
+																	className='ion-text-capitalize text-[16px] ion-no-padding'
 																	routerLink={
 																		ZaionsRoutes.WhyZaions.ZaionsPricingRoute
 																	}
@@ -821,8 +821,8 @@ const ZAccountDetails: React.FC = () => {
 																<IonProgressBar
 																	className={classNames({
 																		'inline-block me-2': true,
-																		zaions__w80: isMdScale || !isSmScale,
-																		zaions__w90: !isMdScale && isSmScale,
+																		'w-[80%]': isMdScale || !isSmScale,
+																		'w-[90%]': !isMdScale && isSmScale,
 																	})}
 																/>{' '}
 																<ZIonText className='ion-hide-md-down'>
@@ -843,7 +843,7 @@ const ZAccountDetails: React.FC = () => {
 															>
 																<ZIonButton
 																	fill='clear'
-																	className='ion-text-capitalize zaions__fs_16 ion-no-padding'
+																	className='ion-text-capitalize text-[16px] ion-no-padding'
 																	routerLink={
 																		ZaionsRoutes.WhyZaions.ZaionsPricingRoute
 																	}
@@ -862,7 +862,7 @@ const ZAccountDetails: React.FC = () => {
 						</ZIonContent>
 					</div>
 				</ZIonSplitPane>
-			</ZaionsIonPage>
+			</ZIonPage>
 		</>
 	);
 };

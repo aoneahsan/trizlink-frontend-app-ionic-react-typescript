@@ -62,17 +62,17 @@ const ZCustomRender: React.FC<{
 	color?: ZIonColorType;
 }> = ({ d, color = 'light' }) => {
 	return (
-		<div className='flex mx-auto ion-justify-content-between zaions__w80 ion-align-items-center'>
+		<div className='flex mx-auto ion-justify-content-between w-[80%] ion-align-items-center'>
 			<div className='ion-text-center'>
 				<ZIonTitle className='ion-no-padding' color={color}>
 					{d.days}
 				</ZIonTitle>
-				<ZIonText className='zaions__fs_11' color={color}>
+				<ZIonText className='text-xs' color={color}>
 					DAYS
 				</ZIonText>
 			</div>
 			<div className='mb-2'>
-				<ZIonText className='font-bold zaions__fs_18' color={color}>
+				<ZIonText className='font-bold text-[18px]' color={color}>
 					:
 				</ZIonText>
 			</div>
@@ -81,12 +81,12 @@ const ZCustomRender: React.FC<{
 				<ZIonTitle className='ion-no-padding' color={color}>
 					{d.hours}
 				</ZIonTitle>
-				<ZIonText className='zaions__fs_11' color={color}>
+				<ZIonText className='text-xs' color={color}>
 					HRS
 				</ZIonText>
 			</div>
 			<div className='mb-2'>
-				<ZIonText className='font-bold zaions__fs_18' color={color}>
+				<ZIonText className='font-bold text-[18px]' color={color}>
 					:
 				</ZIonText>
 			</div>
@@ -95,12 +95,12 @@ const ZCustomRender: React.FC<{
 				<ZIonTitle className='ion-no-padding' color={color}>
 					{d.minutes}
 				</ZIonTitle>
-				<ZIonText className='zaions__fs_11' color={color}>
+				<ZIonText className='text-xs' color={color}>
 					MIN
 				</ZIonText>
 			</div>
 			<div className='mb-2'>
-				<ZIonText className='font-bold zaions__fs_18' color={color}>
+				<ZIonText className='font-bold text-[18px]' color={color}>
 					:
 				</ZIonText>
 			</div>
@@ -109,7 +109,7 @@ const ZCustomRender: React.FC<{
 				<ZIonTitle className='ion-no-padding' color={color}>
 					{d.seconds}
 				</ZIonTitle>
-				<ZIonText className='zaions__fs_11' color={color}>
+				<ZIonText className='text-xs' color={color}>
 					SEC
 				</ZIonText>
 			</div>

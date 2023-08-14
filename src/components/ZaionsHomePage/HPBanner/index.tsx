@@ -51,7 +51,7 @@ const ZaionsHPBanner: React.FC = () => {
 						className={`${!isLgScale ? 'ion-text-center' : ''}`}
 					>
 						<ZIonText>
-							<h1 className='ion-padding-top ion-margin-top font-bold zaions__color_dark zaions__heading text-4xl'>
+							<h1 className='ion-padding-top ion-margin-top font-bold zaions__color_dark leading-[48px] text-4xl'>
 								We’ve expanded! <br /> Shorten URLs. Generate QR Codes. <br />
 								And now, create Link-in-bios.
 							</h1>

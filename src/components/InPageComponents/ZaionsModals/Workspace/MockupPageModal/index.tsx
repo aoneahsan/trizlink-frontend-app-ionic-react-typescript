@@ -196,7 +196,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 										{/* Add Cover */}
 										<ZIonRow
 											className={classNames({
-												'mx-3 mt-3 zaions__cursor_pointer': true,
+												'mx-3 mt-3 cursor-pointer': true,
 												'h-[230px]':
 													pageType === workspaceFormConnectPagesEnum.facebook ||
 													pageType === workspaceFormConnectPagesEnum.pinterest,
@@ -282,7 +282,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 										{/* Add Profile Picture */}
 										<ZIonRow
 											className={classNames({
-												'mx-3 relative z-50 w-max zaions__cursor_pointer': true,
+												'mx-3 relative z-50 w-max cursor-pointer': true,
 
 												'mt-[-6.5rem]':
 													pageType === workspaceFormConnectPagesEnum.facebook ||
@@ -358,7 +358,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 													/>
 													<ZIonLabel
 														className={classNames({
-															zaions__fs_13: true,
+															'text-sm': true,
 															'zaions_ion_color_light hidden hover:block':
 																values.coverImage.trim().length ||
 																values.profilePhoto.trim().length,
@@ -490,7 +490,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 										<ZIonRow className='mx-3'>
 											<ZIonCol size='3' className='ion-text-end ms-auto'>
 												<ZIonButton
-													className='text-transform-initial'
+													className='normal-case'
 													expand='block'
 													type='submit'
 													disabled={!isValid}
@@ -537,7 +537,7 @@ const PlatformColorAndIcon: React.FC = () => {
 		<ZIonRow className='mx-3 mt-3'>
 			<ZIonCol>
 				<ZIonButton
-					className='ion-no-margin text-transform-initial'
+					className='ion-no-margin normal-case'
 					fill='clear'
 					color='dark'
 					onClick={(event: unknown) => {
@@ -563,7 +563,7 @@ const PlatformColorAndIcon: React.FC = () => {
 			{/*  */}
 			<ZIonCol>
 				<ZIonButton
-					className='ion-no-margin text-transform-initial'
+					className='ion-no-margin normal-case'
 					fill='clear'
 					color='dark'
 					onClick={(event: unknown) => {
@@ -605,7 +605,7 @@ const ContentStyle: React.FC = () => {
 				<ZIonCol
 					size='2'
 					className={classNames({
-						'pb-4 rounded border zaions__cursor_pointer': true,
+						'pb-4 rounded border cursor-pointer': true,
 						zaions__bg_white: el.contentStyleType === values.contentStyle,
 					})}
 					key={index}

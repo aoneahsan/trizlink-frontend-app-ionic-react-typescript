@@ -7,7 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import { useRecoilValue } from 'recoil';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsTopMenu from '@/navigation/TopMenu';
 
@@ -77,7 +77,7 @@ const ZaionsPricing: React.FC = () => {
 	});
 
 	return (
-		<ZaionsIonPage pageTitle='Integration Api Page'>
+		<ZIonPage pageTitle='Integration Api Page'>
 			{/* Constant */}
 			<ZIonContent>
 				<ZaionsTopMenu />
@@ -91,7 +91,7 @@ const ZaionsPricing: React.FC = () => {
 							sizeXs='12'
 							className='my-5'
 						>
-							<div className='mx-auto zaions__max_content'>
+							<div className='mx-auto w-max'>
 								<ZIonText>
 									<h1 className='font-extrabold zaions__color_dark'>
 										Pricing for brands and businesses of all sizes
@@ -157,7 +157,7 @@ const ZaionsPricing: React.FC = () => {
 														</span>
 														{el?.priceDuration || '-'}
 													</ZIonText>
-													<ZIonText className='ms-3 zaions__fs_11'>
+													<ZIonText className='ms-3 text-xs'>
 														{el.annualCharge
 															? `(annual one-time charge of ${el.annualCharge})`
 															: ''}
@@ -277,7 +277,7 @@ const ZaionsPricing: React.FC = () => {
 														</ZIonText>
 														/mo
 													</ZIonText>
-													<ZIonText className='zaions__fs_11 opacity-0 block'>
+													<ZIonText className='text-xs opacity-0 block'>
 														Empty
 													</ZIonText>
 													<ZIonButton
@@ -302,7 +302,7 @@ const ZaionsPricing: React.FC = () => {
 														</ZIonText>
 														/mo
 													</ZIonText>
-													<ZIonText className='zaions__fs_11 opacity-0'>
+													<ZIonText className='text-xs opacity-0'>
 														($96 annually)
 													</ZIonText>
 													<ZIonButton
@@ -326,7 +326,7 @@ const ZaionsPricing: React.FC = () => {
 														</ZIonText>
 														/mo
 													</ZIonText>
-													<ZIonText className='zaions__fs_11 opacity-0'>
+													<ZIonText className='text-xs opacity-0'>
 														($348 annually)
 													</ZIonText>
 													<ZIonButton
@@ -350,7 +350,7 @@ const ZaionsPricing: React.FC = () => {
 														</ZIonText>
 														/mo
 													</ZIonText>
-													<ZIonText className='zaions__fs_11 opacity-0'>
+													<ZIonText className='text-xs opacity-0'>
 														($2,388 annually)
 													</ZIonText>
 													<ZIonButton
@@ -373,7 +373,7 @@ const ZaionsPricing: React.FC = () => {
 															Custom
 														</ZIonText>
 													</ZIonText>
-													<ZIonText className='zaions__fs_11 opacity-0'>
+													<ZIonText className='text-xs opacity-0'>
 														($2,388 annually)
 													</ZIonText>
 													<ZIonButton
@@ -595,7 +595,7 @@ const ZaionsPricing: React.FC = () => {
 
 				<InPageFooter />
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

@@ -90,7 +90,7 @@ const ZLinkInBioFormBlock: React.FC<ZLinkInBioFromBlockInterface> = ({
           expand='block'
           style={{ height: '40px' }}
           className={classNames(fontFamily, {
-            'text-transform-initial': true,
+            'normal-case': true,
           })}
         >
           {fromBlockData?.submitButtonText}
@@ -178,7 +178,7 @@ const ZLinkInBioFormBlock: React.FC<ZLinkInBioFromBlockInterface> = ({
 					expand='block'
 					style={{ height: '40px' }}
 					className={classNames(fontFamily, {
-						'text-transform-initial': true,
+						'normal-case': true,
 					})}
 				>
 					{fromBlockData?.submitButtonText}

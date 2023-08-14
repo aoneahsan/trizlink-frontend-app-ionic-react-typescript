@@ -5,7 +5,7 @@ import React from 'react';
 import { useMediaQuery } from 'react-responsive';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZaionsInpageBrandsList from '@/components/InPageComponents/ZaionsBrandsList';
 import ZaionsTopMenu from '@/navigation/TopMenu';
 import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
@@ -48,7 +48,7 @@ const ZaionsEnterpriseClass: React.FC = () => {
 		query: `(min-width: ${BRACKPOINT_MD})`,
 	});
 	return (
-		<ZaionsIonPage pageTitle='Enterprise Class Page'>
+		<ZIonPage pageTitle='Enterprise Class Page'>
 			{/* Page Content */}
 			<ZIonContent fullscreen>
 				<ZaionsTopMenu />
@@ -172,7 +172,7 @@ const ZaionsEnterpriseClass: React.FC = () => {
 				{/* Page Footer */}
 				<InPageFooter btnText='' />
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

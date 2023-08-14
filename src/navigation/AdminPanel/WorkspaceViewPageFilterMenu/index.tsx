@@ -324,7 +324,7 @@ const ZWorkspaceViewPageFilterMenu: React.FC = () => {
 							lines='none'
 							minHeight='46px'
 							color='light'
-							className='ion-activatable ion-focusable zaions__cursor_pointer '
+							className='ion-activatable ion-focusable cursor-pointer '
 						>
 							<ZIonIcon icon={searchOutline} className='w-4 h-4' />
 							<ZIonText className='text-sm pt-1 ms-2'>Search in posts</ZIonText>
@@ -336,7 +336,7 @@ const ZWorkspaceViewPageFilterMenu: React.FC = () => {
 							lines='none'
 							minHeight='46px'
 							color='light'
-							className='ion-activatable ion-focusable zaions__cursor_pointer '
+							className='ion-activatable ion-focusable cursor-pointer '
 						>
 							<ZIonIcon icon={eyeOffOutline} className='w-4 h-4' />
 							<ZIonText className='text-sm pt-1 ms-2'>
@@ -348,7 +348,7 @@ const ZWorkspaceViewPageFilterMenu: React.FC = () => {
 							lines='none'
 							minHeight='46px'
 							color='light'
-							className='ion-activatable ion-focusable zaions__cursor_pointer mt-2'
+							className='ion-activatable ion-focusable cursor-pointer mt-2'
 						>
 							<ZIonIcon icon={fileTrayFullOutline} className='w-4 h-4' />
 							<ZIonText className='text-sm pt-1 ms-2'>

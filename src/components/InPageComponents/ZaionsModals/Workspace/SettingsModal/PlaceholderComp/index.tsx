@@ -77,10 +77,7 @@ const ZWorkspaceSettingPlaceholderComp: React.FC<
 
 			<ZIonText className='mt-3 text-3xl ion-text-center'>{title}</ZIonText>
 
-			<ZIonButton
-				className='mt-4 text-transform-initial'
-				onClick={buttonOnClick}
-			>
+			<ZIonButton className='mt-4 normal-case' onClick={buttonOnClick}>
 				{buttonText}
 			</ZIonButton>
 		</ZIonCol>

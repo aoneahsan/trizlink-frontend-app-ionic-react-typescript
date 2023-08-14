@@ -77,7 +77,7 @@ const ZUserInfoPopover: React.FC<ZUserInfoPopoverInterface> = ({
 			{/* User avatar col */}
 			<ZIonCol size='max-content'>
 				<ZUserAvatarButton
-					className='zaions__w50px zaions__h50px'
+					className='w-[50px] h-[50px]'
 					userAvatar={
 						user?.profilePitcher ||
 						getUiAvatarApiUrl({
@@ -89,8 +89,8 @@ const ZUserInfoPopover: React.FC<ZUserInfoPopoverInterface> = ({
 
 			{/* User info col */}
 			<ZIonCol>
-				<ZIonText className='block'>{user?.username}</ZIonText>
-				<ZIonText className='block zaions__fs_13'>{user?.email}</ZIonText>
+				<ZIonText className='block text-[1rem]'>{user?.username}</ZIonText>
+				<ZIonText className='block text-sm'>{user?.email}</ZIonText>
 			</ZIonCol>
 
 			{showBadges && (
@@ -101,7 +101,7 @@ const ZUserInfoPopover: React.FC<ZUserInfoPopoverInterface> = ({
 			)}
 
 			<ZIonCol size='12' className='px-3 py-3 mt-2 border-top'>
-				<ZIonText className='block zaions__fs_13'>last seen: just now</ZIonText>
+				<ZIonText className='block text-sm'>last seen: just now</ZIonText>
 			</ZIonCol>
 		</ZIonRow>
 	);

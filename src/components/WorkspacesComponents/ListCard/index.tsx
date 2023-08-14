@@ -109,8 +109,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 							<ZIonCol className='flex gap-3 ion-align-items-center'>
 								<div
 									className={classNames({
-										'zaions__w50px zaions__h50px rounded overflow__hidden':
-											true,
+										'w-[50px] h-[50px] rounded overflow-hidden': true,
 										'flex ion-align-items-center ion-justify-content-center zaions__primary_bg':
 											!workspaceImage,
 									})}
@@ -139,7 +138,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 													name: workspaceName,
 												})
 											}
-											className='rounded overflow__hidden'
+											className='rounded overflow-hidden'
 										/>
 									</ZIonRouterLink>
 								</div>
@@ -170,9 +169,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 									</ZIonRouterLink>
 
 									{/*  */}
-									<ZIonText className='block zaions__fs_11'>
-										{createdAt}
-									</ZIonText>
+									<ZIonText className='block text-xs'>{createdAt}</ZIonText>
 								</div>
 							</ZIonCol>
 
@@ -241,7 +238,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 							{/* Last active */}
 							<ZIonCol>
 								<ZIonButton
-									className=' text-transform-initial'
+									className=' normal-case'
 									color='secondary'
 									size='default'
 									testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.viewWorkspaceButton}-${id}`}
@@ -274,7 +271,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 							<ZIonCol className='ion-text-end'>
 								<ZIonButton
 									fill='clear'
-									className='h-auto mb-1 ion-no-padding ion-no-margin text-transform-initial'
+									className='h-auto mb-1 ion-no-padding ion-no-margin normal-case'
 									color='dark'
 									testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardActionPopoverButton}-${id}`}
 									testingListSelector={
@@ -303,14 +300,14 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 export const ZWorkspacesCardSkeleton: React.FC = () => {
 	return (
 		<ZIonCol sizeXl='4' sizeLg='6' sizeMd='6' sizeSm='6' sizeXs='12'>
-			<ZIonCard className='zaions__cursor_pointer h-[13.4rem]'>
+			<ZIonCard className='cursor-pointer h-[13.4rem]'>
 				<ZIonRow className='flex-col h-full'>
 					<ZIonCol className='flex-1'>
 						{/* Card header */}
 						<ZIonCardHeader>
 							<ZIonRow className='ion-align-items-center'>
 								<ZIonCol className='flex gap-3 ion-align-items-center'>
-									<div className='rounded zaions__w50px zaions__h50px overflow__hidden'>
+									<div className='rounded w-[50px] h-[50px] overflow-hidden'>
 										<ZIonSkeletonText
 											animated={true}
 											style={{ width: '100%', height: '100%' }}
@@ -326,7 +323,7 @@ export const ZWorkspacesCardSkeleton: React.FC = () => {
 												style={{ width: '100px', height: '15px' }}
 											></ZIonSkeletonText>
 										</ZIonText>
-										<ZIonText className='block zaions__fs_11'>
+										<ZIonText className='block text-xs'>
 											<ZIonSkeletonText
 												animated={true}
 												style={{ width: '80px', height: '15px' }}
@@ -378,7 +375,7 @@ export const ZWorkspacesCardSkeleton: React.FC = () => {
 								{/* Last active */}
 								<ZIonCol>
 									<ZIonButton
-										className=' text-transform-initial'
+										className=' normal-case'
 										color='secondary'
 										size='default'
 									>
@@ -393,7 +390,7 @@ export const ZWorkspacesCardSkeleton: React.FC = () => {
 								<ZIonCol className='ion-text-end'>
 									<ZIonButton
 										fill='clear'
-										className='h-auto mt-1 mb-1 ion-no-padding ion-no-margin text-transform-initial'
+										className='h-auto mt-1 mb-1 ion-no-padding ion-no-margin normal-case'
 										color='dark'
 									>
 										<ZIonSkeletonText

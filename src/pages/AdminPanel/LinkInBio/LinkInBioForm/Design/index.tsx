@@ -240,7 +240,7 @@ const LinkInBioDesignPage: React.FC = () => {
 		<>
 			<ZIonContent>
 				<ZIonGrid
-					className='ion-no-padding ion-margin-horizontal overflow__hidden'
+					className='ion-no-padding ion-margin-horizontal overflow-hidden'
 					style={{ height: 'calc(112% - 70px)' }}
 				>
 					<ZIonRow className='h-full'>
@@ -361,14 +361,14 @@ const LinkInBioDesignPage: React.FC = () => {
 													),
 												}}
 												className={classNames(classes['zaions__view_panel'], {
-													'zaions__h85 ion-padding-start rounded': true,
+													'h-[85%] ion-padding-start rounded': true,
 												})}
 											>
 												<ZRScrollbars style={{ width: '100%', height: '100%' }}>
 													<ZIonRow className='my-2 ion-padding-end ion-padding-bottom'>
 														<ZIonList
 															lines='none'
-															className='w-full h-full zaions__bg_transparent'
+															className='w-full h-full bg-transparent'
 														>
 															<ZIonReorderGroup
 																onIonItemReorder={handleReorder}

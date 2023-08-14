@@ -127,7 +127,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 				lines='none'
 				className='zaions_pretty_scrollbar overflow-y-scroll'
 			>
-				<ZIonItem className='zaions__cursor_pointer mb-2'>
+				<ZIonItem className='cursor-pointer mb-2'>
 					<h5 className='font-bold m-0 p-0'>🔗 All links</h5>
 				</ZIonItem>
 
@@ -140,7 +140,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 						</ZIonItem>
 
 						<ZIonItem
-							className='zaions__cursor_pointer ms-2'
+							className='cursor-pointer ms-2'
 							onClick={() => {
 								zNavigatePushRoute(
 									replaceParams(
@@ -164,7 +164,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 							>
 								{foldersData.map((el) => (
 									<ZIonItem
-										className={`zaions__cursor_pointer zaions-short-link-folder-${
+										className={`cursor-pointer zaions-short-link-folder-${
 											state || ''
 										}`}
 										key={el.id}

@@ -5,7 +5,7 @@ import React from 'react';
 import { useMediaQuery } from 'react-responsive';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZaionsInpageBrandsList from '@/components/InPageComponents/ZaionsBrandsList';
 import ZaionsTopMenu from '@/navigation/TopMenu';
 import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
@@ -40,7 +40,7 @@ const ZaionsIntegrationApi: React.FC = () => {
 		query: `(min-width: ${BRACKPOINT_MD})`,
 	});
 	return (
-		<ZaionsIonPage pageTitle='Integration Api Page'>
+		<ZIonPage pageTitle='Integration Api Page'>
 			{/* Page Content */}
 			<ZIonContent fullscreen>
 				<ZaionsTopMenu />
@@ -144,7 +144,7 @@ const ZaionsIntegrationApi: React.FC = () => {
 					btnText='View Integrate'
 				/>
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

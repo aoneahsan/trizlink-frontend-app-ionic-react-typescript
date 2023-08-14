@@ -75,7 +75,7 @@ const ZLinkInBioVCardBlock: React.FC<ZLinkInBioVCardBlockInterface> = ({
 				<ZIonButton
 					expand='block'
 					className={classNames({
-						'text-transform-initial font-bold zaions__fs_16 my-0 mb-2': true,
+						'normal-case font-bold text-[16px] my-0 mb-2': true,
 					})}
 					color='success'
 					style={{

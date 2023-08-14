@@ -5,7 +5,7 @@ import React, { useLayoutEffect } from 'react';
 import { useRecoilState } from 'recoil';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsTopMenu from '@/navigation/TopMenu';
 import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
@@ -50,7 +50,7 @@ const ZaionsResourceLibrary: React.FC = () => {
 	}, [setBlogData]);
 
 	return (
-		<ZaionsIonPage pageTitle='Resource Library Page'>
+		<ZIonPage pageTitle='Resource Library Page'>
 			{/* Content */}
 			<ZIonContent>
 				<ZaionsTopMenu />
@@ -173,7 +173,7 @@ const ZaionsResourceLibrary: React.FC = () => {
 
 				<InPageFooter btnText='Start for free' />
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

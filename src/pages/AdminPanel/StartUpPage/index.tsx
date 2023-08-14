@@ -13,7 +13,7 @@ import React, { useEffect, useState } from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import { ZIonContent, ZIonLoading } from '@/components/ZIonComponents';
 
 /**
@@ -123,14 +123,14 @@ const ZAppStartupPage: React.FC = () => {
 	}, [getUserRoleAndPermissions, isZFetching]);
 
 	return (
-		<ZaionsIonPage pageTitle='zaions startup page'>
+		<ZIonPage pageTitle='zaions startup page'>
 			<ZIonContent>
 				<ZIonLoading
 					isOpen={isZFetching}
 					message='Loading dashboard please await a second!'
 				/>
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

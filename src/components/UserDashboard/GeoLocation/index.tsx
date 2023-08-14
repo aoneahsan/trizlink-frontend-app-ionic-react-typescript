@@ -16,8 +16,8 @@ import {
 	ZIonItem,
 	ZIonInput,
 	ZIonNote,
+	ZIonButton,
 } from '@/components/ZIonComponents';
-import { ZIonButton } from '@/components/ZIonComponents';
 import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 
 // Global Constants
@@ -26,6 +26,8 @@ import {
 	getRandomKey,
 	zAddUrlProtocol,
 } from '@/utils/helpers';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Images
 
@@ -36,9 +38,6 @@ import { ZaionsDiscoverEnterpriseCountry } from '@/data/DiscoverEnterprise/index
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Styles
 
@@ -223,7 +222,7 @@ const GeoLocation: React.FC = () => {
 														?.country &&
 													touched?.geoLocation[_index]?.country ? (
 														<ZIonNote
-															className='ion-padding-start zaions__fs_12'
+															className='ion-padding-start text-xs'
 															color='danger'
 														>
 															{errors.geoLocation?.length &&

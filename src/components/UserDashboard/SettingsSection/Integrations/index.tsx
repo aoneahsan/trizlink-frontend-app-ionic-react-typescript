@@ -71,7 +71,7 @@ const APSettingsApiKey: React.FC = () => {
 							so, keep them safe 😉
 						</ZIonText>
 						<br />
-						<ZIonImg src={noToken} className='zaions__w40 mx-auto mt-5' />
+						<ZIonImg src={noToken} className='w-[40%] mx-auto mt-5' />
 					</ZIonCol>
 				</ZIonRow>
 			)}

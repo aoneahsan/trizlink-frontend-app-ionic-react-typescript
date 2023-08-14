@@ -3,6 +3,7 @@
  * ? Like Import of React is a Core Import
  * */
 import React from 'react';
+import { useParams } from 'react-router';
 
 /**
  * Packages Imports go down
@@ -15,7 +16,6 @@ import {
 	ZIonGrid,
 	ZIonIcon,
 	ZIonImg,
-	ZIonItem,
 	ZIonRouterLink,
 	ZIonRow,
 	ZIonSkeletonText,
@@ -25,11 +25,8 @@ import {
 	albumsOutline,
 	chevronBackOutline,
 	chevronForwardOutline,
-	fileTrayStackedOutline,
-	helpCircleOutline,
 	idCardOutline,
 	linkOutline,
-	logoChrome,
 	personOutline,
 	settingsOutline,
 } from 'ionicons/icons';
@@ -40,18 +37,28 @@ import { useRecoilState } from 'recoil';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
+import { ZIonSegment, ZIonSegmentButton } from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { replaceParams, replaceRouteParams } from '@/utils/helpers';
+import { API_URL_ENUM } from '@/utils/enums';
+import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import { AdminPanelSidebarMenuPageEnum } from '@/types/AdminPanel/index.type';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { workspaceInterface } from '@/types/AdminPanel/workspace';
 
 /**
  * Recoil State Imports go down
@@ -69,19 +76,6 @@ import classes from './styles.module.css';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
-import { ProductLogo } from '@/assets/images';
-import { replaceParams, replaceRouteParams } from '@/utils/helpers';
-import { useLocation, useParams } from 'react-router';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import ZIonSegment from '@/components/ZIonComponents/ZIonSegment';
-import ZIonSegmentButton from '@/components/ZIonComponents/ZIonSegmentButton';
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-import { AdminPanelSidebarMenuPageEnum } from '@/types/AdminPanel/index.type';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from '@/utils/enums';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { workspaceInterface } from '@/types/AdminPanel/workspace';
-import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 
 /**
  * Component props type go down
@@ -120,11 +114,6 @@ const AdminPanelSidebarMenu: React.FC<{
 
 	// Made this constant for readability.
 	const isExpand = ZDashboardState.dashboardMainSidebarIsCollabes.isExpand;
-
-	// console.log({
-	// 	check: location.pathname.includes('short-links/list'),
-	// 	check2: doesUrlIncludes(location.pathname, 'short-links/list'),
-	// });
 
 	const { zNavigatePushRoute } = useZNavigate();
 
@@ -214,8 +203,7 @@ const AdminPanelSidebarMenu: React.FC<{
 										color='light'
 										expand='block'
 										className={classNames({
-											'ion-no-padding ion-no-margin text-transform-initial':
-												true,
+											'ion-no-padding ion-no-margin normal-case': true,
 											zaions__primary_set:
 												activePage === AdminPanelSidebarMenuPageEnum.shortLink,
 										})}
@@ -257,8 +245,7 @@ const AdminPanelSidebarMenu: React.FC<{
 										color='light'
 										expand='block'
 										className={classNames({
-											'ion-no-padding ion-no-margin text-transform-initial':
-												true,
+											'ion-no-padding ion-no-margin normal-case': true,
 											zaions__primary_set:
 												activePage === AdminPanelSidebarMenuPageEnum.linkInBio,
 										})}
@@ -299,7 +286,7 @@ const AdminPanelSidebarMenu: React.FC<{
 										fill='clear'
 										color='light'
 										expand='block'
-										className='ion-no-padding ion-no-margin text-transform-initial'
+										className='ion-no-padding ion-no-margin normal-case'
 									>
 										<ZIonText
 											className={classNames({
@@ -328,7 +315,7 @@ const AdminPanelSidebarMenu: React.FC<{
 										fill='clear'
 										color='light'
 										expand='block'
-										className='ion-no-padding ion-no-margin text-transform-initial'
+										className='ion-no-padding ion-no-margin normal-case'
 									>
 										<ZIonText
 											className={classNames({
@@ -358,8 +345,7 @@ const AdminPanelSidebarMenu: React.FC<{
 										color='light'
 										expand='block'
 										className={classNames({
-											'ion-no-padding ion-no-margin text-transform-initial':
-												true,
+											'ion-no-padding ion-no-margin normal-case': true,
 											zaions__primary_set:
 												activePage === AdminPanelSidebarMenuPageEnum.workspaces,
 										})}
@@ -396,7 +382,7 @@ const AdminPanelSidebarMenu: React.FC<{
 										fill='clear'
 										color='light'
 										expand='block'
-										className='ion-no-padding ion-no-margin text-transform-initial'
+										className='ion-no-padding ion-no-margin normal-case'
 									>
 										<ZIonText
 											className={classNames({
@@ -425,7 +411,7 @@ const AdminPanelSidebarMenu: React.FC<{
 										fill='clear'
 										color='light'
 										expand='block'
-										className='ion-no-padding ion-no-margin text-transform-initial'
+										className='ion-no-padding ion-no-margin normal-case'
 									>
 										<ZIonText
 											className={classNames({
@@ -454,7 +440,7 @@ const AdminPanelSidebarMenu: React.FC<{
 										fill='clear'
 										color='light'
 										expand='block'
-										className='ion-no-padding ion-no-margin text-transform-initial'
+										className='ion-no-padding ion-no-margin normal-case'
 									>
 										<ZIonText
 											className={classNames({
@@ -494,7 +480,7 @@ const AdminPanelSidebarMenu: React.FC<{
 						{/* Short Links */}
 						<ZIonSegmentButton
 							value={AdminPanelSidebarMenuPageEnum.shortLink}
-							className='text-transform-initial'
+							className='normal-case'
 							onClick={() => {
 								zNavigatePushRoute(
 									replaceRouteParams(
@@ -514,7 +500,7 @@ const AdminPanelSidebarMenu: React.FC<{
 						{/* Link-in-bio */}
 						<ZIonSegmentButton
 							value={AdminPanelSidebarMenuPageEnum.linkInBio}
-							className='text-transform-initial'
+							className='normal-case'
 							onClick={() => {
 								zNavigatePushRoute(
 									replaceRouteParams(
@@ -534,7 +520,7 @@ const AdminPanelSidebarMenu: React.FC<{
 						{/* Extension */}
 						<ZIonSegmentButton
 							value='extension'
-							className='text-transform-initial'
+							className='normal-case'
 							onClick={() => {
 								zNavigatePushRoute(
 									replaceParams(
@@ -551,7 +537,7 @@ const AdminPanelSidebarMenu: React.FC<{
 						{/* Integrations */}
 						<ZIonSegmentButton
 							value='integrations'
-							className='text-transform-initial'
+							className='normal-case'
 							onClick={() => {
 								zNavigatePushRoute(
 									replaceParams(
@@ -568,7 +554,7 @@ const AdminPanelSidebarMenu: React.FC<{
 						{/* Workspaces */}
 						<ZIonSegmentButton
 							value='Workspaces'
-							className='text-transform-initial'
+							className='normal-case'
 							onClick={() => {
 								zNavigatePushRoute(
 									replaceParams(
@@ -585,7 +571,7 @@ const AdminPanelSidebarMenu: React.FC<{
 						{/* Help center */}
 						<ZIonSegmentButton
 							value='help-center'
-							className='text-transform-initial'
+							className='normal-case'
 							onClick={() => {
 								zNavigatePushRoute(
 									replaceParams(
@@ -602,7 +588,7 @@ const AdminPanelSidebarMenu: React.FC<{
 						{/* Settings */}
 						<ZIonSegmentButton
 							value='settings'
-							className='text-transform-initial'
+							className='normal-case'
 							onClick={() => {
 								zNavigatePushRoute(
 									replaceParams(

@@ -143,7 +143,7 @@ const ZWorkspacesSettingModal: React.FC<{
 					{/* Timetable */}
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.timetable}
-						className='text-transform-initial ion-no-padding ion-text-center'
+						className='normal-case ion-no-padding ion-text-center'
 						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.timetable}-${workspaceId}`}
 						testingListSelector={
 							CONSTANTS.testingSelectors.workspace.settingsModal.tabs.timetable
@@ -162,7 +162,7 @@ const ZWorkspacesSettingModal: React.FC<{
 					{/* Labels */}
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.labels}
-						className='text-transform-initial ion-no-padding ion-text-center'
+						className='normal-case ion-no-padding ion-text-center'
 						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.labels}-${workspaceId}`}
 						testingListSelector={
 							CONSTANTS.testingSelectors.workspace.settingsModal.tabs.labels
@@ -181,7 +181,7 @@ const ZWorkspacesSettingModal: React.FC<{
 					{/* Settings */}
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.settings}
-						className='text-transform-initial ion-no-padding ion-text-center'
+						className='normal-case ion-no-padding ion-text-center'
 						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.settings}-${workspaceId}`}
 						testingListSelector={
 							CONSTANTS.testingSelectors.workspace.settingsModal.tabs.settings
@@ -200,7 +200,7 @@ const ZWorkspacesSettingModal: React.FC<{
 					{/* Approvals */}
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.approvals}
-						className='text-transform-initial ion-no-padding ion-text-center'
+						className='normal-case ion-no-padding ion-text-center'
 						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.approvals}-${workspaceId}`}
 						testingListSelector={
 							CONSTANTS.testingSelectors.workspace.settingsModal.tabs.approvals

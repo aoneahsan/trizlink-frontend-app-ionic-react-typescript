@@ -80,7 +80,7 @@ const ZLinkInBioMusicBlock: React.FC<ZLinkInBioMusicBlockInterface> = ({
 						<ZIonButton
 							expand='block'
 							className={classNames({
-								'ion-text-capitalize font-bold zaions__fs_16 my-0 mb-2': true,
+								'ion-text-capitalize font-bold text-[16px] my-0 mb-2': true,
 								'mt-3': index >= 1,
 							})}
 							color='success'

@@ -75,32 +75,28 @@ const SideBarMenu: React.FC<SideBarMenuPropsType> = ({ menuSide }) => {
 								color={'dark'}
 								className='block mb-2'
 							>
-								<ZIonText className='zaions__fs_16'>
-									{PRODUCT_NAME} 101
-								</ZIonText>
+								<ZIonText className='text-[16px]'>{PRODUCT_NAME} 101</ZIonText>
 							</ZIonRouterLink>
 							<ZIonRouterLink
 								routerLink={ZaionsRoutes.WhyZaions.ZaionsIntegrationApiRoute}
 								color={'dark'}
 								className='block mb-2'
 							>
-								<ZIonText className='zaions__fs_16'>
-									Integrations & API
-								</ZIonText>
+								<ZIonText className='text-[16px]'>Integrations & API</ZIonText>
 							</ZIonRouterLink>
 							<ZIonRouterLink
 								routerLink={ZaionsRoutes.WhyZaions.ZaionsEnterpriseClassRoute}
 								color={'dark'}
 								className='block mb-2'
 							>
-								<ZIonText className='zaions__fs_16'>Enterprise Class</ZIonText>
+								<ZIonText className='text-[16px]'>Enterprise Class</ZIonText>
 							</ZIonRouterLink>
 							<ZIonRouterLink
 								routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
 								color={'dark'}
 								className='block mb-2'
 							>
-								<ZIonText className='zaions__fs_16'>Pricing</ZIonText>
+								<ZIonText className='text-[16px]'>Pricing</ZIonText>
 							</ZIonRouterLink>
 						</div>
 
@@ -114,21 +110,21 @@ const SideBarMenu: React.FC<SideBarMenuPropsType> = ({ menuSide }) => {
 								color={'dark'}
 								className='block mb-2'
 							>
-								<ZIonText className='zaions__fs_16'>Link Management</ZIonText>
+								<ZIonText className='text-[16px]'>Link Management</ZIonText>
 							</ZIonRouterLink>
 							<ZIonRouterLink
 								routerLink={ZaionsRoutes.Products.ZaionsQRCodeRoute}
 								color={'dark'}
 								className='block mb-2'
 							>
-								<ZIonText className='zaions__fs_16'>QR Codes</ZIonText>
+								<ZIonText className='text-[16px]'>QR Codes</ZIonText>
 							</ZIonRouterLink>
 							<ZIonRouterLink
 								routerLink={ZaionsRoutes.Products.ZaionsLinkInBioRoute}
 								color={'dark'}
 								className='block mb-2'
 							>
-								<ZIonText className='zaions__fs_16'>Link-in-bio</ZIonText>
+								<ZIonText className='text-[16px]'>Link-in-bio</ZIonText>
 							</ZIonRouterLink>
 						</div>
 
@@ -142,28 +138,28 @@ const SideBarMenu: React.FC<SideBarMenuPropsType> = ({ menuSide }) => {
 								color={'dark'}
 								className='block mb-2'
 							>
-								<ZIonText className='zaions__fs_16'>Developers</ZIonText>
+								<ZIonText className='text-[16px]'>Developers</ZIonText>
 							</ZIonRouterLink>
 							<ZIonRouterLink
 								routerLink={ZaionsRoutes.Resources.ZaionsResourceLibraryRoute}
 								color={'dark'}
 								className='block mb-2'
 							>
-								<ZIonText className='zaions__fs_16'>Resource Library</ZIonText>
+								<ZIonText className='text-[16px]'>Resource Library</ZIonText>
 							</ZIonRouterLink>
 							<ZIonRouterLink
 								routerLink={ZaionsRoutes.Resources.ZaionsBlogsRoute}
 								color={'dark'}
 								className='block mb-2'
 							>
-								<ZIonText className='zaions__fs_16'>Blog</ZIonText>
+								<ZIonText className='text-[16px]'>Blog</ZIonText>
 							</ZIonRouterLink>
 							<ZIonRouterLink
 								routerLink={ZaionsRoutes.HomeRoute}
 								color={'dark'}
 								className='block mb-2'
 							>
-								<ZIonText className='zaions__fs_16'>Support</ZIonText>
+								<ZIonText className='text-[16px]'>Support</ZIonText>
 							</ZIonRouterLink>
 						</div>
 

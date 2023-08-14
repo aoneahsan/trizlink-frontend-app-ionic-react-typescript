@@ -9,7 +9,7 @@ import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsTopMenu from '@/navigation/TopMenu';
 import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
@@ -63,7 +63,7 @@ const ZaionsPartners: React.FC = () => {
 		query: `(min-width: ${BRACKPOINT_MD})`,
 	});
 	return (
-		<ZaionsIonPage pageTitle='Partners Page'>
+		<ZIonPage pageTitle='Partners Page'>
 			<>
 				{/* Content */}
 				<ZIonContent>
@@ -176,7 +176,7 @@ const ZaionsPartners: React.FC = () => {
 										sizeSm='12'
 										sizeXs='12'
 									>
-										<div className=' zaions__max_content'>
+										<div className=' w-max'>
 											<ZIonText>
 												<h2 className='font-extrabold zaions__color_dark'>
 													{PRODUCT_NAME} Partner Benefits
@@ -189,7 +189,7 @@ const ZaionsPartners: React.FC = () => {
 														className='text-3xl font-extrabold me-2'
 														style={{ color: '#ee6123' }}
 													/>
-													<ZIonText className='zaions__fs_18 fw-light'>
+													<ZIonText className='text-[18px] fw-light'>
 														Co-marketing opportunities
 													</ZIonText>
 												</ZIonItem>
@@ -199,7 +199,7 @@ const ZaionsPartners: React.FC = () => {
 														className='text-3xl font-extrabold me-2'
 														style={{ color: '#ee6123' }}
 													/>
-													<ZIonText className='zaions__fs_18 fw-light'>
+													<ZIonText className='text-[18px] fw-light'>
 														Eligibility for certification
 													</ZIonText>
 												</ZIonItem>
@@ -209,7 +209,7 @@ const ZaionsPartners: React.FC = () => {
 														className='text-3xl font-extrabold me-2'
 														style={{ color: '#ee6123' }}
 													/>
-													<ZIonText className='zaions__fs_18 fw-light'>
+													<ZIonText className='text-[18px] fw-light'>
 														Technical guidance and flexible API usage
 													</ZIonText>
 												</ZIonItem>
@@ -219,7 +219,7 @@ const ZaionsPartners: React.FC = () => {
 														className='text-3xl font-extrabold me-2'
 														style={{ color: '#ee6123' }}
 													/>
-													<ZIonText className='zaions__fs_18 fw-light'>
+													<ZIonText className='text-[18px] fw-light'>
 														Sales collaboration
 													</ZIonText>
 												</ZIonItem>
@@ -233,7 +233,7 @@ const ZaionsPartners: React.FC = () => {
 										sizeSm='12'
 										sizeXs='12'
 									>
-										<div className=' zaions__max_content'>
+										<div className=' w-max'>
 											<ZIonText>
 												<h2 className='font-extrabold zaions__color_dark'>
 													Participation Criteria
@@ -246,7 +246,7 @@ const ZaionsPartners: React.FC = () => {
 														className='text-3xl font-extrabold me-2'
 														style={{ color: '#ee6123' }}
 													/>
-													<ZIonText className='zaions__fs_18 fw-light'>
+													<ZIonText className='text-[18px] fw-light'>
 														A broad focus on business customers
 													</ZIonText>
 												</ZIonItem>
@@ -256,7 +256,7 @@ const ZaionsPartners: React.FC = () => {
 														className='text-3xl font-extrabold me-2'
 														style={{ color: '#ee6123' }}
 													/>
-													<ZIonText className='zaions__fs_18 fw-light'>
+													<ZIonText className='text-[18px] fw-light'>
 														A current {PRODUCT_NAME} integration in good <br />{' '}
 														technical standing
 													</ZIonText>
@@ -267,7 +267,7 @@ const ZaionsPartners: React.FC = () => {
 														className='text-3xl font-extrabold me-2'
 														style={{ color: '#ee6123' }}
 													/>
-													<ZIonText className='zaions__fs_18 fw-light'>
+													<ZIonText className='text-[18px] fw-light'>
 														A solution complementary to {PRODUCT_NAME}’s
 														offering
 													</ZIonText>
@@ -278,7 +278,7 @@ const ZaionsPartners: React.FC = () => {
 														className='text-3xl font-extrabold me-2'
 														style={{ color: '#ee6123' }}
 													/>
-													<ZIonText className='zaions__fs_18 fw-light'>
+													<ZIonText className='text-[18px] fw-light'>
 														A broad focus on business customers
 													</ZIonText>
 												</ZIonItem>
@@ -404,10 +404,7 @@ const ZaionsPartners: React.FC = () => {
 								</ZIonText>
 
 								{/* Button */}
-								<ZIonButton
-									className='text-transform-initial mx-3 mt-5'
-									expand='block'
-								>
+								<ZIonButton className='normal-case mx-3 mt-5' expand='block'>
 									Apply now
 								</ZIonButton>
 							</ZIonCol>
@@ -418,7 +415,7 @@ const ZaionsPartners: React.FC = () => {
 					<InPageFooter />
 				</ZIonContent>
 			</>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

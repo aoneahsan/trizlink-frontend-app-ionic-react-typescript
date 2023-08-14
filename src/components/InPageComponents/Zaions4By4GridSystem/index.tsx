@@ -128,9 +128,7 @@ const Zaions4By4GridSystem: React.FC<Zaions4By4GridSysTypes> = ({
 														</h2>
 													</ZIonText>
 												</ZIonRouterLink>
-												<ZIonText className='mt-2 zaions__fs_13'>
-													{el.text}
-												</ZIonText>
+												<ZIonText className='mt-2 text-sm'>{el.text}</ZIonText>
 											</ZIonCardContent>
 										</ZIonCard>
 									</ZIonCol>

@@ -7,7 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
 import ZaionsInpageBrandsList from '@/components/InPageComponents/ZaionsBrandsList';
@@ -59,7 +59,7 @@ const ZaionsQRCode: React.FC = () => {
 	});
 
 	return (
-		<ZaionsIonPage pageTitle='QR Code Page'>
+		<ZIonPage pageTitle='QR Code Page'>
 			{/* Page Content */}
 			<ZIonContent fullscreen>
 				<ZaionsTopMenu />
@@ -409,7 +409,7 @@ const ZaionsQRCode: React.FC = () => {
 				{/* Page Footer */}
 				<InPageFooter btnText='Start for free' />
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

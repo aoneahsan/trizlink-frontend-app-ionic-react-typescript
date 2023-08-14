@@ -35,7 +35,7 @@ import classNames from 'classnames';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZLinkIonPanelSidebar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
 import ZLinkDashboardTopBar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
 
@@ -164,7 +164,7 @@ const ZLinks: React.FC = () => {
 
 	return (
 		<>
-			<ZaionsIonPage
+			<ZIonPage
 				pageTitle='Dashboard'
 				id={CONSTANTS.MENU_IDS.DASHBOARD_SM_MENU_CONTENT_ID}
 				menu={PAGE_MENU.DASHBOARD_PAGE_MENU}
@@ -180,7 +180,7 @@ const ZLinks: React.FC = () => {
 						/>
 
 						<div
-							className='ion-page zaionsPaneContent'
+							className='ion-page  overflow-y-scroll'
 							id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
 						>
 							<ZLinkDashboardTopBar />
@@ -269,7 +269,7 @@ const ZLinks: React.FC = () => {
 													return (
 														<ZIonItem
 															className={classNames({
-																'ion-no-padding zaions__cursor_pointer': true,
+																'ion-no-padding cursor-pointer': true,
 																zaions__bg_white:
 																	el.id === selectedShortLinkData.id,
 															})}
@@ -286,14 +286,14 @@ const ZLinks: React.FC = () => {
 																	<ZIonCheckbox className='ms-auto me-2' />
 																</ZIonCol>
 																<ZIonCol size='8'>
-																	<ZIonText className='block zaions__fs_11'>
+																	<ZIonText className='block text-xs'>
 																		{el.createdAt || CONSTANTS.NO_VALUE_FOUND}
 																	</ZIonText>
 																	<ZIonText className='block mb-1'>
 																		{el.title || CONSTANTS.NO_VALUE_FOUND}
 																	</ZIonText>
 																	<ZIonText
-																		className='block zaions__fs_13'
+																		className='block text-sm'
 																		color='success'
 																	>
 																		{(el.target as LinkTargetType)?.url ||
@@ -453,7 +453,7 @@ const ZLinks: React.FC = () => {
 															<div className='flex'>
 																<ZIonImg
 																	src={qrCodeImage}
-																	className='zaions__w35'
+																	className='w-[35%]'
 																/>
 																<div className='pt-2 ms-3'>
 																	<ZIonButton
@@ -491,7 +491,7 @@ const ZLinks: React.FC = () => {
 															<div className='flex'>
 																<ZIonImg
 																	src={placeholderImage}
-																	className='zaions__w35 rounded-full'
+																	className='w-[35%] rounded-full'
 																/>
 																<div className='pt-2 ms-3'>
 																	<ZIonButton
@@ -538,7 +538,7 @@ const ZLinks: React.FC = () => {
 														/>
 													</ZIonText>
 												</ZIonCol>
-												<ZIonText className='block zaions__fs_13'>
+												<ZIonText className='block text-sm'>
 													TOTAL ENGAGEMENTS
 												</ZIonText>
 											</ZIonRow>
@@ -551,7 +551,7 @@ const ZLinks: React.FC = () => {
 						</div>
 					</ZIonSplitPane>
 				</>
-			</ZaionsIonPage>
+			</ZIonPage>
 		</>
 	);
 };

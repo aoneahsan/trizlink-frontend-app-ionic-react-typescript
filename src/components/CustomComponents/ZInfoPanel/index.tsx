@@ -108,12 +108,12 @@ const ZaionsInfoPanel: React.FC<ZaionsInfoPanelType> = ({
 						icon={icon}
 						className={classNames({
 							'font-bold': true,
-							zaions__fs_3rem: !isMdScale,
-							zaions__fs_15: isMdScale,
+							'text-[3rem]': !isMdScale,
+							'text-[15px]': isMdScale,
 						})}
 						color={iconColor}
 					/>
-					<ZIonText className='zaions__fs_14 ps-2 block' color={textColor}>
+					<ZIonText className='text-[14px] ps-2 block' color={textColor}>
 						{text}
 					</ZIonText>
 				</ZIonCol>

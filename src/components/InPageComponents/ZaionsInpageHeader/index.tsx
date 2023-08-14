@@ -86,7 +86,7 @@ const ZaionsInpageHeader: React.FC<{
 								className={classNames({
 									'mx-auto': true,
 									'w-full': !isMdScale,
-									zaions__w70: isMdScale,
+									'w-[70%]': isMdScale,
 								})}
 							></ZIonImg>
 						) : (
@@ -127,7 +127,7 @@ const ZaionsInpageHeader: React.FC<{
 							className={classNames({
 								'ion-text-center mt-4 pt-2 ': true,
 								'ion-text-start': !isXlScale,
-								'zaions__max_content ion-text-center': isXlScale,
+								'w-max ion-text-center': isXlScale,
 							})}
 						>
 							{isPrimaryBtn === true ? (
@@ -148,7 +148,7 @@ const ZaionsInpageHeader: React.FC<{
 								<ZIonRouterLink routerLink={seondaryBtnLinkTo}>
 									<ZIonText
 										className={classNames({
-											'zaions__getAQuote_btn ion-text-capitalize zaions__fs_14':
+											'zaions__getAQuote_btn ion-text-capitalize text-[14px]':
 												true,
 											block: isLgScale,
 										})}

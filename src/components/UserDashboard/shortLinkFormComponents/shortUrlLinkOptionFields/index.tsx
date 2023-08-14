@@ -2,47 +2,56 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router';
 
 /**
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
 import classNames from 'classnames';
+import { useFormikContext } from 'formik';
+import { refreshCircleOutline } from 'ionicons/icons';
+import { useRecoilState } from 'recoil';
+import { InputChangeEventDetail, IonInputCustomEvent } from '@ionic/core';
+import isURL from 'validator/lib/isURL';
+
+/**
+ * Custom Imports go down
+ * ? Like import of custom components is a custom import
+ * */
 import {
 	ZIonButton,
 	ZIonCol,
 	ZIonGrid,
 	ZIonIcon,
 	ZIonInput,
-	ZIonItem,
-	ZIonNote,
 	ZIonRow,
 	ZIonSkeletonText,
 	ZIonText,
 	ZIonTextarea,
 } from '@/components/ZIonComponents';
-import { useFormikContext } from 'formik';
-import { refreshCircleOutline } from 'ionicons/icons';
-import { useRecoilState, useRecoilValue } from 'recoil';
-
-/**
- * Custom Imports go down
- * ? Like import of custom components is a custom import
- * */
+import ZShortLinkOptionsPopover from '@/components/InPageComponents/ZaionsPopovers/ShortLinkOptionsPopover';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import CONSTANTS, { ZaionsBusinessDetails } from '@/utils/constants';
+import { API_URL_ENUM } from '@/utils/enums';
+import { reportCustomError } from '@/utils/customErrorType';
+import { parseZQueryString, zAddUrlProtocol } from '@/utils/helpers';
+import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import {
 	ShortLinkType,
-	ShortUrlLinkOptionType,
 	ZaionsShortUrlOptionFieldsValuesInterface,
 } from '@/types/AdminPanel/linksType';
 import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
@@ -51,24 +60,8 @@ import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import {
-	NewShortLinkFormState,
-	NewShortLinkSelectTypeOption,
-} from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
-import CONSTANTS, { ZaionsBusinessDetails } from '@/utils/constants';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
-import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
-import ZShortLinkOptionsPopover from '@/components/InPageComponents/ZaionsPopovers/ShortLinkOptionsPopover';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from '@/utils/enums';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { useParams } from 'react-router';
-import { reportCustomError } from '@/utils/customErrorType';
+import { NewShortLinkSelectTypeOption } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import { parseZQueryString, zAddUrlProtocol } from '@/utils/helpers';
-import { InputChangeEventDetail, IonInputCustomEvent } from '@ionic/core';
-import isURL from 'validator/lib/isURL';
 
 /**
  * Style files Imports go down
@@ -281,7 +274,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 								<ZIonButton
 									fill={isMdScale ? 'default' : 'outline'}
 									className={classNames({
-										'flex text-transform-initial ion-no-margin ion-align-items-center ion-justify-content-center':
+										'flex normal-case ion-no-margin ion-align-items-center ion-justify-content-center':
 											true,
 										'mb-4': !isMdScale,
 										'w-full': !isSmScale,
@@ -599,7 +592,7 @@ const ZaionsShortUrlOptionFieldsSkeleton = () => {
 					<ZIonButton
 						fill='default'
 						className={classNames({
-							'flex text-transform-initial ion-no-margin ion-align-items-center ion-justify-content-center':
+							'flex normal-case ion-no-margin ion-align-items-center ion-justify-content-center':
 								true,
 							'mb-4': !isMdScale,
 							'w-full': !isSmScale,

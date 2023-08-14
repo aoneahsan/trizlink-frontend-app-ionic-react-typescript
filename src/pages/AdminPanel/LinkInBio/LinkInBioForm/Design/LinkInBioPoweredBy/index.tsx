@@ -196,7 +196,7 @@ const ZLinkInBioPoweredBySection: React.FC = () => {
 							<ZIonIcon icon={heartOutline} className='me-3' />
 						</h4>
 					</ZIonText>
-					<ZIonText className='zaions__fs_14 mb-1'>Powered by Zlink</ZIonText>
+					<ZIonText className='text-[14px] mb-1'>Powered by Zlink</ZIonText>
 				</ZIonCol>
 
 				<ZIonCol size='6' className='flex ion-justify-content-end'>

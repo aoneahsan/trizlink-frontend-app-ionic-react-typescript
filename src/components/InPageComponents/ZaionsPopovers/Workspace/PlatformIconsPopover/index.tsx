@@ -78,7 +78,7 @@ const ZPlatformIconsPopover: React.FC<{
 				<ZIonCol size='3' key={index}>
 					<div
 						className={classNames({
-							'rounded py-1 zaions__cursor_pointer flex ion-align-items-center ion-justify-content-center':
+							'rounded py-1 cursor-pointer flex ion-align-items-center ion-justify-content-center':
 								true,
 							zaions__dark_set: _icon === el.icon,
 						})}
@@ -104,7 +104,7 @@ const ZPlatformIconsPopover: React.FC<{
 				<ZIonCol size='3' key={index}>
 					<div
 						className={classNames({
-							'rounded py-1 zaions__cursor_pointer flex ion-align-items-center ion-justify-content-center':
+							'rounded py-1 cursor-pointer flex ion-align-items-center ion-justify-content-center':
 								true,
 							zaions__dark_set: _icon === el.icon,
 						})}

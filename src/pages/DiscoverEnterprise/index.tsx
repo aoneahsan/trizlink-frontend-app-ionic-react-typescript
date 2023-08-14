@@ -11,7 +11,7 @@ import { checkmarkSharp } from 'ionicons/icons';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
 import {
 	ZIonCol,
@@ -70,7 +70,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 	}, [setLoadedHPBrandsData]);
 
 	return (
-		<ZaionsIonPage pageTitle='Discover Enterprise Page'>
+		<ZIonPage pageTitle='Discover Enterprise Page'>
 			<ZIonContent>
 				<ZaionsSecondaryHeader bottomHr={false} />
 
@@ -221,10 +221,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 							</ZIonText>
 
 							{/* Button */}
-							<ZIonButton
-								className='mx-3 mt-5 text-transform-initial'
-								expand='block'
-							>
+							<ZIonButton className='mx-3 mt-5 normal-case' expand='block'>
 								Apply now
 							</ZIonButton>
 						</ZIonCol>
@@ -313,7 +310,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 										})}
 										style={{ color: '#ee6123' }}
 									/>
-									<ZIonText className='zaions__fs_18 '>
+									<ZIonText className='text-[18px] '>
 										<ZIonText className='font-bold me-1'>
 											Custom Branded Domains
 										</ZIonText>
@@ -336,7 +333,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 										})}
 										style={{ color: '#ee6123' }}
 									/>
-									<ZIonText className='zaions__fs_18'>
+									<ZIonText className='text-[18px]'>
 										<ZIonText className='font-bold'>Auto Branding</ZIonText> –
 										Any link shortened in {PRODUCT_NAME} by a third-party will
 										use your custom branded domain
@@ -357,7 +354,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 										})}
 										style={{ color: '#ee6123' }}
 									/>
-									<ZIonText className='zaions__fs_18'>
+									<ZIonText className='text-[18px]'>
 										<ZIonText className='font-bold me-1'>
 											Unlimited Link Redirects
 										</ZIonText>
@@ -379,7 +376,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 										})}
 										style={{ color: '#ee6123' }}
 									/>
-									<ZIonText className='zaions__fs_18 '>
+									<ZIonText className='text-[18px] '>
 										<ZIonText className='font-bold'>
 											Campaign Management & Analytics
 										</ZIonText>
@@ -401,7 +398,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 										})}
 										style={{ color: '#ee6123' }}
 									/>
-									<ZIonText className='zaions__fs_18 '>
+									<ZIonText className='text-[18px] '>
 										<ZIonText className='font-bold me-1'>
 											Account Setup & Support
 										</ZIonText>
@@ -422,7 +419,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 
 				<InPageFooter blueSec={false} />
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

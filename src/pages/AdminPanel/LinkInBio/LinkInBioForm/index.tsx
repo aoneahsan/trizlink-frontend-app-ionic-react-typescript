@@ -20,7 +20,7 @@ import classNames from 'classnames';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import {
 	ZIonButton,
 	ZIonCol,
@@ -302,7 +302,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 	const isZFetching = isSelectedLinkInBioFetching;
 
 	return (
-		<ZaionsIonPage pageTitle='Link In Bio Form Page'>
+		<ZIonPage pageTitle='Link In Bio Form Page'>
 			<Formik
 				// #region initial values
 				initialValues={{
@@ -415,7 +415,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 														[workspaceId, 'all']
 													)}
 												>
-													<ZIonText className='ion-no-padding zaions__fs_16'>
+													<ZIonText className='ion-no-padding text-[16px]'>
 														Home
 													</ZIonText>
 												</ZIonButton>
@@ -442,7 +442,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 																className={classNames(
 																	classes['link-in-bio-title-field'],
 																	{
-																		zaions__fs_18: true,
+																		'text-[18px]': true,
 																	}
 																)}
 															/>
@@ -464,7 +464,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 													)}
 													{!values.enableTitleInput && (
 														<div
-															className='flex w-full zaions__fs_18 zaions__cursor_pointer ms-2'
+															className='flex w-full text-[18px] cursor-pointer ms-2'
 															onClick={() => {
 																setFieldValue('enableTitleInput', true, false);
 															}}
@@ -504,7 +504,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 															);
 														}}
 													>
-														<ZIonLabel className='font-bold letter-spacing-0px'>
+														<ZIonLabel className='font-bold tracking-normal'>
 															Design
 														</ZIonLabel>
 													</ZIonSegmentButton>
@@ -528,7 +528,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 															);
 														}}
 													>
-														<ZIonLabel className='font-bold letter-spacing-0px'>
+														<ZIonLabel className='font-bold tracking-normal'>
 															Share settings
 														</ZIonLabel>
 													</ZIonSegmentButton>
@@ -552,7 +552,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 															);
 														}}
 													>
-														<ZIonLabel className='font-bold letter-spacing-0px'>
+														<ZIonLabel className='font-bold tracking-normal'>
 															Page Analytics
 														</ZIonLabel>
 													</ZIonSegmentButton>
@@ -576,7 +576,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 															);
 														}}
 													>
-														<ZIonLabel className='font-bold letter-spacing-0px'>
+														<ZIonLabel className='font-bold tracking-normal'>
 															Lead
 														</ZIonLabel>
 													</ZIonSegmentButton>
@@ -585,7 +585,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 														value='block-analytics'
 														className='ion-text-capitalize'
 													>
-														<ZIonLabel className='font-bold letter-spacing-0px'>
+														<ZIonLabel className='font-bold tracking-normal'>
 															Block Analytics
 														</ZIonLabel>
 													</ZIonSegmentButton>
@@ -597,12 +597,12 @@ const ZaionsLinkInBioForm: React.FC = () => {
 													className='ion-text-lowercase ion-no-margin me-4'
 													color='danger'
 												>
-													<ZIonText className='ion-no-padding zaions__fs_16'>
+													<ZIonText className='ion-no-padding text-[16px]'>
 														errors
 													</ZIonText>
 												</ZIonButton>
 												<ZIonButton className='ion-text-capitalize ion-no-margin'>
-													<ZIonText className='ion-no-padding zaions__fs_16'>
+													<ZIonText className='ion-no-padding text-[16px]'>
 														Upgrade
 													</ZIonText>
 												</ZIonButton>
@@ -630,7 +630,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 					);
 				}}
 			</Formik>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 
@@ -644,13 +644,13 @@ const ZHeaderSkeleton: React.FC = React.memo(() => {
 							className='ion-text-capitalize ion-no-margin'
 							color='secondary'
 						>
-							<ZIonText className='ion-no-padding zaions__fs_16'>
+							<ZIonText className='ion-no-padding text-[16px]'>
 								<ZIonSkeletonText width='45px' height='20px' animated={true} />
 							</ZIonText>
 						</ZIonButton>
 
 						<div className='ms-2 w-[71%]'>
-							<div className='flex w-full zaions__fs_18 zaions__cursor_pointer ms-2'>
+							<div className='flex w-full text-[18px] cursor-pointer ms-2'>
 								<ZIonTitle className='overflow-hidden me-1 w-min max-w-max ion-no-padding text-md'>
 									<ZIonSkeletonText width='100px' height='25px' />
 								</ZIonTitle>
@@ -664,7 +664,7 @@ const ZHeaderSkeleton: React.FC = React.memo(() => {
 					<ZIonCol size='6'>
 						<ZIonSegment disabled={true}>
 							<ZIonSegmentButton value='design' className='ion-text-capitalize'>
-								<ZIonLabel className='font-bold letter-spacing-0px'>
+								<ZIonLabel className='font-bold tracking-normal'>
 									<ZIonSkeletonText
 										width='50px'
 										height='20px'
@@ -677,7 +677,7 @@ const ZHeaderSkeleton: React.FC = React.memo(() => {
 								value='shareSettings'
 								className='ion-text-capitalize'
 							>
-								<ZIonLabel className='font-bold letter-spacing-0px'>
+								<ZIonLabel className='font-bold tracking-normal'>
 									<ZIonSkeletonText
 										width='85px'
 										height='20px'
@@ -690,7 +690,7 @@ const ZHeaderSkeleton: React.FC = React.memo(() => {
 								value='pageAnalytics'
 								className='ion-text-capitalize'
 							>
-								<ZIonLabel className='font-bold letter-spacing-0px'>
+								<ZIonLabel className='font-bold tracking-normal'>
 									<ZIonSkeletonText
 										width='95px'
 										height='20px'
@@ -700,7 +700,7 @@ const ZHeaderSkeleton: React.FC = React.memo(() => {
 							</ZIonSegmentButton>
 
 							<ZIonSegmentButton value='lead' className='ion-text-capitalize'>
-								<ZIonLabel className='font-bold letter-spacing-0px'>
+								<ZIonLabel className='font-bold tracking-normal'>
 									<ZIonSkeletonText
 										width='40px'
 										height='20px'
@@ -713,7 +713,7 @@ const ZHeaderSkeleton: React.FC = React.memo(() => {
 								value='block-analytics'
 								className='ion-text-capitalize'
 							>
-								<ZIonLabel className='font-bold letter-spacing-0px'>
+								<ZIonLabel className='font-bold tracking-normal'>
 									<ZIonSkeletonText
 										width='100px'
 										height='20px'
@@ -729,12 +729,12 @@ const ZHeaderSkeleton: React.FC = React.memo(() => {
 							className='ion-text-lowercase ion-no-margin me-4'
 							color='danger'
 						>
-							<ZIonText className='ion-no-padding zaions__fs_16'>
+							<ZIonText className='ion-no-padding text-[16px]'>
 								<ZIonSkeletonText width='45px' height='20px' animated={true} />
 							</ZIonText>
 						</ZIonButton>
 						<ZIonButton className='ion-text-capitalize ion-no-margin'>
-							<ZIonText className='ion-no-padding zaions__fs_16'>
+							<ZIonText className='ion-no-padding text-[16px]'>
 								<ZIonSkeletonText width='65px' height='20px' animated={true} />
 							</ZIonText>
 						</ZIonButton>

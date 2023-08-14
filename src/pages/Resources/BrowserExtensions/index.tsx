@@ -6,7 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 import { useRecoilState } from 'recoil';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsTopMenu from '@/navigation/TopMenu';
 import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
@@ -53,7 +53,7 @@ const ZaionsBrowserExtensions: React.FC = () => {
 
 	return (
 		<>
-			<ZaionsIonPage pageTitle='Browser Extention'>
+			<ZIonPage pageTitle='Browser Extention'>
 				{/* Content */}
 				<ZIonContent>
 					<ZaionsTopMenu />
@@ -205,7 +205,7 @@ const ZaionsBrowserExtensions: React.FC = () => {
 
 					<InPageFooter title={`You’ll Need a ${PRODUCT_NAME} Account`} />
 				</ZIonContent>
-			</ZaionsIonPage>
+			</ZIonPage>
 		</>
 	);
 };

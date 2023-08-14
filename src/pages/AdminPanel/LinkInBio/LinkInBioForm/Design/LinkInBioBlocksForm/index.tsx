@@ -964,7 +964,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								{/* ✅ Submit button */}
 								{linkInBioBlockData?.blockType === LinkInBioBlockEnum.form && (
 									<ZIonCol size='12' className='mt-3 border-bottom__violet'>
-										<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding ms-3'>
+										<ZIonTitle className='font-bold text-[16px] ion-no-padding ms-3'>
 											✅ Submit button
 										</ZIonTitle>
 										<div className='mt-2 mb-5'>
@@ -1346,7 +1346,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								{linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.separator && (
 									<ZIonCol size='12'>
-										<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
+										<ZIonTitle className='font-bold text-[16px] ion-no-padding'>
 											➖ Type
 										</ZIonTitle>
 										<div className='mt-2 mb-2'>
@@ -1429,7 +1429,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								{linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.separator && (
 									<ZIonCol size='12' className='pt-2 mt-4'>
-										<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
+										<ZIonTitle className='font-bold text-[16px] ion-no-padding'>
 											🎨 Color
 										</ZIonTitle>
 										<div className='mb-2'>
@@ -1446,7 +1446,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								{linkInBioBlockData?.blockType ===
 									LinkInBioBlockEnum.spacing && (
 									<ZIonCol size='12'>
-										<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
+										<ZIonTitle className='font-bold text-[16px] ion-no-padding'>
 											☄️ Spacing:{' '}
 											<ZIonText color='primary'>{values.spacing}</ZIonText>
 										</ZIonTitle>
@@ -1485,7 +1485,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								sizeXs='12'
 								className='ion-padding-vertical ion-margin-start border-bottom__violet'
 							>
-								<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
+								<ZIonTitle className='font-bold text-[16px] ion-no-padding'>
 									📏 Margin:
 									<ZIonText color='primary' className='ps-1'>
 										{values.separatorMargin}
@@ -1519,7 +1519,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 							>
 								<ZIonRow>
 									<ZIonCol>
-										<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
+										<ZIonTitle className='font-bold text-[16px] ion-no-padding'>
 											🎨 Custom appearance{' '}
 											<ZIonRouterLink>(help)</ZIonRouterLink>
 										</ZIonTitle>
@@ -1635,7 +1635,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 												)}
 											</div>
 
-											<ZIonTitle className='font-bold zaions__fs_16 ion-margin-top ion-no-padding'>
+											<ZIonTitle className='font-bold text-[16px] ion-margin-top ion-no-padding'>
 												🎫 Button type
 											</ZIonTitle>
 											<ZIonRow
@@ -1924,7 +1924,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								size='11'
 								className='ion-padding-vertical ion-margin-start border-bottom__violet'
 							>
-								<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
+								<ZIonTitle className='font-bold text-[16px] ion-no-padding'>
 									🗃️ Card number: <ZIonText color='primary'>10</ZIonText>
 								</ZIonTitle>
 								<div className='mb-2'>
@@ -1959,7 +1959,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								sizeXs='12'
 								className='pb-2 ion-padding-top ion-margin-start border-bottom__violet'
 							>
-								<ZIonTitle className='mb-3 font-bold zaions__fs_16 ion-no-padding'>
+								<ZIonTitle className='mb-3 font-bold text-[16px] ion-no-padding'>
 									✨ Style
 								</ZIonTitle>
 								<div className='mb-2 ion-padding-bottom'>
@@ -2187,7 +2187,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 								sizeXs='12'
 								className='ion-padding-vertical ion-margin-start border-bottom__violet'
 							>
-								<ZIonTitle className='mb-3 font-bold zaions__fs_16 ion-no-padding'>
+								<ZIonTitle className='mb-3 font-bold text-[16px] ion-no-padding'>
 									👓 View
 								</ZIonTitle>
 								<div className='mb-2 ion-padding-bottom'>
@@ -2277,7 +2277,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 							>
 								<ZIonRow className='ion-padding-bottom'>
 									<ZIonCol>
-										<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
+										<ZIonTitle className='font-bold text-[16px] ion-no-padding'>
 											🎈 Animation <ZIonRouterLink>(help)</ZIonRouterLink>
 										</ZIonTitle>
 									</ZIonCol>
@@ -2477,7 +2477,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 						>
 							<ZIonRow className='ion-margin-bottom'>
 								<ZIonCol>
-									<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
+									<ZIonTitle className='font-bold text-[16px] ion-no-padding'>
 										⏱ Schedule <ZIonRouterLink>(help)</ZIonRouterLink>
 									</ZIonTitle>
 								</ZIonCol>

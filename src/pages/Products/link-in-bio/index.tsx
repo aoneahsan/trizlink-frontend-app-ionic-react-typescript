@@ -7,7 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
 import ZaionsInpageBrandsList from '@/components/InPageComponents/ZaionsBrandsList';
@@ -63,7 +63,7 @@ const ZaionsLinkInBio: React.FC = () => {
 	});
 
 	return (
-		<ZaionsIonPage pageTitle='Link In Bio Page'>
+		<ZIonPage pageTitle='Link In Bio Page'>
 			{/* Page Content */}
 			<ZIonContent fullscreen>
 				<ZaionsTopMenu />
@@ -589,7 +589,7 @@ const ZaionsLinkInBio: React.FC = () => {
 				{/* Page Footer */}
 				<InPageFooter btnText='Start for free' />
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

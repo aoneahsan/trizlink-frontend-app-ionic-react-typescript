@@ -6,7 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 import { useRecoilState } from 'recoil';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsTopMenu from '@/navigation/TopMenu';
 import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
@@ -53,7 +53,7 @@ const ZaionsMobileApps: React.FC = () => {
 
 	return (
 		<>
-			<ZaionsIonPage pageTitle='Mobile App Page'>
+			<ZIonPage pageTitle='Mobile App Page'>
 				{/* Content */}
 				<ZIonContent>
 					<ZaionsTopMenu />
@@ -198,7 +198,7 @@ const ZaionsMobileApps: React.FC = () => {
 
 					<InPageFooter title={`Take ${PRODUCT_NAME} with You`} />
 				</ZIonContent>
-			</ZaionsIonPage>
+			</ZIonPage>
 		</>
 	);
 };

@@ -122,7 +122,7 @@ const ZWorkspacesSharingModal: React.FC<{
 					{/* Timetable */}
 					<ZIonSegmentButton
 						value={WorkspaceSharingTabEnum.invite}
-						className='text-transform-initial ion-text-center ion-no-padding'
+						className='normal-case ion-text-center ion-no-padding'
 						onClick={() => {
 							setCompState((oldValues) => ({
 								...oldValues,
@@ -137,7 +137,7 @@ const ZWorkspacesSharingModal: React.FC<{
 					{/* Labels */}
 					<ZIonSegmentButton
 						value={WorkspaceSharingTabEnum.members}
-						className='text-transform-initial ion-text-center ion-no-padding'
+						className='normal-case ion-text-center ion-no-padding'
 						onClick={() => {
 							setCompState((oldValues) => ({
 								...oldValues,
@@ -152,7 +152,7 @@ const ZWorkspacesSharingModal: React.FC<{
 					{/* Settings */}
 					<ZIonSegmentButton
 						value={WorkspaceSharingTabEnum.permissions}
-						className='text-transform-initial ion-text-center ion-no-padding'
+						className='normal-case ion-text-center ion-no-padding'
 						onClick={() => {
 							setCompState((oldValues) => ({
 								...oldValues,
@@ -167,7 +167,7 @@ const ZWorkspacesSharingModal: React.FC<{
 					{/* Approvals */}
 					<ZIonSegmentButton
 						value={WorkspaceSharingTabEnum.notifications}
-						className='text-transform-initial ion-text-center ion-no-padding'
+						className='normal-case ion-text-center ion-no-padding'
 						onClick={() => {
 							setCompState((oldValues) => ({
 								...oldValues,

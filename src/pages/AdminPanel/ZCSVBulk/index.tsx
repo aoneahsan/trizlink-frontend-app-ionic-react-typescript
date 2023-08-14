@@ -15,7 +15,7 @@ import classNames from 'classnames';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZLinkDashboardTopBar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
 import ZLinkIonPanelSidebar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
 import ZaionsLinkSettingPanel from '@/components/UserDashboard/ZLinkdashboard/ZLinksSettingPanel';
@@ -93,7 +93,7 @@ const ZCSVBulkShortning: React.FC = () => {
 	});
 	return (
 		<>
-			<ZaionsIonPage
+			<ZIonPage
 				pageTitle='Setting'
 				id={CONSTANTS.MENU_IDS.DASHBOARD_SM_MENU_CONTENT_ID}
 			>
@@ -107,7 +107,7 @@ const ZCSVBulkShortning: React.FC = () => {
 					/>
 
 					<div
-						className='ion-page zaionsPaneContent'
+						className='ion-page  overflow-y-scroll'
 						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
 					>
 						{/* Top bar */}
@@ -115,7 +115,7 @@ const ZCSVBulkShortning: React.FC = () => {
 						<ZIonContent className='ion-padding'>
 							<ZIonGrid>
 								<ZIonRow>
-									{/* If it is in md then the setting side panel will be visiable */}
+									{/* If it is in md then the setting side panel will be visitable */}
 									{isMdScale && (
 										<ZaionsLinkSettingPanel
 											activeLink={
@@ -128,8 +128,8 @@ const ZCSVBulkShortning: React.FC = () => {
 											<ZIonImg
 												src={bulkUploadEmptyState}
 												className={classNames({
-													zaions__w43: isMdScale,
-													zaions__w60: !isMdScale && isSmScale,
+													'w-[43%]': isMdScale,
+													'w-[60%]': !isMdScale && isSmScale,
 													'w-full': !isSmScale,
 												})}
 												alt='bulk upload Inactive state'
@@ -163,7 +163,7 @@ const ZCSVBulkShortning: React.FC = () => {
 						</ZIonContent>
 					</div>
 				</ZIonSplitPane>
-			</ZaionsIonPage>
+			</ZIonPage>
 		</>
 	);
 };

@@ -160,7 +160,7 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 									size='2.4'
 									className='flex ion-justify-content-center'
 								>
-									<div className='ion-text-center me-3 zaions__max_content'>
+									<div className='ion-text-center me-3 w-max'>
 										<ZIonButton
 											size='large'
 											fill='outline'
@@ -197,7 +197,7 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 								key={el.id}
 								className='flex ion-justify-content-center'
 							>
-								<div className='ion-text-center me-3 zaions__max_content'>
+								<div className='ion-text-center me-3 w-max'>
 									<LinkInBioPDButton
 										icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
 										onClick={() => {

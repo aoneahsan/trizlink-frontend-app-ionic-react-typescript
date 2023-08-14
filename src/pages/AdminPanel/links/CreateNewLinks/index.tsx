@@ -33,7 +33,7 @@ import {
 	ZIonButton,
 	ZIonSpinner,
 } from '@/components/ZIonComponents';
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 
 const AddNotes = lazy(() => import('@/components/UserDashboard/AddNotes'));
 const EmbedWidget = lazy(
@@ -467,7 +467,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 	const isZFetching = isSelectedShortLinkFetching || isShortLinksFetching;
 
 	return (
-		<ZaionsIonPage pageTitle='Create New Page'>
+		<ZIonPage pageTitle='Create New Page'>
 			<Suspense fallback={<ZFallbackIonSpinner />}>
 				{/* Formik Start */}
 				<Formik
@@ -1082,7 +1082,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 					}}
 				</Formik>
 			</Suspense>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

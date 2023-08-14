@@ -104,11 +104,7 @@ const ZWorkspaceComposeModal: React.FC = () => {
 			<ZIonHeader className='px-2 pt-2'>
 				{/* Add label */}
 				<div className=''>
-					<ZIonButton
-						className='text-transform-initial'
-						fill='outline'
-						size='small'
-					>
+					<ZIonButton className='normal-case' fill='outline' size='small'>
 						<ZIonIcon icon={addOutline} />
 						Add labels
 					</ZIonButton>
@@ -121,7 +117,7 @@ const ZWorkspaceComposeModal: React.FC = () => {
 				>
 					{workspacePagesDomeData.map((el, index) => (
 						<ZIonSegmentButton
-							className='px-1 text-transform-initial'
+							className='px-1 normal-case'
 							value={String(index)}
 							// onClick={() => {
 							// 	setFieldValue('pageType', el.type, false);
@@ -152,7 +148,7 @@ const ZWorkspaceComposeModal: React.FC = () => {
 
 					{/*  */}
 					<ZIonCol size='11.5' className='mt-2'>
-						<ZIonButton className='text-transform-initial'>
+						<ZIonButton className='normal-case'>
 							<ZIonIcon icon={sparklesOutline} className='pe-1' /> Generate with
 							AI
 						</ZIonButton>
@@ -210,7 +206,7 @@ const ZWorkspaceComposeModal: React.FC = () => {
 
 						<ZIonButtons>
 							<ZIonButton
-								className='m-0 text-transform-initial'
+								className='m-0 normal-case'
 								color='primary'
 								fill='solid'
 								style={{ '--border-radius': '0px' }}
@@ -218,7 +214,7 @@ const ZWorkspaceComposeModal: React.FC = () => {
 								Save
 							</ZIonButton>
 							<ZIonButton
-								className='m-0 text-transform-initial'
+								className='m-0 normal-case'
 								color='primary'
 								fill='solid'
 								style={{ '--border-radius': '0px' }}

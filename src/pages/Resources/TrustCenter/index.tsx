@@ -5,7 +5,7 @@ import React, { useLayoutEffect } from 'react';
 import { useRecoilState } from 'recoil';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsTopMenu from '@/navigation/TopMenu';
 import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
@@ -47,7 +47,7 @@ const ZaionsTrustCenter: React.FC = () => {
 	}, [setZaionsTCData]);
 
 	return (
-		<ZaionsIonPage pageTitle='Trust Center Page'>
+		<ZIonPage pageTitle='Trust Center Page'>
 			{/* Content */}
 			<ZIonContent>
 				<ZaionsTopMenu />
@@ -145,7 +145,7 @@ const ZaionsTrustCenter: React.FC = () => {
 
 				<InPageFooter title='We’re committed to your safety' />
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

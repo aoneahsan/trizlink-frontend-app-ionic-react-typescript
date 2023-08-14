@@ -6,7 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 import { useRecoilState } from 'recoil';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZaionsKeyFeatures from '@/components/InPageComponents/ZaionsKeyFeatures';
 import ZaionsTopMenu from '@/navigation/TopMenu';
 import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
@@ -71,7 +71,7 @@ const ZaionsDigitalMarketing: React.FC = () => {
 	});
 
 	return (
-		<ZaionsIonPage pageTitle='Digital Marketing Page'>
+		<ZIonPage pageTitle='Digital Marketing Page'>
 			{/* Page Content */}
 			<ZIonContent fullscreen>
 				<ZaionsTopMenu />
@@ -235,7 +235,7 @@ const ZaionsDigitalMarketing: React.FC = () => {
 
 				<InPageFooter btnText='Start for free' />
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

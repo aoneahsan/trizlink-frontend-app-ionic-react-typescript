@@ -189,7 +189,7 @@ const ZWorkspaceFormApprovalTab: React.FC = () => {
 										<ZIonButton
 											expand='block'
 											fill='outline'
-											className='text-transform-initial'
+											className='normal-case'
 											routerLink={createRedirectRoute({
 												url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
 												params: [
@@ -213,10 +213,7 @@ const ZWorkspaceFormApprovalTab: React.FC = () => {
 										sizeSm='6'
 										sizeXs='12'
 									>
-										<ZIonButton
-											expand='block'
-											className='text-transform-initial'
-										>
+										<ZIonButton expand='block' className='normal-case'>
 											Finish
 										</ZIonButton>
 									</ZIonCol>

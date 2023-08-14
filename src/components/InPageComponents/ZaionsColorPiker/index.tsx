@@ -111,7 +111,7 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
 					/>
 					<ZIonInput
 						type='text'
-						className='ms-2 zaions__fs_18'
+						className='ms-2 text-[18px]'
 						value={value}
 						label=''
 						fill='outline'

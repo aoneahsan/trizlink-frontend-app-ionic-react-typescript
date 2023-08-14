@@ -106,7 +106,7 @@ const ZWorkspaceNotificationPopover: React.FC = () => {
 										>
 											<ZIonSegmentButton
 												value={workspaceViewNotificationsEnum.approvalRequests}
-												className='text-transform-initial ion-no-padding ion-no-margin'
+												className='normal-case ion-no-padding ion-no-margin'
 												onClick={() => {
 													setFieldValue(
 														'currentTab',
@@ -120,7 +120,7 @@ const ZWorkspaceNotificationPopover: React.FC = () => {
 
 											<ZIonSegmentButton
 												value={workspaceViewNotificationsEnum.updates}
-												className='text-transform-initial ion-no-padding ion-no-margin'
+												className='normal-case ion-no-padding ion-no-margin'
 												onClick={() => {
 													setFieldValue(
 														'currentTab',
@@ -170,7 +170,7 @@ const UpdatesTab = () => {
 		<ZIonList lines='none' className='my-2'>
 			<ZIonItem
 				minHeight='32px'
-				className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+				className='ion-activatable ion-focusable cursor-pointer text-sm'
 			>
 				<ZIonRow className='ion-align-items-start w-full'>
 					<ZIonCol size='max-content'>

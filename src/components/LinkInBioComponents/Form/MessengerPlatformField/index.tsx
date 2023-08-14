@@ -161,8 +161,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 							{/* After getting MusicPlatform data from api and storing it to the LinkInBioPredefinedMusicPlatformsRState recoil state, looping the recoil state value to make MusicPlatforms */}
 							<ZIonRow
 								className={classNames({
-									'ion-padding-bottom mb-3 row-gap-1-point-6-rem zaions__w90':
-										true,
+									'ion-padding-bottom mb-3 row-gap-1-point-6-rem w-[90%]': true,
 								})}
 							>
 								{linkInBioPredefinedMessengerPlatformState?.map((el) => {
@@ -175,7 +174,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 											key={el.id}
 											className='flex ion-justify-content-start'
 										>
-											<div className='ion-text-center me-3 zaions__max_content'>
+											<div className='ion-text-center me-3 w-max'>
 												<LinkInBioPDButton
 													icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
 													onClick={() => {

@@ -104,7 +104,9 @@ const DashboardTopBarUserAccountModal: React.FC = ({
 }) => {
 	const [authTokenState, setAuthTokenState] =
 		useRecoilState(ZaionsAuthTokenData);
-	const setUserAccountStateAtom = useSetRecoilState(ZaionsUserAccountRStateAtom);
+	const setUserAccountStateAtom = useSetRecoilState(
+		ZaionsUserAccountRStateAtom
+	);
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
 
 	const signOutUser = async () => {
@@ -164,7 +166,7 @@ const DashboardTopBarUserAccountModal: React.FC = ({
 						</ZIonCol>
 						<ZIonCol className='ion-no-padding ps-3'>
 							<ZIonText className='block'>talhairshad</ZIonText>
-							<ZIonText className='zaions__fs_14'>
+							<ZIonText className='text-[14px]'>
 								bhaiameer704@gmail.com
 							</ZIonText>
 						</ZIonCol>
@@ -174,7 +176,7 @@ const DashboardTopBarUserAccountModal: React.FC = ({
 					<ZIonRow className='py-2 ion-align-items-top ion-padding-start w-full'>
 						<ZIonCol className='ion-no-padding ps-3'>
 							<ZIonText className='block'>talhairshad</ZIonText>
-							<ZIonText className='zaions__fs_14'>Free account</ZIonText>
+							<ZIonText className='text-[14px]'>Free account</ZIonText>
 						</ZIonCol>
 						<ZIonCol className='ion-text-end'>
 							<ZIonButton
@@ -197,7 +199,7 @@ const DashboardTopBarUserAccountModal: React.FC = ({
 					<ZIonItem className='border-top'>
 						<ZIonButton
 							fill='clear'
-							className='ion-no-padding ion-text-capitalize zaions__fs_15'
+							className='ion-no-padding ion-text-capitalize text-[15px]'
 							mode='ios'
 							color='dark'
 							onClick={() => void signOutUser()}

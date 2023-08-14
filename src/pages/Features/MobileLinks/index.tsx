@@ -7,7 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZaionsTwoByTwoRightCols from '@/components/InPageComponents/Zaions2By2RightCols';
 import ZaionsTwoByTwoLeftCols from '@/components/InPageComponents/Zaions2By2LeftCols';
 import ZaionsTopMenu from '@/navigation/TopMenu';
@@ -42,7 +42,7 @@ const ZaionsMobileLinks: React.FC = () => {
 	});
 
 	return (
-		<ZaionsIonPage pageTitle='Mobile Link Page'>
+		<ZIonPage pageTitle='Mobile Link Page'>
 			{/* Page Content */}
 			<ZIonContent>
 				<ZaionsTopMenu />
@@ -180,7 +180,7 @@ const ZaionsMobileLinks: React.FC = () => {
 
 				<InPageFooter btnText='Start for free' />
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

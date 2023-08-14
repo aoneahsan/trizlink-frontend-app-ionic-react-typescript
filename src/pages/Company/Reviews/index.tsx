@@ -8,7 +8,7 @@ import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsTopMenu from '@/navigation/TopMenu';
 import ZaionsInpageHeader from '@/components/InPageComponents/ZaionsInpageHeader';
@@ -54,7 +54,7 @@ const ZaionsReviews: React.FC = () => {
 		query: `(min-width: ${BRACKPOINT_MD})`,
 	});
 	return (
-		<ZaionsIonPage pageTitle='Review Page'>
+		<ZIonPage pageTitle='Review Page'>
 			<ZIonContent>
 				<ZaionsTopMenu />
 				<ZaionsInpageHeader
@@ -132,8 +132,8 @@ const ZaionsReviews: React.FC = () => {
 															<ZIonText
 																className={` ${
 																	!isLgScale
-																		? 'w-full zaions__fs_15'
-																		: 'zaions__w60 zaions__fs_11'
+																		? 'w-full text-[15px]'
+																		: 'w-[60%] text-xs'
 																}`}
 															>
 																{el?.userAbout}
@@ -151,7 +151,7 @@ const ZaionsReviews: React.FC = () => {
 																	style={{ width: '83px' }}
 																/>
 
-																<ZIonText className='ms-2 zaions__fs_15'>
+																<ZIonText className='ms-2 text-[15px]'>
 																	{el.date}
 																</ZIonText>
 															</div>
@@ -177,7 +177,7 @@ const ZaionsReviews: React.FC = () => {
 							</ZIonRow>
 						</ZIonCol>
 					</ZIonRow>
-					<div className='zaions__w80 mx-auto ion-text-end zaions__fs_11'>
+					<div className='w-[80%] mx-auto ion-text-end text-xs'>
 						<ZIonRouterLink
 							routerLink={CONSTANTS.ExternalURL.GenericExternalURL}
 							color={'dark'}
@@ -189,7 +189,7 @@ const ZaionsReviews: React.FC = () => {
 
 				<InPageFooter />
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

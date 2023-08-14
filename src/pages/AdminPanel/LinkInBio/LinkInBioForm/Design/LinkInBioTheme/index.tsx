@@ -321,7 +321,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 				className='mt-3 ion-margin-start border-bottom__violet'
 			>
 				{/* 🖍️ Button color */}
-				<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
+				<ZIonTitle className='font-bold text-[16px] ion-no-padding'>
 					🖍️ Button color
 				</ZIonTitle>
 
@@ -420,7 +420,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 				</div>
 
 				{/* 🎫 Button type */}
-				<ZIonTitle className='font-bold zaions__fs_16 ion-margin-top ion-no-padding z_ff__b612'>
+				<ZIonTitle className='font-bold text-[16px] ion-margin-top ion-no-padding z_ff__b612'>
 					🎫 Button type
 				</ZIonTitle>
 				<ZIonRow
@@ -683,7 +683,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 				sizeXs='12'
 				className='mt-3 ion-margin-start'
 			>
-				<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
+				<ZIonTitle className='font-bold text-[16px] ion-no-padding'>
 					📝 Font
 				</ZIonTitle>
 
@@ -728,7 +728,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 			>
 				<ZIonRow>
 					<ZIonCol>
-						<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
+						<ZIonTitle className='font-bold text-[16px] ion-no-padding'>
 							🖼️ Background image
 						</ZIonTitle>
 					</ZIonCol>

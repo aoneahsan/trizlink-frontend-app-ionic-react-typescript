@@ -15,7 +15,7 @@ import classNames from 'classnames';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZLinkIonPanelSidebar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
 import ZLinkDashboardTopBar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
 import {
@@ -84,7 +84,7 @@ const ZLinkCampaigns: React.FC = () => {
 	});
 	return (
 		<>
-			<ZaionsIonPage
+			<ZIonPage
 				pageTitle='Dashboard'
 				id={CONSTANTS.MENU_IDS.DASHBOARD_SM_MENU_CONTENT_ID}
 				menu={PAGE_MENU.DASHBOARD_PAGE_MENU}
@@ -99,7 +99,7 @@ const ZLinkCampaigns: React.FC = () => {
 					/>
 
 					<div
-						className='ion-page zaionsPaneContent'
+						className='ion-page  overflow-y-scroll'
 						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
 					>
 						<ZLinkDashboardTopBar />
@@ -110,8 +110,8 @@ const ZLinkCampaigns: React.FC = () => {
 										src={campaignsEmptyState}
 										alt='Link in bio Inactive state'
 										className={classNames({
-											zaions__w43: isMdScale,
-											zaions__w60: !isMdScale && isSmScale,
+											'w-[43%]': isMdScale,
+											'w-[60%]': !isMdScale && isSmScale,
 											'w-full': !isSmScale,
 										})}
 									/>
@@ -139,7 +139,7 @@ const ZLinkCampaigns: React.FC = () => {
 						</ZIonContent>
 					</div>
 				</ZIonSplitPane>
-			</ZaionsIonPage>
+			</ZIonPage>
 		</>
 	);
 };

@@ -117,7 +117,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 				scrollY={true}
 			>
 				<ZIonList lines='none'>
-					<ZIonItem className='p-0 mb-2 text-xl font-bold zaions__cursor_pointer'>
+					<ZIonItem className='p-0 mb-2 text-xl font-bold cursor-pointer'>
 						🔗 All{' '}
 						{type === AdminPanelSidebarMenuPageEnum.shortLink
 							? 'links'
@@ -134,7 +134,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 							</ZIonItem>
 
 							<ZIonItem
-								className='zaions__cursor_pointer'
+								className='cursor-pointer'
 								style={{
 									'--inner-padding-end': '0px',
 									'--padding-start': '0px',
@@ -193,7 +193,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 												'--padding-start': '0px',
 											}}
 											className={classNames({
-												zaions__cursor_pointer: true,
+												'cursor-pointer': true,
 												'zaions-short-link-folder':
 													type === AdminPanelSidebarMenuPageEnum.shortLink,
 												'zaions-link-in-bio-folder':
@@ -273,7 +273,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 									<ZIonItem
 										key={el}
 										className={classNames({
-											'zaions__cursor_pointer ': true,
+											'cursor-pointer ': true,
 											'zaions-short-link-folder':
 												type === AdminPanelSidebarMenuPageEnum.shortLink,
 											'zaions-link-in-bio-folder':

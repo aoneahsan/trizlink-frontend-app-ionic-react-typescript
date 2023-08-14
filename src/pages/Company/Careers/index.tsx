@@ -8,7 +8,7 @@ import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsTopMenu from '@/components/InPageFooter';
 import ZaionsInpageCol from '@/components/InPageComponents/ZaionsInpageGridsys';
@@ -64,7 +64,7 @@ const ZaionsCareers: React.FC = () => {
 	});
 
 	return (
-		<ZaionsIonPage pageTitle='Careers Page'>
+		<ZIonPage pageTitle='Careers Page'>
 			{/* Content */}
 			<ZIonContent>
 				<ZaionsTopMenu />
@@ -359,7 +359,7 @@ const ZaionsCareers: React.FC = () => {
 
 				<InPageFooter />
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

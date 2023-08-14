@@ -7,7 +7,7 @@ import { useRecoilValue } from 'recoil';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsTopMenu from '@/components/InPageFooter';
 import {
@@ -52,7 +52,7 @@ const ZaionsAbout: React.FC = () => {
 		query: `(min-width: ${BRACKPOINT_SM})`,
 	});
 	return (
-		<ZaionsIonPage pageTitle='About Page'>
+		<ZIonPage pageTitle='About Page'>
 			<ZIonContent>
 				<ZaionsTopMenu />
 				<ZIonGrid>
@@ -290,7 +290,7 @@ const ZaionsAbout: React.FC = () => {
 									<ZIonText
 										className={classNames({
 											'w-full': !isSmScale,
-											zaions__w80: isSmScale,
+											'w-[80%]': isSmScale,
 										})}
 									>
 										Chauncey McPufferson was born at {PRODUCT_NAME} HQ in 2008.
@@ -312,7 +312,7 @@ const ZaionsAbout: React.FC = () => {
 
 				<InPageFooter />
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

@@ -7,7 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZaionsTwoByTwoRightCols from '@/components/InPageComponents/Zaions2By2RightCols';
 import ZaionsTwoByTwoLeftCols from '@/components/InPageComponents/Zaions2By2LeftCols';
 import ZaionsTopMenu from '@/navigation/TopMenu';
@@ -40,7 +40,7 @@ const ZaionsCampaignManagementAnalytics: React.FC = () => {
 	});
 
 	return (
-		<ZaionsIonPage pageTitle='Campaign Management Analytics'>
+		<ZIonPage pageTitle='Campaign Management Analytics'>
 			{/* Page Content */}
 			<ZIonContent>
 				<ZaionsTopMenu />
@@ -136,7 +136,7 @@ const ZaionsCampaignManagementAnalytics: React.FC = () => {
 
 				<InPageFooter btnText='Start for free' />
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

@@ -14,32 +14,22 @@ import {
 	ZIonIcon,
 	ZIonRouterLink,
 	ZIonInput,
+	ZIonButton,
 } from '@/components/ZIonComponents';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Global constant
 import { getRandomKey, zAddUrlProtocol } from '@/utils/helpers';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Types
 import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
-import { ZIonButton } from '@/components/ZIonComponents';
-import { ABTestingRotatorInterface } from '@/types/AdminPanel/index.type';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 const FULL_PERCENTAGE = 100;
 
 type RotatorABTestingErrorType = {
 	redirectionLink?: string;
 	percentage?: string;
-};
-
-const getNewRotatorABTestingEmptyObj: () => ABTestingRotatorInterface = () => {
-	return {
-		id: getRandomKey(),
-		redirectionLink: '',
-		percentage: 0,
-	};
 };
 
 const RotatorABTesting: React.FC = () => {

@@ -335,7 +335,7 @@ const ZaionsLinkInBioLinksTable: React.FC<{
                             </div>
                             <ZIonText
                               color='primary'
-                              className='mt-1 zaions__cursor_pointer'
+                              className='mt-1 cursor-pointer'
                               onClick={() => {
                                 setLinkInBioFormState((oldVal) => ({
                                   ...oldVal,
@@ -361,7 +361,7 @@ const ZaionsLinkInBioLinksTable: React.FC<{
                         {el.notes ? (
                           <ZIonText
                             color='primary'
-                            className='mt-1 zaions__cursor_pointer'
+                            className='mt-1 cursor-pointer'
                             onClick={() => {
                               setLinkInBioFormState((oldVal) => ({
                                 ...oldVal,
@@ -521,10 +521,7 @@ const ZaionsShortLinkTableSkeleton: React.FC = React.memo(() => {
 								<ZIonSkeletonText width='40px' height='17px' animated={true} />
 							</ZTableRowCol>
 							<ZTableRowCol>
-								<ZIonText
-									color='primary'
-									className='mt-1 zaions__cursor_pointer'
-								>
+								<ZIonText color='primary' className='mt-1 cursor-pointer'>
 									<ZIonSkeletonText
 										width='40px'
 										height='17px'

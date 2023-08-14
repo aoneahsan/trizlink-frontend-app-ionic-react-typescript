@@ -27,7 +27,7 @@ const LinkInBioVCardField: React.FC = () => {
 			size='11'
 			className='ion-padding-vertical ion-margin-top ion-margin-start border-bottom__violet'
 		>
-			<ZIonTitle className='font-bold zaions__fs_16 ion-no-padding'>
+			<ZIonTitle className='font-bold text-[16px] ion-no-padding'>
 				📄 vCard
 			</ZIonTitle>
 

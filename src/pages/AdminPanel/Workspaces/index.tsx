@@ -15,7 +15,7 @@ import classNames from 'classnames';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import {
 	ZIonButton,
 	ZIonButtons,
@@ -97,7 +97,7 @@ const ZWorkspaceListPage: React.FC = () => {
 		});
 
 	return (
-		<ZaionsIonPage pageTitle='Zaions workspaces list page'>
+		<ZIonPage pageTitle='Zaions workspaces list page'>
 			<ZIonContent>
 				<ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
 					{/* Main grid */}
@@ -128,7 +128,7 @@ const ZWorkspaceListPage: React.FC = () => {
 												<ZIonButton
 													fill='solid'
 													color='primary'
-													className='ion-no-margin text-transform-initial'
+													className='ion-no-margin normal-case'
 													testingSelector={
 														CONSTANTS.testingSelectors.workspace.listPage
 															.inviteButton
@@ -146,7 +146,7 @@ const ZWorkspaceListPage: React.FC = () => {
 											>
 												{!isWorkspacesDataFetching && (
 													<ZIonButton
-														className='ion-no-margin text-transform-initial'
+														className='ion-no-margin normal-case'
 														color='secondary'
 														testingSelector={
 															CONSTANTS.testingSelectors.workspace.listPage
@@ -186,7 +186,7 @@ const ZWorkspaceListPage: React.FC = () => {
 
 												{isWorkspacesDataFetching && (
 													<ZIonButton
-														className='ion-no-margin text-transform-initial'
+														className='ion-no-margin normal-case'
 														color='secondary'
 													>
 														<ZIonSkeletonText
@@ -246,7 +246,7 @@ const ZWorkspaceListPage: React.FC = () => {
 												{!isWorkspacesDataFetching && (
 													<ZIonCard
 														className={classNames({
-															'h-[13.4rem] zaions__cursor_pointer': true,
+															'h-[13.4rem] cursor-pointer': true,
 														})}
 														testingSelector={
 															CONSTANTS.testingSelectors.workspace.listPage
@@ -292,7 +292,7 @@ const ZWorkspaceListPage: React.FC = () => {
 												{isWorkspacesDataFetching && (
 													<ZIonCard
 														className={classNames({
-															'h-[13.4rem] zaions__cursor_pointer': true,
+															'h-[13.4rem] cursor-pointer': true,
 														})}
 													>
 														<ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
@@ -319,7 +319,7 @@ const ZWorkspaceListPage: React.FC = () => {
 					</ZIonGrid>
 				</ZCan>
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

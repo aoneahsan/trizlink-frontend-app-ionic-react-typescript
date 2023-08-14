@@ -22,7 +22,7 @@ import {
 // Global Constants
 import { validateFields, zConsoleLog } from '@/utils/helpers';
 import { VALIDATION_RULE } from '@/utils/enums';
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import { ProductLogo } from '@/assets/images';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
@@ -31,7 +31,7 @@ import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputFi
 
 const ZaionsPasswordResetConfirm: React.FC = () => {
 	return (
-		<ZaionsIonPage>
+		<ZIonPage>
 			<ZIonContent color='light'>
 				<ZIonGrid className=''>
 					<ZIonRow className='ion-justify-content-center ion-align-items-top '>
@@ -43,7 +43,7 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
 							sizeSm='8.2'
 							sizeXs='11.5'
 						>
-							<div className='zaions__w80 mx-auto'>
+							<div className='w-[80%] mx-auto'>
 								<ZIonImg src={ProductLogo} className='logo mx-auto' />
 								<ZIonTitle color='dark'>
 									<h5 className='ion-text-center mt-4 mb-3'>
@@ -107,7 +107,7 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
 										<ZIonInputField
 											inputFieldProps={{
 												className: classNames({
-													'mb-4 zaions__w80 mx-auto mt-4': true,
+													'mb-4 w-[80%] mx-auto mt-4': true,
 													'ion-touched ion-invalid':
 														touched.emailAddress && errors.emailAddress,
 													'ion-touched ion-valid':
@@ -127,7 +127,7 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
 										{/* Submit Button */}
 										<ZIonButton
 											expand='block'
-											className='ion-text-capitalize mt-4 zaions__w80 mx-auto mt-3 mb-5'
+											className='ion-text-capitalize mt-4 w-[80%] mx-auto mt-3 mb-5'
 										>
 											Log in
 										</ZIonButton>
@@ -138,7 +138,7 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
 					</ZIonRow>
 				</ZIonGrid>
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

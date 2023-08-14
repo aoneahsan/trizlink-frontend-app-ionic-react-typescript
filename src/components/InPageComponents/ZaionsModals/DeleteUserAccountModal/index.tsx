@@ -182,7 +182,7 @@ const DeleteUserAccountModal: React.FC<{
 										<ZIonTitle className='ion-no-padding mb-3'>
 											<h3 className='font-bold'>Delete user account</h3>
 										</ZIonTitle>
-										<ZIonText className='block font-bold zaions__fs_16'>
+										<ZIonText className='block font-bold text-[16px]'>
 											How your account will be affected:
 										</ZIonText>
 										<ZIonList
@@ -206,7 +206,7 @@ const DeleteUserAccountModal: React.FC<{
 											</ZIonItem>
 										</ZIonList>
 
-										<ZIonText className='block font-bold zaions__fs_16 mt-3'>
+										<ZIonText className='block font-bold text-[16px] mt-3'>
 											How your links will be affected:
 										</ZIonText>
 										<ZIonList
@@ -234,7 +234,7 @@ const DeleteUserAccountModal: React.FC<{
 												Your name will not appear next to links you've created
 											</ZIonItem>
 
-											<ZIonText className='block font-bold zaions__fs_16 mt-3'>
+											<ZIonText className='block font-bold text-[16px] mt-3'>
 												We're sad to see you go. Can you tell us why you're
 												leaving?
 											</ZIonText>
@@ -315,7 +315,7 @@ const DeleteUserAccountModal: React.FC<{
 											</IonRadioGroup>
 										</ZIonList>
 
-										<ZIonText className='font-bold zaions__fs_16 mt-4'>
+										<ZIonText className='font-bold text-[16px] mt-4'>
 											To permanently delete your account, enter '
 											{CONSTANTS.USER_ACCOUNT_DELETE_CONFIRM_KEY}' below, and
 											then select Delete account.

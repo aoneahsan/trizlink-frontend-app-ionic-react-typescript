@@ -96,14 +96,12 @@ const ZaionsKeyFeatures: React.FC<ZaionsKeyFeaturesType> = ({ data = [] }) => {
 												sizeXs='11'
 											>
 												<ZIonText>
-													<ZIonText className='font-bold zaions__fs_15'>
+													<ZIonText className='font-bold text-[15px]'>
 														{el.title}
 													</ZIonText>
 												</ZIonText>
 												<br />
-												<ZIonText className='zaions__fs_15'>
-													{el?.text}
-												</ZIonText>
+												<ZIonText className='text-[15px]'>{el?.text}</ZIonText>
 												<br />
 												{animationMedia.key === el.id && (
 													<ZIonText>{el?.link?.text}</ZIonText>

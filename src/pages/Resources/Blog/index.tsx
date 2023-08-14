@@ -5,7 +5,7 @@ import React, { useLayoutEffect } from 'react';
 import { IonSearchbar } from '@ionic/react';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsTopMenu from '@/navigation/TopMenu';
 import Zaions4By4GridSystem from '@/components/InPageComponents/Zaions4By4GridSystem';
@@ -47,7 +47,7 @@ const ZaionsBlogs: React.FC = () => {
 		setBlogData(RSBlogData);
 	}, [setBlogData]);
 	return (
-		<ZaionsIonPage pageTitle='Link Managment'>
+		<ZIonPage pageTitle='Link Managment'>
 			{/* Page Content */}
 			<ZIonContent>
 				<ZaionsTopMenu />
@@ -66,7 +66,7 @@ const ZaionsBlogs: React.FC = () => {
 									color={'dark'}
 									className={`${classes.zaions__bg_f5f6f8}`}
 								>
-									<ZIonText className='inline-block me-3 pe-2 zaions__fs_15'>
+									<ZIonText className='inline-block me-3 pe-2 text-[15px]'>
 										Latest Articles
 									</ZIonText>
 								</ZIonRouterLink>
@@ -75,7 +75,7 @@ const ZaionsBlogs: React.FC = () => {
 									routerLink={ZaionsRoutes.HomeRoute}
 									className={`${classes.zaions__bg_f5f6f8}`}
 								>
-									<ZIonText className='inline-block me-3 pe-1 zaions__fs_15'>
+									<ZIonText className='inline-block me-3 pe-1 text-[15px]'>
 										Digital Marketing
 									</ZIonText>
 								</ZIonRouterLink>
@@ -84,7 +84,7 @@ const ZaionsBlogs: React.FC = () => {
 									routerLink={ZaionsRoutes.HomeRoute}
 									className={`${classes.zaions__bg_f5f6f8}`}
 								>
-									<ZIonText className='inline-block me-3 pe-1 zaions__fs_15'>
+									<ZIonText className='inline-block me-3 pe-1 text-[15px]'>
 										Social Media Marketing
 									</ZIonText>
 								</ZIonRouterLink>
@@ -94,7 +94,7 @@ const ZaionsBlogs: React.FC = () => {
 									color={'dark'}
 									className={`${classes.zaions__bg_f5f6f8}`}
 								>
-									<ZIonText className='inline-block me-3 pe-1 zaions__fs_15'>
+									<ZIonText className='inline-block me-3 pe-1 text-[15px]'>
 										Customer Service
 									</ZIonText>
 								</ZIonRouterLink>
@@ -103,7 +103,7 @@ const ZaionsBlogs: React.FC = () => {
 									routerLink={ZaionsRoutes.HomeRoute}
 									className={`${classes.zaions__bg_f5f6f8}`}
 								>
-									<ZIonText className='inline-block me-3 pe-1 zaions__fs_15'>
+									<ZIonText className='inline-block me-3 pe-1 text-[15px]'>
 										Branding
 									</ZIonText>
 								</ZIonRouterLink>
@@ -239,7 +239,7 @@ const ZaionsBlogs: React.FC = () => {
 				</ZIonGrid>
 				<InPageFooter btnText='Start for free' blueSec={false} />
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

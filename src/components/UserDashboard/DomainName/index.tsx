@@ -10,6 +10,7 @@ import {
 import { useRecoilValue } from 'recoil';
 import { useFormikContext } from 'formik';
 import classNames from 'classnames';
+import { useParams } from 'react-router';
 
 // Custom Imports
 import {
@@ -24,12 +25,19 @@ import {
 	ZIonSelect,
 	ZIonSelectOption,
 } from '@/components/ZIonComponents';
-import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 // Global Constants
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import { extractInnerData, formatReactSelectOption } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import {
+	useZGetRQCacheData,
+	useZRemoveRQCacheData,
+	useZRQGetRequest,
+} from '@/ZaionsHooks/zreactquery-hooks';
+import { API_URL_ENUM } from '@/utils/enums';
+import CONSTANTS from '@/utils/constants';
+import { reportCustomError } from '@/utils/customErrorType';
 
 // Images
 
@@ -37,23 +45,8 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { DefaultDomainsState } from '@/ZaionsStore/UserDashboard/CustomDomainState';
 
 // Types
-import {
-	ShortLinkType,
-	ZaionsShortUrlOptionFieldsValuesInterface,
-} from '@/types/AdminPanel/linksType';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
-import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
-import {
-	useZGetRQCacheData,
-	useZRemoveRQCacheData,
-	useZRQGetRequest,
-} from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
-import CONSTANTS from '@/utils/constants';
-import { useParams } from 'react-router';
+import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { reportCustomError } from '@/utils/customErrorType';
 
 // Styles
 

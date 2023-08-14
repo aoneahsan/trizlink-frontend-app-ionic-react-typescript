@@ -88,7 +88,7 @@ const ZaionsDropDown = (props: {
 	return (
 		<></>
 		// <Dropdown
-		// 	className={`${classes.zaions__max_content} ${
+		// 	className={`${classes.w-max} ${
 		// 		isXlScale ? 'pe-1' : ''
 		// 	} mb-3`}
 		// >
@@ -115,7 +115,7 @@ const ZaionsDropDown = (props: {
 		// 						<div className='me-2 pe-1 pt-2'>
 		// 							<ZIonIcon
 		// 								icon={el.icon}
-		// 								className={`zaions__fs_25 ${classes.zaions__dropdown_icon} ${classes.zaions__color_777}`}
+		// 								className={`text-[25px] ${classes.zaions__dropdown_icon} ${classes.zaions__color_777}`}
 		// 							/>
 		// 						</div>
 		// 						<div className=''>

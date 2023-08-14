@@ -145,7 +145,7 @@ const ZWorkspacePostDetailModal: React.FC = () => {
 										>
 											<ZIonSegmentButton
 												value={workspacePostDetailTabEnum.desktop}
-												className='text-transform-initial'
+												className='normal-case'
 												onClick={() => {
 													setFieldValue(
 														'modalTab',
@@ -158,7 +158,7 @@ const ZWorkspacePostDetailModal: React.FC = () => {
 											</ZIonSegmentButton>
 											<ZIonSegmentButton
 												value={workspacePostDetailTabEnum.mobile}
-												className='text-transform-initial'
+												className='normal-case'
 												onClick={() => {
 													setFieldValue(
 														'modalTab',
@@ -174,9 +174,7 @@ const ZWorkspacePostDetailModal: React.FC = () => {
 
 									{/*  */}
 									<ZIonCol className='flex ion-align-items-center ion-justify-content-end'>
-										<ZIonButton className='text-transform-initial me-3'>
-											Share
-										</ZIonButton>
+										<ZIonButton className='normal-case me-3'>Share</ZIonButton>
 
 										<ZIonButtons>
 											<ZIonButton>
@@ -293,13 +291,13 @@ const ZWorkspacePostDetailModal: React.FC = () => {
 												<ZIonSegment value='Desktop' className='mx-auto '>
 													<ZIonSegmentButton
 														value='Desktop'
-														className='text-transform-initial'
+														className='normal-case'
 													>
 														Comments
 													</ZIonSegmentButton>
 													<ZIonSegmentButton
 														value='Mobile'
-														className='text-transform-initial'
+														className='normal-case'
 													>
 														Activity
 													</ZIonSegmentButton>
@@ -339,7 +337,7 @@ const ZWorkspacePostDetailModal: React.FC = () => {
 														<ZIonButton
 															fill='clear'
 															color='dark'
-															className='text-xs ion-no-padding ion-no-margin text-transform-initial'
+															className='text-xs ion-no-padding ion-no-margin normal-case'
 														>
 															Show resolved
 														</ZIonButton>
@@ -372,7 +370,7 @@ const ZWorkspacePostDetailModal: React.FC = () => {
 											<ZIonRow className='bg-white border'>
 												<ZIonCol className='ion-no-padding'>
 													<ZIonButton
-														className='ion-no-padding ion-no-margin text-transform-initial'
+														className='ion-no-padding ion-no-margin normal-case'
 														expand='block'
 														size='small'
 														fill='clear'
@@ -386,7 +384,7 @@ const ZWorkspacePostDetailModal: React.FC = () => {
 
 												<ZIonCol className='ion-no-padding ion-no-margin'>
 													<ZIonButton
-														className='ion-no-padding ion-no-margin text-transform-initial'
+														className='ion-no-padding ion-no-margin normal-case'
 														expand='block'
 														size='small'
 														fill='clear'
@@ -401,7 +399,7 @@ const ZWorkspacePostDetailModal: React.FC = () => {
 
 												<ZIonCol className='ion-no-padding ion-no-margin'>
 													<ZIonButton
-														className='ion-no-padding ion-no-margin text-transform-initial'
+														className='ion-no-padding ion-no-margin normal-case'
 														expand='block'
 														size='small'
 														fill='clear'
@@ -513,11 +511,11 @@ const CardView: React.FC<{
 						'mt-1': type === workspacePostDetailTabEnum.mobile,
 					})}
 				>
-					<ZIonButton className='text-transform-initial' size='small'>
+					<ZIonButton className='normal-case' size='small'>
 						<ZIonIcon icon={pencil} className='me-2' /> Rewrite with AI
 					</ZIonButton>
 
-					<ZIonButton className='text-transform-initial' size='small'>
+					<ZIonButton className='normal-case' size='small'>
 						<ZIonIcon icon={menuOutline} className='me-2' />
 						Continue
 					</ZIonButton>

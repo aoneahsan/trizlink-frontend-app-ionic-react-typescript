@@ -190,7 +190,7 @@ const ZInviteTab: React.FC = () => {
 											fill='outline'
 											id='role-popover-index'
 											className={classNames({
-												'm-0 flex h-full text-transform-initial ion-align-items-start':
+												'm-0 flex h-full normal-case ion-align-items-start':
 													true,
 											})}
 											size='small'
@@ -243,7 +243,7 @@ const ZInviteTab: React.FC = () => {
 										<ZIonButton
 											fill='outline'
 											id='permission-popover-index'
-											className='m-0 flex h-full text-transform-initial'
+											className='m-0 flex h-full normal-case'
 											size='small'
 											color='medium'
 											style={{
@@ -298,7 +298,7 @@ const ZInviteTab: React.FC = () => {
 											fill='solid'
 											id='role-popover-index'
 											className={classNames({
-												'm-0 flex h-full text-transform-initial ion-align-items-start':
+												'm-0 flex h-full normal-case ion-align-items-start':
 													true,
 											})}
 											size='small'
@@ -324,7 +324,7 @@ const ZInviteTab: React.FC = () => {
 											fill='outline'
 											id='role-popover-index'
 											className={classNames({
-												'm-0 flex h-full text-transform-initial ion-align-items-start':
+												'm-0 flex h-full normal-case ion-align-items-start':
 													true,
 											})}
 											size='small'
@@ -357,7 +357,7 @@ const ZInviteTab: React.FC = () => {
 								<ZIonText className='me-2'>Invite links</ZIonText>
 								<ZIonIcon
 									icon={helpCircleOutline}
-									className='w-5 h-5 zaions__cursor_pointer'
+									className='w-5 h-5 cursor-pointer'
 								/>
 							</ZIonCol>
 							{/* Copy Invite link button */}

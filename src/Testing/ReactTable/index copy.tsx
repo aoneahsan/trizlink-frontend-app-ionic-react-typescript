@@ -15,7 +15,7 @@ import CLASSES from './styles.module.css';
 
 import PRODUCTS from './_data.json';
 import classNames from 'classnames';
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import { ZIonContent } from '@/components/ZIonComponents';
 
 const TestingReactTable: React.FC = () => {
@@ -70,7 +70,7 @@ const TestingReactTable: React.FC = () => {
 	// rTableInstance.getAllFlatColumns;  rating
 
 	return (
-		<ZaionsIonPage>
+		<ZIonPage>
 			<ZIonContent>
 				<h1>React Table</h1>
 				<table border={1}>
@@ -153,7 +153,7 @@ const TestingReactTable: React.FC = () => {
 					</tfoot>
 				</table>
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

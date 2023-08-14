@@ -73,7 +73,7 @@ const ZLinkInBioCalendarBlock: React.FC<ZLinkInBioCalendarBlockInterface> = ({
 					<ZIonDatetime />
 					<ZTimezoneInput
 						className={classNames(fontFamily, {
-							'zaions__w90 ion-margin-top': true,
+							'w-[90%] ion-margin-top': true,
 						})}
 					/>
 				</div>

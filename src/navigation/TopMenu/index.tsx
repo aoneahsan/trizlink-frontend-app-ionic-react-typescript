@@ -74,7 +74,7 @@ const ZaionsTopMenu: React.FC = () => {
 						<ZIonImg
 							src={ProductLogo}
 							alt={`${PRODUCT_NAME} Logo`}
-							className={`logo ${
+							className={`h-[50px] w-max ${
 								isMdScale
 									? 'ion-margin-horizontal ion-padding-horizontal'
 									: 'px-0'

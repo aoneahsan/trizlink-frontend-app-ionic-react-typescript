@@ -91,7 +91,7 @@ const ZLinkInBioNavigation: React.FC = () => {
 				className={classNames({
 					'zaions__bg_white py-1 border-bottom__sand': true,
 					'border-radius__100vmax mx-2': isLgScale,
-					'ff-column-reverse': !isLgScale,
+					'flex-col-reverse': !isLgScale,
 				})}
 			>
 				<ZIonCol

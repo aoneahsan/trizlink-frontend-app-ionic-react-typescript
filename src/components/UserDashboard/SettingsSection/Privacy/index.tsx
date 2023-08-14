@@ -54,9 +54,7 @@ const APSettingsPrivacy: React.FC = () => {
 					<div className=''>
 						<ZIonImg
 							src={privacy}
-							className={`mx-auto ${
-								!isLgScale ? 'w-full mt-5' : 'zaions__w60 '
-							}`}
+							className={`mx-auto ${!isLgScale ? 'w-full mt-5' : 'w-[60%] '}`}
 						/>
 					</div>
 				</ZIonCol>

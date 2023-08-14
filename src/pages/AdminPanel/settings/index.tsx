@@ -6,7 +6,7 @@ import { useRouteMatch } from 'react-router';
 import classNames from 'classnames';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZaionsCreateShortLinkUrlInput from '@/components/InPageComponents/ZaionsCreateShortLinkUrlInput';
 import APSettingsPixels from '@/components/UserDashboard/SettingsSection/Pixels';
 import APSettingsUtmTags from '@/components/UserDashboard/SettingsSection/UtmTemplates';
@@ -67,7 +67,7 @@ const ZaionsAdminPanelSettings: React.FC = () => {
 
 	return (
 		<>
-			<ZaionsIonPage
+			<ZIonPage
 				pageTitle='Admin Setting Page'
 				menu={PAGE_MENU.DASHBOARD_PAGE_MENU}
 			>
@@ -191,7 +191,7 @@ const ZaionsAdminPanelSettings: React.FC = () => {
 								</ZIonContent>
 							</ZIonMenu>
 							<div
-								className='ion-page zaionsPaneContent'
+								className='ion-page  overflow-y-scroll'
 								id={CONSTANTS.DEFAULT_VALUES.ZAIONS_SETTING_SPLIT_PANEL}
 							>
 								<ZIonGrid className='w-full mt-2'>
@@ -256,7 +256,7 @@ const ZaionsAdminPanelSettings: React.FC = () => {
 						</ZIonSplitPane>
 					</ZIonGrid>
 				</ZIonContent>
-			</ZaionsIonPage>
+			</ZIonPage>
 		</>
 	);
 };

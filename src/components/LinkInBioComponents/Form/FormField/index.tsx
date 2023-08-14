@@ -212,7 +212,7 @@ const LinkInBioFormField: React.FC = () => {
 																			'--inner-padding-end': '0',
 																		}}
 																	>
-																		<ZIonText className='font-bold zaions__fs_13'>
+																		<ZIonText className='font-bold text-sm'>
 																			Required
 																		</ZIonText>
 																		<ZRCSwitch
@@ -238,7 +238,7 @@ const LinkInBioFormField: React.FC = () => {
 																			'--inner-padding-end': '0',
 																		}}
 																	>
-																		<ZIonText className='font-bold zaions__fs_13'>
+																		<ZIonText className='font-bold text-sm'>
 																			Is Active
 																		</ZIonText>
 																		<ZRCSwitch
@@ -318,7 +318,7 @@ const LinkInBiosFormFieldsModal: React.FC<{
 			<ZIonTitle className='py-3 ion-text-center border-bottom__violet'>
 				Add a new field
 			</ZIonTitle>
-			<ZIonRow className='ion-padding ion-margin-top row-gap-1-rem'>
+			<ZIonRow className='ion-padding ion-margin-top gap-y-4'>
 				{linkInBioPredefinedFormFieldState &&
 					linkInBioPredefinedFormFieldState.map((el) => {
 						return (
@@ -327,7 +327,7 @@ const LinkInBiosFormFieldsModal: React.FC<{
 								key={el.id}
 								className='flex ion-justify-content-center'
 							>
-								<div className='ion-text-center me-3 zaions__max_content'>
+								<div className='ion-text-center me-3 w-max'>
 									<LinkInBioPDButton
 										icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
 										onClick={() => {

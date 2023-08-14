@@ -8,7 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import {
 	ZIonAvatar,
 	ZIonButton,
@@ -69,7 +69,7 @@ import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 
 const TestingIonComponents: React.FC = () => {
 	return (
-		<ZaionsIonPage>
+		<ZIonPage>
 			<ZIonContent>
 				{/* Grid-1 */}
 				<ZIonGrid
@@ -125,7 +125,7 @@ const TestingIonComponents: React.FC = () => {
 					</ZIonRow>
 				</ZIonGrid>
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

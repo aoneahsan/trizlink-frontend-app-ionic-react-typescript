@@ -4,7 +4,7 @@ import React from 'react';
 // Packages Imports
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsTopMenu from '@/navigation/TopMenu';
@@ -35,7 +35,7 @@ import { ZIonButton } from '@/components/ZIonComponents';
 
 const ZaionsContact: React.FC = () => {
 	return (
-		<ZaionsIonPage pageTitle='Contact Page'>
+		<ZIonPage pageTitle='Contact Page'>
 			<>
 				<ZIonContent>
 					<ZaionsTopMenu />
@@ -128,7 +128,7 @@ const ZaionsContact: React.FC = () => {
 								<ZIonRouterLink
 									routerLink={ZaionsRoutes.DiscoverEnterpriseRoute}
 								>
-									<ZIonText className='zaions_lh_15px mt-3'>
+									<ZIonText className='leading-[15px] mt-3'>
 										Contact a representative to <br /> get started with{' '}
 										{PRODUCT_NAME}
 										Enterprise. →
@@ -151,7 +151,7 @@ const ZaionsContact: React.FC = () => {
 								<ZIonRouterLink
 									routerLink={CONSTANTS.ExternalURL.GenericExternalURL}
 								>
-									<ZIonText className='zaions_lh_15px mt-3'>
+									<ZIonText className='leading-[15px] mt-3'>
 										Contact our press team. →
 									</ZIonText>
 								</ZIonRouterLink>
@@ -172,7 +172,7 @@ const ZaionsContact: React.FC = () => {
 											>
 												<ZIonIcon
 													icon={logoFacebook}
-													className='me-3 zaions__fs_3rem'
+													className='me-3 text-[3rem]'
 													style={{ color: '#3c5a99' }}
 												/>
 											</ZIonRouterLink>
@@ -181,7 +181,7 @@ const ZaionsContact: React.FC = () => {
 											>
 												<ZIonIcon
 													icon={logoTwitter}
-													className='me-3 zaions__fs_3rem zaions__fs_3rem'
+													className='me-3 text-[3rem] text-[3rem]'
 													style={{ color: '#0079b0' }}
 												/>
 											</ZIonRouterLink>
@@ -190,7 +190,7 @@ const ZaionsContact: React.FC = () => {
 											>
 												<ZIonIcon
 													icon={logoLinkedin}
-													className='me-3 zaions__fs_3rem zaions__fs_3rem'
+													className='me-3 text-[3rem] text-[3rem]'
 													style={{ color: '#1da1f2' }}
 												/>
 											</ZIonRouterLink>
@@ -199,7 +199,7 @@ const ZaionsContact: React.FC = () => {
 											>
 												<ZIonIcon
 													icon={logoInstagram}
-													className='me-3 zaions__fs_3rem'
+													className='me-3 text-[3rem]'
 													style={{ color: '#000' }}
 												/>
 											</ZIonRouterLink>
@@ -284,7 +284,7 @@ const ZaionsContact: React.FC = () => {
 					<InPageFooter />
 				</ZIonContent>
 			</>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

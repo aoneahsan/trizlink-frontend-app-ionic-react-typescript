@@ -228,7 +228,7 @@ const ZaionsShortLinkTable: React.FC<{
 								</div>
 								<ZIonText
 									color='primary'
-									className='zaions__cursor_pointer'
+									className='cursor-pointer'
 									onClick={() => {
 										setShortLinkFormState((oldVal) => ({
 											...oldVal,

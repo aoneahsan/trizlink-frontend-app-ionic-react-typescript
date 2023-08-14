@@ -36,7 +36,7 @@ import {
 	ZIonButtons,
 } from '@/components/ZIonComponents';
 import { ZIonButton } from '@/components/ZIonComponents';
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
 import ZRCheckbox from '@/components/CustomComponents/ZRCheckbox';
 import ZIonRefresher from '@/components/ZIonComponents/ZIonRefresher';
@@ -300,7 +300,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 		isSelectedWorkspaceFetching;
 
 	return (
-		<ZaionsIonPage
+		<ZIonPage
 			pageTitle='Zaions link-in-bio list page'
 			id={CONSTANTS.MENU_IDS.ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID}
 			menu={PAGE_MENU.ADMIN_PANEL_LINK_IN_BIO_FOLDERS_MENU}
@@ -392,7 +392,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 												>
 													<ZIonButton
 														className={classNames({
-															'text-transform-initial': true,
+															'normal-case': true,
 															'open-folder-menu-button': isLgScale || isSmScale,
 															'mt-4 ms-0': !isMdScale,
 														})}
@@ -468,7 +468,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 												className={classNames({
 													'justify-content-end': isXlScale,
 													'justify-content-start mt-4': !isXlScale,
-													'row-gap-1-rem': !isLgScale,
+													'gap-y-4': !isLgScale,
 												})}
 											>
 												<ZIonButtons
@@ -598,7 +598,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 											<ZIonRow
 												className={classNames({
 													'w-full ion-justify-content-between': true,
-													'row-gap-1-rem': !isLgScale,
+													'gap-y-4': !isLgScale,
 												})}
 											>
 												<ZIonButtons
@@ -833,7 +833,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 					</ZIonGrid>
 				</ZIonContent>
 			</ZCan>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 
@@ -1042,7 +1042,7 @@ const LinkInBiosTagsFiltersPopover = () => {
 								<ZIonText>filter</ZIonText>
 							</ZIonButton>
 							<ZIonItem className='ion-no-padding'>
-								<ZIonText className='font-bold ms-3 zaions__fs_14 zaions__color_gray2'>
+								<ZIonText className='font-bold ms-3 text-[14px] zaions__color_gray2'>
 									All Tags
 								</ZIonText>
 								{/* <IonCheckbox
@@ -1075,7 +1075,7 @@ const LinkInBiosTagsFiltersPopover = () => {
 								{_LinkInBiosFieldsDataTagsSelector.map((el, i) => {
 									return (
 										<ZIonItem key={i}>
-											<IonChip className='m-0 zaions__fs_14'>{el}</IonChip>
+											<IonChip className='m-0 text-[14px]'>{el}</IonChip>
 											<IonCheckbox
 												slot='end'
 												checked={
@@ -1192,7 +1192,7 @@ const LinkInBiosTagsFiltersPopover = () => {
 //               <ZIonText>filter</ZIonText>
 //             </ZIonButton>
 //             <ZIonItem className='ion-no-padding'>
-//               <ZIonText className='font-bold ms-3 zaions__fs_14 zaions__color_gray2'>
+//               <ZIonText className='font-bold ms-3 text-[14px] zaions__color_gray2'>
 //                 All Domains
 //               </ZIonText>
 //               {/* <IonCheckbox
@@ -1220,7 +1220,7 @@ const LinkInBiosTagsFiltersPopover = () => {
 //                 const domain = _domain.replace('.', '_');
 //                 return (
 //                   <ZIonItem key={i}>
-//                     <IonChip className='m-0 zaions__fs_14'>{_domain}</IonChip>
+//                     <IonChip className='m-0 text-[14px]'>{_domain}</IonChip>
 //                     <IonCheckbox
 //                       slot='end'
 //                       checked={

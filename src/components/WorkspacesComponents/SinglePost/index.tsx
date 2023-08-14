@@ -257,11 +257,11 @@ const ZWorkspaceSinglePost: React.FC<ZWorkspaceSinglePostInterface> = ({
 						'mt-1': type === workspacePostDetailTabEnum.mobile,
 					})}
 				>
-					<ZIonButton className='text-transform-initial' size='small'>
+					<ZIonButton className='normal-case' size='small'>
 						<ZIonIcon icon={pencil} className='me-2' /> Rewrite with AI
 					</ZIonButton>
 
-					<ZIonButton className='text-transform-initial' size='small'>
+					<ZIonButton className='normal-case' size='small'>
 						<ZIonIcon icon={menuOutline} className='me-2' />
 						Continue
 					</ZIonButton>

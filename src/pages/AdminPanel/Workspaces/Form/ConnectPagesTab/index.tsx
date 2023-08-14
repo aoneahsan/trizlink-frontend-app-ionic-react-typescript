@@ -186,8 +186,7 @@ const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 											{/*  */}
 											<ZIonText
 												className={classNames({
-													'ion-text-center block zaions__fs_13 text-muted':
-														true,
+													'ion-text-center block text-sm text-muted': true,
 												})}
 											>
 												@zaions
@@ -238,7 +237,7 @@ const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 									<ZIonButton
 										expand='block'
 										fill='outline'
-										className='text-transform-initial'
+										className='normal-case'
 										routerLink={createRedirectRoute({
 											url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
 											params: [
@@ -264,7 +263,7 @@ const ZWorkspaceFormConnectPagesTab: React.FC = () => {
 								>
 									<ZIonButton
 										expand='block'
-										className='text-transform-initial'
+										className='normal-case'
 										routerLink={createRedirectRoute({
 											url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
 											params: [

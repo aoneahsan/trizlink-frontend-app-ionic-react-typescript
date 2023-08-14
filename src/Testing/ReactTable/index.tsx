@@ -8,7 +8,7 @@ import {
 	ZIonRow,
 	ZIonTitle,
 } from '@/components/ZIonComponents';
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import PRODUCTS from './_data_copy.json';
 import {
 	createColumnHelper,
@@ -111,7 +111,7 @@ const TestingReactTable: React.FC = () => {
 	}, []);
 
 	return (
-		<ZaionsIonPage>
+		<ZIonPage>
 			<ZIonContent>
 				{/* Main Container */}
 				<ZIonGrid>
@@ -283,7 +283,7 @@ const TestingReactTable: React.FC = () => {
 					<pre>{JSON.stringify(zTable.getState().pagination, null, 2)}</pre>
 				</ZIonGrid>
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

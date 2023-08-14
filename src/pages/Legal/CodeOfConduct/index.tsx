@@ -4,7 +4,7 @@ import React from 'react';
 // Packages Imports
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZaionsTopMenu from '@/navigation/TopMenu';
 import InPageFooter from '@/components/InPageFooter';
 import {
@@ -22,7 +22,7 @@ import { PRODUCT_NAME } from '@/utils/constants';
 
 const ZaionsCodeOfConduct: React.FC = () => {
 	return (
-		<ZaionsIonPage pageTitle='Code Of Conduct Page'>
+		<ZIonPage pageTitle='Code Of Conduct Page'>
 			{/* Content */}
 			<ZIonContent>
 				<ZaionsTopMenu />
@@ -504,7 +504,7 @@ const ZaionsCodeOfConduct: React.FC = () => {
 				</ZIonGrid>
 				<InPageFooter />
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

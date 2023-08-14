@@ -83,7 +83,7 @@ const ZWorkspaceAppStatusPopover: React.FC = () => {
 
 			<ZIonList lines='none'>
 				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+					className='ion-activatable ion-focusable cursor-pointer text-sm'
 					minHeight='32px'
 					lines='full'
 				>
@@ -92,7 +92,7 @@ const ZWorkspaceAppStatusPopover: React.FC = () => {
 				</ZIonItem>
 
 				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+					className='ion-activatable ion-focusable cursor-pointer text-sm'
 					minHeight='40px'
 				>
 					<ZIonIcon icon={giftOutline} className='me-1 pe-1 w-5 h-5' />
@@ -100,7 +100,7 @@ const ZWorkspaceAppStatusPopover: React.FC = () => {
 				</ZIonItem>
 
 				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+					className='ion-activatable ion-focusable cursor-pointer text-sm'
 					minHeight='40px'
 				>
 					<ZIonIcon icon={bulbOutline} className='me-1 pe-1 w-5 h-5' />
@@ -108,7 +108,7 @@ const ZWorkspaceAppStatusPopover: React.FC = () => {
 				</ZIonItem>
 
 				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+					className='ion-activatable ion-focusable cursor-pointer text-sm'
 					minHeight='40px'
 				>
 					<ZIonIcon icon={helpCircleOutline} className='me-1 pe-1 w-5 h-5' />
@@ -116,7 +116,7 @@ const ZWorkspaceAppStatusPopover: React.FC = () => {
 				</ZIonItem>
 
 				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+					className='ion-activatable ion-focusable cursor-pointer text-sm'
 					minHeight='40px'
 				>
 					<ZIonIcon icon={cashOutline} className='me-1 pe-1 w-5 h-5' />
@@ -124,7 +124,7 @@ const ZWorkspaceAppStatusPopover: React.FC = () => {
 				</ZIonItem>
 
 				<ZIonItem
-					className='ion-activatable ion-focusable zaions__cursor_pointer text-sm'
+					className='ion-activatable ion-focusable cursor-pointer text-sm'
 					minHeight='40px'
 					lines='full'
 				>
@@ -141,11 +141,11 @@ const ZWorkspaceAppStatusPopover: React.FC = () => {
 			</ZIonText>
 
 			<ZIonButtons className='mx-4 flex my-2 ion-justify-content-between'>
-				<ZIonButton className='text-xs text-transform-initial'>
+				<ZIonButton className='text-xs normal-case'>
 					<ZIonIcon icon={logoApple} className='me-2' /> IOS
 				</ZIonButton>
 				<ZIonText>|</ZIonText>
-				<ZIonButton className='text-xs text-transform-initial'>
+				<ZIonButton className='text-xs normal-case'>
 					<ZIonIcon icon={logoAndroid} className='me-2' /> Android
 				</ZIonButton>
 			</ZIonButtons>

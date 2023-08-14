@@ -13,7 +13,7 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZLinkIonPanelSidebar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
 import ZLinkDashboardTopBar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
 import {
@@ -88,7 +88,7 @@ const ZDashboard: React.FC = () => {
 	});
 	return (
 		<>
-			<ZaionsIonPage
+			<ZIonPage
 				pageTitle='Dashboard'
 				id={CONSTANTS.MENU_IDS.DASHBOARD_SM_MENU_CONTENT_ID}
 				menu={PAGE_MENU.DASHBOARD_PAGE_MENU}
@@ -103,7 +103,7 @@ const ZDashboard: React.FC = () => {
 					/>
 
 					<div
-						className='ion-page zaionsPaneContent'
+						className='ion-page  overflow-y-scroll'
 						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
 					>
 						<ZLinkDashboardTopBar />
@@ -142,7 +142,7 @@ const ZDashboard: React.FC = () => {
 						</ZIonContent>
 					</div>
 				</ZIonSplitPane>
-			</ZaionsIonPage>
+			</ZIonPage>
 		</>
 	);
 };

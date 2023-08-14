@@ -30,7 +30,7 @@ import RCSwitch from 'rc-switch';
  * ? Like import of custom components is a custom import
  * */
 import ZLinkInBioNavigation from '@/components/UserDashboard/ZLinkInBioComps/LinkInBioNavigation';
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import {
 	ZIonAccordion,
 	ZIonAccordionGroup,
@@ -102,7 +102,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 	};
 
 	return (
-		<ZaionsIonPage>
+		<ZIonPage>
 			<ZIonContent
 				className={classNames(classes['link-page-background-color'])}
 			>
@@ -127,7 +127,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 										})}
 									>
 										<ZIonLabel className='flex ion-align-items-center'>
-											<ZIonText className='font-bold zaions__fs_15'>
+											<ZIonText className='font-bold text-[15px]'>
 												Analytics
 											</ZIonText>
 											<ZIonIcon
@@ -150,7 +150,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 									<ZIonButton
 										expand='block'
 										shape='round'
-										className='ion-text-capitalize font-bold zaions__fs_16'
+										className='ion-text-capitalize font-bold text-[16px]'
 										style={{
 											'--padding-top': '1.4rem',
 											'--padding-bottom': '1.4rem',
@@ -190,7 +190,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 
 								{/* List below header button */}
 								<ZIonCol size='10.5'>
-									<ZIonList lines='none' className='zaions__bg_transparent'>
+									<ZIonList lines='none' className='bg-transparent'>
 										{/* The reorder gesture is disabled by default, enable it to drag and drop items */}
 										<IonReorderGroup
 											disabled={false}
@@ -214,7 +214,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 														<div className=''>
 															{/* <ZIonInput
 															value={'Seo Home - Zaions'}
-															className='zaions__fs_14'
+															className='text-[14px]'
 														/> */}
 															<ZIonButton
 																fill='clear'
@@ -227,7 +227,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 																	'margin-right': '2rem',
 																}}
 															>
-																<ZIonText className='me-2 font-bold zaions__fs_14 letter-spacing-0px'>
+																<ZIonText className='me-2 font-bold text-[14px] tracking-normal'>
 																	Seo Home - Zaions
 																</ZIonText>
 																<ZIonIcon icon={pencil} />
@@ -237,7 +237,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 														<div className=''>
 															{/* <ZIonInput
 																value={ZaionsBusinessDetails.WebsiteUrl}
-																className='zaions__fs_14'
+																className='text-[14px]'
 															/> */}
 															<ZIonButton
 																fill='clear'
@@ -250,7 +250,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 																	'margin-right': '2rem',
 																}}
 															>
-																<ZIonText className='me-2 font-bold zaions__fs_13 letter-spacing-0px'>
+																<ZIonText className='me-2 font-bold text-sm tracking-normal'>
 																	{ZaionsBusinessDetails.WebsiteUrl}
 																</ZIonText>
 																<ZIonIcon icon={pencil} />
@@ -418,7 +418,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
 				</ZIonGrid>
 				{/* Main Container Start */}
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

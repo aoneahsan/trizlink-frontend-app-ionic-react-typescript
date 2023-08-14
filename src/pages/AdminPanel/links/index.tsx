@@ -56,7 +56,7 @@ import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNe
 import ZIonRefresher from '@/components/ZIonComponents/ZIonRefresher';
 import ZIonRefresherContent from '@/components/ZIonComponents/ZIonRefresherContent';
 import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import FolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/FoldersActionPopover';
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 import ZCan from '@/components/Can';
@@ -398,7 +398,7 @@ const ZShortLinksListPage: React.FC = () => {
 			<ZUserSettingsMenu />
 
 			{/*  */}
-			<ZaionsIonPage
+			<ZIonPage
 				pageTitle='Zaions short-links list page'
 				// id={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
 				// menu={PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU}
@@ -527,7 +527,7 @@ const ZShortLinksListPage: React.FC = () => {
 																	>
 																		<ZIonButton
 																			className={classNames({
-																				'text-transform-initial': true,
+																				'normal-case': true,
 																				'open-folder-menu-button':
 																					isLgScale || isSmScale,
 																				'mt-4 ms-0': !isMdScale,
@@ -605,7 +605,7 @@ const ZShortLinksListPage: React.FC = () => {
 																className={classNames({
 																	'justify-content-end': isXlScale,
 																	'justify-content-start mt-4': !isXlScale,
-																	'row-gap-1-rem': !isLgScale,
+																	'gap-y-4': !isLgScale,
 																})}
 															>
 																<ZIonButtons
@@ -802,7 +802,7 @@ const ZShortLinksListPage: React.FC = () => {
 																<ZIonRow
 																	className={classNames({
 																		'w-full ion-justify-content-between': true,
-																		'row-gap-1-rem': !isLgScale,
+																		'gap-y-4': !isLgScale,
 																	})}
 																>
 																	<ZIonButtons
@@ -982,7 +982,7 @@ const ZShortLinksListPage: React.FC = () => {
 						</ZIonGrid>
 					</ZIonContent>
 				</ZCan>
-			</ZaionsIonPage>
+			</ZIonPage>
 		</>
 	);
 };
@@ -1268,7 +1268,7 @@ const ShortLinksTagsFiltersPopover = () => {
 								<ZIonText>filter</ZIonText>
 							</ZIonButton>
 							<ZIonItem className='ion-no-padding'>
-								<ZIonText className='font-bold ms-3 zaions__fs_14'>
+								<ZIonText className='font-bold ms-3 text-[14px]'>
 									All Tags
 								</ZIonText>
 								{/* <ZIonCheckbox
@@ -1301,7 +1301,7 @@ const ShortLinksTagsFiltersPopover = () => {
 								{_shortLinksFieldsDataTagsSelector.map((el, i) => {
 									return (
 										<ZIonItem key={i}>
-											<ZIonChip className='m-0 zaions__fs_14'>{el}</ZIonChip>
+											<ZIonChip className='m-0 text-[14px]'>{el}</ZIonChip>
 											<ZIonCheckbox
 												slot='end'
 												checked={
@@ -1418,7 +1418,7 @@ const ShortLinksDomainsFiltersPopover = () => {
 							<ZIonText>filter</ZIonText>
 						</ZIonButton>
 						<ZIonItem className='ion-no-padding'>
-							<ZIonText className='font-bold ms-3 zaions__fs_14'>
+							<ZIonText className='font-bold ms-3 text-[14px]'>
 								All Domains
 							</ZIonText>
 							{/* <ZIonCheckbox
@@ -1446,7 +1446,7 @@ const ShortLinksDomainsFiltersPopover = () => {
 								const domain = _domain.replace('.', '_');
 								return (
 									<ZIonItem key={i}>
-										<ZIonChip className='m-0 zaions__fs_14'>{_domain}</ZIonChip>
+										<ZIonChip className='m-0 text-[14px]'>{_domain}</ZIonChip>
 										<ZIonCheckbox
 											slot='end'
 											checked={

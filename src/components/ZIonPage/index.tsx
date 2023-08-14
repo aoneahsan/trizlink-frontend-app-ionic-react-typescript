@@ -13,7 +13,6 @@ import SideBarMenu from '@/navigation/SideBarMenu';
 import { CONTENT_ID } from '@/utils/constants';
 import ZaionsDashboardResponsiveMenu from '@/navigation/AdminPanel/DashboardResponsiveMenu';
 import { PAGE_MENU, PAGE_MENU_SIDE } from '@/utils/enums';
-import AdminPanelFoldersSidebarMenu from '@/navigation/AdminPanel/FolderSideMenu';
 import AdminPanelShortLinksFolderSideMenu from '@/navigation/AdminPanel/ShortLinksFolderSideMenu';
 import AdminPanelLinkInBioFolderSideMenu from '@/navigation/AdminPanel/LinkInBioFolderSideMenu';
 import ZWorkspaceViewPageFilterMenu from '@/navigation/AdminPanel/WorkspaceViewPageFilterMenu';
@@ -30,7 +29,7 @@ type ZaionsIonPageType = {
 };
 
 // Functional Component
-const ZaionsIonPage: React.FC<ZaionsIonPageType> = ({
+const ZIonPage: React.FC<ZaionsIonPageType> = ({
 	menu,
 	id,
 	children,
@@ -69,4 +68,4 @@ const ZaionsIonPage: React.FC<ZaionsIonPageType> = ({
 	);
 };
 
-export default ZaionsIonPage;
+export default ZIonPage;

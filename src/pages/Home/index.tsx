@@ -5,7 +5,7 @@ import React, { Suspense } from 'react';
 
 // Custom Imports
 import InPageFooter from '@/components/InPageFooter';
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZaionsHPBanner from '@/components/ZaionsHomePage/HPBanner';
 import ZaionsHPShortLink from '@/components/ZaionsHomePage/HPShortLink';
 import ZaionsHPConnectPlatform from '@/components/ZaionsHomePage/HPConnetPlateform';
@@ -23,7 +23,7 @@ import ZFallbackIonSpinner from '@/components/CustomComponents/FallbackSpinner';
 
 const Home: React.FC = () => {
 	return (
-		<ZaionsIonPage pageTitle='Home Page'>
+		<ZIonPage pageTitle='Home Page'>
 			<Suspense fallback={<ZFallbackIonSpinner />}>
 				<ZIonContent fullscreen>
 					<ZaionsTopMenu />
@@ -41,7 +41,7 @@ const Home: React.FC = () => {
 					/>
 				</ZIonContent>
 			</Suspense>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

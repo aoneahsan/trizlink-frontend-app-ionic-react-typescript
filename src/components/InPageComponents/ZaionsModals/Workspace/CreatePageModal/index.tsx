@@ -157,7 +157,7 @@ const ZWorkspaceCreatePageModal: React.FC<{
 										>
 											{workspacePagesDomeData.map((el, index) => (
 												<ZIonSegmentButton
-													className='px-1 text-transform-initial'
+													className='px-1 normal-case'
 													value={String(index)}
 													onClick={() => {
 														setFieldValue('pageType', el.type, false);
@@ -300,8 +300,7 @@ const ZWorkspaceCreatePageModal: React.FC<{
 												{/*  */}
 												<ZIonText
 													className={classNames({
-														'ion-text-center block zaions__fs_13 text-muted':
-															true,
+														'ion-text-center block text-sm text-muted': true,
 													})}
 												>
 													@zaions
@@ -310,7 +309,7 @@ const ZWorkspaceCreatePageModal: React.FC<{
 												{/*  */}
 												<ZIonText
 													className={classNames({
-														'ion-text-center block zaions__fs_13 text-muted ion-text-uppercase pt-2':
+														'ion-text-center block text-sm text-muted ion-text-uppercase pt-2':
 															true,
 													})}
 												>

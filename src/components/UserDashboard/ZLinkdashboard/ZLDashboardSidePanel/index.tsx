@@ -106,7 +106,7 @@ const ZLinkIonPanelSidebar: React.FC<{
 						<ZIonImg
 							src={productSmLogo}
 							alt='product logo'
-							className='menu-product-logo'
+							className='min-w-[34px] w-[34px] max-w-[50px]'
 						/>
 					</ZIonRouterLink>
 				</ZIonTitle>

@@ -60,7 +60,7 @@ const PageAnalyticsInfoBlocks: React.FC = () => {
 		<ZIonRow
 			className={classNames({
 				'mt-4 ion-justify-content-between': true,
-				'row-gap-1-rem': !isXlScale,
+				'gap-y-4': !isXlScale,
 			})}
 		>
 			{/* Click Info Block */}

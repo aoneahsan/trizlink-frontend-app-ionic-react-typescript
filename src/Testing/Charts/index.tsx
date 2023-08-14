@@ -12,7 +12,7 @@ import {
 	ZIonRow,
 	ZIonTitle,
 } from '@/components/ZIonComponents';
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import ZChartHOC from '@/components/AdminPanelComponents/ChartHOC';
 
 const ChartsExamples: React.FC = () => {
@@ -76,7 +76,7 @@ const ChartsExamples: React.FC = () => {
 	};
 
 	return (
-		<ZaionsIonPage>
+		<ZIonPage>
 			<ZIonHeader>
 				<ZIonTitle>Charts</ZIonTitle>
 			</ZIonHeader>
@@ -98,7 +98,7 @@ const ChartsExamples: React.FC = () => {
 			<ZIonFooter>
 				<ZIonTitle>Charts Okay :)</ZIonTitle>
 			</ZIonFooter>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

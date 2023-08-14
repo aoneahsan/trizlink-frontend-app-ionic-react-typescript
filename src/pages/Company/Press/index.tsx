@@ -7,7 +7,7 @@ import { useRecoilValue } from 'recoil';
 import { cloudDownloadOutline } from 'ionicons/icons';
 
 // Custom Imports
-import ZaionsIonPage from '@/components/ZaionsIonPage';
+import ZIonPage from '@/components/ZIonPage';
 import InPageFooter from '@/components/InPageFooter';
 import ZaionsTopMenu from '@/navigation/TopMenu';
 import {
@@ -51,7 +51,7 @@ const ZaionsPress: React.FC = () => {
 		query: `(min-width: ${BRACKPOINT_MD})`,
 	});
 	return (
-		<ZaionsIonPage pageTitle='Press Page'>
+		<ZIonPage pageTitle='Press Page'>
 			{/* Content */}
 			<ZIonContent>
 				<ZaionsTopMenu />
@@ -276,9 +276,7 @@ const ZaionsPress: React.FC = () => {
 											key={el.id}
 										>
 											<ZIonCard
-												className={`${
-													!isMdScale ? 'w-full m-0' : 'zaions__w88'
-												}`}
+												className={`${!isMdScale ? 'w-full m-0' : 'w-[88%]'}`}
 											>
 												<ZIonCardHeader className='px-0 pt-0'>
 													<ZIonImg src={el.image} />
@@ -332,7 +330,7 @@ const ZaionsPress: React.FC = () => {
 
 				<InPageFooter />
 			</ZIonContent>
-		</ZaionsIonPage>
+		</ZIonPage>
 	);
 };
 

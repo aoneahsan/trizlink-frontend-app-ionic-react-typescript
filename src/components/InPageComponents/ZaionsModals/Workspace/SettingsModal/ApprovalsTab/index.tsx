@@ -90,7 +90,7 @@ const ZApprovalTab: React.FC<{ workspaceId: string }> = ({ workspaceId }) => {
 								<ZIonText className='flex gap-1 ion-align-items-center'>
 									Muhammad talha Irshad (you) <ZIonBadge>Team</ZIonBadge>
 								</ZIonText>
-								<ZIonText className='block zaions__fs_14'>
+								<ZIonText className='block text-[14px]'>
 									talhaarshaad5@gmail.com
 								</ZIonText>
 							</div>
