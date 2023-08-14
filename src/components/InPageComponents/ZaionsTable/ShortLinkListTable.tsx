@@ -1049,7 +1049,7 @@ const ZShortLinkActionPopover: React.FC<{
 // Skeleton.
 const ZaionsShortLinkTableSkeleton: React.FC = React.memo(() => {
 	return (
-		<div className='w-full overflow-y-hidden border rounded-lg ms-2 h-max zaions_pretty_scrollbar ion-no-padding'>
+		<div className='w-full overflow-y-hidden border rounded-lg ms-1 h-max zaions_pretty_scrollbar ion-no-padding'>
 			{/* Row-1 */}
 			<ZIonRow className='flex mb-2 flex-nowrap zaions__light_bg'>
 				{/* Col-1 */}

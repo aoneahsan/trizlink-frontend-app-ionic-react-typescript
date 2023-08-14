@@ -105,7 +105,7 @@ const AppRoutes: React.FC = () => {
 					{/* Generic Routes */}
 					<Route exact path={ZaionsRoutes.HomeRoute} component={Home} />
 
-					{/* <Route
+					<Route
 						exact
 						path={ZaionsRoutes.Legal.ZaionsTermsOfService}
 						component={ZaionsTermsOfService}
@@ -114,18 +114,18 @@ const AppRoutes: React.FC = () => {
 					<Route
 						path={ZaionsRoutes.Testing.IonComponents.Main}
 						component={TestingIonComponents}
-					/> */}
+					/>
 
 					{/* Public Routes */}
 					<PublicRoute exact path={ZaionsRoutes.LoginRoute} Component={Login} />
 
-					{/* <PublicRoute
+					<PublicRoute
 						exact
 						path={ZaionsRoutes.SignUpRoute}
 						Component={SignUp}
-					/> */}
+					/>
 
-					{/* <PublicRoute
+					<PublicRoute
 						exact
 						path={ZaionsRoutes.PasswordResetEmailForm}
 						Component={ZaionsPasswordResetConfirm}
@@ -146,7 +146,7 @@ const AppRoutes: React.FC = () => {
 					<PrivateRoute
 						path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkInBioInactive}
 						Component={ZLinkInBioLinksSection}
-					/> */}
+					/>
 
 					<PrivateRoute
 						exact
@@ -166,7 +166,7 @@ const AppRoutes: React.FC = () => {
 						Component={AdminCreateNewLinkPages}
 					/>
 
-					{/* <PrivateRoute
+					<PrivateRoute
 						exact
 						path={ZaionsRoutes.AdminPanel.LinkInBio.Main}
 						Component={ZLinkInBiosListPage}
@@ -188,7 +188,7 @@ const AppRoutes: React.FC = () => {
 						exact
 						path={ZaionsRoutes.AdminPanel.Setting.Main}
 						Component={ZaionsAdminPanelSettings}
-					/> */}
+					/>
 
 					<PrivateRoute
 						exact
@@ -201,7 +201,7 @@ const AppRoutes: React.FC = () => {
 						Component={ZWorkspaceForm}
 					/>
 
-					{/* <PrivateRoute
+					<PrivateRoute
 						exact
 						path={ZaionsRoutes.AdminPanel.Workspaces.Edit}
 						Component={ZWorkspaceForm}
@@ -443,7 +443,7 @@ const AppRoutes: React.FC = () => {
 					<Route
 						path={ZaionsRoutes.Testing.TestingTabs.Main}
 						component={TestingTabs}
-					/> */}
+					/>
 				</Suspense>
 			</IonRouterOutlet>
 		</IonReactRouter>

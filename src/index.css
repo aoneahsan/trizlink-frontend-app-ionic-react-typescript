@@ -362,6 +362,11 @@ span.new {
 .zaions__primary_bg {
 	background-color: var(--ion-color-primary);
 }
+
+.zaions__secondary_bg {
+	background-color: var(--ion-color-secondary);
+}
+
 .zaions_bg__dark {
 	background: var(--ion-color-dark);
 }
@@ -1049,8 +1054,22 @@ ion-modal.zaions__modal_w100 {
 }
 
 .z-help-center-popover-size {
-	--width: 300px;
+	--width: 218px;
 	--height: 350px;
+}
+.z-notification-popover-size {
+	--width: 500px;
+	--height: 450px;
+}
+.z-notification-popover-size .popover-viewport {
+	overflow: hidden;
+}
+
+.z-workspaces-list-popover-size {
+	--width: 218px;
+	--height: max-content;
+	--max-width: 218px;
+	--max-height: 350px;
 }
 
 /* Link-in-bio design-theme-customAppearance & design-block-customAppearance buttons styles */

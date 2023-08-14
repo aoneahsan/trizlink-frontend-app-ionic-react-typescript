@@ -85,7 +85,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 				_method: 'post',
 				_isAuthenticatedRequest: false,
 				_data: zStringify({
-					username: _values.username,
+					name: _values.username,
 					email: _values.emailAddress,
 					password: _values.password,
 					password_confirmation: _values.confirm_password,
@@ -110,12 +110,12 @@ const ZaionsSignUpForm: React.FC = (props) => {
 					void STORAGE.SET(LOCALSTORAGE_KEYS.AUTHTOKEN, userToken.token);
 
 					// Storing user data in userAccount Recoil State.
-					setUserAccountStateAtom((oldVals) => ({
-						...oldVals,
+					setUserAccountStateAtom((oldValues) => ({
+						...oldValues,
 						...userData,
 					}));
-					setAuthTokenDataState((oldVals) => ({
-						...oldVals,
+					setAuthTokenDataState((oldValues) => ({
+						...oldValues,
 						...userToken,
 					}));
 
@@ -145,14 +145,14 @@ const ZaionsSignUpForm: React.FC = (props) => {
 
 			if (error instanceof AxiosError) {
 				// if there any error then showing the alert modal.
-				await presentZIonErrorAlert();
+				// await presentZIonErrorAlert();
 
 				// Setting errors on form fields
 				const __apiErrors = (error.response?.data as { errors: ZGenericObject })
 					?.errors;
 				const __errors = formatApiRequestErrorForFormikFormField(
 					['username', 'emailAddress', 'password'],
-					['username', 'email', 'password'],
+					['name', 'email', 'password'],
 					__apiErrors
 				);
 
@@ -450,7 +450,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 
 							{/* Some Text */}
 							<div className='mt-3 mb-4 ion-text-center'>
-								<ZIonText className='zaions__fs_14 ' color='medium'>
+								<ZIonText className='zaions__fs_14' color='medium'>
 									By signing in with an account, you agree to <br />{' '}
 									{PRODUCT_NAME}
 									's{' '}

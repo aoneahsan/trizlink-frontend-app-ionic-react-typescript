@@ -445,7 +445,7 @@ const ZShortLinksListPage: React.FC = () => {
 								>
 									<ZIonGrid className='h-full ion-no-padding'>
 										{/* Col-2 Row-1 Top bar. */}
-										<ZAdminPanelTopBar />
+										<ZAdminPanelTopBar workspaceId={workspaceId} />
 
 										{/* Col-2 Row-2 */}
 										<ZIonRow style={{ height: 'calc(100% - 4rem)' }}>
@@ -491,18 +491,8 @@ const ZShortLinksListPage: React.FC = () => {
 											{/* Col-2 Row-2 col-2 Table & filters etc. */}
 											<ZIonCol
 												className='h-full zaions-transition'
-												sizeXl={
-													ZDashboardState.dashboardMainSidebarIsCollabes
-														.isExpand
-														? '9.6'
-														: '9.6'
-												}
-												sizeLg={
-													ZDashboardState.dashboardMainSidebarIsCollabes
-														.isExpand
-														? '9.6'
-														: '9.6'
-												}
+												sizeXl='9.5'
+												sizeLg='9.5'
 												sizeMd='12'
 												sizeSm='12'
 												sizeXs='12'

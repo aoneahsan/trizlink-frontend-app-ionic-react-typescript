@@ -55,3 +55,14 @@ export type ZLinkGetApiType<T> = {
 	status: number;
 	success: boolean;
 };
+
+export interface ZUIAvatarApiDefaultParamsInterface {
+	name?: string;
+	rounded?: string;
+	bold?: string;
+	size?: string;
+	background?: string;
+	color?: string;
+	fontSize?: string;
+	length?: string;
+}

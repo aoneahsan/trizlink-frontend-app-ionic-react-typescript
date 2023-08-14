@@ -14,6 +14,7 @@ import React from 'react';
  * ? Like import of custom components is a custom import
  * */
 import {
+	ZIonButton,
 	ZIonIcon,
 	ZIonItem,
 	ZIonList,
@@ -27,6 +28,7 @@ import {
 	ellipse,
 	giftOutline,
 	helpCircleOutline,
+	logoAndroid,
 	logoApple,
 } from 'ionicons/icons';
 
@@ -153,11 +155,36 @@ const ZHelpCenterPopover: React.FC<{
 				DOWNLOAD APPS
 			</ZIonText>
 
-			<div className=''>
-				<ZIonRouterLink className='flex ion-align-items-center' color='dark'>
+			<div className='flex ion-align-items-center mx-3 gap-1'>
+				{/* iOS */}
+				<ZIonButton
+					className='ion-no-margin w-1/2'
+					size='small'
+					fill='clear'
+					color='dark'
+				>
 					<ZIonIcon icon={logoApple} />
-					<ZIonText></ZIonText>
-				</ZIonRouterLink>
+					<ZIonText className='ps-1 mt-[3px]'>iOS</ZIonText>
+				</ZIonButton>
+
+				{/* Middle line */}
+				<div
+					className='h-[0.9em]'
+					style={{
+						borderInlineStart: '1px solid rgba(5, 5, 5, 0.06)',
+					}}
+				></div>
+
+				{/* Android */}
+				<ZIonButton
+					className='ion-no-margin w-1/2'
+					fill='clear'
+					size='small'
+					color='dark'
+				>
+					<ZIonIcon icon={logoAndroid} />
+					<ZIonText className='ps-1'>Android</ZIonText>
+				</ZIonButton>
 			</div>
 		</div>
 	);

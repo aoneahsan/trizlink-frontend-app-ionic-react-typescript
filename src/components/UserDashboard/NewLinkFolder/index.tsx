@@ -15,6 +15,7 @@ import {
 	ZIonSkeletonText,
 	ZIonSelect,
 	ZIonSelectOption,
+	ZIonSpinner,
 } from '@/components/ZIonComponents';
 import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
@@ -47,7 +48,8 @@ const NewLinkFolder: React.FC<{
 	_foldersData: LinkFolderType[];
 	_state: folderState;
 	workspaceId: string;
-}> = ({ _foldersData, _state, workspaceId }) => {
+	showSkeleton?: boolean;
+}> = ({ _foldersData, _state, workspaceId, showSkeleton = false }) => {
 	const { values, handleChange, handleBlur, setFieldValue } =
 		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
@@ -58,6 +60,10 @@ const NewLinkFolder: React.FC<{
 			workspaceId,
 		}
 	);
+
+	if (showSkeleton) {
+		return <FolderSkeleton />;
+	}
 
 	return (
 		<ZIonCol
@@ -144,7 +150,7 @@ const NewLinkFolder: React.FC<{
 	);
 };
 
-export const FolderSkeleton: React.FC = React.memo(() => {
+const FolderSkeleton: React.FC = React.memo(() => {
 	return (
 		<ZIonCol
 			sizeXl='5.9'
@@ -185,6 +191,28 @@ export const FolderSkeleton: React.FC = React.memo(() => {
 					width='100%'
 					height='40px'
 					animated={true}
+				/>
+			</div>
+		</ZIonCol>
+	);
+});
+
+const FolderSkeletonOld: React.FC = React.memo(() => {
+	return (
+		<ZIonCol
+			sizeXl='5.9'
+			sizeLg='5.9'
+			sizeMd='5.9'
+			sizeSm='12'
+			sizeXs='12'
+			className='py-2 border zaions__bg_white'
+		>
+			<div className='w-full h-full flex ion-align-items-center ion-justify-content-center'>
+				<ZIonSpinner
+					color='primary'
+					className=''
+					name='crescent'
+					style={{ width: '50px', height: '50px' }}
 				/>
 			</div>
 		</ZIonCol>

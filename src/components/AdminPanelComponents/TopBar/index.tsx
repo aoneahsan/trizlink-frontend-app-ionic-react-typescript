@@ -8,7 +8,11 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { helpCircleOutline, notificationsOutline } from 'ionicons/icons';
+import {
+	caretDown,
+	helpCircleOutline,
+	notificationsOutline,
+} from 'ionicons/icons';
 
 /**
  * Custom Imports go down
@@ -19,10 +23,23 @@ import {
 	ZIonButton,
 	ZIonCol,
 	ZIonIcon,
+	ZIonImg,
+	ZIonLabel,
 	ZIonRow,
+	ZIonText,
 } from '@/components/ZIonComponents';
 import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import ZUserProfileButton from '../UserProfileButton';
+import ZNotificationPopover from '@/components/InPageComponents/ZaionsPopovers/NotificationPopover';
+import classNames from 'classnames';
+import { productSmLogo } from '@/assets/images';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import { API_URL_ENUM } from '@/utils/enums';
+import CONSTANTS from '@/utils/constants';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import ZWorkspaceSwitcher from '../WorkspaceSwitcher';
 
 /**
  * Custom Hooks Imports go down
@@ -64,16 +81,46 @@ import ZUserProfileButton from '../UserProfileButton';
  * About: (Info of component here...)
  * @type {*}
  * */
-const ZAdminPanelTopBar: React.FC = () => {
+const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
+	workspaceId,
+}) => {
 	// #region popovers.
 	const { presentZIonPopover: presentZHelpCenterPopover } =
 		useZIonPopover(ZHelpCenterPopover);
+	const { presentZIonPopover: presentZNotificationPopover } =
+		useZIonPopover(ZNotificationPopover);
 	// #endregion
 
+	// #region APIs.
+	// get workspace data api.
+	const { data: currentWorkspaceData, isFetching: isCurrentWorkspaceFetching } =
+		useZRQGetRequest<workspaceInterface>({
+			_url: API_URL_ENUM.workspace_update_delete,
+			_key: [
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
+				workspaceId || '',
+			],
+			_authenticated: true,
+			_itemsIds: [workspaceId || ''],
+			_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+			_shouldFetchWhenIdPassed: !workspaceId ? true : false,
+			_extractType: ZRQGetRequestExtractEnum.extractItem,
+		});
+	// #endregion
+
+	const isZFetching = isCurrentWorkspaceFetching;
+
 	return (
-		<ZIonRow className='h-[4rem] px-3 zaions__light_bg '>
-			<ZIonCol className='h-full bg-cyan-500'></ZIonCol>
+		<ZIonRow className='h-[4rem] px-3 zaions__light_bg'>
+			{/*  */}
+			<ZIonCol className='h-full flex ion-align-items-center'>
+				<ZWorkspaceSwitcher workspaceId={workspaceId} />
+			</ZIonCol>
+
+			{/*  */}
 			<ZIonCol className='h-full bg-indigo-500'></ZIonCol>
+
+			{/*  */}
 			<ZIonCol className='flex h-full gap-2 ion-align-items-center ion-justify-content-end'>
 				{/* Upgrade button */}
 				<ZIonButton color='secondary' height='2.3rem'>
@@ -103,6 +150,13 @@ const ZAdminPanelTopBar: React.FC = () => {
 					size='small'
 					className='me-3'
 					height='2.3rem'
+					onClick={(event: unknown) => {
+						presentZNotificationPopover({
+							_event: event as Event,
+							_cssClass: 'z-notification-popover-size',
+							_dismissOnSelect: false,
+						});
+					}}
 				>
 					<ZIonIcon icon={notificationsOutline} className='w-6 h-6' />
 					{/* <ZIonText className='mt-[2px]'>Help</ZIonText> */}
