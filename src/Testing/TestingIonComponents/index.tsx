@@ -8,28 +8,21 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import ZIonPage from '@/components/ZIonPage';
-import {
-	ZIonAvatar,
-	ZIonButton,
-	ZIonCol,
-	ZIonContent,
-	ZIonGrid,
-	ZIonIcon,
-	ZIonImg,
-	ZIonRow,
-	ZIonText,
-} from '@/components/ZIonComponents';
-import { checkmarkCircle, closeCircle, ellipse } from 'ionicons/icons';
 import classNames from 'classnames';
-import ZReactMediaPlayer from '@/components/CustomComponents/ZCustomAudio';
-import ReactPlayer from 'react-player';
-import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
+import ZIonPage from '@/components/ZIonPage';
+import {
+	ZIonCol,
+	ZIonContent,
+	ZIonGrid,
+	ZIonRow,
+	ZIonText,
+} from '@/components/ZIonComponents';
+import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 
 /**
  * Global Constants Imports go down

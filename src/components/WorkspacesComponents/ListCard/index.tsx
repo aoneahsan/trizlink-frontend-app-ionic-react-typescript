@@ -63,6 +63,8 @@ import { workspaceInterface } from '@/types/AdminPanel/workspace';
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import ZCan from '@/components/Can';
 
 /**
  * Images Imports go down
@@ -237,34 +239,36 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 						<ZIonRow className='w-full ion-align-items-center'>
 							{/* Last active */}
 							<ZIonCol>
-								<ZIonButton
-									className=' normal-case'
-									color='secondary'
-									size='default'
-									testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.viewWorkspaceButton}-${id}`}
-									testingListSelector={
-										CONSTANTS.testingSelectors.workspace.listPage
-											.viewWorkspaceButton
-									}
-									onClick={() => {
-										// Click on card will redirect to view workspace.
-										if (id) {
-											zNavigatePushRoute(
-												createRedirectRoute({
-													url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-													params: [
-														CONSTANTS.RouteParams.workspace.workspaceId,
-														CONSTANTS.RouteParams
-															.folderIdToGetShortLinksOrLinkInBio,
-													],
-													values: [id, 'all'],
-												})
-											);
+								<ZCan havePermissions={[permissionsEnum.view_workspace]}>
+									<ZIonButton
+										className=' normal-case'
+										color='secondary'
+										size='default'
+										testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.viewWorkspaceButton}-${id}`}
+										testingListSelector={
+											CONSTANTS.testingSelectors.workspace.listPage
+												.viewWorkspaceButton
 										}
-									}}
-								>
-									View
-								</ZIonButton>
+										onClick={() => {
+											// Click on card will redirect to view workspace.
+											if (id) {
+												zNavigatePushRoute(
+													createRedirectRoute({
+														url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+														params: [
+															CONSTANTS.RouteParams.workspace.workspaceId,
+															CONSTANTS.RouteParams
+																.folderIdToGetShortLinksOrLinkInBio,
+														],
+														values: [id, 'all'],
+													})
+												);
+											}
+										}}
+									>
+										View
+									</ZIonButton>
+								</ZCan>
 							</ZIonCol>
 
 							{/* actions popover button */}

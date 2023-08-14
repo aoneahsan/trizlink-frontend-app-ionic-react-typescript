@@ -11,6 +11,7 @@ import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { currentLoggedInUserRoleAndPermissionsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 import React, { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import Z403View from '../Errors/403';
 
 interface CanComponentProps {
 	children: React.ReactNode;
@@ -74,7 +75,7 @@ const ZCan: React.FC<CanComponentProps> = ({
 		// if user have permission then user can view content
 		content = children;
 	} else if (returnPermissionDeniedView) {
-		content = <>you do not have permission to view this page</>;
+		content = <Z403View />;
 	}
 
 	return <>{content}</>;

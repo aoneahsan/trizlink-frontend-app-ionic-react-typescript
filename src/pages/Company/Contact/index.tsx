@@ -181,7 +181,7 @@ const ZaionsContact: React.FC = () => {
 											>
 												<ZIonIcon
 													icon={logoTwitter}
-													className='me-3 text-[3rem] text-[3rem]'
+													className='me-3 text-[3rem]'
 													style={{ color: '#0079b0' }}
 												/>
 											</ZIonRouterLink>
@@ -190,7 +190,7 @@ const ZaionsContact: React.FC = () => {
 											>
 												<ZIonIcon
 													icon={logoLinkedin}
-													className='me-3 text-[3rem] text-[3rem]'
+													className='me-3 text-[3rem]'
 													style={{ color: '#1da1f2' }}
 												/>
 											</ZIonRouterLink>

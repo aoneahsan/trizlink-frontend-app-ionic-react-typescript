@@ -98,8 +98,11 @@ const ZWorkspaceListPage: React.FC = () => {
 
 	return (
 		<ZIonPage pageTitle='Zaions workspaces list page'>
-			<ZIonContent>
-				<ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
+			<ZCan
+				havePermissions={[permissionsEnum.viewAny_workspace]}
+				returnPermissionDeniedView={true}
+			>
+				<ZIonContent>
 					{/* Main grid */}
 					<ZIonGrid className='h-full ion-no-padding'>
 						{/*  */}
@@ -317,8 +320,8 @@ const ZWorkspaceListPage: React.FC = () => {
 							</ZIonCol>
 						</ZIonRow>
 					</ZIonGrid>
-				</ZCan>
-			</ZIonContent>
+				</ZIonContent>
+			</ZCan>
 		</ZIonPage>
 	);
 };

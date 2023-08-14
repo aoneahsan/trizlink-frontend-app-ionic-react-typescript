@@ -271,7 +271,7 @@ const ZaionsPricing: React.FC = () => {
 													<ZIonText className='label mt-1 mb-0 font-bold text-base block'>
 														FREE
 													</ZIonText>
-													<ZIonText className='price mb-0 fw-normal mb-0'>
+													<ZIonText className='price fw-normal mb-0'>
 														<ZIonText className='text-3xl zaions__color_gray2'>
 															$0
 														</ZIonText>
@@ -293,10 +293,10 @@ const ZaionsPricing: React.FC = () => {
 													className='text-center'
 													style={{ color: '#464c50' }}
 												>
-													<ZIonText className='label mt-1 mb-0 font-bold text-base d-dlock'>
+													<ZIonText className='label mt-1 mb-0 font-bold text-base block'>
 														STARTER
 													</ZIonText>
-													<ZIonText className='price mb-0 fw-normal mb-0 block'>
+													<ZIonText className='price fw-normal mb-0 block'>
 														<ZIonText className='text-3xl zaions__color_gray2'>
 															$8
 														</ZIonText>
@@ -320,7 +320,7 @@ const ZaionsPricing: React.FC = () => {
 													<ZIonText className='label mt-1 mb-0 font-bold text-base block'>
 														BASIC
 													</ZIonText>
-													<ZIonText className='price mb-0 fw-normal mb-0 block'>
+													<ZIonText className='price mb-0 fw-normal block'>
 														<ZIonText className='text-3xl zaions__color_gray2'>
 															$29
 														</ZIonText>
@@ -344,7 +344,7 @@ const ZaionsPricing: React.FC = () => {
 													<ZIonText className='label mt-1 mb-0 font-bold text-base block'>
 														PREMIUM
 													</ZIonText>
-													<ZIonText className='price mb-0 fw-normal mb-0 block'>
+													<ZIonText className='price mb-0 fw-normal block'>
 														<ZIonText className='text-3xl zaions__color_gray2'>
 															$199
 														</ZIonText>
@@ -368,7 +368,7 @@ const ZaionsPricing: React.FC = () => {
 													<ZIonText className='label mt-1 mb-0 font-bold text-base block'>
 														ENTERPRISE
 													</ZIonText>
-													<ZIonText className='price mb-0 fw-normal mb-0 block'>
+													<ZIonText className='price mb-0 fw-normal block'>
 														<ZIonText className='text-3xl zaions__color_gray2'>
 															Custom
 														</ZIonText>

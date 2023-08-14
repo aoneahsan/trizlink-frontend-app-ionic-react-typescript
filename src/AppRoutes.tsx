@@ -89,7 +89,7 @@ import ZaionsAdminPanelSettings from '@/pages/AdminPanel/settings';
 import ZLinkInBioLinksSection from '@/pages/AdminPanel/ZLinkInBio/parts/links';
 import ZLinkInBiosListPage from '@/pages/AdminPanel/LinkInBio';
 import ZaionsLinkInBioForm from '@/pages/AdminPanel/LinkInBio/LinkInBioForm';
-import TestingIonComponents from './Testing/TestingIonComponents';
+import TestingIonComponents from './Testing/TestingIonComponents/index';
 import PublicRoute from './components/PublicRoute';
 import PrivateRoute from './components/PrivateRoute';
 import ZAppStartupPage from './pages/AdminPanel/StartUpPage';

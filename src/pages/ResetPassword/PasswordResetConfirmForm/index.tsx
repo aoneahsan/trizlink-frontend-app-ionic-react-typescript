@@ -127,7 +127,7 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
 										{/* Submit Button */}
 										<ZIonButton
 											expand='block'
-											className='ion-text-capitalize mt-4 w-[80%] mx-auto mt-3 mb-5'
+											className='ion-text-capitalize mt-4 w-[80%] mx-auto mb-5'
 										>
 											Log in
 										</ZIonButton>
