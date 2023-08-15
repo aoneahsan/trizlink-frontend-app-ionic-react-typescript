@@ -128,8 +128,13 @@ const ZWorkspacesListPopover: React.FC<{
 						minHeight='2.2rem'
 						className='cursor-pointer ion-activatable'
 						key={el.id}
+						testingSelector={
+							CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
+								.singleWorkspace
+						}
+						testingListSelector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
 					>
-						<ZIonLabel className='text-sm w-full'>{el.workspaceName}</ZIonLabel>
+						<ZIonLabel className='w-full text-sm'>{el.workspaceName}</ZIonLabel>
 						<ZIonIcon
 							icon={ellipsisHorizontalOutline}
 							className='cursor-pointer'
@@ -268,7 +273,15 @@ const ZWorkspaceActionPopover: React.FC<{
 	return (
 		<ZIonList lines='full' className='ion-no-padding'>
 			{/* Edit */}
-			<ZIonItem minHeight='2.1rem' className='cursor-pointer ion-activatable'>
+			<ZIonItem
+				minHeight='2.1rem'
+				className='cursor-pointer ion-activatable'
+				testingSelector={
+					CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
+						.actionPopover.editWorkspace
+				}
+				testingListSelector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.actionPopover.editWorkspace}-${workspaceId}`}
+			>
 				<ZIonIcon
 					icon={pencilOutline}
 					className='w-5 h-5 me-2'
@@ -282,6 +295,11 @@ const ZWorkspaceActionPopover: React.FC<{
 				minHeight='2.1rem'
 				lines='none'
 				className='cursor-pointer ion-activatable'
+				testingSelector={
+					CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
+						.actionPopover.deleteWorkspace
+				}
+				testingListSelector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.actionPopover.deleteWorkspace}-${workspaceId}`}
 				onClick={() => {
 					deleteWorkspaceConfirmModal();
 				}}

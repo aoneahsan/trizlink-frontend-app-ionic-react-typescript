@@ -87,6 +87,9 @@ const NewLinkFolder: React.FC<{
 					icon={addCircleOutline}
 					size='large'
 					color='primary'
+					testingSelector={
+						CONSTANTS.testingSelectors.shortLink.formPage.folder.createBtn
+					}
 					onClick={() => {
 						presentFolderModal({
 							_cssClass: 'folder-modal-size',
@@ -126,6 +129,9 @@ const NewLinkFolder: React.FC<{
 					interface='popover'
 					fill='outline'
 					minHeight='40px'
+					testingSelector={
+						CONSTANTS.testingSelectors.shortLink.formPage.folder.selector
+					}
 				>
 					<ZIonSelectOption value={CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER}>
 						default
@@ -201,7 +207,7 @@ const FolderSkeletonOld: React.FC = React.memo(() => {
 			sizeXs='12'
 			className='py-2 border zaions__bg_white'
 		>
-			<div className='w-full h-full flex ion-align-items-center ion-justify-content-center'>
+			<div className='flex w-full h-full ion-align-items-center ion-justify-content-center'>
 				<ZIonSpinner
 					color='primary'
 					className=''

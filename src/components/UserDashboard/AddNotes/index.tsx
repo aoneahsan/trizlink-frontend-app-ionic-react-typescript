@@ -24,6 +24,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Types
 import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
+import CONSTANTS from '@/utils/constants';
 
 // Styles
 
@@ -64,6 +65,9 @@ const AddNotes: React.FC<{ showSkeleton?: boolean }> = ({
 					name='linkNote'
 					fill='outline'
 					value={values.linkNote}
+					testingSelector={
+						CONSTANTS.testingSelectors.shortLink.formPage.notesTextarea
+					}
 				/>
 			</div>
 		</ZIonCol>

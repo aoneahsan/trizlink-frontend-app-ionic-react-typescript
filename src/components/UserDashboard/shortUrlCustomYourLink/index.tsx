@@ -63,6 +63,7 @@ import classes from './styles.module.css';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { uploadImageBg, upload_send } from '@/assets/images';
+import CONSTANTS from '@/utils/constants';
 
 /**
  * Component props type go down
@@ -128,6 +129,10 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
 						'flex ion-justify-content-center ion-align-items-center rounded relative cursor-pointer':
 							true,
 					})}
+					testingSelector={
+						CONSTANTS.testingSelectors.shortLink.formPage.customYourLink
+							.imageCol
+					}
 					onClick={() => {
 						presentZFileUploadModal({
 							_cssClass: 'file-upload-modal-size',
@@ -162,6 +167,10 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
 								alt='send icon'
 								className='mx-auto'
 								style={{ width: '10rem' }}
+								testingSelector={
+									CONSTANTS.testingSelectors.shortLink.formPage.customYourLink
+										.image
+								}
 							/>
 						</ZIonText>
 						<ZIonText color='light'>
@@ -198,6 +207,10 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
 						onIonBlur={handleBlur}
 						value={values.title}
 						errorText={touched.title ? errors.title : undefined}
+						testingSelector={
+							CONSTANTS.testingSelectors.shortLink.formPage.customYourLink
+								.titleInput
+						}
 						className={classNames({
 							'w-full': true,
 							'ion-touched': touched.title,
@@ -217,6 +230,10 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
 						onIonBlur={handleBlur}
 						rows={3}
 						value={values.linkDescription}
+						testingSelector={
+							CONSTANTS.testingSelectors.shortLink.formPage.customYourLink
+								.descriptionTextarea
+						}
 					/>
 				</ZIonCol>
 			</ZIonRow>

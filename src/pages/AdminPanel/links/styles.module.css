@@ -139,6 +139,10 @@
 	--height: 300px;
 }
 
+.short-link-time-filter-modal-size .popover-viewport {
+	overflow: hidden;
+}
+
 .short-link-tags-filter-modal-size {
 	--width: 300px;
 	--height: 300px;

@@ -240,6 +240,9 @@ const ZaionsAddUtmTags: React.FC<{
 							<ZIonRow className='ion-align-items-center'>
 								<ZIonCol>
 									<ZIonButton
+										testingSelector={
+											CONSTANTS.testingSelectors.utmTags.formModal.closeModalBtn
+										}
 										onClick={() => {
 											// Close The Modal
 											dismissZIonModal();
@@ -257,6 +260,9 @@ const ZaionsAddUtmTags: React.FC<{
 								<ZIonCol className='ion-text-end'>
 									<ZIonButton
 										type='submit'
+										testingSelector={
+											CONSTANTS.testingSelectors.utmTags.formModal.submitFormBtn
+										}
 										onClick={() => {
 											void submitForm();
 										}}
@@ -317,13 +323,16 @@ const ZaionsAddUtmTags: React.FC<{
 								labelPlacement='stacked'
 								name='templateName'
 								placeholder='Template name'
+								minHeight='2.3rem'
 								onIonChange={handleChange}
 								onIonBlur={handleBlur}
 								value={values.templateName}
 								errorText={
 									touched.templateName ? errors.templateName : undefined
 								}
-								minHeight='2.3rem'
+								testingSelector={
+									CONSTANTS.testingSelectors.utmTags.formModal.name
+								}
 								className={classNames({
 									'mt-5': true,
 									'ion-touched': touched.templateName,
@@ -345,6 +354,9 @@ const ZaionsAddUtmTags: React.FC<{
 								onIonBlur={handleBlur}
 								value={values.utmCampaign}
 								errorText={touched.utmCampaign ? errors.utmCampaign : undefined}
+								testingSelector={
+									CONSTANTS.testingSelectors.utmTags.formModal.campaign
+								}
 								className={classNames({
 									'mt-6': true,
 									'ion-touched': touched.utmCampaign,
@@ -366,6 +378,9 @@ const ZaionsAddUtmTags: React.FC<{
 								onIonBlur={handleBlur}
 								value={values.utmMedium}
 								errorText={touched.utmMedium ? errors.utmMedium : undefined}
+								testingSelector={
+									CONSTANTS.testingSelectors.utmTags.formModal.medium
+								}
 								className={classNames({
 									'mt-6': true,
 									'ion-touched': touched.utmMedium,
@@ -387,6 +402,9 @@ const ZaionsAddUtmTags: React.FC<{
 								onIonChange={handleChange}
 								onIonBlur={handleBlur}
 								value={values.utmSource}
+								testingSelector={
+									CONSTANTS.testingSelectors.utmTags.formModal.source
+								}
 							/>
 
 							{/* UTM Term Input */}
@@ -402,6 +420,9 @@ const ZaionsAddUtmTags: React.FC<{
 								onIonChange={handleChange}
 								onIonBlur={handleBlur}
 								value={values.utmTerm}
+								testingSelector={
+									CONSTANTS.testingSelectors.utmTags.formModal.term
+								}
 							/>
 
 							{/* UTM Content Input */}
@@ -417,6 +438,9 @@ const ZaionsAddUtmTags: React.FC<{
 								onIonChange={handleChange}
 								onIonBlur={handleBlur}
 								value={values.utmContent}
+								testingSelector={
+									CONSTANTS.testingSelectors.utmTags.formModal.content
+								}
 							/>
 						</Form>
 					</ZIonContent>
@@ -433,6 +457,9 @@ const ZaionsAddUtmTags: React.FC<{
 										fill='outline'
 										size='default'
 										className='ion-text-capitalize'
+										testingSelector={
+											CONSTANTS.testingSelectors.utmTags.formModal.closeModalBtn
+										}
 										onClick={() => {
 											// Close The Modal
 											dismissZIonModal();
@@ -451,6 +478,9 @@ const ZaionsAddUtmTags: React.FC<{
 										className='ion-text-capitalize'
 										// disabled
 										type='submit'
+										testingSelector={
+											CONSTANTS.testingSelectors.utmTags.formModal.submitFormBtn
+										}
 										onClick={() => void submitForm()}
 									>
 										{ZaionsUTMTagsTemplateFormState.formMode === FormMode.ADD

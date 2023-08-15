@@ -292,15 +292,18 @@ const ZaionsAddPixelAccount: React.FC<{
 							<ZIonRow className='ion-align-items-center'>
 								<ZIonCol>
 									<ZIonButton
+										color='primary'
+										className='ion-text-capitalize'
+										fill='outline'
+										testingSelector={
+											CONSTANTS.testingSelectors.pixels.formModal.closeModalBtn
+										}
 										onClick={() => {
 											// Close the Modal
 											dismissZIonModal();
 											// Reset to default
 											SetDefaultPixelAccountFormState();
 										}}
-										color='primary'
-										className='ion-text-capitalize'
-										fill='outline'
 									>
 										Cancel
 									</ZIonButton>
@@ -313,6 +316,9 @@ const ZaionsAddPixelAccount: React.FC<{
 										className='ion-text-capitalize'
 										fill='solid'
 										disabled={!isValid}
+										testingSelector={
+											CONSTANTS.testingSelectors.pixels.formModal.submitFormBtn
+										}
 										onClick={() => {
 											void submitForm();
 										}}
@@ -368,6 +374,9 @@ const ZaionsAddPixelAccount: React.FC<{
 								minHeight='2.3rem'
 								interface='popover'
 								errorText={touched.platform ? errors.platform : undefined}
+								testingSelector={
+									CONSTANTS.testingSelectors.pixels.formModal.pixelSelector
+								}
 								className={classNames({
 									'mt-5': true,
 									'ion-touched': touched.platform,
@@ -390,12 +399,15 @@ const ZaionsAddPixelAccount: React.FC<{
 								labelPlacement='stacked'
 								name='title'
 								value={values.title}
-								errorText={touched.title ? errors.title : undefined}
 								placeholder='Enter Pixel Name'
 								type='text'
+								minHeight='2.3rem'
 								onIonChange={handleChange}
 								onIonBlur={handleBlur}
-								minHeight='2.3rem'
+								errorText={touched.title ? errors.title : undefined}
+								testingSelector={
+									CONSTANTS.testingSelectors.pixels.formModal.pixelNameInput
+								}
 								className={classNames({
 									'mt-6 mb-5 pb-2': true,
 									'ion-touched': touched.title,
@@ -411,11 +423,14 @@ const ZaionsAddPixelAccount: React.FC<{
 								name='pixelId'
 								placeholder='Enter Pixel Id'
 								type='text'
+								minHeight='2.3rem'
 								onIonChange={handleChange}
 								onIonBlur={handleBlur}
 								value={values.pixelId}
 								errorText={touched.pixelId ? errors.pixelId : undefined}
-								minHeight='2.3rem'
+								testingSelector={
+									CONSTANTS.testingSelectors.pixels.formModal.pixelIdInput
+								}
 								className={classNames({
 									'mt-6': true,
 									'ion-touched': touched.pixelId,
@@ -438,6 +453,9 @@ const ZaionsAddPixelAccount: React.FC<{
 										fill='outline'
 										size='default'
 										className='ion-text-capitalize'
+										testingSelector={
+											CONSTANTS.testingSelectors.pixels.formModal.closeModalBtn
+										}
 										onClick={() => {
 											// Close the Modal
 											dismissZIonModal();
@@ -456,6 +474,9 @@ const ZaionsAddPixelAccount: React.FC<{
 										className='ion-text-capitalize'
 										disabled={!isValid}
 										type='submit'
+										testingSelector={
+											CONSTANTS.testingSelectors.pixels.formModal.submitFormBtn
+										}
 										onClick={() => void submitForm()}
 									>
 										{pixelAccountFormState.formMode === FormMode.ADD

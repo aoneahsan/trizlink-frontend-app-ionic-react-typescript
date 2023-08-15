@@ -206,7 +206,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
 									color='danger'
 									testingSelector={
 										CONSTANTS.testingSelectors.shortLink.listPage
-											.searchInputError
+											.switchItInputError
 									}
 								>
 									{errors.domain}

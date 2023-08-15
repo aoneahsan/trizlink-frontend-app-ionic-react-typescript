@@ -15,6 +15,7 @@ import {
 	ZIonRouterLink,
 	ZIonInput,
 	ZIonButton,
+	ZIonGrid,
 } from '@/components/ZIonComponents';
 
 // Global constant
@@ -24,6 +25,7 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Types
 import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
+import CONSTANTS from '@/utils/constants';
 
 const FULL_PERCENTAGE = 100;
 
@@ -75,6 +77,7 @@ const RotatorABTesting: React.FC = () => {
 								label='Redirection Links*'
 								labelPlacement='stacked'
 								minHeight='40px'
+								testingSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.rotatorABTesting.redirectionLinkInput}-disable`}
 							/>
 						</ZIonCol>
 						<ZIonCol
@@ -91,6 +94,7 @@ const RotatorABTesting: React.FC = () => {
 								disabled
 								labelPlacement='stacked'
 								minHeight='40px'
+								testingSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.rotatorABTesting.percentageInput}-disable`}
 							/>
 						</ZIonCol>
 					</ZIonRow>
@@ -98,7 +102,12 @@ const RotatorABTesting: React.FC = () => {
 					{/*  */}
 					<FieldArray name='rotatorABTesting'>
 						{({ remove, push }) => (
-							<div>
+							<ZIonGrid
+								testingSelector={
+									CONSTANTS.testingSelectors.shortLink.formPage.rotatorABTesting
+										.container
+								}
+							>
 								{values.rotatorABTesting.length > 0 &&
 									values.rotatorABTesting.map((_rotatorAbTestingEl, _index) => (
 										<ZIonRow
@@ -121,8 +130,13 @@ const RotatorABTesting: React.FC = () => {
 													label='Redirection Links*'
 													labelPlacement='stacked'
 													onIonChange={handleChange}
-													name={`rotatorABTesting.${_index}.redirectionLink`}
 													minHeight='40px'
+													name={`rotatorABTesting.${_index}.redirectionLink`}
+													testingSelector={
+														CONSTANTS.testingSelectors.shortLink.formPage
+															.rotatorABTesting.redirectionLinkInput
+													}
+													testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.rotatorABTesting.redirectionLinkInput}-${_rotatorAbTestingEl.id}`}
 													onIonBlur={(e) => {
 														handleBlur(e);
 														const inputUrl =
@@ -197,6 +211,11 @@ const RotatorABTesting: React.FC = () => {
 													onIonBlur={handleBlur}
 													value={values.rotatorABTesting[_index].percentage}
 													name={`rotatorABTesting.${_index}.percentage`}
+													testingSelector={
+														CONSTANTS.testingSelectors.shortLink.formPage
+															.rotatorABTesting.percentageInput
+													}
+													testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.rotatorABTesting.percentageInput}-${_rotatorAbTestingEl.id}`}
 													errorText={
 														errors.rotatorABTesting?.length
 															? touched?.rotatorABTesting &&
@@ -239,11 +258,16 @@ const RotatorABTesting: React.FC = () => {
 											<ZIonCol className='ion-padding-top'>
 												<ZIonIcon
 													icon={trashBin}
+													color='danger'
+													className='w-[21px] h-[21px] zaions__nav_item'
+													testingSelector={
+														CONSTANTS.testingSelectors.shortLink.formPage
+															.rotatorABTesting.deleteSingleRotatorBtn
+													}
+													testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.rotatorABTesting.deleteSingleRotatorBtn}-${_rotatorAbTestingEl.id}`}
 													onClick={() => {
 														remove(_index);
 													}}
-													color='danger'
-													className='w-[21px] h-[21px] zaions__nav_item'
 												/>
 											</ZIonCol>
 										</ZIonRow>
@@ -255,6 +279,10 @@ const RotatorABTesting: React.FC = () => {
 										color='dark'
 										className='mt-3 ion-text-capitalize ion-no-padding'
 										fill='clear'
+										testingSelector={
+											CONSTANTS.testingSelectors.shortLink.formPage
+												.rotatorABTesting.disabledAddSingleRotatorBtn
+										}
 									>
 										You can't add a redirection if Geolocation is activated
 									</ZIonButton>
@@ -263,6 +291,10 @@ const RotatorABTesting: React.FC = () => {
 										fill='clear'
 										className='mt-2 ion-text-capitalize ion-no-padding ps-1'
 										size='small'
+										testingSelector={
+											CONSTANTS.testingSelectors.shortLink.formPage
+												.rotatorABTesting.addSingleRotatorBtn
+										}
 										onClick={() =>
 											push({
 												id: getRandomKey(),
@@ -274,7 +306,7 @@ const RotatorABTesting: React.FC = () => {
 										Add a destination
 									</ZIonButton>
 								)}
-							</div>
+							</ZIonGrid>
 						)}
 					</FieldArray>
 				</div>

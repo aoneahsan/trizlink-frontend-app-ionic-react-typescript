@@ -272,14 +272,18 @@ const ZaionsAddNewFolder: React.FC<{
 								<ZIonRow className='ion-align-items-center'>
 									<ZIonCol>
 										<ZIonButton
+											color='primary'
+											className='ion-text-capitalize'
+											fill='outline'
+											testingSelector={
+												CONSTANTS.testingSelectors.folder.formModal
+													.closeModalBtn
+											}
 											onClick={() => {
 												// Close the Modal
 												dismissZIonModal();
 												SetDefaultFolderState();
 											}}
-											color='primary'
-											className='ion-text-capitalize'
-											fill='outline'
 										>
 											Close
 										</ZIonButton>
@@ -288,12 +292,16 @@ const ZaionsAddNewFolder: React.FC<{
 									<ZIonCol className='ion-text-end'>
 										<ZIonButton
 											type='submit'
+											color='primary'
+											fill='solid'
+											className='ion-text-capitalize'
+											testingSelector={
+												CONSTANTS.testingSelectors.folder.formModal
+													.submitFormBtn
+											}
 											onClick={() => {
 												void submitForm();
 											}}
-											color={'primary'}
-											className='ion-text-capitalize'
-											fill='solid'
 										>
 											{folderFormState.formMode === FormMode.ADD
 												? 'Create'
@@ -354,6 +362,9 @@ const ZaionsAddNewFolder: React.FC<{
 									onIonBlur={handleBlur}
 									value={values.folderName}
 									errorText={touched.folderName ? errors.folderName : undefined}
+									testingSelector={
+										CONSTANTS.testingSelectors.folder.formModal.nameInput
+									}
 									className={classNames({
 										'mt-5': true,
 										'ion-touched': touched.folderName,
@@ -376,6 +387,10 @@ const ZaionsAddNewFolder: React.FC<{
 											fill='outline'
 											size='default'
 											className='ion-text-capitalize'
+											testingSelector={
+												CONSTANTS.testingSelectors.folder.formModal
+													.closeModalBtn
+											}
 											onClick={() => {
 												// Close The Modal
 												dismissZIonModal();
@@ -395,6 +410,10 @@ const ZaionsAddNewFolder: React.FC<{
 											type='submit'
 											disabled={isSubmitting || !isValid}
 											onClick={() => void submitForm()}
+											testingSelector={
+												CONSTANTS.testingSelectors.folder.formModal
+													.submitFormBtn
+											}
 										>
 											{folderFormState.formMode === FormMode.ADD
 												? 'Create'

@@ -8,6 +8,9 @@ import { IonTextareaCustomEvent } from '@ionic/core/dist/types/components';
 
 // Type
 import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
+import { createElementTestingSelector } from '@/utils/helpers';
+import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
+import { PRODUCT_NAME } from '@/utils/constants';
 type ZIonTextareaType = {
 	className?: string;
 	autoGrow?: boolean;
@@ -52,6 +55,8 @@ type ZIonTextareaType = {
 		[key: string]: unknown;
 	};
 
+	testingSelector?: string;
+	testingListSelector?: string;
 	// Ionic 7
 	label?: string;
 	labelPlacement?: 'fixed' | 'floating' | 'stacked';
@@ -61,7 +66,30 @@ type ZIonTextareaType = {
 };
 
 const ZIonTextarea = (props: ZIonTextareaType) => {
-	return <IonTextarea {...props} onIonInput={props.onIonChange} />;
+	const _testingListSelector = props.testingListSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingListSelector || PRODUCT_NAME,
+					_key: createElementTestingSelectorKeyEnum.listSelector,
+				}),
+		  }
+		: {};
+
+	const _testingSelector = props.testingSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingSelector || PRODUCT_NAME,
+				}),
+		  }
+		: {};
+	return (
+		<IonTextarea
+			{...props}
+			onIonInput={props.onIonChange}
+			{..._testingSelector}
+			{..._testingListSelector}
+		/>
+	);
 };
 
 export default ZIonTextarea;

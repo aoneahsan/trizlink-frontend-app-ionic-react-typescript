@@ -513,8 +513,8 @@ const testingSelectors = {
 		listPage: {
 			switchItInput: 'slp-switch-input',
 			switchItBtn: 'slp-switch-btn',
+			switchItInputError: 'slp-search-input-error',
 			searchInput: 'slp-search-input',
-			searchInputError: 'slp-search-input-error',
 			searchBtn: 'slp-search-btn',
 			filterBtn: 'slp-filter-btn',
 			exportDataBtn: 'slp-export-data-btn',
@@ -524,18 +524,216 @@ const testingSelectors = {
 			tagsFilterBtn: 'slp-tags-filter-btn',
 			domainFilterBtn: 'slp-domain-filter-btn',
 			refetchBtn: 'slp-refetch-btn',
-			// url, linkToShare, Actions.
+
 			table: {
 				url: 'slp-t-url',
 				linkToShare: 'slp-t-link-to-share',
+				pixel: 'slp-t-pixel',
+				notes: 'slp-t-notes',
 				actionPopoverBtn: 'slp-t-ap-btn',
 				editBtn: 'slp-t-edit-btn',
 				deleteBtn: 'slp-t-delete-btn',
+				previousButton: 'slp-t-previous-page-btn',
+				getFirstPageButton: 'slp-t-first-page-btn',
+				nextButton: 'slp-t-next-page-btn',
+				getLastPageButton: 'slp-t-last-page-btn',
+				pageSizeInput: 'slp-t-page-size-input',
+			},
+		},
+
+		formPage: {
+			advanceOptionsBtn: 'sl-fp-advance-options-btn',
+			advanceOptionsContent: 'sl-fp-advance-options-content',
+
+			notesTextarea: 'sl-fp-note-textarea',
+
+			favicon: 'sl-fp-favicon',
+
+			tag: {
+				tagInput: 'sl-fp-tag-input',
+				singleTag: 'sl-fp-single-tag',
+			},
+
+			rotatorABTesting: {
+				// sl-fp-rabt -> shortlink-form-page-rotator-ab-testing
+				redirectionLinkInput: 'sl-fp-rabt-link-input',
+				percentageInput: 'sl-fp-rabt-percentage-input',
+				deleteSingleRotatorBtn: 'sl-fp-rabt-delete-btn',
+				addSingleRotatorBtn: 'sl-fp-rabt-add-btn',
+				disabledAddSingleRotatorBtn: 'sl-fp-rabt-disabled-add-btn',
+				container: 'sl-fp-rabt-container',
+			},
+
+			geoLocation: {
+				// sl-fp-gl -> shortlink-form-page-geo-location
+				redirectionLinkInput: 'sl-fp-gl-link-input',
+				countrySelector: 'sl-fp-gl-country-selector',
+				countrySelectorError: 'sl-fp-gl-country-selector-error',
+				deleteSingleGeoLocationBtn: 'sl-fp-gl-delete-btn',
+				addSingleGeoLocationBtn: 'sl-fp-gl-add-btn',
+				disabledAddSingleGeoLocationBtn: 'sl-fp-gl-disabled-add-btn',
+				container: 'sl-fp-gl-container',
+			},
+
+			linkExpiration: {
+				// sl-fp-el -> shortlink-form-page-link-expiration
+				enableBtn: 'sl-fp-le-enable-toggler',
+				expirationDateInput: 'sl-fp-le-expiration-date-input',
+				timezoneSelector: 'sl-fp-le-timezone-input-selector',
+				redirectionLinkInput: 'sl-fp-le-redirection-link-input',
+				container: 'sl-fp-le-container',
+				disabledLEText: 'sl-fp-le-disabled-text',
+			},
+
+			password: {
+				// sl-fp -> shortlink-form
+				enableBtn: 'sl-fp-password-enable-toggler',
+				container: 'sl-fp-password-container',
+				input: 'sl-fp-password-input',
+				disabledPasswordText: 'sl-fp-password-disabled-text',
+			},
+
+			ShortUrlOptionFields: {
+				// sl-fp-suof-tp -> shortlink-form-page-short-url-option-fields-type-popover
+				typeBtn: 'sl-fp-suof-type-btn',
+				typePopover: {
+					typeBtn: 'sl-fp-suof-tp',
+				},
+				linkInput: 'sl-fp-suof-link-input',
+				emailInput: 'sl-fp-suof-email-input',
+				numberInput: 'sl-fp-suof-number-input',
+				usernameInput: 'sl-fp-suof-username-input',
+				accountIdInput: 'sl-fp-suof-account-id-input',
+				subjectInput: 'sl-fp-suof-subject-input',
+				messageTextarea: 'sl-fp-suof-message-textarea',
+
+				refreshThePreviewBtn: 'sl-fp-refresh-the-preview-btn',
+			},
+
+			customYourLink: {
+				// sl-fp-cyl-tp -> shortlink-form-page-custom-your-link
+				imageCol: 'sl-fp-cyl-image-col',
+				image: 'sl-fp-cyl-image',
+				titleInput: 'sl-fp-cyl-title-input',
+				descriptionTextarea: 'sl-fp-cyl-description-textarea',
+			},
+
+			pixelAccount: {
+				// sl-fp-pa -> shortlink-form-page-pixel-account
+				pixelsSelector: 'sl-fp-pa-pixels-selector',
+				createBtn: 'sl-fp-pa-create-btn',
+			},
+
+			utmTags: {
+				// sl-fp-ut -> shortlink-form-page-utm-tag
+				campaignInput: 'sl-fp-ut-campaign-input',
+				mediumInput: 'sl-fp-ut-medium input',
+				sourceInput: 'sl-fp-ut-source-input',
+				termInput: 'sl-fp-ut-term-input',
+				contentInput: 'sl-fp-ut-content-input',
+				addTemplateBtn: 'sl-fp-ut-add-template-btn',
+				selectTemplateSelector: 'sl-fp-ut-select-template-selector',
+			},
+
+			customDomain: {
+				// sl-fp-cd -> shortlink-form-page-custom-domain
+				domainSelector: 'sl-fp-cd-domain-selector',
+				customizeInput: 'sl-fp-cd-customize-input',
+				customizeCheckBtn: 'sl-fp-cd-customize-checker-btn',
+			},
+
+			folder: {
+				// sl-fp -> shortlink-form-page
+				createBtn: 'sl-fp-folder-create-btn',
+				selector: 'sl-fp-folder-selector',
 			},
 		},
 	},
 	// #endregion
 
+	// #region link-in-bio
+	linkInBio: {
+		listPage: {
+			// lib-lp -> link-in-bio-list-page
+			searchInput: 'lib-lp-search-input',
+			searchBtn: 'lib-lp-search-btn',
+			filterBtn: 'lib-lp-filter-btn',
+			exportDataBtn: 'lib-lp-export-data-btn',
+			bulkImportBtn: 'lib-lp-bulk-import-btn',
+			createBtn: 'lib-lp-create-btn',
+			timeFilterBtn: 'lib-lp-time-filter-btn',
+			tagsFilterBtn: 'lib-lp-tags-filter-btn',
+			refetchBtn: 'lib-lp-refetch-btn',
+		},
+
+		table: {
+			// lib-t -> link-in-bio-table
+			url: 'lib-t-url',
+			linkToShare: 'lib-t-link-to-share',
+			pixel: 'lib-t-pixel',
+			notes: 'lib-t-notes',
+			actionPopoverBtn: 'lib-t-ap-btn',
+			editBtn: 'lib-t-edit-btn',
+			deleteBtn: 'lib-t-delete-btn',
+			previousButton: 'lib-t-previous-page-btn',
+			getFirstPageButton: 'lib-t-first-page-btn',
+			nextButton: 'lib-t-next-page-btn',
+			getLastPageButton: 'lib-t-last-page-btn',
+			pageSizeInput: 'lib-t-page-size-input',
+		},
+
+		formModal: {
+			// lib-fm -> link-in-bio-form-modal
+			closeBtn: 'lib-fm-close-btn',
+			submitFormBtn: 'lib-fm-submit-form-btn',
+			titleInput: 'lib-fm-title-input',
+		},
+
+		formPage: {
+			// lib-fp -> link-in-bio-form-page
+			advanceOptionsBtn: 'lib-fp-advance-options-btn',
+			advanceOptionsContent: 'lib-fp-advance-options-content',
+
+			notesTextarea: 'lib-fp-note-textarea',
+
+			favicon: 'lib-fp-favicon',
+
+			tag: {
+				tagInput: 'lib-fp-tag-input',
+				singleTag: 'lib-fp-single-tag',
+			},
+		},
+	},
+	// #endregion
+
+	// #region pixels
+	pixels: {
+		formModal: {
+			closeModalBtn: 'p-fm-close-btn',
+			pixelSelector: 'p-fm-pixel-selector',
+			pixelNameInput: 'p-fm-pixel-name-input',
+			pixelIdInput: 'p-fm-pixel-id-input',
+			submitFormBtn: 'p-fm-pixel-submit-form-btn',
+		},
+	},
+	// #endregion
+
+	// #region utm tag
+	utmTags: {
+		formModal: {
+			closeModalBtn: 'ut-fm-close-btn',
+			submitFormBtn: 'ut-fm-utm-tag-submit-form-btn',
+			name: 'ut-fm-name-input',
+			campaign: 'ut-fm-campaign-input',
+			medium: 'ut-fm-medium-input',
+			source: 'ut-fm-source-input',
+			term: 'ut-fm-term-input',
+			content: 'ut-fm-content-input',
+		},
+	},
+	// #endregion
+
+	// #region folder
 	folder: {
 		create: 'f-create-btn',
 		actionPopoverBtn: 'fap-btn',
@@ -543,7 +741,50 @@ const testingSelectors = {
 		deleteBtn: 'f-delete-btn',
 		reorderBtn: 'f-reorder-btn',
 		singleFolder: 'single-folder',
+		formModal: {
+			closeModalBtn: 'folder-fm-close-btn',
+			submitFormBtn: 'folder-fm-submit-form-btn',
+			nameInput: 'folder-fm-name-input',
+		},
 	},
+	// #endregion
+
+	// #region top bar
+	topBar: {
+		workspaceSwitcherBtn: 'tb-ws-btn', // top-bar-workspace-switcher-btn.
+		workspaceSwitcherPopover: {
+			singleWorkspace: 'tb-wsp-single-workspace', // top-bar-workspace-switcher-popover-...
+			actionPopover: {
+				// top-bar-workspace-switcher-popover-action-popover-...
+				editWorkspace: 'tb-wsp-ap-edit-btn',
+				deleteWorkspace: 'tb-wsp-ap-delete-btn',
+			},
+		},
+		upgradeBtn: 'tb-upgrade-btn',
+		helpBtn: 'tb-help-btn',
+		helpPopover: {
+			allSystemsOperations: 'tb-hcp-aso-btn',
+			whatsNew: 'tb-hcp-whats-new-btn',
+			suggestAnIdea: 'tb-hcp-suggest-idea-btn',
+			helpCenter: 'tb-hcp-help-center-btn',
+			price: 'tb-hcp-price-btn',
+			contactSupport: 'tb-hcp-cs-btn',
+			iSOAppBtn: 'tb-hcp-iSO-app-btn',
+			androidAppBtn: 'tb-hcp-android-app-btn',
+		},
+		notificationBtn: 'tb-notification-btn',
+		notificationPopover: {
+			tabs: {
+				approvalRequests: 'tb-np-approval-requests-btn',
+				updates: 'tb-np-updates-btn',
+			},
+			markAllAsReadBtn: 'tb-np-masr-btn',
+			settingsBtn: 'tb-np-settings-btn',
+
+			singleNotification: 'tb-np-single-notification',
+		},
+	},
+	// #endregion
 };
 
 export const TIMEZONES = [

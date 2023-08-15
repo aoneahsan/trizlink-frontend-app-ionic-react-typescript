@@ -114,6 +114,7 @@ const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = ({
 			fill='clear'
 			color='dark'
 			size={false ? 'small' : 'default'}
+			testingSelector={CONSTANTS.testingSelectors.topBar.workspaceSwitcherBtn}
 			onClick={(event: unknown) => {
 				presentZWorkspacesListPopover({
 					_event: event as Event,
@@ -138,7 +139,7 @@ const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = ({
 					'w-[30px!important] h-[30px!important]': true,
 				})}
 			/>
-			<ZIonText className=''>{currentWorkspaceData?.workspaceName}</ZIonText>
+			<ZIonText>{currentWorkspaceData?.workspaceName}</ZIonText>
 			<ZIonIcon
 				icon={caretDown}
 				size='small'

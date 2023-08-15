@@ -51,6 +51,7 @@ import {
 } from '@/components/ZIonComponents';
 import { FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
+import CONSTANTS from '@/utils/constants';
 
 /**
  * Style files Imports go down
@@ -135,6 +136,7 @@ const ZShortLinkOptionsPopover: React.FC<{
 						<ZIonCol size='5' key={el.id}>
 							<ZIonText
 								className='flex gap-3 cursor-pointer ion-align-items-center ion-margin-bottom'
+								testingSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.ShortUrlOptionFields.typePopover.typeBtn}-${el.type}`}
 								onClick={() => {
 									shortLinkTypeOptionChangeHandler(el.type);
 								}}

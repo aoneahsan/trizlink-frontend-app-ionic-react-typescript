@@ -141,6 +141,9 @@ const ZaionsAddLinkInBioModal: React.FC<{
 				<ZIonIcon
 					icon={closeOutline}
 					className='cursor-pointer w-7 h-7'
+					testingSelector={
+						CONSTANTS.testingSelectors.linkInBio.formModal.closeBtn
+					}
 					onClick={() => {
 						dismissZIonModal();
 					}}
@@ -176,7 +179,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
 								const zStringifyData = zStringify({
 									linkInBioTitle: values.linkInBioTitle,
 									theme: zStringify(ZaionsLinkInBioDefaultData.theme), // passing default data with title
-									folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
+									folderId: 1,
 								});
 								await FormikSubmitHandler(zStringifyData);
 							}
@@ -195,28 +198,6 @@ const ZaionsAddLinkInBioModal: React.FC<{
 					}) => {
 						return (
 							<>
-								{/* <ZIonInputField
-									inputFieldProps={{
-										label: 'Link-in-bio title*',
-										labelPlacement: 'floating',
-										name: 'linkInBioTitle',
-										onIonChange: handleChange,
-										onIonBlur: handleBlur,
-										minHeight: '2.3rem',
-										value: values.linkInBioTitle, // the title of the new-link-in-bio
-										errorText: touched.linkInBioTitle
-											? errors.linkInBioTitle
-											: undefined,
-										className: classNames({
-											'mt-4 ion-text-start': true,
-											'ion-touched': touched.linkInBioTitle,
-											'ion-invalid': errors.linkInBioTitle,
-											'ion-valid':
-												touched.linkInBioTitle && !errors.linkInBioTitle,
-										}),
-									}}
-								/> */}
-
 								<ZIonInput
 									label='Link-in-bio title*'
 									labelPlacement='stacked'
@@ -228,6 +209,9 @@ const ZaionsAddLinkInBioModal: React.FC<{
 									value={values.linkInBioTitle} // the title of the new-link-in-bio
 									errorText={
 										touched.linkInBioTitle ? errors.linkInBioTitle : undefined
+									}
+									testingSelector={
+										CONSTANTS.testingSelectors.linkInBio.formModal.titleInput
 									}
 									className={classNames({
 										'mt-5 ion-text-start': true,
@@ -242,6 +226,9 @@ const ZaionsAddLinkInBioModal: React.FC<{
 									expand='block'
 									className='mt-4'
 									onClick={() => void submitForm()}
+									testingSelector={
+										CONSTANTS.testingSelectors.linkInBio.formModal.submitFormBtn
+									}
 								>
 									Create
 								</ZIonButton>

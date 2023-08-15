@@ -3,7 +3,6 @@ import React from 'react';
 
 // Packages Import
 import { lockClosedOutline } from 'ionicons/icons';
-import RCSwitch from 'rc-switch';
 import { useFormikContext } from 'formik';
 import classNames from 'classnames';
 
@@ -14,10 +13,13 @@ import {
 	ZIonIcon,
 	ZIonRouterLink,
 	ZIonInput,
+	ZIonGrid,
 } from '@/components/ZIonComponents';
+import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 
 // Global Constants
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import CONSTANTS from '@/utils/constants';
 
 // Images
 
@@ -53,18 +55,26 @@ const LinkPassword: React.FC = () => {
 						</ZIonRouterLink>
 					</ZIonText>
 
-					<RCSwitch
+					<ZRCSwitch
 						className='ms-auto me-2'
 						defaultChecked={values.password.enabled}
 						checkedChildren='on'
 						unCheckedChildren='off'
+						testingSelector={
+							CONSTANTS.testingSelectors.shortLink.formPage.password.enableBtn
+						}
 						onChange={(val) => {
 							setFieldValue('password.enabled', val, false);
 						}}
 					/>
 				</div>
 				{values.password.enabled ? (
-					<div className='block px-2 mt-1'>
+					<ZIonGrid
+						className='block px-2 mt-1'
+						testingSelector={
+							CONSTANTS.testingSelectors.shortLink.formPage.password.container
+						}
+					>
 						<ZIonInput
 							label='Password'
 							labelPlacement='stacked'
@@ -74,6 +84,9 @@ const LinkPassword: React.FC = () => {
 							onIonChange={handleChange}
 							onIonBlur={handleBlur}
 							value={values.password.value}
+							testingSelector={
+								CONSTANTS.testingSelectors.shortLink.formPage.password.input
+							}
 							errorText={
 								touched.password?.value ? errors?.password?.value : undefined
 							}
@@ -85,13 +98,19 @@ const LinkPassword: React.FC = () => {
 								'ion-valid': touched.password?.value && !errors.password?.value,
 							})}
 						/>
-					</div>
+					</ZIonGrid>
 				) : (
-					<div className='mt-2 ion-padding-start'>
+					<ZIonGrid
+						className='mt-2 ion-padding-start'
+						testingSelector={
+							CONSTANTS.testingSelectors.shortLink.formPage.password
+								.disabledPasswordText
+						}
+					>
 						<ZIonText className='text-base'>
 							Activate this option to protect your link with a password
 						</ZIonText>
-					</div>
+					</ZIonGrid>
 				)}
 			</ZIonCol>
 		</>

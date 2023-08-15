@@ -283,6 +283,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 									value={values.password}
 									errorText={touched.password ? errors.password : undefined}
 									type={zaionsSignUpState.canViewPassword ? 'text' : 'password'}
+									clearOnEdit={false}
 									testingSelector={
 										CONSTANTS.testingSelectors.signupPage.passwordInput
 									}
@@ -392,6 +393,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 									onIonBlur={handleBlur}
 									value={values.confirm_password}
 									name='confirm_password'
+									clearOnEdit={false}
 									type={zaionsSignUpState.canViewPassword ? 'text' : 'password'}
 									testingSelector={
 										CONSTANTS.testingSelectors.signupPage.confirmPasswordInput

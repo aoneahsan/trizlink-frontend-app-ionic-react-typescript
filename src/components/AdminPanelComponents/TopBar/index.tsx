@@ -127,7 +127,11 @@ const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 			{/*  */}
 			<ZIonCol className='flex h-full gap-2 ion-align-items-center ion-justify-content-end'>
 				{/* Upgrade button */}
-				<ZIonButton color='secondary' height='2.3rem'>
+				<ZIonButton
+					color='secondary'
+					height='2.3rem'
+					testingSelector={CONSTANTS.testingSelectors.topBar.upgradeBtn}
+				>
 					Upgrade
 				</ZIonButton>
 
@@ -136,6 +140,7 @@ const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 					color='tertiary'
 					size='small'
 					height='2.3rem'
+					testingSelector={CONSTANTS.testingSelectors.topBar.helpBtn}
 					onClick={(event: unknown) => {
 						presentZHelpCenterPopover({
 							_event: event as Event,
@@ -154,6 +159,7 @@ const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 					size='small'
 					className='me-3'
 					height='2.3rem'
+					testingSelector={CONSTANTS.testingSelectors.topBar.notificationBtn}
 					onClick={(event: unknown) => {
 						presentZNotificationPopover({
 							_event: event as Event,

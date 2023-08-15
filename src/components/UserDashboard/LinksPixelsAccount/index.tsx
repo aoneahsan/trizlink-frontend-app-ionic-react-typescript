@@ -116,6 +116,11 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
 					<ZaionsRSelect
 						className='pt-0 pb-0 ion-padding'
 						isMulti
+						name='linkPixelsAccount'
+						testingSelector={
+							CONSTANTS.testingSelectors.shortLink.formPage.pixelAccount
+								.pixelsSelector
+						}
 						options={
 							pixelAccountsState
 								? pixelAccountsState.map((el) => {
@@ -123,7 +128,6 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
 								  })
 								: []
 						}
-						name='linkPixelsAccount'
 						onChange={(_values) => {
 							setFieldValue(
 								'linkPixelsAccount',
@@ -146,6 +150,10 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
 						fill='clear'
 						className='ion-text-capitalize ion-no-padding ps-1 ion-no-margin ion-margin-start'
 						size='small'
+						testingSelector={
+							CONSTANTS.testingSelectors.shortLink.formPage.pixelAccount
+								.createBtn
+						}
 						onClick={() => {
 							presentZAddPixelAccount({
 								_cssClass: 'pixel-account-modal-size',

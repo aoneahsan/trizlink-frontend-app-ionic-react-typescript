@@ -31,6 +31,7 @@ import {
 	logoAndroid,
 	logoApple,
 } from 'ionicons/icons';
+import CONSTANTS from '@/utils/constants';
 
 /**
  * Custom Hooks Imports go down
@@ -91,6 +92,9 @@ const ZHelpCenterPopover: React.FC<{
 				lines='full'
 				minHeight='2.3rem'
 				className='cursor-pointer ion-activatable'
+				testingSelector={
+					CONSTANTS.testingSelectors.topBar.helpPopover.allSystemsOperations
+				}
 			>
 				<ZIonIcon icon={ellipse} className='w-3 h-3' color='success' />
 				<ZIonText className='block text-sm tracking-wide ms-2'>
@@ -101,7 +105,13 @@ const ZHelpCenterPopover: React.FC<{
 			{/*  */}
 			<ZIonList lines='none'>
 				{/* What's new? */}
-				<ZIonItem minHeight='2.3rem' className='cursor-pointer ion-activatable'>
+				<ZIonItem
+					minHeight='2.3rem'
+					className='cursor-pointer ion-activatable'
+					testingSelector={
+						CONSTANTS.testingSelectors.topBar.helpPopover.whatsNew
+					}
+				>
 					<ZIonIcon icon={giftOutline} className='w-5 h-5' />
 					<ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
 						What's new?
@@ -109,7 +119,13 @@ const ZHelpCenterPopover: React.FC<{
 				</ZIonItem>
 
 				{/* Suggest an idea */}
-				<ZIonItem minHeight='2.3rem' className='cursor-pointer ion-activatable'>
+				<ZIonItem
+					minHeight='2.3rem'
+					className='cursor-pointer ion-activatable'
+					testingSelector={
+						CONSTANTS.testingSelectors.topBar.helpPopover.suggestAnIdea
+					}
+				>
 					<ZIonIcon icon={bulbOutline} className='w-5 h-5' />
 					<ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
 						Suggest an idea
@@ -117,7 +133,13 @@ const ZHelpCenterPopover: React.FC<{
 				</ZIonItem>
 
 				{/* Help center */}
-				<ZIonItem minHeight='2.3rem' className='cursor-pointer ion-activatable'>
+				<ZIonItem
+					minHeight='2.3rem'
+					className='cursor-pointer ion-activatable'
+					testingSelector={
+						CONSTANTS.testingSelectors.topBar.helpPopover.helpCenter
+					}
+				>
 					<ZIonIcon icon={helpCircleOutline} className='w-5 h-5' />
 					<ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
 						Help center
@@ -125,7 +147,11 @@ const ZHelpCenterPopover: React.FC<{
 				</ZIonItem>
 
 				{/* Price */}
-				<ZIonItem minHeight='2.3rem' className='cursor-pointer ion-activatable'>
+				<ZIonItem
+					minHeight='2.3rem'
+					className='cursor-pointer ion-activatable'
+					testingSelector={CONSTANTS.testingSelectors.topBar.helpPopover.price}
+				>
 					<ZIonIcon icon={cashOutline} className='w-5 h-5' />
 					<ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
 						Price
@@ -133,7 +159,13 @@ const ZHelpCenterPopover: React.FC<{
 				</ZIonItem>
 
 				{/* Contact support */}
-				<ZIonItem minHeight='2.3rem' className='cursor-pointer ion-activatable'>
+				<ZIonItem
+					minHeight='2.3rem'
+					className='cursor-pointer ion-activatable'
+					testingSelector={
+						CONSTANTS.testingSelectors.topBar.helpPopover.contactSupport
+					}
+				>
 					<ZIonIcon icon={chatboxEllipsesOutline} className='w-5 h-5' />
 					<ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
 						Contact support
@@ -155,13 +187,16 @@ const ZHelpCenterPopover: React.FC<{
 				DOWNLOAD APPS
 			</ZIonText>
 
-			<div className='flex ion-align-items-center mx-3 gap-1'>
+			<div className='flex gap-1 mx-3 ion-align-items-center'>
 				{/* iOS */}
 				<ZIonButton
-					className='ion-no-margin w-1/2'
+					className='w-1/2 ion-no-margin'
 					size='small'
 					fill='clear'
 					color='dark'
+					testingSelector={
+						CONSTANTS.testingSelectors.topBar.helpPopover.iSOAppBtn
+					}
 				>
 					<ZIonIcon icon={logoApple} />
 					<ZIonText className='ps-1 mt-[3px]'>iOS</ZIonText>
@@ -177,10 +212,13 @@ const ZHelpCenterPopover: React.FC<{
 
 				{/* Android */}
 				<ZIonButton
-					className='ion-no-margin w-1/2'
+					className='w-1/2 ion-no-margin'
 					fill='clear'
 					size='small'
 					color='dark'
+					testingSelector={
+						CONSTANTS.testingSelectors.topBar.helpPopover.androidAppBtn
+					}
 				>
 					<ZIonIcon icon={logoAndroid} />
 					<ZIonText className='ps-1'>Android</ZIonText>

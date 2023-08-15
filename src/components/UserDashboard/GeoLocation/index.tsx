@@ -13,10 +13,10 @@ import {
 	ZIonText,
 	ZIonIcon,
 	ZIonRouterLink,
-	ZIonItem,
 	ZIonInput,
 	ZIonNote,
 	ZIonButton,
+	ZIonGrid,
 } from '@/components/ZIonComponents';
 import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 
@@ -38,6 +38,7 @@ import { ZaionsDiscoverEnterpriseCountry } from '@/data/DiscoverEnterprise/index
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import CONSTANTS from '@/utils/constants';
 
 // Styles
 
@@ -84,7 +85,12 @@ const GeoLocation: React.FC = () => {
 				<div className='block px-2 pt-2'>
 					<FieldArray name='geoLocation'>
 						{({ remove, push }) => (
-							<div>
+							<ZIonGrid
+								testingSelector={
+									CONSTANTS.testingSelectors.shortLink.formPage.geoLocation
+										.container
+								}
+							>
 								{values.geoLocation.length
 									? values.geoLocation.map((_geoLocationEl, _index) => (
 											<ZIonRow
@@ -112,6 +118,11 @@ const GeoLocation: React.FC = () => {
 														onIonChange={handleChange}
 														value={values.geoLocation[_index]?.redirectionLink}
 														name={`geoLocation.${_index}.redirectionLink`}
+														testingSelector={
+															CONSTANTS.testingSelectors.shortLink.formPage
+																.geoLocation.redirectionLinkInput
+														}
+														testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.geoLocation.redirectionLinkInput}-${_geoLocationEl.id}`}
 														onIonBlur={(e) => {
 															handleBlur(e);
 															const inputUrl =
@@ -168,6 +179,21 @@ const GeoLocation: React.FC = () => {
 													sizeXs='11'
 												>
 													<ZaionsRSelect
+														placeholder='country*'
+														name={`geoLocation.${_index}.country`}
+														options={ZaionsDiscoverEnterpriseCountry}
+														testingSelector={
+															CONSTANTS.testingSelectors.shortLink.formPage
+																.geoLocation.countrySelector
+														}
+														testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.geoLocation.countrySelector}-${_geoLocationEl.id}`}
+														onChange={(_value) => {
+															setFieldValue(
+																`geoLocation.${_index}.country`,
+																(_value as ZaionsRSelectOptions).value,
+																true
+															);
+														}}
 														className={classNames({
 															'pb-0 mb-0 geo-location-country-field': true,
 															invalid:
@@ -190,16 +216,6 @@ const GeoLocation: React.FC = () => {
 																	] as GeoLocationErrorsType
 																)?.country,
 														})}
-														placeholder='country*'
-														name={`geoLocation.${_index}.country`}
-														options={ZaionsDiscoverEnterpriseCountry}
-														onChange={(_value) => {
-															setFieldValue(
-																`geoLocation.${_index}.country`,
-																(_value as ZaionsRSelectOptions).value,
-																true
-															);
-														}}
 														onBlur={() => {
 															setFieldTouched(
 																`geoLocation.${_index}.country`,
@@ -224,6 +240,11 @@ const GeoLocation: React.FC = () => {
 														<ZIonNote
 															className='ion-padding-start text-xs'
 															color='danger'
+															testingSelector={
+																CONSTANTS.testingSelectors.shortLink.formPage
+																	.geoLocation.countrySelectorError
+															}
+															testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.geoLocation.countrySelectorError}-${_geoLocationEl.id}`}
 														>
 															{errors.geoLocation?.length &&
 																(
@@ -244,6 +265,11 @@ const GeoLocation: React.FC = () => {
 														onClick={() => remove(_index)}
 														color='danger'
 														className='w-[21px] h-[21px] zaions__nav_item'
+														testingSelector={
+															CONSTANTS.testingSelectors.shortLink.formPage
+																.geoLocation.deleteSingleGeoLocationBtn
+														}
+														testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.geoLocation.deleteSingleGeoLocationBtn}-${_geoLocationEl.id}`}
 													/>
 												</ZIonCol>
 											</ZIonRow>
@@ -255,6 +281,10 @@ const GeoLocation: React.FC = () => {
 										fill='clear'
 										className='mt-3 ion-text-capitalize ion-no-padding'
 										size='small'
+										testingSelector={
+											CONSTANTS.testingSelectors.shortLink.formPage.geoLocation
+												.addSingleGeoLocationBtn
+										}
 										onClick={() =>
 											push({
 												id: getRandomKey(),
@@ -271,11 +301,15 @@ const GeoLocation: React.FC = () => {
 										color={'dark'}
 										className='mt-3 ion-text-capitalize ion-no-padding'
 										fill='clear'
+										testingSelector={
+											CONSTANTS.testingSelectors.shortLink.formPage.geoLocation
+												.deleteSingleGeoLocationBtn
+										}
 									>
 										You can't add a redirection if AB testing is activated
 									</ZIonButton>
 								)}
-							</div>
+							</ZIonGrid>
 						)}
 					</FieldArray>
 				</div>

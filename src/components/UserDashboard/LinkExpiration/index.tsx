@@ -4,7 +4,6 @@ import React from 'react';
 // Packages Import
 import { alarmOutline } from 'ionicons/icons';
 import classNames from 'classnames';
-import RCSwitch from 'rc-switch';
 import { useFormikContext } from 'formik';
 
 // Custom Imports
@@ -15,13 +14,15 @@ import {
 	ZIonIcon,
 	ZIonRouterLink,
 	ZIonInput,
+	ZIonGrid,
 } from '@/components/ZIonComponents';
 import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 
 // Global Constants
-import { TIMEZONES } from '@/utils/constants';
+import CONSTANTS, { TIMEZONES } from '@/utils/constants';
 import { formatReactSelectOption, zAddUrlProtocol } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 
 // Images
 
@@ -66,18 +67,28 @@ const LinkExpiration: React.FC = () => {
 						</ZIonRouterLink>
 					</ZIonText>
 
-					<RCSwitch
-						onChange={(value) => {
-							setFieldValue('linkExpiration.enabled', value, true);
-						}}
-						checked={values.linkExpiration.enabled}
+					<ZRCSwitch
 						checkedChildren='on'
 						unCheckedChildren='off'
 						className='ms-auto me-2'
+						checked={values.linkExpiration.enabled}
+						testingSelector={
+							CONSTANTS.testingSelectors.shortLink.formPage.linkExpiration
+								.enableBtn
+						}
+						onChange={(value) => {
+							setFieldValue('linkExpiration.enabled', value, true);
+						}}
 					/>
 				</div>
 				{values.linkExpiration.enabled ? (
-					<div className='block px-2 mt-4 '>
+					<ZIonGrid
+						className='block px-2 mt-4 py-0'
+						testingSelector={
+							CONSTANTS.testingSelectors.shortLink.formPage.linkExpiration
+								.container
+						}
+					>
 						<ZIonRow className='ion-justify-content-between'>
 							{/* expirationDate */}
 							<ZIonCol size='5.9'>
@@ -90,6 +101,10 @@ const LinkExpiration: React.FC = () => {
 									onIonChange={handleChange}
 									onIonBlur={handleBlur}
 									value={values.linkExpiration.expirationDate}
+									testingSelector={
+										CONSTANTS.testingSelectors.shortLink.formPage.linkExpiration
+											.expirationDateInput
+									}
 								/>
 							</ZIonCol>
 
@@ -99,6 +114,10 @@ const LinkExpiration: React.FC = () => {
 									className=''
 									placeholder='country*'
 									name='linkExpiration.timezone'
+									testingSelector={
+										CONSTANTS.testingSelectors.shortLink.formPage.linkExpiration
+											.timezoneSelector
+									}
 									options={
 										TIMEZONES.map((el) => {
 											return { ...el };
@@ -131,6 +150,10 @@ const LinkExpiration: React.FC = () => {
 							labelPlacement='stacked'
 							name='linkExpiration.redirectionLink'
 							value={values.linkExpiration.redirectionLink}
+							testingSelector={
+								CONSTANTS.testingSelectors.shortLink.formPage.linkExpiration
+									.redirectionLinkInput
+							}
 							errorText={
 								touched.linkExpiration?.redirectionLink
 									? errors.linkExpiration?.redirectionLink
@@ -160,14 +183,20 @@ const LinkExpiration: React.FC = () => {
 									!errors.linkExpiration?.redirectionLink,
 							})}
 						/>
-					</div>
+					</ZIonGrid>
 				) : (
-					<div className='mt-2 ion-padding-start'>
+					<ZIonGrid
+						className='mt-2 ion-padding-start'
+						testingSelector={
+							CONSTANTS.testingSelectors.shortLink.formPage.linkExpiration
+								.disabledLEText
+						}
+					>
 						<ZIonText className='text-base'>
 							Activate this option to change destination after expiration
 							date/time
 						</ZIonText>
-					</div>
+					</ZIonGrid>
 				)}
 			</ZIonCol>
 		</>

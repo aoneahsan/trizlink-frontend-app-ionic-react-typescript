@@ -7,7 +7,12 @@ import { fileTrayOutline } from 'ionicons/icons';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 
 // Custom Imports
-import { ZIonIcon, ZIonImg, ZIonText } from '@/components/ZIonComponents';
+import {
+	ZIonGrid,
+	ZIonIcon,
+	ZIonImg,
+	ZIonText,
+} from '@/components/ZIonComponents';
 import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/FileUploadModal';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 
@@ -31,6 +36,8 @@ type ZDragAndDropType = {
 	fieldName?: string;
 	imageUrl?: string;
 	title?: string;
+	testingSelector?: string;
+	testingListSelector?: string;
 	setFieldValue?: FormikSetFieldValueEventType;
 };
 
@@ -40,6 +47,8 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
 	fieldName = '',
 	imageUrl,
 	title = 'Click to upload Picture or a GIF',
+	testingListSelector,
+	testingSelector,
 	setFieldValue,
 }) => {
 	const { presentZIonModal: presentZFileUploadModal } = useZIonModal(
@@ -51,7 +60,10 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
 	// }>({});
 
 	return (
-		<div
+		<ZIonGrid
+			style={style}
+			testingSelector={testingSelector}
+			testingListSelector={testingListSelector}
 			className={classNames(classes['zaions-drag-and-drop'], className, {
 				'flex flex-col ion-align-items-center ion-justify-content-center': true,
 			})}
@@ -79,10 +91,14 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
 					},
 				});
 			}}
-			style={style}
 		>
 			{imageUrl?.trim() ? (
-				<ZIonImg src={imageUrl} className='w-full h-full' />
+				<ZIonImg
+					src={imageUrl}
+					testingSelector={`${testingSelector}-image`}
+					testingListSelector={`${testingListSelector}-image`}
+					className='w-full h-full'
+				/>
 			) : (
 				<>
 					<ZIonText className='ion-no-margin'>
@@ -90,9 +106,17 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
 							icon={fileTrayOutline}
 							color='primary'
 							className='w-8 h-8'
+							testingSelector={`${testingSelector}-cd-icon`}
+							testingListSelector={`${testingListSelector}-cd-icon`}
 						/>
 					</ZIonText>
-					<ZIonText color='primary'>{title}</ZIonText>
+					<ZIonText
+						color='primary'
+						testingSelector={`${testingSelector}-cd-icon`}
+						testingListSelector={`${testingListSelector}-cd-icon`}
+					>
+						{title}
+					</ZIonText>
 				</>
 			)}
 			<div
@@ -105,14 +129,21 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
 					<ZIonImg
 						src={upload_send}
 						alt='send icon'
+						testingSelector={`${testingSelector}-od-icon`} // od -> overlay-div
+						testingListSelector={`${testingListSelector}-od-icon`}
 						style={{ width: '4rem' }}
 					/>
 				</ZIonText>
-				<ZIonText color='light' className='mt-2 font-bold'>
+				<ZIonText
+					color='light'
+					className='mt-2 font-bold'
+					testingSelector={`${testingSelector}-od-text`} // od -> overlay-div
+					testingListSelector={`${testingListSelector}-od-text`}
+				>
 					Upload a new Picture
 				</ZIonText>
 			</div>
-		</div>
+		</ZIonGrid>
 	);
 };
 

@@ -4,6 +4,9 @@ import React, { ReactNode } from 'react';
 // Packages Import
 import { IonCol } from '@ionic/react';
 import { ZIonColorType } from '@/types/zaionsAppSettings.type';
+import { createElementTestingSelector } from '@/utils/helpers';
+import { PRODUCT_NAME } from '@/utils/constants';
+import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 type ZIonColType = {
 	offset?: string;
@@ -37,6 +40,8 @@ type ZIonColType = {
 	style?: {
 		[key: string]: unknown;
 	};
+	testingSelector?: string;
+	testingListSelector?: string;
 	onMouseEnter?: React.MouseEventHandler<HTMLIonColElement>;
 	onClick?: React.MouseEventHandler<HTMLIonIconElement>;
 	minHeight?: 'auto' | string;
@@ -51,8 +56,30 @@ const ZIonCol = (props: ZIonColType) => {
 			: !props.style && props.minHeight
 			? { 'min-height': props.minHeight }
 			: {};
+
+	const _testingListSelector = props.testingListSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingListSelector || PRODUCT_NAME,
+					_key: createElementTestingSelectorKeyEnum.listSelector,
+				}),
+		  }
+		: {};
+
+	const _testingSelector = props.testingSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingSelector || PRODUCT_NAME,
+				}),
+		  }
+		: {};
 	return (
-		<IonCol {...props} style={compStyle}>
+		<IonCol
+			{...props}
+			style={compStyle}
+			{..._testingSelector}
+			{..._testingListSelector}
+		>
 			{props.children}
 		</IonCol>
 	);

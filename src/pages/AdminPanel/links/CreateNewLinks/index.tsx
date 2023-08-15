@@ -159,6 +159,7 @@ import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import ZFallbackIonSpinner from '@/components/CustomComponents/FallbackSpinner';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import ZCan from '@/components/Can';
+import ZAdminPanelTopBar from '@/components/AdminPanelComponents/TopBar';
 
 /**
  * Style files Imports go down
@@ -902,7 +903,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 						// #endregion
 					>
 						{/* Content */}
-						{({ isSubmitting, isValid, errors, submitForm }) => {
+						{({ isSubmitting, isValid, submitForm }) => {
 							return (
 								<ZIonContent color='light'>
 									{/* Grid-1 */}
@@ -934,6 +935,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 											>
 												{/* Grid-1 -> Grid-1 top-bar */}
 												{isZFetching ? <ZTopBarSkeleton /> : <ZTopBar />}
+												{/* <ZAdminPanelTopBar workspaceId={workspaceId} /> */}
 
 												{/* Short link Grid-1 -> Grid-2 */}
 												<ZaionsShortUrlOptionFields />
@@ -998,11 +1000,15 @@ const AdminCreateNewLinkPages: React.FC = () => {
 															<ZIonCol>
 																{/* advance options toggler button */}
 																<ZIonButton
+																	expand='block'
+																	// size={isMdScale ? 'large' : 'default'}
+																	testingSelector={
+																		CONSTANTS.testingSelectors.shortLink
+																			.formPage.advanceOptionsBtn
+																	}
 																	onClick={() =>
 																		setShowAdvanceOptions((oldVal) => !oldVal)
 																	}
-																	expand='block'
-																	// size={isMdScale ? 'large' : 'default'}
 																	className={classNames({
 																		'ion-text-capitalize': true,
 																		'mx-0': !isMdScale,
@@ -1020,7 +1026,13 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
 																{/* advance options row */}
 																{showAdvanceOptions && (
-																	<ZIonRow className='gap-3 ion-margin-top'>
+																	<ZIonRow
+																		className='gap-3 ion-margin-top'
+																		testingSelector={
+																			CONSTANTS.testingSelectors.shortLink
+																				.formPage.advanceOptionsContent
+																		}
+																	>
 																		{/* Folder */}
 																		<NewLinkFolder
 																			_foldersData={shortLinksFoldersData || []}

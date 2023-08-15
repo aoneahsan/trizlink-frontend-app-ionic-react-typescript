@@ -2,7 +2,6 @@
 import React from 'react';
 
 // Packages Import
-import { IonChip } from '@ionic/react';
 import { close, pricetagsOutline } from 'ionicons/icons';
 import { useFormikContext } from 'formik';
 
@@ -12,9 +11,9 @@ import {
 	ZIonText,
 	ZIonIcon,
 	ZIonRouterLink,
-	ZIonItem,
 	ZIonLabel,
 	ZIonInput,
+	ZIonChip,
 } from '@/components/ZIonComponents';
 
 // Global Constants
@@ -27,6 +26,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Types
 import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
+import CONSTANTS from '@/utils/constants';
 
 // Styles
 
@@ -80,7 +80,16 @@ const Tags: React.FC = () => {
 			{/*  */}
 			<div className='block px-4 mt-4'>
 				<ZIonInput
+					label=''
+					name='tags'
+					minHeight='40px'
 					placeholder='Add tag'
+					testingSelector={
+						CONSTANTS.testingSelectors.shortLink.formPage.tag.tagInput
+					}
+					style={{
+						'--padding-start': '0px',
+					}}
 					onKeyUp={({ currentTarget, key }) => {
 						if (!!currentTarget?.value && key === 'Enter') {
 							void handleTagSubmit(
@@ -89,26 +98,24 @@ const Tags: React.FC = () => {
 							currentTarget.value = '';
 						}
 					}}
-					name='tags'
-					label=''
-					minHeight='40px'
-					style={{
-						'--padding-start': '0px',
-					}}
 				/>
 				<div className='tags ion-padding-top'>
 					{values.tags && values.tags.length
 						? values.tags.map((el) => {
 								return (
-									<IonChip
+									<ZIonChip
+										key={el}
+										testingSelector={
+											CONSTANTS.testingSelectors.shortLink.formPage.tag
+												.singleTag
+										}
 										onClick={() => {
 											removeTags(el);
 										}}
-										key={el}
 									>
 										<ZIonLabel>{el}</ZIonLabel>
 										<ZIonIcon icon={close}></ZIonIcon>
-									</IonChip>
+									</ZIonChip>
 								);
 						  })
 						: ''}

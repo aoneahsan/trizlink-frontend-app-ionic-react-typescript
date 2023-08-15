@@ -9,6 +9,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { appsOutline, ellipsisVertical } from 'ionicons/icons';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useParams } from 'react-router';
 
 /**
  * Custom Imports go down
@@ -27,6 +28,8 @@ import {
 	ZIonText,
 } from '@/components/ZIonComponents';
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
+import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
+import ZCan from '@/components/Can';
 
 /**
  * Custom Hooks Imports go down
@@ -41,6 +44,7 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import CONSTANTS from '@/utils/constants';
 import { createRedirectRoute, replaceParams } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Type Imports go down
@@ -57,10 +61,6 @@ import {
  * ? Import of recoil states is a Recoil State import
  * */
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
-import { useParams } from 'react-router';
-import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
-import ZCan from '@/components/Can';
 /**
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
@@ -190,9 +190,11 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 									onIonItemReorder={handleFoldersReorder}
 								>
 									{foldersData.map((el) => (
-										<ZCan havePermissions={[permissionsEnum.view_folder]}>
+										<ZCan
+											havePermissions={[permissionsEnum.view_folder]}
+											key={el.id}
+										>
 											<ZIonItem
-												key={el.id}
 												data-folder-id={el.id}
 												style={{
 													'--inner-padding-end': '0px',
@@ -272,7 +274,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 													<ZIonIcon icon={ellipsisVertical} />
 												</ZIonButton>
 												<ZIonReorder slot='start' className='me-3'>
-													<ZIonIcon icon={appsOutline}></ZIonIcon>
+													<ZIonIcon icon={appsOutline} />
 												</ZIonReorder>
 											</ZIonItem>
 										</ZCan>
@@ -330,6 +332,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 						fill='outline'
 						expand='block'
 						onClick={addNewFolderButtonOnClickHandler}
+						testingSelector={`${CONSTANTS.testingSelectors.folder.create}-${type}`}
 					>
 						New Folder
 					</ZIonButton>

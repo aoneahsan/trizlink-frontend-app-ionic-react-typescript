@@ -229,6 +229,10 @@ const ZaionsShortLinkTable: React.FC<{
 								<ZIonText
 									color='primary'
 									className='cursor-pointer'
+									testingSelector={
+										CONSTANTS.testingSelectors.shortLink.listPage.table.pixel
+									}
+									testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.pixel}-${row.row.original.id}`}
 									onClick={() => {
 										setShortLinkFormState((oldVal) => ({
 											...oldVal,
@@ -269,6 +273,10 @@ const ZaionsShortLinkTable: React.FC<{
 								<ZIonText
 									color='primary'
 									className='text-sm cursor-pointer'
+									testingSelector={
+										CONSTANTS.testingSelectors.shortLink.listPage.table.notes
+									}
+									testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.notes}-${row.row.original.id}`}
 									onClick={() => {
 										setShortLinkFormState((oldVal) => ({
 											...oldVal,
@@ -306,6 +314,10 @@ const ZaionsShortLinkTable: React.FC<{
 						color='dark'
 						className='hover:underline'
 						target='_blank'
+						testingSelector={
+							CONSTANTS.testingSelectors.shortLink.listPage.table.url
+						}
+						testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.url}-${row.row.original.id}`}
 					>
 						{row.getValue()}
 					</ZIonRouterLink>
@@ -330,6 +342,10 @@ const ZaionsShortLinkTable: React.FC<{
 							color='primary'
 							className='block cursor-pointer hover:underline'
 							id={`z-shortlink-${row?.original?.id}`}
+							testingSelector={
+								CONSTANTS.testingSelectors.shortLink.listPage.table.linkToShare
+							}
+							testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.linkToShare}-${row.original.id}`}
 							onClick={() => {
 								navigator.clipboard.writeText(_shortLink || '');
 
@@ -544,6 +560,7 @@ const ZaionsShortLinkTable: React.FC<{
 													{_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
 														_cellInfo.column.getIsVisible() ? (
 															<ZIonCol
+																key={_cellIndex}
 																size={
 																	_cellInfo.column.id ===
 																		ZShortLinkListPageTableColumnsIds.id ||
@@ -552,7 +569,6 @@ const ZaionsShortLinkTable: React.FC<{
 																		? '.8'
 																		: '2.5'
 																}
-																key={_cellIndex}
 																className={classNames({
 																	'py-1 mt-1 border-b flex ion-align-items-center':
 																		true,
@@ -652,6 +668,11 @@ const ZaionsShortLinkTable: React.FC<{
 								className='mr-1 ion-no-padding ion-no-margin'
 								size='small'
 								fill='clear'
+								disabled={!zShortLinksTable.getCanPreviousPage()}
+								testingSelector={
+									CONSTANTS.testingSelectors.shortLink.listPage.table
+										.getFirstPageButton
+								}
 								onClick={() => {
 									if (zShortLinksTable.getCanPreviousPage()) {
 										zNavigatePushRoute(
@@ -675,10 +696,7 @@ const ZaionsShortLinkTable: React.FC<{
 										zShortLinksTable.setPageIndex(0);
 									}
 								}}
-								disabled={!zShortLinksTable.getCanPreviousPage()}
 							>
-								{/* <ZIonIcon icon={chevronBackOutline} />
-							<ZIonIcon icon={chevronBackOutline} /> */}
 								<ZIonText className='px-1 text-xl'>{'<<'}</ZIonText>
 							</ZIonButton>
 
@@ -686,6 +704,11 @@ const ZaionsShortLinkTable: React.FC<{
 								className='mr-1 ion-no-padding ion-no-margin'
 								size='small'
 								fill='clear'
+								disabled={!zShortLinksTable.getCanPreviousPage()}
+								testingSelector={
+									CONSTANTS.testingSelectors.shortLink.listPage.table
+										.previousButton
+								}
 								onClick={() => {
 									if (zShortLinksTable.getCanPreviousPage()) {
 										zShortLinksTable.previousPage();
@@ -711,10 +734,7 @@ const ZaionsShortLinkTable: React.FC<{
 										);
 									}
 								}}
-								disabled={!zShortLinksTable.getCanPreviousPage()}
 							>
-								{/* <ZIonIcon icon={chevronBackOutline} />
-							<ZIonIcon icon={chevronBackOutline} /> */}
 								<ZIonText className='px-1 text-xl'>{'<'}</ZIonText>
 							</ZIonButton>
 
@@ -723,6 +743,10 @@ const ZaionsShortLinkTable: React.FC<{
 								className='mr-1 ion-no-padding ion-no-margin'
 								size='small'
 								fill='clear'
+								disabled={!zShortLinksTable.getCanNextPage()}
+								testingSelector={
+									CONSTANTS.testingSelectors.shortLink.listPage.table.nextButton
+								}
 								onClick={() => {
 									if (zShortLinksTable.getCanNextPage()) {
 										zShortLinksTable.nextPage();
@@ -748,10 +772,7 @@ const ZaionsShortLinkTable: React.FC<{
 										);
 									}
 								}}
-								disabled={!zShortLinksTable.getCanNextPage()}
 							>
-								{/* <ZIonIcon icon={chevronBackOutline} />
-							<ZIonIcon icon={chevronBackOutline} /> */}
 								<ZIonText className='px-1 text-xl'>{'>'}</ZIonText>
 							</ZIonButton>
 
@@ -759,6 +780,11 @@ const ZaionsShortLinkTable: React.FC<{
 								className='mr-1 ion-no-padding ion-no-margin'
 								size='small'
 								fill='clear'
+								disabled={!zShortLinksTable.getCanNextPage()}
+								testingSelector={
+									CONSTANTS.testingSelectors.shortLink.listPage.table
+										.getLastPageButton
+								}
 								onClick={() => {
 									if (zShortLinksTable.getCanNextPage()) {
 										zShortLinksTable.setPageIndex(
@@ -784,10 +810,7 @@ const ZaionsShortLinkTable: React.FC<{
 										);
 									}
 								}}
-								disabled={!zShortLinksTable.getCanNextPage()}
 							>
-								{/* <ZIonIcon icon={chevronBackOutline} />
-							<ZIonIcon icon={chevronBackOutline} /> */}
 								<ZIonText className='px-1 text-xl'>{'>>'}</ZIonText>
 							</ZIonButton>
 						</ZIonCol>
@@ -802,6 +825,10 @@ const ZaionsShortLinkTable: React.FC<{
 								className='bg-white w-[7rem]'
 								interface='popover'
 								value={zShortLinksTable.getState().pagination.pageSize}
+								testingSelector={
+									CONSTANTS.testingSelectors.shortLink.listPage.table
+										.pageSizeInput
+								}
 								onIonChange={(e) => {
 									zShortLinksTable.setPageSize(Number(e.target.value));
 

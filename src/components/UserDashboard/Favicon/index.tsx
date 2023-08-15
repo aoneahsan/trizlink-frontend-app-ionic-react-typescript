@@ -23,6 +23,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Types
 import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
+import CONSTANTS from '@/utils/constants';
 
 // Styles
 
@@ -59,6 +60,9 @@ const LinkFavIcon: React.FC = () => {
 						imageUrl={values.favicon}
 						title='Click to upload favicon'
 						style={{ height: '9rem' }}
+						testingSelector={
+							CONSTANTS.testingSelectors.shortLink.formPage.favicon
+						}
 					/>
 				</div>
 			</ZIonCol>

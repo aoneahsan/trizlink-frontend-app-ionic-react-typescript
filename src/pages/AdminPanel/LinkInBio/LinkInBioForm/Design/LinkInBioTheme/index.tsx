@@ -156,12 +156,13 @@ const ZLinkInBioThemeSection: React.FC = () => {
 				</ZIonTitle>
 				<ZIonRow
 					className={classNames(classes['row-gap-1-point-6-rem'], {
-						'ion-margin-top pt-2 ion-padding-bottom mb-2 ': true,
+						'ion-margin-top pt-2 ion-padding-bottom mb-2 gap-y-2  border-bottom__violet':
+							true,
 					})}
 				>
 					{LinkInBioPreDefinedThemesData?.map((el, i) => {
 						return (
-							<ZIonCol size='1.9' key={i}>
+							<ZIonCol size='max-content' key={i}>
 								<ZIonButton
 									size='large'
 									className={classNames(classes['zaions-pd-color-block'], {
@@ -175,9 +176,8 @@ const ZLinkInBioThemeSection: React.FC = () => {
 									onClick={() => {
 										const _bg = el.background as LinkInBioThemeBackgroundType;
 
-										const _bgGradient = zJsonParse(
-											_bg.bgGradientColors as unknown as string
-										) as LinkInBioBgGradientColorsInterface;
+										const _bgGradient =
+											_bg.bgGradientColors as LinkInBioBgGradientColorsInterface;
 
 										setFieldValue(
 											'theme.background',
@@ -210,7 +210,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 				sizeMd='12'
 				sizeSm='12'
 				sizeXs='12'
-				className='mt-3 ion-margin-start border-bottom__violet'
+				className='mt-2 ion-margin-start border-bottom__violet'
 			>
 				<ZIonTitle className='font-bold text-lg ion-no-padding'>
 					🖌️ Background
@@ -241,14 +241,9 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							/>
 							<ZIonButton
 								shape='round'
-								className='mt-3 direction-button ion-margin-horizontal'
+								className='mt-3 direction-button ion-margin-horizontal ion-no-padding w-[3rem]'
 								color='secondary'
-								style={{
-									'--padding-top': '1.3rem',
-									'--padding-bottom': '1.3rem',
-									'--padding-start': '.7rem',
-									'--padding-end': '.7rem',
-								}}
+								height='2.5rem'
 								onClick={() => {
 									let _newDirection =
 										+(values?.theme?.background?.bgGradientColors
@@ -351,14 +346,9 @@ const ZLinkInBioThemeSection: React.FC = () => {
 
 							<ZIonButton
 								shape='round'
-								className='mt-3 direction-button ion-margin-horizontal'
+								className='mt-3 direction-button ion-margin-horizontal ion-no-padding w-[3rem]'
+								height='2.5rem'
 								color='secondary'
-								style={{
-									'--padding-top': '1.3rem',
-									'--padding-bottom': '1.3rem',
-									'--padding-start': '.7rem',
-									'--padding-end': '.7rem',
-								}}
 								onClick={() => {
 									let _newDirection =
 										+(values?.theme?.button?.background?.bgGradientColors

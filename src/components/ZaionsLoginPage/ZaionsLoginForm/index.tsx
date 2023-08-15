@@ -252,6 +252,7 @@ const ZaionsLoginForm: React.FC = () => {
 									onIonBlur={handleBlur}
 									value={values.password}
 									errorText={touched.password ? errors.password : undefined}
+									clearOnEdit={false}
 									testingSelector={
 										CONSTANTS.testingSelectors.loginPage.passwordInput
 									}

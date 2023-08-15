@@ -18,6 +18,7 @@ import {
 	ZIonSegmentButton,
 	ZIonText,
 } from '@/components/ZIonComponents';
+import CONSTANTS from '@/utils/constants';
 import { Formik } from 'formik';
 import {
 	fileTrayStackedOutline,
@@ -108,6 +109,10 @@ const ZNotificationPopover: React.FC = () => {
 										<ZIonSegmentButton
 											className='normal-case w-max'
 											value={ZNotificationPopoverTabsEnum.approvals}
+											testingSelector={
+												CONSTANTS.testingSelectors.topBar.notificationPopover
+													.tabs.approvalRequests
+											}
 											onClick={() => {
 												setFieldValue(
 													'tab',
@@ -129,6 +134,10 @@ const ZNotificationPopover: React.FC = () => {
 										<ZIonSegmentButton
 											className='normal-case w-max min-w-[80px]'
 											value={ZNotificationPopoverTabsEnum.updates}
+											testingSelector={
+												CONSTANTS.testingSelectors.topBar.notificationPopover
+													.tabs.updates
+											}
 											onClick={() => {
 												setFieldValue(
 													'tab',
@@ -147,7 +156,7 @@ const ZNotificationPopover: React.FC = () => {
 								</ZIonCol>
 
 								{/* Col-2 */}
-								<ZIonCol className='ion-no-padding flex ion-align-items-center ion-justify-content-end me-2 gap-2'>
+								<ZIonCol className='flex gap-2 ion-no-padding ion-align-items-center ion-justify-content-end me-2'>
 									{/* Mark all as read btn */}
 									{values.tab === ZNotificationPopoverTabsEnum.updates ? (
 										<ZIonButton
@@ -156,6 +165,10 @@ const ZNotificationPopover: React.FC = () => {
 											color='medium'
 											className='ion-no-margin ion-no-padding'
 											id='z-mark-all-as-read-btn'
+											testingSelector={
+												CONSTANTS.testingSelectors.topBar.notificationPopover
+													.markAllAsReadBtn
+											}
 										>
 											<ZIonIcon icon={listCircleOutline} className='w-6 h-6' />
 										</ZIonButton>
@@ -173,6 +186,10 @@ const ZNotificationPopover: React.FC = () => {
 										color='medium'
 										className='ion-no-margin ion-no-padding'
 										id='z-wnp-settings-btn'
+										testingSelector={
+											CONSTANTS.testingSelectors.topBar.notificationPopover
+												.settingsBtn
+										}
 									>
 										<ZIonIcon icon={settingsOutline} className='w-5 h-5' />
 									</ZIonButton>
@@ -206,7 +223,7 @@ const ZNotificationPopover: React.FC = () => {
 const ZApprovalsTab: React.FC = () => {
 	return (
 		<>
-			<div className='w-full py-7 flex gap-2 flex-col ion-align-items-center ion-justify-content-center'>
+			<div className='flex flex-col w-full gap-2 py-7 ion-align-items-center ion-justify-content-center'>
 				<ZIonIcon
 					icon={fileTrayStackedOutline}
 					color='medium'
@@ -226,7 +243,15 @@ const ZUpdatesTab: React.FC = () => {
 	return (
 		<ZCustomScrollable className='h-full pb-10 mb-2' scrollY={true}>
 			{[1, 2, 3, 4, 5, 6, 7, 8].map((el) => (
-				<ZIonRow className='border-b pb-2' key={el}>
+				<ZIonRow
+					className='pb-2 border-b cursor-pointer'
+					key={el}
+					testingSelector={
+						CONSTANTS.testingSelectors.topBar.notificationPopover
+							.singleNotification
+					}
+					testingListSelector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.singleNotification}-${el}`}
+				>
 					{/*  */}
 					<ZIonCol size='1.5'>
 						<ZUserAvatarButton
@@ -240,7 +265,7 @@ const ZUpdatesTab: React.FC = () => {
 
 					{/*  */}
 					<ZIonCol>
-						<div className='flex ion-align-items-top ion-justify-content-between w-full'>
+						<div className='flex w-full ion-align-items-top ion-justify-content-between'>
 							<div className='overflow-hidden line-clamp-2 leading-none w-[85%]'>
 								<ZIonText className='text-sm' color='medium'>
 									Hamza joined Talha workspace
