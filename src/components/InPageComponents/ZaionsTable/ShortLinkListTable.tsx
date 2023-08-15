@@ -595,6 +595,11 @@ const ZaionsShortLinkTable: React.FC<{
 															color='dark'
 															className='ion-no-padding ion-no-margin'
 															size='small'
+															testingSelector={
+																CONSTANTS.testingSelectors.shortLink.listPage
+																	.table.actionPopoverBtn
+															}
+															testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
 															onClick={(_event: unknown) => {
 																setCompState((oldVal) => ({
 																	...oldVal,
@@ -894,7 +899,7 @@ const ZShortLinkActionPopover: React.FC<{
 		}
 	};
 
-	// on the delete short link confirm alert, when user click on delete button this function will firs which will trigger delete request and delete the short link.
+	// on the delete short link confirm alert, when user click on delete button this function will fires which will trigger delete request and delete the short link.
 	const removeShortLink = async () => {
 		try {
 			if (shortLinkId?.trim() && _FilteredShortLinkDataSelector?.length) {
@@ -970,6 +975,10 @@ const ZShortLinkActionPopover: React.FC<{
 					button={true}
 					detail={false}
 					minHeight='2.5rem'
+					testingSelector={
+						CONSTANTS.testingSelectors.shortLink.listPage.table.editBtn
+					}
+					testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.editBtn}-${shortLinkId}`}
 					onClick={async () => {
 						try {
 							if (shortLinkId) {
@@ -1023,6 +1032,10 @@ const ZShortLinkActionPopover: React.FC<{
 					detail={false}
 					minHeight='2.5rem'
 					onClick={() => void deleteShortLink()}
+					testingSelector={
+						CONSTANTS.testingSelectors.shortLink.listPage.table.deleteBtn
+					}
+					testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.deleteBtn}-${shortLinkId}`}
 				>
 					<ZIonButton
 						size='small'

@@ -373,10 +373,14 @@ const ZTooltipIds = {
  */
 
 const testingSelectors = {
+	// #region home page
 	homePage: {
 		loginButton: 'hp-nav-login-btn',
 		signupButton: 'hp-nav-signup-btn',
 	},
+	// #endregion
+
+	// #region login page
 	loginPage: {
 		loginButton: 'lp-login-btn',
 		forgetPasswordButton: 'lp-forget-pw-btn',
@@ -389,7 +393,9 @@ const testingSelectors = {
 		emailInput: 'lp-email-input',
 		passwordInput: 'lp-password-input',
 	},
+	// #endregion
 
+	// #region sign up page
 	signupPage: {
 		loginButton: 'sp-login-btn',
 		SSOLoginButton: 'sp-sso-btn',
@@ -402,7 +408,9 @@ const testingSelectors = {
 		confirmPasswordInput: 'sp-confirm-password-input',
 		canViewConfirmPasswordButton: 'sp-see-confirm-password-btn',
 	},
+	// #endregion
 
+	// #region workspace
 	workspace: {
 		listPage: {
 			inviteButton: 'wlp-invite-btn',
@@ -415,6 +423,7 @@ const testingSelectors = {
 			workspaceCardUserButton: 'wlp-card-user-btn',
 			workspaceCardActionPopoverButton: 'wlp-card-action-btn',
 		},
+
 		createModal: {
 			nameInput: 'wcm-name-input',
 			timezoneInput: 'wcm-timezone-input',
@@ -440,6 +449,7 @@ const testingSelectors = {
 				settings: 'wsm-settings-tab',
 				approvals: 'wsm-approvals-tab',
 			},
+
 			timetable: {
 				addTimeButton: 'wsm-tt-add-time-btn',
 				timeActionButton: 'wsm-tt-time-actions-btn',
@@ -455,6 +465,7 @@ const testingSelectors = {
 					submitBtn: 'wsm-tfm-form-submit-btn',
 				},
 			},
+
 			labels: {
 				addNewLabelButton: 'wsm-lt-add-btn',
 				addNewLabelInfoButton: 'wsm-lt-add-info-btn',
@@ -464,6 +475,7 @@ const testingSelectors = {
 				editLabelButton: 'wsm-lt-edit-label-btn',
 				deleteLabelButton: 'wsm-lt-delete-label-btn',
 			},
+
 			settings: {
 				//
 				workspaceNameInput: 'wsm-st-name-input',
@@ -473,6 +485,7 @@ const testingSelectors = {
 				updateButton: 'wsm-st-update-btn',
 				deleteButton: 'wsm-st-delete-btn',
 			},
+
 			approvals: {
 				card: 'wsm-at-card',
 				schedulePostToggler: 'wsm-at-schedule-post-toggler',
@@ -480,15 +493,56 @@ const testingSelectors = {
 			},
 		},
 	},
+	// #endregion
 
+	// #region user
 	user: {
 		userProfilePopoverButton: 'user-profile-popover-btn',
+
 		profilePopover: {
 			profileSettings: 'profile-popover-profile-settings-btn',
 			notificationSettings: 'profile-popover-profile-settings-btn',
 			logout: 'profile-popover-logout-btn',
 			addNewCompanyAccount: 'profile-popover-add-company-account-btn',
 		},
+	},
+	// #endregion
+
+	// #region short links
+	shortLink: {
+		listPage: {
+			switchItInput: 'slp-switch-input',
+			switchItBtn: 'slp-switch-btn',
+			searchInput: 'slp-search-input',
+			searchInputError: 'slp-search-input-error',
+			searchBtn: 'slp-search-btn',
+			filterBtn: 'slp-filter-btn',
+			exportDataBtn: 'slp-export-data-btn',
+			bulkImportBtn: 'slp-bulk-import-btn',
+			createBtn: 'slp-create-btn',
+			timeFilterBtn: 'slp-time-filter-btn',
+			tagsFilterBtn: 'slp-tags-filter-btn',
+			domainFilterBtn: 'slp-domain-filter-btn',
+			refetchBtn: 'slp-refetch-btn',
+			// url, linkToShare, Actions.
+			table: {
+				url: 'slp-t-url',
+				linkToShare: 'slp-t-link-to-share',
+				actionPopoverBtn: 'slp-t-ap-btn',
+				editBtn: 'slp-t-edit-btn',
+				deleteBtn: 'slp-t-delete-btn',
+			},
+		},
+	},
+	// #endregion
+
+	folder: {
+		create: 'f-create-btn',
+		actionPopoverBtn: 'fap-btn',
+		editBtn: 'f-edit-btn',
+		deleteBtn: 'f-delete-btn',
+		reorderBtn: 'f-reorder-btn',
+		singleFolder: 'single-folder',
 	},
 };
 

@@ -258,52 +258,57 @@ const ZWorkspacesActionPopover: React.FC<{
 			)}
 
 			{/* Configure timetable */}
-			<ZIonItem
-				minHeight='2.3rem'
-				className='ion-activatable ion-focusable cursor-pointer '
-				testingSelector={
-					CONSTANTS.testingSelectors.workspace.actionsPopover.configureTimetable
-				}
-				onClick={() => {
-					// setting the tab with should be active in modal
-					setModalTab(workspaceSettingsModalTabEnum.timetable);
+			<ZCan havePermissions={[permissionsEnum.viewAny_timeSlot]}>
+				<ZIonItem
+					minHeight='2.3rem'
+					className='ion-activatable ion-focusable cursor-pointer '
+					testingSelector={
+						CONSTANTS.testingSelectors.workspace.actionsPopover
+							.configureTimetable
+					}
+					onClick={() => {
+						// setting the tab with should be active in modal
+						setModalTab(workspaceSettingsModalTabEnum.timetable);
 
-					// presenting modal
-					presentWorkspaceSettingModal({
-						_cssClass: 'workspace-setting-modal-size',
-					});
+						// presenting modal
+						presentWorkspaceSettingModal({
+							_cssClass: 'workspace-setting-modal-size',
+						});
 
-					dismissZIonPopover();
-				}}
-			>
-				<ZIonIcon icon={timeOutline} className='me-2' />
-				<ZIonText className={classNames('text-sm')}>
-					Configure timetable
-				</ZIonText>
-			</ZIonItem>
+						dismissZIonPopover();
+					}}
+				>
+					<ZIonIcon icon={timeOutline} className='me-2' />
+					<ZIonText className={classNames('text-sm')}>
+						Configure timetable
+					</ZIonText>
+				</ZIonItem>
+			</ZCan>
 
 			{/* Manage labels */}
-			<ZIonItem
-				className='ion-activatable ion-focusable cursor-pointer'
-				minHeight='2.3rem'
-				testingSelector={
-					CONSTANTS.testingSelectors.workspace.actionsPopover.manageLabels
-				}
-				onClick={() => {
-					// setting the tab with should be active in modal
-					setModalTab(workspaceSettingsModalTabEnum.labels);
+			<ZCan havePermissions={[permissionsEnum.viewAny_label]}>
+				<ZIonItem
+					className='ion-activatable ion-focusable cursor-pointer'
+					minHeight='2.3rem'
+					testingSelector={
+						CONSTANTS.testingSelectors.workspace.actionsPopover.manageLabels
+					}
+					onClick={() => {
+						// setting the tab with should be active in modal
+						setModalTab(workspaceSettingsModalTabEnum.labels);
 
-					// presenting modal
-					presentWorkspaceSettingModal({
-						_cssClass: 'workspace-setting-modal-size',
-					});
+						// presenting modal
+						presentWorkspaceSettingModal({
+							_cssClass: 'workspace-setting-modal-size',
+						});
 
-					dismissZIonPopover();
-				}}
-			>
-				<ZIonIcon icon={pricetagOutline} className='me-2' />
-				<ZIonText className={classNames('text-sm')}>Manage labels</ZIonText>
-			</ZIonItem>
+						dismissZIonPopover();
+					}}
+				>
+					<ZIonIcon icon={pricetagOutline} className='me-2' />
+					<ZIonText className={classNames('text-sm')}>Manage labels</ZIonText>
+				</ZIonItem>
+			</ZCan>
 
 			{/* Manage people */}
 			{/* <ZIonItem
@@ -324,27 +329,30 @@ const ZWorkspacesActionPopover: React.FC<{
 			</ZIonItem> */}
 
 			{/* Settings */}
-			<ZIonItem
-				minHeight='2.3rem'
-				className='ion-activatable ion-focusable cursor-pointer'
-				testingSelector={
-					CONSTANTS.testingSelectors.workspace.actionsPopover.settings
-				}
-				onClick={() => {
-					// setting the tab with should be active in modal
-					setModalTab(workspaceSettingsModalTabEnum.settings);
 
-					// presenting modal
-					presentWorkspaceSettingModal({
-						_cssClass: 'workspace-setting-modal-size',
-					});
+			<ZCan havePermissions={[permissionsEnum.update_workspace]}>
+				<ZIonItem
+					minHeight='2.3rem'
+					className='ion-activatable ion-focusable cursor-pointer'
+					testingSelector={
+						CONSTANTS.testingSelectors.workspace.actionsPopover.settings
+					}
+					onClick={() => {
+						// setting the tab with should be active in modal
+						setModalTab(workspaceSettingsModalTabEnum.settings);
 
-					dismissZIonPopover();
-				}}
-			>
-				<ZIonIcon icon={settingsOutline} className='me-2' />
-				<ZIonText className={classNames('text-sm')}>Settings</ZIonText>
-			</ZIonItem>
+						// presenting modal
+						presentWorkspaceSettingModal({
+							_cssClass: 'workspace-setting-modal-size',
+						});
+
+						dismissZIonPopover();
+					}}
+				>
+					<ZIonIcon icon={settingsOutline} className='me-2' />
+					<ZIonText className={classNames('text-sm')}>Settings</ZIonText>
+				</ZIonItem>
+			</ZCan>
 
 			{/* Approvals settings */}
 			<ZIonItem

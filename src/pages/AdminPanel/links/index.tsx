@@ -404,7 +404,10 @@ const ZShortLinksListPage: React.FC = () => {
 				// menu={PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU}
 				id={CONSTANTS.MENU_IDS.ADMIN_PANEL_CONTENT_ID}
 			>
-				<ZCan havePermissions={[permissionsEnum.viewAny_shortLink]}>
+				<ZCan
+					havePermissions={[permissionsEnum.viewAny_shortLink]}
+					returnPermissionDeniedView={true}
+				>
 					{/* Content */}
 					<ZIonContent>
 						{/* IonRefresher */}
@@ -451,41 +454,45 @@ const ZShortLinksListPage: React.FC = () => {
 										<ZIonRow style={{ height: 'calc(100% - 4rem)' }}>
 											{/* Col-2 Row-2 col-1 Folder menu */}
 											{isLgScale && (
-												<ZDashboardFolderMenu
-													showSkeleton={isZFetching}
-													type={AdminPanelSidebarMenuPageEnum.shortLink}
-													foldersData={
-														shortLinksFoldersData ? shortLinksFoldersData : []
-													}
-													showFoldersSaveReorderButton={
-														compState?.shortLinksFoldersReorder?.isEnable
-													}
-													handleFoldersReorder={handleReorder}
-													addNewFolderButtonOnClickHandler={() => {
-														setFolderFormState((oldVal) => ({
-															...oldVal,
-															id: '',
-															name: '',
-															formMode: FormMode.ADD,
-														}));
-														presentFolderModal({
-															_cssClass: 'link-in-bio-folder-modal',
-														});
-													}}
-													foldersSaveReorderButtonOnClickHandler={() => {
-														void shortLinksFoldersReOrderHandler();
-													}}
-													folderActionsButtonOnClickHandler={(
-														event: unknown
-													) => {
-														presentFolderActionIonPopover({
-															_event: event as Event,
-															_cssClass: classNames(
-																classes.zaions_present_folder_Action_popover_width
-															),
-														});
-													}}
-												/>
+												<ZCan
+													havePermissions={[permissionsEnum.viewAny_folder]}
+												>
+													<ZDashboardFolderMenu
+														showSkeleton={isZFetching}
+														type={AdminPanelSidebarMenuPageEnum.shortLink}
+														foldersData={
+															shortLinksFoldersData ? shortLinksFoldersData : []
+														}
+														showFoldersSaveReorderButton={
+															compState?.shortLinksFoldersReorder?.isEnable
+														}
+														handleFoldersReorder={handleReorder}
+														addNewFolderButtonOnClickHandler={() => {
+															setFolderFormState((oldVal) => ({
+																...oldVal,
+																id: '',
+																name: '',
+																formMode: FormMode.ADD,
+															}));
+															presentFolderModal({
+																_cssClass: 'link-in-bio-folder-modal',
+															});
+														}}
+														foldersSaveReorderButtonOnClickHandler={() => {
+															void shortLinksFoldersReOrderHandler();
+														}}
+														folderActionsButtonOnClickHandler={(
+															event: unknown
+														) => {
+															presentFolderActionIonPopover({
+																_event: event as Event,
+																_cssClass: classNames(
+																	classes.zaions_present_folder_Action_popover_width
+																),
+															});
+														}}
+													/>
+												</ZCan>
 											)}
 
 											{/* Col-2 Row-2 col-2 Table & filters etc. */}
@@ -620,9 +627,13 @@ const ZShortLinksListPage: React.FC = () => {
 																	<ZIonButton
 																		fill='outline'
 																		color='primary'
-																		expand={!isMdScale ? 'block' : undefined}
 																		className='my-2 normal-case'
 																		height='39px'
+																		expand={!isMdScale ? 'block' : undefined}
+																		testingSelector={
+																			CONSTANTS.testingSelectors.shortLink
+																				.listPage.filterBtn
+																		}
 																		onClick={async () => {
 																			await menuController.enable(
 																				true,
@@ -647,6 +658,10 @@ const ZShortLinksListPage: React.FC = () => {
 																		expand={!isSmScale ? 'block' : undefined}
 																		className='my-2 normal-case'
 																		height='39px'
+																		testingSelector={
+																			CONSTANTS.testingSelectors.shortLink
+																				.listPage.exportDataBtn
+																		}
 																	>
 																		Export data's
 																	</ZIonButton>
@@ -657,6 +672,10 @@ const ZShortLinksListPage: React.FC = () => {
 																		expand={!isSmScale ? 'block' : undefined}
 																		className='my-2 normal-case'
 																		height='39px'
+																		testingSelector={
+																			CONSTANTS.testingSelectors.shortLink
+																				.listPage.bulkImportBtn
+																		}
 																	>
 																		Bulk Import
 																	</ZIonButton>
@@ -682,100 +701,15 @@ const ZShortLinksListPage: React.FC = () => {
 																					.workspaceId,
 																				workspaceId
 																			)}
+																			testingSelector={
+																				CONSTANTS.testingSelectors.shortLink
+																					.listPage.createBtn
+																			}
 																		>
 																			Create a new link
 																		</ZIonButton>
 																	</ZCan>
 																</ZIonButtons>
-																{/* <ZIonCol
-												sizeXl='max-content'
-												sizeSm='4'
-												sizeXs='6'
-												className={classNames({
-													'ion-text-end': isXlScale,
-													'ion-text-start': !isXlScale,
-												})}
-											>
-												<Dropdown>
-													<Dropdown.Toggle
-														id='dropdown-custom-components'
-														className={`${classes.zaions__dropdown_toggle}`}
-													>
-														<ZIonButton
-															id='dropdown-basic'
-															fill='outline'
-															className='ms-auto'
-														>
-															Export data's
-														</ZIonButton>
-													</Dropdown.Toggle>
-													<Dropdown.Menu className='ms-auto'>
-														<Dropdown.Item
-															className={`${classes.zaions__dropdown_item}`}
-														>
-															Export all data's
-														</Dropdown.Item>
-														<Dropdown.Item
-															className={`${classes.zaions__dropdown_item}`}
-														>
-															Export folders data's
-														</Dropdown.Item>
-													</Dropdown.Menu>
-												</Dropdown>
-											</ZIonCol>
-
-											<ZIonCol
-												sizeXl='max-content'
-												sizeSm='4'
-												sizeXs='6'
-												className={classNames({
-													'ion-text-end': isXlScale,
-													'ion-text-start': !isXlScale,
-												})}
-											>
-												<ZIonMenuToggle
-													autoHide={false}
-													// menu={ADMIN_LINK_PAGE_CONTENT_ID}
-												>
-													<ZIonButton fill='outline' className='me-3'>
-														Bulk Import
-													</ZIonButton>
-												</ZIonMenuToggle>
-											</ZIonCol>
-
-											<ZIonCol
-												sizeXl='max-content'
-												sizeSm='4'
-												sizeXs='6'
-												className={classNames({
-													'ion-text-end': isXlScale,
-													'ion-text-start': !isXlScale,
-												})}
-											>
-												<ZIonButton
-													color='primary'
-													onClick={() =>
-														setNewShortLinkFormState((_) => ({
-															folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
-															shortUrl: {
-																domain:
-																	CONSTANTS.DEFAULT_VALUES
-																		.DEFAULT_CUSTOM_DOMAIN,
-															},
-															type: messengerPlatformsBlockEnum.link,
-															pixelIds: [],
-															tags: [],
-															formMode: FormMode.ADD,
-														}))
-													}
-													routerLink={
-														ZaionsRoutes.AdminPanel
-															.ShortLinks.Create
-													}
-												>
-													Create a new link
-												</ZIonButton>
-											</ZIonCol> */}
 															</ZIonCol>
 														</ZIonRow>
 
@@ -821,6 +755,10 @@ const ZShortLinksListPage: React.FC = () => {
 																			expand={!isMdScale ? 'block' : undefined}
 																			className='my-2 normal-case'
 																			height='39px'
+																			testingSelector={
+																				CONSTANTS.testingSelectors.shortLink
+																					.listPage.timeFilterBtn
+																			}
 																			onClick={(event: unknown) => {
 																				presentShortLinkTimeFilterModal({
 																					_event: event as Event,
@@ -877,6 +815,10 @@ const ZShortLinksListPage: React.FC = () => {
 																			expand={!isMdScale ? 'block' : undefined}
 																			className='my-2 normal-case'
 																			height='39px'
+																			testingSelector={
+																				CONSTANTS.testingSelectors.shortLink
+																					.listPage.tagsFilterBtn
+																			}
 																			onClick={(event: unknown) => {
 																				presentShortLinkTagsFilterModal({
 																					_event: event as Event,
@@ -910,6 +852,10 @@ const ZShortLinksListPage: React.FC = () => {
 																			expand={!isMdScale ? 'block' : undefined}
 																			className='my-2 normal-case'
 																			height='39px'
+																			testingSelector={
+																				CONSTANTS.testingSelectors.shortLink
+																					.listPage.domainFilterBtn
+																			}
 																			onClick={(event: unknown) => {
 																				presentShortLinkDomainsFilterModal({
 																					_event: event as Event,
@@ -937,7 +883,7 @@ const ZShortLinksListPage: React.FC = () => {
 																		</ZIonButton>
 
 																		{/* Filter by Columns */}
-																		<ZIonButton
+																		{/* <ZIonButton
 																			fill='outline'
 																			color='primary'
 																			expand={!isMdScale ? 'block' : undefined}
@@ -949,7 +895,7 @@ const ZShortLinksListPage: React.FC = () => {
 																				icon={menuOutline}
 																			></ZIonIcon>
 																			7 Columns
-																		</ZIonButton>
+																		</ZIonButton> */}
 
 																		{/* Refetch data button */}
 																		<ZIonButton
@@ -961,6 +907,10 @@ const ZShortLinksListPage: React.FC = () => {
 																			onClick={() => {
 																				void invalidedQueries();
 																			}}
+																			testingSelector={
+																				CONSTANTS.testingSelectors.shortLink
+																					.listPage.refetchBtn
+																			}
 																		>
 																			<ZIonIcon slot='start' icon={refresh} />
 																			Refetch
@@ -972,7 +922,11 @@ const ZShortLinksListPage: React.FC = () => {
 													</div>
 
 													{/* Shortlink Table */}
-													<ZaionsShortLinkTable showSkeleton={isZFetching} />
+													<ZCan
+														havePermissions={[permissionsEnum.view_shortLink]}
+													>
+														<ZaionsShortLinkTable showSkeleton={isZFetching} />
+													</ZCan>
 												</ZCustomScrollable>
 											</ZIonCol>
 										</ZIonRow>
@@ -1513,26 +1467,32 @@ const SearchQueryInputComponent = () => {
 				>
 					<ZIonInput
 						label=''
-						clearInput={true}
 						type='text'
 						name='searchValue'
-						onIonChange={handleChange}
-						placeholder='Search link by title, domain...'
 						fill='solid'
+						minHeight='40px'
+						clearInput={true}
+						placeholder='Search link by title, domain...'
+						onIonChange={handleChange}
+						testingSelector={
+							CONSTANTS.testingSelectors.shortLink.listPage.searchInput
+						}
 						style={{
 							'--background': '#fff',
 							'--padding-start': '11px',
 							'--border-color': '#fff',
 						}}
-						minHeight='40px'
 					/>
 					<ZIonButton
-						onClick={() => void submitForm()}
+						slot='end'
 						className='ion-no-margin ion-text-capitalize'
+						onClick={() => void submitForm()}
+						testingSelector={
+							CONSTANTS.testingSelectors.shortLink.listPage.searchBtn
+						}
 						style={{
 							height: '100%',
 						}}
-						slot='end'
 					>
 						<ZIonIcon icon={searchOutline} className='me-2' />
 						<ZIonText>search</ZIonText>

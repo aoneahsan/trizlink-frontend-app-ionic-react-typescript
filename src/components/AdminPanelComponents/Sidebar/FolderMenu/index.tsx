@@ -59,6 +59,8 @@ import {
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
 import { useParams } from 'react-router';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import ZCan from '@/components/Can';
 /**
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
@@ -133,51 +135,54 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 								</ZIonText>
 							</ZIonItem>
 
-							<ZIonItem
-								className='cursor-pointer'
-								style={{
-									'--inner-padding-end': '0px',
-									'--padding-start': '0px',
-								}}
-								onClick={() => {
-									switch (type) {
-										case AdminPanelSidebarMenuPageEnum.shortLink:
-											zNavigatePushRoute(
-												createRedirectRoute({
-													url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-													params: [
-														CONSTANTS.RouteParams.workspace.workspaceId,
-														CONSTANTS.RouteParams
-															.folderIdToGetShortLinksOrLinkInBio,
-													],
-													values: [workspaceId, 'all'],
-												})
-											);
-											break;
+							<ZCan havePermissions={[permissionsEnum.view_folder]}>
+								<ZIonItem
+									className='cursor-pointer'
+									testingSelector={`${CONSTANTS.testingSelectors.folder.singleFolder}-default-${type}`}
+									style={{
+										'--inner-padding-end': '0px',
+										'--padding-start': '0px',
+									}}
+									onClick={() => {
+										switch (type) {
+											case AdminPanelSidebarMenuPageEnum.shortLink:
+												zNavigatePushRoute(
+													createRedirectRoute({
+														url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+														params: [
+															CONSTANTS.RouteParams.workspace.workspaceId,
+															CONSTANTS.RouteParams
+																.folderIdToGetShortLinksOrLinkInBio,
+														],
+														values: [workspaceId, 'all'],
+													})
+												);
+												break;
 
-										case AdminPanelSidebarMenuPageEnum.linkInBio:
-											zNavigatePushRoute(
-												createRedirectRoute({
-													url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
-													params: [
-														CONSTANTS.RouteParams.workspace.workspaceId,
-														CONSTANTS.RouteParams
-															.folderIdToGetShortLinksOrLinkInBio,
-													],
-													values: [workspaceId, 'all'],
-												})
-											);
-											break;
-									}
-								}}
-							>
-								<ZIonLabel>Default</ZIonLabel>
-								<ZIonIcon
-									slot='start'
-									icon={appsOutline}
-									className='w-4 h-4 me-3'
-								/>
-							</ZIonItem>
+											case AdminPanelSidebarMenuPageEnum.linkInBio:
+												zNavigatePushRoute(
+													createRedirectRoute({
+														url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
+														params: [
+															CONSTANTS.RouteParams.workspace.workspaceId,
+															CONSTANTS.RouteParams
+																.folderIdToGetShortLinksOrLinkInBio,
+														],
+														values: [workspaceId, 'all'],
+													})
+												);
+												break;
+										}
+									}}
+								>
+									<ZIonLabel>Default</ZIonLabel>
+									<ZIonIcon
+										slot='start'
+										icon={appsOutline}
+										className='w-4 h-4 me-3'
+									/>
+								</ZIonItem>
+							</ZCan>
 
 							{!showSkeleton && foldersData && foldersData.length ? (
 								<ZIonReorderGroup
@@ -185,85 +190,92 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 									onIonItemReorder={handleFoldersReorder}
 								>
 									{foldersData.map((el) => (
-										<ZIonItem
-											key={el.id}
-											data-folder-id={el.id}
-											style={{
-												'--inner-padding-end': '0px',
-												'--padding-start': '0px',
-											}}
-											className={classNames({
-												'cursor-pointer': true,
-												'zaions-short-link-folder':
-													type === AdminPanelSidebarMenuPageEnum.shortLink,
-												'zaions-link-in-bio-folder':
-													type === AdminPanelSidebarMenuPageEnum.linkInBio,
-											})}
-										>
-											<ZIonLabel
-												onClick={() => {
-													if (el.id) {
-														switch (type) {
-															case AdminPanelSidebarMenuPageEnum.shortLink:
-																zNavigatePushRoute(
-																	createRedirectRoute({
-																		url: ZaionsRoutes.AdminPanel.ShortLinks
-																			.Main,
-																		params: [
-																			CONSTANTS.RouteParams.workspace
-																				.workspaceId,
-																			CONSTANTS.RouteParams
-																				.folderIdToGetShortLinksOrLinkInBio,
-																		],
-																		values: [workspaceId, el.id],
-																	})
-																);
-																break;
+										<ZCan havePermissions={[permissionsEnum.view_folder]}>
+											<ZIonItem
+												key={el.id}
+												data-folder-id={el.id}
+												style={{
+													'--inner-padding-end': '0px',
+													'--padding-start': '0px',
+												}}
+												className={classNames({
+													'cursor-pointer': true,
+													'zaions-short-link-folder':
+														type === AdminPanelSidebarMenuPageEnum.shortLink,
+													'zaions-link-in-bio-folder':
+														type === AdminPanelSidebarMenuPageEnum.linkInBio,
+												})}
+											>
+												<ZIonLabel
+													testingSelector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}`}
+													testingListSelector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}-${el.id}`}
+													onClick={() => {
+														if (el.id) {
+															switch (type) {
+																case AdminPanelSidebarMenuPageEnum.shortLink:
+																	zNavigatePushRoute(
+																		createRedirectRoute({
+																			url: ZaionsRoutes.AdminPanel.ShortLinks
+																				.Main,
+																			params: [
+																				CONSTANTS.RouteParams.workspace
+																					.workspaceId,
+																				CONSTANTS.RouteParams
+																					.folderIdToGetShortLinksOrLinkInBio,
+																			],
+																			values: [workspaceId, el.id],
+																		})
+																	);
+																	break;
 
-															case AdminPanelSidebarMenuPageEnum.linkInBio:
-																zNavigatePushRoute(
-																	createRedirectRoute({
-																		url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
-																		params: [
-																			CONSTANTS.RouteParams.workspace
-																				.workspaceId,
-																			CONSTANTS.RouteParams
-																				.folderIdToGetShortLinksOrLinkInBio,
-																		],
-																		values: [workspaceId, el.id],
-																	})
-																);
-																break;
+																case AdminPanelSidebarMenuPageEnum.linkInBio:
+																	zNavigatePushRoute(
+																		createRedirectRoute({
+																			url: ZaionsRoutes.AdminPanel.LinkInBio
+																				.Main,
+																			params: [
+																				CONSTANTS.RouteParams.workspace
+																					.workspaceId,
+																				CONSTANTS.RouteParams
+																					.folderIdToGetShortLinksOrLinkInBio,
+																			],
+																			values: [workspaceId, el.id],
+																		})
+																	);
+																	break;
+															}
 														}
-													}
-												}}
-											>
-												{el.title}
-											</ZIonLabel>
-											<ZIonButton
-												fill='clear'
-												color='dark'
-												size='small'
-												value={el.id}
-												onClick={(event) => {
-													folderActionsButtonOnClickHandler &&
-														folderActionsButtonOnClickHandler(event);
+													}}
+												>
+													{el.title}
+												</ZIonLabel>
+												<ZIonButton
+													fill='clear'
+													color='dark'
+													size='small'
+													value={el.id}
+													testingSelector={`${CONSTANTS.testingSelectors.folder.actionPopoverBtn}-${type}`}
+													testingListSelector={`${CONSTANTS.testingSelectors.folder.actionPopoverBtn}-${type}-${el.id}`}
+													onClick={(event) => {
+														folderActionsButtonOnClickHandler &&
+															folderActionsButtonOnClickHandler(event);
 
-													setFolderFormState((oldVal) => ({
-														...oldVal,
-														id: el.id,
-														name: el.title,
-														formMode: FormMode.EDIT,
-													}));
-												}}
-												className='ion-no-padding ms-auto'
-											>
-												<ZIonIcon icon={ellipsisVertical} />
-											</ZIonButton>
-											<ZIonReorder slot='start' className='me-3'>
-												<ZIonIcon icon={appsOutline}></ZIonIcon>
-											</ZIonReorder>
-										</ZIonItem>
+														setFolderFormState((oldVal) => ({
+															...oldVal,
+															id: el.id,
+															name: el.title,
+															formMode: FormMode.EDIT,
+														}));
+													}}
+													className='ion-no-padding ms-auto'
+												>
+													<ZIonIcon icon={ellipsisVertical} />
+												</ZIonButton>
+												<ZIonReorder slot='start' className='me-3'>
+													<ZIonIcon icon={appsOutline}></ZIonIcon>
+												</ZIonReorder>
+											</ZIonItem>
+										</ZCan>
 									))}
 								</ZIonReorderGroup>
 							) : null}
@@ -312,19 +324,22 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 					</ZIonItem>
 				</ZIonList>
 
-				<ZIonButton
-					className='ion-text-capitalize ion-margin-horizontal'
-					fill='outline'
-					expand='block'
-					onClick={addNewFolderButtonOnClickHandler}
-				>
-					New Folder
-				</ZIonButton>
+				<ZCan havePermissions={[permissionsEnum.create_folder]}>
+					<ZIonButton
+						className='ion-text-capitalize ion-margin-horizontal'
+						fill='outline'
+						expand='block'
+						onClick={addNewFolderButtonOnClickHandler}
+					>
+						New Folder
+					</ZIonButton>
+				</ZCan>
 
 				{showFoldersSaveReorderButton && (
 					<ZIonButton
 						className='absolute bottom-0 ion-text-capitalize ion-margin-horizontal'
 						expand='block'
+						testingSelector={`${CONSTANTS.testingSelectors.folder.reorderBtn}-${type}`}
 						onClick={foldersSaveReorderButtonOnClickHandler}
 						style={{ width: '78%' }}
 					>

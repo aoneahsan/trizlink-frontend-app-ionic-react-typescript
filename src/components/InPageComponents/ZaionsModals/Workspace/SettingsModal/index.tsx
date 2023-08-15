@@ -43,6 +43,8 @@ import CONSTANTS from '@/utils/constants';
 import { extractInnerData } from '@/utils/helpers';
 import { useZGetRQCacheData } from '@/ZaionsHooks/zreactquery-hooks';
 import ZLabelsTab from './LabelsTab';
+import ZCan from '@/components/Can';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Custom Hooks Imports go down
@@ -141,61 +143,68 @@ const ZWorkspacesSettingModal: React.FC<{
 					className='h-[4rem] w-[40%] mx-auto'
 				>
 					{/* Timetable */}
-					<ZIonSegmentButton
-						value={workspaceSettingsModalTabEnum.timetable}
-						className='normal-case ion-no-padding ion-text-center'
-						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.timetable}-${workspaceId}`}
-						testingListSelector={
-							CONSTANTS.testingSelectors.workspace.settingsModal.tabs.timetable
-						}
-						onClick={() => {
-							setCompState((oldValues) => ({
-								...oldValues,
-								activeTab: workspaceSettingsModalTabEnum.timetable,
-							}));
-						}}
-					>
-						<ZIonIcon icon={timeOutline} className='pt-1' />
-						<ZIonText className='pb-3 mb-2'>Timetable</ZIonText>
-					</ZIonSegmentButton>
+					<ZCan havePermissions={[permissionsEnum.viewAny_timeSlot]}>
+						<ZIonSegmentButton
+							value={workspaceSettingsModalTabEnum.timetable}
+							className='normal-case ion-no-padding ion-text-center'
+							testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.timetable}-${workspaceId}`}
+							testingListSelector={
+								CONSTANTS.testingSelectors.workspace.settingsModal.tabs
+									.timetable
+							}
+							onClick={() => {
+								setCompState((oldValues) => ({
+									...oldValues,
+									activeTab: workspaceSettingsModalTabEnum.timetable,
+								}));
+							}}
+						>
+							<ZIonIcon icon={timeOutline} className='pt-1' />
+							<ZIonText className='pb-3 mb-2'>Timetable</ZIonText>
+						</ZIonSegmentButton>
+					</ZCan>
 
 					{/* Labels */}
-					<ZIonSegmentButton
-						value={workspaceSettingsModalTabEnum.labels}
-						className='normal-case ion-no-padding ion-text-center'
-						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.labels}-${workspaceId}`}
-						testingListSelector={
-							CONSTANTS.testingSelectors.workspace.settingsModal.tabs.labels
-						}
-						onClick={() => {
-							setCompState((oldValues) => ({
-								...oldValues,
-								activeTab: workspaceSettingsModalTabEnum.labels,
-							}));
-						}}
-					>
-						<ZIonIcon icon={pricetagOutline} className='pt-1' />
-						<ZIonText className='pb-3 mb-2'>Labels</ZIonText>
-					</ZIonSegmentButton>
+					<ZCan havePermissions={[permissionsEnum.viewAny_label]}>
+						<ZIonSegmentButton
+							value={workspaceSettingsModalTabEnum.labels}
+							className='normal-case ion-no-padding ion-text-center'
+							testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.labels}-${workspaceId}`}
+							testingListSelector={
+								CONSTANTS.testingSelectors.workspace.settingsModal.tabs.labels
+							}
+							onClick={() => {
+								setCompState((oldValues) => ({
+									...oldValues,
+									activeTab: workspaceSettingsModalTabEnum.labels,
+								}));
+							}}
+						>
+							<ZIonIcon icon={pricetagOutline} className='pt-1' />
+							<ZIonText className='pb-3 mb-2'>Labels</ZIonText>
+						</ZIonSegmentButton>
+					</ZCan>
 
 					{/* Settings */}
-					<ZIonSegmentButton
-						value={workspaceSettingsModalTabEnum.settings}
-						className='normal-case ion-no-padding ion-text-center'
-						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.settings}-${workspaceId}`}
-						testingListSelector={
-							CONSTANTS.testingSelectors.workspace.settingsModal.tabs.settings
-						}
-						onClick={() => {
-							setCompState((oldValues) => ({
-								...oldValues,
-								activeTab: workspaceSettingsModalTabEnum.settings,
-							}));
-						}}
-					>
-						<ZIonIcon icon={settingsOutline} className='pt-1' />
-						<ZIonText className='pb-3 mb-2'>Settings</ZIonText>
-					</ZIonSegmentButton>
+					<ZCan havePermissions={[permissionsEnum.update_workspace]}>
+						<ZIonSegmentButton
+							value={workspaceSettingsModalTabEnum.settings}
+							className='normal-case ion-no-padding ion-text-center'
+							testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.settings}-${workspaceId}`}
+							testingListSelector={
+								CONSTANTS.testingSelectors.workspace.settingsModal.tabs.settings
+							}
+							onClick={() => {
+								setCompState((oldValues) => ({
+									...oldValues,
+									activeTab: workspaceSettingsModalTabEnum.settings,
+								}));
+							}}
+						>
+							<ZIonIcon icon={settingsOutline} className='pt-1' />
+							<ZIonText className='pb-3 mb-2'>Settings</ZIonText>
+						</ZIonSegmentButton>
+					</ZCan>
 
 					{/* Approvals */}
 					<ZIonSegmentButton
@@ -223,15 +232,21 @@ const ZWorkspacesSettingModal: React.FC<{
 				<ZIonGrid className='h-full'>
 					<ZIonRow className='h-full ion-align-items-center'>
 						{compState.activeTab === workspaceSettingsModalTabEnum.timetable ? (
-							<ZTimetableTab workspaceId={workspaceId} />
+							<ZCan havePermissions={[permissionsEnum.viewAny_timeSlot]}>
+								<ZTimetableTab workspaceId={workspaceId} />
+							</ZCan>
 						) : compState.activeTab === workspaceSettingsModalTabEnum.labels ? (
-							<ZLabelsTab workspaceId={workspaceId} />
+							<ZCan havePermissions={[permissionsEnum.viewAny_label]}>
+								<ZLabelsTab workspaceId={workspaceId} />
+							</ZCan>
 						) : compState.activeTab ===
 						  workspaceSettingsModalTabEnum.settings ? (
-							<ZSettingsTab
-								workspaceId={workspaceId}
-								dismissZIonModal={dismissZIonModal}
-							/>
+							<ZCan havePermissions={[permissionsEnum.update_workspace]}>
+								<ZSettingsTab
+									workspaceId={workspaceId}
+									dismissZIonModal={dismissZIonModal}
+								/>
+							</ZCan>
 						) : compState.activeTab ===
 						  workspaceSettingsModalTabEnum.approvals ? (
 							<ZApprovalTab workspaceId={workspaceId} />

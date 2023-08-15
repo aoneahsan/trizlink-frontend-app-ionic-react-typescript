@@ -40,6 +40,8 @@ import { API_URL_ENUM } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import ZWorkspaceSwitcher from '../WorkspaceSwitcher';
+import ZCan from '@/components/Can';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Custom Hooks Imports go down
@@ -113,12 +115,14 @@ const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 	return (
 		<ZIonRow className='h-[4rem] px-3 zaions__light_bg'>
 			{/*  */}
-			<ZIonCol className='h-full flex ion-align-items-center'>
-				<ZWorkspaceSwitcher workspaceId={workspaceId} />
+			<ZIonCol className='flex h-full ion-align-items-center'>
+				<ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
+					<ZWorkspaceSwitcher workspaceId={workspaceId} />
+				</ZCan>
 			</ZIonCol>
 
 			{/*  */}
-			<ZIonCol className='h-full bg-indigo-500'></ZIonCol>
+			<ZIonCol className='h-full '></ZIonCol>
 
 			{/*  */}
 			<ZIonCol className='flex h-full gap-2 ion-align-items-center ion-justify-content-end'>

@@ -71,6 +71,8 @@ import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import ZCan from '@/components/Can';
 
 /**
  * Images Imports go down
@@ -286,7 +288,7 @@ const AdminPanelSidebarMenu: React.FC<{
 										fill='clear'
 										color='light'
 										expand='block'
-										className='ion-no-padding ion-no-margin normal-case'
+										className='normal-case ion-no-padding ion-no-margin'
 									>
 										<ZIonText
 											className={classNames({
@@ -315,7 +317,7 @@ const AdminPanelSidebarMenu: React.FC<{
 										fill='clear'
 										color='light'
 										expand='block'
-										className='ion-no-padding ion-no-margin normal-case'
+										className='normal-case ion-no-padding ion-no-margin'
 									>
 										<ZIonText
 											className={classNames({
@@ -382,7 +384,7 @@ const AdminPanelSidebarMenu: React.FC<{
 										fill='clear'
 										color='light'
 										expand='block'
-										className='ion-no-padding ion-no-margin normal-case'
+										className='normal-case ion-no-padding ion-no-margin'
 									>
 										<ZIonText
 											className={classNames({
@@ -411,7 +413,7 @@ const AdminPanelSidebarMenu: React.FC<{
 										fill='clear'
 										color='light'
 										expand='block'
-										className='ion-no-padding ion-no-margin normal-case'
+										className='normal-case ion-no-padding ion-no-margin'
 									>
 										<ZIonText
 											className={classNames({
@@ -440,7 +442,7 @@ const AdminPanelSidebarMenu: React.FC<{
 										fill='clear'
 										color='light'
 										expand='block'
-										className='ion-no-padding ion-no-margin normal-case'
+										className='normal-case ion-no-padding ion-no-margin'
 									>
 										<ZIonText
 											className={classNames({
@@ -478,44 +480,50 @@ const AdminPanelSidebarMenu: React.FC<{
 						className='zaions_pretty_scrollbar'
 					>
 						{/* Short Links */}
-						<ZIonSegmentButton
-							value={AdminPanelSidebarMenuPageEnum.shortLink}
-							className='normal-case'
-							onClick={() => {
-								zNavigatePushRoute(
-									replaceRouteParams(
-										ZaionsRoutes.AdminPanel.ShortLinks.Main,
-										[
-											CONSTANTS.RouteParams.workspace.workspaceId,
-											CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-										],
-										[workspaceId, 'all']
-									)
-								);
-							}}
-						>
-							Short links
-						</ZIonSegmentButton>
+						<ZCan havePermissions={[permissionsEnum.viewAny_shortLink]}>
+							<ZIonSegmentButton
+								value={AdminPanelSidebarMenuPageEnum.shortLink}
+								className='normal-case'
+								onClick={() => {
+									zNavigatePushRoute(
+										replaceRouteParams(
+											ZaionsRoutes.AdminPanel.ShortLinks.Main,
+											[
+												CONSTANTS.RouteParams.workspace.workspaceId,
+												CONSTANTS.RouteParams
+													.folderIdToGetShortLinksOrLinkInBio,
+											],
+											[workspaceId, 'all']
+										)
+									);
+								}}
+							>
+								Short links
+							</ZIonSegmentButton>
+						</ZCan>
 
 						{/* Link-in-bio */}
-						<ZIonSegmentButton
-							value={AdminPanelSidebarMenuPageEnum.linkInBio}
-							className='normal-case'
-							onClick={() => {
-								zNavigatePushRoute(
-									replaceRouteParams(
-										ZaionsRoutes.AdminPanel.LinkInBio.Main,
-										[
-											CONSTANTS.RouteParams.workspace.workspaceId,
-											CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-										],
-										[workspaceId, 'all']
-									)
-								);
-							}}
-						>
-							Link-in-bio
-						</ZIonSegmentButton>
+						<ZCan havePermissions={[permissionsEnum.viewAny_linkInBio]}>
+							<ZIonSegmentButton
+								value={AdminPanelSidebarMenuPageEnum.linkInBio}
+								className='normal-case'
+								onClick={() => {
+									zNavigatePushRoute(
+										replaceRouteParams(
+											ZaionsRoutes.AdminPanel.LinkInBio.Main,
+											[
+												CONSTANTS.RouteParams.workspace.workspaceId,
+												CONSTANTS.RouteParams
+													.folderIdToGetShortLinksOrLinkInBio,
+											],
+											[workspaceId, 'all']
+										)
+									);
+								}}
+							>
+								Link-in-bio
+							</ZIonSegmentButton>
+						</ZCan>
 
 						{/* Extension */}
 						<ZIonSegmentButton

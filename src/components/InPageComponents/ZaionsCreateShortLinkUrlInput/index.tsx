@@ -11,7 +11,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { Formik } from 'formik';
 import { useSetRecoilState } from 'recoil';
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import { useParams } from 'react-router';
 
 /**
  * Custom Imports go down
@@ -20,9 +20,9 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 import {
 	ZIonButton,
-	ZIonIcon,
 	ZIonInput,
 	ZIonItem,
+	ZIonNote,
 	ZIonSkeletonText,
 	ZIonText,
 } from '@/components/ZIonComponents';
@@ -34,11 +34,18 @@ import {
 import { reportCustomError } from '@/utils/customErrorType';
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { replaceParams, validateField } from '@/utils/helpers';
+import { VALIDATION_RULE } from '@/utils/enums';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import {
+	FormMode,
+	messengerPlatformsBlockEnum,
+} from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down
@@ -48,15 +55,6 @@ import {
 	NewShortLinkFormState,
 	NewShortLinkSelectTypeOption,
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
-import { replaceParams, validateField } from '@/utils/helpers';
-import { VALIDATION_RULE } from '@/utils/enums';
-import { IonNote } from '@ionic/react';
-import {
-	FormMode,
-	messengerPlatformsBlockEnum,
-} from '@/types/AdminPanel/index.type';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
-import { useParams } from 'react-router';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
 
 /**
@@ -152,41 +150,47 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
 					<>
 						{!showSkeleton && (
 							<ZIonItem
+								lines='none'
+								minHeight='40px'
+								style={{ '--inner-padding-end': '0px' }}
 								className={classNames(className, {
 									'ion-item-start-no-padding': true,
 									'ion-invalid': touched.domain && errors.domain,
 									'ion-valid': touched.domain && !errors.domain,
 								})}
-								style={{ '--inner-padding-end': '0px' }}
-								lines='none'
-								minHeight='40px'
 							>
 								<ZIonInput
+									label=''
+									name='domain'
+									type='email'
+									fill='outline'
+									minHeight='40px'
+									placeholder='https://yourlink.com'
+									onIonChange={handleChange}
+									onIonBlur={handleBlur}
+									value={values.domain}
+									testingSelector={
+										CONSTANTS.testingSelectors.shortLink.listPage.switchItInput
+									}
 									className={classNames({
 										'rounded-none': true,
 										'ion-touched ion-invalid': touched.domain && errors.domain,
 										'ion-touched ion-valid': touched.domain && !errors.domain,
 									})}
-									label=''
-									name='domain'
-									type='email'
-									onIonChange={handleChange}
-									onIonBlur={handleBlur}
-									value={values.domain}
-									fill='outline'
-									placeholder='https://yourlink.com'
 									style={{
 										'--background': '#fff',
 										'--padding-start': '3px',
 										'--border-radius': '0',
 									}}
-									minHeight='40px'
 								/>
 
 								<ZIonButton
-									onClick={() => void submitForm()}
 									className='ion-no-margin ion-text-capitalize'
 									slot='end'
+									onClick={() => void submitForm()}
+									testingSelector={
+										CONSTANTS.testingSelectors.shortLink.listPage.switchItBtn
+									}
 									style={{
 										height: '100%',
 										'--border-radius': '0',
@@ -198,7 +202,15 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
 						)}
 						{!showSkeleton && errors.domain && touched.domain && (
 							<div className='ps-1 text-[14px]'>
-								<IonNote color='danger'>{errors.domain}</IonNote>
+								<ZIonNote
+									color='danger'
+									testingSelector={
+										CONSTANTS.testingSelectors.shortLink.listPage
+											.searchInputError
+									}
+								>
+									{errors.domain}
+								</ZIonNote>
 							</div>
 						)}
 
@@ -224,7 +236,7 @@ export const ZaionsCreateShortLinkUrlInputSkeleton: React.FC = React.memo(
 				<ZIonSkeletonText width='100%' height='40px' animated={true} />
 
 				<ZIonButton
-					className='ion-no-margin shadow-none'
+					className='shadow-none ion-no-margin'
 					slot='end'
 					style={{
 						height: '40px',

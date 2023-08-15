@@ -107,6 +107,26 @@ export enum permissionsEnum {
 	restore_workspace = 'restore_workspace',
 	forceDelete_workspace = 'forceDelete_workspace',
 
+	// time slot
+	viewAny_timeSlot = 'viewAny_timeSlot',
+	view_timeSlot = 'view_timeSlot',
+	create_timeSlot = 'create_timeSlot',
+	update_timeSlot = 'update_timeSlot',
+	delete_timeSlot = 'delete_timeSlot',
+	replicate_timeSlot = 'replicate_timeSlot',
+	restore_timeSlot = 'restore_timeSlot',
+	forceDelete_timeSlot = 'forceDelete_timeSlot',
+
+	// Labels
+	viewAny_label = 'viewAny_label',
+	view_label = 'view_label',
+	create_label = 'create_label',
+	update_label = 'update_label',
+	delete_label = 'delete_label',
+	replicate_label = 'replicate_label',
+	restore_label = 'restore_label',
+	forceDelete_label = 'forceDelete_label',
+
 	// Workspace Members
 	attach_workspace_members = 'attach_workspace_members',
 	detach_workspace_members = 'view_workspace_members',
