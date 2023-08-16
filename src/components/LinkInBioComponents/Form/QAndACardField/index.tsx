@@ -26,6 +26,7 @@ import {
 import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 import { reportCustomError } from '@/utils/customErrorType';
+import CONSTANTS from '@/utils/constants';
 
 // Styles
 
@@ -70,9 +71,13 @@ const LinkInBioQAndACardField: React.FC = () => {
 						return (
 							<>
 								<ZIonButton
+									expand='block'
 									className='ion-text-capitalize'
 									onClick={() => push(getNewCardItemEmptyObjForQAndA)}
-									expand='block'
+									testingSelector={
+										CONSTANTS.testingSelectors.linkInBio.formPage.design
+											.blockForm.fields.QAndA.addCardBtn
+									}
 								>
 									<ZIonIcon icon={addOutline} className='me-1' />
 									add new Q&A
@@ -80,12 +85,17 @@ const LinkInBioQAndACardField: React.FC = () => {
 								{values.cardItems?.length
 									? values.cardItems.map((_cardItem, _index) => (
 											<ZIonItem
-												className='pb-3 my-4 border  zaions-linkInBio-block'
+												key={_index}
+												lines='none'
+												className='pb-3 my-4 border zaions-linkInBio-block'
+												testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.QAndA.cardItem}-${_index}`}
+												testingSelector={
+													CONSTANTS.testingSelectors.linkInBio.formPage.design
+														.blockForm.fields.QAndA.cardItem
+												}
 												style={{
 													'--background': 'transparent',
 												}}
-												lines='none'
-												key={_index}
 											>
 												<ZIonReorder slot='start' className='ms-3'>
 													<ZIonIcon
@@ -97,17 +107,29 @@ const LinkInBioQAndACardField: React.FC = () => {
 
 												<div className='w-full'>
 													<LinkInBioTitleField
+														className='mt-3'
+														placeholder='Question'
 														name={`cardItems.${_index}.title`}
 														onIonChange={handleChange}
 														onIonBlur={handleBlur}
+														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.QAndA.titleInput}-${_index}`}
+														testingSelector={
+															CONSTANTS.testingSelectors.linkInBio.formPage
+																.design.blockForm.fields.QAndA.titleInput
+														}
 														value={
 															values.cardItems && values.cardItems[_index].title
 														}
-														className='mt-3'
-														placeholder='Question'
 													/>
 
 													<ZTextEditor
+														placeholder='Answer'
+														className='mt-3'
+														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.QAndA.textEditor}-${_index}`}
+														testingSelector={
+															CONSTANTS.testingSelectors.linkInBio.formPage
+																.design.blockForm.fields.QAndA.textEditor
+														}
 														value={
 															values.cardItems && values.cardItems[_index].text
 														}
@@ -118,13 +140,19 @@ const LinkInBioQAndACardField: React.FC = () => {
 																false
 															);
 														}}
-														placeholder='Answer'
-														className='mt-3'
 													/>
 												</div>
 
 												{/* Delete block button */}
 												<ZCustomDeleteComponent
+													slot='end'
+													iconColor='danger'
+													className='ion-no-padding me-1'
+													testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.QAndA.deleteBtn}-${_index}`}
+													testingSelector={
+														CONSTANTS.testingSelectors.linkInBio.formPage.design
+															.blockForm.fields.QAndA.deleteBtn
+													}
 													deleteFn={(detail: OverlayEventDetail<unknown>) => {
 														try {
 															if (detail && detail.role === 'destructive') {
@@ -134,9 +162,6 @@ const LinkInBioQAndACardField: React.FC = () => {
 															reportCustomError(error);
 														}
 													}}
-													className='ion-no-padding me-1'
-													slot='end'
-													iconColor='danger'
 												/>
 											</ZIonItem>
 									  ))

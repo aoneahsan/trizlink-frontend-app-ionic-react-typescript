@@ -26,6 +26,8 @@ interface LinkInBioDateTimeFieldInterface {
 	value?: string;
 	name?: string;
 	id?: string;
+	testingListSelector?: string;
+	testingSelector?: string;
 	onIonChange?: (
 		event: IonDatetimeCustomEvent<DatetimeChangeEventDetail>
 	) => void;
@@ -35,23 +37,30 @@ const LinkInBioDateTimeField: React.FC<LinkInBioDateTimeFieldInterface> = ({
 	value,
 	name = '',
 	id = '',
+	testingListSelector,
+	testingSelector,
 	onIonChange,
 }) => {
 	return (
 		<ZIonItem
-			style={{ '--background-hover': 'transparent', '--min-height': '31px' }}
+			minHeight='32px'
+			testingSelector={`${testingSelector}-item`}
+			testingListSelector={`${testingListSelector}-item`}
+			style={{ '--background-hover': 'transparent' }}
 		>
 			<ZIonIcon icon={calendarOutline} slot='start' className='my-0 me-2' />
 
 			<ZIonDatetimeButton
+				id={id}
 				name={name}
+				onIonChange={onIonChange}
+				testingSelector={testingSelector}
+				testingListSelector={testingListSelector}
+				min={new Date().toISOString()}
+				value={dayjs(value).format(CONSTANTS.DateTime.iso8601DateTime)}
 				className={classNames(classes['zaions-datetime-field'], {
 					'zaions-datetime-btn w-full': true,
 				})}
-				onIonChange={onIonChange}
-				id={id}
-				value={dayjs(value).format(CONSTANTS.DateTime.iso8601DateTime)}
-				min={new Date().toISOString()}
 			/>
 		</ZIonItem>
 	);

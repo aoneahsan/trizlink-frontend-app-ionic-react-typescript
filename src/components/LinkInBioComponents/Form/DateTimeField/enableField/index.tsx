@@ -13,27 +13,47 @@ import { SwitchChangeEventHandler } from 'rc-switch';
 
 // Component Type
 interface LinkInBioEnableFieldInterface {
-  title?: string;
-  icon?: string;
-  checked?: boolean;
-  onChange?: SwitchChangeEventHandler;
+	title?: string;
+	icon?: string;
+	checked?: boolean;
+	testingSelector?: string;
+	testingListSelector?: string;
+	onChange?: SwitchChangeEventHandler;
 }
 
 const LinkInBioEnableField: React.FC<LinkInBioEnableFieldInterface> = ({
-  title = 'Title',
-  icon = reorderTwoOutline,
-  checked,
-  onChange,
+	title = 'Title',
+	icon = reorderTwoOutline,
+	checked,
+	testingSelector,
+	testingListSelector,
+	onChange,
 }) => {
-  return (
-    <ZIonItem lines='none' className='mt-3'>
-      <ZIonIcon icon={icon} className='me-3' slot='start' />
-      <ZIonText color='medium'>{title}</ZIonText>
-      <ZIonText slot='end'>
-        <ZRCSwitch onChange={onChange} checked={checked} />
-      </ZIonText>
-    </ZIonItem>
-  );
+	return (
+		<ZIonItem
+			lines='none'
+			className='mt-3'
+			testingSelector={`${testingSelector}-item`}
+			testingListSelector={`${testingListSelector}-item`}
+		>
+			<ZIonIcon icon={icon} className='me-3' slot='start' />
+			<ZIonText
+				color='medium'
+				testingSelector={`${testingSelector}-text`}
+				testingListSelector={`${testingListSelector}-text`}
+			>
+				{title}
+			</ZIonText>
+			<ZIonText slot='end'>
+				<ZRCSwitch
+					onChange={onChange}
+					checked={checked}
+					testingSelector={testingSelector}
+					testingListSelector={testingListSelector}
+				/>
+			</ZIonText>
+		</ZIonItem>
+	);
 };
 
 export default LinkInBioEnableField;

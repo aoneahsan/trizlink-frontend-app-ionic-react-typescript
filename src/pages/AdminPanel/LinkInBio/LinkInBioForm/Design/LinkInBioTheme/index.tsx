@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 
 /**
  * Packages Imports go down
@@ -11,29 +11,46 @@ import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
 import { addOutline, arrowUp } from 'ionicons/icons';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
+import { useParams } from 'react-router';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
-import ZDragAndDrop from '@/components/CustomComponents/ZDragAndDrop';
-import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
-import ZaionsColorPiker from '@/components/InPageComponents/ZaionsColorPiker';
 import {
 	ZIonButton,
 	ZIonCol,
+	ZIonGrid,
 	ZIonIcon,
 	ZIonRow,
+	ZIonSkeletonText,
 	ZIonText,
 	ZIonTitle,
 } from '@/components/ZIonComponents';
+import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
+const ZaionsRSelect = lazy(
+	() => import('@/components/CustomComponents/ZaionsRSelect')
+);
+const ZDragAndDrop = lazy(
+	() => import('@/components/CustomComponents/ZDragAndDrop')
+);
+const ZRCSwitch = lazy(() => import('@/components/CustomComponents/ZRCSwitch'));
+const ZaionsColorPiker = lazy(
+	() => import('@/components/InPageComponents/ZaionsColorPiker')
+);
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { API_URL_ENUM } from '@/utils/enums';
+import CONSTANTS from '@/utils/constants';
+import {
+	formatReactSelectOption,
+	generatePredefinedThemeBackgroundValue,
+} from '@/utils/helpers';
 
 /**
  * Type Imports go down
@@ -47,6 +64,9 @@ import {
 	LinkInBioThemeBackgroundType,
 	LinkInBioType,
 } from '@/types/AdminPanel/linkInBioType';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 /**
  * Recoil State Imports go down
@@ -64,20 +84,6 @@ import { LinkInBioFontFamilyRState } from '@/ZaionsStore/UserDashboard/LinkInBio
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import classes from '../styles.module.css';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from '@/utils/enums';
-import CONSTANTS from '@/utils/constants';
-import { reportCustomError } from '@/utils/customErrorType';
-import { LinkInBioPredefinedThemeRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioPreDefinedThemesState.recoil';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
-import {
-	formatReactSelectOption,
-	generatePredefinedThemeBackgroundValue,
-	zJsonParse,
-} from '@/utils/helpers';
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
-import { useParams } from 'react-router';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Component props type go down
@@ -107,9 +113,10 @@ const ZLinkInBioThemeSection: React.FC = () => {
 	}>();
 
 	// #region APIS.
-	const { data: LinkInBioPreDefinedThemesData } = useZRQGetRequest<
-		LinkInBioPredefinedThemeType[]
-	>({
+	const {
+		data: LinkInBioPreDefinedThemesData,
+		isFetching: isLinkInBioPreDefinedThemesDataFetching,
+	} = useZRQGetRequest<LinkInBioPredefinedThemeType[]>({
 		_url: API_URL_ENUM.linkInBioPreDefinedThemes_create_list,
 		_key: [
 			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_DEFINED_THEMES.MAIN,
@@ -141,7 +148,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 	const isZFetching = isSelectedLinkInBioFetching;
 
 	return (
-		<>
+		<Suspense fallback={<ZFallbackIonSpinner2 />}>
 			{/* 🎨 Pre-defined start */}
 			<ZIonCol
 				sizeXl='11'
@@ -151,7 +158,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 				sizeXs='12'
 				className='mt-3 ion-margin-start '
 			>
-				<ZIonTitle className='font-bold text-lg ion-no-padding'>
+				<ZIonTitle className='text-lg font-bold ion-no-padding'>
 					🎨 Pre-defined
 				</ZIonTitle>
 				<ZIonRow
@@ -165,6 +172,11 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							<ZIonCol size='max-content' key={i}>
 								<ZIonButton
 									size='large'
+									testingSelector={
+										CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+											.preDefinedThemeBlock
+									}
+									testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.preDefinedThemeBlock}-${el.id}`}
 									className={classNames(classes['zaions-pd-color-block'], {
 										'me-3': true,
 									})}
@@ -199,6 +211,18 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							</ZIonCol>
 						);
 					})}
+
+					{isLinkInBioPreDefinedThemesDataFetching
+						? [...Array(14)].map((_, i) => (
+								<ZIonCol size='max-content' key={i}>
+									<ZIonSkeletonText
+										width='3.6rem'
+										height='4.7rem'
+										className='rounded-sm me-3'
+									/>
+								</ZIonCol>
+						  ))
+						: null}
 				</ZIonRow>
 			</ZIonCol>
 			{/* 🎨 Pre-defined end */}
@@ -212,11 +236,18 @@ const ZLinkInBioThemeSection: React.FC = () => {
 				sizeXs='12'
 				className='mt-2 ion-margin-start border-bottom__violet'
 			>
-				<ZIonTitle className='font-bold text-lg ion-no-padding'>
+				<ZIonTitle className='text-lg font-bold ion-no-padding'>
 					🖌️ Background
 				</ZIonTitle>
 
-				<div className='flex ion-align-items-center ion-padding-bottom'>
+				<ZIonGrid
+					className='flex ion-align-items-center ion-padding-bottom'
+					testingSelector={
+						CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
+							.container
+					}
+				>
+					{/* If bgType solidColor show this input */}
 					{values?.theme?.background?.bgType ===
 						LinkInBioThemeBackgroundEnum.solidColor && (
 						<ZaionsColorPiker
@@ -224,12 +255,18 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							name='theme.background.bgSolidColor'
 							value={values.theme.background.bgSolidColor as string}
 							setFieldValueFn={setFieldValue}
+							testingSelector={
+								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
+									.bgSolidColorInput
+							}
 						/>
 					)}
 
+					{/* If bgType solidColor show blow inputs */}
 					{values?.theme?.background?.bgType ===
 						LinkInBioThemeBackgroundEnum.gradient && (
 						<>
+							{/* start color */}
 							<ZaionsColorPiker
 								name='theme.background.bgGradientColors.startColor'
 								showSkeleton={isZFetching}
@@ -238,12 +275,22 @@ const ZLinkInBioThemeSection: React.FC = () => {
 									values?.theme.background?.bgGradientColors
 										?.startColor as string
 								}
+								testingSelector={
+									CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
+										.gColors.startColorInput
+								}
 							/>
+
+							{/* direction */}
 							<ZIonButton
 								shape='round'
 								className='mt-3 direction-button ion-margin-horizontal ion-no-padding w-[3rem]'
 								color='secondary'
 								height='2.5rem'
+								testingSelector={
+									CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
+										.gColors.directionBtn
+								}
 								onClick={() => {
 									let _newDirection =
 										+(values?.theme?.background?.bgGradientColors
@@ -266,11 +313,17 @@ const ZLinkInBioThemeSection: React.FC = () => {
 									}}
 								/>
 							</ZIonButton>
+
+							{/* end color */}
 							<ZaionsColorPiker
 								name='theme.background.bgGradientColors.endColor'
 								showSkeleton={isZFetching}
 								setFieldValueFn={setFieldValue}
 								showCloseIcon={true}
+								testingSelector={
+									CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
+										.gColors.endColorInput
+								}
 								value={
 									values?.theme?.background?.bgGradientColors
 										?.endColor as string
@@ -285,11 +338,17 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							/>
 						</>
 					)}
+
+					{/* Add gradient btn */}
 					{values?.theme?.background?.bgType ===
 						LinkInBioThemeBackgroundEnum.solidColor && (
 						<ZIonButton
 							className='mt-3 ion-text-capitalize ms-4'
 							height='40px'
+							testingSelector={
+								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
+									.addGradientBtn
+							}
 							onClick={() => {
 								setFieldValue(
 									'theme.background.bgType',
@@ -302,7 +361,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							<ZIonText>Add gradient</ZIonText>
 						</ZIonButton>
 					)}
-				</div>
+				</ZIonGrid>
 			</ZIonCol>
 			{/* 🖌️ Background */}
 
@@ -320,7 +379,14 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					🖍️ Button color
 				</ZIonTitle>
 
-				<div className='flex ion-align-items-center ion-padding-bottom border-bottom__violet'>
+				<ZIonGrid
+					className='flex ion-align-items-center ion-padding-bottom border-bottom__violet'
+					testingSelector={
+						CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.button
+							.container
+					}
+				>
+					{/* If bgType solidColor show this input */}
 					{values?.theme?.button?.background?.bgType ===
 						LinkInBioThemeBackgroundEnum.solidColor && (
 						<ZaionsColorPiker
@@ -328,27 +394,42 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							name='theme.button.background.bgSolidColor'
 							value={values?.theme?.button?.background?.bgSolidColor as string}
 							setFieldValueFn={setFieldValue}
+							testingSelector={
+								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+									.button.bgSolidColorInput
+							}
 						/>
 					)}
 
+					{/* If bgType solidColor show blow inputs */}
 					{values?.theme?.button?.background?.bgType ===
 						LinkInBioThemeBackgroundEnum.gradient && (
 						<>
+							{/* Start color */}
 							<ZaionsColorPiker
 								name='theme.button.background.bgGradientColors.startColor'
 								setFieldValueFn={setFieldValue}
 								showSkeleton={isZFetching}
+								testingSelector={
+									CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+										.button.gColors.startColorInput
+								}
 								value={
 									values?.theme?.button?.background?.bgGradientColors
 										?.startColor as string
 								}
 							/>
 
+							{/* direction */}
 							<ZIonButton
 								shape='round'
 								className='mt-3 direction-button ion-margin-horizontal ion-no-padding w-[3rem]'
 								height='2.5rem'
 								color='secondary'
+								testingSelector={
+									CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+										.button.gColors.directionBtn
+								}
 								onClick={() => {
 									let _newDirection =
 										+(values?.theme?.button?.background?.bgGradientColors
@@ -371,6 +452,8 @@ const ZLinkInBioThemeSection: React.FC = () => {
 									}}
 								/>
 							</ZIonButton>
+
+							{/* end color */}
 							<ZaionsColorPiker
 								name='theme.button.background.bgGradientColors.endColor'
 								setFieldValueFn={setFieldValue}
@@ -379,6 +462,10 @@ const ZLinkInBioThemeSection: React.FC = () => {
 								value={
 									values?.theme?.button?.background?.bgGradientColors
 										?.endColor as string
+								}
+								testingSelector={
+									CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+										.button.gColors.endColorInput
 								}
 								closeIconOnChangeFn={() => {
 									setFieldValue(
@@ -390,11 +477,17 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							/>
 						</>
 					)}
+
+					{/* Add gradient btn */}
 					{values?.theme?.button?.background?.bgType ===
 						LinkInBioThemeBackgroundEnum.solidColor && (
 						<ZIonButton
 							className='mt-3 ion-text-capitalize ms-4'
 							height='40px'
+							testingSelector={
+								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+									.button.addGradientBtn
+							}
 							onClick={() => {
 								setFieldValue(
 									'theme.button.background.bgType',
@@ -407,7 +500,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							<ZIonText>Add gradient</ZIonText>
 						</ZIonButton>
 					)}
-				</div>
+				</ZIonGrid>
 
 				{/* 🎫 Button type */}
 				<ZIonTitle className='font-bold text-[16px] ion-margin-top ion-no-padding z_ff__b612'>
@@ -421,16 +514,20 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					{/* Filled's */}
 					<ZIonCol size='4'>
 						<ZIonButton
+							color='medium'
+							style={{
+								'--border-radius': '0',
+							}}
 							className={classNames(classes['zaions-button-type'], {
 								'zaions-button-type-button-active': true, // from index.css
 								'zaions-border-primary':
 									values?.theme?.button?.type ===
 									LinkInBioButtonTypeEnum.inlineSquare,
 							})}
-							color='medium'
-							style={{
-								'--border-radius': '0',
-							}}
+							testingSelector={
+								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+									.button.btnType.inlineSquare
+							}
 							onClick={() => {
 								setFieldValue(
 									'theme.button.type',
@@ -443,15 +540,19 @@ const ZLinkInBioThemeSection: React.FC = () => {
 
 					<ZIonCol size='4'>
 						<ZIonButton
+							color='medium'
+							style={{
+								'--border-radius': '10px',
+							}}
 							className={classNames(classes['zaions-button-type'], {
 								'zaions-border-primary':
 									values?.theme?.button?.type ===
 									LinkInBioButtonTypeEnum.inlineRound,
 							})}
-							color='medium'
-							style={{
-								'--border-radius': '10px',
-							}}
+							testingSelector={
+								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+									.button.btnType.inlineRound
+							}
 							onClick={() => {
 								setFieldValue(
 									'theme.button.type',
@@ -464,13 +565,17 @@ const ZLinkInBioThemeSection: React.FC = () => {
 
 					<ZIonCol size='4'>
 						<ZIonButton
+							color='medium'
+							shape='round'
+							testingSelector={
+								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+									.button.btnType.inlineCircle
+							}
 							className={classNames(classes['zaions-button-type'], {
 								'zaions-border-primary':
 									values?.theme?.button?.type ===
 									LinkInBioButtonTypeEnum.inlineCircle,
 							})}
-							color='medium'
-							shape='round'
 							onClick={() => {
 								setFieldValue(
 									'theme.button.type',
@@ -484,6 +589,11 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					{/* Outline's */}
 					<ZIonCol size='4'>
 						<ZIonButton
+							fill='outline'
+							testingSelector={
+								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+									.button.btnType.inlineSquareOutline
+							}
 							className={classNames(classes['zaions-button-type'], {
 								'zaions-border-primary':
 									values?.theme?.button?.type ===
@@ -498,7 +608,6 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							style={{
 								'--border-radius': '0',
 							}}
-							fill='outline'
 							onClick={() => {
 								setFieldValue(
 									'theme.button.type',
@@ -511,6 +620,11 @@ const ZLinkInBioThemeSection: React.FC = () => {
 
 					<ZIonCol size='4'>
 						<ZIonButton
+							fill='outline'
+							testingSelector={
+								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+									.button.btnType.inlineRoundOutline
+							}
 							className={classNames(classes['zaions-button-type'], {
 								'zaions-border-primary':
 									values?.theme?.button?.type ===
@@ -525,7 +639,6 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							style={{
 								'--border-radius': '10px',
 							}}
-							fill='outline'
 							onClick={() => {
 								setFieldValue(
 									'theme.button.type',
@@ -538,6 +651,12 @@ const ZLinkInBioThemeSection: React.FC = () => {
 
 					<ZIonCol size='4'>
 						<ZIonButton
+							shape='round'
+							fill='outline'
+							testingSelector={
+								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+									.button.btnType.inlineCircleOutline
+							}
 							className={classNames(classes['zaions-button-type'], {
 								'zaions-border-primary':
 									values?.theme?.button?.type ===
@@ -549,8 +668,6 @@ const ZLinkInBioThemeSection: React.FC = () => {
 									? 'primary'
 									: 'medium'
 							}
-							shape='round'
-							fill='outline'
 							onClick={() => {
 								setFieldValue(
 									'theme.button.type',
@@ -564,6 +681,11 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					{/* Shadow's */}
 					<ZIonCol size='4'>
 						<ZIonButton
+							color='medium'
+							testingSelector={
+								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+									.button.btnType.inlineSquareShadow
+							}
 							className={classNames(
 								classes['zaions-button-type'],
 								classes['zaions-button-type-shadow'],
@@ -576,7 +698,6 @@ const ZLinkInBioThemeSection: React.FC = () => {
 										LinkInBioButtonTypeEnum.inlineSquareShadow,
 								}
 							)}
-							color='medium'
 							style={{
 								'--border-radius': '0',
 							}}
@@ -592,6 +713,11 @@ const ZLinkInBioThemeSection: React.FC = () => {
 
 					<ZIonCol size='4'>
 						<ZIonButton
+							color='medium'
+							testingSelector={
+								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+									.button.btnType.inlineRoundShadow
+							}
 							className={classNames(
 								classes['zaions-button-type'],
 								classes['zaions-button-type-shadow'],
@@ -604,7 +730,6 @@ const ZLinkInBioThemeSection: React.FC = () => {
 										LinkInBioButtonTypeEnum.inlineRoundShadow,
 								}
 							)}
-							color='medium'
 							style={{
 								'--border-radius': '10px',
 							}}
@@ -620,6 +745,12 @@ const ZLinkInBioThemeSection: React.FC = () => {
 
 					<ZIonCol size='4'>
 						<ZIonButton
+							color='medium'
+							shape='round'
+							testingSelector={
+								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+									.button.btnType.inlineCircleShadow
+							}
 							className={classNames(
 								classes['zaions-button-type'],
 								classes['zaions-button-type-shadow'],
@@ -632,8 +763,6 @@ const ZLinkInBioThemeSection: React.FC = () => {
 										LinkInBioButtonTypeEnum.inlineCircleShadow,
 								}
 							)}
-							color='medium'
-							shape='round'
 							onClick={() => {
 								setFieldValue(
 									'theme.button.type',
@@ -645,7 +774,14 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					</ZIonCol>
 
 					{/* Shadow Color */}
-					<ZIonCol size='12' className='mt-3'>
+					<ZIonCol
+						size='12'
+						className='mt-3'
+						testingSelector={
+							CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.button
+								.btnType.shadowColorInputContainer
+						}
+					>
 						{values?.theme?.button?.type &&
 							[
 								LinkInBioButtonTypeEnum.inlineSquareShadow,
@@ -657,6 +793,10 @@ const ZLinkInBioThemeSection: React.FC = () => {
 									name='theme.button.shadowColor'
 									value={values?.theme?.button?.shadowColor as string}
 									setFieldValueFn={setFieldValue}
+									testingSelector={
+										CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+											.button.btnType.shadowColorInput
+									}
 								/>
 							)}
 					</ZIonCol>
@@ -679,14 +819,18 @@ const ZLinkInBioThemeSection: React.FC = () => {
 
 				<div className='flex ion-align-items-center ion-padding-bottom'>
 					<ZaionsRSelect
+						className='w-full z_ff__roboto'
+						name='theme.font'
+						testingSelector={
+							CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+								.fontSelector
+						}
 						options={linkInBioFontFamilyState?.map((el) => {
 							return {
 								value: el.fontName,
 								label: el.fontName,
 							};
 						})}
-						className='w-full z_ff__roboto'
-						name='theme.font'
 						onChange={(_value) => {
 							setFieldValue(
 								'theme.font',
@@ -714,7 +858,11 @@ const ZLinkInBioThemeSection: React.FC = () => {
 				sizeMd='12'
 				sizeSm='12'
 				sizeXs='12'
-				className='mb-5 mt-3 ion-margin-start'
+				className='mt-3 mb-5 ion-margin-start'
+				testingSelector={
+					CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bgImage
+						.container
+				}
 			>
 				<ZIonRow>
 					<ZIonCol>
@@ -724,6 +872,11 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					</ZIonCol>
 					<ZIonCol className='flex ion-justify-content-end'>
 						<ZRCSwitch
+							checked={values?.theme?.background?.enableBgImage}
+							testingSelector={
+								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+									.bgImage.toggler
+							}
 							onChange={(value) => {
 								setFieldValue('theme.background.enableBgImage', value, false);
 								if (value === true) {
@@ -740,7 +893,6 @@ const ZLinkInBioThemeSection: React.FC = () => {
 									);
 								}
 							}}
-							checked={values?.theme?.background?.enableBgImage}
 						/>
 					</ZIonCol>
 				</ZIonRow>
@@ -751,12 +903,16 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							setFieldValue={setFieldValue}
 							fieldName='theme.background.bgImageUrl'
 							imageUrl={values.theme?.background?.bgImageUrl}
+							testingSelector={
+								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+									.bgImage.upload
+							}
 						/>
 					</div>
 				)}
 			</ZIonCol>
 			{/* 🖼️ Background image end */}
-		</>
+		</Suspense>
 	);
 };
 

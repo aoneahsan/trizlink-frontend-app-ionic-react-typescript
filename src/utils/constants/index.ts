@@ -690,17 +690,250 @@ const testingSelectors = {
 		},
 
 		formPage: {
-			// lib-fp -> link-in-bio-form-page
-			advanceOptionsBtn: 'lib-fp-advance-options-btn',
-			advanceOptionsContent: 'lib-fp-advance-options-content',
+			topBar: {
+				// lib-fp-tb -> link-in-bio-form-page-topBar
+				homeBtn: 'lib-fp-tb-home-btn',
+				titleContainer: 'lib-fp-tb-title-container',
+				titleTextContainer: 'lib-fp-tb-title-text-container',
+				titleText: 'lib-fp-tb-title',
+				titleInput: 'lib-fp-tb-title-input',
+				titleSaveBtn: 'lib-fp-tb-title-save-btn',
+				titleIonItem: 'lib-fp-tb-title-item',
 
-			notesTextarea: 'lib-fp-note-textarea',
+				tab: {
+					design: 'lib-fp-tb-design',
+					shareSettings: 'lib-fp-tb-share-settings',
+					pageAnalytics: 'lib-fp-tb-page-analytics',
+					lead: 'lib-fp-tb-lead',
+					blockAnalytics: 'lib-fp-tb-block-analytics',
+				},
 
-			favicon: 'lib-fp-favicon',
+				errorsBtn: 'lib-fp-tb-errors-btn',
+				upgradeBtn: 'lib-fp-tb-upgrade-btn',
+			},
 
-			tag: {
-				tagInput: 'lib-fp-tag-input',
-				singleTag: 'lib-fp-single-tag',
+			design: {
+				TopTitleBar: {
+					container: 'lib-fp-dt-title-container',
+					titleCol: 'lib-fp-dt-title-col',
+					title: 'lib-fp-dt-title',
+					saveBtn: 'lib-fp-dt-save-btn',
+					saveBtnCol: 'lib-fp-dt-save-btn-col',
+				},
+
+				bottomTabs: {
+					// lib-fp-dt-bt -> link-in-bio-form-page-design-tab-bottom-tab
+					theme: 'lib-fp-dt-bt-theme',
+					blocks: 'lib-fp-dt-bt-blocks',
+					settings: 'lib-fp-dt-bt-settings',
+					poweredBy: 'lib-fp-dt-bt-powered-by',
+				},
+
+				// lib-fp-dt-pdt-b -> link-in-bio-form-page-design-tab-pre-defined-theme-block
+				theme: {
+					preDefinedThemeBlock: 'lib-fp-dt-pdt-b',
+
+					fontSelector: 'lib-fp-dt-font-selector',
+
+					bg: {
+						// lib-fp-dt-bg -> link-in-bio-form-page-design-tab-background
+						bgSolidColorInput: 'lib-fp-dt-bg-sc-input', //sc -> solid color
+						addGradientBtn: 'lib-fp-dt-bg-add-gradient-btn',
+						container: 'lib-fp-dt-bg-container',
+						gColors: {
+							// gColors/gc -> gradientColors
+							startColorInput: 'lib-fp-dt-bg-gc-sci',
+							endColorInput: 'lib-fp-dt-bg-gc-eci',
+							directionBtn: 'lib-fp-dt-bg-gc-d-btn',
+						},
+					},
+
+					button: {
+						// lib-fp-dt-btn -> link-in-bio-form-page-design-tab-button
+						bgSolidColorInput: 'lib-fp-dt-btn-sc-input', //sc -> solid color
+						addGradientBtn: 'lib-fp-dt-btn-add-gradient-btn',
+						container: 'lib-fp-dt-btn-container',
+						gColors: {
+							// lib-fp-dt-btn-gc -> link-in-bio-form-page-design-tab-button-background-color
+							// gColors/gc -> gradientColors
+							startColorInput: 'lib-fp-dt-btn-gc-sci', // sci -> startColorInput
+							endColorInput: 'lib-fp-dt-btn-gc-eci', // eci -> endColorInput
+							directionBtn: 'lib-fp-dt-btn-gc-d-btn', // d-btn -> directionBtn
+						},
+
+						btnType: {
+							// lib-fp-dt-btn-gc -> link-in-bio-form-page-design-tab-button
+							inlineSquare: 'lib-fp-dt-btn-type-is', // is -> inlineSquare
+							inlineRound: 'lib-fp-dt-btn-type-ir', // ir -> inlineRound
+							inlineCircle: 'lib-fp-dt-btn-type-ic', // ic -> inlineCircle
+
+							inlineSquareOutline: 'lib-fp-dt-btn-type-iso', // iso -> inlineSquareOutline
+							inlineRoundOutline: 'lib-fp-dt-btn-type-iro', // iro -> inlineRoundOutline
+							inlineCircleOutline: 'lib-fp-dt-btn-type-ico', // ico -> inlineCircleOutline
+
+							inlineSquareShadow: 'lib-fp-dt-btn-type-iss', // iss -> inlineSquareShadow
+							inlineRoundShadow: 'lib-fp-dt-btn-type-irs', // irs -> inlineRoundShadow
+							inlineCircleShadow: 'lib-fp-dt-btn-type-ics', // ics -> inlineCircleShadow
+
+							shadowColorInput: 'lib-fp-dt-btn-type-sci', // sci -> shadowColorInput
+							shadowColorInputContainer: 'lib-fp-dt-btn-type-sci-container', // sci -> shadowColorInput
+						},
+					},
+
+					bgImage: {
+						// lib-fp-dt-bgi -> link-in-bio-form-page-design-tab-background-image
+						toggler: 'lib-fp-dt-bgi-toggler',
+						upload: 'lib-fp-dt-bgi-upload',
+						container: 'lib-fp-dt-bgi-container',
+					},
+				},
+
+				blocks: {
+					container: 'lib-fp-dt-blocks-container',
+					btnCol: 'lib-fp-dt-blocks-btnCol',
+					btn: 'lib-fp-dt-blocks-btn',
+
+					addModal: {
+						// lib-fp-dt-bam -> link-in-bio-form-page-design-tab-block-add-modal
+						topBtn: 'lib-fp-dt-bam-top-btn',
+						bottomBtn: 'lib-fp-dt-bam-bottom-btn',
+						text: 'lib-fp-dt-bam-text',
+						closeModalBtn: 'lib-fp-dt-bam-close-modal-btn',
+					},
+				},
+
+				blockForm: {
+					// lib-fp-dt-bf -> link-in-bio-form-page-design-tab-block-form
+					goToBlockPageBtn: 'lib-fp-dt-bf-chevron-btn',
+					title: 'lib-fp-dt-bf-title',
+					titleCol: 'lib-fp-dt-bf-title-col',
+					actionsCol: 'lib-fp-dt-bf-actions-col',
+					saveBtn: 'lib-fp-dt-bf-save-btn',
+					isActiveBtn: 'lib-fp-dt-bf-is-active-btn',
+					duplicateBtn: 'lib-fp-dt-bf-is-duplicate-btn',
+					deleteBtn: 'lib-fp-dt-bf-is-delete-btn',
+
+					fields: {
+						// lib-fp-dt-bf-f -> link-in-bio-form-page-design-tab-block-form-fields
+						container: 'lib-fp-dt-bf-f-container',
+						title: 'lib-fp-dt-bf-f-title',
+
+						//
+						linkInput: 'lib-fp-dt-bf-f-link',
+						iFrameInput: 'lib-fp-dt-bf-f-iFrame',
+						iconInput: 'lib-fp-dt-bf-f-icon',
+						descriptionInput: 'lib-fp-dt-bf-f-description',
+						textEditor: 'lib-fp-dt-bf-f-text-editor',
+						upload: 'lib-fp-dt-bf-f-upload',
+						submitButtonText: 'lib-fp-dt-bf-f-submit-button-text',
+						dateTimeInput: 'lib-fp-dt-bf-f-datetime-input',
+						timezoneInput: 'lib-fp-dt-bf-f-timezone-input',
+						rssInput: 'lib-fp-dt-bf-f-rss',
+						shopifyInput: 'lib-fp-dt-bf-f-shopify',
+						magnetoInput: 'lib-fp-dt-bf-f-magneto',
+						wordpressInput: 'lib-fp-dt-bf-f-wordpress',
+						map: 'lib-fp-dt-bf-f-map',
+						titleEnable: 'lib-fp-dt-bf-f-title-enable',
+						descriptionEnable: 'lib-fp-dt-bf-f-description-enable',
+						pictureEnable: 'lib-fp-dt-bf-f-picture-enable',
+						cardEnable: 'lib-fp-dt-bf-f-card-enable',
+						priceEnable: 'lib-fp-dt-bf-f-price-enable',
+
+						spacing: 'lib-fp-dt-bf-f-spacing-range',
+
+						term: {
+							toggler: 'lib-fp-dt-bf-f-term-toggler',
+							text: 'lib-fp-dt-bf-f-term-text',
+							link: 'lib-fp-dt-bf-f-term-link',
+						},
+
+						separatorType: {
+							button: 'lib-fp-dt-bf-f-st-btn',
+							colorInput: 'lib-fp-dt-bf-f-st-color-input',
+						},
+
+						form: {
+							addNewFieldBtn: 'lib-fp-dt-bf-f-form-anf-btn',
+							cardItem: 'lib-fp-dt-bf-f-form-card-item',
+							titleInput: 'lib-fp-dt-bf-f-form-title',
+							textarea: 'lib-fp-dt-bf-f-form-textarea',
+							requiredSwitcher: 'lib-fp-dt-bf-f-form-is-required',
+							activeSwitcher: 'lib-fp-dt-bf-f-form-is-active',
+							deleteBtn: 'lib-fp-dt-bf-f-form-delete-btn',
+						},
+
+						carouselCard: {
+							addCardBtn: 'lib-fp-dt-bf-cc-add-card-btn',
+							cardItem: 'lib-fp-dt-bf-cc-card-item',
+							linkInput: 'lib-fp-dt-bf-cc-link',
+							uploadField: 'lib-fp-dt-bf-cc-upload',
+							titleInput: 'lib-fp-dt-bf-cc-title',
+							description: 'lib-fp-dt-bf-cc-description',
+							deleteBtn: 'lib-fp-dt-bf-cc-delete-btn',
+						},
+
+						QAndA: {
+							addCardBtn: 'lib-fp-dt-bf-qaa-add-card-btn',
+							cardItem: 'lib-fp-dt-bf-qaa-card-item',
+							titleInput: 'lib-fp-dt-bf-qaa-title',
+							textEditor: 'lib-fp-dt-bf-qaa-text-editor',
+							deleteBtn: 'lib-fp-dt-bf-qaa-delete-btn',
+						},
+
+						music: {
+							// lib-fp-dt-bf-mu-pdb -> link-in-bio-form-page-design-tab-music-pre-defined-block
+							block: 'lib-fp-dt-bf-mu-pdb',
+							blocksContainer: 'lib-fp-dt-bf-mu-pdb-container',
+							addBlockBtn: 'lib-fp-dt-bf-mu-add-block-btn',
+							cardItem: 'lib-fp-dt-bf-mu-card-item',
+							titleInput: 'lib-fp-dt-bf-mu-title',
+							linkInput: 'lib-fp-dt-bf-mu-link',
+							iconInput: 'lib-fp-dt-bf-mu-icon',
+							deleteBtn: 'lib-fp-dt-bf-mu-delete-btn',
+						},
+
+						messenger: {
+							// lib-fp-dt-bf-me-pdb -> link-in-bio-form-page-design-tab-messenger-pre-defined-block
+							block: 'lib-fp-dt-bf-me-pdb',
+							addBlockBtn: 'lib-fp-dt-bf-me-add-block-btn',
+							cardItem: 'lib-fp-dt-bf-me-card-item',
+							titleInput: 'lib-fp-dt-bf-me-title',
+							linkInput: 'lib-fp-dt-bf-me-link',
+							iconInput: 'lib-fp-dt-bf-me-icon',
+							emailInput: 'lib-fp-dt-bf-me-email',
+							pNumberInput: 'lib-fp-dt-bf-me-pNumber',
+							usernameInput: 'lib-fp-dt-bf-me-username',
+							objectInput: 'lib-fp-dt-bf-me-object',
+							textInput: 'lib-fp-dt-bf-me-text',
+							deleteBtn: 'lib-fp-dt-bf-me-delete-btn',
+						},
+
+						socialPlatform: {
+							// lib-fp-dt-bf-sp-pdb -> link-in-bio-form-page-design-tab-social-platform-pre-defined-block
+							block: 'lib-fp-dt-bf-sp-pdb',
+							addBlockBtn: 'lib-fp-dt-bf-sp-add-block-btn',
+							cardItem: 'lib-fp-dt-bf-sp-card-item',
+							linkInput: 'lib-fp-dt-bf-sp-link',
+							iconInput: 'lib-fp-dt-bf-sp-icon',
+							deleteBtn: 'lib-fp-dt-bf-sp-delete-btn',
+						},
+					},
+				},
+			},
+
+			shareSettings: {
+				// lib-fp -> link-in-bio-form-page
+				advanceOptionsBtn: 'lib-fp-advance-options-btn',
+				advanceOptionsContent: 'lib-fp-advance-options-content',
+
+				notesTextarea: 'lib-fp-note-textarea',
+
+				favicon: 'lib-fp-favicon',
+
+				tag: {
+					tagInput: 'lib-fp-tag-input',
+					singleTag: 'lib-fp-single-tag',
+				},
 			},
 		},
 	},

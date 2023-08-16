@@ -17,6 +17,8 @@ interface LinkInBioUploadFieldInterface {
 	dropdownHeight?: string;
 	fieldName?: string;
 	imageUrl?: string;
+	testingListSelector?: string;
+	testingSelector?: string;
 	setFieldValue?: FormikSetFieldValueEventType;
 }
 
@@ -25,16 +27,25 @@ const LinkInBioUploadField: React.FC<LinkInBioUploadFieldInterface> = ({
 	dropdownHeight,
 	fieldName,
 	imageUrl,
+	testingListSelector,
+	testingSelector,
 	setFieldValue,
 }) => {
 	return (
-		<ZIonItem lines='none' className={className}>
+		<ZIonItem
+			lines='none'
+			className={className}
+			testingSelector={`${testingSelector}-item`}
+			testingListSelector={`${testingListSelector}-item`}
+		>
 			<ZIonIcon icon={imageOutline} slot='start' className='w-7 h-7 me-2' />
 			<ZDragAndDrop
 				fieldName={fieldName}
 				imageUrl={imageUrl}
 				setFieldValue={setFieldValue}
 				style={{ height: dropdownHeight }}
+				testingSelector={testingSelector}
+				testingListSelector={testingListSelector}
 			/>
 		</ZIonItem>
 	);

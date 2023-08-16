@@ -5,13 +5,7 @@ import React from 'react';
 import { reorderFourOutline } from 'ionicons/icons';
 
 // Custom Imports
-import {
-	ZIonIcon,
-	ZIonInput,
-	ZIonItem,
-	ZIonTextarea,
-} from '@/components/ZIonComponents';
-import { InputChangeEventDetail, IonInputCustomEvent } from '@ionic/core';
+import { ZIonIcon, ZIonItem, ZIonTextarea } from '@/components/ZIonComponents';
 
 // Styles
 
@@ -21,6 +15,8 @@ interface LinkInBioDescriptionFieldInterface {
 	value?: string | null;
 	name?: string;
 	className?: string;
+	testingListSelector?: string;
+	testingSelector?: string;
 	onIonChange?: (event: Event) => void;
 	onIonBlur?: <A extends Event>(event: A) => void;
 }
@@ -29,29 +25,40 @@ const LinkInBioDescriptionField: React.FC<
 	LinkInBioDescriptionFieldInterface
 > = ({
 	placeholder = 'Your Description',
-	onIonChange,
-	onIonBlur,
 	value,
 	name,
 	className,
+	testingListSelector,
+	testingSelector,
+	onIonChange,
+	onIonBlur,
 }) => {
 	return (
-		<ZIonItem className={className} lines='none'>
+		<ZIonItem
+			className={className}
+			lines='none'
+			testingSelector={`${testingSelector}-item`}
+			testingListSelector={`${testingListSelector}-item`}
+		>
 			<ZIonIcon
 				icon={reorderFourOutline}
 				slot='start'
 				className='w-7 h-7 me-2'
+				testingSelector={`${testingSelector}-icon`}
+				testingListSelector={`${testingListSelector}-icon`}
 			/>
 
 			<ZIonTextarea
+				label=''
+				rows={3}
+				value={value}
+				name={name}
+				fill='outline'
 				placeholder={placeholder}
 				onIonChange={onIonChange}
 				onIonBlur={onIonBlur}
-				value={value}
-				rows={3}
-				name={name}
-				label=''
-				fill='outline'
+				testingSelector={`${testingSelector}-textarea`}
+				testingListSelector={`${testingListSelector}-textarea`}
 			/>
 		</ZIonItem>
 	);

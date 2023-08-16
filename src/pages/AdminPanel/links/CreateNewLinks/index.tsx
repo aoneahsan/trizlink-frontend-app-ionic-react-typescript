@@ -156,7 +156,9 @@ import {
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
-import ZFallbackIonSpinner from '@/components/CustomComponents/FallbackSpinner';
+import ZFallbackIonSpinner, {
+	ZFallbackIonSpinner2,
+} from '@/components/CustomComponents/FallbackSpinner';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import ZCan from '@/components/Can';
 import ZAdminPanelTopBar from '@/components/AdminPanelComponents/TopBar';
@@ -983,18 +985,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 												{/* Advance Options Grid-1 -> Grid-4 */}
 												<ZIonGrid className='mr-3 ms-3'>
 													{/* Row-1 */}
-													<Suspense
-														fallback={
-															<div className='flex w-full h-full ion-align-items-center ion-justify-content-center'>
-																<ZIonSpinner
-																	color='primary'
-																	className=''
-																	name='crescent'
-																	style={{ width: '50px', height: '50px' }}
-																/>
-															</div>
-														}
-													>
+													<Suspense fallback={<ZFallbackIonSpinner2 />}>
 														<ZIonRow>
 															{/* Col-1 */}
 															<ZIonCol>

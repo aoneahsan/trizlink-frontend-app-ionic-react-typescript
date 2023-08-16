@@ -25,4 +25,17 @@ const ZFallbackIonSpinner: React.FC = () => {
 	);
 };
 
+export const ZFallbackIonSpinner2: React.FC = () => {
+	return (
+		<div className='flex w-full h-full ion-align-items-center ion-justify-content-center'>
+			<ZIonSpinner
+				color='primary'
+				className=''
+				name='crescent'
+				style={{ width: '50px', height: '50px' }}
+			/>
+		</div>
+	);
+};
+
 export default ZFallbackIonSpinner;

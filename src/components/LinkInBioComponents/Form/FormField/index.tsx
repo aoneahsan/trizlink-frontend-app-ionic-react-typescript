@@ -105,13 +105,17 @@ const LinkInBioFormField: React.FC = () => {
 	return (
 		<>
 			<ZIonButton
+				expand='block'
 				className='ion-text-capitalize'
+				testingSelector={
+					CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields
+						.form.addNewFieldBtn
+				}
 				onClick={() => {
 					presentLinkInBioFormFieldModal({
 						_cssClass: 'link-in-bio-form-fields-modal-size',
 					});
 				}}
-				expand='block'
 			>
 				<ZIonIcon icon={addOutline} className='me-1' />
 				Add a new field
@@ -129,12 +133,17 @@ const LinkInBioFormField: React.FC = () => {
 									? values.form?.formFields.map((_cardItem, _index) => {
 											return (
 												<ZIonItem
+													key={_index}
+													lines='none'
 													className='pt-3 my-4 border zaions-linkInBio-block'
+													testingListSelector={
+														CONSTANTS.testingSelectors.linkInBio.formPage.design
+															.blockForm.fields.form.cardItem
+													}
+													testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.cardItem}-${_index}`}
 													style={{
 														'--background': 'transparent',
 													}}
-													lines='none'
-													key={_index}
 												>
 													<ZIonReorder slot='start' className='ms-3 me-2'>
 														<ZIonIcon
@@ -148,30 +157,37 @@ const LinkInBioFormField: React.FC = () => {
 														{_cardItem.type ===
 															LinkInBioFormFieldsEnum.title && (
 															<LinkInBioTitleField
+																placeholder='Title'
 																name={`form.formFields.${_index}.title`}
 																onIonChange={handleChange}
 																onIonBlur={handleBlur}
+																testingListSelector={
+																	CONSTANTS.testingSelectors.linkInBio.formPage
+																		.design.blockForm.fields.form.titleInput
+																}
+																testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.titleInput}-${_index}`}
 																value={
 																	values.form?.formFields &&
 																	values.form?.formFields[_index].title
 																}
-																placeholder='Title'
 															/>
 														)}
 
 														{_cardItem.type !==
 															LinkInBioFormFieldsEnum.title && (
 															<LinkInBioTitleField
-																name={`form.formFields.${_index}.placeholder`}
+																className='mt-1'
+																placeholder='placeholder'
+																showImageInSlot={true}
 																onIonChange={handleChange}
 																onIonBlur={handleBlur}
+																name={`form.formFields.${_index}.placeholder`}
+																testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.titleInput}-2`}
+																testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.titleInput}-2-${_index}`}
 																value={
 																	values.form?.formFields &&
 																	values.form?.formFields[_index].placeholder
 																}
-																className='mt-1'
-																placeholder='placeholder'
-																showImageInSlot={true}
 																slotImageUrl={
 																	predefinedFormFieldsImages[
 																		_cardItem.type as LinkInBioFormFieldsEnum
@@ -191,12 +207,17 @@ const LinkInBioFormField: React.FC = () => {
 																name={`form.formFields.${_index}.columnId`}
 																onIonChange={handleChange}
 																onIonBlur={handleBlur}
+																placeholder='column ID'
+																style={{ '--padding-start': '16px' }}
+																testingListSelector={
+																	CONSTANTS.testingSelectors.linkInBio.formPage
+																		.design.blockForm.fields.form.textarea
+																}
+																testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.textarea}-${_index}`}
 																value={
 																	values.form?.formFields &&
 																	values.form?.formFields[_index].columnId
 																}
-																style={{ '--padding-start': '16px' }}
-																placeholder='column ID'
 															/>
 														)}
 														{/* </ZIonItem> */}
@@ -217,6 +238,12 @@ const LinkInBioFormField: React.FC = () => {
 																		</ZIonText>
 																		<ZRCSwitch
 																			className='me-auto ms-3'
+																			testingListSelector={
+																				CONSTANTS.testingSelectors.linkInBio
+																					.formPage.design.blockForm.fields.form
+																					.requiredSwitcher
+																			}
+																			testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.requiredSwitcher}-${_index}`}
 																			onChange={(value) => {
 																				setFieldValue(
 																					`form.formFields.${_index}.required`,
@@ -243,6 +270,12 @@ const LinkInBioFormField: React.FC = () => {
 																		</ZIonText>
 																		<ZRCSwitch
 																			className='me-auto ms-3'
+																			testingListSelector={
+																				CONSTANTS.testingSelectors.linkInBio
+																					.formPage.design.blockForm.fields.form
+																					.activeSwitcher
+																			}
+																			testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.activeSwitcher}-${_index}`}
 																			onChange={(value) => {
 																				setFieldValue(
 																					`form.formFields.${_index}.isActive`,
@@ -263,6 +296,14 @@ const LinkInBioFormField: React.FC = () => {
 
 													{/* Delete block button */}
 													<ZCustomDeleteComponent
+														slot='end'
+														iconColor='danger'
+														className='ion-no-padding me-1 ms-1'
+														testingListSelector={
+															CONSTANTS.testingSelectors.linkInBio.formPage
+																.design.blockForm.fields.form.deleteBtn
+														}
+														testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.deleteBtn}-${_index}`}
 														deleteFn={(detail: OverlayEventDetail<unknown>) => {
 															try {
 																if (detail && detail.role === 'destructive') {
@@ -272,9 +313,6 @@ const LinkInBioFormField: React.FC = () => {
 																reportCustomError(error);
 															}
 														}}
-														className='ion-no-padding me-1 ms-1'
-														slot='end'
-														iconColor='danger'
 													/>
 												</ZIonItem>
 											);

@@ -8,14 +8,19 @@ import React, { useState } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import { Formik } from 'formik';
+import {
+	addOutline,
+	ellipsisHorizontalOutline,
+	pencilOutline,
+	timeOutline,
+	trashBinOutline,
+} from 'ionicons/icons';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { WorkspaceSettingsTimetablePlaceholder } from '@/assets/images';
-import ZWorkspaceSettingPlaceholderComp from '@/components/InPageComponents/ZaionsModals/Workspace/SettingsModal/PlaceholderComp';
-import { Formik } from 'formik';
 import {
 	ZIonButton,
 	ZIonCol,
@@ -26,13 +31,18 @@ import {
 	ZIonSkeletonText,
 	ZIonText,
 } from '@/components/ZIonComponents';
+import ZWorkspaceTimeSlotFormModal from '../../TimeSlotFormModal';
+
+/**
+ * Custom Hooks Imports go down
+ * ? Like import of custom Hook is a custom import
+ * */
 import {
-	addOutline,
-	ellipsisHorizontalOutline,
-	pencilOutline,
-	timeOutline,
-	trashBinOutline,
-} from 'ionicons/icons';
+	useZGetRQCacheData,
+	useZRQDeleteRequest,
+	useZRQGetRequest,
+	useZUpdateRQCacheData,
+} from '@/ZaionsHooks/zreactquery-hooks';
 import {
 	useZIonAlert,
 	useZIonErrorAlert,
@@ -40,43 +50,28 @@ import {
 	useZIonPopover,
 	useZIonToastSuccess,
 } from '@/ZaionsHooks/zionic-hooks';
-import ZWorkspaceTimeSlotFormModal from '../../TimeSlotFormModal';
-import {
-	useZGetRQCacheData,
-	useZRQDeleteRequest,
-	useZRQGetRequest,
-	useZUpdateRQCacheData,
-} from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
-import CONSTANTS from '@/utils/constants';
-import {
-	daysEnum,
-	FormMode,
-	TimeSlotInterface,
-} from '@/types/AdminPanel/index.type';
-import { reportCustomError } from '@/utils/customErrorType';
-import {
-	showErrorNotification,
-	showSuccessNotification,
-} from '@/utils/notification';
-import MESSAGES from '@/utils/messages';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { extractInnerData } from '@/utils/helpers';
-
-/**
- * Custom Hooks Imports go down
- * ? Like import of custom Hook is a custom import
- * */
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import CONSTANTS from '@/utils/constants';
+import { reportCustomError } from '@/utils/customErrorType';
+import { showErrorNotification } from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
+import { extractInnerData } from '@/utils/helpers';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import {
+	daysEnum,
+	FormMode,
+	TimeSlotInterface,
+} from '@/types/AdminPanel/index.type';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Recoil State Imports go down

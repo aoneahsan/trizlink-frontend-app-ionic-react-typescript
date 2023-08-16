@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 
 /**
  * Packages Imports go down
@@ -19,13 +19,19 @@ import { useParams } from 'react-router';
 import {
 	ZIonButton,
 	ZIonCol,
-	ZIonImg,
 	ZIonRow,
 	ZIonSkeletonText,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import ZLinkInBioAddBlockModal from '@/components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal';
-import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedButton';
+import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
+const ZLinkInBioAddBlockModal = lazy(
+	() =>
+		import('@/components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal')
+);
+const LinkInBioPDButton = lazy(
+	() => import('@/components/LinkInBioComponents/UI/PerDefinedButton')
+);
+
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 
@@ -136,7 +142,7 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 	const isZFetching = isLinkInBioPreDefinedBlocksDataFetching;
 
 	return (
-		<>
+		<Suspense fallback={<ZFallbackIonSpinner2 />}>
 			<ZIonCol
 				sizeXl='10'
 				sizeLg='11'
@@ -148,15 +154,18 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 			>
 				<ZIonRow
 					className={classNames({
-						'ion-margin-top pt-2 ion-padding-bottom mb-2 row-gap-1-point-6-rem':
-							true,
+						'ion-margin-top pt-2 ion-padding-bottom mb-2 gap-y-2': true,
 					})}
+					testingSelector={
+						CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
+							.container
+					}
 				>
 					{isZFetching &&
-						[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((el) => {
+						[...Array(10)].map((_, i) => {
 							return (
 								<ZIonCol
-									key={el}
+									key={i}
 									size='2.4'
 									className='flex ion-justify-content-center'
 								>
@@ -196,10 +205,16 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 								size='2.4'
 								key={el.id}
 								className='flex ion-justify-content-center'
+								testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks.btnCol}-${el.id}`}
+								testingSelector={
+									CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
+										.btnCol
+								}
 							>
 								<div className='ion-text-center me-3 w-max'>
 									<LinkInBioPDButton
 										icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
+										testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks.btn}-${el.type}`}
 										onClick={() => {
 											LinkInBioBlockHandler(LinkInBioBlockEnum[el.type]);
 										}}
@@ -225,7 +240,7 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 					})}
 				</ZIonRow>
 			</ZIonCol>
-		</>
+		</Suspense>
 	);
 };
 

@@ -28,6 +28,7 @@ import {
 import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
 import { reportCustomError } from '@/utils/customErrorType';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import CONSTANTS from '@/utils/constants';
 
 // Styles
 
@@ -76,9 +77,13 @@ const LinkInBioCarouselCardField: React.FC = () => {
 						return (
 							<>
 								<ZIonButton
-									className='ion-text-capitalize'
-									onClick={() => push(getNewCardItemEmptyObjForCarousel)}
 									expand='block'
+									className='ion-text-capitalize'
+									testingSelector={
+										CONSTANTS.testingSelectors.linkInBio.formPage.design
+											.blockForm.fields.carouselCard.addCardBtn
+									}
+									onClick={() => push(getNewCardItemEmptyObjForCarousel)}
 								>
 									<ZIonIcon icon={addOutline} className='me-1' />
 									add card
@@ -86,12 +91,17 @@ const LinkInBioCarouselCardField: React.FC = () => {
 								{values.cardItems?.length
 									? values.cardItems.map((_cardItem, _index) => (
 											<ZIonItem
+												key={_index}
+												lines='none'
 												className='py-3 my-3 border zaions-linkInBio-block'
+												testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.cardItem}-${_index}`}
+												testingSelector={
+													CONSTANTS.testingSelectors.linkInBio.formPage.design
+														.blockForm.fields.carouselCard.cardItem
+												}
 												style={{
 													'--background': 'transparent',
 												}}
-												lines='none'
-												key={_index}
 											>
 												<ZIonReorder slot='start' className='ms-3 me-3'>
 													<ZIonIcon
@@ -106,6 +116,11 @@ const LinkInBioCarouselCardField: React.FC = () => {
 														name={`cardItems.${_index}.target.url`}
 														onIonChange={handleChange}
 														onIonBlur={handleBlur}
+														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.linkInput}-${_index}`}
+														testingSelector={
+															CONSTANTS.testingSelectors.linkInBio.formPage
+																.design.blockForm.fields.carouselCard.linkInput
+														}
 														value={
 															values.cardItems &&
 															values.cardItems[_index].target?.url
@@ -115,19 +130,31 @@ const LinkInBioCarouselCardField: React.FC = () => {
 													<LinkInBioUploadField
 														className='mt-2'
 														dropdownHeight='7rem'
+														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.uploadField}-${_index}`}
+														testingSelector={
+															CONSTANTS.testingSelectors.linkInBio.formPage
+																.design.blockForm.fields.carouselCard
+																.uploadField
+														}
 													/>
 
 													<LinkInBioTitleField
+														className='mt-2'
 														name={`cardItems.${_index}.title`}
 														onIonChange={handleChange}
 														onIonBlur={handleBlur}
 														value={
 															values.cardItems && values.cardItems[_index].title
 														}
-														className='mt-2'
+														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.titleInput}-${_index}`}
+														testingSelector={
+															CONSTANTS.testingSelectors.linkInBio.formPage
+																.design.blockForm.fields.carouselCard.titleInput
+														}
 													/>
 
 													<LinkInBioDescriptionField
+														className='mt-2'
 														name={`cardItems.${_index}.description`}
 														onIonChange={handleChange}
 														onIonBlur={handleBlur}
@@ -135,12 +162,25 @@ const LinkInBioCarouselCardField: React.FC = () => {
 															values.cardItems &&
 															values.cardItems[_index].description
 														}
-														className='mt-2'
+														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.description}-${_index}`}
+														testingSelector={
+															CONSTANTS.testingSelectors.linkInBio.formPage
+																.design.blockForm.fields.carouselCard
+																.description
+														}
 													/>
 												</div>
 
 												{/* Delete block button */}
 												<ZCustomDeleteComponent
+													slot='end'
+													iconColor='danger'
+													className='ion-no-padding ms-3 me-1'
+													testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.deleteBtn}-${_index}`}
+													testingSelector={
+														CONSTANTS.testingSelectors.linkInBio.formPage.design
+															.blockForm.fields.carouselCard.deleteBtn
+													}
 													deleteFn={(detail: OverlayEventDetail<unknown>) => {
 														try {
 															if (detail && detail.role === 'destructive') {
@@ -150,9 +190,6 @@ const LinkInBioCarouselCardField: React.FC = () => {
 															reportCustomError(error);
 														}
 													}}
-													className='ion-no-padding ms-3 me-1'
-													slot='end'
-													iconColor='danger'
 												/>
 											</ZIonItem>
 									  ))

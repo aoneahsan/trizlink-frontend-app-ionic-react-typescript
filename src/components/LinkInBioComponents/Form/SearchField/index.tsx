@@ -6,8 +6,8 @@ import React from 'react';
 // Custom Imports
 import { ZIonItem } from '@/components/ZIonComponents';
 import {
-  IonSearchbarCustomEvent,
-  SearchbarChangeEventDetail,
+	IonSearchbarCustomEvent,
+	SearchbarChangeEventDetail,
 } from '@ionic/core';
 import ZIonSearchbar from '@/components/ZIonComponents/ZIonSearchbar';
 import { closeOutline, searchOutline } from 'ionicons/icons';
@@ -16,38 +16,48 @@ import { closeOutline, searchOutline } from 'ionicons/icons';
 
 // Component Type
 interface LinkInBioSearchFieldInterface {
-  placeholder?: string;
-  value?: string | null;
-  searchIcon?: string;
-  onIonChange?: (
-    event: IonSearchbarCustomEvent<SearchbarChangeEventDetail>
-  ) => void;
-  onIonBlur?: <A extends Event>(event: A) => void;
+	placeholder?: string;
+	value?: string | null;
+	searchIcon?: string;
+	testingListSelector?: string;
+	testingSelector?: string;
+	onIonChange?: (
+		event: IonSearchbarCustomEvent<SearchbarChangeEventDetail>
+	) => void;
+	onIonBlur?: <A extends Event>(event: A) => void;
 }
 
 const LinkInBioSearchField: React.FC<LinkInBioSearchFieldInterface> = ({
-  placeholder = 'Search an address',
-  value,
-  searchIcon = searchOutline,
-  onIonChange,
-  onIonBlur,
+	placeholder = 'Search an address',
+	value,
+	searchIcon = searchOutline,
+	testingSelector,
+	testingListSelector,
+	onIonChange,
+	onIonBlur,
 }) => {
-  return (
-    <ZIonItem className='ion-no-padding'>
-      <ZIonSearchbar
-        placeholder={placeholder}
-        onIonChange={onIonChange}
-        onIonBlur={onIonBlur}
-        value={value}
-        className='ion-no-padding'
-        style={{
-          '--box-shadow': 'none',
-        }}
-        searchIcon={searchIcon}
-        clearIcon={closeOutline}
-      />
-    </ZIonItem>
-  );
+	return (
+		<ZIonItem
+			className='ion-no-padding'
+			testingSelector={`${testingSelector}-item`}
+			testingListSelector={`${testingListSelector}-item`}
+		>
+			<ZIonSearchbar
+				placeholder={placeholder}
+				onIonChange={onIonChange}
+				onIonBlur={onIonBlur}
+				value={value}
+				searchIcon={searchIcon}
+				clearIcon={closeOutline}
+				testingSelector={`${testingSelector}-input`}
+				testingListSelector={`${testingListSelector}-input`}
+				className='ion-no-padding'
+				style={{
+					'--box-shadow': 'none',
+				}}
+			/>
+		</ZIonItem>
+	);
 };
 
 export default LinkInBioSearchField;

@@ -169,14 +169,19 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
 										>
 											<div className='ion-text-center me-3 w-max'>
 												<LinkInBioPDButton
+													color={_index > -1 ? 'secondary' : 'light'}
 													icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
+													testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.socialPlatform.block}-${el.type}`}
+													testingSelector={
+														CONSTANTS.testingSelectors.linkInBio.formPage.design
+															.blockForm.fields.socialPlatform.block
+													}
 													onClick={() => {
 														toggleSocialPlatformCardHandler({
 															_type: el.type,
 															_title: el.title as string,
 														});
 													}}
-													color={_index > -1 ? 'secondary' : 'light'}
 												/>
 											</div>
 										</ZIonCol>
@@ -185,7 +190,12 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
 							</ZIonRow>
 
 							<ZIonButton
+								expand='block'
 								className='ion-text-capitalize'
+								testingSelector={
+									CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm
+										.fields.socialPlatform.addBlockBtn
+								}
 								onClick={() =>
 									push({
 										target: {
@@ -197,7 +207,6 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
 										socialCardType: LinkInBioSocialPlatformEnum.default,
 									})
 								}
-								expand='block'
 							>
 								<ZIonIcon icon={addOutline} className='me-1' />
 								add custom element
@@ -211,12 +220,17 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
 									? values.cardItems.map((_cardItem, _index) => {
 											return (
 												<ZIonItem
-													className='my-4 zaions-linkInBio-block border py-3'
+													key={_index}
+													lines='none'
+													className='py-3 my-4 border zaions-linkInBio-block'
+													testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.socialPlatform.cardItem}-${_index}`}
+													testingSelector={
+														CONSTANTS.testingSelectors.linkInBio.formPage.design
+															.blockForm.fields.socialPlatform.cardItem
+													}
 													style={{
 														'--background': 'transparent',
 													}}
-													lines='none'
-													key={_index}
 												>
 													<ZIonReorder slot='start' className='ms-3'>
 														<h4 className='ion-no-margin'>
@@ -226,14 +240,20 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
 
 													<div className='w-full pe-3'>
 														<LinkInBioLinkField
-															name={`cardItems.${_index}.target.url`}
+															showImageInSlot={true}
 															onIonChange={handleChange}
 															onIonBlur={handleBlur}
+															name={`cardItems.${_index}.target.url`}
+															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.socialPlatform.linkInput}-${_index}`}
+															testingSelector={
+																CONSTANTS.testingSelectors.linkInBio.formPage
+																	.design.blockForm.fields.socialPlatform
+																	.linkInput
+															}
 															value={
 																values.cardItems &&
 																values.cardItems[_index].target?.url
 															}
-															showImageInSlot={true}
 															slotImageUrl={
 																predefinedSocialImages[
 																	_cardItem.socialCardType as LinkInBioSocialPlatformEnum
@@ -244,20 +264,35 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
 														{_cardItem.socialCardType ===
 															LinkInBioSocialPlatformEnum.default && (
 															<LinkInBioIconField
-																name={`cardItems.${_index}.icon`}
+																className='mt-3'
 																onIonChange={handleChange}
 																onIonBlur={handleBlur}
+																name={`cardItems.${_index}.icon`}
+																testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.socialPlatform.iconInput}-${_index}`}
+																testingSelector={
+																	CONSTANTS.testingSelectors.linkInBio.formPage
+																		.design.blockForm.fields.socialPlatform
+																		.iconInput
+																}
 																value={
 																	values.cardItems &&
 																	values.cardItems[_index].icon
 																}
-																className='mt-3'
 															/>
 														)}
 													</div>
 
 													{/* Delete block button */}
 													<ZCustomDeleteComponent
+														slot='end'
+														iconColor='danger'
+														className='ion-no-padding me-1'
+														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.socialPlatform.deleteBtn}-${_index}`}
+														testingSelector={
+															CONSTANTS.testingSelectors.linkInBio.formPage
+																.design.blockForm.fields.socialPlatform
+																.deleteBtn
+														}
 														deleteFn={(detail: OverlayEventDetail<unknown>) => {
 															try {
 																if (detail && detail.role === 'destructive') {
@@ -267,9 +302,6 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
 																reportCustomError(error);
 															}
 														}}
-														className='ion-no-padding me-1'
-														slot='end'
-														iconColor='danger'
 													/>
 												</ZIonItem>
 											);

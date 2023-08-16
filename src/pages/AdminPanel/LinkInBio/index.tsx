@@ -10,7 +10,6 @@ import {
 	RefresherEventDetail,
 } from '@ionic/react';
 import {
-	menuOutline,
 	calendar,
 	pricetagOutline,
 	filterOutline,
@@ -568,7 +567,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 
 																	<ZCan
 																		havePermissions={[
-																			permissionsEnum.create_shortLink,
+																			permissionsEnum.create_linkInBio,
 																		]}
 																	>
 																		<ZIonButton

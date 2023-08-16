@@ -84,66 +84,64 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
 	testingListSelector,
 	closeIconOnChangeFn,
 }) => {
-	return (
-		<>
-			{!showSkeleton && (
-				<ZIonItem
-					className='flex mt-3 ion-no-padding ion-align-items-center'
-					lines='none'
-					minHeight={minHeight}
-					testingSelector={testingSelector}
-					testingListSelector={testingListSelector}
-					style={{
-						// '--border-color': '#000',
-						// '--highlight-color-focused': value,
-						'--inner-padding-end': '0px',
-					}}
-				>
-					<input
-						type='color'
-						name={name}
-						className='zaions-color-piker'
-						value={value}
-						onChange={({ target }) => {
-							setFieldValueFn &&
-								setFieldValueFn(name, target.value || setDefaultColor, false);
-						}}
-					/>
-					<ZIonInput
-						type='text'
-						className='ms-2 text-[18px]'
-						value={value}
-						label=''
-						fill='outline'
-						minHeight={minHeight}
-						style={{ '--background': '#fff' }}
-						onIonChange={({ target }) => {
-							setFieldValueFn &&
-								setFieldValueFn(name, target.value || setDefaultColor, false);
-						}}
-					/>
-					{showCloseIcon && (
-						<ZIonButton
-							slot='end'
-							fill='clear'
-							className='ion-no-padding ion-no-margin ms-2'
-							onClick={closeIconOnChangeFn}
-						>
-							<ZIonIcon icon={closeCircleOutline} className='w-6 h-6' />
-						</ZIonButton>
-					)}
-				</ZIonItem>
-			)}
+	if (showSkeleton) {
+		return <ZaionsColorPikerSkeleton />;
+	}
 
-			{showSkeleton && <ZaionsColorPikerSkeleton />}
-		</>
+	return (
+		<ZIonItem
+			className='flex mt-3 ion-no-padding ion-align-items-center'
+			lines='none'
+			minHeight={minHeight}
+			testingSelector={testingSelector}
+			testingListSelector={testingListSelector}
+			style={{
+				// '--border-color': '#000',
+				// '--highlight-color-focused': value,
+				'--inner-padding-end': '0px',
+			}}
+		>
+			<input
+				type='color'
+				name={name}
+				className='zaions-color-piker'
+				value={value}
+				onChange={({ target }) => {
+					setFieldValueFn &&
+						setFieldValueFn(name, target.value || setDefaultColor, false);
+				}}
+			/>
+			<ZIonInput
+				type='text'
+				className='ms-2 text-[18px]'
+				value={value}
+				label=''
+				fill='outline'
+				minHeight={minHeight}
+				style={{ '--background': '#fff' }}
+				onIonChange={({ target }) => {
+					setFieldValueFn &&
+						setFieldValueFn(name, target.value || setDefaultColor, false);
+				}}
+			/>
+			{showCloseIcon && (
+				<ZIonButton
+					slot='end'
+					fill='clear'
+					className='ion-no-padding ion-no-margin ms-2'
+					onClick={closeIconOnChangeFn}
+				>
+					<ZIonIcon icon={closeCircleOutline} className='w-6 h-6' />
+				</ZIonButton>
+			)}
+		</ZIonItem>
 	);
 };
 
 const ZaionsColorPikerSkeleton: React.FC = React.memo(() => {
 	return (
 		<ZIonItem
-			className='flex mt-3 ion-no-padding ion-align-items-center'
+			className='flex w-full mt-3 ion-no-padding ion-align-items-center'
 			lines='none'
 			minHeight='40px'
 			style={{

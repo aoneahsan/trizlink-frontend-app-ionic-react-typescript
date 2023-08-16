@@ -13,25 +13,30 @@ import { LinkInBioSingleBlockContentType } from '@/types/AdminPanel/linkInBioTyp
 
 // Component Type
 
-const LinkInBioIframeField: React.FC = () => {
-  const { values, setFieldValue } =
-    useFormikContext<LinkInBioSingleBlockContentType>();
-  return (
-    <ZIonCol size='12'>
-      <div className='ion-padding-top mt-3'>
-        <ZEditor
-          width={'100%'}
-          height={'240px'}
-          placeholder='Paste you HTML code here...'
-          fontSize={18}
-          onChange={(value) => {
-            setFieldValue('iframe', value, false);
-          }}
-          value={values.iframe}
-        />
-      </div>
-    </ZIonCol>
-  );
+const LinkInBioIframeField: React.FC<{
+	testingSelector?: string;
+	testingListSelector?: string;
+}> = ({ testingListSelector, testingSelector }) => {
+	const { values, setFieldValue } =
+		useFormikContext<LinkInBioSingleBlockContentType>();
+	return (
+		<ZIonCol size='12'>
+			<div className='ion-padding-top mt-3'>
+				<ZEditor
+					width={'100%'}
+					height={'240px'}
+					placeholder='Paste you HTML code here...'
+					fontSize={18}
+					value={values.iframe}
+					testingListSelector={testingListSelector}
+					testingSelector={testingSelector}
+					onChange={(value) => {
+						setFieldValue('iframe', value, false);
+					}}
+				/>
+			</div>
+		</ZIonCol>
+	);
 };
 
 export default LinkInBioIframeField;

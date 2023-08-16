@@ -16,6 +16,8 @@ interface LinkInBioPDButtonInterface {
 	onMouseEnter?: React.MouseEventHandler<HTMLIonButtonElement>;
 	icon?: string;
 	color?: ZIonColorType;
+	testingSelector?: string;
+	testingListSelector?: string;
 	style?: {
 		[key: string]: unknown;
 	};
@@ -27,6 +29,8 @@ const LinkInBioPDButton: React.FC<LinkInBioPDButtonInterface> = ({
 	icon,
 	color = 'light',
 	style,
+	testingSelector,
+	testingListSelector,
 	onClick,
 	onMouseEnter,
 }) => {
@@ -40,6 +44,8 @@ const LinkInBioPDButton: React.FC<LinkInBioPDButtonInterface> = ({
 			onMouseEnter={onMouseEnter}
 			className={classNames(className)} //classes['zaions-block-button'],
 			height='4.5rem'
+			testingSelector={testingSelector}
+			testingListSelector={testingListSelector}
 		>
 			<ZIonImg src={icon} style={{ width: '25px' }} />
 		</ZIonButton>

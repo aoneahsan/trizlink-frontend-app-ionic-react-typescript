@@ -36,6 +36,9 @@ import { DeltaStatic, Sources } from 'quill/index';
  * ? Import of style sheet is a style import
  * */
 import 'react-quill/dist/quill.snow.css';
+import { createElementTestingSelector } from '@/utils/helpers';
+import { PRODUCT_NAME } from '@/utils/constants';
+import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 /**
  * Images Imports go down
@@ -47,34 +50,36 @@ import 'react-quill/dist/quill.snow.css';
  * ? Like if you have a type for props it should be please Down
  * */
 interface ZTextEditorInterface {
-  value?: ReactQuill.Value;
-  defaultValue?: ReactQuill.Value;
-  bounds?: string | HTMLElement;
-  className?: string;
-  children?: React.ReactElement<
-    unknown,
-    string | React.JSXElementConstructor<unknown>
-  >;
-  formats?: string[];
-  style?: React.CSSProperties;
-  id?: string;
-  placeholder?: string;
-  onChange?: (
-    value: string,
-    delta: DeltaStatic,
-    source: Sources,
-    editor: ReactQuill.UnprivilegedEditor
-  ) => void;
-  onBlur?: (
-    previousSelection: ReactQuill.Range,
-    source: Sources,
-    editor: ReactQuill.UnprivilegedEditor
-  ) => void;
-  onChangeSelection?: (
-    selection: ReactQuill.Range,
-    source: Sources,
-    editor: ReactQuill.UnprivilegedEditor
-  ) => void;
+	value?: ReactQuill.Value;
+	defaultValue?: ReactQuill.Value;
+	bounds?: string | HTMLElement;
+	className?: string;
+	children?: React.ReactElement<
+		unknown,
+		string | React.JSXElementConstructor<unknown>
+	>;
+	formats?: string[];
+	style?: React.CSSProperties;
+	id?: string;
+	placeholder?: string;
+	testingSelector?: string;
+	testingListSelector?: string;
+	onChange?: (
+		value: string,
+		delta: DeltaStatic,
+		source: Sources,
+		editor: ReactQuill.UnprivilegedEditor
+	) => void;
+	onBlur?: (
+		previousSelection: ReactQuill.Range,
+		source: Sources,
+		editor: ReactQuill.UnprivilegedEditor
+	) => void;
+	onChangeSelection?: (
+		selection: ReactQuill.Range,
+		source: Sources,
+		editor: ReactQuill.UnprivilegedEditor
+	) => void;
 }
 
 /**
@@ -84,7 +89,32 @@ interface ZTextEditorInterface {
  * */
 
 const ZTextEditor: React.FC<ZTextEditorInterface> = (props) => {
-  return <ReactQuill theme='snow' {...props} style={{ ...props.style }} />;
+	const _testingListSelector = props.testingListSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingListSelector || PRODUCT_NAME,
+					_key: createElementTestingSelectorKeyEnum.listSelector,
+				}),
+		  }
+		: {};
+
+	const _testingSelector = props.testingSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingSelector || PRODUCT_NAME,
+				}),
+		  }
+		: {};
+
+	return (
+		<ReactQuill
+			theme='snow'
+			{...props}
+			style={{ ...props.style }}
+			{..._testingSelector}
+			{..._testingListSelector}
+		/>
+	);
 };
 
 export default ZTextEditor;

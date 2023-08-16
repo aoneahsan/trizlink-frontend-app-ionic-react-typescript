@@ -177,6 +177,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 											<div className='ion-text-center me-3 w-max'>
 												<LinkInBioPDButton
 													icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
+													testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.block}-${el.type}`}
 													onClick={() => {
 														toggleMusicPlatformCardHandler({
 															_type: el.type,
@@ -192,7 +193,12 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 							</ZIonRow>
 
 							<ZIonButton
+								expand='block'
 								className='ion-text-capitalize'
+								testingSelector={
+									CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm
+										.fields.messenger.addBlockBtn
+								}
 								onClick={() =>
 									push({
 										target: {
@@ -204,7 +210,6 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 										messengerCardType: messengerPlatformsBlockEnum.default,
 									})
 								}
-								expand='block'
 							>
 								<ZIonIcon icon={addOutline} className='me-1' />
 								add custom element
@@ -213,12 +218,17 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 								? values.cardItems.map((_cardItem, _index) => {
 										return (
 											<ZIonItem
+												key={_index}
+												lines='none'
 												className='pt-2 pb-3 my-4 border zaions-linkInBio-block'
+												testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.cardItem}-${_index}`}
+												testingSelector={
+													CONSTANTS.testingSelectors.linkInBio.formPage.design
+														.blockForm.fields.messenger.cardItem
+												}
 												style={{
 													'--background': 'transparent',
 												}}
-												lines='none'
-												key={_index}
 											>
 												<ZIonReorder slot='start' className='ms-3 me-2'>
 													<ZIonIcon
@@ -230,14 +240,18 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 
 												<div className='w-full pe-3'>
 													<LinkInBioTitleField
+														placeholder='Title'
 														name={`cardItems.${_index}.title`}
 														onIonChange={handleChange}
 														onIonBlur={handleBlur}
+														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.titleInput}-${_index}`}
+														testingSelector={
+															CONSTANTS.testingSelectors.linkInBio.formPage
+																.design.blockForm.fields.messenger.titleInput
+														}
 														value={
 															values.cardItems && values.cardItems[_index].title
 														}
-														className=''
-														placeholder='Title'
 													/>
 
 													{(_cardItem.messengerCardType ===
@@ -245,42 +259,57 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 														_cardItem.messengerCardType ===
 															messengerPlatformsBlockEnum.messenger) && (
 														<LinkInBioLinkField
+															className='mt-1'
 															name={`cardItems.${_index}.target.url`}
 															onIonChange={handleChange}
 															onIonBlur={handleBlur}
+															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.linkInput}-${_index}`}
+															testingSelector={
+																CONSTANTS.testingSelectors.linkInBio.formPage
+																	.design.blockForm.fields.messenger.linkInput
+															}
 															value={
 																values.cardItems &&
 																values.cardItems[_index].target?.url
 															}
-															className='mt-1'
 														/>
 													)}
 
 													{_cardItem.messengerCardType ===
 														messengerPlatformsBlockEnum.default && (
 														<LinkInBioIconField
+															className='mt-1'
 															name={`cardItems.${_index}.icon`}
 															onIonChange={handleChange}
 															onIonBlur={handleBlur}
+															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.iconInput}-${_index}`}
+															testingSelector={
+																CONSTANTS.testingSelectors.linkInBio.formPage
+																	.design.blockForm.fields.messenger.iconInput
+															}
 															value={
 																values.cardItems &&
 																values.cardItems[_index].icon
 															}
-															className='mt-1'
 														/>
 													)}
 
 													{_cardItem.messengerCardType ===
 														messengerPlatformsBlockEnum.email && (
 														<LinkInBioEmailField
+															className='mt-1'
 															name={`cardItems.${_index}.email`}
 															onIonChange={handleChange}
 															onIonBlur={handleBlur}
+															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.emailInput}-${_index}`}
+															testingSelector={
+																CONSTANTS.testingSelectors.linkInBio.formPage
+																	.design.blockForm.fields.messenger.emailInput
+															}
 															value={
 																values.cardItems &&
 																values.cardItems[_index].email
 															}
-															className='mt-1'
 														/>
 													)}
 
@@ -294,11 +323,16 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 															name={`cardItems.${_index}.phoneNumber`}
 															onIonChange={handleChange}
 															onIonBlur={handleBlur}
+															className='mt-1'
+															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.emailInput}-${_index}`}
+															testingSelector={
+																CONSTANTS.testingSelectors.linkInBio.formPage
+																	.design.blockForm.fields.messenger.emailInput
+															}
 															value={
 																values.cardItems &&
 																values.cardItems[_index].phoneNumber
 															}
-															className='mt-1'
 														/>
 													)}
 
@@ -313,29 +347,40 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 														_cardItem.messengerCardType ===
 															messengerPlatformsBlockEnum.viber) && (
 														<LinkInBioTitleField
-															name={`cardItems.${_index}.username`}
+															className='mt-1'
+															placeholder='Username'
 															onIonChange={handleChange}
 															onIonBlur={handleBlur}
+															name={`cardItems.${_index}.username`}
+															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.usernameInput}-${_index}`}
+															testingSelector={
+																CONSTANTS.testingSelectors.linkInBio.formPage
+																	.design.blockForm.fields.messenger
+																	.usernameInput
+															}
 															value={
 																values.cardItems &&
 																values.cardItems[_index].username
 															}
-															className='mt-1'
-															placeholder='Username'
 														/>
 													)}
 
 													{_cardItem.messengerCardType ===
 														messengerPlatformsBlockEnum.email && (
 														<LinkInBioObjectField
-															name={`cardItems.${_index}.object`}
+															className='mt-1'
 															onIonChange={handleChange}
 															onIonBlur={handleBlur}
+															name={`cardItems.${_index}.object`}
+															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.objectInput}-${_index}`}
+															testingSelector={
+																CONSTANTS.testingSelectors.linkInBio.formPage
+																	.design.blockForm.fields.messenger.objectInput
+															}
 															value={
 																values.cardItems &&
 																values.cardItems[_index].object
 															}
-															className='mt-1'
 														/>
 													)}
 
@@ -348,6 +393,13 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 														_cardItem.messengerCardType ===
 															messengerPlatformsBlockEnum.viber) && (
 														<ZTextEditor
+															placeholder='Message'
+															className='pt-2'
+															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.textInput}-${_index}`}
+															testingSelector={
+																CONSTANTS.testingSelectors.linkInBio.formPage
+																	.design.blockForm.fields.messenger.textInput
+															}
 															value={
 																values.cardItems &&
 																values.cardItems[_index].text
@@ -359,14 +411,20 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 																	false
 																);
 															}}
-															placeholder='Message'
-															className='pt-2'
 														/>
 													)}
 												</div>
 
 												{/* Delete block button */}
 												<ZCustomDeleteComponent
+													slot='end'
+													iconColor='danger'
+													className='ion-no-padding me-1 ms-2'
+													testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.deleteBtn}-${_index}`}
+													testingSelector={
+														CONSTANTS.testingSelectors.linkInBio.formPage.design
+															.blockForm.fields.messenger.deleteBtn
+													}
 													deleteFn={(detail: OverlayEventDetail<unknown>) => {
 														try {
 															if (detail && detail.role === 'destructive') {
@@ -376,9 +434,6 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 															reportCustomError(error);
 														}
 													}}
-													className='ion-no-padding me-1 ms-2'
-													slot='end'
-													iconColor='danger'
 												/>
 											</ZIonItem>
 										);

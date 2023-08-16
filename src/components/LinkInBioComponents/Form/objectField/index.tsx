@@ -14,6 +14,8 @@ import { IonInputCustomEvent } from '@ionic/core';
 interface LinkInBioObjectFieldInterface {
 	placeholder?: string;
 	name?: string;
+	testingListSelector?: string;
+	testingSelector?: string;
 	value?: string | number | null;
 	className?: string;
 	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
@@ -24,20 +26,29 @@ const LinkInBioObjectField: React.FC<LinkInBioObjectFieldInterface> = ({
 	placeholder = 'object',
 	value,
 	name,
+	testingListSelector,
+	testingSelector,
 	className,
 	onIonChange,
 	onIonBlur,
 }) => {
 	return (
-		<ZIonItem className={className} lines='none'>
+		<ZIonItem
+			className={className}
+			lines='none'
+			testingSelector={`${testingSelector}-item`}
+			testingListSelector={`${testingListSelector}-item`}
+		>
 			<ZIonInput
+				label=''
 				name={name}
 				placeholder={placeholder}
 				onIonChange={onIonChange}
 				onIonBlur={onIonBlur}
 				value={value}
-				label=''
 				minHeight='40px'
+				testingSelector={`${testingSelector}-input`}
+				testingListSelector={`${testingListSelector}-input`}
 			/>
 		</ZIonItem>
 	);

@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { useEffect, useState } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 
 /**
  * Packages Imports go down
@@ -10,7 +10,6 @@ import React, { useEffect, useState } from 'react';
  * */
 import { useFormikContext } from 'formik';
 import classNames from 'classnames';
-import { useRecoilState, useSetRecoilState } from 'recoil';
 import { ItemReorderEventDetail } from '@ionic/react';
 import {
 	albumsOutline,
@@ -38,12 +37,38 @@ import {
 	ZIonText,
 } from '@/components/ZIonComponents';
 import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
-import ZLinkInBioBlocksSection from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioBlocks';
-import ZLinkInBioBlocksForm from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioBlocksForm';
-import ZLinkInBioPoweredBySection from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioPoweredBy';
-import ZLinkInBioSettingsSection from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioSettings';
-import ZLinkInBioThemeSection from '@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioTheme';
-import ZLinkInBioReorderItem from '@/components/LinkInBioComponents/UI/LinkInBioReorderItem';
+import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
+
+const ZLinkInBioBlocksSection = lazy(
+	() =>
+		import('@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioBlocks')
+);
+const ZLinkInBioBlocksForm = lazy(
+	() =>
+		import(
+			'@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioBlocksForm'
+		)
+);
+const ZLinkInBioPoweredBySection = lazy(
+	() =>
+		import(
+			'@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioPoweredBy'
+		)
+);
+const ZLinkInBioSettingsSection = lazy(
+	() =>
+		import(
+			'@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioSettings'
+		)
+);
+const ZLinkInBioThemeSection = lazy(
+	() =>
+		import('@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design/LinkInBioTheme')
+);
+const ZLinkInBioReorderItem = lazy(
+	() => import('@/components/LinkInBioComponents/UI/LinkInBioReorderItem')
+);
+
 import {
 	useZRQGetRequest,
 	useZRQUpdateRequest,
@@ -82,7 +107,6 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { LinkInBioBlocksRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
 
 /**
  * Style files Imports go down
@@ -237,10 +261,10 @@ const LinkInBioDesignPage: React.FC = () => {
 	const isZFetching = isSelectedLinkInBioBlocksFetching;
 
 	return (
-		<>
+		<Suspense fallback={<ZFallbackIonSpinner2 />}>
 			<ZIonContent>
 				<ZIonGrid
-					className='ion-no-padding ion-margin-horizontal overflow-hidden'
+					className='overflow-hidden ion-no-padding ion-margin-horizontal'
 					style={{ height: 'calc(112% - 70px)' }}
 				>
 					<ZIonRow className='h-full'>
@@ -264,8 +288,18 @@ const LinkInBioDesignPage: React.FC = () => {
 											sizeXs='12'
 											className='ion-padding-vertical ion-margin-top ion-margin-start'
 										>
-											<ZIonRow className='ion-align-items-center'>
+											<ZIonRow
+												className='ion-align-items-center'
+												testingSelector={
+													CONSTANTS.testingSelectors.linkInBio.formPage.design
+														.TopTitleBar.container
+												}
+											>
 												<ZIonCol
+													testingSelector={
+														CONSTANTS.testingSelectors.linkInBio.formPage.design
+															.TopTitleBar.titleCol
+													}
 													className={classNames({
 														'ion-text-center': true,
 														'ion-text-left':
@@ -277,7 +311,13 @@ const LinkInBioDesignPage: React.FC = () => {
 																	ZLinkInBioRHSComponentEnum.settings),
 													})}
 												>
-													<ZIonText className='text-2xl font-bold'>
+													<ZIonText
+														className='text-2xl font-bold'
+														testingSelector={
+															CONSTANTS.testingSelectors.linkInBio.formPage
+																.design.TopTitleBar.title
+														}
+													>
 														{values.designPageCurrentTab ===
 														ZLinkInBioRHSComponentEnum.theme
 															? 'Link In Bio Theme'
@@ -303,8 +343,18 @@ const LinkInBioDesignPage: React.FC = () => {
 												(dirty &&
 													values.designPageCurrentTab ===
 														ZLinkInBioRHSComponentEnum.settings) ? (
-													<ZIonCol className='ion-text-end'>
+													<ZIonCol
+														className='ion-text-end'
+														testingSelector={
+															CONSTANTS.testingSelectors.linkInBio.formPage
+																.design.TopTitleBar.saveBtnCol
+														}
+													>
 														<ZIonButton
+															testingSelector={
+																CONSTANTS.testingSelectors.linkInBio.formPage
+																	.design.TopTitleBar.saveBtn
+															}
 															onClick={() => {
 																void submitForm();
 															}}
@@ -449,6 +499,10 @@ const LinkInBioDesignPage: React.FC = () => {
 										? 'solid'
 										: 'outline'
 								}
+								testingSelector={
+									CONSTANTS.testingSelectors.linkInBio.formPage.design
+										.bottomTabs.theme
+								}
 								routerLink={createRedirectRoute({
 									url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
 									params: [
@@ -470,6 +524,10 @@ const LinkInBioDesignPage: React.FC = () => {
 							<ZIonButton
 								title='Blocks'
 								className='ion-text-capitalize'
+								testingSelector={
+									CONSTANTS.testingSelectors.linkInBio.formPage.design
+										.bottomTabs.blocks
+								}
 								fill={
 									values.designPageCurrentTab ===
 										ZLinkInBioRHSComponentEnum.blocks ||
@@ -499,6 +557,10 @@ const LinkInBioDesignPage: React.FC = () => {
 							<ZIonButton
 								title='Setting'
 								className='ion-text-capitalize'
+								testingSelector={
+									CONSTANTS.testingSelectors.linkInBio.formPage.design
+										.bottomTabs.settings
+								}
 								fill={
 									values.designPageCurrentTab ===
 									ZLinkInBioRHSComponentEnum.settings
@@ -526,6 +588,10 @@ const LinkInBioDesignPage: React.FC = () => {
 							<ZIonButton
 								title={`Powered by ${PRODUCT_NAME} `}
 								className='ion-text-capitalize'
+								testingSelector={
+									CONSTANTS.testingSelectors.linkInBio.formPage.design
+										.bottomTabs.poweredBy
+								}
 								fill={
 									values.designPageCurrentTab ===
 									ZLinkInBioRHSComponentEnum.poweredBy
@@ -554,7 +620,7 @@ const LinkInBioDesignPage: React.FC = () => {
 					</ZIonRow>
 				</ZIonGrid>
 			</ZIonFooter>
-		</>
+		</Suspense>
 	);
 };
 

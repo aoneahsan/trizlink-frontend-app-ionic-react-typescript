@@ -16,6 +16,8 @@ interface LinkInBioEmailFieldInterface {
 	name?: string;
 	value?: string | number | null;
 	className?: string;
+	testingListSelector?: string;
+	testingSelector?: string;
 	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
 	onIonBlur?: <A extends Event>(event: A) => void;
 }
@@ -24,20 +26,29 @@ const LinkInBioEmailField: React.FC<LinkInBioEmailFieldInterface> = ({
 	placeholder = 'johndoe@gmail.com',
 	value,
 	name,
+	testingListSelector,
+	testingSelector,
 	className,
 	onIonChange,
 	onIonBlur,
 }) => {
 	return (
-		<ZIonItem className={className} lines='none'>
+		<ZIonItem
+			className={className}
+			lines='none'
+			testingSelector={`${testingSelector}-item`}
+			testingListSelector={`${testingListSelector}-item`}
+		>
 			<ZIonInput
+				label=''
 				name={name}
 				placeholder={placeholder}
 				onIonChange={onIonChange}
 				onIonBlur={onIonBlur}
 				value={value}
-				label=''
 				minHeight='40px'
+				testingSelector={`${testingSelector}-input`}
+				testingListSelector={`${testingListSelector}-input`}
 			/>
 		</ZIonItem>
 	);

@@ -153,6 +153,10 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 						<>
 							{/* After getting MusicPlatform data from api and storing it to the LinkInBioPredefinedMusicPlatformsRState recoil state, looping the recoil state value to make MusicPlatforms */}
 							<ZIonRow
+								testingSelector={
+									CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm
+										.fields.music.blocksContainer
+								}
 								className={classNames({
 									'ion-padding-bottom mb-3 row-gap-1-point-6-rem w-[90%]': true,
 								})}
@@ -169,14 +173,15 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 										>
 											<div className='ion-text-center me-3 w-max'>
 												<LinkInBioPDButton
+													color={_index > -1 ? 'secondary' : 'light'}
 													icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
+													testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.block}-${el.type}`}
 													onClick={() => {
 														toggleMusicPlatformCardHandler({
 															_type: el.type,
 															_title: el.title as string,
 														});
 													}}
-													color={_index > -1 ? 'secondary' : 'light'}
 												/>
 											</div>
 										</ZIonCol>
@@ -185,7 +190,12 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 							</ZIonRow>
 
 							<ZIonButton
+								expand='block'
 								className='ion-text-capitalize'
+								testingSelector={
+									CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm
+										.fields.music.addBlockBtn
+								}
 								onClick={() =>
 									push({
 										target: {
@@ -197,7 +207,6 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 										musicCardType: LinkInBioMusicPlatformEnum.default,
 									})
 								}
-								expand='block'
 							>
 								<ZIonIcon icon={addOutline} className='me-1' />
 								add custom element
@@ -211,12 +220,17 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 									? values.cardItems.map((_cardItem, _index) => {
 											return (
 												<ZIonItem
+													key={_index}
+													lines='none'
 													className='py-3 my-3 border zaions-linkInBio-block'
+													testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.cardItem}-${_index}`}
+													testingSelector={
+														CONSTANTS.testingSelectors.linkInBio.formPage.design
+															.blockForm.fields.music.cardItem
+													}
 													style={{
 														'--background': 'transparent',
 													}}
-													lines='none'
-													key={_index}
 												>
 													<ZIonReorder slot='start' className='ms-3 me-2'>
 														<ZIonIcon
@@ -228,16 +242,21 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 
 													<div className='w-full pe-3'>
 														<LinkInBioTitleField
+															className='mt-1'
+															placeholder='Title'
+															showImageInSlot={true}
 															name={`cardItems.${_index}.title`}
 															onIonChange={handleChange}
 															onIonBlur={handleBlur}
+															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.titleInput}-${_index}`}
+															testingSelector={
+																CONSTANTS.testingSelectors.linkInBio.formPage
+																	.design.blockForm.fields.music.titleInput
+															}
 															value={
 																values.cardItems &&
 																values.cardItems[_index].title
 															}
-															className='mt-1'
-															placeholder='Title'
-															showImageInSlot={true}
 															slotImageUrl={
 																predefinedMusicPlatformImages[
 																	_cardItem.musicCardType as LinkInBioMusicPlatformEnum
@@ -246,33 +265,51 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 														/>
 
 														<LinkInBioLinkField
+															className='mt-1'
 															name={`cardItems.${_index}.target.url`}
 															onIonChange={handleChange}
 															onIonBlur={handleBlur}
+															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.linkInput}-${_index}`}
+															testingSelector={
+																CONSTANTS.testingSelectors.linkInBio.formPage
+																	.design.blockForm.fields.music.linkInput
+															}
 															value={
 																values.cardItems &&
 																values.cardItems[_index].target?.url
 															}
-															className='mt-1'
 														/>
 
 														{_cardItem.musicCardType ===
 															LinkInBioMusicPlatformEnum.default && (
 															<LinkInBioIconField
+																className='mt-3'
 																name={`cardItems.${_index}.icon`}
 																onIonChange={handleChange}
 																onIonBlur={handleBlur}
+																testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.iconInput}-${_index}`}
+																testingSelector={
+																	CONSTANTS.testingSelectors.linkInBio.formPage
+																		.design.blockForm.fields.music.iconInput
+																}
 																value={
 																	values.cardItems &&
 																	values.cardItems[_index].icon
 																}
-																className='mt-3'
 															/>
 														)}
 													</div>
 
 													{/* Delete block button */}
 													<ZCustomDeleteComponent
+														slot='end'
+														iconColor='danger'
+														className='ion-no-padding me-1 ms-2'
+														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.deleteBtn}-${_index}`}
+														testingSelector={
+															CONSTANTS.testingSelectors.linkInBio.formPage
+																.design.blockForm.fields.music.deleteBtn
+														}
 														deleteFn={(detail: OverlayEventDetail<unknown>) => {
 															try {
 																if (detail && detail.role === 'destructive') {
@@ -282,9 +319,6 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 																reportCustomError(error);
 															}
 														}}
-														className='ion-no-padding me-1 ms-2'
-														slot='end'
-														iconColor='danger'
 													/>
 												</ZIonItem>
 											);

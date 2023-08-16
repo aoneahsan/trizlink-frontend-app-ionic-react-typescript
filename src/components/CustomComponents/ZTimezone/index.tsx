@@ -5,12 +5,14 @@
 import React from 'react';
 import { ActionMeta, MultiValue, PropsValue } from 'react-select';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
-import { TIMEZONES } from '@/utils/constants';
+import { PRODUCT_NAME, TIMEZONES } from '@/utils/constants';
 import ZaionsRSelect from '../ZaionsRSelect';
 import { ZIonSelect, ZIonSelectOption } from '@/components/ZIonComponents';
 import { IonSelectCustomEvent, SelectChangeEventDetail } from '@ionic/core';
 import { ZIonPlacementType } from '@/types/zaionsAppSettings.type';
 import classNames from 'classnames';
+import { createElementTestingSelector } from '@/utils/helpers';
+import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 /**
  * Packages Imports go down
@@ -55,6 +57,8 @@ interface ZTimezoneInputInterface {
 	className?: string;
 	placeholder?: string;
 	name?: string;
+	testingSelector?: string;
+	testingListSelector?: string;
 	// options?: readonly ZaionsRSelectOptions[];
 	value?: PropsValue<ZaionsRSelectOptions>;
 	defaultValue?: PropsValue<ZaionsRSelectOptions>;
@@ -94,10 +98,28 @@ interface ZTimezoneSelectorInterface {
  * */
 
 const ZTimezoneInput: React.FC<ZTimezoneInputInterface> = (props) => {
+	const _testingListSelector = props.testingListSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingListSelector || PRODUCT_NAME,
+					_key: createElementTestingSelectorKeyEnum.listSelector,
+				}),
+		  }
+		: {};
+
+	const _testingSelector = props.testingSelector
+		? {
+				...createElementTestingSelector({
+					_value: props.testingSelector || PRODUCT_NAME,
+				}),
+		  }
+		: {};
 	return (
 		<ZaionsRSelect
 			{...props}
 			placeholder='timezone'
+			{..._testingSelector}
+			{..._testingListSelector}
 			options={
 				TIMEZONES.map((el) => {
 					return { ...el };

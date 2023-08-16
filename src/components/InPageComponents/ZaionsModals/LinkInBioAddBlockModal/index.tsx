@@ -265,32 +265,43 @@ const ZLinkInBioAddBlockModal: React.FC<{
 
 			<ZIonContent className='ion-padding'>
 				<div className='ion-text-end'>
-					<ZIonButton
-						className='ion-no-margin'
+					<ZIonIcon
+						icon={closeOutline}
+						className='w-6 h-6 cursor-pointer'
+						testingSelector={
+							CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
+								.addModal.closeModalBtn
+						}
 						onClick={() => {
 							dismissZIonModal();
 						}}
-						fill='clear'
-						color='dark'
-					>
-						<h4 className='mt-1 ion-no-margin'>
-							<ZIonIcon icon={closeOutline} className='w-6 h-6' />
-						</h4>
-					</ZIonButton>
+					/>
 				</div>
 				<div className='flex flex-col ion-text-center ion-justify-content-center ion-margin-top'>
 					<ZIonText className='mb-0 zaions__primary_bg w-[50px] h-[50px] zaions__modal_icon mx-auto ion-margin-bottom inline-block'>
 						<ZIonIcon icon={toggleOutline} className='mx-auto' color='light' />
 					</ZIonText>
 
-					<ZIonText color={'dark'} className='mt-3 text-xl font-bold'>
+					<ZIonText color='dark' className='mt-3 text-xl font-bold'>
 						{modalHeading}
 					</ZIonText>
 
-					<ZIonText className='mt-2 mb-2'>{modalSubHeading}</ZIonText>
+					<ZIonText
+						className='mt-2 mb-2'
+						testingSelector={
+							CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
+								.addModal.text
+						}
+					>
+						{modalSubHeading}
+					</ZIonText>
 					<ZIonButton
 						expand='block'
 						className='mt-4'
+						testingSelector={
+							CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
+								.addModal.topBtn
+						}
 						onClick={() => {
 							void addBlockHandler(LinkInBioBlocksPositionEnum.top);
 						}}
@@ -301,6 +312,10 @@ const ZLinkInBioAddBlockModal: React.FC<{
 						expand='block'
 						fill='outline'
 						className='mt-3'
+						testingSelector={
+							CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
+								.addModal.bottomBtn
+						}
 						onClick={() => {
 							void addBlockHandler(LinkInBioBlocksPositionEnum.bottom);
 						}}
@@ -316,7 +331,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
 			 *  */}
 			{/* {appSettings.appModalsSetting.actions.showActionInModalFooter && (
         <ZIonFooter>
-          <ZIonRow className='mx-3 mt-2  ion-justify-content-between ion-align-items-center'>
+          <ZIonRow className='mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
             <ZIonCol>
               <ZIonButton
                 fill='outline'

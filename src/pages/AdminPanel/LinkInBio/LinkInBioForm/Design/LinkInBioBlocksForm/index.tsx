@@ -590,12 +590,22 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 							className='ion-margin-start ion-padding-vertical ion-margin-top border-bottom__violet'
 						>
 							<ZIonRow>
-								<ZIonCol className='flex ion-align-items-center'>
+								<ZIonCol
+									className='flex ion-align-items-center'
+									testingSelector={
+										CONSTANTS.testingSelectors.linkInBio.formPage.design
+											.blockForm.titleCol
+									}
+								>
 									<ZIonButton
 										fill='clear'
 										size='small'
 										className='mb-1 ion-no-padding me-2'
 										color='dark'
+										testingSelector={
+											CONSTANTS.testingSelectors.linkInBio.formPage.design
+												.blockForm.goToBlockPageBtn
+										}
 										onClick={() => {
 											zNavigatePushRoute(
 												createRedirectRoute({
@@ -623,7 +633,13 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 									)}
 									{/*  */}
 									{!isZFetching && (
-										<ZIonText className='text-xl'>
+										<ZIonText
+											className='text-xl'
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.title
+											}
+										>
 											{linkInBioBlockData?.blockType ===
 											LinkInBioBlockEnum.button
 												? 'Button'
@@ -700,10 +716,20 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 									)}
 								</ZIonCol>
 
-								<ZIonCol className='flex ion-align-items-center ion-justify-content-end'>
+								<ZIonCol
+									className='flex ion-align-items-center ion-justify-content-end'
+									testingSelector={
+										CONSTANTS.testingSelectors.linkInBio.formPage.design
+											.blockForm.actionsCol
+									}
+								>
 									{dirty && (
 										<ZIonButton
 											className='ion-no-margin me-3 ion-text-capitalize'
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.saveBtn
+											}
 											onClick={() => {
 												void submitForm();
 											}}
@@ -713,13 +739,13 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 									)}
 
 									{isZFetching &&
-										[1, 2, 3].map((el) => (
+										[...Array(3)].map((_, i) => (
 											<ZIonButton
 												fill='clear'
 												className='mt-2 ion-no-padding me-3 ion-no-margin'
 												color='light'
 												size='small'
-												key={el}
+												key={i}
 											>
 												<ZIonSkeletonText
 													width='2rem'
@@ -737,6 +763,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 												className='ion-no-padding me-3 ion-no-margin'
 												color='light'
 												size='small'
+												testingSelector={
+													CONSTANTS.testingSelectors.linkInBio.formPage.design
+														.blockForm.isActiveBtn
+												}
 												style={{
 													'--background-hover-opacity': '0',
 												}}
@@ -756,6 +786,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 												fill='clear'
 												className='ion-no-padding me-3 ion-no-margin'
 												color='light'
+												testingSelector={
+													CONSTANTS.testingSelectors.linkInBio.formPage.design
+														.blockForm.duplicateBtn
+												}
 												style={{
 													'--background-hover-opacity': '0',
 												}}
@@ -779,6 +813,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 												iconColor='danger'
 												iconName={trashBinOutline}
 												iconClassName='mt-2'
+												testingSelector={
+													CONSTANTS.testingSelectors.linkInBio.formPage.design
+														.blockForm.deleteBtn
+												}
 											/>
 										</>
 									)}
@@ -793,9 +831,19 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 							sizeSm='12'
 							sizeXs='12'
 							className='ion-padding-top ion-margin-start border-bottom__violet'
+							testingSelector={
+								CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm
+									.fields.container
+							}
 						>
 							{!isZFetching && (
-								<ZIonTitle className='text-lg font-bold ion-no-padding'>
+								<ZIonTitle
+									className='text-lg font-bold ion-no-padding'
+									testingSelector={
+										CONSTANTS.testingSelectors.linkInBio.formPage.design
+											.blockForm.fields.title
+									}
+								>
 									{linkInBioBlockData?.blockType ===
 										LinkInBioBlockEnum.button ||
 									linkInBioBlockData?.blockType === LinkInBioBlockEnum.VCard
@@ -857,9 +905,9 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
 							<ZIonRow className='ion-padding-bottom'>
 								{isZFetching &&
-									[1, 2, 3, 4, 5].map((el) => {
+									[...Array(5)].map((_, i) => {
 										return (
-											<ZIonCol size='12' className='mt-3' key={el}>
+											<ZIonCol size='12' className='mt-3' key={i}>
 												<ZIonSkeletonText height='2rem' animated={true} />
 											</ZIonCol>
 										);
@@ -916,13 +964,24 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 											name='target.url'
 											value={values.target.url}
 											onIonChange={handleChange}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.linkInput
+											}
 										/>
 									</ZIonCol>
 								)}
 
 								{/* Iframe component */}
 								{linkInBioBlockData?.blockType ===
-									LinkInBioBlockEnum.Iframe && <LinkInBioIframeField />}
+									LinkInBioBlockEnum.Iframe && (
+									<LinkInBioIframeField
+										testingSelector={
+											CONSTANTS.testingSelectors.linkInBio.formPage.design
+												.blockForm.fields.iFrameInput
+										}
+									/>
+								)}
 
 								{/* Title Component */}
 								{(linkInBioBlockData?.blockType === LinkInBioBlockEnum.button ||
@@ -950,6 +1009,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 													? 'Form Name'
 													: 'Your Title'
 											}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.title
+											}
 										/>
 									</ZIonCol>
 								)}
@@ -974,6 +1037,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 												onIonChange={handleChange}
 												placeholder='Submit button text'
 												showImageInSlot={true}
+												testingSelector={
+													CONSTANTS.testingSelectors.linkInBio.formPage.design
+														.blockForm.fields.submitButtonText
+												}
 											/>
 										</div>
 									</ZIonCol>
@@ -986,6 +1053,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 											name='icon'
 											value={values.icon}
 											onIonChange={handleChange}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.iconInput
+											}
 										/>
 									</ZIonCol>
 								)}
@@ -1001,6 +1072,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 											name='description'
 											value={values.description}
 											onIonChange={handleChange}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.descriptionInput
+											}
 										/>
 									</ZIonCol>
 								)}
@@ -1010,6 +1085,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 									<ZIonCol size='12' className='mt-2 mb-4'>
 										<ZTextEditor
 											value={values.text}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.textEditor
+											}
 											onChange={(_value) => {
 												setFieldValue('text', _value, false);
 											}}
@@ -1030,6 +1109,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 											setFieldValue={setFieldValue}
 											fieldName='imageUrl'
 											imageUrl={values.imageUrl}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.upload
+											}
 										/>
 									</ZIonCol>
 								)}
@@ -1040,9 +1123,13 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioDateTimeField
 											name='date'
-											id={`${linkInBioBlockData?.blockType}-${linkInBioBlockData?.id}`}
 											value={values.date}
 											onIonChange={handleChange}
+											id={`${linkInBioBlockData?.blockType}-${linkInBioBlockData?.id}`}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.dateTimeInput
+											}
 										/>
 									</ZIonCol>
 								)}
@@ -1053,6 +1140,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 									<ZIonCol size='12' className='pt-2 mt-4'>
 										<LinkInBioTimezoneField
 											name='timezone'
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.timezoneInput
+											}
 											onChange={(_value) => {
 												setFieldValue(
 													'timezone',
@@ -1126,10 +1217,14 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										<LinkInBioSearchField
 											placeholder='RSS Feed'
 											searchIcon={wifiOutline}
+											value={values?.searchString}
 											onIonChange={({ detail }) => {
 												setFieldValue('searchString', detail.value, false);
 											}}
-											value={values?.searchString}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.rssInput
+											}
 										/>
 									</ZIonCol>
 								)}
@@ -1141,10 +1236,14 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										<LinkInBioSearchField
 											placeholder='Shopify link'
 											searchIcon={linkOutline}
+											value={values?.searchString}
 											onIonChange={({ detail }) => {
 												setFieldValue('searchString', detail.value, false);
 											}}
-											value={values?.searchString}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.shopifyInput
+											}
 										/>
 									</ZIonCol>
 								)}
@@ -1156,10 +1255,14 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										<LinkInBioSearchField
 											placeholder='Magento link'
 											searchIcon={linkOutline}
+											value={values?.searchString}
 											onIonChange={({ detail }) => {
 												setFieldValue('searchString', detail.value, false);
 											}}
-											value={values?.searchString}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.magnetoInput
+											}
 										/>
 									</ZIonCol>
 								)}
@@ -1171,10 +1274,14 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										<LinkInBioSearchField
 											placeholder='Wordpress link'
 											searchIcon={linkOutline}
+											value={values?.searchString}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.wordpressInput
+											}
 											onIonChange={({ detail }) => {
 												setFieldValue('searchString', detail.value, false);
 											}}
-											value={values?.searchString}
 										/>
 									</ZIonCol>
 								)}
@@ -1184,6 +1291,16 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 									<ZIonCol size='12' className='mt-4'>
 										<ZIonItem className='ion-item-start-no-padding'>
 											<ZRGAutoCompleteInput
+												inputStyles={{ width: '100%', border: 'none' }}
+												defaultValue={values?.map?.userEnteredAddress}
+												inputName='map.userEnteredAddress'
+												testingSelector={
+													CONSTANTS.testingSelectors.linkInBio.formPage.design
+														.blockForm.fields.map
+												}
+												className={classNames(
+													classes['map-auto-complete-input']
+												)}
 												onLocationSelectHandler={(
 													place: google.maps.places.PlaceResult
 												) => {
@@ -1197,12 +1314,6 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 													setFieldValue('map.lat', _lat, true);
 													setFieldValue('map.lng', _lng, true);
 												}}
-												inputStyles={{ width: '100%', border: 'none' }}
-												className={classNames(
-													classes['map-auto-complete-input']
-												)}
-												defaultValue={values?.map?.userEnteredAddress}
-												inputName='map.userEnteredAddress'
 											/>
 										</ZIonItem>
 									</ZIonCol>
@@ -1229,10 +1340,14 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										LinkInBioBlockEnum.wordpress) && (
 									<ZIonCol size='12' className='mt-4'>
 										<LinkInBioEnableField
+											checked={values.titleIsEnable}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.titleEnable
+											}
 											onChange={(value) => {
 												setFieldValue('titleIsEnable', value, false);
 											}}
-											checked={values.titleIsEnable}
 										/>
 									</ZIonCol>
 								)}
@@ -1248,11 +1363,15 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 									<ZIonCol size='12' className='mt-3'>
 										<LinkInBioEnableField
 											title='Description'
+											checked={values.descriptionIsEnable}
 											icon={reorderFourOutline}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.descriptionEnable
+											}
 											onChange={(value) => {
 												setFieldValue('descriptionIsEnable', value, false);
 											}}
-											checked={values.descriptionIsEnable}
 										/>
 									</ZIonCol>
 								)}
@@ -1269,10 +1388,14 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										<LinkInBioEnableField
 											title='Photo'
 											icon={imageOutline}
+											checked={values.pictureIsEnable}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.pictureEnable
+											}
 											onChange={(value) => {
 												setFieldValue('pictureIsEnable', value, false);
 											}}
-											checked={values.pictureIsEnable}
 										/>
 									</ZIonCol>
 								)}
@@ -1286,10 +1409,14 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										<LinkInBioEnableField
 											title='Card mode'
 											icon={cardOutline}
+											checked={values.cardIsEnable}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.cardEnable
+											}
 											onChange={(value) => {
 												setFieldValue('cardIsEnable', value, false);
 											}}
-											checked={values.cardIsEnable}
 										/>
 									</ZIonCol>
 								)}
@@ -1301,10 +1428,14 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										<LinkInBioEnableField
 											title='Price'
 											icon={cashOutline}
+											checked={values.priceIsEnable}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.priceEnable
+											}
 											onChange={(value) => {
 												setFieldValue('priceIsEnable', value, false);
 											}}
-											checked={values.priceIsEnable}
 										/>
 									</ZIonCol>
 								)}
@@ -1316,6 +1447,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 											title='Terms checkbox'
 											icon={lockClosedOutline}
 											checked={values.form?.isTermEnabled}
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.formPage.design
+													.blockForm.fields.term.toggler
+											}
 											onChange={(value) => {
 												setFieldValue('form.isTermEnabled', value, false);
 											}}
@@ -1327,6 +1462,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 													value={values.form?.termText}
 													onIonChange={handleChange}
 													placeholder='Text'
+													testingSelector={
+														CONSTANTS.testingSelectors.linkInBio.formPage.design
+															.blockForm.fields.term.text
+													}
 												/>
 
 												<LinkInBioLinkField
@@ -1336,6 +1475,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 													placeholder='Link to your T&C'
 													className='pt-2 mt-3'
 													showRefreshBtn={false}
+													testingSelector={
+														CONSTANTS.testingSelectors.linkInBio.formPage.design
+															.blockForm.fields.term.link
+													}
 												/>
 											</div>
 										)}
@@ -1352,6 +1495,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 										<div className='mt-2 mb-2'>
 											{/* Solid */}
 											<ZRoundedButton
+												testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.separatorType.button}-${SeparatorTypeEnum.solid}`}
 												className='me-2'
 												color={
 													values.separatorType === SeparatorTypeEnum.solid
@@ -1376,6 +1520,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
 											{/* Dashed */}
 											<ZRoundedButton
+												testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.separatorType.button}-${SeparatorTypeEnum.dashed}`}
 												className='me-2'
 												color={
 													values.separatorType === SeparatorTypeEnum.dashed
@@ -1400,6 +1545,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
 											{/* Dotted */}
 											<ZRoundedButton
+												testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.separatorType.button}-${SeparatorTypeEnum.dotted}`}
 												className='me-2'
 												color={
 													values.separatorType === SeparatorTypeEnum.dotted
@@ -1437,6 +1583,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 												name='separatorColor'
 												value={values.separatorColor}
 												setFieldValueFn={setFieldValue}
+												testingSelector={
+													CONSTANTS.testingSelectors.linkInBio.formPage.design
+														.blockForm.fields.separatorType.colorInput
+												}
 											/>
 										</div>
 									</ZIonCol>
@@ -1460,6 +1610,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 												onIonChange={({ target }) => {
 													setFieldValue('spacing', target.value, false);
 												}}
+												testingSelector={
+													CONSTANTS.testingSelectors.linkInBio.formPage.design
+														.blockForm.fields.spacing
+												}
 											>
 												<ZIonIcon slot='start' icon={removeOutline} />
 												<ZIonIcon slot='end' icon={addOutline} />

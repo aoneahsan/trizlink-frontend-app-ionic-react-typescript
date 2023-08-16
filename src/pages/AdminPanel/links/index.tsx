@@ -1007,7 +1007,7 @@ const ShortLinksTimeRangeFilterPopover = () => {
 	};
 
 	return (
-		<div className='flex overflow-hidden w-full h-full'>
+		<div className='flex w-full h-full overflow-hidden'>
 			<ZCustomScrollable
 				scrollY={true}
 				scrollX={true}
