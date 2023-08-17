@@ -8,9 +8,9 @@ import {
 	ZIonRouterDirection,
 	ZIonTargetType,
 } from '@/types/zaionsAppSettings.type';
-import { createElementTestingSelector } from '@/utils/helpers';
+import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { PRODUCT_NAME } from '@/utils/constants';
-import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
+import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 // Type
 type ZIonRouterLinkType = {
@@ -32,16 +32,16 @@ type ZIonRouterLinkType = {
 const ZIonRouterLink = (props: ZIonRouterLinkType) => {
 	const _testingListSelector = props.testingListSelector
 		? {
-				...createElementTestingSelector({
+				...zCreateElementTestingSelector({
 					_value: props.testingListSelector || PRODUCT_NAME,
-					_key: createElementTestingSelectorKeyEnum.listSelector,
+					_key: zCreateElementTestingSelectorKeyEnum.listSelector,
 				}),
 		  }
 		: {};
 
 	const _testingSelector = props.testingSelector
 		? {
-				...createElementTestingSelector({
+				...zCreateElementTestingSelector({
 					_value: props.testingSelector || PRODUCT_NAME,
 				}),
 		  }

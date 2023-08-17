@@ -1,3 +1,6 @@
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import { useLocation } from 'react-router';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { workspaceFormConnectPagesEnum } from './../../types/AdminPanel/workspace/index';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 // Packages Import
@@ -14,7 +17,7 @@ import CONSTANTS, {
 import {
 	API_URL_ENUM,
 	CONTAINS,
-	createElementTestingSelectorKeyEnum,
+	zCreateElementTestingSelectorKeyEnum,
 	extractInnerDataOptionsEnum,
 	VALIDATION_RULE,
 } from '@/utils/enums';
@@ -26,6 +29,7 @@ import axiosInstance from '@/axiosInstance';
 import {
 	ZCapDialogPropsType,
 	ZConsolePropsType,
+	ZRoutesObject,
 } from '@/types/ZaionsHelperFunction.type';
 import {
 	AxiosRequestResponseType,
@@ -1269,9 +1273,10 @@ export const zAddUrlProtocol = (url: string): string => {
 };
 
 /**
- * Function which will generate a random-unique string of giving length for short-link url path.
- * @param _length
- * @returns
+ * Generates a random string of specified length or using the default length.
+ *
+ * @param {number} _length - The length of the random string. Defaults to the URL path length from CONSTANTS.
+ * @returns {string} A random string of specified length.
  */
 export const zGenerateRandomString = (
 	_length: number | undefined = CONSTANTS.SHORT_LINK.urlPathLength
@@ -1290,7 +1295,16 @@ export const zGenerateRandomString = (
 	return __randomStringCharts.join('');
 };
 
-export const generateShortLink = ({
+/**
+ * Generates a short link URL using the provided domain and URL path.
+ *
+ * @param {Object} options - The options for generating the short link.
+ * @param {string} options.domain - The domain to be used in the short link URL.
+ * @param {string} options.urlPath - The URL path to be appended to the short link.
+ * @returns {string} The generated short link URL.
+ * @throws {ZCustomError} Throws an error if both domain and urlPath are not provided.
+ */
+export const zGenerateShortLink = ({
 	domain,
 	urlPath,
 }: {
@@ -1302,7 +1316,7 @@ export const generateShortLink = ({
 			return `${domain}/${CONSTANTS.SHORT_LINK.urlStaticPath}/${urlPath}`;
 		} else {
 			throw new ZCustomError({
-				message: 'generateShortLink: params domain & urlPath are required',
+				message: 'zGenerateShortLink: params domain & urlPath are required',
 			});
 		}
 	} catch (error) {
@@ -1310,24 +1324,29 @@ export const generateShortLink = ({
 	}
 };
 
-export const createElementTestingSelector = ({
+/**
+ * The zCreateElementTestingSelector function is designed to generate testing attributes for HTML and Ionic elements.
+ * @param param0 It takes an object as input with two properties: _value and _key.
+ * @returns an array destruct the array in to HTML or ionic element.
+ */
+export const zCreateElementTestingSelector = ({
 	_value,
-	_key = createElementTestingSelectorKeyEnum.selector,
+	_key = zCreateElementTestingSelectorKeyEnum.selector,
 }: {
 	_value: string;
-	_key?: createElementTestingSelectorKeyEnum;
+	_key?: zCreateElementTestingSelectorKeyEnum;
 }): { [key: string]: string } => {
 	const __prefix = CONSTANTS.testingSelectorsPrefix;
 
 	const __attributeValue = `${__prefix}${_value}`;
 
 	switch (_key) {
-		case createElementTestingSelectorKeyEnum.selector:
+		case zCreateElementTestingSelectorKeyEnum.selector:
 			return {
 				'cy-es': __attributeValue,
 			};
 
-		case createElementTestingSelectorKeyEnum.listSelector:
+		case zCreateElementTestingSelectorKeyEnum.listSelector:
 			return {
 				'cy-els': __attributeValue,
 			};
@@ -1336,5 +1355,129 @@ export const createElementTestingSelector = ({
 			return {
 				'cy-es': __attributeValue,
 			};
+	}
+};
+
+/**
+ * Compares a route template with a current route to determine if they match.
+ *
+ * @param {Object} options - The options for the function.
+ * @param {string} options.routeTemplate - The template of the route to be compared.
+ * @param {string} options.currentRoute - The current route to be compared against the template.
+ * @returns {boolean} Returns true if the current route matches the template, otherwise false.
+ */
+export const zCompareRoutes = ({
+	routeTemplate,
+	currentRoute,
+}: {
+	routeTemplate: string;
+	currentRoute: string;
+}): boolean => {
+	const templateParts = routeTemplate.split('/');
+	const currentParts = currentRoute.split('/');
+
+	if (templateParts.length !== currentParts.length) {
+		return false;
+	}
+
+	for (let i = 0; i < templateParts.length; i++) {
+		const templatePart = templateParts[i];
+		const currentPart = currentParts[i];
+
+		if (templatePart.startsWith(':')) {
+			// If template part is a parameter, continue to the next iteration
+			continue;
+		}
+
+		if (templatePart !== currentPart) {
+			return false;
+		}
+	}
+
+	return true;
+};
+
+/**
+ * Determines whether the current URL matches any of the defined routes in a structured route object.
+ *
+ * @param {Object} options - The options for the function.
+ * @param {string} options._currentUrl - The current URL to be checked.
+ * @param {Object} options._routesObj - The routes object to compare against.
+ * @returns {string | undefined} Returns route if a matching route is found, otherwise undefined.
+ */
+export const ZGetCurrentRoute = ({
+	_currentUrl,
+	_routesObj,
+}: {
+	_currentUrl: string;
+	_routesObj: ZRoutesObject;
+}): string | undefined => {
+	try {
+		for (const key in _routesObj) {
+			if (typeof _routesObj[key] === 'string') {
+				if (
+					zCompareRoutes({
+						routeTemplate: _routesObj[key] as string,
+						currentRoute: _currentUrl,
+					})
+				) {
+					return _routesObj[key] as string;
+				}
+			}
+
+			if (typeof _routesObj[key] === 'object') {
+				const _nestedRouteCheck = ZGetCurrentRoute({
+					_currentUrl: _currentUrl,
+					_routesObj: _routesObj[key] as ZRoutesObject,
+				});
+
+				if (_nestedRouteCheck) {
+					return _nestedRouteCheck;
+				}
+			}
+		}
+	} catch (error) {
+		reportCustomError(error);
+	}
+};
+
+/**
+ * Retrieves an array of permission enums associated with the provided current route.
+ *
+ * @param {Object} options - The options for the function.
+ * @param {string} options._currentRoute - The current route for which permissions are to be retrieved.
+ * @returns {Array} An array of permission enums relevant to the current route, or undefined if no permissions are found.
+ */
+export const ZGetRoutePermissions = ({
+	_currentRoute,
+}: {
+	_currentRoute: string;
+}): permissionsEnum[] | undefined => {
+	try {
+		let __permissions: permissionsEnum[] = [];
+		switch (_currentRoute) {
+			case ZaionsRoutes.AdminPanel.Workspaces.Main:
+				__permissions = [permissionsEnum.viewAny_workspace];
+				break;
+			case ZaionsRoutes.AdminPanel.ShortLinks.Main:
+				__permissions = [
+					permissionsEnum.viewAny_workspace,
+					permissionsEnum.viewAny_shortLink,
+				];
+				break;
+
+			case ZaionsRoutes.AdminPanel.ShortLinks.Main:
+				__permissions = [permissionsEnum.viewAny_shortLink];
+				break;
+
+			case ZaionsRoutes.AdminPanel.LinkInBio.Main:
+				__permissions = [permissionsEnum.viewAny_linkInBio];
+				break;
+		}
+
+		return __permissions;
+	} catch (error) {
+		reportCustomError(error);
+		return [];
 	}
 };

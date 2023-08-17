@@ -1,3 +1,5 @@
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import { currentLoggedInUserRoleAndPermissionsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 import {
 	useZIonToastSuccess,
 	useZIonToastDanger,
@@ -5,7 +7,7 @@ import {
 	useZIonErrorAlert,
 } from '@/ZaionsHooks/zionic-hooks';
 import { notificationTypeEnum } from '@/utils/enums';
-import { reportCustomError } from '@/utils/customErrorType';
+import { reportCustomError, ZCustomError } from '@/utils/customErrorType';
 import {
 	showErrorNotification,
 	showSuccessNotification,
@@ -23,6 +25,14 @@ import {
 	BRACKPOINT_SM,
 	BRACKPOINT_XS,
 } from '@/utils/constants';
+import { useLocation } from 'react-router';
+import {
+	emptyVoidReturnFunction,
+	ZGetCurrentRoute,
+	ZGetRoutePermissions,
+} from '@/utils/helpers';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { useRecoilValue } from 'recoil';
 
 export const useZNotification = () => {
 	const { presentZIonToastDanger } = useZIonToastDanger();
@@ -129,4 +139,96 @@ export const useZMediaQueryScale = (): useZMediaQueryScaleReturnInterface => {
 		is1150pxScale,
 		is1100pxScale,
 	};
+};
+
+export const useZPermissionChecker = (): {
+	permissionsChecker: () => Promise<{
+		hasAllPermissions: boolean;
+		permissions: permissionsEnum[];
+	}> | void;
+} => {
+	try {
+		const __location = useLocation();
+		const currentLoggedInUserRoleAndPermissionsStateAtom = useRecoilValue(
+			currentLoggedInUserRoleAndPermissionsRStateAtom
+		);
+
+		const permissionsChecker = async (): Promise<{
+			hasAllPermissions: boolean;
+			permissions: permissionsEnum[];
+		}> => {
+			try {
+				let permissions: permissionsEnum[] = [];
+				const result = await new Promise<boolean>((res, rej) => {
+					let _hasAllPermissions = false;
+					console.log({
+						currentLoggedInUserRoleAndPermissionsRStateAtom,
+						log: 'useZPermissionChecker permissions check',
+					});
+					if (__location.pathname) {
+						const __currentRoute = ZGetCurrentRoute({
+							_currentUrl: __location.pathname,
+							_routesObj: ZaionsRoutes,
+						});
+
+						if (__currentRoute) {
+							const __permissions = ZGetRoutePermissions({
+								_currentRoute: __currentRoute,
+							});
+
+							if (__permissions && __permissions.length) {
+								const userPermissions =
+									currentLoggedInUserRoleAndPermissionsStateAtom?.permissions
+										?.length
+										? [
+												...currentLoggedInUserRoleAndPermissionsStateAtom.permissions,
+										  ]
+										: [];
+								// const haveRequiredPermission = userPermissions?.includes(havePermission);
+								const haveRequiredPermission = __permissions.every((el) =>
+									userPermissions?.includes(el)
+								);
+								permissions = [...__permissions];
+								_hasAllPermissions = haveRequiredPermission;
+								console.log({
+									permissions,
+									userPermissions,
+									log: 'useZPermissionChecker -> permissionsChecker',
+									_hasAllPermissions,
+									haveRequiredPermission,
+								});
+							}
+						} else {
+							new ZCustomError({
+								message:
+									'useZPermissionChecker: __currentRoute is undefined. :(',
+							});
+						}
+					} else {
+						new ZCustomError({
+							message:
+								'useZPermissionChecker: filed to fetch pathname from location. :(',
+						});
+					}
+					res(_hasAllPermissions);
+				});
+				if (result) {
+					return { hasAllPermissions: result, permissions };
+				} else {
+					return { hasAllPermissions: false, permissions };
+				}
+			} catch (error) {
+				reportCustomError(error);
+				return { hasAllPermissions: false, permissions: [] };
+			}
+		};
+		return { permissionsChecker };
+	} catch (error) {
+		if (error instanceof ZCustomError || error instanceof Error) {
+			alert(error.message);
+		}
+		reportCustomError(error);
+		return { permissionsChecker: emptyVoidReturnFunction };
+		// return { hasAllPermissions: false, permissions: [] };
+	}
 };

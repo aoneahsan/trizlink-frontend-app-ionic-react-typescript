@@ -11,8 +11,8 @@ import { ZIonSelect, ZIonSelectOption } from '@/components/ZIonComponents';
 import { IonSelectCustomEvent, SelectChangeEventDetail } from '@ionic/core';
 import { ZIonPlacementType } from '@/types/zaionsAppSettings.type';
 import classNames from 'classnames';
-import { createElementTestingSelector } from '@/utils/helpers';
-import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
+import { zCreateElementTestingSelector } from '@/utils/helpers';
+import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 /**
  * Packages Imports go down
@@ -100,16 +100,16 @@ interface ZTimezoneSelectorInterface {
 const ZTimezoneInput: React.FC<ZTimezoneInputInterface> = (props) => {
 	const _testingListSelector = props.testingListSelector
 		? {
-				...createElementTestingSelector({
+				...zCreateElementTestingSelector({
 					_value: props.testingListSelector || PRODUCT_NAME,
-					_key: createElementTestingSelectorKeyEnum.listSelector,
+					_key: zCreateElementTestingSelectorKeyEnum.listSelector,
 				}),
 		  }
 		: {};
 
 	const _testingSelector = props.testingSelector
 		? {
-				...createElementTestingSelector({
+				...zCreateElementTestingSelector({
 					_value: props.testingSelector || PRODUCT_NAME,
 				}),
 		  }

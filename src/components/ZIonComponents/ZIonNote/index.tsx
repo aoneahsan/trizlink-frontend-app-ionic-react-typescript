@@ -6,9 +6,9 @@ import { IonNote } from '@ionic/react';
 
 // Type
 import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
-import { createElementTestingSelector } from '@/utils/helpers';
+import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { PRODUCT_NAME } from '@/utils/constants';
-import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
+import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 type ZIonNoteType = {
 	children: ReactNode;
 	className?: string;
@@ -22,16 +22,16 @@ type ZIonNoteType = {
 const ZIonNote = (props: ZIonNoteType) => {
 	const _testingListSelector = props.testingListSelector
 		? {
-				...createElementTestingSelector({
+				...zCreateElementTestingSelector({
 					_value: props.testingListSelector || PRODUCT_NAME,
-					_key: createElementTestingSelectorKeyEnum.listSelector,
+					_key: zCreateElementTestingSelectorKeyEnum.listSelector,
 				}),
 		  }
 		: {};
 
 	const _testingSelector = props.testingSelector
 		? {
-				...createElementTestingSelector({
+				...zCreateElementTestingSelector({
 					_value: props.testingSelector || PRODUCT_NAME,
 				}),
 		  }

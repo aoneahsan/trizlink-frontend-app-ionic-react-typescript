@@ -25,6 +25,7 @@ export const currentLoggedInUserRoleAndPermissionsRStateAtom =
 		default: {
 			role: '',
 			permissions: [],
+			fetched: false,
 		},
 	});
 
@@ -70,6 +71,8 @@ export const IsAuthenticatedRStateSelector = selector({
 			| string
 			| null;
 		const currentUserEmail = get(ZaionsUserAccountEmail);
-		return authToken || currentUserEmail !== null;
+		return (
+			(authToken && authToken?.trim()?.length > 0) || currentUserEmail !== null
+		);
 	},
 });

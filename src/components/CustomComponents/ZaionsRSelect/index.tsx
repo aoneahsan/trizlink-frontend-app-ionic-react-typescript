@@ -11,9 +11,9 @@ import Select, {
 
 // Interface
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
-import { createElementTestingSelector } from '@/utils/helpers';
+import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { PRODUCT_NAME } from '@/utils/constants';
-import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
+import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 interface ZaionsRSelectType {
 	options: readonly ZaionsRSelectOptions[];
@@ -68,16 +68,16 @@ const ClearIndicatorStyles = <T extends object>(
 const ZaionsRSelect: React.FC<ZaionsRSelectType> = (props) => {
 	const _testingListSelector = props.testingListSelector
 		? {
-				...createElementTestingSelector({
+				...zCreateElementTestingSelector({
 					_value: props.testingListSelector || PRODUCT_NAME,
-					_key: createElementTestingSelectorKeyEnum.listSelector,
+					_key: zCreateElementTestingSelectorKeyEnum.listSelector,
 				}),
 		  }
 		: {};
 
 	const _testingSelector = props.testingSelector
 		? {
-				...createElementTestingSelector({
+				...zCreateElementTestingSelector({
 					_value: props.testingSelector || PRODUCT_NAME,
 				}),
 		  }

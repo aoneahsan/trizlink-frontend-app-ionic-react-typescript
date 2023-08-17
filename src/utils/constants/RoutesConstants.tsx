@@ -2,6 +2,8 @@ import CONSTANTS from '@/utils/constants';
 
 const workspaceIdParam = CONSTANTS.RouteParams.workspace.workspaceId;
 
+export const ZPrivateRoutePath = '/app';
+
 const ZaionsRoutes = {
 	// Main routes
 	HomeRoute: '/',
@@ -70,44 +72,44 @@ const ZaionsRoutes = {
 
 	// Admin Panel
 	AdminPanel: {
-		AppStartupPage: '/app/startup',
+		AppStartupPage: `${ZPrivateRoutePath}/startup`,
 		Setting: {
-			Main: '/settings',
-			ZaionsAdminPanelSettingsCustomDomain: '/settings/custom-domain',
-			ZaionsAdminPanelSettingsPixels: '/settings/pixels',
+			Main: `${ZPrivateRoutePath}/settings`,
+			ZaionsAdminPanelSettingsCustomDomain: `${ZPrivateRoutePath}/settings/custom-domain`,
+			ZaionsAdminPanelSettingsPixels: `${ZPrivateRoutePath}/settings/pixels`,
 		},
 
 		ShortLinks: {
-			Main: `/workspaces/${workspaceIdParam}/short-links/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
-			Create: `/workspaces/${workspaceIdParam}/short-links/create`,
-			Edit: `/workspaces/${workspaceIdParam}/short-links/edit/${CONSTANTS.RouteParams.editShortLinkIdParam}`,
+			Main: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/short-links/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
+			Create: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/short-links/create`,
+			Edit: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/short-links/edit/${CONSTANTS.RouteParams.editShortLinkIdParam}`,
 		},
 
 		LinkInBio: {
-			Main: `/workspaces/${workspaceIdParam}/link-in-bio/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
-			Create: `/workspaces/${workspaceIdParam}/link-in-bio/create`,
-			Edit: `/workspaces/${workspaceIdParam}/link-in-bio/edit/${CONSTANTS.RouteParams.linkInBio.linkInBioId}`,
+			Main: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/link-in-bio/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
+			Create: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/link-in-bio/create`,
+			Edit: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/link-in-bio/edit/${CONSTANTS.RouteParams.linkInBio.linkInBioId}`,
 		},
 
 		Workspaces: {
-			Main: '/workspaces',
-			Create: '/workspaces/create',
-			Edit: `/workspaces/edit/${CONSTANTS.RouteParams.workspace.editWorkspaceIdParam}`,
-			View: `/workspaces/${workspaceIdParam}/view`,
+			Main: `${ZPrivateRoutePath}/workspaces`,
+			Create: `${ZPrivateRoutePath}/workspaces/create`,
+			Edit: `${ZPrivateRoutePath}/workspaces/edit/${CONSTANTS.RouteParams.workspace.editWorkspaceIdParam}`,
+			View: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/view`,
 		},
 
 		ZaionsDashboard: {
-			DashboardInactive: '/dashboard-upgrade/',
-			LinkInBioInactive: '/launchpads/default/intro',
-			LinkCampaignsInactive: '/campaigns-upgrade/',
-			CustomlinksInactive: '/custom-links-upgrade/',
-			ZLinks: '/links',
-			ZProfile: '/settings/profile/',
-			ZCustomDomain: '/settings/custom-domains/',
-			ZGroup: '/settings/groups/',
-			ZCSVBulk: '/settings/bulk-upload/',
-			ZAccountDetails: '/settings/organization/details/',
-			ZIntegration: '/settings/integrations/',
+			DashboardInactive: `${ZPrivateRoutePath}/dashboard-upgrade/`,
+			LinkInBioInactive: `${ZPrivateRoutePath}/launchpads/default/intro`,
+			LinkCampaignsInactive: `${ZPrivateRoutePath}/campaigns-upgrade/`,
+			CustomlinksInactive: `${ZPrivateRoutePath}/custom-links-upgrade/`,
+			ZLinks: `${ZPrivateRoutePath}/links`,
+			ZProfile: `${ZPrivateRoutePath}/settings/profile/`,
+			ZCustomDomain: `${ZPrivateRoutePath}/settings/custom-domains/`,
+			ZGroup: `${ZPrivateRoutePath}/settings/groups/`,
+			ZCSVBulk: `${ZPrivateRoutePath}/settings/bulk-upload/`,
+			ZAccountDetails: `${ZPrivateRoutePath}/settings/organization/details/`,
+			ZIntegration: `${ZPrivateRoutePath}/settings/integrations/`,
 		},
 	},
 

@@ -4,7 +4,7 @@ import React, { ReactNode } from 'react';
 // Packages Imports
 import { IonAvatar } from '@ionic/react';
 import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
-import { createElementTestingSelector } from '@/utils/helpers';
+import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { PRODUCT_NAME } from '@/utils/constants';
 
 // Type
@@ -32,8 +32,8 @@ const ZIonAvatar = (props: ZIonAvatarType) => {
 	return (
 		<IonAvatar
 			{...props}
-			{...createElementTestingSelector({
-				_value: props.testingSelector || PRODUCT_NAME
+			{...zCreateElementTestingSelector({
+				_value: props.testingSelector || PRODUCT_NAME,
 			})}
 		>
 			{props.children}

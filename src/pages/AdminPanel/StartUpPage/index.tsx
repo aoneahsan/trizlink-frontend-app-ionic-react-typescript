@@ -108,6 +108,7 @@ const ZAppStartupPage: React.FC = () => {
 					...oldValues,
 					role: getUserRoleAndPermissions.result.role,
 					permissions: getUserRoleAndPermissions.result.permissions,
+					fetched: true,
 				}));
 
 				setLoadingIsOpen(false);

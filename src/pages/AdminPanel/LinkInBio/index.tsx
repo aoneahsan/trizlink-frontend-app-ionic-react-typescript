@@ -98,7 +98,10 @@ import CONSTANTS from '@/utils/constants';
 import { API_URL_ENUM, PAGE_MENU, PAGE_MENU_SIDE } from '@/utils/enums';
 import { zStringify } from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import {
+	useZMediaQueryScale,
+	useZPermissionChecker,
+} from '@/ZaionsHooks/ZGenericHooks';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 

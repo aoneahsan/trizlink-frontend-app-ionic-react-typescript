@@ -99,8 +99,8 @@ import ZFallbackIonSpinner from './components/CustomComponents/FallbackSpinner';
 // Functional Component
 const AppRoutes: React.FC = () => {
 	return (
-		<IonReactRouter>
-			<IonRouterOutlet>
+		// <IonReactRouter>
+		// 	<IonRouterOutlet>
 				<Suspense fallback={<ZFallbackIonSpinner />}>
 					{/* Generic Routes */}
 					<Route exact path={ZaionsRoutes.HomeRoute} component={Home} />
@@ -445,8 +445,8 @@ const AppRoutes: React.FC = () => {
 						component={TestingTabs}
 					/>
 				</Suspense>
-			</IonRouterOutlet>
-		</IonReactRouter>
+		// 	</IonRouterOutlet>
+		// </IonReactRouter>
 	);
 };
 

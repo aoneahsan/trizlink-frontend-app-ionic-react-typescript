@@ -54,6 +54,10 @@ export enum API_URL_ENUM {
 	userEmbedWidget_create_list = 'userEmbedWidget_create_list',
 	userEmbedWidget_update_delete = 'userEmbedWidget_update_delete',
 
+	user_unread_notifications_list = 'user_unread_notifications_list',
+	user_notification_mark_as_read = 'user_notification_mark_as_read',
+	user_notification_mark_all_as_read = 'user_notification_mark_all_as_read',
+
 	shortLinks_create_list = 'shortLinks_create_list',
 	shortLinks_update_delete = 'shortLinks_update_delete',
 	shortLinks_is_path_available = 'shortLinks_is_path_available',
@@ -137,7 +141,7 @@ export enum apiTypeToValidateEnum {
 	ZlinkMutationApi = 'ZlinkMutationApi',
 }
 
-export enum createElementTestingSelectorKeyEnum {
+export enum zCreateElementTestingSelectorKeyEnum {
 	selector = 'selector',
 	listSelector = 'listSelector',
 }

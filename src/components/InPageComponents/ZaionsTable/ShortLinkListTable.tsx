@@ -47,7 +47,7 @@ import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import {
 	createRedirectRoute,
 	extractInnerData,
-	generateShortLink,
+	zGenerateShortLink,
 	replaceRouteParams,
 } from '@/utils/helpers';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
@@ -332,7 +332,7 @@ const ZaionsShortLinkTable: React.FC<{
 			id: ZShortLinkListPageTableColumnsIds.linkToShare,
 			footer: 'Link to share',
 			cell: ({ row }) => {
-				const _shortLink = generateShortLink({
+				const _shortLink = zGenerateShortLink({
 					domain: row?.original?.shortUrlDomain,
 					urlPath: row?.original?.shortUrlPath,
 				});

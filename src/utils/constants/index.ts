@@ -48,6 +48,11 @@ const RouteParams = {
 		setting: {
 			type: ':type',
 		},
+
+		notification: {
+			type: ':type',
+			id: ':id',
+		},
 	},
 
 	timeSlot: {
@@ -97,13 +102,17 @@ export const API_URLS = {
 	userAccountUtmTags_update_delete: `/user/utm-tag/${RouteParams.utmTag.utmTagId}`,
 	userAccountFolders_update_delete: '/user/folders/:folderId',
 	userEmbedWidget_update_delete: '/user/embedded-scripts/:embeddedId',
+
+	user_unread_notifications_list: `/user/notification/type/${RouteParams.user.notification.type}`,
+	user_notification_mark_as_read: `/user/notification/type/${RouteParams.user.notification.type}/markAsRead/${RouteParams.user.notification.id}`,
+	user_notification_mark_all_as_read: `/user/notification/type/${RouteParams.user.notification.type}/markAllAsRead`,
+
 	shortLinks_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links`,
 	shortLinks_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links/${RouteParams.shortLink.shortLinkId}`,
-
 	shortLinks_is_path_available: `/user/workspaces/${RouteParams.workspace.workspaceId}/sl/is-path-available/${RouteParams.shortLink.path}`,
+	ShortLinks_folders_reorder: '/user/shortLinks/folders/reorder',
 
 	FolderShortLinks: '/user/folders/:folderId/short-links',
-	ShortLinks_folders_reorder: '/user/shortLinks/folders/reorder',
 	LinkInBio_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/linkInBio/folders`,
 
 	folders_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder/${RouteParams.folderIdToGetShortLinksOrLinkInBio}`,

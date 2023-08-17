@@ -96,6 +96,8 @@ const ZWorkspaceListPage: React.FC = () => {
 			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
 		});
 
+	console.count('checking for infinite re-render');
+
 	return (
 		<ZIonPage pageTitle='Zaions workspaces list page'>
 			<ZCan
@@ -131,7 +133,7 @@ const ZWorkspaceListPage: React.FC = () => {
 												<ZIonButton
 													fill='solid'
 													color='primary'
-													className='ion-no-margin normal-case'
+													className='normal-case ion-no-margin'
 													testingSelector={
 														CONSTANTS.testingSelectors.workspace.listPage
 															.inviteButton
@@ -149,7 +151,7 @@ const ZWorkspaceListPage: React.FC = () => {
 											>
 												{!isWorkspacesDataFetching && (
 													<ZIonButton
-														className='ion-no-margin normal-case'
+														className='normal-case ion-no-margin'
 														color='secondary'
 														testingSelector={
 															CONSTANTS.testingSelectors.workspace.listPage
@@ -189,7 +191,7 @@ const ZWorkspaceListPage: React.FC = () => {
 
 												{isWorkspacesDataFetching && (
 													<ZIonButton
-														className='ion-no-margin normal-case'
+														className='normal-case ion-no-margin'
 														color='secondary'
 													>
 														<ZIonSkeletonText

@@ -10,7 +10,7 @@ import {
 	ZIonText,
 	ZIonTitle,
 } from '@/components/ZIonComponents';
-import { lockClosed } from 'ionicons/icons';
+import { lockClosed, sadOutline } from 'ionicons/icons';
 import React from 'react';
 
 /**
@@ -64,7 +64,7 @@ import React from 'react';
  * @type {*}
  * */
 
-const Z403View: React.FC = () => {
+const Z500View: React.FC = () => {
 	return (
 		<ZIonContent>
 			<ZIonRow className='w-full h-full ion-align-items-center ion-justify-content-center'>
@@ -76,15 +76,18 @@ const Z403View: React.FC = () => {
 					sizeXs='11'
 					className='h-[50%] zaions__medium_set rounded-md flex-col flex ion-align-items-center ion-justify-content-center gap-3 ion-text-center shadow-xl'
 				>
-					<ZIonIcon icon={lockClosed} className='w-10 h-10 mb-2' />
+					<ZIonIcon icon={sadOutline} className='w-10 h-10 mb-2' />
 					<ZIonText
 						className='text-5xl font-bold ion-no-padding h-max'
 						color='dark'
 					>
-						403
+						500
 					</ZIonText>
 					<ZIonText className='text-2xl ion-no-padding'>
-						Access Forbidden!
+						Something went wrong!
+					</ZIonText>
+					<ZIonText className='text-lg ion-no-padding'>
+						unknown error occurred 500 server error
 					</ZIonText>
 				</ZIonCol>
 			</ZIonRow>
@@ -92,4 +95,4 @@ const Z403View: React.FC = () => {
 	);
 };
 
-export default Z403View;
+export default Z500View;

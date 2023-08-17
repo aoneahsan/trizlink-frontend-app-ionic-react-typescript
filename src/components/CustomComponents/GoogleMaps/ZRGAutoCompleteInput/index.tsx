@@ -4,8 +4,8 @@ import {
 	FormikSetFieldTouchedEventType,
 } from '@/types/ZaionsFormik.type';
 import { GM_CONSTANTS } from '@/utils/constants/googleMapsConstants';
-import { createElementTestingSelector } from '@/utils/helpers';
-import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
+import { zCreateElementTestingSelector } from '@/utils/helpers';
+import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 import { PRODUCT_NAME } from '@/utils/constants';
 
 interface IZRGAutoCompleteInputProps {
@@ -37,16 +37,16 @@ const ZRGAutoCompleteInput: React.FC<IZRGAutoCompleteInputProps> = ({
 }) => {
 	const _testingListSelector = testingListSelector
 		? {
-				...createElementTestingSelector({
+				...zCreateElementTestingSelector({
 					_value: testingListSelector || PRODUCT_NAME,
-					_key: createElementTestingSelectorKeyEnum.listSelector,
+					_key: zCreateElementTestingSelectorKeyEnum.listSelector,
 				}),
 		  }
 		: {};
 
 	const _testingSelector = testingSelector
 		? {
-				...createElementTestingSelector({
+				...zCreateElementTestingSelector({
 					_value: testingSelector || PRODUCT_NAME,
 				}),
 		  }

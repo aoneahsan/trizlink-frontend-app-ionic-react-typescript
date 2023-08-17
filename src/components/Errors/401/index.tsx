@@ -3,6 +3,7 @@
  * ? Like Import of React is a Core Import
  * */
 import {
+	ZIonButton,
 	ZIonCol,
 	ZIonContent,
 	ZIonIcon,
@@ -10,6 +11,7 @@ import {
 	ZIonText,
 	ZIonTitle,
 } from '@/components/ZIonComponents';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { lockClosed } from 'ionicons/icons';
 import React from 'react';
 
@@ -64,7 +66,7 @@ import React from 'react';
  * @type {*}
  * */
 
-const Z403View: React.FC = () => {
+const Z401View: React.FC = () => {
 	return (
 		<ZIonContent>
 			<ZIonRow className='w-full h-full ion-align-items-center ion-justify-content-center'>
@@ -81,15 +83,20 @@ const Z403View: React.FC = () => {
 						className='text-5xl font-bold ion-no-padding h-max'
 						color='dark'
 					>
-						403
+						401
 					</ZIonText>
-					<ZIonText className='text-2xl ion-no-padding'>
-						Access Forbidden!
-					</ZIonText>
+					<ZIonText className='text-2xl ion-no-padding'>Unauthorized!</ZIonText>
+
+					<div className='flex w-full gap-3 ion-align-items-center ion-justify-content-center'>
+						<ZIonButton fill='outline' routerLink={ZaionsRoutes.HomeRoute}>
+							Home
+						</ZIonButton>
+						<ZIonButton routerLink={ZaionsRoutes.LoginRoute}>Login</ZIonButton>
+					</div>
 				</ZIonCol>
 			</ZIonRow>
 		</ZIonContent>
 	);
 };
 
-export default Z403View;
+export default Z401View;

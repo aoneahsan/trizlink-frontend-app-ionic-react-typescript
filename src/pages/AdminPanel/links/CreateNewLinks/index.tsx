@@ -105,7 +105,7 @@ import {
 	areAllObjectsFilled,
 	extractInnerData,
 	formatApiRequestErrorForFormikFormField,
-	generateShortLink,
+	zGenerateShortLink,
 	replaceRouteParams,
 	validateField,
 	zStringify,
@@ -317,7 +317,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
 					// if we have data then update cache and show success message.
 					if (_data && _data.id) {
-						const __generatedShortLink = generateShortLink({
+						const __generatedShortLink = zGenerateShortLink({
 							domain: _data.shortUrlDomain,
 							urlPath: _data.shortUrlPath,
 						});
@@ -386,7 +386,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
 					// if we have data then show success message.
 					if (_data && _data.id) {
-						const __generatedShortLink = generateShortLink({
+						const __generatedShortLink = zGenerateShortLink({
 							domain: _data.shortUrlDomain,
 							urlPath: _data.shortUrlPath,
 						});

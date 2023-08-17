@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Packages Imports
-import { setupIonicReact } from '@ionic/react';
+import { IonRouterOutlet, setupIonicReact } from '@ionic/react';
 // import { IonReactRouter } from '@ionic/react-router';
 import { RecoilRoot } from 'recoil';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
@@ -31,6 +31,8 @@ import 'react-tooltip/dist/react-tooltip.css';
 // Custom Imports
 import ZaionsApp from './ZaionsApp';
 import AuthenticateHOC from './HOCs/AuthenticateHOC';
+import FetchRequiredAppDataHOC from './HOCs/FetchRequiredAppDataHOC';
+import { IonReactRouter } from '@ionic/react-router';
 
 // Global Constants
 
@@ -43,9 +45,15 @@ const AppHOCWrapper: React.FC = () => {
 	return (
 		<QueryClientProvider client={queryClientObj}>
 			<RecoilRoot>
-				<AuthenticateHOC>
-					<ZaionsApp />
-				</AuthenticateHOC>
+				<IonReactRouter>
+					<IonRouterOutlet>
+						<AuthenticateHOC>
+							<FetchRequiredAppDataHOC>
+								<ZaionsApp />
+							</FetchRequiredAppDataHOC>
+						</AuthenticateHOC>
+					</IonRouterOutlet>
+				</IonReactRouter>
 			</RecoilRoot>
 			<ReactQueryDevtools initialIsOpen={false} />
 		</QueryClientProvider>

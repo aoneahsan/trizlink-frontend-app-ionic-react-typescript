@@ -11,9 +11,9 @@ import {
 
 // Type
 import { IonInputCustomEvent } from '@ionic/core/dist/types/components';
-import { createElementTestingSelector } from '@/utils/helpers';
+import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { PRODUCT_NAME } from '@/utils/constants';
-import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
+import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 type ZIonInputAutoCompleteType =
 	| 'name'
@@ -170,16 +170,16 @@ const ZIonInput = React.forwardRef(
 
 		const _testingListSelector = props.testingListSelector
 			? {
-					...createElementTestingSelector({
+					...zCreateElementTestingSelector({
 						_value: props.testingListSelector || PRODUCT_NAME,
-						_key: createElementTestingSelectorKeyEnum.listSelector,
+						_key: zCreateElementTestingSelectorKeyEnum.listSelector,
 					}),
 			  }
 			: {};
 
 		const _testingSelector = props.testingSelector
 			? {
-					...createElementTestingSelector({
+					...zCreateElementTestingSelector({
 						_value: props.testingSelector || PRODUCT_NAME,
 					}),
 			  }

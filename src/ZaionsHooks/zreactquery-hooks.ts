@@ -1,3 +1,5 @@
+import { useZPermissionChecker } from '@/ZaionsHooks/ZGenericHooks';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import { extractInnerDataOptionsEnum } from './../utils/enums/index';
 import { zAxiosApiRequest, emptyVoidReturnFunction } from '@/utils/helpers';
 // Core Imports
@@ -18,11 +20,13 @@ import { AxiosError } from 'axios';
 import { errorCodes } from '@/utils/constants/apiConstants';
 import { clearAuthDataFromLocalStorageAndRecoil } from '@/utils/helpers/apiHelpers';
 import { useResetRecoilState, useRecoilValue } from 'recoil';
-import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 import {
-	appWiseIonicLoaderIsOpenedRSelector,
-	appWiseIonicLoaderRStateAtom,
-} from '@/ZaionsStore/AppRStates';
+	ZaionsUserAccountRStateAtom,
+	currentLoggedInUserRoleAndPermissionsRStateAtom,
+} from '@/ZaionsStore/UserAccount/index.recoil';
+import { appWiseIonicLoaderIsOpenedRSelector } from '@/ZaionsStore/AppRStates';
+import CONSTANTS from '@/utils/constants';
+import { useEffect } from 'react';
 
 /**
  * The custom hook for getting data from an API using useQuery hook from react-query package.
@@ -41,6 +45,7 @@ export const useZRQGetRequest = <T>({
 	_shouldExtractData = true,
 	_extractType = ZRQGetRequestExtractEnum.extractItems,
 	_staleTime = 10 * 60000,
+	_checkPermissions = true,
 	_queryOptions = {
 		refetchOnWindowFocus: false,
 		networkMode: 'offlineFirst',
@@ -57,6 +62,7 @@ export const useZRQGetRequest = <T>({
 	_urlDynamicParts?: string[];
 	_shouldFetchWhenIdPassed?: boolean;
 	_staleTime?: number | typeof Infinity;
+	_checkPermissions?: boolean;
 	_queryOptions?: {
 		refetchOnWindowFocus?: boolean;
 		networkMode?: 'always' | 'offlineFirst' | 'online';
@@ -71,10 +77,24 @@ export const useZRQGetRequest = <T>({
 	const zAppWiseIonicLoaderIsOpenedRSelector = useRecoilValue(
 		appWiseIonicLoaderIsOpenedRSelector
 	);
+	const currentLoggedInUserRoleAndPermissionsStateAtom = useRecoilValue(
+		currentLoggedInUserRoleAndPermissionsRStateAtom
+	);
+	const { permissionsChecker } = useZPermissionChecker();
 
 	return useQuery({
 		queryKey: [..._key],
 		queryFn: async (): Promise<T | undefined | null> => {
+			if (_checkPermissions) {
+				const _permissionsCheckerResult = await permissionsChecker();
+				if (_permissionsCheckerResult) {
+					console.log({ _permissionsCheckerResult });
+					if (!_permissionsCheckerResult.hasAllPermissions) {
+						return null;
+					}
+				}
+			}
+
 			if (_shouldFetchWhenIdPassed) {
 				return null;
 			} else {
@@ -170,6 +190,7 @@ export const useZRQCreateRequest = <T>({
 	_itemsIds,
 	_urlDynamicParts,
 	_contentType = zAxiosApiRequestContentType.Json,
+	_permissions,
 }: {
 	_url: API_URL_ENUM;
 	_queriesKeysToInvalidate?: string[];
@@ -177,6 +198,7 @@ export const useZRQCreateRequest = <T>({
 	_itemsIds?: string[];
 	_urlDynamicParts?: string[];
 	_contentType?: zAxiosApiRequestContentType;
+	_permissions?: permissionsEnum[];
 }) => {
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
@@ -184,11 +206,33 @@ export const useZRQCreateRequest = <T>({
 	const resetUserAccountState = useResetRecoilState(
 		ZaionsUserAccountRStateAtom
 	);
+	const currentLoggedInUserRoleAndPermissionsStateAtom = useRecoilValue(
+		currentLoggedInUserRoleAndPermissionsRStateAtom
+	);
+
+	// const { getRQCDataHandler } = useZGetRQCacheData();
+
+	// const _roleAndPermissions = getRQCDataHandler({
+	// 	key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.ROLE_PERMISSIONS],
+	// });
 
 	return useMutation({
 		mutationFn: async (
 			_requestData: string | FormData
 		): Promise<T | undefined> => {
+			// if (_permissions && _permissions?.length > 0) {
+			// 	const userPermissions =
+			// 		currentLoggedInUserRoleAndPermissionsStateAtom?.permissions;
+			// 	// const haveRequiredPermission = userPermissions?.includes(havePermission);
+			// 	const haveRequiredPermission = _permissions.every((el) =>
+			// 		userPermissions?.includes(el)
+			// 	);
+
+			// 	if (haveRequiredPermission === false) {
+			// 		return undefined;
+			// 	}
+			// }
+
 			// Present ion loading before api start
 			await presentZIonLoader(MESSAGES.GENERAL.API_REQUEST.CREATING);
 			/**
@@ -254,11 +298,13 @@ export const useZRQUpdateRequest = <T>({
 	_queriesKeysToInvalidate,
 	authenticated,
 	_contentType = zAxiosApiRequestContentType.Json,
+	_permissions,
 }: {
 	_url: API_URL_ENUM;
 	_queriesKeysToInvalidate?: string[];
 	authenticated?: boolean;
 	_contentType?: zAxiosApiRequestContentType;
+	_permissions?: permissionsEnum[];
 }) => {
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
@@ -266,7 +312,9 @@ export const useZRQUpdateRequest = <T>({
 	const resetUserAccountState = useResetRecoilState(
 		ZaionsUserAccountRStateAtom
 	);
-
+	const currentLoggedInUserRoleAndPermissionsStateAtom = useRecoilValue(
+		currentLoggedInUserRoleAndPermissionsRStateAtom
+	);
 	return useMutation({
 		mutationFn: async ({
 			// Please note, the "itemIds" & "urlDynamicParts" array length should be equal, mean, if you pass 4 ids in "itemIds", then you need to pass 4 strings representing the dynamic parts in "urlDynamicParts" array, so we can replace all dynamic/id parts with the respective IDs properly.
@@ -286,6 +334,19 @@ export const useZRQUpdateRequest = <T>({
 			urlDynamicParts: string[];
 			requestData: string;
 		}): Promise<T | undefined> => {
+			if (_permissions && _permissions?.length > 0) {
+				const userPermissions =
+					currentLoggedInUserRoleAndPermissionsStateAtom?.permissions;
+				// const haveRequiredPermission = userPermissions?.includes(havePermission);
+				const haveRequiredPermission = _permissions.every((el) =>
+					userPermissions?.includes(el)
+				);
+
+				if (haveRequiredPermission === false) {
+					return undefined;
+				}
+			}
+
 			// Present ion loading before api start
 			await presentZIonLoader(MESSAGES.GENERAL.API_REQUEST.UPDATING);
 			/**
@@ -351,13 +412,17 @@ export const useZRQUpdateRequest = <T>({
 export const useZRQDeleteRequest = <T>(
 	_url: API_URL_ENUM,
 	_queriesKeysToInvalidate?: string[],
-	authenticated?: boolean
+	authenticated?: boolean,
+	_permissions?: permissionsEnum[]
 ) => {
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
 	const queryClient = useQueryClient();
 	const resetUserAccountState = useResetRecoilState(
 		ZaionsUserAccountRStateAtom
+	);
+	const currentLoggedInUserRoleAndPermissionsStateAtom = useRecoilValue(
+		currentLoggedInUserRoleAndPermissionsRStateAtom
 	);
 
 	return useMutation({
@@ -368,6 +433,19 @@ export const useZRQDeleteRequest = <T>(
 			itemIds: string[];
 			urlDynamicParts: string[];
 		}): Promise<T | undefined> => {
+			if (_permissions && _permissions?.length > 0) {
+				const userPermissions =
+					currentLoggedInUserRoleAndPermissionsStateAtom?.permissions;
+				// const haveRequiredPermission = userPermissions?.includes(havePermission);
+				const haveRequiredPermission = _permissions.every((el) =>
+					userPermissions?.includes(el)
+				);
+
+				if (haveRequiredPermission === false) {
+					return undefined;
+				}
+			}
+
 			// Present ion loading before api start
 			await presentZIonLoader(MESSAGES.GENERAL.API_REQUEST.DELETING);
 
@@ -521,8 +599,14 @@ export const useZUpdateRQCacheData = () => {
 	}
 };
 
-// Get data from React-query cache.
-// Made this hook just because to use QueryClient.getQueryData in one place so if in feature we change it, just have to change this in this hook. (as same for all above).
+/**
+ * Get data from React-query cache.
+ * Made this hook just because to use QueryClient.getQueryData in one place so if in feature we change it, just have to change this in this hook. (as same for all above).
+ * @param
+ * id: string
+ * @return
+ * getRQCDataHandler: <T>(key: string[]): T|undefined
+ */
 export const useZGetRQCacheData = () => {
 	try {
 		const QueryClient = useQueryClient();

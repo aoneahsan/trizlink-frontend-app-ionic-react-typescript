@@ -100,3 +100,4 @@
   - if any of obj is null or undefined then it will throw that error
   - to avoid this error write above code like this
     - "obj1.obj2.obj3.obj4.keyName" => "obj1?.obj2?.obj3?.obj4?.keyName"
+- must use "error reporting function" in every catch block, in no condition/case catch block error can be ignored.

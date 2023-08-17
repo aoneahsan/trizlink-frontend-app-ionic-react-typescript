@@ -1,7 +1,7 @@
 {
 	"css.format.enable": true,
 	"editor.formatOnSave": true,
-	"files.autoSave": "onFocusChange",
+	"files.autoSave": "onWindowChange",
 	"prettier.enable": true,
 	"cSpell.words": [
 		"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz",

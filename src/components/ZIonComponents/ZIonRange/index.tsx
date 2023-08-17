@@ -12,9 +12,9 @@ import {
 	RangeKnobMoveEndEventDetail,
 	RangeKnobMoveStartEventDetail,
 } from '@ionic/core';
-import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
+import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 import { PRODUCT_NAME } from '@/utils/constants';
-import { createElementTestingSelector } from '@/utils/helpers';
+import { zCreateElementTestingSelector } from '@/utils/helpers';
 type ZIonRangeType = {
 	children?: ReactNode;
 	className?: string;
@@ -49,16 +49,16 @@ type ZIonRangeType = {
 const ZIonRange = (props: ZIonRangeType) => {
 	const _testingListSelector = props.testingListSelector
 		? {
-				...createElementTestingSelector({
+				...zCreateElementTestingSelector({
 					_value: props.testingListSelector || PRODUCT_NAME,
-					_key: createElementTestingSelectorKeyEnum.listSelector,
+					_key: zCreateElementTestingSelectorKeyEnum.listSelector,
 				}),
 		  }
 		: {};
 
 	const _testingSelector = props.testingSelector
 		? {
-				...createElementTestingSelector({
+				...zCreateElementTestingSelector({
 					_value: props.testingSelector || PRODUCT_NAME,
 				}),
 		  }

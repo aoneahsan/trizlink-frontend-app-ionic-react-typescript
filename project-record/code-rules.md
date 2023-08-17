@@ -4,3 +4,8 @@
   - In ionic we have useIonViewWillEnter & useIonViewWillLeave hook. the useIonViewWillEnter run when the page get fouced, the page is visiable in browser. and useIonViewWillLeave will run when the page is about to close.
 
   - for example in createNewShortLink I went to fetch data from backend every time the view is enterd but I am using useEffect there where I should use useIonViewWillEnter. (1/June/2023) (if in feture I froget this the punchment is 20 up&down)
+
+- object and array value assign to new const/variables
+  - must destruct before assigning, as objects and arrays are reference type
+  - INVALID:   const newArray/ObjectName = oldArray/ObjectName
+  - VALID:   const newArray/ObjectName = [...oldArrayName] || {...oldObjectName}

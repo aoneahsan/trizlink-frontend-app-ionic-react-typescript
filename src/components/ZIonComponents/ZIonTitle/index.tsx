@@ -4,8 +4,8 @@ import React, { ReactNode } from 'react';
 // Packages Import
 import { IonTitle } from '@ionic/react';
 import { ZIonColorType } from '@/types/zaionsAppSettings.type';
-import { createElementTestingSelector } from '@/utils/helpers';
-import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
+import { zCreateElementTestingSelector } from '@/utils/helpers';
+import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 import { PRODUCT_NAME } from '@/utils/constants';
 
 // Type
@@ -24,16 +24,16 @@ type ZIonTitleType = {
 const ZIonTitle = (props: ZIonTitleType) => {
 	const _testingListSelector = props.testingListSelector
 		? {
-				...createElementTestingSelector({
+				...zCreateElementTestingSelector({
 					_value: props.testingListSelector || PRODUCT_NAME,
-					_key: createElementTestingSelectorKeyEnum.listSelector,
+					_key: zCreateElementTestingSelectorKeyEnum.listSelector,
 				}),
 		  }
 		: {};
 
 	const _testingSelector = props.testingSelector
 		? {
-				...createElementTestingSelector({
+				...zCreateElementTestingSelector({
 					_value: props.testingSelector || PRODUCT_NAME,
 				}),
 		  }

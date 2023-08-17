@@ -23,7 +23,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import classNames from 'classnames';
 import { Formik } from 'formik';
 import dayjs from 'dayjs';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 
 /**
  * Custom Imports go down
@@ -85,7 +85,10 @@ import {
 	useZRQGetRequest,
 	useZRQUpdateRequest,
 } from '@/ZaionsHooks/zreactquery-hooks';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import {
+	useZMediaQueryScale,
+	useZPermissionChecker,
+} from '@/ZaionsHooks/ZGenericHooks';
 import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 
@@ -97,7 +100,13 @@ import CONSTANTS from '@/utils/constants';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { API_URL_ENUM } from '@/utils/enums';
-import { replaceParams, zStringify } from '@/utils/helpers';
+import {
+	zCompareRoutes,
+	replaceParams,
+	zStringify,
+	ZGetCurrentRoute,
+	ZGetRoutePermissions,
+} from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
 

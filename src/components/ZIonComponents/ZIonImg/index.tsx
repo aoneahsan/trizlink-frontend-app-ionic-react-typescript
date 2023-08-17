@@ -3,8 +3,8 @@ import React, { ReactNode } from 'react';
 
 // Packages Import
 import { IonImg } from '@ionic/react';
-import { createElementTestingSelector } from '@/utils/helpers';
-import { createElementTestingSelectorKeyEnum } from '@/utils/enums';
+import { zCreateElementTestingSelector } from '@/utils/helpers';
+import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 import { PRODUCT_NAME } from '@/utils/constants';
 
 type ZIonImgType = {
@@ -23,27 +23,24 @@ type ZIonImgType = {
 const ZIonImg = (props: ZIonImgType) => {
 	const _testingListSelector = props.testingListSelector
 		? {
-				...createElementTestingSelector({
+				...zCreateElementTestingSelector({
 					_value: props.testingListSelector || PRODUCT_NAME,
-					_key: createElementTestingSelectorKeyEnum.listSelector,
+					_key: zCreateElementTestingSelectorKeyEnum.listSelector,
 				}),
 		  }
 		: {};
 
 	const _testingSelector = props.testingSelector
 		? {
-				...createElementTestingSelector({
+				...zCreateElementTestingSelector({
 					_value: props.testingSelector || PRODUCT_NAME,
 				}),
 		  }
 		: {};
 	return (
 		<IonImg
-			
-			
 			{...props}
 			style={props.style}
-		
 			{..._testingSelector}
 			{..._testingListSelector}
 		>

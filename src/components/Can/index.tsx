@@ -53,6 +53,7 @@ const ZCan: React.FC<CanComponentProps> = ({
 					...oldValues,
 					role: getUserRoleAndPermissions.result.role,
 					permissions: getUserRoleAndPermissions.result.permissions,
+					fetched: true,
 				}));
 			}
 		} catch (error) {
@@ -74,7 +75,10 @@ const ZCan: React.FC<CanComponentProps> = ({
 	if (haveRequiredPermission) {
 		// if user have permission then user can view content
 		content = children;
-	} else if (returnPermissionDeniedView) {
+	} else if (
+		returnPermissionDeniedView &&
+		currentLoggedInUserRoleAndPermissionsStateAtom?.fetched
+	) {
 		content = <Z403View />;
 	}
 

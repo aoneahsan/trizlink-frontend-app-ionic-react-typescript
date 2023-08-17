@@ -4,6 +4,7 @@
 export interface UserRoleAndPermissionsInterface {
 	role: string;
 	permissions: string[];
+	fetched?: boolean;
 }
 
 // Type
