@@ -25,8 +25,6 @@ import {
 	currentLoggedInUserRoleAndPermissionsRStateAtom,
 } from '@/ZaionsStore/UserAccount/index.recoil';
 import { appWiseIonicLoaderIsOpenedRSelector } from '@/ZaionsStore/AppRStates';
-import CONSTANTS from '@/utils/constants';
-import { useEffect } from 'react';
 
 /**
  * The custom hook for getting data from an API using useQuery hook from react-query package.
@@ -46,6 +44,7 @@ export const useZRQGetRequest = <T>({
 	_extractType = ZRQGetRequestExtractEnum.extractItems,
 	_staleTime = 10 * 60000,
 	_checkPermissions = true,
+	_showAlertOnError = true,
 	_queryOptions = {
 		refetchOnWindowFocus: false,
 		networkMode: 'offlineFirst',
@@ -63,6 +62,7 @@ export const useZRQGetRequest = <T>({
 	_shouldFetchWhenIdPassed?: boolean;
 	_staleTime?: number | typeof Infinity;
 	_checkPermissions?: boolean;
+	_showAlertOnError?: boolean;
 	_queryOptions?: {
 		refetchOnWindowFocus?: boolean;
 		networkMode?: 'always' | 'offlineFirst' | 'online';
@@ -76,9 +76,6 @@ export const useZRQGetRequest = <T>({
 	);
 	const zAppWiseIonicLoaderIsOpenedRSelector = useRecoilValue(
 		appWiseIonicLoaderIsOpenedRSelector
-	);
-	const currentLoggedInUserRoleAndPermissionsStateAtom = useRecoilValue(
-		currentLoggedInUserRoleAndPermissionsRStateAtom
 	);
 	const { permissionsChecker } = useZPermissionChecker();
 
@@ -143,10 +140,10 @@ export const useZRQGetRequest = <T>({
 				void dismissZIonLoader();
 
 			// showing error alert...
-			void presentZIonErrorAlert();
+			_showAlertOnError && void presentZIonErrorAlert();
 
 			// throw the request_failed error
-			reportCustomError(_error);
+			_showAlertOnError && reportCustomError(_error);
 
 			// check if it's unauthenticated error
 			const errorCode = (_error as AxiosError)?.response?.status;
@@ -186,19 +183,21 @@ export const useZRQGetRequest = <T>({
 export const useZRQCreateRequest = <T>({
 	_url,
 	_queriesKeysToInvalidate,
-	authenticated,
+	_authenticated,
 	_itemsIds,
 	_urlDynamicParts,
 	_contentType = zAxiosApiRequestContentType.Json,
-	_permissions,
+	_showAlertOnError = false,
+	_showLoader = true,
 }: {
 	_url: API_URL_ENUM;
 	_queriesKeysToInvalidate?: string[];
-	authenticated?: boolean;
+	_authenticated?: boolean;
 	_itemsIds?: string[];
 	_urlDynamicParts?: string[];
 	_contentType?: zAxiosApiRequestContentType;
-	_permissions?: permissionsEnum[];
+	_showAlertOnError?: boolean;
+	_showLoader?: boolean;
 }) => {
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
@@ -234,7 +233,8 @@ export const useZRQCreateRequest = <T>({
 			// }
 
 			// Present ion loading before api start
-			await presentZIonLoader(MESSAGES.GENERAL.API_REQUEST.CREATING);
+			_showLoader &&
+				(await presentZIonLoader(MESSAGES.GENERAL.API_REQUEST.CREATING));
 			/**
 			 * @_url - takes the post url to post data to api.
 			 *  second argument take the method (post | get | update | delete). as this is the post api so it  will be post
@@ -245,7 +245,7 @@ export const useZRQCreateRequest = <T>({
 			return await zAxiosApiRequest<T>({
 				_url: _url,
 				_method: 'post',
-				_isAuthenticatedRequest: authenticated,
+				_isAuthenticatedRequest: _authenticated,
 				_data: _requestData,
 				_itemIds: _itemsIds,
 				_urlDynamicParts: _urlDynamicParts,
@@ -257,7 +257,7 @@ export const useZRQCreateRequest = <T>({
 		},
 		onSuccess: async (_data) => {
 			// onSucceed dismissing loader...
-			await dismissZIonLoader();
+			_showLoader && (await dismissZIonLoader());
 			if (_queriesKeysToInvalidate?.length) {
 				await queryClient.invalidateQueries({
 					queryKey: _queriesKeysToInvalidate,
@@ -266,13 +266,13 @@ export const useZRQCreateRequest = <T>({
 		},
 		onError: async (_error) => {
 			// OnError dismissing loader...
-			void dismissZIonLoader();
+			_showLoader && void dismissZIonLoader();
 
 			// showing error alert...
-			void presentZIonErrorAlert();
+			_showAlertOnError && void presentZIonErrorAlert();
 
 			// throw the request_failed error
-			reportCustomError(_error);
+			_showAlertOnError && reportCustomError(_error);
 
 			// check if it's unauthenticated error
 			const errorCode = (_error as AxiosError)?.response?.status;

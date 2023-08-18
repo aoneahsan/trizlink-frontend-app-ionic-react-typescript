@@ -33,6 +33,8 @@ import ZWorkspacesCard, {
 	ZWorkspacesCardSkeleton,
 } from '@/components/WorkspacesComponents/ListCard';
 import ZAddNewWorkspaceModal from '@/components/InPageComponents/ZaionsModals/Workspace/CreateModal';
+import ZUserProfileButton from '@/components/AdminPanelComponents/UserProfileButton';
+import ZCan from '@/components/Can';
 
 /**
  * Custom Hooks Imports go down
@@ -40,14 +42,13 @@ import ZAddNewWorkspaceModal from '@/components/InPageComponents/ZaionsModals/Wo
  * */
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import ZUserProfileButton from '@/components/AdminPanelComponents/UserProfileButton';
-import ZCan from '@/components/Can';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
 import { API_URL_ENUM } from '@/utils/enums';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import CONSTANTS from '@/utils/constants';
 
 /**
@@ -65,7 +66,6 @@ import CONSTANTS from '@/utils/constants';
  * ? Import of style sheet is a style import
  * */
 import { workspaceInterface } from '@/types/AdminPanel/workspace';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Images Imports go down
@@ -95,8 +95,6 @@ const ZWorkspaceListPage: React.FC = () => {
 			_url: API_URL_ENUM.workspace_create_list,
 			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
 		});
-
-	console.count('checking for infinite re-render');
 
 	return (
 		<ZIonPage pageTitle='Zaions workspaces list page'>

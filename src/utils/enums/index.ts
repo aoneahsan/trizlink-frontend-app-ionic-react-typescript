@@ -47,12 +47,13 @@ export enum API_URL_ENUM {
 	userPixelAccounts_update_delete = 'userPixelAccounts_update_delete',
 	userAccountUtmTags_create_list = 'userAccountUtmTags_create_list',
 	userAccountUtmTags_update_delete = 'userAccountUtmTags_update_delete',
-	ShortLink_folders_create_list = 'ShortLink_folders_create_list',
 	LinkInBio_folders_create_list = 'LinkInBio_folders_create_list',
 	userAccountFolders_update_delete = 'userAccountFolders_update_delete',
 	userAccount_LinkInBio_folders_update_delete = 'userAccount_LinkInBio_folders_update_delete',
 	userEmbedWidget_create_list = 'userEmbedWidget_create_list',
 	userEmbedWidget_update_delete = 'userEmbedWidget_update_delete',
+
+	//
 
 	user_unread_notifications_list = 'user_unread_notifications_list',
 	user_notification_mark_as_read = 'user_notification_mark_as_read',
@@ -61,12 +62,13 @@ export enum API_URL_ENUM {
 	shortLinks_create_list = 'shortLinks_create_list',
 	shortLinks_update_delete = 'shortLinks_update_delete',
 	shortLinks_is_path_available = 'shortLinks_is_path_available',
+	ShortLink_folders_create_list = 'ShortLink_folders_create_list',
+	shortLink_get_target_url_info = 'shortLink_get_target_url_info',
+	FolderShortLinks = 'FolderShortLinks',
+	ShortLinks_folders_reorder = 'ShortLinks_folders_reorder',
 
 	linkInBio_update_delete = 'linkInBio_update_delete',
 	linkInBio_create_list = 'linkInBio_create_list',
-
-	FolderShortLinks = 'FolderShortLinks',
-	ShortLinks_folders_reorder = 'ShortLinks_folders_reorder',
 
 	folders_update_delete = 'folders_update_delete',
 	folders_create_list = 'folders_create_list',

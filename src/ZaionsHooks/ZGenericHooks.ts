@@ -85,44 +85,57 @@ export const useZNotification = () => {
 	return { presentZNotification };
 };
 
-// Media Scale hook
+/**
+ * A custom hook to determine the media query scale of the screen.
+ * @returns an object with boolean values for each defined media scale.
+ */
 export const useZMediaQueryScale = (): useZMediaQueryScaleReturnInterface => {
+	// Check if the screen width is at extra-large (xl) scale
 	const isXlScale = useMediaQuery({
 		query: `(min-width: ${BRACKPOINT_XL})`,
 	});
 
+	// Check if the screen width is at 1300px scale
 	const is1300pxScale = useMediaQuery({
 		query: `(min-width: 1300px)`,
 	});
 
+	// Check if the screen width is at 1250px scale
 	const is1250pxScale = useMediaQuery({
 		query: `(min-width: 1250px)`,
 	});
 
+	// Check if the screen width is at 1200px scale
 	const is1200pxScale = useMediaQuery({
 		query: `(min-width: 1200px)`,
 	});
 
+	// Check if the screen width is at 1150px scale
 	const is1150pxScale = useMediaQuery({
 		query: `(min-width: 1150px)`,
 	});
 
+	// Check if the screen width is at 1100px scale
 	const is1100pxScale = useMediaQuery({
 		query: `(min-width: 1100px)`,
 	});
 
+	// Check if the screen width is at large (lg) scale
 	const isLgScale = useMediaQuery({
 		query: `(min-width: ${BRACKPOINT_LG})`,
 	});
 
+	// Check if the screen width is at medium (md) scale
 	const isMdScale = useMediaQuery({
 		query: `(min-width: ${BRACKPOINT_MD})`,
 	});
 
+	// Check if the screen width is at small (sm) scale
 	const isSmScale = useMediaQuery({
 		query: `(min-width: ${BRACKPOINT_SM})`,
 	});
 
+	// Check if the screen width is at extra small (xs) scale
 	const isXsScale = useMediaQuery({
 		query: `(min-width: ${BRACKPOINT_XS})`,
 	});
@@ -141,6 +154,13 @@ export const useZMediaQueryScale = (): useZMediaQueryScaleReturnInterface => {
 	};
 };
 
+/**
+ * A custom React hook that provides a permissions checker function to determine if the current user
+ * has the required permissions for the current route. It relies on the user's roles and permissions,
+ * as well as the defined route permissions.
+ *
+ * @returns An object containing the permissions checker function.
+ */
 export const useZPermissionChecker = (): {
 	permissionsChecker: () => Promise<{
 		hasAllPermissions: boolean;
@@ -148,55 +168,63 @@ export const useZPermissionChecker = (): {
 	}> | void;
 } => {
 	try {
+		// for getting pathname from location.
 		const __location = useLocation();
-		const currentLoggedInUserRoleAndPermissionsStateAtom = useRecoilValue(
+
+		// getting current users permissions.
+		const currentUserAllPermissions = useRecoilValue(
 			currentLoggedInUserRoleAndPermissionsRStateAtom
 		);
 
+		/**
+		 * Asynchronous function to check if the current user has all the required permissions for the current route.
+		 * @returns A promise that resolves to an object with information about whether the user has all permissions and the associated permissions list.
+		 */
 		const permissionsChecker = async (): Promise<{
 			hasAllPermissions: boolean;
 			permissions: permissionsEnum[];
 		}> => {
 			try {
+				/**
+				 * An array of permission enums associated with the current route.
+				 */
 				let permissions: permissionsEnum[] = [];
-				const result = await new Promise<boolean>((res, rej) => {
+
+				//
+				const result = await new Promise<boolean>((res, _) => {
+					/**
+					 * A boolean indicating if the user has all the required permissions for the current route.
+					 */
 					let _hasAllPermissions = false;
-					console.log({
-						currentLoggedInUserRoleAndPermissionsRStateAtom,
-						log: 'useZPermissionChecker permissions check',
-					});
+
 					if (__location.pathname) {
+						/**
+						 * getting current route from url and checking if exist in ZaionsRoutes then return that route from ZaionsRoutes
+						 */
 						const __currentRoute = ZGetCurrentRoute({
 							_currentUrl: __location.pathname,
 							_routesObj: ZaionsRoutes,
 						});
 
 						if (__currentRoute) {
+							// getting permissions of that routes.
 							const __permissions = ZGetRoutePermissions({
 								_currentRoute: __currentRoute,
 							});
 
 							if (__permissions && __permissions.length) {
-								const userPermissions =
-									currentLoggedInUserRoleAndPermissionsStateAtom?.permissions
-										?.length
-										? [
-												...currentLoggedInUserRoleAndPermissionsStateAtom.permissions,
-										  ]
-										: [];
-								// const haveRequiredPermission = userPermissions?.includes(havePermission);
+								const userPermissions = currentUserAllPermissions?.permissions
+									?.length
+									? [...currentUserAllPermissions.permissions]
+									: [];
+
+								// checking if users has all the permission of that to asses it.
 								const haveRequiredPermission = __permissions.every((el) =>
 									userPermissions?.includes(el)
 								);
+
 								permissions = [...__permissions];
 								_hasAllPermissions = haveRequiredPermission;
-								console.log({
-									permissions,
-									userPermissions,
-									log: 'useZPermissionChecker -> permissionsChecker',
-									_hasAllPermissions,
-									haveRequiredPermission,
-								});
 							}
 						} else {
 							new ZCustomError({
@@ -212,16 +240,18 @@ export const useZPermissionChecker = (): {
 					}
 					res(_hasAllPermissions);
 				});
-				if (result) {
-					return { hasAllPermissions: result, permissions };
-				} else {
-					return { hasAllPermissions: false, permissions };
-				}
+
+				/**
+				 * In the end. the permissionsChecker will return route permissions and user has all permissions or not.
+				 */
+				return { hasAllPermissions: result, permissions };
 			} catch (error) {
 				reportCustomError(error);
 				return { hasAllPermissions: false, permissions: [] };
 			}
 		};
+
+		//
 		return { permissionsChecker };
 	} catch (error) {
 		if (error instanceof ZCustomError || error instanceof Error) {

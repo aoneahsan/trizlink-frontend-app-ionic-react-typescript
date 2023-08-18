@@ -2,25 +2,26 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
-
-/**
- * Packages Imports go down
- * ? Like import of ionic components is a packages import
- * */
-import { eyeOffOutline } from 'ionicons/icons';
-
-/**
- * Custom Imports go down
- * ? Like import of custom components is a custom import
- * */
 import {
 	ZIonCol,
 	ZIonContent,
 	ZIonIcon,
 	ZIonRow,
 	ZIonText,
+	ZIonTitle,
 } from '@/components/ZIonComponents';
+import { helpCircleOutline, lockClosed } from 'ionicons/icons';
+import React from 'react';
+
+/**
+ * Packages Imports go down
+ * ? Like import of ionic components is a packages import
+ * */
+
+/**
+ * Custom Imports go down
+ * ? Like import of custom components is a custom import
+ * */
 
 /**
  * Custom Hooks Imports go down
@@ -63,7 +64,7 @@ import {
  * @type {*}
  * */
 
-const Z403View: React.FC = () => {
+const Z404View: React.FC = () => {
 	return (
 		<ZIonContent>
 			<ZIonRow className='w-full h-full ion-align-items-center ion-justify-content-center'>
@@ -75,20 +76,18 @@ const Z403View: React.FC = () => {
 					sizeXs='11'
 					className='h-[50%] zaions__medium_set rounded-md flex-col flex ion-align-items-center ion-justify-content-center gap-3 ion-text-center shadow-xl'
 				>
-					<ZIonIcon icon={eyeOffOutline} className='w-10 h-10 mb-2' />
+					<ZIonIcon icon={helpCircleOutline} className='w-12 h-12 mb-2' />
 					<ZIonText
 						className='text-5xl font-bold ion-no-padding h-max'
 						color='dark'
 					>
-						403
+						404
 					</ZIonText>
-					<ZIonText className='text-2xl ion-no-padding'>
-						Access Forbidden!
-					</ZIonText>
+					<ZIonText className='text-2xl ion-no-padding'>Not Found</ZIonText>
 				</ZIonCol>
 			</ZIonRow>
 		</ZIonContent>
 	);
 };
 
-export default Z403View;
+export default Z404View;

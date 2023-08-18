@@ -83,6 +83,7 @@ const ZAppStartupPage: React.FC = () => {
 	const {
 		data: getUserRoleAndPermissions,
 		isFetching: isUserRoleAndPermissionsFetching,
+		refetch: refetchUserRoleAndPermissions,
 	} = useZRQGetRequest<{
 		isSuccess: boolean;
 		result: UserRoleAndPermissionsInterface;
@@ -90,16 +91,26 @@ const ZAppStartupPage: React.FC = () => {
 		_url: API_URL_ENUM.getUserRolePermission,
 		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.ROLE_PERMISSIONS],
 		_extractType: ZRQGetRequestExtractEnum.extractItem,
+		_checkPermissions: false,
 	});
 
 	//
-	const { isFetching: isUserSettingFetching } = useZRQGetRequest({
-		_url: API_URL_ENUM.user_setting_list_create,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.MAIN],
-	});
+	const { data: getUserSetting, isFetching: isUserSettingFetching } =
+		useZRQGetRequest({
+			_url: API_URL_ENUM.user_setting_list_create,
+			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.MAIN],
+			_checkPermissions: false,
+		});
 
 	// storing the role & permissions in recoil state
-	const isZFetching = isUserRoleAndPermissionsFetching && isUserSettingFetching;
+	const isZFetching = isUserRoleAndPermissionsFetching || isUserSettingFetching;
+	console.log({
+		getUserRoleAndPermissions,
+		isZFetching,
+		isUserRoleAndPermissionsFetching,
+		isUserSettingFetching,
+		getUserSetting,
+	});
 	useEffect(() => {
 		try {
 			if (getUserRoleAndPermissions?.isSuccess) {
@@ -112,11 +123,12 @@ const ZAppStartupPage: React.FC = () => {
 				}));
 
 				setLoadingIsOpen(false);
-
 				// Redirect to workspaces index page
 				if (!isZFetching) {
 					zNavigatePushRoute(ZaionsRoutes.AdminPanel.Workspaces.Main);
 				}
+			} else if (getUserRoleAndPermissions === undefined) {
+				refetchUserRoleAndPermissions();
 			}
 		} catch (error) {
 			reportCustomError(error);

@@ -36,6 +36,7 @@
 		"@capacitor/app": "^5.0.6",
 		"@capacitor/clipboard": "^5.0.6",
 		"@capacitor/core": "^5.2.2",
+		"@capacitor/device": "^5.0.6",
 		"@capacitor/dialog": "^5.0.6",
 		"@capacitor/geolocation": "^5.0.6",
 		"@capacitor/google-maps": "^5.2.2",

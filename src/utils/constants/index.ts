@@ -38,6 +38,9 @@ const RouteParams = {
 	editLinkInBioStepParam: ':editLinkInBioStep',
 	folderIdToGetShortLinksOrLinkInBio: ':folderId?',
 
+	// ShortLink redirect url path.
+	urlPath: ':urlPath',
+
 	// workspace
 	workspace: {
 		workspaceId: ':workspaceId',
@@ -111,6 +114,7 @@ export const API_URLS = {
 	shortLinks_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links/${RouteParams.shortLink.shortLinkId}`,
 	shortLinks_is_path_available: `/user/workspaces/${RouteParams.workspace.workspaceId}/sl/is-path-available/${RouteParams.shortLink.path}`,
 	ShortLinks_folders_reorder: '/user/shortLinks/folders/reorder',
+	shortLink_get_target_url_info: `/public/s/${RouteParams.urlPath}`,
 
 	FolderShortLinks: '/user/folders/:folderId/short-links',
 	LinkInBio_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/linkInBio/folders`,

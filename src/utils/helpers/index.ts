@@ -1005,7 +1005,10 @@ export const extractInnerData = <T>(
 	}
 };
 
-// ZSanitizeHTML gonna made for the text area (react-quill) for sanitize the html data but react-quill is doing it by it self we tested it and it is working well. if we need to add a package for sanitizing we will add it to this function and use this function in all the place need.
+/**
+ * ZSanitizeHTML gonna made for the text area (react-quill) for sanitize the html data but react-quill is doing it by it self we tested it and it is working well. if we need to add a package for sanitizing we will add it to this function and use this function in all the place need.
+ * @param param0 value of type T
+ */
 export const ZSanitizeHTML = <T>({ value }: { value: T }) => {
 	try {
 		if (value) {
@@ -1016,7 +1019,11 @@ export const ZSanitizeHTML = <T>({ value }: { value: T }) => {
 	}
 };
 
-// this function will give the remaining time for count down component
+/**
+ * this function will give the remaining time for count down component present in link-in-bio blocks.
+ * @param countDownTimeFinishDate type string
+ * @returns remaining time in milliseconds.
+ */
 export const getRemainingTimeForCountDown = (
 	countDownTimeFinishDate: string | undefined
 ): number => {
@@ -1039,6 +1046,7 @@ export const getRemainingTimeForCountDown = (
 		return 0;
 	}
 };
+
 export const convertTimeToSpecificUnit = ({
 	days = 0,
 	hours = 0,
@@ -1162,7 +1170,11 @@ export const doesUrlIncludes = (_url: string, _searchString: string) => {
 	}
 };
 
-// this function will give the icon of platform accounting to workspaceFormConnectPagesEnum basically used in workspaceView page and Compose modal etc.
+/**
+ * This function will give the icon of platform accounting to workspaceFormConnectPagesEnum basically used in workspaceView page and Compose modal etc.
+ * @param type typeof workspaceFormConnectPagesEnum
+ * @returns accounting to type it will return icon.
+ */
 export const getPlatformIcon = (type: workspaceFormConnectPagesEnum) => {
 	try {
 		if (type) {
@@ -1215,6 +1227,11 @@ export const getPlatformIcon = (type: workspaceFormConnectPagesEnum) => {
 	}
 };
 
+/**
+ * Initiates the user logout process by making an API request to log out the user.
+ * Clears user and authentication tokens from local storage upon successful logout.
+ * Redirects the user to the home page after logout.
+ */
 export const UserLogoutFn = async () => {
 	try {
 		const __response = await zAxiosApiRequest<{ isSuccess: boolean }>({
@@ -1310,7 +1327,7 @@ export const zGenerateShortLink = ({
 }: {
 	domain?: string;
 	urlPath?: string;
-}) => {
+}): string | undefined => {
 	try {
 		if (domain && urlPath) {
 			return `${domain}/${CONSTANTS.SHORT_LINK.urlStaticPath}/${urlPath}`;
@@ -1444,8 +1461,7 @@ export const ZGetCurrentRoute = ({
 /**
  * Retrieves an array of permission enums associated with the provided current route.
  *
- * @param {Object} options - The options for the function.
- * @param {string} options._currentRoute - The current route for which permissions are to be retrieved.
+ * @param {Object} options - The options for the function. options._currentRoute - The current route for which permissions are to be retrieved.
  * @returns {Array} An array of permission enums relevant to the current route, or undefined if no permissions are found.
  */
 export const ZGetRoutePermissions = ({

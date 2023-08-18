@@ -5,6 +5,9 @@ const workspaceIdParam = CONSTANTS.RouteParams.workspace.workspaceId;
 export const ZPrivateRoutePath = '/app';
 
 const ZaionsRoutes = {
+	// ShortLink redirect route.
+	ShortLinkRedirectRoute: `/${CONSTANTS.SHORT_LINK.urlStaticPath}/${CONSTANTS.RouteParams.urlPath}`,
+
 	// Main routes
 	HomeRoute: '/',
 	LoginRoute: '/sign-in',

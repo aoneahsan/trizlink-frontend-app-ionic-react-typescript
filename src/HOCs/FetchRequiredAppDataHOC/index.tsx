@@ -7,7 +7,7 @@ import React, { Suspense, useEffect } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -43,7 +43,11 @@ import { UserRoleAndPermissionsInterface } from '@/types/UserAccount/index.type'
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { IsAuthenticatedRStateSelector } from '@/ZaionsStore/UserAccount/index.recoil';
+import {
+	currentLoggedInUserRoleAndPermissionsRStateAtom,
+	IsAuthenticatedRStateSelector,
+} from '@/ZaionsStore/UserAccount/index.recoil';
+import { reportCustomError } from '@/utils/customErrorType';
 
 interface IFetchRequiredAppDataHOCProps {
 	children?: React.ReactNode;
@@ -83,11 +87,20 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
 	});
 
 	const loggedIn = useRecoilValue(IsAuthenticatedRStateSelector);
+	// recoil state for storing current user roles & permissions.
+	const setUserRoleAndPermissions = useSetRecoilState(
+		currentLoggedInUserRoleAndPermissionsRStateAtom
+	);
+
 	const { zIsPrivateRoute } = useZPrivateRouteChecker();
 
 	// #region APIS.
 	// getting the role & permissions of the current log in user.
-	const { refetch: refetchUserRoleAndPermissionsFetching } = useZRQGetRequest<{
+	const {
+		data: getUserRoleAndPermissions,
+		refetch: refetchUserRoleAndPermissions,
+		isFetched: isUserRoleAndPermissionsFetching,
+	} = useZRQGetRequest<{
 		isSuccess: boolean;
 		result: UserRoleAndPermissionsInterface;
 	}>({
@@ -108,11 +121,27 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
 				guestUser: true,
 			}));
 		}
-	}, []);
+	}, [zIsPrivateRoute]);
 
 	useEffect(() => {
-		refetchUserRoleAndPermissionsFetching();
-		if (loggedIn) {
+		try {
+			if (getUserRoleAndPermissions?.isSuccess) {
+				// Storing in recoil.
+				setUserRoleAndPermissions((oldValues) => ({
+					...oldValues,
+					role: getUserRoleAndPermissions.result.role,
+					permissions: getUserRoleAndPermissions.result.permissions,
+					fetched: true,
+				}));
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	}, [getUserRoleAndPermissions]);
+
+	useEffect(() => {
+		refetchUserRoleAndPermissions();
+		if (loggedIn && !isUserRoleAndPermissionsFetching) {
 			setCompState((oldState) => ({
 				...oldState,
 				isProcessing: false,
@@ -120,7 +149,7 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
 				guestUser: false,
 			}));
 		}
-	}, [loggedIn, zIsPrivateRoute]);
+	}, [loggedIn, isUserRoleAndPermissionsFetching]);
 
 	if (compState.isProcessing) {
 		return <ZFallbackIonSpinner />;
