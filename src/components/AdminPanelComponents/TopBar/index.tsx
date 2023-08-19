@@ -8,11 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import {
-	caretDown,
-	helpCircleOutline,
-	notificationsOutline,
-} from 'ionicons/icons';
+import { helpCircleOutline, notificationsOutline } from 'ionicons/icons';
 
 /**
  * Custom Imports go down
@@ -23,40 +19,34 @@ import {
 	ZIonButton,
 	ZIonCol,
 	ZIonIcon,
-	ZIonImg,
-	ZIonLabel,
 	ZIonRow,
-	ZIonText,
 } from '@/components/ZIonComponents';
-import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import ZUserProfileButton from '../UserProfileButton';
 import ZNotificationPopover from '@/components/InPageComponents/ZaionsPopovers/NotificationPopover';
-import classNames from 'classnames';
-import { productSmLogo } from '@/assets/images';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import { workspaceInterface } from '@/types/AdminPanel/workspace';
-import { API_URL_ENUM } from '@/utils/enums';
-import CONSTANTS from '@/utils/constants';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import ZWorkspaceSwitcher from '../WorkspaceSwitcher';
 import ZCan from '@/components/Can';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { API_URL_ENUM } from '@/utils/enums';
+import CONSTANTS from '@/utils/constants';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Recoil State Imports go down

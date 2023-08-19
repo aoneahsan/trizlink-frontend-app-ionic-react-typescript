@@ -12,8 +12,8 @@ import {
 	ZIonImg,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
+import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 import CONSTANTS from '@/utils/constants';
 import { ZIonColorType } from '@/types/zaionsAppSettings.type';
 import { ZUIAvatarApiDefaultParamsInterface } from '@/types/ZaionsApis.type';

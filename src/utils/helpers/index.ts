@@ -6,7 +6,10 @@ import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 // Packages Import
 import { ConfirmResult, Dialog, PromptResult } from '@capacitor/dialog';
 import { Preferences } from '@capacitor/preferences';
-import { PixelPlatformsEnum } from '@/types/AdminPanel/linksType';
+import {
+	LinkTargetType,
+	PixelPlatformsEnum,
+} from '@/types/AdminPanel/linksType';
 import isEmail from 'validator/lib/isEmail';
 import CONSTANTS, {
 	API_URLS,
@@ -66,6 +69,7 @@ import {
 	logoYoutube,
 	gridOutline,
 } from 'ionicons/icons';
+import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
 
 dayjs.extend(DayJsDurationPlugin);
 
@@ -1464,7 +1468,7 @@ export const ZGetCurrentRoute = ({
  * @param {Object} options - The options for the function. options._currentRoute - The current route for which permissions are to be retrieved.
  * @returns {Array} An array of permission enums relevant to the current route, or undefined if no permissions are found.
  */
-export const ZGetRoutePermissions = ({
+export const zGetRoutePermissions = ({
 	_currentRoute,
 }: {
 	_currentRoute: string;
@@ -1486,6 +1490,10 @@ export const ZGetRoutePermissions = ({
 				__permissions = [permissionsEnum.viewAny_shortLink];
 				break;
 
+			case ZaionsRoutes.AdminPanel.ShortLinks.Edit:
+				__permissions = [permissionsEnum.update_shortLink];
+				break;
+
 			case ZaionsRoutes.AdminPanel.LinkInBio.Main:
 				__permissions = [permissionsEnum.viewAny_linkInBio];
 				break;
@@ -1495,5 +1503,95 @@ export const ZGetRoutePermissions = ({
 	} catch (error) {
 		reportCustomError(error);
 		return [];
+	}
+};
+
+/**
+ * zRedirectToTarget is a utility function that generates the appropriate redirect URL based on the target and type provided.
+ * It supports various messenger platforms and generates URLs for links, emails, messenger apps, and more.
+ *
+ * @param _target - The target information containing different properties depending on the type.
+ * @param type - The type of messenger platform or action (e.g., link, email, messenger).
+ * @returns The generated redirect URL.
+ */
+export const zRedirectToTarget = ({
+	_target,
+	type,
+}: {
+	_target: LinkTargetType;
+	type: messengerPlatformsBlockEnum;
+}) => {
+	try {
+		if (_target) {
+			let __redirectUrl = '';
+			switch (type) {
+				case messengerPlatformsBlockEnum.link:
+					if (_target?.url && _target?.url?.trim().length > 0) {
+						__redirectUrl = _target?.url;
+					}
+					break;
+
+				case messengerPlatformsBlockEnum.email:
+					if (_target?.email && _target?.email?.trim().length > 0) {
+						__redirectUrl = `mailto:${_target?.email}subject=${_target?.subject}&body=${_target?.message}`;
+					}
+					break;
+
+				case messengerPlatformsBlockEnum.messenger:
+					if (_target?.url && _target?.url?.trim().length > 0) {
+						__redirectUrl = _target?.url;
+					}
+					break;
+
+				case messengerPlatformsBlockEnum.line:
+					if (_target?.accountId && _target?.accountId?.trim().length > 0) {
+						__redirectUrl = `https://line.me/R/oaMessage/${_target?.accountId}`;
+					}
+					break;
+
+				case messengerPlatformsBlockEnum.whatsapp:
+					if (_target?.phoneNumber && _target?.phoneNumber?.trim().length > 0) {
+						__redirectUrl = `https://wa.me/${_target?.phoneNumber}&text=${_target?.message}`;
+					}
+					break;
+
+				case messengerPlatformsBlockEnum.call:
+					if (_target?.phoneNumber && _target?.phoneNumber?.trim().length > 0) {
+						__redirectUrl = `tel:${_target?.phoneNumber}`;
+					}
+					break;
+
+				case messengerPlatformsBlockEnum.sms:
+					if (_target?.phoneNumber && _target?.phoneNumber?.trim().length > 0) {
+						__redirectUrl = `sms:+${_target?.phoneNumber}&body=${_target?.message}`;
+					}
+					break;
+
+				case messengerPlatformsBlockEnum.telegram:
+					if (_target?.username && _target?.username?.trim().length > 0) {
+						__redirectUrl = `https://t.me/${_target?.username}`;
+					}
+					break;
+
+				case messengerPlatformsBlockEnum.skype:
+					if (_target?.username && _target?.username?.trim().length > 0) {
+						__redirectUrl = `skype:${_target?.username}?chat`;
+					}
+					break;
+
+				case messengerPlatformsBlockEnum.viber:
+					if (_target?.username && _target?.username?.trim().length > 0) {
+						__redirectUrl = `viber://pa?chatURI=${_target?.username}&text=${_target?.message}`;
+					}
+					break;
+
+				default:
+					break;
+			}
+
+			return __redirectUrl;
+		}
+	} catch (error) {
+		reportCustomError(error);
 	}
 };

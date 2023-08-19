@@ -46,8 +46,13 @@ import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { LinkTargetType, ShortLinkType } from '@/types/AdminPanel/linksType';
-import { extractInnerData, zStringify } from '@/utils/helpers';
+import {
+	extractInnerData,
+	zRedirectToTarget,
+	zStringify,
+} from '@/utils/helpers';
 import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down
@@ -137,16 +142,16 @@ const ZShortLinkRedirectPage: React.FC = () => {
 				}));
 
 				const __target = _data?.target as LinkTargetType;
+				const __type = _data?.type as messengerPlatformsBlockEnum;
 
-				let __redirectUrl = '';
-
-				if (__target) {
-					if (__target?.url) {
-						__redirectUrl = __target?.url;
-					}
+				const __redirectUrl = zRedirectToTarget({
+					_target: __target,
+					type: __type,
+				});
+				console.log({ __redirectUrl });
+				if (__redirectUrl) {
+					window.location.replace(__redirectUrl);
 				}
-
-				window.location.replace(__redirectUrl);
 			}
 		}
 	}, []);

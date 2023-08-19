@@ -25,11 +25,11 @@ import {
 	ZIonImg,
 	ZIonRouterLink,
 	ZIonRow,
-	ZIonSkeletonText,
 	ZIonText,
 } from '@/components/ZIonComponents';
 import ZUserInfoPopover from '@/components/InPageComponents/ZaionsPopovers/UserInfoPopover';
 import ZWorkspacesActionPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ActionsPopover';
+import ZCan from '@/components/Can';
 
 /**
  * Custom Hooks Imports go down
@@ -46,6 +46,7 @@ import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 import CONSTANTS from '@/utils/constants';
 import { createRedirectRoute } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Type Imports go down
@@ -63,8 +64,6 @@ import { workspaceInterface } from '@/types/AdminPanel/workspace';
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
-import ZCan from '@/components/Can';
 
 /**
  * Images Imports go down
@@ -140,7 +139,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 													name: workspaceName,
 												})
 											}
-											className='rounded overflow-hidden'
+											className='overflow-hidden rounded'
 										/>
 									</ZIonRouterLink>
 								</div>
@@ -241,7 +240,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 							<ZIonCol>
 								<ZCan havePermissions={[permissionsEnum.view_workspace]}>
 									<ZIonButton
-										className=' normal-case'
+										className='normal-case '
 										color='secondary'
 										size='default'
 										testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.viewWorkspaceButton}-${id}`}
@@ -275,7 +274,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 							<ZIonCol className='ion-text-end'>
 								<ZIonButton
 									fill='clear'
-									className='h-auto mb-1 ion-no-padding ion-no-margin normal-case'
+									className='h-auto mb-1 normal-case ion-no-padding ion-no-margin'
 									color='dark'
 									testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardActionPopoverButton}-${id}`}
 									testingListSelector={
@@ -298,117 +297,6 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 				</ZIonCol>
 			</ZIonRow>
 		</ZIonCard>
-	);
-};
-
-export const ZWorkspacesCardSkeleton: React.FC = () => {
-	return (
-		<ZIonCol sizeXl='4' sizeLg='6' sizeMd='6' sizeSm='6' sizeXs='12'>
-			<ZIonCard className='cursor-pointer h-[13.4rem]'>
-				<ZIonRow className='flex-col h-full'>
-					<ZIonCol className='flex-1'>
-						{/* Card header */}
-						<ZIonCardHeader>
-							<ZIonRow className='ion-align-items-center'>
-								<ZIonCol className='flex gap-3 ion-align-items-center'>
-									<div className='rounded w-[50px] h-[50px] overflow-hidden'>
-										<ZIonSkeletonText
-											animated={true}
-											style={{ width: '100%', height: '100%' }}
-										></ZIonSkeletonText>
-									</div>
-									<div>
-										<ZIonText
-											className='block text-base font-bold'
-											color='dark'
-										>
-											<ZIonSkeletonText
-												animated={true}
-												style={{ width: '100px', height: '15px' }}
-											></ZIonSkeletonText>
-										</ZIonText>
-										<ZIonText className='block text-xs'>
-											<ZIonSkeletonText
-												animated={true}
-												style={{ width: '80px', height: '15px' }}
-											></ZIonSkeletonText>
-										</ZIonText>
-									</div>
-								</ZIonCol>
-
-								{/* Add to Favorites button col */}
-								<ZIonCol className='ion-text-end me-2'>
-									<ZIonButton
-										fill='clear'
-										className='h-auto mb-1 ion-no-padding ion-no-margin'
-									>
-										<ZIonSkeletonText
-											animated={true}
-											style={{ width: '17px', height: '17px' }}
-										></ZIonSkeletonText>
-									</ZIonButton>
-								</ZIonCol>
-
-								{/* user avatar */}
-								<ZIonCol
-									size='12'
-									className='mt-2 ion-no-margin ion-no-padding'
-								>
-									{/* Row */}
-									<ZIonRow>
-										{/* Col */}
-										<ZIonCol>
-											<div className='w-[38px] h-[40px] rounded-full zaions-object-fit-cover'>
-												<ZIonSkeletonText
-													animated={true}
-													style={{ width: '100%', height: '100%' }}
-												></ZIonSkeletonText>
-											</div>
-										</ZIonCol>
-									</ZIonRow>
-								</ZIonCol>
-							</ZIonRow>
-						</ZIonCardHeader>
-					</ZIonCol>
-
-					<ZIonCol>
-						{/* Card body */}
-						<ZIonCardContent className='flex flex-col h-full ion-justify-content-end ion-align-items-end'>
-							{/* Bottom row */}
-							<ZIonRow className='w-full ion-align-items-center'>
-								{/* Last active */}
-								<ZIonCol>
-									<ZIonButton
-										className=' normal-case'
-										color='secondary'
-										size='default'
-									>
-										<ZIonSkeletonText
-											animated={true}
-											style={{ width: '40px', height: '17px' }}
-										></ZIonSkeletonText>
-									</ZIonButton>
-								</ZIonCol>
-
-								{/* actions popover button */}
-								<ZIonCol className='ion-text-end'>
-									<ZIonButton
-										fill='clear'
-										className='h-auto mt-1 mb-1 ion-no-padding ion-no-margin normal-case'
-										color='dark'
-									>
-										<ZIonSkeletonText
-											animated={true}
-											style={{ width: '30px', height: '17px' }}
-										></ZIonSkeletonText>
-									</ZIonButton>
-								</ZIonCol>
-							</ZIonRow>
-						</ZIonCardContent>
-					</ZIonCol>
-				</ZIonRow>
-			</ZIonCard>
-		</ZIonCol>
 	);
 };
 

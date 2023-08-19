@@ -134,21 +134,22 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
 					fetched: true,
 				}));
 			}
+
+			if (loggedIn && getUserRoleAndPermissions?.isSuccess) {
+				setCompState((oldState) => ({
+					...oldState,
+					isProcessing: false,
+					userIsAuthenticated: true,
+					guestUser: false,
+				}));
+			}
 		} catch (error) {
 			reportCustomError(error);
 		}
-	}, [getUserRoleAndPermissions]);
+	}, [loggedIn, getUserRoleAndPermissions]);
 
 	useEffect(() => {
 		refetchUserRoleAndPermissions();
-		if (loggedIn && !isUserRoleAndPermissionsFetching) {
-			setCompState((oldState) => ({
-				...oldState,
-				isProcessing: false,
-				userIsAuthenticated: true,
-				guestUser: false,
-			}));
-		}
 	}, [loggedIn, isUserRoleAndPermissionsFetching]);
 
 	if (compState.isProcessing) {

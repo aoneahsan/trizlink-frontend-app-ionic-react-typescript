@@ -13,9 +13,10 @@ import {
 import { workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import CONSTANTS from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { reportCustomError } from '@/utils/customErrorType';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
-import { extractInnerData } from '@/utils/helpers';
+import { createRedirectRoute, extractInnerData } from '@/utils/helpers';
 import MESSAGES from '@/utils/messages';
 import {
 	showErrorNotification,
@@ -88,7 +89,8 @@ import React, { useState } from 'react';
 const ZWorkspacesListPopover: React.FC<{
 	workspaceId: string;
 	dismissZIonPopover: (data: string, role: string) => void;
-}> = ({ workspaceId, dismissZIonPopover }) => {
+	zNavigatePushRoute: (_url: string) => void;
+}> = ({ workspaceId, dismissZIonPopover, zNavigatePushRoute }) => {
 	// #region Comp state.
 	const [compState, setCompState] = useState<{
 		_workspaceId: string;
@@ -125,14 +127,27 @@ const ZWorkspacesListPopover: React.FC<{
 			<ZIonList lines='none'>
 				{workspacesList?.map((el) => (
 					<ZIonItem
+						key={el.id}
 						minHeight='2.2rem'
 						className='cursor-pointer ion-activatable'
-						key={el.id}
+						testingListSelector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
 						testingSelector={
 							CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
 								.singleWorkspace
 						}
-						testingListSelector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
+						onClick={() => {
+							zNavigatePushRoute(
+								createRedirectRoute({
+									url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+									params: [
+										CONSTANTS.RouteParams.workspace.workspaceId,
+										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+									],
+									values: [el.id || '', 'all'],
+								})
+							);
+							dismissZIonPopover('', '');
+						}}
 					>
 						<ZIonLabel className='w-full text-sm'>{el.workspaceName}</ZIonLabel>
 						<ZIonIcon

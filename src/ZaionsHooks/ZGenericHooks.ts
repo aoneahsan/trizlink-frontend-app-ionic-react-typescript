@@ -29,7 +29,7 @@ import { useLocation } from 'react-router';
 import {
 	emptyVoidReturnFunction,
 	ZGetCurrentRoute,
-	ZGetRoutePermissions,
+	zGetRoutePermissions,
 } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useRecoilValue } from 'recoil';
@@ -208,7 +208,7 @@ export const useZPermissionChecker = (): {
 
 						if (__currentRoute) {
 							// getting permissions of that routes.
-							const __permissions = ZGetRoutePermissions({
+							const __permissions = zGetRoutePermissions({
 								_currentRoute: __currentRoute,
 							});
 

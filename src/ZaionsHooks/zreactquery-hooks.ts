@@ -85,7 +85,6 @@ export const useZRQGetRequest = <T>({
 			if (_checkPermissions) {
 				const _permissionsCheckerResult = await permissionsChecker();
 				if (_permissionsCheckerResult) {
-					console.log({ _permissionsCheckerResult });
 					if (!_permissionsCheckerResult.hasAllPermissions) {
 						return null;
 					}

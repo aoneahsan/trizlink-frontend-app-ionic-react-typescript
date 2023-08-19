@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense } from 'react';
 
 /**
  * Packages Imports go down
@@ -29,12 +29,18 @@ import {
 	ZIonSkeletonText,
 	ZIonText,
 } from '@/components/ZIonComponents';
-import ZWorkspacesCard, {
-	ZWorkspacesCardSkeleton,
-} from '@/components/WorkspacesComponents/ListCard';
-import ZAddNewWorkspaceModal from '@/components/InPageComponents/ZaionsModals/Workspace/CreateModal';
-import ZUserProfileButton from '@/components/AdminPanelComponents/UserProfileButton';
+import ZWorkspacesCardSkeleton from '@/components/WorkspacesComponents/ListCard/index.skeleton';
 import ZCan from '@/components/Can';
+import ZAddNewWorkspaceModal from '@/components/InPageComponents/ZaionsModals/Workspace/CreateModal';
+//
+
+const ZWorkspacesCard = lazy(
+	() => import('@/components/WorkspacesComponents/ListCard')
+);
+
+const ZUserProfileButton = lazy(
+	() => import('@/components/AdminPanelComponents/UserProfileButton')
+);
 
 /**
  * Custom Hooks Imports go down
@@ -79,10 +85,9 @@ import { workspaceInterface } from '@/types/AdminPanel/workspace';
 
 /**
  * Functional Component
- * About: (Info of component here...)
+ * About: (Workspace list page.)
  * @type {*}
  * */
-
 const ZWorkspaceListPage: React.FC = () => {
 	//
 	const { presentZIonModal: presentZWorkspaceCreateModal } = useZIonModal(
@@ -131,6 +136,7 @@ const ZWorkspaceListPage: React.FC = () => {
 												<ZIonButton
 													fill='solid'
 													color='primary'
+													disabled={isWorkspacesDataFetching}
 													className='normal-case ion-no-margin'
 													testingSelector={
 														CONSTANTS.testingSelectors.workspace.listPage
@@ -147,93 +153,61 @@ const ZWorkspaceListPage: React.FC = () => {
 											<ZCan
 												havePermissions={[permissionsEnum.create_workspace]}
 											>
-												{!isWorkspacesDataFetching && (
-													<ZIonButton
-														className='normal-case ion-no-margin'
-														color='secondary'
-														testingSelector={
-															CONSTANTS.testingSelectors.workspace.listPage
-																.createWorkspaceButton
-														}
-														onClick={() => {
+												<ZIonButton
+													className='normal-case ion-no-margin'
+													color='secondary'
+													disabled={isWorkspacesDataFetching}
+													testingSelector={
+														CONSTANTS.testingSelectors.workspace.listPage
+															.createWorkspaceButton
+													}
+													onClick={() => {
+														if (!isWorkspacesDataFetching)
 															presentZWorkspaceCreateModal({
 																_cssClass: 'create-workspace-modal-size',
-																_onDidDismiss: (event) => {
-																	if (
-																		event.detail.data &&
-																		event.detail.role === 'success'
-																	) {
-																		// after dismissing redirecting to edit workspace-page
-																		// zNavigatePushRoute(
-																		// 	createRedirectRoute({
-																		// 		url: ZaionsRoutes.AdminPanel.Workspaces
-																		// 			.Edit,
-																		// 		params: [
-																		// 			CONSTANTS.RouteParams.workspace
-																		// 				.editWorkspaceIdParam,
-																		// 		],
-																		// 		values: [event.detail.data],
-																		// 		routeSearchParams: {
-																		// 			tab: workspaceFormTabEnum.inviteClients,
-																		// 		},
-																		// 	})
-																		// );
-																	}
-																},
 															});
-														}}
-													>
-														<ZIonIcon icon={addOutline} /> New workspace
-													</ZIonButton>
-												)}
-
-												{isWorkspacesDataFetching && (
-													<ZIonButton
-														className='normal-case ion-no-margin'
-														color='secondary'
-													>
-														<ZIonSkeletonText
-															animated={true}
-															style={{ width: '20px', height: '20px' }}
-														/>
-														<ZIonText className='ms-2'>
-															<ZIonSkeletonText
-																animated={true}
-																style={{ width: '100px', height: '17px' }}
-															/>
-														</ZIonText>
-													</ZIonButton>
-												)}
+													}}
+												>
+													<ZIonIcon icon={addOutline} /> New workspace
+												</ZIonButton>
 											</ZCan>
 
 											{/* User profile button */}
-											<ZUserProfileButton />
+											<Suspense
+												fallback={
+													<div className='w-[44px] h-[44px] rounded-full'></div>
+												}
+											>
+												<ZUserProfileButton />
+											</Suspense>
 										</ZIonCol>
 									</ZIonRow>
 
 									{/* cards row */}
 									<ZIonRow className='mt-5'>
 										{/* single card */}
-										{!isWorkspacesDataFetching &&
-											WorkspacesData &&
-											WorkspacesData.map((el) => (
-												<ZIonCol
-													sizeXl='4'
-													sizeLg='6'
-													sizeMd='6'
-													sizeSm='6'
-													sizeXs='12'
-													key={el.id}
-												>
-													<ZWorkspacesCard
-														workspaceImage={el.workspaceImage}
-														workspaceName={el.workspaceName as string}
-														user={el.user}
-														id={el.id}
-														createdAt={el.createdAt}
-													/>
-												</ZIonCol>
-											))}
+										<Suspense fallback={<ZWorkspacesCardSkeleton />}>
+											{!isWorkspacesDataFetching &&
+												WorkspacesData &&
+												WorkspacesData.map((el) => (
+													<ZIonCol
+														sizeXl='4'
+														sizeLg='6'
+														sizeMd='6'
+														sizeSm='6'
+														sizeXs='12'
+														key={el.id}
+													>
+														<ZWorkspacesCard
+															workspaceImage={el.workspaceImage}
+															workspaceName={el.workspaceName as string}
+															user={el.user}
+															id={el.id}
+															createdAt={el.createdAt}
+														/>
+													</ZIonCol>
+												))}
+										</Suspense>
 
 										{isWorkspacesDataFetching && <ZWorkspacesCardSkeleton />}
 
@@ -299,15 +273,10 @@ const ZWorkspaceListPage: React.FC = () => {
 														})}
 													>
 														<ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
-															<ZIonSkeletonText
-																animated={true}
-																style={{ width: '20px', height: '20px' }}
-															></ZIonSkeletonText>
+															<ZIonSkeletonText width='20px' height='20px' />
+
 															<ZIonText className='text-lg'>
-																<ZIonSkeletonText
-																	animated={true}
-																	style={{ width: '150px', height: '17px' }}
-																></ZIonSkeletonText>
+																<ZIonSkeletonText width='120px' height='15px' />
 															</ZIonText>
 														</ZIonCardContent>
 													</ZIonCard>

@@ -614,8 +614,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 };
 
 const ZaionsShortUrlOptionFieldsSkeleton = () => {
-	const { isXlScale, isLgScale, isMdScale, isSmScale, isXsScale } =
-		useZMediaQueryScale();
+	const { isMdScale, isSmScale } = useZMediaQueryScale();
 	return (
 		<ZIonGrid className='mx-3 mt-2'>
 			<ZIonRow className='px-4 py-4 rounded zaions__bg_white ion-align-items-center'>
