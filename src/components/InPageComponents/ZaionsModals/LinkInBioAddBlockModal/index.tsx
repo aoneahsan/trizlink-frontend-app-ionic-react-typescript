@@ -117,7 +117,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
 		useZRQCreateRequest<LinkInBioBlockFromType>({
 			_url: API_URL_ENUM.linkInBioBlock_create_list,
 			_queriesKeysToInvalidate: [],
-			authenticated: true,
+			_authenticated: true,
 			_itemsIds: [workspaceId, linkInBioId],
 			_urlDynamicParts: [
 				CONSTANTS.RouteParams.workspace.workspaceId,

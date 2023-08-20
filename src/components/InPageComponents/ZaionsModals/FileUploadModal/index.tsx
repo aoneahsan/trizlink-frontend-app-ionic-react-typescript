@@ -108,14 +108,14 @@ const ZaionsFileUploadModal: React.FC<{
 					<ZIonRow className='h-full'>
 						<ZIonCol
 							size='3'
-							className='zaions__light_bg h-full ion-padding-vertical'
+							className='h-full zaions__light_bg ion-padding-vertical'
 						>
 							{/* Title */}
 							<ZIonText
 								color='dark'
 								className='flex ion-justify-content-center ion-align-items-center ion-padding-vertical ion-margin-top'
 							>
-								<h5 className='ion-no-margin me-2 font-bold'>
+								<h5 className='font-bold ion-no-margin me-2'>
 									Select an option
 								</h5>
 								<h6 className='ion-no-margin text-[14px] mt-1'>
@@ -124,10 +124,10 @@ const ZaionsFileUploadModal: React.FC<{
 							</ZIonText>
 
 							{/* Links */}
-							<ZIonList className='ion-no-padding ion-no-margin mt-3 zaions__light_bg'>
+							<ZIonList className='mt-3 ion-no-padding ion-no-margin zaions__light_bg'>
 								{/* 📁 Upload */}
 								<ZIonItem
-									className='ion-no-padding cursor-pointer'
+									className='cursor-pointer ion-no-padding'
 									color={
 										compState.currentTab === uploadFileModalTabEnum.upload
 											? undefined
@@ -152,7 +152,7 @@ const ZaionsFileUploadModal: React.FC<{
 
 								{/* 🔎 From URL */}
 								<ZIonItem
-									className='ion-no-padding cursor-pointer mt-2'
+									className='mt-2 cursor-pointer ion-no-padding'
 									color={
 										compState.currentTab === uploadFileModalTabEnum.url
 											? undefined
@@ -177,7 +177,7 @@ const ZaionsFileUploadModal: React.FC<{
 
 								{/* 📸 Screenshot */}
 								<ZIonItem
-									className='ion-no-padding cursor-pointer mt-2'
+									className='mt-2 cursor-pointer ion-no-padding'
 									color={
 										compState.currentTab === uploadFileModalTabEnum.screenshot
 											? undefined
@@ -202,7 +202,7 @@ const ZaionsFileUploadModal: React.FC<{
 
 								{/* 🎉 Giphy */}
 								<ZIonItem
-									className='ion-no-padding cursor-pointer mt-2'
+									className='mt-2 cursor-pointer ion-no-padding'
 									color={
 										compState.currentTab === uploadFileModalTabEnum.galleryGiphy
 											? undefined
@@ -227,7 +227,7 @@ const ZaionsFileUploadModal: React.FC<{
 
 								{/* 🗻 Pexels */}
 								<ZIonItem
-									className='ion-no-padding cursor-pointer mt-2'
+									className='mt-2 cursor-pointer ion-no-padding'
 									color={
 										compState.currentTab ===
 										uploadFileModalTabEnum.galleryPexels
@@ -254,7 +254,7 @@ const ZaionsFileUploadModal: React.FC<{
 
 								{/* 🍴 Pixabay */}
 								<ZIonItem
-									className='ion-no-padding cursor-pointer mt-2'
+									className='mt-2 cursor-pointer ion-no-padding'
 									color={
 										compState.currentTab ===
 										uploadFileModalTabEnum.galleryPixabay
@@ -281,7 +281,7 @@ const ZaionsFileUploadModal: React.FC<{
 
 								{/* 🌍 Unsplash */}
 								<ZIonItem
-									className='ion-no-padding cursor-pointer mt-2'
+									className='mt-2 cursor-pointer ion-no-padding'
 									color={
 										compState.currentTab ===
 										uploadFileModalTabEnum.galleryUnsplash
@@ -308,7 +308,7 @@ const ZaionsFileUploadModal: React.FC<{
 
 								{/* 👋 Tenor */}
 								<ZIonItem
-									className='ion-no-padding cursor-pointer mt-2'
+									className='mt-2 cursor-pointer ion-no-padding'
 									color={
 										compState.currentTab === uploadFileModalTabEnum.galleryTenor
 											? undefined
@@ -345,10 +345,10 @@ const ZaionsFileUploadModal: React.FC<{
 							})}
 						>
 							{/* Close modal button */}
-							<div className='w-full ion-text-end ion-no-margin pb-2'>
+							<div className='w-full pb-2 ion-text-end ion-no-margin'>
 								<ZIonButton
 									fill='clear'
-									className='ion-no-padding me-3 mt-2'
+									className='mt-2 ion-no-padding me-3'
 									onClick={() => dismissZIonModal()}
 								>
 									<ZIonIcon icon={closeOutline} size='large' />
@@ -408,7 +408,7 @@ const ZaionsFileUploadModal: React.FC<{
 			 *  */}
 			{/* {appSettings.appModalsSetting.actions.showActionInModalFooter && (
         <ZIonFooter>
-          <ZIonRow className=' mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
+          <ZIonRow className='mx-3 mt-2  ion-justify-content-between ion-align-items-center'>
             <ZIonCol>
               <ZIonButton
                 fill='outline'
@@ -454,7 +454,7 @@ const UploadTab: React.FC<{
 		};
 	}>({
 		_url: API_URL_ENUM.uploadSingleFile,
-		authenticated: true,
+		_authenticated: true,
 		_contentType: zAxiosApiRequestContentType.FormData,
 	});
 
@@ -573,7 +573,7 @@ const UploadTab: React.FC<{
 								</h5>
 							</ZIonText>
 							<div className='flex flex-col ion-align-items-center ion-justify-content-center'>
-								<ZIonText color='medium' className='font-bold mt-2'>
+								<ZIonText color='medium' className='mt-2 font-bold'>
 									(5MB maximum - JPG, GIF, PNG)
 								</ZIonText>
 							</div>
@@ -592,7 +592,7 @@ const UploadTab: React.FC<{
 									className='w-full h-full'
 								/>
 							</div>
-							<div className='my-5 w-full zaions__tertiary_set'>
+							<div className='w-full my-5 zaions__tertiary_set'>
 								<div className='w-[80%] flex ion-align-item-center ion-justify-content-between mx-auto py-2'>
 									<ZIonButton
 										color='danger'
@@ -639,7 +639,7 @@ const UploadTab: React.FC<{
 
 const LinkTab: React.FC = () => {
 	return (
-		<div className='flex flex-col ion-align-items-center ion-justify-content-start mt-2 h-full w-full rounded'>
+		<div className='flex flex-col w-full h-full mt-2 rounded ion-align-items-center ion-justify-content-start'>
 			<ZIonText className='ion-no-margin'>
 				<ZIonImg
 					src={uploadModalLink}
@@ -652,7 +652,7 @@ const LinkTab: React.FC = () => {
 				<h5 className='font-bold'>Paste the link of an image 🔗</h5>
 			</ZIonText>
 			<div className='flex flex-col ion-align-items-center ion-justify-content-center'>
-				<ZIonText color='medium' className='font-bold mt-2'>
+				<ZIonText color='medium' className='mt-2 font-bold'>
 					(5MB maximum - JPG, GIF, PNG)
 				</ZIonText>
 			</div>
@@ -669,7 +669,7 @@ const LinkTab: React.FC = () => {
 					label=''
 				/>
 				<ZIonButton
-					className='h-full ion-no-margin normal-case'
+					className='h-full normal-case ion-no-margin'
 					style={{ '--border-radius': '0', '--box-shadow': 'none' }}
 				>
 					Select
@@ -681,7 +681,7 @@ const LinkTab: React.FC = () => {
 
 const ScreenShotTab: React.FC = () => {
 	return (
-		<div className='flex flex-col ion-align-items-center ion-justify-content-start mt-2 h-full w-full rounded'>
+		<div className='flex flex-col w-full h-full mt-2 rounded ion-align-items-center ion-justify-content-start'>
 			<ZIonText className='ion-no-margin'>
 				<ZIonImg
 					src={uploadModalCamera}
@@ -694,7 +694,7 @@ const ScreenShotTab: React.FC = () => {
 				<h5 className='font-bold'>Take a screenshot of a website 📸</h5>
 			</ZIonText>
 			<div className='flex flex-col ion-align-items-center ion-justify-content-center'>
-				<ZIonText color='medium' className='font-bold mt-2'>
+				<ZIonText color='medium' className='mt-2 font-bold'>
 					Paste the link of the Website you want to take a screenshot
 				</ZIonText>
 			</div>
@@ -711,7 +711,7 @@ const ScreenShotTab: React.FC = () => {
 					label=''
 				/>
 				<ZIonButton
-					className='h-full ion-no-margin normal-case'
+					className='h-full normal-case ion-no-margin'
 					style={{ '--border-radius': '0', '--box-shadow': 'none' }}
 				>
 					Take a screenshot
@@ -753,14 +753,14 @@ const GalleryTab: React.FC<{ typeOfGallery: galleryEnum }> = ({
 						label=''
 					/>
 					<ZIonButton
-						className='h-full ion-no-margin normal-case'
+						className='h-full normal-case ion-no-margin'
 						style={{ '--border-radius': '0', '--box-shadow': 'none' }}
 					>
 						Search
 					</ZIonButton>
 				</ZIonCol>
 			</ZIonRow>
-			<ZIonRow className='px-3 ion-justify-content-between mx-auto'>
+			<ZIonRow className='px-3 mx-auto ion-justify-content-between'>
 				{[1, 2, 3, 4, 5, 6].map((el) => {
 					return (
 						<ZIonCol
