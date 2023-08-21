@@ -105,12 +105,44 @@ export enum workspaceFilterAccordionContentEnum {
 	radio = 'radio',
 }
 
+// WS -> workspace
+export enum ZWSTeamListPageTableColumnsIds {
+	id = '__z_short_link_id__',
+	title = '__z_short_link_title__',
+	description = '__z_short_link_description__',
+	isActive = '__z_short_link_isActive__',
+	date = '__z_short_link_date__',
+	actions = '__z_short_link_actions__',
+}
+
+// Sect means section
+export enum WSSettingsPageSect {
+	accountSetting = 'accountSetting', // Account settings
+	workspaceSettings = 'workspaceSettings', // workspace settings
+}
+
+export enum WSSettingsPageSectTab {
+	team = 'team',
+	referralProgram = 'referralProgram',
+	billing = 'billing',
+	user = 'user',
+}
+
 // Interfaces
 export interface workspaceInviteClientInterface {
 	avatar?: string;
 	email?: string;
 	role: workspaceFormRoleEnum;
 	permission: workspaceFormPermissionEnum;
+}
+
+export interface workspaceTeamInterface {
+	id?: string;
+	title: string;
+	description: string;
+	isActive: boolean;
+	createdAt?: string;
+	updatedAt?: string;
 }
 
 export interface workspaceInterface {

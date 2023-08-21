@@ -159,7 +159,7 @@ const ZaionsShortLinkTable: React.FC<{
 				ZUserSettingTypeEnum.shortLinkListPageTable,
 			],
 			_itemsIds: [ZUserSettingTypeEnum.shortLinkListPageTable],
-			_urlDynamicParts: [CONSTANTS.RouteParams.user.setting.type],
+			_urlDynamicParts: [CONSTANTS.RouteParams.settings.type],
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
 		});
 	// #endregion
@@ -575,10 +575,10 @@ const ZaionsShortLinkTable: React.FC<{
 																	'border-r': false,
 																	'ps-2':
 																		_cellInfo.column.id !==
-																		'__z_short_link_id__',
+																		ZShortLinkListPageTableColumnsIds.id,
 																	'ps-0':
 																		_cellInfo.column.id ===
-																		'__z_short_link_id__',
+																		ZShortLinkListPageTableColumnsIds.id,
 																})}
 															>
 																<div
@@ -586,7 +586,7 @@ const ZaionsShortLinkTable: React.FC<{
 																		'w-full text-sm ZaionsTextEllipsis': true,
 																		'ps-3':
 																			_cellInfo.column.id ===
-																			'__z_short_link_id__',
+																			ZShortLinkListPageTableColumnsIds.id,
 																	})}
 																>
 																	{flexRender(

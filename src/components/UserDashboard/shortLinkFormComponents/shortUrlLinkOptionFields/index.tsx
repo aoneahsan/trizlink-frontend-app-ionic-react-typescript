@@ -27,6 +27,8 @@ import {
 	ZIonIcon,
 	ZIonInput,
 	ZIonRow,
+	ZIonSelect,
+	ZIonSelectOption,
 	ZIonSkeletonText,
 	ZIonText,
 	ZIonTextarea,
@@ -365,6 +367,25 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 								newShortLinkTypeOptionDataAtom?.type ===
 									messengerPlatformsBlockEnum.call) && (
 								<>
+									<ZIonSelect
+										name='countryCode'
+										// value={values.countryCode}
+										// onIonChange={handleCountryCodeChange}
+										className='w-1/5 me-2'
+										minHeight='40px'
+										value='92'
+										fill='outline'
+										interface='popover'
+									>
+										{/* {countryCodes.map((country) => (
+											<IonSelectOption key={country.code} value={country.code}>
+												{country.name} ({country.code})
+											</IonSelectOption>
+										))} */}
+										<ZIonSelectOption value='92'>
+											+92 (pakistan)
+										</ZIonSelectOption>
+									</ZIonSelect>
 									{/* Input of every Phone Number */}
 									<ZIonInput
 										label='Phone number'

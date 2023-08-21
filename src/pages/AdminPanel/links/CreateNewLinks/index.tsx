@@ -33,9 +33,7 @@ import {
 	ZIonButton,
 } from '@/components/ZIonComponents';
 import ZIonPage from '@/components/ZIonPage';
-import ZFallbackIonSpinner, {
-	ZFallbackIonSpinner2,
-} from '@/components/CustomComponents/FallbackSpinner';
+import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
 import ZCan from '@/components/Can';
 
 const AddNotes = lazy(() => import('@/components/UserDashboard/AddNotes'));

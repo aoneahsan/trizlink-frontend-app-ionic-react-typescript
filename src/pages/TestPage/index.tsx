@@ -2,125 +2,79 @@
 import React from 'react';
 
 // Packages Imports
-import { FieldArray } from 'formik';
-import { gitPullRequestOutline, trashBin } from 'ionicons/icons';
-import { FormikHandleChangeEventType } from '@/types/ZaionsFormik.type';
-import { ZIonButton, ZIonIcon } from '@/components/ZIonComponents';
+import { Formik } from 'formik';
+import PhoneInput, {
+	formatPhoneNumberIntl,
+	isPossiblePhoneNumber,
+} from 'react-phone-number-input';
 
 // Custom Imports
-import {
-	ZIonCol,
-	ZIonText,
-	ZIonRouterLink,
-	ZIonItem,
-	ZIonRow,
-	ZIonInput,
-} from '@/components/ZIonComponents';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { ZIonCol, ZIonNote } from '@/components/ZIonComponents';
 
 // Global constant
 
-const FULL_PERCENTAGE = 100;
+import 'react-phone-number-input/style.css';
 
-const ZaionsTextPage: React.FC<{
-	testValue: {
-		redirectionLink?: string;
-		percentage?: string;
-	}[];
-	handleChange: FormikHandleChangeEventType;
-}> = ({ testValue, handleChange }) => {
+const ZaionsTestPage: React.FC = () => {
 	return (
-		<>
-			<ZIonCol
-				sizeXl='5.7'
-				sizeLg='5.6'
-				sizeMd='5.6'
-				sizeSm='12'
-				sizeXs='12'
-				className='border py-3 zaions__bg_white'
-			>
-				<div className='flex ion-align-items-center border-bottom ion-padding-start pb-2'>
-					<ZIonIcon icon={gitPullRequestOutline} size={'large'}></ZIonIcon>
-					<ZIonText>
-						<h6 className='font-bold ion-no-margin ion-padding-start'>
-							Rotator - AB Testing{' '}
-							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-								(help)
-							</ZIonRouterLink>
-						</h6>
-					</ZIonText>
-				</div>
-				<div className='block px-2 mt-3 mb-4'>
-					<ZIonRow className='gap-1'>
-						<ZIonCol size='5.6'>
-							<ZIonInput
-								// name={'rotatorABTesting.redirectionLink'}
-								disabled
-								label='Redirection Links'
-								labelPlacement='floating'
-								className='ion-no-padding'
-							/>
-						</ZIonCol>
-						<ZIonCol size='5.6'>
-							<ZIonInput
-								label='Percentage'
-								labelPlacement='floating'
-								type='number'
-								value={FULL_PERCENTAGE}
-								disabled
-							/>
-						</ZIonCol>
-					</ZIonRow>
-					<FieldArray name='rotatorABTesting'>
-						{({ remove, push }) => (
-							<div>
-								{testValue.length > 0 &&
-									testValue.map((friend, index) => (
-										<ZIonRow key={index} className='mt-3'>
-											<ZIonCol size='5.6'>
-												<ZIonInput
-													label='Redirection Links*'
-													labelPlacement='floating'
-													name={`rotatorABTesting.${index}.redirectionLink`}
-													onIonChange={handleChange}
-													className='ion-no-padding'
-												/>
-											</ZIonCol>
-											<ZIonCol size='5.6'>
-												<ZIonInput
-													type='number'
-													label='Percentage*'
-													labelPlacement='floating'
-													name={`rotatorABTesting.${index}.percentage`}
-													onIonChange={handleChange}
-												/>
-											</ZIonCol>
-											<ZIonCol className='flex ion-align-items-end'>
-												<ZIonIcon
-													icon={trashBin}
-													onClick={() => remove(index)}
-													color='danger'
-													className='zaions__nav_item'
-												/>
-											</ZIonCol>
-										</ZIonRow>
-									))}
+		<ZIonCol
+			sizeXl='12'
+			sizeLg='12'
+			sizeMd='12'
+			sizeSm='12'
+			sizeXs='12'
+			className='py-3'
+		>
+			<Formik
+				initialValues={{
+					pn1: '',
+				}}
+				validate={(values) => {
+					const errors: {
+						pn1?: string;
+					} = {};
 
-								<ZIonButton
-									fill='clear'
-									className='ion-text-capitalize mt-3'
-									size='small'
-									onClick={() => push({ redirectionLink: '', percentage: '' })}
-								>
-									Add a destination
-								</ZIonButton>
+					if (values.pn1.trim().length === 0) {
+						errors.pn1 = 'phone number is required.';
+					} else if (!isPossiblePhoneNumber(values.pn1)) {
+						errors.pn1 = 'not a valid phone number.';
+					} else {
+						delete errors.pn1;
+					}
+
+					return errors;
+				}}
+				onSubmit={() => {}}
+			>
+				{({ values, errors, touched, setFieldValue, setFieldTouched }) => {
+					console.log({
+						values,
+						errors,
+						touched,
+					});
+					return (
+						<>
+							<div className='border'>
+								<PhoneInput
+									placeholder='Enter phone number'
+									value={formatPhoneNumberIntl(values.pn1)}
+									onBlur={() => {
+										setFieldTouched('pn1', true, true);
+									}}
+									onChange={(_value) => {
+										setFieldValue('pn1', _value, false);
+									}}
+								/>
+								{touched.pn1 && errors.pn1 && errors.pn1?.length > 0 && (
+									<ZIonNote color='danger'>{errors.pn1}</ZIonNote>
+								)}
 							</div>
-						)}
-					</FieldArray>
-				</div>
-			</ZIonCol>
-		</>
+						</>
+					);
+				}}
+			</Formik>
+		</ZIonCol>
 	);
 };
 
-export default ZaionsTextPage;
+export default ZaionsTestPage;

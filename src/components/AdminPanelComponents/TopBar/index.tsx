@@ -103,7 +103,7 @@ const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 	const isZFetching = isCurrentWorkspaceFetching;
 
 	return (
-		<ZIonRow className='h-[4rem] px-3 zaions__light_bg'>
+		<ZIonRow className='h-[4rem] px-3 zaions__bg_white shadow-[0_3px_6px_#00000029]'>
 			{/*  */}
 			<ZIonCol className='flex h-full ion-align-items-center'>
 				<ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>

@@ -72,7 +72,7 @@ const ZaionsAdminPanelSettings: React.FC = () => {
 				menu={PAGE_MENU.DASHBOARD_PAGE_MENU}
 			>
 				<ZIonContent color='light'>
-					<ZIonGrid className='zaions__bg_white px-4 ion-no-padding'>
+					<ZIonGrid className='px-4 zaions__bg_white ion-no-padding'>
 						<ZIonSplitPane
 							when='lg'
 							contentId={CONSTANTS.DEFAULT_VALUES.ZAIONS_SETTING_SPLIT_PANEL}
@@ -191,11 +191,11 @@ const ZaionsAdminPanelSettings: React.FC = () => {
 								</ZIonContent>
 							</ZIonMenu>
 							<div
-								className='ion-page  overflow-y-scroll'
+								className='overflow-y-scroll ion-page'
 								id={CONSTANTS.DEFAULT_VALUES.ZAIONS_SETTING_SPLIT_PANEL}
 							>
 								<ZIonGrid className='w-full mt-2'>
-									<ZIonRow className='py-3 px-3 zaions__bg_white'>
+									<ZIonRow className='px-3 py-3 zaions__bg_white'>
 										<ZIonCol
 											sizeXl='7'
 											sizeLg='7'

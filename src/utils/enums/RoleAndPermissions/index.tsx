@@ -127,6 +127,16 @@ export enum permissionsEnum {
 	restore_label = 'restore_label',
 	forceDelete_label = 'forceDelete_label',
 
+	// Workspace team
+	viewAny_workspaceTeam = 'viewAny_workspaceTeam',
+	view_workspaceTeam = 'view_workspaceTeam',
+	create_workspaceTeam = 'create_workspaceTeam',
+	update_workspaceTeam = 'update_workspaceTeam',
+	delete_workspaceTeam = 'delete_workspaceTeam',
+	replicate_workspaceTeam = 'replicate_workspaceTeam',
+	restore_workspaceTeam = 'restore_workspaceTeam',
+	forceDelete_workspaceTeam = 'forceDelete_workspaceTeam',
+
 	// Workspace Members
 	attach_workspace_members = 'attach_workspace_members',
 	detach_workspace_members = 'view_workspace_members',

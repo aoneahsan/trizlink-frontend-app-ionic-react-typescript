@@ -136,7 +136,7 @@ const ZUserSettingsMenu: React.FC = () => {
 			],
 			_itemsIds: [ZUserSettingTypeEnum.shortLinkListPageTable, workspaceId],
 			_urlDynamicParts: [
-				CONSTANTS.RouteParams.user.setting.type,
+				CONSTANTS.RouteParams.settings.type,
 				CONSTANTS.RouteParams.workspace.workspaceId,
 			],
 			_extractType: ZRQGetRequestExtractEnum.extractItem,
@@ -196,7 +196,7 @@ const ZUserSettingsMenu: React.FC = () => {
 					__response = await updateUserSettingsAsyncMutate({
 						itemIds: [ZUserSettingTypeEnum.shortLinkListPageTable, ''],
 						urlDynamicParts: [
-							CONSTANTS.RouteParams.user.setting.type,
+							CONSTANTS.RouteParams.settings.type,
 							CONSTANTS.RouteParams.workspace.workspaceId,
 						],
 						requestData: _data,

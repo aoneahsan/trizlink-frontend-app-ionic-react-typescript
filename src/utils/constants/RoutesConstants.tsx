@@ -80,6 +80,18 @@ const ZaionsRoutes = {
 			Main: `${ZPrivateRoutePath}/settings`,
 			ZaionsAdminPanelSettingsCustomDomain: `${ZPrivateRoutePath}/settings/custom-domain`,
 			ZaionsAdminPanelSettingsPixels: `${ZPrivateRoutePath}/settings/pixels`,
+
+			WSSettings: {
+				Main: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/${CONSTANTS.RouteParams.settings.tab}`,
+			},
+
+			AccountSettings: {
+				Main: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings`,
+				Team: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/as/team`,
+				ReferralProgram: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/as/referral-program`,
+				Billing: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/as/billing`,
+				User: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/as/user`,
+			},
 		},
 
 		ShortLinks: {
@@ -117,6 +129,7 @@ const ZaionsRoutes = {
 	},
 
 	Testing: {
+		Page: '/testing/page',
 		ReactTable: {
 			Main: '/testing/react-table',
 		},

@@ -96,6 +96,8 @@ import ZAppStartupPage from './pages/AdminPanel/StartUpPage';
 import ChartsExamples from './Testing/Charts';
 import ZFallbackIonSpinner from './components/CustomComponents/FallbackSpinner';
 import ZShortLinkRedirectPage from './pages/ShortLinkRedirectPage';
+import ZaionsTestPage from './pages/TestPage';
+import ZUserAccountSettings from './pages/AdminPanel/UserAccount';
 
 // Functional Component
 const AppRoutes: React.FC = () => {
@@ -122,6 +124,12 @@ const AppRoutes: React.FC = () => {
 				exact
 				path={ZaionsRoutes.Testing.IonComponents.Main}
 				component={TestingIonComponents}
+			/>
+
+			<Route
+				exact
+				path={ZaionsRoutes.Testing.Page}
+				component={ZaionsTestPage}
 			/>
 
 			{/* Public Routes */}
@@ -190,7 +198,12 @@ const AppRoutes: React.FC = () => {
 			/>
 
 			<PrivateRoute
-				exact
+				path={ZaionsRoutes.AdminPanel.Setting.AccountSettings.Main}
+				Component={ZUserAccountSettings}
+			/>
+
+			{/* should not add exact  */}
+			<PrivateRoute
 				path={ZaionsRoutes.AdminPanel.Setting.Main}
 				Component={ZaionsAdminPanelSettings}
 			/>

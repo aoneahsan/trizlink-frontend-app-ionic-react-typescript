@@ -255,7 +255,7 @@ span.new {
 }
 
 .zaions__bg_white {
-	background-color: #fff !important;
+	background-color: var(--ion-color-white) !important;
 }
 
 .zaions__bg_f5f6fa {
@@ -304,6 +304,7 @@ span.new {
 
 .zaions__light_bg {
 	background-color: var(--ion-color-light);
+	--background: var(--ion-color-light);
 }
 
 .zaions__primary_bg {

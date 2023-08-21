@@ -1497,6 +1497,10 @@ export const zGetRoutePermissions = ({
 			case ZaionsRoutes.AdminPanel.LinkInBio.Main:
 				__permissions = [permissionsEnum.viewAny_linkInBio];
 				break;
+
+			case ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team:
+				__permissions = [permissionsEnum.viewAny_workspaceTeam];
+				break;
 		}
 
 		return __permissions;
@@ -1551,7 +1555,7 @@ export const zRedirectToTarget = ({
 
 				case messengerPlatformsBlockEnum.whatsapp:
 					if (_target?.phoneNumber && _target?.phoneNumber?.trim().length > 0) {
-						__redirectUrl = `https://wa.me/${_target?.phoneNumber}&text=${_target?.message}`;
+						__redirectUrl = `https://wa.me/+92${_target?.phoneNumber}`;
 					}
 					break;
 

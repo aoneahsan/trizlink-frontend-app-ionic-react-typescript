@@ -59,7 +59,7 @@ const ZRCheckbox = lazy(
 const ZaionsLinkInBioLinksTable = lazy(
 	() =>
 		import(
-			'@/components/InPageComponents/ZaionsTable/linkInBioTables/LinkInBioTable'
+			'@/components/InPageComponents/ZaionsTable/LinkInBioTables/LinkInBioTable'
 		)
 );
 const ZRScrollbars = lazy(

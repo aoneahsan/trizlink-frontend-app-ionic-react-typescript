@@ -45,13 +45,16 @@ const RouteParams = {
 	workspace: {
 		workspaceId: ':workspaceId',
 		editWorkspaceIdParam: ':editWorkspaceId',
+		teamId: ':teamId',
+	},
+
+	settings: {
+		tab: ':tab',
+		sect: ':sect',
+		type: ':type',
 	},
 
 	user: {
-		setting: {
-			type: ':type',
-		},
-
 		notification: {
 			type: ':type',
 			id: ':id',
@@ -123,7 +126,7 @@ export const API_URLS = {
 	folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder`,
 
 	user_setting_list_create: `/user/settings`,
-	user_setting_delete_update: `/user/settings/${RouteParams.user.setting.type}/${RouteParams.workspace.workspaceId}`,
+	user_setting_delete_update: `/user/settings/${RouteParams.settings.type}/${RouteParams.workspace.workspaceId}`,
 
 	userAccount_LinkInBio_folders_update_delete:
 		'/user/link-in-bio-folders/:folderId',
@@ -160,6 +163,8 @@ export const API_URLS = {
 	// workspace
 	workspace_create_list: '/user/workspaces',
 	workspace_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}`,
+	workspace_team_create_list: `/user/workspace/${RouteParams.workspace.workspaceId}/teams`,
+	workspace_team_update_delete: `/user/workspace/team/${RouteParams.workspace.teamId}`,
 
 	// Time slot
 	time_slot_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/time-slot`,
@@ -1031,6 +1036,43 @@ const testingSelectors = {
 		},
 	},
 	// #endregion
+
+	// #region settings
+	WSSettings: {
+		menuBar: {
+			accordionGroup: {
+				value: 'accordion-group',
+				asAccordion: 'account-settings-accordion',
+				wsAccordion: 'workspace-settings-accordion',
+			},
+			// wss-mb-as -> workspace-setting-menubar-accountSettings
+			as: {
+				teamBtn: 'wss-mb-as-team-btn',
+				referralBtn: 'wss-mb-as-referral-btn',
+				billingBtn: 'wss-mb-as-billing-btn',
+				userBtn: 'wss-mb-as-user-btn',
+			},
+			ws: {
+				pixelBtn: 'wss-mb-ws-pixel-btn',
+				utmBtn: 'wss-mb-ws-utm-btn',
+				embedWidgetBtn: 'wss-mb-ws-embed-widget-btn',
+				customDomainBtn: 'wss-mb-ws-custom-domain-btn',
+				privacyPopoverBtn: 'wss-mb-ws-privacy-popover-btn',
+				passwordBtn: 'wss-mb-ws-password-btn',
+				apiKeyBtn: 'wss-mb-ws-api-key-btn',
+			},
+		},
+
+		teamListPage: {
+			// wss-tlp-t -> workspace-setting-team-list-page-table
+			createTeamBtn: 'wss-tlp-create-team-btn',
+
+			table: {
+				description: 'wss-tlp-t-description-rm', // rm -> read more
+			},
+		},
+	},
+	// #endregion
 };
 
 export const TIMEZONES = [
@@ -1179,6 +1221,7 @@ const REACT_QUERY = {
 		WORKSPACE: {
 			MAIN: 'rq-workspace-list-key',
 			GET: 'rq-workspace-get-key',
+			TEAM: 'rq-workspace-team-get-key',
 		},
 		FOLDER: {
 			MAIN: 'rq-folders-list-key',

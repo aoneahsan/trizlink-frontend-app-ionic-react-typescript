@@ -6,14 +6,17 @@ import React, { ReactNode } from 'react';
 
 // Type
 type ZIonSelectOptionType = {
-  children: ReactNode;
-  className?: string;
-  disabled?: boolean;
-  value?: string | unknown;
+	children: ReactNode;
+	className?: string;
+	disabled?: boolean;
+	value?: string | unknown;
+	style?: {
+		[key: string]: unknown;
+	};
 };
 
 const ZIonSelectOption = (props: ZIonSelectOptionType) => {
-  return <IonSelectOption {...props}>{props.children}</IonSelectOption>;
+	return <IonSelectOption {...props}>{props.children}</IonSelectOption>;
 };
 
 export default ZIonSelectOption;

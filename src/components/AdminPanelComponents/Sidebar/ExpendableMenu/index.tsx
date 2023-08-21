@@ -58,7 +58,11 @@ import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
  * */
 import { AdminPanelSidebarMenuPageEnum } from '@/types/AdminPanel/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import {
+	workspaceInterface,
+	WSSettingsPageSect,
+	WSSettingsPageSectTab,
+} from '@/types/AdminPanel/workspace';
 
 /**
  * Recoil State Imports go down
@@ -414,7 +418,7 @@ const AdminPanelSidebarMenu: React.FC<{
 								</ZIonCol> */}
 
 								{/* Account */}
-								<ZIonCol size='12' className='my-3'>
+								{/* <ZIonCol size='12' className='my-3'>
 									<ZIonButton
 										fill='clear'
 										color='light'
@@ -440,7 +444,7 @@ const AdminPanelSidebarMenu: React.FC<{
 											</ZIonText>
 										</ZIonText>
 									</ZIonButton>
-								</ZIonCol>
+								</ZIonCol> */}
 
 								{/* Settings */}
 								<ZIonCol size='12' className='my-3'>
@@ -449,6 +453,11 @@ const AdminPanelSidebarMenu: React.FC<{
 										color='light'
 										expand='block'
 										className='normal-case ion-no-padding ion-no-margin'
+										routerLink={replaceRouteParams(
+											ZaionsRoutes.AdminPanel.Setting.AccountSettings.Main,
+											[CONSTANTS.RouteParams.workspace.workspaceId],
+											[workspaceId]
+										)}
 									>
 										<ZIonText
 											className={classNames({
