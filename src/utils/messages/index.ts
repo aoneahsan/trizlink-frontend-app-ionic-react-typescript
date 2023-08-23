@@ -19,6 +19,11 @@ const GENERAL = {
 		UPDATED: 'Time slot updated successfully.',
 		DELETED: 'Time slot deleted successfully.',
 	},
+	TEAM: {
+		CREATED: 'Team created successfully.',
+		UPDATED: 'Team updated successfully.',
+		DELETED: 'Team deleted successfully.',
+	},
 	LABEL: {
 		CREATED: 'Label created successfully.',
 		UPDATED: 'Label updated successfully.',

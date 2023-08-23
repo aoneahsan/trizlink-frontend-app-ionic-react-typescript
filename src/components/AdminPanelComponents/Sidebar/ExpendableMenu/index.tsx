@@ -27,7 +27,6 @@ import {
 	chevronForwardOutline,
 	idCardOutline,
 	linkOutline,
-	personOutline,
 	settingsOutline,
 } from 'ionicons/icons';
 import classNames from 'classnames';
@@ -58,11 +57,7 @@ import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
  * */
 import { AdminPanelSidebarMenuPageEnum } from '@/types/AdminPanel/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import {
-	workspaceInterface,
-	WSSettingsPageSect,
-	WSSettingsPageSectTab,
-} from '@/types/AdminPanel/workspace';
+import { workspaceInterface } from '@/types/AdminPanel/workspace';
 
 /**
  * Recoil State Imports go down
@@ -151,7 +146,7 @@ const AdminPanelSidebarMenu: React.FC<{
 									},
 								}));
 							}}
-							style={{ right: isExpand ? '-9%' : '-25%', top: '12%' }}
+							style={{ right: isExpand ? '-9%' : '-25%', top: '7%' }}
 						>
 							<ZIonIcon
 								icon={isExpand ? chevronBackOutline : chevronForwardOutline}
@@ -452,9 +447,13 @@ const AdminPanelSidebarMenu: React.FC<{
 										fill='clear'
 										color='light'
 										expand='block'
-										className='normal-case ion-no-padding ion-no-margin'
+										className={classNames({
+											'ion-no-padding ion-no-margin normal-case': true,
+											zaions__primary_set:
+												activePage === AdminPanelSidebarMenuPageEnum.settings,
+										})}
 										routerLink={replaceRouteParams(
-											ZaionsRoutes.AdminPanel.Setting.AccountSettings.Main,
+											ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
 											[CONSTANTS.RouteParams.workspace.workspaceId],
 											[workspaceId]
 										)}

@@ -1,0 +1,764 @@
+/**
+ * Core Imports go down
+ * ? Like Import of React is a Core Import
+ * */
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
+
+/**
+ * Packages Imports go down
+ * ? Like import of ionic components is a packages import
+ * */
+import classNames from 'classnames';
+import routeQueryString from 'qs';
+import {
+	createColumnHelper,
+	flexRender,
+	getCoreRowModel,
+	getPaginationRowModel,
+	useReactTable,
+} from '@tanstack/react-table';
+import {
+	createOutline,
+	ellipsisVerticalOutline,
+	fileTrayFullOutline,
+	trashBinOutline,
+} from 'ionicons/icons';
+
+/**
+ * Custom Imports go down
+ * ? Like import of custom components is a custom import
+ * */
+import {
+	ZIonButton,
+	ZIonCheckbox,
+	ZIonCol,
+	ZIonIcon,
+	ZIonItem,
+	ZIonList,
+	ZIonRow,
+	ZIonSelect,
+	ZIonSelectOption,
+	ZIonText,
+	ZIonTitle,
+} from '@/components/ZIonComponents';
+import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
+import ZCan from '@/components/Can';
+
+/**
+ * Custom Hooks Imports go down
+ * ? Like import of custom Hook is a custom import
+ * */
+import {
+	useZGetRQCacheData,
+	useZRQDeleteRequest,
+	useZRQGetRequest,
+	useZUpdateRQCacheData,
+} from '@/ZaionsHooks/zreactquery-hooks';
+import {
+	useZIonAlert,
+	useZIonErrorAlert,
+	useZIonPopover,
+} from '@/ZaionsHooks/zionic-hooks';
+
+/**
+ * Global Constants Imports go down
+ * ? Like import of Constant is a global constants import
+ * */
+import CONSTANTS from '@/utils/constants';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import { createRedirectRoute, extractInnerData } from '@/utils/helpers';
+import {
+	showErrorNotification,
+	showSuccessNotification,
+} from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
+import { reportCustomError } from '@/utils/customErrorType';
+
+/**
+ * Type Imports go down
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
+ * */
+import {
+	workspaceTeamInterface,
+	ZWSTeamListPageTableColumnsIds,
+} from '@/types/AdminPanel/workspace';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+
+/**
+ * Recoil State Imports go down
+ * ? Import of recoil states is a Recoil State import
+ * */
+
+/**
+ * Style files Imports go down
+ * ? Import of style sheet is a style import
+ * */
+
+/**
+ * Images Imports go down
+ * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
+ * */
+
+/**
+ * Component props type go down
+ * ? Like if you have a type for props it should be please Down
+ * */
+
+/**
+ * Functional Component
+ * About: (ZWSSettingTeamListTable -> ZWorkspaceSettingTeamListTable is table component for listing team data.)
+ * @type {*}
+ * */
+
+const ZWSSettingTeamListTable: React.FC = () => {
+	// #region Component state.
+	const [compState, setCompState] = useState<{
+		selectedTeamId?: string;
+	}>({});
+	// #endregion
+
+	// #region Custom hooks
+	const { zNavigatePushRoute } = useZNavigate();
+	// getting search param from url with the help of 'qs' package.
+	const routeQSearchParams = routeQueryString.parse(location.search, {
+		ignoreQueryPrefix: true,
+	});
+	const { pageindex, pagesize } = routeQSearchParams;
+	// #endregion
+
+	const { workspaceId } = useParams<{
+		workspaceId: string;
+	}>();
+
+	// #region Modal & Popovers.
+	const { presentZIonPopover: presentZTeamActionPopover } = useZIonPopover(
+		ZTeamActionPopover,
+		{
+			workspaceId: workspaceId,
+			teamId: compState.selectedTeamId,
+		}
+	);
+	// #endregion
+
+	// #region APIS
+	// Request for getting teams data.
+	const { data: WSTeamsData } = useZRQGetRequest<workspaceTeamInterface[]>({
+		_url: API_URL_ENUM.workspace_team_create_list,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM, workspaceId],
+		_itemsIds: [workspaceId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+	});
+
+	// #endregion
+
+	// #region Managing table data with react-table.
+	const columnHelper = createColumnHelper<workspaceTeamInterface>();
+	const defaultColumns = [
+		columnHelper.display({
+			id: ZWSTeamListPageTableColumnsIds.id,
+			header: 'Select',
+			footer: 'Select Column Footer',
+			cell: (_) => {
+				return <ZIonCheckbox />;
+			},
+		}),
+
+		// Title
+		columnHelper.accessor((itemData) => itemData.title, {
+			header: 'Title',
+			id: ZWSTeamListPageTableColumnsIds.title,
+			footer: 'Title',
+		}),
+
+		// Description
+		columnHelper.accessor((itemData) => itemData.description, {
+			header: 'Description',
+			id: ZWSTeamListPageTableColumnsIds.description,
+			footer: 'Description',
+			cell: (row) => {
+				return (
+					<>
+						{row.getValue() ? (
+							<div className='flex ion-align-items-center'>
+								<div className='text-sm ZaionsTextEllipsis'>
+									{row.getValue()}
+								</div>
+								{/* <ZIonText
+									color='primary'
+									className='text-sm cursor-pointer'
+									testingSelector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.description}-${row.row.original.id}`}
+									testingListSelector={
+										CONSTANTS.testingSelectors.WSSettings.teamListPage.table
+											.description
+									}
+								>
+									Read more
+								</ZIonText> */}
+							</div>
+						) : (
+							CONSTANTS.NO_VALUE_FOUND
+						)}
+					</>
+				);
+			},
+		}),
+	];
+
+	const zTeamsTable = useReactTable({
+		columns: defaultColumns,
+		data: WSTeamsData || [],
+		getCoreRowModel: getCoreRowModel(),
+		getPaginationRowModel: getPaginationRowModel(),
+		debugTable: true,
+		debugHeaders: true,
+		debugColumns: true,
+	});
+	// #endregion
+
+	useEffect(() => {
+		zTeamsTable.setPageIndex(Number(pageindex) || 0);
+		zTeamsTable.setPageSize(Number(pagesize) || 2);
+	}, [pageindex, pagesize]);
+
+	return (
+		<div>
+			<ZCustomScrollable
+				className='w-full overflow-hidden border rounded-lg h-max ion-no-padding zaions__light_bg'
+				scrollX={true}
+			>
+				{zTeamsTable.getHeaderGroups().map((_headerInfo, _headerIndex) => {
+					return (
+						<ZIonRow
+							key={_headerIndex}
+							className='flex flex-nowrap zaions__light_bg'
+						>
+							{_headerInfo.headers.map((_columnInfo, _columnIndex) => {
+								return (
+									<ZIonCol
+										key={_columnInfo.id}
+										className={classNames({
+											'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
+												true,
+											'border-r': false,
+										})}
+										size={
+											_columnInfo.column.id ===
+												ZWSTeamListPageTableColumnsIds.id ||
+											_columnInfo.column.id ===
+												ZWSTeamListPageTableColumnsIds.actions
+												? '1.2'
+												: _columnInfo.column.id ===
+												  ZWSTeamListPageTableColumnsIds.description
+												? '6.5'
+												: '3.5'
+										}
+									>
+										{_columnInfo.column.columnDef.header?.toString()}
+									</ZIonCol>
+								);
+							})}
+
+							<ZIonCol
+								size='.8'
+								className={classNames({
+									'border-b ps-2 py-1 font-bold zaions__light_bg text-sm': true,
+									'border-r': false,
+								})}
+							>
+								Actions
+							</ZIonCol>
+						</ZIonRow>
+					);
+				})}
+
+				{/* Body Section */}
+				<ZIonRow className='rounded-b-lg zaions__light_bg'>
+					{WSTeamsData?.length ? (
+						<ZIonCol size='12' className='w-full ion-no-padding'>
+							{zTeamsTable.getRowModel().rows.map((_rowInfo, _rowIndex) => {
+								return (
+									<ZIonRow key={_rowIndex} className='flex-nowrap'>
+										{_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
+											_cellInfo.column.getIsVisible() ? (
+												<ZIonCol
+													key={_cellIndex}
+													size={
+														_cellInfo.column.id ===
+															ZWSTeamListPageTableColumnsIds.id ||
+														_cellInfo.column.id ===
+															ZWSTeamListPageTableColumnsIds.actions
+															? '1.2'
+															: _cellInfo.column.id ===
+															  ZWSTeamListPageTableColumnsIds.description
+															? '6.5'
+															: '3.5'
+													}
+													className={classNames({
+														'py-1 mt-1 border-b flex ion-align-items-center':
+															true,
+														'border-r': false,
+														'ps-2':
+															_cellInfo.column.id !==
+															ZWSTeamListPageTableColumnsIds.id,
+														'ps-0':
+															_cellInfo.column.id ===
+															ZWSTeamListPageTableColumnsIds.id,
+													})}
+												>
+													<div
+														className={classNames({
+															'w-full text-sm ZaionsTextEllipsis': true,
+															'ps-3':
+																_cellInfo.column.id ===
+																ZWSTeamListPageTableColumnsIds.id,
+														})}
+													>
+														{flexRender(
+															_cellInfo.column.columnDef.cell,
+															_cellInfo.getContext()
+														)}
+													</div>
+												</ZIonCol>
+											) : null
+										)}
+
+										<ZIonCol
+											size='.8'
+											className={classNames({
+												'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
+													true,
+												'border-r': false,
+											})}
+										>
+											<ZIonButton
+												fill='clear'
+												color='dark'
+												className='ion-no-padding ion-no-margin'
+												size='small'
+												testingSelector={
+													CONSTANTS.testingSelectors.shortLink.listPage.table
+														.actionPopoverBtn
+												}
+												testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
+												onClick={(_event: unknown) => {
+													setCompState((oldVal) => ({
+														...oldVal,
+														selectedTeamId: _rowInfo.original.id || '',
+													}));
+
+													//
+													presentZTeamActionPopover({
+														_event: _event as Event,
+														_cssClass:
+															'zaions_present_folder_Action_popover_width',
+														_dismissOnSelect: false,
+													});
+												}}
+											>
+												<ZIonIcon icon={ellipsisVerticalOutline} />
+											</ZIonButton>
+										</ZIonCol>
+									</ZIonRow>
+								);
+							})}
+						</ZIonCol>
+					) : (
+						<ZIonCol className='py-3 ion-text-center'>
+							<ZIonTitle className='mt-3'>
+								<ZIonIcon
+									icon={fileTrayFullOutline}
+									className='mx-auto'
+									size='large'
+									color='medium'
+								/>
+							</ZIonTitle>
+							<ZIonTitle color='medium'>
+								No teams founds. please create a team.
+							</ZIonTitle>
+						</ZIonCol>
+					)}
+				</ZIonRow>
+			</ZCustomScrollable>
+
+			<ZIonRow className='w-full px-2 pb-2 pt-1 ion-align-items-center mt-2 overflow-hidden border rounded-lg zaions__light_bg'>
+				<ZIonCol>
+					{/* previous buttons */}
+					<ZIonButton
+						className='mr-1 ion-no-padding ion-no-margin'
+						size='small'
+						fill='clear'
+						disabled={!zTeamsTable.getCanPreviousPage()}
+						testingSelector={
+							CONSTANTS.testingSelectors.WSSettings.teamListPage.table
+								.getFirstPageButton
+						}
+						onClick={() => {
+							if (zTeamsTable.getCanPreviousPage()) {
+								zNavigatePushRoute(
+									createRedirectRoute({
+										url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
+										params: [CONSTANTS.RouteParams.workspace.workspaceId],
+										values: [workspaceId],
+										routeSearchParams: {
+											pageindex: 0,
+											pagesize: zTeamsTable
+												.getState()
+												.pagination.pageSize.toString(),
+										},
+									})
+								);
+
+								zTeamsTable.setPageIndex(0);
+							}
+						}}
+					>
+						<ZIonText className='px-1 text-xl'>{'<<'}</ZIonText>
+					</ZIonButton>
+
+					<ZIonButton
+						className='mr-1 ion-no-padding ion-no-margin'
+						size='small'
+						fill='clear'
+						disabled={!zTeamsTable.getCanPreviousPage()}
+						testingSelector={
+							CONSTANTS.testingSelectors.WSSettings.teamListPage.table
+								.previousButton
+						}
+						onClick={() => {
+							if (zTeamsTable.getCanPreviousPage()) {
+								zTeamsTable.previousPage();
+
+								zNavigatePushRoute(
+									createRedirectRoute({
+										url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
+										params: [CONSTANTS.RouteParams.workspace.workspaceId],
+										values: [workspaceId],
+										routeSearchParams: {
+											pageindex:
+												zTeamsTable.getState().pagination.pageIndex - 1,
+											pagesize: zTeamsTable
+												.getState()
+												.pagination.pageSize.toString(),
+										},
+									})
+								);
+							}
+						}}
+					>
+						<ZIonText className='px-1 text-xl'>{'<'}</ZIonText>
+					</ZIonButton>
+
+					{/* next buttons */}
+					<ZIonButton
+						className='mr-1 ion-no-padding ion-no-margin'
+						size='small'
+						fill='clear'
+						disabled={!zTeamsTable.getCanNextPage()}
+						testingSelector={
+							CONSTANTS.testingSelectors.WSSettings.teamListPage.table
+								.nextButton
+						}
+						onClick={() => {
+							if (zTeamsTable.getCanNextPage()) {
+								zTeamsTable.nextPage();
+
+								zNavigatePushRoute(
+									createRedirectRoute({
+										url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
+										params: [CONSTANTS.RouteParams.workspace.workspaceId],
+										values: [workspaceId],
+										routeSearchParams: {
+											pageindex:
+												zTeamsTable.getState().pagination.pageIndex + 1,
+											pagesize: zTeamsTable
+												.getState()
+												.pagination.pageSize.toString(),
+										},
+									})
+								);
+							}
+						}}
+					>
+						<ZIonText className='px-1 text-xl'>{'>'}</ZIonText>
+					</ZIonButton>
+
+					<ZIonButton
+						className='mr-1 ion-no-padding ion-no-margin'
+						size='small'
+						fill='clear'
+						disabled={!zTeamsTable.getCanNextPage()}
+						testingSelector={
+							CONSTANTS.testingSelectors.WSSettings.teamListPage.table
+								.getLastPageButton
+						}
+						onClick={() => {
+							if (zTeamsTable.getCanNextPage()) {
+								zTeamsTable.setPageIndex(zTeamsTable.getPageCount() - 1);
+
+								zNavigatePushRoute(
+									createRedirectRoute({
+										url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
+										params: [CONSTANTS.RouteParams.workspace.workspaceId],
+										values: [workspaceId],
+										routeSearchParams: {
+											pageindex: zTeamsTable.getPageCount() - 1,
+											pagesize: zTeamsTable
+												.getState()
+												.pagination.pageSize.toString(),
+										},
+									})
+								);
+							}
+						}}
+					>
+						<ZIonText className='px-1 text-xl'>{'>>'}</ZIonText>
+					</ZIonButton>
+				</ZIonCol>
+
+				{/* Col for pagination number like 1,2,3,...,n */}
+				<ZIonCol></ZIonCol>
+
+				<ZIonCol className='flex ion-align-items-center ion-justify-content-end'>
+					<ZIonSelect
+						minHeight='30px'
+						fill='outline'
+						className='bg-white w-[7rem] mt-1'
+						interface='popover'
+						value={zTeamsTable.getState().pagination.pageSize}
+						testingSelector={
+							CONSTANTS.testingSelectors.WSSettings.teamListPage.table
+								.pageSizeInput
+						}
+						onIonChange={(e) => {
+							zTeamsTable.setPageSize(Number(e.target.value));
+
+							zNavigatePushRoute(
+								createRedirectRoute({
+									url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
+									params: [CONSTANTS.RouteParams.workspace.workspaceId],
+									values: [workspaceId],
+									routeSearchParams: {
+										pageindex: zTeamsTable.getPageCount() - 1,
+										pagesize: Number(e.target.value),
+									},
+								})
+							);
+						}}
+					>
+						{[2, 3].map((pageSize) => (
+							<ZIonSelectOption
+								key={pageSize}
+								value={pageSize}
+								className='h-[2.3rem]'
+							>
+								Show {pageSize}
+							</ZIonSelectOption>
+						))}
+					</ZIonSelect>
+				</ZIonCol>
+			</ZIonRow>
+		</div>
+	);
+};
+
+// Shortlink action popover
+const ZTeamActionPopover: React.FC<{
+	dismissZIonPopover: (data?: string, role?: string | undefined) => void;
+	zNavigatePushRoute: (_url: string) => void;
+	workspaceId: string;
+	teamId: string;
+}> = ({ dismissZIonPopover, zNavigatePushRoute, workspaceId, teamId }) => {
+	// #region Custom hooks.
+	const { presentZIonErrorAlert } = useZIonErrorAlert();
+	const { presentZIonAlert } = useZIonAlert();
+	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+	// #endregion
+
+	// #region APIS.
+	// Request for deleting team.
+	const { mutateAsync: deleteTeamMutate } = useZRQDeleteRequest(
+		API_URL_ENUM.workspace_team_update_delete,
+		[]
+	);
+	// #endregion
+
+	// #region Functions.
+	// when user won't to delete team and click on the delete button this function will fire and show the confirm alert.
+	const deleteTeam = async () => {
+		try {
+			if (teamId?.trim()) {
+				await presentZIonAlert({
+					header: `Delete team.`,
+					subHeader: 'Remove team from user account.',
+					message: 'Are you sure you want to delete this team?',
+					buttons: [
+						{
+							text: 'Cancel',
+							role: 'cancel',
+						},
+						{
+							text: 'Delete',
+							role: 'danger',
+							handler: () => {
+								void removeTeam();
+							},
+						},
+					],
+				});
+			} else {
+				await presentZIonErrorAlert();
+			}
+		} catch (error) {
+			await presentZIonErrorAlert();
+		}
+	};
+
+	// on the delete short link confirm alert, when user click on delete button this function will fires which will trigger delete request and delete the short link.
+	const removeTeam = async () => {
+		try {
+			if (teamId?.trim()) {
+				const _response = await deleteTeamMutate({
+					itemIds: [workspaceId, teamId],
+					urlDynamicParts: [
+						CONSTANTS.RouteParams.workspace.workspaceId,
+						CONSTANTS.RouteParams.workspace.teamId,
+					],
+				});
+
+				if (_response) {
+					const _data = extractInnerData<{ success: boolean }>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (_data && _data?.success) {
+						// getting all the shortLinks from RQ cache.
+						const _oldTeams =
+							extractInnerData<workspaceTeamInterface[]>(
+								getRQCDataHandler<workspaceTeamInterface[]>({
+									key: [
+										CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM,
+										workspaceId,
+									],
+								}) as workspaceTeamInterface[],
+								extractInnerDataOptionsEnum.createRequestResponseItems
+							) || [];
+
+						// removing deleted shortLinks from cache.
+						const _updatedTeams = _oldTeams.filter((el) => el.id !== teamId);
+
+						// Updating data in RQ cache.
+						await updateRQCDataHandler<workspaceTeamInterface[] | undefined>({
+							key: [
+								CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM,
+								workspaceId,
+							],
+							data: _updatedTeams as workspaceTeamInterface[],
+							id: '',
+							extractType: ZRQGetRequestExtractEnum.extractItems,
+							updateHoleData: true,
+						});
+
+						showSuccessNotification(MESSAGES.GENERAL.TEAM.DELETED);
+
+						dismissZIonPopover('', '');
+					} else {
+						showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+
+						dismissZIonPopover('', '');
+					}
+				}
+			} else {
+				void presentZIonErrorAlert();
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+	// #endregion
+
+	return (
+		<ZIonList lines='none' className='ion-no-padding'>
+			<ZCan havePermissions={[permissionsEnum.update_workspaceTeam]}>
+				{/* Edit */}
+				<ZIonItem
+					button={true}
+					detail={false}
+					minHeight='2.5rem'
+					testingSelector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.editBtn}-${teamId}`}
+					testingListSelector={
+						CONSTANTS.testingSelectors.WSSettings.teamListPage.table.editBtn
+					}
+					onClick={() => {
+						zNavigatePushRoute(
+							createRedirectRoute({
+								url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.ViewTeam,
+								params: [
+									CONSTANTS.RouteParams.workspace.workspaceId,
+									CONSTANTS.RouteParams.workspace.teamId,
+								],
+								values: [workspaceId, teamId],
+							})
+						);
+
+						dismissZIonPopover('', '');
+					}}
+				>
+					<ZIonButton
+						size='small'
+						expand='full'
+						fill='clear'
+						color='light'
+						className='ion-text-capitalize'
+					>
+						<ZIonIcon
+							icon={createOutline}
+							className='w-5 h-5 me-2'
+							color='secondary'
+						/>
+						<ZIonText color='secondary' className='text-[.9rem] pt-1'>
+							Edit
+						</ZIonText>
+					</ZIonButton>
+				</ZIonItem>
+
+				<ZCan havePermissions={[permissionsEnum.delete_workspaceTeam]}>
+					<ZIonItem
+						button={true}
+						detail={false}
+						minHeight='2.5rem'
+						onClick={() => void deleteTeam()}
+						testingListSelector={
+							CONSTANTS.testingSelectors.WSSettings.teamListPage.table.deleteBtn
+						}
+						testingSelector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.deleteBtn}-${teamId}`}
+					>
+						<ZIonButton
+							size='small'
+							expand='full'
+							fill='clear'
+							color='light'
+							className='ion-text-capitalize'
+						>
+							<ZIonIcon
+								icon={trashBinOutline}
+								className='w-4 h-4 me-2'
+								color='danger'
+							/>
+							<ZIonText color='danger' className='text-[.9rem] pt-1'>
+								Delete
+							</ZIonText>
+						</ZIonButton>
+					</ZIonItem>
+				</ZCan>
+			</ZCan>
+		</ZIonList>
+	);
+};
+
+export default ZWSSettingTeamListTable;

@@ -88,6 +88,7 @@ const ZaionsRoutes = {
 			AccountSettings: {
 				Main: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings`,
 				Team: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/as/team`,
+				ViewTeam: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/team/${CONSTANTS.RouteParams.workspace.teamId}`,
 				ReferralProgram: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/as/referral-program`,
 				Billing: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/as/billing`,
 				User: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/as/user`,

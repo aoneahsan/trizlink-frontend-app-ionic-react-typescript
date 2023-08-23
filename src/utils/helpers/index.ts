@@ -1486,20 +1486,32 @@ export const zGetRoutePermissions = ({
 				];
 				break;
 
-			case ZaionsRoutes.AdminPanel.ShortLinks.Main:
-				__permissions = [permissionsEnum.viewAny_shortLink];
-				break;
-
 			case ZaionsRoutes.AdminPanel.ShortLinks.Edit:
-				__permissions = [permissionsEnum.update_shortLink];
+				__permissions = [
+					permissionsEnum.viewAny_workspace,
+					permissionsEnum.update_shortLink,
+				];
 				break;
 
 			case ZaionsRoutes.AdminPanel.LinkInBio.Main:
-				__permissions = [permissionsEnum.viewAny_linkInBio];
+				__permissions = [
+					permissionsEnum.viewAny_workspace,
+					permissionsEnum.viewAny_linkInBio,
+				];
 				break;
 
 			case ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team:
-				__permissions = [permissionsEnum.viewAny_workspaceTeam];
+				__permissions = [
+					permissionsEnum.viewAny_workspace,
+					permissionsEnum.viewAny_workspaceTeam,
+				];
+				break;
+
+			case ZaionsRoutes.AdminPanel.Setting.AccountSettings.ViewTeam:
+				__permissions = [
+					permissionsEnum.viewAny_workspace,
+					permissionsEnum.view_workspaceTeam,
+				];
 				break;
 		}
 

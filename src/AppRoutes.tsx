@@ -2,64 +2,85 @@
 import React, { lazy, Suspense } from 'react';
 
 // Packages Imports
-import { IonRouterOutlet } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
 import { Route } from 'react-router-dom';
 
+// Custom
+import ZaionsRoutes from './utils/constants/RoutesConstants';
+
 // Commented Routes
-import ZaionsReactArea from '@/Testing/ReactArea';
-import Zaions101 from '@/pages/Zaions/Zaions101';
-import ZaionsEnterpriseClass from '@/pages/Zaions/enterprise-class';
-import ZaionsIntegrationApi from '@/pages/Zaions/integration-api';
-import ZaionsLinkManagment from '@/pages/Products/link-management';
-import ZaionsQRCode from '@/pages/Products/qr-code';
-import ZaionsLinkInBio from '@/pages/Products/link-in-bio';
-import ZaionsPricing from '@/pages/Zaions/Pricing';
-import ZaionsSocialMedia from '@/pages/Solutions/ZaionsSocialMedia';
-import ZaionsDigitalMarketing from '@/pages/Solutions/ZaionsDigitalMarketing';
-import ZaionsForDevelopers from '@/pages/Solutions/ZaionsForDevelopers';
-import ZaionsCustomerService from '@/pages/Solutions/ZaionsCustomerService';
-import ZaionsBrandedLinks from '@/pages/Features/BrandedLinks';
-import ZaionsMobileLinks from '@/pages/Features/MobileLinks';
-import ZaionsCampaignManagementAnalytics from '@/pages/Features/CampaignManagementAnalytics';
-import ZaionsBlogs from '@/pages/Resources/Blog';
-import ZaionsResourceLibrary from '@/pages/Resources/ResourceLibrary';
-import ZaionsTrustCenter from '@/pages/Resources/TrustCenter';
-import ZaionsBrowserExtensions from '@/pages/Resources/BrowserExtensions';
-import ZaionsMobileApps from '@/pages/Resources/MobileApp';
-import ZaionsPrivacyPolicy from '@/pages/Legal/PrivacyPolicy';
-import ZaionsAcceptableUsePolicy from '@/pages/Legal/AcceptableUsePolicy';
-import ZaionsCodeOfConduct from '@/pages/Legal/CodeOfConduct';
-import ZaionsAbout from '@/pages/Company/AboutZaions';
-import ZaionsContact from '@/pages/Company/Contact';
-import ZaionsCareers from '@/pages/Company/Careers';
-import ZaionsPartners from '@/pages/Company/Partners';
-import ZaionsPress from '@/pages/Company/Press';
-import ZaionsReviews from '@/pages/Company/Reviews';
-import ZaionsDiscoverEnterprise from '@/pages/DiscoverEnterprise';
-import TestingReactTable from '@/Testing/ReactTable/index';
-import ZLinkInBio from '@/pages/AdminPanel/ZLinkInBio';
-import ZLinkCampaigns from '@/pages/AdminPanel/ZLCampaigns';
-import ZCustomLinks from '@/pages/AdminPanel/ZLCustomLinks';
-import ZLinks from '@/pages/AdminPanel/ZLinks';
-import ZProfile from '@/pages/AdminPanel/ZProfile';
-import ZCustomDomain from '@/pages/AdminPanel/ZCustomDomin';
-import ZGroups from '@/pages/AdminPanel/ZGroups';
-import ZCSVBulkShortening from '@/pages/AdminPanel/ZCSVBulk';
-import ZAccountDetails from '@/pages/AdminPanel/ZAccountDetails';
-import ZIntegration from '@/pages/AdminPanel/ZIntegration';
-import GoogleMapsCapacitorPackageTest from '@/Testing/GoogleMaps';
-import TestingTabs from '@/Testing/TestingTabs';
+const ZaionsReactArea = lazy(() => import('@/Testing/ReactArea'));
+const Zaions101 = lazy(() => import('@/pages/Zaions/Zaions101'));
+const ZaionsEnterpriseClass = lazy(
+	() => import('@/pages/Zaions/enterprise-class')
+);
+const ZaionsIntegrationApi = lazy(
+	() => import('@/pages/Zaions/integration-api')
+);
+const ZaionsLinkManagment = lazy(
+	() => import('@/pages/Products/link-management')
+);
+const ZaionsQRCode = lazy(() => import('@/pages/Products/qr-code'));
+const ZaionsLinkInBio = lazy(() => import('@/pages/Products/link-in-bio'));
+const ZaionsPricing = lazy(() => import('@/pages/Zaions/Pricing'));
+const ZaionsSocialMedia = lazy(
+	() => import('@/pages/Solutions/ZaionsSocialMedia')
+);
+const ZaionsDigitalMarketing = lazy(
+	() => import('@/pages/Solutions/ZaionsDigitalMarketing')
+);
+const ZaionsForDevelopers = lazy(
+	() => import('@/pages/Solutions/ZaionsForDevelopers')
+);
+const ZaionsCustomerService = lazy(
+	() => import('@/pages/Solutions/ZaionsCustomerService')
+);
+const ZaionsBrandedLinks = lazy(() => import('@/pages/Features/BrandedLinks'));
+const ZaionsMobileLinks = lazy(() => import('@/pages/Features/MobileLinks'));
+const ZaionsCampaignManagementAnalytics = lazy(
+	() => import('@/pages/Features/CampaignManagementAnalytics')
+);
+const ZaionsBlogs = lazy(() => import('@/pages/Resources/Blog'));
+const ZaionsResourceLibrary = lazy(
+	() => import('@/pages/Resources/ResourceLibrary')
+);
+const ZaionsTrustCenter = lazy(() => import('@/pages/Resources/TrustCenter'));
+const ZaionsBrowserExtensions = lazy(
+	() => import('@/pages/Resources/BrowserExtensions')
+);
+const ZaionsMobileApps = lazy(() => import('@/pages/Resources/MobileApp'));
+const ZaionsPrivacyPolicy = lazy(() => import('@/pages/Legal/PrivacyPolicy'));
+const ZaionsAcceptableUsePolicy = lazy(
+	() => import('@/pages/Legal/AcceptableUsePolicy')
+);
+const ZaionsCodeOfConduct = lazy(() => import('@/pages/Legal/CodeOfConduct'));
+const ZaionsAbout = lazy(() => import('@/pages/Company/AboutZaions'));
+const ZaionsContact = lazy(() => import('@/pages/Company/Contact'));
+const ZaionsCareers = lazy(() => import('@/pages/Company/Careers'));
+const ZaionsPartners = lazy(() => import('@/pages/Company/Partners'));
+const ZaionsPress = lazy(() => import('@/pages/Company/Press'));
+const ZaionsReviews = lazy(() => import('@/pages/Company/Reviews'));
+const ZaionsDiscoverEnterprise = lazy(
+	() => import('@/pages/DiscoverEnterprise')
+);
+const TestingReactTable = lazy(() => import('@/Testing/ReactTable/index'));
+const ZLinkInBio = lazy(() => import('@/pages/AdminPanel/ZLinkInBio'));
+const ZLinkCampaigns = lazy(() => import('@/pages/AdminPanel/ZLCampaigns'));
+const ZCustomLinks = lazy(() => import('@/pages/AdminPanel/ZLCustomLinks'));
+const ZLinks = lazy(() => import('@/pages/AdminPanel/ZLinks'));
+const ZProfile = lazy(() => import('@/pages/AdminPanel/ZProfile'));
+const ZCustomDomain = lazy(() => import('@/pages/AdminPanel/ZCustomDomin'));
+const ZGroups = lazy(() => import('@/pages/AdminPanel/ZGroups'));
+const ZCSVBulkShortening = lazy(() => import('@/pages/AdminPanel/ZCSVBulk'));
+const ZAccountDetails = lazy(
+	() => import('@/pages/AdminPanel/ZAccountDetails')
+);
+const ZIntegration = lazy(() => import('@/pages/AdminPanel/ZIntegration'));
+const GoogleMapsCapacitorPackageTest = lazy(
+	() => import('@/Testing/GoogleMaps')
+);
+const TestingTabs = lazy(() => import('@/Testing/TestingTabs'));
 
 // Routes
-// import Home from '@/pages/Home';
-// import Login from '@/pages/Login';
-// import SignUp from '@/pages/SignUp';
-// import ZWorkspaceListPage from '@/pages/AdminPanel/Workspaces';
-import ViewSingleWorkspace from '@/pages/AdminPanel/Workspaces/ViewSingle';
-import ZWorkspaceForm from '@/pages/AdminPanel/Workspaces/Form';
-// import ZShortLinksListPage from '@/pages/AdminPanel/links';
-// import AdminCreateNewLinkPages from '@/pages/AdminPanel/links/CreateNewLinks';
 
 //
 const Home = lazy(() => import('@/pages/Home'));
@@ -70,10 +91,10 @@ const SignUp = lazy(() => import('@/pages/SignUp'));
 
 //
 const ZWorkspaceListPage = lazy(() => import('@/pages/AdminPanel/Workspaces'));
-// const ViewSingleWorkspace = lazy(
-// 	() => import('@/pages/AdminPanel/Workspaces/ViewSingle')
-// );
-// const ZWorkspaceForm = lazy(() => import('@/pages/AdminPanel/Workspaces/Form'));
+const ViewSingleWorkspace = lazy(
+	() => import('@/pages/AdminPanel/Workspaces/ViewSingle')
+);
+const ZWorkspaceForm = lazy(() => import('@/pages/AdminPanel/Workspaces/Form'));
 
 //
 const ZShortLinksListPage = lazy(() => import('@/pages/AdminPanel/links'));
@@ -81,23 +102,39 @@ const AdminCreateNewLinkPages = lazy(
 	() => import('@/pages/AdminPanel/links/CreateNewLinks')
 );
 
-import ZaionsTermsOfService from '@/pages/Legal/TermsOfService';
-import ZaionsRoutes from './utils/constants/RoutesConstants';
-import ZDashboard from '@/pages/AdminPanel/ZDashboard';
-import ZaionsPasswordResetConfirm from '@/pages/ResetPassword/PasswordResetConfirmForm';
-import ZaionsAdminPanelSettings from '@/pages/AdminPanel/settings';
-import ZLinkInBioLinksSection from '@/pages/AdminPanel/ZLinkInBio/parts/links';
-import ZLinkInBiosListPage from '@/pages/AdminPanel/LinkInBio';
-import ZaionsLinkInBioForm from '@/pages/AdminPanel/LinkInBio/LinkInBioForm';
-import TestingIonComponents from './Testing/TestingIonComponents/index';
-import PublicRoute from './components/PublicRoute';
-import PrivateRoute from './components/PrivateRoute';
-import ZAppStartupPage from './pages/AdminPanel/StartUpPage';
-import ChartsExamples from './Testing/Charts';
-import ZFallbackIonSpinner from './components/CustomComponents/FallbackSpinner';
-import ZShortLinkRedirectPage from './pages/ShortLinkRedirectPage';
-import ZaionsTestPage from './pages/TestPage';
-import ZUserAccountSettings from './pages/AdminPanel/UserAccount';
+const ZaionsTermsOfService = lazy(() => import('@/pages/Legal/TermsOfService'));
+const ZDashboard = lazy(() => import('@/pages/AdminPanel/ZDashboard'));
+const ZaionsPasswordResetConfirm = lazy(
+	() => import('@/pages/ResetPassword/PasswordResetConfirmForm')
+);
+const ZaionsAdminPanelSettings = lazy(
+	() => import('@/pages/AdminPanel/settings')
+);
+const ZLinkInBioLinksSection = lazy(
+	() => import('@/pages/AdminPanel/ZLinkInBio/parts/links')
+);
+const ZLinkInBiosListPage = lazy(() => import('@/pages/AdminPanel/LinkInBio'));
+const ZaionsLinkInBioForm = lazy(
+	() => import('@/pages/AdminPanel/LinkInBio/LinkInBioForm')
+);
+const TestingIonComponents = lazy(
+	() => import('./Testing/TestingIonComponents/index')
+);
+const PublicRoute = lazy(() => import('./components/PublicRoute'));
+const PrivateRoute = lazy(() => import('./components/PrivateRoute'));
+const ZAppStartupPage = lazy(() => import('./pages/AdminPanel/StartUpPage'));
+const ChartsExamples = lazy(() => import('./Testing/Charts'));
+const ZFallbackIonSpinner = lazy(
+	() => import('./components/CustomComponents/FallbackSpinner')
+);
+const ZShortLinkRedirectPage = lazy(
+	() => import('./pages/ShortLinkRedirectPage')
+);
+const ZaionsTestPage = lazy(() => import('./pages/TestPage'));
+const ZWorkspaceSettings = lazy(() => import('./pages/AdminPanel/WSSettings'));
+const ZWSSettingsTeamViewPage = lazy(
+	() => import('./pages/AdminPanel/WSSettings/Team/View')
+);
 
 // Functional Component
 const AppRoutes: React.FC = () => {
@@ -199,7 +236,13 @@ const AppRoutes: React.FC = () => {
 
 			<PrivateRoute
 				path={ZaionsRoutes.AdminPanel.Setting.AccountSettings.Main}
-				Component={ZUserAccountSettings}
+				Component={ZWorkspaceSettings}
+			/>
+
+			<PrivateRoute
+				exact
+				path={ZaionsRoutes.AdminPanel.Setting.AccountSettings.ViewTeam}
+				Component={ZWSSettingsTeamViewPage}
 			/>
 
 			{/* should not add exact  */}

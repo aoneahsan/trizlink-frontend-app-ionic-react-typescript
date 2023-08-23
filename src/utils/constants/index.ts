@@ -164,7 +164,7 @@ export const API_URLS = {
 	workspace_create_list: '/user/workspaces',
 	workspace_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}`,
 	workspace_team_create_list: `/user/workspace/${RouteParams.workspace.workspaceId}/teams`,
-	workspace_team_update_delete: `/user/workspace/team/${RouteParams.workspace.teamId}`,
+	workspace_team_update_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}`,
 
 	// Time slot
 	time_slot_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/time-slot`,
@@ -1066,10 +1066,42 @@ const testingSelectors = {
 		teamListPage: {
 			// wss-tlp-t -> workspace-setting-team-list-page-table
 			createTeamBtn: 'wss-tlp-create-team-btn',
-
+			timeFilterBtn: 'wss-tlp-time-filter-btn',
+			tagsFilterBtn: 'wss-tlp-tags-filter-btn',
+			refetchBtn: 'wss-tlp-refetch-btn',
+			teamsCount: 'wss-tlp-teams-counts',
 			table: {
 				description: 'wss-tlp-t-description-rm', // rm -> read more
+				actionPopoverBtn: 'wss-tlp-t-ap-btn',
+				editBtn: 'wss-tlp-t-edit-btn',
+				deleteBtn: 'wss-tlp-t-delete-btn',
+				previousButton: 'wss-tlp-t-previous-page-btn',
+				getFirstPageButton: 'wss-tlp-t-first-page-btn',
+				nextButton: 'wss-tlp-t-next-page-btn',
+				getLastPageButton: 'wss-tlp-t-last-page-btn',
+				pageSizeInput: 'wss-tlp-t-page-size-input',
 			},
+		},
+
+		teamViewPage: {
+			titleText: 'wss-tvp-title-text',
+			descriptionText: 'wss-tvp-description-text',
+			unableEditModeBtn: 'wss-tvp-unable-edit-mode-btn',
+
+			// wss-tvp-f -> workspace-setting-team-view-page-form
+			form: {
+				submitFormBtn: 'wss-tvp-f-submit-form-btn',
+				closeButton: 'wss-tvp-f-close-btn',
+				titleInput: 'wss-tvp-f-title-input',
+				descriptionTextarea: 'wss-tvp-f-description-textarea',
+			},
+		},
+
+		createModal: {
+			submitFormBtn: 'wcm-submit-form-btn',
+			closeButton: 'wcm-close-btn',
+			titleInput: 'wcm-title-input',
+			descriptionTextarea: 'wcm-description-textarea',
 		},
 	},
 	// #endregion
@@ -1221,7 +1253,8 @@ const REACT_QUERY = {
 		WORKSPACE: {
 			MAIN: 'rq-workspace-list-key',
 			GET: 'rq-workspace-get-key',
-			TEAM: 'rq-workspace-team-get-key',
+			TEAM: 'rq-workspace-team-list-key',
+			TEAM_GET: 'rq-workspace-team-get-key',
 		},
 		FOLDER: {
 			MAIN: 'rq-folders-list-key',

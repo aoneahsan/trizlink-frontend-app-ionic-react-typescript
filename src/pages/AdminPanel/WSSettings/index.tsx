@@ -9,7 +9,7 @@ import React, { lazy, Suspense } from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import { RefresherEventDetail } from '@ionic/react';
-import { useParams } from 'react-router';
+import { useParams, useRouteMatch } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import classNames from 'classnames';
 
@@ -18,19 +18,15 @@ import classNames from 'classnames';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonButton,
 	ZIonCol,
 	ZIonContent,
 	ZIonGrid,
-	ZIonItem,
-	ZIonList,
 	ZIonRefresher,
 	ZIonRefresherContent,
 	ZIonRow,
-	ZIonText,
-	ZIonTitle,
 } from '@/components/ZIonComponents';
 import ZIonPage from '@/components/ZIonPage';
+import ZWSTeamCreateModal from '@/components/InPageComponents/ZaionsModals/Workspace/Team/CreateModal';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 import ZCan from '@/components/Can';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
@@ -43,19 +39,15 @@ const ZAdminPanelTopBar = lazy(
 const ZWSSettingsMenu = lazy(
 	() => import('@/components/AdminPanelComponents/Sidebar/WSSettingsMenu')
 );
-
-const ZWSSettingTeamListTable = lazy(
-	() =>
-		import(
-			'@/components/InPageComponents/ZaionsTable/Workspace/Settings/TeamListTable'
-		)
-);
+const ZWSSettingTeamsListPage = lazy(() => import('./Team'));
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -63,20 +55,25 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * */
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import { reportCustomError } from '@/utils/customErrorType';
+import CONSTANTS from '@/utils/constants';
+import { API_URL_ENUM } from '@/utils/enums';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { AdminPanelSidebarMenuPageEnum } from '@/types/AdminPanel/index.type';
-import { WSSettingsPageSectTab } from '@/types/AdminPanel/workspace';
+import {
+	workspaceTeamInterface,
+	WSSettingsPageSectTab,
+} from '@/types/AdminPanel/workspace';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
-import CONSTANTS from '@/utils/constants';
 
 /**
  * Style files Imports go down
@@ -98,14 +95,13 @@ import CONSTANTS from '@/utils/constants';
  * About: (User settings page)
  * @type {*}
  * */
-const ZUserAccountSettings: React.FC = () => {
+const ZWorkspaceSettings: React.FC = () => {
 	// getting current workspace id form params.
-	const { workspaceId, tab } = useParams<{
+	const { workspaceId } = useParams<{
 		workspaceId: string;
-		tab: WSSettingsPageSectTab;
 	}>();
 	// #region Custom hooks.
-	const { isSmScale } = useZMediaQueryScale();
+	const { isSmScale, isXlScale, isLgScale, isMdScale } = useZMediaQueryScale();
 	// #endregion
 
 	// #region Recoils.
@@ -113,17 +109,32 @@ const ZUserAccountSettings: React.FC = () => {
 	const ZDashboardState = useRecoilValue(ZDashboardRState);
 	// #endregion
 
-	// #region APIS requests.
+	// #region APIS
+	// Request for getting teams data.
+	const { data: WSTeamsData, refetch: refetchWSTeamsData } = useZRQGetRequest<
+		workspaceTeamInterface[]
+	>({
+		_url: API_URL_ENUM.workspace_team_create_list,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM, workspaceId],
+		_itemsIds: [workspaceId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+	});
 
 	// #endregion
 
 	// #region Popovers & Modals.
-
+	const { presentZIonModal: presentZWSTeamCreateModal } = useZIonModal(
+		ZWSTeamCreateModal,
+		{
+			workspaceId: workspaceId,
+		}
+	);
 	// #endregion
 
 	// #region Functions.
 	const invalidedQueries = async () => {
 		try {
+			await refetchWSTeamsData();
 		} catch (error) {
 			reportCustomError(error);
 		}
@@ -140,6 +151,24 @@ const ZUserAccountSettings: React.FC = () => {
 
 	// #endregion
 
+	// #region checking the route.
+	const isTeamPage = useRouteMatch(
+		ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team
+	)?.isExact;
+
+	const isReferralProgramPage = useRouteMatch(
+		ZaionsRoutes.AdminPanel.Setting.AccountSettings.ReferralProgram
+	)?.isExact;
+
+	const isBillingPage = useRouteMatch(
+		ZaionsRoutes.AdminPanel.Setting.AccountSettings.Billing
+	)?.isExact;
+
+	const isUserPage = useRouteMatch(
+		ZaionsRoutes.AdminPanel.Setting.AccountSettings.User
+	)?.isExact;
+	// #endregion
+
 	return (
 		<ZIonPage>
 			<ZCan
@@ -147,7 +176,7 @@ const ZUserAccountSettings: React.FC = () => {
 				returnPermissionDeniedView={true}
 			>
 				{/* Content */}
-				<ZIonContent color='light'>
+				<ZIonContent>
 					{/* IonRefresher */}
 					<ZIonRefresher onIonRefresh={(event) => void handleRefresh(event)}>
 						<ZIonRefresherContent />
@@ -157,7 +186,7 @@ const ZUserAccountSettings: React.FC = () => {
 					<ZIonGrid
 						className={classNames({
 							'h-screen ion-no-padding': true,
-							'max-w-[200rem] mx-auto': true,
+							'max-w-[200rem] mx-auto': false,
 						})}
 					>
 						{/* Row-1 */}
@@ -234,50 +263,15 @@ const ZUserAccountSettings: React.FC = () => {
 												scrollY={true}
 											>
 												<div className='flex flex-col gap-8 ion-no-margin ion-no-padding'>
-													<ZIonRow className='border rounded-lg zaions__bg_white ion-align-items-center ion-padding'>
-														<ZIonCol>
-															<ZIonTitle className='block text-2xl font-bold ion-no-padding'>
-																Account
-															</ZIonTitle>
-
-															<ZIonText className='block mt-2'>
-																Add team members & manage your team
-															</ZIonText>
-														</ZIonCol>
-
-														<ZIonCol className='ion-text-end'>
-															<ZIonButton
-																color='primary'
-																fill='solid'
-																className='my-2'
-																height='39px'
-																expand={!isSmScale ? 'block' : undefined}
-																testingSelector={
-																	CONSTANTS.testingSelectors.WSSettings
-																		.teamListPage.createTeamBtn
-																}
-															>
-																Create new team
-															</ZIonButton>
-														</ZIonCol>
-													</ZIonRow>
-
-													{/* Shortlink Table */}
-													<ZCan
-														havePermissions={[
-															permissionsEnum.view_workspaceTeam,
-														]}
+													<Suspense
+														fallback={
+															<ZIonCol className='h-full w-full'>
+																<ZFallbackIonSpinner2 />
+															</ZIonCol>
+														}
 													>
-														<Suspense
-															fallback={
-																<ZIonRow className='h-full'>
-																	<ZFallbackIonSpinner2 />
-																</ZIonRow>
-															}
-														>
-															<ZWSSettingTeamListTable />
-														</Suspense>
-													</ZCan>
+														{isTeamPage ? <ZWSSettingTeamsListPage /> : ''}
+													</Suspense>
 												</div>
 											</ZCustomScrollable>
 										</ZIonCol>
@@ -292,4 +286,4 @@ const ZUserAccountSettings: React.FC = () => {
 	);
 };
 
-export default ZUserAccountSettings;
+export default ZWorkspaceSettings;

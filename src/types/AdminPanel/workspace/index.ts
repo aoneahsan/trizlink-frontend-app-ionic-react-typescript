@@ -115,6 +115,17 @@ export enum ZWSTeamListPageTableColumnsIds {
 	actions = '__z_short_link_actions__',
 }
 
+export enum ZWSMemberListPageTableColumnsIds {
+	id = '__z_short_link_id__',
+	username = '__z_short_link_username__',
+	email = '__z_short_link_email__',
+	invitedAt = '__z_short_link_invitedAt__',
+	role = '__z_short_link_role__',
+	isActive = '__z_short_link_isActive__',
+	date = '__z_short_link_date__',
+	actions = '__z_short_link_actions__',
+}
+
 // Sect means section
 export enum WSSettingsPageSect {
 	accountSetting = 'accountSetting', // Account settings
@@ -140,6 +151,17 @@ export interface workspaceTeamInterface {
 	id?: string;
 	title: string;
 	description: string;
+	isActive: boolean;
+	createdAt?: string;
+	updatedAt?: string;
+}
+
+export interface workspaceMembersInterface {
+	id?: string;
+	username: string;
+	email: string;
+	invitedAt: string;
+	role: string;
 	isActive: boolean;
 	createdAt?: string;
 	updatedAt?: string;

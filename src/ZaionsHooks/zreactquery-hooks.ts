@@ -411,8 +411,7 @@ export const useZRQUpdateRequest = <T>({
 export const useZRQDeleteRequest = <T>(
 	_url: API_URL_ENUM,
 	_queriesKeysToInvalidate?: string[],
-	authenticated?: boolean,
-	_permissions?: permissionsEnum[]
+	authenticated?: boolean
 ) => {
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
@@ -432,19 +431,6 @@ export const useZRQDeleteRequest = <T>(
 			itemIds: string[];
 			urlDynamicParts: string[];
 		}): Promise<T | undefined> => {
-			if (_permissions && _permissions?.length > 0) {
-				const userPermissions =
-					currentLoggedInUserRoleAndPermissionsStateAtom?.permissions;
-				// const haveRequiredPermission = userPermissions?.includes(havePermission);
-				const haveRequiredPermission = _permissions.every((el) =>
-					userPermissions?.includes(el)
-				);
-
-				if (haveRequiredPermission === false) {
-					return undefined;
-				}
-			}
-
 			// Present ion loading before api start
 			await presentZIonLoader(MESSAGES.GENERAL.API_REQUEST.DELETING);
 
