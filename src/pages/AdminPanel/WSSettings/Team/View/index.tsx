@@ -13,6 +13,7 @@ import { RefresherEventDetail } from '@ionic/react';
 import classNames from 'classnames';
 import { useRecoilValue } from 'recoil';
 import {
+	addOutline,
 	calendar,
 	createOutline,
 	pricetagOutline,
@@ -86,7 +87,10 @@ import { reportCustomError, ZCustomError } from '@/utils/customErrorType';
  * */
 import { AdminPanelSidebarMenuPageEnum } from '@/types/AdminPanel/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { workspaceTeamInterface } from '@/types/AdminPanel/workspace';
+import {
+	WorkspaceSharingTabEnum,
+	workspaceTeamInterface,
+} from '@/types/AdminPanel/workspace';
 
 /**
  * Recoil State Imports go down
@@ -103,6 +107,9 @@ import {
 import { FormikSetErrorsType } from '@/types/ZaionsFormik.type';
 import { AxiosError } from 'axios';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { WSRolesInterfaces } from '@/types/UserAccount/index.type';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
+import ZWorkspacesSharingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SharingModal';
 
 /**
  * Style files Imports go down
@@ -138,7 +145,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 	const { getRQCDataHandler } = useZGetRQCacheData();
 	// #endregion
 
-	// #region APIS
+	// #region APIS.
 	// Request for getting teams data.
 	const {
 		data: WSTeamsData,
@@ -170,6 +177,18 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 		_extractType: ZRQGetRequestExtractEnum.extractItem,
 	});
 
+	const {
+		data: wsRolesData,
+		refetch: refetchWSRolesData,
+		isFetching: isWSRolesDataFetching,
+	} = useZRQGetRequest<WSRolesInterfaces>({
+		_url: API_URL_ENUM.ws_roles_get,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.WS_ROLES, workspaceId],
+		_urlDynamicParts: [],
+		_itemsIds: [],
+		_extractType: ZRQGetRequestExtractEnum.extractItem,
+	});
+
 	// Update team API.
 	const { mutateAsync: updateWSTeamMutate } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.workspace_team_update_delete,
@@ -182,6 +201,15 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 	// #region Recoils.
 	// Recoil state that control the dashboard.
 	const ZDashboardState = useRecoilValue(ZDashboardRState);
+	// #endregion
+
+	// #region Modals & popovers.
+	const { presentZIonModal: presentWorkspaceSharingModal } = useZIonModal(
+		ZWorkspacesSharingModal,
+		{
+			Tab: WorkspaceSharingTabEnum.invite,
+		}
+	);
 	// #endregion
 
 	// #region Functions.
@@ -391,10 +419,10 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 														})}
 
 													{isZFetching &&
-														[...Array(3)].map((el) => {
+														[...Array(3)].map((el, index) => {
 															return (
 																<ZIonItem
-																	key={el}
+																	key={index}
 																	minHeight='2rem'
 																	className='w-full cursor-pointer ion-no-padding ion-activatable'
 																>
@@ -551,15 +579,34 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																			)}
 																		</div>
 																		<div className=''>
-																			<ZIonText
-																				className='block mt-2'
-																				testingSelector={
-																					CONSTANTS.testingSelectors.WSSettings
-																						.teamViewPage.descriptionText
-																				}
-																			>
-																				{currentWSTeamData?.description}
-																			</ZIonText>
+																			{!isZFetching && (
+																				<ZIonText
+																					className='block mt-2'
+																					testingSelector={
+																						CONSTANTS.testingSelectors
+																							.WSSettings.teamViewPage
+																							.descriptionText
+																					}
+																				>
+																					{currentWSTeamData?.description}
+																				</ZIonText>
+																			)}
+
+																			{isZFetching && (
+																				<ZIonText
+																					className='block mt-2'
+																					testingSelector={
+																						CONSTANTS.testingSelectors
+																							.WSSettings.teamViewPage
+																							.descriptionText
+																					}
+																				>
+																					<ZIonSkeletonText
+																						width='100%'
+																						height='3rem'
+																					/>
+																				</ZIonText>
+																			)}
 																		</div>
 																	</ZIonCol>
 																</ZIonRow>
@@ -676,15 +723,25 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																<ZIonRow className='mt-1 border rounded-lg zaions__light_bg ion-align-items-center ion-padding'>
 																	<ZIonCol className='flex ps-1 ion-align-items-center'>
 																		<ZIonText className='text-2xl'>
-																			<ZIonText
-																				className='font-bold total_links pe-1'
-																				testingSelector={
-																					CONSTANTS.testingSelectors.WSSettings
-																						.teamListPage.teamsCount
-																				}
-																			>
-																				{/* {WSTeamsData?.length || 0} */} 0
-																			</ZIonText>
+																			{!isZFetching && (
+																				<ZIonText
+																					className='font-bold total_links pe-1'
+																					testingSelector={
+																						CONSTANTS.testingSelectors
+																							.WSSettings.teamListPage
+																							.teamsCount
+																					}
+																				>
+																					{/* {WSTeamsData?.length || 0} */} 0
+																				</ZIonText>
+																			)}
+																			{isZFetching && (
+																				<ZIonSkeletonText
+																					width='1rem'
+																					height='.9rem'
+																					className='inline-block pb-1 me-1'
+																				/>
+																			)}
 																			Members
 																		</ZIonText>
 																	</ZIonCol>
@@ -782,6 +839,34 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																						icon={refresh}
 																					/>
 																					Refetch
+																				</ZIonButton>
+
+																				{/* Refetch data button */}
+																				<ZIonButton
+																					color='primary'
+																					fill='solid'
+																					expand={
+																						!isMdScale ? 'block' : undefined
+																					}
+																					className='my-2 normal-case'
+																					height='39px'
+																					onClick={() => {
+																						presentWorkspaceSharingModal({
+																							_cssClass:
+																								'workspace-sharing-modal-size',
+																						});
+																					}}
+																					testingSelector={
+																						CONSTANTS.testingSelectors
+																							.WSSettings.teamListPage
+																							.addMemberBtn
+																					}
+																				>
+																					<ZIonIcon
+																						slot='start'
+																						icon={addOutline}
+																					/>
+																					Add Member
 																				</ZIonButton>
 																			</ZIonButtons>
 																		</ZIonRow>

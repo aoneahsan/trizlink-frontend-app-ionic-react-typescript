@@ -1,10 +1,34 @@
 // Enums
+export enum WSRolesNameEnum {
+	Administrator = 'Administrator',
+	Manager = 'Manager',
+	Contributor = 'Contributor',
+	Writer = 'Writer',
+	Approver = 'Approver',
+	Commenter = 'Commenter',
+	Guest = 'Guest',
+}
+
+export enum WSRoleType {
+	mainAppRole = 'mainAppRole',
+	inAppWSRole = 'inAppWSRole',
+}
 
 // Interfaces
 export interface UserRoleAndPermissionsInterface {
 	role: string;
 	permissions: string[];
 	fetched?: boolean;
+}
+
+export interface WSRolesInterfaces {
+	WSRoles: {
+		id: 4;
+		name: WSRolesNameEnum;
+		roleType: WSRoleType;
+		created_at: string;
+		updated_at: string;
+	}[];
 }
 
 // Type

@@ -356,7 +356,7 @@ const ZMembersListTable: React.FC = () => {
 								/>
 							</ZIonTitle>
 							<ZIonTitle color='medium'>
-								No members founds. please create a member.
+								No members founds. please invite a member.
 							</ZIonTitle>
 						</ZIonCol>
 					)}

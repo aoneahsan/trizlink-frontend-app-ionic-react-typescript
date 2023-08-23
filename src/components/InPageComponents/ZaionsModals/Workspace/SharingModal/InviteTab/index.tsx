@@ -72,6 +72,7 @@ import { ProductLogo } from '@/assets/images';
 import { Formik } from 'formik';
 import ZInviteClientsPermissionPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/InviteClientPermissionPopover';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 /**
  * Component props type go down
@@ -112,7 +113,7 @@ const ZInviteTab: React.FC = () => {
 						>
 							{/* Avatar */}
 							<ZIonCol size='max-content'>
-								<ZIonAvatar className='w-[30px] h-[30px] mt-1'>
+								<ZIonAvatar className='w-[2.3rem] h-[2.3rem] mt-1'>
 									<ZIonImg src={ProductLogo} />
 								</ZIonAvatar>
 							</ZIonCol>
@@ -134,6 +135,7 @@ const ZInviteTab: React.FC = () => {
 											// errorText={errors.pageName}
 											placeholder='Type or search email'
 											type='email'
+											minHeight='2.3rem'
 											// onIonChange={handleChange}
 											// onIonBlur={handleBlur}
 											// value={values.pageName}
@@ -141,14 +143,10 @@ const ZInviteTab: React.FC = () => {
 											// 	'ion-touched ion-invalid': touched.pageName && errors.pageName,
 											// 	'ion-touched ion-valid': touched.pageName && !errors.pageName,
 											// })}
-											className=''
-											style={{
-												minHeight: '30px',
-											}}
 										/>
 									</ZIonCol>
 
-									<ZIonCol
+									{/* <ZIonCol
 										sizeXl='6'
 										size='6'
 										sizeMd='12'
@@ -175,10 +173,8 @@ const ZInviteTab: React.FC = () => {
 												'--padding-end': '7px',
 											}}
 										/>
-									</ZIonCol>
-								</ZIonRow>
+									</ZIonCol> */}
 
-								<ZIonRow className='mt-4 pt-2'>
 									<ZIonCol
 										sizeXl='6'
 										size='6'
@@ -189,14 +185,14 @@ const ZInviteTab: React.FC = () => {
 										<ZIonButton
 											fill='outline'
 											id='role-popover-index'
+											size='small'
+											color='medium'
+											height='2.3rem'
 											className={classNames({
 												'm-0 flex h-full normal-case ion-align-items-start':
 													true,
 											})}
-											size='small'
-											color='medium'
 											style={{
-												minHeight: '30px',
 												'--border-width': '1px',
 											}}
 										>
@@ -232,61 +228,9 @@ const ZInviteTab: React.FC = () => {
 											selectedRole={values.role}
 										/>
 									</ZIonPopover>
-
-									<ZIonCol
-										sizeXl='6'
-										size='6'
-										sizeMd='12'
-										sizeSm='12'
-										sizeXs='12'
-									>
-										<ZIonButton
-											fill='outline'
-											id='permission-popover-index'
-											className='m-0 flex h-full normal-case'
-											size='small'
-											color='medium'
-											style={{
-												minHeight: '30px',
-												'--border-width': '1px',
-											}}
-										>
-											<ZIonText className='flex me-auto'>Role</ZIonText>
-											<ZIonIcon
-												icon={chevronDownOutline}
-												className='flex ms-auto'
-											/>
-										</ZIonButton>
-									</ZIonCol>
-									{/* Permission popover */}
-									<ZIonPopover
-										trigger='permission-popover-index'
-										triggerAction='click'
-										showBackdrop={false}
-										backdropDismiss
-										className='workspace_form_permission_popover_size'
-										side='bottom'
-									>
-										<ZInviteClientsPermissionPopover
-											dismissZIonPopover={(permission) => {
-												setFieldValue(
-													'permission',
-													workspaceFormPermissionEnum[
-														permission as workspaceFormPermissionEnum
-													] !== undefined
-														? workspaceFormPermissionEnum[
-																permission as workspaceFormPermissionEnum
-														  ]
-														: values.permission,
-													false
-												);
-											}}
-											selectedPermission={values.permission}
-										/>
-									</ZIonPopover>
 								</ZIonRow>
 
-								<ZIonRow className='mt-4 pt-2'>
+								<ZIonRow className='pt-2'>
 									<ZIonCol
 										sizeXl='6'
 										size='6'
@@ -295,16 +239,16 @@ const ZInviteTab: React.FC = () => {
 										sizeXs='12'
 									>
 										<ZIonButton
+											size='small'
+											color='primary'
 											fill='solid'
 											id='role-popover-index'
+											height='2.3rem'
 											className={classNames({
 												'm-0 flex h-full normal-case ion-align-items-start':
 													true,
 											})}
-											size='small'
-											color='primary'
 											style={{
-												minHeight: '30px',
 												'--border-width': '1px',
 											}}
 										>
@@ -323,14 +267,14 @@ const ZInviteTab: React.FC = () => {
 										<ZIonButton
 											fill='outline'
 											id='role-popover-index'
+											size='small'
+											color='medium'
+											height='2.3rem'
 											className={classNames({
 												'm-0 flex h-full normal-case ion-align-items-start':
 													true,
 											})}
-											size='small'
-											color='medium'
 											style={{
-												minHeight: '30px',
 												'--border-width': '1px',
 											}}
 										>
@@ -352,7 +296,7 @@ const ZInviteTab: React.FC = () => {
 							{/*  */}
 							<ZIonCol
 								size='12'
-								className='flex ion-align-items-center ion-justify-content-center mt-2'
+								className='flex mt-2 ion-align-items-center ion-justify-content-center'
 							>
 								<ZIonText className='me-2'>Invite links</ZIonText>
 								<ZIonIcon
@@ -364,13 +308,8 @@ const ZInviteTab: React.FC = () => {
 							<ZIonCol size='max-content'>
 								<ZIonButton
 									size='small'
-									className='border-radius__50per m-0 mb-1'
-									style={{
-										'--padding-bottom': '16px',
-										'--padding-top': '16px',
-										'--padding-start': '6px',
-										'--padding-end': '6px',
-									}}
+									height='2.3rem'
+									className='m-0 w-[2.3rem] overflow-hidden rounded-full ion-no-padding'
 								>
 									<ZIonIcon icon={linkOutline} className='w-6 h-6' />
 								</ZIonButton>
@@ -385,29 +324,41 @@ const ZInviteTab: React.FC = () => {
 									})}
 								>
 									<ZIonCol
-										className={classNames({
-											'border rounded-l h-full px-2 ': true,
-											'flex ion-align-items-center': isLgScale,
-										})}
-										sizeXl='10.5'
-										sizeLg='10.5'
+										sizeXl='12'
+										sizeLg='12'
 										sizeMd='12'
 										sizeSm='12'
 										sizeXs='12'
+										className={classNames({
+											'border rounded-l h-full ps-2 pe-0': true,
+											'flex ion-align-items-center': isLgScale,
+										})}
 									>
-										<ZIonText className='text-sm pt-1'>
+										<ZIonText className='pt-1 text-sm'>
 											http://plnbl.io/ws/Yxugg59eLfj5
 										</ZIonText>
 
-										<div className='ms-auto flex ion-align-items-center gap-2'>
+										<div className='flex gap-2 ms-auto ion-align-items-center'>
 											<ZIonBadge className='text-sm' color='medium'>
 												Contributor
 											</ZIonBadge>
-											<ZIonBadge className='text-sm'>Team</ZIonBadge>
+											{/* <ZIonBadge className='text-sm'>Team</ZIonBadge> */}
 										</div>
+
+										<ZIonButton
+											fill='clear'
+											expand='full'
+											height='100%'
+											id='wss-tsm-delete-invite-link-tt'
+											className='shadow-none ion-no-margin zaions__danger_bg ms-2'
+										>
+											<ZIonIcon color='light' icon={closeOutline} />
+										</ZIonButton>
+										{/* wss-tsm -> workspace-settings-team-settings-modal */}
+										<ZRTooltip anchorSelect='#wss-tsm-delete-invite-link-tt' />
 									</ZIonCol>
 
-									<ZIonCol
+									{/* <ZIonCol
 										className={classNames({
 											'border rounded-r h-full p-0 overflow-hidden': true,
 											'mt-2': !isLgScale,
@@ -420,7 +371,7 @@ const ZInviteTab: React.FC = () => {
 												<ZIonIcon icon={closeOutline} />
 											)}
 										</ZIonButton>
-									</ZIonCol>
+									</ZIonCol> */}
 								</ZIonRow>
 							</ZIonCol>
 						</ZIonRow>

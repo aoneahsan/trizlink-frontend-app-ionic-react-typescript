@@ -100,6 +100,7 @@ export const API_URLS = {
 	getUserRolePermission: '/user/role/permissions',
 	csrf: '/sanctum/csrf-cookie',
 	delete: '/user/delete',
+	ws_roles_get: '/user/ws-roles',
 	userPixelAccounts_create_list: '/user/pixel',
 	userAccountUtmTags_create_list: '/user/utm-tag',
 	ShortLink_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/shortLink/folders`,
@@ -1069,6 +1070,7 @@ const testingSelectors = {
 			timeFilterBtn: 'wss-tlp-time-filter-btn',
 			tagsFilterBtn: 'wss-tlp-tags-filter-btn',
 			refetchBtn: 'wss-tlp-refetch-btn',
+			addMemberBtn: 'wss-tlp-add-member-btn',
 			teamsCount: 'wss-tlp-teams-counts',
 			table: {
 				description: 'wss-tlp-t-description-rm', // rm -> read more
@@ -1302,6 +1304,7 @@ const REACT_QUERY = {
 
 		USER: {
 			ROLE_PERMISSIONS: 'rq-user-roles-and-permissions',
+			WS_ROLES: 'rq-user-ws-roles',
 			SETTING: {
 				MAIN: 'rq-user-setting-key',
 				GET: 're-user-setting-get',

@@ -48,6 +48,7 @@ export enum API_URL_ENUM {
 	userAccountUtmTags_create_list = 'userAccountUtmTags_create_list',
 	userAccountUtmTags_update_delete = 'userAccountUtmTags_update_delete',
 	LinkInBio_folders_create_list = 'LinkInBio_folders_create_list',
+	ws_roles_get = 'ws_roles_get',
 	userAccountFolders_update_delete = 'userAccountFolders_update_delete',
 	userAccount_LinkInBio_folders_update_delete = 'userAccount_LinkInBio_folders_update_delete',
 	userEmbedWidget_create_list = 'userEmbedWidget_create_list',
