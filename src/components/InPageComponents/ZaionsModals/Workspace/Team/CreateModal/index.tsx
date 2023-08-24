@@ -140,8 +140,6 @@ const ZWSTeamCreateModal: React.FC<{
 								extractInnerDataOptionsEnum.createRequestResponseItems
 							) || [];
 
-						console.log({ _oldWorkspaceTeams });
-
 						// Adding newly created workspace data.
 						const updatedWorkspaceTeams = [..._oldWorkspaceTeams, _data];
 

@@ -208,6 +208,8 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 		ZWorkspacesSharingModal,
 		{
 			Tab: WorkspaceSharingTabEnum.invite,
+			workspaceId: workspaceId,
+			teamId: teamId,
 		}
 	);
 	// #endregion

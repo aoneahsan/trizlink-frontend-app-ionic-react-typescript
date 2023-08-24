@@ -72,6 +72,7 @@ type ZIonInputAutoCompleteType =
 	| 'photo';
 
 export type ZIonInputType = {
+	children?: ReactNode;
 	className?: string;
 	autocapitalize?: 'off' | 'none' | 'on' | 'sentences' | 'words' | 'characters';
 	autocomplete?: ZIonInputAutoCompleteType;
@@ -194,7 +195,9 @@ const ZIonInput = React.forwardRef(
 				style={compStyle}
 				{..._testingSelector}
 				{..._testingListSelector}
-			/>
+			>
+				{props.children}
+			</IonInput>
 		);
 	}
 );

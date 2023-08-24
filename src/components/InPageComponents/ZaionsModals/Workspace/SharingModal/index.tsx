@@ -52,6 +52,7 @@ import ZMembersTab from './MembersTab';
 import ZPermissionsTab from './PermissionsTab';
 import ZNotificationTab from './NotificationTab';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 
 /**
  * Recoil State Imports go down
@@ -82,7 +83,9 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 const ZWorkspacesSharingModal: React.FC<{
 	dismissZIonModal: (data?: string, role?: string | undefined) => void;
 	Tab: WorkspaceSharingTabEnum;
-}> = ({ dismissZIonModal, Tab }) => {
+	workspaceId: string;
+	teamId: string;
+}> = ({ dismissZIonModal, Tab, workspaceId, teamId }) => {
 	// Component state
 	const [compState, setCompState] = useState<{
 		activeTab: WorkspaceSharingTabEnum;
@@ -96,20 +99,18 @@ const ZWorkspacesSharingModal: React.FC<{
 		<>
 			{/* header  */}
 			<ZIonHeader>
-				<div className='w-full ion-text-end pe-3'>
-					<ZIonButton
-						className='ion-no-padding ion-no-margin h-max'
-						fill='clear'
-						color='dark'
+				<div className='w-full pt-1 ion-text-end pe-1'>
+					<ZIonIcon
+						slot='icon-only'
+						icon={closeOutline}
+						className='w-6 h-6 cursor-pointer'
 						onClick={() => {
 							dismissZIonModal();
 						}}
-					>
-						<ZIonIcon icon={closeOutline} />
-					</ZIonButton>
+					/>
 				</div>
 				<div className='pb-1 w-full ion-text-center mt-[-13px]'>
-					<ZIonText className='text-xl h-max'>Workspace sharing</ZIonText>
+					<ZIonText className='text-2xl h-max'>Team sharing</ZIonText>
 				</div>
 				<ZIonSegment
 					scrollable={true}
@@ -130,7 +131,7 @@ const ZWorkspacesSharingModal: React.FC<{
 							}));
 						}}
 					>
-						<ZIonIcon icon={personAddOutline} className='pt-1 w-5 h-5' />
+						<ZIonIcon icon={personAddOutline} className='w-5 h-5 pt-1' />
 						<ZIonText className='pb-3 text-sm'>Invite</ZIonText>
 					</ZIonSegmentButton>
 
@@ -145,7 +146,7 @@ const ZWorkspacesSharingModal: React.FC<{
 							}));
 						}}
 					>
-						<ZIonIcon icon={peopleOutline} className='pt-1 w-5 h-5' />
+						<ZIonIcon icon={peopleOutline} className='w-5 h-5 pt-1' />
 						<ZIonText className='pb-3 text-xs'>Members</ZIonText>
 					</ZIonSegmentButton>
 
@@ -160,7 +161,7 @@ const ZWorkspacesSharingModal: React.FC<{
 							}));
 						}}
 					>
-						<ZIonIcon icon={checkboxOutline} className='pt-1 w-5 h-5' />
+						<ZIonIcon icon={checkboxOutline} className='w-5 h-5 pt-1' />
 						<ZIonText className='pb-3 text-xs'>Permissions</ZIonText>
 					</ZIonSegmentButton>
 
@@ -175,7 +176,7 @@ const ZWorkspacesSharingModal: React.FC<{
 							}));
 						}}
 					>
-						<ZIonIcon icon={notificationsOutline} className='pt-1 w-5 h-5' />
+						<ZIonIcon icon={notificationsOutline} className='w-5 h-5 pt-1' />
 						<ZIonText className='pb-3 text-xs'>Notifications</ZIonText>
 					</ZIonSegmentButton>
 				</ZIonSegment>
@@ -183,19 +184,26 @@ const ZWorkspacesSharingModal: React.FC<{
 
 			{/* Content */}
 			<ZIonContent>
-				<ZIonGrid>
-					{compState.activeTab === WorkspaceSharingTabEnum.invite ? (
-						<ZInviteTab />
-					) : compState.activeTab === WorkspaceSharingTabEnum.members ? (
-						<ZMembersTab />
-					) : compState.activeTab === WorkspaceSharingTabEnum.permissions ? (
-						<ZPermissionsTab />
-					) : compState.activeTab === WorkspaceSharingTabEnum.notifications ? (
-						<ZNotificationTab />
-					) : (
-						''
-					)}
-				</ZIonGrid>
+				<ZCustomScrollable scrollY={true} className='w-full h-full'>
+					<ZIonGrid className='pb-3'>
+						{compState.activeTab === WorkspaceSharingTabEnum.invite ? (
+							<ZInviteTab
+								workspaceId={workspaceId}
+								teamId={teamId}
+								dismissZIonModal={dismissZIonModal}
+							/>
+						) : compState.activeTab === WorkspaceSharingTabEnum.members ? (
+							<ZMembersTab />
+						) : compState.activeTab === WorkspaceSharingTabEnum.permissions ? (
+							<ZPermissionsTab />
+						) : compState.activeTab ===
+						  WorkspaceSharingTabEnum.notifications ? (
+							<ZNotificationTab />
+						) : (
+							''
+						)}
+					</ZIonGrid>
+				</ZCustomScrollable>
 			</ZIonContent>
 		</>
 	);

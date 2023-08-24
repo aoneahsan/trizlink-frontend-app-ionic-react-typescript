@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Packages Imports go down
@@ -13,9 +13,10 @@ import {
 	closeOutline,
 	helpCircleOutline,
 	linkOutline,
-	mailOutline,
+	sendOutline,
 } from 'ionicons/icons';
 import classNames from 'classnames';
+import { Formik } from 'formik';
 
 /**
  * Custom Imports go down
@@ -30,15 +31,17 @@ import {
 	ZIonIcon,
 	ZIonImg,
 	ZIonInput,
-	ZIonPopover,
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { useZIonPopover, useZIonToast } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down
@@ -50,8 +53,8 @@ import {
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-	workspaceFormPermissionEnum,
 	workspaceFormRoleEnum,
+	WSTeamMembersInterface,
 } from '@/types/AdminPanel/workspace';
 
 /**
@@ -69,10 +72,31 @@ import {
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductLogo } from '@/assets/images';
-import { Formik } from 'formik';
-import ZInviteClientsPermissionPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/InviteClientPermissionPopover';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
+import {
+	extractInnerData,
+	formatApiRequestErrorForFormikFormField,
+	validateField,
+	zStringify,
+} from '@/utils/helpers';
+import {
+	API_URL_ENUM,
+	extractInnerDataOptionsEnum,
+	VALIDATION_RULE,
+} from '@/utils/enums';
+import {
+	useZGetRQCacheData,
+	useZRQCreateRequest,
+	useZUpdateRQCacheData,
+} from '@/ZaionsHooks/zreactquery-hooks';
+import CONSTANTS from '@/utils/constants';
+import { reportCustomError } from '@/utils/customErrorType';
+import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { showSuccessNotification } from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
+import { FormikSetErrorsType } from '@/types/ZaionsFormik.type';
+import { AxiosError } from 'axios';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Component props type go down
@@ -85,23 +109,143 @@ import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
  * @type {*}
  * */
 
-const ZInviteTab: React.FC = () => {
+const ZInviteTab: React.FC<{
+	workspaceId: string;
+	teamId: string;
+	dismissZIonModal: (data?: string, role?: string | undefined) => void;
+}> = ({ workspaceId, teamId, dismissZIonModal }) => {
+	const [compState, setCompState] = useState<{
+		_role?: workspaceFormRoleEnum;
+	}>();
+
+	// #region Custom hooks
 	const { isLgScale } = useZMediaQueryScale();
+	const { presentZIonToast } = useZIonToast();
+	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+	// #endregion
+
+	// #region APIS.
+	const { mutateAsync: inviteTeamMemberAsyncMutate } = useZRQCreateRequest({
+		_url: API_URL_ENUM.ws_team_member_invite_list,
+		_itemsIds: [workspaceId, teamId],
+		_urlDynamicParts: [
+			CONSTANTS.RouteParams.workspace.workspaceId,
+			CONSTANTS.RouteParams.workspace.teamId,
+		],
+	});
+	// #endregion
+
+	// #region modal & popover.
+	const { presentZIonPopover: presentZWorkspaceFormRoleSelectorPopover } =
+		useZIonPopover(ZWorkspaceFormRoleSelectorPopover, {
+			selectedRole: compState?._role,
+		});
+	// #endregion
+
+	// #region Functions.
+	const formikSubmitHandler = async (
+		_data: string,
+		setErrors: FormikSetErrorsType
+	) => {
+		try {
+			if (_data) {
+				const __response = await inviteTeamMemberAsyncMutate(_data);
+
+				if (
+					(__response as ZLinkMutateApiType<WSTeamMembersInterface>).success
+				) {
+					const __data = extractInnerData<WSTeamMembersInterface>(
+						__response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (__data && __data?.id) {
+						const __wsTeamMembersRQData = getRQCDataHandler({
+							key: [
+								CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+								workspaceId,
+								teamId,
+							],
+						});
+
+						if (__wsTeamMembersRQData) {
+							const _oldTeamsMemberData =
+								extractInnerData<WSTeamMembersInterface[]>(
+									__wsTeamMembersRQData,
+									extractInnerDataOptionsEnum.createRequestResponseItems
+								) || [];
+
+							const __updatedMembersData = [..._oldTeamsMemberData, __data];
+
+							await updateRQCDataHandler({
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+									workspaceId,
+									teamId,
+								],
+								data: __updatedMembersData,
+								id: '',
+								updateHoleData: true,
+								extractType: ZRQGetRequestExtractEnum.extractItems,
+							});
+						}
+
+						showSuccessNotification(MESSAGES.GENERAL.MEMBER.INVITE_SEND);
+
+						dismissZIonModal();
+					}
+				}
+			}
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				const __apiErrors = (error.response?.data as { errors: ZGenericObject })
+					?.errors;
+				const __errors = formatApiRequestErrorForFormikFormField(
+					['email', 'role'],
+					['email', 'role'],
+					__apiErrors
+				);
+
+				setErrors(__errors);
+			}
+			reportCustomError(error);
+		}
+	};
+	// #endregion
 
 	return (
 		<Formik
 			initialValues={{
 				role: workspaceFormRoleEnum.Approver,
-				permission: workspaceFormPermissionEnum.team,
+				email: '',
 			}}
-			validate={() => {
-				const errors = {};
+			validate={(values) => {
+				const errors: { email?: string } = {};
+
+				validateField('email', values, errors, VALIDATION_RULE.email);
 
 				return errors;
 			}}
-			onSubmit={() => {}}
+			onSubmit={async (values, { setErrors }) => {
+				const _zStringifyData = zStringify({
+					email: values.email,
+					role: values.role,
+				});
+
+				await formikSubmitHandler(_zStringifyData, setErrors);
+			}}
 		>
-			{({ values, setFieldValue }) => {
+			{({
+				values,
+				touched,
+				errors,
+				isValid,
+				setFieldValue,
+				handleChange,
+				handleBlur,
+				submitForm,
+			}) => {
 				return (
 					<>
 						<ZIonRow
@@ -121,6 +265,7 @@ const ZInviteTab: React.FC = () => {
 							{/* Fields */}
 							<ZIonCol>
 								<ZIonRow>
+									{/* Email fields */}
 									<ZIonCol
 										sizeXl='6'
 										size='6'
@@ -129,20 +274,22 @@ const ZInviteTab: React.FC = () => {
 										sizeXs='12'
 									>
 										<ZIonInput
-											// name='pageName'
-											label=''
+											name='email'
+											aria-label='type email'
 											// labelPlacement='floating'
 											// errorText={errors.pageName}
-											placeholder='Type or search email'
+											placeholder='Type email'
 											type='email'
 											minHeight='2.3rem'
-											// onIonChange={handleChange}
-											// onIonBlur={handleBlur}
-											// value={values.pageName}
-											// className={classNames({
-											// 	'ion-touched ion-invalid': touched.pageName && errors.pageName,
-											// 	'ion-touched ion-valid': touched.pageName && !errors.pageName,
-											// })}
+											onIonChange={handleChange}
+											onIonBlur={handleBlur}
+											value={values.email}
+											errorText={touched.email ? errors.email : undefined}
+											className={classNames({
+												'ion-touched': touched.email,
+												'ion-invalid': touched.email && errors.email,
+												'ion-valid': touched.email && !errors.email,
+											})}
 										/>
 									</ZIonCol>
 
@@ -175,6 +322,7 @@ const ZInviteTab: React.FC = () => {
 										/>
 									</ZIonCol> */}
 
+									{/* role fields */}
 									<ZIonCol
 										sizeXl='6'
 										size='6'
@@ -184,7 +332,6 @@ const ZInviteTab: React.FC = () => {
 									>
 										<ZIonButton
 											fill='outline'
-											id='role-popover-index'
 											size='small'
 											color='medium'
 											height='2.3rem'
@@ -195,42 +342,46 @@ const ZInviteTab: React.FC = () => {
 											style={{
 												'--border-width': '1px',
 											}}
+											onClick={(event: unknown) => {
+												presentZWorkspaceFormRoleSelectorPopover({
+													_event: event as Event,
+													_cssClass: 'workspace_form_role_popover_size',
+													_dismissOnSelect: false,
+													_onDidDismiss: ({ detail }) => {
+														if (detail.data) {
+															setCompState((oldValues) => ({
+																...oldValues,
+																_role: detail.data as workspaceFormRoleEnum,
+															}));
+															setFieldValue(
+																'role',
+																workspaceFormRoleEnum[
+																	detail.data as workspaceFormRoleEnum
+																] !== undefined
+																	? workspaceFormRoleEnum[
+																			detail.data as workspaceFormRoleEnum
+																	  ]
+																	: values.role,
+																false
+															);
+														}
+													},
+												});
+											}}
 										>
-											<ZIonText className='flex me-auto'>Permission</ZIonText>
+											<ZIonText className='flex me-auto'>
+												{values.role}
+											</ZIonText>
 											<ZIonIcon
 												icon={chevronDownOutline}
 												className='flex ms-auto'
 											/>
 										</ZIonButton>
 									</ZIonCol>
-									<ZIonPopover
-										trigger='role-popover-index'
-										triggerAction='click'
-										showBackdrop={false}
-										backdropDismiss
-										className='workspace_form_role_popover_size'
-										side='bottom'
-									>
-										<ZWorkspaceFormRoleSelectorPopover
-											dismissZIonPopover={(role) => {
-												setFieldValue(
-													'role',
-													workspaceFormRoleEnum[
-														role as workspaceFormRoleEnum
-													] !== undefined
-														? workspaceFormRoleEnum[
-																role as workspaceFormRoleEnum
-														  ]
-														: values.role,
-													false
-												);
-											}}
-											selectedRole={values.role}
-										/>
-									</ZIonPopover>
 								</ZIonRow>
 
 								<ZIonRow className='pt-2'>
+									{/* Send invite btn */}
 									<ZIonCol
 										sizeXl='6'
 										size='6'
@@ -244,6 +395,10 @@ const ZInviteTab: React.FC = () => {
 											fill='solid'
 											id='role-popover-index'
 											height='2.3rem'
+											disabled={!isValid}
+											onClick={() => {
+												void submitForm();
+											}}
 											className={classNames({
 												'm-0 flex h-full normal-case ion-align-items-start':
 													true,
@@ -252,11 +407,12 @@ const ZInviteTab: React.FC = () => {
 												'--border-width': '1px',
 											}}
 										>
-											<ZIonIcon icon={mailOutline} className='me-2' />
-											Send email invite
+											<ZIonIcon icon={sendOutline} className='me-2' />
+											Send invite
 										</ZIonButton>
 									</ZIonCol>
 
+									{/* Create invite link btn */}
 									<ZIonCol
 										sizeXl='6'
 										size='6'
@@ -296,85 +452,105 @@ const ZInviteTab: React.FC = () => {
 							{/*  */}
 							<ZIonCol
 								size='12'
-								className='flex mt-2 ion-align-items-center ion-justify-content-center'
+								className='flex my-1 ion-align-items-center ion-justify-content-center'
 							>
 								<ZIonText className='me-2'>Invite links</ZIonText>
 								<ZIonIcon
 									icon={helpCircleOutline}
+									id='wss-tsm-invite-link-help-btn-tt'
 									className='w-5 h-5 cursor-pointer'
 								/>
-							</ZIonCol>
-							{/* Copy Invite link button */}
-							<ZIonCol size='max-content'>
-								<ZIonButton
-									size='small'
-									height='2.3rem'
-									className='m-0 w-[2.3rem] overflow-hidden rounded-full ion-no-padding'
+								<ZRTooltip
+									anchorSelect='#wss-tsm-invite-link-help-btn-tt'
+									place='bottom'
+									variant='info'
+									className='z-10'
 								>
-									<ZIonIcon icon={linkOutline} className='w-6 h-6' />
-								</ZIonButton>
-							</ZIonCol>
-
-							{/* Invite link */}
-							<ZIonCol className=''>
-								<ZIonRow
-									className={classNames({
-										'w-full  flex ion-align-items-center': true,
-										'h-[35px]': isLgScale,
-									})}
-								>
-									<ZIonCol
-										sizeXl='12'
-										sizeLg='12'
-										sizeMd='12'
-										sizeSm='12'
-										sizeXs='12'
-										className={classNames({
-											'border rounded-l h-full ps-2 pe-0': true,
-											'flex ion-align-items-center': isLgScale,
-										})}
-									>
-										<ZIonText className='pt-1 text-sm'>
-											http://plnbl.io/ws/Yxugg59eLfj5
+									<div className=''>
+										<ZIonText className='block text-lg font-bold'>
+											Invite collaborators via link
 										</ZIonText>
-
-										<div className='flex gap-2 ms-auto ion-align-items-center'>
-											<ZIonBadge className='text-sm' color='medium'>
-												Contributor
-											</ZIonBadge>
-											{/* <ZIonBadge className='text-sm'>Team</ZIonBadge> */}
-										</div>
-
-										<ZIonButton
-											fill='clear'
-											expand='full'
-											height='100%'
-											id='wss-tsm-delete-invite-link-tt'
-											className='shadow-none ion-no-margin zaions__danger_bg ms-2'
-										>
-											<ZIonIcon color='light' icon={closeOutline} />
-										</ZIonButton>
-										{/* wss-tsm -> workspace-settings-team-settings-modal */}
-										<ZRTooltip anchorSelect='#wss-tsm-delete-invite-link-tt' />
-									</ZIonCol>
-
-									{/* <ZIonCol
-										className={classNames({
-											'border rounded-r h-full p-0 overflow-hidden': true,
-											'mt-2': !isLgScale,
-										})}
-									>
-										<ZIonButton className='h-[33px] m-0' expand='full'>
-											{!isLgScale ? (
-												'Delete link'
-											) : (
-												<ZIonIcon icon={closeOutline} />
-											)}
-										</ZIonButton>
-									</ZIonCol> */}
-								</ZIonRow>
+										<ZIonText className='block mt-3 '>
+											User will be able to join the company <br /> by creating
+											account and will be assigned <br /> selected permissions
+											and membership
+										</ZIonText>
+									</div>
+								</ZRTooltip>
 							</ZIonCol>
 						</ZIonRow>
+
+						{/* Invitation links */}
+						{[1].map((el) => (
+							<ZIonRow className='mx-2 ion-align-items-center' key={el}>
+								{/* Copy Invite link button */}
+								<ZIonCol size='max-content'>
+									<ZIonButton
+										size='small'
+										height='2.3rem'
+										className='m-0 w-[2.3rem] overflow-hidden rounded-full ion-no-padding'
+										id={`wss-tsm-copy-invite-link-tt-${el}`}
+										onClick={() => {
+											navigator.clipboard.writeText('https://linkhere.com');
+
+											presentZIonToast('✨ Copied', 'tertiary');
+										}}
+									>
+										<ZIonIcon icon={linkOutline} className='w-6 h-6' />
+									</ZIonButton>
+
+									{/* wss-tsm -> workspace-settings-team-settings-modal */}
+									<ZRTooltip
+										anchorSelect={`#wss-tsm-copy-invite-link-tt-${el}`}
+										place='top'
+										content='copy invite link'
+										variant='info'
+									/>
+								</ZIonCol>
+
+								{/* Invite link */}
+								<ZIonCol
+									sizeXl='11'
+									sizeLg='11'
+									sizeMd='11'
+									sizeSm='11'
+									sizeXs='11'
+									className={classNames({
+										'border rounded ps-2 pe-0 h-[2.3rem] overflow-hidden': true,
+										'flex ion-align-items-center': isLgScale,
+									})}
+								>
+									<ZIonText className='pt-1 text-sm'>
+										http://plnbl.io/ws/Yxugg59eLfj5
+									</ZIonText>
+
+									<div className='flex gap-2 ms-auto ion-align-items-center'>
+										<ZIonBadge className='text-sm' color='medium'>
+											Contributor
+										</ZIonBadge>
+										{/* <ZIonBadge className='text-sm'>Team</ZIonBadge> */}
+									</div>
+
+									<ZIonButton
+										fill='clear'
+										expand='full'
+										height='100%'
+										id={`wss-tsm-delete-invite-link-tt-${el}`}
+										className='overflow-hidden rounded-r shadow-none ion-no-margin zaions__danger_bg ms-2'
+									>
+										<ZIonIcon color='light' icon={closeOutline} />
+									</ZIonButton>
+
+									{/* wss-tsm -> workspace-settings-team-settings-modal */}
+									<ZRTooltip
+										anchorSelect={`#wss-tsm-delete-invite-link-tt-${el}`}
+										place='top'
+										content='delete invite link'
+										variant='info'
+									/>
+								</ZIonCol>
+							</ZIonRow>
+						))}
 					</>
 				);
 			}}

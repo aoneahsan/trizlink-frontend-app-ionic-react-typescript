@@ -11,6 +11,7 @@ type ZIonBadgeType = {
 	className?: string;
 	color?: ZIonColorType;
 	mode?: ZIonModeType;
+	slot?: string;
 	style?: {
 		[key: string]: unknown;
 	};

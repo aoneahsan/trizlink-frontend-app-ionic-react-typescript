@@ -9,6 +9,9 @@ const GENERAL = {
 		WORKSPACE_UPDATED: 'Workspace updated successfully.',
 		WORKSPACE_DELETED: 'Workspace deleted successfully.',
 	},
+	MEMBER: {
+		INVITE_SEND: 'Invite send successfully.',
+	},
 	SHORT_LINKS: {
 		SHORT_LINK_CREATED: 'Short link created successfully.',
 		SHORT_LINK_UPDATED: 'Short link updated successfully.',

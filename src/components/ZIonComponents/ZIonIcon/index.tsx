@@ -19,7 +19,7 @@ type ZIonIconType = {
 	style?: {
 		[key: string]: unknown;
 	};
-	slot?: 'start' | 'end';
+	slot?: 'start' | 'end' | 'icon-only';
 	title?: string;
 	id?: string;
 	onClick?: React.MouseEventHandler<HTMLIonIconElement>;

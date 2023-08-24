@@ -441,7 +441,7 @@ span.new {
 }
 .workspace_form_role_popover_size {
 	--width: 500px;
-	--height: 350px;
+	--height: 20rem;
 }
 
 .z-help-center-popover-size {

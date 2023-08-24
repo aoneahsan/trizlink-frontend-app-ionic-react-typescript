@@ -101,6 +101,7 @@ export const API_URLS = {
 	csrf: '/sanctum/csrf-cookie',
 	delete: '/user/delete',
 	ws_roles_get: '/user/ws-roles',
+	ws_team_member_invite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}/member`,
 	userPixelAccounts_create_list: '/user/pixel',
 	userAccountUtmTags_create_list: '/user/utm-tag',
 	ShortLink_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/shortLink/folders`,
@@ -1257,6 +1258,8 @@ const REACT_QUERY = {
 			GET: 'rq-workspace-get-key',
 			TEAM: 'rq-workspace-team-list-key',
 			TEAM_GET: 'rq-workspace-team-get-key',
+			MEMBERS: 'rq-ws-team-members-main-key',
+			MEMBER_GET: 'rq-ws-team-member-get-key',
 		},
 		FOLDER: {
 			MAIN: 'rq-folders-list-key',

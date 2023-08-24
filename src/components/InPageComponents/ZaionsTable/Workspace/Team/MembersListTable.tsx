@@ -22,6 +22,7 @@ import {
 	createOutline,
 	ellipsisVerticalOutline,
 	fileTrayFullOutline,
+	trashBinOutline,
 } from 'ionicons/icons';
 
 /**
@@ -65,9 +66,11 @@ import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-	workspaceMembersInterface,
+	WSTeamMembersInterface,
 	ZWSMemberListPageTableColumnsIds,
 } from '@/types/AdminPanel/workspace';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { API_URL_ENUM } from '@/utils/enums';
 
 /**
  * Recoil State Imports go down
@@ -91,7 +94,7 @@ import {
 
 /**
  * Functional Component
- * About: (Info of component here...)
+ * About: (table for listing workspace team members)
  * @type {*}
  * */
 
@@ -107,6 +110,24 @@ const ZMembersListTable: React.FC = () => {
 		teamId: string;
 	}>();
 
+	// #region APIS.
+	const { data: wsTeamMembersData } = useZRQGetRequest<
+		WSTeamMembersInterface[]
+	>({
+		_url: API_URL_ENUM.ws_team_member_invite_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+			workspaceId,
+			teamId,
+		],
+		_itemsIds: [workspaceId, teamId],
+		_urlDynamicParts: [
+			CONSTANTS.RouteParams.workspace.workspaceId,
+			CONSTANTS.RouteParams.workspace.teamId,
+		],
+	});
+	// #endregion
+	console.log({ wsTeamMembersData });
 	// #region Modal & Popovers.
 	const { presentZIonPopover: presentZMemberActionPopover } = useZIonPopover(
 		ZMemberActionPopover,
@@ -127,7 +148,7 @@ const ZMembersListTable: React.FC = () => {
 	// #endregion
 
 	// #region Managing table data with react-table.
-	const columnHelper = createColumnHelper<workspaceMembersInterface>();
+	const columnHelper = createColumnHelper<WSTeamMembersInterface>();
 	const defaultMembersColumns = [
 		columnHelper.display({
 			id: ZWSMemberListPageTableColumnsIds.id,
@@ -136,13 +157,6 @@ const ZMembersListTable: React.FC = () => {
 			cell: (_) => {
 				return <ZIonCheckbox />;
 			},
-		}),
-
-		// Username
-		columnHelper.accessor((itemData) => itemData.username, {
-			header: 'Username',
-			id: ZWSMemberListPageTableColumnsIds.username,
-			footer: 'Username',
 		}),
 
 		// Email
@@ -179,10 +193,20 @@ const ZMembersListTable: React.FC = () => {
 		}),
 
 		// Role
-		columnHelper.accessor((itemData) => itemData.role, {
+		columnHelper.accessor('memberRole', {
 			header: 'Role',
 			id: ZWSMemberListPageTableColumnsIds.role,
+			cell: ({ row }) => {
+				return <>{row?.original?.memberRole?.name}</>;
+			},
 			footer: 'Role',
+		}),
+
+		// status
+		columnHelper.accessor((itemData) => itemData.accountStatus, {
+			header: 'Status',
+			id: ZWSMemberListPageTableColumnsIds.status,
+			footer: 'Status',
 		}),
 
 		// Invited at
@@ -195,7 +219,7 @@ const ZMembersListTable: React.FC = () => {
 
 	const zMembersTable = useReactTable({
 		columns: defaultMembersColumns,
-		data: [],
+		data: wsTeamMembersData || [],
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		debugTable: true,
@@ -204,11 +228,11 @@ const ZMembersListTable: React.FC = () => {
 	});
 	// #endregion
 
-	// useEffect(() => {
-	// 	zMembersTable.setPageIndex(Number(pageindex) || 0);
-	// 	zMembersTable.setPageSize(Number(pagesize) || 2);
-	// }, [pageindex, pagesize]);
-	// console.log({ d: zMembersTable?.getCanNextPage() }); // causing infinite loop
+	useEffect(() => {
+		zMembersTable.setPageIndex(Number(pageindex) || 0);
+		zMembersTable.setPageSize(Number(pagesize) || 2);
+	}, [pageindex, pagesize]);
+	console.log({ d: zMembersTable?.getCanNextPage() }); // causing infinite loop
 	return (
 		<div>
 			<ZCustomScrollable
@@ -259,7 +283,7 @@ const ZMembersListTable: React.FC = () => {
 
 				{/* Body Section */}
 				<ZIonRow className='rounded-b-lg zaions__light_bg'>
-					{[]?.length ? (
+					{wsTeamMembersData?.length ? (
 						<ZIonCol size='12' className='w-full ion-no-padding'>
 							{zMembersTable?.getRowModel().rows.map((_rowInfo, _rowIndex) => {
 								return (
@@ -444,7 +468,7 @@ const ZMembersListTable: React.FC = () => {
 						className='mr-1 ion-no-padding ion-no-margin'
 						size='small'
 						fill='clear'
-						// disabled={!zMembersTable?.getCanNextPage()}
+						disabled={!zMembersTable?.getCanNextPage()}
 						testingSelector={
 							CONSTANTS.testingSelectors.WSSettings.teamListPage.table
 								.nextButton
@@ -481,7 +505,7 @@ const ZMembersListTable: React.FC = () => {
 						className='mr-1 ion-no-padding ion-no-margin'
 						size='small'
 						fill='clear'
-						// disabled={!zMembersTable.getCanNextPage()}
+						disabled={!zMembersTable.getCanNextPage()}
 						testingSelector={
 							CONSTANTS.testingSelectors.WSSettings.teamListPage.table
 								.getLastPageButton
@@ -618,11 +642,11 @@ const ZMemberActionPopover: React.FC<{
 						className='ion-text-capitalize'
 					>
 						<ZIonIcon
-							icon={createOutline}
+							icon={trashBinOutline}
 							className='w-5 h-5 me-2'
-							color='secondary'
+							color='danger'
 						/>
-						<ZIonText color='secondary' className='text-[.9rem] pt-1'>
+						<ZIonText color='danger' className='text-[.9rem] pt-1'>
 							Delete
 						</ZIonText>
 					</ZIonButton>
@@ -632,4 +656,4 @@ const ZMemberActionPopover: React.FC<{
 	);
 };
 
-export default ZMembersListTable;
+export default React.memo(ZMembersListTable);

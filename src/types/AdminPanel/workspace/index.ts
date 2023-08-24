@@ -1,3 +1,4 @@
+import { WSRolesNameEnum } from './../../UserAccount/index.type';
 import { UserAccountType } from '@/types/UserAccount/index.type';
 import { ReactNode } from 'react';
 
@@ -24,10 +25,12 @@ export enum workspaceFormTabEnum {
 }
 
 export enum workspaceFormRoleEnum {
-	Contributor = 'Contributor',
 	Administrator = 'Administrator',
+	Manager = 'Manager',
+	Contributor = 'Contributor',
 	Writer = 'Writer',
 	Approver = 'Approver',
+	Commenter = 'Commenter',
 	Guest = 'Guest',
 }
 
@@ -117,7 +120,7 @@ export enum ZWSTeamListPageTableColumnsIds {
 
 export enum ZWSMemberListPageTableColumnsIds {
 	id = '__z_short_link_id__',
-	username = '__z_short_link_username__',
+	status = '__z_short_link_status__',
 	email = '__z_short_link_email__',
 	invitedAt = '__z_short_link_invitedAt__',
 	role = '__z_short_link_role__',
@@ -156,12 +159,24 @@ export interface workspaceTeamInterface {
 	updatedAt?: string;
 }
 
-export interface workspaceMembersInterface {
+export interface WSTeamMembersInterface {
 	id?: string;
-	username: string;
+	// username: string;
 	email: string;
+	accountStatus: string;
 	invitedAt: string;
-	role: string;
+	inviteAcceptedAt: string;
+	accountStatusUpdaterRemarks: string;
+	accountStatusLastUpdatedBy: string;
+	memberRole: {
+		id?: string;
+		name?: WSRolesNameEnum;
+	};
+	team: {
+		id?: string;
+		title: string;
+	};
+	sortOrderNo: string;
 	isActive: boolean;
 	createdAt?: string;
 	updatedAt?: string;
