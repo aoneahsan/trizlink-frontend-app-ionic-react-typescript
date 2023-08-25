@@ -130,6 +130,11 @@ const ZFallbackIonSpinner = lazy(
 const ZShortLinkRedirectPage = lazy(
 	() => import('./pages/ShortLinkRedirectPage')
 );
+
+const ZValidateInvitationPage = lazy(
+	() => import('./pages/ValidateInvitation')
+);
+
 const ZaionsTestPage = lazy(() => import('./pages/TestPage'));
 const ZWorkspaceSettings = lazy(() => import('./pages/AdminPanel/WSSettings'));
 const ZWSSettingsTeamViewPage = lazy(
@@ -146,6 +151,12 @@ const AppRoutes: React.FC = () => {
 				exact
 				path={ZaionsRoutes.ShortLinkRedirectRoute}
 				component={ZShortLinkRedirectPage}
+			/>
+
+			<Route
+				exact
+				path={ZaionsRoutes.ValidateInvitationRoute}
+				component={ZValidateInvitationPage}
 			/>
 
 			{/* Generic Routes */}

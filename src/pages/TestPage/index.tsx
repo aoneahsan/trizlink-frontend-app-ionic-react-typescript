@@ -7,13 +7,14 @@ import PhoneInput, {
 	formatPhoneNumberIntl,
 	isPossiblePhoneNumber,
 } from 'react-phone-number-input';
-
+// import PhoneInput from 'react-phone-input-2';
 // Custom Imports
 import { ZIonCol, ZIonNote } from '@/components/ZIonComponents';
 
 // Global constant
 
 import 'react-phone-number-input/style.css';
+// import 'react-phone-input-2/lib/style.css';
 
 const ZaionsTestPage: React.FC = () => {
 	return (
@@ -54,7 +55,7 @@ const ZaionsTestPage: React.FC = () => {
 					});
 					return (
 						<>
-							<div className='border'>
+							<div className=''>
 								<PhoneInput
 									placeholder='Enter phone number'
 									value={formatPhoneNumberIntl(values.pn1)}
@@ -64,11 +65,32 @@ const ZaionsTestPage: React.FC = () => {
 									onChange={(_value) => {
 										setFieldValue('pn1', _value, false);
 									}}
+									className='h-[2.5rem]'
 								/>
 								{touched.pn1 && errors.pn1 && errors.pn1?.length > 0 && (
 									<ZIonNote color='danger'>{errors.pn1}</ZIonNote>
 								)}
 							</div>
+
+							{/* <div>
+								<PhoneInput
+									country='pk'
+									isValid={(value, country) => {
+										if (value.match(/12345/)) {
+											return 'Invalid value: ' + value + ', ' + country.name;
+										} else if (value.match(/1234/)) {
+											return false;
+										} else {
+											return true;
+										}
+									}}
+									value={values.pn1}
+									onChange={(phone) => setFieldValue('pn1', phone, false)}
+								/> 
+								{touched.pn1 && errors.pn1 && errors.pn1?.length > 0 && (
+									<ZIonNote color='danger'>{errors.pn1}</ZIonNote>
+								)}
+							</div> */}
 						</>
 					);
 				}}

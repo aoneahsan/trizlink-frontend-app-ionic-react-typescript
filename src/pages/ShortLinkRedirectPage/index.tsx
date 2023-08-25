@@ -110,11 +110,11 @@ const ZShortLinkRedirectPage: React.FC = () => {
 		return _deviceInfo;
 	}, []);
 
-	const logBatteryInfo = useCallback(async () => {
-		const _batteryInfo = await Device.getBatteryInfo();
+	// const logBatteryInfo = useCallback(async () => {
+	// 	const _batteryInfo = await Device.getBatteryInfo();
 
-		return _batteryInfo;
-	}, []);
+	// 	return _batteryInfo;
+	// }, []);
 
 	const createURlRecodeCallback = useCallback(async () => {
 		const __deviceInfo = await logDeviceInfo();
@@ -148,7 +148,6 @@ const ZShortLinkRedirectPage: React.FC = () => {
 					_target: __target,
 					type: __type,
 				});
-				console.log({ __redirectUrl });
 				if (__redirectUrl) {
 					window.location.replace(__redirectUrl);
 				}

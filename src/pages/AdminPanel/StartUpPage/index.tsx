@@ -104,13 +104,7 @@ const ZAppStartupPage: React.FC = () => {
 
 	// storing the role & permissions in recoil state
 	const isZFetching = isUserRoleAndPermissionsFetching || isUserSettingFetching;
-	console.log({
-		getUserRoleAndPermissions,
-		isZFetching,
-		isUserRoleAndPermissionsFetching,
-		isUserSettingFetching,
-		getUserSetting,
-	});
+
 	useEffect(() => {
 		try {
 			if (getUserRoleAndPermissions?.isSuccess) {

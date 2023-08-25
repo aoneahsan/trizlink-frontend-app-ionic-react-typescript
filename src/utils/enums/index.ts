@@ -54,6 +54,7 @@ export enum API_URL_ENUM {
 	userEmbedWidget_update_delete = 'userEmbedWidget_update_delete',
 	ws_roles_get = 'ws_roles_get',
 	ws_team_member_invite_list = 'ws_team_member_invite_list',
+	validate_invitation_status = 'validate_invitation_status',
 
 	//
 

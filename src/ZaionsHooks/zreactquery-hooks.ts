@@ -186,7 +186,7 @@ export const useZRQCreateRequest = <T>({
 	_itemsIds,
 	_urlDynamicParts,
 	_contentType = zAxiosApiRequestContentType.Json,
-	_showAlertOnError = false,
+	_showAlertOnError = true,
 	_showLoader = true,
 }: {
 	_url: API_URL_ENUM;
@@ -298,12 +298,16 @@ export const useZRQUpdateRequest = <T>({
 	authenticated,
 	_contentType = zAxiosApiRequestContentType.Json,
 	_permissions,
+	_showAlertOnError = true,
+	_showLoader = true,
 }: {
 	_url: API_URL_ENUM;
 	_queriesKeysToInvalidate?: string[];
 	authenticated?: boolean;
 	_contentType?: zAxiosApiRequestContentType;
 	_permissions?: permissionsEnum[];
+	_showAlertOnError?: boolean;
+	_showLoader?: boolean;
 }) => {
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
@@ -347,7 +351,8 @@ export const useZRQUpdateRequest = <T>({
 			}
 
 			// Present ion loading before api start
-			await presentZIonLoader(MESSAGES.GENERAL.API_REQUEST.UPDATING);
+			_showLoader &&
+				(await presentZIonLoader(MESSAGES.GENERAL.API_REQUEST.UPDATING));
 			/**
 			 * @_url - takes the post url to post data to api.
 			 *  second argument take the method (post | get | update | delete). as this is the put api for updating so it  will be put
@@ -371,7 +376,7 @@ export const useZRQUpdateRequest = <T>({
 		},
 		onSuccess: (_data) => {
 			// onSucceed dismissing loader...
-			void dismissZIonLoader();
+			_showLoader && void dismissZIonLoader();
 			if (_queriesKeysToInvalidate?.length) {
 				void queryClient.invalidateQueries({
 					queryKey: _queriesKeysToInvalidate,
@@ -380,14 +385,14 @@ export const useZRQUpdateRequest = <T>({
 		},
 		onError: async (_error) => {
 			// OnError dismissing loader...
-			void dismissZIonLoader();
+			_showLoader && void dismissZIonLoader();
 
 			// showing error alert...
-			void presentZIonErrorAlert();
+			_showAlertOnError && void presentZIonErrorAlert();
 			// TODO create a helper function to throw a ZCustomError so if we add sentry or some other error logging then it will be easy to track that as well
 
 			// throw the request_failed error
-			reportCustomError(_error);
+			_showAlertOnError && reportCustomError(_error);
 
 			// check if it's unauthenticated error
 			const errorCode = (_error as AxiosError)?.response?.status;

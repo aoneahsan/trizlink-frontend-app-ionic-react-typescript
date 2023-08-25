@@ -7,6 +7,7 @@ export const ZPrivateRoutePath = '/app';
 const ZaionsRoutes = {
 	// ShortLink redirect route.
 	ShortLinkRedirectRoute: `/${CONSTANTS.SHORT_LINK.urlStaticPath}/${CONSTANTS.RouteParams.urlPath}`,
+	ValidateInvitationRoute: '/accept-invitation',
 
 	// Main routes
 	HomeRoute: '/',

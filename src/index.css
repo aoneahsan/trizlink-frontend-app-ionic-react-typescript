@@ -914,3 +914,21 @@ ion-modal.zaions__modal_w100 {
 } */
 
 /* #endregion  */
+.PhoneInput {
+	border: 1px solid #b3b3b3;
+	/*border: 1px solid #595959;
+	*/
+	padding: 0 0.8rem;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-ms-border-radius: 4px;
+	-o-border-radius: 4px;
+}
+.PhoneInput input:focus {
+	outline: none !important;
+}
+
+.PhoneInputInput:focus-within .PhoneInput {
+	border: 1px solid red;
+}

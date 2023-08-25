@@ -102,6 +102,7 @@ export const API_URLS = {
 	delete: '/user/delete',
 	ws_roles_get: '/user/ws-roles',
 	ws_team_member_invite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}/member`,
+	validate_invitation_status: `/user/validate-and-update-invitation`,
 	userPixelAccounts_create_list: '/user/pixel',
 	userAccountUtmTags_create_list: '/user/utm-tag',
 	ShortLink_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/shortLink/folders`,
