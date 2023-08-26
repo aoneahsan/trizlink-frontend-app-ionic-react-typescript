@@ -16,9 +16,16 @@ import {
 	ZIonRow,
 	ZIonSegment,
 	ZIonSegmentButton,
+	ZIonSkeletonText,
 	ZIonText,
 } from '@/components/ZIonComponents';
+import {
+	IZNotification,
+	ZNotificationEnum,
+} from '@/types/AdminPanel/index.type';
 import CONSTANTS from '@/utils/constants';
+import { API_URL_ENUM } from '@/utils/enums';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { Formik } from 'formik';
 import {
 	fileTrayStackedOutline,
@@ -84,7 +91,9 @@ enum ZNotificationPopoverTabsEnum {
  * @type {*}
  * */
 
-const ZNotificationPopover: React.FC = () => {
+const ZNotificationPopover: React.FC<{ workspaceId: string }> = ({
+	workspaceId,
+}) => {
 	return (
 		<Formik
 			initialValues={{
@@ -103,7 +112,7 @@ const ZNotificationPopover: React.FC = () => {
 								<ZIonCol className='ion-no-padding' size='7'>
 									<ZIonSegment
 										value={values.tab}
-										style={{ 'grid-auto-columns': '1fr' }}
+										style={{ gridAutoColumns: '1fr' }}
 									>
 										{/* Approval requests */}
 										<ZIonSegmentButton
@@ -208,7 +217,7 @@ const ZNotificationPopover: React.FC = () => {
 								{values.tab === ZNotificationPopoverTabsEnum.approvals ? (
 									<ZApprovalsTab />
 								) : values.tab === ZNotificationPopoverTabsEnum.updates ? (
-									<ZUpdatesTab />
+									<ZUpdatesTab workspaceId={workspaceId} />
 								) : null}
 							</ZIonGrid>
 						</ZIonContent>
@@ -239,18 +248,39 @@ const ZApprovalsTab: React.FC = () => {
 };
 
 // Update tab.
-const ZUpdatesTab: React.FC = () => {
+const ZUpdatesTab: React.FC<{ workspaceId: string }> = ({ workspaceId }) => {
+	const {
+		data: userInvitationNotificationsData,
+		isFetching: isNotificationsFetching,
+	} = useZRQGetRequest<IZNotification[]>({
+		_url: API_URL_ENUM.user_unread_notifications_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION.MAIN,
+			workspaceId,
+		],
+		_showLoader: false,
+		_checkPermissions: false,
+		_itemsIds: [ZNotificationEnum.wsTeamMemberInvitation],
+		_urlDynamicParts: [CONSTANTS.RouteParams.user.notification.type],
+	});
+
+	console.log({ userInvitationNotificationsData });
+
+	if (isNotificationsFetching) {
+		return <ZUpdatesTabSkeleton />;
+	}
+
 	return (
 		<ZCustomScrollable className='h-full pb-10 mb-2' scrollY={true}>
-			{[1, 2, 3, 4, 5, 6, 7, 8].map((el) => (
+			{userInvitationNotificationsData?.map((el, index) => (
 				<ZIonRow
 					className='pb-2 border-b cursor-pointer'
-					key={el}
+					key={index}
 					testingSelector={
 						CONSTANTS.testingSelectors.topBar.notificationPopover
 							.singleNotification
 					}
-					testingListSelector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.singleNotification}-${el}`}
+					testingListSelector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.singleNotification}-${el?.id}`}
 				>
 					{/*  */}
 					<ZIonCol size='1.5'>
@@ -268,7 +298,7 @@ const ZUpdatesTab: React.FC = () => {
 						<div className='flex w-full ion-align-items-top ion-justify-content-between'>
 							<div className='overflow-hidden line-clamp-2 leading-none w-[85%]'>
 								<ZIonText className='text-sm' color='medium'>
-									Hamza joined Talha workspace
+									{el?.data?.item?.message}
 								</ZIonText>
 							</div>
 
@@ -309,6 +339,75 @@ const ZUpdatesTab: React.FC = () => {
 				</ZIonRow>
 			))}
 		</ZCustomScrollable>
+	);
+};
+
+const ZUpdatesTabSkeleton: React.FC = () => {
+	return (
+		<>
+			{[...Array(3)].map((_, index) => {
+				return (
+					<ZIonRow className='pb-2 border-b cursor-pointer' key={index}>
+						{/*  */}
+						<ZIonCol size='1.5'>
+							<ZIonSkeletonText
+								className='rounded-full'
+								width='44px'
+								height='44px'
+							/>
+						</ZIonCol>
+
+						{/*  */}
+						<ZIonCol>
+							<div className='flex w-full ion-align-items-top ion-justify-content-between'>
+								<div className='w-[85%] me-2'>
+									<ZIonText color='medium'>
+										<ZIonSkeletonText width='100%' height='.8rem' />
+									</ZIonText>
+								</div>
+
+								<div className='w-[15%]'>
+									<ZIonText color='medium'>
+										<ZIonSkeletonText width='100%' height='.8rem' />
+									</ZIonText>
+								</div>
+							</div>
+
+							{index === 1 && (
+								<div className='flex p-[3px] ion-align-items-center border rounded-md mt-2'>
+									<div className='w-[36px] h-[36px] zaions__light_bg rounded-sm me-2'></div>
+
+									<div className='w-[40%!important] me-1 overflow-hidden line-clamp-2 leading-none'>
+										<ZIonText className='text-xs'>
+											<ZIonSkeletonText width='100%' height='1.4rem' />
+										</ZIonText>
+									</div>
+
+									<div className='flex ion-align-items-center ion-justify-content-between w-[47%]'>
+										<div className='flex ion-align-items-center'>
+											<ZIonSkeletonText
+												width='1rem'
+												height='1rem'
+												className='rounded-full'
+											/>
+											<ZIonText className='text-xs mt-[1px] ms-1'>
+												<ZIonSkeletonText width='3rem' height='.8rem' />
+											</ZIonText>
+										</div>
+
+										<div>
+											<ZIonText className='text-xs' color='medium'>
+												<ZIonSkeletonText width='5rem' height='.8rem' />
+											</ZIonText>
+										</div>
+									</div>
+								</div>
+							)}
+						</ZIonCol>
+					</ZIonRow>
+				);
+			})}
+		</>
 	);
 };
 

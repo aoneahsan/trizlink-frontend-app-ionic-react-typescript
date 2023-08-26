@@ -8,7 +8,12 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { helpCircleOutline, notificationsOutline } from 'ionicons/icons';
+import {
+	addOutline,
+	helpCircleOutline,
+	notificationsOutline,
+} from 'ionicons/icons';
+import { useRouteMatch } from 'react-router';
 
 /**
  * Custom Imports go down
@@ -23,8 +28,9 @@ import {
 } from '@/components/ZIonComponents';
 import ZUserProfileButton from '../UserProfileButton';
 import ZNotificationPopover from '@/components/InPageComponents/ZaionsPopovers/NotificationPopover';
-import ZWorkspaceSwitcher from '../WorkspaceSwitcher';
+import ZWorkspaceSwitcher from '../Workspace/WorkspaceSwitcher';
 import ZCan from '@/components/Can';
+import ZCreateWorkspaceBtn from '../Workspace/ZCreateWorkspaceBtn';
 
 /**
  * Custom Hooks Imports go down
@@ -40,6 +46,7 @@ import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Type Imports go down
@@ -79,8 +86,12 @@ const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 	// #region popovers.
 	const { presentZIonPopover: presentZHelpCenterPopover } =
 		useZIonPopover(ZHelpCenterPopover);
-	const { presentZIonPopover: presentZNotificationPopover } =
-		useZIonPopover(ZNotificationPopover);
+	const { presentZIonPopover: presentZNotificationPopover } = useZIonPopover(
+		ZNotificationPopover,
+		{
+			workspaceId: workspaceId,
+		}
+	);
 	// #endregion
 
 	// #region APIs.
@@ -106,14 +117,10 @@ const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 	return (
 		<ZIonRow className='h-[4rem] px-3 zaions__light_bg shadow-[0_3px_6px_#00000029]'>
 			{/*  */}
-			<ZIonCol className='flex h-full ion-align-items-center'>
-				<ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
-					<ZWorkspaceSwitcher workspaceId={workspaceId} />
-				</ZCan>
-			</ZIonCol>
+			<ZADTopBarColOne workspaceId={workspaceId} />
 
 			{/*  */}
-			<ZIonCol className='h-full '></ZIonCol>
+			<ZIonCol className='h-full'></ZIonCol>
 
 			{/*  */}
 			<ZIonCol className='flex h-full gap-2 ion-align-items-center ion-justify-content-end'>
@@ -167,6 +174,26 @@ const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 				<ZUserProfileButton />
 			</ZIonCol>
 		</ZIonRow>
+	);
+};
+
+const ZADTopBarColOne: React.FC<{ workspaceId?: string }> = ({
+	workspaceId,
+}) => {
+	const isWorkspaceListPage = useRouteMatch(
+		ZaionsRoutes.AdminPanel.Workspaces.Main
+	)?.isExact;
+
+	return (
+		<ZIonCol className='flex h-full ion-align-items-center'>
+			{isWorkspaceListPage ? (
+				<ZCreateWorkspaceBtn />
+			) : (
+				<ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
+					<ZWorkspaceSwitcher workspaceId={workspaceId} />
+				</ZCan>
+			)}
+		</ZIonCol>
 	);
 };
 

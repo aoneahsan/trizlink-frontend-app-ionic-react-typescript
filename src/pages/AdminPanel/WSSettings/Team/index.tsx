@@ -159,7 +159,7 @@ const ZWSSettingTeamsListPage: React.FC = () => {
 			</ZIonRow>
 
 			{/* total teams count and filters buttons */}
-			<ZIonRow className='mt-1 rounded border rounded-lg zaions__light_bg ion-align-items-center ion-padding'>
+			<ZIonRow className='mt-1 border rounded-lg zaions__light_bg ion-align-items-center ion-padding'>
 				<ZIonCol className='flex ps-1 ion-align-items-center'>
 					<ZIonText className='text-2xl'>
 						<ZIonText

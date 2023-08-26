@@ -160,7 +160,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
 								})}
 							>
 								<ZIonInput
-									label=''
+									aria-label='domain'
 									name='domain'
 									type='email'
 									fill='outline'
@@ -173,13 +173,12 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
 										CONSTANTS.testingSelectors.shortLink.listPage.switchItInput
 									}
 									className={classNames({
-										'rounded-none': true,
+										'rounded-none zaions__bg_white': true,
 										'ion-touched ion-invalid': touched.domain && errors.domain,
 										'ion-touched ion-valid': touched.domain && !errors.domain,
 									})}
 									style={{
-										'--background': '#fff',
-										'--padding-start': '3px',
+										'--padding-start': '10px',
 										'--border-radius': '0',
 									}}
 								/>

@@ -685,22 +685,22 @@ const testingSelectors = {
 			timeFilterBtn: 'lib-lp-time-filter-btn',
 			tagsFilterBtn: 'lib-lp-tags-filter-btn',
 			refetchBtn: 'lib-lp-refetch-btn',
-		},
 
-		table: {
-			// lib-t -> link-in-bio-table
-			url: 'lib-t-url',
-			linkToShare: 'lib-t-link-to-share',
-			pixel: 'lib-t-pixel',
-			notes: 'lib-t-notes',
-			actionPopoverBtn: 'lib-t-ap-btn',
-			editBtn: 'lib-t-edit-btn',
-			deleteBtn: 'lib-t-delete-btn',
-			previousButton: 'lib-t-previous-page-btn',
-			getFirstPageButton: 'lib-t-first-page-btn',
-			nextButton: 'lib-t-next-page-btn',
-			getLastPageButton: 'lib-t-last-page-btn',
-			pageSizeInput: 'lib-t-page-size-input',
+			table: {
+				// lib-t -> link-in-bio-table
+				url: 'lib-t-url',
+				linkToShare: 'lib-t-link-to-share',
+				pixel: 'lib-t-pixel',
+				notes: 'lib-t-notes',
+				actionPopoverBtn: 'lib-t-ap-btn',
+				editBtn: 'lib-t-edit-btn',
+				deleteBtn: 'lib-t-delete-btn',
+				previousButton: 'lib-t-previous-page-btn',
+				getFirstPageButton: 'lib-t-first-page-btn',
+				nextButton: 'lib-t-next-page-btn',
+				getLastPageButton: 'lib-t-last-page-btn',
+				pageSizeInput: 'lib-t-page-size-input',
+			},
 		},
 
 		formModal: {
@@ -1309,9 +1309,12 @@ const REACT_QUERY = {
 		USER: {
 			ROLE_PERMISSIONS: 'rq-user-roles-and-permissions',
 			WS_ROLES: 'rq-user-ws-roles',
+			NOTIFICATION: {
+				MAIN: 'rq-user-notification-main-key',
+			},
 			SETTING: {
-				MAIN: 'rq-user-setting-key',
-				GET: 're-user-setting-get',
+				MAIN: 'rq-user-setting-main-key',
+				GET: 're-user-setting-get-key',
 			},
 		},
 	},

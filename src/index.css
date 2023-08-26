@@ -234,7 +234,7 @@ span.new {
 }
 
 .zaions_ion_color_danger {
-	color: var(--ion-color-danger);
+	color: var(--ion-color-danger) !important;
 	--color: var(--ion-color-danger);
 }
 
@@ -256,6 +256,7 @@ span.new {
 
 .zaions__bg_white {
 	background-color: var(--ion-color-white) !important;
+	--background: var(--ion-color-white) !important;
 }
 
 .zaions__bg_f5f6fa {
@@ -378,6 +379,13 @@ span.new {
 
 .z-ion-border-secondary {
 	border: 1px solid var(--ion-color-secondary);
+}
+.z-ion-border-danger {
+	border: 1px solid var(--ion-color-danger) !important;
+}
+
+.z-ion-border-success {
+	border: 1px solid var(--ion-color-success) !important;
 }
 
 .z-ion-border-width-1px {

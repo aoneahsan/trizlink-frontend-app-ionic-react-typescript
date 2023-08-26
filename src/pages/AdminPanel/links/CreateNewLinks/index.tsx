@@ -158,6 +158,7 @@ import {
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { isPossiblePhoneNumber } from 'react-phone-number-input';
 
 /**
  * Style files Imports go down
@@ -655,6 +656,12 @@ const AdminCreateNewLinkPages: React.FC = () => {
 								errors.target,
 								VALIDATION_RULE.phoneNumber
 							);
+							if (
+								values?.target?.phoneNumber &&
+								!isPossiblePhoneNumber(values.target.phoneNumber)
+							) {
+								errors.target.phoneNumber = 'Not a valid phone number.';
+							}
 						} else {
 							delete errors.target.phoneNumber;
 						}
@@ -901,7 +908,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 					// #endregion
 				>
 					{/* Content */}
-					{({ isSubmitting, isValid, submitForm }) => {
+					{({ isSubmitting, isValid, submitForm, values, errors }) => {
 						return (
 							<ZIonContent color='light'>
 								{/* Grid-1 */}

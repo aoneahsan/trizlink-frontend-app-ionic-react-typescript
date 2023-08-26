@@ -64,6 +64,7 @@ import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
  * */
 import { NewShortLinkSelectTypeOption } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
+import ZCPhoneNumberInput from '@/components/CustomComponents/ZPhoneNumberInput';
 
 /**
  * Style files Imports go down
@@ -87,8 +88,15 @@ import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
  * */
 
 const ZaionsShortUrlOptionFields: React.FC = () => {
-	const { values, errors, touched, handleChange, handleBlur, setFieldValue } =
-		useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
+	const {
+		values,
+		errors,
+		touched,
+		handleChange,
+		handleBlur,
+		setFieldValue,
+		setFieldTouched,
+	} = useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
 	const { isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
 
@@ -367,7 +375,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 								newShortLinkTypeOptionDataAtom?.type ===
 									messengerPlatformsBlockEnum.call) && (
 								<>
-									<ZIonSelect
+									{/* <ZIonSelect
 										name='countryCode'
 										// value={values.countryCode}
 										// onIonChange={handleCountryCodeChange}
@@ -381,13 +389,36 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 											<IonSelectOption key={country.code} value={country.code}>
 												{country.name} ({country.code})
 											</IonSelectOption>
-										))} */}
+										))} * /}
 										<ZIonSelectOption value='92'>
 											+92 (pakistan)
 										</ZIonSelectOption>
-									</ZIonSelect>
+									</ZIonSelect> */}
+									<ZCPhoneNumberInput
+										placeholder={ShortLinkPlaceholder()}
+										value={String(values?.target?.phoneNumber)}
+										touched={touched?.target?.phoneNumber}
+										className={classNames({
+											'w-full ': true,
+										})}
+										errorText={
+											touched?.target?.phoneNumber
+												? errors?.target?.phoneNumber
+												: undefined
+										}
+										onChange={(_value) => {
+											setFieldValue('target.phoneNumber', _value, true);
+										}}
+										onBlur={() => {
+											setFieldTouched('target.phoneNumber', true, true);
+										}}
+										testingSelector={
+											CONSTANTS.testingSelectors.shortLink.formPage
+												.ShortUrlOptionFields.numberInput
+										}
+									/>
 									{/* Input of every Phone Number */}
-									<ZIonInput
+									{/* <ZIonInput
 										label='Phone number'
 										labelPlacement='stacked'
 										name='target.phoneNumber'
@@ -416,7 +447,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 												touched?.target?.phoneNumber &&
 												!errors?.target?.phoneNumber,
 										})}
-									/>
+									/> */}
 								</>
 							)}
 

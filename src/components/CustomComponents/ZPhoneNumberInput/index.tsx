@@ -9,7 +9,11 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import { ZIonNote } from '@/components/ZIonComponents';
-import PhoneInput, { formatPhoneNumberIntl } from 'react-phone-number-input';
+import PhoneInput, {
+	formatPhoneNumberIntl,
+	isPossiblePhoneNumber,
+} from 'react-phone-number-input';
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
@@ -41,6 +45,10 @@ import PhoneInput, { formatPhoneNumberIntl } from 'react-phone-number-input';
  * ? Import of style sheet is a style import
  * */
 import 'react-phone-number-input/style.css';
+import classes from './styles.module.css';
+import { zCreateElementTestingSelector } from '@/utils/helpers';
+import { PRODUCT_NAME } from '@/utils/constants';
+import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 /**
  * Images Imports go down
@@ -53,11 +61,15 @@ import 'react-phone-number-input/style.css';
  * */
 interface IZCPhoneNumberInput {
 	value?: string;
-	onBlur?(event: React.FocusEvent<HTMLElement, Element>): void;
-	onChange(value?: string | undefined): void;
-	errorsText?: string;
+	placeholder?: string;
+	onChange: (value: string) => void;
+	onBlur?: (event: React.FocusEvent<HTMLElement, Element>) => void;
+	errorText?: string;
 	className?: string;
+	touched?: boolean;
 	minHeight?: string;
+	testingSelector?: string;
+	testingListSelector?: string;
 	style?: {
 		[key: string]: unknown;
 	};
@@ -71,12 +83,16 @@ interface IZCPhoneNumberInput {
 
 const ZCPhoneNumberInput: React.FC<IZCPhoneNumberInput> = ({
 	value,
+	placeholder = 'Enter phone number',
+	errorText,
+	className,
+	minHeight = '2.5rem',
+	style,
+	touched = false,
+	testingSelector,
+	testingListSelector,
 	onBlur,
 	onChange,
-	errorsText,
-	className,
-	minHeight,
-	style,
 }) => {
 	const compStyle =
 		style && minHeight
@@ -86,20 +102,46 @@ const ZCPhoneNumberInput: React.FC<IZCPhoneNumberInput> = ({
 			: !style && minHeight
 			? { minHeight: minHeight }
 			: {};
+
+	const _testingListSelector = testingListSelector
+		? {
+				...zCreateElementTestingSelector({
+					_value: testingListSelector || PRODUCT_NAME,
+					_key: zCreateElementTestingSelectorKeyEnum.listSelector,
+				}),
+		  }
+		: {};
+
+	const _testingSelector = testingSelector
+		? {
+				...zCreateElementTestingSelector({
+					_value: testingSelector || PRODUCT_NAME,
+				}),
+		  }
+		: {};
 	return (
-		<>
+		<div className={className}>
 			<PhoneInput
-				placeholder='Enter phone number'
+				placeholder={placeholder}
 				onBlur={onBlur}
 				onChange={onChange}
 				style={compStyle}
-				className={className}
+				className={classNames(classes['z-custom-pn-field'], {
+					'w-full': true,
+					'z-ion-border-danger zaions_ion_color_danger':
+						touched && errorText !== undefined,
+					// 'z-ion-border-success': isPossiblePhoneNumber(value),
+				})}
+				{..._testingSelector}
+				{..._testingListSelector}
 				value={formatPhoneNumberIntl(String(value))}
 			/>
-			{errorsText && errorsText?.trim().length > 0 && (
-				<ZIonNote color='danger'>{errorsText}</ZIonNote>
+			{errorText && errorText?.trim().length > 0 && (
+				<ZIonNote color='danger' className='z-custom-pn-field-error-text'>
+					{errorText}
+				</ZIonNote>
 			)}
-		</>
+		</div>
 	);
 };
 

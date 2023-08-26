@@ -83,6 +83,19 @@ export interface LinkInBioBgGradientColorsInterface {
 	direction: string | number;
 }
 
+// LIB -> link-in-bio
+export enum ZLIBListPageTableColumnsIds {
+	id = '__z_link_in_bio_id__',
+	title = '__z_link_in_bio_title__',
+	date = '__z_link_in_bio_date__',
+	pixel = '__z_link_in_bio_pixels__',
+	notes = '__z_link_in_bio_notes__',
+	url = '__z_link_in_bio_target_url__',
+	linkToShare = '__z_link_in_bio_link_to_share__',
+	click = '__z_link_in_bio_click__',
+	actions = '__z_link_in_bio_actions__',
+}
+
 /**
  * Types
  */

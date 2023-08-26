@@ -72,6 +72,7 @@ import CONSTANTS from '@/utils/constants';
  * ? Import of style sheet is a style import
  * */
 import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import ZAdminPanelTopBar from '@/components/AdminPanelComponents/TopBar';
 
 /**
  * Images Imports go down
@@ -110,29 +111,12 @@ const ZWorkspaceListPage: React.FC = () => {
 				<ZIonContent>
 					{/* Main grid */}
 					<ZIonGrid className='h-full ion-no-padding'>
-						{/*  */}
-						<ZIonRow className='h-full'>
-							{/* Expendable Navigation in the left-hand side */}
-							{/* <AdminPanelSidebarMenu
-							activePage={AdminPanelSidebarMenuPageEnum.workspaces}
-						/> */}
-
-							{/* Main Container */}
-							<ZIonCol
-								className='zaions-transition'
-								sizeXl='12'
-								sizeLg='12'
-								sizeMd='12'
-								sizeSm='12'
-								sizeXs='12'
-							>
-								<ZIonGrid className='px-4'>
-									{/* Top workspace menu */}
-									<ZIonRow className='pt-2'>
-										{/*  invite buttons col */}
+						{/* Top workspace menu */}
+						{/* <ZIonRow className='pt-2'>
+										{/*  invite buttons col * /}
 										<ZIonCol>
 											<ZIonButtons className='gap-3 ion-align-items-center'>
-												{/* Invite button */}
+												{/* Invite button * /}
 												<ZIonButton
 													fill='solid'
 													color='primary'
@@ -148,7 +132,7 @@ const ZWorkspaceListPage: React.FC = () => {
 											</ZIonButtons>
 										</ZIonCol>
 
-										{/* new workspace button col */}
+										{/* new workspace button col * /}
 										<ZIonCol className='flex gap-8 pe-3 ion-align-items-center ion-justify-content-end'>
 											<ZCan
 												havePermissions={[permissionsEnum.create_workspace]}
@@ -172,7 +156,7 @@ const ZWorkspaceListPage: React.FC = () => {
 												</ZIonButton>
 											</ZCan>
 
-											{/* User profile button */}
+											{/* User profile button * /}
 											<Suspense
 												fallback={
 													<div className='w-[44px] h-[44px] rounded-full'></div>
@@ -181,113 +165,111 @@ const ZWorkspaceListPage: React.FC = () => {
 												<ZUserProfileButton />
 											</Suspense>
 										</ZIonCol>
-									</ZIonRow>
+									</ZIonRow> */}
+						<ZAdminPanelTopBar />
 
-									{/* cards row */}
-									<ZIonRow className='mt-5'>
-										{/* single card */}
-										<Suspense fallback={<ZWorkspacesCardSkeleton />}>
-											{!isWorkspacesDataFetching &&
-												WorkspacesData &&
-												WorkspacesData.map((el) => (
-													<ZIonCol
-														sizeXl='4'
-														sizeLg='6'
-														sizeMd='6'
-														sizeSm='6'
-														sizeXs='12'
-														key={el.id}
-													>
-														<ZWorkspacesCard
-															workspaceImage={el.workspaceImage}
-															workspaceName={el.workspaceName as string}
-															user={el.user}
-															id={el.id}
-															createdAt={el.createdAt}
-														/>
-													</ZIonCol>
-												))}
-										</Suspense>
+						{/* cards row */}
+						<ZIonRow className='mt-5 px-4'>
+							{/* single card */}
+							<Suspense fallback={<ZWorkspacesCardSkeleton />}>
+								{!isWorkspacesDataFetching &&
+									WorkspacesData &&
+									WorkspacesData.map((el) => (
+										<ZIonCol
+											sizeXl='4'
+											sizeLg='6'
+											sizeMd='6'
+											sizeSm='6'
+											sizeXs='12'
+											key={el.id}
+										>
+											<ZWorkspacesCard
+												workspaceImage={el.workspaceImage}
+												workspaceName={el.workspaceName as string}
+												user={el.user}
+												id={el.id}
+												createdAt={el.createdAt}
+											/>
+										</ZIonCol>
+									))}
+							</Suspense>
 
-										{isWorkspacesDataFetching && <ZWorkspacesCardSkeleton />}
+							{isWorkspacesDataFetching && <ZWorkspacesCardSkeleton />}
 
-										{/* add a workspace card */}
-										<ZCan havePermissions={[permissionsEnum.create_workspace]}>
-											<ZIonCol
-												sizeXl='4'
-												sizeLg='6'
-												sizeMd='6'
-												sizeSm='6'
-												sizeXs='12'
-											>
-												{!isWorkspacesDataFetching && (
-													<ZIonCard
-														className={classNames({
-															'h-[13.4rem] cursor-pointer': true,
-														})}
-														testingSelector={
-															CONSTANTS.testingSelectors.workspace.listPage
-																.createWorkspaceCardButton
+							{/* add a workspace card */}
+							<ZCan havePermissions={[permissionsEnum.create_workspace]}>
+								<ZIonCol
+									sizeXl='4'
+									sizeLg='6'
+									sizeMd='6'
+									sizeSm='6'
+									sizeXs='12'
+								>
+									{!isWorkspacesDataFetching && (
+										<ZIonCard
+											className={classNames({
+												'h-[13.4rem] cursor-pointer': true,
+											})}
+											testingSelector={
+												CONSTANTS.testingSelectors.workspace.listPage
+													.createWorkspaceCardButton
+											}
+											onClick={() => {
+												presentZWorkspaceCreateModal({
+													_cssClass: 'create-workspace-modal-size',
+													_onDidDismiss: (event) => {
+														if (
+															event.detail.data &&
+															event.detail.role === 'success'
+														) {
+															// after dismissing redirecting to edit workspace-page
+															// zNavigatePushRoute(
+															// 	createRedirectRoute({
+															// 		url: ZaionsRoutes.AdminPanel.Workspaces
+															// 			.Edit,
+															// 		params: [
+															// 			CONSTANTS.RouteParams.workspace
+															// 				.editWorkspaceIdParam,
+															// 		],
+															// 		values: [event.detail.data],
+															// 		routeSearchParams: {
+															// 			tab: workspaceFormTabEnum.inviteClients,
+															// 		},
+															// 	})
+															// );
 														}
-														onClick={() => {
-															presentZWorkspaceCreateModal({
-																_cssClass: 'create-workspace-modal-size',
-																_onDidDismiss: (event) => {
-																	if (
-																		event.detail.data &&
-																		event.detail.role === 'success'
-																	) {
-																		// after dismissing redirecting to edit workspace-page
-																		// zNavigatePushRoute(
-																		// 	createRedirectRoute({
-																		// 		url: ZaionsRoutes.AdminPanel.Workspaces
-																		// 			.Edit,
-																		// 		params: [
-																		// 			CONSTANTS.RouteParams.workspace
-																		// 				.editWorkspaceIdParam,
-																		// 		],
-																		// 		values: [event.detail.data],
-																		// 		routeSearchParams: {
-																		// 			tab: workspaceFormTabEnum.inviteClients,
-																		// 		},
-																		// 	})
-																		// );
-																	}
-																},
-															});
-														}}
-													>
-														<ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
-															<ZIonIcon icon={addOutline} size='large' />
-															<ZIonText className='text-lg'>
-																Create a workspace
-															</ZIonText>
-														</ZIonCardContent>
-													</ZIonCard>
-												)}
+													},
+												});
+											}}
+										>
+											<ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
+												<ZIonIcon icon={addOutline} size='large' />
+												<ZIonText className='text-lg'>
+													Create a workspace
+												</ZIonText>
+											</ZIonCardContent>
+										</ZIonCard>
+									)}
 
-												{isWorkspacesDataFetching && (
-													<ZIonCard
-														className={classNames({
-															'h-[13.4rem] cursor-pointer': true,
-														})}
-													>
-														<ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
-															<ZIonSkeletonText width='20px' height='20px' />
+									{isWorkspacesDataFetching && (
+										<ZIonCard
+											className={classNames({
+												'h-[13.4rem] cursor-pointer': true,
+											})}
+										>
+											<ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
+												<ZIonSkeletonText width='20px' height='20px' />
 
-															<ZIonText className='text-lg'>
-																<ZIonSkeletonText width='120px' height='15px' />
-															</ZIonText>
-														</ZIonCardContent>
-													</ZIonCard>
-												)}
-											</ZIonCol>
-										</ZCan>
-									</ZIonRow>
-									{/*  */}
-								</ZIonGrid>
-							</ZIonCol>
+												<ZIonText className='text-lg'>
+													<ZIonSkeletonText width='120px' height='15px' />
+												</ZIonText>
+											</ZIonCardContent>
+										</ZIonCard>
+									)}
+								</ZIonCol>
+							</ZCan>
 						</ZIonRow>
+						{/*  */}
 					</ZIonGrid>
 				</ZIonContent>
 			</ZCan>

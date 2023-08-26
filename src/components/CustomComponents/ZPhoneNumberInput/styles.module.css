@@ -1,0 +1,13 @@
+.z-custom-pn-field .PhoneInput {
+	border: 1px solid #b3b3b3;
+	padding: 0 0.8rem;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-ms-border-radius: 4px;
+	-o-border-radius: 4px;
+}
+
+.z-custom-pn-field .PhoneInput input:focus {
+	outline: none !important;
+}

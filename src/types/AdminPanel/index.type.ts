@@ -55,6 +55,12 @@ export enum ZUserSettingTypeEnum {
 	shortLinkListPageTable = 'shortLinkListPageTable',
 }
 
+export enum ZNotificationEnum {
+	newDeviceLogin = 'newDeviceLogin',
+	lastLogout = 'lastLogout',
+	wsTeamMemberInvitation = 'wsTeamMemberInvitation',
+}
+
 // Interfaces
 export interface UTMTagInfoInterface {
 	templateId?: string;
@@ -63,6 +69,22 @@ export interface UTMTagInfoInterface {
 	utmSource?: string;
 	utmTerm?: string;
 	utmContent?: string;
+}
+
+export interface IZNotification {
+	id?: string;
+	ZLInviteeId?: string;
+	zlNotificationType?: ZNotificationEnum;
+	data: {
+		item: {
+			userId: string;
+			message: string;
+			inviter: string;
+			inviterUserId: string;
+			teamId: string;
+			teamName: string;
+		};
+	};
 }
 
 export interface ShortUrlInterface {

@@ -447,11 +447,12 @@ const ZLinkInBiosListPage: React.FC = () => {
 												className='flex flex-col w-full h-full gap-10 px-3'
 												scrollY={true}
 											>
-												<div className='flex flex-col gap-8 ion-no-margin ion-no-padding'>
+												<div className='flex flex-col gap-4 ion-no-margin ion-no-padding'>
 													{/* Switch it button & page heading */}
 													<ZIonRow
 														className={classNames({
-															'ion-align-items-center': true,
+															'ion-align-items-center border rounded-lg zaions__light_bg ion-padding':
+																true,
 															'mt-4': isLgScale,
 														})}
 													>
@@ -537,7 +538,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 													</ZIonRow>
 
 													{/* filter input, export, import, & create short links buttons */}
-													<ZIonRow className='mt-3 rounded ion-align-items-center'>
+													<ZIonRow className='mt-1 ion-align-items-center border rounded-lg zaions__light_bg ion-padding'>
 														<ZIonCol
 															sizeXl='4'
 															sizeLg='12'
@@ -627,7 +628,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 													</ZIonRow>
 
 													{/* total links count and filters buttons */}
-													<ZIonRow className='mt-1 rounded ion-align-items-center'>
+													<ZIonRow className='mt-1 ion-align-items-center border rounded-lg zaions__light_bg ion-padding'>
 														<ZIonCol className='flex ps-1 ion-align-items-center'>
 															<ZIonText className='text-2xl'>
 																<ZIonText className='font-bold total_links me-1'>
@@ -1270,27 +1271,27 @@ const SearchQueryInputComponent = () => {
 		>
 			{({ submitForm, handleChange }) => (
 				<ZIonItem
-					className='border ion-item-start-no-padding'
+					className='ion-item-start-no-padding'
 					style={{ '--inner-padding-end': '0px' }}
 					lines='none'
 					minHeight='40px'
 				>
 					<ZIonInput
-						label=''
+						aria-label='search'
 						clearInput={true}
 						type='text'
 						name='searchValue'
 						onIonChange={handleChange}
 						placeholder='Search link by title, domain...'
-						fill='solid'
+						fill='outline'
+						className='zaions__bg_white'
 						minHeight='40px'
 						testingSelector={
 							CONSTANTS.testingSelectors.linkInBio.listPage.searchInput
 						}
 						style={{
-							'--background': '#fff',
-							'--padding-start': '11px',
-							'--border-color': '#fff',
+							'--padding-start': '10px',
+							'--border-radius': '0',
 						}}
 					/>
 					<ZIonButton
@@ -1302,6 +1303,7 @@ const SearchQueryInputComponent = () => {
 						}
 						style={{
 							height: '100%',
+							'--border-radius': '0',
 						}}
 					>
 						<ZIonIcon icon={filterOutline} className='me-2' />

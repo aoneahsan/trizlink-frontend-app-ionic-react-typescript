@@ -180,7 +180,11 @@ const ZValidateInvitationPage: React.FC = () => {
 			</ZIonPage>
 		);
 	} else if (_token && !compState.errorOccurred && !compState.isProcessing) {
-		return <ZIonTitle>Successfully done</ZIonTitle>;
+		return (
+			<ZIonPage>
+				<ZIonTitle>Successfully done</ZIonTitle>
+			</ZIonPage>
+		);
 	} else {
 		return (
 			<ZIonPage>
