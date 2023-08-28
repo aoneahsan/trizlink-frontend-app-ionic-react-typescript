@@ -61,6 +61,11 @@ export enum ZNotificationEnum {
 	wsTeamMemberInvitation = 'wsTeamMemberInvitation',
 }
 
+export enum ZTeamMemberInvitationEnum {
+	accepted = 'accepted',
+	rejected = 'rejected',
+}
+
 // Interfaces
 export interface UTMTagInfoInterface {
 	templateId?: string;
@@ -83,6 +88,7 @@ export interface IZNotification {
 			inviterUserId: string;
 			teamId: string;
 			teamName: string;
+			wsTeamMemberInviteId: string;
 		};
 	};
 }

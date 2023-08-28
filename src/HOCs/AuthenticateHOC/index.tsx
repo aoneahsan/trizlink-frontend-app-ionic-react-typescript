@@ -9,6 +9,7 @@ import React, { ReactNode } from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import { useResetRecoilState } from 'recoil';
+import { App } from '@capacitor/app';
 
 /**
  * Custom Imports go down
@@ -63,64 +64,73 @@ const AuthenticateHOC: React.FC<AuthenticateHOCPropsType> = (props) => {
 
 	const { zIsPrivateRoute } = useZPrivateRouteChecker();
 
+	const checkAuthenticateValidation = async () => {
+		try {
+			if (!zIsPrivateRoute) {
+				setCompState((oldState) => ({
+					...oldState,
+					isProcessing: false,
+					userIsAuthenticated: false,
+					guestUser: true,
+				}));
+			} else {
+				// Checking if there is some data in local storage, if there is some data then, run verifyAuthenticationStatus api to check it is valid or not.
+				await Promise.all([
+					STORAGE.GET(LOCALSTORAGE_KEYS.AUTHTOKEN),
+					STORAGE.GET(LOCALSTORAGE_KEYS.USERDATA),
+				]).then(async ([authToken, userData]) => {
+					if (authToken && userData) {
+						// check api result
+						await zAxiosApiRequest({
+							_url: API_URL_ENUM.verifyAuthenticationStatus,
+							_method: 'post',
+						});
+
+						setCompState((oldState) => ({
+							...oldState,
+							isProcessing: false,
+							userIsAuthenticated: true,
+						}));
+					} else {
+						window.location.replace(ZaionsRoutes.LoginRoute);
+						return null;
+					}
+				});
+			}
+		} catch (error: any) {
+			// Checking if Unauthorized.
+			if (error.response && error.response.status === 401) {
+				// Clear storage
+				STORAGE.CLEAR(LOCALSTORAGE_KEYS.USERDATA);
+				STORAGE.CLEAR(LOCALSTORAGE_KEYS.AUTHTOKEN);
+
+				//
+				setCompState((oldState) => ({
+					...oldState,
+					isProcessing: false,
+					userIsAuthenticated: false,
+					errorCode: ZErrorCodeEnum.unauthorized,
+					errorOccurred: true,
+				}));
+				// Clear recoil state
+				resetUserAccountState();
+			}
+		}
+	};
+
 	// check if authenticate
 	/**
 	 *
 	 */
 	React.useEffect(() => {
-		void (async () => {
-			try {
-				if (!zIsPrivateRoute) {
-					setCompState((oldState) => ({
-						...oldState,
-						isProcessing: false,
-						userIsAuthenticated: false,
-						guestUser: true,
-					}));
-				} else {
-					// Checking if there is some data in local storage, if there is some data then, run verifyAuthenticationStatus api to check it is valid or not.
-					await Promise.all([
-						STORAGE.GET(LOCALSTORAGE_KEYS.AUTHTOKEN),
-						STORAGE.GET(LOCALSTORAGE_KEYS.USERDATA),
-					]).then(async ([authToken, userData]) => {
-						if (authToken && userData) {
-							// check api result
-							await zAxiosApiRequest({
-								_url: API_URL_ENUM.verifyAuthenticationStatus,
-								_method: 'post',
-							});
+		void checkAuthenticateValidation();
 
-							setCompState((oldState) => ({
-								...oldState,
-								isProcessing: false,
-								userIsAuthenticated: true,
-							}));
-						} else {
-							window.location.replace(ZaionsRoutes.LoginRoute);
-							return null;
-						}
-					});
-				}
-			} catch (error: any) {
-				// Checking if Unauthorized.
-				if (error.response && error.response.status === 401) {
-					// Clear storage
-					STORAGE.CLEAR(LOCALSTORAGE_KEYS.USERDATA);
-					STORAGE.CLEAR(LOCALSTORAGE_KEYS.AUTHTOKEN);
-
-					//
-					setCompState((oldState) => ({
-						...oldState,
-						isProcessing: false,
-						userIsAuthenticated: false,
-						errorCode: ZErrorCodeEnum.unauthorized,
-						errorOccurred: true,
-					}));
-					// Clear recoil state
-					resetUserAccountState();
-				}
+		App.addListener('appStateChange', ({ isActive }) => {
+			// console.log('App state changed. Is active?', isActive);
+			if (isActive === true) {
+				void checkAuthenticateValidation();
 			}
-		})();
+		});
 	}, []);
 
 	if (compState.isProcessing) {

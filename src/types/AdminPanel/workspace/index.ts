@@ -166,6 +166,7 @@ export interface WSTeamMembersInterface {
 	accountStatus: string;
 	invitedAt: string;
 	inviteAcceptedAt: string;
+	inviteRejectedAt?: string;
 	accountStatusUpdaterRemarks: string;
 	accountStatusLastUpdatedBy: string;
 	memberRole: {

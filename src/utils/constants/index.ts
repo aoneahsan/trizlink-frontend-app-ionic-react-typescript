@@ -46,6 +46,7 @@ const RouteParams = {
 		workspaceId: ':workspaceId',
 		editWorkspaceIdParam: ':editWorkspaceId',
 		teamId: ':teamId',
+		memberInviteId: ':memberInviteId',
 	},
 
 	settings: {
@@ -102,6 +103,8 @@ export const API_URLS = {
 	delete: '/user/delete',
 	ws_roles_get: '/user/ws-roles',
 	ws_team_member_invite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}/member`,
+	ws_team_member_invite_get: `/user/workspace/member/${RouteParams.workspace.memberInviteId}`,
+	ws_team_member_update: `/user/update-invitation/${RouteParams.workspace.memberInviteId}`,
 	validate_invitation_status: `/user/validate-and-update-invitation`,
 	userPixelAccounts_create_list: '/user/pixel',
 	userAccountUtmTags_create_list: '/user/utm-tag',
@@ -1036,6 +1039,23 @@ const testingSelectors = {
 			settingsBtn: 'tb-np-settings-btn',
 
 			singleNotification: 'tb-np-single-notification',
+			notificationUpdateTabText: 'tb-np-updates-message-text',
+			notificationUpdateTabViewBtn: 'tb-np-updates-view-btn',
+			dateText: 'tb-np-updates-date-text',
+		},
+	},
+	// #endregion
+
+	// #region Invitation.
+	invitation: {
+		viewModal: {
+			closeBtn: 'invitation-vm-close-btn',
+			acceptedBtn: 'invitation-vm-accepted-btn',
+			rejectedBtn: 'invitation-vm-rejected-btn',
+			actionBtnContainer: 'invitation-vm-action-btn-container',
+			messageContainer: 'invitation-vm-message-container',
+			acceptedText: 'invitation-vm-accepted-text',
+			rejectedText: 'invitation-vm-rejected-text',
 		},
 	},
 	// #endregion
@@ -1261,6 +1281,7 @@ const REACT_QUERY = {
 			TEAM_GET: 'rq-workspace-team-get-key',
 			MEMBERS: 'rq-ws-team-members-main-key',
 			MEMBER_GET: 'rq-ws-team-member-get-key',
+			INVITATION_GET: 'rq-ws-team-member-invitation-get-key',
 		},
 		FOLDER: {
 			MAIN: 'rq-folders-list-key',

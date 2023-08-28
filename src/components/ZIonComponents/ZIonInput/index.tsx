@@ -11,9 +11,10 @@ import {
 
 // Type
 import { IonInputCustomEvent } from '@ionic/core/dist/types/components';
-import { zCreateElementTestingSelector } from '@/utils/helpers';
+import { zCreateElementTestingSelector, zGotoNextField } from '@/utils/helpers';
 import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
+import ZInputLengthConstant from '@/utils/constants/InputLenghtConstant';
 
 type ZIonInputAutoCompleteType =
 	| 'name'
@@ -156,6 +157,9 @@ export type ZIonInputType = {
 	errorText?: string;
 	fill?: 'solid' | 'outline';
 	counter?: boolean;
+
+	//
+	zNextFieldId?: string;
 };
 
 const ZIonInput = React.forwardRef(
@@ -192,6 +196,19 @@ const ZIonInput = React.forwardRef(
 				onIonInput={props.onIonChange}
 				fill={props.fill || 'outline'}
 				ref={ref}
+				counter={props.counter || true}
+				maxlength={
+					props.maxlength || ZInputLengthConstant.defaultStringMaxLength
+				}
+				onKeyUp={({ key }) => {
+					// if (props.onKeyUp) {
+					// 	props.onKeyUp();
+					// }
+
+					if (key === 'Enter') {
+						zGotoNextField(props.zNextFieldId);
+					}
+				}}
 				style={compStyle}
 				{..._testingSelector}
 				{..._testingListSelector}

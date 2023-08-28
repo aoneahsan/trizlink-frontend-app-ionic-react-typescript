@@ -550,6 +550,11 @@ span.new {
 	--width: 33vw;
 }
 
+.invitation-view-modal-size {
+	--height: 18rem;
+	--width: 30rem;
+}
+
 .pixel-account-detail-modal-size,
 .note-detail-modal-size,
 .dashboard-filter-modal-size {

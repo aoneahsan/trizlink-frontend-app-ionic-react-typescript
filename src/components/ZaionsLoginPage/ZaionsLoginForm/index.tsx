@@ -46,6 +46,7 @@ import { UserAuthData } from '@/types/ZaionsApis.type';
 import { ZIonButton } from '@/components/ZIonComponents';
 import { FormikSetErrorsType, resetFormType } from '@/types/ZaionsFormik.type';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import ZInputLengthConstant from '@/utils/constants/InputLenghtConstant';
 
 // Style
 
@@ -224,6 +225,7 @@ const ZaionsLoginForm: React.FC = () => {
 								label='Email Address'
 								labelPlacement='floating'
 								type='email'
+								enterkeyhint='next'
 								onIonChange={handleChange}
 								onIonBlur={handleBlur}
 								value={values.emailAddress}
@@ -233,6 +235,7 @@ const ZaionsLoginForm: React.FC = () => {
 								errorText={
 									touched.emailAddress ? errors.emailAddress : undefined
 								}
+								zNextFieldId={}
 								className={classNames({
 									'mb-4': true,
 									'ion-touched': touched.emailAddress,
@@ -246,6 +249,7 @@ const ZaionsLoginForm: React.FC = () => {
 								<ZIonInput
 									name='password'
 									label='Password'
+									enterkeyhint='enter'
 									labelPlacement='floating'
 									type={canViewPassword ? 'text' : 'password'}
 									onIonChange={handleChange}
@@ -253,6 +257,7 @@ const ZaionsLoginForm: React.FC = () => {
 									value={values.password}
 									errorText={touched.password ? errors.password : undefined}
 									clearOnEdit={false}
+									minlength={ZInputLengthConstant.loginForm.password.min}
 									testingSelector={
 										CONSTANTS.testingSelectors.loginPage.passwordInput
 									}

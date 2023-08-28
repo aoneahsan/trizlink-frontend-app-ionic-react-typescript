@@ -1611,3 +1611,13 @@ export const zRedirectToTarget = ({
 		reportCustomError(error);
 	}
 };
+
+export const zGotoNextField = (uniqueId?: string) => {
+	if (uniqueId) {
+		const _nextField = document.getElementById(uniqueId);
+
+		if (_nextField && _nextField instanceof HTMLInputElement) {
+			_nextField.focus();
+		}
+	}
+};

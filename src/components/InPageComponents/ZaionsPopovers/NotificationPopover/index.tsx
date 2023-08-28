@@ -22,19 +22,29 @@ import {
 import {
 	IZNotification,
 	ZNotificationEnum,
+	ZTeamMemberInvitationEnum,
 } from '@/types/AdminPanel/index.type';
 import CONSTANTS from '@/utils/constants';
+import { reportCustomError } from '@/utils/customErrorType';
 import { API_URL_ENUM } from '@/utils/enums';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { zStringify } from '@/utils/helpers';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
+import {
+	useZRQGetRequest,
+	useZRQUpdateRequest,
+} from '@/ZaionsHooks/zreactquery-hooks';
 import { Formik } from 'formik';
 import {
+	checkmarkOutline,
+	closeOutline,
 	fileTrayStackedOutline,
 	listCircleOutline,
 	logoFacebook,
 	personAdd,
 	settingsOutline,
 } from 'ionicons/icons';
-import React from 'react';
+import React, { useState } from 'react';
+import ZViewInvitationModal from '../../ZaionsModals/Workspace/ViewInvitationModal';
 
 /**
  * Packages Imports go down
@@ -91,9 +101,10 @@ enum ZNotificationPopoverTabsEnum {
  * @type {*}
  * */
 
-const ZNotificationPopover: React.FC<{ workspaceId: string }> = ({
-	workspaceId,
-}) => {
+const ZNotificationPopover: React.FC<{
+	dismissZIonPopover: (data?: string, role?: string | undefined) => void;
+	workspaceId: string;
+}> = ({ dismissZIonPopover, workspaceId }) => {
 	return (
 		<Formik
 			initialValues={{
@@ -217,7 +228,10 @@ const ZNotificationPopover: React.FC<{ workspaceId: string }> = ({
 								{values.tab === ZNotificationPopoverTabsEnum.approvals ? (
 									<ZApprovalsTab />
 								) : values.tab === ZNotificationPopoverTabsEnum.updates ? (
-									<ZUpdatesTab workspaceId={workspaceId} />
+									<ZUpdatesTab
+										workspaceId={workspaceId}
+										dismissZIonPopover={dismissZIonPopover}
+									/>
 								) : null}
 							</ZIonGrid>
 						</ZIonContent>
@@ -248,7 +262,17 @@ const ZApprovalsTab: React.FC = () => {
 };
 
 // Update tab.
-const ZUpdatesTab: React.FC<{ workspaceId: string }> = ({ workspaceId }) => {
+const ZUpdatesTab: React.FC<{
+	dismissZIonPopover: (data?: string, role?: string | undefined) => void;
+	workspaceId: string;
+}> = ({ workspaceId, dismissZIonPopover }) => {
+	// #region Component state.
+	const [compState, setCompState] = useState<{
+		memberInviteId?: string;
+	}>();
+	// #endregion
+
+	// #region APIS.
 	const {
 		data: userInvitationNotificationsData,
 		isFetching: isNotificationsFetching,
@@ -264,7 +288,44 @@ const ZUpdatesTab: React.FC<{ workspaceId: string }> = ({ workspaceId }) => {
 		_urlDynamicParts: [CONSTANTS.RouteParams.user.notification.type],
 	});
 
-	console.log({ userInvitationNotificationsData });
+	const { mutateAsync: markAsReadAsyncMutate } = useZRQUpdateRequest({
+		_url: API_URL_ENUM.user_notification_mark_as_read,
+		_showLoader: false,
+	});
+	// #endregion
+
+	// #region Modal & Popover.
+	const { presentZIonModal: presentZViewInvitationModal } = useZIonModal(
+		ZViewInvitationModal,
+		{
+			workspaceId: workspaceId,
+			memberInviteId: compState?.memberInviteId,
+		}
+	);
+	// #endregion
+
+	// #region Functions.
+	const zMarkAsReadHandler = async ({
+		notificationId,
+	}: {
+		notificationId?: string;
+	}) => {
+		try {
+			if (notificationId) {
+				await markAsReadAsyncMutate({
+					requestData: '',
+					itemIds: [ZNotificationEnum.wsTeamMemberInvitation, notificationId],
+					urlDynamicParts: [
+						CONSTANTS.RouteParams.user.notification.type,
+						CONSTANTS.RouteParams.user.notification.id,
+					],
+				});
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+	// #endregion
 
 	if (isNotificationsFetching) {
 		return <ZUpdatesTabSkeleton />;
@@ -296,20 +357,70 @@ const ZUpdatesTab: React.FC<{ workspaceId: string }> = ({ workspaceId }) => {
 					{/*  */}
 					<ZIonCol>
 						<div className='flex w-full ion-align-items-top ion-justify-content-between'>
-							<div className='overflow-hidden line-clamp-2 leading-none w-[85%]'>
-								<ZIonText className='text-sm' color='medium'>
-									{el?.data?.item?.message}
-								</ZIonText>
+							<div className='w-[73%]'>
+								<div className='overflow-hidden leading-none line-clamp-2'>
+									<ZIonText
+										className='text-sm'
+										color='medium'
+										testingSelector={
+											CONSTANTS.testingSelectors.topBar.notificationPopover
+												.notificationUpdateTabText
+										}
+										testingListSelector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.notificationUpdateTabText}-${el?.id}`}
+									>
+										{el?.data?.item?.message}
+									</ZIonText>
+								</div>
+
+								{el.zlNotificationType ===
+									ZNotificationEnum.wsTeamMemberInvitation && (
+									<ZIonButton
+										size='small'
+										className='mt-1'
+										testingSelector={
+											CONSTANTS.testingSelectors.topBar.notificationPopover
+												.notificationUpdateTabViewBtn
+										}
+										testingListSelector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.notificationUpdateTabViewBtn}-${el?.id}`}
+										onClick={async () => {
+											setCompState((oldValues) => ({
+												...oldValues,
+												memberInviteId: el?.data?.item?.wsTeamMemberInviteId,
+											}));
+
+											await zMarkAsReadHandler({
+												notificationId: el.id,
+											});
+
+											presentZViewInvitationModal({
+												_cssClass: 'invitation-view-modal-size',
+											});
+
+											dismissZIonPopover('', '');
+										}}
+									>
+										View
+									</ZIonButton>
+								)}
 							</div>
 
-							<div className='w-[15%]'>
-								<ZIonText className='text-sm' color='medium'>
-									3 month
+							{/*  */}
+							<div className='w-[22%] ion-text-center'>
+								<ZIonText
+									className='text-sm'
+									color='medium'
+									testingSelector={
+										CONSTANTS.testingSelectors.topBar.notificationPopover
+											.dateText
+									}
+									testingListSelector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.dateText}-${el?.id}`}
+								>
+									3 mouth
 								</ZIonText>
 							</div>
 						</div>
 
-						<div className='flex p-[3px] ion-align-items-center border rounded-md mt-2'>
+						{/* <div className='flex p-[3px] ion-align-items-center border rounded-md mt-2'>
 							<div className='w-[36px] h-[36px] zaions__light_bg rounded-sm me-2'></div>
 
 							<div className='w-[40%!important] me-1 overflow-hidden line-clamp-2 leading-none'>
@@ -334,7 +445,7 @@ const ZUpdatesTab: React.FC<{ workspaceId: string }> = ({ workspaceId }) => {
 									</ZIonText>
 								</div>
 							</div>
-						</div>
+						</div> */}
 					</ZIonCol>
 				</ZIonRow>
 			))}
