@@ -235,7 +235,7 @@ const ZaionsLoginForm: React.FC = () => {
 								errorText={
 									touched.emailAddress ? errors.emailAddress : undefined
 								}
-								zNextFieldId={}
+								// zNextFieldId={}
 								className={classNames({
 									'mb-4': true,
 									'ion-touched': touched.emailAddress,
