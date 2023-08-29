@@ -2,6 +2,8 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
+import { zEmptyTable } from '@/assets/images';
+import { ZIonImg, ZIonText, ZIonTitle } from '@/components/ZIonComponents';
 import React from 'react';
 
 /**
@@ -13,14 +15,6 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import {
-	ZIonCol,
-	ZIonContent,
-	ZIonImg,
-	ZIonRow,
-	ZIonText,
-	ZIonTitle,
-} from '@/components/ZIonComponents';
 
 /**
  * Custom Hooks Imports go down
@@ -51,7 +45,6 @@ import {
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
-import { Z403Svg } from '@/assets/images';
 
 /**
  * Component props type go down
@@ -64,32 +57,20 @@ import { Z403Svg } from '@/assets/images';
  * @type {*}
  * */
 
-const Z403View: React.FC = () => {
+const ZEmptyTable: React.FC<{ message?: string }> = ({
+	message = 'no data found!',
+}) => {
 	return (
-		<ZIonContent>
-			<ZIonRow className='w-full h-full ion-align-items-center ion-justify-content-center'>
-				<ZIonCol
-					sizeXl='6'
-					sizeLg='5'
-					sizeMd='6'
-					sizeSm='8'
-					sizeXs='11'
-					className='flex flex-col ion-align-items-center ion-justify-content-center'
-				>
-					<ZIonImg src={Z403Svg} className='w-[60%] h-[60%] pb-5' />
-
-					<ZIonTitle className='mb-4 mt-6 md:text-5xl'>
-						Access Forbidden
-					</ZIonTitle>
-					<ZIonText className='md:text-lg ion-text-center'>
-						Sorry, but you don't have the necessary permissions to access this
-						resource. If you believe this is a mistake or need further
-						assistance, please reach out to our support team for guidance.
-					</ZIonText>
-				</ZIonCol>
-			</ZIonRow>
-		</ZIonContent>
+		<div className='bg-transparent flex ion-align-items-center ion-justify-content-center w-full h-full'>
+			<ZIonImg src={zEmptyTable} className='w-[15rem] mt-2' />
+			<div className='max-w-[30%] min-w-[20%] ms-4'>
+				<ZIonText className='text-lg inline-block max-content' color='medium'>
+					{/* No short links founds. please create a short link. */}
+					{message}
+				</ZIonText>
+			</div>
+		</div>
 	);
 };
 
-export default Z403View;
+export default ZEmptyTable;

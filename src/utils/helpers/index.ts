@@ -1614,10 +1614,10 @@ export const zRedirectToTarget = ({
 
 export const zGotoNextField = (uniqueId?: string) => {
 	if (uniqueId) {
-		const _nextField = document.getElementById(uniqueId);
+		const _nextField = document.getElementById(uniqueId) as HTMLIonInputElement;
 
-		if (_nextField && _nextField instanceof HTMLInputElement) {
-			_nextField.focus();
+		if (_nextField && _nextField instanceof HTMLIonInputElement) {
+			_nextField?.setFocus();
 		}
 	}
 };

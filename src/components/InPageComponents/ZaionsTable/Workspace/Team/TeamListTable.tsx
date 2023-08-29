@@ -39,6 +39,7 @@ import {
 	ZIonRow,
 	ZIonSelect,
 	ZIonSelectOption,
+	ZIonSkeletonText,
 	ZIonText,
 	ZIonTitle,
 } from '@/components/ZIonComponents';
@@ -87,6 +88,7 @@ import {
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import ZEmptyTable from '@/components/InPageComponents/ZEmptyTable';
 
 /**
  * Recoil State Imports go down
@@ -115,6 +117,40 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * */
 
 const ZWSSettingTeamListTable: React.FC = () => {
+	const { workspaceId } = useParams<{
+		workspaceId: string;
+	}>();
+
+	// #region APIS
+	// Request for getting teams data.
+	const { data: WSTeamsData, isFetching: isWSTeamsDataFetching } =
+		useZRQGetRequest<workspaceTeamInterface[]>({
+			_url: API_URL_ENUM.workspace_team_create_list,
+			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM, workspaceId],
+			_itemsIds: [workspaceId],
+			_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+		});
+
+	// #endregion
+
+	return (
+		<>
+			{isWSTeamsDataFetching && <ZTeamTableSkeleton />}
+
+			{!isWSTeamsDataFetching ? (
+				WSTeamsData && WSTeamsData?.length > 0 ? (
+					<ZInpageTable />
+				) : (
+					<div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
+						<ZEmptyTable message='No teams founds. please create a team.' />
+					</div>
+				)
+			) : null}
+		</>
+	);
+};
+
+const ZInpageTable: React.FC = () => {
 	// #region Component state.
 	const [compState, setCompState] = useState<{
 		selectedTeamId?: string;
@@ -760,5 +796,119 @@ const ZTeamActionPopover: React.FC<{
 		</ZIonList>
 	);
 };
+
+// Skeleton.
+const ZTeamTableSkeleton: React.FC = React.memo(() => {
+	return (
+		<div className='w-full overflow-y-hidden border rounded-lg ms-1 h-max zaions_pretty_scrollbar ion-no-padding'>
+			{/* Row-1 */}
+			<ZIonRow className='flex mb-2 flex-nowrap zaions__light_bg'>
+				{/* Col-1 */}
+				<ZIonCol
+					size='.8'
+					className='text-sm font-bold border-b ps-2 zaions__light_bg'
+				>
+					<ZIonSkeletonText width='2.3rem' height='.8rem' animated={true} />
+				</ZIonCol>
+
+				{/* Col-2 */}
+				<ZIonCol
+					size='3'
+					className='text-sm font-bold border-b ps-2 zaions__light_bg'
+				>
+					<ZIonSkeletonText width='2.4rem' height='.8rem' animated={true} />
+				</ZIonCol>
+
+				{/* Col-3 */}
+				<ZIonCol
+					size='3'
+					className='text-sm font-bold border-b ps-2 zaions__light_bg'
+				>
+					<ZIonSkeletonText width='2.5rem' height='.8rem' animated={true} />
+				</ZIonCol>
+
+				{/* Col-4 */}
+				<ZIonCol className='text-sm font-bold border-b ps-2 zaions__light_bg'>
+					<ZIonSkeletonText width='4.5rem' height='.8rem' animated={true} />
+				</ZIonCol>
+
+				{/* Col-5 */}
+				<ZIonCol
+					size='3'
+					className='text-sm font-bold border-b ps-2 zaions__light_bg'
+				>
+					<ZIonSkeletonText width='4.5rem' height='.8rem' animated={true} />
+				</ZIonCol>
+			</ZIonRow>
+
+			{/* Row-2 */}
+			<ZIonRow className='rounded-b-lg'>
+				<ZIonCol size='12' className='w-full ion-no-padding'>
+					{[1, 2].map((el) => {
+						return (
+							<ZIonRow className='flex-nowrap' key={el}>
+								{/* Row-2 Col-1 */}
+								<ZIonCol
+									size='.8'
+									className='flex py-1 mt-1 border-b ps-4 ion-align-items-center'
+								>
+									<ZIonSkeletonText
+										width='1rem'
+										height='1rem'
+										animated={true}
+									/>
+								</ZIonCol>
+
+								<ZIonCol
+									size='3'
+									className='flex py-1 mt-1 border-b ps-2 ion-align-items-center'
+								>
+									<ZIonSkeletonText
+										width='2.3rem'
+										height='.8rem'
+										animated={true}
+									/>
+								</ZIonCol>
+
+								<ZIonCol
+									size='3'
+									className='flex py-1 mt-1 border-b ps-2 ion-align-items-center'
+								>
+									<ZIonSkeletonText
+										width='4.3rem'
+										height='.8rem'
+										animated={true}
+									/>
+								</ZIonCol>
+
+								<ZIonCol
+									size='2.3'
+									className='flex py-1 mt-1 border-b ps-2 ion-align-items-center'
+								>
+									<ZIonSkeletonText
+										width='3.3rem'
+										height='.8rem'
+										animated={true}
+									/>
+								</ZIonCol>
+
+								<ZIonCol
+									size='3'
+									className='flex py-1 mt-1 border-b ps-1 ion-align-items-center'
+								>
+									<ZIonSkeletonText
+										width='3.3rem'
+										height='.8rem'
+										animated={true}
+									/>
+								</ZIonCol>
+							</ZIonRow>
+						);
+					})}
+				</ZIonCol>
+			</ZIonRow>
+		</div>
+	);
+});
 
 export default ZWSSettingTeamListTable;

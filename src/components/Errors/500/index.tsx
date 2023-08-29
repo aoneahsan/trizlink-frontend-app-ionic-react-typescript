@@ -2,15 +2,6 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import {
-	ZIonCol,
-	ZIonContent,
-	ZIonIcon,
-	ZIonRow,
-	ZIonText,
-	ZIonTitle,
-} from '@/components/ZIonComponents';
-import { lockClosed, sadOutline } from 'ionicons/icons';
 import React from 'react';
 
 /**
@@ -22,6 +13,14 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
+import {
+	ZIonCol,
+	ZIonContent,
+	ZIonImg,
+	ZIonRow,
+	ZIonText,
+	ZIonTitle,
+} from '@/components/ZIonComponents';
 
 /**
  * Custom Hooks Imports go down
@@ -52,6 +51,7 @@ import React from 'react';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
+import { Z500Svg } from '@/assets/images';
 
 /**
  * Component props type go down
@@ -69,25 +69,24 @@ const Z500View: React.FC = () => {
 		<ZIonContent>
 			<ZIonRow className='w-full h-full ion-align-items-center ion-justify-content-center'>
 				<ZIonCol
-					sizeXl='4'
+					sizeXl='6'
 					sizeLg='5'
 					sizeMd='6'
 					sizeSm='8'
 					sizeXs='11'
-					className='h-[50%] zaions__medium_set rounded-md flex-col flex ion-align-items-center ion-justify-content-center gap-3 ion-text-center shadow-xl'
+					className='flex flex-col ion-align-items-center ion-justify-content-center'
 				>
-					<ZIonIcon icon={sadOutline} className='w-10 h-10 mb-2' />
-					<ZIonText
-						className='text-5xl font-bold ion-no-padding h-max'
-						color='dark'
-					>
-						500
-					</ZIonText>
-					<ZIonText className='text-2xl ion-no-padding'>
+					<ZIonImg src={Z500Svg} className='w-[60%] h-[60%] pb-4' />
+
+					<ZIonText className='mb-3 pb-1 mt-6 md:text-5xl'>
 						Something went wrong!
 					</ZIonText>
-					<ZIonText className='text-lg ion-no-padding'>
-						unknown error occurred 500 server error
+					<ZIonText className='md:text-lg ion-text-center'>
+						We're sorry, but something went wrong on our end. Our team has been
+						notified of this issue and is working to fix it. In the meantime,
+						you can try refreshing the page or coming back later. If the problem
+						persists, please don't hesitate to contact our support team for
+						further assistance.
 					</ZIonText>
 				</ZIonCol>
 			</ZIonRow>

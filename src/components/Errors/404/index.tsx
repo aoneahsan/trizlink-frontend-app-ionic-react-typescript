@@ -2,16 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import {
-	ZIonCol,
-	ZIonContent,
-	ZIonIcon,
-	ZIonRow,
-	ZIonText,
-	ZIonTitle,
-} from '@/components/ZIonComponents';
-import { helpCircleOutline, lockClosed } from 'ionicons/icons';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 /**
  * Packages Imports go down
@@ -22,6 +13,14 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
+import {
+	ZIonCol,
+	ZIonContent,
+	ZIonImg,
+	ZIonRow,
+	ZIonText,
+	ZIonTitle,
+} from '@/components/ZIonComponents';
 
 /**
  * Custom Hooks Imports go down
@@ -32,6 +31,8 @@ import React from 'react';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { LOCALSTORAGE_KEYS } from '@/utils/constants';
+import { STORAGE } from '@/utils/helpers';
 
 /**
  * Type Imports go down
@@ -52,6 +53,9 @@ import React from 'react';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
+import { Z404Svg } from '@/assets/images';
+import { reportCustomError } from '@/utils/customErrorType';
+import { errorCodes } from '@/utils/constants/apiConstants';
 
 /**
  * Component props type go down
@@ -63,27 +67,54 @@ import React from 'react';
  * About: (Info of component here...)
  * @type {*}
  * */
-
 const Z404View: React.FC = () => {
+	const [compState, setCompState] = useState<{
+		message: string;
+	}>({
+		message: 'Not found',
+	});
+
+	useEffect(() => {
+		void (async () => {
+			try {
+				const _errorData = (await STORAGE.GET(
+					LOCALSTORAGE_KEYS.ERROR_DATA
+				)) as { message: string; status: number } | null;
+
+				if (_errorData && _errorData.status === errorCodes?.notFound) {
+					setCompState((oldValue) => ({
+						...oldValue,
+						message: _errorData?.message,
+					}));
+				}
+			} catch (error) {
+				reportCustomError(error);
+			}
+		})();
+	}, []);
+
 	return (
 		<ZIonContent>
 			<ZIonRow className='w-full h-full ion-align-items-center ion-justify-content-center'>
 				<ZIonCol
-					sizeXl='4'
+					sizeXl='6'
 					sizeLg='5'
 					sizeMd='6'
 					sizeSm='8'
 					sizeXs='11'
-					className='h-[50%] zaions__medium_set rounded-md flex-col flex ion-align-items-center ion-justify-content-center gap-3 ion-text-center shadow-xl'
+					className='flex flex-col ion-align-items-center ion-justify-content-center'
 				>
-					<ZIonIcon icon={helpCircleOutline} className='w-12 h-12 mb-2' />
-					<ZIonText
-						className='text-5xl font-bold ion-no-padding h-max'
-						color='dark'
-					>
-						404
+					<ZIonImg src={Z404Svg} className='w-[70%] h-[70%]' />
+
+					<ZIonTitle className='mb-4 md:text-5xl'>
+						{compState.message}
+					</ZIonTitle>
+					<ZIonText className='md:text-lg ion-text-center'>
+						Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magni, at
+						illo natus, quasi maxime delectus nisi, consequuntur suscipit
+						inventore accusantium sunt ex. Eius ipsum eum distinctio explicabo
+						illo delectus beatae.
 					</ZIonText>
-					<ZIonText className='text-2xl ion-no-padding'>Not Found</ZIonText>
 				</ZIonCol>
 			</ZIonRow>
 		</ZIonContent>

@@ -1,7 +1,11 @@
 import { useZPermissionChecker } from '@/ZaionsHooks/ZGenericHooks';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import { extractInnerDataOptionsEnum } from './../utils/enums/index';
-import { zAxiosApiRequest, emptyVoidReturnFunction } from '@/utils/helpers';
+import {
+	zAxiosApiRequest,
+	emptyVoidReturnFunction,
+	STORAGE,
+} from '@/utils/helpers';
 // Core Imports
 
 // Packages Imports
@@ -25,6 +29,9 @@ import {
 	currentLoggedInUserRoleAndPermissionsRStateAtom,
 } from '@/ZaionsStore/UserAccount/index.recoil';
 import { appWiseIonicLoaderIsOpenedRSelector } from '@/ZaionsStore/AppRStates';
+import { LOCALSTORAGE_KEYS } from '@/utils/constants';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * The custom hook for getting data from an API using useQuery hook from react-query package.
@@ -138,18 +145,34 @@ export const useZRQGetRequest = <T>({
 				_showLoader &&
 				void dismissZIonLoader();
 
-			// showing error alert...
-			_showAlertOnError && void presentZIonErrorAlert();
-
 			// throw the request_failed error
 			_showAlertOnError && reportCustomError(_error);
 
-			// check if it's unauthenticated error
-			const errorCode = (_error as AxiosError)?.response?.status;
-			if (errorCode && errorCode === errorCodes.unauthenticated) {
-				// clear localstorage
-				await clearAuthDataFromLocalStorageAndRecoil(resetUserAccountState);
+			if (_error instanceof AxiosError) {
+				const __error = (_error as AxiosError)?.response;
+				const __errorMessage = (__error?.data as { errors: { item: string[] } })
+					?.errors?.item[0];
+
+				if (__error?.status === errorCodes.notFound) {
+					const __data = {
+						message: __errorMessage || 'Not found',
+						status: __error?.status,
+					};
+					void STORAGE.SET(LOCALSTORAGE_KEYS.ERROR_DATA, __data);
+
+					// redirect to 404
+					window.location.replace(ZaionsRoutes.Error.Z404);
+				}
+
+				// check if it's unauthenticated error
+				if (__error?.status && __error?.status === errorCodes.unauthenticated) {
+					// clear localstorage
+					await clearAuthDataFromLocalStorageAndRecoil(resetUserAccountState);
+				}
 			}
+
+			// showing error alert...
+			_showAlertOnError && void presentZIonErrorAlert();
 		},
 		select: (data) => {
 			if (_shouldExtractData) {

@@ -14,88 +14,94 @@ import { ZIonCol, ZIonNote } from '@/components/ZIonComponents';
 // Global constant
 
 import 'react-phone-number-input/style.css';
+import Z404View from '@/components/Errors/404';
+import Z401View from '@/components/Errors/401';
+import Z400View from '@/components/Errors/400';
+import Z403View from '@/components/Errors/403';
+import Z500View from '@/components/Errors/500';
 // import 'react-phone-input-2/lib/style.css';
 
 const ZaionsTestPage: React.FC = () => {
 	return (
-		<ZIonCol
-			sizeXl='12'
-			sizeLg='12'
-			sizeMd='12'
-			sizeSm='12'
-			sizeXs='12'
-			className='py-3'
-		>
-			<Formik
-				initialValues={{
-					pn1: '',
-				}}
-				validate={(values) => {
-					const errors: {
-						pn1?: string;
-					} = {};
+		<Z500View />
+		// <ZIonCol
+		// 	sizeXl='12'
+		// 	sizeLg='12'
+		// 	sizeMd='12'
+		// 	sizeSm='12'
+		// 	sizeXs='12'
+		// 	className='py-3'
+		// >
+		// 	{/* <Formik
+		// 		initialValues={{
+		// 			pn1: '',
+		// 		}}
+		// 		validate={(values) => {
+		// 			const errors: {
+		// 				pn1?: string;
+		// 			} = {};
 
-					if (values.pn1.trim().length === 0) {
-						errors.pn1 = 'phone number is required.';
-					} else if (!isPossiblePhoneNumber(values.pn1)) {
-						errors.pn1 = 'not a valid phone number.';
-					} else {
-						delete errors.pn1;
-					}
+		// 			if (values.pn1.trim().length === 0) {
+		// 				errors.pn1 = 'phone number is required.';
+		// 			} else if (!isPossiblePhoneNumber(values.pn1)) {
+		// 				errors.pn1 = 'not a valid phone number.';
+		// 			} else {
+		// 				delete errors.pn1;
+		// 			}
 
-					return errors;
-				}}
-				onSubmit={() => {}}
-			>
-				{({ values, errors, touched, setFieldValue, setFieldTouched }) => {
-					console.log({
-						values,
-						errors,
-						touched,
-					});
-					return (
-						<>
-							<div className=''>
-								<PhoneInput
-									placeholder='Enter phone number'
-									value={formatPhoneNumberIntl(values.pn1)}
-									onBlur={() => {
-										setFieldTouched('pn1', true, true);
-									}}
-									onChange={(_value) => {
-										setFieldValue('pn1', _value, false);
-									}}
-									className='h-[2.5rem]'
-								/>
-								{touched.pn1 && errors.pn1 && errors.pn1?.length > 0 && (
-									<ZIonNote color='danger'>{errors.pn1}</ZIonNote>
-								)}
-							</div>
+		// 			return errors;
+		// 		}}
+		// 		onSubmit={() => {}}
+		// 	>
+		// 		{({ values, errors, touched, setFieldValue, setFieldTouched }) => {
+		// 			console.log({
+		// 				values,
+		// 				errors,
+		// 				touched,
+		// 			});
+		// 			return (
+		// 				<>
+		// 					<div className=''>
+		// 						<PhoneInput
+		// 							placeholder='Enter phone number'
+		// 							value={formatPhoneNumberIntl(values.pn1)}
+		// 							onBlur={() => {
+		// 								setFieldTouched('pn1', true, true);
+		// 							}}
+		// 							onChange={(_value) => {
+		// 								setFieldValue('pn1', _value, false);
+		// 							}}
+		// 							className='h-[2.5rem]'
+		// 						/>
+		// 						{touched.pn1 && errors.pn1 && errors.pn1?.length > 0 && (
+		// 							<ZIonNote color='danger'>{errors.pn1}</ZIonNote>
+		// 						)}
+		// 					</div>
 
-							{/* <div>
-								<PhoneInput
-									country='pk'
-									isValid={(value, country) => {
-										if (value.match(/12345/)) {
-											return 'Invalid value: ' + value + ', ' + country.name;
-										} else if (value.match(/1234/)) {
-											return false;
-										} else {
-											return true;
-										}
-									}}
-									value={values.pn1}
-									onChange={(phone) => setFieldValue('pn1', phone, false)}
-								/> 
-								{touched.pn1 && errors.pn1 && errors.pn1?.length > 0 && (
-									<ZIonNote color='danger'>{errors.pn1}</ZIonNote>
-								)}
-							</div> */}
-						</>
-					);
-				}}
-			</Formik>
-		</ZIonCol>
+		// 					{/* <div>
+		// 						<PhoneInput
+		// 							country='pk'
+		// 							isValid={(value, country) => {
+		// 								if (value.match(/12345/)) {
+		// 									return 'Invalid value: ' + value + ', ' + country.name;
+		// 								} else if (value.match(/1234/)) {
+		// 									return false;
+		// 								} else {
+		// 									return true;
+		// 								}
+		// 							}}
+		// 							value={values.pn1}
+		// 							onChange={(phone) => setFieldValue('pn1', phone, false)}
+		// 						/>
+		// 						{touched.pn1 && errors.pn1 && errors.pn1?.length > 0 && (
+		// 							<ZIonNote color='danger'>{errors.pn1}</ZIonNote>
+		// 						)}
+		// 					</div> * /}
+		// 				</>
+		// 			);
+		// 		}}
+		// 	</Formik> */}
+		// </ZIonCol>
 	);
 };
 

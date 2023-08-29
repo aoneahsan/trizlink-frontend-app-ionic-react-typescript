@@ -89,12 +89,51 @@ import {
 } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioState.recoil';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 import classNames from 'classnames';
+import ZEmptyTable from '../../ZEmptyTable';
 
 // Styles
 
 const ZaionsLinkInBioLinksTable: React.FC<{
 	showSkeleton?: boolean;
 }> = ({ showSkeleton = false }) => {
+	const { folderId, workspaceId } = useParams<{
+		folderId: string;
+		workspaceId: string;
+	}>();
+
+	// #region APIS requests.
+	const { data: getLinkInBioLinkData } = useZRQGetRequest<LinkInBioType[]>({
+		_url: API_URL_ENUM.linkInBio_create_list,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN, workspaceId],
+		_itemsIds: [workspaceId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+	});
+	// #endregion
+
+	return (
+		<>
+			{showSkeleton && <ZaionsLinkInBioTableSkeleton />}
+
+			{!showSkeleton ? (
+				getLinkInBioLinkData && getLinkInBioLinkData?.length > 0 ? (
+					<ZInpageTable />
+				) : (
+					<div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
+						<ZEmptyTable
+							message="No link-in-bio's founds. please create a link-in-bio."
+							// message={`No link-in-bio's founds
+							// ${(folderId !== null || folderId !== 'all') &&
+							// 	'In this Folder'}
+							// . please create a link-in-bio.`}
+						/>
+					</div>
+				)
+			) : null}
+		</>
+	);
+};
+
+const ZInpageTable: React.FC = () => {
 	// #region Component state.
 	const [compState, setCompState] = useState<{
 		selectedLinkInBioLinkId?: string;
@@ -102,16 +141,25 @@ const ZaionsLinkInBioLinksTable: React.FC<{
 	}>({ showActionPopover: false });
 	// #endregion
 
+	const { folderId, workspaceId } = useParams<{
+		folderId: string;
+		workspaceId: string;
+	}>();
+
+	// #region APIS requests.
+	const { data: getLinkInBioLinkData } = useZRQGetRequest<LinkInBioType[]>({
+		_url: API_URL_ENUM.linkInBio_create_list,
+		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN, workspaceId],
+		_itemsIds: [workspaceId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+	});
+	// #endregion
+
 	// getting search param from url with the help of 'qs' package.
 	const routeQSearchParams = routeQueryString.parse(location.search, {
 		ignoreQueryPrefix: true,
 	});
 	const { pageindex, pagesize } = routeQSearchParams;
-
-	const { folderId, workspaceId } = useParams<{
-		folderId: string;
-		workspaceId: string;
-	}>();
 
 	const { presentZIonPopover: presentZShortLinkActionPopover } = useZIonPopover(
 		ZLinkInBioActionPopover,
@@ -122,10 +170,6 @@ const ZaionsLinkInBioLinksTable: React.FC<{
 	);
 
 	// #region custom hooks.
-	const { getRQCDataHandler } = useZGetRQCacheData();
-	const { updateRQCDataHandler } = useZUpdateRQCacheData();
-	const { presentZIonErrorAlert } = useZIonErrorAlert();
-	const { presentZIonAlert } = useZIonAlert();
 	const { zNavigatePushRoute } = useZNavigate();
 
 	// #endregion
@@ -140,20 +184,6 @@ const ZaionsLinkInBioLinksTable: React.FC<{
 	const _linkInBiosFilterOptionsState = useSetRecoilState(
 		LinkInBiosFilterOptionsRStateAtom
 	);
-	// #endregion
-
-	// #region APIS requests.
-	const { mutateAsync: deleteLinkInBioLinkMutateAsync } = useZRQDeleteRequest(
-		API_URL_ENUM.linkInBio_update_delete,
-		[]
-	);
-
-	const { data: getLinkInBioLinkData } = useZRQGetRequest<LinkInBioType[]>({
-		_url: API_URL_ENUM.linkInBio_create_list,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN, workspaceId],
-		_itemsIds: [workspaceId],
-		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-	});
 	// #endregion
 
 	// #region useEffect's
@@ -235,378 +265,340 @@ const ZaionsLinkInBioLinksTable: React.FC<{
 	// #endregion
 
 	return (
-		<>
-			{!showSkeleton && (
-				<div>
-					<ZCustomScrollable
-						className='w-full border rounded-lg h-max ion-no-padding'
-						scrollX={true}
-					>
-						{zLinkInBioTable
-							.getHeaderGroups()
-							.map((_headerInfo, _headerIndex) => {
+		<div>
+			<ZCustomScrollable
+				className='w-full border rounded-lg h-max ion-no-padding'
+				scrollX={true}
+			>
+				{zLinkInBioTable.getHeaderGroups().map((_headerInfo, _headerIndex) => {
+					return (
+						<ZIonRow
+							key={_headerIndex}
+							className='flex flex-nowrap zaions__light_bg'
+						>
+							{_headerInfo.headers.map((_columnInfo, _columnIndex) => {
 								return (
-									<ZIonRow
-										key={_headerIndex}
-										className='flex flex-nowrap zaions__light_bg'
-									>
-										{_headerInfo.headers.map((_columnInfo, _columnIndex) => {
-											return (
-												<ZIonCol
-													size={
-														_columnInfo.column.id ===
-															ZLIBListPageTableColumnsIds.id ||
-														_columnInfo.column.id ===
-															ZLIBListPageTableColumnsIds.actions
-															? '.8'
-															: '2.5'
-													}
-													key={_columnInfo.id}
-													className={classNames({
-														'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
-															true,
-														'border-r': false,
-													})}
-												>
-													{_columnInfo.column.columnDef.header?.toString()}
-												</ZIonCol>
-											);
+									<ZIonCol
+										size={
+											_columnInfo.column.id ===
+												ZLIBListPageTableColumnsIds.id ||
+											_columnInfo.column.id ===
+												ZLIBListPageTableColumnsIds.actions
+												? '.8'
+												: '2.5'
+										}
+										key={_columnInfo.id}
+										className={classNames({
+											'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
+												true,
+											'border-r': false,
 										})}
-
-										<ZIonCol
-											size='.8'
-											className={classNames({
-												'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
-													true,
-												'border-r': false,
-											})}
-										>
-											Actions
-										</ZIonCol>
-									</ZIonRow>
+									>
+										{_columnInfo.column.columnDef.header?.toString()}
+									</ZIonCol>
 								);
 							})}
 
-						{/* Body Section */}
-						<ZIonRow className='rounded-b-lg'>
-							{getLinkInBioLinkData?.length ? (
-								<ZIonCol size='12' className='w-full ion-no-padding'>
-									{zLinkInBioTable
-										.getRowModel()
-										.rows.map((_rowInfo, _rowIndex) => {
-											return (
-												<ZIonRow key={_rowIndex} className='flex-nowrap'>
-													{_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
-														_cellInfo.column.getIsVisible() ? (
-															<ZIonCol
-																key={_cellIndex}
-																size={
-																	_cellInfo.column.id ===
-																		ZLIBListPageTableColumnsIds.id ||
-																	_cellInfo.column.id ===
-																		ZLIBListPageTableColumnsIds.actions
-																		? '.8'
-																		: '2.5'
-																}
-																className={classNames({
-																	'py-1 mt-1 border-b flex ion-align-items-center':
-																		true,
-																	'border-r': false,
-																	'ps-2':
-																		_cellInfo.column.id !==
-																		ZLIBListPageTableColumnsIds.id,
-																	'ps-0':
-																		_cellInfo.column.id ===
-																		ZLIBListPageTableColumnsIds.id,
-																})}
-															>
-																<div
-																	className={classNames({
-																		'w-full text-sm ZaionsTextEllipsis': true,
-																		'ps-3':
-																			_cellInfo.column.id ===
-																			ZLIBListPageTableColumnsIds.id,
-																	})}
-																>
-																	{flexRender(
-																		_cellInfo.column.columnDef.cell,
-																		_cellInfo.getContext()
-																	)}
-																</div>
-															</ZIonCol>
-														) : null
-													)}
-
-													<ZIonCol
-														size='.8'
-														className={classNames({
-															'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
-																true,
-															'border-r': false,
-														})}
-													>
-														<ZIonButton
-															fill='clear'
-															color='dark'
-															className='ion-no-padding ion-no-margin'
-															size='small'
-															testingSelector={
-																CONSTANTS.testingSelectors.linkInBio.listPage
-																	.table.actionPopoverBtn
-															}
-															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
-															onClick={(_event: unknown) => {
-																setCompState((oldVal) => ({
-																	...oldVal,
-																	selectedLinkInBioLinkId:
-																		_rowInfo.original.id || '',
-																}));
-
-																//
-																presentZShortLinkActionPopover({
-																	_event: _event as Event,
-																	_cssClass:
-																		'zaions_present_folder_Action_popover_width',
-																	_dismissOnSelect: false,
-																});
-															}}
-														>
-															<ZIonIcon icon={ellipsisVerticalOutline} />
-														</ZIonButton>
-													</ZIonCol>
-												</ZIonRow>
-											);
-										})}
-								</ZIonCol>
-							) : (
-								<ZIonCol className='py-3 ion-text-center'>
-									<ZIonTitle className='mt-3'>
-										<ZIonIcon
-											icon={fileTrayFullOutline}
-											className='mx-auto'
-											size='large'
-											color='medium'
-										/>
-									</ZIonTitle>
-									<ZIonTitle color='medium'>
-										No link-in-bio's founds{' '}
-										{(folderId !== null || folderId !== 'all') &&
-											'In this Folder'}
-										. please create a link-in-bio.
-									</ZIonTitle>
-								</ZIonCol>
-							)}
+							<ZIonCol
+								size='.8'
+								className={classNames({
+									'border-b ps-2 py-1 font-bold zaions__light_bg text-sm': true,
+									'border-r': false,
+								})}
+							>
+								Actions
+							</ZIonCol>
 						</ZIonRow>
-					</ZCustomScrollable>
+					);
+				})}
 
-					{/*  */}
-					<ZIonRow className='w-full px-2 pt-1 pb-2 mt-1 overflow-hidden rounded-lg zaions__light_bg'>
-						<ZIonCol>
-							{/* previous buttons */}
-							<ZIonButton
-								className='mr-1 ion-no-padding ion-no-margin'
-								size='small'
-								fill='clear'
-								disabled={!zLinkInBioTable.getCanPreviousPage()}
-								testingSelector={
-									CONSTANTS.testingSelectors.linkInBio.listPage.table
-										.getFirstPageButton
-								}
-								onClick={() => {
-									if (zLinkInBioTable.getCanPreviousPage()) {
-										zNavigatePushRoute(
-											createRedirectRoute({
-												url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
-												params: [
-													CONSTANTS.RouteParams.workspace.workspaceId,
-													CONSTANTS.RouteParams
-														.folderIdToGetShortLinksOrLinkInBio,
-												],
-												values: [workspaceId, 'all'],
-												routeSearchParams: {
-													pageindex: 0,
-													pagesize: zLinkInBioTable
-														.getState()
-														.pagination.pageSize.toString(),
-												},
-											})
-										);
+				{/* Body Section */}
+				<ZIonRow className='rounded-b-lg'>
+					<ZIonCol size='12' className='w-full ion-no-padding'>
+						{zLinkInBioTable.getRowModel().rows.map((_rowInfo, _rowIndex) => {
+							return (
+								<ZIonRow key={_rowIndex} className='flex-nowrap'>
+									{_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
+										_cellInfo.column.getIsVisible() ? (
+											<ZIonCol
+												key={_cellIndex}
+												size={
+													_cellInfo.column.id ===
+														ZLIBListPageTableColumnsIds.id ||
+													_cellInfo.column.id ===
+														ZLIBListPageTableColumnsIds.actions
+														? '.8'
+														: '2.5'
+												}
+												className={classNames({
+													'py-1 mt-1 border-b flex ion-align-items-center':
+														true,
+													'border-r': false,
+													'ps-2':
+														_cellInfo.column.id !==
+														ZLIBListPageTableColumnsIds.id,
+													'ps-0':
+														_cellInfo.column.id ===
+														ZLIBListPageTableColumnsIds.id,
+												})}
+											>
+												<div
+													className={classNames({
+														'w-full text-sm ZaionsTextEllipsis': true,
+														'ps-3':
+															_cellInfo.column.id ===
+															ZLIBListPageTableColumnsIds.id,
+													})}
+												>
+													{flexRender(
+														_cellInfo.column.columnDef.cell,
+														_cellInfo.getContext()
+													)}
+												</div>
+											</ZIonCol>
+										) : null
+									)}
 
-										zLinkInBioTable.setPageIndex(0);
-									}
-								}}
-							>
-								<ZIonText className='px-1 text-xl'>{'<<'}</ZIonText>
-							</ZIonButton>
-
-							<ZIonButton
-								className='mr-1 ion-no-padding ion-no-margin'
-								size='small'
-								fill='clear'
-								disabled={!zLinkInBioTable.getCanPreviousPage()}
-								testingSelector={
-									CONSTANTS.testingSelectors.linkInBio.listPage.table
-										.previousButton
-								}
-								onClick={() => {
-									if (zLinkInBioTable.getCanPreviousPage()) {
-										zLinkInBioTable.previousPage();
-
-										zNavigatePushRoute(
-											createRedirectRoute({
-												url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
-												params: [
-													CONSTANTS.RouteParams.workspace.workspaceId,
-													CONSTANTS.RouteParams
-														.folderIdToGetShortLinksOrLinkInBio,
-												],
-												values: [workspaceId, 'all'],
-												routeSearchParams: {
-													pageindex:
-														zLinkInBioTable.getState().pagination.pageIndex - 1,
-													pagesize: zLinkInBioTable
-														.getState()
-														.pagination.pageSize.toString(),
-												},
-											})
-										);
-									}
-								}}
-							>
-								<ZIonText className='px-1 text-xl'>{'<'}</ZIonText>
-							</ZIonButton>
-
-							{/* next buttons */}
-							<ZIonButton
-								className='mr-1 ion-no-padding ion-no-margin'
-								size='small'
-								fill='clear'
-								disabled={!zLinkInBioTable.getCanNextPage()}
-								testingSelector={
-									CONSTANTS.testingSelectors.linkInBio.listPage.table.nextButton
-								}
-								onClick={() => {
-									if (zLinkInBioTable.getCanNextPage()) {
-										zLinkInBioTable.nextPage();
-
-										zNavigatePushRoute(
-											createRedirectRoute({
-												url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
-												params: [
-													CONSTANTS.RouteParams.workspace.workspaceId,
-													CONSTANTS.RouteParams
-														.folderIdToGetShortLinksOrLinkInBio,
-												],
-												values: [workspaceId, 'all'],
-												routeSearchParams: {
-													pageindex:
-														zLinkInBioTable.getState().pagination.pageIndex + 1,
-													pagesize: zLinkInBioTable
-														.getState()
-														.pagination.pageSize.toString(),
-												},
-											})
-										);
-									}
-								}}
-							>
-								<ZIonText className='px-1 text-xl'>{'>'}</ZIonText>
-							</ZIonButton>
-
-							<ZIonButton
-								className='mr-1 ion-no-padding ion-no-margin'
-								size='small'
-								fill='clear'
-								disabled={!zLinkInBioTable.getCanNextPage()}
-								testingSelector={
-									CONSTANTS.testingSelectors.linkInBio.listPage.table
-										.getLastPageButton
-								}
-								onClick={() => {
-									if (zLinkInBioTable.getCanNextPage()) {
-										zLinkInBioTable.setPageIndex(
-											zLinkInBioTable.getPageCount() - 1
-										);
-
-										zNavigatePushRoute(
-											createRedirectRoute({
-												url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
-												params: [
-													CONSTANTS.RouteParams.workspace.workspaceId,
-													CONSTANTS.RouteParams
-														.folderIdToGetShortLinksOrLinkInBio,
-												],
-												values: [workspaceId, 'all'],
-												routeSearchParams: {
-													pageindex: zLinkInBioTable.getPageCount() - 1,
-													pagesize: zLinkInBioTable
-														.getState()
-														.pagination.pageSize.toString(),
-												},
-											})
-										);
-									}
-								}}
-							>
-								<ZIonText className='px-1 text-xl'>{'>>'}</ZIonText>
-							</ZIonButton>
-						</ZIonCol>
-
-						{/* Col for pagination number like 1,2,3,...,n */}
-						<ZIonCol></ZIonCol>
-
-						<ZIonCol className='flex ion-align-items-center ion-justify-content-end'>
-							<ZIonSelect
-								minHeight='30px'
-								fill='outline'
-								className='bg-white w-[7rem]'
-								interface='popover'
-								value={zLinkInBioTable.getState().pagination.pageSize}
-								testingSelector={
-									CONSTANTS.testingSelectors.linkInBio.listPage.table
-										.pageSizeInput
-								}
-								onIonChange={(e) => {
-									zLinkInBioTable.setPageSize(Number(e.target.value));
-
-									zNavigatePushRoute(
-										createRedirectRoute({
-											url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
-											params: [
-												CONSTANTS.RouteParams.workspace.workspaceId,
-												CONSTANTS.RouteParams
-													.folderIdToGetShortLinksOrLinkInBio,
-											],
-											values: [workspaceId, 'all'],
-											routeSearchParams: {
-												pageindex: zLinkInBioTable.getPageCount() - 1,
-												pagesize: Number(e.target.value),
-											},
-										})
-									);
-								}}
-							>
-								{[2, 3].map((pageSize) => (
-									<ZIonSelectOption
-										key={pageSize}
-										value={pageSize}
-										className='h-[2.3rem]'
+									<ZIonCol
+										size='.8'
+										className={classNames({
+											'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
+												true,
+											'border-r': false,
+										})}
 									>
-										Show {pageSize}
-									</ZIonSelectOption>
-								))}
-							</ZIonSelect>
-						</ZIonCol>
-					</ZIonRow>
-				</div>
-			)}
+										<ZIonButton
+											fill='clear'
+											color='dark'
+											className='ion-no-padding ion-no-margin'
+											size='small'
+											testingSelector={
+												CONSTANTS.testingSelectors.linkInBio.listPage.table
+													.actionPopoverBtn
+											}
+											testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
+											onClick={(_event: unknown) => {
+												setCompState((oldVal) => ({
+													...oldVal,
+													selectedLinkInBioLinkId: _rowInfo.original.id || '',
+												}));
 
-			{showSkeleton && <ZaionsShortLinkTableSkeleton />}
-		</>
+												//
+												presentZShortLinkActionPopover({
+													_event: _event as Event,
+													_cssClass:
+														'zaions_present_folder_Action_popover_width',
+													_dismissOnSelect: false,
+												});
+											}}
+										>
+											<ZIonIcon icon={ellipsisVerticalOutline} />
+										</ZIonButton>
+									</ZIonCol>
+								</ZIonRow>
+							);
+						})}
+					</ZIonCol>
+				</ZIonRow>
+			</ZCustomScrollable>
+
+			{/*  */}
+			<ZIonRow className='w-full px-2 pt-1 pb-2 mt-1 overflow-hidden rounded-lg zaions__light_bg'>
+				<ZIonCol>
+					{/* previous buttons */}
+					<ZIonButton
+						className='mr-1 ion-no-padding ion-no-margin'
+						size='small'
+						fill='clear'
+						disabled={!zLinkInBioTable.getCanPreviousPage()}
+						testingSelector={
+							CONSTANTS.testingSelectors.linkInBio.listPage.table
+								.getFirstPageButton
+						}
+						onClick={() => {
+							if (zLinkInBioTable.getCanPreviousPage()) {
+								zNavigatePushRoute(
+									createRedirectRoute({
+										url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
+										params: [
+											CONSTANTS.RouteParams.workspace.workspaceId,
+											CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+										],
+										values: [workspaceId, 'all'],
+										routeSearchParams: {
+											pageindex: 0,
+											pagesize: zLinkInBioTable
+												.getState()
+												.pagination.pageSize.toString(),
+										},
+									})
+								);
+
+								zLinkInBioTable.setPageIndex(0);
+							}
+						}}
+					>
+						<ZIonText className='px-1 text-xl'>{'<<'}</ZIonText>
+					</ZIonButton>
+
+					<ZIonButton
+						className='mr-1 ion-no-padding ion-no-margin'
+						size='small'
+						fill='clear'
+						disabled={!zLinkInBioTable.getCanPreviousPage()}
+						testingSelector={
+							CONSTANTS.testingSelectors.linkInBio.listPage.table.previousButton
+						}
+						onClick={() => {
+							if (zLinkInBioTable.getCanPreviousPage()) {
+								zLinkInBioTable.previousPage();
+
+								zNavigatePushRoute(
+									createRedirectRoute({
+										url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
+										params: [
+											CONSTANTS.RouteParams.workspace.workspaceId,
+											CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+										],
+										values: [workspaceId, 'all'],
+										routeSearchParams: {
+											pageindex:
+												zLinkInBioTable.getState().pagination.pageIndex - 1,
+											pagesize: zLinkInBioTable
+												.getState()
+												.pagination.pageSize.toString(),
+										},
+									})
+								);
+							}
+						}}
+					>
+						<ZIonText className='px-1 text-xl'>{'<'}</ZIonText>
+					</ZIonButton>
+
+					{/* next buttons */}
+					<ZIonButton
+						className='mr-1 ion-no-padding ion-no-margin'
+						size='small'
+						fill='clear'
+						disabled={!zLinkInBioTable.getCanNextPage()}
+						testingSelector={
+							CONSTANTS.testingSelectors.linkInBio.listPage.table.nextButton
+						}
+						onClick={() => {
+							if (zLinkInBioTable.getCanNextPage()) {
+								zLinkInBioTable.nextPage();
+
+								zNavigatePushRoute(
+									createRedirectRoute({
+										url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
+										params: [
+											CONSTANTS.RouteParams.workspace.workspaceId,
+											CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+										],
+										values: [workspaceId, 'all'],
+										routeSearchParams: {
+											pageindex:
+												zLinkInBioTable.getState().pagination.pageIndex + 1,
+											pagesize: zLinkInBioTable
+												.getState()
+												.pagination.pageSize.toString(),
+										},
+									})
+								);
+							}
+						}}
+					>
+						<ZIonText className='px-1 text-xl'>{'>'}</ZIonText>
+					</ZIonButton>
+
+					<ZIonButton
+						className='mr-1 ion-no-padding ion-no-margin'
+						size='small'
+						fill='clear'
+						disabled={!zLinkInBioTable.getCanNextPage()}
+						testingSelector={
+							CONSTANTS.testingSelectors.linkInBio.listPage.table
+								.getLastPageButton
+						}
+						onClick={() => {
+							if (zLinkInBioTable.getCanNextPage()) {
+								zLinkInBioTable.setPageIndex(
+									zLinkInBioTable.getPageCount() - 1
+								);
+
+								zNavigatePushRoute(
+									createRedirectRoute({
+										url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
+										params: [
+											CONSTANTS.RouteParams.workspace.workspaceId,
+											CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+										],
+										values: [workspaceId, 'all'],
+										routeSearchParams: {
+											pageindex: zLinkInBioTable.getPageCount() - 1,
+											pagesize: zLinkInBioTable
+												.getState()
+												.pagination.pageSize.toString(),
+										},
+									})
+								);
+							}
+						}}
+					>
+						<ZIonText className='px-1 text-xl'>{'>>'}</ZIonText>
+					</ZIonButton>
+				</ZIonCol>
+
+				{/* Col for pagination number like 1,2,3,...,n */}
+				<ZIonCol></ZIonCol>
+
+				<ZIonCol className='flex ion-align-items-center ion-justify-content-end'>
+					<ZIonSelect
+						minHeight='30px'
+						fill='outline'
+						className='bg-white w-[7rem]'
+						interface='popover'
+						value={zLinkInBioTable.getState().pagination.pageSize}
+						testingSelector={
+							CONSTANTS.testingSelectors.linkInBio.listPage.table.pageSizeInput
+						}
+						onIonChange={(e) => {
+							zLinkInBioTable.setPageSize(Number(e.target.value));
+
+							zNavigatePushRoute(
+								createRedirectRoute({
+									url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
+									params: [
+										CONSTANTS.RouteParams.workspace.workspaceId,
+										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+									],
+									values: [workspaceId, 'all'],
+									routeSearchParams: {
+										pageindex: zLinkInBioTable.getPageCount() - 1,
+										pagesize: Number(e.target.value),
+									},
+								})
+							);
+						}}
+					>
+						{[2, 3].map((pageSize) => (
+							<ZIonSelectOption
+								key={pageSize}
+								value={pageSize}
+								className='h-[2.3rem]'
+							>
+								Show {pageSize}
+							</ZIonSelectOption>
+						))}
+					</ZIonSelect>
+				</ZIonCol>
+			</ZIonRow>
+		</div>
 	);
 };
 
-const ZaionsShortLinkTableSkeleton: React.FC = React.memo(() => {
+const ZaionsLinkInBioTableSkeleton: React.FC = React.memo(() => {
 	return (
 		<ZIonRow className='px-4 pt-2 pb-1 mx-1 mt-5 overflow-y-scroll zaions_pretty_scrollbar ion-margin-bottom'>
 			<ZIonCol>

@@ -74,6 +74,14 @@ const ZaionsRoutes = {
 		ZaionsReviewsRoute: '/pages/reviews',
 	},
 
+	Error: {
+		Z400: '/error/400-bad-request',
+		Z401: '/error/401-unauthorized',
+		Z403: '/error/403-access-forbidden',
+		Z404: '/error/404-not-found',
+		Z500: '/error/500-internal-server-errors',
+	},
+
 	// Admin Panel
 	AdminPanel: {
 		AppStartupPage: `${ZPrivateRoutePath}/startup`,

@@ -1284,6 +1284,7 @@ const SearchQueryInputComponent = () => {
 						onIonChange={handleChange}
 						placeholder='Search link by title, domain...'
 						fill='outline'
+						counter={false}
 						className='zaions__bg_white'
 						minHeight='40px'
 						testingSelector={

@@ -8,6 +8,13 @@ import { Route } from 'react-router-dom';
 import ZaionsRoutes from './utils/constants/RoutesConstants';
 
 // Commented Routes
+
+const Z400View = lazy(() => import('./components/Errors/400'));
+const Z401View = lazy(() => import('./components/Errors/401'));
+const Z403View = lazy(() => import('./components/Errors/403'));
+const Z404View = lazy(() => import('./components/Errors/404'));
+const Z500View = lazy(() => import('./components/Errors/500'));
+
 const ZaionsReactArea = lazy(() => import('@/Testing/ReactArea'));
 const Zaions101 = lazy(() => import('@/pages/Zaions/Zaions101'));
 const ZaionsEnterpriseClass = lazy(
@@ -182,6 +189,13 @@ const AppRoutes: React.FC = () => {
 
 			{/* Public Routes */}
 			<PublicRoute exact path={ZaionsRoutes.LoginRoute} Component={Login} />
+
+			{/* Errors */}
+			<Route exact path={ZaionsRoutes.Error.Z400} component={Z400View} />
+			<Route exact path={ZaionsRoutes.Error.Z401} component={Z401View} />
+			<Route exact path={ZaionsRoutes.Error.Z403} component={Z403View} />
+			<Route exact path={ZaionsRoutes.Error.Z404} component={Z404View} />
+			<Route exact path={ZaionsRoutes.Error.Z500} component={Z500View} />
 
 			<PublicRoute exact path={ZaionsRoutes.SignUpRoute} Component={SignUp} />
 

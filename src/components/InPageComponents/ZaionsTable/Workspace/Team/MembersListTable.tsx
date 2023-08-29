@@ -41,6 +41,7 @@ import {
 	ZIonRow,
 	ZIonSelect,
 	ZIonSelectOption,
+	ZIonSkeletonText,
 	ZIonText,
 	ZIonTitle,
 } from '@/components/ZIonComponents';
@@ -71,6 +72,7 @@ import {
 } from '@/types/AdminPanel/workspace';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
+import ZEmptyTable from '@/components/InPageComponents/ZEmptyTable';
 
 /**
  * Recoil State Imports go down
@@ -99,6 +101,46 @@ import { API_URL_ENUM } from '@/utils/enums';
  * */
 
 const ZMembersListTable: React.FC = () => {
+	const { workspaceId, teamId } = useParams<{
+		workspaceId: string;
+		teamId: string;
+	}>();
+
+	// #region APIS.
+	const { data: wsTeamMembersData, isFetching: isWSTeamMembersFetching } =
+		useZRQGetRequest<WSTeamMembersInterface[]>({
+			_url: API_URL_ENUM.ws_team_member_invite_list,
+			_key: [
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+				workspaceId,
+				teamId,
+			],
+			_itemsIds: [workspaceId, teamId],
+			_urlDynamicParts: [
+				CONSTANTS.RouteParams.workspace.workspaceId,
+				CONSTANTS.RouteParams.workspace.teamId,
+			],
+		});
+	// #endregion
+
+	return (
+		<>
+			{isWSTeamMembersFetching && <ZaionsMembersTableSkeleton />}
+
+			{!isWSTeamMembersFetching ? (
+				wsTeamMembersData && wsTeamMembersData?.length > 0 ? (
+					<ZInpageTable />
+				) : (
+					<div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
+						<ZEmptyTable message='No members founds. please invite a member.' />
+					</div>
+				)
+			) : null}
+		</>
+	);
+};
+
+const ZInpageTable: React.FC = () => {
 	// #region Component state.
 	const [compState, setCompState] = useState<{
 		selectedMemberId?: string;
@@ -111,23 +153,22 @@ const ZMembersListTable: React.FC = () => {
 	}>();
 
 	// #region APIS.
-	const { data: wsTeamMembersData } = useZRQGetRequest<
-		WSTeamMembersInterface[]
-	>({
-		_url: API_URL_ENUM.ws_team_member_invite_list,
-		_key: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-			workspaceId,
-			teamId,
-		],
-		_itemsIds: [workspaceId, teamId],
-		_urlDynamicParts: [
-			CONSTANTS.RouteParams.workspace.workspaceId,
-			CONSTANTS.RouteParams.workspace.teamId,
-		],
-	});
+	const { data: wsTeamMembersData, isFetching: isWSTeamMembersFetching } =
+		useZRQGetRequest<WSTeamMembersInterface[]>({
+			_url: API_URL_ENUM.ws_team_member_invite_list,
+			_key: [
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+				workspaceId,
+				teamId,
+			],
+			_itemsIds: [workspaceId, teamId],
+			_urlDynamicParts: [
+				CONSTANTS.RouteParams.workspace.workspaceId,
+				CONSTANTS.RouteParams.workspace.teamId,
+			],
+		});
 	// #endregion
-	console.log({ wsTeamMembersData });
+
 	// #region Modal & Popovers.
 	const { presentZIonPopover: presentZMemberActionPopover } = useZIonPopover(
 		ZMemberActionPopover,
@@ -232,7 +273,7 @@ const ZMembersListTable: React.FC = () => {
 		zMembersTable.setPageIndex(Number(pageindex) || 0);
 		zMembersTable.setPageSize(Number(pagesize) || 2);
 	}, [pageindex, pagesize]);
-	console.log({ d: zMembersTable?.getCanNextPage() }); // causing infinite loop
+	// console.log({ d: zMembersTable?.getCanNextPage() }); // causing infinite loop
 	return (
 		<div>
 			<ZCustomScrollable
@@ -283,107 +324,91 @@ const ZMembersListTable: React.FC = () => {
 
 				{/* Body Section */}
 				<ZIonRow className='rounded-b-lg zaions__light_bg'>
-					{wsTeamMembersData?.length ? (
-						<ZIonCol size='12' className='w-full ion-no-padding'>
-							{zMembersTable?.getRowModel().rows.map((_rowInfo, _rowIndex) => {
-								return (
-									<ZIonRow key={_rowIndex} className='flex-nowrap'>
-										{_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
-											_cellInfo.column.getIsVisible() ? (
-												<ZIonCol
-													key={_cellIndex}
-													size={
+					<ZIonCol size='12' className='w-full ion-no-padding'>
+						{zMembersTable?.getRowModel().rows.map((_rowInfo, _rowIndex) => {
+							return (
+								<ZIonRow key={_rowIndex} className='flex-nowrap'>
+									{_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
+										_cellInfo.column.getIsVisible() ? (
+											<ZIonCol
+												key={_cellIndex}
+												size={
+													_cellInfo.column.id ===
+														ZWSMemberListPageTableColumnsIds.id ||
+													_cellInfo.column.id ===
+														ZWSMemberListPageTableColumnsIds.actions
+														? '1.2'
+														: '2.5'
+												}
+												className={classNames({
+													'py-1 mt-1 border-b flex ion-align-items-center':
+														true,
+													'border-r': false,
+													'ps-2':
+														_cellInfo.column.id !==
+														ZWSMemberListPageTableColumnsIds.id,
+													'ps-0':
 														_cellInfo.column.id ===
-															ZWSMemberListPageTableColumnsIds.id ||
-														_cellInfo.column.id ===
-															ZWSMemberListPageTableColumnsIds.actions
-															? '1.2'
-															: '2.5'
-													}
+														ZWSMemberListPageTableColumnsIds.id,
+												})}
+											>
+												<div
 													className={classNames({
-														'py-1 mt-1 border-b flex ion-align-items-center':
-															true,
-														'border-r': false,
-														'ps-2':
-															_cellInfo.column.id !==
-															ZWSMemberListPageTableColumnsIds.id,
-														'ps-0':
+														'w-full text-sm ZaionsTextEllipsis': true,
+														'ps-3':
 															_cellInfo.column.id ===
 															ZWSMemberListPageTableColumnsIds.id,
 													})}
 												>
-													<div
-														className={classNames({
-															'w-full text-sm ZaionsTextEllipsis': true,
-															'ps-3':
-																_cellInfo.column.id ===
-																ZWSMemberListPageTableColumnsIds.id,
-														})}
-													>
-														{flexRender(
-															_cellInfo.column.columnDef.cell,
-															_cellInfo.getContext()
-														)}
-													</div>
-												</ZIonCol>
-											) : null
-										)}
+													{flexRender(
+														_cellInfo.column.columnDef.cell,
+														_cellInfo.getContext()
+													)}
+												</div>
+											</ZIonCol>
+										) : null
+									)}
 
-										<ZIonCol
-											size='.8'
-											className={classNames({
-												'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
-													true,
-												'border-r': false,
-											})}
+									<ZIonCol
+										size='.8'
+										className={classNames({
+											'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
+												true,
+											'border-r': false,
+										})}
+									>
+										<ZIonButton
+											fill='clear'
+											color='dark'
+											className='ion-no-padding ion-no-margin'
+											size='small'
+											testingSelector={
+												CONSTANTS.testingSelectors.shortLink.listPage.table
+													.actionPopoverBtn
+											}
+											testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
+											onClick={(_event: unknown) => {
+												setCompState((oldVal) => ({
+													...oldVal,
+													selectedMemberId: _rowInfo.original.id || '',
+												}));
+
+												//
+												presentZMemberActionPopover({
+													_event: _event as Event,
+													_cssClass:
+														'zaions_present_folder_Action_popover_width',
+													_dismissOnSelect: false,
+												});
+											}}
 										>
-											<ZIonButton
-												fill='clear'
-												color='dark'
-												className='ion-no-padding ion-no-margin'
-												size='small'
-												testingSelector={
-													CONSTANTS.testingSelectors.shortLink.listPage.table
-														.actionPopoverBtn
-												}
-												testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
-												onClick={(_event: unknown) => {
-													setCompState((oldVal) => ({
-														...oldVal,
-														selectedMemberId: _rowInfo.original.id || '',
-													}));
-
-													//
-													presentZMemberActionPopover({
-														_event: _event as Event,
-														_cssClass:
-															'zaions_present_folder_Action_popover_width',
-														_dismissOnSelect: false,
-													});
-												}}
-											>
-												<ZIonIcon icon={ellipsisVerticalOutline} />
-											</ZIonButton>
-										</ZIonCol>
-									</ZIonRow>
-								);
-							})}
-						</ZIonCol>
-					) : (
-						<ZIonCol className='py-3 ion-text-center'>
-							<ZIonTitle className='mt-3'>
-								<ZIonIcon
-									icon={fileTrayFullOutline}
-									className='mx-auto'
-									size='large'
-									color='medium'
-								/>
-							</ZIonTitle>
-							<ZIonTitle color='medium'>
-								No members founds. please invite a member.
-							</ZIonTitle>
-						</ZIonCol>
-					)}
+											<ZIonIcon icon={ellipsisVerticalOutline} />
+										</ZIonButton>
+									</ZIonCol>
+								</ZIonRow>
+							);
+						})}
+					</ZIonCol>
 				</ZIonRow>
 			</ZCustomScrollable>
 
@@ -655,5 +680,119 @@ const ZMemberActionPopover: React.FC<{
 		</ZIonList>
 	);
 };
+
+// Skeleton.
+const ZaionsMembersTableSkeleton: React.FC = React.memo(() => {
+	return (
+		<div className='w-full overflow-y-hidden border rounded-lg ms-1 h-max zaions_pretty_scrollbar ion-no-padding'>
+			{/* Row-1 */}
+			<ZIonRow className='flex mb-2 flex-nowrap zaions__light_bg'>
+				{/* Col-1 */}
+				<ZIonCol
+					size='.8'
+					className='text-sm font-bold border-b ps-2 zaions__light_bg'
+				>
+					<ZIonSkeletonText width='2.3rem' height='.8rem' animated={true} />
+				</ZIonCol>
+
+				{/* Col-2 */}
+				<ZIonCol
+					size='3'
+					className='text-sm font-bold border-b ps-2 zaions__light_bg'
+				>
+					<ZIonSkeletonText width='2.4rem' height='.8rem' animated={true} />
+				</ZIonCol>
+
+				{/* Col-3 */}
+				<ZIonCol
+					size='3'
+					className='text-sm font-bold border-b ps-2 zaions__light_bg'
+				>
+					<ZIonSkeletonText width='2.5rem' height='.8rem' animated={true} />
+				</ZIonCol>
+
+				{/* Col-4 */}
+				<ZIonCol className='text-sm font-bold border-b ps-2 zaions__light_bg'>
+					<ZIonSkeletonText width='4.5rem' height='.8rem' animated={true} />
+				</ZIonCol>
+
+				{/* Col-5 */}
+				<ZIonCol
+					size='3'
+					className='text-sm font-bold border-b ps-2 zaions__light_bg'
+				>
+					<ZIonSkeletonText width='4.5rem' height='.8rem' animated={true} />
+				</ZIonCol>
+			</ZIonRow>
+
+			{/* Row-2 */}
+			<ZIonRow className='rounded-b-lg'>
+				<ZIonCol size='12' className='w-full ion-no-padding'>
+					{[1, 2].map((el) => {
+						return (
+							<ZIonRow className='flex-nowrap' key={el}>
+								{/* Row-2 Col-1 */}
+								<ZIonCol
+									size='.8'
+									className='flex py-1 mt-1 border-b ps-4 ion-align-items-center'
+								>
+									<ZIonSkeletonText
+										width='1rem'
+										height='1rem'
+										animated={true}
+									/>
+								</ZIonCol>
+
+								<ZIonCol
+									size='3'
+									className='flex py-1 mt-1 border-b ps-2 ion-align-items-center'
+								>
+									<ZIonSkeletonText
+										width='2.3rem'
+										height='.8rem'
+										animated={true}
+									/>
+								</ZIonCol>
+
+								<ZIonCol
+									size='3'
+									className='flex py-1 mt-1 border-b ps-2 ion-align-items-center'
+								>
+									<ZIonSkeletonText
+										width='4.3rem'
+										height='.8rem'
+										animated={true}
+									/>
+								</ZIonCol>
+
+								<ZIonCol
+									size='2.3'
+									className='flex py-1 mt-1 border-b ps-2 ion-align-items-center'
+								>
+									<ZIonSkeletonText
+										width='3.3rem'
+										height='.8rem'
+										animated={true}
+									/>
+								</ZIonCol>
+
+								<ZIonCol
+									size='3'
+									className='flex py-1 mt-1 border-b ps-1 ion-align-items-center'
+								>
+									<ZIonSkeletonText
+										width='3.3rem'
+										height='.8rem'
+										animated={true}
+									/>
+								</ZIonCol>
+							</ZIonRow>
+						);
+					})}
+				</ZIonCol>
+			</ZIonRow>
+		</div>
+	);
+});
 
 export default React.memo(ZMembersListTable);

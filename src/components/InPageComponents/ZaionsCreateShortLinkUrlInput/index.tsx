@@ -164,6 +164,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
 									name='domain'
 									type='email'
 									fill='outline'
+									counter={false}
 									minHeight='40px'
 									placeholder='https://yourlink.com'
 									onIonChange={handleChange}

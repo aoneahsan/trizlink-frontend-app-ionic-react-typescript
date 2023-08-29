@@ -324,14 +324,17 @@ const AdminCreateNewLinkPages: React.FC = () => {
 							shortUrl: __generatedShortLink,
 						}));
 
+						const __shortlinkCacheData =
+							(getRQCDataHandler<ShortLinkType[]>({
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+									workspaceId,
+								],
+							}) as ShortLinkType[]) || [];
+
 						const _oldShortLinks =
 							extractInnerData<ShortLinkType[]>(
-								getRQCDataHandler<ShortLinkType[]>({
-									key: [
-										CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-										workspaceId,
-									],
-								}) as ShortLinkType[],
+								__shortlinkCacheData,
 								extractInnerDataOptionsEnum.createRequestResponseItems
 							) || [];
 

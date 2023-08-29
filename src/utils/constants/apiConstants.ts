@@ -27,5 +27,9 @@ export const uiAvatarApiDefaultParams = {
 	length: '1',
 };
 export const errorCodes = {
+	badRequest: 400,
 	unauthenticated: 401,
+	forbidden: 403,
+	notFound: 404,
+	serverError: 500,
 };

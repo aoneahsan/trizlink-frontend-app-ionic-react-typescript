@@ -28,7 +28,7 @@ import { useZPrivateRouteChecker } from '@/ZaionsHooks/zrouter-hooks';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import CONSTANTS from '@/utils/constants';
+import CONSTANTS, { LOCALSTORAGE_KEYS } from '@/utils/constants';
 import { API_URL_ENUM } from '@/utils/enums';
 import { ZErrorCodeEnum } from '@/utils/enums/ErrorsCodes';
 
@@ -48,6 +48,9 @@ import {
 	IsAuthenticatedRStateSelector,
 } from '@/ZaionsStore/UserAccount/index.recoil';
 import { reportCustomError } from '@/utils/customErrorType';
+import { useRouteMatch } from 'react-router';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { STORAGE } from '@/utils/helpers';
 
 interface IFetchRequiredAppDataHOCProps {
 	children?: React.ReactNode;
@@ -62,6 +65,22 @@ interface IFetchRequiredAppDataHOCProps {
 const FetchRequiredAppDataHOC: React.FC<IFetchRequiredAppDataHOCProps> = ({
 	children,
 }) => {
+	const is404Page = useRouteMatch(ZaionsRoutes.Error.Z404)?.isExact;
+
+	useEffect(() => {
+		if (is404Page === undefined) {
+			(async () => {
+				const _errorData = (await STORAGE.GET(
+					LOCALSTORAGE_KEYS.ERROR_DATA
+				)) as { message: string; status: number } | null;
+
+				if (_errorData !== null) {
+					await Promise.all([STORAGE.REMOVE(LOCALSTORAGE_KEYS.ERROR_DATA)]);
+				}
+			})();
+		}
+	}, [is404Page]);
+
 	return (
 		<Suspense fallback={<ZFallbackIonSpinner />}>
 			<FetchRequiredAppDataHOCAsync>{children}</FetchRequiredAppDataHOCAsync>

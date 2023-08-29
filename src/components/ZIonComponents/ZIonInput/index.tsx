@@ -123,6 +123,7 @@ export type ZIonInputType = {
 	size?: number;
 	spellcheck?: boolean;
 	step?: string;
+	id?: string;
 	type?:
 		| 'date'
 		| 'datetime-local'
@@ -196,16 +197,20 @@ const ZIonInput = React.forwardRef(
 				onIonInput={props.onIonChange}
 				fill={props.fill || 'outline'}
 				ref={ref}
-				counter={props.counter || true}
+				counter={props.counter === false ? false : true}
 				maxlength={
 					props.maxlength || ZInputLengthConstant.defaultStringMaxLength
 				}
-				onKeyUp={({ key }) => {
-					// if (props.onKeyUp) {
-					// 	props.onKeyUp();
-					// }
+				onKeyUp={(event) => {
+					if (props.onKeyUp) {
+						props.onKeyUp(event);
+					}
 
-					if (key === 'Enter') {
+					if (event?.key === 'Enter' && props.zNextFieldId !== null) {
+						console.log({
+							s: props.zNextFieldId,
+							c: event.key,
+						});
 						zGotoNextField(props.zNextFieldId);
 					}
 				}}

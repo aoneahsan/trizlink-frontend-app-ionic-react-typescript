@@ -355,6 +355,7 @@ const DEFAULT_VALUES = {
 export const LOCALSTORAGE_KEYS = {
 	USERDATA: 'udhsaf38h_3g-23g-c',
 	AUTHTOKEN: 'cewiuh4ggb284ghg',
+	ERROR_DATA: 'asdgcvbv_cbert-k',
 };
 
 export const Platforms = {

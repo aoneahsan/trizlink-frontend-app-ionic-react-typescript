@@ -235,7 +235,9 @@ const ZaionsLoginForm: React.FC = () => {
 								errorText={
 									touched.emailAddress ? errors.emailAddress : undefined
 								}
-								// zNextFieldId={}
+								zNextFieldId={
+									CONSTANTS.testingSelectors.loginPage.passwordInput
+								}
 								className={classNames({
 									'mb-4': true,
 									'ion-touched': touched.emailAddress,
@@ -255,6 +257,7 @@ const ZaionsLoginForm: React.FC = () => {
 									onIonChange={handleChange}
 									onIonBlur={handleBlur}
 									value={values.password}
+									id={CONSTANTS.testingSelectors.loginPage.passwordInput}
 									errorText={touched.password ? errors.password : undefined}
 									clearOnEdit={false}
 									minlength={ZInputLengthConstant.loginForm.password.min}
