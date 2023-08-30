@@ -10,8 +10,13 @@ import { useParams } from 'react-router';
  * ? Like import of ionic components is a packages import
  * */
 import { AxiosError } from 'axios';
-// import { Geolocation } from '@capacitor/geolocation';
+import { Geolocation } from '@capacitor/geolocation';
 import { Device } from '@capacitor/device';
+import dayjs from 'dayjs';
+import DayJsTimezonePlugin from 'dayjs/plugin/timezone';
+import DayJsUtcPlugin from 'dayjs/plugin/utc';
+dayjs.extend(DayJsUtcPlugin);
+dayjs.extend(DayJsTimezonePlugin);
 
 /**
  * Custom Imports go down
@@ -40,19 +45,24 @@ import { useZRQCreateRequest } from '@/ZaionsHooks/zreactquery-hooks';
  * */
 import CONSTANTS, { ExternalURL } from '@/utils/constants';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import { ENVS } from '@/utils/envKeys';
+import {
+	extractInnerData,
+	zRedirectToTarget,
+	zStringify,
+} from '@/utils/helpers';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { LinkTargetType, ShortLinkType } from '@/types/AdminPanel/linksType';
-import {
-	extractInnerData,
-	zRedirectToTarget,
-	zStringify,
-} from '@/utils/helpers';
 import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
-import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
+import {
+	GeoLocationRotatorInterface,
+	LinkExpirationInfoInterface,
+	messengerPlatformsBlockEnum,
+} from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down
@@ -116,6 +126,30 @@ const ZShortLinkRedirectPage: React.FC = () => {
 	// 	return _batteryInfo;
 	// }, []);
 
+	async function getCountryFromCoordinates({
+		latitude,
+		longitude,
+	}: {
+		latitude?: number;
+		longitude?: number;
+	}) {
+		const response = await fetch(
+			`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${ENVS?.googleMapApiKey}`
+		);
+		const data = await response.json();
+
+		const countryComponent = (
+			data.results[0].address_components as {
+				long_name: string;
+				short_name: string;
+				types: string[];
+			}[]
+		).find((component) => component.types.includes('country'));
+
+		return countryComponent ? countryComponent?.long_name : null;
+	}
+
+	//
 	const createURlRecodeCallback = useCallback(async () => {
 		const __deviceInfo = await logDeviceInfo();
 
@@ -143,11 +177,57 @@ const ZShortLinkRedirectPage: React.FC = () => {
 
 				const __target = _data?.target as LinkTargetType;
 				const __type = _data?.type as messengerPlatformsBlockEnum;
+				const __geoLocations =
+					_data?.geoLocationRotatorLinks as GeoLocationRotatorInterface[];
+				const __linkExpiration =
+					_data?.linkExpirationInfo as LinkExpirationInfoInterface;
+				const __userPosition = await Geolocation.getCurrentPosition();
+				const __userCountry = await getCountryFromCoordinates({
+					latitude: __userPosition?.coords?.latitude,
+					longitude: __userPosition?.coords?.longitude,
+				});
 
-				const __redirectUrl = zRedirectToTarget({
+				// generating redirect link according to __target and type. (the default redirection)
+				let __redirectUrl = zRedirectToTarget({
 					_target: __target,
 					type: __type,
 				});
+
+				// Checking if any geo-location define. if define then redirect according to it.
+				// Now check if the user's country exists in the geoRedirects array
+				const matchingRedirect = __geoLocations?.find(
+					(redirect) => redirect?.country === __userCountry
+				);
+
+				// If there is link-expiration define. then redirect according to it.
+				if (
+					matchingRedirect?.country &&
+					matchingRedirect?.redirectionLink &&
+					matchingRedirect?.redirectionLink?.trim()?.length > 0
+				) {
+					__redirectUrl = matchingRedirect?.redirectionLink;
+				}
+
+				if (
+					__linkExpiration?.enabled &&
+					__linkExpiration?.redirectionLink &&
+					__linkExpiration?.redirectionLink?.trim()?.length > 0
+				) {
+					const __expirationTimePass = dayjs
+						.tz(dayjs(), __linkExpiration?.timezone)
+						.isAfter(
+							dayjs.tz(
+								__linkExpiration?.expirationDate,
+								__linkExpiration?.timezone
+							)
+						);
+
+					if (__expirationTimePass) {
+						__redirectUrl = __linkExpiration?.redirectionLink;
+					}
+				}
+
+				// redirecting...
 				if (__redirectUrl) {
 					window.location.replace(__redirectUrl);
 				}

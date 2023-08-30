@@ -534,7 +534,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 							timezone:
 								(
 									selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-								)?.timezone || '',
+								)?.timezone || CONSTANTS.DEFAULT_VALUES.TIMEZONE_DEFAULT,
 							redirectionLink:
 								(
 									selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface

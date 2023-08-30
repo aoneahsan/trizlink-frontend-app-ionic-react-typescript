@@ -66,6 +66,13 @@ export enum ZTeamMemberInvitationEnum {
 	rejected = 'rejected',
 }
 
+export enum EZGeoLocationCondition {
+	equalTo,
+	in,
+	notEqualTo,
+	notIn,
+}
+
 // Interfaces
 export interface UTMTagInfoInterface {
 	templateId?: string;

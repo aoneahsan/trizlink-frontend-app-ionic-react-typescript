@@ -1,5 +1,5 @@
 // Core Imports
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Packages Imports
 import { FieldArray, useFormikContext } from 'formik';
@@ -19,15 +19,17 @@ import {
 } from '@/components/ZIonComponents';
 
 // Global constant
-import { getRandomKey, zAddUrlProtocol } from '@/utils/helpers';
+import {
+	getRandomKey,
+	zAddUrlProtocol,
+	zCalculateRotatorABTesting,
+} from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Types
 import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 import CONSTANTS from '@/utils/constants';
-
-const FULL_PERCENTAGE = 100;
 
 type RotatorABTestingErrorType = {
 	redirectionLink?: string;
@@ -76,6 +78,7 @@ const RotatorABTesting: React.FC = () => {
 								className='ion-no-padding'
 								label='Redirection Links*'
 								labelPlacement='stacked'
+								value={values?.target?.url}
 								minHeight='40px'
 								testingSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.rotatorABTesting.redirectionLinkInput}-disable`}
 							/>
@@ -90,7 +93,11 @@ const RotatorABTesting: React.FC = () => {
 							<ZIonInput
 								type='number'
 								label='Percentage'
-								value={FULL_PERCENTAGE}
+								value={
+									zCalculateRotatorABTesting({
+										_data: values.rotatorABTesting,
+									})?._remainingPercentage
+								}
 								disabled
 								labelPlacement='stacked'
 								minHeight='40px'
@@ -119,6 +126,7 @@ const RotatorABTesting: React.FC = () => {
 													(!isMdScale && isSmScale) || !isSmScale,
 											})}
 										>
+											{/* Link Input */}
 											<ZIonCol
 												sizeXl='5.5'
 												sizeLg='5.5'
@@ -194,7 +202,7 @@ const RotatorABTesting: React.FC = () => {
 												/>
 											</ZIonCol>
 
-											{/*  */}
+											{/* Percentage Input */}
 											<ZIonCol
 												sizeXl='5.5'
 												sizeLg='5.5'
@@ -205,10 +213,60 @@ const RotatorABTesting: React.FC = () => {
 												<ZIonInput
 													type='number'
 													label='Percentage*'
+													max={
+														zCalculateRotatorABTesting({
+															_data: values.rotatorABTesting,
+														})?._remainingPercentage - 1
+													}
+													min={1}
 													labelPlacement='stacked'
 													minHeight='40px'
-													onIonChange={handleChange}
-													onIonBlur={handleBlur}
+													counter={false}
+													onIonChange={(e) => {
+														try {
+															const _percentageVal = parseInt(
+																e?.target?.value?.toString() ?? '0'
+															);
+															const _remainingPercentage =
+																zCalculateRotatorABTesting({
+																	_data: values.rotatorABTesting,
+																})?._remainingPercentage;
+															console.log({
+																lm: 'checking what is ab testing percentage',
+																_remainingPercentage,
+																_percentageVal,
+																oldPercentage: values.rotatorABTesting[_index],
+																rotatorABTesting: values.rotatorABTesting,
+															});
+															if (_percentageVal > _remainingPercentage) {
+																setFieldValue(
+																	`rotatorABTesting.${_index}.percentage`,
+																	1,
+																	false
+																);
+															} else {
+																handleChange(e);
+															}
+														} catch (error) {
+															setFieldValue(
+																`rotatorABTesting.${_index}.percentage`,
+																1,
+																false
+															);
+														}
+													}}
+													onIonBlur={(e) => {
+														handleBlur(e);
+														if (
+															values.rotatorABTesting[_index].percentage === 0
+														) {
+															setFieldValue(
+																`rotatorABTesting.${_index}.percentage`,
+																1,
+																false
+															);
+														}
+													}}
 													value={values.rotatorABTesting[_index].percentage}
 													name={`rotatorABTesting.${_index}.percentage`}
 													testingSelector={
@@ -299,7 +357,7 @@ const RotatorABTesting: React.FC = () => {
 											push({
 												id: getRandomKey(),
 												redirectionLink: 'https://',
-												percentage: 0,
+												percentage: 1,
 											})
 										}
 									>

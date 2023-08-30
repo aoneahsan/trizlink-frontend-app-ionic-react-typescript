@@ -31,6 +31,7 @@ import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 // Types
 import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { ZTimezoneSelector } from '@/components/CustomComponents/ZTimezone';
 
 // Styles
 
@@ -93,7 +94,7 @@ const LinkExpiration: React.FC = () => {
 							{/* expirationDate */}
 							<ZIonCol size='5.9'>
 								<ZIonInput
-									label='End at:'
+									label='End at:*'
 									labelPlacement='stacked'
 									name='linkExpiration.expirationDate'
 									type='datetime-local'
@@ -109,8 +110,16 @@ const LinkExpiration: React.FC = () => {
 							</ZIonCol>
 
 							{/* timezone */}
+
 							<ZIonCol size='5.9'>
-								<ZaionsRSelect
+								<ZTimezoneSelector
+									placeholder='timezone*'
+									name='linkExpiration.timezone'
+									value={values?.linkExpiration?.timezone}
+									onIonChange={handleChange}
+									onIonBlur={handleBlur}
+								/>
+								{/* <ZaionsRSelect
 									className=''
 									placeholder='country*'
 									name='linkExpiration.timezone'
@@ -138,7 +147,7 @@ const LinkExpiration: React.FC = () => {
 											'value'
 										) || []
 									}
-								/>
+								/> */}
 							</ZIonCol>
 						</ZIonRow>
 

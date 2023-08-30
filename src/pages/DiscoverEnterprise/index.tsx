@@ -35,7 +35,7 @@ import InPageFooter from '@/components/InPageFooter';
 // Global Constants
 import {
 	ZaionsDiscoverEnterpriseCompanySize,
-	ZaionsDiscoverEnterpriseCountry,
+	ZCountryData,
 	ZaionsDiscoverEnterprisePrimaryUseCase,
 } from '@/data/DiscoverEnterprise/index.data';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
@@ -43,7 +43,7 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { PRODUCT_DOMAIN, PRODUCT_NAME } from '@/utils/constants';
 // import {
 // 	ZaionsDiscoverEnterpriseCompanySize,
-// 	ZaionsDiscoverEnterpriseCountry,
+// 	ZCountryData,
 // 	ZaionsDiscoverEnterpriseJobTitle,
 // 	ZaionsDiscoverEnterprisePrimaryUseCase,
 // } from '@/data/DiscoverEnterprise/index.data';
@@ -185,7 +185,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
 								className='mt-5'
 								interface='popover'
 							>
-								{ZaionsDiscoverEnterpriseCountry.map((el, index) => {
+								{ZCountryData.map((el, index) => {
 									return (
 										<ZIonSelectOption value={index} key={index}>
 											{el.value}

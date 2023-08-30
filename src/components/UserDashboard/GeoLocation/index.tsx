@@ -17,6 +17,8 @@ import {
 	ZIonNote,
 	ZIonButton,
 	ZIonGrid,
+	ZIonSelect,
+	ZIonSelectOption,
 } from '@/components/ZIonComponents';
 import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 
@@ -32,7 +34,7 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 // Images
 
 // Recoil States
-import { ZaionsDiscoverEnterpriseCountry } from '@/data/DiscoverEnterprise/index.data';
+import { ZCountryData } from '@/data/DiscoverEnterprise/index.data';
 
 // Types
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
@@ -104,9 +106,9 @@ const GeoLocation: React.FC = () => {
 												})}
 											>
 												<ZIonCol
-													sizeXl='5.6'
-													sizeLg='5.6'
-													sizeMd='5.6'
+													sizeXl='12'
+													sizeLg='12'
+													sizeMd='12'
 													sizeSm='12'
 													sizeXs='12'
 												>
@@ -175,13 +177,110 @@ const GeoLocation: React.FC = () => {
 													sizeXl='5.6'
 													sizeLg='5.6'
 													sizeMd='5.6'
+													sizeSm='12'
+													sizeXs='12'
+												>
+													<ZIonSelect
+														minHeight='2.5rem'
+														interface='popover'
+														fill='outline'
+														label='Condition'
+														labelPlacement='stacked'
+														name={`geoLocation.${_index}.country`}
+														value={
+															values?.geoLocation[_index]?.country as string
+														}
+														testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.geoLocation.countrySelector}-${_geoLocationEl.id}`}
+														testingSelector={
+															CONSTANTS.testingSelectors.shortLink.formPage
+																.geoLocation.countrySelector
+														}
+													>
+														<ZIonSelectOption>d</ZIonSelectOption>
+													</ZIonSelect>
+												</ZIonCol>
+												<ZIonCol
+													sizeXl='5.6'
+													sizeLg='5.6'
+													sizeMd='5.6'
 													sizeSm='11'
 													sizeXs='11'
 												>
+													{/* <ZIonSelect
+														minHeight='2.5rem'
+														interface='popover'
+														fill='outline'
+														label='country*'
+														labelPlacement='stacked'
+														name={`geoLocation.${_index}.country`}
+														value={
+															values?.geoLocation[_index]?.country as string
+														}
+														testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.geoLocation.countrySelector}-${_geoLocationEl.id}`}
+														testingSelector={
+															CONSTANTS.testingSelectors.shortLink.formPage
+																.geoLocation.countrySelector
+														}
+														errorText={
+															errors.geoLocation?.length
+																? ((
+																		errors.geoLocation[
+																			_index
+																		] as GeoLocationErrorsType
+																  )?.redirectionLink as string)
+																: undefined
+														}
+														onIonChange={({ target }) => {
+															setFieldValue(
+																`geoLocation.${_index}.country`,
+																target?.value,
+																true
+															);
+														}}
+														onIonBlur={() => {
+															setFieldTouched(
+																`geoLocation.${_index}.country`,
+																true,
+																true
+															);
+														}}
+														className={classNames({
+															'pb-0 mb-0 geo-location-country-field': false,
+															'ion-touched':
+																touched?.geoLocation &&
+																touched?.geoLocation[_index]?.country,
+															'ion-invalid':
+																touched?.geoLocation &&
+																errors?.geoLocation &&
+																touched?.geoLocation[_index]?.country &&
+																(
+																	errors.geoLocation[
+																		_index
+																	] as GeoLocationErrorsType
+																).country,
+															'ion-valid':
+																touched?.geoLocation &&
+																errors?.geoLocation &&
+																touched?.geoLocation[_index]?.country &&
+																!(
+																	errors.geoLocation[
+																		_index
+																	] as GeoLocationErrorsType
+																).country,
+														})}
+													>
+														{ZCountryData.map((el, index) => {
+															return (
+																<ZIonSelectOption value={el.value} key={index}>
+																	{el.label}
+																</ZIonSelectOption>
+															);
+														})}
+													</ZIonSelect> */}
 													<ZaionsRSelect
 														placeholder='country*'
 														name={`geoLocation.${_index}.country`}
-														options={ZaionsDiscoverEnterpriseCountry}
+														options={ZCountryData}
 														testingSelector={
 															CONSTANTS.testingSelectors.shortLink.formPage
 																.geoLocation.countrySelector
@@ -226,7 +325,7 @@ const GeoLocation: React.FC = () => {
 														value={
 															formatReactSelectOption(
 																values?.geoLocation[_index]?.country as string,
-																ZaionsDiscoverEnterpriseCountry as ZGenericObject[],
+																ZCountryData as ZGenericObject[],
 																'label',
 																'value'
 															) || []

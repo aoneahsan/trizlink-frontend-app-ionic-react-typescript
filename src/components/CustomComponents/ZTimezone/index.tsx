@@ -136,6 +136,8 @@ export const ZTimezoneSelector: React.FC<ZTimezoneSelectorInterface> = (
 		<ZIonSelect
 			{...props}
 			fill='outline'
+			label='timezone'
+			labelPlacement='stacked'
 			errorText={props.errorText}
 			minHeight='2.5rem'
 			interface='popover'
@@ -143,8 +145,8 @@ export const ZTimezoneSelector: React.FC<ZTimezoneSelectorInterface> = (
 		>
 			{TIMEZONES.map((el, index) => {
 				return (
-					<ZIonSelectOption value={el.label} key={index}>
-						{el.value}
+					<ZIonSelectOption value={el.value} key={index}>
+						{el.label}
 					</ZIonSelectOption>
 				);
 			})}

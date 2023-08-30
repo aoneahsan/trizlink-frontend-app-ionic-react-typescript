@@ -1,3 +1,4 @@
+import { ABTestingRotatorInterface } from './../../types/AdminPanel/index.type';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import { useLocation } from 'react-router';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
@@ -1619,5 +1620,25 @@ export const zGotoNextField = (uniqueId?: string) => {
 		if (_nextField && _nextField instanceof HTMLIonInputElement) {
 			_nextField?.setFocus();
 		}
+	}
+};
+
+export const zCalculateRotatorABTesting = ({
+	_data,
+}: {
+	_data: ABTestingRotatorInterface[];
+}) => {
+	try {
+		const _totalPercentage = CONSTANTS.DEFAULT_VALUES.Z_PERCENTAGE;
+		const _dataPercentage = _data.reduce(
+			(sum, obj) => sum + obj.percentage!,
+			0
+		);
+		const _remainingPercentage = _totalPercentage - _dataPercentage;
+
+		return { _totalPercentage, _remainingPercentage };
+	} catch (error) {
+		reportCustomError(error);
+		return { _totalPercentage: 0, _remainingPercentage: 0 };
 	}
 };

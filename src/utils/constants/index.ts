@@ -343,8 +343,9 @@ const DateTime = {
 
 // Default Values
 const DEFAULT_VALUES = {
+	Z_PERCENTAGE: 100,
 	DEFAULT_CUSTOM_DOMAIN: '1',
-	TIMEZONE_DEFAULT: '(GMT) Western Europe Time, London, Lisbon, Casablanca',
+	TIMEZONE_DEFAULT: ENVS.timezone,
 	DEFAULT_FOLDER: 'all',
 	ZAIONS_SETTING_SPLIT_PANEL: 'ZAIONS_SETTING_PAGE_PANEL',
 	ZAIONS_SHORT_LINKS_LIST_SPLIT_PANEL: 'ZAIONS_SHORT_LINKS_LIST_SPLIT_PANEL',
@@ -1133,72 +1134,40 @@ const testingSelectors = {
 };
 
 export const TIMEZONES = [
+	{ label: '(UTC-12:00) International Date Line West', value: 'Etc/GMT+12' },
+	{ label: '(UTC-11:00) Midway Island, Samoa', value: 'Pacific/Midway' },
+	{ label: '(UTC-10:00) Hawaii', value: 'Pacific/Honolulu' },
+	{ label: '(UTC-09:00) Alaska', value: 'America/Anchorage' },
 	{
-		label: '(GMT +5:30) Bombay, Calcutta, Madras, New Delhi',
-		value: '(GMT +5:30) Bombay, Calcutta, Madras, New Delhi',
+		label: '(UTC-08:00) Pacific Time (US & Canada)',
+		value: 'America/Los_Angeles',
 	},
+	{ label: '(UTC-07:00) Mountain Time (US & Canada)', value: 'America/Denver' },
+	{ label: '(UTC-06:00) Central Time (US & Canada)', value: 'America/Chicago' },
 	{
-		label: '(GMT) Western Europe Time, London, Lisbon, Casablanca',
-		value: '(GMT) Western Europe Time, London, Lisbon, Casablanca',
+		label: '(UTC-05:00) Eastern Time (US & Canada)',
+		value: 'America/New_York',
 	},
+	{ label: '(UTC-04:00) Atlantic Time (Canada)', value: 'America/Halifax' },
 	{
-		label: '(GMT +1:00) Brussels, Copenhagen, Madrid, Paris',
-		value: '(GMT +1:00) Brussels, Copenhagen, Madrid, Paris',
+		label: '(UTC-03:00) Buenos Aires, Georgetown',
+		value: 'America/Argentina/Buenos_Aires',
 	},
-	{
-		label: '(GMT +2:00) Kaliningrad, South Africa',
-		value: '(GMT +2:00) Kaliningrad, South Africa',
-	},
-	{
-		label: '(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg',
-		value: '(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg',
-	},
-	{ label: '(GMT +3:30) Tehran', value: '(GMT +3:30) Tehran' },
-	{
-		label: '(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi',
-		value: '(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi',
-	},
-	{ label: '(GMT +4:30) Kabul', value: '(GMT +4:30) Kabul' },
-	{
-		label: '(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent',
-		value: '(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent',
-	},
-	{
-		label: '(GMT +5:30) Bombay, Calcutta, Madras, New Delhi',
-		value: '(GMT +5:30) Bombay, Calcutta, Madras, New Delhi',
-	},
-	{
-		label: '(GMT +6:00) Almaty, Dhaka, Colombo',
-		value: '(GMT +6:00) Almaty, Dhaka, Colombo',
-	},
-	{
-		label: '(GMT +7:00) Bangkok, Hanoi, Jakarta',
-		value: '(GMT +7:00) Bangkok, Hanoi, Jakarta',
-	},
-	{
-		label: '(GMT +8:00) Beijing, Perth, Singapore, Hong Kong',
-		value: '(GMT +8:00) Beijing, Perth, Singapore, Hong Kong',
-	},
-	{
-		label: '(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk',
-		value: '(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk',
-	},
-	{
-		label: '(GMT +9:30) Adelaide, Darwin',
-		value: '(GMT +9:30) Adelaide, Darwin',
-	},
-	{
-		label: '(GMT +10:00) Eastern Australia, Guam, Vladivostok',
-		value: '(GMT +10:00) Eastern Australia, Guam, Vladivostok',
-	},
-	{
-		label: '(GMT +11:00) Magadan, Solomon Islands, New Caledonia',
-		value: '(GMT +11:00) Magadan, Solomon Islands, New Caledonia',
-	},
-	{
-		label: '(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka',
-		value: '(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka',
-	},
+	{ label: '(UTC-02:00) Mid-Atlantic', value: 'Etc/GMT+2' },
+	{ label: '(UTC-01:00) Azores', value: 'Atlantic/Azores' },
+	{ label: '(UTC+00:00) London, UTC/GMT', value: 'UTC' },
+	{ label: '(UTC+01:00) Berlin, Rome, Paris', value: 'Europe/Berlin' },
+	{ label: '(UTC+02:00) Athens, Jerusalem', value: 'Europe/Athens' },
+	{ label: '(UTC+03:00) Moscow, St. Petersburg', value: 'Europe/Moscow' },
+	{ label: '(UTC+04:00) Abu Dhabi, Dubai', value: 'Asia/Dubai' },
+	{ label: '(UTC+05:00) Islamabad, Karachi', value: 'Asia/Karachi' },
+	{ label: '(UTC+06:00) Almaty, Dhaka', value: 'Asia/Almaty' },
+	{ label: '(UTC+07:00) Bangkok, Jakarta', value: 'Asia/Bangkok' },
+	{ label: '(UTC+08:00) Beijing, Hong Kong', value: 'Asia/Hong_Kong' },
+	{ label: '(UTC+09:00) Tokyo, Seoul', value: 'Asia/Tokyo' },
+	{ label: '(UTC+10:00) Brisbane, Sydney', value: 'Australia/Brisbane' },
+	{ label: '(UTC+11:00) Solomon Islands', value: 'Pacific/Guadalcanal' },
+	{ label: '(UTC+12:00) Auckland, Wellington', value: 'Pacific/Auckland' },
 ];
 
 // Modal Id's

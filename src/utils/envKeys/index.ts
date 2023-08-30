@@ -12,6 +12,7 @@ export const ENVS = {
 	isProduction: _env.PROD,
 	isDevelopment: _env.DEV,
 	isTesting: _env.MODE === 'testing',
+	timezone: _env.VITE_DEFAULT_TIME_ZONE,
 	defaultShortUrlDomain: _env.PROD
 		? _env.VITE_DEFAULT_SHORT_URL_DOMAIN_PROD
 		: _env.VITE_DEFAULT_SHORT_URL_DOMAIN_LOCAL,

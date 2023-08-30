@@ -9,7 +9,12 @@ import PhoneInput, {
 } from 'react-phone-number-input';
 // import PhoneInput from 'react-phone-input-2';
 // Custom Imports
-import { ZIonCol, ZIonNote } from '@/components/ZIonComponents';
+import {
+	ZIonCol,
+	ZIonNote,
+	ZIonSelect,
+	ZIonSelectOption,
+} from '@/components/ZIonComponents';
 
 // Global constant
 
@@ -19,89 +24,106 @@ import Z401View from '@/components/Errors/401';
 import Z400View from '@/components/Errors/400';
 import Z403View from '@/components/Errors/403';
 import Z500View from '@/components/Errors/500';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { IonSelect } from '@ionic/react';
+
 // import 'react-phone-input-2/lib/style.css';
 
 const ZaionsTestPage: React.FC = () => {
+	const ionSelectParentRef = React.useRef(null);
+	const divParentRef = React.useRef(null);
+
+	const ionSelectRowVirtualizer = useVirtualizer({
+		count: 10000,
+		getScrollElement: () => ionSelectParentRef.current,
+		estimateSize: () => 35,
+		overscan: 5,
+	});
+	const divRowVirtualizer = useVirtualizer({
+		count: 10000,
+		getScrollElement: () => divParentRef.current,
+		estimateSize: () => 35,
+		overscan: 5,
+	});
+
 	return (
-		<Z500View />
-		// <ZIonCol
-		// 	sizeXl='12'
-		// 	sizeLg='12'
-		// 	sizeMd='12'
-		// 	sizeSm='12'
-		// 	sizeXs='12'
-		// 	className='py-3'
-		// >
-		// 	{/* <Formik
-		// 		initialValues={{
-		// 			pn1: '',
-		// 		}}
-		// 		validate={(values) => {
-		// 			const errors: {
-		// 				pn1?: string;
-		// 			} = {};
+		<>
+			<IonSelect
+				ref={ionSelectParentRef}
+				interface='popover'
+				className='List'
+				style={{
+					height: `200px`,
+					width: `400px`,
+					overflow: 'auto',
+					contain: 'strict',
+				}}
+			>
+				<div
+					style={{
+						height: `${ionSelectRowVirtualizer.getTotalSize()}px`,
+						width: '100%',
+						position: 'relative',
+					}}
+				>
+					{ionSelectRowVirtualizer.getVirtualItems().map((virtualRow) => {
+						return (
+							<ZIonSelectOption
+								key={virtualRow.index}
+								className={
+									virtualRow.index % 2 ? 'ListItemOdd' : 'ListItemEven'
+								}
+								style={{
+									position: 'absolute',
+									top: 0,
+									left: 0,
+									width: '100%',
+									height: `${virtualRow.size}px`,
+									transform: `translateY(${virtualRow.start}px)`,
+								}}
+							>
+								Row {virtualRow.index}
+							</ZIonSelectOption>
+						);
+					})}
+				</div>
+			</IonSelect>
 
-		// 			if (values.pn1.trim().length === 0) {
-		// 				errors.pn1 = 'phone number is required.';
-		// 			} else if (!isPossiblePhoneNumber(values.pn1)) {
-		// 				errors.pn1 = 'not a valid phone number.';
-		// 			} else {
-		// 				delete errors.pn1;
-		// 			}
-
-		// 			return errors;
-		// 		}}
-		// 		onSubmit={() => {}}
-		// 	>
-		// 		{({ values, errors, touched, setFieldValue, setFieldTouched }) => {
-		// 			console.log({
-		// 				values,
-		// 				errors,
-		// 				touched,
-		// 			});
-		// 			return (
-		// 				<>
-		// 					<div className=''>
-		// 						<PhoneInput
-		// 							placeholder='Enter phone number'
-		// 							value={formatPhoneNumberIntl(values.pn1)}
-		// 							onBlur={() => {
-		// 								setFieldTouched('pn1', true, true);
-		// 							}}
-		// 							onChange={(_value) => {
-		// 								setFieldValue('pn1', _value, false);
-		// 							}}
-		// 							className='h-[2.5rem]'
-		// 						/>
-		// 						{touched.pn1 && errors.pn1 && errors.pn1?.length > 0 && (
-		// 							<ZIonNote color='danger'>{errors.pn1}</ZIonNote>
-		// 						)}
-		// 					</div>
-
-		// 					{/* <div>
-		// 						<PhoneInput
-		// 							country='pk'
-		// 							isValid={(value, country) => {
-		// 								if (value.match(/12345/)) {
-		// 									return 'Invalid value: ' + value + ', ' + country.name;
-		// 								} else if (value.match(/1234/)) {
-		// 									return false;
-		// 								} else {
-		// 									return true;
-		// 								}
-		// 							}}
-		// 							value={values.pn1}
-		// 							onChange={(phone) => setFieldValue('pn1', phone, false)}
-		// 						/>
-		// 						{touched.pn1 && errors.pn1 && errors.pn1?.length > 0 && (
-		// 							<ZIonNote color='danger'>{errors.pn1}</ZIonNote>
-		// 						)}
-		// 					</div> * /}
-		// 				</>
-		// 			);
-		// 		}}
-		// 	</Formik> */}
-		// </ZIonCol>
+			<div
+				ref={divParentRef}
+				className='List'
+				style={{
+					height: `200px`,
+					width: `400px`,
+					overflow: 'auto',
+				}}
+			>
+				<div
+					style={{
+						height: `${divRowVirtualizer.getTotalSize()}px`,
+						width: '100%',
+						position: 'relative',
+					}}
+				>
+					{divRowVirtualizer.getVirtualItems().map((virtualRow) => (
+						<div
+							key={virtualRow.index}
+							className={virtualRow.index % 2 ? 'ListItemOdd' : 'ListItemEven'}
+							style={{
+								position: 'absolute',
+								top: 0,
+								left: 0,
+								width: '100%',
+								height: `${virtualRow.size}px`,
+								transform: `translateY(${virtualRow.start}px)`,
+							}}
+						>
+							Row {virtualRow.index}
+						</div>
+					))}
+				</div>
+			</div>
+		</>
 	);
 };
 
