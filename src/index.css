@@ -258,6 +258,9 @@ span.new {
 	background-color: var(--ion-color-white) !important;
 	--background: var(--ion-color-white) !important;
 }
+.z_ion_bg_white {
+	--background: var(--ion-color-white) !important;
+}
 
 .zaions__bg_f5f6fa {
 	background-color: #f5f6fa;
@@ -322,6 +325,13 @@ span.new {
 
 .zaions_bg__dark {
 	background: var(--ion-color-dark);
+}
+
+.zaions__medium_bg_opacity_point_3 {
+	background: rgba(var(--ion-color-medium-rgb), 0.3);
+}
+.zaions__medium_bg_opacity_point_1 {
+	background: rgba(var(--ion-color-medium-rgb), 0.1);
 }
 
 .zaions__dark_bg_opacity_point_7 {
@@ -592,9 +602,6 @@ span.new {
 }
 .zaions__rs__menu {
 	z-index: 999 !important;
-}
-.geo-location-country-field {
-	margin-top: 2px;
 }
 .invalid .zaions__rs__control {
 	border-bottom: 2px solid var(--ion-color-danger) !important ;

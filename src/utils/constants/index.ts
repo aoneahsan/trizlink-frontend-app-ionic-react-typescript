@@ -344,6 +344,7 @@ const DateTime = {
 // Default Values
 const DEFAULT_VALUES = {
 	Z_PERCENTAGE: 100,
+	DEFAULT_COUNTRY: ENVS.country,
 	DEFAULT_CUSTOM_DOMAIN: '1',
 	TIMEZONE_DEFAULT: ENVS.timezone,
 	DEFAULT_FOLDER: 'all',
@@ -594,6 +595,7 @@ const testingSelectors = {
 				// sl-fp-gl -> shortlink-form-page-geo-location
 				redirectionLinkInput: 'sl-fp-gl-link-input',
 				countrySelector: 'sl-fp-gl-country-selector',
+				conditionSelector: 'sl-fp-gl-condition-selector',
 				countrySelectorError: 'sl-fp-gl-country-selector-error',
 				deleteSingleGeoLocationBtn: 'sl-fp-gl-delete-btn',
 				addSingleGeoLocationBtn: 'sl-fp-gl-add-btn',

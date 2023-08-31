@@ -52,6 +52,8 @@ type ZIonSelectType = {
 	fill?: 'solid' | 'outline';
 	helperText?: string;
 	errorText?: string;
+	toggleIcon?: string;
+	expandedIcon?: string;
 };
 
 const ZIonSelect = (props: ZIonSelectType) => {

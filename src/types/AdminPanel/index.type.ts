@@ -67,10 +67,10 @@ export enum ZTeamMemberInvitationEnum {
 }
 
 export enum EZGeoLocationCondition {
-	equalTo,
-	in,
-	notEqualTo,
-	notIn,
+	equalTo = 'equalTo',
+	within = 'within',
+	notEqualTo = 'notEqualTo',
+	notWithin = 'notWithin',
 }
 
 // Interfaces
@@ -132,7 +132,8 @@ export interface ABTestingRotatorInterface {
 export interface GeoLocationRotatorInterface {
 	id?: string;
 	redirectionLink?: string;
-	country?: string;
+	country?: string | string[];
+	condition?: EZGeoLocationCondition;
 }
 
 export interface LinkExpirationInfoInterface {

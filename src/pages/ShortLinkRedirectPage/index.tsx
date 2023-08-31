@@ -59,6 +59,7 @@ import {
 import { LinkTargetType, ShortLinkType } from '@/types/AdminPanel/linksType';
 import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import {
+	EZGeoLocationCondition,
 	GeoLocationRotatorInterface,
 	LinkExpirationInfoInterface,
 	messengerPlatformsBlockEnum,
@@ -89,6 +90,14 @@ import {
  * About: (This page handles the redirection of short links, such as "/s/mrtf". It extracts the unique link identifier, validates it, and redirects the user to the corresponding destination.)
  * @type {*}
  * */
+
+const conditionPriority: Record<EZGeoLocationCondition, number> = {
+	[EZGeoLocationCondition.equalTo]: 1,
+	[EZGeoLocationCondition.within]: 2,
+	[EZGeoLocationCondition.notEqualTo]: 3,
+	[EZGeoLocationCondition.notWithin]: 4,
+};
+
 const ZShortLinkRedirectPage: React.FC = () => {
 	const [compState, setCompState] = useState<{
 		shouldFetch: boolean;
@@ -192,22 +201,35 @@ const ZShortLinkRedirectPage: React.FC = () => {
 					_target: __target,
 					type: __type,
 				});
+				let highestPriority = Infinity; // Start with a high value
 
 				// Checking if any geo-location define. if define then redirect according to it.
-				// Now check if the user's country exists in the geoRedirects array
-				const matchingRedirect = __geoLocations?.find(
-					(redirect) => redirect?.country === __userCountry
-				);
-
-				// If there is link-expiration define. then redirect according to it.
-				if (
-					matchingRedirect?.country &&
-					matchingRedirect?.redirectionLink &&
-					matchingRedirect?.redirectionLink?.trim()?.length > 0
-				) {
-					__redirectUrl = matchingRedirect?.redirectionLink;
+				// Now check if the user's country exists in the geoRedirects array.
+				for (const geoLocation of __geoLocations) {
+					if (
+						(geoLocation.country &&
+							geoLocation.condition === EZGeoLocationCondition.equalTo &&
+							geoLocation.country === __userCountry) ||
+						(geoLocation.condition === EZGeoLocationCondition.notEqualTo &&
+							geoLocation.country !== __userCountry) ||
+						(geoLocation.condition === EZGeoLocationCondition.within &&
+							Array.isArray(geoLocation.country) &&
+							geoLocation.country.includes(__userCountry!)) ||
+						(geoLocation.condition === EZGeoLocationCondition.notWithin &&
+							Array.isArray(geoLocation.country) &&
+							!geoLocation.country.includes(__userCountry!))
+					) {
+						const currentPriority = conditionPriority[geoLocation.condition!];
+						if (currentPriority < highestPriority) {
+							highestPriority = currentPriority;
+							__redirectUrl = geoLocation.redirectionLink;
+						}
+					}
 				}
 
+				// console.log({ __geoLocations, __redirectUrl });
+
+				// If there is link-expiration define. then redirect according to it.
 				if (
 					__linkExpiration?.enabled &&
 					__linkExpiration?.redirectionLink &&
@@ -228,9 +250,9 @@ const ZShortLinkRedirectPage: React.FC = () => {
 				}
 
 				// redirecting...
-				if (__redirectUrl) {
-					window.location.replace(__redirectUrl);
-				}
+				// if (__redirectUrl) {
+				// 	window.location.replace(__redirectUrl);
+				// }
 			}
 		}
 	}, []);
