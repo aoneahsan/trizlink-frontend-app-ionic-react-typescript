@@ -48,6 +48,7 @@ import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import CONSTANTS from '@/utils/constants';
 import { EZGeoLocationCondition } from '@/types/AdminPanel/index.type';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
+import { AutoSizer, List } from 'react-virtualized';
 
 // Styles
 
@@ -500,7 +501,7 @@ const GeoLocation: React.FC = () => {
 																	)?.country &&
 																	touched?.geoLocation[_index]?.country ? (
 																		<ZIonNote
-																			className='ps-2 text-xs'
+																			className='text-xs ps-2'
 																			color='danger'
 																			testingSelector={
 																				CONSTANTS.testingSelectors.shortLink
@@ -547,7 +548,7 @@ const GeoLocation: React.FC = () => {
 								{!values.rotatorABTesting.length ? (
 									<ZIonButton
 										fill='clear'
-										className=' ms-4 mb-0 ion-text-capitalize ion-no-padding'
+										className='mb-0 ms-4 ion-text-capitalize ion-no-padding'
 										size='small'
 										testingSelector={
 											CONSTANTS.testingSelectors.shortLink.formPage.geoLocation
@@ -568,7 +569,7 @@ const GeoLocation: React.FC = () => {
 									<ZIonButton
 										disabled
 										color={'dark'}
-										className='mt-3 ms-4  ion-text-capitalize ion-no-padding'
+										className='mt-3 ms-4 ion-text-capitalize ion-no-padding'
 										fill='clear'
 										testingSelector={
 											CONSTANTS.testingSelectors.shortLink.formPage.geoLocation

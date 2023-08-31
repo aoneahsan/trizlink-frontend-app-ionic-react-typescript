@@ -124,6 +124,7 @@ export const API_URLS = {
 	shortLinks_is_path_available: `/user/workspaces/${RouteParams.workspace.workspaceId}/sl/is-path-available/${RouteParams.shortLink.path}`,
 	ShortLinks_folders_reorder: '/user/shortLinks/folders/reorder',
 	shortLink_get_target_url_info: `/public/s/${RouteParams.urlPath}`,
+	shortLink_check_target_password: `/public/s/${RouteParams.urlPath}/check-password`,
 
 	FolderShortLinks: '/user/folders/:folderId/short-links',
 	LinkInBio_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/linkInBio/folders`,

@@ -206,13 +206,13 @@ const ZIonInput = React.forwardRef(
 						props.onKeyUp(event);
 					}
 
-					if (event?.key === 'Enter' && props.zNextFieldId !== null) {
-						console.log({
-							s: props.zNextFieldId,
-							c: event.key,
-						});
-						zGotoNextField(props.zNextFieldId);
-					}
+					// if (event?.key === 'Enter' && props.zNextFieldId !== null) {
+					// 	console.log({
+					// 		s: props.zNextFieldId,
+					// 		c: event.key,
+					// 	});
+					// 	zGotoNextField(props.zNextFieldId);
+					// }
 				}}
 				style={compStyle}
 				{..._testingSelector}

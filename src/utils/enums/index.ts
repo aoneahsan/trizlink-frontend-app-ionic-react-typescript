@@ -69,6 +69,7 @@ export enum API_URL_ENUM {
 	shortLinks_is_path_available = 'shortLinks_is_path_available',
 	ShortLink_folders_create_list = 'ShortLink_folders_create_list',
 	shortLink_get_target_url_info = 'shortLink_get_target_url_info',
+	shortLink_check_target_password = 'shortLink_check_target_password',
 	FolderShortLinks = 'FolderShortLinks',
 	ShortLinks_folders_reorder = 'ShortLinks_folders_reorder',
 

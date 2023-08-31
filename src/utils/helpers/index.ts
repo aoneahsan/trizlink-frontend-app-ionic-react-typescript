@@ -1642,3 +1642,25 @@ export const zCalculateRotatorABTesting = ({
 		return { _totalPercentage: 0, _remainingPercentage: 0 };
 	}
 };
+
+export const zGetRandomLink = (_array: ABTestingRotatorInterface[]) => {
+	try {
+		// Generate a random number between 0 to 99
+		const __randomNumber = Math.floor(Math.random() * 100);
+
+		let __accumulatingPercentage = 0;
+
+		// determine which link the random number fall under based on the percentage.
+		for (const __item of _array) {
+			__accumulatingPercentage += __item?.percentage!;
+
+			if (__randomNumber < __accumulatingPercentage) {
+				return __item?.redirectionLink;
+			}
+		}
+
+		return null;
+	} catch (error) {
+		reportCustomError(error);
+	}
+};

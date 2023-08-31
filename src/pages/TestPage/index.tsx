@@ -1,129 +1,115 @@
 // Core Imports
-import React from 'react';
-
-// Packages Imports
-import { Formik } from 'formik';
-import PhoneInput, {
-	formatPhoneNumberIntl,
-	isPossiblePhoneNumber,
-} from 'react-phone-number-input';
-// import PhoneInput from 'react-phone-input-2';
-// Custom Imports
 import {
 	ZIonCol,
-	ZIonNote,
+	ZIonContent,
+	ZIonGrid,
+	ZIonInput,
+	ZIonRow,
 	ZIonSelect,
 	ZIonSelectOption,
 } from '@/components/ZIonComponents';
+import ZIonPage from '@/components/ZIonPage';
+import { ZCountryData } from '@/data/DiscoverEnterprise/index.data';
+import React, { useRef } from 'react';
+
+// Packages Imports
+import {
+	List,
+	AutoSizer,
+	CellMeasurer,
+	CellMeasurerCache,
+} from 'react-virtualized';
+// import PhoneInput from 'react-phone-input-2';
+// Custom Imports
 
 // Global constant
-
-import 'react-phone-number-input/style.css';
-import Z404View from '@/components/Errors/404';
-import Z401View from '@/components/Errors/401';
-import Z400View from '@/components/Errors/400';
-import Z403View from '@/components/Errors/403';
-import Z500View from '@/components/Errors/500';
-import { useVirtualizer } from '@tanstack/react-virtual';
-import { IonSelect } from '@ionic/react';
 
 // import 'react-phone-input-2/lib/style.css';
 
 const ZaionsTestPage: React.FC = () => {
-	const ionSelectParentRef = React.useRef(null);
-	const divParentRef = React.useRef(null);
-
-	const ionSelectRowVirtualizer = useVirtualizer({
-		count: 10000,
-		getScrollElement: () => ionSelectParentRef.current,
-		estimateSize: () => 35,
-		overscan: 5,
-	});
-	const divRowVirtualizer = useVirtualizer({
-		count: 10000,
-		getScrollElement: () => divParentRef.current,
-		estimateSize: () => 35,
-		overscan: 5,
-	});
-
+	const cache = useRef(
+		new CellMeasurerCache({
+			fixedWidth: true,
+			defaultHeight: 100,
+		})
+	);
 	return (
-		<>
-			<IonSelect
-				ref={ionSelectParentRef}
-				interface='popover'
-				className='List'
-				style={{
-					height: `200px`,
-					width: `400px`,
-					overflow: 'auto',
-					contain: 'strict',
-				}}
-			>
-				<div
-					style={{
-						height: `${ionSelectRowVirtualizer.getTotalSize()}px`,
-						width: '100%',
-						position: 'relative',
-					}}
-				>
-					{ionSelectRowVirtualizer.getVirtualItems().map((virtualRow) => {
-						return (
-							<ZIonSelectOption
-								key={virtualRow.index}
-								className={
-									virtualRow.index % 2 ? 'ListItemOdd' : 'ListItemEven'
-								}
-								style={{
-									position: 'absolute',
-									top: 0,
-									left: 0,
-									width: '100%',
-									height: `${virtualRow.size}px`,
-									transform: `translateY(${virtualRow.start}px)`,
-								}}
-							>
-								Row {virtualRow.index}
-							</ZIonSelectOption>
-						);
-					})}
-				</div>
-			</IonSelect>
+		<ZIonPage>
+			<ZIonContent>
+				<ZIonGrid className='w-full h-full'>
+					<div className='w-full h-full'>
+						<AutoSizer>
+							{({ height, width }) => {
+								return (
+									<List
+										height={height}
+										rowCount={ZCountryData.length}
+										rowHeight={}
+										deferredMeasurementCache={cache.current}
+										width={width}
+										rowRenderer={({
+											columnIndex,
+											index,
+											key,
+											isVisible,
+											isScrolling,
+											parent,
+											style,
+										}) => {
+											const country = ZCountryData[index];
 
-			<div
-				ref={divParentRef}
-				className='List'
-				style={{
-					height: `200px`,
-					width: `400px`,
-					overflow: 'auto',
-				}}
-			>
-				<div
-					style={{
-						height: `${divRowVirtualizer.getTotalSize()}px`,
-						width: '100%',
-						position: 'relative',
-					}}
-				>
-					{divRowVirtualizer.getVirtualItems().map((virtualRow) => (
-						<div
-							key={virtualRow.index}
-							className={virtualRow.index % 2 ? 'ListItemOdd' : 'ListItemEven'}
-							style={{
-								position: 'absolute',
-								top: 0,
-								left: 0,
-								width: '100%',
-								height: `${virtualRow.size}px`,
-								transform: `translateY(${virtualRow.start}px)`,
+											return (
+												<CellMeasurer
+													key={key}
+													cache={cache.current}
+													parent={parent}
+													columnIndex={0}
+													rowIndex={index}
+												>
+													<ZIonRow
+														className='ion-justify-content-between'
+														style={style}
+													>
+														<ZIonCol
+															sizeXl='12'
+															sizeLg='12'
+															sizeMd='12'
+															sizeSm='12'
+															sizeXs='12'
+															className='mb-2'
+														>
+															<ZIonInput
+																minHeight='40px'
+																labelPlacement='stacked'
+																label='Redirection Links*'
+															/>
+														</ZIonCol>
+
+														<ZIonCol
+															sizeXl='5.8'
+															sizeLg='5.8'
+															sizeMd='5.8'
+															sizeSm='12'
+															sizeXs='12'
+														>
+															<ZIonInput
+																minHeight='40px'
+																labelPlacement='stacked'
+																label='Redirection Links*'
+															/>
+														</ZIonCol>
+													</ZIonRow>
+												</CellMeasurer>
+											);
+										}}
+									/>
+								);
 							}}
-						>
-							Row {virtualRow.index}
-						</div>
-					))}
-				</div>
-			</div>
-		</>
+						</AutoSizer>
+					</div>
+				</ZIonGrid>
+			</ZIonContent>
+		</ZIonPage>
 	);
 };
 

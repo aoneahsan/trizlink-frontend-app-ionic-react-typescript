@@ -23,8 +23,13 @@ dayjs.extend(DayJsTimezonePlugin);
  * ? Like import of custom components is a custom import
  * */
 import {
+	ZIonButton,
 	ZIonCol,
 	ZIonContent,
+	ZIonImg,
+	ZIonInput,
+	ZIonItem,
+	ZIonNote,
 	ZIonRouterLink,
 	ZIonRow,
 	ZIonText,
@@ -48,6 +53,8 @@ import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import { ENVS } from '@/utils/envKeys';
 import {
 	extractInnerData,
+	formatApiRequestErrorForFormikFormField,
+	zGetRandomLink,
 	zRedirectToTarget,
 	zStringify,
 } from '@/utils/helpers';
@@ -59,11 +66,18 @@ import {
 import { LinkTargetType, ShortLinkType } from '@/types/AdminPanel/linksType';
 import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import {
+	ABTestingRotatorInterface,
 	EZGeoLocationCondition,
 	GeoLocationRotatorInterface,
 	LinkExpirationInfoInterface,
 	messengerPlatformsBlockEnum,
+	PasswordInterface,
 } from '@/types/AdminPanel/index.type';
+import { ProductLogo } from '@/assets/images';
+import { Formik } from 'formik';
+import classNames from 'classnames';
+import { reportCustomError } from '@/utils/customErrorType';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 
 /**
  * Recoil State Imports go down
@@ -105,6 +119,8 @@ const ZShortLinkRedirectPage: React.FC = () => {
 		errorCode?: number;
 		errorOccurred: boolean;
 		sl?: ShortLinkType;
+		redirectLink?: string;
+		error?: string;
 	}>({
 		shouldFetch: false,
 		isProcessing: true,
@@ -122,6 +138,15 @@ const ZShortLinkRedirectPage: React.FC = () => {
 			_authenticated: false,
 			_showLoader: false,
 		});
+
+	const { mutateAsync: checkLinkPasswordValidation } = useZRQCreateRequest({
+		_url: API_URL_ENUM.shortLink_check_target_password,
+		_urlDynamicParts: [CONSTANTS.RouteParams.urlPath],
+		_itemsIds: [urlPath],
+		_showAlertOnError: false,
+		_authenticated: false,
+		_showLoader: false,
+	});
 
 	const logDeviceInfo = useCallback(async () => {
 		const _deviceInfo = await Device.getInfo();
@@ -188,6 +213,8 @@ const ZShortLinkRedirectPage: React.FC = () => {
 				const __type = _data?.type as messengerPlatformsBlockEnum;
 				const __geoLocations =
 					_data?.geoLocationRotatorLinks as GeoLocationRotatorInterface[];
+				const __abTestingRotator =
+					_data?.abTestingRotatorLinks as ABTestingRotatorInterface[];
 				const __linkExpiration =
 					_data?.linkExpirationInfo as LinkExpirationInfoInterface;
 				const __userPosition = await Geolocation.getCurrentPosition();
@@ -201,6 +228,13 @@ const ZShortLinkRedirectPage: React.FC = () => {
 					_target: __target,
 					type: __type,
 				});
+
+				const __randomRotatorLink = zGetRandomLink(__abTestingRotator);
+
+				if (__randomRotatorLink && __abTestingRotator?.length > 0) {
+					__redirectUrl = __randomRotatorLink;
+				}
+
 				let highestPriority = Infinity; // Start with a high value
 
 				// Checking if any geo-location define. if define then redirect according to it.
@@ -250,9 +284,16 @@ const ZShortLinkRedirectPage: React.FC = () => {
 				}
 
 				// redirecting...
-				// if (__redirectUrl) {
-				// 	window.location.replace(__redirectUrl);
-				// }
+				if (__redirectUrl) {
+					setCompState((oldValues) => ({
+						...oldValues,
+						redirectLink: __redirectUrl,
+					}));
+
+					if (!(_data?.password as PasswordInterface)?.enabled) {
+						window.location.replace(__redirectUrl);
+					}
+				}
 			}
 		}
 	}, []);
@@ -302,6 +343,168 @@ const ZShortLinkRedirectPage: React.FC = () => {
 	/**
 	 * Showing appropriate view.
 	 */
+	if ((compState?.sl?.password as PasswordInterface)?.enabled) {
+		return (
+			<ZIonPage>
+				<ZIonContent color='light' className='h-full'>
+					<ZIonRow className='flex h-full ion-align-items-center ion-justify-content-center'>
+						<ZIonCol
+							size='5'
+							className='flex rounded-xl ion-align-items-center ion-justify-content-center zaions__bg_white shadow-xl flex-col px-[3rem] py-[5rem] ion-text-center gap-3'
+						>
+							<ZIonImg
+								src={ProductLogo}
+								className='min-w-[7rem] max-w-[10rem] mb-5'
+							/>
+
+							<ZIonText className='text-2xl font-bold'>
+								This link is protected
+							</ZIonText>
+
+							<ZIonText>
+								This link is protected by a password. To access this link,
+								please provide the password.
+							</ZIonText>
+
+							<Formik
+								initialValues={{
+									password: '',
+								}}
+								validate={() => {
+									const errors = {};
+
+									return errors;
+								}}
+								onSubmit={async (values, { setErrors, setFieldError }) => {
+									try {
+										const _zStringifyData = zStringify({
+											password: values?.password,
+										});
+
+										const __response:
+											| unknown
+											| ZLinkMutateApiType<{ success: boolean }> =
+											await checkLinkPasswordValidation(_zStringifyData);
+
+										// if we have a successful response then...
+										if (
+											(__response as ZLinkMutateApiType<{ success: boolean }>)
+												.success
+										) {
+											// extract Data from _response.
+											const _data = extractInnerData<{ success: boolean }>(
+												__response,
+												extractInnerDataOptionsEnum.createRequestResponseItem
+											);
+
+											// if we have data then update cache and show success message.
+											if (_data && _data.success) {
+												window.location.replace(compState?.redirectLink!);
+											}
+										}
+									} catch (error) {
+										if (error instanceof AxiosError) {
+											// await presentZIonErrorAlert();
+											// Setting errors on form fields
+											const __apiErrors = (
+												error.response?.data as { errors: ZGenericObject }
+											)?.errors;
+											const __errors = formatApiRequestErrorForFormikFormField(
+												['password'],
+												['password'],
+												__apiErrors
+											);
+
+											setCompState((oldValues) => ({
+												...oldValues,
+												error: (__errors as { password: string }).password,
+											}));
+										}
+										reportCustomError(error);
+									}
+								}}
+							>
+								{({
+									values,
+									errors,
+									touched,
+									handleChange,
+									handleBlur,
+									submitForm,
+								}) => {
+									return (
+										<>
+											<ZIonItem
+												className='ion-item-start-no-padding overflow-hidden rounded w-[90%] mt-5'
+												style={{ '--inner-padding-end': '0px' }}
+												lines='none'
+												minHeight='3rem'
+											>
+												<ZIonInput
+													aria-label='Password'
+													type='text'
+													name='password'
+													fill='outline'
+													minHeight='3rem'
+													clearInput={true}
+													placeholder='Password'
+													counter={false}
+													onIonChange={handleChange}
+													onIonBlur={handleBlur}
+													// errorText={errors?.password}
+													value={values.password}
+													className={classNames({
+														'rounded zaions__bg_white': true,
+														// 'ion-touched': touched.password,
+														// 'ion-valid': errors?.password?.trim()?.length === 0,
+														// 'ion-invalid':
+														// 	errors?.password &&
+														// 	errors?.password?.trim()?.length > 0,
+													})}
+													onKeyUp={(event) => {
+														if (event?.key === 'Enter') {
+															void submitForm();
+														}
+													}}
+													testingSelector={
+														CONSTANTS.testingSelectors.shortLink.listPage
+															.searchInput
+													}
+													style={{
+														'--padding-start': '10px',
+														'--border-radius': '0',
+													}}
+												/>
+												<ZIonButton
+													slot='end'
+													className='ion-no-margin ion-text-capitalize'
+													onClick={() => void submitForm()}
+													testingSelector={
+														CONSTANTS.testingSelectors.shortLink.listPage
+															.searchBtn
+													}
+													style={{
+														height: '100%',
+														'--border-radius': '0',
+													}}
+												>
+													<ZIonText className='block px-3 text-sm'>
+														Enter
+													</ZIonText>
+												</ZIonButton>
+											</ZIonItem>
+
+											<ZIonNote color='danger'>{compState.error}</ZIonNote>
+										</>
+									);
+								}}
+							</Formik>
+						</ZIonCol>
+					</ZIonRow>
+				</ZIonContent>
+			</ZIonPage>
+		);
+	}
 	if (compState.isProcessing) {
 		return <ZFallbackIonSpinner />;
 	} else if (
@@ -310,11 +513,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
 		!compState.errorOccurred &&
 		!compState.isProcessing
 	) {
-		return (
-			<ZIonPage>
-				<ZIonContent>{compState?.sl?.shortUrlPath}</ZIonContent>
-			</ZIonPage>
-		);
+		return <ZFallbackIonSpinner />;
 	} else {
 		return (
 			<ZIonPage>
