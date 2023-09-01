@@ -12,9 +12,7 @@ type ZIonRowType = {
 	className?: string;
 	testingSelector?: string;
 	testingListSelector?: string;
-	style?: {
-		[key: string]: unknown;
-	};
+	style?: React.CSSProperties;
 	onClick?: React.MouseEventHandler<HTMLIonRowElement>;
 };
 

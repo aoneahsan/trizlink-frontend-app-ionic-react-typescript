@@ -428,7 +428,7 @@ import gifIcon from './svg/gifIcon.svg';
 import mediaIcon from './svg/mediaIcon.svg';
 import thumbnailIcon from './svg/thumbnailIcon.svg';
 
-import Z404Svg from './svg/z-404.svg';
+import Z404Svg from './global-images/404.jpg';
 import Z401Svg from './svg/z-unauthorized.svg';
 import Z400Svg from './svg/z-bad-request.svg';
 import Z403Svg from './svg/z-access-forbidden.svg';

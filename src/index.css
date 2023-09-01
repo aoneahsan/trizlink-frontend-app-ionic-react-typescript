@@ -556,8 +556,8 @@ span.new {
 }
 
 .create-workspace-modal-size {
-	--height: 67vh;
-	--width: 33vw;
+	--height: 27rem;
+	--width: 27rem;
 }
 
 .invitation-view-modal-size {

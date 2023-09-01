@@ -77,6 +77,7 @@ const RotatorABTesting: React.FC = () => {
 								disabled
 								className='ion-no-padding'
 								label='Redirection Links*'
+								type='url'
 								labelPlacement='stacked'
 								value={values?.target?.url}
 								minHeight='40px'
@@ -93,6 +94,7 @@ const RotatorABTesting: React.FC = () => {
 							<ZIonInput
 								type='number'
 								label='Percentage'
+								counter={false}
 								value={
 									zCalculateRotatorABTesting({
 										_data: values.rotatorABTesting,
@@ -110,6 +112,7 @@ const RotatorABTesting: React.FC = () => {
 					<FieldArray name='rotatorABTesting'>
 						{({ remove, push }) => (
 							<ZIonGrid
+								className='pt-0 px-0'
 								testingSelector={
 									CONSTANTS.testingSelectors.shortLink.formPage.rotatorABTesting
 										.container
@@ -136,6 +139,7 @@ const RotatorABTesting: React.FC = () => {
 											>
 												<ZIonInput
 													label='Redirection Links*'
+													type='url'
 													labelPlacement='stacked'
 													onIonChange={handleChange}
 													minHeight='40px'

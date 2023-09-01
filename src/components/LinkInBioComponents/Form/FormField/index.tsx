@@ -17,7 +17,7 @@ import {
 	ZIonReorderGroup,
 	ZIonRow,
 	ZIonText,
-	ZIonTextarea,
+	ZIonTextareaShort,
 	ZIonTitle,
 } from '@/components/ZIonComponents';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
@@ -199,7 +199,7 @@ const LinkInBioFormField: React.FC = () => {
 														{_cardItem.type !==
 															LinkInBioFormFieldsEnum.title && (
 															// <ZIonItem className='mt-1' lines='none'>
-															<ZIonTextarea
+															<ZIonTextareaShort
 																fill='outline'
 																className='px-4 mt-3'
 																label='Column Id*'

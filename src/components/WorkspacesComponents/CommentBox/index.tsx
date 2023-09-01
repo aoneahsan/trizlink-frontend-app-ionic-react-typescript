@@ -14,7 +14,7 @@ import {
 	ZIonItem,
 	ZIonRow,
 	ZIonText,
-	ZIonTextarea,
+	ZIonTextareaShort,
 } from '@/components/ZIonComponents';
 import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
@@ -85,7 +85,7 @@ const ZWorkspaceCommentBox: React.FC<{
 
 					<div className='w-full mt-2'>
 						<ZIonItem lines='full' color='light' className='rounded'>
-							<ZIonTextarea
+							<ZIonTextareaShort
 								label='Comments...'
 								labelPlacement='floating'
 								autoGrow={true}

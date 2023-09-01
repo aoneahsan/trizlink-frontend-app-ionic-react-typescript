@@ -17,7 +17,7 @@ import {
 	ZIonSegment,
 	ZIonSegmentButton,
 	ZIonText,
-	ZIonTextarea,
+	ZIonTextareaShort,
 } from '@/components/ZIonComponents';
 import { workspacePagesDomeData } from '@/data/UserDashboard/Workspace/index.data';
 import { getPlatformIcon } from '@/utils/helpers';
@@ -143,7 +143,7 @@ const ZWorkspaceComposeModal: React.FC = () => {
 			<ZIonContent>
 				<ZIonRow className='mt-2 ion-align-items-center ion-justify-content-center'>
 					<ZIonCol size='11.5'>
-						<ZIonTextarea placeholder='Write something... or type :balloon to inset a 🎈' />
+						<ZIonTextareaShort placeholder='Write something... or type :balloon to inset a 🎈' />
 					</ZIonCol>
 
 					{/*  */}

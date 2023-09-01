@@ -42,6 +42,7 @@ import {
 	ZIonButton,
 	ZIonSelect,
 	ZIonSelectOption,
+	ZIonRouterLink,
 } from '@/components/ZIonComponents';
 import ZCan from '@/components/Can';
 
@@ -242,6 +243,27 @@ const ZInpageTable: React.FC = () => {
 		columnHelper.accessor((itemData) => itemData.linkInBioTitle, {
 			header: 'Title',
 			id: ZLIBListPageTableColumnsIds.title,
+			cell: (row) => {
+				return (
+					<ZIonRouterLink
+						className='hover:underline'
+						routerLink={createRedirectRoute({
+							url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+							params: [
+								CONSTANTS.RouteParams.workspace.workspaceId,
+								CONSTANTS.RouteParams.linkInBio.linkInBioId,
+							],
+							values: [workspaceId, row?.row?.original?.id!],
+							routeSearchParams: {
+								page: ZLinkInBioPageEnum.design,
+								step: ZLinkInBioRHSComponentEnum.theme,
+							},
+						})}
+					>
+						<ZIonText>{row.getValue()}</ZIonText>
+					</ZIonRouterLink>
+				);
+			},
 			footer: 'Title',
 		}),
 

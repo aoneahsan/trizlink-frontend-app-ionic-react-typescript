@@ -22,7 +22,7 @@ import {
 	ZIonInput,
 	ZIonRow,
 	ZIonText,
-	ZIonTextarea,
+	ZIonTextareaShort,
 } from '@/components/ZIonComponents';
 
 /**
@@ -186,19 +186,16 @@ const ZWSTeamCreateModal: React.FC<{
 		<ZIonContent className='ion-padding'>
 			{/* Close modal button */}
 			<div className='ion-text-end'>
-				<ZIonButton
-					className='ion-no-padding ion-no-margin'
-					fill='clear'
-					color='dark'
+				<ZIonIcon
+					icon={closeOutline}
+					className='w-7 h-7 cursor-pointer'
 					onClick={() => {
 						dismissZIonModal();
 					}}
 					testingSelector={
 						CONSTANTS.testingSelectors.WSSettings.createModal.closeButton
 					}
-				>
-					<ZIonIcon icon={closeOutline} className='w-7 h-7' />
-				</ZIonButton>
+				/>
 			</div>
 
 			<div className='flex flex-col ion-justify-content-center'>
@@ -259,7 +256,7 @@ const ZWSTeamCreateModal: React.FC<{
 						submitForm,
 					}) => {
 						return (
-							<ZIonRow className='pt-2 mt-4'>
+							<ZIonRow className='mt-3'>
 								{/* Title */}
 								<ZIonCol size='12'>
 									<ZIonInput
@@ -287,7 +284,7 @@ const ZWSTeamCreateModal: React.FC<{
 
 								{/* Description */}
 								<ZIonCol size='12'>
-									<ZIonTextarea
+									<ZIonTextareaShort
 										rows={3}
 										fill='outline'
 										name='description'
@@ -302,7 +299,7 @@ const ZWSTeamCreateModal: React.FC<{
 											touched.description ? errors.description : undefined
 										}
 										className={classNames({
-											'mt-3': true,
+											'mt-1': true,
 											'ion-touched': touched.description,
 											'ion-invalid': touched.description && errors.description,
 											'ion-valid':

@@ -31,7 +31,7 @@ import {
 	ZIonSelectOption,
 	ZIonSkeletonText,
 	ZIonText,
-	ZIonTextarea,
+	ZIonTextareaShort,
 } from '@/components/ZIonComponents';
 import ZShortLinkOptionsPopover from '@/components/InPageComponents/ZaionsPopovers/ShortLinkOptionsPopover';
 
@@ -629,7 +629,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 									messengerPlatformsBlockEnum.viber ||
 								newShortLinkTypeOptionDataAtom?.type ===
 									messengerPlatformsBlockEnum.whatsapp) && (
-								<ZIonTextarea
+								<ZIonTextareaShort
 									rows={4}
 									name='target.message'
 									placeholder='Message*'

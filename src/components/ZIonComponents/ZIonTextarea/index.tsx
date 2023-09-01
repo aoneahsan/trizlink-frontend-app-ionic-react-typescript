@@ -11,6 +11,7 @@ import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 import { PRODUCT_NAME } from '@/utils/constants';
+import ZInputLengthConstant from '@/utils/constants/InputLenghtConstant';
 type ZIonTextareaType = {
 	className?: string;
 	autoGrow?: boolean;
@@ -51,6 +52,7 @@ type ZIonTextareaType = {
 	wrap?: 'hard' | 'off' | 'soft';
 	onIonChange?: (event: Event) => void;
 	onIonBlur?: (event: IonTextareaCustomEvent<FocusEvent>) => void;
+	counter?: boolean;
 	style?: {
 		[key: string]: unknown;
 	};
@@ -88,6 +90,30 @@ const ZIonTextarea = (props: ZIonTextareaType) => {
 			onIonInput={props.onIonChange}
 			{..._testingSelector}
 			{..._testingListSelector}
+		/>
+	);
+};
+
+export const ZIonTextareaShort: React.FC<ZIonTextareaType> = (props) => {
+	return (
+		<ZIonTextarea
+			{...props}
+			counter={true}
+			maxlength={ZInputLengthConstant.defaultShortTextMaxLength}
+			rows={3}
+			autoGrow={true}
+		/>
+	);
+};
+
+export const ZIonTextareaLong: React.FC<ZIonTextareaType> = (props) => {
+	return (
+		<ZIonTextarea
+			{...props}
+			counter={true}
+			maxlength={ZInputLengthConstant.defaultLongTextMaxLength}
+			rows={5}
+			autoGrow={true}
 		/>
 	);
 };

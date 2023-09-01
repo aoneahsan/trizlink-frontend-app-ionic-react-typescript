@@ -6,14 +6,15 @@ import { IonMenuToggle } from '@ionic/react';
 
 // Type
 type ZIonMenuToggleType = {
-  children: ReactNode;
-  className?: string;
-  autoHide?: boolean;
-  menu?: string;
+	children: ReactNode;
+	className?: string;
+	autoHide?: boolean;
+	menu?: string;
+	slot?: string;
 };
 
 const ZIonMenuToggle = (props: ZIonMenuToggleType) => {
-  return <IonMenuToggle {...props}>{props.children}</IonMenuToggle>;
+	return <IonMenuToggle {...props}>{props.children}</IonMenuToggle>;
 };
 
 export default ZIonMenuToggle;

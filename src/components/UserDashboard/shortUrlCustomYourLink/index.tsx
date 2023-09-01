@@ -27,7 +27,7 @@ import {
 	ZIonRow,
 	ZIonSkeletonText,
 	ZIonText,
-	ZIonTextarea,
+	ZIonTextareaShort,
 } from '@/components/ZIonComponents';
 import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/FileUploadModal';
 
@@ -220,11 +220,11 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
 					/>
 
 					{/* Link Description */}
-					<ZIonTextarea
+					<ZIonTextareaShort
 						placeholder='Type something here'
 						autoGrow={true}
 						fill='outline'
-						className='mt-5 rounded'
+						className='mt-3 rounded'
 						name='linkDescription'
 						onIonChange={handleChange}
 						onIonBlur={handleBlur}

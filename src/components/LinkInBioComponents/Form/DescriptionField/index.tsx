@@ -5,7 +5,11 @@ import React from 'react';
 import { reorderFourOutline } from 'ionicons/icons';
 
 // Custom Imports
-import { ZIonIcon, ZIonItem, ZIonTextarea } from '@/components/ZIonComponents';
+import {
+	ZIonIcon,
+	ZIonItem,
+	ZIonTextareaShort,
+} from '@/components/ZIonComponents';
 
 // Styles
 
@@ -48,7 +52,7 @@ const LinkInBioDescriptionField: React.FC<
 				testingListSelector={`${testingListSelector}-icon`}
 			/>
 
-			<ZIonTextarea
+			<ZIonTextareaShort
 				label=''
 				rows={3}
 				value={value}

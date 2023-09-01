@@ -238,13 +238,13 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
 									sizeMd='6'
 									sizeSm='6'
 									sizeXs='12'
-									className='pr-2 mt-2 h-max'
+									className='pr-2 h-max'
 								>
 									{/* utm source input */}
 									<ZIonInput
 										label='UTM Source'
 										labelPlacement='stacked'
-										className='mt-3'
+										className='mt-2'
 										onIonChange={handleChange}
 										onIonBlur={handleBlur}
 										value={values.UTMTags.utmSource}
@@ -265,13 +265,13 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
 									sizeMd='6'
 									sizeSm='6'
 									sizeXs='12'
-									className='mt-2 h-max'
+									className='h-max'
 								>
 									{/* utm term input */}
 									<ZIonInput
 										label='UTM Term'
 										labelPlacement='stacked'
-										className='mt-3'
+										className='mt-2'
 										onIonChange={handleChange}
 										onIonBlur={handleBlur}
 										value={values.UTMTags.utmTerm}
@@ -292,13 +292,13 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
 									sizeMd='6'
 									sizeSm='6'
 									sizeXs='12'
-									className='pr-2 mt-2 h-max'
+									className='pr-2 h-max'
 								>
 									{/* utm content input */}
 									<ZIonInput
 										label='UTM Content'
 										labelPlacement='stacked'
-										className='mt-3'
+										className='mt-2'
 										onIonChange={handleChange}
 										onIonBlur={handleBlur}
 										value={values.UTMTags.utmContent}
@@ -319,12 +319,12 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
 									sizeMd='6'
 									sizeSm='6'
 									sizeXs='12'
-									className='flex mt-2 ion-align-items-center ps-2'
+									className='flex ion-align-items-center ps-2'
 								>
 									{/* Add a template button */}
 									<ZIonButton
 										fill='clear'
-										className='mt-5 text-md ion-text-capitalize ion-no-margin ion-no-padding'
+										className='mt-2 text-md ion-text-capitalize ion-no-margin ion-no-padding'
 										size='small'
 										testingSelector={
 											CONSTANTS.testingSelectors.shortLink.formPage.utmTags
@@ -346,7 +346,7 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
 					{/* select from templates. */}
 					<ZaionsRSelect
 						className={classNames({
-							'pt-4 pb-3 pr-2 ps-4': true,
+							'pt-1 pb-3 pr-2 ps-4': true,
 							'w-[50%]': isSmScale,
 							'w-full': !isSmScale,
 						})}

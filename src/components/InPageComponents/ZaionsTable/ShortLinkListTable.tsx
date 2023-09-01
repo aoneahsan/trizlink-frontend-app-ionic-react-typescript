@@ -239,6 +239,23 @@ const ZInpageTable: React.FC = () => {
 		columnHelper.accessor((itemData) => itemData.title, {
 			header: 'Title',
 			id: ZShortLinkListPageTableColumnsIds.title,
+			cell: (row) => {
+				return (
+					<ZIonRouterLink
+						className='hover:underline'
+						routerLink={replaceRouteParams(
+							ZaionsRoutes.AdminPanel.ShortLinks.Edit,
+							[
+								CONSTANTS.RouteParams.workspace.workspaceId,
+								CONSTANTS.RouteParams.editShortLinkIdParam,
+							],
+							[workspaceId, row?.row?.original?.id!]
+						)}
+					>
+						<ZIonText>{row.getValue()}</ZIonText>
+					</ZIonRouterLink>
+				);
+			},
 			footer: 'Title',
 		}),
 

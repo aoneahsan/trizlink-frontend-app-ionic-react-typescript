@@ -31,7 +31,10 @@ const ZaionsSecondaryHeader: React.FC<{ bottomHr?: boolean }> = ({
 						<ZIonCol
 							className={`ion-justify-content-start ion-align-items-center`}
 						>
-							<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
+							<ZIonRouterLink
+								routerLink={ZaionsRoutes.HomeRoute}
+								className='flex'
+							>
 								<ZIonImg
 									src={ProductLogo}
 									alt={`${PRODUCT_NAME} Logo`}

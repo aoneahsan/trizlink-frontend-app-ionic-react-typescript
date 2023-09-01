@@ -8,11 +8,8 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import {
-	addOutline,
-	helpCircleOutline,
-	notificationsOutline,
-} from 'ionicons/icons';
+import { helpCircleOutline, notificationsOutline } from 'ionicons/icons';
+import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 
 /**
@@ -54,6 +51,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * */
 import { workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Recoil State Imports go down
@@ -83,6 +81,8 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 	workspaceId,
 }) => {
+	const { isMdScale, isLgScale } = useZMediaQueryScale();
+
 	// #region popovers.
 	const { presentZIonPopover: presentZHelpCenterPopover } =
 		useZIonPopover(ZHelpCenterPopover);
@@ -115,19 +115,46 @@ const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 	const isZFetching = isCurrentWorkspaceFetching;
 
 	return (
-		<ZIonRow className='h-[4rem] px-3 zaions__light_bg shadow-[0_3px_6px_#00000029]'>
+		<ZIonRow
+			className={classNames({
+				'zaions__light_bg shadow-[0_3px_6px_#00000029]': true,
+				'px-3 h-[4rem]': isMdScale,
+				'pe-2 py-2': !isMdScale,
+			})}
+		>
 			{/*  */}
 			<ZADTopBarColOne workspaceId={workspaceId} />
 
 			{/*  */}
-			<ZIonCol className='h-full'></ZIonCol>
+			{/* <ZIonCol
+				sizeXl='4'
+				sizeLg='3'
+				sizeMd='3'
+				sizeSm='3'
+				sizeXs='3'
+				className='h-full'
+			></ZIonCol> */}
 
 			{/*  */}
-			<ZIonCol className='flex h-full gap-2 ion-align-items-center ion-justify-content-end'>
+			<ZIonCol
+				sizeXl='6'
+				sizeLg='6'
+				sizeMd='6'
+				sizeSm='12'
+				sizeXs='12'
+				className={classNames({
+					'flex h-full gap-2 ion-align-items-center': true,
+					'ion-justify-content-end': isMdScale,
+				})}
+			>
 				{/* Upgrade button */}
 				<ZIonButton
 					color='secondary'
-					height='2.3rem'
+					size={!isLgScale ? 'small' : undefined}
+					height={isLgScale ? '2.3rem' : '1.9rem'}
+					className={classNames({
+						'text-xs ms-4': !isLgScale,
+					})}
 					testingSelector={CONSTANTS.testingSelectors.topBar.upgradeBtn}
 				>
 					Upgrade
@@ -137,7 +164,10 @@ const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 				<ZIonButton
 					color='tertiary'
 					size='small'
-					height='2.3rem'
+					height={isLgScale ? '2.3rem' : '1.9rem'}
+					className={classNames({
+						'text-xs': !isLgScale,
+					})}
 					testingSelector={CONSTANTS.testingSelectors.topBar.helpBtn}
 					onClick={(event: unknown) => {
 						presentZHelpCenterPopover({
@@ -155,9 +185,12 @@ const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 				<ZIonButton
 					color='tertiary'
 					size='small'
-					className='me-3'
-					height='2.3rem'
+					height={isLgScale ? '2.3rem' : '1.9rem'}
 					testingSelector={CONSTANTS.testingSelectors.topBar.notificationBtn}
+					className={classNames({
+						'me-3': true,
+						'text-xs': !isLgScale,
+					})}
 					onClick={(event: unknown) => {
 						presentZNotificationPopover({
 							_event: event as Event,
@@ -171,7 +204,10 @@ const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 				</ZIonButton>
 
 				{/* User profile button */}
-				<ZUserProfileButton />
+				<ZUserProfileButton
+					width={!isLgScale ? '35px' : '44pxs'}
+					height={!isLgScale ? '35px' : '44pxs'}
+				/>
 			</ZIonCol>
 		</ZIonRow>
 	);
@@ -185,7 +221,14 @@ const ZADTopBarColOne: React.FC<{ workspaceId?: string }> = ({
 	)?.isExact;
 
 	return (
-		<ZIonCol className='flex h-full ion-align-items-center'>
+		<ZIonCol
+			sizeXl='6'
+			sizeLg='6'
+			sizeMd='6'
+			sizeSm='12'
+			sizeXs='12'
+			className='flex h-full ion-align-items-center'
+		>
 			{isWorkspaceListPage ? (
 				<ZCreateWorkspaceBtn />
 			) : (

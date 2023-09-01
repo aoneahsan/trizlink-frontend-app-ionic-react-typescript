@@ -58,14 +58,17 @@ import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
  * @type {*}
  * */
 
-const ZUserProfileButton: React.FC = () => {
+const ZUserProfileButton: React.FC<{
+	width?: string;
+	height?: string;
+}> = ({ width = '44px', height = '44px' }) => {
 	const { presentZIonPopover: presentWorkspaceProfilePopover } = useZIonPopover(
 		ZWorkspaceProfilePopover
 	); // popover hook to show ZWorkspaceProfilePopover
 
 	return (
 		<ZUserAvatarButton
-			style={{ height: '44px', width: '44px' }}
+			style={{ height: height, width: width }}
 			onClick={(event: unknown) => {
 				presentWorkspaceProfilePopover({
 					_event: event as Event,

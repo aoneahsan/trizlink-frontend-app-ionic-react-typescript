@@ -33,7 +33,7 @@ import {
 	ZIonLabel,
 	ZIonRow,
 	ZIonText,
-	ZIonTextarea,
+	ZIonTextareaShort,
 } from '@/components/ZIonComponents';
 import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/FileUploadModal';
 
@@ -453,7 +453,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
 												pageType ===
 													workspaceFormConnectPagesEnum.linkedin) && (
 												<ZIonCol size='12' className='mt-3'>
-													<ZIonTextarea
+													<ZIonTextareaShort
 														name='description'
 														label={
 															pageType ===

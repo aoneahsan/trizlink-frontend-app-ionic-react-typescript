@@ -36,6 +36,7 @@ import {
 	ZIonIcon,
 	ZIonItem,
 	ZIonList,
+	ZIonRouterLink,
 	ZIonRow,
 	ZIonSelect,
 	ZIonSelectOption,
@@ -89,6 +90,7 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import ZEmptyTable from '@/components/InPageComponents/ZEmptyTable';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Recoil State Imports go down
@@ -159,6 +161,7 @@ const ZInpageTable: React.FC = () => {
 
 	// #region Custom hooks
 	const { zNavigatePushRoute } = useZNavigate();
+	const { isMdScale } = useZMediaQueryScale();
 	// getting search param from url with the help of 'qs' package.
 	const routeQSearchParams = routeQueryString.parse(location.search, {
 		ignoreQueryPrefix: true,
@@ -207,6 +210,23 @@ const ZInpageTable: React.FC = () => {
 		columnHelper.accessor((itemData) => itemData.title, {
 			header: 'Title',
 			id: ZWSTeamListPageTableColumnsIds.title,
+			cell: (row) => {
+				return (
+					<ZIonRouterLink
+						className='hover:underline'
+						routerLink={createRedirectRoute({
+							url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.ViewTeam,
+							params: [
+								CONSTANTS.RouteParams.workspace.workspaceId,
+								CONSTANTS.RouteParams.workspace.teamId,
+							],
+							values: [workspaceId, row?.row?.original?.id!],
+						})}
+					>
+						<ZIonText>{row.getValue()}</ZIonText>
+					</ZIonRouterLink>
+				);
+			},
 			footer: 'Title',
 		}),
 
@@ -242,6 +262,23 @@ const ZInpageTable: React.FC = () => {
 				);
 			},
 		}),
+
+		// Member
+		columnHelper.accessor((itemData) => itemData.membersCount, {
+			header: 'Member',
+			id: ZWSTeamListPageTableColumnsIds.member,
+			footer: 'Member',
+			cell: (row) => {
+				return (
+					<div className='flex ion-align-items-center'>
+						{/* current/total */}
+						<div className='text-sm ZaionsTextEllipsis ps-1'>
+							{row.getValue()}/4
+						</div>
+					</div>
+				);
+			},
+		}),
 	];
 
 	const zTeamsTable = useReactTable({
@@ -261,163 +298,170 @@ const ZInpageTable: React.FC = () => {
 	}, [pageindex, pagesize]);
 
 	return (
-		<div>
+		<div
+			className={classNames({
+				'mt-2': !isMdScale,
+			})}
+		>
 			<ZCustomScrollable
 				className='w-full overflow-hidden border rounded-lg h-max ion-no-padding zaions__light_bg'
 				scrollX={true}
 			>
-				{zTeamsTable.getHeaderGroups().map((_headerInfo, _headerIndex) => {
-					return (
-						<ZIonRow
-							key={_headerIndex}
-							className='flex flex-nowrap zaions__light_bg'
-						>
-							{_headerInfo.headers.map((_columnInfo, _columnIndex) => {
-								return (
-									<ZIonCol
-										key={_columnInfo.id}
-										className={classNames({
-											'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
-												true,
-											'border-r': false,
-										})}
-										size={
-											_columnInfo.column.id ===
-												ZWSTeamListPageTableColumnsIds.id ||
-											_columnInfo.column.id ===
-												ZWSTeamListPageTableColumnsIds.actions
-												? '1.2'
-												: _columnInfo.column.id ===
-												  ZWSTeamListPageTableColumnsIds.description
-												? '6.5'
-												: '3.5'
-										}
-									>
-										{_columnInfo.column.columnDef.header?.toString()}
-									</ZIonCol>
-								);
-							})}
-
-							<ZIonCol
-								size='.8'
-								className={classNames({
-									'border-b ps-2 py-1 font-bold zaions__light_bg text-sm': true,
-									'border-r': false,
-								})}
+				<div className='min-w-[55rem]'>
+					{zTeamsTable.getHeaderGroups().map((_headerInfo, _headerIndex) => {
+						return (
+							<ZIonRow
+								key={_headerIndex}
+								className='flex flex-nowrap zaions__light_bg'
 							>
-								Actions
-							</ZIonCol>
-						</ZIonRow>
-					);
-				})}
+								{_headerInfo.headers.map((_columnInfo, _columnIndex) => {
+									return (
+										<ZIonCol
+											key={_columnInfo.id}
+											className={classNames({
+												'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
+													true,
+												'border-r': false,
+											})}
+											size={
+												_columnInfo.column.id ===
+													ZWSTeamListPageTableColumnsIds.id ||
+												_columnInfo.column.id ===
+													ZWSTeamListPageTableColumnsIds.actions
+													? '1.2'
+													: _columnInfo.column.id ===
+													  ZWSTeamListPageTableColumnsIds.description
+													? '5.5'
+													: '2.5'
+											}
+										>
+											{_columnInfo.column.columnDef.header?.toString()}
+										</ZIonCol>
+									);
+								})}
 
-				{/* Body Section */}
-				<ZIonRow className='rounded-b-lg zaions__light_bg'>
-					{WSTeamsData?.length ? (
-						<ZIonCol size='12' className='w-full ion-no-padding'>
-							{zTeamsTable.getRowModel().rows.map((_rowInfo, _rowIndex) => {
-								return (
-									<ZIonRow key={_rowIndex} className='flex-nowrap'>
-										{_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
-											_cellInfo.column.getIsVisible() ? (
-												<ZIonCol
-													key={_cellIndex}
-													size={
-														_cellInfo.column.id ===
-															ZWSTeamListPageTableColumnsIds.id ||
-														_cellInfo.column.id ===
-															ZWSTeamListPageTableColumnsIds.actions
-															? '1.2'
-															: _cellInfo.column.id ===
-															  ZWSTeamListPageTableColumnsIds.description
-															? '6.5'
-															: '3.5'
-													}
-													className={classNames({
-														'py-1 mt-1 border-b flex ion-align-items-center':
-															true,
-														'border-r': false,
-														'ps-2':
-															_cellInfo.column.id !==
-															ZWSTeamListPageTableColumnsIds.id,
-														'ps-0':
+								<ZIonCol
+									size='.8'
+									className={classNames({
+										'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
+											true,
+										'border-r': false,
+									})}
+								>
+									Actions
+								</ZIonCol>
+							</ZIonRow>
+						);
+					})}
+
+					{/* Body Section */}
+					<ZIonRow className='rounded-b-lg zaions__light_bg'>
+						{WSTeamsData?.length ? (
+							<ZIonCol size='12' className='w-full ion-no-padding'>
+								{zTeamsTable.getRowModel().rows.map((_rowInfo, _rowIndex) => {
+									return (
+										<ZIonRow key={_rowIndex} className='flex-nowrap'>
+											{_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
+												_cellInfo.column.getIsVisible() ? (
+													<ZIonCol
+														key={_cellIndex}
+														size={
 															_cellInfo.column.id ===
-															ZWSTeamListPageTableColumnsIds.id,
-													})}
-												>
-													<div
+																ZWSTeamListPageTableColumnsIds.id ||
+															_cellInfo.column.id ===
+																ZWSTeamListPageTableColumnsIds.actions
+																? '1.2'
+																: _cellInfo.column.id ===
+																  ZWSTeamListPageTableColumnsIds.description
+																? '5.5'
+																: '2.5'
+														}
 														className={classNames({
-															'w-full text-sm ZaionsTextEllipsis': true,
-															'ps-3':
+															'py-1 mt-1 border-b flex ion-align-items-center':
+																true,
+															'border-r': false,
+															'ps-2':
+																_cellInfo.column.id !==
+																ZWSTeamListPageTableColumnsIds.id,
+															'ps-0':
 																_cellInfo.column.id ===
 																ZWSTeamListPageTableColumnsIds.id,
 														})}
 													>
-														{flexRender(
-															_cellInfo.column.columnDef.cell,
-															_cellInfo.getContext()
-														)}
-													</div>
-												</ZIonCol>
-											) : null
-										)}
+														<div
+															className={classNames({
+																'w-full text-sm ZaionsTextEllipsis': true,
+																'ps-3':
+																	_cellInfo.column.id ===
+																	ZWSTeamListPageTableColumnsIds.id,
+															})}
+														>
+															{flexRender(
+																_cellInfo.column.columnDef.cell,
+																_cellInfo.getContext()
+															)}
+														</div>
+													</ZIonCol>
+												) : null
+											)}
 
-										<ZIonCol
-											size='.8'
-											className={classNames({
-												'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
-													true,
-												'border-r': false,
-											})}
-										>
-											<ZIonButton
-												fill='clear'
-												color='dark'
-												className='ion-no-padding ion-no-margin'
-												size='small'
-												testingSelector={
-													CONSTANTS.testingSelectors.shortLink.listPage.table
-														.actionPopoverBtn
-												}
-												testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
-												onClick={(_event: unknown) => {
-													setCompState((oldVal) => ({
-														...oldVal,
-														selectedTeamId: _rowInfo.original.id || '',
-													}));
-
-													//
-													presentZTeamActionPopover({
-														_event: _event as Event,
-														_cssClass:
-															'zaions_present_folder_Action_popover_width',
-														_dismissOnSelect: false,
-													});
-												}}
+											<ZIonCol
+												size='.8'
+												className={classNames({
+													'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
+														true,
+													'border-r': false,
+												})}
 											>
-												<ZIonIcon icon={ellipsisVerticalOutline} />
-											</ZIonButton>
-										</ZIonCol>
-									</ZIonRow>
-								);
-							})}
-						</ZIonCol>
-					) : (
-						<ZIonCol className='py-3 ion-text-center'>
-							<ZIonTitle className='mt-3'>
-								<ZIonIcon
-									icon={fileTrayFullOutline}
-									className='mx-auto'
-									size='large'
-									color='medium'
-								/>
-							</ZIonTitle>
-							<ZIonTitle color='medium'>
-								No teams founds. please create a team.
-							</ZIonTitle>
-						</ZIonCol>
-					)}
-				</ZIonRow>
+												<ZIonButton
+													fill='clear'
+													color='dark'
+													className='ion-no-padding ion-no-margin'
+													size='small'
+													testingSelector={
+														CONSTANTS.testingSelectors.shortLink.listPage.table
+															.actionPopoverBtn
+													}
+													testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
+													onClick={(_event: unknown) => {
+														setCompState((oldVal) => ({
+															...oldVal,
+															selectedTeamId: _rowInfo.original.id || '',
+														}));
+
+														//
+														presentZTeamActionPopover({
+															_event: _event as Event,
+															_cssClass:
+																'zaions_present_folder_Action_popover_width',
+															_dismissOnSelect: false,
+														});
+													}}
+												>
+													<ZIonIcon icon={ellipsisVerticalOutline} />
+												</ZIonButton>
+											</ZIonCol>
+										</ZIonRow>
+									);
+								})}
+							</ZIonCol>
+						) : (
+							<ZIonCol className='py-3 ion-text-center'>
+								<ZIonTitle className='mt-3'>
+									<ZIonIcon
+										icon={fileTrayFullOutline}
+										className='mx-auto'
+										size='large'
+										color='medium'
+									/>
+								</ZIonTitle>
+								<ZIonTitle color='medium'>
+									No teams founds. please create a team.
+								</ZIonTitle>
+							</ZIonCol>
+						)}
+					</ZIonRow>
+				</div>
 			</ZCustomScrollable>
 
 			<ZIonRow className='w-full px-2 pb-2 pt-1 ion-align-items-center mt-2 overflow-hidden border rounded-lg zaions__light_bg'>

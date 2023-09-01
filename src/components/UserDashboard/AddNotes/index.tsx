@@ -11,7 +11,7 @@ import {
 	ZIonText,
 	ZIonIcon,
 	ZIonRouterLink,
-	ZIonTextarea,
+	ZIonTextareaShort,
 	ZIonSkeletonText,
 } from '@/components/ZIonComponents';
 
@@ -57,7 +57,7 @@ const AddNotes: React.FC<{ showSkeleton?: boolean }> = ({
 				</ZIonText>
 			</div>
 			<div className='block px-4 my-1'>
-				<ZIonTextarea
+				<ZIonTextareaShort
 					rows={2}
 					placeholder='Description for your link'
 					onIonChange={handleChange}

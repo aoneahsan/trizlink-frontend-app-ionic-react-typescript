@@ -8,24 +8,26 @@ import React, { useEffect, useState } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonCol,
+	ZIonButton,
 	ZIonContent,
 	ZIonImg,
 	ZIonRow,
 	ZIonText,
-	ZIonTitle,
 } from '@/components/ZIonComponents';
+import ZaionsSecondaryHeader from '@/components/InPageComponents/ZaionsSecondaryHeader';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -43,6 +45,8 @@ import { STORAGE } from '@/utils/helpers';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
+import { reportCustomError } from '@/utils/customErrorType';
+import { errorCodes } from '@/utils/constants/apiConstants';
 
 /**
  * Style files Imports go down
@@ -54,8 +58,7 @@ import { STORAGE } from '@/utils/helpers';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { Z404Svg } from '@/assets/images';
-import { reportCustomError } from '@/utils/customErrorType';
-import { errorCodes } from '@/utils/constants/apiConstants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Component props type go down
@@ -73,6 +76,8 @@ const Z404View: React.FC = () => {
 	}>({
 		message: 'Not found',
 	});
+
+	const { isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
 
 	useEffect(() => {
 		void (async () => {
@@ -95,27 +100,46 @@ const Z404View: React.FC = () => {
 
 	return (
 		<ZIonContent>
-			<ZIonRow className='w-full h-full ion-align-items-center ion-justify-content-center'>
-				<ZIonCol
-					sizeXl='6'
-					sizeLg='5'
-					sizeMd='6'
-					sizeSm='8'
-					sizeXs='11'
-					className='flex flex-col ion-align-items-center ion-justify-content-center'
-				>
-					<ZIonImg src={Z404Svg} className='w-[70%] h-[70%]' />
+			<ZaionsSecondaryHeader />
 
-					<ZIonTitle className='mb-4 md:text-5xl'>
-						{compState.message}
-					</ZIonTitle>
-					<ZIonText className='md:text-lg ion-text-center'>
+			{/*  */}
+			<ZIonRow className='w-full h-full ion-justify-content-center'>
+				<div
+					className={classNames({
+						'flex flex-col ion-align-items-center ion-text-center': true,
+						'w-[40rem] h-[40rem]': isLgScale,
+						'w-[25rem]': !isLgScale && isMdScale,
+						'w-[95%]': !isMdScale,
+					})}
+				>
+					<ZIonImg
+						src={Z404Svg}
+						className={classNames({
+							'w-[60%] h-[60%]': isLgScale,
+							'w-[22rem] h-[22rem]': !isLgScale && isSmScale,
+							'w-[95%] h-[95%]': !isSmScale,
+						})}
+					/>
+
+					<ZIonText className=' md:text-5xl'>{compState.message}</ZIonText>
+					<ZIonText className='md:text-lg mt-3 ion-text-center'>
 						Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magni, at
 						illo natus, quasi maxime delectus nisi, consequuntur suscipit
 						inventore accusantium sunt ex. Eius ipsum eum distinctio explicabo
 						illo delectus beatae.
 					</ZIonText>
-				</ZIonCol>
+
+					<ZIonButton
+						routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}
+						className={classNames({
+							'sm:text-xs md:text-sm mt-4 w-[10rem]': true,
+							'mb-4': !isLgScale,
+							'w-[90%]': !isSmScale,
+						})}
+					>
+						Go Home
+					</ZIonButton>
+				</div>
 			</ZIonRow>
 		</ZIonContent>
 	);

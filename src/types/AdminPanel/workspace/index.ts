@@ -113,6 +113,7 @@ export enum ZWSTeamListPageTableColumnsIds {
 	id = '__z_short_link_id__',
 	title = '__z_short_link_title__',
 	description = '__z_short_link_description__',
+	member = '__z_short_link_member__',
 	isActive = '__z_short_link_isActive__',
 	date = '__z_short_link_date__',
 	actions = '__z_short_link_actions__',
@@ -154,6 +155,7 @@ export interface workspaceTeamInterface {
 	id?: string;
 	title: string;
 	description: string;
+	membersCount: string;
 	isActive: boolean;
 	createdAt?: string;
 	updatedAt?: string;

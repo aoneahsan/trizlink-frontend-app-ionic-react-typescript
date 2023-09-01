@@ -41,7 +41,7 @@ import {
 	ZIonRow,
 	ZIonSkeletonText,
 	ZIonText,
-	ZIonTextarea,
+	ZIonTextareaShort,
 	ZIonTitle,
 } from '@/components/ZIonComponents';
 import ZCan from '@/components/Can';
@@ -654,7 +654,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 
 																		{/* Description */}
 																		<div className='overflow-hidden line-clamp-3'>
-																			<ZIonTextarea
+																			<ZIonTextareaShort
 																				rows={3}
 																				fill='outline'
 																				name='description'

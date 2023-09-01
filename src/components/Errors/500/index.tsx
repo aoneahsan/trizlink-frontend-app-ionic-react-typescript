@@ -8,24 +8,27 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
 import {
+	ZIonButton,
 	ZIonCol,
 	ZIonContent,
 	ZIonImg,
 	ZIonRow,
 	ZIonText,
-	ZIonTitle,
 } from '@/components/ZIonComponents';
+import ZaionsSecondaryHeader from '@/components/InPageComponents/ZaionsSecondaryHeader';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -52,6 +55,7 @@ import {
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { Z500Svg } from '@/assets/images';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Component props type go down
@@ -65,30 +69,53 @@ import { Z500Svg } from '@/assets/images';
  * */
 
 const Z500View: React.FC = () => {
+	const { isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
+
 	return (
 		<ZIonContent>
-			<ZIonRow className='w-full h-full ion-align-items-center ion-justify-content-center'>
-				<ZIonCol
-					sizeXl='6'
-					sizeLg='5'
-					sizeMd='6'
-					sizeSm='8'
-					sizeXs='11'
-					className='flex flex-col ion-align-items-center ion-justify-content-center'
-				>
-					<ZIonImg src={Z500Svg} className='w-[60%] h-[60%] pb-4' />
+			<ZaionsSecondaryHeader />
 
-					<ZIonText className='mb-3 pb-1 mt-6 md:text-5xl'>
+			{/*  */}
+			<ZIonRow className='w-full h-full ion-justify-content-center'>
+				<div
+					className={classNames({
+						'flex flex-col ion-align-items-center ion-text-center': true,
+						'w-[40rem] h-[40rem]': isLgScale,
+						'w-[25rem]': !isLgScale && isMdScale,
+						'w-[95%]': !isMdScale,
+					})}
+				>
+					<ZIonImg
+						src={Z500Svg}
+						className={classNames({
+							'w-[60%] h-[60%]': isLgScale,
+							'w-[22rem] h-[22rem]': !isLgScale && isSmScale,
+							'w-[95%] h-[95%]': !isSmScale,
+						})}
+					/>
+
+					<ZIonText className='md:text-4xl text-2xl sm:text-3xl lg:text-4xl mt-2'>
 						Something went wrong!
 					</ZIonText>
-					<ZIonText className='md:text-lg ion-text-center'>
+					<ZIonText className='text-sm md:text-lg lg:text-lg mt-3 ion-text-center'>
 						We're sorry, but something went wrong on our end. Our team has been
 						notified of this issue and is working to fix it. In the meantime,
 						you can try refreshing the page or coming back later. If the problem
 						persists, please don't hesitate to contact our support team for
 						further assistance.
 					</ZIonText>
-				</ZIonCol>
+
+					<ZIonButton
+						routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}
+						className={classNames({
+							'sm:text-xs md:text-sm mt-4 w-[10rem]': true,
+							'mb-4': !isLgScale,
+							'w-[90%]': !isSmScale,
+						})}
+					>
+						Go Home
+					</ZIonButton>
+				</div>
 			</ZIonRow>
 		</ZIonContent>
 	);

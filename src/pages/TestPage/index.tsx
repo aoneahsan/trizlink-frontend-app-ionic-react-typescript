@@ -1,5 +1,6 @@
 // Core Imports
 import {
+	ZIonButton,
 	ZIonCol,
 	ZIonContent,
 	ZIonGrid,
@@ -10,7 +11,7 @@ import {
 } from '@/components/ZIonComponents';
 import ZIonPage from '@/components/ZIonPage';
 import { ZCountryData } from '@/data/DiscoverEnterprise/index.data';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 // Packages Imports
 import {
@@ -33,18 +34,22 @@ const ZaionsTestPage: React.FC = () => {
 			defaultHeight: 100,
 		})
 	);
+	const [first, setfirst] = useState([...Array(10)]);
+
+	const data = [...Array(10)];
+
 	return (
 		<ZIonPage>
 			<ZIonContent>
-				<ZIonGrid className='w-full h-full'>
+				<ZIonGrid className='w-full h-[50%]'>
 					<div className='w-full h-full'>
 						<AutoSizer>
 							{({ height, width }) => {
 								return (
 									<List
 										height={height}
-										rowCount={ZCountryData.length}
-										rowHeight={}
+										rowCount={first.length}
+										rowHeight={70}
 										deferredMeasurementCache={cache.current}
 										width={width}
 										rowRenderer={({
@@ -66,39 +71,40 @@ const ZaionsTestPage: React.FC = () => {
 													columnIndex={0}
 													rowIndex={index}
 												>
-													<ZIonRow
-														className='ion-justify-content-between'
-														style={style}
-													>
-														<ZIonCol
-															sizeXl='12'
-															sizeLg='12'
-															sizeMd='12'
-															sizeSm='12'
-															sizeXs='12'
-															className='mb-2'
-														>
-															<ZIonInput
-																minHeight='40px'
-																labelPlacement='stacked'
-																label='Redirection Links*'
-															/>
-														</ZIonCol>
+													<div style={{ ...style }}>
+														<ZIonRow className='ion-justify-content-between'>
+															<ZIonCol
+																sizeXl='12'
+																sizeLg='12'
+																sizeMd='12'
+																sizeSm='12'
+																sizeXs='12'
+																className='mb-0'
+															>
+																<ZIonInput
+																	minHeight='40px'
+																	labelPlacement='stacked'
+																	label='Redirection Links*'
+																	value={index}
+																/>
+															</ZIonCol>
 
-														<ZIonCol
-															sizeXl='5.8'
-															sizeLg='5.8'
-															sizeMd='5.8'
-															sizeSm='12'
-															sizeXs='12'
-														>
-															<ZIonInput
-																minHeight='40px'
-																labelPlacement='stacked'
-																label='Redirection Links*'
-															/>
-														</ZIonCol>
-													</ZIonRow>
+															{/* <ZIonCol
+																sizeXl='5.8'
+																sizeLg='5.8'
+																sizeMd='5.8'
+																sizeSm='12'
+																sizeXs='12'
+																className='mt-0'
+															>
+																<ZIonInput
+																	minHeight='40px'
+																	labelPlacement='stacked'
+																	label='Redirection Links*'
+																/>
+															</ZIonCol> */}
+														</ZIonRow>
+													</div>
 												</CellMeasurer>
 											);
 										}}
@@ -108,6 +114,13 @@ const ZaionsTestPage: React.FC = () => {
 						</AutoSizer>
 					</div>
 				</ZIonGrid>
+				<ZIonButton
+					onClick={() => {
+						setfirst((oldValues) => [...oldValues, 8]);
+					}}
+				>
+					add
+				</ZIonButton>
 			</ZIonContent>
 		</ZIonPage>
 	);

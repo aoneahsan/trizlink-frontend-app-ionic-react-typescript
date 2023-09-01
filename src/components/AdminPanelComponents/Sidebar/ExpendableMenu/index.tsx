@@ -483,10 +483,7 @@ const AdminPanelSidebarMenu: React.FC<{
 					</ZIonContent>
 				</ZIonCol>
 			) : (
-				<ZIonCol
-					size='12'
-					className='mb-5 ion-align-items-center zaions__light_bg'
-				>
+				<ZIonCol size='12' className='ion-align-items-center zaions__light_bg'>
 					<ZIonSegment
 						scrollable={true}
 						value={activePage}

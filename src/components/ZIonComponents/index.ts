@@ -17,6 +17,8 @@ export { default as ZIonRouterLink } from './ZIonRouterLink';
 export { default as ZIonItem } from './ZIonItem';
 export { default as ZIonInput } from './ZIonInput';
 export { default as ZIonTextarea } from './ZIonTextarea';
+export { ZIonTextareaShort } from './ZIonTextarea';
+export { ZIonTextareaLong } from './ZIonTextarea';
 export { default as ZIonList } from './ZIonList';
 export { default as ZIonBadge } from './ZIonBadge';
 export { default as ZIonCheckbox } from './ZIonCheckbox';

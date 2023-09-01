@@ -19,6 +19,7 @@ import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import {
 	ZIonButton,
 	ZIonIcon,
+	ZIonLabel,
 	ZIonSkeletonText,
 	ZIonText,
 } from '@/components/ZIonComponents';
@@ -123,9 +124,9 @@ const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = ({
 				});
 			}}
 			className={classNames({
-				'ion-text-capitalize my-0': true,
+				'ion-text-capitalize my-0 ': true,
 				'me-2 ms-2': false,
-				'me-0 ms-1 ion-no-padding ': false,
+				'me-0 ms-1 ion-no-padding': false,
 			})}
 		>
 			<ZUserAvatarButton
@@ -139,7 +140,9 @@ const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = ({
 					'w-[30px!important] h-[30px!important]': true,
 				})}
 			/>
-			<ZIonText>{currentWorkspaceData?.workspaceName}</ZIonText>
+			<div className='w-[3rem] overflow-hidden line-clamp-1'>
+				<ZIonLabel>{currentWorkspaceData?.workspaceName}asdasassasa</ZIonLabel>
+			</div>
 			<ZIonIcon
 				icon={caretDown}
 				size='small'

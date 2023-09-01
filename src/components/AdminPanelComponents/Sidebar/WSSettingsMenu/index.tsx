@@ -94,7 +94,14 @@ const ZWSSettingsMenu: React.FC = () => {
 	// #endregion
 
 	return (
-		<ZIonCol className='border-e-[1px] zaions-transition h-full shadow-[0_3px_6px_#00000029]'>
+		<ZIonCol
+			sizeXl='2.8'
+			sizeLg='3'
+			sizeMd='3'
+			sizeSm='2.8'
+			sizeXs='2.8'
+			className='border-e-[1px] zaions-transition h-full shadow-[0_3px_6px_#00000029]'
+		>
 			<ZCustomScrollable
 				className='w-full h-full ion-padding-top ion-padding'
 				scrollY={true}

@@ -197,7 +197,7 @@ const ZIonInput = React.forwardRef(
 				onIonInput={props.onIonChange}
 				fill={props.fill || 'outline'}
 				ref={ref}
-				counter={props.counter === false ? false : true}
+				counter={props.counter === false || props.type === 'url' ? false : true}
 				maxlength={
 					props.maxlength || ZInputLengthConstant.defaultStringMaxLength
 				}
