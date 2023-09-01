@@ -1,0 +1,14 @@
+{
+  "resourceName": "zaionsurlshorteners3cfd16e62",
+  "policyUUID": "cfd16e62",
+  "bucketName": "zaionsurlshortener9b4c087454ba4eabaae7bbd02bdea",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

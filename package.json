@@ -4,9 +4,9 @@
 	"version": "0.0.1",
 	"type": "module",
 	"engines": {
-		"node": "=18.17.0",
+		"node": "^18.17.0",
 		"npm": "Please use Yarn (v1.22.19)",
-		"yarn": "=1.22.19"
+		"yarn": "^1.22.19"
 	},
 	"author": {
 		"email": "developer@zaions.com",
