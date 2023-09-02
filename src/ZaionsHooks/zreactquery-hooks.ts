@@ -320,17 +320,17 @@ export const useZRQUpdateRequest = <T>({
 	_queriesKeysToInvalidate,
 	authenticated,
 	_contentType = zAxiosApiRequestContentType.Json,
-	_permissions,
 	_showAlertOnError = true,
 	_showLoader = true,
+	_loaderMessage = MESSAGES.GENERAL.API_REQUEST.UPDATING,
 }: {
 	_url: API_URL_ENUM;
 	_queriesKeysToInvalidate?: string[];
 	authenticated?: boolean;
 	_contentType?: zAxiosApiRequestContentType;
-	_permissions?: permissionsEnum[];
 	_showAlertOnError?: boolean;
 	_showLoader?: boolean;
+	_loaderMessage?: string;
 }) => {
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
@@ -360,22 +360,8 @@ export const useZRQUpdateRequest = <T>({
 			urlDynamicParts: string[];
 			requestData: string;
 		}): Promise<T | undefined> => {
-			if (_permissions && _permissions?.length > 0) {
-				const userPermissions =
-					currentLoggedInUserRoleAndPermissionsStateAtom?.permissions;
-				// const haveRequiredPermission = userPermissions?.includes(havePermission);
-				const haveRequiredPermission = _permissions.every((el) =>
-					userPermissions?.includes(el)
-				);
-
-				if (haveRequiredPermission === false) {
-					return undefined;
-				}
-			}
-
 			// Present ion loading before api start
-			_showLoader &&
-				(await presentZIonLoader(MESSAGES.GENERAL.API_REQUEST.UPDATING));
+			_showLoader && (await presentZIonLoader(_loaderMessage));
 			/**
 			 * @_url - takes the post url to post data to api.
 			 *  second argument take the method (post | get | update | delete). as this is the put api for updating so it  will be put

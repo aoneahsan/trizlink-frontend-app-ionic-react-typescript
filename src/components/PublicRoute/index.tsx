@@ -26,7 +26,7 @@ const PublicRouteAsync = ({ Component, restricted, ...rest }: any) => {
 		// restricted = true meaning restricted route
 		<Route
 			{...rest}
-			render={(props) =>
+			render={(props: any) =>
 				loggedIn && restricted ? (
 					<Redirect to={ZRoutesRedirects.AUTHENTICATED_USER_REDIRECT} />
 				) : (

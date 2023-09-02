@@ -12,6 +12,7 @@ const ZaionsRoutes = {
 	// Main routes
 	HomeRoute: '/',
 	LoginRoute: '/sign-in',
+	SetPassword: '/set-password',
 	SignUpRoute: '/sign-up',
 	PasswordResetEmailForm: '/forgot-password',
 	DiscoverEnterpriseRoute: '/pages/landing/discover-enterprise',

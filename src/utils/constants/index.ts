@@ -114,6 +114,8 @@ export const API_URLS = {
 	userAccountUtmTags_update_delete: `/user/utm-tag/${RouteParams.utmTag.utmTagId}`,
 	userAccountFolders_update_delete: '/user/folders/:folderId',
 	userEmbedWidget_update_delete: '/user/embedded-scripts/:embeddedId',
+	send_otp: '/user/send-otp',
+	confirm_otp: '/user/confirm-otp',
 
 	user_unread_notifications_list: `/user/notification/type/${RouteParams.user.notification.type}`,
 	user_notification_mark_as_read: `/user/notification/type/${RouteParams.user.notification.type}/markAsRead/${RouteParams.user.notification.id}`,
@@ -422,6 +424,15 @@ const testingSelectors = {
 		signupButton: 'lp-sign-in-btn',
 		emailInput: 'lp-email-input',
 		passwordInput: 'lp-password-input',
+	},
+	// #endregion
+
+	// #region set password page
+	setPasswordPage: {
+		emailInput: 'spp-email-input',
+		otpBtn: 'spp-send-opt-btn',
+		confirmOtpBtn: 'spp-confirm-opt-btn',
+		resendOtpBtn: 'spp-resend-opt-btn',
 	},
 	// #endregion
 

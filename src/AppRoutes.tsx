@@ -127,8 +127,9 @@ const ZaionsLinkInBioForm = lazy(
 const TestingIonComponents = lazy(
 	() => import('./Testing/TestingIonComponents/index')
 );
-const PublicRoute = lazy(() => import('./components/PublicRoute'));
-const PrivateRoute = lazy(() => import('./components/PrivateRoute'));
+import PublicRoute from './components/PublicRoute';
+import PrivateRoute from './components/PrivateRoute';
+const ZSetPasswordPage = lazy(() => import('./pages/SetPassword'));
 const ZAppStartupPage = lazy(() => import('./pages/AdminPanel/StartUpPage'));
 const ChartsExamples = lazy(() => import('./Testing/Charts'));
 const ZFallbackIonSpinner = lazy(
@@ -149,7 +150,7 @@ const ZWSSettingsTeamViewPage = lazy(
 );
 
 // Functional Component
-const AppRoutes: React.FC = () => {
+const AppRoutes = () => {
 	return (
 		// <IonReactRouter>
 		// 	<IonRouterOutlet>
@@ -158,6 +159,12 @@ const AppRoutes: React.FC = () => {
 				exact
 				path={ZaionsRoutes.ShortLinkRedirectRoute}
 				component={ZShortLinkRedirectPage}
+			/>
+
+			<Route
+				exact
+				path={ZaionsRoutes.SetPassword}
+				component={ZSetPasswordPage}
 			/>
 
 			<Route

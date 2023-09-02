@@ -14,6 +14,12 @@ export enum WSRoleType {
 	inAppWSRole = 'inAppWSRole',
 }
 
+export enum SignUpTypeEnum {
+	normal = 'normal',
+	admin = 'admin',
+	invite = 'invite',
+}
+
 // Interfaces
 export interface UserRoleAndPermissionsInterface {
 	role: string;

@@ -484,6 +484,7 @@ import QRCodeIndexBlogLarge from './global-images/qr-code-index-blog-large-800x4
 import Q22022ProductFeaturesBlog from './global-images/q2-2022-product-features-blog-featured-800x450.webp';
 
 import ProductLogo from './global-images/zlink-logo-zaions.png';
+import ProductFavicon from './global-images/favicon-z-link-white-bg_720.png';
 
 import BlogoOrange from './global-images/zlink-logo-zaions.png';
 
@@ -824,6 +825,7 @@ export {
 	QRCodeIndexBlogLarge,
 	Q22022ProductFeaturesBlog,
 	ProductLogo,
+	ProductFavicon,
 	BlogoOrange,
 	productSmLogo,
 	linktreeLogoSymbol,

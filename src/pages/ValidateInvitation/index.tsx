@@ -29,7 +29,11 @@ import Z400View from '@/components/Errors/400';
 import Z500View from '@/components/Errors/500';
 import { reportCustomError } from '@/utils/customErrorType';
 import { LOCALSTORAGE_KEYS } from '@/utils/constants';
-import { UserAccountType } from '@/types/UserAccount/index.type';
+import {
+	SignUpTypeEnum,
+	UserAccountType,
+} from '@/types/UserAccount/index.type';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Custom Hooks Imports go down
@@ -100,15 +104,15 @@ const ZValidateInvitationPage: React.FC = () => {
 
 	const validator = useCallback(async () => {
 		try {
-			const userData = (await STORAGE.GET(
-				LOCALSTORAGE_KEYS.USERDATA
-			)) as UserAccountType | null;
-			console.log(userData);
+			// const userData = (await STORAGE.GET(
+			// 	LOCALSTORAGE_KEYS.USERDATA
+			// )) as UserAccountType | null;
+			// console.log(userData);
+
 			const __data = zStringify({
-				email: userData?.email,
+				// email: userData?.email,
 				token: _token,
 			});
-			console.log('done');
 
 			const _response = await validateAndUpdateInvitation({
 				requestData: __data,
@@ -117,16 +121,28 @@ const ZValidateInvitationPage: React.FC = () => {
 			});
 
 			if ((_response as ZLinkMutateApiType<WSTeamMembersInterface>).success) {
-				const _data = extractInnerData<WSTeamMembersInterface>(
-					_response,
-					extractInnerDataOptionsEnum.createRequestResponseItem
-				);
+				const _data = extractInnerData<{
+					user: {
+						email: string;
+						signupType: string;
+					};
+				}>(_response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
-				if (_data && _data.id) {
+				console.log({
+					_data: _data?.user?.email,
+				});
+
+				if (_data && _data?.user?.email) {
 					setCompState((oldValues) => ({
 						...oldValues,
 						isProcessing: false,
 					}));
+
+					if (_data?.user?.signupType === SignUpTypeEnum.normal) {
+						window.location.replace(ZaionsRoutes.LoginRoute);
+					} else if (_data?.user?.signupType === SignUpTypeEnum.invite) {
+						window.location.replace(ZaionsRoutes.SetPassword);
+					}
 				}
 			}
 		} catch (error) {
