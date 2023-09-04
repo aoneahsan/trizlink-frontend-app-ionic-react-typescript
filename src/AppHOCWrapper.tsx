@@ -33,6 +33,7 @@ import ZaionsApp from './ZaionsApp';
 import AuthenticateHOC from './HOCs/AuthenticateHOC';
 import FetchRequiredAppDataHOC from './HOCs/FetchRequiredAppDataHOC';
 import { IonReactRouter } from '@ionic/react-router';
+import PackagesHOC from './HOCs/PackagesHOC';
 
 // Global Constants
 
@@ -49,7 +50,9 @@ const AppHOCWrapper: React.FC = () => {
 					<IonRouterOutlet>
 						<AuthenticateHOC>
 							<FetchRequiredAppDataHOC>
-								<ZaionsApp />
+								<PackagesHOC>
+									<ZaionsApp />
+								</PackagesHOC>
 							</FetchRequiredAppDataHOC>
 						</AuthenticateHOC>
 					</IonRouterOutlet>

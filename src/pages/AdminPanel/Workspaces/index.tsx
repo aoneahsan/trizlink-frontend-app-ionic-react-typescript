@@ -28,18 +28,24 @@ import {
 	ZIonRow,
 	ZIonSkeletonText,
 	ZIonText,
+	ZIonTitle,
 } from '@/components/ZIonComponents';
 import ZWorkspacesCardSkeleton from '@/components/WorkspacesComponents/ListCard/index.skeleton';
 import ZCan from '@/components/Can';
 import ZAddNewWorkspaceModal from '@/components/InPageComponents/ZaionsModals/Workspace/CreateModal';
 //
+import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
 
 const ZWorkspacesCard = lazy(
 	() => import('@/components/WorkspacesComponents/ListCard')
 );
 
-const ZUserProfileButton = lazy(
-	() => import('@/components/AdminPanelComponents/UserProfileButton')
+// const ZUserProfileButton = lazy(
+// 	() => import('@/components/AdminPanelComponents/UserProfileButton')
+// );
+
+const ZAdminPanelTopBar = lazy(
+	() => import('@/components/AdminPanelComponents/TopBar')
 );
 
 /**
@@ -72,7 +78,7 @@ import CONSTANTS from '@/utils/constants';
  * ? Import of style sheet is a style import
  * */
 import { workspaceInterface } from '@/types/AdminPanel/workspace';
-import ZAdminPanelTopBar from '@/components/AdminPanelComponents/TopBar';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 /**
  * Images Imports go down
@@ -108,7 +114,7 @@ const ZWorkspaceListPage: React.FC = () => {
 				havePermissions={[permissionsEnum.viewAny_workspace]}
 				returnPermissionDeniedView={true}
 			>
-				<ZIonContent>
+				<ZIonContent className='mb-5'>
 					{/* Main grid */}
 					<ZIonGrid className='h-full ion-no-padding'>
 						{/* Top workspace menu */}
@@ -166,10 +172,23 @@ const ZWorkspaceListPage: React.FC = () => {
 											</Suspense>
 										</ZIonCol>
 									</ZIonRow> */}
-						<ZAdminPanelTopBar />
+						<Suspense
+							fallback={
+								<ZIonRow className='h-[4rem] px-3 zaions__light_bg'>
+									<ZFallbackIonSpinner2 />
+								</ZIonRow>
+							}
+						>
+							<ZAdminPanelTopBar />
+						</Suspense>
 
 						{/* cards row */}
-						<ZIonRow className='mt-5 px-4'>
+						<ZIonRow className='py-5 px-4'>
+							<ZIonCol size='12' className='ps-3'>
+								<ZIonTitle className='ion-no-padding font-bold'>
+									Owned workspaces
+								</ZIonTitle>
+							</ZIonCol>
 							{/* single card */}
 							<Suspense fallback={<ZWorkspacesCardSkeleton />}>
 								{!isWorkspacesDataFetching &&

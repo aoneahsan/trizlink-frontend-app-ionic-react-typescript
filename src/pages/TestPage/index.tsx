@@ -8,119 +8,99 @@ import {
 	ZIonRow,
 	ZIonSelect,
 	ZIonSelectOption,
+	ZIonText,
 } from '@/components/ZIonComponents';
-import ZIonPage from '@/components/ZIonPage';
-import { ZCountryData } from '@/data/DiscoverEnterprise/index.data';
+import classNames from 'classnames';
 import React, { useRef, useState } from 'react';
 
 // Packages Imports
-import {
-	List,
-	AutoSizer,
-	CellMeasurer,
-	CellMeasurerCache,
-} from 'react-virtualized';
-// import PhoneInput from 'react-phone-input-2';
+
 // Custom Imports
 
-// Global constant
-
-// import 'react-phone-input-2/lib/style.css';
+import {
+	ZSwiperContainer,
+	ZSwiperSlide,
+} from '@/components/CustomComponents/ZSwiper';
+import ZIonPage from '@/components/ZIonPage';
+import Swiper from 'swiper';
 
 const ZaionsTestPage: React.FC = () => {
-	const cache = useRef(
-		new CellMeasurerCache({
-			fixedWidth: true,
-			defaultHeight: 100,
-		})
-	);
-	const [first, setfirst] = useState([...Array(10)]);
+	const swiperRef = useRef(null);
+	React.useEffect(() => {
+		try {
+			const swiperObj = new Swiper('.zswiper-container', {
+				slidesPerView: 3,
+				grid: {
+					rows: 3,
+				},
+				mousewheel: {
+					forceToAxis: true,
+				},
+			});
 
-	const data = [...Array(10)];
+			console.log({ swiperObj });
+		} catch (error) {
+			console.log({ error });
+		}
+	}, []);
 
 	return (
 		<ZIonPage>
 			<ZIonContent>
-				<ZIonGrid className='w-full h-[50%]'>
-					<div className='w-full h-full'>
-						<AutoSizer>
-							{({ height, width }) => {
-								return (
-									<List
-										height={height}
-										rowCount={first.length}
-										rowHeight={70}
-										deferredMeasurementCache={cache.current}
-										width={width}
-										rowRenderer={({
-											columnIndex,
-											index,
-											key,
-											isVisible,
-											isScrolling,
-											parent,
-											style,
-										}) => {
-											const country = ZCountryData[index];
+				<ZIonRow className='zswiper-container'>
+					<ZIonCol>
+						<swiper-container
+							// class={'mySwiper'}
+							ref={swiperRef}
+							slides-per-view={3}
+							space-between={0}
+							mousewheel-force-to-axis='true'
+							// onSwiper={onSwiper}
+							// onSlideChange={onSlideChange}
+							// navigation='true'
+							// pagination='true'
+						>
+							{[
+								1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1,
+								2, 3, 4, 5, 6, 7, 8, 9, 10,
 
-											return (
-												<CellMeasurer
-													key={key}
-													cache={cache.current}
-													parent={parent}
-													columnIndex={0}
-													rowIndex={index}
-												>
-													<div style={{ ...style }}>
-														<ZIonRow className='ion-justify-content-between'>
-															<ZIonCol
-																sizeXl='12'
-																sizeLg='12'
-																sizeMd='12'
-																sizeSm='12'
-																sizeXs='12'
-																className='mb-0'
-															>
-																<ZIonInput
-																	minHeight='40px'
-																	labelPlacement='stacked'
-																	label='Redirection Links*'
-																	value={index}
-																/>
-															</ZIonCol>
-
-															{/* <ZIonCol
-																sizeXl='5.8'
-																sizeLg='5.8'
-																sizeMd='5.8'
-																sizeSm='12'
-																sizeXs='12'
-																className='mt-0'
-															>
-																<ZIonInput
-																	minHeight='40px'
-																	labelPlacement='stacked'
-																	label='Redirection Links*'
-																/>
-															</ZIonCol> */}
-														</ZIonRow>
-													</div>
-												</CellMeasurer>
-											);
-										}}
-									/>
-								);
+								1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+							].map((el, index) => {
+								return <swiper-slide key={index}>{el}</swiper-slide>;
+							})}
+						</swiper-container>
+					</ZIonCol>
+					<hr />
+					<ZIonCol>
+						<ZIonButton
+							onClick={() => {
+								try {
+									if (swiperRef.current) {
+										console.log(swiperRef.current);
+										// swiperRef.current?.loop();
+									}
+								} catch (error) {
+									console.error({ error });
+								}
 							}}
-						</AutoSizer>
-					</div>
-				</ZIonGrid>
-				<ZIonButton
-					onClick={() => {
-						setfirst((oldValues) => [...oldValues, 8]);
-					}}
-				>
-					add
-				</ZIonButton>
+						>
+							go next
+						</ZIonButton>
+						<ZIonButton
+							onClick={() => {
+								try {
+									if (swiperRef.current) {
+										// swiperRef.current?.slidePrev();
+									}
+								} catch (error) {
+									console.error({ error });
+								}
+							}}
+						>
+							go back
+						</ZIonButton>
+					</ZIonCol>
+				</ZIonRow>
 			</ZIonContent>
 		</ZIonPage>
 	);

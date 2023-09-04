@@ -229,13 +229,18 @@ const ZADTopBarColOne: React.FC<{ workspaceId?: string }> = ({
 			sizeXs='12'
 			className='flex h-full ion-align-items-center'
 		>
-			{isWorkspaceListPage ? (
+			{/* {isWorkspaceListPage ? (
 				<ZCreateWorkspaceBtn />
 			) : (
 				<ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
 					<ZWorkspaceSwitcher workspaceId={workspaceId} />
 				</ZCan>
-			)}
+			)} */}
+			{!isWorkspaceListPage ? (
+				<ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
+					<ZWorkspaceSwitcher workspaceId={workspaceId} />
+				</ZCan>
+			) : null}
 		</ZIonCol>
 	);
 };
