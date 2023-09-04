@@ -29,7 +29,9 @@ import { UserAccountType } from '@/types/UserAccount/index.type';
 
 const App: React.FC = () => {
 	const setAuthTokenState = useSetRecoilState(ZaionsAuthTokenData);
-	const setUserAccountStateAtom = useSetRecoilState(ZaionsUserAccountRStateAtom);
+	const setUserAccountStateAtom = useSetRecoilState(
+		ZaionsUserAccountRStateAtom
+	);
 	// check for userData and authtoken in localstorage set that in recoil state and redirect user to authenticated screen (like dashboard), from guest screen, (mean user can not visit login screen, he is already logged in)
 	useEffect(() => {
 		void (async () => {

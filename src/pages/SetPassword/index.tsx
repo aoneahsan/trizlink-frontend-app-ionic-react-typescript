@@ -2,15 +2,28 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import { useZRQUpdateRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import { ProductFavicon } from '@/assets/images';
+import React, { useEffect, useState } from 'react';
+
+/**
+ * Packages Imports go down
+ * ? Like import of ionic components is a packages import
+ * */
+import { AxiosError } from 'axios';
+import classNames from 'classnames';
+import { Formik, useFormikContext } from 'formik';
+import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
+import { useSetRecoilState } from 'recoil';
+
+/**
+ * Custom Imports go down
+ * ? Like import of custom components is a custom import
+ * */
 import ZaionsSecondaryHeader from '@/components/InPageComponents/ZaionsSecondaryHeader';
 import {
 	ZIonButton,
 	ZIonCol,
 	ZIonContent,
 	ZIonGrid,
-	ZIonHeader,
 	ZIonIcon,
 	ZIonImg,
 	ZIonInput,
@@ -19,9 +32,25 @@ import {
 	ZIonText,
 } from '@/components/ZIonComponents';
 import ZIonPage from '@/components/ZIonPage';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
-import CONSTANTS from '@/utils/constants';
-import { reportCustomError } from '@/utils/customErrorType';
+
+/**
+ * Custom Hooks Imports go down
+ * ? Like import of custom Hook is a custom import
+ * */
+import { useZRQUpdateRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import {
+	ZaionsAuthTokenData,
+	ZaionsUserAccountRStateAtom,
+} from '@/ZaionsStore/UserAccount/index.recoil';
+
+/**
+ * Global Constants Imports go down
+ * ? Like import of Constant is a global constants import
+ * */
+import CONSTANTS, { LOCALSTORAGE_KEYS } from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { ZCustomError, reportCustomError } from '@/utils/customErrorType';
 import {
 	API_URL_ENUM,
 	CONTAINS,
@@ -30,43 +59,25 @@ import {
 } from '@/utils/enums';
 import { ZErrorCodeEnum } from '@/utils/enums/ErrorsCodes';
 import {
+	STORAGE,
 	checkIfContains,
 	extractInnerData,
+	formatApiRequestErrorForFormikFormField,
+	getUserDataObjectForm,
 	validateFields,
 	zStringify,
 } from '@/utils/helpers';
 import MESSAGES from '@/utils/messages';
 import { showSuccessNotification } from '@/utils/notification';
-import { AxiosError } from 'axios';
-import classNames from 'classnames';
-import { Formik, useFormikContext } from 'formik';
-import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
-import React from 'react';
-
-/**
- * Packages Imports go down
- * ? Like import of ionic components is a packages import
- * */
-
-/**
- * Custom Imports go down
- * ? Like import of custom components is a custom import
- * */
-
-/**
- * Custom Hooks Imports go down
- * ? Like import of custom Hook is a custom import
- * */
-
-/**
- * Global Constants Imports go down
- * ? Like import of Constant is a global constants import
- * */
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import {
+	AuthTokenResponseType,
+	UserAccountType,
+} from '@/types/UserAccount/index.type';
 
 /**
  * Recoil State Imports go down
@@ -82,6 +93,9 @@ import React from 'react';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
+import { ProductFavicon } from '@/assets/images';
+import { useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 
 /**
  * Component props type go down
@@ -100,6 +114,32 @@ enum ZSetPasswordTabEnum {
  * */
 
 const ZSetPasswordPage: React.FC = () => {
+	const [compState, setCompState] = useState<{
+		email?: string;
+		inviteToken?: string;
+	}>();
+
+	useEffect(() => {
+		try {
+			void (async () => {
+				const userData = (await STORAGE.GET(
+					LOCALSTORAGE_KEYS.INVITEE_USER_DATA
+				)) as {
+					email: string;
+					token: string;
+					signupType: string;
+				} | null;
+				setCompState((oldValues) => ({
+					...oldValues,
+					email: userData?.email,
+					inviteToken: userData?.token,
+				}));
+			})();
+		} catch (error) {
+			reportCustomError(error);
+		}
+	}, []);
+
 	return (
 		<ZIonPage pageTitle='set password page'>
 			<ZIonContent fullscreen>
@@ -108,7 +148,7 @@ const ZSetPasswordPage: React.FC = () => {
 				<ZIonGrid className='h-auto ion-padding-top ion-margin-top'>
 					<ZIonRow className='h-auto ion-padding-top ion-margin-top'>
 						<ZIonCol className='flex ion-justify-content-center'>
-							<div className='w-full ion-text-center mb-5'>
+							<div className='w-full mb-5 ion-text-center'>
 								<ZIonImg
 									src={ProductFavicon}
 									className='w-[6rem] h-[6rem] mx-auto mb-6'
@@ -138,7 +178,8 @@ const ZSetPasswordPage: React.FC = () => {
 							<Formik
 								// Initial Values of sign up form fields
 								initialValues={{
-									emailAddress: '',
+									emailAddress: compState?.email,
+									inviteToken: compState?.inviteToken,
 									otp: '',
 
 									isEmailAddressApiError: false,
@@ -151,8 +192,9 @@ const ZSetPasswordPage: React.FC = () => {
 									confirmPassword: '',
 									canViewConfirmPassword: false,
 
-									tab: ZSetPasswordTabEnum.newPasswordTab,
+									tab: ZSetPasswordTabEnum.sendOptTab,
 								}}
+								enableReinitialize={true}
 								// Validations of sign up form fields
 								validate={(values) => {
 									try {
@@ -189,19 +231,11 @@ const ZSetPasswordPage: React.FC = () => {
 									}
 								}}
 								// Submit function of formik
-								onSubmit={async (values, { resetForm, setErrors }) => {
+								onSubmit={async () => {
 									// await FormikSubmissionHandler(values, resetForm, setErrors);
 								}}
 							>
-								{({
-									handleChange,
-									handleBlur,
-									submitForm,
-									isValid,
-									values,
-									touched,
-									errors,
-								}) => {
+								{({ values }) => {
 									return (
 										<>
 											{values.tab === ZSetPasswordTabEnum.sendOptTab ? (
@@ -236,6 +270,7 @@ const ZSendOtpTab: React.FC = () => {
 	} = useFormikContext<{
 		emailAddress: string;
 		tab: ZSetPasswordTabEnum;
+		inviteToken: string;
 
 		isEmailAddressApiError: boolean;
 		emailAddressApiErrorText: string;
@@ -251,11 +286,14 @@ const ZSendOtpTab: React.FC = () => {
 		_loaderMessage: 'Sending OTP...',
 	});
 
+	const { presentZIonErrorAlert } = useZIonErrorAlert();
+
 	const ZSendOTPHandler = async () => {
 		try {
 			if (values?.emailAddress && values?.emailAddress?.trim()?.length > 0) {
 				const __stringifyData = zStringify({
 					email: values.emailAddress,
+					inviteToken: values.inviteToken,
 				});
 
 				const __response = await zSendOtpAsyncMutate({
@@ -297,6 +335,10 @@ const ZSendOtpTab: React.FC = () => {
 					setFieldValue('emailAddressApiErrorText', __apiErrors[0], false);
 					setFieldValue('isEmailAddressApiError', true, false);
 				}
+
+				if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
+					presentZIonErrorAlert(__apiErrors[0]);
+				}
 			}
 			reportCustomError(error);
 		}
@@ -306,18 +348,20 @@ const ZSendOtpTab: React.FC = () => {
 		<>
 			{/* Email Address Field */}
 			<ZIonInput
-				name='emailAddress'
+				// name='emailAddress'
 				label='Email Address'
 				labelPlacement='floating'
 				type='email'
+				disabled={true}
+				readonly
 				enterkeyhint='next'
-				onIonChange={(e) => {
-					handleChange(e);
-					if (values.isEmailAddressApiError) {
-						setFieldValue('isEmailAddressApiError', false);
-					}
-				}}
-				onIonBlur={handleBlur}
+				// onIonChange={(e) => {
+				// 	handleChange(e);
+				// 	if (values.isEmailAddressApiError) {
+				// 		setFieldValue('isEmailAddressApiError', false);
+				// 	}
+				// }}
+				// onIonBlur={handleBlur}
 				value={values.emailAddress}
 				testingSelector={CONSTANTS.testingSelectors.setPasswordPage.emailInput}
 				errorText={
@@ -366,6 +410,7 @@ const ZConfirmOptTab: React.FC = () => {
 			emailAddressApiErrorText: string;
 			isOTPApiError: boolean;
 			OTPApiErrorText: string;
+			inviteToken: string;
 		}>();
 
 	// API
@@ -376,12 +421,76 @@ const ZConfirmOptTab: React.FC = () => {
 		_loaderMessage: 'Confirming OTP...',
 	});
 
+	const { presentZIonErrorAlert } = useZIonErrorAlert();
+
+	const { mutateAsync: zSendOtpAsyncMutate } = useZRQUpdateRequest({
+		_url: API_URL_ENUM.send_otp,
+		_showAlertOnError: false,
+		authenticated: false,
+		_loaderMessage: 'Sending OTP...',
+	});
+
+	const ZResendOTPHandler = async () => {
+		try {
+			if (values?.emailAddress && values?.emailAddress?.trim()?.length > 0) {
+				const __stringifyData = zStringify({
+					email: values.emailAddress,
+					inviteToken: values.inviteToken,
+				});
+
+				const __response = await zSendOtpAsyncMutate({
+					requestData: __stringifyData,
+					itemIds: [],
+					urlDynamicParts: [],
+				});
+
+				if (__response) {
+					const __data = extractInnerData<{
+						success: boolean;
+					}>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
+
+					if (__data?.success) {
+						if (values.isEmailAddressApiError === true) {
+							setFieldValue('emailAddressApiErrorText', '', false);
+							setFieldValue('isEmailAddressApiError', false, false);
+						}
+
+						showSuccessNotification(
+							'OTP has been successfully sent to your email. Please check your email.'
+						);
+					}
+				}
+			}
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				const __apiErrorObjects = error.response?.data as {
+					errors: { item: string[] };
+					status: number;
+				};
+
+				const __apiErrors = __apiErrorObjects?.errors?.item;
+				const __apiErrorCode = __apiErrorObjects?.status;
+
+				if (__apiErrorCode === ZErrorCodeEnum.notFound) {
+					setFieldValue('emailAddressApiErrorText', __apiErrors[0], false);
+					setFieldValue('isEmailAddressApiError', true, false);
+				}
+
+				if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
+					presentZIonErrorAlert(__apiErrors[0]);
+				}
+			}
+			reportCustomError(error);
+		}
+	};
+
 	const ZConfirmOTPHandler = async () => {
 		try {
 			if (values?.emailAddress && values?.emailAddress?.trim()?.length > 0) {
 				const __stringifyData = zStringify({
 					email: values.emailAddress,
 					otp: values.otp,
+					inviteToken: values.inviteToken,
 				});
 
 				const __response = await zConfirmOtpAsyncMutate({
@@ -417,14 +526,13 @@ const ZConfirmOptTab: React.FC = () => {
 				const __apiErrors = __apiErrorObjects?.errors?.item;
 				const __apiErrorCode = __apiErrorObjects?.status;
 
-				console.log({
-					__apiErrorCode,
-					__apiErrors,
-				});
-
 				if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
 					setFieldValue('OTPApiErrorText', __apiErrors[0], false);
 					setFieldValue('isOTPApiError', true, false);
+				}
+
+				if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
+					presentZIonErrorAlert(__apiErrors[0]);
 				}
 			}
 
@@ -472,11 +580,10 @@ const ZConfirmOptTab: React.FC = () => {
 			<ZIonButton
 				expand='block'
 				fill='outline'
-				disabled={!isValid}
 				className='mt-4 ion-text-capitalize'
-				// onClick={async () => {
-				// 	await ZConfirmOTPHandler();
-				// }}
+				onClick={async () => {
+					await ZResendOTPHandler();
+				}}
 				testingSelector={
 					CONSTANTS.testingSelectors.setPasswordPage.resendOtpBtn
 				}
@@ -488,16 +595,140 @@ const ZConfirmOptTab: React.FC = () => {
 };
 
 const ZNewPasswordTab: React.FC = () => {
-	const { handleChange, handleBlur, setFieldValue, values, touched, errors } =
-		useFormikContext<{
-			emailAddress: string;
-			tab: ZSetPasswordTabEnum;
+	const {
+		handleChange,
+		handleBlur,
+		setFieldValue,
+		resetForm,
+		setErrors,
+		values,
+		touched,
+		errors,
+	} = useFormikContext<{
+		emailAddress: string;
+		tab: ZSetPasswordTabEnum;
+		inviteToken: string;
 
-			password: string;
-			canViewPassword: boolean;
-			confirmPassword: string;
-			canViewConfirmPassword: boolean;
-		}>();
+		password: string;
+		canViewPassword: boolean;
+		confirmPassword: string;
+		canViewConfirmPassword: boolean;
+	}>();
+
+	const { presentZIonErrorAlert } = useZIonErrorAlert();
+
+	// API
+	const { mutateAsync: zSetPasswordAsyncMutate } = useZRQUpdateRequest({
+		_url: API_URL_ENUM.set_password,
+		_showAlertOnError: false,
+		authenticated: false,
+		_loaderMessage: 'Setting password...',
+	});
+
+	const setUserAccountStateAtom = useSetRecoilState(
+		ZaionsUserAccountRStateAtom
+	);
+	const setAuthTokenDataState = useSetRecoilState(ZaionsAuthTokenData);
+
+	const { zNavigatePushRoute } = useZNavigate();
+
+	const ZSetPassword = async () => {
+		try {
+			if (values?.password && values?.password?.trim()?.length > 0) {
+				const __stringifyData = zStringify({
+					email: values.emailAddress,
+					password: values.password,
+					password_confirmation: values.confirmPassword,
+					inviteToken: values.inviteToken,
+				});
+
+				const __response = await zSetPasswordAsyncMutate({
+					requestData: __stringifyData,
+					itemIds: [],
+					urlDynamicParts: [],
+				});
+
+				if (__response) {
+					const __data = extractInnerData<{
+						user: UserAccountType;
+						token: AuthTokenResponseType;
+					}>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
+					console.log({
+						__data,
+						__response,
+					});
+					// Checking if the __data is available & if there is a user object in __data which have the id.
+					if (__data?.user?.id) {
+						// getting user data.
+						const userData = getUserDataObjectForm(__data.user);
+
+						// Storing user token at userAccountAuthToken State.
+						const userToken = {
+							token: __data?.token?.plainTextToken,
+						};
+
+						// Set user data && user token to localstorage.
+						if (userData && userToken.token) {
+							// store User token.
+							void STORAGE.SET(LOCALSTORAGE_KEYS.USERDATA, userData);
+							// store auth token.
+							void STORAGE.SET(LOCALSTORAGE_KEYS.AUTHTOKEN, userToken.token);
+
+							// Storing user data in userAccount Recoil State.
+							setUserAccountStateAtom((oldValues) => ({
+								...oldValues,
+								...userData,
+							}));
+							setAuthTokenDataState((oldValues) => ({
+								...oldValues,
+								...userToken,
+							}));
+
+							// reset form.
+							resetForm();
+
+							// If success then show the success notification.
+							showSuccessNotification('Registration Completed');
+
+							// Redirect to startup page
+							zNavigatePushRoute(ZaionsRoutes.AdminPanel.AppStartupPage);
+						} else {
+							// if there is any error in above then Throw Error..
+							throw new ZCustomError();
+						}
+					}
+				}
+			}
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				// if there any error then showing the alert modal.
+				// await presentZIonErrorAlert();
+
+				const __apiErrorObjects = error.response?.data as {
+					errors: { item: string[] } | ZGenericObject;
+					status: number;
+				};
+
+				const __apiErrors = __apiErrorObjects?.errors;
+				const __apiErrorCode = __apiErrorObjects?.status;
+
+				if (__apiErrorCode === ZErrorCodeEnum.serverError) {
+					const __errors = formatApiRequestErrorForFormikFormField(
+						['password', 'confirmPassword'],
+						['password', 'password_confirmation'],
+						__apiErrors as ZGenericObject
+					);
+
+					setErrors(__errors);
+				}
+
+				if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
+					presentZIonErrorAlert((__apiErrors as { item: string[] }).item[0]);
+				}
+			}
+			reportCustomError(error);
+		}
+	};
 
 	return (
 		<>
@@ -525,7 +756,7 @@ const ZNewPasswordTab: React.FC = () => {
 					slot='end'
 					fill='clear'
 					size='large'
-					className='ion-no-padding ion-no-margin  ms-3 w-max'
+					className='ion-no-padding ion-no-margin ms-3 w-max'
 					testingSelector={
 						CONSTANTS.testingSelectors.signupPage.canViewPasswordButton
 					}
@@ -653,6 +884,7 @@ const ZNewPasswordTab: React.FC = () => {
 				className='mt-4 ion-text-capitalize'
 				onClick={async () => {
 					// await ZConfirmOTPHandler();
+					await ZSetPassword();
 				}}
 				testingSelector={
 					CONSTANTS.testingSelectors.setPasswordPage.confirmOtpBtn

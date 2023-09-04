@@ -62,6 +62,10 @@ export enum ZNotificationEnum {
 }
 
 export enum ZTeamMemberInvitationEnum {
+	pending = 'pending',
+	active = 'active',
+	suspended = 'suspended',
+	blocked = 'blocked',
 	accepted = 'accepted',
 	rejected = 'rejected',
 }

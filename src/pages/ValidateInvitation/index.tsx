@@ -128,15 +128,18 @@ const ZValidateInvitationPage: React.FC = () => {
 					};
 				}>(_response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
-				console.log({
-					_data: _data?.user?.email,
-				});
-
 				if (_data && _data?.user?.email) {
 					setCompState((oldValues) => ({
 						...oldValues,
 						isProcessing: false,
 					}));
+
+					const inviteeData = {
+						email: _data?.user?.email,
+						token: _token,
+						signupType: _data?.user?.signupType,
+					};
+					void STORAGE.SET(LOCALSTORAGE_KEYS.INVITEE_USER_DATA, inviteeData);
 
 					if (_data?.user?.signupType === SignUpTypeEnum.normal) {
 						window.location.replace(ZaionsRoutes.LoginRoute);

@@ -116,6 +116,7 @@ export const API_URLS = {
 	userEmbedWidget_update_delete: '/user/embedded-scripts/:embeddedId',
 	send_otp: '/user/send-otp',
 	confirm_otp: '/user/confirm-otp',
+	set_password: '/user/set-password',
 
 	user_unread_notifications_list: `/user/notification/type/${RouteParams.user.notification.type}`,
 	user_notification_mark_as_read: `/user/notification/type/${RouteParams.user.notification.type}/markAsRead/${RouteParams.user.notification.id}`,
@@ -362,6 +363,7 @@ const DEFAULT_VALUES = {
 export const LOCALSTORAGE_KEYS = {
 	USERDATA: 'udhsaf38h_3g-23g-c',
 	AUTHTOKEN: 'cewiuh4ggb284ghg',
+	INVITEE_USER_DATA: 'zoirjf_hflmn-e',
 	ERROR_DATA: 'asdgcvbv_cbert-k',
 };
 

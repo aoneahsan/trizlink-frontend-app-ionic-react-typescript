@@ -143,7 +143,7 @@ export const useZIonErrorAlert = (): useZIonErrorAlertReturnType => {
 	);
 
 	try {
-		const presentZIonErrorAlert = async (): Promise<void> => {
+		const presentZIonErrorAlert = async (message?: string): Promise<void> => {
 			setAppWiseIonAlertState((oldValues) => ({
 				...oldValues,
 				showAlert: false,
@@ -158,7 +158,7 @@ export const useZIonErrorAlert = (): useZIonErrorAlertReturnType => {
 					alertProps: {
 						header: MESSAGES.GENERAL.FAILED,
 						subHeader: MESSAGES.GENERAL.FAILED_SUBHEADING,
-						message: MESSAGES.GENERAL.FAILED_MESSAGE,
+						message: message || MESSAGES.GENERAL.FAILED_MESSAGE,
 						animated: true,
 						keyboardClose: true,
 						buttons: [

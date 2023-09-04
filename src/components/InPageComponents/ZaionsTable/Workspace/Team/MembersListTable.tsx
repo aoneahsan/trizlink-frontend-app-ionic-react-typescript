@@ -73,6 +73,7 @@ import {
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
 import ZEmptyTable from '@/components/InPageComponents/ZEmptyTable';
+import { ZTeamMemberInvitationEnum } from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down
@@ -247,6 +248,24 @@ const ZInpageTable: React.FC = () => {
 		columnHelper.accessor((itemData) => itemData.accountStatus, {
 			header: 'Status',
 			id: ZWSMemberListPageTableColumnsIds.status,
+			cell: (row) => {
+				const value = row.getValue();
+				return (
+					<ZIonText
+						color={
+							value === ZTeamMemberInvitationEnum.pending
+								? 'warning'
+								: value === ZTeamMemberInvitationEnum.accepted
+								? 'success'
+								: value === ZTeamMemberInvitationEnum.rejected
+								? 'danger'
+								: 'dark'
+						}
+					>
+						{row.getValue()}
+					</ZIonText>
+				);
+			},
 			footer: 'Status',
 		}),
 

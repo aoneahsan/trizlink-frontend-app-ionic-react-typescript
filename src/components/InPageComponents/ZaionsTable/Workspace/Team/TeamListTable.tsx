@@ -289,6 +289,7 @@ const ZInpageTable: React.FC = () => {
 		debugTable: true,
 		debugHeaders: true,
 		debugColumns: true,
+		// filterFns: undefined,
 	});
 	// #endregion
 
@@ -464,7 +465,7 @@ const ZInpageTable: React.FC = () => {
 				</div>
 			</ZCustomScrollable>
 
-			<ZIonRow className='w-full px-2 pb-2 pt-1 ion-align-items-center mt-2 overflow-hidden border rounded-lg zaions__light_bg'>
+			<ZIonRow className='w-full px-2 pt-1 pb-2 mt-2 overflow-hidden border rounded-lg ion-align-items-center zaions__light_bg'>
 				<ZIonCol>
 					{/* previous buttons */}
 					<ZIonButton

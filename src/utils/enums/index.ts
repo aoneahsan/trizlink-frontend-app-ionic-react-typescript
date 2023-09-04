@@ -53,6 +53,7 @@ export enum API_URL_ENUM {
 	userEmbedWidget_update_delete = 'userEmbedWidget_update_delete',
 	send_otp = 'send_otp',
 	confirm_otp = 'confirm_otp',
+	set_password = 'set_password',
 	ws_roles_get = 'ws_roles_get',
 	LinkInBio_folders_create_list = 'LinkInBio_folders_create_list',
 	ws_team_member_invite_list = 'ws_team_member_invite_list',
