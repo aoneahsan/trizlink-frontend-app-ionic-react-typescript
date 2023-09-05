@@ -108,6 +108,17 @@ const ZWorkspaceListPage: React.FC = () => {
 			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
 		});
 
+	// Get workspaces data from backend.
+	const { data: WSShareData, isFetching: isWSShareDataFetching } =
+		useZRQGetRequest<workspaceInterface[]>({
+			_url: API_URL_ENUM.ws_share_list,
+			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN],
+		});
+
+	console.log({
+		WSShareData,
+	});
+
 	return (
 		<ZIonPage pageTitle='Zaions workspaces list page'>
 			<ZCan
@@ -183,9 +194,9 @@ const ZWorkspaceListPage: React.FC = () => {
 						</Suspense>
 
 						{/* cards row */}
-						<ZIonRow className='py-5 px-4'>
+						<ZIonRow className='px-4 py-5'>
 							<ZIonCol size='12' className='ps-3'>
-								<ZIonTitle className='ion-no-padding font-bold'>
+								<ZIonTitle className='font-bold ion-no-padding'>
 									Owned workspaces
 								</ZIonTitle>
 							</ZIonCol>
@@ -289,6 +300,40 @@ const ZWorkspaceListPage: React.FC = () => {
 							</ZCan>
 						</ZIonRow>
 						{/*  */}
+
+						<ZIonRow className='px-4 py-5'>
+							<ZIonCol size='12' className='ps-3'>
+								<ZIonTitle className='font-bold ion-no-padding'>
+									Shared workspaces
+								</ZIonTitle>
+							</ZIonCol>
+
+							{/* single card */}
+							<Suspense fallback={<ZWorkspacesCardSkeleton />}>
+								{!isWSShareDataFetching &&
+									WSShareData &&
+									WSShareData.map((el) => (
+										<ZIonCol
+											sizeXl='4'
+											sizeLg='6'
+											sizeMd='6'
+											sizeSm='6'
+											sizeXs='12'
+											key={el.id}
+										>
+											<ZWorkspacesCard
+												workspaceImage={el.workspaceImage}
+												workspaceName={el.workspaceName as string}
+												user={el.user}
+												id={el.id}
+												createdAt={el.createdAt}
+											/>
+										</ZIonCol>
+									))}
+							</Suspense>
+
+							{isWSShareDataFetching && <ZWorkspacesCardSkeleton />}
+						</ZIonRow>
 					</ZIonGrid>
 				</ZIonContent>
 			</ZCan>

@@ -576,12 +576,14 @@ const AdminPanelSidebarMenu: React.FC<{
 							className='normal-case'
 							onClick={() => {
 								zNavigatePushRoute(
-									replaceParams(
+									replaceRouteParams(
 										ZaionsRoutes.AdminPanel.Workspaces.View,
-										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-										workspaceId
+										[CONSTANTS.RouteParams.workspace.workspaceId],
+										[workspaceId]
 									)
 								);
+
+								// zNavigatePushRoute();
 							}}
 						>
 							Workspaces
@@ -610,10 +612,10 @@ const AdminPanelSidebarMenu: React.FC<{
 							className='normal-case'
 							onClick={() => {
 								zNavigatePushRoute(
-									replaceParams(
-										ZaionsRoutes.AdminPanel.ShortLinks.Main,
-										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-										'all'
+									replaceRouteParams(
+										ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
+										[CONSTANTS.RouteParams.workspace.workspaceId],
+										[workspaceId]
 									)
 								);
 							}}

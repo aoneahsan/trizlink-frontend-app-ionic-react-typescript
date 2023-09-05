@@ -65,17 +65,17 @@ export const ZSwiperContainer: React.FC<ZSwiperInterface> = ({
 }) => {
 	return (
 		<swiper-container
-			class={classNames(className, {
-				mySwiper: true,
-			})}
+			// class={classNames(className, {
+			// 	mySwiper: true,
+			// })}
 			slides-per-view={slidesPerView}
 			space-between={spaceBetween}
 			mousewheel-force-to-axis='true'
 			style={style}
 			onSwiper={onSwiper}
 			onSlideChange={onSlideChange}
-			navigation='true'
-			pagination='true'
+			// navigation='true'
+			// pagination='true'
 			// centered-slides={true}
 			// pagination={{
 			// 	hideOnClick: true,

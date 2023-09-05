@@ -176,6 +176,9 @@ export const API_URLS = {
 	workspace_team_create_list: `/user/workspace/${RouteParams.workspace.workspaceId}/teams`,
 	workspace_team_update_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}`,
 
+	// share workspace
+	ws_share_list: `/user/shared-ws`,
+
 	// Time slot
 	time_slot_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/time-slot`,
 	time_slot_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/time-slot/${RouteParams.timeSlot.timeSlotId}`,
@@ -1264,6 +1267,7 @@ const REACT_QUERY = {
 		},
 		WORKSPACE: {
 			MAIN: 'rq-workspace-list-key',
+			WS_SHARE_MAIN: 'rq-ws-share-list-key',
 			GET: 'rq-workspace-get-key',
 			TEAM: 'rq-workspace-team-list-key',
 			TEAM_GET: 'rq-workspace-team-get-key',
@@ -1348,7 +1352,7 @@ const SHORT_LINK = {
 export const ShortLinksTableColumns = [
 	{
 		id: ZShortLinkListPageTableColumnsIds.title,
-		name: ZShortLinkListPageTableColumnsEnum.title,
+		name: 'Title',
 		isVisible: true,
 	},
 	// {
@@ -1358,27 +1362,27 @@ export const ShortLinksTableColumns = [
 	// },
 	{
 		id: ZShortLinkListPageTableColumnsIds.date,
-		name: ZShortLinkListPageTableColumnsEnum.date,
+		name: 'Date',
 		isVisible: true,
 	},
 	{
 		id: ZShortLinkListPageTableColumnsIds.pixel,
-		name: ZShortLinkListPageTableColumnsEnum.pixels,
+		name: 'Pixel',
 		isVisible: true,
 	},
 	{
 		id: ZShortLinkListPageTableColumnsIds.notes,
-		name: ZShortLinkListPageTableColumnsEnum.notes,
+		name: 'Notes',
 		isVisible: true,
 	},
 	{
 		id: ZShortLinkListPageTableColumnsIds.url,
-		name: ZShortLinkListPageTableColumnsEnum.url,
+		name: 'URL',
 		isVisible: true,
 	},
 	{
 		id: ZShortLinkListPageTableColumnsIds.linkToShare,
-		name: ZShortLinkListPageTableColumnsEnum.linkToShare,
+		name: 'Link to share',
 		isVisible: true,
 	},
 ];

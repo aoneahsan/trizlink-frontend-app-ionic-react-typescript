@@ -115,6 +115,9 @@ export enum API_URL_ENUM {
 	workspace_team_create_list = 'workspace_team_create_list',
 	workspace_team_update_delete = 'workspace_team_update_delete',
 
+	// share workspace
+	ws_share_list = 'ws_share_list',
+
 	// Time slot
 	time_slot_create_list = 'time_slot_create_list',
 	time_slot_update_delete = 'time_slot_update_delete',

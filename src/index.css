@@ -430,6 +430,25 @@ span.new {
 	--width: 150px;
 }
 
+.short-link-tags-filter-modal-size {
+	--width: 300px;
+	--height: 300px;
+}
+
+.short-link-time-filter-modal-size {
+	--width: 21rem;
+	--height: 300px;
+}
+
+.short-link-time-filter-modal-size .popover-viewport {
+	overflow: hidden;
+}
+
+.short-link-tags-filter-modal-custom-range-size {
+	--width: 450px;
+	--height: 300px;
+}
+
 .zaions_user_info_popover_size,
 .workspace_form_permission_popover_size {
 	--width: 300px;
@@ -910,12 +929,12 @@ ion-modal.zaions__modal_w100 {
 	--box-shadow: 0 3px 6px #00000029;
 }
 
-.open-folder-menu-button {
+/* .open-folder-menu-button {
 	--padding-top: 27px;
 	--padding-bottom: 27px;
 	margin-top: 0;
 	margin-bottom: 17px;
-}
+} */
 
 /* Workspace */
 .zaions_comment_box {

@@ -45,6 +45,7 @@ import { API_URL_ENUM } from '@/utils/enums';
  * */
 import { workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Recoil State Imports go down
@@ -75,6 +76,8 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = ({
 	workspaceId,
 }) => {
+	const { isLgScale } = useZMediaQueryScale();
+
 	// #region popovers.
 	const { presentZIonPopover: presentZWorkspacesListPopover } = useZIonPopover(
 		ZWorkspacesListPopover
@@ -140,8 +143,14 @@ const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = ({
 					'w-[30px!important] h-[30px!important]': true,
 				})}
 			/>
-			<div className='w-[3rem] overflow-hidden line-clamp-1'>
-				<ZIonLabel>{currentWorkspaceData?.workspaceName}asdasassasa</ZIonLabel>
+			<div
+				className={classNames({
+					'overflow-hidden line-clamp-1': true,
+					'w-[3rem]': isLgScale,
+					'w-auto': !isLgScale,
+				})}
+			>
+				<ZIonLabel>{currentWorkspaceData?.workspaceName}</ZIonLabel>
 			</div>
 			<ZIonIcon
 				icon={caretDown}

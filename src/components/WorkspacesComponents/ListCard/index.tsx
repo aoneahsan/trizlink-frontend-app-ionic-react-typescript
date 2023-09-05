@@ -107,7 +107,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 					{/* Card header */}
 					<ZIonCardHeader>
 						<ZIonRow className='ion-align-items-center'>
-							<ZIonCol className='flex gap-3 ion-align-items-center'>
+							<ZIonCol size='8' className='flex gap-3 ion-align-items-center'>
 								<div
 									className={classNames({
 										'w-[50px] h-[50px] rounded overflow-hidden': true,
