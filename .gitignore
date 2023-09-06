@@ -49,3 +49,5 @@ vendor
 **/vendor/**/*
 
 .env
+
+electron
