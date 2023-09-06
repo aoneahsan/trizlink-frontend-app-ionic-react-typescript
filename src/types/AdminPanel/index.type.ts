@@ -91,6 +91,9 @@ export interface IZNotification {
 	id?: string;
 	ZLInviteeId?: string;
 	zlNotificationType?: ZNotificationEnum;
+	read_at?: string | null;
+	createdAt?: string;
+	updatedAt?: string;
 	data: {
 		item: {
 			userId: string;

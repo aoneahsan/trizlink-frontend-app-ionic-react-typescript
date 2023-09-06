@@ -1031,6 +1031,7 @@ const testingSelectors = {
 
 	// #region top bar
 	topBar: {
+		goToWorkspacesBtn: 'tb-go-to-workspaces-btn',
 		workspaceSwitcherBtn: 'tb-ws-btn', // top-bar-workspace-switcher-btn.
 		workspaceSwitcherPopover: {
 			singleWorkspace: 'tb-wsp-single-workspace', // top-bar-workspace-switcher-popover-...
@@ -1060,6 +1061,7 @@ const testingSelectors = {
 			},
 			markAllAsReadBtn: 'tb-np-masr-btn',
 			settingsBtn: 'tb-np-settings-btn',
+			refetchBtn: 'tb-np-refetch-btn',
 
 			singleNotification: 'tb-np-single-notification',
 			notificationUpdateTabText: 'tb-np-updates-message-text',

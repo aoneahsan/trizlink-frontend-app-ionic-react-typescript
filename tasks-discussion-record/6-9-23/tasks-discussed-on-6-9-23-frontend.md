@@ -1,7 +1,7 @@
 # Hot Issues
 
 - workspace edit page 404 error
-- no way of going back to workspaces page once we click on view workspace (no button in UI for user)
+- no way of going back to workspaces page once we click on view workspace (no button in UI for user) (done)
 
 - ERROR: Warning: React does not recognize the `testingListSelector` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `testinglistselector` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
 
@@ -11,12 +11,12 @@
 
   - created a team in a new workspace and got this (some other random cases)
 
-- Notifications modal
+- Notifications modal (done)
 
-  - move updates to first tab
-    - show empty component when there are no notifications
+  - move updates to first tab (done)
+    - show empty component when there are no notifications (done)
     - add a refresh button next to "mark all as read" button to refetch the notifications data
-      - "mark all as read" button should be disabled is there are no notifications or no notification to mark as read
+      - "mark all as read" button should be disabled is there are no notifications or no notification to mark as read (done)
 
 - invite member modal
 

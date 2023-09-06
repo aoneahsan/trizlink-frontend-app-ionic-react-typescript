@@ -229,6 +229,17 @@ const ZADTopBarColOne: React.FC<{ workspaceId?: string }> = ({
 			sizeXs='12'
 			className='flex h-full ion-align-items-center'
 		>
+			{!isWorkspaceListPage ? (
+				<ZIonButton
+					color='secondary'
+					// height='2.3rem'
+					className='normal-case ion-no-margin me-2'
+					testingselector={CONSTANTS.testingSelectors.topBar.goToWorkspacesBtn}
+					routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}
+				>
+					Go to workspaces
+				</ZIonButton>
+			) : null}
 			{isWorkspaceListPage ? (
 				<ZCreateWorkspaceBtn />
 			) : (

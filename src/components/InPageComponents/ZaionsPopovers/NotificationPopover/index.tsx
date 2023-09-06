@@ -24,15 +24,26 @@ import {
 	ZNotificationEnum,
 	ZTeamMemberInvitationEnum,
 } from '@/types/AdminPanel/index.type';
+import { zNotificationSlotEnum } from '@/types/CustomHooks/zgeneric-hooks.type';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
-import { API_URL_ENUM } from '@/utils/enums';
-import { zStringify } from '@/utils/helpers';
+import {
+	API_URL_ENUM,
+	extractInnerDataOptionsEnum,
+	notificationTypeEnum,
+} from '@/utils/enums';
+import { extractInnerData, zStringify } from '@/utils/helpers';
+import { showSuccessNotification } from '@/utils/notification';
+import { useZNotification } from '@/ZaionsHooks/ZGenericHooks';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import {
+	useZInvalidateReactQueries,
 	useZRQGetRequest,
 	useZRQUpdateRequest,
+	useZUpdateRQCacheData,
 } from '@/ZaionsHooks/zreactquery-hooks';
+import classNames from 'classnames';
 import { Formik } from 'formik';
 import {
 	checkmarkOutline,
@@ -41,6 +52,7 @@ import {
 	listCircleOutline,
 	logoFacebook,
 	personAdd,
+	refreshOutline,
 	settingsOutline,
 } from 'ionicons/icons';
 import React, { useState } from 'react';
@@ -105,10 +117,32 @@ const ZNotificationPopover: React.FC<{
 	dismissZIonPopover: (data?: string, role?: string | undefined) => void;
 	workspaceId: string;
 }> = ({ dismissZIonPopover, workspaceId }) => {
+	const { zInvalidateReactQueries } = useZInvalidateReactQueries();
+	const { presentZNotification } = useZNotification();
+	const {
+		data: userInvitationNotificationsData,
+		refetch: refetchNotifications,
+	} = useZRQGetRequest<IZNotification[]>({
+		_url: API_URL_ENUM.user_unread_notifications_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION.MAIN,
+			workspaceId,
+		],
+		_showLoader: false,
+		_checkPermissions: false,
+		_itemsIds: [ZNotificationEnum.wsTeamMemberInvitation],
+		_urlDynamicParts: [CONSTANTS.RouteParams.user.notification.type],
+	});
+
+	const { mutateAsync: markAllAsReadAsyncMutate } = useZRQUpdateRequest({
+		_url: API_URL_ENUM.user_notification_mark_all_as_read,
+		_showLoader: false,
+	});
+
 	return (
 		<Formik
 			initialValues={{
-				tab: ZNotificationPopoverTabsEnum.approvals,
+				tab: ZNotificationPopoverTabsEnum.updates,
 			}}
 			onSubmit={() => {}}
 		>
@@ -122,9 +156,33 @@ const ZNotificationPopover: React.FC<{
 								{/* Col-1 Segment  */}
 								<ZIonCol className='ion-no-padding' size='7'>
 									<ZIonSegment
+										className='ion-justify-content-start'
 										value={values.tab}
-										style={{ gridAutoColumns: '1fr' }}
+										style={{ gridAutoColumns: 'max-content' }}
 									>
+										{/* Updates */}
+										<ZIonSegmentButton
+											className='normal-case w-max min-w-[80px]'
+											value={ZNotificationPopoverTabsEnum.updates}
+											testingselector={
+												CONSTANTS.testingSelectors.topBar.notificationPopover
+													.tabs.updates
+											}
+											onClick={() => {
+												setFieldValue(
+													'tab',
+													ZNotificationPopoverTabsEnum.updates,
+													false
+												);
+											}}
+											style={{
+												'--padding-end': '5px',
+												'--padding-start': '5px',
+											}}
+										>
+											<ZIonLabel className='text-sm'>Updates</ZIonLabel>
+										</ZIonSegmentButton>
+
 										{/* Approval requests */}
 										<ZIonSegmentButton
 											className='normal-case w-max'
@@ -149,34 +207,40 @@ const ZNotificationPopover: React.FC<{
 												Approval requests
 											</ZIonLabel>
 										</ZIonSegmentButton>
-
-										{/* Updates */}
-										<ZIonSegmentButton
-											className='normal-case w-max min-w-[80px]'
-											value={ZNotificationPopoverTabsEnum.updates}
-											testingselector={
-												CONSTANTS.testingSelectors.topBar.notificationPopover
-													.tabs.updates
-											}
-											onClick={() => {
-												setFieldValue(
-													'tab',
-													ZNotificationPopoverTabsEnum.updates,
-													false
-												);
-											}}
-											style={{
-												'--padding-end': '5px',
-												'--padding-start': '5px',
-											}}
-										>
-											<ZIonLabel className='text-sm'>Updates</ZIonLabel>
-										</ZIonSegmentButton>
 									</ZIonSegment>
 								</ZIonCol>
 
 								{/* Col-2 */}
 								<ZIonCol className='flex gap-2 ion-no-padding ion-align-items-center ion-justify-content-end me-2'>
+									{/* Settings btn */}
+									{values.tab === ZNotificationPopoverTabsEnum.updates ? (
+										<ZIonButton
+											fill='clear'
+											size='small'
+											color='medium'
+											className='ion-no-margin ion-no-padding'
+											id='z-wnp-refresh-btn'
+											onClick={async () => {
+												await zInvalidateReactQueries([
+													CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION
+														.MAIN,
+													workspaceId,
+												]);
+											}}
+											testingselector={
+												CONSTANTS.testingSelectors.topBar.notificationPopover
+													.refetchBtn
+											}
+										>
+											<ZIonIcon icon={refreshOutline} className='w-5 h-5' />
+										</ZIonButton>
+									) : null}
+									<ZRTooltip
+										anchorSelect='#z-wnp-refresh-btn'
+										place='bottom'
+										content='Refetch notification'
+									/>
+
 									{/* Mark all as read btn */}
 									{values.tab === ZNotificationPopoverTabsEnum.updates ? (
 										<ZIonButton
@@ -189,6 +253,56 @@ const ZNotificationPopover: React.FC<{
 												CONSTANTS.testingSelectors.topBar.notificationPopover
 													.markAllAsReadBtn
 											}
+											disabled={
+												userInvitationNotificationsData &&
+												userInvitationNotificationsData?.filter(
+													(el) => el.read_at === null
+												)?.length > 0
+													? false
+													: true
+											}
+											onClick={async () => {
+												if (
+													userInvitationNotificationsData &&
+													userInvitationNotificationsData?.filter(
+														(el) => el.read_at === null
+													)?.length > 0
+												) {
+													const _response = await markAllAsReadAsyncMutate({
+														requestData: '',
+														itemIds: [ZNotificationEnum.wsTeamMemberInvitation],
+														urlDynamicParts: [
+															CONSTANTS.RouteParams.user.notification.type,
+														],
+													});
+
+													if (_response) {
+														const _data = extractInnerData<{
+															success: boolean;
+														}>(
+															_response,
+															extractInnerDataOptionsEnum.createRequestResponseItem
+														);
+
+														if (_data?.success) {
+															// const _allNotification;
+
+															await zInvalidateReactQueries([
+																CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER
+																	.NOTIFICATION.MAIN,
+																workspaceId,
+															]);
+
+															presentZNotification({
+																message:
+																	'Successfully marked all notification as read',
+																notificationType: notificationTypeEnum.toast,
+																slot: zNotificationSlotEnum.success,
+															});
+														}
+													}
+												}
+											}}
 										>
 											<ZIonIcon icon={listCircleOutline} className='w-6 h-6' />
 										</ZIonButton>
@@ -224,7 +338,7 @@ const ZNotificationPopover: React.FC<{
 
 						{/* Content */}
 						<ZIonContent className='h-full'>
-							<ZIonGrid className='h-full'>
+							<ZIonGrid className='h-full px-0'>
 								{values.tab === ZNotificationPopoverTabsEnum.approvals ? (
 									<ZApprovalsTab />
 								) : values.tab === ZNotificationPopoverTabsEnum.updates ? (
@@ -271,6 +385,9 @@ const ZUpdatesTab: React.FC<{
 		memberInviteId?: string;
 	}>();
 	// #endregion
+	const { presentZNotification } = useZNotification();
+
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
 	// #region APIS.
 	const {
@@ -312,7 +429,7 @@ const ZUpdatesTab: React.FC<{
 	}) => {
 		try {
 			if (notificationId) {
-				await markAsReadAsyncMutate({
+				const _response = await markAsReadAsyncMutate({
 					requestData: '',
 					itemIds: [ZNotificationEnum.wsTeamMemberInvitation, notificationId],
 					urlDynamicParts: [
@@ -320,6 +437,36 @@ const ZUpdatesTab: React.FC<{
 						CONSTANTS.RouteParams.user.notification.id,
 					],
 				});
+
+				if (_response) {
+					const _data = extractInnerData<IZNotification>(
+						_response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					console.log({ _data });
+					if (_data?.id) {
+						// 	await zInvalidateReactQueries([
+						// 		CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION.MAIN,
+						// 		workspaceId,
+						// 	]);
+						await updateRQCDataHandler({
+							key: [
+								CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION.MAIN,
+								workspaceId,
+							],
+							id: _data?.id,
+							data: _data,
+							extractType: ZRQGetRequestExtractEnum.extractItems,
+						});
+
+						presentZNotification({
+							message: 'Successfully marked notification as read',
+							notificationType: notificationTypeEnum.toast,
+							slot: zNotificationSlotEnum.success,
+						});
+					}
+				}
 			}
 		} catch (error) {
 			reportCustomError(error);
@@ -335,13 +482,24 @@ const ZUpdatesTab: React.FC<{
 		<ZCustomScrollable className='h-full pb-10 mb-2' scrollY={true}>
 			{userInvitationNotificationsData?.map((el, index) => (
 				<ZIonRow
-					className='pb-2 border-b cursor-pointer'
 					key={index}
+					className={classNames({
+						'pb-2 border-b cursor-pointer px-1': true,
+						zaions__bg_light_opacity_point7: el?.read_at !== null,
+						zaions__bg_white: el?.read_at === null,
+					})}
 					testingselector={
 						CONSTANTS.testingSelectors.topBar.notificationPopover
 							.singleNotification
 					}
 					testingListSelector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.singleNotification}-${el?.id}`}
+					onClick={() => {
+						if (el?.read_at === null) {
+							void zMarkAsReadHandler({
+								notificationId: el?.id,
+							});
+						}
+					}}
 				>
 					{/*  */}
 					<ZIonCol size='1.5'>
@@ -360,8 +518,11 @@ const ZUpdatesTab: React.FC<{
 							<div className='w-[73%]'>
 								<div className='overflow-hidden leading-none line-clamp-2'>
 									<ZIonText
-										className='text-sm'
-										color='medium'
+										className={classNames({
+											'text-sm ion-color': true,
+											'ion-color-dark font-semibold': el?.read_at === null,
+											'ion-color-medium ': el?.read_at !== null,
+										})}
 										testingselector={
 											CONSTANTS.testingSelectors.topBar.notificationPopover
 												.notificationUpdateTabText
@@ -415,7 +576,7 @@ const ZUpdatesTab: React.FC<{
 									}
 									testingListSelector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.dateText}-${el?.id}`}
 								>
-									3 mouth
+									{el.createdAt}
 								</ZIonText>
 							</div>
 						</div>
@@ -449,6 +610,23 @@ const ZUpdatesTab: React.FC<{
 					</ZIonCol>
 				</ZIonRow>
 			))}
+
+			{userInvitationNotificationsData &&
+			userInvitationNotificationsData?.length === 0 ? (
+				<div className='flex flex-col w-full gap-2 py-7 ion-align-items-center ion-justify-content-center'>
+					<ZIonIcon
+						icon={fileTrayStackedOutline}
+						color='medium'
+						className='w-8 h-8'
+					/>
+
+					<ZIonText color='medium'>
+						There are currently no notifications.
+					</ZIonText>
+				</div>
+			) : (
+				[]
+			)}
 		</ZCustomScrollable>
 	);
 };

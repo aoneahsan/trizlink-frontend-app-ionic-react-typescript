@@ -115,8 +115,9 @@ const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = ({
 
 	return (
 		<ZIonButton
-			fill='clear'
-			color='dark'
+			fill='outline'
+			color='tertiary'
+			height='2.4rem'
 			size={false ? 'small' : 'default'}
 			testingselector={CONSTANTS.testingSelectors.topBar.workspaceSwitcherBtn}
 			onClick={(event: unknown) => {
@@ -127,10 +128,15 @@ const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = ({
 				});
 			}}
 			className={classNames({
-				'ion-text-capitalize my-0 ': true,
+				'ion-text-capitalize my-0 ion-no-margin zaions__bg_white mt-[2px]':
+					true,
 				'me-2 ms-2': false,
 				'me-0 ms-1 ion-no-padding': false,
 			})}
+			style={{
+				'--border-width': '1px',
+				// border: '1px solid',
+			}}
 		>
 			<ZUserAvatarButton
 				userAvatar={currentWorkspaceData?.workspaceImage}
@@ -145,7 +151,7 @@ const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = ({
 			/>
 			<div
 				className={classNames({
-					'overflow-hidden line-clamp-1': true,
+					'overflow-hidden line-clamp-1 ion-text-start': true,
 					'w-[3rem]': isLgScale,
 					'w-auto': !isLgScale,
 				})}

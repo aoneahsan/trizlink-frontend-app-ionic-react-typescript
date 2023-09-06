@@ -28,11 +28,13 @@ import {
 	ZIonBadge,
 	ZIonButton,
 	ZIonCol,
+	ZIonGrid,
 	ZIonIcon,
 	ZIonImg,
 	ZIonInput,
 	ZIonRow,
 	ZIonText,
+	ZIonTitle,
 } from '@/components/ZIonComponents';
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
@@ -248,52 +250,72 @@ const ZInviteTab: React.FC<{
 			}) => {
 				return (
 					<>
-						<ZIonRow
+						<ZIonGrid
 							className={classNames({
-								'mt-3': true,
+								'mt-1': true,
 								'px-3': isLgScale,
 								'px-1': !isLgScale,
 							})}
 						>
-							{/* Avatar */}
-							<ZIonCol size='max-content'>
-								<ZIonAvatar className='w-[2.3rem] h-[2.3rem] mt-1'>
-									<ZIonImg src={ProductLogo} />
-								</ZIonAvatar>
-							</ZIonCol>
+							<ZIonRow className='mb-1'>
+								<ZIonCol>
+									<ZIonTitle
+										className={classNames({
+											'block font-normal ion-no-padding': true,
+										})}
+									>
+										<ZIonText
+											className={classNames({
+												'text-lg': isLgScale,
+												'text-sm': !isLgScale,
+											})}
+										>
+											Assign role:
+										</ZIonText>
+										<ZIonText
+											className={classNames({
+												'ms-2': true,
+												'text-xl': isLgScale,
+												'text-lg': !isLgScale,
+											})}
+										>
+											{values.role}
+										</ZIonText>
+									</ZIonTitle>
+								</ZIonCol>
+							</ZIonRow>
 
 							{/* Fields */}
-							<ZIonCol>
-								<ZIonRow>
-									{/* Email fields */}
-									<ZIonCol
-										sizeXl='6'
-										size='6'
-										sizeMd='12'
-										sizeSm='12'
-										sizeXs='12'
-									>
-										<ZIonInput
-											name='email'
-											aria-label='type email'
-											// labelPlacement='floating'
-											// errorText={errors.pageName}
-											placeholder='Type email'
-											type='email'
-											minHeight='2.3rem'
-											onIonChange={handleChange}
-											onIonBlur={handleBlur}
-											value={values.email}
-											errorText={touched.email ? errors.email : undefined}
-											className={classNames({
-												'ion-touched': touched.email,
-												'ion-invalid': touched.email && errors.email,
-												'ion-valid': touched.email && !errors.email,
-											})}
-										/>
-									</ZIonCol>
+							<ZIonRow>
+								{/* Email fields */}
+								<ZIonCol
+									sizeXl='6'
+									size='6'
+									sizeMd='12'
+									sizeSm='12'
+									sizeXs='12'
+								>
+									<ZIonInput
+										name='email'
+										aria-label='type email'
+										// labelPlacement='floating'
+										// errorText={errors.pageName}
+										placeholder='Type email'
+										type='email'
+										minHeight='2.3rem'
+										onIonChange={handleChange}
+										onIonBlur={handleBlur}
+										value={values.email}
+										errorText={touched.email ? errors.email : undefined}
+										className={classNames({
+											'ion-touched': touched.email,
+											'ion-invalid': touched.email && errors.email,
+											'ion-valid': touched.email && !errors.email,
+										})}
+									/>
+								</ZIonCol>
 
-									{/* <ZIonCol
+								{/* <ZIonCol
 										sizeXl='6'
 										size='6'
 										sizeMd='12'
@@ -322,125 +344,119 @@ const ZInviteTab: React.FC<{
 										/>
 									</ZIonCol> */}
 
-									{/* role fields */}
-									<ZIonCol
-										sizeXl='6'
-										size='6'
-										sizeMd='12'
-										sizeSm='12'
-										sizeXs='12'
+								{/* role fields */}
+								<ZIonCol
+									sizeXl='6'
+									size='6'
+									sizeMd='12'
+									sizeSm='12'
+									sizeXs='12'
+								>
+									<ZIonButton
+										fill='outline'
+										size='small'
+										color='medium'
+										height='2.3rem'
+										className={classNames({
+											'm-0 flex h-full normal-case ion-align-items-start': true,
+										})}
+										style={{
+											'--border-width': '1px',
+										}}
+										onClick={(event: unknown) => {
+											presentZWorkspaceFormRoleSelectorPopover({
+												_event: event as Event,
+												_cssClass: 'workspace_form_role_popover_size',
+												_dismissOnSelect: false,
+												_onDidDismiss: ({ detail }) => {
+													if (detail.data) {
+														setCompState((oldValues) => ({
+															...oldValues,
+															_role: detail.data as workspaceFormRoleEnum,
+														}));
+														setFieldValue(
+															'role',
+															workspaceFormRoleEnum[
+																detail.data as workspaceFormRoleEnum
+															] !== undefined
+																? workspaceFormRoleEnum[
+																		detail.data as workspaceFormRoleEnum
+																  ]
+																: values.role,
+															false
+														);
+													}
+												},
+											});
+										}}
 									>
-										<ZIonButton
-											fill='outline'
-											size='small'
-											color='medium'
-											height='2.3rem'
-											className={classNames({
-												'm-0 flex h-full normal-case ion-align-items-start':
-													true,
-											})}
-											style={{
-												'--border-width': '1px',
-											}}
-											onClick={(event: unknown) => {
-												presentZWorkspaceFormRoleSelectorPopover({
-													_event: event as Event,
-													_cssClass: 'workspace_form_role_popover_size',
-													_dismissOnSelect: false,
-													_onDidDismiss: ({ detail }) => {
-														if (detail.data) {
-															setCompState((oldValues) => ({
-																...oldValues,
-																_role: detail.data as workspaceFormRoleEnum,
-															}));
-															setFieldValue(
-																'role',
-																workspaceFormRoleEnum[
-																	detail.data as workspaceFormRoleEnum
-																] !== undefined
-																	? workspaceFormRoleEnum[
-																			detail.data as workspaceFormRoleEnum
-																	  ]
-																	: values.role,
-																false
-															);
-														}
-													},
-												});
-											}}
-										>
-											<ZIonText className='flex me-auto'>
-												{values.role}
-											</ZIonText>
-											<ZIonIcon
-												icon={chevronDownOutline}
-												className='flex ms-auto'
-											/>
-										</ZIonButton>
-									</ZIonCol>
-								</ZIonRow>
+										<ZIonText className='flex me-auto'>{values.role}</ZIonText>
+										<ZIonIcon
+											icon={chevronDownOutline}
+											className='flex ms-auto'
+										/>
+									</ZIonButton>
+								</ZIonCol>
+							</ZIonRow>
 
-								<ZIonRow className='pt-2'>
-									{/* Send invite btn */}
-									<ZIonCol
-										sizeXl='6'
-										size='6'
-										sizeMd='12'
-										sizeSm='12'
-										sizeXs='12'
+							<ZIonRow className='pt-2'>
+								{/* Send invite btn */}
+								<ZIonCol
+									sizeXl='6'
+									size='6'
+									sizeMd='12'
+									sizeSm='12'
+									sizeXs='12'
+								>
+									<ZIonButton
+										size='small'
+										color='primary'
+										fill='solid'
+										id='role-popover-index'
+										height='2.3rem'
+										disabled={!isValid}
+										onClick={() => {
+											void submitForm();
+										}}
+										className={classNames({
+											'm-0 flex h-full normal-case ion-align-items-start': true,
+										})}
+										style={{
+											'--border-width': '1px',
+										}}
 									>
-										<ZIonButton
-											size='small'
-											color='primary'
-											fill='solid'
-											id='role-popover-index'
-											height='2.3rem'
-											disabled={!isValid}
-											onClick={() => {
-												void submitForm();
-											}}
-											className={classNames({
-												'm-0 flex h-full normal-case ion-align-items-start':
-													true,
-											})}
-											style={{
-												'--border-width': '1px',
-											}}
-										>
-											<ZIonIcon icon={sendOutline} className='me-2' />
-											Send invite
-										</ZIonButton>
-									</ZIonCol>
+										<ZIonIcon icon={sendOutline} className='me-2' />
+										Send invite
+									</ZIonButton>
+								</ZIonCol>
 
-									{/* Create invite link btn */}
-									<ZIonCol
-										sizeXl='6'
-										size='6'
-										sizeMd='12'
-										sizeSm='12'
-										sizeXs='12'
+								{/* Create invite link btn */}
+								<ZIonCol
+									sizeXl='6'
+									size='6'
+									sizeMd='12'
+									sizeSm='12'
+									sizeXs='12'
+								>
+									<ZIonButton
+										fill='outline'
+										id='role-popover-index'
+										size='small'
+										color='medium'
+										height='2.3rem'
+										className={classNames({
+											'm-0 flex h-full normal-case ion-align-items-start': true,
+										})}
+										style={{
+											'--border-width': '1px',
+										}}
 									>
-										<ZIonButton
-											fill='outline'
-											id='role-popover-index'
-											size='small'
-											color='medium'
-											height='2.3rem'
-											className={classNames({
-												'm-0 flex h-full normal-case ion-align-items-start':
-													true,
-											})}
-											style={{
-												'--border-width': '1px',
-											}}
-										>
-											<ZIonIcon icon={linkOutline} className='me-2' />
-											Create invite link
-										</ZIonButton>
-									</ZIonCol>
-								</ZIonRow>
-							</ZIonCol>
-						</ZIonRow>
+										<ZIonIcon icon={linkOutline} className='me-2' />
+										Create invite link
+									</ZIonButton>
+								</ZIonCol>
+							</ZIonRow>
+						</ZIonGrid>
 
 						<ZIonRow
 							className={classNames({
