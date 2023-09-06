@@ -57,7 +57,7 @@ type ZIonTextareaType = {
 		[key: string]: unknown;
 	};
 
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	// Ionic 7
 	label?: string;
@@ -77,10 +77,10 @@ const ZIonTextarea = (props: ZIonTextareaType) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

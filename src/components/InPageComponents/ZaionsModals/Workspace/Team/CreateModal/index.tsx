@@ -192,7 +192,7 @@ const ZWSTeamCreateModal: React.FC<{
 					onClick={() => {
 						dismissZIonModal();
 					}}
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.WSSettings.createModal.closeButton
 					}
 				/>
@@ -269,7 +269,7 @@ const ZWSTeamCreateModal: React.FC<{
 										onIonBlur={handleBlur}
 										value={values.title}
 										errorText={touched.title ? errors.title : undefined}
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.WSSettings.createModal
 												.titleInput
 										}
@@ -306,7 +306,7 @@ const ZWSTeamCreateModal: React.FC<{
 												touched.description &&
 												errors.description?.trim()?.length === 0,
 										})}
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.WSSettings.createModal
 												.descriptionTextarea
 										}
@@ -320,7 +320,7 @@ const ZWSTeamCreateModal: React.FC<{
 										className='mt-4 '
 										onClick={() => void submitForm()}
 										disabled={!isValid}
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.WSSettings.createModal
 												.submitFormBtn
 										}

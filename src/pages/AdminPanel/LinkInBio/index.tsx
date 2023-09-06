@@ -570,7 +570,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 																	color='primary'
 																	height='39px'
 																	expand={!isSmScale ? 'block' : undefined}
-																	testingSelector={
+																	testingselector={
 																		CONSTANTS.testingSelectors.linkInBio
 																			.listPage.exportDataBtn
 																	}
@@ -586,7 +586,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 																	color='primary'
 																	expand={!isSmScale ? 'block' : undefined}
 																	height='39px'
-																	testingSelector={
+																	testingselector={
 																		CONSTANTS.testingSelectors.linkInBio
 																			.listPage.bulkImportBtn
 																	}
@@ -607,7 +607,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 																		fill='solid'
 																		height='39px'
 																		expand={!isSmScale ? 'block' : undefined}
-																		testingSelector={
+																		testingselector={
 																			CONSTANTS.testingSelectors.linkInBio
 																				.listPage.createBtn
 																		}
@@ -666,7 +666,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 																		fill='outline'
 																		color='primary'
 																		height='39px'
-																		testingSelector={
+																		testingselector={
 																			CONSTANTS.testingSelectors.linkInBio
 																				.listPage.timeFilterBtn
 																		}
@@ -726,7 +726,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 																		color='primary'
 																		height='39px'
 																		expand={!isMdScale ? 'block' : undefined}
-																		testingSelector={
+																		testingselector={
 																			CONSTANTS.testingSelectors.linkInBio
 																				.listPage.tagsFilterBtn
 																		}
@@ -785,7 +785,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 																		fill='outline'
 																		height='39px'
 																		expand={!isMdScale ? 'block' : undefined}
-																		testingSelector={
+																		testingselector={
 																			CONSTANTS.testingSelectors.linkInBio
 																				.listPage.refetchBtn
 																		}
@@ -1287,7 +1287,7 @@ const SearchQueryInputComponent = () => {
 						counter={false}
 						className='zaions__bg_white'
 						minHeight='40px'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.linkInBio.listPage.searchInput
 						}
 						style={{
@@ -1299,7 +1299,7 @@ const SearchQueryInputComponent = () => {
 						onClick={() => void submitForm()}
 						slot='end'
 						className='ion-no-margin ion-text-capitalize'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.linkInBio.listPage.searchBtn
 						}
 						style={{

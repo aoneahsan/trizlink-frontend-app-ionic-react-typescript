@@ -28,6 +28,7 @@ export const ShortLinksFilterOptionsRStateAtom =
 				endAt: new Date().toISOString(),
 			},
 			tags: [],
+			domains: [],
 			folderId: 'all',
 		},
 	});

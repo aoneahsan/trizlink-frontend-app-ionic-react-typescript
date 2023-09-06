@@ -21,7 +21,7 @@ const ZWorkspaceApprovalToggler: React.FC<{
 	className?: string;
 	onChange?: SwitchChangeEventHandler;
 	checked?: boolean;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 }> = ({
 	className,
@@ -31,7 +31,7 @@ const ZWorkspaceApprovalToggler: React.FC<{
 	checked,
 	workspaceId,
 	testingListSelector,
-	testingSelector,
+	testingselector,
 }) => {
 	return (
 		<ZIonRow
@@ -47,7 +47,7 @@ const ZWorkspaceApprovalToggler: React.FC<{
 			<ZIonCol className='ion-text-end'>
 				<ZRCSwitch
 					onChange={onChange}
-					testingSelector={testingSelector}
+					testingselector={testingselector}
 					testingListSelector={testingListSelector}
 					checked={checked}
 				/>

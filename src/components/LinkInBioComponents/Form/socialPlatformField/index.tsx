@@ -172,7 +172,7 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
 													color={_index > -1 ? 'secondary' : 'light'}
 													icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
 													testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.socialPlatform.block}-${el.type}`}
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.linkInBio.formPage.design
 															.blockForm.fields.socialPlatform.block
 													}
@@ -192,7 +192,7 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
 							<ZIonButton
 								expand='block'
 								className='ion-text-capitalize'
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm
 										.fields.socialPlatform.addBlockBtn
 								}
@@ -224,7 +224,7 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
 													lines='none'
 													className='py-3 my-4 border zaions-linkInBio-block'
 													testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.socialPlatform.cardItem}-${_index}`}
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.linkInBio.formPage.design
 															.blockForm.fields.socialPlatform.cardItem
 													}
@@ -245,7 +245,7 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
 															onIonBlur={handleBlur}
 															name={`cardItems.${_index}.target.url`}
 															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.socialPlatform.linkInput}-${_index}`}
-															testingSelector={
+															testingselector={
 																CONSTANTS.testingSelectors.linkInBio.formPage
 																	.design.blockForm.fields.socialPlatform
 																	.linkInput
@@ -269,7 +269,7 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
 																onIonBlur={handleBlur}
 																name={`cardItems.${_index}.icon`}
 																testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.socialPlatform.iconInput}-${_index}`}
-																testingSelector={
+																testingselector={
 																	CONSTANTS.testingSelectors.linkInBio.formPage
 																		.design.blockForm.fields.socialPlatform
 																		.iconInput
@@ -288,7 +288,7 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
 														iconColor='danger'
 														className='ion-no-padding me-1'
 														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.socialPlatform.deleteBtn}-${_index}`}
-														testingSelector={
+														testingselector={
 															CONSTANTS.testingSelectors.linkInBio.formPage
 																.design.blockForm.fields.socialPlatform
 																.deleteBtn

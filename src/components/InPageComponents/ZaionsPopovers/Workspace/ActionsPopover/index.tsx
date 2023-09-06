@@ -243,7 +243,7 @@ const ZWorkspacesActionPopover: React.FC<{
 				<ZIonItem
 					minHeight='2.3rem'
 					className='ion-activatable ion-focusable cursor-pointer'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.workspace.actionsPopover.manageUsers
 					}
 					onClick={() => {
@@ -262,7 +262,7 @@ const ZWorkspacesActionPopover: React.FC<{
 				<ZIonItem
 					minHeight='2.3rem'
 					className='ion-activatable ion-focusable cursor-pointer '
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.workspace.actionsPopover
 							.configureTimetable
 					}
@@ -290,7 +290,7 @@ const ZWorkspacesActionPopover: React.FC<{
 				<ZIonItem
 					className='ion-activatable ion-focusable cursor-pointer'
 					minHeight='2.3rem'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.workspace.actionsPopover.manageLabels
 					}
 					onClick={() => {
@@ -334,7 +334,7 @@ const ZWorkspacesActionPopover: React.FC<{
 				<ZIonItem
 					minHeight='2.3rem'
 					className='ion-activatable ion-focusable cursor-pointer'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.workspace.actionsPopover.settings
 					}
 					onClick={() => {
@@ -358,7 +358,7 @@ const ZWorkspacesActionPopover: React.FC<{
 			<ZIonItem
 				minHeight='2.3rem'
 				className='ion-activatable ion-focusable cursor-pointer'
-				testingSelector={
+				testingselector={
 					CONSTANTS.testingSelectors.workspace.actionsPopover.approvalSettings
 				}
 				onClick={() => {
@@ -385,7 +385,7 @@ const ZWorkspacesActionPopover: React.FC<{
 					<ZIonItem
 						minHeight='2.3rem'
 						className='ion-activatable ion-focusable cursor-pointer'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.workspace.actionsPopover.edit
 						}
 						onClick={() => {
@@ -419,7 +419,7 @@ const ZWorkspacesActionPopover: React.FC<{
 					<ZIonItem
 						minHeight='2.3rem'
 						className='ion-activatable ion-focusable cursor-pointer'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.workspace.actionsPopover.delete
 						}
 						onClick={async () => {

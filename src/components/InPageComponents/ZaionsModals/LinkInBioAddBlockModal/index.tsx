@@ -268,7 +268,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
 					<ZIonIcon
 						icon={closeOutline}
 						className='w-6 h-6 cursor-pointer'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
 								.addModal.closeModalBtn
 						}
@@ -288,7 +288,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
 
 					<ZIonText
 						className='mt-2 mb-2'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
 								.addModal.text
 						}
@@ -298,7 +298,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
 					<ZIonButton
 						expand='block'
 						className='mt-4'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
 								.addModal.topBtn
 						}
@@ -312,7 +312,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
 						expand='block'
 						fill='outline'
 						className='mt-3'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
 								.addModal.bottomBtn
 						}

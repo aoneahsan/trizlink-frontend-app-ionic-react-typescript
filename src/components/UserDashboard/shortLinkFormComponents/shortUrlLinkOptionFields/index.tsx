@@ -289,7 +289,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 										'mb-4': !isMdScale,
 										'w-full': !isSmScale,
 									})}
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.shortLink.formPage
 											.ShortUrlOptionFields.typeBtn
 									}
@@ -346,7 +346,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 										errorText={
 											touched?.target?.url ? errors?.target?.url : undefined
 										}
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage
 												.ShortUrlOptionFields.linkInput
 										}
@@ -412,7 +412,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 										onBlur={() => {
 											setFieldTouched('target.phoneNumber', true, true);
 										}}
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage
 												.ShortUrlOptionFields.numberInput
 										}
@@ -428,7 +428,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 										onIonBlur={handleBlur}
 										value={values?.target?.phoneNumber}
 										placeholder={ShortLinkPlaceholder()}
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage
 												.ShortUrlOptionFields.numberInput
 										}
@@ -468,7 +468,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 										onIonBlur={handleBlur}
 										value={values?.target?.username}
 										placeholder={ShortLinkPlaceholder()}
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage
 												.ShortUrlOptionFields.usernameInput
 										}
@@ -508,7 +508,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 										onIonBlur={handleBlur}
 										value={values?.target?.accountId}
 										placeholder={ShortLinkPlaceholder()}
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage
 												.ShortUrlOptionFields.accountIdInput
 										}
@@ -548,7 +548,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 										errorText={
 											touched?.target?.email ? errors?.target?.email : undefined
 										}
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage
 												.ShortUrlOptionFields.emailInput
 										}
@@ -567,7 +567,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 							<ZIonButton
 								height='39px'
 								fill={isMdScale ? 'clear' : 'solid'}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.shortLink.formPage
 										.ShortUrlOptionFields.refreshThePreviewBtn
 								}
@@ -605,7 +605,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 											? errors?.target?.subject
 											: undefined
 									}
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.shortLink.formPage
 											.ShortUrlOptionFields.subjectInput
 									}
@@ -636,7 +636,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 									fill='outline'
 									onIonChange={handleChange}
 									value={values?.target?.message}
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.shortLink.formPage
 											.ShortUrlOptionFields.messageTextarea
 									}

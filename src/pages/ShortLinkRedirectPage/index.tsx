@@ -466,7 +466,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
 															void submitForm();
 														}
 													}}
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.shortLink.listPage
 															.searchInput
 													}
@@ -479,7 +479,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
 													slot='end'
 													className='ion-no-margin ion-text-capitalize'
 													onClick={() => void submitForm()}
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.shortLink.listPage
 															.searchBtn
 													}

@@ -107,7 +107,7 @@ const ZWSSettingsMenu: React.FC = () => {
 				scrollY={true}
 			>
 				<ZIonAccordionGroup
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.WSSettings.menuBar.accordionGroup.value
 					}
 					value={
@@ -119,7 +119,7 @@ const ZWSSettingsMenu: React.FC = () => {
 					{/* Account settings */}
 					<ZIonAccordion
 						value={WSSettingsPageSect.accountSetting}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.WSSettings.menuBar.accordionGroup
 								.asAccordion
 						}
@@ -137,7 +137,7 @@ const ZWSSettingsMenu: React.FC = () => {
 									'mt-1 cursor-pointer': true,
 									zaions__light_bg: isTeamPage,
 								})}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.WSSettings.menuBar.as.teamBtn
 								}
 								routerLink={replaceRouteParams(
@@ -157,7 +157,7 @@ const ZWSSettingsMenu: React.FC = () => {
 									'mt-1 cursor-pointer': true,
 									zaions__light_bg: isReferralProgramPage,
 								})}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.WSSettings.menuBar.as.referralBtn
 								}
 								routerLink={replaceRouteParams(
@@ -178,7 +178,7 @@ const ZWSSettingsMenu: React.FC = () => {
 									'mt-1 cursor-pointer': true,
 									zaions__light_bg: isBillingPage,
 								})}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.WSSettings.menuBar.as.billingBtn
 								}
 								routerLink={replaceRouteParams(
@@ -198,7 +198,7 @@ const ZWSSettingsMenu: React.FC = () => {
 									'mt-1 cursor-pointer': true,
 									zaions__light_bg: isUserPage,
 								})}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.WSSettings.menuBar.as.userBtn
 								}
 								routerLink={replaceRouteParams(
@@ -215,7 +215,7 @@ const ZWSSettingsMenu: React.FC = () => {
 					{/* Workspace settings */}
 					<ZIonAccordion
 						value={WSSettingsPageSect.workspaceSettings}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.WSSettings.menuBar.accordionGroup
 								.wsAccordion
 						}
@@ -232,7 +232,7 @@ const ZWSSettingsMenu: React.FC = () => {
 									'mt-1 cursor-pointer': true,
 									// zaions__light_bg: false,
 								})}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.WSSettings.menuBar.ws.pixelBtn
 								}
 								// routerLink={replaceRouteParams(
@@ -254,7 +254,7 @@ const ZWSSettingsMenu: React.FC = () => {
 									'mt-1 cursor-pointer': true,
 									// zaions__light_bg: false,
 								})}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.WSSettings.menuBar.ws.utmBtn
 								}
 								// routerLink={replaceRouteParams(
@@ -276,7 +276,7 @@ const ZWSSettingsMenu: React.FC = () => {
 									'mt-1 cursor-pointer': true,
 									// zaions__light_bg: false,
 								})}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.WSSettings.menuBar.ws
 										.embedWidgetBtn
 								}

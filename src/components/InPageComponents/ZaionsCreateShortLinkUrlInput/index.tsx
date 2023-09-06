@@ -170,7 +170,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
 									onIonChange={handleChange}
 									onIonBlur={handleBlur}
 									value={values.domain}
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.shortLink.listPage.switchItInput
 									}
 									className={classNames({
@@ -188,7 +188,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
 									className='ion-no-margin ion-text-capitalize'
 									slot='end'
 									onClick={() => void submitForm()}
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.shortLink.listPage.switchItBtn
 									}
 									style={{
@@ -204,7 +204,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
 							<div className='ps-1 text-[14px]'>
 								<ZIonNote
 									color='danger'
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.shortLink.listPage
 											.switchItInputError
 									}

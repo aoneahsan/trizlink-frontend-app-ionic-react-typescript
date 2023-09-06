@@ -394,7 +394,7 @@ const ZInpageTable: React.FC = () => {
 											color='dark'
 											className='ion-no-padding ion-no-margin'
 											size='small'
-											testingSelector={
+											testingselector={
 												CONSTANTS.testingSelectors.linkInBio.listPage.table
 													.actionPopoverBtn
 											}
@@ -433,7 +433,7 @@ const ZInpageTable: React.FC = () => {
 						size='small'
 						fill='clear'
 						disabled={!zLinkInBioTable.getCanPreviousPage()}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.linkInBio.listPage.table
 								.getFirstPageButton
 						}
@@ -468,7 +468,7 @@ const ZInpageTable: React.FC = () => {
 						size='small'
 						fill='clear'
 						disabled={!zLinkInBioTable.getCanPreviousPage()}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.linkInBio.listPage.table.previousButton
 						}
 						onClick={() => {
@@ -504,7 +504,7 @@ const ZInpageTable: React.FC = () => {
 						size='small'
 						fill='clear'
 						disabled={!zLinkInBioTable.getCanNextPage()}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.linkInBio.listPage.table.nextButton
 						}
 						onClick={() => {
@@ -539,7 +539,7 @@ const ZInpageTable: React.FC = () => {
 						size='small'
 						fill='clear'
 						disabled={!zLinkInBioTable.getCanNextPage()}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.linkInBio.listPage.table
 								.getLastPageButton
 						}
@@ -582,7 +582,7 @@ const ZInpageTable: React.FC = () => {
 						className='bg-white w-[7rem]'
 						interface='popover'
 						value={zLinkInBioTable.getState().pagination.pageSize}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.linkInBio.listPage.table.pageSizeInput
 						}
 						onIonChange={(e) => {
@@ -821,7 +821,7 @@ const ZLinkInBioActionPopover: React.FC<{
 					button={true}
 					detail={false}
 					minHeight='2.5rem'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.linkInBio.listPage.table.editBtn
 					}
 					testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.listPage.table.editBtn}-${linInBioId}`}
@@ -854,7 +854,7 @@ const ZLinkInBioActionPopover: React.FC<{
 					detail={false}
 					minHeight='2.5rem'
 					onClick={() => void deleteLinkInBio()}
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.linkInBio.listPage.table.deleteBtn
 					}
 					testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.listPage.table.deleteBtn}-${linInBioId}`}

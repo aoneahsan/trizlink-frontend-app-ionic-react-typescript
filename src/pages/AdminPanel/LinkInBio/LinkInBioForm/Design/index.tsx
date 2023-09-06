@@ -290,13 +290,13 @@ const LinkInBioDesignPage: React.FC = () => {
 										>
 											<ZIonRow
 												className='ion-align-items-center'
-												testingSelector={
+												testingselector={
 													CONSTANTS.testingSelectors.linkInBio.formPage.design
 														.TopTitleBar.container
 												}
 											>
 												<ZIonCol
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.linkInBio.formPage.design
 															.TopTitleBar.titleCol
 													}
@@ -313,7 +313,7 @@ const LinkInBioDesignPage: React.FC = () => {
 												>
 													<ZIonText
 														className='text-2xl font-bold'
-														testingSelector={
+														testingselector={
 															CONSTANTS.testingSelectors.linkInBio.formPage
 																.design.TopTitleBar.title
 														}
@@ -345,13 +345,13 @@ const LinkInBioDesignPage: React.FC = () => {
 														ZLinkInBioRHSComponentEnum.settings) ? (
 													<ZIonCol
 														className='ion-text-end'
-														testingSelector={
+														testingselector={
 															CONSTANTS.testingSelectors.linkInBio.formPage
 																.design.TopTitleBar.saveBtnCol
 														}
 													>
 														<ZIonButton
-															testingSelector={
+															testingselector={
 																CONSTANTS.testingSelectors.linkInBio.formPage
 																	.design.TopTitleBar.saveBtn
 															}
@@ -499,7 +499,7 @@ const LinkInBioDesignPage: React.FC = () => {
 										? 'solid'
 										: 'outline'
 								}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.linkInBio.formPage.design
 										.bottomTabs.theme
 								}
@@ -524,7 +524,7 @@ const LinkInBioDesignPage: React.FC = () => {
 							<ZIonButton
 								title='Blocks'
 								className='ion-text-capitalize'
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.linkInBio.formPage.design
 										.bottomTabs.blocks
 								}
@@ -557,7 +557,7 @@ const LinkInBioDesignPage: React.FC = () => {
 							<ZIonButton
 								title='Setting'
 								className='ion-text-capitalize'
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.linkInBio.formPage.design
 										.bottomTabs.settings
 								}
@@ -588,7 +588,7 @@ const LinkInBioDesignPage: React.FC = () => {
 							<ZIonButton
 								title={`Powered by ${PRODUCT_NAME} `}
 								className='ion-text-capitalize'
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.linkInBio.formPage.design
 										.bottomTabs.poweredBy
 								}

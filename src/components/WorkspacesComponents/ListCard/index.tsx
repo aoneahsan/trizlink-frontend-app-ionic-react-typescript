@@ -126,7 +126,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 											values: [id || '', 'all'],
 										})}
 										color='dark'
-										testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardImg}-${id}`}
+										testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardImg}-${id}`}
 										testingListSelector={
 											CONSTANTS.testingSelectors.workspace.listPage
 												.workspaceCardImg
@@ -155,7 +155,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 											],
 											values: [id || '', 'all'],
 										})}
-										testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardTitle}-${id}`}
+										testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardTitle}-${id}`}
 										testingListSelector={
 											CONSTANTS.testingSelectors.workspace.listPage
 												.workspaceCardTitle
@@ -179,7 +179,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 								<ZIonButton
 									fill='clear'
 									className='h-auto mb-1 ion-no-padding ion-no-margin'
-									testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardFavoritesButton}-${id}`}
+									testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardFavoritesButton}-${id}`}
 									testingListSelector={
 										CONSTANTS.testingSelectors.workspace.listPage
 											.workspaceCardFavoritesButton
@@ -198,7 +198,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 										<ZIonButton
 											color='primary'
 											fill='solid'
-											testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardUserButton}-${id}`}
+											testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardUserButton}-${id}`}
 											testingListSelector={
 												CONSTANTS.testingSelectors.workspace.listPage
 													.workspaceCardUserButton
@@ -243,7 +243,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 										className='normal-case '
 										color='secondary'
 										size='default'
-										testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.viewWorkspaceButton}-${id}`}
+										testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.viewWorkspaceButton}-${id}`}
 										testingListSelector={
 											CONSTANTS.testingSelectors.workspace.listPage
 												.viewWorkspaceButton
@@ -276,7 +276,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 									fill='clear'
 									className='h-auto mb-1 normal-case ion-no-padding ion-no-margin'
 									color='dark'
-									testingSelector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardActionPopoverButton}-${id}`}
+									testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardActionPopoverButton}-${id}`}
 									testingListSelector={
 										CONSTANTS.testingSelectors.workspace.listPage
 											.workspaceCardActionPopoverButton

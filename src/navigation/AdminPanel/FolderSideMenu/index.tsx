@@ -23,8 +23,12 @@ import {
 	ZIonReorder,
 	ZIonReorderGroup,
 	ZIonButton,
+	ZIonHeader,
+	ZIonTitle,
+	ZIonMenuToggle,
+	ZIonContent,
 } from '@/components/ZIonComponents';
-import { appsOutline, ellipsisVertical } from 'ionicons/icons';
+import { appsOutline, closeOutline, ellipsisVertical } from 'ionicons/icons';
 import { ItemReorderEventDetail } from '@ionic/react';
 import { IonReorderGroupCustomEvent } from '@ionic/core';
 
@@ -40,7 +44,7 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * */
 import { PAGE_MENU_SIDE } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
-import { replaceParams } from '@/utils/helpers';
+import { replaceParams, replaceRouteParams } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
@@ -54,6 +58,8 @@ import { useSetRecoilState } from 'recoil';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
 import { useParams } from 'react-router';
+import classNames from 'classnames';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Recoil State Imports go down
@@ -76,6 +82,7 @@ import { useParams } from 'react-router';
  * */
 interface AdminPanelFoldersSidebarMenuInterface {
 	menuSide?: PAGE_MENU_SIDE;
+	contentId?: string;
 	foldersData?: LinkFolderType[];
 	state?: folderState;
 	showSaveReorderButton?: boolean;
@@ -97,6 +104,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 	AdminPanelFoldersSidebarMenuInterface
 > = ({
 	menuSide,
+	contentId,
 	foldersData,
 	state,
 	showSaveReorderButton,
@@ -105,7 +113,10 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 	folderActionHandlerFn,
 	saveReorderButtonFn,
 }) => {
+	// #region custom hooks.
 	const { zNavigatePushRoute } = useZNavigate();
+	const { isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
+	// #endregion
 
 	const setFolderFormState = useSetRecoilState(FolderFormState);
 
@@ -122,99 +133,106 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 	);
 
 	return (
-		<ZIonMenu contentId={menuId} side={menuSide || 'end'} menuId={menuId}>
-			<ZIonList
-				lines='none'
-				className='zaions_pretty_scrollbar overflow-y-scroll'
-			>
-				<ZIonItem className='cursor-pointer mb-2'>
-					<h5 className='font-bold m-0 p-0'>🔗 All links</h5>
-				</ZIonItem>
+		<ZIonMenu contentId={contentId} side={menuSide || 'end'} menuId={menuId}>
+			{/* Header */}
+			<ZIonHeader className='flex px-3 border-b shadow-none ion-align-items-center ion-padding ion-justify-content-between'>
+				<ZIonTitle
+					className={classNames({
+						'block font-semibold ion-no-padding': true,
+						'text-xl': isLgScale,
+						'text-lg': !isLgScale,
+					})}
+				>
+					Short links folders
+				</ZIonTitle>
 
-				<ZIonItem>
-					<ZIonList lines='none' className='w-full'>
-						<ZIonItem className='ion-no-padding'>
-							<ZIonText color='primary' className='font-bold'>
-								<h5 className='font-bold block m-0 p-0'>📂 Folders</h5>
-							</ZIonText>
-						</ZIonItem>
+				<ZIonMenuToggle>
+					<ZIonIcon icon={closeOutline} className='w-6 h-6 cursor-pointer' />
+				</ZIonMenuToggle>
+			</ZIonHeader>
 
-						<ZIonItem
-							className='cursor-pointer ms-2'
-							onClick={() => {
-								zNavigatePushRoute(
-									replaceParams(
-										ZaionsRoutes.AdminPanel.ShortLinks.Main,
+			{/* Content */}
+			<ZIonContent className='ion-padding-top'>
+				<ZIonList lines='none' className='w-full py-0'>
+					<ZIonItem
+						minHeight='40px'
+						className='cursor-pointer ms-2'
+						onClick={() => {
+							zNavigatePushRoute(
+								replaceRouteParams(
+									ZaionsRoutes.AdminPanel.ShortLinks.Main,
+									[
+										CONSTANTS.RouteParams.workspace.workspaceId,
 										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-										'all'
-									)
-								);
-							}}
-						>
-							<ZIonLabel>Default</ZIonLabel>
-							<ZIonReorder slot='start' className='me-3'>
-								<ZIonIcon icon={appsOutline} />
-							</ZIonReorder>
-						</ZIonItem>
+									],
+									[workspaceId, 'all']
+								)
+							);
+						}}
+					>
+						<ZIonText>Default</ZIonText>
+					</ZIonItem>
 
-						{foldersData && foldersData.length ? (
-							<ZIonReorderGroup
-								disabled={false}
-								onIonItemReorder={handleReorderFn}
-							>
-								{foldersData.map((el) => (
-									<ZIonItem
-										className={`cursor-pointer zaions-short-link-folder-${
-											state || ''
-										}`}
-										key={el.id}
-										data-folder-id={el.id}
-									>
-										<ZIonLabel
-											onClick={() => {
-												zNavigatePushRoute(
-													replaceParams(
-														ZaionsRoutes.AdminPanel.ShortLinks.Main,
+					{foldersData && foldersData.length ? (
+						<ZIonReorderGroup
+							disabled={false}
+							onIonItemReorder={handleReorderFn}
+						>
+							{foldersData.map((el) => (
+								<ZIonItem
+									className={`cursor-pointer zaions-short-link-folder-${
+										state || ''
+									}`}
+									key={el.id}
+									data-folder-id={el.id}
+								>
+									<ZIonLabel
+										onClick={() => {
+											zNavigatePushRoute(
+												replaceRouteParams(
+													ZaionsRoutes.AdminPanel.ShortLinks.Main,
+													[
+														CONSTANTS.RouteParams.workspace.workspaceId,
 														CONSTANTS.RouteParams
 															.folderIdToGetShortLinksOrLinkInBio,
-														el.id as string
-													)
-												);
-											}}
-										>
-											{el.title}
-										</ZIonLabel>
-										<ZIonButton
-											fill='clear'
-											color='dark'
-											size='small'
-											value={el.id}
-											onClick={(event) => {
-												folderActionHandlerFn && folderActionHandlerFn(event);
-												setFolderFormState((oldVal) => ({
-													...oldVal,
-													id: el.id,
-													name: el.title,
-													formMode: FormMode.EDIT,
-												}));
-											}}
-											className='ion-no-padding ms-auto'
-										>
-											<ZIonIcon icon={ellipsisVertical} />
-										</ZIonButton>
-										<ZIonReorder slot='start' className='me-3'>
-											<ZIonIcon icon={appsOutline} />
-										</ZIonReorder>
-									</ZIonItem>
-								))}
-							</ZIonReorderGroup>
-						) : (
-							''
-						)}
-					</ZIonList>
-				</ZIonItem>
+													],
+													[workspaceId, el.id!]
+												)
+											);
+										}}
+									>
+										{el.title}
+									</ZIonLabel>
+									<ZIonButton
+										fill='clear'
+										color='dark'
+										size='small'
+										value={el.id}
+										onClick={(event) => {
+											folderActionHandlerFn && folderActionHandlerFn(event);
+											setFolderFormState((oldVal) => ({
+												...oldVal,
+												id: el.id,
+												name: el.title,
+												formMode: FormMode.EDIT,
+											}));
+										}}
+										className='ion-no-padding ms-auto'
+									>
+										<ZIonIcon icon={ellipsisVertical} />
+									</ZIonButton>
+									<ZIonReorder slot='start' className='me-3'>
+										<ZIonIcon icon={appsOutline} />
+									</ZIonReorder>
+								</ZIonItem>
+							))}
+						</ZIonReorderGroup>
+					) : (
+						''
+					)}
+				</ZIonList>
 				<ZIonButton
-					className='ion-text-capitalize ion-margin-horizontal mt-3'
+					className='mt-3 ion-text-capitalize ion-margin-horizontal'
 					fill='outline'
 					expand='block'
 					onClick={() => {
@@ -231,20 +249,20 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 				>
 					New Folder
 				</ZIonButton>
-			</ZIonList>
 
-			{showSaveReorderButton && (
-				<ZIonButton
-					className='ion-text-capitalize ion-margin-horizontal absolute bottom-0'
-					expand='block'
-					onClick={(event) => {
-						saveReorderButtonFn && void saveReorderButtonFn(event);
-					}}
-					style={{ width: '78%' }}
-				>
-					save reorder
-				</ZIonButton>
-			)}
+				{showSaveReorderButton && (
+					<ZIonButton
+						className='absolute bottom-0 ion-text-capitalize ion-margin-horizontal'
+						expand='block'
+						onClick={(event) => {
+							saveReorderButtonFn && void saveReorderButtonFn(event);
+						}}
+						style={{ width: '78%' }}
+					>
+						save reorder
+					</ZIonButton>
+				)}
+			</ZIonContent>
 		</ZIonMenu>
 	);
 };

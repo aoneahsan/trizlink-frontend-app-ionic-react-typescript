@@ -74,7 +74,7 @@ const LinkInBioQAndACardField: React.FC = () => {
 									expand='block'
 									className='ion-text-capitalize'
 									onClick={() => push(getNewCardItemEmptyObjForQAndA)}
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.linkInBio.formPage.design
 											.blockForm.fields.QAndA.addCardBtn
 									}
@@ -89,7 +89,7 @@ const LinkInBioQAndACardField: React.FC = () => {
 												lines='none'
 												className='pb-3 my-4 border zaions-linkInBio-block'
 												testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.QAndA.cardItem}-${_index}`}
-												testingSelector={
+												testingselector={
 													CONSTANTS.testingSelectors.linkInBio.formPage.design
 														.blockForm.fields.QAndA.cardItem
 												}
@@ -113,7 +113,7 @@ const LinkInBioQAndACardField: React.FC = () => {
 														onIonChange={handleChange}
 														onIonBlur={handleBlur}
 														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.QAndA.titleInput}-${_index}`}
-														testingSelector={
+														testingselector={
 															CONSTANTS.testingSelectors.linkInBio.formPage
 																.design.blockForm.fields.QAndA.titleInput
 														}
@@ -126,7 +126,7 @@ const LinkInBioQAndACardField: React.FC = () => {
 														placeholder='Answer'
 														className='mt-3'
 														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.QAndA.textEditor}-${_index}`}
-														testingSelector={
+														testingselector={
 															CONSTANTS.testingSelectors.linkInBio.formPage
 																.design.blockForm.fields.QAndA.textEditor
 														}
@@ -149,7 +149,7 @@ const LinkInBioQAndACardField: React.FC = () => {
 													iconColor='danger'
 													className='ion-no-padding me-1'
 													testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.QAndA.deleteBtn}-${_index}`}
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.linkInBio.formPage.design
 															.blockForm.fields.QAndA.deleteBtn
 													}

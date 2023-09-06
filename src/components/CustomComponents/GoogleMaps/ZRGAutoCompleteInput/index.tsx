@@ -19,7 +19,7 @@ interface IZRGAutoCompleteInputProps {
 	setFieldValue?: FormikSetFieldValueEventType;
 	setFieldTouched?: FormikSetFieldTouchedEventType;
 	inputName: string;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 }
 
@@ -32,7 +32,7 @@ const ZRGAutoCompleteInput: React.FC<IZRGAutoCompleteInputProps> = ({
 	setFieldValue,
 	setFieldTouched,
 	inputName,
-	testingSelector,
+	testingselector,
 	testingListSelector,
 }) => {
 	const _testingListSelector = testingListSelector
@@ -44,10 +44,10 @@ const ZRGAutoCompleteInput: React.FC<IZRGAutoCompleteInputProps> = ({
 		  }
 		: {};
 
-	const _testingSelector = testingSelector
+	const _testingSelector = testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: testingSelector || PRODUCT_NAME,
+					_value: testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

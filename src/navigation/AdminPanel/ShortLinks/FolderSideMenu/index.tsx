@@ -91,11 +91,21 @@ const AdminPanelShortLinksFolderSideMenu: React.FC<{ workspaceId: string }> = ({
 		{ workspaceId, state: folderState.linkInBio }
 	);
 
-	const [shortLinksFolderState, setShortLinksFolderState] = useRecoilState(
-		ShortLinksFolderRStateAtom
-	);
-
 	const { validateRequestResponse } = useZValidateRequestResponse();
+
+	const {
+		data: shortLinksFoldersData,
+		isFetching: isShortLinksFoldersDataFetching,
+	} = useZRQGetRequest<LinkFolderType[]>({
+		_url: API_URL_ENUM.ShortLink_folders_create_list,
+		_key: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+			workspaceId,
+			folderState.shortlink,
+		],
+		_itemsIds: [workspaceId],
+		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+	});
 
 	// folder reorder handler
 	const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
@@ -178,7 +188,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC<{ workspaceId: string }> = ({
 	return (
 		<AdminPanelFoldersSidebarMenu
 			menuSide={PAGE_MENU_SIDE.START}
-			foldersData={shortLinksFolderState}
+			foldersData={shortLinksFoldersData || []}
 			folderActionHandlerFn={(event: unknown) => {
 				presentFolderActionIonPopover({
 					_event: event as Event,
@@ -190,6 +200,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC<{ workspaceId: string }> = ({
 			saveReorderButtonFn={shortLinksFoldersReorderHandler}
 			state={folderState.shortlink}
 			menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
+			contentId={CONSTANTS.MENU_IDS.AD_SL_LIST_PAGE}
 		/>
 	);
 };

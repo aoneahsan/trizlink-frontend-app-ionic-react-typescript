@@ -381,7 +381,7 @@ const ZLabelsTab: React.FC<{
 											size='small'
 											fill='clear'
 											disabled={values.enableAddLabel}
-											testingSelector={
+											testingselector={
 												CONSTANTS.testingSelectors.workspace.settingsModal
 													.labels.addNewLabelButton
 											}
@@ -401,7 +401,7 @@ const ZLabelsTab: React.FC<{
 											fill='clear'
 											color='medium'
 											id='z-workspace-add-label-tooltip'
-											testingSelector={
+											testingselector={
 												CONSTANTS.testingSelectors.workspace.settingsModal
 													.labels.addNewLabelInfoButton
 											}
@@ -434,7 +434,7 @@ const ZLabelsTab: React.FC<{
 													onIonChange={handleChange}
 													onIonBlur={handleBlur}
 													errorText={touched.title ? errors.title : undefined}
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.workspace.settingsModal
 															.labels.labelNameInput
 													}
@@ -450,7 +450,7 @@ const ZLabelsTab: React.FC<{
 													className='mx-1 ion-no-margin ion-no-padding'
 													size='small'
 													fill='clear'
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.workspace.settingsModal
 															.labels.closedCreateModeButton
 													}
@@ -471,7 +471,7 @@ const ZLabelsTab: React.FC<{
 													color='success'
 													fill='clear'
 													disabled={!isValid}
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.workspace.settingsModal
 															.labels.closedCreateModeButton
 													}
@@ -560,7 +560,7 @@ const ZLabelsTab: React.FC<{
 																						icon={createOutline}
 																						className='w-5 h-5 cursor-pointer'
 																						id={`z-workspace-add-label-edit-${index}`}
-																						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.labels.editLabelButton}-${el.id}`}
+																						testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.labels.editLabelButton}-${el.id}`}
 																						testingListSelector={
 																							CONSTANTS.testingSelectors
 																								.workspace.settingsModal.labels
@@ -596,7 +596,7 @@ const ZLabelsTab: React.FC<{
 																						icon={trashBinOutline}
 																						className='w-4 h-4 cursor-pointer ms-2'
 																						id={`z-workspace-add-label-delete-${index}`}
-																						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.labels.deleteLabelButton}-${el.id}`}
+																						testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.labels.deleteLabelButton}-${el.id}`}
 																						testingListSelector={
 																							CONSTANTS.testingSelectors
 																								.workspace.settingsModal.labels

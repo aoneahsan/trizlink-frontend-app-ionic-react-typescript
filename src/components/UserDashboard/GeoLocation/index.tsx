@@ -171,421 +171,12 @@ const GeoLocation: React.FC = () => {
 								>
 									<ZIonGrid
 										className='w-full h-full ion-no-padding'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage.geoLocation
 												.container
 										}
 									>
-										<div className='w-full h-full'>
-											{/* <AutoSizer>
-												{({ height, width }) => {
-													console.log({
-														lm: 'from autosizer',
-														length: values?.geoLocation?.length,
-													});
-													return ( */}
-											<List
-												height={400}
-												rowCount={values?.geoLocation?.length}
-												rowHeight={200}
-												// deferredMeasurementCache={cache.current}
-												width={500}
-												rowRenderer={({
-													columnIndex,
-													index,
-													key,
-													isVisible,
-													isScrolling,
-													parent,
-													style,
-												}) => {
-													const _geoLocationEl = values?.geoLocation[index];
-													console.log({ _geoLocationEl, index });
-													return (
-														<div style={{ ...style }} key={key}>
-															<ZIonRow
-																key={index}
-																className={classNames({
-																	'ion-align-items-center px-3 py-5': true,
-																	// zaions__medium_bg_opacity_point_3: index !== 0,
-																	zaions__medium_bg_opacity_point_1:
-																		(index + 1) % 2 === 0,
-																	'gap-2': isSmScale,
-																	'py-2 gap-1 mt-2 border-b':
-																		(!isMdScale && isSmScale) || !isSmScale,
-																})}
-															>
-																<ZIonCol size='11.2'>
-																	<ZIonRow className='ion-justify-content-between'>
-																		<ZIonCol
-																			sizeXl='12'
-																			sizeLg='12'
-																			sizeMd='12'
-																			sizeSm='12'
-																			sizeXs='12'
-																			className='mb-2'
-																		>
-																			<ZIonInput
-																				type='url'
-																				minHeight='40px'
-																				labelPlacement='stacked'
-																				label='Redirection Links*'
-																				onIonChange={handleChange}
-																				value={
-																					values.geoLocation[index]
-																						?.redirectionLink
-																				}
-																				name={`geoLocation.${index}.redirectionLink`}
-																				testingSelector={
-																					CONSTANTS.testingSelectors.shortLink
-																						.formPage.geoLocation
-																						.redirectionLinkInput
-																				}
-																				testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.geoLocation.redirectionLinkInput}-${_geoLocationEl.id}`}
-																				onIonBlur={(e) => {
-																					handleBlur(e);
-																					const inputUrl =
-																						values?.geoLocation[index]
-																							?.redirectionLink;
-																					const formattedUrl = zAddUrlProtocol(
-																						inputUrl || ''
-																					);
-																					setFieldValue(
-																						`geoLocation.${index}.redirectionLink`,
-																						formattedUrl
-																					);
-																				}}
-																				errorText={
-																					errors.geoLocation?.length
-																						? ((
-																								errors.geoLocation[
-																									index
-																								] as GeoLocationErrorsType
-																						  )?.redirectionLink as string)
-																						: undefined
-																				}
-																				className={classNames({
-																					z_ion_bg_white: true,
-																					'ion-touched':
-																						touched?.geoLocation &&
-																						touched?.geoLocation[index]
-																							?.redirectionLink,
-																					'ion-invalid':
-																						touched?.geoLocation &&
-																						errors?.geoLocation &&
-																						touched?.geoLocation[index]
-																							?.redirectionLink &&
-																						(
-																							errors.geoLocation[
-																								index
-																							] as GeoLocationErrorsType
-																						).redirectionLink,
-																					'ion-valid':
-																						touched?.geoLocation &&
-																						errors?.geoLocation &&
-																						touched?.geoLocation[index]
-																							?.redirectionLink &&
-																						!(
-																							errors.geoLocation[
-																								index
-																							] as GeoLocationErrorsType
-																						).redirectionLink,
-																				})}
-																			/>
-																		</ZIonCol>
-
-																		<ZIonCol
-																			sizeXl='5.8'
-																			sizeLg='5.8'
-																			sizeMd='5.8'
-																			sizeSm='12'
-																			sizeXs='12'
-																		>
-																			<ZIonSelect
-																				minHeight='2.5rem'
-																				interface='popover'
-																				fill='outline'
-																				label='Condition'
-																				labelPlacement='stacked'
-																				className='z_ion_bg_white'
-																				onIonChange={(e) => {
-																					if (
-																						e?.target?.value ===
-																							EZGeoLocationCondition.equalTo ||
-																						e?.target?.value ===
-																							EZGeoLocationCondition.notEqualTo
-																					) {
-																						setFieldValue(
-																							`geoLocation.${index}.country`,
-																							'',
-																							false
-																						);
-																					}
-																					handleChange(e);
-																				}}
-																				onIonBlur={handleBlur}
-																				name={`geoLocation.${index}.condition`}
-																				value={
-																					values?.geoLocation[index]
-																						?.condition as string
-																				}
-																				testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.geoLocation.conditionSelector}-${_geoLocationEl.id}`}
-																				testingSelector={
-																					CONSTANTS.testingSelectors.shortLink
-																						.formPage.geoLocation
-																						.conditionSelector
-																				}
-																			>
-																				{ZConditions?.map((el, index) => {
-																					return (
-																						<ZIonSelectOption
-																							key={index}
-																							value={el.value}
-																						>
-																							{el.label}
-																						</ZIonSelectOption>
-																					);
-																				})}
-																			</ZIonSelect>
-																		</ZIonCol>
-
-																		<ZIonCol
-																			sizeXl='5.8'
-																			sizeLg='5.8'
-																			sizeMd='5.8'
-																			sizeSm='11'
-																			sizeXs='11'
-																		>
-																			<ZIonSelect
-																				toggleIcon={
-																					values?.geoLocation[index]
-																						?.condition ===
-																						EZGeoLocationCondition.notWithin ||
-																					values?.geoLocation[index]
-																						?.condition ===
-																						EZGeoLocationCondition.within
-																						? addOutline
-																						: undefined
-																				}
-																				expandedIcon={
-																					values?.geoLocation[index]
-																						?.condition ===
-																						EZGeoLocationCondition.notWithin ||
-																					values?.geoLocation[index]
-																						?.condition ===
-																						EZGeoLocationCondition.within
-																						? removeOutline
-																						: undefined
-																				}
-																				minHeight='2.5rem'
-																				interface='popover'
-																				multiple={
-																					values?.geoLocation[index]
-																						?.condition ===
-																						EZGeoLocationCondition.notWithin ||
-																					values?.geoLocation[index]
-																						?.condition ===
-																						EZGeoLocationCondition.within
-																				}
-																				fill='outline'
-																				label='country*'
-																				labelPlacement='stacked'
-																				name={`geoLocation.${index}.country`}
-																				value={
-																					values?.geoLocation[index]
-																						?.country as string
-																				}
-																				onIonChange={handleChange}
-																				onIonBlur={handleBlur}
-																				testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.geoLocation.countrySelector}-${_geoLocationEl.id}`}
-																				testingSelector={
-																					CONSTANTS.testingSelectors.shortLink
-																						.formPage.geoLocation
-																						.countrySelector
-																				}
-																				errorText={
-																					errors.geoLocation?.length
-																						? ((
-																								errors.geoLocation[
-																									index
-																								] as GeoLocationErrorsType
-																						  )?.country as string)
-																						: undefined
-																				}
-																				className={classNames({
-																					z_ion_bg_white: true,
-																					'ion-touched':
-																						touched?.geoLocation &&
-																						touched?.geoLocation[index]
-																							?.country,
-																					'ion-invalid':
-																						touched?.geoLocation &&
-																						errors?.geoLocation &&
-																						touched?.geoLocation[index]
-																							?.country &&
-																						(
-																							errors.geoLocation[
-																								index
-																							] as GeoLocationErrorsType
-																						).country,
-																					'ion-valid':
-																						touched?.geoLocation &&
-																						errors?.geoLocation &&
-																						touched?.geoLocation[index]
-																							?.country &&
-																						!(
-																							errors.geoLocation[
-																								index
-																							] as GeoLocationErrorsType
-																						).country,
-																				})}
-																			>
-																				{ZCountryData.map((el, index) => {
-																					let _disabled = false;
-																					const _condition =
-																						values?.geoLocation[index]
-																							?.condition;
-																					if (
-																						_condition ===
-																						EZGeoLocationCondition.equalTo
-																					) {
-																						_disabled =
-																							compState.equalToConditionCountries?.includes(
-																								el.value
-																							);
-																					} else if (
-																						_condition ===
-																						EZGeoLocationCondition.notEqualTo
-																					) {
-																						_disabled =
-																							compState.notEqualToConditionCountries?.includes(
-																								el.value
-																							);
-																					}
-
-																					return (
-																						<ZIonSelectOption
-																							value={el.value}
-																							key={index}
-																							disabled={_disabled}
-																						>
-																							{el.label}
-																						</ZIonSelectOption>
-																					);
-																				})}
-																			</ZIonSelect>
-																			{/* <ZaionsRSelect
-														placeholder='country*'
-														name={`geoLocation.${index}.country`}
-														options={ZCountryData}
-														testingSelector={
-															CONSTANTS.testingSelectors.shortLink.formPage
-																.geoLocation.countrySelector
-														}
-														testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.geoLocation.countrySelector}-${_geoLocationEl.id}`}
-														onChange={(_value) => {
-															setFieldValue(
-																`geoLocation.${index}.country`,
-																(_value as ZaionsRSelectOptions).value,
-																true
-															);
-														}}
-														className={classNames({
-															'pb-0 mb-0 geo-location-country-field': true,
-															invalid:
-																touched?.geoLocation &&
-																errors?.geoLocation &&
-																touched?.geoLocation[index]?.country &&
-																(
-																	errors?.geoLocation[
-																		index
-																	] as GeoLocationErrorsType
-																)?.country,
-
-															valid:
-																touched?.geoLocation &&
-																errors?.geoLocation &&
-																touched?.geoLocation[index]?.country &&
-																!(
-																	errors?.geoLocation[
-																		index
-																	] as GeoLocationErrorsType
-																)?.country,
-														})}
-														onBlur={() => {
-															setFieldTouched(
-																`geoLocation.${index}.country`,
-																true,
-																true
-															);
-														}}
-														value={
-															formatReactSelectOption(
-																values?.geoLocation[index]?.country as string,
-																ZCountryData as ZGenericObject[],
-																'label',
-																'value'
-															) || []
-														}
-													/>
-													 */}
-																			{errors?.geoLocation &&
-																			touched?.geoLocation &&
-																			(
-																				errors.geoLocation[
-																					index
-																				] as GeoLocationErrorsType
-																			)?.country &&
-																			touched?.geoLocation[index]?.country ? (
-																				<ZIonNote
-																					className='text-xs ps-2'
-																					color='danger'
-																					testingSelector={
-																						CONSTANTS.testingSelectors.shortLink
-																							.formPage.geoLocation
-																							.countrySelectorError
-																					}
-																					testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.geoLocation.countrySelectorError}-${_geoLocationEl.id}`}
-																				>
-																					{errors.geoLocation?.length &&
-																						(
-																							errors.geoLocation[
-																								index
-																							] as GeoLocationErrorsType
-																						)?.country}
-																				</ZIonNote>
-																			) : (
-																				''
-																			)}
-																		</ZIonCol>
-																	</ZIonRow>
-																</ZIonCol>
-
-																{/* delete */}
-																<ZIonCol className='flex ion-align-items-center ion-justify-content-center'>
-																	<ZIonIcon
-																		icon={trashBin}
-																		onClick={() => remove(index)}
-																		color='danger'
-																		className='w-[21px] h-[21px] zaions__nav_item'
-																		testingSelector={
-																			CONSTANTS.testingSelectors.shortLink
-																				.formPage.geoLocation
-																				.deleteSingleGeoLocationBtn
-																		}
-																		testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.geoLocation.deleteSingleGeoLocationBtn}-${_geoLocationEl.id}`}
-																	/>
-																</ZIonCol>
-															</ZIonRow>
-														</div>
-													);
-												}}
-											/>
-											{/* // 		);
-											// 	}}
-											// </AutoSizer> */}
-										</div>
-										{/* {values.geoLocation.length
+										{values.geoLocation.length
 											? values.geoLocation.map((_geoLocationEl, _index) => (
 													<ZIonRow
 														key={_index}
@@ -620,7 +211,7 @@ const GeoLocation: React.FC = () => {
 																				?.redirectionLink
 																		}
 																		name={`geoLocation.${_index}.redirectionLink`}
-																		testingSelector={
+																		testingselector={
 																			CONSTANTS.testingSelectors.shortLink
 																				.formPage.geoLocation
 																				.redirectionLinkInput
@@ -714,7 +305,7 @@ const GeoLocation: React.FC = () => {
 																				?.condition as string
 																		}
 																		testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.geoLocation.conditionSelector}-${_geoLocationEl.id}`}
-																		testingSelector={
+																		testingselector={
 																			CONSTANTS.testingSelectors.shortLink
 																				.formPage.geoLocation.conditionSelector
 																		}
@@ -775,7 +366,7 @@ const GeoLocation: React.FC = () => {
 																		onIonChange={handleChange}
 																		onIonBlur={handleBlur}
 																		testingListSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.geoLocation.countrySelector}-${_geoLocationEl.id}`}
-																		testingSelector={
+																		testingselector={
 																			CONSTANTS.testingSelectors.shortLink
 																				.formPage.geoLocation.countrySelector
 																		}
@@ -850,7 +441,7 @@ const GeoLocation: React.FC = () => {
 														placeholder='country*'
 														name={`geoLocation.${_index}.country`}
 														options={ZCountryData}
-														testingSelector={
+														testingselector={
 															CONSTANTS.testingSelectors.shortLink.formPage
 																.geoLocation.countrySelector
 														}
@@ -900,7 +491,7 @@ const GeoLocation: React.FC = () => {
 															) || []
 														}
 													/>
-													 * /}
+													 */}
 																	{errors?.geoLocation &&
 																	touched?.geoLocation &&
 																	(
@@ -912,7 +503,7 @@ const GeoLocation: React.FC = () => {
 																		<ZIonNote
 																			className='text-xs ps-2'
 																			color='danger'
-																			testingSelector={
+																			testingselector={
 																				CONSTANTS.testingSelectors.shortLink
 																					.formPage.geoLocation
 																					.countrySelectorError
@@ -933,14 +524,14 @@ const GeoLocation: React.FC = () => {
 															</ZIonRow>
 														</ZIonCol>
 
-														{/* delete * /}
+														{/* delete */}
 														<ZIonCol className='flex ion-align-items-center ion-justify-content-center'>
 															<ZIonIcon
 																icon={trashBin}
 																onClick={() => remove(_index)}
 																color='danger'
 																className='w-[21px] h-[21px] zaions__nav_item'
-																testingSelector={
+																testingselector={
 																	CONSTANTS.testingSelectors.shortLink.formPage
 																		.geoLocation.deleteSingleGeoLocationBtn
 																}
@@ -949,7 +540,7 @@ const GeoLocation: React.FC = () => {
 														</ZIonCol>
 													</ZIonRow>
 											  ))
-											: null} */}
+											: null}
 									</ZIonGrid>
 								</ZCustomScrollable>
 
@@ -959,7 +550,7 @@ const GeoLocation: React.FC = () => {
 										fill='clear'
 										className='mb-0 ms-4 ion-text-capitalize ion-no-padding'
 										size='small'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage.geoLocation
 												.addSingleGeoLocationBtn
 										}
@@ -980,7 +571,7 @@ const GeoLocation: React.FC = () => {
 										color={'dark'}
 										className='mt-3 ms-4 ion-text-capitalize ion-no-padding'
 										fill='clear'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage.geoLocation
 												.deleteSingleGeoLocationBtn
 										}

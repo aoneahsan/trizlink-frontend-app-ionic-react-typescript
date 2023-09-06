@@ -43,7 +43,7 @@ type ZIonButtonType = {
 	onMouseLeave?: React.MouseEventHandler<HTMLIonButtonElement>;
 
 	//
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 };
 const ZIonButton = (props: ZIonButtonType) => {
@@ -65,10 +65,10 @@ const ZIonButton = (props: ZIonButtonType) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

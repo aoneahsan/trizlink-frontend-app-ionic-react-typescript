@@ -324,7 +324,7 @@ const ZSettingsTab: React.FC<{
 									onIonBlur={handleBlur}
 									errorText={errors.workspaceName}
 									value={values.workspaceName}
-									testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.workspaceNameInput}-${workspaceId}`}
+									testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.workspaceNameInput}-${workspaceId}`}
 									testingListSelector={
 										CONSTANTS.testingSelectors.workspace.settingsModal.settings
 											.workspaceNameInput
@@ -348,7 +348,7 @@ const ZSettingsTab: React.FC<{
 									style={{
 										'--background': '#fff',
 									}}
-									testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.workspaceTimezoneInput}-${workspaceId}`}
+									testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.workspaceTimezoneInput}-${workspaceId}`}
 									testingListSelector={
 										CONSTANTS.testingSelectors.workspace.settingsModal.settings
 											.workspaceTimezoneInput
@@ -372,7 +372,7 @@ const ZSettingsTab: React.FC<{
 											icon={alertCircleOutline}
 											className='w-6 h-6 cursor-pointer ms-2'
 											id='z-workspace-internal-post'
-											testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.internalPostInfoButton}-${workspaceId}`}
+											testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.internalPostInfoButton}-${workspaceId}`}
 											testingListSelector={
 												CONSTANTS.testingSelectors.workspace.settingsModal
 													.settings.internalPostInfoButton
@@ -388,7 +388,7 @@ const ZSettingsTab: React.FC<{
 
 									<ZIonCol className='ion-text-end'>
 										<ZRCSwitch
-											testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.internalPostToggler}-${workspaceId}`}
+											testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.internalPostToggler}-${workspaceId}`}
 											testingListSelector={
 												CONSTANTS.testingSelectors.workspace.settingsModal
 													.settings.internalPostToggler
@@ -402,7 +402,7 @@ const ZSettingsTab: React.FC<{
 
 								<div className='w-full mt-2 ion-text-end'>
 									<ZIonButton
-										testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.updateButton}-${workspaceId}`}
+										testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.updateButton}-${workspaceId}`}
 										testingListSelector={
 											CONSTANTS.testingSelectors.workspace.settingsModal
 												.settings.updateButton
@@ -445,7 +445,7 @@ const ZSettingsTab: React.FC<{
 					<ZIonButton
 						color='danger'
 						className='mt-2 ion-no-margin normal-case'
-						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.deleteButton}-${workspaceId}`}
+						testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.deleteButton}-${workspaceId}`}
 						testingListSelector={
 							CONSTANTS.testingSelectors.workspace.settingsModal.settings
 								.deleteButton

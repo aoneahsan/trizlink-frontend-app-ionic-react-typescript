@@ -92,7 +92,7 @@ const ZHelpCenterPopover: React.FC<{
 				lines='full'
 				minHeight='2.3rem'
 				className='cursor-pointer ion-activatable'
-				testingSelector={
+				testingselector={
 					CONSTANTS.testingSelectors.topBar.helpPopover.allSystemsOperations
 				}
 			>
@@ -108,7 +108,7 @@ const ZHelpCenterPopover: React.FC<{
 				<ZIonItem
 					minHeight='2.3rem'
 					className='cursor-pointer ion-activatable'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.topBar.helpPopover.whatsNew
 					}
 				>
@@ -122,7 +122,7 @@ const ZHelpCenterPopover: React.FC<{
 				<ZIonItem
 					minHeight='2.3rem'
 					className='cursor-pointer ion-activatable'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.topBar.helpPopover.suggestAnIdea
 					}
 				>
@@ -136,7 +136,7 @@ const ZHelpCenterPopover: React.FC<{
 				<ZIonItem
 					minHeight='2.3rem'
 					className='cursor-pointer ion-activatable'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.topBar.helpPopover.helpCenter
 					}
 				>
@@ -150,7 +150,7 @@ const ZHelpCenterPopover: React.FC<{
 				<ZIonItem
 					minHeight='2.3rem'
 					className='cursor-pointer ion-activatable'
-					testingSelector={CONSTANTS.testingSelectors.topBar.helpPopover.price}
+					testingselector={CONSTANTS.testingSelectors.topBar.helpPopover.price}
 				>
 					<ZIonIcon icon={cashOutline} className='w-5 h-5' />
 					<ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
@@ -162,7 +162,7 @@ const ZHelpCenterPopover: React.FC<{
 				<ZIonItem
 					minHeight='2.3rem'
 					className='cursor-pointer ion-activatable'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.topBar.helpPopover.contactSupport
 					}
 				>
@@ -194,7 +194,7 @@ const ZHelpCenterPopover: React.FC<{
 					size='small'
 					fill='clear'
 					color='dark'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.topBar.helpPopover.iSOAppBtn
 					}
 				>
@@ -216,7 +216,7 @@ const ZHelpCenterPopover: React.FC<{
 					fill='clear'
 					size='small'
 					color='dark'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.topBar.helpPopover.androidAppBtn
 					}
 				>

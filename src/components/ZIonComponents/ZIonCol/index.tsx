@@ -40,7 +40,7 @@ type ZIonColType = {
 	style?: {
 		[key: string]: unknown;
 	};
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	onMouseEnter?: React.MouseEventHandler<HTMLIonColElement>;
 	onClick?: React.MouseEventHandler<HTMLIonIconElement>;
@@ -66,10 +66,10 @@ const ZIonCol = (props: ZIonColType) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

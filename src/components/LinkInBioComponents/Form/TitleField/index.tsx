@@ -25,7 +25,7 @@ interface LinkInBioTitleFieldInterface {
 	showImageInSlot?: boolean;
 	slotImageUrl?: string;
 	testingListSelector?: string;
-	testingSelector?: string;
+	testingselector?: string;
 	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
 	onIonBlur?: <A extends Event>(event: A) => void;
 }
@@ -38,7 +38,7 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
 	showImageInSlot = false,
 	slotImageUrl,
 	testingListSelector,
-	testingSelector,
+	testingselector,
 	onIonChange,
 	onIonBlur,
 }) => {
@@ -46,7 +46,7 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
 		<ZIonItem
 			className={className}
 			lines='none'
-			testingSelector={`${testingSelector}-item`}
+			testingselector={`${testingselector}-item`}
 			testingListSelector={`${testingListSelector}-item`}
 		>
 			{!showImageInSlot && !slotImageUrl?.trim() && (
@@ -54,7 +54,7 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
 					icon={reorderTwoOutline}
 					slot='start'
 					className='w-7 h-7 me-2'
-					testingSelector={`${testingSelector}-icon`}
+					testingselector={`${testingselector}-icon`}
 					testingListSelector={`${testingListSelector}-icon`}
 				/>
 			)}
@@ -64,7 +64,7 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
 					src={slotImageUrl}
 					style={{ width: '25px' }}
 					slot='start'
-					testingSelector={`${testingSelector}-image`}
+					testingselector={`${testingselector}-image`}
 					testingListSelector={`${testingListSelector}-image`}
 				/>
 			)}
@@ -77,7 +77,7 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
 				onIonChange={onIonChange}
 				onIonBlur={onIonBlur}
 				value={value}
-				testingSelector={`${testingSelector}-input`}
+				testingselector={`${testingselector}-input`}
 				testingListSelector={`${testingListSelector}-input`}
 			/>
 		</ZIonItem>

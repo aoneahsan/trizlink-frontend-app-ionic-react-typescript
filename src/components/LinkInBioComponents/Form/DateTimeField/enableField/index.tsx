@@ -16,7 +16,7 @@ interface LinkInBioEnableFieldInterface {
 	title?: string;
 	icon?: string;
 	checked?: boolean;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	onChange?: SwitchChangeEventHandler;
 }
@@ -25,7 +25,7 @@ const LinkInBioEnableField: React.FC<LinkInBioEnableFieldInterface> = ({
 	title = 'Title',
 	icon = reorderTwoOutline,
 	checked,
-	testingSelector,
+	testingselector,
 	testingListSelector,
 	onChange,
 }) => {
@@ -33,13 +33,13 @@ const LinkInBioEnableField: React.FC<LinkInBioEnableFieldInterface> = ({
 		<ZIonItem
 			lines='none'
 			className='mt-3'
-			testingSelector={`${testingSelector}-item`}
+			testingselector={`${testingselector}-item`}
 			testingListSelector={`${testingListSelector}-item`}
 		>
 			<ZIonIcon icon={icon} className='me-3' slot='start' />
 			<ZIonText
 				color='medium'
-				testingSelector={`${testingSelector}-text`}
+				testingselector={`${testingselector}-text`}
 				testingListSelector={`${testingListSelector}-text`}
 			>
 				{title}
@@ -48,7 +48,7 @@ const LinkInBioEnableField: React.FC<LinkInBioEnableFieldInterface> = ({
 				<ZRCSwitch
 					onChange={onChange}
 					checked={checked}
-					testingSelector={testingSelector}
+					testingselector={testingselector}
 					testingListSelector={testingListSelector}
 				/>
 			</ZIonText>

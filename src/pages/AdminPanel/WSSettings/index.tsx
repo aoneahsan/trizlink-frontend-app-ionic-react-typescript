@@ -226,7 +226,7 @@ const ZWorkspaceSettings: React.FC = () => {
 								'mt-1 cursor-pointer': true,
 								'zaions__light_bg font-normal': isReferralProgramPage,
 							})}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.WSSettings.menuBar.as.referralBtn
 							}
 							routerLink={replaceRouteParams(
@@ -245,7 +245,7 @@ const ZWorkspaceSettings: React.FC = () => {
 								'mt-1 cursor-pointer': true,
 								'zaions__light_bg font-normal': isBillingPage,
 							})}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.WSSettings.menuBar.as.billingBtn
 							}
 							routerLink={replaceRouteParams(
@@ -264,7 +264,7 @@ const ZWorkspaceSettings: React.FC = () => {
 								'mt-1 cursor-pointer': true,
 								'zaions__light_bg font-normal': isUserPage,
 							})}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.WSSettings.menuBar.as.userBtn
 							}
 							routerLink={replaceRouteParams(

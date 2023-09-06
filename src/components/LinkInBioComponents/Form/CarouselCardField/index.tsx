@@ -79,7 +79,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
 								<ZIonButton
 									expand='block'
 									className='ion-text-capitalize'
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.linkInBio.formPage.design
 											.blockForm.fields.carouselCard.addCardBtn
 									}
@@ -95,7 +95,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
 												lines='none'
 												className='py-3 my-3 border zaions-linkInBio-block'
 												testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.cardItem}-${_index}`}
-												testingSelector={
+												testingselector={
 													CONSTANTS.testingSelectors.linkInBio.formPage.design
 														.blockForm.fields.carouselCard.cardItem
 												}
@@ -117,7 +117,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
 														onIonChange={handleChange}
 														onIonBlur={handleBlur}
 														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.linkInput}-${_index}`}
-														testingSelector={
+														testingselector={
 															CONSTANTS.testingSelectors.linkInBio.formPage
 																.design.blockForm.fields.carouselCard.linkInput
 														}
@@ -131,7 +131,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
 														className='mt-2'
 														dropdownHeight='7rem'
 														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.uploadField}-${_index}`}
-														testingSelector={
+														testingselector={
 															CONSTANTS.testingSelectors.linkInBio.formPage
 																.design.blockForm.fields.carouselCard
 																.uploadField
@@ -147,7 +147,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
 															values.cardItems && values.cardItems[_index].title
 														}
 														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.titleInput}-${_index}`}
-														testingSelector={
+														testingselector={
 															CONSTANTS.testingSelectors.linkInBio.formPage
 																.design.blockForm.fields.carouselCard.titleInput
 														}
@@ -163,7 +163,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
 															values.cardItems[_index].description
 														}
 														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.description}-${_index}`}
-														testingSelector={
+														testingselector={
 															CONSTANTS.testingSelectors.linkInBio.formPage
 																.design.blockForm.fields.carouselCard
 																.description
@@ -177,7 +177,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
 													iconColor='danger'
 													className='ion-no-padding ms-3 me-1'
 													testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.deleteBtn}-${_index}`}
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.linkInBio.formPage.design
 															.blockForm.fields.carouselCard.deleteBtn
 													}

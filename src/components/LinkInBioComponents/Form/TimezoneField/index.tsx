@@ -17,7 +17,7 @@ interface LinkInBioTimezoneFieldInterface {
 	className?: string;
 	value?: PropsValue<ZaionsRSelectOptions>;
 	name?: string;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	onChange?: (
 		newValue: MultiValue<ZaionsRSelectOptions>,
@@ -31,7 +31,7 @@ const LinkInBioTimezoneField: React.FC<LinkInBioTimezoneFieldInterface> = ({
 	name,
 	onChange,
 	onBlur,
-	testingSelector,
+	testingselector,
 	testingListSelector,
 }) => {
 	return (
@@ -40,7 +40,7 @@ const LinkInBioTimezoneField: React.FC<LinkInBioTimezoneFieldInterface> = ({
 			onChange={onChange}
 			onBlur={onBlur}
 			name={name}
-			testingSelector={testingSelector}
+			testingselector={testingselector}
 			testingListSelector={testingListSelector}
 		/>
 	);

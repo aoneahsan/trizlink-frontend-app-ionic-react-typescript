@@ -37,7 +37,7 @@ type ZIonSelectType = {
 		[key: string]: unknown;
 	};
 	minHeight?: 'auto' | string;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	onIonChange?: (
 		event: IonSelectCustomEvent<SelectChangeEventDetail<unknown>>
@@ -75,10 +75,10 @@ const ZIonSelect = (props: ZIonSelectType) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

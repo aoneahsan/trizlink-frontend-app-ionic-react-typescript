@@ -19,7 +19,7 @@ type ZIonChipType = {
 	disabled?: boolean;
 	mode?: ZIonModeType;
 	outline?: boolean;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	onClick?: React.MouseEventHandler<HTMLIonChipElement>;
 };
@@ -34,10 +34,10 @@ const ZIonChip = (props: ZIonChipType) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

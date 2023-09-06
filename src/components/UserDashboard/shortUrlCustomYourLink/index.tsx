@@ -129,7 +129,7 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
 						'flex ion-justify-content-center ion-align-items-center rounded relative cursor-pointer':
 							true,
 					})}
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.shortLink.formPage.customYourLink
 							.imageCol
 					}
@@ -167,7 +167,7 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
 								alt='send icon'
 								className='mx-auto'
 								style={{ width: '10rem' }}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.shortLink.formPage.customYourLink
 										.image
 								}
@@ -207,7 +207,7 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
 						onIonBlur={handleBlur}
 						value={values.title}
 						errorText={touched.title ? errors.title : undefined}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.formPage.customYourLink
 								.titleInput
 						}
@@ -230,7 +230,7 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
 						onIonBlur={handleBlur}
 						rows={3}
 						value={values.linkDescription}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.formPage.customYourLink
 								.descriptionTextarea
 						}

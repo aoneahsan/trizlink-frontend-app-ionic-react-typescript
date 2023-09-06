@@ -19,7 +19,7 @@ type ZRCSwitchType = {
 	id?: string;
 
 	//
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 };
 
@@ -33,10 +33,10 @@ const ZRCSwitch: React.FC<ZRCSwitchType> = (props) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

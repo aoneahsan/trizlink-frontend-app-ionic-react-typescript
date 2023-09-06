@@ -177,7 +177,7 @@ const ZViewInvitationModal: React.FC<{
 					className='ion-no-padding ion-no-margin'
 					fill='clear'
 					color='dark'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.invitation.viewModal.closeBtn
 					}
 					onClick={() => {
@@ -221,7 +221,7 @@ const ZViewInvitationModal: React.FC<{
 				userInvitationData?.inviteRejectedAt === null ? (
 					<ZIonCol
 						className='w-[80%] mx-auto mt-5'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.invitation.viewModal.actionBtnContainer
 						}
 					>
@@ -229,7 +229,7 @@ const ZViewInvitationModal: React.FC<{
 							color='success'
 							expand='block'
 							disabled={userInvitationData?.inviteAcceptedAt !== null}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.invitation.viewModal.acceptedBtn
 							}
 							onClick={() => {
@@ -247,7 +247,7 @@ const ZViewInvitationModal: React.FC<{
 							expand='block'
 							className='mt-3'
 							disabled={userInvitationData?.inviteRejectedAt !== null}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.invitation.viewModal.rejectedBtn
 							}
 							onClick={() => {
@@ -278,7 +278,7 @@ const ZViewInvitationModal: React.FC<{
 
 				{!isZFetching && (
 					<ZIonCol
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.invitation.viewModal.messageContainer
 						}
 					>
@@ -286,7 +286,7 @@ const ZViewInvitationModal: React.FC<{
 							<ZIonText
 								className='block text-xl mt-7'
 								color='success'
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.invitation.viewModal.acceptedText
 								}
 							>
@@ -297,7 +297,7 @@ const ZViewInvitationModal: React.FC<{
 							<ZIonText
 								className='block text-xl mt-7'
 								color='danger'
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.invitation.viewModal.rejectedBtn
 								}
 							>

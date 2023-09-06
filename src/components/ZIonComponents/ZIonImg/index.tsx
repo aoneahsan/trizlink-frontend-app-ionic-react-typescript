@@ -16,7 +16,7 @@ type ZIonImgType = {
 		[key: string]: unknown;
 	};
 	slot?: 'start' | 'end';
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 };
 
@@ -30,10 +30,10 @@ const ZIonImg = (props: ZIonImgType) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

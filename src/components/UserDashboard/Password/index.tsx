@@ -60,7 +60,7 @@ const LinkPassword: React.FC = () => {
 						defaultChecked={values.password.enabled}
 						checkedChildren='on'
 						unCheckedChildren='off'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.formPage.password.enableBtn
 						}
 						onChange={(val) => {
@@ -71,7 +71,7 @@ const LinkPassword: React.FC = () => {
 				{values.password.enabled ? (
 					<ZIonGrid
 						className='block px-2 mt-1'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.formPage.password.container
 						}
 					>
@@ -84,7 +84,7 @@ const LinkPassword: React.FC = () => {
 							onIonChange={handleChange}
 							onIonBlur={handleBlur}
 							value={values.password.value}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.shortLink.formPage.password.input
 							}
 							errorText={
@@ -102,7 +102,7 @@ const LinkPassword: React.FC = () => {
 				) : (
 					<ZIonGrid
 						className='mt-2 ion-padding-start'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.formPage.password
 								.disabledPasswordText
 						}

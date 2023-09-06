@@ -10,13 +10,27 @@ type ZIonSelectOptionType = {
 	className?: string;
 	disabled?: boolean;
 	value?: string | unknown;
+	minHeight?: 'auto' | string;
 	style?: {
 		[key: string]: unknown;
 	};
 };
 
 const ZIonSelectOption = (props: ZIonSelectOptionType) => {
-	return <IonSelectOption {...props}>{props.children}</IonSelectOption>;
+	const compStyle =
+		props.style && props.minHeight
+			? { ...props.style, '--min-height': props.minHeight }
+			: props.style && !props.minHeight
+			? { ...props.style }
+			: !props.style && props.minHeight
+			? { '--min-height': props.minHeight }
+			: {};
+
+	return (
+		<IonSelectOption {...props} style={compStyle}>
+			{props.children}
+		</IonSelectOption>
+	);
 };
 
 export default ZIonSelectOption;

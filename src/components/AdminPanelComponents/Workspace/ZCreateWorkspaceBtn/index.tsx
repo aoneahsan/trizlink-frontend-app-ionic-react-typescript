@@ -61,7 +61,7 @@ const ZCreateWorkspaceBtn: React.FC = () => {
 			// height='2.3rem'
 			className='normal-case ion-no-margin'
 			disabled={isWorkspacesDataFetching}
-			testingSelector={
+			testingselector={
 				CONSTANTS.testingSelectors.workspace.listPage.createWorkspaceButton
 			}
 			onClick={() => {

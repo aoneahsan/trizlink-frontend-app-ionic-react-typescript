@@ -105,7 +105,7 @@ const ZApprovalTab: React.FC<{ workspaceId: string }> = ({ workspaceId }) => {
 						icon={timeOutline}
 						workspaceId={workspaceId}
 						text='Schedule posts automatically on approval'
-						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.schedulePostToggler}-${workspaceId}`}
+						testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.schedulePostToggler}-${workspaceId}`}
 						testingListSelector={
 							CONSTANTS.testingSelectors.workspace.settingsModal.approvals
 								.schedulePostToggler
@@ -117,7 +117,7 @@ const ZApprovalTab: React.FC<{ workspaceId: string }> = ({ workspaceId }) => {
 						icon={lockClosedOutline}
 						workspaceId={workspaceId}
 						text='Lock content after approval'
-						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.lockContent}-${workspaceId}`}
+						testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.lockContent}-${workspaceId}`}
 						testingListSelector={
 							CONSTANTS.testingSelectors.workspace.settingsModal.approvals
 								.lockContent

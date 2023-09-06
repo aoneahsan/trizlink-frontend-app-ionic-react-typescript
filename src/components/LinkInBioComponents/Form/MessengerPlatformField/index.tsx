@@ -177,7 +177,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 											<div className='ion-text-center me-3 w-max'>
 												<LinkInBioPDButton
 													icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
-													testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.block}-${el.type}`}
+													testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.block}-${el.type}`}
 													onClick={() => {
 														toggleMusicPlatformCardHandler({
 															_type: el.type,
@@ -195,7 +195,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 							<ZIonButton
 								expand='block'
 								className='ion-text-capitalize'
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm
 										.fields.messenger.addBlockBtn
 								}
@@ -222,7 +222,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 												lines='none'
 												className='pt-2 pb-3 my-4 border zaions-linkInBio-block'
 												testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.cardItem}-${_index}`}
-												testingSelector={
+												testingselector={
 													CONSTANTS.testingSelectors.linkInBio.formPage.design
 														.blockForm.fields.messenger.cardItem
 												}
@@ -245,7 +245,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 														onIonChange={handleChange}
 														onIonBlur={handleBlur}
 														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.titleInput}-${_index}`}
-														testingSelector={
+														testingselector={
 															CONSTANTS.testingSelectors.linkInBio.formPage
 																.design.blockForm.fields.messenger.titleInput
 														}
@@ -264,7 +264,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 															onIonChange={handleChange}
 															onIonBlur={handleBlur}
 															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.linkInput}-${_index}`}
-															testingSelector={
+															testingselector={
 																CONSTANTS.testingSelectors.linkInBio.formPage
 																	.design.blockForm.fields.messenger.linkInput
 															}
@@ -283,7 +283,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 															onIonChange={handleChange}
 															onIonBlur={handleBlur}
 															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.iconInput}-${_index}`}
-															testingSelector={
+															testingselector={
 																CONSTANTS.testingSelectors.linkInBio.formPage
 																	.design.blockForm.fields.messenger.iconInput
 															}
@@ -302,7 +302,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 															onIonChange={handleChange}
 															onIonBlur={handleBlur}
 															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.emailInput}-${_index}`}
-															testingSelector={
+															testingselector={
 																CONSTANTS.testingSelectors.linkInBio.formPage
 																	.design.blockForm.fields.messenger.emailInput
 															}
@@ -325,7 +325,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 															onIonBlur={handleBlur}
 															className='mt-1'
 															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.emailInput}-${_index}`}
-															testingSelector={
+															testingselector={
 																CONSTANTS.testingSelectors.linkInBio.formPage
 																	.design.blockForm.fields.messenger.emailInput
 															}
@@ -353,7 +353,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 															onIonBlur={handleBlur}
 															name={`cardItems.${_index}.username`}
 															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.usernameInput}-${_index}`}
-															testingSelector={
+															testingselector={
 																CONSTANTS.testingSelectors.linkInBio.formPage
 																	.design.blockForm.fields.messenger
 																	.usernameInput
@@ -373,7 +373,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 															onIonBlur={handleBlur}
 															name={`cardItems.${_index}.object`}
 															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.objectInput}-${_index}`}
-															testingSelector={
+															testingselector={
 																CONSTANTS.testingSelectors.linkInBio.formPage
 																	.design.blockForm.fields.messenger.objectInput
 															}
@@ -396,7 +396,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 															placeholder='Message'
 															className='pt-2'
 															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.textInput}-${_index}`}
-															testingSelector={
+															testingselector={
 																CONSTANTS.testingSelectors.linkInBio.formPage
 																	.design.blockForm.fields.messenger.textInput
 															}
@@ -421,7 +421,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 													iconColor='danger'
 													className='ion-no-padding me-1 ms-2'
 													testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.deleteBtn}-${_index}`}
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.linkInBio.formPage.design
 															.blockForm.fields.messenger.deleteBtn
 													}

@@ -27,7 +27,7 @@ interface LinkInBioLinkFieldInterface {
 	slotImageUrl?: string;
 	value?: string | number | null;
 	testingListSelector?: string;
-	testingSelector?: string;
+	testingselector?: string;
 	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
 	onIonBlur?: <A extends Event>(event: A) => void;
 	RefreshBtnClickFn?: React.MouseEventHandler<HTMLIonButtonElement>;
@@ -42,7 +42,7 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
 	slotImageUrl,
 	className,
 	testingListSelector,
-	testingSelector,
+	testingselector,
 	RefreshBtnClickFn,
 	onIonChange,
 	onIonBlur,
@@ -51,7 +51,7 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
 		<ZIonItem
 			className={className}
 			lines='none'
-			testingSelector={`${testingSelector}-item`}
+			testingselector={`${testingselector}-item`}
 			testingListSelector={`${testingListSelector}-item`}
 		>
 			{!showImageInSlot && !slotImageUrl?.trim() && (
@@ -59,7 +59,7 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
 					icon={linkOutline}
 					slot='start'
 					className='w-7 h-7 me-2'
-					testingSelector={`${testingSelector}-icon`}
+					testingselector={`${testingselector}-icon`}
 					testingListSelector={`${testingListSelector}-icon`}
 				/>
 			)}
@@ -69,7 +69,7 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
 					src={slotImageUrl}
 					style={{ width: '25px' }}
 					slot='start'
-					testingSelector={`${testingSelector}-image`}
+					testingselector={`${testingselector}-image`}
 					testingListSelector={`${testingListSelector}-image`}
 				/>
 			)}
@@ -82,7 +82,7 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
 				onIonChange={onIonChange}
 				onIonBlur={onIonBlur}
 				value={value}
-				testingSelector={`${testingSelector}-input`}
+				testingselector={`${testingselector}-input`}
 				testingListSelector={`${testingListSelector}-input`}
 			/>
 
@@ -94,7 +94,7 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
 					height='35px'
 					className='ion-no-padding ms-2'
 					onClick={RefreshBtnClickFn}
-					testingSelector={`${testingSelector}-refresh-btn`}
+					testingselector={`${testingselector}-refresh-btn`}
 					testingListSelector={`${testingListSelector}-refresh-btn`}
 					style={{
 						'--background-hover-opacity': '0',

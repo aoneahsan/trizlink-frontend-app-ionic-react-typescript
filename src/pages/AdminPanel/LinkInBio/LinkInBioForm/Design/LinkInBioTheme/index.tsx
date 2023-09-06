@@ -172,7 +172,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							<ZIonCol size='max-content' key={i}>
 								<ZIonButton
 									size='large'
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 											.preDefinedThemeBlock
 									}
@@ -242,7 +242,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 
 				<ZIonGrid
 					className='flex ion-align-items-center ion-padding-bottom'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
 							.container
 					}
@@ -255,7 +255,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							name='theme.background.bgSolidColor'
 							value={values.theme.background.bgSolidColor as string}
 							setFieldValueFn={setFieldValue}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
 									.bgSolidColorInput
 							}
@@ -275,7 +275,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 									values?.theme.background?.bgGradientColors
 										?.startColor as string
 								}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
 										.gColors.startColorInput
 								}
@@ -287,7 +287,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 								className='mt-3 direction-button ion-margin-horizontal ion-no-padding w-[3rem]'
 								color='secondary'
 								height='2.5rem'
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
 										.gColors.directionBtn
 								}
@@ -320,7 +320,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 								showSkeleton={isZFetching}
 								setFieldValueFn={setFieldValue}
 								showCloseIcon={true}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
 										.gColors.endColorInput
 								}
@@ -345,7 +345,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 						<ZIonButton
 							className='mt-3 ion-text-capitalize ms-4'
 							height='40px'
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
 									.addGradientBtn
 							}
@@ -381,7 +381,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 
 				<ZIonGrid
 					className='flex ion-align-items-center ion-padding-bottom border-bottom__violet'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.button
 							.container
 					}
@@ -394,7 +394,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							name='theme.button.background.bgSolidColor'
 							value={values?.theme?.button?.background?.bgSolidColor as string}
 							setFieldValueFn={setFieldValue}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 									.button.bgSolidColorInput
 							}
@@ -410,7 +410,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 								name='theme.button.background.bgGradientColors.startColor'
 								setFieldValueFn={setFieldValue}
 								showSkeleton={isZFetching}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 										.button.gColors.startColorInput
 								}
@@ -426,7 +426,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 								className='mt-3 direction-button ion-margin-horizontal ion-no-padding w-[3rem]'
 								height='2.5rem'
 								color='secondary'
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 										.button.gColors.directionBtn
 								}
@@ -463,7 +463,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 									values?.theme?.button?.background?.bgGradientColors
 										?.endColor as string
 								}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 										.button.gColors.endColorInput
 								}
@@ -484,7 +484,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 						<ZIonButton
 							className='mt-3 ion-text-capitalize ms-4'
 							height='40px'
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 									.button.addGradientBtn
 							}
@@ -524,7 +524,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 									values?.theme?.button?.type ===
 									LinkInBioButtonTypeEnum.inlineSquare,
 							})}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 									.button.btnType.inlineSquare
 							}
@@ -549,7 +549,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 									values?.theme?.button?.type ===
 									LinkInBioButtonTypeEnum.inlineRound,
 							})}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 									.button.btnType.inlineRound
 							}
@@ -567,7 +567,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 						<ZIonButton
 							color='medium'
 							shape='round'
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 									.button.btnType.inlineCircle
 							}
@@ -590,7 +590,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					<ZIonCol size='4'>
 						<ZIonButton
 							fill='outline'
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 									.button.btnType.inlineSquareOutline
 							}
@@ -621,7 +621,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					<ZIonCol size='4'>
 						<ZIonButton
 							fill='outline'
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 									.button.btnType.inlineRoundOutline
 							}
@@ -653,7 +653,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 						<ZIonButton
 							shape='round'
 							fill='outline'
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 									.button.btnType.inlineCircleOutline
 							}
@@ -682,7 +682,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					<ZIonCol size='4'>
 						<ZIonButton
 							color='medium'
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 									.button.btnType.inlineSquareShadow
 							}
@@ -714,7 +714,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					<ZIonCol size='4'>
 						<ZIonButton
 							color='medium'
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 									.button.btnType.inlineRoundShadow
 							}
@@ -747,7 +747,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 						<ZIonButton
 							color='medium'
 							shape='round'
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 									.button.btnType.inlineCircleShadow
 							}
@@ -777,7 +777,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					<ZIonCol
 						size='12'
 						className='mt-3'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.button
 								.btnType.shadowColorInputContainer
 						}
@@ -793,7 +793,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 									name='theme.button.shadowColor'
 									value={values?.theme?.button?.shadowColor as string}
 									setFieldValueFn={setFieldValue}
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 											.button.btnType.shadowColorInput
 									}
@@ -821,7 +821,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					<ZaionsRSelect
 						className='w-full z_ff__roboto'
 						name='theme.font'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 								.fontSelector
 						}
@@ -859,7 +859,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 				sizeSm='12'
 				sizeXs='12'
 				className='mt-3 mb-5 ion-margin-start'
-				testingSelector={
+				testingselector={
 					CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bgImage
 						.container
 				}
@@ -873,7 +873,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 					<ZIonCol className='flex ion-justify-content-end'>
 						<ZRCSwitch
 							checked={values?.theme?.background?.enableBgImage}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 									.bgImage.toggler
 							}
@@ -903,7 +903,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
 							setFieldValue={setFieldValue}
 							fieldName='theme.background.bgImageUrl'
 							imageUrl={values.theme?.background?.bgImageUrl}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
 									.bgImage.upload
 							}

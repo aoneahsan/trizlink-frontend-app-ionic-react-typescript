@@ -14,9 +14,9 @@ import { LinkInBioSingleBlockContentType } from '@/types/AdminPanel/linkInBioTyp
 // Component Type
 
 const LinkInBioIframeField: React.FC<{
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
-}> = ({ testingListSelector, testingSelector }) => {
+}> = ({ testingListSelector, testingselector }) => {
 	const { values, setFieldValue } =
 		useFormikContext<LinkInBioSingleBlockContentType>();
 	return (
@@ -29,7 +29,7 @@ const LinkInBioIframeField: React.FC<{
 					fontSize={18}
 					value={values.iframe}
 					testingListSelector={testingListSelector}
-					testingSelector={testingSelector}
+					testingselector={testingselector}
 					onChange={(value) => {
 						setFieldValue('iframe', value, false);
 					}}

@@ -423,7 +423,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 														<ZIonButton
 															className='ion-text-capitalize ion-no-margin'
 															color='secondary'
-															testingSelector={
+															testingselector={
 																CONSTANTS.testingSelectors.linkInBio.formPage
 																	.topBar.homeBtn
 															}
@@ -445,7 +445,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 														{/* Title */}
 														<ZIonGrid
 															className='ms-2 w-[71%]'
-															testingSelector={
+															testingselector={
 																CONSTANTS.testingSelectors.linkInBio.formPage
 																	.topBar.titleContainer
 															}
@@ -454,7 +454,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 																<ZIonItem
 																	lines='none'
 																	minHeight='40px'
-																	testingSelector={
+																	testingselector={
 																		CONSTANTS.testingSelectors.linkInBio
 																			.formPage.topBar.titleIonItem
 																	}
@@ -472,7 +472,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 																		onIonChange={handleChange}
 																		onIonBlur={handleBlur}
 																		value={values.linkInBioTitle}
-																		testingSelector={
+																		testingselector={
 																			CONSTANTS.testingSelectors.linkInBio
 																				.formPage.topBar.titleInput
 																		}
@@ -487,7 +487,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 																		className='ion-text-capitalize ion-no-margin'
 																		height='40px'
 																		expand='full'
-																		testingSelector={
+																		testingselector={
 																			CONSTANTS.testingSelectors.linkInBio
 																				.formPage.topBar.titleSaveBtn
 																		}
@@ -508,7 +508,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 															{!values.enableTitleInput && (
 																<ZIonGrid
 																	className='flex w-full text-[18px] cursor-pointer ms-2'
-																	testingSelector={
+																	testingselector={
 																		CONSTANTS.testingSelectors.linkInBio
 																			.formPage.topBar.titleTextContainer
 																	}
@@ -522,7 +522,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 																>
 																	<ZIonTitle
 																		className='overflow-hidden me-1 w-min max-w-max ion-no-padding text-md'
-																		testingSelector={
+																		testingselector={
 																			CONSTANTS.testingSelectors.linkInBio
 																				.formPage.topBar.titleText
 																		}
@@ -546,7 +546,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 															<ZIonSegmentButton
 																value='design'
 																className='ion-text-capitalize'
-																testingSelector={
+																testingselector={
 																	CONSTANTS.testingSelectors.linkInBio.formPage
 																		.topBar.tab.design
 																}
@@ -579,7 +579,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 															<ZIonSegmentButton
 																value='shareSettings'
 																className='ion-text-capitalize'
-																testingSelector={
+																testingselector={
 																	CONSTANTS.testingSelectors.linkInBio.formPage
 																		.topBar.tab.shareSettings
 																}
@@ -611,7 +611,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 															<ZIonSegmentButton
 																value='pageAnalytics'
 																className='ion-text-capitalize'
-																testingSelector={
+																testingselector={
 																	CONSTANTS.testingSelectors.linkInBio.formPage
 																		.topBar.tab.pageAnalytics
 																}
@@ -643,7 +643,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 															<ZIonSegmentButton
 																value='lead'
 																className='ion-text-capitalize'
-																testingSelector={
+																testingselector={
 																	CONSTANTS.testingSelectors.linkInBio.formPage
 																		.topBar.tab.lead
 																}
@@ -675,7 +675,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 															<ZIonSegmentButton
 																value='block-analytics'
 																className='ion-text-capitalize'
-																testingSelector={
+																testingselector={
 																	CONSTANTS.testingSelectors.linkInBio.formPage
 																		.topBar.tab.blockAnalytics
 																}
@@ -692,7 +692,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 														<ZIonButton
 															className='ion-text-lowercase ion-no-margin me-4'
 															color='danger'
-															testingSelector={
+															testingselector={
 																CONSTANTS.testingSelectors.linkInBio.formPage
 																	.topBar.errorsBtn
 															}
@@ -705,7 +705,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 														{/* Upgrade btn */}
 														<ZIonButton
 															className='ion-text-capitalize ion-no-margin'
-															testingSelector={
+															testingselector={
 																CONSTANTS.testingSelectors.linkInBio.formPage
 																	.topBar.upgradeBtn
 															}

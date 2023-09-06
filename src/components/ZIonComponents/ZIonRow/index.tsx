@@ -10,7 +10,7 @@ import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 type ZIonRowType = {
 	children: ReactNode;
 	className?: string;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	style?: React.CSSProperties;
 	onClick?: React.MouseEventHandler<HTMLIonRowElement>;
@@ -26,10 +26,10 @@ const ZIonRow = (props: ZIonRowType) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

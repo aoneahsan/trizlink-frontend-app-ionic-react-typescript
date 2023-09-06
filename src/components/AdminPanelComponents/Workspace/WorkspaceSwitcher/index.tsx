@@ -118,7 +118,7 @@ const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = ({
 			fill='clear'
 			color='dark'
 			size={false ? 'small' : 'default'}
-			testingSelector={CONSTANTS.testingSelectors.topBar.workspaceSwitcherBtn}
+			testingselector={CONSTANTS.testingSelectors.topBar.workspaceSwitcherBtn}
 			onClick={(event: unknown) => {
 				presentZWorkspacesListPopover({
 					_event: event as Event,

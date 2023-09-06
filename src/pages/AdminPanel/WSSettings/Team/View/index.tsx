@@ -526,7 +526,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																				<div className='ZaionsTextEllipsis max-w-[50%!important]'>
 																					<ZIonTitle
 																						className='block text-2xl font-bold ion-no-padding'
-																						testingSelector={
+																						testingselector={
 																							CONSTANTS.testingSelectors
 																								.WSSettings.teamViewPage
 																								.titleText
@@ -540,7 +540,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																			{isZFetching && (
 																				<ZIonTitle
 																					className='block text-2xl font-bold ion-no-padding'
-																					testingSelector={
+																					testingselector={
 																						CONSTANTS.testingSelectors
 																							.WSSettings.teamViewPage.titleText
 																					}
@@ -556,7 +556,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																				<ZIonIcon
 																					icon={createOutline}
 																					className='w-5 h-5 cursor-pointer'
-																					testingSelector={
+																					testingselector={
 																						CONSTANTS.testingSelectors
 																							.WSSettings.teamViewPage
 																							.unableEditModeBtn
@@ -584,7 +584,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																			{!isZFetching && (
 																				<ZIonText
 																					className='block mt-2'
-																					testingSelector={
+																					testingselector={
 																						CONSTANTS.testingSelectors
 																							.WSSettings.teamViewPage
 																							.descriptionText
@@ -597,7 +597,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																			{isZFetching && (
 																				<ZIonText
 																					className='block mt-2'
-																					testingSelector={
+																					testingselector={
 																						CONSTANTS.testingSelectors
 																							.WSSettings.teamViewPage
 																							.descriptionText
@@ -636,7 +636,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																						? errors.title
 																						: undefined
 																				}
-																				testingSelector={
+																				testingselector={
 																					CONSTANTS.testingSelectors.WSSettings
 																						.teamViewPage.form.titleInput
 																				}
@@ -680,7 +680,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																						errors.description?.trim()
 																							?.length === 0,
 																				})}
-																				testingSelector={
+																				testingselector={
 																					CONSTANTS.testingSelectors.WSSettings
 																						.teamViewPage.form
 																						.descriptionTextarea
@@ -693,7 +693,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																			<ZIonButton
 																				onClick={() => void submitForm()}
 																				disabled={!isValid}
-																				testingSelector={
+																				testingselector={
 																					CONSTANTS.testingSelectors.WSSettings
 																						.teamViewPage.form.submitFormBtn
 																				}
@@ -703,7 +703,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																			<ZIonButton
 																				fill='outline'
 																				className='ms-2'
-																				testingSelector={
+																				testingselector={
 																					CONSTANTS.testingSelectors.WSSettings
 																						.teamViewPage.form.closeButton
 																				}
@@ -728,7 +728,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																			{!isZFetching && (
 																				<ZIonText
 																					className='font-bold total_links pe-1'
-																					testingSelector={
+																					testingselector={
 																						CONSTANTS.testingSelectors
 																							.WSSettings.teamListPage
 																							.teamsCount
@@ -783,7 +783,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																					}
 																					className='my-2 normal-case'
 																					height='39px'
-																					testingSelector={
+																					testingselector={
 																						CONSTANTS.testingSelectors
 																							.WSSettings.teamListPage
 																							.timeFilterBtn
@@ -805,7 +805,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																					}
 																					className='my-2 normal-case'
 																					height='39px'
-																					testingSelector={
+																					testingselector={
 																						CONSTANTS.testingSelectors
 																							.WSSettings.teamListPage
 																							.tagsFilterBtn
@@ -830,7 +830,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																					onClick={() => {
 																						void invalidedQueries();
 																					}}
-																					testingSelector={
+																					testingselector={
 																						CONSTANTS.testingSelectors
 																							.WSSettings.teamListPage
 																							.refetchBtn
@@ -858,7 +858,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 																								'workspace-sharing-modal-size',
 																						});
 																					}}
-																					testingSelector={
+																					testingselector={
 																						CONSTANTS.testingSelectors
 																							.WSSettings.teamListPage
 																							.addMemberBtn

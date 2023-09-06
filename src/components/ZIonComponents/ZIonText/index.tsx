@@ -19,7 +19,7 @@ type ZIonTextType = {
 		[key: string]: unknown;
 	};
 	slot?: 'start' | 'end' | string;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	onClick?: React.MouseEventHandler<HTMLIonTextElement>;
 };
@@ -35,10 +35,10 @@ const ZIonText = React.forwardRef(
 			  }
 			: {};
 
-		const _testingSelector = props.testingSelector
+		const _testingSelector = props.testingselector
 			? {
 					...zCreateElementTestingSelector({
-						_value: props.testingSelector || PRODUCT_NAME,
+						_value: props.testingselector || PRODUCT_NAME,
 					}),
 			  }
 			: {};

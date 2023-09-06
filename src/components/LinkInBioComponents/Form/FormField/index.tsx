@@ -107,7 +107,7 @@ const LinkInBioFormField: React.FC = () => {
 			<ZIonButton
 				expand='block'
 				className='ion-text-capitalize'
-				testingSelector={
+				testingselector={
 					CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields
 						.form.addNewFieldBtn
 				}
@@ -140,7 +140,7 @@ const LinkInBioFormField: React.FC = () => {
 														CONSTANTS.testingSelectors.linkInBio.formPage.design
 															.blockForm.fields.form.cardItem
 													}
-													testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.cardItem}-${_index}`}
+													testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.cardItem}-${_index}`}
 													style={{
 														'--background': 'transparent',
 													}}
@@ -165,7 +165,7 @@ const LinkInBioFormField: React.FC = () => {
 																	CONSTANTS.testingSelectors.linkInBio.formPage
 																		.design.blockForm.fields.form.titleInput
 																}
-																testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.titleInput}-${_index}`}
+																testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.titleInput}-${_index}`}
 																value={
 																	values.form?.formFields &&
 																	values.form?.formFields[_index].title
@@ -183,7 +183,7 @@ const LinkInBioFormField: React.FC = () => {
 																onIonBlur={handleBlur}
 																name={`form.formFields.${_index}.placeholder`}
 																testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.titleInput}-2`}
-																testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.titleInput}-2-${_index}`}
+																testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.titleInput}-2-${_index}`}
 																value={
 																	values.form?.formFields &&
 																	values.form?.formFields[_index].placeholder
@@ -213,7 +213,7 @@ const LinkInBioFormField: React.FC = () => {
 																	CONSTANTS.testingSelectors.linkInBio.formPage
 																		.design.blockForm.fields.form.textarea
 																}
-																testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.textarea}-${_index}`}
+																testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.textarea}-${_index}`}
 																value={
 																	values.form?.formFields &&
 																	values.form?.formFields[_index].columnId
@@ -243,7 +243,7 @@ const LinkInBioFormField: React.FC = () => {
 																					.formPage.design.blockForm.fields.form
 																					.requiredSwitcher
 																			}
-																			testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.requiredSwitcher}-${_index}`}
+																			testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.requiredSwitcher}-${_index}`}
 																			onChange={(value) => {
 																				setFieldValue(
 																					`form.formFields.${_index}.required`,
@@ -275,7 +275,7 @@ const LinkInBioFormField: React.FC = () => {
 																					.formPage.design.blockForm.fields.form
 																					.activeSwitcher
 																			}
-																			testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.activeSwitcher}-${_index}`}
+																			testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.activeSwitcher}-${_index}`}
 																			onChange={(value) => {
 																				setFieldValue(
 																					`form.formFields.${_index}.isActive`,
@@ -303,7 +303,7 @@ const LinkInBioFormField: React.FC = () => {
 															CONSTANTS.testingSelectors.linkInBio.formPage
 																.design.blockForm.fields.form.deleteBtn
 														}
-														testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.deleteBtn}-${_index}`}
+														testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.deleteBtn}-${_index}`}
 														deleteFn={(detail: OverlayEventDetail<unknown>) => {
 															try {
 																if (detail && detail.role === 'destructive') {

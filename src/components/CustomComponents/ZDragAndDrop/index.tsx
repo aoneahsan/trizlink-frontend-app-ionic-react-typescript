@@ -36,7 +36,7 @@ type ZDragAndDropType = {
 	fieldName?: string;
 	imageUrl?: string;
 	title?: string;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	setFieldValue?: FormikSetFieldValueEventType;
 };
@@ -48,7 +48,7 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
 	imageUrl,
 	title = 'Click to upload Picture or a GIF',
 	testingListSelector,
-	testingSelector,
+	testingselector,
 	setFieldValue,
 }) => {
 	const { presentZIonModal: presentZFileUploadModal } = useZIonModal(
@@ -62,7 +62,7 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
 	return (
 		<ZIonGrid
 			style={style}
-			testingSelector={testingSelector}
+			testingselector={testingselector}
 			testingListSelector={testingListSelector}
 			className={classNames(classes['zaions-drag-and-drop'], className, {
 				'flex flex-col ion-align-items-center ion-justify-content-center': true,
@@ -95,7 +95,7 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
 			{imageUrl?.trim() ? (
 				<ZIonImg
 					src={imageUrl}
-					testingSelector={`${testingSelector}-image`}
+					testingselector={`${testingselector}-image`}
 					testingListSelector={`${testingListSelector}-image`}
 					className='w-full h-full'
 				/>
@@ -106,13 +106,13 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
 							icon={fileTrayOutline}
 							color='primary'
 							className='w-8 h-8'
-							testingSelector={`${testingSelector}-cd-icon`}
+							testingselector={`${testingselector}-cd-icon`}
 							testingListSelector={`${testingListSelector}-cd-icon`}
 						/>
 					</ZIonText>
 					<ZIonText
 						color='primary'
-						testingSelector={`${testingSelector}-cd-icon`}
+						testingselector={`${testingselector}-cd-icon`}
 						testingListSelector={`${testingListSelector}-cd-icon`}
 					>
 						{title}
@@ -129,7 +129,7 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
 					<ZIonImg
 						src={upload_send}
 						alt='send icon'
-						testingSelector={`${testingSelector}-od-icon`} // od -> overlay-div
+						testingselector={`${testingselector}-od-icon`} // od -> overlay-div
 						testingListSelector={`${testingListSelector}-od-icon`}
 						style={{ width: '4rem' }}
 					/>
@@ -137,7 +137,7 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
 				<ZIonText
 					color='light'
 					className='mt-2 font-bold'
-					testingSelector={`${testingSelector}-od-text`} // od -> overlay-div
+					testingselector={`${testingselector}-od-text`} // od -> overlay-div
 					testingListSelector={`${testingListSelector}-od-text`}
 				>
 					Upload a new Picture

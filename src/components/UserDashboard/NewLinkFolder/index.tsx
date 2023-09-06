@@ -87,7 +87,7 @@ const NewLinkFolder: React.FC<{
 					icon={addCircleOutline}
 					size='large'
 					color='primary'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.shortLink.formPage.folder.createBtn
 					}
 					onClick={() => {
@@ -129,7 +129,7 @@ const NewLinkFolder: React.FC<{
 					interface='popover'
 					fill='outline'
 					minHeight='40px'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.shortLink.formPage.folder.selector
 					}
 				>

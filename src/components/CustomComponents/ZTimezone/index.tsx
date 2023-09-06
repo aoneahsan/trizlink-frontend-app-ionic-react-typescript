@@ -57,7 +57,7 @@ interface ZTimezoneInputInterface {
 	className?: string;
 	placeholder?: string;
 	name?: string;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	// options?: readonly ZaionsRSelectOptions[];
 	value?: PropsValue<ZaionsRSelectOptions>;
@@ -87,7 +87,7 @@ interface ZTimezoneSelectorInterface {
 	style?: {
 		[key: string]: unknown;
 	};
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 }
 
@@ -107,10 +107,10 @@ const ZTimezoneInput: React.FC<ZTimezoneInputInterface> = (props) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

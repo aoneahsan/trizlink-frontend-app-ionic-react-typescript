@@ -44,7 +44,7 @@ const ZaionsLoginOptions: React.FC = () => {
 							<ZIonRouterLink
 								className='underline'
 								routerLink={ZaionsRoutes.SignUpRoute}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.loginPage.signupButton
 								}
 							>
@@ -69,7 +69,7 @@ const ZaionsLoginOptions: React.FC = () => {
 						className='me-2 ion-text-capitalize'
 						color='tertiary'
 						expand={!isXsScale ? 'block' : undefined}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.loginPage.googleLoginButton
 						}
 					>
@@ -80,7 +80,7 @@ const ZaionsLoginOptions: React.FC = () => {
 						className='me-2 ion-text-capitalize'
 						color='tertiary'
 						expand={!isXsScale ? 'block' : undefined}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.loginPage.twitterLoginButton
 						}
 					>
@@ -91,7 +91,7 @@ const ZaionsLoginOptions: React.FC = () => {
 						className='me-2 ion-text-capitalize'
 						color='tertiary'
 						expand={!isXsScale ? 'block' : undefined}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.loginPage.facebookLoginButton
 						}
 					>
@@ -102,7 +102,7 @@ const ZaionsLoginOptions: React.FC = () => {
 						className='me-2 ion-text-capitalize'
 						color='tertiary'
 						expand={!isXsScale ? 'block' : undefined}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.loginPage.appleLoginButton
 						}
 					>

@@ -20,7 +20,7 @@ type ZIonAccordionGroupType = {
 	readonly?: boolean;
 	value?: null | string | string[];
 	//
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 };
 
@@ -34,10 +34,10 @@ const ZIonAccordionGroup = (props: ZIonAccordionGroupType) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

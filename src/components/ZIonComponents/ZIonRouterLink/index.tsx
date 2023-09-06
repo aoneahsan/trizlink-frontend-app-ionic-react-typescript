@@ -25,7 +25,7 @@ type ZIonRouterLinkType = {
 	target?: ZIonTargetType;
 
 	//
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 };
 
@@ -39,10 +39,10 @@ const ZIonRouterLink = (props: ZIonRouterLinkType) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

@@ -14,6 +14,9 @@ import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.
 import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
+import classNames from 'classnames';
+import { ZIonIcon } from '@/components/ZIonComponents';
+import { closeOutline } from 'ionicons/icons';
 
 interface ZaionsRSelectType {
 	options: readonly ZaionsRSelectOptions[];
@@ -23,10 +26,14 @@ interface ZaionsRSelectType {
 	name?: string;
 	placeholder?: React.ReactNode;
 	disabled?: boolean;
+	isClearable?: boolean;
+	isDisabled?: boolean;
+	isRtl?: boolean;
+	isSearchable?: boolean;
 	value?: PropsValue<ZaionsRSelectOptions>;
 	classNamePrefix?: string | null | undefined;
 	defaultValue?: PropsValue<ZaionsRSelectOptions>;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	onBlur?: React.FocusEventHandler<HTMLInputElement>;
 	onChange?: (
@@ -35,7 +42,9 @@ interface ZaionsRSelectType {
 	) => void;
 }
 
-const CustomClearText: FunctionComponent = () => <>clear all</>;
+const CustomClearText: FunctionComponent = () => (
+	<ZIonIcon color='dark' icon={closeOutline} />
+);
 const ClearIndicator = (
 	props: ClearIndicatorProps<ZaionsRSelectOptions, true>
 ) => {
@@ -50,7 +59,7 @@ const ClearIndicator = (
 			ref={ref}
 			style={getStyles('clearIndicator', props) as CSSProperties}
 		>
-			<div style={{ padding: '0px 5px' }}>{children}</div>
+			<div style={{ padding: '0px 0px' }}>{children}</div>
 		</div>
 	);
 };
@@ -61,7 +70,7 @@ const ClearIndicatorStyles = <T extends object>(
 ) => ({
 	...base,
 	cursor: 'pointer',
-	color: state.isFocused ? 'white' : 'white',
+	color: state.isFocused ? 'dark' : 'light',
 	border: 0,
 });
 
@@ -75,21 +84,20 @@ const ZaionsRSelect: React.FC<ZaionsRSelectType> = (props) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};
 	return (
 		<Select
-			components={{ ClearIndicator }}
-			styles={{ clearIndicator: ClearIndicatorStyles }}
-			// defaultValue={[ZaionsRSelects[4], ZaionsRSelects[5]]}
 			{...props}
-			classNamePrefix={props.classNamePrefix || 'zaions__rs'}
-			// menuIsOpen={true}
+			// components={{ ClearIndicator }}
+			// styles={{ clearIndicator: ClearIndicatorStyles }}
+			className={classNames('basic-single', props.className)}
+			classNamePrefix={props.classNamePrefix || 'select'}
 			{..._testingSelector}
 			{..._testingListSelector}
 		/>

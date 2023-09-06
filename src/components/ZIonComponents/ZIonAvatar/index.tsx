@@ -25,7 +25,7 @@ type ZIonAvatarType = {
 	onMouseLeave?: React.MouseEventHandler<HTMLIonAvatarElement>;
 
 	//
-	testingSelector?: string;
+	testingselector?: string;
 };
 
 const ZIonAvatar = (props: ZIonAvatarType) => {
@@ -33,7 +33,7 @@ const ZIonAvatar = (props: ZIonAvatarType) => {
 		<IonAvatar
 			{...props}
 			{...zCreateElementTestingSelector({
-				_value: props.testingSelector || PRODUCT_NAME,
+				_value: props.testingselector || PRODUCT_NAME,
 			})}
 		>
 			{props.children}

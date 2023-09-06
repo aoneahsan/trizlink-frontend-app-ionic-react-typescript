@@ -58,7 +58,7 @@ interface ZCustomDeleteComponentInterface {
 	iconColor?: ZIonColorType;
 	iconName?: string;
 	iconClassName?: string;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	deleteFn?: (detail: OverlayEventDetail<unknown>) => Promise<void> | void;
 }
@@ -78,7 +78,7 @@ const ZCustomDeleteComponent: React.FC<ZCustomDeleteComponentInterface> = ({
 	iconColor,
 	iconName = trashBin,
 	iconClassName,
-	testingSelector,
+	testingselector,
 	testingListSelector,
 	deleteFn,
 }) => {
@@ -91,7 +91,7 @@ const ZCustomDeleteComponent: React.FC<ZCustomDeleteComponentInterface> = ({
 			className={className}
 			fill='clear'
 			size='small'
-			testingSelector={testingSelector}
+			testingselector={testingselector}
 			testingListSelector={testingListSelector}
 			style={{
 				'--background-hover-opacity': '0',

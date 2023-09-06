@@ -10,7 +10,7 @@ import { ZIonColorType } from '@/types/zaionsAppSettings.type';
 // Component Type
 type ZRoundedButtonType = {
 	className?: string;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	children?: ReactNode;
 	color?: ZIonColorType;
@@ -26,7 +26,7 @@ const ZRoundedButton: React.FC<ZRoundedButtonType> = (props) => {
 			{...props}
 			shape='round'
 			testingListSelector={props.testingListSelector}
-			testingSelector={props.testingSelector}
+			testingselector={props.testingselector}
 			style={{
 				'--padding-top': '1.5rem',
 				'--padding-bottom': '1.5rem',

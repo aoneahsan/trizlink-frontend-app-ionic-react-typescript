@@ -363,7 +363,7 @@ const ZSendOtpTab: React.FC = () => {
 				// }}
 				// onIonBlur={handleBlur}
 				value={values.emailAddress}
-				testingSelector={CONSTANTS.testingSelectors.setPasswordPage.emailInput}
+				testingselector={CONSTANTS.testingSelectors.setPasswordPage.emailInput}
 				errorText={
 					touched.emailAddress
 						? errors.emailAddress?.trim()
@@ -391,7 +391,7 @@ const ZSendOtpTab: React.FC = () => {
 				onClick={async () => {
 					await ZSendOTPHandler();
 				}}
-				testingSelector={CONSTANTS.testingSelectors.setPasswordPage.otpBtn}
+				testingselector={CONSTANTS.testingSelectors.setPasswordPage.otpBtn}
 			>
 				Send OTP
 			</ZIonButton>
@@ -552,7 +552,7 @@ const ZConfirmOptTab: React.FC = () => {
 				onIonChange={handleChange}
 				onIonBlur={handleBlur}
 				value={values.otp}
-				testingSelector={CONSTANTS.testingSelectors.setPasswordPage.emailInput}
+				testingselector={CONSTANTS.testingSelectors.setPasswordPage.emailInput}
 				errorText={values?.isOTPApiError ? values?.OTPApiErrorText : undefined}
 				className={classNames({
 					'mb-4': true,
@@ -570,7 +570,7 @@ const ZConfirmOptTab: React.FC = () => {
 				onClick={async () => {
 					await ZConfirmOTPHandler();
 				}}
-				testingSelector={
+				testingselector={
 					CONSTANTS.testingSelectors.setPasswordPage.confirmOtpBtn
 				}
 			>
@@ -584,7 +584,7 @@ const ZConfirmOptTab: React.FC = () => {
 				onClick={async () => {
 					await ZResendOTPHandler();
 				}}
-				testingSelector={
+				testingselector={
 					CONSTANTS.testingSelectors.setPasswordPage.resendOtpBtn
 				}
 			>
@@ -744,7 +744,7 @@ const ZNewPasswordTab: React.FC = () => {
 					errorText={touched.password ? errors.password : undefined}
 					type={values.canViewPassword ? 'text' : 'password'}
 					clearOnEdit={false}
-					testingSelector={CONSTANTS.testingSelectors.signupPage.passwordInput}
+					testingselector={CONSTANTS.testingSelectors.signupPage.passwordInput}
 					className={classNames({
 						'ion-touched': touched.password,
 						'ion-invalid': touched.password && errors.password,
@@ -757,7 +757,7 @@ const ZNewPasswordTab: React.FC = () => {
 					fill='clear'
 					size='large'
 					className='ion-no-padding ion-no-margin ms-3 w-max'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.signupPage.canViewPasswordButton
 					}
 					onClick={() =>
@@ -839,7 +839,7 @@ const ZNewPasswordTab: React.FC = () => {
 					name='confirmPassword'
 					clearOnEdit={false}
 					type={values?.canViewConfirmPassword ? 'text' : 'password'}
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.signupPage.confirmPasswordInput
 					}
 					errorText={
@@ -855,7 +855,7 @@ const ZNewPasswordTab: React.FC = () => {
 					fill='clear'
 					size='large'
 					className='ion-no-padding ion-no-margin ms-3 w-max'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.signupPage.canViewConfirmPasswordButton
 					}
 					onClick={() =>
@@ -886,7 +886,7 @@ const ZNewPasswordTab: React.FC = () => {
 					// await ZConfirmOTPHandler();
 					await ZSetPassword();
 				}}
-				testingSelector={
+				testingselector={
 					CONSTANTS.testingSelectors.setPasswordPage.confirmOtpBtn
 				}
 			>

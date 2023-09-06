@@ -136,7 +136,7 @@ const ZShortLinkOptionsPopover: React.FC<{
 						<ZIonCol size='5' key={el.id}>
 							<ZIonText
 								className='flex gap-3 cursor-pointer ion-align-items-center ion-margin-bottom'
-								testingSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.ShortUrlOptionFields.typePopover.typeBtn}-${el.type}`}
+								testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.ShortUrlOptionFields.typePopover.typeBtn}-${el.type}`}
 								onClick={() => {
 									shortLinkTypeOptionChangeHandler(el.type);
 								}}

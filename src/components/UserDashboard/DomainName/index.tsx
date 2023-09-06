@@ -185,7 +185,7 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
 						interface='popover'
 						disabled={isZEditMode}
 						value={values?.shortUrlDomain}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.formPage.customDomain
 								.domainSelector
 						}
@@ -231,7 +231,7 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
 						disabled={isZEditMode}
 						value={values?.shortUrlPath}
 						errorText={touched?.shortUrlPath ? errors?.shortUrlPath : undefined}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.formPage.customDomain
 								.customizeInput
 						}
@@ -311,7 +311,7 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
 								height='2.2rem'
 								id='z-shortlink-check-domain-url-path-available-tooltip'
 								disabled={errors?.shortUrlPath?.trim() ? true : false}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.shortLink.formPage.customDomain
 										.customizeCheckBtn
 								}

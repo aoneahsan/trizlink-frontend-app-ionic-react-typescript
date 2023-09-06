@@ -62,7 +62,7 @@ interface ZTextEditorInterface {
 	style?: React.CSSProperties;
 	id?: string;
 	placeholder?: string;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	onChange?: (
 		value: string,
@@ -98,10 +98,10 @@ const ZTextEditor: React.FC<ZTextEditorInterface> = (props) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

@@ -197,7 +197,7 @@ const ZaionsTopMenu: React.FC = () => {
 						<ZIonRouterLink
 							routerLink={ZaionsRoutes.LoginRoute}
 							color='dark'
-							testingSelector={CONSTANTS.testingSelectors.homePage.loginButton}
+							testingselector={CONSTANTS.testingSelectors.homePage.loginButton}
 						>
 							<ZIonTitle className={`${classes.zaions_nav_button} mb-4`}>
 								Login
@@ -205,7 +205,7 @@ const ZaionsTopMenu: React.FC = () => {
 						</ZIonRouterLink>
 						<ZIonRouterLink
 							routerLink={ZaionsRoutes.SignUpRoute}
-							testingSelector={CONSTANTS.testingSelectors.homePage.signupButton}
+							testingselector={CONSTANTS.testingSelectors.homePage.signupButton}
 						>
 							<ZIonTitle
 								className={classNames({

@@ -131,7 +131,7 @@ const ZWorkspacesListPopover: React.FC<{
 						minHeight='2.2rem'
 						className='cursor-pointer ion-activatable'
 						testingListSelector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
 								.singleWorkspace
 						}
@@ -291,7 +291,7 @@ const ZWorkspaceActionPopover: React.FC<{
 			<ZIonItem
 				minHeight='2.1rem'
 				className='cursor-pointer ion-activatable'
-				testingSelector={
+				testingselector={
 					CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
 						.actionPopover.editWorkspace
 				}
@@ -310,7 +310,7 @@ const ZWorkspaceActionPopover: React.FC<{
 				minHeight='2.1rem'
 				lines='none'
 				className='cursor-pointer ion-activatable'
-				testingSelector={
+				testingselector={
 					CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
 						.actionPopover.deleteWorkspace
 				}

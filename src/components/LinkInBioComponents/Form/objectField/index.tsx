@@ -15,7 +15,7 @@ interface LinkInBioObjectFieldInterface {
 	placeholder?: string;
 	name?: string;
 	testingListSelector?: string;
-	testingSelector?: string;
+	testingselector?: string;
 	value?: string | number | null;
 	className?: string;
 	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
@@ -27,7 +27,7 @@ const LinkInBioObjectField: React.FC<LinkInBioObjectFieldInterface> = ({
 	value,
 	name,
 	testingListSelector,
-	testingSelector,
+	testingselector,
 	className,
 	onIonChange,
 	onIonBlur,
@@ -36,7 +36,7 @@ const LinkInBioObjectField: React.FC<LinkInBioObjectFieldInterface> = ({
 		<ZIonItem
 			className={className}
 			lines='none'
-			testingSelector={`${testingSelector}-item`}
+			testingselector={`${testingselector}-item`}
 			testingListSelector={`${testingListSelector}-item`}
 		>
 			<ZIonInput
@@ -47,7 +47,7 @@ const LinkInBioObjectField: React.FC<LinkInBioObjectFieldInterface> = ({
 				onIonBlur={onIonBlur}
 				value={value}
 				minHeight='40px'
-				testingSelector={`${testingSelector}-input`}
+				testingselector={`${testingselector}-input`}
 				testingListSelector={`${testingListSelector}-input`}
 			/>
 		</ZIonItem>

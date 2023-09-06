@@ -68,7 +68,7 @@ interface IZCPhoneNumberInput {
 	className?: string;
 	touched?: boolean;
 	minHeight?: string;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	style?: {
 		[key: string]: unknown;
@@ -89,7 +89,7 @@ const ZCPhoneNumberInput: React.FC<IZCPhoneNumberInput> = ({
 	minHeight = '2.5rem',
 	style,
 	touched = false,
-	testingSelector,
+	testingselector,
 	testingListSelector,
 	onBlur,
 	onChange,
@@ -112,10 +112,10 @@ const ZCPhoneNumberInput: React.FC<IZCPhoneNumberInput> = ({
 		  }
 		: {};
 
-	const _testingSelector = testingSelector
+	const _testingSelector = testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: testingSelector || PRODUCT_NAME,
+					_value: testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

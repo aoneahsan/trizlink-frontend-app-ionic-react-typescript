@@ -194,7 +194,7 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
 										name='UTMTags.utmCampaign'
 										placeholder='Enter text'
 										minHeight='40px'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage.utmTags
 												.campaignInput
 										}
@@ -224,7 +224,7 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
 										name='UTMTags.utmMedium'
 										placeholder='Enter text'
 										minHeight='40px'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage.utmTags
 												.mediumInput
 										}
@@ -251,7 +251,7 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
 										name='UTMTags.utmSource'
 										placeholder='Enter text'
 										minHeight='40px'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage.utmTags
 												.sourceInput
 										}
@@ -278,7 +278,7 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
 										name='UTMTags.utmTerm'
 										placeholder='Enter text'
 										minHeight='40px'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage.utmTags
 												.termInput
 										}
@@ -305,7 +305,7 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
 										name='UTMTags.utmContent'
 										placeholder='Enter text'
 										minHeight='40px'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage.utmTags
 												.contentInput
 										}
@@ -326,7 +326,7 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
 										fill='clear'
 										className='mt-2 text-md ion-text-capitalize ion-no-margin ion-no-padding'
 										size='small'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage.utmTags
 												.addTemplateBtn
 										}
@@ -350,7 +350,7 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
 							'w-[50%]': isSmScale,
 							'w-full': !isSmScale,
 						})}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.formPage.utmTags
 								.selectTemplateSelector
 						}

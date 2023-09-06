@@ -161,7 +161,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 					className='text-sm ion-activatable ion-focusable cursor-pointer'
 					minHeight='32px'
 					lines='full'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.user.profilePopover.profileSettings
 					}
 				>
@@ -172,7 +172,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 				<ZIonItem
 					className='text-sm ion-activatable ion-focusable cursor-pointer'
 					minHeight='40px'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.user.profilePopover.notificationSettings
 					}
 				>
@@ -185,7 +185,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 					minHeight='40px'
 					lines='full'
 					onClick={() => void profileLogoutHandler()}
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.user.profilePopover.logout
 					}
 				>
@@ -220,7 +220,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 				<ZIonItem
 					className='mt-1 text-sm ion-activatable ion-focusable cursor-pointer'
 					minHeight='40px'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.user.profilePopover.addNewCompanyAccount
 					}
 				>

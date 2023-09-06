@@ -13,7 +13,7 @@ type ZIonIconType = {
 	icon?: string;
 	className?: string;
 	color?: ZIonColorType;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	size?: 'small' | 'large' | 'default';
 	style?: {
@@ -35,10 +35,10 @@ const ZIonIcon = (props: ZIonIconType) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

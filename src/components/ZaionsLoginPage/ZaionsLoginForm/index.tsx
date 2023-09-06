@@ -226,7 +226,7 @@ const ZaionsLoginForm: React.FC = () => {
 								onIonChange={handleChange}
 								onIonBlur={handleBlur}
 								value={values.emailAddress}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.loginPage.emailInput
 								}
 								errorText={
@@ -258,7 +258,7 @@ const ZaionsLoginForm: React.FC = () => {
 									errorText={touched.password ? errors.password : undefined}
 									clearOnEdit={false}
 									minlength={ZInputLengthConstant.loginForm.password.min}
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.loginPage.passwordInput
 									}
 									className={classNames({
@@ -273,7 +273,7 @@ const ZaionsLoginForm: React.FC = () => {
 									className='ion-no-padding ms-3 w-max'
 									onClick={() => setCanViewPassword((OldVal) => !OldVal)}
 									mode='ios'
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.loginPage.canViewPasswordButton
 									}
 								>
@@ -289,7 +289,7 @@ const ZaionsLoginForm: React.FC = () => {
 									className='ion-no-padding ion-no-margin ion-text-capitalize text-decoration-underline'
 									mode='ios'
 									routerLink={ZaionsRoutes.PasswordResetEmailForm}
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.loginPage.forgetPasswordButton
 									}
 								>
@@ -303,7 +303,7 @@ const ZaionsLoginForm: React.FC = () => {
 								disabled={!isValid}
 								className='mt-4 ion-text-capitalize'
 								onClick={() => void submitForm()}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.loginPage.loginButton
 								}
 							>

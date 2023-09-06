@@ -37,7 +37,7 @@ type ZIonCardType = {
 	onClick?: React.MouseEventHandler<HTMLIonCardElement>;
 
 	//
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 };
 
@@ -51,10 +51,10 @@ const ZIonCard = (props: ZIonCardType) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

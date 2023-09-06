@@ -20,7 +20,7 @@ interface LinkInBioDescriptionFieldInterface {
 	name?: string;
 	className?: string;
 	testingListSelector?: string;
-	testingSelector?: string;
+	testingselector?: string;
 	onIonChange?: (event: Event) => void;
 	onIonBlur?: <A extends Event>(event: A) => void;
 }
@@ -33,7 +33,7 @@ const LinkInBioDescriptionField: React.FC<
 	name,
 	className,
 	testingListSelector,
-	testingSelector,
+	testingselector,
 	onIonChange,
 	onIonBlur,
 }) => {
@@ -41,14 +41,14 @@ const LinkInBioDescriptionField: React.FC<
 		<ZIonItem
 			className={className}
 			lines='none'
-			testingSelector={`${testingSelector}-item`}
+			testingselector={`${testingselector}-item`}
 			testingListSelector={`${testingListSelector}-item`}
 		>
 			<ZIonIcon
 				icon={reorderFourOutline}
 				slot='start'
 				className='w-7 h-7 me-2'
-				testingSelector={`${testingSelector}-icon`}
+				testingselector={`${testingselector}-icon`}
 				testingListSelector={`${testingListSelector}-icon`}
 			/>
 
@@ -61,7 +61,7 @@ const LinkInBioDescriptionField: React.FC<
 				placeholder={placeholder}
 				onIonChange={onIonChange}
 				onIonBlur={onIonBlur}
-				testingSelector={`${testingSelector}-textarea`}
+				testingselector={`${testingselector}-textarea`}
 				testingListSelector={`${testingListSelector}-textarea`}
 			/>
 		</ZIonItem>

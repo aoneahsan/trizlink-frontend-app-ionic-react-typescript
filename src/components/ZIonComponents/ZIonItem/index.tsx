@@ -42,7 +42,7 @@ type ZIonItemType = {
 	};
 	onClick?: (event?: unknown) => void;
 	minHeight?: 'auto' | string;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 };
 
@@ -65,10 +65,10 @@ const ZIonItem = (props: ZIonItemType) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

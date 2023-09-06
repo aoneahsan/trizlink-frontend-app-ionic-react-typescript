@@ -117,7 +117,7 @@ export const ShortLinksTimeRangeFilterPopover: React.FC = () => {
 				scrollX={true}
 				className='flex w-full h-full'
 			>
-				<div className='ion-padding-horizontal mx-auto'>
+				<div className='mx-auto ion-padding-horizontal'>
 					<ZIonButton
 						color='secondary'
 						expand='block'

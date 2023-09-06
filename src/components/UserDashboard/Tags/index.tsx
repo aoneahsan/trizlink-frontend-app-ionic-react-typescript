@@ -84,7 +84,7 @@ const Tags: React.FC = () => {
 					name='tags'
 					minHeight='40px'
 					placeholder='Add tag'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.shortLink.formPage.tag.tagInput
 					}
 					style={{
@@ -105,7 +105,7 @@ const Tags: React.FC = () => {
 								return (
 									<ZIonChip
 										key={el}
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage.tag
 												.singleTag
 										}

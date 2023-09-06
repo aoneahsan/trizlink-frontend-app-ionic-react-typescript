@@ -139,7 +139,7 @@ const ZWorkspaceListPage: React.FC = () => {
 													color='primary'
 													disabled={isWorkspacesDataFetching}
 													className='normal-case ion-no-margin'
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.workspace.listPage
 															.inviteButton
 													}
@@ -158,7 +158,7 @@ const ZWorkspaceListPage: React.FC = () => {
 													className='normal-case ion-no-margin'
 													color='secondary'
 													disabled={isWorkspacesDataFetching}
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.workspace.listPage
 															.createWorkspaceButton
 													}
@@ -240,7 +240,7 @@ const ZWorkspaceListPage: React.FC = () => {
 											className={classNames({
 												'h-[13.4rem] cursor-pointer': true,
 											})}
-											testingSelector={
+											testingselector={
 												CONSTANTS.testingSelectors.workspace.listPage
 													.createWorkspaceCardButton
 											}

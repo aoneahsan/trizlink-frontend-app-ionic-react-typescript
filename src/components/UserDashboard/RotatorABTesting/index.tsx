@@ -81,7 +81,7 @@ const RotatorABTesting: React.FC = () => {
 								labelPlacement='stacked'
 								value={values?.target?.url}
 								minHeight='40px'
-								testingSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.rotatorABTesting.redirectionLinkInput}-disable`}
+								testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.rotatorABTesting.redirectionLinkInput}-disable`}
 							/>
 						</ZIonCol>
 						<ZIonCol
@@ -103,7 +103,7 @@ const RotatorABTesting: React.FC = () => {
 								disabled
 								labelPlacement='stacked'
 								minHeight='40px'
-								testingSelector={`${CONSTANTS.testingSelectors.shortLink.formPage.rotatorABTesting.percentageInput}-disable`}
+								testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.rotatorABTesting.percentageInput}-disable`}
 							/>
 						</ZIonCol>
 					</ZIonRow>
@@ -113,7 +113,7 @@ const RotatorABTesting: React.FC = () => {
 						{({ remove, push }) => (
 							<ZIonGrid
 								className='pt-0 px-0'
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.shortLink.formPage.rotatorABTesting
 										.container
 								}
@@ -144,7 +144,7 @@ const RotatorABTesting: React.FC = () => {
 													onIonChange={handleChange}
 													minHeight='40px'
 													name={`rotatorABTesting.${_index}.redirectionLink`}
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.shortLink.formPage
 															.rotatorABTesting.redirectionLinkInput
 													}
@@ -273,7 +273,7 @@ const RotatorABTesting: React.FC = () => {
 													}}
 													value={values.rotatorABTesting[_index].percentage}
 													name={`rotatorABTesting.${_index}.percentage`}
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.shortLink.formPage
 															.rotatorABTesting.percentageInput
 													}
@@ -322,7 +322,7 @@ const RotatorABTesting: React.FC = () => {
 													icon={trashBin}
 													color='danger'
 													className='w-[21px] h-[21px] zaions__nav_item'
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.shortLink.formPage
 															.rotatorABTesting.deleteSingleRotatorBtn
 													}
@@ -341,7 +341,7 @@ const RotatorABTesting: React.FC = () => {
 										color='dark'
 										className='mt-3 ion-text-capitalize ion-no-padding'
 										fill='clear'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage
 												.rotatorABTesting.disabledAddSingleRotatorBtn
 										}
@@ -353,7 +353,7 @@ const RotatorABTesting: React.FC = () => {
 										fill='clear'
 										className='mt-2 ion-text-capitalize ion-no-padding ps-1'
 										size='small'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.shortLink.formPage
 												.rotatorABTesting.addSingleRotatorBtn
 										}

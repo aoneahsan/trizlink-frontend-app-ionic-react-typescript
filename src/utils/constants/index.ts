@@ -230,7 +230,7 @@ export const CONTENT_ID = 'zaions_main-content';
 
 const MENU_IDS = {
 	CONTENT_ID: 'zaions_main-content',
-	ADMIN_PANEL_CONTENT_ID: 'admin-panel-content-id',
+	AD_SL_LIST_PAGE: 'admin-panel-content-id', // AD_SL => AdminPanel_shortLink
 	ADMIN_PANEL_WS_SETTING_PAGE_ID: 'admin-panel-ws-settings-page-id',
 	ADMIN_LINK_PAGE_CONTENT_ID: 'zaions-link-page-menu',
 	DASHBOARD_SM_MENU_CONTENT_ID: 'zaions-dashboard-responsive-menu-content-id',

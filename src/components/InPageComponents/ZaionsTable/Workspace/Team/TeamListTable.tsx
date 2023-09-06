@@ -246,7 +246,7 @@ const ZInpageTable: React.FC = () => {
 								{/* <ZIonText
 									color='primary'
 									className='text-sm cursor-pointer'
-									testingSelector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.description}-${row.row.original.id}`}
+									testingselector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.description}-${row.row.original.id}`}
 									testingListSelector={
 										CONSTANTS.testingSelectors.WSSettings.teamListPage.table
 											.description
@@ -419,7 +419,7 @@ const ZInpageTable: React.FC = () => {
 													color='dark'
 													className='ion-no-padding ion-no-margin'
 													size='small'
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.shortLink.listPage.table
 															.actionPopoverBtn
 													}
@@ -473,7 +473,7 @@ const ZInpageTable: React.FC = () => {
 						size='small'
 						fill='clear'
 						disabled={!zTeamsTable.getCanPreviousPage()}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.WSSettings.teamListPage.table
 								.getFirstPageButton
 						}
@@ -505,7 +505,7 @@ const ZInpageTable: React.FC = () => {
 						size='small'
 						fill='clear'
 						disabled={!zTeamsTable.getCanPreviousPage()}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.WSSettings.teamListPage.table
 								.previousButton
 						}
@@ -539,7 +539,7 @@ const ZInpageTable: React.FC = () => {
 						size='small'
 						fill='clear'
 						disabled={!zTeamsTable.getCanNextPage()}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.WSSettings.teamListPage.table
 								.nextButton
 						}
@@ -572,7 +572,7 @@ const ZInpageTable: React.FC = () => {
 						size='small'
 						fill='clear'
 						disabled={!zTeamsTable.getCanNextPage()}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.WSSettings.teamListPage.table
 								.getLastPageButton
 						}
@@ -610,7 +610,7 @@ const ZInpageTable: React.FC = () => {
 						className='bg-white w-[7rem] mt-1'
 						interface='popover'
 						value={zTeamsTable.getState().pagination.pageSize}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.WSSettings.teamListPage.table
 								.pageSizeInput
 						}
@@ -771,7 +771,7 @@ const ZTeamActionPopover: React.FC<{
 					button={true}
 					detail={false}
 					minHeight='2.5rem'
-					testingSelector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.editBtn}-${teamId}`}
+					testingselector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.editBtn}-${teamId}`}
 					testingListSelector={
 						CONSTANTS.testingSelectors.WSSettings.teamListPage.table.editBtn
 					}
@@ -817,7 +817,7 @@ const ZTeamActionPopover: React.FC<{
 						testingListSelector={
 							CONSTANTS.testingSelectors.WSSettings.teamListPage.table.deleteBtn
 						}
-						testingSelector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.deleteBtn}-${teamId}`}
+						testingselector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.deleteBtn}-${teamId}`}
 					>
 						<ZIonButton
 							size='small'

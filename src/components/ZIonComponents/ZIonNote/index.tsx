@@ -15,7 +15,7 @@ type ZIonNoteType = {
 	color?: ZIonColorType;
 	mode?: ZIonModeType;
 	slot?: 'error' | 'helper';
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 };
 
@@ -29,10 +29,10 @@ const ZIonNote = (props: ZIonNoteType) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

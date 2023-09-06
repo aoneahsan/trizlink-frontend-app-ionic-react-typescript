@@ -226,7 +226,7 @@ const FolderActionsPopoverContent: React.FC<{
 				fill='clear'
 				className='ion-no-padding ion-text-capitalize'
 				expand='block'
-				testingSelector={`${CONSTANTS.testingSelectors.folder.editBtn}-${state}`}
+				testingselector={`${CONSTANTS.testingSelectors.folder.editBtn}-${state}`}
 				testingListSelector={`${CONSTANTS.testingSelectors.folder.editBtn}-${state}-${folderFormState.id}`}
 				onClick={() => {
 					presentFolderModal({
@@ -241,7 +241,7 @@ const FolderActionsPopoverContent: React.FC<{
 				fill='clear'
 				className='ion-no-padding ion-text-capitalize'
 				expand='block'
-				testingSelector={`${CONSTANTS.testingSelectors.folder.deleteBtn}-${state}`}
+				testingselector={`${CONSTANTS.testingSelectors.folder.deleteBtn}-${state}`}
 				testingListSelector={`${CONSTANTS.testingSelectors.folder.deleteBtn}-${state}-${folderFormState.id}`}
 				onClick={() => {
 					void deleteFolderAccount();

@@ -156,7 +156,7 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 					className={classNames({
 						'ion-margin-top pt-2 ion-padding-bottom mb-2 gap-y-2': true,
 					})}
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
 							.container
 					}
@@ -206,7 +206,7 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 								key={el.id}
 								className='flex ion-justify-content-center'
 								testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks.btnCol}-${el.id}`}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
 										.btnCol
 								}
@@ -214,7 +214,7 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 								<div className='ion-text-center me-3 w-max'>
 									<LinkInBioPDButton
 										icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
-										testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks.btn}-${el.type}`}
+										testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks.btn}-${el.type}`}
 										onClick={() => {
 											LinkInBioBlockHandler(LinkInBioBlockEnum[el.type]);
 										}}

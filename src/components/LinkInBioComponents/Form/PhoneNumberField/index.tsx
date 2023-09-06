@@ -17,7 +17,7 @@ interface LinkInBioPhoneNumberFieldInterface {
 	value?: string | number | null;
 	className?: string;
 	testingListSelector?: string;
-	testingSelector?: string;
+	testingselector?: string;
 	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
 	onIonBlur?: <A extends Event>(event: A) => void;
 }
@@ -30,7 +30,7 @@ const LinkInBioPhoneNumberField: React.FC<
 	name,
 	className,
 	testingListSelector,
-	testingSelector,
+	testingselector,
 	onIonChange,
 	onIonBlur,
 }) => {
@@ -38,7 +38,7 @@ const LinkInBioPhoneNumberField: React.FC<
 		<ZIonItem
 			className={className}
 			lines='none'
-			testingSelector={`${testingSelector}-item`}
+			testingselector={`${testingselector}-item`}
 			testingListSelector={`${testingListSelector}-item`}
 		>
 			<ZIonInput
@@ -49,7 +49,7 @@ const LinkInBioPhoneNumberField: React.FC<
 				onIonBlur={onIonBlur}
 				value={value}
 				minHeight='40px'
-				testingSelector={`${testingSelector}-input`}
+				testingselector={`${testingselector}-input`}
 				testingListSelector={`${testingListSelector}-input`}
 			/>
 		</ZIonItem>

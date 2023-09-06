@@ -295,7 +295,7 @@ const ZaionsAddPixelAccount: React.FC<{
 										color='primary'
 										className='ion-text-capitalize'
 										fill='outline'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.pixels.formModal.closeModalBtn
 										}
 										onClick={() => {
@@ -316,7 +316,7 @@ const ZaionsAddPixelAccount: React.FC<{
 										className='ion-text-capitalize'
 										fill='solid'
 										disabled={!isValid}
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.pixels.formModal.submitFormBtn
 										}
 										onClick={() => {
@@ -374,7 +374,7 @@ const ZaionsAddPixelAccount: React.FC<{
 								minHeight='2.3rem'
 								interface='popover'
 								errorText={touched.platform ? errors.platform : undefined}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.pixels.formModal.pixelSelector
 								}
 								className={classNames({
@@ -405,7 +405,7 @@ const ZaionsAddPixelAccount: React.FC<{
 								onIonChange={handleChange}
 								onIonBlur={handleBlur}
 								errorText={touched.title ? errors.title : undefined}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.pixels.formModal.pixelNameInput
 								}
 								className={classNames({
@@ -428,7 +428,7 @@ const ZaionsAddPixelAccount: React.FC<{
 								onIonBlur={handleBlur}
 								value={values.pixelId}
 								errorText={touched.pixelId ? errors.pixelId : undefined}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.pixels.formModal.pixelIdInput
 								}
 								className={classNames({
@@ -453,7 +453,7 @@ const ZaionsAddPixelAccount: React.FC<{
 										fill='outline'
 										size='default'
 										className='ion-text-capitalize'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.pixels.formModal.closeModalBtn
 										}
 										onClick={() => {
@@ -474,7 +474,7 @@ const ZaionsAddPixelAccount: React.FC<{
 										className='ion-text-capitalize'
 										disabled={!isValid}
 										type='submit'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.pixels.formModal.submitFormBtn
 										}
 										onClick={() => void submitForm()}

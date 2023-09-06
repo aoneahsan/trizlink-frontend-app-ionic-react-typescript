@@ -172,7 +172,7 @@ const ZWSSettingTeamsListPage: React.FC = () => {
 						fill='solid'
 						height={isLgScale ? '39px' : '20px'}
 						expand={!isSmScale ? 'block' : undefined}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.WSSettings.teamListPage.createTeamBtn
 						}
 						className={classNames({
@@ -228,7 +228,7 @@ const ZWSSettingTeamsListPage: React.FC = () => {
 					>
 						<ZIonText
 							className='font-bold total_links pe-1'
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.WSSettings.teamListPage.teamsCount
 							}
 						>
@@ -269,7 +269,7 @@ const ZWSSettingTeamsListPage: React.FC = () => {
 								'text-xs': !isLgScale,
 								'w-full': !isSmScale,
 							})}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.WSSettings.teamListPage.timeFilterBtn
 							}
 						>
@@ -295,7 +295,7 @@ const ZWSSettingTeamsListPage: React.FC = () => {
 								'text-xs': !isLgScale,
 								'w-full': !isSmScale,
 							})}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.WSSettings.teamListPage.tagsFilterBtn
 							}
 						>
@@ -324,7 +324,7 @@ const ZWSSettingTeamsListPage: React.FC = () => {
 							onClick={() => {
 								void invalidedQueries();
 							}}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.WSSettings.teamListPage.refetchBtn
 							}
 						>

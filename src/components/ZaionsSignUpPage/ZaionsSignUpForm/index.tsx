@@ -238,7 +238,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 								onIonBlur={handleBlur}
 								value={values.username}
 								errorText={touched.username ? errors.username : undefined}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.signupPage.usernameInput
 								}
 								className={classNames({
@@ -258,7 +258,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 								onIonChange={handleChange}
 								onIonBlur={handleBlur}
 								value={values.emailAddress}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.signupPage.emailInput
 								}
 								errorText={
@@ -284,7 +284,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 									errorText={touched.password ? errors.password : undefined}
 									type={zaionsSignUpState.canViewPassword ? 'text' : 'password'}
 									clearOnEdit={false}
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.signupPage.passwordInput
 									}
 									className={classNames({
@@ -300,7 +300,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 									fill='clear'
 									size='large'
 									className='ion-no-padding ms-3 w-max'
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.signupPage.canViewPasswordButton
 									}
 									onClick={() =>
@@ -395,7 +395,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 									name='confirm_password'
 									clearOnEdit={false}
 									type={zaionsSignUpState.canViewPassword ? 'text' : 'password'}
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.signupPage.confirmPasswordInput
 									}
 									errorText={
@@ -416,7 +416,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 									size='large'
 									className='ion-no-padding ms-3 w-max'
 									mode='ios'
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.signupPage
 											.canViewConfirmPasswordButton
 									}
@@ -443,7 +443,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 								type='submit'
 								className='mt-4 ion-text-capitalize'
 								disabled={touched && !isValid}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.signupPage.signupButton
 								}
 							>

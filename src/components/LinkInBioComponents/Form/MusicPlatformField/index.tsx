@@ -153,7 +153,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 						<>
 							{/* After getting MusicPlatform data from api and storing it to the LinkInBioPredefinedMusicPlatformsRState recoil state, looping the recoil state value to make MusicPlatforms */}
 							<ZIonRow
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm
 										.fields.music.blocksContainer
 								}
@@ -175,7 +175,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 												<LinkInBioPDButton
 													color={_index > -1 ? 'secondary' : 'light'}
 													icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
-													testingSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.block}-${el.type}`}
+													testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.block}-${el.type}`}
 													onClick={() => {
 														toggleMusicPlatformCardHandler({
 															_type: el.type,
@@ -192,7 +192,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 							<ZIonButton
 								expand='block'
 								className='ion-text-capitalize'
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm
 										.fields.music.addBlockBtn
 								}
@@ -224,7 +224,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 													lines='none'
 													className='py-3 my-3 border zaions-linkInBio-block'
 													testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.cardItem}-${_index}`}
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.linkInBio.formPage.design
 															.blockForm.fields.music.cardItem
 													}
@@ -249,7 +249,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 															onIonChange={handleChange}
 															onIonBlur={handleBlur}
 															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.titleInput}-${_index}`}
-															testingSelector={
+															testingselector={
 																CONSTANTS.testingSelectors.linkInBio.formPage
 																	.design.blockForm.fields.music.titleInput
 															}
@@ -270,7 +270,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 															onIonChange={handleChange}
 															onIonBlur={handleBlur}
 															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.linkInput}-${_index}`}
-															testingSelector={
+															testingselector={
 																CONSTANTS.testingSelectors.linkInBio.formPage
 																	.design.blockForm.fields.music.linkInput
 															}
@@ -288,7 +288,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 																onIonChange={handleChange}
 																onIonBlur={handleBlur}
 																testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.iconInput}-${_index}`}
-																testingSelector={
+																testingselector={
 																	CONSTANTS.testingSelectors.linkInBio.formPage
 																		.design.blockForm.fields.music.iconInput
 																}
@@ -306,7 +306,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 														iconColor='danger'
 														className='ion-no-padding me-1 ms-2'
 														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.deleteBtn}-${_index}`}
-														testingSelector={
+														testingselector={
 															CONSTANTS.testingSelectors.linkInBio.formPage
 																.design.blockForm.fields.music.deleteBtn
 														}

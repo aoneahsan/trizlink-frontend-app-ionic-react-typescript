@@ -171,7 +171,7 @@ const ZAddNewWorkspaceModal: React.FC<{
 					className='ion-no-padding ion-no-margin'
 					fill='clear'
 					color='dark'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.workspace.createModal.closeButton
 					}
 					onClick={() => {
@@ -240,7 +240,7 @@ const ZAddNewWorkspaceModal: React.FC<{
 										onIonBlur={handleBlur}
 										value={values.title}
 										errorText={touched.title ? errors.title : undefined}
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.workspace.createModal.nameInput
 										}
 										className={classNames({
@@ -261,7 +261,7 @@ const ZAddNewWorkspaceModal: React.FC<{
 										value={values.workspaceTimezone}
 										onIonChange={handleChange}
 										onIonBlur={handleBlur}
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.workspace.createModal
 												.timezoneInput
 										}
@@ -275,7 +275,7 @@ const ZAddNewWorkspaceModal: React.FC<{
 										className='mt-4 '
 										onClick={() => void submitForm()}
 										disabled={!isValid}
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.workspace.createModal
 												.createButton
 										}

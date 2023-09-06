@@ -141,7 +141,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
 				<ZIonIcon
 					icon={closeOutline}
 					className='cursor-pointer w-7 h-7'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.linkInBio.formModal.closeBtn
 					}
 					onClick={() => {
@@ -210,7 +210,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
 									errorText={
 										touched.linkInBioTitle ? errors.linkInBioTitle : undefined
 									}
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.linkInBio.formModal.titleInput
 									}
 									className={classNames({
@@ -226,7 +226,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
 									expand='block'
 									className='mt-4'
 									onClick={() => void submitForm()}
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.linkInBio.formModal.submitFormBtn
 									}
 								>

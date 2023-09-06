@@ -147,7 +147,7 @@ const ZWorkspacesSettingModal: React.FC<{
 						<ZIonSegmentButton
 							value={workspaceSettingsModalTabEnum.timetable}
 							className='normal-case ion-no-padding ion-text-center'
-							testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.timetable}-${workspaceId}`}
+							testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.timetable}-${workspaceId}`}
 							testingListSelector={
 								CONSTANTS.testingSelectors.workspace.settingsModal.tabs
 									.timetable
@@ -169,7 +169,7 @@ const ZWorkspacesSettingModal: React.FC<{
 						<ZIonSegmentButton
 							value={workspaceSettingsModalTabEnum.labels}
 							className='normal-case ion-no-padding ion-text-center'
-							testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.labels}-${workspaceId}`}
+							testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.labels}-${workspaceId}`}
 							testingListSelector={
 								CONSTANTS.testingSelectors.workspace.settingsModal.tabs.labels
 							}
@@ -190,7 +190,7 @@ const ZWorkspacesSettingModal: React.FC<{
 						<ZIonSegmentButton
 							value={workspaceSettingsModalTabEnum.settings}
 							className='normal-case ion-no-padding ion-text-center'
-							testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.settings}-${workspaceId}`}
+							testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.settings}-${workspaceId}`}
 							testingListSelector={
 								CONSTANTS.testingSelectors.workspace.settingsModal.tabs.settings
 							}
@@ -210,7 +210,7 @@ const ZWorkspacesSettingModal: React.FC<{
 					<ZIonSegmentButton
 						value={workspaceSettingsModalTabEnum.approvals}
 						className='normal-case ion-no-padding ion-text-center'
-						testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.approvals}-${workspaceId}`}
+						testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.tabs.approvals}-${workspaceId}`}
 						testingListSelector={
 							CONSTANTS.testingSelectors.workspace.settingsModal.tabs.approvals
 						}

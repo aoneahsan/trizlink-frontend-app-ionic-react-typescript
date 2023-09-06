@@ -87,7 +87,7 @@ const ZWorkspaceApprovalCards: React.FC<{
 						onClick={() => onClick && onClick(el.cardType)}
 					>
 						<ZIonCard
-							testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.card}-${el.cardType}-${workspaceId}`}
+							testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.card}-${el.cardType}-${workspaceId}`}
 							testingListSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.card}-${el.cardType}`}
 							className={classNames({
 								'cursor-pointer border-t-[1px] border-b-[1px] border-s-[1px] border-e-[1px] border-solid':

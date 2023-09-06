@@ -108,6 +108,13 @@ const ZaionsShortLinkTable: React.FC<{
 		workspaceId: string;
 	}>();
 
+	// Recoil selector that will filter from all short links state(ShortLinksRStateAtom) and give the filter short links.
+	const _FilteredShortLinkDataSelector = useRecoilValue(
+		FilteredShortLinkDataSelector
+	);
+
+	console.log({ _FilteredShortLinkDataSelector });
+
 	// #region APIS requests.
 	// Request for getting short links data.
 	const { data: ShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
@@ -173,7 +180,7 @@ const ZInpageTable: React.FC = () => {
 	// #region custom hooks.
 	const { zNavigatePushRoute } = useZNavigate();
 	const { presentZIonToast } = useZIonToast();
-	const { isMdScale } = useZMediaQueryScale();
+	const { isMdScale, isSmScale } = useZMediaQueryScale();
 	// getting search param from url with the help of 'qs' package.
 	const routeQSearchParams = routeQueryString.parse(location.search, {
 		ignoreQueryPrefix: true,
@@ -288,7 +295,7 @@ const ZInpageTable: React.FC = () => {
 								<ZIonText
 									color='primary'
 									className='cursor-pointer'
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.shortLink.listPage.table.pixel
 									}
 									testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.pixel}-${row.row.original.id}`}
@@ -332,7 +339,7 @@ const ZInpageTable: React.FC = () => {
 								<ZIonText
 									color='primary'
 									className='text-sm cursor-pointer'
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.shortLink.listPage.table.notes
 									}
 									testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.notes}-${row.row.original.id}`}
@@ -373,7 +380,7 @@ const ZInpageTable: React.FC = () => {
 						color='dark'
 						className='hover:underline'
 						target='_blank'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.listPage.table.url
 						}
 						testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.url}-${row.row.original.id}`}
@@ -401,7 +408,7 @@ const ZInpageTable: React.FC = () => {
 							color='primary'
 							className='block cursor-pointer hover:underline'
 							id={`z-shortlink-${row?.original?.id}`}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.shortLink.listPage.table.linkToShare
 							}
 							testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.linkToShare}-${row.original.id}`}
@@ -672,7 +679,7 @@ const ZInpageTable: React.FC = () => {
 													color='dark'
 													className='ion-no-padding ion-no-margin'
 													size='small'
-													testingSelector={
+													testingselector={
 														CONSTANTS.testingSelectors.shortLink.listPage.table
 															.actionPopoverBtn
 													}
@@ -704,15 +711,30 @@ const ZInpageTable: React.FC = () => {
 			</ZCustomScrollable>
 
 			{/*  */}
-			<ZIonRow className='w-full px-2 pt-1 pb-2 mt-1 overflow-hidden rounded-lg zaions__light_bg'>
-				<ZIonCol>
+			<ZIonRow
+				className={classNames({
+					'w-full px-2 pt-1 pb-2 mt-1 overflow-hidden rounded-lg zaions__light_bg':
+						true,
+					'mt-2': !isMdScale,
+				})}
+			>
+				<ZIonCol
+					sizeXl='6'
+					sizeLg='6'
+					sizeMd='6'
+					sizeSm='6'
+					sizeXs='12'
+					className={classNames({
+						'flex ion-justify-content-center': !isSmScale,
+					})}
+				>
 					{/* previous buttons */}
 					<ZIonButton
 						className='mr-1 ion-no-padding ion-no-margin'
 						size='small'
 						fill='clear'
 						disabled={!zShortLinksTable.getCanPreviousPage()}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.listPage.table
 								.getFirstPageButton
 						}
@@ -747,7 +769,7 @@ const ZInpageTable: React.FC = () => {
 						size='small'
 						fill='clear'
 						disabled={!zShortLinksTable.getCanPreviousPage()}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.listPage.table.previousButton
 						}
 						onClick={() => {
@@ -783,7 +805,7 @@ const ZInpageTable: React.FC = () => {
 						size='small'
 						fill='clear'
 						disabled={!zShortLinksTable.getCanNextPage()}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.listPage.table.nextButton
 						}
 						onClick={() => {
@@ -818,7 +840,7 @@ const ZInpageTable: React.FC = () => {
 						size='small'
 						fill='clear'
 						disabled={!zShortLinksTable.getCanNextPage()}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.listPage.table
 								.getLastPageButton
 						}
@@ -852,10 +874,21 @@ const ZInpageTable: React.FC = () => {
 				</ZIonCol>
 
 				{/* Col for pagination number like 1,2,3,...,n */}
-				<ZIonCol></ZIonCol>
+				{/* <ZIonCol></ZIonCol> */}
 
-				<ZIonCol className='flex ion-align-items-center ion-justify-content-end'>
-					<ZIonText className='me-3 mt-1 font-semibold'>
+				<ZIonCol
+					sizeXl='6'
+					sizeLg='6'
+					sizeMd='6'
+					sizeSm='6'
+					sizeXs='12'
+					className={classNames({
+						'flex ion-align-items-center ': true,
+						'ion-justify-content-end': isSmScale,
+						'ion-justify-content-between mt-1 px-2': !isSmScale,
+					})}
+				>
+					<ZIonText className='mt-1 font-semibold me-3'>
 						{_FilteredShortLinkDataSelector?.length || 0}{' '}
 						{_FilteredShortLinkDataSelector?.length === 1 ? 'Link' : 'Links'}
 					</ZIonText>
@@ -865,7 +898,7 @@ const ZInpageTable: React.FC = () => {
 						className='bg-white w-[7rem]'
 						interface='popover'
 						value={zShortLinksTable.getState().pagination.pageSize}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.listPage.table.pageSizeInput
 						}
 						onIonChange={(e) => {
@@ -1036,7 +1069,7 @@ const ZShortLinkActionPopover: React.FC<{
 					button={true}
 					detail={false}
 					minHeight='2.5rem'
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.shortLink.listPage.table.editBtn
 					}
 					testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.editBtn}-${shortLinkId}`}
@@ -1093,7 +1126,7 @@ const ZShortLinkActionPopover: React.FC<{
 					detail={false}
 					minHeight='2.5rem'
 					onClick={() => void deleteShortLink()}
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.shortLink.listPage.table.deleteBtn
 					}
 					testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.deleteBtn}-${shortLinkId}`}

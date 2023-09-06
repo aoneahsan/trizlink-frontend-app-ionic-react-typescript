@@ -211,7 +211,7 @@ const ZTimetableTab: React.FC<{
 																</ZIonText>
 															</ZIonText>
 															<ZIonIcon
-																testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.timeActionButton}-${_timeSlot.id}`}
+																testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.timeActionButton}-${_timeSlot.id}`}
 																testingListSelector={
 																	CONSTANTS.testingSelectors.workspace
 																		.settingsModal.timetable.timeActionButton
@@ -269,7 +269,7 @@ const ZTimetableTab: React.FC<{
 											disabled={isZFetching}
 											className='mb-3'
 											fill='outline'
-											testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.addTimeButton}-${_element.day}`}
+											testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.addTimeButton}-${_element.day}`}
 											onClick={() => {
 												setCompState((oldValues) => ({
 													...oldValues,
@@ -424,7 +424,7 @@ const ZTimeSlotActionPopover: React.FC<{
 			<ZIonItem
 				minHeight='2.1rem'
 				className='cursor-pointer ion-activatable'
-				testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.timeEditButton}-${timeSlotId}`}
+				testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.timeEditButton}-${timeSlotId}`}
 				testingListSelector={
 					CONSTANTS.testingSelectors.workspace.settingsModal.timetable
 						.timeEditButton
@@ -452,7 +452,7 @@ const ZTimeSlotActionPopover: React.FC<{
 				minHeight='2.1rem'
 				lines='none'
 				className='cursor-pointer ion-activatable'
-				testingSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.timeDeleteButton}-${timeSlotId}`}
+				testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.timeDeleteButton}-${timeSlotId}`}
 				testingListSelector={
 					CONSTANTS.testingSelectors.workspace.settingsModal.timetable
 						.timeDeleteButton

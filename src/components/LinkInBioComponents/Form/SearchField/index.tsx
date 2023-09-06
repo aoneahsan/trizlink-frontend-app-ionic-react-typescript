@@ -20,7 +20,7 @@ interface LinkInBioSearchFieldInterface {
 	value?: string | null;
 	searchIcon?: string;
 	testingListSelector?: string;
-	testingSelector?: string;
+	testingselector?: string;
 	onIonChange?: (
 		event: IonSearchbarCustomEvent<SearchbarChangeEventDetail>
 	) => void;
@@ -31,7 +31,7 @@ const LinkInBioSearchField: React.FC<LinkInBioSearchFieldInterface> = ({
 	placeholder = 'Search an address',
 	value,
 	searchIcon = searchOutline,
-	testingSelector,
+	testingselector,
 	testingListSelector,
 	onIonChange,
 	onIonBlur,
@@ -39,7 +39,7 @@ const LinkInBioSearchField: React.FC<LinkInBioSearchFieldInterface> = ({
 	return (
 		<ZIonItem
 			className='ion-no-padding'
-			testingSelector={`${testingSelector}-item`}
+			testingselector={`${testingselector}-item`}
 			testingListSelector={`${testingListSelector}-item`}
 		>
 			<ZIonSearchbar
@@ -49,7 +49,7 @@ const LinkInBioSearchField: React.FC<LinkInBioSearchFieldInterface> = ({
 				value={value}
 				searchIcon={searchIcon}
 				clearIcon={closeOutline}
-				testingSelector={`${testingSelector}-input`}
+				testingselector={`${testingselector}-input`}
 				testingListSelector={`${testingListSelector}-input`}
 				className='ion-no-padding'
 				style={{

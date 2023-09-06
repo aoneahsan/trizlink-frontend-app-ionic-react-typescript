@@ -65,7 +65,7 @@ const AddNotes: React.FC<{ showSkeleton?: boolean }> = ({
 					name='linkNote'
 					fill='outline'
 					value={values.linkNote}
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.shortLink.formPage.notesTextarea
 					}
 				/>

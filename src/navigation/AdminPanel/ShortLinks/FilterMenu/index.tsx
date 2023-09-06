@@ -19,7 +19,7 @@ import {
 import { Formik } from 'formik';
 import { ItemReorderEventDetail } from '@ionic/react';
 import { useParams } from 'react-router';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -40,6 +40,8 @@ import {
 	ZIonReorder,
 	ZIonReorderGroup,
 	ZIonRow,
+	ZIonSelect,
+	ZIonSelectOption,
 	ZIonText,
 	ZIonTitle,
 } from '@/components/ZIonComponents';
@@ -89,7 +91,10 @@ import {
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { ShortLinksFilterOptionsRStateAtom } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
+import {
+	ShortLinksFieldsDataRStateSelector,
+	ShortLinksFilterOptionsRStateAtom,
+} from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import classNames from 'classnames';
 
@@ -97,6 +102,9 @@ import classNames from 'classnames';
  * Style files Imports go down
  * ? Import of style sheet is a style import
  * */
+import classes from './styles.module.css';
+import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 /**
  * Images Imports go down
@@ -113,6 +121,33 @@ import classNames from 'classnames';
  * About: (Info of component here...)
  * @type {*}
  * */
+
+const ZTimeSelectData: ZaionsRSelectOptions[] = [
+	{
+		label: 'All Time',
+		value: TimeFilterEnum.allTime,
+	},
+	{
+		label: 'Today',
+		value: TimeFilterEnum.today,
+	},
+	{
+		label: 'Last 7 days',
+		value: TimeFilterEnum.lastSevenDays,
+	},
+	{
+		label: 'Last 30 days',
+		value: TimeFilterEnum.last30days,
+	},
+	{
+		label: 'Last month',
+		value: TimeFilterEnum.lastMonth,
+	},
+	{
+		label: 'Custom range',
+		value: TimeFilterEnum.customRange,
+	},
+];
 
 const ZShortLinksFilterMenu: React.FC = () => {
 	// #region compState.
@@ -140,8 +175,17 @@ const ZShortLinksFilterMenu: React.FC = () => {
 
 	// #region Recoils.
 	// Recoil state for storing filter options for short-links.
-	const shortLinksFilterOptions = useRecoilValue(
+	const [shortLinksFilterOptions, setShortLinksFilterOptions] = useRecoilState(
 		ShortLinksFilterOptionsRStateAtom
+	);
+	// For getting all tags data
+	const { tags: _shortLinksFieldsDataTagsSelector } = useRecoilValue(
+		ShortLinksFieldsDataRStateSelector
+	);
+
+	// For getting all domains data
+	const { domains: _shortLinksFieldsDataDomainsSelector } = useRecoilValue(
+		ShortLinksFieldsDataRStateSelector
 	);
 	// Recoil state for shortLinks.
 	// const shortLinksStateAtom = useRecoilValue(ShortLinksRStateAtom);
@@ -284,7 +328,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
 
 	return (
 		<ZIonMenu
-			contentId={CONSTANTS.MENU_IDS.ADMIN_PANEL_CONTENT_ID}
+			contentId={CONSTANTS.MENU_IDS.AD_SL_LIST_PAGE}
 			side='end'
 			menuId={CONSTANTS.MENU_IDS.USER_SETTINGS_MENU_ID}
 			style={
@@ -319,10 +363,32 @@ const ZShortLinksFilterMenu: React.FC = () => {
 					initialValues={{
 						columns: compState?.shortLinkColumn || ShortLinksTableColumns,
 						// columns: ShortLinksTableColumns,
+
+						filters: {
+							tags: [],
+							domains: [],
+							time: TimeFilterEnum.allTime,
+						},
 					}}
 					enableReinitialize={true}
 					onSubmit={async (values) => {
 						try {
+							const _domains = Array.from(
+								values.filters.domains as ZaionsRSelectOptions[],
+								({ value }) => value!
+							);
+
+							const _tags = Array.from(
+								values.filters.tags as ZaionsRSelectOptions[],
+								({ value }) => value!
+							);
+
+							setShortLinksFilterOptions((oldVales) => ({
+								...oldVales,
+								domains: [..._domains],
+								tags: { ..._tags },
+							}));
+
 							const zStringifyData = zStringify({
 								type: ZUserSettingTypeEnum.shortLinkListPageTable,
 								workspaceUniqueId: workspaceId,
@@ -339,10 +405,11 @@ const ZShortLinksFilterMenu: React.FC = () => {
 					}}
 				>
 					{({ values, setFieldValue, submitForm }) => {
+						// console.log({ values });
 						return (
 							<ZIonRow>
 								{/*  */}
-								<ZIonCol size='12' className='border-b pb-3'>
+								<ZIonCol size='12' className='pb-3 border-b'>
 									<ZIonText
 										className={classNames({
 											'block mx-3 mb-2 text-md tracking-widest font-semibold':
@@ -355,7 +422,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
 									</ZIonText>
 
 									<div className='px-3'>
-										<ZIonButton
+										{/* <ZIonButton
 											expand='block'
 											className='ion-no-margin ion-no-padding'
 											fill='outline'
@@ -363,7 +430,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
 											height={
 												isLgScale ? '2.3rem' : !isLgScale ? '1.9rem' : '2.3rem'
 											}
-											testingSelector={
+											testingselector={
 												CONSTANTS.testingSelectors.shortLink.listPage
 													.timeFilterBtn
 											}
@@ -422,14 +489,82 @@ const ZShortLinksFilterMenu: React.FC = () => {
 													? 'Custom Range'
 													: 'All Time'}
 											</ZIonText>
-										</ZIonButton>
+										</ZIonButton> */}
 
-										<ZIonButton
+										<ZaionsRSelect
+											name='filters.time'
+											className='mt-2'
+											testingselector={
+												CONSTANTS.testingSelectors.shortLink.formPage
+													.geoLocation.countrySelector
+											}
+											onChange={(_value) => {
+												setFieldValue(
+													'filters.time',
+													(_value as ZaionsRSelectOptions).value,
+													true
+												);
+											}}
+											value={ZTimeSelectData?.find(
+												(el) => el.value === values.filters.time
+											)}
+											options={ZTimeSelectData}
+										/>
+
+										{/* Tags filter */}
+										<ZaionsRSelect
+											isMulti={true}
+											name='filters.tags'
+											className='mt-2'
+											testingselector={
+												CONSTANTS.testingSelectors.shortLink.formPage
+													.geoLocation.countrySelector
+											}
+											onChange={(_value) => {
+												setFieldValue('filters.tags', _value, true);
+											}}
+											options={
+												_shortLinksFieldsDataTagsSelector
+													? _shortLinksFieldsDataTagsSelector.map((el) => {
+															return {
+																value: el,
+																label: el,
+															};
+													  })
+													: []
+											}
+										/>
+
+										{/* Domain filter */}
+										<ZaionsRSelect
+											isMulti={true}
+											name='filters.domains'
+											className='mt-2'
+											testingselector={
+												CONSTANTS.testingSelectors.shortLink.formPage
+													.geoLocation.countrySelector
+											}
+											onChange={(_value) => {
+												setFieldValue('filters.domains', _value, true);
+											}}
+											options={
+												_shortLinksFieldsDataDomainsSelector
+													? _shortLinksFieldsDataDomainsSelector?.map((el) => {
+															return {
+																value: el,
+																label: el,
+															};
+													  })
+													: []
+											}
+										/>
+
+										{/* <ZIonButton
 											expand='block'
-											className='ion-no-margin mt-2 ion-no-padding'
+											className='mt-2 ion-no-margin ion-no-padding'
 											fill='outline'
 											color='tertiary'
-											testingSelector={
+											testingselector={
 												CONSTANTS.testingSelectors.shortLink.listPage
 													.tagsFilterBtn
 											}
@@ -473,10 +608,10 @@ const ZShortLinksFilterMenu: React.FC = () => {
 
 										<ZIonButton
 											expand='block'
-											className='ion-no-margin mt-2 ion-no-padding'
+											className='mt-2 ion-no-margin ion-no-padding'
 											fill='outline'
 											color='tertiary'
-											testingSelector={
+											testingselector={
 												CONSTANTS.testingSelectors.shortLink.listPage
 													.domainFilterBtn
 											}
@@ -516,7 +651,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
 														: 'No values'
 													: 'No values'}
 											</ZIonText>
-										</ZIonButton>
+										</ZIonButton> */}
 
 										<ZIonButton
 											expand='block'
@@ -531,7 +666,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
 								</ZIonCol>
 
 								{/*  */}
-								<ZIonCol size='12' className='border-b pb-3'>
+								<ZIonCol size='12' className='pb-3 border-b'>
 									<ZIonText
 										className={classNames({
 											'block mx-3 mb-2 text-md tracking-widest font-semibold':
@@ -621,7 +756,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
 
 									<ZIonButton
 										expand='block'
-										className='mx-1 mt-2'
+										className='mx-3 mt-2'
 										onClick={() => {
 											void submitForm();
 										}}

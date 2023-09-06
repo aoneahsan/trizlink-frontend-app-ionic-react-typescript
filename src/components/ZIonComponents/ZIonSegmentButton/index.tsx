@@ -19,7 +19,7 @@ type ZIonSegmentButtonType = {
 	mode?: ZIonModeType;
 	value?: string;
 	type?: 'button' | 'reset' | 'submit';
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	layout?:
 		| 'icon-bottom'
@@ -42,10 +42,10 @@ const ZIonSegmentButton = (props: ZIonSegmentButtonType) => {
 		  }
 		: {};
 
-	const _testingSelector = props.testingSelector
+	const _testingSelector = props.testingselector
 		? {
 				...zCreateElementTestingSelector({
-					_value: props.testingSelector || PRODUCT_NAME,
+					_value: props.testingselector || PRODUCT_NAME,
 				}),
 		  }
 		: {};

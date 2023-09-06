@@ -138,7 +138,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 							<ZCan havePermissions={[permissionsEnum.view_folder]}>
 								<ZIonItem
 									className='cursor-pointer'
-									testingSelector={`${CONSTANTS.testingSelectors.folder.singleFolder}-default-${type}`}
+									testingselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-default-${type}`}
 									style={{
 										'--inner-padding-end': '0px',
 										'--padding-start': '0px',
@@ -209,7 +209,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 												})}
 											>
 												<ZIonLabel
-													testingSelector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}`}
+													testingselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}`}
 													testingListSelector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}-${el.id}`}
 													onClick={() => {
 														if (el.id) {
@@ -256,7 +256,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 													color='dark'
 													size='small'
 													value={el.id}
-													testingSelector={`${CONSTANTS.testingSelectors.folder.actionPopoverBtn}-${type}`}
+													testingselector={`${CONSTANTS.testingSelectors.folder.actionPopoverBtn}-${type}`}
 													testingListSelector={`${CONSTANTS.testingSelectors.folder.actionPopoverBtn}-${type}-${el.id}`}
 													onClick={(event) => {
 														folderActionsButtonOnClickHandler &&
@@ -332,7 +332,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 						fill='outline'
 						expand='block'
 						onClick={addNewFolderButtonOnClickHandler}
-						testingSelector={`${CONSTANTS.testingSelectors.folder.create}-${type}`}
+						testingselector={`${CONSTANTS.testingSelectors.folder.create}-${type}`}
 					>
 						New Folder
 					</ZIonButton>
@@ -342,7 +342,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 					<ZIonButton
 						className='absolute bottom-0 ion-text-capitalize ion-margin-horizontal'
 						expand='block'
-						testingSelector={`${CONSTANTS.testingSelectors.folder.reorderBtn}-${type}`}
+						testingselector={`${CONSTANTS.testingSelectors.folder.reorderBtn}-${type}`}
 						onClick={foldersSaveReorderButtonOnClickHandler}
 						style={{ width: '78%' }}
 					>

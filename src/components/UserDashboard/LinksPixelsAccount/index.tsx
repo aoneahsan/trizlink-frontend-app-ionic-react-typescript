@@ -117,7 +117,7 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
 						className='pt-0 pb-0 ion-padding'
 						isMulti
 						name='linkPixelsAccount'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.formPage.pixelAccount
 								.pixelsSelector
 						}
@@ -150,7 +150,7 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
 						fill='clear'
 						className='ion-text-capitalize ion-no-padding ps-1 ion-no-margin ion-margin-start'
 						size='small'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.formPage.pixelAccount
 								.createBtn
 						}

@@ -60,7 +60,7 @@ interface ZaionsColorPikerType {
 	showSkeleton?: boolean;
 	minHeight?: string;
 	setDefaultColor?: string;
-	testingSelector?: string;
+	testingselector?: string;
 	testingListSelector?: string;
 	setFieldValueFn?: FormikSetFieldValueEventType;
 	closeIconOnChangeFn?: React.MouseEventHandler<HTMLIonButtonElement>;
@@ -80,7 +80,7 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
 	showSkeleton = false,
 	minHeight = '40px',
 	setDefaultColor = '#000', //if color is values is empty the when color is be set.
-	testingSelector,
+	testingselector,
 	testingListSelector,
 	closeIconOnChangeFn,
 }) => {
@@ -93,7 +93,7 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
 			className='flex mt-3 ion-no-padding ion-align-items-center'
 			lines='none'
 			minHeight={minHeight}
-			testingSelector={testingSelector}
+			testingselector={testingselector}
 			testingListSelector={testingListSelector}
 			style={{
 				// '--border-color': '#000',

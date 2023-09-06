@@ -73,7 +73,7 @@ const LinkExpiration: React.FC = () => {
 						unCheckedChildren='off'
 						className='ms-auto me-2'
 						checked={values.linkExpiration.enabled}
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.formPage.linkExpiration
 								.enableBtn
 						}
@@ -85,7 +85,7 @@ const LinkExpiration: React.FC = () => {
 				{values.linkExpiration.enabled ? (
 					<ZIonGrid
 						className='block px-2 mt-4 py-0'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.formPage.linkExpiration
 								.container
 						}
@@ -102,7 +102,7 @@ const LinkExpiration: React.FC = () => {
 									onIonChange={handleChange}
 									onIonBlur={handleBlur}
 									value={values.linkExpiration.expirationDate}
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.shortLink.formPage.linkExpiration
 											.expirationDateInput
 									}
@@ -123,7 +123,7 @@ const LinkExpiration: React.FC = () => {
 									className=''
 									placeholder='country*'
 									name='linkExpiration.timezone'
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.shortLink.formPage.linkExpiration
 											.timezoneSelector
 									}
@@ -159,7 +159,7 @@ const LinkExpiration: React.FC = () => {
 							labelPlacement='stacked'
 							name='linkExpiration.redirectionLink'
 							value={values.linkExpiration.redirectionLink}
-							testingSelector={
+							testingselector={
 								CONSTANTS.testingSelectors.shortLink.formPage.linkExpiration
 									.redirectionLinkInput
 							}
@@ -196,7 +196,7 @@ const LinkExpiration: React.FC = () => {
 				) : (
 					<ZIonGrid
 						className='mt-2 ion-padding-start'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.shortLink.formPage.linkExpiration
 								.disabledLEText
 						}

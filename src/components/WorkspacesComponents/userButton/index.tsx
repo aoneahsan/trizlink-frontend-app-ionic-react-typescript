@@ -66,7 +66,7 @@ const ZUserAvatarButton: React.FC<ZUserAvatarButtonInterface> = ({
 				onMouseLeave={onMouseLeave}
 				style={style}
 				data-tooltip-id={id}
-				testingSelector={
+				testingselector={
 					CONSTANTS.testingSelectors.user.userProfilePopoverButton
 				}
 			>

@@ -41,7 +41,7 @@ const ZaionsSignUpOptions: React.FC = () => {
 							<ZIonRouterLink
 								className='underline'
 								routerLink={ZaionsRoutes.LoginRoute}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.signupPage.loginButton
 								}
 							>
@@ -51,7 +51,7 @@ const ZaionsSignUpOptions: React.FC = () => {
 							<ZIonRouterLink
 								className='underline'
 								routerLink={ZaionsRoutes.LoginRoute}
-								testingSelector={
+								testingselector={
 									CONSTANTS.testingSelectors.signupPage.SSOLoginButton
 								}
 							>
@@ -77,7 +77,7 @@ const ZaionsSignUpOptions: React.FC = () => {
 						className='me-2 ion-text-capitalize'
 						color='tertiary'
 						expand='block'
-						testingSelector={
+						testingselector={
 							CONSTANTS.testingSelectors.signupPage.googleSignupButton
 						}
 					>

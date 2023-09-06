@@ -155,7 +155,7 @@ const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 					className={classNames({
 						'text-xs ms-4': !isLgScale,
 					})}
-					testingSelector={CONSTANTS.testingSelectors.topBar.upgradeBtn}
+					testingselector={CONSTANTS.testingSelectors.topBar.upgradeBtn}
 				>
 					Upgrade
 				</ZIonButton>
@@ -168,7 +168,7 @@ const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 					className={classNames({
 						'text-xs': !isLgScale,
 					})}
-					testingSelector={CONSTANTS.testingSelectors.topBar.helpBtn}
+					testingselector={CONSTANTS.testingSelectors.topBar.helpBtn}
 					onClick={(event: unknown) => {
 						presentZHelpCenterPopover({
 							_event: event as Event,
@@ -186,7 +186,7 @@ const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 					color='tertiary'
 					size='small'
 					height={isLgScale ? '2.3rem' : '1.9rem'}
-					testingSelector={CONSTANTS.testingSelectors.topBar.notificationBtn}
+					testingselector={CONSTANTS.testingSelectors.topBar.notificationBtn}
 					className={classNames({
 						'me-3': true,
 						'text-xs': !isLgScale,

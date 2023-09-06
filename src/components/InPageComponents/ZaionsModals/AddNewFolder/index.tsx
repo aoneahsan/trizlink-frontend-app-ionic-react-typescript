@@ -275,7 +275,7 @@ const ZaionsAddNewFolder: React.FC<{
 											color='primary'
 											className='ion-text-capitalize'
 											fill='outline'
-											testingSelector={
+											testingselector={
 												CONSTANTS.testingSelectors.folder.formModal
 													.closeModalBtn
 											}
@@ -295,7 +295,7 @@ const ZaionsAddNewFolder: React.FC<{
 											color='primary'
 											fill='solid'
 											className='ion-text-capitalize'
-											testingSelector={
+											testingselector={
 												CONSTANTS.testingSelectors.folder.formModal
 													.submitFormBtn
 											}
@@ -362,7 +362,7 @@ const ZaionsAddNewFolder: React.FC<{
 									onIonBlur={handleBlur}
 									value={values.folderName}
 									errorText={touched.folderName ? errors.folderName : undefined}
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.folder.formModal.nameInput
 									}
 									className={classNames({
@@ -387,7 +387,7 @@ const ZaionsAddNewFolder: React.FC<{
 											fill='outline'
 											size='default'
 											className='ion-text-capitalize'
-											testingSelector={
+											testingselector={
 												CONSTANTS.testingSelectors.folder.formModal
 													.closeModalBtn
 											}
@@ -410,7 +410,7 @@ const ZaionsAddNewFolder: React.FC<{
 											type='submit'
 											disabled={isSubmitting || !isValid}
 											onClick={() => void submitForm()}
-											testingSelector={
+											testingselector={
 												CONSTANTS.testingSelectors.folder.formModal
 													.submitFormBtn
 											}

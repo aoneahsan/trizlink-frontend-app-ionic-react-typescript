@@ -129,7 +129,7 @@ const ZNotificationPopover: React.FC<{
 										<ZIonSegmentButton
 											className='normal-case w-max'
 											value={ZNotificationPopoverTabsEnum.approvals}
-											testingSelector={
+											testingselector={
 												CONSTANTS.testingSelectors.topBar.notificationPopover
 													.tabs.approvalRequests
 											}
@@ -154,7 +154,7 @@ const ZNotificationPopover: React.FC<{
 										<ZIonSegmentButton
 											className='normal-case w-max min-w-[80px]'
 											value={ZNotificationPopoverTabsEnum.updates}
-											testingSelector={
+											testingselector={
 												CONSTANTS.testingSelectors.topBar.notificationPopover
 													.tabs.updates
 											}
@@ -185,7 +185,7 @@ const ZNotificationPopover: React.FC<{
 											color='medium'
 											className='ion-no-margin ion-no-padding'
 											id='z-mark-all-as-read-btn'
-											testingSelector={
+											testingselector={
 												CONSTANTS.testingSelectors.topBar.notificationPopover
 													.markAllAsReadBtn
 											}
@@ -206,7 +206,7 @@ const ZNotificationPopover: React.FC<{
 										color='medium'
 										className='ion-no-margin ion-no-padding'
 										id='z-wnp-settings-btn'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.topBar.notificationPopover
 												.settingsBtn
 										}
@@ -337,7 +337,7 @@ const ZUpdatesTab: React.FC<{
 				<ZIonRow
 					className='pb-2 border-b cursor-pointer'
 					key={index}
-					testingSelector={
+					testingselector={
 						CONSTANTS.testingSelectors.topBar.notificationPopover
 							.singleNotification
 					}
@@ -362,7 +362,7 @@ const ZUpdatesTab: React.FC<{
 									<ZIonText
 										className='text-sm'
 										color='medium'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.topBar.notificationPopover
 												.notificationUpdateTabText
 										}
@@ -377,7 +377,7 @@ const ZUpdatesTab: React.FC<{
 									<ZIonButton
 										size='small'
 										className='mt-1'
-										testingSelector={
+										testingselector={
 											CONSTANTS.testingSelectors.topBar.notificationPopover
 												.notificationUpdateTabViewBtn
 										}
@@ -409,7 +409,7 @@ const ZUpdatesTab: React.FC<{
 								<ZIonText
 									className='text-sm'
 									color='medium'
-									testingSelector={
+									testingselector={
 										CONSTANTS.testingSelectors.topBar.notificationPopover
 											.dateText
 									}
