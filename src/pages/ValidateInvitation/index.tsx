@@ -199,11 +199,7 @@ const ZValidateInvitationPage: React.FC = () => {
 			</ZIonPage>
 		);
 	} else if (_token && !compState.errorOccurred && !compState.isProcessing) {
-		return (
-			<ZIonPage>
-				<ZIonTitle>Successfully done</ZIonTitle>
-			</ZIonPage>
-		);
+		return <ZFallbackIonSpinner />;
 	} else {
 		return (
 			<ZIonPage>

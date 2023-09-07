@@ -18,24 +18,24 @@
     - add a refresh button next to "mark all as read" button to refetch the notifications data
       - "mark all as read" button should be disabled is there are no notifications or no notification to mark as read (done)
 
-- invite member modal
+- invite member modal (done)
 
-  - in mobile the UI is not correct, elements are not visible
-    - remove the "user icon circle" from member invite modal
-    - lines on left and right for "invite links ?" just one line on left and right (to make it look better)
+  - in mobile the UI is not correct, elements are not visible (done)
+    - remove the "user icon circle" from member invite modal (done)
+    - lines on left and right for "invite links ?" just one line on left and right (to make it look better) (done)
 
 - invited members list page
 
   - update the format for invite at date
-    - add these columns
-      - invite accepted at
-        - Action "Resend Invite link/Send a new Invite Link"
+    - add these columns (done)
+      - invite accepted at (done)
+        - Action "Resend Invite link/Send a new Invite Link" (done)
 
 - invite sent to user
   - when user click on Invite
-    - successfully done, is at a bad position (for a splist second)
+    - successfully done, is at a bad position (for a splist second) (done)
       - email is prefilled, user should confirm that email, as a simple frontend security check
-        - add a info icon on that page explaining user why we are requesting him to refill his email
+        - add a info icon on that page explaining user why we are requesting him to refill his email (done)
           - OTP email sent, but the code in that email does not look good at all, make that numbers in box, or just large numbers in one box make it beautiful any way
 - password field should show errors on typing and not on focus out
 
@@ -55,3 +55,7 @@ next tasks after member flow in shared workspace
 
 - workspaces UI flow
   - favorite workspaces
+
+<!-- My task  -->
+set responsiveness of member list page.
+unknown issue in invite modal when in responsive focus on email filed and whole responsive messed.

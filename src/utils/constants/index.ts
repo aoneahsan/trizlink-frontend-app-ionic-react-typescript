@@ -47,6 +47,7 @@ const RouteParams = {
 		editWorkspaceIdParam: ':editWorkspaceId',
 		teamId: ':teamId',
 		memberInviteId: ':memberInviteId',
+		invitationId: ':invitationId',
 	},
 
 	settings: {
@@ -102,8 +103,10 @@ export const API_URLS = {
 	csrf: '/sanctum/csrf-cookie',
 	delete: '/user/delete',
 	ws_roles_get: '/user/ws-roles',
-	ws_team_member_invite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}/member`,
-	ws_team_member_invite_get: `/user/workspace/member/${RouteParams.workspace.memberInviteId}`,
+	ws_team_member_sendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}/member/send-invitation`,
+	ws_team_member_getAllInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}/member`,
+	ws_team_member_resendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}/member/resend-invitation/${RouteParams.workspace.invitationId}`,
+	ws_team_member_invite_get: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}/member/${RouteParams.workspace.memberInviteId}`,
 	ws_team_member_update: `/user/update-invitation/${RouteParams.workspace.memberInviteId}`,
 	validate_invitation_status: `/user/validate-and-update-invitation`,
 	userPixelAccounts_create_list: '/user/pixel',
@@ -1123,6 +1126,7 @@ const testingSelectors = {
 				description: 'wss-tlp-t-description-rm', // rm -> read more
 				actionPopoverBtn: 'wss-tlp-t-ap-btn',
 				editBtn: 'wss-tlp-t-edit-btn',
+				resendInvitation: 'wss-tlp-t-resend-invitation-btn',
 				deleteBtn: 'wss-tlp-t-delete-btn',
 				previousButton: 'wss-tlp-t-previous-page-btn',
 				getFirstPageButton: 'wss-tlp-t-first-page-btn',
@@ -1393,7 +1397,7 @@ const CONSTANTS = {
 	PIXEL_ACCOUNTS,
 	ION_LOADER_DEFAULTS,
 	ION_TOAST,
-	NO_VALUE_FOUND: '-',
+	NO_VALUE_FOUND: '---',
 	ZaionsRHelmetDefaults,
 	RouteParams,
 	DEFAULT_VALUES,

@@ -194,14 +194,38 @@ const ZWorkspaceListPage: React.FC = () => {
 						</Suspense>
 
 						{/* cards row */}
-						<ZIonRow className='px-4 py-5'>
-							<ZIonCol size='12' className='ps-3'>
-								<ZIonTitle className='font-bold ion-no-padding'>
-									Owned workspaces
-								</ZIonTitle>
-							</ZIonCol>
-							{/* single card */}
-							<Suspense fallback={<ZWorkspacesCardSkeleton />}>
+						<ZIonCard>
+							<ZIonRow className='px-4 py-5 '>
+								<ZIonCol size='12' className='ps-3'>
+									<ZIonTitle className='font-bold ion-no-padding'>
+										Owned workspaces
+									</ZIonTitle>
+								</ZIonCol>
+
+								<ZIonCol
+									size='12'
+									className='flex ion-align-items-center ion-justify-content-center flex-col zaions__primary_bg_opacity_point_4 py-4 mt-2 rounded-lg'
+								>
+									<ZIonButton
+										className='ion-no-padding ion-no-margin rounded-full overflow-hidden w-[3rem]'
+										height='3rem'
+										color='tertiary'
+									>
+										<ZIonIcon icon={addOutline} className='w-6 h-6' />
+									</ZIonButton>
+
+									<ZIonText className='mt-3 text-lg font-semibold'>
+										Workspaces
+									</ZIonText>
+
+									<ZIonText className='mt-1' color='medium'>
+										Start by creating a new workspace and organizing your
+										content.
+									</ZIonText>
+								</ZIonCol>
+
+								{/* single card */}
+								{/* <Suspense fallback={<ZWorkspacesCardSkeleton />}>
 								{!isWorkspacesDataFetching &&
 									WorkspacesData &&
 									WorkspacesData.map((el) => (
@@ -222,12 +246,12 @@ const ZWorkspaceListPage: React.FC = () => {
 											/>
 										</ZIonCol>
 									))}
-							</Suspense>
+							</Suspense> */}
 
-							{isWorkspacesDataFetching && <ZWorkspacesCardSkeleton />}
+								{isWorkspacesDataFetching && <ZWorkspacesCardSkeleton />}
 
-							{/* add a workspace card */}
-							<ZCan havePermissions={[permissionsEnum.create_workspace]}>
+								{/* add a workspace card */}
+								{/* <ZCan havePermissions={[permissionsEnum.create_workspace]}>
 								<ZIonCol
 									sizeXl='4'
 									sizeLg='6'
@@ -297,8 +321,9 @@ const ZWorkspaceListPage: React.FC = () => {
 										</ZIonCard>
 									)}
 								</ZIonCol>
-							</ZCan>
-						</ZIonRow>
+							</ZCan> */}
+							</ZIonRow>
+						</ZIonCard>
 						{/*  */}
 
 						<ZIonRow className='px-4 py-5'>

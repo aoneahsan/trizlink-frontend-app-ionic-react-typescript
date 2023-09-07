@@ -93,7 +93,7 @@ const ZWorkspacesSharingModal: React.FC<{
 		activeTab: Tab,
 	});
 
-	const { isLgScale } = useZMediaQueryScale();
+	const { isLgScale, isMdScale } = useZMediaQueryScale();
 
 	return (
 		<>
@@ -132,7 +132,14 @@ const ZWorkspacesSharingModal: React.FC<{
 						}}
 					>
 						<ZIonIcon icon={personAddOutline} className='w-5 h-5 pt-1' />
-						<ZIonText className='pb-3 text-sm'>Invite</ZIonText>
+						<ZIonText
+							className={classNames({
+								'text-sm': true,
+								'pb-3': isMdScale,
+							})}
+						>
+							Invite
+						</ZIonText>
 					</ZIonSegmentButton>
 
 					{/* Labels */}
@@ -147,7 +154,14 @@ const ZWorkspacesSharingModal: React.FC<{
 						}}
 					>
 						<ZIonIcon icon={peopleOutline} className='w-5 h-5 pt-1' />
-						<ZIonText className='pb-3 text-xs'>Members</ZIonText>
+						<ZIonText
+							className={classNames({
+								'text-sm': true,
+								'pb-3': isMdScale,
+							})}
+						>
+							Members
+						</ZIonText>
 					</ZIonSegmentButton>
 
 					{/* Settings */}
@@ -162,7 +176,14 @@ const ZWorkspacesSharingModal: React.FC<{
 						}}
 					>
 						<ZIonIcon icon={checkboxOutline} className='w-5 h-5 pt-1' />
-						<ZIonText className='pb-3 text-xs'>Permissions</ZIonText>
+						<ZIonText
+							className={classNames({
+								'text-sm': true,
+								'pb-3': isMdScale,
+							})}
+						>
+							Permissions
+						</ZIonText>
 					</ZIonSegmentButton>
 
 					{/* Approvals */}
@@ -177,7 +198,14 @@ const ZWorkspacesSharingModal: React.FC<{
 						}}
 					>
 						<ZIonIcon icon={notificationsOutline} className='w-5 h-5 pt-1' />
-						<ZIonText className='pb-3 text-xs'>Notifications</ZIonText>
+						<ZIonText
+							className={classNames({
+								'text-sm': true,
+								'pb-3': isMdScale,
+							})}
+						>
+							Notifications
+						</ZIonText>
 					</ZIonSegmentButton>
 				</ZIonSegment>
 			</ZIonHeader>

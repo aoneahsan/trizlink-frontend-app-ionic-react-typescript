@@ -9,11 +9,15 @@ import React, { useState } from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import {
+	checkmarkCircleOutline,
 	chevronDownOutline,
+	closeCircleOutline,
 	closeOutline,
 	helpCircleOutline,
 	linkOutline,
 	sendOutline,
+	trashBin,
+	trashBinOutline,
 } from 'ionicons/icons';
 import classNames from 'classnames';
 import { Formik } from 'formik';
@@ -99,6 +103,9 @@ import { FormikSetErrorsType } from '@/types/ZaionsFormik.type';
 import { AxiosError } from 'axios';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import ZaionsSeparator from '@/components/InPageComponents/ZaionsSepatator/ZaionsSeparator';
 
 /**
  * Component props type go down
@@ -111,6 +118,15 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
  * @type {*}
  * */
 
+const ZRolesOptions: ZaionsRSelectOptions[] = [
+	{ label: 'Administrator', value: workspaceFormRoleEnum.Administrator },
+	{ label: 'Contributor', value: workspaceFormRoleEnum.Contributor },
+	{ label: 'Manager', value: workspaceFormRoleEnum.Manager },
+	{ label: 'Approver', value: workspaceFormRoleEnum.Approver },
+	{ label: 'Commenter', value: workspaceFormRoleEnum.Commenter },
+	{ label: 'Guest', value: workspaceFormRoleEnum.Guest },
+];
+
 const ZInviteTab: React.FC<{
 	workspaceId: string;
 	teamId: string;
@@ -121,7 +137,7 @@ const ZInviteTab: React.FC<{
 	}>();
 
 	// #region Custom hooks
-	const { isLgScale } = useZMediaQueryScale();
+	const { isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
 	const { presentZIonToast } = useZIonToast();
 	const { getRQCDataHandler } = useZGetRQCacheData();
 	const { updateRQCDataHandler } = useZUpdateRQCacheData();
@@ -129,7 +145,7 @@ const ZInviteTab: React.FC<{
 
 	// #region APIS.
 	const { mutateAsync: inviteTeamMemberAsyncMutate } = useZRQCreateRequest({
-		_url: API_URL_ENUM.ws_team_member_invite_list,
+		_url: API_URL_ENUM.ws_team_member_sendInvite_list,
 		_itemsIds: [workspaceId, teamId],
 		_urlDynamicParts: [
 			CONSTANTS.RouteParams.workspace.workspaceId,
@@ -258,7 +274,7 @@ const ZInviteTab: React.FC<{
 							})}
 						>
 							<ZIonRow className='mb-1'>
-								<ZIonCol>
+								<ZIonCol size='12'>
 									<ZIonTitle
 										className={classNames({
 											'block font-normal ion-no-padding': true,
@@ -269,6 +285,7 @@ const ZInviteTab: React.FC<{
 												'text-lg': isLgScale,
 												'text-sm': !isLgScale,
 											})}
+											color='medium'
 										>
 											Assign role:
 										</ZIonText>
@@ -283,6 +300,260 @@ const ZInviteTab: React.FC<{
 										</ZIonText>
 									</ZIonTitle>
 								</ZIonCol>
+
+								<ZIonCol>
+									<ZIonTitle
+										className={classNames({
+											'block font-normal ion-no-padding': true,
+										})}
+									>
+										<ZIonText
+											className={classNames({
+												'text-lg': isLgScale,
+												'text-sm': !isLgScale,
+											})}
+											color='medium'
+										>
+											Permissions:
+										</ZIonText>
+									</ZIonTitle>
+								</ZIonCol>
+
+								{/* All permissions */}
+								<ZIonRow>
+									{/* Comment on posts */}
+									<ZIonCol
+										sizeXl='6'
+										sizeLg='6'
+										sizeMd='6'
+										sizeSm='6'
+										sizeXs='6'
+										className={classNames({
+											'flex gap-1 ion-align-items-center': true,
+											'ion-no-padding': !isSmScale,
+										})}
+									>
+										<ZIonIcon
+											icon={checkmarkCircleOutline}
+											color='success'
+											className={classNames({
+												'w-5 h-5': isSmScale,
+												'w-4 h-4': !isSmScale,
+											})}
+										/>
+										<ZIonText
+											className={classNames({
+												'text-sm': !isSmScale,
+											})}
+										>
+											Comment on posts
+										</ZIonText>
+									</ZIonCol>
+
+									{/* Create & edit posts */}
+									<ZIonCol
+										sizeXl='6'
+										sizeLg='6'
+										sizeMd='6'
+										sizeSm='6'
+										sizeXs='6'
+										className={classNames({
+											'flex gap-1 ion-align-items-center': true,
+											'ion-no-padding': !isSmScale,
+										})}
+									>
+										<ZIonIcon
+											icon={
+												values.role === workspaceFormRoleEnum.Contributor ||
+												values.role === workspaceFormRoleEnum.Administrator ||
+												values.role === workspaceFormRoleEnum.Writer
+													? checkmarkCircleOutline
+													: values.role === workspaceFormRoleEnum.Guest ||
+													  values.role === workspaceFormRoleEnum.Approver ||
+													  values.role === workspaceFormRoleEnum.Commenter ||
+													  values.role === workspaceFormRoleEnum.Manager
+													? closeCircleOutline
+													: ''
+											}
+											color={
+												values.role === workspaceFormRoleEnum.Contributor ||
+												values.role === workspaceFormRoleEnum.Administrator ||
+												values.role === workspaceFormRoleEnum.Writer
+													? 'success'
+													: values.role === workspaceFormRoleEnum.Guest ||
+													  values.role === workspaceFormRoleEnum.Approver ||
+													  values.role === workspaceFormRoleEnum.Commenter ||
+													  values.role === workspaceFormRoleEnum.Manager
+													? 'danger'
+													: undefined
+											}
+											className={classNames({
+												'w-5 h-5': isSmScale,
+												'w-4 h-4': !isSmScale,
+											})}
+										/>
+										<ZIonText
+											className={classNames({
+												'text-sm': !isSmScale,
+											})}
+										>
+											Create & edit posts
+										</ZIonText>
+									</ZIonCol>
+
+									{/* Approve & disapprove */}
+									<ZIonCol
+										sizeXl='6'
+										sizeLg='6'
+										sizeMd='6'
+										sizeSm='6'
+										sizeXs='6'
+										className={classNames({
+											'flex gap-1 ion-align-items-center': true,
+											'ion-no-padding': !isSmScale,
+										})}
+									>
+										<ZIonIcon
+											icon={
+												values.role === workspaceFormRoleEnum.Administrator ||
+												values.role === workspaceFormRoleEnum.Approver
+													? checkmarkCircleOutline
+													: values.role === workspaceFormRoleEnum.Contributor ||
+													  values.role === workspaceFormRoleEnum.Guest ||
+													  values.role === workspaceFormRoleEnum.Writer ||
+													  values.role === workspaceFormRoleEnum.Commenter ||
+													  values.role === workspaceFormRoleEnum.Manager
+													? closeCircleOutline
+													: ''
+											}
+											color={
+												values.role === workspaceFormRoleEnum.Administrator ||
+												values.role === workspaceFormRoleEnum.Approver
+													? 'success'
+													: values.role === workspaceFormRoleEnum.Contributor ||
+													  values.role === workspaceFormRoleEnum.Guest ||
+													  values.role === workspaceFormRoleEnum.Writer ||
+													  values.role === workspaceFormRoleEnum.Commenter ||
+													  values.role === workspaceFormRoleEnum.Manager
+													? 'danger'
+													: undefined
+											}
+											className={classNames({
+												'w-5 h-5': isSmScale,
+												'w-4 h-4': !isSmScale,
+											})}
+										/>
+										<ZIonText
+											className={classNames({
+												'text-sm': !isSmScale,
+											})}
+										>
+											Approve & disapprove
+										</ZIonText>
+									</ZIonCol>
+
+									{/* Publish & schedule */}
+									<ZIonCol
+										sizeXl='6'
+										sizeLg='6'
+										sizeMd='6'
+										sizeSm='6'
+										sizeXs='6'
+										className={classNames({
+											'flex gap-1 ion-align-items-center': true,
+											'ion-no-padding': !isSmScale,
+										})}
+									>
+										<ZIonIcon
+											icon={
+												values.role === workspaceFormRoleEnum.Contributor ||
+												values.role === workspaceFormRoleEnum.Administrator ||
+												values.role === workspaceFormRoleEnum.Manager
+													? checkmarkCircleOutline
+													: values.role === workspaceFormRoleEnum.Guest ||
+													  values.role === workspaceFormRoleEnum.Writer ||
+													  values.role === workspaceFormRoleEnum.Approver ||
+													  values.role === workspaceFormRoleEnum.Commenter
+													? closeCircleOutline
+													: ''
+											}
+											color={
+												values.role === workspaceFormRoleEnum.Contributor ||
+												values.role === workspaceFormRoleEnum.Administrator ||
+												values.role === workspaceFormRoleEnum.Manager
+													? 'success'
+													: values.role === workspaceFormRoleEnum.Guest ||
+													  values.role === workspaceFormRoleEnum.Writer ||
+													  values.role === workspaceFormRoleEnum.Approver ||
+													  values.role === workspaceFormRoleEnum.Commenter
+													? 'danger'
+													: undefined
+											}
+											className={classNames({
+												'w-5 h-5': isSmScale,
+												'w-4 h-4': !isSmScale,
+											})}
+										/>
+										<ZIonText
+											className={classNames({
+												'text-sm': !isSmScale,
+											})}
+										>
+											Publish & schedule
+										</ZIonText>
+									</ZIonCol>
+
+									{/* Manage users & pages */}
+									<ZIonCol
+										sizeXl='6'
+										sizeLg='6'
+										sizeMd='6'
+										sizeSm='6'
+										sizeXs='6'
+										className={classNames({
+											'flex gap-1 ion-align-items-center': true,
+											'ion-no-padding': !isSmScale,
+										})}
+									>
+										<ZIonIcon
+											icon={
+												values.role === workspaceFormRoleEnum.Administrator ||
+												values.role === workspaceFormRoleEnum.Manager
+													? checkmarkCircleOutline
+													: values.role === workspaceFormRoleEnum.Contributor ||
+													  values.role === workspaceFormRoleEnum.Guest ||
+													  values.role === workspaceFormRoleEnum.Writer ||
+													  values.role === workspaceFormRoleEnum.Approver ||
+													  values.role === workspaceFormRoleEnum.Commenter
+													? closeCircleOutline
+													: ''
+											}
+											color={
+												values.role === workspaceFormRoleEnum.Administrator ||
+												values.role === workspaceFormRoleEnum.Manager
+													? 'success'
+													: values.role === workspaceFormRoleEnum.Contributor ||
+													  values.role === workspaceFormRoleEnum.Guest ||
+													  values.role === workspaceFormRoleEnum.Writer ||
+													  values.role === workspaceFormRoleEnum.Approver ||
+													  values.role === workspaceFormRoleEnum.Commenter
+													? 'danger'
+													: undefined
+											}
+											className={classNames({
+												'w-5 h-5': isSmScale,
+												'w-4 h-4': !isSmScale,
+											})}
+										/>
+										<ZIonText
+											className={classNames({
+												'text-sm': !isSmScale,
+											})}
+										>
+											Manage users & pages
+										</ZIonText>
+									</ZIonCol>
+								</ZIonRow>
 							</ZIonRow>
 
 							{/* Fields */}
@@ -352,7 +623,7 @@ const ZInviteTab: React.FC<{
 									sizeSm='12'
 									sizeXs='12'
 								>
-									<ZIonButton
+									{/* <ZIonButton
 										fill='outline'
 										size='small'
 										color='medium'
@@ -395,11 +666,30 @@ const ZInviteTab: React.FC<{
 											icon={chevronDownOutline}
 											className='flex ms-auto'
 										/>
-									</ZIonButton>
+									</ZIonButton> */}
+									<ZaionsRSelect
+										name='role'
+										// className='mt-2'
+										testingselector={
+											CONSTANTS.testingSelectors.shortLink.formPage.geoLocation
+												.countrySelector
+										}
+										onChange={(_value) => {
+											setFieldValue(
+												'role',
+												(_value as ZaionsRSelectOptions).value,
+												true
+											);
+										}}
+										value={ZRolesOptions?.find(
+											(el) => el.value === values.role
+										)}
+										options={ZRolesOptions}
+									/>
 								</ZIonCol>
 							</ZIonRow>
 
-							<ZIonRow className='pt-2'>
+							<ZIonRow>
 								{/* Send invite btn */}
 								<ZIonCol
 									sizeXl='6'
@@ -466,53 +756,81 @@ const ZInviteTab: React.FC<{
 							})}
 						>
 							{/*  */}
-							<ZIonCol
+							{/* <ZIonCol
 								size='12'
 								className='flex my-1 ion-align-items-center ion-justify-content-center'
 							>
-								<ZIonText className='me-2'>Invite links</ZIonText>
-								<ZIonIcon
-									icon={helpCircleOutline}
-									id='wss-tsm-invite-link-help-btn-tt'
-									className='w-5 h-5 cursor-pointer'
-								/>
-								<ZRTooltip
-									anchorSelect='#wss-tsm-invite-link-help-btn-tt'
-									place='bottom'
-									variant='info'
-									className='z-10'
-								>
-									<div className=''>
-										<ZIonText className='block text-lg font-bold'>
-											Invite collaborators via link
-										</ZIonText>
-										<ZIonText className='block mt-3 '>
-											User will be able to join the company <br /> by creating
-											account and will be assigned <br /> selected permissions
-											and membership
-										</ZIonText>
-									</div>
-								</ZRTooltip>
-							</ZIonCol>
+								
+							</ZIonCol> */}
 						</ZIonRow>
+						<ZaionsSeparator
+							sizeXl='11.5'
+							sizeLg='11.5'
+							sizeMd='11.5'
+							sizeSm='11.5'
+							sizeXs='11.5'
+							text={
+								<div className='flex zaions__bg_white px-2 w-max mx-auto ion-align-items-center ion-justify-content-center'>
+									<ZIonText className='me-2'>Invite links</ZIonText>
+									<ZIonIcon
+										icon={helpCircleOutline}
+										id='wss-tsm-invite-link-help-btn-tt'
+										className='w-5 h-5 cursor-pointer'
+									/>
+									<ZRTooltip
+										anchorSelect='#wss-tsm-invite-link-help-btn-tt'
+										place='bottom'
+										variant='info'
+										className='z-10'
+									>
+										<div className=''>
+											<ZIonText className='block text-lg font-bold'>
+												Invite collaborators via link
+											</ZIonText>
+											<ZIonText className='block mt-3 '>
+												User will be able to join the company <br /> by creating
+												account and will be assigned <br /> selected permissions
+												and membership
+											</ZIonText>
+										</div>
+									</ZRTooltip>
+								</div>
+							}
+						/>
 
 						{/* Invitation links */}
-						{[1].map((el) => (
-							<ZIonRow className='mx-2 ion-align-items-center' key={el}>
-								{/* Copy Invite link button */}
+						{[...Array(1)].map((el, index) => (
+							<ZIonRow
+								className={classNames({
+									'ion-align-items-center': true,
+									'mx-2': isMdScale,
+									'ion-justify-content-center': !isMdScale,
+								})}
+								key={index}
+							>
+								{/* Copy Invite link button (up sm scale) / Delete invite link button (below sm scale) */}
 								<ZIonCol size='max-content'>
+									{/* Copy button up Sm scale */}
 									<ZIonButton
 										size='small'
 										height='2.3rem'
-										className='m-0 w-[2.3rem] overflow-hidden rounded-full ion-no-padding'
 										id={`wss-tsm-copy-invite-link-tt-${el}`}
+										className={classNames({
+											'm-0 w-[2.3rem] overflow-hidden rounded-full ion-no-padding ion-hide-sm-down':
+												true,
+										})}
 										onClick={() => {
 											navigator.clipboard.writeText('https://linkhere.com');
 
 											presentZIonToast('✨ Copied', 'tertiary');
 										}}
 									>
-										<ZIonIcon icon={linkOutline} className='w-6 h-6' />
+										<ZIonIcon
+											icon={linkOutline}
+											className={classNames({
+												'w-6 h-6': true,
+											})}
+										/>
 									</ZIonButton>
 
 									{/* wss-tsm -> workspace-settings-team-settings-modal */}
@@ -522,6 +840,24 @@ const ZInviteTab: React.FC<{
 										content='copy invite link'
 										variant='info'
 									/>
+
+									{/* Delete button below Sm scale */}
+									<ZIonButton
+										fill='clear'
+										height='2.3rem'
+										// id={`wss-tsm-copy-invite-link-tt-${el}`}
+										className={classNames({
+											'ion-hide-sm-up ion-no-margin ion-no-padding': true,
+										})}
+									>
+										<ZIonIcon
+											icon={trashBin}
+											color='danger'
+											className={classNames({
+												'w-5 h-5': true,
+											})}
+										/>
+									</ZIonButton>
 								</ZIonCol>
 
 								{/* Invite link */}
@@ -529,19 +865,25 @@ const ZInviteTab: React.FC<{
 									sizeXl='11'
 									sizeLg='11'
 									sizeMd='11'
-									sizeSm='11'
-									sizeXs='11'
+									sizeSm='10.5'
+									sizeXs='9.5'
 									className={classNames({
 										'border rounded ps-2 pe-0 h-[2.3rem] overflow-hidden': true,
-										'flex ion-align-items-center': isLgScale,
+										'flex ion-align-items-center': true,
 									})}
 								>
-									<ZIonText className='pt-1 text-sm'>
+									<ZIonText className='pt-1 text-sm min-w-[8rem] text-ellipsis whitespace-nowrap overflow-hidden'>
 										http://plnbl.io/ws/Yxugg59eLfj5
 									</ZIonText>
 
 									<div className='flex gap-2 ms-auto ion-align-items-center'>
-										<ZIonBadge className='text-sm' color='medium'>
+										<ZIonBadge
+											className={classNames({
+												'text-sm': true,
+												'me-1': !isMdScale,
+											})}
+											color='medium'
+										>
 											Contributor
 										</ZIonBadge>
 										{/* <ZIonBadge className='text-sm'>Team</ZIonBadge> */}
@@ -552,9 +894,9 @@ const ZInviteTab: React.FC<{
 										expand='full'
 										height='100%'
 										id={`wss-tsm-delete-invite-link-tt-${el}`}
-										className='overflow-hidden rounded-r shadow-none ion-no-margin zaions__danger_bg ms-2'
+										className='overflow-hidden rounded-r shadow-none ion-no-margin ms-2 ion-hide-sm-down'
 									>
-										<ZIonIcon color='light' icon={closeOutline} />
+										<ZIonIcon color='danger' icon={trashBin} />
 									</ZIonButton>
 
 									{/* wss-tsm -> workspace-settings-team-settings-modal */}
@@ -564,6 +906,22 @@ const ZInviteTab: React.FC<{
 										content='delete invite link'
 										variant='info'
 									/>
+								</ZIonCol>
+
+								{/* Copy link button below Sm scale */}
+								<ZIonCol size='max-content'>
+									<ZIonButton
+										fill='clear'
+										expand='full'
+										height='100%'
+										className='overflow-hidden rounded-r shadow-none ion-no-margin ion-hide-sm-up ion-no-padding'
+									>
+										<ZIonIcon
+											color='primary'
+											className='w-6 h-6'
+											icon={linkOutline}
+										/>
+									</ZIonButton>
 								</ZIonCol>
 							</ZIonRow>
 						))}

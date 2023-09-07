@@ -331,6 +331,14 @@ span.new {
 	background: var(--ion-color-dark);
 }
 
+.zaions__primary_bg_opacity_point_2 {
+	background: rgba(var(--ion-color-primary-rgb), 0.2);
+}
+
+.zaions__primary_bg_opacity_point_4 {
+	background: rgba(var(--ion-color-primary-rgb), 0.4);
+}
+
 .zaions__medium_bg_opacity_point_3 {
 	background: rgba(var(--ion-color-medium-rgb), 0.3);
 }
@@ -432,6 +440,10 @@ span.new {
 /* #region Popovers */
 .zaions_present_folder_Action_popover_width {
 	--width: 150px;
+}
+
+.z_member_table_action_popover_width {
+	--width: 204px;
 }
 
 .short-link-tags-filter-modal-size {
@@ -543,7 +555,8 @@ span.new {
 }
 
 .workspace-sharing-modal-size {
-	--height: 75vh;
+	--height: 95vh;
+	/* --height: 37rem; */
 	--width: 650px;
 }
 

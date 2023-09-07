@@ -102,14 +102,14 @@ const Z401View: React.FC = () => {
 					</ZIonText>
 
 					<ZIonButton
-						routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}
+						routerLink={ZaionsRoutes.LoginRoute}
 						className={classNames({
 							'sm:text-xs md:text-sm mt-4 w-[10rem]': true,
 							'mb-4': !isLgScale,
 							'w-[90%]': !isSmScale,
 						})}
 					>
-						Go Home
+						Go to login
 					</ZIonButton>
 				</div>
 			</ZIonRow>

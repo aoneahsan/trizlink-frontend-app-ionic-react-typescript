@@ -244,7 +244,7 @@ const ZaionsLoginForm: React.FC = () => {
 							/>
 
 							{/* Password Field */}
-							<div className='flex ion-align-items-center'>
+							<div className='flex ion-align-items-start'>
 								<ZIonInput
 									name='password'
 									label='Password'
@@ -270,9 +270,8 @@ const ZaionsLoginForm: React.FC = () => {
 								<ZIonButton
 									fill='clear'
 									size='large'
-									className='ion-no-padding ms-3 w-max'
+									className='ion-no-padding ion-no-margin ms-3 w-max'
 									onClick={() => setCanViewPassword((OldVal) => !OldVal)}
-									mode='ios'
 									testingselector={
 										CONSTANTS.testingSelectors.loginPage.canViewPasswordButton
 									}

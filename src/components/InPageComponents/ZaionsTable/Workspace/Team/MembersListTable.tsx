@@ -22,6 +22,7 @@ import {
 	createOutline,
 	ellipsisVerticalOutline,
 	fileTrayFullOutline,
+	sendOutline,
 	trashBinOutline,
 } from 'ionicons/icons';
 
@@ -59,7 +60,7 @@ import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
  * */
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { createRedirectRoute } from '@/utils/helpers';
+import { createRedirectRoute, extractInnerData } from '@/utils/helpers';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 
 /**
@@ -70,10 +71,23 @@ import {
 	WSTeamMembersInterface,
 	ZWSMemberListPageTableColumnsIds,
 } from '@/types/AdminPanel/workspace';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from '@/utils/enums';
+import {
+	useZGetRQCacheData,
+	useZRQGetRequest,
+	useZRQUpdateRequest,
+	useZUpdateRQCacheData,
+} from '@/ZaionsHooks/zreactquery-hooks';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import ZEmptyTable from '@/components/InPageComponents/ZEmptyTable';
 import { ZTeamMemberInvitationEnum } from '@/types/AdminPanel/index.type';
+import { AxiosError } from 'axios';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { reportCustomError } from '@/utils/customErrorType';
+import { showSuccessNotification } from '@/utils/notification';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import MESSAGES from '@/utils/messages';
+import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import dayjs from 'dayjs';
 
 /**
  * Recoil State Imports go down
@@ -110,7 +124,7 @@ const ZMembersListTable: React.FC = () => {
 	// #region APIS.
 	const { data: wsTeamMembersData, isFetching: isWSTeamMembersFetching } =
 		useZRQGetRequest<WSTeamMembersInterface[]>({
-			_url: API_URL_ENUM.ws_team_member_invite_list,
+			_url: API_URL_ENUM.ws_team_member_getAllInvite_list,
 			_key: [
 				CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
 				workspaceId,
@@ -156,7 +170,7 @@ const ZInpageTable: React.FC = () => {
 	// #region APIS.
 	const { data: wsTeamMembersData, isFetching: isWSTeamMembersFetching } =
 		useZRQGetRequest<WSTeamMembersInterface[]>({
-			_url: API_URL_ENUM.ws_team_member_invite_list,
+			_url: API_URL_ENUM.ws_team_member_getAllInvite_list,
 			_key: [
 				CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
 				workspaceId,
@@ -175,6 +189,7 @@ const ZInpageTable: React.FC = () => {
 		ZMemberActionPopover,
 		{
 			workspaceId: workspaceId,
+			teamId: teamId,
 			membersId: compState.selectedMemberId,
 		}
 	);
@@ -274,6 +289,18 @@ const ZInpageTable: React.FC = () => {
 			header: 'Invited at',
 			id: ZWSMemberListPageTableColumnsIds.invitedAt,
 			footer: 'Invited at',
+		}),
+
+		// Invited accepted at
+		columnHelper.accessor((itemData) => itemData.inviteAcceptedAt, {
+			header: 'Invited accepted at',
+			id: ZWSMemberListPageTableColumnsIds.invitedAcceptedAt,
+			cell: (row) => {
+				return (
+					<>{row.getValue() ? row.getValue() : CONSTANTS.NO_VALUE_FOUND}</>
+				);
+			},
+			footer: 'Invited accepted at',
 		}),
 	];
 
@@ -415,8 +442,7 @@ const ZInpageTable: React.FC = () => {
 												//
 												presentZMemberActionPopover({
 													_event: _event as Event,
-													_cssClass:
-														'zaions_present_folder_Action_popover_width',
+													_cssClass: 'z_member_table_action_popover_width',
 													_dismissOnSelect: false,
 												});
 											}}
@@ -636,7 +662,95 @@ const ZMemberActionPopover: React.FC<{
 	zNavigatePushRoute: (_url: string) => void;
 	workspaceId: string;
 	membersId: string;
-}> = ({ dismissZIonPopover, zNavigatePushRoute, membersId, workspaceId }) => {
+	teamId: string;
+}> = ({ dismissZIonPopover, workspaceId, membersId, teamId }) => {
+	const [compState, setCompState] = useState<{
+		currentMemberData?: WSTeamMembersInterface;
+	}>();
+
+	// #region custom hooks.
+	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+	// #endregion
+
+	// #region APIS.
+	const { mutateAsync: resendInviteTeamMemberAsyncMutate } =
+		useZRQUpdateRequest({
+			_url: API_URL_ENUM.ws_team_member_resendInvite_list,
+			_loaderMessage: 'Resending invitation.',
+		});
+	// #endregion
+
+	useEffect(() => {
+		try {
+			const _allMemberRQCacheData = getRQCDataHandler({
+				key: [
+					CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+					workspaceId,
+					teamId,
+				],
+			});
+
+			const _allMember =
+				extractInnerData<WSTeamMembersInterface[]>(
+					_allMemberRQCacheData || [],
+					extractInnerDataOptionsEnum.createRequestResponseItems
+				) || [];
+
+			const _currentMember = _allMember?.find((el) => el.id === membersId);
+
+			setCompState((oldValues) => ({
+				...oldValues,
+				currentMemberData: _currentMember,
+			}));
+		} catch (error) {
+			reportCustomError(error);
+		}
+	}, []);
+
+	const ZResendInvitationHandler = async () => {
+		try {
+			const __response = await resendInviteTeamMemberAsyncMutate({
+				urlDynamicParts: [
+					CONSTANTS.RouteParams.workspace.workspaceId,
+					CONSTANTS.RouteParams.workspace.teamId,
+					CONSTANTS.RouteParams.workspace.invitationId,
+				],
+				itemIds: [workspaceId, teamId, membersId],
+				requestData: '',
+			});
+
+			if ((__response as ZLinkMutateApiType<WSTeamMembersInterface>).success) {
+				const __data = extractInnerData<WSTeamMembersInterface>(
+					__response,
+					extractInnerDataOptionsEnum.createRequestResponseItem
+				);
+
+				if (__data && __data.id) {
+					await updateRQCDataHandler({
+						key: [
+							CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+							workspaceId,
+							teamId,
+						],
+						data: __data,
+						id: __data?.id!,
+					});
+
+					showSuccessNotification(MESSAGES.GENERAL.MEMBER.INVITE_RESEND);
+
+					dismissZIonPopover('', '');
+				}
+			}
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				const __apiErrors = (error.response?.data as { errors: ZGenericObject })
+					?.errors;
+			}
+			reportCustomError(error);
+		}
+	};
+
 	return (
 		<ZIonList lines='none' className='ion-no-padding'>
 			<ZCan havePermissions={[permissionsEnum.update_workspaceTeam]}>
@@ -664,6 +778,60 @@ const ZMemberActionPopover: React.FC<{
 						/>
 						<ZIonText color='secondary' className='text-[.9rem] pt-1'>
 							Edit
+						</ZIonText>
+					</ZIonButton>
+				</ZIonItem>
+
+				{/* Resend invite link */}
+				<ZIonItem
+					button={true}
+					detail={false}
+					minHeight='2.5rem'
+					testingselector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.resendInvitation}-${membersId}`}
+					testingListSelector={
+						CONSTANTS.testingSelectors.WSSettings.teamListPage.table
+							.resendInvitation
+					}
+					disabled={
+						compState?.currentMemberData?.resendAllowedAfter?.trim()?.length !==
+							0 &&
+						dayjs(compState?.currentMemberData?.resendAllowedAfter).isAfter(
+							dayjs()
+						)
+					}
+					onClick={async () => {
+						if (
+							compState?.currentMemberData?.resendAllowedAfter?.trim()
+								?.length !== 0 &&
+							dayjs(compState?.currentMemberData?.resendAllowedAfter).isBefore(
+								dayjs()
+							)
+						) {
+							console.log(
+								compState?.currentMemberData?.resendAllowedAfter?.trim()
+									?.length !== 0 &&
+									dayjs(
+										compState?.currentMemberData?.resendAllowedAfter
+									).isBefore(dayjs())
+							);
+							await ZResendInvitationHandler();
+						}
+					}}
+				>
+					<ZIonButton
+						size='small'
+						expand='full'
+						fill='clear'
+						color='light'
+						className='ion-text-capitalize'
+					>
+						<ZIonIcon
+							icon={sendOutline}
+							className='w-5 h-5 me-2'
+							color='primary'
+						/>
+						<ZIonText color='primary' className='text-[.9rem] pt-1'>
+							Resend invite link
 						</ZIonText>
 					</ZIonButton>
 				</ZIonItem>

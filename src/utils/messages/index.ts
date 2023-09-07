@@ -10,7 +10,8 @@ const GENERAL = {
 		WORKSPACE_DELETED: 'Workspace deleted successfully.',
 	},
 	MEMBER: {
-		INVITE_SEND: 'Invite send successfully.',
+		INVITE_SEND: 'successfully send invitation.',
+		INVITE_RESEND: 'Successfully resend invitation.',
 	},
 	SHORT_LINKS: {
 		SHORT_LINK_CREATED: 'Short link created successfully.',

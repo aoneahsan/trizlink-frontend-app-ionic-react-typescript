@@ -219,7 +219,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 											<ZIonImg
 												src={
 													user?.profilePitcher ||
-													getUiAvatarApiUrl({ name: user?.name })
+													getUiAvatarApiUrl({ name: user?.username })
 												}
 												className='w-[38px] h-[40px] zaions-object-fit-cover'
 											/>

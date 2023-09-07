@@ -20,7 +20,7 @@ const Login: React.FC = () => {
 				<ZaionsSecondaryHeader />
 				<ZIonGrid>
 					<ZaionsLoginOptions />
-					<ZaionsSeparator />
+					<ZaionsSeparator className='my-6 py-2' />
 					<ZaionsLoginForm />
 				</ZIonGrid>
 			</ZIonContent>

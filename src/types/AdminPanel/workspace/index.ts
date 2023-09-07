@@ -124,6 +124,7 @@ export enum ZWSMemberListPageTableColumnsIds {
 	status = '__z_short_link_status__',
 	email = '__z_short_link_email__',
 	invitedAt = '__z_short_link_invitedAt__',
+	invitedAcceptedAt = '__z_short_link_invitedAcceptedAt__',
 	role = '__z_short_link_role__',
 	isActive = '__z_short_link_isActive__',
 	date = '__z_short_link_date__',
@@ -171,6 +172,7 @@ export interface WSTeamMembersInterface {
 	inviteRejectedAt?: string;
 	accountStatusUpdaterRemarks: string;
 	accountStatusLastUpdatedBy: string;
+	resendAllowedAfter: string;
 	memberRole: {
 		id?: string;
 		name?: WSRolesNameEnum;

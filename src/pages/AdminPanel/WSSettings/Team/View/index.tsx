@@ -66,6 +66,7 @@ const ZMembersListTable = lazy(
  * */
 import {
 	useZGetRQCacheData,
+	useZInvalidateReactQueries,
 	useZRQGetRequest,
 	useZRQUpdateRequest,
 	useZUpdateRQCacheData,
@@ -143,6 +144,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 	const { isMdScale, isXlScale, isLgScale } = useZMediaQueryScale();
 	const { updateRQCDataHandler } = useZUpdateRQCacheData();
 	const { getRQCDataHandler } = useZGetRQCacheData();
+	const { zInvalidateReactQueries } = useZInvalidateReactQueries();
 	// #endregion
 
 	// #region APIS.
@@ -220,6 +222,12 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 			await refetchWSTeamsData();
 
 			await refetchCurrentWSTeamData();
+
+			await zInvalidateReactQueries([
+				CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+				workspaceId,
+				teamId,
+			]);
 		} catch (error) {
 			reportCustomError(error);
 		}

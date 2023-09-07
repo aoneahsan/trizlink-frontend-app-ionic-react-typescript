@@ -123,10 +123,8 @@ const Z404View: React.FC = () => {
 
 					<ZIonText className=' md:text-5xl'>{compState.message}</ZIonText>
 					<ZIonText className='md:text-lg mt-3 ion-text-center'>
-						Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magni, at
-						illo natus, quasi maxime delectus nisi, consequuntur suscipit
-						inventore accusantium sunt ex. Eius ipsum eum distinctio explicabo
-						illo delectus beatae.
+						404 Error: You've ventured into uncharted territory! This page seems
+						to be on a coffee break. Head back or visit our homepage.
 					</ZIonText>
 
 					<ZIonButton

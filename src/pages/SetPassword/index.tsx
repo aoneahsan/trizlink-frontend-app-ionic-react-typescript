@@ -11,7 +11,11 @@ import React, { useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
 import classNames from 'classnames';
 import { Formik, useFormikContext } from 'formik';
-import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
+import {
+	eyeOffOutline,
+	eyeOutline,
+	informationCircleOutline,
+} from 'ionicons/icons';
 import { useSetRecoilState } from 'recoil';
 
 /**
@@ -96,6 +100,7 @@ import {
 import { ProductFavicon } from '@/assets/images';
 import { useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 /**
  * Component props type go down
@@ -131,7 +136,7 @@ const ZSetPasswordPage: React.FC = () => {
 				} | null;
 				setCompState((oldValues) => ({
 					...oldValues,
-					email: userData?.email,
+					// email: userData?.email,
 					inviteToken: userData?.token,
 				}));
 			})();
@@ -178,7 +183,7 @@ const ZSetPasswordPage: React.FC = () => {
 							<Formik
 								// Initial Values of sign up form fields
 								initialValues={{
-									emailAddress: compState?.email,
+									emailAddress: '',
 									inviteToken: compState?.inviteToken,
 									otp: '',
 
@@ -188,6 +193,7 @@ const ZSetPasswordPage: React.FC = () => {
 									OTPApiErrorText: '',
 
 									password: '',
+									username: '',
 									canViewPassword: false,
 									confirmPassword: '',
 									canViewConfirmPassword: false,
@@ -205,13 +211,19 @@ const ZSetPasswordPage: React.FC = () => {
 										} = {};
 
 										validateFields(
-											['emailAddress', 'password', 'confirmPassword'],
+											[
+												'emailAddress',
+												'password',
+												'confirmPassword',
+												'username',
+											],
 											values,
 											errors,
 											[
 												VALIDATION_RULE.email,
 												VALIDATION_RULE.password,
 												VALIDATION_RULE.confirm_password,
+												VALIDATION_RULE.string,
 											]
 										);
 
@@ -235,7 +247,8 @@ const ZSetPasswordPage: React.FC = () => {
 									// await FormikSubmissionHandler(values, resetForm, setErrors);
 								}}
 							>
-								{({ values }) => {
+								{({ values, errors }) => {
+									console.log({ values, errors });
 									return (
 										<>
 											{values.tab === ZSetPasswordTabEnum.sendOptTab ? (
@@ -331,7 +344,7 @@ const ZSendOtpTab: React.FC = () => {
 				const __apiErrors = __apiErrorObjects?.errors?.item;
 				const __apiErrorCode = __apiErrorObjects?.status;
 
-				if (__apiErrorCode === ZErrorCodeEnum.notFound) {
+				if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
 					setFieldValue('emailAddressApiErrorText', __apiErrors[0], false);
 					setFieldValue('isEmailAddressApiError', true, false);
 				}
@@ -346,22 +359,32 @@ const ZSendOtpTab: React.FC = () => {
 
 	return (
 		<>
+			<div className='w-full flex ion-align-items-center ion-justify-content-end'>
+				<ZIonIcon
+					icon={informationCircleOutline}
+					color='warning'
+					className='w-6 h-6 cursor-pointer'
+					id='z-set-password-email-info-tt'
+				/>
+
+				<ZRTooltip anchorSelect='#z-set-password-email-info-tt' place='top'>
+					<ZIonText>ewerwer</ZIonText>
+				</ZRTooltip>
+			</div>
 			{/* Email Address Field */}
 			<ZIonInput
-				// name='emailAddress'
+				name='emailAddress'
 				label='Email Address'
 				labelPlacement='floating'
 				type='email'
-				disabled={true}
-				readonly
-				enterkeyhint='next'
-				// onIonChange={(e) => {
-				// 	handleChange(e);
-				// 	if (values.isEmailAddressApiError) {
-				// 		setFieldValue('isEmailAddressApiError', false);
-				// 	}
-				// }}
-				// onIonBlur={handleBlur}
+				// enterkeyhint='next'
+				onIonChange={(e) => {
+					handleChange(e);
+					if (values.isEmailAddressApiError) {
+						setFieldValue('isEmailAddressApiError', false);
+					}
+				}}
+				onIonBlur={handleBlur}
 				value={values.emailAddress}
 				testingselector={CONSTANTS.testingSelectors.setPasswordPage.emailInput}
 				errorText={
@@ -377,9 +400,7 @@ const ZSendOtpTab: React.FC = () => {
 					'mb-4': true,
 					'ion-touched': touched.emailAddress,
 					'ion-invalid': values?.isEmailAddressApiError || errors.emailAddress,
-					'ion-valid':
-						(touched.emailAddress && !errors.emailAddress) ||
-						!values?.isEmailAddressApiError,
+					'ion-valid': touched.emailAddress && !errors.emailAddress,
 				})}
 			/>
 
@@ -601,6 +622,7 @@ const ZNewPasswordTab: React.FC = () => {
 		setFieldValue,
 		resetForm,
 		setErrors,
+		setFieldTouched,
 		values,
 		touched,
 		errors,
@@ -610,6 +632,7 @@ const ZNewPasswordTab: React.FC = () => {
 		inviteToken: string;
 
 		password: string;
+		username: string;
 		canViewPassword: boolean;
 		confirmPassword: string;
 		canViewConfirmPassword: boolean;
@@ -637,6 +660,7 @@ const ZNewPasswordTab: React.FC = () => {
 			if (values?.password && values?.password?.trim()?.length > 0) {
 				const __stringifyData = zStringify({
 					email: values.emailAddress,
+					username: values.username,
 					password: values.password,
 					password_confirmation: values.confirmPassword,
 					inviteToken: values.inviteToken,
@@ -653,10 +677,7 @@ const ZNewPasswordTab: React.FC = () => {
 						user: UserAccountType;
 						token: AuthTokenResponseType;
 					}>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
-					console.log({
-						__data,
-						__response,
-					});
+
 					// Checking if the __data is available & if there is a user object in __data which have the id.
 					if (__data?.user?.id) {
 						// getting user data.
@@ -732,13 +753,36 @@ const ZNewPasswordTab: React.FC = () => {
 
 	return (
 		<>
+			<ZIonInput
+				name='username'
+				label='username*'
+				labelPlacement='floating'
+				onIonChange={handleChange}
+				onIonBlur={handleBlur}
+				value={values.username}
+				errorText={touched.username ? errors.username : undefined}
+				type='text'
+				clearOnEdit={false}
+				testingselector={CONSTANTS.testingSelectors.signupPage.passwordInput}
+				className={classNames({
+					'ion-touched': touched.username,
+					'ion-invalid': touched.username && errors.username,
+					'ion-touched ion-valid': touched.username && !errors.username,
+				})}
+			/>
+
 			{/* Password Field */}
-			<div className='flex mb-1 ion-align-items-start'>
+			<div className='flex mb-1 mt-4 ion-align-items-start'>
 				<ZIonInput
 					name='password'
 					label='Password*'
 					labelPlacement='floating'
-					onIonChange={handleChange}
+					onIonChange={(e) => {
+						handleChange(e);
+						if (e?.target?.value && (e?.target?.value as string)?.length > 0) {
+							setFieldTouched('password', true, true);
+						}
+					}}
 					onIonBlur={handleBlur}
 					value={values.password}
 					errorText={touched.password ? errors.password : undefined}
@@ -748,7 +792,7 @@ const ZNewPasswordTab: React.FC = () => {
 					className={classNames({
 						'ion-touched': touched.password,
 						'ion-invalid': touched.password && errors.password,
-						'ion-touched ion-valid': touched.password && !errors.password,
+						'ion-valid': touched.password && !errors.password,
 					})}
 				/>
 

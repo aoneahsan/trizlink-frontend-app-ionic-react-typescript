@@ -85,7 +85,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 				_method: 'post',
 				_isAuthenticatedRequest: false,
 				_data: zStringify({
-					name: _values.username,
+					username: _values.username,
 					email: _values.emailAddress,
 					password: _values.password,
 					password_confirmation: _values.confirm_password,
@@ -227,7 +227,15 @@ const ZaionsSignUpForm: React.FC = (props) => {
 						await FormikSubmissionHandler(_values, resetForm, setErrors);
 					}}
 				>
-					{({ handleChange, handleBlur, values, touched, errors, isValid }) => (
+					{({
+						handleChange,
+						handleBlur,
+						setFieldTouched,
+						values,
+						touched,
+						errors,
+						isValid,
+					}) => (
 						<Form>
 							{/* User Name Field */}
 							<ZIonInput
@@ -273,12 +281,20 @@ const ZaionsSignUpForm: React.FC = (props) => {
 							/>
 
 							{/* Password Field */}
-							<div className='flex mb-4 ion-align-items-center'>
+							<div className='flex mb-1 mt-4 ion-align-items-start'>
 								<ZIonInput
 									name='password'
 									label='Password*'
 									labelPlacement='floating'
-									onIonChange={handleChange}
+									onIonChange={(e) => {
+										handleChange(e);
+										if (
+											e?.target?.value &&
+											(e?.target?.value as string)?.length > 0
+										) {
+											setFieldTouched('password', true, true);
+										}
+									}}
 									onIonBlur={handleBlur}
 									value={values.password}
 									errorText={touched.password ? errors.password : undefined}
@@ -299,7 +315,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 									slot='end'
 									fill='clear'
 									size='large'
-									className='ion-no-padding ms-3 w-max'
+									className='ion-no-padding ion-no-margin ms-3 w-max'
 									testingselector={
 										CONSTANTS.testingSelectors.signupPage.canViewPasswordButton
 									}
@@ -309,7 +325,6 @@ const ZaionsSignUpForm: React.FC = (props) => {
 											canViewPassword: !oldValues.canViewPassword,
 										}))
 									}
-									mode='ios'
 								>
 									<ZIonIcon
 										icon={
@@ -385,7 +400,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 							</ZIonNote>
 
 							{/* Confirm Password Field */}
-							<div className='flex mb-4 ion-align-items-center'>
+							<div className='flex mt-4 ion-align-items-start'>
 								<ZIonInput
 									label='Confirm Password*'
 									labelPlacement='floating'
@@ -414,8 +429,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 								<ZIonButton
 									fill='clear'
 									size='large'
-									className='ion-no-padding ms-3 w-max'
-									mode='ios'
+									className='ion-no-padding ion-no-margin ms-3 w-max'
 									testingselector={
 										CONSTANTS.testingSelectors.signupPage
 											.canViewConfirmPasswordButton

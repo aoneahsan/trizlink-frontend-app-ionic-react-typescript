@@ -10,6 +10,7 @@ import { ZIonCol, ZIonRow, ZIonText } from '@/components/ZIonComponents';
 
 // Style
 import './styles.css';
+import classNames from 'classnames';
 
 type ZaionsSeparatorType = {
 	sizeXl?: string;
@@ -17,6 +18,8 @@ type ZaionsSeparatorType = {
 	sizeMd?: string;
 	sizeSm?: string;
 	sizeXs?: string;
+	text?: string | React.ReactNode;
+	className?: string;
 };
 
 const ZaionsSeparator: React.FC<ZaionsSeparatorType> = ({
@@ -25,24 +28,30 @@ const ZaionsSeparator: React.FC<ZaionsSeparatorType> = ({
 	sizeMd = '6.2',
 	sizeSm = '8.2',
 	sizeXs = '11.2',
+	text = 'OR',
+	className,
 }) => {
 	return (
-		<>
-			<ZIonRow className='ion-justify-content-center'>
-				<ZIonCol
-					className='ion-text-center'
-					sizeXl={sizeXl}
-					sizeLg={sizeLg}
-					sizeMd={sizeMd}
-					sizeSm={sizeSm}
-					sizeXs={sizeXs}
-				>
-					<ZIonText className='zaions__separator block'>
-						<ZIonText className='zaions__separator_OR'>OR</ZIonText>
+		<ZIonRow
+			className={classNames(className, {
+				'ion-justify-content-center w-full': true,
+			})}
+		>
+			<ZIonCol
+				className='ion-text-center ion-no-padding'
+				sizeXl={sizeXl}
+				sizeLg={sizeLg}
+				sizeMd={sizeMd}
+				sizeSm={sizeSm}
+				sizeXs={sizeXs}
+			>
+				<ZIonText className='zaions__separator block'>
+					<ZIonText color='medium' className='relative zaions__bg_white px-1'>
+						{text}
 					</ZIonText>
-				</ZIonCol>
-			</ZIonRow>
-		</>
+				</ZIonText>
+			</ZIonCol>
+		</ZIonRow>
 	);
 };
 
