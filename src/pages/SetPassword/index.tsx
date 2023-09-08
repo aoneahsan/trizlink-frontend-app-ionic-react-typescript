@@ -36,6 +36,7 @@ import {
 	ZIonText,
 } from '@/components/ZIonComponents';
 import ZIonPage from '@/components/ZIonPage';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 /**
  * Custom Hooks Imports go down
@@ -43,10 +44,7 @@ import ZIonPage from '@/components/ZIonPage';
  * */
 import { useZRQUpdateRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-import {
-	ZaionsAuthTokenData,
-	ZaionsUserAccountRStateAtom,
-} from '@/ZaionsStore/UserAccount/index.recoil';
+import { useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down
@@ -60,6 +58,7 @@ import {
 	CONTAINS,
 	VALIDATION_RULE,
 	extractInnerDataOptionsEnum,
+	ZSetPasswordTabEnum,
 } from '@/utils/enums';
 import { ZErrorCodeEnum } from '@/utils/enums/ErrorsCodes';
 import {
@@ -82,11 +81,16 @@ import {
 	AuthTokenResponseType,
 	UserAccountType,
 } from '@/types/UserAccount/index.type';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
+import {
+	ZaionsAuthTokenData,
+	ZaionsUserAccountRStateAtom,
+} from '@/ZaionsStore/UserAccount/index.recoil';
 
 /**
  * Style files Imports go down
@@ -98,19 +102,11 @@ import {
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductFavicon } from '@/assets/images';
-import { useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
-import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 /**
  * Component props type go down
  * ? Like if you have a type for props it should be please Down
  * */
-enum ZSetPasswordTabEnum {
-	sendOptTab = 'sendOptTab',
-	confirmOptTab = 'confirmOptTab',
-	newPasswordTab = 'newPasswordTab',
-}
 
 /**
  * Functional Component
@@ -248,7 +244,6 @@ const ZSetPasswordPage: React.FC = () => {
 								}}
 							>
 								{({ values, errors }) => {
-									console.log({ values, errors });
 									return (
 										<>
 											{values.tab === ZSetPasswordTabEnum.sendOptTab ? (
@@ -271,25 +266,17 @@ const ZSetPasswordPage: React.FC = () => {
 };
 
 const ZSendOtpTab: React.FC = () => {
-	const {
-		handleChange,
-		handleBlur,
-		submitForm,
-		setFieldValue,
-		setFieldError,
-		values,
-		touched,
-		errors,
-	} = useFormikContext<{
-		emailAddress: string;
-		tab: ZSetPasswordTabEnum;
-		inviteToken: string;
+	const { handleChange, handleBlur, setFieldValue, values, touched, errors } =
+		useFormikContext<{
+			emailAddress: string;
+			tab: ZSetPasswordTabEnum;
+			inviteToken: string;
 
-		isEmailAddressApiError: boolean;
-		emailAddressApiErrorText: string;
-		isOTPApiError: boolean;
-		OTPErrorText: string;
-	}>();
+			isEmailAddressApiError: boolean;
+			emailAddressApiErrorText: string;
+			isOTPApiError: boolean;
+			OTPErrorText: string;
+		}>();
 
 	// API.
 	const { mutateAsync: zSendOtpAsyncMutate } = useZRQUpdateRequest({
@@ -367,8 +354,18 @@ const ZSendOtpTab: React.FC = () => {
 					id='z-set-password-email-info-tt'
 				/>
 
-				<ZRTooltip anchorSelect='#z-set-password-email-info-tt' place='top'>
-					<ZIonText>ewerwer</ZIonText>
+				<ZRTooltip
+					anchorSelect='#z-set-password-email-info-tt'
+					place='top'
+					variant='info'
+				>
+					<ZIonText>
+						For your security, we want to ensure that it's <br /> really you
+						joining the workspace. By re-entering <br /> your email, you confirm
+						that the invitation was sent to the <br /> right person. It's one
+						more step towards keeping your <br /> information and our community
+						safe.
+					</ZIonText>
 				</ZRTooltip>
 			</div>
 			{/* Email Address Field */}
@@ -560,9 +557,10 @@ const ZConfirmOptTab: React.FC = () => {
 			reportCustomError(error);
 		}
 	};
+
 	return (
 		<>
-			{/* Email Address Field */}
+			{/* OTP Field */}
 			<ZIonInput
 				name='otp'
 				label='OTP'
@@ -807,7 +805,6 @@ const ZNewPasswordTab: React.FC = () => {
 					onClick={() =>
 						setFieldValue('canViewPassword', !values.canViewPassword, false)
 					}
-					mode='ios'
 				>
 					<ZIonIcon
 						icon={values.canViewPassword ? eyeOffOutline : eyeOutline}

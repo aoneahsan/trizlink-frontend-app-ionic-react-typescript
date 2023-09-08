@@ -25,6 +25,7 @@ const SignUp: React.FC = () => {
 						sizeMd='6.5'
 						sizeSm='10'
 						sizeXs='12'
+						className='my-5'
 					/>
 					<ZaionsSignUpForm />
 				</ZIonGrid>

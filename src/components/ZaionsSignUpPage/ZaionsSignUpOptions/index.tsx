@@ -11,12 +11,14 @@ import {
 	ZIonIcon,
 	ZIonRouterLink,
 	ZIonRow,
+	ZIonImg,
 } from '@/components/ZIonComponents';
 
 // Global Constants
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { ZIonButton } from '@/components/ZIonComponents';
 import CONSTANTS from '@/utils/constants';
+import { ProductFavicon } from '@/assets/images';
 
 // Style
 
@@ -33,6 +35,11 @@ const ZaionsSignUpOptions: React.FC = () => {
 					sizeXs='12'
 				>
 					<div className='w-full ion-text-center'>
+						<ZIonImg
+							src={ProductFavicon}
+							className='w-[6rem] h-[6rem] mx-auto mb-6'
+						/>
+
 						<ZIonText className='block mb-3 text-2xl font-bold'>
 							Sign up and start shortening
 						</ZIonText>
@@ -47,7 +54,7 @@ const ZaionsSignUpOptions: React.FC = () => {
 							>
 								Login
 							</ZIonRouterLink>{' '}
-							.{' '}
+							{/* .{' '}
 							<ZIonRouterLink
 								className='underline'
 								routerLink={ZaionsRoutes.LoginRoute}
@@ -56,7 +63,7 @@ const ZaionsSignUpOptions: React.FC = () => {
 								}
 							>
 								Log in with SSO
-							</ZIonRouterLink>
+							</ZIonRouterLink> */}
 						</ZIonText>
 					</div>
 					<div></div>

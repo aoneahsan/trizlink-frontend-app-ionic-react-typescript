@@ -38,7 +38,7 @@ const ZaionsSecondaryHeader: React.FC<{ bottomHr?: boolean }> = ({
 								<ZIonImg
 									src={ProductLogo}
 									alt={`${PRODUCT_NAME} Logo`}
-									className={`h-[40px] w-max ms-5 ion-padding-horizontal pt-2 mb-1`}
+									className={`h-[30px] w-max ms-5 ion-padding-horizontal pt-2 mb-1`}
 								/>
 							</ZIonRouterLink>
 							<ZIonRow className='p-0 m-0'>

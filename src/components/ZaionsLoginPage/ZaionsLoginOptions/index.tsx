@@ -17,12 +17,14 @@ import {
 	ZIonIcon,
 	ZIonRouterLink,
 	ZIonRow,
+	ZIonImg,
 } from '@/components/ZIonComponents';
 
 // Global Constants
 import CONSTANTS, { BRACKPOINT_SM } from '@/utils/constants';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { ProductFavicon } from '@/assets/images';
 
 // Style
 
@@ -36,6 +38,11 @@ const ZaionsLoginOptions: React.FC = () => {
 			<ZIonRow>
 				<ZIonCol className='flex ion-justify-content-center'>
 					<div className='w-full ion-text-center'>
+						<ZIonImg
+							src={ProductFavicon}
+							className='w-[6rem] h-[6rem] mx-auto mb-6'
+						/>
+
 						<ZIonText className='block mb-3 text-2xl font-bold ion-text-center'>
 							Log in and start sharing
 						</ZIonText>

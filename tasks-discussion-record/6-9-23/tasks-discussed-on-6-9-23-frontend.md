@@ -59,3 +59,8 @@ next tasks after member flow in shared workspace
 <!-- My task  -->
 set responsiveness of member list page.
 unknown issue in invite modal when in responsive focus on email filed and whole responsive messed.
+
+<!--  -->
+first in sign up page save the data in local storage.
+make workspace ui better in frontend diffrentiont the share workspace and pending workspace.
+add Queues in backend where I am sending mail (small task).

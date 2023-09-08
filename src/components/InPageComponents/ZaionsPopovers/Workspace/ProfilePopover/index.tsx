@@ -48,6 +48,8 @@ import { useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
 import CONSTANTS, { LOCALSTORAGE_KEYS } from '@/utils/constants';
 import { API_URL_ENUM } from '@/utils/enums';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { useRecoilValue } from 'recoil';
+import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 
 /**
  * Custom Hooks Imports go down
@@ -94,6 +96,8 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 	// Custom hooks.
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading(); // hook to show loader
 
+	const zUserAccountStateAtom = useRecoilValue(ZaionsUserAccountRStateAtom);
+
 	const profileLogoutHandler = async () => {
 		try {
 			// Loading start...
@@ -138,7 +142,10 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 				<ZIonCol size='max-content'>
 					<ZUserAvatarButton
 						className='w-[10px] h-[10px] me-1'
-						userAvatar={ProductLogo}
+						userAvatar={zUserAccountStateAtom?.profilePitcher}
+						userAvatarUi={{
+							name: zUserAccountStateAtom?.username,
+						}}
 						style={{ height: '39px', width: '39px' }}
 					/>
 				</ZIonCol>
@@ -148,10 +155,10 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 							'text-sm font-bold flex': true,
 						})}
 					>
-						Muhammad talha Irshad (you)
+						{zUserAccountStateAtom?.username}
 					</ZIonLabel>
 					<ZIonLabel className='block text-sm' color='medium'>
-						talhaarshaad5@gmail.com
+						{zUserAccountStateAtom?.email}
 					</ZIonLabel>
 				</ZIonCol>
 			</ZIonRow>
@@ -183,7 +190,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 				<ZIonItem
 					className='text-sm ion-activatable ion-focusable cursor-pointer'
 					minHeight='40px'
-					lines='full'
+					lines='none'
 					onClick={() => void profileLogoutHandler()}
 					testingselector={
 						CONSTANTS.testingSelectors.user.profilePopover.logout
@@ -191,41 +198,6 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 				>
 					<ZIonIcon icon={logOutOutline} className='w-5 h-5 me-1 pe-1' />
 					<ZIonLabel className='pt-1 my-0'>Logout</ZIonLabel>
-				</ZIonItem>
-
-				<ZIonText
-					className='block mx-3 mt-2 mb-2 text-xs tracking-widest'
-					color='medium'
-				>
-					COMPANY ACCOUNTS
-				</ZIonText>
-
-				<ZIonItem
-					className='text-sm ion-activatable ion-focusable cursor-pointer'
-					minHeight='40px'
-				>
-					<ZIonAvatar
-						style={{ '--border-radius': '4px', width: '32px', height: '32px' }}
-					>
-						<ZIonImg src={getUiAvatarApiUrl({})} />
-					</ZIonAvatar>
-					<ZIonLabel className='my-0 ms-2'>
-						<ZIonText className='block'>zaions</ZIonText>
-						<ZIonText color='medium' className='text-sm'>
-							Billing, members & usage
-						</ZIonText>
-					</ZIonLabel>
-				</ZIonItem>
-
-				<ZIonItem
-					className='mt-1 text-sm ion-activatable ion-focusable cursor-pointer'
-					minHeight='40px'
-					testingselector={
-						CONSTANTS.testingSelectors.user.profilePopover.addNewCompanyAccount
-					}
-				>
-					<ZIonIcon icon={addOutline} className='w-5 h-5 me-1 pe-1' />
-					<ZIonLabel className='pt-1 my-0'>New company account</ZIonLabel>
 				</ZIonItem>
 			</ZIonList>
 		</>

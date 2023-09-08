@@ -52,8 +52,10 @@ export enum API_URL_ENUM {
 	userEmbedWidget_create_list = 'userEmbedWidget_create_list',
 	userEmbedWidget_update_delete = 'userEmbedWidget_update_delete',
 	send_otp = 'send_otp',
+	send_signup_otp = 'send_signup_otp',
 	confirm_otp = 'confirm_otp',
 	set_password = 'set_password',
+	set_username_password = 'set_username_password',
 	ws_roles_get = 'ws_roles_get',
 	LinkInBio_folders_create_list = 'LinkInBio_folders_create_list',
 	ws_team_member_sendInvite_list = 'ws_team_member_sendInvite_list',
@@ -162,4 +164,10 @@ export enum apiTypeToValidateEnum {
 export enum zCreateElementTestingSelectorKeyEnum {
 	selector = 'selector',
 	listSelector = 'listSelector',
+}
+
+export enum ZSetPasswordTabEnum {
+	sendOptTab = 'sendOptTab',
+	confirmOptTab = 'confirmOptTab',
+	newPasswordTab = 'newPasswordTab',
 }

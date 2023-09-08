@@ -21,6 +21,8 @@ import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
  * ? Like import of custom Hook is a custom import
  * */
 import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import { useRecoilValue } from 'recoil';
+import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 
 /**
  * Global Constants Imports go down
@@ -66,8 +68,14 @@ const ZUserProfileButton: React.FC<{
 		ZWorkspaceProfilePopover
 	); // popover hook to show ZWorkspaceProfilePopover
 
+	const zUserAccountStateAtom = useRecoilValue(ZaionsUserAccountRStateAtom);
+
 	return (
 		<ZUserAvatarButton
+			userAvatar={zUserAccountStateAtom?.profilePitcher}
+			userAvatarUi={{
+				name: zUserAccountStateAtom?.username,
+			}}
 			style={{ height: height, width: width }}
 			onClick={(event: unknown) => {
 				presentWorkspaceProfilePopover({

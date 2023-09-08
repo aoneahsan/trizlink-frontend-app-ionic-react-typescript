@@ -709,7 +709,7 @@ export const zAxiosApiRequest = async <T>({
 export const getUserDataObjectForm = (_user: UserAccountType) => {
 	return {
 		id: _user?.id?.toString(),
-		name: _user?.username,
+		username: _user?.username,
 		email: _user?.email,
 		email_verified_at: _user?.email_verified_at,
 		password: _user?.password,

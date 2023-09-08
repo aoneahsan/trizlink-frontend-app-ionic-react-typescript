@@ -168,6 +168,7 @@ export interface WSTeamMembersInterface {
 	email: string;
 	accountStatus: string;
 	invitedAt: string;
+
 	inviteAcceptedAt: string;
 	inviteRejectedAt?: string;
 	accountStatusUpdaterRemarks: string;
@@ -190,6 +191,7 @@ export interface WSTeamMembersInterface {
 export interface workspaceInterface {
 	id?: string;
 	workspaceName?: string;
+	isFavorite?: boolean;
 	workspaceTimezone?: string;
 	workspaceImage?: string;
 	internalPost?: boolean;

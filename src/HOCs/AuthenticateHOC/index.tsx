@@ -8,7 +8,7 @@ import React, { ReactNode } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { useResetRecoilState } from 'recoil';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { App } from '@capacitor/app';
 
 /**
@@ -62,6 +62,10 @@ const AuthenticateHOC: React.FC<AuthenticateHOCPropsType> = (props) => {
 		ZaionsUserAccountRStateAtom
 	);
 
+	const setUserAccountStateAtom = useSetRecoilState(
+		ZaionsUserAccountRStateAtom
+	);
+
 	const { zIsPrivateRoute } = useZPrivateRouteChecker();
 
 	const checkAuthenticateValidation = async () => {
@@ -85,6 +89,11 @@ const AuthenticateHOC: React.FC<AuthenticateHOCPropsType> = (props) => {
 							_url: API_URL_ENUM.verifyAuthenticationStatus,
 							_method: 'post',
 						});
+
+						setUserAccountStateAtom((oldValues) => ({
+							...oldValues,
+							...userData,
+						}));
 
 						setCompState((oldState) => ({
 							...oldState,

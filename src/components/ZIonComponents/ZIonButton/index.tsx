@@ -37,6 +37,7 @@ type ZIonButtonType = {
 	};
 	href?: string;
 	height?: '36px' | string;
+	minHeight?: '36px' | string;
 	ref?: React.Ref<HTMLIonButtonElement>;
 	onClick?: React.MouseEventHandler<HTMLIonButtonElement>;
 	onMouseEnter?: React.MouseEventHandler<HTMLIonButtonElement>;
@@ -50,10 +51,16 @@ const ZIonButton = (props: ZIonButtonType) => {
 	const compStyle =
 		props.style && props.height
 			? { ...props.style, height: props.height }
+			: props.style && props.minHeight
+			? { ...props.style, minHeight: props.height }
 			: props.style && !props.height
+			? { ...props.style }
+			: props.style && !props.minHeight
 			? { ...props.style }
 			: !props.style && props.height
 			? { height: props.height }
+			: !props.style && props.minHeight
+			? { minHeight: props.minHeight }
 			: {};
 
 	const _testingListSelector = props.testingListSelector

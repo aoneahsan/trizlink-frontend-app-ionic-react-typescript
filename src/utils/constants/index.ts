@@ -118,8 +118,10 @@ export const API_URLS = {
 	userAccountFolders_update_delete: '/user/folders/:folderId',
 	userEmbedWidget_update_delete: '/user/embedded-scripts/:embeddedId',
 	send_otp: '/user/send-otp',
+	send_signup_otp: '/user/send-signup-otp',
 	confirm_otp: '/user/confirm-otp',
 	set_password: '/user/set-password',
+	set_username_password: '/user/set-username-password',
 
 	user_unread_notifications_list: `/user/notification/type/${RouteParams.user.notification.type}`,
 	user_notification_mark_as_read: `/user/notification/type/${RouteParams.user.notification.type}/markAsRead/${RouteParams.user.notification.id}`,

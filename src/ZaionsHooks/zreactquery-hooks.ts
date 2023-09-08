@@ -211,6 +211,7 @@ export const useZRQCreateRequest = <T>({
 	_contentType = zAxiosApiRequestContentType.Json,
 	_showAlertOnError = true,
 	_showLoader = true,
+	_loaderMessage = MESSAGES.GENERAL.API_REQUEST.CREATING,
 }: {
 	_url: API_URL_ENUM;
 	_queriesKeysToInvalidate?: string[];
@@ -220,6 +221,7 @@ export const useZRQCreateRequest = <T>({
 	_contentType?: zAxiosApiRequestContentType;
 	_showAlertOnError?: boolean;
 	_showLoader?: boolean;
+	_loaderMessage?: string;
 }) => {
 	const { presentZIonErrorAlert } = useZIonErrorAlert();
 	const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
@@ -255,8 +257,7 @@ export const useZRQCreateRequest = <T>({
 			// }
 
 			// Present ion loading before api start
-			_showLoader &&
-				(await presentZIonLoader(MESSAGES.GENERAL.API_REQUEST.CREATING));
+			_showLoader && (await presentZIonLoader(_loaderMessage));
 			/**
 			 * @_url - takes the post url to post data to api.
 			 *  second argument take the method (post | get | update | delete). as this is the post api so it  will be post
