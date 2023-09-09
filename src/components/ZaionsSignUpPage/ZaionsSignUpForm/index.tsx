@@ -1,5 +1,5 @@
 // Core Imports
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Package Imports
 import { Form, Formik, useFormikContext } from 'formik';
@@ -68,13 +68,10 @@ import {
 // Style
 
 const ZaionsSignUpForm: React.FC = (props) => {
-	const [zaionsSignUpState, setZaionsSignUpState] = useState<{
-		canViewPassword: boolean;
-		canViewConfirmPassword: boolean;
-	}>({
-		canViewConfirmPassword: false,
-		canViewPassword: false,
-	});
+	const [compState, setCompState] = useState<{
+		email?: string;
+		tab?: ZSetPasswordTabEnum;
+	}>();
 
 	const setUserAccountStateAtom = useSetRecoilState(
 		ZaionsUserAccountRStateAtom
@@ -180,6 +177,28 @@ const ZaionsSignUpForm: React.FC = (props) => {
 		}
 	};
 
+	useEffect(() => {
+		try {
+			void (async () => {
+				const userData = (await STORAGE.GET(
+					LOCALSTORAGE_KEYS.SIGNUP_USER_DATA
+				)) as {
+					email: string;
+					tab?: ZSetPasswordTabEnum;
+				} | null;
+				console.log({ userData });
+				//
+				setCompState((oldValues) => ({
+					...oldValues,
+					email: userData?.email,
+					tab: userData?.tab,
+				}));
+			})();
+		} catch (error) {
+			reportCustomError(error);
+		}
+	}, []);
+
 	return (
 		<ZIonRow className='ion-justify-content-center'>
 			<ZIonCol
@@ -194,7 +213,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 					// Initial Values of sign up form fields
 					initialValues={{
 						username: '',
-						emailAddress: '',
+						emailAddress: compState?.email || '',
 						password: '',
 						otp: '',
 						confirm_password: '',
@@ -202,7 +221,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 						isOTPApiError: false,
 						OTPApiErrorText: '',
 
-						tab: ZSetPasswordTabEnum.sendOptTab,
+						tab: compState?.tab || ZSetPasswordTabEnum.sendOptTab,
 					}}
 					// Validations of sign up form fields
 					validate={(values) => {
@@ -244,6 +263,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 							});
 						}
 					}}
+					enableReinitialize
 					// Submit function
 					onSubmit={async (_values, { resetForm, setErrors }) => {
 						await FormikSubmissionHandler(_values, resetForm, setErrors);
@@ -571,13 +591,19 @@ const ZSendOtpTab: React.FC = () => {
 				});
 
 				const __response = await zSendOtpAsyncMutate(__stringifyData);
-				console.log(__response);
 				if (__response) {
 					const __data = extractInnerData<{
 						success: boolean;
 					}>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
 					if (__data?.success) {
+						const userData = {
+							email: values?.emailAddress,
+							tab: ZSetPasswordTabEnum.confirmOptTab,
+						};
+
+						await STORAGE.SET(LOCALSTORAGE_KEYS.SIGNUP_USER_DATA, userData);
+
 						setFieldValue('tab', ZSetPasswordTabEnum.confirmOptTab, false);
 
 						showSuccessNotification(
@@ -721,6 +747,13 @@ const ZConfirmOptTab: React.FC = () => {
 							setFieldValue('isOTPApiError', false, false);
 						}
 
+						const userData = {
+							email: values?.emailAddress,
+							tab: ZSetPasswordTabEnum.newPasswordTab,
+						};
+
+						await STORAGE.SET(LOCALSTORAGE_KEYS.SIGNUP_USER_DATA, userData);
+
 						setFieldValue('tab', ZSetPasswordTabEnum.newPasswordTab, false);
 						setFieldValue('otp', '', false);
 						showSuccessNotification('OTP has been confirmed.');
@@ -755,7 +788,6 @@ const ZConfirmOptTab: React.FC = () => {
 				});
 
 				const __response = await zSendOtpAsyncMutate(__stringifyData);
-				console.log(__response);
 				if (__response) {
 					const __data = extractInnerData<{
 						success: boolean;
@@ -914,6 +946,8 @@ const ZNewPasswordTab: React.FC = () => {
 						const userToken = {
 							token: __data?.token?.plainTextToken,
 						};
+
+						await STORAGE.REMOVE(LOCALSTORAGE_KEYS.SIGNUP_USER_DATA);
 
 						// Set user data && user token to localstorage.
 						if (userData && userToken.token) {

@@ -1,6 +1,7 @@
 import { WSRolesNameEnum } from './../../UserAccount/index.type';
 import { UserAccountType } from '@/types/UserAccount/index.type';
 import { ReactNode } from 'react';
+import { ZTeamMemberInvitationEnum } from '../index.type';
 
 // Enum's
 export enum workspaceSettingsModalTabEnum {
@@ -182,6 +183,15 @@ export interface WSTeamMembersInterface {
 		id?: string;
 		title: string;
 	};
+	workspace?: {
+		id?: string;
+		workspaceName?: string;
+		workspaceTimezone?: string;
+		// workspaceData;
+		workspaceImage?: string;
+		createdAt?: string;
+		updatedAt?: string;
+	};
 	sortOrderNo: string;
 	isActive: boolean;
 	createdAt?: string;
@@ -200,6 +210,12 @@ export interface workspaceInterface {
 	createdAt?: string;
 	updatedAt?: string;
 }
+
+export interface wsShareInterface extends workspaceInterface {
+	workspaceId?: string;
+	accountStatus?: ZTeamMemberInvitationEnum;
+}
+
 export interface ApprovalCardInterface {
 	icon: string;
 	title: ReactNode;

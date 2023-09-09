@@ -444,7 +444,6 @@ const ZUpdatesTab: React.FC<{
 						extractInnerDataOptionsEnum.createRequestResponseItem
 					);
 
-					console.log({ _data });
 					if (_data?.id) {
 						// 	await zInvalidateReactQueries([
 						// 		CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION.MAIN,
@@ -521,7 +520,7 @@ const ZUpdatesTab: React.FC<{
 										className={classNames({
 											'text-sm ion-color': true,
 											'ion-color-dark font-semibold': el?.read_at === null,
-											'ion-color-medium ': el?.read_at !== null,
+											'ion-color-medium': el?.read_at !== null,
 										})}
 										testingselector={
 											CONSTANTS.testingSelectors.topBar.notificationPopover

@@ -44,7 +44,11 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * */
 import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 import CONSTANTS from '@/utils/constants';
-import { createRedirectRoute } from '@/utils/helpers';
+import {
+	createRedirectRoute,
+	extractInnerData,
+	zStringify,
+} from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 
@@ -52,7 +56,11 @@ import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import {
+	workspaceInterface,
+	wsShareInterface,
+	WSTeamMembersInterface,
+} from '@/types/AdminPanel/workspace';
 
 /**
  * Recoil State Imports go down
@@ -64,6 +72,19 @@ import { workspaceInterface } from '@/types/AdminPanel/workspace';
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
+import { ZTeamMemberInvitationEnum } from '@/types/AdminPanel/index.type';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+	useZGetRQCacheData,
+	useZRQUpdateRequest,
+	useZUpdateRQCacheData,
+} from '@/ZaionsHooks/zreactquery-hooks';
+import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { showSuccessNotification } from '@/utils/notification';
+import { reportCustomError } from '@/utils/customErrorType';
+import { UserAccountType } from '@/types/UserAccount/index.type';
+import { _adapters } from 'chart.js';
 
 /**
  * Images Imports go down
@@ -80,16 +101,35 @@ import classes from './styles.module.css';
  * @type {*}
  * */
 
-const ZWorkspacesCard: React.FC<workspaceInterface> = ({
-	id,
+const ZWorkspacesCard: React.FC<{
+	workspaceId?: string;
+	inviteId?: string;
+	workspaceName?: string;
+	isFavorite?: boolean;
+	workspaceTimezone?: string;
+	workspaceImage?: string;
+	owned?: boolean;
+	user: UserAccountType;
+	createdAt?: string;
+	updatedAt?: string;
+	accountStatus?: ZTeamMemberInvitationEnum;
+}> = ({
+	workspaceId,
 	workspaceImage,
 	workspaceName,
 	createdAt,
 	user,
+	owned = true,
+	accountStatus,
+	inviteId,
 }) => {
-	//
+	// #region Custom Hooks.
+	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+	const { getRQCDataHandler } = useZGetRQCacheData();
 	const { zNavigatePushRoute } = useZNavigate();
+	// #endregion
 
+	// #region Popover.
 	const { presentZIonPopover: presentUserInfoPopover } = useZIonPopover(
 		ZUserInfoPopover,
 		{ showBadges: true, user: user }
@@ -97,8 +137,107 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 
 	const { presentZIonPopover: presentWorkspacesActionsPopover } =
 		useZIonPopover(ZWorkspacesActionPopover, {
-			workspaceId: id,
+			workspaceId: workspaceId,
 		}); // popover hook to show UserInfoPopover
+	// #endregion
+
+	// #region APIS.
+	// update invitation data api
+	const { mutateAsync: updateInvitationAsyncMutate } = useZRQUpdateRequest({
+		_url: API_URL_ENUM.ws_team_member_update,
+		_queriesKeysToInvalidate: [
+			CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION.MAIN,
+			workspaceId!,
+		],
+	});
+
+	// #region Functions.
+	const zInvitationResponseHandler = async ({
+		_item,
+	}: {
+		_item: ZTeamMemberInvitationEnum;
+	}) => {
+		try {
+			if (_item) {
+				const __response = await updateInvitationAsyncMutate({
+					requestData: zStringify({
+						status: _item,
+					}),
+					itemIds: [inviteId!],
+					urlDynamicParts: [CONSTANTS.RouteParams.workspace.memberInviteId],
+				});
+
+				if (
+					(__response as ZLinkMutateApiType<WSTeamMembersInterface>).success
+				) {
+					const __data = extractInnerData<WSTeamMembersInterface>(
+						__response,
+						extractInnerDataOptionsEnum.createRequestResponseItem
+					);
+
+					if (__data && __data?.id) {
+						await updateRQCDataHandler({
+							key: [
+								CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.INVITATION_GET,
+								inviteId!,
+							],
+							data: __data,
+							id: '',
+							updateHoleData: true,
+							extractType: ZRQGetRequestExtractEnum.extractItem,
+						});
+
+						const getWSShareWorkspaceData = getRQCDataHandler({
+							key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN],
+						});
+
+						const __oldData =
+							extractInnerData<wsShareInterface[]>(
+								getWSShareWorkspaceData,
+								extractInnerDataOptionsEnum.createRequestResponseItems
+							) || [];
+
+						if (_item === ZTeamMemberInvitationEnum.accepted) {
+							await updateRQCDataHandler({
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN,
+								],
+								data: {
+									...__data.workspace,
+									id: __data?.id,
+									accountStatus: __data?.accountStatus,
+								},
+								id: __data?.id!,
+							});
+						} else if (_item === ZTeamMemberInvitationEnum.rejected) {
+							const __updatedData = __oldData?.filter(
+								(el) => el?.id !== __data?.id
+							);
+							console.log({ __data, __updatedData, __oldData });
+							await updateRQCDataHandler({
+								key: [
+									CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN,
+								],
+								data: __updatedData,
+								id: '',
+								updateHoleData: true,
+								extractType: ZRQGetRequestExtractEnum.extractItems,
+							});
+						}
+
+						if (_item === ZTeamMemberInvitationEnum.accepted) {
+							showSuccessNotification('Successfully accepted invitation.');
+						} else if (_item === ZTeamMemberInvitationEnum.rejected) {
+							showSuccessNotification('Successfully rejected invitation.');
+						}
+					}
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+	// #endregion
 
 	return (
 		<ZIonCard className='h-[13.4rem]'>
@@ -123,10 +262,10 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 												CONSTANTS.RouteParams
 													.folderIdToGetShortLinksOrLinkInBio,
 											],
-											values: [id || '', 'all'],
+											values: [workspaceId || '', 'all'],
 										})}
 										color='dark'
-										testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardImg}-${id}`}
+										testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardImg}-${workspaceId}`}
 										testingListSelector={
 											CONSTANTS.testingSelectors.workspace.listPage
 												.workspaceCardImg
@@ -153,9 +292,9 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 												CONSTANTS.RouteParams
 													.folderIdToGetShortLinksOrLinkInBio,
 											],
-											values: [id || '', 'all'],
+											values: [workspaceId || '', 'all'],
 										})}
-										testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardTitle}-${id}`}
+										testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardTitle}-${workspaceId}`}
 										testingListSelector={
 											CONSTANTS.testingSelectors.workspace.listPage
 												.workspaceCardTitle
@@ -179,7 +318,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 								<ZIonButton
 									fill='clear'
 									className='h-auto mb-1 ion-no-padding ion-no-margin'
-									testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardFavoritesButton}-${id}`}
+									testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardFavoritesButton}-${workspaceId}`}
 									testingListSelector={
 										CONSTANTS.testingSelectors.workspace.listPage
 											.workspaceCardFavoritesButton
@@ -198,7 +337,7 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 										<ZIonButton
 											color='primary'
 											fill='solid'
-											testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardUserButton}-${id}`}
+											testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardUserButton}-${workspaceId}`}
 											testingListSelector={
 												CONSTANTS.testingSelectors.workspace.listPage
 													.workspaceCardUserButton
@@ -236,62 +375,112 @@ const ZWorkspacesCard: React.FC<workspaceInterface> = ({
 					<ZIonCardContent className='flex flex-col h-full ion-justify-content-end ion-align-items-end'>
 						{/* Bottom row */}
 						<ZIonRow className='w-full ion-align-items-center'>
-							{/* Last active */}
-							<ZIonCol>
-								<ZCan havePermissions={[permissionsEnum.view_workspace]}>
-									<ZIonButton
-										className='normal-case '
-										color='secondary'
-										size='default'
-										testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.viewWorkspaceButton}-${id}`}
-										testingListSelector={
-											CONSTANTS.testingSelectors.workspace.listPage
-												.viewWorkspaceButton
-										}
-										onClick={() => {
-											// Click on card will redirect to view workspace.
-											if (id) {
-												zNavigatePushRoute(
-													createRedirectRoute({
-														url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-														params: [
-															CONSTANTS.RouteParams.workspace.workspaceId,
-															CONSTANTS.RouteParams
-																.folderIdToGetShortLinksOrLinkInBio,
-														],
-														values: [id, 'all'],
-													})
-												);
-											}
-										}}
-									>
-										View
-									</ZIonButton>
-								</ZCan>
-							</ZIonCol>
+							{owned || accountStatus === ZTeamMemberInvitationEnum.accepted ? (
+								<>
+									{/* View button */}
+									<ZIonCol>
+										<ZCan havePermissions={[permissionsEnum.view_workspace]}>
+											<ZIonButton
+												className='normal-case '
+												color='secondary'
+												size='default'
+												testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.viewWorkspaceButton}-${workspaceId}`}
+												testingListSelector={
+													CONSTANTS.testingSelectors.workspace.listPage
+														.viewWorkspaceButton
+												}
+												onClick={() => {
+													// Click on card will redirect to view workspace.
+													if (workspaceId) {
+														zNavigatePushRoute(
+															createRedirectRoute({
+																url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+																params: [
+																	CONSTANTS.RouteParams.workspace.workspaceId,
+																	CONSTANTS.RouteParams
+																		.folderIdToGetShortLinksOrLinkInBio,
+																],
+																values: [workspaceId, 'all'],
+															})
+														);
+													}
+												}}
+											>
+												View
+											</ZIonButton>
+										</ZCan>
+									</ZIonCol>
 
-							{/* actions popover button */}
-							<ZIonCol className='ion-text-end'>
-								<ZIonButton
-									fill='clear'
-									className='h-auto mb-1 normal-case ion-no-padding ion-no-margin'
-									color='dark'
-									testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardActionPopoverButton}-${id}`}
-									testingListSelector={
-										CONSTANTS.testingSelectors.workspace.listPage
-											.workspaceCardActionPopoverButton
-									}
-									onClick={(event: unknown) => {
-										presentWorkspacesActionsPopover({
-											_event: event as Event,
-											_cssClass: 'zaions_workspaces_actions_popover_size',
-											_dismissOnSelect: false,
-										});
-									}}
-								>
-									<ZIonIcon icon={ellipsisHorizontalOutline} />
-								</ZIonButton>
-							</ZIonCol>
+									{/* actions popover button */}
+									<ZIonCol className='ion-text-end'>
+										<ZIonButton
+											fill='clear'
+											className='h-auto mb-1 normal-case ion-no-padding ion-no-margin'
+											color='dark'
+											testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardActionPopoverButton}-${workspaceId}`}
+											testingListSelector={
+												CONSTANTS.testingSelectors.workspace.listPage
+													.workspaceCardActionPopoverButton
+											}
+											onClick={(event: unknown) => {
+												presentWorkspacesActionsPopover({
+													_event: event as Event,
+													_cssClass: 'zaions_workspaces_actions_popover_size',
+													_dismissOnSelect: false,
+												});
+											}}
+										>
+											<ZIonIcon icon={ellipsisHorizontalOutline} />
+										</ZIonButton>
+									</ZIonCol>
+								</>
+							) : accountStatus === ZTeamMemberInvitationEnum.pending ? (
+								<>
+									{/* Accept invitation */}
+									<ZIonCol>
+										<ZCan havePermissions={[permissionsEnum.view_workspace]}>
+											<ZIonButton
+												className='normal-case '
+												color='success'
+												size='default'
+												testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.acceptInvitationButton}-${workspaceId}`}
+												testingListSelector={
+													CONSTANTS.testingSelectors.workspace.listPage
+														.acceptInvitationButton
+												}
+												onClick={() => {
+													zInvitationResponseHandler({
+														_item: ZTeamMemberInvitationEnum.accepted,
+													});
+												}}
+											>
+												Accept
+											</ZIonButton>
+										</ZCan>
+									</ZIonCol>
+
+									{/* Reject invitation */}
+									<ZIonCol className='ion-text-end'>
+										<ZIonButton
+											className='normal-case '
+											color='danger'
+											size='default'
+											testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.rejectInvitationButton}-${workspaceId}`}
+											testingListSelector={
+												CONSTANTS.testingSelectors.workspace.listPage
+													.rejectInvitationButton
+											}
+											onClick={() => {
+												zInvitationResponseHandler({
+													_item: ZTeamMemberInvitationEnum.rejected,
+												});
+											}}
+										>
+											Reject
+										</ZIonButton>
+									</ZIonCol>
+								</>
+							) : null}
 						</ZIonRow>
 					</ZIonCardContent>
 				</ZIonCol>

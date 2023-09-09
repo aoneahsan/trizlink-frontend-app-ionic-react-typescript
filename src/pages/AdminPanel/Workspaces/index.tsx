@@ -77,7 +77,10 @@ import CONSTANTS from '@/utils/constants';
  * Style files Imports go down
  * ? Import of style sheet is a style import
  * */
-import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import {
+	workspaceInterface,
+	wsShareInterface,
+} from '@/types/AdminPanel/workspace';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { workerData } from 'worker_threads';
 
@@ -118,7 +121,7 @@ const ZWorkspaceListPage: React.FC = () => {
 
 	// Get workspaces data from backend.
 	const { data: WSShareData, isFetching: isWSShareDataFetching } =
-		useZRQGetRequest<workspaceInterface[]>({
+		useZRQGetRequest<wsShareInterface[]>({
 			_url: API_URL_ENUM.ws_share_list,
 			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN],
 		});
@@ -217,7 +220,7 @@ const ZWorkspaceListPage: React.FC = () => {
 															workspaceImage={el.workspaceImage}
 															workspaceName={el.workspaceName as string}
 															user={el.user}
-															id={el.id}
+															workspaceId={el.id}
 															createdAt={el.createdAt}
 														/>
 													</ZIonCol>
@@ -363,7 +366,7 @@ const ZWorkspaceListPage: React.FC = () => {
 															workspaceImage={el.workspaceImage}
 															workspaceName={el.workspaceName as string}
 															user={el.user}
-															id={el.id}
+															workspaceId={el.id}
 															createdAt={el.createdAt}
 														/>
 													</ZIonCol>
@@ -475,24 +478,29 @@ const ZWorkspaceListPage: React.FC = () => {
 								<Suspense fallback={<ZWorkspacesCardSkeleton />}>
 									{!isWSShareDataFetching &&
 										WSShareData &&
-										WSShareData.map((el) => (
-											<ZIonCol
-												sizeXl='4'
-												sizeLg='6'
-												sizeMd='6'
-												sizeSm='6'
-												sizeXs='12'
-												key={el.id}
-											>
-												<ZWorkspacesCard
-													workspaceImage={el.workspaceImage}
-													workspaceName={el.workspaceName as string}
-													user={el.user}
-													id={el.id}
-													createdAt={el.createdAt}
-												/>
-											</ZIonCol>
-										))}
+										WSShareData.map((el) => {
+											return (
+												<ZIonCol
+													sizeXl='4'
+													sizeLg='6'
+													sizeMd='6'
+													sizeSm='6'
+													sizeXs='12'
+													key={el.id}
+												>
+													<ZWorkspacesCard
+														workspaceImage={el.workspaceImage}
+														workspaceName={el.workspaceName as string}
+														user={el.user}
+														workspaceId={el.id} // workspaceId
+														createdAt={el.createdAt}
+														accountStatus={el.accountStatus}
+														inviteId={el.id}
+														owned={false}
+													/>
+												</ZIonCol>
+											);
+										})}
 								</Suspense>
 
 								{isWSShareDataFetching && <ZWorkspacesCardSkeleton />}

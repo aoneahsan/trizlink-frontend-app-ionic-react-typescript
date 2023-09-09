@@ -372,6 +372,7 @@ export const LOCALSTORAGE_KEYS = {
 	USERDATA: 'udhsaf38h_3g-23g-c',
 	AUTHTOKEN: 'cewiuh4ggb284ghg',
 	INVITEE_USER_DATA: 'zoirjf_hflmn-e',
+	SIGNUP_USER_DATA: 'zmkftr-lokgyr-d',
 	ERROR_DATA: 'asdgcvbv_cbert-k',
 };
 
@@ -468,6 +469,8 @@ const testingSelectors = {
 			createWorkspaceButton: 'wlp-create-btn',
 			createWorkspaceCardButton: 'wlp-create-card-btn',
 			viewWorkspaceButton: 'wlp-view-btn',
+			acceptInvitationButton: 'wlp-accept-btn',
+			rejectInvitationButton: 'wlp-reject-btn',
 			workspaceCardImg: 'wlp-card-image',
 			workspaceCardTitle: 'wlp-card-title',
 			workspaceCardFavoritesButton: 'wlp-card-favorites-btn',

@@ -112,8 +112,6 @@ const ZWorkspaceProfilePopover: React.FC = () => {
 				_isAuthenticatedRequest: false,
 			});
 
-			console.log(__response);
-
 			if (__response?.data.isSuccess) {
 				// clear User token.
 				void STORAGE.CLEAR(LOCALSTORAGE_KEYS.USERDATA);
