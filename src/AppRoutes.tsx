@@ -161,7 +161,7 @@ const AppRoutes = () => {
 				component={ZShortLinkRedirectPage}
 			/>
 
-			<Route
+			<PublicRoute
 				exact
 				path={ZaionsRoutes.SetPassword}
 				component={ZSetPasswordPage}

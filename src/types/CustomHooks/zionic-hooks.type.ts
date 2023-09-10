@@ -26,7 +26,11 @@ export type UseZIonAlertSuccessReturnType = {
 };
 
 export type useZIonErrorAlertReturnType = {
-	presentZIonErrorAlert: (message?: string) => Promise<void> | void;
+	presentZIonErrorAlert: (props?: {
+		message?: string;
+		header?: string;
+		subHeader?: string;
+	}) => Promise<void> | void;
 };
 
 /**

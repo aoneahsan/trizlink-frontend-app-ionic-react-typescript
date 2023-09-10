@@ -441,6 +441,7 @@ const testingSelectors = {
 	// #region set password page
 	setPasswordPage: {
 		emailInput: 'spp-email-input',
+		gotoWSBtn: 'spp-goto-ws-list-page-btn',
 		otpBtn: 'spp-send-opt-btn',
 		confirmOtpBtn: 'spp-confirm-opt-btn',
 		resendOtpBtn: 'spp-resend-opt-btn',

@@ -34,6 +34,9 @@ import {
 	UserAccountType,
 } from '@/types/UserAccount/index.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { errorCodes } from '@/utils/constants/apiConstants';
+import Z403View from '@/components/Errors/403';
+import { useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Custom Hooks Imports go down
@@ -95,6 +98,8 @@ const ZValidateInvitationPage: React.FC = () => {
 
 	const _token = (routeQSearchParams as { token: string }).token;
 
+	const { presentZIonErrorAlert } = useZIonErrorAlert();
+
 	const { mutateAsync: validateAndUpdateInvitation } = useZRQUpdateRequest({
 		_url: API_URL_ENUM.validate_invitation_status,
 		_showAlertOnError: false,
@@ -104,13 +109,12 @@ const ZValidateInvitationPage: React.FC = () => {
 
 	const validator = useCallback(async () => {
 		try {
-			// const userData = (await STORAGE.GET(
-			// 	LOCALSTORAGE_KEYS.USERDATA
-			// )) as UserAccountType | null;
-			// console.log(userData);
+			const userData = (await STORAGE.GET(
+				LOCALSTORAGE_KEYS.USERDATA
+			)) as UserAccountType | null;
 
 			const __data = zStringify({
-				// email: userData?.email,
+				email: userData?.email,
 				token: _token,
 			});
 
@@ -158,6 +162,13 @@ const ZValidateInvitationPage: React.FC = () => {
 					errorCode: __apiErrors?.status,
 					errorOccurred: true,
 				}));
+
+				if (__apiErrors?.status === errorCodes.badRequest) {
+					presentZIonErrorAlert({
+						subHeader: 'Invalid token',
+						message: 'The provided token is invalid.',
+					});
+				}
 			}
 		}
 	}, []);
@@ -179,7 +190,7 @@ const ZValidateInvitationPage: React.FC = () => {
 	} else if (
 		_token &&
 		compState.errorOccurred &&
-		compState.errorCode === 401 &&
+		compState.errorCode === errorCodes.unauthenticated &&
 		!compState.isProcessing
 	) {
 		return (
@@ -190,12 +201,23 @@ const ZValidateInvitationPage: React.FC = () => {
 	} else if (
 		_token &&
 		compState.errorOccurred &&
-		compState.errorCode === 400 &&
+		compState.errorCode === errorCodes.badRequest &&
 		!compState.isProcessing
 	) {
 		return (
 			<ZIonPage>
 				<Z400View />
+			</ZIonPage>
+		);
+	} else if (
+		_token &&
+		compState.errorOccurred &&
+		compState.errorCode === errorCodes.forbidden &&
+		!compState.isProcessing
+	) {
+		return (
+			<ZIonPage>
+				<Z403View />
 			</ZIonPage>
 		);
 	} else if (_token && !compState.errorOccurred && !compState.isProcessing) {

@@ -331,7 +331,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 							/> */}
 
 							{/* Password Field */}
-							{/* <div className='flex mb-1 mt-4 ion-align-items-start'>
+							{/* <div className='flex mt-4 mb-1 ion-align-items-start'>
 								<ZIonInput
 									name='password'
 									label='Password*'
@@ -1005,7 +1005,9 @@ const ZNewPasswordTab: React.FC = () => {
 				}
 
 				if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
-					presentZIonErrorAlert((__apiErrors as { item: string[] }).item[0]);
+					presentZIonErrorAlert({
+						message: (__apiErrors as { item: string[] }).item[0],
+					});
 				}
 			}
 			reportCustomError(error);
@@ -1033,7 +1035,7 @@ const ZNewPasswordTab: React.FC = () => {
 			/>
 
 			{/* Password Field */}
-			<div className='flex mb-1 mt-4 ion-align-items-start'>
+			<div className='flex mt-4 mb-1 ion-align-items-start'>
 				<ZIonInput
 					name='password'
 					label='Password*'

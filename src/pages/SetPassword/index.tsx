@@ -32,6 +32,7 @@ import {
 	ZIonImg,
 	ZIonInput,
 	ZIonNote,
+	ZIonRouterLink,
 	ZIonRow,
 	ZIonText,
 } from '@/components/ZIonComponents';
@@ -102,6 +103,8 @@ import {
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { ProductFavicon } from '@/assets/images';
+import { errorCodes } from '@/utils/constants/apiConstants';
+import Z403View from '@/components/Errors/403';
 
 /**
  * Component props type go down
@@ -118,28 +121,80 @@ const ZSetPasswordPage: React.FC = () => {
 	const [compState, setCompState] = useState<{
 		email?: string;
 		inviteToken?: string;
-	}>();
+		canSetPassword?: boolean;
+		message?: string;
+		isProcessing: boolean;
+		errorCode?: number;
+	}>({
+		isProcessing: true,
+	});
 
 	useEffect(() => {
 		try {
 			void (async () => {
-				const userData = (await STORAGE.GET(
+				const inviteeData = (await STORAGE.GET(
 					LOCALSTORAGE_KEYS.INVITEE_USER_DATA
 				)) as {
 					email: string;
 					token: string;
 					signupType: string;
 				} | null;
-				setCompState((oldValues) => ({
-					...oldValues,
-					// email: userData?.email,
-					inviteToken: userData?.token,
-				}));
+
+				const userData = (await STORAGE.GET(
+					LOCALSTORAGE_KEYS.USERDATA
+				)) as UserAccountType | null;
+
+				const authToken = (await STORAGE.GET(LOCALSTORAGE_KEYS.AUTHTOKEN)) as
+					| string
+					| null;
+				if (
+					userData &&
+					userData.email &&
+					authToken &&
+					authToken?.trim()?.length > 0
+				) {
+					setCompState((oldValues) => ({
+						...oldValues,
+						canSetPassword: false,
+						isProcessing: false,
+					}));
+				} else if (
+					userData === undefined &&
+					authToken === undefined &&
+					inviteeData?.token !== undefined
+				) {
+					setCompState((oldValues) => ({
+						...oldValues,
+						inviteToken: inviteeData?.token,
+						canSetPassword: true,
+						isProcessing: false,
+					}));
+				} else if (
+					userData === undefined &&
+					authToken === undefined &&
+					inviteeData?.token === undefined
+				) {
+					setCompState((oldValues) => ({
+						...oldValues,
+						inviteToken: inviteeData?.token,
+						canSetPassword: false,
+						isProcessing: false,
+						errorCode: errorCodes.forbidden,
+					}));
+				}
 			})();
 		} catch (error) {
 			reportCustomError(error);
 		}
 	}, []);
+
+	if (compState?.errorCode && compState?.errorCode === errorCodes.forbidden) {
+		return (
+			<ZIonPage pageTitle='set password page'>
+				<Z403View />
+			</ZIonPage>
+		);
+	}
 
 	return (
 		<ZIonPage pageTitle='set password page'>
@@ -157,11 +212,25 @@ const ZSetPasswordPage: React.FC = () => {
 								<ZIonText className='block mb-3 text-2xl font-bold ion-text-center'>
 									Setup Account Password
 								</ZIonText>
-								<ZIonText className='block'>
-									<ZIonText>
-										Set Account Password to access your account
+
+								{!compState?.isProcessing && compState?.canSetPassword ? (
+									<ZIonText className='block'>
+										<ZIonText>
+											Set Account Password to access your account
+										</ZIonText>
 									</ZIonText>
-								</ZIonText>
+								) : !compState?.isProcessing && !compState?.canSetPassword ? (
+									<ZIonText className='block'>
+										You have already set a password for your account. If you'd
+										like to update it, please use the '
+										<ZIonRouterLink
+											routerLink={ZaionsRoutes.PasswordResetEmailForm}
+										>
+											Forgot Password
+										</ZIonRouterLink>
+										' option.
+									</ZIonText>
+								) : null}
 							</div>
 						</ZIonCol>
 					</ZIonRow>
@@ -246,13 +315,40 @@ const ZSetPasswordPage: React.FC = () => {
 								{({ values, errors }) => {
 									return (
 										<>
-											{values.tab === ZSetPasswordTabEnum.sendOptTab ? (
+											{!compState?.isProcessing && compState?.canSetPassword ? (
+												values.tab === ZSetPasswordTabEnum.sendOptTab ? (
+													<ZSendOtpTab />
+												) : values.tab === ZSetPasswordTabEnum.confirmOptTab ? (
+													<ZConfirmOptTab />
+												) : values.tab ===
+												  ZSetPasswordTabEnum.newPasswordTab ? (
+													<ZNewPasswordTab />
+												) : null
+											) : !compState?.isProcessing &&
+											  !compState?.canSetPassword ? (
+												<div className='mt-2'>
+													{/* Send OTP Button */}
+													<ZIonButton
+														expand='block'
+														className='mt-4 ion-text-capitalize'
+														routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}
+														testingselector={
+															CONSTANTS.testingSelectors.setPasswordPage
+																.gotoWSBtn
+														}
+													>
+														Go to workspaces
+													</ZIonButton>
+												</div>
+											) : null}
+
+											{/* {values.tab === ZSetPasswordTabEnum.sendOptTab ? (
 												<ZSendOtpTab />
 											) : values.tab === ZSetPasswordTabEnum.confirmOptTab ? (
 												<ZConfirmOptTab />
 											) : values.tab === ZSetPasswordTabEnum.newPasswordTab ? (
 												<ZNewPasswordTab />
-											) : null}
+											) : null} */}
 										</>
 									);
 								}}
@@ -337,7 +433,9 @@ const ZSendOtpTab: React.FC = () => {
 				}
 
 				if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
-					presentZIonErrorAlert(__apiErrors[0]);
+					presentZIonErrorAlert({
+						message: __apiErrors[0],
+					});
 				}
 			}
 			reportCustomError(error);
@@ -346,7 +444,7 @@ const ZSendOtpTab: React.FC = () => {
 
 	return (
 		<>
-			<div className='w-full flex ion-align-items-center ion-justify-content-end'>
+			<div className='flex w-full ion-align-items-center ion-justify-content-end'>
 				<ZIonIcon
 					icon={informationCircleOutline}
 					color='warning'
@@ -495,7 +593,9 @@ const ZConfirmOptTab: React.FC = () => {
 				}
 
 				if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
-					presentZIonErrorAlert(__apiErrors[0]);
+					presentZIonErrorAlert({
+						message: __apiErrors[0],
+					});
 				}
 			}
 			reportCustomError(error);
@@ -550,7 +650,9 @@ const ZConfirmOptTab: React.FC = () => {
 				}
 
 				if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
-					presentZIonErrorAlert(__apiErrors[0]);
+					presentZIonErrorAlert({
+						message: __apiErrors[0],
+					});
 				}
 			}
 
@@ -742,7 +844,9 @@ const ZNewPasswordTab: React.FC = () => {
 				}
 
 				if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
-					presentZIonErrorAlert((__apiErrors as { item: string[] }).item[0]);
+					presentZIonErrorAlert({
+						message: (__apiErrors as { item: string[] }).item[0],
+					});
 				}
 			}
 			reportCustomError(error);
@@ -770,7 +874,7 @@ const ZNewPasswordTab: React.FC = () => {
 			/>
 
 			{/* Password Field */}
-			<div className='flex mb-1 mt-4 ion-align-items-start'>
+			<div className='flex mt-4 mb-1 ion-align-items-start'>
 				<ZIonInput
 					name='password'
 					label='Password*'
