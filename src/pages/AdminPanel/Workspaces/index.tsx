@@ -102,8 +102,8 @@ import { workerData } from 'worker_threads';
 const ZWorkspaceListPage: React.FC = () => {
 	//
 	const [compState, setCompState] = useState<{
-		sharedFavoriteWorkspaces: workspaceInterface[];
-		ownedFavoriteWorkspaces: workspaceInterface[];
+		sharedFavoriteWorkspaces: wsShareInterface[];
+		ownedFavoriteWorkspaces: wsShareInterface[];
 	}>({
 		sharedFavoriteWorkspaces: [],
 		ownedFavoriteWorkspaces: [],
@@ -128,21 +128,23 @@ const ZWorkspaceListPage: React.FC = () => {
 
 	useEffect(() => {
 		const _sharedFavoriteWorkspaces = WSShareData?.filter(
-			(el) => el?.isFavorite === true
+			(el) => el?.isFavorite === 1
 		);
 
 		const _ownedFavoriteWorkspaces = WorkspacesData?.filter(
-			(el) => el?.isFavorite === true
+			(el) => el?.isFavorite === 1
 		);
 
-		if (_sharedFavoriteWorkspaces && _sharedFavoriteWorkspaces?.length > 0) {
+		// console.log({ _ownedFavoriteWorkspaces, WorkspacesData });
+
+		if (_sharedFavoriteWorkspaces) {
 			setCompState((oldValues) => ({
 				...oldValues,
 				sharedFavoriteWorkspaces: _sharedFavoriteWorkspaces,
 			}));
 		}
 
-		if (_ownedFavoriteWorkspaces && _ownedFavoriteWorkspaces?.length > 0) {
+		if (_ownedFavoriteWorkspaces) {
 			setCompState((oldValues) => ({
 				...oldValues,
 				ownedFavoriteWorkspaces: _ownedFavoriteWorkspaces,
@@ -221,67 +223,14 @@ const ZWorkspaceListPage: React.FC = () => {
 															workspaceName={el.workspaceName as string}
 															user={el.user}
 															workspaceId={el.id}
+															owned={el?.accountStatus ? false : true}
+															accountStatus={el?.accountStatus}
 															createdAt={el.createdAt}
+															isFavorite={el.isFavorite ? true : false}
 														/>
 													</ZIonCol>
 												))}
 										</Suspense>
-
-										{!isWorkspacesDataFetching && !isWSShareDataFetching && (
-											<ZWorkspacesCardSkeleton />
-										)}
-
-										{/* add a workspace card */}
-										<ZCan havePermissions={[permissionsEnum.create_workspace]}>
-											<ZIonCol
-												sizeXl='4'
-												sizeLg='6'
-												sizeMd='6'
-												sizeSm='6'
-												sizeXs='12'
-											>
-												{!isWorkspacesDataFetching &&
-													!isWSShareDataFetching && (
-														<ZIonCard
-															className={classNames({
-																'h-[13.4rem] cursor-pointer': true,
-															})}
-															testingselector={
-																CONSTANTS.testingSelectors.workspace.listPage
-																	.createWorkspaceCardButton
-															}
-															onClick={() => {
-																presentZWorkspaceCreateModal({
-																	_cssClass: 'create-workspace-modal-size',
-																});
-															}}
-														>
-															<ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
-																<ZIonIcon icon={addOutline} size='large' />
-																<ZIonText className='text-lg'>
-																	Create a workspace
-																</ZIonText>
-															</ZIonCardContent>
-														</ZIonCard>
-													)}
-
-												{isWorkspacesDataFetching && (
-													<ZIonCard
-														className={classNames({
-															'h-[13.4rem] cursor-pointer': true,
-														})}
-													>
-														<ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
-															<ZIonSkeletonText width='20px' height='20px' />
-
-															<ZIonText className='text-lg'>
-																<ZIonSkeletonText width='120px' height='15px' />
-															</ZIonText>
-														</ZIonCardContent>
-													</ZIonCard>
-												)}
-											</ZIonCol>
-										</ZCan>
 									</>
 								)}
 							</ZIonRow>
@@ -368,6 +317,7 @@ const ZWorkspaceListPage: React.FC = () => {
 															user={el.user}
 															workspaceId={el.id}
 															createdAt={el.createdAt}
+															isFavorite={el.isFavorite ? true : false}
 														/>
 													</ZIonCol>
 												))}
@@ -497,6 +447,7 @@ const ZWorkspaceListPage: React.FC = () => {
 														accountStatus={el.accountStatus}
 														inviteId={el.id}
 														owned={false}
+														isFavorite={el.isFavorite ? true : false}
 													/>
 												</ZIonCol>
 											);

@@ -8,6 +8,8 @@ const GENERAL = {
 		WORKSPACE_CREATED: 'Workspace created successfully.',
 		WORKSPACE_UPDATED: 'Workspace updated successfully.',
 		WORKSPACE_DELETED: 'Workspace deleted successfully.',
+		ADD_TO_IS_FAVORITE: 'Workspace is added to favorite',
+		REMOVE_TO_IS_FAVORITE: 'Workspace is removed from favorite',
 	},
 	MEMBER: {
 		INVITE_SEND: 'successfully send invitation.',

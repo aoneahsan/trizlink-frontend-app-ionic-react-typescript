@@ -116,11 +116,15 @@ export enum API_URL_ENUM {
 	// Workspace
 	workspace_create_list = 'workspace_create_list',
 	workspace_update_delete = 'workspace_update_delete',
+	workspace_update_is_favorite = 'workspace_update_is_favorite',
+
+	// WS team
 	workspace_team_create_list = 'workspace_team_create_list',
 	workspace_team_update_delete = 'workspace_team_update_delete',
 
 	// share workspace
 	ws_share_list = 'ws_share_list',
+	ws_share_update_is_favorite = 'ws_share_update_is_favorite',
 
 	// Time slot
 	time_slot_create_list = 'time_slot_create_list',

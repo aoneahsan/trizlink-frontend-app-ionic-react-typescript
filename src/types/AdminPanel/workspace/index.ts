@@ -175,6 +175,7 @@ export interface WSTeamMembersInterface {
 	accountStatusUpdaterRemarks: string;
 	accountStatusLastUpdatedBy: string;
 	resendAllowedAfter: string;
+	isFavorite?: boolean;
 	memberRole: {
 		id?: string;
 		name?: WSRolesNameEnum;
@@ -201,7 +202,7 @@ export interface WSTeamMembersInterface {
 export interface workspaceInterface {
 	id?: string;
 	workspaceName?: string;
-	isFavorite?: boolean;
+	isFavorite?: boolean | number;
 	workspaceTimezone?: string;
 	workspaceImage?: string;
 	internalPost?: boolean;

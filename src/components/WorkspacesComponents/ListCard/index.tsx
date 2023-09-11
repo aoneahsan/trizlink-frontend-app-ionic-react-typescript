@@ -8,7 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { ellipsisHorizontalOutline, starOutline } from 'ionicons/icons';
+import { ellipsisHorizontalOutline, star, starOutline } from 'ionicons/icons';
 import classNames from 'classnames';
 
 /**
@@ -85,6 +85,7 @@ import { showSuccessNotification } from '@/utils/notification';
 import { reportCustomError } from '@/utils/customErrorType';
 import { UserAccountType } from '@/types/UserAccount/index.type';
 import { _adapters } from 'chart.js';
+import MESSAGES from '@/utils/messages';
 
 /**
  * Images Imports go down
@@ -120,6 +121,7 @@ const ZWorkspacesCard: React.FC<{
 	createdAt,
 	user,
 	owned = true,
+	isFavorite,
 	accountStatus,
 	inviteId,
 }) => {
@@ -150,6 +152,18 @@ const ZWorkspacesCard: React.FC<{
 			workspaceId!,
 		],
 	});
+
+	// Update isFavorite of owned workspace
+	const { mutateAsync: updateIsFavoriteOwnedWSAsyncMutate } =
+		useZRQUpdateRequest({
+			_url: API_URL_ENUM.workspace_update_is_favorite,
+		});
+
+	// Update isFavorite of share workspace
+	const { mutateAsync: updateIsFavoriteShareWSAsyncMutate } =
+		useZRQUpdateRequest({
+			_url: API_URL_ENUM.ws_share_update_is_favorite,
+		});
 
 	// #region Functions.
 	const zInvitationResponseHandler = async ({
@@ -213,7 +227,7 @@ const ZWorkspacesCard: React.FC<{
 							const __updatedData = __oldData?.filter(
 								(el) => el?.id !== __data?.id
 							);
-							console.log({ __data, __updatedData, __oldData });
+
 							await updateRQCDataHandler({
 								key: [
 									CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN,
@@ -237,8 +251,69 @@ const ZWorkspacesCard: React.FC<{
 			reportCustomError(error);
 		}
 	};
-	// #endregion
 
+	const zUpdateIsFavoriteHandler = async () => {
+		try {
+			let __response;
+			const __zStringifyData = zStringify({
+				isFavorite: !isFavorite,
+			});
+			if (owned) {
+				__response = await updateIsFavoriteOwnedWSAsyncMutate({
+					itemIds: [workspaceId!],
+					urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+					requestData: __zStringifyData,
+				});
+			} else {
+				__response = await updateIsFavoriteShareWSAsyncMutate({
+					itemIds: [workspaceId!],
+					urlDynamicParts: [CONSTANTS.RouteParams.workspace.wsShareId],
+					requestData: __zStringifyData,
+				});
+			}
+
+			if (__response) {
+				const __data = extractInnerData<WSTeamMembersInterface>(
+					__response,
+					extractInnerDataOptionsEnum.createRequestResponseItem
+				);
+
+				if (owned) {
+					await updateRQCDataHandler({
+						key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
+						data: {
+							...__data,
+						},
+						id: __data?.id!,
+						// extractType: ZRQGetRequestExtractEnum.extractItems,
+					});
+				} else {
+					await updateRQCDataHandler({
+						key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN],
+						data: {
+							...__data,
+						},
+						id: __data?.id!,
+						// extractType: ZRQGetRequestExtractEnum.extractItems,
+					});
+				}
+
+				if (__data?.isFavorite) {
+					showSuccessNotification(
+						MESSAGES.GENERAL.WORKSPACE.ADD_TO_IS_FAVORITE
+					);
+				} else {
+					showSuccessNotification(
+						MESSAGES.GENERAL.WORKSPACE.REMOVE_TO_IS_FAVORITE
+					);
+				}
+			}
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
+	// #endregion
+	console.log({ isFavorite });
 	return (
 		<ZIonCard className='h-[13.4rem]'>
 			<ZIonRow className='flex-col h-full'>
@@ -323,8 +398,11 @@ const ZWorkspacesCard: React.FC<{
 										CONSTANTS.testingSelectors.workspace.listPage
 											.workspaceCardFavoritesButton
 									}
+									onClick={() => {
+										void zUpdateIsFavoriteHandler();
+									}}
 								>
-									<ZIonIcon icon={starOutline} />
+									<ZIonIcon icon={isFavorite ? star : starOutline} />
 								</ZIonButton>
 							</ZIonCol>
 

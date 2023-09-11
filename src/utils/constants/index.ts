@@ -44,6 +44,7 @@ const RouteParams = {
 	// workspace
 	workspace: {
 		workspaceId: ':workspaceId',
+		wsShareId: ':wsShareId',
 		editWorkspaceIdParam: ':editWorkspaceId',
 		teamId: ':teamId',
 		memberInviteId: ':memberInviteId',
@@ -180,9 +181,11 @@ export const API_URLS = {
 	workspace_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}`,
 	workspace_team_create_list: `/user/workspace/${RouteParams.workspace.workspaceId}/teams`,
 	workspace_team_update_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}`,
+	workspace_update_is_favorite: `/user/workspaces/update-is-favorite/${RouteParams.workspace.workspaceId}`,
 
 	// share workspace
 	ws_share_list: `/user/shared-ws`,
+	ws_share_update_is_favorite: `/user/shared-ws/update-is-favorite/${RouteParams.workspace.wsShareId}`,
 
 	// Time slot
 	time_slot_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/time-slot`,
