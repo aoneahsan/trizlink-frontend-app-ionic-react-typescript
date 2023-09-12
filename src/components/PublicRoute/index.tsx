@@ -10,15 +10,11 @@ const PublicRoute = ({ Component, restricted = true, ...rest }: any) => {
 		// restricted = false meaning public route
 		// restricted = true meaning restricted route
 		<Suspense fallback={<ZFallbackIonSpinner />}>
-			<PublicRouteAsync
-				Component={Component}
-				restricted={restricted}
-				{...rest}
-			/>
+			<PublicRouteAsync Comp={Component} restricted={restricted} {...rest} />
 		</Suspense>
 	);
 };
-const PublicRouteAsync = ({ Component, restricted, ...rest }: any) => {
+const PublicRouteAsync = ({ Comp: Component, restricted, ...rest }: any) => {
 	const loggedIn = useRecoilValue(IsAuthenticatedRStateSelector);
 
 	return (

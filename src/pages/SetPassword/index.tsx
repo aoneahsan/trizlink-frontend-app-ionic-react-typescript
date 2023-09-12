@@ -411,9 +411,7 @@ const ZSendOtpTab: React.FC = () => {
 
 						setFieldValue('tab', ZSetPasswordTabEnum.confirmOptTab, false);
 
-						showSuccessNotification(
-							'OTP has been successfully sent to your email. Please check your email.'
-						);
+						showSuccessNotification(MESSAGES.GENERAL.OTP.SEND_SUCCESSFULLY);
 					}
 				}
 			}
@@ -502,7 +500,10 @@ const ZSendOtpTab: React.FC = () => {
 			{/* Send OTP Button */}
 			<ZIonButton
 				expand='block'
-				disabled={values?.emailAddress?.length === 0}
+				disabled={
+					errors?.emailAddress !== undefined ||
+					values?.emailAddress?.length === 0
+				}
 				className='mt-4 ion-text-capitalize'
 				onClick={async () => {
 					await ZSendOTPHandler();
@@ -571,9 +572,7 @@ const ZConfirmOptTab: React.FC = () => {
 							setFieldValue('isEmailAddressApiError', false, false);
 						}
 
-						showSuccessNotification(
-							'OTP has been successfully sent to your email. Please check your email.'
-						);
+						showSuccessNotification(MESSAGES.GENERAL.OTP.SEND_SUCCESSFULLY);
 					}
 				}
 			}
@@ -630,7 +629,7 @@ const ZConfirmOptTab: React.FC = () => {
 
 						setFieldValue('tab', ZSetPasswordTabEnum.newPasswordTab, false);
 
-						showSuccessNotification('OTP has been confirmed.');
+						showSuccessNotification(MESSAGES.GENERAL.OTP.CONFIRMED);
 					}
 				}
 			}

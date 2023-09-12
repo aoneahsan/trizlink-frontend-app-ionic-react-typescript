@@ -8,8 +8,8 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { ellipsisHorizontalOutline, star, starOutline } from 'ionicons/icons';
 import classNames from 'classnames';
+import { ellipsisHorizontalOutline, star, starOutline } from 'ionicons/icons';
 
 /**
  * Custom Imports go down
@@ -23,6 +23,7 @@ import {
 	ZIonCol,
 	ZIonIcon,
 	ZIonImg,
+	ZIonLabel,
 	ZIonRouterLink,
 	ZIonRow,
 	ZIonText,
@@ -37,6 +38,11 @@ import ZCan from '@/components/Can';
  * */
 import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import {
+	useZGetRQCacheData,
+	useZRQUpdateRequest,
+	useZUpdateRQCacheData,
+} from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -51,16 +57,23 @@ import {
 } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import { showSuccessNotification } from '@/utils/notification';
+import { reportCustomError } from '@/utils/customErrorType';
+import MESSAGES from '@/utils/messages';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-	workspaceInterface,
 	wsShareInterface,
 	WSTeamMembersInterface,
 } from '@/types/AdminPanel/workspace';
+import { ZTeamMemberInvitationEnum } from '@/types/AdminPanel/index.type';
+import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { UserAccountType } from '@/types/UserAccount/index.type';
 
 /**
  * Recoil State Imports go down
@@ -72,20 +85,6 @@ import {
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
-import { ZTeamMemberInvitationEnum } from '@/types/AdminPanel/index.type';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
-import {
-	useZGetRQCacheData,
-	useZRQUpdateRequest,
-	useZUpdateRQCacheData,
-} from '@/ZaionsHooks/zreactquery-hooks';
-import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { showSuccessNotification } from '@/utils/notification';
-import { reportCustomError } from '@/utils/customErrorType';
-import { UserAccountType } from '@/types/UserAccount/index.type';
-import { _adapters } from 'chart.js';
-import MESSAGES from '@/utils/messages';
 
 /**
  * Images Imports go down
@@ -313,9 +312,8 @@ const ZWorkspacesCard: React.FC<{
 		}
 	};
 	// #endregion
-	console.log({ isFavorite });
 	return (
-		<ZIonCard className='h-[13.4rem]'>
+		<ZIonCard className='h-[11.4rem]'>
 			<ZIonRow className='flex-col h-full'>
 				<ZIonCol className='flex-1'>
 					{/* Card header */}
@@ -324,12 +322,13 @@ const ZWorkspacesCard: React.FC<{
 							<ZIonCol size='8' className='flex gap-3 ion-align-items-center'>
 								<div
 									className={classNames({
-										'w-[50px] h-[50px] rounded overflow-hidden': true,
-										'flex ion-align-items-center ion-justify-content-center zaions__primary_bg':
+										'w-[40px] h-[40px] rounded overflow-hidden': true,
+										'flex ion-align-items-center ion-justify-content-center':
 											!workspaceImage,
 									})}
 								>
 									<ZIonRouterLink
+										color='dark'
 										routerLink={createRedirectRoute({
 											url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
 											params: [
@@ -339,7 +338,6 @@ const ZWorkspacesCard: React.FC<{
 											],
 											values: [workspaceId || '', 'all'],
 										})}
-										color='dark'
 										testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardImg}-${workspaceId}`}
 										testingListSelector={
 											CONSTANTS.testingSelectors.workspace.listPage
@@ -360,6 +358,8 @@ const ZWorkspacesCard: React.FC<{
 								<div>
 									{/* workspace name */}
 									<ZIonRouterLink
+										className='block'
+										color='dark'
 										routerLink={createRedirectRoute({
 											url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
 											params: [
@@ -375,12 +375,14 @@ const ZWorkspacesCard: React.FC<{
 												.workspaceCardTitle
 										}
 									>
-										<ZIonText
-											className='block text-base font-bold'
-											color='dark'
-										>
-											{workspaceName}
-										</ZIonText>
+										<div className='max-w-[8rem] overflow-hidden line-clamp-1'>
+											<ZIonLabel
+												className='block text-base font-bold'
+												color='dark'
+											>
+												{workspaceName}
+											</ZIonLabel>
+										</div>
 									</ZIonRouterLink>
 
 									{/*  */}

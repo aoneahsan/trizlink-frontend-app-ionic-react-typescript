@@ -172,6 +172,15 @@ export enum permissionsEnum {
 	restore_utmTag = 'restore_utmTag',
 	forceDelete_utmTag = 'forceDelete_utmTag',
 
+	viewAny_USSettings = 'viewAny_USSettings',
+	view_USSettings = 'view_USSettings',
+	create_USSettings = 'create_USSettings',
+	update_USSettings = 'update_USSettings',
+	delete_USSettings = 'delete_USSettings',
+	replicate_USSettings = 'replicate_USSettings',
+	restore_USSettings = 'restore_USSettings',
+	forceDelete_USSettings = 'forceDelete_USSettings',
+
 	// short link
 	viewAny_shortLink = 'viewAny_shortLink',
 	view_shortLink = 'view_shortLink',

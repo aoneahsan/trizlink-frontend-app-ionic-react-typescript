@@ -283,17 +283,15 @@ const ZaionsLoginForm: React.FC = () => {
 							</div>
 
 							<div className='ion-text-end'>
-								<ZIonButton
-									fill='clear'
-									className='ion-no-padding ion-no-margin ion-text-capitalize text-decoration-underline'
-									mode='ios'
+								<ZIonRouterLink
+									className='block ion-no-padding ion-no-margin hover:underline'
 									routerLink={ZaionsRoutes.PasswordResetEmailForm}
 									testingselector={
 										CONSTANTS.testingSelectors.loginPage.forgetPasswordButton
 									}
 								>
 									Forgot your password?
-								</ZIonButton>
+								</ZIonRouterLink>
 							</div>
 
 							{/* Submit Button */}

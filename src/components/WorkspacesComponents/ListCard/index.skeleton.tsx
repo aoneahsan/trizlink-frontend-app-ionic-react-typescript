@@ -68,7 +68,7 @@ import React from 'react';
 const ZWorkspacesCardSkeleton: React.FC = () => {
 	return (
 		<ZIonCol sizeXl='4' sizeLg='6' sizeMd='6' sizeSm='6' sizeXs='12'>
-			<ZIonCard className='cursor-pointer h-[13.4rem]'>
+			<ZIonCard className='cursor-pointer h-[11.4rem]'>
 				<ZIonRow className='flex-col h-full'>
 					<ZIonCol className='flex-1'>
 						{/* Card header */}

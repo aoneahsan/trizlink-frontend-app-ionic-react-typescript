@@ -120,6 +120,7 @@ export const API_URLS = {
 	userEmbedWidget_update_delete: '/user/embedded-scripts/:embeddedId',
 	send_otp: '/user/send-otp',
 	send_signup_otp: '/user/send-signup-otp',
+	send_forget_password_otp: '/user/send-forget-password-otp',
 	confirm_otp: '/user/confirm-otp',
 	set_password: '/user/set-password',
 	set_username_password: '/user/set-username-password',
@@ -376,6 +377,7 @@ export const LOCALSTORAGE_KEYS = {
 	AUTHTOKEN: 'cewiuh4ggb284ghg',
 	INVITEE_USER_DATA: 'zoirjf_hflmn-e',
 	SIGNUP_USER_DATA: 'zmkftr-lokgyr-d',
+	FORGET_PASSWORD_USER_DATA: 'ziomkliy-rthng-r',
 	ERROR_DATA: 'asdgcvbv_cbert-k',
 };
 

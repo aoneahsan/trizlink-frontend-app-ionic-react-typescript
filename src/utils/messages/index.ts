@@ -4,6 +4,11 @@ const GENERAL = {
 	FILE: {
 		FILE_DELETED_SUCCESS_MESSAGE: 'File deleted successfully.',
 	},
+	OTP: {
+		SEND_SUCCESSFULLY:
+			'OTP has been successfully sent to your email. Please check your email.',
+		CONFIRMED: 'OTP has been confirmed.',
+	},
 	WORKSPACE: {
 		WORKSPACE_CREATED: 'Workspace created successfully.',
 		WORKSPACE_UPDATED: 'Workspace updated successfully.',

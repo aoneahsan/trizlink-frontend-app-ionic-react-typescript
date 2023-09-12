@@ -12,7 +12,6 @@ import {
 	ZIonCol,
 	ZIonText,
 	ZIonIcon,
-	ZIonRouterLink,
 	ZIonInput,
 	ZIonRow,
 	ZIonNote,
@@ -54,7 +53,6 @@ import { UserAuthData } from '@/types/ZaionsApis.type';
 import { ZIonButton } from '@/components/ZIonComponents';
 import { FormikSetErrorsType, resetFormType } from '@/types/ZaionsFormik.type';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 import {
 	useZRQCreateRequest,
 	useZRQUpdateRequest,
@@ -269,15 +267,7 @@ const ZaionsSignUpForm: React.FC = (props) => {
 						await FormikSubmissionHandler(_values, resetForm, setErrors);
 					}}
 				>
-					{({
-						handleChange,
-						handleBlur,
-						setFieldTouched,
-						values,
-						touched,
-						errors,
-						isValid,
-					}) => (
+					{({ values }) => (
 						<Form>
 							{values.tab === ZSetPasswordTabEnum.sendOptTab ? (
 								<ZSendOtpTab />
@@ -606,9 +596,7 @@ const ZSendOtpTab: React.FC = () => {
 
 						setFieldValue('tab', ZSetPasswordTabEnum.confirmOptTab, false);
 
-						showSuccessNotification(
-							'OTP has been successfully sent to your email. Please check your email.'
-						);
+						showSuccessNotification(MESSAGES.GENERAL.OTP.SEND_SUCCESSFULLY);
 					}
 				}
 			}
@@ -678,7 +666,10 @@ const ZSendOtpTab: React.FC = () => {
 			{/* Send OTP Button */}
 			<ZIonButton
 				expand='block'
-				disabled={values?.emailAddress?.length === 0}
+				disabled={
+					errors?.emailAddress !== undefined ||
+					values?.emailAddress?.length === 0
+				}
 				className='mt-4 ion-text-capitalize'
 				onClick={async () => {
 					await ZSendOTPHandler();
@@ -756,7 +747,7 @@ const ZConfirmOptTab: React.FC = () => {
 
 						setFieldValue('tab', ZSetPasswordTabEnum.newPasswordTab, false);
 						setFieldValue('otp', '', false);
-						showSuccessNotification('OTP has been confirmed.');
+						showSuccessNotification(MESSAGES.GENERAL.OTP.CONFIRMED);
 					}
 				}
 			}
@@ -796,9 +787,7 @@ const ZConfirmOptTab: React.FC = () => {
 					if (__data?.success) {
 						setFieldValue('tab', ZSetPasswordTabEnum.confirmOptTab, false);
 
-						showSuccessNotification(
-							'OTP has been successfully sent to your email. Please check your email.'
-						);
+						showSuccessNotification(MESSAGES.GENERAL.OTP.SEND_SUCCESSFULLY);
 					}
 				}
 			}
