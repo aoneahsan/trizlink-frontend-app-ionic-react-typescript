@@ -1,375 +1,368 @@
-// Core Imports
-import React, { useRef, useState } from 'react';
+/**
+ * Core Imports go down
+ * ? Like Import of React is a Core Import
+ * */
+import React, { useEffect } from 'react';
 
-// Packages Import
-import { IonPopover } from '@ionic/react';
+/**
+ * Packages Imports go down
+ * ? Like import of ionic components is a packages import
+ * */
+import routeQueryString from 'qs';
+import classNames from 'classnames';
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  useReactTable
+} from '@tanstack/react-table';
 
+/**
+ * Custom Imports go down
+ * ? Like import of custom components is a custom import
+ * */
+import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 import {
-	chevronBackOutline,
-	chevronForwardOutline,
-	ellipsisVerticalOutline,
-	pencilOutline,
-	playBackOutline,
-	playForwardOutline,
-	trashBinOutline,
-} from 'ionicons/icons';
-import { useSetRecoilState } from 'recoil';
-
-// Custom Imports
-import {
-	ZTable,
-	ZTableHeadCol,
-	ZTableRow,
-	ZTableRowCol,
-	ZTableTBody,
-	ZTableTHead,
-} from './table-styled-components.sc';
-import {
-	ZIonCol,
-	ZIonRow,
-	ZIonText,
-	ZIonContent,
-	ZIonIcon,
-	ZIonItem,
-	ZIonSelectOption,
-	ZIonList,
+  ZIonButton,
+  ZIonCheckbox,
+  ZIonCol,
+  ZIonIcon,
+  ZIonRouterLink,
+  ZIonRow,
+  ZIonText
 } from '@/components/ZIonComponents';
+import ZEmptyTable from '../ZEmptyTable';
 
-// Global Constants
+/**
+ * Custom Hooks Imports go down
+ * ? Like import of custom Hook is a custom import
+ * */
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { useZIonToast } from '@/ZaionsHooks/zionic-hooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+
+/**
+ * Global Constants Imports go down
+ * ? Like import of Constant is a global constants import
+ * */
 import CONSTANTS from '@/utils/constants';
-
-// Images
-
-// Recoil States
-import { PixelAccountFormState } from '@/ZaionsStore/FormStates/pixelAccountFormState.recoil';
-
-// Types
-import { PixelAccountType } from '@/types/AdminPanel/linksType';
-import { FormMode } from '@/types/AdminPanel/index.type';
-import {
-	useZIonAlert,
-	useZIonErrorAlert,
-	useZIonModal,
-} from '@/ZaionsHooks/zionic-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
-import {
-	useZRQDeleteRequest,
-	useZRQGetRequest,
-} from '@/ZaionsHooks/zreactquery-hooks';
-import { reportCustomError } from '@/utils/customErrorType';
-import { ZIonButton } from '@/components/ZIonComponents';
-import ZIonSelect from '@/components/ZIonComponents/ZIonSelect';
-import { showSuccessNotification } from '@/utils/notification';
-import MESSAGES from '@/utils/messages';
-import ZaionsAddPixelAccount from '../ZaionsModals/AddPixelsAccount';
 
-// Styles
+/**
+ * Type Imports go down
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
+ * */
+import { PixelAccountType } from '@/types/AdminPanel/linksType';
+import { ZPixelsListPageTableColumnsIds } from '@/types/AdminPanel/index.type';
+import { ellipsisVerticalOutline } from 'ionicons/icons';
 
-const ZaionsPixelAccountData: React.FC = () => {
-	// React Hooks
-	const [compState, setCompState] = useState<{
-		selectedPixelId: string | null;
-		showActionPopover: boolean;
-	}>({ selectedPixelId: null, showActionPopover: false });
-	const actionsPopoverRef = useRef<HTMLIonPopoverElement>(null);
+/**
+ * Recoil State Imports go down
+ * ? Import of recoil states is a Recoil State import
+ * */
 
-	// Packages  Hooks
-	const setPixelAccountFormState = useSetRecoilState(PixelAccountFormState);
+/**
+ * Style files Imports go down
+ * ? Import of style sheet is a style import
+ * */
 
-	// Custom Hooks
-	const { presentZIonErrorAlert } = useZIonErrorAlert();
+/**
+ * Images Imports go down
+ * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
+ * */
 
-	const { presentZIonModal: presentZAddPixelAccount } = useZIonModal(
-		ZaionsAddPixelAccount
-	);
+/**
+ * Component props type go down
+ * ? Like if you have a type for props it should be please Down
+ * */
 
-	const { presentZIonAlert } = useZIonAlert();
+/**
+ * Functional Component
+ * About: (Info of component here...)
+ * @type {*}
+ * */
 
-	const { data: pixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
-		_url: API_URL_ENUM.userPixelAccounts_create_list,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
-	});
+const ZPixelsTable: React.FC<{
+  showSkeleton?: boolean;
+}> = ({ showSkeleton = false }) => {
+  // #region custom hooks.
+  const { zNavigatePushRoute } = useZNavigate();
+  // #endregion
 
-	const { mutate: deletePixelAccountMutate } = useZRQDeleteRequest(
-		API_URL_ENUM.userPixelAccounts_update_delete,
-		[CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN]
-	);
+  // #region APIS requests.
+  // Request for getting pixels data.
+  const { data: PixelsData } = useZRQGetRequest<PixelAccountType[]>({
+    _url: API_URL_ENUM.userPixelAccounts_create_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+    _itemsIds: [],
+    _urlDynamicParts: []
+  });
+  // #endregion
 
-	const showActionsPopover = (
-		_event: React.MouseEvent<HTMLIonButtonElement, MouseEvent>
-	) => {
-		if (actionsPopoverRef.current) {
-			actionsPopoverRef.current.event = _event;
-		}
-	};
+  // #region Functions.
 
-	/**
-	 * Edit pixel account function. this function will call where user press the edit button that is present in the action column (dropdown). where user click the edit button this function will get call and it will set the pixel data in pixelAccountFormState with formMode to edit (means in edit mode), that will open the modal with edit mode.
-	 */
-	const editPixelAccountDetails = async () => {
-		try {
-			if (compState.selectedPixelId && pixelAccountsData?.length) {
-				const selectedPixelAccount = pixelAccountsData?.find(
-					(el) => el.id === compState.selectedPixelId
-				);
-				setPixelAccountFormState((oldVal) => ({
-					...oldVal,
-					formMode: FormMode.EDIT,
-					id: selectedPixelAccount?.id,
-					pixelId: selectedPixelAccount?.pixelId,
-					title: selectedPixelAccount?.title,
-					platform: selectedPixelAccount?.platform,
-				}));
-				presentZAddPixelAccount({
-					_cssClass: 'pixel-account-modal-size',
-				});
-			} else {
-				await presentZIonErrorAlert();
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
+  // #endregion
 
-	/**
-	 * Deleting pixel account function this function will call where user press the delete button that is present in the 	action column (dropdown). you can find this button blow in ZTableRow -> ZTableRowCol.
-	 */
-	const deletePixelAccount = async () => {
-		try {
-			if (compState.selectedPixelId?.trim() && pixelAccountsData?.length) {
-				const selectedPixelAccount = pixelAccountsData.find(
-					(el) => el.id === compState.selectedPixelId
-				);
-				await presentZIonAlert({
-					// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-					header: `Delete Pixel Account "${selectedPixelAccount?.title}"`,
-					subHeader: 'Remove Pixel account from user account.',
-					message: 'Are you sure you want to delete this pixel account?',
-					buttons: [
-						{
-							text: 'Cancel',
-							role: 'cancel',
-						},
-						{
-							text: 'Delete',
-							role: 'danger',
-							handler: () => {
-								void removePixelAccount();
-							},
-						},
-					],
-				});
-			} else {
-				await presentZIonErrorAlert();
-			}
-		} catch (error) {
-			console.error(error);
-		}
-	};
-
-	/**
-	 * Remove pixel account from user account function used it above function where we are deleting pixel account.
-	 */
-	const removePixelAccount = async () => {
-		try {
-			if (compState.selectedPixelId?.trim() && pixelAccountsData?.length) {
-				const selectedPixelAccount = pixelAccountsData.find(
-					(el) => el.id === compState.selectedPixelId
-				);
-				if (selectedPixelAccount && selectedPixelAccount?.id) {
-					deletePixelAccountMutate({
-						itemIds: [selectedPixelAccount?.id],
-						urlDynamicParts: [':pixelId'],
-					});
-					showSuccessNotification(MESSAGES.GENERAL.PIXEL_ACCOUNT.DELETED);
-				}
-			} else {
-				await presentZIonErrorAlert();
-			}
-		} catch (error) {
-			await presentZIonErrorAlert();
-		}
-	};
-
-	return (
-		<>
-			<ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-5'>
-				<ZIonCol>
-					<ZTable>
-						{/* Table */}
-						<ZTableTHead>
-							<ZTableRow>
-								<ZTableHeadCol>Name</ZTableHeadCol>
-								<ZTableHeadCol>Platform</ZTableHeadCol>
-								<ZTableHeadCol>Value</ZTableHeadCol>
-								<ZTableHeadCol>Creation date</ZTableHeadCol>
-								<ZTableHeadCol>Action</ZTableHeadCol>
-							</ZTableRow>
-						</ZTableTHead>
-
-						<ZTableTBody>
-							{pixelAccountsData?.map((el) => (
-								<ZTableRow key={el.id}>
-									<ZTableRowCol>{el.title}</ZTableRowCol>
-									<ZTableRowCol>{el.platform}</ZTableRowCol>
-									<ZTableRowCol>{el.platform}</ZTableRowCol>
-									<ZTableRowCol>
-										{el.createAt || CONSTANTS.NO_VALUE_FOUND}
-									</ZTableRowCol>
-									<ZTableRowCol>
-										<ZIonButton
-											fill='clear'
-											color={'dark'}
-											onClick={(_event) => {
-												setCompState((oldVal) => ({
-													...oldVal,
-													selectedPixelId: el.id || '',
-													showActionPopover: true,
-												}));
-												showActionsPopover(_event);
-											}}
-										>
-											<ZIonIcon icon={ellipsisVerticalOutline} />
-										</ZIonButton>
-									</ZTableRowCol>
-								</ZTableRow>
-							))}
-						</ZTableTBody>
-					</ZTable>
-					{/* Bottom bar */}
-					<ZIonRow className='ion-align-items-center ion-margin-top'>
-						<ZIonCol></ZIonCol>
-						<ZIonCol className='ion-text-end' size='7'>
-							<ZIonRow className='ion-align-items-center ion-justify-content-center'>
-								{/* Item Count Selector */}
-								<ZIonCol>
-									<ZIonItem lines='none'>
-										<ZIonSelect
-											interface='popover'
-											value={'20'}
-											label='Items per page:'
-										>
-											<ZIonSelectOption value={'20'}>20</ZIonSelectOption>
-											<ZIonSelectOption value={'40'}>{'40'}</ZIonSelectOption>
-										</ZIonSelect>
-									</ZIonItem>
-								</ZIonCol>
-								{/* Number of pages */}
-								<ZIonCol className='ion-text-center'>
-									<ZIonText>1 – 2 of 2</ZIonText>
-								</ZIonCol>
-
-								{/* Pagination */}
-								<ZIonCol>
-									<ZIonButton fill='clear' size='small' color='medium'>
-										<ZIonIcon icon={playBackOutline}></ZIonIcon>
-									</ZIonButton>
-									{/* <ZIonIcon icon={caretBackCircleOutline} /> */}
-									<ZIonButton
-										fill='clear'
-										size='small'
-										color='medium'
-										className='m-0'
-									>
-										<ZIonIcon icon={chevronBackOutline} />
-									</ZIonButton>
-									<ZIonButton
-										fill='clear'
-										size='small'
-										color='medium'
-										className='m-0'
-									>
-										<ZIonIcon icon={chevronForwardOutline} />
-									</ZIonButton>
-									{/* <ZIonIcon icon={caretForwardCircleOutline} /> */}
-									<ZIonButton
-										fill='clear'
-										size='small'
-										color='medium'
-										className='m-0'
-									>
-										<ZIonIcon icon={playForwardOutline} />
-									</ZIonButton>
-								</ZIonCol>
-							</ZIonRow>
-						</ZIonCol>
-					</ZIonRow>
-				</ZIonCol>
-			</ZIonRow>
-
-			{/* Popovers */}
-			<IonPopover
-				ref={actionsPopoverRef}
-				isOpen={compState?.showActionPopover}
-				dismissOnSelect
-				showBackdrop={false}
-				keepContentsMounted
-				className='zaions__ion_popover'
-				onDidDismiss={() =>
-					setCompState((oldVal) => ({ ...oldVal, showActionPopover: false }))
-				}
-			>
-				<ZIonContent>
-					<ZIonList lines='none' className='ion-no-padding'>
-						{/* Keep this incase we change our flow and need to show some info later on */}
-						{/* <ZIonItem button={true} detail={false}>
-							<ZIonButton
-								size='small'
-								expand='full'
-								fill='clear'
-								className='ion-text-capitalize mx-auto'
-							>
-								<ZIonIcon
-									icon={eyeOutline}
-									className='me-2 '
-									color={'primary'}
-								/>{' '}
-								<ZIonText color={'primary'}>View</ZIonText>
-							</ZIonButton>
-						</ZIonItem> */}
-						<ZIonItem
-							button={true}
-							detail={false}
-							onClick={() => void editPixelAccountDetails()}
-						>
-							<ZIonButton
-								size='small'
-								expand='full'
-								fill='clear'
-								className='ion-text-capitalize mx-auto'
-							>
-								<ZIonIcon
-									icon={pencilOutline}
-									className='me-2'
-									color={'secondary'}
-								/>{' '}
-								<ZIonText color={'secondary'}>Edit</ZIonText>
-							</ZIonButton>
-						</ZIonItem>
-						<ZIonItem
-							button={true}
-							detail={false}
-							onClick={() => void deletePixelAccount()}
-						>
-							<ZIonButton
-								size='small'
-								expand='full'
-								fill='clear'
-								className='ion-text-capitalize mx-auto'
-							>
-								<ZIonIcon
-									icon={trashBinOutline}
-									className='me-2'
-									color={'danger'}
-								/>{' '}
-								<ZIonText color={'danger'}>Delete</ZIonText>
-							</ZIonButton>
-						</ZIonItem>
-					</ZIonList>
-				</ZIonContent>
-			</IonPopover>
-		</>
-	);
+  return (
+    <>
+      {!showSkeleton ? (
+        PixelsData && PixelsData?.length ? (
+          <ZInpageTable />
+        ) : (
+          <div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
+            <ZEmptyTable
+              message='No pixels founds. please create a pixel.'
+              btnText='Create pixel'
+              btnOnClick={() => {}}
+            />
+          </div>
+        )
+      ) : null}
+    </>
+  );
 };
 
-export default ZaionsPixelAccountData;
+const ZInpageTable: React.FC = () => {
+  // #region custom hooks.
+  const { zNavigatePushRoute } = useZNavigate();
+  const { presentZIonToast } = useZIonToast();
+  const { isMdScale, isSmScale } = useZMediaQueryScale();
+  // getting search param from url with the help of 'qs' package.
+  const routeQSearchParams = routeQueryString.parse(location.search, {
+    ignoreQueryPrefix: true
+  });
+  const { pageindex, pagesize } = routeQSearchParams;
+  // #endregion
+
+  // #region APIS requests.
+  // Request for getting pixels data.
+  const { data: PixelsData } = useZRQGetRequest<PixelAccountType[]>({
+    _url: API_URL_ENUM.userPixelAccounts_create_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+    _itemsIds: [],
+    _urlDynamicParts: []
+  });
+  // #endregion
+
+  // #region Managing table data with react-table.
+  const columnHelper = createColumnHelper<PixelAccountType>();
+
+  const defaultColumns = [
+    columnHelper.display({
+      id: ZPixelsListPageTableColumnsIds.id,
+      header: 'Select',
+      footer: 'Select Column Footer',
+      cell: props => {
+        return <ZIonCheckbox />;
+      }
+    }),
+
+    // Title
+    columnHelper.accessor(itemData => itemData.title, {
+      header: 'Title',
+      id: ZPixelsListPageTableColumnsIds.title,
+      cell: row => {
+        return (
+          <ZIonRouterLink
+            className='hover:underline'
+            // routerLink={replaceRouteParams(
+            //   ZaionsRoutes.AdminPanel.ShortLinks.Edit,
+            //   [
+            //     CONSTANTS.RouteParams.workspace.workspaceId,
+            //     CONSTANTS.RouteParams.editShortLinkIdParam
+            //   ],
+            //   [workspaceId, row?.row?.original?.id!]
+            // )}
+          >
+            <ZIonText>{row.getValue()}</ZIonText>
+          </ZIonRouterLink>
+        );
+      },
+      footer: 'Title'
+    }),
+
+    // pixelId
+    columnHelper.accessor(itemData => itemData.pixelId, {
+      header: 'pixel id',
+      id: ZPixelsListPageTableColumnsIds.pixelId,
+      footer: 'pixel id'
+    }),
+
+    // platform
+    columnHelper.accessor(itemData => itemData.platform, {
+      header: 'platform',
+      id: ZPixelsListPageTableColumnsIds.platform,
+      footer: 'platform'
+    }),
+
+    // create at
+    columnHelper.accessor(itemData => itemData.createAt, {
+      header: 'create at',
+      id: ZPixelsListPageTableColumnsIds.createAt,
+      footer: 'create at'
+    })
+  ];
+
+  const zPixelTable = useReactTable({
+    columns: defaultColumns,
+    data: PixelsData || [],
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    debugTable: true,
+    debugHeaders: true,
+    debugColumns: true
+  });
+  // #endregion
+
+  // #region useEffect's
+  useEffect(() => {
+    zPixelTable.setPageIndex(Number(pageindex) || 0);
+    zPixelTable.setPageSize(Number(pagesize) || 2);
+  }, [pageindex, pagesize]);
+  // #endregion
+
+  return (
+    <div
+      className={classNames({
+        'mt-2': !isMdScale
+      })}>
+      <ZCustomScrollable
+        className='w-full border rounded-lg h-max ion-no-padding'
+        scrollX={true}>
+        <div className='min-w-[55rem]'>
+          {zPixelTable.getHeaderGroups().map((_headerInfo, _headerIndex) => {
+            return (
+              <ZIonRow
+                key={_headerIndex}
+                className='flex flex-nowrap zaions__light_bg'>
+                {_headerInfo.headers.map((_columnInfo, _columnIndex) => {
+                  return (
+                    <ZIonCol
+                      size={
+                        _columnInfo.column.id ===
+                          ZPixelsListPageTableColumnsIds.id ||
+                        _columnInfo.column.id ===
+                          ZPixelsListPageTableColumnsIds.actions
+                          ? '.8'
+                          : '2.6'
+                      }
+                      key={_columnInfo.id}
+                      className={classNames({
+                        'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
+                          true,
+                        'border-r': false
+                      })}>
+                      {_columnInfo.column.columnDef.header?.toString()}
+                    </ZIonCol>
+                  );
+                })}
+
+                <ZIonCol
+                  size='.8'
+                  className={classNames({
+                    'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
+                      true,
+                    'border-r': false
+                  })}>
+                  Actions
+                </ZIonCol>
+              </ZIonRow>
+            );
+          })}
+
+          {/* Body Section */}
+          <ZIonRow className='rounded-b-lg'>
+            <ZIonCol
+              size='12'
+              className='w-full ion-no-padding'>
+              {zPixelTable.getRowModel().rows.map((_rowInfo, _rowIndex) => {
+                return (
+                  <ZIonRow
+                    key={_rowIndex}
+                    className='flex-nowrap'>
+                    {_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
+                      _cellInfo.column.getIsVisible() ? (
+                        <ZIonCol
+                          key={_cellIndex}
+                          size={
+                            _cellInfo.column.id ===
+                              ZPixelsListPageTableColumnsIds.id ||
+                            _cellInfo.column.id ===
+                              ZPixelsListPageTableColumnsIds.actions
+                              ? '.8'
+                              : '2.6'
+                          }
+                          className={classNames({
+                            'py-1 mt-1 border-b flex ion-align-items-center':
+                              true,
+                            'border-r': false,
+                            'ps-2':
+                              _cellInfo.column.id !==
+                              ZPixelsListPageTableColumnsIds.id,
+                            'ps-0':
+                              _cellInfo.column.id ===
+                              ZPixelsListPageTableColumnsIds.id
+                          })}>
+                          <div
+                            className={classNames({
+                              'w-full text-sm ZaionsTextEllipsis': true,
+                              'ps-3':
+                                _cellInfo.column.id ===
+                                ZPixelsListPageTableColumnsIds.id
+                            })}>
+                            {flexRender(
+                              _cellInfo.column.columnDef.cell,
+                              _cellInfo.getContext()
+                            )}
+                          </div>
+                        </ZIonCol>
+                      ) : null
+                    )}
+
+                    <ZIonCol
+                      size='.8'
+                      className={classNames({
+                        'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
+                          true,
+                        'border-r': false
+                      })}>
+                      <ZIonButton
+                        fill='clear'
+                        color='dark'
+                        className='ion-no-padding ion-no-margin'
+                        size='small'
+                        testingselector={
+                          CONSTANTS.testingSelectors.shortLink.listPage.table
+                            .actionPopoverBtn
+                        }
+                        testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
+                        onClick={(_event: unknown) => {
+                          // setCompState(oldVal => ({
+                          //   ...oldVal,
+                          //   selectedShortLinkId: _rowInfo.original.id || ''
+                          // }));
+                          // //
+                          // presentZShortLinkActionPopover({
+                          //   _event: _event as Event,
+                          //   _cssClass:
+                          //     'zaions_present_folder_Action_popover_width',
+                          //   _dismissOnSelect: false
+                          // });
+                        }}>
+                        <ZIonIcon icon={ellipsisVerticalOutline} />
+                      </ZIonButton>
+                    </ZIonCol>
+                  </ZIonRow>
+                );
+              })}
+            </ZIonCol>
+          </ZIonRow>
+        </div>
+      </ZCustomScrollable>
+    </div>
+  );
+};
+
+export default ZPixelsTable;

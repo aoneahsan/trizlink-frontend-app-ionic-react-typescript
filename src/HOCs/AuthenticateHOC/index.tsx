@@ -23,7 +23,10 @@ import Z500View from '@/components/Errors/500';
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import { useZPrivateRouteChecker } from '@/ZaionsHooks/zrouter-hooks';
+import {
+  useZNavigate,
+  useZPrivateRouteChecker
+} from '@/ZaionsHooks/zrouter-hooks';
 
 /**
  * Global Constants Imports go down
@@ -40,126 +43,134 @@ import { STORAGE, zAxiosApiRequest } from '@/utils/helpers';
  * ? Import of recoil states is a Recoil State import
  * */
 import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import { ErrorCodeEnum } from '@/utils/customErrorType';
 interface AuthenticateHOCPropsType {
-	children: ReactNode;
+  children: ReactNode;
 }
 
-const AuthenticateHOC: React.FC<AuthenticateHOCPropsType> = (props) => {
-	const [compState, setCompState] = React.useState<{
-		isProcessing: boolean;
-		userIsAuthenticated: boolean;
-		errorOccurred: boolean;
-		guestUser: boolean;
-		errorCode?: ZErrorCodeEnum; // use enum or whatever so you know which component to show
-	}>({
-		isProcessing: true,
-		userIsAuthenticated: false,
-		errorOccurred: false,
-		guestUser: false,
-	});
-	// registering data
-	const resetUserAccountState = useResetRecoilState(
-		ZaionsUserAccountRStateAtom
-	);
+const AuthenticateHOC: React.FC<AuthenticateHOCPropsType> = props => {
+  const [compState, setCompState] = React.useState<{
+    isProcessing: boolean;
+    userIsAuthenticated: boolean;
+    errorOccurred: boolean;
+    guestUser: boolean;
+    errorCode?: ZErrorCodeEnum; // use enum or whatever so you know which component to show
+  }>({
+    isProcessing: true,
+    userIsAuthenticated: false,
+    errorOccurred: false,
+    guestUser: false
+  });
+  // registering data
+  const resetUserAccountState = useResetRecoilState(
+    ZaionsUserAccountRStateAtom
+  );
 
-	const setUserAccountStateAtom = useSetRecoilState(
-		ZaionsUserAccountRStateAtom
-	);
+  const setUserAccountStateAtom = useSetRecoilState(
+    ZaionsUserAccountRStateAtom
+  );
 
-	const { zIsPrivateRoute } = useZPrivateRouteChecker();
+  const { zIsPrivateRoute } = useZPrivateRouteChecker();
 
-	const checkAuthenticateValidation = async () => {
-		try {
-			if (!zIsPrivateRoute) {
-				setCompState((oldState) => ({
-					...oldState,
-					isProcessing: false,
-					userIsAuthenticated: false,
-					guestUser: true,
-				}));
-			} else {
-				// Checking if there is some data in local storage, if there is some data then, run verifyAuthenticationStatus api to check it is valid or not.
-				await Promise.all([
-					STORAGE.GET(LOCALSTORAGE_KEYS.AUTHTOKEN),
-					STORAGE.GET(LOCALSTORAGE_KEYS.USERDATA),
-				]).then(async ([authToken, userData]) => {
-					if (authToken && userData) {
-						// check api result
-						await zAxiosApiRequest({
-							_url: API_URL_ENUM.verifyAuthenticationStatus,
-							_method: 'post',
-						});
+  const { zNavigatePushRoute } = useZNavigate();
 
-						setUserAccountStateAtom((oldValues) => ({
-							...oldValues,
-							...userData,
-						}));
+  const checkAuthenticateValidation = async () => {
+    try {
+      if (!zIsPrivateRoute) {
+        setCompState(oldState => ({
+          ...oldState,
+          isProcessing: false,
+          userIsAuthenticated: false,
+          guestUser: true
+        }));
+      } else {
+        // Checking if there is some data in local storage, if there is some data then, run verifyAuthenticationStatus api to check it is valid or not.
+        await Promise.all([
+          STORAGE.GET(LOCALSTORAGE_KEYS.AUTHTOKEN),
+          STORAGE.GET(LOCALSTORAGE_KEYS.USERDATA)
+        ]).then(async ([authToken, userData]) => {
+          if (authToken && userData) {
+            // check api result
+            await zAxiosApiRequest({
+              _url: API_URL_ENUM.verifyAuthenticationStatus,
+              _method: 'post'
+            });
 
-						setCompState((oldState) => ({
-							...oldState,
-							isProcessing: false,
-							userIsAuthenticated: true,
-						}));
-					} else {
-						window.location.replace(ZaionsRoutes.LoginRoute);
-						return null;
-					}
-				});
-			}
-		} catch (error: any) {
-			// Checking if Unauthorized.
-			if (error.response && error.response.status === 401) {
-				// Clear storage
-				STORAGE.CLEAR(LOCALSTORAGE_KEYS.USERDATA);
-				STORAGE.CLEAR(LOCALSTORAGE_KEYS.AUTHTOKEN);
+            setUserAccountStateAtom(oldValues => ({
+              ...oldValues,
+              ...userData
+            }));
 
-				//
-				setCompState((oldState) => ({
-					...oldState,
-					isProcessing: false,
-					userIsAuthenticated: false,
-					errorCode: ZErrorCodeEnum.unauthorized,
-					errorOccurred: true,
-				}));
-				// Clear recoil state
-				resetUserAccountState();
-			}
-		}
-	};
+            setCompState(oldState => ({
+              ...oldState,
+              isProcessing: false,
+              userIsAuthenticated: true
+            }));
+          } else {
+            window.location.replace(ZaionsRoutes.LoginRoute);
+            return null;
+          }
+        });
+      }
+    } catch (error: any) {
+      // Checking if Unauthorized.
+      if (
+        error.response &&
+        error.response.status === ZErrorCodeEnum.unauthorized
+      ) {
+        // Clear storage
+        STORAGE.CLEAR(LOCALSTORAGE_KEYS.USERDATA);
+        STORAGE.CLEAR(LOCALSTORAGE_KEYS.AUTHTOKEN);
 
-	// check if authenticate
-	/**
-	 *
-	 */
-	React.useEffect(() => {
-		void checkAuthenticateValidation();
+        //
+        setCompState(oldState => ({
+          ...oldState,
+          isProcessing: false,
+          userIsAuthenticated: false,
+          errorCode: ZErrorCodeEnum.unauthorized,
+          errorOccurred: true
+        }));
+        // Clear recoil state
+        resetUserAccountState();
 
-		App.addListener('appStateChange', ({ isActive }) => {
-			// console.log('App state changed. Is active?', isActive);
-			if (isActive === true) {
-				void checkAuthenticateValidation();
-			}
-		});
-	}, []);
+        zNavigatePushRoute(ZaionsRoutes.LoginRoute);
+      }
+    }
+  };
 
-	if (compState.isProcessing) {
-		return <ZFallbackIonSpinner />;
-	} else if (
-		!compState.isProcessing &&
-		((!compState.errorOccurred && compState.userIsAuthenticated) ||
-			compState.guestUser)
-	) {
-		return <>{props.children}</>;
-	} else if (
-		!compState.isProcessing &&
-		compState.errorOccurred &&
-		compState.errorCode === ZErrorCodeEnum.unauthorized
-	) {
-		// check error code and then show the respective component
-		return <Z401View />;
-	} else {
-		return <Z500View />;
-	}
+  // check if authenticate
+  /**
+   *
+   */
+  React.useEffect(() => {
+    void checkAuthenticateValidation();
+
+    App.addListener('appStateChange', ({ isActive }) => {
+      // console.log('App state changed. Is active?', isActive);
+      if (isActive === true) {
+        void checkAuthenticateValidation();
+      }
+    });
+  }, []);
+
+  if (compState.isProcessing) {
+    return <ZFallbackIonSpinner />;
+  } else if (
+    !compState.isProcessing &&
+    ((!compState.errorOccurred && compState.userIsAuthenticated) ||
+      compState.guestUser)
+  ) {
+    return <>{props.children}</>;
+  } else if (
+    !compState.isProcessing &&
+    compState.errorOccurred &&
+    compState.errorCode === ZErrorCodeEnum.unauthorized
+  ) {
+    // check error code and then show the respective component
+    return <Z401View />;
+  } else {
+    return <Z500View />;
+  }
 };
 
 export default AuthenticateHOC;
