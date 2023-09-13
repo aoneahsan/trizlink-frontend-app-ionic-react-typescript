@@ -257,7 +257,7 @@ const ZWorkspacesActionPopover: React.FC<{
 						});
 					}}
 				>
-					<ZIonIcon icon={peopleOutline} className='me-2' />
+					<ZIonIcon icon={peopleOutline} className='me-2 w-5 h-5' />
 					<ZIonText className={classNames('text-sm')}>Manage users</ZIonText>
 				</ZIonItem>
 			)}
@@ -283,7 +283,7 @@ const ZWorkspacesActionPopover: React.FC<{
 						dismissZIonPopover();
 					}}
 				>
-					<ZIonIcon icon={timeOutline} className='me-2' />
+					<ZIonIcon icon={timeOutline} className='me-2 w-5 h-5' />
 					<ZIonText className={classNames('text-sm')}>
 						Configure timetable
 					</ZIonText>
@@ -310,7 +310,7 @@ const ZWorkspacesActionPopover: React.FC<{
 						dismissZIonPopover();
 					}}
 				>
-					<ZIonIcon icon={pricetagOutline} className='me-2' />
+					<ZIonIcon icon={pricetagOutline} className='me-2 w-5 h-5' />
 					<ZIonText className={classNames('text-sm')}>Manage labels</ZIonText>
 				</ZIonItem>
 			</ZCan>
@@ -331,7 +331,7 @@ const ZWorkspacesActionPopover: React.FC<{
 					dismissZIonPopover('', '');
 				}}
 			>
-				<ZIonIcon icon={peopleOutline} className='me-2' />
+				<ZIonIcon icon={peopleOutline} className='me-2 w-5 h-5' />
 				<ZIonText className={classNames('text-sm')}>Invite members</ZIonText>
 			</ZIonItem>
 
@@ -356,7 +356,7 @@ const ZWorkspacesActionPopover: React.FC<{
 						dismissZIonPopover();
 					}}
 				>
-					<ZIonIcon icon={settingsOutline} className='me-2' />
+					<ZIonIcon icon={settingsOutline} className='me-2 w-5 h-5' />
 					<ZIonText className={classNames('text-sm')}>Settings</ZIonText>
 				</ZIonItem>
 			</ZCan>
@@ -380,7 +380,7 @@ const ZWorkspacesActionPopover: React.FC<{
 					dismissZIonPopover();
 				}}
 			>
-				<ZIonIcon icon={checkmarkOutline} className='me-2' />
+				<ZIonIcon icon={checkmarkOutline} className='me-2 w-5 h-5' />
 				<ZIonText className={classNames('text-sm')}>
 					Approvals settings
 				</ZIonText>
@@ -414,8 +414,8 @@ const ZWorkspacesActionPopover: React.FC<{
 							}
 						}}
 					>
-						<ZIonIcon icon={pencilOutline} className='me-2' />
-						<ZIonText>Edit</ZIonText>
+						<ZIonIcon icon={pencilOutline} className='me-2 w-5 h-5' />
+						<ZIonText className='text-sm'>Edit</ZIonText>
 					</ZIonItem>
 				</ZCan>
 			)}
@@ -433,8 +433,14 @@ const ZWorkspacesActionPopover: React.FC<{
 							await deleteWorkspaceConfirmModal();
 						}}
 					>
-						<ZIonIcon icon={trashBinOutline} className='me-2' color='danger' />
-						<ZIonText color='danger'>Delete</ZIonText>
+						<ZIonIcon
+							icon={trashBinOutline}
+							className='me-2 w-5 h-5'
+							color='danger'
+						/>
+						<ZIonText color='danger' className='text-sm'>
+							Delete
+						</ZIonText>
 					</ZIonItem>
 				</ZCan>
 			)}

@@ -21,6 +21,7 @@ import {
 	ZIonCol,
 	ZIonContent,
 	ZIonIcon,
+	ZIonImg,
 	ZIonInput,
 	ZIonNote,
 	ZIonRow,
@@ -61,6 +62,7 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { AxiosError } from 'axios';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { FormikSetErrorsType } from '@/types/ZaionsFormik.type';
+import { ProductFavicon } from '@/assets/images';
 
 /**
  * Recoil State Imports go down
@@ -184,19 +186,22 @@ const ZAddNewWorkspaceModal: React.FC<{
 
 			{/*  */}
 			<div className='flex flex-col ion-justify-content-center'>
-				<div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
+				{/* <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
 					<ZIonIcon
 						icon={toggleOutline}
 						className='w-8 h-8 mx-auto'
 						color='light'
 					/>
+				</div> */}
+				<div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
+					<ZIonImg src={ProductFavicon} className='w-10 h-10 mx-auto' />
 				</div>
 
 				<ZIonText
 					color='dark'
 					className='block mt-3 text-lg font-bold ion-text-center'
 				>
-					Create a new Workspace 😊
+					Create a new Workspace
 				</ZIonText>
 
 				<Formik

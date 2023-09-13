@@ -8,7 +8,7 @@ import React from 'react';
 
 const ZFallbackIonSpinner: React.FC = () => {
 	return (
-		<div className='w-full h-[90vh] relative'>
+		<div className='w-full h-full relative'>
 			<div
 				className='absolute flex flex-col gap-2 top-1/2 start-1/2'
 				style={{ transform: 'translate(-50%, -50%)' }}
