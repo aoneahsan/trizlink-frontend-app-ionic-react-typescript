@@ -64,6 +64,7 @@ import {
 import {
 	useZIonAlert,
 	useZIonErrorAlert,
+	useZIonModal,
 	useZIonPopover,
 } from '@/ZaionsHooks/zionic-hooks';
 import CONSTANTS from '@/utils/constants';
@@ -91,6 +92,7 @@ import {
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 import classNames from 'classnames';
 import ZEmptyTable from '../../ZEmptyTable';
+import ZaionsAddLinkInBioModal from '../../ZaionsModals/AddNewLinkInBioModal';
 
 // Styles
 
@@ -111,6 +113,15 @@ const ZaionsLinkInBioLinksTable: React.FC<{
 	});
 	// #endregion
 
+	// #region Modals.
+	const { presentZIonModal: presentAddLinkInBioModal } = useZIonModal(
+		ZaionsAddLinkInBioModal,
+		{
+			workspaceId: workspaceId,
+		}
+	);
+	// #endregion
+
 	return (
 		<>
 			{showSkeleton && <ZaionsLinkInBioTableSkeleton />}
@@ -126,6 +137,12 @@ const ZaionsLinkInBioLinksTable: React.FC<{
 							// ${(folderId !== null || folderId !== 'all') &&
 							// 	'In this Folder'}
 							// . please create a link-in-bio.`}
+							btnText='Create link-in-bio'
+							btnOnClick={() => {
+								presentAddLinkInBioModal({
+									_cssClass: 'folder-modal-size',
+								});
+							}}
 						/>
 					</div>
 				)

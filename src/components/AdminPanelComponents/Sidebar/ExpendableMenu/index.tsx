@@ -133,7 +133,7 @@ const AdminPanelSidebarMenu: React.FC<{
 						<ZIonButton
 							slot='fixed'
 							className={classNames(classes['zaions-ap-msm-toggle-button'], {
-								'zaions-transition z-10 w-11 h-11 ion-no-padding ion-no-margin':
+								'zaions-transition z-20 w-11 h-11 ion-no-padding ion-no-margin':
 									true,
 							})}
 							shape='round'

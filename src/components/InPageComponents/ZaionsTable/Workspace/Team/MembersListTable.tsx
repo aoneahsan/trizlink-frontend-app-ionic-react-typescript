@@ -52,7 +52,7 @@ import {
  * ? Like import of custom Hook is a custom import
  * */
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down
@@ -68,6 +68,7 @@ import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
+	WorkspaceSharingTabEnum,
 	WSTeamMembersInterface,
 	ZWSMemberListPageTableColumnsIds,
 } from '@/types/AdminPanel/workspace';
@@ -88,6 +89,7 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import MESSAGES from '@/utils/messages';
 import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import dayjs from 'dayjs';
+import ZWorkspacesSharingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SharingModal';
 
 /**
  * Recoil State Imports go down
@@ -138,6 +140,17 @@ const ZMembersListTable: React.FC = () => {
 		});
 	// #endregion
 
+	// #region Modals & popovers.
+	const { presentZIonModal: presentWorkspaceSharingModal } = useZIonModal(
+		ZWorkspacesSharingModal,
+		{
+			Tab: WorkspaceSharingTabEnum.invite,
+			workspaceId: workspaceId,
+			teamId: teamId,
+		}
+	);
+	// #endregion
+
 	return (
 		<>
 			{isWSTeamMembersFetching && <ZaionsMembersTableSkeleton />}
@@ -147,7 +160,15 @@ const ZMembersListTable: React.FC = () => {
 					<ZInpageTable />
 				) : (
 					<div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
-						<ZEmptyTable message='No members founds. please invite a member.' />
+						<ZEmptyTable
+							message='No members founds. please invite a member.'
+							btnText='Invite member'
+							btnOnClick={() => {
+								presentWorkspaceSharingModal({
+									_cssClass: 'workspace-sharing-modal-size',
+								});
+							}}
+						/>
 					</div>
 				)
 			) : null}

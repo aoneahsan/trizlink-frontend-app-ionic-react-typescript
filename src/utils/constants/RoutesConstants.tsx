@@ -5,6 +5,7 @@ const workspaceIdParam = CONSTANTS.RouteParams.workspace.workspaceId;
 export const ZPrivateRoutePath = '/app';
 
 const ZaionsRoutes = {
+	Asterisk: '*',
 	// ShortLink redirect route.
 	ShortLinkRedirectRoute: `/${CONSTANTS.SHORT_LINK.urlStaticPath}/${CONSTANTS.RouteParams.urlPath}`,
 	ValidateInvitationRoute: '/accept-invitation',

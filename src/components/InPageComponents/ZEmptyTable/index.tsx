@@ -3,7 +3,12 @@
  * ? Like Import of React is a Core Import
  * */
 import { zEmptyTable } from '@/assets/images';
-import { ZIonImg, ZIonText, ZIonTitle } from '@/components/ZIonComponents';
+import {
+	ZIonButton,
+	ZIonImg,
+	ZIonText,
+	ZIonTitle,
+} from '@/components/ZIonComponents';
 import React from 'react';
 
 /**
@@ -57,9 +62,12 @@ import React from 'react';
  * @type {*}
  * */
 
-const ZEmptyTable: React.FC<{ message?: string }> = ({
-	message = 'no data found!',
-}) => {
+const ZEmptyTable: React.FC<{
+	message?: string;
+	btnOnClick?: React.MouseEventHandler<HTMLIonButtonElement>;
+	btnText?: string;
+	showBtn?: boolean;
+}> = ({ message = 'no data found!', btnOnClick, btnText, showBtn = true }) => {
 	return (
 		<div className='bg-transparent flex ion-align-items-center ion-justify-content-center w-full h-full'>
 			<ZIonImg src={zEmptyTable} className='w-[15rem] mt-2' />
@@ -68,6 +76,11 @@ const ZEmptyTable: React.FC<{ message?: string }> = ({
 					{/* No short links founds. please create a short link. */}
 					{message}
 				</ZIonText>
+				{showBtn ? (
+					<ZIonButton onClick={btnOnClick} className='ion-no-margin mt-2'>
+						{btnText}
+					</ZIonButton>
+				) : null}
 			</div>
 		</div>
 	);

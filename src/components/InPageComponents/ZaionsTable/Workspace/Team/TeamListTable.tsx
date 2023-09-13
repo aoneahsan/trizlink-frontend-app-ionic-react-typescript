@@ -60,6 +60,7 @@ import {
 import {
 	useZIonAlert,
 	useZIonErrorAlert,
+	useZIonModal,
 	useZIonPopover,
 } from '@/ZaionsHooks/zionic-hooks';
 
@@ -91,6 +92,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import ZEmptyTable from '@/components/InPageComponents/ZEmptyTable';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import ZWSTeamCreateModal from '@/components/InPageComponents/ZaionsModals/Workspace/Team/CreateModal';
 
 /**
  * Recoil State Imports go down
@@ -135,6 +137,15 @@ const ZWSSettingTeamListTable: React.FC = () => {
 
 	// #endregion
 
+	// #region Popovers & Modals.
+	const { presentZIonModal: presentZWSTeamCreateModal } = useZIonModal(
+		ZWSTeamCreateModal,
+		{
+			workspaceId: workspaceId,
+		}
+	);
+	// #endregion
+
 	return (
 		<>
 			{isWSTeamsDataFetching && <ZTeamTableSkeleton />}
@@ -144,7 +155,15 @@ const ZWSSettingTeamListTable: React.FC = () => {
 					<ZInpageTable />
 				) : (
 					<div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
-						<ZEmptyTable message='No teams founds. please create a team.' />
+						<ZEmptyTable
+							message='No teams founds. please create a team.'
+							btnOnClick={() => {
+								presentZWSTeamCreateModal({
+									_cssClass: 'create-workspace-modal-size',
+								});
+							}}
+							btnText='Create team'
+						/>
 					</div>
 				)
 			) : null}

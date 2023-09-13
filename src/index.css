@@ -554,9 +554,14 @@ span.new {
 	--width: 87.6vw;
 }
 
-.workspace-sharing-modal-size {
+/* .invite-member-in-team-modal-size {
+	--height: 27rem;
+	--width: 30rem;
+} */
+
+.workspace-sharing-modal-size,
+.invite-member-in-team-modal-size {
 	--height: 95vh;
-	/* --height: 37rem; */
 	--width: 650px;
 }
 

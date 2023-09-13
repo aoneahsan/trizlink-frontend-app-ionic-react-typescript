@@ -10,6 +10,7 @@ import {
 	ZIonButton,
 	ZIonContent,
 	ZIonIcon,
+	ZIonImg,
 	ZIonInput,
 	ZIonText,
 } from '@/components/ZIonComponents';
@@ -46,6 +47,7 @@ import {
 } from '@/types/AdminPanel/linkInBioType';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { folderState } from '@/types/AdminPanel/index.type';
+import { ProductFavicon } from '@/assets/images';
 
 // Styles
 
@@ -152,15 +154,20 @@ const ZaionsAddLinkInBioModal: React.FC<{
 
 			{/*  */}
 			<div className='flex flex-col ion-text-center ion-justify-content-center'>
-				<div className='flex mx-auto mb-2 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
+				{/* <div className='flex mx-auto mb-2 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
 					<ZIonIcon
 						icon={toggleOutline}
 						className='w-8 h-8 mx-auto'
 						color='light'
 					/>
+				</div> */}
+
+				<div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
+					<ZIonImg src={ProductFavicon} className='w-10 h-10 mx-auto' />
 				</div>
-				<ZIonText color='dark' className='text-lg font-bold'>
-					Create a new Link-in-bio 😊
+
+				<ZIonText color='dark' className='text-xl font-bold mt-3'>
+					Create a new Link-in-bio
 				</ZIonText>
 
 				<Formik

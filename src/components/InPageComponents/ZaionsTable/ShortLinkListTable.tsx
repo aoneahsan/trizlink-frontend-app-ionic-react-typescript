@@ -51,6 +51,7 @@ import {
 	extractInnerData,
 	zGenerateShortLink,
 	replaceRouteParams,
+	replaceParams,
 } from '@/utils/helpers';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import {
@@ -81,6 +82,7 @@ import {
 } from '@/types/AdminPanel/linksType';
 import {
 	FormMode,
+	messengerPlatformsBlockEnum,
 	ZUserSettingInterface,
 	ZUserSettingTypeEnum,
 } from '@/types/AdminPanel/index.type';
@@ -94,8 +96,12 @@ import {
 	ShortLinksRStateAtom,
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
 import { reportCustomError } from '@/utils/customErrorType';
-import { NewShortLinkFormState } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
+import {
+	NewShortLinkFormState,
+	NewShortLinkSelectTypeOption,
+} from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
 
 // Styles
 
@@ -108,12 +114,21 @@ const ZaionsShortLinkTable: React.FC<{
 		workspaceId: string;
 	}>();
 
+	const { zNavigatePushRoute } = useZNavigate();
+
+	// Recoil state for shortLinks.
 	// Recoil selector that will filter from all short links state(ShortLinksRStateAtom) and give the filter short links.
 	const _FilteredShortLinkDataSelector = useRecoilValue(
 		FilteredShortLinkDataSelector
 	);
+	const shortLinksStateAtom = useRecoilValue(ShortLinksRStateAtom);
+	//
+	const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
 
-	console.log({ _FilteredShortLinkDataSelector });
+	const setNewShortLinkTypeOptionDataAtom = useSetRecoilState(
+		NewShortLinkSelectTypeOption
+	);
+	// #endregion
 
 	// #region APIS requests.
 	// Request for getting short links data.
@@ -123,6 +138,43 @@ const ZaionsShortLinkTable: React.FC<{
 		_itemsIds: [workspaceId],
 		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
 	});
+	// #endregion
+
+	// #region Functions.
+	const resetShortLinkFormHandler = () => {
+		try {
+			setNewShortLinkFormState((_) => ({
+				folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
+				shortUrl: {
+					domain: CONSTANTS.DEFAULT_VALUES.DEFAULT_CUSTOM_DOMAIN,
+				},
+				type: messengerPlatformsBlockEnum.link,
+				pixelIds: [],
+				tags: [],
+				formMode: FormMode.ADD,
+			}));
+
+			const selectedTypeOptionData = LinkTypeOptionsData.find(
+				(el) => el.type === messengerPlatformsBlockEnum.link
+			);
+
+			if (selectedTypeOptionData) {
+				setNewShortLinkTypeOptionDataAtom((_) => ({
+					...selectedTypeOptionData,
+				}));
+			}
+
+			zNavigatePushRoute(
+				replaceParams(
+					ZaionsRoutes.AdminPanel.ShortLinks.Create,
+					CONSTANTS.RouteParams.workspace.workspaceId,
+					workspaceId
+				)
+			);
+		} catch (error) {
+			reportCustomError(error);
+		}
+	};
 	// #endregion
 
 	return (
@@ -137,6 +189,8 @@ const ZaionsShortLinkTable: React.FC<{
 							// message={`No short links founds
 							// 			${(folderId !== null || folderId !== 'all') && 'In this Folder'}
 							// 			. please create a short link.`}
+							btnText='Create short link'
+							btnOnClick={() => resetShortLinkFormHandler()}
 						/>
 					</div>
 				)

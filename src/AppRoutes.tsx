@@ -548,6 +548,13 @@ const AppRoutes = () => {
 				path={ZaionsRoutes.Testing.TestingTabs.Main}
 				component={TestingTabs}
 			/>
+
+			<Route
+				path={ZaionsRoutes.Testing.TestingTabs.Main}
+				component={TestingTabs}
+			/>
+
+			<Route path={ZaionsRoutes.Asterisk} component={Z404View} />
 		</Suspense>
 		// 	</IonRouterOutlet>
 		// </IonReactRouter>

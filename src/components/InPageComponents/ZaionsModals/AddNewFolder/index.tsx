@@ -18,6 +18,7 @@ import {
 	ZIonIcon,
 	ZIonFooter,
 	ZIonInput,
+	ZIonImg,
 } from '@/components/ZIonComponents';
 
 // Global Constants
@@ -55,6 +56,7 @@ import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputFi
 import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { LinkFolderType } from '@/types/AdminPanel/linksType';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { ProductFavicon } from '@/assets/images';
 
 // Styles
 
@@ -326,17 +328,20 @@ const ZaionsAddNewFolder: React.FC<{
 
 						<ZIonContent className='ion-padding'>
 							<div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top'>
-								<div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
+								{/* <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
 									<ZIonIcon
 										icon={toggleOutline}
 										className='w-8 h-8 mx-auto'
 										color='light'
 									/>
+								</div> */}
+								<div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
+									<ZIonImg src={ProductFavicon} className='w-10 h-10 mx-auto' />
 								</div>
 
 								<ZIonText
 									color='dark'
-									className='block mt-3 text-lg font-bold ion-text-center'
+									className='block mt-3 text-xl font-bold ion-text-center'
 								>
 									{folderFormState.formMode === FormMode.ADD
 										? 'Create a new folder'
@@ -349,10 +354,9 @@ const ZaionsAddNewFolder: React.FC<{
 									>
 										(help)
 									</ZIonRouterLink>
-									📁
 								</ZIonText>
 							</div>
-							<Form className='px-2'>
+							<Form className='px-2 mt-2'>
 								<ZIonInput
 									label='Folder name*'
 									labelPlacement='stacked'

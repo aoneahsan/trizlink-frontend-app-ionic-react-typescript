@@ -52,6 +52,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import ZInviteButton from '../InviteButton';
 
 /**
  * Recoil State Imports go down
@@ -117,7 +118,7 @@ const ZAdminPanelTopBar: React.FC<{ workspaceId?: string }> = ({
 	return (
 		<ZIonRow
 			className={classNames({
-				'zaions__light_bg shadow-[0_3px_6px_#00000029]': true,
+				'zaions__light_bg shadow-[0_3px_6px_#00000029] relative z-10': true,
 				'px-3 h-[4rem]': isMdScale,
 				'pe-2 py-2': !isMdScale,
 			})}
@@ -243,9 +244,13 @@ const ZADTopBarColOne: React.FC<{ workspaceId?: string }> = ({
 			{isWorkspaceListPage ? (
 				<ZCreateWorkspaceBtn />
 			) : (
-				<ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
-					<ZWorkspaceSwitcher workspaceId={workspaceId} />
-				</ZCan>
+				<>
+					<ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
+						<ZWorkspaceSwitcher workspaceId={workspaceId} />
+					</ZCan>
+
+					<ZInviteButton className='ms-2' workspaceId={workspaceId} />
+				</>
 			)}
 			{/* {!isWorkspaceListPage ? (
 				<ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>

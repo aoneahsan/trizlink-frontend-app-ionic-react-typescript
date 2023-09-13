@@ -1055,6 +1055,10 @@ const testingSelectors = {
 				deleteWorkspace: 'tb-wsp-ap-delete-btn',
 			},
 		},
+		teamInviteBtn: 'tb-ti-btn', // top-bar-team-invite-btn.
+		teamInviteModal: {
+			closeModalBtn: 'tb-ti-modal-close-btn',
+		},
 		upgradeBtn: 'tb-upgrade-btn',
 		helpBtn: 'tb-help-btn',
 		helpPopover: {

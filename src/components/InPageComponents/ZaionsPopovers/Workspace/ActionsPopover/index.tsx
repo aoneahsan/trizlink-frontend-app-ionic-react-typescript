@@ -72,10 +72,15 @@ import {
 	showErrorNotification,
 	showSuccessNotification,
 } from '@/utils/notification';
-import { createRedirectRoute, extractInnerData } from '@/utils/helpers';
+import {
+	createRedirectRoute,
+	extractInnerData,
+	replaceRouteParams,
+} from '@/utils/helpers';
 import MESSAGES from '@/utils/messages';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 
 /**
  * Recoil State Imports go down
@@ -310,23 +315,25 @@ const ZWorkspacesActionPopover: React.FC<{
 				</ZIonItem>
 			</ZCan>
 
-			{/* Manage people */}
-			{/* <ZIonItem
-				onClick={() => {
-					// setting the tab with should be active in modal
-					setModalTab(workspaceSettingsModalTabEnum.timetable);
-
-					// presenting modal
-					presentWorkspaceSettingModal({
-						_cssClass: 'workspace-setting-modal-size',
-					});
-				}}
+			{/* Invite members */}
+			<ZIonItem
+				minHeight='32px'
 				className='ion-activatable ion-focusable cursor-pointer'
-				minHeight={'32px'}
+				onClick={() => {
+					zNavigatePushRoute(
+						replaceRouteParams(
+							ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
+							[CONSTANTS.RouteParams.workspace.workspaceId],
+							[workspaceId!]
+						)
+					);
+
+					dismissZIonPopover('', '');
+				}}
 			>
 				<ZIonIcon icon={peopleOutline} className='me-2' />
-				<ZIonText className={classNames('text-sm')}>Manage people</ZIonText>
-			</ZIonItem> */}
+				<ZIonText className={classNames('text-sm')}>Invite members</ZIonText>
+			</ZIonItem>
 
 			{/* Settings */}
 

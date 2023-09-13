@@ -18,7 +18,9 @@ import {
 	ZIonButton,
 	ZIonCol,
 	ZIonContent,
+	ZIonFooter,
 	ZIonIcon,
+	ZIonImg,
 	ZIonInput,
 	ZIonRow,
 	ZIonText,
@@ -58,6 +60,7 @@ import {
 	useZRQCreateRequest,
 	useZUpdateRQCacheData,
 } from '@/ZaionsHooks/zreactquery-hooks';
+import { ProductFavicon } from '@/assets/images';
 
 /**
  * Type Imports go down
@@ -199,19 +202,22 @@ const ZWSTeamCreateModal: React.FC<{
 			</div>
 
 			<div className='flex flex-col ion-justify-content-center'>
-				<div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
+				{/* <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
 					<ZIonIcon
 						icon={toggleOutline}
 						className='w-8 h-8 mx-auto'
 						color='light'
 					/>
+				</div> */}
+				<div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
+					<ZIonImg src={ProductFavicon} className='w-10 h-10 mx-auto' />
 				</div>
 
 				<ZIonText
 					color='dark'
-					className='block mt-3 text-lg font-bold ion-text-center'
+					className='block mt-3 text-xl font-bold ion-text-center'
 				>
-					Create a new team 😊
+					Create a new team
 				</ZIonText>
 
 				<Formik
@@ -256,7 +262,7 @@ const ZWSTeamCreateModal: React.FC<{
 						submitForm,
 					}) => {
 						return (
-							<ZIonRow className='mt-3'>
+							<ZIonRow className='mt-5'>
 								{/* Title */}
 								<ZIonCol size='12'>
 									<ZIonInput
@@ -299,7 +305,7 @@ const ZWSTeamCreateModal: React.FC<{
 											touched.description ? errors.description : undefined
 										}
 										className={classNames({
-											'mt-1': true,
+											'mt-1': false,
 											'ion-touched': touched.description,
 											'ion-invalid': touched.description && errors.description,
 											'ion-valid':
