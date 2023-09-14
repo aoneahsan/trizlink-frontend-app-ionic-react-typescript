@@ -10,6 +10,7 @@ import React, { Suspense } from 'react';
  * */
 import { useParams } from 'react-router';
 import classNames from 'classnames';
+import { menuController } from '@ionic/core/components';
 
 /**
  * Custom Imports go down
@@ -34,16 +35,24 @@ import CONSTANTS from '@/utils/constants';
 import ZaionsAddPixelAccount from '@/components/InPageComponents/ZaionsModals/AddPixelsAccount';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import {
+  useZInvalidateReactQueries,
   useZRQDeleteRequest,
   useZRQGetRequest
 } from '@/ZaionsHooks/zreactquery-hooks';
 import { PixelAccountType } from '@/types/AdminPanel/linksType';
 import { API_URL_ENUM } from '@/utils/enums';
-import { calendar, pricetagOutline, refresh } from 'ionicons/icons';
+import {
+  calendar,
+  filterOutline,
+  pricetagOutline,
+  refresh
+} from 'ionicons/icons';
 import ZCan from '@/components/Can';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
 import ZPixelsTable from '@/components/InPageComponents/ZaionsTable/pixelAccountTable';
+import { reportCustomError } from '@/utils/customErrorType';
+import { FormMode } from '@/types/AdminPanel/index.type';
 
 /**
  * Global Constants Imports go down
@@ -88,13 +97,15 @@ const ZWSSettingPixelListPage: React.FC = () => {
   }>();
 
   // #region Custom hooks.
-  const { isSmScale, isXlScale, isLgScale, isMdScale } = useZMediaQueryScale();
+  const { isSmScale, isLgScale, isMdScale } = useZMediaQueryScale();
+
+  const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   // #endregion
 
   // #region APIs
   const { data: pixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [workspaceId, CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN]
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN]
   });
 
   const { mutate: deletePixelAccountMutate } = useZRQDeleteRequest(
@@ -104,8 +115,21 @@ const ZWSSettingPixelListPage: React.FC = () => {
 
   // #region Modals & popovers
   const { presentZIonModal: presentZAddPixelAccount } = useZIonModal(
-    ZaionsAddPixelAccount
+    ZaionsAddPixelAccount,
+    { formMode: FormMode.ADD }
   );
+  // #endregion
+
+  // #region Functions.
+  const invalidedQueries = async () => {
+    try {
+      await zInvalidateReactQueries([
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN
+      ]);
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
   // #endregion
 
   return (
@@ -168,7 +192,7 @@ const ZWSSettingPixelListPage: React.FC = () => {
             Create new pixel
           </ZIonButton>
 
-          {/* {!isMdScale ? (
+          {!isMdScale ? (
             <ZIonButton
               expand={!isSmScale ? 'block' : undefined}
               height={isLgScale ? '39px' : '20px'}
@@ -189,7 +213,7 @@ const ZWSSettingPixelListPage: React.FC = () => {
               }}>
               Open menu
             </ZIonButton>
-          ) : null} */}
+          ) : null}
         </ZIonCol>
       </ZIonRow>
 
@@ -237,6 +261,14 @@ const ZWSSettingPixelListPage: React.FC = () => {
               color='primary'
               expand={!isSmScale ? 'block' : undefined}
               height={isLgScale ? '39px' : '20px'}
+              onClick={async () => {
+                // Open the menu by menu-id
+                await menuController.enable(
+                  true,
+                  CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID
+                );
+                await menuController.open(CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID);
+              }}
               className={classNames({
                 'my-2 normal-case': true,
                 'text-xs': !isLgScale,
@@ -247,38 +279,13 @@ const ZWSSettingPixelListPage: React.FC = () => {
               }>
               <ZIonIcon
                 slot='start'
-                icon={calendar}
+                icon={filterOutline}
                 className={classNames({
                   'me-1': true,
                   'w-4 h-4': !isLgScale
                 })}
               />
-              All Times
-            </ZIonButton>
-
-            {/* Filter by tags */}
-            <ZIonButton
-              fill='outline'
-              color='primary'
-              expand={!isSmScale ? 'block' : undefined}
-              height={isLgScale ? '39px' : '20px'}
-              className={classNames({
-                'my-2 normal-case': true,
-                'text-xs': !isLgScale,
-                'w-full': !isSmScale
-              })}
-              testingselector={
-                CONSTANTS.testingSelectors.WSSettings.teamListPage.tagsFilterBtn
-              }>
-              <ZIonIcon
-                slot='start'
-                icon={pricetagOutline}
-                className={classNames({
-                  'me-1': true,
-                  'w-4 h-4': !isLgScale
-                })}
-              />
-              No values
+              Filter
             </ZIonButton>
 
             {/* Refetch data button */}
@@ -293,7 +300,7 @@ const ZWSSettingPixelListPage: React.FC = () => {
                 'w-full': !isSmScale
               })}
               onClick={() => {
-                // void invalidedQueries();
+                void invalidedQueries();
               }}
               testingselector={
                 CONSTANTS.testingSelectors.WSSettings.teamListPage.refetchBtn

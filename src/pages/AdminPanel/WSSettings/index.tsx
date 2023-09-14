@@ -12,6 +12,7 @@ import { RefresherEventDetail } from '@ionic/react';
 import { useParams, useRouteMatch } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import classNames from 'classnames';
+import { menuController } from '@ionic/core/components';
 
 /**
  * Custom Imports go down
@@ -87,6 +88,7 @@ import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 import { replaceRouteParams } from '@/utils/helpers';
 import { closeOutline } from 'ionicons/icons';
 import ZWSSettingPixelListPage from './Pixel';
+import ZPixelsFilterMenu from '@/navigation/AdminPanel/Pixels/FilterMenu';
 
 /**
  * Style files Imports go down
@@ -188,18 +190,26 @@ const ZWorkspaceSettings: React.FC = () => {
       <ZIonMenu
         side='start'
         menuId={CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID}
-        contentId={CONSTANTS.MENU_IDS.ADMIN_PANEL_WS_SETTING_PAGE_ID}>
+        contentId={
+          !isMdScale
+            ? CONSTANTS.MENU_IDS.ADMIN_PANEL_WS_SETTING_PAGE_ID
+            : undefined
+        }>
         <ZIonHeader>
           <ZIonToolbar className='flex ion-align-items-center w-full'>
             {/* <ZIonTitle>First Menu</ZIonTitle> */}
-            <ZIonMenuToggle
+
+            <ZIonIcon
               slot='end'
-              className='pt-1'>
-              <ZIonIcon
-                icon={closeOutline}
-                className='w-7 h-7'
-              />
-            </ZIonMenuToggle>
+              icon={closeOutline}
+              className='w-7 h-7 pt-1 cursor-pointer'
+              onClick={async () => {
+                // Close the menu by menu-id
+                await menuController.close(
+                  CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
+                );
+              }}
+            />
           </ZIonToolbar>
         </ZIonHeader>
         <ZIonContent className='ion-padding'>
@@ -334,14 +344,12 @@ const ZWorkspaceSettings: React.FC = () => {
         </ZIonContent>
       </ZIonMenu>
 
+      <ZPixelsFilterMenu />
+
       {/*  */}
       <ZIonPage
         pageTitle='Workspace settings page'
-        id={
-          !isMdScale
-            ? CONSTANTS.MENU_IDS.ADMIN_PANEL_WS_SETTING_PAGE_ID
-            : undefined
-        }>
+        id={CONSTANTS.MENU_IDS.ADMIN_PANEL_WS_SETTING_PAGE_ID}>
         <ZCan
           havePermissions={[permissionsEnum.viewAny_workspaceTeam]}
           returnPermissionDeniedView={true}>

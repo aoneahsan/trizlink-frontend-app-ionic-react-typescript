@@ -1,5 +1,5 @@
 import { IonReorderGroupCustomEvent } from '@ionic/core';
-import { LinkFolderType } from './linksType/index';
+import { LinkFolderType, TimeFilterEnum } from './linksType/index';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import { ItemReorderEventDetail } from '@ionic/react';
 
@@ -52,7 +52,8 @@ export enum daysEnum {
 }
 
 export enum ZUserSettingTypeEnum {
-  shortLinkListPageTable = 'shortLinkListPageTable'
+  shortLinkListPageTable = 'shortLinkListPageTable',
+  pixelListPageTable = 'pixelListPageTable'
 }
 
 export enum ZNotificationEnum {
@@ -97,6 +98,15 @@ export interface UTMTagInfoInterface {
   utmContent?: string;
 }
 
+export interface IPixelsFilterOptions {
+  timeFilter: {
+    daysToSubtract: TimeFilterEnum;
+    startedAt?: string;
+    endAt?: string;
+  };
+  searchQuery?: string | null;
+  platform?: string;
+}
 export interface IZNotification {
   id?: string;
   ZLInviteeId?: string;
@@ -184,7 +194,7 @@ export interface ZUserSettingInterface {
   type?: ZUserSettingTypeEnum;
   workspaceUniqueId?: string;
   settings: {
-    shortLinkColumn: {
+    columns: {
       id?: string;
       name: string;
       isVisible: boolean;
