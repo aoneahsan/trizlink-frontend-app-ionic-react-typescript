@@ -83,6 +83,7 @@ export enum ZPixelsListPageTableColumnsIds {
   id = '__z_pixels_id__',
   title = '__z_pixels_title__',
   createAt = '__z_pixels_create_at__',
+  formattedCreateAt = '__z_pixels_formatted_create_at__',
   pixelId = '__z_pixels_pixel_id__',
   platform = '__z_pixels_platform__',
   actions = '__z_pixels_actions__'
@@ -201,6 +202,11 @@ export interface ZUserSettingInterface {
       orderNumber: number;
     }[];
     columnOrderIds: string[];
+    filters: {
+      time: TimeFilterEnum;
+      startDate: string;
+      endDate: string;
+    };
   };
 }
 

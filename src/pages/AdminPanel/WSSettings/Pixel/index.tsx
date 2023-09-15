@@ -134,12 +134,13 @@ const ZWSSettingPixelListPage: React.FC = () => {
 
   return (
     <>
+      {/* filter, refresh, create buttons */}
       <ZIonRow className='border rounded-lg zaions__light_bg ion-align-items-center ion-padding'>
         <ZIonCol
           sizeXl='6'
-          sizeLg='6'
-          sizeMd='6'
-          sizeSm='6'
+          sizeLg='5'
+          sizeMd='12'
+          sizeSm='12'
           sizeXs='12'
           className={classNames({
             'mb-2': !isSmScale
@@ -149,7 +150,7 @@ const ZWSSettingPixelListPage: React.FC = () => {
               'block font-bold ion-no-padding': true,
               'text-2xl': isLgScale,
               'text-xl': !isLgScale,
-              'ion-text-center': !isSmScale
+              'ion-text-center': !isLgScale
             })}>
             Pixels
           </ZIonTitle>
@@ -158,7 +159,7 @@ const ZWSSettingPixelListPage: React.FC = () => {
             className={classNames({
               'block mt-2': true,
               'text-sm': !isLgScale,
-              'ion-text-center': !isSmScale
+              'ion-text-center': !isLgScale
             })}>
             Add team pixels & manage your pixels
           </ZIonText>
@@ -166,23 +167,84 @@ const ZWSSettingPixelListPage: React.FC = () => {
 
         <ZIonCol
           sizeXl='6'
-          sizeLg='6'
-          sizeMd='6'
-          sizeSm='6'
+          sizeLg='7'
+          sizeMd='12'
+          sizeSm='12'
           sizeXs='12'
           className='ion-text-end'>
           <ZIonButton
+            fill='outline'
+            color='primary'
+            minHeight={isLgScale ? '39px' : '2rem'}
+            expand={!isLgScale ? 'block' : undefined}
+            testingselector={
+              CONSTANTS.testingSelectors.WSSettings.teamListPage.timeFilterBtn
+            }
+            className={classNames({
+              'my-2 me-2': isLgScale,
+              'text-xs ion-no-padding': !isLgScale,
+              'ion-no-margin': !isSmScale
+            })}
+            onClick={async () => {
+              // Open the menu by menu-id
+              await menuController.enable(
+                true,
+                CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID
+              );
+              await menuController.open(CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID);
+            }}>
+            <ZIonIcon
+              slot='start'
+              icon={filterOutline}
+              className={classNames({
+                'me-1': true,
+                'w-4 h-4': !isLgScale
+              })}
+            />
+            Filter
+          </ZIonButton>
+
+          {/* Refetch data button */}
+          <ZIonButton
+            color='primary'
+            fill='outline'
+            minHeight={isLgScale ? '39px' : '2rem'}
+            expand={!isLgScale ? 'block' : undefined}
+            className={classNames({
+              'my-2': true,
+              'me-2': isLgScale,
+              'text-xs ion-no-padding ion-no-margin': !isLgScale,
+              'w-full': !isSmScale
+            })}
+            onClick={() => {
+              void invalidedQueries();
+            }}
+            testingselector={
+              CONSTANTS.testingSelectors.WSSettings.teamListPage.refetchBtn
+            }>
+            <ZIonIcon
+              slot='start'
+              icon={refresh}
+              className={classNames({
+                'me-1': true,
+                'w-4 h-4': !isLgScale,
+                'ion-no-margin': !isSmScale
+              })}
+            />
+            Refetch
+          </ZIonButton>
+
+          <ZIonButton
             color='primary'
             fill='solid'
-            height={isLgScale ? '39px' : '20px'}
-            expand={!isSmScale ? 'block' : undefined}
+            minHeight={isLgScale ? '39px' : '2rem'}
+            expand={!isLgScale ? 'block' : undefined}
             testingselector={
               CONSTANTS.testingSelectors.WSSettings.teamListPage.createTeamBtn
             }
             className={classNames({
               'my-2': true,
-              'text-xs': !isLgScale,
-              'ion-no-margin': !isSmScale
+              'text-xs ion-no-padding ion-no-margin': !isLgScale
             })}
             onClick={() => {
               presentZAddPixelAccount({
@@ -194,12 +256,12 @@ const ZWSSettingPixelListPage: React.FC = () => {
 
           {!isMdScale ? (
             <ZIonButton
-              expand={!isSmScale ? 'block' : undefined}
-              height={isLgScale ? '39px' : '20px'}
+              expand={!isLgScale ? 'block' : undefined}
+              minHeight={isLgScale ? '39px' : '2rem'}
               className={classNames({
                 'my-2': true,
-                'text-xs': !isLgScale,
-                'ion-no-margin': !isSmScale
+                'text-xs ion-no-padding': !isLgScale,
+                'ion-no-margin': !isLgScale
               })}
               onClick={async () => {
                 // Open the menu by menu-id
@@ -214,108 +276,6 @@ const ZWSSettingPixelListPage: React.FC = () => {
               Open menu
             </ZIonButton>
           ) : null}
-        </ZIonCol>
-      </ZIonRow>
-
-      {/* total teams count and filters buttons */}
-      <ZIonRow className='mt-1 border rounded-lg zaions__light_bg ion-align-items-center ion-padding'>
-        <ZIonCol className='flex ps-1 ion-align-items-center'>
-          <ZIonText
-            className={classNames({
-              'text-2xl': true,
-              'text-xl': !isLgScale,
-              'ion-text-center w-full': !isSmScale
-            })}>
-            <ZIonText
-              className='font-bold total_links pe-1'
-              testingselector={
-                CONSTANTS.testingSelectors.WSSettings.teamListPage.teamsCount
-              }>
-              {pixelAccountsData?.length || 0}
-            </ZIonText>
-            Pixels
-          </ZIonText>
-        </ZIonCol>
-
-        <ZIonCol
-          sizeXl='10'
-          sizeLg='10'
-          sizeMd='10'
-          sizeSm='10'
-          sizeXs='12'
-          className={classNames({
-            flex: true,
-            'justify-content-end': isMdScale,
-            'justify-content-between': !isMdScale
-          })}>
-          <ZIonButtons
-            className={classNames({
-              'w-full': true,
-              'ion-justify-content-between flex': !isMdScale,
-              'flex-col gap-2 mt-2': !isSmScale,
-              'ion-justify-content-end gap-3': isMdScale,
-              block: !isMdScale
-            })}>
-            <ZIonButton
-              fill='outline'
-              color='primary'
-              expand={!isSmScale ? 'block' : undefined}
-              height={isLgScale ? '39px' : '20px'}
-              onClick={async () => {
-                // Open the menu by menu-id
-                await menuController.enable(
-                  true,
-                  CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID
-                );
-                await menuController.open(CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID);
-              }}
-              className={classNames({
-                'my-2 normal-case': true,
-                'text-xs': !isLgScale,
-                'w-full': !isSmScale
-              })}
-              testingselector={
-                CONSTANTS.testingSelectors.WSSettings.teamListPage.timeFilterBtn
-              }>
-              <ZIonIcon
-                slot='start'
-                icon={filterOutline}
-                className={classNames({
-                  'me-1': true,
-                  'w-4 h-4': !isLgScale
-                })}
-              />
-              Filter
-            </ZIonButton>
-
-            {/* Refetch data button */}
-            <ZIonButton
-              color='primary'
-              fill='outline'
-              expand={!isSmScale ? 'block' : undefined}
-              height={isLgScale ? '39px' : '20px'}
-              className={classNames({
-                'my-2 normal-case': true,
-                'text-xs': !isLgScale,
-                'w-full': !isSmScale
-              })}
-              onClick={() => {
-                void invalidedQueries();
-              }}
-              testingselector={
-                CONSTANTS.testingSelectors.WSSettings.teamListPage.refetchBtn
-              }>
-              <ZIonIcon
-                slot='start'
-                icon={refresh}
-                className={classNames({
-                  'me-1': true,
-                  'w-4 h-4': !isLgScale
-                })}
-              />
-              Refetch
-            </ZIonButton>
-          </ZIonButtons>
         </ZIonCol>
       </ZIonRow>
 

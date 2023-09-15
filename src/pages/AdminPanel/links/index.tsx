@@ -8,22 +8,13 @@ import React, { lazy, Suspense, useState } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { menuController } from '@ionic/core/components';
-import { ItemReorderEventDetail, RefresherEventDetail } from '@ionic/react';
-import {
-  menuOutline,
-  businessOutline,
-  calendar,
-  pricetagOutline,
-  filterOutline,
-  refresh,
-  searchOutline
-} from 'ionicons/icons';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import classNames from 'classnames';
 import { Formik } from 'formik';
-import dayjs from 'dayjs';
-import { useLocation, useParams } from 'react-router';
+import { menuController } from '@ionic/core/components';
+import { ItemReorderEventDetail, RefresherEventDetail } from '@ionic/react';
+import { filterOutline, refresh, searchOutline } from 'ionicons/icons';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useParams } from 'react-router';
 
 /**
  * Custom Imports go down
@@ -36,17 +27,11 @@ import {
   ZIonText,
   ZIonIcon,
   ZIonItem,
-  ZIonLabel,
   ZIonInput,
   ZIonRow,
-  ZIonList,
   ZIonGrid,
-  ZIonChip,
   ZIonContent,
-  ZIonMenuToggle,
-  ZIonDatetimeButton,
   ZIonButton,
-  ZIonCheckbox,
   ZIonButtons,
   ZIonRefresher,
   ZIonRefresherContent
@@ -55,11 +40,8 @@ import ZIonPage from '@/components/ZIonPage';
 import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
 import ZShortLinksFilterMenu from '@/navigation/AdminPanel/ShortLinks/FilterMenu';
 import FolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/FoldersActionPopover';
-import ZFallbackIonSpinner, {
-  ZFallbackIonSpinner2
-} from '@/components/CustomComponents/FallbackSpinner';
+import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
 //
-import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
 //
 import ZCan from '@/components/Can';
 // const ZCan = lazy(() => import('@/components/Can'));
@@ -114,11 +96,7 @@ import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import {
-  LinkFolderType,
-  ShortLinkType,
-  TimeFilterEnum
-} from '@/types/AdminPanel/linksType';
+import { LinkFolderType, ShortLinkType } from '@/types/AdminPanel/linksType';
 import {
   AdminPanelSidebarMenuPageEnum,
   folderState,
@@ -138,7 +116,6 @@ import {
   NewShortLinkSelectTypeOption
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import {
-  ShortLinksFieldsDataRStateSelector,
   ShortLinksFilterOptionsRStateAtom,
   ShortLinksRStateAtom
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
@@ -844,15 +821,6 @@ const ZInpageMainContent: React.FC = () => {
 							> */}
               {!isLgScale ? (
                 <ZIonButton
-                  onClick={async () => {
-                    await menuController.enable(
-                      true,
-                      CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
-                    );
-                    await menuController.open(
-                      CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
-                    );
-                  }}
                   fill='outline'
                   color='primary'
                   expand={!isSmScale ? 'block' : undefined}
@@ -861,7 +829,16 @@ const ZInpageMainContent: React.FC = () => {
                     'my-2 normal-case': true,
                     'text-xs w-[25%]': !isLgScale,
                     'w-full': !isSmScale
-                  })}>
+                  })}
+                  onClick={async () => {
+                    await menuController.enable(
+                      true,
+                      CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
+                    );
+                    await menuController.open(
+                      CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
+                    );
+                  }}>
                   Open folders menu
                 </ZIonButton>
               ) : null}

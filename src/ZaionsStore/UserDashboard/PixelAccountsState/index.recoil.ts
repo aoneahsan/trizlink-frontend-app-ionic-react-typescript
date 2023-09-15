@@ -31,8 +31,8 @@ export const PixelsFilterOptionsRStateAtom = atom<IPixelsFilterOptions>({
 });
 
 // Recoil selector that will filtered pixels (we are using this selector to list pixels in frontend in pixels table in pixels list page).
-export const FilteredPixelsDataSelector = selector({
-  key: 'FilteredPixelsDataSelector_key',
+export const FilteredPixelsDataRStateSelector = selector({
+  key: 'FilteredPixelsDataRStateSelector_key',
   get: ({ get }) => {
     // Variables
     const pixelsRStateAtom = get(PixelAccountsRStateAtom);
@@ -77,11 +77,24 @@ export const FilteredPixelsDataSelector = selector({
           CONSTANTS.toLocaleStringOptions
         );
 
+        // console.log({
+        //   log: 'checking time',
+        //   _formattedStartDate,
+        //   startDate,
+        //   endDate
+        // });
+
         _filterPixelsData = pixelsRStateAtom?.filter(el => {
           const _createdAt = new Date(
             new Date(el.createAt as string)
           ).toLocaleString('en-US', CONSTANTS.toLocaleStringOptions);
-
+          console.log({
+            log: 'checking time',
+            _createdAt,
+            startDate,
+            endDate,
+            e: el.createAt
+          });
           if (
             new Date(_createdAt) >= new Date(_formattedStartDate) &&
             new Date(_createdAt) <= endDate
@@ -93,6 +106,8 @@ export const FilteredPixelsDataSelector = selector({
         });
       }
     }
+
+    return _filterPixelsData;
   }
 });
 

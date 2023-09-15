@@ -1,6 +1,10 @@
 import CONSTANTS from '@/utils/constants';
 
 const GENERAL = {
+  FILTER: {
+    FILTERING:
+      'Hold on while we sift through the pixels. Our pixel detectives are on the case! 🕵️‍♂️'
+  },
   FILE: {
     FILE_DELETED_SUCCESS_MESSAGE: 'File deleted successfully.'
   },

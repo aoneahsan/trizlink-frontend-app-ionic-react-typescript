@@ -63,6 +63,7 @@ import {
   useZRQCreateRequest,
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Styles
 
@@ -121,6 +122,7 @@ const ZaionsAddPixelAccount: React.FC<{
 
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
+  const { isMdScale } = useZMediaQueryScale();
 
   const { mutateAsync: createPixelAccount } = useZRQCreateRequest({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
@@ -344,7 +346,10 @@ const ZaionsAddPixelAccount: React.FC<{
             </ZIonHeader>
           )}
 
-          <ZIonContent className='ion-padding'>
+          <ZIonContent
+            className={classNames({
+              'ion-padding': isMdScale
+            })}>
             <div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top'>
               {/* <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
                 <ZIonIcon
@@ -374,7 +379,10 @@ const ZaionsAddPixelAccount: React.FC<{
             {/*  */}
             <Form
               onSubmit={handleSubmit}
-              className='px-4'>
+              className={classNames({
+                'px-4': isMdScale,
+                'px-3': !isMdScale
+              })}>
               {/* Pixel platform select */}
               <ZIonSelect
                 name='platform'

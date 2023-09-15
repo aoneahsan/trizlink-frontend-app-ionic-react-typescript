@@ -126,7 +126,7 @@ const ZAdminPanelTopBar: React.FC<{
       className={classNames({
         'zaions__light_bg shadow-[0_3px_6px_#00000029] relative z-10': true,
         'px-3 h-[4rem]': isMdScale,
-        'pe-2 py-2': !isMdScale
+        'px-2 py-2': !isMdScale
       })}>
       {/*  */}
       <ZADTopBarColOne workspaceId={workspaceId} />
@@ -146,11 +146,12 @@ const ZAdminPanelTopBar: React.FC<{
         sizeXl='6'
         sizeLg='6'
         sizeMd='6'
-        sizeSm='12'
-        sizeXs='12'
+        sizeSm='6'
+        sizeXs='6'
         className={classNames({
-          'flex h-full gap-2 ion-align-items-center': true,
-          'ion-justify-content-end': isMdScale
+          'h-full gap-2 ion-align-items-center': true,
+          'ion-justify-content-end flex': true
+          // 'mt-1': !isMdScale
         })}>
         {showRefreshBtn ? (
           <ZIonButton
@@ -176,63 +177,73 @@ const ZAdminPanelTopBar: React.FC<{
         ) : null}
 
         {/* Upgrade button */}
-        <ZIonButton
-          color='secondary'
-          size={!isLgScale ? 'small' : undefined}
-          height={isLgScale ? '2.3rem' : '1.9rem'}
-          className={classNames({
-            'text-xs ms-4': !isLgScale
-          })}
-          testingselector={CONSTANTS.testingSelectors.topBar.upgradeBtn}>
-          Upgrade
-        </ZIonButton>
+        {isMdScale ? (
+          <ZIonButton
+            color='secondary'
+            expand={!isMdScale ? 'block' : undefined}
+            size={!isLgScale ? 'small' : undefined}
+            height={isLgScale ? '2.3rem' : '1.9rem'}
+            className={classNames({
+              'text-xs': !isLgScale,
+              'ms-4': showRefreshBtn
+            })}
+            testingselector={CONSTANTS.testingSelectors.topBar.upgradeBtn}>
+            Upgrade
+          </ZIonButton>
+        ) : null}
 
         {/* Help button */}
-        <ZIonButton
-          color='tertiary'
-          size='small'
-          height={isLgScale ? '2.3rem' : '1.9rem'}
-          className={classNames({
-            'text-xs': !isLgScale
-          })}
-          testingselector={CONSTANTS.testingSelectors.topBar.helpBtn}
-          onClick={(event: unknown) => {
-            presentZHelpCenterPopover({
-              _event: event as Event,
-              _cssClass: 'z-help-center-popover-size',
-              _dismissOnSelect: false
-            });
-          }}>
-          <ZIonIcon
-            icon={helpCircleOutline}
-            className='w-7 h-7'
-          />
-          {/* <ZIonText className='mt-[2px]'>Help</ZIonText> */}
-        </ZIonButton>
+        {isMdScale ? (
+          <ZIonButton
+            color='tertiary'
+            size='small'
+            expand={!isMdScale ? 'block' : undefined}
+            height={isLgScale ? '2.3rem' : '1.9rem'}
+            className={classNames({
+              'text-xs': !isLgScale
+            })}
+            testingselector={CONSTANTS.testingSelectors.topBar.helpBtn}
+            onClick={(event: unknown) => {
+              presentZHelpCenterPopover({
+                _event: event as Event,
+                _cssClass: 'z-help-center-popover-size',
+                _dismissOnSelect: false
+              });
+            }}>
+            <ZIonIcon
+              icon={helpCircleOutline}
+              className='w-7 h-7'
+            />
+            {/* <ZIonText className='mt-[2px]'>Help</ZIonText> */}
+          </ZIonButton>
+        ) : null}
 
         {/* Notification button */}
-        <ZIonButton
-          color='tertiary'
-          size='small'
-          height={isLgScale ? '2.3rem' : '1.9rem'}
-          testingselector={CONSTANTS.testingSelectors.topBar.notificationBtn}
-          className={classNames({
-            'me-3': true,
-            'text-xs': !isLgScale
-          })}
-          onClick={(event: unknown) => {
-            presentZNotificationPopover({
-              _event: event as Event,
-              _cssClass: 'z-notification-popover-size',
-              _dismissOnSelect: false
-            });
-          }}>
-          <ZIonIcon
-            icon={notificationsOutline}
-            className='w-6 h-6'
-          />
-          {/* <ZIonText className='mt-[2px]'>Help</ZIonText> */}
-        </ZIonButton>
+        {isMdScale ? (
+          <ZIonButton
+            color='tertiary'
+            size='small'
+            expand={!isMdScale ? 'block' : undefined}
+            height={isLgScale ? '2.3rem' : '1.9rem'}
+            testingselector={CONSTANTS.testingSelectors.topBar.notificationBtn}
+            className={classNames({
+              'me-3': isMdScale,
+              'text-xs': !isLgScale
+            })}
+            onClick={(event: unknown) => {
+              presentZNotificationPopover({
+                _event: event as Event,
+                _cssClass: 'z-notification-popover-size',
+                _dismissOnSelect: false
+              });
+            }}>
+            <ZIonIcon
+              icon={notificationsOutline}
+              className='w-6 h-6'
+            />
+            {/* <ZIonText className='mt-[2px]'>Help</ZIonText> */}
+          </ZIonButton>
+        ) : null}
 
         {/* User profile button */}
         <ZUserProfileButton
@@ -251,18 +262,21 @@ const ZADTopBarColOne: React.FC<{ workspaceId?: string }> = ({
     ZaionsRoutes.AdminPanel.Workspaces.Main
   )?.isExact;
 
+  const { isLgScale } = useZMediaQueryScale();
+
   return (
     <ZIonCol
       sizeXl='6'
       sizeLg='6'
       sizeMd='6'
-      sizeSm='12'
-      sizeXs='12'
+      sizeSm='6'
+      sizeXs='6'
       className='flex h-full ion-align-items-center'>
       {!isWorkspaceListPage ? (
         <ZIonButton
           color='secondary'
-          // height='2.3rem'
+          size={!isLgScale ? 'small' : undefined}
+          height={isLgScale ? '2.3rem' : '1.9rem'}
           className='normal-case ion-no-margin me-2'
           testingselector={CONSTANTS.testingSelectors.topBar.goToWorkspacesBtn}
           routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}>

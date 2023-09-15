@@ -8,18 +8,17 @@ import React, { useEffect, useState } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import { menuController } from '@ionic/core/components';
 import {
-  businessOutline,
-  calendar,
   closeOutline,
   cloudDownloadOutline,
-  cloudUploadOutline,
-  pricetagOutline
+  cloudUploadOutline
 } from 'ionicons/icons';
 import { Formik } from 'formik';
 import { ItemReorderEventDetail } from '@ionic/react';
 import { useParams } from 'react-router';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
@@ -36,12 +35,9 @@ import {
   ZIonIcon,
   ZIonItem,
   ZIonMenu,
-  ZIonMenuToggle,
   ZIonReorder,
   ZIonReorderGroup,
   ZIonRow,
-  ZIonSelect,
-  ZIonSelectOption,
   ZIonText,
   ZIonTitle
 } from '@/components/ZIonComponents';
@@ -51,6 +47,7 @@ import {
   ShortLinksTagsFiltersPopover,
   ShortLinksTimeRangeFilterPopover
 } from '@/components/InPageComponents/ZaionsPopovers/ShortLinks/FiltersPopovers';
+import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
@@ -62,6 +59,7 @@ import {
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -71,6 +69,7 @@ import CONSTANTS from '@/utils/constants';
 import { extractInnerData, zStringify } from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import { ShortLinksTableColumns } from '@/utils/constants/columns';
 
 /**
  * Type Imports go down
@@ -85,6 +84,7 @@ import {
   TimeFilterEnum,
   ZShortLinkListPageTableColumnsIds
 } from '@/types/AdminPanel/linksType';
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 /**
  * Recoil State Imports go down
@@ -94,17 +94,11 @@ import {
   ShortLinksFieldsDataRStateSelector,
   ShortLinksFilterOptionsRStateAtom
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import classNames from 'classnames';
 
 /**
  * Style files Imports go down
  * ? Import of style sheet is a style import
  * */
-import classes from './styles.module.css';
-import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
-import { ShortLinksTableColumns } from '@/utils/constants/columns';
 
 /**
  * Images Imports go down
@@ -173,7 +167,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
   // #region APIs.
   //
   const { mutateAsync: updateUserSettingsAsyncMutate } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.user_setting_delete_update
+    _url: API_URL_ENUM.user_setting_delete_update_get
   });
 
   const { mutateAsync: createUserSettingsAsyncMutate } = useZRQCreateRequest({
@@ -182,7 +176,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
 
   const { data: getUserSetting, isFetching: isUserSettingFetching } =
     useZRQGetRequest<ZUserSettingInterface>({
-      _url: API_URL_ENUM.user_setting_delete_update,
+      _url: API_URL_ENUM.user_setting_delete_update_get,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
         workspaceId,
@@ -309,7 +303,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
           : {}
       }>
       {/* Header */}
-      <ZIonHeader className='flex px-3 border-b shadow-none ion-align-items-center ion-padding ion-justify-content-between'>
+      <ZIonHeader className='flex py-2 border-b shadow-none ps-3 pe-2 ion-align-items-center ion-no-padding ion-justify-content-between'>
         <ZIonTitle
           className={classNames({
             'block font-semibold ion-no-padding': true,
@@ -319,12 +313,13 @@ const ZShortLinksFilterMenu: React.FC = () => {
           Filter short links & table UI
         </ZIonTitle>
 
-        <ZIonMenuToggle>
-          <ZIonIcon
-            icon={closeOutline}
-            className='w-6 h-6 cursor-pointer'
-          />
-        </ZIonMenuToggle>
+        <ZIonIcon
+          icon={closeOutline}
+          className='w-6 h-6 pt-[2px] cursor-pointer'
+          onClick={async () => {
+            await menuController.close(CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID);
+          }}
+        />
       </ZIonHeader>
 
       {/* Content */}
@@ -375,7 +370,6 @@ const ZShortLinksFilterMenu: React.FC = () => {
             }
           }}>
           {({ values, setFieldValue, submitForm }) => {
-            // console.log({ values });
             return (
               <ZIonRow>
                 {/*  */}
@@ -569,7 +563,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
                 {/*  */}
                 <ZIonCol
                   size='12'
-                  className='pb-3 border-b mt-2'>
+                  className='pb-3 mt-2 border-b'>
                   <ZIonText
                     className={classNames({
                       'block mx-3 mb-2 text-md tracking-widest font-semibold':

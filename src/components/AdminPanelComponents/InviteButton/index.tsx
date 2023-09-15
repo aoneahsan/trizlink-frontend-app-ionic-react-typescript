@@ -20,6 +20,7 @@ import { ZIonButton, ZIonIcon } from '@/components/ZIonComponents';
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -56,8 +57,8 @@ import { replaceRouteParams } from '@/utils/helpers';
  * ? Like if you have a type for props it should be please Down
  * */
 interface IZInviteButton {
-	className?: string;
-	workspaceId?: string;
+  className?: string;
+  workspaceId?: string;
 }
 
 /**
@@ -67,34 +68,36 @@ interface IZInviteButton {
  * */
 
 const ZInviteButton: React.FC<IZInviteButton> = ({
-	className,
-	workspaceId,
+  className,
+  workspaceId
 }) => {
-	const { presentZIonModal: presentZInviteInTeamModal } = useZIonModal(
-		ZInviteInTeamModal,
-		{
-			workspaceId: workspaceId,
-		}
-	);
-	return (
-		<ZIonButton
-			className={className}
-			testingselector={CONSTANTS.testingSelectors.topBar.teamInviteBtn}
-			// onClick={() => {
-			// 	presentZInviteInTeamModal({
-			// 		_cssClass: 'invite-member-in-team-modal-size',
-			// 	});
-			// }}
-			routerLink={replaceRouteParams(
-				ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
-				[CONSTANTS.RouteParams.workspace.workspaceId],
-				[workspaceId!]
-			)}
-		>
-			<ZIonIcon icon={addOutline} className='me-1' />
-			Invite
-		</ZIonButton>
-	);
+  const { presentZIonModal: presentZInviteInTeamModal } = useZIonModal(
+    ZInviteInTeamModal,
+    {
+      workspaceId: workspaceId
+    }
+  );
+
+  const { isLgScale } = useZMediaQueryScale();
+
+  return (
+    <ZIonButton
+      size={!isLgScale ? 'small' : undefined}
+      height={isLgScale ? '2.3rem' : '1.9rem'}
+      className={className}
+      testingselector={CONSTANTS.testingSelectors.topBar.teamInviteBtn}
+      routerLink={replaceRouteParams(
+        ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
+        [CONSTANTS.RouteParams.workspace.workspaceId],
+        [workspaceId!]
+      )}>
+      <ZIonIcon
+        icon={addOutline}
+        className='me-1'
+      />
+      Invite
+    </ZIonButton>
+  );
 };
 
 export default ZInviteButton;

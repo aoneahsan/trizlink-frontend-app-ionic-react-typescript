@@ -16,6 +16,9 @@ type ZIonContentType = {
   scrollX?: boolean;
   scrollY?: boolean;
   className?: string;
+  style?: {
+    [key: string]: unknown;
+  };
 };
 
 const ZIonContent = (props: ZIonContentType) => {

@@ -259,7 +259,7 @@ const ZInpageTable: React.FC = () => {
 
   const { data: getUserSetting, isFetching: isUserSettingFetching } =
     useZRQGetRequest<ZUserSettingInterface>({
-      _url: API_URL_ENUM.user_setting_delete_update,
+      _url: API_URL_ENUM.user_setting_delete_update_get,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
         workspaceId,
@@ -506,33 +506,28 @@ const ZInpageTable: React.FC = () => {
   // #region useEffect's
   useEffect(() => {
     try {
-      if (getUserSetting?.settings?.shortLinkColumn) {
-        const __getTitleColumn =
-          getUserSetting?.settings?.shortLinkColumn.filter(
-            el => el.name === ZShortLinkListPageTableColumnsEnum.title
-          )[0];
+      if (getUserSetting?.settings?.columns) {
+        const __getTitleColumn = getUserSetting?.settings?.columns.filter(
+          el => el.name === ZShortLinkListPageTableColumnsEnum.title
+        )[0];
 
-        const __getDateColumn =
-          getUserSetting?.settings?.shortLinkColumn.filter(
-            el => el.name === ZShortLinkListPageTableColumnsEnum.date
-          )[0];
+        const __getDateColumn = getUserSetting?.settings?.columns.filter(
+          el => el.name === ZShortLinkListPageTableColumnsEnum.date
+        )[0];
 
-        const __getLinkToShareColumn =
-          getUserSetting?.settings?.shortLinkColumn.filter(
-            el => el.name === ZShortLinkListPageTableColumnsEnum.linkToShare
-          )[0];
+        const __getLinkToShareColumn = getUserSetting?.settings?.columns.filter(
+          el => el.name === ZShortLinkListPageTableColumnsEnum.linkToShare
+        )[0];
 
-        const __getNotesColumn =
-          getUserSetting?.settings?.shortLinkColumn.filter(
-            el => el.name === ZShortLinkListPageTableColumnsEnum.notes
-          )[0];
+        const __getNotesColumn = getUserSetting?.settings?.columns.filter(
+          el => el.name === ZShortLinkListPageTableColumnsEnum.notes
+        )[0];
 
-        const __getPixelsColumn =
-          getUserSetting?.settings?.shortLinkColumn.filter(
-            el => el.name === ZShortLinkListPageTableColumnsEnum.pixels
-          )[0];
+        const __getPixelsColumn = getUserSetting?.settings?.columns.filter(
+          el => el.name === ZShortLinkListPageTableColumnsEnum.pixels
+        )[0];
 
-        const __getUrlColumn = getUserSetting?.settings?.shortLinkColumn.filter(
+        const __getUrlColumn = getUserSetting?.settings?.columns.filter(
           el => el.name === ZShortLinkListPageTableColumnsEnum.url
         )[0];
 

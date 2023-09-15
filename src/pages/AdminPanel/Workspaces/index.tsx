@@ -12,9 +12,14 @@ import {
   addOutline,
   gitNetworkOutline,
   heartOutline,
+  library,
+  playCircle,
+  radio,
+  search,
   starOutline
 } from 'ionicons/icons';
 import classNames from 'classnames';
+import { IonNav, RefresherEventDetail } from '@ionic/react';
 
 /**
  * Custom Imports go down
@@ -30,10 +35,14 @@ import {
   ZIonContent,
   ZIonGrid,
   ZIonIcon,
+  ZIonLabel,
   ZIonRefresher,
   ZIonRefresherContent,
   ZIonRow,
   ZIonSkeletonText,
+  ZIonTabBar,
+  ZIonTabButton,
+  ZIonTabs,
   ZIonText,
   ZIonTitle
 } from '@/components/ZIonComponents';
@@ -72,11 +81,16 @@ import {
 import { API_URL_ENUM } from '@/utils/enums';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import CONSTANTS from '@/utils/constants';
+import { reportCustomError } from '@/utils/customErrorType';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import {
+  workspaceInterface,
+  wsShareInterface
+} from '@/types/AdminPanel/workspace';
 
 /**
  * Recoil State Imports go down
@@ -87,14 +101,6 @@ import CONSTANTS from '@/utils/constants';
  * Style files Imports go down
  * ? Import of style sheet is a style import
  * */
-import {
-  workspaceInterface,
-  wsShareInterface
-} from '@/types/AdminPanel/workspace';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { workerData } from 'worker_threads';
-import { reportCustomError } from '@/utils/customErrorType';
-import { RefresherEventDetail } from '@ionic/react';
 
 /**
  * Images Imports go down
@@ -223,7 +229,7 @@ const ZWorkspaceListPage: React.FC = () => {
                   size='12'
                   className='ps-3'>
                   <ZIonTitle
-                    className='font-bold ion-no-padding tracking-wider'
+                    className='font-bold tracking-wider ion-no-padding'
                     color='dark'>
                     Favorite workspaces
                   </ZIonTitle>
@@ -242,7 +248,7 @@ const ZWorkspaceListPage: React.FC = () => {
                     />
 
                     <ZIonText
-                      className='mt-2 block text-md tracking-wider'
+                      className='block mt-2 tracking-wider text-md'
                       color='dark'>
                       You haven't added any workspaces to your favorites yet.
                       Start by marking your most used workspaces!
@@ -294,7 +300,7 @@ const ZWorkspaceListPage: React.FC = () => {
                   size='12'
                   className='ps-3'>
                   <ZIonTitle
-                    className='font-bold ion-no-padding tracking-wider'
+                    className='font-bold tracking-wider ion-no-padding'
                     color='dark'>
                     Owned workspaces
                   </ZIonTitle>
@@ -430,7 +436,7 @@ const ZWorkspaceListPage: React.FC = () => {
                   size='12'
                   className='ps-3'>
                   <ZIonTitle
-                    className='font-bold ion-no-padding tracking-wider'
+                    className='font-bold tracking-wider ion-no-padding'
                     color='dark'>
                     Shared workspaces
                   </ZIonTitle>

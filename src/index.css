@@ -7,551 +7,551 @@ body {
 
 @import url('theme/variables.css');
 a {
-	text-decoration: none;
+  text-decoration: none;
 }
 li {
-	list-style: none;
+  list-style: none;
 }
 
 ion-app.ios ion-title {
-	position: initial !important;
-	width: max-content !important;
-	height: max-content !important;
-	display: inline !important;
+  position: initial !important;
+  width: max-content !important;
+  height: max-content !important;
+  display: inline !important;
 }
 
 /* #region Global */
 .zaions-transition {
-	transition: all 0.3s ease !important;
-	-webkit-transition: all 0.3s ease !important;
-	-moz-transition: all 0.3s ease !important;
-	-ms-transition: all 0.3s ease !important;
-	-o-transition: all 0.3s ease !important;
+  transition: all 0.3s ease !important;
+  -webkit-transition: all 0.3s ease !important;
+  -moz-transition: all 0.3s ease !important;
+  -ms-transition: all 0.3s ease !important;
+  -o-transition: all 0.3s ease !important;
 }
 
 /* Scrollbar */
 .zaions_pretty_scrollbar::-webkit-scrollbar {
-	height: 8px;
-	width: 8px;
+  height: 8px;
+  width: 8px;
 }
 
 .zaions_pretty_scrollbar::-webkit-scrollbar-track {
-	background-color: rgba(var(--ion-color-medium-rgb), 0.25);
-	border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	-ms-border-radius: 5px;
-	-o-border-radius: 5px;
+  background-color: rgba(var(--ion-color-medium-rgb), 0.25);
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
 }
 
 .zaions_pretty_scrollbar::-webkit-scrollbar-thumb {
-	background-color: rgba(var(--ion-color-light-rgb));
-	border-radius: 5px;
-	transition: background-color 0.5s ease;
-	-webkit-transition: background-color 0.5s ease;
-	-moz-transition: background-color 0.5s ease;
-	-ms-transition: background-color 0.5s ease;
-	-o-transition: background-color 0.5s ease;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	-ms-border-radius: 5px;
-	-o-border-radius: 5px;
+  background-color: rgba(var(--ion-color-light-rgb));
+  border-radius: 5px;
+  transition: background-color 0.5s ease;
+  -webkit-transition: background-color 0.5s ease;
+  -moz-transition: background-color 0.5s ease;
+  -ms-transition: background-color 0.5s ease;
+  -o-transition: background-color 0.5s ease;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
 }
 
 .zaions_list_default li {
-	list-style: disc;
+  list-style: disc;
 }
 
 .zaions_list_decimal li {
-	list-style: decimal;
+  list-style: decimal;
 }
 
 .zaions_hr {
-	width: 83%;
-	height: 1px;
-	background-color: #eff0f2;
+  width: 83%;
+  height: 1px;
+  background-color: #eff0f2;
 }
 
 @media only screen and (max-content: 968px) {
-	.zaions_hr {
-		margin: 0 auto;
-	}
+  .zaions_hr {
+    margin: 0 auto;
+  }
 }
 
 .border-radius__100vmax {
-	--border-radius: 100vmax !important;
-	border-radius: 100vmax !important;
-	-webkit-border-radius: 100vmax !important;
-	-moz-border-radius: 100vmax !important;
-	-ms-border-radius: 100vmax !important;
-	-o-border-radius: 100vmax !important;
+  --border-radius: 100vmax !important;
+  border-radius: 100vmax !important;
+  -webkit-border-radius: 100vmax !important;
+  -moz-border-radius: 100vmax !important;
+  -ms-border-radius: 100vmax !important;
+  -o-border-radius: 100vmax !important;
 }
 
 .border-radius__50per {
-	--border-radius: 50%;
-	border-radius: 50%;
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	-ms-border-radius: 50%;
-	-o-border-radius: 50%;
+  --border-radius: 50%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
 }
 
 span.new {
-	font-size: 12px;
-	display: inline-block;
-	color: #fff;
-	font-weight: 400;
-	padding: 0 3px;
-	background-color: #0b1736;
-	line-height: 15px;
-	vertical-align: middle;
-	margin-top: -2px;
+  font-size: 12px;
+  display: inline-block;
+  color: #fff;
+  font-weight: 400;
+  padding: 0 3px;
+  background-color: #0b1736;
+  line-height: 15px;
+  vertical-align: middle;
+  margin-top: -2px;
 }
 
 .zaions-color-piker {
-	width: 3rem;
-	height: 3rem;
-	border: none !important;
-	cursor: pointer;
-	outline: none !important;
-	appearance: none !important;
-	-webkit-appearance: none !important;
-	padding: 0 !important;
-	height: 40px;
+  width: 3rem;
+  height: 3rem;
+  border: none !important;
+  cursor: pointer;
+  outline: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  padding: 0 !important;
+  height: 40px;
 }
 
 .zaions__getAQuote_btn {
-	font-size: 15px;
-	letter-spacing: 1px;
-	cursor: pointer;
+  font-size: 15px;
+  letter-spacing: 1px;
+  cursor: pointer;
 }
 
 .zaions__new_tag {
-	line-height: 16px;
-	font-family: 'ProximaNova Medium', 'Helvetica Neue', Helvetica, Arial,
-		sans-serif;
-	background-color: #60aa69;
-	border-radius: 3px 3px 3px 3px;
-	/* display: inline-block; */
-	padding: 2.5px 5px;
-	color: #fff;
-	font-size: 11px;
-	margin-left: 5px;
-	vertical-align: middle;
+  line-height: 16px;
+  font-family: 'ProximaNova Medium', 'Helvetica Neue', Helvetica, Arial,
+    sans-serif;
+  background-color: #60aa69;
+  border-radius: 3px 3px 3px 3px;
+  /* display: inline-block; */
+  padding: 2.5px 5px;
+  color: #fff;
+  font-size: 11px;
+  margin-left: 5px;
+  vertical-align: middle;
 }
 /* #endregion */
 
 /* #region Fonts */
 .lato {
-	font-family: 'Lato', sans-serif !important;
+  font-family: 'Lato', sans-serif !important;
 }
 
 .roboto {
-	font-family: 'Roboto', sans-serif !important;
+  font-family: 'Roboto', sans-serif !important;
 }
 
 .B612 {
-	font-family: 'B612', sans-serif !important;
+  font-family: 'B612', sans-serif !important;
 }
 
 .san-serif {
-	font-family: sans-serif !important;
+  font-family: sans-serif !important;
 }
 
 .serif {
-	font-family: serif !important;
+  font-family: serif !important;
 }
 
 .Alegreya {
-	font-family: 'Alegreya', sans-serif !important;
+  font-family: 'Alegreya', sans-serif !important;
 }
 
 .titillium-web {
-	font-family: 'Titillium Web', sans-serif !important;
+  font-family: 'Titillium Web', sans-serif !important;
 }
 
 .vollkorn {
-	font-family: 'Vollkorn', sans-serif !important;
+  font-family: 'Vollkorn', sans-serif !important;
 }
 
 .IBM-plex-serif {
-	font-family: 'IBM Plex Serif', sans-serif !important;
+  font-family: 'IBM Plex Serif', sans-serif !important;
 }
 
 .source-serif-pro {
-	font-family: 'Source Serif Pro', sans-serif !important;
+  font-family: 'Source Serif Pro', sans-serif !important;
 }
 
 .roboto-slab {
-	font-family: 'Roboto Slab', sans-serif !important;
+  font-family: 'Roboto Slab', sans-serif !important;
 }
 
 .roboto-condensed {
-	font-family: 'Roboto Condensed', sans-serif !important;
+  font-family: 'Roboto Condensed', sans-serif !important;
 }
 
 .poppins {
-	font-family: 'Poppins', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
 }
 
 .source-serif-4 {
-	font-family: 'Source Serif 4', sans-serif !important;
+  font-family: 'Source Serif 4', sans-serif !important;
 }
 
 .apple-system {
-	font-family: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji'";
+  font-family: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji'";
 }
 
 /* #endregion */
 
 /* #region Colors */
 .zaions__color_dark {
-	color: #252628 !important;
+  color: #252628 !important;
 }
 .zaions__color_dark_2 {
-	color: #2a2e30 !important;
+  color: #2a2e30 !important;
 }
 
 .zaions__color_gray {
-	color: #9ca1ad;
+  color: #9ca1ad;
 }
 
 .zaions__color_gray2 {
-	color: #56575b;
+  color: #56575b;
 }
 
 .zaions__color_gray_light {
-	color: #828387;
+  color: #828387;
 }
 
 .zaions_ion_color_light {
-	color: var(--ion-color-light);
+  color: var(--ion-color-light);
 }
 
 .zaions_ion_color_success {
-	color: var(--ion-color-success);
-	--color: var(--ion-color-success);
+  color: var(--ion-color-success);
+  --color: var(--ion-color-success);
 }
 
 .zaions_ion_color_danger {
-	color: var(--ion-color-danger) !important;
-	--color: var(--ion-color-danger);
+  color: var(--ion-color-danger) !important;
+  --color: var(--ion-color-danger);
 }
 
 /* #endregion */
 
 /* #region Backgrounds */
 .zaions-background-set {
-	background-size: cover !important;
-	background-position: center !important;
-	background-repeat: no-repeat !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
 }
 
 .zaions__bg_gray {
-	background-color: #f5f6f7;
+  background-color: #f5f6f7;
 }
 .zaions__bg_light_opacity_point5 {
-	background: rgba(var(--ion-color-light-rgb), 0.5);
+  background: rgba(var(--ion-color-light-rgb), 0.5);
 }
 
 .zaions__bg_light_opacity_point7 {
-	background: rgba(var(--ion-color-light-rgb), 0.7);
+  background: rgba(var(--ion-color-light-rgb), 0.7);
 }
 
 .zaions__bg_white {
-	background-color: var(--ion-color-white) !important;
-	--background: var(--ion-color-white) !important;
+  background-color: var(--ion-color-white) !important;
+  --background: var(--ion-color-white) !important;
 }
 .z_ion_bg_white {
-	--background: var(--ion-color-white) !important;
+  --background: var(--ion-color-white) !important;
 }
 
 .zaions__bg_f5f6fa {
-	background-color: #f5f6fa;
+  background-color: #f5f6fa;
 }
 
 .zaions__primary_set {
-	background: rgba(var(--ion-color-primary-rgb), 0.2);
-	color: var(--ion-color-primary-contrast);
+  background: rgba(var(--ion-color-primary-rgb), 0.2);
+  color: var(--ion-color-primary-contrast);
 }
 .zaions__secondary_set {
-	background: rgba(var(--ion-color-secondary-rgb), 0.2);
-	color: var(--ion-color-secondary-contrast);
+  background: rgba(var(--ion-color-secondary-rgb), 0.2);
+  color: var(--ion-color-secondary-contrast);
 }
 .zaions__tertiary_set {
-	background: rgba(var(--ion-color-tertiary-rgb), 0.2);
-	color: var(--ion-color-tertiary-contrast);
+  background: rgba(var(--ion-color-tertiary-rgb), 0.2);
+  color: var(--ion-color-tertiary-contrast);
 }
 .zaions__success_set {
-	background: rgba(var(--ion-color-success-rgb), 0.2);
-	color: var(--ion-color-success-contrast);
+  background: rgba(var(--ion-color-success-rgb), 0.2);
+  color: var(--ion-color-success-contrast);
 }
 .zaions__warning_set {
-	background: rgba(var(--ion-color-warning-rgb), 0.2);
-	color: var(--ion-color-warning-contrast);
+  background: rgba(var(--ion-color-warning-rgb), 0.2);
+  color: var(--ion-color-warning-contrast);
 }
 .zaions__danger_set {
-	background: rgba(var(--ion-color-danger-rgb), 0.2);
-	color: var(--ion-color-danger-contrast);
+  background: rgba(var(--ion-color-danger-rgb), 0.2);
+  color: var(--ion-color-danger-contrast);
 }
 .zaions__dark_set {
-	background: rgba(var(--ion-color-dark-rgb), 0.2);
-	color: var(--ion-color-dark-contrast);
+  background: rgba(var(--ion-color-dark-rgb), 0.2);
+  color: var(--ion-color-dark-contrast);
 }
 .zaions__medium_set {
-	background-color: rgba(var(--ion-color-medium-rgb), 0.2);
-	color: var(--ion-color-medium-shade);
+  background-color: rgba(var(--ion-color-medium-rgb), 0.2);
+  color: var(--ion-color-medium-shade);
 }
 .zaions__light_set {
-	background: rgba(var(--ion-color-light-rgb), 0.2);
-	color: var(--ion-color-light-contrast);
+  background: rgba(var(--ion-color-light-rgb), 0.2);
+  color: var(--ion-color-light-contrast);
 }
 .zaions__medium_bg {
-	background-color: var(--ion-color-medium);
+  background-color: var(--ion-color-medium);
 }
 
 .zaions__light_bg {
-	background-color: var(--ion-color-light);
-	--background: var(--ion-color-light);
+  background-color: var(--ion-color-light);
+  --background: var(--ion-color-light);
 }
 
 .zaions__primary_bg {
-	background-color: var(--ion-color-primary);
+  background-color: var(--ion-color-primary);
 }
 
 .zaions__danger_bg {
-	background-color: var(--ion-color-danger);
+  background-color: var(--ion-color-danger);
 }
 
 .zaions__secondary_bg {
-	background-color: var(--ion-color-secondary);
+  background-color: var(--ion-color-secondary);
 }
 
 .zaions_bg__dark {
-	background: var(--ion-color-dark);
+  background: var(--ion-color-dark);
 }
 
 .zaions__primary_bg_opacity_point_2 {
-	background: rgba(var(--ion-color-primary-rgb), 0.2);
+  background: rgba(var(--ion-color-primary-rgb), 0.2);
 }
 
 .zaions__primary_bg_opacity_point_4 {
-	background: rgba(var(--ion-color-primary-rgb), 0.4);
+  background: rgba(var(--ion-color-primary-rgb), 0.4);
 }
 
 .zaions__medium_bg_opacity_point_3 {
-	background: rgba(var(--ion-color-medium-rgb), 0.3);
+  background: rgba(var(--ion-color-medium-rgb), 0.3);
 }
 .zaions__medium_bg_opacity_point_1 {
-	background: rgba(var(--ion-color-medium-rgb), 0.1);
+  background: rgba(var(--ion-color-medium-rgb), 0.1);
 }
 
 .zaions__dark_bg_opacity_point_7 {
-	background: rgba(var(--ion-color-dark-rgb), 0.7);
+  background: rgba(var(--ion-color-dark-rgb), 0.7);
 }
 
 .zaions__light_bg_opacity_point_2 {
-	background: rgba(var(--ion-color-light-rgb), 0.2) !important;
-	--background: rgba(var(--ion-color-light-rgb), 0.2) !important;
+  background: rgba(var(--ion-color-light-rgb), 0.2) !important;
+  --background: rgba(var(--ion-color-light-rgb), 0.2) !important;
 }
 
 .zaions_primary_color {
-	background-color: #2a5bd7 !important;
+  background-color: #2a5bd7 !important;
 }
 .zaions_secondary_color {
-	/* background-color: #0b1736 !important;
+  /* background-color: #0b1736 !important;
    */
-	background-color: var(--ion-color-secondary);
+  background-color: var(--ion-color-secondary);
 }
 .zaions-ion-bg-color-light {
-	background-color: var(--ion-color-light) !important;
+  background-color: var(--ion-color-light) !important;
 }
 
 .zaions-ion-bg-color-medium {
-	background-color: var(--ion-color-medium);
+  background-color: var(--ion-color-medium);
 }
 
 .zaions__tertiary_btn {
-	background-color: #edf2fe;
+  background-color: #edf2fe;
 }
 .zaions__tertiary_btn:hover {
-	background-color: #cedafa;
+  background-color: #cedafa;
 }
 
 /* #endregion */
 
 /* #region Borders */
 .border-bottom-danger {
-	border-bottom: 1px solid var(--ion-color-danger) !important ;
+  border-bottom: 1px solid var(--ion-color-danger) !important ;
 }
 .border-bottom-success {
-	border-bottom: 1px solid var(--ion-color-success) !important ;
+  border-bottom: 1px solid var(--ion-color-success) !important ;
 }
 .border-bottom__sand {
-	border-bottom: 1px solid #e0e2d9;
+  border-bottom: 1px solid #e0e2d9;
 }
 
 .border-bottom__violet {
-	border-bottom: 2px solid #edf5fd;
+  border-bottom: 2px solid #edf5fd;
 }
 
 .z-ion-border-primary {
-	border: 1px solid var(--ion-color-primary);
+  border: 1px solid var(--ion-color-primary);
 }
 
 .z-ion-border-secondary {
-	border: 1px solid var(--ion-color-secondary);
+  border: 1px solid var(--ion-color-secondary);
 }
 .z-ion-border-danger {
-	border: 1px solid var(--ion-color-danger) !important;
+  border: 1px solid var(--ion-color-danger) !important;
 }
 
 .z-ion-border-success {
-	border: 1px solid var(--ion-color-success) !important;
+  border: 1px solid var(--ion-color-success) !important;
 }
 
 .z-ion-border-width-1px {
-	--border-width: 1px !important;
+  --border-width: 1px !important;
 }
 
 .zaions-border-primary {
-	--border-width: 2px !important;
-	--border-color: var(--ion-color-primary) !important;
-	--border-style: solid !important;
+  --border-width: 2px !important;
+  --border-color: var(--ion-color-primary) !important;
+  --border-style: solid !important;
 }
 .zaions-border-color-secondary {
-	border-color: var(--ion-color-secondary) !important;
+  border-color: var(--ion-color-secondary) !important;
 }
 .zaions-border-transparent {
-	--border-width: 2px;
-	--border-style: solid;
-	--border-color: transparent;
+  --border-width: 2px;
+  --border-style: solid;
+  --border-color: transparent;
 }
 
 .z_border_color_success {
-	--border-color: var(--ion-color-success) !important;
+  --border-color: var(--ion-color-success) !important;
 }
 
 .z_border_color_danger {
-	--border-color: var(--ion-color-danger) !important;
+  --border-color: var(--ion-color-danger) !important;
 }
 /* #endregion */
 
 /* #region Popovers */
 .zaions_present_folder_Action_popover_width {
-	--width: 150px;
+  --width: 150px;
 }
 
 .z_member_table_action_popover_width {
-	--width: 204px;
+  --width: 204px;
 }
 
 .short-link-tags-filter-modal-size {
-	--width: 300px;
-	--height: 300px;
+  --width: 300px;
+  --height: 300px;
 }
 
 .short-link-time-filter-modal-size {
-	--width: 21rem;
-	--height: 300px;
+  --width: 21rem;
+  --height: 300px;
 }
 
 .short-link-time-filter-modal-size .popover-viewport {
-	overflow: hidden;
+  overflow: hidden;
 }
 
 .short-link-tags-filter-modal-custom-range-size {
-	--width: 450px;
-	--height: 300px;
+  --width: 450px;
+  --height: 300px;
 }
 
 .zaions_user_info_popover_size,
 .workspace_form_permission_popover_size {
-	--width: 300px;
+  --width: 300px;
 }
 .short_link_options_popover_size {
-	--width: 400px;
+  --width: 400px;
 }
 
 .zaions_workspaces_card_popover_size {
-	--width: 350px;
+  --width: 350px;
 }
 
 .zaions_workspaces_actions_popover_size {
-	--width: 256px;
+  --width: 256px;
 }
 
 .zaions_workspaces_profile_popover_size {
-	--width: 270px;
+  --width: 270px;
 }
 
 .zaions_workspaces_notifications_popover_size {
-	--width: 560px;
+  --width: 560px;
 }
 
 .zaions_workspaces_import_export_popover_size {
-	--width: 191px;
+  --width: 191px;
 }
 .workspace_form_role_popover_size {
-	--width: 500px;
-	--height: 20rem;
+  --width: 500px;
+  --height: 20rem;
 }
 
 .z-help-center-popover-size {
-	--width: 218px;
-	--height: 350px;
+  --width: 218px;
+  --height: 350px;
 }
 .z-notification-popover-size {
-	--width: 500px;
-	--height: 450px;
+  --width: 500px;
+  --height: 450px;
 }
 .z-notification-popover-size .popover-viewport {
-	overflow: hidden;
+  overflow: hidden;
 }
 
 .z-workspaces-list-popover-size {
-	--width: 218px;
-	--height: max-content;
-	--max-width: 218px;
-	--max-height: 350px;
+  --width: 218px;
+  --height: max-content;
+  --max-width: 218px;
+  --max-height: 350px;
 }
 /* #endregion Popovers */
 
 /* #region ion-modals */
 .link-in-bio-folder-modal {
-	--height: 50vh;
-	--width: 33vw;
+  --height: 50vh;
+  --width: 33vw;
 }
 
 .short-link-modal {
-	--height: 45vh;
-	--width: 35vw;
+  --height: 45vh;
+  --width: 35vw;
 }
 
 .pixel-account-modal-size {
-	--height: 27rem;
-	--width: 29rem;
+  --height: 27rem;
+  --width: 29rem;
 }
 .utm-tags-modal-size {
-	--height: 37rem;
-	--width: 29rem;
+  --height: 37rem;
+  --width: 29rem;
 }
 
 .embed-widget-modal-size {
-	--height: 85vh;
-	--width: 50.6vw;
+  --height: 85vh;
+  --width: 50.6vw;
 }
 
 .link-in-bio-time-filter-modal-size {
-	--width: 200px;
-	--height: 300px;
+  --width: 200px;
+  --height: 300px;
 }
 
 .file-upload-modal-size,
 .workspace-setting-modal-size,
 .workspace-post-detail-modal-size {
-	--height: 94vh;
-	--width: 87.6vw;
+  --height: 94vh;
+  --width: 87.6vw;
 }
 
 /* .invite-member-in-team-modal-size {
@@ -561,154 +561,154 @@ span.new {
 
 .workspace-sharing-modal-size,
 .invite-member-in-team-modal-size {
-	--height: 95vh;
-	--width: 650px;
+  --height: 95vh;
+  --width: 650px;
 }
 
 .workspace-compose-modal-size {
-	--height: 59vh;
-	--width: 650px;
+  --height: 59vh;
+  --width: 650px;
 }
 
 .workspace-edit-page-modal {
-	--height: 79vh;
-	--width: 700px;
+  --height: 79vh;
+  --width: 700px;
 }
 @media only screen and (max-content: 768px) {
-	.workspace-sharing-modal-size {
-		--width: 95% !important;
-	}
+  .workspace-sharing-modal-size {
+    --width: 95% !important;
+  }
 }
 
 .workspace-connect-pages-modal-size {
-	--height: 92vh;
-	--width: 63.6vw;
+  --height: 92vh;
+  --width: 63.6vw;
 }
 
 .workspace-create-pages-modal-size {
-	--height: 95vh;
-	--width: 755px;
+  --height: 95vh;
+  --width: 755px;
 }
 
 .folder-modal-size,
 .api-key-modal-size {
-	--height: 50vh;
-	--width: 33vw;
+  --height: 50vh;
+  --width: 33vw;
 }
 
 .create-workspace-modal-size {
-	--height: 27rem;
-	--width: 27rem;
+  --height: 27rem;
+  --width: 27rem;
 }
 
 .invitation-view-modal-size {
-	--height: 18rem;
-	--width: 30rem;
+  --height: 18rem;
+  --width: 30rem;
 }
 
 .pixel-account-detail-modal-size,
 .note-detail-modal-size,
 .dashboard-filter-modal-size {
-	--height: 55vh;
-	--width: 33vw;
+  --height: 55vh;
+  --width: 33vw;
 }
 
 .lib-block-modal-size {
-	--width: 500px;
-	--height: 365px;
+  --width: 500px;
+  --height: 365px;
 }
 
 .link-in-bio-form-fields-modal-size {
-	--width: 592px;
-	--height: 380px;
+  --width: 592px;
+  --height: 380px;
 }
 
 .workspace-create-time-slot-modal {
-	--box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4) !important;
-	--border-radius: 0.8rem;
-	/* --width: fit-content; */
-	/* --min-width: 250px; */
-	--height: 414px;
+  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4) !important;
+  --border-radius: 0.8rem;
+  /* --width: fit-content; */
+  /* --min-width: 250px; */
+  --height: 414px;
 }
 /* #endregion */
 
 /* #region React select custom styles...  */
 .zaions__rs__control {
-	border: none !important;
-	box-shadow: none !important;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.13) !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.13) !important;
 }
 .zaions__rs__indicators .zaions__rs__indicator-separator {
-	display: none !important;
+  display: none !important;
 }
 .zaions__rs__menu {
-	z-index: 999 !important;
+  z-index: 999 !important;
 }
 .invalid .zaions__rs__control {
-	border-bottom: 2px solid var(--ion-color-danger) !important ;
+  border-bottom: 2px solid var(--ion-color-danger) !important ;
 }
 .valid .zaions__rs__control {
-	border-bottom: 2px solid var(--ion-color-success) !important ;
+  border-bottom: 2px solid var(--ion-color-success) !important ;
 }
 /* #endregion */
 
 /* #region others */
 .accordion-button::after {
-	display: none;
+  display: none;
 }
 
 .zaions-object-fit-cover {
-	object-fit: cover;
+  object-fit: cover;
 }
 
 .zaions__nav_item {
-	cursor: pointer;
-	letter-spacing: 0.2px;
-	font-size: 16px;
-	position: relative;
+  cursor: pointer;
+  letter-spacing: 0.2px;
+  font-size: 16px;
+  position: relative;
 }
 .zaions__nav_item:hover {
-	color: #2a5bd7;
+  color: #2a5bd7;
 }
 
 .zaions__nav_item::after {
-	display: block;
-	position: absolute;
-	content: '';
-	top: 1.7rem;
-	bottom: 0rem;
-	left: 50%;
-	height: 2px;
-	width: 0;
-	background: #2a5bd7;
-	border: 0;
-	transition: width 150ms ease-out, left 150ms ease-out;
-	transform: translate(-50%, 0);
+  display: block;
+  position: absolute;
+  content: '';
+  top: 1.7rem;
+  bottom: 0rem;
+  left: 50%;
+  height: 2px;
+  width: 0;
+  background: #2a5bd7;
+  border: 0;
+  transition: width 150ms ease-out, left 150ms ease-out;
+  transform: translate(-50%, 0);
 }
 
 .zaions__nav_item:hover::after {
-	width: 60%;
+  width: 60%;
 }
 
 .zaions__page_title {
-	/* color: #252628; */
-	/* font-family: "ProximaNova ExtraBold","Helvetica Neue",Helvetica,Arial,sans-serif; */
-	/* font-size: 62px; */
-	/* font-size: 60px; */
-	font-size: 3.3rem;
-	font-weight: 800;
-	/* font-weight: 750; */
-	line-height: 56px;
+  /* color: #252628; */
+  /* font-family: "ProximaNova ExtraBold","Helvetica Neue",Helvetica,Arial,sans-serif; */
+  /* font-size: 62px; */
+  /* font-size: 60px; */
+  font-size: 3.3rem;
+  font-weight: 800;
+  /* font-weight: 750; */
+  line-height: 56px;
 }
 .zaions__page_subtitle {
-	color: #56575b;
-	/* font-family: "ProximaNova Regular","Helvetica Neue",Helvetica,Arial,sans-serif; */
-	font-size: 24px;
-	font-weight: 400;
+  color: #56575b;
+  /* font-family: "ProximaNova Regular","Helvetica Neue",Helvetica,Arial,sans-serif; */
+  font-size: 24px;
+  font-weight: 400;
 }
 
 .carousel-indicators {
-	display: none !important;
+  display: none !important;
 }
 
 /* Default Roles */
@@ -716,239 +716,246 @@ span.new {
 .item-select-disabled,
 .toggle-disabled,
 .toggle-disabled input {
-	cursor: not-allowed !important;
+  cursor: not-allowed !important;
 }
 
 .sc-ion-input-md-h input {
-	padding: 0 !important;
+  padding: 0 !important;
 }
 
 .zaions__modal_icon {
-	display: inline;
-	font-size: 1.5rem;
-	padding: 12px 9px;
-	padding-bottom: 2px;
-	border-radius: 50%;
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	-ms-border-radius: 50%;
-	-o-border-radius: 50%;
+  display: inline;
+  font-size: 1.5rem;
+  padding: 12px 9px;
+  padding-bottom: 2px;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
 }
 
 ion-modal.zaions__modal_w100 {
-	--width: 80vw;
-	--height: 80vh;
+  --width: 80vw;
+  --height: 80vh;
 }
 /* IonPopover as a actions menu */
 .zaions__ion_popover {
-	--width: max-content;
-	--max-width: 150px;
-	--min-width: 125px;
-	/* --offset-x: 0px; */
+  --width: max-content;
+  --max-width: 150px;
+  --min-width: 125px;
+  /* --offset-x: 0px; */
 }
 
 .ZaionsTextEllipsis {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	width: 90%;
-	max-width: 90%;
-	min-width: 4rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 90%;
+  max-width: 90%;
+  min-width: 4rem;
 }
 
 .rc-switch {
-	position: relative;
-	display: inline-block;
-	box-sizing: border-box;
-	width: 44px;
-	height: 22px;
-	line-height: 20px;
-	padding: 0;
-	vertical-align: middle;
-	border-radius: 20px 20px;
-	border: 1px solid #ccc;
-	background-color: #ccc;
-	cursor: pointer;
-	transition: all 0.3s cubic-bezier(0.35, 0, 0.25, 1);
-	overflow: hidden;
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 44px;
+  height: 22px;
+  line-height: 20px;
+  padding: 0;
+  vertical-align: middle;
+  border-radius: 20px 20px;
+  border: 1px solid #ccc;
+  background-color: #ccc;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.35, 0, 0.25, 1);
+  overflow: hidden;
 }
 .rc-switch-inner-checked,
 .rc-switch-inner-unchecked {
-	color: #fff;
-	font-size: 12px;
-	position: absolute;
-	top: 0;
-	transition: left 0.3s cubic-bezier(0.35, 0, 0.25, 1);
+  color: #fff;
+  font-size: 12px;
+  position: absolute;
+  top: 0;
+  transition: left 0.3s cubic-bezier(0.35, 0, 0.25, 1);
 }
 .rc-switch-inner-checked {
-	left: -14px;
+  left: -14px;
 }
 .rc-switch-inner-unchecked {
-	left: 24px;
+  left: 24px;
 }
 .rc-switch:after {
-	position: absolute;
-	width: 18px;
-	height: 18px;
-	left: 2px;
-	top: 1px;
-	border-radius: 50% 50%;
-	background-color: #fff;
-	content: ' ';
-	cursor: pointer;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
-	transform: scale(1);
-	transition: left 0.3s cubic-bezier(0.35, 0, 0.25, 1);
-	animation-timing-function: cubic-bezier(0.35, 0, 0.25, 1);
-	animation-duration: 0.3s;
-	animation-name: rcSwitchOff;
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 2px;
+  top: 1px;
+  border-radius: 50% 50%;
+  background-color: #fff;
+  content: ' ';
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
+  transform: scale(1);
+  transition: left 0.3s cubic-bezier(0.35, 0, 0.25, 1);
+  animation-timing-function: cubic-bezier(0.35, 0, 0.25, 1);
+  animation-duration: 0.3s;
+  animation-name: rcSwitchOff;
 }
 .rc-switch:hover:after {
-	transform: scale(1.1);
-	animation-name: rcSwitchOn;
+  transform: scale(1.1);
+  animation-name: rcSwitchOn;
 }
 .rc-switch:focus {
-	box-shadow: 0 0 0 2px tint(#2db7f5, 80%);
-	outline: none;
+  box-shadow: 0 0 0 2px tint(#2db7f5, 80%);
+  outline: none;
 }
 .rc-switch-checked {
-	border: 1px solid var(--ion-color-primary);
-	background-color: var(--ion-color-primary);
+  border: 1px solid var(--ion-color-primary);
+  background-color: var(--ion-color-primary);
 }
 .rc-switch-checked .rc-switch-inner-checked {
-	left: 6px;
+  left: 6px;
 }
 .rc-switch-checked .rc-switch-inner-unchecked {
-	left: 44px;
+  left: 44px;
 }
 .rc-switch-checked:after {
-	left: 22px;
+  left: 22px;
 }
 .rc-switch-disabled {
-	cursor: no-drop;
-	background: #ccc;
-	border-color: #ccc;
+  cursor: no-drop;
+  background: #ccc;
+  border-color: #ccc;
 }
 .rc-switch-disabled:after {
-	background: #9e9e9e;
-	animation-name: none;
-	cursor: no-drop;
+  background: #9e9e9e;
+  animation-name: none;
+  cursor: no-drop;
 }
 .rc-switch-disabled:hover:after {
-	transform: scale(1);
-	animation-name: none;
+  transform: scale(1);
+  animation-name: none;
 }
 .rc-switch-label {
-	display: inline-block;
-	line-height: 20px;
-	font-size: 14px;
-	padding-left: 10px;
-	vertical-align: middle;
-	white-space: normal;
-	pointer-events: none;
-	user-select: text;
+  display: inline-block;
+  line-height: 20px;
+  font-size: 14px;
+  padding-left: 10px;
+  vertical-align: middle;
+  white-space: normal;
+  pointer-events: none;
+  user-select: text;
 }
 
 .zaions__dotted_list {
-	padding-left: 16px;
-	--width: 100%;
+  padding-left: 16px;
+  --width: 100%;
 }
 
 .zaions__dotted_list ion-item {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .zaions__dotted_list ion-item::before {
-	content: '•';
-	font-size: 1.3rem;
+  content: '•';
+  font-size: 1.3rem;
 }
 
 @keyframes rcSwitchOn {
-	0% {
-		transform: scale(1);
-	}
-	50% {
-		transform: scale(1.25);
-	}
-	100% {
-		transform: scale(1.1);
-	}
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1.1);
+  }
 }
 @keyframes rcSwitchOff {
-	0% {
-		transform: scale(1.1);
-	}
-	100% {
-		transform: scale(1);
-	}
+  0% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 .zaions_item_input_bb {
-	border-bottom: 1px solid #aeaeae;
+  border-bottom: 1px solid #aeaeae;
 }
 
 .ZLIonBadge {
-	--color: var(--ion-color-success-shade);
-	--background: transparent;
-	font-size: 0.7rem;
-	font-weight: 900;
+  --color: var(--ion-color-success-shade);
+  --background: transparent;
+  font-size: 0.7rem;
+  font-weight: 900;
 }
 
 .ion-item-start-no-padding {
-	--padding-start: 0px;
+  --padding-start: 0px;
 }
 
 .hover\:outline-sand {
-	transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-	transition-duration: 75ms;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  transition-duration: 75ms;
 }
 
 .hover\:outline-sand:hover {
-	outline-color: #e0e2d9;
-	outline-offset: 3px;
-	outline-width: 2px;
-	outline-style: solid;
-	border-radius: 100vmax;
-	-webkit-border-radius: 100vmax;
-	-moz-border-radius: 100vmax;
-	-ms-border-radius: 100vmax;
-	-o-border-radius: 100vmax;
+  outline-color: #e0e2d9;
+  outline-offset: 3px;
+  outline-width: 2px;
+  outline-style: solid;
+  border-radius: 100vmax;
+  -webkit-border-radius: 100vmax;
+  -moz-border-radius: 100vmax;
+  -ms-border-radius: 100vmax;
+  -o-border-radius: 100vmax;
 }
 
 .zaions-datetime-btn::part(native) {
-	/* background: var(--ion-color-primary);
+  /*background: var(--ion-color-primary);
   color: #fff;
   box-shadow: var(--box-shadow);
-  border: 1px solid var(--ion-color-primary); */
-	background: #fff;
-	color: var(--ion-color-dark);
-	box-shadow: var(--box-shadow);
-	border-bottom: 1px solid rgba(0, 0, 0, 0.13);
-	border-radius: 0;
-	padding-left: 6px;
-	width: 100%;
-	text-align: left;
+  border: 1px solid var(--ion-color-primary);
+  */
+  background: var(--ion-color-white);
+  color: var(--ion-color-dark);
+  box-shadow: var(--box-shadow);
+  border: 1px solid rgba(0, 0, 0, 0.13);
+  border-radius: 5px;
+  padding-left: 6px;
+  width: 100%;
+  height: 2.3rem;
+  text-align: left;
+  margin: 0;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
 }
 .zaions-datetime-btn::part(native):last-child {
-	background: var(--ion-color-secondary);
+  background: var(--ion-color-secondary);
 }
 
 /* Link-in-bio design-theme-customAppearance & design-block-customAppearance buttons styles */
 .inlineSquare {
-	--border-radius: 0;
-	border-radius: 0;
+  --border-radius: 0;
+  border-radius: 0;
 }
 
 .inlineRound {
-	--border-radius: 10px;
-	border-radius: 10px;
+  --border-radius: 10px;
+  border-radius: 10px;
 }
 
 .zaions-button-type-button-active {
-	--border: solid 2px var(--ion-color-primary);
-	color: #fff;
-	--box-shadow: 0 3px 6px #00000029;
+  --border: solid 2px var(--ion-color-primary);
+  color: #fff;
+  --box-shadow: 0 3px 6px #00000029;
 }
 
 /* .open-folder-menu-button {
@@ -960,8 +967,8 @@ ion-modal.zaions__modal_w100 {
 
 /* Workspace */
 .zaions_comment_box {
-	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08))
-		drop-shadow(0 0 1px rgba(50, 79, 58, 0.15));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08))
+    drop-shadow(0 0 1px rgba(50, 79, 58, 0.15));
 }
 /* .zaions_comment_box::before {
 	background: inherit;
@@ -976,20 +983,20 @@ ion-modal.zaions__modal_w100 {
 
 /* #endregion  */
 .PhoneInput {
-	border: 1px solid #b3b3b3;
-	/*border: 1px solid #595959;
+  border: 1px solid #b3b3b3;
+  /*border: 1px solid #595959;
 	*/
-	padding: 0 0.8rem;
-	border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	-ms-border-radius: 4px;
-	-o-border-radius: 4px;
+  padding: 0 0.8rem;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
 }
 .PhoneInput input:focus {
-	outline: none !important;
+  outline: none !important;
 }
 
 .PhoneInputInput:focus-within .PhoneInput {
-	border: 1px solid red;
+  border: 1px solid red;
 }

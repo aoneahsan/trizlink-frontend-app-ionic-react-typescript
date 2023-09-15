@@ -89,6 +89,7 @@ import { replaceRouteParams } from '@/utils/helpers';
 import { closeOutline } from 'ionicons/icons';
 import ZWSSettingPixelListPage from './Pixel';
 import ZPixelsFilterMenu from '@/navigation/AdminPanel/Pixels/FilterMenu';
+import ZUtilityButtonGroup from '@/components/AdminPanelComponents/UtilityButtonGroup';
 
 /**
  * Style files Imports go down
@@ -195,28 +196,37 @@ const ZWorkspaceSettings: React.FC = () => {
             ? CONSTANTS.MENU_IDS.ADMIN_PANEL_WS_SETTING_PAGE_ID
             : undefined
         }>
-        <ZIonHeader>
-          <ZIonToolbar className='flex ion-align-items-center w-full'>
-            {/* <ZIonTitle>First Menu</ZIonTitle> */}
-
-            <ZIonIcon
-              slot='end'
-              icon={closeOutline}
-              className='w-7 h-7 pt-1 cursor-pointer'
-              onClick={async () => {
-                // Close the menu by menu-id
-                await menuController.close(
-                  CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
-                );
-              }}
-            />
-          </ZIonToolbar>
-        </ZIonHeader>
-        <ZIonContent className='ion-padding'>
-          {/* Account Settings */}
-          <ZIonTitle className='ion-no-padding ion-text-center mt-2 font-semibold text-xl'>
-            Account settings
+        {/* Header */}
+        <ZIonHeader className='flex px-3 py-2 border-b shadow-none ion-align-items-center ion-no-padding ion-justify-content-between'>
+          <ZIonTitle
+            className={classNames({
+              'block font-semibold ion-no-padding': true,
+              'text-xl': isLgScale,
+              'text-lg': !isLgScale
+            })}>
+            Settings
           </ZIonTitle>
+
+          <ZIonIcon
+            icon={closeOutline}
+            className='w-6 h-6 pt-[1px] cursor-pointer'
+            onClick={async () => {
+              await menuController.close(
+                CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
+              );
+            }}
+          />
+        </ZIonHeader>
+
+        <ZIonContent
+          style={{
+            '--padding-start': '.6rem',
+            '--padding-end': '.6rem'
+          }}>
+          {/* Account Settings */}
+          <ZIonText className='block mt-2 font-semibold text-md ion-no-padding'>
+            Account settings
+          </ZIonText>
           <ZIonList lines='none'>
             {/* Team */}
             <ZIonItem
@@ -289,9 +299,9 @@ const ZWorkspaceSettings: React.FC = () => {
           </ZIonList>
 
           {/* Workspace settings */}
-          <ZIonTitle className='ion-no-padding ion-text-center mt-1 font-semibold text-xl'>
+          <ZIonText className='block mt-1 font-semibold text-md ion-no-padding'>
             Workspace settings
-          </ZIonTitle>
+          </ZIonText>
           <ZIonList lines='none'>
             {/* Pixels */}
             <ZIonItem
@@ -300,12 +310,11 @@ const ZWorkspaceSettings: React.FC = () => {
                 'mt-1 cursor-pointer': true,
                 'zaions__light_bg font-normal': false
               })}
-              // routerLink={replaceRouteParams(
-              // 	ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
-              // 	[CONSTANTS.RouteParams.workspace.workspaceId],
-              // 	[workspaceId]
-              // )}
-            >
+              routerLink={replaceRouteParams(
+                ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel,
+                [CONSTANTS.RouteParams.workspace.workspaceId],
+                [workspaceId]
+              )}>
               Pixels
             </ZIonItem>
 
@@ -341,6 +350,8 @@ const ZWorkspaceSettings: React.FC = () => {
               Embed widgets
             </ZIonItem>
           </ZIonList>
+
+          {!isMdScale ? <ZUtilityButtonGroup /> : null}
         </ZIonContent>
       </ZIonMenu>
 
@@ -497,7 +508,7 @@ const ZInpageMainContent: React.FC = () => {
       })}>
       <Suspense
         fallback={
-          <ZIonCol className='h-full w-full'>
+          <ZIonCol className='w-full h-full'>
             <ZFallbackIonSpinner2 />
           </ZIonCol>
         }>

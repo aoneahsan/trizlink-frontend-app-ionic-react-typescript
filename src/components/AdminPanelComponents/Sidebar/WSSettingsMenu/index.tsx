@@ -20,8 +20,7 @@ import {
   ZIonAccordionGroup,
   ZIonCol,
   ZIonItem,
-  ZIonLabel,
-  ZIonList
+  ZIonLabel
 } from '@/components/ZIonComponents';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 
@@ -43,6 +42,7 @@ import CONSTANTS from '@/utils/constants';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { WSSettingsPageSect } from '@/types/AdminPanel/workspace';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Recoil State Imports go down
@@ -75,6 +75,8 @@ const ZWSSettingsMenu: React.FC = () => {
     workspaceId: string;
   }>();
 
+  const { isLgScale } = useZMediaQueryScale();
+
   // #region checking the route.
   const isTeamPage = useRouteMatch(
     ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team
@@ -106,7 +108,11 @@ const ZWSSettingsMenu: React.FC = () => {
       sizeXs='2.8'
       className='border-e-[1px] zaions-transition h-full shadow-[0_3px_6px_#00000029]'>
       <ZCustomScrollable
-        className='w-full h-full ion-padding-top ion-padding'
+        className={classNames({
+          'w-full h-full ion-padding-top': true,
+          'ion-padding': isLgScale,
+          'px-2': !isLgScale
+        })}
         scrollY={true}>
         <ZIonAccordionGroup
           testingselector={

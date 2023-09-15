@@ -56,7 +56,7 @@ export const PixelTableColumns = [
     isVisible: true
   },
   {
-    id: ZPixelsListPageTableColumnsIds.createAt,
+    id: ZPixelsListPageTableColumnsIds.formattedCreateAt,
     name: 'Create at',
     isVisible: true
   }

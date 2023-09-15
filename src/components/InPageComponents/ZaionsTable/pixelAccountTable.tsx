@@ -76,7 +76,9 @@ import {
 } from '@/types/AdminPanel/linksType';
 import {
   FormMode,
-  ZPixelsListPageTableColumnsIds
+  ZPixelsListPageTableColumnsIds,
+  ZUserSettingInterface,
+  ZUserSettingTypeEnum
 } from '@/types/AdminPanel/index.type';
 import {
   chevronBackOutline,
@@ -100,10 +102,13 @@ import { reportCustomError } from '@/utils/customErrorType';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import ZCan from '@/components/Can';
 import ZaionsAddPixelAccount from '../ZaionsModals/AddPixelsAccount';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
 import { PixelAccountFormState } from '@/ZaionsStore/FormStates/pixelAccountFormState.recoil';
-import { PixelAccountsRStateAtom } from '@/ZaionsStore/UserDashboard/PixelAccountsState/index.recoil';
+import {
+  FilteredPixelsDataRStateSelector,
+  PixelAccountsRStateAtom
+} from '@/ZaionsStore/UserDashboard/PixelAccountsState/index.recoil';
 
 /**
  * Recoil State Imports go down
@@ -201,11 +206,13 @@ const ZInpageTable: React.FC = () => {
 
   // #region Recoil state.
   const setPixelDataRState = useSetRecoilState(PixelAccountsRStateAtom);
+  const filteredPixelsDataRSelector = useRecoilValue(
+    FilteredPixelsDataRStateSelector
+  );
   // #endregion
 
   // #region custom hooks.
   const { zNavigatePushRoute } = useZNavigate();
-  const { presentZIonToast } = useZIonToast();
   const { isMdScale, isSmScale } = useZMediaQueryScale();
   // getting search param from url with the help of 'qs' package.
   const routeQSearchParams = routeQueryString.parse(location.search, {
@@ -222,6 +229,18 @@ const ZInpageTable: React.FC = () => {
     _itemsIds: [],
     _urlDynamicParts: []
   });
+
+  const { data: getPixelFiltersData, isFetching: isPixelFiltersDataFetching } =
+    useZRQGetRequest<ZUserSettingInterface>({
+      _url: API_URL_ENUM.user_setting_delete_update_get,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+        ZUserSettingTypeEnum.pixelListPageTable
+      ],
+      _itemsIds: [ZUserSettingTypeEnum.pixelListPageTable],
+      _urlDynamicParts: [CONSTANTS.RouteParams.settings.type],
+      _extractType: ZRQGetRequestExtractEnum.extractItem
+    });
   // #endregion
 
   // #region Managing table data with react-table.
@@ -242,21 +261,7 @@ const ZInpageTable: React.FC = () => {
       header: 'Title',
       id: ZPixelsListPageTableColumnsIds.title,
       cell: row => {
-        return (
-          <ZIonRouterLink
-            className='hover:underline'
-            // routerLink={replaceRouteParams(
-            //   ZaionsRoutes.AdminPanel.ShortLinks.Edit,
-            //   [
-            //     CONSTANTS.RouteParams.workspace.workspaceId,
-            //     CONSTANTS.RouteParams.editShortLinkIdParam
-            //   ],
-            //   [workspaceId, row?.row?.original?.id!]
-            // )}
-          >
-            <ZIonText>{row.getValue()}</ZIonText>
-          </ZIonRouterLink>
-        );
+        return <ZIonText>{row.getValue()}</ZIonText>;
       },
       footer: 'Title'
     }),
@@ -276,16 +281,19 @@ const ZInpageTable: React.FC = () => {
     }),
 
     // create at
-    columnHelper.accessor(itemData => itemData.createAt, {
+    columnHelper.accessor(itemData => itemData.formattedCreateAt, {
       header: 'create at',
-      id: ZPixelsListPageTableColumnsIds.createAt,
+      id: ZPixelsListPageTableColumnsIds.formattedCreateAt,
       footer: 'create at'
     })
   ];
 
   const zPixelTable = useReactTable({
     columns: defaultColumns,
-    data: PixelsData || [],
+    data: filteredPixelsDataRSelector || [],
+    state: {
+      columnOrder: getPixelFiltersData?.settings?.columnOrderIds || []
+    },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     debugTable: true,
@@ -295,6 +303,58 @@ const ZInpageTable: React.FC = () => {
   // #endregion
 
   // #region useEffect's
+
+  useEffect(() => {
+    try {
+      if (getPixelFiltersData?.settings?.columns) {
+        const __getTitleColumn = getPixelFiltersData?.settings?.columns.filter(
+          el => el?.id === ZPixelsListPageTableColumnsIds.title
+        )[0];
+
+        const __getFormattedCreateAtColumn =
+          getPixelFiltersData?.settings?.columns.filter(
+            el => el?.id === ZPixelsListPageTableColumnsIds.formattedCreateAt
+          )[0];
+
+        const __getPixelIdColumn =
+          getPixelFiltersData?.settings?.columns.filter(
+            el => el?.id === ZPixelsListPageTableColumnsIds.pixelId
+          )[0];
+
+        const __getPlatformColumn =
+          getPixelFiltersData?.settings?.columns.filter(
+            el => el?.id === ZPixelsListPageTableColumnsIds.platform
+          )[0];
+
+        if (__getTitleColumn) {
+          zPixelTable
+            ?.getColumn(ZPixelsListPageTableColumnsIds.title)
+            ?.toggleVisibility(__getTitleColumn?.isVisible);
+        }
+
+        if (__getFormattedCreateAtColumn) {
+          zPixelTable
+            ?.getColumn(ZPixelsListPageTableColumnsIds.formattedCreateAt)
+            ?.toggleVisibility(__getFormattedCreateAtColumn?.isVisible);
+        }
+
+        if (__getPixelIdColumn) {
+          zPixelTable
+            ?.getColumn(ZPixelsListPageTableColumnsIds.pixelId)
+            ?.toggleVisibility(__getPixelIdColumn?.isVisible);
+        }
+
+        if (__getPlatformColumn) {
+          zPixelTable
+            ?.getColumn(ZPixelsListPageTableColumnsIds.platform)
+            ?.toggleVisibility(__getPlatformColumn?.isVisible);
+        }
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  }, [getPixelFiltersData]);
+
   useEffect(() => {
     zPixelTable.setPageIndex(Number(pageindex) || 0);
     zPixelTable.setPageSize(Number(pagesize) || 2);
@@ -303,13 +363,12 @@ const ZInpageTable: React.FC = () => {
   useEffect(() => {
     try {
       if (PixelsData) {
-        setPixelDataRState;
+        setPixelDataRState(PixelsData);
       }
     } catch (error) {
       reportCustomError(error);
     }
   }, [PixelsData]);
-
   // #endregion
 
   // #region Modal & Popovers.
@@ -334,7 +393,7 @@ const ZInpageTable: React.FC = () => {
         className='w-full border rounded-lg h-max ion-no-padding'
         scrollX={true}>
         <div className='min-w-[55rem]'>
-          {zPixelTable.getHeaderGroups().map((_headerInfo, _headerIndex) => {
+          {zPixelTable?.getHeaderGroups()?.map((_headerInfo, _headerIndex) => {
             return (
               <ZIonRow
                 key={_headerIndex}
@@ -379,89 +438,103 @@ const ZInpageTable: React.FC = () => {
             <ZIonCol
               size='12'
               className='w-full ion-no-padding'>
-              {zPixelTable.getRowModel().rows.map((_rowInfo, _rowIndex) => {
-                return (
-                  <ZIonRow
-                    key={_rowIndex}
-                    className='flex-nowrap'>
-                    {_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
-                      _cellInfo.column.getIsVisible() ? (
-                        <ZIonCol
-                          key={_cellIndex}
-                          size={
-                            _cellInfo.column.id ===
-                              ZPixelsListPageTableColumnsIds.id ||
-                            _cellInfo.column.id ===
-                              ZPixelsListPageTableColumnsIds.actions
-                              ? '.8'
-                              : '2.6'
-                          }
-                          className={classNames({
-                            'py-1 mt-1 border-b flex ion-align-items-center':
-                              true,
-                            'border-r': false,
-                            'ps-2':
-                              _cellInfo.column.id !==
-                              ZPixelsListPageTableColumnsIds.id,
-                            'ps-0':
+              {filteredPixelsDataRSelector?.length > 0 ? (
+                zPixelTable?.getRowModel()?.rows?.map((_rowInfo, _rowIndex) => {
+                  return (
+                    <ZIonRow
+                      key={_rowIndex}
+                      className='flex-nowrap'>
+                      {_rowInfo?.getAllCells()?.map((_cellInfo, _cellIndex) =>
+                        _cellInfo?.column?.getIsVisible() ? (
+                          <ZIonCol
+                            key={_cellIndex}
+                            size={
                               _cellInfo.column.id ===
-                              ZPixelsListPageTableColumnsIds.id
-                          })}>
-                          <div
+                                ZPixelsListPageTableColumnsIds.id ||
+                              _cellInfo.column.id ===
+                                ZPixelsListPageTableColumnsIds.actions
+                                ? '.8'
+                                : '2.6'
+                            }
                             className={classNames({
-                              'w-full text-sm ZaionsTextEllipsis': true,
-                              'ps-3':
+                              'py-1 mt-1 border-b flex ion-align-items-center':
+                                true,
+                              'border-r': false,
+                              'ps-2':
+                                _cellInfo.column.id !==
+                                ZPixelsListPageTableColumnsIds.id,
+                              'ps-0':
                                 _cellInfo.column.id ===
                                 ZPixelsListPageTableColumnsIds.id
                             })}>
-                            {flexRender(
-                              _cellInfo.column.columnDef.cell,
-                              _cellInfo.getContext()
-                            )}
-                          </div>
-                        </ZIonCol>
-                      ) : null
-                    )}
+                            <div
+                              className={classNames({
+                                'w-full text-sm ZaionsTextEllipsis': true,
+                                'ps-3':
+                                  _cellInfo.column.id ===
+                                  ZPixelsListPageTableColumnsIds.id
+                              })}>
+                              {flexRender(
+                                _cellInfo.column.columnDef.cell,
+                                _cellInfo.getContext()
+                              )}
+                            </div>
+                          </ZIonCol>
+                        ) : null
+                      )}
 
-                    <ZIonCol
-                      size='.8'
-                      className={classNames({
-                        'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
-                          true,
-                        'border-r': false
-                      })}>
-                      <ZIonButton
-                        fill='clear'
-                        color='dark'
-                        className='ion-no-padding ion-no-margin'
-                        size='small'
-                        testingselector={
-                          CONSTANTS.testingSelectors.shortLink.listPage.table
-                            .actionPopoverBtn
-                        }
-                        testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
-                        onClick={(_event: unknown) => {
-                          setCompState(oldVal => ({
-                            ...oldVal,
-                            selectedId: _rowInfo?.original?.id || '',
-                            selectedPixelId: _rowInfo?.original?.pixelId || '',
-                            selectedPixelTitle: _rowInfo?.original?.title,
-                            selectedPixelPlatform: _rowInfo?.original?.platform
-                          }));
-                          //
-                          presentZPixelActionPopover({
-                            _event: _event as Event,
-                            _cssClass:
-                              'zaions_present_folder_Action_popover_width',
-                            _dismissOnSelect: false
-                          });
-                        }}>
-                        <ZIonIcon icon={ellipsisVerticalOutline} />
-                      </ZIonButton>
-                    </ZIonCol>
-                  </ZIonRow>
-                );
-              })}
+                      <ZIonCol
+                        size='.8'
+                        className={classNames({
+                          'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
+                            true,
+                          'border-r': false
+                        })}>
+                        <ZIonButton
+                          fill='clear'
+                          color='dark'
+                          className='ion-no-padding ion-no-margin'
+                          size='small'
+                          testingselector={
+                            CONSTANTS.testingSelectors.shortLink.listPage.table
+                              .actionPopoverBtn
+                          }
+                          testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
+                          onClick={(_event: unknown) => {
+                            setCompState(oldVal => ({
+                              ...oldVal,
+                              selectedId: _rowInfo?.original?.id || '',
+                              selectedPixelId:
+                                _rowInfo?.original?.pixelId || '',
+                              selectedPixelTitle: _rowInfo?.original?.title,
+                              selectedPixelPlatform:
+                                _rowInfo?.original?.platform
+                            }));
+                            //
+                            presentZPixelActionPopover({
+                              _event: _event as Event,
+                              _cssClass:
+                                'zaions_present_folder_Action_popover_width',
+                              _dismissOnSelect: false
+                            });
+                          }}>
+                          <ZIonIcon icon={ellipsisVerticalOutline} />
+                        </ZIonButton>
+                      </ZIonCol>
+                    </ZIonRow>
+                  );
+                })
+              ) : (
+                <ZEmptyTable
+                  message='No pixels founds. please create a pixel.'
+                  btnText='Create pixel'
+                  btnOnClick={() => {
+                    presentZAddPixelAccount({
+                      _cssClass: 'pixel-account-modal-size'
+                    });
+                  }}
+                />
+              )}
             </ZIonCol>
           </ZIonRow>
         </div>
@@ -643,8 +716,8 @@ const ZInpageTable: React.FC = () => {
             'ion-justify-content-between mt-1 px-2': !isSmScale
           })}>
           <ZIonText className='mt-1 font-semibold me-3'>
-            {PixelsData?.length || 0}{' '}
-            {PixelsData?.length === 1 ? 'Pixel' : 'Pixels'}
+            {filteredPixelsDataRSelector?.length || 0}{' '}
+            {filteredPixelsDataRSelector?.length === 1 ? 'Pixel' : 'Pixels'}
           </ZIonText>
           <ZIonSelect
             minHeight='30px'

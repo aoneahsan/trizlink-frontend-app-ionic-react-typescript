@@ -22,9 +22,11 @@ import {
   ZIonButton,
   ZIonCol,
   ZIonContent,
+  ZIonDatetimeButton,
   ZIonHeader,
   ZIonIcon,
   ZIonItem,
+  ZIonLabel,
   ZIonMenu,
   ZIonReorder,
   ZIonReorderGroup,
@@ -49,6 +51,7 @@ import { TimeFilterEnum } from '@/types/AdminPanel/linksType';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import { extractInnerData, zStringify } from '@/utils/helpers';
 import {
+  ZPixelsListPageTableColumnsIds,
   ZUserSettingInterface,
   ZUserSettingTypeEnum
 } from '@/types/AdminPanel/index.type';
@@ -64,6 +67,9 @@ import {
 } from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { useSetRecoilState } from 'recoil';
+import { PixelsFilterOptionsRStateAtom } from '@/ZaionsStore/UserDashboard/PixelAccountsState/index.recoil';
+import MESSAGES from '@/utils/messages';
 
 /**
  * Type Imports go down
@@ -116,19 +122,28 @@ const ZPixelsFilterMenu: React.FC = () => {
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
   // #endregion
 
+  // #region Recoil.
+  // Recoil state for storing filter options for Pixel.
+  const setShortLinksFilterOptions = useSetRecoilState(
+    PixelsFilterOptionsRStateAtom
+  );
+  // #endregion
+
   // #region APIs.
   //
   const { mutateAsync: updatePixelFilersAsyncMutate } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.user_setting_delete_update
+    _url: API_URL_ENUM.user_setting_delete_update_get,
+    _loaderMessage: MESSAGES.GENERAL.FILTER.FILTERING
   });
 
   const { mutateAsync: createPixelFilersAsyncMutate } = useZRQCreateRequest({
-    _url: API_URL_ENUM.user_setting_list_create
+    _url: API_URL_ENUM.user_setting_list_create,
+    _loaderMessage: MESSAGES.GENERAL.FILTER.FILTERING
   });
 
   const { data: getPixelFiltersData, isFetching: isPixelFiltersDataFetching } =
     useZRQGetRequest<ZUserSettingInterface>({
-      _url: API_URL_ENUM.user_setting_get,
+      _url: API_URL_ENUM.user_setting_delete_update_get,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
         ZUserSettingTypeEnum.pixelListPageTable
@@ -138,7 +153,6 @@ const ZPixelsFilterMenu: React.FC = () => {
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
   // #endregion
-  console.log({ getPixelFiltersData: getPixelFiltersData?.settings?.columns });
 
   useEffect(() => {
     try {
@@ -157,15 +171,24 @@ const ZPixelsFilterMenu: React.FC = () => {
   const handleCarouselCardReorder = (
     event: CustomEvent<ItemReorderEventDetail>
   ) => {
-    const reorderedItems = event.detail.complete(PixelTableColumns);
+    const reorderedItems = event.detail.complete(compState.pixelsColumn);
+    const pixelsColumnIds: string[] = [ZPixelsListPageTableColumnsIds.id];
+
+    for (let i = 0; i < reorderedItems.length; i++) {
+      const _block = reorderedItems[i] as {
+        id?: string;
+        name: string;
+        isVisible: boolean;
+      };
+      pixelsColumnIds.push(_block?.id!);
+    }
+
+    //
     setCompState(oldValues => ({
       ...oldValues,
-      pixelsColumn: reorderedItems
+      // pixelsColumn: reorderedItems,
+      columnOrderIds: pixelsColumnIds
     }));
-    console.log({
-      log: 'reorder',
-      reorderedItems
-    });
   };
 
   const FormikSubmitHandler = async (_data: string) => {
@@ -251,38 +274,38 @@ const ZPixelsFilterMenu: React.FC = () => {
         <Formik
           initialValues={{
             columns: compState?.pixelsColumn,
-            // columns: ShortLinksTableColumns,
 
             filters: {
-              tags: [],
-              domains: [],
-              time: TimeFilterEnum.allTime
+              time:
+                getPixelFiltersData?.settings?.filters?.time ||
+                TimeFilterEnum.allTime,
+              startDate:
+                getPixelFiltersData?.settings?.filters?.startDate ||
+                new Date().toISOString(),
+              endDate:
+                getPixelFiltersData?.settings?.filters?.endDate ||
+                new Date().toISOString()
             }
           }}
           enableReinitialize={true}
           onSubmit={async values => {
             try {
-              const _domains = Array.from(
-                values.filters.domains as ZaionsRSelectOptions[],
-                ({ value }) => value!
-              );
-
-              const _tags = Array.from(
-                values.filters.tags as ZaionsRSelectOptions[],
-                ({ value }) => value!
-              );
-
-              // setShortLinksFilterOptions(oldVales => ({
-              //   ...oldVales,
-              //   domains: [..._domains],
-              //   tags: { ..._tags }
-              // }));
+              setShortLinksFilterOptions(oldValues => ({
+                ...oldValues,
+                timeFilter: {
+                  ...oldValues.timeFilter,
+                  daysToSubtract: values?.filters?.time,
+                  startedAt: values?.filters?.startDate,
+                  endAt: values?.filters?.endDate
+                }
+              }));
 
               const zStringifyData = zStringify({
                 type: ZUserSettingTypeEnum.pixelListPageTable,
                 settings: zStringify({
                   columns: values.columns,
-                  columnOrderIds: compState.columnOrderIds
+                  columnOrderIds: compState.columnOrderIds,
+                  filters: values?.filters
                 })
               });
 
@@ -291,7 +314,7 @@ const ZPixelsFilterMenu: React.FC = () => {
               reportCustomError(error);
             }
           }}>
-          {({ values, setFieldValue, submitForm }) => {
+          {({ values, setFieldValue, handleChange, submitForm }) => {
             return (
               <ZIonRow>
                 <ZIonCol
@@ -328,6 +351,37 @@ const ZPixelsFilterMenu: React.FC = () => {
                       options={CONSTANTS.ZTimeSelectData}
                     />
 
+                    {values?.filters?.time === TimeFilterEnum.customRange ? (
+                      <>
+                        <ZIonLabel
+                          className='block mt-3 text-xs'
+                          color='medium'>
+                          Start time
+                        </ZIonLabel>
+                        <ZIonDatetimeButton
+                          name='filters.startDate'
+                          value={values?.filters?.startDate}
+                          onIonChange={handleChange}
+                          id='filter_start_time'
+                          className='w-full zaions-datetime-btn ion-no-margin'
+                        />
+
+                        <ZIonLabel
+                          className='block mt-3 text-xs'
+                          color='medium'>
+                          End time
+                        </ZIonLabel>
+                        <ZIonDatetimeButton
+                          name='filters.endDate'
+                          value={values?.filters?.endDate}
+                          onIonChange={handleChange}
+                          min={values?.filters?.startDate}
+                          id='filter_end_time'
+                          className='w-full zaions-datetime-btn ion-no-margin'
+                        />
+                      </>
+                    ) : null}
+
                     <ZIonButton
                       expand='block'
                       className='mt-3'
@@ -339,10 +393,10 @@ const ZPixelsFilterMenu: React.FC = () => {
                   </div>
                 </ZIonCol>
 
-                {/*  */}
+                {/* Table UI */}
                 <ZIonCol
                   size='12'
-                  className='pb-3 border-b mt-2'>
+                  className='pb-3 mt-2 border-b'>
                   <ZIonText
                     className={classNames({
                       'block mx-3 mb-2 text-md tracking-widest font-semibold':
