@@ -78,13 +78,14 @@ const ZInviteButton: React.FC<IZInviteButton> = ({
     }
   );
 
-  const { isLgScale } = useZMediaQueryScale();
+  const { isLgScale, isMdScale } = useZMediaQueryScale();
 
   return (
     <ZIonButton
       size={!isLgScale ? 'small' : undefined}
-      height={isLgScale ? '2.3rem' : '1.9rem'}
+      height={isMdScale ? '2.3rem' : '1.9rem'}
       className={className}
+      expand={isMdScale ? undefined : 'block'}
       testingselector={CONSTANTS.testingSelectors.topBar.teamInviteBtn}
       routerLink={replaceRouteParams(
         ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,

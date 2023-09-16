@@ -103,7 +103,9 @@ const ZaionsRoutes = {
         ReferralProgram: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/as/referral-program`,
         Billing: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/as/billing`,
         User: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/as/user`,
-        Pixel: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/ws/pixel`
+        Pixel: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/ws/pixel`,
+        UTMTag: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/ws/utm-tag`,
+        EmbedWidget: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/ws/embed-widget`
       }
     },
 

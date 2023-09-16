@@ -10,42 +10,45 @@ import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 // Type
 type ZIonChipType = {
-	children: ReactNode;
-	color?: ZIonColorType;
-	className?: string;
-	style?: {
-		[key: string]: unknown;
-	};
-	disabled?: boolean;
-	mode?: ZIonModeType;
-	outline?: boolean;
-	testingselector?: string;
-	testingListSelector?: string;
-	onClick?: React.MouseEventHandler<HTMLIonChipElement>;
+  children: ReactNode;
+  color?: ZIonColorType;
+  className?: string;
+  style?: {
+    [key: string]: unknown;
+  };
+  disabled?: boolean;
+  mode?: ZIonModeType;
+  outline?: boolean;
+  testingselector?: string;
+  testinglistselector?: string;
+  onClick?: React.MouseEventHandler<HTMLIonChipElement>;
 };
 
 const ZIonChip = (props: ZIonChipType) => {
-	const _testingListSelector = props.testingListSelector
-		? {
-				...zCreateElementTestingSelector({
-					_value: props.testingListSelector || PRODUCT_NAME,
-					_key: zCreateElementTestingSelectorKeyEnum.listSelector,
-				}),
-		  }
-		: {};
+  const _testinglistselector = props.testinglistselector
+    ? {
+        ...zCreateElementTestingSelector({
+          _value: props.testinglistselector || PRODUCT_NAME,
+          _key: zCreateElementTestingSelectorKeyEnum.listSelector
+        })
+      }
+    : {};
 
-	const _testingSelector = props.testingselector
-		? {
-				...zCreateElementTestingSelector({
-					_value: props.testingselector || PRODUCT_NAME,
-				}),
-		  }
-		: {};
-	return (
-		<IonChip {...props} {..._testingSelector} {..._testingListSelector}>
-			{props.children}
-		</IonChip>
-	);
+  const _testingSelector = props.testingselector
+    ? {
+        ...zCreateElementTestingSelector({
+          _value: props.testingselector || PRODUCT_NAME
+        })
+      }
+    : {};
+  return (
+    <IonChip
+      {...props}
+      {..._testingSelector}
+      {..._testinglistselector}>
+      {props.children}
+    </IonChip>
+  );
 };
 
 export default ZIonChip;

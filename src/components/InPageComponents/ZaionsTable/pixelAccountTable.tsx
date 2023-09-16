@@ -251,8 +251,15 @@ const ZInpageTable: React.FC = () => {
       id: ZPixelsListPageTableColumnsIds.id,
       header: 'Select',
       footer: 'Select Column Footer',
-      cell: props => {
-        return <ZIonCheckbox />;
+      cell: ({ row }) => {
+        return (
+          <ZIonCheckbox
+            testingselector={`${CONSTANTS.testingSelectors.pixels.listPage.table.select}-${row?.original?.id}`}
+            testinglistselector={
+              CONSTANTS.testingSelectors.pixels.listPage.table.select
+            }
+          />
+        );
       }
     }),
 
@@ -261,7 +268,15 @@ const ZInpageTable: React.FC = () => {
       header: 'Title',
       id: ZPixelsListPageTableColumnsIds.title,
       cell: row => {
-        return <ZIonText>{row.getValue()}</ZIonText>;
+        return (
+          <ZIonText
+            testingselector={`${CONSTANTS.testingSelectors.pixels.listPage.table.title}-${row?.row?.original?.id}`}
+            testinglistselector={
+              CONSTANTS.testingSelectors.pixels.listPage.table.title
+            }>
+            {row.getValue()}
+          </ZIonText>
+        );
       },
       footer: 'Title'
     }),
@@ -270,6 +285,17 @@ const ZInpageTable: React.FC = () => {
     columnHelper.accessor(itemData => itemData.pixelId, {
       header: 'pixel id',
       id: ZPixelsListPageTableColumnsIds.pixelId,
+      cell: row => {
+        return (
+          <ZIonText
+            testingselector={`${CONSTANTS.testingSelectors.pixels.listPage.table.pixelId}-${row?.row?.original?.id}`}
+            testinglistselector={
+              CONSTANTS.testingSelectors.pixels.listPage.table.pixelId
+            }>
+            {row.getValue()}
+          </ZIonText>
+        );
+      },
       footer: 'pixel id'
     }),
 
@@ -277,14 +303,36 @@ const ZInpageTable: React.FC = () => {
     columnHelper.accessor(itemData => itemData.platform, {
       header: 'platform',
       id: ZPixelsListPageTableColumnsIds.platform,
-      footer: 'platform'
+      footer: 'platform',
+      cell: row => {
+        return (
+          <ZIonText
+            testingselector={`${CONSTANTS.testingSelectors.pixels.listPage.table.platform}-${row?.row?.original?.id}`}
+            testinglistselector={
+              CONSTANTS.testingSelectors.pixels.listPage.table.platform
+            }>
+            {row.getValue()}
+          </ZIonText>
+        );
+      }
     }),
 
     // create at
     columnHelper.accessor(itemData => itemData.formattedCreateAt, {
       header: 'create at',
       id: ZPixelsListPageTableColumnsIds.formattedCreateAt,
-      footer: 'create at'
+      footer: 'create at',
+      cell: row => {
+        return (
+          <ZIonText
+            testingselector={`${CONSTANTS.testingSelectors.pixels.listPage.table.createAt}-${row?.row?.original?.id}`}
+            testinglistselector={
+              CONSTANTS.testingSelectors.pixels.listPage.table.createAt
+            }>
+            {row.getValue()}
+          </ZIonText>
+        );
+      }
     })
   ];
 
@@ -296,9 +344,9 @@ const ZInpageTable: React.FC = () => {
     },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: true
+    debugTable: false,
+    debugHeaders: false,
+    debugColumns: false
   });
   // #endregion
 
@@ -381,6 +429,11 @@ const ZInpageTable: React.FC = () => {
       pixelTitle: compState?.selectedPixelTitle,
       pixelPlatform: compState?.selectedPixelPlatform
     }
+  );
+
+  const { presentZIonModal: presentZAddPixelAccount } = useZIonModal(
+    ZaionsAddPixelAccount,
+    { formMode: FormMode.ADD }
   );
   // #endregion
 
@@ -495,11 +548,11 @@ const ZInpageTable: React.FC = () => {
                           color='dark'
                           className='ion-no-padding ion-no-margin'
                           size='small'
-                          testingselector={
-                            CONSTANTS.testingSelectors.shortLink.listPage.table
-                              .actionPopoverBtn
+                          testingselector={`${CONSTANTS.testingSelectors.pixels.listPage.table.pixelId}-${_rowInfo?.original?.id}`}
+                          testinglistselector={
+                            CONSTANTS.testingSelectors.pixels.listPage.table
+                              .pixelId
                           }
-                          testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
                           onClick={(_event: unknown) => {
                             setCompState(oldVal => ({
                               ...oldVal,
@@ -528,6 +581,9 @@ const ZInpageTable: React.FC = () => {
                 <ZEmptyTable
                   message='No pixels founds. please create a pixel.'
                   btnText='Create pixel'
+                  btnTestingselector={
+                    CONSTANTS.testingSelectors.pixels.listPage.table.createBtn
+                  }
                   btnOnClick={() => {
                     presentZAddPixelAccount({
                       _cssClass: 'pixel-account-modal-size'
@@ -565,7 +621,7 @@ const ZInpageTable: React.FC = () => {
             fill='clear'
             disabled={!zPixelTable.getCanPreviousPage()}
             testingselector={
-              CONSTANTS.testingSelectors.shortLink.listPage.table
+              CONSTANTS.testingSelectors.pixels.listPage.table
                 .getFirstPageButton
             }
             onClick={() => {
@@ -600,7 +656,7 @@ const ZInpageTable: React.FC = () => {
             fill='clear'
             disabled={!zPixelTable.getCanPreviousPage()}
             testingselector={
-              CONSTANTS.testingSelectors.shortLink.listPage.table.previousButton
+              CONSTANTS.testingSelectors.pixels.listPage.table.previousButton
             }
             onClick={() => {
               if (zPixelTable.getCanPreviousPage()) {
@@ -636,7 +692,7 @@ const ZInpageTable: React.FC = () => {
             fill='clear'
             disabled={!zPixelTable.getCanNextPage()}
             testingselector={
-              CONSTANTS.testingSelectors.shortLink.listPage.table.nextButton
+              CONSTANTS.testingSelectors.pixels.listPage.table.nextButton
             }
             onClick={() => {
               if (zPixelTable.getCanNextPage()) {
@@ -671,8 +727,7 @@ const ZInpageTable: React.FC = () => {
             fill='clear'
             disabled={!zPixelTable.getCanNextPage()}
             testingselector={
-              CONSTANTS.testingSelectors.shortLink.listPage.table
-                .getLastPageButton
+              CONSTANTS.testingSelectors.pixels.listPage.table.getLastPageButton
             }
             onClick={() => {
               if (zPixelTable.getCanNextPage()) {
@@ -726,7 +781,7 @@ const ZInpageTable: React.FC = () => {
             interface='popover'
             value={zPixelTable.getState().pagination.pageSize}
             testingselector={
-              CONSTANTS.testingSelectors.shortLink.listPage.table.pageSizeInput
+              CONSTANTS.testingSelectors.pixels.listPage.table.pageSizeInput
             }
             onIonChange={e => {
               zPixelTable.setPageSize(Number(e.target.value));
@@ -1033,10 +1088,10 @@ const ZPixelActionPopover: React.FC<{
           button={true}
           detail={false}
           minHeight='2.5rem'
-          testingselector={
-            CONSTANTS.testingSelectors.shortLink.listPage.table.editBtn
+          testingselector={`${CONSTANTS.testingSelectors.pixels.listPage.table.editBtn}-${selectedId}`}
+          testinglistselector={
+            CONSTANTS.testingSelectors.pixels.listPage.table.editBtn
           }
-          testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.editBtn}-${selectedId}`}
           onClick={async () => {
             try {
               if (selectedId) {
@@ -1073,16 +1128,16 @@ const ZPixelActionPopover: React.FC<{
         </ZIonItem>
       </ZCan>
 
-      <ZCan havePermissions={[permissionsEnum.delete_shortLink]}>
+      <ZCan havePermissions={[permissionsEnum.delete_pixel]}>
         <ZIonItem
           button={true}
           detail={false}
           minHeight='2.5rem'
           onClick={() => void deletePixel()}
-          testingselector={
-            CONSTANTS.testingSelectors.shortLink.listPage.table.deleteBtn
-          }
-          testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.deleteBtn}-${selectedId}`}>
+          testingselector={`${CONSTANTS.testingSelectors.pixels.listPage.table.deleteBtn}-${selectedId}`}
+          testinglistselector={
+            CONSTANTS.testingSelectors.pixels.listPage.table.deleteBtn
+          }>
           <ZIonButton
             size='small'
             expand='full'

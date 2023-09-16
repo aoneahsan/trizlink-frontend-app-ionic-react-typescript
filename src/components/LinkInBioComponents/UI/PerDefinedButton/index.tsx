@@ -11,45 +11,47 @@ import { ZIonColorType } from '@/types/zaionsAppSettings.type';
 
 // Component type
 interface LinkInBioPDButtonInterface {
-	className?: string;
-	onClick?: React.MouseEventHandler<HTMLIonButtonElement>;
-	onMouseEnter?: React.MouseEventHandler<HTMLIonButtonElement>;
-	icon?: string;
-	color?: ZIonColorType;
-	testingselector?: string;
-	testingListSelector?: string;
-	style?: {
-		[key: string]: unknown;
-	};
+  className?: string;
+  onClick?: React.MouseEventHandler<HTMLIonButtonElement>;
+  onMouseEnter?: React.MouseEventHandler<HTMLIonButtonElement>;
+  icon?: string;
+  color?: ZIonColorType;
+  testingselector?: string;
+  testinglistselector?: string;
+  style?: {
+    [key: string]: unknown;
+  };
 }
 
 // This button component is use to in blocks page where the single block is this single button. and also in musicPlatform, social block etc.
 const LinkInBioPDButton: React.FC<LinkInBioPDButtonInterface> = ({
-	className,
-	icon,
-	color = 'light',
-	style,
-	testingselector,
-	testingListSelector,
-	onClick,
-	onMouseEnter,
+  className,
+  icon,
+  color = 'light',
+  style,
+  testingselector,
+  testinglistselector,
+  onClick,
+  onMouseEnter
 }) => {
-	return (
-		<ZIonButton
-			style={style}
-			size='large'
-			fill='outline'
-			color={color}
-			onClick={onClick}
-			onMouseEnter={onMouseEnter}
-			className={classNames(className)} //classes['zaions-block-button'],
-			height='4.5rem'
-			testingselector={testingselector}
-			testingListSelector={testingListSelector}
-		>
-			<ZIonImg src={icon} style={{ width: '25px' }} />
-		</ZIonButton>
-	);
+  return (
+    <ZIonButton
+      style={style}
+      size='large'
+      fill='outline'
+      color={color}
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      className={classNames(className)} //classes['zaions-block-button'],
+      height='4.5rem'
+      testingselector={testingselector}
+      testinglistselector={testinglistselector}>
+      <ZIonImg
+        src={icon}
+        style={{ width: '25px' }}
+      />
+    </ZIonButton>
+  );
 };
 
 export default LinkInBioPDButton;

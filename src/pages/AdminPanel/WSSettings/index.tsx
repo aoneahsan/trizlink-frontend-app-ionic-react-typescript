@@ -13,13 +13,13 @@ import { useParams, useRouteMatch } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import classNames from 'classnames';
 import { menuController } from '@ionic/core/components';
+import { closeOutline } from 'ionicons/icons';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
 import {
-  ZIonButton,
   ZIonCol,
   ZIonContent,
   ZIonGrid,
@@ -28,13 +28,11 @@ import {
   ZIonItem,
   ZIonList,
   ZIonMenu,
-  ZIonMenuToggle,
   ZIonRefresher,
   ZIonRefresherContent,
   ZIonRow,
   ZIonText,
-  ZIonTitle,
-  ZIonToolbar
+  ZIonTitle
 } from '@/components/ZIonComponents';
 import ZIonPage from '@/components/ZIonPage';
 import ZWSTeamCreateModal from '@/components/InPageComponents/ZaionsModals/Workspace/Team/CreateModal';
@@ -51,6 +49,12 @@ const ZWSSettingsMenu = lazy(
   () => import('@/components/AdminPanelComponents/Sidebar/WSSettingsMenu')
 );
 const ZWSSettingTeamsListPage = lazy(() => import('./Team'));
+const ZWSSettingPixelListPage = lazy(() => import('./Pixel'));
+const ZWSSettingUtmTagListPage = lazy(() => import('./UTMTag'));
+const ZWSSettingEmbedWidgetListPage = lazy(() => import('./EmbedWidget'));
+import ZPixelsFilterMenu from '@/navigation/AdminPanel/Pixels/FilterMenu';
+import ZUtilityButtonGroup from '@/components/AdminPanelComponents/UtilityButtonGroup';
+import ZUTMTagsFilterMenu from '@/navigation/AdminPanel/UTMTags/FilterMenu';
 
 /**
  * Custom Hooks Imports go down
@@ -69,27 +73,20 @@ import { reportCustomError } from '@/utils/customErrorType';
 import CONSTANTS from '@/utils/constants';
 import { API_URL_ENUM } from '@/utils/enums';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { replaceRouteParams } from '@/utils/helpers';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { AdminPanelSidebarMenuPageEnum } from '@/types/AdminPanel/index.type';
-import {
-  workspaceTeamInterface,
-  WSSettingsPageSectTab
-} from '@/types/AdminPanel/workspace';
+import { workspaceTeamInterface } from '@/types/AdminPanel/workspace';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
 import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
-import { replaceRouteParams } from '@/utils/helpers';
-import { closeOutline } from 'ionicons/icons';
-import ZWSSettingPixelListPage from './Pixel';
-import ZPixelsFilterMenu from '@/navigation/AdminPanel/Pixels/FilterMenu';
-import ZUtilityButtonGroup from '@/components/AdminPanelComponents/UtilityButtonGroup';
 
 /**
  * Style files Imports go down
@@ -188,174 +185,173 @@ const ZWorkspaceSettings: React.FC = () => {
   return (
     <>
       {/* Menu to show in small screen. */}
-      <ZIonMenu
-        side='start'
-        menuId={CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID}
-        contentId={
-          !isMdScale
-            ? CONSTANTS.MENU_IDS.ADMIN_PANEL_WS_SETTING_PAGE_ID
-            : undefined
-        }>
-        {/* Header */}
-        <ZIonHeader className='flex px-3 py-2 border-b shadow-none ion-align-items-center ion-no-padding ion-justify-content-between'>
-          <ZIonTitle
-            className={classNames({
-              'block font-semibold ion-no-padding': true,
-              'text-xl': isLgScale,
-              'text-lg': !isLgScale
-            })}>
-            Settings
-          </ZIonTitle>
-
-          <ZIonIcon
-            icon={closeOutline}
-            className='w-6 h-6 pt-[1px] cursor-pointer'
-            onClick={async () => {
-              await menuController.close(
-                CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
-              );
-            }}
-          />
-        </ZIonHeader>
-
-        <ZIonContent
-          style={{
-            '--padding-start': '.6rem',
-            '--padding-end': '.6rem'
-          }}>
-          {/* Account Settings */}
-          <ZIonText className='block mt-2 font-semibold text-md ion-no-padding'>
-            Account settings
-          </ZIonText>
-          <ZIonList lines='none'>
-            {/* Team */}
-            <ZIonItem
-              minHeight='2rem'
+      {!isMdScale && (
+        <ZIonMenu
+          side='start'
+          menuId={CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID}
+          contentId={CONSTANTS.MENU_IDS.ADMIN_PANEL_WS_SETTING_PAGE_ID}>
+          {/* Header */}
+          <ZIonHeader className='flex px-3 py-2 border-b shadow-none ion-align-items-center ion-no-padding ion-justify-content-between'>
+            <ZIonTitle
               className={classNames({
-                'mt-1 cursor-pointer': true,
-                'zaions__light_bg font-normal': isTeamPage
-              })}
-              routerLink={replaceRouteParams(
-                ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
-                [CONSTANTS.RouteParams.workspace.workspaceId],
-                [workspaceId]
-              )}>
-              Team
-            </ZIonItem>
+                'block font-semibold ion-no-padding': true,
+                'text-xl': isLgScale,
+                'text-lg': !isLgScale
+              })}>
+              Settings
+            </ZIonTitle>
 
-            {/* Referral program */}
-            <ZIonItem
-              minHeight='2rem'
-              className={classNames({
-                'mt-1 cursor-pointer': true,
-                'zaions__light_bg font-normal': isReferralProgramPage
-              })}
-              testingselector={
-                CONSTANTS.testingSelectors.WSSettings.menuBar.as.referralBtn
-              }
-              routerLink={replaceRouteParams(
-                ZaionsRoutes.AdminPanel.Setting.AccountSettings.ReferralProgram,
-                [CONSTANTS.RouteParams.workspace.workspaceId],
-                [workspaceId]
-              )}>
-              Referral program
-            </ZIonItem>
+            <ZIonIcon
+              icon={closeOutline}
+              className='w-6 h-6 pt-[1px] cursor-pointer'
+              onClick={async () => {
+                await menuController.close(
+                  CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
+                );
+              }}
+            />
+          </ZIonHeader>
 
-            {/* Billing */}
-            <ZIonItem
-              minHeight='2rem'
-              className={classNames({
-                'mt-1 cursor-pointer': true,
-                'zaions__light_bg font-normal': isBillingPage
-              })}
-              testingselector={
-                CONSTANTS.testingSelectors.WSSettings.menuBar.as.billingBtn
-              }
-              routerLink={replaceRouteParams(
-                ZaionsRoutes.AdminPanel.Setting.AccountSettings.Billing,
-                [CONSTANTS.RouteParams.workspace.workspaceId],
-                [workspaceId]
-              )}>
-              Billing
-            </ZIonItem>
+          <ZIonContent
+            style={{
+              '--padding-start': '.6rem',
+              '--padding-end': '.6rem'
+            }}>
+            {/* Account Settings */}
+            <ZIonText className='block mt-2 font-semibold text-md ion-no-padding'>
+              Account settings
+            </ZIonText>
+            <ZIonList lines='none'>
+              {/* Team */}
+              <ZIonItem
+                minHeight='2rem'
+                className={classNames({
+                  'mt-1 cursor-pointer': true,
+                  'zaions__light_bg font-normal': isTeamPage
+                })}
+                routerLink={replaceRouteParams(
+                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
+                  [CONSTANTS.RouteParams.workspace.workspaceId],
+                  [workspaceId]
+                )}>
+                Team
+              </ZIonItem>
 
-            {/* User */}
-            <ZIonItem
-              minHeight='2rem'
-              className={classNames({
-                'mt-1 cursor-pointer': true,
-                'zaions__light_bg font-normal': isUserPage
-              })}
-              testingselector={
-                CONSTANTS.testingSelectors.WSSettings.menuBar.as.userBtn
-              }
-              routerLink={replaceRouteParams(
-                ZaionsRoutes.AdminPanel.Setting.AccountSettings.User,
-                [CONSTANTS.RouteParams.workspace.workspaceId],
-                [workspaceId]
-              )}>
-              User
-            </ZIonItem>
-          </ZIonList>
+              {/* Referral program */}
+              <ZIonItem
+                minHeight='2rem'
+                className={classNames({
+                  'mt-1 cursor-pointer': true,
+                  'zaions__light_bg font-normal': isReferralProgramPage
+                })}
+                testingselector={
+                  CONSTANTS.testingSelectors.WSSettings.menuBar.as.referralBtn
+                }
+                routerLink={replaceRouteParams(
+                  ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                    .ReferralProgram,
+                  [CONSTANTS.RouteParams.workspace.workspaceId],
+                  [workspaceId]
+                )}>
+                Referral program
+              </ZIonItem>
 
-          {/* Workspace settings */}
-          <ZIonText className='block mt-1 font-semibold text-md ion-no-padding'>
-            Workspace settings
-          </ZIonText>
-          <ZIonList lines='none'>
-            {/* Pixels */}
-            <ZIonItem
-              minHeight='2rem'
-              className={classNames({
-                'mt-1 cursor-pointer': true,
-                'zaions__light_bg font-normal': false
-              })}
-              routerLink={replaceRouteParams(
-                ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel,
-                [CONSTANTS.RouteParams.workspace.workspaceId],
-                [workspaceId]
-              )}>
-              Pixels
-            </ZIonItem>
+              {/* Billing */}
+              <ZIonItem
+                minHeight='2rem'
+                className={classNames({
+                  'mt-1 cursor-pointer': true,
+                  'zaions__light_bg font-normal': isBillingPage
+                })}
+                testingselector={
+                  CONSTANTS.testingSelectors.WSSettings.menuBar.as.billingBtn
+                }
+                routerLink={replaceRouteParams(
+                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.Billing,
+                  [CONSTANTS.RouteParams.workspace.workspaceId],
+                  [workspaceId]
+                )}>
+                Billing
+              </ZIonItem>
 
-            {/* Utm tags */}
-            <ZIonItem
-              minHeight='2rem'
-              className={classNames({
-                'mt-1 cursor-pointer': true,
-                'zaions__light_bg font-normal': false
-              })}
-              // routerLink={replaceRouteParams(
-              // 	ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
-              // 	[CONSTANTS.RouteParams.workspace.workspaceId],
-              // 	[workspaceId]
-              // )}
-            >
-              Utm tags
-            </ZIonItem>
+              {/* User */}
+              <ZIonItem
+                minHeight='2rem'
+                className={classNames({
+                  'mt-1 cursor-pointer': true,
+                  'zaions__light_bg font-normal': isUserPage
+                })}
+                testingselector={
+                  CONSTANTS.testingSelectors.WSSettings.menuBar.as.userBtn
+                }
+                routerLink={replaceRouteParams(
+                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.User,
+                  [CONSTANTS.RouteParams.workspace.workspaceId],
+                  [workspaceId]
+                )}>
+                User
+              </ZIonItem>
+            </ZIonList>
 
-            {/* Embed widgets */}
-            <ZIonItem
-              minHeight='2rem'
-              className={classNames({
-                'mt-1 cursor-pointer': true,
-                'zaions__light_bg font-normal': false
-              })}
-              // routerLink={replaceRouteParams(
-              // 	ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
-              // 	[CONSTANTS.RouteParams.workspace.workspaceId],
-              // 	[workspaceId]
-              // )}
-            >
-              Embed widgets
-            </ZIonItem>
-          </ZIonList>
+            {/* Workspace settings */}
+            <ZIonText className='block mt-1 font-semibold text-md ion-no-padding'>
+              Workspace settings
+            </ZIonText>
+            <ZIonList lines='none'>
+              {/* Pixels */}
+              <ZIonItem
+                minHeight='2rem'
+                className={classNames({
+                  'mt-1 cursor-pointer': true,
+                  'zaions__light_bg font-normal': false
+                })}
+                routerLink={replaceRouteParams(
+                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel,
+                  [CONSTANTS.RouteParams.workspace.workspaceId],
+                  [workspaceId]
+                )}>
+                Pixels
+              </ZIonItem>
 
-          {!isMdScale ? <ZUtilityButtonGroup /> : null}
-        </ZIonContent>
-      </ZIonMenu>
+              {/* Utm tags */}
+              <ZIonItem
+                minHeight='2rem'
+                className={classNames({
+                  'mt-1 cursor-pointer': true,
+                  'zaions__light_bg font-normal': false
+                })}
+                routerLink={replaceRouteParams(
+                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag,
+                  [CONSTANTS.RouteParams.workspace.workspaceId],
+                  [workspaceId]
+                )}>
+                Utm tags
+              </ZIonItem>
+
+              {/* Embed widgets */}
+              <ZIonItem
+                minHeight='2rem'
+                className={classNames({
+                  'mt-1 cursor-pointer': true,
+                  'zaions__light_bg font-normal': false
+                })}
+                routerLink={replaceRouteParams(
+                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.EmbedWidget,
+                  [CONSTANTS.RouteParams.workspace.workspaceId],
+                  [workspaceId]
+                )}>
+                Embed widgets
+              </ZIonItem>
+            </ZIonList>
+
+            {!isMdScale ? <ZUtilityButtonGroup /> : null}
+          </ZIonContent>
+        </ZIonMenu>
+      )}
 
       <ZPixelsFilterMenu />
+
+      <ZUTMTagsFilterMenu />
 
       {/*  */}
       <ZIonPage
@@ -497,6 +493,14 @@ const ZInpageMainContent: React.FC = () => {
   const isPixelPage = useRouteMatch(
     ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel
   )?.isExact;
+
+  const isUTMTagPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag
+  )?.isExact;
+
+  const isEmbedWidgetPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.AccountSettings.EmbedWidget
+  )?.isExact;
   // #endregion
 
   return (
@@ -514,6 +518,8 @@ const ZInpageMainContent: React.FC = () => {
         }>
         {isTeamPage ? <ZWSSettingTeamsListPage /> : ''}
         {isPixelPage ? <ZWSSettingPixelListPage /> : ''}
+        {isUTMTagPage ? <ZWSSettingUtmTagListPage /> : ''}
+        {isEmbedWidgetPage ? <ZWSSettingEmbedWidgetListPage /> : ''}
       </Suspense>
     </div>
   );

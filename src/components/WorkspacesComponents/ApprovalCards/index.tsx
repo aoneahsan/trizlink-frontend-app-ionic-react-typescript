@@ -14,12 +14,12 @@ import React from 'react';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonCard,
-	ZIonCardContent,
-	ZIonCol,
-	ZIonIcon,
-	ZIonRow,
-	ZIonText,
+  ZIonCard,
+  ZIonCardContent,
+  ZIonCol,
+  ZIonIcon,
+  ZIonRow,
+  ZIonText
 } from '@/components/ZIonComponents';
 
 /**
@@ -69,57 +69,57 @@ import CONSTANTS from '@/utils/constants';
  * */
 
 const ZWorkspaceApprovalCards: React.FC<{
-	workspaceId: string;
-	type?: workspaceApprovalCardEnum;
-	onClick?: (type: workspaceApprovalCardEnum) => void;
+  workspaceId: string;
+  type?: workspaceApprovalCardEnum;
+  onClick?: (type: workspaceApprovalCardEnum) => void;
 }> = ({ type, onClick, workspaceId }) => {
-	return (
-		<ZIonRow className='px-4'>
-			{WorkspaceApprovalCards.map((el, index) => {
-				return (
-					<ZIonCol
-						key={index}
-						sizeXl='3'
-						sizeLg='4'
-						sizeMd='6'
-						sizeSm='6'
-						sizeXs='12'
-						onClick={() => onClick && onClick(el.cardType)}
-					>
-						<ZIonCard
-							testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.card}-${el.cardType}-${workspaceId}`}
-							testingListSelector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.card}-${el.cardType}`}
-							className={classNames({
-								'cursor-pointer border-t-[1px] border-b-[1px] border-s-[1px] border-e-[1px] border-solid':
-									true,
-								'zaions-border-color-secondary': el.cardType === type,
-							})}
-						>
-							<ZIonCardContent>
-								<div className='flex w-full my-1'>
-									<ZIonIcon icon={el.icon} className='w-8 h-8' />
-									{el.cardType === type && (
-										<ZIonIcon
-											icon={checkmarkCircle}
-											color='success'
-											className='w-8 h-8 ms-auto'
-										/>
-									)}
-								</div>
-								<ZIonText
-									className='flex gap-2 mt-2 text-lg ion-align-items-center'
-									color='dark'
-								>
-									{el.title}
-								</ZIonText>
-								<ZIonText className='block'>{el.subtitle}</ZIonText>
-							</ZIonCardContent>
-						</ZIonCard>
-					</ZIonCol>
-				);
-			})}
-		</ZIonRow>
-	);
+  return (
+    <ZIonRow className='px-4'>
+      {WorkspaceApprovalCards.map((el, index) => {
+        return (
+          <ZIonCol
+            key={index}
+            sizeXl='3'
+            sizeLg='4'
+            sizeMd='6'
+            sizeSm='6'
+            sizeXs='12'
+            onClick={() => onClick && onClick(el.cardType)}>
+            <ZIonCard
+              testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.card}-${el.cardType}-${workspaceId}`}
+              testinglistselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.card}-${el.cardType}`}
+              className={classNames({
+                'cursor-pointer border-t-[1px] border-b-[1px] border-s-[1px] border-e-[1px] border-solid':
+                  true,
+                'zaions-border-color-secondary': el.cardType === type
+              })}>
+              <ZIonCardContent>
+                <div className='flex w-full my-1'>
+                  <ZIonIcon
+                    icon={el.icon}
+                    className='w-8 h-8'
+                  />
+                  {el.cardType === type && (
+                    <ZIonIcon
+                      icon={checkmarkCircle}
+                      color='success'
+                      className='w-8 h-8 ms-auto'
+                    />
+                  )}
+                </div>
+                <ZIonText
+                  className='flex gap-2 mt-2 text-lg ion-align-items-center'
+                  color='dark'>
+                  {el.title}
+                </ZIonText>
+                <ZIonText className='block'>{el.subtitle}</ZIonText>
+              </ZIonCardContent>
+            </ZIonCard>
+          </ZIonCol>
+        );
+      })}
+    </ZIonRow>
+  );
 };
 
 export default ZWorkspaceApprovalCards;

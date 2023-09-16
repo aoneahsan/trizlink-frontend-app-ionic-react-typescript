@@ -247,7 +247,8 @@ const MENU_IDS = {
   ADMIN_LINK_PAGE_CONTENT_ID: 'zaions-link-page-menu',
   DASHBOARD_SM_MENU_CONTENT_ID: 'zaions-dashboard-responsive-menu-content-id',
   SL_FILTERS_MENU_ID: 'sl_filters_menu_id', // sl => shortLink
-  P_FILTERS_MENU_ID: 'sl_filters_menu_id', // p => pixels
+  P_FILTERS_MENU_ID: 'p_filters_menu_id', // p => pixels
+  UTMTag_FILTERS_MENU_ID: 'utmTag_filters_menu_id',
   WS_SETTINGS_PAGE_MENU_ID: 'ws-settings-page-menu-id',
   ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID:
     'admin_page_short_links_folders_menu_id',
@@ -1007,17 +1008,61 @@ const testingSelectors = {
   // #region pixels
   pixels: {
     formModal: {
-      closeModalBtn: 'p-fm-close-btn',
-      pixelSelector: 'p-fm-pixel-selector',
-      pixelNameInput: 'p-fm-pixel-name-input',
-      pixelIdInput: 'p-fm-pixel-id-input',
-      submitFormBtn: 'p-fm-pixel-submit-form-btn'
+      // p-fm -> pixel-form-modal
+      closeBtn: 'p-fm-close-btn',
+      submitFormBtn: 'p-fm-submit-form-btn',
+      platformSelector: 'p-fm-platform-selector',
+      pixelIdInput: 'p-fm-pixelId-input',
+      pixelNameInput: 'p-fm-pixel-name-input'
+    },
+
+    listPage: {
+      // p-lp -> pixel-list-page
+      filterBtn: 'p-lp-filter-btn',
+      refreshBtn: 'p-lp-refresh-btn',
+      createBtn: 'p-lp-create-btn',
+
+      table: {
+        // p-lp-t -> pixel-list-page-table
+        select: 'p-lp-t-select',
+        createBtn: 'p-lp-t-create-btn',
+        title: 'p-lp-t-title',
+        pixelId: 'p-lp-t-pixel-id',
+        platform: 'p-lp-t-platform',
+        createAt: 'p-lp-t-create-at',
+        actionBtn: 'p-lp-t-action-btn',
+        editBtn: 'p-lp-t-edit-btn',
+        deleteBtn: 'p-lp-t-delete-btn',
+        previousButton: 'p-lp-t-previous-button',
+        getFirstPageButton: 'p-lp-t-get-first-page-btn',
+        nextButton: 'p-lp-t-next-button',
+        getLastPageButton: 'p-lp-t-get-last-page-button',
+        pageSizeInput: 'p-lp-t-page-size-input',
+        itemsCount: 'p-lp-t-items-count',
+        itemsCountText: 'p-lp-t-items-count-text'
+      },
+
+      filterSidebar: {
+        // p-lp-fsb -> pixel-list-page-filter-side-bar
+        closeMenuBtn: 'p-lp-fsb-close-menu-btn',
+        timeFilterInput: 'p-lp-fsb-time-filter-input',
+        startInput: 'p-lp-fsb-start-input',
+        endInput: 'p-lp-fsb-end-input',
+        saveBtn1: 'p-lp-fsb-save-btn-1',
+        columnAccordionHead: 'p-lp-fsb-column-accordion-head',
+        columnAccordionBody: 'p-lp-fsb-column-accordion-body',
+        reorderItem: 'p-lp-fsb-reorder-item',
+        reorderTitle: 'p-lp-fsb-reorder-title',
+        reorderToggler: 'p-lp-fsb-reorder-toggler',
+        saveBtn2: 'p-lp-fsb-save-btn-2'
+      }
     }
   },
   // #endregion
 
   // #region utm tag
   utmTags: {
+    // ut-fm -> utmTags-form-modal
     formModal: {
       closeModalBtn: 'ut-fm-close-btn',
       submitFormBtn: 'ut-fm-utm-tag-submit-form-btn',
@@ -1027,6 +1072,51 @@ const testingSelectors = {
       source: 'ut-fm-source-input',
       term: 'ut-fm-term-input',
       content: 'ut-fm-content-input'
+    },
+
+    listPage: {
+      // ut-lp -> utmTags-list-page
+      filterBtn: 'ut-lp-filter-btn',
+      refetchBtn: 'ut-lp-refetch-btn',
+      createBtn: 'ut-lp-create-btn',
+
+      table: {
+        // ut-lp-t -> pixel-list-page-table
+        select: 'ut-lp-t-select',
+        createBtn: 'ut-lp-t-create-btn',
+        templateName: 'ut-lp-t-template',
+        campaign: 'ut-lp-t-campaign',
+        medium: 'ut-lp-t-medium',
+        content: 'ut-lp-t-content',
+        source: 'ut-lp-t-source',
+        team: 'ut-lp-t-team',
+        createAt: 'ut-lp-t-create-at',
+        actionBtn: 'ut-lp-t-action-btn',
+        editBtn: 'ut-lp-t-edit-btn',
+        deleteBtn: 'ut-lp-t-delete-btn',
+        previousButton: 'ut-lp-t-previous-button',
+        getFirstPageButton: 'ut-lp-t-get-first-page-btn',
+        nextButton: 'ut-lp-t-next-button',
+        getLastPageButton: 'ut-lp-t-get-last-page-button',
+        pageSizeInput: 'ut-lp-t-page-size-input',
+        itemsCount: 'ut-lp-t-items-count',
+        itemsCountText: 'ut-lp-t-items-count-text'
+      },
+
+      filterSidebar: {
+        // ut-lp-fsb -> pixel-list-page-filter-side-bar
+        closeMenuBtn: 'ut-lp-fsb-close-menu-btn',
+        timeFilterInput: 'ut-lp-fsb-time-filter-input',
+        startInput: 'ut-lp-fsb-start-input',
+        endInput: 'ut-lp-fsb-end-input',
+        saveBtn1: 'ut-lp-fsb-save-btn-1',
+        columnAccordionHead: 'ut-lp-fsb-column-accordion-head',
+        columnAccordionBody: 'ut-lp-fsb-column-accordion-body',
+        reorderItem: 'ut-lp-fsb-reorder-item',
+        reorderTitle: 'ut-lp-fsb-reorder-title',
+        reorderToggler: 'ut-lp-fsb-reorder-toggler',
+        saveBtn2: 'ut-lp-fsb-save-btn-2'
+      }
     }
   },
   // #endregion
@@ -1050,6 +1140,7 @@ const testingSelectors = {
   // #region top bar
   topBar: {
     goToWorkspacesBtn: 'tb-go-to-workspaces-btn',
+    openWSSettingMenuBtn: 'tb-open-ws-settings-menu-btn',
     workspaceSwitcherBtn: 'tb-ws-btn', // top-bar-workspace-switcher-btn.
     workspaceSwitcherPopover: {
       singleWorkspace: 'tb-wsp-single-workspace', // top-bar-workspace-switcher-popover-...

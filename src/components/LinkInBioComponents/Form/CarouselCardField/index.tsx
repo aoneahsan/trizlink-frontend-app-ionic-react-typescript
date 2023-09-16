@@ -8,11 +8,11 @@ import { ItemReorderEventDetail } from '@ionic/react';
 
 // Custom Imports
 import {
-	ZIonButton,
-	ZIonIcon,
-	ZIonItem,
-	ZIonReorder,
-	ZIonReorderGroup,
+  ZIonButton,
+  ZIonIcon,
+  ZIonItem,
+  ZIonReorder,
+  ZIonReorderGroup
 } from '@/components/ZIonComponents';
 import LinkInBioLinkField from '../LinkField';
 import LinkInBioUploadField from '../UploadField';
@@ -21,9 +21,9 @@ import LinkInBioDescriptionField from '../DescriptionField';
 
 // Types
 import {
-	cardDisplayEnum,
-	linkInBioBlockCardItemInterface,
-	LinkInBioSingleBlockContentType,
+  cardDisplayEnum,
+  linkInBioBlockCardItemInterface,
+  LinkInBioSingleBlockContentType
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
 import { reportCustomError } from '@/utils/customErrorType';
@@ -33,174 +33,176 @@ import CONSTANTS from '@/utils/constants';
 // Styles
 
 const LinkInBioCarouselCardField: React.FC = () => {
-	// handle reorder function (preview panel)
+  // handle reorder function (preview panel)
 
-	const { values, handleBlur, handleChange } =
-		useFormikContext<LinkInBioSingleBlockContentType>();
+  const { values, handleBlur, handleChange } =
+    useFormikContext<LinkInBioSingleBlockContentType>();
 
-	const handleCarouselCardReorder = (
-		event: CustomEvent<ItemReorderEventDetail>
-	) => {
-		// The `from` and `to` properties contain the index of the item
-		// when the drag started and ended, respectively
+  const handleCarouselCardReorder = (
+    event: CustomEvent<ItemReorderEventDetail>
+  ) => {
+    // The `from` and `to` properties contain the index of the item
+    // when the drag started and ended, respectively
 
-		// Finish the reorder and position the item in the DOM based on
-		// where the gesture ended. This method can also be called directly
-		// by the reorder group
-		// eslint-disable-next-line
-		event.detail.complete();
-	};
+    // Finish the reorder and position the item in the DOM based on
+    // where the gesture ended. This method can also be called directly
+    // by the reorder group
+    // eslint-disable-next-line
+    event.detail.complete();
+  };
 
-	const getNewCardItemEmptyObjForCarousel: () => linkInBioBlockCardItemInterface =
-		() => {
-			return {
-				target: {
-					url: '',
-				},
-				imageUrl: '',
-				title: '',
-				text: '',
-				description: '',
-				isActive: true,
-				cardDisplayType: cardDisplayEnum.carousel,
-			};
-		};
+  const getNewCardItemEmptyObjForCarousel: () => linkInBioBlockCardItemInterface =
+    () => {
+      return {
+        target: {
+          url: ''
+        },
+        imageUrl: '',
+        title: '',
+        text: '',
+        description: '',
+        isActive: true,
+        cardDisplayType: cardDisplayEnum.carousel
+      };
+    };
 
-	return (
-		<>
-			<ZIonReorderGroup
-				onIonItemReorder={handleCarouselCardReorder}
-				disabled={false}
-			>
-				<FieldArray name='cardItems'>
-					{({ remove, push }) => {
-						return (
-							<>
-								<ZIonButton
-									expand='block'
-									className='ion-text-capitalize'
-									testingselector={
-										CONSTANTS.testingSelectors.linkInBio.formPage.design
-											.blockForm.fields.carouselCard.addCardBtn
-									}
-									onClick={() => push(getNewCardItemEmptyObjForCarousel)}
-								>
-									<ZIonIcon icon={addOutline} className='me-1' />
-									add card
-								</ZIonButton>
-								{values.cardItems?.length
-									? values.cardItems.map((_cardItem, _index) => (
-											<ZIonItem
-												key={_index}
-												lines='none'
-												className='py-3 my-3 border zaions-linkInBio-block'
-												testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.cardItem}-${_index}`}
-												testingselector={
-													CONSTANTS.testingSelectors.linkInBio.formPage.design
-														.blockForm.fields.carouselCard.cardItem
-												}
-												style={{
-													'--background': 'transparent',
-												}}
-											>
-												<ZIonReorder slot='start' className='ms-3 me-3'>
-													<ZIonIcon
-														icon={appsOutline}
-														color='dark'
-														className='w-6 h-6'
-													/>
-												</ZIonReorder>
+  return (
+    <>
+      <ZIonReorderGroup
+        onIonItemReorder={handleCarouselCardReorder}
+        disabled={false}>
+        <FieldArray name='cardItems'>
+          {({ remove, push }) => {
+            return (
+              <>
+                <ZIonButton
+                  expand='block'
+                  className='ion-text-capitalize'
+                  testingselector={
+                    CONSTANTS.testingSelectors.linkInBio.formPage.design
+                      .blockForm.fields.carouselCard.addCardBtn
+                  }
+                  onClick={() => push(getNewCardItemEmptyObjForCarousel)}>
+                  <ZIonIcon
+                    icon={addOutline}
+                    className='me-1'
+                  />
+                  add card
+                </ZIonButton>
+                {values.cardItems?.length
+                  ? values.cardItems.map((_cardItem, _index) => (
+                      <ZIonItem
+                        key={_index}
+                        lines='none'
+                        className='py-3 my-3 border zaions-linkInBio-block'
+                        testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.cardItem}-${_index}`}
+                        testingselector={
+                          CONSTANTS.testingSelectors.linkInBio.formPage.design
+                            .blockForm.fields.carouselCard.cardItem
+                        }
+                        style={{
+                          '--background': 'transparent'
+                        }}>
+                        <ZIonReorder
+                          slot='start'
+                          className='ms-3 me-3'>
+                          <ZIonIcon
+                            icon={appsOutline}
+                            color='dark'
+                            className='w-6 h-6'
+                          />
+                        </ZIonReorder>
 
-												<div className='w-full pe-3'>
-													<LinkInBioLinkField
-														name={`cardItems.${_index}.target.url`}
-														onIonChange={handleChange}
-														onIonBlur={handleBlur}
-														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.linkInput}-${_index}`}
-														testingselector={
-															CONSTANTS.testingSelectors.linkInBio.formPage
-																.design.blockForm.fields.carouselCard.linkInput
-														}
-														value={
-															values.cardItems &&
-															values.cardItems[_index].target?.url
-														}
-													/>
+                        <div className='w-full pe-3'>
+                          <LinkInBioLinkField
+                            name={`cardItems.${_index}.target.url`}
+                            onIonChange={handleChange}
+                            onIonBlur={handleBlur}
+                            testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.linkInput}-${_index}`}
+                            testingselector={
+                              CONSTANTS.testingSelectors.linkInBio.formPage
+                                .design.blockForm.fields.carouselCard.linkInput
+                            }
+                            value={
+                              values.cardItems &&
+                              values.cardItems[_index].target?.url
+                            }
+                          />
 
-													<LinkInBioUploadField
-														className='mt-2'
-														dropdownHeight='7rem'
-														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.uploadField}-${_index}`}
-														testingselector={
-															CONSTANTS.testingSelectors.linkInBio.formPage
-																.design.blockForm.fields.carouselCard
-																.uploadField
-														}
-													/>
+                          <LinkInBioUploadField
+                            className='mt-2'
+                            dropdownHeight='7rem'
+                            testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.uploadField}-${_index}`}
+                            testingselector={
+                              CONSTANTS.testingSelectors.linkInBio.formPage
+                                .design.blockForm.fields.carouselCard
+                                .uploadField
+                            }
+                          />
 
-													<LinkInBioTitleField
-														className='mt-2'
-														name={`cardItems.${_index}.title`}
-														onIonChange={handleChange}
-														onIonBlur={handleBlur}
-														value={
-															values.cardItems && values.cardItems[_index].title
-														}
-														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.titleInput}-${_index}`}
-														testingselector={
-															CONSTANTS.testingSelectors.linkInBio.formPage
-																.design.blockForm.fields.carouselCard.titleInput
-														}
-													/>
+                          <LinkInBioTitleField
+                            className='mt-2'
+                            name={`cardItems.${_index}.title`}
+                            onIonChange={handleChange}
+                            onIonBlur={handleBlur}
+                            value={
+                              values.cardItems && values.cardItems[_index].title
+                            }
+                            testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.titleInput}-${_index}`}
+                            testingselector={
+                              CONSTANTS.testingSelectors.linkInBio.formPage
+                                .design.blockForm.fields.carouselCard.titleInput
+                            }
+                          />
 
-													<LinkInBioDescriptionField
-														className='mt-2'
-														name={`cardItems.${_index}.description`}
-														onIonChange={handleChange}
-														onIonBlur={handleBlur}
-														value={
-															values.cardItems &&
-															values.cardItems[_index].description
-														}
-														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.description}-${_index}`}
-														testingselector={
-															CONSTANTS.testingSelectors.linkInBio.formPage
-																.design.blockForm.fields.carouselCard
-																.description
-														}
-													/>
-												</div>
+                          <LinkInBioDescriptionField
+                            className='mt-2'
+                            name={`cardItems.${_index}.description`}
+                            onIonChange={handleChange}
+                            onIonBlur={handleBlur}
+                            value={
+                              values.cardItems &&
+                              values.cardItems[_index].description
+                            }
+                            testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.description}-${_index}`}
+                            testingselector={
+                              CONSTANTS.testingSelectors.linkInBio.formPage
+                                .design.blockForm.fields.carouselCard
+                                .description
+                            }
+                          />
+                        </div>
 
-												{/* Delete block button */}
-												<ZCustomDeleteComponent
-													slot='end'
-													iconColor='danger'
-													className='ion-no-padding ms-3 me-1'
-													testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.deleteBtn}-${_index}`}
-													testingselector={
-														CONSTANTS.testingSelectors.linkInBio.formPage.design
-															.blockForm.fields.carouselCard.deleteBtn
-													}
-													deleteFn={(detail: OverlayEventDetail<unknown>) => {
-														try {
-															if (detail && detail.role === 'destructive') {
-																void remove(_index);
-															}
-														} catch (error) {
-															reportCustomError(error);
-														}
-													}}
-												/>
-											</ZIonItem>
-									  ))
-									: ''}
-							</>
-						);
-					}}
-				</FieldArray>
-			</ZIonReorderGroup>
-		</>
-	);
+                        {/* Delete block button */}
+                        <ZCustomDeleteComponent
+                          slot='end'
+                          iconColor='danger'
+                          className='ion-no-padding ms-3 me-1'
+                          testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.deleteBtn}-${_index}`}
+                          testingselector={
+                            CONSTANTS.testingSelectors.linkInBio.formPage.design
+                              .blockForm.fields.carouselCard.deleteBtn
+                          }
+                          deleteFn={(detail: OverlayEventDetail<unknown>) => {
+                            try {
+                              if (detail && detail.role === 'destructive') {
+                                void remove(_index);
+                              }
+                            } catch (error) {
+                              reportCustomError(error);
+                            }
+                          }}
+                        />
+                      </ZIonItem>
+                    ))
+                  : ''}
+              </>
+            );
+          }}
+        </FieldArray>
+      </ZIonReorderGroup>
+    </>
+  );
 };
 
 export default LinkInBioCarouselCardField;

@@ -10,7 +10,7 @@ import {
   PixelAccountPlatformOptionsData
   // PixelAccountsData,
 } from '@/data/UserDashboard/PixelAccountsData';
-import { IPixelsFilterOptions } from '@/types/AdminPanel/index.type';
+import { IFilterOptions } from '@/types/AdminPanel/index.type';
 import CONSTANTS from '@/utils/constants';
 
 export const PixelAccountsRStateAtom = atom<PixelAccountType[]>({
@@ -19,7 +19,7 @@ export const PixelAccountsRStateAtom = atom<PixelAccountType[]>({
 });
 
 // Recoil state that will store all the filter options for pixels for example time, etc.
-export const PixelsFilterOptionsRStateAtom = atom<IPixelsFilterOptions>({
+export const PixelsFilterOptionsRStateAtom = atom<IFilterOptions>({
   key: 'PixelsFilterOptionsRStateAtom_key',
   default: {
     timeFilter: {

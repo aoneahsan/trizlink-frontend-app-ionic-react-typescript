@@ -50,36 +50,36 @@ import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
  * ? Like if you have a type for props it should be please Down
  * */
 interface ZTextEditorInterface {
-	value?: ReactQuill.Value;
-	defaultValue?: ReactQuill.Value;
-	bounds?: string | HTMLElement;
-	className?: string;
-	children?: React.ReactElement<
-		unknown,
-		string | React.JSXElementConstructor<unknown>
-	>;
-	formats?: string[];
-	style?: React.CSSProperties;
-	id?: string;
-	placeholder?: string;
-	testingselector?: string;
-	testingListSelector?: string;
-	onChange?: (
-		value: string,
-		delta: DeltaStatic,
-		source: Sources,
-		editor: ReactQuill.UnprivilegedEditor
-	) => void;
-	onBlur?: (
-		previousSelection: ReactQuill.Range,
-		source: Sources,
-		editor: ReactQuill.UnprivilegedEditor
-	) => void;
-	onChangeSelection?: (
-		selection: ReactQuill.Range,
-		source: Sources,
-		editor: ReactQuill.UnprivilegedEditor
-	) => void;
+  value?: ReactQuill.Value;
+  defaultValue?: ReactQuill.Value;
+  bounds?: string | HTMLElement;
+  className?: string;
+  children?: React.ReactElement<
+    unknown,
+    string | React.JSXElementConstructor<unknown>
+  >;
+  formats?: string[];
+  style?: React.CSSProperties;
+  id?: string;
+  placeholder?: string;
+  testingselector?: string;
+  testinglistselector?: string;
+  onChange?: (
+    value: string,
+    delta: DeltaStatic,
+    source: Sources,
+    editor: ReactQuill.UnprivilegedEditor
+  ) => void;
+  onBlur?: (
+    previousSelection: ReactQuill.Range,
+    source: Sources,
+    editor: ReactQuill.UnprivilegedEditor
+  ) => void;
+  onChangeSelection?: (
+    selection: ReactQuill.Range,
+    source: Sources,
+    editor: ReactQuill.UnprivilegedEditor
+  ) => void;
 }
 
 /**
@@ -88,33 +88,33 @@ interface ZTextEditorInterface {
  * @type {*}
  * */
 
-const ZTextEditor: React.FC<ZTextEditorInterface> = (props) => {
-	const _testingListSelector = props.testingListSelector
-		? {
-				...zCreateElementTestingSelector({
-					_value: props.testingListSelector || PRODUCT_NAME,
-					_key: zCreateElementTestingSelectorKeyEnum.listSelector,
-				}),
-		  }
-		: {};
+const ZTextEditor: React.FC<ZTextEditorInterface> = props => {
+  const _testinglistselector = props.testinglistselector
+    ? {
+        ...zCreateElementTestingSelector({
+          _value: props.testinglistselector || PRODUCT_NAME,
+          _key: zCreateElementTestingSelectorKeyEnum.listSelector
+        })
+      }
+    : {};
 
-	const _testingSelector = props.testingselector
-		? {
-				...zCreateElementTestingSelector({
-					_value: props.testingselector || PRODUCT_NAME,
-				}),
-		  }
-		: {};
+  const _testingSelector = props.testingselector
+    ? {
+        ...zCreateElementTestingSelector({
+          _value: props.testingselector || PRODUCT_NAME
+        })
+      }
+    : {};
 
-	return (
-		<ReactQuill
-			theme='snow'
-			{...props}
-			style={{ ...props.style }}
-			{..._testingSelector}
-			{..._testingListSelector}
-		/>
-	);
+  return (
+    <ReactQuill
+      theme='snow'
+      {...props}
+      style={{ ...props.style }}
+      {..._testingSelector}
+      {..._testinglistselector}
+    />
+  );
 };
 
 export default ZTextEditor;

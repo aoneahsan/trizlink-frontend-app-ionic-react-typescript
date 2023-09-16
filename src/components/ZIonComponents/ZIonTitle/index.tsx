@@ -10,40 +10,43 @@ import { PRODUCT_NAME } from '@/utils/constants';
 
 // Type
 type ZIonTitleType = {
-	children: ReactNode;
-	color?: ZIonColorType;
-	size?: 'large' | 'small' | undefined;
-	className?: string;
-	style?: {
-		[key: string]: unknown;
-	};
-	testingselector?: string;
-	testingListSelector?: string;
+  children: ReactNode;
+  color?: ZIonColorType;
+  size?: 'large' | 'small' | undefined;
+  className?: string;
+  style?: {
+    [key: string]: unknown;
+  };
+  testingselector?: string;
+  testinglistselector?: string;
 };
 
 const ZIonTitle = (props: ZIonTitleType) => {
-	const _testingListSelector = props.testingListSelector
-		? {
-				...zCreateElementTestingSelector({
-					_value: props.testingListSelector || PRODUCT_NAME,
-					_key: zCreateElementTestingSelectorKeyEnum.listSelector,
-				}),
-		  }
-		: {};
+  const _testinglistselector = props.testinglistselector
+    ? {
+        ...zCreateElementTestingSelector({
+          _value: props.testinglistselector || PRODUCT_NAME,
+          _key: zCreateElementTestingSelectorKeyEnum.listSelector
+        })
+      }
+    : {};
 
-	const _testingSelector = props.testingselector
-		? {
-				...zCreateElementTestingSelector({
-					_value: props.testingselector || PRODUCT_NAME,
-				}),
-		  }
-		: {};
+  const _testingSelector = props.testingselector
+    ? {
+        ...zCreateElementTestingSelector({
+          _value: props.testingselector || PRODUCT_NAME
+        })
+      }
+    : {};
 
-	return (
-		<IonTitle {...props} {..._testingSelector} {..._testingListSelector}>
-			{props.children}
-		</IonTitle>
-	);
+  return (
+    <IonTitle
+      {...props}
+      {..._testingSelector}
+      {..._testinglistselector}>
+      {props.children}
+    </IonTitle>
+  );
 };
 
 export default ZIonTitle;

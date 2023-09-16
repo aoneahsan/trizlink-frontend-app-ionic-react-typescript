@@ -4,11 +4,13 @@
  * */
 import { zEmptyTable } from '@/assets/images';
 import {
-	ZIonButton,
-	ZIonImg,
-	ZIonText,
-	ZIonTitle,
+  ZIonButton,
+  ZIonImg,
+  ZIonText,
+  ZIonTitle
 } from '@/components/ZIonComponents';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import classNames from 'classnames';
 import React from 'react';
 
 /**
@@ -63,27 +65,66 @@ import React from 'react';
  * */
 
 const ZEmptyTable: React.FC<{
-	message?: string;
-	btnOnClick?: React.MouseEventHandler<HTMLIonButtonElement>;
-	btnText?: string;
-	showBtn?: boolean;
-}> = ({ message = 'no data found!', btnOnClick, btnText, showBtn = true }) => {
-	return (
-		<div className='bg-transparent flex ion-align-items-center ion-justify-content-center w-full h-full'>
-			<ZIonImg src={zEmptyTable} className='w-[15rem] mt-2' />
-			<div className='max-w-[30%] min-w-[20%] ms-4'>
-				<ZIonText className='text-lg inline-block max-content' color='medium'>
-					{/* No short links founds. please create a short link. */}
-					{message}
-				</ZIonText>
-				{showBtn ? (
-					<ZIonButton onClick={btnOnClick} className='ion-no-margin mt-2'>
-						{btnText}
-					</ZIonButton>
-				) : null}
-			</div>
-		</div>
-	);
+  message?: string;
+  btnOnClick?: React.MouseEventHandler<HTMLIonButtonElement>;
+  btnText?: string;
+  showBtn?: boolean;
+  btnTestingselector?: string;
+}> = ({
+  message = 'no data found!',
+  btnOnClick,
+  btnText,
+  showBtn = true,
+  btnTestingselector
+}) => {
+  const { isLgScale, isMdScale } = useZMediaQueryScale();
+  return (
+    <div
+      className={classNames({
+        'bg-transparent flex ion-align-items-center ion-justify-content-center w-full h-full':
+          true,
+        'flex-col': !isMdScale
+      })}>
+      <ZIonImg
+        src={zEmptyTable}
+        className={classNames({
+          'mt-2': true,
+          'w-[15rem]': isMdScale,
+          'w-[10rem]': !isMdScale
+        })}
+      />
+      <div
+        className={classNames({
+          'ms-4 max-w-[30%]': true,
+          'min-w-[20%]': isLgScale,
+          'min-w-[40%]': !isLgScale && isMdScale,
+          'min-w-[95%] flex flex-col ion-align-items-center ion-text-center':
+            !isMdScale
+        })}>
+        <ZIonText
+          className={classNames({
+            'inline-block max-content': true,
+            'text-lg': isMdScale,
+            'text-sm': !isMdScale
+          })}
+          color='medium'>
+          {/* No short links founds. please create a short link. */}
+          {message}
+        </ZIonText>
+        {showBtn ? (
+          <ZIonButton
+            onClick={btnOnClick}
+            testingselector={btnTestingselector}
+            className={classNames({
+              'mt-2 ion-no-margin': true,
+              'text-xs': !isMdScale
+            })}>
+            {btnText}
+          </ZIonButton>
+        ) : null}
+      </div>
+    </div>
+  );
 };
 
 export default ZEmptyTable;

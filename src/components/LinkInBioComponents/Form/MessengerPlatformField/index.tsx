@@ -11,13 +11,13 @@ import classNames from 'classnames';
 // Custom Imports
 import LinkInBioTitleField from '../TitleField';
 import {
-	ZIonButton,
-	ZIonCol,
-	ZIonIcon,
-	ZIonItem,
-	ZIonReorder,
-	ZIonReorderGroup,
-	ZIonRow,
+  ZIonButton,
+  ZIonCol,
+  ZIonIcon,
+  ZIonItem,
+  ZIonReorder,
+  ZIonReorderGroup,
+  ZIonRow
 } from '@/components/ZIonComponents';
 import LinkInBioLinkField from '../LinkField';
 import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedButton';
@@ -32,10 +32,10 @@ import { ZIcons } from '@/utils/ZIcons';
 
 // Types
 import {
-	cardDisplayEnum,
-	linkInBioBlockCardItemInterface,
-	LinkInBioPredefinedPlatformInterface,
-	LinkInBioSingleBlockContentType,
+  cardDisplayEnum,
+  linkInBioBlockCardItemInterface,
+  LinkInBioPredefinedPlatformInterface,
+  LinkInBioSingleBlockContentType
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 // Recoil states
@@ -52,399 +52,399 @@ import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-com
 // Styles
 
 const LinkInBioMessengerPlatformCardField: React.FC = () => {
-	const { values, handleBlur, handleChange, setFieldValue } =
-		useFormikContext<LinkInBioSingleBlockContentType>();
+  const { values, handleBlur, handleChange, setFieldValue } =
+    useFormikContext<LinkInBioSingleBlockContentType>();
 
-	// Recoil state for storing pre-defined music platform data.
-	const [
-		linkInBioPredefinedMessengerPlatformState,
-		setLinkInBioPredefinedMessengerPlatformState,
-	] = useRecoilState(LinkInBioPredefinedMessengerPlatformRState);
+  // Recoil state for storing pre-defined music platform data.
+  const [
+    linkInBioPredefinedMessengerPlatformState,
+    setLinkInBioPredefinedMessengerPlatformState
+  ] = useRecoilState(LinkInBioPredefinedMessengerPlatformRState);
 
-	// fetch block data from api and storing it in LinkInBioBlocksData variable...
-	const { data: LinkInBioPreDefinedMessengerPlatformData } = useZRQGetRequest<
-		LinkInBioPredefinedPlatformInterface<messengerPlatformsBlockEnum>[]
-	>({
-		_url: API_URL_ENUM.linkInBioPreDefinedMessengerPlatform_create_list,
-		_key: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS
-				.LINK_IN_BIO_PRE_DEFINED_MESSENGER_PLATFORM.MAIN,
-		],
-	});
+  // fetch block data from api and storing it in LinkInBioBlocksData variable...
+  const { data: LinkInBioPreDefinedMessengerPlatformData } = useZRQGetRequest<
+    LinkInBioPredefinedPlatformInterface<messengerPlatformsBlockEnum>[]
+  >({
+    _url: API_URL_ENUM.linkInBioPreDefinedMessengerPlatform_create_list,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS
+        .LINK_IN_BIO_PRE_DEFINED_MESSENGER_PLATFORM.MAIN
+    ]
+  });
 
-	// After fetching data and storing it to LinkInBioPreDefinedMessengerPlatformData variable, setting data to setLinkInBioPredefinedMessengerPlatformState recoil state and making sure that if only the data refetch then again store the lates data in recoil state...
-	useEffect(() => {
-		try {
-			if (LinkInBioPreDefinedMessengerPlatformData) {
-				setLinkInBioPredefinedMessengerPlatformState(
-					LinkInBioPreDefinedMessengerPlatformData
-				);
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-		// eslint-disable-next-line
-	}, [LinkInBioPreDefinedMessengerPlatformData]);
+  // After fetching data and storing it to LinkInBioPreDefinedMessengerPlatformData variable, setting data to setLinkInBioPredefinedMessengerPlatformState recoil state and making sure that if only the data refetch then again store the lates data in recoil state...
+  useEffect(() => {
+    try {
+      if (LinkInBioPreDefinedMessengerPlatformData) {
+        setLinkInBioPredefinedMessengerPlatformState(
+          LinkInBioPreDefinedMessengerPlatformData
+        );
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+    // eslint-disable-next-line
+  }, [LinkInBioPreDefinedMessengerPlatformData]);
 
-	// handle reorder function (preview panel)
-	const handleMessengerCardReorder = (
-		event: CustomEvent<ItemReorderEventDetail>
-	) => {
-		// The `from` and `to` properties contain the index of the item
-		// when the drag started and ended, respectively
+  // handle reorder function (preview panel)
+  const handleMessengerCardReorder = (
+    event: CustomEvent<ItemReorderEventDetail>
+  ) => {
+    // The `from` and `to` properties contain the index of the item
+    // when the drag started and ended, respectively
 
-		// Finish the reorder and position the item in the DOM based on
-		// where the gesture ended. This method can also be called directly
-		// by the reorder group
-		// eslint-disable-next-line
-		event.detail.complete();
-	};
+    // Finish the reorder and position the item in the DOM based on
+    // where the gesture ended. This method can also be called directly
+    // by the reorder group
+    // eslint-disable-next-line
+    event.detail.complete();
+  };
 
-	const toggleMusicPlatformCardHandler = ({
-		_type,
-		_title,
-	}: {
-		_type: messengerPlatformsBlockEnum;
-		_title: string;
-	}) => {
-		try {
-			if (_type) {
-				const _updateValue = values.cardItems;
+  const toggleMusicPlatformCardHandler = ({
+    _type,
+    _title
+  }: {
+    _type: messengerPlatformsBlockEnum;
+    _title: string;
+  }) => {
+    try {
+      if (_type) {
+        const _updateValue = values.cardItems;
 
-				if (_updateValue) {
-					const _index = _updateValue?.findIndex(
-						(item) => item.messengerCardType === _type
-					);
+        if (_updateValue) {
+          const _index = _updateValue?.findIndex(
+            item => item.messengerCardType === _type
+          );
 
-					if (_index !== -1) {
-						_updateValue?.splice(_index, 1);
-					} else if (_index === -1) {
-						const newEntry: linkInBioBlockCardItemInterface = {
-							target: {
-								url: '',
-							},
-							messengerCardType: messengerPlatformsBlockEnum[_type],
-							title: _title,
-						};
+          if (_index !== -1) {
+            _updateValue?.splice(_index, 1);
+          } else if (_index === -1) {
+            const newEntry: linkInBioBlockCardItemInterface = {
+              target: {
+                url: ''
+              },
+              messengerCardType: messengerPlatformsBlockEnum[_type],
+              title: _title
+            };
 
-						_updateValue?.push(newEntry);
-					}
+            _updateValue?.push(newEntry);
+          }
 
-					setFieldValue('cardItems', _updateValue, true);
+          setFieldValue('cardItems', _updateValue, true);
 
-					/**
-					 * We are setting the title below just to make formik dirty.
-					 * Why? when we are setting the cardItems up why we need that?
-					 * what I understand that cardItems is an array an we are setting the value of cardItems to an array again, as we now array is a reference type so it does not change and formik does not get dirty and we also does not see the save button in frontend as save button will show when formik is dirty. for now the way round is to set title field to make formik dirty. we will change this as we find a better solution.
-					 */
-					setFieldValue(
-						'title',
-						`${PRODUCT_NAME} music blocks = ${_updateValue.length}`,
-						true
-					);
-				}
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
+          /**
+           * We are setting the title below just to make formik dirty.
+           * Why? when we are setting the cardItems up why we need that?
+           * what I understand that cardItems is an array an we are setting the value of cardItems to an array again, as we now array is a reference type so it does not change and formik does not get dirty and we also does not see the save button in frontend as save button will show when formik is dirty. for now the way round is to set title field to make formik dirty. we will change this as we find a better solution.
+           */
+          setFieldValue(
+            'title',
+            `${PRODUCT_NAME} music blocks = ${_updateValue.length}`,
+            true
+          );
+        }
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
 
-	return (
-		<ZIonReorderGroup
-			onIonItemReorder={handleMessengerCardReorder}
-			disabled={false}
-		>
-			<FieldArray name='cardItems'>
-				{({ remove, push }) => {
-					return (
-						<>
-							{/* After getting MusicPlatform data from api and storing it to the LinkInBioPredefinedMusicPlatformsRState recoil state, looping the recoil state value to make MusicPlatforms */}
-							<ZIonRow
-								className={classNames({
-									'ion-padding-bottom mb-3 row-gap-1-point-6-rem w-[90%]': true,
-								})}
-							>
-								{linkInBioPredefinedMessengerPlatformState?.map((el) => {
-									const _index = values.cardItems?.findIndex(
-										(_el) => _el.messengerCardType === el.type
-									) as number;
-									return (
-										<ZIonCol
-											size='2'
-											key={el.id}
-											className='flex ion-justify-content-start'
-										>
-											<div className='ion-text-center me-3 w-max'>
-												<LinkInBioPDButton
-													icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
-													testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.block}-${el.type}`}
-													onClick={() => {
-														toggleMusicPlatformCardHandler({
-															_type: el.type,
-															_title: el.title as string,
-														});
-													}}
-													color={_index > -1 ? 'secondary' : 'light'}
-												/>
-											</div>
-										</ZIonCol>
-									);
-								})}
-							</ZIonRow>
+  return (
+    <ZIonReorderGroup
+      onIonItemReorder={handleMessengerCardReorder}
+      disabled={false}>
+      <FieldArray name='cardItems'>
+        {({ remove, push }) => {
+          return (
+            <>
+              {/* After getting MusicPlatform data from api and storing it to the LinkInBioPredefinedMusicPlatformsRState recoil state, looping the recoil state value to make MusicPlatforms */}
+              <ZIonRow
+                className={classNames({
+                  'ion-padding-bottom mb-3 row-gap-1-point-6-rem w-[90%]': true
+                })}>
+                {linkInBioPredefinedMessengerPlatformState?.map(el => {
+                  const _index = values.cardItems?.findIndex(
+                    _el => _el.messengerCardType === el.type
+                  ) as number;
+                  return (
+                    <ZIonCol
+                      size='2'
+                      key={el.id}
+                      className='flex ion-justify-content-start'>
+                      <div className='ion-text-center me-3 w-max'>
+                        <LinkInBioPDButton
+                          icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
+                          testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.block}-${el.type}`}
+                          onClick={() => {
+                            toggleMusicPlatformCardHandler({
+                              _type: el.type,
+                              _title: el.title as string
+                            });
+                          }}
+                          color={_index > -1 ? 'secondary' : 'light'}
+                        />
+                      </div>
+                    </ZIonCol>
+                  );
+                })}
+              </ZIonRow>
 
-							<ZIonButton
-								expand='block'
-								className='ion-text-capitalize'
-								testingselector={
-									CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm
-										.fields.messenger.addBlockBtn
-								}
-								onClick={() =>
-									push({
-										target: {
-											url: '',
-										},
-										title: 'Title',
-										isActive: true,
-										cardDisplayType: cardDisplayEnum.music,
-										messengerCardType: messengerPlatformsBlockEnum.default,
-									})
-								}
-							>
-								<ZIonIcon icon={addOutline} className='me-1' />
-								add custom element
-							</ZIonButton>
-							{values.cardItems?.length
-								? values.cardItems.map((_cardItem, _index) => {
-										return (
-											<ZIonItem
-												key={_index}
-												lines='none'
-												className='pt-2 pb-3 my-4 border zaions-linkInBio-block'
-												testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.cardItem}-${_index}`}
-												testingselector={
-													CONSTANTS.testingSelectors.linkInBio.formPage.design
-														.blockForm.fields.messenger.cardItem
-												}
-												style={{
-													'--background': 'transparent',
-												}}
-											>
-												<ZIonReorder slot='start' className='ms-3 me-2'>
-													<ZIonIcon
-														icon={appsOutline}
-														color='dark'
-														className='w-6 h-6'
-													/>
-												</ZIonReorder>
+              <ZIonButton
+                expand='block'
+                className='ion-text-capitalize'
+                testingselector={
+                  CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm
+                    .fields.messenger.addBlockBtn
+                }
+                onClick={() =>
+                  push({
+                    target: {
+                      url: ''
+                    },
+                    title: 'Title',
+                    isActive: true,
+                    cardDisplayType: cardDisplayEnum.music,
+                    messengerCardType: messengerPlatformsBlockEnum.default
+                  })
+                }>
+                <ZIonIcon
+                  icon={addOutline}
+                  className='me-1'
+                />
+                add custom element
+              </ZIonButton>
+              {values.cardItems?.length
+                ? values.cardItems.map((_cardItem, _index) => {
+                    return (
+                      <ZIonItem
+                        key={_index}
+                        lines='none'
+                        className='pt-2 pb-3 my-4 border zaions-linkInBio-block'
+                        testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.cardItem}-${_index}`}
+                        testingselector={
+                          CONSTANTS.testingSelectors.linkInBio.formPage.design
+                            .blockForm.fields.messenger.cardItem
+                        }
+                        style={{
+                          '--background': 'transparent'
+                        }}>
+                        <ZIonReorder
+                          slot='start'
+                          className='ms-3 me-2'>
+                          <ZIonIcon
+                            icon={appsOutline}
+                            color='dark'
+                            className='w-6 h-6'
+                          />
+                        </ZIonReorder>
 
-												<div className='w-full pe-3'>
-													<LinkInBioTitleField
-														placeholder='Title'
-														name={`cardItems.${_index}.title`}
-														onIonChange={handleChange}
-														onIonBlur={handleBlur}
-														testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.titleInput}-${_index}`}
-														testingselector={
-															CONSTANTS.testingSelectors.linkInBio.formPage
-																.design.blockForm.fields.messenger.titleInput
-														}
-														value={
-															values.cardItems && values.cardItems[_index].title
-														}
-													/>
+                        <div className='w-full pe-3'>
+                          <LinkInBioTitleField
+                            placeholder='Title'
+                            name={`cardItems.${_index}.title`}
+                            onIonChange={handleChange}
+                            onIonBlur={handleBlur}
+                            testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.titleInput}-${_index}`}
+                            testingselector={
+                              CONSTANTS.testingSelectors.linkInBio.formPage
+                                .design.blockForm.fields.messenger.titleInput
+                            }
+                            value={
+                              values.cardItems && values.cardItems[_index].title
+                            }
+                          />
 
-													{(_cardItem.messengerCardType ===
-														messengerPlatformsBlockEnum.default ||
-														_cardItem.messengerCardType ===
-															messengerPlatformsBlockEnum.messenger) && (
-														<LinkInBioLinkField
-															className='mt-1'
-															name={`cardItems.${_index}.target.url`}
-															onIonChange={handleChange}
-															onIonBlur={handleBlur}
-															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.linkInput}-${_index}`}
-															testingselector={
-																CONSTANTS.testingSelectors.linkInBio.formPage
-																	.design.blockForm.fields.messenger.linkInput
-															}
-															value={
-																values.cardItems &&
-																values.cardItems[_index].target?.url
-															}
-														/>
-													)}
+                          {(_cardItem.messengerCardType ===
+                            messengerPlatformsBlockEnum.default ||
+                            _cardItem.messengerCardType ===
+                              messengerPlatformsBlockEnum.messenger) && (
+                            <LinkInBioLinkField
+                              className='mt-1'
+                              name={`cardItems.${_index}.target.url`}
+                              onIonChange={handleChange}
+                              onIonBlur={handleBlur}
+                              testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.linkInput}-${_index}`}
+                              testingselector={
+                                CONSTANTS.testingSelectors.linkInBio.formPage
+                                  .design.blockForm.fields.messenger.linkInput
+                              }
+                              value={
+                                values.cardItems &&
+                                values.cardItems[_index].target?.url
+                              }
+                            />
+                          )}
 
-													{_cardItem.messengerCardType ===
-														messengerPlatformsBlockEnum.default && (
-														<LinkInBioIconField
-															className='mt-1'
-															name={`cardItems.${_index}.icon`}
-															onIonChange={handleChange}
-															onIonBlur={handleBlur}
-															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.iconInput}-${_index}`}
-															testingselector={
-																CONSTANTS.testingSelectors.linkInBio.formPage
-																	.design.blockForm.fields.messenger.iconInput
-															}
-															value={
-																values.cardItems &&
-																values.cardItems[_index].icon
-															}
-														/>
-													)}
+                          {_cardItem.messengerCardType ===
+                            messengerPlatformsBlockEnum.default && (
+                            <LinkInBioIconField
+                              className='mt-1'
+                              name={`cardItems.${_index}.icon`}
+                              onIonChange={handleChange}
+                              onIonBlur={handleBlur}
+                              testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.iconInput}-${_index}`}
+                              testingselector={
+                                CONSTANTS.testingSelectors.linkInBio.formPage
+                                  .design.blockForm.fields.messenger.iconInput
+                              }
+                              value={
+                                values.cardItems &&
+                                values.cardItems[_index].icon
+                              }
+                            />
+                          )}
 
-													{_cardItem.messengerCardType ===
-														messengerPlatformsBlockEnum.email && (
-														<LinkInBioEmailField
-															className='mt-1'
-															name={`cardItems.${_index}.email`}
-															onIonChange={handleChange}
-															onIonBlur={handleBlur}
-															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.emailInput}-${_index}`}
-															testingselector={
-																CONSTANTS.testingSelectors.linkInBio.formPage
-																	.design.blockForm.fields.messenger.emailInput
-															}
-															value={
-																values.cardItems &&
-																values.cardItems[_index].email
-															}
-														/>
-													)}
+                          {_cardItem.messengerCardType ===
+                            messengerPlatformsBlockEnum.email && (
+                            <LinkInBioEmailField
+                              className='mt-1'
+                              name={`cardItems.${_index}.email`}
+                              onIonChange={handleChange}
+                              onIonBlur={handleBlur}
+                              testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.emailInput}-${_index}`}
+                              testingselector={
+                                CONSTANTS.testingSelectors.linkInBio.formPage
+                                  .design.blockForm.fields.messenger.emailInput
+                              }
+                              value={
+                                values.cardItems &&
+                                values.cardItems[_index].email
+                              }
+                            />
+                          )}
 
-													{(_cardItem.messengerCardType ===
-														messengerPlatformsBlockEnum.whatsapp ||
-														_cardItem.messengerCardType ===
-															messengerPlatformsBlockEnum.call ||
-														_cardItem.messengerCardType ===
-															messengerPlatformsBlockEnum.sms) && (
-														<LinkInBioPhoneNumberField
-															name={`cardItems.${_index}.phoneNumber`}
-															onIonChange={handleChange}
-															onIonBlur={handleBlur}
-															className='mt-1'
-															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.emailInput}-${_index}`}
-															testingselector={
-																CONSTANTS.testingSelectors.linkInBio.formPage
-																	.design.blockForm.fields.messenger.emailInput
-															}
-															value={
-																values.cardItems &&
-																values.cardItems[_index].phoneNumber
-															}
-														/>
-													)}
+                          {(_cardItem.messengerCardType ===
+                            messengerPlatformsBlockEnum.whatsapp ||
+                            _cardItem.messengerCardType ===
+                              messengerPlatformsBlockEnum.call ||
+                            _cardItem.messengerCardType ===
+                              messengerPlatformsBlockEnum.sms) && (
+                            <LinkInBioPhoneNumberField
+                              name={`cardItems.${_index}.phoneNumber`}
+                              onIonChange={handleChange}
+                              onIonBlur={handleBlur}
+                              className='mt-1'
+                              testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.emailInput}-${_index}`}
+                              testingselector={
+                                CONSTANTS.testingSelectors.linkInBio.formPage
+                                  .design.blockForm.fields.messenger.emailInput
+                              }
+                              value={
+                                values.cardItems &&
+                                values.cardItems[_index].phoneNumber
+                              }
+                            />
+                          )}
 
-													{(_cardItem.messengerCardType ===
-														messengerPlatformsBlockEnum.telegram ||
-														_cardItem.messengerCardType ===
-															messengerPlatformsBlockEnum.skype ||
-														_cardItem.messengerCardType ===
-															messengerPlatformsBlockEnum.wechat ||
-														_cardItem.messengerCardType ===
-															messengerPlatformsBlockEnum.line ||
-														_cardItem.messengerCardType ===
-															messengerPlatformsBlockEnum.viber) && (
-														<LinkInBioTitleField
-															className='mt-1'
-															placeholder='Username'
-															onIonChange={handleChange}
-															onIonBlur={handleBlur}
-															name={`cardItems.${_index}.username`}
-															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.usernameInput}-${_index}`}
-															testingselector={
-																CONSTANTS.testingSelectors.linkInBio.formPage
-																	.design.blockForm.fields.messenger
-																	.usernameInput
-															}
-															value={
-																values.cardItems &&
-																values.cardItems[_index].username
-															}
-														/>
-													)}
+                          {(_cardItem.messengerCardType ===
+                            messengerPlatformsBlockEnum.telegram ||
+                            _cardItem.messengerCardType ===
+                              messengerPlatformsBlockEnum.skype ||
+                            _cardItem.messengerCardType ===
+                              messengerPlatformsBlockEnum.wechat ||
+                            _cardItem.messengerCardType ===
+                              messengerPlatformsBlockEnum.line ||
+                            _cardItem.messengerCardType ===
+                              messengerPlatformsBlockEnum.viber) && (
+                            <LinkInBioTitleField
+                              className='mt-1'
+                              placeholder='Username'
+                              onIonChange={handleChange}
+                              onIonBlur={handleBlur}
+                              name={`cardItems.${_index}.username`}
+                              testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.usernameInput}-${_index}`}
+                              testingselector={
+                                CONSTANTS.testingSelectors.linkInBio.formPage
+                                  .design.blockForm.fields.messenger
+                                  .usernameInput
+                              }
+                              value={
+                                values.cardItems &&
+                                values.cardItems[_index].username
+                              }
+                            />
+                          )}
 
-													{_cardItem.messengerCardType ===
-														messengerPlatformsBlockEnum.email && (
-														<LinkInBioObjectField
-															className='mt-1'
-															onIonChange={handleChange}
-															onIonBlur={handleBlur}
-															name={`cardItems.${_index}.object`}
-															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.objectInput}-${_index}`}
-															testingselector={
-																CONSTANTS.testingSelectors.linkInBio.formPage
-																	.design.blockForm.fields.messenger.objectInput
-															}
-															value={
-																values.cardItems &&
-																values.cardItems[_index].object
-															}
-														/>
-													)}
+                          {_cardItem.messengerCardType ===
+                            messengerPlatformsBlockEnum.email && (
+                            <LinkInBioObjectField
+                              className='mt-1'
+                              onIonChange={handleChange}
+                              onIonBlur={handleBlur}
+                              name={`cardItems.${_index}.object`}
+                              testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.objectInput}-${_index}`}
+                              testingselector={
+                                CONSTANTS.testingSelectors.linkInBio.formPage
+                                  .design.blockForm.fields.messenger.objectInput
+                              }
+                              value={
+                                values.cardItems &&
+                                values.cardItems[_index].object
+                              }
+                            />
+                          )}
 
-													{(_cardItem.messengerCardType ===
-														messengerPlatformsBlockEnum.email ||
-														_cardItem.messengerCardType ===
-															messengerPlatformsBlockEnum.whatsapp ||
-														_cardItem.messengerCardType ===
-															messengerPlatformsBlockEnum.sms ||
-														_cardItem.messengerCardType ===
-															messengerPlatformsBlockEnum.viber) && (
-														<ZTextEditor
-															placeholder='Message'
-															className='pt-2'
-															testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.textInput}-${_index}`}
-															testingselector={
-																CONSTANTS.testingSelectors.linkInBio.formPage
-																	.design.blockForm.fields.messenger.textInput
-															}
-															value={
-																values.cardItems &&
-																values.cardItems[_index].text
-															}
-															onChange={(_value) => {
-																setFieldValue(
-																	`cardItems.${_index}.text`,
-																	_value,
-																	false
-																);
-															}}
-														/>
-													)}
-												</div>
+                          {(_cardItem.messengerCardType ===
+                            messengerPlatformsBlockEnum.email ||
+                            _cardItem.messengerCardType ===
+                              messengerPlatformsBlockEnum.whatsapp ||
+                            _cardItem.messengerCardType ===
+                              messengerPlatformsBlockEnum.sms ||
+                            _cardItem.messengerCardType ===
+                              messengerPlatformsBlockEnum.viber) && (
+                            <ZTextEditor
+                              placeholder='Message'
+                              className='pt-2'
+                              testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.textInput}-${_index}`}
+                              testingselector={
+                                CONSTANTS.testingSelectors.linkInBio.formPage
+                                  .design.blockForm.fields.messenger.textInput
+                              }
+                              value={
+                                values.cardItems &&
+                                values.cardItems[_index].text
+                              }
+                              onChange={_value => {
+                                setFieldValue(
+                                  `cardItems.${_index}.text`,
+                                  _value,
+                                  false
+                                );
+                              }}
+                            />
+                          )}
+                        </div>
 
-												{/* Delete block button */}
-												<ZCustomDeleteComponent
-													slot='end'
-													iconColor='danger'
-													className='ion-no-padding me-1 ms-2'
-													testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.deleteBtn}-${_index}`}
-													testingselector={
-														CONSTANTS.testingSelectors.linkInBio.formPage.design
-															.blockForm.fields.messenger.deleteBtn
-													}
-													deleteFn={(detail: OverlayEventDetail<unknown>) => {
-														try {
-															if (detail && detail.role === 'destructive') {
-																void remove(_index);
-															}
-														} catch (error) {
-															reportCustomError(error);
-														}
-													}}
-												/>
-											</ZIonItem>
-										);
-								  })
-								: ''}
-						</>
-					);
-				}}
-			</FieldArray>
-		</ZIonReorderGroup>
-	);
+                        {/* Delete block button */}
+                        <ZCustomDeleteComponent
+                          slot='end'
+                          iconColor='danger'
+                          className='ion-no-padding me-1 ms-2'
+                          testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.deleteBtn}-${_index}`}
+                          testingselector={
+                            CONSTANTS.testingSelectors.linkInBio.formPage.design
+                              .blockForm.fields.messenger.deleteBtn
+                          }
+                          deleteFn={(detail: OverlayEventDetail<unknown>) => {
+                            try {
+                              if (detail && detail.role === 'destructive') {
+                                void remove(_index);
+                              }
+                            } catch (error) {
+                              reportCustomError(error);
+                            }
+                          }}
+                        />
+                      </ZIonItem>
+                    );
+                  })
+                : ''}
+            </>
+          );
+        }}
+      </FieldArray>
+    </ZIonReorderGroup>
+  );
 };
 
 export default LinkInBioMessengerPlatformCardField;

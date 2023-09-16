@@ -4,11 +4,11 @@
  * */
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 import {
-	ZIonIcon,
-	ZIonItem,
-	ZIonLabel,
-	ZIonList,
-	ZIonText,
+  ZIonIcon,
+  ZIonItem,
+  ZIonLabel,
+  ZIonList,
+  ZIonText
 } from '@/components/ZIonComponents';
 import { workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
@@ -19,19 +19,19 @@ import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import { createRedirectRoute, extractInnerData } from '@/utils/helpers';
 import MESSAGES from '@/utils/messages';
 import {
-	showErrorNotification,
-	showSuccessNotification,
+  showErrorNotification,
+  showSuccessNotification
 } from '@/utils/notification';
 import { useZIonAlert, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import {
-	useZGetRQCacheData,
-	useZRQDeleteRequest,
-	useZUpdateRQCacheData,
+  useZGetRQCacheData,
+  useZRQDeleteRequest,
+  useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
 import {
-	ellipsisHorizontalOutline,
-	pencilOutline,
-	trashBinOutline,
+  ellipsisHorizontalOutline,
+  pencilOutline,
+  trashBinOutline
 } from 'ionicons/icons';
 import React, { useState } from 'react';
 
@@ -87,247 +87,246 @@ import React, { useState } from 'react';
  * */
 
 const ZWorkspacesListPopover: React.FC<{
-	workspaceId: string;
-	dismissZIonPopover: (data: string, role: string) => void;
-	zNavigatePushRoute: (_url: string) => void;
+  workspaceId: string;
+  dismissZIonPopover: (data: string, role: string) => void;
+  zNavigatePushRoute: (_url: string) => void;
 }> = ({ workspaceId, dismissZIonPopover, zNavigatePushRoute }) => {
-	// #region Comp state.
-	const [compState, setCompState] = useState<{
-		_workspaceId: string;
-	}>({
-		_workspaceId: '',
-	});
-	// #endregion
+  // #region Comp state.
+  const [compState, setCompState] = useState<{
+    _workspaceId: string;
+  }>({
+    _workspaceId: ''
+  });
+  // #endregion
 
-	// #region Custom hooks.
-	const { getRQCDataHandler } = useZGetRQCacheData();
-	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+  // #region Custom hooks.
+  const { getRQCDataHandler } = useZGetRQCacheData();
+  const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
-	// #endregion
+  // #endregion
 
-	// #region Popover.
-	const { presentZIonPopover: presentZWorkspaceActionPopover } = useZIonPopover(
-		ZWorkspaceActionPopover,
-		{
-			workspaceId: compState._workspaceId,
-		}
-	);
-	// #endregion
+  // #region Popover.
+  const { presentZIonPopover: presentZWorkspaceActionPopover } = useZIonPopover(
+    ZWorkspaceActionPopover,
+    {
+      workspaceId: compState._workspaceId
+    }
+  );
+  // #endregion
 
-	const workspacesList =
-		extractInnerData<workspaceInterface[]>(
-			getRQCDataHandler<workspaceInterface[]>({
-				key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
-			}) as workspaceInterface[],
-			extractInnerDataOptionsEnum.createRequestResponseItems
-		) || [];
+  const workspacesList =
+    extractInnerData<workspaceInterface[]>(
+      getRQCDataHandler<workspaceInterface[]>({
+        key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
+      }) as workspaceInterface[],
+      extractInnerDataOptionsEnum.createRequestResponseItems
+    ) || [];
 
-	return (
-		<div className='py-1'>
-			<ZIonList lines='none'>
-				{workspacesList?.map((el) => (
-					<ZIonItem
-						key={el.id}
-						minHeight='2.2rem'
-						className='cursor-pointer ion-activatable'
-						testingListSelector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
-						testingselector={
-							CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
-								.singleWorkspace
-						}
-						onClick={() => {
-							zNavigatePushRoute(
-								createRedirectRoute({
-									url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-									params: [
-										CONSTANTS.RouteParams.workspace.workspaceId,
-										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-									],
-									values: [el.id || '', 'all'],
-								})
-							);
-							dismissZIonPopover('', '');
-						}}
-					>
-						<ZIonLabel className='w-full text-sm'>{el.workspaceName}</ZIonLabel>
-						<ZIonIcon
-							icon={ellipsisHorizontalOutline}
-							className='cursor-pointer'
-							onClick={(event: unknown) => {
-								if (el?.id) {
-									setCompState((oldValues) => ({
-										...oldValues,
-										_workspaceId: el.id!,
-									}));
+  return (
+    <div className='py-1'>
+      <ZIonList lines='none'>
+        {workspacesList?.map(el => (
+          <ZIonItem
+            key={el.id}
+            minHeight='2.2rem'
+            className='cursor-pointer ion-activatable'
+            testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
+            testingselector={
+              CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
+                .singleWorkspace
+            }
+            onClick={() => {
+              zNavigatePushRoute(
+                createRedirectRoute({
+                  url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                  params: [
+                    CONSTANTS.RouteParams.workspace.workspaceId,
+                    CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                  ],
+                  values: [el.id || '', 'all']
+                })
+              );
+              dismissZIonPopover('', '');
+            }}>
+            <ZIonLabel className='w-full text-sm'>{el.workspaceName}</ZIonLabel>
+            <ZIonIcon
+              icon={ellipsisHorizontalOutline}
+              className='cursor-pointer'
+              onClick={(event: unknown) => {
+                if (el?.id) {
+                  setCompState(oldValues => ({
+                    ...oldValues,
+                    _workspaceId: el.id!
+                  }));
 
-									//
-									presentZWorkspaceActionPopover({
-										_event: event as Event,
-										_cssClass: 'zaions_present_folder_Action_popover_width',
-										_dismissOnSelect: false,
-									});
-								}
-							}}
-						/>
-					</ZIonItem>
-				))}
-			</ZIonList>
-		</div>
-	);
+                  //
+                  presentZWorkspaceActionPopover({
+                    _event: event as Event,
+                    _cssClass: 'zaions_present_folder_Action_popover_width',
+                    _dismissOnSelect: false
+                  });
+                }
+              }}
+            />
+          </ZIonItem>
+        ))}
+      </ZIonList>
+    </div>
+  );
 };
 
 const ZWorkspaceActionPopover: React.FC<{
-	workspaceId: string;
-	dismissZIonPopover: (data: string, role: string) => void;
+  workspaceId: string;
+  dismissZIonPopover: (data: string, role: string) => void;
 }> = ({ workspaceId, dismissZIonPopover }) => {
-	// #region Custom hooks.
-	const { presentZIonAlert } = useZIonAlert(); // hook to present alert.
-	const { getRQCDataHandler } = useZGetRQCacheData();
-	const { updateRQCDataHandler } = useZUpdateRQCacheData();
-	// #endregion
+  // #region Custom hooks.
+  const { presentZIonAlert } = useZIonAlert(); // hook to present alert.
+  const { getRQCDataHandler } = useZGetRQCacheData();
+  const { updateRQCDataHandler } = useZUpdateRQCacheData();
+  // #endregion
 
-	// #region
-	// delete workspace api.
-	const { mutateAsync: deleteWorkspaceMutate } = useZRQDeleteRequest(
-		API_URL_ENUM.workspace_update_delete,
-		[]
-	);
-	// #endregion
+  // #region
+  // delete workspace api.
+  const { mutateAsync: deleteWorkspaceMutate } = useZRQDeleteRequest(
+    API_URL_ENUM.workspace_update_delete,
+    []
+  );
+  // #endregion
 
-	// #region Functions.
-	// delete Workspace Confirm Modal.
-	const deleteWorkspaceConfirmModal = async () => {
-		try {
-			if (workspaceId) {
-				await presentZIonAlert({
-					header: `Delete Workspace`,
-					subHeader: 'Remove workspace from user account.',
-					message: 'Are you sure you want to delete this workspace?',
-					buttons: [
-						{
-							text: 'Cancel',
-							role: 'cancel',
-						},
-						{
-							text: 'Delete',
-							role: 'danger',
-							handler: () => {
-								void removeWorkspace();
-							},
-						},
-					],
-				});
-			} else {
-				showErrorNotification('Workspace id is undefined :(');
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
+  // #region Functions.
+  // delete Workspace Confirm Modal.
+  const deleteWorkspaceConfirmModal = async () => {
+    try {
+      if (workspaceId) {
+        await presentZIonAlert({
+          header: `Delete Workspace`,
+          subHeader: 'Remove workspace from user account.',
+          message: 'Are you sure you want to delete this workspace?',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel'
+            },
+            {
+              text: 'Delete',
+              role: 'danger',
+              handler: () => {
+                void removeWorkspace();
+              }
+            }
+          ]
+        });
+      } else {
+        showErrorNotification('Workspace id is undefined :(');
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
 
-	// removeWorkspace will hit delete workspace folder api
-	const removeWorkspace = async () => {
-		try {
-			if (workspaceId) {
-				// hitting the delete api.
-				const _response = await deleteWorkspaceMutate({
-					itemIds: [workspaceId],
-					urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-				});
+  // removeWorkspace will hit delete workspace folder api
+  const removeWorkspace = async () => {
+    try {
+      if (workspaceId) {
+        // hitting the delete api.
+        const _response = await deleteWorkspaceMutate({
+          itemIds: [workspaceId],
+          urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+        });
 
-				if (_response) {
-					const _data = extractInnerData<{ success: boolean }>(
-						_response,
-						extractInnerDataOptionsEnum.createRequestResponseItem
-					);
+        if (_response) {
+          const _data = extractInnerData<{ success: boolean }>(
+            _response,
+            extractInnerDataOptionsEnum.createRequestResponseItem
+          );
 
-					if (_data && _data?.success) {
-						// getting all the workspace from RQ cache.
-						const _oldWorkspaces =
-							extractInnerData<workspaceInterface[]>(
-								getRQCDataHandler<workspaceInterface[]>({
-									key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
-								}) as workspaceInterface[],
-								extractInnerDataOptionsEnum.createRequestResponseItems
-							) || [];
+          if (_data && _data?.success) {
+            // getting all the workspace from RQ cache.
+            const _oldWorkspaces =
+              extractInnerData<workspaceInterface[]>(
+                getRQCDataHandler<workspaceInterface[]>({
+                  key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
+                }) as workspaceInterface[],
+                extractInnerDataOptionsEnum.createRequestResponseItems
+              ) || [];
 
-						// removing deleted workspace from cache.
-						const _updatedWorkspaces = _oldWorkspaces.filter(
-							(el) => el.id !== workspaceId
-						);
+            // removing deleted workspace from cache.
+            const _updatedWorkspaces = _oldWorkspaces.filter(
+              el => el.id !== workspaceId
+            );
 
-						// Updating data in RQ cache.
-						await updateRQCDataHandler<workspaceInterface[] | undefined>({
-							key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
-							data: _updatedWorkspaces as workspaceInterface[],
-							id: '',
-							extractType: ZRQGetRequestExtractEnum.extractItems,
-							updateHoleData: true,
-						});
+            // Updating data in RQ cache.
+            await updateRQCDataHandler<workspaceInterface[] | undefined>({
+              key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
+              data: _updatedWorkspaces as workspaceInterface[],
+              id: '',
+              extractType: ZRQGetRequestExtractEnum.extractItems,
+              updateHoleData: true
+            });
 
-						// show success message after deleting.
-						showSuccessNotification(
-							MESSAGES.GENERAL.WORKSPACE.WORKSPACE_DELETED
-						);
-					}
-				} else {
-					showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
-				}
+            // show success message after deleting.
+            showSuccessNotification(
+              MESSAGES.GENERAL.WORKSPACE.WORKSPACE_DELETED
+            );
+          }
+        } else {
+          showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+        }
 
-				// Dismiss popover.
-				dismissZIonPopover('', '');
-			} else {
-				showErrorNotification('Workspace id is undefined :(');
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
-	// #endregion
+        // Dismiss popover.
+        dismissZIonPopover('', '');
+      } else {
+        showErrorNotification('Workspace id is undefined :(');
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
+  // #endregion
 
-	return (
-		<ZIonList lines='full' className='ion-no-padding'>
-			{/* Edit */}
-			<ZIonItem
-				minHeight='2.1rem'
-				className='cursor-pointer ion-activatable'
-				testingselector={
-					CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
-						.actionPopover.editWorkspace
-				}
-				testingListSelector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.actionPopover.editWorkspace}-${workspaceId}`}
-			>
-				<ZIonIcon
-					icon={pencilOutline}
-					className='w-5 h-5 me-2'
-					color='secondary'
-				/>
-				<ZIonText className='font-normal'>Edit</ZIonText>
-			</ZIonItem>
+  return (
+    <ZIonList
+      lines='full'
+      className='ion-no-padding'>
+      {/* Edit */}
+      <ZIonItem
+        minHeight='2.1rem'
+        className='cursor-pointer ion-activatable'
+        testingselector={
+          CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
+            .actionPopover.editWorkspace
+        }
+        testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.actionPopover.editWorkspace}-${workspaceId}`}>
+        <ZIonIcon
+          icon={pencilOutline}
+          className='w-5 h-5 me-2'
+          color='secondary'
+        />
+        <ZIonText className='font-normal'>Edit</ZIonText>
+      </ZIonItem>
 
-			{/* Delete */}
-			<ZIonItem
-				minHeight='2.1rem'
-				lines='none'
-				className='cursor-pointer ion-activatable'
-				testingselector={
-					CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
-						.actionPopover.deleteWorkspace
-				}
-				testingListSelector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.actionPopover.deleteWorkspace}-${workspaceId}`}
-				onClick={() => {
-					deleteWorkspaceConfirmModal();
-				}}
-			>
-				<ZIonIcon
-					icon={trashBinOutline}
-					className='w-5 h-5 me-2'
-					color='danger'
-				/>
-				<ZIonText className='font-normal'>Delete</ZIonText>
-			</ZIonItem>
-		</ZIonList>
-	);
+      {/* Delete */}
+      <ZIonItem
+        minHeight='2.1rem'
+        lines='none'
+        className='cursor-pointer ion-activatable'
+        testingselector={
+          CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
+            .actionPopover.deleteWorkspace
+        }
+        testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.actionPopover.deleteWorkspace}-${workspaceId}`}
+        onClick={() => {
+          deleteWorkspaceConfirmModal();
+        }}>
+        <ZIonIcon
+          icon={trashBinOutline}
+          className='w-5 h-5 me-2'
+          color='danger'
+        />
+        <ZIonText className='font-normal'>Delete</ZIonText>
+      </ZIonItem>
+    </ZIonList>
+  );
 };
 
 export default ZWorkspacesListPopover;

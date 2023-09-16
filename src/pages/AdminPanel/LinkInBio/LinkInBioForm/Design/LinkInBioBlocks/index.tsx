@@ -17,19 +17,19 @@ import { useParams } from 'react-router';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonButton,
-	ZIonCol,
-	ZIonRow,
-	ZIonSkeletonText,
-	ZIonText,
+  ZIonButton,
+  ZIonCol,
+  ZIonRow,
+  ZIonSkeletonText,
+  ZIonText
 } from '@/components/ZIonComponents';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
 const ZLinkInBioAddBlockModal = lazy(
-	() =>
-		import('@/components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal')
+  () =>
+    import('@/components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal')
 );
 const LinkInBioPDButton = lazy(
-	() => import('@/components/LinkInBioComponents/UI/PerDefinedButton')
+  () => import('@/components/LinkInBioComponents/UI/PerDefinedButton')
 );
 
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
@@ -52,8 +52,8 @@ import { ZIcons } from '@/utils/ZIcons';
 import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 
 import {
-	LinkInBioBlockEnum,
-	LinkInBioPredefinedBlocksInterface,
+  LinkInBioBlockEnum,
+  LinkInBioPredefinedBlocksInterface
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 /**
@@ -85,163 +85,156 @@ import classes from '../styles.module.css';
  * */
 
 const ZLinkInBioBlocksSection: React.FC = () => {
-	// The formikContext to get the formik value and setFieldValue method...
-	const { values, setFieldValue } = useFormikContext<LinkInBioType>();
+  // The formikContext to get the formik value and setFieldValue method...
+  const { values, setFieldValue } = useFormikContext<LinkInBioType>();
 
-	// Recoil state for storing Link-in-bio blocks data that will fetch from backend.
-	// const [linkInBioPredefinedBlocksState, setLinkInBioPredefinedBlocksState] =
-	// 	useRecoilState(LinkInBioPredefinedBlocksRState);
+  // Recoil state for storing Link-in-bio blocks data that will fetch from backend.
+  // const [linkInBioPredefinedBlocksState, setLinkInBioPredefinedBlocksState] =
+  // 	useRecoilState(LinkInBioPredefinedBlocksRState);
 
-	// getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio blocks of that id will be fetch from backend.
-	const { linkInBioId, workspaceId } = useParams<{
-		linkInBioId: string;
-		workspaceId: string;
-	}>();
+  // getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio blocks of that id will be fetch from backend.
+  const { linkInBioId, workspaceId } = useParams<{
+    linkInBioId: string;
+    workspaceId: string;
+  }>();
 
-	// custom hook for presenting modal (the add block modal)
-	const { presentZIonModal: presentZLinkInBioAddBlockModal } = useZIonModal(
-		ZLinkInBioAddBlockModal,
-		{
-			_blockType: values.LinkInBioBlock, // passing values.LinkInBioBlock as blockType to ZLinkInBioAddBlockModal component.
-			_blockContent:
-				LinkInBioBlocksDefaultData[values.LinkInBioBlock as string],
-			setFieldValue, // passing setFieldValue to ZLinkInBioAddBlockModal component.
-			linkInBioId,
-			workspaceId,
-		}
-	);
+  // custom hook for presenting modal (the add block modal)
+  const { presentZIonModal: presentZLinkInBioAddBlockModal } = useZIonModal(
+    ZLinkInBioAddBlockModal,
+    {
+      _blockType: values.LinkInBioBlock, // passing values.LinkInBioBlock as blockType to ZLinkInBioAddBlockModal component.
+      _blockContent:
+        LinkInBioBlocksDefaultData[values.LinkInBioBlock as string],
+      setFieldValue, // passing setFieldValue to ZLinkInBioAddBlockModal component.
+      linkInBioId,
+      workspaceId
+    }
+  );
 
-	// fetch block data from api and storing.
-	const {
-		data: LinkInBioPreDefinedBlocksData,
-		isFetching: isLinkInBioPreDefinedBlocksDataFetching,
-	} = useZRQGetRequest<LinkInBioPredefinedBlocksInterface[]>({
-		_url: API_URL_ENUM.linkInBioPreDefinedBlocks_create_list,
-		_key: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_DEFINED_BLOCKS.MAIN,
-			workspaceId,
-			linkInBioId,
-		],
-	});
+  // fetch block data from api and storing.
+  const {
+    data: LinkInBioPreDefinedBlocksData,
+    isFetching: isLinkInBioPreDefinedBlocksDataFetching
+  } = useZRQGetRequest<LinkInBioPredefinedBlocksInterface[]>({
+    _url: API_URL_ENUM.linkInBioPreDefinedBlocks_create_list,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_DEFINED_BLOCKS.MAIN,
+      workspaceId,
+      linkInBioId
+    ]
+  });
 
-	// the LinkInBioBlockHandler function will run then the user click on any of the blocks this will execute the presentZLinkInBioAddBlockModal function which is coming from the useZIonModal to present modal...
-	const LinkInBioBlockHandler = (_type: LinkInBioBlockEnum) => {
-		try {
-			if (_type) {
-				presentZLinkInBioAddBlockModal({
-					_cssClass: 'lib-block-modal-size',
-				});
+  // the LinkInBioBlockHandler function will run then the user click on any of the blocks this will execute the presentZLinkInBioAddBlockModal function which is coming from the useZIonModal to present modal...
+  const LinkInBioBlockHandler = (_type: LinkInBioBlockEnum) => {
+    try {
+      if (_type) {
+        presentZLinkInBioAddBlockModal({
+          _cssClass: 'lib-block-modal-size'
+        });
 
-				setFieldValue('LinkInBioBlock', _type, false);
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
+        setFieldValue('LinkInBioBlock', _type, false);
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
 
-	const isZFetching = isLinkInBioPreDefinedBlocksDataFetching;
+  const isZFetching = isLinkInBioPreDefinedBlocksDataFetching;
 
-	return (
-		<Suspense fallback={<ZFallbackIonSpinner2 />}>
-			<ZIonCol
-				sizeXl='10'
-				sizeLg='11'
-				sizeMd='12'
-				sizeSm='12'
-				sizeXs='12'
-				className='ion-padding-vertical ion-margin-top ion-margin-start'
-				style={{ borderTop: '2px solid #edf5fd' }}
-			>
-				<ZIonRow
-					className={classNames({
-						'ion-margin-top pt-2 ion-padding-bottom mb-2 gap-y-2': true,
-					})}
-					testingselector={
-						CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
-							.container
-					}
-				>
-					{isZFetching &&
-						[...Array(10)].map((_, i) => {
-							return (
-								<ZIonCol
-									key={i}
-									size='2.4'
-									className='flex ion-justify-content-center'
-								>
-									<div className='ion-text-center me-3 w-max'>
-										<ZIonButton
-											size='large'
-											fill='outline'
-											color='medium'
-											height='4.5rem'
-										>
-											<ZIonSkeletonText
-												width='25px'
-												height='25px'
-												animated={true}
-											/>
-										</ZIonButton>
-										{/*  */}
-										<ZIonText
-											color='dark'
-											className='flex font-bold ion-justify-content-center'
-										>
-											<ZIonSkeletonText
-												width='2.5rem'
-												height='17px'
-												animated={true}
-											/>
-										</ZIonText>
-									</div>
-								</ZIonCol>
-							);
-						})}
+  return (
+    <Suspense fallback={<ZFallbackIonSpinner2 />}>
+      <ZIonCol
+        sizeXl='10'
+        sizeLg='11'
+        sizeMd='12'
+        sizeSm='12'
+        sizeXs='12'
+        className='ion-padding-vertical ion-margin-top ion-margin-start'
+        style={{ borderTop: '2px solid #edf5fd' }}>
+        <ZIonRow
+          className={classNames({
+            'ion-margin-top pt-2 ion-padding-bottom mb-2 gap-y-2': true
+          })}
+          testingselector={
+            CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
+              .container
+          }>
+          {isZFetching &&
+            [...Array(10)].map((_, i) => {
+              return (
+                <ZIonCol
+                  key={i}
+                  size='2.4'
+                  className='flex ion-justify-content-center'>
+                  <div className='ion-text-center me-3 w-max'>
+                    <ZIonButton
+                      size='large'
+                      fill='outline'
+                      color='medium'
+                      height='4.5rem'>
+                      <ZIonSkeletonText
+                        width='25px'
+                        height='25px'
+                        animated={true}
+                      />
+                    </ZIonButton>
+                    {/*  */}
+                    <ZIonText
+                      color='dark'
+                      className='flex font-bold ion-justify-content-center'>
+                      <ZIonSkeletonText
+                        width='2.5rem'
+                        height='17px'
+                        animated={true}
+                      />
+                    </ZIonText>
+                  </div>
+                </ZIonCol>
+              );
+            })}
 
-					{/* After getting block data from api and storing it to the LinkInBioPredefinedBlocksRState recoil state, looping the recoil state value to make blocks */}
-					{LinkInBioPreDefinedBlocksData?.map((el) => {
-						return (
-							<ZIonCol
-								size='2.4'
-								key={el.id}
-								className='flex ion-justify-content-center'
-								testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks.btnCol}-${el.id}`}
-								testingselector={
-									CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
-										.btnCol
-								}
-							>
-								<div className='ion-text-center me-3 w-max'>
-									<LinkInBioPDButton
-										icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
-										testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks.btn}-${el.type}`}
-										onClick={() => {
-											LinkInBioBlockHandler(LinkInBioBlockEnum[el.type]);
-										}}
-										onMouseEnter={() => {
-											setFieldValue(
-												'LinkInBioBlock',
-												LinkInBioBlockEnum[el.type],
-												false
-											);
-										}}
-									/>
-									<ZIonText
-										color='dark'
-										className={classNames(classes['zaions-block-button-text'], {
-											'font-bold': false,
-										})}
-									>
-										{el.title}
-									</ZIonText>
-								</div>
-							</ZIonCol>
-						);
-					})}
-				</ZIonRow>
-			</ZIonCol>
-		</Suspense>
-	);
+          {/* After getting block data from api and storing it to the LinkInBioPredefinedBlocksRState recoil state, looping the recoil state value to make blocks */}
+          {LinkInBioPreDefinedBlocksData?.map(el => {
+            return (
+              <ZIonCol
+                size='2.4'
+                key={el.id}
+                className='flex ion-justify-content-center'
+                testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks.btnCol}-${el.id}`}
+                testingselector={
+                  CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks
+                    .btnCol
+                }>
+                <div className='ion-text-center me-3 w-max'>
+                  <LinkInBioPDButton
+                    icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
+                    testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks.btn}-${el.type}`}
+                    onClick={() => {
+                      LinkInBioBlockHandler(LinkInBioBlockEnum[el.type]);
+                    }}
+                    onMouseEnter={() => {
+                      setFieldValue(
+                        'LinkInBioBlock',
+                        LinkInBioBlockEnum[el.type],
+                        false
+                      );
+                    }}
+                  />
+                  <ZIonText
+                    color='dark'
+                    className={classNames(classes['zaions-block-button-text'], {
+                      'font-bold': false
+                    })}>
+                    {el.title}
+                  </ZIonText>
+                </div>
+              </ZIonCol>
+            );
+          })}
+        </ZIonRow>
+      </ZIonCol>
+    </Suspense>
+  );
 };
 
 export default ZLinkInBioBlocksSection;

@@ -8,8 +8,10 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import { menuController } from '@ionic/core/components';
 import {
   helpCircleOutline,
+  menu,
   notificationsOutline,
   refresh
 } from 'ionicons/icons';
@@ -245,6 +247,12 @@ const ZAdminPanelTopBar: React.FC<{
           </ZIonButton>
         ) : null}
 
+        {!isMdScale ? (
+          <ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
+            <ZWorkspaceSwitcher workspaceId={workspaceId} />
+          </ZCan>
+        ) : null}
+
         {/* User profile button */}
         <ZUserProfileButton
           width={!isLgScale ? '35px' : '44pxs'}
@@ -262,7 +270,7 @@ const ZADTopBarColOne: React.FC<{ workspaceId?: string }> = ({
     ZaionsRoutes.AdminPanel.Workspaces.Main
   )?.isExact;
 
-  const { isLgScale } = useZMediaQueryScale();
+  const { isLgScale, isMdScale } = useZMediaQueryScale();
 
   return (
     <ZIonCol
@@ -272,29 +280,59 @@ const ZADTopBarColOne: React.FC<{ workspaceId?: string }> = ({
       sizeSm='6'
       sizeXs='6'
       className='flex h-full ion-align-items-center'>
-      {!isWorkspaceListPage ? (
-        <ZIonButton
-          color='secondary'
-          size={!isLgScale ? 'small' : undefined}
-          height={isLgScale ? '2.3rem' : '1.9rem'}
-          className='normal-case ion-no-margin me-2'
-          testingselector={CONSTANTS.testingSelectors.topBar.goToWorkspacesBtn}
-          routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}>
-          Go to workspaces
-        </ZIonButton>
-      ) : null}
+      {!isWorkspaceListPage
+        ? isMdScale && (
+            <ZIonButton
+              color='secondary'
+              size={!isLgScale ? 'small' : undefined}
+              height={isLgScale ? '2.3rem' : '1.9rem'}
+              className='normal-case ion-no-margin me-2'
+              testingselector={
+                CONSTANTS.testingSelectors.topBar.goToWorkspacesBtn
+              }
+              routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}>
+              Go to workspaces
+            </ZIonButton>
+          )
+        : null}
       {isWorkspaceListPage ? (
         <ZCreateWorkspaceBtn />
       ) : (
         <>
-          <ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
-            <ZWorkspaceSwitcher workspaceId={workspaceId} />
-          </ZCan>
+          {isMdScale ? (
+            <ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
+              <ZWorkspaceSwitcher workspaceId={workspaceId} />
+            </ZCan>
+          ) : null}
 
-          <ZInviteButton
-            className='ms-2'
-            workspaceId={workspaceId}
-          />
+          {!isMdScale ? (
+            <ZIonButton
+              className='w-[2rem] rounded-full overflow-hidden ion-no-padding ion-no-margin'
+              minHeight='2rem'
+              color='tertiary'
+              testingselector={
+                CONSTANTS.testingSelectors.topBar.openWSSettingMenuBtn
+              }
+              onClick={async () => {
+                // Open the menu by menu-id
+                await menuController.enable(
+                  true,
+                  CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
+                );
+                await menuController.open(
+                  CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
+                );
+              }}>
+              <ZIonIcon icon={menu} />
+            </ZIonButton>
+          ) : null}
+
+          {isMdScale ? (
+            <ZInviteButton
+              className='ms-2'
+              workspaceId={workspaceId}
+            />
+          ) : null}
         </>
       )}
       {/* {!isWorkspaceListPage ? (

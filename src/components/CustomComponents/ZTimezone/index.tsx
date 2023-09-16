@@ -54,41 +54,41 @@ import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
  * ? Like if you have a type for props it should be please Down
  * */
 interface ZTimezoneInputInterface {
-	className?: string;
-	placeholder?: string;
-	name?: string;
-	testingselector?: string;
-	testingListSelector?: string;
-	// options?: readonly ZaionsRSelectOptions[];
-	value?: PropsValue<ZaionsRSelectOptions>;
-	defaultValue?: PropsValue<ZaionsRSelectOptions>;
-	onChange?: (
-		newValue: MultiValue<ZaionsRSelectOptions>,
-		actionMeta: ActionMeta<ZaionsRSelectOptions>
-	) => void;
-	onBlur?: React.FocusEventHandler<HTMLInputElement>;
+  className?: string;
+  placeholder?: string;
+  name?: string;
+  testingselector?: string;
+  testinglistselector?: string;
+  // options?: readonly ZaionsRSelectOptions[];
+  value?: PropsValue<ZaionsRSelectOptions>;
+  defaultValue?: PropsValue<ZaionsRSelectOptions>;
+  onChange?: (
+    newValue: MultiValue<ZaionsRSelectOptions>,
+    actionMeta: ActionMeta<ZaionsRSelectOptions>
+  ) => void;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
 }
 
 interface ZTimezoneSelectorInterface {
-	className?: string;
-	placeholder?: string;
-	name?: string;
-	value?: string | number | readonly string[];
-	defaultValue?: string | number | readonly string[];
-	multiple?: boolean;
-	label?: string;
-	labelPlacement?: ZIonPlacementType;
-	helperText?: string;
-	errorText?: string;
-	onIonBlur?: (event: IonSelectCustomEvent<void>) => void;
-	onIonChange?: (
-		event: IonSelectCustomEvent<SelectChangeEventDetail<unknown>>
-	) => void;
-	style?: {
-		[key: string]: unknown;
-	};
-	testingselector?: string;
-	testingListSelector?: string;
+  className?: string;
+  placeholder?: string;
+  name?: string;
+  value?: string | number | readonly string[];
+  defaultValue?: string | number | readonly string[];
+  multiple?: boolean;
+  label?: string;
+  labelPlacement?: ZIonPlacementType;
+  helperText?: string;
+  errorText?: string;
+  onIonBlur?: (event: IonSelectCustomEvent<void>) => void;
+  onIonChange?: (
+    event: IonSelectCustomEvent<SelectChangeEventDetail<unknown>>
+  ) => void;
+  style?: {
+    [key: string]: unknown;
+  };
+  testingselector?: string;
+  testinglistselector?: string;
 }
 
 /**
@@ -97,61 +97,62 @@ interface ZTimezoneSelectorInterface {
  * @type {*}
  * */
 
-const ZTimezoneInput: React.FC<ZTimezoneInputInterface> = (props) => {
-	const _testingListSelector = props.testingListSelector
-		? {
-				...zCreateElementTestingSelector({
-					_value: props.testingListSelector || PRODUCT_NAME,
-					_key: zCreateElementTestingSelectorKeyEnum.listSelector,
-				}),
-		  }
-		: {};
+const ZTimezoneInput: React.FC<ZTimezoneInputInterface> = props => {
+  const _testinglistselector = props.testinglistselector
+    ? {
+        ...zCreateElementTestingSelector({
+          _value: props.testinglistselector || PRODUCT_NAME,
+          _key: zCreateElementTestingSelectorKeyEnum.listSelector
+        })
+      }
+    : {};
 
-	const _testingSelector = props.testingselector
-		? {
-				...zCreateElementTestingSelector({
-					_value: props.testingselector || PRODUCT_NAME,
-				}),
-		  }
-		: {};
-	return (
-		<ZaionsRSelect
-			{...props}
-			placeholder='timezone'
-			{..._testingSelector}
-			{..._testingListSelector}
-			options={
-				TIMEZONES.map((el) => {
-					return { ...el };
-				}) as unknown as ZaionsRSelectOptions[]
-			}
-		/>
-	);
+  const _testingSelector = props.testingselector
+    ? {
+        ...zCreateElementTestingSelector({
+          _value: props.testingselector || PRODUCT_NAME
+        })
+      }
+    : {};
+  return (
+    <ZaionsRSelect
+      {...props}
+      placeholder='timezone'
+      {..._testingSelector}
+      {..._testinglistselector}
+      options={
+        TIMEZONES.map(el => {
+          return { ...el };
+        }) as unknown as ZaionsRSelectOptions[]
+      }
+    />
+  );
 };
 
-export const ZTimezoneSelector: React.FC<ZTimezoneSelectorInterface> = (
-	props
-) => {
-	return (
-		<ZIonSelect
-			{...props}
-			fill='outline'
-			label='timezone'
-			labelPlacement='stacked'
-			errorText={props.errorText}
-			minHeight='2.5rem'
-			interface='popover'
-			className={classNames(props.className)}
-		>
-			{TIMEZONES.map((el, index) => {
-				return (
-					<ZIonSelectOption value={el.value} key={index}>
-						{el.label}
-					</ZIonSelectOption>
-				);
-			})}
-		</ZIonSelect>
-	);
+export const ZTimezoneSelector: React.FC<
+  ZTimezoneSelectorInterface
+> = props => {
+  return (
+    <ZIonSelect
+      {...props}
+      fill='outline'
+      label='timezone'
+      labelPlacement='stacked'
+      errorText={props.errorText}
+      minHeight='2.5rem'
+      interface='popover'
+      className={classNames(props.className)}>
+      {TIMEZONES.map((el, index) => {
+        return (
+          <ZIonSelectOption
+            value={el.value}
+            key={index}>
+            {el.label}
+          </ZIonSelectOption>
+        );
+      })}
+    </ZIonSelect>
+  );
 };
 
 export default ZTimezoneInput;

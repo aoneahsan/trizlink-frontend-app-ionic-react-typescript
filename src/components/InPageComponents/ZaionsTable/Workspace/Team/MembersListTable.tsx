@@ -255,7 +255,7 @@ const ZInpageTable: React.FC = () => {
 									color='primary'
 									className='text-sm cursor-pointer'
 									testingselector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.description}-${row.row.original.id}`}
-									testingListSelector={
+									testinglistselector={
 										CONSTANTS.testingSelectors.WSSettings.teamListPage.table
 											.description
 									}
@@ -332,9 +332,9 @@ const ZInpageTable: React.FC = () => {
     data: wsTeamMembersData || [],
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: true
+    debugTable: false,
+    debugHeaders: false,
+    debugColumns: false
   });
   // #endregion
 
@@ -452,7 +452,7 @@ const ZInpageTable: React.FC = () => {
                         CONSTANTS.testingSelectors.shortLink.listPage.table
                           .actionPopoverBtn
                       }
-                      testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
+                      testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
                       onClick={(_event: unknown) => {
                         setCompState(oldVal => ({
                           ...oldVal,
@@ -791,7 +791,7 @@ const ZMemberActionPopover: React.FC<{
           detail={false}
           minHeight='2.5rem'
           testingselector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.editBtn}-${membersId}`}
-          testingListSelector={
+          testinglistselector={
             CONSTANTS.testingSelectors.WSSettings.teamListPage.table.editBtn
           }>
           <ZIonButton
@@ -819,7 +819,7 @@ const ZMemberActionPopover: React.FC<{
           detail={false}
           minHeight='2.5rem'
           testingselector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.resendInvitation}-${membersId}`}
-          testingListSelector={
+          testinglistselector={
             CONSTANTS.testingSelectors.WSSettings.teamListPage.table
               .resendInvitation
           }
@@ -873,7 +873,7 @@ const ZMemberActionPopover: React.FC<{
           detail={false}
           minHeight='2.5rem'
           testingselector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.deleteBtn}-${membersId}`}
-          testingListSelector={
+          testinglistselector={
             CONSTANTS.testingSelectors.WSSettings.teamListPage.table.deleteBtn
           }>
           <ZIonButton

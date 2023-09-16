@@ -10,8 +10,8 @@ import React from 'react';
  * */
 import { ZIonNote } from '@/components/ZIonComponents';
 import PhoneInput, {
-	formatPhoneNumberIntl,
-	isPossiblePhoneNumber,
+  formatPhoneNumberIntl,
+  isPossiblePhoneNumber
 } from 'react-phone-number-input';
 import classNames from 'classnames';
 
@@ -60,19 +60,19 @@ import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
  * ? Like if you have a type for props it should be please Down
  * */
 interface IZCPhoneNumberInput {
-	value?: string;
-	placeholder?: string;
-	onChange: (value: string) => void;
-	onBlur?: (event: React.FocusEvent<HTMLElement, Element>) => void;
-	errorText?: string;
-	className?: string;
-	touched?: boolean;
-	minHeight?: string;
-	testingselector?: string;
-	testingListSelector?: string;
-	style?: {
-		[key: string]: unknown;
-	};
+  value?: string;
+  placeholder?: string;
+  onChange: (value: string) => void;
+  onBlur?: (event: React.FocusEvent<HTMLElement, Element>) => void;
+  errorText?: string;
+  className?: string;
+  touched?: boolean;
+  minHeight?: string;
+  testingselector?: string;
+  testinglistselector?: string;
+  style?: {
+    [key: string]: unknown;
+  };
 }
 
 /**
@@ -82,67 +82,69 @@ interface IZCPhoneNumberInput {
  * */
 
 const ZCPhoneNumberInput: React.FC<IZCPhoneNumberInput> = ({
-	value,
-	placeholder = 'Enter phone number',
-	errorText,
-	className,
-	minHeight = '2.5rem',
-	style,
-	touched = false,
-	testingselector,
-	testingListSelector,
-	onBlur,
-	onChange,
+  value,
+  placeholder = 'Enter phone number',
+  errorText,
+  className,
+  minHeight = '2.5rem',
+  style,
+  touched = false,
+  testingselector,
+  testinglistselector,
+  onBlur,
+  onChange
 }) => {
-	const compStyle =
-		style && minHeight
-			? { ...style, minHeight: minHeight }
-			: style && !minHeight
-			? { ...style }
-			: !style && minHeight
-			? { minHeight: minHeight }
-			: {};
+  const compStyle =
+    style && minHeight
+      ? { ...style, minHeight: minHeight }
+      : style && !minHeight
+      ? { ...style }
+      : !style && minHeight
+      ? { minHeight: minHeight }
+      : {};
 
-	const _testingListSelector = testingListSelector
-		? {
-				...zCreateElementTestingSelector({
-					_value: testingListSelector || PRODUCT_NAME,
-					_key: zCreateElementTestingSelectorKeyEnum.listSelector,
-				}),
-		  }
-		: {};
+  const _testinglistselector = testinglistselector
+    ? {
+        ...zCreateElementTestingSelector({
+          _value: testinglistselector || PRODUCT_NAME,
+          _key: zCreateElementTestingSelectorKeyEnum.listSelector
+        })
+      }
+    : {};
 
-	const _testingSelector = testingselector
-		? {
-				...zCreateElementTestingSelector({
-					_value: testingselector || PRODUCT_NAME,
-				}),
-		  }
-		: {};
-	return (
-		<div className={className}>
-			<PhoneInput
-				placeholder={placeholder}
-				onBlur={onBlur}
-				onChange={onChange}
-				style={compStyle}
-				className={classNames(classes['z-custom-pn-field'], {
-					'w-full': true,
-					'z-ion-border-danger zaions_ion_color_danger':
-						touched && errorText !== undefined,
-					// 'z-ion-border-success': isPossiblePhoneNumber(value),
-				})}
-				{..._testingSelector}
-				{..._testingListSelector}
-				value={formatPhoneNumberIntl(String(value))}
-			/>
-			{errorText && errorText?.trim().length > 0 && (
-				<ZIonNote color='danger' className='z-custom-pn-field-error-text'>
-					{errorText}
-				</ZIonNote>
-			)}
-		</div>
-	);
+  const _testingSelector = testingselector
+    ? {
+        ...zCreateElementTestingSelector({
+          _value: testingselector || PRODUCT_NAME
+        })
+      }
+    : {};
+  return (
+    <div className={className}>
+      <PhoneInput
+        placeholder={placeholder}
+        onBlur={onBlur}
+        onChange={onChange}
+        style={compStyle}
+        className={classNames(classes['z-custom-pn-field'], {
+          'w-full': true,
+          'z-ion-border-danger zaions_ion_color_danger':
+            touched && errorText !== undefined
+          // 'z-ion-border-success': isPossiblePhoneNumber(value),
+        })}
+        {..._testingSelector}
+        {..._testinglistselector}
+        value={formatPhoneNumberIntl(String(value))}
+      />
+      {errorText && errorText?.trim().length > 0 && (
+        <ZIonNote
+          color='danger'
+          className='z-custom-pn-field-error-text'>
+          {errorText}
+        </ZIonNote>
+      )}
+    </div>
+  );
 };
 
 export default ZCPhoneNumberInput;

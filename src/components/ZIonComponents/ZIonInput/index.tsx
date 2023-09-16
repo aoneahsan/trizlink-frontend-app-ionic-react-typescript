@@ -144,7 +144,7 @@ export type ZIonInputType = {
   };
   minHeight?: 'auto' | string;
   testingselector?: string;
-  testingListSelector?: string;
+  testinglistselector?: string;
 
   onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
   onIonBlur?: <A extends Event>(event: A) => void;
@@ -174,10 +174,10 @@ const ZIonInput = React.forwardRef(
         ? { minHeight: props.minHeight }
         : {};
 
-    const _testingListSelector = props.testingListSelector
+    const _testinglistselector = props.testinglistselector
       ? {
           ...zCreateElementTestingSelector({
-            _value: props.testingListSelector || PRODUCT_NAME,
+            _value: props.testinglistselector || PRODUCT_NAME,
             _key: zCreateElementTestingSelectorKeyEnum.listSelector
           })
         }
@@ -216,7 +216,7 @@ const ZIonInput = React.forwardRef(
         }}
         style={compStyle}
         {..._testingSelector}
-        {..._testingListSelector}>
+        {..._testinglistselector}>
         {props.children}
       </IonInput>
     );

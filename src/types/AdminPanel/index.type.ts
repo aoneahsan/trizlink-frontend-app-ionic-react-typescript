@@ -53,7 +53,8 @@ export enum daysEnum {
 
 export enum ZUserSettingTypeEnum {
   shortLinkListPageTable = 'shortLinkListPageTable',
-  pixelListPageTable = 'pixelListPageTable'
+  pixelListPageTable = 'pixelListPageTable',
+  UTMTagListPageTable = 'UTMTagListPageTable'
 }
 
 export enum ZNotificationEnum {
@@ -89,6 +90,18 @@ export enum ZPixelsListPageTableColumnsIds {
   actions = '__z_pixels_actions__'
 }
 
+export enum ZUTMTagsListPageTableColumnsIds {
+  id = '__z_utm_tags_id__',
+  templateName = '__z_utm_tags_title_name__',
+  campaign = '__z_utm_tags_campaign__',
+  medium = '__z_utm_tags_medium__',
+  content = '__z_utm_tags_content__',
+  source = '__z_utm_tags_source__',
+  term = '__z_utm_tags_term__',
+  formattedCreateAt = '__z_utm_tags_formatted_create_at__',
+  actions = '__z_utm_tags_actions__'
+}
+
 // Interfaces
 export interface UTMTagInfoInterface {
   templateId?: string;
@@ -99,7 +112,7 @@ export interface UTMTagInfoInterface {
   utmContent?: string;
 }
 
-export interface IPixelsFilterOptions {
+export interface IFilterOptions {
   timeFilter: {
     daysToSubtract: TimeFilterEnum;
     startedAt?: string;

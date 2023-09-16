@@ -16,10 +16,10 @@ import { useRecoilState } from 'recoil';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonButton,
-	ZIonIcon,
-	ZIonList,
-	ZIonText,
+  ZIonButton,
+  ZIonIcon,
+  ZIonList,
+  ZIonText
 } from '@/components/ZIonComponents';
 import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
 
@@ -28,14 +28,14 @@ import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNe
  * ? Like import of custom Hook is a custom import
  * */
 import {
-	useZIonAlert,
-	useZIonErrorAlert,
-	useZIonModal,
+  useZIonAlert,
+  useZIonErrorAlert,
+  useZIonModal
 } from '@/ZaionsHooks/zionic-hooks';
 import {
-	useZGetRQCacheData,
-	useZRQDeleteRequest,
-	useZUpdateRQCacheData,
+  useZGetRQCacheData,
+  useZRQDeleteRequest,
+  useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
@@ -83,175 +83,180 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
  * */
 
 const FolderActionsPopoverContent: React.FC<{
-	workspaceId: string;
-	state: folderState;
+  workspaceId: string;
+  state: folderState;
 }> = ({ workspaceId, state }) => {
-	/**
-	 * hook to present folder form modal
-	 */
-	const { presentZIonModal: presentFolderModal } = useZIonModal(
-		ZaionsAddNewFolder,
-		{ state, workspaceId }
-	);
+  /**
+   * hook to present folder form modal
+   */
+  const { presentZIonModal: presentFolderModal } = useZIonModal(
+    ZaionsAddNewFolder,
+    { state, workspaceId }
+  );
 
-	// Custom hooks.
-	const { presentZIonAlert } = useZIonAlert();
-	const { presentZIonErrorAlert } = useZIonErrorAlert();
-	const { getRQCDataHandler } = useZGetRQCacheData();
-	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+  // Custom hooks.
+  const { presentZIonAlert } = useZIonAlert();
+  const { presentZIonErrorAlert } = useZIonErrorAlert();
+  const { getRQCDataHandler } = useZGetRQCacheData();
+  const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
-	/**
-	 * recoil state which will hold the single folder data (for updating). when user click on edit button in action popover the data of that folder will storing in this state and present as initial value in the update folder form. here we are delete it folder by getting the id from folderFormState
-	 *
-	 */
-	const [folderFormState, setFolderFormState] = useRecoilState(FolderFormState);
+  /**
+   * recoil state which will hold the single folder data (for updating). when user click on edit button in action popover the data of that folder will storing in this state and present as initial value in the update folder form. here we are delete it folder by getting the id from folderFormState
+   *
+   */
+  const [folderFormState, setFolderFormState] = useRecoilState(FolderFormState);
 
-	/**
-	 * delete short link folder api.
-	 */
-	const { mutateAsync: deleteFolderMutate } = useZRQDeleteRequest(
-		API_URL_ENUM.folders_update_delete,
-		[]
-	);
+  /**
+   * delete short link folder api.
+   */
+  const { mutateAsync: deleteFolderMutate } = useZRQDeleteRequest(
+    API_URL_ENUM.folders_update_delete,
+    []
+  );
 
-	/**
-	 * deleteFolderAccount will show the confirm alert before deleting short link folder.
-	 */
-	const deleteFolderAccount = async () => {
-		try {
-			if (folderFormState && folderFormState.id) {
-				await presentZIonAlert({
-					header: `Delete Folder "${
-						folderFormState.name ? folderFormState.name : ''
-					}"`,
-					subHeader: 'Remove folder from user account.',
-					message: 'Are you sure you want to delete this folder?',
-					buttons: [
-						{
-							text: 'Cancel',
-							role: 'cancel',
-						},
-						{
-							text: 'Delete',
-							role: 'danger',
-							handler: () => {
-								void removeFolderAccount();
-							},
-						},
-					],
-				});
-			} else {
-				await presentZIonErrorAlert();
-			}
-		} catch (error) {
-			console.error(error);
-		}
-	};
-	/**
-	 * removeFolderAccount will hit delete short link folder api
-	 */
-	const removeFolderAccount = async () => {
-		try {
-			if (folderFormState.id) {
-				// hitting the delete api
-				const _response = await deleteFolderMutate({
-					itemIds: [workspaceId, folderFormState.id],
-					urlDynamicParts: [
-						CONSTANTS.RouteParams.workspace.workspaceId,
-						CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-					],
-				});
+  /**
+   * deleteFolderAccount will show the confirm alert before deleting short link folder.
+   */
+  const deleteFolderAccount = async () => {
+    try {
+      if (folderFormState && folderFormState.id) {
+        await presentZIonAlert({
+          header: `Delete Folder "${
+            folderFormState.name ? folderFormState.name : ''
+          }"`,
+          subHeader: 'Remove folder from user account.',
+          message: 'Are you sure you want to delete this folder?',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel'
+            },
+            {
+              text: 'Delete',
+              role: 'danger',
+              handler: () => {
+                void removeFolderAccount();
+              }
+            }
+          ]
+        });
+      } else {
+        await presentZIonErrorAlert();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  /**
+   * removeFolderAccount will hit delete short link folder api
+   */
+  const removeFolderAccount = async () => {
+    try {
+      if (folderFormState.id) {
+        // hitting the delete api
+        const _response = await deleteFolderMutate({
+          itemIds: [workspaceId, folderFormState.id],
+          urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.workspaceId,
+            CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+          ]
+        });
 
-				if (_response) {
-					const _data = extractInnerData<{ success: boolean }>(
-						_response,
-						extractInnerDataOptionsEnum.createRequestResponseItem
-					);
+        if (_response) {
+          const _data = extractInnerData<{ success: boolean }>(
+            _response,
+            extractInnerDataOptionsEnum.createRequestResponseItem
+          );
 
-					if (_data && _data?.success) {
-						// getting all the folders from RQ cache.
-						const _oldFoldersData =
-							extractInnerData<LinkFolderType[]>(
-								getRQCDataHandler<LinkFolderType[]>({
-									key: [
-										CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-										workspaceId,
-										state,
-									],
-								}) as LinkFolderType[],
-								extractInnerDataOptionsEnum.createRequestResponseItems
-							) || [];
+          if (_data && _data?.success) {
+            // getting all the folders from RQ cache.
+            const _oldFoldersData =
+              extractInnerData<LinkFolderType[]>(
+                getRQCDataHandler<LinkFolderType[]>({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+                    workspaceId,
+                    state
+                  ]
+                }) as LinkFolderType[],
+                extractInnerDataOptionsEnum.createRequestResponseItems
+              ) || [];
 
-						// removing deleted folder from cache.
-						const _updatedFolders = _oldFoldersData.filter(
-							(el) => el.id !== folderFormState.id
-						);
+            // removing deleted folder from cache.
+            const _updatedFolders = _oldFoldersData.filter(
+              el => el.id !== folderFormState.id
+            );
 
-						// Updating data in RQ cache.
-						await updateRQCDataHandler<LinkFolderType[] | undefined>({
-							key: [
-								CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-								workspaceId,
-								state,
-							],
-							data: _updatedFolders as LinkFolderType[],
-							id: '',
-							extractType: ZRQGetRequestExtractEnum.extractItems,
-							updateHoleData: true,
-						});
+            // Updating data in RQ cache.
+            await updateRQCDataHandler<LinkFolderType[] | undefined>({
+              key: [
+                CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+                workspaceId,
+                state
+              ],
+              data: _updatedFolders as LinkFolderType[],
+              id: '',
+              extractType: ZRQGetRequestExtractEnum.extractItems,
+              updateHoleData: true
+            });
 
-						// setting the folderFormState to initial state because the value of this recoil state is used as the initial values of the short link folder form, when we click on the delete button in popover it will store the value or that folder in this recoil state. because we need it in here for example the id to delete the folder.
-						setFolderFormState((oldVal) => ({
-							...oldVal,
-							id: '',
-							name: '',
-							formMode: FormMode.ADD,
-						}));
+            // setting the folderFormState to initial state because the value of this recoil state is used as the initial values of the short link folder form, when we click on the delete button in popover it will store the value or that folder in this recoil state. because we need it in here for example the id to delete the folder.
+            setFolderFormState(oldVal => ({
+              ...oldVal,
+              id: '',
+              name: '',
+              formMode: FormMode.ADD
+            }));
 
-						// show success message after deleting
-						showSuccessNotification(`Folder deleted successfully.`);
-					}
-				}
-			} else {
-				await presentZIonErrorAlert();
-			}
-		} catch (error) {
-			console.error(error);
-		}
-	};
+            // show success message after deleting
+            showSuccessNotification(`Folder deleted successfully.`);
+          }
+        }
+      } else {
+        await presentZIonErrorAlert();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-	return (
-		<ZIonList lines='none'>
-			<ZIonButton
-				fill='clear'
-				className='ion-no-padding ion-text-capitalize'
-				expand='block'
-				testingselector={`${CONSTANTS.testingSelectors.folder.editBtn}-${state}`}
-				testingListSelector={`${CONSTANTS.testingSelectors.folder.editBtn}-${state}-${folderFormState.id}`}
-				onClick={() => {
-					presentFolderModal({
-						_cssClass: 'folder-modal-size',
-					});
-				}}
-			>
-				<ZIonIcon icon={pencilOutline} className='me-2' />
-				<ZIonText>Rename</ZIonText>
-			</ZIonButton>
-			<ZIonButton
-				fill='clear'
-				className='ion-no-padding ion-text-capitalize'
-				expand='block'
-				testingselector={`${CONSTANTS.testingSelectors.folder.deleteBtn}-${state}`}
-				testingListSelector={`${CONSTANTS.testingSelectors.folder.deleteBtn}-${state}-${folderFormState.id}`}
-				onClick={() => {
-					void deleteFolderAccount();
-				}}
-			>
-				<ZIonIcon icon={trashOutline} className='me-2' color='danger' />
-				<ZIonText color='danger'>Delete</ZIonText>
-			</ZIonButton>
-		</ZIonList>
-	);
+  return (
+    <ZIonList lines='none'>
+      <ZIonButton
+        fill='clear'
+        className='ion-no-padding ion-text-capitalize'
+        expand='block'
+        testingselector={`${CONSTANTS.testingSelectors.folder.editBtn}-${state}`}
+        testinglistselector={`${CONSTANTS.testingSelectors.folder.editBtn}-${state}-${folderFormState.id}`}
+        onClick={() => {
+          presentFolderModal({
+            _cssClass: 'folder-modal-size'
+          });
+        }}>
+        <ZIonIcon
+          icon={pencilOutline}
+          className='me-2'
+        />
+        <ZIonText>Rename</ZIonText>
+      </ZIonButton>
+      <ZIonButton
+        fill='clear'
+        className='ion-no-padding ion-text-capitalize'
+        expand='block'
+        testingselector={`${CONSTANTS.testingSelectors.folder.deleteBtn}-${state}`}
+        testinglistselector={`${CONSTANTS.testingSelectors.folder.deleteBtn}-${state}-${folderFormState.id}`}
+        onClick={() => {
+          void deleteFolderAccount();
+        }}>
+        <ZIonIcon
+          icon={trashOutline}
+          className='me-2'
+          color='danger'
+        />
+        <ZIonText color='danger'>Delete</ZIonText>
+      </ZIonButton>
+    </ZIonList>
+  );
 };
 
 export default FolderActionsPopoverContent;

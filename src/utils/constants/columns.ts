@@ -1,4 +1,7 @@
-import { ZPixelsListPageTableColumnsIds } from '@/types/AdminPanel/index.type';
+import {
+  ZPixelsListPageTableColumnsIds,
+  ZUTMTagsListPageTableColumnsIds
+} from '@/types/AdminPanel/index.type';
 import { ZShortLinkListPageTableColumnsIds } from '@/types/AdminPanel/linksType';
 
 export const ShortLinksTableColumns = [
@@ -57,6 +60,44 @@ export const PixelTableColumns = [
   },
   {
     id: ZPixelsListPageTableColumnsIds.formattedCreateAt,
+    name: 'Create at',
+    isVisible: true
+  }
+];
+
+export const UtmTagTableColumns = [
+  {
+    id: ZUTMTagsListPageTableColumnsIds.templateName,
+    name: 'Template name',
+    isVisible: true
+  },
+  {
+    id: ZUTMTagsListPageTableColumnsIds.campaign,
+    name: 'Campaign',
+    isVisible: true
+  },
+  {
+    id: ZUTMTagsListPageTableColumnsIds.medium,
+    name: 'Medium',
+    isVisible: true
+  },
+  {
+    id: ZUTMTagsListPageTableColumnsIds.content,
+    name: 'Content',
+    isVisible: true
+  },
+  {
+    id: ZUTMTagsListPageTableColumnsIds.source,
+    name: 'Source',
+    isVisible: true
+  },
+  {
+    id: ZUTMTagsListPageTableColumnsIds.term,
+    name: 'Term',
+    isVisible: true
+  },
+  {
+    id: ZUTMTagsListPageTableColumnsIds.formattedCreateAt,
     name: 'Create at',
     isVisible: true
   }

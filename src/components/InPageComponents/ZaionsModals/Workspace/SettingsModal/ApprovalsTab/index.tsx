@@ -15,11 +15,11 @@ import { lockClosedOutline, timeOutline } from 'ionicons/icons';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonBadge,
-	ZIonCol,
-	ZIonGrid,
-	ZIonRow,
-	ZIonText,
+  ZIonBadge,
+  ZIonCol,
+  ZIonGrid,
+  ZIonRow,
+  ZIonText
 } from '@/components/ZIonComponents';
 import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
@@ -69,64 +69,63 @@ import CONSTANTS from '@/utils/constants';
  * */
 
 const ZApprovalTab: React.FC<{ workspaceId: string }> = ({ workspaceId }) => {
-	return (
-		<ZIonGrid>
-			{/* Cards */}
-			<ZWorkspaceApprovalCards workspaceId={workspaceId} />
+  return (
+    <ZIonGrid>
+      {/* Cards */}
+      <ZWorkspaceApprovalCards workspaceId={workspaceId} />
 
-			{/*  */}
-			<ZIonRow className='mt-4 ion-justify-content-center'>
-				<ZIonCol size='5'>
-					<ZIonText className='block text-xl'>
-						Who can approve content?
-					</ZIonText>
-					<ZIonRow>
-						<ZIonCol
-							className='flex gap-2 ion-align-items-center ps-0'
-							size='10'
-						>
-							<ZUserAvatarButton />
-							<div>
-								<ZIonText className='flex gap-1 ion-align-items-center'>
-									Muhammad talha Irshad (you) <ZIonBadge>Team</ZIonBadge>
-								</ZIonText>
-								<ZIonText className='block text-[14px]'>
-									talhaarshaad5@gmail.com
-								</ZIonText>
-							</div>
-						</ZIonCol>
-						<ZIonCol className='ion-text-end'>
-							<ZRCSwitch />
-						</ZIonCol>
-					</ZIonRow>
+      {/*  */}
+      <ZIonRow className='mt-4 ion-justify-content-center'>
+        <ZIonCol size='5'>
+          <ZIonText className='block text-xl'>
+            Who can approve content?
+          </ZIonText>
+          <ZIonRow>
+            <ZIonCol
+              className='flex gap-2 ion-align-items-center ps-0'
+              size='10'>
+              <ZUserAvatarButton />
+              <div>
+                <ZIonText className='flex gap-1 ion-align-items-center'>
+                  Muhammad talha Irshad (you) <ZIonBadge>Team</ZIonBadge>
+                </ZIonText>
+                <ZIonText className='block text-[14px]'>
+                  talhaarshaad5@gmail.com
+                </ZIonText>
+              </div>
+            </ZIonCol>
+            <ZIonCol className='ion-text-end'>
+              <ZRCSwitch />
+            </ZIonCol>
+          </ZIonRow>
 
-					{/* Schedule posts approval */}
-					<ZWorkspaceApprovalToggler
-						icon={timeOutline}
-						workspaceId={workspaceId}
-						text='Schedule posts automatically on approval'
-						testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.schedulePostToggler}-${workspaceId}`}
-						testingListSelector={
-							CONSTANTS.testingSelectors.workspace.settingsModal.approvals
-								.schedulePostToggler
-						}
-					/>
+          {/* Schedule posts approval */}
+          <ZWorkspaceApprovalToggler
+            icon={timeOutline}
+            workspaceId={workspaceId}
+            text='Schedule posts automatically on approval'
+            testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.schedulePostToggler}-${workspaceId}`}
+            testinglistselector={
+              CONSTANTS.testingSelectors.workspace.settingsModal.approvals
+                .schedulePostToggler
+            }
+          />
 
-					{/* Lock content approval */}
-					<ZWorkspaceApprovalToggler
-						icon={lockClosedOutline}
-						workspaceId={workspaceId}
-						text='Lock content after approval'
-						testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.lockContent}-${workspaceId}`}
-						testingListSelector={
-							CONSTANTS.testingSelectors.workspace.settingsModal.approvals
-								.lockContent
-						}
-					/>
-				</ZIonCol>
-			</ZIonRow>
-		</ZIonGrid>
-	);
+          {/* Lock content approval */}
+          <ZWorkspaceApprovalToggler
+            icon={lockClosedOutline}
+            workspaceId={workspaceId}
+            text='Lock content after approval'
+            testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.lockContent}-${workspaceId}`}
+            testinglistselector={
+              CONSTANTS.testingSelectors.workspace.settingsModal.approvals
+                .lockContent
+            }
+          />
+        </ZIonCol>
+      </ZIonRow>
+    </ZIonGrid>
+  );
 };
 
 export default ZApprovalTab;

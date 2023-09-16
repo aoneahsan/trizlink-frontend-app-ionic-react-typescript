@@ -301,7 +301,7 @@ const ZaionsAddPixelAccount: React.FC<{
                     className='ion-text-capitalize'
                     fill='outline'
                     testingselector={
-                      CONSTANTS.testingSelectors.pixels.formModal.closeModalBtn
+                      CONSTANTS.testingSelectors.pixels.formModal.closeBtn
                     }
                     onClick={() => {
                       // Close the Modal
@@ -395,7 +395,7 @@ const ZaionsAddPixelAccount: React.FC<{
                 interface='popover'
                 errorText={touched.platform ? errors.platform : undefined}
                 testingselector={
-                  CONSTANTS.testingSelectors.pixels.formModal.pixelSelector
+                  CONSTANTS.testingSelectors.pixels.formModal.platformSelector
                 }
                 className={classNames({
                   'mt-5': true,
@@ -475,7 +475,7 @@ const ZaionsAddPixelAccount: React.FC<{
                     size='default'
                     className='ion-text-capitalize'
                     testingselector={
-                      CONSTANTS.testingSelectors.pixels.formModal.closeModalBtn
+                      CONSTANTS.testingSelectors.pixels.formModal.closeBtn
                     }
                     onClick={() => {
                       // Close the Modal

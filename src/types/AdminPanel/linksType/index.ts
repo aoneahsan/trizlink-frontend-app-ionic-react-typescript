@@ -242,6 +242,7 @@ export type UTMTagTemplateType = {
   utmTerm?: string;
   utmContent?: string;
   createAt?: string | undefined;
+  formattedCreateAt?: string | undefined;
   updatedAt?: string | undefined;
 
   // Just to handle frontend form

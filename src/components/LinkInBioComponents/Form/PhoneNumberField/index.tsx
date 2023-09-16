@@ -12,48 +12,47 @@ import { IonInputCustomEvent } from '@ionic/core';
 
 // Component Type
 interface LinkInBioPhoneNumberFieldInterface {
-	placeholder?: string;
-	name?: string;
-	value?: string | number | null;
-	className?: string;
-	testingListSelector?: string;
-	testingselector?: string;
-	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
-	onIonBlur?: <A extends Event>(event: A) => void;
+  placeholder?: string;
+  name?: string;
+  value?: string | number | null;
+  className?: string;
+  testinglistselector?: string;
+  testingselector?: string;
+  onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
+  onIonBlur?: <A extends Event>(event: A) => void;
 }
 
 const LinkInBioPhoneNumberField: React.FC<
-	LinkInBioPhoneNumberFieldInterface
+  LinkInBioPhoneNumberFieldInterface
 > = ({
-	placeholder = 'Phone number (eg +33 6 XX XX XX XX)',
-	value,
-	name,
-	className,
-	testingListSelector,
-	testingselector,
-	onIonChange,
-	onIonBlur,
+  placeholder = 'Phone number (eg +33 6 XX XX XX XX)',
+  value,
+  name,
+  className,
+  testinglistselector,
+  testingselector,
+  onIonChange,
+  onIonBlur
 }) => {
-	return (
-		<ZIonItem
-			className={className}
-			lines='none'
-			testingselector={`${testingselector}-item`}
-			testingListSelector={`${testingListSelector}-item`}
-		>
-			<ZIonInput
-				label=''
-				name={name}
-				placeholder={placeholder}
-				onIonChange={onIonChange}
-				onIonBlur={onIonBlur}
-				value={value}
-				minHeight='40px'
-				testingselector={`${testingselector}-input`}
-				testingListSelector={`${testingListSelector}-input`}
-			/>
-		</ZIonItem>
-	);
+  return (
+    <ZIonItem
+      className={className}
+      lines='none'
+      testingselector={`${testingselector}-item`}
+      testinglistselector={`${testinglistselector}-item`}>
+      <ZIonInput
+        label=''
+        name={name}
+        placeholder={placeholder}
+        onIonChange={onIonChange}
+        onIonBlur={onIonBlur}
+        value={value}
+        minHeight='40px'
+        testingselector={`${testingselector}-input`}
+        testinglistselector={`${testinglistselector}-input`}
+      />
+    </ZIonItem>
+  );
 };
 
 export default LinkInBioPhoneNumberField;

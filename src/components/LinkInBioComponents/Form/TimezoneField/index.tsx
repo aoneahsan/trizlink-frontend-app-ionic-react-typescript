@@ -14,36 +14,36 @@ import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.
 
 // Component Type
 interface LinkInBioTimezoneFieldInterface {
-	className?: string;
-	value?: PropsValue<ZaionsRSelectOptions>;
-	name?: string;
-	testingselector?: string;
-	testingListSelector?: string;
-	onChange?: (
-		newValue: MultiValue<ZaionsRSelectOptions>,
-		actionMeta: ActionMeta<ZaionsRSelectOptions>
-	) => void;
-	onBlur?: React.FocusEventHandler<HTMLInputElement>;
+  className?: string;
+  value?: PropsValue<ZaionsRSelectOptions>;
+  name?: string;
+  testingselector?: string;
+  testinglistselector?: string;
+  onChange?: (
+    newValue: MultiValue<ZaionsRSelectOptions>,
+    actionMeta: ActionMeta<ZaionsRSelectOptions>
+  ) => void;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
 }
 
 const LinkInBioTimezoneField: React.FC<LinkInBioTimezoneFieldInterface> = ({
-	value,
-	name,
-	onChange,
-	onBlur,
-	testingselector,
-	testingListSelector,
+  value,
+  name,
+  onChange,
+  onBlur,
+  testingselector,
+  testinglistselector
 }) => {
-	return (
-		<ZTimezoneInput
-			value={value}
-			onChange={onChange}
-			onBlur={onBlur}
-			name={name}
-			testingselector={testingselector}
-			testingListSelector={testingListSelector}
-		/>
-	);
+  return (
+    <ZTimezoneInput
+      value={value}
+      onChange={onChange}
+      onBlur={onBlur}
+      name={name}
+      testingselector={testingselector}
+      testinglistselector={testinglistselector}
+    />
+  );
 };
 
 export default LinkInBioTimezoneField;

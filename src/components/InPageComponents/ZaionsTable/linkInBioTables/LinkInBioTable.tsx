@@ -300,9 +300,9 @@ const ZInpageTable: React.FC = () => {
     data: _FilteredLinkInBioLinksDataSelector || [],
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: true
+    debugTable: false,
+    debugHeaders: false,
+    debugColumns: false
   });
   // #endregion
 
@@ -415,7 +415,7 @@ const ZInpageTable: React.FC = () => {
                         CONSTANTS.testingSelectors.linkInBio.listPage.table
                           .actionPopoverBtn
                       }
-                      testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
+                      testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
                       onClick={(_event: unknown) => {
                         setCompState(oldVal => ({
                           ...oldVal,
@@ -890,7 +890,7 @@ const ZLinkInBioActionPopover: React.FC<{
           testingselector={
             CONSTANTS.testingSelectors.linkInBio.listPage.table.editBtn
           }
-          testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.listPage.table.editBtn}-${linInBioId}`}>
+          testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.listPage.table.editBtn}-${linInBioId}`}>
           <ZIonButton
             size='small'
             expand='full'
@@ -923,7 +923,7 @@ const ZLinkInBioActionPopover: React.FC<{
           testingselector={
             CONSTANTS.testingSelectors.linkInBio.listPage.table.deleteBtn
           }
-          testingListSelector={`${CONSTANTS.testingSelectors.linkInBio.listPage.table.deleteBtn}-${linInBioId}`}>
+          testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.listPage.table.deleteBtn}-${linInBioId}`}>
           <ZIonButton
             size='small'
             expand='full'

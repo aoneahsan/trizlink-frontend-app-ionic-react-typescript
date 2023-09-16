@@ -8,80 +8,79 @@ import { IonInputCustomEvent } from '@ionic/core';
 
 // Custom Imports
 import {
-	ZIonIcon,
-	ZIonImg,
-	ZIonInput,
-	ZIonItem,
+  ZIonIcon,
+  ZIonImg,
+  ZIonInput,
+  ZIonItem
 } from '@/components/ZIonComponents';
 
 // Styles
 
 // Component Type
 interface LinkInBioTitleFieldInterface {
-	placeholder?: string;
-	name?: string;
-	value?: string | number | null;
-	className?: string;
-	showImageInSlot?: boolean;
-	slotImageUrl?: string;
-	testingListSelector?: string;
-	testingselector?: string;
-	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
-	onIonBlur?: <A extends Event>(event: A) => void;
+  placeholder?: string;
+  name?: string;
+  value?: string | number | null;
+  className?: string;
+  showImageInSlot?: boolean;
+  slotImageUrl?: string;
+  testinglistselector?: string;
+  testingselector?: string;
+  onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
+  onIonBlur?: <A extends Event>(event: A) => void;
 }
 
 const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
-	placeholder = 'Your Title',
-	value,
-	name,
-	className,
-	showImageInSlot = false,
-	slotImageUrl,
-	testingListSelector,
-	testingselector,
-	onIonChange,
-	onIonBlur,
+  placeholder = 'Your Title',
+  value,
+  name,
+  className,
+  showImageInSlot = false,
+  slotImageUrl,
+  testinglistselector,
+  testingselector,
+  onIonChange,
+  onIonBlur
 }) => {
-	return (
-		<ZIonItem
-			className={className}
-			lines='none'
-			testingselector={`${testingselector}-item`}
-			testingListSelector={`${testingListSelector}-item`}
-		>
-			{!showImageInSlot && !slotImageUrl?.trim() && (
-				<ZIonIcon
-					icon={reorderTwoOutline}
-					slot='start'
-					className='w-7 h-7 me-2'
-					testingselector={`${testingselector}-icon`}
-					testingListSelector={`${testingListSelector}-icon`}
-				/>
-			)}
+  return (
+    <ZIonItem
+      className={className}
+      lines='none'
+      testingselector={`${testingselector}-item`}
+      testinglistselector={`${testinglistselector}-item`}>
+      {!showImageInSlot && !slotImageUrl?.trim() && (
+        <ZIonIcon
+          icon={reorderTwoOutline}
+          slot='start'
+          className='w-7 h-7 me-2'
+          testingselector={`${testingselector}-icon`}
+          testinglistselector={`${testinglistselector}-icon`}
+        />
+      )}
 
-			{showImageInSlot && slotImageUrl?.trim() && (
-				<ZIonImg
-					src={slotImageUrl}
-					style={{ width: '25px' }}
-					slot='start'
-					testingselector={`${testingselector}-image`}
-					testingListSelector={`${testingListSelector}-image`}
-				/>
-			)}
+      {showImageInSlot && slotImageUrl?.trim() && (
+        <ZIonImg
+          src={slotImageUrl}
+          style={{ width: '25px' }}
+          slot='start'
+          testingselector={`${testingselector}-image`}
+          testinglistselector={`${testinglistselector}-image`}
+        />
+      )}
 
-			<ZIonInput
-				label=''
-				minHeight='40px'
-				name={name}
-				placeholder={placeholder}
-				onIonChange={onIonChange}
-				onIonBlur={onIonBlur}
-				value={value}
-				testingselector={`${testingselector}-input`}
-				testingListSelector={`${testingListSelector}-input`}
-			/>
-		</ZIonItem>
-	);
+      <ZIonInput
+        label=''
+        minHeight='40px'
+        name={name}
+        placeholder={placeholder}
+        onIonChange={onIonChange}
+        onIonBlur={onIonBlur}
+        value={value}
+        testingselector={`${testingselector}-input`}
+        testinglistselector={`${testinglistselector}-input`}
+      />
+    </ZIonItem>
+  );
 };
 
 export default LinkInBioTitleField;

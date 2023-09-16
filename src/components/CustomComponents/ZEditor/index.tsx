@@ -13,43 +13,47 @@ import AceEditor from 'react-ace';
 
 // Component Type
 type ZEditorType = {
-	className?: string;
-	name?: string;
-	width?: string;
-	height?: string;
-	placeholder?: string;
-	fontSize?: string | number;
-	value?: string;
-	style?: {
-		[key: string]: unknown;
-	};
-	onChange?: (value: string, event?: unknown) => void;
+  className?: string;
+  name?: string;
+  width?: string;
+  height?: string;
+  placeholder?: string;
+  fontSize?: string | number;
+  value?: string;
+  style?: {
+    [key: string]: unknown;
+  };
+  onChange?: (value: string, event?: unknown) => void;
 
-	testingselector?: string;
-	testingListSelector?: string;
+  testingselector?: string;
+  testinglistselector?: string;
 };
 
-const ZEditor: React.FC<ZEditorType> = (props) => {
-	const _testingListSelector = props.testingListSelector
-		? {
-				...zCreateElementTestingSelector({
-					_value: props.testingListSelector || PRODUCT_NAME,
-					_key: zCreateElementTestingSelectorKeyEnum.listSelector,
-				}),
-		  }
-		: {};
+const ZEditor: React.FC<ZEditorType> = props => {
+  const _testinglistselector = props.testinglistselector
+    ? {
+        ...zCreateElementTestingSelector({
+          _value: props.testinglistselector || PRODUCT_NAME,
+          _key: zCreateElementTestingSelectorKeyEnum.listSelector
+        })
+      }
+    : {};
 
-	const _testingSelector = props.testingselector
-		? {
-				...zCreateElementTestingSelector({
-					_value: props.testingselector || PRODUCT_NAME,
-				}),
-		  }
-		: {};
+  const _testingSelector = props.testingselector
+    ? {
+        ...zCreateElementTestingSelector({
+          _value: props.testingselector || PRODUCT_NAME
+        })
+      }
+    : {};
 
-	return (
-		<AceEditor {...props} {..._testingSelector} {..._testingListSelector} />
-	);
+  return (
+    <AceEditor
+      {...props}
+      {..._testingSelector}
+      {..._testinglistselector}
+    />
+  );
 };
 
 export default ZEditor;

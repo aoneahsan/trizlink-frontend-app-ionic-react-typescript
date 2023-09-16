@@ -1512,6 +1512,10 @@ export const zGetRoutePermissions = ({
         __permissions = [permissionsEnum.viewAny_pixel];
         break;
 
+      case ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag:
+        __permissions = [permissionsEnum.viewAny_utmTag];
+        break;
+
       case ZaionsRoutes.AdminPanel.Setting.AccountSettings.ViewTeam:
         __permissions = [
           permissionsEnum.viewAny_workspace,

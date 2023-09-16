@@ -11,6 +11,8 @@ import {
   trendingUpOutline
 } from 'ionicons/icons';
 import React from 'react';
+import { useParams } from 'react-router';
+import ZInviteButton from '../InviteButton';
 
 /**
  * Packages Imports go down
@@ -64,20 +66,10 @@ import React from 'react';
  * */
 
 const ZUtilityButtonGroup: React.FC = () => {
+  const { workspaceId } = useParams<{ workspaceId?: string }>();
+
   return (
     <div>
-      {/* <ZIonButton
-        className='ion-no-margin ion-no-padding'
-        minHeight='1.9rem'
-        expand='block'
-        color='secondary'>
-        <ZIonIcon
-          icon={openOutline}
-          className='me-1'
-        />
-        <ZIonText className='mt-1 text-xs'>Go to workspace</ZIonText>
-      </ZIonButton> */}
-
       <ZIonButton
         className='mt-2 ion-no-margin ion-no-padding'
         minHeight='1.9rem'
@@ -90,17 +82,17 @@ const ZUtilityButtonGroup: React.FC = () => {
         <ZIonText className='mt-1 text-xs'>Upgrade</ZIonText>
       </ZIonButton>
 
-      {/* <ZIonButton
+      <ZIonButton
         className='mt-2 ion-no-margin ion-no-padding'
         minHeight='1.9rem'
         expand='block'
         color='primary'>
         <ZIonIcon
-          icon={addOutline}
+          icon={openOutline}
           className='me-1'
         />
-        <ZIonText className='mt-1 text-xs'>Invite</ZIonText>
-      </ZIonButton> */}
+        <ZIonText className='mt-1 text-xs'>Go to workspace</ZIonText>
+      </ZIonButton>
 
       <ZIonButton
         className='mt-2 ion-no-margin ion-no-padding'
@@ -125,6 +117,11 @@ const ZUtilityButtonGroup: React.FC = () => {
         />
         <ZIonText className='mt-1 text-xs'>Notification</ZIonText>
       </ZIonButton>
+
+      <ZInviteButton
+        className='mt-2 ion-no-margin ion-no-padding'
+        workspaceId={workspaceId}
+      />
     </div>
   );
 };

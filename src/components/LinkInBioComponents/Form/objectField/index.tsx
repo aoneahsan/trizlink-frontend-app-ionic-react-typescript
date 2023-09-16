@@ -12,46 +12,45 @@ import { IonInputCustomEvent } from '@ionic/core';
 
 // Component Type
 interface LinkInBioObjectFieldInterface {
-	placeholder?: string;
-	name?: string;
-	testingListSelector?: string;
-	testingselector?: string;
-	value?: string | number | null;
-	className?: string;
-	onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
-	onIonBlur?: <A extends Event>(event: A) => void;
+  placeholder?: string;
+  name?: string;
+  testinglistselector?: string;
+  testingselector?: string;
+  value?: string | number | null;
+  className?: string;
+  onIonChange?: (event: IonInputCustomEvent<InputChangeEventDetail>) => void;
+  onIonBlur?: <A extends Event>(event: A) => void;
 }
 
 const LinkInBioObjectField: React.FC<LinkInBioObjectFieldInterface> = ({
-	placeholder = 'object',
-	value,
-	name,
-	testingListSelector,
-	testingselector,
-	className,
-	onIonChange,
-	onIonBlur,
+  placeholder = 'object',
+  value,
+  name,
+  testinglistselector,
+  testingselector,
+  className,
+  onIonChange,
+  onIonBlur
 }) => {
-	return (
-		<ZIonItem
-			className={className}
-			lines='none'
-			testingselector={`${testingselector}-item`}
-			testingListSelector={`${testingListSelector}-item`}
-		>
-			<ZIonInput
-				label=''
-				name={name}
-				placeholder={placeholder}
-				onIonChange={onIonChange}
-				onIonBlur={onIonBlur}
-				value={value}
-				minHeight='40px'
-				testingselector={`${testingselector}-input`}
-				testingListSelector={`${testingListSelector}-input`}
-			/>
-		</ZIonItem>
-	);
+  return (
+    <ZIonItem
+      className={className}
+      lines='none'
+      testingselector={`${testingselector}-item`}
+      testinglistselector={`${testinglistselector}-item`}>
+      <ZIonInput
+        label=''
+        name={name}
+        placeholder={placeholder}
+        onIonChange={onIonChange}
+        onIonBlur={onIonBlur}
+        value={value}
+        minHeight='40px'
+        testingselector={`${testingselector}-input`}
+        testinglistselector={`${testinglistselector}-input`}
+      />
+    </ZIonItem>
+  );
 };
 
 export default LinkInBioObjectField;

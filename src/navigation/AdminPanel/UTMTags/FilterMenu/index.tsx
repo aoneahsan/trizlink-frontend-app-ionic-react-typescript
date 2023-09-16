@@ -43,22 +43,22 @@ import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import CONSTANTS from '@/utils/constants';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import {
   useZRQCreateRequest,
   useZRQGetRequest,
   useZRQUpdateRequest,
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import CONSTANTS from '@/utils/constants';
 import { extractInnerData, zStringify } from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
-import { PixelTableColumns } from '@/utils/constants/columns';
+import { UtmTagTableColumns } from '@/utils/constants/columns';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import MESSAGES from '@/utils/messages';
 
@@ -70,7 +70,7 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { TimeFilterEnum } from '@/types/AdminPanel/linksType';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import {
-  ZPixelsListPageTableColumnsIds,
+  ZUTMTagsListPageTableColumnsIds,
   ZUserSettingInterface,
   ZUserSettingTypeEnum
 } from '@/types/AdminPanel/index.type';
@@ -79,7 +79,7 @@ import {
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { PixelsFilterOptionsRStateAtom } from '@/ZaionsStore/UserDashboard/PixelAccountsState/index.recoil';
+import { UTMTagsFilterOptionsRStateAtom } from '@/ZaionsStore/UserDashboard/UTMTagTemplatesState';
 
 /**
  * Style files Imports go down
@@ -102,10 +102,10 @@ import { PixelsFilterOptionsRStateAtom } from '@/ZaionsStore/UserDashboard/Pixel
  * @type {*}
  * */
 
-const ZPixelsFilterMenu: React.FC = () => {
+const ZUTMTagsFilterMenu: React.FC = () => {
   // #region compState.
   const [compState, setCompState] = useState<{
-    pixelsColumn: {
+    utmTagsColumn: {
       id?: string;
       name: string;
       isVisible: boolean;
@@ -113,7 +113,7 @@ const ZPixelsFilterMenu: React.FC = () => {
     columnOrderIds: string[];
   }>({
     columnOrderIds: [],
-    pixelsColumn: PixelTableColumns
+    utmTagsColumn: UtmTagTableColumns
   });
   // #endregion
 
@@ -124,55 +124,60 @@ const ZPixelsFilterMenu: React.FC = () => {
 
   // #region Recoil.
   // Recoil state for storing filter options for Pixel.
-  const setPixelsFilterOptions = useSetRecoilState(
-    PixelsFilterOptionsRStateAtom
+  const setUtmTagsFilterOptions = useSetRecoilState(
+    UTMTagsFilterOptionsRStateAtom
   );
   // #endregion
 
   // #region APIs.
   //
-  const { mutateAsync: updatePixelFilersAsyncMutate } = useZRQUpdateRequest({
+  const { mutateAsync: updateUtmTagsFilersAsyncMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.user_setting_delete_update_get,
     _loaderMessage: MESSAGES.GENERAL.FILTER.FILTERING
   });
 
-  const { mutateAsync: createPixelFilersAsyncMutate } = useZRQCreateRequest({
+  const { mutateAsync: createUtmTagsFilersAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.user_setting_list_create,
     _loaderMessage: MESSAGES.GENERAL.FILTER.FILTERING
   });
 
-  const { data: getPixelFiltersData, isFetching: isPixelFiltersDataFetching } =
-    useZRQGetRequest<ZUserSettingInterface>({
-      _url: API_URL_ENUM.user_setting_delete_update_get,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-        ZUserSettingTypeEnum.pixelListPageTable
-      ],
-      _itemsIds: [ZUserSettingTypeEnum.pixelListPageTable],
-      _urlDynamicParts: [CONSTANTS.RouteParams.settings.type],
-      _extractType: ZRQGetRequestExtractEnum.extractItem
-    });
+  const {
+    data: getUtmTagsFiltersData,
+    isFetching: isUtmTagsFiltersDataFetching
+  } = useZRQGetRequest<ZUserSettingInterface>({
+    _url: API_URL_ENUM.user_setting_delete_update_get,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+      ZUserSettingTypeEnum.UTMTagListPageTable
+    ],
+    _itemsIds: [ZUserSettingTypeEnum.UTMTagListPageTable],
+    _urlDynamicParts: [CONSTANTS.RouteParams.settings.type],
+    _extractType: ZRQGetRequestExtractEnum.extractItem
+  });
   // #endregion
 
   useEffect(() => {
     try {
-      if (getPixelFiltersData?.type && getPixelFiltersData?.settings?.columns) {
+      if (
+        getUtmTagsFiltersData?.type &&
+        getUtmTagsFiltersData?.settings?.columns
+      ) {
         setCompState(_oldValue => ({
           ..._oldValue,
-          pixelsColumn: getPixelFiltersData?.settings?.columns
+          utmTagsColumn: getUtmTagsFiltersData?.settings?.columns
         }));
       }
     } catch (error) {
       reportCustomError(error);
     }
-  }, [getPixelFiltersData]);
+  }, [getUtmTagsFiltersData]);
 
   // #region Functions.
   const handleCarouselCardReorder = (
     event: CustomEvent<ItemReorderEventDetail>
   ) => {
-    const reorderedItems = event.detail.complete(compState.pixelsColumn);
-    const pixelsColumnIds: string[] = [ZPixelsListPageTableColumnsIds.id];
+    const reorderedItems = event.detail.complete(compState.utmTagsColumn);
+    const utmTagsColumnIds: string[] = [ZUTMTagsListPageTableColumnsIds.id];
 
     for (let i = 0; i < reorderedItems.length; i++) {
       const _block = reorderedItems[i] as {
@@ -180,14 +185,14 @@ const ZPixelsFilterMenu: React.FC = () => {
         name: string;
         isVisible: boolean;
       };
-      pixelsColumnIds.push(_block?.id!);
+      utmTagsColumnIds.push(_block?.id!);
     }
 
     //
     setCompState(oldValues => ({
       ...oldValues,
-      // pixelsColumn: reorderedItems,
-      columnOrderIds: pixelsColumnIds
+      // utmTagsColumn: reorderedItems,
+      columnOrderIds: utmTagsColumnIds
     }));
   };
 
@@ -197,15 +202,16 @@ const ZPixelsFilterMenu: React.FC = () => {
         let __response;
 
         if (
-          getPixelFiltersData?.type === ZUserSettingTypeEnum.pixelListPageTable
+          getUtmTagsFiltersData?.type ===
+          ZUserSettingTypeEnum.UTMTagListPageTable
         ) {
-          __response = await updatePixelFilersAsyncMutate({
-            itemIds: [ZUserSettingTypeEnum.pixelListPageTable],
+          __response = await updateUtmTagsFilersAsyncMutate({
+            itemIds: [ZUserSettingTypeEnum.UTMTagListPageTable],
             urlDynamicParts: [CONSTANTS.RouteParams.settings.type],
             requestData: _data
           });
         } else {
-          __response = await createPixelFilersAsyncMutate(_data);
+          __response = await createUtmTagsFilersAsyncMutate(_data);
         }
 
         if (__response) {
@@ -220,7 +226,7 @@ const ZPixelsFilterMenu: React.FC = () => {
             await updateRQCDataHandler<ZUserSettingInterface | undefined>({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-                ZUserSettingTypeEnum.pixelListPageTable
+                ZUserSettingTypeEnum.UTMTagListPageTable
               ],
               data: __data,
               id: '',
@@ -240,7 +246,7 @@ const ZPixelsFilterMenu: React.FC = () => {
     <ZIonMenu
       side='end'
       contentId={CONSTANTS.MENU_IDS.ADMIN_PANEL_WS_SETTING_PAGE_ID}
-      menuId={CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID}
+      menuId={CONSTANTS.MENU_IDS.UTMTag_FILTERS_MENU_ID}
       style={
         isLgScale
           ? {
@@ -256,19 +262,21 @@ const ZPixelsFilterMenu: React.FC = () => {
             'text-xl': isLgScale,
             'text-lg': !isLgScale
           })}>
-          Filter pixels & table UI
+          Filter UTM tags & table UI
         </ZIonTitle>
 
         <ZIonIcon
           icon={closeOutline}
           className='w-6 h-6 cursor-pointer'
           testingselector={
-            CONSTANTS.testingSelectors.pixels.listPage.filterSidebar
+            CONSTANTS.testingSelectors.utmTags.listPage.filterSidebar
               .closeMenuBtn
           }
           onClick={async () => {
             // Close the menu by menu-id
-            await menuController.close(CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID);
+            await menuController.close(
+              CONSTANTS.MENU_IDS.UTMTag_FILTERS_MENU_ID
+            );
           }}
         />
       </ZIonHeader>
@@ -277,24 +285,24 @@ const ZPixelsFilterMenu: React.FC = () => {
       <ZIonContent className='ion-padding-top'>
         <Formik
           initialValues={{
-            columns: compState?.pixelsColumn,
+            columns: compState?.utmTagsColumn,
 
             filters: {
               time:
-                getPixelFiltersData?.settings?.filters?.time ||
+                getUtmTagsFiltersData?.settings?.filters?.time ||
                 TimeFilterEnum.allTime,
               startDate:
-                getPixelFiltersData?.settings?.filters?.startDate ||
+                getUtmTagsFiltersData?.settings?.filters?.startDate ||
                 new Date().toISOString(),
               endDate:
-                getPixelFiltersData?.settings?.filters?.endDate ||
+                getUtmTagsFiltersData?.settings?.filters?.endDate ||
                 new Date().toISOString()
             }
           }}
           enableReinitialize={true}
           onSubmit={async values => {
             try {
-              setPixelsFilterOptions(oldValues => ({
+              setUtmTagsFilterOptions(oldValues => ({
                 ...oldValues,
                 timeFilter: {
                   ...oldValues.timeFilter,
@@ -305,7 +313,7 @@ const ZPixelsFilterMenu: React.FC = () => {
               }));
 
               const zStringifyData = zStringify({
-                type: ZUserSettingTypeEnum.pixelListPageTable,
+                type: ZUserSettingTypeEnum.UTMTagListPageTable,
                 settings: zStringify({
                   columns: values.columns,
                   columnOrderIds: compState.columnOrderIds,
@@ -331,7 +339,7 @@ const ZPixelsFilterMenu: React.FC = () => {
                       'text-sm': !isLgScale
                     })}
                     color='dark'>
-                    Filter Pixels.
+                    Filter UTM tags.
                   </ZIonText>
 
                   <div className='px-3'>
@@ -339,8 +347,8 @@ const ZPixelsFilterMenu: React.FC = () => {
                       name='filters.time'
                       className='mt-2'
                       testingselector={
-                        CONSTANTS.testingSelectors.pixels.listPage.filterSidebar
-                          .timeFilterInput
+                        CONSTANTS.testingSelectors.utmTags.listPage
+                          .filterSidebar.timeFilterInput
                       }
                       onChange={_value => {
                         setFieldValue(
@@ -366,10 +374,10 @@ const ZPixelsFilterMenu: React.FC = () => {
                           name='filters.startDate'
                           value={values?.filters?.startDate}
                           onIonChange={handleChange}
-                          id='filter_start_time'
+                          id='utmTag_filter_start_time'
                           className='w-full zaions-datetime-btn ion-no-margin'
                           testingselector={
-                            CONSTANTS.testingSelectors.pixels.listPage
+                            CONSTANTS.testingSelectors.utmTags.listPage
                               .filterSidebar.startInput
                           }
                         />
@@ -384,10 +392,10 @@ const ZPixelsFilterMenu: React.FC = () => {
                           value={values?.filters?.endDate}
                           onIonChange={handleChange}
                           min={values?.filters?.startDate}
-                          id='filter_end_time'
+                          id='utmTag_filter_end_time'
                           className='w-full zaions-datetime-btn ion-no-margin'
                           testingselector={
-                            CONSTANTS.testingSelectors.pixels.listPage
+                            CONSTANTS.testingSelectors.utmTags.listPage
                               .filterSidebar.endInput
                           }
                         />
@@ -398,8 +406,8 @@ const ZPixelsFilterMenu: React.FC = () => {
                       expand='block'
                       className='mt-3'
                       testingselector={
-                        CONSTANTS.testingSelectors.pixels.listPage.filterSidebar
-                          .saveBtn1
+                        CONSTANTS.testingSelectors.utmTags.listPage
+                          .filterSidebar.saveBtn1
                       }
                       onClick={() => {
                         void submitForm();
@@ -431,7 +439,7 @@ const ZPixelsFilterMenu: React.FC = () => {
                         lines='none'
                         className='ps-1 h-[2.2rem] flex overflow-hidden rounded-lg cursor-pointer ion-activatable w-[104.6%]'
                         testingselector={
-                          CONSTANTS.testingSelectors.pixels.listPage
+                          CONSTANTS.testingSelectors.utmTags.listPage
                             .filterSidebar.columnAccordionHead
                         }
                         style={{
@@ -462,10 +470,10 @@ const ZPixelsFilterMenu: React.FC = () => {
                                 className='zaions-short-link-list-table-column '
                                 data-id={el?.id}
                                 testinglistselector={
-                                  CONSTANTS.testingSelectors.pixels.listPage
+                                  CONSTANTS.testingSelectors.utmTags.listPage
                                     .filterSidebar.reorderItem
                                 }
-                                testingselector={`${CONSTANTS.testingSelectors.pixels.listPage.filterSidebar.reorderItem}-${el.id}`}
+                                testingselector={`${CONSTANTS.testingSelectors.utmTags.listPage.filterSidebar.reorderItem}-${el.id}`}
                                 style={{
                                   '--padding-bottom': '.1rem',
                                   '--padding-top': '.1rem',
@@ -478,20 +486,20 @@ const ZPixelsFilterMenu: React.FC = () => {
                                 <ZIonText
                                   className='text-sm'
                                   testinglistselector={
-                                    CONSTANTS.testingSelectors.pixels.listPage
+                                    CONSTANTS.testingSelectors.utmTags.listPage
                                       .filterSidebar.reorderTitle
                                   }
-                                  testingselector={`${CONSTANTS.testingSelectors.pixels.listPage.filterSidebar.reorderTitle}-${el.id}`}>
+                                  testingselector={`${CONSTANTS.testingSelectors.utmTags.listPage.filterSidebar.reorderTitle}-${el.id}`}>
                                   {el.name}
                                 </ZIonText>
 
                                 <ZIonText slot='end'>
                                   <ZRCSwitch
                                     testinglistselector={
-                                      CONSTANTS.testingSelectors.pixels.listPage
-                                        .filterSidebar.reorderToggler
+                                      CONSTANTS.testingSelectors.utmTags
+                                        .listPage.filterSidebar.reorderToggler
                                     }
-                                    testingselector={`${CONSTANTS.testingSelectors.pixels.listPage.filterSidebar.reorderToggler}-${el.id}`}
+                                    testingselector={`${CONSTANTS.testingSelectors.utmTags.listPage.filterSidebar.reorderToggler}-${el.id}`}
                                     checked={el.isVisible}
                                     onChange={_value => {
                                       setFieldValue(
@@ -514,7 +522,7 @@ const ZPixelsFilterMenu: React.FC = () => {
                     expand='block'
                     className='mx-3 mt-2'
                     testingselector={
-                      CONSTANTS.testingSelectors.pixels.listPage.filterSidebar
+                      CONSTANTS.testingSelectors.utmTags.listPage.filterSidebar
                         .saveBtn2
                     }
                     onClick={() => {
@@ -532,4 +540,4 @@ const ZPixelsFilterMenu: React.FC = () => {
   );
 };
 
-export default ZPixelsFilterMenu;
+export default ZUTMTagsFilterMenu;

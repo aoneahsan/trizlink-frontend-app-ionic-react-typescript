@@ -13,47 +13,49 @@ import { SwitchChangeEventHandler } from 'rc-switch';
 
 // Component Type
 interface LinkInBioEnableFieldInterface {
-	title?: string;
-	icon?: string;
-	checked?: boolean;
-	testingselector?: string;
-	testingListSelector?: string;
-	onChange?: SwitchChangeEventHandler;
+  title?: string;
+  icon?: string;
+  checked?: boolean;
+  testingselector?: string;
+  testinglistselector?: string;
+  onChange?: SwitchChangeEventHandler;
 }
 
 const LinkInBioEnableField: React.FC<LinkInBioEnableFieldInterface> = ({
-	title = 'Title',
-	icon = reorderTwoOutline,
-	checked,
-	testingselector,
-	testingListSelector,
-	onChange,
+  title = 'Title',
+  icon = reorderTwoOutline,
+  checked,
+  testingselector,
+  testinglistselector,
+  onChange
 }) => {
-	return (
-		<ZIonItem
-			lines='none'
-			className='mt-3'
-			testingselector={`${testingselector}-item`}
-			testingListSelector={`${testingListSelector}-item`}
-		>
-			<ZIonIcon icon={icon} className='me-3' slot='start' />
-			<ZIonText
-				color='medium'
-				testingselector={`${testingselector}-text`}
-				testingListSelector={`${testingListSelector}-text`}
-			>
-				{title}
-			</ZIonText>
-			<ZIonText slot='end'>
-				<ZRCSwitch
-					onChange={onChange}
-					checked={checked}
-					testingselector={testingselector}
-					testingListSelector={testingListSelector}
-				/>
-			</ZIonText>
-		</ZIonItem>
-	);
+  return (
+    <ZIonItem
+      lines='none'
+      className='mt-3'
+      testingselector={`${testingselector}-item`}
+      testinglistselector={`${testinglistselector}-item`}>
+      <ZIonIcon
+        icon={icon}
+        className='me-3'
+        slot='start'
+      />
+      <ZIonText
+        color='medium'
+        testingselector={`${testingselector}-text`}
+        testinglistselector={`${testinglistselector}-text`}>
+        {title}
+      </ZIonText>
+      <ZIonText slot='end'>
+        <ZRCSwitch
+          onChange={onChange}
+          checked={checked}
+          testingselector={testingselector}
+          testinglistselector={testinglistselector}
+        />
+      </ZIonText>
+    </ZIonItem>
+  );
 };
 
 export default LinkInBioEnableField;

@@ -10,11 +10,11 @@ import React, { useState } from 'react';
  * */
 import { Formik } from 'formik';
 import {
-	addOutline,
-	ellipsisHorizontalOutline,
-	pencilOutline,
-	timeOutline,
-	trashBinOutline,
+  addOutline,
+  ellipsisHorizontalOutline,
+  pencilOutline,
+  timeOutline,
+  trashBinOutline
 } from 'ionicons/icons';
 
 /**
@@ -22,14 +22,14 @@ import {
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonButton,
-	ZIonCol,
-	ZIonIcon,
-	ZIonItem,
-	ZIonList,
-	ZIonRow,
-	ZIonSkeletonText,
-	ZIonText,
+  ZIonButton,
+  ZIonCol,
+  ZIonIcon,
+  ZIonItem,
+  ZIonList,
+  ZIonRow,
+  ZIonSkeletonText,
+  ZIonText
 } from '@/components/ZIonComponents';
 import ZWorkspaceTimeSlotFormModal from '../../TimeSlotFormModal';
 
@@ -38,17 +38,17 @@ import ZWorkspaceTimeSlotFormModal from '../../TimeSlotFormModal';
  * ? Like import of custom Hook is a custom import
  * */
 import {
-	useZGetRQCacheData,
-	useZRQDeleteRequest,
-	useZRQGetRequest,
-	useZUpdateRQCacheData,
+  useZGetRQCacheData,
+  useZRQDeleteRequest,
+  useZRQGetRequest,
+  useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
 import {
-	useZIonAlert,
-	useZIonErrorAlert,
-	useZIonModal,
-	useZIonPopover,
-	useZIonToastSuccess,
+  useZIonAlert,
+  useZIonErrorAlert,
+  useZIonModal,
+  useZIonPopover,
+  useZIonToastSuccess
 } from '@/ZaionsHooks/zionic-hooks';
 
 /**
@@ -67,9 +67,9 @@ import { extractInnerData } from '@/utils/helpers';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-	daysEnum,
-	FormMode,
-	TimeSlotInterface,
+  daysEnum,
+  FormMode,
+  TimeSlotInterface
 } from '@/types/AdminPanel/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
@@ -100,58 +100,60 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
  * */
 
 const ZTimetableTab: React.FC<{
-	workspaceId: string;
+  workspaceId: string;
 }> = ({ workspaceId }) => {
-	const [compState, setCompState] = useState<{
-		timeSlotDay: daysEnum;
-		timeSlotId: string;
-	}>({
-		timeSlotDay: daysEnum.monday,
-		timeSlotId: '',
-	});
+  const [compState, setCompState] = useState<{
+    timeSlotDay: daysEnum;
+    timeSlotId: string;
+  }>({
+    timeSlotDay: daysEnum.monday,
+    timeSlotId: ''
+  });
 
-	const { presentZIonPopover: presentZTimeSlotActionPopover } = useZIonPopover(
-		ZTimeSlotActionPopover,
-		{
-			workspaceId: workspaceId,
-			timeSlotId: compState.timeSlotId,
-		}
-	);
+  const { presentZIonPopover: presentZTimeSlotActionPopover } = useZIonPopover(
+    ZTimeSlotActionPopover,
+    {
+      workspaceId: workspaceId,
+      timeSlotId: compState.timeSlotId
+    }
+  );
 
-	const { presentZIonModal: presentZWorkspaceTimeSlotFormModal } = useZIonModal(
-		ZWorkspaceTimeSlotFormModal,
-		{
-			workspaceId: workspaceId,
-			timeSlotDay: compState.timeSlotDay,
-		}
-	);
+  const { presentZIonModal: presentZWorkspaceTimeSlotFormModal } = useZIonModal(
+    ZWorkspaceTimeSlotFormModal,
+    {
+      workspaceId: workspaceId,
+      timeSlotDay: compState.timeSlotDay
+    }
+  );
 
-	//#region APIS
-	const { data: timeSlotData, isFetching: isTimeSlotDataFetching } =
-		useZRQGetRequest<TimeSlotInterface[]>({
-			_url: API_URL_ENUM.time_slot_create_list,
-			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN, workspaceId],
-			_showLoader: false,
-			_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-			_itemsIds: [workspaceId],
-		});
-	// #endregion
+  //#region APIS
+  const { data: timeSlotData, isFetching: isTimeSlotDataFetching } =
+    useZRQGetRequest<TimeSlotInterface[]>({
+      _url: API_URL_ENUM.time_slot_create_list,
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN, workspaceId],
+      _showLoader: false,
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+      _itemsIds: [workspaceId]
+    });
+  // #endregion
 
-	const isZFetching = isTimeSlotDataFetching;
+  const isZFetching = isTimeSlotDataFetching;
 
-	const ZDays = [
-		{ day: daysEnum.monday, loop: 2 },
-		{ day: daysEnum.tuesday, loop: 4 },
-		{ day: daysEnum.wednesday, loop: 5 },
-		{ day: daysEnum.thursday, loop: 3 },
-		{ day: daysEnum.friday, loop: 1 },
-		{ day: daysEnum.saturday, loop: 2 },
-		{ day: daysEnum.sunday, loop: 3 },
-	];
+  const ZDays = [
+    { day: daysEnum.monday, loop: 2 },
+    { day: daysEnum.tuesday, loop: 4 },
+    { day: daysEnum.wednesday, loop: 5 },
+    { day: daysEnum.thursday, loop: 3 },
+    { day: daysEnum.friday, loop: 1 },
+    { day: daysEnum.saturday, loop: 2 },
+    { day: daysEnum.sunday, loop: 3 }
+  ];
 
-	return (
-		<Formik initialValues={{}} onSubmit={() => {}}>
-			{/* <ZWorkspaceSettingPlaceholderComp
+  return (
+    <Formik
+      initialValues={{}}
+      onSubmit={() => {}}>
+      {/* <ZWorkspaceSettingPlaceholderComp
 				buttonText='Add a time'
 				image={WorkspaceSettingsTimetablePlaceholder}
 				title={
@@ -161,317 +163,319 @@ const ZTimetableTab: React.FC<{
 				}
 			/> */}
 
-			{() => {
-				return (
-					<div className='w-full h-full px-2 py-3'>
-						<ZIonRow className='gap-2 border ion-text-center'>
-							<ZIonCol>
-								<ZIonText className='text-sm font-normal'>Monday</ZIonText>
-							</ZIonCol>
-							<ZIonCol>
-								<ZIonText className='text-sm font-normal'>Tuesday</ZIonText>
-							</ZIonCol>
-							<ZIonCol>
-								<ZIonText className='text-sm font-normal'>Wednesday</ZIonText>
-							</ZIonCol>
-							<ZIonCol>
-								<ZIonText className='text-sm font-normal'>Thursday</ZIonText>
-							</ZIonCol>
-							<ZIonCol>
-								<ZIonText className='text-sm font-normal'>Friday</ZIonText>
-							</ZIonCol>
-							<ZIonCol>
-								<ZIonText className='text-sm font-normal'>Saturday</ZIonText>
-							</ZIonCol>
-							<ZIonCol>
-								<ZIonText className='text-sm font-normal'>Sunday</ZIonText>
-							</ZIonCol>
-						</ZIonRow>
+      {() => {
+        return (
+          <div className='w-full h-full px-2 py-3'>
+            <ZIonRow className='gap-2 border ion-text-center'>
+              <ZIonCol>
+                <ZIonText className='text-sm font-normal'>Monday</ZIonText>
+              </ZIonCol>
+              <ZIonCol>
+                <ZIonText className='text-sm font-normal'>Tuesday</ZIonText>
+              </ZIonCol>
+              <ZIonCol>
+                <ZIonText className='text-sm font-normal'>Wednesday</ZIonText>
+              </ZIonCol>
+              <ZIonCol>
+                <ZIonText className='text-sm font-normal'>Thursday</ZIonText>
+              </ZIonCol>
+              <ZIonCol>
+                <ZIonText className='text-sm font-normal'>Friday</ZIonText>
+              </ZIonCol>
+              <ZIonCol>
+                <ZIonText className='text-sm font-normal'>Saturday</ZIonText>
+              </ZIonCol>
+              <ZIonCol>
+                <ZIonText className='text-sm font-normal'>Sunday</ZIonText>
+              </ZIonCol>
+            </ZIonRow>
 
-						<ZIonRow className='h-[92%] gap-2 mt-3 ion-text-center'>
-							{ZDays.map((_element, _elementIndex) => {
-								return (
-									<ZIonCol className='h-full bg-white' key={_elementIndex}>
-										{!isZFetching &&
-											timeSlotData &&
-											timeSlotData?.map((_timeSlot, _timeSlotIndex) => {
-												if (_element.day === _timeSlot?.day) {
-													return (
-														<div
-															key={_timeSlotIndex}
-															className='w-full h-[2.4rem] mb-3 shadow-sm bg-white rounded border flex ion-align-items-center ion-justify-content-between px-2'
-														>
-															<ZIonText className='flex ion-align-items-center'>
-																<ZIonIcon
-																	icon={timeOutline}
-																	className='w-6 h-6'
-																/>
-																<ZIonText className='mt-[2px] text-sm ms-2'>
-																	{_timeSlot?.time}
-																</ZIonText>
-															</ZIonText>
-															<ZIonIcon
-																testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.timeActionButton}-${_timeSlot.id}`}
-																testingListSelector={
-																	CONSTANTS.testingSelectors.workspace
-																		.settingsModal.timetable.timeActionButton
-																}
-																onClick={(event: unknown) => {
-																	if (_timeSlot.id) {
-																		setCompState((oldValues) => ({
-																			...oldValues,
-																			timeSlotId: _timeSlot.id as string,
-																		}));
+            <ZIonRow className='h-[92%] gap-2 mt-3 ion-text-center'>
+              {ZDays.map((_element, _elementIndex) => {
+                return (
+                  <ZIonCol
+                    className='h-full bg-white'
+                    key={_elementIndex}>
+                    {!isZFetching &&
+                      timeSlotData &&
+                      timeSlotData?.map((_timeSlot, _timeSlotIndex) => {
+                        if (_element.day === _timeSlot?.day) {
+                          return (
+                            <div
+                              key={_timeSlotIndex}
+                              className='w-full h-[2.4rem] mb-3 shadow-sm bg-white rounded border flex ion-align-items-center ion-justify-content-between px-2'>
+                              <ZIonText className='flex ion-align-items-center'>
+                                <ZIonIcon
+                                  icon={timeOutline}
+                                  className='w-6 h-6'
+                                />
+                                <ZIonText className='mt-[2px] text-sm ms-2'>
+                                  {_timeSlot?.time}
+                                </ZIonText>
+                              </ZIonText>
+                              <ZIonIcon
+                                testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.timeActionButton}-${_timeSlot.id}`}
+                                testinglistselector={
+                                  CONSTANTS.testingSelectors.workspace
+                                    .settingsModal.timetable.timeActionButton
+                                }
+                                onClick={(event: unknown) => {
+                                  if (_timeSlot.id) {
+                                    setCompState(oldValues => ({
+                                      ...oldValues,
+                                      timeSlotId: _timeSlot.id as string
+                                    }));
 
-																		//
-																		presentZTimeSlotActionPopover({
-																			_event: event as Event,
-																			_cssClass:
-																				'zaions_present_folder_Action_popover_width',
-																			_dismissOnSelect: false,
-																		});
-																	}
-																}}
-																icon={ellipsisHorizontalOutline}
-																className='w-5 h-5 cursor-pointer'
-															/>
-														</div>
-													);
-												}
-											})}
+                                    //
+                                    presentZTimeSlotActionPopover({
+                                      _event: event as Event,
+                                      _cssClass:
+                                        'zaions_present_folder_Action_popover_width',
+                                      _dismissOnSelect: false
+                                    });
+                                  }
+                                }}
+                                icon={ellipsisHorizontalOutline}
+                                className='w-5 h-5 cursor-pointer'
+                              />
+                            </div>
+                          );
+                        }
+                      })}
 
-										{isZFetching &&
-											[...Array(_element.loop)].map((el, _loopIndex) => {
-												return (
-													<div
-														className='w-full h-[2.4rem] mb-3 shadow-sm bg-white rounded border flex ion-align-items-center ion-justify-content-between px-2'
-														key={_loopIndex}
-													>
-														<ZIonText className='flex ion-align-items-center'>
-															<ZIonIcon
-																icon={timeOutline}
-																className='w-6 h-6'
-															/>
-															<ZIonText className='mt-[2px] text-sm ms-2'>
-																<ZIonSkeletonText height='.9rem' width='4rem' />
-															</ZIonText>
-														</ZIonText>
-														<ZIonIcon
-															icon={ellipsisHorizontalOutline}
-															className='w-5 h-5'
-														/>
-													</div>
-												);
-											})}
+                    {isZFetching &&
+                      [...Array(_element.loop)].map((el, _loopIndex) => {
+                        return (
+                          <div
+                            className='w-full h-[2.4rem] mb-3 shadow-sm bg-white rounded border flex ion-align-items-center ion-justify-content-between px-2'
+                            key={_loopIndex}>
+                            <ZIonText className='flex ion-align-items-center'>
+                              <ZIonIcon
+                                icon={timeOutline}
+                                className='w-6 h-6'
+                              />
+                              <ZIonText className='mt-[2px] text-sm ms-2'>
+                                <ZIonSkeletonText
+                                  height='.9rem'
+                                  width='4rem'
+                                />
+                              </ZIonText>
+                            </ZIonText>
+                            <ZIonIcon
+                              icon={ellipsisHorizontalOutline}
+                              className='w-5 h-5'
+                            />
+                          </div>
+                        );
+                      })}
 
-										<ZIonButton
-											expand='block'
-											disabled={isZFetching}
-											className='mb-3'
-											fill='outline'
-											testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.addTimeButton}-${_element.day}`}
-											onClick={() => {
-												setCompState((oldValues) => ({
-													...oldValues,
-													timeSlotDay: _element.day,
-												}));
+                    <ZIonButton
+                      expand='block'
+                      disabled={isZFetching}
+                      className='mb-3'
+                      fill='outline'
+                      testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.addTimeButton}-${_element.day}`}
+                      onClick={() => {
+                        setCompState(oldValues => ({
+                          ...oldValues,
+                          timeSlotDay: _element.day
+                        }));
 
-												presentZWorkspaceTimeSlotFormModal({
-													_cssClass: 'workspace-create-time-slot-modal',
-												});
-											}}
-										>
-											<ZIonIcon icon={addOutline} />
-											<ZIonText className='ms-1 pt-[2px]'>Add Time</ZIonText>
-										</ZIonButton>
-									</ZIonCol>
-								);
-							})}
-						</ZIonRow>
-					</div>
-				);
-			}}
-		</Formik>
-	);
+                        presentZWorkspaceTimeSlotFormModal({
+                          _cssClass: 'workspace-create-time-slot-modal'
+                        });
+                      }}>
+                      <ZIonIcon icon={addOutline} />
+                      <ZIonText className='ms-1 pt-[2px]'>Add Time</ZIonText>
+                    </ZIonButton>
+                  </ZIonCol>
+                );
+              })}
+            </ZIonRow>
+          </div>
+        );
+      }}
+    </Formik>
+  );
 };
 
 const ZTimeSlotActionPopover: React.FC<{
-	workspaceId: string;
-	timeSlotId: string;
-	dismissZIonPopover: (data: string, role: string) => void;
+  workspaceId: string;
+  timeSlotId: string;
+  dismissZIonPopover: (data: string, role: string) => void;
 }> = ({ timeSlotId, workspaceId, dismissZIonPopover }) => {
-	const { presentZIonModal: presentZWorkspaceTimeSlotFormModal } = useZIonModal(
-		ZWorkspaceTimeSlotFormModal,
-		{
-			workspaceId: workspaceId,
-			timeSlotId: timeSlotId,
-			mode: FormMode.EDIT,
-		}
-	);
+  const { presentZIonModal: presentZWorkspaceTimeSlotFormModal } = useZIonModal(
+    ZWorkspaceTimeSlotFormModal,
+    {
+      workspaceId: workspaceId,
+      timeSlotId: timeSlotId,
+      mode: FormMode.EDIT
+    }
+  );
 
-	// #region APIS.
-	// Request for deleting time slot.
-	const { mutateAsync: deleteTimeSlotMutate } = useZRQDeleteRequest(
-		API_URL_ENUM.time_slot_update_delete
-	);
-	// #endregion
+  // #region APIS.
+  // Request for deleting time slot.
+  const { mutateAsync: deleteTimeSlotMutate } = useZRQDeleteRequest(
+    API_URL_ENUM.time_slot_update_delete
+  );
+  // #endregion
 
-	// #region Custom hooks
-	// const { isLgScale, isMdScale } = useZMediaQueryScale(); //
-	const { getRQCDataHandler } = useZGetRQCacheData();
-	const { updateRQCDataHandler } = useZUpdateRQCacheData();
-	const { presentZIonErrorAlert } = useZIonErrorAlert();
-	const { presentZIonAlert } = useZIonAlert();
-	const { presentZIonToastSuccess } = useZIonToastSuccess();
-	// #endregion
+  // #region Custom hooks
+  // const { isLgScale, isMdScale } = useZMediaQueryScale(); //
+  const { getRQCDataHandler } = useZGetRQCacheData();
+  const { updateRQCDataHandler } = useZUpdateRQCacheData();
+  const { presentZIonErrorAlert } = useZIonErrorAlert();
+  const { presentZIonAlert } = useZIonAlert();
+  const { presentZIonToastSuccess } = useZIonToastSuccess();
+  // #endregion
 
-	// #region Functions.
-	// when user won't to delete time slot and click on the delete button this function will fire and show the confirm alert.
-	const deleteTimeSlot = async () => {
-		try {
-			if (timeSlotId) {
-				await presentZIonAlert({
-					header: `Delete time slot`,
-					subHeader: 'Remove time slot from workspace.',
-					message: 'Are you sure you want to delete this time slot?',
-					buttons: [
-						{
-							text: 'Cancel',
-							role: 'cancel',
-						},
-						{
-							text: 'Delete',
-							role: 'danger',
-							handler: () => {
-								void removeTimeSlot();
-							},
-						},
-					],
-				});
-			} else {
-				await presentZIonErrorAlert();
-			}
-		} catch (error) {
-			await presentZIonErrorAlert();
-		}
-	};
+  // #region Functions.
+  // when user won't to delete time slot and click on the delete button this function will fire and show the confirm alert.
+  const deleteTimeSlot = async () => {
+    try {
+      if (timeSlotId) {
+        await presentZIonAlert({
+          header: `Delete time slot`,
+          subHeader: 'Remove time slot from workspace.',
+          message: 'Are you sure you want to delete this time slot?',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel'
+            },
+            {
+              text: 'Delete',
+              role: 'danger',
+              handler: () => {
+                void removeTimeSlot();
+              }
+            }
+          ]
+        });
+      } else {
+        await presentZIonErrorAlert();
+      }
+    } catch (error) {
+      await presentZIonErrorAlert();
+    }
+  };
 
-	// on the delete time slot confirm alert, when user click on delete button this function will first which will trigger delete request and delete the time slot.
-	const removeTimeSlot = async () => {
-		try {
-			if (timeSlotId) {
-				const __response = await deleteTimeSlotMutate({
-					itemIds: [workspaceId, timeSlotId],
-					urlDynamicParts: [
-						CONSTANTS.RouteParams.workspace.workspaceId,
-						CONSTANTS.RouteParams.timeSlot.timeSlotId,
-					],
-				});
+  // on the delete time slot confirm alert, when user click on delete button this function will first which will trigger delete request and delete the time slot.
+  const removeTimeSlot = async () => {
+    try {
+      if (timeSlotId) {
+        const __response = await deleteTimeSlotMutate({
+          itemIds: [workspaceId, timeSlotId],
+          urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.workspaceId,
+            CONSTANTS.RouteParams.timeSlot.timeSlotId
+          ]
+        });
 
-				if (__response) {
-					const __data = extractInnerData<{ success: boolean }>(
-						__response,
-						extractInnerDataOptionsEnum.createRequestResponseItem
-					);
+        if (__response) {
+          const __data = extractInnerData<{ success: boolean }>(
+            __response,
+            extractInnerDataOptionsEnum.createRequestResponseItem
+          );
 
-					if (__data && __data?.success) {
-						// getting all the shortLinks from RQ cache.
-						const __oldTimeSlots =
-							extractInnerData<TimeSlotInterface[]>(
-								getRQCDataHandler<TimeSlotInterface[]>({
-									key: [
-										CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
-										workspaceId,
-									],
-								}) as TimeSlotInterface[],
-								extractInnerDataOptionsEnum.createRequestResponseItems
-							) || [];
+          if (__data && __data?.success) {
+            // getting all the shortLinks from RQ cache.
+            const __oldTimeSlots =
+              extractInnerData<TimeSlotInterface[]>(
+                getRQCDataHandler<TimeSlotInterface[]>({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
+                    workspaceId
+                  ]
+                }) as TimeSlotInterface[],
+                extractInnerDataOptionsEnum.createRequestResponseItems
+              ) || [];
 
-						// removing deleted shortLinks from cache.
-						const __updatedTimeSlots = __oldTimeSlots.filter(
-							(el) => el.id !== timeSlotId
-						);
+            // removing deleted shortLinks from cache.
+            const __updatedTimeSlots = __oldTimeSlots.filter(
+              el => el.id !== timeSlotId
+            );
 
-						// Updating data in RQ cache.
-						await updateRQCDataHandler<TimeSlotInterface[] | undefined>({
-							key: [
-								CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
-								workspaceId,
-							],
-							data: __updatedTimeSlots as TimeSlotInterface[],
-							id: '',
-							extractType: ZRQGetRequestExtractEnum.extractItems,
-							updateHoleData: true,
-						});
+            // Updating data in RQ cache.
+            await updateRQCDataHandler<TimeSlotInterface[] | undefined>({
+              key: [
+                CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
+                workspaceId
+              ],
+              data: __updatedTimeSlots as TimeSlotInterface[],
+              id: '',
+              extractType: ZRQGetRequestExtractEnum.extractItems,
+              updateHoleData: true
+            });
 
-						presentZIonToastSuccess(MESSAGES.GENERAL.TIME_SLOT.DELETED);
-					} else {
-						showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
-					}
-				}
-			} else {
-				void presentZIonErrorAlert();
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
-	// #endregion
+            presentZIonToastSuccess(MESSAGES.GENERAL.TIME_SLOT.DELETED);
+          } else {
+            showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+          }
+        }
+      } else {
+        void presentZIonErrorAlert();
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
+  // #endregion
 
-	return (
-		<ZIonList lines='full' className='ion-no-padding'>
-			{/* Edit */}
-			<ZIonItem
-				minHeight='2.1rem'
-				className='cursor-pointer ion-activatable'
-				testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.timeEditButton}-${timeSlotId}`}
-				testingListSelector={
-					CONSTANTS.testingSelectors.workspace.settingsModal.timetable
-						.timeEditButton
-				}
-				onClick={() => {
-					if (timeSlotId) {
-						presentZWorkspaceTimeSlotFormModal({
-							_cssClass: 'workspace-create-time-slot-modal',
-						});
+  return (
+    <ZIonList
+      lines='full'
+      className='ion-no-padding'>
+      {/* Edit */}
+      <ZIonItem
+        minHeight='2.1rem'
+        className='cursor-pointer ion-activatable'
+        testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.timeEditButton}-${timeSlotId}`}
+        testinglistselector={
+          CONSTANTS.testingSelectors.workspace.settingsModal.timetable
+            .timeEditButton
+        }
+        onClick={() => {
+          if (timeSlotId) {
+            presentZWorkspaceTimeSlotFormModal({
+              _cssClass: 'workspace-create-time-slot-modal'
+            });
 
-						dismissZIonPopover('', '');
-					}
-				}}
-			>
-				<ZIonIcon
-					icon={pencilOutline}
-					className='w-5 h-5 me-2'
-					color='secondary'
-				/>
-				<ZIonText className='font-normal'>Edit</ZIonText>
-			</ZIonItem>
+            dismissZIonPopover('', '');
+          }
+        }}>
+        <ZIonIcon
+          icon={pencilOutline}
+          className='w-5 h-5 me-2'
+          color='secondary'
+        />
+        <ZIonText className='font-normal'>Edit</ZIonText>
+      </ZIonItem>
 
-			{/* Delete */}
-			<ZIonItem
-				minHeight='2.1rem'
-				lines='none'
-				className='cursor-pointer ion-activatable'
-				testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.timeDeleteButton}-${timeSlotId}`}
-				testingListSelector={
-					CONSTANTS.testingSelectors.workspace.settingsModal.timetable
-						.timeDeleteButton
-				}
-				onClick={() => {
-					deleteTimeSlot();
+      {/* Delete */}
+      <ZIonItem
+        minHeight='2.1rem'
+        lines='none'
+        className='cursor-pointer ion-activatable'
+        testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.timeDeleteButton}-${timeSlotId}`}
+        testinglistselector={
+          CONSTANTS.testingSelectors.workspace.settingsModal.timetable
+            .timeDeleteButton
+        }
+        onClick={() => {
+          deleteTimeSlot();
 
-					dismissZIonPopover('', '');
-				}}
-			>
-				<ZIonIcon
-					icon={trashBinOutline}
-					className='w-5 h-5 me-2'
-					color='danger'
-				/>
-				<ZIonText className='font-normal'>Delete</ZIonText>
-			</ZIonItem>
-		</ZIonList>
-	);
+          dismissZIonPopover('', '');
+        }}>
+        <ZIonIcon
+          icon={trashBinOutline}
+          className='w-5 h-5 me-2'
+          color='danger'
+        />
+        <ZIonText className='font-normal'>Delete</ZIonText>
+      </ZIonItem>
+    </ZIonList>
+  );
 };
 
 export default ZTimetableTab;

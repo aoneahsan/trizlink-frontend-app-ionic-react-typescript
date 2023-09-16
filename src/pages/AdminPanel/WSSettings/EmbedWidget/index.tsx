@@ -27,8 +27,8 @@ import {
 } from '@/components/ZIonComponents';
 import ZCan from '@/components/Can';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
-import ZPixelsTable from '@/components/InPageComponents/ZaionsTable/pixelAccountTable';
-import ZaionsAddPixelAccount from '@/components/InPageComponents/ZaionsModals/AddPixelsAccount';
+import ZaionsAddUtmTags from '@/components/InPageComponents/ZaionsModals/AddUtmTags';
+import ZUTMTagsTable from '@/components/InPageComponents/ZaionsTable/UTMTagsTemplateTable';
 
 /**
  * Custom Hooks Imports go down
@@ -36,11 +36,7 @@ import ZaionsAddPixelAccount from '@/components/InPageComponents/ZaionsModals/Ad
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
-import {
-  useZInvalidateReactQueries,
-  useZRQDeleteRequest,
-  useZRQGetRequest
-} from '@/ZaionsHooks/zreactquery-hooks';
+import { useZInvalidateReactQueries } from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -55,7 +51,6 @@ import { API_URL_ENUM } from '@/utils/enums';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { PixelAccountType } from '@/types/AdminPanel/linksType';
 import { FormMode } from '@/types/AdminPanel/index.type';
 
 /**
@@ -84,7 +79,7 @@ import { FormMode } from '@/types/AdminPanel/index.type';
  * @type {*}
  * */
 
-const ZWSSettingPixelListPage: React.FC = () => {
+const ZWSSettingEmbedWidgetListPage: React.FC = () => {
   // getting current workspace id form params.
   const { workspaceId } = useParams<{
     workspaceId: string;
@@ -97,20 +92,14 @@ const ZWSSettingPixelListPage: React.FC = () => {
   // #endregion
 
   // #region APIs
-  const { data: pixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
-    _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN]
-  });
-
-  const { mutate: deletePixelAccountMutate } = useZRQDeleteRequest(
-    API_URL_ENUM.userPixelAccounts_update_delete
-  );
   // #endregion
 
   // #region Modals & popovers
-  const { presentZIonModal: presentZAddPixelAccount } = useZIonModal(
-    ZaionsAddPixelAccount,
-    { formMode: FormMode.ADD }
+  const { presentZIonModal: presentZUtmTagsFormModal } = useZIonModal(
+    ZaionsAddUtmTags,
+    {
+      formMode: FormMode.ADD
+    }
   );
   // #endregion
 
@@ -118,7 +107,7 @@ const ZWSSettingPixelListPage: React.FC = () => {
   const invalidedQueries = async () => {
     try {
       await zInvalidateReactQueries([
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN
       ]);
     } catch (error) {
       reportCustomError(error);
@@ -146,7 +135,7 @@ const ZWSSettingPixelListPage: React.FC = () => {
               'text-xl': !isLgScale,
               'ion-text-center': !isLgScale
             })}>
-            Pixels
+            Embed widgets
           </ZIonTitle>
 
           <ZIonText
@@ -155,7 +144,7 @@ const ZWSSettingPixelListPage: React.FC = () => {
               'text-sm': !isLgScale,
               'ion-text-center': !isLgScale
             })}>
-            Add team pixels & manage your pixels
+            Add embed widgets & manage your embed widgets
           </ZIonText>
         </ZIonCol>
 
@@ -177,7 +166,7 @@ const ZWSSettingPixelListPage: React.FC = () => {
             minHeight={isLgScale ? '39px' : '2rem'}
             expand={!isLgScale ? 'block' : undefined}
             testingselector={
-              CONSTANTS.testingSelectors.pixels.listPage.filterBtn
+              CONSTANTS.testingSelectors.WSSettings.teamListPage.timeFilterBtn
             }
             className={classNames({
               'my-2': true,
@@ -191,9 +180,11 @@ const ZWSSettingPixelListPage: React.FC = () => {
               // Open the menu by menu-id
               await menuController.enable(
                 true,
-                CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID
+                CONSTANTS.MENU_IDS.UTMTag_FILTERS_MENU_ID
               );
-              await menuController.open(CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID);
+              await menuController.open(
+                CONSTANTS.MENU_IDS.UTMTag_FILTERS_MENU_ID
+              );
             }}>
             <ZIonIcon
               slot='start'
@@ -223,7 +214,7 @@ const ZWSSettingPixelListPage: React.FC = () => {
               void invalidedQueries();
             }}
             testingselector={
-              CONSTANTS.testingSelectors.pixels.listPage.refreshBtn
+              CONSTANTS.testingSelectors.WSSettings.teamListPage.refetchBtn
             }>
             <ZIonIcon
               slot='start'
@@ -237,14 +228,14 @@ const ZWSSettingPixelListPage: React.FC = () => {
             Refetch
           </ZIonButton>
 
-          {/* Create new pixel */}
+          {/* Create new UTM */}
           <ZIonButton
             color='primary'
             fill='solid'
             minHeight={isLgScale ? '39px' : '2rem'}
             expand={!isLgScale ? 'block' : undefined}
             testingselector={
-              CONSTANTS.testingSelectors.pixels.listPage.createBtn
+              CONSTANTS.testingSelectors.WSSettings.teamListPage.createTeamBtn
             }
             className={classNames({
               'my-2': true,
@@ -253,11 +244,11 @@ const ZWSSettingPixelListPage: React.FC = () => {
               'w-full': !isSmScale
             })}
             onClick={() => {
-              presentZAddPixelAccount({
-                _cssClass: 'pixel-account-modal-size'
+              presentZUtmTagsFormModal({
+                _cssClass: 'utm-tags-modal-size'
               });
             }}>
-            Create new pixel
+            Create new UTM
           </ZIonButton>
 
           {/* {!isMdScale ? (
@@ -286,18 +277,18 @@ const ZWSSettingPixelListPage: React.FC = () => {
         </ZIonCol>
       </ZIonRow>
 
-      <ZCan havePermissions={[permissionsEnum.view_pixel]}>
+      <ZCan havePermissions={[permissionsEnum.view_utmTag]}>
         <Suspense
           fallback={
             <ZIonRow className='h-full'>
               <ZFallbackIonSpinner2 />
             </ZIonRow>
           }>
-          <ZPixelsTable />
+          <ZUTMTagsTable />
         </Suspense>
       </ZCan>
     </>
   );
 };
 
-export default ZWSSettingPixelListPage;
+export default ZWSSettingEmbedWidgetListPage;

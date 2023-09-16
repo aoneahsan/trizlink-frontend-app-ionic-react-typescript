@@ -97,6 +97,10 @@ const ZWSSettingsMenu: React.FC = () => {
   const isPixelPage = useRouteMatch(
     ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel
   )?.isExact;
+
+  const isUtmTagPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag
+  )?.isExact;
   // #endregion
 
   return (
@@ -258,22 +262,18 @@ const ZWSSettingsMenu: React.FC = () => {
                 lines='none'
                 minHeight='2rem'
                 className={classNames({
-                  'mt-1 cursor-pointer': true
-                  // zaions__light_bg: false,
+                  'mt-1 cursor-pointer': true,
+                  zaions__light_bg: isUtmTagPage
                 })}
                 testingselector={
                   CONSTANTS.testingSelectors.WSSettings.menuBar.ws.utmBtn
                 }
-                // routerLink={replaceRouteParams(
-                // 	ZaionsRoutes.AdminPanel.Setting.AccountSettings.Main,
-                // 	[
-                // 		CONSTANTS.RouteParams.workspace.workspaceId,
-                // 		CONSTANTS.RouteParams.settings.tab,
-                // 	],
-                // 	[workspaceId, WSSettingsPageSectTab.billing]
-                // )}
-              >
-                Utm tags
+                routerLink={replaceRouteParams(
+                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag,
+                  [CONSTANTS.RouteParams.workspace.workspaceId],
+                  [workspaceId]
+                )}>
+                UTM tags
               </ZIonItem>
 
               <ZIonItem
@@ -287,15 +287,11 @@ const ZWSSettingsMenu: React.FC = () => {
                   CONSTANTS.testingSelectors.WSSettings.menuBar.ws
                     .embedWidgetBtn
                 }
-                // routerLink={replaceRouteParams(
-                // 	ZaionsRoutes.AdminPanel.Setting.AccountSettings.Main,
-                // 	[
-                // 		CONSTANTS.RouteParams.workspace.workspaceId,
-                // 		CONSTANTS.RouteParams.settings.tab,
-                // 	],
-                // 	[workspaceId, WSSettingsPageSectTab.billing]
-                // )}
-              >
+                routerLink={replaceRouteParams(
+                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.EmbedWidget,
+                  [CONSTANTS.RouteParams.workspace.workspaceId],
+                  [workspaceId]
+                )}>
                 Embed widgets
               </ZIonItem>
             </div>

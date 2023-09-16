@@ -1,5 +1,7 @@
 # Please add standards points here
 
+- Testing attribute and assessable attribute mush be added.
+
 ## Like
 
 ## Coding Rules

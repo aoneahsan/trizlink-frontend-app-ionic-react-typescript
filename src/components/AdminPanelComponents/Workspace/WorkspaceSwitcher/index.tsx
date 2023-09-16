@@ -167,20 +167,28 @@ const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = ({
 
 // Skeleton
 const ZWorkspaceSwitcherSkeleton: React.FC = () => {
+  const { isLgScale } = useZMediaQueryScale();
+
   return (
     <ZIonButton
-      fill='clear'
+      fill='outline'
+      color='tertiary'
+      height={isLgScale ? '2.3rem' : '1.9rem'}
+      size={!isLgScale ? 'small' : 'default'}
       className={classNames({
-        'ion-text-capitalize my-0': true,
+        'ion-text-capitalize my-0 ion-no-margin zaions__bg_white mt-[2px]':
+          true,
         'me-2 ms-2': false,
-        'me-0 ms-1 ion-no-padding ': false
+        'me-0 ms-1 ion-no-padding': false
       })}
-      size={false ? 'small' : 'default'}>
+      style={{
+        '--border-width': '1px'
+      }}>
       <ZIonSkeletonText
         className={classNames({
-          'me-2': true,
-          'w-[20px!important] h-[20px!important]': false,
-          'w-[30px!important] h-[30px!important]': true
+          'me-2 rounded-full': true,
+          'w-[20px!important] h-[20px!important]': !isLgScale,
+          'w-[30px!important] h-[30px!important]': isLgScale
         })}
       />
 

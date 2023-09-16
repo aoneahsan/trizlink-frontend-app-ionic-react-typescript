@@ -355,7 +355,7 @@ const ZInpageTable: React.FC = () => {
                   testingselector={
                     CONSTANTS.testingSelectors.shortLink.listPage.table.pixel
                   }
-                  testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.pixel}-${row.row.original.id}`}
+                  testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.pixel}-${row.row.original.id}`}
                   onClick={() => {
                     setShortLinkFormState(oldVal => ({
                       ...oldVal,
@@ -398,7 +398,7 @@ const ZInpageTable: React.FC = () => {
                   testingselector={
                     CONSTANTS.testingSelectors.shortLink.listPage.table.notes
                   }
-                  testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.notes}-${row.row.original.id}`}
+                  testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.notes}-${row.row.original.id}`}
                   onClick={() => {
                     setShortLinkFormState(oldVal => ({
                       ...oldVal,
@@ -438,7 +438,7 @@ const ZInpageTable: React.FC = () => {
             testingselector={
               CONSTANTS.testingSelectors.shortLink.listPage.table.url
             }
-            testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.url}-${row.row.original.id}`}>
+            testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.url}-${row.row.original.id}`}>
             {row.getValue()}
           </ZIonRouterLink>
         ),
@@ -465,7 +465,7 @@ const ZInpageTable: React.FC = () => {
               testingselector={
                 CONSTANTS.testingSelectors.shortLink.listPage.table.linkToShare
               }
-              testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.linkToShare}-${row.original.id}`}
+              testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.linkToShare}-${row.original.id}`}
               onClick={() => {
                 navigator.clipboard.writeText(_shortLink || '');
 
@@ -496,9 +496,9 @@ const ZInpageTable: React.FC = () => {
     },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: true
+    debugTable: false,
+    debugHeaders: false,
+    debugColumns: false
   });
 
   // #endregion
@@ -726,7 +726,7 @@ const ZInpageTable: React.FC = () => {
                             CONSTANTS.testingSelectors.shortLink.listPage.table
                               .actionPopoverBtn
                           }
-                          testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
+                          testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
                           onClick={(_event: unknown) => {
                             setCompState(oldVal => ({
                               ...oldVal,
@@ -1125,7 +1125,7 @@ const ZShortLinkActionPopover: React.FC<{
           testingselector={
             CONSTANTS.testingSelectors.shortLink.listPage.table.editBtn
           }
-          testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.editBtn}-${shortLinkId}`}
+          testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.editBtn}-${shortLinkId}`}
           onClick={async () => {
             try {
               if (shortLinkId) {
@@ -1182,7 +1182,7 @@ const ZShortLinkActionPopover: React.FC<{
           testingselector={
             CONSTANTS.testingSelectors.shortLink.listPage.table.deleteBtn
           }
-          testingListSelector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.deleteBtn}-${shortLinkId}`}>
+          testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.deleteBtn}-${shortLinkId}`}>
           <ZIonButton
             size='small'
             expand='full'

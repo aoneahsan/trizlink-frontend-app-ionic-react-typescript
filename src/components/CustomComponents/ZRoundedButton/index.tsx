@@ -9,34 +9,33 @@ import { ZIonColorType } from '@/types/zaionsAppSettings.type';
 
 // Component Type
 type ZRoundedButtonType = {
-	className?: string;
-	testingselector?: string;
-	testingListSelector?: string;
-	children?: ReactNode;
-	color?: ZIonColorType;
-	onClick?: React.MouseEventHandler<HTMLIonButtonElement>;
+  className?: string;
+  testingselector?: string;
+  testinglistselector?: string;
+  children?: ReactNode;
+  color?: ZIonColorType;
+  onClick?: React.MouseEventHandler<HTMLIonButtonElement>;
 };
 
 /**
  * Rounded button component for example in LinkInBioBlocksForm page
  */
-const ZRoundedButton: React.FC<ZRoundedButtonType> = (props) => {
-	return (
-		<ZIonButton
-			{...props}
-			shape='round'
-			testingListSelector={props.testingListSelector}
-			testingselector={props.testingselector}
-			style={{
-				'--padding-top': '1.5rem',
-				'--padding-bottom': '1.5rem',
-				'--padding-start': '.9rem',
-				'--padding-end': '.9rem',
-			}}
-		>
-			{props.children}
-		</ZIonButton>
-	);
+const ZRoundedButton: React.FC<ZRoundedButtonType> = props => {
+  return (
+    <ZIonButton
+      {...props}
+      shape='round'
+      testinglistselector={props.testinglistselector}
+      testingselector={props.testingselector}
+      style={{
+        '--padding-top': '1.5rem',
+        '--padding-bottom': '1.5rem',
+        '--padding-start': '.9rem',
+        '--padding-end': '.9rem'
+      }}>
+      {props.children}
+    </ZIonButton>
+  );
 };
 
 export default ZRoundedButton;
