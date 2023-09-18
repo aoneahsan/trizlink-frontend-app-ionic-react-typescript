@@ -55,6 +55,7 @@ const ZWSSettingEmbedWidgetListPage = lazy(() => import('./EmbedWidget'));
 import ZPixelsFilterMenu from '@/navigation/AdminPanel/Pixels/FilterMenu';
 import ZUtilityButtonGroup from '@/components/AdminPanelComponents/UtilityButtonGroup';
 import ZUTMTagsFilterMenu from '@/navigation/AdminPanel/UTMTags/FilterMenu';
+import ZMembersFilterMenu from '@/navigation/AdminPanel/Members/FilterMenu';
 
 /**
  * Custom Hooks Imports go down
@@ -62,7 +63,10 @@ import ZUTMTagsFilterMenu from '@/navigation/AdminPanel/UTMTags/FilterMenu';
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+  useZInvalidateReactQueries,
+  useZRQGetRequest
+} from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -115,6 +119,7 @@ const ZWorkspaceSettings: React.FC = () => {
   }>();
   // #region Custom hooks.
   const { isSmScale, isLgScale, isMdScale } = useZMediaQueryScale();
+  const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   // #endregion
 
   // #region Recoils.
@@ -144,10 +149,53 @@ const ZWorkspaceSettings: React.FC = () => {
   );
   // #endregion
 
+  // #region checking the route.
+  const isMembersPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members
+  )?.isExact;
+
+  const isReferralProgramPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.AccountSettings.ReferralProgram
+  )?.isExact;
+
+  const isBillingPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.AccountSettings.Billing
+  )?.isExact;
+
+  const isUserPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.AccountSettings.User
+  )?.isExact;
+
+  const isPixelPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel
+  )?.isExact;
+
+  const isUTMTagPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag
+  )?.isExact;
+  // #endregion
+
   // #region Functions.
   const invalidedQueries = async () => {
     try {
-      await refetchWSTeamsData();
+      if (isMembersPage) {
+        // Invalidating RQ members cache.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+          workspaceId
+        ]);
+      }
+      if (isPixelPage) {
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN
+        ]);
+      }
+
+      if (isUTMTagPage) {
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN
+        ]);
+      }
     } catch (error) {
       reportCustomError(error);
     }
@@ -162,24 +210,6 @@ const ZWorkspaceSettings: React.FC = () => {
     }
   };
 
-  // #endregion
-
-  // #region checking the route.
-  const isTeamPage = useRouteMatch(
-    ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team
-  )?.isExact;
-
-  const isReferralProgramPage = useRouteMatch(
-    ZaionsRoutes.AdminPanel.Setting.AccountSettings.ReferralProgram
-  )?.isExact;
-
-  const isBillingPage = useRouteMatch(
-    ZaionsRoutes.AdminPanel.Setting.AccountSettings.Billing
-  )?.isExact;
-
-  const isUserPage = useRouteMatch(
-    ZaionsRoutes.AdminPanel.Setting.AccountSettings.User
-  )?.isExact;
   // #endregion
 
   return (
@@ -222,19 +252,19 @@ const ZWorkspaceSettings: React.FC = () => {
               Account settings
             </ZIonText>
             <ZIonList lines='none'>
-              {/* Team */}
+              {/* Members */}
               <ZIonItem
                 minHeight='2rem'
                 className={classNames({
                   'mt-1 cursor-pointer': true,
-                  'zaions__light_bg font-normal': isTeamPage
+                  'zaions__light_bg font-normal': isMembersPage
                 })}
                 routerLink={replaceRouteParams(
-                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
+                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
                   [CONSTANTS.RouteParams.workspace.workspaceId],
                   [workspaceId]
                 )}>
-                Team
+                Members
               </ZIonItem>
 
               {/* Referral program */}
@@ -349,9 +379,11 @@ const ZWorkspaceSettings: React.FC = () => {
         </ZIonMenu>
       )}
 
-      <ZPixelsFilterMenu />
+      {isPixelPage && <ZPixelsFilterMenu />}
 
-      <ZUTMTagsFilterMenu />
+      {isUTMTagPage && <ZUTMTagsFilterMenu />}
+
+      {isMembersPage && <ZMembersFilterMenu />}
 
       {/*  */}
       <ZIonPage
@@ -474,8 +506,8 @@ const ZInpageMainContent: React.FC = () => {
   // #endregion
 
   // #region checking the route.
-  const isTeamPage = useRouteMatch(
-    ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team
+  const isMembersPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members
   )?.isExact;
 
   const isReferralProgramPage = useRouteMatch(
@@ -516,7 +548,7 @@ const ZInpageMainContent: React.FC = () => {
             <ZFallbackIonSpinner2 />
           </ZIonCol>
         }>
-        {isTeamPage ? <ZWSSettingTeamsListPage /> : ''}
+        {isMembersPage ? <ZWSSettingTeamsListPage /> : ''}
         {isPixelPage ? <ZWSSettingPixelListPage /> : ''}
         {isUTMTagPage ? <ZWSSettingUtmTagListPage /> : ''}
         {isEmbedWidgetPage ? <ZWSSettingEmbedWidgetListPage /> : ''}

@@ -1,16 +1,20 @@
 // Core Imports
+import React from 'react';
+// Packages Imports
+import AceEditor from 'react-ace';
+import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/mode-html';
+import 'ace-builds/src-noconflict/theme-monokai';
+import 'ace-builds/src-noconflict/ext-language_tools';
+
+// Custom Imports
 import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
-import React from 'react';
-
-// Packages Imports
-import AceEditor from 'react-ace';
-
-// Custom Imports
 
 // Styles
 
+import { ZEditorThemeEnum } from '@/types/components/ZEditor.type';
 // Component Type
 type ZEditorType = {
   className?: string;
@@ -20,6 +24,7 @@ type ZEditorType = {
   placeholder?: string;
   fontSize?: string | number;
   value?: string;
+  theme?: ZEditorThemeEnum;
   style?: {
     [key: string]: unknown;
   };
@@ -52,6 +57,16 @@ const ZEditor: React.FC<ZEditorType> = props => {
       {...props}
       {..._testingSelector}
       {..._testinglistselector}
+      // theme={props.theme || ZEditorThemeEnum.monokai}
+      mode='javascript'
+      editorProps={{ $blockScrolling: true }}
+      setOptions={{
+        enableBasicAutocompletion: true,
+        enableLiveAutocompletion: true,
+        enableSnippets: true,
+        showLineNumbers: true,
+        tabSize: 2
+      }}
     />
   );
 };

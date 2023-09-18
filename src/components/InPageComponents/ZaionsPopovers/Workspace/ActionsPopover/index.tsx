@@ -9,13 +9,13 @@ import React, { useState } from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import {
-	checkmarkOutline,
-	pencilOutline,
-	peopleOutline,
-	pricetagOutline,
-	settingsOutline,
-	timeOutline,
-	trashBinOutline,
+  checkmarkOutline,
+  pencilOutline,
+  peopleOutline,
+  pricetagOutline,
+  settingsOutline,
+  timeOutline,
+  trashBinOutline
 } from 'ionicons/icons';
 import classNames from 'classnames';
 
@@ -24,11 +24,11 @@ import classNames from 'classnames';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonIcon,
-	ZIonInput,
-	ZIonItem,
-	ZIonList,
-	ZIonText,
+  ZIonIcon,
+  ZIonInput,
+  ZIonItem,
+  ZIonList,
+  ZIonText
 } from '@/components/ZIonComponents';
 import ZWorkspacesSettingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SettingsModal';
 import ZWorkspacesSharingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SharingModal';
@@ -38,9 +38,9 @@ import ZWorkspacesSharingModal from '@/components/InPageComponents/ZaionsModals/
  * ? Like import of custom Hook is a custom import
  * */
 import {
-	useZIonAlert,
-	useZIonErrorAlert,
-	useZIonModal,
+  useZIonAlert,
+  useZIonErrorAlert,
+  useZIonModal
 } from '@/ZaionsHooks/zionic-hooks';
 
 /**
@@ -53,29 +53,29 @@ import {
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-	workspaceFormTabEnum,
-	workspaceInterface,
-	workspaceSettingsModalTabEnum,
-	WorkspaceSharingTabEnum,
+  workspaceFormTabEnum,
+  workspaceInterface,
+  workspaceSettingsModalTabEnum,
+  WorkspaceSharingTabEnum
 } from '@/types/AdminPanel/workspace';
 import ZCan from '@/components/Can';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import {
-	useZGetRQCacheData,
-	useZRQDeleteRequest,
-	useZUpdateRQCacheData,
+  useZGetRQCacheData,
+  useZRQDeleteRequest,
+  useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
 import {
-	showErrorNotification,
-	showSuccessNotification,
+  showErrorNotification,
+  showSuccessNotification
 } from '@/utils/notification';
 import {
-	createRedirectRoute,
-	extractInnerData,
-	replaceRouteParams,
+  createRedirectRoute,
+  extractInnerData,
+  replaceRouteParams
 } from '@/utils/helpers';
 import MESSAGES from '@/utils/messages';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
@@ -109,343 +109,358 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * */
 
 const ZWorkspacesActionPopover: React.FC<{
-	dismissZIonPopover: (data?: string, role?: string | undefined) => void;
-	zNavigatePushRoute: (_url: string) => void;
-	showDeleteWorkspaceOption?: boolean;
-	showEditWorkspaceOption?: boolean;
-	showManageUserOption?: boolean;
-	workspaceId?: string;
+  dismissZIonPopover: (data?: string, role?: string | undefined) => void;
+  zNavigatePushRoute: (_url: string) => void;
+  showDeleteWorkspaceOption?: boolean;
+  showEditWorkspaceOption?: boolean;
+  showManageUserOption?: boolean;
+  workspaceId?: string;
 }> = ({
-	showDeleteWorkspaceOption = true,
-	showEditWorkspaceOption = true,
-	showManageUserOption = false,
-	workspaceId,
-	dismissZIonPopover,
-	zNavigatePushRoute,
+  showDeleteWorkspaceOption = true,
+  showEditWorkspaceOption = true,
+  showManageUserOption = false,
+  workspaceId,
+  dismissZIonPopover,
+  zNavigatePushRoute
 }) => {
-	// component states
-	const [modalTab, setModalTab] = useState<workspaceSettingsModalTabEnum>();
+  // component states
+  const [modalTab, setModalTab] = useState<workspaceSettingsModalTabEnum>();
 
-	// Custom hooks
-	const { presentZIonAlert } = useZIonAlert(); // hook to present alert.
-	const { getRQCDataHandler } = useZGetRQCacheData();
-	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+  // Custom hooks
+  const { presentZIonAlert } = useZIonAlert(); // hook to present alert.
+  const { getRQCDataHandler } = useZGetRQCacheData();
+  const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
-	// Modals
-	const { presentZIonModal: presentWorkspaceSettingModal } = useZIonModal(
-		ZWorkspacesSettingModal,
-		{
-			Tab: modalTab,
-			workspaceId: workspaceId,
-		}
-	);
-	const { presentZIonModal: presentWorkspaceSharingModal } = useZIonModal(
-		ZWorkspacesSharingModal,
-		{
-			Tab: WorkspaceSharingTabEnum.invite,
-		}
-	);
+  // Modals
+  const { presentZIonModal: presentWorkspaceSettingModal } = useZIonModal(
+    ZWorkspacesSettingModal,
+    {
+      Tab: modalTab,
+      workspaceId: workspaceId
+    }
+  );
+  const { presentZIonModal: presentWorkspaceSharingModal } = useZIonModal(
+    ZWorkspacesSharingModal,
+    {
+      Tab: WorkspaceSharingTabEnum.invite
+    }
+  );
 
-	// delete workspace api.
-	const { mutateAsync: deleteWorkspaceMutate } = useZRQDeleteRequest(
-		API_URL_ENUM.workspace_update_delete,
-		[]
-	);
+  // delete workspace api.
+  const { mutateAsync: deleteWorkspaceMutate } = useZRQDeleteRequest(
+    API_URL_ENUM.workspace_update_delete,
+    []
+  );
 
-	// delete Workspace Confirm Modal.
-	const deleteWorkspaceConfirmModal = async () => {
-		try {
-			if (workspaceId) {
-				await presentZIonAlert({
-					header: `Delete Workspace`,
-					subHeader: 'Remove workspace from user account.',
-					message: 'Are you sure you want to delete this workspace?',
-					buttons: [
-						{
-							text: 'Cancel',
-							role: 'cancel',
-						},
-						{
-							text: 'Delete',
-							role: 'danger',
-							handler: () => {
-								void removeWorkspace();
-							},
-						},
-					],
-				});
-			} else {
-				showErrorNotification('Workspace id is undefined :(');
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
+  // delete Workspace Confirm Modal.
+  const deleteWorkspaceConfirmModal = async () => {
+    try {
+      if (workspaceId) {
+        await presentZIonAlert({
+          header: `Delete Workspace`,
+          subHeader: 'Remove workspace from user account.',
+          message: 'Are you sure you want to delete this workspace?',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel'
+            },
+            {
+              text: 'Delete',
+              role: 'danger',
+              handler: () => {
+                void removeWorkspace();
+              }
+            }
+          ]
+        });
+      } else {
+        showErrorNotification('Workspace id is undefined :(');
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
 
-	// removeWorkspace will hit delete workspace folder api
-	const removeWorkspace = async () => {
-		try {
-			if (workspaceId) {
-				// hitting the delete api.
-				const _response = await deleteWorkspaceMutate({
-					itemIds: [workspaceId],
-					urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-				});
+  // removeWorkspace will hit delete workspace folder api
+  const removeWorkspace = async () => {
+    try {
+      if (workspaceId) {
+        // hitting the delete api.
+        const _response = await deleteWorkspaceMutate({
+          itemIds: [workspaceId],
+          urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+        });
 
-				if (_response) {
-					const _data = extractInnerData<{ success: boolean }>(
-						_response,
-						extractInnerDataOptionsEnum.createRequestResponseItem
-					);
+        if (_response) {
+          const _data = extractInnerData<{ success: boolean }>(
+            _response,
+            extractInnerDataOptionsEnum.createRequestResponseItem
+          );
 
-					if (_data && _data?.success) {
-						// getting all the workspace from RQ cache.
-						const _oldWorkspaces =
-							extractInnerData<workspaceInterface[]>(
-								getRQCDataHandler<workspaceInterface[]>({
-									key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
-								}) as workspaceInterface[],
-								extractInnerDataOptionsEnum.createRequestResponseItems
-							) || [];
+          if (_data && _data?.success) {
+            // getting all the workspace from RQ cache.
+            const _oldWorkspaces =
+              extractInnerData<workspaceInterface[]>(
+                getRQCDataHandler<workspaceInterface[]>({
+                  key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
+                }) as workspaceInterface[],
+                extractInnerDataOptionsEnum.createRequestResponseItems
+              ) || [];
 
-						// removing deleted workspace from cache.
-						const _updatedWorkspaces = _oldWorkspaces.filter(
-							(el) => el.id !== workspaceId
-						);
+            // removing deleted workspace from cache.
+            const _updatedWorkspaces = _oldWorkspaces.filter(
+              el => el.id !== workspaceId
+            );
 
-						// Updating data in RQ cache.
-						await updateRQCDataHandler<workspaceInterface[] | undefined>({
-							key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
-							data: _updatedWorkspaces as workspaceInterface[],
-							id: '',
-							extractType: ZRQGetRequestExtractEnum.extractItems,
-							updateHoleData: true,
-						});
+            // Updating data in RQ cache.
+            await updateRQCDataHandler<workspaceInterface[] | undefined>({
+              key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
+              data: _updatedWorkspaces as workspaceInterface[],
+              id: '',
+              extractType: ZRQGetRequestExtractEnum.extractItems,
+              updateHoleData: true
+            });
 
-						// show success message after deleting.
-						showSuccessNotification(
-							MESSAGES.GENERAL.WORKSPACE.WORKSPACE_DELETED
-						);
-					}
-				} else {
-					showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
-				}
+            // show success message after deleting.
+            showSuccessNotification(
+              MESSAGES.GENERAL.WORKSPACE.WORKSPACE_DELETED
+            );
+          }
+        } else {
+          showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+        }
 
-				// Dismiss popover.
-				dismissZIonPopover();
-			} else {
-				showErrorNotification('Workspace id is undefined :(');
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
+        // Dismiss popover.
+        dismissZIonPopover();
+      } else {
+        showErrorNotification('Workspace id is undefined :(');
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
 
-	return (
-		<ZIonList lines='none'>
-			{/* Manage Users */}
-			{showManageUserOption && (
-				<ZIonItem
-					minHeight='2.3rem'
-					className='ion-activatable ion-focusable cursor-pointer'
-					testingselector={
-						CONSTANTS.testingSelectors.workspace.actionsPopover.manageUsers
-					}
-					onClick={() => {
-						presentWorkspaceSharingModal({
-							_cssClass: 'workspace-sharing-modal-size',
-						});
-					}}
-				>
-					<ZIonIcon icon={peopleOutline} className='me-2 w-5 h-5' />
-					<ZIonText className={classNames('text-sm')}>Manage users</ZIonText>
-				</ZIonItem>
-			)}
+  return (
+    <ZIonList lines='none'>
+      {/* Manage Users */}
+      {showManageUserOption && (
+        <ZIonItem
+          minHeight='2.3rem'
+          className='ion-activatable ion-focusable cursor-pointer'
+          testingselector={
+            CONSTANTS.testingSelectors.workspace.actionsPopover.manageUsers
+          }
+          onClick={() => {
+            presentWorkspaceSharingModal({
+              _cssClass: 'workspace-sharing-modal-size'
+            });
+          }}>
+          <ZIonIcon
+            icon={peopleOutline}
+            className='me-2 w-5 h-5'
+          />
+          <ZIonText className={classNames('text-sm')}>Manage users</ZIonText>
+        </ZIonItem>
+      )}
 
-			{/* Configure timetable */}
-			<ZCan havePermissions={[permissionsEnum.viewAny_timeSlot]}>
-				<ZIonItem
-					minHeight='2.3rem'
-					className='ion-activatable ion-focusable cursor-pointer '
-					testingselector={
-						CONSTANTS.testingSelectors.workspace.actionsPopover
-							.configureTimetable
-					}
-					onClick={() => {
-						// setting the tab with should be active in modal
-						setModalTab(workspaceSettingsModalTabEnum.timetable);
+      {/* Configure timetable */}
+      <ZCan havePermissions={[permissionsEnum.viewAny_timeSlot]}>
+        <ZIonItem
+          minHeight='2.3rem'
+          className='ion-activatable ion-focusable cursor-pointer '
+          testingselector={
+            CONSTANTS.testingSelectors.workspace.actionsPopover
+              .configureTimetable
+          }
+          onClick={() => {
+            // setting the tab with should be active in modal
+            setModalTab(workspaceSettingsModalTabEnum.timetable);
 
-						// presenting modal
-						presentWorkspaceSettingModal({
-							_cssClass: 'workspace-setting-modal-size',
-						});
+            // presenting modal
+            presentWorkspaceSettingModal({
+              _cssClass: 'workspace-setting-modal-size'
+            });
 
-						dismissZIonPopover();
-					}}
-				>
-					<ZIonIcon icon={timeOutline} className='me-2 w-5 h-5' />
-					<ZIonText className={classNames('text-sm')}>
-						Configure timetable
-					</ZIonText>
-				</ZIonItem>
-			</ZCan>
+            dismissZIonPopover();
+          }}>
+          <ZIonIcon
+            icon={timeOutline}
+            className='me-2 w-5 h-5'
+          />
+          <ZIonText className={classNames('text-sm')}>
+            Configure timetable
+          </ZIonText>
+        </ZIonItem>
+      </ZCan>
 
-			{/* Manage labels */}
-			<ZCan havePermissions={[permissionsEnum.viewAny_label]}>
-				<ZIonItem
-					className='ion-activatable ion-focusable cursor-pointer'
-					minHeight='2.3rem'
-					testingselector={
-						CONSTANTS.testingSelectors.workspace.actionsPopover.manageLabels
-					}
-					onClick={() => {
-						// setting the tab with should be active in modal
-						setModalTab(workspaceSettingsModalTabEnum.labels);
+      {/* Manage labels */}
+      <ZCan havePermissions={[permissionsEnum.viewAny_label]}>
+        <ZIonItem
+          className='ion-activatable ion-focusable cursor-pointer'
+          minHeight='2.3rem'
+          testingselector={
+            CONSTANTS.testingSelectors.workspace.actionsPopover.manageLabels
+          }
+          onClick={() => {
+            // setting the tab with should be active in modal
+            setModalTab(workspaceSettingsModalTabEnum.labels);
 
-						// presenting modal
-						presentWorkspaceSettingModal({
-							_cssClass: 'workspace-setting-modal-size',
-						});
+            // presenting modal
+            presentWorkspaceSettingModal({
+              _cssClass: 'workspace-setting-modal-size'
+            });
 
-						dismissZIonPopover();
-					}}
-				>
-					<ZIonIcon icon={pricetagOutline} className='me-2 w-5 h-5' />
-					<ZIonText className={classNames('text-sm')}>Manage labels</ZIonText>
-				</ZIonItem>
-			</ZCan>
+            dismissZIonPopover();
+          }}>
+          <ZIonIcon
+            icon={pricetagOutline}
+            className='me-2 w-5 h-5'
+          />
+          <ZIonText className={classNames('text-sm')}>Manage labels</ZIonText>
+        </ZIonItem>
+      </ZCan>
 
-			{/* Invite members */}
-			<ZIonItem
-				minHeight='32px'
-				className='ion-activatable ion-focusable cursor-pointer'
-				onClick={() => {
-					zNavigatePushRoute(
-						replaceRouteParams(
-							ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
-							[CONSTANTS.RouteParams.workspace.workspaceId],
-							[workspaceId!]
-						)
-					);
+      {/* Invite members */}
+      <ZIonItem
+        minHeight='32px'
+        className='ion-activatable ion-focusable cursor-pointer'
+        onClick={() => {
+          zNavigatePushRoute(
+            replaceRouteParams(
+              ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
+              [CONSTANTS.RouteParams.workspace.workspaceId],
+              [workspaceId!]
+            )
+          );
 
-					dismissZIonPopover('', '');
-				}}
-			>
-				<ZIonIcon icon={peopleOutline} className='me-2 w-5 h-5' />
-				<ZIonText className={classNames('text-sm')}>Invite members</ZIonText>
-			</ZIonItem>
+          dismissZIonPopover('', '');
+        }}>
+        <ZIonIcon
+          icon={peopleOutline}
+          className='me-2 w-5 h-5'
+        />
+        <ZIonText className={classNames('text-sm')}>Invite members</ZIonText>
+      </ZIonItem>
 
-			{/* Settings */}
+      {/* Settings */}
 
-			<ZCan havePermissions={[permissionsEnum.update_workspace]}>
-				<ZIonItem
-					minHeight='2.3rem'
-					className='ion-activatable ion-focusable cursor-pointer'
-					testingselector={
-						CONSTANTS.testingSelectors.workspace.actionsPopover.settings
-					}
-					onClick={() => {
-						// setting the tab with should be active in modal
-						setModalTab(workspaceSettingsModalTabEnum.settings);
+      <ZCan havePermissions={[permissionsEnum.update_workspace]}>
+        <ZIonItem
+          minHeight='2.3rem'
+          className='ion-activatable ion-focusable cursor-pointer'
+          testingselector={
+            CONSTANTS.testingSelectors.workspace.actionsPopover.settings
+          }
+          onClick={() => {
+            // setting the tab with should be active in modal
+            setModalTab(workspaceSettingsModalTabEnum.settings);
 
-						// presenting modal
-						presentWorkspaceSettingModal({
-							_cssClass: 'workspace-setting-modal-size',
-						});
+            // presenting modal
+            presentWorkspaceSettingModal({
+              _cssClass: 'workspace-setting-modal-size'
+            });
 
-						dismissZIonPopover();
-					}}
-				>
-					<ZIonIcon icon={settingsOutline} className='me-2 w-5 h-5' />
-					<ZIonText className={classNames('text-sm')}>Settings</ZIonText>
-				</ZIonItem>
-			</ZCan>
+            dismissZIonPopover();
+          }}>
+          <ZIonIcon
+            icon={settingsOutline}
+            className='me-2 w-5 h-5'
+          />
+          <ZIonText className={classNames('text-sm')}>Settings</ZIonText>
+        </ZIonItem>
+      </ZCan>
 
-			{/* Approvals settings */}
-			<ZIonItem
-				minHeight='2.3rem'
-				className='ion-activatable ion-focusable cursor-pointer'
-				testingselector={
-					CONSTANTS.testingSelectors.workspace.actionsPopover.approvalSettings
-				}
-				onClick={() => {
-					// setting the tab with should be active in modal
-					setModalTab(workspaceSettingsModalTabEnum.approvals);
+      {/* Approvals settings */}
+      <ZIonItem
+        minHeight='2.3rem'
+        className='ion-activatable ion-focusable cursor-pointer'
+        testingselector={
+          CONSTANTS.testingSelectors.workspace.actionsPopover.approvalSettings
+        }
+        onClick={() => {
+          // setting the tab with should be active in modal
+          setModalTab(workspaceSettingsModalTabEnum.approvals);
 
-					// presenting modal
-					presentWorkspaceSettingModal({
-						_cssClass: 'workspace-setting-modal-size',
-					});
+          // presenting modal
+          presentWorkspaceSettingModal({
+            _cssClass: 'workspace-setting-modal-size'
+          });
 
-					dismissZIonPopover();
-				}}
-			>
-				<ZIonIcon icon={checkmarkOutline} className='me-2 w-5 h-5' />
-				<ZIonText className={classNames('text-sm')}>
-					Approvals settings
-				</ZIonText>
-			</ZIonItem>
+          dismissZIonPopover();
+        }}>
+        <ZIonIcon
+          icon={checkmarkOutline}
+          className='me-2 w-5 h-5'
+        />
+        <ZIonText className={classNames('text-sm')}>
+          Approvals settings
+        </ZIonText>
+      </ZIonItem>
 
-			{/* Edit */}
-			{showEditWorkspaceOption && (
-				<ZCan havePermissions={[permissionsEnum.update_workspace]}>
-					<ZIonItem
-						minHeight='2.3rem'
-						className='ion-activatable ion-focusable cursor-pointer'
-						testingselector={
-							CONSTANTS.testingSelectors.workspace.actionsPopover.edit
-						}
-						onClick={() => {
-							if (workspaceId) {
-								zNavigatePushRoute(
-									createRedirectRoute({
-										url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
-										params: [
-											CONSTANTS.RouteParams.workspace.editWorkspaceIdParam,
-										],
-										values: [workspaceId],
-										routeSearchParams: {
-											tab: workspaceFormTabEnum.inviteClients,
-										},
-									})
-								);
+      {/* Edit */}
+      {showEditWorkspaceOption && (
+        <ZCan havePermissions={[permissionsEnum.update_workspace]}>
+          <ZIonItem
+            minHeight='2.3rem'
+            className='ion-activatable ion-focusable cursor-pointer'
+            testingselector={
+              CONSTANTS.testingSelectors.workspace.actionsPopover.edit
+            }
+            onClick={() => {
+              if (workspaceId) {
+                zNavigatePushRoute(
+                  createRedirectRoute({
+                    url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
+                    params: [
+                      CONSTANTS.RouteParams.workspace.editWorkspaceIdParam
+                    ],
+                    values: [workspaceId],
+                    routeSearchParams: {
+                      tab: workspaceFormTabEnum.inviteClients
+                    }
+                  })
+                );
 
-								dismissZIonPopover();
-							}
-						}}
-					>
-						<ZIonIcon icon={pencilOutline} className='me-2 w-5 h-5' />
-						<ZIonText className='text-sm'>Edit</ZIonText>
-					</ZIonItem>
-				</ZCan>
-			)}
+                dismissZIonPopover();
+              }
+            }}>
+            <ZIonIcon
+              icon={pencilOutline}
+              className='me-2 w-5 h-5'
+            />
+            <ZIonText className='text-sm'>Edit</ZIonText>
+          </ZIonItem>
+        </ZCan>
+      )}
 
-			{/* Delete */}
-			{showDeleteWorkspaceOption && (
-				<ZCan havePermissions={[permissionsEnum.delete_workspace]}>
-					<ZIonItem
-						minHeight='2.3rem'
-						className='ion-activatable ion-focusable cursor-pointer'
-						testingselector={
-							CONSTANTS.testingSelectors.workspace.actionsPopover.delete
-						}
-						onClick={async () => {
-							await deleteWorkspaceConfirmModal();
-						}}
-					>
-						<ZIonIcon
-							icon={trashBinOutline}
-							className='me-2 w-5 h-5'
-							color='danger'
-						/>
-						<ZIonText color='danger' className='text-sm'>
-							Delete
-						</ZIonText>
-					</ZIonItem>
-				</ZCan>
-			)}
-		</ZIonList>
-	);
+      {/* Delete */}
+      {showDeleteWorkspaceOption && (
+        <ZCan havePermissions={[permissionsEnum.delete_workspace]}>
+          <ZIonItem
+            minHeight='2.3rem'
+            className='ion-activatable ion-focusable cursor-pointer'
+            testingselector={
+              CONSTANTS.testingSelectors.workspace.actionsPopover.delete
+            }
+            onClick={async () => {
+              await deleteWorkspaceConfirmModal();
+            }}>
+            <ZIonIcon
+              icon={trashBinOutline}
+              className='me-2 w-5 h-5'
+              color='danger'
+            />
+            <ZIonText
+              color='danger'
+              className='text-sm'>
+              Delete
+            </ZIonText>
+          </ZIonItem>
+        </ZCan>
+      )}
+    </ZIonList>
+  );
 };
 
 export default ZWorkspacesActionPopover;

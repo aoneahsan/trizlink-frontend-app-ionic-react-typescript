@@ -225,8 +225,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 
 			await zInvalidateReactQueries([
 				CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-				workspaceId,
-				teamId,
+				workspaceId
 			]);
 		} catch (error) {
 			reportCustomError(error);

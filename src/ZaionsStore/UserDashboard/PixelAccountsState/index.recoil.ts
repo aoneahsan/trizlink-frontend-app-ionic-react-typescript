@@ -41,8 +41,8 @@ export const FilteredPixelsDataRStateSelector = selector({
 
     if (pixelsRStateAtom?.length) {
       if (
-        _filterOptions.timeFilter.daysToSubtract &&
-        _filterOptions.timeFilter.daysToSubtract !== TimeFilterEnum.allTime
+        _filterOptions?.timeFilter?.daysToSubtract &&
+        _filterOptions?.timeFilter?.daysToSubtract !== TimeFilterEnum.allTime
       ) {
         let endDate = new Date(
           new Date().toLocaleString('en-US', CONSTANTS.toLocaleStringOptions)

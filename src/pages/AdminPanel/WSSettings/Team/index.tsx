@@ -9,9 +9,9 @@ import React, { lazy, Suspense } from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import { useParams } from 'react-router';
-import { calendar, pricetagOutline, refresh } from 'ionicons/icons';
-import classNames from 'classnames';
+import { filterOutline, refresh } from 'ionicons/icons';
 import { menuController } from '@ionic/core/components';
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
@@ -19,21 +19,20 @@ import { menuController } from '@ionic/core/components';
  * */
 import {
   ZIonButton,
-  ZIonButtons,
   ZIonCol,
   ZIonIcon,
   ZIonRow,
   ZIonText,
   ZIonTitle
 } from '@/components/ZIonComponents';
-import ZWSTeamCreateModal from '@/components/InPageComponents/ZaionsModals/Workspace/Team/CreateModal';
+import ZWorkspacesSharingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SharingModal';
 import ZCan from '@/components/Can';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
 
-const ZWSSettingTeamListTable = lazy(
+const ZMembersListTable = lazy(
   () =>
     import(
-      '@/components/InPageComponents/ZaionsTable/Workspace/Team/TeamListTable'
+      '@/components/InPageComponents/ZaionsTable/Workspace/Team/MembersListTable'
     )
 );
 
@@ -43,7 +42,10 @@ const ZWSSettingTeamListTable = lazy(
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+  useZInvalidateReactQueries,
+  useZRQGetRequest
+} from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -51,14 +53,17 @@ import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
  * */
 import CONSTANTS from '@/utils/constants';
 import { API_URL_ENUM } from '@/utils/enums';
+import { reportCustomError } from '@/utils/customErrorType';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { workspaceTeamInterface } from '@/types/AdminPanel/workspace';
-import { reportCustomError } from '@/utils/customErrorType';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import {
+  WorkspaceSharingTabEnum,
+  workspaceTeamInterface
+} from '@/types/AdminPanel/workspace';
 
 /**
  * Recoil State Imports go down
@@ -93,31 +98,32 @@ const ZWSSettingTeamsListPage: React.FC = () => {
   }>();
 
   // #region Custom hooks.
-  const { isSmScale, isXlScale, isLgScale, isMdScale } = useZMediaQueryScale();
+  const { isSmScale, isLgScale } = useZMediaQueryScale();
+  const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   // #endregion
 
   // #region Popovers & Modals.
-  const { presentZIonModal: presentZWSTeamCreateModal } = useZIonModal(
-    ZWSTeamCreateModal,
+  const { presentZIonModal: presentWorkspaceSharingModal } = useZIonModal(
+    ZWorkspacesSharingModal,
     {
+      Tab: WorkspaceSharingTabEnum.invite,
       workspaceId: workspaceId
+      //  teamId: teamId
     }
   );
   // #endregion
 
   // #region APIS
-  // Request for getting teams data.
-  const { data: WSTeamsData } = useZRQGetRequest<workspaceTeamInterface[]>({
-    _url: API_URL_ENUM.workspace_team_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM, workspaceId],
-    _itemsIds: [workspaceId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
-  });
   // #endregion
 
   // #region Functions.
   const invalidedQueries = async () => {
     try {
+      // Invalidating RQ members cache.
+      await zInvalidateReactQueries([
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+        workspaceId
+      ]);
     } catch (error) {
       reportCustomError(error);
     }
@@ -128,10 +134,10 @@ const ZWSSettingTeamsListPage: React.FC = () => {
     <>
       <ZIonRow className='border rounded-lg zaions__light_bg ion-align-items-center ion-padding'>
         <ZIonCol
-          sizeXl='6'
-          sizeLg='6'
-          sizeMd='6'
-          sizeSm='6'
+          sizeXl='5'
+          sizeLg='5'
+          sizeMd='12'
+          sizeSm='12'
           sizeXs='12'
           className={classNames({
             'mb-2': !isSmScale
@@ -143,7 +149,7 @@ const ZWSSettingTeamsListPage: React.FC = () => {
               'text-xl': !isLgScale,
               'ion-text-center': !isSmScale
             })}>
-            Account
+            Members
           </ZIonTitle>
 
           <ZIonText
@@ -152,40 +158,115 @@ const ZWSSettingTeamsListPage: React.FC = () => {
               'text-sm': !isLgScale,
               'ion-text-center': !isSmScale
             })}>
-            Add team members & manage your team
+            Add members & manage your members
           </ZIonText>
         </ZIonCol>
 
         <ZIonCol
-          sizeXl='6'
-          sizeLg='6'
-          sizeMd='6'
-          sizeSm='6'
+          sizeXl='7'
+          sizeLg='7'
+          sizeMd='12'
+          sizeSm='12'
           sizeXs='12'
-          className='ion-text-end'>
+          className={classNames({
+            'ion-text-end': true,
+            'ion-justify-content-between flex gap-1': !isLgScale && isSmScale,
+            'w-full': !isSmScale
+          })}>
           <ZIonButton
+            fill='outline'
             color='primary'
-            fill='solid'
-            height={isLgScale ? '39px' : '20px'}
-            expand={!isSmScale ? 'block' : undefined}
+            minHeight={isLgScale ? '39px' : '2rem'}
+            expand={!isLgScale ? 'block' : undefined}
             testingselector={
-              CONSTANTS.testingSelectors.WSSettings.teamListPage.createTeamBtn
+              CONSTANTS.testingSelectors.WSSettings.teamListPage.timeFilterBtn
             }
             className={classNames({
               'my-2': true,
-              'text-xs': !isLgScale,
+              'me-2': isLgScale,
+              'text-xs ion-no-margin ion-no-padding w-[33.33%]':
+                !isLgScale && isSmScale,
+              'w-full': !isSmScale,
+              'ion-no-margin': !isSmScale
+            })}
+            onClick={async () => {
+              // Open the menu by menu-id
+              await menuController.enable(
+                true,
+                CONSTANTS.MENU_IDS.MEMBER_FILTERS_MENU_ID
+              );
+              await menuController.open(
+                CONSTANTS.MENU_IDS.MEMBER_FILTERS_MENU_ID
+              );
+            }}>
+            <ZIonIcon
+              slot='start'
+              icon={filterOutline}
+              className={classNames({
+                'me-1': true,
+                'w-4 h-4': !isLgScale
+              })}
+            />
+            Filters
+          </ZIonButton>
+
+          {/* Refetch data button */}
+          <ZIonButton
+            fill='outline'
+            color='primary'
+            minHeight={isLgScale ? '39px' : '2rem'}
+            expand={!isLgScale ? 'block' : undefined}
+            testingselector={
+              CONSTANTS.testingSelectors.WSSettings.teamListPage.refetchBtn
+            }
+            className={classNames({
+              'my-2': true,
+              'me-2': isLgScale,
+              'text-xs ion-no-margin ion-no-padding w-[33.33%]':
+                !isLgScale && isSmScale,
+              'w-full': !isSmScale,
               'ion-no-margin': !isSmScale
             })}
             onClick={() => {
-              // if (!isWorkspacesDataFetching)
-              presentZWSTeamCreateModal({
-                _cssClass: 'create-workspace-modal-size'
-              });
+              void invalidedQueries();
             }}>
-            Create new team
+            <ZIonIcon
+              slot='start'
+              icon={refresh}
+              className={classNames({
+                'me-1': true,
+                'w-4 h-4': !isLgScale
+              })}
+            />
+            Refetch
           </ZIonButton>
 
-          {!isMdScale ? (
+          <ZCan havePermissions={[permissionsEnum.invite_WSTeamMember]}>
+            <ZIonButton
+              color='primary'
+              fill='solid'
+              minHeight={isLgScale ? '39px' : '2rem'}
+              expand={!isLgScale ? 'block' : undefined}
+              testingselector={
+                CONSTANTS.testingSelectors.WSSettings.teamListPage.createTeamBtn
+              }
+              className={classNames({
+                'my-2': true,
+                'text-xs ion-no-margin ion-no-padding w-[33.33%]':
+                  !isLgScale && isSmScale,
+                'w-full': !isSmScale
+              })}
+              onClick={() => {
+                // if (!isWorkspacesDataFetching)
+                presentWorkspaceSharingModal({
+                  _cssClass: 'workspace-sharing-modal-size'
+                });
+              }}>
+              Add member
+            </ZIonButton>
+          </ZCan>
+
+          {/* {!isMdScale ? (
             <ZIonButton
               expand={!isSmScale ? 'block' : undefined}
               height={isLgScale ? '39px' : '20px'}
@@ -206,138 +287,19 @@ const ZWSSettingTeamsListPage: React.FC = () => {
               }}>
               Open menu
             </ZIonButton>
-          ) : null}
-        </ZIonCol>
-      </ZIonRow>
-
-      {/* total teams count and filters buttons */}
-      <ZIonRow className='mt-1 border rounded-lg zaions__light_bg ion-align-items-center ion-padding'>
-        <ZIonCol className='flex ps-1 ion-align-items-center'>
-          <ZIonText
-            className={classNames({
-              'text-2xl': true,
-              'text-xl': !isLgScale,
-              'ion-text-center w-full': !isSmScale
-            })}>
-            <ZIonText
-              className='font-bold total_links pe-1'
-              testingselector={
-                CONSTANTS.testingSelectors.WSSettings.teamListPage.teamsCount
-              }>
-              {WSTeamsData?.length || 0}
-            </ZIonText>
-            teams
-          </ZIonText>
-        </ZIonCol>
-
-        <ZIonCol
-          sizeXl='10'
-          sizeLg='10'
-          sizeMd='10'
-          sizeSm='10'
-          sizeXs='12'
-          className={classNames({
-            flex: true,
-            'justify-content-end': isMdScale,
-            'justify-content-between': !isMdScale
-          })}>
-          <ZIonButtons
-            className={classNames({
-              'w-full': true,
-              'flex ion-justify-content-end': !isMdScale,
-              'flex-col gap-2 mt-2': !isSmScale,
-              'ion-justify-content-end gap-3': isMdScale,
-              block: !isMdScale
-            })}>
-            <ZIonButton
-              fill='outline'
-              color='primary'
-              expand={!isSmScale ? 'block' : undefined}
-              height={isLgScale ? '39px' : '20px'}
-              className={classNames({
-                'my-2 normal-case': true,
-                'text-xs': !isLgScale,
-                'w-full': !isSmScale
-              })}
-              testingselector={
-                CONSTANTS.testingSelectors.WSSettings.teamListPage.timeFilterBtn
-              }>
-              <ZIonIcon
-                slot='start'
-                icon={calendar}
-                className={classNames({
-                  'me-1': true,
-                  'w-4 h-4': !isLgScale
-                })}
-              />
-              All Times
-            </ZIonButton>
-
-            {/* Filter by tags */}
-            <ZIonButton
-              fill='outline'
-              color='primary'
-              expand={!isSmScale ? 'block' : undefined}
-              height={isLgScale ? '39px' : '20px'}
-              className={classNames({
-                'my-2 normal-case': true,
-                'text-xs': !isLgScale,
-                'w-full': !isSmScale
-              })}
-              testingselector={
-                CONSTANTS.testingSelectors.WSSettings.teamListPage.tagsFilterBtn
-              }>
-              <ZIonIcon
-                slot='start'
-                icon={pricetagOutline}
-                className={classNames({
-                  'me-1': true,
-                  'w-4 h-4': !isLgScale
-                })}
-              />
-              No values
-            </ZIonButton>
-
-            {/* Refetch data button */}
-            <ZIonButton
-              color='primary'
-              fill='outline'
-              expand={!isSmScale ? 'block' : undefined}
-              height={isLgScale ? '39px' : '20px'}
-              className={classNames({
-                'my-2 normal-case': true,
-                'text-xs': !isLgScale,
-                'w-full': !isSmScale
-              })}
-              onClick={() => {
-                void invalidedQueries();
-              }}
-              testingselector={
-                CONSTANTS.testingSelectors.WSSettings.teamListPage.refetchBtn
-              }>
-              <ZIonIcon
-                slot='start'
-                icon={refresh}
-                className={classNames({
-                  'me-1': true,
-                  'w-4 h-4': !isLgScale
-                })}
-              />
-              Refetch
-            </ZIonButton>
-          </ZIonButtons>
+          ) : null} */}
         </ZIonCol>
       </ZIonRow>
 
       {/* Teams Table */}
-      <ZCan havePermissions={[permissionsEnum.view_workspaceTeam]}>
+      <ZCan havePermissions={[permissionsEnum.viewAny_WSTeamMember]}>
         <Suspense
           fallback={
             <ZIonRow className='h-full'>
               <ZFallbackIonSpinner2 />
             </ZIonRow>
           }>
-          <ZWSSettingTeamListTable />
+          <ZMembersListTable />
         </Suspense>
       </ZCan>
     </>

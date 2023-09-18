@@ -7,3 +7,7 @@
 ## 07/09/2023 responsive ( invite member modal -> invite tab )
 
 - after 326px the responsive is not looking good.
+
+## 18/09/2023
+
+- reorder not working properly in menu filter of utm tags and

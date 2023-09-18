@@ -10,24 +10,24 @@ import { useParams } from 'react-router';
  * ? Like import of ionic components is a packages import
  * */
 import {
-	ZIonButton,
-	ZIonCol,
-	ZIonContent,
-	ZIonGrid,
-	ZIonIcon,
-	ZIonImg,
-	ZIonRouterLink,
-	ZIonRow,
-	ZIonSkeletonText,
-	ZIonText,
+  ZIonButton,
+  ZIonCol,
+  ZIonContent,
+  ZIonGrid,
+  ZIonIcon,
+  ZIonImg,
+  ZIonRouterLink,
+  ZIonRow,
+  ZIonSkeletonText,
+  ZIonText
 } from '@/components/ZIonComponents';
 import {
-	albumsOutline,
-	chevronBackOutline,
-	chevronForwardOutline,
-	idCardOutline,
-	linkOutline,
-	settingsOutline,
+  albumsOutline,
+  chevronBackOutline,
+  chevronForwardOutline,
+  idCardOutline,
+  linkOutline,
+  settingsOutline
 } from 'ionicons/icons';
 import classNames from 'classnames';
 import { useRecoilState } from 'recoil';
@@ -90,205 +90,203 @@ import ZCan from '@/components/Can';
  * */
 
 const AdminPanelSidebarMenu: React.FC<{
-	activePage: AdminPanelSidebarMenuPageEnum;
+  activePage: AdminPanelSidebarMenuPageEnum;
 }> = ({ activePage }) => {
-	const { isLgScale } = useZMediaQueryScale();
-	const [ZDashboardState, setZDashboardState] =
-		useRecoilState(ZDashboardRState);
+  const { isLgScale } = useZMediaQueryScale();
+  const [ZDashboardState, setZDashboardState] =
+    useRecoilState(ZDashboardRState);
 
-	// getting workspace ids from url with the help of useParams.
-	const { workspaceId } = useParams<{
-		workspaceId: string;
-	}>();
+  // getting workspace ids from url with the help of useParams.
+  const { workspaceId } = useParams<{
+    workspaceId: string;
+  }>();
 
-	// get workspace data api.
-	const { data: selectedWorkspace, isFetching: isSelectedWorkspaceFetching } =
-		useZRQGetRequest<workspaceInterface>({
-			_url: API_URL_ENUM.workspace_update_delete,
-			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId],
-			_authenticated: true,
-			_itemsIds: [workspaceId],
-			_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-			_shouldFetchWhenIdPassed: !workspaceId ? true : false,
-			_extractType: ZRQGetRequestExtractEnum.extractItem,
-		});
+  // get workspace data api.
+  const { data: selectedWorkspace, isFetching: isSelectedWorkspaceFetching } =
+    useZRQGetRequest<workspaceInterface>({
+      _url: API_URL_ENUM.workspace_update_delete,
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId],
+      _authenticated: true,
+      _itemsIds: [workspaceId],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+      _shouldFetchWhenIdPassed: !workspaceId ? true : false,
+      _extractType: ZRQGetRequestExtractEnum.extractItem
+    });
 
-	// Made this constant for readability.
-	const isExpand = ZDashboardState.dashboardMainSidebarIsCollabes.isExpand;
+  // Made this constant for readability.
+  const isExpand = ZDashboardState.dashboardMainSidebarIsCollabes.isExpand;
 
-	const { zNavigatePushRoute } = useZNavigate();
+  const { zNavigatePushRoute } = useZNavigate();
 
-	// is fetching.
-	const isZFetching = isSelectedWorkspaceFetching;
+  // is fetching.
+  const isZFetching = isSelectedWorkspaceFetching;
 
-	return (
-		<>
-			{isLgScale ? (
-				<ZIonCol
-					size={isExpand ? '2' : '.8'}
-					className='h-full zaions__medium_bg zaions-transition'
-				>
-					<ZIonContent color='dark'>
-						{/* Toggler menu button */}
-						<ZIonButton
-							slot='fixed'
-							className={classNames(classes['zaions-ap-msm-toggle-button'], {
-								'zaions-transition z-20 w-11 h-11 ion-no-padding ion-no-margin':
-									true,
-							})}
-							shape='round'
-							onClick={() => {
-								setZDashboardState((oldValues) => ({
-									...oldValues,
-									dashboardMainSidebarIsCollabes: {
-										...oldValues.dashboardMainSidebarIsCollabes,
-										isExpand: !isExpand,
-									},
-								}));
-							}}
-							style={{ right: isExpand ? '-9%' : '-25%', top: '7%' }}
-						>
-							<ZIonIcon
-								icon={isExpand ? chevronBackOutline : chevronForwardOutline}
-							/>
-						</ZIonButton>
+  return (
+    <>
+      {isLgScale ? (
+        <ZIonCol
+          size={isExpand ? '2' : '.8'}
+          className='h-full zaions__medium_bg zaions-transition'>
+          <ZIonContent color='dark'>
+            {/* Toggler menu button */}
+            <ZIonButton
+              slot='fixed'
+              className={classNames(classes['zaions-ap-msm-toggle-button'], {
+                'zaions-transition z-20 w-11 h-11 ion-no-padding ion-no-margin':
+                  true
+              })}
+              shape='round'
+              onClick={() => {
+                setZDashboardState(oldValues => ({
+                  ...oldValues,
+                  dashboardMainSidebarIsCollabes: {
+                    ...oldValues.dashboardMainSidebarIsCollabes,
+                    isExpand: !isExpand
+                  }
+                }));
+              }}
+              style={{ right: isExpand ? '-9%' : '-25%', top: '7%' }}>
+              <ZIonIcon
+                icon={isExpand ? chevronBackOutline : chevronForwardOutline}
+              />
+            </ZIonButton>
 
-						<ZIonGrid className='h-full'>
-							<ZIonRow className='h-full ion-align-items-start'>
-								<ZIonCol
-									size='12'
-									className='flex py-4 ion-justify-content-center'
-								>
-									{!isZFetching && (
-										<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-											<ZIonImg
-												src={
-													selectedWorkspace?.workspaceImage ||
-													getUiAvatarApiUrl({
-														name: selectedWorkspace?.workspaceName,
-													})
-												}
-												alt={`${PRODUCT_NAME} logo`}
-												className={classNames(classes['zaions-ap-msm-logo'], {
-													'rounded-full zaions-transition': true,
-												})}
-												style={{
-													width: isExpand ? '80px' : '42px',
-													height: isExpand ? '80px' : '42px',
-												}}
-											/>
-										</ZIonRouterLink>
-									)}
+            <ZIonGrid className='h-full'>
+              <ZIonRow className='h-full ion-align-items-start'>
+                <ZIonCol
+                  size='12'
+                  className='flex py-4 ion-justify-content-center'>
+                  {!isZFetching && (
+                    <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
+                      <ZIonImg
+                        src={
+                          selectedWorkspace?.workspaceImage ||
+                          getUiAvatarApiUrl({
+                            name: selectedWorkspace?.workspaceName
+                          })
+                        }
+                        alt={`${PRODUCT_NAME} logo`}
+                        className={classNames(classes['zaions-ap-msm-logo'], {
+                          'rounded-full zaions-transition': true
+                        })}
+                        style={{
+                          width: isExpand ? '80px' : '42px',
+                          height: isExpand ? '80px' : '42px'
+                        }}
+                      />
+                    </ZIonRouterLink>
+                  )}
 
-									{isZFetching && (
-										<div
-											className='rounded-full zaions-transition'
-											style={{
-												width: isExpand ? '80px' : '42px',
-												height: isExpand ? '80px' : '42px',
-											}}
-										>
-											<ZIonSkeletonText
-												width='100%'
-												height='100%'
-												animated={true}
-											/>
-										</div>
-									)}
-								</ZIonCol>
+                  {isZFetching && (
+                    <div
+                      className='rounded-full zaions-transition'
+                      style={{
+                        width: isExpand ? '80px' : '42px',
+                        height: isExpand ? '80px' : '42px'
+                      }}>
+                      <ZIonSkeletonText
+                        width='100%'
+                        height='100%'
+                        animated={true}
+                      />
+                    </div>
+                  )}
+                </ZIonCol>
 
-								{/* Short Links */}
-								<ZCan havePermissions={[permissionsEnum.viewAny_shortLink]}>
-									<ZIonCol size='12' className='my-3'>
-										<ZIonButton
-											fill='clear'
-											color='light'
-											expand='block'
-											className={classNames({
-												'ion-no-padding ion-no-margin normal-case': true,
-												zaions__primary_set:
-													activePage ===
-													AdminPanelSidebarMenuPageEnum.shortLink,
-											})}
-											routerLink={replaceRouteParams(
-												ZaionsRoutes.AdminPanel.ShortLinks.Main,
-												[
-													CONSTANTS.RouteParams.workspace.workspaceId,
-													CONSTANTS.RouteParams
-														.folderIdToGetShortLinksOrLinkInBio,
-												],
-												[workspaceId, 'all']
-											)}
-										>
-											<ZIonText
-												className={classNames({
-													'flex ion-align-items-center': true,
-													'ps-3 me-auto': isExpand,
-												})}
-											>
-												<ZIonIcon icon={linkOutline} size='large' />
+                {/* Short Links */}
+                <ZCan havePermissions={[permissionsEnum.viewAny_shortLink]}>
+                  <ZIonCol
+                    size='12'
+                    className='my-3'>
+                    <ZIonButton
+                      fill='clear'
+                      color='light'
+                      expand='block'
+                      className={classNames({
+                        'ion-no-padding ion-no-margin normal-case': true,
+                        zaions__primary_set:
+                          activePage === AdminPanelSidebarMenuPageEnum.shortLink
+                      })}
+                      routerLink={replaceRouteParams(
+                        ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                        [
+                          CONSTANTS.RouteParams.workspace.workspaceId,
+                          CONSTANTS.RouteParams
+                            .folderIdToGetShortLinksOrLinkInBio
+                        ],
+                        [workspaceId, 'all']
+                      )}>
+                      <ZIonText
+                        className={classNames({
+                          'flex ion-align-items-center': true,
+                          'ps-3 me-auto': isExpand
+                        })}>
+                        <ZIonIcon
+                          icon={linkOutline}
+                          size='large'
+                        />
 
-												<ZIonText
-													className={classNames({
-														'ps-2 zaions-transition': true,
-														'inline-block': isExpand,
-														hidden: !isExpand,
-													})}
-												>
-													Short Links
-												</ZIonText>
-											</ZIonText>
-										</ZIonButton>
-									</ZIonCol>
-								</ZCan>
+                        <ZIonText
+                          className={classNames({
+                            'ps-2 zaions-transition': true,
+                            'inline-block': isExpand,
+                            hidden: !isExpand
+                          })}>
+                          Short Links
+                        </ZIonText>
+                      </ZIonText>
+                    </ZIonButton>
+                  </ZIonCol>
+                </ZCan>
 
-								{/* Link-in-bio */}
-								<ZCan havePermissions={[permissionsEnum.viewAny_linkInBio]}>
-									<ZIonCol size='12' className='my-3'>
-										<ZIonButton
-											fill='clear'
-											color='light'
-											expand='block'
-											className={classNames({
-												'ion-no-padding ion-no-margin normal-case': true,
-												zaions__primary_set:
-													activePage ===
-													AdminPanelSidebarMenuPageEnum.linkInBio,
-											})}
-											routerLink={replaceRouteParams(
-												ZaionsRoutes.AdminPanel.LinkInBio.Main,
-												[
-													CONSTANTS.RouteParams.workspace.workspaceId,
-													CONSTANTS.RouteParams
-														.folderIdToGetShortLinksOrLinkInBio,
-												],
-												[workspaceId, 'all']
-											)}
-										>
-											<ZIonText
-												className={classNames({
-													'flex ion-align-items-center': true,
-													'ps-3 me-auto': isExpand,
-												})}
-											>
-												<ZIonIcon icon={idCardOutline} size='large' />
+                {/* Link-in-bio */}
+                <ZCan havePermissions={[permissionsEnum.viewAny_linkInBio]}>
+                  <ZIonCol
+                    size='12'
+                    className='my-3'>
+                    <ZIonButton
+                      fill='clear'
+                      color='light'
+                      expand='block'
+                      className={classNames({
+                        'ion-no-padding ion-no-margin normal-case': true,
+                        zaions__primary_set:
+                          activePage === AdminPanelSidebarMenuPageEnum.linkInBio
+                      })}
+                      routerLink={replaceRouteParams(
+                        ZaionsRoutes.AdminPanel.LinkInBio.Main,
+                        [
+                          CONSTANTS.RouteParams.workspace.workspaceId,
+                          CONSTANTS.RouteParams
+                            .folderIdToGetShortLinksOrLinkInBio
+                        ],
+                        [workspaceId, 'all']
+                      )}>
+                      <ZIonText
+                        className={classNames({
+                          'flex ion-align-items-center': true,
+                          'ps-3 me-auto': isExpand
+                        })}>
+                        <ZIonIcon
+                          icon={idCardOutline}
+                          size='large'
+                        />
 
-												<ZIonText
-													className={classNames({
-														'ps-2 zaions-transition': true,
-														'inline-block': isExpand,
-														hidden: !isExpand,
-													})}
-												>
-													Links-in-bio
-												</ZIonText>
-											</ZIonText>
-										</ZIonButton>
-									</ZIonCol>
-								</ZCan>
+                        <ZIonText
+                          className={classNames({
+                            'ps-2 zaions-transition': true,
+                            'inline-block': isExpand,
+                            hidden: !isExpand
+                          })}>
+                          Links-in-bio
+                        </ZIonText>
+                      </ZIonText>
+                    </ZIonButton>
+                  </ZIonCol>
+                </ZCan>
 
-								{/* Chrome extension */}
-								{/* <ZIonCol size='12' title='Extension'>
+                {/* Chrome extension */}
+                {/* <ZIonCol size='12' title='Extension'>
 									<ZIonButton
 										fill='clear'
 										color='light'
@@ -316,8 +314,8 @@ const AdminPanelSidebarMenu: React.FC<{
 									</ZIonButton>
 								</ZIonCol> */}
 
-								{/* Integrations */}
-								{/* <ZIonCol size='12'>
+                {/* Integrations */}
+                {/* <ZIonCol size='12'>
 									<ZIonButton
 										fill='clear'
 										color='light'
@@ -345,46 +343,48 @@ const AdminPanelSidebarMenu: React.FC<{
 									</ZIonButton>
 								</ZIonCol> */}
 
-								{/* Workspaces */}
-								<ZIonCol size='12' className='my-3'>
-									<ZIonButton
-										fill='clear'
-										color='light'
-										expand='block'
-										className={classNames({
-											'ion-no-padding ion-no-margin normal-case': true,
-											zaions__primary_set:
-												activePage === AdminPanelSidebarMenuPageEnum.workspaces,
-										})}
-										routerLink={replaceRouteParams(
-											ZaionsRoutes.AdminPanel.Workspaces.View,
-											[CONSTANTS.RouteParams.workspace.workspaceId],
-											[workspaceId]
-										)}
-									>
-										<ZIonText
-											className={classNames({
-												'flex ion-align-items-center': true,
-												'ps-3 me-auto': isExpand,
-											})}
-										>
-											<ZIonIcon icon={albumsOutline} size='large' />
+                {/* Workspaces */}
+                <ZIonCol
+                  size='12'
+                  className='my-3'>
+                  <ZIonButton
+                    fill='clear'
+                    color='light'
+                    expand='block'
+                    className={classNames({
+                      'ion-no-padding ion-no-margin normal-case': true,
+                      zaions__primary_set:
+                        activePage === AdminPanelSidebarMenuPageEnum.workspaces
+                    })}
+                    routerLink={replaceRouteParams(
+                      ZaionsRoutes.AdminPanel.Workspaces.View,
+                      [CONSTANTS.RouteParams.workspace.workspaceId],
+                      [workspaceId]
+                    )}>
+                    <ZIonText
+                      className={classNames({
+                        'flex ion-align-items-center': true,
+                        'ps-3 me-auto': isExpand
+                      })}>
+                      <ZIonIcon
+                        icon={albumsOutline}
+                        size='large'
+                      />
 
-											<ZIonText
-												className={classNames({
-													'ps-2 zaions-transition': true,
-													'inline-block': isExpand,
-													hidden: !isExpand,
-												})}
-											>
-												Workspace detail
-											</ZIonText>
-										</ZIonText>
-									</ZIonButton>
-								</ZIonCol>
+                      <ZIonText
+                        className={classNames({
+                          'ps-2 zaions-transition': true,
+                          'inline-block': isExpand,
+                          hidden: !isExpand
+                        })}>
+                        Workspace detail
+                      </ZIonText>
+                    </ZIonText>
+                  </ZIonButton>
+                </ZIonCol>
 
-								{/* Help center */}
-								{/* <ZIonCol size='12' className='my-3'>
+                {/* Help center */}
+                {/* <ZIonCol size='12' className='my-3'>
 									<ZIonButton
 										fill='clear'
 										color='light'
@@ -412,8 +412,8 @@ const AdminPanelSidebarMenu: React.FC<{
 									</ZIonButton>
 								</ZIonCol> */}
 
-								{/* Account */}
-								{/* <ZIonCol size='12' className='my-3'>
+                {/* Account */}
+                {/* <ZIonCol size='12' className='my-3'>
 									<ZIonButton
 										fill='clear'
 										color='light'
@@ -441,192 +441,186 @@ const AdminPanelSidebarMenu: React.FC<{
 									</ZIonButton>
 								</ZIonCol> */}
 
-								{/* Settings */}
-								<ZIonCol size='12' className='my-3'>
-									<ZIonButton
-										fill='clear'
-										color='light'
-										expand='block'
-										className={classNames({
-											'ion-no-padding ion-no-margin normal-case': true,
-											zaions__primary_set:
-												activePage === AdminPanelSidebarMenuPageEnum.settings,
-										})}
-										routerLink={replaceRouteParams(
-											ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
-											[CONSTANTS.RouteParams.workspace.workspaceId],
-											[workspaceId]
-										)}
-									>
-										<ZIonText
-											className={classNames({
-												'flex ion-align-items-center': true,
-												'ps-3 me-auto': isExpand,
-											})}
-										>
-											<ZIonIcon icon={settingsOutline} size='large' />
+                {/* Settings */}
+                <ZIonCol
+                  size='12'
+                  className='my-3'>
+                  <ZIonButton
+                    fill='clear'
+                    color='light'
+                    expand='block'
+                    className={classNames({
+                      'ion-no-padding ion-no-margin normal-case': true,
+                      zaions__primary_set:
+                        activePage === AdminPanelSidebarMenuPageEnum.settings
+                    })}
+                    routerLink={replaceRouteParams(
+                      ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
+                      [CONSTANTS.RouteParams.workspace.workspaceId],
+                      [workspaceId]
+                    )}>
+                    <ZIonText
+                      className={classNames({
+                        'flex ion-align-items-center': true,
+                        'ps-3 me-auto': isExpand
+                      })}>
+                      <ZIonIcon
+                        icon={settingsOutline}
+                        size='large'
+                      />
 
-											<ZIonText
-												className={classNames({
-													'ps-2 zaions-transition': true,
-													'inline-block': isExpand,
-													hidden: !isExpand,
-												})}
-											>
-												Settings
-											</ZIonText>
-										</ZIonText>
-									</ZIonButton>
-								</ZIonCol>
-							</ZIonRow>
-						</ZIonGrid>
-					</ZIonContent>
-				</ZIonCol>
-			) : (
-				<ZIonCol size='12' className='ion-align-items-center zaions__light_bg'>
-					<ZIonSegment
-						scrollable={true}
-						value={activePage}
-						// color='secondary'
-						className='zaions_pretty_scrollbar'
-					>
-						{/* Short Links */}
-						<ZCan havePermissions={[permissionsEnum.viewAny_shortLink]}>
-							<ZIonSegmentButton
-								value={AdminPanelSidebarMenuPageEnum.shortLink}
-								className='normal-case'
-								onClick={() => {
-									zNavigatePushRoute(
-										replaceRouteParams(
-											ZaionsRoutes.AdminPanel.ShortLinks.Main,
-											[
-												CONSTANTS.RouteParams.workspace.workspaceId,
-												CONSTANTS.RouteParams
-													.folderIdToGetShortLinksOrLinkInBio,
-											],
-											[workspaceId, 'all']
-										)
-									);
-								}}
-							>
-								Short links
-							</ZIonSegmentButton>
-						</ZCan>
+                      <ZIonText
+                        className={classNames({
+                          'ps-2 zaions-transition': true,
+                          'inline-block': isExpand,
+                          hidden: !isExpand
+                        })}>
+                        Settings
+                      </ZIonText>
+                    </ZIonText>
+                  </ZIonButton>
+                </ZIonCol>
+              </ZIonRow>
+            </ZIonGrid>
+          </ZIonContent>
+        </ZIonCol>
+      ) : (
+        <ZIonCol
+          size='12'
+          className='ion-align-items-center zaions__light_bg'>
+          <ZIonSegment
+            scrollable={true}
+            value={activePage}
+            // color='secondary'
+            className='zaions_pretty_scrollbar'>
+            {/* Short Links */}
+            <ZCan havePermissions={[permissionsEnum.viewAny_shortLink]}>
+              <ZIonSegmentButton
+                value={AdminPanelSidebarMenuPageEnum.shortLink}
+                className='normal-case'
+                onClick={() => {
+                  zNavigatePushRoute(
+                    replaceRouteParams(
+                      ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                      [
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      [workspaceId, 'all']
+                    )
+                  );
+                }}>
+                Short links
+              </ZIonSegmentButton>
+            </ZCan>
 
-						{/* Link-in-bio */}
-						<ZCan havePermissions={[permissionsEnum.viewAny_linkInBio]}>
-							<ZIonSegmentButton
-								value={AdminPanelSidebarMenuPageEnum.linkInBio}
-								className='normal-case'
-								onClick={() => {
-									zNavigatePushRoute(
-										replaceRouteParams(
-											ZaionsRoutes.AdminPanel.LinkInBio.Main,
-											[
-												CONSTANTS.RouteParams.workspace.workspaceId,
-												CONSTANTS.RouteParams
-													.folderIdToGetShortLinksOrLinkInBio,
-											],
-											[workspaceId, 'all']
-										)
-									);
-								}}
-							>
-								Link-in-bio
-							</ZIonSegmentButton>
-						</ZCan>
+            {/* Link-in-bio */}
+            <ZCan havePermissions={[permissionsEnum.viewAny_linkInBio]}>
+              <ZIonSegmentButton
+                value={AdminPanelSidebarMenuPageEnum.linkInBio}
+                className='normal-case'
+                onClick={() => {
+                  zNavigatePushRoute(
+                    replaceRouteParams(
+                      ZaionsRoutes.AdminPanel.LinkInBio.Main,
+                      [
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      [workspaceId, 'all']
+                    )
+                  );
+                }}>
+                Link-in-bio
+              </ZIonSegmentButton>
+            </ZCan>
 
-						{/* Extension */}
-						<ZIonSegmentButton
-							value='extension'
-							className='normal-case'
-							onClick={() => {
-								zNavigatePushRoute(
-									replaceParams(
-										ZaionsRoutes.AdminPanel.ShortLinks.Main,
-										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-										'all'
-									)
-								);
-							}}
-						>
-							Extension
-						</ZIonSegmentButton>
+            {/* Extension */}
+            <ZIonSegmentButton
+              value='extension'
+              className='normal-case'
+              onClick={() => {
+                zNavigatePushRoute(
+                  replaceParams(
+                    ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                    CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+                    'all'
+                  )
+                );
+              }}>
+              Extension
+            </ZIonSegmentButton>
 
-						{/* Integrations */}
-						<ZIonSegmentButton
-							value='integrations'
-							className='normal-case'
-							onClick={() => {
-								zNavigatePushRoute(
-									replaceParams(
-										ZaionsRoutes.AdminPanel.ShortLinks.Main,
-										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-										'all'
-									)
-								);
-							}}
-						>
-							Integrations
-						</ZIonSegmentButton>
+            {/* Integrations */}
+            <ZIonSegmentButton
+              value='integrations'
+              className='normal-case'
+              onClick={() => {
+                zNavigatePushRoute(
+                  replaceParams(
+                    ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                    CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+                    'all'
+                  )
+                );
+              }}>
+              Integrations
+            </ZIonSegmentButton>
 
-						{/* Workspaces */}
-						<ZIonSegmentButton
-							value='Workspaces'
-							className='normal-case'
-							onClick={() => {
-								zNavigatePushRoute(
-									replaceRouteParams(
-										ZaionsRoutes.AdminPanel.Workspaces.View,
-										[CONSTANTS.RouteParams.workspace.workspaceId],
-										[workspaceId]
-									)
-								);
+            {/* Workspaces */}
+            <ZIonSegmentButton
+              value='Workspaces'
+              className='normal-case'
+              onClick={() => {
+                zNavigatePushRoute(
+                  replaceRouteParams(
+                    ZaionsRoutes.AdminPanel.Workspaces.View,
+                    [CONSTANTS.RouteParams.workspace.workspaceId],
+                    [workspaceId]
+                  )
+                );
 
-								// zNavigatePushRoute();
-							}}
-						>
-							Workspaces
-						</ZIonSegmentButton>
+                // zNavigatePushRoute();
+              }}>
+              Workspaces
+            </ZIonSegmentButton>
 
-						{/* Help center */}
-						<ZIonSegmentButton
-							value='help-center'
-							className='normal-case'
-							onClick={() => {
-								zNavigatePushRoute(
-									replaceParams(
-										ZaionsRoutes.AdminPanel.ShortLinks.Main,
-										CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-										'all'
-									)
-								);
-							}}
-						>
-							Help center
-						</ZIonSegmentButton>
+            {/* Help center */}
+            <ZIonSegmentButton
+              value='help-center'
+              className='normal-case'
+              onClick={() => {
+                zNavigatePushRoute(
+                  replaceParams(
+                    ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                    CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+                    'all'
+                  )
+                );
+              }}>
+              Help center
+            </ZIonSegmentButton>
 
-						{/* Settings */}
-						<ZIonSegmentButton
-							value='settings'
-							className='normal-case'
-							onClick={() => {
-								zNavigatePushRoute(
-									replaceRouteParams(
-										ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
-										[CONSTANTS.RouteParams.workspace.workspaceId],
-										[workspaceId]
-									)
-								);
-							}}
-						>
-							Settings
-						</ZIonSegmentButton>
-					</ZIonSegment>
-				</ZIonCol>
-			)}
-		</>
-	);
+            {/* Settings */}
+            <ZIonSegmentButton
+              value='settings'
+              className='normal-case'
+              onClick={() => {
+                zNavigatePushRoute(
+                  replaceRouteParams(
+                    ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
+                    [CONSTANTS.RouteParams.workspace.workspaceId],
+                    [workspaceId]
+                  )
+                );
+              }}>
+              Settings
+            </ZIonSegmentButton>
+          </ZIonSegment>
+        </ZIonCol>
+      )}
+    </>
+  );
 };
 
 export default AdminPanelSidebarMenu;

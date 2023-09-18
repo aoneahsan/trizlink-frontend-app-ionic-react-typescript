@@ -1,26 +1,24 @@
-import { selector } from 'recoil';
 // Packages Imports
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 
 // Custom
 // Type
-import {
-  TimeFilterEnum,
-  UTMTagTemplateType
-} from '@/types/AdminPanel/linksType';
+import { TimeFilterEnum } from '@/types/AdminPanel/linksType';
+import { WSTeamMembersInterface } from '@/types/AdminPanel/workspace/index';
+import { IMembersFilterOptions } from '@/types/AdminPanel/index.type';
+
 // Data
-import { UTMTagTemplatesData } from '@/data/UserDashboard/UTMTagTemplatesData';
-import { IFilterOptions } from '@/types/AdminPanel/index.type';
+
 import CONSTANTS from '@/utils/constants';
 
-export const UTMTagsRStateAtom = atom<UTMTagTemplateType[]>({
-  key: 'UTMTagsRStateAtom_key',
-  default: UTMTagTemplatesData
+export const MembersAccountsRStateAtom = atom<WSTeamMembersInterface[]>({
+  key: 'MembersAccountsRStateAtom_key',
+  default: []
 });
 
-// Recoil state that will store all the filter options for utm tags for example time, etc.
-export const UTMTagsFilterOptionsRStateAtom = atom<IFilterOptions>({
-  key: 'UTMTagsFilterOptionsRStateAtom_key',
+// Recoil state that will store all the filter options for Members for example time, etc.
+export const MembersFilterOptionsRStateAtom = atom<IMembersFilterOptions>({
+  key: 'MembersFilterOptionsRStateAtom_key',
   default: {
     timeFilter: {
       daysToSubtract: TimeFilterEnum.allTime,
@@ -30,17 +28,17 @@ export const UTMTagsFilterOptionsRStateAtom = atom<IFilterOptions>({
   }
 });
 
-// Recoil selector that will filtered utm tags (we are using this selector to list utm tags in frontend in utm tags table in utm tags list page).
-export const FilteredUtmTagsDataRStateSelector = selector({
-  key: 'FilteredUtmTagsDataRStateSelector_key',
+// Recoil selector that will filtered Members (we are using this selector to list Members in frontend in Members table in Members list page).
+export const FilteredMembersDataRStateSelector = selector({
+  key: 'FilteredMembersDataRStateSelector_key',
   get: ({ get }) => {
     // Variables
-    const utmTagsRStateAtom = get(UTMTagsRStateAtom);
-    const _filterOptions = get(UTMTagsFilterOptionsRStateAtom);
-    let _filterUtmTagsData: UTMTagTemplateType[] | undefined =
-      utmTagsRStateAtom;
+    const membersRStateAtom = get(MembersAccountsRStateAtom);
+    const _filterOptions = get(MembersFilterOptionsRStateAtom);
+    let _filterMembersData: WSTeamMembersInterface[] | undefined =
+      membersRStateAtom;
 
-    if (utmTagsRStateAtom?.length) {
+    if (membersRStateAtom?.length) {
       if (
         _filterOptions?.timeFilter?.daysToSubtract &&
         _filterOptions?.timeFilter?.daysToSubtract !== TimeFilterEnum.allTime
@@ -78,10 +76,11 @@ export const FilteredUtmTagsDataRStateSelector = selector({
           CONSTANTS.toLocaleStringOptions
         );
 
-        _filterUtmTagsData = utmTagsRStateAtom?.filter(el => {
+        _filterMembersData = membersRStateAtom?.filter(el => {
           const _createdAt = new Date(
-            new Date(el.createAt as string)
+            new Date(el.createdAt as string)
           ).toLocaleString('en-US', CONSTANTS.toLocaleStringOptions);
+
           if (
             new Date(_createdAt) >= new Date(_formattedStartDate) &&
             new Date(_createdAt) <= endDate
@@ -92,8 +91,20 @@ export const FilteredUtmTagsDataRStateSelector = selector({
           }
         });
       }
+
+      if (_filterOptions?.role) {
+        _filterMembersData = _filterMembersData?.filter(
+          el => el?.memberRole?.name! === _filterOptions?.role
+        );
+      }
+
+      if (_filterOptions?.status) {
+        _filterMembersData = _filterMembersData?.filter(
+          el => el?.accountStatus === _filterOptions?.status
+        );
+      }
     }
 
-    return _filterUtmTagsData;
+    return _filterMembersData;
   }
 });

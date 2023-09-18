@@ -148,8 +148,8 @@ const ZAdminPanelTopBar: React.FC<{
         sizeXl='6'
         sizeLg='6'
         sizeMd='6'
-        sizeSm='6'
-        sizeXs='6'
+        sizeSm='8'
+        sizeXs='7.5'
         className={classNames({
           'h-full gap-2 ion-align-items-center': true,
           'ion-justify-content-end flex': true
@@ -277,8 +277,8 @@ const ZADTopBarColOne: React.FC<{ workspaceId?: string }> = ({
       sizeXl='6'
       sizeLg='6'
       sizeMd='6'
-      sizeSm='6'
-      sizeXs='6'
+      sizeSm='4'
+      sizeXs='4.5'
       className='flex h-full ion-align-items-center'>
       {!isWorkspaceListPage
         ? isMdScale && (

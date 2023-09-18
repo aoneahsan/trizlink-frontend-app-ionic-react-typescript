@@ -26,6 +26,8 @@ import {
   ZShortLinkListPageTableColumnsIds
 } from '@/types/AdminPanel/linksType';
 import { ENVS } from '@/utils/envKeys';
+import { workspaceFormRoleEnum } from '@/types/AdminPanel/workspace';
+import { ZTeamMemberInvitationEnum } from '@/types/AdminPanel/index.type';
 
 // Constant
 // const ZLinkApiRootUrl = 'https://zlinkbackend.zaions.com/public/api/zlink/v1';
@@ -106,10 +108,10 @@ export const API_URLS = {
   csrf: '/sanctum/csrf-cookie',
   delete: '/user/delete',
   ws_roles_get: '/user/ws-roles',
-  ws_team_member_sendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}/member/send-invitation`,
-  ws_team_member_getAllInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}/member`,
-  ws_team_member_resendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}/member/resend-invitation/${RouteParams.workspace.invitationId}`,
-  ws_team_member_invite_get: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}/member/${RouteParams.workspace.memberInviteId}`,
+  ws_team_member_sendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member/send-invitation`,
+  ws_team_member_getAllInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member`,
+  ws_team_member_resendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member/resend-invitation/${RouteParams.workspace.invitationId}`,
+  ws_team_member_invite_get: `/user/workspace/${RouteParams.workspace.workspaceId}/member/${RouteParams.workspace.memberInviteId}`,
   ws_team_member_update: `/user/update-invitation/${RouteParams.workspace.memberInviteId}`,
   validate_invitation_status: `/user/validate-and-update-invitation`,
   userPixelAccounts_create_list: '/user/pixel',
@@ -248,6 +250,7 @@ const MENU_IDS = {
   DASHBOARD_SM_MENU_CONTENT_ID: 'zaions-dashboard-responsive-menu-content-id',
   SL_FILTERS_MENU_ID: 'sl_filters_menu_id', // sl => shortLink
   P_FILTERS_MENU_ID: 'p_filters_menu_id', // p => pixels
+  MEMBER_FILTERS_MENU_ID: 'member_filters_menu_id',
   UTMTag_FILTERS_MENU_ID: 'utmTag_filters_menu_id',
   WS_SETTINGS_PAGE_MENU_ID: 'ws-settings-page-menu-id',
   ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID:
@@ -1499,8 +1502,29 @@ const ZTimeSelectData: ZaionsRSelectOptions[] = [
   }
 ];
 
+const ZRolesOptions: ZaionsRSelectOptions[] = [
+  { label: 'Administrator', value: workspaceFormRoleEnum.Administrator },
+  { label: 'Contributor', value: workspaceFormRoleEnum.Contributor },
+  { label: 'Manager', value: workspaceFormRoleEnum.Manager },
+  { label: 'Approver', value: workspaceFormRoleEnum.Approver },
+  { label: 'Commenter', value: workspaceFormRoleEnum.Commenter },
+  { label: 'Guest', value: workspaceFormRoleEnum.Guest }
+];
+
+const ZStatesOptions: ZaionsRSelectOptions[] = [
+  { label: 'Accepted', value: ZTeamMemberInvitationEnum.accepted },
+  { label: 'Active', value: ZTeamMemberInvitationEnum.active },
+  { label: 'Blocked', value: ZTeamMemberInvitationEnum.blocked },
+  { label: 'Pending', value: ZTeamMemberInvitationEnum.pending },
+  { label: 'Rejected', value: ZTeamMemberInvitationEnum.rejected },
+  { label: 'Resend', value: ZTeamMemberInvitationEnum.resend },
+  { label: 'Suspended', value: ZTeamMemberInvitationEnum.suspended }
+];
+
 const CONSTANTS = {
+  ZRolesOptions,
   PIXEL_ACCOUNTS,
+  ZStatesOptions,
   ZTimeSelectData,
   toLocaleStringOptions,
   ION_LOADER_DEFAULTS,

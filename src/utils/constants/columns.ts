@@ -1,4 +1,5 @@
 import {
+  ZMembersListPageTableColumnsIds,
   ZPixelsListPageTableColumnsIds,
   ZUTMTagsListPageTableColumnsIds
 } from '@/types/AdminPanel/index.type';
@@ -99,6 +100,34 @@ export const UtmTagTableColumns = [
   {
     id: ZUTMTagsListPageTableColumnsIds.formattedCreateAt,
     name: 'Create at',
+    isVisible: true
+  }
+];
+
+export const MemberTableColumns = [
+  {
+    id: ZMembersListPageTableColumnsIds.email,
+    name: 'Email',
+    isVisible: true
+  },
+  {
+    id: ZMembersListPageTableColumnsIds.role,
+    name: 'Role',
+    isVisible: true
+  },
+  {
+    id: ZMembersListPageTableColumnsIds.status,
+    name: 'Status',
+    isVisible: true
+  },
+  {
+    id: ZMembersListPageTableColumnsIds.invitedAt,
+    name: 'Invited at',
+    isVisible: true
+  },
+  {
+    id: ZMembersListPageTableColumnsIds.invitedAcceptedAt,
+    name: 'Invited accepted at',
     isVisible: true
   }
 ];

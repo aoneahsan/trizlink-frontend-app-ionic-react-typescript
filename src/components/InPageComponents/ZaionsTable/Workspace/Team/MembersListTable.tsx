@@ -29,6 +29,8 @@ import {
   sendOutline,
   trashBinOutline
 } from 'ionicons/icons';
+import { AxiosError } from 'axios';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -84,18 +86,26 @@ import MESSAGES from '@/utils/messages';
  * */
 import {
   WorkspaceSharingTabEnum,
-  WSTeamMembersInterface,
-  ZWSMemberListPageTableColumnsIds
+  WSTeamMembersInterface
 } from '@/types/AdminPanel/workspace';
-import { ZTeamMemberInvitationEnum } from '@/types/AdminPanel/index.type';
-import { AxiosError } from 'axios';
+import {
+  ZMembersListPageTableColumnsIds,
+  ZTeamMemberInvitationEnum,
+  ZUserSettingInterface,
+  ZUserSettingTypeEnum
+} from '@/types/AdminPanel/index.type';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
+import {
+   FilteredMembersDataRStateSelector,
+   MembersAccountsRStateAtom
+ } from '@/ZaionsStore/UserDashboard/MemberState/index.recoil';
 
 /**
  * Style files Imports go down
@@ -128,16 +138,9 @@ const ZMembersListTable: React.FC = () => {
   const { data: wsTeamMembersData, isFetching: isWSTeamMembersFetching } =
     useZRQGetRequest<WSTeamMembersInterface[]>({
       _url: API_URL_ENUM.ws_team_member_getAllInvite_list,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-        workspaceId,
-        teamId
-      ],
-      _itemsIds: [workspaceId, teamId],
-      _urlDynamicParts: [
-        CONSTANTS.RouteParams.workspace.workspaceId,
-        CONSTANTS.RouteParams.workspace.teamId
-      ]
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId],
+      _itemsIds: [workspaceId],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
     });
   // #endregion
 
@@ -189,21 +192,35 @@ const ZInpageTable: React.FC = () => {
     teamId: string;
   }>();
 
+  // #region Recoil state.
+  const setMembersDataRState = useSetRecoilState(MembersAccountsRStateAtom);
+  const filteredMembersDataRSelector = useRecoilValue(
+    FilteredMembersDataRStateSelector
+  );
+  // #endregion
+
   // #region APIS.
   const { data: wsTeamMembersData, isFetching: isWSTeamMembersFetching } =
     useZRQGetRequest<WSTeamMembersInterface[]>({
       _url: API_URL_ENUM.ws_team_member_getAllInvite_list,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-        workspaceId,
-        teamId
-      ],
-      _itemsIds: [workspaceId, teamId],
-      _urlDynamicParts: [
-        CONSTANTS.RouteParams.workspace.workspaceId,
-        CONSTANTS.RouteParams.workspace.teamId
-      ]
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId],
+      _itemsIds: [workspaceId],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
     });
+
+  const {
+    data: getMemberFiltersData,
+    isFetching: isMemberFiltersDataFetching
+  } = useZRQGetRequest<ZUserSettingInterface>({
+    _url: API_URL_ENUM.user_setting_delete_update_get,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+      ZUserSettingTypeEnum.membersListPageTable
+    ],
+    _itemsIds: [ZUserSettingTypeEnum.membersListPageTable],
+    _urlDynamicParts: [CONSTANTS.RouteParams.settings.type],
+    _extractType: ZRQGetRequestExtractEnum.extractItem
+  });
   // #endregion
 
   // #region Modal & Popovers.
@@ -230,7 +247,7 @@ const ZInpageTable: React.FC = () => {
   const columnHelper = createColumnHelper<WSTeamMembersInterface>();
   const defaultMembersColumns = [
     columnHelper.display({
-      id: ZWSMemberListPageTableColumnsIds.id,
+      id: ZMembersListPageTableColumnsIds.id,
       header: 'Select',
       footer: 'Select Column Footer',
       cell: _ => {
@@ -241,7 +258,7 @@ const ZInpageTable: React.FC = () => {
     // Email
     columnHelper.accessor(itemData => itemData.email, {
       header: 'Email',
-      id: ZWSMemberListPageTableColumnsIds.email,
+      id: ZMembersListPageTableColumnsIds.email,
       footer: 'Email',
       cell: row => {
         return (
@@ -274,7 +291,7 @@ const ZInpageTable: React.FC = () => {
     // Role
     columnHelper.accessor('memberRole', {
       header: 'Role',
-      id: ZWSMemberListPageTableColumnsIds.role,
+      id: ZMembersListPageTableColumnsIds.role,
       cell: ({ row }) => {
         return <>{row?.original?.memberRole?.name}</>;
       },
@@ -284,7 +301,7 @@ const ZInpageTable: React.FC = () => {
     // status
     columnHelper.accessor(itemData => itemData.accountStatus, {
       header: 'Status',
-      id: ZWSMemberListPageTableColumnsIds.status,
+      id: ZMembersListPageTableColumnsIds.status,
       cell: row => {
         const value = row.getValue();
         return (
@@ -310,14 +327,14 @@ const ZInpageTable: React.FC = () => {
     // Invited at
     columnHelper.accessor(itemData => itemData.invitedAt, {
       header: 'Invited at',
-      id: ZWSMemberListPageTableColumnsIds.invitedAt,
+      id: ZMembersListPageTableColumnsIds.invitedAt,
       footer: 'Invited at'
     }),
 
     // Invited accepted at
     columnHelper.accessor(itemData => itemData.inviteAcceptedAt, {
       header: 'Invited accepted at',
-      id: ZWSMemberListPageTableColumnsIds.invitedAcceptedAt,
+      id: ZMembersListPageTableColumnsIds.invitedAcceptedAt,
       cell: row => {
         return (
           <>{row.getValue() ? row.getValue() : CONSTANTS.NO_VALUE_FOUND}</>
@@ -329,7 +346,10 @@ const ZInpageTable: React.FC = () => {
 
   const zMembersTable = useReactTable({
     columns: defaultMembersColumns,
-    data: wsTeamMembersData || [],
+    data: filteredMembersDataRSelector || [],
+    state: {
+      columnOrder: getMemberFiltersData?.settings?.columnOrderIds || []
+    },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     debugTable: false,
@@ -338,142 +358,220 @@ const ZInpageTable: React.FC = () => {
   });
   // #endregion
 
+  // #region useEffect's
   useEffect(() => {
     zMembersTable.setPageIndex(Number(pageindex) || 0);
     zMembersTable.setPageSize(Number(pagesize) || 2);
   }, [pageindex, pagesize]);
+
+  useEffect(() => {
+    try {
+      if (getMemberFiltersData?.settings?.columns) {
+        const __getEmailColumn =
+          getMemberFiltersData?.settings?.columns?.filter(
+            el => el?.id === ZMembersListPageTableColumnsIds.email
+          )[0];
+
+        const __getRoleColumn = getMemberFiltersData?.settings?.columns?.filter(
+          el => el?.id === ZMembersListPageTableColumnsIds.role
+        )[0];
+
+        const __getStatusColumn =
+          getMemberFiltersData?.settings?.columns?.filter(
+            el => el?.id === ZMembersListPageTableColumnsIds.status
+          )[0];
+
+        const __getInvitedAtColumn =
+          getMemberFiltersData?.settings?.columns?.filter(
+            el => el?.id === ZMembersListPageTableColumnsIds.invitedAt
+          )[0];
+
+        const __geInvitedAcceptedAtColumn =
+          getMemberFiltersData?.settings?.columns?.filter(
+            el => el?.id === ZMembersListPageTableColumnsIds.invitedAcceptedAt
+          )[0];
+
+        if (__getInvitedAtColumn) {
+          zMembersTable
+            ?.getColumn(ZMembersListPageTableColumnsIds.invitedAt)
+            ?.toggleVisibility(__getInvitedAtColumn?.isVisible);
+        }
+
+        if (__getEmailColumn) {
+          zMembersTable
+            ?.getColumn(ZMembersListPageTableColumnsIds.email)
+            ?.toggleVisibility(__getEmailColumn?.isVisible);
+        }
+
+        if (__getRoleColumn) {
+          zMembersTable
+            ?.getColumn(ZMembersListPageTableColumnsIds.role)
+            ?.toggleVisibility(__getRoleColumn?.isVisible);
+        }
+
+        if (__geInvitedAcceptedAtColumn) {
+          zMembersTable
+            ?.getColumn(ZMembersListPageTableColumnsIds.invitedAcceptedAt)
+            ?.toggleVisibility(__geInvitedAcceptedAtColumn?.isVisible);
+        }
+
+        if (__getStatusColumn) {
+          zMembersTable
+            ?.getColumn(ZMembersListPageTableColumnsIds.status)
+            ?.toggleVisibility(__getStatusColumn?.isVisible);
+        }
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  }, [getMemberFiltersData]);
+
+  useEffect(() => {
+    try {
+      if (wsTeamMembersData) {
+        setMembersDataRState(wsTeamMembersData);
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  }, [wsTeamMembersData]);
+  // #endregion
   // console.log({ d: zMembersTable?.getCanNextPage() }); // causing infinite loop
+
   return (
     <div>
       <ZCustomScrollable
         className='w-full overflow-hidden border rounded-lg h-max ion-no-padding zaions__light_bg'
         scrollX={true}>
-        {zMembersTable.getHeaderGroups().map((_headerInfo, _headerIndex) => {
-          return (
-            <ZIonRow
-              key={_headerIndex}
-              className='flex flex-nowrap zaions__light_bg'>
-              {_headerInfo.headers.map((_columnInfo, _columnIndex) => {
+        <div className='min-w-[55rem]'>
+          {zMembersTable.getHeaderGroups().map((_headerInfo, _headerIndex) => {
+            return (
+              <ZIonRow
+                key={_headerIndex}
+                className='flex flex-nowrap zaions__light_bg'>
+                {_headerInfo.headers.map((_columnInfo, _columnIndex) => {
+                  return (
+                    <ZIonCol
+                      key={_columnInfo.id}
+                      className={classNames({
+                        'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
+                          true,
+                        'border-r': false
+                      })}
+                      size={
+                        _columnInfo.column.id ===
+                          ZMembersListPageTableColumnsIds.id ||
+                        _columnInfo.column.id ===
+                          ZMembersListPageTableColumnsIds.actions
+                          ? '1.2'
+                          : '2.5'
+                      }>
+                      {_columnInfo.column.columnDef.header?.toString()}
+                    </ZIonCol>
+                  );
+                })}
+
+                <ZIonCol
+                  size='.8'
+                  className={classNames({
+                    'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
+                      true,
+                    'border-r': false
+                  })}>
+                  Actions
+                </ZIonCol>
+              </ZIonRow>
+            );
+          })}
+
+          {/* Body Section */}
+          <ZIonRow className='rounded-b-lg zaions__light_bg'>
+            <ZIonCol
+              size='12'
+              className='w-full ion-no-padding'>
+              {zMembersTable?.getRowModel().rows.map((_rowInfo, _rowIndex) => {
                 return (
-                  <ZIonCol
-                    key={_columnInfo.id}
-                    className={classNames({
-                      'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
-                        true,
-                      'border-r': false
-                    })}
-                    size={
-                      _columnInfo.column.id ===
-                        ZWSMemberListPageTableColumnsIds.id ||
-                      _columnInfo.column.id ===
-                        ZWSMemberListPageTableColumnsIds.actions
-                        ? '1.2'
-                        : '2.5'
-                    }>
-                    {_columnInfo.column.columnDef.header?.toString()}
-                  </ZIonCol>
+                  <ZIonRow
+                    key={_rowIndex}
+                    className='flex-nowrap'>
+                    {_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
+                      _cellInfo.column.getIsVisible() ? (
+                        <ZIonCol
+                          key={_cellIndex}
+                          size={
+                            _cellInfo.column.id ===
+                              ZMembersListPageTableColumnsIds.id ||
+                            _cellInfo.column.id ===
+                              ZMembersListPageTableColumnsIds.actions
+                              ? '1.2'
+                              : '2.5'
+                          }
+                          className={classNames({
+                            'py-1 mt-1 border-b flex ion-align-items-center':
+                              true,
+                            'border-r': false,
+                            'ps-2':
+                              _cellInfo.column.id !==
+                              ZMembersListPageTableColumnsIds.id,
+                            'ps-0':
+                              _cellInfo.column.id ===
+                              ZMembersListPageTableColumnsIds.id
+                          })}>
+                          <div
+                            className={classNames({
+                              'w-full text-sm ZaionsTextEllipsis': true,
+                              'ps-3':
+                                _cellInfo.column.id ===
+                                ZMembersListPageTableColumnsIds.id
+                            })}>
+                            {flexRender(
+                              _cellInfo.column.columnDef.cell,
+                              _cellInfo.getContext()
+                            )}
+                          </div>
+                        </ZIonCol>
+                      ) : null
+                    )}
+
+                    <ZIonCol
+                      size='.8'
+                      className={classNames({
+                        'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
+                          true,
+                        'border-r': false
+                      })}>
+                      <ZIonButton
+                        fill='clear'
+                        color='dark'
+                        className='ion-no-padding ion-no-margin'
+                        size='small'
+                        testingselector={
+                          CONSTANTS.testingSelectors.shortLink.listPage.table
+                            .actionPopoverBtn
+                        }
+                        testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
+                        onClick={(_event: unknown) => {
+                          setCompState(oldVal => ({
+                            ...oldVal,
+                            selectedMemberId: _rowInfo.original.id || ''
+                          }));
+
+                          //
+                          presentZMemberActionPopover({
+                            _event: _event as Event,
+                            _cssClass: 'z_member_table_action_popover_width',
+                            _dismissOnSelect: false
+                          });
+                        }}>
+                        <ZIonIcon icon={ellipsisVerticalOutline} />
+                      </ZIonButton>
+                    </ZIonCol>
+                  </ZIonRow>
                 );
               })}
-
-              <ZIonCol
-                size='.8'
-                className={classNames({
-                  'border-b ps-2 py-1 font-bold zaions__light_bg text-sm': true,
-                  'border-r': false
-                })}>
-                Actions
-              </ZIonCol>
-            </ZIonRow>
-          );
-        })}
-
-        {/* Body Section */}
-        <ZIonRow className='rounded-b-lg zaions__light_bg'>
-          <ZIonCol
-            size='12'
-            className='w-full ion-no-padding'>
-            {zMembersTable?.getRowModel().rows.map((_rowInfo, _rowIndex) => {
-              return (
-                <ZIonRow
-                  key={_rowIndex}
-                  className='flex-nowrap'>
-                  {_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
-                    _cellInfo.column.getIsVisible() ? (
-                      <ZIonCol
-                        key={_cellIndex}
-                        size={
-                          _cellInfo.column.id ===
-                            ZWSMemberListPageTableColumnsIds.id ||
-                          _cellInfo.column.id ===
-                            ZWSMemberListPageTableColumnsIds.actions
-                            ? '1.2'
-                            : '2.5'
-                        }
-                        className={classNames({
-                          'py-1 mt-1 border-b flex ion-align-items-center':
-                            true,
-                          'border-r': false,
-                          'ps-2':
-                            _cellInfo.column.id !==
-                            ZWSMemberListPageTableColumnsIds.id,
-                          'ps-0':
-                            _cellInfo.column.id ===
-                            ZWSMemberListPageTableColumnsIds.id
-                        })}>
-                        <div
-                          className={classNames({
-                            'w-full text-sm ZaionsTextEllipsis': true,
-                            'ps-3':
-                              _cellInfo.column.id ===
-                              ZWSMemberListPageTableColumnsIds.id
-                          })}>
-                          {flexRender(
-                            _cellInfo.column.columnDef.cell,
-                            _cellInfo.getContext()
-                          )}
-                        </div>
-                      </ZIonCol>
-                    ) : null
-                  )}
-
-                  <ZIonCol
-                    size='.8'
-                    className={classNames({
-                      'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
-                        true,
-                      'border-r': false
-                    })}>
-                    <ZIonButton
-                      fill='clear'
-                      color='dark'
-                      className='ion-no-padding ion-no-margin'
-                      size='small'
-                      testingselector={
-                        CONSTANTS.testingSelectors.shortLink.listPage.table
-                          .actionPopoverBtn
-                      }
-                      testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
-                      onClick={(_event: unknown) => {
-                        setCompState(oldVal => ({
-                          ...oldVal,
-                          selectedMemberId: _rowInfo.original.id || ''
-                        }));
-
-                        //
-                        presentZMemberActionPopover({
-                          _event: _event as Event,
-                          _cssClass: 'z_member_table_action_popover_width',
-                          _dismissOnSelect: false
-                        });
-                      }}>
-                      <ZIonIcon icon={ellipsisVerticalOutline} />
-                    </ZIonButton>
-                  </ZIonCol>
-                </ZIonRow>
-              );
-            })}
-          </ZIonCol>
-        </ZIonRow>
+            </ZIonCol>
+          </ZIonRow>
+        </div>
       </ZCustomScrollable>
 
       <ZIonRow className='w-full px-2 pt-1 pb-2 mt-2 overflow-hidden border rounded-lg ion-align-items-center zaions__light_bg'>
@@ -493,12 +591,9 @@ const ZInpageTable: React.FC = () => {
                 zNavigatePushRoute(
                   createRedirectRoute({
                     url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
-                      .ViewTeam,
-                    params: [
-                      CONSTANTS.RouteParams.workspace.workspaceId,
-                      CONSTANTS.RouteParams.workspace.teamId
-                    ],
-                    values: [workspaceId, teamId],
+                      .Members,
+                    params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                    values: [workspaceId],
                     routeSearchParams: {
                       pageindex: 0,
                       pagesize: zMembersTable
@@ -534,12 +629,9 @@ const ZInpageTable: React.FC = () => {
                 zNavigatePushRoute(
                   createRedirectRoute({
                     url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
-                      .ViewTeam,
-                    params: [
-                      CONSTANTS.RouteParams.workspace.workspaceId,
-                      CONSTANTS.RouteParams.workspace.teamId
-                    ],
-                    values: [workspaceId, teamId],
+                      .Members,
+                    params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                    values: [workspaceId],
                     routeSearchParams: {
                       pageindex:
                         zMembersTable.getState().pagination.pageIndex - 1,
@@ -575,12 +667,9 @@ const ZInpageTable: React.FC = () => {
                 zNavigatePushRoute(
                   createRedirectRoute({
                     url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
-                      .ViewTeam,
-                    params: [
-                      CONSTANTS.RouteParams.workspace.workspaceId,
-                      CONSTANTS.RouteParams.workspace.teamId
-                    ],
-                    values: [workspaceId, teamId],
+                      .Members,
+                    params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                    values: [workspaceId],
                     routeSearchParams: {
                       pageindex:
                         zMembersTable.getState().pagination.pageIndex + 1,
@@ -615,12 +704,9 @@ const ZInpageTable: React.FC = () => {
                 zNavigatePushRoute(
                   createRedirectRoute({
                     url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
-                      .ViewTeam,
-                    params: [
-                      CONSTANTS.RouteParams.workspace.workspaceId,
-                      CONSTANTS.RouteParams.workspace.teamId
-                    ],
-                    values: [workspaceId, teamId],
+                      .Members,
+                    params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                    values: [workspaceId],
                     routeSearchParams: {
                       pageindex: zMembersTable.getPageCount() - 1,
                       pagesize: zMembersTable
@@ -643,10 +729,14 @@ const ZInpageTable: React.FC = () => {
         <ZIonCol></ZIonCol>
 
         <ZIonCol className='flex ion-align-items-center ion-justify-content-end'>
+          <ZIonText className='mt-1 font-semibold me-3'>
+            {filteredMembersDataRSelector?.length || 0}{' '}
+            {filteredMembersDataRSelector?.length === 1 ? 'Member' : 'Members'}
+          </ZIonText>
           <ZIonSelect
             minHeight='30px'
             fill='outline'
-            className='bg-white w-[7rem] mt-1'
+            className='zaions__bg_white w-[7rem] mt-1'
             interface='popover'
             value={zMembersTable.getState().pagination.pageSize}
             testingselector={
@@ -713,11 +803,7 @@ const ZMemberActionPopover: React.FC<{
   useEffect(() => {
     try {
       const _allMemberRQCacheData = getRQCDataHandler({
-        key: [
-          CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-          workspaceId,
-          teamId
-        ]
+        key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId]
       });
 
       const _allMember =
@@ -742,10 +828,9 @@ const ZMemberActionPopover: React.FC<{
       const __response = await resendInviteTeamMemberAsyncMutate({
         urlDynamicParts: [
           CONSTANTS.RouteParams.workspace.workspaceId,
-          CONSTANTS.RouteParams.workspace.teamId,
           CONSTANTS.RouteParams.workspace.invitationId
         ],
-        itemIds: [workspaceId, teamId, membersId],
+        itemIds: [workspaceId, membersId],
         requestData: ''
       });
 
@@ -759,8 +844,7 @@ const ZMemberActionPopover: React.FC<{
           await updateRQCDataHandler({
             key: [
               CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-              workspaceId,
-              teamId
+              workspaceId
             ],
             data: __data,
             id: __data?.id!

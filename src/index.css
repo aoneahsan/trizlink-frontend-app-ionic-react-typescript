@@ -350,6 +350,10 @@ span.new {
   background: rgba(var(--ion-color-dark-rgb), 0.7);
 }
 
+.zaions__primary_bg_opacity_point_6 {
+  background: rgba(var(--ion-color-primary-rgb), 0.6);
+}
+
 .zaions__light_bg_opacity_point_2 {
   background: rgba(var(--ion-color-light-rgb), 0.2) !important;
   --background: rgba(var(--ion-color-light-rgb), 0.2) !important;

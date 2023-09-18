@@ -1501,7 +1501,7 @@ export const zGetRoutePermissions = ({
         ];
         break;
 
-      case ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team:
+      case ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members:
         __permissions = [
           permissionsEnum.viewAny_workspace,
           permissionsEnum.viewAny_workspaceTeam

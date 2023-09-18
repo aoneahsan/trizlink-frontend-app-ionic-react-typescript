@@ -27,8 +27,8 @@ import {
 } from '@/components/ZIonComponents';
 import ZCan from '@/components/Can';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
-import ZaionsAddUtmTags from '@/components/InPageComponents/ZaionsModals/AddUtmTags';
-import ZUTMTagsTable from '@/components/InPageComponents/ZaionsTable/UTMTagsTemplateTable';
+import EmbedWidgetsTable from '@/components/InPageComponents/ZaionsTable/embedWidgetsTable';
+import ZaionsEmbedWidgetsModal from '@/components/InPageComponents/ZaionsModals/AddEmbedWidgets';
 
 /**
  * Custom Hooks Imports go down
@@ -95,8 +95,8 @@ const ZWSSettingEmbedWidgetListPage: React.FC = () => {
   // #endregion
 
   // #region Modals & popovers
-  const { presentZIonModal: presentZUtmTagsFormModal } = useZIonModal(
-    ZaionsAddUtmTags,
+  const { presentZIonModal: presentZEmbedWidgetsFormModal } = useZIonModal(
+    ZaionsEmbedWidgetsModal,
     {
       formMode: FormMode.ADD
     }
@@ -227,29 +227,30 @@ const ZWSSettingEmbedWidgetListPage: React.FC = () => {
             />
             Refetch
           </ZIonButton>
-
-          {/* Create new UTM */}
-          <ZIonButton
-            color='primary'
-            fill='solid'
-            minHeight={isLgScale ? '39px' : '2rem'}
-            expand={!isLgScale ? 'block' : undefined}
-            testingselector={
-              CONSTANTS.testingSelectors.WSSettings.teamListPage.createTeamBtn
-            }
-            className={classNames({
-              'my-2': true,
-              'text-xs ion-no-margin ion-no-padding w-[33.33%]':
-                !isLgScale && isSmScale,
-              'w-full': !isSmScale
-            })}
-            onClick={() => {
-              presentZUtmTagsFormModal({
-                _cssClass: 'utm-tags-modal-size'
-              });
-            }}>
-            Create new UTM
-          </ZIonButton>
+          <ZCan havePermissions={[permissionsEnum.create_embededWidget]}>
+            {/* Create new embeded widget */}
+            <ZIonButton
+              color='primary'
+              fill='solid'
+              minHeight={isLgScale ? '39px' : '2rem'}
+              expand={!isLgScale ? 'block' : undefined}
+              testingselector={
+                CONSTANTS.testingSelectors.WSSettings.teamListPage.createTeamBtn
+              }
+              className={classNames({
+                'my-2': true,
+                'text-xs ion-no-margin ion-no-padding w-[33.33%]':
+                  !isLgScale && isSmScale,
+                'w-full': !isSmScale
+              })}
+              onClick={() => {
+                presentZEmbedWidgetsFormModal({
+                  _cssClass: 'utm-tags-modal-size'
+                });
+              }}>
+              Create new embed widget
+            </ZIonButton>
+          </ZCan>
 
           {/* {!isMdScale ? (
             <ZIonButton
@@ -277,14 +278,14 @@ const ZWSSettingEmbedWidgetListPage: React.FC = () => {
         </ZIonCol>
       </ZIonRow>
 
-      <ZCan havePermissions={[permissionsEnum.view_utmTag]}>
+      <ZCan havePermissions={[permissionsEnum.view_embededWidget]}>
         <Suspense
           fallback={
             <ZIonRow className='h-full'>
               <ZFallbackIonSpinner2 />
             </ZIonRow>
           }>
-          <ZUTMTagsTable />
+          <EmbedWidgetsTable />
         </Suspense>
       </ZCan>
     </>

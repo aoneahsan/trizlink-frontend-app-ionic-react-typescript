@@ -494,7 +494,8 @@ const ZInpageTable: React.FC = () => {
               if (zTeamsTable.getCanPreviousPage()) {
                 zNavigatePushRoute(
                   createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
+                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                      .Members,
                     params: [CONSTANTS.RouteParams.workspace.workspaceId],
                     values: [workspaceId],
                     routeSearchParams: {
@@ -527,7 +528,8 @@ const ZInpageTable: React.FC = () => {
 
                 zNavigatePushRoute(
                   createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
+                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                      .Members,
                     params: [CONSTANTS.RouteParams.workspace.workspaceId],
                     values: [workspaceId],
                     routeSearchParams: {
@@ -560,7 +562,8 @@ const ZInpageTable: React.FC = () => {
 
                 zNavigatePushRoute(
                   createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
+                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                      .Members,
                     params: [CONSTANTS.RouteParams.workspace.workspaceId],
                     values: [workspaceId],
                     routeSearchParams: {
@@ -592,7 +595,8 @@ const ZInpageTable: React.FC = () => {
 
                 zNavigatePushRoute(
                   createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
+                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                      .Members,
                     params: [CONSTANTS.RouteParams.workspace.workspaceId],
                     values: [workspaceId],
                     routeSearchParams: {
@@ -628,7 +632,7 @@ const ZInpageTable: React.FC = () => {
 
               zNavigatePushRoute(
                 createRedirectRoute({
-                  url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
+                  url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
                   params: [CONSTANTS.RouteParams.workspace.workspaceId],
                   values: [workspaceId],
                   routeSearchParams: {

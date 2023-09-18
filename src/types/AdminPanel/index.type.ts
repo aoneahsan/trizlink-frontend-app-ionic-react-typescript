@@ -2,6 +2,8 @@ import { IonReorderGroupCustomEvent } from '@ionic/core';
 import { LinkFolderType, TimeFilterEnum } from './linksType/index';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import { ItemReorderEventDetail } from '@ionic/react';
+import { workspaceFormRoleEnum } from './workspace';
+import { WSRolesNameEnum } from '../UserAccount/index.type';
 
 // Enum's
 export enum FormMode {
@@ -54,7 +56,9 @@ export enum daysEnum {
 export enum ZUserSettingTypeEnum {
   shortLinkListPageTable = 'shortLinkListPageTable',
   pixelListPageTable = 'pixelListPageTable',
-  UTMTagListPageTable = 'UTMTagListPageTable'
+  UTMTagListPageTable = 'UTMTagListPageTable',
+  embedWidgetsListPageTable = 'embedWidgetsListPageTable',
+  membersListPageTable = 'membersListPageTable'
 }
 
 export enum ZNotificationEnum {
@@ -102,6 +106,18 @@ export enum ZUTMTagsListPageTableColumnsIds {
   actions = '__z_utm_tags_actions__'
 }
 
+export enum ZMembersListPageTableColumnsIds {
+  id = '__z_member_id__',
+  createAt = '__z_member_create_at__',
+  formattedCreateAt = '__z_member_formatted_create_at__',
+  email = '__z_member_email_id__',
+  role = '__z_member_role__',
+  status = '__z_member_status__',
+  invitedAt = '__z_member_invited_at__',
+  invitedAcceptedAt = '__z_member_invited_accepted_at__',
+  actions = '__z_member_actions__'
+}
+
 // Interfaces
 export interface UTMTagInfoInterface {
   templateId?: string;
@@ -121,6 +137,12 @@ export interface IFilterOptions {
   searchQuery?: string | null;
   platform?: string;
 }
+
+export interface IMembersFilterOptions extends IFilterOptions {
+  role?: WSRolesNameEnum;
+  status?: ZTeamMemberInvitationEnum;
+}
+
 export interface IZNotification {
   id?: string;
   ZLInviteeId?: string;

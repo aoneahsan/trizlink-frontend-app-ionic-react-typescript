@@ -78,8 +78,8 @@ const ZWSSettingsMenu: React.FC = () => {
   const { isLgScale } = useZMediaQueryScale();
 
   // #region checking the route.
-  const isTeamPage = useRouteMatch(
-    ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team
+  const isMembersPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members
   )?.isExact;
 
   const isReferralProgramPage = useRouteMatch(
@@ -100,6 +100,10 @@ const ZWSSettingsMenu: React.FC = () => {
 
   const isUtmTagPage = useRouteMatch(
     ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag
+  )?.isExact;
+
+  const isEmbedWidgetPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.AccountSettings.EmbedWidget
   )?.isExact;
   // #endregion
 
@@ -123,7 +127,10 @@ const ZWSSettingsMenu: React.FC = () => {
             CONSTANTS.testingSelectors.WSSettings.menuBar.accordionGroup.value
           }
           value={
-            isBillingPage || isTeamPage || isReferralProgramPage || isUserPage
+            isBillingPage ||
+            isMembersPage ||
+            isReferralProgramPage ||
+            isUserPage
               ? WSSettingsPageSect.accountSetting
               : WSSettingsPageSect.workspaceSettings
           }>
@@ -144,23 +151,23 @@ const ZWSSettingsMenu: React.FC = () => {
             <div
               className='px-1 py-1'
               slot='content'>
-              {/* Team */}
+              {/* Members */}
               <ZIonItem
                 lines='none'
                 minHeight='2rem'
                 className={classNames({
                   'mt-1 cursor-pointer': true,
-                  zaions__light_bg: isTeamPage
+                  zaions__light_bg: isMembersPage
                 })}
                 testingselector={
                   CONSTANTS.testingSelectors.WSSettings.menuBar.as.teamBtn
                 }
                 routerLink={replaceRouteParams(
-                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.Team,
+                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
                   [CONSTANTS.RouteParams.workspace.workspaceId],
                   [workspaceId]
                 )}>
-                Team
+                Members
               </ZIonItem>
 
               {/* Referral Program */}
@@ -280,8 +287,8 @@ const ZWSSettingsMenu: React.FC = () => {
                 lines='none'
                 minHeight='2rem'
                 className={classNames({
-                  'mt-1 cursor-pointer': true
-                  // zaions__light_bg: false,
+                  'mt-1 cursor-pointer': true,
+                  zaions__light_bg: isEmbedWidgetPage
                 })}
                 testingselector={
                   CONSTANTS.testingSelectors.WSSettings.menuBar.ws
