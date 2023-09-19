@@ -508,7 +508,8 @@ const ZWorkspacesCard: React.FC<{
                     </ZIonButton>
                   </ZIonCol>
                 </>
-              ) : accountStatus === ZTeamMemberInvitationEnum.pending ? (
+              ) : accountStatus === ZTeamMemberInvitationEnum.pending ||
+                accountStatus === ZTeamMemberInvitationEnum.resend ? (
                 <>
                   {/* Accept invitation */}
                   <ZIonCol>

@@ -271,7 +271,7 @@ const ZLabelsTab: React.FC<{
           );
 
           if (__data && __data?.success) {
-            // getting all the shortLinks from RQ cache.
+            // getting all the label from RQ cache.
             const __oldLabels =
               extractInnerData<LabelInterface[]>(
                 getRQCDataHandler<LabelInterface[]>({
@@ -283,7 +283,7 @@ const ZLabelsTab: React.FC<{
                 extractInnerDataOptionsEnum.createRequestResponseItems
               ) || [];
 
-            // removing deleted shortLinks from cache.
+            // removing deleted label from cache.
             const __updatedLabels = __oldLabels.filter(
               el => el.id !== _labelId
             );

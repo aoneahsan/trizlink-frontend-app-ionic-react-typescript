@@ -73,6 +73,7 @@ export enum ZTeamMemberInvitationEnum {
   active = 'active',
   suspended = 'suspended',
   blocked = 'blocked',
+  cancel = 'cancel',
   accepted = 'accepted',
   rejected = 'rejected'
 }

@@ -22,13 +22,16 @@ const GENERAL = {
   },
   MEMBER: {
     INVITE_SEND: 'successfully send invitation.',
-    INVITE_RESEND: 'Successfully resend invitation.'
+    INVITE_RESEND: 'Successfully resend invitation.',
+    CANCELED: 'Successfully canceled invitation.',
+    DELETED: 'Successfully deleted invitation.'
   },
   SHORT_LINKS: {
     SHORT_LINK_CREATED: 'Short link created successfully.',
     SHORT_LINK_UPDATED: 'Short link updated successfully.',
     SHORT_LINK_DELETE: 'Short link deleted successfully.'
   },
+
   TIME_SLOT: {
     CREATED: 'Time slot created successfully.',
     UPDATED: 'Time slot updated successfully.',

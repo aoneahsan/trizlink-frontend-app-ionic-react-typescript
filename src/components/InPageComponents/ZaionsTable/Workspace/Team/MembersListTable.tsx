@@ -22,6 +22,7 @@ import dayjs from 'dayjs';
 import {
   chevronBackOutline,
   chevronForwardOutline,
+  closeOutline,
   createOutline,
   ellipsisVerticalOutline,
   playBackOutline,
@@ -59,9 +60,15 @@ import ZWorkspacesSharingModal from '@/components/InPageComponents/ZaionsModals/
  * ? Like import of custom Hook is a custom import
  * */
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import {
+  useZIonAlert,
+  useZIonErrorAlert,
+  useZIonModal,
+  useZIonPopover
+} from '@/ZaionsHooks/zionic-hooks';
 import {
   useZGetRQCacheData,
+  useZRQDeleteRequest,
   useZRQGetRequest,
   useZRQUpdateRequest,
   useZUpdateRQCacheData
@@ -73,7 +80,11 @@ import {
  * */
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { createRedirectRoute, extractInnerData } from '@/utils/helpers';
+import {
+  createRedirectRoute,
+  extractInnerData,
+  zStringify
+} from '@/utils/helpers';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import { reportCustomError } from '@/utils/customErrorType';
@@ -103,9 +114,9 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
  * ? Import of recoil states is a Recoil State import
  * */
 import {
-   FilteredMembersDataRStateSelector,
-   MembersAccountsRStateAtom
- } from '@/ZaionsStore/UserDashboard/MemberState/index.recoil';
+  FilteredMembersDataRStateSelector,
+  MembersAccountsRStateAtom
+} from '@/ZaionsStore/UserDashboard/MemberState/index.recoil';
 
 /**
  * Style files Imports go down
@@ -311,7 +322,8 @@ const ZInpageTable: React.FC = () => {
                 ? 'warning'
                 : value === ZTeamMemberInvitationEnum.accepted
                 ? 'success'
-                : value === ZTeamMemberInvitationEnum.rejected
+                : value === ZTeamMemberInvitationEnum.rejected ||
+                  value === ZTeamMemberInvitationEnum.cancel
                 ? 'danger'
                 : value === ZTeamMemberInvitationEnum.resend
                 ? 'secondary'
@@ -790,6 +802,8 @@ const ZMemberActionPopover: React.FC<{
   // #region custom hooks.
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
+  const { presentZIonErrorAlert } = useZIonErrorAlert();
+  const { presentZIonAlert } = useZIonAlert();
   // #endregion
 
   // #region APIS.
@@ -798,6 +812,16 @@ const ZMemberActionPopover: React.FC<{
       _url: API_URL_ENUM.ws_team_member_resendInvite_list,
       _loaderMessage: 'Resending invitation.'
     });
+
+  // update invitation data api
+  const { mutateAsync: updateInvitationAsyncMutate } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.ws_team_member_update,
+    _loaderMessage: 'Canceling invitation...'
+  });
+
+  const { mutateAsync: deleteInvitationAsyncMutate } = useZRQDeleteRequest(
+    API_URL_ENUM.ws_team_member_invite_get_delete
+  );
   // #endregion
 
   useEffect(() => {
@@ -823,6 +847,7 @@ const ZMemberActionPopover: React.FC<{
     }
   }, []);
 
+  // #region Functions.
   const ZResendInvitationHandler = async () => {
     try {
       const __response = await resendInviteTeamMemberAsyncMutate({
@@ -864,6 +889,159 @@ const ZMemberActionPopover: React.FC<{
     }
   };
 
+  // Cancel invitation alert.
+  const ZCancelInvitationAlert = async () => {
+    try {
+      if (membersId) {
+        await presentZIonAlert({
+          header: `Cancel Invitation`,
+          subHeader: 'Cancel the invitation from workspace.',
+          message: 'Are you sure you want to cancel this invitation?',
+          buttons: [
+            {
+              text: 'Close',
+              role: 'cancel'
+            },
+            {
+              text: 'Cancel',
+              role: 'danger',
+              handler: () => {
+                void ZCancelInvitation();
+              }
+            }
+          ]
+        });
+      } else {
+        await presentZIonErrorAlert();
+      }
+    } catch (error) {
+      await presentZIonErrorAlert();
+    }
+  };
+
+  const ZCancelInvitation = async () => {
+    try {
+      const __stringifyData = zStringify({
+        status: ZTeamMemberInvitationEnum.cancel
+      });
+
+      const __response = await updateInvitationAsyncMutate({
+        itemIds: [membersId],
+        urlDynamicParts: [CONSTANTS.RouteParams.workspace.memberInviteId],
+        requestData: __stringifyData
+      });
+
+      if (__response) {
+        const __data = extractInnerData<WSTeamMembersInterface>(
+          __response,
+          extractInnerDataOptionsEnum.createRequestResponseItem
+        );
+
+        if (__data && __data?.id) {
+          await updateRQCDataHandler({
+            key: [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+              workspaceId
+            ],
+            data: __data,
+            id: __data?.id
+          });
+
+          showSuccessNotification(MESSAGES.GENERAL.MEMBER.CANCELED);
+
+          dismissZIonPopover('', '');
+        }
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
+
+  // when user won't to delete Invitation and click on the delete button this function will fire and show the confirm alert.
+  const deleteMember = async () => {
+    try {
+      if (membersId) {
+        await presentZIonAlert({
+          header: `Delete Invitation`,
+          subHeader: 'Remove invitation from workspace.',
+          message: 'Are you sure you want to delete this invitation?',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel'
+            },
+            {
+              text: 'Delete',
+              role: 'danger',
+              handler: () => {
+                void ZDeleteInvitation();
+              }
+            }
+          ]
+        });
+      } else {
+        await presentZIonErrorAlert();
+      }
+    } catch (error) {
+      await presentZIonErrorAlert();
+    }
+  };
+
+  const ZDeleteInvitation = async () => {
+    try {
+      const __response = await deleteInvitationAsyncMutate({
+        itemIds: [workspaceId, membersId],
+        urlDynamicParts: [
+          CONSTANTS.RouteParams.workspace.workspaceId,
+          CONSTANTS.RouteParams.workspace.memberInviteId
+        ]
+      });
+      if (__response) {
+        const __data = extractInnerData<{ success: boolean }>(
+          __response,
+          extractInnerDataOptionsEnum.createRequestResponseItem
+        );
+
+        if (__data && __data?.success) {
+          // getting all the members from RQ cache.
+          const __oldMembers =
+            extractInnerData<WSTeamMembersInterface[]>(
+              getRQCDataHandler<WSTeamMembersInterface[]>({
+                key: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+                  workspaceId
+                ]
+              }) as WSTeamMembersInterface[],
+              extractInnerDataOptionsEnum.createRequestResponseItems
+            ) || [];
+
+          // removing deleted members from cache.
+          const __updatedMembers = __oldMembers.filter(
+            el => el.id !== membersId
+          );
+
+          await updateRQCDataHandler({
+            key: [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+              workspaceId
+            ],
+            data: __updatedMembers,
+            id: '',
+            updateHoleData: true,
+            extractType: ZRQGetRequestExtractEnum.extractItems
+          });
+
+          showSuccessNotification(MESSAGES.GENERAL.MEMBER.DELETED);
+
+          dismissZIonPopover('', '');
+        }
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
+  // #endregion
+
   return (
     <ZIonList
       lines='none'
@@ -898,86 +1076,136 @@ const ZMemberActionPopover: React.FC<{
         </ZIonItem>
 
         {/* Resend invite link */}
-        <ZIonItem
-          button={true}
-          detail={false}
-          minHeight='2.5rem'
-          testingselector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.resendInvitation}-${membersId}`}
-          testinglistselector={
-            CONSTANTS.testingSelectors.WSSettings.teamListPage.table
-              .resendInvitation
-          }
-          disabled={
-            compState?.currentMemberData?.resendAllowedAfter?.trim()?.length !==
-              0 &&
-            dayjs(compState?.currentMemberData?.resendAllowedAfter).isAfter(
-              dayjs()
-            )
-          }
-          onClick={async () => {
-            if (
-              compState?.currentMemberData?.resendAllowedAfter?.trim()
-                ?.length !== 0 &&
-              dayjs(compState?.currentMemberData?.resendAllowedAfter).isBefore(
-                dayjs()
-              )
-            ) {
-              console.log(
+        {compState?.currentMemberData?.accountStatus !==
+          ZTeamMemberInvitationEnum.accepted && (
+          <div
+            className={classNames({
+              'cursor-not-allowed':
                 compState?.currentMemberData?.resendAllowedAfter?.trim()
                   ?.length !== 0 &&
+                dayjs(compState?.currentMemberData?.resendAllowedAfter).isAfter(
+                  dayjs()
+                )
+            })}>
+            <ZIonItem
+              button={true}
+              detail={false}
+              minHeight='2.5rem'
+              testingselector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.resendInvitation}-${membersId}`}
+              testinglistselector={
+                CONSTANTS.testingSelectors.WSSettings.teamListPage.table
+                  .resendInvitation
+              }
+              onClick={async () => {
+                if (
+                  compState?.currentMemberData?.resendAllowedAfter?.trim()
+                    ?.length !== 0 &&
                   dayjs(
                     compState?.currentMemberData?.resendAllowedAfter
                   ).isBefore(dayjs())
-              );
-              await ZResendInvitationHandler();
+                ) {
+                  await ZResendInvitationHandler();
+                }
+              }}
+              disabled={
+                compState?.currentMemberData?.resendAllowedAfter?.trim()
+                  ?.length !== 0 &&
+                dayjs(compState?.currentMemberData?.resendAllowedAfter).isAfter(
+                  dayjs()
+                )
+              }>
+              <ZIonButton
+                size='small'
+                expand='full'
+                fill='clear'
+                color='light'
+                className='ion-text-capitalize'>
+                <ZIonIcon
+                  icon={sendOutline}
+                  className='w-5 h-5 me-2'
+                  color='primary'
+                />
+                <ZIonText
+                  color='primary'
+                  className='text-[.9rem] pt-1'>
+                  Resend invite link
+                </ZIonText>
+              </ZIonButton>
+            </ZIonItem>
+          </div>
+        )}
+
+        {/* Cancel */}
+        {(compState?.currentMemberData?.accountStatus ===
+          ZTeamMemberInvitationEnum.pending ||
+          compState?.currentMemberData?.accountStatus ===
+            ZTeamMemberInvitationEnum.resend) && (
+          <ZIonItem
+            button={true}
+            detail={false}
+            minHeight='2.5rem'
+            testingselector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.cancelBtn}-${membersId}`}
+            testinglistselector={
+              CONSTANTS.testingSelectors.WSSettings.teamListPage.table.cancelBtn
             }
-          }}>
-          <ZIonButton
-            size='small'
-            expand='full'
-            fill='clear'
-            color='light'
-            className='ion-text-capitalize'>
-            <ZIonIcon
-              icon={sendOutline}
-              className='w-5 h-5 me-2'
-              color='primary'
-            />
-            <ZIonText
-              color='primary'
-              className='text-[.9rem] pt-1'>
-              Resend invite link
-            </ZIonText>
-          </ZIonButton>
-        </ZIonItem>
+            onClick={async () => {
+              await ZCancelInvitationAlert();
+            }}>
+            <ZIonButton
+              size='small'
+              expand='full'
+              fill='clear'
+              color='light'
+              className='ion-text-capitalize'>
+              <ZIonIcon
+                icon={closeOutline}
+                className='w-5 h-5 me-2'
+                color='danger'
+              />
+              <ZIonText
+                color='danger'
+                className='text-[.9rem] pt-1'>
+                Cancel
+              </ZIonText>
+            </ZIonButton>
+          </ZIonItem>
+        )}
 
         {/* Delete */}
-        <ZIonItem
-          button={true}
-          detail={false}
-          minHeight='2.5rem'
-          testingselector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.deleteBtn}-${membersId}`}
-          testinglistselector={
-            CONSTANTS.testingSelectors.WSSettings.teamListPage.table.deleteBtn
-          }>
-          <ZIonButton
-            size='small'
-            expand='full'
-            fill='clear'
-            color='light'
-            className='ion-text-capitalize'>
-            <ZIonIcon
-              icon={trashBinOutline}
-              className='w-5 h-5 me-2'
-              color='danger'
-            />
-            <ZIonText
-              color='danger'
-              className='text-[.9rem] pt-1'>
-              Delete
-            </ZIonText>
-          </ZIonButton>
-        </ZIonItem>
+        {(compState?.currentMemberData?.accountStatus ===
+          ZTeamMemberInvitationEnum.cancel ||
+          compState?.currentMemberData?.accountStatus ===
+            ZTeamMemberInvitationEnum.rejected) && (
+          <ZIonItem
+            button={true}
+            detail={false}
+            minHeight='2.5rem'
+            testingselector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.deleteBtn}-${membersId}`}
+            testinglistselector={
+              CONSTANTS.testingSelectors.WSSettings.teamListPage.table.deleteBtn
+            }
+            onClick={async () => {
+              await deleteMember();
+            }}>
+            <ZIonButton
+              size='small'
+              expand='full'
+              fill='clear'
+              color='light'
+              className='ion-text-capitalize'>
+              <ZIonIcon
+                icon={trashBinOutline}
+                className='w-5 h-5 me-2'
+                color='danger'
+              />
+              <ZIonText
+                color='danger'
+                className='text-[.9rem] pt-1'>
+                Delete
+              </ZIonText>
+            </ZIonButton>
+          </ZIonItem>
+        )}
       </ZCan>
     </ZIonList>
   );

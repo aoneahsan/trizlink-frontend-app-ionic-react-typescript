@@ -262,7 +262,7 @@ const ZWSSettingTeamsListPage: React.FC = () => {
                   _cssClass: 'workspace-sharing-modal-size'
                 });
               }}>
-              Add member
+              Invite member
             </ZIonButton>
           </ZCan>
 
