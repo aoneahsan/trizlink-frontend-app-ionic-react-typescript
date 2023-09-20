@@ -2,8 +2,7 @@ import { IonReorderGroupCustomEvent } from '@ionic/core';
 import { LinkFolderType, TimeFilterEnum } from './linksType/index';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import { ItemReorderEventDetail } from '@ionic/react';
-import { workspaceFormRoleEnum } from './workspace';
-import { WSRolesNameEnum } from '../UserAccount/index.type';
+import { WSRolesNameEnum } from './workspace';
 
 // Enum's
 export enum FormMode {
@@ -64,7 +63,8 @@ export enum ZUserSettingTypeEnum {
 export enum ZNotificationEnum {
   newDeviceLogin = 'newDeviceLogin',
   lastLogout = 'lastLogout',
-  wsTeamMemberInvitation = 'wsTeamMemberInvitation'
+  wsTeamMemberInvitation = 'wsTeamMemberInvitation',
+  wsMemberInviteAction = 'wsMemberInviteAction' // action by invitee in invitee accept
 }
 
 export enum ZTeamMemberInvitationEnum {

@@ -130,8 +130,8 @@ const ZNotificationPopover: React.FC<{
     ],
     _showLoader: false,
     _checkPermissions: false,
-    _itemsIds: [ZNotificationEnum.wsTeamMemberInvitation],
-    _urlDynamicParts: [CONSTANTS.RouteParams.user.notification.type]
+    _itemsIds: [],
+    _urlDynamicParts: []
   });
 
   const { mutateAsync: markAllAsReadAsyncMutate } = useZRQUpdateRequest({
@@ -270,10 +270,8 @@ const ZNotificationPopover: React.FC<{
                         ) {
                           const _response = await markAllAsReadAsyncMutate({
                             requestData: '',
-                            itemIds: [ZNotificationEnum.wsTeamMemberInvitation],
-                            urlDynamicParts: [
-                              CONSTANTS.RouteParams.user.notification.type
-                            ]
+                            itemIds: [],
+                            urlDynamicParts: []
                           });
 
                           if (_response) {
@@ -405,8 +403,8 @@ const ZUpdatesTab: React.FC<{
     ],
     _showLoader: false,
     _checkPermissions: false,
-    _itemsIds: [ZNotificationEnum.wsTeamMemberInvitation],
-    _urlDynamicParts: [CONSTANTS.RouteParams.user.notification.type]
+    _itemsIds: [],
+    _urlDynamicParts: []
   });
 
   const { mutateAsync: markAsReadAsyncMutate } = useZRQUpdateRequest({
@@ -435,11 +433,8 @@ const ZUpdatesTab: React.FC<{
       if (notificationId) {
         const _response = await markAsReadAsyncMutate({
           requestData: '',
-          itemIds: [ZNotificationEnum.wsTeamMemberInvitation, notificationId],
-          urlDynamicParts: [
-            CONSTANTS.RouteParams.user.notification.type,
-            CONSTANTS.RouteParams.user.notification.id
-          ]
+          itemIds: [notificationId],
+          urlDynamicParts: [CONSTANTS.RouteParams.user.notification.id]
         });
 
         if (_response) {
@@ -485,104 +480,102 @@ const ZUpdatesTab: React.FC<{
     <ZCustomScrollable
       className='h-full pb-10 mb-2'
       scrollY={true}>
-      {userInvitationNotificationsData?.map((el, index) => (
-        <ZIonRow
-          key={index}
-          className={classNames({
-            'pb-2 border-b cursor-pointer px-1': true,
-            zaions__bg_light_opacity_point7: el?.read_at !== null,
-            zaions__bg_white: el?.read_at === null
-          })}
-          testingselector={
-            CONSTANTS.testingSelectors.topBar.notificationPopover
-              .singleNotification
-          }
-          testinglistselector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.singleNotification}-${el?.id}`}
-          onClick={() => {
-            if (el?.read_at === null) {
-              void zMarkAsReadHandler({
-                notificationId: el?.id
-              });
+      {/* console.log({ d: el.zlNotificationType }); */}
+      {userInvitationNotificationsData?.map((el, index) => {
+        return (
+          <ZIonRow
+            key={index}
+            className={classNames({
+              'pb-2 border-b cursor-pointer px-1': true,
+              zaions__bg_light_opacity_point7: el?.read_at !== null,
+              zaions__bg_white: el?.read_at === null
+            })}
+            testingselector={
+              CONSTANTS.testingSelectors.topBar.notificationPopover
+                .singleNotification
             }
-          }}>
-          {/*  */}
-          <ZIonCol size='1.5'>
-            <ZUserAvatarButton
-              className='w-[44px!important] h-[44px!important]'
-              showStatus={true}
-              statusIconColor='light'
-              statusIcon={personAdd}
-              statusIconPosition='bottom'
-            />
-          </ZIonCol>
+            testinglistselector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.singleNotification}-${el?.id}`}
+            onClick={() => {
+              if (el?.read_at === null) {
+                void zMarkAsReadHandler({
+                  notificationId: el?.id
+                });
+              }
+            }}>
+            {/*  */}
+            <ZIonCol size='1.5'>
+              <ZUserAvatarButton
+                className='w-[44px!important] h-[44px!important]'
+                showStatus={true}
+                statusIconColor='light'
+                statusIcon={personAdd}
+                statusIconPosition='bottom'
+              />
+            </ZIonCol>
 
-          {/*  */}
-          <ZIonCol>
-            <div className='flex w-full ion-align-items-top ion-justify-content-between'>
-              <div className='w-[73%]'>
-                <div className='overflow-hidden leading-none line-clamp-2'>
-                  <ZIonText
-                    className={classNames({
-                      'text-sm ion-color': true,
-                      'ion-color-dark font-semibold': el?.read_at === null,
-                      'ion-color-medium': el?.read_at !== null
-                    })}
-                    testingselector={
-                      CONSTANTS.testingSelectors.topBar.notificationPopover
-                        .notificationUpdateTabText
-                    }
-                    testinglistselector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.notificationUpdateTabText}-${el?.id}`}>
-                    {el?.data?.item?.message}
-                  </ZIonText>
+            {/*  */}
+            <ZIonCol>
+              <div className='flex w-full ion-align-items-top ion-justify-content-between'>
+                <div className='w-[73%]'>
+                  <div className='overflow-hidden leading-none line-clamp-2'>
+                    <ZIonText
+                      className={classNames({
+                        'text-sm ion-color': true,
+                        'ion-color-dark font-semibold': el?.read_at === null,
+                        'ion-color-medium': el?.read_at !== null
+                      })}
+                      testingselector={
+                        CONSTANTS.testingSelectors.topBar.notificationPopover
+                          .notificationUpdateTabText
+                      }
+                      testinglistselector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.notificationUpdateTabText}-${el?.id}`}>
+                      {el?.data?.item?.message}
+                    </ZIonText>
+                  </div>
+
+                  {el.zlNotificationType ===
+                    ZNotificationEnum.wsTeamMemberInvitation && (
+                    <ZIonButton
+                      size='small'
+                      className='mt-1'
+                      testingselector={
+                        CONSTANTS.testingSelectors.topBar.notificationPopover
+                          .notificationUpdateTabViewBtn
+                      }
+                      testinglistselector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.notificationUpdateTabViewBtn}-${el?.id}`}
+                      onClick={async () => {
+                        setCompState(oldValues => ({
+                          ...oldValues,
+                          memberInviteId: el?.data?.item?.wsTeamMemberInviteId
+                        }));
+
+                        presentZViewInvitationModal({
+                          _cssClass: 'invitation-view-modal-size'
+                        });
+
+                        dismissZIonPopover('', '');
+                      }}>
+                      View
+                    </ZIonButton>
+                  )}
                 </div>
 
-                {el.zlNotificationType ===
-                  ZNotificationEnum.wsTeamMemberInvitation && (
-                  <ZIonButton
-                    size='small'
-                    className='mt-1'
+                {/*  */}
+                <div className='w-[22%] ion-text-center'>
+                  <ZIonText
+                    className='text-sm'
+                    color='medium'
                     testingselector={
                       CONSTANTS.testingSelectors.topBar.notificationPopover
-                        .notificationUpdateTabViewBtn
+                        .dateText
                     }
-                    testinglistselector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.notificationUpdateTabViewBtn}-${el?.id}`}
-                    onClick={async () => {
-                      setCompState(oldValues => ({
-                        ...oldValues,
-                        memberInviteId: el?.data?.item?.wsTeamMemberInviteId
-                      }));
-
-                      await zMarkAsReadHandler({
-                        notificationId: el.id
-                      });
-
-                      presentZViewInvitationModal({
-                        _cssClass: 'invitation-view-modal-size'
-                      });
-
-                      dismissZIonPopover('', '');
-                    }}>
-                    View
-                  </ZIonButton>
-                )}
+                    testinglistselector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.dateText}-${el?.id}`}>
+                    {el.createdAt}
+                  </ZIonText>
+                </div>
               </div>
 
-              {/*  */}
-              <div className='w-[22%] ion-text-center'>
-                <ZIonText
-                  className='text-sm'
-                  color='medium'
-                  testingselector={
-                    CONSTANTS.testingSelectors.topBar.notificationPopover
-                      .dateText
-                  }
-                  testinglistselector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.dateText}-${el?.id}`}>
-                  {el.createdAt}
-                </ZIonText>
-              </div>
-            </div>
-
-            {/* <div className='flex p-[3px] ion-align-items-center border rounded-md mt-2'>
+              {/* <div className='flex p-[3px] ion-align-items-center border rounded-md mt-2'>
 							<div className='w-[36px] h-[36px] zaions__light_bg rounded-sm me-2'></div>
 
 							<div className='w-[40%!important] me-1 overflow-hidden line-clamp-2 leading-none'>
@@ -608,9 +601,10 @@ const ZUpdatesTab: React.FC<{
 								</div>
 							</div>
 						</div> */}
-          </ZIonCol>
-        </ZIonRow>
-      ))}
+            </ZIonCol>
+          </ZIonRow>
+        );
+      })}
 
       {userInvitationNotificationsData &&
       userInvitationNotificationsData?.length === 0 ? (

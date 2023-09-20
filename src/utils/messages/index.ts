@@ -22,6 +22,7 @@ const GENERAL = {
   },
   MEMBER: {
     INVITE_SEND: 'successfully send invitation.',
+    UPDATED_ROLE: 'successfully updated role.',
     INVITE_RESEND: 'Successfully resend invitation.',
     CANCELED: 'Successfully canceled invitation.',
     DELETED: 'Successfully deleted invitation.'
@@ -221,6 +222,8 @@ const MODALS = {
     DELAY: 'Please enter a delay seconds it is required.'
   }
 };
+
+const FILTER = {};
 
 // Add Constants Above this one, and then include them in this object
 const MESSAGES = {

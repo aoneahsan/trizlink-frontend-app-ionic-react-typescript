@@ -96,10 +96,12 @@ import MESSAGES from '@/utils/messages';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
+  WSRolesNameEnum,
   WorkspaceSharingTabEnum,
   WSTeamMembersInterface
 } from '@/types/AdminPanel/workspace';
 import {
+  FormMode,
   ZMembersListPageTableColumnsIds,
   ZTeamMemberInvitationEnum,
   ZUserSettingInterface,
@@ -140,9 +142,8 @@ import {
  * */
 
 const ZMembersListTable: React.FC = () => {
-  const { workspaceId, teamId } = useParams<{
+  const { workspaceId } = useParams<{
     workspaceId: string;
-    teamId: string;
   }>();
 
   // #region APIS.
@@ -160,8 +161,7 @@ const ZMembersListTable: React.FC = () => {
     ZWorkspacesSharingModal,
     {
       Tab: WorkspaceSharingTabEnum.invite,
-      workspaceId: workspaceId,
-      teamId: teamId
+      workspaceId: workspaceId
     }
   );
   // #endregion
@@ -195,12 +195,13 @@ const ZInpageTable: React.FC = () => {
   // #region Component state.
   const [compState, setCompState] = useState<{
     selectedMemberId?: string;
+    selectedMemberEmail?: string;
+    selectedMemberRole?: WSRolesNameEnum;
   }>({});
   // #endregion
 
-  const { workspaceId, teamId } = useParams<{
+  const { workspaceId } = useParams<{
     workspaceId: string;
-    teamId: string;
   }>();
 
   // #region Recoil state.
@@ -239,8 +240,9 @@ const ZInpageTable: React.FC = () => {
     ZMemberActionPopover,
     {
       workspaceId: workspaceId,
-      teamId: teamId,
-      membersId: compState.selectedMemberId
+      membersId: compState.selectedMemberId,
+      email: compState.selectedMemberEmail,
+      role: compState.selectedMemberRole
     }
   );
   // #endregion
@@ -337,22 +339,28 @@ const ZInpageTable: React.FC = () => {
     }),
 
     // Invited at
-    columnHelper.accessor(itemData => itemData.invitedAt, {
-      header: 'Invited at',
-      id: ZMembersListPageTableColumnsIds.invitedAt,
-      footer: 'Invited at'
-    }),
+    // columnHelper.accessor(itemData => itemData.invitedAt, {
+    //   header: 'Invited at',
+    //   id: ZMembersListPageTableColumnsIds.invitedAt,
+    //   footer: 'Invited at'
+    // }),
 
     // Invited accepted at
-    columnHelper.accessor(itemData => itemData.inviteAcceptedAt, {
-      header: 'Invited accepted at',
+    columnHelper.accessor('"inviteAcceptedAt"|"inviteRejectedAt"', {
+      header: 'Invited accepted/rejected at',
       id: ZMembersListPageTableColumnsIds.invitedAcceptedAt,
       cell: row => {
         return (
-          <>{row.getValue() ? row.getValue() : CONSTANTS.NO_VALUE_FOUND}</>
+          <>
+            {row?.row?.original?.inviteAcceptedAt
+              ? `Accepted at: ${row?.row?.original?.inviteAcceptedAt}`
+              : row?.row?.original?.inviteRejectedAt
+              ? `Rejected at: ${row?.row?.original?.inviteRejectedAt}`
+              : CONSTANTS.NO_VALUE_FOUND}
+          </>
         );
       },
-      footer: 'Invited accepted at'
+      footer: 'Invited accepted/rejected at'
     })
   ];
 
@@ -565,7 +573,10 @@ const ZInpageTable: React.FC = () => {
                         onClick={(_event: unknown) => {
                           setCompState(oldVal => ({
                             ...oldVal,
-                            selectedMemberId: _rowInfo.original.id || ''
+                            selectedMemberId: _rowInfo.original.id || '',
+                            selectedMemberEmail: _rowInfo.original.email || '',
+                            selectedMemberRole:
+                              _rowInfo.original.memberRole.name
                           }));
 
                           //
@@ -760,12 +771,9 @@ const ZInpageTable: React.FC = () => {
 
               zNavigatePushRoute(
                 createRedirectRoute({
-                  url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.ViewTeam,
-                  params: [
-                    CONSTANTS.RouteParams.workspace.workspaceId,
-                    CONSTANTS.RouteParams.workspace.teamId
-                  ],
-                  values: [workspaceId, teamId],
+                  url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
+                  params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                  values: [workspaceId],
                   routeSearchParams: {
                     pageindex: zMembersTable.getPageCount() - 1,
                     pagesize: Number(e.target.value)
@@ -793,8 +801,9 @@ const ZMemberActionPopover: React.FC<{
   zNavigatePushRoute: (_url: string) => void;
   workspaceId: string;
   membersId: string;
-  teamId: string;
-}> = ({ dismissZIonPopover, workspaceId, membersId, teamId }) => {
+  email: string;
+  role: WSRolesNameEnum;
+}> = ({ dismissZIonPopover, workspaceId, membersId, email, role }) => {
   const [compState, setCompState] = useState<{
     currentMemberData?: WSTeamMembersInterface;
   }>();
@@ -820,7 +829,7 @@ const ZMemberActionPopover: React.FC<{
   });
 
   const { mutateAsync: deleteInvitationAsyncMutate } = useZRQDeleteRequest(
-    API_URL_ENUM.ws_team_member_invite_get_delete
+    API_URL_ENUM.ws_team_member_invite_delete
   );
   // #endregion
 
@@ -846,6 +855,20 @@ const ZMemberActionPopover: React.FC<{
       reportCustomError(error);
     }
   }, []);
+
+  // #region Modals & popovers.
+  const { presentZIonModal: presentWorkspaceSharingModal } = useZIonModal(
+    ZWorkspacesSharingModal,
+    {
+      Tab: WorkspaceSharingTabEnum.invite,
+      workspaceId: workspaceId,
+      formMode: FormMode.EDIT,
+      email: email,
+      role: role,
+      id: membersId
+    }
+  );
+  // #endregion
 
   // #region Functions.
   const ZResendInvitationHandler = async () => {
@@ -1047,7 +1070,7 @@ const ZMemberActionPopover: React.FC<{
       lines='none'
       className='ion-no-padding'>
       <ZCan havePermissions={[permissionsEnum.update_workspaceTeam]}>
-        {/* Edit */}
+        {/* Edit Role */}
         <ZIonItem
           button={true}
           detail={false}
@@ -1055,13 +1078,19 @@ const ZMemberActionPopover: React.FC<{
           testingselector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.editBtn}-${membersId}`}
           testinglistselector={
             CONSTANTS.testingSelectors.WSSettings.teamListPage.table.editBtn
-          }>
+          }
+          onClick={() => {
+            presentWorkspaceSharingModal({
+              _cssClass: 'workspace-sharing-modal-size'
+            });
+
+            dismissZIonPopover('', '');
+          }}>
           <ZIonButton
             size='small'
             expand='full'
             fill='clear'
-            color='light'
-            className='ion-text-capitalize'>
+            color='light'>
             <ZIonIcon
               icon={createOutline}
               className='w-5 h-5 me-2'
@@ -1070,7 +1099,7 @@ const ZMemberActionPopover: React.FC<{
             <ZIonText
               color='secondary'
               className='text-[.9rem] pt-1'>
-              Edit
+              Edit role
             </ZIonText>
           </ZIonButton>
         </ZIonItem>
@@ -1118,8 +1147,7 @@ const ZMemberActionPopover: React.FC<{
                 size='small'
                 expand='full'
                 fill='clear'
-                color='light'
-                className='ion-text-capitalize'>
+                color='light'>
                 <ZIonIcon
                   icon={sendOutline}
                   className='w-5 h-5 me-2'

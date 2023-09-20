@@ -62,8 +62,10 @@ export enum API_URL_ENUM {
   ws_team_member_sendInvite_list = 'ws_team_member_sendInvite_list',
   ws_team_member_getAllInvite_list = 'ws_team_member_getAllInvite_list',
   ws_team_member_resendInvite_list = 'ws_team_member_resendInvite_list',
-  ws_team_member_invite_get_delete = 'ws_team_member_invite_get_delete',
+  ws_team_member_invite_delete = 'ws_team_member_invite_delete',
+  ws_team_member_invite_get = 'ws_team_member_invite_get',
   ws_team_member_update = 'ws_team_member_update',
+  ws_team_member_role_update = 'ws_team_member_role_update',
   validate_invitation_status = 'validate_invitation_status',
 
   //

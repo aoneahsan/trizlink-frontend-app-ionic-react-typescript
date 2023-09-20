@@ -211,7 +211,6 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 		{
 			Tab: WorkspaceSharingTabEnum.invite,
 			workspaceId: workspaceId,
-			teamId: teamId,
 		}
 	);
 	// #endregion

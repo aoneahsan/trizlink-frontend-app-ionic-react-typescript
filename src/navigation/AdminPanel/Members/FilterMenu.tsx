@@ -82,7 +82,7 @@ import {
  * ? Import of recoil states is a Recoil State import
  * */
 import { MembersFilterOptionsRStateAtom } from '@/ZaionsStore/UserDashboard/MemberState/index.recoil';
-import { WSRolesNameEnum } from '@/types/UserAccount/index.type';
+import { WSRolesNameEnum } from '@/types/AdminPanel/workspace';
 
 /**
  * Style files Imports go down

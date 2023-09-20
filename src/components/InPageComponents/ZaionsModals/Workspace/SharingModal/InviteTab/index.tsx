@@ -53,6 +53,7 @@ import { useZIonPopover, useZIonToast } from '@/ZaionsHooks/zionic-hooks';
 import {
   useZGetRQCacheData,
   useZRQCreateRequest,
+  useZRQUpdateRequest,
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
 
@@ -81,15 +82,19 @@ import CONSTANTS from '@/utils/constants';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  workspaceFormRoleEnum,
+  WSRolesNameEnum,
   WSTeamMembersInterface
 } from '@/types/AdminPanel/workspace';
 import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
-import { FormikSetErrorsType } from '@/types/ZaionsFormik.type';
+import {
+  FormikSetErrorsType,
+  FormikSetFieldValueEventType
+} from '@/types/ZaionsFormik.type';
 import { AxiosError } from 'axios';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { FormMode } from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down
@@ -119,11 +124,21 @@ import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.
 
 const ZInviteTab: React.FC<{
   workspaceId: string;
-  teamId: string;
+  formMode?: FormMode;
+  role?: WSRolesNameEnum;
+  email?: string;
+  memberId?: string;
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
-}> = ({ workspaceId, teamId, dismissZIonModal }) => {
+}> = ({
+  workspaceId,
+  dismissZIonModal,
+  formMode = FormMode.ADD,
+  role,
+  email,
+  memberId
+}) => {
   const [compState, setCompState] = useState<{
-    _role?: workspaceFormRoleEnum;
+    _role?: WSRolesNameEnum;
   }>();
 
   // #region Custom hooks
@@ -136,12 +151,15 @@ const ZInviteTab: React.FC<{
   // #region APIS.
   const { mutateAsync: inviteTeamMemberAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.ws_team_member_sendInvite_list,
-    _itemsIds: [workspaceId, teamId],
-    _urlDynamicParts: [
-      CONSTANTS.RouteParams.workspace.workspaceId,
-      CONSTANTS.RouteParams.workspace.teamId
-    ]
+    _itemsIds: [workspaceId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _showAlertOnError: false
   });
+
+  const { mutateAsync: updateRoleAsyncMutate } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.ws_team_member_role_update
+  });
+
   // #endregion
 
   // #region modal & popover.
@@ -154,11 +172,24 @@ const ZInviteTab: React.FC<{
   // #region Functions.
   const formikSubmitHandler = async (
     _data: string,
-    setErrors: FormikSetErrorsType
+    setErrors: FormikSetErrorsType,
+    setFieldValue: FormikSetFieldValueEventType
   ) => {
     try {
       if (_data) {
-        const __response = await inviteTeamMemberAsyncMutate(_data);
+        let __response;
+        if (formMode === FormMode.ADD) {
+          __response = await inviteTeamMemberAsyncMutate(_data);
+        } else if (formMode === FormMode.EDIT) {
+          __response = await updateRoleAsyncMutate({
+            itemIds: [workspaceId, memberId!],
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.workspaceId,
+              CONSTANTS.RouteParams.workspace.memberInviteId
+            ],
+            requestData: _data
+          });
+        }
 
         if (
           (__response as ZLinkMutateApiType<WSTeamMembersInterface>).success
@@ -183,21 +214,32 @@ const ZInviteTab: React.FC<{
                   extractInnerDataOptionsEnum.createRequestResponseItems
                 ) || [];
 
-              const __updatedMembersData = [..._oldTeamsMemberData, __data];
+              if (formMode === FormMode.ADD) {
+                const __updatedMembersData = [..._oldTeamsMemberData, __data];
 
-              await updateRQCDataHandler({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-                  workspaceId
-                ],
-                data: __updatedMembersData,
-                id: '',
-                updateHoleData: true,
-                extractType: ZRQGetRequestExtractEnum.extractItems
-              });
+                await updateRQCDataHandler({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+                    workspaceId
+                  ],
+                  data: __updatedMembersData,
+                  id: '',
+                  updateHoleData: true,
+                  extractType: ZRQGetRequestExtractEnum.extractItems
+                });
+                showSuccessNotification(MESSAGES.GENERAL.MEMBER.INVITE_SEND);
+              } else if (formMode === FormMode.EDIT) {
+                await updateRQCDataHandler({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+                    workspaceId
+                  ],
+                  data: __data,
+                  id: __data?.id
+                });
+                showSuccessNotification(MESSAGES.GENERAL.MEMBER.UPDATED_ROLE);
+              }
             }
-
-            showSuccessNotification(MESSAGES.GENERAL.MEMBER.INVITE_SEND);
 
             dismissZIonModal();
           }
@@ -212,6 +254,14 @@ const ZInviteTab: React.FC<{
           ['email', 'role'],
           __apiErrors
         );
+        if ((__errors as { email: string })?.email) {
+          setFieldValue('isApiEmailError', true, false);
+          setFieldValue(
+            'apiEmailErrorText',
+            (__errors as { email: string })?.email,
+            false
+          );
+        }
 
         setErrors(__errors);
       }
@@ -223,8 +273,11 @@ const ZInviteTab: React.FC<{
   return (
     <Formik
       initialValues={{
-        role: workspaceFormRoleEnum.Approver,
-        email: ''
+        role: role || WSRolesNameEnum.Approver,
+        email: email || '',
+
+        isApiEmailError: false,
+        apiEmailErrorText: ''
       }}
       validate={values => {
         const errors: { email?: string } = {};
@@ -233,13 +286,23 @@ const ZInviteTab: React.FC<{
 
         return errors;
       }}
-      onSubmit={async (values, { setErrors }) => {
-        const _zStringifyData = zStringify({
+      onSubmit={async (values, { setErrors, setFieldValue }) => {
+        let _zStringifyData = zStringify({
           email: values.email,
           role: values.role
         });
 
-        await formikSubmitHandler(_zStringifyData, setErrors);
+        if (formMode === FormMode.EDIT) {
+          _zStringifyData = zStringify({
+            role: values.role
+          });
+        }
+
+        if (formMode === FormMode.EDIT && role !== values.role) {
+          await formikSubmitHandler(_zStringifyData, setErrors, setFieldValue);
+        } else if (formMode === FormMode.ADD) {
+          await formikSubmitHandler(_zStringifyData, setErrors, setFieldValue);
+        }
       }}>
       {({
         values,
@@ -251,6 +314,7 @@ const ZInviteTab: React.FC<{
         handleBlur,
         submitForm
       }) => {
+        console.log({ values });
         return (
           <>
             <ZIonGrid
@@ -342,26 +406,26 @@ const ZInviteTab: React.FC<{
                     })}>
                     <ZIonIcon
                       icon={
-                        values.role === workspaceFormRoleEnum.Contributor ||
-                        values.role === workspaceFormRoleEnum.Administrator ||
-                        values.role === workspaceFormRoleEnum.Writer
+                        values.role === WSRolesNameEnum.Contributor ||
+                        values.role === WSRolesNameEnum.Administrator ||
+                        values.role === WSRolesNameEnum.Writer
                           ? checkmarkCircleOutline
-                          : values.role === workspaceFormRoleEnum.Guest ||
-                            values.role === workspaceFormRoleEnum.Approver ||
-                            values.role === workspaceFormRoleEnum.Commenter ||
-                            values.role === workspaceFormRoleEnum.Manager
+                          : values.role === WSRolesNameEnum.Guest ||
+                            values.role === WSRolesNameEnum.Approver ||
+                            values.role === WSRolesNameEnum.Commenter ||
+                            values.role === WSRolesNameEnum.Manager
                           ? closeCircleOutline
                           : ''
                       }
                       color={
-                        values.role === workspaceFormRoleEnum.Contributor ||
-                        values.role === workspaceFormRoleEnum.Administrator ||
-                        values.role === workspaceFormRoleEnum.Writer
+                        values.role === WSRolesNameEnum.Contributor ||
+                        values.role === WSRolesNameEnum.Administrator ||
+                        values.role === WSRolesNameEnum.Writer
                           ? 'success'
-                          : values.role === workspaceFormRoleEnum.Guest ||
-                            values.role === workspaceFormRoleEnum.Approver ||
-                            values.role === workspaceFormRoleEnum.Commenter ||
-                            values.role === workspaceFormRoleEnum.Manager
+                          : values.role === WSRolesNameEnum.Guest ||
+                            values.role === WSRolesNameEnum.Approver ||
+                            values.role === WSRolesNameEnum.Commenter ||
+                            values.role === WSRolesNameEnum.Manager
                           ? 'danger'
                           : undefined
                       }
@@ -391,26 +455,26 @@ const ZInviteTab: React.FC<{
                     })}>
                     <ZIonIcon
                       icon={
-                        values.role === workspaceFormRoleEnum.Administrator ||
-                        values.role === workspaceFormRoleEnum.Approver
+                        values.role === WSRolesNameEnum.Administrator ||
+                        values.role === WSRolesNameEnum.Approver
                           ? checkmarkCircleOutline
-                          : values.role === workspaceFormRoleEnum.Contributor ||
-                            values.role === workspaceFormRoleEnum.Guest ||
-                            values.role === workspaceFormRoleEnum.Writer ||
-                            values.role === workspaceFormRoleEnum.Commenter ||
-                            values.role === workspaceFormRoleEnum.Manager
+                          : values.role === WSRolesNameEnum.Contributor ||
+                            values.role === WSRolesNameEnum.Guest ||
+                            values.role === WSRolesNameEnum.Writer ||
+                            values.role === WSRolesNameEnum.Commenter ||
+                            values.role === WSRolesNameEnum.Manager
                           ? closeCircleOutline
                           : ''
                       }
                       color={
-                        values.role === workspaceFormRoleEnum.Administrator ||
-                        values.role === workspaceFormRoleEnum.Approver
+                        values.role === WSRolesNameEnum.Administrator ||
+                        values.role === WSRolesNameEnum.Approver
                           ? 'success'
-                          : values.role === workspaceFormRoleEnum.Contributor ||
-                            values.role === workspaceFormRoleEnum.Guest ||
-                            values.role === workspaceFormRoleEnum.Writer ||
-                            values.role === workspaceFormRoleEnum.Commenter ||
-                            values.role === workspaceFormRoleEnum.Manager
+                          : values.role === WSRolesNameEnum.Contributor ||
+                            values.role === WSRolesNameEnum.Guest ||
+                            values.role === WSRolesNameEnum.Writer ||
+                            values.role === WSRolesNameEnum.Commenter ||
+                            values.role === WSRolesNameEnum.Manager
                           ? 'danger'
                           : undefined
                       }
@@ -440,26 +504,26 @@ const ZInviteTab: React.FC<{
                     })}>
                     <ZIonIcon
                       icon={
-                        values.role === workspaceFormRoleEnum.Contributor ||
-                        values.role === workspaceFormRoleEnum.Administrator ||
-                        values.role === workspaceFormRoleEnum.Manager
+                        values.role === WSRolesNameEnum.Contributor ||
+                        values.role === WSRolesNameEnum.Administrator ||
+                        values.role === WSRolesNameEnum.Manager
                           ? checkmarkCircleOutline
-                          : values.role === workspaceFormRoleEnum.Guest ||
-                            values.role === workspaceFormRoleEnum.Writer ||
-                            values.role === workspaceFormRoleEnum.Approver ||
-                            values.role === workspaceFormRoleEnum.Commenter
+                          : values.role === WSRolesNameEnum.Guest ||
+                            values.role === WSRolesNameEnum.Writer ||
+                            values.role === WSRolesNameEnum.Approver ||
+                            values.role === WSRolesNameEnum.Commenter
                           ? closeCircleOutline
                           : ''
                       }
                       color={
-                        values.role === workspaceFormRoleEnum.Contributor ||
-                        values.role === workspaceFormRoleEnum.Administrator ||
-                        values.role === workspaceFormRoleEnum.Manager
+                        values.role === WSRolesNameEnum.Contributor ||
+                        values.role === WSRolesNameEnum.Administrator ||
+                        values.role === WSRolesNameEnum.Manager
                           ? 'success'
-                          : values.role === workspaceFormRoleEnum.Guest ||
-                            values.role === workspaceFormRoleEnum.Writer ||
-                            values.role === workspaceFormRoleEnum.Approver ||
-                            values.role === workspaceFormRoleEnum.Commenter
+                          : values.role === WSRolesNameEnum.Guest ||
+                            values.role === WSRolesNameEnum.Writer ||
+                            values.role === WSRolesNameEnum.Approver ||
+                            values.role === WSRolesNameEnum.Commenter
                           ? 'danger'
                           : undefined
                       }
@@ -489,26 +553,26 @@ const ZInviteTab: React.FC<{
                     })}>
                     <ZIonIcon
                       icon={
-                        values.role === workspaceFormRoleEnum.Administrator ||
-                        values.role === workspaceFormRoleEnum.Manager
+                        values.role === WSRolesNameEnum.Administrator ||
+                        values.role === WSRolesNameEnum.Manager
                           ? checkmarkCircleOutline
-                          : values.role === workspaceFormRoleEnum.Contributor ||
-                            values.role === workspaceFormRoleEnum.Guest ||
-                            values.role === workspaceFormRoleEnum.Writer ||
-                            values.role === workspaceFormRoleEnum.Approver ||
-                            values.role === workspaceFormRoleEnum.Commenter
+                          : values.role === WSRolesNameEnum.Contributor ||
+                            values.role === WSRolesNameEnum.Guest ||
+                            values.role === WSRolesNameEnum.Writer ||
+                            values.role === WSRolesNameEnum.Approver ||
+                            values.role === WSRolesNameEnum.Commenter
                           ? closeCircleOutline
                           : ''
                       }
                       color={
-                        values.role === workspaceFormRoleEnum.Administrator ||
-                        values.role === workspaceFormRoleEnum.Manager
+                        values.role === WSRolesNameEnum.Administrator ||
+                        values.role === WSRolesNameEnum.Manager
                           ? 'success'
-                          : values.role === workspaceFormRoleEnum.Contributor ||
-                            values.role === workspaceFormRoleEnum.Guest ||
-                            values.role === workspaceFormRoleEnum.Writer ||
-                            values.role === workspaceFormRoleEnum.Approver ||
-                            values.role === workspaceFormRoleEnum.Commenter
+                          : values.role === WSRolesNameEnum.Contributor ||
+                            values.role === WSRolesNameEnum.Guest ||
+                            values.role === WSRolesNameEnum.Writer ||
+                            values.role === WSRolesNameEnum.Approver ||
+                            values.role === WSRolesNameEnum.Commenter
                           ? 'danger'
                           : undefined
                       }
@@ -541,16 +605,33 @@ const ZInviteTab: React.FC<{
                     aria-label='type email'
                     // labelPlacement='floating'
                     // errorText={errors.pageName}
+                    disabled={formMode === FormMode.EDIT}
+                    readonly={formMode === FormMode.EDIT}
                     placeholder='Type email'
                     type='email'
                     minHeight='2.3rem'
-                    onIonChange={handleChange}
+                    onIonChange={e => {
+                      handleChange(e);
+                      if (values.isApiEmailError) {
+                        setFieldValue('isApiEmailError', false);
+                      }
+                    }}
                     onIonBlur={handleBlur}
                     value={values.email}
-                    errorText={touched.email ? errors.email : undefined}
+                    errorText={
+                      touched.email
+                        ? errors.email?.trim()
+                          ? errors.email
+                          : values.isApiEmailError
+                          ? values?.apiEmailErrorText
+                          : undefined
+                        : undefined
+                    }
                     className={classNames({
                       'ion-touched': touched.email,
-                      'ion-invalid': touched.email && errors.email,
+                      'ion-invalid':
+                        (touched.email && errors.email) ||
+                        values.isApiEmailError,
                       'ion-valid': touched.email && !errors.email
                     })}
                   />
@@ -612,15 +693,15 @@ const ZInviteTab: React.FC<{
 													if (detail.data) {
 														setCompState((oldValues) => ({
 															...oldValues,
-															_role: detail.data as workspaceFormRoleEnum,
+															_role: detail.data as WSRolesNameEnum,
 														}));
 														setFieldValue(
 															'role',
-															workspaceFormRoleEnum[
-																detail.data as workspaceFormRoleEnum
+															WSRolesNameEnum[
+																detail.data as WSRolesNameEnum
 															] !== undefined
-																? workspaceFormRoleEnum[
-																		detail.data as workspaceFormRoleEnum
+																? WSRolesNameEnum[
+																		detail.data as WSRolesNameEnum
 																  ]
 																: values.role,
 															false
@@ -638,7 +719,6 @@ const ZInviteTab: React.FC<{
 									</ZIonButton> */}
                   <ZaionsRSelect
                     name='role'
-                    // className='mt-2'
                     testingselector={
                       CONSTANTS.testingSelectors.shortLink.formPage.geoLocation
                         .countrySelector
@@ -665,14 +745,21 @@ const ZInviteTab: React.FC<{
                   size='6'
                   sizeMd='12'
                   sizeSm='12'
-                  sizeXs='12'>
+                  sizeXs='12'
+                  className={classNames({
+                    'cursor-not-allowed':
+                      formMode === FormMode.EDIT && role === values.role
+                  })}>
                   <ZIonButton
                     size='small'
                     color='primary'
                     fill='solid'
                     id='role-popover-index'
                     height='2.3rem'
-                    disabled={!isValid}
+                    disabled={
+                      !isValid ||
+                      (formMode === FormMode.EDIT && role === values.role)
+                    }
                     onClick={() => {
                       void submitForm();
                     }}
@@ -686,7 +773,11 @@ const ZInviteTab: React.FC<{
                       icon={sendOutline}
                       className='me-2'
                     />
-                    Send invite
+                    {formMode === FormMode.ADD
+                      ? 'Send invite'
+                      : formMode === FormMode.EDIT
+                      ? 'Update role'
+                      : null}
                   </ZIonButton>
                 </ZIonCol>
 

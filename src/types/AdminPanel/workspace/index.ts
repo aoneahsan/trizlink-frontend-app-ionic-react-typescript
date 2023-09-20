@@ -1,4 +1,3 @@
-import { WSRolesNameEnum } from './../../UserAccount/index.type';
 import { UserAccountType } from '@/types/UserAccount/index.type';
 import { ReactNode } from 'react';
 import { ZTeamMemberInvitationEnum } from '../index.type';
@@ -25,7 +24,7 @@ export enum workspaceFormTabEnum {
   Approval = 'Approval'
 }
 
-export enum workspaceFormRoleEnum {
+export enum WSRolesNameEnum {
   Administrator = 'Administrator',
   Manager = 'Manager',
   Contributor = 'Contributor',
@@ -137,7 +136,7 @@ export enum WSSettingsPageSectTab {
 export interface workspaceInviteClientInterface {
   avatar?: string;
   email?: string;
-  role: workspaceFormRoleEnum;
+  role: WSRolesNameEnum;
   permission: workspaceFormPermissionEnum;
 }
 

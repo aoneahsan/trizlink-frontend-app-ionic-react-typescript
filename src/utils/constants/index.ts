@@ -26,7 +26,7 @@ import {
   ZShortLinkListPageTableColumnsIds
 } from '@/types/AdminPanel/linksType';
 import { ENVS } from '@/utils/envKeys';
-import { workspaceFormRoleEnum } from '@/types/AdminPanel/workspace';
+import { WSRolesNameEnum } from '@/types/AdminPanel/workspace';
 import { ZTeamMemberInvitationEnum } from '@/types/AdminPanel/index.type';
 
 // Constant
@@ -111,7 +111,9 @@ export const API_URLS = {
   ws_team_member_sendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member/send-invitation`,
   ws_team_member_getAllInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member`,
   ws_team_member_resendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member/resend-invitation/${RouteParams.workspace.invitationId}`,
-  ws_team_member_invite_get_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/member/${RouteParams.workspace.memberInviteId}`,
+  ws_team_member_invite_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/member/${RouteParams.workspace.memberInviteId}`,
+  ws_team_member_invite_get: `/user/member/${RouteParams.workspace.memberInviteId}`,
+  ws_team_member_role_update: `/user/workspace/${RouteParams.workspace.workspaceId}/update-role/${RouteParams.workspace.memberInviteId}`,
   ws_team_member_update: `/user/update-invitation/${RouteParams.workspace.memberInviteId}`,
   validate_invitation_status: `/user/validate-and-update-invitation`,
   userPixelAccounts_create_list: '/user/pixel',
@@ -129,9 +131,9 @@ export const API_URLS = {
   set_password: '/user/set-password',
   set_username_password: '/user/set-username-password',
 
-  user_unread_notifications_list: `/user/notification/type/${RouteParams.user.notification.type}`,
-  user_notification_mark_as_read: `/user/notification/type/${RouteParams.user.notification.type}/markAsRead/${RouteParams.user.notification.id}`,
-  user_notification_mark_all_as_read: `/user/notification/type/${RouteParams.user.notification.type}/markAllAsRead`,
+  user_unread_notifications_list: `/user/notification`,
+  user_notification_mark_as_read: `/user/notification/markAsRead/${RouteParams.user.notification.id}`,
+  user_notification_mark_all_as_read: `/user/notification/markAllAsRead`,
 
   shortLinks_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links`,
   shortLinks_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links/${RouteParams.shortLink.shortLinkId}`,
@@ -1504,12 +1506,12 @@ const ZTimeSelectData: ZaionsRSelectOptions[] = [
 ];
 
 const ZRolesOptions: ZaionsRSelectOptions[] = [
-  { label: 'Administrator', value: workspaceFormRoleEnum.Administrator },
-  { label: 'Contributor', value: workspaceFormRoleEnum.Contributor },
-  { label: 'Manager', value: workspaceFormRoleEnum.Manager },
-  { label: 'Approver', value: workspaceFormRoleEnum.Approver },
-  { label: 'Commenter', value: workspaceFormRoleEnum.Commenter },
-  { label: 'Guest', value: workspaceFormRoleEnum.Guest }
+  { label: 'Administrator', value: WSRolesNameEnum.Administrator },
+  { label: 'Contributor', value: WSRolesNameEnum.Contributor },
+  { label: 'Manager', value: WSRolesNameEnum.Manager },
+  { label: 'Approver', value: WSRolesNameEnum.Approver },
+  { label: 'Commenter', value: WSRolesNameEnum.Commenter },
+  { label: 'Guest', value: WSRolesNameEnum.Guest }
 ];
 
 const ZStatesOptions: ZaionsRSelectOptions[] = [

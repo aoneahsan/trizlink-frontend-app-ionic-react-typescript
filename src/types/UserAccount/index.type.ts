@@ -1,64 +1,56 @@
-// Enums
-export enum WSRolesNameEnum {
-	Administrator = 'Administrator',
-	Manager = 'Manager',
-	Contributor = 'Contributor',
-	Writer = 'Writer',
-	Approver = 'Approver',
-	Commenter = 'Commenter',
-	Guest = 'Guest',
-}
+import { WSRolesNameEnum } from '../AdminPanel/workspace';
 
+// Enums
 export enum WSRoleType {
-	mainAppRole = 'mainAppRole',
-	inAppWSRole = 'inAppWSRole',
+  mainAppRole = 'mainAppRole',
+  inAppWSRole = 'inAppWSRole'
 }
 
 export enum SignUpTypeEnum {
-	normal = 'normal',
-	admin = 'admin',
-	invite = 'invite',
+  normal = 'normal',
+  admin = 'admin',
+  invite = 'invite'
 }
 
 // Interfaces
 export interface UserRoleAndPermissionsInterface {
-	role: string;
-	permissions: string[];
-	fetched?: boolean;
+  role: string;
+  permissions: string[];
+  fetched?: boolean;
 }
 
 export interface WSRolesInterfaces {
-	WSRoles: {
-		id: 4;
-		name: WSRolesNameEnum;
-		roleType: WSRoleType;
-		created_at: string;
-		updated_at: string;
-	}[];
+  WSRoles: {
+    id: 4;
+    name: WSRolesNameEnum;
+    roleType: WSRoleType;
+    created_at: string;
+    updated_at: string;
+  }[];
 }
 
 // Type
 export type UserAccountType = {
-	id?: string;
-	username?: string;
-	name?: string;
-	email?: string;
-	profilePitcher?: string;
-	password?: string;
-	createdAt?: string;
-	updatedAt?: string;
-	email_verified_at?: string | null;
+  id?: string;
+  username?: string;
+  name?: string;
+  email?: string;
+  profilePitcher?: string;
+  password?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  email_verified_at?: string | null;
 };
 
 export type UserAccountEmailType = {
-	id?: string;
-	emailAddress: string;
-	isPrimary?: boolean;
-	isVarified?: boolean;
-	makePrimary?: boolean;
+  id?: string;
+  emailAddress: string;
+  isPrimary?: boolean;
+  isVarified?: boolean;
+  makePrimary?: boolean;
 };
 
 export type UserAccountAuthTokenType = {
-	token?: string;
+  token?: string;
 };
 export type AuthTokenResponseType = { plainTextToken: string };

@@ -30,6 +30,7 @@ import {
  * */
 import { useZIonToast } from '@/ZaionsHooks/zionic-hooks';
 import {
+  useZGetRQCacheData,
   useZRQGetRequest,
   useZRQUpdateRequest,
   useZUpdateRQCacheData
@@ -50,7 +51,10 @@ import { showSuccessNotification } from '@/utils/notification';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { ZTeamMemberInvitationEnum } from '@/types/AdminPanel/index.type';
-import { WSTeamMembersInterface } from '@/types/AdminPanel/workspace';
+import {
+  wsShareInterface,
+  WSTeamMembersInterface
+} from '@/types/AdminPanel/workspace';
 import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import reactSelect from 'react-select';
@@ -86,7 +90,7 @@ const ZViewInvitationModal: React.FC<{
   memberInviteId: string;
 }> = ({ workspaceId, memberInviteId, dismissZIonModal }) => {
   // #region Custom Hooks.
-  const { presentZIonToast } = useZIonToast();
+  const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
   // #endregion
 
@@ -94,7 +98,7 @@ const ZViewInvitationModal: React.FC<{
   // api to get Invitation data
   const { data: userInvitationData, isFetching: isInvitationFetching } =
     useZRQGetRequest<WSTeamMembersInterface>({
-      _url: API_URL_ENUM.ws_team_member_invite_get_delete,
+      _url: API_URL_ENUM.ws_team_member_invite_get,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.INVITATION_GET,
         memberInviteId
@@ -145,13 +149,51 @@ const ZViewInvitationModal: React.FC<{
             await updateRQCDataHandler({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.INVITATION_GET,
-                memberInviteId
+                memberInviteId!
               ],
               data: __data,
               id: '',
               updateHoleData: true,
               extractType: ZRQGetRequestExtractEnum.extractItem
             });
+
+            const getWSShareWorkspaceData = getRQCDataHandler({
+              key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN]
+            });
+
+            const __oldData =
+              extractInnerData<wsShareInterface[]>(
+                getWSShareWorkspaceData,
+                extractInnerDataOptionsEnum.createRequestResponseItems
+              ) || [];
+
+            if (_item === ZTeamMemberInvitationEnum.accepted) {
+              await updateRQCDataHandler({
+                key: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN
+                ],
+                data: {
+                  ...__data.workspace,
+                  id: __data?.id,
+                  accountStatus: __data?.accountStatus
+                },
+                id: __data?.id!
+              });
+            } else if (_item === ZTeamMemberInvitationEnum.rejected) {
+              const __updatedData = __oldData?.filter(
+                el => el?.id !== __data?.id
+              );
+
+              await updateRQCDataHandler({
+                key: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN
+                ],
+                data: __updatedData,
+                id: '',
+                updateHoleData: true,
+                extractType: ZRQGetRequestExtractEnum.extractItems
+              });
+            }
 
             if (_item === ZTeamMemberInvitationEnum.accepted) {
               showSuccessNotification('Successfully accepted invitation.');
@@ -287,7 +329,7 @@ const ZViewInvitationModal: React.FC<{
                 testingselector={
                   CONSTANTS.testingSelectors.invitation.viewModal.acceptedText
                 }>
-                You excepted this Invite.
+                You accepted this invite.
               </ZIonText>
             ) : null}
             {userInvitationData?.inviteRejectedAt !== null ? (
@@ -297,7 +339,7 @@ const ZViewInvitationModal: React.FC<{
                 testingselector={
                   CONSTANTS.testingSelectors.invitation.viewModal.rejectedBtn
                 }>
-                You rejected this Invite.
+                You rejected this invite.
               </ZIonText>
             ) : null}
           </ZIonCol>

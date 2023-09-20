@@ -51,7 +51,11 @@ import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { WorkspaceSharingTabEnum } from '@/types/AdminPanel/workspace';
+import {
+  WSRolesNameEnum,
+  WorkspaceSharingTabEnum
+} from '@/types/AdminPanel/workspace';
+import { FormMode } from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down
@@ -83,8 +87,19 @@ const ZWorkspacesSharingModal: React.FC<{
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
   Tab: WorkspaceSharingTabEnum;
   workspaceId: string;
-  teamId: string;
-}> = ({ dismissZIonModal, Tab, workspaceId, teamId }) => {
+  formMode?: FormMode;
+  email: string;
+  id?: string;
+  role: WSRolesNameEnum;
+}> = ({
+  dismissZIonModal,
+  Tab,
+  workspaceId,
+  formMode = FormMode.ADD,
+  id,
+  email,
+  role
+}) => {
   // Component state
   const [compState, setCompState] = useState<{
     activeTab: WorkspaceSharingTabEnum;
@@ -221,8 +236,11 @@ const ZWorkspacesSharingModal: React.FC<{
             {compState.activeTab === WorkspaceSharingTabEnum.invite ? (
               <ZInviteTab
                 workspaceId={workspaceId}
-                teamId={teamId}
                 dismissZIonModal={dismissZIonModal}
+                formMode={formMode}
+                email={email}
+                role={role}
+                memberId={id}
               />
             ) : compState.activeTab === WorkspaceSharingTabEnum.members ? (
               <ZMembersTab />
