@@ -84,7 +84,14 @@ import { replaceRouteParams } from '@/utils/helpers';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { AdminPanelSidebarMenuPageEnum } from '@/types/AdminPanel/index.type';
-import { workspaceTeamInterface } from '@/types/AdminPanel/workspace';
+import {
+  workspaceTeamInterface,
+  WSTeamMembersInterface
+} from '@/types/AdminPanel/workspace';
+import {
+  PixelAccountType,
+  UTMTagTemplateType
+} from '@/types/AdminPanel/linksType';
 
 /**
  * Recoil State Imports go down
@@ -136,6 +143,30 @@ const ZWorkspaceSettings: React.FC = () => {
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM, workspaceId],
     _itemsIds: [workspaceId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+  });
+
+  const { data: wsTeamMembersData } = useZRQGetRequest<
+    WSTeamMembersInterface[]
+  >({
+    _url: API_URL_ENUM.ws_team_member_getAllInvite_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId],
+    _itemsIds: [workspaceId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _showLoader: false
+  });
+
+  const { data: UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
+    _url: API_URL_ENUM.userAccountUtmTags_create_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
+    _itemsIds: [],
+    _urlDynamicParts: [],
+    _showLoader: false
+  });
+
+  const { data: pixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
+    _url: API_URL_ENUM.userPixelAccounts_create_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+    _showLoader: false
   });
 
   // #endregion
@@ -379,11 +410,17 @@ const ZWorkspaceSettings: React.FC = () => {
         </ZIonMenu>
       )}
 
-      {isPixelPage && <ZPixelsFilterMenu />}
+      {isPixelPage && pixelAccountsData && pixelAccountsData?.length > 0 && (
+        <ZPixelsFilterMenu />
+      )}
 
-      {isUTMTagPage && <ZUTMTagsFilterMenu />}
+      {isUTMTagPage && UTMTagsData && UTMTagsData?.length > 0 && (
+        <ZUTMTagsFilterMenu />
+      )}
 
-      {isMembersPage && <ZMembersFilterMenu />}
+      {isMembersPage && wsTeamMembersData && wsTeamMembersData?.length > 0 && (
+        <ZMembersFilterMenu />
+      )}
 
       {/*  */}
       <ZIonPage
@@ -449,7 +486,19 @@ const ZWorkspaceSettings: React.FC = () => {
                           <ZFallbackIonSpinner2 />
                         </ZIonRow>
                       }>
-                      <ZAdminPanelTopBar workspaceId={workspaceId} />
+                      <ZAdminPanelTopBar
+                        workspaceId={workspaceId}
+                        menuOnClickFn={async () => {
+                          // Open the menu by menu-id
+                          await menuController.enable(
+                            true,
+                            CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
+                          );
+                          await menuController.open(
+                            CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
+                          );
+                        }}
+                      />
                     </Suspense>
 
                     {/* Col-2 Row-2 */}
@@ -548,10 +597,10 @@ const ZInpageMainContent: React.FC = () => {
             <ZFallbackIonSpinner2 />
           </ZIonCol>
         }>
-        {isMembersPage ? <ZWSSettingTeamsListPage /> : ''}
-        {isPixelPage ? <ZWSSettingPixelListPage /> : ''}
-        {isUTMTagPage ? <ZWSSettingUtmTagListPage /> : ''}
-        {isEmbedWidgetPage ? <ZWSSettingEmbedWidgetListPage /> : ''}
+        {isMembersPage ? <ZWSSettingTeamsListPage /> : null}
+        {isPixelPage ? <ZWSSettingPixelListPage /> : null}
+        {isUTMTagPage ? <ZWSSettingUtmTagListPage /> : null}
+        {isEmbedWidgetPage ? <ZWSSettingEmbedWidgetListPage /> : null}
       </Suspense>
     </div>
   );

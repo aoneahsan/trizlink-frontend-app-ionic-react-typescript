@@ -67,7 +67,10 @@ import MESSAGES from '@/utils/messages';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { TimeFilterEnum } from '@/types/AdminPanel/linksType';
+import {
+  PixelPlatformsEnum,
+  TimeFilterEnum
+} from '@/types/AdminPanel/linksType';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import {
   ZPixelsListPageTableColumnsIds,
@@ -133,12 +136,12 @@ const ZPixelsFilterMenu: React.FC = () => {
   //
   const { mutateAsync: updatePixelFilersAsyncMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.user_setting_delete_update_get,
-    _loaderMessage: MESSAGES.GENERAL.FILTER.FILTERING
+    _loaderMessage: MESSAGES.PIXEL_ACCOUNT.FILTERING
   });
 
   const { mutateAsync: createPixelFilersAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.user_setting_list_create,
-    _loaderMessage: MESSAGES.GENERAL.FILTER.FILTERING
+    _loaderMessage: MESSAGES.PIXEL_ACCOUNT.FILTERING
   });
 
   const { data: getPixelFiltersData, isFetching: isPixelFiltersDataFetching } =
@@ -288,7 +291,8 @@ const ZPixelsFilterMenu: React.FC = () => {
                 new Date().toISOString(),
               endDate:
                 getPixelFiltersData?.settings?.filters?.endDate ||
-                new Date().toISOString()
+                new Date().toISOString(),
+              platform: ''
             }
           }}
           enableReinitialize={true}
@@ -301,7 +305,8 @@ const ZPixelsFilterMenu: React.FC = () => {
                   daysToSubtract: values?.filters?.time,
                   startedAt: values?.filters?.startDate,
                   endAt: values?.filters?.endDate
-                }
+                },
+                platform: values?.filters?.platform as PixelPlatformsEnum
               }));
 
               const zStringifyData = zStringify({
@@ -393,6 +398,38 @@ const ZPixelsFilterMenu: React.FC = () => {
                         />
                       </>
                     ) : null}
+
+                    {/*  */}
+                    <ZIonLabel
+                      className='block mt-3 text-xs'
+                      color='medium'>
+                      Platform
+                    </ZIonLabel>
+                    <ZaionsRSelect
+                      name='filters.platform'
+                      placeholder='Select platform...'
+                      testingselector={
+                        CONSTANTS.testingSelectors.pixels.listPage.filterSidebar
+                          .platformSelect
+                      }
+                      onChange={_value => {
+                        setFieldValue(
+                          'filters.platform',
+                          (_value as ZaionsRSelectOptions).value,
+                          true
+                        );
+                      }}
+                      value={CONSTANTS?.ZPlatformOptions?.find(
+                        el => el.value === values.filters.platform
+                      )}
+                      options={[
+                        {
+                          label: 'Select platform...',
+                          value: undefined
+                        },
+                        ...CONSTANTS?.ZPlatformOptions
+                      ]}
+                    />
 
                     <ZIonButton
                       expand='block'

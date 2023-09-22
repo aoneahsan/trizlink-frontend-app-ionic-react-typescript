@@ -46,6 +46,7 @@ import { API_URL_ENUM } from '@/utils/enums';
 import { workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { useParams } from 'react-router';
 
 /**
  * Recoil State Imports go down
@@ -73,14 +74,15 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * @type {*}
  * */
 
-const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = ({
-  workspaceId
-}) => {
+const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = () => {
   const { isLgScale } = useZMediaQueryScale();
-
+  const { workspaceId } = useParams<{ workspaceId?: string }>();
   // #region popovers.
   const { presentZIonPopover: presentZWorkspacesListPopover } = useZIonPopover(
-    ZWorkspacesListPopover
+    ZWorkspacesListPopover,
+    {
+      workspaceId: workspaceId
+    }
   );
   // #endregion
 
@@ -91,6 +93,13 @@ const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = ({
   >({
     _url: API_URL_ENUM.workspace_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
+  });
+
+  const { isFetching: isSharedWorkspacesDataFetching } = useZRQGetRequest<
+    workspaceInterface[]
+  >({
+    _url: API_URL_ENUM.ws_share_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN]
   });
 
   // get workspace data api.

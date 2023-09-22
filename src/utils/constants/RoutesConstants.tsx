@@ -106,6 +106,12 @@ const ZaionsRoutes = {
         Pixel: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/ws/pixel`,
         UTMTag: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/ws/utm-tag`,
         EmbedWidget: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/settings/ws/embed-widget`
+      },
+
+      UserAccount: {
+        Main: `${ZPrivateRoutePath}/user-account`,
+        ProfileSettings: `${ZPrivateRoutePath}/user-account/profile-settings`,
+        NotificationSettings: `${ZPrivateRoutePath}/user-account/notification-settings`
       }
     },
 

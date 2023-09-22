@@ -41,6 +41,7 @@ import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNe
 import ZShortLinksFilterMenu from '@/navigation/AdminPanel/ShortLinks/FilterMenu';
 import FolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/FoldersActionPopover';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
+import AdminPanelShortLinksFolderSideMenu from '@/navigation/AdminPanel/ShortLinks/FolderSideMenu';
 //
 //
 import ZCan from '@/components/Can';
@@ -126,7 +127,6 @@ import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
-import AdminPanelShortLinksFolderSideMenu from '@/navigation/AdminPanel/ShortLinks/FolderSideMenu';
 
 /**
  * Images Imports go down
@@ -253,14 +253,13 @@ const ZShortLinksListPage: React.FC = () => {
   });
 
   // Request for getting short links data.
-  const { isFetching: isShortLinksDataFetching } = useZRQGetRequest<
-    ShortLinkType[]
-  >({
-    _url: API_URL_ENUM.shortLinks_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
-    _itemsIds: [workspaceId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
-  });
+  const { data: shortLinksData, isFetching: isShortLinksDataFetching } =
+    useZRQGetRequest<ShortLinkType[]>({
+      _url: API_URL_ENUM.shortLinks_create_list,
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
+      _itemsIds: [workspaceId],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+    });
   // #endregion
 
   // #region Popovers.
@@ -384,7 +383,9 @@ const ZShortLinksListPage: React.FC = () => {
 
   return (
     <>
-      <ZShortLinksFilterMenu />
+      {shortLinksData && shortLinksData?.length > 0 && (
+        <ZShortLinksFilterMenu />
+      )}
 
       {!isLgScale ? (
         <AdminPanelShortLinksFolderSideMenu workspaceId={workspaceId} />
@@ -623,14 +624,13 @@ const ZInpageMainContent: React.FC = () => {
   });
 
   // Request for getting short links data.
-  const { isFetching: isShortLinksDataFetching } = useZRQGetRequest<
-    ShortLinkType[]
-  >({
-    _url: API_URL_ENUM.shortLinks_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
-    _itemsIds: [workspaceId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
-  });
+  const { data: shortLinksData, isFetching: isShortLinksDataFetching } =
+    useZRQGetRequest<ShortLinkType[]>({
+      _url: API_URL_ENUM.shortLinks_create_list,
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
+      _itemsIds: [workspaceId],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+    });
   // #endregion
 
   // #region Popovers.
@@ -785,35 +785,37 @@ const ZInpageMainContent: React.FC = () => {
                 'mt-2': !isLgScale,
                 'gap-2 flex-col': !isSmScale
               })}>
-              {/*  */}
-              <ZIonButton
-                fill='outline'
-                color='primary'
-                expand={!isSmScale ? 'block' : undefined}
-                height={isLgScale ? '39px' : '20px'}
-                className={classNames({
-                  'my-2 normal-case': true,
-                  'text-xs w-[25%]': !isLgScale,
-                  'w-full': !isSmScale
-                })}
-                testingselector={
-                  CONSTANTS.testingSelectors.shortLink.listPage.filterBtn
-                }
-                onClick={async () => {
-                  await menuController.enable(
-                    true,
-                    CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID
-                  );
-                  await menuController.open(
-                    CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID
-                  );
-                }}>
-                <ZIonIcon
-                  icon={filterOutline}
-                  className='pr-1'
-                />
-                Filter
-              </ZIonButton>
+              {/* Filter button */}
+              {shortLinksData && shortLinksData?.length > 0 && (
+                <ZIonButton
+                  fill='outline'
+                  color='primary'
+                  expand={!isSmScale ? 'block' : undefined}
+                  height={isLgScale ? '39px' : '20px'}
+                  className={classNames({
+                    'my-2 normal-case': true,
+                    'text-xs w-[25%]': !isLgScale,
+                    'w-full': !isSmScale
+                  })}
+                  testingselector={
+                    CONSTANTS.testingSelectors.shortLink.listPage.filterBtn
+                  }
+                  onClick={async () => {
+                    await menuController.enable(
+                      true,
+                      CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID
+                    );
+                    await menuController.open(
+                      CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID
+                    );
+                  }}>
+                  <ZIonIcon
+                    icon={filterOutline}
+                    className='pr-1'
+                  />
+                  Filter
+                </ZIonButton>
+              )}
 
               {/* <ZIonMenuToggle
 								autoHide={false}

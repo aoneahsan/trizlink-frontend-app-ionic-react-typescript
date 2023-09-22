@@ -188,7 +188,7 @@ const ZaionsAddPixelAccount: React.FC<{
                 updateHoleData: true
               });
 
-              showSuccessNotification(MESSAGES.GENERAL.PIXEL_ACCOUNT.CREATED);
+              showSuccessNotification(MESSAGES.PIXEL_ACCOUNT.CREATED);
             } else if (formMode === FormMode.EDIT) {
               // Updating all pixels data in RQ cache.
               await updateRQCDataHandler<PixelAccountPlatformType | undefined>({
@@ -198,7 +198,7 @@ const ZaionsAddPixelAccount: React.FC<{
                 extractType: ZRQGetRequestExtractEnum.extractItem
               });
 
-              showSuccessNotification(MESSAGES.GENERAL.PIXEL_ACCOUNT.UPDATED);
+              showSuccessNotification(MESSAGES.PIXEL_ACCOUNT.UPDATED);
             }
           }
         }

@@ -1004,3 +1004,8 @@ ion-modal.zaions__modal_w100 {
 .PhoneInputInput:focus-within .PhoneInput {
   border: 1px solid red;
 }
+
+/* React select */
+.select__menu {
+  z-index: 10 !important;
+}

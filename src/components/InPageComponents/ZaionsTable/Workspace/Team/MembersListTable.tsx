@@ -347,7 +347,7 @@ const ZInpageTable: React.FC = () => {
 
     // Invited accepted at
     columnHelper.accessor('"inviteAcceptedAt"|"inviteRejectedAt"', {
-      header: 'Invited accepted/rejected at',
+      header: 'Updated At',
       id: ZMembersListPageTableColumnsIds.invitedAcceptedAt,
       cell: row => {
         return (
@@ -360,7 +360,7 @@ const ZInpageTable: React.FC = () => {
           </>
         );
       },
-      footer: 'Invited accepted/rejected at'
+      footer: 'Updated At'
     })
   ];
 
@@ -598,7 +598,7 @@ const ZInpageTable: React.FC = () => {
       </ZCustomScrollable>
 
       <ZIonRow className='w-full px-2 pt-1 pb-2 mt-2 overflow-hidden border rounded-lg ion-align-items-center zaions__light_bg'>
-        <ZIonCol className='ps-1 flex ion-align-items-center mt-1'>
+        <ZIonCol className='flex mt-1 ps-1 ion-align-items-center'>
           {/* previous buttons */}
           <ZIonButton
             className='mr-2 ion-no-padding ion-no-margin'
@@ -898,7 +898,7 @@ const ZMemberActionPopover: React.FC<{
             id: __data?.id!
           });
 
-          showSuccessNotification(MESSAGES.GENERAL.MEMBER.INVITE_RESEND);
+          showSuccessNotification(MESSAGES.MEMBER.INVITE_RESEND);
 
           dismissZIonPopover('', '');
         }
@@ -917,9 +917,9 @@ const ZMemberActionPopover: React.FC<{
     try {
       if (membersId) {
         await presentZIonAlert({
-          header: `Cancel Invitation`,
-          subHeader: 'Cancel the invitation from workspace.',
-          message: 'Are you sure you want to cancel this invitation?',
+          header: MESSAGES.MEMBER.CANCEL_ALERT.HEADER,
+          subHeader: MESSAGES.MEMBER.CANCEL_ALERT.SUB_HEADER,
+          message: MESSAGES.MEMBER.CANCEL_ALERT.MESSAGES,
           buttons: [
             {
               text: 'Close',
@@ -927,6 +927,7 @@ const ZMemberActionPopover: React.FC<{
             },
             {
               text: 'Cancel',
+              cssClass: 'zaions_ion_color_danger',
               role: 'danger',
               handler: () => {
                 void ZCancelInvitation();
@@ -970,7 +971,7 @@ const ZMemberActionPopover: React.FC<{
             id: __data?.id
           });
 
-          showSuccessNotification(MESSAGES.GENERAL.MEMBER.CANCELED);
+          showSuccessNotification(MESSAGES.MEMBER.CANCELED);
 
           dismissZIonPopover('', '');
         }
@@ -985,9 +986,9 @@ const ZMemberActionPopover: React.FC<{
     try {
       if (membersId) {
         await presentZIonAlert({
-          header: `Delete Invitation`,
-          subHeader: 'Remove invitation from workspace.',
-          message: 'Are you sure you want to delete this invitation?',
+          header: MESSAGES.MEMBER.DELETE_ALERT.HEADER,
+          subHeader: MESSAGES.MEMBER.DELETE_ALERT.SUB_HEADER,
+          message: MESSAGES.MEMBER.DELETE_ALERT.MESSAGES,
           buttons: [
             {
               text: 'Cancel',
@@ -995,6 +996,7 @@ const ZMemberActionPopover: React.FC<{
             },
             {
               text: 'Delete',
+              cssClass: 'zaions_ion_color_danger',
               role: 'danger',
               handler: () => {
                 void ZDeleteInvitation();
@@ -1054,7 +1056,7 @@ const ZMemberActionPopover: React.FC<{
             extractType: ZRQGetRequestExtractEnum.extractItems
           });
 
-          showSuccessNotification(MESSAGES.GENERAL.MEMBER.DELETED);
+          showSuccessNotification(MESSAGES.MEMBER.DELETED);
 
           dismissZIonPopover('', '');
         }

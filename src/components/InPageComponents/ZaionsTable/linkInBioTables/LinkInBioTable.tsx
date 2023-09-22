@@ -442,7 +442,7 @@ const ZInpageTable: React.FC = () => {
 
       {/*  */}
       <ZIonRow className='w-full px-2 pt-1 pb-2 mt-1 overflow-hidden rounded-lg zaions__light_bg'>
-        <ZIonCol className='ps-1 flex ion-align-items-center mt-1'>
+        <ZIonCol className='flex mt-1 ps-1 ion-align-items-center'>
           {/* previous buttons */}
           <ZIonButton
             className='mr-2 ion-no-padding ion-no-margin'
@@ -792,9 +792,9 @@ const ZLinkInBioActionPopover: React.FC<{
     try {
       if (linInBioId?.trim() && _FilteredLinkInBioLinksDataSelector?.length) {
         await presentZIonAlert({
-          header: `Delete Link-in-bio`,
-          subHeader: 'Remove Link-in-bio from user account.',
-          message: 'Are you sure you want to delete this Link-in-bio?',
+          header: MESSAGES.LINK_IN_BIO.DELETE_ALERT.HEADER,
+          subHeader: MESSAGES.LINK_IN_BIO.DELETE_ALERT.SUB_HEADER,
+          message: MESSAGES.LINK_IN_BIO.DELETE_ALERT.MESSAGES,
           buttons: [
             {
               text: 'Cancel',
@@ -803,6 +803,7 @@ const ZLinkInBioActionPopover: React.FC<{
             {
               text: 'Delete',
               role: 'danger',
+              cssClass: 'zaions_ion_color_danger',
               handler: () => {
                 void removeLinkInBio();
               }
@@ -865,7 +866,7 @@ const ZLinkInBioActionPopover: React.FC<{
                 updateHoleData: true
               });
 
-              showSuccessNotification(MESSAGES.GENERAL.LINK_IN_BIO.DELETE);
+              showSuccessNotification(MESSAGES.LINK_IN_BIO.DELETE);
             }
           }
         }

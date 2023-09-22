@@ -94,6 +94,7 @@ import {
   ShortLinksFieldsDataRStateSelector,
   ShortLinksFilterOptionsRStateAtom
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
+import MESSAGES from '@/utils/messages';
 
 /**
  * Style files Imports go down
@@ -167,11 +168,13 @@ const ZShortLinksFilterMenu: React.FC = () => {
   // #region APIs.
   //
   const { mutateAsync: updateUserSettingsAsyncMutate } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.user_setting_delete_update_get
+    _url: API_URL_ENUM.user_setting_delete_update_get,
+    _loaderMessage: MESSAGES.SHORT_LINKS.FILTERING
   });
 
   const { mutateAsync: createUserSettingsAsyncMutate } = useZRQCreateRequest({
-    _url: API_URL_ENUM.user_setting_list_create
+    _url: API_URL_ENUM.user_setting_list_create,
+    _loaderMessage: MESSAGES.SHORT_LINKS.FILTERING
   });
 
   const { data: getUserSetting, isFetching: isUserSettingFetching } =

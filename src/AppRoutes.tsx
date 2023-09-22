@@ -8,7 +8,8 @@ import { Route } from 'react-router-dom';
 import ZaionsRoutes from './utils/constants/RoutesConstants';
 
 // Commented Routes
-
+import PublicRoute from './components/PublicRoute';
+import PrivateRoute from './components/PrivateRoute';
 const Z400View = lazy(() => import('./components/Errors/400'));
 const Z401View = lazy(() => import('./components/Errors/401'));
 const Z403View = lazy(() => import('./components/Errors/403'));
@@ -127,8 +128,8 @@ const ZaionsLinkInBioForm = lazy(
 const TestingIonComponents = lazy(
   () => import('./Testing/TestingIonComponents/index')
 );
-import PublicRoute from './components/PublicRoute';
-import PrivateRoute from './components/PrivateRoute';
+
+const ZUserAccount = lazy(() => import('./pages/AdminPanel/UserAccount'));
 const ZSetPasswordPage = lazy(() => import('./pages/SetPassword'));
 const ZAppStartupPage = lazy(() => import('./pages/AdminPanel/StartUpPage'));
 const ChartsExamples = lazy(() => import('./Testing/Charts'));
@@ -301,6 +302,16 @@ const AppRoutes = () => {
       <PrivateRoute
         path={ZaionsRoutes.AdminPanel.Setting.AccountSettings.Main}
         Component={ZWorkspaceSettings}
+      />
+
+      <PrivateRoute
+        path={ZaionsRoutes.AdminPanel.Setting.UserAccount.ProfileSettings}
+        Component={ZUserAccount}
+      />
+
+      <PrivateRoute
+        path={ZaionsRoutes.AdminPanel.Setting.UserAccount.NotificationSettings}
+        Component={ZUserAccount}
       />
 
       <PrivateRoute

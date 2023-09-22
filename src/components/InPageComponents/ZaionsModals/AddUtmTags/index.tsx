@@ -47,6 +47,7 @@ import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { UTMTagTemplateType } from '@/types/AdminPanel/linksType';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { ProductFavicon } from '@/assets/images';
+import { reportCustomError } from '@/utils/customErrorType';
 
 // Styles
 
@@ -119,9 +120,7 @@ const ZaionsAddUtmTags: React.FC<{
                 updateHoleData: true
               });
 
-              showSuccessNotification(
-                MESSAGES.GENERAL.UTM_TAGS_TEMPLATE.CREATED
-              );
+              showSuccessNotification(MESSAGES.UTM_TAGS_TEMPLATE.CREATED);
             } else if (formMode === FormMode.EDIT) {
               await updateRQCDataHandler({
                 key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
@@ -130,9 +129,7 @@ const ZaionsAddUtmTags: React.FC<{
                 extractType: ZRQGetRequestExtractEnum.extractItems
               });
 
-              showSuccessNotification(
-                MESSAGES.GENERAL.UTM_TAGS_TEMPLATE.UPDATED
-              );
+              showSuccessNotification(MESSAGES.UTM_TAGS_TEMPLATE.UPDATED);
             }
           }
         }
@@ -148,7 +145,7 @@ const ZaionsAddUtmTags: React.FC<{
         resetForm({ values: {} });
       }
     } catch (error) {
-      console.error(error);
+      reportCustomError(error);
     }
   };
 
@@ -167,7 +164,7 @@ const ZaionsAddUtmTags: React.FC<{
         formMode: FormMode.ADD
       }));
     } catch (error) {
-      console.error(error);
+      reportCustomError(error);
     }
   };
 

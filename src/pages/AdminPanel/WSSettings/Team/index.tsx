@@ -52,9 +52,9 @@ import {
  * ? Like import of Constant is a global constants import
  * */
 import CONSTANTS from '@/utils/constants';
-import { API_URL_ENUM } from '@/utils/enums';
 import { reportCustomError } from '@/utils/customErrorType';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import { API_URL_ENUM } from '@/utils/enums';
 
 /**
  * Type Imports go down
@@ -62,7 +62,7 @@ import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
  * */
 import {
   WorkspaceSharingTabEnum,
-  workspaceTeamInterface
+  WSTeamMembersInterface
 } from '@/types/AdminPanel/workspace';
 
 /**
@@ -113,6 +113,14 @@ const ZWSSettingTeamsListPage: React.FC = () => {
   // #endregion
 
   // #region APIS
+  const { data: wsTeamMembersData } = useZRQGetRequest<
+    WSTeamMembersInterface[]
+  >({
+    _url: API_URL_ENUM.ws_team_member_getAllInvite_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId],
+    _itemsIds: [workspaceId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+  });
   // #endregion
 
   // #region Functions.
@@ -172,42 +180,44 @@ const ZWSSettingTeamsListPage: React.FC = () => {
             'ion-justify-content-between flex gap-1': !isLgScale && isSmScale,
             'w-full': !isSmScale
           })}>
-          <ZIonButton
-            fill='outline'
-            color='primary'
-            minHeight={isLgScale ? '39px' : '2rem'}
-            expand={!isLgScale ? 'block' : undefined}
-            testingselector={
-              CONSTANTS.testingSelectors.WSSettings.teamListPage.timeFilterBtn
-            }
-            className={classNames({
-              'my-2': true,
-              'me-2': isLgScale,
-              'text-xs ion-no-margin ion-no-padding w-[33.33%]':
-                !isLgScale && isSmScale,
-              'w-full': !isSmScale,
-              'ion-no-margin': !isSmScale
-            })}
-            onClick={async () => {
-              // Open the menu by menu-id
-              await menuController.enable(
-                true,
-                CONSTANTS.MENU_IDS.MEMBER_FILTERS_MENU_ID
-              );
-              await menuController.open(
-                CONSTANTS.MENU_IDS.MEMBER_FILTERS_MENU_ID
-              );
-            }}>
-            <ZIonIcon
-              slot='start'
-              icon={filterOutline}
+          {wsTeamMembersData && wsTeamMembersData?.length > 0 && (
+            <ZIonButton
+              fill='outline'
+              color='primary'
+              minHeight={isLgScale ? '39px' : '2rem'}
+              expand={!isLgScale ? 'block' : undefined}
+              testingselector={
+                CONSTANTS.testingSelectors.WSSettings.teamListPage.timeFilterBtn
+              }
               className={classNames({
-                'me-1': true,
-                'w-4 h-4': !isLgScale
+                'my-2': true,
+                'me-2': isLgScale,
+                'text-xs ion-no-margin ion-no-padding w-[33.33%]':
+                  !isLgScale && isSmScale,
+                'w-full': !isSmScale,
+                'ion-no-margin': !isSmScale
               })}
-            />
-            Filters
-          </ZIonButton>
+              onClick={async () => {
+                // Open the menu by menu-id
+                await menuController.enable(
+                  true,
+                  CONSTANTS.MENU_IDS.MEMBER_FILTERS_MENU_ID
+                );
+                await menuController.open(
+                  CONSTANTS.MENU_IDS.MEMBER_FILTERS_MENU_ID
+                );
+              }}>
+              <ZIonIcon
+                slot='start'
+                icon={filterOutline}
+                className={classNames({
+                  'me-1': true,
+                  'w-4 h-4': !isLgScale
+                })}
+              />
+              Filters
+            </ZIonButton>
+          )}
 
           {/* Refetch data button */}
           <ZIonButton

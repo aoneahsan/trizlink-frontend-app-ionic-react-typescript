@@ -206,7 +206,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                   updateHoleData: true
                 });
 
-                presentZIonToastSuccess(MESSAGES.GENERAL.TIME_SLOT.CREATED);
+                presentZIonToastSuccess(MESSAGES.TIME_SLOT.CREATED);
               } else if (mode === FormMode.EDIT) {
                 // Updating all TimeSlot data in RQ cache.
                 await updateRQCDataHandler<TimeSlotInterface | undefined>({
@@ -231,7 +231,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                   extractType: ZRQGetRequestExtractEnum.extractItem
                 });
 
-                presentZIonToastSuccess(MESSAGES.GENERAL.TIME_SLOT.UPDATED);
+                presentZIonToastSuccess(MESSAGES.TIME_SLOT.UPDATED);
               }
             }
 
@@ -393,6 +393,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                         .timetable.formModal.timeInput
                     }
                     className={classNames({
+                      z_ion_bg_white: true,
                       'ion-touched': touched.time,
                       'ion-invalid': errors.time,
                       'ion-valid': !errors.time
@@ -441,6 +442,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                     }}
                     disabled={mode === FormMode.EDIT}
                     className={classNames({
+                      z_ion_bg_white: true,
                       'ion-touched': touched.day,
                       'ion-invalid': errors.day,
                       'ion-valid': !errors.day

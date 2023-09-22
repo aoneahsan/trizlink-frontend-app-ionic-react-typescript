@@ -227,7 +227,7 @@ const ZInviteTab: React.FC<{
                   updateHoleData: true,
                   extractType: ZRQGetRequestExtractEnum.extractItems
                 });
-                showSuccessNotification(MESSAGES.GENERAL.MEMBER.INVITE_SEND);
+                showSuccessNotification(MESSAGES.MEMBER.INVITE_SEND);
               } else if (formMode === FormMode.EDIT) {
                 await updateRQCDataHandler({
                   key: [
@@ -237,7 +237,7 @@ const ZInviteTab: React.FC<{
                   data: __data,
                   id: __data?.id
                 });
-                showSuccessNotification(MESSAGES.GENERAL.MEMBER.UPDATED_ROLE);
+                showSuccessNotification(MESSAGES.MEMBER.ROLE_UPDATED);
               }
             }
 
@@ -831,7 +831,7 @@ const ZInviteTab: React.FC<{
               sizeSm='11.5'
               sizeXs='11.5'
               text={
-                <div className='flex zaions__bg_white px-2 w-max mx-auto ion-align-items-center ion-justify-content-center'>
+                <div className='flex px-2 mx-auto zaions__bg_white w-max ion-align-items-center ion-justify-content-center'>
                   <ZIonText className='me-2'>Invite links</ZIonText>
                   <ZIonIcon
                     icon={helpCircleOutline}

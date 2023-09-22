@@ -127,8 +127,8 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
                 .pixelsSelector
             }
             options={
-              pixelAccountsState
-                ? pixelAccountsState.map(el => {
+              pixelAccountsData
+                ? pixelAccountsData?.map(el => {
                     return { value: el.id, label: selectOptionComponent(el) };
                   })
                 : []

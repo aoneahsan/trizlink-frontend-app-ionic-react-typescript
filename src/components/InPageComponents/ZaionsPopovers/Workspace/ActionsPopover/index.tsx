@@ -157,9 +157,9 @@ const ZWorkspacesActionPopover: React.FC<{
     try {
       if (workspaceId) {
         await presentZIonAlert({
-          header: `Delete Workspace`,
-          subHeader: 'Remove workspace from user account.',
-          message: 'Are you sure you want to delete this workspace?',
+          header: MESSAGES.WORKSPACE.DELETE_ALERT.HEADER,
+          subHeader: MESSAGES.WORKSPACE.DELETE_ALERT.SUB_HEADER,
+          message: MESSAGES.WORKSPACE.DELETE_ALERT.MESSAGES,
           buttons: [
             {
               text: 'Cancel',
@@ -168,6 +168,7 @@ const ZWorkspacesActionPopover: React.FC<{
             {
               text: 'Delete',
               role: 'danger',
+              cssClass: 'zaions_ion_color_danger',
               handler: () => {
                 void removeWorkspace();
               }
@@ -223,9 +224,7 @@ const ZWorkspacesActionPopover: React.FC<{
             });
 
             // show success message after deleting.
-            showSuccessNotification(
-              MESSAGES.GENERAL.WORKSPACE.WORKSPACE_DELETED
-            );
+            showSuccessNotification(MESSAGES.WORKSPACE.DELETED);
           }
         } else {
           showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
@@ -247,7 +246,7 @@ const ZWorkspacesActionPopover: React.FC<{
       {showManageUserOption && (
         <ZIonItem
           minHeight='2.3rem'
-          className='ion-activatable ion-focusable cursor-pointer'
+          className='cursor-pointer ion-activatable ion-focusable'
           testingselector={
             CONSTANTS.testingSelectors.workspace.actionsPopover.manageUsers
           }
@@ -258,7 +257,7 @@ const ZWorkspacesActionPopover: React.FC<{
           }}>
           <ZIonIcon
             icon={peopleOutline}
-            className='me-2 w-5 h-5'
+            className='w-5 h-5 me-2'
           />
           <ZIonText className={classNames('text-sm')}>Manage users</ZIonText>
         </ZIonItem>
@@ -268,7 +267,7 @@ const ZWorkspacesActionPopover: React.FC<{
       <ZCan havePermissions={[permissionsEnum.viewAny_timeSlot]}>
         <ZIonItem
           minHeight='2.3rem'
-          className='ion-activatable ion-focusable cursor-pointer '
+          className='cursor-pointer ion-activatable ion-focusable '
           testingselector={
             CONSTANTS.testingSelectors.workspace.actionsPopover
               .configureTimetable
@@ -286,7 +285,7 @@ const ZWorkspacesActionPopover: React.FC<{
           }}>
           <ZIonIcon
             icon={timeOutline}
-            className='me-2 w-5 h-5'
+            className='w-5 h-5 me-2'
           />
           <ZIonText className={classNames('text-sm')}>
             Configure timetable
@@ -297,7 +296,7 @@ const ZWorkspacesActionPopover: React.FC<{
       {/* Manage labels */}
       <ZCan havePermissions={[permissionsEnum.viewAny_label]}>
         <ZIonItem
-          className='ion-activatable ion-focusable cursor-pointer'
+          className='cursor-pointer ion-activatable ion-focusable'
           minHeight='2.3rem'
           testingselector={
             CONSTANTS.testingSelectors.workspace.actionsPopover.manageLabels
@@ -315,7 +314,7 @@ const ZWorkspacesActionPopover: React.FC<{
           }}>
           <ZIonIcon
             icon={pricetagOutline}
-            className='me-2 w-5 h-5'
+            className='w-5 h-5 me-2'
           />
           <ZIonText className={classNames('text-sm')}>Manage labels</ZIonText>
         </ZIonItem>
@@ -324,7 +323,7 @@ const ZWorkspacesActionPopover: React.FC<{
       {/* Invite members */}
       <ZIonItem
         minHeight='32px'
-        className='ion-activatable ion-focusable cursor-pointer'
+        className='cursor-pointer ion-activatable ion-focusable'
         onClick={() => {
           zNavigatePushRoute(
             replaceRouteParams(
@@ -338,17 +337,16 @@ const ZWorkspacesActionPopover: React.FC<{
         }}>
         <ZIonIcon
           icon={peopleOutline}
-          className='me-2 w-5 h-5'
+          className='w-5 h-5 me-2'
         />
         <ZIonText className={classNames('text-sm')}>Invite members</ZIonText>
       </ZIonItem>
 
       {/* Settings */}
-
       <ZCan havePermissions={[permissionsEnum.update_workspace]}>
         <ZIonItem
           minHeight='2.3rem'
-          className='ion-activatable ion-focusable cursor-pointer'
+          className='cursor-pointer ion-activatable ion-focusable'
           testingselector={
             CONSTANTS.testingSelectors.workspace.actionsPopover.settings
           }
@@ -365,7 +363,7 @@ const ZWorkspacesActionPopover: React.FC<{
           }}>
           <ZIonIcon
             icon={settingsOutline}
-            className='me-2 w-5 h-5'
+            className='w-5 h-5 me-2'
           />
           <ZIonText className={classNames('text-sm')}>Settings</ZIonText>
         </ZIonItem>
@@ -374,7 +372,7 @@ const ZWorkspacesActionPopover: React.FC<{
       {/* Approvals settings */}
       <ZIonItem
         minHeight='2.3rem'
-        className='ion-activatable ion-focusable cursor-pointer'
+        className='cursor-pointer ion-activatable ion-focusable'
         testingselector={
           CONSTANTS.testingSelectors.workspace.actionsPopover.approvalSettings
         }
@@ -391,7 +389,7 @@ const ZWorkspacesActionPopover: React.FC<{
         }}>
         <ZIonIcon
           icon={checkmarkOutline}
-          className='me-2 w-5 h-5'
+          className='w-5 h-5 me-2'
         />
         <ZIonText className={classNames('text-sm')}>
           Approvals settings
@@ -399,11 +397,11 @@ const ZWorkspacesActionPopover: React.FC<{
       </ZIonItem>
 
       {/* Edit */}
-      {showEditWorkspaceOption && (
+      {/* {showEditWorkspaceOption && (
         <ZCan havePermissions={[permissionsEnum.update_workspace]}>
           <ZIonItem
             minHeight='2.3rem'
-            className='ion-activatable ion-focusable cursor-pointer'
+            className='cursor-pointer ion-activatable ion-focusable'
             testingselector={
               CONSTANTS.testingSelectors.workspace.actionsPopover.edit
             }
@@ -427,19 +425,19 @@ const ZWorkspacesActionPopover: React.FC<{
             }}>
             <ZIonIcon
               icon={pencilOutline}
-              className='me-2 w-5 h-5'
+              className='w-5 h-5 me-2'
             />
             <ZIonText className='text-sm'>Edit</ZIonText>
           </ZIonItem>
         </ZCan>
-      )}
+      )} */}
 
       {/* Delete */}
       {showDeleteWorkspaceOption && (
         <ZCan havePermissions={[permissionsEnum.delete_workspace]}>
           <ZIonItem
             minHeight='2.3rem'
-            className='ion-activatable ion-focusable cursor-pointer'
+            className='cursor-pointer ion-activatable ion-focusable'
             testingselector={
               CONSTANTS.testingSelectors.workspace.actionsPopover.delete
             }
@@ -448,7 +446,7 @@ const ZWorkspacesActionPopover: React.FC<{
             }}>
             <ZIonIcon
               icon={trashBinOutline}
-              className='me-2 w-5 h-5'
+              className='w-5 h-5 me-2'
               color='danger'
             />
             <ZIonText

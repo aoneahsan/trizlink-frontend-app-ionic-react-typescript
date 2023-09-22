@@ -201,7 +201,7 @@ const ZLabelsTab: React.FC<{
                   updateHoleData: true
                 });
 
-                presentZIonToastSuccess(MESSAGES.GENERAL.LABEL.CREATED);
+                presentZIonToastSuccess(MESSAGES.LABEL.CREATED);
               } else if (_mode === FormMode.EDIT) {
                 // Updating all labels data in RQ cache.
                 await updateRQCDataHandler<LabelInterface | undefined>({
@@ -212,6 +212,8 @@ const ZLabelsTab: React.FC<{
                   data: __data as LabelInterface,
                   id: __data.id
                 });
+
+                presentZIonToastSuccess(MESSAGES.LABEL.UPDATED);
               }
             }
           }
@@ -227,9 +229,9 @@ const ZLabelsTab: React.FC<{
     try {
       if (_labelId) {
         await presentZIonAlert({
-          header: `Delete Label`,
-          subHeader: 'Remove label from workspace.',
-          message: 'Are you sure you want to delete this label?',
+          header: MESSAGES.LABEL.DELETE_ALERT.HEADER,
+          subHeader: MESSAGES.LABEL.DELETE_ALERT.SUB_HEADER,
+          message: MESSAGES.LABEL.DELETE_ALERT.MESSAGES,
           buttons: [
             {
               text: 'Cancel',
@@ -237,6 +239,7 @@ const ZLabelsTab: React.FC<{
             },
             {
               text: 'Delete',
+              cssClass: 'zaions_ion_color_danger',
               role: 'danger',
               handler: () => {
                 void removeLabel(_labelId);
@@ -297,7 +300,7 @@ const ZLabelsTab: React.FC<{
               updateHoleData: true
             });
 
-            presentZIonToastSuccess(MESSAGES.GENERAL.TIME_SLOT.DELETED);
+            presentZIonToastSuccess(MESSAGES.LABEL.DELETED);
           } else {
             showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
           }
@@ -440,7 +443,7 @@ const ZLabelsTab: React.FC<{
                               .labels.labelNameInput
                           }
                           className={classNames({
-                            'bg-white': true,
+                            z_ion_bg_white: true,
                             'ion-touched': touched.title,
                             'ion-invalid': errors.title,
                             'ion-valid': !errors.title
@@ -620,7 +623,7 @@ const ZLabelsTab: React.FC<{
                                         </>
                                       )}
                                       {el.editMode && (
-                                        <>
+                                        <div className='flex w-full ion-align-items-start'>
                                           <ZIonInput
                                             placeholder='Label name'
                                             minHeight='2rem'
@@ -635,7 +638,8 @@ const ZLabelsTab: React.FC<{
                                             }
                                             name={`allLabels.${index}.title`}
                                             className={classNames({
-                                              'w-full bg-white ps-2': true,
+                                              'w-full z_ion_bg_white ps-2':
+                                                true,
                                               'ion-touched':
                                                 touched.allLabels &&
                                                 touched.allLabels[index]?.title,
@@ -729,7 +733,7 @@ const ZLabelsTab: React.FC<{
                                               className='w-5 h-5'
                                             />
                                           </ZIonButton>
-                                        </>
+                                        </div>
                                       )}
                                     </ZIonItem>
                                   );

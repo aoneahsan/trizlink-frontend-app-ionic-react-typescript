@@ -51,8 +51,10 @@ const ZIonButton = (props: ZIonButtonType) => {
   const compStyle =
     props.style && props.height
       ? { ...props.style, height: props.height }
+      : props.style && props.height && props.minHeight
+      ? { ...props.style, height: props.height, minHeight: props.minHeight }
       : props.style && props.minHeight
-      ? { ...props.style, minHeight: props.height }
+      ? { ...props.style, minHeight: props.minHeight }
       : props.style && !props.height
       ? { ...props.style }
       : props.style && !props.minHeight

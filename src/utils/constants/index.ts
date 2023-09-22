@@ -1,3 +1,4 @@
+import { PixelPlatformsEnum } from './../../types/AdminPanel/linksType/index';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 // import { zConsoleError } from '@/utils/helpers';
 // Custom Imports
@@ -255,6 +256,8 @@ const MENU_IDS = {
   MEMBER_FILTERS_MENU_ID: 'member_filters_menu_id',
   UTMTag_FILTERS_MENU_ID: 'utmTag_filters_menu_id',
   WS_SETTINGS_PAGE_MENU_ID: 'ws-settings-page-menu-id',
+  USER_SETTINGS_PAGE_MENU_ID: 'user-settings-page-menu-id',
+  USER_SETTINGS_PAGE_ID: 'user-settings-page-id',
   ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID:
     'admin_page_short_links_folders_menu_id',
   ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID:
@@ -1054,6 +1057,7 @@ const testingSelectors = {
         startInput: 'p-lp-fsb-start-input',
         endInput: 'p-lp-fsb-end-input',
         saveBtn1: 'p-lp-fsb-save-btn-1',
+        platformSelect: 'p-lp-fsb-platform-select',
         columnAccordionHead: 'p-lp-fsb-column-accordion-head',
         columnAccordionBody: 'p-lp-fsb-column-accordion-body',
         reorderItem: 'p-lp-fsb-reorder-item',
@@ -1514,6 +1518,24 @@ const ZRolesOptions: ZaionsRSelectOptions[] = [
   { label: 'Guest', value: WSRolesNameEnum.Guest }
 ];
 
+const ZPlatformOptions: ZaionsRSelectOptions[] = [
+  { label: 'facebook', value: PixelPlatformsEnum.facebook },
+  { label: 'linkedin', value: PixelPlatformsEnum.linkedin },
+  { label: 'adroll', value: PixelPlatformsEnum.adroll },
+  { label: 'google ads', value: PixelPlatformsEnum.google_ads },
+  { label: 'bing', value: PixelPlatformsEnum.bing },
+  { label: 'google analytics', value: PixelPlatformsEnum.google_analytics },
+  { label: 'google analytics 4', value: PixelPlatformsEnum.google_analytics_4 },
+  { label: 'nexus', value: PixelPlatformsEnum.nexus },
+  { label: 'pinterest', value: PixelPlatformsEnum.pinterest },
+  { label: 'quora', value: PixelPlatformsEnum.quora },
+  { label: 'snapchat', value: PixelPlatformsEnum.snapchat },
+  { label: 'tiktok', value: PixelPlatformsEnum.tiktok },
+  { label: 'twitter', value: PixelPlatformsEnum.twitter },
+  { label: 'VK', value: PixelPlatformsEnum.vk },
+  { label: 'google tag manager', value: PixelPlatformsEnum.google_tag_manager }
+];
+
 const ZStatesOptions: ZaionsRSelectOptions[] = [
   { label: 'Accepted', value: ZTeamMemberInvitationEnum.accepted },
   { label: 'Active', value: ZTeamMemberInvitationEnum.active },
@@ -1526,6 +1548,7 @@ const ZStatesOptions: ZaionsRSelectOptions[] = [
 
 const CONSTANTS = {
   ZRolesOptions,
+  ZPlatformOptions,
   PIXEL_ACCOUNTS,
   ZStatesOptions,
   ZTimeSelectData,

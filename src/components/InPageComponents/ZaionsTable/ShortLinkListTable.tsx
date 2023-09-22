@@ -1015,13 +1015,13 @@ const ZShortLinkActionPopover: React.FC<{
   const deleteShortLink = async () => {
     try {
       if (shortLinkId?.trim() && _FilteredShortLinkDataSelector?.length) {
-        const selectedShortLinkId = _FilteredShortLinkDataSelector?.find(
-          el => el.id === shortLinkId
-        );
+        // const selectedShortLinkId = _FilteredShortLinkDataSelector?.find(
+        //   el => el.id === shortLinkId
+        // );
         await presentZIonAlert({
-          header: `Delete Short Link "${selectedShortLinkId?.title || ''}"`,
-          subHeader: 'Remove Short Link from user account.',
-          message: 'Are you sure you want to delete this Short Link?',
+          header: MESSAGES.SHORT_LINKS.DELETE_ALERT.HEADER,
+          subHeader: MESSAGES.SHORT_LINKS.DELETE_ALERT.SUB_HEADER,
+          message: MESSAGES.SHORT_LINKS.DELETE_ALERT.MESSAGES,
           buttons: [
             {
               text: 'Cancel',
@@ -1030,6 +1030,7 @@ const ZShortLinkActionPopover: React.FC<{
             {
               text: 'Delete',
               role: 'danger',
+              cssClass: 'zaions_ion_color_danger',
               handler: () => {
                 void removeShortLink();
               }
@@ -1093,9 +1094,7 @@ const ZShortLinkActionPopover: React.FC<{
                 updateHoleData: true
               });
 
-              showSuccessNotification(
-                MESSAGES.GENERAL.SHORT_LINKS.SHORT_LINK_DELETE
-              );
+              showSuccessNotification(MESSAGES.SHORT_LINKS.DELETE);
 
               dismissZIonPopover('', '');
             } else {

@@ -756,7 +756,7 @@ const ZTeamActionPopover: React.FC<{
               updateHoleData: true
             });
 
-            showSuccessNotification(MESSAGES.GENERAL.TEAM.DELETED);
+            // showSuccessNotification(MESSAGES.GENERAL.TEAM.DELETED);
 
             dismissZIonPopover('', '');
           } else {

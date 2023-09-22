@@ -133,12 +133,12 @@ const ZUTMTagsFilterMenu: React.FC = () => {
   //
   const { mutateAsync: updateUtmTagsFilersAsyncMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.user_setting_delete_update_get,
-    _loaderMessage: MESSAGES.GENERAL.FILTER.FILTERING
+    _loaderMessage: MESSAGES.UTM_TAGS_TEMPLATE.FILTERING
   });
 
   const { mutateAsync: createUtmTagsFilersAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.user_setting_list_create,
-    _loaderMessage: MESSAGES.GENERAL.FILTER.FILTERING
+    _loaderMessage: MESSAGES.UTM_TAGS_TEMPLATE.FILTERING
   });
 
   const {

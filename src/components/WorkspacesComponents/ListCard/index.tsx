@@ -298,13 +298,9 @@ const ZWorkspacesCard: React.FC<{
         }
 
         if (__data?.isFavorite) {
-          showSuccessNotification(
-            MESSAGES.GENERAL.WORKSPACE.ADD_TO_IS_FAVORITE
-          );
+          showSuccessNotification(MESSAGES.WORKSPACE.ADD_TO_IS_FAVORITE);
         } else {
-          showSuccessNotification(
-            MESSAGES.GENERAL.WORKSPACE.REMOVE_TO_IS_FAVORITE
-          );
+          showSuccessNotification(MESSAGES.WORKSPACE.REMOVE_TO_IS_FAVORITE);
         }
       }
     } catch (error) {
@@ -388,19 +384,22 @@ const ZWorkspacesCard: React.FC<{
 
               {/* Add to Favorites button col */}
               <ZIonCol className='ion-text-end me-2'>
-                <ZIonButton
-                  fill='clear'
-                  className='h-auto mb-1 ion-no-padding ion-no-margin'
-                  testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardFavoritesButton}-${workspaceId}`}
-                  testinglistselector={
-                    CONSTANTS.testingSelectors.workspace.listPage
-                      .workspaceCardFavoritesButton
-                  }
-                  onClick={() => {
-                    void zUpdateIsFavoriteHandler();
-                  }}>
-                  <ZIonIcon icon={isFavorite ? star : starOutline} />
-                </ZIonButton>
+                {owned ||
+                accountStatus === ZTeamMemberInvitationEnum.accepted ? (
+                  <ZIonButton
+                    fill='clear'
+                    className='h-auto mb-1 ion-no-padding ion-no-margin'
+                    testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardFavoritesButton}-${workspaceId}`}
+                    testinglistselector={
+                      CONSTANTS.testingSelectors.workspace.listPage
+                        .workspaceCardFavoritesButton
+                    }
+                    onClick={() => {
+                      void zUpdateIsFavoriteHandler();
+                    }}>
+                    <ZIonIcon icon={isFavorite ? star : starOutline} />
+                  </ZIonButton>
+                ) : null}
               </ZIonCol>
 
               {/* user avatar */}
@@ -457,7 +456,7 @@ const ZWorkspacesCard: React.FC<{
                   <ZIonCol>
                     <ZCan havePermissions={[permissionsEnum.view_workspace]}>
                       <ZIonButton
-                        className='normal-case '
+                        className='normal-case'
                         color='secondary'
                         size='default'
                         testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.viewWorkspaceButton}-${workspaceId}`}

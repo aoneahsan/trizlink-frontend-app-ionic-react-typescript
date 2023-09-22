@@ -8,7 +8,6 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { menuController } from '@ionic/core/components';
 import {
   helpCircleOutline,
   menu,
@@ -34,6 +33,7 @@ import ZNotificationPopover from '@/components/InPageComponents/ZaionsPopovers/N
 import ZWorkspaceSwitcher from '../Workspace/WorkspaceSwitcher';
 import ZCan from '@/components/Can';
 import ZCreateWorkspaceBtn from '../Workspace/ZCreateWorkspaceBtn';
+import ZInviteButton from '../InviteButton';
 
 /**
  * Custom Hooks Imports go down
@@ -41,6 +41,7 @@ import ZCreateWorkspaceBtn from '../Workspace/ZCreateWorkspaceBtn';
  * */
 import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -57,8 +58,6 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * */
 import { workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import ZInviteButton from '../InviteButton';
 
 /**
  * Recoil State Imports go down
@@ -88,8 +87,18 @@ import ZInviteButton from '../InviteButton';
 const ZAdminPanelTopBar: React.FC<{
   workspaceId?: string;
   showRefreshBtn?: boolean;
+  showWSSwitcherBtn?: boolean;
+  showInviteBtn?: boolean;
+  menuOnClickFn?: React.MouseEventHandler<HTMLIonButtonElement>;
   refreshBtnOnClick?: React.MouseEventHandler<HTMLIonButtonElement>;
-}> = ({ workspaceId, showRefreshBtn = false, refreshBtnOnClick }) => {
+}> = ({
+  workspaceId,
+  showRefreshBtn = false,
+  refreshBtnOnClick,
+  showWSSwitcherBtn = true,
+  showInviteBtn = true,
+  menuOnClickFn
+}) => {
   const { isMdScale, isLgScale } = useZMediaQueryScale();
 
   // #region popovers.
@@ -131,7 +140,12 @@ const ZAdminPanelTopBar: React.FC<{
         'px-2 py-2': !isMdScale
       })}>
       {/*  */}
-      <ZADTopBarColOne workspaceId={workspaceId} />
+      <ZADTopBarColOne
+        workspaceId={workspaceId}
+        showWSSwitcherBtn={showWSSwitcherBtn}
+        showInviteBtn={showInviteBtn}
+        menuOnClickFn={menuOnClickFn}
+      />
 
       {/*  */}
       {/* <ZIonCol
@@ -186,8 +200,8 @@ const ZAdminPanelTopBar: React.FC<{
             size={!isLgScale ? 'small' : undefined}
             height={isLgScale ? '2.3rem' : '1.9rem'}
             className={classNames({
-              'text-xs': !isLgScale,
-              'ms-4': showRefreshBtn
+              'text-xs': !isLgScale
+              // 'ms-4': showRefreshBtn
             })}
             testingselector={CONSTANTS.testingSelectors.topBar.upgradeBtn}>
             Upgrade
@@ -247,7 +261,7 @@ const ZAdminPanelTopBar: React.FC<{
           </ZIonButton>
         ) : null}
 
-        {!isMdScale ? (
+        {!isMdScale && showWSSwitcherBtn ? (
           <ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
             <ZWorkspaceSwitcher workspaceId={workspaceId} />
           </ZCan>
@@ -263,8 +277,16 @@ const ZAdminPanelTopBar: React.FC<{
   );
 };
 
-const ZADTopBarColOne: React.FC<{ workspaceId?: string }> = ({
-  workspaceId
+const ZADTopBarColOne: React.FC<{
+  workspaceId?: string;
+  showWSSwitcherBtn?: boolean;
+  showInviteBtn?: boolean;
+  menuOnClickFn?: React.MouseEventHandler<HTMLIonButtonElement>;
+}> = ({
+  workspaceId,
+  showWSSwitcherBtn = true,
+  showInviteBtn = true,
+  menuOnClickFn
 }) => {
   const isWorkspaceListPage = useRouteMatch(
     ZaionsRoutes.AdminPanel.Workspaces.Main
@@ -296,10 +318,12 @@ const ZADTopBarColOne: React.FC<{ workspaceId?: string }> = ({
           )
         : null}
       {isWorkspaceListPage ? (
-        <ZCreateWorkspaceBtn />
+        <>
+          <ZCreateWorkspaceBtn />
+        </>
       ) : (
         <>
-          {isMdScale ? (
+          {isMdScale && showWSSwitcherBtn ? (
             <ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
               <ZWorkspaceSwitcher workspaceId={workspaceId} />
             </ZCan>
@@ -310,24 +334,19 @@ const ZADTopBarColOne: React.FC<{ workspaceId?: string }> = ({
               className='w-[2rem] rounded-full overflow-hidden ion-no-padding ion-no-margin'
               minHeight='2rem'
               color='tertiary'
+              fill='clear'
               testingselector={
                 CONSTANTS.testingSelectors.topBar.openWSSettingMenuBtn
               }
-              onClick={async () => {
-                // Open the menu by menu-id
-                await menuController.enable(
-                  true,
-                  CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
-                );
-                await menuController.open(
-                  CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
-                );
-              }}>
-              <ZIonIcon icon={menu} />
+              onClick={menuOnClickFn}>
+              <ZIonIcon
+                icon={menu}
+                className='w-6 h-6'
+              />
             </ZIonButton>
           ) : null}
 
-          {isMdScale ? (
+          {isMdScale && showInviteBtn ? (
             <ZInviteButton
               className='ms-2'
               workspaceId={workspaceId}
@@ -335,11 +354,6 @@ const ZADTopBarColOne: React.FC<{ workspaceId?: string }> = ({
           ) : null}
         </>
       )}
-      {/* {!isWorkspaceListPage ? (
-				<ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
-					<ZWorkspaceSwitcher workspaceId={workspaceId} />
-				</ZCan>
-			) : null} */}
     </ZIonCol>
   );
 };

@@ -172,40 +172,42 @@ const ZWSSettingPixelListPage: React.FC = () => {
             'w-full': !isSmScale
           })}>
           {/* Filter */}
-          <ZIonButton
-            fill='outline'
-            color='primary'
-            minHeight={isLgScale ? '39px' : '2rem'}
-            expand={!isLgScale ? 'block' : undefined}
-            testingselector={
-              CONSTANTS.testingSelectors.pixels.listPage.filterBtn
-            }
-            className={classNames({
-              'my-2': true,
-              'me-2': isLgScale,
-              'text-xs ion-no-margin ion-no-padding w-[33.33%]':
-                !isLgScale && isSmScale,
-              'w-full': !isSmScale,
-              'ion-no-margin': !isSmScale
-            })}
-            onClick={async () => {
-              // Open the menu by menu-id
-              await menuController.enable(
-                true,
-                CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID
-              );
-              await menuController.open(CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID);
-            }}>
-            <ZIonIcon
-              slot='start'
-              icon={filterOutline}
+          {pixelAccountsData && pixelAccountsData?.length > 0 && (
+            <ZIonButton
+              fill='outline'
+              color='primary'
+              minHeight={isLgScale ? '39px' : '2rem'}
+              expand={!isLgScale ? 'block' : undefined}
+              testingselector={
+                CONSTANTS.testingSelectors.pixels.listPage.filterBtn
+              }
               className={classNames({
-                'me-1': true,
-                'w-4 h-4': !isLgScale
+                'my-2': true,
+                'me-2': isLgScale,
+                'text-xs ion-no-margin ion-no-padding w-[33.33%]':
+                  !isLgScale && isSmScale,
+                'w-full': !isSmScale,
+                'ion-no-margin': !isSmScale
               })}
-            />
-            Filter
-          </ZIonButton>
+              onClick={async () => {
+                // Open the menu by menu-id
+                await menuController.enable(
+                  true,
+                  CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID
+                );
+                await menuController.open(CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID);
+              }}>
+              <ZIonIcon
+                slot='start'
+                icon={filterOutline}
+                className={classNames({
+                  'me-1': true,
+                  'w-4 h-4': !isLgScale
+                })}
+              />
+              Filter
+            </ZIonButton>
+          )}
 
           {/* Refetch data button */}
           <ZIonButton

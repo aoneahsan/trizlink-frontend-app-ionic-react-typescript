@@ -1,5 +1,9 @@
 import { IonReorderGroupCustomEvent } from '@ionic/core';
-import { LinkFolderType, TimeFilterEnum } from './linksType/index';
+import {
+  LinkFolderType,
+  PixelPlatformsEnum,
+  TimeFilterEnum
+} from './linksType/index';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import { ItemReorderEventDetail } from '@ionic/react';
 import { WSRolesNameEnum } from './workspace';
@@ -137,6 +141,10 @@ export interface IFilterOptions {
   };
   searchQuery?: string | null;
   platform?: string;
+}
+
+export interface IPixelsFilterOptions extends IFilterOptions {
+  platform?: PixelPlatformsEnum;
 }
 
 export interface IMembersFilterOptions extends IFilterOptions {

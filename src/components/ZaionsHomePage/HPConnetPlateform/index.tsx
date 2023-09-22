@@ -3,21 +3,21 @@ import React, { Fragment } from 'react';
 
 // Packages Imports
 import { useRecoilValue } from 'recoil';
-import { IonItemDivider } from '@ionic/react';
 
 // Custom Imports
 import ZaionsNewLabel from '@/components/InPageComponents/ZaionsNewLable';
 import {
-	ZIonCol,
-	ZIonText,
-	ZIonIcon,
-	ZIonRouterLink,
-	ZIonRow,
-	ZIonGrid,
-	ZIonCard,
-	ZIonCardHeader,
-	ZIonCardTitle,
-	ZIonCardContent,
+  ZIonCol,
+  ZIonText,
+  ZIonIcon,
+  ZIonRouterLink,
+  ZIonRow,
+  ZIonGrid,
+  ZIonCard,
+  ZIonCardHeader,
+  ZIonCardTitle,
+  ZIonCardContent,
+  ZIonItemDivider
 } from '@/components/ZIonComponents';
 import { ZIonButton } from '@/components/ZIonComponents';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
@@ -36,163 +36,168 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 // const { Item: CarouselItem } = Carousel;
 
 const ZaionsHPConnectPlatform: React.FC = () => {
-	const loadedHPBCData = useRecoilValue<ZaionsHpCPDataType[]>(ZaionsHpCPData);
+  const loadedHPBCData = useRecoilValue<ZaionsHpCPDataType[]>(ZaionsHpCPData);
 
-	//
-	const { isLgScale } = useZMediaQueryScale();
+  //
+  const { isLgScale } = useZMediaQueryScale();
 
-	// Slider
+  // Slider
 
-	return (
-		<>
-			<div className='pt-2 mt-4 ion-text-center ion-margin-bottom ion-padding-bottom'>
-				<br />
-				<ZIonText className='mb-2 text-3xl font-bold d-inline-block'>
-					{PRODUCT_NAME}’s Connections Platform
-				</ZIonText>
-				<br />
-				<ZIonText>
-					All the products you need to build brand connections, manage links and
-					QR Codes, and <br /> connect with audiences everywhere, in a single
-					unified platform.
-				</ZIonText>
-			</div>
-			<div>
-				<ZIonGrid>
-					<ZIonRow>
-						<ZIonCol></ZIonCol>
-						<ZIonCol
-							sizeXl='11'
-							sizeLg='11'
-							sizeMd='11'
-							sizeSm='10'
-							sizeXs='12'
-						>
-							<ZIonRow>
-								{isLgScale ? (
-									loadedHPBCData.map((data) => (
-										<ZSingleCard
-											key={data.id}
-											id={data.id}
-											icon={data.icon}
-											title={data.title}
-											text={data.text}
-											featureListTitle={data.featureListTitle}
-											featureListItem={data.featureListItem}
-											primaryBtnText={data.primaryBtnText}
-											secondaryBtnText={data.secondaryBtnText}
-										/>
-									))
-								) : !isLgScale ? (
-									<Swiper>
-										{loadedHPBCData.map((data) => (
-											<SwiperSlide key={data.id} className='h-full'>
-												<ZSingleCard
-													id={data.id}
-													icon={data.icon}
-													title={data.title}
-													text={data.text}
-													featureListTitle={data.featureListTitle}
-													featureListItem={data.featureListItem}
-													primaryBtnText={data.primaryBtnText}
-													secondaryBtnText={data.secondaryBtnText}
-												/>
-											</SwiperSlide>
-										))}
-									</Swiper>
-								) : (
-									''
-								)}
-							</ZIonRow>
-						</ZIonCol>
-						<ZIonCol></ZIonCol>
-					</ZIonRow>
-				</ZIonGrid>
-			</div>
-		</>
-	);
+  return (
+    <>
+      <div className='pt-2 mt-4 ion-text-center ion-margin-bottom ion-padding-bottom'>
+        <br />
+        <ZIonText className='mb-2 text-3xl font-bold d-inline-block'>
+          {PRODUCT_NAME}’s Connections Platform
+        </ZIonText>
+        <br />
+        <ZIonText>
+          All the products you need to build brand connections, manage links and
+          QR Codes, and <br /> connect with audiences everywhere, in a single
+          unified platform.
+        </ZIonText>
+      </div>
+      <div>
+        <ZIonGrid>
+          <ZIonRow>
+            <ZIonCol></ZIonCol>
+            <ZIonCol
+              sizeXl='11'
+              sizeLg='11'
+              sizeMd='11'
+              sizeSm='10'
+              sizeXs='12'>
+              <ZIonRow>
+                {isLgScale ? (
+                  loadedHPBCData.map(data => (
+                    <ZSingleCard
+                      key={data.id}
+                      id={data.id}
+                      icon={data.icon}
+                      title={data.title}
+                      text={data.text}
+                      featureListTitle={data.featureListTitle}
+                      featureListItem={data.featureListItem}
+                      primaryBtnText={data.primaryBtnText}
+                      secondaryBtnText={data.secondaryBtnText}
+                    />
+                  ))
+                ) : !isLgScale ? (
+                  <Swiper>
+                    {loadedHPBCData.map(data => (
+                      <SwiperSlide
+                        key={data.id}
+                        className='h-full'>
+                        <ZSingleCard
+                          id={data.id}
+                          icon={data.icon}
+                          title={data.title}
+                          text={data.text}
+                          featureListTitle={data.featureListTitle}
+                          featureListItem={data.featureListItem}
+                          primaryBtnText={data.primaryBtnText}
+                          secondaryBtnText={data.secondaryBtnText}
+                        />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                ) : (
+                  ''
+                )}
+              </ZIonRow>
+            </ZIonCol>
+            <ZIonCol></ZIonCol>
+          </ZIonRow>
+        </ZIonGrid>
+      </div>
+    </>
+  );
 };
 
 const ZSingleCard: React.FC<ZaionsHpCPDataType> = ({
-	icon,
-	title,
-	text,
-	featureListTitle,
-	featureListItem,
-	primaryBtnText,
-	secondaryBtnText,
-	extraData,
+  icon,
+  title,
+  text,
+  featureListTitle,
+  featureListItem,
+  primaryBtnText,
+  secondaryBtnText,
+  extraData
 }) => {
-	const { isSmScale } = useZMediaQueryScale();
-	return (
-		<ZIonCol
-			sizeXl='4'
-			sizeLg='4'
-			sizeMd='6'
-			sizeSm='6'
-			sizeXs='6'
-			className='h-full'
-		>
-			<ZIonCard
-				style={{
-					border: '1px #000 solid',
-					borderRadius: '20px',
-				}}
-			>
-				<ZIonCardHeader className='mt-4'>
-					<ZIonCardTitle
-						className='flex ion-align-items-center'
-						style={{
-							flexDirection: !isSmScale && 'column',
-							gap: !isSmScale && '10px',
-						}}
-					>
-						<img src={icon} className='ion-padding-end' alt='icon' />{' '}
-						<ZIonText className='font-bold'>{title}</ZIonText>{' '}
-						{extraData === 'New' ? (
-							<ZaionsNewLabel className='ms-2' title={extraData} />
-						) : (
-							''
-						)}
-					</ZIonCardTitle>
-					<div className='ion-margin-start ion-margin-top ion-padding-top'>
-						<ZIonText className=''>{text}</ZIonText>
-					</div>
-				</ZIonCardHeader>
-				<ZIonCardContent>
-					<IonItemDivider />
-					<br />
-					<h2>{featureListTitle}</h2>
-					{featureListItem.map((item) => (
-						<ZIonText
-							className='flex ion-align-items-center ion-padding-top'
-							key={item.id}
-						>
-							<ZIonIcon
-								icon={item.featureIcon}
-								color='primary'
-								className='ion-padding-end'
-								size='large'
-							></ZIonIcon>
-							{item.fetureText}
-						</ZIonText>
-					))}
-					<div className='pt-3 ion-margin-horizontal'>
-						<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-							<ZIonButton expand='block'>{primaryBtnText}</ZIonButton>
-						</ZIonRouterLink>
-					</div>
-					<div className='ion-margin-horizontal ion-margin-top'>
-						<ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
-							<ZIonButton expand='block' fill='clear'>
-								{secondaryBtnText}
-							</ZIonButton>
-						</ZIonRouterLink>
-					</div>
-				</ZIonCardContent>
-			</ZIonCard>
-		</ZIonCol>
-	);
+  const { isSmScale } = useZMediaQueryScale();
+  return (
+    <ZIonCol
+      sizeXl='4'
+      sizeLg='4'
+      sizeMd='6'
+      sizeSm='6'
+      sizeXs='6'
+      className='h-full'>
+      <ZIonCard
+        style={{
+          border: '1px #000 solid',
+          borderRadius: '20px'
+        }}>
+        <ZIonCardHeader className='mt-4'>
+          <ZIonCardTitle
+            className='flex ion-align-items-center'
+            style={{
+              flexDirection: !isSmScale && 'column',
+              gap: !isSmScale && '10px'
+            }}>
+            <img
+              src={icon}
+              className='ion-padding-end'
+              alt='icon'
+            />{' '}
+            <ZIonText className='font-bold'>{title}</ZIonText>{' '}
+            {extraData === 'New' ? (
+              <ZaionsNewLabel
+                className='ms-2'
+                title={extraData}
+              />
+            ) : (
+              ''
+            )}
+          </ZIonCardTitle>
+          <div className='ion-margin-start ion-margin-top ion-padding-top'>
+            <ZIonText className=''>{text}</ZIonText>
+          </div>
+        </ZIonCardHeader>
+        <ZIonCardContent>
+          <ZIonItemDivider />
+          <br />
+          <h2>{featureListTitle}</h2>
+          {featureListItem.map(item => (
+            <ZIonText
+              className='flex ion-align-items-center ion-padding-top'
+              key={item.id}>
+              <ZIonIcon
+                icon={item.featureIcon}
+                color='primary'
+                className='ion-padding-end'
+                size='large'></ZIonIcon>
+              {item.fetureText}
+            </ZIonText>
+          ))}
+          <div className='pt-3 ion-margin-horizontal'>
+            <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
+              <ZIonButton expand='block'>{primaryBtnText}</ZIonButton>
+            </ZIonRouterLink>
+          </div>
+          <div className='ion-margin-horizontal ion-margin-top'>
+            <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
+              <ZIonButton
+                expand='block'
+                fill='clear'>
+                {secondaryBtnText}
+              </ZIonButton>
+            </ZIonRouterLink>
+          </div>
+        </ZIonCardContent>
+      </ZIonCard>
+    </ZIonCol>
+  );
 };
 
 export default ZaionsHPConnectPlatform;

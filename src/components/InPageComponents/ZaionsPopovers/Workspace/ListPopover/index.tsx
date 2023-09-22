@@ -3,14 +3,20 @@
  * ? Like Import of React is a Core Import
  * */
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
+import ZWorkspacesSettingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SettingsModal';
 import {
   ZIonIcon,
   ZIonItem,
+  ZIonItemDivider,
+  ZIonItemGroup,
   ZIonLabel,
   ZIonList,
   ZIonText
 } from '@/components/ZIonComponents';
-import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import {
+  workspaceInterface,
+  workspaceSettingsModalTabEnum
+} from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
@@ -22,7 +28,11 @@ import {
   showErrorNotification,
   showSuccessNotification
 } from '@/utils/notification';
-import { useZIonAlert, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import {
+  useZIonAlert,
+  useZIonModal,
+  useZIonPopover
+} from '@/ZaionsHooks/zionic-hooks';
 import {
   useZGetRQCacheData,
   useZRQDeleteRequest,
@@ -34,6 +44,7 @@ import {
   trashBinOutline
 } from 'ionicons/icons';
 import React, { useState } from 'react';
+import { useParams } from 'react-router';
 
 /**
  * Packages Imports go down
@@ -109,7 +120,9 @@ const ZWorkspacesListPopover: React.FC<{
   const { presentZIonPopover: presentZWorkspaceActionPopover } = useZIonPopover(
     ZWorkspaceActionPopover,
     {
-      workspaceId: compState._workspaceId
+      workspaceId: compState._workspaceId,
+      _paramsWorkspaceId: workspaceId,
+      _parentPopoverDismiss: dismissZIonPopover
     }
   );
   // #endregion
@@ -122,54 +135,125 @@ const ZWorkspacesListPopover: React.FC<{
       extractInnerDataOptionsEnum.createRequestResponseItems
     ) || [];
 
+  const sharedWorkspacesList =
+    extractInnerData<workspaceInterface[]>(
+      getRQCDataHandler<workspaceInterface[]>({
+        key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN]
+      }) as workspaceInterface[],
+      extractInnerDataOptionsEnum.createRequestResponseItems
+    ) || [];
+
   return (
     <div className='py-1'>
       <ZIonList lines='none'>
-        {workspacesList?.map(el => (
-          <ZIonItem
-            key={el.id}
-            minHeight='2.2rem'
-            className='cursor-pointer ion-activatable'
-            testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
-            testingselector={
-              CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
-                .singleWorkspace
-            }
-            onClick={() => {
-              zNavigatePushRoute(
-                createRedirectRoute({
-                  url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                  params: [
-                    CONSTANTS.RouteParams.workspace.workspaceId,
-                    CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-                  ],
-                  values: [el.id || '', 'all']
-                })
-              );
-              dismissZIonPopover('', '');
-            }}>
-            <ZIonLabel className='w-full text-sm'>{el.workspaceName}</ZIonLabel>
-            <ZIonIcon
-              icon={ellipsisHorizontalOutline}
-              className='cursor-pointer'
-              onClick={(event: unknown) => {
-                if (el?.id) {
-                  setCompState(oldValues => ({
-                    ...oldValues,
-                    _workspaceId: el.id!
-                  }));
+        <ZIonItemGroup>
+          <ZIonItemDivider className='font-normal tracking-widest'>
+            Owned workspaces
+          </ZIonItemDivider>
+          {workspacesList?.map(el => (
+            <ZIonItem
+              key={el.id}
+              minHeight='2.2rem'
+              className='cursor-pointer ion-activatable'
+              testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
+              testingselector={
+                CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
+                  .singleWorkspace
+              }>
+              <ZIonLabel
+                className='w-full text-sm'
+                onClick={() => {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [el.id || '', 'all']
+                    })
+                  );
+                  dismissZIonPopover('', '');
+                }}>
+                {el.workspaceName}
+              </ZIonLabel>
+              <ZIonIcon
+                icon={ellipsisHorizontalOutline}
+                className='cursor-pointer'
+                onClick={(event: unknown) => {
+                  if (el?.id) {
+                    setCompState(oldValues => ({
+                      ...oldValues,
+                      _workspaceId: el.id!
+                    }));
 
-                  //
-                  presentZWorkspaceActionPopover({
-                    _event: event as Event,
-                    _cssClass: 'zaions_present_folder_Action_popover_width',
-                    _dismissOnSelect: false
-                  });
-                }
-              }}
-            />
-          </ZIonItem>
-        ))}
+                    //
+                    presentZWorkspaceActionPopover({
+                      _event: event as Event,
+                      _cssClass: 'zaions_present_folder_Action_popover_width',
+                      _dismissOnSelect: false
+                    });
+                  }
+                }}
+              />
+            </ZIonItem>
+          ))}
+        </ZIonItemGroup>
+
+        <ZIonItemGroup>
+          <ZIonItemDivider className='font-normal tracking-widest'>
+            Shared workspaces
+          </ZIonItemDivider>
+
+          {sharedWorkspacesList?.map(el => (
+            <ZIonItem
+              key={el.id}
+              minHeight='2.2rem'
+              className='cursor-pointer ion-activatable'
+              testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
+              testingselector={
+                CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
+                  .singleWorkspace
+              }>
+              <ZIonLabel
+                className='w-full text-sm'
+                onClick={() => {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [el.id || '', 'all']
+                    })
+                  );
+                  dismissZIonPopover('', '');
+                }}>
+                {el.workspaceName}
+              </ZIonLabel>
+              <ZIonIcon
+                icon={ellipsisHorizontalOutline}
+                className='cursor-pointer'
+                onClick={(event: unknown) => {
+                  if (el?.id) {
+                    setCompState(oldValues => ({
+                      ...oldValues,
+                      _workspaceId: el.id!
+                    }));
+
+                    //
+                    presentZWorkspaceActionPopover({
+                      _event: event as Event,
+                      _cssClass: 'zaions_present_folder_Action_popover_width',
+                      _dismissOnSelect: false
+                    });
+                  }
+                }}
+              />
+            </ZIonItem>
+          ))}
+        </ZIonItemGroup>
       </ZIonList>
     </div>
   );
@@ -177,12 +261,22 @@ const ZWorkspacesListPopover: React.FC<{
 
 const ZWorkspaceActionPopover: React.FC<{
   workspaceId: string;
-  dismissZIonPopover: (data: string, role: string) => void;
-}> = ({ workspaceId, dismissZIonPopover }) => {
+  _paramsWorkspaceId: string;
+  dismissZIonPopover: (data?: string, role?: string) => void;
+  _parentPopoverDismiss: (data?: string, role?: string) => void;
+  zNavigatePushRoute: (_url: string) => void;
+}> = ({
+  workspaceId,
+  dismissZIonPopover,
+  zNavigatePushRoute,
+  _paramsWorkspaceId,
+  _parentPopoverDismiss
+}) => {
   // #region Custom hooks.
   const { presentZIonAlert } = useZIonAlert(); // hook to present alert.
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
+
   // #endregion
 
   // #region
@@ -193,15 +287,26 @@ const ZWorkspaceActionPopover: React.FC<{
   );
   // #endregion
 
+  // #region popovers & modals
+  const { presentZIonModal: presentWorkspaceSettingModal } = useZIonModal(
+    ZWorkspacesSettingModal,
+    {
+      Tab: workspaceSettingsModalTabEnum.settings,
+      workspaceId: workspaceId
+    }
+  );
+
+  // #endregion
+
   // #region Functions.
   // delete Workspace Confirm Modal.
   const deleteWorkspaceConfirmModal = async () => {
     try {
       if (workspaceId) {
         await presentZIonAlert({
-          header: `Delete Workspace`,
-          subHeader: 'Remove workspace from user account.',
-          message: 'Are you sure you want to delete this workspace?',
+          header: MESSAGES.WORKSPACE.DELETE_ALERT.HEADER,
+          subHeader: MESSAGES.WORKSPACE.DELETE_ALERT.SUB_HEADER,
+          message: MESSAGES.WORKSPACE.DELETE_ALERT.MESSAGES,
           buttons: [
             {
               text: 'Cancel',
@@ -209,6 +314,7 @@ const ZWorkspaceActionPopover: React.FC<{
             },
             {
               text: 'Delete',
+              cssClass: 'zaions_ion_color_danger',
               role: 'danger',
               handler: () => {
                 void removeWorkspace();
@@ -265,9 +371,17 @@ const ZWorkspaceActionPopover: React.FC<{
             });
 
             // show success message after deleting.
-            showSuccessNotification(
-              MESSAGES.GENERAL.WORKSPACE.WORKSPACE_DELETED
-            );
+            showSuccessNotification(MESSAGES.WORKSPACE.DELETED);
+
+            // Dismiss popover.
+            dismissZIonPopover('redirect', 'redirect');
+
+            // dismissing parent popover.
+            _parentPopoverDismiss();
+
+            if (_paramsWorkspaceId === workspaceId) {
+              zNavigatePushRoute(ZaionsRoutes.AdminPanel.Workspaces.Main);
+            }
           }
         } else {
           showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
@@ -296,7 +410,14 @@ const ZWorkspaceActionPopover: React.FC<{
           CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
             .actionPopover.editWorkspace
         }
-        testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.actionPopover.editWorkspace}-${workspaceId}`}>
+        testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.actionPopover.editWorkspace}-${workspaceId}`}
+        onClick={() => {
+          // presenting modal
+          presentWorkspaceSettingModal({
+            _cssClass: 'workspace-setting-modal-size'
+          });
+          dismissZIonPopover();
+        }}>
         <ZIonIcon
           icon={pencilOutline}
           className='w-5 h-5 me-2'

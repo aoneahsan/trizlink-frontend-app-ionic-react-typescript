@@ -1061,9 +1061,9 @@ const ZEmbedWidgetActionPopover: React.FC<{
       if (utmTag?.id?.trim() && UTMTagsData?.length) {
         const selectedUTMTag = UTMTagsData?.find(el => el.id === utmTag?.id);
         await presentZIonAlert({
-          header: `Delete UTM tag "${selectedUTMTag?.templateName || ''}"`,
-          subHeader: 'Remove UTM tag from user account.',
-          message: 'Are you sure you want to delete this UTM tag?',
+          header: MESSAGES.UTM_TAGS_TEMPLATE.DELETE_ALERT.HEADER,
+          subHeader: MESSAGES.UTM_TAGS_TEMPLATE.DELETE_ALERT.SUB_HEADER,
+          message: MESSAGES.UTM_TAGS_TEMPLATE.DELETE_ALERT.MESSAGES,
           buttons: [
             {
               text: 'Cancel',
@@ -1071,6 +1071,7 @@ const ZEmbedWidgetActionPopover: React.FC<{
             },
             {
               text: 'Delete',
+              cssClass: 'zaions_ion_color_danger',
               role: 'danger',
               handler: () => {
                 void removeUTMTag();
@@ -1126,9 +1127,7 @@ const ZEmbedWidgetActionPopover: React.FC<{
                 updateHoleData: true
               });
 
-              showSuccessNotification(
-                MESSAGES.GENERAL.UTM_TAGS_TEMPLATE.DELETED
-              );
+              showSuccessNotification(MESSAGES.UTM_TAGS_TEMPLATE.DELETED);
 
               dismissZIonPopover('', '');
             } else {

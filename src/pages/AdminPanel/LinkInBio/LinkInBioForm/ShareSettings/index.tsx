@@ -29,13 +29,13 @@ import LinkPassword from '@/components/UserDashboard/Password';
 import LinkFavIcon from '@/components/UserDashboard/Favicon';
 import GDPRPopup from '@/components/UserDashboard/GDPRPopup';
 import {
-	ZIonCol,
-	ZIonText,
-	ZIonIcon,
-	ZIonRow,
-	ZIonGrid,
-	ZIonContent,
-	ZIonFooter,
+  ZIonCol,
+  ZIonText,
+  ZIonIcon,
+  ZIonRow,
+  ZIonGrid,
+  ZIonContent,
+  ZIonFooter
 } from '@/components/ZIonComponents';
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZaionsCustomYourLink from '@/components/UserDashboard/shortUrlCustomYourLink';
@@ -43,10 +43,10 @@ import LinksPixelsAccount from '@/components/UserDashboard/LinksPixelsAccount';
 import UTMTagTemplates from '@/components/UserDashboard/UTMTagTemplates';
 import DomainName from '@/components/UserDashboard/DomainName';
 import {
-	useZGetRQCacheData,
-	useZRQGetRequest,
-	useZRQUpdateRequest,
-	useZUpdateRQCacheData,
+  useZGetRQCacheData,
+  useZRQGetRequest,
+  useZRQUpdateRequest,
+  useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 import LinkInBioFoldersHOC from '@/components/UserDashboard/LinkInBioFoldersHOC';
@@ -57,16 +57,16 @@ import LinkInBioFoldersHOC from '@/components/UserDashboard/LinkInBioFoldersHOC'
  * */
 import MESSAGES from '@/utils/messages';
 import {
-	extractInnerData,
-	validateField,
-	zJsonParse,
-	zStringify,
+  extractInnerData,
+  validateField,
+  zJsonParse,
+  zStringify
 } from '@/utils/helpers';
 import {
-	API_URL_ENUM,
-	extractInnerDataOptionsEnum,
-	notificationTypeEnum,
-	VALIDATION_RULE,
+  API_URL_ENUM,
+  extractInnerDataOptionsEnum,
+  notificationTypeEnum,
+  VALIDATION_RULE
 } from '@/utils/enums';
 import CONSTANTS, { BRACKPOINT_LG, BRACKPOINT_MD } from '@/utils/constants';
 
@@ -81,13 +81,13 @@ import { NewLinkInBioFormState } from '@/ZaionsStore/UserDashboard/LinkInBio/Lin
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-	UTMTagInfoInterface,
-	ShortUrlInterface,
-	ABTestingRotatorInterface,
-	GeoLocationRotatorInterface,
-	LinkExpirationInfoInterface,
-	PasswordInterface,
-	folderState,
+  UTMTagInfoInterface,
+  ShortUrlInterface,
+  ABTestingRotatorInterface,
+  GeoLocationRotatorInterface,
+  LinkExpirationInfoInterface,
+  PasswordInterface,
+  folderState
 } from '@/types/AdminPanel/index.type';
 import { reportCustomError } from '@/utils/customErrorType';
 import NewLinkFolder from '@/components/UserDashboard/NewLinkFolder';
@@ -118,465 +118,459 @@ import { showSuccessNotification } from '@/utils/notification';
  * */
 
 const LinkInBioShareSettings: React.FC = () => {
-	const [showAdvanceOptions, setShowAdvanceOptions] = useState(false);
+  const [showAdvanceOptions, setShowAdvanceOptions] = useState(false);
 
-	const { linkInBioId, workspaceId } = useParams<{
-		linkInBioId: string;
-		workspaceId: string;
-	}>();
+  const { linkInBioId, workspaceId } = useParams<{
+    linkInBioId: string;
+    workspaceId: string;
+  }>();
 
-	// #region Custom hooks.
-	const { isLgScale, isMdScale } = useZMediaQueryScale();
-	const { getRQCDataHandler } = useZGetRQCacheData();
-	const { updateRQCDataHandler } = useZUpdateRQCacheData();
+  // #region Custom hooks.
+  const { isLgScale, isMdScale } = useZMediaQueryScale();
+  const { getRQCDataHandler } = useZGetRQCacheData();
+  const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
-	// validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
-	const { validateRequestResponse } = useZValidateRequestResponse();
-	// #endregion
+  // validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
+  const { validateRequestResponse } = useZValidateRequestResponse();
+  // #endregion
 
-	// #region recoils.
-	// Recoil state link-in-bio form state (for editing or creating link-in-bio)
-	const linkInBioFormState = useRecoilValue(NewLinkInBioFormState);
-	//#endregion
+  // #region recoils.
+  // Recoil state link-in-bio form state (for editing or creating link-in-bio)
+  const linkInBioFormState = useRecoilValue(NewLinkInBioFormState);
+  //#endregion
 
-	// #region APIS
-	// fetching link-in-bio with the linkInBioId data from backend.
-	const { data: selectedLinkInBio, isFetching: isSelectedLinkInBioFetching } =
-		useZRQGetRequest<LinkInBioType>({
-			_url: API_URL_ENUM.linkInBio_update_delete,
-			_key: [
-				CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-				workspaceId,
-				linkInBioId,
-			],
-			_authenticated: true,
-			_itemsIds: [linkInBioId, workspaceId],
-			_urlDynamicParts: [
-				CONSTANTS.RouteParams.linkInBio.linkInBioId,
-				CONSTANTS.RouteParams.workspace.workspaceId,
-			],
-			_shouldFetchWhenIdPassed: !linkInBioId ? true : false,
-			_extractType: ZRQGetRequestExtractEnum.extractItem,
-		});
+  // #region APIS
+  // fetching link-in-bio with the linkInBioId data from backend.
+  const { data: selectedLinkInBio, isFetching: isSelectedLinkInBioFetching } =
+    useZRQGetRequest<LinkInBioType>({
+      _url: API_URL_ENUM.linkInBio_update_delete,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
+        workspaceId,
+        linkInBioId
+      ],
+      _authenticated: true,
+      _itemsIds: [linkInBioId, workspaceId],
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.linkInBio.linkInBioId,
+        CONSTANTS.RouteParams.workspace.workspaceId
+      ],
+      _shouldFetchWhenIdPassed: !linkInBioId ? true : false,
+      _extractType: ZRQGetRequestExtractEnum.extractItem
+    });
 
-	// Update Link-in-bio API.
-	const { mutateAsync: UpdateLinkInBio } = useZRQUpdateRequest({
-		_url: API_URL_ENUM.linkInBio_update_delete,
-	});
+  // Update Link-in-bio API.
+  const { mutateAsync: UpdateLinkInBio } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.linkInBio_update_delete
+  });
 
-	// #endregion
+  // #endregion
 
-	// #region Functions.
-	// Formik submit handler.
-	const FormikSubmissionHandler = async (_reqDataStr: string) => {
-		try {
-			if (_reqDataStr) {
-				// The update api...
-				const __response = await UpdateLinkInBio({
-					itemIds: [workspaceId, linkInBioId],
-					urlDynamicParts: [
-						CONSTANTS.RouteParams.workspace.workspaceId,
-						CONSTANTS.RouteParams.linkInBio.linkInBioId,
-					],
-					requestData: _reqDataStr,
-				});
+  // #region Functions.
+  // Formik submit handler.
+  const FormikSubmissionHandler = async (_reqDataStr: string) => {
+    try {
+      if (_reqDataStr) {
+        // The update api...
+        const __response = await UpdateLinkInBio({
+          itemIds: [workspaceId, linkInBioId],
+          urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.workspaceId,
+            CONSTANTS.RouteParams.linkInBio.linkInBioId
+          ],
+          requestData: _reqDataStr
+        });
 
-				if (__response) {
-					// extract Data from _response.
-					const __data = extractInnerData<LinkInBioType>(
-						__response,
-						extractInnerDataOptionsEnum.createRequestResponseItem
-					);
+        if (__response) {
+          // extract Data from _response.
+          const __data = extractInnerData<LinkInBioType>(
+            __response,
+            extractInnerDataOptionsEnum.createRequestResponseItem
+          );
 
-					// if we have data then show success message.
-					if (__data && __data.id) {
-						const __oldLinkInBios =
-							extractInnerData<LinkInBioType[]>(
-								getRQCDataHandler<LinkInBioType[]>({
-									key: [
-										CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-										workspaceId,
-									],
-								}) || [],
-								extractInnerDataOptionsEnum.createRequestResponseItems
-							) || [];
+          // if we have data then show success message.
+          if (__data && __data.id) {
+            const __oldLinkInBios =
+              extractInnerData<LinkInBioType[]>(
+                getRQCDataHandler<LinkInBioType[]>({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+                    workspaceId
+                  ]
+                }) || [],
+                extractInnerDataOptionsEnum.createRequestResponseItems
+              ) || [];
 
-						// Updating all link in bio data in RQ cache.
-						await updateRQCDataHandler<LinkInBioType | undefined>({
-							key: [
-								CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-								workspaceId,
-								linkInBioId,
-							],
-							data: __data as LinkInBioType,
-							id: '',
-							extractType: ZRQGetRequestExtractEnum.extractItem,
-							updateHoleData: true,
-						});
+            // Updating all link in bio data in RQ cache.
+            await updateRQCDataHandler<LinkInBioType | undefined>({
+              key: [
+                CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
+                workspaceId,
+                linkInBioId
+              ],
+              data: __data as LinkInBioType,
+              id: '',
+              extractType: ZRQGetRequestExtractEnum.extractItem,
+              updateHoleData: true
+            });
 
-						if (__oldLinkInBios && __oldLinkInBios?.length) {
-							await updateRQCDataHandler<LinkInBioType | undefined>({
-								key: [
-									CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-									workspaceId,
-								],
-								data: __data as LinkInBioType,
-								id: __data?.id,
-							});
-						}
-						// Updating current link in bio data in RQ cache.
-					}
-				}
+            if (__oldLinkInBios && __oldLinkInBios?.length) {
+              await updateRQCDataHandler<LinkInBioType | undefined>({
+                key: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+                  workspaceId
+                ],
+                data: __data as LinkInBioType,
+                id: __data?.id
+              });
+            }
+            // Updating current link in bio data in RQ cache.
+          }
+        }
 
-				showSuccessNotification(MESSAGES.GENERAL.LINK_IN_BIO.UPDATED);
+        showSuccessNotification(MESSAGES.LINK_IN_BIO.CREATED);
 
-				// if __response of the updateLinkInBio api is success this showing success notification else not success then error notification.
-				// await validateRequestResponse({
-				// 	resultObj: __response,
-				// 	successNotificationType: notificationTypeEnum.sideNotification,
-				// });
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
-	// #endregion
+        // if __response of the updateLinkInBio api is success this showing success notification else not success then error notification.
+        // await validateRequestResponse({
+        // 	resultObj: __response,
+        // 	successNotificationType: notificationTypeEnum.sideNotification,
+        // });
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
+  // #endregion
 
-	const isZFetching = isSelectedLinkInBioFetching;
+  const isZFetching = isSelectedLinkInBioFetching;
 
-	return (
-		<Formik
-			// #region ( Initial Values Start  )
-			initialValues={{
-				title: selectedLinkInBio?.title || '',
-				linkDescription: selectedLinkInBio?.description || '',
-				featureImg: selectedLinkInBio?.featureImg || '',
-				password: {
-					value: selectedLinkInBio?.password?.value || '',
-					enabled: selectedLinkInBio?.password?.enabled || false,
-				},
-				folderId:
-					selectedLinkInBio?.folderId ||
-					CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
-				linkNote: selectedLinkInBio?.notes || '',
-				tags: (zJsonParse(String(selectedLinkInBio?.tags)) as string[]) || [],
-				linkExpiration: {
-					enabled: selectedLinkInBio?.linkExpirationInfo?.enabled || false,
-					expirationDate:
-						selectedLinkInBio?.linkExpirationInfo?.expirationDate || '',
-					timezone: selectedLinkInBio?.linkExpirationInfo?.timezone || '',
-					redirectionLink:
-						selectedLinkInBio?.linkExpirationInfo?.redirectionLink || '',
-				},
-				rotatorABTesting: selectedLinkInBio?.abTestingRotatorLinks || [],
-				geoLocation: selectedLinkInBio?.geoLocationRotatorLinks || [],
-				shortUrl: {
-					domain: selectedLinkInBio?.shortUrl?.domain || '',
-					url: selectedLinkInBio?.shortUrl?.url || '',
-				},
-				linkPixelsAccount: selectedLinkInBio?.pixelIds || [],
-				UTMTags: {
-					templateId: selectedLinkInBio?.utmTagInfo?.templateId || '',
-					utmCampaign: selectedLinkInBio?.utmTagInfo?.utmCampaign || '',
-					utmMedium: selectedLinkInBio?.utmTagInfo?.utmMedium || '',
-					utmSource: selectedLinkInBio?.utmTagInfo?.utmSource || '',
-					utmTerm: selectedLinkInBio?.utmTagInfo?.utmTerm || '',
-					utmContent: selectedLinkInBio?.utmTagInfo?.utmContent || '',
-				},
-				favicon: selectedLinkInBio?.favicon || '',
+  return (
+    <Formik
+      // #region ( Initial Values Start  )
+      initialValues={{
+        title: selectedLinkInBio?.title || '',
+        linkDescription: selectedLinkInBio?.description || '',
+        featureImg: selectedLinkInBio?.featureImg || '',
+        password: {
+          value: selectedLinkInBio?.password?.value || '',
+          enabled: selectedLinkInBio?.password?.enabled || false
+        },
+        folderId:
+          selectedLinkInBio?.folderId ||
+          CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
+        linkNote: selectedLinkInBio?.notes || '',
+        tags: (zJsonParse(String(selectedLinkInBio?.tags)) as string[]) || [],
+        linkExpiration: {
+          enabled: selectedLinkInBio?.linkExpirationInfo?.enabled || false,
+          expirationDate:
+            selectedLinkInBio?.linkExpirationInfo?.expirationDate || '',
+          timezone: selectedLinkInBio?.linkExpirationInfo?.timezone || '',
+          redirectionLink:
+            selectedLinkInBio?.linkExpirationInfo?.redirectionLink || ''
+        },
+        rotatorABTesting: selectedLinkInBio?.abTestingRotatorLinks || [],
+        geoLocation: selectedLinkInBio?.geoLocationRotatorLinks || [],
+        shortUrl: {
+          domain: selectedLinkInBio?.shortUrl?.domain || '',
+          url: selectedLinkInBio?.shortUrl?.url || ''
+        },
+        linkPixelsAccount: selectedLinkInBio?.pixelIds || [],
+        UTMTags: {
+          templateId: selectedLinkInBio?.utmTagInfo?.templateId || '',
+          utmCampaign: selectedLinkInBio?.utmTagInfo?.utmCampaign || '',
+          utmMedium: selectedLinkInBio?.utmTagInfo?.utmMedium || '',
+          utmSource: selectedLinkInBio?.utmTagInfo?.utmSource || '',
+          utmTerm: selectedLinkInBio?.utmTagInfo?.utmTerm || '',
+          utmContent: selectedLinkInBio?.utmTagInfo?.utmContent || ''
+        },
+        favicon: selectedLinkInBio?.favicon || ''
 
-				// complete page fields here
-			}}
-			enableReinitialize={true}
-			// #endregion ( Initial Values End  )
+        // complete page fields here
+      }}
+      enableReinitialize={true}
+      // #endregion ( Initial Values End  )
 
-			// #region ( Handling Validation & Errors Start  )
-			validate={(values) => {
-				const errors: {
-					target: {
-						url?: string;
-						phoneNumber?: string;
-						username?: string;
-						email?: string;
-						accountId?: string;
-						subject?: string;
-						message?: string;
-					};
-					title?: string;
-					password: {
-						value?: string;
-					};
-					linkExpiration: {
-						redirectionLink?: string;
-					};
-					rotatorABTesting: {
-						redirectionLink?: string;
-						percentage?: string;
-					}[];
-					geoLocation: {
-						redirectionLink?: string;
-						country?: string;
-					}[];
-				} = {
-					target: {},
-					linkExpiration: {},
-					rotatorABTesting: [],
-					geoLocation: [],
-					password: {},
-				};
+      // #region ( Handling Validation & Errors Start  )
+      validate={values => {
+        const errors: {
+          target: {
+            url?: string;
+            phoneNumber?: string;
+            username?: string;
+            email?: string;
+            accountId?: string;
+            subject?: string;
+            message?: string;
+          };
+          title?: string;
+          password: {
+            value?: string;
+          };
+          linkExpiration: {
+            redirectionLink?: string;
+          };
+          rotatorABTesting: {
+            redirectionLink?: string;
+            percentage?: string;
+          }[];
+          geoLocation: {
+            redirectionLink?: string;
+            country?: string;
+          }[];
+        } = {
+          target: {},
+          linkExpiration: {},
+          rotatorABTesting: [],
+          geoLocation: [],
+          password: {}
+        };
 
-				// Link Title Validation Starts
-				validateField('title', values, errors, VALIDATION_RULE.linkTitle);
-				// Link Title Validation End
+        // Link Title Validation Starts
+        validateField('title', values, errors, VALIDATION_RULE.linkTitle);
+        // Link Title Validation End
 
-				// Password Validation Start
-				if (values.password.enabled) {
-					validateField(
-						'value',
-						values?.password,
-						errors?.password,
-						VALIDATION_RULE.password
-					);
-				}
-				// Password Validation End
+        // Password Validation Start
+        if (values.password.enabled) {
+          validateField(
+            'value',
+            values?.password,
+            errors?.password,
+            VALIDATION_RULE.password
+          );
+        }
+        // Password Validation End
 
-				// Link Expiration Validation Start
-				if (values.linkExpiration.enabled) {
-					validateField(
-						'redirectionLink',
-						values?.linkExpiration,
-						errors?.linkExpiration,
-						VALIDATION_RULE.url
-					);
-				}
-				//  Link Expiration Validation End
+        // Link Expiration Validation Start
+        if (values.linkExpiration.enabled) {
+          validateField(
+            'redirectionLink',
+            values?.linkExpiration,
+            errors?.linkExpiration,
+            VALIDATION_RULE.url
+          );
+        }
+        //  Link Expiration Validation End
 
-				// Rotator AB Testing Field Validation Start
-				if (values.rotatorABTesting.length) {
-					errors.rotatorABTesting = values.rotatorABTesting.map((el) => ({}));
-					values.rotatorABTesting.forEach(
-						(el: ABTestingRotatorInterface, index) => {
-							if (!el.redirectionLink?.trim()) {
-								errors.rotatorABTesting[index].redirectionLink =
-									MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.REQUIRED_REDIRECTION_LINK;
-							} else if (!VALIDATOR.isURL(el.redirectionLink)) {
-								errors.rotatorABTesting[index].redirectionLink =
-									MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.INVALID_REDIRECTION_LINK;
-							}
-							if (!el.percentage || isNaN(el.percentage)) {
-								errors.rotatorABTesting[index].percentage =
-									MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.REQUIRED_PERCENTAGE;
-							}
-						}
-					);
-				}
-				// Rotator AB Testing Field Validation End
+        // Rotator AB Testing Field Validation Start
+        if (values.rotatorABTesting.length) {
+          errors.rotatorABTesting = values.rotatorABTesting.map(el => ({}));
+          values.rotatorABTesting.forEach(
+            (el: ABTestingRotatorInterface, index) => {
+              if (!el.redirectionLink?.trim()) {
+                errors.rotatorABTesting[index].redirectionLink =
+                  MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.REQUIRED_REDIRECTION_LINK;
+              } else if (!VALIDATOR.isURL(el.redirectionLink)) {
+                errors.rotatorABTesting[index].redirectionLink =
+                  MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.INVALID_REDIRECTION_LINK;
+              }
+              if (!el.percentage || isNaN(el.percentage)) {
+                errors.rotatorABTesting[index].percentage =
+                  MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.REQUIRED_PERCENTAGE;
+              }
+            }
+          );
+        }
+        // Rotator AB Testing Field Validation End
 
-				// Rotator Geo Location Field Validation Start
-				if (values.geoLocation.length) {
-					errors.geoLocation = values.geoLocation.map((el) => ({}));
-					values.geoLocation.forEach(
-						(el: GeoLocationRotatorInterface, index) => {
-							if (!el.redirectionLink?.trim()) {
-								errors.geoLocation[index].redirectionLink =
-									MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.REQUIRED_REDIRECTION_LINK;
-							} else if (!VALIDATOR.isURL(el.redirectionLink)) {
-								errors.geoLocation[index].redirectionLink =
-									MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.INVALID_REDIRECTION_LINK;
-							}
-							if (!el.country) {
-								errors.geoLocation[index].country =
-									MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.REQUIRED_COUNTRY;
-							}
-						}
-					);
-				}
-				// Rotator Geo Location Field Validation End
+        // Rotator Geo Location Field Validation Start
+        if (values.geoLocation.length) {
+          errors.geoLocation = values.geoLocation.map(el => ({}));
+          values.geoLocation.forEach(
+            (el: GeoLocationRotatorInterface, index) => {
+              if (!el.redirectionLink?.trim()) {
+                errors.geoLocation[index].redirectionLink =
+                  MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.REQUIRED_REDIRECTION_LINK;
+              } else if (!VALIDATOR.isURL(el.redirectionLink)) {
+                errors.geoLocation[index].redirectionLink =
+                  MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.INVALID_REDIRECTION_LINK;
+              }
+              if (!el.country) {
+                errors.geoLocation[index].country =
+                  MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.REQUIRED_COUNTRY;
+              }
+            }
+          );
+        }
+        // Rotator Geo Location Field Validation End
 
-				// check for errors if there are any return errors object otherwise return []
-				if (
-					errors.target?.url?.trim() ||
-					errors.target?.accountId?.trim() ||
-					errors.target?.email?.trim() ||
-					errors.target?.message?.trim() ||
-					errors.target?.username?.trim() ||
-					errors.target?.phoneNumber?.trim() ||
-					errors.target?.subject?.trim() ||
-					errors.linkExpiration?.redirectionLink?.trim() ||
-					errors.title?.trim() ||
-					errors.password?.value?.trim()
-					// || Object.keys(errors.geoLocation).length ||
-					// Object.keys(errors.rotatorABTesting).length
-				) {
-					return errors;
-				} else {
-					return [];
-				}
-			}}
-			// #endregion ( Handling Validation & Errors End  )
+        // check for errors if there are any return errors object otherwise return []
+        if (
+          errors.target?.url?.trim() ||
+          errors.target?.accountId?.trim() ||
+          errors.target?.email?.trim() ||
+          errors.target?.message?.trim() ||
+          errors.target?.username?.trim() ||
+          errors.target?.phoneNumber?.trim() ||
+          errors.target?.subject?.trim() ||
+          errors.linkExpiration?.redirectionLink?.trim() ||
+          errors.title?.trim() ||
+          errors.password?.value?.trim()
+          // || Object.keys(errors.geoLocation).length ||
+          // Object.keys(errors.rotatorABTesting).length
+        ) {
+          return errors;
+        } else {
+          return [];
+        }
+      }}
+      // #endregion ( Handling Validation & Errors End  )
 
-			onSubmit={async (values, { resetForm }) => {
-				await FormikSubmissionHandler(
-					zStringify({
-						...selectedLinkInBio,
-						theme: zStringify(selectedLinkInBio?.theme),
-						settings: zStringify(selectedLinkInBio?.settings),
-						title: values.title,
-						featureImg: values.featureImg,
-						password: zStringify({
-							value: values.password.value,
-							enabled: values.password.enabled,
-						}),
-						linkExpirationInfo: zStringify({
-							redirectionLink: values.linkExpiration.redirectionLink,
-							expirationDate: values.linkExpiration.expirationDate,
-							timezone: values.linkExpiration.timezone,
-							enabled: values.linkExpiration.enabled,
-						}),
-						abTestingRotatorLinks: zStringify(values.rotatorABTesting),
-						geoLocationRotatorLinks: zStringify(values.geoLocation),
-						description: values.linkDescription,
-						folderId: values.folderId,
-						notes: values.linkNote,
-						pixelIds: zStringify(values.linkPixelsAccount),
-						tags: zStringify(values.tags),
-						utmTagInfo: zStringify(values.UTMTags),
-						createdAt: Date.now().toString(),
-						shortUrl: zStringify(values.shortUrl),
-						favicon: values.favicon,
-					})
-				);
-			}}
-		>
-			{({ isSubmitting, isValid, dirty, submitForm }) => {
-				return (
-					<>
-						<ZIonContent color='light'>
-							<div className='w-full h-full'>
-								{/* Custom your link Grid */}
-								<ZIonGrid
-									className={classNames({
-										'my-5': true,
-										'ms-3': isMdScale,
-										'mx-2': !isMdScale,
-									})}
-								>
-									<ZIonRow
-										className={classNames({
-											'gap-4': isLgScale,
-											'gap-0': !isLgScale,
-										})}
-									>
-										{/* Custom Your Link */}
-										<ZaionsCustomYourLink showSkeleton={isZFetching} />
+      onSubmit={async (values, { resetForm }) => {
+        await FormikSubmissionHandler(
+          zStringify({
+            ...selectedLinkInBio,
+            theme: zStringify(selectedLinkInBio?.theme),
+            settings: zStringify(selectedLinkInBio?.settings),
+            title: values.title,
+            featureImg: values.featureImg,
+            password: zStringify({
+              value: values.password.value,
+              enabled: values.password.enabled
+            }),
+            linkExpirationInfo: zStringify({
+              redirectionLink: values.linkExpiration.redirectionLink,
+              expirationDate: values.linkExpiration.expirationDate,
+              timezone: values.linkExpiration.timezone,
+              enabled: values.linkExpiration.enabled
+            }),
+            abTestingRotatorLinks: zStringify(values.rotatorABTesting),
+            geoLocationRotatorLinks: zStringify(values.geoLocation),
+            description: values.linkDescription,
+            folderId: values.folderId,
+            notes: values.linkNote,
+            pixelIds: zStringify(values.linkPixelsAccount),
+            tags: zStringify(values.tags),
+            utmTagInfo: zStringify(values.UTMTags),
+            createdAt: Date.now().toString(),
+            shortUrl: zStringify(values.shortUrl),
+            favicon: values.favicon
+          })
+        );
+      }}>
+      {({ isSubmitting, isValid, dirty, submitForm }) => {
+        return (
+          <>
+            <ZIonContent color='light'>
+              <div className='w-full h-full'>
+                {/* Custom your link Grid */}
+                <ZIonGrid
+                  className={classNames({
+                    'my-5': true,
+                    'ms-3': isMdScale,
+                    'mx-2': !isMdScale
+                  })}>
+                  <ZIonRow
+                    className={classNames({
+                      'gap-4': isLgScale,
+                      'gap-0': !isLgScale
+                    })}>
+                    {/* Custom Your Link */}
+                    <ZaionsCustomYourLink showSkeleton={isZFetching} />
 
-										{/* Pixel Account, Utm Tags, Custom Domain */}
-										<ZIonCol
-											sizeXl='5.9'
-											sizeLg='5.8'
-											sizeMd='5.9'
-											sizeSm='12'
-											sizeXs='12'
-										>
-											{/* Pixels */}
-											<LinksPixelsAccount showSkeleton={isZFetching} />
+                    {/* Pixel Account, Utm Tags, Custom Domain */}
+                    <ZIonCol
+                      sizeXl='5.9'
+                      sizeLg='5.8'
+                      sizeMd='5.9'
+                      sizeSm='12'
+                      sizeXs='12'>
+                      {/* Pixels */}
+                      <LinksPixelsAccount showSkeleton={isZFetching} />
 
-											{/* UTMTags */}
-											<UTMTagTemplates showSkeleton={isZFetching} />
+                      {/* UTMTags */}
+                      <UTMTagTemplates showSkeleton={isZFetching} />
 
-											{/* Choose Domain Name */}
-											<DomainName showSkeleton={isZFetching} />
-										</ZIonCol>
-									</ZIonRow>
-								</ZIonGrid>
+                      {/* Choose Domain Name */}
+                      <DomainName showSkeleton={isZFetching} />
+                    </ZIonCol>
+                  </ZIonRow>
+                </ZIonGrid>
 
-								{/* Advance Options */}
-								<ZIonGrid className='ms-3 me-1'>
-									<ZIonRow>
-										<ZIonCol>
-											<ZIonButton
-												// size='large'
-												// size={isMdScale ? 'large' : 'default'}
-												expand='block'
-												disabled={isZFetching}
-												onClick={() => {
-													if (!isZFetching) {
-														setShowAdvanceOptions((oldVal) => !oldVal);
-													}
-												}}
-												className={classNames({
-													'ion-text-capitalize': true,
-													'mx-0': !isMdScale,
-												})}
-											>
-												<ZIonText className='flex py-2 text-lg ion-no-margin ion-align-items-center'>
-													Advance Options
-												</ZIonText>
-												<ZIonIcon
-													slot='end'
-													icon={settingsOutline}
-													className='w-6 h-6 ms-auto me-1'
-												/>
-											</ZIonButton>
-											{showAdvanceOptions && (
-												<ZIonRow className='gap-5 ion-margin-top'>
-													{/* Folder */}
-													<NewLinkFolder
-														_foldersData={[]}
-														_state={folderState.linkInBio}
-														workspaceId={workspaceId}
-													/>
+                {/* Advance Options */}
+                <ZIonGrid className='ms-3 me-1'>
+                  <ZIonRow>
+                    <ZIonCol>
+                      <ZIonButton
+                        // size='large'
+                        // size={isMdScale ? 'large' : 'default'}
+                        expand='block'
+                        disabled={isZFetching}
+                        onClick={() => {
+                          if (!isZFetching) {
+                            setShowAdvanceOptions(oldVal => !oldVal);
+                          }
+                        }}
+                        className={classNames({
+                          'ion-text-capitalize': true,
+                          'mx-0': !isMdScale
+                        })}>
+                        <ZIonText className='flex py-2 text-lg ion-no-margin ion-align-items-center'>
+                          Advance Options
+                        </ZIonText>
+                        <ZIonIcon
+                          slot='end'
+                          icon={settingsOutline}
+                          className='w-6 h-6 ms-auto me-1'
+                        />
+                      </ZIonButton>
+                      {showAdvanceOptions && (
+                        <ZIonRow className='gap-5 ion-margin-top'>
+                          {/* Folder */}
+                          <NewLinkFolder
+                            _foldersData={[]}
+                            _state={folderState.linkInBio}
+                            workspaceId={workspaceId}
+                          />
 
-													{/* Add Notes */}
-													<AddNotes />
+                          {/* Add Notes */}
+                          <AddNotes />
 
-													{/* Tags */}
-													<Tags />
+                          {/* Tags */}
+                          <Tags />
 
-													{/* Rotator - AB Testing */}
-													<RotatorABTesting />
+                          {/* Rotator - AB Testing */}
+                          <RotatorABTesting />
 
-													{/* Geo Location */}
-													<GeoLocation />
+                          {/* Geo Location */}
+                          <GeoLocation />
 
-													{/* Link Expiration */}
-													<LinkExpiration />
+                          {/* Link Expiration */}
+                          <LinkExpiration />
 
-													{/* Link Password */}
-													<LinkPassword />
+                          {/* Link Password */}
+                          <LinkPassword />
 
-													{/* Link Favicon */}
-													<LinkFavIcon />
+                          {/* Link Favicon */}
+                          <LinkFavIcon />
 
-													{/* GDPR Popup */}
-													<GDPRPopup />
-												</ZIonRow>
-											)}
-										</ZIonCol>
-									</ZIonRow>
-								</ZIonGrid>
-							</div>
-						</ZIonContent>
-						<ZIonFooter>
-							<ZIonGrid className='mx-4 mt-3'>
-								<ZIonRow>
-									<ZIonCol>
-										<ZIonButton
-											expand='full'
-											onClick={() => void submitForm()}
-											disabled={isSubmitting || !isValid || !dirty}
-										>
-											Save Changes
-										</ZIonButton>
-									</ZIonCol>
-								</ZIonRow>
-							</ZIonGrid>
-						</ZIonFooter>
-					</>
-				);
-			}}
-		</Formik>
-	);
+                          {/* GDPR Popup */}
+                          <GDPRPopup />
+                        </ZIonRow>
+                      )}
+                    </ZIonCol>
+                  </ZIonRow>
+                </ZIonGrid>
+              </div>
+            </ZIonContent>
+            <ZIonFooter>
+              <ZIonGrid className='mx-4 mt-3'>
+                <ZIonRow>
+                  <ZIonCol>
+                    <ZIonButton
+                      expand='full'
+                      onClick={() => void submitForm()}
+                      disabled={isSubmitting || !isValid || !dirty}>
+                      Save Changes
+                    </ZIonButton>
+                  </ZIonCol>
+                </ZIonRow>
+              </ZIonGrid>
+            </ZIonFooter>
+          </>
+        );
+      }}
+    </Formik>
+  );
 };
 
 export default LinkInBioShareSettings;

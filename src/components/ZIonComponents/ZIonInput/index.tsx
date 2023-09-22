@@ -199,7 +199,9 @@ const ZIonInput = React.forwardRef(
         ref={ref}
         counter={props.counter === false || props.type === 'url' ? false : true}
         maxlength={
-          props.maxlength || ZInputLengthConstant.defaultStringMaxLength
+          props.type === 'url'
+            ? undefined
+            : props.maxlength || ZInputLengthConstant.defaultStringMaxLength
         }
         onKeyUp={event => {
           if (props.onKeyUp) {

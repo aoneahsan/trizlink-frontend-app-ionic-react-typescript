@@ -90,7 +90,7 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
 
   return (
     <ZIonItem
-      className='flex mt-3 ion-no-padding ion-align-items-center'
+      className='flex mt-3 ion-no-padding ion-align-items-start'
       lines='none'
       minHeight={minHeight}
       testingselector={testingselector}
@@ -112,7 +112,7 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
       />
       <ZIonInput
         type='text'
-        className='ms-2 text-[18px]'
+        className='ms-2 text-[18px] z_ion_bg_white'
         value={value}
         label=''
         fill='outline'

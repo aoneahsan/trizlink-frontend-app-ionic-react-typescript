@@ -36,7 +36,10 @@ import ZUTMTagsTable from '@/components/InPageComponents/ZaionsTable/UTMTagsTemp
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
-import { useZInvalidateReactQueries } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+  useZInvalidateReactQueries,
+  useZRQGetRequest
+} from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -52,6 +55,7 @@ import { API_URL_ENUM } from '@/utils/enums';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { FormMode } from '@/types/AdminPanel/index.type';
+import { UTMTagTemplateType } from '@/types/AdminPanel/linksType';
 
 /**
  * Recoil State Imports go down
@@ -92,6 +96,13 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
   // #endregion
 
   // #region APIs
+  const { data: UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
+    _url: API_URL_ENUM.userAccountUtmTags_create_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
+    _itemsIds: [],
+    _urlDynamicParts: [],
+    _showLoader: false
+  });
   // #endregion
 
   // #region Modals & popovers
@@ -160,42 +171,44 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
             'w-full': !isSmScale
           })}>
           {/* Filter */}
-          <ZIonButton
-            fill='outline'
-            color='primary'
-            minHeight={isLgScale ? '39px' : '2rem'}
-            expand={!isLgScale ? 'block' : undefined}
-            testingselector={
-              CONSTANTS.testingSelectors.utmTags.listPage.filterBtn
-            }
-            className={classNames({
-              'my-2': true,
-              'me-2': isLgScale,
-              'text-xs ion-no-margin ion-no-padding w-[33.33%]':
-                !isLgScale && isSmScale,
-              'w-full': !isSmScale,
-              'ion-no-margin': !isSmScale
-            })}
-            onClick={async () => {
-              // Open the menu by menu-id
-              await menuController.enable(
-                true,
-                CONSTANTS.MENU_IDS.UTMTag_FILTERS_MENU_ID
-              );
-              await menuController.open(
-                CONSTANTS.MENU_IDS.UTMTag_FILTERS_MENU_ID
-              );
-            }}>
-            <ZIonIcon
-              slot='start'
-              icon={filterOutline}
+          {UTMTagsData && UTMTagsData?.length > 0 && (
+            <ZIonButton
+              fill='outline'
+              color='primary'
+              minHeight={isLgScale ? '39px' : '2rem'}
+              expand={!isLgScale ? 'block' : undefined}
+              testingselector={
+                CONSTANTS.testingSelectors.utmTags.listPage.filterBtn
+              }
               className={classNames({
-                'me-1': true,
-                'w-4 h-4': !isLgScale
+                'my-2': true,
+                'me-2': isLgScale,
+                'text-xs ion-no-margin ion-no-padding w-[33.33%]':
+                  !isLgScale && isSmScale,
+                'w-full': !isSmScale,
+                'ion-no-margin': !isSmScale
               })}
-            />
-            Filter
-          </ZIonButton>
+              onClick={async () => {
+                // Open the menu by menu-id
+                await menuController.enable(
+                  true,
+                  CONSTANTS.MENU_IDS.UTMTag_FILTERS_MENU_ID
+                );
+                await menuController.open(
+                  CONSTANTS.MENU_IDS.UTMTag_FILTERS_MENU_ID
+                );
+              }}>
+              <ZIonIcon
+                slot='start'
+                icon={filterOutline}
+                className={classNames({
+                  'me-1': true,
+                  'w-4 h-4': !isLgScale
+                })}
+              />
+              Filter
+            </ZIonButton>
+          )}
 
           {/* Refetch data button */}
           <ZIonButton

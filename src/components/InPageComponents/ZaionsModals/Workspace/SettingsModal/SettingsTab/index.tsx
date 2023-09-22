@@ -148,9 +148,7 @@ const ZSettingsTab: React.FC<{
               workspace: _data
             }));
 
-            showSuccessNotification(
-              MESSAGES.GENERAL.WORKSPACE.WORKSPACE_UPDATED
-            );
+            showSuccessNotification(MESSAGES.WORKSPACE.UPDATED);
           }
         }
       }
@@ -164,11 +162,9 @@ const ZSettingsTab: React.FC<{
     try {
       if (workspaceId) {
         await presentZIonAlert({
-          header: `Delete workspace "${
-            compState.workspace?.workspaceName || ''
-          }"`,
-          subHeader: 'Remove workspace from user account.',
-          message: 'Are you sure you want to delete this workspace?',
+          header: MESSAGES.WORKSPACE.DELETE_ALERT.HEADER,
+          subHeader: MESSAGES.WORKSPACE.DELETE_ALERT.SUB_HEADER,
+          message: MESSAGES.WORKSPACE.DELETE_ALERT.MESSAGES,
           buttons: [
             {
               text: 'Cancel',
@@ -176,6 +172,7 @@ const ZSettingsTab: React.FC<{
             },
             {
               text: 'Delete',
+              cssClass: 'zaions_ion_color_danger',
               role: 'danger',
               handler: () => {
                 void removeWorkspace();
@@ -230,9 +227,7 @@ const ZSettingsTab: React.FC<{
               updateHoleData: true
             });
 
-            showSuccessNotification(
-              MESSAGES.GENERAL.WORKSPACE.WORKSPACE_DELETED
-            );
+            showSuccessNotification(MESSAGES.WORKSPACE.DELETED);
 
             dismissZIonModal();
           } else {
@@ -329,7 +324,7 @@ const ZSettingsTab: React.FC<{
                       .workspaceNameInput
                   }
                   className={classNames({
-                    'bg-white': true,
+                    z_ion_bg_white: true,
                     'ion-touched': touched.workspaceName,
                     'ion-invalid': errors.workspaceName,
                     'ion-valid': !errors.workspaceName
@@ -344,16 +339,13 @@ const ZSettingsTab: React.FC<{
                   value={values.workspaceTimezone}
                   onIonChange={handleChange}
                   onIonBlur={handleBlur}
-                  style={{
-                    '--background': '#fff'
-                  }}
                   testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.workspaceTimezoneInput}-${workspaceId}`}
                   testinglistselector={
                     CONSTANTS.testingSelectors.workspace.settingsModal.settings
                       .workspaceTimezoneInput
                   }
                   className={classNames({
-                    'pt-2 ion-margin-top': true,
+                    'pt-2 z_ion_bg_white ion-margin-top': true,
                     'ion-touched': touched.workspaceTimezone,
                     'ion-invalid': errors.workspaceTimezone,
                     'ion-valid': !errors.workspaceTimezone
@@ -446,7 +438,7 @@ const ZSettingsTab: React.FC<{
 
           <ZIonButton
             color='danger'
-            className='mt-2 ion-no-margin normal-case'
+            className='mt-2 normal-case ion-no-margin'
             testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.deleteButton}-${workspaceId}`}
             testinglistselector={
               CONSTANTS.testingSelectors.workspace.settingsModal.settings

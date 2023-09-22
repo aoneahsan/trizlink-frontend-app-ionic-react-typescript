@@ -994,11 +994,11 @@ const ZPixelActionPopover: React.FC<{
   const deletePixel = async () => {
     try {
       if (selectedId?.trim() && PixelsData?.length) {
-        const selectedPixel = PixelsData?.find(el => el.id === selectedId);
+        // const selectedPixel = PixelsData?.find(el => el.id === selectedId);
         await presentZIonAlert({
-          header: `Delete pixel "${selectedPixel?.title || ''}"`,
-          subHeader: 'Remove pixel from user account.',
-          message: 'Are you sure you want to delete this pixel?',
+          header: MESSAGES.PIXEL_ACCOUNT.DELETE_ALERT.HEADER,
+          subHeader: MESSAGES.PIXEL_ACCOUNT.DELETE_ALERT.SUB_HEADER,
+          message: MESSAGES.PIXEL_ACCOUNT.DELETE_ALERT.MESSAGES,
           buttons: [
             {
               text: 'Cancel',
@@ -1006,6 +1006,7 @@ const ZPixelActionPopover: React.FC<{
             },
             {
               text: 'Delete',
+              cssClass: 'zaions_ion_color_danger',
               role: 'danger',
               handler: () => {
                 void removePixel();
@@ -1061,7 +1062,7 @@ const ZPixelActionPopover: React.FC<{
                 updateHoleData: true
               });
 
-              showSuccessNotification(MESSAGES.GENERAL.PIXEL_ACCOUNT.DELETED);
+              showSuccessNotification(MESSAGES.PIXEL_ACCOUNT.DELETED);
 
               dismissZIonPopover('', '');
             } else {

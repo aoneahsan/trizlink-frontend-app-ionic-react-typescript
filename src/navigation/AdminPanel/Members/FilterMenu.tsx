@@ -136,12 +136,12 @@ const ZMembersFilterMenu: React.FC = () => {
   //
   const { mutateAsync: updateMemberFilersAsyncMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.user_setting_delete_update_get,
-    _loaderMessage: MESSAGES.GENERAL.FILTER.FILTERING
+    _loaderMessage: MESSAGES.MEMBER.FILTERING
   });
 
   const { mutateAsync: createMemberFilersAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.user_setting_list_create,
-    _loaderMessage: MESSAGES.GENERAL.FILTER.FILTERING
+    _loaderMessage: MESSAGES.MEMBER.FILTERING
   });
 
   const {

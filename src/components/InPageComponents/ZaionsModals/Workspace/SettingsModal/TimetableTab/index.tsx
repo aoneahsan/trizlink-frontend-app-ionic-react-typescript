@@ -335,9 +335,9 @@ const ZTimeSlotActionPopover: React.FC<{
     try {
       if (timeSlotId) {
         await presentZIonAlert({
-          header: `Delete time slot`,
-          subHeader: 'Remove time slot from workspace.',
-          message: 'Are you sure you want to delete this time slot?',
+          header: MESSAGES.TIME_SLOT.DELETE_ALERT.HEADER,
+          subHeader: MESSAGES.TIME_SLOT.DELETE_ALERT.SUB_HEADER,
+          message: MESSAGES.TIME_SLOT.DELETE_ALERT.MESSAGES,
           buttons: [
             {
               text: 'Cancel',
@@ -345,6 +345,7 @@ const ZTimeSlotActionPopover: React.FC<{
             },
             {
               text: 'Delete',
+              cssClass: 'zaions_ion_color_danger',
               role: 'danger',
               handler: () => {
                 void removeTimeSlot();
@@ -408,7 +409,7 @@ const ZTimeSlotActionPopover: React.FC<{
               updateHoleData: true
             });
 
-            presentZIonToastSuccess(MESSAGES.GENERAL.TIME_SLOT.DELETED);
+            presentZIonToastSuccess(MESSAGES.TIME_SLOT.DELETED);
           } else {
             showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
           }
