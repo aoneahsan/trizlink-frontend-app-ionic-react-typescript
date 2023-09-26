@@ -136,9 +136,9 @@ const ZLabelsTab: React.FC<{
     _url: API_URL_ENUM.label_update_delete
   });
 
-  const { mutateAsync: deleteLabelMutate } = useZRQDeleteRequest(
-    API_URL_ENUM.label_update_delete
-  );
+  const { mutateAsync: deleteLabelMutate } = useZRQDeleteRequest({
+    _url: API_URL_ENUM.label_update_delete
+  });
   // #endregion
 
   const isZFetching = isLabelsDataFetching;

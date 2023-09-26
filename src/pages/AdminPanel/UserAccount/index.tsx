@@ -43,7 +43,7 @@ const ZAdminPanelTopBar = lazy(
   () => import('@/components/AdminPanelComponents/TopBar')
 );
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
-import ZUserSettingsSettings from './UserSettings';
+import ZProfileSettingsSettings from './ProfileSettings';
 import ZNotificationSettings from './NotificationsSettings';
 
 /**
@@ -60,6 +60,7 @@ import { useZInvalidateReactQueries } from '@/ZaionsHooks/zreactquery-hooks';
 import { reportCustomError } from '@/utils/customErrorType';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import CONSTANTS from '@/utils/constants';
+import ZWSNotificationSettings from './WSNotificationSettings';
 
 /**
  * Type Imports go down
@@ -107,6 +108,10 @@ const ZUserAccount: React.FC = () => {
   const isNotificationSettingsPage = useRouteMatch(
     ZaionsRoutes.AdminPanel.Setting.UserAccount.NotificationSettings
   )?.isExact;
+
+  const isWorkspaceNotificationPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.UserAccount.WorkspaceNotifications
+  )?.isExact;
   // #endregion
 
   // #region Functions.
@@ -148,6 +153,9 @@ const ZUserAccount: React.FC = () => {
           <ZIonIcon
             icon={closeOutline}
             className='w-6 h-6 pt-[1px] cursor-pointer'
+            testingselector={
+              CONSTANTS.testingSelectors.userAccount.ionMenu.closeMenuBtn
+            }
             onClick={async () => {
               await menuController.close(
                 CONSTANTS.MENU_IDS.USER_SETTINGS_PAGE_MENU_ID
@@ -166,12 +174,18 @@ const ZUserAccount: React.FC = () => {
                   {/* Notifications settings */}
                   <ZIonItem
                     minHeight='2.2rem'
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount.ionMenu
+                        .notificationSettings
+                    }
                     routerLink={
                       ZaionsRoutes.AdminPanel.Setting.UserAccount
                         .NotificationSettings
                     }
                     className={classNames({
-                      zaions__light_bg: isNotificationSettingsPage
+                      zaions__light_bg:
+                        isNotificationSettingsPage ||
+                        isWorkspaceNotificationPage
                     })}>
                     <ZIonIcon
                       icon={notificationsOutline}
@@ -186,6 +200,10 @@ const ZUserAccount: React.FC = () => {
                   {/* Profile settings */}
                   <ZIonItem
                     minHeight='2.2rem'
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount.ionMenu
+                        .profileSettings
+                    }
                     routerLink={
                       ZaionsRoutes.AdminPanel.Setting.UserAccount
                         .ProfileSettings
@@ -272,12 +290,18 @@ const ZUserAccount: React.FC = () => {
                       {/* Notifications settings */}
                       <ZIonItem
                         minHeight='2.2rem'
+                        testingselector={
+                          CONSTANTS.testingSelectors.userAccount.menuBar
+                            .notificationSettings
+                        }
                         routerLink={
                           ZaionsRoutes.AdminPanel.Setting.UserAccount
                             .NotificationSettings
                         }
                         className={classNames({
-                          zaions__light_bg: isNotificationSettingsPage
+                          zaions__light_bg:
+                            isNotificationSettingsPage ||
+                            isWorkspaceNotificationPage
                         })}>
                         <ZIonIcon
                           icon={notificationsOutline}
@@ -292,6 +316,10 @@ const ZUserAccount: React.FC = () => {
                       {/* Profile settings */}
                       <ZIonItem
                         minHeight='2.2rem'
+                        testingselector={
+                          CONSTANTS.testingSelectors.userAccount.menuBar
+                            .profileSettings
+                        }
                         routerLink={
                           ZaionsRoutes.AdminPanel.Setting.UserAccount
                             .ProfileSettings
@@ -321,7 +349,10 @@ const ZUserAccount: React.FC = () => {
                 sizeLg='9'
                 sizeMd='12'
                 sizeSm='12'
-                sizeXs='12'>
+                sizeXs='12'
+                testingselector={
+                  CONSTANTS.testingSelectors.userAccount.mainContainer
+                }>
                 {!isSmScale ? (
                   <ZInpageMainContent />
                 ) : (
@@ -357,6 +388,10 @@ const ZInpageMainContent: React.FC = () => {
   const isNotificationSettings = useRouteMatch(
     ZaionsRoutes.AdminPanel.Setting.UserAccount.NotificationSettings
   )?.isExact;
+
+  const isWorkspaceNotificationPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.UserAccount.WorkspaceNotifications
+  )?.isExact;
   // #endregion
 
   return (
@@ -372,8 +407,9 @@ const ZInpageMainContent: React.FC = () => {
             <ZFallbackIonSpinner2 />
           </ZIonCol>
         }>
-        {isProfileSettingsPage ? <ZUserSettingsSettings /> : null}
+        {isProfileSettingsPage ? <ZProfileSettingsSettings /> : null}
         {isNotificationSettings ? <ZNotificationSettings /> : null}
+        {isWorkspaceNotificationPage ? <ZWSNotificationSettings /> : null}
       </Suspense>
     </div>
   );

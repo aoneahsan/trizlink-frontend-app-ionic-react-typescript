@@ -29,13 +29,28 @@ export interface WSRolesInterfaces {
   }[];
 }
 
+export interface EmailAddressInterface {
+  id?: string;
+  email: string;
+  status: string;
+  optExpireTime: string;
+  isPrimary: boolean;
+  verifiedAt: string;
+}
+
 // Type
 export type UserAccountType = {
   id?: string;
   username?: string;
   name?: string;
   email?: string;
-  profilePitcher?: string;
+  phoneNumber?: string;
+  profileImage?: {
+    // profileImage use to store user profile detail json, for example json containing filePath, fileUrl, etc.
+    filePath?: string;
+    fileUrl?: string;
+  };
+  avatar?: string; // avatar use to store one fileUrl so where we need just url we will get from here.
   password?: string;
   createdAt?: string;
   updatedAt?: string;
@@ -46,7 +61,7 @@ export type UserAccountEmailType = {
   id?: string;
   emailAddress: string;
   isPrimary?: boolean;
-  isVarified?: boolean;
+  isVerified?: boolean;
   makePrimary?: boolean;
 };
 

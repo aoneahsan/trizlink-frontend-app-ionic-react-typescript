@@ -1006,10 +1006,9 @@ const ZShortLinkActionPopover: React.FC<{
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
   // Request for deleting short link.
-  const { mutateAsync: deleteShortLinkMutate } = useZRQDeleteRequest(
-    API_URL_ENUM.shortLinks_update_delete,
-    []
-  );
+  const { mutateAsync: deleteShortLinkMutate } = useZRQDeleteRequest({
+    _url: API_URL_ENUM.shortLinks_update_delete
+  });
 
   // when user won't to delete short link and click on the delete button this function will fire and show the confirm alert.
   const deleteShortLink = async () => {

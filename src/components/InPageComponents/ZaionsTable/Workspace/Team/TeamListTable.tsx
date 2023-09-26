@@ -673,10 +673,9 @@ const ZTeamActionPopover: React.FC<{
 
   // #region APIS.
   // Request for deleting team.
-  const { mutateAsync: deleteTeamMutate } = useZRQDeleteRequest(
-    API_URL_ENUM.workspace_team_update_delete,
-    []
-  );
+  const { mutateAsync: deleteTeamMutate } = useZRQDeleteRequest({
+    _url: API_URL_ENUM.workspace_team_update_delete
+  });
   // #endregion
 
   // #region Functions.

@@ -23,27 +23,27 @@ import ZLinkDashboardTopBar from '@/components/UserDashboard/ZLinkdashboard/ZLDa
 import AddEmailModal from '@/components/InPageComponents/ZaionsModals/EmailModal';
 import DeleteUserAccountModal from '@/components/InPageComponents/ZaionsModals/DeleteUserAccountModal';
 import {
-	ZTable,
-	ZTableTHead,
-	ZTableRow,
-	ZTableHeadCol,
-	ZTableTBody,
-	ZTableRowCol,
+  ZTable,
+  ZTableTHead,
+  ZTableRow,
+  ZTableHeadCol,
+  ZTableTBody,
+  ZTableRowCol
 } from '@/components/InPageComponents/ZaionsTable/table-styled-components.sc';
 import ZaionsLinkSettingPanel from '@/components/UserDashboard/ZLinkdashboard/ZLinksSettingPanel';
 import {
-	ZIonCol,
-	ZIonText,
-	ZIonItem,
-	ZIonRow,
-	ZIonGrid,
-	ZIonContent,
-	ZIonSplitPane,
-	ZIonTitle,
-	ZIonInput,
-	ZIonIcon,
-	ZIonCheckbox,
-	ZIonSelectOption,
+  ZIonCol,
+  ZIonText,
+  ZIonItem,
+  ZIonRow,
+  ZIonGrid,
+  ZIonContent,
+  ZIonSplitPane,
+  ZIonTitle,
+  ZIonInput,
+  ZIonIcon,
+  ZIonCheckbox,
+  ZIonSelectOption
 } from '@/components/ZIonComponents';
 
 /**
@@ -51,9 +51,9 @@ import {
  * ? Like import of Constant is a global constants import
  * */
 import CONSTANTS, {
-	BRACKPOINT_MD,
-	BRACKPOINT_SM,
-	PRODUCT_NAME,
+  BRACKPOINT_MD,
+  BRACKPOINT_SM,
+  PRODUCT_NAME
 } from '@/utils/constants';
 import { PAGE_MENU } from '@/utils/enums';
 
@@ -62,8 +62,8 @@ import { PAGE_MENU } from '@/utils/enums';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-	ZLinkIonPanelSettingsSidebarActiveLinkType,
-	ZLinkIonPanelSidebarActiveLinkType,
+  ZLinkIonPanelSettingsSidebarActiveLinkType,
+  ZLinkIonPanelSidebarActiveLinkType
 } from '@/types/AdminPanel/linksType';
 
 /**
@@ -72,8 +72,8 @@ import {
  * */
 import { ZaionsCountryCodeRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
 import {
-	ZaionsUserAccountEmails,
-	ZaionsUserAccountRStateAtom,
+  ZaionsUserAccountEmails,
+  ZaionsUserAccountRStateAtom
 } from '@/ZaionsStore/UserAccount/index.recoil';
 
 /**
@@ -102,563 +102,534 @@ import ZIonSelect from '@/components/ZIonComponents/ZIonSelect';
  * */
 
 const ZProfile: React.FC = () => {
-	const countryCode = useRecoilValue(ZaionsCountryCodeRState);
-	const isMdScale = useMediaQuery({
-		query: `(min-width: ${BRACKPOINT_MD})`,
-	});
-	const isSmScale = useMediaQuery({
-		query: `(min-width: ${BRACKPOINT_SM})`,
-	});
+  const countryCode = useRecoilValue(ZaionsCountryCodeRState);
+  const isMdScale = useMediaQuery({
+    query: `(min-width: ${BRACKPOINT_MD})`
+  });
+  const isSmScale = useMediaQuery({
+    query: `(min-width: ${BRACKPOINT_SM})`
+  });
 
-	const { presentZIonAlert } = useZIonAlert();
-	const { presentZIonModal: presentEmailModal } = useZIonModal(AddEmailModal);
-	const { presentZIonModal: presentUserAccountDeleteModal } = useZIonModal(
-		DeleteUserAccountModal
-	);
-	const [UserAccountEmails, setUserAccountEmails] = useRecoilState(
-		ZaionsUserAccountEmails
-	);
-	const [userAccountState] = useRecoilState(ZaionsUserAccountRStateAtom);
+  const { presentZIonAlert } = useZIonAlert();
+  const { presentZIonModal: presentEmailModal } = useZIonModal(AddEmailModal);
+  const { presentZIonModal: presentUserAccountDeleteModal } = useZIonModal(
+    DeleteUserAccountModal
+  );
+  const [UserAccountEmails, setUserAccountEmails] = useRecoilState(
+    ZaionsUserAccountEmails
+  );
+  const [userAccountState] = useRecoilState(ZaionsUserAccountRStateAtom);
 
-	const setToPrimary = (id: string) => {
-		setUserAccountEmails(
-			(oldVals) =>
-				oldVals &&
-				oldVals.map((email) =>
-					email.id === id
-						? { ...email, isPrimary: true }
-						: { ...email, isPrimary: false }
-				)
-		);
-	};
+  const setToPrimary = (id: string) => {
+    setUserAccountEmails(
+      oldVals =>
+        oldVals &&
+        oldVals.map(email =>
+          email.id === id
+            ? { ...email, isPrimary: true }
+            : { ...email, isPrimary: false }
+        )
+    );
+  };
 
-	const onDeleteEmail = async (id: string, email: string) => {
-		await presentZIonAlert({
-			header: `Delete Email`,
-			subHeader: 'Remove email from user account.',
-			message: 'Are you sure you want to delete this email account?',
-			buttons: [
-				{
-					text: 'Cancel',
-					role: 'cancel',
-				},
-				{
-					text: 'Delete',
-					role: 'danger',
-					handler: () => {
-						void removeEmailAccount(id);
-					},
-				},
-			],
-		});
-	};
+  const onDeleteEmail = async (id: string, email: string) => {
+    await presentZIonAlert({
+      header: `Delete Email`,
+      subHeader: 'Remove email from user account.',
+      message: 'Are you sure you want to delete this email account?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Delete',
+          role: 'danger',
+          handler: () => {
+            void removeEmailAccount(id);
+          }
+        }
+      ]
+    });
+  };
 
-	const removeEmailAccount = (id: string) => {
-		setUserAccountEmails(
-			(oldVal) => oldVal && oldVal.filter((val) => val.id !== id)
-		);
-	};
+  const removeEmailAccount = (id: string) => {
+    setUserAccountEmails(
+      oldVal => oldVal && oldVal.filter(val => val.id !== id)
+    );
+  };
 
-	return (
-		<>
-			<ZIonPage
-				pageTitle='Dashboard'
-				id={CONSTANTS.MENU_IDS.DASHBOARD_SM_MENU_CONTENT_ID}
-				menu={PAGE_MENU.DASHBOARD_PAGE_MENU}
-			>
-				<ZIonSplitPane
-					when='lg'
-					contentId={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
-				>
-					{/* Side Bar */}
-					<ZLinkIonPanelSidebar
-						activeLink={ZLinkIonPanelSidebarActiveLinkType.settings}
-					/>
+  return (
+    <>
+      <ZIonPage
+        pageTitle='Dashboard'
+        id={CONSTANTS.MENU_IDS.DASHBOARD_SM_MENU_CONTENT_ID}
+        menu={PAGE_MENU.DASHBOARD_PAGE_MENU}>
+        <ZIonSplitPane
+          when='lg'
+          contentId={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}>
+          {/* Side Bar */}
+          <ZLinkIonPanelSidebar
+            activeLink={ZLinkIonPanelSidebarActiveLinkType.settings}
+          />
 
-					<div
-						className='overflow-y-scroll ion-page'
-						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
-					>
-						<ZLinkDashboardTopBar />
-						<ZIonContent
-							className={classNames({
-								'mx-3': true,
-								'ion-padding': isMdScale,
-							})}
-							// scrollX={true}
-						>
-							<ZIonGrid>
-								<ZIonRow>
-									{/* If it is in md then the setting side panel will be visible */}
-									{isMdScale && (
-										<ZaionsLinkSettingPanel
-											activeLink={
-												ZLinkIonPanelSettingsSidebarActiveLinkType.profile
-											}
-										/>
-									)}
-									<ZIonCol>
-										<ZIonRow
-											className={classNames({
-												'border-bottom  px-1': true,
-												'pb-3': isMdScale,
-												'pb-1': !isMdScale,
-											})}
-										>
-											<ZIonTitle
-												className={classNames({
-													'ion-no-padding': true,
-													'ion-text-center': !isMdScale,
-												})}
-											>
-												<h2 className='font-black'>Profile</h2>
-											</ZIonTitle>
-										</ZIonRow>
+          <div
+            className='overflow-y-scroll ion-page'
+            id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}>
+            <ZLinkDashboardTopBar />
+            <ZIonContent
+              className={classNames({
+                'mx-3': true,
+                'ion-padding': isMdScale
+              })}
+              // scrollX={true}
+            >
+              <ZIonGrid>
+                <ZIonRow>
+                  {/* If it is in md then the setting side panel will be visible */}
+                  {isMdScale && (
+                    <ZaionsLinkSettingPanel
+                      activeLink={
+                        ZLinkIonPanelSettingsSidebarActiveLinkType.profile
+                      }
+                    />
+                  )}
+                  <ZIonCol>
+                    <ZIonRow
+                      className={classNames({
+                        'border-bottom  px-1': true,
+                        'pb-3': isMdScale,
+                        'pb-1': !isMdScale
+                      })}>
+                      <ZIonTitle
+                        className={classNames({
+                          'ion-no-padding': true,
+                          'ion-text-center': !isMdScale
+                        })}>
+                        <h2 className='font-black'>Profile</h2>
+                      </ZIonTitle>
+                    </ZIonRow>
 
-										<ZIonRow className='px-1 py-4'>
-											<ZIonCol size='12'>
-												<ZIonTitle
-													className={classNames({
-														'ion-no-padding block': true,
-														'ion-text-center pb-1': !isMdScale,
-														'pb-3': isMdScale,
-													})}
-												>
-													<h4 className='font-bold'>Preferences</h4>
-												</ZIonTitle>
-											</ZIonCol>
-											<ZIonCol
-												sizeXl='4'
-												sizeLg='4.5'
-												sizeMd='12'
-												sizeSm='12'
-												sizeXs='12'
-											>
-												{/* <ZIonItem className='zaions_item_input_bb'> */}
-												<ZIonInput
-													type='text'
-													label='Display Name'
-													labelPlacement='stacked'
-													className=''
-													minHeight='40px'
-													placeholder='username here'
-													value={userAccountState && userAccountState.username}
-												/>
-												{/* </ZIonItem> */}
-												<div
-													className={classNames({
-														'cursor-no-drop mt-4 ': true,
-														'w-max': isMdScale,
-													})}
-												>
-													<ZIonButton
-														disabled
-														expand={!isMdScale ? 'block' : undefined}
-														className='mt-0 ion-text-capitalize'
-													>
-														Update display name
-													</ZIonButton>
-												</div>
-											</ZIonCol>
-										</ZIonRow>
+                    <ZIonRow className='px-1 py-4'>
+                      <ZIonCol size='12'>
+                        <ZIonTitle
+                          className={classNames({
+                            'ion-no-padding block': true,
+                            'ion-text-center pb-1': !isMdScale,
+                            'pb-3': isMdScale
+                          })}>
+                          <h4 className='font-bold'>Preferences</h4>
+                        </ZIonTitle>
+                      </ZIonCol>
+                      <ZIonCol
+                        sizeXl='4'
+                        sizeLg='4.5'
+                        sizeMd='12'
+                        sizeSm='12'
+                        sizeXs='12'>
+                        {/* <ZIonItem className='zaions_item_input_bb'> */}
+                        <ZIonInput
+                          type='text'
+                          label='Display Name'
+                          labelPlacement='stacked'
+                          className=''
+                          minHeight='40px'
+                          placeholder='username here'
+                          value={userAccountState && userAccountState.username}
+                        />
+                        {/* </ZIonItem> */}
+                        <div
+                          className={classNames({
+                            'cursor-no-drop mt-4 ': true,
+                            'w-max': isMdScale
+                          })}>
+                          <ZIonButton
+                            disabled
+                            expand={!isMdScale ? 'block' : undefined}
+                            className='mt-0 ion-text-capitalize'>
+                            Update display name
+                          </ZIonButton>
+                        </div>
+                      </ZIonCol>
+                    </ZIonRow>
 
-										<ZIonRow
-											className={classNames({
-												'mt-2': true,
-												'ms-0': !isMdScale,
-											})}
-										>
-											<ZIonCol
-												size='12'
-												className={classNames({
-													'ion-text-center mt-2': !isMdScale,
-												})}
-											>
-												<ZIonTitle className='ion-no-padding'>
-													<h4 className='font-bold'>Email addresses</h4>
-												</ZIonTitle>
-												<ZIonText className='text-[18px]'>
-													Select or add a new email address to receive
-													notifications. Only verified emails can be designated
-													as the primary email address, which is used to log in.
-												</ZIonText>
-											</ZIonCol>
+                    <ZIonRow
+                      className={classNames({
+                        'mt-2': true,
+                        'ms-0': !isMdScale
+                      })}>
+                      <ZIonCol
+                        size='12'
+                        className={classNames({
+                          'ion-text-center mt-2': !isMdScale
+                        })}>
+                        <ZIonTitle className='ion-no-padding'>
+                          <h4 className='font-bold'>Email addresses</h4>
+                        </ZIonTitle>
+                        <ZIonText className='text-[18px]'>
+                          Select or add a new email address to receive
+                          notifications. Only verified emails can be designated
+                          as the primary email address, which is used to log in.
+                        </ZIonText>
+                      </ZIonCol>
 
-											<ZIonCol
-												size='12'
-												className={classNames({
-													'mt-3': true,
-													'ion-no-padding': !isMdScale,
-												})}
-											>
-												<ZTable>
-													<ZTableTHead>
-														<ZTableRow>
-															<ZTableHeadCol>Email address</ZTableHeadCol>
-															<ZTableHeadCol>Status</ZTableHeadCol>
-															<ZTableHeadCol>Primary</ZTableHeadCol>
-															<ZTableHeadCol></ZTableHeadCol>
-														</ZTableRow>
-													</ZTableTHead>
-													<ZTableTBody>
-														{UserAccountEmails &&
-															UserAccountEmails.map((el) => (
-																<ZTableRow key={el.id}>
-																	<ZTableRowCol className='py-2'>
-																		<ZIonText
-																			color='dark'
-																			className='mt-1 text-base'
-																		>
-																			{el.emailAddress}
-																		</ZIonText>
-																	</ZTableRowCol>
-																	<ZTableRowCol className='flex py-2 mt-1 ion-text-items-center'>
-																		{el.isVarified ? (
-																			<>
-																				<ZIonIcon
-																					icon={checkbox}
-																					color='success'
-																					className='pt-1 text-base me-1'
-																				/>{' '}
-																				<ZIonText
-																					color='dark'
-																					className='text-base'
-																				>
-																					Verified
-																				</ZIonText>
-																			</>
-																		) : (
-																			<>
-																				<ZIonIcon
-																					icon={closeCircleOutline}
-																					color='danger'
-																					className='pt-1 text-base me-1'
-																				/>{' '}
-																				<ZIonText
-																					color='dark'
-																					className='text-base'
-																				>
-																					Not verified
-																				</ZIonText>
-																			</>
-																		)}
-																	</ZTableRowCol>
-																	<ZTableRowCol className='py-2'>
-																		<ZIonCheckbox
-																			className='mt-1'
-																			onClick={() => {
-																				setToPrimary(el.id ? el.id : '');
-																			}}
-																			checked={el.isPrimary}
-																			color='success'
-																		/>
-																	</ZTableRowCol>
-																	<ZTableRowCol>
-																		{!el.isPrimary && (
-																			<ZIonButton
-																				className='ion-no-padding'
-																				fill='clear'
-																				onClick={() => {
-																					void onDeleteEmail(
-																						el.id ? el.id : '',
-																						el.emailAddress
-																					);
-																				}}
-																			>
-																				<ZIonIcon
-																					icon={trashBinOutline}
-																					color='danger'
-																				/>
-																			</ZIonButton>
-																		)}
-																	</ZTableRowCol>
-																</ZTableRow>
-															))}
-													</ZTableTBody>
-												</ZTable>
-												<ZIonButton
-													fill='outline'
-													className='mt-4 ion-text-capitalize'
-													color='tertiary'
-													onClick={() =>
-														presentEmailModal({
-															_cssClass: classes.email_modal_size,
-														})
-													}
-													expand={!isMdScale ? 'block' : undefined}
-												>
-													Add new email
-												</ZIonButton>{' '}
-												<br />
-												<div
-													className={classNames({
-														'cursor-no-drop': true,
-														'w-max mt-3': isMdScale,
-													})}
-												>
-													<ZIonButton
-														disabled
-														className='mt-0 ion-text-capitalize'
-														expand={!isMdScale ? 'block' : undefined}
-													>
-														Update primary email
-													</ZIonButton>
-												</div>
-											</ZIonCol>
-										</ZIonRow>
+                      <ZIonCol
+                        size='12'
+                        className={classNames({
+                          'mt-3': true,
+                          'ion-no-padding': !isMdScale
+                        })}>
+                        <ZTable>
+                          <ZTableTHead>
+                            <ZTableRow>
+                              <ZTableHeadCol>Email address</ZTableHeadCol>
+                              <ZTableHeadCol>Status</ZTableHeadCol>
+                              <ZTableHeadCol>Primary</ZTableHeadCol>
+                              <ZTableHeadCol></ZTableHeadCol>
+                            </ZTableRow>
+                          </ZTableTHead>
+                          <ZTableTBody>
+                            {UserAccountEmails &&
+                              UserAccountEmails.map(el => (
+                                <ZTableRow key={el.id}>
+                                  <ZTableRowCol className='py-2'>
+                                    <ZIonText
+                                      color='dark'
+                                      className='mt-1 text-base'>
+                                      {el.emailAddress}
+                                    </ZIonText>
+                                  </ZTableRowCol>
+                                  <ZTableRowCol className='flex py-2 mt-1 ion-text-items-center'>
+                                    {el.isVerified ? (
+                                      <>
+                                        <ZIonIcon
+                                          icon={checkbox}
+                                          color='success'
+                                          className='pt-1 text-base me-1'
+                                        />{' '}
+                                        <ZIonText
+                                          color='dark'
+                                          className='text-base'>
+                                          Verified
+                                        </ZIonText>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <ZIonIcon
+                                          icon={closeCircleOutline}
+                                          color='danger'
+                                          className='pt-1 text-base me-1'
+                                        />{' '}
+                                        <ZIonText
+                                          color='dark'
+                                          className='text-base'>
+                                          Not verified
+                                        </ZIonText>
+                                      </>
+                                    )}
+                                  </ZTableRowCol>
+                                  <ZTableRowCol className='py-2'>
+                                    <ZIonCheckbox
+                                      className='mt-1'
+                                      onClick={() => {
+                                        setToPrimary(el.id ? el.id : '');
+                                      }}
+                                      checked={el.isPrimary}
+                                      color='success'
+                                    />
+                                  </ZTableRowCol>
+                                  <ZTableRowCol>
+                                    {!el.isPrimary && (
+                                      <ZIonButton
+                                        className='ion-no-padding'
+                                        fill='clear'
+                                        onClick={() => {
+                                          void onDeleteEmail(
+                                            el.id ? el.id : '',
+                                            el.emailAddress
+                                          );
+                                        }}>
+                                        <ZIonIcon
+                                          icon={trashBinOutline}
+                                          color='danger'
+                                        />
+                                      </ZIonButton>
+                                    )}
+                                  </ZTableRowCol>
+                                </ZTableRow>
+                              ))}
+                          </ZTableTBody>
+                        </ZTable>
+                        <ZIonButton
+                          fill='outline'
+                          className='mt-4 ion-text-capitalize'
+                          color='tertiary'
+                          onClick={() =>
+                            presentEmailModal({
+                              _cssClass: classes.email_modal_size
+                            })
+                          }
+                          expand={!isMdScale ? 'block' : undefined}>
+                          Add new email
+                        </ZIonButton>{' '}
+                        <br />
+                        <div
+                          className={classNames({
+                            'cursor-no-drop': true,
+                            'w-max mt-3': isMdScale
+                          })}>
+                          <ZIonButton
+                            disabled
+                            className='mt-0 ion-text-capitalize'
+                            expand={!isMdScale ? 'block' : undefined}>
+                            Update primary email
+                          </ZIonButton>
+                        </div>
+                      </ZIonCol>
+                    </ZIonRow>
 
-										<ZIonRow>
-											<ZIonCol
-												size='12'
-												className={classNames({
-													'px-1 mt-5': true,
-													'ion-text-center': !isMdScale,
-												})}
-											>
-												<ZIonTitle className='ion-no-padding'>
-													<h4 className='font-black'>
-														Security & authentication
-													</h4>
-												</ZIonTitle>
-											</ZIonCol>
+                    <ZIonRow>
+                      <ZIonCol
+                        size='12'
+                        className={classNames({
+                          'px-1 mt-5': true,
+                          'ion-text-center': !isMdScale
+                        })}>
+                        <ZIonTitle className='ion-no-padding'>
+                          <h4 className='font-black'>
+                            Security & authentication
+                          </h4>
+                        </ZIonTitle>
+                      </ZIonCol>
 
-											<ZIonCol
-												size='12'
-												className={classNames({
-													'mt-1': true,
-													'ion-text-center': !isMdScale,
-												})}
-											>
-												<ZIonTitle className='ion-no-padding'>
-													<h5 className='font-bold'>Change password</h5>
-												</ZIonTitle>
-												<ZIonText className='text-[18px]'>
-													You will be required to login after changing your
-													password
-												</ZIonText>
-												<ZIonItem
-													className={classNames({
-														'w-[35%]': isMdScale,
-														'w-full mx-auto px-3 mt-2': !isMdScale,
-														// w-full: !isSmScale,
-													})}
-													lines='none'
-												>
-													<ZIonInput
-														label='Current password'
-														labelPlacement='floating'
-													/>
-												</ZIonItem>
-												<ZIonItem
-													className={classNames({
-														'mt-4': true,
-														'w-[35%]': isMdScale,
-														'w-full mx-auto px-3': !isMdScale,
-													})}
-													lines='none'
-												>
-													<ZIonInput
-														label='New password'
-														labelPlacement='floating'
-													/>
-												</ZIonItem>
-												<ZIonItem
-													className={classNames({
-														'mt-4': true,
-														'w-[35%]': isMdScale,
-														'w-full mx-auto px-3': !isMdScale,
-														// w-full: !isSmScale,
-													})}
-													lines='none'
-												>
-													<ZIonInput
-														label='Confirm new password'
-														labelPlacement='floating'
-													/>
-												</ZIonItem>
-												<ZIonButton
-													color='tertiary'
-													className={classNames({
-														'ion-text-capitalize mt-4': true,
-														'mx-3 mt-5': !isMdScale,
-													})}
-													expand={!isMdScale ? 'block' : undefined}
-												>
-													Change Password
-												</ZIonButton>
-											</ZIonCol>
+                      <ZIonCol
+                        size='12'
+                        className={classNames({
+                          'mt-1': true,
+                          'ion-text-center': !isMdScale
+                        })}>
+                        <ZIonTitle className='ion-no-padding'>
+                          <h5 className='font-bold'>Change password</h5>
+                        </ZIonTitle>
+                        <ZIonText className='text-[18px]'>
+                          You will be required to login after changing your
+                          password
+                        </ZIonText>
+                        <ZIonItem
+                          className={classNames({
+                            'w-[35%]': isMdScale,
+                            'w-full mx-auto px-3 mt-2': !isMdScale
+                            // w-full: !isSmScale,
+                          })}
+                          lines='none'>
+                          <ZIonInput
+                            label='Current password'
+                            labelPlacement='floating'
+                          />
+                        </ZIonItem>
+                        <ZIonItem
+                          className={classNames({
+                            'mt-4': true,
+                            'w-[35%]': isMdScale,
+                            'w-full mx-auto px-3': !isMdScale
+                          })}
+                          lines='none'>
+                          <ZIonInput
+                            label='New password'
+                            labelPlacement='floating'
+                          />
+                        </ZIonItem>
+                        <ZIonItem
+                          className={classNames({
+                            'mt-4': true,
+                            'w-[35%]': isMdScale,
+                            'w-full mx-auto px-3': !isMdScale
+                            // w-full: !isSmScale,
+                          })}
+                          lines='none'>
+                          <ZIonInput
+                            label='Confirm new password'
+                            labelPlacement='floating'
+                          />
+                        </ZIonItem>
+                        <ZIonButton
+                          color='tertiary'
+                          className={classNames({
+                            'ion-text-capitalize mt-4': true,
+                            'mx-3 mt-5': !isMdScale
+                          })}
+                          expand={!isMdScale ? 'block' : undefined}>
+                          Change Password
+                        </ZIonButton>
+                      </ZIonCol>
 
-											<ZIonCol
-												size='12'
-												className={classNames({
-													'px-1 mt-5': true,
-													'ion-text-center': !isMdScale,
-												})}
-											>
-												<ZIonTitle className='ion-no-padding'>
-													<h5 className='font-bold'>2-Factor authentication</h5>
-												</ZIonTitle>
-												<ZIonItem
-													className={classNames({
-														'w-[35%]': isMdScale,
-														'w-full mx-auto px-3 mt-2': !isMdScale,
-													})}
-												>
-													<ZIonSelect
-														interface='popover'
-														label='Country Code'
-														labelPlacement='floating'
-													>
-														{countryCode.map((el, key) => (
-															<ZIonSelectOption key={key} value={el.dial_code}>
-																{el.name} ({el.dial_code})
-															</ZIonSelectOption>
-														))}
-													</ZIonSelect>
-												</ZIonItem>
+                      <ZIonCol
+                        size='12'
+                        className={classNames({
+                          'px-1 mt-5': true,
+                          'ion-text-center': !isMdScale
+                        })}>
+                        <ZIonTitle className='ion-no-padding'>
+                          <h5 className='font-bold'>2-Factor authentication</h5>
+                        </ZIonTitle>
+                        <ZIonItem
+                          className={classNames({
+                            'w-[35%]': isMdScale,
+                            'w-full mx-auto px-3 mt-2': !isMdScale
+                          })}>
+                          <ZIonSelect
+                            interface='popover'
+                            label='Country Code'
+                            labelPlacement='floating'>
+                            {countryCode.map((el, key) => (
+                              <ZIonSelectOption
+                                key={key}
+                                value={el.dial_code}>
+                                {el.name} ({el.dial_code})
+                              </ZIonSelectOption>
+                            ))}
+                          </ZIonSelect>
+                        </ZIonItem>
 
-												<ZIonItem
-													className={classNames({
-														'w-[35%]': isMdScale,
-														'w-full mx-auto px-3 mt-2': !isMdScale,
-														// w-full: !isSmScale,
-													})}
-												>
-													<ZIonInput
-														label='Mobile number'
-														labelPlacement='floating'
-													/>
-												</ZIonItem>
-												<ZIonButton
-													color='tertiary'
-													className={classNames({
-														'ion-text-capitalize mt-4': true,
-														'mx-3 mt-5': !isMdScale,
-													})}
-													expand={!isMdScale ? 'block' : undefined}
-												>
-													Send verification code
-												</ZIonButton>
-											</ZIonCol>
+                        <ZIonItem
+                          className={classNames({
+                            'w-[35%]': isMdScale,
+                            'w-full mx-auto px-3 mt-2': !isMdScale
+                            // w-full: !isSmScale,
+                          })}>
+                          <ZIonInput
+                            label='Mobile number'
+                            labelPlacement='floating'
+                          />
+                        </ZIonItem>
+                        <ZIonButton
+                          color='tertiary'
+                          className={classNames({
+                            'ion-text-capitalize mt-4': true,
+                            'mx-3 mt-5': !isMdScale
+                          })}
+                          expand={!isMdScale ? 'block' : undefined}>
+                          Send verification code
+                        </ZIonButton>
+                      </ZIonCol>
 
-											<ZIonCol
-												size='12'
-												className={classNames({
-													'mt-5': true,
-													'ion-text-center': !isMdScale,
-												})}
-											>
-												<ZIonTitle className='ion-no-padding'>
-													<h4 className='font-black'>Access history</h4>
-												</ZIonTitle>
-												<ZIonText className='text-[18px] block'>
-													You're viewing recent activity on your account.
-													Logging out will apply to all devices currently
-													connected to {PRODUCT_NAME}.
-												</ZIonText>
+                      <ZIonCol
+                        size='12'
+                        className={classNames({
+                          'mt-5': true,
+                          'ion-text-center': !isMdScale
+                        })}>
+                        <ZIonTitle className='ion-no-padding'>
+                          <h4 className='font-black'>Access history</h4>
+                        </ZIonTitle>
+                        <ZIonText className='text-[18px] block'>
+                          You're viewing recent activity on your account.
+                          Logging out will apply to all devices currently
+                          connected to {PRODUCT_NAME}.
+                        </ZIonText>
 
-												<ZIonButton
-													color='tertiary'
-													className={classNames({
-														'ion-text-capitalize mt-4': true,
-														'mx-3 mt-5': !isMdScale,
-													})}
-													expand={!isMdScale ? 'block' : undefined}
-												>
-													Log out all sessions
-												</ZIonButton>
-											</ZIonCol>
+                        <ZIonButton
+                          color='tertiary'
+                          className={classNames({
+                            'ion-text-capitalize mt-4': true,
+                            'mx-3 mt-5': !isMdScale
+                          })}
+                          expand={!isMdScale ? 'block' : undefined}>
+                          Log out all sessions
+                        </ZIonButton>
+                      </ZIonCol>
 
-											<ZIonCol size='12' className='mt-2'>
-												{[1, 2, 3, 4, 5, 6, 7, 8].map((el) => (
-													<ZIonRow key={el} className='py-3 border-bottom'>
-														<ZIonCol
-															sizeXl='8'
-															sizeLg='8'
-															sizeMd='8'
-															sizeSm='12'
-															sizeXs='12'
-														>
-															<ZIonText className='block font-bold'>
-																Log In With Google
-															</ZIonText>
-															<ZIonText className='block'>
-																from 180.178.188.126 (SHARP TELECOM (PRIVATE)
-																LIMITED) (Pakistan, Punjab, Lahore)
-															</ZIonText>
-														</ZIonCol>
-														<ZIonCol
-															className={classNames({
-																'ion-text-end': isMdScale,
-																'ion-text-start': isSmScale,
-															})}
-														>
-															<ZIonText className='block'>
-																December 31, 2022 2:18 PM GMT+5
-															</ZIonText>
-															<ZIonText className='block'>1 week ago</ZIonText>
-														</ZIonCol>
-													</ZIonRow>
-												))}
-											</ZIonCol>
+                      <ZIonCol
+                        size='12'
+                        className='mt-2'>
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map(el => (
+                          <ZIonRow
+                            key={el}
+                            className='py-3 border-bottom'>
+                            <ZIonCol
+                              sizeXl='8'
+                              sizeLg='8'
+                              sizeMd='8'
+                              sizeSm='12'
+                              sizeXs='12'>
+                              <ZIonText className='block font-bold'>
+                                Log In With Google
+                              </ZIonText>
+                              <ZIonText className='block'>
+                                from 180.178.188.126 (SHARP TELECOM (PRIVATE)
+                                LIMITED) (Pakistan, Punjab, Lahore)
+                              </ZIonText>
+                            </ZIonCol>
+                            <ZIonCol
+                              className={classNames({
+                                'ion-text-end': isMdScale,
+                                'ion-text-start': isSmScale
+                              })}>
+                              <ZIonText className='block'>
+                                December 31, 2022 2:18 PM GMT+5
+                              </ZIonText>
+                              <ZIonText className='block'>1 week ago</ZIonText>
+                            </ZIonCol>
+                          </ZIonRow>
+                        ))}
+                      </ZIonCol>
 
-											<ZIonCol
-												size='12'
-												className={classNames({
-													'mt-5 border-bottom pb-5': true,
-													'ion-text-center': !isMdScale,
-												})}
-											>
-												<ZIonTitle className='ion-no-padding'>
-													<h4 className='font-black'>SAR Report</h4>
-												</ZIonTitle>
-												<ZIonText className='text-[18px] block'>
-													Click to request a Subject Access Request (SAR) Report
-													of all your Personal Information stored by{' '}
-													{PRODUCT_NAME}. Once requested, in compliance with
-													your local regulations, we will reply to your request
-													via email.
-												</ZIonText>
+                      <ZIonCol
+                        size='12'
+                        className={classNames({
+                          'mt-5 border-bottom pb-5': true,
+                          'ion-text-center': !isMdScale
+                        })}>
+                        <ZIonTitle className='ion-no-padding'>
+                          <h4 className='font-black'>SAR Report</h4>
+                        </ZIonTitle>
+                        <ZIonText className='text-[18px] block'>
+                          Click to request a Subject Access Request (SAR) Report
+                          of all your Personal Information stored by{' '}
+                          {PRODUCT_NAME}. Once requested, in compliance with
+                          your local regulations, we will reply to your request
+                          via email.
+                        </ZIonText>
 
-												<ZIonButton
-													color='tertiary'
-													className={classNames({
-														'ion-text-capitalize mt-4': true,
-														'mx-3 mt-5': !isMdScale,
-													})}
-													expand={!isMdScale ? 'block' : undefined}
-												>
-													Request report
-												</ZIonButton>
-											</ZIonCol>
+                        <ZIonButton
+                          color='tertiary'
+                          className={classNames({
+                            'ion-text-capitalize mt-4': true,
+                            'mx-3 mt-5': !isMdScale
+                          })}
+                          expand={!isMdScale ? 'block' : undefined}>
+                          Request report
+                        </ZIonButton>
+                      </ZIonCol>
 
-											<ZIonCol size='12' className='pt-4'>
-												<ZIonButton
-													color='danger'
-													className={classNames({
-														'ion-text-capitalize mt-4': true,
-														'mx-3 mt-0': !isMdScale,
-													})}
-													expand={!isMdScale ? 'block' : undefined}
-													onClick={() =>
-														presentUserAccountDeleteModal({
-															_cssClass: classes.delete_account_modal_size,
-														})
-													}
-												>
-													delete account
-												</ZIonButton>
-											</ZIonCol>
-										</ZIonRow>
-									</ZIonCol>
-								</ZIonRow>
-							</ZIonGrid>
-						</ZIonContent>
-					</div>
-				</ZIonSplitPane>
-			</ZIonPage>
-		</>
-	);
+                      <ZIonCol
+                        size='12'
+                        className='pt-4'>
+                        <ZIonButton
+                          color='danger'
+                          className={classNames({
+                            'ion-text-capitalize mt-4': true,
+                            'mx-3 mt-0': !isMdScale
+                          })}
+                          expand={!isMdScale ? 'block' : undefined}
+                          onClick={() =>
+                            presentUserAccountDeleteModal({
+                              _cssClass: classes.delete_account_modal_size
+                            })
+                          }>
+                          delete account
+                        </ZIonButton>
+                      </ZIonCol>
+                    </ZIonRow>
+                  </ZIonCol>
+                </ZIonRow>
+              </ZIonGrid>
+            </ZIonContent>
+          </div>
+        </ZIonSplitPane>
+      </ZIonPage>
+    </>
+  );
 };
 
 export default ZProfile;

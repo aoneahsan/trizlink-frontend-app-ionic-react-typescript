@@ -522,6 +522,12 @@ span.new {
 /* #endregion Popovers */
 
 /* #region ion-modals */
+
+.add-email-modal-size {
+  --width: 34vw;
+  --height: 50vh;
+}
+
 .link-in-bio-folder-modal {
   --height: 50vh;
   --width: 33vw;
@@ -1008,4 +1014,39 @@ ion-modal.zaions__modal_w100 {
 /* React select */
 .select__menu {
   z-index: 10 !important;
+}
+
+/* File upload style */
+.z-upload-input {
+  border: none;
+  outline: none;
+  background-color: var(--ion-color-white);
+  min-height: 35px;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  border: 1px solid rgba(var(--ion-color-dark-rgb), 0.4);
+  border-radius: 0.2rem;
+  -webkit-border-radius: 0.2rem;
+  -moz-border-radius: 0.2rem;
+  -ms-border-radius: 0.2rem;
+  -o-border-radius: 0.2rem;
+  cursor: text;
+}
+
+.z-upload-input:hover {
+  border: 1px solid rgba(var(--ion-color-dark-rgb), 1);
+}
+
+/* .z-upload-input:active {
+  border: 1px solid rgba(var(--ion-color-primary-rgb), 1);
+} */
+
+.z-upload-input::-webkit-file-upload-button {
+  outline: none;
+  border: none;
+  height: 35px;
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-light);
+  cursor: pointer;
 }

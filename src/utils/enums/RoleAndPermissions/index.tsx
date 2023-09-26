@@ -19,6 +19,15 @@ export enum permissionsEnum {
   replicate_role = 'replicate_role',
   restore_role = 'restore_role',
   forceDelete_role = 'forceDelete_role',
+  // Emails
+  viewAny_emails = 'viewAny_emails',
+  view_email = 'view_email',
+  add_email = 'add_email',
+  email_opt_check = 'email_opt_check',
+  update_email = 'update_email',
+  delete_email = 'delete_email',
+  restore_email = 'restore_email',
+  forceDelete_email = 'forceDelete_email',
 
   // Permission
   viewAny_permission = 'viewAny_permission',

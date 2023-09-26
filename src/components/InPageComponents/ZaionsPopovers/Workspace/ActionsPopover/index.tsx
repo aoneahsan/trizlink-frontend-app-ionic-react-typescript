@@ -147,10 +147,9 @@ const ZWorkspacesActionPopover: React.FC<{
   );
 
   // delete workspace api.
-  const { mutateAsync: deleteWorkspaceMutate } = useZRQDeleteRequest(
-    API_URL_ENUM.workspace_update_delete,
-    []
-  );
+  const { mutateAsync: deleteWorkspaceMutate } = useZRQDeleteRequest({
+    _url: API_URL_ENUM.workspace_update_delete
+  });
 
   // delete Workspace Confirm Modal.
   const deleteWorkspaceConfirmModal = async () => {

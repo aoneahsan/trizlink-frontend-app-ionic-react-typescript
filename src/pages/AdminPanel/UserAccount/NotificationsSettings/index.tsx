@@ -35,6 +35,7 @@ import {
   chatbubbleEllipsesOutline,
   ellipsisHorizontalOutline,
   mailOutline,
+  notificationsCircleOutline,
   notificationsOutline
 } from 'ionicons/icons';
 import { useRecoilValue } from 'recoil';
@@ -48,6 +49,8 @@ import {
 } from '@/types/AdminPanel/workspace';
 import { API_URL_ENUM } from '@/utils/enums';
 import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
+import { createRedirectRoute } from '@/utils/helpers';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Custom Imports go down
@@ -187,6 +190,10 @@ const ZNotificationSettings: React.FC = () => {
               lines='none'
               minHeight='25px'
               color='light'
+              testingselector={
+                CONSTANTS.testingSelectors.userAccount.notificationSettingsTab
+                  .WSNotificationsAccordion.header
+              }
               className={classNames({
                 'h-[2.9rem]': !isMdScale
               })}>
@@ -268,6 +275,18 @@ const ZNotificationSettings: React.FC = () => {
                     <ZIonItem
                       lines='none'
                       key={index}
+                      testinglistselector={`${CONSTANTS.testingSelectors.userAccount.notificationSettingsTab.WSNotificationsAccordion.ownedWSItem}-${index}`}
+                      testingselector={
+                        CONSTANTS.testingSelectors.userAccount
+                          .notificationSettingsTab.WSNotificationsAccordion
+                          .ownedWSItem
+                      }
+                      routerLink={createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.Setting.UserAccount
+                          .WorkspaceNotifications,
+                        params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                        values: [el.id!]
+                      })}
                       className={classNames({
                         'mb-0 ion-activatable ripple-parent cursor-pointer rounded-lg':
                           true,
@@ -324,6 +343,12 @@ const ZNotificationSettings: React.FC = () => {
                     <ZIonItem
                       key={index}
                       lines='none'
+                      testingselector={
+                        CONSTANTS.testingSelectors.userAccount
+                          .notificationSettingsTab.WSNotificationsAccordion
+                          .shareWSItem
+                      }
+                      testinglistselector={`${CONSTANTS.testingSelectors.userAccount.notificationSettingsTab.WSNotificationsAccordion.shareWSItem}-${index}`}
                       className={classNames({
                         'mb-0 ion-activatable ripple-parent cursor-pointer rounded-lg':
                           true,
@@ -361,6 +386,232 @@ const ZNotificationSettings: React.FC = () => {
             </div>
           </ZIonAccordion>
 
+          {/* Invitation notifications */}
+          <ZIonAccordion className='rounded-lg overflow-hidden mb-2'>
+            <ZIonItem
+              slot='header'
+              lines='none'
+              minHeight='25px'
+              color='light'
+              testingselector={
+                CONSTANTS.testingSelectors.userAccount.notificationSettingsTab
+                  .invitationNotificationAccordion.header
+              }
+              className={classNames({
+                'h-[2.9rem]': !isMdScale
+              })}>
+              <ZIonIcon
+                icon={notificationsCircleOutline}
+                className={classNames({
+                  'w-7 h-7': isMdScale,
+                  'w-6 h-6': !isMdScale
+                })}
+              />
+              <ZIonLabel
+                className={classNames({
+                  'ms-2': true,
+                  'my-0': !isMdScale
+                })}>
+                <ZIonText
+                  className={classNames({
+                    'block font-semibold': true,
+                    'text-md': isMdScale,
+                    'text-sm': !isMdScale
+                  })}>
+                  Invitation notification
+                </ZIonText>
+                <ZIonText className='block text-xs'>Push, Email</ZIonText>
+              </ZIonLabel>
+            </ZIonItem>
+            <div
+              className='p-2 border rounded-b-lg border-t-0'
+              slot='content'>
+              <ZIonText
+                className={classNames({
+                  'px-3 mb-1 block font-semibold': true,
+                  'text-md': isLgScale,
+                  'text-sm': !isLgScale,
+                  'ion-text-center': !isMdScale
+                })}>
+                These are notifications for workspaces invitations.
+              </ZIonText>
+              {/* allow notification */}
+              <ZIonItem
+                lines='none'
+                testingselector={
+                  CONSTANTS.testingSelectors.userAccount.notificationSettingsTab
+                    .invitationNotificationAccordion.allowNotificationItem
+                }
+                className={classNames({
+                  'rounded-lg overflow-hidden ion-activatable mb-1 ripple-parent cursor-pointer':
+                    true,
+                  'text-sm': !isLgScale
+                })}>
+                <ZIonIcon
+                  icon={notificationsOutline}
+                  color='dark'
+                  className={classNames({
+                    'w-6 h-6': isLgScale,
+                    'w-5 h-5': !isLgScale
+                  })}
+                />
+                <ZIonLabel
+                  className={classNames({
+                    'block ms-2 font-normal ion-text-wrap': true,
+                    'text-md': isLgScale,
+                    'text-sm': !isLgScale,
+                    'my-0': !isMdScale
+                  })}>
+                  In-App Notifications
+                </ZIonLabel>
+
+                <ZIonText slot='end'>
+                  <ZRCSwitch
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount
+                        .notificationSettingsTab.invitationNotificationAccordion
+                        .allowNotificationToggler
+                    }
+                  />
+                </ZIonText>
+              </ZIonItem>
+
+              {/* receive notifications */}
+              <ZIonText
+                className={classNames({
+                  'px-3 mb-1 block font-semibold': true,
+                  'text-md': isLgScale,
+                  'text-sm': !isLgScale,
+                  'ion-text-center': !isMdScale
+                })}>
+                Where you receive these notifications
+              </ZIonText>
+
+              {/* Push */}
+              <ZIonItem
+                lines='none'
+                testingselector={
+                  CONSTANTS.testingSelectors.userAccount.notificationSettingsTab
+                    .invitationNotificationAccordion.pushItem
+                }
+                className={classNames({
+                  'rounded-lg overflow-hidden ion-activatable mb-1 ripple-parent cursor-pointer':
+                    true,
+                  'text-sm': !isLgScale
+                })}>
+                <ZIonIcon
+                  icon={browsersOutline}
+                  color='dark'
+                  className={classNames({
+                    'w-6 h-6': isLgScale,
+                    'w-5 h-5': !isLgScale
+                  })}
+                />
+                <ZIonLabel
+                  className={classNames({
+                    'block ms-2 font-normal ion-text-wrap': true,
+                    'text-md': isLgScale,
+                    'text-sm': !isLgScale,
+                    'my-0': !isMdScale
+                  })}>
+                  Push
+                </ZIonLabel>
+
+                <ZIonText slot='end'>
+                  <ZRCSwitch
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount
+                        .notificationSettingsTab.invitationNotificationAccordion
+                        .pushToggler
+                    }
+                  />
+                </ZIonText>
+              </ZIonItem>
+
+              {/* Email */}
+              <ZIonItem
+                lines='none'
+                testingselector={
+                  CONSTANTS.testingSelectors.userAccount.notificationSettingsTab
+                    .invitationNotificationAccordion.emailItem
+                }
+                className={classNames({
+                  'rounded-lg overflow-hidden ion-activatable mb-1 ripple-parent cursor-pointer':
+                    true,
+                  'text-sm': !isLgScale
+                })}>
+                <ZIonIcon
+                  icon={mailOutline}
+                  color='dark'
+                  className={classNames({
+                    'w-6 h-6': isLgScale,
+                    'w-5 h-5': !isLgScale
+                  })}
+                />
+                <ZIonLabel
+                  className={classNames({
+                    'block ms-2 font-normal ion-text-wrap': true,
+                    'text-md': isLgScale,
+                    'text-sm': !isLgScale,
+                    'my-0': !isMdScale
+                  })}>
+                  Email
+                </ZIonLabel>
+
+                <ZIonText slot='end'>
+                  <ZRCSwitch
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount
+                        .notificationSettingsTab.invitationNotificationAccordion
+                        .emailToggler
+                    }
+                  />
+                </ZIonText>
+              </ZIonItem>
+
+              {/* SMS */}
+              {/* <ZIonItem
+                lines='none'
+                testingselector={
+                  CONSTANTS.testingSelectors.userAccount.notificationSettingsTab
+                    .invitationNotificationAccordion.smsItem
+                }
+                className={classNames({
+                  'rounded-lg overflow-hidden ion-activatable mb-1 ripple-parent cursor-pointer':
+                    true,
+                  'text-sm': !isLgScale
+                })}>
+                <ZIonIcon
+                  icon={chatbubbleEllipsesOutline}
+                  color='dark'
+                  className={classNames({
+                    'w-6 h-6': isLgScale,
+                    'w-5 h-5': !isLgScale
+                  })}
+                />
+                <ZIonLabel
+                  className={classNames({
+                    'block ms-2 font-normal ion-text-wrap': true,
+                    'text-md': isLgScale,
+                    'text-sm': !isLgScale,
+                    'my-0': !isMdScale
+                  })}>
+                  SMS
+                </ZIonLabel>
+
+                <ZIonText slot='end'>
+                  <ZRCSwitch
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount
+                        .notificationSettingsTab.invitationNotificationAccordion
+                        .smsToggler
+                    }
+                  />
+                </ZIonText>
+              </ZIonItem> */}
+            </div>
+          </ZIonAccordion>
+
           {/* Other notifications */}
           <ZIonAccordion className='rounded-lg overflow-hidden'>
             <ZIonItem
@@ -368,6 +619,10 @@ const ZNotificationSettings: React.FC = () => {
               lines='none'
               minHeight='25px'
               color='light'
+              testingselector={
+                CONSTANTS.testingSelectors.userAccount.notificationSettingsTab
+                  .otherNotificationAccordion.header
+              }
               className={classNames({
                 'h-[2.9rem]': !isMdScale
               })}>
@@ -409,6 +664,10 @@ const ZNotificationSettings: React.FC = () => {
               {/* allow notification */}
               <ZIonItem
                 lines='none'
+                testingselector={
+                  CONSTANTS.testingSelectors.userAccount.notificationSettingsTab
+                    .otherNotificationAccordion.allowNotificationItem
+                }
                 className={classNames({
                   'rounded-lg overflow-hidden ion-activatable mb-1 ripple-parent cursor-pointer':
                     true,
@@ -429,11 +688,17 @@ const ZNotificationSettings: React.FC = () => {
                     'text-sm': !isLgScale,
                     'my-0': !isMdScale
                   })}>
-                  Allow notification on {PRODUCT_NAME}
+                  In-App Notifications
                 </ZIonLabel>
 
                 <ZIonText slot='end'>
-                  <ZRCSwitch />
+                  <ZRCSwitch
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount
+                        .notificationSettingsTab.otherNotificationAccordion
+                        .allowNotificationToggler
+                    }
+                  />
                 </ZIonText>
               </ZIonItem>
 
@@ -450,6 +715,10 @@ const ZNotificationSettings: React.FC = () => {
               {/* Push */}
               <ZIonItem
                 lines='none'
+                testingselector={
+                  CONSTANTS.testingSelectors.userAccount.notificationSettingsTab
+                    .otherNotificationAccordion.pushItem
+                }
                 className={classNames({
                   'rounded-lg overflow-hidden ion-activatable mb-1 ripple-parent cursor-pointer':
                     true,
@@ -474,13 +743,23 @@ const ZNotificationSettings: React.FC = () => {
                 </ZIonLabel>
 
                 <ZIonText slot='end'>
-                  <ZRCSwitch />
+                  <ZRCSwitch
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount
+                        .notificationSettingsTab.otherNotificationAccordion
+                        .pushToggler
+                    }
+                  />
                 </ZIonText>
               </ZIonItem>
 
               {/* Email */}
               <ZIonItem
                 lines='none'
+                testingselector={
+                  CONSTANTS.testingSelectors.userAccount.notificationSettingsTab
+                    .otherNotificationAccordion.emailItem
+                }
                 className={classNames({
                   'rounded-lg overflow-hidden ion-activatable mb-1 ripple-parent cursor-pointer':
                     true,
@@ -505,13 +784,23 @@ const ZNotificationSettings: React.FC = () => {
                 </ZIonLabel>
 
                 <ZIonText slot='end'>
-                  <ZRCSwitch />
+                  <ZRCSwitch
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount
+                        .notificationSettingsTab.otherNotificationAccordion
+                        .emailToggler
+                    }
+                  />
                 </ZIonText>
               </ZIonItem>
 
               {/* SMS */}
               <ZIonItem
                 lines='none'
+                testingselector={
+                  CONSTANTS.testingSelectors.userAccount.notificationSettingsTab
+                    .otherNotificationAccordion.smsItem
+                }
                 className={classNames({
                   'rounded-lg overflow-hidden ion-activatable mb-1 ripple-parent cursor-pointer':
                     true,
@@ -536,7 +825,13 @@ const ZNotificationSettings: React.FC = () => {
                 </ZIonLabel>
 
                 <ZIonText slot='end'>
-                  <ZRCSwitch />
+                  <ZRCSwitch
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount
+                        .notificationSettingsTab.otherNotificationAccordion
+                        .smsToggler
+                    }
+                  />
                 </ZIonText>
               </ZIonItem>
             </div>
@@ -561,6 +856,10 @@ const ZNotificationSettings: React.FC = () => {
               lines='none'
               minHeight='25px'
               color='light'
+              testingselector={
+                CONSTANTS.testingSelectors.userAccount.notificationSettingsTab
+                  .browserNotificationAccordion.header
+              }
               className={classNames({
                 'h-[2.9rem]': !isMdScale
               })}>
@@ -604,6 +903,11 @@ const ZNotificationSettings: React.FC = () => {
                 {/* Chrome */}
                 <ZIonItem
                   lines='none'
+                  testingselector={
+                    CONSTANTS.testingSelectors.userAccount
+                      .notificationSettingsTab.browserNotificationAccordion
+                      .chromeNotificationItem
+                  }
                   className={classNames({
                     'rounded-lg overflow-hidden ion-activatable ripple-parent cursor-pointer':
                       true,
@@ -627,7 +931,13 @@ const ZNotificationSettings: React.FC = () => {
                   </ZIonLabel>
 
                   <ZIonText slot='end'>
-                    <ZRCSwitch />
+                    <ZRCSwitch
+                      testingselector={
+                        CONSTANTS.testingSelectors.userAccount
+                          .notificationSettingsTab.browserNotificationAccordion
+                          .chromeNotificationToggler
+                      }
+                    />
                   </ZIonText>
                 </ZIonItem>
 
@@ -644,6 +954,11 @@ const ZNotificationSettings: React.FC = () => {
 
                   <ZIonItem
                     lines='none'
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount
+                        .notificationSettingsTab.browserNotificationAccordion
+                        .notificationSoundItem
+                    }
                     className={classNames({
                       'rounded-lg overflow-hidden ion-activatable ripple-parent cursor-pointer':
                         true,
@@ -658,12 +973,24 @@ const ZNotificationSettings: React.FC = () => {
                     </ZIonLabel>
 
                     <ZIonText slot='end'>
-                      <ZRCSwitch />
+                      <ZRCSwitch
+                        testingselector={
+                          CONSTANTS.testingSelectors.userAccount
+                            .notificationSettingsTab
+                            .browserNotificationAccordion
+                            .notificationSoundToggler
+                        }
+                      />
                     </ZIonText>
                   </ZIonItem>
 
                   <ZIonItem
                     lines='none'
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount
+                        .notificationSettingsTab.browserNotificationAccordion
+                        .messageSoundItem
+                    }
                     className={classNames({
                       'rounded-lg overflow-hidden ion-activatable ripple-parent cursor-pointer':
                         true,
@@ -678,7 +1005,13 @@ const ZNotificationSettings: React.FC = () => {
                     </ZIonLabel>
 
                     <ZIonText slot='end'>
-                      <ZRCSwitch />
+                      <ZRCSwitch
+                        testingselector={
+                          CONSTANTS.testingSelectors.userAccount
+                            .notificationSettingsTab
+                            .browserNotificationAccordion.messageSoundToggler
+                        }
+                      />
                     </ZIonText>
                   </ZIonItem>
                 </div>
@@ -693,6 +1026,10 @@ const ZNotificationSettings: React.FC = () => {
               minHeight='25px'
               lines='none'
               color='light'
+              testingselector={
+                CONSTANTS.testingSelectors.userAccount.notificationSettingsTab
+                  .emailNotificationAccording.header
+              }
               className={classNames({
                 'h-[2.9rem]': !isMdScale
               })}>
@@ -740,6 +1077,11 @@ const ZNotificationSettings: React.FC = () => {
                     'my-0': !isMdScale
                   })}>
                   <ZIonText
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount
+                        .notificationSettingsTab.emailNotificationAccording
+                        .primaryEmail
+                    }
                     className={classNames({
                       'block font-semibold': true,
                       'text-md': isMdScale,
@@ -765,13 +1107,24 @@ const ZNotificationSettings: React.FC = () => {
                 {/* All */}
                 <ZIonItem
                   lines='none'
+                  testingselector={
+                    CONSTANTS.testingSelectors.userAccount
+                      .notificationSettingsTab.emailNotificationAccording
+                      .allItem
+                  }
                   className={classNames({
                     'rounded-lg overflow-hidden mt-2': true
                   })}
                   style={{
                     '--padding-start': '4px'
                   }}>
-                  <ZIonCheckbox mode='ios'>
+                  <ZIonCheckbox
+                    mode='ios'
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount
+                        .notificationSettingsTab.emailNotificationAccording
+                        .allToggler
+                    }>
                     <ZIonLabel className='ms-3 my-0 ion-text-wrap'>
                       <ZIonText
                         className={classNames({
@@ -791,13 +1144,24 @@ const ZNotificationSettings: React.FC = () => {
                 {/* Suggested */}
                 <ZIonItem
                   lines='none'
+                  testingselector={
+                    CONSTANTS.testingSelectors.userAccount
+                      .notificationSettingsTab.emailNotificationAccording
+                      .suggestedItem
+                  }
                   className={classNames({
                     'rounded-lg overflow-hidden mt-2': true
                   })}
                   style={{
                     '--padding-start': '4px'
                   }}>
-                  <ZIonCheckbox mode='ios'>
+                  <ZIonCheckbox
+                    mode='ios'
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount
+                        .notificationSettingsTab.emailNotificationAccording
+                        .suggestedToggler
+                    }>
                     <ZIonLabel className='ms-3 my-0 ion-text-wrap'>
                       <ZIonText
                         className={classNames({
@@ -818,13 +1182,24 @@ const ZNotificationSettings: React.FC = () => {
                 {/* Required notification */}
                 <ZIonItem
                   lines='none'
+                  testingselector={
+                    CONSTANTS.testingSelectors.userAccount
+                      .notificationSettingsTab.emailNotificationAccording
+                      .requestedItem
+                  }
                   className={classNames({
                     'rounded-lg overflow-hidden mt-2': true
                   })}
                   style={{
                     '--padding-start': '4px'
                   }}>
-                  <ZIonCheckbox mode='ios'>
+                  <ZIonCheckbox
+                    mode='ios'
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount
+                        .notificationSettingsTab.emailNotificationAccording
+                        .requestedToggler
+                    }>
                     <ZIonLabel className='ms-3 my-0 ion-text-wrap'>
                       <ZIonText
                         className={classNames({

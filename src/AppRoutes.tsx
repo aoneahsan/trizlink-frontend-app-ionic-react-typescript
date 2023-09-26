@@ -10,6 +10,7 @@ import ZaionsRoutes from './utils/constants/RoutesConstants';
 // Commented Routes
 import PublicRoute from './components/PublicRoute';
 import PrivateRoute from './components/PrivateRoute';
+const TestingReactDropzone = lazy(() => import('./Testing/ReactDropZone'));
 const Z400View = lazy(() => import('./components/Errors/400'));
 const Z401View = lazy(() => import('./components/Errors/401'));
 const Z403View = lazy(() => import('./components/Errors/403'));
@@ -195,6 +196,12 @@ const AppRoutes = () => {
 
       <Route
         exact
+        path={ZaionsRoutes.Testing.ReactDropzone.Main}
+        component={TestingReactDropzone}
+      />
+
+      <Route
+        exact
         path={ZaionsRoutes.Testing.Page}
         component={ZaionsTestPage}
       />
@@ -306,6 +313,13 @@ const AppRoutes = () => {
 
       <PrivateRoute
         path={ZaionsRoutes.AdminPanel.Setting.UserAccount.ProfileSettings}
+        Component={ZUserAccount}
+      />
+
+      <PrivateRoute
+        path={
+          ZaionsRoutes.AdminPanel.Setting.UserAccount.WorkspaceNotifications
+        }
         Component={ZUserAccount}
       />
 

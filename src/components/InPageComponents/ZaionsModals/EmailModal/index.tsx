@@ -19,12 +19,13 @@ import { closeOutline } from 'ionicons/icons';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonCol,
-	ZIonRow,
-	ZIonText,
-	ZIonContent,
-	ZIonIcon,
-	ZIonFooter,
+  ZIonCol,
+  ZIonRow,
+  ZIonText,
+  ZIonContent,
+  ZIonIcon,
+  ZIonFooter,
+  ZIonInput
 } from '@/components/ZIonComponents';
 
 /**
@@ -32,7 +33,12 @@ import {
  * ? Like import of Constant is a global constants import
  * */
 import MESSAGES from '@/utils/messages';
-import { getRandomKey } from '@/utils/helpers';
+import {
+  extractInnerData,
+  getRandomKey,
+  validateField,
+  zStringify
+} from '@/utils/helpers';
 
 /**
  * Type Imports go down
@@ -47,6 +53,21 @@ import { ZaionsUserAccountEmails } from '@/ZaionsStore/UserAccount/index.recoil'
 import { ZIonButton } from '@/components/ZIonComponents';
 import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
 import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
+import {
+  API_URL_ENUM,
+  extractInnerDataOptionsEnum,
+  VALIDATION_RULE
+} from '@/utils/enums';
+import {
+  useZGetRQCacheData,
+  useZRQCreateRequest,
+  useZUpdateRQCacheData
+} from '@/ZaionsHooks/zreactquery-hooks';
+import { reportCustomError } from '@/utils/customErrorType';
+import { EmailAddressInterface } from '@/types/UserAccount/index.type';
+import CONSTANTS from '@/utils/constants';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { showSuccessNotification } from '@/utils/notification';
 
 /**
  * Style files Imports go down
@@ -70,127 +91,169 @@ import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputFi
  * */
 
 const AddEmailModal: React.FC<{
-	dismissZIonModal: (data?: string, role?: string | undefined) => void;
+  dismissZIonModal: (data?: string, role?: string | undefined) => void;
 }> = ({ dismissZIonModal }) => {
-	const setNewEmailInUserAccount = useSetRecoilState(ZaionsUserAccountEmails);
-	return (
-		<>
-			<Formik
-				initialValues={{ email: '' }}
-				validate={(values) => {
-					const errors: {
-						email?: string;
-					} = {};
+  const setNewEmailInUserAccount = useSetRecoilState(ZaionsUserAccountEmails);
 
-					if (!values.email.trim()) {
-						errors.email = MESSAGES.GENERAL.FORM.FIELDS_INVALID.Email;
-					} else if (!isEmail(values.email)) {
-						errors.email = MESSAGES.GENERAL.FORM.FIELDS_INVALID.NOT_VALID_Email;
-					}
+  // #region Custom hooks.
+  const { getRQCDataHandler } = useZGetRQCacheData();
+  const { updateRQCDataHandler } = useZUpdateRQCacheData();
+  // #endregion
 
-					return errors;
-				}}
-				onSubmit={(values) => {
-					setNewEmailInUserAccount((oldVals) =>
-						oldVals
-							? [
-									...oldVals,
-									{
-										id: getRandomKey(),
-										emailAddress: values.email,
-										isPrimary: false,
-										isVarified: false,
-									},
-							  ]
-							: [
-									{
-										id: getRandomKey(),
-										emailAddress: values.email,
-										isPrimary: false,
-										isVarified: false,
-									},
-							  ]
-					);
-					dismissZIonModal();
-				}}
-			>
-				{({
-					values,
-					errors,
-					handleChange,
-					handleBlur,
-					submitForm,
-					isValid,
-					touched,
-				}) => (
-					<>
-						<ZIonContent className='ion-padding-vertical '>
-							<ZIonRow className='ion-padding'>
-								<ZIonCol className='flex flex-col ion-justify-content-end ion-align-items-center mt-3'>
-									<ZIonTitle className='ion-no-padding mb-3'>
-										<h3 className='font-bold'>Add a new email address</h3>
-									</ZIonTitle>
-									<ZIonText className='block'>
-										A verification email will be sent to this address after
-										clicking Save. New email addresses cannot be designated as
-										primary until they have been verified.
-									</ZIonText>
-								</ZIonCol>
-								<ZIonCol className='flex ion-justify-content-end ion-align-items-start ion-no-padding'>
-									<ZIonButton
-										fill='clear'
-										className='ion-no-padding ion-no-margin me-2'
-										color='dark'
-										onClick={() => dismissZIonModal()}
-									>
-										<ZIonIcon icon={closeOutline} size='large' />
-									</ZIonButton>
-								</ZIonCol>
-							</ZIonRow>
+  // #region APIS.
+  const { mutateAsync: addEmailAsyncMutate } = useZRQCreateRequest({
+    _url: API_URL_ENUM.addEmail,
+    _loaderMessage: 'Sending OTP (One-time-password)'
+  });
+  // #endregion
 
-							<ZIonInputField
-								inputFieldProps={{
-									className: classNames({
-										'ion-margin-start ion-margin-end': true,
-										'ion-touched ion-invalid': touched.email && errors.email,
-										'ion-touched ion-valid': touched.email && !errors.email,
-									}),
-									label: 'Email address*',
-									labelPlacement: 'floating',
-									name: 'email',
-									onIonChange: handleChange,
-									onIonBlur: handleBlur,
-									value: values.email,
-									errorText: errors.email,
-								}}
-							/>
-						</ZIonContent>
+  // #region Functions.
+  const ZAddEmailHandler = async (_data: string) => {
+    try {
+      if (_data) {
+        const __response = await addEmailAsyncMutate(_data);
 
-						<ZIonFooter className='ion-text-end py-2'>
-							<ZIonButton
-								className='me-4'
-								fill='outline'
-								onClick={() => dismissZIonModal()}
-							>
-								Cancel
-							</ZIonButton>
-							<ZIonButton
-								className='me-4'
-								color='tertiary'
-								onClick={() => {
-									if (isValid) {
-										void submitForm();
-									}
-								}}
-							>
-								Save
-							</ZIonButton>
-						</ZIonFooter>
-					</>
-				)}
-			</Formik>
-		</>
-	);
+        if (__response) {
+          const __data = extractInnerData<EmailAddressInterface>(
+            __response,
+            extractInnerDataOptionsEnum.createRequestResponseItem
+          );
+
+          if (__data?.id) {
+            // getting all the emails from RQ cache.
+            const _oldUserEmails =
+              extractInnerData<EmailAddressInterface[]>(
+                getRQCDataHandler<EmailAddressInterface[]>({
+                  key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.EMAILS]
+                }) as EmailAddressInterface[],
+                extractInnerDataOptionsEnum.createRequestResponseItems
+              ) || [];
+
+            // Adding newly created emails data.
+            const updatedUserEmails = [..._oldUserEmails, __data];
+
+            // Updating data in RQ cache.
+            await updateRQCDataHandler<EmailAddressInterface[] | undefined>({
+              key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.EMAILS],
+              data: updatedUserEmails as EmailAddressInterface[],
+              id: '',
+              extractType: ZRQGetRequestExtractEnum.extractItems,
+              updateHoleData: true
+            });
+
+            showSuccessNotification(MESSAGES.USER.ADD_EMAIL);
+
+            // After updating cache dismissing modal.
+            dismissZIonModal();
+          }
+        }
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
+  // #endregion
+
+  return (
+    <>
+      <Formik
+        initialValues={{ email: '' }}
+        validate={values => {
+          const errors: {
+            email?: string;
+          } = {};
+
+          validateField('email', values, errors, VALIDATION_RULE.email);
+
+          return errors;
+        }}
+        onSubmit={values => {
+          const __zStringifyData = zStringify({
+            email: values.email
+          });
+          void ZAddEmailHandler(__zStringifyData);
+        }}>
+        {({
+          values,
+          errors,
+          isValid,
+          touched,
+          handleChange,
+          handleBlur,
+          submitForm
+        }) => (
+          <>
+            <ZIonContent className='ion-no-padding ion-padding-horizontal'>
+              <div className='mt-5'>
+                <div className='flex ion-align-items-start ion-justify-content-between'>
+                  <ZIonTitle className='ion-no-padding ion-no-margin mb-3 font-semibold'>
+                    Add a new email address
+                  </ZIonTitle>
+
+                  <ZIonIcon
+                    icon={closeOutline}
+                    className='w-6 h-6 cursor-pointer'
+                    onClick={() => dismissZIonModal()}
+                  />
+                </div>
+
+                <ZIonText className='block'>
+                  A verification six digits <b>OTP</b> (One-time-password) will
+                  be sent to this email address after clicking Save. New email
+                  addresses cannot be designated as primary until they have been
+                  verified.
+                </ZIonText>
+              </div>
+
+              {/* Email input */}
+              <ZIonInput
+                name='email'
+                label='Email'
+                minHeight='2.3rem'
+                labelPlacement='stacked'
+                value={values.email}
+                errorText={touched.email ? errors.email : undefined}
+                onIonChange={handleChange}
+                onIonBlur={handleBlur}
+                className={classNames({
+                  'mt-5': true,
+                  'ion-touched': touched.email,
+                  'ion-invalid': touched.email && errors.email,
+                  'ion-valid': touched.email && !errors.email
+                })}
+              />
+            </ZIonContent>
+
+            <ZIonFooter className='ion-text-end py-1'>
+              <ZIonButton
+                className='me-4'
+                fill='outline'
+                onClick={() => dismissZIonModal()}>
+                Cancel
+              </ZIonButton>
+              <div
+                className={classNames({
+                  'inline-block': true,
+                  'cursor-not-allowed': !isValid
+                })}>
+                <ZIonButton
+                  className='me-4'
+                  disabled={!isValid}
+                  color='tertiary'
+                  onClick={() => {
+                    if (isValid) {
+                      void submitForm();
+                    }
+                  }}>
+                  Save
+                </ZIonButton>
+              </div>
+            </ZIonFooter>
+          </>
+        )}
+      </Formik>
+    </>
+  );
 };
 
 export default AddEmailModal;

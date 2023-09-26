@@ -14,10 +14,10 @@ import React from 'react';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonBadge,
-	ZIonCol,
-	ZIonRow,
-	ZIonText,
+  ZIonBadge,
+  ZIonCol,
+  ZIonRow,
+  ZIonText
 } from '@/components/ZIonComponents';
 import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 
@@ -58,8 +58,8 @@ import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
  * ? Like if you have a type for props it should be please Down
  * */
 interface ZUserInfoPopoverInterface {
-	showBadges: boolean;
-	user: UserAccountType;
+  showBadges: boolean;
+  user: UserAccountType;
 }
 
 /**
@@ -69,42 +69,46 @@ interface ZUserInfoPopoverInterface {
  * */
 
 const ZUserInfoPopover: React.FC<ZUserInfoPopoverInterface> = ({
-	showBadges = false,
-	user,
+  showBadges = false,
+  user
 }) => {
-	return (
-		<ZIonRow className='px-2 my-2 ion-align-items-center'>
-			{/* User avatar col */}
-			<ZIonCol size='max-content'>
-				<ZUserAvatarButton
-					className='w-[50px] h-[50px]'
-					userAvatar={
-						user?.profilePitcher ||
-						getUiAvatarApiUrl({
-							name: user?.username,
-						})
-					}
-				/>
-			</ZIonCol>
+  return (
+    <ZIonRow className='px-2 my-2 ion-align-items-center'>
+      {/* User avatar col */}
+      <ZIonCol size='max-content'>
+        <ZUserAvatarButton
+          className='w-[50px] h-[50px]'
+          userAvatar={
+            user?.avatar ||
+            getUiAvatarApiUrl({
+              name: user?.username
+            })
+          }
+        />
+      </ZIonCol>
 
-			{/* User info col */}
-			<ZIonCol>
-				<ZIonText className='block text-[1rem]'>{user?.username}</ZIonText>
-				<ZIonText className='block text-sm'>{user?.email}</ZIonText>
-			</ZIonCol>
+      {/* User info col */}
+      <ZIonCol>
+        <ZIonText className='block text-[1rem]'>{user?.username}</ZIonText>
+        <ZIonText className='block text-sm'>{user?.email}</ZIonText>
+      </ZIonCol>
 
-			{showBadges && (
-				<ZIonCol size='12' className='flex gap-2 ps-5'>
-					<ZIonBadge className='ms-4'>Team</ZIonBadge>
-					<ZIonBadge color='secondary'>Company owner</ZIonBadge>
-				</ZIonCol>
-			)}
+      {showBadges && (
+        <ZIonCol
+          size='12'
+          className='flex gap-2 ps-5'>
+          <ZIonBadge className='ms-4'>Team</ZIonBadge>
+          <ZIonBadge color='secondary'>Company owner</ZIonBadge>
+        </ZIonCol>
+      )}
 
-			<ZIonCol size='12' className='px-3 py-3 mt-2 border-top'>
-				<ZIonText className='block text-sm'>last seen: just now</ZIonText>
-			</ZIonCol>
-		</ZIonRow>
-	);
+      <ZIonCol
+        size='12'
+        className='px-3 py-3 mt-2 border-top'>
+        <ZIonText className='block text-sm'>last seen: just now</ZIonText>
+      </ZIonCol>
+    </ZIonRow>
+  );
 };
 
 export default ZUserInfoPopover;

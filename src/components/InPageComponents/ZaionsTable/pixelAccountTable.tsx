@@ -17,11 +17,24 @@ import {
   getPaginationRowModel,
   useReactTable
 } from '@tanstack/react-table';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  chevronBackOutline,
+  chevronForwardOutline,
+  createOutline,
+  ellipsisVerticalOutline,
+  playBackOutline,
+  playForwardOutline,
+  trashBinOutline
+} from 'ionicons/icons';
+import { useParams } from 'react-router';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
+import ZCan from '@/components/Can';
+import ZaionsAddPixelAccount from '../ZaionsModals/AddPixelsAccount';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 import {
   ZIonButton,
@@ -30,7 +43,6 @@ import {
   ZIonIcon,
   ZIonItem,
   ZIonList,
-  ZIonRouterLink,
   ZIonRow,
   ZIonSelect,
   ZIonSelectOption,
@@ -48,8 +60,7 @@ import {
   useZIonAlert,
   useZIonErrorAlert,
   useZIonModal,
-  useZIonPopover,
-  useZIonToast
+  useZIonPopover
 } from '@/ZaionsHooks/zionic-hooks';
 import {
   useZGetRQCacheData,
@@ -65,6 +76,15 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * */
 import CONSTANTS from '@/utils/constants';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import { createRedirectRoute, extractInnerData } from '@/utils/helpers';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import {
+  showErrorNotification,
+  showSuccessNotification
+} from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
+import { reportCustomError } from '@/utils/customErrorType';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Type Imports go down
@@ -80,40 +100,16 @@ import {
   ZUserSettingInterface,
   ZUserSettingTypeEnum
 } from '@/types/AdminPanel/index.type';
-import {
-  chevronBackOutline,
-  chevronForwardOutline,
-  createOutline,
-  ellipsisVerticalOutline,
-  playBackOutline,
-  playForwardOutline,
-  trashBinOutline
-} from 'ionicons/icons';
-import { createRedirectRoute, extractInnerData } from '@/utils/helpers';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { useParams } from 'react-router';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import {
-  showErrorNotification,
-  showSuccessNotification
-} from '@/utils/notification';
-import MESSAGES from '@/utils/messages';
-import { reportCustomError } from '@/utils/customErrorType';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
-import ZCan from '@/components/Can';
-import ZaionsAddPixelAccount from '../ZaionsModals/AddPixelsAccount';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
-import { PixelAccountFormState } from '@/ZaionsStore/FormStates/pixelAccountFormState.recoil';
-import {
-  FilteredPixelsDataRStateSelector,
-  PixelAccountsRStateAtom
-} from '@/ZaionsStore/UserDashboard/PixelAccountsState/index.recoil';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
+import {
+  FilteredPixelsDataRStateSelector,
+  PixelAccountsRStateAtom
+} from '@/ZaionsStore/UserDashboard/PixelAccountsState/index.recoil';
 
 /**
  * Style files Imports go down
@@ -979,9 +975,9 @@ const ZPixelActionPopover: React.FC<{
   // #endregion
 
   // Request for deleting pixel.
-  const { mutateAsync: deletePixelMutate } = useZRQDeleteRequest(
-    API_URL_ENUM.userPixelAccounts_update_delete
-  );
+  const { mutateAsync: deletePixelMutate } = useZRQDeleteRequest({
+    _url: API_URL_ENUM.userPixelAccounts_update_delete
+  });
 
   const { data: PixelsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,

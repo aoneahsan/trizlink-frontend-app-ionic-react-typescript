@@ -2,26 +2,23 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { lazy, Suspense } from 'react';
+import { ZIonButton, ZIonInput, ZIonText } from '@/components/ZIonComponents';
+import React from 'react';
 
 /**
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import classNames from 'classnames';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonRow, ZIonTitle } from '@/components/ZIonComponents';
-import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -59,25 +56,24 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * @type {*}
  * */
 
-const ZUserSettingsSettings: React.FC = () => {
-  // #region Custom hooks.
-  const { isSmScale, isLgScale, isMdScale } = useZMediaQueryScale();
-  // #endregion
-
-  // #region Functions.
-
-  // #endregion
-
+const ZConfirmEmailOTPPopover: React.FC = () => {
   return (
-    <ZIonRow className='ion-align-items-center ion-padding'>
-      <ZIonTitle
-        className={classNames({
-          'block font-bold ion-no-padding text-2xl': true
-        })}>
-        User settings
-      </ZIonTitle>
-    </ZIonRow>
+    <div className='ion-text-center'>
+      <ZIonText>
+        A verification OTP(One-time-password) has been sent to your email. Enter
+        it below
+      </ZIonText>
+
+      <ZIonInput
+        name='confirmOTP'
+        label='Confirm OTP'
+        labelPlacement='stacked'
+        minHeight='2.3rem'
+      />
+
+      <ZIonButton>Confirm OTP</ZIonButton>
+    </div>
   );
 };
 
-export default ZUserSettingsSettings;
+export default ZConfirmEmailOTPPopover;

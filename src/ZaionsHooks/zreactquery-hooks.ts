@@ -430,11 +430,21 @@ export const useZRQUpdateRequest = <T>({
  * query.
  * @returns return an presentZIonErrorAlert and error if not succeed. if success then a recode will deleted.
  */
-export const useZRQDeleteRequest = <T>(
-  _url: API_URL_ENUM,
-  _queriesKeysToInvalidate?: string[],
-  authenticated?: boolean
-) => {
+export const useZRQDeleteRequest = <T>({
+  _url,
+  _queriesKeysToInvalidate,
+  _authenticated,
+  _showAlertOnError = true,
+  _showLoader = true,
+  _loaderMessage = MESSAGES.GENERAL.API_REQUEST.DELETING
+}: {
+  _url: API_URL_ENUM;
+  _queriesKeysToInvalidate?: string[];
+  _authenticated?: boolean;
+  _showAlertOnError?: boolean;
+  _showLoader?: boolean;
+  _loaderMessage?: string;
+}) => {
   const { presentZIonErrorAlert } = useZIonErrorAlert();
   const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
   const queryClient = useQueryClient();
@@ -454,7 +464,7 @@ export const useZRQDeleteRequest = <T>(
       urlDynamicParts: string[];
     }): Promise<T | undefined> => {
       // Present ion loading before api start
-      await presentZIonLoader(MESSAGES.GENERAL.API_REQUEST.DELETING);
+      _showLoader && (await presentZIonLoader(_loaderMessage));
 
       /**
        * @_url - takes the post url to post data to api.
@@ -467,7 +477,7 @@ export const useZRQDeleteRequest = <T>(
       return await zAxiosApiRequest({
         _url: _url,
         _method: 'delete',
-        _isAuthenticatedRequest: authenticated,
+        _isAuthenticatedRequest: _authenticated,
         _data: undefined,
         _itemIds: itemIds,
         _urlDynamicParts: urlDynamicParts
@@ -478,7 +488,7 @@ export const useZRQDeleteRequest = <T>(
     },
     onSuccess: _data => {
       // onSucceed dismissing loader...
-      void dismissZIonLoader();
+      _showLoader && void dismissZIonLoader();
       if (_queriesKeysToInvalidate?.length) {
         void queryClient.invalidateQueries({
           queryKey: _queriesKeysToInvalidate
@@ -487,10 +497,10 @@ export const useZRQDeleteRequest = <T>(
     },
     onError: async _error => {
       // OnError dismissing loader...
-      void dismissZIonLoader();
+      _showLoader && void dismissZIonLoader();
 
       // showing error alert...
-      void presentZIonErrorAlert();
+      _showAlertOnError && void presentZIonErrorAlert();
       // TODO create a helper function to throw a ZCustomError so if we add sentry or some other error logging then it will be easy to track that as well
 
       // throw the request_failed error

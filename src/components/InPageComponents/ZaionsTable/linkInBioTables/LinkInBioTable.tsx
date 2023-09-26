@@ -755,10 +755,9 @@ const ZLinkInBioActionPopover: React.FC<{
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
   // #region APIS requests.
-  const { mutateAsync: deleteLinkInBioLinkMutateAsync } = useZRQDeleteRequest(
-    API_URL_ENUM.linkInBio_update_delete,
-    []
-  );
+  const { mutateAsync: deleteLinkInBioLinkMutateAsync } = useZRQDeleteRequest({
+    _url: API_URL_ENUM.linkInBio_update_delete
+  });
   // #endregion
 
   // #region Functions.

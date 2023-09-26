@@ -102,9 +102,9 @@ const ZWSSettingPixelListPage: React.FC = () => {
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN]
   });
 
-  const { mutate: deletePixelAccountMutate } = useZRQDeleteRequest(
-    API_URL_ENUM.userPixelAccounts_update_delete
-  );
+  const { mutate: deletePixelAccountMutate } = useZRQDeleteRequest({
+    _url: API_URL_ENUM.userPixelAccounts_update_delete
+  });
   // #endregion
 
   // #region Modals & popovers

@@ -111,7 +111,8 @@ const ZaionsRoutes = {
       UserAccount: {
         Main: `${ZPrivateRoutePath}/user-account`,
         ProfileSettings: `${ZPrivateRoutePath}/user-account/profile-settings`,
-        NotificationSettings: `${ZPrivateRoutePath}/user-account/notification-settings`
+        NotificationSettings: `${ZPrivateRoutePath}/user-account/notification-settings`,
+        WorkspaceNotifications: `${ZPrivateRoutePath}/user-account/workspace/${workspaceIdParam}/notifications`
       }
     },
 
@@ -151,6 +152,9 @@ const ZaionsRoutes = {
 
   Testing: {
     Page: '/testing/page',
+    ReactDropzone: {
+      Main: '/testing/react-dropzone'
+    },
     ReactTable: {
       Main: '/testing/react-table'
     },

@@ -315,9 +315,9 @@ const ZTimeSlotActionPopover: React.FC<{
 
   // #region APIS.
   // Request for deleting time slot.
-  const { mutateAsync: deleteTimeSlotMutate } = useZRQDeleteRequest(
-    API_URL_ENUM.time_slot_update_delete
-  );
+  const { mutateAsync: deleteTimeSlotMutate } = useZRQDeleteRequest({
+    _url: API_URL_ENUM.time_slot_update_delete
+  });
   // #endregion
 
   // #region Custom hooks

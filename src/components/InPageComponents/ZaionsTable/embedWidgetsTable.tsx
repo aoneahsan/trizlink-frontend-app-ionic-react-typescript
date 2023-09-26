@@ -1044,9 +1044,9 @@ const ZEmbedWidgetActionPopover: React.FC<{
   // #endregion
 
   // Request for deleting UTM tag.
-  const { mutateAsync: deleteUtmTagMutate } = useZRQDeleteRequest(
-    API_URL_ENUM.userAccountUtmTags_update_delete
-  );
+  const { mutateAsync: deleteUtmTagMutate } = useZRQDeleteRequest({
+    _url: API_URL_ENUM.userAccountUtmTags_update_delete
+  });
 
   const { data: UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,

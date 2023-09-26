@@ -109,10 +109,9 @@ const FolderActionsPopoverContent: React.FC<{
   /**
    * delete short link folder api.
    */
-  const { mutateAsync: deleteFolderMutate } = useZRQDeleteRequest(
-    API_URL_ENUM.folders_update_delete,
-    []
-  );
+  const { mutateAsync: deleteFolderMutate } = useZRQDeleteRequest({
+    _url: API_URL_ENUM.folders_update_delete
+  });
 
   /**
    * deleteFolderAccount will show the confirm alert before deleting short link folder.

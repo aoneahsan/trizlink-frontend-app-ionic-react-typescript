@@ -15,6 +15,7 @@ type ZIonLabelType = {
   mode?: ZIonModeType;
   position?: 'fixed' | 'floating' | 'stacked';
   className?: string;
+  slot?: 'start' | 'end';
   testingselector?: string;
   testinglistselector?: string;
   onClick?: () => void;

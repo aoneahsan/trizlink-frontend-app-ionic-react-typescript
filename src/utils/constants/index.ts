@@ -63,6 +63,7 @@ const RouteParams = {
   },
 
   user: {
+    itemId: ':itemId',
     notification: {
       type: ':type',
       id: ':id'
@@ -106,6 +107,12 @@ export const API_URLS = {
   verifyAuthenticationStatus: '/verify-authentication-status',
   register: '/register',
   getUserRolePermission: '/user/role/permissions',
+  updateUserAccountInfo: '/user/update-account-info',
+  userEmailsList: '/user/list-emails',
+  userEmailDelete: `/user/delete-email/${RouteParams.user.itemId}`,
+  addEmail: '/user/add-email',
+  confirmEmailOTP: `/user/confirm-email-otp/${RouteParams.user.itemId}`,
+  resendEmailOTP: `/user/resend-email-otp/${RouteParams.user.itemId}`,
   csrf: '/sanctum/csrf-cookie',
   delete: '/user/delete',
   ws_roles_get: '/user/ws-roles',
@@ -1149,7 +1156,7 @@ const testingSelectors = {
   // #region top bar
   topBar: {
     goToWorkspacesBtn: 'tb-go-to-workspaces-btn',
-    openWSSettingMenuBtn: 'tb-open-ws-settings-menu-btn',
+    openInpageMenuBtn: 'tb-open-page-menu-btn',
     workspaceSwitcherBtn: 'tb-ws-btn', // top-bar-workspace-switcher-btn.
     workspaceSwitcherPopover: {
       singleWorkspace: 'tb-wsp-single-workspace', // top-bar-workspace-switcher-popover-...
@@ -1275,6 +1282,104 @@ const testingSelectors = {
       closeButton: 'wcm-close-btn',
       titleInput: 'wcm-title-input',
       descriptionTextarea: 'wcm-description-textarea'
+    }
+  },
+  // #endregion
+
+  // #region User account
+  userAccount: {
+    // us => userAccount
+    mainContainer: 'ua-main-container',
+    ionMenu: {
+      // us-im => userAccount-ionMenu
+      closeMenuBtn: 'ua-im-close-btn',
+      notificationSettings: 'ua-im-ns-btn', // us-im-ns => userAccount-ionMenu-notificationSettings
+      profileSettings: 'ua-im-ps-btn' // us-im-ns => userAccount-ionMenu-profileSettings
+    },
+    menuBar: {
+      notificationSettings: 'ua-mb-ns-btn', // us-mb-ns => userAccount-menuBar-notificationSettings
+      profileSettings: 'ua-mb-ps-btn' // us-mb-ns => userAccount-menuBar-profileSettings
+    },
+    notificationSettingsTab: {
+      // nst => notificationSettingsTab
+      WSNotificationsAccordion: {
+        header: 'nst-ws-na-header', // nst-ws-ns => notificationSettingsTab-workspace-notificationAccordion
+        ownedWSItem: 'nst-owned-ws-item',
+        shareWSItem: 'nst-share-ws-item'
+      },
+      otherNotificationAccordion: {
+        header: 'nst-ona-header', // nst-ona => notificationSettingsTab-otherNotificationsAccordion
+        allowNotificationItem: 'nst-ona-allow-notification-item',
+        allowNotificationToggler: 'nst-ona-allow-notification-toggler',
+
+        pushItem: 'nst-ona-push-item',
+        pushToggler: 'nst-ona-push-toggler',
+
+        emailItem: 'nst-ona-email-item',
+        emailToggler: 'nst-ona-email-toggler',
+
+        smsItem: 'nst-ona-sms-item',
+        smsToggler: 'nst-ona-sms-toggler'
+      },
+      invitationNotificationAccordion: {
+        header: 'nst-ina-header', // nst-ina => notificationSettingsTab-invitationNotificationAccordion
+        allowNotificationItem: 'nst-ina-allow-notification-item',
+        allowNotificationToggler: 'nst-ina-allow-notification-toggler',
+
+        pushItem: 'nst-ina-push-item',
+        pushToggler: 'nst-ina-push-toggler',
+
+        emailItem: 'nst-ina-email-item',
+        emailToggler: 'nst-ina-email-toggler',
+
+        smsItem: 'nst-ina-sms-item',
+        smsToggler: 'nst-ina-sms-toggler'
+      },
+      browserNotificationAccordion: {
+        header: 'nst-bna-header', // nst-bna => notificationSettingsTab-browserNotificationAccordion
+
+        chromeNotificationItem: 'nst-bna-cn-item',
+        chromeNotificationToggler: 'nst-bna-cn-toggler',
+
+        notificationSoundItem: 'nst-bna-ns-item',
+        notificationSoundToggler: 'nst-bna-ns-toggler',
+
+        messageSoundItem: 'nst-bna-ms-item',
+        messageSoundToggler: 'nst-bna-ms-toggler'
+      },
+      emailNotificationAccording: {
+        header: 'nst-ena-header', // nst-ena => notificationSettingsTab-emailNotificationAccordion
+        primaryEmail: 'nst-ena-primary-email',
+
+        allItem: 'nst-bna-all-item',
+        allToggler: 'nst-bna-all-toggler',
+
+        suggestedItem: 'nst-bna-suggested-item',
+        suggestedToggler: 'nst-bna-suggested-toggler',
+
+        requestedItem: 'nst-bna-requested-item',
+        requestedToggler: 'nst-bna-requested-toggler'
+      }
+    },
+    profileSettingsTab: {
+      // pst => profileSettingsTab
+      usernameInput: 'ua-pst-username-input',
+      updateProfileBtn: 'ua-pst-update-profile-btn',
+      addNewEmailBtn: 'ua-pst-add-new-email-btn',
+      updatePrimaryEmailBtn: 'ua-pst-update-primary-email-btn',
+      currentPasswordInput: 'ua-pst-current-password-input',
+      currentPasswordSeeBtn: 'ua-pst-current-password-see-btn',
+
+      newPasswordInput: 'ua-pst-new-password-input',
+      newPasswordSeeBtn: 'ua-pst-new-password-see-btn',
+
+      confirmPasswordInput: 'ua-pst-confirm-password-input',
+      confirmPasswordSeeBtn: 'ua-pst-confirm-see-btn',
+
+      changePasswordBtn: 'ua-pst-change-password-btn',
+      twoAuthenticationPhoneInput: 'ua-pst-ta-phone-input',
+      twoAuthenticationBtn: 'ua-pst-ta-sv-input',
+      logoutAllSession: 'ua-pst-logout-all-session'
     }
   }
   // #endregion
@@ -1446,8 +1551,9 @@ const REACT_QUERY = {
     },
 
     USER: {
-      ROLE_PERMISSIONS: 'rq-user-roles-and-permissions',
-      WS_ROLES: 'rq-user-ws-roles',
+      EMAILS: 'rq-user-emails-key',
+      ROLE_PERMISSIONS: 'rq-user-roles-and-permissions-key',
+      WS_ROLES: 'rq-user-ws-roles-key',
       NOTIFICATION: {
         MAIN: 'rq-user-notification-main-key'
       },

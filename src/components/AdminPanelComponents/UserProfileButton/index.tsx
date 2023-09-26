@@ -61,31 +61,31 @@ import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.rec
  * */
 
 const ZUserProfileButton: React.FC<{
-	width?: string;
-	height?: string;
+  width?: string;
+  height?: string;
 }> = ({ width = '44px', height = '44px' }) => {
-	const { presentZIonPopover: presentWorkspaceProfilePopover } = useZIonPopover(
-		ZWorkspaceProfilePopover
-	); // popover hook to show ZWorkspaceProfilePopover
+  const { presentZIonPopover: presentWorkspaceProfilePopover } = useZIonPopover(
+    ZWorkspaceProfilePopover
+  ); // popover hook to show ZWorkspaceProfilePopover
 
-	const zUserAccountStateAtom = useRecoilValue(ZaionsUserAccountRStateAtom);
+  const zUserAccountStateAtom = useRecoilValue(ZaionsUserAccountRStateAtom);
 
-	return (
-		<ZUserAvatarButton
-			userAvatar={zUserAccountStateAtom?.profilePitcher}
-			userAvatarUi={{
-				name: zUserAccountStateAtom?.username,
-			}}
-			style={{ height: height, width: width }}
-			onClick={(event: unknown) => {
-				presentWorkspaceProfilePopover({
-					_event: event as Event,
-					_cssClass: 'zaions_workspaces_profile_popover_size',
-					_dismissOnSelect: false,
-				});
-			}}
-		/>
-	);
+  return (
+    <ZUserAvatarButton
+      userAvatar={zUserAccountStateAtom?.avatar}
+      userAvatarUi={{
+        name: zUserAccountStateAtom?.username
+      }}
+      style={{ height: height, width: width }}
+      onClick={(event: unknown) => {
+        presentWorkspaceProfilePopover({
+          _event: event as Event,
+          _cssClass: 'zaions_workspaces_profile_popover_size',
+          _dismissOnSelect: false
+        });
+      }}
+    />
+  );
 };
 
 export default ZUserProfileButton;

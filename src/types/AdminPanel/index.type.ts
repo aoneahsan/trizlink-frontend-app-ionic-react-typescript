@@ -89,6 +89,11 @@ export enum EZGeoLocationCondition {
   notWithin = 'notWithin'
 }
 
+export enum EmailStatusEnum {
+  Verified = 'Verified',
+  Unverified = 'Unverified'
+}
+
 export enum ZPixelsListPageTableColumnsIds {
   id = '__z_pixels_id__',
   title = '__z_pixels_title__',
@@ -121,6 +126,18 @@ export enum ZMembersListPageTableColumnsIds {
   invitedAt = '__z_member_invited_at__',
   invitedAcceptedAt = '__z_member_invited_accepted_at__',
   actions = '__z_member_actions__'
+}
+
+export enum ZEmailAddressesListPageTableColumnIds {
+  id = '__z_email_id__',
+  createAt = '__z_email_create_at__',
+  formattedCreateAt = '__z_email_formatted_create_at__',
+  email = '__z_email_emailAddress__',
+  status = '__z_email_status__',
+  OTP = '__z_email_otp__',
+  isPrimary = '__z_email_isPrimary__',
+  actions = '__z_email_actions__',
+  verifiedAt = '__z_email_verified_at__'
 }
 
 // Interfaces

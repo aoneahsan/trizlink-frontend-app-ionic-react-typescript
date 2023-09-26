@@ -828,9 +828,9 @@ const ZMemberActionPopover: React.FC<{
     _loaderMessage: 'Canceling invitation...'
   });
 
-  const { mutateAsync: deleteInvitationAsyncMutate } = useZRQDeleteRequest(
-    API_URL_ENUM.ws_team_member_invite_delete
-  );
+  const { mutateAsync: deleteInvitationAsyncMutate } = useZRQDeleteRequest({
+    _url: API_URL_ENUM.ws_team_member_invite_delete
+  });
   // #endregion
 
   useEffect(() => {

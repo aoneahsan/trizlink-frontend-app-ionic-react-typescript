@@ -710,6 +710,10 @@ export const getUserDataObjectForm = (_user: UserAccountType) => {
   return {
     id: _user?.id?.toString(),
     username: _user?.username,
+    name: _user?.name,
+    avatar: _user?.avatar,
+    phoneNumber: _user?.phoneNumber,
+    profileImage: _user?.profileImage,
     email: _user?.email,
     email_verified_at: _user?.email_verified_at,
     password: _user?.password,
@@ -1531,6 +1535,17 @@ export const zGetRoutePermissions = ({
 
       case ZaionsRoutes.AdminPanel.Setting.UserAccount.NotificationSettings:
         __permissions = [permissionsEnum.viewAny_workspace];
+        break;
+
+      case ZaionsRoutes.AdminPanel.Setting.UserAccount.ProfileSettings:
+        __permissions = [permissionsEnum.viewAny_emails];
+        break;
+
+      case ZaionsRoutes.AdminPanel.Setting.UserAccount.WorkspaceNotifications:
+        __permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.view_workspace
+        ];
         break;
 
       case ZaionsRoutes.AdminPanel.Setting.AccountSettings.ViewTeam:

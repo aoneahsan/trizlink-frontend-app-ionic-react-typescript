@@ -331,14 +331,13 @@ const ZADTopBarColOne: React.FC<{
 
           {!isMdScale ? (
             <ZIonButton
-              className='w-[2rem] rounded-full overflow-hidden ion-no-padding ion-no-margin'
               minHeight='2rem'
               color='tertiary'
               fill='clear'
-              testingselector={
-                CONSTANTS.testingSelectors.topBar.openWSSettingMenuBtn
-              }
+              className='w-[2rem] rounded-full overflow-hidden ion-no-padding ion-no-margin'
               onClick={menuOnClickFn}>
+              testingselector=
+              {CONSTANTS.testingSelectors.topBar.openInpageMenuBtn}
               <ZIonIcon
                 icon={menu}
                 className='w-6 h-6'

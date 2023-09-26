@@ -78,7 +78,10 @@ import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.rec
  * @type {*}
  * */
 
-const ZWorkspaceProfilePopover: React.FC = () => {
+const ZWorkspaceProfilePopover: React.FC<{
+  dismissZIonPopover: (data?: string, role?: string) => void;
+  zNavigatePushRoute: (_url: string) => void;
+}> = ({ dismissZIonPopover, zNavigatePushRoute }) => {
   // Custom hooks.
   const { presentZIonLoader, dismissZIonLoader } = useZIonLoading(); // hook to show loader
 
@@ -126,7 +129,7 @@ const ZWorkspaceProfilePopover: React.FC = () => {
         <ZIonCol size='max-content'>
           <ZUserAvatarButton
             className='w-[10px] h-[10px] me-1'
-            userAvatar={zUserAccountStateAtom?.profilePitcher}
+            userAvatar={zUserAccountStateAtom?.avatar}
             userAvatarUi={{
               name: zUserAccountStateAtom?.username
             }}
@@ -156,9 +159,12 @@ const ZWorkspaceProfilePopover: React.FC = () => {
           testingselector={
             CONSTANTS.testingSelectors.user.profilePopover.profileSettings
           }
-          routerLink={
-            ZaionsRoutes.AdminPanel.Setting.UserAccount.ProfileSettings
-          }>
+          onClick={() => {
+            zNavigatePushRoute(
+              ZaionsRoutes.AdminPanel.Setting.UserAccount.ProfileSettings
+            );
+            dismissZIonPopover();
+          }}>
           <ZIonIcon
             icon={settingsOutline}
             className='w-5 h-5 me-2'
@@ -172,9 +178,12 @@ const ZWorkspaceProfilePopover: React.FC = () => {
           testingselector={
             CONSTANTS.testingSelectors.user.profilePopover.notificationSettings
           }
-          routerLink={
-            ZaionsRoutes.AdminPanel.Setting.UserAccount.NotificationSettings
-          }>
+          onClick={() => {
+            zNavigatePushRoute(
+              ZaionsRoutes.AdminPanel.Setting.UserAccount.NotificationSettings
+            );
+            dismissZIonPopover();
+          }}>
           <ZIonIcon
             icon={notificationsOutline}
             className='w-5 h-5 me-1 pe-1'

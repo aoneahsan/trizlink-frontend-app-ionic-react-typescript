@@ -2,6 +2,7 @@ import CONSTANTS from '@/utils/constants';
 
 const GENERAL = {
   FILE: {
+    UPLOADED: 'Mission accomplished! Your file is securely in place.',
     FILE_DELETED_SUCCESS_MESSAGE: 'File deleted successfully.'
   },
   OTP: {
@@ -169,6 +170,23 @@ const FORM_VALIDATIONS = {
   }
 };
 
+const USER = {
+  ADD_EMAIL:
+    'Congratulations on taking the first step! A verification code has been sent to your new email.',
+  CONFIRMED_OTP: 'Boom! Your email just leveled up to verified status.',
+  RESEND_OTP: 'Resent! Look out for the fresh verification code in your email.',
+  RESEND_OTP_API: 'Resend OTP (One-time-password)',
+  CONFIRM_OTP_API: 'Confirming OTP (One-time-password)',
+  DELETED: 'The email has left the building!',
+
+  DELETE_ALERT: {
+    HEADER: 'Final Check: Deleting email',
+    SUB_HEADER: 'Confirm Your Move!',
+    MESSAGES:
+      "Deleting this email means it's gone forever. Are you certain this is what you want?"
+  }
+};
+
 const MODALS = {
   EMBED_WIDGETS_MODAL: {
     CUSTOM_HTML: 'Please enter a Custom HTML code it is required.',
@@ -330,6 +348,7 @@ const MESSAGES = {
   GENERAL,
   Login,
   LABEL,
+  USER,
   PIXEL_ACCOUNT,
   TIME_SLOT,
   MEMBER,
