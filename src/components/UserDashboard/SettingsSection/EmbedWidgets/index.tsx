@@ -12,23 +12,22 @@ import {
   ZIonRouterLink,
   ZIonImg
 } from '@/components/ZIonComponents';
+import EmbedWidgetsTable from '@/components/InPageComponents/ZaionsTable/embedWidgetsTable';
+import ZaionsEmbedWidgetsModal from '@/components/InPageComponents/ZaionsModals/AddEmbedWidgets';
+import { ZIonButton } from '@/components/ZIonComponents';
 
 // Global Constants
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 
 // Images
 import { noScript } from '@/assets/images';
 
 // Recoil States
-import { EmbedWidgetsRStateAtom } from '@/ZaionsStore/UserDashboard/EmbedWidgetsRStateAtom';
+import { EmbedWidgetsRStateAtom } from '@/ZaionsStore/UserDashboard/EmbedWidgetsState';
 
 // Types
 
 // Styles
-
-import EmbedWidgetsTable from '@/components/InPageComponents/ZaionsTable/embedWidgetsTable';
-import { ZIonButton } from '@/components/ZIonComponents';
-import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
-import ZaionsEmbedWidgetsModal from '@/components/InPageComponents/ZaionsModals/AddEmbedWidgets';
 
 const APSettingsEmbedWidgets: React.FC = () => {
   const { presentZIonModal: presentZEmbedWidgetsModal } = useZIonModal(
@@ -37,7 +36,7 @@ const APSettingsEmbedWidgets: React.FC = () => {
   const embedWidgetsData = useRecoilValue(EmbedWidgetsRStateAtom);
   return (
     <>
-      <ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-5 ion-align-items-center'>
+      <ZIonRow className='px-4 py-4 mx-4 mt-5 zaions__bg_white ion-align-items-center'>
         <ZIonCol
           sizeXl='6'
           sizeLg='6'
@@ -71,13 +70,13 @@ const APSettingsEmbedWidgets: React.FC = () => {
         </ZIonCol>
       </ZIonRow>
 
-      {embedWidgetsData.length ? (
+      {embedWidgetsData && embedWidgetsData?.length ? (
         <EmbedWidgetsTable />
       ) : (
-        <ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-5 ion-align-items-center'>
-          <ZIonCol className='ion-text-center pt-5'>
+        <ZIonRow className='px-4 py-4 mx-4 mt-5 zaions__bg_white ion-align-items-center'>
+          <ZIonCol className='pt-5 ion-text-center'>
             <ZIonText
-              className='p-0 font-bold inline-block mb-4'
+              className='inline-block p-0 mb-4 font-bold'
               color={'dark'}>
               Integrate any embed third-party widgets on your links!
             </ZIonText>

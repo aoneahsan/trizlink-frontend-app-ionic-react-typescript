@@ -43,6 +43,8 @@ export enum API_URL_ENUM {
   register = 'register',
   getUserRolePermission = 'getUserRolePermission',
   updateUserAccountInfo = 'updateUserAccountInfo',
+  updatePassword = 'updatePassword',
+  validateCurrentPassword = 'validateCurrentPassword',
   userEmailsList = 'userEmailsList',
   userEmailDelete = 'userEmailDelete',
   makeEmailPrimary = 'makeEmailPrimary',

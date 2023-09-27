@@ -68,6 +68,7 @@ import {
 } from '@/utils/enums';
 import {
   extractInnerData,
+  formatApiRequestErrorForFormikFormField,
   getUserDataObjectForm,
   STORAGE,
   validateField,
@@ -80,6 +81,19 @@ import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import AddEmailModal from '@/components/InPageComponents/ZaionsModals/EmailModal';
 import MESSAGES from '@/utils/messages';
+import {
+  showErrorNotification,
+  showInfoNotification,
+  showSuccessNotification
+} from '@/utils/notification';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { ZErrorCodeEnum } from '@/utils/enums/ErrorsCodes';
+import {
+  FormikSetErrorsType,
+  FormikSetFieldTouchedEventType,
+  FormikSetFieldValueEventType
+} from '@/types/ZaionsFormik.type';
+import ZCountdown from '@/components/CustomComponents/ZCountDown';
 
 /**
  * Style files Imports go down
@@ -95,6 +109,13 @@ import MESSAGES from '@/utils/messages';
  * Component props type go down
  * ? Like if you have a type for props it should be please Down
  * */
+
+// Change password tab enum
+enum EChangePasswordTab {
+  currentPasswordTab = 'currentPasswordTab',
+  otpTab = 'otpTab',
+  newPasswordTab = 'newPasswordTab'
+}
 
 /**
  * Functional Component
@@ -160,6 +181,7 @@ const ZProfileSettingsSettings: React.FC = () => {
       }
     }
   };
+
   // #endregion
 
   return (
@@ -218,47 +240,17 @@ const ZProfileSettingsSettings: React.FC = () => {
                 userAccountStateAtom?.avatar ||
                 ''
             },
-            phoneNumber: userAccountStateAtom?.phoneNumber || '',
-
-            canViewCurrentPassword: false,
-            currentPassword: '',
-
-            canViewNewPassword: false,
-            newPassword: '',
-
-            canViewConfirmPassword: false,
-            confirmPassword: ''
+            phoneNumber: userAccountStateAtom?.phoneNumber || ''
           }}
           enableReinitialize={true}
           validate={values => {
-            const errors: {
-              confirmPassword?: string;
-            } = {};
+            const errors = {};
 
             // validating the fields and checking for error and error ? setting the errors : validated
-            validateFields(
-              [
-                'username',
-                'emailAddress',
-                'currentPassword',
-                'newPassword',
-                'confirmPassword'
-              ],
-              values,
-              errors,
-              [
-                VALIDATION_RULE.username,
-                VALIDATION_RULE.email,
-                VALIDATION_RULE.password,
-                VALIDATION_RULE.password,
-                VALIDATION_RULE.confirm_password
-              ]
-            );
-
-            // checking the confirm password is === password ? validated : setting an error + invalidate
-            if (values.confirmPassword !== values.newPassword) {
-              errors.confirmPassword = MESSAGES.GENERAL.FORM.PASSWORD_NOT_MATCH;
-            }
+            validateFields(['username', 'emailAddress'], values, errors, [
+              VALIDATION_RULE.username,
+              VALIDATION_RULE.email
+            ]);
 
             return errors;
           }}
@@ -482,224 +474,7 @@ const ZProfileSettingsSettings: React.FC = () => {
                 </div>
 
                 {/* Security & authentication */}
-                <ZIonTitle
-                  className={classNames({
-                    'block font-semibold ion-no-padding mt-4 pt-2': true,
-                    'text-xl': isLgScale,
-                    'text-lg': !isLgScale,
-                    'ion-text-center': !isSmScale
-                  })}>
-                  Security & authentication
-                </ZIonTitle>
-                {/* Change password */}
-                <ZIonTitle
-                  className={classNames({
-                    'block font-semibold ion-no-padding mt-2': true,
-                    'text-lg': isLgScale,
-                    'text-sm': !isLgScale,
-                    'ion-text-center': !isSmScale
-                  })}>
-                  Change password
-                </ZIonTitle>
-                <ZIonText
-                  className={classNames({
-                    'block mt-1 mb-4 font-normal': true,
-                    'text-md': isLgScale,
-                    'text-sm': !isLgScale,
-                    'ion-text-center': !isSmScale
-                  })}>
-                  You will be required to login after changing your password
-                </ZIonText>
-                {/* Current password */}
-                <div className='flex mt-2 ion-align-items-start'>
-                  <ZIonInput
-                    name='currentPassword'
-                    label='Current password'
-                    enterkeyhint='enter'
-                    labelPlacement='stacked'
-                    minHeight='2.3rem'
-                    type={values.canViewCurrentPassword ? 'text' : 'password'}
-                    onIonChange={handleChange}
-                    onIonBlur={handleBlur}
-                    value={values.currentPassword}
-                    id={CONSTANTS.testingSelectors.loginPage.passwordInput}
-                    errorText={
-                      touched.currentPassword
-                        ? errors.currentPassword
-                        : undefined
-                    }
-                    clearOnEdit={false}
-                    minlength={ZInputLengthConstant.loginForm.password.min}
-                    testingselector={
-                      CONSTANTS.testingSelectors.userAccount.profileSettingsTab
-                        .currentPasswordInput
-                    }
-                    className={classNames({
-                      'ion-touched': touched.currentPassword,
-                      'ion-invalid': errors.currentPassword,
-                      'ion-valid':
-                        touched.currentPassword && !errors.currentPassword
-                    })}
-                  />
-                  <ZIonButton
-                    fill='default'
-                    height='2.3rem'
-                    className='ion-no-padding ion-no-margin ms-3 w-max'
-                    testingselector={
-                      CONSTANTS.testingSelectors.userAccount.profileSettingsTab
-                        .currentPasswordSeeBtn
-                    }
-                    onClick={() =>
-                      setFieldValue(
-                        'canViewCurrentPassword',
-                        !values.canViewCurrentPassword,
-                        false
-                      )
-                    }>
-                    <ZIonIcon
-                      color='primary'
-                      className='w-6 h-6'
-                      icon={
-                        values.canViewCurrentPassword
-                          ? eyeOffOutline
-                          : eyeOutline
-                      }
-                    />
-                  </ZIonButton>
-                </div>
-
-                {/* New password */}
-                <div className='flex mt-3 ion-align-items-start'>
-                  <ZIonInput
-                    name='newPassword'
-                    label='New password'
-                    enterkeyhint='enter'
-                    labelPlacement='stacked'
-                    minHeight='2.3rem'
-                    type={values.canViewNewPassword ? 'text' : 'password'}
-                    onIonChange={handleChange}
-                    onIonBlur={handleBlur}
-                    value={values.newPassword}
-                    id={CONSTANTS.testingSelectors.loginPage.passwordInput}
-                    errorText={
-                      touched.newPassword ? errors.newPassword : undefined
-                    }
-                    clearOnEdit={false}
-                    minlength={ZInputLengthConstant.loginForm.password.min}
-                    testingselector={
-                      CONSTANTS.testingSelectors.userAccount.profileSettingsTab
-                        .newPasswordInput
-                    }
-                    className={classNames({
-                      'ion-touched': touched.newPassword,
-                      'ion-invalid': errors.newPassword,
-                      'ion-valid': touched.newPassword && !errors.newPassword
-                    })}
-                  />
-                  <ZIonButton
-                    fill='default'
-                    height='2.3rem'
-                    className='ion-no-padding ion-no-margin ms-3 w-max'
-                    onClick={() =>
-                      setFieldValue(
-                        'canViewNewPassword',
-                        !values.canViewNewPassword,
-                        false
-                      )
-                    }
-                    testingselector={
-                      CONSTANTS.testingSelectors.userAccount.profileSettingsTab
-                        .newPasswordSeeBtn
-                    }>
-                    <ZIonIcon
-                      color='primary'
-                      className='w-6 h-6'
-                      icon={
-                        values.canViewNewPassword ? eyeOffOutline : eyeOutline
-                      }
-                    />
-                  </ZIonButton>
-                </div>
-
-                {/* Confirm password */}
-                <div className='flex mt-3 ion-align-items-start'>
-                  <ZIonInput
-                    name='confirmPassword'
-                    label='Confirm password'
-                    enterkeyhint='enter'
-                    labelPlacement='stacked'
-                    minHeight='2.3rem'
-                    type={values.canViewConfirmPassword ? 'text' : 'password'}
-                    onIonChange={handleChange}
-                    onIonBlur={handleBlur}
-                    value={values.confirmPassword}
-                    id={CONSTANTS.testingSelectors.loginPage.passwordInput}
-                    errorText={
-                      touched.confirmPassword
-                        ? errors.confirmPassword
-                        : undefined
-                    }
-                    clearOnEdit={false}
-                    minlength={ZInputLengthConstant.loginForm.password.min}
-                    testingselector={
-                      CONSTANTS.testingSelectors.userAccount.profileSettingsTab
-                        .confirmPasswordInput
-                    }
-                    className={classNames({
-                      'ion-touched': touched.confirmPassword,
-                      'ion-invalid': errors.confirmPassword,
-                      'ion-valid':
-                        touched.confirmPassword && !errors.confirmPassword
-                    })}
-                  />
-                  <ZIonButton
-                    fill='default'
-                    height='2.3rem'
-                    className='ion-no-padding ion-no-margin ms-3 w-max'
-                    onClick={() =>
-                      setFieldValue(
-                        'canViewConfirmPassword',
-                        !values.canViewConfirmPassword,
-                        false
-                      )
-                    }
-                    testingselector={
-                      CONSTANTS.testingSelectors.userAccount.profileSettingsTab
-                        .confirmPasswordSeeBtn
-                    }>
-                    <ZIonIcon
-                      color='primary'
-                      className='w-6 h-6'
-                      icon={
-                        values.canViewConfirmPassword
-                          ? eyeOffOutline
-                          : eyeOutline
-                      }
-                    />
-                  </ZIonButton>
-                </div>
-                <div
-                  className={classNames({
-                    'flex ion-align-items-center': true,
-                    'gap-2': isSmScale,
-                    'flex-col': !isSmScale
-                  })}>
-                  <div
-                    className={classNames({
-                      'w-max': isSmScale,
-                      'w-full': !isSmScale,
-                      'cursor-not-allowed': true
-                    })}>
-                    <ZIonButton
-                      expand={isSmScale ? undefined : 'block'}
-                      testingselector={
-                        CONSTANTS.testingSelectors.userAccount
-                          .profileSettingsTab.changePasswordBtn
-                      }>
-                      Change password
-                    </ZIonButton>
-                  </div>
-                </div>
+                <ZChangePassword />
 
                 {/*  2-Factor authentication */}
                 <ZIonTitle
@@ -851,6 +626,629 @@ const ZProfileSettingsSettings: React.FC = () => {
         </Formik>
       </ZIonCol>
     </ZIonRow>
+  );
+};
+
+const ZChangePassword: React.FC = () => {
+  // #region Custom hooks.
+  const { isSmScale, isLgScale } = useZMediaQueryScale();
+  // #endregion
+
+  // #region APIS.
+  const { mutateAsync: ZUpdatePasswordAsyncMutate } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.updatePassword,
+    _showAlertOnError: false
+  });
+
+  const { mutateAsync: ZValidateCurrentPasswordAsyncMutate } =
+    useZRQUpdateRequest({
+      _url: API_URL_ENUM.validateCurrentPassword,
+      _showAlertOnError: false,
+      _loaderMessage: MESSAGES.USER.CONFIRMED_CURRENT_PASSWORD_API
+    });
+  // #endregion
+
+  // #region Functions.
+  // validating current password through validateCurrentPassword api.
+  const validateCurrentPasswordHandler = async ({
+    _data,
+    setErrors,
+    setFieldValueFn
+  }: {
+    _data: string;
+    setErrors: FormikSetErrorsType;
+    setFieldValueFn: FormikSetFieldValueEventType;
+  }) => {
+    try {
+      const __response = await ZValidateCurrentPasswordAsyncMutate({
+        itemIds: [],
+        urlDynamicParts: [],
+        requestData: _data
+      });
+
+      if (__response) {
+        const __data = extractInnerData<{
+          success: boolean;
+          OTPCodeValidTill: string;
+        }>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
+
+        if (__data?.success) {
+          setFieldValueFn('tab', EChangePasswordTab.otpTab, false);
+          setFieldValueFn('otpCodeValidTill', __data.OTPCodeValidTill, false);
+          setFieldValueFn('currentPassword', '', false);
+
+          showSuccessNotification(MESSAGES.USER.CONFIRMED_CURRENT_PASSWORD);
+        }
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const __apiErrorObjects = error.response?.data as {
+          errors: { item: string[] } | ZGenericObject;
+          status: number;
+        };
+
+        const __apiErrors = __apiErrorObjects?.errors;
+        const __apiErrorCode = __apiErrorObjects?.status;
+
+        if (
+          __apiErrorCode === ZErrorCodeEnum.serverError ||
+          __apiErrorCode === ZErrorCodeEnum.badRequest
+        ) {
+          const __errors = formatApiRequestErrorForFormikFormField(
+            ['currentPassword'],
+            ['password'],
+            __apiErrors as ZGenericObject
+          );
+
+          const _passwordErrorMessage = (
+            __errors as { currentPassword: string }
+          )?.currentPassword;
+
+          setFieldValueFn('isCurrentPasswordApiError', true, false);
+          setFieldValueFn(
+            'currentPasswordApiMessage',
+            _passwordErrorMessage,
+            false
+          );
+
+          setErrors(__errors);
+        }
+      }
+
+      reportCustomError(error);
+    }
+  };
+
+  //
+  const updatePasswordHandler = async (
+    _data: string,
+    setErrors: FormikSetErrorsType,
+    setFieldValueFn: FormikSetFieldValueEventType,
+    setFieldTouchedFn: FormikSetFieldTouchedEventType
+  ) => {
+    try {
+      const __response = await ZUpdatePasswordAsyncMutate({
+        itemIds: [],
+        urlDynamicParts: [],
+        requestData: _data
+      });
+
+      if (__response) {
+        const __data = extractInnerData<{
+          user: UserAccountType;
+        }>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
+
+        if (__data && __data?.user?.email) {
+          setFieldValueFn('currentPassword', '', false);
+          setFieldValueFn('newPassword', '', false);
+          setFieldValueFn('confirmPassword', '', false);
+
+          setFieldTouchedFn('currentPassword', false);
+          setFieldTouchedFn('newPassword', false);
+          setFieldTouchedFn('confirmPassword', false);
+          showSuccessNotification(MESSAGES.USER.PASSWORD_CHANGE);
+        }
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const __apiErrorObjects = error.response?.data as {
+          errors: { item: string[] } | ZGenericObject;
+          status: number;
+        };
+
+        const __apiErrors = __apiErrorObjects?.errors;
+        const __apiErrorCode = __apiErrorObjects?.status;
+
+        if (
+          __apiErrorCode === ZErrorCodeEnum.serverError ||
+          __apiErrorCode === ZErrorCodeEnum.badRequest
+        ) {
+          const __errors = formatApiRequestErrorForFormikFormField(
+            ['currentPassword', 'newPassword', 'confirmPassword'],
+            ['password', 'newPassword', 'newPassword_confirmation'],
+            __apiErrors as ZGenericObject
+          );
+          setErrors(__errors);
+        }
+
+        // if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
+        //   showErrorNotification(
+        //     (__apiErrorObjects?.errors as { item: string[] })?.item[0]
+        //   );
+        // }
+      }
+
+      reportCustomError(error);
+    }
+  };
+  // #endregion
+  return (
+    <Formik
+      initialValues={{
+        tab: EChangePasswordTab.currentPasswordTab,
+        canViewCurrentPassword: false,
+        currentPassword: '',
+        isCurrentPasswordApiError: false,
+        currentPasswordApiMessage: '',
+
+        canViewNewPassword: false,
+        newPassword: '',
+
+        canViewConfirmPassword: false,
+        confirmPassword: '',
+
+        otp: '',
+        otpCodeValidTill: ''
+      }}
+      validate={values => {
+        const errors: {
+          confirmPassword?: string;
+          currentPassword?: string;
+          otp?: string;
+        } = {};
+
+        // validating the fields and checking for error and error ? setting the errors : validated
+        validateFields(['newPassword', 'confirmPassword'], values, errors, [
+          VALIDATION_RULE.password,
+          VALIDATION_RULE.confirm_password
+        ]);
+
+        // checking the confirm password is === password ? validated : setting an error + invalidate
+        if (values.confirmPassword !== values.newPassword) {
+          errors.confirmPassword = MESSAGES.GENERAL.FORM.PASSWORD_NOT_MATCH;
+        }
+
+        if (
+          values.currentPassword?.trim()?.length <
+          CONSTANTS.ZPasswordMinCharacter
+        ) {
+          errors.currentPassword = MESSAGES.PASSWORD.VALIDATION.MIN_LENGTH;
+        }
+
+        // otp
+        if (values.otp?.trim()?.length > CONSTANTS.ZOtpLength) {
+          errors.otp = MESSAGES.OTP.VALIDATION.MAX_LENGTH;
+        }
+
+        return errors;
+      }}
+      onSubmit={() => {}}>
+      {({
+        handleChange,
+        handleBlur,
+        setFieldValue,
+        setFieldTouched,
+        setErrors,
+        values,
+        errors,
+        touched
+      }) => {
+        const changePasswordValidCheck =
+          touched.currentPassword &&
+          touched.newPassword &&
+          touched.confirmPassword &&
+          !errors?.currentPassword?.trim() &&
+          !errors?.newPassword?.trim() &&
+          !errors?.confirmPassword?.trim() &&
+          values?.currentPassword?.trim()?.length > 0 &&
+          values?.newPassword?.trim()?.length > 0 &&
+          values?.confirmPassword?.trim()?.length > 0;
+
+        const currentPasswordValidCheck =
+          touched.currentPassword &&
+          !errors?.currentPassword?.trim() &&
+          values?.currentPassword?.trim()?.length > 0;
+
+        const otpValidCheck =
+          touched.otp &&
+          !errors?.otp?.trim() &&
+          values?.currentPassword?.trim()?.length === CONSTANTS?.ZOtpLength;
+
+        return (
+          <>
+            {/* Security & authentication */}
+            <ZIonTitle
+              className={classNames({
+                'block font-semibold ion-no-padding mt-4 pt-2': true,
+                'text-xl': isLgScale,
+                'text-lg': !isLgScale,
+                'ion-text-center': !isSmScale
+              })}>
+              Security & authentication
+            </ZIonTitle>
+            {/* Change password */}
+            <ZIonTitle
+              className={classNames({
+                'block font-semibold ion-no-padding mt-2': true,
+                'text-lg': isLgScale,
+                'text-sm': !isLgScale,
+                'ion-text-center': !isSmScale
+              })}>
+              Change password
+            </ZIonTitle>
+            <ZIonText
+              className={classNames({
+                'block mt-1 mb-4 font-normal': true,
+                'text-md': isLgScale,
+                'text-sm': !isLgScale,
+                'ion-text-center': !isSmScale
+              })}>
+              You will be required to login after changing your password
+            </ZIonText>
+
+            {/* Current password tab */}
+            {values.tab === EChangePasswordTab.currentPasswordTab ? (
+              <div className='flex mt-2 ion-align-items-start'>
+                <ZIonInput
+                  name='currentPassword'
+                  label='Current password'
+                  enterkeyhint='enter'
+                  labelPlacement='stacked'
+                  minHeight='2.3rem'
+                  type={values.canViewCurrentPassword ? 'text' : 'password'}
+                  onIonChange={e => {
+                    handleChange(e);
+
+                    setFieldValue('isCurrentPasswordApiError', false, false);
+                  }}
+                  onIonBlur={handleBlur}
+                  value={values.currentPassword}
+                  id={CONSTANTS.testingSelectors.loginPage.passwordInput}
+                  errorText={
+                    values.isCurrentPasswordApiError
+                      ? values.currentPasswordApiMessage
+                      : touched.currentPassword
+                      ? errors.currentPassword
+                      : undefined
+                  }
+                  clearOnEdit={false}
+                  minlength={ZInputLengthConstant.loginForm.password.min}
+                  testingselector={
+                    CONSTANTS.testingSelectors.userAccount.profileSettingsTab
+                      .currentPasswordInput
+                  }
+                  className={classNames({
+                    'ion-touched': touched.currentPassword,
+                    'ion-invalid':
+                      values.isCurrentPasswordApiError || errors.currentPassword
+                    // 'ion-valid':
+                    //   touched.currentPassword && !errors.currentPassword
+                  })}
+                />
+                <ZIonButton
+                  fill='default'
+                  height='2.3rem'
+                  className='ion-no-padding ion-no-margin ms-3 w-max'
+                  testingselector={
+                    CONSTANTS.testingSelectors.userAccount.profileSettingsTab
+                      .currentPasswordSeeBtn
+                  }
+                  onClick={() =>
+                    setFieldValue(
+                      'canViewCurrentPassword',
+                      !values.canViewCurrentPassword,
+                      false
+                    )
+                  }>
+                  <ZIonIcon
+                    color='primary'
+                    className='w-6 h-6'
+                    icon={
+                      values.canViewCurrentPassword ? eyeOffOutline : eyeOutline
+                    }
+                  />
+                </ZIonButton>
+              </div>
+            ) : null}
+
+            {/* OTP Tab */}
+            {values.tab === EChangePasswordTab.otpTab ? (
+              <div className='flex ion-align-items-start'>
+                <ZIonInput
+                  name='otp'
+                  onIonChange={handleChange}
+                  onIonBlur={handleBlur}
+                  minHeight='2.3rem'
+                  label='OTP (One-time-password)'
+                  maxlength={CONSTANTS.ZOtpLength}
+                  labelPlacement='stacked'
+                  errorText={touched.otp ? errors.otp : undefined}
+                  className={classNames({
+                    'ion-touched': touched.otp,
+                    'ion-invalid': touched.otp && errors.otp
+                    // 'ion-valid': touched.otp && !errors.otp
+                  })}
+                />
+                <ZCountdown
+                  onComplete={() => {
+                    setFieldValue(
+                      'tab',
+                      EChangePasswordTab.currentPasswordTab,
+                      false
+                    );
+
+                    showInfoNotification(
+                      'OTP valid time passed please try again.'
+                    );
+                  }}
+                  countDownTime={values?.otpCodeValidTill}
+                  color='dark'
+                  component={({ d, color }) => {
+                    return (
+                      <ZIonText className='h-full mt-2 ms-2'>
+                        {d.minutes}:{d.seconds}
+                      </ZIonText>
+                    );
+                  }}
+                />
+              </div>
+            ) : null}
+
+            {/* New password tab */}
+            {values.tab === EChangePasswordTab.newPasswordTab ? (
+              <>
+                {/* New password */}
+                <div className='flex mt-3 ion-align-items-start'>
+                  <ZIonInput
+                    name='newPassword'
+                    label='New password'
+                    enterkeyhint='enter'
+                    labelPlacement='stacked'
+                    minHeight='2.3rem'
+                    type={values.canViewNewPassword ? 'text' : 'password'}
+                    onIonChange={handleChange}
+                    onIonBlur={handleBlur}
+                    value={values.newPassword}
+                    id={CONSTANTS.testingSelectors.loginPage.passwordInput}
+                    errorText={
+                      touched.newPassword ? errors.newPassword : undefined
+                    }
+                    clearOnEdit={false}
+                    minlength={ZInputLengthConstant.loginForm.password.min}
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount.profileSettingsTab
+                        .newPasswordInput
+                    }
+                    className={classNames({
+                      'mt-1': true,
+                      'ion-touched': touched.newPassword,
+                      'ion-invalid': errors.newPassword,
+                      'ion-valid': touched.newPassword && !errors.newPassword
+                    })}
+                  />
+                  <ZIonButton
+                    fill='default'
+                    height='2.3rem'
+                    className='ion-no-padding ion-no-margin ms-3 w-max'
+                    onClick={() =>
+                      setFieldValue(
+                        'canViewNewPassword',
+                        !values.canViewNewPassword,
+                        false
+                      )
+                    }
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount.profileSettingsTab
+                        .newPasswordSeeBtn
+                    }>
+                    <ZIonIcon
+                      color='primary'
+                      className='w-6 h-6'
+                      icon={
+                        values.canViewNewPassword ? eyeOffOutline : eyeOutline
+                      }
+                    />
+                  </ZIonButton>
+                </div>
+
+                {/* Confirm password */}
+                <div className='flex mt-3 ion-align-items-start'>
+                  <ZIonInput
+                    name='confirmPassword'
+                    label='Confirm password'
+                    enterkeyhint='enter'
+                    labelPlacement='stacked'
+                    minHeight='2.3rem'
+                    type={values.canViewConfirmPassword ? 'text' : 'password'}
+                    onIonChange={handleChange}
+                    onIonBlur={handleBlur}
+                    value={values.confirmPassword}
+                    id={CONSTANTS.testingSelectors.loginPage.passwordInput}
+                    errorText={
+                      touched.confirmPassword
+                        ? errors.confirmPassword
+                        : undefined
+                    }
+                    clearOnEdit={false}
+                    minlength={ZInputLengthConstant.loginForm.password.min}
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount.profileSettingsTab
+                        .confirmPasswordInput
+                    }
+                    className={classNames({
+                      'mt-1': true,
+                      'ion-touched': touched.confirmPassword,
+                      'ion-invalid': errors.confirmPassword,
+                      'ion-valid':
+                        touched.confirmPassword && !errors.confirmPassword
+                    })}
+                  />
+                  <ZIonButton
+                    fill='default'
+                    height='2.3rem'
+                    className='ion-no-padding ion-no-margin ms-3 w-max'
+                    onClick={() =>
+                      setFieldValue(
+                        'canViewConfirmPassword',
+                        !values.canViewConfirmPassword,
+                        false
+                      )
+                    }
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount.profileSettingsTab
+                        .confirmPasswordSeeBtn
+                    }>
+                    <ZIonIcon
+                      color='primary'
+                      className='w-6 h-6'
+                      icon={
+                        values.canViewConfirmPassword
+                          ? eyeOffOutline
+                          : eyeOutline
+                      }
+                    />
+                  </ZIonButton>
+                </div>
+              </>
+            ) : null}
+
+            {/* Action btn */}
+
+            {values.tab === EChangePasswordTab.currentPasswordTab ? (
+              <div
+                className={classNames({
+                  'flex ion-align-items-center': true,
+                  'gap-2': isSmScale,
+                  'flex-col': !isSmScale
+                })}>
+                <div
+                  className={classNames({
+                    'mt-1': true,
+                    'w-max': isSmScale,
+                    'w-full': !isSmScale,
+                    'cursor-not-allowed': !currentPasswordValidCheck
+                  })}>
+                  <ZIonButton
+                    disabled={!currentPasswordValidCheck}
+                    expand={isSmScale ? undefined : 'block'}
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount.profileSettingsTab
+                        .changePasswordBtn
+                    }
+                    onClick={() => {
+                      const __stringifyData = zStringify({
+                        password: values.currentPassword
+                      });
+
+                      void validateCurrentPasswordHandler({
+                        _data: __stringifyData,
+                        setErrors: setErrors,
+                        setFieldValueFn: setFieldValue
+                      });
+                    }}>
+                    Confirm current password
+                  </ZIonButton>
+                </div>
+              </div>
+            ) : null}
+
+            {values.tab === EChangePasswordTab.otpTab ? (
+              <div
+                className={classNames({
+                  'flex ion-align-items-center': true,
+                  'gap-2': isSmScale,
+                  'flex-col': !isSmScale
+                })}>
+                <div
+                  className={classNames({
+                    'mt-1': true,
+                    'w-max': isSmScale,
+                    'w-full': !isSmScale,
+                    'cursor-not-allowed': !otpValidCheck
+                  })}>
+                  <ZIonButton
+                    disabled={!otpValidCheck}
+                    expand={isSmScale ? undefined : 'block'}
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount.profileSettingsTab
+                        .changePasswordBtn
+                    }
+                    onClick={() => {
+                      const __stringifyData = zStringify({
+                        password: values.currentPassword
+                      });
+
+                      void validateCurrentPasswordHandler({
+                        _data: __stringifyData,
+                        setErrors: setErrors,
+                        setFieldValueFn: setFieldValue
+                      });
+                    }}>
+                    Confirm OTP
+                  </ZIonButton>
+                </div>
+              </div>
+            ) : null}
+
+            {values.tab === EChangePasswordTab.newPasswordTab ? (
+              <div
+                className={classNames({
+                  'flex ion-align-items-center': true,
+                  'gap-2': isSmScale,
+                  'flex-col': !isSmScale
+                })}>
+                <div
+                  className={classNames({
+                    'mt-1': true,
+                    'w-max': isSmScale,
+                    'w-full': !isSmScale,
+                    'cursor-not-allowed':
+                      !changePasswordValidCheck ||
+                      values.isCurrentPasswordApiError
+                  })}>
+                  <ZIonButton
+                    disabled={
+                      !changePasswordValidCheck ||
+                      values.isCurrentPasswordApiError
+                    }
+                    expand={isSmScale ? undefined : 'block'}
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount.profileSettingsTab
+                        .changePasswordBtn
+                    }
+                    onClick={() => {
+                      const __stringifyData = zStringify({
+                        password: values.currentPassword,
+                        newPassword: values.newPassword,
+                        newPassword_confirmation: values.confirmPassword
+                      });
+
+                      void updatePasswordHandler(
+                        __stringifyData,
+                        setErrors,
+                        setFieldValue,
+                        setFieldTouched
+                      );
+                    }}>
+                    Change password
+                  </ZIonButton>
+                </div>
+              </div>
+            ) : null}
+          </>
+        );
+      }}
+    </Formik>
   );
 };
 

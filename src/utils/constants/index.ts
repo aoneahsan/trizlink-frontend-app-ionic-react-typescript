@@ -36,6 +36,10 @@ export const ZLinkApiRootUrl = ENVS.apiUrl;
 
 const testingSelectorsPrefix = 'ztes__';
 
+const ZPasswordMinCharacter = 8;
+
+const ZOtpLength = 6;
+
 const RouteParams = {
   editShortLinkIdParam: ':editLinkId',
   editLinkInBioIdParam: ':editLinkInBioId',
@@ -108,6 +112,8 @@ export const API_URLS = {
   register: '/register',
   getUserRolePermission: '/user/role/permissions',
   updateUserAccountInfo: '/user/update-account-info',
+  updatePassword: '/user/update-password',
+  validateCurrentPassword: '/user/validate-password',
   userEmailsList: '/user/list-emails',
   userEmailDelete: `/user/delete-email/${RouteParams.user.itemId}`,
   makeEmailPrimary: `/user/make-email-primary/${RouteParams.user.itemId}`,
@@ -1655,6 +1661,8 @@ const ZStatesOptions: ZaionsRSelectOptions[] = [
 
 const CONSTANTS = {
   ZRolesOptions,
+  ZOtpLength,
+  ZPasswordMinCharacter,
   ZPlatformOptions,
   PIXEL_ACCOUNTS,
   ZStatesOptions,

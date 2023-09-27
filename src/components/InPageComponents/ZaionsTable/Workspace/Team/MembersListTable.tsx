@@ -40,8 +40,10 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import ZCan from '@/components/Can';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 import {
+  ZIonBadge,
   ZIonButton,
   ZIonCheckbox,
+  ZIonChip,
   ZIonCol,
   ZIonIcon,
   ZIonItem,
@@ -318,7 +320,8 @@ const ZInpageTable: React.FC = () => {
       cell: row => {
         const value = row.getValue();
         return (
-          <ZIonText
+          <ZIonChip
+            className='p-0 px-3 py-[2px] cursor-auto h-max'
             color={
               value === ZTeamMemberInvitationEnum.pending
                 ? 'warning'
@@ -332,7 +335,7 @@ const ZInpageTable: React.FC = () => {
                 : 'dark'
             }>
             {row.getValue()}
-          </ZIonText>
+          </ZIonChip>
         );
       },
       footer: 'Status'
@@ -345,8 +348,8 @@ const ZInpageTable: React.FC = () => {
     //   footer: 'Invited at'
     // }),
 
-    // Invited accepted at
-    columnHelper.accessor('"inviteAcceptedAt"|"inviteRejectedAt"', {
+    // Invited accepted at '"inviteAcceptedAt"|"inviteRejectedAt"',
+    columnHelper.accessor(itemData => itemData.inviteAcceptedAt, {
       header: 'Updated At',
       id: ZMembersListPageTableColumnsIds.invitedAcceptedAt,
       cell: row => {

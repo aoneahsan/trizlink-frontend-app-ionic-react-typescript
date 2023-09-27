@@ -494,7 +494,7 @@ const ZInpageTable: React.FC = () => {
       cell: row => {
         return (
           <ZIonChip
-            className='cursor-auto'
+            className='p-0 px-3 py-[2px] cursor-auto h-max'
             color={row?.getValue() ? 'success' : 'danger'}>
             {row?.getValue() ? 'Yes' : 'No'}
           </ZIonChip>

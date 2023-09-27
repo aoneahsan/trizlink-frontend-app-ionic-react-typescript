@@ -224,9 +224,12 @@ export const showZCapDialogConfirm = async ({
 };
 
 export const convertToTitleCase = (s: string | PixelPlatformsEnum): string => {
-  return s.replace(/^_*(.)|_+(.)/g, (s, c, d) =>
-    c ? (c as string).toUpperCase() : ' ' + (d as string).toUpperCase()
-  );
+  // return s.replace(/^_*(.)|_+(.)/g, (s, c, d) =>
+  //   c ? (c as string).toUpperCase() : ' ' + (d as string).toUpperCase()
+  // );
+  return s
+    .replace(/([a-z])([A-Z])/g, '$1 $2') // Add space between lowercase and uppercase letters
+    .toLowerCase(); // Convert the string to lowercase
 };
 
 // if string is returned mean validation failed, and that was the error message to show to user, if null return mean validation passed, no error message
@@ -488,7 +491,7 @@ export const checkIfContains = (
     case CONTAINS.specialSymbol:
       return /[\W_]+/.test(val);
     case CONTAINS.minCharacter:
-      return val.length >= 8;
+      return val.length >= CONSTANTS.ZPasswordMinCharacter;
 
     default:
       return /\d/.test(val);

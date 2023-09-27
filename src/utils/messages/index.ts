@@ -86,6 +86,12 @@ const Login = {
     'Oops! It seems like your login pass has decided to take a coffee break. Please reauthenticate.'
 };
 
+const PASSWORD = {
+  VALIDATION: {
+    MIN_LENGTH: `password needs to be at least ${CONSTANTS.ZPasswordMinCharacter} digits long.`
+  }
+};
+
 // All Forms Related Validation Messages
 const FORM_VALIDATIONS = {
   // Pixel Accounts Validation Messages
@@ -173,6 +179,11 @@ const FORM_VALIDATIONS = {
 const USER = {
   ADD_EMAIL:
     'Congratulations on taking the first step! A verification code has been sent to your new email.',
+  PASSWORD_CHANGE:
+    'Well done! Your account just got a shiny new lock and key. Safety first!',
+  CONFIRMED_CURRENT_PASSWORD:
+    'Bingo! Current password confirmed. Your OTP is on its way to your inbox!',
+  CONFIRMED_CURRENT_PASSWORD_API: 'Confirming password...',
   CONFIRMED_OTP: 'Boom! Your email just leveled up to verified status.',
   RESEND_OTP: 'Resent! Look out for the fresh verification code in your email.',
   RESEND_OTP_API: 'Resend OTP (One-time-password)',
@@ -346,9 +357,16 @@ const LABEL = {
   }
 };
 
+const OTP = {
+  VALIDATION: {
+    MAX_LENGTH: `OTP needs to be exactly ${CONSTANTS.ZOtpLength} digits long.`
+  }
+};
+
 // Add Constants Above this one, and then include them in this object
 const MESSAGES = {
   GENERAL,
+  OTP,
   Login,
   LABEL,
   USER,
@@ -360,7 +378,8 @@ const MESSAGES = {
   WORKSPACE,
   LINK_IN_BIO,
   FORM_VALIDATIONS,
-  MODALS
+  MODALS,
+  PASSWORD
 };
 
 export default MESSAGES;

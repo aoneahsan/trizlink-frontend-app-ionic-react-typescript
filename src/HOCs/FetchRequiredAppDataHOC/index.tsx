@@ -44,8 +44,8 @@ import { UserRoleAndPermissionsInterface } from '@/types/UserAccount/index.type'
  * ? Import of recoil states is a Recoil State import
  * */
 import {
-	currentLoggedInUserRoleAndPermissionsRStateAtom,
-	IsAuthenticatedRStateSelector,
+  currentLoggedInUserRoleAndPermissionsRStateAtom,
+  IsAuthenticatedRStateSelector
 } from '@/ZaionsStore/UserAccount/index.recoil';
 import { reportCustomError } from '@/utils/customErrorType';
 import { useRouteMatch } from 'react-router';
@@ -53,7 +53,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { STORAGE } from '@/utils/helpers';
 
 interface IFetchRequiredAppDataHOCProps {
-	children?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 /**
@@ -63,131 +63,130 @@ interface IFetchRequiredAppDataHOCProps {
  *  remote config
  */
 const FetchRequiredAppDataHOC: React.FC<IFetchRequiredAppDataHOCProps> = ({
-	children,
+  children
 }) => {
-	const is404Page = useRouteMatch(ZaionsRoutes.Error.Z404)?.isExact;
+  const is404Page = useRouteMatch(ZaionsRoutes.Error.Z404)?.isExact;
 
-	useEffect(() => {
-		if (is404Page === undefined) {
-			(async () => {
-				const _errorData = (await STORAGE.GET(
-					LOCALSTORAGE_KEYS.ERROR_DATA
-				)) as { message: string; status: number } | null;
+  useEffect(() => {
+    if (is404Page === undefined) {
+      (async () => {
+        const _errorData = (await STORAGE.GET(
+          LOCALSTORAGE_KEYS.ERROR_DATA
+        )) as { message: string; status: number } | null;
 
-				if (_errorData !== null) {
-					await Promise.all([STORAGE.REMOVE(LOCALSTORAGE_KEYS.ERROR_DATA)]);
-				}
-			})();
-		}
-	}, [is404Page]);
+        if (_errorData !== null) {
+          await Promise.all([STORAGE.REMOVE(LOCALSTORAGE_KEYS.ERROR_DATA)]);
+        }
+      })();
+    }
+  }, [is404Page]);
 
-	return (
-		<Suspense fallback={<ZFallbackIonSpinner />}>
-			<FetchRequiredAppDataHOCAsync>{children}</FetchRequiredAppDataHOCAsync>
-		</Suspense>
-	);
+  return (
+    <Suspense fallback={<ZFallbackIonSpinner />}>
+      <FetchRequiredAppDataHOCAsync>{children}</FetchRequiredAppDataHOCAsync>
+    </Suspense>
+  );
 };
 
 const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
-	children,
+  children
 }) => {
-	const [compState, setCompState] = React.useState<{
-		isProcessing: boolean;
-		userIsAuthenticated: boolean;
-		errorOccurred: boolean;
-		guestUser: boolean;
-		errorCode: string; // use enum or whatever so you know which component to show
-	}>({
-		isProcessing: true,
-		userIsAuthenticated: false,
-		errorOccurred: false,
-		guestUser: false,
-		errorCode: '',
-	});
+  const [compState, setCompState] = React.useState<{
+    isProcessing: boolean;
+    userIsAuthenticated: boolean;
+    errorOccurred: boolean;
+    guestUser: boolean;
+    errorCode?: ZErrorCodeEnum; // use enum or whatever so you know which component to show
+  }>({
+    isProcessing: true,
+    userIsAuthenticated: false,
+    errorOccurred: false,
+    guestUser: false
+  });
 
-	const loggedIn = useRecoilValue(IsAuthenticatedRStateSelector);
-	// recoil state for storing current user roles & permissions.
-	const setUserRoleAndPermissions = useSetRecoilState(
-		currentLoggedInUserRoleAndPermissionsRStateAtom
-	);
+  const loggedIn = useRecoilValue(IsAuthenticatedRStateSelector);
+  // recoil state for storing current user roles & permissions.
+  const setUserRoleAndPermissions = useSetRecoilState(
+    currentLoggedInUserRoleAndPermissionsRStateAtom
+  );
 
-	const { zIsPrivateRoute } = useZPrivateRouteChecker();
+  const { zIsPrivateRoute } = useZPrivateRouteChecker();
 
-	// #region APIS.
-	// getting the role & permissions of the current log in user.
-	const {
-		data: getUserRoleAndPermissions,
-		refetch: refetchUserRoleAndPermissions,
-		isFetched: isUserRoleAndPermissionsFetching,
-	} = useZRQGetRequest<{
-		isSuccess: boolean;
-		result: UserRoleAndPermissionsInterface;
-	}>({
-		_url: API_URL_ENUM.getUserRolePermission,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.ROLE_PERMISSIONS],
-		_extractType: ZRQGetRequestExtractEnum.extractItem,
-		_shouldFetchWhenIdPassed: !loggedIn || !zIsPrivateRoute,
-		_checkPermissions: false,
-	});
-	// #endregion
+  // #region APIS.
+  // getting the role & permissions of the current log in user.
+  const {
+    data: getUserRoleAndPermissions,
+    refetch: refetchUserRoleAndPermissions,
+    isFetched: isUserRoleAndPermissionsFetching
+  } = useZRQGetRequest<{
+    isSuccess: boolean;
+    result: UserRoleAndPermissionsInterface;
+  }>({
+    _url: API_URL_ENUM.getUserRolePermission,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.ROLE_PERMISSIONS],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _shouldFetchWhenIdPassed: !loggedIn || !zIsPrivateRoute,
+    _checkPermissions: false
+  });
+  // #endregion
 
-	useEffect(() => {
-		if (!zIsPrivateRoute) {
-			setCompState((oldState) => ({
-				...oldState,
-				isProcessing: false,
-				userIsAuthenticated: false,
-				guestUser: true,
-			}));
-		}
-	}, [zIsPrivateRoute]);
+  useEffect(() => {
+    if (!zIsPrivateRoute) {
+      setCompState(oldState => ({
+        ...oldState,
+        isProcessing: false,
+        userIsAuthenticated: false,
+        guestUser: true
+      }));
+    }
+  }, [zIsPrivateRoute]);
 
-	useEffect(() => {
-		try {
-			if (getUserRoleAndPermissions?.isSuccess) {
-				// Storing in recoil.
-				setUserRoleAndPermissions((oldValues) => ({
-					...oldValues,
-					role: getUserRoleAndPermissions.result.role,
-					permissions: getUserRoleAndPermissions.result.permissions,
-					fetched: true,
-				}));
-			}
+  useEffect(() => {
+    try {
+      if (getUserRoleAndPermissions?.isSuccess) {
+        // Storing in recoil.
+        setUserRoleAndPermissions(oldValues => ({
+          ...oldValues,
+          role: getUserRoleAndPermissions.result.role,
+          permissions: getUserRoleAndPermissions.result.permissions,
+          fetched: true
+        }));
+      }
 
-			if (loggedIn && getUserRoleAndPermissions?.isSuccess) {
-				setCompState((oldState) => ({
-					...oldState,
-					isProcessing: false,
-					userIsAuthenticated: true,
-					guestUser: false,
-				}));
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	}, [loggedIn, getUserRoleAndPermissions]);
+      if (loggedIn && getUserRoleAndPermissions?.isSuccess) {
+        setCompState(oldState => ({
+          ...oldState,
+          isProcessing: false,
+          userIsAuthenticated: true,
+          guestUser: false
+        }));
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  }, [loggedIn, getUserRoleAndPermissions]);
 
-	useEffect(() => {
-		refetchUserRoleAndPermissions();
-	}, [loggedIn, isUserRoleAndPermissionsFetching]);
+  useEffect(() => {
+    refetchUserRoleAndPermissions();
+  }, [loggedIn, isUserRoleAndPermissionsFetching]);
 
-	if (compState.isProcessing) {
-		return <ZFallbackIonSpinner />;
-	} else if (
-		!compState.isProcessing &&
-		((!compState.errorOccurred && compState.userIsAuthenticated) ||
-			compState.guestUser)
-	) {
-		return <>{children}</>;
-	} else if (
-		!compState.isProcessing &&
-		compState.errorOccurred &&
-		compState.errorCode === ZErrorCodeEnum.unauthorized
-	) {
-		return <Z401View />;
-	} else {
-		return <Z500View />;
-	}
+  if (compState.isProcessing) {
+    return <ZFallbackIonSpinner />;
+  } else if (
+    !compState.isProcessing &&
+    ((!compState.errorOccurred && compState.userIsAuthenticated) ||
+      compState.guestUser)
+  ) {
+    return <>{children}</>;
+  } else if (
+    !compState.isProcessing &&
+    compState.errorOccurred &&
+    compState.errorCode === ZErrorCodeEnum.unauthorized
+  ) {
+    return <Z401View />;
+  } else {
+    return <Z500View />;
+  }
 };
 
 export default FetchRequiredAppDataHOC;

@@ -11,7 +11,8 @@ import React from 'react';
  * */
 import Countdown, {
   CountdownRendererFn,
-  CountdownRenderProps
+  CountdownRenderProps,
+  CountdownTimeDelta
 } from 'react-countdown';
 import { getRemainingTimeForCountDown } from '@/utils/helpers';
 import { ZIonColorType } from '@/types/zaionsAppSettings.type';
@@ -142,13 +143,17 @@ const ZCustomRender: React.FC<{
 const ZCountdown: React.FC<{
   countDownTime?: string;
   color?: ZIonColorType;
+  onComplete?:
+    | ((timeDelta: CountdownTimeDelta, completedOnStart: boolean) => void)
+    | (() => void);
   component?: React.FC<{
     d: CountdownRenderProps;
     color?: ZIonColorType;
   }>;
-}> = ({ countDownTime, color, component }) => {
+}> = ({ countDownTime, color, component, onComplete }) => {
   return (
     <Countdown
+      onComplete={onComplete}
       date={getRemainingTimeForCountDown(countDownTime)}
       renderer={(props: CountdownRenderProps) => {
         if (component === undefined) {
