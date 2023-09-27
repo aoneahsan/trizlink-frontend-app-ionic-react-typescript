@@ -248,7 +248,7 @@ const ZWorkspaceListPage: React.FC = () => {
                     />
 
                     <ZIonText
-                      className='block mt-2 tracking-wider text-md'
+                      className='block mt-2 tracking-wider text-md ion-text-center'
                       color='dark'>
                       You haven't added any workspaces to your favorites yet.
                       Start by marking your most used workspaces!

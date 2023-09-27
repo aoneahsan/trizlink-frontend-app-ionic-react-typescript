@@ -10,64 +10,58 @@ import React from 'react';
  * */
 import classNames from 'classnames';
 import { Formik } from 'formik';
-import isEmail from 'validator/lib/isEmail';
-import { useSetRecoilState } from 'recoil';
 import { closeOutline } from 'ionicons/icons';
+import { AxiosError } from 'axios';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
 import {
-  ZIonCol,
-  ZIonRow,
   ZIonText,
   ZIonContent,
   ZIonIcon,
   ZIonFooter,
-  ZIonInput
+  ZIonInput,
+  ZIonButton
 } from '@/components/ZIonComponents';
+import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import MESSAGES from '@/utils/messages';
-import {
-  extractInnerData,
-  getRandomKey,
-  validateField,
-  zStringify
-} from '@/utils/helpers';
-
-/**
- * Type Imports go down
- * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
- * */
-
-/**
- * Recoil State Imports go down
- * ? Import of recoil states is a Recoil State import
- * */
-import { ZaionsUserAccountEmails } from '@/ZaionsStore/UserAccount/index.recoil';
-import { ZIonButton } from '@/components/ZIonComponents';
-import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
-import {
-  API_URL_ENUM,
-  extractInnerDataOptionsEnum,
-  VALIDATION_RULE
-} from '@/utils/enums';
 import {
   useZGetRQCacheData,
   useZRQCreateRequest,
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
+import MESSAGES from '@/utils/messages';
+import { extractInnerData, validateField, zStringify } from '@/utils/helpers';
+import {
+  API_URL_ENUM,
+  extractInnerDataOptionsEnum,
+  VALIDATION_RULE
+} from '@/utils/enums';
 import { reportCustomError } from '@/utils/customErrorType';
-import { EmailAddressInterface } from '@/types/UserAccount/index.type';
+import {
+  showErrorNotification,
+  showSuccessNotification
+} from '@/utils/notification';
 import CONSTANTS from '@/utils/constants';
+import { ZErrorCodeEnum } from '@/utils/enums/ErrorsCodes';
+
+/**
+ * Type Imports go down
+ * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
+ * */
+import { EmailAddressInterface } from '@/types/UserAccount/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { showSuccessNotification } from '@/utils/notification';
+
+/**
+ * Recoil State Imports go down
+ * ? Import of recoil states is a Recoil State import
+ * */
 
 /**
  * Style files Imports go down
@@ -93,8 +87,6 @@ import { showSuccessNotification } from '@/utils/notification';
 const AddEmailModal: React.FC<{
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
 }> = ({ dismissZIonModal }) => {
-  const setNewEmailInUserAccount = useSetRecoilState(ZaionsUserAccountEmails);
-
   // #region Custom hooks.
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
@@ -149,6 +141,19 @@ const AddEmailModal: React.FC<{
         }
       }
     } catch (error) {
+      if (error instanceof AxiosError) {
+        const __apiErrorObjects = error.response?.data as {
+          errors: { item: string[] };
+          status: number;
+        };
+
+        const __apiErrors = __apiErrorObjects?.errors?.item;
+        const __apiErrorCode = __apiErrorObjects?.status;
+
+        if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
+          showErrorNotification(__apiErrors[0]);
+        }
+      }
       reportCustomError(error);
     }
   };
@@ -186,7 +191,7 @@ const AddEmailModal: React.FC<{
             <ZIonContent className='ion-no-padding ion-padding-horizontal'>
               <div className='mt-5'>
                 <div className='flex ion-align-items-start ion-justify-content-between'>
-                  <ZIonTitle className='ion-no-padding ion-no-margin mb-3 font-semibold'>
+                  <ZIonTitle className='mb-3 font-semibold ion-no-padding ion-no-margin'>
                     Add a new email address
                   </ZIonTitle>
 
@@ -224,7 +229,7 @@ const AddEmailModal: React.FC<{
               />
             </ZIonContent>
 
-            <ZIonFooter className='ion-text-end py-1'>
+            <ZIonFooter className='py-1 ion-text-end'>
               <ZIonButton
                 className='me-4'
                 fill='outline'

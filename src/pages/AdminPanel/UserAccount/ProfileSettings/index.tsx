@@ -61,12 +61,17 @@ import { reportCustomError } from '@/utils/customErrorType';
  * */
 import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 import { useZRQUpdateRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  extractInnerDataOptionsEnum,
+  VALIDATION_RULE
+} from '@/utils/enums';
 import {
   extractInnerData,
   getUserDataObjectForm,
   STORAGE,
   validateField,
+  validateFields,
   zStringify
 } from '@/utils/helpers';
 import { UserAccountType } from '@/types/UserAccount/index.type';
@@ -74,6 +79,7 @@ import ZCan from '@/components/Can';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import AddEmailModal from '@/components/InPageComponents/ZaionsModals/EmailModal';
+import MESSAGES from '@/utils/messages';
 
 /**
  * Style files Imports go down
@@ -225,9 +231,34 @@ const ZProfileSettingsSettings: React.FC = () => {
           }}
           enableReinitialize={true}
           validate={values => {
-            const errors = {};
+            const errors: {
+              confirmPassword?: string;
+            } = {};
 
-            validateField('username', values, errors);
+            // validating the fields and checking for error and error ? setting the errors : validated
+            validateFields(
+              [
+                'username',
+                'emailAddress',
+                'currentPassword',
+                'newPassword',
+                'confirmPassword'
+              ],
+              values,
+              errors,
+              [
+                VALIDATION_RULE.username,
+                VALIDATION_RULE.email,
+                VALIDATION_RULE.password,
+                VALIDATION_RULE.password,
+                VALIDATION_RULE.confirm_password
+              ]
+            );
+
+            // checking the confirm password is === password ? validated : setting an error + invalidate
+            if (values.confirmPassword !== values.newPassword) {
+              errors.confirmPassword = MESSAGES.GENERAL.FORM.PASSWORD_NOT_MATCH;
+            }
 
             return errors;
           }}
@@ -448,23 +479,6 @@ const ZProfileSettingsSettings: React.FC = () => {
                       Add new email
                     </ZIonButton>
                   </div>
-
-                  <div
-                    className={classNames({
-                      'w-max': isSmScale,
-                      'w-full': !isSmScale,
-                      'cursor-not-allowed': true
-                    })}>
-                    <ZIonButton
-                      disabled={true}
-                      expand={isSmScale ? undefined : 'block'}
-                      testingselector={
-                        CONSTANTS.testingSelectors.userAccount
-                          .profileSettingsTab.updatePrimaryEmailBtn
-                      }>
-                      Update primary email
-                    </ZIonButton>
-                  </div>
                 </div>
 
                 {/* Security & authentication */}
@@ -528,8 +542,7 @@ const ZProfileSettingsSettings: React.FC = () => {
                     })}
                   />
                   <ZIonButton
-                    fill='clear'
-                    // size='large'
+                    fill='default'
                     height='2.3rem'
                     className='ion-no-padding ion-no-margin ms-3 w-max'
                     testingselector={
@@ -544,6 +557,8 @@ const ZProfileSettingsSettings: React.FC = () => {
                       )
                     }>
                     <ZIonIcon
+                      color='primary'
+                      className='w-6 h-6'
                       icon={
                         values.canViewCurrentPassword
                           ? eyeOffOutline
@@ -582,8 +597,7 @@ const ZProfileSettingsSettings: React.FC = () => {
                     })}
                   />
                   <ZIonButton
-                    fill='clear'
-                    // size='large'
+                    fill='default'
                     height='2.3rem'
                     className='ion-no-padding ion-no-margin ms-3 w-max'
                     onClick={() =>
@@ -598,6 +612,8 @@ const ZProfileSettingsSettings: React.FC = () => {
                         .newPasswordSeeBtn
                     }>
                     <ZIonIcon
+                      color='primary'
+                      className='w-6 h-6'
                       icon={
                         values.canViewNewPassword ? eyeOffOutline : eyeOutline
                       }
@@ -637,8 +653,7 @@ const ZProfileSettingsSettings: React.FC = () => {
                     })}
                   />
                   <ZIonButton
-                    fill='clear'
-                    // size='large'
+                    fill='default'
                     height='2.3rem'
                     className='ion-no-padding ion-no-margin ms-3 w-max'
                     onClick={() =>
@@ -653,6 +668,8 @@ const ZProfileSettingsSettings: React.FC = () => {
                         .confirmPasswordSeeBtn
                     }>
                     <ZIonIcon
+                      color='primary'
+                      className='w-6 h-6'
                       icon={
                         values.canViewConfirmPassword
                           ? eyeOffOutline

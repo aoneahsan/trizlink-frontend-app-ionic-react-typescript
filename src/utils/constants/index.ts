@@ -110,6 +110,7 @@ export const API_URLS = {
   updateUserAccountInfo: '/user/update-account-info',
   userEmailsList: '/user/list-emails',
   userEmailDelete: `/user/delete-email/${RouteParams.user.itemId}`,
+  makeEmailPrimary: `/user/make-email-primary/${RouteParams.user.itemId}`,
   addEmail: '/user/add-email',
   confirmEmailOTP: `/user/confirm-email-otp/${RouteParams.user.itemId}`,
   resendEmailOTP: `/user/resend-email-otp/${RouteParams.user.itemId}`,

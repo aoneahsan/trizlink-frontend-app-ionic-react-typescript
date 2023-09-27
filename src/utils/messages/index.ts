@@ -178,6 +178,9 @@ const USER = {
   RESEND_OTP_API: 'Resend OTP (One-time-password)',
   CONFIRM_OTP_API: 'Confirming OTP (One-time-password)',
   DELETED: 'The email has left the building!',
+  MAKE_EMAIL_PRIMARY_API_LOADER: 'Making email primary...',
+  EMAIL_PRIMARY_SUCCESS:
+    "Congratulations! You've just promoted an email to 'Chief of Communication'!",
 
   DELETE_ALERT: {
     HEADER: 'Final Check: Deleting email',

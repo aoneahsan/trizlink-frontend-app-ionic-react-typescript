@@ -45,6 +45,7 @@ export enum API_URL_ENUM {
   updateUserAccountInfo = 'updateUserAccountInfo',
   userEmailsList = 'userEmailsList',
   userEmailDelete = 'userEmailDelete',
+  makeEmailPrimary = 'makeEmailPrimary',
   addEmail = 'addEmail',
   confirmEmailOTP = 'confirmEmailOTP',
   resendEmailOTP = 'resendEmailOTP',
