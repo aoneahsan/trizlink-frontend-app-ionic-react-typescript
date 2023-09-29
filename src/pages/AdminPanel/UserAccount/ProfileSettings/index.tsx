@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 
 /**
  * Packages Imports go down
@@ -10,7 +10,7 @@ import React, { lazy, Suspense } from 'react';
  * */
 import classNames from 'classnames';
 import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
-import { Form, Formik } from 'formik';
+import { Form, Formik, useFormikContext } from 'formik';
 import { AxiosError } from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
@@ -60,7 +60,10 @@ import { reportCustomError } from '@/utils/customErrorType';
  * ? Import of recoil states is a Recoil State import
  * */
 import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
-import { useZRQUpdateRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+  useZRQCreateRequest,
+  useZRQUpdateRequest
+} from '@/ZaionsHooks/zreactquery-hooks';
 import {
   API_URL_ENUM,
   extractInnerDataOptionsEnum,
@@ -94,6 +97,9 @@ import {
   FormikSetFieldValueEventType
 } from '@/types/ZaionsFormik.type';
 import ZCountdown from '@/components/CustomComponents/ZCountDown';
+import dayjs from 'dayjs';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
+import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
 
 /**
  * Style files Imports go down
@@ -124,6 +130,19 @@ enum EChangePasswordTab {
  * */
 
 const ZProfileSettingsSettings: React.FC = () => {
+  // #region component useState
+  const [compState, setCompState] = useState<{
+    profileFile?: File;
+    profilePicFormattedObj?: {
+      file?: object;
+      fileName?: object;
+      filePath?: string;
+      fileUrl?: string;
+    };
+    profilePicFrontendUrl?: string;
+  }>();
+  // #endregion
+
   // #region Custom hooks.
   const { isSmScale, isLgScale, isMdScale } = useZMediaQueryScale();
   // #endregion
@@ -144,9 +163,61 @@ const ZProfileSettingsSettings: React.FC = () => {
     useZRQUpdateRequest({
       _url: API_URL_ENUM.updateUserAccountInfo
     });
+
+  // Single file upload.
+  const { mutateAsync: uploadSingleFile } = useZRQCreateRequest({
+    _url: API_URL_ENUM.uploadSingleFile,
+    _queriesKeysToInvalidate: [],
+    _authenticated: true,
+    _contentType: zAxiosApiRequestContentType.FormData
+  });
   // #endregion
 
   // #region Functions.
+  const uploadFileToBackend = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('file', compState?.profileFile!);
+      const result = await uploadSingleFile(formData);
+
+      if (result) {
+        const __data = (
+          result as {
+            data: {
+              file: object;
+              fileName: object;
+              filePath: string;
+              fileUrl: string;
+            };
+          }
+        )?.data;
+
+        if (__data) {
+          setCompState(oldValues => ({
+            ...oldValues,
+            profilePicFormattedObj: { ...__data }
+          }));
+
+          // showing success message.
+          showSuccessNotification(MESSAGES.GENERAL.FILE.UPLOADED);
+        }
+      }
+    } catch (error) {
+      reportCustomError(error);
+      if (error instanceof AxiosError) {
+        const _error = (error?.response?.data as { errors: { file: string[] } })
+          ?.errors;
+        const _axiosErrorMessage = error?.message;
+
+        if (_error) {
+          showErrorNotification(_error?.file[0]);
+        } else {
+          showErrorNotification(_axiosErrorMessage);
+        }
+      }
+    }
+  };
+
   const updateProfileDetailsHandler = async (_data: string) => {
     try {
       const __response = await ZUpdateUserAccountInfoAsyncMutate({
@@ -162,6 +233,7 @@ const ZProfileSettingsSettings: React.FC = () => {
         );
 
         if (__data && __data?.id && __data?.email) {
+          console.log({ __data, compState });
           // getting user data.
           const userData = getUserDataObjectForm(__data);
 
@@ -183,7 +255,6 @@ const ZProfileSettingsSettings: React.FC = () => {
   };
 
   // #endregion
-
   return (
     <ZIonRow
       className={classNames({
@@ -240,7 +311,8 @@ const ZProfileSettingsSettings: React.FC = () => {
                 userAccountStateAtom?.avatar ||
                 ''
             },
-            phoneNumber: userAccountStateAtom?.phoneNumber || ''
+            phoneNumber: userAccountStateAtom?.phoneNumber || '',
+            enableMakeEmailPrimary: true
           }}
           enableReinitialize={true}
           validate={values => {
@@ -325,7 +397,11 @@ const ZProfileSettingsSettings: React.FC = () => {
                 <div className='flex w-full gap-2 mt-2 mb-4 ion-align-items-center'>
                   <ZUserAvatarButton
                     className='border rounded-sm'
-                    userAvatar={values?.userProfileFile?.fileUrl}
+                    userAvatar={
+                      compState?.profilePicFrontendUrl ||
+                      compState?.profilePicFormattedObj?.fileUrl ||
+                      userAccountStateAtom?.profileImage?.fileUrl
+                    }
                     style={{
                       height: '3rem',
                       width: '3rem',
@@ -336,10 +412,40 @@ const ZProfileSettingsSettings: React.FC = () => {
                       name: userAccountStateAtom?.username
                     }}
                   />
-                  <ZUploadInput
+                  {/* <ZUploadInput
                     setFieldValueFn={setFieldValue}
                     name='userProfileFile'
                     value={values.userProfileFile}
+                  /> */}
+                  <input
+                    type='file'
+                    name='userProfileFile'
+                    multiple={false}
+                    className={classNames({
+                      'z-upload-input w-full': true
+                    })}
+                    onChange={event => {
+                      const zFile =
+                        event?.target?.files && event?.target?.files[0];
+
+                      if (zFile) {
+                        setCompState(oldValues => ({
+                          ...oldValues,
+                          profileFile: zFile
+                        }));
+
+                        const reader = new FileReader();
+
+                        reader.onload = ({ target }) => {
+                          setCompState(oldValues => ({
+                            ...oldValues,
+                            profilePicFrontendUrl: target?.result as string
+                          }));
+                        };
+
+                        reader.readAsDataURL(zFile);
+                      }
+                    }}
                   />
                 </div>
 
@@ -382,17 +488,27 @@ const ZProfileSettingsSettings: React.FC = () => {
                     }
                     type='submit'
                     expand={isSmScale ? undefined : 'block'}
-                    onClick={() => {
+                    onClick={async () => {
                       if (
                         errors?.username === undefined &&
                         !updateProfileDetailBtnDisable
                       ) {
+                        if (compState?.profileFile !== undefined) {
+                          await uploadFileToBackend();
+                        }
+
                         const __zStringifyData = zStringify({
                           name: values?.name,
                           username: values?.username,
                           phoneNumber: values?.phoneNumber,
-                          profileImage: zStringify(values?.userProfileFile),
-                          avatar: values?.userProfileFile?.fileUrl
+                          profileImage: compState?.profilePicFormattedObj
+                            ? zStringify(compState?.profilePicFormattedObj)
+                            : userAccountStateAtom?.profileImage
+                            ? zStringify(userAccountStateAtom?.profileImage)
+                            : null,
+                          avatar:
+                            compState?.profilePicFormattedObj?.fileUrl ||
+                            userAccountStateAtom?.profileImage?.fileUrl
                         });
                         void updateProfileDetailsHandler(__zStringifyData);
                       }
@@ -437,7 +553,9 @@ const ZProfileSettingsSettings: React.FC = () => {
                         <ZFallbackIonSpinner2 />
                       </ZIonRow>
                     }>
-                    <ZEmailAddressesTable />
+                    <ZEmailAddressesTable
+                      enableMakeEmailPrimary={values.enableMakeEmailPrimary}
+                    />
                   </Suspense>
                 </ZCan>
 
@@ -630,6 +748,10 @@ const ZProfileSettingsSettings: React.FC = () => {
 };
 
 const ZChangePassword: React.FC = () => {
+  // #region parent component formik
+  const { setFieldValue: parentSetFieldValue } = useFormikContext();
+  // #endregion
+
   // #region Custom hooks.
   const { isSmScale, isLgScale } = useZMediaQueryScale();
   // #endregion
@@ -646,6 +768,18 @@ const ZChangePassword: React.FC = () => {
       _showAlertOnError: false,
       _loaderMessage: MESSAGES.USER.CONFIRMED_CURRENT_PASSWORD_API
     });
+
+  const { mutateAsync: ZResendPasswordOtpAsyncMutate } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.resendPasswordOtp,
+    _showAlertOnError: false,
+    _loaderMessage: MESSAGES.USER.RESEND_OTP_API
+  });
+
+  const { mutateAsync: ZValidatePasswordOtpAsyncMutate } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.validateCurrentPasswordOtp,
+    _showAlertOnError: false,
+    _loaderMessage: MESSAGES.USER.CONFIRM_OTP_API
+  });
   // #endregion
 
   // #region Functions.
@@ -653,11 +787,13 @@ const ZChangePassword: React.FC = () => {
   const validateCurrentPasswordHandler = async ({
     _data,
     setErrors,
-    setFieldValueFn
+    setFieldValueFn,
+    setFieldTouchedFn
   }: {
     _data: string;
     setErrors: FormikSetErrorsType;
     setFieldValueFn: FormikSetFieldValueEventType;
+    setFieldTouchedFn: FormikSetFieldTouchedEventType;
   }) => {
     try {
       const __response = await ZValidateCurrentPasswordAsyncMutate({
@@ -674,8 +810,14 @@ const ZChangePassword: React.FC = () => {
 
         if (__data?.success) {
           setFieldValueFn('tab', EChangePasswordTab.otpTab, false);
+
+          parentSetFieldValue('enableMakeEmailPrimary', false, false);
+
+          setFieldValueFn('resendOTPValidCheck', false, false);
           setFieldValueFn('otpCodeValidTill', __data.OTPCodeValidTill, false);
+          setFieldTouchedFn('currentPassword', false);
           setFieldValueFn('currentPassword', '', false);
+          setErrors({});
 
           showSuccessNotification(MESSAGES.USER.CONFIRMED_CURRENT_PASSWORD);
         }
@@ -719,6 +861,134 @@ const ZChangePassword: React.FC = () => {
     }
   };
 
+  const resendPasswordOtpHandler = async ({
+    setErrors,
+    setFieldValueFn,
+    setFieldTouchedFn
+  }: {
+    setErrors: FormikSetErrorsType;
+    setFieldValueFn: FormikSetFieldValueEventType;
+    setFieldTouchedFn: FormikSetFieldTouchedEventType;
+  }) => {
+    try {
+      const __response = await ZResendPasswordOtpAsyncMutate({
+        itemIds: [],
+        urlDynamicParts: [],
+        requestData: ''
+      });
+
+      if (__response) {
+        const __data = extractInnerData<{
+          success: boolean;
+          OTPCodeValidTill: string;
+        }>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
+
+        if (__data?.success) {
+          setFieldValueFn('resendOTPValidCheck', false, false);
+          parentSetFieldValue('enableMakeEmailPrimary', false, false);
+          setFieldValueFn('otpCodeValidTill', __data.OTPCodeValidTill, false);
+          setFieldTouchedFn('currentPassword', false);
+          setFieldValueFn('currentPassword', '', false);
+          setErrors({});
+
+          showSuccessNotification(MESSAGES.USER.RESEND_OTP);
+        }
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
+
+  const validateOtpHandler = async ({
+    _data,
+    setErrors,
+    setFieldValueFn,
+    setFieldTouchedFn
+  }: {
+    _data: string;
+    setErrors: FormikSetErrorsType;
+    setFieldValueFn: FormikSetFieldValueEventType;
+    setFieldTouchedFn: FormikSetFieldTouchedEventType;
+  }) => {
+    try {
+      const __response = await ZValidatePasswordOtpAsyncMutate({
+        itemIds: [],
+        urlDynamicParts: [],
+        requestData: _data
+      });
+
+      if (__response) {
+        const __data = extractInnerData<{
+          success: boolean;
+        }>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
+
+        if (__data?.success) {
+          setFieldValueFn('tab', EChangePasswordTab.newPasswordTab, false);
+          parentSetFieldValue('enableMakeEmailPrimary', true, false);
+          setFieldValueFn('otp', '', false);
+          setFieldTouchedFn('otp', false);
+          setErrors({});
+
+          showSuccessNotification(MESSAGES.USER.CONFIRMED_PASSWORD_OTP);
+        }
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const __apiErrorObjects = error.response?.data as {
+          errors: { item: string[] } | ZGenericObject;
+          status: number;
+        };
+
+        const __apiErrors = __apiErrorObjects?.errors;
+        const __apiErrorCode = __apiErrorObjects?.status;
+
+        if (
+          __apiErrorCode === ZErrorCodeEnum.serverError ||
+          __apiErrorCode === ZErrorCodeEnum.badRequest
+        ) {
+          const __errors = formatApiRequestErrorForFormikFormField(
+            ['otp'],
+            ['otp'],
+            __apiErrors as ZGenericObject
+          );
+
+          const _otpErrorMessage = (__errors as { otp: string })?.otp;
+
+          setFieldValueFn('isOTPApiError', true, false);
+          setFieldValueFn('OTPApiMessage', _otpErrorMessage, false);
+
+          setErrors(__errors);
+        }
+      }
+
+      reportCustomError(error);
+    }
+  };
+
+  const cancelPasswordPossessHandler = ({
+    setErrors,
+    setFieldValueFn,
+    setFieldTouchedFn
+  }: {
+    setErrors: FormikSetErrorsType;
+    setFieldValueFn: FormikSetFieldValueEventType;
+    setFieldTouchedFn: FormikSetFieldTouchedEventType;
+  }) => {
+    try {
+      setFieldValueFn('tab', EChangePasswordTab.currentPasswordTab, false);
+
+      parentSetFieldValue('enableMakeEmailPrimary', true, false);
+
+      setFieldValueFn('otpCodeValidTill', '', false);
+      setFieldValueFn('otp', '', false);
+      setFieldTouchedFn('currentPassword', false);
+      setFieldValueFn('currentPassword', '', false);
+      setErrors({});
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
+
   //
   const updatePasswordHandler = async (
     _data: string,
@@ -739,13 +1009,15 @@ const ZChangePassword: React.FC = () => {
         }>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
         if (__data && __data?.user?.email) {
-          setFieldValueFn('currentPassword', '', false);
+          setFieldValueFn('tab', EChangePasswordTab.currentPasswordTab, false);
           setFieldValueFn('newPassword', '', false);
           setFieldValueFn('confirmPassword', '', false);
 
-          setFieldTouchedFn('currentPassword', false);
           setFieldTouchedFn('newPassword', false);
           setFieldTouchedFn('confirmPassword', false);
+
+          setErrors({});
+
           showSuccessNotification(MESSAGES.USER.PASSWORD_CHANGE);
         }
       }
@@ -764,18 +1036,12 @@ const ZChangePassword: React.FC = () => {
           __apiErrorCode === ZErrorCodeEnum.badRequest
         ) {
           const __errors = formatApiRequestErrorForFormikFormField(
-            ['currentPassword', 'newPassword', 'confirmPassword'],
-            ['password', 'newPassword', 'newPassword_confirmation'],
+            ['newPassword', 'confirmPassword'],
+            ['newPassword', 'newPassword_confirmation'],
             __apiErrors as ZGenericObject
           );
           setErrors(__errors);
         }
-
-        // if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
-        //   showErrorNotification(
-        //     (__apiErrorObjects?.errors as { item: string[] })?.item[0]
-        //   );
-        // }
       }
 
       reportCustomError(error);
@@ -798,7 +1064,11 @@ const ZChangePassword: React.FC = () => {
         confirmPassword: '',
 
         otp: '',
-        otpCodeValidTill: ''
+        otpCodeValidTill: '',
+        isOTPApiError: false,
+        OTPApiMessage: '',
+
+        resendOTPValidCheck: false
       }}
       validate={values => {
         const errors: {
@@ -844,25 +1114,26 @@ const ZChangePassword: React.FC = () => {
         touched
       }) => {
         const changePasswordValidCheck =
-          touched.currentPassword &&
-          touched.newPassword &&
-          touched.confirmPassword &&
-          !errors?.currentPassword?.trim() &&
           !errors?.newPassword?.trim() &&
           !errors?.confirmPassword?.trim() &&
-          values?.currentPassword?.trim()?.length > 0 &&
           values?.newPassword?.trim()?.length > 0 &&
           values?.confirmPassword?.trim()?.length > 0;
 
         const currentPasswordValidCheck =
-          touched.currentPassword &&
           !errors?.currentPassword?.trim() &&
           values?.currentPassword?.trim()?.length > 0;
 
         const otpValidCheck =
-          touched.otp &&
           !errors?.otp?.trim() &&
-          values?.currentPassword?.trim()?.length === CONSTANTS?.ZOtpLength;
+          values?.otp?.trim()?.length === CONSTANTS?.ZOtpLength;
+
+        // useEffect(() => {
+        //   resendOTPValidCheck = dayjs().isAfter(
+        //     dayjs(values?.otpCodeValidTill).subtract(2, 'minute')
+        //   );
+        // }, [
+        //   dayjs().isAfter(dayjs(values?.otpCodeValidTill).subtract(2, 'minute'))
+        // ]);
 
         return (
           <>
@@ -972,25 +1243,41 @@ const ZChangePassword: React.FC = () => {
                   label='OTP (One-time-password)'
                   maxlength={CONSTANTS.ZOtpLength}
                   labelPlacement='stacked'
-                  errorText={touched.otp ? errors.otp : undefined}
+                  errorText={
+                    values.isOTPApiError
+                      ? values.OTPApiMessage
+                      : touched.otp
+                      ? errors.otp
+                      : undefined
+                  }
                   className={classNames({
                     'ion-touched': touched.otp,
-                    'ion-invalid': touched.otp && errors.otp
+                    'ion-invalid':
+                      (touched.otp && errors.otp) || values.isOTPApiError
                     // 'ion-valid': touched.otp && !errors.otp
                   })}
                 />
                 <ZCountdown
-                  onComplete={() => {
-                    setFieldValue(
-                      'tab',
-                      EChangePasswordTab.currentPasswordTab,
-                      false
-                    );
-
-                    showInfoNotification(
-                      'OTP valid time passed please try again.'
-                    );
+                  onTick={() => {
+                    if (
+                      dayjs().isAfter(
+                        dayjs(values?.otpCodeValidTill).subtract(4, 'minute')
+                      )
+                    ) {
+                      setFieldValue('resendOTPValidCheck', true, false);
+                    }
                   }}
+                  // onComplete={() => {
+                  //   // setFieldValue(
+                  //   //   'tab',
+                  //   //   EChangePasswordTab.currentPasswordTab,
+                  //   //   false
+                  //   // );
+
+                  //   showInfoNotification(
+                  //     'OTP valid time passed please try again.'
+                  //   );
+                  // }}
                   countDownTime={values?.otpCodeValidTill}
                   color='dark'
                   component={({ d, color }) => {
@@ -1123,7 +1410,6 @@ const ZChangePassword: React.FC = () => {
             ) : null}
 
             {/* Action btn */}
-
             {values.tab === EChangePasswordTab.currentPasswordTab ? (
               <div
                 className={classNames({
@@ -1153,7 +1439,8 @@ const ZChangePassword: React.FC = () => {
                       void validateCurrentPasswordHandler({
                         _data: __stringifyData,
                         setErrors: setErrors,
-                        setFieldValueFn: setFieldValue
+                        setFieldValueFn: setFieldValue,
+                        setFieldTouchedFn: setFieldTouched
                       });
                     }}>
                     Confirm current password
@@ -1185,18 +1472,71 @@ const ZChangePassword: React.FC = () => {
                     }
                     onClick={() => {
                       const __stringifyData = zStringify({
-                        password: values.currentPassword
+                        otp: values.otp
                       });
 
-                      void validateCurrentPasswordHandler({
+                      void validateOtpHandler({
                         _data: __stringifyData,
                         setErrors: setErrors,
-                        setFieldValueFn: setFieldValue
+                        setFieldValueFn: setFieldValue,
+                        setFieldTouchedFn: setFieldTouched
                       });
                     }}>
                     Confirm OTP
                   </ZIonButton>
                 </div>
+
+                <div
+                  className={classNames({
+                    'mt-1': true,
+                    'w-max': isSmScale,
+                    'w-full': !isSmScale,
+                    'cursor-not-allowed': !otpValidCheck
+                  })}>
+                  <ZIonButton
+                    color='tertiary'
+                    disabled={!values.resendOTPValidCheck}
+                    expand={isSmScale ? undefined : 'block'}
+                    testingselector={
+                      CONSTANTS.testingSelectors.userAccount.profileSettingsTab
+                        .changePasswordBtn
+                    }
+                    onClick={() => {
+                      if (values.resendOTPValidCheck) {
+                        void resendPasswordOtpHandler({
+                          setErrors: setErrors,
+                          setFieldValueFn: setFieldValue,
+                          setFieldTouchedFn: setFieldTouched
+                        });
+                      }
+                    }}>
+                    Resend OTP
+                  </ZIonButton>
+                </div>
+
+                <ZIonButton
+                  color='secondary'
+                  expand={isSmScale ? undefined : 'block'}
+                  id='cancel-password-change-possess-tt'
+                  testingselector={
+                    CONSTANTS.testingSelectors.userAccount.profileSettingsTab
+                      .changePasswordBtn
+                  }
+                  onClick={() => {
+                    cancelPasswordPossessHandler({
+                      setErrors: setErrors,
+                      setFieldValueFn: setFieldValue,
+                      setFieldTouchedFn: setFieldTouched
+                    });
+                  }}>
+                  Cancel
+                </ZIonButton>
+                <ZRTooltip
+                  anchorSelect='#cancel-password-change-possess-tt'
+                  variant='info'
+                  place='right'>
+                  <p className='text-sm'>Cancel password change possess</p>
+                </ZRTooltip>
               </div>
             ) : null}
 
@@ -1228,7 +1568,6 @@ const ZChangePassword: React.FC = () => {
                     }
                     onClick={() => {
                       const __stringifyData = zStringify({
-                        password: values.currentPassword,
                         newPassword: values.newPassword,
                         newPassword_confirmation: values.confirmPassword
                       });

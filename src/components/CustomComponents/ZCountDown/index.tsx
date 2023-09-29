@@ -16,6 +16,7 @@ import Countdown, {
 } from 'react-countdown';
 import { getRemainingTimeForCountDown } from '@/utils/helpers';
 import { ZIonColorType } from '@/types/zaionsAppSettings.type';
+import { CountdownTimeDeltaFn } from 'react-countdown/dist/Countdown';
 
 /**
  * Custom Imports go down
@@ -143,6 +144,8 @@ const ZCustomRender: React.FC<{
 const ZCountdown: React.FC<{
   countDownTime?: string;
   color?: ZIonColorType;
+  controlled?: boolean;
+  onTick?: CountdownTimeDeltaFn;
   onComplete?:
     | ((timeDelta: CountdownTimeDelta, completedOnStart: boolean) => void)
     | (() => void);
@@ -150,9 +153,18 @@ const ZCountdown: React.FC<{
     d: CountdownRenderProps;
     color?: ZIonColorType;
   }>;
-}> = ({ countDownTime, color, component, onComplete }) => {
+}> = ({
+  countDownTime,
+  color,
+  component,
+  controlled = false,
+  onComplete,
+  onTick
+}) => {
   return (
     <Countdown
+      controlled={controlled}
+      onTick={onTick}
       onComplete={onComplete}
       date={getRemainingTimeForCountDown(countDownTime)}
       renderer={(props: CountdownRenderProps) => {

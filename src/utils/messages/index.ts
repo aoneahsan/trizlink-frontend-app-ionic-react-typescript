@@ -184,7 +184,9 @@ const USER = {
   CONFIRMED_CURRENT_PASSWORD:
     'Bingo! Current password confirmed. Your OTP is on its way to your inbox!',
   CONFIRMED_CURRENT_PASSWORD_API: 'Confirming password...',
-  CONFIRMED_OTP: 'Boom! Your email just leveled up to verified status.',
+  CONFIRMED_EMAIL_OTP: 'Boom! Your email just leveled up to verified status.',
+  CONFIRMED_PASSWORD_OTP:
+    "Double win! Password and OTP cleared. Now, let's cook up a new password!",
   RESEND_OTP: 'Resent! Look out for the fresh verification code in your email.',
   RESEND_OTP_API: 'Resend OTP (One-time-password)',
   CONFIRM_OTP_API: 'Confirming OTP (One-time-password)',

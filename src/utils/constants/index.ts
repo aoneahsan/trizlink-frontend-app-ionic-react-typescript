@@ -40,6 +40,8 @@ const ZPasswordMinCharacter = 8;
 
 const ZOtpLength = 6;
 
+const ZOptResendAfter = 5;
+
 const RouteParams = {
   editShortLinkIdParam: ':editLinkId',
   editLinkInBioIdParam: ':editLinkInBioId',
@@ -114,6 +116,8 @@ export const API_URLS = {
   updateUserAccountInfo: '/user/update-account-info',
   updatePassword: '/user/update-password',
   validateCurrentPassword: '/user/validate-password',
+  resendPasswordOtp: '/user/password-resend-otp',
+  validateCurrentPasswordOtp: '/user/validate-password-otp',
   userEmailsList: '/user/list-emails',
   userEmailDelete: `/user/delete-email/${RouteParams.user.itemId}`,
   makeEmailPrimary: `/user/make-email-primary/${RouteParams.user.itemId}`,
@@ -1660,6 +1664,7 @@ const ZStatesOptions: ZaionsRSelectOptions[] = [
 ];
 
 const CONSTANTS = {
+  ZOptResendAfter,
   ZRolesOptions,
   ZOtpLength,
   ZPasswordMinCharacter,

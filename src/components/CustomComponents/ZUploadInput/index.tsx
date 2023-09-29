@@ -164,7 +164,6 @@ const ZUploadInput: React.FC<IZUploadInput> = ({
 
       const result = await uploadFiles(formData);
       if (result) {
-        console.log({ result });
         const __data = (
           result as {
             data: {

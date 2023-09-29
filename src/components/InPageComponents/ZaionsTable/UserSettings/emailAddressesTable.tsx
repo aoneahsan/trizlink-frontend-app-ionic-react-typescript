@@ -143,7 +143,9 @@ import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.rec
  * @type {*}
  * */
 
-const ZEmailAddressesTable: React.FC = () => {
+const ZEmailAddressesTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
+  enableMakeEmailPrimary
+}) => {
   // #region APIS.
   const { data: userEmailsData, isFetching: isUserEmailsDataFetching } =
     useZRQGetRequest<EmailAddressInterface[]>({
@@ -157,11 +159,13 @@ const ZEmailAddressesTable: React.FC = () => {
   if (isUserEmailsDataFetching) {
     return <ZEmailTableSkeleton />;
   } else {
-    return <ZInpageTable />;
+    return <ZInpageTable enableMakeEmailPrimary={enableMakeEmailPrimary} />;
   }
 };
 
-const ZInpageTable: React.FC = () => {
+const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
+  enableMakeEmailPrimary
+}) => {
   // #region comp state.
   const [compState, setCompState] = useState<{
     selectedEmail: EmailAddressInterface;
@@ -351,7 +355,7 @@ const ZInpageTable: React.FC = () => {
                               );
 
                               showSuccessNotification(
-                                MESSAGES.USER.CONFIRMED_OTP
+                                MESSAGES.USER.CONFIRMED_EMAIL_OTP
                               );
                             }
                           }
@@ -751,37 +755,58 @@ const ZInpageTable: React.FC = () => {
                           'border-r': false
                         })}>
                         {!_rowInfo?.original?.isPrimary &&
-                          _rowInfo?.original?.status ===
-                            EmailStatusEnum.Verified && (
-                            <>
-                              {/* Edit */}
-                              <ZIonIcon
-                                icon={createOutline}
-                                color='secondary'
-                                className='w-6 h-6 cursor-pointer'
-                                id={`email-edit-btn-tt-${_rowInfo?.original
-                                  ?.id!}`}
-                                onClick={() => {
-                                  setCompState(oldValues => ({
-                                    ...oldValues,
-                                    selectedEmail: _rowInfo?.original
-                                  }));
+                        _rowInfo?.original?.status ===
+                          EmailStatusEnum.Verified &&
+                        enableMakeEmailPrimary ? (
+                          <>
+                            {/* Edit */}
+                            <ZIonIcon
+                              icon={createOutline}
+                              color='secondary'
+                              className='w-6 h-6 cursor-pointer'
+                              id={`email-edit-btn-tt-${_rowInfo?.original
+                                ?.id!}`}
+                              onClick={() => {
+                                setCompState(oldValues => ({
+                                  ...oldValues,
+                                  selectedEmail: _rowInfo?.original
+                                }));
 
-                                  //
-                                  presentUpdateEmailModal({
-                                    _cssClass: 'add-email-modal-size'
-                                  });
-                                }}
-                              />
-                              <ZRTooltip
-                                place='left'
-                                variant='info'
-                                anchorSelect={`#email-edit-btn-tt-${_rowInfo
-                                  ?.original?.id!}`}>
-                                Make email primary
-                              </ZRTooltip>
-                            </>
-                          )}
+                                //
+                                presentUpdateEmailModal({
+                                  _cssClass: 'add-email-modal-size'
+                                });
+                              }}
+                            />
+                            <ZRTooltip
+                              place='left'
+                              variant='info'
+                              anchorSelect={`#email-edit-btn-tt-${_rowInfo
+                                ?.original?.id!}`}>
+                              Make email primary
+                            </ZRTooltip>
+                          </>
+                        ) : !enableMakeEmailPrimary ? (
+                          <>
+                            <ZIonIcon
+                              icon={informationCircleOutline}
+                              color='warning'
+                              className='w-6 h-6 cursor-pointer '
+                              id={`primary-enable-email-info-warning-tt-${_rowInfo
+                                ?.original?.id!}`}
+                            />
+
+                            <ZRTooltip
+                              place='left'
+                              variant='info'
+                              anchorSelect={`#primary-enable-email-info-warning-tt-${_rowInfo
+                                ?.original?.id!}`}>
+                              You can't make an email
+                              <br /> primary until the password
+                              <br /> change process is complete.
+                            </ZRTooltip>
+                          </>
+                        ) : null}
 
                         {/* Delete or warning */}
                         {_rowInfo?.original?.isPrimary ? (

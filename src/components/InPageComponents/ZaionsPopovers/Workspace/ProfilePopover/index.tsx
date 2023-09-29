@@ -128,12 +128,12 @@ const ZWorkspaceProfilePopover: React.FC<{
       <ZIonRow className='pt-2 ion-align-items-center'>
         <ZIonCol size='max-content'>
           <ZUserAvatarButton
-            className='w-[10px] h-[10px] me-1'
+            className='w-[10px] h-[10px] me-1 ms-1 border'
             userAvatar={zUserAccountStateAtom?.avatar}
             userAvatarUi={{
               name: zUserAccountStateAtom?.username
             }}
-            style={{ height: '39px', width: '39px' }}
+            style={{ height: '40px', width: '40px' }}
           />
         </ZIonCol>
         <ZIonCol>

@@ -1,8 +1,8 @@
 // Core Imports
-import React, { lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 
 // Packages Imports
-import { Route } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 
 // Custom
 import ZaionsRoutes from './utils/constants/RoutesConstants';
@@ -346,6 +346,18 @@ const AppRoutes = () => {
         Component={ZWorkspaceListPage}
       />
 
+      {/* If user visit /app then redirect to /app/workspaces */}
+      <PrivateRoute
+        exact
+        path={ZaionsRoutes.AdminPanel.Workspaces.App}
+        Component={() => (
+          <Redirect
+            exact
+            to={ZaionsRoutes.AdminPanel.Workspaces.Main}
+          />
+        )}
+      />
+
       <PrivateRoute
         exact
         path={ZaionsRoutes.AdminPanel.Workspaces.Create}
@@ -610,6 +622,16 @@ const AppRoutes = () => {
         path={ZaionsRoutes.Testing.TestingTabs.Main}
         component={TestingTabs}
       />
+
+      {/* <Route
+        path={ZaionsRoutes.Asterisk}
+        component={() => (
+          <Redirect
+            exact
+            to={ZaionsRoutes.Error.Z404}
+          />
+        )}
+      /> */}
 
       {/* <Route path={ZaionsRoutes.Asterisk} component={Z404View} /> */}
     </Suspense>

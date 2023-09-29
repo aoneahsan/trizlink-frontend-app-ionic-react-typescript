@@ -129,6 +129,7 @@ const ZaionsRoutes = {
     },
 
     Workspaces: {
+      App: `${ZPrivateRoutePath}`,
       Main: `${ZPrivateRoutePath}/workspaces`,
       Create: `${ZPrivateRoutePath}/workspaces/create`,
       Edit: `${ZPrivateRoutePath}/workspaces/edit/${CONSTANTS.RouteParams.workspace.editWorkspaceIdParam}`,
