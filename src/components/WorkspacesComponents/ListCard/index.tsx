@@ -487,24 +487,39 @@ const ZWorkspacesCard: React.FC<{
 
                   {/* actions popover button */}
                   <ZIonCol className='ion-text-end'>
-                    <ZIonButton
-                      fill='clear'
-                      className='h-auto mb-1 normal-case ion-no-padding ion-no-margin'
-                      color='dark'
-                      testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardActionPopoverButton}-${workspaceId}`}
-                      testinglistselector={
-                        CONSTANTS.testingSelectors.workspace.listPage
-                          .workspaceCardActionPopoverButton
-                      }
-                      onClick={(event: unknown) => {
-                        presentWorkspacesActionsPopover({
-                          _event: event as Event,
-                          _cssClass: 'zaions_workspaces_actions_popover_size',
-                          _dismissOnSelect: false
-                        });
-                      }}>
-                      <ZIonIcon icon={ellipsisHorizontalOutline} />
-                    </ZIonButton>
+                    {owned === true && (
+                      <ZIonButton
+                        fill='clear'
+                        className='h-auto mb-1 normal-case ion-no-padding ion-no-margin'
+                        color='dark'
+                        testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardActionPopoverButton}-${workspaceId}`}
+                        testinglistselector={
+                          CONSTANTS.testingSelectors.workspace.listPage
+                            .workspaceCardActionPopoverButton
+                        }
+                        onClick={(event: unknown) => {
+                          presentWorkspacesActionsPopover({
+                            _event: event as Event,
+                            _cssClass: 'zaions_workspaces_actions_popover_size',
+                            _dismissOnSelect: false
+                          });
+                        }}>
+                        <ZIonIcon icon={ellipsisHorizontalOutline} />
+                      </ZIonButton>
+                    )}
+                    {owned === false && (
+                      <ZIonButton
+                        color='danger'
+                        size='default'
+                        testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.leaveWorkspaceButton}-${workspaceId}`}
+                        testinglistselector={
+                          CONSTANTS.testingSelectors.workspace.listPage
+                            .leaveWorkspaceButton
+                        }
+                        onClick={() => {}}>
+                        Leave
+                      </ZIonButton>
+                    )}
                   </ZIonCol>
                 </>
               ) : accountStatus === ZTeamMemberInvitationEnum.pending ||

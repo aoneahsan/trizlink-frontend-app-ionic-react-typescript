@@ -27,6 +27,7 @@ import {
 import { zNotificationSlotEnum } from '@/types/CustomHooks/zgeneric-hooks.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import CONSTANTS from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { reportCustomError } from '@/utils/customErrorType';
 import {
   API_URL_ENUM,
@@ -323,7 +324,11 @@ const ZNotificationPopover: React.FC<{
                     testingselector={
                       CONSTANTS.testingSelectors.topBar.notificationPopover
                         .settingsBtn
-                    }>
+                    }
+                    onClick={() => {
+                      // ZaionsRoutes.AdminPanel.Setting.UserAccount
+                      // .NotificationSettings
+                    }}>
                     <ZIonIcon
                       icon={settingsOutline}
                       className='w-5 h-5'

@@ -34,7 +34,11 @@ import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import { useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
+import {
+  useZIonAlert,
+  useZIonErrorAlert,
+  useZIonLoading
+} from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down
@@ -56,6 +60,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * ? Import of recoil states is a Recoil State import
  * */
 import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import MESSAGES from '@/utils/messages';
 
 /**
  * Style files Imports go down
@@ -84,8 +89,37 @@ const ZWorkspaceProfilePopover: React.FC<{
 }> = ({ dismissZIonPopover, zNavigatePushRoute }) => {
   // Custom hooks.
   const { presentZIonLoader, dismissZIonLoader } = useZIonLoading(); // hook to show loader
+  const { presentZIonErrorAlert } = useZIonErrorAlert();
+  const { presentZIonAlert } = useZIonAlert();
 
   const zUserAccountStateAtom = useRecoilValue(ZaionsUserAccountRStateAtom);
+
+  // logout confirm alert.
+  const ZLogoutAlert = async () => {
+    try {
+      await presentZIonAlert({
+        header: MESSAGES.Logout.LOGOUT_ALERT.HEADER,
+        subHeader: MESSAGES.Logout.LOGOUT_ALERT.SUB_HEADER,
+        message: MESSAGES.Logout.LOGOUT_ALERT.MESSAGES,
+        buttons: [
+          {
+            text: 'Close',
+            role: 'cancel'
+          },
+          {
+            text: 'Logout',
+            cssClass: 'zaions_ion_color_danger',
+            role: 'danger',
+            handler: () => {
+              void profileLogoutHandler();
+            }
+          }
+        ]
+      });
+    } catch (error) {
+      await presentZIonErrorAlert();
+    }
+  };
 
   const profileLogoutHandler = async () => {
     try {
@@ -151,11 +185,12 @@ const ZWorkspaceProfilePopover: React.FC<{
         </ZIonCol>
       </ZIonRow>
 
-      <ZIonList lines='none'>
+      <ZIonList
+        lines='full'
+        className='pb-0'>
         <ZIonItem
           className='text-sm cursor-pointer ion-activatable ion-focusable'
           minHeight='32px'
-          lines='full'
           testingselector={
             CONSTANTS.testingSelectors.user.profilePopover.profileSettings
           }
@@ -195,13 +230,14 @@ const ZWorkspaceProfilePopover: React.FC<{
           className='text-sm cursor-pointer ion-activatable ion-focusable'
           minHeight='40px'
           lines='none'
-          onClick={() => void profileLogoutHandler()}
+          onClick={() => void ZLogoutAlert()}
           testingselector={
             CONSTANTS.testingSelectors.user.profilePopover.logout
           }>
           <ZIonIcon
             icon={logOutOutline}
             className='w-5 h-5 me-1 pe-1'
+            color='danger'
           />
           <ZIonLabel className='pt-1 my-0'>Logout</ZIonLabel>
         </ZIonItem>

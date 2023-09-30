@@ -86,6 +86,14 @@ const Login = {
     'Oops! It seems like your login pass has decided to take a coffee break. Please reauthenticate.'
 };
 
+const Logout = {
+  LOGOUT_ALERT: {
+    HEADER: 'Final Check: Logout',
+    SUB_HEADER: 'Confirm Your Move!',
+    MESSAGES: 'Are you sure you went to logout.'
+  }
+};
+
 const PASSWORD = {
   VALIDATION: {
     MIN_LENGTH: `password needs to be at least ${CONSTANTS.ZPasswordMinCharacter} digits long.`
@@ -188,7 +196,7 @@ const USER = {
   CONFIRMED_PASSWORD_OTP:
     "Double win! Password and OTP cleared. Now, let's cook up a new password!",
   RESEND_OTP: 'Resent! Look out for the fresh verification code in your email.',
-  RESEND_OTP_API: 'Resend OTP (One-time-password)',
+  RESEND_OTP_API: 'Resending OTP (One-time-password)',
   CONFIRM_OTP_API: 'Confirming OTP (One-time-password)',
   DELETED: 'The email has left the building!',
   MAKE_EMAIL_PRIMARY_API_LOADER: 'Making email primary...',
@@ -201,6 +209,10 @@ const USER = {
     MESSAGES:
       "Deleting this email means it's gone forever. Are you certain this is what you want?"
   }
+};
+
+const SIGN_UP = {
+  SIGNING_UP: 'signing up. setting up your profile.'
 };
 
 const MODALS = {
@@ -362,12 +374,21 @@ const LABEL = {
 const OTP = {
   VALIDATION: {
     MAX_LENGTH: `OTP needs to be exactly ${CONSTANTS.ZOtpLength} digits long.`
-  }
+  },
+  SEND_SUCCESSFULLY:
+    'Drumroll, please! Your OTP has just embarked on its journey to your inbox.',
+  CONFIRMED:
+    'Your OTP just passed the final test! Your email is now officially confirmed.',
+  SENDING: 'Sending OTP (One time password)',
+  RESENDING: 'Resending OTP (One time password)',
+  CONFIRMING: 'Confirming OTP (One time password)'
 };
 
 // Add Constants Above this one, and then include them in this object
 const MESSAGES = {
   GENERAL,
+  Logout,
+  SIGN_UP,
   OTP,
   Login,
   LABEL,

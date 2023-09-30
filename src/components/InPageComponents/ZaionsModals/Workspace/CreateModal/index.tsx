@@ -281,17 +281,23 @@ const ZAddNewWorkspaceModal: React.FC<{
 
                 {/* create button */}
                 <ZIonCol>
-                  <ZIonButton
-                    expand='block'
-                    className='mt-4 '
-                    onClick={() => void submitForm()}
-                    disabled={!isValid}
-                    testingselector={
-                      CONSTANTS.testingSelectors.workspace.createModal
-                        .createButton
-                    }>
-                    Create
-                  </ZIonButton>
+                  <div
+                    className={classNames({
+                      'w-full mt-4': true,
+                      'cursor-not-allowed': !isValid
+                    })}>
+                    <ZIonButton
+                      expand='block'
+                      className='ion-no-margin'
+                      onClick={() => void submitForm()}
+                      disabled={!isValid}
+                      testingselector={
+                        CONSTANTS.testingSelectors.workspace.createModal
+                          .createButton
+                      }>
+                      Create
+                    </ZIonButton>
+                  </div>
                 </ZIonCol>
               </ZIonRow>
             );

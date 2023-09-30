@@ -64,6 +64,7 @@ export enum API_URL_ENUM {
   userEmbedWidget_update_delete = 'userEmbedWidget_update_delete',
   send_otp = 'send_otp',
   send_signup_otp = 'send_signup_otp',
+  resend_user_otp = 'resend_user_otp',
   send_forget_password_otp = 'send_forget_password_otp',
   confirm_otp = 'confirm_otp',
   set_password = 'set_password',

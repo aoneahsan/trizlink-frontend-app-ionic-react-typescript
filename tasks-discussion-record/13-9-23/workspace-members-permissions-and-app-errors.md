@@ -31,19 +31,19 @@ explaining talha - members permissions management in zlink and any other product
 - ~~showing “mark as faviort for workspace invitations, total invalid case, user needs to accept invite first then only can mark as faviorte~~
 - ~~i marked a workspace invitation as faviorte and then tried accepting it from favoritte list, gave a error, and then i accepted the invitation from “shared workspaces list” it worked and it removed my workspace from the favorite workspace list automatically~~
 
-<!-- MTI -->
-show timer in otp in signup forget password
+~~show timer in otp in signup, forget password pages~~
+~~show alert before logout~~
 
 —— Permissions Flow in Shared WorkSpaces. —————
 
 - no other option on shared workspaces, only two options “view” & “leave”
 - /app/s/ws/{wsId}/startup.
-  - - fetching data on this page, so user can see what he can do
-        - - - queries we will fetch on this page
-                - - - - permissions of this user in this workspace, shortlinks, link in bios, posts
+    - - fetching data on this page, so user can see what he can do
+          - - - queries we will fetch on this page
+                  - - - - permissions of this user in this workspace, shortlinks, link in bios, posts
 - after fetching permissions and other (as mimium as possible) data move user to /app/s/ws/{wsId}/startup
-  - - total 4 sections, one for workspace info, one for shortlinks, one for link in bio, one for posts.
-        - - - total number of {shortlinks/bios/posts} in their section
+    - - total 4 sections, one for workspace info, one for shortlinks, one for link in bio, one for posts.
+          - - - total number of {shortlinks/bios/posts} in their section
 
 $wsTeamMember = WSTeamMember
 $roleId = $wsTeamMember->mem
