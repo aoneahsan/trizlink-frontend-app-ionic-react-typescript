@@ -314,7 +314,6 @@ const ZInviteTab: React.FC<{
         handleBlur,
         submitForm
       }) => {
-        console.log({ values });
         return (
           <>
             <ZIonGrid

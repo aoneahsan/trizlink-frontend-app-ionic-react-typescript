@@ -103,7 +103,7 @@ import classes from './styles.module.css';
 
 const ZWorkspacesCard: React.FC<{
   workspaceId?: string;
-  inviteId?: string;
+  memberId?: string;
   workspaceName?: string;
   isFavorite?: boolean;
   workspaceTimezone?: string;
@@ -122,7 +122,7 @@ const ZWorkspacesCard: React.FC<{
   owned = true,
   isFavorite,
   accountStatus,
-  inviteId
+  memberId
 }) => {
   // #region Custom Hooks.
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
@@ -163,6 +163,7 @@ const ZWorkspacesCard: React.FC<{
     useZRQUpdateRequest({
       _url: API_URL_ENUM.ws_share_update_is_favorite
     });
+  // #endregion
 
   // #region Functions.
   const zInvitationResponseHandler = async ({
@@ -176,7 +177,7 @@ const ZWorkspacesCard: React.FC<{
           requestData: zStringify({
             status: _item
           }),
-          itemIds: [inviteId!],
+          itemIds: [memberId!],
           urlDynamicParts: [CONSTANTS.RouteParams.workspace.memberInviteId]
         });
 
@@ -192,7 +193,7 @@ const ZWorkspacesCard: React.FC<{
             await updateRQCDataHandler({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.INVITATION_GET,
-                inviteId!
+                memberId!
               ],
               data: __data,
               id: '',
@@ -201,7 +202,7 @@ const ZWorkspacesCard: React.FC<{
             });
 
             const getWSShareWorkspaceData = getRQCDataHandler({
-              key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN]
+              key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
             });
 
             const __oldData =
@@ -212,9 +213,7 @@ const ZWorkspacesCard: React.FC<{
 
             if (_item === ZTeamMemberInvitationEnum.accepted) {
               await updateRQCDataHandler({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN
-                ],
+                key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
                 data: {
                   ...__data.workspace,
                   id: __data?.id,
@@ -228,9 +227,7 @@ const ZWorkspacesCard: React.FC<{
               );
 
               await updateRQCDataHandler({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN
-                ],
+                key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
                 data: __updatedData,
                 id: '',
                 updateHoleData: true,
@@ -288,7 +285,7 @@ const ZWorkspacesCard: React.FC<{
           });
         } else {
           await updateRQCDataHandler({
-            key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN],
+            key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
             data: {
               ...__data
             },
@@ -467,17 +464,31 @@ const ZWorkspacesCard: React.FC<{
                         onClick={() => {
                           // Click on card will redirect to view workspace.
                           if (workspaceId) {
-                            zNavigatePushRoute(
-                              createRedirectRoute({
-                                url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                                params: [
-                                  CONSTANTS.RouteParams.workspace.workspaceId,
-                                  CONSTANTS.RouteParams
-                                    .folderIdToGetShortLinksOrLinkInBio
-                                ],
-                                values: [workspaceId, 'all']
-                              })
-                            );
+                            if (owned === true) {
+                              zNavigatePushRoute(
+                                createRedirectRoute({
+                                  url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                                  params: [
+                                    CONSTANTS.RouteParams.workspace.workspaceId,
+                                    CONSTANTS.RouteParams
+                                      .folderIdToGetShortLinksOrLinkInBio
+                                  ],
+                                  values: [workspaceId, 'all']
+                                })
+                              );
+                            } else {
+                              zNavigatePushRoute(
+                                createRedirectRoute({
+                                  url: ZaionsRoutes.AdminPanel.ShareWS.Startup,
+                                  params: [
+                                    CONSTANTS.RouteParams.workspace.wsShareId,
+                                    CONSTANTS.RouteParams.workspace
+                                      .shareWSMemberId
+                                  ],
+                                  values: [workspaceId, memberId!]
+                                })
+                              );
+                            }
                           }
                         }}>
                         View
@@ -550,7 +561,7 @@ const ZWorkspacesCard: React.FC<{
                   {/* Reject invitation */}
                   <ZIonCol className='ion-text-end'>
                     <ZIonButton
-                      className='normal-case '
+                      className='normal-case'
                       color='danger'
                       size='default'
                       testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.rejectInvitationButton}-${workspaceId}`}

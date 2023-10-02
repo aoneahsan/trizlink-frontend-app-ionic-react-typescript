@@ -99,7 +99,7 @@ const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = () => {
     workspaceInterface[]
   >({
     _url: API_URL_ENUM.ws_share_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN]
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
   });
 
   // get workspace data api.

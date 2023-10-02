@@ -158,7 +158,7 @@ const ZViewInvitationModal: React.FC<{
             });
 
             const getWSShareWorkspaceData = getRQCDataHandler({
-              key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN]
+              key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
             });
 
             const __oldData =
@@ -169,9 +169,7 @@ const ZViewInvitationModal: React.FC<{
 
             if (_item === ZTeamMemberInvitationEnum.accepted) {
               await updateRQCDataHandler({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN
-                ],
+                key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
                 data: {
                   ...__data.workspace,
                   id: __data?.id,
@@ -185,9 +183,7 @@ const ZViewInvitationModal: React.FC<{
               );
 
               await updateRQCDataHandler({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN
-                ],
+                key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
                 data: __updatedData,
                 id: '',
                 updateHoleData: true,

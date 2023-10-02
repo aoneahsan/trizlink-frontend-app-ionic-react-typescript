@@ -1,6 +1,8 @@
 import CONSTANTS from '@/utils/constants';
 
 const workspaceIdParam = CONSTANTS.RouteParams.workspace.workspaceId;
+const shareWSMemberId = CONSTANTS.RouteParams.workspace.shareWSMemberId;
+const wsShareId = CONSTANTS.RouteParams.workspace.wsShareId;
 
 export const ZPrivateRoutePath = '/app';
 
@@ -134,6 +136,13 @@ const ZaionsRoutes = {
       Create: `${ZPrivateRoutePath}/workspaces/create`,
       Edit: `${ZPrivateRoutePath}/workspaces/edit/${CONSTANTS.RouteParams.workspace.editWorkspaceIdParam}`,
       View: `${ZPrivateRoutePath}/workspaces/${workspaceIdParam}/view`
+    },
+
+    ShareWS: {
+      Startup: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/startup`,
+      Create: `${ZPrivateRoutePath}/workspaces/create`,
+      Edit: `${ZPrivateRoutePath}/workspaces/edit/${CONSTANTS.RouteParams.workspace.editWorkspaceIdParam}`,
+      View: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/view`
     },
 
     ZaionsDashboard: {

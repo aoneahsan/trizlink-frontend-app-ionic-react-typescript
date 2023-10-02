@@ -126,7 +126,8 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.ROLE_PERMISSIONS],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _shouldFetchWhenIdPassed: !loggedIn || !zIsPrivateRoute,
-    _checkPermissions: false
+    _checkPermissions: false,
+    _showLoader: false
   });
   // #endregion
 

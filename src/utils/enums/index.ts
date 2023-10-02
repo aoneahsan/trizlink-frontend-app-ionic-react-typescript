@@ -140,7 +140,9 @@ export enum API_URL_ENUM {
 
   // share workspace
   ws_share_list = 'ws_share_list',
+  ws_share_member_role_permissions = 'ws_share_member_role_permissions',
   ws_share_update_is_favorite = 'ws_share_update_is_favorite',
+  ws_share_info_data = 'ws_share_info_data',
 
   // Time slot
   time_slot_create_list = 'time_slot_create_list',

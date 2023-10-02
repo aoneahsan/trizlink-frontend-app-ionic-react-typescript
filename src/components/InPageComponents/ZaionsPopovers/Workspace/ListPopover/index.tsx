@@ -138,7 +138,7 @@ const ZWorkspacesListPopover: React.FC<{
   const sharedWorkspacesList =
     extractInnerData<workspaceInterface[]>(
       getRQCDataHandler<workspaceInterface[]>({
-        key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN]
+        key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
       }) as workspaceInterface[],
       extractInnerDataOptionsEnum.createRequestResponseItems
     ) || [];

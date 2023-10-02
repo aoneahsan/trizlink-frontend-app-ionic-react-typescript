@@ -50,7 +50,11 @@ import { extractInnerDataOptionsEnum } from '@/utils/enums';
 import { reportCustomError } from '@/utils/customErrorType';
 import CONSTANTS from '@/utils/constants';
 import { extractInnerData } from '@/utils/helpers';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import {
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Type Imports go down
@@ -90,8 +94,9 @@ import {
 const ZWorkspacesSettingModal: React.FC<{
   Tab: workspaceSettingsModalTabEnum;
   workspaceId: string;
+  wsShareId?: string; // if this is share workspace then pass the share workspace id
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
-}> = ({ Tab, workspaceId, dismissZIonModal }) => {
+}> = ({ Tab, workspaceId, wsShareId, dismissZIonModal }) => {
   // Component state
   const [compState, setCompState] = useState<{
     activeTab: workspaceSettingsModalTabEnum;
@@ -122,6 +127,24 @@ const ZWorkspacesSettingModal: React.FC<{
           ...oldValues,
           workspace: _currentWorkspace[0]
         }));
+      } else if (wsShareId) {
+        // getting all the workspace from RQ cache.
+        const _allShareWorkspaces =
+          extractInnerData<workspaceInterface[]>(
+            getRQCDataHandler<workspaceInterface[]>({
+              key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
+            }) as workspaceInterface[],
+            extractInnerDataOptionsEnum.createRequestResponseItems
+          ) || [];
+
+        const _currentShareWorkspace = _allShareWorkspaces.filter(
+          el => el.id === workspaceId
+        );
+
+        setCompState(oldValues => ({
+          ...oldValues,
+          workspace: _currentShareWorkspace[0]
+        }));
       }
     } catch (error) {
       reportCustomError(error);
@@ -131,7 +154,6 @@ const ZWorkspacesSettingModal: React.FC<{
   return (
     <>
       {/* header  */}
-
       <ZIonHeader>
         <div className='w-full py-1 mt-3 mb-1 ion-text-center'>
           <ZIonText
@@ -145,7 +167,18 @@ const ZWorkspacesSettingModal: React.FC<{
           value={compState.activeTab}
           className='h-[4rem] w-[40%] mx-auto'>
           {/* Timetable */}
-          <ZCan havePermissions={[permissionsEnum.viewAny_timeSlot]}>
+          <ZCan
+            havePermissions={
+              wsShareId
+                ? [shareWSPermissionEnum.viewAny_sws_timeSlot]
+                : [permissionsEnum.viewAny_timeSlot]
+            }
+            permissionType={
+              wsShareId
+                ? permissionsTypeEnum.shareWSMemberPermissions
+                : permissionsTypeEnum.loggedInUserPermissions
+            }
+            shareWSId={wsShareId}>
             <ZIonSegmentButton
               value={workspaceSettingsModalTabEnum.timetable}
               className='normal-case ion-no-padding ion-text-center'
@@ -169,7 +202,18 @@ const ZWorkspacesSettingModal: React.FC<{
           </ZCan>
 
           {/* Labels */}
-          <ZCan havePermissions={[permissionsEnum.viewAny_label]}>
+          <ZCan
+            havePermissions={
+              wsShareId
+                ? [shareWSPermissionEnum.viewAny_sws_label]
+                : [permissionsEnum.viewAny_label]
+            }
+            permissionType={
+              wsShareId
+                ? permissionsTypeEnum.shareWSMemberPermissions
+                : permissionsTypeEnum.loggedInUserPermissions
+            }
+            shareWSId={wsShareId}>
             <ZIonSegmentButton
               value={workspaceSettingsModalTabEnum.labels}
               className='normal-case ion-no-padding ion-text-center'
@@ -192,7 +236,18 @@ const ZWorkspacesSettingModal: React.FC<{
           </ZCan>
 
           {/* Settings */}
-          <ZCan havePermissions={[permissionsEnum.update_workspace]}>
+          <ZCan
+            havePermissions={
+              wsShareId
+                ? [shareWSPermissionEnum.update_sws_workspace]
+                : [permissionsEnum.update_workspace]
+            }
+            permissionType={
+              wsShareId
+                ? permissionsTypeEnum.shareWSMemberPermissions
+                : permissionsTypeEnum.loggedInUserPermissions
+            }
+            shareWSId={wsShareId}>
             <ZIonSegmentButton
               value={workspaceSettingsModalTabEnum.settings}
               className='normal-case ion-no-padding ion-text-center'
@@ -243,7 +298,10 @@ const ZWorkspacesSettingModal: React.FC<{
           <ZIonRow className='h-full ion-align-items-center'>
             {compState.activeTab === workspaceSettingsModalTabEnum.timetable ? (
               <ZCan havePermissions={[permissionsEnum.viewAny_timeSlot]}>
-                <ZTimetableTab workspaceId={workspaceId} />
+                <ZTimetableTab
+                  workspaceId={workspaceId}
+                  shareWSMemberId={shareWSMemberId}
+                />
               </ZCan>
             ) : compState.activeTab === workspaceSettingsModalTabEnum.labels ? (
               <ZCan havePermissions={[permissionsEnum.viewAny_label]}>

@@ -55,6 +55,8 @@ const RouteParams = {
   // workspace
   workspace: {
     workspaceId: ':workspaceId',
+    shareWSId: ':shareWSId',
+    shareWSMemberId: ':shareWSMemberId',
     wsShareId: ':wsShareId',
     editWorkspaceIdParam: ':editWorkspaceId',
     teamId: ':teamId',
@@ -213,11 +215,16 @@ export const API_URLS = {
 
   // share workspace
   ws_share_list: `/user/shared-ws`,
-  ws_share_update_is_favorite: `/user/shared-ws/update-is-favorite/${RouteParams.workspace.wsShareId}`,
+  ws_share_member_role_permissions: `/user/shared-ws/get-member-role-permissions/${RouteParams.workspace.shareWSMemberId}`,
+  ws_share_update_is_favorite: `/user/shared-ws/update-is-favorite/${RouteParams.workspace.shareWSMemberId}`,
+  ws_share_info_data: `/user/shared-ws/get-share-ws-info-data/${RouteParams.workspace.shareWSMemberId}`,
 
   // Time slot
   time_slot_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/time-slot`,
   time_slot_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/time-slot/${RouteParams.timeSlot.timeSlotId}`,
+
+  // Share workspace time slot.
+  time_slot_sws_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/time-slot`,
 
   // Label
   label_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/label`,
@@ -1511,13 +1518,17 @@ const REACT_QUERY = {
     },
     WORKSPACE: {
       MAIN: 'rq-workspace-list-key',
-      WS_SHARE_MAIN: 'rq-ws-share-list-key',
       GET: 'rq-workspace-get-key',
       TEAM: 'rq-workspace-team-list-key',
       TEAM_GET: 'rq-workspace-team-get-key',
       MEMBERS: 'rq-ws-team-members-main-key',
       MEMBER_GET: 'rq-ws-team-member-get-key',
       INVITATION_GET: 'rq-ws-team-member-invitation-get-key'
+    },
+    SHARE_WS: {
+      MAIN: 'rq-ws-share-list-key',
+      MEMBER_ROLE_AND_PERMISSIONS: 'rq-ws-share-member-role-and-permission-key',
+      SHARE_WS_INFO: 'rq-share-ws-info-data-key'
     },
     FOLDER: {
       MAIN: 'rq-folders-list-key',
@@ -1630,8 +1641,9 @@ const ZTimeSelectData: ZaionsRSelectOptions[] = [
 
 const ZRolesOptions: ZaionsRSelectOptions[] = [
   { label: 'Administrator', value: WSRolesNameEnum.Administrator },
-  { label: 'Contributor', value: WSRolesNameEnum.Contributor },
   { label: 'Manager', value: WSRolesNameEnum.Manager },
+  { label: 'Contributor', value: WSRolesNameEnum.Contributor },
+  { label: 'Writer', value: WSRolesNameEnum.Writer },
   { label: 'Approver', value: WSRolesNameEnum.Approver },
   { label: 'Commenter', value: WSRolesNameEnum.Commenter },
   { label: 'Guest', value: WSRolesNameEnum.Guest }

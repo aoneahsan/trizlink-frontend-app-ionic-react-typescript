@@ -5,8 +5,8 @@ export enum rolePermissions {
 }
 
 export enum permissionsTypeEnum {
-  workspaceUserPermission = 'workspaceUserPermission',
-  loggedInUserPermission = 'loggedInUserPermission'
+  shareWSMemberPermissions = 'shareWSMemberPermissions',
+  loggedInUserPermissions = 'loggedInUserPermissions'
 }
 
 export enum permissionsEnum {
@@ -115,6 +115,16 @@ export enum permissionsEnum {
   replicate_workspace = 'replicate_workspace',
   restore_workspace = 'restore_workspace',
   forceDelete_workspace = 'forceDelete_workspace',
+
+  // Share WS
+  viewAny_shareWS = 'viewAny_shareWS',
+  view_shareWS = 'view_shareWS',
+  create_shareWS = 'create_shareWS',
+  update_shareWS = 'update_shareWS',
+  delete_shareWS = 'delete_shareWS',
+  replicate_shareWS = 'replicate_shareWS',
+  restore_shareWS = 'restore_shareWS',
+  forceDelete_shareWS = 'forceDelete_shareWS',
 
   // time slot
   viewAny_timeSlot = 'viewAny_timeSlot',
@@ -278,4 +288,90 @@ export enum permissionsEnum {
   replicate_embededWidget = 'replicate_embededWidget',
   restore_embededWidget = 'restore_embededWidget',
   forceDelete_embededWidget = 'forceDelete_embededWidget'
+}
+
+export enum shareWSPermissionEnum {
+  // sws => ShareWorkspace.
+
+  // member
+  viewAny_sws_member = 'viewAny_sws_member',
+  view_sws_member = 'view_sws_member',
+  create_sws_member = 'create_sws_member',
+  update_sws_member = 'update_sws_member',
+  delete_sws_member = 'delete_sws_member',
+  replicate_sws_member = 'replicate_sws_member',
+  restore_sws_member = 'restore_sws_member',
+  forceDelete_sws_member = 'forceDelete_sws_member',
+  // Workspace
+  viewAny_sws_workspace = 'viewAny_sws_workspace',
+  view_sws_workspace = 'view_sws_workspace',
+  create_sws_workspace = 'create_sws_workspace',
+  update_sws_workspace = 'update_sws_workspace',
+  delete_sws_workspace = 'delete_sws_workspace',
+  replicate_sws_workspace = 'replicate_sws_workspace',
+  restore_sws_workspace = 'restore_sws_workspace',
+  forceDelete_sws_workspace = 'forceDelete_sws_workspace',
+  // Pixel
+  viewAny_sws_pixel = 'viewAny_sws_pixel',
+  view_sws_pixel = 'view_sws_pixel',
+  create_sws_pixel = 'create_sws_pixel',
+  update_sws_pixel = 'update_sws_pixel',
+  delete_sws_pixel = 'delete_sws_pixel',
+  replicate_sws_pixel = 'replicate_sws_pixel',
+  restore_sws_pixel = 'restore_sws_pixel',
+  forceDelete_sws_pixel = 'forceDelete_sws_pixel',
+  // Utm Tag
+  viewAny_sws_utmTag = 'viewAny_sws_utmTag',
+  view_sws_utmTag = 'view_sws_utmTag',
+  create_sws_utmTag = 'create_sws_utmTag',
+  update_sws_utmTag = 'update_sws_utmTag',
+  delete_sws_utmTag = 'delete_sws_utmTag',
+  replicate_sws_utmTag = 'replicate_sws_utmTag',
+  restore_sws_utmTag = 'restore_sws_utmTag',
+  forceDelete_sws_utmTag = 'forceDelete_sws_utmTag',
+  // short link
+  viewAny_sws_shortLink = 'viewAny_sws_shortLink',
+  view_sws_shortLink = 'view_sws_shortLink',
+  create_sws_shortLink = 'create_sws_shortLink',
+  update_sws_shortLink = 'update_sws_shortLink',
+  delete_sws_shortLink = 'delete_sws_shortLink',
+  replicate_sws_shortLink = 'replicate_sws_shortLink',
+  restore_sws_shortLink = 'restore_sws_shortLink',
+  forceDelete_sws_shortLink = 'forceDelete_sws_shortLink',
+  // link in bio
+  viewAny_sws_linkInBio = 'viewAny_sws_linkInBio',
+  view_sws_linkInBio = 'view_sws_linkInBio',
+  create_sws_linkInBio = 'create_sws_linkInBio',
+  update_sws_linkInBio = 'update_sws_linkInBio',
+  delete_sws_linkInBio = 'delete_sws_linkInBio',
+  replicate_sws_linkInBio = 'replicate_sws_linkInBio',
+  restore_sws_linkInBio = 'restore_sws_linkInBio',
+  forceDelete_sws_linkInBio = 'forceDelete_sws_linkInBio',
+  // time slot
+  viewAny_sws_timeSlot = 'viewAny_sws_timeSlot',
+  view_sws_timeSlot = 'view_sws_timeSlot',
+  create_sws_timeSlot = 'create_sws_timeSlot',
+  update_sws_timeSlot = 'update_sws_timeSlot',
+  delete_sws_timeSlot = 'delete_sws_timeSlot',
+  replicate_sws_timeSlot = 'replicate_sws_timeSlot',
+  restore_sws_timeSlot = 'restore_sws_timeSlot',
+  forceDelete_sws_timeSlot = 'forceDelete_sws_timeSlot',
+  // label
+  viewAny_sws_label = 'viewAny_sws_label',
+  view_sws_label = 'view_sws_label',
+  create_sws_label = 'create_sws_label',
+  update_sws_label = 'update_sws_label',
+  delete_sws_label = 'delete_sws_label',
+  replicate_sws_label = 'replicate_sws_label',
+  restore_sws_label = 'restore_sws_label',
+  forceDelete_sws_label = 'forceDelete_sws_label',
+  // comment
+  viewAny_sws_comment = 'viewAny_sws_comment',
+  view_sws_comment = 'view_sws_comment',
+  create_sws_comment = 'create_sws_comment',
+  update_sws_comment = 'update_sws_comment',
+  delete_sws_comment = 'delete_sws_comment',
+  replicate_sws_comment = 'replicate_sws_comment',
+  restore_sws_comment = 'restore_sws_comment',
+  forceDelete_sws_comment = 'forceDelete_sws_comment'
 }
