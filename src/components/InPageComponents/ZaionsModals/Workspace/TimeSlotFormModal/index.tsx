@@ -102,21 +102,32 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
   timeSlotId?: string;
   mode?: FormMode;
   timeSlotDay: daysEnum;
+  wsShareMemberId?: string; // if this is share workspace then pass the member id
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
 }> = ({
   dismissZIonModal,
   workspaceId,
   timeSlotDay,
   timeSlotId,
+  wsShareMemberId,
   mode = FormMode.ADD
 }) => {
   // #region APIS.
+  // if owner then this api hit to create time slot for current workspace data.
   const { mutateAsync: createTimeSlotMutateAsync } = useZRQCreateRequest({
     _url: API_URL_ENUM.time_slot_create_list,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _itemsIds: [workspaceId]
   });
 
+  // if member then this api hit to create time slot for current share workspace data.
+  const { mutateAsync: createSWSTimeSlotMutateAsync } = useZRQCreateRequest({
+    _url: API_URL_ENUM.time_slot_sws_create_list,
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _itemsIds: [wsShareMemberId!]
+  });
+
+  // if owner then this api hit to get current time slot in current workspace data.
   const {
     data: currentTimeSlotData,
     isFetching: isCurrentTimeSlotDataFetching
@@ -134,12 +145,40 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
     ],
     _itemsIds: [workspaceId, timeSlotId || ''],
     _shouldFetchWhenIdPassed:
-      timeSlotId && mode === FormMode.EDIT ? false : true,
+      timeSlotId && workspaceId && mode === FormMode.EDIT ? false : true,
     _extractType: ZRQGetRequestExtractEnum.extractItem
   });
 
+  // if member then this api hit to get current time slot in current share workspace data.
+  const {
+    data: currentSWSTimeSlotData,
+    isFetching: isCurrentSWSTimeSlotDataFetching
+  } = useZRQGetRequest<TimeSlotInterface>({
+    _url: API_URL_ENUM.time_slot_sws_update_delete_get,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.SWS_GET,
+      wsShareMemberId!,
+      timeSlotId || ''
+    ],
+    _showLoader: false,
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.shareWSMemberId,
+      CONSTANTS.RouteParams.timeSlot.timeSlotId
+    ],
+    _itemsIds: [wsShareMemberId!, timeSlotId || ''],
+    _shouldFetchWhenIdPassed:
+      timeSlotId && wsShareMemberId && mode === FormMode.EDIT ? false : true,
+    _extractType: ZRQGetRequestExtractEnum.extractItem
+  });
+
+  // if owner then this api hit to update time slot for current workspace data.
   const { mutateAsync: updateTimeSlotMutateAsync } = useZRQUpdateRequest({
     _url: API_URL_ENUM.time_slot_update_delete
+  });
+
+  // if member then this api hit to update time slot for current share workspace data.
+  const { mutateAsync: updateSWSTimeSlotMutateAsync } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.time_slot_sws_update_delete_get
   });
 
   // #endregion
@@ -158,16 +197,31 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
         let __response;
 
         if (mode === FormMode.ADD) {
-          __response = await createTimeSlotMutateAsync(_data);
+          if (wsShareMemberId) {
+            __response = await createSWSTimeSlotMutateAsync(_data);
+          } else if (workspaceId) {
+            __response = await createTimeSlotMutateAsync(_data);
+          }
         } else if (mode === FormMode.EDIT) {
-          __response = await updateTimeSlotMutateAsync({
-            itemIds: [workspaceId, timeSlotId || ''],
-            urlDynamicParts: [
-              CONSTANTS.RouteParams.workspace.workspaceId,
-              CONSTANTS.RouteParams.timeSlot.timeSlotId
-            ],
-            requestData: _data
-          });
+          if (wsShareMemberId) {
+            __response = await updateSWSTimeSlotMutateAsync({
+              itemIds: [wsShareMemberId, timeSlotId || ''],
+              urlDynamicParts: [
+                CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                CONSTANTS.RouteParams.timeSlot.timeSlotId
+              ],
+              requestData: _data
+            });
+          } else if (workspaceId) {
+            __response = await updateTimeSlotMutateAsync({
+              itemIds: [workspaceId, timeSlotId || ''],
+              urlDynamicParts: [
+                CONSTANTS.RouteParams.workspace.workspaceId,
+                CONSTANTS.RouteParams.timeSlot.timeSlotId
+              ],
+              requestData: _data
+            });
+          }
         }
 
         if ((__response as ZLinkMutateApiType<TimeSlotInterface>).success) {
@@ -178,14 +232,26 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
           );
 
           if (__data && __data.id) {
+            let __rqTimeSlotData =
+              (getRQCDataHandler<TimeSlotInterface[]>({
+                key: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
+                  workspaceId
+                ]
+              }) as TimeSlotInterface[]) || [];
+
+            if (wsShareMemberId) {
+              __rqTimeSlotData = getRQCDataHandler<TimeSlotInterface[]>({
+                key: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.SWS_MAIN,
+                  wsShareMemberId!
+                ]
+              }) as TimeSlotInterface[];
+            }
+
             const __oldTimeSlot =
               extractInnerData<TimeSlotInterface[]>(
-                getRQCDataHandler<TimeSlotInterface[]>({
-                  key: [
-                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
-                    workspaceId
-                  ]
-                }) as TimeSlotInterface[],
+                __rqTimeSlotData,
                 extractInnerDataOptionsEnum.createRequestResponseItems
               ) || [];
 
@@ -194,42 +260,80 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                 // added shortLink to all TimeSlot data in cache.
                 const __updatedTimeSlot = [...__oldTimeSlot, __data];
 
-                // Updating all TimeSlot data in RQ cache.
-                await updateRQCDataHandler<TimeSlotInterface[] | undefined>({
-                  key: [
-                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
-                    workspaceId
-                  ],
-                  data: __updatedTimeSlot as TimeSlotInterface[],
-                  id: '',
-                  extractType: ZRQGetRequestExtractEnum.extractItems,
-                  updateHoleData: true
-                });
+                if (workspaceId) {
+                  // Updating all TimeSlot data in RQ cache.
+                  await updateRQCDataHandler<TimeSlotInterface[] | undefined>({
+                    key: [
+                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
+                      workspaceId
+                    ],
+                    data: __updatedTimeSlot as TimeSlotInterface[],
+                    id: '',
+                    extractType: ZRQGetRequestExtractEnum.extractItems,
+                    updateHoleData: true
+                  });
+                } else if (wsShareMemberId) {
+                  await updateRQCDataHandler<TimeSlotInterface[] | undefined>({
+                    key: [
+                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.SWS_MAIN,
+                      wsShareMemberId
+                    ],
+                    data: __updatedTimeSlot as TimeSlotInterface[],
+                    id: '',
+                    extractType: ZRQGetRequestExtractEnum.extractItems,
+                    updateHoleData: true
+                  });
+                }
 
                 presentZIonToastSuccess(MESSAGES.TIME_SLOT.CREATED);
               } else if (mode === FormMode.EDIT) {
-                // Updating all TimeSlot data in RQ cache.
-                await updateRQCDataHandler<TimeSlotInterface | undefined>({
-                  key: [
-                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
-                    workspaceId
-                  ],
-                  data: __data as TimeSlotInterface,
-                  id: __data.id
-                });
+                if (workspaceId) {
+                  // Updating all TimeSlot data in RQ cache.
+                  await updateRQCDataHandler<TimeSlotInterface | undefined>({
+                    key: [
+                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
+                      workspaceId
+                    ],
+                    data: __data as TimeSlotInterface,
+                    id: __data.id
+                  });
 
-                // Updating TimeSlot data in RQ cache.
-                await updateRQCDataHandler<TimeSlotInterface | undefined>({
-                  key: [
-                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.GET,
-                    workspaceId,
-                    __data.id
-                  ],
-                  data: __data as TimeSlotInterface,
-                  id: '',
-                  updateHoleData: true,
-                  extractType: ZRQGetRequestExtractEnum.extractItem
-                });
+                  // Updating TimeSlot data in RQ cache.
+                  await updateRQCDataHandler<TimeSlotInterface | undefined>({
+                    key: [
+                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.GET,
+                      workspaceId,
+                      __data.id
+                    ],
+                    data: __data as TimeSlotInterface,
+                    id: '',
+                    updateHoleData: true,
+                    extractType: ZRQGetRequestExtractEnum.extractItem
+                  });
+                } else if (wsShareMemberId) {
+                  // Updating all TimeSlot data in RQ cache.
+                  await updateRQCDataHandler<TimeSlotInterface | undefined>({
+                    key: [
+                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.SWS_MAIN,
+                      wsShareMemberId
+                    ],
+                    data: __data as TimeSlotInterface,
+                    id: __data.id
+                  });
+
+                  // Updating TimeSlot data in RQ cache.
+                  await updateRQCDataHandler<TimeSlotInterface | undefined>({
+                    key: [
+                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.SWS_GET,
+                      wsShareMemberId,
+                      __data.id
+                    ],
+                    data: __data as TimeSlotInterface,
+                    id: '',
+                    updateHoleData: true,
+                    extractType: ZRQGetRequestExtractEnum.extractItem
+                  });
+                }
 
                 presentZIonToastSuccess(MESSAGES.TIME_SLOT.UPDATED);
               }
@@ -265,7 +369,6 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
           ) || [];
 
         if (__oldTimeSlot) {
-          console.log({ currentTimeSlotData });
           // Updating all TimeSlot data in RQ cache.
           void updateRQCDataHandler<TimeSlotInterface | undefined>({
             key: [
@@ -282,15 +385,28 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
     }
   }, [timeSlotId, currentTimeSlotData?.id]);
 
-  const isZFetching = mode === FormMode.EDIT && isCurrentTimeSlotDataFetching;
+  let isZFetching = mode === FormMode.EDIT;
+
+  if (workspaceId) {
+    isZFetching = mode === FormMode.EDIT && isCurrentTimeSlotDataFetching;
+  } else if (wsShareMemberId) {
+    isZFetching = mode === FormMode.EDIT && isCurrentSWSTimeSlotDataFetching;
+  }
 
   return (
     <ZIonContent className='w-full h-full ion-padding'>
       <Formik
         initialValues={{
-          time: currentTimeSlotData?.time || '',
-          day: currentTimeSlotData?.day || timeSlotDay || daysEnum.monday,
-          color: currentTimeSlotData?.color || DefaultTimeSlotColors[0].color
+          time: currentTimeSlotData?.time || currentSWSTimeSlotData?.time || '',
+          day:
+            currentTimeSlotData?.day ||
+            currentSWSTimeSlotData?.day ||
+            timeSlotDay ||
+            daysEnum.monday,
+          color:
+            currentTimeSlotData?.color ||
+            currentSWSTimeSlotData?.color ||
+            DefaultTimeSlotColors[0].color
         }}
         enableReinitialize={true}
         validate={values => {

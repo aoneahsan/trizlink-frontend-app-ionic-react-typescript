@@ -148,9 +148,17 @@ export enum API_URL_ENUM {
   time_slot_create_list = 'time_slot_create_list',
   time_slot_update_delete = 'time_slot_update_delete',
 
+  // Share workspace time slot.
+  time_slot_sws_create_list = 'time_slot_sws_create_list',
+  time_slot_sws_update_delete_get = 'time_slot_sws_update_delete_get',
+
   // Label
   label_create_list = 'label_create_list',
   label_update_delete = 'label_update_delete',
+
+  // Share workspace Label.
+  label_sws_create_list = 'label_sws_create_list',
+  label_sws_update_delete_get = 'label_sws_update_delete_get',
 
   // File Upload Routes
   getSingleFile = 'getSingleFile',

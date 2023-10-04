@@ -25,6 +25,8 @@ import {
   ZIonRefresher,
   ZIonRefresherContent,
   ZIonRow,
+  ZIonSkeletonText,
+  ZIonSpinner,
   ZIonText,
   ZIonTitle
 } from '@/components/ZIonComponents';
@@ -50,7 +52,10 @@ import {
   shareWSPermissionEnum
 } from '@/utils/enums/RoleAndPermissions';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+  useZInvalidateReactQueries,
+  useZRQGetRequest
+} from '@/ZaionsHooks/zreactquery-hooks';
 import CONSTANTS from '@/utils/constants';
 import { API_URL_ENUM } from '@/utils/enums';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
@@ -108,15 +113,18 @@ const ZShareWSView: React.FC = () => {
   }>();
 
   // #region custom hooks.
+  const { zInvalidateReactQueries } = useZInvalidateReactQueries();
 
   // #endregion
 
   // #region Modals & popovers.
+  // if user have permissions to view any of ZWorkspacesSettingModal.
   const { presentZIonModal: presentWorkspaceSettingModal } = useZIonModal(
     ZWorkspacesSettingModal,
     {
       Tab: compState.modalTab,
-      wsShareId: wsShareId
+      wsShareId: wsShareId,
+      wsShareMemberId: shareWSMemberId
     }
   );
   // #endregion
@@ -159,11 +167,15 @@ const ZShareWSView: React.FC = () => {
   // #region Functions.
   const invalidedQueries = async () => {
     try {
-      // Workspace.
-      // await zInvalidateReactQueries([
-      //   CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
-      //   workspaceId
-      // ]);
+      await zInvalidateReactQueries([
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
+        wsShareId
+      ]);
+
+      await zInvalidateReactQueries([
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
+        wsShareId
+      ]);
     } catch (error) {
       reportCustomError(error);
     }
@@ -178,6 +190,9 @@ const ZShareWSView: React.FC = () => {
     }
   };
   // #endregion
+
+  const isZFetching =
+    isGetMemberRolePermissionsFetching && isGetShareWSInfoDataFetching;
 
   return (
     <ZIonPage pageTitle='Zaions share workspace view page'>
@@ -205,90 +220,193 @@ const ZShareWSView: React.FC = () => {
               }>
               <ZAdminPanelTopBar
                 showInviteBtn={false}
+                showRefreshBtn={true}
+                refreshBtnOnClick={() => {
+                  invalidedQueries();
+                }}
                 showWSSwitcherBtn={false}
               />
             </Suspense>
 
             <ZIonRow className='px-4 py-5 mt-5 border rounded-lg zaions__light_bg ion-margin ion-align-items-start'>
               <ZIonCol>
-                <ZIonTitle className='tracking-wider ion-no-padding'>
-                  Welcome to "<b>{getShareWSInfoData?.workspaceName}</b>"
-                  workspace
-                </ZIonTitle>
-                <ZIonText
-                  className='block text-sm'
-                  color='medium'>
-                  Owned by "
-                  <ZIonText className='font-semibold'>
-                    {getShareWSInfoData?.user?.username}
-                  </ZIonText>
-                  "<ZIonText className='px-1'>|</ZIonText>Created at
-                  <ZIonText className='px-1'>
-                    {getShareWSInfoData?.createdAt}
-                  </ZIonText>
-                </ZIonText>
-                <ZIonText className='block mt-3 text-sm'>
-                  Your expertise as a "
-                  <b>{getMemberRolePermissions?.memberRole}</b>" is essential
-                  here. Your contributions make a difference. Let's work
-                  together to achieve great things!
-                </ZIonText>
+                {!isZFetching && (
+                  <>
+                    <ZIonTitle className='block font-bold ion-no-padding'>
+                      Welcome to "
+                      <ZIonText color='tertiary'>
+                        {getShareWSInfoData?.workspaceName}
+                      </ZIonText>
+                      " workspace
+                    </ZIonTitle>
+                    <ZIonText
+                      className='block text-sm'
+                      color='dark'>
+                      Owned by "
+                      <ZIonText
+                        className='font-semibold'
+                        color='tertiary'>
+                        {getShareWSInfoData?.user?.username}
+                      </ZIonText>
+                      "<ZIonText className='px-1'>|</ZIonText>Created at
+                      <ZIonText className='px-1'>
+                        {getShareWSInfoData?.createdAt}
+                      </ZIonText>
+                    </ZIonText>
+                    <ZIonText className='block mt-3 text-sm'>
+                      Your expertise as a "
+                      <ZIonText
+                        className='font-semibold'
+                        color='tertiary'>
+                        {getMemberRolePermissions?.memberRole}
+                      </ZIonText>
+                      " is essential here. Your contributions make a difference.
+                      Let's work together to achieve great things!
+                    </ZIonText>
+                  </>
+                )}
+
+                {isZFetching && (
+                  <>
+                    <ZIonTitle className='tracking-wider ion-no-padding'>
+                      <ZIonSkeletonText className='w-full h-[1.2rem]' />
+                    </ZIonTitle>
+                    <ZIonText
+                      className='block text-sm'
+                      color='medium'>
+                      <ZIonSkeletonText className='w-full h-[.8rem]' />
+                    </ZIonText>
+                    <ZIonText className='block mt-3 text-sm'>
+                      <ZIonSkeletonText className='w-full h-[.6rem]' />
+                      <ZIonSkeletonText className='w-full h-[.6rem]' />
+                    </ZIonText>
+                  </>
+                )}
               </ZIonCol>
 
               <ZIonCol className='flex ion-align-items-start ion-justify-content-end'>
-                {/* Time slot */}
-                <ZCan
-                  havePermissions={[shareWSPermissionEnum.viewAny_sws_timeSlot]}
-                  permissionType={permissionsTypeEnum.shareWSMemberPermissions}
-                  shareWSId={wsShareId}>
-                  <ZIonButton
-                    onClick={() => {
-                      // setting the tab with should be active in modal
-                      setCompState(oldValues => ({
-                        ...oldValues,
-                        modalTab: workspaceSettingsModalTabEnum.timetable
-                      }));
+                {/* <ZIonButton
+                  height='.9rem'
+                  disabled
+                  className='w-[9rem]'>
+                  <ZIonSpinner color='light' />
+                </ZIonButton> */}
+                {isZFetching && getMemberRolePermissions === undefined && (
+                  <>
+                    <ZIonButton
+                      height='.9rem'
+                      disabled
+                      className='w-[9rem]'>
+                      <ZIonSpinner color='light' />
+                    </ZIonButton>
+                    <ZIonButton
+                      height='.9rem'
+                      disabled
+                      className='w-[7rem]'>
+                      <ZIonSpinner color='light' />
+                    </ZIonButton>
+                    <ZIonButton
+                      height='.9rem'
+                      disabled>
+                      <ZIonSpinner color='light' />
+                    </ZIonButton>
+                  </>
+                )}
 
-                      // presenting modal
-                      presentWorkspaceSettingModal({
-                        _cssClass: 'workspace-setting-modal-size'
-                      });
-                    }}>
-                    <ZIonIcon
-                      className='me-1'
-                      icon={timeOutline}
-                    />
-                    Add time slot
-                  </ZIonButton>
-                </ZCan>
+                {!isZFetching &&
+                  getMemberRolePermissions?.memberPermissions?.length && (
+                    <>
+                      {/* If member has permission to view Time slot */}
+                      <ZCan
+                        havePermissions={[
+                          shareWSPermissionEnum.viewAny_sws_timeSlot
+                        ]}
+                        permissionType={
+                          permissionsTypeEnum.shareWSMemberPermissions
+                        }
+                        shareWSId={wsShareId}>
+                        <ZIonButton
+                          onClick={() => {
+                            // setting the tab with should be active in modal
+                            setCompState(oldValues => ({
+                              ...oldValues,
+                              modalTab: workspaceSettingsModalTabEnum.timetable
+                            }));
 
-                {/* Label */}
-                <ZCan
-                  havePermissions={[shareWSPermissionEnum.viewAny_sws_label]}
-                  permissionType={permissionsTypeEnum.shareWSMemberPermissions}
-                  shareWSId={wsShareId}>
-                  <ZIonButton>
-                    <ZIonIcon
-                      className='me-1'
-                      icon={pricetagOutline}
-                    />
-                    Add label
-                  </ZIonButton>
-                </ZCan>
+                            // presenting modal
+                            presentWorkspaceSettingModal({
+                              _cssClass: 'workspace-setting-modal-size'
+                            });
+                          }}>
+                          <ZIonIcon
+                            className='me-1'
+                            icon={timeOutline}
+                          />
+                          Add time slot
+                        </ZIonButton>
+                      </ZCan>
 
-                {/* Edit */}
-                <ZCan
-                  havePermissions={[shareWSPermissionEnum.update_sws_workspace]}
-                  permissionType={permissionsTypeEnum.shareWSMemberPermissions}
-                  shareWSId={wsShareId}>
-                  <ZIonButton>
-                    <ZIonIcon
-                      className='me-1'
-                      icon={createOutline}
-                    />
-                    Edit
-                  </ZIonButton>
-                </ZCan>
+                      {/* If member has permission to view Label */}
+                      <ZCan
+                        havePermissions={[
+                          shareWSPermissionEnum.viewAny_sws_label
+                        ]}
+                        permissionType={
+                          permissionsTypeEnum.shareWSMemberPermissions
+                        }
+                        shareWSId={wsShareId}>
+                        <ZIonButton
+                          onClick={() => {
+                            // setting the tab with should be active in modal
+                            setCompState(oldValues => ({
+                              ...oldValues,
+                              modalTab: workspaceSettingsModalTabEnum.labels
+                            }));
+
+                            // presenting modal
+                            presentWorkspaceSettingModal({
+                              _cssClass: 'workspace-setting-modal-size'
+                            });
+                          }}>
+                          <ZIonIcon
+                            className='me-1'
+                            icon={pricetagOutline}
+                          />
+                          Add label
+                        </ZIonButton>
+                      </ZCan>
+
+                      {/* If member has permission to edit */}
+                      <ZCan
+                        havePermissions={[
+                          shareWSPermissionEnum.update_sws_workspace
+                        ]}
+                        permissionType={
+                          permissionsTypeEnum.shareWSMemberPermissions
+                        }
+                        shareWSId={wsShareId}>
+                        <ZIonButton
+                          onClick={() => {
+                            // setting the tab with should be active in modal
+                            setCompState(oldValues => ({
+                              ...oldValues,
+                              modalTab: workspaceSettingsModalTabEnum.settings
+                            }));
+
+                            // presenting modal
+                            presentWorkspaceSettingModal({
+                              _cssClass: 'workspace-setting-modal-size'
+                            });
+                          }}>
+                          <ZIonIcon
+                            className='me-1'
+                            icon={createOutline}
+                          />
+                          Edit
+                        </ZIonButton>
+                      </ZCan>
+                    </>
+                  )}
               </ZIonCol>
             </ZIonRow>
           </ZIonGrid>

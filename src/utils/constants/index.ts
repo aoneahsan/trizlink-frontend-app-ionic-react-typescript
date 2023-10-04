@@ -225,10 +225,14 @@ export const API_URLS = {
 
   // Share workspace time slot.
   time_slot_sws_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/time-slot`,
+  time_slot_sws_update_delete_get: `/user/sws/${RouteParams.workspace.shareWSMemberId}/time-slot/${RouteParams.timeSlot.timeSlotId}`,
 
   // Label
   label_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/label`,
   label_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/label/${RouteParams.label.labelId}`,
+
+  label_sws_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/label`,
+  label_sws_update_delete_get: `/user/sws/${RouteParams.workspace.shareWSMemberId}/label/${RouteParams.label.labelId}`,
 
   // File
   getSingleFile: '/file-upload/getSingleFileUrl',
@@ -417,6 +421,7 @@ export const LOCALSTORAGE_KEYS = {
   INVITEE_USER_DATA: 'zoirjf_hflmn-e',
   SIGNUP_USER_DATA: 'zmkftr-lokgyr-d',
   FORGET_PASSWORD_USER_DATA: 'ziomkliy-rthng-r',
+  SET_PASSWORD_DATA: 'zplkithfns-wolf-s',
   ERROR_DATA: 'asdgcvbv_cbert-k'
 };
 
@@ -1510,11 +1515,17 @@ const REACT_QUERY = {
     },
     TIME_SLOT: {
       MAIN: 'rq-time-slot-list-key',
-      GET: 'rq-time-slot-get-key'
+      GET: 'rq-time-slot-get-key',
+
+      SWS_MAIN: 'rq-sws-time-slot-list-key',
+      SWS_GET: 'rq-sws-time-slot-get-key'
     },
     LABEL: {
       MAIN: 'rq-label-list-key',
-      GET: 'rq-label-get-key'
+      GET: 'rq-label-get-key',
+
+      SWS_MAIN: 'rq-sws-label-list-key',
+      SWS_GET: 'rq-sws-label-get-key'
     },
     WORKSPACE: {
       MAIN: 'rq-workspace-list-key',

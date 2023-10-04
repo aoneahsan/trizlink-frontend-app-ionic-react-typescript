@@ -397,9 +397,19 @@ const ZSendOtpTab: React.FC = () => {
         if (__response) {
           const __data = extractInnerData<{
             success: boolean;
+            OTPCodeValidTill: string;
           }>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
           if (__data?.success) {
+            const userData = {
+              email: values?.emailAddress,
+              tab: ZSetPasswordTabEnum.confirmOptTab,
+              OTPCodeValidTill: __data?.OTPCodeValidTill,
+              resendOTPValidCheck: false
+            };
+
+            await STORAGE.SET(LOCALSTORAGE_KEYS.SET_PASSWORD_DATA, userData);
+
             if (values.isEmailAddressApiError === true) {
               setFieldValue('emailAddressApiErrorText', '', false);
               setFieldValue('isEmailAddressApiError', false, false);
@@ -541,15 +551,21 @@ const ZConfirmOptTab: React.FC = () => {
     _loaderMessage: 'Sending OTP...'
   });
 
+  const { mutateAsync: zResendOtpAsyncMutate } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.resend_user_otp,
+    _showAlertOnError: false,
+    authenticated: false,
+    _loaderMessage: MESSAGES.OTP.RESENDING
+  });
+
   const ZResendOTPHandler = async () => {
     try {
       if (values?.emailAddress && values?.emailAddress?.trim()?.length > 0) {
         const __stringifyData = zStringify({
-          email: values.emailAddress,
-          inviteToken: values.inviteToken
+          email: values.emailAddress
         });
 
-        const __response = await zSendOtpAsyncMutate({
+        const __response = await zResendOtpAsyncMutate({
           requestData: __stringifyData,
           itemIds: [],
           urlDynamicParts: []
@@ -558,9 +574,19 @@ const ZConfirmOptTab: React.FC = () => {
         if (__response) {
           const __data = extractInnerData<{
             success: boolean;
+            OTPCodeValidTill: string;
           }>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
           if (__data?.success) {
+            const userData = {
+              email: values?.emailAddress,
+              tab: ZSetPasswordTabEnum.confirmOptTab,
+              OTPCodeValidTill: __data?.OTPCodeValidTill,
+              resendOTPValidCheck: false
+            };
+
+            await STORAGE.SET(LOCALSTORAGE_KEYS.SET_PASSWORD_DATA, userData);
+
             if (values.isEmailAddressApiError === true) {
               setFieldValue('emailAddressApiErrorText', '', false);
               setFieldValue('isEmailAddressApiError', false, false);
@@ -613,9 +639,19 @@ const ZConfirmOptTab: React.FC = () => {
         if (__response) {
           const __data = extractInnerData<{
             success: boolean;
+            OTPCodeValidTill: string;
           }>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
           if (__data?.success) {
+            const userData = {
+              email: values?.emailAddress,
+              tab: ZSetPasswordTabEnum.newPasswordTab,
+              OTPCodeValidTill: null,
+              resendOTPValidCheck: true
+            };
+
+            await STORAGE.SET(LOCALSTORAGE_KEYS.SET_PASSWORD_DATA, userData);
+
             if (values?.isOTPApiError === true) {
               setFieldValue('OTPApiErrorText', '', false);
               setFieldValue('isOTPApiError', false, false);
