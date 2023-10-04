@@ -8,18 +8,9 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import {
-  addOutline,
-  gitNetworkOutline,
-  heartOutline,
-  library,
-  playCircle,
-  radio,
-  search,
-  starOutline
-} from 'ionicons/icons';
+import { addOutline, gitNetworkOutline, starOutline } from 'ionicons/icons';
 import classNames from 'classnames';
-import { IonNav, RefresherEventDetail } from '@ionic/react';
+import { RefresherEventDetail } from '@ionic/react';
 
 /**
  * Custom Imports go down
@@ -28,21 +19,16 @@ import { IonNav, RefresherEventDetail } from '@ionic/react';
 import ZIonPage from '@/components/ZIonPage';
 import {
   ZIonButton,
-  ZIonButtons,
   ZIonCard,
   ZIonCardContent,
   ZIonCol,
   ZIonContent,
   ZIonGrid,
   ZIonIcon,
-  ZIonLabel,
   ZIonRefresher,
   ZIonRefresherContent,
   ZIonRow,
   ZIonSkeletonText,
-  ZIonTabBar,
-  ZIonTabButton,
-  ZIonTabs,
   ZIonText,
   ZIonTitle
 } from '@/components/ZIonComponents';
@@ -482,7 +468,7 @@ const ZWorkspaceListPage: React.FC = () => {
                                 workspaceImage={el.workspaceImage}
                                 workspaceName={el.workspaceName as string}
                                 user={el.user}
-                                workspaceId={el.id} // workspaceId
+                                workspaceId={el.workspaceId} // workspaceId
                                 createdAt={el.createdAt}
                                 accountStatus={el.accountStatus}
                                 memberId={el.id}

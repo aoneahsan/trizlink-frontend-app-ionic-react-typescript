@@ -328,7 +328,8 @@ const ZInpageTable: React.FC = () => {
                 : value === ZTeamMemberInvitationEnum.accepted
                 ? 'success'
                 : value === ZTeamMemberInvitationEnum.rejected ||
-                  value === ZTeamMemberInvitationEnum.cancel
+                  value === ZTeamMemberInvitationEnum.cancel ||
+                  value === ZTeamMemberInvitationEnum.leaved
                 ? 'danger'
                 : value === ZTeamMemberInvitationEnum.resend
                 ? 'secondary'

@@ -97,7 +97,15 @@ const ZWorkspacesSettingModal: React.FC<{
   wsShareId?: string; // if this is share workspace then pass the share workspace id
   wsShareMemberId?: string; // if this is share workspace then pass the member id
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
-}> = ({ Tab, workspaceId, wsShareId, wsShareMemberId, dismissZIonModal }) => {
+  zNavigatePushRoute: (_url: string) => void;
+}> = ({
+  Tab,
+  workspaceId,
+  wsShareId,
+  wsShareMemberId,
+  dismissZIonModal,
+  zNavigatePushRoute
+}) => {
   // Component state
   const [compState, setCompState] = useState<{
     activeTab: workspaceSettingsModalTabEnum;
@@ -324,7 +332,10 @@ const ZWorkspacesSettingModal: React.FC<{
               workspaceSettingsModalTabEnum.settings ? (
               <ZCan havePermissions={[permissionsEnum.update_workspace]}>
                 <ZSettingsTab
-                  workspaceId={workspaceId}
+                  zNavigatePushRoute={zNavigatePushRoute}
+                  workspaceId={workspaceId} // if owner then pass the workspaceId, that is how we are knowing that it is a owner
+                  wsShareMemberId={wsShareMemberId} // if member then pass the wsShareMemberId, that is how we are knowing that it is a member
+                  wsShareId={wsShareId}
                   dismissZIonModal={dismissZIonModal}
                 />
               </ZCan>

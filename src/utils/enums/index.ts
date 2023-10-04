@@ -143,6 +143,8 @@ export enum API_URL_ENUM {
   ws_share_member_role_permissions = 'ws_share_member_role_permissions',
   ws_share_update_is_favorite = 'ws_share_update_is_favorite',
   ws_share_info_data = 'ws_share_info_data',
+  update_ws_share_info_data = 'update_ws_share_info_data',
+  leave_share_ws = 'leave_share_ws',
 
   // Time slot
   time_slot_create_list = 'time_slot_create_list',

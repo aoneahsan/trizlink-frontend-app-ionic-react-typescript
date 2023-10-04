@@ -79,7 +79,8 @@ export enum ZTeamMemberInvitationEnum {
   blocked = 'blocked',
   cancel = 'cancel',
   accepted = 'accepted',
-  rejected = 'rejected'
+  rejected = 'rejected',
+  leaved = 'leaved'
 }
 
 export enum EZGeoLocationCondition {

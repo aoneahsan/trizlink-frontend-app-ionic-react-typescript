@@ -9,6 +9,11 @@ export enum permissionsTypeEnum {
   loggedInUserPermissions = 'loggedInUserPermissions'
 }
 
+export enum permissionCheckModeEnum {
+  every = 'every', // user must have every permissions that have passed.
+  any = 'any' // user must have any permissions that have passed.
+}
+
 export enum permissionsEnum {
   // Role
   viewAny_role = 'viewAny_role',

@@ -7,6 +7,7 @@ import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import {
+  permissionCheckModeEnum,
   permissionsEnum,
   permissionsTypeEnum,
   shareWSPermissionEnum
@@ -25,6 +26,7 @@ interface CanComponentProps {
   children: React.ReactNode;
   havePermissions: permissionsEnum[] | shareWSPermissionEnum[];
   permissionType?: permissionsTypeEnum;
+  checkMode?: permissionCheckModeEnum; // check mode if check every permissions or some permissions, etc.
   shareWSId?: string;
   returnPermissionDeniedView?: boolean;
 }
@@ -34,12 +36,16 @@ const ZCan: React.FC<CanComponentProps> = ({
   havePermissions,
   returnPermissionDeniedView = false,
   permissionType = permissionsTypeEnum.loggedInUserPermissions,
-  shareWSId
+  shareWSId,
+  checkMode = permissionCheckModeEnum.every
 }) => {
   // Component state.
   const [compState, setCompState] = useState<{
     userPermissions?: string[];
-  }>();
+    isProcessing: boolean;
+  }>({
+    isProcessing: true
+  });
 
   // #region Custom hooks.
   const { getRQCDataHandler } = useZGetRQCacheData();
@@ -79,6 +85,10 @@ const ZCan: React.FC<CanComponentProps> = ({
           permissions: getUserRoleAndPermissions.result.permissions,
           fetched: true
         }));
+        setCompState(oldValues => ({
+          ...oldValues,
+          isProcessing: false
+        }));
       }
     } catch (error) {
       reportCustomError(error);
@@ -91,7 +101,8 @@ const ZCan: React.FC<CanComponentProps> = ({
       setCompState(oldValues => ({
         ...oldValues,
         userPermissions:
-          currentLoggedInUserRoleAndPermissionsStateAtom?.permissions
+          currentLoggedInUserRoleAndPermissionsStateAtom?.permissions,
+        isProcessing: false
       }));
     } else if (
       permissionType === permissionsTypeEnum.shareWSMemberPermissions &&
@@ -117,7 +128,8 @@ const ZCan: React.FC<CanComponentProps> = ({
 
         setCompState(oldValues => ({
           ...oldValues,
-          userPermissions: __data?.memberPermissions
+          userPermissions: __data?.memberPermissions,
+          isProcessing: false
         }));
       }
     }
@@ -127,13 +139,33 @@ const ZCan: React.FC<CanComponentProps> = ({
   // const haveRequiredPermission = userPermissions?.includes(havePermission);
   let haveRequiredPermission = undefined;
   if (shareWSId) {
-    haveRequiredPermission = (havePermissions as shareWSPermissionEnum[]).every(
-      el => compState?.userPermissions?.includes(el)
-    );
+    switch (checkMode) {
+      case permissionCheckModeEnum.every:
+        haveRequiredPermission = (
+          havePermissions as shareWSPermissionEnum[]
+        ).every(el => compState?.userPermissions?.includes(el));
+        break;
+
+      case permissionCheckModeEnum.any:
+        haveRequiredPermission = (
+          havePermissions as shareWSPermissionEnum[]
+        ).some(el => compState?.userPermissions?.includes(el));
+        break;
+    }
   } else {
-    haveRequiredPermission = (havePermissions as permissionsEnum[]).every(el =>
-      compState?.userPermissions?.includes(el)
-    );
+    switch (checkMode) {
+      case permissionCheckModeEnum.every:
+        haveRequiredPermission = (havePermissions as permissionsEnum[]).every(
+          el => compState?.userPermissions?.includes(el)
+        );
+        break;
+
+      case permissionCheckModeEnum.any:
+        haveRequiredPermission = (havePermissions as permissionsEnum[]).some(
+          el => compState?.userPermissions?.includes(el)
+        );
+        break;
+    }
   }
 
   //
@@ -143,8 +175,12 @@ const ZCan: React.FC<CanComponentProps> = ({
     // if user have permission then user can view content
     content = children;
   } else if (
-    returnPermissionDeniedView &&
-    currentLoggedInUserRoleAndPermissionsStateAtom?.fetched
+    (returnPermissionDeniedView &&
+      currentLoggedInUserRoleAndPermissionsStateAtom?.fetched &&
+      compState.isProcessing === false) ||
+    (returnPermissionDeniedView &&
+      compState.isProcessing === false &&
+      haveRequiredPermission === false)
   ) {
     content = <Z403View />;
   }

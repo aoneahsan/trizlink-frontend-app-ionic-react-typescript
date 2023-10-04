@@ -302,6 +302,13 @@ const WORKSPACE = {
     SUB_HEADER: 'Confirm Your Move!',
     MESSAGES:
       "Deleting this workspace means it's gone forever. Are you certain this is what you want?"
+  },
+
+  LEAVE_WS_ALERT: {
+    HEADER: 'Final Check: Leave workspace',
+    SUB_HEADER: 'Confirm Your Move!',
+    MESSAGES:
+      'If you choose to leave this workspace you will lose access to all data (posts, comments, pages, etc.). You can regain your access in the future if someone else will invite you back in the workspace.'
   }
 };
 

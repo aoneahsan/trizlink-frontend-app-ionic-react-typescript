@@ -36,7 +36,11 @@ import ZCan from '@/components/Can';
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import {
+  useZIonAlert,
+  useZIonErrorAlert,
+  useZIonPopover
+} from '@/ZaionsHooks/zionic-hooks';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import {
   useZGetRQCacheData,
@@ -128,6 +132,8 @@ const ZWorkspacesCard: React.FC<{
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { zNavigatePushRoute } = useZNavigate();
+  const { presentZIonErrorAlert } = useZIonErrorAlert();
+  const { presentZIonAlert } = useZIonAlert();
   // #endregion
 
   // #region Popover.
@@ -150,6 +156,12 @@ const ZWorkspacesCard: React.FC<{
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION.MAIN,
       workspaceId!
     ]
+  });
+
+  const { mutateAsync: leaveSWSMutate } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.leave_share_ws,
+    _queriesKeysToInvalidate: [],
+    _loaderMessage: 'Leaving workspace...'
   });
 
   // Update isFavorite of owned workspace
@@ -298,6 +310,85 @@ const ZWorkspacesCard: React.FC<{
           showSuccessNotification(MESSAGES.WORKSPACE.ADD_TO_IS_FAVORITE);
         } else {
           showSuccessNotification(MESSAGES.WORKSPACE.REMOVE_TO_IS_FAVORITE);
+        }
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
+
+  // when member went to leave workspace and click on the leave button this function will fire and show the confirm alert.
+  const LeaveWorkspaceConfirmAlert = async () => {
+    try {
+      if (workspaceId && memberId) {
+        await presentZIonAlert({
+          header: MESSAGES.WORKSPACE.LEAVE_WS_ALERT.HEADER,
+          subHeader: MESSAGES.WORKSPACE.LEAVE_WS_ALERT.SUB_HEADER,
+          message: MESSAGES.WORKSPACE.LEAVE_WS_ALERT.MESSAGES,
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel'
+            },
+            {
+              text: 'Leave',
+              cssClass: 'zaions_ion_color_danger',
+              role: 'danger',
+              handler: () => {
+                void leaveWorkspaceHandler();
+              }
+            }
+          ]
+        });
+      } else {
+        await presentZIonErrorAlert();
+      }
+    } catch (error) {
+      await presentZIonErrorAlert();
+    }
+  };
+
+  const leaveWorkspaceHandler = async () => {
+    try {
+      if (workspaceId && memberId && owned === false) {
+        const _response = await leaveSWSMutate({
+          urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.shareWSId,
+            CONSTANTS.RouteParams.workspace.shareWSMemberId
+          ],
+          itemIds: [workspaceId, memberId],
+          requestData: ''
+        });
+
+        if (_response) {
+          // extracting data from _response.
+          const _data = extractInnerData<{ success: boolean }>(
+            _response,
+            extractInnerDataOptionsEnum.createRequestResponseItem
+          );
+
+          if (_data?.success) {
+            const getWSShareWorkspaceData =
+              getRQCDataHandler({
+                key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
+              }) || [];
+
+            const __oldData =
+              extractInnerData<wsShareInterface[]>(
+                getWSShareWorkspaceData,
+                extractInnerDataOptionsEnum.createRequestResponseItems
+              ) || [];
+
+            const __updatedData = __oldData?.filter(el => el?.id !== memberId);
+
+            await updateRQCDataHandler({
+              key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
+              data: __updatedData,
+              id: '',
+              updateHoleData: true,
+              extractType: ZRQGetRequestExtractEnum.extractItems
+            });
+          }
         }
       }
     } catch (error) {
@@ -527,7 +618,9 @@ const ZWorkspacesCard: React.FC<{
                           CONSTANTS.testingSelectors.workspace.listPage
                             .leaveWorkspaceButton
                         }
-                        onClick={() => {}}>
+                        onClick={() => {
+                          void LeaveWorkspaceConfirmAlert();
+                        }}>
                         Leave
                       </ZIonButton>
                     )}

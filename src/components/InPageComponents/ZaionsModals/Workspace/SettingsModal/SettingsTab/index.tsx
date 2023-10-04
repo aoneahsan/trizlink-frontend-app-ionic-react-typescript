@@ -36,7 +36,10 @@ import {
 } from '@/ZaionsHooks/zreactquery-hooks';
 import { reportCustomError } from '@/utils/customErrorType';
 import { extractInnerData, validateField, zStringify } from '@/utils/helpers';
-import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import {
+  workspaceInterface,
+  wsShareInterface
+} from '@/types/AdminPanel/workspace';
 import CONSTANTS from '@/utils/constants';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import classNames from 'classnames';
@@ -49,6 +52,7 @@ import {
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 import { useZIonAlert, useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Custom Hooks Imports go down
@@ -92,9 +96,18 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * */
 
 const ZSettingsTab: React.FC<{
-  workspaceId: string;
+  workspaceId?: string; // if this is owned workspace then pass the workspaceId id so we will know its a owner
+  wsShareMemberId?: string; // if this is share workspace then pass the member id so we will know its a member
+  wsShareId?: string; // if this is share workspace then pass the share ws id so we will know its a member
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
-}> = ({ workspaceId, dismissZIonModal }) => {
+  zNavigatePushRoute: (_url: string) => void;
+}> = ({
+  workspaceId,
+  wsShareMemberId,
+  wsShareId,
+  dismissZIonModal,
+  zNavigatePushRoute
+}) => {
   const [compState, setCompState] = useState<{
     workspace?: workspaceInterface;
   }>({});
@@ -111,21 +124,45 @@ const ZSettingsTab: React.FC<{
     _queriesKeysToInvalidate: []
   });
 
+  //
+  const { mutateAsync: updateSWSMutate } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.update_ws_share_info_data,
+    _queriesKeysToInvalidate: []
+  });
+
+  const { mutateAsync: leaveSWSMutate } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.leave_share_ws,
+    _queriesKeysToInvalidate: [],
+    _loaderMessage: 'Leaving workspace...'
+  });
+
   const { mutateAsync: deleteWorkspaceMutate } = useZRQDeleteRequest({
     _url: API_URL_ENUM.workspace_update_delete
   });
-  //#endregion
+  // #endregion
 
-  //#region Functions.
+  // #region Functions.
   const formikSubmitHandler = async (values: string) => {
     try {
       if (values) {
+        let _response;
         // Making an api call creating new workspace.
-        const _response = await updateWorkspaceMutate({
-          urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-          itemIds: [workspaceId],
-          requestData: values
-        });
+        if (workspaceId) {
+          _response = await updateWorkspaceMutate({
+            urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+            itemIds: [workspaceId],
+            requestData: values
+          });
+        } else if (wsShareId && wsShareMemberId) {
+          _response = await updateSWSMutate({
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.shareWSId,
+              CONSTANTS.RouteParams.workspace.shareWSMemberId
+            ],
+            itemIds: [wsShareId, wsShareMemberId],
+            requestData: values
+          });
+        }
 
         if (_response) {
           // extracting data from _response.
@@ -135,12 +172,25 @@ const ZSettingsTab: React.FC<{
           );
 
           if (_data && _data.id) {
-            // Updating current short link in cache in RQ cache.
-            await updateRQCDataHandler<workspaceInterface | undefined>({
-              key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
-              data: { ..._data },
-              id: _data.id
-            });
+            if (workspaceId) {
+              // Updating current short link in cache in RQ cache.
+              await updateRQCDataHandler<workspaceInterface | undefined>({
+                key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
+                data: { ..._data },
+                id: _data.id
+              });
+            } else if (wsShareId && wsShareMemberId) {
+              await updateRQCDataHandler<workspaceInterface | undefined>({
+                key: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
+                  wsShareId
+                ],
+                data: { ..._data },
+                updateHoleData: true,
+                extractType: ZRQGetRequestExtractEnum.extractItem,
+                id: ''
+              });
+            }
 
             setCompState(oldValues => ({
               ...oldValues,
@@ -156,7 +206,7 @@ const ZSettingsTab: React.FC<{
     }
   };
 
-  // when user won't to delete workspace and click on the delete button this function will fire and show the confirm alert.
+  // when user went to delete workspace and click on the delete button this function will fire and show the confirm alert.
   const deleteWorkspace = async () => {
     try {
       if (workspaceId) {
@@ -240,6 +290,91 @@ const ZSettingsTab: React.FC<{
       reportCustomError(error);
     }
   };
+
+  // when member went to leave workspace and click on the leave button this function will fire and show the confirm alert.
+  const LeaveWorkspaceConfirmAlert = async () => {
+    try {
+      if (wsShareId && wsShareMemberId) {
+        await presentZIonAlert({
+          header: MESSAGES.WORKSPACE.LEAVE_WS_ALERT.HEADER,
+          subHeader: MESSAGES.WORKSPACE.LEAVE_WS_ALERT.SUB_HEADER,
+          message: MESSAGES.WORKSPACE.LEAVE_WS_ALERT.MESSAGES,
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel'
+            },
+            {
+              text: 'Leave',
+              cssClass: 'zaions_ion_color_danger',
+              role: 'danger',
+              handler: () => {
+                void leaveWorkspaceHandler();
+              }
+            }
+          ]
+        });
+      } else {
+        await presentZIonErrorAlert();
+      }
+    } catch (error) {
+      await presentZIonErrorAlert();
+    }
+  };
+
+  const leaveWorkspaceHandler = async () => {
+    try {
+      if (wsShareId && wsShareMemberId) {
+        const _response = await leaveSWSMutate({
+          urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.shareWSId,
+            CONSTANTS.RouteParams.workspace.shareWSMemberId
+          ],
+          itemIds: [wsShareId, wsShareMemberId],
+          requestData: ''
+        });
+
+        if (_response) {
+          // extracting data from _response.
+          const _data = extractInnerData<{ success: boolean }>(
+            _response,
+            extractInnerDataOptionsEnum.createRequestResponseItem
+          );
+
+          if (_data?.success) {
+            const getWSShareWorkspaceData =
+              getRQCDataHandler({
+                key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
+              }) || [];
+
+            const __oldData =
+              extractInnerData<wsShareInterface[]>(
+                getWSShareWorkspaceData,
+                extractInnerDataOptionsEnum.createRequestResponseItems
+              ) || [];
+
+            const __updatedData = __oldData?.filter(
+              el => el?.id !== wsShareMemberId
+            );
+
+            await updateRQCDataHandler({
+              key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
+              data: __updatedData,
+              id: '',
+              updateHoleData: true,
+              extractType: ZRQGetRequestExtractEnum.extractItems
+            });
+
+            dismissZIonModal();
+
+            zNavigatePushRoute(ZaionsRoutes.AdminPanel.Workspaces.Main);
+          }
+        }
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
   //#endregion
 
   useEffect(() => {
@@ -261,6 +396,22 @@ const ZSettingsTab: React.FC<{
         setCompState(oldValues => ({
           ...oldValues,
           workspace: _currentWorkspace[0]
+        }));
+      } else if (wsShareId && wsShareMemberId) {
+        // getting all the workspace from RQ cache.
+        const _currentShareWorkspace = extractInnerData<workspaceInterface>(
+          getRQCDataHandler<workspaceInterface>({
+            key: [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
+              wsShareId
+            ]
+          }) as workspaceInterface,
+          extractInnerDataOptionsEnum.createRequestResponseItem
+        );
+
+        setCompState(oldValues => ({
+          ...oldValues,
+          workspace: _currentShareWorkspace
         }));
       }
     } catch (error) {
@@ -380,6 +531,7 @@ const ZSettingsTab: React.FC<{
 
                   <ZIonCol className='ion-text-end'>
                     <ZRCSwitch
+                      disabled={wsShareId && wsShareMemberId ? true : false}
                       testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.internalPostToggler}-${workspaceId}`}
                       testinglistselector={
                         CONSTANTS.testingSelectors.workspace.settingsModal
@@ -429,10 +581,19 @@ const ZSettingsTab: React.FC<{
         <ZIonCol
           size='12'
           className='mt-2'>
-          <ZIonText className='block text-lg'>Remove workspace</ZIonText>
+          <ZIonText className='block text-lg'>
+            {workspaceId
+              ? 'Remove workspace'
+              : wsShareId && wsShareMemberId
+              ? 'Leave workspace'
+              : null}
+          </ZIonText>
           <ZIonText className='block text-sm text-muted'>
-            Remove this workspace and erase all data (posts, comments, pages
-            etc.). This action is irreversible.
+            {workspaceId
+              ? 'Remove this workspace and erase all data (posts, comments, pages etc.). This action is irreversible.'
+              : wsShareId && wsShareMemberId
+              ? 'If you choose to leave this workspace you will lose access to all data (posts, comments, pages, etc.). You can regain your access in the future if someone else will invite you back in the workspace.'
+              : null}
           </ZIonText>
 
           <ZIonButton
@@ -444,9 +605,17 @@ const ZSettingsTab: React.FC<{
                 .deleteButton
             }
             onClick={() => {
-              void deleteWorkspace();
+              if (workspaceId) {
+                void deleteWorkspace();
+              } else if (wsShareId && wsShareMemberId) {
+                void LeaveWorkspaceConfirmAlert();
+              }
             }}>
-            Remove this workspace
+            {workspaceId
+              ? 'Remove this workspace'
+              : wsShareId && wsShareMemberId
+              ? 'Leave this workspace'
+              : null}
           </ZIonButton>
         </ZIonCol>
       </ZIonRow>

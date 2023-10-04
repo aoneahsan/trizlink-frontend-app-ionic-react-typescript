@@ -218,6 +218,8 @@ export const API_URLS = {
   ws_share_member_role_permissions: `/user/shared-ws/get-member-role-permissions/${RouteParams.workspace.shareWSMemberId}`,
   ws_share_update_is_favorite: `/user/shared-ws/update-is-favorite/${RouteParams.workspace.shareWSMemberId}`,
   ws_share_info_data: `/user/shared-ws/get-share-ws-info-data/${RouteParams.workspace.shareWSMemberId}`,
+  update_ws_share_info_data: `/user/shared-ws/${RouteParams.workspace.shareWSId}/member-id/${RouteParams.workspace.shareWSMemberId}`,
+  leave_share_ws: `/user/shared-ws/${RouteParams.workspace.shareWSId}/leave-ws/member-id/${RouteParams.workspace.shareWSMemberId}`,
 
   // Time slot
   time_slot_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/time-slot`,

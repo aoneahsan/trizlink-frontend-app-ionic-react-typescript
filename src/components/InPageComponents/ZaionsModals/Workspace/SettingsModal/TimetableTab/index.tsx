@@ -74,6 +74,7 @@ import {
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import ZCan from '@/components/Can';
 import {
+  permissionCheckModeEnum,
   permissionsEnum,
   permissionsTypeEnum,
   shareWSPermissionEnum
@@ -270,31 +271,53 @@ const ZTimetableTab: React.FC<{
                                     {_timeSlot?.time}
                                   </ZIonText>
                                 </ZIonText>
-                                <ZIonIcon
-                                  testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.timeActionButton}-${_timeSlot.id}`}
-                                  testinglistselector={
-                                    CONSTANTS.testingSelectors.workspace
-                                      .settingsModal.timetable.timeActionButton
-                                  }
-                                  onClick={(event: unknown) => {
-                                    if (_timeSlot.id) {
-                                      setCompState(oldValues => ({
-                                        ...oldValues,
-                                        timeSlotId: _timeSlot.id as string
-                                      }));
 
-                                      //
-                                      presentZTimeSlotActionPopover({
-                                        _event: event as Event,
-                                        _cssClass:
-                                          'zaions_present_folder_Action_popover_width',
-                                        _dismissOnSelect: false
-                                      });
+                                <ZCan
+                                  shareWSId={wsShareId}
+                                  checkMode={permissionCheckModeEnum.any}
+                                  permissionType={
+                                    wsShareId
+                                      ? permissionsTypeEnum.shareWSMemberPermissions
+                                      : permissionsTypeEnum.loggedInUserPermissions
+                                  }
+                                  havePermissions={
+                                    wsShareId
+                                      ? [
+                                          shareWSPermissionEnum.update_sws_timeSlot,
+                                          shareWSPermissionEnum.delete_sws_timeSlot
+                                        ]
+                                      : [
+                                          permissionsEnum.update_workspace,
+                                          permissionsEnum.delete_workspace
+                                        ]
+                                  }>
+                                  <ZIonIcon
+                                    testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.timeActionButton}-${_timeSlot.id}`}
+                                    testinglistselector={
+                                      CONSTANTS.testingSelectors.workspace
+                                        .settingsModal.timetable
+                                        .timeActionButton
                                     }
-                                  }}
-                                  icon={ellipsisHorizontalOutline}
-                                  className='w-5 h-5 cursor-pointer'
-                                />
+                                    onClick={(event: unknown) => {
+                                      if (_timeSlot.id) {
+                                        setCompState(oldValues => ({
+                                          ...oldValues,
+                                          timeSlotId: _timeSlot.id as string
+                                        }));
+
+                                        //
+                                        presentZTimeSlotActionPopover({
+                                          _event: event as Event,
+                                          _cssClass:
+                                            'zaions_present_folder_Action_popover_width',
+                                          _dismissOnSelect: false
+                                        });
+                                      }
+                                    }}
+                                    icon={ellipsisHorizontalOutline}
+                                    className='w-5 h-5 cursor-pointer'
+                                  />
+                                </ZCan>
                               </div>
                             );
                           }
