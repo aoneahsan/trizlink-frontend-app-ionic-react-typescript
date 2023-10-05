@@ -365,6 +365,7 @@ const ZShareWSView: React.FC = () => {
                           shareWSId={wsShareId}>
                           <ZIonButton
                             fill='outline'
+                            className='me-2'
                             onClick={() => {
                               // setting the tab with should be active in modal
                               setCompState(oldValues => ({
@@ -406,6 +407,7 @@ const ZShareWSView: React.FC = () => {
                           }
                           shareWSId={wsShareId}>
                           <ZIonButton
+                            className='me-2'
                             fill='outline'
                             onClick={() => {
                               // setting the tab with should be active in modal
@@ -491,12 +493,33 @@ const ZShareWSView: React.FC = () => {
                 </ZIonCol>
 
                 <ZIonCol className='flex ion-align-items-start ion-justify-content-end'>
-                  <ZIonButton
-                    fill='outline'
-                    className=''>
-                    View all short links
-                  </ZIonButton>
-                  <ZIonButton className=''>Create short links</ZIonButton>
+                  {/* If member has permission to view short links */}
+                  <ZCan
+                    havePermissions={[
+                      shareWSPermissionEnum.viewAny_sws_shortLink
+                    ]}
+                    permissionType={
+                      permissionsTypeEnum.shareWSMemberPermissions
+                    }
+                    shareWSId={wsShareId}>
+                    <ZIonButton
+                      fill='outline'
+                      className='me-2'>
+                      View all short links
+                    </ZIonButton>
+                  </ZCan>
+
+                  {/* If member has permission to view short links */}
+                  <ZCan
+                    havePermissions={[
+                      shareWSPermissionEnum.create_sws_shortLink
+                    ]}
+                    permissionType={
+                      permissionsTypeEnum.shareWSMemberPermissions
+                    }
+                    shareWSId={wsShareId}>
+                    <ZIonButton className=''>Create short links</ZIonButton>
+                  </ZCan>
                 </ZIonCol>
               </ZIonRow>
             </ZIonGrid>

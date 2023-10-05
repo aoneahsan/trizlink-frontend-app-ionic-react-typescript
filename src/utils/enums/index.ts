@@ -86,6 +86,7 @@ export enum API_URL_ENUM {
   user_notification_mark_as_read = 'user_notification_mark_as_read',
   user_notification_mark_all_as_read = 'user_notification_mark_all_as_read',
 
+  // Short links
   shortLinks_create_list = 'shortLinks_create_list',
   shortLinks_update_delete = 'shortLinks_update_delete',
   shortLinks_is_path_available = 'shortLinks_is_path_available',
@@ -94,6 +95,10 @@ export enum API_URL_ENUM {
   shortLink_check_target_password = 'shortLink_check_target_password',
   FolderShortLinks = 'FolderShortLinks',
   ShortLinks_folders_reorder = 'ShortLinks_folders_reorder',
+
+  // Share workspace short links
+  sws_sl_create_list = 'sws_sl_create_list',
+  sws_sl_get_update_delete = 'sws_sl_get_update_delete',
 
   linkInBio_update_delete = 'linkInBio_update_delete',
   linkInBio_create_list = 'linkInBio_create_list',

@@ -157,12 +157,17 @@ export const API_URLS = {
   user_notification_mark_as_read: `/user/notification/markAsRead/${RouteParams.user.notification.id}`,
   user_notification_mark_all_as_read: `/user/notification/markAllAsRead`,
 
+  // Short links
   shortLinks_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links`,
   shortLinks_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links/${RouteParams.shortLink.shortLinkId}`,
   shortLinks_is_path_available: `/user/workspaces/${RouteParams.workspace.workspaceId}/sl/is-path-available/${RouteParams.shortLink.path}`,
   ShortLinks_folders_reorder: '/user/shortLinks/folders/reorder',
   shortLink_get_target_url_info: `/public/s/${RouteParams.urlPath}`,
   shortLink_check_target_password: `/public/s/${RouteParams.urlPath}/check-password`,
+
+  // Share workspace short links
+  sws_sl_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/short-links`,
+  sws_sl_get_update_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/short-links/${RouteParams.shortLink.shortLinkId}`,
 
   FolderShortLinks: '/user/folders/:folderId/short-links',
   LinkInBio_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/linkInBio/folders`,
@@ -1503,7 +1508,10 @@ const REACT_QUERY = {
     SHORT_LINKS: {
       MAIN: 'rq-short-links-list-key',
       GET: 'rq-short-link-get-key',
-      IS_PATH_AVAILABLE: 'rq-short-link-is-path-available-key'
+      IS_PATH_AVAILABLE: 'rq-short-link-is-path-available-key',
+
+      SWS_MAIN: 'rq-sws-short-link-list-key',
+      SWS_GET: 'rq-sws-short-link-get-key'
     },
     LINK_IN_BIO: {
       MAIN: 'rq-link-in-bio-links-list-key',
