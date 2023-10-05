@@ -488,13 +488,16 @@ const ZShareWSView: React.FC = () => {
                     </ZIonText>
                     "
                   </ZIonText>
-
-                  <ZIonButton className='ion-no-margin mt-2'>
-                    View all short links
-                  </ZIonButton>
                 </ZIonCol>
 
-                <ZIonCol></ZIonCol>
+                <ZIonCol className='flex ion-align-items-start ion-justify-content-end'>
+                  <ZIonButton
+                    fill='outline'
+                    className=''>
+                    View all short links
+                  </ZIonButton>
+                  <ZIonButton className=''>Create short links</ZIonButton>
+                </ZIonCol>
               </ZIonRow>
             </ZIonGrid>
           </ZIonContent>
