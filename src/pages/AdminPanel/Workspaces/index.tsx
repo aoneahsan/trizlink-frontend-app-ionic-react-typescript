@@ -265,11 +265,14 @@ const ZWorkspaceListPage: React.FC = () => {
                               workspaceImage={el.workspaceImage}
                               workspaceName={el.workspaceName as string}
                               user={el.user}
-                              workspaceId={el.id}
+                              workspaceId={
+                                el?.accountStatus ? el.workspaceId : el.id
+                              }
                               owned={el?.accountStatus ? false : true}
                               accountStatus={el?.accountStatus}
                               createdAt={el.createdAt}
                               isFavorite={el.isFavorite ? true : false}
+                              memberId={el.id}
                             />
                           </ZIonCol>
                         ))}

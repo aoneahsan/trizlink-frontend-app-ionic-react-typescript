@@ -274,8 +274,8 @@ const ZWorkspacesCard: React.FC<{
         });
       } else {
         __response = await updateIsFavoriteShareWSAsyncMutate({
-          itemIds: [workspaceId!],
-          urlDynamicParts: [CONSTANTS.RouteParams.workspace.wsShareId],
+          itemIds: [memberId!],
+          urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
           requestData: __zStringifyData
         });
       }

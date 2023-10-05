@@ -329,12 +329,6 @@ const ZShareWSView: React.FC = () => {
                 </ZIonCol>
 
                 <ZIonCol className='flex ion-align-items-start ion-justify-content-end'>
-                  {/* <ZIonButton
-                    height='.9rem'
-                    disabled
-                    className='w-[9rem]'>
-                    <ZIonSpinner color='light' />
-                  </ZIonButton> */}
                   {isZFetching && getMemberRolePermissions === undefined && (
                     <>
                       <ZIonButton
@@ -370,6 +364,7 @@ const ZShareWSView: React.FC = () => {
                           }
                           shareWSId={wsShareId}>
                           <ZIonButton
+                            fill='outline'
                             onClick={() => {
                               // setting the tab with should be active in modal
                               setCompState(oldValues => ({
@@ -395,7 +390,7 @@ const ZShareWSView: React.FC = () => {
                                 permissionsTypeEnum.shareWSMemberPermissions
                               }
                               shareWSId={wsShareId}>
-                              Add
+                              <ZIonText className='me-1'>Add</ZIonText>
                             </ZCan>
                             time slot
                           </ZIonButton>
@@ -411,6 +406,7 @@ const ZShareWSView: React.FC = () => {
                           }
                           shareWSId={wsShareId}>
                           <ZIonButton
+                            fill='outline'
                             onClick={() => {
                               // setting the tab with should be active in modal
                               setCompState(oldValues => ({
@@ -475,7 +471,31 @@ const ZShareWSView: React.FC = () => {
                 </ZIonCol>
               </ZIonRow>
 
-              <ZIonRow className='px-4 py-5 mt-5 border rounded-lg zaions__light_bg ion-margin ion-align-items-start'></ZIonRow>
+              <ZIonRow className='px-4 py-5 mt-5 border rounded-lg zaions__light_bg ion-margin ion-align-items-start'>
+                <ZIonCol>
+                  <ZIonTitle className='block font-bold ion-no-padding'>
+                    Short links
+                  </ZIonTitle>
+
+                  <ZIonText
+                    className='block text-sm'
+                    color='dark'>
+                    Total short link in this workspace are "
+                    <ZIonText
+                      className='font-semibold'
+                      color='tertiary'>
+                      0
+                    </ZIonText>
+                    "
+                  </ZIonText>
+
+                  <ZIonButton className='ion-no-margin mt-2'>
+                    View all short links
+                  </ZIonButton>
+                </ZIonCol>
+
+                <ZIonCol></ZIonCol>
+              </ZIonRow>
             </ZIonGrid>
           </ZIonContent>
         </ZCan>
