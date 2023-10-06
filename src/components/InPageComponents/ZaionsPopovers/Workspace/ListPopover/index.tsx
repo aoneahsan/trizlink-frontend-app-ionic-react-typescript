@@ -170,7 +170,10 @@ const ZWorkspacesListPopover: React.FC<{
                         CONSTANTS.RouteParams.workspace.workspaceId,
                         CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                       ],
-                      values: [el.id || '', 'all']
+                      values: [
+                        el.id || '',
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ]
                     })
                   );
                   dismissZIonPopover('', '');
@@ -225,7 +228,10 @@ const ZWorkspacesListPopover: React.FC<{
                         CONSTANTS.RouteParams.workspace.workspaceId,
                         CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                       ],
-                      values: [el.id || '', 'all']
+                      values: [
+                        el.id || '',
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ]
                     })
                   );
                   dismissZIonPopover('', '');

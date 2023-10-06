@@ -139,6 +139,13 @@ export enum API_URL_ENUM {
   workspace_update_delete = 'workspace_update_delete',
   workspace_update_is_favorite = 'workspace_update_is_favorite',
 
+  // Share workspace folder.
+  ws_share_folder_sl_list = 'ws_share_folder_sl_list',
+  ws_share_folder_lib_list = 'ws_share_folder_lib_list',
+  ws_share_folder_create = 'ws_share_folder_create',
+  ws_share_folder_get_update_delete = 'ws_share_folder_get_update_delete',
+  ws_share_folder_reorder = 'ws_share_folder_reorder',
+
   // WS team
   workspace_team_create_list = 'workspace_team_create_list',
   workspace_team_update_delete = 'workspace_team_update_delete',

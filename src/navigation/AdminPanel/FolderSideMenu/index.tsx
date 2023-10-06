@@ -184,7 +184,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                           CONSTANTS.RouteParams
                             .folderIdToGetShortLinksOrLinkInBio
                         ],
-                        [workspaceId, 'all']
+                        [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
                       )
                     );
                   }}>

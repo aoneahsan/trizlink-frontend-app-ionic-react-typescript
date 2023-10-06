@@ -420,7 +420,10 @@ const ZWorkspacesCard: React.FC<{
                         CONSTANTS.RouteParams.workspace.workspaceId,
                         CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                       ],
-                      values: [workspaceId || '', 'all']
+                      values: [
+                        workspaceId || '',
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ]
                     })}
                     testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardImg}-${workspaceId}`}
                     testinglistselector={
@@ -449,7 +452,10 @@ const ZWorkspacesCard: React.FC<{
                         CONSTANTS.RouteParams.workspace.workspaceId,
                         CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                       ],
-                      values: [workspaceId || '', 'all']
+                      values: [
+                        workspaceId || '',
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ]
                     })}
                     testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardTitle}-${workspaceId}`}
                     testinglistselector={
@@ -564,7 +570,10 @@ const ZWorkspacesCard: React.FC<{
                                     CONSTANTS.RouteParams
                                       .folderIdToGetShortLinksOrLinkInBio
                                   ],
-                                  values: [workspaceId, 'all']
+                                  values: [
+                                    workspaceId,
+                                    CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                                  ]
                                 })
                               );
                             } else {

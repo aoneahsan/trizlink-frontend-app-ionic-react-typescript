@@ -71,6 +71,8 @@ import {
   workspaceInterface,
   workspaceSettingsModalTabEnum
 } from '@/types/AdminPanel/workspace';
+import { createRedirectRoute } from '@/utils/helpers';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Recoil State Imports go down
@@ -504,7 +506,21 @@ const ZShareWSView: React.FC = () => {
                     shareWSId={wsShareId}>
                     <ZIonButton
                       fill='outline'
-                      className='me-2'>
+                      className='me-2'
+                      routerLink={createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                        values: [
+                          wsShareId,
+                          shareWSMemberId,
+                          CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                        ],
+                        params: [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                          CONSTANTS.RouteParams
+                            .folderIdToGetShortLinksOrLinkInBio
+                        ]
+                      })}>
                       View all short links
                     </ZIonButton>
                   </ZCan>

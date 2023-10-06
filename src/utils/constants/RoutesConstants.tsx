@@ -142,7 +142,13 @@ const ZaionsRoutes = {
       Startup: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/startup`,
       Create: `${ZPrivateRoutePath}/workspaces/create`,
       Edit: `${ZPrivateRoutePath}/workspaces/edit/${CONSTANTS.RouteParams.workspace.editWorkspaceIdParam}`,
-      View: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/view`
+      View: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/view`,
+
+      Short_link: {
+        Main: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/short-links/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
+        Create: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/short-links/create`,
+        Edit: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/short-links/edit/${CONSTANTS.RouteParams.editShortLinkIdParam}`
+      }
     },
 
     ZaionsDashboard: {

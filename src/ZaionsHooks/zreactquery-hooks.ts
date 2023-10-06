@@ -168,7 +168,7 @@ export const useZRQGetRequest = <T>({
           void STORAGE.SET(LOCALSTORAGE_KEYS.ERROR_DATA, __data);
 
           // redirect to 404
-          window.location.replace(ZaionsRoutes.Error.Z404);
+          // window.location.replace(ZaionsRoutes.Error.Z404);
         } else {
           // showing error alert...
           _showAlertOnError && void presentZIonErrorAlert();

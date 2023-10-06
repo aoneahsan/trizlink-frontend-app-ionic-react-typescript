@@ -723,7 +723,7 @@ const ZInpageMainContent: React.FC = () => {
               })}
               // color='medium'
             >
-              Create a new link
+              Create a New Link or Manage Your Existing Ones!
             </ZIonText>
             <ZIonText
               className={classNames({
@@ -733,7 +733,8 @@ const ZInpageMainContent: React.FC = () => {
               })}
               // color='medium'
             >
-              Create & manage your links
+              Craft fresh links or take a peek at your existing ones. The choice
+              is yours!
             </ZIonText>
           </ZIonCol>
 

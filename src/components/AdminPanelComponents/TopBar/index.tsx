@@ -15,7 +15,7 @@ import {
   refresh
 } from 'ionicons/icons';
 import classNames from 'classnames';
-import { useRouteMatch } from 'react-router';
+import { useParams, useRouteMatch } from 'react-router';
 
 /**
  * Custom Imports go down
@@ -101,6 +101,13 @@ const ZAdminPanelTopBar: React.FC<{
 }) => {
   const { isMdScale, isLgScale } = useZMediaQueryScale();
 
+  // getting current share workspace id form params.
+  const { wsShareId, shareWSMemberId } = useParams<{
+    workspaceId?: string;
+    shareWSMemberId: string;
+    wsShareId: string;
+  }>();
+
   // #region popovers.
   const { presentZIonPopover: presentZHelpCenterPopover } =
     useZIonPopover(ZHelpCenterPopover);
@@ -124,7 +131,7 @@ const ZAdminPanelTopBar: React.FC<{
       _authenticated: true,
       _itemsIds: [workspaceId || ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: !workspaceId ? true : false,
+      _shouldFetchWhenIdPassed: workspaceId ? false : true,
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
 

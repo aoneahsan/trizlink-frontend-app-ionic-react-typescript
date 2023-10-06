@@ -489,7 +489,8 @@ const AdminCreateNewLinkPages: React.FC = () => {
       // 			CONSTANTS.RouteParams.workspace.workspaceId,
       // 			CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
       // 		],
-      // 		[workspaceId, 'all']
+      // 		[workspaceId,
+      // CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
       // 	)
       // );
     } catch (error) {
@@ -1251,7 +1252,7 @@ const ZTopBar: React.FC = () => {
                   CONSTANTS.RouteParams.workspace.workspaceId,
                   CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                 ],
-                [workspaceId, 'all']
+                [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
               )}
               onClick={() => {
                 resetForm();
@@ -1329,7 +1330,7 @@ const ZTopBar: React.FC = () => {
                   CONSTANTS.RouteParams.workspace.workspaceId,
                   CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                 ],
-                [workspaceId, 'all']
+                [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
               )}
               onClick={() => {
                 resetForm();

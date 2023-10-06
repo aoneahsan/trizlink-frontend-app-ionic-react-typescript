@@ -11,6 +11,9 @@ import ZaionsRoutes from './utils/constants/RoutesConstants';
 import PublicRoute from './components/PublicRoute';
 import PrivateRoute from './components/PrivateRoute';
 import ZShareWSStartup from './pages/AdminPanel/ShareWS/Startup';
+const ZSWSShortLinksListPage = lazy(
+  () => import('./pages/AdminPanel/ShareWS/ShortLinks/List')
+);
 const ZShareWSView = lazy(() => import('./pages/AdminPanel/ShareWS/View'));
 const TestingReactDropzone = lazy(() => import('./Testing/ReactDropZone'));
 const Z400View = lazy(() => import('./components/Errors/400'));
@@ -388,6 +391,12 @@ const AppRoutes = () => {
         exact
         path={ZaionsRoutes.AdminPanel.ShareWS.View}
         Component={ZShareWSView}
+      />
+
+      <PrivateRoute
+        exact
+        path={ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main}
+        Component={ZSWSShortLinksListPage}
       />
 
       <PrivateRoute

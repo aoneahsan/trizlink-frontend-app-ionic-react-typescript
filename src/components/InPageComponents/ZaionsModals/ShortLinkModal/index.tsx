@@ -4,30 +4,30 @@
  * */
 import ZCan from '@/components/Can';
 import {
-	ZIonButton,
-	ZIonContent,
-	ZIonInput,
-	ZIonText,
-	ZIonTitle,
+  ZIonButton,
+  ZIonContent,
+  ZIonInput,
+  ZIonText,
+  ZIonTitle
 } from '@/components/ZIonComponents';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
 import {
-	FormMode,
-	messengerPlatformsBlockEnum,
+  FormMode,
+  messengerPlatformsBlockEnum
 } from '@/types/AdminPanel/index.type';
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import {
-	createRedirectRoute,
-	replaceParams,
-	replaceRouteParams,
+  createRedirectRoute,
+  replaceParams,
+  replaceRouteParams
 } from '@/utils/helpers';
 import { showInfoNotification } from '@/utils/notification';
 import { useZIonToast } from '@/ZaionsHooks/zionic-hooks';
 import {
-	NewShortLinkFormState,
-	NewShortLinkSelectTypeOption,
+  NewShortLinkFormState,
+  NewShortLinkSelectTypeOption
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import React from 'react';
 import { useSetRecoilState } from 'recoil';
@@ -84,116 +84,115 @@ import { useSetRecoilState } from 'recoil';
  * */
 
 const ZShortLinkModal: React.FC<{
-	dismissZIonModal: (data?: string, role?: string | undefined) => void;
-	zNavigatePushRoute: (_url: string) => void;
-	workspaceId: string;
-	shortUrl: string;
+  dismissZIonModal: (data?: string, role?: string | undefined) => void;
+  zNavigatePushRoute: (_url: string) => void;
+  workspaceId: string;
+  shortUrl: string;
 }> = ({ dismissZIonModal, zNavigatePushRoute, workspaceId, shortUrl }) => {
-	const { presentZIonToast } = useZIonToast();
-	//
-	const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
+  const { presentZIonToast } = useZIonToast();
+  //
+  const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
 
-	const setNewShortLinkTypeOptionDataAtom = useSetRecoilState(
-		NewShortLinkSelectTypeOption
-	);
+  const setNewShortLinkTypeOptionDataAtom = useSetRecoilState(
+    NewShortLinkSelectTypeOption
+  );
 
-	return (
-		<>
-			<ZIonContent className='ion-padding'>
-				<div className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
-					<ZIonText className='text-xl font-bold'>Well done 🧙</ZIonText>
-					<ZIonText className='text-lg font-normal'>
-						Your link is ready to be shared
-					</ZIonText>
+  return (
+    <>
+      <ZIonContent className='ion-padding'>
+        <div className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
+          <ZIonText className='text-xl font-bold'>Well done 🧙</ZIonText>
+          <ZIonText className='text-lg font-normal'>
+            Your link is ready to be shared
+          </ZIonText>
 
-					{/* Copy short link to clipboard */}
-					<div className='flex w-[90%] rounded-lg overflow-hidden my-5'>
-						<div className='zaions__medium_bg h-[2.5rem] w-[90%] overflow-hidden line-clamp-1  flex ion-align-items-center ps-2'>
-							<ZIonTitle className='text-sm ion-no-padding' color='light'>
-								{shortUrl}
-							</ZIonTitle>
-						</div>
-						<ZIonButton
-							height='2.5rem'
-							className='ion-no-margin'
-							style={{
-								'--border-radius': '0px',
-							}}
-							onClick={() => {
-								navigator.clipboard.writeText(shortUrl);
+          {/* Copy short link to clipboard */}
+          <div className='flex w-[90%] rounded-lg overflow-hidden my-5'>
+            <div className='zaions__medium_bg h-[2.5rem] w-[90%] overflow-hidden line-clamp-1  flex ion-align-items-center ps-2'>
+              <ZIonTitle
+                className='text-sm ion-no-padding'
+                color='light'>
+                {shortUrl}
+              </ZIonTitle>
+            </div>
+            <ZIonButton
+              height='2.5rem'
+              className='ion-no-margin'
+              style={{
+                '--border-radius': '0px'
+              }}
+              onClick={() => {
+                navigator.clipboard.writeText(shortUrl);
 
-								presentZIonToast('✨ Copied', 'tertiary');
-							}}
-						>
-							Copy
-						</ZIonButton>
-					</div>
+                presentZIonToast('✨ Copied', 'tertiary');
+              }}>
+              Copy
+            </ZIonButton>
+          </div>
 
-					{/* Buttons */}
-					<div className='flex w-[90%] ion-justify-content-between'>
-						<ZCan havePermissions={[permissionsEnum.create_shortLink]}>
-							<ZIonButton
-								fill='outline'
-								onClick={() => {
-									dismissZIonModal();
+          {/* Buttons */}
+          <div className='flex w-[90%] ion-justify-content-between'>
+            <ZCan havePermissions={[permissionsEnum.create_shortLink]}>
+              <ZIonButton
+                fill='outline'
+                onClick={() => {
+                  dismissZIonModal();
 
-									setNewShortLinkFormState((_) => ({
-										folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
-										shortUrl: {
-											domain: CONSTANTS.DEFAULT_VALUES.DEFAULT_CUSTOM_DOMAIN,
-										},
-										type: messengerPlatformsBlockEnum.link,
-										pixelIds: [],
-										tags: [],
-										formMode: FormMode.ADD,
-									}));
+                  setNewShortLinkFormState(_ => ({
+                    folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
+                    shortUrl: {
+                      domain: CONSTANTS.DEFAULT_VALUES.DEFAULT_CUSTOM_DOMAIN
+                    },
+                    type: messengerPlatformsBlockEnum.link,
+                    pixelIds: [],
+                    tags: [],
+                    formMode: FormMode.ADD
+                  }));
 
-									const selectedTypeOptionData = LinkTypeOptionsData.find(
-										(el) => el.type === messengerPlatformsBlockEnum.link
-									);
+                  const selectedTypeOptionData = LinkTypeOptionsData.find(
+                    el => el.type === messengerPlatformsBlockEnum.link
+                  );
 
-									if (selectedTypeOptionData) {
-										setNewShortLinkTypeOptionDataAtom((_) => ({
-											...selectedTypeOptionData,
-										}));
-									}
+                  if (selectedTypeOptionData) {
+                    setNewShortLinkTypeOptionDataAtom(_ => ({
+                      ...selectedTypeOptionData
+                    }));
+                  }
 
-									zNavigatePushRoute(
-										createRedirectRoute({
-											url: ZaionsRoutes.AdminPanel.ShortLinks.Create,
-											params: [CONSTANTS.RouteParams.workspace.workspaceId],
-											values: [workspaceId],
-										})
-									);
-								}}
-							>
-								Create a new link
-							</ZIonButton>
-						</ZCan>
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShortLinks.Create,
+                      params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                      values: [workspaceId]
+                    })
+                  );
+                }}>
+                Create a new link
+              </ZIonButton>
+            </ZCan>
 
-						<ZIonButton
-							onClick={() => {
-								dismissZIonModal();
+            <ZIonButton
+              onClick={() => {
+                dismissZIonModal();
 
-								zNavigatePushRoute(
-									replaceRouteParams(
-										ZaionsRoutes.AdminPanel.ShortLinks.Main,
-										[
-											CONSTANTS.RouteParams.workspace.workspaceId,
-											CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-										],
-										[workspaceId, 'all']
-									)
-								);
-							}}
-						>
-							Go to dashboard
-						</ZIonButton>
-					</div>
-				</div>
-			</ZIonContent>
-		</>
-	);
+                zNavigatePushRoute(
+                  replaceRouteParams(
+                    ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                    [
+                      CONSTANTS.RouteParams.workspace.workspaceId,
+                      CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                    ],
+                    [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
+                  )
+                );
+              }}>
+              Go to dashboard
+            </ZIonButton>
+          </div>
+        </div>
+      </ZIonContent>
+    </>
+  );
 };
 
 export default ZShortLinkModal;

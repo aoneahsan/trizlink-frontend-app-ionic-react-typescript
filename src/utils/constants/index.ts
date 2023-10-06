@@ -218,6 +218,13 @@ export const API_URLS = {
   workspace_team_update_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}`,
   workspace_update_is_favorite: `/user/workspaces/update-is-favorite/${RouteParams.workspace.workspaceId}`,
 
+  // Share workspace folder
+  ws_share_folder_sl_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/get/shortLink/folders`,
+  ws_share_folder_lib_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/get/linkInBio/folders`,
+  ws_share_folder_create: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/folder`,
+  ws_share_folder_get_update_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/folder/${RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
+  ws_share_folder_reorder: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/folder/reorder`,
+
   // share workspace
   ws_share_list: `/user/shared-ws`,
   ws_share_member_role_permissions: `/user/shared-ws/get-member-role-permissions/${RouteParams.workspace.shareWSMemberId}`,
@@ -419,7 +426,8 @@ const DEFAULT_VALUES = {
   ZAIONS_SETTING_SPLIT_PANEL: 'ZAIONS_SETTING_PAGE_PANEL',
   ZAIONS_SHORT_LINKS_LIST_SPLIT_PANEL: 'ZAIONS_SHORT_LINKS_LIST_SPLIT_PANEL',
   ZAIONS_DASHBOARD_SPLIT_PANEL: 'ZAIONS_DASHBOARD_PAGE_PANEL',
-  API_TOKEN_PRIMARY_KEY: 'Bearer'
+  API_TOKEN_PRIMARY_KEY: 'Bearer',
+  FOLDER_ROUTE: 'all'
 };
 
 export const LOCALSTORAGE_KEYS = {
@@ -1554,7 +1562,10 @@ const REACT_QUERY = {
     FOLDER: {
       MAIN: 'rq-folders-list-key',
       GET: 'rq-folder-get-key',
-      FOLDER_SHORT_LINKS: 'rq-folder-short-links-key'
+      FOLDER_SHORT_LINKS: 'rq-folder-short-links-key',
+
+      SWS_MAIN: 'rq-sws-folder-list-key',
+      SWS_GET: 'rq-sws-folder-get-key'
     },
     LINK_IN_BIO_FOLDER: {
       MAIN: 'rq-link-in-bio-folders-list-key',
