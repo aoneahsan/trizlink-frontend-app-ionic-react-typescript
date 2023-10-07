@@ -264,6 +264,8 @@ const ZSWSShortLinksListPage: React.FC = () => {
     FolderActionsPopoverContent,
     {
       workspaceId,
+      shareWSMemberId,
+      wsShareId,
       state: folderState.shortlink
     }
   );
@@ -275,7 +277,9 @@ const ZSWSShortLinksListPage: React.FC = () => {
     ZaionsAddNewFolder,
     {
       state: folderState.shortlink,
-      workspaceId
+      workspaceId,
+      shareWSMemberId: shareWSMemberId,
+      wsShareId: wsShareId
     }
   );
   // #endregion
@@ -1006,7 +1010,7 @@ const ZInpageMainContent: React.FC = () => {
           shareWSId={wsShareId}
           permissionType={permissionsTypeEnum.shareWSMemberPermissions}
           havePermissions={[shareWSPermissionEnum.viewAny_sws_shortLink]}>
-          {/* <ZaionsShortLinkTable showSkeleton={isZFetching} /> */}
+          <ZaionsShortLinkTable showSkeleton={isZFetching} />
         </ZCan>
       </div>
     </>

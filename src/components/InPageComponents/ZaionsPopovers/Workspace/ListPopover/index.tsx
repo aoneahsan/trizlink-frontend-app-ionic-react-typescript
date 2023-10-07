@@ -2,9 +2,11 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
+import ZCreateWorkspaceBtn from '@/components/AdminPanelComponents/Workspace/ZCreateWorkspaceBtn';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 import ZWorkspacesSettingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SettingsModal';
 import {
+  ZIonButton,
   ZIonIcon,
   ZIonItem,
   ZIonItemDivider,
@@ -15,7 +17,8 @@ import {
 } from '@/components/ZIonComponents';
 import {
   workspaceInterface,
-  workspaceSettingsModalTabEnum
+  workspaceSettingsModalTabEnum,
+  wsShareInterface
 } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import CONSTANTS from '@/utils/constants';
@@ -39,6 +42,7 @@ import {
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
 import {
+  createOutline,
   ellipsisHorizontalOutline,
   pencilOutline,
   trashBinOutline
@@ -99,9 +103,17 @@ import { useParams } from 'react-router';
 
 const ZWorkspacesListPopover: React.FC<{
   workspaceId: string;
+  shareWSMemberId?: string;
+  wsShareId?: string;
   dismissZIonPopover: (data: string, role: string) => void;
   zNavigatePushRoute: (_url: string) => void;
-}> = ({ workspaceId, dismissZIonPopover, zNavigatePushRoute }) => {
+}> = ({
+  workspaceId,
+  shareWSMemberId,
+  wsShareId,
+  dismissZIonPopover,
+  zNavigatePushRoute
+}) => {
   // #region Comp state.
   const [compState, setCompState] = useState<{
     _workspaceId: string;
@@ -136,10 +148,10 @@ const ZWorkspacesListPopover: React.FC<{
     ) || [];
 
   const sharedWorkspacesList =
-    extractInnerData<workspaceInterface[]>(
-      getRQCDataHandler<workspaceInterface[]>({
+    extractInnerData<wsShareInterface[]>(
+      getRQCDataHandler<wsShareInterface[]>({
         key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
-      }) as workspaceInterface[],
+      }) as wsShareInterface[],
       extractInnerDataOptionsEnum.createRequestResponseItems
     ) || [];
 
@@ -155,6 +167,7 @@ const ZWorkspacesListPopover: React.FC<{
               key={el.id}
               minHeight='2.2rem'
               className='cursor-pointer ion-activatable'
+              color={workspaceId && workspaceId === el.id ? 'light' : undefined}
               testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
               testingselector={
                 CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
@@ -201,6 +214,15 @@ const ZWorkspacesListPopover: React.FC<{
               />
             </ZIonItem>
           ))}
+
+          {workspacesList?.length === 0 && (
+            <ZIonItem minHeight='2.2rem'>
+              <ZCreateWorkspaceBtn
+                className='w-full ion-no-margin'
+                height='2rem'
+              />
+            </ZIonItem>
+          )}
         </ZIonItemGroup>
 
         <ZIonItemGroup>
@@ -213,6 +235,9 @@ const ZWorkspacesListPopover: React.FC<{
               key={el.id}
               minHeight='2.2rem'
               className='cursor-pointer ion-activatable'
+              color={
+                wsShareId && wsShareId === el.workspaceId ? 'light' : undefined
+              }
               testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
               testingselector={
                 CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
@@ -259,6 +284,14 @@ const ZWorkspacesListPopover: React.FC<{
               />
             </ZIonItem>
           ))}
+
+          {sharedWorkspacesList?.length === 0 && (
+            <ZIonItem minHeight='2.2rem'>
+              <ZIonText className='w-full text-sm'>
+                No Share workspace found.
+              </ZIonText>
+            </ZIonItem>
+          )}
         </ZIonItemGroup>
       </ZIonList>
     </div>

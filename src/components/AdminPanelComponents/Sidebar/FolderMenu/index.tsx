@@ -45,6 +45,7 @@ import CONSTANTS from '@/utils/constants';
 import { createRedirectRoute, replaceParams } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import {
+  permissionCheckModeEnum,
   permissionsEnum,
   permissionsTypeEnum,
   shareWSPermissionEnum
@@ -125,7 +126,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
         scrollY={true}>
         <ZIonList
           lines='none'
-          className='w-full mt-2 ms-4'>
+          className='w-full ion-padding'>
           <ZIonItem className='ion-no-padding'>
             <ZIonText
               color='primary'
@@ -212,114 +213,174 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
             </ZIonItem>
           </ZCan>
 
-          {!showSkeleton && foldersData && foldersData.length ? (
-            <ZIonReorderGroup
-              disabled={false}
-              onIonItemReorder={handleFoldersReorder}>
-              {foldersData.map(el => (
-                <ZCan
-                  key={el.id}
-                  shareWSId={wsShareId}
-                  permissionType={
-                    wsShareId
-                      ? permissionsTypeEnum.shareWSMemberPermissions
-                      : permissionsTypeEnum.loggedInUserPermissions
-                  }
-                  havePermissions={
-                    wsShareId
-                      ? type === AdminPanelSidebarMenuPageEnum.shortLink
-                        ? [shareWSPermissionEnum.viewAny_sws_sl_folder]
+          <ZCan
+            shareWSId={wsShareId}
+            permissionType={
+              wsShareId
+                ? permissionsTypeEnum.shareWSMemberPermissions
+                : permissionsTypeEnum.loggedInUserPermissions
+            }
+            havePermissions={
+              wsShareId
+                ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                  ? [shareWSPermissionEnum.viewAny_sws_sl_folder]
+                  : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                  ? [shareWSPermissionEnum.viewAny_sws_lib_folder]
+                  : []
+                : type === AdminPanelSidebarMenuPageEnum.shortLink
+                ? [permissionsEnum.viewAny_sl_folder]
+                : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                ? [permissionsEnum.viewAny_lib_folder]
+                : []
+            }>
+            {!showSkeleton && foldersData && foldersData.length ? (
+              <ZIonReorderGroup
+                disabled={false}
+                onIonItemReorder={handleFoldersReorder}>
+                {foldersData.map(el => (
+                  <ZCan
+                    key={el.id}
+                    shareWSId={wsShareId}
+                    permissionType={
+                      wsShareId
+                        ? permissionsTypeEnum.shareWSMemberPermissions
+                        : permissionsTypeEnum.loggedInUserPermissions
+                    }
+                    havePermissions={
+                      wsShareId
+                        ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                          ? [shareWSPermissionEnum.view_sws_sl_folder]
+                          : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                          ? [shareWSPermissionEnum.view_sws_lib_folder]
+                          : []
+                        : type === AdminPanelSidebarMenuPageEnum.shortLink
+                        ? [permissionsEnum.view_sl_folder]
                         : type === AdminPanelSidebarMenuPageEnum.linkInBio
-                        ? [shareWSPermissionEnum.viewAny_sws_lib_folder]
+                        ? [permissionsEnum.view_lib_folder]
                         : []
-                      : type === AdminPanelSidebarMenuPageEnum.shortLink
-                      ? [permissionsEnum.viewAny_sl_folder]
-                      : type === AdminPanelSidebarMenuPageEnum.linkInBio
-                      ? [permissionsEnum.viewAny_lib_folder]
-                      : []
-                  }>
-                  <ZIonItem
-                    data-folder-id={el.id}
-                    style={{
-                      '--inner-padding-end': '0px',
-                      '--padding-start': '0px'
-                    }}
-                    className={classNames({
-                      'cursor-pointer': true,
-                      'zaions-short-link-folder':
-                        type === AdminPanelSidebarMenuPageEnum.shortLink,
-                      'zaions-link-in-bio-folder':
-                        type === AdminPanelSidebarMenuPageEnum.linkInBio
-                    })}>
-                    <ZIonLabel
-                      testingselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}`}
-                      testinglistselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}-${el.id}`}
-                      onClick={() => {
-                        if (el.id) {
-                          switch (type) {
-                            case AdminPanelSidebarMenuPageEnum.shortLink:
-                              zNavigatePushRoute(
-                                createRedirectRoute({
-                                  url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                                  params: [
-                                    CONSTANTS.RouteParams.workspace.workspaceId,
-                                    CONSTANTS.RouteParams
-                                      .folderIdToGetShortLinksOrLinkInBio
-                                  ],
-                                  values: [workspaceId, el.id]
-                                })
-                              );
-                              break;
-
-                            case AdminPanelSidebarMenuPageEnum.linkInBio:
-                              zNavigatePushRoute(
-                                createRedirectRoute({
-                                  url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
-                                  params: [
-                                    CONSTANTS.RouteParams.workspace.workspaceId,
-                                    CONSTANTS.RouteParams
-                                      .folderIdToGetShortLinksOrLinkInBio
-                                  ],
-                                  values: [workspaceId, el.id]
-                                })
-                              );
-                              break;
-                          }
-                        }
-                      }}>
-                      {el.title}
-                    </ZIonLabel>
-                    <ZIonButton
-                      fill='clear'
-                      color='dark'
-                      size='small'
-                      value={el.id}
-                      testingselector={`${CONSTANTS.testingSelectors.folder.actionPopoverBtn}-${type}`}
-                      testinglistselector={`${CONSTANTS.testingSelectors.folder.actionPopoverBtn}-${type}-${el.id}`}
-                      onClick={event => {
-                        folderActionsButtonOnClickHandler &&
-                          folderActionsButtonOnClickHandler(event);
-
-                        setFolderFormState(oldVal => ({
-                          ...oldVal,
-                          id: el.id,
-                          name: el.title,
-                          formMode: FormMode.EDIT
-                        }));
+                    }>
+                    <ZIonItem
+                      data-folder-id={el.id}
+                      style={{
+                        '--inner-padding-end': '0px',
+                        '--padding-start': '0px'
                       }}
-                      className='ion-no-padding ms-auto'>
-                      <ZIonIcon icon={ellipsisVertical} />
-                    </ZIonButton>
-                    <ZIonReorder
-                      slot='start'
-                      className='me-3'>
-                      <ZIonIcon icon={appsOutline} />
-                    </ZIonReorder>
-                  </ZIonItem>
-                </ZCan>
-              ))}
-            </ZIonReorderGroup>
-          ) : null}
+                      className={classNames({
+                        'cursor-pointer': true,
+                        'zaions-short-link-folder':
+                          type === AdminPanelSidebarMenuPageEnum.shortLink,
+                        'zaions-link-in-bio-folder':
+                          type === AdminPanelSidebarMenuPageEnum.linkInBio
+                      })}>
+                      <ZIonLabel
+                        testingselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}`}
+                        testinglistselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}-${el.id}`}
+                        onClick={() => {
+                          if (el.id) {
+                            switch (type) {
+                              case AdminPanelSidebarMenuPageEnum.shortLink:
+                                zNavigatePushRoute(
+                                  createRedirectRoute({
+                                    url: ZaionsRoutes.AdminPanel.ShortLinks
+                                      .Main,
+                                    params: [
+                                      CONSTANTS.RouteParams.workspace
+                                        .workspaceId,
+                                      CONSTANTS.RouteParams
+                                        .folderIdToGetShortLinksOrLinkInBio
+                                    ],
+                                    values: [workspaceId, el.id]
+                                  })
+                                );
+                                break;
+
+                              case AdminPanelSidebarMenuPageEnum.linkInBio:
+                                zNavigatePushRoute(
+                                  createRedirectRoute({
+                                    url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
+                                    params: [
+                                      CONSTANTS.RouteParams.workspace
+                                        .workspaceId,
+                                      CONSTANTS.RouteParams
+                                        .folderIdToGetShortLinksOrLinkInBio
+                                    ],
+                                    values: [workspaceId, el.id]
+                                  })
+                                );
+                                break;
+                            }
+                          }
+                        }}>
+                        {el.title}
+                      </ZIonLabel>
+
+                      <ZCan
+                        shareWSId={wsShareId}
+                        checkMode={permissionCheckModeEnum.any}
+                        permissionType={
+                          wsShareId
+                            ? permissionsTypeEnum.shareWSMemberPermissions
+                            : permissionsTypeEnum.loggedInUserPermissions
+                        }
+                        havePermissions={
+                          wsShareId
+                            ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                              ? [
+                                  shareWSPermissionEnum.create_sws_sl_folder,
+                                  shareWSPermissionEnum.delete_sws_sl_folder
+                                ]
+                              : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                              ? [
+                                  shareWSPermissionEnum.create_sws_lib_folder,
+                                  shareWSPermissionEnum.delete_sws_lib_folder
+                                ]
+                              : []
+                            : type === AdminPanelSidebarMenuPageEnum.shortLink
+                            ? [
+                                permissionsEnum.create_sl_folder,
+                                permissionsEnum.delete_sl_folder
+                              ]
+                            : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                            ? [
+                                permissionsEnum.create_lib_folder,
+                                permissionsEnum.delete_lib_folder
+                              ]
+                            : []
+                        }>
+                        <ZIonButton
+                          fill='clear'
+                          color='dark'
+                          size='small'
+                          value={el.id}
+                          testingselector={`${CONSTANTS.testingSelectors.folder.actionPopoverBtn}-${type}`}
+                          testinglistselector={`${CONSTANTS.testingSelectors.folder.actionPopoverBtn}-${type}-${el.id}`}
+                          onClick={event => {
+                            folderActionsButtonOnClickHandler &&
+                              folderActionsButtonOnClickHandler(event);
+
+                            setFolderFormState(oldVal => ({
+                              ...oldVal,
+                              id: el.id,
+                              name: el.title,
+                              formMode: FormMode.EDIT
+                            }));
+                          }}
+                          className='ion-no-padding ms-auto'>
+                          <ZIonIcon icon={ellipsisVertical} />
+                        </ZIonButton>
+                      </ZCan>
+
+                      <ZIonReorder
+                        slot='start'
+                        className='me-3'>
+                        <ZIonIcon icon={appsOutline} />
+                      </ZIonReorder>
+                    </ZIonItem>
+                  </ZCan>
+                ))}
+              </ZIonReorderGroup>
+            ) : null}
+          </ZCan>
 
           {showSkeleton &&
             [1, 2, 3].map(el => (

@@ -36,44 +36,53 @@ import { API_URL_ENUM } from '@/utils/enums';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import classNames from 'classnames';
 
 /**
  * Workspace create button
  * About: (button with will open from modal to create workspace.)
  * @type {*}
  * */
-const ZCreateWorkspaceBtn: React.FC = () => {
-	// Get workspaces data from backend.
-	const { isFetching: isWorkspacesDataFetching } = useZRQGetRequest<
-		workspaceInterface[]
-	>({
-		_url: API_URL_ENUM.workspace_create_list,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
-	});
+const ZCreateWorkspaceBtn: React.FC<{
+  className?: string;
+  height?: string;
+}> = ({ className, height }) => {
+  // Get workspaces data from backend.
+  const { isFetching: isWorkspacesDataFetching } = useZRQGetRequest<
+    workspaceInterface[]
+  >({
+    _url: API_URL_ENUM.workspace_create_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
+  });
 
-	const { presentZIonModal: presentZWorkspaceCreateModal } = useZIonModal(
-		ZAddNewWorkspaceModal
-	);
+  const { presentZIonModal: presentZWorkspaceCreateModal } = useZIonModal(
+    ZAddNewWorkspaceModal
+  );
 
-	return (
-		<ZIonButton
-			color='secondary'
-			// height='2.3rem'
-			className='normal-case ion-no-margin'
-			disabled={isWorkspacesDataFetching}
-			testingselector={
-				CONSTANTS.testingSelectors.workspace.listPage.createWorkspaceButton
-			}
-			onClick={() => {
-				if (!isWorkspacesDataFetching)
-					presentZWorkspaceCreateModal({
-						_cssClass: 'create-workspace-modal-size',
-					});
-			}}
-		>
-			<ZIonIcon icon={addOutline} /> New workspace
-		</ZIonButton>
-	);
+  return (
+    <ZIonButton
+      color='secondary'
+      height={height}
+      disabled={isWorkspacesDataFetching}
+      className={classNames(className, {
+        'normal-case ion-no-margin': true
+      })}
+      testingselector={
+        CONSTANTS.testingSelectors.workspace.listPage.createWorkspaceButton
+      }
+      onClick={() => {
+        if (!isWorkspacesDataFetching)
+          presentZWorkspaceCreateModal({
+            _cssClass: 'create-workspace-modal-size'
+          });
+      }}>
+      <ZIonIcon
+        icon={addOutline}
+        className='me-1'
+      />
+      New workspace
+    </ZIonButton>
+  );
 };
 
 export default ZCreateWorkspaceBtn;
