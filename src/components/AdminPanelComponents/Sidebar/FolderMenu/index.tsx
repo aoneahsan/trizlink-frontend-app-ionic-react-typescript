@@ -7,7 +7,7 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import classNames from 'classnames';
-import { appsOutline, ellipsisVertical } from 'ionicons/icons';
+import { appsOutline, ellipsisVertical, fileTrayOutline } from 'ionicons/icons';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useParams } from 'react-router';
 
@@ -381,6 +381,27 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
               </ZIonReorderGroup>
             ) : null}
           </ZCan>
+
+          {foldersData?.length === 0 && (
+            <ZIonItem
+              style={{
+                '--inner-padding-end': '0px',
+                '--padding-start': '0px'
+              }}>
+              <ZIonLabel className='w-full text-md ion-text-center'>
+                <ZIonIcon
+                  icon={fileTrayOutline}
+                  className='w-6 h-6'
+                  color='medium'
+                />
+                <ZIonText
+                  className='block'
+                  color='medium'>
+                  No folder found!
+                </ZIonText>
+              </ZIonLabel>
+            </ZIonItem>
+          )}
 
           {showSkeleton &&
             [1, 2, 3].map(el => (
