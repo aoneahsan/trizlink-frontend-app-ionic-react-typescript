@@ -255,7 +255,7 @@ export interface ZDashboardFolderMenuInterface {
 export interface ZUserSettingInterface {
   id?: string;
   type?: ZUserSettingTypeEnum;
-  workspaceUniqueId?: string;
+  workspaceId?: string;
   settings: {
     columns: {
       id?: string;

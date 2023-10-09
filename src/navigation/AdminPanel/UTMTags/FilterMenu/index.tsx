@@ -3,6 +3,7 @@
  * ? Like Import of React is a Core Import
  * */
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 
 /**
  * Packages Imports go down
@@ -103,6 +104,13 @@ import { UTMTagsFilterOptionsRStateAtom } from '@/ZaionsStore/UserDashboard/UTMT
  * */
 
 const ZUTMTagsFilterMenu: React.FC = () => {
+  // getting current workspace id OR wsShareId && shareWSMemberId form params.
+  const { workspaceId, wsShareId, shareWSMemberId } = useParams<{
+    workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
+  }>();
+
   // #region compState.
   const [compState, setCompState] = useState<{
     utmTagsColumn: {
@@ -138,7 +146,9 @@ const ZUTMTagsFilterMenu: React.FC = () => {
 
   const { mutateAsync: createUtmTagsFilersAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.user_setting_list_create,
-    _loaderMessage: MESSAGES.UTM_TAGS_TEMPLATE.FILTERING
+    _loaderMessage: MESSAGES.UTM_TAGS_TEMPLATE.FILTERING,
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _itemsIds: [workspaceId]
   });
 
   const {
@@ -150,9 +160,13 @@ const ZUTMTagsFilterMenu: React.FC = () => {
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
       ZUserSettingTypeEnum.UTMTagListPageTable
     ],
-    _itemsIds: [ZUserSettingTypeEnum.UTMTagListPageTable],
-    _urlDynamicParts: [CONSTANTS.RouteParams.settings.type],
-    _extractType: ZRQGetRequestExtractEnum.extractItem
+    _itemsIds: [workspaceId, ZUserSettingTypeEnum.UTMTagListPageTable],
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.workspaceId,
+      CONSTANTS.RouteParams.settings.type
+    ],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _shouldFetchWhenIdPassed: workspaceId ? false : true
   });
   // #endregion
 
@@ -206,8 +220,11 @@ const ZUTMTagsFilterMenu: React.FC = () => {
           ZUserSettingTypeEnum.UTMTagListPageTable
         ) {
           __response = await updateUtmTagsFilersAsyncMutate({
-            itemIds: [ZUserSettingTypeEnum.UTMTagListPageTable],
-            urlDynamicParts: [CONSTANTS.RouteParams.settings.type],
+            itemIds: [workspaceId, ZUserSettingTypeEnum.UTMTagListPageTable],
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.workspaceId,
+              CONSTANTS.RouteParams.settings.type
+            ],
             requestData: _data
           });
         } else {

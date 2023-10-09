@@ -144,7 +144,7 @@ import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil
  * @type {*}
  * */
 const ZSWSShortLinksListPage: React.FC = () => {
-  // getting current workspace id form params.
+  // getting current workspace id Or wsShareId & shareWSMemberId form params.
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
     workspaceId: string;
     shareWSMemberId: string;
@@ -224,6 +224,7 @@ const ZSWSShortLinksListPage: React.FC = () => {
     _url: API_URL_ENUM.sws_sl_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN, wsShareId],
     _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
   });
@@ -241,6 +242,7 @@ const ZSWSShortLinksListPage: React.FC = () => {
       folderState.shortlink
     ],
     _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
   });
@@ -443,9 +445,9 @@ const ZSWSShortLinksListPage: React.FC = () => {
   } else {
     return (
       <>
-        {/* {swsShortLinksData && swsShortLinksData?.length > 0 && (
-        <ZShortLinksFilterMenu />
-      )} */}
+        {swsShortLinksData && swsShortLinksData?.length > 0 && (
+          <ZShortLinksFilterMenu />
+        )}
 
         {!isLgScale ? (
           <AdminPanelShortLinksFolderSideMenu workspaceId={workspaceId} />

@@ -2,7 +2,8 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { lazy, Suspense, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 
 /**
  * Packages Imports go down
@@ -14,7 +15,6 @@ import { menuController } from '@ionic/core/components';
 import { ItemReorderEventDetail, RefresherEventDetail } from '@ionic/react';
 import { filterOutline, refresh, searchOutline } from 'ionicons/icons';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useParams } from 'react-router';
 
 /**
  * Custom Imports go down
@@ -34,7 +34,8 @@ import {
   ZIonButton,
   ZIonButtons,
   ZIonRefresher,
-  ZIonRefresherContent
+  ZIonRefresherContent,
+  ZIonSpinner
 } from '@/components/ZIonComponents';
 import ZIonPage from '@/components/ZIonPage';
 import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
@@ -86,7 +87,11 @@ import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
  * ? Like import of Constant is a global constants import
  * */
 import CONSTANTS from '@/utils/constants';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import {
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { API_URL_ENUM } from '@/utils/enums';
 import { replaceParams, zStringify } from '@/utils/helpers';
@@ -144,23 +149,27 @@ import classes from './styles.module.css';
  * @type {*}
  * */
 const ZShortLinksListPage: React.FC = () => {
+  // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
+  }>();
+
   // #region Component state.
   const [compState, setCompState] = useState<{
+    isProcessing: boolean;
     shortLinksFoldersReorder: {
       Ids?: string[];
       isEnable?: boolean;
     };
   }>({
+    isProcessing: true,
     shortLinksFoldersReorder: {
       isEnable: false
     }
   });
   // #endregion
-
-  // getting current workspace id form params.
-  const { workspaceId } = useParams<{
-    workspaceId: string;
-  }>();
 
   // #region Custom hooks.
   const { isMdScale, isLgScale, isSmScale } = useZMediaQueryScale(); // media query hook.
@@ -168,6 +177,172 @@ const ZShortLinksListPage: React.FC = () => {
   const { validateRequestResponse } = useZValidateRequestResponse();
   // #endregion
 
+  // #region Recoils.
+  // Recoil state that control the dashboard.
+  const ZDashboardState = useRecoilValue(ZDashboardRState);
+
+  //
+  const setFolderFormState = useSetRecoilState(FolderFormState);
+  // #endregion
+
+  // #region APIS requests.
+  // If share-workspace then this api will fetch role & permission of current member in this share-workspace.
+  const {
+    data: getMemberRolePermissions,
+    isFetching: isGetMemberRolePermissionsFetching,
+    isError: isGetMemberRolePermissionsError
+  } = useZRQGetRequest<{
+    memberRole?: string;
+    memberPermissions?: string[];
+  }>({
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
+      wsShareId
+    ],
+    _url: API_URL_ENUM.ws_share_member_role_permissions,
+    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _itemsIds: [shareWSMemberId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
+  });
+
+  // If share-workspace then this api will fetch share-workspace data.
+  const { isFetching: isSWSFetching, isError: isSWSError } =
+    useZRQGetRequest<workspaceInterface>({
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
+        wsShareId
+      ],
+      _url: API_URL_ENUM.ws_share_info_data,
+      _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+      _itemsIds: [shareWSMemberId],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _showLoader: false
+    });
+
+  // If share-workspace then this api will fetch share-workspace-short-links data.
+  const {
+    data: swsShortLinksData,
+    isFetching: isSWSShortLinksDataFetching,
+    isError: isSWSShortLinksDataError
+  } = useZRQGetRequest<ShortLinkType[]>({
+    _url: API_URL_ENUM.sws_sl_create_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN, wsShareId],
+    _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _showLoader: false
+  });
+
+  // If share-workspace then this api will fetch share-workspace-short-links-folders data.
+  const {
+    data: swsShortLinksFoldersData,
+    isFetching: isSWSShortLinksFoldersDataFetching,
+    isError: isSWSShortLinksFoldersDataError
+  } = useZRQGetRequest<LinkFolderType[]>({
+    _url: API_URL_ENUM.ws_share_folder_sl_list,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
+      wsShareId,
+      folderState.shortlink
+    ],
+    _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _showLoader: false
+  });
+
+  // If owned workspace then this api will fetch this owned workspace data.
+  const {
+    isFetching: isSelectedWorkspaceFetching,
+    isError: isSelectedWorkspaceError
+  } = useZRQGetRequest<workspaceInterface>({
+    _url: API_URL_ENUM.workspace_update_delete,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId],
+    _authenticated: true,
+    _itemsIds: [workspaceId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _extractType: ZRQGetRequestExtractEnum.extractItem
+  });
+
+  // If owned-workspace then this api will fetch owned-workspace-short-links data.
+  const {
+    data: shortLinksData,
+    isFetching: isShortLinksDataFetching,
+    isError: isShortLinksDataError
+  } = useZRQGetRequest<ShortLinkType[]>({
+    _url: API_URL_ENUM.shortLinks_create_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
+    _itemsIds: [workspaceId],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+  });
+
+  // If owned-workspace then this api will fetch owned-workspace-short-links-folder data.
+  const {
+    data: shortLinksFoldersData,
+    isFetching: isShortLinksFoldersDataFetching,
+    isError: isShortLinksFoldersDataError
+  } = useZRQGetRequest<LinkFolderType[]>({
+    _url: API_URL_ENUM.ShortLink_folders_create_list,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+      workspaceId,
+      folderState.shortlink
+    ],
+    _itemsIds: [workspaceId],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+  });
+
+  // If owned-workspace then this api will used to update the owned-workspace-short-links-folders reorders.
+  const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.ShortLinks_folders_reorder,
+    _queriesKeysToInvalidate: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+      workspaceId,
+      folderState.shortlink
+    ]
+  });
+
+  // If share-workspace then this api will used to update the share-workspace-short-links-folders reorders.
+  const { mutateAsync: UpdateSWSShortLinksFoldersReorder } =
+    useZRQUpdateRequest({
+      _url: API_URL_ENUM.ws_share_folder_reorder,
+      _queriesKeysToInvalidate: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
+        wsShareId,
+        folderState.shortlink
+      ]
+    });
+  // #endregion
+
+  // #region Popovers & Modals.
+  const { presentZIonPopover: presentFolderActionIonPopover } = useZIonPopover(
+    FolderActionsPopoverContent,
+    {
+      workspaceId,
+      shareWSMemberId,
+      wsShareId,
+      state: folderState.shortlink
+    }
+  );
+
+  const { presentZIonModal: presentFolderModal } = useZIonModal(
+    ZaionsAddNewFolder,
+    {
+      state: folderState.shortlink,
+      workspaceId,
+      shareWSMemberId: shareWSMemberId,
+      wsShareId: wsShareId
+    }
+  );
+  // #endregion
+
+  // #region Functions.
   // Short links folders reorder function.
   const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
     event.detail.complete();
@@ -185,7 +360,8 @@ const ZShortLinksListPage: React.FC = () => {
       }
 
       if (_shortLinksFoldersIds.length) {
-        setCompState(_ => ({
+        setCompState(oldValues => ({
+          ...oldValues,
           shortLinksFoldersReorder: {
             Ids: _shortLinksFoldersIds,
             isEnable: _shortLinksFoldersIds.length > 1
@@ -195,121 +371,61 @@ const ZShortLinksListPage: React.FC = () => {
     }, 100);
   };
 
-  // #region Recoils.
-  // Recoil state for storing filter options for short-links.
-  const shortLinksFilterOptions = useRecoilValue(
-    ShortLinksFilterOptionsRStateAtom
-  );
-  // Recoil state that control the dashboard.
-  const ZDashboardState = useRecoilValue(ZDashboardRState);
-  // Recoil state for shortLinks.
-  const shortLinksStateAtom = useRecoilValue(ShortLinksRStateAtom);
-  //
-  const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
-  //
-  const setFolderFormState = useSetRecoilState(FolderFormState);
-
-  const setNewShortLinkTypeOptionDataAtom = useSetRecoilState(
-    NewShortLinkSelectTypeOption
-  );
-  // #endregion
-
-  // #region APIS requests.
-  // get workspace data api.
-  const { isFetching: isSelectedWorkspaceFetching } =
-    useZRQGetRequest<workspaceInterface>({
-      _url: API_URL_ENUM.workspace_update_delete,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId],
-      _authenticated: true,
-      _itemsIds: [workspaceId],
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: !workspaceId ? true : false,
-      _extractType: ZRQGetRequestExtractEnum.extractItem
-    });
-
-  // Request for getting short links folders.
-  const {
-    data: shortLinksFoldersData,
-    isFetching: isShortLinksFoldersDataFetching
-  } = useZRQGetRequest<LinkFolderType[]>({
-    _url: API_URL_ENUM.ShortLink_folders_create_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-      workspaceId,
-      folderState.shortlink
-    ],
-    _itemsIds: [workspaceId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
-  });
-
-  // Update shortLinks folders reorder API
-  const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.ShortLinks_folders_reorder,
-    _queriesKeysToInvalidate: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-      workspaceId,
-      folderState.shortlink
-    ]
-  });
-
-  // Request for getting short links data.
-  const { data: shortLinksData, isFetching: isShortLinksDataFetching } =
-    useZRQGetRequest<ShortLinkType[]>({
-      _url: API_URL_ENUM.shortLinks_create_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
-      _itemsIds: [workspaceId],
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
-    });
-  // #endregion
-
-  // #region Popovers.
-  //
-  const { presentZIonPopover: presentFolderActionIonPopover } = useZIonPopover(
-    FolderActionsPopoverContent,
-    {
-      workspaceId,
-      state: folderState.shortlink
-    }
-  );
-  // #endregion
-
-  // #region Modals.
-  //
-  const { presentZIonModal: presentFolderModal } = useZIonModal(
-    ZaionsAddNewFolder,
-    {
-      state: folderState.shortlink,
-      workspaceId
-    }
-  );
-  // #endregion
-
-  // #region Functions.
+  // Invalid inpage RQ keys.
   const invalidedQueries = async () => {
     try {
-      // Workspace.
-      await zInvalidateReactQueries([
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
-        workspaceId
-      ]);
+      if (workspaceId) {
+        // Workspace.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
+          workspaceId
+        ]);
 
-      // Shorts links.
-      await zInvalidateReactQueries([
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-        workspaceId
-      ]);
+        // Shorts links.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+          workspaceId
+        ]);
 
-      // Folder.
-      await zInvalidateReactQueries([
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-        workspaceId,
-        folderState.shortlink
-      ]);
+        // Folder.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+          workspaceId,
+          folderState.shortlink
+        ]);
+      } else if (wsShareId && shareWSMemberId) {
+        // Share workspace.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
+          wsShareId
+        ]);
+
+        // Share workspace shorts links.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
+          wsShareId
+        ]);
+
+        // Share workspace Folder.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
+          wsShareId,
+          folderState.shortlink
+        ]);
+
+        // Member role & permissions Folder.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS
+            .MEMBER_ROLE_AND_PERMISSIONS,
+          wsShareId
+        ]);
+      }
     } catch (error) {
       reportCustomError(error);
     }
   };
 
+  // IonRefresher refresh handler
   const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
     try {
       await invalidedQueries();
@@ -319,55 +435,41 @@ const ZShortLinksListPage: React.FC = () => {
     }
   };
 
+  // Reorder folder handler.
   const shortLinksFoldersReOrderHandler = async () => {
     try {
-      // The update api...
-      const _result = await UpdateShortLinksFoldersReorder({
-        requestData: zStringify({
-          folders: compState.shortLinksFoldersReorder.Ids
-        }),
-        itemIds: [],
-        urlDynamicParts: []
-      });
+      let _result;
+      if (workspaceId) {
+        // The update api...
+        _result = await UpdateShortLinksFoldersReorder({
+          requestData: zStringify({
+            folders: compState.shortLinksFoldersReorder.Ids
+          }),
+          itemIds: [],
+          urlDynamicParts: []
+        });
+      } else if (wsShareId && shareWSMemberId) {
+        _result = await UpdateSWSShortLinksFoldersReorder({
+          requestData: zStringify({
+            folders: compState.shortLinksFoldersReorder.Ids
+          }),
+          itemIds: [],
+          urlDynamicParts: []
+        });
+      }
+      if (_result) {
+        // if _result of the UpdateShortLinksFoldersReorder api is success this showing success notification else not success then error notification.
+        await validateRequestResponse({
+          resultObj: _result
+        });
 
-      // if _result of the UpdateShortLinksFoldersReorder api is success this showing success notification else not success then error notification.
-      await validateRequestResponse({
-        resultObj: _result
-      });
-
-      // hiding the reorder button by assigning isEnable to false
-      setCompState(oldValues => ({
-        ...oldValues,
-        shortLinksFoldersReorder: {
-          Ids: oldValues.shortLinksFoldersReorder.Ids,
-          isEnable: false
-        }
-      }));
-    } catch (error) {
-      reportCustomError(error);
-    }
-  };
-
-  const resetShortLinkFormHandler = () => {
-    try {
-      setNewShortLinkFormState(_ => ({
-        folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
-        shortUrl: {
-          domain: CONSTANTS.DEFAULT_VALUES.DEFAULT_CUSTOM_DOMAIN
-        },
-        type: messengerPlatformsBlockEnum.link,
-        pixelIds: [],
-        tags: [],
-        formMode: FormMode.ADD
-      }));
-
-      const selectedTypeOptionData = LinkTypeOptionsData.find(
-        el => el.type === messengerPlatformsBlockEnum.link
-      );
-
-      if (selectedTypeOptionData) {
-        setNewShortLinkTypeOptionDataAtom(_ => ({
-          ...selectedTypeOptionData
+        // hiding the reorder button by assigning isEnable to false
+        setCompState(oldValues => ({
+          ...oldValues,
+          shortLinksFoldersReorder: {
+            Ids: oldValues.shortLinksFoldersReorder.Ids,
+            isEnable: false
+          }
         }));
       }
     } catch (error) {
@@ -376,178 +478,309 @@ const ZShortLinksListPage: React.FC = () => {
   };
   // #endregion
 
-  const isZFetching =
+  // #region useEffects
+  useEffect(() => {
+    try {
+      if (
+        wsShareId &&
+        isSWSFetching === false &&
+        isSWSError === false &&
+        isSWSShortLinksFoldersDataFetching === false &&
+        isSWSShortLinksFoldersDataError === false &&
+        isSWSShortLinksDataFetching === false &&
+        isSWSShortLinksDataError === false &&
+        isGetMemberRolePermissionsFetching === false &&
+        isGetMemberRolePermissionsError === false
+      ) {
+        setCompState(oldValues => ({
+          ...oldValues,
+          isProcessing: false
+        }));
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  }, [
+    wsShareId,
+    isSWSFetching,
+    isSWSError,
+    isSWSShortLinksFoldersDataFetching,
+    isSWSShortLinksFoldersDataError,
+    isSWSShortLinksDataFetching,
+    isSWSShortLinksDataError,
+    isGetMemberRolePermissionsFetching,
+    isGetMemberRolePermissionsError
+  ]);
+
+  useEffect(() => {
+    try {
+      if (
+        workspaceId &&
+        isSelectedWorkspaceError === false &&
+        isSelectedWorkspaceFetching === false &&
+        isShortLinksDataFetching === false &&
+        isShortLinksDataError === false &&
+        isShortLinksFoldersDataError === false &&
+        isShortLinksFoldersDataFetching === false
+      ) {
+        setCompState(oldValues => ({
+          ...oldValues,
+          isProcessing: false
+        }));
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  }, [
+    workspaceId,
+    isSelectedWorkspaceError,
+    isSelectedWorkspaceFetching,
+    isShortLinksDataFetching,
+    isShortLinksDataError,
+    isShortLinksFoldersDataFetching,
+    isShortLinksFoldersDataError
+  ]);
+  // #endregion
+
+  let isZFetching =
     isShortLinksFoldersDataFetching ||
     isShortLinksDataFetching ||
     isSelectedWorkspaceFetching;
 
-  return (
-    <>
-      {shortLinksData && shortLinksData?.length > 0 && (
-        <ZShortLinksFilterMenu />
-      )}
+  if (wsShareId) {
+    isZFetching =
+      isSWSShortLinksFoldersDataFetching ||
+      isSWSShortLinksDataFetching ||
+      isSWSFetching;
+  }
 
-      {!isLgScale ? (
-        <AdminPanelShortLinksFolderSideMenu workspaceId={workspaceId} />
-      ) : null}
+  if (compState.isProcessing) {
+    return (
+      <ZIonPage>
+        <ZIonContent>
+          <div className='flex flex-col w-full h-full pt-4 ion-align-items-center ion-justify-content-center'>
+            <ZIonSpinner className='w-10 h-10' />
 
-      {/*  */}
-      <ZIonPage
-        pageTitle='Zaions short-links list page'
-        // id={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
-        // menu={PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU}
-        id={CONSTANTS.MENU_IDS.AD_SL_LIST_PAGE}>
-        <ZCan
-          havePermissions={[permissionsEnum.viewAny_shortLink]}
-          returnPermissionDeniedView={true}>
-          {/* Content */}
-          <ZIonContent>
-            {/* IonRefresher */}
-            <ZIonRefresher onIonRefresh={event => void handleRefresh(event)}>
-              <ZIonRefresherContent />
-            </ZIonRefresher>
-
-            {/* Grid-1 */}
-            <ZIonGrid
-              className={classNames({
-                'h-screen ion-no-padding': true,
-                'max-w-[200rem] mx-auto': true
-              })}>
-              {/* Row-1 */}
-              <ZIonRow className='h-full'>
-                {/* Col-1 Side bar */}
-                <Suspense
-                  fallback={
-                    <ZIonCol
-                      size='.8'
-                      className='h-full zaions__medium_bg zaions-transition'>
-                      <ZFallbackIonSpinner2 />
-                    </ZIonCol>
-                  }>
-                  <AdminPanelSidebarMenu
-                    activePage={AdminPanelSidebarMenuPageEnum.shortLink}
-                  />
-                </Suspense>
-
-                {/* Col-2 Right-side Main Container */}
-                <ZIonCol
-                  sizeXl={
-                    ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                      ? '10'
-                      : '11.2'
-                  }
-                  sizeLg={
-                    ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                      ? '10'
-                      : '11.2'
-                  }
-                  sizeMd='12'
-                  sizeSm='12'
-                  sizeXs='12'
-                  className='h-screen zaions-transition'>
-                  <ZIonGrid
-                    className={classNames({
-                      'h-full ion-no-padding': true,
-                      'mt-2': !isLgScale
-                    })}>
-                    {/* Col-2 Row-1 Top bar. */}
-                    <Suspense
-                      fallback={
-                        <ZIonRow className='h-[4rem] px-3 zaions__light_bg'>
-                          <ZFallbackIonSpinner2 />
-                        </ZIonRow>
-                      }>
-                      <ZAdminPanelTopBar workspaceId={workspaceId} />
-                    </Suspense>
-
-                    {/* Col-2 Row-2 */}
-                    <ZIonRow style={{ height: 'calc(100% - 4rem)' }}>
-                      {/* Col-2 Row-2 col-1 Folder menu */}
-                      {isLgScale && (
-                        <ZCan
-                          havePermissions={[permissionsEnum.viewAny_folder]}>
-                          <Suspense
-                            fallback={
-                              <ZIonCol className='h-full border-e-[1px] zaions-transition'>
-                                <ZFallbackIonSpinner2 />
-                              </ZIonCol>
-                            }>
-                            <ZDashboardFolderMenu
-                              showSkeleton={isZFetching}
-                              type={AdminPanelSidebarMenuPageEnum.shortLink}
-                              foldersData={
-                                shortLinksFoldersData
-                                  ? shortLinksFoldersData
-                                  : []
-                              }
-                              showFoldersSaveReorderButton={
-                                compState?.shortLinksFoldersReorder?.isEnable
-                              }
-                              handleFoldersReorder={handleReorder}
-                              addNewFolderButtonOnClickHandler={() => {
-                                setFolderFormState(oldVal => ({
-                                  ...oldVal,
-                                  id: '',
-                                  name: '',
-                                  formMode: FormMode.ADD
-                                }));
-                                presentFolderModal({
-                                  _cssClass: 'link-in-bio-folder-modal'
-                                });
-                              }}
-                              foldersSaveReorderButtonOnClickHandler={() => {
-                                void shortLinksFoldersReOrderHandler();
-                              }}
-                              folderActionsButtonOnClickHandler={(
-                                event: unknown
-                              ) => {
-                                presentFolderActionIonPopover({
-                                  _event: event as Event,
-                                  _cssClass: classNames(
-                                    classes.zaions_present_folder_Action_popover_width
-                                  )
-                                });
-                              }}
-                            />
-                          </Suspense>
-                        </ZCan>
-                      )}
-
-                      {/* Col-2 Row-2 col-2 Table & filters etc. */}
-                      <ZIonCol
-                        className='h-full zaions-transition'
-                        sizeXl='9.2'
-                        sizeLg='9.2'
-                        sizeMd='12'
-                        sizeSm='12'
-                        sizeXs='12'>
-                        {!isSmScale ? (
-                          <ZInpageMainContent />
-                        ) : (
-                          <ZCustomScrollable
-                            className={classNames({
-                              'flex flex-col w-full h-full px-3 pt-3': true,
-                              'gap-10': isMdScale,
-                              'gap-5': !isMdScale
-                            })}
-                            scrollY={true}>
-                            <ZInpageMainContent />
-                          </ZCustomScrollable>
-                        )}
-                      </ZIonCol>
-                    </ZIonRow>
-                  </ZIonGrid>
-                </ZIonCol>
-              </ZIonRow>
-            </ZIonGrid>
-          </ZIonContent>
-        </ZCan>
+            {workspaceId
+              ? isSelectedWorkspaceFetching
+                ? 'Setting workspace data'
+                : isShortLinksDataFetching
+                ? 'Fetching workspace short links'
+                : isShortLinksFoldersDataFetching
+                ? 'Fetching workspace short links folders'
+                : null
+              : wsShareId && shareWSMemberId
+              ? isGetMemberRolePermissionsFetching
+                ? 'Getting & setting your permissions in this workspace'
+                : isSWSFetching
+                ? 'Setting share workspace data'
+                : isSWSShortLinksDataFetching
+                ? 'Fetching share workspace short links'
+                : isSWSShortLinksFoldersDataFetching
+                ? 'Fetching share workspace short links folders'
+                : null
+              : null}
+          </div>
+        </ZIonContent>
       </ZIonPage>
-    </>
-  );
+    );
+  } else {
+    return (
+      <>
+        {((shortLinksData && shortLinksData?.length > 0) ||
+          (swsShortLinksData && swsShortLinksData?.length > 0)) && (
+          <ZShortLinksFilterMenu />
+        )}
+
+        {!isLgScale ? (
+          <AdminPanelShortLinksFolderSideMenu workspaceId={workspaceId} />
+        ) : null}
+
+        {/*  */}
+        <ZIonPage
+          pageTitle='Zaions short-links list page'
+          // id={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
+          // menu={PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU}
+          id={CONSTANTS.MENU_IDS.AD_SL_LIST_PAGE}>
+          <ZCan
+            returnPermissionDeniedView={true}
+            shareWSId={wsShareId}
+            permissionType={
+              wsShareId
+                ? permissionsTypeEnum.shareWSMemberPermissions
+                : permissionsTypeEnum.loggedInUserPermissions
+            }
+            havePermissions={
+              wsShareId
+                ? [shareWSPermissionEnum.viewAny_sws_shortLink]
+                : [permissionsEnum.viewAny_shortLink]
+            }>
+            {/* Content */}
+            <ZIonContent>
+              {/* IonRefresher */}
+              <ZIonRefresher onIonRefresh={event => void handleRefresh(event)}>
+                <ZIonRefresherContent />
+              </ZIonRefresher>
+
+              {/* Grid-1 */}
+              <ZIonGrid
+                className={classNames({
+                  'h-screen ion-no-padding': true,
+                  'max-w-[200rem] mx-auto': true
+                })}>
+                {/* Row-1 */}
+                <ZIonRow className='h-full'>
+                  {/* Col-1 Side bar */}
+                  <Suspense
+                    fallback={
+                      <ZIonCol
+                        size='.8'
+                        className='h-full zaions__medium_bg zaions-transition'>
+                        <ZFallbackIonSpinner2 />
+                      </ZIonCol>
+                    }>
+                    <AdminPanelSidebarMenu
+                      activePage={AdminPanelSidebarMenuPageEnum.shortLink}
+                    />
+                  </Suspense>
+
+                  {/* Col-2 Right-side Main Container */}
+                  <ZIonCol
+                    sizeXl={
+                      ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
+                        ? '10'
+                        : '11.2'
+                    }
+                    sizeLg={
+                      ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
+                        ? '10'
+                        : '11.2'
+                    }
+                    sizeMd='12'
+                    sizeSm='12'
+                    sizeXs='12'
+                    className='h-screen zaions-transition'>
+                    <ZIonGrid
+                      className={classNames({
+                        'h-full ion-no-padding': true,
+                        'mt-2': !isLgScale
+                      })}>
+                      {/* Col-2 Row-1 Top bar. */}
+                      <Suspense
+                        fallback={
+                          <ZIonRow className='h-[4rem] px-3 zaions__light_bg'>
+                            <ZFallbackIonSpinner2 />
+                          </ZIonRow>
+                        }>
+                        <ZAdminPanelTopBar workspaceId={workspaceId} />
+                      </Suspense>
+
+                      {/* Col-2 Row-2 */}
+                      <ZIonRow style={{ height: 'calc(100% - 4rem)' }}>
+                        {/* Col-2 Row-2 col-1 Folder menu */}
+                        {isLgScale && (
+                          <ZCan
+                            shareWSId={wsShareId}
+                            permissionType={
+                              wsShareId
+                                ? permissionsTypeEnum.shareWSMemberPermissions
+                                : permissionsTypeEnum.loggedInUserPermissions
+                            }
+                            havePermissions={
+                              wsShareId
+                                ? [shareWSPermissionEnum.viewAny_sws_folder]
+                                : [permissionsEnum.viewAny_folder]
+                            }>
+                            <Suspense
+                              fallback={
+                                <ZIonCol className='h-full border-e-[1px] zaions-transition'>
+                                  <ZFallbackIonSpinner2 />
+                                </ZIonCol>
+                              }>
+                              <ZDashboardFolderMenu
+                                showSkeleton={isZFetching}
+                                type={AdminPanelSidebarMenuPageEnum.shortLink}
+                                foldersData={
+                                  shortLinksFoldersData
+                                    ? shortLinksFoldersData
+                                    : []
+                                }
+                                showFoldersSaveReorderButton={
+                                  compState?.shortLinksFoldersReorder?.isEnable
+                                }
+                                handleFoldersReorder={handleReorder}
+                                addNewFolderButtonOnClickHandler={() => {
+                                  setFolderFormState(oldVal => ({
+                                    ...oldVal,
+                                    id: '',
+                                    name: '',
+                                    formMode: FormMode.ADD
+                                  }));
+                                  presentFolderModal({
+                                    _cssClass: 'link-in-bio-folder-modal'
+                                  });
+                                }}
+                                foldersSaveReorderButtonOnClickHandler={() => {
+                                  void shortLinksFoldersReOrderHandler();
+                                }}
+                                folderActionsButtonOnClickHandler={(
+                                  event: unknown
+                                ) => {
+                                  presentFolderActionIonPopover({
+                                    _event: event as Event,
+                                    _cssClass: classNames(
+                                      classes.zaions_present_folder_Action_popover_width
+                                    )
+                                  });
+                                }}
+                              />
+                            </Suspense>
+                          </ZCan>
+                        )}
+
+                        {/* Col-2 Row-2 col-2 Table & filters etc. */}
+                        <ZIonCol
+                          className='h-full zaions-transition'
+                          sizeXl='9.2'
+                          sizeLg='9.2'
+                          sizeMd='12'
+                          sizeSm='12'
+                          sizeXs='12'>
+                          {!isSmScale ? (
+                            <ZInpageMainContent />
+                          ) : (
+                            <ZCustomScrollable
+                              className={classNames({
+                                'flex flex-col w-full h-full px-3 pt-3': true,
+                                'gap-10': isMdScale,
+                                'gap-5': !isMdScale
+                              })}
+                              scrollY={true}>
+                              <ZInpageMainContent />
+                            </ZCustomScrollable>
+                          )}
+                        </ZIonCol>
+                      </ZIonRow>
+                    </ZIonGrid>
+                  </ZIonCol>
+                </ZIonRow>
+              </ZIonGrid>
+            </ZIonContent>
+          </ZCan>
+        </ZIonPage>
+      </>
+    );
+  }
 };
 
 const ZInpageMainContent: React.FC = () => {
+  // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
+  }>();
+
   // #region Component state.
   const [compState, setCompState] = useState<{
     shortLinksFoldersReorder: {
@@ -560,11 +793,6 @@ const ZInpageMainContent: React.FC = () => {
     }
   });
   // #endregion
-
-  // getting current workspace id form params.
-  const { workspaceId } = useParams<{
-    workspaceId: string;
-  }>();
 
   // #region Custom hooks.
   const { isXlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale(); // media query hook.
@@ -587,7 +815,80 @@ const ZInpageMainContent: React.FC = () => {
   // #endregion
 
   // #region APIS requests.
-  // get workspace data api.
+  // If share-workspace then this api will fetch share-workspace data.
+  const { isFetching: isSWSFetching } = useZRQGetRequest<workspaceInterface>({
+    _url: API_URL_ENUM.ws_share_info_data,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
+      wsShareId
+    ],
+    _authenticated: true,
+    _itemsIds: [shareWSMemberId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _extractType: ZRQGetRequestExtractEnum.extractItem
+  });
+
+  // If share-workspace then this api will fetch share-workspace-short-links data.
+  const { data: swsShortLinksData, isFetching: isSWSShortLinksDataFetching } =
+    useZRQGetRequest<ShortLinkType[]>({
+      _url: API_URL_ENUM.sws_sl_create_list,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
+        wsShareId
+      ],
+      _itemsIds: [shareWSMemberId],
+      _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId]
+    });
+
+  // If share-workspace then this api will fetch share-workspace-short-link-folders data.
+  const { isFetching: isSWSShortLinksFoldersDataFetching } = useZRQGetRequest<
+    LinkFolderType[]
+  >({
+    _url: API_URL_ENUM.ws_share_folder_sl_list,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
+      wsShareId,
+      folderState.shortlink
+    ],
+    _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId]
+  });
+
+  // If share-workspace then this api will update share-workspace-short-link-folders order.
+  const { mutateAsync: UpdateSWSShortLinksFoldersReorder } =
+    useZRQUpdateRequest({
+      _url: API_URL_ENUM.ws_share_folder_reorder,
+      _queriesKeysToInvalidate: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
+        wsShareId,
+        folderState.shortlink
+      ]
+    });
+
+  // If share-workspace then this api will fetch role & permissions of current user in this share-workspace.
+  const {
+    data: getMemberRolePermissions,
+    isFetching: isGetMemberRolePermissionsFetching
+  } = useZRQGetRequest<{
+    memberRole?: string;
+    memberPermissions?: string[];
+  }>({
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
+      wsShareId
+    ],
+    _url: API_URL_ENUM.ws_share_member_role_permissions,
+    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _itemsIds: [shareWSMemberId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
+  });
+
+  // If owned-workspace then this api will fetch owned-workspace data.
   const { isFetching: isSelectedWorkspaceFetching } =
     useZRQGetRequest<workspaceInterface>({
       _url: API_URL_ENUM.workspace_update_delete,
@@ -595,11 +896,11 @@ const ZInpageMainContent: React.FC = () => {
       _authenticated: true,
       _itemsIds: [workspaceId],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: !workspaceId ? true : false,
+      _shouldFetchWhenIdPassed: workspaceId ? false : true,
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
 
-  // Request for getting short links folders.
+  // If owned-workspace then this api will fetch owned-workspace-short-link-folders data.
   const { isFetching: isShortLinksFoldersDataFetching } = useZRQGetRequest<
     LinkFolderType[]
   >({
@@ -610,10 +911,11 @@ const ZInpageMainContent: React.FC = () => {
       folderState.shortlink
     ],
     _itemsIds: [workspaceId],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
 
-  // Update shortLinks folders reorder API
+  // If owned-workspace then this api will update owned-workspace-short-link-folders order.
   const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
     _url: API_URL_ENUM.ShortLinks_folders_reorder,
     _queriesKeysToInvalidate: [
@@ -623,12 +925,13 @@ const ZInpageMainContent: React.FC = () => {
     ]
   });
 
-  // Request for getting short links data.
+  // If owned-workspace then this api will fetch owned-workspace-short-links data.
   const { data: shortLinksData, isFetching: isShortLinksDataFetching } =
     useZRQGetRequest<ShortLinkType[]>({
       _url: API_URL_ENUM.shortLinks_create_list,
       _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
       _itemsIds: [workspaceId],
+      _shouldFetchWhenIdPassed: workspaceId ? false : true,
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
     });
   // #endregion
@@ -640,24 +943,52 @@ const ZInpageMainContent: React.FC = () => {
   // #region Functions.
   const invalidedQueries = async () => {
     try {
-      // Workspace.
-      await zInvalidateReactQueries([
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
-        workspaceId
-      ]);
+      if (workspaceId) {
+        // Workspace.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
+          workspaceId
+        ]);
 
-      // Shorts links.
-      await zInvalidateReactQueries([
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-        workspaceId
-      ]);
+        // Shorts links.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+          workspaceId
+        ]);
 
-      // Folder.
-      await zInvalidateReactQueries([
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-        workspaceId,
-        folderState.shortlink
-      ]);
+        // Folder.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+          workspaceId,
+          folderState.shortlink
+        ]);
+      } else if (wsShareId && shareWSMemberId) {
+        // Share workspace.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
+          wsShareId
+        ]);
+
+        // Share workspace shorts links.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
+          wsShareId
+        ]);
+
+        // Share workspace Folder.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
+          wsShareId,
+          folderState.shortlink
+        ]);
+
+        // Member Role and permissions
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS
+            .MEMBER_ROLE_AND_PERMISSIONS,
+          wsShareId
+        ]);
+      }
     } catch (error) {
       reportCustomError(error);
     }
@@ -691,10 +1022,18 @@ const ZInpageMainContent: React.FC = () => {
   };
   // #endregion
 
-  const isZFetching =
+  let isZFetching =
     isShortLinksFoldersDataFetching ||
     isShortLinksDataFetching ||
     isSelectedWorkspaceFetching;
+
+  if (wsShareId) {
+    isZFetching =
+      isSWSShortLinksFoldersDataFetching ||
+      isSWSShortLinksDataFetching ||
+      isSWSFetching;
+  }
+
   return (
     <>
       <div
@@ -723,7 +1062,15 @@ const ZInpageMainContent: React.FC = () => {
               })}
               // color='medium'
             >
-              Create a New Link or Manage Your Existing Ones!
+              {workspaceId
+                ? 'Create a New Link or Manage Your Existing Ones!'
+                : wsShareId
+                ? getMemberRolePermissions?.memberPermissions?.includes(
+                    shareWSPermissionEnum.create_sws_shortLink
+                  )
+                  ? 'Create a New Link or Manage Existing Ones!'
+                  : 'Explore Existing Links'
+                : null}
             </ZIonText>
             <ZIonText
               className={classNames({
@@ -733,13 +1080,31 @@ const ZInpageMainContent: React.FC = () => {
               })}
               // color='medium'
             >
-              Craft fresh links or take a peek at your existing ones. The choice
-              is yours!
+              {workspaceId
+                ? 'Craft fresh links or take a peek at your existing ones. The choice is yours!'
+                : wsShareId
+                ? getMemberRolePermissions?.memberPermissions?.includes(
+                    shareWSPermissionEnum.create_sws_shortLink
+                  )
+                  ? 'Craft fresh links or take a peek at existing ones. The choice is yours!'
+                  : 'As new member, dive into short link world and oversee existing creations.'
+                : null}
             </ZIonText>
           </ZIonCol>
 
           {isLgScale ? (
-            <ZCan havePermissions={[permissionsEnum.create_shortLink]}>
+            <ZCan
+              shareWSId={wsShareId}
+              permissionType={
+                wsShareId
+                  ? permissionsTypeEnum.shareWSMemberPermissions
+                  : permissionsTypeEnum.loggedInUserPermissions
+              }
+              havePermissions={
+                wsShareId
+                  ? [shareWSPermissionEnum.create_sws_shortLink]
+                  : [permissionsEnum.create_shortLink]
+              }>
               <ZIonCol
                 sizeXl='4'
                 sizeLg='5'
@@ -787,7 +1152,10 @@ const ZInpageMainContent: React.FC = () => {
                 'gap-2 flex-col': !isSmScale
               })}>
               {/* Filter button */}
-              {shortLinksData && shortLinksData?.length > 0 && (
+              {((workspaceId && shortLinksData && shortLinksData?.length > 0) ||
+                (wsShareId &&
+                  swsShortLinksData &&
+                  swsShortLinksData?.length > 0)) && (
                 <ZIonButton
                   fill='outline'
                   color='primary'
@@ -845,6 +1213,7 @@ const ZInpageMainContent: React.FC = () => {
                   Open folders menu
                 </ZIonButton>
               ) : null}
+
               {/* </ZIonMenuToggle> */}
 
               <ZIonButton
@@ -870,7 +1239,18 @@ const ZInpageMainContent: React.FC = () => {
                 Refetch
               </ZIonButton>
 
-              <ZCan havePermissions={[permissionsEnum.create_shortLink]}>
+              <ZCan
+                shareWSId={wsShareId}
+                permissionType={
+                  wsShareId
+                    ? permissionsTypeEnum.shareWSMemberPermissions
+                    : permissionsTypeEnum.loggedInUserPermissions
+                }
+                havePermissions={
+                  wsShareId
+                    ? [shareWSPermissionEnum.create_sws_shortLink]
+                    : [permissionsEnum.create_shortLink]
+                }>
                 <ZIonButton
                   fill='solid'
                   color='primary'
@@ -898,7 +1278,18 @@ const ZInpageMainContent: React.FC = () => {
         </ZIonRow>
 
         {/* Shortlink Table */}
-        <ZCan havePermissions={[permissionsEnum.view_shortLink]}>
+        <ZCan
+          shareWSId={wsShareId}
+          permissionType={
+            wsShareId
+              ? permissionsTypeEnum.shareWSMemberPermissions
+              : permissionsTypeEnum.loggedInUserPermissions
+          }
+          havePermissions={
+            wsShareId
+              ? [shareWSPermissionEnum.view_sws_shortLink]
+              : [permissionsEnum.view_shortLink]
+          }>
           <ZaionsShortLinkTable showSkeleton={isZFetching} />
         </ZCan>
       </div>

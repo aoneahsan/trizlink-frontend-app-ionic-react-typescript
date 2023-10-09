@@ -148,6 +148,9 @@ const ZaionsRoutes = {
         Main: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/short-links/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
         Create: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/short-links/create`,
         Edit: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/short-links/edit/${CONSTANTS.RouteParams.editShortLinkIdParam}`
+      },
+      Link_in_bio: {
+        Main: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/link-in-bio/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`
       }
     },
 

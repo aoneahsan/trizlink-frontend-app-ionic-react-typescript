@@ -107,8 +107,10 @@ export enum API_URL_ENUM {
   folders_create_list = 'folders_create_list',
 
   user_setting_list_create = 'user_setting_list_create',
-  user_setting_delete_update_get = 'user_setting_delete_update',
-  user_setting_get = 'user_setting_get',
+  user_setting_delete_update_get = 'user_setting_delete_update_get',
+
+  sws_user_setting_list_create = 'sws_user_setting_list_create',
+  sws_user_setting_delete_update_get = 'sws_user_setting_delete_update_get',
 
   linkInBioPreData_create_list = 'linkInBioPreData_create_list',
   linkInBioPreData_delete_update = 'linkInBioPreData_delete_update',

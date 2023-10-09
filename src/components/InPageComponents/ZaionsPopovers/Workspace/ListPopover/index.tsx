@@ -248,13 +248,15 @@ const ZWorkspacesListPopover: React.FC<{
                 onClick={() => {
                   zNavigatePushRoute(
                     createRedirectRoute({
-                      url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                      url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
                       params: [
-                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.workspace.wsShareId,
+                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
                         CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                       ],
                       values: [
-                        el.id || '',
+                        el.workspaceId!,
+                        el.id!,
                         CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                       ]
                     })

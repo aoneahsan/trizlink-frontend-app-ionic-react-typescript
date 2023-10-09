@@ -3,6 +3,7 @@
  * ? Like Import of React is a Core Import
  * */
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 
 /**
  * Packages Imports go down
@@ -106,6 +107,13 @@ import { PixelsFilterOptionsRStateAtom } from '@/ZaionsStore/UserDashboard/Pixel
  * */
 
 const ZPixelsFilterMenu: React.FC = () => {
+  // getting current workspace id OR wsShareId && shareWSMemberId form params.
+  const { workspaceId, wsShareId, shareWSMemberId } = useParams<{
+    workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
+  }>();
+
   // #region compState.
   const [compState, setCompState] = useState<{
     pixelsColumn: {
@@ -141,7 +149,9 @@ const ZPixelsFilterMenu: React.FC = () => {
 
   const { mutateAsync: createPixelFilersAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.user_setting_list_create,
-    _loaderMessage: MESSAGES.PIXEL_ACCOUNT.FILTERING
+    _loaderMessage: MESSAGES.PIXEL_ACCOUNT.FILTERING,
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _itemsIds: [workspaceId]
   });
 
   const { data: getPixelFiltersData, isFetching: isPixelFiltersDataFetching } =
@@ -151,9 +161,13 @@ const ZPixelsFilterMenu: React.FC = () => {
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
         ZUserSettingTypeEnum.pixelListPageTable
       ],
-      _itemsIds: [ZUserSettingTypeEnum.pixelListPageTable],
-      _urlDynamicParts: [CONSTANTS.RouteParams.settings.type],
-      _extractType: ZRQGetRequestExtractEnum.extractItem
+      _itemsIds: [workspaceId, ZUserSettingTypeEnum.pixelListPageTable],
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.workspaceId,
+        CONSTANTS.RouteParams.settings.type
+      ],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _shouldFetchWhenIdPassed: workspaceId ? false : true
     });
   // #endregion
 
@@ -203,8 +217,11 @@ const ZPixelsFilterMenu: React.FC = () => {
           getPixelFiltersData?.type === ZUserSettingTypeEnum.pixelListPageTable
         ) {
           __response = await updatePixelFilersAsyncMutate({
-            itemIds: [ZUserSettingTypeEnum.pixelListPageTable],
-            urlDynamicParts: [CONSTANTS.RouteParams.settings.type],
+            itemIds: [workspaceId, ZUserSettingTypeEnum.pixelListPageTable],
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.workspaceId,
+              CONSTANTS.RouteParams.settings.type
+            ],
             requestData: _data
           });
         } else {

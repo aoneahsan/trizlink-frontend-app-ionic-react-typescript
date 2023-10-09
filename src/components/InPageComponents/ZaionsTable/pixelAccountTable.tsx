@@ -233,9 +233,13 @@ const ZInpageTable: React.FC = () => {
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
         ZUserSettingTypeEnum.pixelListPageTable
       ],
-      _itemsIds: [ZUserSettingTypeEnum.pixelListPageTable],
-      _urlDynamicParts: [CONSTANTS.RouteParams.settings.type],
-      _extractType: ZRQGetRequestExtractEnum.extractItem
+      _itemsIds: [workspaceId!, ZUserSettingTypeEnum.pixelListPageTable],
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.workspaceId,
+        CONSTANTS.RouteParams.settings.type
+      ],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _shouldFetchWhenIdPassed: workspaceId ? false : true
     });
   // #endregion
 

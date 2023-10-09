@@ -396,7 +396,7 @@ const AppRoutes = () => {
       <PrivateRoute
         exact
         path={ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main}
-        Component={ZSWSShortLinksListPage}
+        Component={ZShortLinksListPage}
       />
 
       <PrivateRoute

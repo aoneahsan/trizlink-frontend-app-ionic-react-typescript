@@ -175,9 +175,11 @@ export const API_URLS = {
   folders_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder/${RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
   folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder`,
 
-  user_setting_list_create: `/user/settings`,
-  user_setting_delete_update: `/user/settings/${RouteParams.settings.type}`,
-  user_setting_get: `/user/settings/${RouteParams.settings.type}`,
+  user_setting_list_create: `/user/workspace/${RouteParams.workspace.workspaceId}/modal-settings`,
+  user_setting_delete_update_get: `/user/workspace/${RouteParams.workspace.workspaceId}/modal-settings/${RouteParams.settings.type}`,
+
+  sws_user_setting_list_create: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/modal-settings`,
+  sws_user_setting_delete_update_get: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/modal-settings/${RouteParams.settings.type}`,
 
   userAccount_LinkInBio_folders_update_delete:
     '/user/link-in-bio-folders/:folderId',
@@ -1615,7 +1617,10 @@ const REACT_QUERY = {
       },
       SETTING: {
         MAIN: 'rq-user-setting-main-key',
-        GET: 're-user-setting-get-key'
+        GET: 're-user-setting-get-key',
+
+        SWS_MAIN: 'rq-sws-user-setting-main-key',
+        SWS_GET: 'rq-sws-user-setting-get-key'
       }
     }
   }

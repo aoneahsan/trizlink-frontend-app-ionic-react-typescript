@@ -7,7 +7,12 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import classNames from 'classnames';
-import { appsOutline, ellipsisVertical, fileTrayOutline } from 'ionicons/icons';
+import {
+  appsOutline,
+  ellipsisVertical,
+  fileTrayOutline,
+  share
+} from 'ionicons/icons';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useParams } from 'react-router';
 
@@ -161,50 +166,91 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                 : []
             }>
             <ZIonItem
-              className='cursor-pointer'
+              minHeight='2.2rem'
+              className='cursor-pointer ion-activatable ripple-parent'
               testingselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-default-${type}`}
-              style={{
-                '--inner-padding-end': '0px',
-                '--padding-start': '0px'
-              }}
               onClick={() => {
                 switch (type) {
                   case AdminPanelSidebarMenuPageEnum.shortLink:
-                    zNavigatePushRoute(
-                      createRedirectRoute({
-                        url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                        params: [
-                          CONSTANTS.RouteParams.workspace.workspaceId,
-                          CONSTANTS.RouteParams
-                            .folderIdToGetShortLinksOrLinkInBio
-                        ],
-                        values: [
-                          workspaceId,
-                          CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
-                        ]
-                      })
-                    );
+                    // if there is workspaceId means it's a owned workspace then redirect to short link of that workspace
+                    if (workspaceId) {
+                      zNavigatePushRoute(
+                        createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.workspaceId,
+                            CONSTANTS.RouteParams
+                              .folderIdToGetShortLinksOrLinkInBio
+                          ],
+                          values: [
+                            workspaceId,
+                            CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                          ]
+                        })
+                      );
+                    }
+                    // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to short link of that share workspace
+                    else if (wsShareId && shareWSMemberId) {
+                      zNavigatePushRoute(
+                        createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.wsShareId,
+                            CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                            CONSTANTS.RouteParams
+                              .folderIdToGetShortLinksOrLinkInBio
+                          ],
+                          values: [
+                            wsShareId,
+                            shareWSMemberId,
+                            CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                          ]
+                        })
+                      );
+                    }
                     break;
 
                   case AdminPanelSidebarMenuPageEnum.linkInBio:
-                    zNavigatePushRoute(
-                      createRedirectRoute({
-                        url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
-                        params: [
-                          CONSTANTS.RouteParams.workspace.workspaceId,
-                          CONSTANTS.RouteParams
-                            .folderIdToGetShortLinksOrLinkInBio
-                        ],
-                        values: [
-                          workspaceId,
-                          CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
-                        ]
-                      })
-                    );
+                    // if there is workspaceId means it's a owned workspace then redirect to link-in-bio of that workspace
+                    if (workspaceId) {
+                      zNavigatePushRoute(
+                        createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.workspaceId,
+                            CONSTANTS.RouteParams
+                              .folderIdToGetShortLinksOrLinkInBio
+                          ],
+                          values: [
+                            workspaceId,
+                            CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                          ]
+                        })
+                      );
+                    }
+                    // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to link-in-bio of that share workspace
+                    else if (wsShareId && shareWSMemberId) {
+                      zNavigatePushRoute(
+                        createRedirectRoute({
+                          url: ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Main,
+                          params: [
+                            CONSTANTS.RouteParams.workspace.wsShareId,
+                            CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                            CONSTANTS.RouteParams
+                              .folderIdToGetShortLinksOrLinkInBio
+                          ],
+                          values: [
+                            wsShareId,
+                            shareWSMemberId,
+                            CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                          ]
+                        })
+                      );
+                    }
                     break;
                 }
               }}>
-              <ZIonLabel>Default</ZIonLabel>
+              <ZIonLabel className='ion-no-margin'>Default</ZIonLabel>
               <ZIonIcon
                 slot='start'
                 icon={appsOutline}
@@ -261,52 +307,101 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                     }>
                     <ZIonItem
                       data-folder-id={el.id}
-                      style={{
-                        '--inner-padding-end': '0px',
-                        '--padding-start': '0px'
-                      }}
+                      minHeight='2.2rem'
                       className={classNames({
-                        'cursor-pointer': true,
+                        'cursor-pointer ion-activatable ripple-parent': true,
                         'zaions-short-link-folder':
                           type === AdminPanelSidebarMenuPageEnum.shortLink,
                         'zaions-link-in-bio-folder':
                           type === AdminPanelSidebarMenuPageEnum.linkInBio
                       })}>
                       <ZIonLabel
+                        className='ion-no-margin'
                         testingselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}`}
                         testinglistselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}-${el.id}`}
                         onClick={() => {
                           if (el.id) {
                             switch (type) {
                               case AdminPanelSidebarMenuPageEnum.shortLink:
-                                zNavigatePushRoute(
-                                  createRedirectRoute({
-                                    url: ZaionsRoutes.AdminPanel.ShortLinks
-                                      .Main,
-                                    params: [
-                                      CONSTANTS.RouteParams.workspace
-                                        .workspaceId,
-                                      CONSTANTS.RouteParams
-                                        .folderIdToGetShortLinksOrLinkInBio
-                                    ],
-                                    values: [workspaceId, el.id]
-                                  })
-                                );
+                                // if there is workspaceId means it's a owned workspace then redirect to short link folder of that workspace
+                                if (workspaceId) {
+                                  zNavigatePushRoute(
+                                    createRedirectRoute({
+                                      url: ZaionsRoutes.AdminPanel.ShortLinks
+                                        .Main,
+                                      params: [
+                                        CONSTANTS.RouteParams.workspace
+                                          .workspaceId,
+                                        CONSTANTS.RouteParams
+                                          .folderIdToGetShortLinksOrLinkInBio
+                                      ],
+                                      values: [workspaceId, el.id]
+                                    })
+                                  );
+                                }
+                                // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to short link folder of that share workspace
+                                else if (wsShareId && shareWSMemberId) {
+                                  zNavigatePushRoute(
+                                    createRedirectRoute({
+                                      url: ZaionsRoutes.AdminPanel.ShareWS
+                                        .Short_link.Main,
+                                      params: [
+                                        CONSTANTS.RouteParams.workspace
+                                          .wsShareId,
+                                        CONSTANTS.RouteParams.workspace
+                                          .shareWSMemberId,
+                                        CONSTANTS.RouteParams
+                                          .folderIdToGetShortLinksOrLinkInBio
+                                      ],
+                                      values: [
+                                        wsShareId,
+                                        shareWSMemberId,
+                                        el.id
+                                      ]
+                                    })
+                                  );
+                                }
                                 break;
 
                               case AdminPanelSidebarMenuPageEnum.linkInBio:
-                                zNavigatePushRoute(
-                                  createRedirectRoute({
-                                    url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
-                                    params: [
-                                      CONSTANTS.RouteParams.workspace
-                                        .workspaceId,
-                                      CONSTANTS.RouteParams
-                                        .folderIdToGetShortLinksOrLinkInBio
-                                    ],
-                                    values: [workspaceId, el.id]
-                                  })
-                                );
+                                // if there is workspaceId means it's a owned workspace then redirect to link-in-bio folder of that workspace
+                                if (workspaceId) {
+                                  zNavigatePushRoute(
+                                    createRedirectRoute({
+                                      url: ZaionsRoutes.AdminPanel.LinkInBio
+                                        .Main,
+                                      params: [
+                                        CONSTANTS.RouteParams.workspace
+                                          .workspaceId,
+                                        CONSTANTS.RouteParams
+                                          .folderIdToGetShortLinksOrLinkInBio
+                                      ],
+                                      values: [workspaceId, el.id]
+                                    })
+                                  );
+                                }
+                                // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to link-in-bio folder of that share workspace
+                                else if (wsShareId && shareWSMemberId) {
+                                  zNavigatePushRoute(
+                                    createRedirectRoute({
+                                      url: ZaionsRoutes.AdminPanel.ShareWS
+                                        .Link_in_bio.Main,
+                                      params: [
+                                        CONSTANTS.RouteParams.workspace
+                                          .wsShareId,
+                                        CONSTANTS.RouteParams.workspace
+                                          .shareWSMemberId,
+                                        CONSTANTS.RouteParams
+                                          .folderIdToGetShortLinksOrLinkInBio
+                                      ],
+                                      values: [
+                                        wsShareId,
+                                        shareWSMemberId,
+                                        el.id
+                                      ]
+                                    })
+                                  );
+                                }
                                 break;
                             }
                           }
@@ -352,6 +447,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                           color='dark'
                           size='small'
                           value={el.id}
+                          className='ion-no-padding w-[2rem] h-[2rem] rounded-full overflow-hidden ms-auto'
                           testingselector={`${CONSTANTS.testingSelectors.folder.actionPopoverBtn}-${type}`}
                           testinglistselector={`${CONSTANTS.testingSelectors.folder.actionPopoverBtn}-${type}-${el.id}`}
                           onClick={event => {
@@ -364,8 +460,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                               name: el.title,
                               formMode: FormMode.EDIT
                             }));
-                          }}
-                          className='ion-no-padding ms-auto'>
+                          }}>
                           <ZIonIcon icon={ellipsisVertical} />
                         </ZIonButton>
                       </ZCan>
@@ -382,7 +477,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
             ) : null}
           </ZCan>
 
-          {foldersData?.length === 0 && (
+          {!showSkeleton && foldersData?.length === 0 && (
             <ZIonItem
               style={{
                 '--inner-padding-end': '0px',
