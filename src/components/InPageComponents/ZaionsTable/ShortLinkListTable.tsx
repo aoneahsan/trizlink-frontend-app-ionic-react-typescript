@@ -51,6 +51,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import {
   permissionsEnum,
+  permissionsTypeEnum,
   shareWSPermissionEnum
 } from '@/utils/enums/RoleAndPermissions';
 import {
@@ -167,7 +168,8 @@ const ZaionsShortLinkTable: React.FC<{
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
     _shouldFetchWhenIdPassed: workspaceId ? false : true,
     _itemsIds: [workspaceId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _showLoader: false
   });
 
   // Request for getting share workspace short links data.
@@ -329,7 +331,8 @@ const ZInpageTable: React.FC = () => {
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
     _shouldFetchWhenIdPassed: workspaceId ? false : true,
     _itemsIds: [workspaceId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _showLoader: false
   });
 
   // Request for getting share workspace short links data.
@@ -361,7 +364,8 @@ const ZInpageTable: React.FC = () => {
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.settings.type
       ],
-      _extractType: ZRQGetRequestExtractEnum.extractItem
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _showLoader: false
     });
 
   // If share-workspace then this api will fetch share-workspace-short-link filters options data.
@@ -379,13 +383,15 @@ const ZInpageTable: React.FC = () => {
         CONSTANTS.RouteParams.settings.type
       ],
       _shouldFetchWhenIdPassed: wsShareId ? false : true,
-      _extractType: ZRQGetRequestExtractEnum.extractItem
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _showLoader: false
     });
   // #endregion
 
   // #region Modal & Popovers.
   const { presentZIonModal: presentPixelAccountDetailModal } = useZIonModal(
-    ZaionsPixelAccountDetail
+    ZaionsPixelAccountDetail,
+    { workspaceId }
   );
 
   const { presentZIonModal: presentShortLinkNoteModal } = useZIonModal(
@@ -396,6 +402,8 @@ const ZInpageTable: React.FC = () => {
     ZShortLinkActionPopover,
     {
       workspaceId: workspaceId,
+      shareWSMemberId,
+      wsShareId,
       shortLinkId: compState.selectedShortLinkId
     }
   );
@@ -634,27 +642,27 @@ const ZInpageTable: React.FC = () => {
         let __getUrlColumn;
 
         if (workspaceId) {
-          __getTitleColumn = swsGetUserSetting?.settings?.columns.filter(
+          __getTitleColumn = getUserSetting?.settings?.columns.filter(
             el => el?.id === ZShortLinkListPageTableColumnsIds.title
           )[0];
 
-          __getDateColumn = swsGetUserSetting?.settings?.columns.filter(
+          __getDateColumn = getUserSetting?.settings?.columns.filter(
             el => el?.id === ZShortLinkListPageTableColumnsIds.date
           )[0];
 
-          __getLinkToShareColumn = swsGetUserSetting?.settings?.columns.filter(
+          __getLinkToShareColumn = getUserSetting?.settings?.columns.filter(
             el => el?.id === ZShortLinkListPageTableColumnsIds.linkToShare
           )[0];
 
-          __getNotesColumn = swsGetUserSetting?.settings?.columns.filter(
+          __getNotesColumn = getUserSetting?.settings?.columns.filter(
             el => el?.id === ZShortLinkListPageTableColumnsIds.notes
           )[0];
 
-          __getPixelsColumn = swsGetUserSetting?.settings?.columns.filter(
+          __getPixelsColumn = getUserSetting?.settings?.columns.filter(
             el => el?.id === ZShortLinkListPageTableColumnsIds.pixel
           )[0];
 
-          __getUrlColumn = swsGetUserSetting?.settings?.columns.filter(
+          __getUrlColumn = getUserSetting?.settings?.columns.filter(
             el => el?.id === ZShortLinkListPageTableColumnsIds.url
           )[0];
         } else if (wsShareId) {
@@ -1159,7 +1167,16 @@ const ZShortLinkActionPopover: React.FC<{
   zNavigatePushRoute: (_url: string) => void;
   workspaceId: string;
   shortLinkId: string;
-}> = ({ dismissZIonPopover, workspaceId, shortLinkId, zNavigatePushRoute }) => {
+  shareWSMemberId: string;
+  wsShareId: string;
+}> = ({
+  dismissZIonPopover,
+  workspaceId,
+  shareWSMemberId,
+  wsShareId,
+  shortLinkId,
+  zNavigatePushRoute
+}) => {
   const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
   // Recoil selector that will filter from all short links state(ShortLinksRStateAtom) and give the filter short links.
   const _FilteredShortLinkDataSelector = useRecoilValue(
@@ -1281,7 +1298,18 @@ const ZShortLinkActionPopover: React.FC<{
     <ZIonList
       lines='none'
       className='ion-no-padding'>
-      <ZCan havePermissions={[permissionsEnum.update_shortLink]}>
+      <ZCan
+        shareWSId={wsShareId}
+        permissionType={
+          wsShareId
+            ? permissionsTypeEnum.shareWSMemberPermissions
+            : permissionsTypeEnum.loggedInUserPermissions
+        }
+        havePermissions={
+          wsShareId
+            ? [shareWSPermissionEnum.update_sws_shortLink]
+            : [permissionsEnum.update_shortLink]
+        }>
         <ZIonItem
           button={true}
           detail={false}
@@ -1337,7 +1365,18 @@ const ZShortLinkActionPopover: React.FC<{
         </ZIonItem>
       </ZCan>
 
-      <ZCan havePermissions={[permissionsEnum.delete_shortLink]}>
+      <ZCan
+        shareWSId={wsShareId}
+        permissionType={
+          wsShareId
+            ? permissionsTypeEnum.shareWSMemberPermissions
+            : permissionsTypeEnum.loggedInUserPermissions
+        }
+        havePermissions={
+          wsShareId
+            ? [shareWSPermissionEnum.delete_sws_shortLink]
+            : [permissionsEnum.delete_shortLink]
+        }>
         <ZIonItem
           button={true}
           detail={false}

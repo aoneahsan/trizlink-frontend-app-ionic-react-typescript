@@ -135,6 +135,10 @@ import {
 const ZPixelsTable: React.FC<{
   showSkeleton?: boolean;
 }> = ({ showSkeleton = false }) => {
+  const { workspaceId } = useParams<{
+    workspaceId: string;
+  }>();
+
   // #region custom hooks.
   const { zNavigatePushRoute } = useZNavigate();
   // #endregion
@@ -145,15 +149,15 @@ const ZPixelsTable: React.FC<{
     useZRQGetRequest<PixelAccountType[]>({
       _url: API_URL_ENUM.userPixelAccounts_create_list,
       _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
-      _itemsIds: [],
-      _urlDynamicParts: []
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+      _itemsIds: [workspaceId]
     });
   // #endregion
 
   // #region Modals & popovers
   const { presentZIonModal: presentZAddPixelAccount } = useZIonModal(
     ZaionsAddPixelAccount,
-    { formMode: FormMode.ADD }
+    { formMode: FormMode.ADD, workspaceId }
   );
   // #endregion
 
@@ -197,7 +201,7 @@ const ZInpageTable: React.FC = () => {
   }>();
 
   const { workspaceId } = useParams<{
-    workspaceId?: string;
+    workspaceId: string;
   }>();
 
   // #region Recoil state.
@@ -222,8 +226,8 @@ const ZInpageTable: React.FC = () => {
   const { data: PixelsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
-    _itemsIds: [],
-    _urlDynamicParts: []
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _itemsIds: [workspaceId]
   });
 
   const { data: getPixelFiltersData, isFetching: isPixelFiltersDataFetching } =
@@ -433,7 +437,7 @@ const ZInpageTable: React.FC = () => {
 
   const { presentZIonModal: presentZAddPixelAccount } = useZIonModal(
     ZaionsAddPixelAccount,
-    { formMode: FormMode.ADD }
+    { formMode: FormMode.ADD, workspaceId }
   );
   // #endregion
 
@@ -973,7 +977,8 @@ const ZPixelActionPopover: React.FC<{
       pixelId,
       pixelTitle,
       pixelPlatform,
-      formMode: FormMode.EDIT
+      formMode: FormMode.EDIT,
+      workspaceId
     }
   );
   // #endregion
@@ -986,8 +991,8 @@ const ZPixelActionPopover: React.FC<{
   const { data: PixelsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
-    _itemsIds: [],
-    _urlDynamicParts: []
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _itemsIds: [workspaceId]
   });
 
   // when user won't to delete pixel and click on the delete button this function will fire and show the confirm alert.
@@ -1028,8 +1033,11 @@ const ZPixelActionPopover: React.FC<{
       if (selectedId?.trim() && PixelsData?.length) {
         if (selectedId) {
           const _response = await deletePixelMutate({
-            itemIds: [selectedId],
-            urlDynamicParts: [CONSTANTS.RouteParams.pixel.pixelId]
+            itemIds: [workspaceId, selectedId],
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.workspaceId,
+              CONSTANTS.RouteParams.pixel.pixelId
+            ]
           });
 
           if (_response) {

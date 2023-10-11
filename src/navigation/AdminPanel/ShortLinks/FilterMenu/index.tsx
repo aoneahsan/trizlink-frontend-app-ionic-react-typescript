@@ -118,6 +118,13 @@ import MESSAGES from '@/utils/messages';
  * */
 
 const ZShortLinksFilterMenu: React.FC = () => {
+  // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
+  }>();
+
   // #region compState.
   const [compState, setCompState] = useState<{
     shortLinkColumn?: {
@@ -141,12 +148,6 @@ const ZShortLinksFilterMenu: React.FC = () => {
     }
   });
   // #endregion
-
-  const { workspaceId, wsShareId, shareWSMemberId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
-  }>();
 
   // #region custom hooks.
   const { isLgScale } = useZMediaQueryScale();
@@ -225,7 +226,8 @@ const ZShortLinksFilterMenu: React.FC = () => {
         CONSTANTS.RouteParams.settings.type
       ],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
-      _shouldFetchWhenIdPassed: workspaceId ? false : true
+      _shouldFetchWhenIdPassed: workspaceId ? false : true,
+      _showLoader: false
     });
 
   // share workspace short link filter and short link other settings get api.
@@ -243,7 +245,8 @@ const ZShortLinksFilterMenu: React.FC = () => {
         CONSTANTS.RouteParams.settings.type
       ],
       _shouldFetchWhenIdPassed: wsShareId ? false : true,
-      _extractType: ZRQGetRequestExtractEnum.extractItem
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _showLoader: false
     });
   // #endregion
 
@@ -270,6 +273,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
       reportCustomError(error);
     }
   }, [getUserSetting, workspaceId, swsGetUserSetting, wsShareId]);
+
   // #region Popovers.
   const { presentZIonPopover: presentShortLinkTimeFilterModal } =
     useZIonPopover(ShortLinksTimeRangeFilterPopover);

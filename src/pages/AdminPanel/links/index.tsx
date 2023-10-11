@@ -265,7 +265,8 @@ const ZShortLinksListPage: React.FC = () => {
     _itemsIds: [workspaceId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _shouldFetchWhenIdPassed: workspaceId ? false : true,
-    _extractType: ZRQGetRequestExtractEnum.extractItem
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
   });
 
   // If owned-workspace then this api will fetch owned-workspace-short-links data.
@@ -278,7 +279,8 @@ const ZShortLinksListPage: React.FC = () => {
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
     _itemsIds: [workspaceId],
     _shouldFetchWhenIdPassed: workspaceId ? false : true,
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _showLoader: false
   });
 
   // If owned-workspace then this api will fetch owned-workspace-short-links-folder data.
@@ -295,7 +297,8 @@ const ZShortLinksListPage: React.FC = () => {
     ],
     _itemsIds: [workspaceId],
     _shouldFetchWhenIdPassed: workspaceId ? false : true,
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _showLoader: false
   });
 
   // If owned-workspace then this api will used to update the owned-workspace-short-links-folders reorders.
@@ -554,54 +557,48 @@ const ZShortLinksListPage: React.FC = () => {
       isSWSFetching;
   }
 
-  if (compState.isProcessing) {
-    return (
-      <ZIonPage>
-        <ZIonContent>
-          <div className='flex flex-col w-full h-full pt-4 ion-align-items-center ion-justify-content-center'>
-            <ZIonSpinner className='w-10 h-10' />
+  return (
+    <>
+      {((shortLinksData && shortLinksData?.length > 0) ||
+        (swsShortLinksData && swsShortLinksData?.length > 0)) && (
+        <ZShortLinksFilterMenu />
+      )}
 
-            {workspaceId
-              ? isSelectedWorkspaceFetching
-                ? 'Setting workspace data'
-                : isShortLinksDataFetching
-                ? 'Fetching workspace short links'
-                : isShortLinksFoldersDataFetching
-                ? 'Fetching workspace short links folders'
-                : null
-              : wsShareId && shareWSMemberId
-              ? isGetMemberRolePermissionsFetching
-                ? 'Getting & setting your permissions in this workspace'
-                : isSWSFetching
-                ? 'Setting share workspace data'
-                : isSWSShortLinksDataFetching
-                ? 'Fetching share workspace short links'
-                : isSWSShortLinksFoldersDataFetching
-                ? 'Fetching share workspace short links folders'
-                : null
-              : null}
-          </div>
-        </ZIonContent>
-      </ZIonPage>
-    );
-  } else {
-    return (
-      <>
-        {((shortLinksData && shortLinksData?.length > 0) ||
-          (swsShortLinksData && swsShortLinksData?.length > 0)) && (
-          <ZShortLinksFilterMenu />
-        )}
+      {!isLgScale ? <AdminPanelShortLinksFolderSideMenu /> : null}
 
-        {!isLgScale ? (
-          <AdminPanelShortLinksFolderSideMenu workspaceId={workspaceId} />
-        ) : null}
+      {/*  */}
+      <ZIonPage
+        pageTitle='Zaions short-links list page'
+        // id={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
+        // menu={PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU}
+        id={CONSTANTS.MENU_IDS.AD_SL_LIST_PAGE}>
+        {compState?.isProcessing ? (
+          <ZIonContent>
+            <div className='flex flex-col w-full h-full pt-4 ion-align-items-center ion-justify-content-center'>
+              <ZIonSpinner className='w-10 h-10' />
 
-        {/*  */}
-        <ZIonPage
-          pageTitle='Zaions short-links list page'
-          // id={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
-          // menu={PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU}
-          id={CONSTANTS.MENU_IDS.AD_SL_LIST_PAGE}>
+              {workspaceId
+                ? isSelectedWorkspaceFetching
+                  ? 'Setting workspace data'
+                  : isShortLinksDataFetching
+                  ? 'Fetching workspace short links'
+                  : isShortLinksFoldersDataFetching
+                  ? 'Fetching workspace short links folders'
+                  : null
+                : wsShareId && shareWSMemberId
+                ? isGetMemberRolePermissionsFetching
+                  ? 'Getting & setting your permissions in this workspace'
+                  : isSWSFetching
+                  ? 'Setting share workspace data'
+                  : isSWSShortLinksDataFetching
+                  ? 'Fetching share workspace short links'
+                  : isSWSShortLinksFoldersDataFetching
+                  ? 'Fetching share workspace short links folders'
+                  : null
+                : null}
+            </div>
+          </ZIonContent>
+        ) : (
           <ZCan
             returnPermissionDeniedView={true}
             shareWSId={wsShareId}
@@ -701,8 +698,11 @@ const ZShortLinksListPage: React.FC = () => {
                                 showSkeleton={isZFetching}
                                 type={AdminPanelSidebarMenuPageEnum.shortLink}
                                 foldersData={
-                                  shortLinksFoldersData
+                                  workspaceId && shortLinksFoldersData?.length
                                     ? shortLinksFoldersData
+                                    : wsShareId &&
+                                      swsShortLinksFoldersData?.length
+                                    ? swsShortLinksFoldersData
                                     : []
                                 }
                                 showFoldersSaveReorderButton={
@@ -767,10 +767,10 @@ const ZShortLinksListPage: React.FC = () => {
               </ZIonGrid>
             </ZIonContent>
           </ZCan>
-        </ZIonPage>
-      </>
-    );
-  }
+        )}
+      </ZIonPage>
+    </>
+  );
 };
 
 const ZInpageMainContent: React.FC = () => {
@@ -826,7 +826,8 @@ const ZInpageMainContent: React.FC = () => {
     _itemsIds: [shareWSMemberId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
-    _extractType: ZRQGetRequestExtractEnum.extractItem
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
   });
 
   // If share-workspace then this api will fetch share-workspace-short-links data.
@@ -839,7 +840,8 @@ const ZInpageMainContent: React.FC = () => {
       ],
       _itemsIds: [shareWSMemberId],
       _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId]
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+      _showLoader: false
     });
 
   // If share-workspace then this api will fetch share-workspace-short-link-folders data.
@@ -854,7 +856,8 @@ const ZInpageMainContent: React.FC = () => {
     ],
     _itemsIds: [shareWSMemberId],
     _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId]
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _showLoader: false
   });
 
   // If share-workspace then this api will update share-workspace-short-link-folders order.
@@ -897,7 +900,8 @@ const ZInpageMainContent: React.FC = () => {
       _itemsIds: [workspaceId],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
       _shouldFetchWhenIdPassed: workspaceId ? false : true,
-      _extractType: ZRQGetRequestExtractEnum.extractItem
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _showLoader: false
     });
 
   // If owned-workspace then this api will fetch owned-workspace-short-link-folders data.
@@ -912,7 +916,8 @@ const ZInpageMainContent: React.FC = () => {
     ],
     _itemsIds: [workspaceId],
     _shouldFetchWhenIdPassed: workspaceId ? false : true,
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _showLoader: false
   });
 
   // If owned-workspace then this api will update owned-workspace-short-link-folders order.
@@ -932,7 +937,8 @@ const ZInpageMainContent: React.FC = () => {
       _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
       _itemsIds: [workspaceId],
       _shouldFetchWhenIdPassed: workspaceId ? false : true,
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+      _showLoader: false
     });
   // #endregion
 
@@ -1035,64 +1041,209 @@ const ZInpageMainContent: React.FC = () => {
   }
 
   return (
-    <>
-      <div
+    <div
+      className={classNames({
+        'flex flex-col ion-no-margin ion-no-padding': true,
+        'gap-4': isMdScale,
+        'gap-3 py-3 px-2': !isMdScale
+      })}>
+      {/* Switch it button & page heading */}
+      <ZIonRow
         className={classNames({
-          'flex flex-col ion-no-margin ion-no-padding': true,
-          'gap-4': isMdScale,
-          'gap-3 py-3 px-2': !isMdScale
+          'ion-align-items-center border rounded-lg zaions__light_bg': true,
+          'mt-4 ion-padding': isLgScale,
+          'mt-2 p-2': !isLgScale
         })}>
-        {/* Switch it button & page heading */}
-        <ZIonRow
+        <ZIonCol
           className={classNames({
-            'ion-align-items-center border rounded-lg zaions__light_bg': true,
-            'mt-4 ion-padding': isLgScale,
-            'mt-2 p-2': !isLgScale
+            'order-1': !isLgScale
           })}>
-          <ZIonCol
+          <ZIonText
             className={classNames({
-              'order-1': !isLgScale
-            })}>
-            <ZIonText
-              className={classNames({
-                'block font-bold ion-no-padding': true,
-                'text-2xl': isLgScale,
-                'text-xl': !isLgScale,
-                'ion-text-center': !isLgScale
-              })}
-              // color='medium'
-            >
-              {workspaceId
-                ? 'Create a New Link or Manage Your Existing Ones!'
-                : wsShareId
-                ? getMemberRolePermissions?.memberPermissions?.includes(
-                    shareWSPermissionEnum.create_sws_shortLink
-                  )
-                  ? 'Create a New Link or Manage Existing Ones!'
-                  : 'Explore Existing Links'
-                : null}
-            </ZIonText>
-            <ZIonText
-              className={classNames({
-                'block mt-1': true,
-                'text-sm': !isLgScale,
-                'ion-text-center': !isLgScale
-              })}
-              // color='medium'
-            >
-              {workspaceId
-                ? 'Craft fresh links or take a peek at your existing ones. The choice is yours!'
-                : wsShareId
-                ? getMemberRolePermissions?.memberPermissions?.includes(
-                    shareWSPermissionEnum.create_sws_shortLink
-                  )
-                  ? 'Craft fresh links or take a peek at existing ones. The choice is yours!'
-                  : 'As new member, dive into short link world and oversee existing creations.'
-                : null}
-            </ZIonText>
-          </ZIonCol>
+              'block font-bold ion-no-padding': true,
+              'text-2xl': isLgScale,
+              'text-xl': !isLgScale,
+              'ion-text-center': !isLgScale
+            })}
+            // color='medium'
+          >
+            {workspaceId
+              ? 'Create a New Link or Manage Your Existing Ones!'
+              : wsShareId
+              ? getMemberRolePermissions?.memberPermissions?.includes(
+                  shareWSPermissionEnum.create_sws_shortLink
+                )
+                ? 'Create a New Link or Manage Existing Ones!'
+                : 'Explore Existing Links'
+              : null}
+          </ZIonText>
+          <ZIonText
+            className={classNames({
+              'block mt-1': true,
+              'text-sm': !isLgScale,
+              'ion-text-center': !isLgScale
+            })}
+            // color='medium'
+          >
+            {workspaceId
+              ? 'Craft fresh links or take a peek at your existing ones. The choice is yours!'
+              : wsShareId
+              ? getMemberRolePermissions?.memberPermissions?.includes(
+                  shareWSPermissionEnum.create_sws_shortLink
+                )
+                ? 'Craft fresh links or take a peek at existing ones. The choice is yours!'
+                : 'As new member, dive into short link world and oversee existing creations.'
+              : null}
+          </ZIonText>
+        </ZIonCol>
 
-          {isLgScale ? (
+        {isLgScale ? (
+          <ZCan
+            shareWSId={wsShareId}
+            permissionType={
+              wsShareId
+                ? permissionsTypeEnum.shareWSMemberPermissions
+                : permissionsTypeEnum.loggedInUserPermissions
+            }
+            havePermissions={
+              wsShareId
+                ? [shareWSPermissionEnum.create_sws_shortLink]
+                : [permissionsEnum.create_shortLink]
+            }>
+            <ZIonCol
+              sizeXl='4'
+              sizeLg='5'
+              sizeMd='5.5'
+              sizeSm='12'
+              sizeXs='12'
+              className={classNames({
+                'order-2': !isLgScale,
+                'mt-3': !isMdScale
+              })}>
+              <ZaionsCreateShortLinkUrlInput showSkeleton={isZFetching} />
+            </ZIonCol>
+          </ZCan>
+        ) : null}
+      </ZIonRow>
+
+      {/* filter input, export, import, & create short links buttons */}
+      <ZIonRow className='mt-1 border rounded-lg ion-align-items-center ion-justify-content-between zaions__light_bg ion-padding'>
+        <ZIonCol
+          sizeXl='4'
+          sizeLg='5'
+          sizeMd='12'
+          sizeSm='12'
+          sizeXs='12'>
+          <SearchQueryInputComponent />
+        </ZIonCol>
+
+        <ZIonCol
+          sizeXl='8'
+          sizeLg='6'
+          sizeMd='12'
+          sizeSm='12'
+          sizeXs='12'
+          className={classNames({
+            flex: true,
+            'ion-justify-content-end': isXlScale,
+            'ion-justify-content-between': !isXlScale
+          })}>
+          <ZIonButtons
+            className={classNames({
+              'w-full': true,
+              'ion-justify-content-end gap-3': isXlScale,
+              'ion-justify-content-between flex': !isXlScale,
+              'mt-2': !isLgScale,
+              'gap-2 flex-col': !isSmScale
+            })}>
+            {/* Filter button */}
+            {((workspaceId && shortLinksData && shortLinksData?.length > 0) ||
+              (wsShareId &&
+                swsShortLinksData &&
+                swsShortLinksData?.length > 0)) && (
+              <ZIonButton
+                fill='outline'
+                color='primary'
+                expand={!isSmScale ? 'block' : undefined}
+                height={isLgScale ? '39px' : '20px'}
+                className={classNames({
+                  'my-2 normal-case': true,
+                  'text-xs w-[25%]': !isLgScale,
+                  'w-full': !isSmScale
+                })}
+                testingselector={
+                  CONSTANTS.testingSelectors.shortLink.listPage.filterBtn
+                }
+                onClick={async () => {
+                  await menuController.enable(
+                    true,
+                    CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID
+                  );
+                  await menuController.open(
+                    CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID
+                  );
+                }}>
+                <ZIonIcon
+                  icon={filterOutline}
+                  className='pr-1'
+                />
+                Filter
+              </ZIonButton>
+            )}
+
+            {/* <ZIonMenuToggle
+								autoHide={false}
+								menu={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
+							> */}
+            {!isLgScale ? (
+              <ZIonButton
+                fill='outline'
+                color='primary'
+                expand={!isSmScale ? 'block' : undefined}
+                height={isLgScale ? '39px' : '20px'}
+                className={classNames({
+                  'my-2 normal-case': true,
+                  'text-xs w-[25%]': !isLgScale,
+                  'w-full': !isSmScale
+                })}
+                onClick={async () => {
+                  await menuController.enable(
+                    true,
+                    CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
+                  );
+                  await menuController.open(
+                    CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
+                  );
+                }}>
+                Open folders menu
+              </ZIonButton>
+            ) : null}
+
+            {/* </ZIonMenuToggle> */}
+
+            <ZIonButton
+              fill='outline'
+              color='primary'
+              expand={!isSmScale ? 'block' : undefined}
+              height={isLgScale ? '39px' : '20px'}
+              className={classNames({
+                'my-2 normal-case': true,
+                'text-xs w-[25%]': !isLgScale,
+                'w-full': !isSmScale
+              })}
+              onClick={() => {
+                void invalidedQueries();
+              }}
+              testingselector={
+                CONSTANTS.testingSelectors.shortLink.listPage.refetchBtn
+              }>
+              <ZIonIcon
+                slot='start'
+                icon={refresh}
+              />
+              Refetch
+            </ZIonButton>
+
             <ZCan
               shareWSId={wsShareId}
               permissionType={
@@ -1105,119 +1256,8 @@ const ZInpageMainContent: React.FC = () => {
                   ? [shareWSPermissionEnum.create_sws_shortLink]
                   : [permissionsEnum.create_shortLink]
               }>
-              <ZIonCol
-                sizeXl='4'
-                sizeLg='5'
-                sizeMd='5.5'
-                sizeSm='12'
-                sizeXs='12'
-                className={classNames({
-                  'order-2': !isLgScale,
-                  'mt-3': !isMdScale
-                })}>
-                <ZaionsCreateShortLinkUrlInput showSkeleton={isZFetching} />
-              </ZIonCol>
-            </ZCan>
-          ) : null}
-        </ZIonRow>
-
-        {/* filter input, export, import, & create short links buttons */}
-        <ZIonRow className='mt-1 border rounded-lg ion-align-items-center ion-justify-content-between zaions__light_bg ion-padding'>
-          <ZIonCol
-            sizeXl='4'
-            sizeLg='5'
-            sizeMd='12'
-            sizeSm='12'
-            sizeXs='12'>
-            <SearchQueryInputComponent />
-          </ZIonCol>
-
-          <ZIonCol
-            sizeXl='8'
-            sizeLg='6'
-            sizeMd='12'
-            sizeSm='12'
-            sizeXs='12'
-            className={classNames({
-              flex: true,
-              'ion-justify-content-end': isXlScale,
-              'ion-justify-content-between': !isXlScale
-            })}>
-            <ZIonButtons
-              className={classNames({
-                'w-full': true,
-                'ion-justify-content-end gap-3': isXlScale,
-                'ion-justify-content-between flex': !isXlScale,
-                'mt-2': !isLgScale,
-                'gap-2 flex-col': !isSmScale
-              })}>
-              {/* Filter button */}
-              {((workspaceId && shortLinksData && shortLinksData?.length > 0) ||
-                (wsShareId &&
-                  swsShortLinksData &&
-                  swsShortLinksData?.length > 0)) && (
-                <ZIonButton
-                  fill='outline'
-                  color='primary'
-                  expand={!isSmScale ? 'block' : undefined}
-                  height={isLgScale ? '39px' : '20px'}
-                  className={classNames({
-                    'my-2 normal-case': true,
-                    'text-xs w-[25%]': !isLgScale,
-                    'w-full': !isSmScale
-                  })}
-                  testingselector={
-                    CONSTANTS.testingSelectors.shortLink.listPage.filterBtn
-                  }
-                  onClick={async () => {
-                    await menuController.enable(
-                      true,
-                      CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID
-                    );
-                    await menuController.open(
-                      CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID
-                    );
-                  }}>
-                  <ZIonIcon
-                    icon={filterOutline}
-                    className='pr-1'
-                  />
-                  Filter
-                </ZIonButton>
-              )}
-
-              {/* <ZIonMenuToggle
-								autoHide={false}
-								menu={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
-							> */}
-              {!isLgScale ? (
-                <ZIonButton
-                  fill='outline'
-                  color='primary'
-                  expand={!isSmScale ? 'block' : undefined}
-                  height={isLgScale ? '39px' : '20px'}
-                  className={classNames({
-                    'my-2 normal-case': true,
-                    'text-xs w-[25%]': !isLgScale,
-                    'w-full': !isSmScale
-                  })}
-                  onClick={async () => {
-                    await menuController.enable(
-                      true,
-                      CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
-                    );
-                    await menuController.open(
-                      CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
-                    );
-                  }}>
-                  Open folders menu
-                </ZIonButton>
-              ) : null}
-
-              {/* </ZIonMenuToggle> */}
-
               <ZIonButton
-                fill='outline'
+                fill='solid'
                 color='primary'
                 expand={!isSmScale ? 'block' : undefined}
                 height={isLgScale ? '39px' : '20px'}
@@ -1226,74 +1266,38 @@ const ZInpageMainContent: React.FC = () => {
                   'text-xs w-[25%]': !isLgScale,
                   'w-full': !isSmScale
                 })}
-                onClick={() => {
-                  void invalidedQueries();
-                }}
+                onClick={() => resetShortLinkFormHandler()}
+                routerLink={replaceParams(
+                  ZaionsRoutes.AdminPanel.ShortLinks.Create,
+                  CONSTANTS.RouteParams.workspace.workspaceId,
+                  workspaceId
+                )}
                 testingselector={
-                  CONSTANTS.testingSelectors.shortLink.listPage.refetchBtn
+                  CONSTANTS.testingSelectors.shortLink.listPage.createBtn
                 }>
-                <ZIonIcon
-                  slot='start'
-                  icon={refresh}
-                />
-                Refetch
+                Create a new link
               </ZIonButton>
+            </ZCan>
+          </ZIonButtons>
+        </ZIonCol>
+      </ZIonRow>
 
-              <ZCan
-                shareWSId={wsShareId}
-                permissionType={
-                  wsShareId
-                    ? permissionsTypeEnum.shareWSMemberPermissions
-                    : permissionsTypeEnum.loggedInUserPermissions
-                }
-                havePermissions={
-                  wsShareId
-                    ? [shareWSPermissionEnum.create_sws_shortLink]
-                    : [permissionsEnum.create_shortLink]
-                }>
-                <ZIonButton
-                  fill='solid'
-                  color='primary'
-                  expand={!isSmScale ? 'block' : undefined}
-                  height={isLgScale ? '39px' : '20px'}
-                  className={classNames({
-                    'my-2 normal-case': true,
-                    'text-xs w-[25%]': !isLgScale,
-                    'w-full': !isSmScale
-                  })}
-                  onClick={() => resetShortLinkFormHandler()}
-                  routerLink={replaceParams(
-                    ZaionsRoutes.AdminPanel.ShortLinks.Create,
-                    CONSTANTS.RouteParams.workspace.workspaceId,
-                    workspaceId
-                  )}
-                  testingselector={
-                    CONSTANTS.testingSelectors.shortLink.listPage.createBtn
-                  }>
-                  Create a new link
-                </ZIonButton>
-              </ZCan>
-            </ZIonButtons>
-          </ZIonCol>
-        </ZIonRow>
-
-        {/* Shortlink Table */}
-        <ZCan
-          shareWSId={wsShareId}
-          permissionType={
-            wsShareId
-              ? permissionsTypeEnum.shareWSMemberPermissions
-              : permissionsTypeEnum.loggedInUserPermissions
-          }
-          havePermissions={
-            wsShareId
-              ? [shareWSPermissionEnum.view_sws_shortLink]
-              : [permissionsEnum.view_shortLink]
-          }>
-          <ZaionsShortLinkTable showSkeleton={isZFetching} />
-        </ZCan>
-      </div>
-    </>
+      {/* Shortlink Table */}
+      <ZCan
+        shareWSId={wsShareId}
+        permissionType={
+          wsShareId
+            ? permissionsTypeEnum.shareWSMemberPermissions
+            : permissionsTypeEnum.loggedInUserPermissions
+        }
+        havePermissions={
+          wsShareId
+            ? [shareWSPermissionEnum.view_sws_shortLink]
+            : [permissionsEnum.view_shortLink]
+        }>
+        <ZaionsShortLinkTable showSkeleton={isZFetching} />
+      </ZCan>
+    </div>
   );
 };
 

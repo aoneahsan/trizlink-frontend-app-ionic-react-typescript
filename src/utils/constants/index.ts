@@ -137,11 +137,18 @@ export const API_URLS = {
   ws_team_member_role_update: `/user/workspace/${RouteParams.workspace.workspaceId}/update-role/${RouteParams.workspace.memberInviteId}`,
   ws_team_member_update: `/user/update-invitation/${RouteParams.workspace.memberInviteId}`,
   validate_invitation_status: `/user/validate-and-update-invitation`,
-  userPixelAccounts_create_list: '/user/pixel',
+
+  // Pixels
+  userPixelAccounts_create_list: `/user/workspace/${RouteParams.workspace.workspaceId}/pixel`,
+  userPixelAccounts_update_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/pixel/${RouteParams.pixel.pixelId}`,
+
+  // Share workspace pixels
+  sws_pixel_account_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/pixel`,
+  sws_pixel_account_update_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/pixel/${RouteParams.pixel.pixelId}`,
+
   userAccountUtmTags_create_list: '/user/utm-tag',
   ShortLink_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/shortLink/folders`,
   userEmbedWidget_create_list: '/user/embedded-scripts',
-  userPixelAccounts_update_delete: `/user/pixel/${RouteParams.pixel.pixelId}`,
   userAccountUtmTags_update_delete: `/user/utm-tag/${RouteParams.utmTag.utmTagId}`,
   userAccountFolders_update_delete: '/user/folders/:folderId',
   userEmbedWidget_update_delete: '/user/embedded-scripts/:embeddedId',
@@ -1507,10 +1514,15 @@ const REACT_QUERY = {
       CREATE: 'rq-pixel-account-create-key',
       UPDATE: 'rq-pixel-account-update-key',
       DELETE: 'rq-pixel-account-delete-key',
-      GET: 'rq-pixel-account-get-key'
+      GET: 'rq-pixel-account-get-key',
+
+      SWS_MAIN: 'rq-sws-pixel-account-list-key',
+      SWS_GET: 'rq-sws-pixel-account-get-key'
     },
     UTM_TAGS: {
-      MAIN: 'rq-utm-tags-list-key'
+      MAIN: 'rq-utm-tags-list-key',
+      SWS_MAIN: 'rq-sws-utm-tags-list-key',
+      SWS_GET: 'rq-sws-utm-tags-get-key'
     },
     EMBED_WIDGET: {
       MAIN: 'rq-embed-widget-list-key'

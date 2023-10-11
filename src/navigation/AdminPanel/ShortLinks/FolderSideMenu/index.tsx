@@ -23,8 +23,8 @@ import FolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPop
  * ? Like import of custom Hook is a custom import
  * */
 import {
-	useZRQGetRequest,
-	useZRQUpdateRequest,
+  useZRQGetRequest,
+  useZRQUpdateRequest
 } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
@@ -50,6 +50,7 @@ import { folderState } from '@/types/AdminPanel/index.type';
  * ? Import of recoil states is a Recoil State import
  * */
 import { ShortLinksFolderRStateAtom } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinksFoldersState.recoil';
+import { useParams } from 'react-router';
 
 /**
  * Style files Imports go down
@@ -72,137 +73,193 @@ import { ShortLinksFolderRStateAtom } from '@/ZaionsStore/UserDashboard/ShortLin
  * @type {*}
  * */
 
-const AdminPanelShortLinksFolderSideMenu: React.FC<{ workspaceId: string }> = ({
-	workspaceId,
-}) => {
-	const [compState, setCompState] = useState<{
-		shortLinksFoldersReorder: {
-			Ids?: string[];
-			isEnable?: boolean;
-		};
-	}>({
-		shortLinksFoldersReorder: {
-			isEnable: false,
-		},
-	});
+const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
+  // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
+  }>();
 
-	const { presentZIonPopover: presentFolderActionIonPopover } = useZIonPopover(
-		FolderActionsPopoverContent,
-		{ workspaceId, state: folderState.linkInBio }
-	);
+  // #region compState.
+  const [compState, setCompState] = useState<{
+    shortLinksFoldersReorder: {
+      Ids?: string[];
+      isEnable?: boolean;
+    };
+  }>({
+    shortLinksFoldersReorder: {
+      isEnable: false
+    }
+  });
+  // #endregion
 
-	const { validateRequestResponse } = useZValidateRequestResponse();
+  // #region custom hooks.
+  const { validateRequestResponse } = useZValidateRequestResponse();
+  // #endregion
 
-	const {
-		data: shortLinksFoldersData,
-		isFetching: isShortLinksFoldersDataFetching,
-	} = useZRQGetRequest<LinkFolderType[]>({
-		_url: API_URL_ENUM.ShortLink_folders_create_list,
-		_key: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-			workspaceId,
-			folderState.shortlink,
-		],
-		_itemsIds: [workspaceId],
-		_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-	});
+  // #region popovers & modals.
+  const { presentZIonPopover: presentFolderActionIonPopover } = useZIonPopover(
+    FolderActionsPopoverContent,
+    {
+      workspaceId,
+      shareWSMemberId,
+      wsShareId,
+      state: folderState.shortlink
+    }
+  );
+  // #endregion
 
-	// folder reorder handler
-	const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
-		event.detail.complete();
+  // #region APIS.
+  // If owned-workspace then this api will fetch owned-workspace-short-links-folder data.
+  const {
+    data: shortLinksFoldersData,
+    isFetching: isShortLinksFoldersDataFetching
+  } = useZRQGetRequest<LinkFolderType[]>({
+    _url: API_URL_ENUM.ShortLink_folders_create_list,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+      workspaceId,
+      folderState.shortlink
+    ],
+    _itemsIds: [workspaceId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _showLoader: false
+  });
 
-		setTimeout(() => {
-			const _shortLinksFoldersEls = document.querySelectorAll(
-				`.zaions-short-link-folder-${folderState.shortlink}`
-			);
-			const _shortLinksFoldersIds: string[] = [];
-			for (let i = 0; i < _shortLinksFoldersEls.length; i++) {
-				const _block = _shortLinksFoldersEls[i];
-				_shortLinksFoldersIds.push(
-					_block.getAttribute('data-folder-id') as string
-				);
-			}
+  // If share-workspace then this api will fetch share-workspace-short-links-folders data.
+  const {
+    data: swsShortLinksFoldersData,
+    isFetching: isSWSShortLinksFoldersDataFetching,
+    isError: isSWSShortLinksFoldersDataError
+  } = useZRQGetRequest<LinkFolderType[]>({
+    _url: API_URL_ENUM.ws_share_folder_sl_list,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
+      wsShareId,
+      folderState.shortlink
+    ],
+    _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _showLoader: false
+  });
 
-			if (_shortLinksFoldersIds) {
-				setCompState((_) => ({
-					shortLinksFoldersReorder: {
-						Ids: _shortLinksFoldersIds,
-						isEnable: _shortLinksFoldersIds.length > 1,
-					},
-				}));
-			}
-		}, 100);
-	};
+  // If owned-workspace then this api will used to update the owned-workspace-short-links-folders reorders.
+  const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.ShortLinks_folders_reorder,
+    _queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN]
+  });
 
-	// Getting short-links folders data from backend
-	// const { data: _foldersData } = useZRQGetRequest<LinkFolderType[]>({
-	// 	_url: API_URL_ENUM.ShortLink_folders_create_list,
-	// 	_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
-	// });
+  // If share-workspace then this api will used to update the share-workspace-short-links-folders reorders.
+  const { mutateAsync: UpdateSWSShortLinksFoldersReorder } =
+    useZRQUpdateRequest({
+      _url: API_URL_ENUM.ws_share_folder_reorder,
+      _queriesKeysToInvalidate: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
+        wsShareId,
+        folderState.shortlink
+      ]
+    });
+  // #endregion
 
-	// Update shortLinks folders reorder API
-	const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
-		_url: API_URL_ENUM.ShortLinks_folders_reorder,
-		_queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
-	});
+  // #region Functions.
+  // folder reorder handler
+  const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
+    event.detail.complete();
 
-	// useEffect(() => {
-	// 	try {
-	// 		if (_foldersData) {
-	// 			setShortLinksFolderState(_foldersData);
-	// 		}
-	// 	} catch (error) {
-	// 		reportCustomError(error);
-	// 	}
-	// }, [_foldersData]);
+    setTimeout(() => {
+      const _shortLinksFoldersEls = document.querySelectorAll(
+        `.zaions-short-link-folder-${folderState.shortlink}`
+      );
+      const _shortLinksFoldersIds: string[] = [];
+      for (let i = 0; i < _shortLinksFoldersEls.length; i++) {
+        const _block = _shortLinksFoldersEls[i];
+        _shortLinksFoldersIds.push(
+          _block.getAttribute('data-folder-id') as string
+        );
+      }
 
-	const shortLinksFoldersReorderHandler = async () => {
-		try {
-			// The update api...
-			const _result = await UpdateShortLinksFoldersReorder({
-				requestData: zStringify({
-					folders: compState.shortLinksFoldersReorder.Ids,
-				}),
-				itemIds: [],
-				urlDynamicParts: [],
-			});
+      if (_shortLinksFoldersIds) {
+        setCompState(_ => ({
+          shortLinksFoldersReorder: {
+            Ids: _shortLinksFoldersIds,
+            isEnable: _shortLinksFoldersIds.length > 1
+          }
+        }));
+      }
+    }, 100);
+  };
 
-			// if _result of the UpdateShortLinksFoldersReorder api is success this showing success notification else not success then error notification.
-			await validateRequestResponse({
-				resultObj: _result,
-			});
+  const shortLinksFoldersReorderHandler = async () => {
+    try {
+      let _result;
+      if (workspaceId) {
+        // The update api...
+        _result = await UpdateShortLinksFoldersReorder({
+          requestData: zStringify({
+            folders: compState.shortLinksFoldersReorder.Ids
+          }),
+          itemIds: [],
+          urlDynamicParts: []
+        });
+      } else if (wsShareId) {
+        // The update api...
+        _result = await UpdateSWSShortLinksFoldersReorder({
+          requestData: zStringify({
+            folders: compState.shortLinksFoldersReorder.Ids
+          }),
+          itemIds: [],
+          urlDynamicParts: []
+        });
+      }
 
-			// hiding the reorder button by assigning isEnable to false
-			setCompState((oldValues) => ({
-				...oldValues,
-				shortLinksFoldersReorder: {
-					Ids: oldValues.shortLinksFoldersReorder.Ids,
-					isEnable: false,
-				},
-			}));
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
+      if (_result) {
+        // if _result of the UpdateShortLinksFoldersReorder api is success this showing success notification else not success then error notification.
+        await validateRequestResponse({
+          resultObj: _result
+        });
 
-	return (
-		<AdminPanelFoldersSidebarMenu
-			menuSide={PAGE_MENU_SIDE.START}
-			foldersData={shortLinksFoldersData || []}
-			folderActionHandlerFn={(event: unknown) => {
-				presentFolderActionIonPopover({
-					_event: event as Event,
-					_cssClass: 'zaions_present_folder_Action_popover_width',
-				});
-			}}
-			showSaveReorderButton={compState.shortLinksFoldersReorder.isEnable}
-			handleReorderFn={handleReorder}
-			saveReorderButtonFn={shortLinksFoldersReorderHandler}
-			state={folderState.shortlink}
-			menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
-			contentId={CONSTANTS.MENU_IDS.AD_SL_LIST_PAGE}
-		/>
-	);
+        // hiding the reorder button by assigning isEnable to false
+        setCompState(oldValues => ({
+          ...oldValues,
+          shortLinksFoldersReorder: {
+            Ids: oldValues.shortLinksFoldersReorder.Ids,
+            isEnable: false
+          }
+        }));
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
+  // #endregion
+
+  return (
+    <AdminPanelFoldersSidebarMenu
+      menuSide={PAGE_MENU_SIDE.START}
+      showSaveReorderButton={compState.shortLinksFoldersReorder.isEnable}
+      handleReorderFn={handleReorder}
+      saveReorderButtonFn={shortLinksFoldersReorderHandler}
+      state={folderState.shortlink}
+      menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
+      contentId={CONSTANTS.MENU_IDS.AD_SL_LIST_PAGE}
+      foldersData={
+        workspaceId && shortLinksFoldersData?.length
+          ? shortLinksFoldersData
+          : wsShareId && swsShortLinksFoldersData?.length
+          ? swsShortLinksFoldersData
+          : []
+      }
+      folderActionHandlerFn={(event: unknown) => {
+        presentFolderActionIonPopover({
+          _event: event as Event,
+          _cssClass: 'zaions_present_folder_Action_popover_width'
+        });
+      }}
+    />
+  );
 };
 
 export default AdminPanelShortLinksFolderSideMenu;

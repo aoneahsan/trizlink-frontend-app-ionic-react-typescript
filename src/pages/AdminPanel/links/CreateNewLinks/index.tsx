@@ -34,7 +34,8 @@ import {
   ZIonSkeletonText,
   ZIonButton,
   ZIonRefresher,
-  ZIonRefresherContent
+  ZIonRefresherContent,
+  ZIonSpinner
 } from '@/components/ZIonComponents';
 import ZIonPage from '@/components/ZIonPage';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
@@ -128,7 +129,12 @@ import {
 import { showSuccessNotification } from '@/utils/notification';
 import CONSTANTS from '@/utils/constants';
 import { ENVS } from '@/utils/envKeys';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import {
+  permissionCheckModeEnum,
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Recoil State Imports go down
@@ -163,6 +169,7 @@ import {
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { workspaceInterface } from '@/types/AdminPanel/workspace';
 
 /**
  * Style files Imports go down
@@ -185,12 +192,23 @@ import { ZGenericObject } from '@/types/zaionsAppSettings.type';
  * @type {*}
  * */
 const AdminCreateNewLinkPages: React.FC = () => {
+  // getting link-in-bio and workspace ids from url with the help of useParams.
+  const { editLinkId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    editLinkId: string;
+    workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
+  }>();
+
   // #region Component state.
   // state to manage showAdvanceOptions
   const [showAdvanceOptions, setShowAdvanceOptions] = useState(false);
   const [compState, setCompState] = useState<{
     shortUrl?: string;
-  }>();
+    isProcessing: boolean;
+  }>({
+    isProcessing: true
+  });
   // #endregion
 
   // #region Recoils.
@@ -202,12 +220,6 @@ const AdminCreateNewLinkPages: React.FC = () => {
   const ZDashboardState = useRecoilValue(ZDashboardRState);
   // #endregion
 
-  // getting link-in-bio and workspace ids from url with the help of useParams.
-  const { editLinkId, workspaceId } = useParams<{
-    editLinkId: string;
-    workspaceId: string;
-  }>();
-
   // #region Custom hooks
   const { isLgScale, isMdScale } = useZMediaQueryScale(); //
   const { getRQCDataHandler } = useZGetRQCacheData();
@@ -216,6 +228,42 @@ const AdminCreateNewLinkPages: React.FC = () => {
   // #endregion
 
   // #region APIs.
+  // If share-workspace then this api will fetch role & permission of current member in this share-workspace.
+  const {
+    data: getMemberRolePermissions,
+    isFetching: isGetMemberRolePermissionsFetching,
+    isError: isGetMemberRolePermissionsError
+  } = useZRQGetRequest<{
+    memberRole?: string;
+    memberPermissions?: string[];
+  }>({
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
+      wsShareId
+    ],
+    _url: API_URL_ENUM.ws_share_member_role_permissions,
+    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _itemsIds: [shareWSMemberId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
+  });
+
+  // If share-workspace then this api will fetch share-workspace data.
+  const { isFetching: isSWSFetching, isError: isSWSError } =
+    useZRQGetRequest<workspaceInterface>({
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
+        wsShareId
+      ],
+      _url: API_URL_ENUM.ws_share_info_data,
+      _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+      _itemsIds: [shareWSMemberId],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _showLoader: false
+    });
+
   // create short link api.
   const { mutateAsync: createShortLink } = useZRQCreateRequest({
     _url: API_URL_ENUM.shortLinks_create_list,
@@ -237,7 +285,8 @@ const AdminCreateNewLinkPages: React.FC = () => {
     _url: API_URL_ENUM.shortLinks_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
     _itemsIds: [workspaceId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _showLoader: false
   });
 
   // get short link data api.
@@ -256,10 +305,33 @@ const AdminCreateNewLinkPages: React.FC = () => {
         CONSTANTS.RouteParams.shortLink.shortLinkId
       ],
       _shouldFetchWhenIdPassed: !editLinkId ? true : false,
-      _extractType: ZRQGetRequestExtractEnum.extractItem
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _showLoader: false
     });
 
-  // Request for getting short links folders.
+  // If share-workspace then this api will fetch share-workspace-current-short-link data.
+  const {
+    data: swsSelectedShortLink,
+    isFetching: isSWSSelectedShortLinkFetching
+  } = useZRQGetRequest<ShortLinkType>({
+    _url: API_URL_ENUM.sws_sl_get_update_delete,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_GET,
+      wsShareId,
+      editLinkId
+    ],
+    _authenticated: true,
+    _itemsIds: [shareWSMemberId, editLinkId],
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.shareWSMemberId,
+      CONSTANTS.RouteParams.shortLink.shortLinkId
+    ],
+    _shouldFetchWhenIdPassed: wsShareId && editLinkId ? false : true,
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
+  });
+
+  // If owned-workspace then this api will fetch owned-workspace-short-links-folders data.
   const {
     data: shortLinksFoldersData,
     isFetching: isShortLinksFoldersDataFetching
@@ -271,10 +343,30 @@ const AdminCreateNewLinkPages: React.FC = () => {
       folderState.shortlink
     ],
     _itemsIds: [workspaceId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _showLoader: false
+  });
+
+  // If share-workspace then this api will fetch share-workspace-short-links-folders data.
+  const {
+    data: swsShortLinksFoldersData,
+    isFetching: isSWSShortLinksFoldersDataFetching,
+    isError: isSWSShortLinksFoldersDataError
+  } = useZRQGetRequest<LinkFolderType[]>({
+    _url: API_URL_ENUM.ws_share_folder_sl_list,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
+      wsShareId,
+      folderState.shortlink
+    ],
+    _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _showLoader: false
   });
   // #endregion
 
+  // #region UseEffect.
   // after getting data store in recoil state.
   useEffect(() => {
     try {
@@ -290,38 +382,79 @@ const AdminCreateNewLinkPages: React.FC = () => {
     }
     // eslint-disable-next-line
   }, [selectedShortLink]);
+  // #endregion
 
+  // #region popovers & modals.
   const { presentZIonModal: presentZShortLinkModal } = useZIonModal(
     ZShortLinkModal,
     { workspaceId: workspaceId, shortUrl: compState?.shortUrl }
   );
+  // #endregion
 
   // #region Functions.
   // Formik submit handler.
   const invalidedQueries = async () => {
     try {
-      // Pixel.
-      await zInvalidateReactQueries([
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN
-      ]);
+      if (workspaceId) {
+        if (editLinkId && newShortLinkFormState?.formMode === FormMode.EDIT) {
+          await zInvalidateReactQueries([
+            CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
+            workspaceId,
+            editLinkId
+          ]);
+        }
 
-      // Utm tag.
-      await zInvalidateReactQueries([
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN
-      ]);
-
-      // Folder.
-      await zInvalidateReactQueries([
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-        workspaceId,
-        folderState.shortlink
-      ]);
-
-      if (editLinkId && newShortLinkFormState?.formMode === FormMode.EDIT) {
+        // Pixel.
         await zInvalidateReactQueries([
-          CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN
+        ]);
+
+        // Utm tag.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN
+        ]);
+
+        // Folder.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
           workspaceId,
-          editLinkId
+          folderState.shortlink
+        ]);
+      } else if (wsShareId) {
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS
+            .MEMBER_ROLE_AND_PERMISSIONS,
+          wsShareId
+        ]);
+
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
+          wsShareId
+        ]);
+
+        if (editLinkId && newShortLinkFormState?.formMode === FormMode.EDIT) {
+          await zInvalidateReactQueries([
+            CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_GET,
+            wsShareId,
+            editLinkId
+          ]);
+        }
+
+        // Share workspace Pixel.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN
+        ]);
+
+        // Share workspace Utm tag.
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN
+        ]);
+
+        // Share workspace folder
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
+          wsShareId,
+          folderState.shortlink
         ]);
       }
     } catch (error) {
@@ -515,681 +648,781 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
   return (
     <ZIonPage pageTitle='Create New Page'>
-      {/* <Suspense fallback={<ZFallbackIonSpinner />}> */}
-      {/* Formik Start */}
-      <ZCan
-        havePermissions={[
-          permissionsEnum.create_shortLink,
-          permissionsEnum.update_shortLink
-        ]}
-        returnPermissionDeniedView={true}>
-        <Formik
-          // #region Initial values
-          initialValues={{
-            target: {
-              url:
-                (selectedShortLink?.target as LinkTargetType)?.url ||
-                (newShortLinkFormState?.target as LinkTargetType)?.url ||
-                'https://',
-              phoneNumber:
-                (selectedShortLink?.target as LinkTargetType)?.phoneNumber ||
-                '',
-              username:
-                (selectedShortLink?.target as LinkTargetType)?.username || '',
-              email: (selectedShortLink?.target as LinkTargetType)?.email || '',
-              accountId:
-                (selectedShortLink?.target as LinkTargetType)?.accountId || '',
-              subject:
-                (selectedShortLink?.target as LinkTargetType)?.subject || '',
-              message:
-                (selectedShortLink?.target as LinkTargetType)?.message || ''
-            },
-            title: selectedShortLink?.title || '',
-            linkDescription: selectedShortLink?.description || '',
-            featureImg: selectedShortLink?.featureImg || '',
-            password: {
-              value:
-                (selectedShortLink?.password as PasswordInterface)?.password ||
-                '',
-              enabled:
-                (selectedShortLink?.password as PasswordInterface)?.enabled ||
-                false
-            },
-            folderId:
-              selectedShortLink?.folderId ||
-              CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
-            linkNote: selectedShortLink?.notes || '',
-            tags:
-              (selectedShortLink?.tags &&
-                (JSON.parse(selectedShortLink?.tags as string) as string[])) ||
-              [],
-            linkExpiration: {
-              enabled:
-                (
-                  selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-                )?.enabled || false,
-              expirationDate:
-                (
-                  selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-                )?.expirationDate || '',
-              timezone:
-                (
-                  selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-                )?.timezone || CONSTANTS.DEFAULT_VALUES.TIMEZONE_DEFAULT,
-              redirectionLink:
-                (
-                  selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-                )?.redirectionLink || 'https://'
-            },
-            rotatorABTesting:
-              (selectedShortLink?.abTestingRotatorLinks as ABTestingRotatorInterface[]) ||
-              [],
-            geoLocation:
-              (selectedShortLink?.geoLocationRotatorLinks as GeoLocationRotatorInterface[]) ||
-              [],
+      {compState?.isProcessing ? (
+        <ZIonContent>
+          <div className='flex flex-col w-full h-full pt-4 ion-align-items-center ion-justify-content-center'>
+            <ZIonSpinner className='w-10 h-10' />
 
-            //
-            shortUrlDomain:
-              selectedShortLink?.shortUrlDomain || ENVS.defaultShortUrlDomain,
-            shortUrlPath: selectedShortLink?.shortUrlPath || '',
-            isShortUrlPathValid: true,
-            //
-
-            linkPixelsAccount:
-              (selectedShortLink?.pixelIds &&
-                (JSON.parse(
-                  selectedShortLink?.pixelIds as string
-                ) as string[])) ||
-              [],
-            UTMTags: {
-              templateId:
-                (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                  ?.templateId || '',
-              utmCampaign:
-                (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                  ?.utmCampaign || '',
-              utmMedium:
-                (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                  ?.utmMedium || '',
-              utmSource:
-                (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                  ?.utmSource || '',
-              utmTerm:
-                (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                  ?.utmTerm || '',
-              utmContent:
-                (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                  ?.utmContent || ''
-            },
-
-            favicon: selectedShortLink?.favicon || ''
-            // complete page fields here
-          }}
-          enableReinitialize={true}
-          // #endregion
-
-          // #region Handling validation & errors
-          validate={values => {
-            const errors: {
+            {workspaceId
+              ? isSelectedShortLinkFetching
+                ? 'Fetching current short link data'
+                : isShortLinksFoldersDataFetching
+                ? 'Fetching workspace short links folders'
+                : null
+              : wsShareId && shareWSMemberId
+              ? isGetMemberRolePermissionsFetching
+                ? 'Getting & setting your permissions in this workspace'
+                : isSWSFetching
+                ? 'Setting share workspace data'
+                : isSWSSelectedShortLinkFetching
+                ? 'Fetching share workspace short links'
+                : isSWSShortLinksFoldersDataFetching
+                ? 'Fetching share workspace short links folders'
+                : null
+              : null}
+          </div>
+        </ZIonContent>
+      ) : (
+        <ZCan
+          returnPermissionDeniedView={true}
+          checkMode={permissionCheckModeEnum.any}
+          shareWSId={wsShareId}
+          permissionType={
+            wsShareId
+              ? permissionsTypeEnum.shareWSMemberPermissions
+              : permissionsTypeEnum.loggedInUserPermissions
+          }
+          havePermissions={
+            wsShareId
+              ? [
+                  shareWSPermissionEnum.create_sws_shortLink,
+                  shareWSPermissionEnum.update_sws_shortLink
+                ]
+              : [
+                  permissionsEnum.create_shortLink,
+                  permissionsEnum.update_shortLink
+                ]
+          }>
+          <Formik
+            // #region Initial values
+            initialValues={{
               target: {
-                url?: string;
-                phoneNumber?: string;
-                username?: string;
-                email?: string;
-                accountId?: string;
-                subject?: string;
-                message?: string;
-              };
-              title?: string;
+                url:
+                  (selectedShortLink?.target as LinkTargetType)?.url ||
+                  (newShortLinkFormState?.target as LinkTargetType)?.url ||
+                  'https://',
+                phoneNumber:
+                  (selectedShortLink?.target as LinkTargetType)?.phoneNumber ||
+                  '',
+                username:
+                  (selectedShortLink?.target as LinkTargetType)?.username || '',
+                email:
+                  (selectedShortLink?.target as LinkTargetType)?.email || '',
+                accountId:
+                  (selectedShortLink?.target as LinkTargetType)?.accountId ||
+                  '',
+                subject:
+                  (selectedShortLink?.target as LinkTargetType)?.subject || '',
+                message:
+                  (selectedShortLink?.target as LinkTargetType)?.message || ''
+              },
+              title: selectedShortLink?.title || '',
+              linkDescription: selectedShortLink?.description || '',
+              featureImg: selectedShortLink?.featureImg || '',
               password: {
-                value?: string;
-              };
+                value:
+                  (selectedShortLink?.password as PasswordInterface)
+                    ?.password || '',
+                enabled:
+                  (selectedShortLink?.password as PasswordInterface)?.enabled ||
+                  false
+              },
+              folderId:
+                selectedShortLink?.folderId ||
+                CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
+              linkNote: selectedShortLink?.notes || '',
+              tags:
+                (selectedShortLink?.tags &&
+                  (JSON.parse(
+                    selectedShortLink?.tags as string
+                  ) as string[])) ||
+                [],
               linkExpiration: {
-                redirectionLink?: string;
+                enabled:
+                  (
+                    selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
+                  )?.enabled || false,
+                expirationDate:
+                  (
+                    selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
+                  )?.expirationDate || '',
+                timezone:
+                  (
+                    selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
+                  )?.timezone || CONSTANTS.DEFAULT_VALUES.TIMEZONE_DEFAULT,
+                redirectionLink:
+                  (
+                    selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
+                  )?.redirectionLink || 'https://'
+              },
+              rotatorABTesting:
+                (selectedShortLink?.abTestingRotatorLinks as ABTestingRotatorInterface[]) ||
+                [],
+              geoLocation:
+                (selectedShortLink?.geoLocationRotatorLinks as GeoLocationRotatorInterface[]) ||
+                [],
+
+              //
+              shortUrlDomain:
+                selectedShortLink?.shortUrlDomain || ENVS.defaultShortUrlDomain,
+              shortUrlPath: selectedShortLink?.shortUrlPath || '',
+              isShortUrlPathValid: true,
+              //
+
+              linkPixelsAccount:
+                (selectedShortLink?.pixelIds &&
+                  (JSON.parse(
+                    selectedShortLink?.pixelIds as string
+                  ) as string[])) ||
+                [],
+              UTMTags: {
+                templateId:
+                  (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
+                    ?.templateId || '',
+                utmCampaign:
+                  (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
+                    ?.utmCampaign || '',
+                utmMedium:
+                  (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
+                    ?.utmMedium || '',
+                utmSource:
+                  (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
+                    ?.utmSource || '',
+                utmTerm:
+                  (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
+                    ?.utmTerm || '',
+                utmContent:
+                  (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
+                    ?.utmContent || ''
+              },
+
+              favicon: selectedShortLink?.favicon || ''
+              // complete page fields here
+            }}
+            enableReinitialize={true}
+            // #endregion
+
+            // #region Handling validation & errors
+            validate={values => {
+              const errors: {
+                target: {
+                  url?: string;
+                  phoneNumber?: string;
+                  username?: string;
+                  email?: string;
+                  accountId?: string;
+                  subject?: string;
+                  message?: string;
+                };
+                title?: string;
+                password: {
+                  value?: string;
+                };
+                linkExpiration: {
+                  redirectionLink?: string;
+                };
+                rotatorABTesting: {
+                  redirectionLink?: string;
+                  percentage?: string;
+                }[];
+                geoLocation: {
+                  redirectionLink?: string;
+                  country?: string;
+                }[];
+                shortUrlPath?: string;
+              } = {
+                target: {},
+                linkExpiration: {},
+                rotatorABTesting: [],
+                geoLocation: [],
+                password: {}
               };
-              rotatorABTesting: {
-                redirectionLink?: string;
-                percentage?: string;
-              }[];
-              geoLocation: {
-                redirectionLink?: string;
-                country?: string;
-              }[];
-              shortUrlPath?: string;
-            } = {
-              target: {},
-              linkExpiration: {},
-              rotatorABTesting: [],
-              geoLocation: [],
-              password: {}
-            };
 
-            // Url Validations Start
-            if (
-              newShortLinkFormState.type === messengerPlatformsBlockEnum.link
-            ) {
-              validateField(
-                'url',
-                values.target,
-                errors.target,
-                VALIDATION_RULE.url
-              );
-            } else if (
-              newShortLinkFormState.type ===
-              messengerPlatformsBlockEnum.messenger
-            ) {
-              if (!values?.target?.url.startsWith('https://m/me/')) {
-                errors.target.url =
-                  'Please enter a valid messenger URL! like (https://m/me/yourUserName)';
-              }
-            } else {
-              delete errors.target.url;
-            }
-            // Url Validations End
-
-            // Phone Number Validation Start
-            if (
-              newShortLinkFormState.type === messengerPlatformsBlockEnum.call ||
-              newShortLinkFormState.type ===
-                messengerPlatformsBlockEnum.whatsapp ||
-              newShortLinkFormState.type === messengerPlatformsBlockEnum.sms
-            ) {
-              validateField(
-                'phoneNumber',
-                values.target,
-                errors.target,
-                VALIDATION_RULE.phoneNumber
-              );
+              // Url Validations Start
               if (
-                values?.target?.phoneNumber &&
-                !isPossiblePhoneNumber(values.target.phoneNumber)
+                newShortLinkFormState.type === messengerPlatformsBlockEnum.link
               ) {
-                errors.target.phoneNumber = 'Not a valid phone number.';
+                validateField(
+                  'url',
+                  values.target,
+                  errors.target,
+                  VALIDATION_RULE.url
+                );
+              } else if (
+                newShortLinkFormState.type ===
+                messengerPlatformsBlockEnum.messenger
+              ) {
+                if (!values?.target?.url.startsWith('https://m/me/')) {
+                  errors.target.url =
+                    'Please enter a valid messenger URL! like (https://m/me/yourUserName)';
+                }
+              } else {
+                delete errors.target.url;
               }
-            } else {
-              delete errors.target.phoneNumber;
-            }
+              // Url Validations End
 
-            // Phone Number Validation End
-
-            // Username Validation Start
-            if (
-              newShortLinkFormState.type ===
-                messengerPlatformsBlockEnum.telegram ||
-              newShortLinkFormState.type === messengerPlatformsBlockEnum.skype
-            ) {
-              validateField(
-                'username',
-                values.target,
-                errors.target,
-                VALIDATION_RULE.username
-              );
-            } else {
-              delete errors.target.username;
-            }
-            // Username Validation End
-
-            // Email Validation Start
-            if (
-              newShortLinkFormState.type === messengerPlatformsBlockEnum.email
-            ) {
-              validateField(
-                'email',
-                values.target,
-                errors.target,
-                VALIDATION_RULE.email
-              );
-            } else {
-              delete errors.target.email;
-            }
-            // Email Validation End
-
-            // AccountId Validation Start
-            if (
-              newShortLinkFormState.type ===
-                messengerPlatformsBlockEnum.wechat ||
-              newShortLinkFormState.type ===
-                messengerPlatformsBlockEnum.viber ||
-              newShortLinkFormState.type === messengerPlatformsBlockEnum.line
-            ) {
-              validateField(
-                'accountId',
-                values.target,
-                errors.target,
-                VALIDATION_RULE.accountId
-              );
-            } else {
-              delete errors.target.accountId;
-            }
-            // AccountId Validation End
-
-            // Subject Validation Start
-            if (
-              newShortLinkFormState.type === messengerPlatformsBlockEnum.email
-            ) {
-              validateField(
-                'subject',
-                values.target,
-                errors.target,
-                VALIDATION_RULE.subject
-              );
-            } else {
-              delete errors.target.subject;
-            }
-            // Subject Validation End
-
-            // Message Validation Start
-            if (
-              newShortLinkFormState.type ===
-                messengerPlatformsBlockEnum.email ||
-              newShortLinkFormState.type === messengerPlatformsBlockEnum.sms ||
-              newShortLinkFormState.type ===
-                messengerPlatformsBlockEnum.viber ||
-              newShortLinkFormState.type ===
-                messengerPlatformsBlockEnum.whatsapp
-            ) {
-              validateField(
-                'message',
-                values.target,
-                errors.target,
-                VALIDATION_RULE.message
-              );
-            } else {
-              delete errors.target.message;
-            }
-            // message Validation End
-
-            // Link Title Validation Starts
-            validateField('title', values, errors, VALIDATION_RULE.linkTitle);
-            // Link Title Validation End
-
-            // Password Validation Start
-            if (values.password.enabled) {
-              validateField(
-                'password',
-                values?.password,
-                errors?.password,
-                VALIDATION_RULE.password
-              );
-            }
-            // Password Validation End
-
-            // Link Expiration Validation Start
-            if (values.linkExpiration.enabled) {
-              validateField(
-                'redirectionLink',
-                values?.linkExpiration,
-                errors?.linkExpiration,
-                VALIDATION_RULE.url
-              );
-            }
-            // Link Expiration Validation End
-
-            // Rotator AB Testing Field Validation Start
-            if (values.rotatorABTesting.length) {
-              errors.rotatorABTesting = values.rotatorABTesting.map(el => ({}));
-              values.rotatorABTesting.forEach(
-                (el: ABTestingRotatorInterface, index) => {
-                  if (!el.redirectionLink?.trim()) {
-                    errors.rotatorABTesting[index].redirectionLink =
-                      MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.REQUIRED_REDIRECTION_LINK;
-                  } else if (!VALIDATOR.isURL(el.redirectionLink)) {
-                    errors.rotatorABTesting[index].redirectionLink =
-                      MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.INVALID_REDIRECTION_LINK;
-                  }
-                  if (!el.percentage || isNaN(el.percentage)) {
-                    errors.rotatorABTesting[index].percentage =
-                      MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.REQUIRED_PERCENTAGE;
-                  }
+              // Phone Number Validation Start
+              if (
+                newShortLinkFormState.type ===
+                  messengerPlatformsBlockEnum.call ||
+                newShortLinkFormState.type ===
+                  messengerPlatformsBlockEnum.whatsapp ||
+                newShortLinkFormState.type === messengerPlatformsBlockEnum.sms
+              ) {
+                validateField(
+                  'phoneNumber',
+                  values.target,
+                  errors.target,
+                  VALIDATION_RULE.phoneNumber
+                );
+                if (
+                  values?.target?.phoneNumber &&
+                  !isPossiblePhoneNumber(values.target.phoneNumber)
+                ) {
+                  errors.target.phoneNumber = 'Not a valid phone number.';
                 }
-              );
-            }
-            // Rotator AB Testing Field Validation End
+              } else {
+                delete errors.target.phoneNumber;
+              }
 
-            // Rotator Geo Location Field Validation Start
-            if (values.geoLocation.length) {
-              errors.geoLocation = values.geoLocation.map(el => ({}));
-              values.geoLocation.forEach(
-                (el: GeoLocationRotatorInterface, index) => {
-                  if (!el.redirectionLink?.trim()) {
-                    errors.geoLocation[index].redirectionLink =
-                      MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.REQUIRED_REDIRECTION_LINK;
-                  } else if (!VALIDATOR.isURL(el.redirectionLink)) {
-                    errors.geoLocation[index].redirectionLink =
-                      MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.INVALID_REDIRECTION_LINK;
+              // Phone Number Validation End
+
+              // Username Validation Start
+              if (
+                newShortLinkFormState.type ===
+                  messengerPlatformsBlockEnum.telegram ||
+                newShortLinkFormState.type === messengerPlatformsBlockEnum.skype
+              ) {
+                validateField(
+                  'username',
+                  values.target,
+                  errors.target,
+                  VALIDATION_RULE.username
+                );
+              } else {
+                delete errors.target.username;
+              }
+              // Username Validation End
+
+              // Email Validation Start
+              if (
+                newShortLinkFormState.type === messengerPlatformsBlockEnum.email
+              ) {
+                validateField(
+                  'email',
+                  values.target,
+                  errors.target,
+                  VALIDATION_RULE.email
+                );
+              } else {
+                delete errors.target.email;
+              }
+              // Email Validation End
+
+              // AccountId Validation Start
+              if (
+                newShortLinkFormState.type ===
+                  messengerPlatformsBlockEnum.wechat ||
+                newShortLinkFormState.type ===
+                  messengerPlatformsBlockEnum.viber ||
+                newShortLinkFormState.type === messengerPlatformsBlockEnum.line
+              ) {
+                validateField(
+                  'accountId',
+                  values.target,
+                  errors.target,
+                  VALIDATION_RULE.accountId
+                );
+              } else {
+                delete errors.target.accountId;
+              }
+              // AccountId Validation End
+
+              // Subject Validation Start
+              if (
+                newShortLinkFormState.type === messengerPlatformsBlockEnum.email
+              ) {
+                validateField(
+                  'subject',
+                  values.target,
+                  errors.target,
+                  VALIDATION_RULE.subject
+                );
+              } else {
+                delete errors.target.subject;
+              }
+              // Subject Validation End
+
+              // Message Validation Start
+              if (
+                newShortLinkFormState.type ===
+                  messengerPlatformsBlockEnum.email ||
+                newShortLinkFormState.type ===
+                  messengerPlatformsBlockEnum.sms ||
+                newShortLinkFormState.type ===
+                  messengerPlatformsBlockEnum.viber ||
+                newShortLinkFormState.type ===
+                  messengerPlatformsBlockEnum.whatsapp
+              ) {
+                validateField(
+                  'message',
+                  values.target,
+                  errors.target,
+                  VALIDATION_RULE.message
+                );
+              } else {
+                delete errors.target.message;
+              }
+              // message Validation End
+
+              // Link Title Validation Starts
+              validateField('title', values, errors, VALIDATION_RULE.linkTitle);
+              // Link Title Validation End
+
+              // Password Validation Start
+              if (values.password.enabled) {
+                validateField(
+                  'password',
+                  values?.password,
+                  errors?.password,
+                  VALIDATION_RULE.password
+                );
+              }
+              // Password Validation End
+
+              // Link Expiration Validation Start
+              if (values.linkExpiration.enabled) {
+                validateField(
+                  'redirectionLink',
+                  values?.linkExpiration,
+                  errors?.linkExpiration,
+                  VALIDATION_RULE.url
+                );
+              }
+              // Link Expiration Validation End
+
+              // Rotator AB Testing Field Validation Start
+              if (values.rotatorABTesting.length) {
+                errors.rotatorABTesting = values.rotatorABTesting.map(
+                  el => ({})
+                );
+                values.rotatorABTesting.forEach(
+                  (el: ABTestingRotatorInterface, index) => {
+                    if (!el.redirectionLink?.trim()) {
+                      errors.rotatorABTesting[index].redirectionLink =
+                        MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.REQUIRED_REDIRECTION_LINK;
+                    } else if (!VALIDATOR.isURL(el.redirectionLink)) {
+                      errors.rotatorABTesting[index].redirectionLink =
+                        MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.INVALID_REDIRECTION_LINK;
+                    }
+                    if (!el.percentage || isNaN(el.percentage)) {
+                      errors.rotatorABTesting[index].percentage =
+                        MESSAGES.FORM_VALIDATIONS.LINK.ROTATOR_AB_TESTING.REQUIRED_PERCENTAGE;
+                    }
                   }
-                  if (!el.country) {
-                    errors.geoLocation[index].country =
-                      MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.REQUIRED_COUNTRY;
+                );
+              }
+              // Rotator AB Testing Field Validation End
+
+              // Rotator Geo Location Field Validation Start
+              if (values.geoLocation.length) {
+                errors.geoLocation = values.geoLocation.map(el => ({}));
+                values.geoLocation.forEach(
+                  (el: GeoLocationRotatorInterface, index) => {
+                    if (!el.redirectionLink?.trim()) {
+                      errors.geoLocation[index].redirectionLink =
+                        MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.REQUIRED_REDIRECTION_LINK;
+                    } else if (!VALIDATOR.isURL(el.redirectionLink)) {
+                      errors.geoLocation[index].redirectionLink =
+                        MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.INVALID_REDIRECTION_LINK;
+                    }
+                    if (!el.country) {
+                      errors.geoLocation[index].country =
+                        MESSAGES.FORM_VALIDATIONS.LINK.GEOLOCATION.REQUIRED_COUNTRY;
+                    }
                   }
-                }
+                );
+              }
+
+              //
+              if (
+                String(values?.shortUrlPath)?.trim()?.length > 0 &&
+                String(values?.shortUrlPath)?.trim()?.length < 6
+              ) {
+                errors.shortUrlPath = 'Path must be exact 6 character long';
+              }
+
+              // Rotator Geo Location Field Validation End
+              // check for errors if there are any return errors object otherwise return []
+              if (
+                errors.target?.url?.trim() ||
+                errors.target?.accountId?.trim() ||
+                errors.target?.email?.trim() ||
+                errors.target?.message?.trim() ||
+                errors.target?.username?.trim() ||
+                errors.target?.phoneNumber?.trim() ||
+                errors.target?.subject?.trim() ||
+                errors.linkExpiration?.redirectionLink?.trim() ||
+                errors.title?.trim() ||
+                errors.shortUrlPath?.trim() ||
+                errors.password?.value?.trim() ||
+                // !values.isShortUrlPathValid ||
+                !areAllObjectsFilled(
+                  (errors.rotatorABTesting as Array<object>) || []
+                ) ||
+                !areAllObjectsFilled(
+                  (errors.geoLocation as Array<object>) || []
+                )
+              ) {
+                return errors;
+              } else {
+                return [];
+              }
+              // return errors;
+            }}
+            // #endregion
+
+            // #region submit function.
+            onSubmit={async (values, { resetForm, setErrors }) => {
+              const _zStringifyData = zStringify({
+                type: newShortLinkFormState.type,
+                target: zStringify({
+                  url: values.target.url,
+                  accountId: values.target.accountId,
+                  email: values.target.email,
+                  message: values.target.message,
+                  phoneNumber: values.target.phoneNumber,
+                  subject: values.target.subject,
+                  username: values.target.username
+                }),
+                title: values.title,
+                featureImg: values.featureImg,
+                description: values.linkDescription,
+                pixelIds: zStringify(values.linkPixelsAccount),
+                utmTagInfo: zStringify(values.UTMTags),
+                shortUrlDomain: values.shortUrlDomain,
+                shortUrlPath: values.shortUrlPath,
+                folderId: values.folderId,
+                notes: values.linkNote,
+                tags: zStringify(values.tags),
+                abTestingRotatorLinks: zStringify(values.rotatorABTesting),
+                geoLocationRotatorLinks: zStringify(values.geoLocation),
+                linkExpirationInfo: zStringify({
+                  redirectionLink: values.linkExpiration.redirectionLink,
+                  expirationDate: values.linkExpiration.expirationDate,
+                  timezone: values.linkExpiration.timezone,
+                  enabled: values.linkExpiration.enabled
+                }),
+                password: zStringify({
+                  password: values.password.value,
+                  enabled: values.password.enabled
+                }),
+                createdAt: Date.now().toString(),
+                favicon: values.favicon
+              });
+
+              await FormikSubmissionHandler(
+                _zStringifyData,
+                resetForm,
+                setErrors
               );
-            }
+            }}
+            // #endregion
+          >
+            {/* Content */}
+            {({ isSubmitting, isValid, submitForm }) => {
+              return (
+                <ZIonContent color='light'>
+                  {/* IonRefresher */}
+                  <ZIonRefresher
+                    onIonRefresh={event => void handleRefresh(event)}>
+                    <ZIonRefresherContent />
+                  </ZIonRefresher>
 
-            //
-            if (
-              String(values?.shortUrlPath)?.trim()?.length > 0 &&
-              String(values?.shortUrlPath)?.trim()?.length < 6
-            ) {
-              errors.shortUrlPath = 'Path must be exact 6 character long';
-            }
-
-            // Rotator Geo Location Field Validation End
-            // check for errors if there are any return errors object otherwise return []
-            if (
-              errors.target?.url?.trim() ||
-              errors.target?.accountId?.trim() ||
-              errors.target?.email?.trim() ||
-              errors.target?.message?.trim() ||
-              errors.target?.username?.trim() ||
-              errors.target?.phoneNumber?.trim() ||
-              errors.target?.subject?.trim() ||
-              errors.linkExpiration?.redirectionLink?.trim() ||
-              errors.title?.trim() ||
-              errors.shortUrlPath?.trim() ||
-              errors.password?.value?.trim() ||
-              // !values.isShortUrlPathValid ||
-              !areAllObjectsFilled(
-                (errors.rotatorABTesting as Array<object>) || []
-              ) ||
-              !areAllObjectsFilled((errors.geoLocation as Array<object>) || [])
-            ) {
-              return errors;
-            } else {
-              return [];
-            }
-            // return errors;
-          }}
-          // #endregion
-
-          // #region submit function.
-          onSubmit={async (values, { resetForm, setErrors }) => {
-            const _zStringifyData = zStringify({
-              type: newShortLinkFormState.type,
-              target: zStringify({
-                url: values.target.url,
-                accountId: values.target.accountId,
-                email: values.target.email,
-                message: values.target.message,
-                phoneNumber: values.target.phoneNumber,
-                subject: values.target.subject,
-                username: values.target.username
-              }),
-              title: values.title,
-              featureImg: values.featureImg,
-              description: values.linkDescription,
-              pixelIds: zStringify(values.linkPixelsAccount),
-              utmTagInfo: zStringify(values.UTMTags),
-              shortUrlDomain: values.shortUrlDomain,
-              shortUrlPath: values.shortUrlPath,
-              folderId: values.folderId,
-              notes: values.linkNote,
-              tags: zStringify(values.tags),
-              abTestingRotatorLinks: zStringify(values.rotatorABTesting),
-              geoLocationRotatorLinks: zStringify(values.geoLocation),
-              linkExpirationInfo: zStringify({
-                redirectionLink: values.linkExpiration.redirectionLink,
-                expirationDate: values.linkExpiration.expirationDate,
-                timezone: values.linkExpiration.timezone,
-                enabled: values.linkExpiration.enabled
-              }),
-              password: zStringify({
-                password: values.password.value,
-                enabled: values.password.enabled
-              }),
-              createdAt: Date.now().toString(),
-              favicon: values.favicon
-            });
-
-            await FormikSubmissionHandler(
-              _zStringifyData,
-              resetForm,
-              setErrors
-            );
-          }}
-          // #endregion
-        >
-          {/* Content */}
-          {({ isSubmitting, isValid, submitForm, values, errors }) => {
-            return (
-              <ZIonContent color='light'>
-                {/* IonRefresher */}
-                <ZIonRefresher
-                  onIonRefresh={event => void handleRefresh(event)}>
-                  <ZIonRefresherContent />
-                </ZIonRefresher>
-
-                {/* Grid-1 */}
-                <ZIonGrid className='h-full ion-no-padding'>
-                  <ZIonRow className='h-full'>
-                    {/* Side bar */}
-                    <Suspense
-                      fallback={
-                        <ZIonCol
-                          size='.8'
-                          className='h-full zaions__medium_bg zaions-transition'>
-                          <ZFallbackIonSpinner2 />
-                        </ZIonCol>
-                      }>
-                      <AdminPanelSidebarMenu
-                        activePage={AdminPanelSidebarMenuPageEnum.shortLink}
-                      />
-                    </Suspense>
-
-                    {/* Right-col */}
-                    <ZIonCol
-                      className='w-full h-screen overflow-y-scroll zaions_pretty_scrollbar zaions-transition'
-                      sizeXl={
-                        ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                          ? '10'
-                          : '11.2'
-                      }
-                      sizeLg={
-                        ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                          ? '10'
-                          : '11.2'
-                      }
-                      sizeMd='12'
-                      sizeSm='12'
-                      sizeXs='12'>
-                      {/* Grid-1 -> Grid-1 top-bar */}
-                      {isZFetching ? <ZTopBarSkeleton /> : <ZTopBar />}
-                      {/* <ZAdminPanelTopBar workspaceId={workspaceId} /> */}
-
-                      {/* Short link Grid-1 -> Grid-2 */}
+                  {/* Grid-1 */}
+                  <ZIonGrid className='h-full ion-no-padding'>
+                    <ZIonRow className='h-full'>
+                      {/* Side bar */}
                       <Suspense
                         fallback={
-                          <ZIonGrid className='mx-3 mt-2'>
+                          <ZIonCol
+                            size='.8'
+                            className='h-full zaions__medium_bg zaions-transition'>
                             <ZFallbackIonSpinner2 />
-                          </ZIonGrid>
+                          </ZIonCol>
                         }>
-                        <ZaionsShortUrlOptionFields />
+                        <AdminPanelSidebarMenu
+                          activePage={AdminPanelSidebarMenuPageEnum.shortLink}
+                        />
                       </Suspense>
 
-                      {/* Custom your link Grid-1 -> Grid-3 */}
-                      <ZIonGrid
-                        className={classNames({
-                          'my-1': true,
-                          'ms-3 mr-4': isMdScale,
-                          'mx-2': !isMdScale
-                        })}>
-                        <ZIonRow
+                      {/* Right-col */}
+                      <ZIonCol
+                        className='w-full h-screen overflow-y-scroll zaions_pretty_scrollbar zaions-transition'
+                        sizeXl={
+                          ZDashboardState.dashboardMainSidebarIsCollabes
+                            .isExpand
+                            ? '10'
+                            : '11.2'
+                        }
+                        sizeLg={
+                          ZDashboardState.dashboardMainSidebarIsCollabes
+                            .isExpand
+                            ? '10'
+                            : '11.2'
+                        }
+                        sizeMd='12'
+                        sizeSm='12'
+                        sizeXs='12'>
+                        {/* Grid-1 -> Grid-1 top-bar */}
+                        {isZFetching ? <ZTopBarSkeleton /> : <ZTopBar />}
+                        {/* <ZAdminPanelTopBar workspaceId={workspaceId} /> */}
+
+                        {/* Short link Grid-1 -> Grid-2 */}
+                        <Suspense
+                          fallback={
+                            <ZIonGrid className='mx-3 mt-2'>
+                              <ZFallbackIonSpinner2 />
+                            </ZIonGrid>
+                          }>
+                          <ZaionsShortUrlOptionFields />
+                        </Suspense>
+
+                        {/* Custom your link Grid-1 -> Grid-3 */}
+                        <ZIonGrid
                           className={classNames({
-                            'gap-4': isLgScale,
-                            'gap-0': !isLgScale
+                            'my-1': true,
+                            'ms-3 mr-4': isMdScale,
+                            'mx-2': !isMdScale
                           })}>
-                          {/* Custom Your Link */}
-                          <Suspense
-                            fallback={
-                              <ZIonCol
-                                sizeXl='5.8'
-                                sizeLg='5.8'
-                                sizeMd='12'
-                                sizeSm='12'
-                                sizeXs='12'
-                                className='py-1 rounded zaions__bg_white'>
-                                <ZFallbackIonSpinner2 />
-                              </ZIonCol>
-                            }>
-                            <ZaionsCustomYourLink showSkeleton={isZFetching} />
-                          </Suspense>
-
-                          {/* Pixel Account, Utm Tags, Custom Domain */}
-                          <ZIonCol
-                            sizeXl='5.9'
-                            sizeLg='5.8'
-                            sizeMd='12'
-                            sizeSm='12'
-                            sizeXs='12'
+                          <ZIonRow
                             className={classNames({
-                              'mt-4': !isLgScale
+                              'gap-4': isLgScale,
+                              'gap-0': !isLgScale
                             })}>
-                            {/* Pixels */}
+                            {/* Custom Your Link */}
                             <Suspense
                               fallback={
-                                <ZIonRow className='pt-1 border-bottom zaions__bg_white'>
+                                <ZIonCol
+                                  sizeXl='5.8'
+                                  sizeLg='5.8'
+                                  sizeMd='12'
+                                  sizeSm='12'
+                                  sizeXs='12'
+                                  className='py-1 rounded zaions__bg_white'>
                                   <ZFallbackIonSpinner2 />
-                                </ZIonRow>
+                                </ZIonCol>
                               }>
-                              <LinksPixelsAccount showSkeleton={isZFetching} />
+                              <ZaionsCustomYourLink
+                                showSkeleton={isZFetching}
+                              />
                             </Suspense>
 
-                            {/* UTMTags */}
-                            <Suspense
-                              fallback={
-                                <ZIonRow className='pt-1 border-bottom zaions__bg_white'>
-                                  <ZFallbackIonSpinner2 />
-                                </ZIonRow>
-                              }>
-                              <UTMTagTemplates showSkeleton={isZFetching} />
-                            </Suspense>
-
-                            {/* Choose Domain Name */}
-                            <DomainName showSkeleton={isZFetching} />
-                          </ZIonCol>
-                        </ZIonRow>
-                      </ZIonGrid>
-
-                      {/* Advance Options Grid-1 -> Grid-4 */}
-                      <ZIonGrid className='mr-3 ms-3'>
-                        {/* Row-1 */}
-                        <Suspense fallback={<ZFallbackIonSpinner2 />}>
-                          <ZIonRow>
-                            {/* Col-1 */}
-                            <ZIonCol>
-                              {/* advance options toggler button */}
-                              <ZIonButton
-                                expand='block'
-                                // size={isMdScale ? 'large' : 'default'}
-                                testingselector={
-                                  CONSTANTS.testingSelectors.shortLink.formPage
-                                    .advanceOptionsBtn
+                            {/* Pixel Account, Utm Tags, Custom Domain */}
+                            <ZIonCol
+                              sizeXl='5.9'
+                              sizeLg='5.8'
+                              sizeMd='12'
+                              sizeSm='12'
+                              sizeXs='12'
+                              className={classNames({
+                                'mt-4': !isLgScale
+                              })}>
+                              {/* Pixels */}
+                              <ZCan
+                                returnPermissionDeniedView={true}
+                                shareWSId={wsShareId}
+                                permissionType={
+                                  wsShareId
+                                    ? permissionsTypeEnum.shareWSMemberPermissions
+                                    : permissionsTypeEnum.loggedInUserPermissions
                                 }
-                                onClick={() =>
-                                  setShowAdvanceOptions(oldVal => !oldVal)
-                                }
-                                className={classNames({
-                                  'ion-text-capitalize': true,
-                                  'mx-0': !isMdScale
-                                })}>
-                                <ZIonText className='flex py-2 text-lg ion-no-margin ion-align-items-center'>
-                                  Advance Options
-                                </ZIonText>
-                                <ZIonIcon
-                                  slot='end'
-                                  icon={settingsOutline}
-                                  className='w-6 h-6 ms-auto me-1'
-                                />
-                              </ZIonButton>
-
-                              {/* advance options row */}
-                              {showAdvanceOptions && (
-                                <ZIonRow
-                                  className='gap-3 ion-margin-top'
-                                  testingselector={
-                                    CONSTANTS.testingSelectors.shortLink
-                                      .formPage.advanceOptionsContent
+                                havePermissions={
+                                  wsShareId
+                                    ? [shareWSPermissionEnum.viewAny_sws_pixel]
+                                    : [permissionsEnum.viewAny_pixel]
+                                }>
+                                <Suspense
+                                  fallback={
+                                    <ZIonRow className='pt-1 border-bottom zaions__bg_white'>
+                                      <ZFallbackIonSpinner2 />
+                                    </ZIonRow>
                                   }>
-                                  {/* Folder */}
-                                  <NewLinkFolder
-                                    _foldersData={shortLinksFoldersData || []}
-                                    _state={folderState.shortlink}
-                                    workspaceId={workspaceId}
+                                  <LinksPixelsAccount
                                     showSkeleton={isZFetching}
                                   />
+                                </Suspense>
+                              </ZCan>
 
-                                  {/* Add Notes */}
-                                  <AddNotes showSkeleton={isZFetching} />
+                              {/* UTMTags */}
+                              <ZCan
+                                returnPermissionDeniedView={true}
+                                shareWSId={wsShareId}
+                                permissionType={
+                                  wsShareId
+                                    ? permissionsTypeEnum.shareWSMemberPermissions
+                                    : permissionsTypeEnum.loggedInUserPermissions
+                                }
+                                havePermissions={
+                                  wsShareId
+                                    ? [shareWSPermissionEnum.viewAny_sws_utmTag]
+                                    : [permissionsEnum.viewAny_utmTag]
+                                }>
+                                <Suspense
+                                  fallback={
+                                    <ZIonRow className='pt-1 border-bottom zaions__bg_white'>
+                                      <ZFallbackIonSpinner2 />
+                                    </ZIonRow>
+                                  }>
+                                  <UTMTagTemplates showSkeleton={isZFetching} />
+                                </Suspense>
+                              </ZCan>
 
-                                  {/* Add Embed Widget */}
-                                  <EmbedWidget />
-
-                                  {/* Deep Linking */}
-                                  <DeepLinking />
-
-                                  {/* Link Cloaking */}
-                                  <LinkCloaking />
-
-                                  {/* Tags */}
-                                  <Tags />
-
-                                  {/* Rotator - AB Testing */}
-                                  <RotatorABTesting />
-
-                                  {/* Geo Location */}
-                                  <GeoLocation />
-
-                                  {/* Link Expiration */}
-                                  <LinkExpiration />
-
-                                  {/* Link Password */}
-                                  <LinkPassword />
-
-                                  {/* Link Favicon */}
-                                  <LinkFavIcon />
-
-                                  {/* GDPR Popup */}
-                                  <GDPRPopup />
-                                </ZIonRow>
-                              )}
-                            </ZIonCol>
-                          </ZIonRow>
-                        </Suspense>
-                      </ZIonGrid>
-
-                      {/* Footer */}
-                      <ZIonFooter>
-                        {/* Gird */}
-                        <ZIonGrid className='mx-4 mt-3'>
-                          {/* Row */}
-                          <ZIonRow>
-                            {/* Col-1 */}
-                            <ZIonCol>
-                              {/* get my link button */}
-                              <ZIonButton
-                                expand='full'
-                                onClick={() => void submitForm()}
-                                disabled={isSubmitting || !isValid}>
-                                {newShortLinkFormState.formMode === FormMode.ADD
-                                  ? 'Get my new link'
-                                  : newShortLinkFormState.formMode ===
-                                    FormMode.EDIT
-                                  ? 'Get my updated link'
-                                  : ''}
-                              </ZIonButton>
+                              {/* Choose Domain Name */}
+                              <DomainName showSkeleton={isZFetching} />
                             </ZIonCol>
                           </ZIonRow>
                         </ZIonGrid>
-                      </ZIonFooter>
-                    </ZIonCol>
-                  </ZIonRow>
-                </ZIonGrid>
-              </ZIonContent>
-            );
-          }}
-        </Formik>
-      </ZCan>
-      {/* </Suspense> */}
+
+                        {/* Advance Options Grid-1 -> Grid-4 */}
+                        <ZIonGrid className='mr-3 ms-3'>
+                          {/* Row-1 */}
+                          <Suspense fallback={<ZFallbackIonSpinner2 />}>
+                            <ZIonRow>
+                              {/* Col-1 */}
+                              <ZIonCol>
+                                {/* advance options toggler button */}
+                                <ZIonButton
+                                  expand='block'
+                                  // size={isMdScale ? 'large' : 'default'}
+                                  testingselector={
+                                    CONSTANTS.testingSelectors.shortLink
+                                      .formPage.advanceOptionsBtn
+                                  }
+                                  onClick={() =>
+                                    setShowAdvanceOptions(oldVal => !oldVal)
+                                  }
+                                  className={classNames({
+                                    'ion-text-capitalize': true,
+                                    'mx-0': !isMdScale
+                                  })}>
+                                  <ZIonText className='flex py-2 text-lg ion-no-margin ion-align-items-center'>
+                                    Advance Options
+                                  </ZIonText>
+                                  <ZIonIcon
+                                    slot='end'
+                                    icon={settingsOutline}
+                                    className='w-6 h-6 ms-auto me-1'
+                                  />
+                                </ZIonButton>
+
+                                {/* advance options row */}
+                                {showAdvanceOptions && (
+                                  <ZIonRow
+                                    className='gap-3 ion-margin-top'
+                                    testingselector={
+                                      CONSTANTS.testingSelectors.shortLink
+                                        .formPage.advanceOptionsContent
+                                    }>
+                                    {/* Folder */}
+                                    <NewLinkFolder
+                                      _foldersData={shortLinksFoldersData || []}
+                                      _state={folderState.shortlink}
+                                      workspaceId={workspaceId}
+                                      showSkeleton={isZFetching}
+                                    />
+
+                                    {/* Add Notes */}
+                                    <AddNotes showSkeleton={isZFetching} />
+
+                                    {/* Add Embed Widget */}
+                                    <ZCan
+                                      returnPermissionDeniedView={true}
+                                      shareWSId={wsShareId}
+                                      permissionType={
+                                        wsShareId
+                                          ? permissionsTypeEnum.shareWSMemberPermissions
+                                          : permissionsTypeEnum.loggedInUserPermissions
+                                      }
+                                      havePermissions={
+                                        wsShareId
+                                          ? [
+                                              shareWSPermissionEnum.viewAny_sws_embededWidget
+                                            ]
+                                          : [
+                                              permissionsEnum.viewAny_embededWidget
+                                            ]
+                                      }>
+                                      <EmbedWidget />
+                                    </ZCan>
+
+                                    {/* Deep Linking */}
+                                    <DeepLinking />
+
+                                    {/* Link Cloaking */}
+                                    <LinkCloaking />
+
+                                    {/* Tags */}
+                                    <Tags />
+
+                                    {/* Rotator - AB Testing */}
+                                    <RotatorABTesting />
+
+                                    {/* Geo Location */}
+                                    <GeoLocation />
+
+                                    {/* Link Expiration */}
+                                    <LinkExpiration />
+
+                                    {/* Link Password */}
+                                    <LinkPassword />
+
+                                    {/* Link Favicon */}
+                                    <LinkFavIcon />
+
+                                    {/* GDPR Popup */}
+                                    <GDPRPopup />
+                                  </ZIonRow>
+                                )}
+                              </ZIonCol>
+                            </ZIonRow>
+                          </Suspense>
+                        </ZIonGrid>
+
+                        {/* Footer */}
+                        <ZIonFooter>
+                          {/* Gird */}
+                          <ZIonGrid className='mx-4 mt-3'>
+                            {/* Row */}
+                            <ZIonRow>
+                              {/* Col-1 */}
+                              <ZIonCol>
+                                {/* get my link button */}
+                                <ZIonButton
+                                  expand='full'
+                                  onClick={() => void submitForm()}
+                                  disabled={isSubmitting || !isValid}>
+                                  {newShortLinkFormState.formMode ===
+                                  FormMode.ADD
+                                    ? 'Get my new link'
+                                    : newShortLinkFormState.formMode ===
+                                      FormMode.EDIT
+                                    ? 'Get my updated link'
+                                    : ''}
+                                </ZIonButton>
+                              </ZIonCol>
+                            </ZIonRow>
+                          </ZIonGrid>
+                        </ZIonFooter>
+                      </ZIonCol>
+                    </ZIonRow>
+                  </ZIonGrid>
+                </ZIonContent>
+              );
+            }}
+          </Formik>
+        </ZCan>
+      )}
     </ZIonPage>
   );
 };

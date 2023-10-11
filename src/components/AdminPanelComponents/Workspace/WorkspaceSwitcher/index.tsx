@@ -94,6 +94,21 @@ const ZWorkspaceSwitcher: React.FC<{
 
   // #region APIs.
   // get workspace data api.
+  const { data: currentWorkspaceData, isFetching: isCurrentWorkspaceFetching } =
+    useZRQGetRequest<workspaceInterface>({
+      _url: API_URL_ENUM.workspace_update_delete,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
+        workspaceId || ''
+      ],
+      _authenticated: true,
+      _itemsIds: [workspaceId || ''],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+      _shouldFetchWhenIdPassed: workspaceId ? false : true,
+      _extractType: ZRQGetRequestExtractEnum.extractItem
+    });
+
+  // get workspace data api.
   const { data: getShareWSInfoData, isFetching: isGetShareWSInfoDataFetching } =
     useZRQGetRequest<workspaceInterface>({
       _key: [
@@ -123,20 +138,6 @@ const ZWorkspaceSwitcher: React.FC<{
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
   });
 
-  // get workspace data api.
-  const { data: currentWorkspaceData, isFetching: isCurrentWorkspaceFetching } =
-    useZRQGetRequest<workspaceInterface>({
-      _url: API_URL_ENUM.workspace_update_delete,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
-        workspaceId || ''
-      ],
-      _authenticated: true,
-      _itemsIds: [workspaceId || ''],
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: workspaceId ? false : true,
-      _extractType: ZRQGetRequestExtractEnum.extractItem
-    });
   // #endregion
 
   let isZFetching = isWorkspacesDataFetching;

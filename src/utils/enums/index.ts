@@ -56,6 +56,11 @@ export enum API_URL_ENUM {
   csrf = 'csrf',
   userPixelAccounts_create_list = 'userPixelAccounts_create_list',
   userPixelAccounts_update_delete = 'userPixelAccounts_update_delete',
+
+  // Share ws pixel
+  sws_pixel_account_create_list = 'sws_pixel_account_create_list',
+  sws_pixel_account_update_delete = 'sws_pixel_account_update_delete',
+
   userAccountUtmTags_create_list = 'userAccountUtmTags_create_list',
   userAccountUtmTags_update_delete = 'userAccountUtmTags_update_delete',
   userAccountFolders_update_delete = 'userAccountFolders_update_delete',

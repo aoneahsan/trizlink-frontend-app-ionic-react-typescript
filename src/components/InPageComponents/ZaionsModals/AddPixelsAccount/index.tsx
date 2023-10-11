@@ -109,13 +109,15 @@ const ZaionsAddPixelAccount: React.FC<{
   pixelTitle?: string;
   pixelPlatform?: PixelPlatformsEnum;
   formMode?: FormMode;
+  workspaceId: string;
 }> = ({
   dismissZIonModal,
   pixelId,
   selectedId,
   pixelTitle,
   pixelPlatform,
-  formMode = FormMode.ADD
+  formMode = FormMode.ADD,
+  workspaceId
 }) => {
   const platformData = useRecoilValue(PixelAccountPlatformOptionsRState);
   const appSettings = useRecoilValue(ZaionsAppSettingsRState);
@@ -126,7 +128,9 @@ const ZaionsAddPixelAccount: React.FC<{
 
   const { mutateAsync: createPixelAccount } = useZRQCreateRequest({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _queriesKeysToInvalidate: []
+    _queriesKeysToInvalidate: [],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _itemsIds: [workspaceId]
   });
   const { mutateAsync: updatePixelAccount } = useZRQUpdateRequest({
     _url: API_URL_ENUM.userPixelAccounts_update_delete,
@@ -147,8 +151,11 @@ const ZaionsAddPixelAccount: React.FC<{
       } // if in from edit mode then edit  pixel account
       else if (formMode === FormMode.EDIT && selectedId) {
         __response = await updatePixelAccount({
-          itemIds: [selectedId],
-          urlDynamicParts: [CONSTANTS.RouteParams.pixel.pixelId],
+          itemIds: [workspaceId, selectedId],
+          urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.workspaceId,
+            CONSTANTS.RouteParams.pixel.pixelId
+          ],
           requestData: _value
         });
       }

@@ -40,6 +40,14 @@ import {
   ZaionsShortUrlOptionFieldsValuesInterface
 } from '@/types/AdminPanel/linksType';
 import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { useParams } from 'react-router';
+import ZCan from '@/components/Can';
+import {
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 // Styles
 
@@ -61,29 +69,80 @@ const selectOptionComponent = (_el: PixelAccountType) => {
 const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
   showSkeleton = false
 }) => {
-  const [pixelAccountsState, setPixelAccountsState] = useRecoilState(
-    PixelAccountsRStateAtom
-  );
-
-  const { presentZIonModal: presentZAddPixelAccount } = useZIonModal(
-    ZaionsAddPixelAccount
-  );
+  // getting link-in-bio and workspace ids from url with the help of useParams.
+  const { editLinkId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    editLinkId: string;
+    workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
+  }>();
 
   const {
     values: { linkPixelsAccount },
     setFieldValue
   } = useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
-  const { data: pixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
-    _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN]
+
+  // #region Recoils states.
+  const [pixelAccountsState, setPixelAccountsState] = useRecoilState(
+    PixelAccountsRStateAtom
+  );
+  // #endregion
+
+  // #region Popovers & Modals.
+  const { presentZIonModal: presentZAddPixelAccount } = useZIonModal(
+    ZaionsAddPixelAccount,
+    { workspaceId }
+  );
+  // #endregion
+
+  // #region APIS
+  const {
+    data: getMemberRolePermissions,
+    isFetching: isGetMemberRolePermissionsFetching,
+    isError: isGetMemberRolePermissionsError
+  } = useZRQGetRequest<{
+    memberRole?: string;
+    memberPermissions?: string[];
+  }>({
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
+      wsShareId
+    ],
+    _url: API_URL_ENUM.ws_share_member_role_permissions,
+    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _itemsIds: [shareWSMemberId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
   });
 
+  const { data: pixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
+    _url: API_URL_ENUM.userPixelAccounts_create_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _showLoader: false,
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _itemsIds: [workspaceId]
+  });
+
+  const { data: swsPixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
+    _url: API_URL_ENUM.sws_pixel_account_create_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN],
+    _shouldFetchWhenIdPassed: wsShareId ? false : true,
+    _showLoader: false,
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _itemsIds: [shareWSMemberId]
+  });
+  // #endregion
+
+  // #region UseEffects.
   useEffect(() => {
     if (pixelAccountsData) {
       setPixelAccountsState(pixelAccountsData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pixelAccountsData]);
+  // #endregion
 
   if (showSkeleton) {
     return <LinkPixelsAccountSkeleton />;
@@ -134,11 +193,22 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
                 : []
             }
             onChange={_values => {
-              setFieldValue(
-                'linkPixelsAccount',
-                _values.map(el => el.value) as string[],
-                false
-              );
+              if (
+                workspaceId ||
+                (wsShareId &&
+                  [
+                    shareWSPermissionEnum.create_sws_pixel,
+                    shareWSPermissionEnum.update_sws_pixel
+                  ].some(el =>
+                    getMemberRolePermissions?.memberPermissions?.includes(el)
+                  ))
+              ) {
+                setFieldValue(
+                  'linkPixelsAccount',
+                  _values.map(el => el.value) as string[],
+                  false
+                );
+              }
             }}
             value={
               formatReactSelectOptionsArray(
@@ -151,21 +221,36 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
           />
 
           {/* add a pixel button */}
-          <ZIonButton
-            fill='clear'
-            className='ion-text-capitalize ion-no-padding ps-1 ion-no-margin ion-margin-start'
-            size='small'
-            testingselector={
-              CONSTANTS.testingSelectors.shortLink.formPage.pixelAccount
-                .createBtn
+          <ZCan
+            shareWSId={wsShareId}
+            permissionType={
+              wsShareId
+                ? permissionsTypeEnum.shareWSMemberPermissions
+                : permissionsTypeEnum.loggedInUserPermissions
             }
-            onClick={() => {
-              presentZAddPixelAccount({
-                _cssClass: 'pixel-account-modal-size'
-              });
-            }}>
-            Add a new pixel
-          </ZIonButton>
+            havePermissions={
+              workspaceId
+                ? [permissionsEnum.create_pixel]
+                : wsShareId
+                ? [shareWSPermissionEnum.create_sws_pixel]
+                : []
+            }>
+            <ZIonButton
+              fill='clear'
+              className='ion-text-capitalize ion-no-padding ps-1 ion-no-margin ion-margin-start'
+              size='small'
+              testingselector={
+                CONSTANTS.testingSelectors.shortLink.formPage.pixelAccount
+                  .createBtn
+              }
+              onClick={() => {
+                presentZAddPixelAccount({
+                  _cssClass: 'pixel-account-modal-size'
+                });
+              }}>
+              Add a new pixel
+            </ZIonButton>
+          </ZCan>
         </ZIonCol>
       </ZIonRow>
     </>

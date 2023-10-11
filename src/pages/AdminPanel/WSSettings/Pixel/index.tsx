@@ -99,18 +99,17 @@ const ZWSSettingPixelListPage: React.FC = () => {
   // #region APIs
   const { data: pixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN]
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _itemsIds: [workspaceId]
   });
 
-  const { mutate: deletePixelAccountMutate } = useZRQDeleteRequest({
-    _url: API_URL_ENUM.userPixelAccounts_update_delete
-  });
   // #endregion
 
   // #region Modals & popovers
   const { presentZIonModal: presentZAddPixelAccount } = useZIonModal(
     ZaionsAddPixelAccount,
-    { formMode: FormMode.ADD }
+    { formMode: FormMode.ADD, workspaceId }
   );
 
   // #endregion
