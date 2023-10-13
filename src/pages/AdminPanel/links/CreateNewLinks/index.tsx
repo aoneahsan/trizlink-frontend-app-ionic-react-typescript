@@ -452,7 +452,14 @@ const AdminCreateNewLinkPages: React.FC = () => {
   }>({
     _url: API_URL_ENUM.uploadSingleFile,
     _authenticated: true,
-    _contentType: zAxiosApiRequestContentType.FormData
+    _contentType: zAxiosApiRequestContentType.FormData,
+    _loaderMessage: MESSAGES.GENERAL.FILE.UPLOADING_FILE_API
+  });
+
+  // Delete file api.
+  const { mutateAsync: deleteSingleFile } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.deleteSingleFile,
+    _loaderMessage: MESSAGES.GENERAL.FILE.UPLOADING_FILE_API
   });
   // #endregion
 
@@ -569,7 +576,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
   const invalidedQueries = async () => {
     try {
       if (workspaceId) {
-        if (editLinkId && newShortLinkFormState?.formMode === FormMode.EDIT) {
+        if (editLinkId) {
           await zInvalidateReactQueries([
             CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
             workspaceId,
@@ -606,7 +613,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
           wsShareId
         ]);
 
-        if (editLinkId && newShortLinkFormState?.formMode === FormMode.EDIT) {
+        if (editLinkId) {
           await zInvalidateReactQueries([
             CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_GET,
             wsShareId,
@@ -679,7 +686,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
     setErrors: FormikSetErrorsType
   ) => {
     try {
-      if (newShortLinkFormState.formMode === FormMode.ADD) {
+      if (editLinkId === undefined) {
         // Making an api call creating new short link
         let _response;
 
@@ -771,10 +778,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
               'something went wrong please try again! :('
           );
         }
-      } else if (
-        newShortLinkFormState.formMode === FormMode.EDIT &&
-        editLinkId
-      ) {
+      } else if (editLinkId) {
         let _response;
 
         if (workspaceId) {
@@ -1458,15 +1462,45 @@ const AdminCreateNewLinkPages: React.FC = () => {
             ) => {
               let __fileUrl = values?.featureImg?.featureImgUrl;
               let __filePath = values?.featureImg?.featureImgPath;
+
               if (
                 (workspaceId &&
+                  values?.featureImg?.featureImgUrl.trim().length > 0 &&
                   values?.featureImg?.featureImgUrl !==
                     selectedShortLink?.featureImg?.featureImgUrl) ||
                 (wsShareId &&
                   shareWSMemberId &&
+                  values?.featureImg?.featureImgUrl.trim().length > 0 &&
                   values?.featureImg?.featureImgUrl !==
                     swsSelectedShortLink?.featureImg?.featureImgUrl)
               ) {
+                if (
+                  (wsShareId &&
+                    swsSelectedShortLink?.featureImg?.featureImgPath &&
+                    swsSelectedShortLink?.featureImg?.featureImgPath?.trim()
+                      ?.length > 0) ||
+                  (workspaceId &&
+                    selectedShortLink?.featureImg?.featureImgPath &&
+                    selectedShortLink?.featureImg?.featureImgPath?.trim()
+                      ?.length > 0)
+                ) {
+                  console.log({
+                    w: swsSelectedShortLink?.featureImg?.featureImgPath,
+                    w2: selectedShortLink?.featureImg?.featureImgPath
+                  });
+                  await deleteSingleFile({
+                    requestData: zStringify({
+                      filePath: workspaceId
+                        ? selectedShortLink?.featureImg?.featureImgPath
+                        : wsShareId
+                        ? swsSelectedShortLink?.featureImg?.featureImgPath
+                        : ''
+                    }),
+                    itemIds: [],
+                    urlDynamicParts: []
+                  });
+                }
+
                 const { filePath, fileUrl } = await uploadFileToBackend(
                   values.featureImg.featureImgFile!
                 );
@@ -1516,11 +1550,11 @@ const AdminCreateNewLinkPages: React.FC = () => {
                 favicon: values.favicon
               });
 
-                await FormikSubmissionHandler(
-                  _zStringifyData,
-                  resetForm,
-                  setErrors
-                );
+              await FormikSubmissionHandler(
+                _zStringifyData,
+                resetForm,
+                setErrors
+              );
             }}
             // #endregion
           >
@@ -1843,13 +1877,9 @@ const AdminCreateNewLinkPages: React.FC = () => {
                                   expand='full'
                                   onClick={() => void submitForm()}
                                   disabled={isSubmitting || !isValid}>
-                                  {newShortLinkFormState.formMode ===
-                                  FormMode.ADD
-                                    ? 'Get my new link'
-                                    : newShortLinkFormState.formMode ===
-                                      FormMode.EDIT
+                                  {editLinkId
                                     ? 'Get my updated link'
-                                    : ''}
+                                    : 'Get my new link'}
                                 </ZIonButton>
                               </ZIonCol>
                             </ZIonRow>
@@ -1964,11 +1994,7 @@ const ZTopBar: React.FC = () => {
               'text-md ion-no-padding ps-2': !isMdScale && isSmScale,
               'text-sm ion-no-padding ps-2': !isMdScale && !isSmScale
             })}>
-            {newShortLinkFormState.formMode === FormMode.ADD
-              ? 'Create a New link'
-              : newShortLinkFormState.formMode === FormMode.EDIT
-              ? 'Update Link'
-              : ''}
+            {editLinkId ? 'Update Link' : 'Create a New link'}
           </ZIonTitle>
         </ZIonCol>
 
@@ -2155,11 +2181,7 @@ const ZTopBar: React.FC = () => {
                 ? '1.3rem'
                 : undefined
             }>
-            {newShortLinkFormState.formMode === FormMode.ADD
-              ? 'Get my new link'
-              : newShortLinkFormState.formMode === FormMode.EDIT
-              ? 'Get my updated link'
-              : ''}
+            {editLinkId ? 'Get my updated link' : 'Get my new link'}
           </ZIonButton>
         </ZIonCol>
       </ZIonRow>

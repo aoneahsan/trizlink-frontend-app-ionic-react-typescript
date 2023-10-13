@@ -110,6 +110,7 @@ import {
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
+import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 
 // Styles
 
@@ -795,7 +796,7 @@ const ZInpageTable: React.FC = () => {
       reportCustomError(error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ShortLinksData]);
+  }, [ShortLinksData, swsShortLinksData]);
   // #endregion
 
   return (
@@ -972,25 +973,49 @@ const ZInpageTable: React.FC = () => {
             }
             onClick={() => {
               if (zShortLinksTable.getCanPreviousPage()) {
-                zNavigatePushRoute(
-                  createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                    params: [
-                      CONSTANTS.RouteParams.workspace.workspaceId,
-                      CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-                    ],
-                    values: [
-                      workspaceId,
-                      CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
-                    ],
-                    routeSearchParams: {
-                      pageindex: 0,
-                      pagesize: zShortLinksTable
-                        .getState()
-                        .pagination.pageSize.toString()
-                    }
-                  })
-                );
+                if (workspaceId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        workspaceId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ],
+                      routeSearchParams: {
+                        pageindex: 0,
+                        pagesize: zShortLinksTable
+                          .getState()
+                          .pagination.pageSize.toString()
+                      }
+                    })
+                  );
+                } else if (wsShareId && shareWSMemberId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.wsShareId,
+                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        wsShareId,
+                        shareWSMemberId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ],
+                      routeSearchParams: {
+                        pageindex: 0,
+                        pagesize: zShortLinksTable
+                          .getState()
+                          .pagination.pageSize.toString()
+                      }
+                    })
+                  );
+                }
 
                 zShortLinksTable.setPageIndex(0);
               }
@@ -1014,26 +1039,51 @@ const ZInpageTable: React.FC = () => {
               if (zShortLinksTable.getCanPreviousPage()) {
                 zShortLinksTable.previousPage();
 
-                zNavigatePushRoute(
-                  createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                    params: [
-                      CONSTANTS.RouteParams.workspace.workspaceId,
-                      CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-                    ],
-                    values: [
-                      workspaceId,
-                      CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
-                    ],
-                    routeSearchParams: {
-                      pageindex:
-                        zShortLinksTable.getState().pagination.pageIndex - 1,
-                      pagesize: zShortLinksTable
-                        .getState()
-                        .pagination.pageSize.toString()
-                    }
-                  })
-                );
+                if (workspaceId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        workspaceId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ],
+                      routeSearchParams: {
+                        pageindex:
+                          zShortLinksTable.getState().pagination.pageIndex - 1,
+                        pagesize: zShortLinksTable
+                          .getState()
+                          .pagination.pageSize.toString()
+                      }
+                    })
+                  );
+                } else if (wsShareId && shareWSMemberId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.wsShareId,
+                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        wsShareId,
+                        shareWSMemberId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ],
+                      routeSearchParams: {
+                        pageindex:
+                          zShortLinksTable.getState().pagination.pageIndex - 1,
+                        pagesize: zShortLinksTable
+                          .getState()
+                          .pagination.pageSize.toString()
+                      }
+                    })
+                  );
+                }
               }
             }}>
             <ZIonIcon
@@ -1056,26 +1106,51 @@ const ZInpageTable: React.FC = () => {
               if (zShortLinksTable.getCanNextPage()) {
                 zShortLinksTable.nextPage();
 
-                zNavigatePushRoute(
-                  createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                    params: [
-                      CONSTANTS.RouteParams.workspace.workspaceId,
-                      CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-                    ],
-                    values: [
-                      workspaceId,
-                      CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
-                    ],
-                    routeSearchParams: {
-                      pageindex:
-                        zShortLinksTable.getState().pagination.pageIndex + 1,
-                      pagesize: zShortLinksTable
-                        .getState()
-                        .pagination.pageSize.toString()
-                    }
-                  })
-                );
+                if (workspaceId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        workspaceId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ],
+                      routeSearchParams: {
+                        pageindex:
+                          zShortLinksTable.getState().pagination.pageIndex + 1,
+                        pagesize: zShortLinksTable
+                          .getState()
+                          .pagination.pageSize.toString()
+                      }
+                    })
+                  );
+                } else if (wsShareId && shareWSMemberId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.wsShareId,
+                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        wsShareId,
+                        shareWSMemberId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ],
+                      routeSearchParams: {
+                        pageindex:
+                          zShortLinksTable.getState().pagination.pageIndex + 1,
+                        pagesize: zShortLinksTable
+                          .getState()
+                          .pagination.pageSize.toString()
+                      }
+                    })
+                  );
+                }
               }
             }}>
             <ZIonIcon
@@ -1100,25 +1175,49 @@ const ZInpageTable: React.FC = () => {
                   zShortLinksTable.getPageCount() - 1
                 );
 
-                zNavigatePushRoute(
-                  createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                    params: [
-                      CONSTANTS.RouteParams.workspace.workspaceId,
-                      CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-                    ],
-                    values: [
-                      workspaceId,
-                      CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
-                    ],
-                    routeSearchParams: {
-                      pageindex: zShortLinksTable.getPageCount() - 1,
-                      pagesize: zShortLinksTable
-                        .getState()
-                        .pagination.pageSize.toString()
-                    }
-                  })
-                );
+                if (workspaceId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        workspaceId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ],
+                      routeSearchParams: {
+                        pageindex: zShortLinksTable.getPageCount() - 1,
+                        pagesize: zShortLinksTable
+                          .getState()
+                          .pagination.pageSize.toString()
+                      }
+                    })
+                  );
+                } else if (wsShareId && shareWSMemberId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.wsShareId,
+                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        wsShareId,
+                        shareWSMemberId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ],
+                      routeSearchParams: {
+                        pageindex: zShortLinksTable.getPageCount() - 1,
+                        pagesize: zShortLinksTable
+                          .getState()
+                          .pagination.pageSize.toString()
+                      }
+                    })
+                  );
+                }
               }
             }}>
             <ZIonIcon
@@ -1150,7 +1249,7 @@ const ZInpageTable: React.FC = () => {
           <ZIonSelect
             minHeight='30px'
             fill='outline'
-            className='bg-white w-[7rem]'
+            className='zaions__bg_white w-[8rem]'
             interface='popover'
             value={zShortLinksTable.getState().pagination.pageSize}
             testingselector={
@@ -1159,20 +1258,45 @@ const ZInpageTable: React.FC = () => {
             onIonChange={e => {
               zShortLinksTable.setPageSize(Number(e.target.value));
 
-              zNavigatePushRoute(
-                createRedirectRoute({
-                  url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                  params: [
-                    CONSTANTS.RouteParams.workspace.workspaceId,
-                    CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-                  ],
-                  values: [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE],
-                  routeSearchParams: {
-                    pageindex: zShortLinksTable.getPageCount() - 1,
-                    pagesize: Number(e.target.value)
-                  }
-                })
-              );
+              if (workspaceId) {
+                zNavigatePushRoute(
+                  createRedirectRoute({
+                    url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                    params: [
+                      CONSTANTS.RouteParams.workspace.workspaceId,
+                      CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                    ],
+                    values: [
+                      workspaceId,
+                      CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                    ],
+                    routeSearchParams: {
+                      pageindex: zShortLinksTable.getPageCount() - 1,
+                      pagesize: Number(e.target.value)
+                    }
+                  })
+                );
+              } else if (wsShareId && shareWSMemberId) {
+                zNavigatePushRoute(
+                  createRedirectRoute({
+                    url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                    params: [
+                      CONSTANTS.RouteParams.workspace.wsShareId,
+                      CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                      CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                    ],
+                    values: [
+                      wsShareId,
+                      shareWSMemberId,
+                      CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                    ],
+                    routeSearchParams: {
+                      pageindex: zShortLinksTable.getPageCount() - 1,
+                      pagesize: Number(e.target.value)
+                    }
+                  })
+                );
+              }
             }}>
             {[2, 3].map(pageSize => (
               <ZIonSelectOption
@@ -1340,7 +1464,7 @@ const ZShortLinkActionPopover: React.FC<{
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
                     wsShareId
                   ],
-                  data: _updatedShortLinks as ShortLinkType[],
+                  data: [..._updatedShortLinks] as ShortLinkType[],
                   id: '',
                   extractType: ZRQGetRequestExtractEnum.extractItems,
                   updateHoleData: true

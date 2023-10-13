@@ -335,6 +335,10 @@ span.new {
   background: rgba(var(--ion-color-primary-rgb), 0.2);
 }
 
+.zaions__danger_bg_opacity_point_1 {
+  background: rgba(var(--ion-color-danger-rgb), 0.1);
+}
+
 .zaions__primary_bg_opacity_point_4 {
   background: rgba(var(--ion-color-primary-rgb), 0.4);
 }
@@ -357,6 +361,11 @@ span.new {
 .zaions__light_bg_opacity_point_2 {
   background: rgba(var(--ion-color-light-rgb), 0.2) !important;
   --background: rgba(var(--ion-color-light-rgb), 0.2) !important;
+}
+
+.zaions__light_bg_opacity_point_8 {
+  background: rgba(var(--ion-color-light-rgb), 0.8) !important;
+  --background: rgba(var(--ion-color-light-rgb), 0.8) !important;
 }
 
 .zaions_primary_color {
@@ -1049,4 +1058,22 @@ ion-modal.zaions__modal_w100 {
   background-color: var(--ion-color-primary);
   color: var(--ion-color-light);
   cursor: pointer;
+}
+
+ion-range.z-ion-range-show-top-pin::part(pin) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  transform: scale(1.01);
+
+  top: -17px;
+
+  min-width: 28px;
+  height: 28px;
+  transition: transform 120ms ease, background 120ms ease;
+}
+ion-range.z-ion-range-show-top-pin::part(pin)::before {
+  content: none;
 }

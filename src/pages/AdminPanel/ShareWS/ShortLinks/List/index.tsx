@@ -449,9 +449,7 @@ const ZSWSShortLinksListPage: React.FC = () => {
           <ZShortLinksFilterMenu />
         )}
 
-        {!isLgScale ? (
-          <AdminPanelShortLinksFolderSideMenu workspaceId={workspaceId} />
-        ) : null}
+        {!isLgScale ? <AdminPanelShortLinksFolderSideMenu /> : null}
 
         {/*  */}
         <ZIonPage
@@ -762,7 +760,8 @@ const ZInpageMainContent: React.FC = () => {
 
   const resetShortLinkFormHandler = () => {
     try {
-      setNewShortLinkFormState(_ => ({
+      setNewShortLinkFormState(oldValues => ({
+        ...oldValues,
         folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
         shortUrl: {
           domain: CONSTANTS.DEFAULT_VALUES.DEFAULT_CUSTOM_DOMAIN

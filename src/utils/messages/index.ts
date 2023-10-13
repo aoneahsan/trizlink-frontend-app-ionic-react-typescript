@@ -3,7 +3,8 @@ import CONSTANTS from '@/utils/constants';
 const GENERAL = {
   FILE: {
     UPLOADED: 'Mission accomplished! Your file is securely in place.',
-    FILE_DELETED_SUCCESS_MESSAGE: 'File deleted successfully.'
+    FILE_DELETED_SUCCESS_MESSAGE: 'File deleted successfully.',
+    UPLOADING_FILE_API: 'Uploading File...'
   },
   OTP: {
     SEND_SUCCESSFULLY:
