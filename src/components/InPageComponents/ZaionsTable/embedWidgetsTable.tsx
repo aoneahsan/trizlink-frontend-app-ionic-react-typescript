@@ -521,7 +521,7 @@ const ZInpageTable: React.FC = () => {
 
   const { presentZIonModal: presentZUtmTagsFormModal } = useZIonModal(
     ZaionsAddUtmTags,
-    { formMode: FormMode.ADD }
+    { formMode: FormMode.ADD, workspaceId }
   );
   // #endregion
 
@@ -1042,7 +1042,8 @@ const ZEmbedWidgetActionPopover: React.FC<{
     ZaionsAddUtmTags,
     {
       utmTag: utmTag,
-      formMode: FormMode.EDIT
+      formMode: FormMode.EDIT,
+      workspaceId
     }
   );
   // #endregion
@@ -1055,8 +1056,8 @@ const ZEmbedWidgetActionPopover: React.FC<{
   const { data: UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
-    _itemsIds: [],
-    _urlDynamicParts: []
+    _itemsIds: [workspaceId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
 
   // when user won't to delete Utm tag and click on the delete button this function will fire and show the confirm alert.
@@ -1097,8 +1098,11 @@ const ZEmbedWidgetActionPopover: React.FC<{
       if (utmTag?.id?.trim() && UTMTagsData?.length) {
         if (utmTag?.id) {
           const _response = await deleteUtmTagMutate({
-            itemIds: [utmTag?.id],
-            urlDynamicParts: [CONSTANTS.RouteParams.utmTag.utmTagId]
+            itemIds: [workspaceId, utmTag?.id],
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.workspaceId,
+              CONSTANTS.RouteParams.utmTag.utmTagId
+            ]
           });
 
           if (_response) {

@@ -99,8 +99,9 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
   const { data: UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
-    _itemsIds: [],
-    _urlDynamicParts: [],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _itemsIds: [workspaceId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _showLoader: false
   });
   // #endregion
@@ -109,7 +110,8 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
   const { presentZIonModal: presentZUtmTagsFormModal } = useZIonModal(
     ZaionsAddUtmTags,
     {
-      formMode: FormMode.ADD
+      formMode: FormMode.ADD,
+      workspaceId
     }
   );
   // #endregion

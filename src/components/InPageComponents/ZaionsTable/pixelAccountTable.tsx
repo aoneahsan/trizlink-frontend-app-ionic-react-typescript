@@ -148,7 +148,10 @@ const ZPixelsTable: React.FC<{
   const { data: PixelsData, isFetching: isPixelsDateFetching } =
     useZRQGetRequest<PixelAccountType[]>({
       _url: API_URL_ENUM.userPixelAccounts_create_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
+        workspaceId
+      ],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
       _itemsIds: [workspaceId]
     });
@@ -225,7 +228,7 @@ const ZInpageTable: React.FC = () => {
   // Request for getting pixels data.
   const { data: PixelsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN, workspaceId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _itemsIds: [workspaceId]
   });
@@ -990,7 +993,7 @@ const ZPixelActionPopover: React.FC<{
 
   const { data: PixelsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN, workspaceId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _itemsIds: [workspaceId]
   });
@@ -1051,7 +1054,10 @@ const ZPixelActionPopover: React.FC<{
               const _oldPixels =
                 extractInnerData<PixelAccountType[]>(
                   getRQCDataHandler<PixelAccountType[]>({
-                    key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN]
+                    key: [
+                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
+                      workspaceId
+                    ]
                   }) as PixelAccountType[],
                   extractInnerDataOptionsEnum.createRequestResponseItems
                 ) || [];
@@ -1063,7 +1069,10 @@ const ZPixelActionPopover: React.FC<{
 
               // Updating data in RQ cache.
               await updateRQCDataHandler<PixelAccountType[] | undefined>({
-                key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+                key: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
+                  workspaceId
+                ],
                 data: _updatedPixels as PixelAccountType[],
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItems,

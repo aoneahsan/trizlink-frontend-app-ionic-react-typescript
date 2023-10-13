@@ -1,7 +1,7 @@
 // Core Imports
 import React from 'react';
 // Packages Import
-import { toggleOutline } from 'ionicons/icons';
+import { share, toggleOutline } from 'ionicons/icons';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 // Custom Imports
@@ -24,7 +24,8 @@ import {
   ZIonContent,
   ZIonIcon,
   ZIonFooter,
-  ZIonGrid
+  ZIonGrid,
+  ZIonImg
 } from '@/components/ZIonComponents';
 
 // Images
@@ -40,26 +41,46 @@ import { ZIonButton } from '@/components/ZIonComponents';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
+import { ProductFavicon } from '@/assets/images';
 
 // Styles
 
 const ZaionsPixelAccountDetail: React.FC<{
   workspaceId: string;
+  shareWSMemberId: string;
+  wsShareId: string;
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
-}> = ({ dismissZIonModal, workspaceId }) => {
+}> = ({ dismissZIonModal, workspaceId, shareWSMemberId, wsShareId }) => {
   const appSettings = useRecoilValue(ZaionsAppSettingsRState);
 
   //
   const [shortLinkFormState, SetShortLinkFormState] =
     useRecoilState(ShortLinkFormState);
 
-  // getting pixels
+  // If owned-workspace then this api will fetch owned-workspace-pixels data.
   const { data: __pixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN, workspaceId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _itemsIds: [workspaceId]
+    _itemsIds: [workspaceId],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _showLoader: false
   });
+
+  // If share-workspace then this api will fetch share-workspace-pixels data.
+  const { data: __swsPixelAccountsData } = useZRQGetRequest<PixelAccountType[]>(
+    {
+      _url: API_URL_ENUM.sws_pixel_account_create_list,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
+        wsShareId
+      ],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+      _itemsIds: [shareWSMemberId],
+      _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true,
+      _showLoader: false
+    }
+  );
 
   /**
    * Handle Form Submission Function
@@ -103,26 +124,52 @@ const ZaionsPixelAccountDetail: React.FC<{
 
       <ZIonContent className='ion-padding'>
         <div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top'>
+          <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
+            <ZIonImg
+              src={ProductFavicon}
+              className='w-10 h-10 mx-auto'
+            />
+          </div>
           <ZIonText
-            className=''
-            color={'primary'}>
-            <h1
-              className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}>
-              <ZIonIcon
-                icon={toggleOutline}
-                className='mx-auto'
-                color='light'
-              />
-            </h1>
-          </ZIonText>
-          <br />
-          <ZIonText color={'dark'}>
-            {/* <h6 className='font-bold'>SEO Home Zaions.com</h6> */}
-            <h6 className='font-bold'>Pixels Id's</h6>
+            color='dark'
+            className='block mt-3 text-xl font-bold ion-text-center'>
+            Pixels Id's
           </ZIonText>
         </div>
-        <ZIonGrid>
-          <ZIonRow>
+        <ZIonGrid className='pt-4'>
+          <ZIonRow className='flex border border-b-0 flex-nowrap zaions__light_bg'>
+            <ZIonCol className='px-2 py-1 border-r ion-no-padding'>
+              Plate Form
+            </ZIonCol>
+            <ZIonCol className='px-2 py-1 ion-no-padding'>Name</ZIonCol>
+          </ZIonRow>
+
+          {shortLinkFormState.pixelAccountIds?.map(el => {
+            let pixel;
+            if (workspaceId) {
+              pixel =
+                __pixelAccountsData &&
+                __pixelAccountsData.find(_pixel => _pixel.id === el);
+            } else if (wsShareId && shareWSMemberId) {
+              pixel =
+                __swsPixelAccountsData &&
+                __swsPixelAccountsData.find(_pixel => _pixel.id === el);
+            }
+
+            return (
+              <ZIonRow
+                key={el}
+                className='flex border ion-align-items-center'>
+                <ZIonCol className='px-2 py-1 border-r ion-no-padding'>
+                  {pixel?.platform}
+                </ZIonCol>
+                <ZIonCol className='px-2 py-1 ion-no-padding'>
+                  {pixel?.title}
+                </ZIonCol>
+              </ZIonRow>
+            );
+          })}
+          {/* <ZIonRow>
             <ZIonCol>
               <ZTable>
                 <ZTableTHead>
@@ -153,7 +200,7 @@ const ZaionsPixelAccountDetail: React.FC<{
                 </ZTableTBody>
               </ZTable>
             </ZIonCol>
-          </ZIonRow>
+          </ZIonRow> */}
         </ZIonGrid>
       </ZIonContent>
 

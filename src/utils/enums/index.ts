@@ -61,8 +61,14 @@ export enum API_URL_ENUM {
   sws_pixel_account_create_list = 'sws_pixel_account_create_list',
   sws_pixel_account_update_delete = 'sws_pixel_account_update_delete',
 
+  // Utm tags
   userAccountUtmTags_create_list = 'userAccountUtmTags_create_list',
   userAccountUtmTags_update_delete = 'userAccountUtmTags_update_delete',
+
+  // Share workspace Utm tags
+  sws_utm_tag_create_list = 'sws_utm_tag_create_list',
+  sws_utm_tag_update_delete = 'sws_utm_tag_update_delete',
+
   userAccountFolders_update_delete = 'userAccountFolders_update_delete',
   userAccount_LinkInBio_folders_update_delete = 'userAccount_LinkInBio_folders_update_delete',
   userEmbedWidget_create_list = 'userEmbedWidget_create_list',

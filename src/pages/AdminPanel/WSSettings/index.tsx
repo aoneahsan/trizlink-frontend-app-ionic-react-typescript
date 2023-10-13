@@ -151,6 +151,7 @@ const ZWorkspaceSettings: React.FC = () => {
     _url: API_URL_ENUM.ws_team_member_getAllInvite_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId],
     _itemsIds: [workspaceId],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _showLoader: false
   });
@@ -158,14 +159,16 @@ const ZWorkspaceSettings: React.FC = () => {
   const { data: UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
-    _itemsIds: [],
-    _urlDynamicParts: [],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _itemsIds: [workspaceId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _showLoader: false
   });
 
   const { data: pixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN, workspaceId],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true,
     _showLoader: false,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _itemsIds: [workspaceId]
@@ -220,7 +223,8 @@ const ZWorkspaceSettings: React.FC = () => {
       }
       if (isPixelPage) {
         await zInvalidateReactQueries([
-          CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
+          workspaceId
         ]);
       }
 

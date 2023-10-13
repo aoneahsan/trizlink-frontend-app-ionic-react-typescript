@@ -80,12 +80,17 @@ const ZaionsAddNewFolder: React.FC<{
   shareWSMemberId,
   wsShareId
 }) => {
-  const appSettings = useRecoilValue(ZaionsAppSettingsRState);
+  // #region Custom Hooks.
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
+  // #endregion
 
+  // #region Recoil states.
+  const appSettings = useRecoilValue(ZaionsAppSettingsRState);
   const [folderFormState, setFolderFormState] = useRecoilState(FolderFormState);
+  // #endregion
 
+  // #region APIS.
   // Create folder in owned workspace.
   const { mutateAsync: createFolderAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.folders_create_list,
@@ -113,6 +118,7 @@ const ZaionsAddNewFolder: React.FC<{
     _url: API_URL_ENUM.ws_share_folder_get_update_delete,
     _queriesKeysToInvalidate: []
   });
+  // #endregion
 
   /**
    * Handle Form Submission Function

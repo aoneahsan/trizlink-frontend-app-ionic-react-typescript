@@ -91,7 +91,7 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
   // #region Popovers & Modals.
   const { presentZIonModal: presentZAddPixelAccount } = useZIonModal(
     ZaionsAddPixelAccount,
-    { workspaceId }
+    { workspaceId, shareWSMemberId, wsShareId }
   );
   // #endregion
 
@@ -118,7 +118,7 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
 
   const { data: pixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN, workspaceId],
     _shouldFetchWhenIdPassed: workspaceId ? false : true,
     _showLoader: false,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
@@ -127,7 +127,10 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
 
   const { data: swsPixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.sws_pixel_account_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
+      wsShareId
+    ],
     _shouldFetchWhenIdPassed: wsShareId ? false : true,
     _showLoader: false,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
@@ -137,11 +140,13 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
 
   // #region UseEffects.
   useEffect(() => {
-    if (pixelAccountsData) {
+    if (workspaceId && pixelAccountsData) {
       setPixelAccountsState(pixelAccountsData);
+    } else if (wsShareId && swsPixelAccountsData) {
+      setPixelAccountsState(swsPixelAccountsData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pixelAccountsData]);
+  }, [pixelAccountsData, swsPixelAccountsData]);
   // #endregion
 
   if (showSkeleton) {
@@ -149,7 +154,18 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
   }
 
   return (
-    <>
+    <ZCan
+      shareWSId={wsShareId}
+      permissionType={
+        wsShareId
+          ? permissionsTypeEnum.shareWSMemberPermissions
+          : permissionsTypeEnum.loggedInUserPermissions
+      }
+      havePermissions={
+        wsShareId
+          ? [shareWSPermissionEnum.viewAny_sws_pixel]
+          : [permissionsEnum.viewAny_pixel]
+      }>
       {/* Row-1 */}
       <ZIonRow className='pt-1 border-bottom zaions__bg_white'>
         {/* Col-1 */}
@@ -178,6 +194,18 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
         <ZIonCol>
           {/* Select */}
           <ZaionsRSelect
+            disabled={
+              workspaceId ||
+              (wsShareId &&
+                [
+                  shareWSPermissionEnum.create_sws_pixel,
+                  shareWSPermissionEnum.update_sws_pixel
+                ].some(el =>
+                  getMemberRolePermissions?.memberPermissions?.includes(el)
+                ))
+                ? false
+                : true
+            }
             className='pt-0 pb-0 ion-padding'
             isMulti
             name='linkPixelsAccount'
@@ -186,10 +214,18 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
                 .pixelsSelector
             }
             options={
-              pixelAccountsData
-                ? pixelAccountsData?.map(el => {
-                    return { value: el.id, label: selectOptionComponent(el) };
-                  })
+              workspaceId
+                ? pixelAccountsData
+                  ? pixelAccountsData?.map(el => {
+                      return { value: el.id, label: selectOptionComponent(el) };
+                    })
+                  : []
+                : wsShareId
+                ? swsPixelAccountsData
+                  ? swsPixelAccountsData?.map(el => {
+                      return { value: el.id, label: selectOptionComponent(el) };
+                    })
+                  : []
                 : []
             }
             onChange={_values => {
@@ -213,7 +249,11 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
             value={
               formatReactSelectOptionsArray(
                 linkPixelsAccount,
-                pixelAccountsData as ZGenericObject[],
+                workspaceId
+                  ? (pixelAccountsData as ZGenericObject[])
+                  : wsShareId
+                  ? (swsPixelAccountsData as ZGenericObject[])
+                  : [],
                 'id',
                 'title'
               ) || []
@@ -253,7 +293,7 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
           </ZCan>
         </ZIonCol>
       </ZIonRow>
-    </>
+    </ZCan>
   );
 };
 

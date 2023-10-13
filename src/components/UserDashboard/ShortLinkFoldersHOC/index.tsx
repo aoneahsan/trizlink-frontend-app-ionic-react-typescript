@@ -60,37 +60,36 @@ import NewLinkFolder from '../NewLinkFolder';
  * */
 
 const ShortLinkFoldersHOC: React.FC = () => {
-	// const { data: getShortLinkFoldersData } = useZRQGetRequest<LinkFolderType[]>({
-	// 	_url: API_URL_ENUM.ShortLink_folders_create_list,
-	// 	_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
-	// });
+  // const { data: getShortLinkFoldersData } = useZRQGetRequest<LinkFolderType[]>({
+  // 	_url: API_URL_ENUM.ShortLink_folders_create_list,
+  // 	_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
+  // });
 
-	const [shortLinksFolderFormattedState, setShortLinksFolderFormattedState] =
-		useRecoilState(ShortLinksFolderFormattedRStateAtom);
+  const [shortLinksFolderFormattedState, setShortLinksFolderFormattedState] =
+    useRecoilState(ShortLinksFolderFormattedRStateAtom);
 
-	// useEffect(() => {
-	// 	try {
-	// 		if (getShortLinkFoldersData) {
-	// 			const formattedData = getShortLinkFoldersData?.map((el) => {
-	// 				return { value: el.id, label: el.title };
-	// 			}) as FolderInterface[];
-	// 			if (formattedData) {
-	// 				setShortLinksFolderFormattedState(formattedData);
-	// 			}
-	// 		}
-	// 	} catch (error) {
-	// 		reportCustomError(error);
-	// 	}
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, [getShortLinkFoldersData]);
+  // useEffect(() => {
+  // 	try {
+  // 		if (getShortLinkFoldersData) {
+  // 			const formattedData = getShortLinkFoldersData?.map((el) => {
+  // 				return { value: el.id, label: el.title };
+  // 			}) as FolderInterface[];
+  // 			if (formattedData) {
+  // 				setShortLinksFolderFormattedState(formattedData);
+  // 			}
+  // 		}
+  // 	} catch (error) {
+  // 		reportCustomError(error);
+  // 	}
+  // 	// eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [getShortLinkFoldersData]);
 
-	return (
-		<NewLinkFolder
-			_foldersData={[]}
-			_state={folderState.shortlink}
-			workspaceId={''}
-		/>
-	);
+  return (
+    <NewLinkFolder
+      _foldersData={[]}
+      _state={folderState.shortlink}
+    />
+  );
 };
 
 export default ShortLinkFoldersHOC;

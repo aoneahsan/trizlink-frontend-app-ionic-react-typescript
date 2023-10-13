@@ -99,7 +99,7 @@ const ZWSSettingPixelListPage: React.FC = () => {
   // #region APIs
   const { data: pixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN, workspaceId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _itemsIds: [workspaceId]
   });
@@ -118,7 +118,8 @@ const ZWSSettingPixelListPage: React.FC = () => {
   const invalidedQueries = async () => {
     try {
       await zInvalidateReactQueries([
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
+        workspaceId
       ]);
     } catch (error) {
       reportCustomError(error);

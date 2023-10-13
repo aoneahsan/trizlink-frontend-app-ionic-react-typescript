@@ -190,7 +190,8 @@ const ZaionsShortLinkTable: React.FC<{
   // #region Functions.
   const resetShortLinkFormHandler = () => {
     try {
-      setNewShortLinkFormState(_ => ({
+      setNewShortLinkFormState(oldValues => ({
+        ...oldValues,
         folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
         shortUrl: {
           domain: CONSTANTS.DEFAULT_VALUES.DEFAULT_CUSTOM_DOMAIN
@@ -211,13 +212,26 @@ const ZaionsShortLinkTable: React.FC<{
         }));
       }
 
-      zNavigatePushRoute(
-        replaceParams(
-          ZaionsRoutes.AdminPanel.ShortLinks.Create,
-          CONSTANTS.RouteParams.workspace.workspaceId,
-          workspaceId
-        )
-      );
+      if (workspaceId) {
+        zNavigatePushRoute(
+          replaceParams(
+            ZaionsRoutes.AdminPanel.ShortLinks.Create,
+            CONSTANTS.RouteParams.workspace.workspaceId,
+            workspaceId
+          )
+        );
+      } else if (wsShareId && shareWSMemberId) {
+        zNavigatePushRoute(
+          createRedirectRoute({
+            url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Create,
+            params: [
+              CONSTANTS.RouteParams.workspace.wsShareId,
+              CONSTANTS.RouteParams.workspace.shareWSMemberId
+            ],
+            values: [wsShareId, shareWSMemberId]
+          })
+        );
+      }
     } catch (error) {
       reportCustomError(error);
     }
@@ -391,7 +405,7 @@ const ZInpageTable: React.FC = () => {
   // #region Modal & Popovers.
   const { presentZIonModal: presentPixelAccountDetailModal } = useZIonModal(
     ZaionsPixelAccountDetail,
-    { workspaceId }
+    { workspaceId, shareWSMemberId, wsShareId }
   );
 
   const { presentZIonModal: presentShortLinkNoteModal } = useZIonModal(
@@ -430,14 +444,28 @@ const ZInpageTable: React.FC = () => {
         return (
           <ZIonRouterLink
             className='hover:underline'
-            routerLink={replaceRouteParams(
-              ZaionsRoutes.AdminPanel.ShortLinks.Edit,
-              [
-                CONSTANTS.RouteParams.workspace.workspaceId,
-                CONSTANTS.RouteParams.editShortLinkIdParam
-              ],
-              [workspaceId, row?.row?.original?.id!]
-            )}>
+            routerLink={
+              workspaceId
+                ? replaceRouteParams(
+                    ZaionsRoutes.AdminPanel.ShortLinks.Edit,
+                    [
+                      CONSTANTS.RouteParams.workspace.workspaceId,
+                      CONSTANTS.RouteParams.editShortLinkIdParam
+                    ],
+                    [workspaceId, row?.row?.original?.id!]
+                  )
+                : wsShareId && shareWSMemberId
+                ? replaceRouteParams(
+                    ZaionsRoutes.AdminPanel.ShareWS.Short_link.Edit,
+                    [
+                      CONSTANTS.RouteParams.workspace.wsShareId,
+                      CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                      CONSTANTS.RouteParams.editShortLinkIdParam
+                    ],
+                    [wsShareId, shareWSMemberId, row?.row?.original?.id!]
+                  )
+                : ''
+            }>
             <ZIonText>{row.getValue()}</ZIonText>
           </ZIonRouterLink>
         );
@@ -1188,9 +1216,14 @@ const ZShortLinkActionPopover: React.FC<{
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
-  // Request for deleting short link.
+  // If owned workspace then this api is used to delete short link.
   const { mutateAsync: deleteShortLinkMutate } = useZRQDeleteRequest({
     _url: API_URL_ENUM.shortLinks_update_delete
+  });
+
+  // If share workspace then this api is used to delete share ws short link.
+  const { mutateAsync: deleteSWSShortLinkMutate } = useZRQDeleteRequest({
+    _url: API_URL_ENUM.sws_sl_get_update_delete
   });
 
   // when user won't to delete short link and click on the delete button this function will fire and show the confirm alert.
@@ -1232,13 +1265,25 @@ const ZShortLinkActionPopover: React.FC<{
     try {
       if (shortLinkId?.trim() && _FilteredShortLinkDataSelector?.length) {
         if (shortLinkId) {
-          const _response = await deleteShortLinkMutate({
-            itemIds: [workspaceId, shortLinkId],
-            urlDynamicParts: [
-              CONSTANTS.RouteParams.workspace.workspaceId,
-              CONSTANTS.RouteParams.shortLink.shortLinkId
-            ]
-          });
+          let _response;
+
+          if (workspaceId) {
+            _response = await deleteShortLinkMutate({
+              itemIds: [workspaceId, shortLinkId],
+              urlDynamicParts: [
+                CONSTANTS.RouteParams.workspace.workspaceId,
+                CONSTANTS.RouteParams.shortLink.shortLinkId
+              ]
+            });
+          } else if (wsShareId && shareWSMemberId) {
+            _response = await deleteSWSShortLinkMutate({
+              itemIds: [shareWSMemberId, shortLinkId],
+              urlDynamicParts: [
+                CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                CONSTANTS.RouteParams.shortLink.shortLinkId
+              ]
+            });
+          }
 
           if (_response) {
             const _data = extractInnerData<{ success: boolean }>(
@@ -1248,14 +1293,27 @@ const ZShortLinkActionPopover: React.FC<{
 
             if (_data && _data?.success) {
               // getting all the shortLinks from RQ cache.
+              let _rqShortlinkData;
+
+              if (workspaceId) {
+                _rqShortlinkData = getRQCDataHandler<ShortLinkType[]>({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+                    workspaceId
+                  ]
+                }) as ShortLinkType[];
+              } else if (wsShareId && shareWSMemberId) {
+                _rqShortlinkData = getRQCDataHandler<ShortLinkType[]>({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
+                    wsShareId
+                  ]
+                }) as ShortLinkType[];
+              }
+
               const _oldShortLinks =
                 extractInnerData<ShortLinkType[]>(
-                  getRQCDataHandler<ShortLinkType[]>({
-                    key: [
-                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-                      workspaceId
-                    ]
-                  }) as ShortLinkType[],
+                  _rqShortlinkData,
                   extractInnerDataOptionsEnum.createRequestResponseItems
                 ) || [];
 
@@ -1265,16 +1323,29 @@ const ZShortLinkActionPopover: React.FC<{
               );
 
               // Updating data in RQ cache.
-              await updateRQCDataHandler<ShortLinkType[] | undefined>({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-                  workspaceId
-                ],
-                data: _updatedShortLinks as ShortLinkType[],
-                id: '',
-                extractType: ZRQGetRequestExtractEnum.extractItems,
-                updateHoleData: true
-              });
+              if (workspaceId) {
+                await updateRQCDataHandler<ShortLinkType[] | undefined>({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+                    workspaceId
+                  ],
+                  data: _updatedShortLinks as ShortLinkType[],
+                  id: '',
+                  extractType: ZRQGetRequestExtractEnum.extractItems,
+                  updateHoleData: true
+                });
+              } else if (wsShareId && shareWSMemberId) {
+                await updateRQCDataHandler<ShortLinkType[] | undefined>({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
+                    wsShareId
+                  ],
+                  data: _updatedShortLinks as ShortLinkType[],
+                  id: '',
+                  extractType: ZRQGetRequestExtractEnum.extractItems,
+                  updateHoleData: true
+                });
+              }
 
               showSuccessNotification(MESSAGES.SHORT_LINKS.DELETE);
 
@@ -1326,16 +1397,30 @@ const ZShortLinkActionPopover: React.FC<{
                   formMode: FormMode.EDIT
                 }));
 
-                zNavigatePushRoute(
-                  replaceRouteParams(
-                    ZaionsRoutes.AdminPanel.ShortLinks.Edit,
-                    [
-                      CONSTANTS.RouteParams.workspace.workspaceId,
-                      CONSTANTS.RouteParams.editShortLinkIdParam
-                    ],
-                    [workspaceId, shortLinkId]
-                  )
-                );
+                if (workspaceId) {
+                  zNavigatePushRoute(
+                    replaceRouteParams(
+                      ZaionsRoutes.AdminPanel.ShortLinks.Edit,
+                      [
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.editShortLinkIdParam
+                      ],
+                      [workspaceId, shortLinkId]
+                    )
+                  );
+                } else if (wsShareId && shareWSMemberId) {
+                  zNavigatePushRoute(
+                    replaceRouteParams(
+                      ZaionsRoutes.AdminPanel.ShareWS.Short_link.Edit,
+                      [
+                        CONSTANTS.RouteParams.workspace.wsShareId,
+                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                        CONSTANTS.RouteParams.editShortLinkIdParam
+                      ],
+                      [wsShareId, shareWSMemberId, shortLinkId]
+                    )
+                  );
+                }
 
                 dismissZIonPopover('', '');
               } else {
@@ -1381,7 +1466,11 @@ const ZShortLinkActionPopover: React.FC<{
           button={true}
           detail={false}
           minHeight='2.5rem'
-          onClick={() => void deleteShortLink()}
+          onClick={() => {
+            if (workspaceId || (wsShareId && shareWSMemberId)) {
+              void deleteShortLink();
+            }
+          }}
           testingselector={
             CONSTANTS.testingSelectors.shortLink.listPage.table.deleteBtn
           }

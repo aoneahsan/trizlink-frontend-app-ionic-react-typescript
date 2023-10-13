@@ -132,6 +132,14 @@ import {
 const ZUTMTagsTable: React.FC<{
   showSkeleton?: boolean;
 }> = ({ showSkeleton = false }) => {
+  // getting link-in-bio and workspace ids from url with the help of useParams.
+  const { editLinkId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    editLinkId: string;
+    workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
+  }>();
+
   // #region custom hooks.
   const { zNavigatePushRoute } = useZNavigate();
   // #endregion
@@ -142,15 +150,16 @@ const ZUTMTagsTable: React.FC<{
     useZRQGetRequest<UTMTagTemplateType[]>({
       _url: API_URL_ENUM.userAccountUtmTags_create_list,
       _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
-      _itemsIds: [],
-      _urlDynamicParts: []
+      _shouldFetchWhenIdPassed: workspaceId ? false : true,
+      _itemsIds: [workspaceId],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
     });
   // #endregion
 
   // #region Modals & popovers
   const { presentZIonModal: presentZUtmTagsFormModal } = useZIonModal(
     ZaionsAddUtmTags,
-    { formMode: FormMode.ADD }
+    { formMode: FormMode.ADD, workspaceId }
   );
   // #endregion
 
@@ -193,8 +202,12 @@ const ZInpageTable: React.FC = () => {
     utmTag?: UTMTagTemplateType;
   }>();
 
-  const { workspaceId } = useParams<{
-    workspaceId?: string;
+  // getting link-in-bio and workspace ids from url with the help of useParams.
+  const { editLinkId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    editLinkId: string;
+    workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
   }>();
 
   // #region Recoil state.
@@ -219,8 +232,9 @@ const ZInpageTable: React.FC = () => {
   const { data: UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
-    _itemsIds: [],
-    _urlDynamicParts: []
+    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _itemsIds: [workspaceId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
 
   const {
@@ -515,7 +529,7 @@ const ZInpageTable: React.FC = () => {
 
   const { presentZIonModal: presentZUtmTagsFormModal } = useZIonModal(
     ZaionsAddUtmTags,
-    { formMode: FormMode.ADD }
+    { formMode: FormMode.ADD, workspaceId }
   );
   // #endregion
 
@@ -1036,7 +1050,8 @@ const ZUTMTagActionPopover: React.FC<{
     ZaionsAddUtmTags,
     {
       utmTag: utmTag,
-      formMode: FormMode.EDIT
+      formMode: FormMode.EDIT,
+      workspaceId
     }
   );
   // #endregion
@@ -1049,8 +1064,8 @@ const ZUTMTagActionPopover: React.FC<{
   const { data: UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
-    _itemsIds: [],
-    _urlDynamicParts: []
+    _itemsIds: [workspaceId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
 
   // when user won't to delete Utm tag and click on the delete button this function will fire and show the confirm alert.
@@ -1091,8 +1106,11 @@ const ZUTMTagActionPopover: React.FC<{
       if (utmTag?.id?.trim() && UTMTagsData?.length) {
         if (utmTag?.id) {
           const _response = await deleteUtmTagMutate({
-            itemIds: [utmTag?.id],
-            urlDynamicParts: [CONSTANTS.RouteParams.utmTag.utmTagId]
+            itemIds: [workspaceId, utmTag?.id],
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.workspaceId,
+              CONSTANTS.RouteParams.utmTag.utmTagId
+            ]
           });
 
           if (_response) {

@@ -6,7 +6,6 @@ import ZCan from '@/components/Can';
 import {
   ZIonButton,
   ZIonContent,
-  ZIonInput,
   ZIonText,
   ZIonTitle
 } from '@/components/ZIonComponents';
@@ -88,7 +87,16 @@ const ZShortLinkModal: React.FC<{
   zNavigatePushRoute: (_url: string) => void;
   workspaceId: string;
   shortUrl: string;
-}> = ({ dismissZIonModal, zNavigatePushRoute, workspaceId, shortUrl }) => {
+  shareWSMemberId: string;
+  wsShareId: string;
+}> = ({
+  dismissZIonModal,
+  zNavigatePushRoute,
+  workspaceId,
+  shortUrl,
+  shareWSMemberId,
+  wsShareId
+}) => {
   const { presentZIonToast } = useZIonToast();
   //
   const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
@@ -159,13 +167,26 @@ const ZShortLinkModal: React.FC<{
                     }));
                   }
 
-                  zNavigatePushRoute(
-                    createRedirectRoute({
-                      url: ZaionsRoutes.AdminPanel.ShortLinks.Create,
-                      params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                      values: [workspaceId]
-                    })
-                  );
+                  if (workspaceId) {
+                    zNavigatePushRoute(
+                      createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.ShortLinks.Create,
+                        params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                        values: [workspaceId]
+                      })
+                    );
+                  } else if (wsShareId && shareWSMemberId) {
+                    zNavigatePushRoute(
+                      createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Create,
+                        params: [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId
+                        ],
+                        values: [wsShareId, shareWSMemberId]
+                      })
+                    );
+                  }
                 }}>
                 Create a new link
               </ZIonButton>
@@ -175,16 +196,34 @@ const ZShortLinkModal: React.FC<{
               onClick={() => {
                 dismissZIonModal();
 
-                zNavigatePushRoute(
-                  replaceRouteParams(
-                    ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                    [
-                      CONSTANTS.RouteParams.workspace.workspaceId,
-                      CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-                    ],
-                    [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
-                  )
-                );
+                if (workspaceId) {
+                  zNavigatePushRoute(
+                    replaceRouteParams(
+                      ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                      [
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
+                    )
+                  );
+                } else if (wsShareId && shareWSMemberId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.wsShareId,
+                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        wsShareId,
+                        shareWSMemberId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ]
+                    })
+                  );
+                }
               }}>
               Go to dashboard
             </ZIonButton>

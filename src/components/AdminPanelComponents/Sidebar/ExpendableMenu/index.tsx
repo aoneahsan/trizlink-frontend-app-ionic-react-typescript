@@ -117,7 +117,8 @@ const AdminPanelSidebarMenu: React.FC<{
       _itemsIds: [workspaceId],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
       _shouldFetchWhenIdPassed: workspaceId ? false : true,
-      _extractType: ZRQGetRequestExtractEnum.extractItem
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _showLoader: false
     });
 
   const {
@@ -133,7 +134,8 @@ const AdminPanelSidebarMenu: React.FC<{
     _itemsIds: [shareWSMemberId],
     _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _extractType: ZRQGetRequestExtractEnum.extractItem
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
   });
 
   // Made this constant for readability.

@@ -6,8 +6,9 @@ import { zConsoleLog } from '@/utils/helpers';
 import { useZRQCreateRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
 import CLASSES from './styles.module.css';
-import { ZIonInput } from '@/components/ZIonComponents';
+import { ZIonIcon, ZIonInput } from '@/components/ZIonComponents';
 import ZUploadInput from '@/components/CustomComponents/ZUploadInput';
+import { star } from 'ionicons/icons';
 
 const TestingReactDropzone: React.FC = () => {
   const { mutateAsync: uploadSingleFile } = useZRQCreateRequest({
@@ -223,6 +224,96 @@ const TestingReactDropzone: React.FC = () => {
         }}
       />
       <ZUploadInput />
+      <ReactDropzone
+        multiple={false}
+        // accept={{ '*': ['.png', '.gif', '.jpeg', '.jpg'] }} // don't pass this if you want to select any file
+        autoFocus
+        disabled={false}
+        maxSize={1250000}
+        minSize={10000}
+        // noClick={false}
+        maxFiles={10}
+        // key={'some key or leave it if not in loop'}
+        // noDrag={false}
+        // onDragEnter={(event) => {
+        //   zConsoleLog({
+        //     message: 'ReactDropzone onDragEnter event',
+        //     data: { event },
+        //   });
+        // }}
+        // onDragLeave={(event) => {
+        //   zConsoleLog({
+        //     message: 'ReactDropzone onDragLeave event',
+        //     data: { event },
+        //   });
+        // }}
+        // onDragOver={(event) => {
+        //   zConsoleLog({
+        //     message: 'ReactDropzone onDragOver event',
+        //     data: { event },
+        //   });
+        // }}
+        onDrop={event => {
+          zConsoleLog({
+            message: 'ReactDropzone onDrop event',
+            data: { event }
+          });
+          void uploadFileToBackend(event[0]);
+        }}
+        // onDropAccepted={(event) => {
+        //   zConsoleLog({
+        //     message: 'ReactDropzone onDropAccepted event',
+        //     data: { event },
+        //   });
+        //   void uploadFileToBackend(event[0]);
+        // }}
+        onDropRejected={event => {
+          zConsoleLog({
+            message: 'ReactDropzone onDropRejected event',
+            data: { event }
+          });
+        }}
+        onError={event => {
+          zConsoleLog({
+            message: 'ReactDropzone onError event',
+            data: { event }
+          });
+        }}
+        // onFileDialogCancel={() => {
+        //   zConsoleLog({
+        //     message: 'ReactDropzone onFileDialogCancel event',
+        //   });
+        // }}
+        // onFileDialogOpen={() => {
+        //   zConsoleLog({
+        //     message: 'ReactDropzone onFileDialogOpen event',
+        //   });
+        // }}
+        // preventDropOnDocument={false}
+        // validator={(files) => {
+        //   zConsoleLog({
+        //     message: 'ReactDropzone validator event, use this if we need some custom validation, can be anything',
+        //     data: { files },
+        //   });
+        //   return null;
+        // }}
+      >
+        {({ getRootProps, getInputProps, isDragActive, acceptedFiles }) => {
+          // zConsoleLog({ message: 'acceptedFiles', data: { acceptedFiles } });
+          return (
+            <div {...getRootProps()}>
+              <input {...getInputProps()} />
+              <div>
+                {isDragActive ? (
+                  <h6>Drop Files here...</h6>
+                ) : (
+                  <h6>Multiple File - Drag and drop files here</h6>
+                )}
+              </div>
+            </div>
+          );
+        }}
+      </ReactDropzone>
     </>
   );
 };

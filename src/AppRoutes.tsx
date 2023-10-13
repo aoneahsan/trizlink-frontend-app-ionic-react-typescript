@@ -401,6 +401,18 @@ const AppRoutes = () => {
 
       <PrivateRoute
         exact
+        path={ZaionsRoutes.AdminPanel.ShareWS.Short_link.Create}
+        Component={AdminCreateNewLinkPages}
+      />
+
+      <PrivateRoute
+        exact
+        path={ZaionsRoutes.AdminPanel.ShareWS.Short_link.Edit}
+        Component={AdminCreateNewLinkPages}
+      />
+
+      <PrivateRoute
+        exact
         path={ZaionsRoutes.AdminPanel.ZaionsDashboard.LinkCampaignsInactive}
         Component={ZLinkCampaigns}
       />

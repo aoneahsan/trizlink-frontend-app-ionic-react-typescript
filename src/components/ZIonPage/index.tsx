@@ -20,52 +20,51 @@ import { useParams } from 'react-router';
 
 // Types
 type ZaionsIonPageType = {
-	children: ReactNode | ReactNode[];
-	className?: string;
-	id?: string;
-	pageTitle?: string;
-	menu?: PAGE_MENU | undefined;
-	menuSide?: PAGE_MENU_SIDE;
+  children: ReactNode | ReactNode[];
+  className?: string;
+  id?: string;
+  pageTitle?: string;
+  menu?: PAGE_MENU | undefined;
+  menuSide?: PAGE_MENU_SIDE;
 };
 
 // Functional Component
 const ZIonPage: React.FC<ZaionsIonPageType> = ({
-	menu,
-	id,
-	children,
-	className,
-	menuSide,
-	pageTitle,
+  menu,
+  id,
+  children,
+  className,
+  menuSide,
+  pageTitle
 }) => {
-	const { workspaceId } = useParams<{
-		workspaceId: string;
-	}>();
-	return (
-		<>
-			{menu === PAGE_MENU.UNAUTHENTICATED_PAGE_MENU ? (
-				<SideBarMenu menuSide={menuSide} />
-			) : menu === PAGE_MENU.DASHBOARD_PAGE_MENU ? (
-				<ZaionsDashboardResponsiveMenu menuSide={menuSide} />
-			) : menu === PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU ? (
-				<AdminPanelShortLinksFolderSideMenu workspaceId={workspaceId} />
-			) : menu === PAGE_MENU.ADMIN_PANEL_LINK_IN_BIO_FOLDERS_MENU ? (
-				<AdminPanelLinkInBioFolderSideMenu workspaceId={workspaceId} />
-			) : menu === PAGE_MENU.ADMIN_PANEL_WORKSPACE_VIEW_FILTER_MENU ? (
-				<ZWorkspaceViewPageFilterMenu />
-			) : (
-				''
-			)}
+  const { workspaceId } = useParams<{
+    workspaceId: string;
+  }>();
+  return (
+    <>
+      {menu === PAGE_MENU.UNAUTHENTICATED_PAGE_MENU ? (
+        <SideBarMenu menuSide={menuSide} />
+      ) : menu === PAGE_MENU.DASHBOARD_PAGE_MENU ? (
+        <ZaionsDashboardResponsiveMenu menuSide={menuSide} />
+      ) : menu === PAGE_MENU.ADMIN_PANEL_SHORT_LINKS_FOLDERS_MENU ? (
+        <AdminPanelShortLinksFolderSideMenu />
+      ) : menu === PAGE_MENU.ADMIN_PANEL_LINK_IN_BIO_FOLDERS_MENU ? (
+        <AdminPanelLinkInBioFolderSideMenu workspaceId={workspaceId} />
+      ) : menu === PAGE_MENU.ADMIN_PANEL_WORKSPACE_VIEW_FILTER_MENU ? (
+        <ZWorkspaceViewPageFilterMenu />
+      ) : (
+        ''
+      )}
 
-			<IonPage
-				id={id ? id : CONTENT_ID}
-				// className={`${className}`}
-				className={classNames(className)}
-			>
-				<ZaionsRHelmet title={pageTitle} />
-				{children}
-			</IonPage>
-		</>
-	);
+      <IonPage
+        id={id ? id : CONTENT_ID}
+        // className={`${className}`}
+        className={classNames(className)}>
+        <ZaionsRHelmet title={pageTitle} />
+        {children}
+      </IonPage>
+    </>
+  );
 };
 
 export default ZIonPage;

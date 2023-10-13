@@ -94,7 +94,11 @@ import {
 } from '@/utils/enums/RoleAndPermissions';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { API_URL_ENUM } from '@/utils/enums';
-import { replaceParams, zStringify } from '@/utils/helpers';
+import {
+  createRedirectRoute,
+  replaceParams,
+  zStringify
+} from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
 
@@ -1002,7 +1006,8 @@ const ZInpageMainContent: React.FC = () => {
 
   const resetShortLinkFormHandler = () => {
     try {
-      setNewShortLinkFormState(_ => ({
+      setNewShortLinkFormState(oldValues => ({
+        ...oldValues,
         folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
         shortUrl: {
           domain: CONSTANTS.DEFAULT_VALUES.DEFAULT_CUSTOM_DOMAIN
@@ -1267,11 +1272,24 @@ const ZInpageMainContent: React.FC = () => {
                   'w-full': !isSmScale
                 })}
                 onClick={() => resetShortLinkFormHandler()}
-                routerLink={replaceParams(
-                  ZaionsRoutes.AdminPanel.ShortLinks.Create,
-                  CONSTANTS.RouteParams.workspace.workspaceId,
+                routerLink={
                   workspaceId
-                )}
+                    ? replaceParams(
+                        ZaionsRoutes.AdminPanel.ShortLinks.Create,
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        workspaceId
+                      )
+                    : wsShareId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Create,
+                        params: [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId
+                        ],
+                        values: [wsShareId, shareWSMemberId]
+                      })
+                    : ''
+                }
                 testingselector={
                   CONSTANTS.testingSelectors.shortLink.listPage.createBtn
                 }>

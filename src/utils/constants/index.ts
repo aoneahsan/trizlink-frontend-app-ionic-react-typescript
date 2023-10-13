@@ -146,10 +146,16 @@ export const API_URLS = {
   sws_pixel_account_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/pixel`,
   sws_pixel_account_update_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/pixel/${RouteParams.pixel.pixelId}`,
 
-  userAccountUtmTags_create_list: '/user/utm-tag',
+  // Utm tags
+  userAccountUtmTags_create_list: `/user/workspace/${RouteParams.workspace.workspaceId}/utm-tag`,
+  userAccountUtmTags_update_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/utm-tag/${RouteParams.utmTag.utmTagId}`,
+
+  // Share workspace Utm tags
+  sws_utm_tag_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/utm-tag`,
+  sws_utm_tag_update_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/utm-tag/${RouteParams.utmTag.utmTagId}`,
+
   ShortLink_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/shortLink/folders`,
   userEmbedWidget_create_list: '/user/embedded-scripts',
-  userAccountUtmTags_update_delete: `/user/utm-tag/${RouteParams.utmTag.utmTagId}`,
   userAccountFolders_update_delete: '/user/folders/:folderId',
   userEmbedWidget_update_delete: '/user/embedded-scripts/:embeddedId',
   send_otp: '/user/send-otp',
@@ -174,7 +180,7 @@ export const API_URLS = {
 
   // Share workspace short links
   sws_sl_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/short-links`,
-  sws_sl_get_update_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/short-links/${RouteParams.shortLink.shortLinkId}`,
+  sws_sl_get_update_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/short-link/${RouteParams.shortLink.shortLinkId}`,
 
   FolderShortLinks: '/user/folders/:folderId/short-links',
   LinkInBio_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/linkInBio/folders`,

@@ -161,7 +161,11 @@ export interface ZaionsShortUrlOptionFieldsValuesInterface {
   type?: messengerPlatformsBlockEnum;
   title: string;
   linkDescription: string;
-  featureImg: string;
+  featureImg: {
+    featureImgFile?: File;
+    featureImgPath?: string;
+    featureImgUrl?: string;
+  };
   passwordEnabled: boolean;
   password: PasswordInterface;
   folderId: string;
@@ -285,7 +289,12 @@ export type ShortLinkType = {
   // form data - for creation/updating
   type?: messengerPlatformsBlockEnum;
   target?: LinkTargetType | string;
-  featureImg?: string;
+  // featureImg?: string;
+  featureImg: {
+    featureImgFile?: File;
+    featureImgPath?: string;
+    featureImgUrl?: string;
+  };
   title?: string;
   description?: string;
   pixelIds?: ZaionsRSelectOptions[] | string[] | string;
