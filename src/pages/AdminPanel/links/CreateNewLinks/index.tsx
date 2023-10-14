@@ -1425,6 +1425,13 @@ const AdminCreateNewLinkPages: React.FC = () => {
                 errors.shortUrlPath = 'Path must be exact 6 character long';
               }
 
+              let _total = 0;
+
+              Array.from(
+                values?.rotatorABTesting,
+                ({ percentage }) => (_total = _total + percentage!)
+              );
+
               // Rotator Geo Location Field Validation End
               // check for errors if there are any return errors object otherwise return []
               if (
@@ -1445,7 +1452,8 @@ const AdminCreateNewLinkPages: React.FC = () => {
                 ) ||
                 !areAllObjectsFilled(
                   (errors.geoLocation as Array<object>) || []
-                )
+                ) ||
+                _total > 100
               ) {
                 return errors;
               } else {

@@ -37,6 +37,7 @@ import { useRecoilState } from 'recoil';
  * ? Like import of custom components is a custom import
  * */
 import { ZIonSegment, ZIonSegmentButton } from '@/components/ZIonComponents';
+import ZCan from '@/components/Can';
 
 /**
  * Global Constants Imports go down
@@ -49,6 +50,12 @@ import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { replaceParams, replaceRouteParams } from '@/utils/helpers';
 import { API_URL_ENUM } from '@/utils/enums';
+import {
+  permissionCheckModeEnum,
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 
 /**
@@ -70,13 +77,6 @@ import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
-import {
-  permissionCheckModeEnum,
-  permissionsEnum,
-  permissionsTypeEnum,
-  shareWSPermissionEnum
-} from '@/utils/enums/RoleAndPermissions';
-import ZCan from '@/components/Can';
 
 /**
  * Images Imports go down
@@ -253,15 +253,37 @@ const AdminPanelSidebarMenu: React.FC<{
                         zaions__primary_set:
                           activePage === AdminPanelSidebarMenuPageEnum.shortLink
                       })}
-                      routerLink={replaceRouteParams(
-                        ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                        [
-                          CONSTANTS.RouteParams.workspace.workspaceId,
-                          CONSTANTS.RouteParams
-                            .folderIdToGetShortLinksOrLinkInBio
-                        ],
-                        [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
-                      )}>
+                      routerLink={
+                        workspaceId
+                          ? replaceRouteParams(
+                              ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                              [
+                                CONSTANTS.RouteParams.workspace.workspaceId,
+                                CONSTANTS.RouteParams
+                                  .folderIdToGetShortLinksOrLinkInBio
+                              ],
+                              [
+                                workspaceId,
+                                CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                              ]
+                            )
+                          : wsShareId && shareWSMemberId
+                          ? replaceRouteParams(
+                              ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                              [
+                                CONSTANTS.RouteParams.workspace.wsShareId,
+                                CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                                CONSTANTS.RouteParams
+                                  .folderIdToGetShortLinksOrLinkInBio
+                              ],
+                              [
+                                wsShareId,
+                                shareWSMemberId,
+                                CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                              ]
+                            )
+                          : ''
+                      }>
                       <ZIonText
                         className={classNames({
                           'flex ion-align-items-center': true,
@@ -310,15 +332,37 @@ const AdminPanelSidebarMenu: React.FC<{
                         zaions__primary_set:
                           activePage === AdminPanelSidebarMenuPageEnum.linkInBio
                       })}
-                      routerLink={replaceRouteParams(
-                        ZaionsRoutes.AdminPanel.LinkInBio.Main,
-                        [
-                          CONSTANTS.RouteParams.workspace.workspaceId,
-                          CONSTANTS.RouteParams
-                            .folderIdToGetShortLinksOrLinkInBio
-                        ],
-                        [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
-                      )}>
+                      routerLink={
+                        workspaceId
+                          ? replaceRouteParams(
+                              ZaionsRoutes.AdminPanel.LinkInBio.Main,
+                              [
+                                CONSTANTS.RouteParams.workspace.workspaceId,
+                                CONSTANTS.RouteParams
+                                  .folderIdToGetShortLinksOrLinkInBio
+                              ],
+                              [
+                                workspaceId,
+                                CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                              ]
+                            )
+                          : wsShareId
+                          ? replaceRouteParams(
+                              ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Main,
+                              [
+                                CONSTANTS.RouteParams.workspace.wsShareId,
+                                CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                                CONSTANTS.RouteParams
+                                  .folderIdToGetShortLinksOrLinkInBio
+                              ],
+                              [
+                                wsShareId,
+                                shareWSMemberId,
+                                CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                              ]
+                            )
+                          : ''
+                      }>
                       <ZIonText
                         className={classNames({
                           'flex ion-align-items-center': true,
@@ -534,11 +578,26 @@ const AdminPanelSidebarMenu: React.FC<{
                         zaions__primary_set:
                           activePage === AdminPanelSidebarMenuPageEnum.settings
                       })}
-                      routerLink={replaceRouteParams(
-                        ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
-                        [CONSTANTS.RouteParams.workspace.workspaceId],
-                        [workspaceId]
-                      )}>
+                      routerLink={
+                        workspaceId
+                          ? replaceRouteParams(
+                              ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                                .Members,
+                              [CONSTANTS.RouteParams.workspace.workspaceId],
+                              [workspaceId]
+                            )
+                          : wsShareId && shareWSMemberId
+                          ? replaceRouteParams(
+                              ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                                .Members,
+                              [
+                                CONSTANTS.RouteParams.workspace.wsShareId,
+                                CONSTANTS.RouteParams.workspace.shareWSMemberId
+                              ],
+                              [wsShareId, shareWSMemberId]
+                            )
+                          : ''
+                      }>
                       <ZIonText
                         className={classNames({
                           'flex ion-align-items-center': true,

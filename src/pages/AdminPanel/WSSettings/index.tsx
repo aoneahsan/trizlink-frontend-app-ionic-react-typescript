@@ -121,8 +121,10 @@ import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
  * */
 const ZWorkspaceSettings: React.FC = () => {
   // getting current workspace id form params.
-  const { workspaceId } = useParams<{
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
     workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
   }>();
   // #region Custom hooks.
   const { isSmScale, isLgScale, isMdScale } = useZMediaQueryScale();
@@ -135,16 +137,7 @@ const ZWorkspaceSettings: React.FC = () => {
   // #endregion
 
   // #region APIS
-  // Request for getting teams data.
-  const { data: WSTeamsData, refetch: refetchWSTeamsData } = useZRQGetRequest<
-    workspaceTeamInterface[]
-  >({
-    _url: API_URL_ENUM.workspace_team_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM, workspaceId],
-    _itemsIds: [workspaceId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
-  });
-
+  // If owned workspace then this api is used to fetch workspace member.
   const { data: wsTeamMembersData } = useZRQGetRequest<
     WSTeamMembersInterface[]
   >({
@@ -156,6 +149,7 @@ const ZWorkspaceSettings: React.FC = () => {
     _showLoader: false
   });
 
+  // If owned workspace then this api is used to fetch workspace utm tags.
   const { data: UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
@@ -165,6 +159,17 @@ const ZWorkspaceSettings: React.FC = () => {
     _showLoader: false
   });
 
+  // If owned workspace then this api is used to fetch workspace utm tags.
+  const { data: swsUTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
+    _url: API_URL_ENUM.userAccountUtmTags_create_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _itemsIds: [workspaceId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _showLoader: false
+  });
+
+  // If owned workspace then this api is used to fetch workspace pixels.
   const { data: pixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN, workspaceId],
@@ -186,9 +191,16 @@ const ZWorkspaceSettings: React.FC = () => {
   // #endregion
 
   // #region checking the route.
-  const isMembersPage = useRouteMatch(
-    ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members
-  )?.isExact;
+  let isMembersPage: boolean | undefined;
+  if (workspaceId) {
+    isMembersPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members
+    )?.isExact;
+  } else if (wsShareId && shareWSMemberId) {
+    isMembersPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Members
+    )?.isExact;
+  }
 
   const isReferralProgramPage = useRouteMatch(
     ZaionsRoutes.AdminPanel.Setting.AccountSettings.ReferralProgram
@@ -210,6 +222,8 @@ const ZWorkspaceSettings: React.FC = () => {
     ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag
   )?.isExact;
   // #endregion
+
+  // console.log({ isMembersPage });
 
   // #region Functions.
   const invalidedQueries = async () => {

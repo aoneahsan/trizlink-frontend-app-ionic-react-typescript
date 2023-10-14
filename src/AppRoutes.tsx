@@ -317,6 +317,11 @@ const AppRoutes = () => {
       />
 
       <PrivateRoute
+        path={ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Main}
+        Component={ZWorkspaceSettings}
+      />
+
+      <PrivateRoute
         path={ZaionsRoutes.AdminPanel.Setting.UserAccount.ProfileSettings}
         Component={ZUserAccount}
       />

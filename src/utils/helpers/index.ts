@@ -1577,6 +1577,17 @@ export const zGetRoutePermissions = ({
       case ZaionsRoutes.AdminPanel.ShareWS.Short_link.Edit:
         __permissions = [permissionsEnum.update_shareWS];
         break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Main:
+        __permissions = [permissionsEnum.update_shareWS];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Members:
+        __permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_workspaceTeam
+        ];
+        break;
     }
 
     return __permissions;

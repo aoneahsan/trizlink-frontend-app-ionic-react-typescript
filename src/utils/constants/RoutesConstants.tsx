@@ -151,6 +151,17 @@ const ZaionsRoutes = {
       },
       Link_in_bio: {
         Main: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/link-in-bio/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`
+      },
+      AccountSettings: {
+        Main: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/settings`,
+        ViewTeam: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/team/${CONSTANTS.RouteParams.workspace.teamId}`,
+        Members: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/settings/as/members`,
+        ReferralProgram: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/settings/as/referral-program`,
+        Billing: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/settings/as/billing`,
+        User: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/settings/as/user`,
+        Pixel: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/settings/ws/pixel`,
+        UTMTag: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/settings/ws/utm-tag`,
+        EmbedWidget: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/settings/ws/embed-widget`
       }
     },
 

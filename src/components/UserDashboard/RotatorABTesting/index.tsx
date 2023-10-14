@@ -116,7 +116,7 @@ const RotatorABTesting: React.FC = () => {
 
           {compState?.isError && (
             <ZIonButton
-              className='ion-no-margin mr-2 animated pulse'
+              className='mr-2 ion-no-margin animated pulse'
               size='small'
               color='danger'
               fill='outline'
@@ -146,7 +146,7 @@ const RotatorABTesting: React.FC = () => {
                       CONSTANTS.testingSelectors.shortLink.formPage
                         .rotatorABTesting.container
                     }>
-                    <ZIonRow className='gap-2 pb-3 pt-3 px-2'>
+                    <ZIonRow className='gap-2 px-2 pt-3 pb-3'>
                       <ZIonCol
                         sizeXl='5.6'
                         sizeLg='5.6'
@@ -398,7 +398,7 @@ const RotatorABTesting: React.FC = () => {
                                   values.rotatorABTesting[_index].percentage
                                 }
                                 name={`rotatorABTesting.${_index}.percentage`}
-                                className='z-ion-range-show-top-pin pt-0'
+                                className='pt-0 z-ion-range-show-top-pin'
                                 pinFormatter={(value: number) => `${value}%`}
                                 onIonChange={e => {
                                   handleChange(e);
@@ -429,7 +429,7 @@ const RotatorABTesting: React.FC = () => {
                 {values.geoLocation.length ? (
                   <ZIonText
                     color='dark'
-                    className='ms-3 text-md block ion-no-padding'
+                    className='block ms-3 text-md ion-no-padding'
                     testingselector={
                       CONSTANTS.testingSelectors.shortLink.formPage
                         .rotatorABTesting.disabledAddSingleRotatorBtn
@@ -439,7 +439,7 @@ const RotatorABTesting: React.FC = () => {
                 ) : (
                   <ZIonButton
                     fill='outline'
-                    className='mt-2 ion-no-padding  ion-padding-horizontal px-0 ms-2'
+                    className='px-0 mt-2 ion-no-padding ion-padding-horizontal ms-2'
                     size='small'
                     testingselector={
                       CONSTANTS.testingSelectors.shortLink.formPage
