@@ -151,7 +151,7 @@ const ZWorkspacesCard: React.FC<{
   // #region APIS.
   // update invitation data api
   const { mutateAsync: updateInvitationAsyncMutate } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.ws_team_member_update,
+    _url: API_URL_ENUM.member_update,
     _queriesKeysToInvalidate: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION.MAIN,
       workspaceId!

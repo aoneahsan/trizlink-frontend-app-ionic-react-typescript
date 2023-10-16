@@ -173,7 +173,9 @@ export enum permissionsEnum {
   replicate_WSTeamMember = 'replicate_WSTeamMember',
   restore_WSTeamMember = 'restore_WSTeamMember',
   forceDelete_WSTeamMember = 'forceDelete_WSTeamMember',
-  invite_WSTeamMember = 'invite_WSTeamMember',
+  send_invitation_WSTeamMember = 'send_invitation_WSTeamMember',
+  resend_invitation_WSTeamMember = 'resend_invitation_WSTeamMember',
+  update_role_WSTeamMember = 'update_role_WSTeamMember',
 
   // Workspace pixel connections
   attach_pixel_to_workspace = 'attach_pixel_to_workspace',
@@ -330,6 +332,9 @@ export enum shareWSPermissionEnum {
   replicate_sws_member = 'replicate_sws_member',
   restore_sws_member = 'restore_sws_member',
   forceDelete_sws_member = 'forceDelete_sws_member',
+  send_invitation_sws_member = 'send_invitation_sws_member',
+  resend_invitation_sws_member = 'resend_invitation_sws_member',
+  update_role_sws_member = 'update_role_sws_member',
   // Workspace
   viewAny_sws_workspace = 'viewAny_sws_workspace',
   view_sws_workspace = 'view_sws_workspace',

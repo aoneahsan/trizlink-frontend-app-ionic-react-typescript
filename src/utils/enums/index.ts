@@ -82,17 +82,27 @@ export enum API_URL_ENUM {
   set_username_password = 'set_username_password',
   ws_roles_get = 'ws_roles_get',
   LinkInBio_folders_create_list = 'LinkInBio_folders_create_list',
-  ws_team_member_sendInvite_list = 'ws_team_member_sendInvite_list',
-  ws_team_member_getAllInvite_list = 'ws_team_member_getAllInvite_list',
-  ws_team_member_resendInvite_list = 'ws_team_member_resendInvite_list',
-  ws_team_member_invite_delete = 'ws_team_member_invite_delete',
-  ws_team_member_invite_get = 'ws_team_member_invite_get',
-  ws_team_member_update = 'ws_team_member_update',
-  ws_team_member_role_update = 'ws_team_member_role_update',
+
+  // Owned workspace members
+  member_sendInvite_list = 'member_sendInvite_list',
+  member_getAllInvite_list = 'member_getAllInvite_list',
+  member_resendInvite_list = 'member_resendInvite_list',
+  member_invite_delete = 'member_invite_delete',
+  member_invite_get = 'member_invite_get',
+  member_update = 'member_update',
+  member_role_update = 'member_role_update',
   validate_invitation_status = 'validate_invitation_status',
 
-  //
+  // Share workspace members
+  sws_member_sendInvite_list = 'sws_member_sendInvite_list',
+  sws_member_getAllInvite_list = 'sws_member_getAllInvite_list',
+  sws_member_resendInvite_list = 'sws_member_resendInvite_list',
+  sws_member_invite_delete = 'sws_member_invite_delete',
+  sws_member_invite_get = 'sws_member_invite_get',
+  sws_member_role_update = 'sws_member_role_update',
+  sws_member_update = 'sws_member_update',
 
+  //
   user_unread_notifications_list = 'user_unread_notifications_list',
   user_notification_mark_as_read = 'user_notification_mark_as_read',
   user_notification_mark_all_as_read = 'user_notification_mark_all_as_read',

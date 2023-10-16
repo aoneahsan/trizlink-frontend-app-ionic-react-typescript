@@ -151,7 +151,7 @@ const ZMembersListTable: React.FC = () => {
   // #region APIS.
   const { data: wsTeamMembersData, isFetching: isWSTeamMembersFetching } =
     useZRQGetRequest<WSTeamMembersInterface[]>({
-      _url: API_URL_ENUM.ws_team_member_getAllInvite_list,
+      _url: API_URL_ENUM.member_getAllInvite_list,
       _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId],
       _itemsIds: [workspaceId],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
@@ -216,7 +216,7 @@ const ZInpageTable: React.FC = () => {
   // #region APIS.
   const { data: wsTeamMembersData, isFetching: isWSTeamMembersFetching } =
     useZRQGetRequest<WSTeamMembersInterface[]>({
-      _url: API_URL_ENUM.ws_team_member_getAllInvite_list,
+      _url: API_URL_ENUM.member_getAllInvite_list,
       _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId],
       _itemsIds: [workspaceId],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
@@ -826,18 +826,18 @@ const ZMemberActionPopover: React.FC<{
   // #region APIS.
   const { mutateAsync: resendInviteTeamMemberAsyncMutate } =
     useZRQUpdateRequest({
-      _url: API_URL_ENUM.ws_team_member_resendInvite_list,
+      _url: API_URL_ENUM.member_resendInvite_list,
       _loaderMessage: 'Resending invitation.'
     });
 
   // update invitation data api
   const { mutateAsync: updateInvitationAsyncMutate } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.ws_team_member_update,
+    _url: API_URL_ENUM.member_update,
     _loaderMessage: 'Canceling invitation...'
   });
 
   const { mutateAsync: deleteInvitationAsyncMutate } = useZRQDeleteRequest({
-    _url: API_URL_ENUM.ws_team_member_invite_delete
+    _url: API_URL_ENUM.member_invite_delete
   });
   // #endregion
 

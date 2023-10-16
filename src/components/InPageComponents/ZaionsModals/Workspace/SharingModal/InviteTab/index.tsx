@@ -150,14 +150,14 @@ const ZInviteTab: React.FC<{
 
   // #region APIS.
   const { mutateAsync: inviteTeamMemberAsyncMutate } = useZRQCreateRequest({
-    _url: API_URL_ENUM.ws_team_member_sendInvite_list,
+    _url: API_URL_ENUM.member_sendInvite_list,
     _itemsIds: [workspaceId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _showAlertOnError: false
   });
 
   const { mutateAsync: updateRoleAsyncMutate } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.ws_team_member_role_update
+    _url: API_URL_ENUM.member_role_update
   });
 
   // #endregion

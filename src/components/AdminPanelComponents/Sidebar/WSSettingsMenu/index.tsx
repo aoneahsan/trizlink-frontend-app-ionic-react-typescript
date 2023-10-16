@@ -43,6 +43,13 @@ import CONSTANTS from '@/utils/constants';
  * */
 import { WSSettingsPageSect } from '@/types/AdminPanel/workspace';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import ZCan from '@/components/Can';
+import {
+  permissionCheckModeEnum,
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Recoil State Imports go down
@@ -71,40 +78,91 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * */
 
 const ZWSSettingsMenu: React.FC = () => {
-  const { workspaceId } = useParams<{
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
     workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
   }>();
 
   const { isLgScale } = useZMediaQueryScale();
 
   // #region checking the route.
-  const isMembersPage = useRouteMatch(
-    ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members
-  )?.isExact;
+  let isMembersPage: boolean | undefined;
+  if (workspaceId) {
+    isMembersPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members
+    )?.isExact;
+  } else if (wsShareId && shareWSMemberId) {
+    isMembersPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Members
+    )?.isExact;
+  }
 
-  const isReferralProgramPage = useRouteMatch(
-    ZaionsRoutes.AdminPanel.Setting.AccountSettings.ReferralProgram
-  )?.isExact;
+  let isReferralProgramPage: boolean | undefined;
+  if (workspaceId) {
+    isReferralProgramPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.Setting.AccountSettings.ReferralProgram
+    )?.isExact;
+  } else if (wsShareId && shareWSMemberId) {
+    isReferralProgramPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.ReferralProgram
+    )?.isExact;
+  }
 
-  const isBillingPage = useRouteMatch(
-    ZaionsRoutes.AdminPanel.Setting.AccountSettings.Billing
-  )?.isExact;
+  let isBillingPage: boolean | undefined;
+  if (workspaceId) {
+    isBillingPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.Setting.AccountSettings.Billing
+    )?.isExact;
+  } else if (wsShareId && shareWSMemberId) {
+    isBillingPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Billing
+    )?.isExact;
+  }
 
-  const isUserPage = useRouteMatch(
-    ZaionsRoutes.AdminPanel.Setting.AccountSettings.User
-  )?.isExact;
+  let isUserPage: boolean | undefined;
+  if (workspaceId) {
+    isUserPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.Setting.AccountSettings.User
+    )?.isExact;
+  } else if (wsShareId && shareWSMemberId) {
+    isUserPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.User
+    )?.isExact;
+  }
 
-  const isPixelPage = useRouteMatch(
-    ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel
-  )?.isExact;
+  let isPixelPage: boolean | undefined;
+  if (workspaceId) {
+    isPixelPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel
+    )?.isExact;
+  } else if (wsShareId && shareWSMemberId) {
+    isPixelPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Pixel
+    )?.isExact;
+  }
 
-  const isUtmTagPage = useRouteMatch(
-    ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag
-  )?.isExact;
+  let isUTMTagPage: boolean | undefined;
+  if (workspaceId) {
+    isUTMTagPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag
+    )?.isExact;
+  } else if (wsShareId && shareWSMemberId) {
+    isUTMTagPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.UTMTag
+    )?.isExact;
+  }
 
-  const isEmbedWidgetPage = useRouteMatch(
-    ZaionsRoutes.AdminPanel.Setting.AccountSettings.EmbedWidget
-  )?.isExact;
+  let isEmbedWidgetPage: boolean | undefined;
+  if (workspaceId) {
+    isEmbedWidgetPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.Setting.AccountSettings.EmbedWidget
+    )?.isExact;
+  } else if (wsShareId && shareWSMemberId) {
+    isEmbedWidgetPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.EmbedWidget
+    )?.isExact;
+  }
   // #endregion
 
   return (
@@ -152,23 +210,53 @@ const ZWSSettingsMenu: React.FC = () => {
               className='px-1 py-1'
               slot='content'>
               {/* Members */}
-              <ZIonItem
-                lines='none'
-                minHeight='2rem'
-                className={classNames({
-                  'mt-1 cursor-pointer': true,
-                  zaions__light_bg: isMembersPage
-                })}
-                testingselector={
-                  CONSTANTS.testingSelectors.WSSettings.menuBar.as.teamBtn
+              <ZCan
+                shareWSId={wsShareId}
+                permissionType={
+                  wsShareId && shareWSMemberId
+                    ? permissionsTypeEnum.shareWSMemberPermissions
+                    : permissionsTypeEnum.loggedInUserPermissions
                 }
-                routerLink={replaceRouteParams(
-                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
-                  [CONSTANTS.RouteParams.workspace.workspaceId],
-                  [workspaceId]
-                )}>
-                Members
-              </ZIonItem>
+                havePermissions={
+                  workspaceId
+                    ? [permissionsEnum.viewAny_WSTeamMember]
+                    : wsShareId && shareWSMemberId
+                    ? [shareWSPermissionEnum.viewAny_sws_member]
+                    : []
+                }>
+                <ZIonItem
+                  lines='none'
+                  minHeight='2rem'
+                  className={classNames({
+                    'mt-1 cursor-pointer': true,
+                    zaions__light_bg: isMembersPage
+                  })}
+                  testingselector={
+                    CONSTANTS.testingSelectors.WSSettings.menuBar.as.teamBtn
+                  }
+                  routerLink={
+                    workspaceId
+                      ? replaceRouteParams(
+                          ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                            .Members,
+                          [CONSTANTS.RouteParams.workspace.workspaceId],
+                          [workspaceId]
+                        )
+                      : wsShareId && shareWSMemberId
+                      ? replaceRouteParams(
+                          ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                            .Members,
+                          [
+                            CONSTANTS.RouteParams.workspace.wsShareId,
+                            CONSTANTS.RouteParams.workspace.shareWSMemberId
+                          ],
+                          [wsShareId, shareWSMemberId]
+                        )
+                      : ''
+                  }>
+                  Members
+                </ZIonItem>
+              </ZCan>
 
               {/* Referral Program */}
               <ZIonItem
@@ -181,12 +269,26 @@ const ZWSSettingsMenu: React.FC = () => {
                 testingselector={
                   CONSTANTS.testingSelectors.WSSettings.menuBar.as.referralBtn
                 }
-                routerLink={replaceRouteParams(
-                  ZaionsRoutes.AdminPanel.Setting.AccountSettings
-                    .ReferralProgram,
-                  [CONSTANTS.RouteParams.workspace.workspaceId],
-                  [workspaceId]
-                )}>
+                routerLink={
+                  workspaceId
+                    ? replaceRouteParams(
+                        ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                          .ReferralProgram,
+                        [CONSTANTS.RouteParams.workspace.workspaceId],
+                        [workspaceId]
+                      )
+                    : wsShareId && shareWSMemberId
+                    ? replaceRouteParams(
+                        ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                          .ReferralProgram,
+                        [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId
+                        ],
+                        [wsShareId, shareWSMemberId]
+                      )
+                    : ''
+                }>
                 Referral program
               </ZIonItem>
 
@@ -201,11 +303,24 @@ const ZWSSettingsMenu: React.FC = () => {
                 testingselector={
                   CONSTANTS.testingSelectors.WSSettings.menuBar.as.billingBtn
                 }
-                routerLink={replaceRouteParams(
-                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.Billing,
-                  [CONSTANTS.RouteParams.workspace.workspaceId],
-                  [workspaceId]
-                )}>
+                routerLink={
+                  workspaceId
+                    ? replaceRouteParams(
+                        ZaionsRoutes.AdminPanel.Setting.AccountSettings.Billing,
+                        [CONSTANTS.RouteParams.workspace.workspaceId],
+                        [workspaceId]
+                      )
+                    : wsShareId && shareWSMemberId
+                    ? replaceRouteParams(
+                        ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Billing,
+                        [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId
+                        ],
+                        [wsShareId, shareWSMemberId]
+                      )
+                    : ''
+                }>
                 Billing
               </ZIonItem>
 
@@ -220,89 +335,219 @@ const ZWSSettingsMenu: React.FC = () => {
                 testingselector={
                   CONSTANTS.testingSelectors.WSSettings.menuBar.as.userBtn
                 }
-                routerLink={replaceRouteParams(
-                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.User,
-                  [CONSTANTS.RouteParams.workspace.workspaceId],
-                  [workspaceId]
-                )}>
+                routerLink={
+                  workspaceId
+                    ? replaceRouteParams(
+                        ZaionsRoutes.AdminPanel.Setting.AccountSettings.User,
+                        [CONSTANTS.RouteParams.workspace.workspaceId],
+                        [workspaceId]
+                      )
+                    : wsShareId && shareWSMemberId
+                    ? replaceRouteParams(
+                        ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.User,
+                        [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId
+                        ],
+                        [wsShareId, shareWSMemberId]
+                      )
+                    : ''
+                }>
                 User
               </ZIonItem>
             </div>
           </ZIonAccordion>
 
           {/* Workspace settings */}
-          <ZIonAccordion
-            value={WSSettingsPageSect.workspaceSettings}
-            testingselector={
-              CONSTANTS.testingSelectors.WSSettings.menuBar.accordionGroup
-                .wsAccordion
+          <ZCan
+            shareWSId={wsShareId}
+            checkMode={permissionCheckModeEnum.any}
+            permissionType={
+              wsShareId && shareWSMemberId
+                ? permissionsTypeEnum.shareWSMemberPermissions
+                : permissionsTypeEnum.loggedInUserPermissions
+            }
+            havePermissions={
+              workspaceId
+                ? [
+                    permissionsEnum.viewAny_pixel,
+                    permissionsEnum.viewAny_utmTag,
+                    permissionsEnum.viewAny_embededWidget
+                  ]
+                : wsShareId && shareWSMemberId
+                ? [
+                    shareWSPermissionEnum.viewAny_sws_pixel,
+                    shareWSPermissionEnum.viewAny_sws_utmTag,
+                    shareWSPermissionEnum.viewAny_sws_embededWidget
+                  ]
+                : []
             }>
-            <ZIonItem
-              slot='header'
-              minHeight='25px'
-              color='light'>
-              <ZIonLabel>Workspace settings</ZIonLabel>
-            </ZIonItem>
-
-            <div
-              className='px-1 py-1'
-              slot='content'>
+            <ZIonAccordion
+              value={WSSettingsPageSect.workspaceSettings}
+              testingselector={
+                CONSTANTS.testingSelectors.WSSettings.menuBar.accordionGroup
+                  .wsAccordion
+              }>
               <ZIonItem
-                lines='none'
-                minHeight='2rem'
-                className={classNames({
-                  'mt-1 cursor-pointer': true,
-                  zaions__light_bg: isPixelPage
-                })}
-                testingselector={
-                  CONSTANTS.testingSelectors.WSSettings.menuBar.ws.pixelBtn
-                }
-                routerLink={replaceRouteParams(
-                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel,
-                  [CONSTANTS.RouteParams.workspace.workspaceId],
-                  [workspaceId]
-                )}>
-                Pixels
+                slot='header'
+                minHeight='25px'
+                color='light'>
+                <ZIonLabel>Workspace settings</ZIonLabel>
               </ZIonItem>
 
-              <ZIonItem
-                lines='none'
-                minHeight='2rem'
-                className={classNames({
-                  'mt-1 cursor-pointer': true,
-                  zaions__light_bg: isUtmTagPage
-                })}
-                testingselector={
-                  CONSTANTS.testingSelectors.WSSettings.menuBar.ws.utmBtn
-                }
-                routerLink={replaceRouteParams(
-                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag,
-                  [CONSTANTS.RouteParams.workspace.workspaceId],
-                  [workspaceId]
-                )}>
-                UTM tags
-              </ZIonItem>
+              <div
+                className='px-1 py-1'
+                slot='content'>
+                {/* Pixels */}
+                <ZCan
+                  shareWSId={wsShareId}
+                  permissionType={
+                    wsShareId && shareWSMemberId
+                      ? permissionsTypeEnum.shareWSMemberPermissions
+                      : permissionsTypeEnum.loggedInUserPermissions
+                  }
+                  havePermissions={
+                    workspaceId
+                      ? [permissionsEnum.viewAny_pixel]
+                      : wsShareId && shareWSMemberId
+                      ? [shareWSPermissionEnum.viewAny_sws_pixel]
+                      : []
+                  }>
+                  <ZIonItem
+                    lines='none'
+                    minHeight='2rem'
+                    className={classNames({
+                      'mt-1 cursor-pointer': true,
+                      zaions__light_bg: isPixelPage
+                    })}
+                    testingselector={
+                      CONSTANTS.testingSelectors.WSSettings.menuBar.ws.pixelBtn
+                    }
+                    routerLink={
+                      workspaceId
+                        ? replaceRouteParams(
+                            ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                              .Pixel,
+                            [CONSTANTS.RouteParams.workspace.workspaceId],
+                            [workspaceId]
+                          )
+                        : wsShareId && shareWSMemberId
+                        ? replaceRouteParams(
+                            ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                              .Pixel,
+                            [
+                              CONSTANTS.RouteParams.workspace.wsShareId,
+                              CONSTANTS.RouteParams.workspace.shareWSMemberId
+                            ],
+                            [wsShareId, shareWSMemberId]
+                          )
+                        : ''
+                    }>
+                    Pixels
+                  </ZIonItem>
+                </ZCan>
 
-              <ZIonItem
-                lines='none'
-                minHeight='2rem'
-                className={classNames({
-                  'mt-1 cursor-pointer': true,
-                  zaions__light_bg: isEmbedWidgetPage
-                })}
-                testingselector={
-                  CONSTANTS.testingSelectors.WSSettings.menuBar.ws
-                    .embedWidgetBtn
-                }
-                routerLink={replaceRouteParams(
-                  ZaionsRoutes.AdminPanel.Setting.AccountSettings.EmbedWidget,
-                  [CONSTANTS.RouteParams.workspace.workspaceId],
-                  [workspaceId]
-                )}>
-                Embed widgets
-              </ZIonItem>
-            </div>
-          </ZIonAccordion>
+                {/* UTM tags */}
+                <ZCan
+                  shareWSId={wsShareId}
+                  permissionType={
+                    wsShareId && shareWSMemberId
+                      ? permissionsTypeEnum.shareWSMemberPermissions
+                      : permissionsTypeEnum.loggedInUserPermissions
+                  }
+                  havePermissions={
+                    workspaceId
+                      ? [permissionsEnum.viewAny_utmTag]
+                      : wsShareId && shareWSMemberId
+                      ? [shareWSPermissionEnum.viewAny_sws_utmTag]
+                      : []
+                  }>
+                  <ZIonItem
+                    lines='none'
+                    minHeight='2rem'
+                    className={classNames({
+                      'mt-1 cursor-pointer': true,
+                      zaions__light_bg: isUTMTagPage
+                    })}
+                    testingselector={
+                      CONSTANTS.testingSelectors.WSSettings.menuBar.ws.utmBtn
+                    }
+                    routerLink={
+                      workspaceId
+                        ? replaceRouteParams(
+                            ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                              .UTMTag,
+                            [CONSTANTS.RouteParams.workspace.workspaceId],
+                            [workspaceId]
+                          )
+                        : wsShareId && shareWSMemberId
+                        ? replaceRouteParams(
+                            ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                              .UTMTag,
+                            [
+                              CONSTANTS.RouteParams.workspace.wsShareId,
+                              CONSTANTS.RouteParams.workspace.shareWSMemberId
+                            ],
+                            [wsShareId, shareWSMemberId]
+                          )
+                        : ''
+                    }>
+                    UTM tags
+                  </ZIonItem>
+                </ZCan>
+
+                {/* Embed widgets */}
+                <ZCan
+                  shareWSId={wsShareId}
+                  permissionType={
+                    wsShareId && shareWSMemberId
+                      ? permissionsTypeEnum.shareWSMemberPermissions
+                      : permissionsTypeEnum.loggedInUserPermissions
+                  }
+                  havePermissions={
+                    workspaceId
+                      ? [permissionsEnum.viewAny_embededWidget]
+                      : wsShareId && shareWSMemberId
+                      ? [shareWSPermissionEnum.viewAny_sws_embededWidget]
+                      : []
+                  }>
+                  <ZIonItem
+                    lines='none'
+                    minHeight='2rem'
+                    className={classNames({
+                      'mt-1 cursor-pointer': true,
+                      zaions__light_bg: isEmbedWidgetPage
+                    })}
+                    testingselector={
+                      CONSTANTS.testingSelectors.WSSettings.menuBar.ws
+                        .embedWidgetBtn
+                    }
+                    routerLink={
+                      workspaceId
+                        ? replaceRouteParams(
+                            ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                              .EmbedWidget,
+                            [CONSTANTS.RouteParams.workspace.workspaceId],
+                            [workspaceId]
+                          )
+                        : wsShareId && shareWSMemberId
+                        ? replaceRouteParams(
+                            ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                              .EmbedWidget,
+                            [
+                              CONSTANTS.RouteParams.workspace.wsShareId,
+                              CONSTANTS.RouteParams.workspace.shareWSMemberId
+                            ],
+                            [wsShareId, shareWSMemberId]
+                          )
+                        : ''
+                    }>
+                    Embed widgets
+                  </ZIonItem>
+                </ZCan>
+              </div>
+            </ZIonAccordion>
+          </ZCan>
         </ZIonAccordionGroup>
       </ZCustomScrollable>
     </ZIonCol>

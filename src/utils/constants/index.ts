@@ -129,14 +129,25 @@ export const API_URLS = {
   csrf: '/sanctum/csrf-cookie',
   delete: '/user/delete',
   ws_roles_get: '/user/ws-roles',
-  ws_team_member_sendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member/send-invitation`,
-  ws_team_member_getAllInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member`,
-  ws_team_member_resendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member/resend-invitation/${RouteParams.workspace.invitationId}`,
-  ws_team_member_invite_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/member/${RouteParams.workspace.memberInviteId}`,
-  ws_team_member_invite_get: `/user/member/${RouteParams.workspace.memberInviteId}`,
-  ws_team_member_role_update: `/user/workspace/${RouteParams.workspace.workspaceId}/update-role/${RouteParams.workspace.memberInviteId}`,
-  ws_team_member_update: `/user/update-invitation/${RouteParams.workspace.memberInviteId}`,
+
+  // Owned workspace members
+  member_sendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member/send-invitation`,
+  member_getAllInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member`,
+  member_resendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member/resend-invitation/${RouteParams.workspace.invitationId}`,
+  member_invite_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/member/${RouteParams.workspace.memberInviteId}`,
+  member_invite_get: `/user/workspace/${RouteParams.workspace.workspaceId}/member/${RouteParams.workspace.memberInviteId}`,
+  member_role_update: `/user/workspace/${RouteParams.workspace.workspaceId}/update-role/${RouteParams.workspace.memberInviteId}`,
+  member_update: `/user/update-invitation/${RouteParams.workspace.memberInviteId}`,
   validate_invitation_status: `/user/validate-and-update-invitation`,
+
+  // Share workspace members
+  sws_member_sendInvite_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member/send-invitation`,
+  sws_member_getAllInvite_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member`,
+  sws_member_resendInvite_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member/resend-invitation/${RouteParams.workspace.invitationId}`,
+  sws_member_invite_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member/${RouteParams.workspace.memberInviteId}`,
+  sws_member_invite_get: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member/${RouteParams.workspace.memberInviteId}`,
+  sws_member_role_update: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/update-role/${RouteParams.workspace.memberInviteId}`,
+  sws_member_update: `/user/update-invitation/${RouteParams.workspace.memberInviteId}`,
 
   // Pixels
   userPixelAccounts_create_list: `/user/workspace/${RouteParams.workspace.workspaceId}/pixel`,
@@ -1572,7 +1583,10 @@ const REACT_QUERY = {
       TEAM_GET: 'rq-workspace-team-get-key',
       MEMBERS: 'rq-ws-team-members-main-key',
       MEMBER_GET: 'rq-ws-team-member-get-key',
-      INVITATION_GET: 'rq-ws-team-member-invitation-get-key'
+      INVITATION_GET: 'rq-ws-team-member-invitation-get-key',
+
+      SWS_MEMBERS_MAIN: 'rq-sws-team-members-main-key',
+      SWS_MEMBER_GET: 'rq-sws-team-member-get-key'
     },
     SHARE_WS: {
       MAIN: 'rq-ws-share-list-key',
