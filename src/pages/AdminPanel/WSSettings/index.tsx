@@ -351,7 +351,7 @@ const ZWorkspaceSettings: React.FC = () => {
       havePermissions={
         workspaceId
           ? [
-              permissionsEnum.viewAny_WSTeamMember,
+              permissionsEnum.viewAny_ws_member,
               permissionsEnum.viewAny_utmTag,
               permissionsEnum.viewAny_pixel,
               permissionsEnum.viewAny_embededWidget
@@ -414,7 +414,7 @@ const ZWorkspaceSettings: React.FC = () => {
                 }
                 havePermissions={
                   workspaceId
-                    ? [permissionsEnum.viewAny_WSTeamMember]
+                    ? [permissionsEnum.viewAny_ws_member]
                     : wsShareId && shareWSMemberId
                     ? [shareWSPermissionEnum.viewAny_sws_member]
                     : []

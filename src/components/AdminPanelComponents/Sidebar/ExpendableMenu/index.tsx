@@ -560,7 +560,7 @@ const AdminPanelSidebarMenu: React.FC<{
                           shareWSPermissionEnum.viewAny_sws_embededWidget
                         ]
                       : [
-                          permissionsEnum.viewAny_WSTeamMember,
+                          permissionsEnum.viewAny_ws_member,
                           permissionsEnum.viewAny_pixel,
                           permissionsEnum.viewAny_utmTag,
                           permissionsEnum.viewAny_embededWidget
@@ -781,7 +781,7 @@ const AdminPanelSidebarMenu: React.FC<{
                       shareWSPermissionEnum.viewAny_sws_embededWidget
                     ]
                   : [
-                      permissionsEnum.viewAny_WSTeamMember,
+                      permissionsEnum.viewAny_ws_member,
                       permissionsEnum.viewAny_pixel,
                       permissionsEnum.viewAny_utmTag,
                       permissionsEnum.viewAny_embededWidget

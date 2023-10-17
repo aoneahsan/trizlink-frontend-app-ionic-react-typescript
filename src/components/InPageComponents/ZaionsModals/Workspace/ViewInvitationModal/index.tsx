@@ -137,8 +137,11 @@ const ZViewInvitationModal: React.FC<{
           requestData: zStringify({
             status: _item
           }),
-          itemIds: [memberInviteId],
-          urlDynamicParts: [CONSTANTS.RouteParams.workspace.memberInviteId]
+          itemIds: [workspaceId, memberInviteId],
+          urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.workspaceId,
+            CONSTANTS.RouteParams.workspace.memberInviteId
+          ]
         });
 
         if (

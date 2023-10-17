@@ -189,8 +189,11 @@ const ZWorkspacesCard: React.FC<{
           requestData: zStringify({
             status: _item
           }),
-          itemIds: [memberId!],
-          urlDynamicParts: [CONSTANTS.RouteParams.workspace.memberInviteId]
+          itemIds: [workspaceId!, memberId!],
+          urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.workspaceId,
+            CONSTANTS.RouteParams.workspace.memberInviteId
+          ]
         });
 
         if (

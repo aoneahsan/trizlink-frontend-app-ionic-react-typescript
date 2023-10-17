@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 /**
  * Packages Imports go down
@@ -13,6 +13,7 @@ import {
   chevronDownOutline,
   closeCircleOutline,
   closeOutline,
+  createOutline,
   helpCircleOutline,
   linkOutline,
   sendOutline,
@@ -95,6 +96,7 @@ import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import { FormMode } from '@/types/AdminPanel/index.type';
+import { ProductFavicon } from '@/assets/images';
 
 /**
  * Recoil State Imports go down
@@ -138,7 +140,10 @@ const ZInviteTab: React.FC<{
   memberId
 }) => {
   const [compState, setCompState] = useState<{
-    _role?: WSRolesNameEnum;
+    formMode?: FormMode;
+    role?: WSRolesNameEnum;
+    email?: string;
+    memberId?: string;
   }>();
 
   // #region Custom hooks
@@ -159,14 +164,26 @@ const ZInviteTab: React.FC<{
   const { mutateAsync: updateRoleAsyncMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.member_role_update
   });
-
   // #endregion
 
   // #region modal & popover.
   const { presentZIonPopover: presentZWorkspaceFormRoleSelectorPopover } =
     useZIonPopover(ZWorkspaceFormRoleSelectorPopover, {
-      selectedRole: compState?._role
+      selectedRole: compState?.role
     });
+  // #endregion
+
+  // #region useEffects.
+  useEffect(() => {
+    setCompState(oldValues => ({
+      ...oldValues,
+      role,
+      email,
+      memberId,
+      formMode
+    }));
+  }, [role, email, memberId, formMode]);
+
   // #endregion
 
   // #region Functions.
@@ -178,11 +195,11 @@ const ZInviteTab: React.FC<{
     try {
       if (_data) {
         let __response;
-        if (formMode === FormMode.ADD) {
+        if (compState?.formMode === FormMode.ADD) {
           __response = await inviteTeamMemberAsyncMutate(_data);
-        } else if (formMode === FormMode.EDIT) {
+        } else if (compState?.formMode === FormMode.EDIT) {
           __response = await updateRoleAsyncMutate({
-            itemIds: [workspaceId, memberId!],
+            itemIds: [workspaceId, compState?.memberId!],
             urlDynamicParts: [
               CONSTANTS.RouteParams.workspace.workspaceId,
               CONSTANTS.RouteParams.workspace.memberInviteId
@@ -200,21 +217,21 @@ const ZInviteTab: React.FC<{
           );
 
           if (__data && __data?.id) {
-            const __wsTeamMembersRQData = getRQCDataHandler({
+            const _ws_membersRQData = getRQCDataHandler({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
                 workspaceId
               ]
             });
 
-            if (__wsTeamMembersRQData) {
+            if (_ws_membersRQData) {
               const _oldTeamsMemberData =
                 extractInnerData<WSTeamMembersInterface[]>(
-                  __wsTeamMembersRQData,
+                  _ws_membersRQData,
                   extractInnerDataOptionsEnum.createRequestResponseItems
                 ) || [];
 
-              if (formMode === FormMode.ADD) {
+              if (compState?.formMode === FormMode.ADD) {
                 const __updatedMembersData = [..._oldTeamsMemberData, __data];
 
                 await updateRQCDataHandler({
@@ -228,7 +245,7 @@ const ZInviteTab: React.FC<{
                   extractType: ZRQGetRequestExtractEnum.extractItems
                 });
                 showSuccessNotification(MESSAGES.MEMBER.INVITE_SEND);
-              } else if (formMode === FormMode.EDIT) {
+              } else if (compState?.formMode === FormMode.EDIT) {
                 await updateRQCDataHandler({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
@@ -241,7 +258,17 @@ const ZInviteTab: React.FC<{
               }
             }
 
-            dismissZIonModal();
+            setFieldValue('canCreateShortUrl', true, false);
+
+            setCompState(oldValues => ({
+              ...oldValues,
+              formMode: FormMode.EDIT,
+              email: __data?.email,
+              memberId: __data?.id,
+              role: __data?.memberRole?.name
+            }));
+
+            // dismissZIonModal();
           }
         }
       }
@@ -273,8 +300,9 @@ const ZInviteTab: React.FC<{
   return (
     <Formik
       initialValues={{
-        role: role || WSRolesNameEnum.Approver,
-        email: email || '',
+        role: compState?.role || WSRolesNameEnum.Approver,
+        email: compState?.email || '',
+        canCreateShortUrl: false,
 
         isApiEmailError: false,
         apiEmailErrorText: ''
@@ -286,21 +314,22 @@ const ZInviteTab: React.FC<{
 
         return errors;
       }}
+      enableReinitialize={true}
       onSubmit={async (values, { setErrors, setFieldValue }) => {
         let _zStringifyData = zStringify({
           email: values.email,
           role: values.role
         });
 
-        if (formMode === FormMode.EDIT) {
+        if (compState?.formMode === FormMode.EDIT) {
           _zStringifyData = zStringify({
             role: values.role
           });
         }
 
-        if (formMode === FormMode.EDIT && role !== values.role) {
+        if (compState?.formMode === FormMode.EDIT && role !== values.role) {
           await formikSubmitHandler(_zStringifyData, setErrors, setFieldValue);
-        } else if (formMode === FormMode.ADD) {
+        } else if (compState?.formMode === FormMode.ADD) {
           await formikSubmitHandler(_zStringifyData, setErrors, setFieldValue);
         }
       }}>
@@ -314,6 +343,13 @@ const ZInviteTab: React.FC<{
         handleBlur,
         submitForm
       }) => {
+        // console.log({
+        //   compState,
+        //   va: !isValid,
+        //   formMode,
+        //   role,
+        //   v: values.role
+        // });
         return (
           <>
             <ZIonGrid
@@ -604,8 +640,8 @@ const ZInviteTab: React.FC<{
                     aria-label='type email'
                     // labelPlacement='floating'
                     // errorText={errors.pageName}
-                    disabled={formMode === FormMode.EDIT}
-                    readonly={formMode === FormMode.EDIT}
+                    disabled={compState?.formMode === FormMode.EDIT}
+                    readonly={compState?.formMode === FormMode.EDIT}
                     placeholder='Type email'
                     type='email'
                     minHeight='2.3rem'
@@ -747,7 +783,8 @@ const ZInviteTab: React.FC<{
                   sizeXs='12'
                   className={classNames({
                     'cursor-not-allowed':
-                      formMode === FormMode.EDIT && role === values.role
+                      compState?.formMode === FormMode.EDIT &&
+                      compState?.role === values.role
                   })}>
                   <ZIonButton
                     size='small'
@@ -756,8 +793,9 @@ const ZInviteTab: React.FC<{
                     id='role-popover-index'
                     height='2.3rem'
                     disabled={
-                      !isValid ||
-                      (formMode === FormMode.EDIT && role === values.role)
+                      (compState?.formMode === FormMode.ADD && !isValid) ||
+                      (compState?.formMode === FormMode.EDIT &&
+                        role === values.role)
                     }
                     onClick={() => {
                       void submitForm();
@@ -769,12 +807,18 @@ const ZInviteTab: React.FC<{
                       '--border-width': '1px'
                     }}>
                     <ZIonIcon
-                      icon={sendOutline}
+                      icon={
+                        compState?.formMode === FormMode.ADD
+                          ? sendOutline
+                          : compState?.formMode === FormMode.EDIT
+                          ? createOutline
+                          : undefined
+                      }
                       className='me-2'
                     />
-                    {formMode === FormMode.ADD
+                    {compState?.formMode === FormMode.ADD
                       ? 'Send invite'
-                      : formMode === FormMode.EDIT
+                      : compState?.formMode === FormMode.EDIT
                       ? 'Update role'
                       : null}
                   </ZIonButton>
@@ -787,24 +831,32 @@ const ZInviteTab: React.FC<{
                   sizeMd='12'
                   sizeSm='12'
                   sizeXs='12'>
-                  <ZIonButton
-                    fill='outline'
-                    id='role-popover-index'
-                    size='small'
-                    color='medium'
-                    height='2.3rem'
+                  <div
                     className={classNames({
-                      'm-0 flex h-full normal-case ion-align-items-start': true
-                    })}
-                    style={{
-                      '--border-width': '1px'
-                    }}>
-                    <ZIonIcon
-                      icon={linkOutline}
-                      className='me-2'
-                    />
-                    Create invite link
-                  </ZIonButton>
+                      'w-full h-full': true,
+                      'cursor-not-allowed': values?.canCreateShortUrl === false
+                    })}>
+                    <ZIonButton
+                      disabled={values?.canCreateShortUrl === false}
+                      fill='outline'
+                      id='role-popover-index'
+                      size='small'
+                      color={values?.canCreateShortUrl ? 'primary' : 'medium'}
+                      height='2.3rem'
+                      className={classNames({
+                        'm-0 flex h-full normal-case ion-align-items-start':
+                          true
+                      })}
+                      style={{
+                        '--border-width': '1px'
+                      }}>
+                      <ZIonIcon
+                        icon={linkOutline}
+                        className='me-2'
+                      />
+                      Create invite link
+                    </ZIonButton>
+                  </div>
                 </ZIonCol>
               </ZIonRow>
             </ZIonGrid>
@@ -832,25 +884,28 @@ const ZInviteTab: React.FC<{
               text={
                 <div className='flex px-2 mx-auto zaions__bg_white w-max ion-align-items-center ion-justify-content-center'>
                   <ZIonText className='me-2'>Invite links</ZIonText>
-                  <ZIonIcon
-                    icon={helpCircleOutline}
-                    id='wss-tsm-invite-link-help-btn-tt'
-                    className='w-5 h-5 cursor-pointer'
-                  />
+                  <div
+                    className='flex ion-align-items-center'
+                    id='wss-tsm-invite-link-help-btn-tt'>
+                    <ZIonIcon
+                      icon={helpCircleOutline}
+                      className='w-5 h-5 cursor-pointer'
+                    />
+                  </div>
                   <ZRTooltip
                     anchorSelect='#wss-tsm-invite-link-help-btn-tt'
                     place='bottom'
                     variant='info'
                     className='z-10'>
                     <div className=''>
-                      <ZIonText className='block text-lg font-bold'>
+                      <p className='block text-lg font-bold'>
                         Invite collaborators via link
-                      </ZIonText>
-                      <ZIonText className='block mt-3 '>
+                      </p>
+                      <p className='block mt-3'>
                         User will be able to join the company <br /> by creating
                         account and will be assigned <br /> selected permissions
                         and membership
-                      </ZIonText>
+                      </p>
                     </div>
                   </ZRTooltip>
                 </div>

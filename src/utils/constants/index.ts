@@ -137,7 +137,9 @@ export const API_URLS = {
   member_invite_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/member/${RouteParams.workspace.memberInviteId}`,
   member_invite_get: `/user/workspace/${RouteParams.workspace.workspaceId}/member/${RouteParams.workspace.memberInviteId}`,
   member_role_update: `/user/workspace/${RouteParams.workspace.workspaceId}/update-role/${RouteParams.workspace.memberInviteId}`,
-  member_update: `/user/update-invitation/${RouteParams.workspace.memberInviteId}`,
+  member_update: `/user/workspace/${RouteParams.workspace.workspaceId}/update-invitation/${RouteParams.workspace.memberInviteId}`,
+  member_create_short_url: `/user/workspace/${RouteParams.workspace.workspaceId}/create-short-url/${RouteParams.workspace.memberInviteId}`,
+  member_check_short_url: `/user/short-url/check`,
   validate_invitation_status: `/user/validate-and-update-invitation`,
 
   // Share workspace members
@@ -147,7 +149,7 @@ export const API_URLS = {
   sws_member_invite_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member/${RouteParams.workspace.memberInviteId}`,
   sws_member_invite_get: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member/${RouteParams.workspace.memberInviteId}`,
   sws_member_role_update: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/update-role/${RouteParams.workspace.memberInviteId}`,
-  sws_member_update: `/user/update-invitation/${RouteParams.workspace.memberInviteId}`,
+  sws_member_update: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/update-invitation/${RouteParams.workspace.memberInviteId}`,
 
   // Pixels
   userPixelAccounts_create_list: `/user/workspace/${RouteParams.workspace.workspaceId}/pixel`,

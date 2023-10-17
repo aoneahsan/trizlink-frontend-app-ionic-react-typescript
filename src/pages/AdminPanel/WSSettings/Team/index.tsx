@@ -199,7 +199,7 @@ const ZWSSettingTeamsListPage: React.FC = () => {
       shareWSId={wsShareId}
       havePermissions={
         workspaceId
-          ? [permissionsEnum.view_WSTeamMember]
+          ? [permissionsEnum.view_ws_member]
           : wsShareId && shareWSMemberId
           ? [shareWSPermissionEnum.viewAny_sws_member]
           : []
@@ -337,7 +337,7 @@ const ZWSSettingTeamsListPage: React.FC = () => {
             shareWSId={wsShareId}
             havePermissions={
               workspaceId
-                ? [permissionsEnum.send_invitation_WSTeamMember]
+                ? [permissionsEnum.send_invitation_ws_member]
                 : wsShareId && shareWSMemberId
                 ? [shareWSPermissionEnum.send_invitation_sws_member]
                 : []
@@ -401,7 +401,7 @@ const ZWSSettingTeamsListPage: React.FC = () => {
         shareWSId={wsShareId}
         havePermissions={
           workspaceId
-            ? [permissionsEnum.view_WSTeamMember]
+            ? [permissionsEnum.viewAny_ws_member]
             : wsShareId && shareWSMemberId
             ? [shareWSPermissionEnum.viewAny_sws_member]
             : []

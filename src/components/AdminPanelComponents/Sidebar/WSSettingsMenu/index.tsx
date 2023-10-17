@@ -219,7 +219,7 @@ const ZWSSettingsMenu: React.FC = () => {
                 }
                 havePermissions={
                   workspaceId
-                    ? [permissionsEnum.viewAny_WSTeamMember]
+                    ? [permissionsEnum.viewAny_ws_member]
                     : wsShareId && shareWSMemberId
                     ? [shareWSPermissionEnum.viewAny_sws_member]
                     : []

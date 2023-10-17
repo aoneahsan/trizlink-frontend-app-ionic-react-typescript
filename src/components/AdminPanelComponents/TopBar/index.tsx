@@ -372,7 +372,7 @@ const ZADTopBarColOne: React.FC<{
             havePermissions={
               wsShareId
                 ? [shareWSPermissionEnum.create_sws_member]
-                : [permissionsEnum.create_WSTeamMember]
+                : [permissionsEnum.create_ws_member]
             }
             permissionType={
               wsShareId

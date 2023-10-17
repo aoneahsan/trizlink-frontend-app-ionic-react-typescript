@@ -87,7 +87,12 @@ import {
   extractInnerData,
   zStringify
 } from '@/utils/helpers';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import {
+  permissionCheckModeEnum,
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import { reportCustomError } from '@/utils/customErrorType';
 import { showSuccessNotification } from '@/utils/notification';
@@ -144,18 +149,59 @@ import {
  * */
 
 const ZMembersListTable: React.FC = () => {
-  const { workspaceId } = useParams<{
+  // getting current workspace id form params.
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
     workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
   }>();
 
   // #region APIS.
-  const { data: wsTeamMembersData, isFetching: isWSTeamMembersFetching } =
+  // If owned-workspace then this api will fetch members in this owned-workspace.
+  const { data: membersData, isFetching: isMembersFetching } = useZRQGetRequest<
+    WSTeamMembersInterface[]
+  >({
+    _url: API_URL_ENUM.member_getAllInvite_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId],
+    _itemsIds: [workspaceId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true
+  });
+
+  // If share-workspace then this api will fetch members in this share-workspace.
+  const { data: swsMembersData, isFetching: isSWSMembersFetching } =
     useZRQGetRequest<WSTeamMembersInterface[]>({
       _url: API_URL_ENUM.member_getAllInvite_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId],
-      _itemsIds: [workspaceId],
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
+        wsShareId
+      ],
+      _itemsIds: [shareWSMemberId],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+      _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true
     });
+
+  // If share-workspace then this api will fetch role & permission of current member in this share-workspace.
+  const {
+    data: getMemberRolePermissions,
+    isFetching: isGetMemberRolePermissionsFetching,
+    isError: isGetMemberRolePermissionsError
+  } = useZRQGetRequest<{
+    memberRole?: string;
+    memberPermissions?: string[];
+  }>({
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
+      wsShareId
+    ],
+    _url: API_URL_ENUM.ws_share_member_role_permissions,
+    _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true,
+    _itemsIds: [shareWSMemberId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
+  });
+
   // #endregion
 
   // #region Modals & popovers.
@@ -168,23 +214,62 @@ const ZMembersListTable: React.FC = () => {
   );
   // #endregion
 
+  let isZFetching = isMembersFetching;
+
+  if (wsShareId && shareWSMemberId) {
+    isZFetching = isSWSMembersFetching;
+  }
+
   return (
     <>
-      {isWSTeamMembersFetching && <ZaionsMembersTableSkeleton />}
+      {isZFetching && <ZaionsMembersTableSkeleton />}
 
-      {!isWSTeamMembersFetching ? (
-        wsTeamMembersData && wsTeamMembersData?.length > 0 ? (
+      {!isZFetching ? (
+        (membersData && membersData?.length > 0) ||
+        (swsMembersData && swsMembersData?.length > 0) ? (
           <ZInpageTable />
         ) : (
           <div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
             <ZEmptyTable
-              message='No members founds. please invite a member.'
+              message={
+                [
+                  shareWSPermissionEnum.send_invitation_sws_member,
+                  shareWSPermissionEnum.create_sws_member,
+                  shareWSPermissionEnum.update_sws_member
+                ].some(el =>
+                  getMemberRolePermissions?.memberPermissions?.includes(el)
+                ) || workspaceId
+                  ? 'No members founds. please invite a member.'
+                  : 'No members founds.'
+              }
               btnText='Invite member'
               btnOnClick={() => {
-                presentWorkspaceSharingModal({
-                  _cssClass: 'workspace-sharing-modal-size'
-                });
+                if (
+                  [
+                    shareWSPermissionEnum.send_invitation_sws_member,
+                    shareWSPermissionEnum.create_sws_member,
+                    shareWSPermissionEnum.update_sws_member
+                  ].some(el =>
+                    getMemberRolePermissions?.memberPermissions?.includes(el)
+                  ) ||
+                  workspaceId
+                ) {
+                  presentWorkspaceSharingModal({
+                    _cssClass: 'workspace-sharing-modal-size'
+                  });
+                }
               }}
+              showBtn={
+                [
+                  shareWSPermissionEnum.send_invitation_sws_member,
+                  shareWSPermissionEnum.create_sws_member,
+                  shareWSPermissionEnum.update_sws_member
+                ].some(el =>
+                  getMemberRolePermissions?.memberPermissions?.includes(el)
+                ) || workspaceId
+                  ? true
+                  : false
+              }
             />
           </div>
         )
@@ -202,8 +287,11 @@ const ZInpageTable: React.FC = () => {
   }>({});
   // #endregion
 
-  const { workspaceId } = useParams<{
+  // getting current workspace id form params.
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
     workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
   }>();
 
   // #region Recoil state.
@@ -214,12 +302,28 @@ const ZInpageTable: React.FC = () => {
   // #endregion
 
   // #region APIS.
-  const { data: wsTeamMembersData, isFetching: isWSTeamMembersFetching } =
+  // If owned-workspace then this api will fetch members in this owned-workspace.
+  const { data: membersData, isFetching: isMembersFetching } = useZRQGetRequest<
+    WSTeamMembersInterface[]
+  >({
+    _url: API_URL_ENUM.member_getAllInvite_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId],
+    _itemsIds: [workspaceId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true
+  });
+
+  // If share-workspace then this api will fetch members in this share-workspace.
+  const { data: swsMembersData, isFetching: isSWSMembersFetching } =
     useZRQGetRequest<WSTeamMembersInterface[]>({
       _url: API_URL_ENUM.member_getAllInvite_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId],
-      _itemsIds: [workspaceId],
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
+        wsShareId
+      ],
+      _itemsIds: [shareWSMemberId],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+      _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true
     });
 
   const {
@@ -238,6 +342,24 @@ const ZInpageTable: React.FC = () => {
     ],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _shouldFetchWhenIdPassed: workspaceId ? false : true
+  });
+
+  const {
+    data: getSWSMemberFiltersData,
+    isFetching: isSWSMemberFiltersDataFetching
+  } = useZRQGetRequest<ZUserSettingInterface>({
+    _url: API_URL_ENUM.sws_user_setting_delete_update_get,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
+      ZUserSettingTypeEnum.membersListPageTable
+    ],
+    _itemsIds: [shareWSMemberId!, ZUserSettingTypeEnum.membersListPageTable],
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.shareWSMemberId,
+      CONSTANTS.RouteParams.settings.type
+    ],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true
   });
   // #endregion
 
@@ -376,7 +498,11 @@ const ZInpageTable: React.FC = () => {
     columns: defaultMembersColumns,
     data: filteredMembersDataRSelector || [],
     state: {
-      columnOrder: getMemberFiltersData?.settings?.columnOrderIds || []
+      columnOrder: workspaceId
+        ? getMemberFiltersData?.settings?.columnOrderIds
+        : wsShareId && shareWSMemberId
+        ? getSWSMemberFiltersData?.settings?.columnOrderIds
+        : []
     },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -394,30 +520,62 @@ const ZInpageTable: React.FC = () => {
 
   useEffect(() => {
     try {
-      if (getMemberFiltersData?.settings?.columns) {
-        const __getEmailColumn =
-          getMemberFiltersData?.settings?.columns?.filter(
+      if (
+        getMemberFiltersData?.settings?.columns ||
+        getSWSMemberFiltersData?.settings?.columns
+      ) {
+        let __getEmailColumn;
+        let __getRoleColumn;
+        let __getStatusColumn;
+        let __getInvitedAtColumn;
+        let __geInvitedAcceptedAtColumn;
+
+        if (workspaceId) {
+          __getEmailColumn = getMemberFiltersData?.settings?.columns?.filter(
             el => el?.id === ZMembersListPageTableColumnsIds.email
           )[0];
 
-        const __getRoleColumn = getMemberFiltersData?.settings?.columns?.filter(
-          el => el?.id === ZMembersListPageTableColumnsIds.role
-        )[0];
+          __getRoleColumn = getMemberFiltersData?.settings?.columns?.filter(
+            el => el?.id === ZMembersListPageTableColumnsIds.role
+          )[0];
 
-        const __getStatusColumn =
-          getMemberFiltersData?.settings?.columns?.filter(
+          __getStatusColumn = getMemberFiltersData?.settings?.columns?.filter(
             el => el?.id === ZMembersListPageTableColumnsIds.status
           )[0];
 
-        const __getInvitedAtColumn =
-          getMemberFiltersData?.settings?.columns?.filter(
-            el => el?.id === ZMembersListPageTableColumnsIds.invitedAt
+          __getInvitedAtColumn =
+            getMemberFiltersData?.settings?.columns?.filter(
+              el => el?.id === ZMembersListPageTableColumnsIds.invitedAt
+            )[0];
+
+          __geInvitedAcceptedAtColumn =
+            getMemberFiltersData?.settings?.columns?.filter(
+              el => el?.id === ZMembersListPageTableColumnsIds.invitedAcceptedAt
+            )[0];
+        } else if (wsShareId && shareWSMemberId) {
+          __getEmailColumn = getSWSMemberFiltersData?.settings?.columns?.filter(
+            el => el?.id === ZMembersListPageTableColumnsIds.email
           )[0];
 
-        const __geInvitedAcceptedAtColumn =
-          getMemberFiltersData?.settings?.columns?.filter(
-            el => el?.id === ZMembersListPageTableColumnsIds.invitedAcceptedAt
+          __getRoleColumn = getSWSMemberFiltersData?.settings?.columns?.filter(
+            el => el?.id === ZMembersListPageTableColumnsIds.role
           )[0];
+
+          __getStatusColumn =
+            getSWSMemberFiltersData?.settings?.columns?.filter(
+              el => el?.id === ZMembersListPageTableColumnsIds.status
+            )[0];
+
+          __getInvitedAtColumn =
+            getSWSMemberFiltersData?.settings?.columns?.filter(
+              el => el?.id === ZMembersListPageTableColumnsIds.invitedAt
+            )[0];
+
+          __geInvitedAcceptedAtColumn =
+            getSWSMemberFiltersData?.settings?.columns?.filter(
+              el => el?.id === ZMembersListPageTableColumnsIds.invitedAcceptedAt
+            )[0];
+        }
 
         if (__getInvitedAtColumn) {
           zMembersTable
@@ -452,17 +610,25 @@ const ZInpageTable: React.FC = () => {
     } catch (error) {
       reportCustomError(error);
     }
-  }, [getMemberFiltersData]);
+  }, [
+    workspaceId,
+    getMemberFiltersData,
+    getSWSMemberFiltersData,
+    wsShareId,
+    shareWSMemberId
+  ]);
 
   useEffect(() => {
     try {
-      if (wsTeamMembersData) {
-        setMembersDataRState(wsTeamMembersData);
+      if (workspaceId && membersData) {
+        setMembersDataRState(membersData);
+      } else if (wsShareId && shareWSMemberId && swsMembersData) {
+        setMembersDataRState(swsMembersData);
       }
     } catch (error) {
       reportCustomError(error);
     }
-  }, [wsTeamMembersData]);
+  }, [workspaceId, membersData, swsMembersData, wsShareId, shareWSMemberId]);
   // #endregion
   // console.log({ d: zMembersTable?.getCanNextPage() }); // causing infinite loop
 
@@ -499,15 +665,41 @@ const ZInpageTable: React.FC = () => {
                   );
                 })}
 
-                <ZIonCol
-                  size='.8'
-                  className={classNames({
-                    'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
-                      true,
-                    'border-r': false
-                  })}>
-                  Actions
-                </ZIonCol>
+                <ZCan
+                  shareWSId={wsShareId}
+                  checkMode={permissionCheckModeEnum.any}
+                  permissionType={
+                    wsShareId && shareWSMemberId
+                      ? permissionsTypeEnum.shareWSMemberPermissions
+                      : permissionsTypeEnum.loggedInUserPermissions
+                  }
+                  havePermissions={
+                    workspaceId
+                      ? [
+                          permissionsEnum.update_ws_member,
+                          permissionsEnum.delete_ws_member,
+                          permissionsEnum.resend_invitation_ws_member,
+                          permissionsEnum.update_memberRole_ws_member
+                        ]
+                      : wsShareId && shareWSMemberId
+                      ? [
+                          shareWSPermissionEnum.update_sws_member,
+                          shareWSPermissionEnum.delete_sws_member,
+                          shareWSPermissionEnum.resend_invitation_sws_member,
+                          shareWSPermissionEnum.update_memberRole_sws_member
+                        ]
+                      : []
+                  }>
+                  <ZIonCol
+                    size='.8'
+                    className={classNames({
+                      'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
+                        true,
+                      'border-r': false
+                    })}>
+                    Actions
+                  </ZIonCol>
+                </ZCan>
               </ZIonRow>
             );
           })}
@@ -561,42 +753,69 @@ const ZInpageTable: React.FC = () => {
                       ) : null
                     )}
 
-                    <ZIonCol
-                      size='.8'
-                      className={classNames({
-                        'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
-                          true,
-                        'border-r': false
-                      })}>
-                      <ZIonButton
-                        fill='clear'
-                        color='dark'
-                        className='ion-no-padding ion-no-margin'
-                        size='small'
-                        testingselector={
-                          CONSTANTS.testingSelectors.shortLink.listPage.table
-                            .actionPopoverBtn
-                        }
-                        testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
-                        onClick={(_event: unknown) => {
-                          setCompState(oldVal => ({
-                            ...oldVal,
-                            selectedMemberId: _rowInfo.original.id || '',
-                            selectedMemberEmail: _rowInfo.original.email || '',
-                            selectedMemberRole:
-                              _rowInfo.original.memberRole.name
-                          }));
+                    <ZCan
+                      shareWSId={wsShareId}
+                      checkMode={permissionCheckModeEnum.any}
+                      permissionType={
+                        wsShareId && shareWSMemberId
+                          ? permissionsTypeEnum.shareWSMemberPermissions
+                          : permissionsTypeEnum.loggedInUserPermissions
+                      }
+                      havePermissions={
+                        workspaceId
+                          ? [
+                              permissionsEnum.update_ws_member,
+                              permissionsEnum.delete_ws_member,
+                              permissionsEnum.resend_invitation_ws_member,
+                              permissionsEnum.update_memberRole_ws_member
+                            ]
+                          : wsShareId && shareWSMemberId
+                          ? [
+                              shareWSPermissionEnum.update_sws_member,
+                              shareWSPermissionEnum.delete_sws_member,
+                              shareWSPermissionEnum.resend_invitation_sws_member,
+                              shareWSPermissionEnum.update_memberRole_sws_member
+                            ]
+                          : []
+                      }>
+                      <ZIonCol
+                        size='.8'
+                        className={classNames({
+                          'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
+                            true,
+                          'border-r': false
+                        })}>
+                        <ZIonButton
+                          fill='clear'
+                          color='dark'
+                          className='ion-no-padding ion-no-margin'
+                          size='small'
+                          testingselector={
+                            CONSTANTS.testingSelectors.shortLink.listPage.table
+                              .actionPopoverBtn
+                          }
+                          testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
+                          onClick={(_event: unknown) => {
+                            setCompState(oldVal => ({
+                              ...oldVal,
+                              selectedMemberId: _rowInfo.original.id || '',
+                              selectedMemberEmail:
+                                _rowInfo.original.email || '',
+                              selectedMemberRole:
+                                _rowInfo.original.memberRole.name
+                            }));
 
-                          //
-                          presentZMemberActionPopover({
-                            _event: _event as Event,
-                            _cssClass: 'z_member_table_action_popover_width',
-                            _dismissOnSelect: false
-                          });
-                        }}>
-                        <ZIonIcon icon={ellipsisVerticalOutline} />
-                      </ZIonButton>
-                    </ZIonCol>
+                            //
+                            presentZMemberActionPopover({
+                              _event: _event as Event,
+                              _cssClass: 'z_member_table_action_popover_width',
+                              _dismissOnSelect: false
+                            });
+                          }}>
+                          <ZIonIcon icon={ellipsisVerticalOutline} />
+                        </ZIonButton>
+                      </ZIonCol>
+                    </ZCan>
                   </ZIonRow>
                 );
               })}
@@ -620,18 +839,36 @@ const ZInpageTable: React.FC = () => {
             onClick={() => {
               if (zMembersTable.getCanPreviousPage()) {
                 zNavigatePushRoute(
-                  createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
-                      .Members,
-                    params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId],
-                    routeSearchParams: {
-                      pageindex: 0,
-                      pagesize: zMembersTable
-                        .getState()
-                        .pagination.pageSize.toString()
-                    }
-                  })
+                  workspaceId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                          .Members,
+                        params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                        values: [workspaceId],
+                        routeSearchParams: {
+                          pageindex: 0,
+                          pagesize: zMembersTable
+                            .getState()
+                            .pagination.pageSize.toString()
+                        }
+                      })
+                    : wsShareId && shareWSMemberId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                          .Members,
+                        params: [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId
+                        ],
+                        values: [wsShareId, shareWSMemberId],
+                        routeSearchParams: {
+                          pageindex: 0,
+                          pagesize: zMembersTable
+                            .getState()
+                            .pagination.pageSize.toString()
+                        }
+                      })
+                    : ''
                 );
 
                 zMembersTable.setPageIndex(0);
@@ -658,19 +895,38 @@ const ZInpageTable: React.FC = () => {
                 zMembersTable.previousPage();
 
                 zNavigatePushRoute(
-                  createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
-                      .Members,
-                    params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId],
-                    routeSearchParams: {
-                      pageindex:
-                        zMembersTable.getState().pagination.pageIndex - 1,
-                      pagesize: zMembersTable
-                        .getState()
-                        .pagination.pageSize.toString()
-                    }
-                  })
+                  workspaceId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                          .Members,
+                        params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                        values: [workspaceId],
+                        routeSearchParams: {
+                          pageindex:
+                            zMembersTable.getState().pagination.pageIndex - 1,
+                          pagesize: zMembersTable
+                            .getState()
+                            .pagination.pageSize.toString()
+                        }
+                      })
+                    : wsShareId && shareWSMemberId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                          .Members,
+                        params: [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId
+                        ],
+                        values: [wsShareId, shareWSMemberId],
+                        routeSearchParams: {
+                          pageindex:
+                            zMembersTable.getState().pagination.pageIndex - 1,
+                          pagesize: zMembersTable
+                            .getState()
+                            .pagination.pageSize.toString()
+                        }
+                      })
+                    : ''
                 );
               }
             }}>
@@ -696,19 +952,38 @@ const ZInpageTable: React.FC = () => {
                 zMembersTable.nextPage();
 
                 zNavigatePushRoute(
-                  createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
-                      .Members,
-                    params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId],
-                    routeSearchParams: {
-                      pageindex:
-                        zMembersTable.getState().pagination.pageIndex + 1,
-                      pagesize: zMembersTable
-                        .getState()
-                        .pagination.pageSize.toString()
-                    }
-                  })
+                  workspaceId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                          .Members,
+                        params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                        values: [workspaceId],
+                        routeSearchParams: {
+                          pageindex:
+                            zMembersTable.getState().pagination.pageIndex + 1,
+                          pagesize: zMembersTable
+                            .getState()
+                            .pagination.pageSize.toString()
+                        }
+                      })
+                    : wsShareId && shareWSMemberId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                          .Members,
+                        params: [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId
+                        ],
+                        values: [wsShareId, shareWSMemberId],
+                        routeSearchParams: {
+                          pageindex:
+                            zMembersTable.getState().pagination.pageIndex + 1,
+                          pagesize: zMembersTable
+                            .getState()
+                            .pagination.pageSize.toString()
+                        }
+                      })
+                    : ''
                 );
               }
             }}>
@@ -733,18 +1008,36 @@ const ZInpageTable: React.FC = () => {
                 zMembersTable.setPageIndex(zMembersTable.getPageCount() - 1);
 
                 zNavigatePushRoute(
-                  createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
-                      .Members,
-                    params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId],
-                    routeSearchParams: {
-                      pageindex: zMembersTable.getPageCount() - 1,
-                      pagesize: zMembersTable
-                        .getState()
-                        .pagination.pageSize.toString()
-                    }
-                  })
+                  workspaceId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                          .Members,
+                        params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                        values: [workspaceId],
+                        routeSearchParams: {
+                          pageindex: zMembersTable.getPageCount() - 1,
+                          pagesize: zMembersTable
+                            .getState()
+                            .pagination.pageSize.toString()
+                        }
+                      })
+                    : wsShareId && shareWSMemberId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                          .Members,
+                        params: [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId
+                        ],
+                        values: [wsShareId, shareWSMemberId],
+                        routeSearchParams: {
+                          pageindex: zMembersTable.getPageCount() - 1,
+                          pagesize: zMembersTable
+                            .getState()
+                            .pagination.pageSize.toString()
+                        }
+                      })
+                    : ''
                 );
               }
             }}>
@@ -777,17 +1070,36 @@ const ZInpageTable: React.FC = () => {
             onIonChange={e => {
               zMembersTable.setPageSize(Number(e.target.value));
 
-              zNavigatePushRoute(
-                createRedirectRoute({
-                  url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
-                  params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                  values: [workspaceId],
-                  routeSearchParams: {
-                    pageindex: zMembersTable.getPageCount() - 1,
-                    pagesize: Number(e.target.value)
-                  }
-                })
-              );
+              if (workspaceId) {
+                zNavigatePushRoute(
+                  createRedirectRoute({
+                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                      .Members,
+                    params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                    values: [workspaceId],
+                    routeSearchParams: {
+                      pageindex: zMembersTable.getPageCount() - 1,
+                      pagesize: Number(e.target.value)
+                    }
+                  })
+                );
+              } else if (wsShareId && shareWSMemberId) {
+                zNavigatePushRoute(
+                  createRedirectRoute({
+                    url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                      .Members,
+                    params: [
+                      CONSTANTS.RouteParams.workspace.wsShareId,
+                      CONSTANTS.RouteParams.workspace.shareWSMemberId
+                    ],
+                    values: [wsShareId, shareWSMemberId],
+                    routeSearchParams: {
+                      pageindex: zMembersTable.getPageCount() - 1,
+                      pagesize: Number(e.target.value)
+                    }
+                  })
+                );
+              }
             }}>
             {[2, 3].map(pageSize => (
               <ZIonSelectOption
@@ -807,11 +1119,21 @@ const ZInpageTable: React.FC = () => {
 const ZMemberActionPopover: React.FC<{
   dismissZIonPopover: (data?: string, role?: string | undefined) => void;
   zNavigatePushRoute: (_url: string) => void;
-  workspaceId: string;
-  membersId: string;
+  workspaceId: string; // if owned workspace then this will be id of owned workspace.
+  wsShareId: string; // if share workspace then this will be id of share workspace.
+  shareWSMemberId: string; // if share workspace then this will be id of current member.
+  membersId: string; // this will be the item id, we are listing member if we click action btn of any member then this will be the id of that member/item
   email: string;
   role: WSRolesNameEnum;
-}> = ({ dismissZIonPopover, workspaceId, membersId, email, role }) => {
+}> = ({
+  dismissZIonPopover,
+  workspaceId,
+  membersId,
+  email,
+  role,
+  wsShareId,
+  shareWSMemberId
+}) => {
   const [compState, setCompState] = useState<{
     currentMemberData?: WSTeamMembersInterface;
   }>();
@@ -824,28 +1146,61 @@ const ZMemberActionPopover: React.FC<{
   // #endregion
 
   // #region APIS.
-  const { mutateAsync: resendInviteTeamMemberAsyncMutate } =
-    useZRQUpdateRequest({
-      _url: API_URL_ENUM.member_resendInvite_list,
-      _loaderMessage: 'Resending invitation.'
-    });
+  // If owner then this api is used to resent invitation to the members.
+  const { mutateAsync: resendInviteMemberAsyncMutate } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.member_resendInvite_list,
+    _loaderMessage: 'Resending invitation.'
+  });
 
-  // update invitation data api
+  // If member and has permission to resent invitation then this api is used to resent invitation to other members.
+  const { mutateAsync: resendInviteSWSMemberAsyncMutate } = useZRQUpdateRequest(
+    {
+      _url: API_URL_ENUM.sws_member_resendInvite_list,
+      _loaderMessage: 'Resending invitation.'
+    }
+  );
+
+  // If owner then this api is used to cancel invitation.
   const { mutateAsync: updateInvitationAsyncMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.member_update,
     _loaderMessage: 'Canceling invitation...'
   });
 
+  // If member and has permission to cancel invitation then this api is used to cancel invitation.
+  const { mutateAsync: updateSWSInvitationAsyncMutate } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.sws_member_update,
+    _loaderMessage: 'Canceling invitation...'
+  });
+
+  // If owner then this api is used to delete invitation.
   const { mutateAsync: deleteInvitationAsyncMutate } = useZRQDeleteRequest({
     _url: API_URL_ENUM.member_invite_delete
+  });
+
+  // If member and has permission to delete invitation then this api is used to delete invitation.
+  const { mutateAsync: deleteSWSInvitationAsyncMutate } = useZRQDeleteRequest({
+    _url: API_URL_ENUM.sws_member_invite_delete
   });
   // #endregion
 
   useEffect(() => {
     try {
-      const _allMemberRQCacheData = getRQCDataHandler({
-        key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId]
-      });
+      let _allMemberRQCacheData;
+      if (workspaceId) {
+        _allMemberRQCacheData = getRQCDataHandler({
+          key: [
+            CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+            workspaceId
+          ]
+        });
+      } else if (wsShareId && shareWSMemberId) {
+        _allMemberRQCacheData = getRQCDataHandler({
+          key: [
+            CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
+            wsShareId
+          ]
+        });
+      }
 
       const _allMember =
         extractInnerData<WSTeamMembersInterface[]>(
@@ -855,10 +1210,12 @@ const ZMemberActionPopover: React.FC<{
 
       const _currentMember = _allMember?.find(el => el.id === membersId);
 
-      setCompState(oldValues => ({
-        ...oldValues,
-        currentMemberData: _currentMember
-      }));
+      if (_currentMember) {
+        setCompState(oldValues => ({
+          ...oldValues,
+          currentMemberData: _currentMember
+        }));
+      }
     } catch (error) {
       reportCustomError(error);
     }
@@ -881,7 +1238,7 @@ const ZMemberActionPopover: React.FC<{
   // #region Functions.
   const ZResendInvitationHandler = async () => {
     try {
-      const __response = await resendInviteTeamMemberAsyncMutate({
+      const __response = await resendInviteMemberAsyncMutate({
         urlDynamicParts: [
           CONSTANTS.RouteParams.workspace.workspaceId,
           CONSTANTS.RouteParams.workspace.invitationId
@@ -958,8 +1315,11 @@ const ZMemberActionPopover: React.FC<{
       });
 
       const __response = await updateInvitationAsyncMutate({
-        itemIds: [membersId],
-        urlDynamicParts: [CONSTANTS.RouteParams.workspace.memberInviteId],
+        itemIds: [workspaceId, membersId],
+        urlDynamicParts: [
+          CONSTANTS.RouteParams.workspace.workspaceId,
+          CONSTANTS.RouteParams.workspace.memberInviteId
+        ],
         requestData: __stringifyData
       });
 

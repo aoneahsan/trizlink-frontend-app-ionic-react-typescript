@@ -64,6 +64,7 @@ import {
   shareWSPermissionEnum
 } from '@/utils/enums/RoleAndPermissions';
 import ZCan from '@/components/Can';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Styles
 
@@ -83,6 +84,7 @@ const ZaionsAddNewFolder: React.FC<{
   // #region Custom Hooks.
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
+  const { isSmScale } = useZMediaQueryScale();
   // #endregion
 
   // #region Recoil states.
@@ -444,13 +446,21 @@ const ZaionsAddNewFolder: React.FC<{
                   <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
                     <ZIonImg
                       src={ProductFavicon}
-                      className='w-10 h-10 mx-auto'
+                      className={classNames({
+                        'mx-auto': true,
+                        'w-[4rem] h-[4rem]': isSmScale,
+                        'w-[3rem] h-[3rem]': !isSmScale
+                      })}
                     />
                   </div>
 
                   <ZIonText
                     color='dark'
-                    className='block mt-3 text-xl font-bold ion-text-center'>
+                    className={classNames({
+                      'block mt-3 font-normal ion-text-center': true,
+                      'text-2xl': isSmScale,
+                      'text-xl': !isSmScale
+                    })}>
                     {folderFormState.formMode === FormMode.ADD
                       ? 'Create a new folder'
                       : folderFormState.formMode === FormMode.EDIT
