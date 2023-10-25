@@ -271,6 +271,15 @@ const MEMBER = {
   ROLE_UPDATED:
     'Update alert! Your invited member role has successfully change.',
 
+  INVITATION_SHORT_URL_ADDED:
+    'Update alert! Your invitation short url is added. share it with member',
+
+  UPDATE_ROLE_API: 'Updating role...',
+
+  INVITE_LINK_API: 'Creating invitation link...',
+
+  SENDING_INVITATION_LINK_API: 'Sending invitation...',
+
   CANCEL_ALERT: {
     HEADER: 'Cancel Invitation?',
     SUB_HEADER: "Let's Confirm This!",

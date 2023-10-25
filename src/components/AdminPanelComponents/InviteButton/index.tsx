@@ -59,6 +59,8 @@ import { replaceRouteParams } from '@/utils/helpers';
 interface IZInviteButton {
   className?: string;
   workspaceId?: string;
+  shareWSMemberId?: string;
+  wsShareId?: string;
 }
 
 /**
@@ -69,7 +71,9 @@ interface IZInviteButton {
 
 const ZInviteButton: React.FC<IZInviteButton> = ({
   className,
-  workspaceId
+  workspaceId,
+  shareWSMemberId,
+  wsShareId
 }) => {
   const { presentZIonModal: presentZInviteInTeamModal } = useZIonModal(
     ZInviteInTeamModal,
@@ -87,11 +91,24 @@ const ZInviteButton: React.FC<IZInviteButton> = ({
       className={className}
       expand={isMdScale ? undefined : 'block'}
       testingselector={CONSTANTS.testingSelectors.topBar.teamInviteBtn}
-      routerLink={replaceRouteParams(
-        ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
-        [CONSTANTS.RouteParams.workspace.workspaceId],
-        [workspaceId!]
-      )}>
+      routerLink={
+        workspaceId
+          ? replaceRouteParams(
+              ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
+              [CONSTANTS.RouteParams.workspace.workspaceId],
+              [workspaceId!]
+            )
+          : wsShareId && shareWSMemberId
+          ? replaceRouteParams(
+              ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Members,
+              [
+                CONSTANTS.RouteParams.workspace.wsShareId,
+                CONSTANTS.RouteParams.workspace.shareWSMemberId
+              ],
+              [wsShareId!, shareWSMemberId!]
+            )
+          : ''
+      }>
       <ZIonIcon
         icon={addOutline}
         className='me-1'

@@ -180,6 +180,7 @@ export interface WSTeamMembersInterface {
     createdAt?: string;
     updatedAt?: string;
   };
+  shortUrlId?: string;
   sortOrderNo: string;
   isActive: boolean;
   createdAt?: string;

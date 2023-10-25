@@ -124,6 +124,7 @@ export enum ZMembersListPageTableColumnsIds {
   email = '__z_member_email_id__',
   role = '__z_member_role__',
   status = '__z_member_status__',
+  linkToShare = '__z_member_link_to_share__',
   invitedAt = '__z_member_invited_at__',
   invitedAcceptedAt = '__z_member_invited_accepted_at__',
   actions = '__z_member_actions__'

@@ -88,7 +88,7 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
   // If owned workspace then this api will fetch current owned workspace utm tags data.
   const { data: _UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN, workspaceId],
     _shouldFetchWhenIdPassed: workspaceId ? false : true,
     _itemsIds: [workspaceId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],

@@ -90,12 +90,15 @@ export enum API_URL_ENUM {
   member_invite_delete = 'member_invite_delete',
   member_invite_get = 'member_invite_get',
   member_update = 'member_update',
+  member_create_short_url = 'member_create_short_url',
   member_role_update = 'member_role_update',
   validate_invitation_status = 'validate_invitation_status',
+  member_check_short_url = 'member_check_short_url',
 
   // Share workspace members
   sws_member_sendInvite_list = 'sws_member_sendInvite_list',
   sws_member_getAllInvite_list = 'sws_member_getAllInvite_list',
+  sws_member_create_short_url = 'sws_member_create_short_url',
   sws_member_resendInvite_list = 'sws_member_resendInvite_list',
   sws_member_invite_delete = 'sws_member_invite_delete',
   sws_member_invite_get = 'sws_member_invite_get',

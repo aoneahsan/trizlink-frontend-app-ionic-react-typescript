@@ -107,7 +107,8 @@ const ZWSSettingEmbedWidgetListPage: React.FC = () => {
   const invalidedQueries = async () => {
     try {
       await zInvalidateReactQueries([
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
+        workspaceId
       ]);
     } catch (error) {
       reportCustomError(error);

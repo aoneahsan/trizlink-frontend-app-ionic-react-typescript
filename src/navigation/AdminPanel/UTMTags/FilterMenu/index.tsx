@@ -182,6 +182,7 @@ const ZUTMTagsFilterMenu: React.FC = () => {
     _url: API_URL_ENUM.user_setting_delete_update_get,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+      workspaceId,
       ZUserSettingTypeEnum.UTMTagListPageTable
     ],
     _itemsIds: [workspaceId, ZUserSettingTypeEnum.UTMTagListPageTable],
@@ -267,7 +268,9 @@ const ZUTMTagsFilterMenu: React.FC = () => {
 
         if (
           getUtmTagsFiltersData?.type ===
-          ZUserSettingTypeEnum.UTMTagListPageTable
+            ZUserSettingTypeEnum.UTMTagListPageTable ||
+          getSWSUtmTagsFiltersData?.type ===
+            ZUserSettingTypeEnum.UTMTagListPageTable
         ) {
           if (workspaceId) {
             __response = await updateUtmTagsFilersAsyncMutate({
@@ -312,6 +315,7 @@ const ZUTMTagsFilterMenu: React.FC = () => {
               await updateRQCDataHandler<ZUserSettingInterface | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+                  workspaceId,
                   ZUserSettingTypeEnum.UTMTagListPageTable
                 ],
                 data: __data,

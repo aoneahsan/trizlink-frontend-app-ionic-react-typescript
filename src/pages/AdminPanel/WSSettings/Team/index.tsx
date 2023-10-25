@@ -114,7 +114,9 @@ const ZWSSettingTeamsListPage: React.FC = () => {
     ZWorkspacesSharingModal,
     {
       Tab: WorkspaceSharingTabEnum.invite,
-      workspaceId: workspaceId
+      workspaceId, // if owned workspace then workspaceId will be passed.
+      shareWSMemberId, // if share workspace then shareWSMemberId will be passed.
+      wsShareId // if share workspace then wsShareId will be passed.
     }
   );
   // #endregion
@@ -199,7 +201,7 @@ const ZWSSettingTeamsListPage: React.FC = () => {
       shareWSId={wsShareId}
       havePermissions={
         workspaceId
-          ? [permissionsEnum.view_ws_member]
+          ? [permissionsEnum.viewAny_ws_member]
           : wsShareId && shareWSMemberId
           ? [shareWSPermissionEnum.viewAny_sws_member]
           : []

@@ -169,7 +169,7 @@ const ZPixelsFilterMenu: React.FC = () => {
 
   // If share-workspace then this api will create share-workspace pixel settings & filters data.
   const { mutateAsync: createSWSPixelFilersAsyncMutate } = useZRQCreateRequest({
-    _url: API_URL_ENUM.sws_user_setting_delete_update_get,
+    _url: API_URL_ENUM.sws_user_setting_list_create,
     _loaderMessage: MESSAGES.PIXEL_ACCOUNT.FILTERING,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _itemsIds: [shareWSMemberId]
@@ -181,6 +181,7 @@ const ZPixelsFilterMenu: React.FC = () => {
       _url: API_URL_ENUM.user_setting_delete_update_get,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+        workspaceId,
         ZUserSettingTypeEnum.pixelListPageTable
       ],
       _itemsIds: [workspaceId, ZUserSettingTypeEnum.pixelListPageTable],
@@ -264,7 +265,10 @@ const ZPixelsFilterMenu: React.FC = () => {
         let __response;
 
         if (
-          getPixelFiltersData?.type === ZUserSettingTypeEnum.pixelListPageTable
+          getPixelFiltersData?.type ===
+            ZUserSettingTypeEnum.pixelListPageTable ||
+          getSWSPixelFiltersData?.type ===
+            ZUserSettingTypeEnum.pixelListPageTable
         ) {
           if (workspaceId) {
             __response = await updatePixelFilersAsyncMutate({
@@ -309,6 +313,7 @@ const ZPixelsFilterMenu: React.FC = () => {
               await updateRQCDataHandler<ZUserSettingInterface | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+                  workspaceId,
                   ZUserSettingTypeEnum.pixelListPageTable
                 ],
                 data: __data,

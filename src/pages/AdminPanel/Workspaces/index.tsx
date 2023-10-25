@@ -329,6 +329,8 @@ const ZWorkspaceListPage: React.FC = () => {
                   </ZIonCol>
                 )}
 
+                {isZFetching && <ZWorkspacesCardSkeleton />}
+
                 {WorkspacesData && WorkspacesData?.length > 0 && (
                   <>
                     {/* single card */}
@@ -357,8 +359,6 @@ const ZWorkspaceListPage: React.FC = () => {
                           </ZCan>
                         ))}
                     </Suspense>
-
-                    {isZFetching && <ZWorkspacesCardSkeleton />}
 
                     {/* add a workspace card */}
                     <ZCan havePermissions={[permissionsEnum.create_workspace]}>
@@ -435,6 +435,8 @@ const ZWorkspaceListPage: React.FC = () => {
                     </ZIonTitle>
                   </ZIonCol>
 
+                  {isZFetching && <ZWorkspacesCardSkeleton />}
+
                   {WSShareData?.length === 0 && (
                     <ZIonCol
                       size='12'
@@ -483,8 +485,6 @@ const ZWorkspaceListPage: React.FC = () => {
                         );
                       })}
                   </Suspense>
-
-                  {isZFetching && <ZWorkspacesCardSkeleton />}
                 </ZIonRow>
               </ZIonCard>
             </ZCan>

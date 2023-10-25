@@ -1588,6 +1588,27 @@ export const zGetRoutePermissions = ({
           permissionsEnum.viewAny_workspaceTeam
         ];
         break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Pixel:
+        __permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_ws_member
+        ];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.UTMTag:
+        __permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_ws_member
+        ];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.EmbedWidget:
+        __permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_ws_member
+        ];
+        break;
     }
 
     return __permissions;

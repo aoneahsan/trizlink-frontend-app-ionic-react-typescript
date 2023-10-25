@@ -176,6 +176,7 @@ export enum permissionsEnum {
   send_invitation_ws_member = 'send_invitation_ws_member',
   resend_invitation_ws_member = 'resend_invitation_ws_member',
   update_memberRole_ws_member = 'update_memberRole_ws_member',
+  cancel_invitation_ws_member = 'cancel_invitation_ws_member',
 
   // Workspace pixel connections
   attach_pixel_to_workspace = 'attach_pixel_to_workspace',
@@ -335,6 +336,7 @@ export enum shareWSPermissionEnum {
   send_invitation_sws_member = 'send_invitation_sws_member',
   resend_invitation_sws_member = 'resend_invitation_sws_member',
   update_memberRole_sws_member = 'update_memberRole_sws_member',
+  cancel_invitation_sws_member = 'cancel_invitation_sws_member',
   // Workspace
   viewAny_sws_workspace = 'viewAny_sws_workspace',
   view_sws_workspace = 'view_sws_workspace',

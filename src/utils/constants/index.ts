@@ -139,12 +139,13 @@ export const API_URLS = {
   member_role_update: `/user/workspace/${RouteParams.workspace.workspaceId}/update-role/${RouteParams.workspace.memberInviteId}`,
   member_update: `/user/workspace/${RouteParams.workspace.workspaceId}/update-invitation/${RouteParams.workspace.memberInviteId}`,
   member_create_short_url: `/user/workspace/${RouteParams.workspace.workspaceId}/create-short-url/${RouteParams.workspace.memberInviteId}`,
-  member_check_short_url: `/user/short-url/check`,
+  member_check_short_url: `/user/ws-member/short-url/check/${RouteParams.workspace.invitationId}`,
   validate_invitation_status: `/user/validate-and-update-invitation`,
 
   // Share workspace members
   sws_member_sendInvite_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member/send-invitation`,
   sws_member_getAllInvite_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member`,
+  sws_member_create_short_url: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/create-short-url/${RouteParams.workspace.memberInviteId}`,
   sws_member_resendInvite_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member/resend-invitation/${RouteParams.workspace.invitationId}`,
   sws_member_invite_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member/${RouteParams.workspace.memberInviteId}`,
   sws_member_invite_get: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member/${RouteParams.workspace.memberInviteId}`,
@@ -1673,7 +1674,8 @@ const LINK_In_BIO = {
 
 const SHORT_LINK = {
   urlPathLength: 6,
-  urlStaticPath: 's'
+  urlStaticPath: 's',
+  invitationSLStaticPath: 'sws'
 };
 
 const toLocaleStringOptions: Intl.DateTimeFormatOptions = {

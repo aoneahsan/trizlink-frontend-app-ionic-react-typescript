@@ -60,6 +60,8 @@ import {
 } from '@/types/AdminPanel/workspace';
 import { FormMode } from '@/types/AdminPanel/index.type';
 import { ProductFavicon } from '@/assets/images';
+import { useZRQUpdateRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { API_URL_ENUM } from '@/utils/enums';
 
 /**
  * Recoil State Imports go down
@@ -90,7 +92,9 @@ import { ProductFavicon } from '@/assets/images';
 const ZWorkspacesSharingModal: React.FC<{
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
   Tab: WorkspaceSharingTabEnum;
-  workspaceId: string;
+  workspaceId?: string;
+  shareWSMemberId?: string;
+  wsShareId?: string;
   formMode?: FormMode;
   email: string;
   id?: string;
@@ -99,10 +103,12 @@ const ZWorkspacesSharingModal: React.FC<{
   dismissZIonModal,
   formMode = FormMode.ADD,
   Tab,
-  workspaceId,
   id,
   email,
-  role
+  role,
+  workspaceId,
+  shareWSMemberId,
+  wsShareId
 }) => {
   // Component state
   const [compState, setCompState] = useState<{
@@ -111,7 +117,9 @@ const ZWorkspacesSharingModal: React.FC<{
     activeTab: Tab
   });
 
+  // #region custom hook.
   const { isSmScale } = useZMediaQueryScale();
+  // #endregion
 
   return (
     <>
@@ -273,6 +281,8 @@ const ZWorkspacesSharingModal: React.FC<{
             {compState.activeTab === WorkspaceSharingTabEnum.invite ? (
               <ZInviteTab
                 workspaceId={workspaceId}
+                wsShareId={wsShareId}
+                shareWSMemberId={shareWSMemberId}
                 dismissZIonModal={dismissZIonModal}
                 formMode={formMode}
                 email={email}

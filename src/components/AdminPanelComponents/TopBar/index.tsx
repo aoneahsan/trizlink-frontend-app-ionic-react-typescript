@@ -383,6 +383,8 @@ const ZADTopBarColOne: React.FC<{
               <ZInviteButton
                 className='ms-2'
                 workspaceId={workspaceId}
+                wsShareId={wsShareId}
+                shareWSMemberId={shareWSMemberId}
               />
             ) : null}
           </ZCan>

@@ -187,6 +187,7 @@ const ZMembersFilterMenu: React.FC = () => {
     _url: API_URL_ENUM.user_setting_delete_update_get,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+      workspaceId,
       ZUserSettingTypeEnum.membersListPageTable
     ],
     _itemsIds: [workspaceId, ZUserSettingTypeEnum.membersListPageTable],
@@ -272,7 +273,9 @@ const ZMembersFilterMenu: React.FC = () => {
 
         if (
           getMemberFiltersData?.type ===
-          ZUserSettingTypeEnum.membersListPageTable
+            ZUserSettingTypeEnum.membersListPageTable ||
+          getSWSMemberFiltersData?.type ===
+            ZUserSettingTypeEnum.membersListPageTable
         ) {
           if (workspaceId) {
             __response = await updateMemberFilersAsyncMutate({
@@ -317,6 +320,7 @@ const ZMembersFilterMenu: React.FC = () => {
               await updateRQCDataHandler<ZUserSettingInterface | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+                  workspaceId,
                   ZUserSettingTypeEnum.membersListPageTable
                 ],
                 data: __data,

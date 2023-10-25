@@ -156,12 +156,18 @@ const ZaionsAddUtmTags: React.FC<{
           if (workspaceId) {
             __utmDataFromCache =
               getRQCDataHandler<UTMTagTemplateType[]>({
-                key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN]
+                key: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
+                  workspaceId
+                ]
               }) || [];
           } else if (wsShareId && shareWSMemberId) {
             __utmDataFromCache =
               getRQCDataHandler<UTMTagTemplateType[]>({
-                key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN]
+                key: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN,
+                  wsShareId
+                ]
               }) || [];
           }
 
@@ -176,7 +182,10 @@ const ZaionsAddUtmTags: React.FC<{
 
               if (workspaceId) {
                 await updateRQCDataHandler({
-                  key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
+                    workspaceId
+                  ],
                   data: __updatedUtmTagsData,
                   id: '',
                   extractType: ZRQGetRequestExtractEnum.extractItems,
@@ -184,7 +193,10 @@ const ZaionsAddUtmTags: React.FC<{
                 });
               } else if (wsShareId && shareWSMemberId) {
                 await updateRQCDataHandler({
-                  key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN],
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN,
+                    wsShareId
+                  ],
                   data: __updatedUtmTagsData,
                   id: '',
                   extractType: ZRQGetRequestExtractEnum.extractItems,
@@ -196,9 +208,15 @@ const ZaionsAddUtmTags: React.FC<{
             } else if (formMode === FormMode.EDIT) {
               await updateRQCDataHandler({
                 key: workspaceId
-                  ? [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN]
+                  ? [
+                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
+                      workspaceId
+                    ]
                   : wsShareId
-                  ? [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN]
+                  ? [
+                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN,
+                      wsShareId
+                    ]
                   : [],
                 data: __data,
                 id: __data.id,

@@ -421,7 +421,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
   const { isFetching: isUTMTagsDataFetching, isError: isUTMTagsDataError } =
     useZRQGetRequest<UTMTagTemplateType[]>({
       _url: API_URL_ENUM.userAccountUtmTags_create_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN, workspaceId],
       _shouldFetchWhenIdPassed: workspaceId ? false : true,
       _itemsIds: [workspaceId],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
@@ -592,7 +592,8 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
         // Utm tag.
         await zInvalidateReactQueries([
-          CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
+          workspaceId
         ]);
 
         // Folder.
@@ -2091,7 +2092,8 @@ const ZTopBar: React.FC = () => {
 
                   // Utm tag.
                   await zInvalidateReactQueries([
-                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
+                    workspaceId
                   ]);
 
                   // Folder.

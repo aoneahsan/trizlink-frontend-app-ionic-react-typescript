@@ -235,6 +235,7 @@ const ZInpageTable: React.FC = () => {
     _url: API_URL_ENUM.user_setting_delete_update_get,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+      workspaceId!,
       ZUserSettingTypeEnum.embedWidgetsListPageTable
     ],
     _itemsIds: [workspaceId!, ZUserSettingTypeEnum.embedWidgetsListPageTable],
@@ -1055,7 +1056,7 @@ const ZEmbedWidgetActionPopover: React.FC<{
 
   const { data: UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN, workspaceId],
     _itemsIds: [workspaceId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
@@ -1116,7 +1117,10 @@ const ZEmbedWidgetActionPopover: React.FC<{
               const _oldUTMTags =
                 extractInnerData<UTMTagTemplateType[]>(
                   getRQCDataHandler<UTMTagTemplateType[]>({
-                    key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN]
+                    key: [
+                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
+                      workspaceId
+                    ]
                   }) as UTMTagTemplateType[],
                   extractInnerDataOptionsEnum.createRequestResponseItems
                 ) || [];
@@ -1128,7 +1132,10 @@ const ZEmbedWidgetActionPopover: React.FC<{
 
               // Updating data in RQ cache.
               await updateRQCDataHandler<UTMTagTemplateType[] | undefined>({
-                key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
+                key: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
+                  workspaceId
+                ],
                 data: _updatedUtmTags as UTMTagTemplateType[],
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItems,

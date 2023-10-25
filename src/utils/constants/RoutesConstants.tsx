@@ -1,4 +1,4 @@
-import CONSTANTS from '@/utils/constants';
+import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 
 const workspaceIdParam = CONSTANTS.RouteParams.workspace.workspaceId;
 const shareWSMemberId = CONSTANTS.RouteParams.workspace.shareWSMemberId;
@@ -10,6 +10,7 @@ const ZaionsRoutes = {
   Asterisk: '*',
   // ShortLink redirect route.
   ShortLinkRedirectRoute: `/${CONSTANTS.SHORT_LINK.urlStaticPath}/${CONSTANTS.RouteParams.urlPath}`,
+  invitationSL: `/${CONSTANTS.SHORT_LINK.invitationSLStaticPath}/${CONSTANTS.RouteParams.urlPath}`,
   ValidateInvitationRoute: '/accept-invitation',
 
   // Main routes
@@ -22,10 +23,10 @@ const ZaionsRoutes = {
 
   // Why Zaions Section
   WhyZaions: {
-    Zaions101Route: '/pages/why-zlink/zlink-101',
-    ZaionsEnterpriseClassRoute: '/pages/why-zlink/enterprise-class',
-    ZaionsIntegrationApiRoute: '/pages/why-zlink/integrations-api',
-    ZaionsPricingRoute: '/pages/pricing/v1'
+    Zaions101Route: `/pages/why-${PRODUCT_NAME}/${PRODUCT_NAME}-101`,
+    ZaionsEnterpriseClassRoute: `/pages/why-${PRODUCT_NAME}/enterprise-class`,
+    ZaionsIntegrationApiRoute: `/pages/why-${PRODUCT_NAME}/integrations-api`,
+    ZaionsPricingRoute: `/pages/pricing/v1`
   },
 
   // Product Section

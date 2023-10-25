@@ -11,6 +11,9 @@ import ZaionsRoutes from './utils/constants/RoutesConstants';
 import PublicRoute from './components/PublicRoute';
 import PrivateRoute from './components/PrivateRoute';
 import ZShareWSStartup from './pages/AdminPanel/ShareWS/Startup';
+const ZInvitationSLRedirectPage = lazy(
+  () => import('./pages/InvitationSLRedirect')
+);
 const ZSWSShortLinksListPage = lazy(
   () => import('./pages/AdminPanel/ShareWS/ShortLinks/List')
 );
@@ -166,6 +169,12 @@ const AppRoutes = () => {
         exact
         path={ZaionsRoutes.ShortLinkRedirectRoute}
         component={ZShortLinkRedirectPage}
+      />
+
+      <Route
+        exact
+        path={ZaionsRoutes.invitationSL}
+        component={ZInvitationSLRedirectPage}
       />
 
       <PublicRoute
