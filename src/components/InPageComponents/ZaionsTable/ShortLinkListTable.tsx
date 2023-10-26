@@ -596,7 +596,7 @@ const ZInpageTable: React.FC = () => {
     ),
 
     // link to share
-    columnHelper.accessor('link_to_share', {
+    columnHelper.accessor(itemData => itemData.shortUrlDomain, {
       header: 'Link to share',
       id: ZShortLinkListPageTableColumnsIds.linkToShare,
       footer: 'Link to share',

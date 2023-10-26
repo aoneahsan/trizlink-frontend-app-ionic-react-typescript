@@ -155,34 +155,40 @@ const ZLabelsTab: React.FC<{
   const { mutateAsync: createLabelMutateAsync } = useZRQCreateRequest({
     _url: API_URL_ENUM.label_create_list,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _itemsIds: [workspaceId!]
+    _itemsIds: [workspaceId!],
+    _loaderMessage: MESSAGES.LABEL.CREATING_API
   });
 
   // if member then this api hit to create label for current share workspace.
   const { mutateAsync: createSWSLabelMutateAsync } = useZRQCreateRequest({
     _url: API_URL_ENUM.label_sws_create_list,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _itemsIds: [wsShareMemberId!]
+    _itemsIds: [wsShareMemberId!],
+    _loaderMessage: MESSAGES.LABEL.CREATING_API
   });
 
   // if owner then this api hit to update label for current workspace.
   const { mutateAsync: updateLabelMutateAsync } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.label_update_delete
+    _url: API_URL_ENUM.label_update_delete,
+    _loaderMessage: MESSAGES.LABEL.UPDATING_API
   });
 
   // if member then this api hit to update label for current workspace.
   const { mutateAsync: updateSWSLabelMutateAsync } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.label_sws_update_delete_get
+    _url: API_URL_ENUM.label_sws_update_delete_get,
+    _loaderMessage: MESSAGES.LABEL.UPDATING_API
   });
 
   // if owner then this api hit to delete label for current share workspace.
   const { mutateAsync: deleteLabelMutate } = useZRQDeleteRequest({
-    _url: API_URL_ENUM.label_update_delete
+    _url: API_URL_ENUM.label_update_delete,
+    _loaderMessage: MESSAGES.LABEL.DELETING_API
   });
 
   // if member then this api hit to delete label for current share workspace.
   const { mutateAsync: deleteSWSLabelMutate } = useZRQDeleteRequest({
-    _url: API_URL_ENUM.label_sws_update_delete_get
+    _url: API_URL_ENUM.label_sws_update_delete_get,
+    _loaderMessage: MESSAGES.LABEL.DELETING_API
   });
   // #endregion
 
@@ -494,7 +500,7 @@ const ZLabelsTab: React.FC<{
 			/> */}
       {() => {
         return (
-          <div className='flex flex-col w-full h-full ion-align-items-center'>
+          <div className='flex flex-col w-full h-full pt-6 ion-align-items-center'>
             <ZIonText className='py-2 text-xl'>
               Create and edit your labels below
             </ZIonText>
@@ -894,6 +900,12 @@ const ZLabelsTab: React.FC<{
                                               fill='clear'
                                               onClick={() => {
                                                 setFieldValue(
+                                                  `allLabels.${index}.title`,
+                                                  compState?.labelsData[index]
+                                                    ?.title,
+                                                  false
+                                                );
+                                                setFieldValue(
                                                   `allLabels.${index}.editMode`,
                                                   false,
                                                   false
@@ -905,62 +917,93 @@ const ZLabelsTab: React.FC<{
                                                 className='w-5 h-5'
                                               />
                                             </ZIonButton>
-                                            <ZIonButton
-                                              height='2.3rem'
-                                              className='mx-1 ion-no-margin ion-no-padding'
-                                              size='small'
-                                              color='success'
-                                              fill='clear'
-                                              disabled={
-                                                values.allLabels &&
-                                                values.allLabels[
-                                                  index
-                                                ]?.title?.trim().length === 0
-                                              }
-                                              onClick={async () => {
-                                                try {
-                                                  if (
-                                                    values.allLabels &&
-                                                    (values.allLabels[
+
+                                            <div
+                                              className={classNames({
+                                                'h-full': true,
+                                                'cursor-not-allowed':
+                                                  (values.allLabels &&
+                                                    values.allLabels[
                                                       index
-                                                    ]?.title?.trim().length ||
-                                                      0) > 0
-                                                  ) {
-                                                    const __zStringifyData =
-                                                      zStringify({
-                                                        title:
-                                                          values.allLabels[
-                                                            index
-                                                          ].title
-                                                      });
-
-                                                    await FormikSubmissionHandler(
-                                                      __zStringifyData,
-                                                      values.mode,
-                                                      el.id
-                                                    );
-
-                                                    setFieldValue(
-                                                      `allLabels.${index}.editMode`,
-                                                      false,
-                                                      false
-                                                    );
-
-                                                    setFieldValue(
-                                                      'mode',
-                                                      FormMode.ADD,
-                                                      false
-                                                    );
-                                                  }
-                                                } catch (error) {
-                                                  reportCustomError(error);
+                                                    ]?.title?.trim().length ===
+                                                      0) ||
+                                                  values.allLabels[
+                                                    index
+                                                  ]?.title?.trim() ===
+                                                    compState?.labelsData[
+                                                      index
+                                                    ]?.title?.trim()
+                                              })}>
+                                              <ZIonButton
+                                                height='2.3rem'
+                                                className='mx-1 ion-no-margin ion-no-padding'
+                                                size='small'
+                                                color='success'
+                                                fill='clear'
+                                                disabled={
+                                                  (values.allLabels &&
+                                                    values.allLabels[
+                                                      index
+                                                    ]?.title?.trim().length ===
+                                                      0) ||
+                                                  values.allLabels[
+                                                    index
+                                                  ]?.title?.trim() ===
+                                                    compState?.labelsData[
+                                                      index
+                                                    ]?.title?.trim()
                                                 }
-                                              }}>
-                                              <ZIonIcon
-                                                icon={checkmark}
-                                                className='w-5 h-5'
-                                              />
-                                            </ZIonButton>
+                                                onClick={async () => {
+                                                  try {
+                                                    if (
+                                                      (values.allLabels &&
+                                                        (values.allLabels[
+                                                          index
+                                                        ]?.title?.trim()
+                                                          .length || 0) > 0) ||
+                                                      values.allLabels[
+                                                        index
+                                                      ]?.title?.trim() !==
+                                                        compState?.labelsData[
+                                                          index
+                                                        ]?.title?.trim()
+                                                    ) {
+                                                      const __zStringifyData =
+                                                        zStringify({
+                                                          title:
+                                                            values.allLabels[
+                                                              index
+                                                            ].title
+                                                        });
+
+                                                      await FormikSubmissionHandler(
+                                                        __zStringifyData,
+                                                        values.mode,
+                                                        el.id
+                                                      );
+
+                                                      setFieldValue(
+                                                        `allLabels.${index}.editMode`,
+                                                        false,
+                                                        false
+                                                      );
+
+                                                      setFieldValue(
+                                                        'mode',
+                                                        FormMode.ADD,
+                                                        false
+                                                      );
+                                                    }
+                                                  } catch (error) {
+                                                    reportCustomError(error);
+                                                  }
+                                                }}>
+                                                <ZIonIcon
+                                                  icon={checkmark}
+                                                  className='w-5 h-5'
+                                                />
+                                              </ZIonButton>
+                                            </div>
                                           </div>
                                         )}
                                       </ZIonItem>

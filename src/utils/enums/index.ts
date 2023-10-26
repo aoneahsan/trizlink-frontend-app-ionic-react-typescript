@@ -46,6 +46,7 @@ export enum API_URL_ENUM {
   updatePassword = 'updatePassword',
   validateCurrentPassword = 'validateCurrentPassword',
   resendPasswordOtp = 'resendPasswordOtp',
+  updateUserStatus = 'updateUserStatus',
   validateCurrentPasswordOtp = 'validateCurrentPasswordOtp',
   userEmailsList = 'userEmailsList',
   userEmailDelete = 'userEmailDelete',

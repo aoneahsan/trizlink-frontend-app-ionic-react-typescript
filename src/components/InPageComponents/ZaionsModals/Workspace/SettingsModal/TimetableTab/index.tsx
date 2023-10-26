@@ -79,6 +79,7 @@ import {
   permissionsTypeEnum,
   shareWSPermissionEnum
 } from '@/utils/enums/RoleAndPermissions';
+import classNames from 'classnames';
 
 /**
  * Recoil State Imports go down
@@ -251,7 +252,7 @@ const ZTimetableTab: React.FC<{
               {ZDays.map((_element, _elementIndex) => {
                 return (
                   <ZIonCol
-                    className='h-full bg-white'
+                    className='h-full zaions__bg_white'
                     key={_elementIndex}>
                     {!isZFetching &&
                       compState?.timeSlotData &&
@@ -261,11 +262,17 @@ const ZTimetableTab: React.FC<{
                             return (
                               <div
                                 key={_timeSlotIndex}
-                                className='w-full h-[2.4rem] mb-3 shadow-sm bg-white rounded border flex ion-align-items-center ion-justify-content-between px-2'>
+                                className='w-full h-[2.4rem] mb-3 shadow-sm zaions__bg_white rounded border flex ion-align-items-center ion-justify-content-between px-2'
+                                style={{
+                                  borderColor: _timeSlot?.color
+                                }}>
                                 <ZIonText className='flex ion-align-items-center'>
                                   <ZIonIcon
                                     icon={timeOutline}
                                     className='w-6 h-6'
+                                    style={{
+                                      color: _timeSlot?.color
+                                    }}
                                   />
                                   <ZIonText className='mt-[2px] text-sm ms-2'>
                                     {_timeSlot?.time}
@@ -328,7 +335,7 @@ const ZTimetableTab: React.FC<{
                       [...Array(_element.loop)].map((el, _loopIndex) => {
                         return (
                           <div
-                            className='w-full h-[2.4rem] mb-3 shadow-sm bg-white rounded border flex ion-align-items-center ion-justify-content-between px-2'
+                            className='w-full h-[2.4rem] mb-3 shadow-sm zaions__bg_white rounded border flex ion-align-items-center ion-justify-content-between px-2'
                             key={_loopIndex}>
                             <ZIonText className='flex ion-align-items-center'>
                               <ZIonIcon
@@ -419,12 +426,14 @@ const ZTimeSlotActionPopover: React.FC<{
   // #region APIS.
   // Request for deleting time slot.
   const { mutateAsync: deleteTimeSlotMutate } = useZRQDeleteRequest({
-    _url: API_URL_ENUM.time_slot_update_delete
+    _url: API_URL_ENUM.time_slot_update_delete,
+    _loaderMessage: MESSAGES.TIME_SLOT.DELETING_API
   });
 
   // Request for deleting share ws time slot.
   const { mutateAsync: deleteSWSTimeSlotMutate } = useZRQDeleteRequest({
-    _url: API_URL_ENUM.time_slot_sws_update_delete_get
+    _url: API_URL_ENUM.time_slot_sws_update_delete_get,
+    _loaderMessage: MESSAGES.TIME_SLOT.DELETING_API
   });
   // #endregion
 

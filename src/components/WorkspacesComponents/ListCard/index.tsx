@@ -89,6 +89,8 @@ import { UserAccountType } from '@/types/UserAccount/index.type';
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
+import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
+import { useRecoilValue } from 'recoil';
 
 /**
  * Images Imports go down
@@ -136,10 +138,15 @@ const ZWorkspacesCard: React.FC<{
   const { presentZIonAlert } = useZIonAlert();
   // #endregion
 
+  // #region Recoil state.
+  // Store user data in ZaionsUserAccountRStateAtom recoil state.
+  const userAccountStateAtom = useRecoilValue(ZaionsUserAccountRStateAtom);
+  // #endregion
+
   // #region Popover.
   const { presentZIonPopover: presentUserInfoPopover } = useZIonPopover(
     ZUserInfoPopover,
-    { showBadges: true, user: user }
+    { showBadges: true, user: owned ? userAccountStateAtom : user }
   ); // popover hook to show UserInfoPopover
 
   const { presentZIonPopover: presentWorkspacesActionsPopover } =
@@ -161,19 +168,25 @@ const ZWorkspacesCard: React.FC<{
   const { mutateAsync: leaveSWSMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.leave_share_ws,
     _queriesKeysToInvalidate: [],
-    _loaderMessage: 'Leaving workspace...'
+    _loaderMessage: MESSAGES.WORKSPACE.LEAVING_WS_API
   });
 
   // Update isFavorite of owned workspace
   const { mutateAsync: updateIsFavoriteOwnedWSAsyncMutate } =
     useZRQUpdateRequest({
-      _url: API_URL_ENUM.workspace_update_is_favorite
+      _url: API_URL_ENUM.workspace_update_is_favorite,
+      _loaderMessage: isFavorite
+        ? MESSAGES.WORKSPACE.REMOVING_TO_IS_FAVORITE_API
+        : MESSAGES.WORKSPACE.ADDING_TO_IS_FAVORITE_API
     });
 
   // Update isFavorite of share workspace
   const { mutateAsync: updateIsFavoriteShareWSAsyncMutate } =
     useZRQUpdateRequest({
-      _url: API_URL_ENUM.ws_share_update_is_favorite
+      _url: API_URL_ENUM.ws_share_update_is_favorite,
+      _loaderMessage: isFavorite
+        ? MESSAGES.WORKSPACE.REMOVING_TO_IS_FAVORITE_API
+        : MESSAGES.WORKSPACE.ADDING_TO_IS_FAVORITE_API
     });
   // #endregion
 
@@ -449,17 +462,32 @@ const ZWorkspacesCard: React.FC<{
                   <ZIonRouterLink
                     className='block'
                     color='dark'
-                    routerLink={createRedirectRoute({
-                      url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                      params: [
-                        CONSTANTS.RouteParams.workspace.workspaceId,
-                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-                      ],
-                      values: [
-                        workspaceId || '',
-                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
-                      ]
-                    })}
+                    routerLink={
+                      owned
+                        ? createRedirectRoute({
+                            url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                            params: [
+                              CONSTANTS.RouteParams.workspace.workspaceId,
+                              CONSTANTS.RouteParams
+                                .folderIdToGetShortLinksOrLinkInBio
+                            ],
+                            values: [
+                              workspaceId || '',
+                              CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                            ]
+                          })
+                        : !owned &&
+                          accountStatus === ZTeamMemberInvitationEnum.accepted
+                        ? createRedirectRoute({
+                            url: ZaionsRoutes.AdminPanel.ShareWS.Startup,
+                            params: [
+                              CONSTANTS.RouteParams.workspace.wsShareId,
+                              CONSTANTS.RouteParams.workspace.shareWSMemberId
+                            ],
+                            values: [workspaceId!, memberId!]
+                          })
+                        : undefined
+                    }
                     testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardTitle}-${workspaceId}`}
                     testinglistselector={
                       CONSTANTS.testingSelectors.workspace.listPage

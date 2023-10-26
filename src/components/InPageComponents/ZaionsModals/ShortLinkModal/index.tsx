@@ -16,7 +16,11 @@ import {
 } from '@/types/AdminPanel/index.type';
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import {
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 import {
   createRedirectRoute,
   replaceParams,
@@ -140,13 +144,27 @@ const ZShortLinkModal: React.FC<{
 
           {/* Buttons */}
           <div className='flex w-[90%] ion-justify-content-between'>
-            <ZCan havePermissions={[permissionsEnum.create_shortLink]}>
+            <ZCan
+              shareWSId={wsShareId}
+              permissionType={
+                workspaceId
+                  ? permissionsTypeEnum.loggedInUserPermissions
+                  : permissionsTypeEnum.shareWSMemberPermissions
+              }
+              havePermissions={
+                workspaceId
+                  ? [permissionsEnum.create_shortLink]
+                  : wsShareId && shareWSMemberId
+                  ? [shareWSPermissionEnum.create_sws_shortLink]
+                  : []
+              }>
               <ZIonButton
                 fill='outline'
                 onClick={() => {
                   dismissZIonModal();
 
-                  setNewShortLinkFormState(_ => ({
+                  setNewShortLinkFormState(oldValues => ({
+                    ...oldValues,
                     folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
                     shortUrl: {
                       domain: CONSTANTS.DEFAULT_VALUES.DEFAULT_CUSTOM_DOMAIN

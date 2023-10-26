@@ -54,6 +54,8 @@ export type UserAccountType = {
   password?: string;
   createdAt?: string;
   updatedAt?: string;
+  lastSeenAt?: string;
+  lastSeenAtFormatted?: string;
   email_verified_at?: string | null;
 };
 

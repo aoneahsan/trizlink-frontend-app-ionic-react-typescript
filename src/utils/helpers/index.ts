@@ -702,6 +702,11 @@ export const zAxiosApiRequest = async <T>({
     );
     return __res.data as unknown as T;
   } else if (_isAuthenticatedRequest && !_authToken) {
+    await Promise.all([
+      STORAGE.REMOVE(LOCALSTORAGE_KEYS.USERDATA),
+      STORAGE.REMOVE(LOCALSTORAGE_KEYS.AUTHTOKEN)
+    ]);
+    window.location.replace(ZaionsRoutes.LoginRoute);
     throwZCustomErrorUnAuthenticated();
   } else {
     throwZCustomErrorRequestFailed();
@@ -720,6 +725,8 @@ export const getUserDataObjectForm = (_user: UserAccountType) => {
     email: _user?.email,
     email_verified_at: _user?.email_verified_at,
     password: _user?.password,
+    lastSeenAt: _user?.lastSeenAt,
+    lastSeenAtFormatted: _user?.lastSeenAtFormatted,
     created_at: _user?.createdAt,
     updated_at: _user?.updatedAt
   };

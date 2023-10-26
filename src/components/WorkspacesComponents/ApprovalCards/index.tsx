@@ -74,7 +74,7 @@ const ZWorkspaceApprovalCards: React.FC<{
   onClick?: (type: workspaceApprovalCardEnum) => void;
 }> = ({ type, onClick, workspaceId }) => {
   return (
-    <ZIonRow className='px-4'>
+    <ZIonRow className='px-4 pb-5'>
       {WorkspaceApprovalCards.map((el, index) => {
         return (
           <ZIonCol
@@ -89,7 +89,7 @@ const ZWorkspaceApprovalCards: React.FC<{
               testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.card}-${el.cardType}-${workspaceId}`}
               testinglistselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.card}-${el.cardType}`}
               className={classNames({
-                'cursor-pointer border-t-[1px] border-b-[1px] border-s-[1px] border-e-[1px] border-solid':
+                'cursor-pointer border-t-[1px] border-b-[1px] border-s-[1px] border-e-[1px] border-solid h-full':
                   true,
                 'zaions-border-color-secondary': el.cardType === type
               })}>

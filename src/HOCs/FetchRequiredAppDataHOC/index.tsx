@@ -21,7 +21,10 @@ import Z500View from '@/components/Errors/500';
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+  useZRQGetRequest,
+  useZRQUpdateRequest
+} from '@/ZaionsHooks/zreactquery-hooks';
 import { useZPrivateRouteChecker } from '@/ZaionsHooks/zrouter-hooks';
 
 /**
@@ -29,7 +32,7 @@ import { useZPrivateRouteChecker } from '@/ZaionsHooks/zrouter-hooks';
  * ? Like import of Constant is a global constants import
  * */
 import CONSTANTS, { LOCALSTORAGE_KEYS } from '@/utils/constants';
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import { ZErrorCodeEnum } from '@/utils/enums/ErrorsCodes';
 
 /**
@@ -37,7 +40,10 @@ import { ZErrorCodeEnum } from '@/utils/enums/ErrorsCodes';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { UserRoleAndPermissionsInterface } from '@/types/UserAccount/index.type';
+import {
+  UserAccountType,
+  UserRoleAndPermissionsInterface
+} from '@/types/UserAccount/index.type';
 
 /**
  * Recoil State Imports go down
@@ -45,12 +51,18 @@ import { UserRoleAndPermissionsInterface } from '@/types/UserAccount/index.type'
  * */
 import {
   currentLoggedInUserRoleAndPermissionsRStateAtom,
-  IsAuthenticatedRStateSelector
+  IsAuthenticatedRStateSelector,
+  ZaionsUserAccountRStateAtom
 } from '@/ZaionsStore/UserAccount/index.recoil';
 import { reportCustomError } from '@/utils/customErrorType';
 import { useRouteMatch } from 'react-router';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { STORAGE } from '@/utils/helpers';
+import {
+  extractInnerData,
+  getUserDataObjectForm,
+  STORAGE
+} from '@/utils/helpers';
+import { App } from '@capacitor/app';
 
 interface IFetchRequiredAppDataHOCProps {
   children?: React.ReactNode;
@@ -91,6 +103,8 @@ const FetchRequiredAppDataHOC: React.FC<IFetchRequiredAppDataHOCProps> = ({
 const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
   children
 }) => {
+  let zUserLastSeenInterval: string | number | NodeJS.Timeout | undefined;
+
   const [compState, setCompState] = React.useState<{
     isProcessing: boolean;
     userIsAuthenticated: boolean;
@@ -105,6 +119,11 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
   });
 
   const loggedIn = useRecoilValue(IsAuthenticatedRStateSelector);
+  // Store user data in ZaionsUserAccountRStateAtom recoil state.
+  const setUserAccountStateAtom = useSetRecoilState(
+    ZaionsUserAccountRStateAtom
+  );
+
   // recoil state for storing current user roles & permissions.
   const setUserRoleAndPermissions = useSetRecoilState(
     currentLoggedInUserRoleAndPermissionsRStateAtom
@@ -129,8 +148,72 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
     _checkPermissions: false,
     _showLoader: false
   });
+
+  const { mutateAsync: updateUserStatus } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.updateUserStatus,
+    _showLoader: false
+  });
   // #endregion
 
+  // #region Functions.
+  const updateUserStatusHandler = async () => {
+    try {
+      const __response = await updateUserStatus({
+        requestData: '',
+        itemIds: [],
+        urlDynamicParts: []
+      });
+
+      if (__response) {
+        const __data = extractInnerData<{ user: UserAccountType }>(
+          __response,
+          extractInnerDataOptionsEnum.createRequestResponseItem
+        );
+
+        if (__data?.user) {
+          // getting user data.
+          const userData = getUserDataObjectForm(__data?.user);
+
+          // store User token.
+          void STORAGE.SET(LOCALSTORAGE_KEYS.USERDATA, userData);
+
+          setUserAccountStateAtom(oldValues => ({
+            ...oldValues,
+            lastSeenAt: __data?.user?.lastSeenAt
+          }));
+        }
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
+
+  const setLastSeenInterval = () => {
+    try {
+      if (loggedIn && !zUserLastSeenInterval) {
+        zUserLastSeenInterval = setInterval(
+          updateUserStatusHandler,
+          1000 * CONSTANTS.ZLastSeenInterval
+        );
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
+
+  const clearLastSeenInterval = () => {
+    try {
+      if (zUserLastSeenInterval) {
+        clearInterval(zUserLastSeenInterval);
+        zUserLastSeenInterval = undefined;
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
+  // #endregion
+
+  // #region useEffect.
   useEffect(() => {
     if (!zIsPrivateRoute) {
       setCompState(oldState => ({
@@ -170,6 +253,36 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
   useEffect(() => {
     refetchUserRoleAndPermissions();
   }, [loggedIn, isUserRoleAndPermissionsFetching]);
+
+  //
+  useEffect(() => {
+    try {
+      if (loggedIn) {
+        // calling this so when user lands/refresh the page it will call this API and will not wait for 10(or more)seconds to update the user active status
+        updateUserStatusHandler();
+
+        // setting the user "updateUserStatus" API interval so it will keep updating the user status after specified interval
+        setLastSeenInterval();
+      } else {
+        clearLastSeenInterval();
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  }, [loggedIn]);
+
+  useEffect(() => {
+    App.addListener('appStateChange', ({ isActive }) => {
+      // console.log('App state changed. Is active?', isActive);
+      if (isActive) {
+        setLastSeenInterval();
+      } else {
+        clearLastSeenInterval();
+      }
+    });
+  }, []);
+
+  // #endregion
 
   if (compState.isProcessing) {
     return <ZFallbackIonSpinner />;

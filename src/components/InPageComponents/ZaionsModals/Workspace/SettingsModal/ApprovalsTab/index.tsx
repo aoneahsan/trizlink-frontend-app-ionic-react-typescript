@@ -70,7 +70,7 @@ import CONSTANTS from '@/utils/constants';
 
 const ZApprovalTab: React.FC<{ workspaceId: string }> = ({ workspaceId }) => {
   return (
-    <ZIonGrid>
+    <ZIonGrid className='w-full h-full pt-6'>
       {/* Cards */}
       <ZWorkspaceApprovalCards workspaceId={workspaceId} />
 

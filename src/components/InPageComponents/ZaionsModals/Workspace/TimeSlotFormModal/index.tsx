@@ -117,14 +117,16 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
   const { mutateAsync: createTimeSlotMutateAsync } = useZRQCreateRequest({
     _url: API_URL_ENUM.time_slot_create_list,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _itemsIds: [workspaceId]
+    _itemsIds: [workspaceId],
+    _loaderMessage: MESSAGES.TIME_SLOT.CREATING_API
   });
 
   // if member then this api hit to create time slot for current share workspace data.
   const { mutateAsync: createSWSTimeSlotMutateAsync } = useZRQCreateRequest({
     _url: API_URL_ENUM.time_slot_sws_create_list,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _itemsIds: [wsShareMemberId!]
+    _itemsIds: [wsShareMemberId!],
+    _loaderMessage: MESSAGES.TIME_SLOT.CREATING_API
   });
 
   // if owner then this api hit to get current time slot in current workspace data.
@@ -173,12 +175,14 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
 
   // if owner then this api hit to update time slot for current workspace data.
   const { mutateAsync: updateTimeSlotMutateAsync } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.time_slot_update_delete
+    _url: API_URL_ENUM.time_slot_update_delete,
+    _loaderMessage: MESSAGES.TIME_SLOT.UPDATING_API
   });
 
   // if member then this api hit to update time slot for current share workspace data.
   const { mutateAsync: updateSWSTimeSlotMutateAsync } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.time_slot_sws_update_delete_get
+    _url: API_URL_ENUM.time_slot_sws_update_delete_get,
+    _loaderMessage: MESSAGES.TIME_SLOT.UPDATING_API
   });
 
   // #endregion

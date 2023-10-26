@@ -306,6 +306,12 @@ const WORKSPACE = {
     "Workspace just leveled up to 'Favorite' status! It's like getting a gold star!",
   REMOVE_TO_IS_FAVORITE:
     'Oops! Looks like this workspace just lost its VIP pass. Farewell, former favorite! ',
+  ADDING_TO_IS_FAVORITE_API: 'Adding working in favorite...',
+  REMOVING_TO_IS_FAVORITE_API: 'Removing working from favorite...',
+  CREATING_API: 'Creating workspace...',
+  UPDATING_API: 'Updating workspace...',
+  DELETING_API: 'Removing workspace...',
+  LEAVING_WS_API: 'Leaving workspace...',
 
   DELETE_ALERT: {
     HEADER: 'Final Check: Deleting workspace',
@@ -364,7 +370,9 @@ const TIME_SLOT = {
   UPDATED: 'Update complete! Your time slot is updated successfully.',
   DELETED:
     'Farewell, dear time slot! It served us well in the grand scheme of things! Onward to new scheduling adventures!',
-
+  CREATING_API: 'Creating time slot...',
+  UPDATING_API: 'Updating time slot...',
+  DELETING_API: 'Removing time slot...',
   DELETE_ALERT: {
     HEADER: 'Final Check: Deleting time slot',
     SUB_HEADER: 'Confirm Your Move!',
@@ -379,7 +387,9 @@ const LABEL = {
   UPDATED: 'Update complete! Your label is updated successfully.',
   DELETED:
     'Farewell, dear label! It served us well in the grand scheme of organization! Onward to new categorizing adventures!',
-
+  CREATING_API: 'Creating label...',
+  UPDATING_API: 'Updating label...',
+  DELETING_API: 'Removing label...',
   DELETE_ALERT: {
     HEADER: 'Final Check: Deleting label',
     SUB_HEADER: 'Confirm Your Move!',

@@ -32,6 +32,7 @@ import {
   currentLoggedInUserRoleAndPermissionsRStateAtom
 } from '@/ZaionsStore/UserAccount/index.recoil';
 import { appWiseIonicLoaderIsOpenedRSelector } from '@/ZaionsStore/AppRStates';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * The custom hook for getting data from an API using useQuery hook from react-query package.
@@ -149,13 +150,13 @@ export const useZRQGetRequest = <T>({
         const __error = (_error as AxiosError)?.response;
         const __errorMessage = (__error?.data as { errors: { item: string[] } })
           ?.errors?.item[0];
-
+        console.log({ c: __error?.status });
         // check if it's unauthenticated error
         if (__error?.status && __error?.status === errorCodes.unauthenticated) {
           // clear localstorage
           await clearAuthDataFromLocalStorageAndRecoil(resetUserAccountState);
 
-          // window.location.replace(ZaionsRoutes.LoginRoute);
+          window.location.replace(ZaionsRoutes.LoginRoute);
 
           // showInfoNotification(MESSAGES.Login.loginExpiredMessage);
         } else if (__error?.status === errorCodes.notFound) {
@@ -166,7 +167,7 @@ export const useZRQGetRequest = <T>({
           void STORAGE.SET(LOCALSTORAGE_KEYS.ERROR_DATA, __data);
 
           // redirect to 404
-          // window.location.replace(ZaionsRoutes.Error.Z404);
+          window.location.replace(ZaionsRoutes.Error.Z404);
         } else {
           // showing error alert...
           _showAlertOnError && void presentZIonErrorAlert();

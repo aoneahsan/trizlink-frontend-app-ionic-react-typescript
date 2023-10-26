@@ -121,23 +121,26 @@ const ZSettingsTab: React.FC<{
   //#region APIS
   const { mutateAsync: updateWorkspaceMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.workspace_update_delete,
-    _queriesKeysToInvalidate: []
+    _queriesKeysToInvalidate: [],
+    _loaderMessage: MESSAGES.WORKSPACE.UPDATING_API
   });
 
   //
   const { mutateAsync: updateSWSMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.update_ws_share_info_data,
-    _queriesKeysToInvalidate: []
+    _queriesKeysToInvalidate: [],
+    _loaderMessage: MESSAGES.WORKSPACE.UPDATING_API
   });
 
   const { mutateAsync: leaveSWSMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.leave_share_ws,
     _queriesKeysToInvalidate: [],
-    _loaderMessage: 'Leaving workspace...'
+    _loaderMessage: MESSAGES.WORKSPACE.LEAVING_WS_API
   });
 
   const { mutateAsync: deleteWorkspaceMutate } = useZRQDeleteRequest({
-    _url: API_URL_ENUM.workspace_update_delete
+    _url: API_URL_ENUM.workspace_update_delete,
+    _loaderMessage: MESSAGES.WORKSPACE.DELETING_API
   });
   // #endregion
 
@@ -377,6 +380,7 @@ const ZSettingsTab: React.FC<{
   };
   //#endregion
 
+  // #region useEffect.
   useEffect(() => {
     try {
       if (workspaceId) {
@@ -418,9 +422,10 @@ const ZSettingsTab: React.FC<{
       reportCustomError(error);
     }
   }, [workspaceId]);
+  // #endregion
 
   return (
-    <ZIonGrid className='w-full'>
+    <ZIonGrid className='w-full h-full pt-6'>
       <ZIonRow className='mx-auto w-[40%]'>
         <Formik
           initialValues={{
@@ -544,34 +549,50 @@ const ZSettingsTab: React.FC<{
                   </ZIonCol>
                 </ZIonRow>
 
-                <div className='w-full mt-2 ion-text-end'>
-                  <ZIonButton
-                    testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.updateButton}-${workspaceId}`}
-                    testinglistselector={
-                      CONSTANTS.testingSelectors.workspace.settingsModal
-                        .settings.updateButton
-                    }
-                    disabled={
-                      values.workspaceName ===
-                        compState.workspace?.workspaceName &&
-                      values.workspaceTimezone ===
-                        compState.workspace?.workspaceTimezone &&
-                      values.internalPost === initialValues?.internalPost
-                    }
-                    onClick={() => {
-                      if (
-                        values.workspaceName !==
-                          compState.workspace?.workspaceName ||
-                        values.workspaceTimezone !==
-                          compState.workspace?.workspaceTimezone ||
-                        values.internalPost !==
-                          compState.workspace?.internalPost
-                      ) {
-                        void submitForm();
+                <div className='flex w-full mt-2 ion-justify-content-end'>
+                  <div
+                    className={classNames({
+                      'w-max': true,
+                      'cursor-not-allowed':
+                        values?.workspaceName?.trim()?.length === 0 ||
+                        values?.workspaceTimezone?.trim()?.length === 0 ||
+                        (values.workspaceName ===
+                          compState.workspace?.workspaceName &&
+                          values.workspaceTimezone ===
+                            compState.workspace?.workspaceTimezone &&
+                          values.internalPost === initialValues?.internalPost)
+                    })}>
+                    <ZIonButton
+                      testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.updateButton}-${workspaceId}`}
+                      testinglistselector={
+                        CONSTANTS.testingSelectors.workspace.settingsModal
+                          .settings.updateButton
                       }
-                    }}>
-                    Update
-                  </ZIonButton>
+                      disabled={
+                        values?.workspaceName?.trim()?.length === 0 ||
+                        values?.workspaceTimezone?.trim()?.length === 0 ||
+                        (values.workspaceName ===
+                          compState.workspace?.workspaceName &&
+                          values.workspaceTimezone ===
+                            compState.workspace?.workspaceTimezone &&
+                          values.internalPost === initialValues?.internalPost)
+                      }
+                      onClick={() => {
+                        if (
+                          values?.workspaceName?.trim()?.length > 0 ||
+                          values?.workspaceTimezone?.trim()?.length > 0 ||
+                          (values.workspaceName !==
+                            compState.workspace?.workspaceName &&
+                            values.workspaceTimezone !==
+                              compState.workspace?.workspaceTimezone &&
+                            values.internalPost !== initialValues?.internalPost)
+                        ) {
+                          void submitForm();
+                        }
+                      }}>
+                      Update
+                    </ZIonButton>
+                  </div>
                 </div>
               </ZIonCol>
             );
