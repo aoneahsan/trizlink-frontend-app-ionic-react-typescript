@@ -1492,7 +1492,17 @@ export const zGetRoutePermissions = ({
     let __permissions: permissionsEnum[] = [];
     switch (_currentRoute) {
       case ZaionsRoutes.AdminPanel.Workspaces.Main:
-        __permissions = [permissionsEnum.viewAny_workspace];
+        __permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_shareWS
+        ];
+        break;
+
+      case ZaionsRoutes.AdminPanel.Workspaces.App:
+        __permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_shareWS
+        ];
         break;
 
       case ZaionsRoutes.AdminPanel.ShortLinks.Main:
