@@ -29,6 +29,7 @@ import {
   ZIonRefresherContent,
   ZIonRow,
   ZIonSkeletonText,
+  ZIonSpinner,
   ZIonText,
   ZIonTitle
 } from '@/components/ZIonComponents';
@@ -131,7 +132,7 @@ const ZWorkspaceListPage: React.FC = () => {
       _url: API_URL_ENUM.ws_share_list,
       _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
     });
-
+  console.log({ WorkspacesData });
   useEffect(() => {
     const _sharedFavoriteWorkspaces = WSShareData?.filter(
       el => el?.isFavorite === 1
@@ -180,6 +181,24 @@ const ZWorkspaceListPage: React.FC = () => {
   };
 
   const isZFetching = isWorkspacesDataFetching && isWSShareDataFetching;
+
+  if (isZFetching) {
+    return (
+      <ZIonPage>
+        <ZIonContent>
+          <div className='flex flex-col w-full h-full pt-4 ion-align-items-center ion-justify-content-center'>
+            <ZIonSpinner className='w-10 h-10' />
+
+            {isWorkspacesDataFetching
+              ? 'Fetching workspaces'
+              : isWSShareDataFetching
+              ? 'Fetching shared workspaces'
+              : ''}
+          </div>
+        </ZIonContent>
+      </ZIonPage>
+    );
+  }
 
   return (
     <ZIonPage pageTitle='Zaions workspaces list page'>
