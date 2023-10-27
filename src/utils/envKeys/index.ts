@@ -18,5 +18,8 @@ export const ENVS = {
     ? _env.VITE_DEFAULT_SHORT_URL_DOMAIN_PROD
     : _env.VITE_DEFAULT_SHORT_URL_DOMAIN_LOCAL,
   firebaseAppId: _env.VITE_FIREBASE_APP_ID,
-  firebaseAppKey: _env.VITE_FIREBASE_APP_KEY
+  firebaseAppKey: _env.VITE_FIREBASE_APP_KEY,
+  firebaseProductId: _env.VITE_FIREBASE_PROJECT_ID,
+  firebaseMeasurementId: _env.VITE_FIREBASE_MEASUREMENT_ID,
+  sentryErrorLoggingDNS: _env.VITE_SENTRY_DNS
 };

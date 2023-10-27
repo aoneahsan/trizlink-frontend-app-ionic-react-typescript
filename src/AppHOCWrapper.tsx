@@ -29,11 +29,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'react-tooltip/dist/react-tooltip.css';
 
 // Custom Imports
-import ZaionsApp from './ZaionsApp';
-import AuthenticateHOC from './HOCs/AuthenticateHOC';
-import FetchRequiredAppDataHOC from './HOCs/FetchRequiredAppDataHOC';
+import ZaionsApp from '@/ZaionsApp';
+import AuthenticateHOC from '@/HOCs/AuthenticateHOC';
+import FetchRequiredAppDataHOC from '@/HOCs/FetchRequiredAppDataHOC';
 import { IonReactRouter } from '@ionic/react-router';
-import PackagesHOC from './HOCs/PackagesHOC';
+import PackagesHOC from '@/HOCs/PackagesHOC';
+import FirebaseHOC from '@/HOCs/FirebaseHOC';
+import ErrorLoggingHOC from '@/HOCs/ErrorLoggingHOC';
 
 // Global Constants
 
@@ -43,24 +45,37 @@ const queryClientObj = new QueryClient();
 
 // Functional Component
 const AppHOCWrapper: React.FC = () => {
-	return (
-		<QueryClientProvider client={queryClientObj}>
-			<RecoilRoot>
-				<IonReactRouter>
-					<IonRouterOutlet>
-						<AuthenticateHOC>
-							<FetchRequiredAppDataHOC>
-								<PackagesHOC>
-									<ZaionsApp />
-								</PackagesHOC>
-							</FetchRequiredAppDataHOC>
-						</AuthenticateHOC>
-					</IonRouterOutlet>
-				</IonReactRouter>
-			</RecoilRoot>
-			<ReactQueryDevtools initialIsOpen={false} />
-		</QueryClientProvider>
-	);
+  return (
+    // Error Logging HOC
+    <ErrorLoggingHOC>
+      {/* React Query HOC */}
+      <QueryClientProvider client={queryClientObj}>
+        {/* Recoil State HOC */}
+        <RecoilRoot>
+          {/* Ionic React Router HOC */}
+          <IonReactRouter>
+            {/* Ionic Router Outlet HOC */}
+            <IonRouterOutlet>
+              {/* Authentication HOC */}
+              <AuthenticateHOC>
+                {/* HOC to fetch required data for app */}
+                <FetchRequiredAppDataHOC>
+                  {/* Firebase HOC */}
+                  <FirebaseHOC>
+                    {/* HOC for any other package, whose separate HOC we don't want */}
+                    <PackagesHOC>
+                      <ZaionsApp />
+                    </PackagesHOC>
+                  </FirebaseHOC>
+                </FetchRequiredAppDataHOC>
+              </AuthenticateHOC>
+            </IonRouterOutlet>
+          </IonReactRouter>
+        </RecoilRoot>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </ErrorLoggingHOC>
+  );
 };
 
 export default AppHOCWrapper;

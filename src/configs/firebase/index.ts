@@ -1,11 +1,16 @@
 import { ENVS } from '@/utils/envKeys';
 
+const appId = String(ENVS.firebaseAppId);
+const firebaseAppIdValueArr = appId.split(':');
+const messagingSenderId =
+  firebaseAppIdValueArr.length > 1 ? firebaseAppIdValueArr[1] : '';
+
 export const firebaseConfig = {
-  apiKey: ENVS.firebaseAppKey,
-  authDomain: 'trizlink---zaions-project.firebaseapp.com',
-  projectId: 'trizlink---zaions-project',
-  storageBucket: 'trizlink---zaions-project.appspot.com',
-  messagingSenderId: '1098579848404',
-  appId: ENVS.firebaseAppId,
-  measurementId: 'G-Z28RS8JH81'
+  apiKey: String(ENVS.firebaseAppKey),
+  authDomain: `${ENVS.firebaseProductId}.firebaseapp.com`,
+  projectId: String(ENVS.firebaseProductId),
+  storageBucket: `${ENVS.firebaseProductId}.appspot.com`,
+  messagingSenderId,
+  appId,
+  measurementId: String(ENVS.firebaseMeasurementId)
 };
