@@ -3,12 +3,15 @@ import {
   ZPixelsListPageTableColumnsIds,
   ZUTMTagsListPageTableColumnsIds
 } from '@/types/AdminPanel/index.type';
-import { ZShortLinkListPageTableColumnsIds } from '@/types/AdminPanel/linksType';
+import {
+  ZShortLinkListPageTableColumnsEnum,
+  ZShortLinkListPageTableColumnsIds
+} from '@/types/AdminPanel/linksType';
 
 export const ShortLinksTableColumns = [
   {
     id: ZShortLinkListPageTableColumnsIds.title,
-    name: 'Title',
+    name: ZShortLinkListPageTableColumnsEnum.title,
     isVisible: true
   },
   // {
@@ -18,27 +21,27 @@ export const ShortLinksTableColumns = [
   // },
   {
     id: ZShortLinkListPageTableColumnsIds.date,
-    name: 'Date',
+    name: ZShortLinkListPageTableColumnsEnum.date,
     isVisible: true
   },
   {
     id: ZShortLinkListPageTableColumnsIds.pixel,
-    name: 'Pixel',
+    name: ZShortLinkListPageTableColumnsEnum.pixels,
     isVisible: true
   },
   {
     id: ZShortLinkListPageTableColumnsIds.notes,
-    name: 'Notes',
+    name: ZShortLinkListPageTableColumnsEnum.notes,
     isVisible: true
   },
   {
     id: ZShortLinkListPageTableColumnsIds.url,
-    name: 'URL',
+    name: ZShortLinkListPageTableColumnsEnum.url,
     isVisible: true
   },
   {
     id: ZShortLinkListPageTableColumnsIds.linkToShare,
-    name: 'Link to share',
+    name: ZShortLinkListPageTableColumnsEnum.linkToShare,
     isVisible: true
   }
 ];

@@ -325,6 +325,10 @@ const ZNotificationPopover: React.FC<{
                       CONSTANTS.testingSelectors.topBar.notificationPopover
                         .settingsBtn
                     }
+                    routerLink={
+                      ZaionsRoutes.AdminPanel.Setting.UserAccount
+                        .NotificationSettings
+                    }
                     onClick={() => {
                       // ZaionsRoutes.AdminPanel.Setting.UserAccount
                       // .NotificationSettings

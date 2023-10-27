@@ -19,12 +19,12 @@ import { arrowBack } from 'ionicons/icons';
  * */
 import ZWorkspaceFormApprovalTab from './ApprovalTab';
 import {
-	ZIonButton,
-	ZIonCol,
-	ZIonHeader,
-	ZIonIcon,
-	ZIonRow,
-	ZIonText,
+  ZIonButton,
+  ZIonCol,
+  ZIonHeader,
+  ZIonIcon,
+  ZIonRow,
+  ZIonText
 } from '@/components/ZIonComponents';
 import ZWorkspaceFormConnectPagesTab from '@/pages/AdminPanel/Workspaces/Form/ConnectPagesTab';
 import ZIonPage from '@/components/ZIonPage';
@@ -37,8 +37,8 @@ import ZWorkspaceFormDetailTab from './DetailTab';
  * */
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import {
-	useZRQGetRequest,
-	useZRQUpdateRequest,
+  useZRQGetRequest,
+  useZRQUpdateRequest
 } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
@@ -57,8 +57,8 @@ import { reportCustomError } from '@/utils/customErrorType';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-	workspaceFormTabEnum,
-	workspaceInterface,
+  workspaceFormTabEnum,
+  workspaceInterface
 } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import classNames from 'classnames';
@@ -91,152 +91,154 @@ import { replaceRouteParams } from '@/utils/helpers';
  * */
 
 const ZWorkspaceForm: React.FC = () => {
-	// getting search param from url with the help of 'qs' package
-	const routeQSearchParams = routeQueryString.parse(location.search, {
-		ignoreQueryPrefix: true,
-	});
+  // getting search param from url with the help of 'qs' package
+  const routeQSearchParams = routeQueryString.parse(location.search, {
+    ignoreQueryPrefix: true
+  });
 
-	// useZNavigate for redirection
-	const { zNavigatePushRoute } = useZNavigate();
+  // useZNavigate for redirection
+  const { zNavigatePushRoute } = useZNavigate();
 
-	// Media Query Scale
-	const { isXlScale, isLgScale, isMdScale, isSmScale, isXsScale } =
-		useZMediaQueryScale();
+  // Media Query Scale
+  const { isXlScale, isLgScale, isMdScale, isSmScale, isXsScale } =
+    useZMediaQueryScale();
 
-	// getting workspace id from route (url), when user refresh the page the id from route will be get and workspace of that id will be fetch from backend.
-	const { editWorkspaceId } = useParams<{
-		editWorkspaceId: string;
-	}>();
+  // getting workspace id from route (url), when user refresh the page the id from route will be get and workspace of that id will be fetch from backend.
+  const { editWorkspaceId } = useParams<{
+    editWorkspaceId: string;
+  }>();
 
-	// Recoil State that hold workspaces.
-	// const [workspaceState, setWorkspaceState] = useRecoilState(
-	// 	WorkspaceRStateAtomFamily(editWorkspaceId)
-	// );
+  // Recoil State that hold workspaces.
+  // const [workspaceState, setWorkspaceState] = useRecoilState(
+  // 	WorkspaceRStateAtomFamily(editWorkspaceId)
+  // );
 
-	// fetching link-in-bio with the editWorkspaceId data from backend.
-	const { data: selectedWorkspace, refetch: refetchSelectedWorkspace } =
-		useZRQGetRequest<workspaceInterface>({
-			_url: API_URL_ENUM.workspace_update_delete,
-			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET],
-			_authenticated: true,
-			_itemsIds: [editWorkspaceId],
-			_urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-			_shouldFetchWhenIdPassed: !editWorkspaceId ? true : false,
-			_extractType: ZRQGetRequestExtractEnum.extractItem,
-		});
+  // fetching link-in-bio with the editWorkspaceId data from backend.
+  const { data: selectedWorkspace, refetch: refetchSelectedWorkspace } =
+    useZRQGetRequest<workspaceInterface>({
+      _url: API_URL_ENUM.workspace_update_delete,
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET],
+      _authenticated: true,
+      _itemsIds: [editWorkspaceId],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+      _shouldFetchWhenIdPassed: !editWorkspaceId ? true : false,
+      _extractType: ZRQGetRequestExtractEnum.extractItem
+    });
 
-	// Update workspace API.
-	const { mutateAsync: UpdateWorkspaceMutateAsync } = useZRQUpdateRequest({
-		_url: API_URL_ENUM.workspace_update_delete,
-		_queriesKeysToInvalidate: [
-			CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
-		],
-	});
+  // Update workspace API.
+  const { mutateAsync: UpdateWorkspaceMutateAsync } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.workspace_update_delete,
+    _queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET]
+  });
 
-	//
-	const WorkspaceGetRequestFn = useCallback(async () => {
-		await refetchSelectedWorkspace();
-		// eslint-disable-next-line
-	}, []);
+  //
+  const WorkspaceGetRequestFn = useCallback(async () => {
+    await refetchSelectedWorkspace();
+    // eslint-disable-next-line
+  }, []);
 
-	// Refetching if the editLinkInBioId changes and if the editLinkInBioId is undefined it will redirect user to link-in-bio page.
-	useEffect(() => {
-		try {
-			if (editWorkspaceId) {
-				void WorkspaceGetRequestFn();
-			}
-		} catch (error) {
-			if (error instanceof AxiosError) {
-				zNavigatePushRoute(
-					replaceRouteParams(
-						ZaionsRoutes.AdminPanel.LinkInBio.Main,
-						[
-							CONSTANTS.RouteParams.workspace.workspaceId,
-							CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-						],
-						[editWorkspaceId, 'all']
-					)
-				);
-				showErrorNotification(error.message);
-			} else {
-				reportCustomError(error);
-			}
-		}
-		// eslint-disable-next-line
-	}, [editWorkspaceId]);
+  // Refetching if the editLinkInBioId changes and if the editLinkInBioId is undefined it will redirect user to link-in-bio page.
+  useEffect(() => {
+    try {
+      if (editWorkspaceId) {
+        void WorkspaceGetRequestFn();
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        zNavigatePushRoute(
+          replaceRouteParams(
+            ZaionsRoutes.AdminPanel.LinkInBio.Main,
+            [
+              CONSTANTS.RouteParams.workspace.workspaceId,
+              CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+            ],
+            [editWorkspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
+          )
+        );
+        showErrorNotification(error.message);
+      } else {
+        reportCustomError(error);
+      }
+    }
+    // eslint-disable-next-line
+  }, [editWorkspaceId]);
 
-	if (!selectedWorkspace) return null;
+  if (!selectedWorkspace) return null;
 
-	return (
-		<ZIonPage pageTitle='Zaions Workspace Form Page'>
-			<ZIonHeader className='ion-no-border'>
-				<ZIonRow className='pb-3 pt-2 ion-justify-content-center ion-align-items-center'>
-					{/*  */}
-					<ZIonCol
-						sizeXl='1'
-						sizeLg='1'
-						sizeMd='12'
-						sizeSm='12'
-						sizeXs='12'
-						className={classNames({
-							'z-50': true,
-							fixed: isLgScale,
-							'top-[5%] start-[1%]': isXlScale,
-							'top-[2%] start-[0%]': !isXlScale && isLgScale,
-							'mb-3': !isMdScale && isSmScale,
-						})}
-					>
-						<ZIonButton
-							expand={!isMdScale ? 'block' : undefined}
-							className='normal-case ion-no-margin ms-2'
-							routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}
-						>
-							<ZIonIcon icon={arrowBack} className='me-2' /> Workspaces
-						</ZIonButton>
-					</ZIonCol>
+  return (
+    <ZIonPage pageTitle='Zaions Workspace Form Page'>
+      <ZIonHeader className='ion-no-border'>
+        <ZIonRow className='pb-3 pt-2 ion-justify-content-center ion-align-items-center'>
+          {/*  */}
+          <ZIonCol
+            sizeXl='1'
+            sizeLg='1'
+            sizeMd='12'
+            sizeSm='12'
+            sizeXs='12'
+            className={classNames({
+              'z-50': true,
+              fixed: isLgScale,
+              'top-[5%] start-[1%]': isXlScale,
+              'top-[2%] start-[0%]': !isXlScale && isLgScale,
+              'mb-3': !isMdScale && isSmScale
+            })}>
+            <ZIonButton
+              expand={!isMdScale ? 'block' : undefined}
+              className='normal-case ion-no-margin ms-2'
+              routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}>
+              <ZIonIcon
+                icon={arrowBack}
+                className='me-2'
+              />{' '}
+              Workspaces
+            </ZIonButton>
+          </ZIonCol>
 
-					{/*  */}
-					<ZIonCol className='ion-text-center' size='11'>
-						{/* Tab Title */}
-						<ZIonText className='text-4xl block'>
-							{routeQSearchParams.tab ===
-							workspaceFormTabEnum.workspaceDetailForm
-								? 'Create a workspace'
-								: routeQSearchParams.tab === workspaceFormTabEnum.inviteClients
-								? 'Invite your clients'
-								: routeQSearchParams.tab === workspaceFormTabEnum.connectPages
-								? `Connect ${selectedWorkspace.workspaceName}'s pages`
-								: routeQSearchParams.tab === workspaceFormTabEnum.Approval
-								? 'Approval workflow'
-								: ''}
-						</ZIonText>
+          {/*  */}
+          <ZIonCol
+            className='ion-text-center'
+            size='11'>
+            {/* Tab Title */}
+            <ZIonText className='text-4xl block'>
+              {routeQSearchParams.tab ===
+              workspaceFormTabEnum.workspaceDetailForm
+                ? 'Create a workspace'
+                : routeQSearchParams.tab === workspaceFormTabEnum.inviteClients
+                ? 'Invite your clients'
+                : routeQSearchParams.tab === workspaceFormTabEnum.connectPages
+                ? `Connect ${selectedWorkspace.workspaceName}'s pages`
+                : routeQSearchParams.tab === workspaceFormTabEnum.Approval
+                ? 'Approval workflow'
+                : ''}
+            </ZIonText>
 
-						{/* Tab sub title */}
-						<ZIonText className='mt-3 text-muted block'>
-							{routeQSearchParams.tab === workspaceFormTabEnum.inviteClients
-								? 'Working with a client? Invite them in the workspace so they can approve and leave feedback on content.'
-								: routeQSearchParams.tab === workspaceFormTabEnum.connectPages
-								? 'Add all your brands’ content channels. You can always add more later.'
-								: routeQSearchParams.tab === workspaceFormTabEnum.Approval
-								? 'Choose a suitable approval workflow for this workspaces. You can change this later in the workspace settings.'
-								: ''}
-						</ZIonText>
-					</ZIonCol>
-				</ZIonRow>
-			</ZIonHeader>
+            {/* Tab sub title */}
+            <ZIonText className='mt-3 text-muted block'>
+              {routeQSearchParams.tab === workspaceFormTabEnum.inviteClients
+                ? 'Working with a client? Invite them in the workspace so they can approve and leave feedback on content.'
+                : routeQSearchParams.tab === workspaceFormTabEnum.connectPages
+                ? 'Add all your brands’ content channels. You can always add more later.'
+                : routeQSearchParams.tab === workspaceFormTabEnum.Approval
+                ? 'Choose a suitable approval workflow for this workspaces. You can change this later in the workspace settings.'
+                : ''}
+            </ZIonText>
+          </ZIonCol>
+        </ZIonRow>
+      </ZIonHeader>
 
-			{/*  */}
-			{routeQSearchParams.tab === workspaceFormTabEnum.inviteClients ? (
-				<ZWorkspaceFormInviteClientsTab />
-			) : routeQSearchParams.tab === workspaceFormTabEnum.connectPages ? (
-				<ZWorkspaceFormConnectPagesTab />
-			) : routeQSearchParams.tab === workspaceFormTabEnum.Approval ? (
-				<ZWorkspaceFormApprovalTab />
-			) : (
-				''
-			)}
-		</ZIonPage>
-	);
+      {/*  */}
+      {routeQSearchParams.tab === workspaceFormTabEnum.inviteClients ? (
+        <ZWorkspaceFormInviteClientsTab />
+      ) : routeQSearchParams.tab === workspaceFormTabEnum.connectPages ? (
+        <ZWorkspaceFormConnectPagesTab />
+      ) : routeQSearchParams.tab === workspaceFormTabEnum.Approval ? (
+        <ZWorkspaceFormApprovalTab />
+      ) : (
+        ''
+      )}
+    </ZIonPage>
+  );
 };
 
 export default ZWorkspaceForm;

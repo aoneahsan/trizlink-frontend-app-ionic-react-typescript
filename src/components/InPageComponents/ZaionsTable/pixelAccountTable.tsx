@@ -84,7 +84,11 @@ import {
 } from '@/utils/notification';
 import MESSAGES from '@/utils/messages';
 import { reportCustomError } from '@/utils/customErrorType';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import {
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Type Imports go down
@@ -135,25 +139,69 @@ import {
 const ZPixelsTable: React.FC<{
   showSkeleton?: boolean;
 }> = ({ showSkeleton = false }) => {
+  // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
+  }>();
+
   // #region custom hooks.
-  const { zNavigatePushRoute } = useZNavigate();
   // #endregion
 
   // #region APIS requests.
-  // Request for getting pixels data.
+  // If owned-workspace then this api will fetch pixels in this owned-workspace.
   const { data: PixelsData, isFetching: isPixelsDateFetching } =
     useZRQGetRequest<PixelAccountType[]>({
       _url: API_URL_ENUM.userPixelAccounts_create_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
-      _itemsIds: [],
-      _urlDynamicParts: []
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
+        workspaceId
+      ],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+      _itemsIds: [workspaceId],
+      _shouldFetchWhenIdPassed: workspaceId ? false : true
     });
+
+  // If share-workspace then this api will fetch pixels in this share-workspace.
+  const { data: swsPixelsData, isFetching: isSWSPixelsDateFetching } =
+    useZRQGetRequest<PixelAccountType[]>({
+      _url: API_URL_ENUM.sws_pixel_account_create_list,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
+        wsShareId
+      ],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+      _itemsIds: [shareWSMemberId],
+      _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true
+    });
+
+  // If share-workspace then this api will fetch role & permission of current member in this share-workspace.
+  const {
+    data: getMemberRolePermissions,
+    isFetching: isGetMemberRolePermissionsFetching,
+    isError: isGetMemberRolePermissionsError
+  } = useZRQGetRequest<{
+    memberRole?: string;
+    memberPermissions?: string[];
+  }>({
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
+      wsShareId
+    ],
+    _url: API_URL_ENUM.ws_share_member_role_permissions,
+    _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true,
+    _itemsIds: [shareWSMemberId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
+  });
   // #endregion
 
   // #region Modals & popovers
   const { presentZIonModal: presentZAddPixelAccount } = useZIonModal(
     ZaionsAddPixelAccount,
-    { formMode: FormMode.ADD }
+    { formMode: FormMode.ADD, workspaceId, wsShareId, shareWSMemberId }
   );
   // #endregion
 
@@ -161,23 +209,52 @@ const ZPixelsTable: React.FC<{
 
   // #endregion
 
-  const isZFetching = isPixelsDateFetching;
+  let isZFetching = isPixelsDateFetching;
+
+  if (workspaceId) {
+    isZFetching = isPixelsDateFetching;
+  } else if (wsShareId && shareWSMemberId) {
+    isZFetching = isSWSPixelsDateFetching;
+  }
 
   return (
     <>
       {!isZFetching ? (
-        PixelsData && PixelsData?.length ? (
+        (workspaceId && PixelsData && PixelsData?.length) ||
+        (wsShareId &&
+          shareWSMemberId &&
+          swsPixelsData &&
+          swsPixelsData?.length) ? (
           <ZInpageTable />
         ) : (
           <div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
             <ZEmptyTable
-              message='No pixels founds. please create a pixel.'
+              message={
+                [
+                  shareWSPermissionEnum.create_sws_pixel,
+                  shareWSPermissionEnum.update_sws_pixel
+                ].some(el =>
+                  getMemberRolePermissions?.memberPermissions?.includes(el)
+                ) || workspaceId
+                  ? 'No pixels founds. please create a pixel.'
+                  : 'No pixels founds.'
+              }
               btnText='Create pixel'
               btnOnClick={() => {
                 presentZAddPixelAccount({
                   _cssClass: 'pixel-account-modal-size'
                 });
               }}
+              showBtn={
+                [
+                  shareWSPermissionEnum.create_sws_pixel,
+                  shareWSPermissionEnum.update_sws_pixel
+                ].some(el =>
+                  getMemberRolePermissions?.memberPermissions?.includes(el)
+                ) || workspaceId
+                  ? true
+                  : false
+              }
             />
           </div>
         )
@@ -189,15 +266,18 @@ const ZPixelsTable: React.FC<{
 };
 
 const ZInpageTable: React.FC = () => {
+  // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
+  }>();
+
   const [compState, setCompState] = useState<{
     selectedId?: string;
     selectedPixelId?: string;
     selectedPixelTitle?: string;
     selectedPixelPlatform?: PixelPlatformsEnum;
-  }>();
-
-  const { workspaceId } = useParams<{
-    workspaceId?: string;
   }>();
 
   // #region Recoil state.
@@ -218,25 +298,66 @@ const ZInpageTable: React.FC = () => {
   // #endregion
 
   // #region APIS requests.
-  // Request for getting pixels data.
-  const { data: PixelsData } = useZRQGetRequest<PixelAccountType[]>({
-    _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
-    _itemsIds: [],
-    _urlDynamicParts: []
-  });
+  // If owned-workspace then this api will fetch pixels in this owned-workspace.
+  const { data: PixelsData, isFetching: isPixelsDateFetching } =
+    useZRQGetRequest<PixelAccountType[]>({
+      _url: API_URL_ENUM.userPixelAccounts_create_list,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
+        workspaceId
+      ],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+      _itemsIds: [workspaceId],
+      _shouldFetchWhenIdPassed: workspaceId ? false : true
+    });
+
+  // If share-workspace then this api will fetch pixels in this share-workspace.
+  const { data: swsPixelsData, isFetching: isSWSPixelsDateFetching } =
+    useZRQGetRequest<PixelAccountType[]>({
+      _url: API_URL_ENUM.sws_pixel_account_create_list,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
+        wsShareId
+      ],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+      _itemsIds: [shareWSMemberId],
+      _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true
+    });
 
   const { data: getPixelFiltersData, isFetching: isPixelFiltersDataFetching } =
     useZRQGetRequest<ZUserSettingInterface>({
       _url: API_URL_ENUM.user_setting_delete_update_get,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+        workspaceId,
         ZUserSettingTypeEnum.pixelListPageTable
       ],
-      _itemsIds: [ZUserSettingTypeEnum.pixelListPageTable],
-      _urlDynamicParts: [CONSTANTS.RouteParams.settings.type],
-      _extractType: ZRQGetRequestExtractEnum.extractItem
+      _itemsIds: [workspaceId!, ZUserSettingTypeEnum.pixelListPageTable],
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.workspaceId,
+        CONSTANTS.RouteParams.settings.type
+      ],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _shouldFetchWhenIdPassed: workspaceId ? false : true
     });
+
+  const {
+    data: getSWSPixelFiltersData,
+    isFetching: isSWSPixelFiltersDataFetching
+  } = useZRQGetRequest<ZUserSettingInterface>({
+    _url: API_URL_ENUM.sws_user_setting_delete_update_get,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
+      ZUserSettingTypeEnum.pixelListPageTable
+    ],
+    _itemsIds: [shareWSMemberId!, ZUserSettingTypeEnum.pixelListPageTable],
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.shareWSMemberId,
+      CONSTANTS.RouteParams.settings.type
+    ],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true
+  });
   // #endregion
 
   // #region Managing table data with react-table.
@@ -347,28 +468,53 @@ const ZInpageTable: React.FC = () => {
   // #endregion
 
   // #region useEffect's
-
   useEffect(() => {
     try {
-      if (getPixelFiltersData?.settings?.columns) {
-        const __getTitleColumn = getPixelFiltersData?.settings?.columns.filter(
-          el => el?.id === ZPixelsListPageTableColumnsIds.title
-        )[0];
+      if (
+        getPixelFiltersData?.settings?.columns ||
+        getSWSPixelFiltersData?.settings?.columns
+      ) {
+        let __getTitleColumn;
+        let __getFormattedCreateAtColumn;
+        let __getPixelIdColumn;
+        let __getPlatformColumn;
 
-        const __getFormattedCreateAtColumn =
-          getPixelFiltersData?.settings?.columns.filter(
-            el => el?.id === ZPixelsListPageTableColumnsIds.formattedCreateAt
+        if (workspaceId) {
+          __getTitleColumn = getPixelFiltersData?.settings?.columns.filter(
+            el => el?.id === ZPixelsListPageTableColumnsIds.title
           )[0];
 
-        const __getPixelIdColumn =
-          getPixelFiltersData?.settings?.columns.filter(
+          __getFormattedCreateAtColumn =
+            getPixelFiltersData?.settings?.columns.filter(
+              el => el?.id === ZPixelsListPageTableColumnsIds.formattedCreateAt
+            )[0];
+
+          __getPixelIdColumn = getPixelFiltersData?.settings?.columns.filter(
             el => el?.id === ZPixelsListPageTableColumnsIds.pixelId
           )[0];
 
-        const __getPlatformColumn =
-          getPixelFiltersData?.settings?.columns.filter(
+          __getPlatformColumn = getPixelFiltersData?.settings?.columns.filter(
             el => el?.id === ZPixelsListPageTableColumnsIds.platform
           )[0];
+        } else if (wsShareId && shareWSMemberId) {
+          __getTitleColumn = getSWSPixelFiltersData?.settings?.columns.filter(
+            el => el?.id === ZPixelsListPageTableColumnsIds.title
+          )[0];
+
+          __getFormattedCreateAtColumn =
+            getSWSPixelFiltersData?.settings?.columns.filter(
+              el => el?.id === ZPixelsListPageTableColumnsIds.formattedCreateAt
+            )[0];
+
+          __getPixelIdColumn = getSWSPixelFiltersData?.settings?.columns.filter(
+            el => el?.id === ZPixelsListPageTableColumnsIds.pixelId
+          )[0];
+
+          __getPlatformColumn =
+            getSWSPixelFiltersData?.settings?.columns.filter(
+              el => el?.id === ZPixelsListPageTableColumnsIds.platform
+            )[0];
+        }
 
         if (__getTitleColumn) {
           zPixelTable
@@ -397,7 +543,13 @@ const ZInpageTable: React.FC = () => {
     } catch (error) {
       reportCustomError(error);
     }
-  }, [getPixelFiltersData]);
+  }, [
+    getPixelFiltersData,
+    getSWSPixelFiltersData,
+    workspaceId,
+    wsShareId,
+    shareWSMemberId
+  ]);
 
   useEffect(() => {
     zPixelTable.setPageIndex(Number(pageindex) || 0);
@@ -406,20 +558,24 @@ const ZInpageTable: React.FC = () => {
 
   useEffect(() => {
     try {
-      if (PixelsData) {
+      if (workspaceId && PixelsData) {
         setPixelDataRState(PixelsData);
+      } else if (wsShareId && shareWSMemberId && swsPixelsData) {
+        setPixelDataRState(swsPixelsData);
       }
     } catch (error) {
       reportCustomError(error);
     }
-  }, [PixelsData]);
+  }, [PixelsData, workspaceId, swsPixelsData, wsShareId, shareWSMemberId]);
   // #endregion
 
   // #region Modal & Popovers.
   const { presentZIonPopover: presentZPixelActionPopover } = useZIonPopover(
     ZPixelActionPopover,
     {
-      workspaceId: workspaceId,
+      workspaceId,
+      wsShareId,
+      shareWSMemberId,
       selectedId: compState?.selectedId,
       pixelId: compState?.selectedPixelId,
       pixelTitle: compState?.selectedPixelTitle,
@@ -429,7 +585,7 @@ const ZInpageTable: React.FC = () => {
 
   const { presentZIonModal: presentZAddPixelAccount } = useZIonModal(
     ZaionsAddPixelAccount,
-    { formMode: FormMode.ADD }
+    { formMode: FormMode.ADD, workspaceId, wsShareId, shareWSMemberId }
   );
   // #endregion
 
@@ -623,17 +779,36 @@ const ZInpageTable: React.FC = () => {
             onClick={() => {
               if (zPixelTable.getCanPreviousPage()) {
                 zNavigatePushRoute(
-                  createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel,
-                    params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId!],
-                    routeSearchParams: {
-                      pageindex: 0,
-                      pagesize: zPixelTable
-                        .getState()
-                        .pagination.pageSize.toString()
-                    }
-                  })
+                  workspaceId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                          .Pixel,
+                        params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                        values: [workspaceId!],
+                        routeSearchParams: {
+                          pageindex: 0,
+                          pagesize: zPixelTable
+                            .getState()
+                            .pagination.pageSize.toString()
+                        }
+                      })
+                    : wsShareId && shareWSMemberId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                          .Pixel,
+                        params: [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId
+                        ],
+                        values: [wsShareId, shareWSMemberId],
+                        routeSearchParams: {
+                          pageindex: 0,
+                          pagesize: zPixelTable
+                            .getState()
+                            .pagination.pageSize.toString()
+                        }
+                      })
+                    : ''
                 );
 
                 zPixelTable.setPageIndex(0);
@@ -659,18 +834,38 @@ const ZInpageTable: React.FC = () => {
                 zPixelTable.previousPage();
 
                 zNavigatePushRoute(
-                  createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel,
-                    params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId!],
-                    routeSearchParams: {
-                      pageindex:
-                        zPixelTable.getState().pagination.pageIndex - 1,
-                      pagesize: zPixelTable
-                        .getState()
-                        .pagination.pageSize.toString()
-                    }
-                  })
+                  workspaceId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                          .Pixel,
+                        params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                        values: [workspaceId!],
+                        routeSearchParams: {
+                          pageindex:
+                            zPixelTable.getState().pagination.pageIndex - 1,
+                          pagesize: zPixelTable
+                            .getState()
+                            .pagination.pageSize.toString()
+                        }
+                      })
+                    : wsShareId && shareWSMemberId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                          .Pixel,
+                        params: [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId
+                        ],
+                        values: [wsShareId, shareWSMemberId],
+                        routeSearchParams: {
+                          pageindex:
+                            zPixelTable.getState().pagination.pageIndex - 1,
+                          pagesize: zPixelTable
+                            .getState()
+                            .pagination.pageSize.toString()
+                        }
+                      })
+                    : ''
                 );
               }
             }}>
@@ -695,18 +890,38 @@ const ZInpageTable: React.FC = () => {
                 zPixelTable.nextPage();
 
                 zNavigatePushRoute(
-                  createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel,
-                    params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId!],
-                    routeSearchParams: {
-                      pageindex:
-                        zPixelTable.getState().pagination.pageIndex + 1,
-                      pagesize: zPixelTable
-                        .getState()
-                        .pagination.pageSize.toString()
-                    }
-                  })
+                  workspaceId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                          .Pixel,
+                        params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                        values: [workspaceId!],
+                        routeSearchParams: {
+                          pageindex:
+                            zPixelTable.getState().pagination.pageIndex + 1,
+                          pagesize: zPixelTable
+                            .getState()
+                            .pagination.pageSize.toString()
+                        }
+                      })
+                    : wsShareId && shareWSMemberId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                          .Pixel,
+                        params: [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId
+                        ],
+                        values: [wsShareId, shareWSMemberId],
+                        routeSearchParams: {
+                          pageindex:
+                            zPixelTable.getState().pagination.pageIndex + 1,
+                          pagesize: zPixelTable
+                            .getState()
+                            .pagination.pageSize.toString()
+                        }
+                      })
+                    : ''
                 );
               }
             }}>
@@ -730,17 +945,37 @@ const ZInpageTable: React.FC = () => {
                 zPixelTable.setPageIndex(zPixelTable.getPageCount() - 1);
 
                 zNavigatePushRoute(
-                  createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel,
-                    params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId!],
-                    routeSearchParams: {
-                      pageindex: zPixelTable.getPageCount() - 1,
-                      pagesize: zPixelTable
-                        .getState()
-                        .pagination.pageSize.toString()
-                    }
-                  })
+                  workspaceId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                          .Pixel,
+                        params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                        values: [workspaceId!],
+                        routeSearchParams: {
+                          pageindex: zPixelTable.getPageCount() - 1,
+                          pagesize: zPixelTable
+                            .getState()
+                            .pagination.pageSize.toString()
+                        }
+                      })
+                    : wsShareId && shareWSMemberId
+                    ? createRedirectRoute({
+                        url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                          .Pixel,
+                        params: [
+                          CONSTANTS.RouteParams.workspace.wsShareId,
+                          CONSTANTS.RouteParams.workspace.shareWSMemberId
+                        ],
+                        values: [wsShareId, shareWSMemberId],
+                        routeSearchParams: {
+                          pageindex:
+                            zPixelTable.getState().pagination.pageIndex + 1,
+                          pagesize: zPixelTable
+                            .getState()
+                            .pagination.pageSize.toString()
+                        }
+                      })
+                    : ''
                 );
               }
             }}>
@@ -783,15 +1018,32 @@ const ZInpageTable: React.FC = () => {
               zPixelTable.setPageSize(Number(e.target.value));
 
               zNavigatePushRoute(
-                createRedirectRoute({
-                  url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel,
-                  params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                  values: [workspaceId!],
-                  routeSearchParams: {
-                    pageindex: zPixelTable.getPageCount() - 1,
-                    pagesize: Number(e.target.value)
-                  }
-                })
+                workspaceId
+                  ? createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                        .Pixel,
+                      params: [CONSTANTS.RouteParams.workspace.workspaceId],
+                      values: [workspaceId!],
+                      routeSearchParams: {
+                        pageindex: zPixelTable.getPageCount() - 1,
+                        pagesize: Number(e.target.value)
+                      }
+                    })
+                  : wsShareId && shareWSMemberId
+                  ? createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                        .Pixel,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.wsShareId,
+                        CONSTANTS.RouteParams.workspace.shareWSMemberId
+                      ],
+                      values: [wsShareId, shareWSMemberId],
+                      routeSearchParams: {
+                        pageindex: zPixelTable.getPageCount() - 1,
+                        pagesize: Number(e.target.value)
+                      }
+                    })
+                  : ''
               );
             }}>
             {[2, 3].map(pageSize => (
@@ -942,13 +1194,17 @@ const ZPixelTableSkeleton: React.FC = React.memo(() => {
 const ZPixelActionPopover: React.FC<{
   dismissZIonPopover: (data?: string, role?: string | undefined) => void;
   zNavigatePushRoute: (_url: string) => void;
-  workspaceId: string;
+  workspaceId: string; // if owned workspace then this will be id of owned workspace.
+  wsShareId: string; // if share workspace then this will be id of share workspace.
+  shareWSMemberId: string; // if share workspace then this will be id of current member.
   pixelId: string;
   selectedId: string;
   pixelTitle: string;
   pixelPlatform: PixelPlatformsEnum;
 }> = ({
   workspaceId,
+  wsShareId,
+  shareWSMemberId,
   pixelId,
   selectedId,
   pixelTitle,
@@ -969,28 +1225,28 @@ const ZPixelActionPopover: React.FC<{
       pixelId,
       pixelTitle,
       pixelPlatform,
+      workspaceId,
+      wsShareId,
+      shareWSMemberId,
       formMode: FormMode.EDIT
     }
   );
   // #endregion
 
-  // Request for deleting pixel.
+  // If owned-workspace then this api will delete pixels in this owned-workspace.
   const { mutateAsync: deletePixelMutate } = useZRQDeleteRequest({
     _url: API_URL_ENUM.userPixelAccounts_update_delete
   });
 
-  const { data: PixelsData } = useZRQGetRequest<PixelAccountType[]>({
-    _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
-    _itemsIds: [],
-    _urlDynamicParts: []
+  // If share-workspace then this api will delete pixels in this owned-workspace.
+  const { mutateAsync: swsDeletePixelMutate } = useZRQDeleteRequest({
+    _url: API_URL_ENUM.sws_pixel_account_update_delete
   });
 
   // when user won't to delete pixel and click on the delete button this function will fire and show the confirm alert.
   const deletePixel = async () => {
     try {
-      if (selectedId?.trim() && PixelsData?.length) {
-        // const selectedPixel = PixelsData?.find(el => el.id === selectedId);
+      if (selectedId?.trim()) {
         await presentZIonAlert({
           header: MESSAGES.PIXEL_ACCOUNT.DELETE_ALERT.HEADER,
           subHeader: MESSAGES.PIXEL_ACCOUNT.DELETE_ALERT.SUB_HEADER,
@@ -1021,55 +1277,99 @@ const ZPixelActionPopover: React.FC<{
   // on the delete pixel confirm alert, when user click on delete button this function will fires which will trigger delete request and delete the pixel.
   const removePixel = async () => {
     try {
-      if (selectedId?.trim() && PixelsData?.length) {
-        if (selectedId) {
-          const _response = await deletePixelMutate({
-            itemIds: [selectedId],
-            urlDynamicParts: [CONSTANTS.RouteParams.pixel.pixelId]
+      if (selectedId) {
+        let _response;
+        if (workspaceId) {
+          _response = await deletePixelMutate({
+            itemIds: [workspaceId, selectedId],
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.workspaceId,
+              CONSTANTS.RouteParams.pixel.pixelId
+            ]
           });
+        } else if (wsShareId && shareWSMemberId) {
+          _response = await swsDeletePixelMutate({
+            itemIds: [shareWSMemberId, selectedId],
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.shareWSMemberId,
+              CONSTANTS.RouteParams.pixel.pixelId
+            ]
+          });
+        }
 
-          if (_response) {
-            const _data = extractInnerData<{ success: boolean }>(
-              _response,
-              extractInnerDataOptionsEnum.createRequestResponseItem
-            );
+        if (_response) {
+          const _data = extractInnerData<{ success: boolean }>(
+            _response,
+            extractInnerDataOptionsEnum.createRequestResponseItem
+          );
 
-            if (_data && _data?.success) {
-              // getting all the pixel from RQ cache.
-              const _oldPixels =
+          if (_data && _data?.success) {
+            // getting all the pixel from RQ cache.
+            let _oldPixels: PixelAccountType[] = [];
+
+            if (workspaceId) {
+              _oldPixels =
                 extractInnerData<PixelAccountType[]>(
                   getRQCDataHandler<PixelAccountType[]>({
-                    key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN]
+                    key: [
+                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
+                      workspaceId
+                    ]
                   }) as PixelAccountType[],
                   extractInnerDataOptionsEnum.createRequestResponseItems
                 ) || [];
+            } else if (wsShareId && shareWSMemberId) {
+              _oldPixels =
+                extractInnerData<PixelAccountType[]>(
+                  getRQCDataHandler<PixelAccountType[]>({
+                    key: [
+                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
+                      wsShareId
+                    ]
+                  }) as PixelAccountType[],
+                  extractInnerDataOptionsEnum.createRequestResponseItems
+                ) || [];
+            }
 
-              // removing deleted pixel from cache.
-              const _updatedPixels = _oldPixels.filter(
-                el => el.id !== selectedId
-              );
+            // removing deleted pixel from cache.
+            const _updatedPixels = _oldPixels.filter(
+              el => el.id !== selectedId
+            );
 
-              // Updating data in RQ cache.
+            // Updating data in RQ cache.
+            if (workspaceId) {
               await updateRQCDataHandler<PixelAccountType[] | undefined>({
-                key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN],
+                key: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
+                  workspaceId
+                ],
                 data: _updatedPixels as PixelAccountType[],
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
               });
-
-              showSuccessNotification(MESSAGES.PIXEL_ACCOUNT.DELETED);
-
-              dismissZIonPopover('', '');
-            } else {
-              showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
-
-              dismissZIonPopover('', '');
+            } else if (wsShareId && shareWSMemberId) {
+              await updateRQCDataHandler<PixelAccountType[] | undefined>({
+                key: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
+                  wsShareId
+                ],
+                data: _updatedPixels as PixelAccountType[],
+                id: '',
+                extractType: ZRQGetRequestExtractEnum.extractItems,
+                updateHoleData: true
+              });
             }
+
+            showSuccessNotification(MESSAGES.PIXEL_ACCOUNT.DELETED);
+
+            dismissZIonPopover('', '');
+          } else {
+            showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
+
+            dismissZIonPopover('', '');
           }
         }
-      } else {
-        void presentZIonErrorAlert();
       }
     } catch (error) {
       reportCustomError(error);
@@ -1080,7 +1380,20 @@ const ZPixelActionPopover: React.FC<{
     <ZIonList
       lines='none'
       className='ion-no-padding'>
-      <ZCan havePermissions={[permissionsEnum.update_pixel]}>
+      <ZCan
+        shareWSId={wsShareId}
+        permissionType={
+          wsShareId && shareWSMemberId
+            ? permissionsTypeEnum.shareWSMemberPermissions
+            : permissionsTypeEnum.loggedInUserPermissions
+        }
+        havePermissions={
+          workspaceId
+            ? [permissionsEnum.update_pixel]
+            : wsShareId && shareWSMemberId
+            ? [shareWSPermissionEnum.update_sws_pixel]
+            : []
+        }>
         <ZIonItem
           button={true}
           detail={false}
@@ -1125,7 +1438,20 @@ const ZPixelActionPopover: React.FC<{
         </ZIonItem>
       </ZCan>
 
-      <ZCan havePermissions={[permissionsEnum.delete_pixel]}>
+      <ZCan
+        shareWSId={wsShareId}
+        permissionType={
+          wsShareId && shareWSMemberId
+            ? permissionsTypeEnum.shareWSMemberPermissions
+            : permissionsTypeEnum.loggedInUserPermissions
+        }
+        havePermissions={
+          workspaceId
+            ? [permissionsEnum.delete_pixel]
+            : wsShareId && shareWSMemberId
+            ? [shareWSPermissionEnum.delete_sws_pixel]
+            : []
+        }>
         <ZIonItem
           button={true}
           detail={false}

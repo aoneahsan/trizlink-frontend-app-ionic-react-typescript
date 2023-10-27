@@ -46,6 +46,7 @@ export enum API_URL_ENUM {
   updatePassword = 'updatePassword',
   validateCurrentPassword = 'validateCurrentPassword',
   resendPasswordOtp = 'resendPasswordOtp',
+  updateUserStatus = 'updateUserStatus',
   validateCurrentPasswordOtp = 'validateCurrentPasswordOtp',
   userEmailsList = 'userEmailsList',
   userEmailDelete = 'userEmailDelete',
@@ -56,8 +57,19 @@ export enum API_URL_ENUM {
   csrf = 'csrf',
   userPixelAccounts_create_list = 'userPixelAccounts_create_list',
   userPixelAccounts_update_delete = 'userPixelAccounts_update_delete',
+
+  // Share ws pixel
+  sws_pixel_account_create_list = 'sws_pixel_account_create_list',
+  sws_pixel_account_update_delete = 'sws_pixel_account_update_delete',
+
+  // Utm tags
   userAccountUtmTags_create_list = 'userAccountUtmTags_create_list',
   userAccountUtmTags_update_delete = 'userAccountUtmTags_update_delete',
+
+  // Share workspace Utm tags
+  sws_utm_tag_create_list = 'sws_utm_tag_create_list',
+  sws_utm_tag_update_delete = 'sws_utm_tag_update_delete',
+
   userAccountFolders_update_delete = 'userAccountFolders_update_delete',
   userAccount_LinkInBio_folders_update_delete = 'userAccount_LinkInBio_folders_update_delete',
   userEmbedWidget_create_list = 'userEmbedWidget_create_list',
@@ -71,21 +83,35 @@ export enum API_URL_ENUM {
   set_username_password = 'set_username_password',
   ws_roles_get = 'ws_roles_get',
   LinkInBio_folders_create_list = 'LinkInBio_folders_create_list',
-  ws_team_member_sendInvite_list = 'ws_team_member_sendInvite_list',
-  ws_team_member_getAllInvite_list = 'ws_team_member_getAllInvite_list',
-  ws_team_member_resendInvite_list = 'ws_team_member_resendInvite_list',
-  ws_team_member_invite_delete = 'ws_team_member_invite_delete',
-  ws_team_member_invite_get = 'ws_team_member_invite_get',
-  ws_team_member_update = 'ws_team_member_update',
-  ws_team_member_role_update = 'ws_team_member_role_update',
+
+  // Owned workspace members
+  member_sendInvite_list = 'member_sendInvite_list',
+  member_getAllInvite_list = 'member_getAllInvite_list',
+  member_resendInvite_list = 'member_resendInvite_list',
+  member_invite_delete = 'member_invite_delete',
+  member_invite_get = 'member_invite_get',
+  member_update = 'member_update',
+  member_create_short_url = 'member_create_short_url',
+  member_role_update = 'member_role_update',
   validate_invitation_status = 'validate_invitation_status',
+  member_check_short_url = 'member_check_short_url',
+
+  // Share workspace members
+  sws_member_sendInvite_list = 'sws_member_sendInvite_list',
+  sws_member_getAllInvite_list = 'sws_member_getAllInvite_list',
+  sws_member_create_short_url = 'sws_member_create_short_url',
+  sws_member_resendInvite_list = 'sws_member_resendInvite_list',
+  sws_member_invite_delete = 'sws_member_invite_delete',
+  sws_member_invite_get = 'sws_member_invite_get',
+  sws_member_role_update = 'sws_member_role_update',
+  sws_member_update = 'sws_member_update',
 
   //
-
   user_unread_notifications_list = 'user_unread_notifications_list',
   user_notification_mark_as_read = 'user_notification_mark_as_read',
   user_notification_mark_all_as_read = 'user_notification_mark_all_as_read',
 
+  // Short links
   shortLinks_create_list = 'shortLinks_create_list',
   shortLinks_update_delete = 'shortLinks_update_delete',
   shortLinks_is_path_available = 'shortLinks_is_path_available',
@@ -95,6 +121,10 @@ export enum API_URL_ENUM {
   FolderShortLinks = 'FolderShortLinks',
   ShortLinks_folders_reorder = 'ShortLinks_folders_reorder',
 
+  // Share workspace short links
+  sws_sl_create_list = 'sws_sl_create_list',
+  sws_sl_get_update_delete = 'sws_sl_get_update_delete',
+
   linkInBio_update_delete = 'linkInBio_update_delete',
   linkInBio_create_list = 'linkInBio_create_list',
 
@@ -102,8 +132,10 @@ export enum API_URL_ENUM {
   folders_create_list = 'folders_create_list',
 
   user_setting_list_create = 'user_setting_list_create',
-  user_setting_delete_update_get = 'user_setting_delete_update',
-  user_setting_get = 'user_setting_get',
+  user_setting_delete_update_get = 'user_setting_delete_update_get',
+
+  sws_user_setting_list_create = 'sws_user_setting_list_create',
+  sws_user_setting_delete_update_get = 'sws_user_setting_delete_update_get',
 
   linkInBioPreData_create_list = 'linkInBioPreData_create_list',
   linkInBioPreData_delete_update = 'linkInBioPreData_delete_update',
@@ -134,21 +166,40 @@ export enum API_URL_ENUM {
   workspace_update_delete = 'workspace_update_delete',
   workspace_update_is_favorite = 'workspace_update_is_favorite',
 
+  // Share workspace folder.
+  ws_share_folder_sl_list = 'ws_share_folder_sl_list',
+  ws_share_folder_lib_list = 'ws_share_folder_lib_list',
+  ws_share_folder_create = 'ws_share_folder_create',
+  ws_share_folder_get_update_delete = 'ws_share_folder_get_update_delete',
+  ws_share_folder_reorder = 'ws_share_folder_reorder',
+
   // WS team
   workspace_team_create_list = 'workspace_team_create_list',
   workspace_team_update_delete = 'workspace_team_update_delete',
 
   // share workspace
   ws_share_list = 'ws_share_list',
+  ws_share_member_role_permissions = 'ws_share_member_role_permissions',
   ws_share_update_is_favorite = 'ws_share_update_is_favorite',
+  ws_share_info_data = 'ws_share_info_data',
+  update_ws_share_info_data = 'update_ws_share_info_data',
+  leave_share_ws = 'leave_share_ws',
 
   // Time slot
   time_slot_create_list = 'time_slot_create_list',
   time_slot_update_delete = 'time_slot_update_delete',
 
+  // Share workspace time slot.
+  time_slot_sws_create_list = 'time_slot_sws_create_list',
+  time_slot_sws_update_delete_get = 'time_slot_sws_update_delete_get',
+
   // Label
   label_create_list = 'label_create_list',
   label_update_delete = 'label_update_delete',
+
+  // Share workspace Label.
+  label_sws_create_list = 'label_sws_create_list',
+  label_sws_update_delete_get = 'label_sws_update_delete_get',
 
   // File Upload Routes
   getSingleFile = 'getSingleFile',

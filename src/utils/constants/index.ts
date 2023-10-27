@@ -42,6 +42,9 @@ const ZOtpLength = 6;
 
 const ZOptResendAfter = 5;
 
+// we are using this in "FetchRequiredAppDataHOCAsync" component, here 1 means 1s in time, and we are using this to call the user "updateUserStatus" api on interval, with interval set to run on this variable * with 1000 (as to convert millisecond to seconds)
+const ZLastSeenInterval = 60;
+
 const RouteParams = {
   editShortLinkIdParam: ':editLinkId',
   editLinkInBioIdParam: ':editLinkInBioId',
@@ -55,6 +58,8 @@ const RouteParams = {
   // workspace
   workspace: {
     workspaceId: ':workspaceId',
+    shareWSId: ':shareWSId',
+    shareWSMemberId: ':shareWSMemberId',
     wsShareId: ':wsShareId',
     editWorkspaceIdParam: ':editWorkspaceId',
     teamId: ':teamId',
@@ -117,6 +122,7 @@ export const API_URLS = {
   updatePassword: '/user/update-password',
   validateCurrentPassword: '/user/validate-password',
   resendPasswordOtp: '/user/password-resend-otp',
+  updateUserStatus: '/user/update-user-status',
   validateCurrentPasswordOtp: '/user/validate-password-otp',
   userEmailsList: '/user/list-emails',
   userEmailDelete: `/user/delete-email/${RouteParams.user.itemId}`,
@@ -127,20 +133,47 @@ export const API_URLS = {
   csrf: '/sanctum/csrf-cookie',
   delete: '/user/delete',
   ws_roles_get: '/user/ws-roles',
-  ws_team_member_sendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member/send-invitation`,
-  ws_team_member_getAllInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member`,
-  ws_team_member_resendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member/resend-invitation/${RouteParams.workspace.invitationId}`,
-  ws_team_member_invite_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/member/${RouteParams.workspace.memberInviteId}`,
-  ws_team_member_invite_get: `/user/member/${RouteParams.workspace.memberInviteId}`,
-  ws_team_member_role_update: `/user/workspace/${RouteParams.workspace.workspaceId}/update-role/${RouteParams.workspace.memberInviteId}`,
-  ws_team_member_update: `/user/update-invitation/${RouteParams.workspace.memberInviteId}`,
+
+  // Owned workspace members
+  member_sendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member/send-invitation`,
+  member_getAllInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member`,
+  member_resendInvite_list: `/user/workspace/${RouteParams.workspace.workspaceId}/member/resend-invitation/${RouteParams.workspace.invitationId}`,
+  member_invite_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/member/${RouteParams.workspace.memberInviteId}`,
+  member_invite_get: `/user/workspace/${RouteParams.workspace.workspaceId}/member/${RouteParams.workspace.memberInviteId}`,
+  member_role_update: `/user/workspace/${RouteParams.workspace.workspaceId}/update-role/${RouteParams.workspace.memberInviteId}`,
+  member_update: `/user/workspace/${RouteParams.workspace.workspaceId}/update-invitation/${RouteParams.workspace.memberInviteId}`,
+  member_create_short_url: `/user/workspace/${RouteParams.workspace.workspaceId}/create-short-url/${RouteParams.workspace.memberInviteId}`,
+  member_check_short_url: `/user/ws-member/short-url/check/${RouteParams.workspace.invitationId}`,
   validate_invitation_status: `/user/validate-and-update-invitation`,
-  userPixelAccounts_create_list: '/user/pixel',
-  userAccountUtmTags_create_list: '/user/utm-tag',
+
+  // Share workspace members
+  sws_member_sendInvite_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member/send-invitation`,
+  sws_member_getAllInvite_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member`,
+  sws_member_create_short_url: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/create-short-url/${RouteParams.workspace.memberInviteId}`,
+  sws_member_resendInvite_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member/resend-invitation/${RouteParams.workspace.invitationId}`,
+  sws_member_invite_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member/${RouteParams.workspace.memberInviteId}`,
+  sws_member_invite_get: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member/${RouteParams.workspace.memberInviteId}`,
+  sws_member_role_update: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/update-role/${RouteParams.workspace.memberInviteId}`,
+  sws_member_update: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/update-invitation/${RouteParams.workspace.memberInviteId}`,
+
+  // Pixels
+  userPixelAccounts_create_list: `/user/workspace/${RouteParams.workspace.workspaceId}/pixel`,
+  userPixelAccounts_update_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/pixel/${RouteParams.pixel.pixelId}`,
+
+  // Share workspace pixels
+  sws_pixel_account_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/pixel`,
+  sws_pixel_account_update_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/pixel/${RouteParams.pixel.pixelId}`,
+
+  // Utm tags
+  userAccountUtmTags_create_list: `/user/workspace/${RouteParams.workspace.workspaceId}/utm-tag`,
+  userAccountUtmTags_update_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/utm-tag/${RouteParams.utmTag.utmTagId}`,
+
+  // Share workspace Utm tags
+  sws_utm_tag_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/utm-tag`,
+  sws_utm_tag_update_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/utm-tag/${RouteParams.utmTag.utmTagId}`,
+
   ShortLink_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/shortLink/folders`,
   userEmbedWidget_create_list: '/user/embedded-scripts',
-  userPixelAccounts_update_delete: `/user/pixel/${RouteParams.pixel.pixelId}`,
-  userAccountUtmTags_update_delete: `/user/utm-tag/${RouteParams.utmTag.utmTagId}`,
   userAccountFolders_update_delete: '/user/folders/:folderId',
   userEmbedWidget_update_delete: '/user/embedded-scripts/:embeddedId',
   send_otp: '/user/send-otp',
@@ -155,6 +188,7 @@ export const API_URLS = {
   user_notification_mark_as_read: `/user/notification/markAsRead/${RouteParams.user.notification.id}`,
   user_notification_mark_all_as_read: `/user/notification/markAllAsRead`,
 
+  // Short links
   shortLinks_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links`,
   shortLinks_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links/${RouteParams.shortLink.shortLinkId}`,
   shortLinks_is_path_available: `/user/workspaces/${RouteParams.workspace.workspaceId}/sl/is-path-available/${RouteParams.shortLink.path}`,
@@ -162,15 +196,21 @@ export const API_URLS = {
   shortLink_get_target_url_info: `/public/s/${RouteParams.urlPath}`,
   shortLink_check_target_password: `/public/s/${RouteParams.urlPath}/check-password`,
 
+  // Share workspace short links
+  sws_sl_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/short-links`,
+  sws_sl_get_update_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/short-link/${RouteParams.shortLink.shortLinkId}`,
+
   FolderShortLinks: '/user/folders/:folderId/short-links',
   LinkInBio_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/linkInBio/folders`,
 
   folders_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder/${RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
   folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder`,
 
-  user_setting_list_create: `/user/settings`,
-  user_setting_delete_update: `/user/settings/${RouteParams.settings.type}`,
-  user_setting_get: `/user/settings/${RouteParams.settings.type}`,
+  user_setting_list_create: `/user/workspace/${RouteParams.workspace.workspaceId}/modal-settings`,
+  user_setting_delete_update_get: `/user/workspace/${RouteParams.workspace.workspaceId}/modal-settings/${RouteParams.settings.type}`,
+
+  sws_user_setting_list_create: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/modal-settings`,
+  sws_user_setting_delete_update_get: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/modal-settings/${RouteParams.settings.type}`,
 
   userAccount_LinkInBio_folders_update_delete:
     '/user/link-in-bio-folders/:folderId',
@@ -211,17 +251,35 @@ export const API_URLS = {
   workspace_team_update_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/team/${RouteParams.workspace.teamId}`,
   workspace_update_is_favorite: `/user/workspaces/update-is-favorite/${RouteParams.workspace.workspaceId}`,
 
+  // Share workspace folder
+  ws_share_folder_sl_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/get/shortLink/folders`,
+  ws_share_folder_lib_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/get/linkInBio/folders`,
+  ws_share_folder_create: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/folder`,
+  ws_share_folder_get_update_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/folder/${RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
+  ws_share_folder_reorder: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/folder/reorder`,
+
   // share workspace
   ws_share_list: `/user/shared-ws`,
-  ws_share_update_is_favorite: `/user/shared-ws/update-is-favorite/${RouteParams.workspace.wsShareId}`,
+  ws_share_member_role_permissions: `/user/shared-ws/get-member-role-permissions/${RouteParams.workspace.shareWSMemberId}`,
+  ws_share_update_is_favorite: `/user/shared-ws/update-is-favorite/${RouteParams.workspace.shareWSMemberId}`,
+  ws_share_info_data: `/user/shared-ws/get-share-ws-info-data/${RouteParams.workspace.shareWSMemberId}`,
+  update_ws_share_info_data: `/user/shared-ws/${RouteParams.workspace.shareWSId}/member-id/${RouteParams.workspace.shareWSMemberId}`,
+  leave_share_ws: `/user/shared-ws/${RouteParams.workspace.shareWSId}/leave-ws/member-id/${RouteParams.workspace.shareWSMemberId}`,
 
   // Time slot
   time_slot_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/time-slot`,
   time_slot_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/time-slot/${RouteParams.timeSlot.timeSlotId}`,
 
+  // Share workspace time slot.
+  time_slot_sws_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/time-slot`,
+  time_slot_sws_update_delete_get: `/user/sws/${RouteParams.workspace.shareWSMemberId}/time-slot/${RouteParams.timeSlot.timeSlotId}`,
+
   // Label
   label_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/label`,
   label_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/label/${RouteParams.label.labelId}`,
+
+  label_sws_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/label`,
+  label_sws_update_delete_get: `/user/sws/${RouteParams.workspace.shareWSMemberId}/label/${RouteParams.label.labelId}`,
 
   // File
   getSingleFile: '/file-upload/getSingleFileUrl',
@@ -401,7 +459,8 @@ const DEFAULT_VALUES = {
   ZAIONS_SETTING_SPLIT_PANEL: 'ZAIONS_SETTING_PAGE_PANEL',
   ZAIONS_SHORT_LINKS_LIST_SPLIT_PANEL: 'ZAIONS_SHORT_LINKS_LIST_SPLIT_PANEL',
   ZAIONS_DASHBOARD_SPLIT_PANEL: 'ZAIONS_DASHBOARD_PAGE_PANEL',
-  API_TOKEN_PRIMARY_KEY: 'Bearer'
+  API_TOKEN_PRIMARY_KEY: 'Bearer',
+  FOLDER_ROUTE: 'all'
 };
 
 export const LOCALSTORAGE_KEYS = {
@@ -410,6 +469,7 @@ export const LOCALSTORAGE_KEYS = {
   INVITEE_USER_DATA: 'zoirjf_hflmn-e',
   SIGNUP_USER_DATA: 'zmkftr-lokgyr-d',
   FORGET_PASSWORD_USER_DATA: 'ziomkliy-rthng-r',
+  SET_PASSWORD_DATA: 'zplkithfns-wolf-s',
   ERROR_DATA: 'asdgcvbv_cbert-k'
 };
 
@@ -1478,10 +1538,15 @@ const REACT_QUERY = {
       CREATE: 'rq-pixel-account-create-key',
       UPDATE: 'rq-pixel-account-update-key',
       DELETE: 'rq-pixel-account-delete-key',
-      GET: 'rq-pixel-account-get-key'
+      GET: 'rq-pixel-account-get-key',
+
+      SWS_MAIN: 'rq-sws-pixel-account-list-key',
+      SWS_GET: 'rq-sws-pixel-account-get-key'
     },
     UTM_TAGS: {
-      MAIN: 'rq-utm-tags-list-key'
+      MAIN: 'rq-utm-tags-list-key',
+      SWS_MAIN: 'rq-sws-utm-tags-list-key',
+      SWS_GET: 'rq-sws-utm-tags-get-key'
     },
     EMBED_WIDGET: {
       MAIN: 'rq-embed-widget-list-key'
@@ -1489,7 +1554,10 @@ const REACT_QUERY = {
     SHORT_LINKS: {
       MAIN: 'rq-short-links-list-key',
       GET: 'rq-short-link-get-key',
-      IS_PATH_AVAILABLE: 'rq-short-link-is-path-available-key'
+      IS_PATH_AVAILABLE: 'rq-short-link-is-path-available-key',
+
+      SWS_MAIN: 'rq-sws-short-link-list-key',
+      SWS_GET: 'rq-sws-short-link-get-key'
     },
     LINK_IN_BIO: {
       MAIN: 'rq-link-in-bio-links-list-key',
@@ -1503,26 +1571,42 @@ const REACT_QUERY = {
     },
     TIME_SLOT: {
       MAIN: 'rq-time-slot-list-key',
-      GET: 'rq-time-slot-get-key'
+      GET: 'rq-time-slot-get-key',
+
+      SWS_MAIN: 'rq-sws-time-slot-list-key',
+      SWS_GET: 'rq-sws-time-slot-get-key'
     },
     LABEL: {
       MAIN: 'rq-label-list-key',
-      GET: 'rq-label-get-key'
+      GET: 'rq-label-get-key',
+
+      SWS_MAIN: 'rq-sws-label-list-key',
+      SWS_GET: 'rq-sws-label-get-key'
     },
     WORKSPACE: {
       MAIN: 'rq-workspace-list-key',
-      WS_SHARE_MAIN: 'rq-ws-share-list-key',
       GET: 'rq-workspace-get-key',
       TEAM: 'rq-workspace-team-list-key',
       TEAM_GET: 'rq-workspace-team-get-key',
       MEMBERS: 'rq-ws-team-members-main-key',
       MEMBER_GET: 'rq-ws-team-member-get-key',
-      INVITATION_GET: 'rq-ws-team-member-invitation-get-key'
+      INVITATION_GET: 'rq-ws-team-member-invitation-get-key',
+
+      SWS_MEMBERS_MAIN: 'rq-sws-team-members-main-key',
+      SWS_MEMBER_GET: 'rq-sws-team-member-get-key'
+    },
+    SHARE_WS: {
+      MAIN: 'rq-ws-share-list-key',
+      MEMBER_ROLE_AND_PERMISSIONS: 'rq-ws-share-member-role-and-permission-key',
+      SHARE_WS_INFO: 'rq-share-ws-info-data-key'
     },
     FOLDER: {
       MAIN: 'rq-folders-list-key',
       GET: 'rq-folder-get-key',
-      FOLDER_SHORT_LINKS: 'rq-folder-short-links-key'
+      FOLDER_SHORT_LINKS: 'rq-folder-short-links-key',
+
+      SWS_MAIN: 'rq-sws-folder-list-key',
+      SWS_GET: 'rq-sws-folder-get-key'
     },
     LINK_IN_BIO_FOLDER: {
       MAIN: 'rq-link-in-bio-folders-list-key',
@@ -1572,7 +1656,10 @@ const REACT_QUERY = {
       },
       SETTING: {
         MAIN: 'rq-user-setting-main-key',
-        GET: 're-user-setting-get-key'
+        GET: 're-user-setting-get-key',
+
+        SWS_MAIN: 'rq-sws-user-setting-main-key',
+        SWS_GET: 'rq-sws-user-setting-get-key'
       }
     }
   }
@@ -1591,7 +1678,8 @@ const LINK_In_BIO = {
 
 const SHORT_LINK = {
   urlPathLength: 6,
-  urlStaticPath: 's'
+  urlStaticPath: 's',
+  invitationSLStaticPath: 'sws'
 };
 
 const toLocaleStringOptions: Intl.DateTimeFormatOptions = {
@@ -1630,8 +1718,9 @@ const ZTimeSelectData: ZaionsRSelectOptions[] = [
 
 const ZRolesOptions: ZaionsRSelectOptions[] = [
   { label: 'Administrator', value: WSRolesNameEnum.Administrator },
-  { label: 'Contributor', value: WSRolesNameEnum.Contributor },
   { label: 'Manager', value: WSRolesNameEnum.Manager },
+  { label: 'Contributor', value: WSRolesNameEnum.Contributor },
+  { label: 'Writer', value: WSRolesNameEnum.Writer },
   { label: 'Approver', value: WSRolesNameEnum.Approver },
   { label: 'Commenter', value: WSRolesNameEnum.Commenter },
   { label: 'Guest', value: WSRolesNameEnum.Guest }
@@ -1667,6 +1756,7 @@ const ZStatesOptions: ZaionsRSelectOptions[] = [
 
 const CONSTANTS = {
   ZOptResendAfter,
+  ZLastSeenInterval,
   ZRolesOptions,
   ZOtpLength,
   ZPasswordMinCharacter,

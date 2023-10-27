@@ -74,19 +74,55 @@ import { useParams } from 'react-router';
  * @type {*}
  * */
 
-const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = () => {
+const ZWorkspaceSwitcher: React.FC<{
+  workspaceId?: string;
+  shareWSMemberId?: string;
+  wsShareId?: string;
+}> = ({ workspaceId, shareWSMemberId, wsShareId }) => {
   const { isLgScale } = useZMediaQueryScale();
-  const { workspaceId } = useParams<{ workspaceId?: string }>();
+  // const { workspaceId } = useParams<{ workspaceId?: string }>();
   // #region popovers.
   const { presentZIonPopover: presentZWorkspacesListPopover } = useZIonPopover(
     ZWorkspacesListPopover,
     {
-      workspaceId: workspaceId
+      workspaceId: workspaceId,
+      shareWSMemberId: shareWSMemberId,
+      wsShareId: wsShareId
     }
   );
   // #endregion
 
   // #region APIs.
+  // get workspace data api.
+  const { data: currentWorkspaceData, isFetching: isCurrentWorkspaceFetching } =
+    useZRQGetRequest<workspaceInterface>({
+      _url: API_URL_ENUM.workspace_update_delete,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
+        workspaceId || ''
+      ],
+      _authenticated: true,
+      _itemsIds: [workspaceId || ''],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+      _shouldFetchWhenIdPassed: workspaceId ? false : true,
+      _extractType: ZRQGetRequestExtractEnum.extractItem
+    });
+
+  // get workspace data api.
+  const { data: getShareWSInfoData, isFetching: isGetShareWSInfoDataFetching } =
+    useZRQGetRequest<workspaceInterface>({
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
+        wsShareId!
+      ],
+      _url: API_URL_ENUM.ws_share_info_data,
+      _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+      _itemsIds: [shareWSMemberId!],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _showLoader: false
+    });
+
   // Get workspaces data from backend.
   const { isFetching: isWorkspacesDataFetching } = useZRQGetRequest<
     workspaceInterface[]
@@ -99,26 +135,18 @@ const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = () => {
     workspaceInterface[]
   >({
     _url: API_URL_ENUM.ws_share_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN]
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
   });
 
-  // get workspace data api.
-  const { data: currentWorkspaceData, isFetching: isCurrentWorkspaceFetching } =
-    useZRQGetRequest<workspaceInterface>({
-      _url: API_URL_ENUM.workspace_update_delete,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
-        workspaceId || ''
-      ],
-      _authenticated: true,
-      _itemsIds: [workspaceId || ''],
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: !workspaceId ? true : false,
-      _extractType: ZRQGetRequestExtractEnum.extractItem
-    });
   // #endregion
 
-  const isZFetching = isCurrentWorkspaceFetching && isWorkspacesDataFetching;
+  let isZFetching = isWorkspacesDataFetching;
+
+  if (workspaceId) {
+    isZFetching = isZFetching && isCurrentWorkspaceFetching;
+  } else if (wsShareId) {
+    isZFetching = isZFetching && isGetShareWSInfoDataFetching;
+  }
 
   if (isZFetching) return <ZWorkspaceSwitcherSkeleton />;
 
@@ -147,10 +175,24 @@ const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = () => {
         // border: '1px solid',
       }}>
       <ZUserAvatarButton
-        userAvatar={currentWorkspaceData?.workspaceImage}
-        userAvatarUi={{
-          name: currentWorkspaceData?.workspaceName
-        }}
+        userAvatar={
+          workspaceId
+            ? currentWorkspaceData?.workspaceImage
+            : wsShareId
+            ? getShareWSInfoData?.workspaceImage
+            : ''
+        }
+        userAvatarUi={
+          workspaceId
+            ? {
+                name: currentWorkspaceData?.workspaceName
+              }
+            : wsShareId
+            ? {
+                name: getShareWSInfoData?.workspaceName
+              }
+            : undefined
+        }
         className={classNames({
           'me-2': true,
           'w-[20px!important] h-[20px!important]': !isLgScale,
@@ -163,7 +205,13 @@ const ZWorkspaceSwitcher: React.FC<{ workspaceId?: string }> = () => {
           'w-[3rem]': isLgScale,
           'w-auto': !isLgScale
         })}>
-        <ZIonLabel>{currentWorkspaceData?.workspaceName}</ZIonLabel>
+        <ZIonLabel>
+          {workspaceId
+            ? currentWorkspaceData?.workspaceName
+            : wsShareId
+            ? getShareWSInfoData?.workspaceName
+            : null}
+        </ZIonLabel>
       </div>
       <ZIonIcon
         icon={caretDown}

@@ -49,7 +49,11 @@ import ZEmptyTable from '../ZEmptyTable';
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import {
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 import {
   createRedirectRoute,
   extractInnerData,
@@ -106,6 +110,7 @@ import {
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
+import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 
 // Styles
 
@@ -113,9 +118,11 @@ const ZaionsShortLinkTable: React.FC<{
   showSkeleton?: boolean;
 }> = ({ showSkeleton = false }) => {
   // Folder id getting from url. (use when use when to filter short links by folder listed on the left-side, when user click on the folder from listed folder the id of that folder the Id of folder will set in the url and we will fetch it here by useParams).
-  const { workspaceId, folderId } = useParams<{
+  const { workspaceId, shareWSMemberId, wsShareId, folderId } = useParams<{
     folderId: string;
     workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
   }>();
 
   const { zNavigatePushRoute } = useZNavigate();
@@ -135,19 +142,57 @@ const ZaionsShortLinkTable: React.FC<{
   // #endregion
 
   // #region APIS requests.
+  // get share-workspace data api.
+  const {
+    data: getMemberRolePermissions,
+    isFetching: isGetMemberRolePermissionsFetching,
+    isError: isGetMemberRolePermissionsError
+  } = useZRQGetRequest<{
+    memberRole?: string;
+    memberPermissions?: string[];
+  }>({
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
+      wsShareId
+    ],
+    _url: API_URL_ENUM.ws_share_member_role_permissions,
+    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _itemsIds: [shareWSMemberId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
+  });
+
   // Request for getting short links data.
   const { data: ShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
     _url: API_URL_ENUM.shortLinks_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true,
     _itemsIds: [workspaceId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _showLoader: false
+  });
+
+  // Request for getting share workspace short links data.
+  const {
+    data: swsShortLinksData,
+    isFetching: isSWSShortLinksDataFetching,
+    isError: isSWSShortLinksDataError
+  } = useZRQGetRequest<ShortLinkType[]>({
+    _url: API_URL_ENUM.sws_sl_create_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN, wsShareId],
+    _shouldFetchWhenIdPassed: wsShareId ? false : true,
+    _itemsIds: [shareWSMemberId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _showLoader: false
   });
   // #endregion
 
   // #region Functions.
   const resetShortLinkFormHandler = () => {
     try {
-      setNewShortLinkFormState(_ => ({
+      setNewShortLinkFormState(oldValues => ({
+        ...oldValues,
         folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
         shortUrl: {
           domain: CONSTANTS.DEFAULT_VALUES.DEFAULT_CUSTOM_DOMAIN
@@ -168,13 +213,26 @@ const ZaionsShortLinkTable: React.FC<{
         }));
       }
 
-      zNavigatePushRoute(
-        replaceParams(
-          ZaionsRoutes.AdminPanel.ShortLinks.Create,
-          CONSTANTS.RouteParams.workspace.workspaceId,
-          workspaceId
-        )
-      );
+      if (workspaceId) {
+        zNavigatePushRoute(
+          replaceParams(
+            ZaionsRoutes.AdminPanel.ShortLinks.Create,
+            CONSTANTS.RouteParams.workspace.workspaceId,
+            workspaceId
+          )
+        );
+      } else if (wsShareId && shareWSMemberId) {
+        zNavigatePushRoute(
+          createRedirectRoute({
+            url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Create,
+            params: [
+              CONSTANTS.RouteParams.workspace.wsShareId,
+              CONSTANTS.RouteParams.workspace.shareWSMemberId
+            ],
+            values: [wsShareId, shareWSMemberId]
+          })
+        );
+      }
     } catch (error) {
       reportCustomError(error);
     }
@@ -184,17 +242,50 @@ const ZaionsShortLinkTable: React.FC<{
   return (
     <>
       {!showSkeleton ? (
-        ShortLinksData && ShortLinksData?.length ? (
+        (ShortLinksData && ShortLinksData?.length) ||
+        (swsShortLinksData && swsShortLinksData?.length) ? (
           <ZInpageTable />
         ) : (
           <div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
             <ZEmptyTable
-              message='No short links founds. please create a short link.'
-              // message={`No short links founds
-              // 			${(folderId !== null || folderId !== 'all') && 'In this Folder'}
-              // 			. please create a short link.`}
-              btnText='Create short link'
-              btnOnClick={() => resetShortLinkFormHandler()}
+              message={
+                (wsShareId &&
+                  getMemberRolePermissions?.memberPermissions?.includes(
+                    shareWSPermissionEnum.create_sws_shortLink
+                  )) ||
+                workspaceId
+                  ? 'No short links founds. please create a short link.'
+                  : 'No short links founds.'
+              }
+              showBtn={
+                wsShareId
+                  ? getMemberRolePermissions?.memberPermissions?.includes(
+                      shareWSPermissionEnum.create_sws_shortLink
+                    )
+                  : workspaceId
+                  ? true
+                  : false
+              }
+              btnText={
+                (wsShareId &&
+                  getMemberRolePermissions?.memberPermissions?.includes(
+                    shareWSPermissionEnum.create_sws_shortLink
+                  )) ||
+                workspaceId
+                  ? 'Create short link'
+                  : undefined
+              }
+              btnOnClick={() => {
+                if (
+                  (wsShareId &&
+                    getMemberRolePermissions?.memberPermissions?.includes(
+                      shareWSPermissionEnum.create_sws_shortLink
+                    )) ||
+                  workspaceId
+                ) {
+                  resetShortLinkFormHandler();
+                }
+              }}
             />
           </div>
         )
@@ -214,9 +305,11 @@ const ZInpageTable: React.FC = () => {
   // #endregion
 
   // Folder id getting from url. (use when use when to filter short links by folder listed on the left-side, when user click on the folder from listed folder the id of that folder the Id of folder will set in the url and we will fetch it here by useParams).
-  const { folderId, workspaceId } = useParams<{
+  const { folderId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
     folderId: string;
     workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
   }>();
 
   // #region Recoils.
@@ -247,16 +340,31 @@ const ZInpageTable: React.FC = () => {
   // #endregion
 
   // #region APIS requests.
-  // Request for deleting short link.
-
   // Request for getting short links data.
   const { data: ShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
     _url: API_URL_ENUM.shortLinks_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true,
     _itemsIds: [workspaceId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _showLoader: false
   });
 
+  // Request for getting share workspace short links data.
+  const {
+    data: swsShortLinksData,
+    isFetching: isSWSShortLinksDataFetching,
+    isError: isSWSShortLinksDataError
+  } = useZRQGetRequest<ShortLinkType[]>({
+    _url: API_URL_ENUM.sws_sl_create_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN, wsShareId],
+    _shouldFetchWhenIdPassed: wsShareId ? false : true,
+    _itemsIds: [shareWSMemberId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _showLoader: false
+  });
+
+  // If owned-workspace then this api will fetch owned-workspace-short-link filters options data.
   const { data: getUserSetting, isFetching: isUserSettingFetching } =
     useZRQGetRequest<ZUserSettingInterface>({
       _url: API_URL_ENUM.user_setting_delete_update_get,
@@ -265,15 +373,40 @@ const ZInpageTable: React.FC = () => {
         workspaceId,
         ZUserSettingTypeEnum.shortLinkListPageTable
       ],
-      _itemsIds: [ZUserSettingTypeEnum.shortLinkListPageTable],
-      _urlDynamicParts: [CONSTANTS.RouteParams.settings.type],
-      _extractType: ZRQGetRequestExtractEnum.extractItem
+      _shouldFetchWhenIdPassed: workspaceId ? false : true,
+      _itemsIds: [workspaceId!, ZUserSettingTypeEnum.shortLinkListPageTable],
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.workspaceId,
+        CONSTANTS.RouteParams.settings.type
+      ],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _showLoader: false
+    });
+
+  // If share-workspace then this api will fetch share-workspace-short-link filters options data.
+  const { data: swsGetUserSetting, isFetching: isSWSUserSettingFetching } =
+    useZRQGetRequest<ZUserSettingInterface>({
+      _url: API_URL_ENUM.sws_user_setting_delete_update_get,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
+        wsShareId,
+        ZUserSettingTypeEnum.shortLinkListPageTable
+      ],
+      _itemsIds: [shareWSMemberId, ZUserSettingTypeEnum.shortLinkListPageTable],
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+        CONSTANTS.RouteParams.settings.type
+      ],
+      _shouldFetchWhenIdPassed: wsShareId ? false : true,
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _showLoader: false
     });
   // #endregion
 
   // #region Modal & Popovers.
   const { presentZIonModal: presentPixelAccountDetailModal } = useZIonModal(
-    ZaionsPixelAccountDetail
+    ZaionsPixelAccountDetail,
+    { workspaceId, shareWSMemberId, wsShareId }
   );
 
   const { presentZIonModal: presentShortLinkNoteModal } = useZIonModal(
@@ -284,6 +417,8 @@ const ZInpageTable: React.FC = () => {
     ZShortLinkActionPopover,
     {
       workspaceId: workspaceId,
+      shareWSMemberId,
+      wsShareId,
       shortLinkId: compState.selectedShortLinkId
     }
   );
@@ -310,14 +445,28 @@ const ZInpageTable: React.FC = () => {
         return (
           <ZIonRouterLink
             className='hover:underline'
-            routerLink={replaceRouteParams(
-              ZaionsRoutes.AdminPanel.ShortLinks.Edit,
-              [
-                CONSTANTS.RouteParams.workspace.workspaceId,
-                CONSTANTS.RouteParams.editShortLinkIdParam
-              ],
-              [workspaceId, row?.row?.original?.id!]
-            )}>
+            routerLink={
+              workspaceId
+                ? replaceRouteParams(
+                    ZaionsRoutes.AdminPanel.ShortLinks.Edit,
+                    [
+                      CONSTANTS.RouteParams.workspace.workspaceId,
+                      CONSTANTS.RouteParams.editShortLinkIdParam
+                    ],
+                    [workspaceId, row?.row?.original?.id!]
+                  )
+                : wsShareId && shareWSMemberId
+                ? replaceRouteParams(
+                    ZaionsRoutes.AdminPanel.ShareWS.Short_link.Edit,
+                    [
+                      CONSTANTS.RouteParams.workspace.wsShareId,
+                      CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                      CONSTANTS.RouteParams.editShortLinkIdParam
+                    ],
+                    [wsShareId, shareWSMemberId, row?.row?.original?.id!]
+                  )
+                : ''
+            }>
             <ZIonText>{row.getValue()}</ZIonText>
           </ZIonRouterLink>
         );
@@ -447,7 +596,7 @@ const ZInpageTable: React.FC = () => {
     ),
 
     // link to share
-    columnHelper.accessor('link_to_share', {
+    columnHelper.accessor(itemData => itemData.shortUrlDomain, {
       header: 'Link to share',
       id: ZShortLinkListPageTableColumnsIds.linkToShare,
       footer: 'Link to share',
@@ -492,7 +641,11 @@ const ZInpageTable: React.FC = () => {
     columns: defaultColumns,
     data: _FilteredShortLinkDataSelector || [],
     state: {
-      columnOrder: getUserSetting?.settings?.columnOrderIds || []
+      columnOrder: workspaceId
+        ? getUserSetting?.settings?.columnOrderIds
+        : wsShareId
+        ? swsGetUserSetting?.settings?.columnOrderIds
+        : []
     },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -506,30 +659,66 @@ const ZInpageTable: React.FC = () => {
   // #region useEffect's
   useEffect(() => {
     try {
-      if (getUserSetting?.settings?.columns) {
-        const __getTitleColumn = getUserSetting?.settings?.columns.filter(
-          el => el.name === ZShortLinkListPageTableColumnsEnum.title
-        )[0];
+      if (
+        getUserSetting?.settings?.columns ||
+        swsGetUserSetting?.settings?.columns
+      ) {
+        let __getTitleColumn;
+        let __getDateColumn;
+        let __getLinkToShareColumn;
+        let __getNotesColumn;
+        let __getPixelsColumn;
+        let __getUrlColumn;
 
-        const __getDateColumn = getUserSetting?.settings?.columns.filter(
-          el => el.name === ZShortLinkListPageTableColumnsEnum.date
-        )[0];
+        if (workspaceId) {
+          __getTitleColumn = getUserSetting?.settings?.columns.filter(
+            el => el?.id === ZShortLinkListPageTableColumnsIds.title
+          )[0];
 
-        const __getLinkToShareColumn = getUserSetting?.settings?.columns.filter(
-          el => el.name === ZShortLinkListPageTableColumnsEnum.linkToShare
-        )[0];
+          __getDateColumn = getUserSetting?.settings?.columns.filter(
+            el => el?.id === ZShortLinkListPageTableColumnsIds.date
+          )[0];
 
-        const __getNotesColumn = getUserSetting?.settings?.columns.filter(
-          el => el.name === ZShortLinkListPageTableColumnsEnum.notes
-        )[0];
+          __getLinkToShareColumn = getUserSetting?.settings?.columns.filter(
+            el => el?.id === ZShortLinkListPageTableColumnsIds.linkToShare
+          )[0];
 
-        const __getPixelsColumn = getUserSetting?.settings?.columns.filter(
-          el => el.name === ZShortLinkListPageTableColumnsEnum.pixels
-        )[0];
+          __getNotesColumn = getUserSetting?.settings?.columns.filter(
+            el => el?.id === ZShortLinkListPageTableColumnsIds.notes
+          )[0];
 
-        const __getUrlColumn = getUserSetting?.settings?.columns.filter(
-          el => el.name === ZShortLinkListPageTableColumnsEnum.url
-        )[0];
+          __getPixelsColumn = getUserSetting?.settings?.columns.filter(
+            el => el?.id === ZShortLinkListPageTableColumnsIds.pixel
+          )[0];
+
+          __getUrlColumn = getUserSetting?.settings?.columns.filter(
+            el => el?.id === ZShortLinkListPageTableColumnsIds.url
+          )[0];
+        } else if (wsShareId) {
+          __getTitleColumn = swsGetUserSetting?.settings?.columns.filter(
+            el => el?.id === ZShortLinkListPageTableColumnsIds.title
+          )[0];
+
+          __getDateColumn = swsGetUserSetting?.settings?.columns.filter(
+            el => el?.id === ZShortLinkListPageTableColumnsIds.date
+          )[0];
+
+          __getLinkToShareColumn = swsGetUserSetting?.settings?.columns.filter(
+            el => el?.id === ZShortLinkListPageTableColumnsIds.linkToShare
+          )[0];
+
+          __getNotesColumn = swsGetUserSetting?.settings?.columns.filter(
+            el => el?.id === ZShortLinkListPageTableColumnsIds.notes
+          )[0];
+
+          __getPixelsColumn = swsGetUserSetting?.settings?.columns.filter(
+            el => el?.id === ZShortLinkListPageTableColumnsIds.pixel
+          )[0];
+
+          __getUrlColumn = swsGetUserSetting?.settings?.columns.filter(
+            el => el?.id === ZShortLinkListPageTableColumnsIds.url
+          )[0];
+        }
 
         if (__getTitleColumn) {
           zShortLinksTable
@@ -576,7 +765,7 @@ const ZInpageTable: React.FC = () => {
     } catch (error) {
       reportCustomError(error);
     }
-  }, [getUserSetting]);
+  }, [workspaceId, getUserSetting, swsGetUserSetting, wsShareId]);
 
   useEffect(() => {
     zShortLinksTable.setPageIndex(Number(pageindex) || 0);
@@ -598,14 +787,16 @@ const ZInpageTable: React.FC = () => {
 
   useEffect(() => {
     try {
-      if (ShortLinksData) {
+      if (workspaceId && ShortLinksData) {
         setShortLinksStateAtom(ShortLinksData);
+      } else if (wsShareId && swsShortLinksData) {
+        setShortLinksStateAtom(swsShortLinksData);
       }
     } catch (error) {
       reportCustomError(error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ShortLinksData]);
+  }, [ShortLinksData, swsShortLinksData]);
   // #endregion
 
   return (
@@ -782,22 +973,49 @@ const ZInpageTable: React.FC = () => {
             }
             onClick={() => {
               if (zShortLinksTable.getCanPreviousPage()) {
-                zNavigatePushRoute(
-                  createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                    params: [
-                      CONSTANTS.RouteParams.workspace.workspaceId,
-                      CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-                    ],
-                    values: [workspaceId, 'all'],
-                    routeSearchParams: {
-                      pageindex: 0,
-                      pagesize: zShortLinksTable
-                        .getState()
-                        .pagination.pageSize.toString()
-                    }
-                  })
-                );
+                if (workspaceId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        workspaceId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ],
+                      routeSearchParams: {
+                        pageindex: 0,
+                        pagesize: zShortLinksTable
+                          .getState()
+                          .pagination.pageSize.toString()
+                      }
+                    })
+                  );
+                } else if (wsShareId && shareWSMemberId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.wsShareId,
+                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        wsShareId,
+                        shareWSMemberId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ],
+                      routeSearchParams: {
+                        pageindex: 0,
+                        pagesize: zShortLinksTable
+                          .getState()
+                          .pagination.pageSize.toString()
+                      }
+                    })
+                  );
+                }
 
                 zShortLinksTable.setPageIndex(0);
               }
@@ -821,23 +1039,51 @@ const ZInpageTable: React.FC = () => {
               if (zShortLinksTable.getCanPreviousPage()) {
                 zShortLinksTable.previousPage();
 
-                zNavigatePushRoute(
-                  createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                    params: [
-                      CONSTANTS.RouteParams.workspace.workspaceId,
-                      CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-                    ],
-                    values: [workspaceId, 'all'],
-                    routeSearchParams: {
-                      pageindex:
-                        zShortLinksTable.getState().pagination.pageIndex - 1,
-                      pagesize: zShortLinksTable
-                        .getState()
-                        .pagination.pageSize.toString()
-                    }
-                  })
-                );
+                if (workspaceId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        workspaceId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ],
+                      routeSearchParams: {
+                        pageindex:
+                          zShortLinksTable.getState().pagination.pageIndex - 1,
+                        pagesize: zShortLinksTable
+                          .getState()
+                          .pagination.pageSize.toString()
+                      }
+                    })
+                  );
+                } else if (wsShareId && shareWSMemberId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.wsShareId,
+                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        wsShareId,
+                        shareWSMemberId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ],
+                      routeSearchParams: {
+                        pageindex:
+                          zShortLinksTable.getState().pagination.pageIndex - 1,
+                        pagesize: zShortLinksTable
+                          .getState()
+                          .pagination.pageSize.toString()
+                      }
+                    })
+                  );
+                }
               }
             }}>
             <ZIonIcon
@@ -860,23 +1106,51 @@ const ZInpageTable: React.FC = () => {
               if (zShortLinksTable.getCanNextPage()) {
                 zShortLinksTable.nextPage();
 
-                zNavigatePushRoute(
-                  createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                    params: [
-                      CONSTANTS.RouteParams.workspace.workspaceId,
-                      CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-                    ],
-                    values: [workspaceId, 'all'],
-                    routeSearchParams: {
-                      pageindex:
-                        zShortLinksTable.getState().pagination.pageIndex + 1,
-                      pagesize: zShortLinksTable
-                        .getState()
-                        .pagination.pageSize.toString()
-                    }
-                  })
-                );
+                if (workspaceId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        workspaceId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ],
+                      routeSearchParams: {
+                        pageindex:
+                          zShortLinksTable.getState().pagination.pageIndex + 1,
+                        pagesize: zShortLinksTable
+                          .getState()
+                          .pagination.pageSize.toString()
+                      }
+                    })
+                  );
+                } else if (wsShareId && shareWSMemberId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.wsShareId,
+                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        wsShareId,
+                        shareWSMemberId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ],
+                      routeSearchParams: {
+                        pageindex:
+                          zShortLinksTable.getState().pagination.pageIndex + 1,
+                        pagesize: zShortLinksTable
+                          .getState()
+                          .pagination.pageSize.toString()
+                      }
+                    })
+                  );
+                }
               }
             }}>
             <ZIonIcon
@@ -901,22 +1175,49 @@ const ZInpageTable: React.FC = () => {
                   zShortLinksTable.getPageCount() - 1
                 );
 
-                zNavigatePushRoute(
-                  createRedirectRoute({
-                    url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                    params: [
-                      CONSTANTS.RouteParams.workspace.workspaceId,
-                      CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-                    ],
-                    values: [workspaceId, 'all'],
-                    routeSearchParams: {
-                      pageindex: zShortLinksTable.getPageCount() - 1,
-                      pagesize: zShortLinksTable
-                        .getState()
-                        .pagination.pageSize.toString()
-                    }
-                  })
-                );
+                if (workspaceId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        workspaceId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ],
+                      routeSearchParams: {
+                        pageindex: zShortLinksTable.getPageCount() - 1,
+                        pagesize: zShortLinksTable
+                          .getState()
+                          .pagination.pageSize.toString()
+                      }
+                    })
+                  );
+                } else if (wsShareId && shareWSMemberId) {
+                  zNavigatePushRoute(
+                    createRedirectRoute({
+                      url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                      params: [
+                        CONSTANTS.RouteParams.workspace.wsShareId,
+                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                        CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                      ],
+                      values: [
+                        wsShareId,
+                        shareWSMemberId,
+                        CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                      ],
+                      routeSearchParams: {
+                        pageindex: zShortLinksTable.getPageCount() - 1,
+                        pagesize: zShortLinksTable
+                          .getState()
+                          .pagination.pageSize.toString()
+                      }
+                    })
+                  );
+                }
               }
             }}>
             <ZIonIcon
@@ -948,7 +1249,7 @@ const ZInpageTable: React.FC = () => {
           <ZIonSelect
             minHeight='30px'
             fill='outline'
-            className='bg-white w-[7rem]'
+            className='zaions__bg_white w-[8rem]'
             interface='popover'
             value={zShortLinksTable.getState().pagination.pageSize}
             testingselector={
@@ -957,20 +1258,45 @@ const ZInpageTable: React.FC = () => {
             onIonChange={e => {
               zShortLinksTable.setPageSize(Number(e.target.value));
 
-              zNavigatePushRoute(
-                createRedirectRoute({
-                  url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                  params: [
-                    CONSTANTS.RouteParams.workspace.workspaceId,
-                    CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-                  ],
-                  values: [workspaceId, 'all'],
-                  routeSearchParams: {
-                    pageindex: zShortLinksTable.getPageCount() - 1,
-                    pagesize: Number(e.target.value)
-                  }
-                })
-              );
+              if (workspaceId) {
+                zNavigatePushRoute(
+                  createRedirectRoute({
+                    url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                    params: [
+                      CONSTANTS.RouteParams.workspace.workspaceId,
+                      CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                    ],
+                    values: [
+                      workspaceId,
+                      CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                    ],
+                    routeSearchParams: {
+                      pageindex: zShortLinksTable.getPageCount() - 1,
+                      pagesize: Number(e.target.value)
+                    }
+                  })
+                );
+              } else if (wsShareId && shareWSMemberId) {
+                zNavigatePushRoute(
+                  createRedirectRoute({
+                    url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                    params: [
+                      CONSTANTS.RouteParams.workspace.wsShareId,
+                      CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                      CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                    ],
+                    values: [
+                      wsShareId,
+                      shareWSMemberId,
+                      CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                    ],
+                    routeSearchParams: {
+                      pageindex: zShortLinksTable.getPageCount() - 1,
+                      pagesize: Number(e.target.value)
+                    }
+                  })
+                );
+              }
             }}>
             {[2, 3].map(pageSize => (
               <ZIonSelectOption
@@ -993,7 +1319,16 @@ const ZShortLinkActionPopover: React.FC<{
   zNavigatePushRoute: (_url: string) => void;
   workspaceId: string;
   shortLinkId: string;
-}> = ({ dismissZIonPopover, workspaceId, shortLinkId, zNavigatePushRoute }) => {
+  shareWSMemberId: string;
+  wsShareId: string;
+}> = ({
+  dismissZIonPopover,
+  workspaceId,
+  shareWSMemberId,
+  wsShareId,
+  shortLinkId,
+  zNavigatePushRoute
+}) => {
   const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
   // Recoil selector that will filter from all short links state(ShortLinksRStateAtom) and give the filter short links.
   const _FilteredShortLinkDataSelector = useRecoilValue(
@@ -1005,9 +1340,14 @@ const ZShortLinkActionPopover: React.FC<{
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
-  // Request for deleting short link.
+  // If owned workspace then this api is used to delete short link.
   const { mutateAsync: deleteShortLinkMutate } = useZRQDeleteRequest({
     _url: API_URL_ENUM.shortLinks_update_delete
+  });
+
+  // If share workspace then this api is used to delete share ws short link.
+  const { mutateAsync: deleteSWSShortLinkMutate } = useZRQDeleteRequest({
+    _url: API_URL_ENUM.sws_sl_get_update_delete
   });
 
   // when user won't to delete short link and click on the delete button this function will fire and show the confirm alert.
@@ -1049,13 +1389,25 @@ const ZShortLinkActionPopover: React.FC<{
     try {
       if (shortLinkId?.trim() && _FilteredShortLinkDataSelector?.length) {
         if (shortLinkId) {
-          const _response = await deleteShortLinkMutate({
-            itemIds: [workspaceId, shortLinkId],
-            urlDynamicParts: [
-              CONSTANTS.RouteParams.workspace.workspaceId,
-              CONSTANTS.RouteParams.shortLink.shortLinkId
-            ]
-          });
+          let _response;
+
+          if (workspaceId) {
+            _response = await deleteShortLinkMutate({
+              itemIds: [workspaceId, shortLinkId],
+              urlDynamicParts: [
+                CONSTANTS.RouteParams.workspace.workspaceId,
+                CONSTANTS.RouteParams.shortLink.shortLinkId
+              ]
+            });
+          } else if (wsShareId && shareWSMemberId) {
+            _response = await deleteSWSShortLinkMutate({
+              itemIds: [shareWSMemberId, shortLinkId],
+              urlDynamicParts: [
+                CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                CONSTANTS.RouteParams.shortLink.shortLinkId
+              ]
+            });
+          }
 
           if (_response) {
             const _data = extractInnerData<{ success: boolean }>(
@@ -1065,14 +1417,27 @@ const ZShortLinkActionPopover: React.FC<{
 
             if (_data && _data?.success) {
               // getting all the shortLinks from RQ cache.
+              let _rqShortlinkData;
+
+              if (workspaceId) {
+                _rqShortlinkData = getRQCDataHandler<ShortLinkType[]>({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+                    workspaceId
+                  ]
+                }) as ShortLinkType[];
+              } else if (wsShareId && shareWSMemberId) {
+                _rqShortlinkData = getRQCDataHandler<ShortLinkType[]>({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
+                    wsShareId
+                  ]
+                }) as ShortLinkType[];
+              }
+
               const _oldShortLinks =
                 extractInnerData<ShortLinkType[]>(
-                  getRQCDataHandler<ShortLinkType[]>({
-                    key: [
-                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-                      workspaceId
-                    ]
-                  }) as ShortLinkType[],
+                  _rqShortlinkData,
                   extractInnerDataOptionsEnum.createRequestResponseItems
                 ) || [];
 
@@ -1082,16 +1447,29 @@ const ZShortLinkActionPopover: React.FC<{
               );
 
               // Updating data in RQ cache.
-              await updateRQCDataHandler<ShortLinkType[] | undefined>({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-                  workspaceId
-                ],
-                data: _updatedShortLinks as ShortLinkType[],
-                id: '',
-                extractType: ZRQGetRequestExtractEnum.extractItems,
-                updateHoleData: true
-              });
+              if (workspaceId) {
+                await updateRQCDataHandler<ShortLinkType[] | undefined>({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+                    workspaceId
+                  ],
+                  data: _updatedShortLinks as ShortLinkType[],
+                  id: '',
+                  extractType: ZRQGetRequestExtractEnum.extractItems,
+                  updateHoleData: true
+                });
+              } else if (wsShareId && shareWSMemberId) {
+                await updateRQCDataHandler<ShortLinkType[] | undefined>({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
+                    wsShareId
+                  ],
+                  data: [..._updatedShortLinks] as ShortLinkType[],
+                  id: '',
+                  extractType: ZRQGetRequestExtractEnum.extractItems,
+                  updateHoleData: true
+                });
+              }
 
               showSuccessNotification(MESSAGES.SHORT_LINKS.DELETE);
 
@@ -1115,7 +1493,18 @@ const ZShortLinkActionPopover: React.FC<{
     <ZIonList
       lines='none'
       className='ion-no-padding'>
-      <ZCan havePermissions={[permissionsEnum.update_shortLink]}>
+      <ZCan
+        shareWSId={wsShareId}
+        permissionType={
+          wsShareId
+            ? permissionsTypeEnum.shareWSMemberPermissions
+            : permissionsTypeEnum.loggedInUserPermissions
+        }
+        havePermissions={
+          wsShareId
+            ? [shareWSPermissionEnum.update_sws_shortLink]
+            : [permissionsEnum.update_shortLink]
+        }>
         <ZIonItem
           button={true}
           detail={false}
@@ -1132,16 +1521,30 @@ const ZShortLinkActionPopover: React.FC<{
                   formMode: FormMode.EDIT
                 }));
 
-                zNavigatePushRoute(
-                  replaceRouteParams(
-                    ZaionsRoutes.AdminPanel.ShortLinks.Edit,
-                    [
-                      CONSTANTS.RouteParams.workspace.workspaceId,
-                      CONSTANTS.RouteParams.editShortLinkIdParam
-                    ],
-                    [workspaceId, shortLinkId]
-                  )
-                );
+                if (workspaceId) {
+                  zNavigatePushRoute(
+                    replaceRouteParams(
+                      ZaionsRoutes.AdminPanel.ShortLinks.Edit,
+                      [
+                        CONSTANTS.RouteParams.workspace.workspaceId,
+                        CONSTANTS.RouteParams.editShortLinkIdParam
+                      ],
+                      [workspaceId, shortLinkId]
+                    )
+                  );
+                } else if (wsShareId && shareWSMemberId) {
+                  zNavigatePushRoute(
+                    replaceRouteParams(
+                      ZaionsRoutes.AdminPanel.ShareWS.Short_link.Edit,
+                      [
+                        CONSTANTS.RouteParams.workspace.wsShareId,
+                        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                        CONSTANTS.RouteParams.editShortLinkIdParam
+                      ],
+                      [wsShareId, shareWSMemberId, shortLinkId]
+                    )
+                  );
+                }
 
                 dismissZIonPopover('', '');
               } else {
@@ -1171,12 +1574,27 @@ const ZShortLinkActionPopover: React.FC<{
         </ZIonItem>
       </ZCan>
 
-      <ZCan havePermissions={[permissionsEnum.delete_shortLink]}>
+      <ZCan
+        shareWSId={wsShareId}
+        permissionType={
+          wsShareId
+            ? permissionsTypeEnum.shareWSMemberPermissions
+            : permissionsTypeEnum.loggedInUserPermissions
+        }
+        havePermissions={
+          wsShareId
+            ? [shareWSPermissionEnum.delete_sws_shortLink]
+            : [permissionsEnum.delete_shortLink]
+        }>
         <ZIonItem
           button={true}
           detail={false}
           minHeight='2.5rem'
-          onClick={() => void deleteShortLink()}
+          onClick={() => {
+            if (workspaceId || (wsShareId && shareWSMemberId)) {
+              void deleteShortLink();
+            }
+          }}
           testingselector={
             CONSTANTS.testingSelectors.shortLink.listPage.table.deleteBtn
           }

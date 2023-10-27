@@ -8,18 +8,9 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import {
-  addOutline,
-  gitNetworkOutline,
-  heartOutline,
-  library,
-  playCircle,
-  radio,
-  search,
-  starOutline
-} from 'ionicons/icons';
+import { addOutline, gitNetworkOutline, starOutline } from 'ionicons/icons';
 import classNames from 'classnames';
-import { IonNav, RefresherEventDetail } from '@ionic/react';
+import { RefresherEventDetail } from '@ionic/react';
 
 /**
  * Custom Imports go down
@@ -28,21 +19,17 @@ import { IonNav, RefresherEventDetail } from '@ionic/react';
 import ZIonPage from '@/components/ZIonPage';
 import {
   ZIonButton,
-  ZIonButtons,
   ZIonCard,
   ZIonCardContent,
   ZIonCol,
   ZIonContent,
   ZIonGrid,
   ZIonIcon,
-  ZIonLabel,
   ZIonRefresher,
   ZIonRefresherContent,
   ZIonRow,
   ZIonSkeletonText,
-  ZIonTabBar,
-  ZIonTabButton,
-  ZIonTabs,
+  ZIonSpinner,
   ZIonText,
   ZIonTitle
 } from '@/components/ZIonComponents';
@@ -143,9 +130,9 @@ const ZWorkspaceListPage: React.FC = () => {
   const { data: WSShareData, isFetching: isWSShareDataFetching } =
     useZRQGetRequest<wsShareInterface[]>({
       _url: API_URL_ENUM.ws_share_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN]
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
     });
-
+  console.log({ WorkspacesData });
   useEffect(() => {
     const _sharedFavoriteWorkspaces = WSShareData?.filter(
       el => el?.isFavorite === 1
@@ -177,7 +164,7 @@ const ZWorkspaceListPage: React.FC = () => {
       ]);
 
       await zInvalidateReactQueries([
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN
       ]);
     } catch (error) {
       reportCustomError(error);
@@ -194,6 +181,24 @@ const ZWorkspaceListPage: React.FC = () => {
   };
 
   const isZFetching = isWorkspacesDataFetching && isWSShareDataFetching;
+
+  if (isZFetching) {
+    return (
+      <ZIonPage>
+        <ZIonContent>
+          <div className='flex flex-col w-full h-full pt-4 ion-align-items-center ion-justify-content-center'>
+            <ZIonSpinner className='w-10 h-10' />
+
+            {isWorkspacesDataFetching
+              ? 'Fetching workspaces'
+              : isWSShareDataFetching
+              ? 'Fetching shared workspaces'
+              : ''}
+          </div>
+        </ZIonContent>
+      </ZIonPage>
+    );
+  }
 
   return (
     <ZIonPage pageTitle='Zaions workspaces list page'>
@@ -279,11 +284,14 @@ const ZWorkspaceListPage: React.FC = () => {
                               workspaceImage={el.workspaceImage}
                               workspaceName={el.workspaceName as string}
                               user={el.user}
-                              workspaceId={el.id}
+                              workspaceId={
+                                el?.accountStatus ? el.workspaceId : el.id
+                              }
                               owned={el?.accountStatus ? false : true}
                               accountStatus={el?.accountStatus}
                               createdAt={el.createdAt}
                               isFavorite={el.isFavorite ? true : false}
+                              memberId={el.id}
                             />
                           </ZIonCol>
                         ))}
@@ -340,6 +348,8 @@ const ZWorkspaceListPage: React.FC = () => {
                   </ZIonCol>
                 )}
 
+                {isZFetching && <ZWorkspacesCardSkeleton />}
+
                 {WorkspacesData && WorkspacesData?.length > 0 && (
                   <>
                     {/* single card */}
@@ -347,26 +357,27 @@ const ZWorkspaceListPage: React.FC = () => {
                       {!isZFetching &&
                         WorkspacesData &&
                         WorkspacesData.map(el => (
-                          <ZIonCol
-                            sizeXl='3'
-                            sizeLg='4'
-                            sizeMd='6'
-                            sizeSm='6'
-                            sizeXs='12'
-                            key={el.id}>
-                            <ZWorkspacesCard
-                              workspaceImage={el.workspaceImage}
-                              workspaceName={el.workspaceName as string}
-                              user={el.user}
-                              workspaceId={el.id}
-                              createdAt={el.createdAt}
-                              isFavorite={el.isFavorite ? true : false}
-                            />
-                          </ZIonCol>
+                          <ZCan
+                            key={el.id}
+                            havePermissions={[permissionsEnum.view_workspace]}>
+                            <ZIonCol
+                              sizeXl='3'
+                              sizeLg='4'
+                              sizeMd='6'
+                              sizeSm='6'
+                              sizeXs='12'>
+                              <ZWorkspacesCard
+                                workspaceImage={el.workspaceImage}
+                                workspaceName={el.workspaceName as string}
+                                user={el.user}
+                                workspaceId={el.id}
+                                createdAt={el.createdAt}
+                                isFavorite={el.isFavorite ? true : false}
+                              />
+                            </ZIonCol>
+                          </ZCan>
                         ))}
                     </Suspense>
-
-                    {isZFetching && <ZWorkspacesCardSkeleton />}
 
                     {/* add a workspace card */}
                     <ZCan havePermissions={[permissionsEnum.create_workspace]}>
@@ -430,67 +441,72 @@ const ZWorkspaceListPage: React.FC = () => {
             </ZIonCard>
 
             {/* Shared workspaces */}
-            <ZIonCard className='mt-5 border rounded-lg shadow-none zaions__light_bg'>
-              <ZIonRow className='px-4 py-5'>
-                <ZIonCol
-                  size='12'
-                  className='ps-3'>
-                  <ZIonTitle
-                    className='font-bold tracking-wider ion-no-padding'
-                    color='dark'>
-                    Shared workspaces
-                  </ZIonTitle>
-                </ZIonCol>
-
-                {WSShareData?.length === 0 && (
+            <ZCan havePermissions={[permissionsEnum.viewAny_shareWS]}>
+              <ZIonCard className='mt-5 border rounded-lg shadow-none zaions__light_bg'>
+                <ZIonRow className='px-4 py-5'>
                   <ZIonCol
                     size='12'
-                    className='flex flex-col py-4 mt-2 rounded-lg ion-align-items-center ion-justify-content-center'>
-                    <ZIonIcon
-                      icon={gitNetworkOutline}
-                      className='w-10 h-10'
-                    />
-
-                    <ZIonText
-                      className='mt-3 tracking-wider'
+                    className='ps-3'>
+                    <ZIonTitle
+                      className='font-bold tracking-wider ion-no-padding'
                       color='dark'>
-                      The shared workspace board is empty!
-                    </ZIonText>
+                      Shared workspaces
+                    </ZIonTitle>
                   </ZIonCol>
-                )}
 
-                {/* single card */}
-                <Suspense fallback={<ZWorkspacesCardSkeleton />}>
-                  {!isZFetching &&
-                    WSShareData &&
-                    WSShareData.map(el => {
-                      return (
-                        <ZIonCol
-                          sizeXl='3'
-                          sizeLg='4'
-                          sizeMd='6'
-                          sizeSm='6'
-                          sizeXs='12'
-                          key={el.id}>
-                          <ZWorkspacesCard
-                            workspaceImage={el.workspaceImage}
-                            workspaceName={el.workspaceName as string}
-                            user={el.user}
-                            workspaceId={el.id} // workspaceId
-                            createdAt={el.createdAt}
-                            accountStatus={el.accountStatus}
-                            inviteId={el.id}
-                            owned={false}
-                            isFavorite={el.isFavorite ? true : false}
-                          />
-                        </ZIonCol>
-                      );
-                    })}
-                </Suspense>
+                  {isZFetching && <ZWorkspacesCardSkeleton />}
 
-                {isZFetching && <ZWorkspacesCardSkeleton />}
-              </ZIonRow>
-            </ZIonCard>
+                  {WSShareData?.length === 0 && (
+                    <ZIonCol
+                      size='12'
+                      className='flex flex-col py-4 mt-2 rounded-lg ion-align-items-center ion-justify-content-center'>
+                      <ZIonIcon
+                        icon={gitNetworkOutline}
+                        className='w-10 h-10'
+                      />
+
+                      <ZIonText
+                        className='mt-3 tracking-wider'
+                        color='dark'>
+                        The shared workspace board is empty!
+                      </ZIonText>
+                    </ZIonCol>
+                  )}
+
+                  {/* single card */}
+                  <Suspense fallback={<ZWorkspacesCardSkeleton />}>
+                    {!isZFetching &&
+                      WSShareData &&
+                      WSShareData.map(el => {
+                        return (
+                          <ZCan
+                            key={el.id}
+                            havePermissions={[permissionsEnum.view_shareWS]}>
+                            <ZIonCol
+                              sizeXl='3'
+                              sizeLg='4'
+                              sizeMd='6'
+                              sizeSm='6'
+                              sizeXs='12'>
+                              <ZWorkspacesCard
+                                workspaceImage={el.workspaceImage}
+                                workspaceName={el.workspaceName as string}
+                                user={el.user}
+                                workspaceId={el.workspaceId} // workspaceId
+                                createdAt={el.createdAt}
+                                accountStatus={el.accountStatus}
+                                memberId={el.id}
+                                owned={false}
+                                isFavorite={el.isFavorite ? true : false}
+                              />
+                            </ZIonCol>
+                          </ZCan>
+                        );
+                      })}
+                  </Suspense>
+                </ZIonRow>
+              </ZIonCard>
+            </ZCan>
           </ZIonGrid>
         </ZIonContent>
       </ZCan>

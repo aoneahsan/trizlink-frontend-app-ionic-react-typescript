@@ -702,6 +702,11 @@ export const zAxiosApiRequest = async <T>({
     );
     return __res.data as unknown as T;
   } else if (_isAuthenticatedRequest && !_authToken) {
+    await Promise.all([
+      STORAGE.REMOVE(LOCALSTORAGE_KEYS.USERDATA),
+      STORAGE.REMOVE(LOCALSTORAGE_KEYS.AUTHTOKEN)
+    ]);
+    window.location.replace(ZaionsRoutes.LoginRoute);
     throwZCustomErrorUnAuthenticated();
   } else {
     throwZCustomErrorRequestFailed();
@@ -720,6 +725,8 @@ export const getUserDataObjectForm = (_user: UserAccountType) => {
     email: _user?.email,
     email_verified_at: _user?.email_verified_at,
     password: _user?.password,
+    lastSeenAt: _user?.lastSeenAt,
+    lastSeenAtFormatted: _user?.lastSeenAtFormatted,
     created_at: _user?.createdAt,
     updated_at: _user?.updatedAt
   };
@@ -1485,7 +1492,17 @@ export const zGetRoutePermissions = ({
     let __permissions: permissionsEnum[] = [];
     switch (_currentRoute) {
       case ZaionsRoutes.AdminPanel.Workspaces.Main:
-        __permissions = [permissionsEnum.viewAny_workspace];
+        __permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_shareWS
+        ];
+        break;
+
+      case ZaionsRoutes.AdminPanel.Workspaces.App:
+        __permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_shareWS
+        ];
         break;
 
       case ZaionsRoutes.AdminPanel.ShortLinks.Main:
@@ -1555,6 +1572,58 @@ export const zGetRoutePermissions = ({
         __permissions = [
           permissionsEnum.viewAny_workspace,
           permissionsEnum.view_workspaceTeam
+        ];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.Startup:
+        __permissions = [permissionsEnum.view_shareWS];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.View:
+        __permissions = [permissionsEnum.view_shareWS];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main:
+        __permissions = [permissionsEnum.view_shareWS];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.Short_link.Create:
+        __permissions = [permissionsEnum.create_shareWS];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.Short_link.Edit:
+        __permissions = [permissionsEnum.update_shareWS];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Main:
+        __permissions = [permissionsEnum.update_shareWS];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Members:
+        __permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_workspaceTeam
+        ];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Pixel:
+        __permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_ws_member
+        ];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.UTMTag:
+        __permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_ws_member
+        ];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.EmbedWidget:
+        __permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_ws_member
         ];
         break;
     }

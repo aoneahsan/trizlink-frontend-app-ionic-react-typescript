@@ -50,7 +50,11 @@ import { extractInnerDataOptionsEnum } from '@/utils/enums';
 import { reportCustomError } from '@/utils/customErrorType';
 import CONSTANTS from '@/utils/constants';
 import { extractInnerData } from '@/utils/helpers';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import {
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Type Imports go down
@@ -90,8 +94,18 @@ import {
 const ZWorkspacesSettingModal: React.FC<{
   Tab: workspaceSettingsModalTabEnum;
   workspaceId: string;
+  wsShareId?: string; // if this is share workspace then pass the share workspace id
+  wsShareMemberId?: string; // if this is share workspace then pass the member id
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
-}> = ({ Tab, workspaceId, dismissZIonModal }) => {
+  zNavigatePushRoute: (_url: string) => void;
+}> = ({
+  Tab,
+  workspaceId,
+  wsShareId,
+  wsShareMemberId,
+  dismissZIonModal,
+  zNavigatePushRoute
+}) => {
   // Component state
   const [compState, setCompState] = useState<{
     activeTab: workspaceSettingsModalTabEnum;
@@ -104,7 +118,10 @@ const ZWorkspacesSettingModal: React.FC<{
 
   useEffect(() => {
     try {
+      // workspaceId pass when the user is owner.
       if (workspaceId) {
+        // if owner then it will work with the QUERIES_KEYS of that user.
+
         // getting all the workspace from RQ cache.
         const _allWorkspaces =
           extractInnerData<workspaceInterface[]>(
@@ -122,6 +139,28 @@ const ZWorkspacesSettingModal: React.FC<{
           ...oldValues,
           workspace: _currentWorkspace[0]
         }));
+      } else if (wsShareId) {
+        //  workspaceId pass when the user is a member.
+
+        // if member then it will work with the QUERIES_KEYS of that member.
+        const _rqShareWSData = getRQCDataHandler<workspaceInterface>({
+          key: [
+            CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
+            wsShareId
+          ]
+        }) as workspaceInterface;
+
+        if (_rqShareWSData) {
+          const _currentShareWorkspaces = extractInnerData<workspaceInterface>(
+            _rqShareWSData,
+            extractInnerDataOptionsEnum.createRequestResponseItem
+          );
+
+          setCompState(oldValues => ({
+            ...oldValues,
+            workspace: _currentShareWorkspaces
+          }));
+        }
       }
     } catch (error) {
       reportCustomError(error);
@@ -131,7 +170,6 @@ const ZWorkspacesSettingModal: React.FC<{
   return (
     <>
       {/* header  */}
-
       <ZIonHeader>
         <div className='w-full py-1 mt-3 mb-1 ion-text-center'>
           <ZIonText
@@ -145,7 +183,18 @@ const ZWorkspacesSettingModal: React.FC<{
           value={compState.activeTab}
           className='h-[4rem] w-[40%] mx-auto'>
           {/* Timetable */}
-          <ZCan havePermissions={[permissionsEnum.viewAny_timeSlot]}>
+          <ZCan
+            shareWSId={wsShareId}
+            havePermissions={
+              wsShareId
+                ? [shareWSPermissionEnum.viewAny_sws_timeSlot]
+                : [permissionsEnum.viewAny_timeSlot]
+            }
+            permissionType={
+              wsShareId
+                ? permissionsTypeEnum.shareWSMemberPermissions
+                : permissionsTypeEnum.loggedInUserPermissions
+            }>
             <ZIonSegmentButton
               value={workspaceSettingsModalTabEnum.timetable}
               className='normal-case ion-no-padding ion-text-center'
@@ -169,7 +218,18 @@ const ZWorkspacesSettingModal: React.FC<{
           </ZCan>
 
           {/* Labels */}
-          <ZCan havePermissions={[permissionsEnum.viewAny_label]}>
+          <ZCan
+            shareWSId={wsShareId}
+            havePermissions={
+              wsShareId
+                ? [shareWSPermissionEnum.viewAny_sws_label]
+                : [permissionsEnum.viewAny_label]
+            }
+            permissionType={
+              wsShareId
+                ? permissionsTypeEnum.shareWSMemberPermissions
+                : permissionsTypeEnum.loggedInUserPermissions
+            }>
             <ZIonSegmentButton
               value={workspaceSettingsModalTabEnum.labels}
               className='normal-case ion-no-padding ion-text-center'
@@ -192,7 +252,18 @@ const ZWorkspacesSettingModal: React.FC<{
           </ZCan>
 
           {/* Settings */}
-          <ZCan havePermissions={[permissionsEnum.update_workspace]}>
+          <ZCan
+            shareWSId={wsShareId}
+            havePermissions={
+              wsShareId
+                ? [shareWSPermissionEnum.update_sws_workspace]
+                : [permissionsEnum.update_workspace]
+            }
+            permissionType={
+              wsShareId
+                ? permissionsTypeEnum.shareWSMemberPermissions
+                : permissionsTypeEnum.loggedInUserPermissions
+            }>
             <ZIonSegmentButton
               value={workspaceSettingsModalTabEnum.settings}
               className='normal-case ion-no-padding ion-text-center'
@@ -243,17 +314,28 @@ const ZWorkspacesSettingModal: React.FC<{
           <ZIonRow className='h-full ion-align-items-center'>
             {compState.activeTab === workspaceSettingsModalTabEnum.timetable ? (
               <ZCan havePermissions={[permissionsEnum.viewAny_timeSlot]}>
-                <ZTimetableTab workspaceId={workspaceId} />
+                <ZTimetableTab
+                  workspaceId={workspaceId} // if owner then pass the workspaceId, that is how we are knowing that it is a owner
+                  wsShareMemberId={wsShareMemberId} // if member then pass the wsShareMemberId, that is how we are knowing that it is a member
+                  wsShareId={wsShareId}
+                />
               </ZCan>
             ) : compState.activeTab === workspaceSettingsModalTabEnum.labels ? (
               <ZCan havePermissions={[permissionsEnum.viewAny_label]}>
-                <ZLabelsTab workspaceId={workspaceId} />
+                <ZLabelsTab
+                  workspaceId={workspaceId} // if owner then pass the workspaceId, that is how we are knowing that it is a owner
+                  wsShareMemberId={wsShareMemberId} // if member then pass the wsShareMemberId, that is how we are knowing that it is a member
+                  wsShareId={wsShareId}
+                />
               </ZCan>
             ) : compState.activeTab ===
               workspaceSettingsModalTabEnum.settings ? (
               <ZCan havePermissions={[permissionsEnum.update_workspace]}>
                 <ZSettingsTab
-                  workspaceId={workspaceId}
+                  zNavigatePushRoute={zNavigatePushRoute}
+                  workspaceId={workspaceId} // if owner then pass the workspaceId, that is how we are knowing that it is a owner
+                  wsShareMemberId={wsShareMemberId} // if member then pass the wsShareMemberId, that is how we are knowing that it is a member
+                  wsShareId={wsShareId}
                   dismissZIonModal={dismissZIonModal}
                 />
               </ZCan>

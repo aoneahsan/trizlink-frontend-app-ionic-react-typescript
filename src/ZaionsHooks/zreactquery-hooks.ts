@@ -1,38 +1,37 @@
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-import { showInfoNotification } from '@/utils/notification';
+// Core Imports
+
+// Packages Imports
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { useResetRecoilState, useRecoilValue } from 'recoil';
+
+// Custom Imports
+import { useZIonErrorAlert, useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
 import { useZPermissionChecker } from '@/ZaionsHooks/ZGenericHooks';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
-import { extractInnerDataOptionsEnum } from './../utils/enums/index';
+
+// Global constants
 import {
   zAxiosApiRequest,
   emptyVoidReturnFunction,
   STORAGE
 } from '@/utils/helpers';
-// Core Imports
-
-// Packages Imports
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
-// Custom Imports
-import { useZIonErrorAlert, useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
-
-// Global constants
 import { reportCustomError } from '@/utils/customErrorType';
 import { API_URL_ENUM } from '@/utils/enums';
 import MESSAGES from '@/utils/messages';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
-import { AxiosError } from 'axios';
 import { errorCodes } from '@/utils/constants/apiConstants';
 import { clearAuthDataFromLocalStorageAndRecoil } from '@/utils/helpers/apiHelpers';
-import { useResetRecoilState, useRecoilValue } from 'recoil';
+import { LOCALSTORAGE_KEYS } from '@/utils/constants';
+
+// Types
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
+
+// Recoils
 import {
   ZaionsUserAccountRStateAtom,
   currentLoggedInUserRoleAndPermissionsRStateAtom
 } from '@/ZaionsStore/UserAccount/index.recoil';
 import { appWiseIonicLoaderIsOpenedRSelector } from '@/ZaionsStore/AppRStates';
-import { LOCALSTORAGE_KEYS } from '@/utils/constants';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
@@ -151,7 +150,7 @@ export const useZRQGetRequest = <T>({
         const __error = (_error as AxiosError)?.response;
         const __errorMessage = (__error?.data as { errors: { item: string[] } })
           ?.errors?.item[0];
-
+        console.log({ c: __error?.status });
         // check if it's unauthenticated error
         if (__error?.status && __error?.status === errorCodes.unauthenticated) {
           // clear localstorage
@@ -645,6 +644,7 @@ export const useZGetRQCacheData = () => {
   }
 };
 
+// Remove key from RQ cache.
 export const useZRemoveRQCacheData = () => {
   try {
     const QueryClient = useQueryClient();

@@ -5,8 +5,13 @@ export enum rolePermissions {
 }
 
 export enum permissionsTypeEnum {
-  workspaceUserPermission = 'workspaceUserPermission',
-  loggedInUserPermission = 'loggedInUserPermission'
+  shareWSMemberPermissions = 'shareWSMemberPermissions',
+  loggedInUserPermissions = 'loggedInUserPermissions'
+}
+
+export enum permissionCheckModeEnum {
+  every = 'every', // user must have every permissions that have passed.
+  any = 'any' // user must have any permissions that have passed.
 }
 
 export enum permissionsEnum {
@@ -116,6 +121,16 @@ export enum permissionsEnum {
   restore_workspace = 'restore_workspace',
   forceDelete_workspace = 'forceDelete_workspace',
 
+  // Share WS
+  viewAny_shareWS = 'viewAny_shareWS',
+  view_shareWS = 'view_shareWS',
+  create_shareWS = 'create_shareWS',
+  update_shareWS = 'update_shareWS',
+  delete_shareWS = 'delete_shareWS',
+  replicate_shareWS = 'replicate_shareWS',
+  restore_shareWS = 'restore_shareWS',
+  forceDelete_shareWS = 'forceDelete_shareWS',
+
   // time slot
   viewAny_timeSlot = 'viewAny_timeSlot',
   view_timeSlot = 'view_timeSlot',
@@ -150,15 +165,18 @@ export enum permissionsEnum {
   attach_workspace_members = 'attach_workspace_members',
   detach_workspace_members = 'view_workspace_members',
   update_workspace_members = 'create_workspace_members',
-  viewAny_WSTeamMember = 'viewAny_WSTeamMember',
-  view_WSTeamMember = 'view_WSTeamMember',
-  create_WSTeamMember = 'create_WSTeamMember',
-  update_WSTeamMember = 'update_WSTeamMember',
-  delete_WSTeamMember = 'delete_WSTeamMember',
-  replicate_WSTeamMember = 'replicate_WSTeamMember',
-  restore_WSTeamMember = 'restore_WSTeamMember',
-  forceDelete_WSTeamMember = 'forceDelete_WSTeamMember',
-  invite_WSTeamMember = 'invite_WSTeamMember',
+  viewAny_ws_member = 'viewAny_ws_member',
+  view_ws_member = 'view_ws_member',
+  create_ws_member = 'create_ws_member',
+  update_ws_member = 'update_ws_member',
+  delete_ws_member = 'delete_ws_member',
+  replicate_ws_member = 'replicate_ws_member',
+  restore_ws_member = 'restore_ws_member',
+  forceDelete_ws_member = 'forceDelete_ws_member',
+  send_invitation_ws_member = 'send_invitation_ws_member',
+  resend_invitation_ws_member = 'resend_invitation_ws_member',
+  update_memberRole_ws_member = 'update_memberRole_ws_member',
+  cancel_invitation_ws_member = 'cancel_invitation_ws_member',
 
   // Workspace pixel connections
   attach_pixel_to_workspace = 'attach_pixel_to_workspace',
@@ -265,9 +283,32 @@ export enum permissionsEnum {
   create_folder = 'create_folder',
   update_folder = 'update_folder',
   delete_folder = 'delete_folder',
+  sort_folder = 'sort_folder',
   replicate_folder = 'replicate_folder',
   restore_folder = 'restore_folder',
   forceDelete_folder = 'forceDelete_folder',
+
+  // Short links folders
+  viewAny_sl_folder = 'viewAny_sl_folder',
+  view_sl_folder = 'view_sl_folder',
+  create_sl_folder = 'create_sl_folder',
+  update_sl_folder = 'update_sl_folder',
+  delete_sl_folder = 'delete_sl_folder',
+  sort_sl_folder = 'sort_sl_folder',
+  replicate_sl_folder = 'replicate_sl_folder',
+  restore_sl_folder = 'restore_sl_folder',
+  forceDelete_sl_folder = 'forceDelete_sl_folder',
+
+  // Link-in-bio folders
+  viewAny_lib_folder = 'viewAny_lib_folder',
+  view_lib_folder = 'view_lib_folder',
+  create_lib_folder = 'create_lib_folder',
+  update_lib_folder = 'update_lib_folder',
+  delete_lib_folder = 'delete_lib_folder',
+  sort_lib_folder = 'sort_lib_folder',
+  replicate_lib_folder = 'replicate_lib_folder',
+  restore_lib_folder = 'restore_lib_folder',
+  forceDelete_lib_folder = 'forceDelete_lib_folder',
 
   // Embeded widgets
   viewAny_embededWidget = 'viewAny_embededWidget',
@@ -278,4 +319,133 @@ export enum permissionsEnum {
   replicate_embededWidget = 'replicate_embededWidget',
   restore_embededWidget = 'restore_embededWidget',
   forceDelete_embededWidget = 'forceDelete_embededWidget'
+}
+
+export enum shareWSPermissionEnum {
+  // sws => ShareWorkspace.
+
+  // member
+  viewAny_sws_member = 'viewAny_sws_member',
+  view_sws_member = 'view_sws_member',
+  create_sws_member = 'create_sws_member',
+  update_sws_member = 'update_sws_member',
+  delete_sws_member = 'delete_sws_member',
+  replicate_sws_member = 'replicate_sws_member',
+  restore_sws_member = 'restore_sws_member',
+  forceDelete_sws_member = 'forceDelete_sws_member',
+  send_invitation_sws_member = 'send_invitation_sws_member',
+  resend_invitation_sws_member = 'resend_invitation_sws_member',
+  update_memberRole_sws_member = 'update_memberRole_sws_member',
+  cancel_invitation_sws_member = 'cancel_invitation_sws_member',
+  // Workspace
+  viewAny_sws_workspace = 'viewAny_sws_workspace',
+  view_sws_workspace = 'view_sws_workspace',
+  create_sws_workspace = 'create_sws_workspace',
+  update_sws_workspace = 'update_sws_workspace',
+  delete_sws_workspace = 'delete_sws_workspace',
+  replicate_sws_workspace = 'replicate_sws_workspace',
+  restore_sws_workspace = 'restore_sws_workspace',
+  forceDelete_sws_workspace = 'forceDelete_sws_workspace',
+  // Folders
+  viewAny_sws_folder = 'viewAny_sws_folder',
+  view_sws_folder = 'view_sws_folder',
+  create_sws_folder = 'create_sws_folder',
+  update_sws_folder = 'update_sws_folder',
+  delete_sws_folder = 'delete_sws_folder',
+  sort_sws_folder = 'sort_sws_folder',
+  replicate_sws_folder = 'replicate_sws_folder',
+  restore_sws_folder = 'restore_sws_folder',
+  forceDelete_sws_folder = 'forceDelete_sws_folder',
+  // Short links folder
+  viewAny_sws_sl_folder = 'viewAny_sws_sl_folder',
+  view_sws_sl_folder = 'view_sws_sl_folder',
+  create_sws_sl_folder = 'create_sws_sl_folder',
+  update_sws_sl_folder = 'update_sws_sl_folder',
+  delete_sws_sl_folder = 'delete_sws_sl_folder',
+  sort_sws_sl_folder = 'sort_sws_sl_folder',
+  replicate_sws_sl_folder = 'replicate_sws_sl_folder',
+  restore_sws_sl_folder = 'restore_sws_sl_folder',
+  forceDelete_sws_sl_folder = 'forceDelete_sws_sl_folder',
+  // Link-in-bio
+  viewAny_sws_lib_folder = 'viewAny_sws_lib_folder',
+  view_sws_lib_folder = 'view_sws_lib_folder',
+  create_sws_lib_folder = 'create_sws_lib_folder',
+  update_sws_lib_folder = 'update_sws_lib_folder',
+  delete_sws_lib_folder = 'delete_sws_lib_folder',
+  sort_sws_lib_folder = 'sort_sws_lib_folder',
+  replicate_sws_lib_folder = 'replicate_sws_lib_folder',
+  restore_sws_lib_folder = 'restore_sws_lib_folder',
+  forceDelete_sws_lib_folder = 'forceDelete_sws_lib_folder',
+  // Pixel
+  viewAny_sws_pixel = 'viewAny_sws_pixel',
+  view_sws_pixel = 'view_sws_pixel',
+  create_sws_pixel = 'create_sws_pixel',
+  update_sws_pixel = 'update_sws_pixel',
+  delete_sws_pixel = 'delete_sws_pixel',
+  replicate_sws_pixel = 'replicate_sws_pixel',
+  restore_sws_pixel = 'restore_sws_pixel',
+  forceDelete_sws_pixel = 'forceDelete_sws_pixel',
+  // Utm Tag
+  viewAny_sws_utmTag = 'viewAny_sws_utmTag',
+  view_sws_utmTag = 'view_sws_utmTag',
+  create_sws_utmTag = 'create_sws_utmTag',
+  update_sws_utmTag = 'update_sws_utmTag',
+  delete_sws_utmTag = 'delete_sws_utmTag',
+  replicate_sws_utmTag = 'replicate_sws_utmTag',
+  restore_sws_utmTag = 'restore_sws_utmTag',
+  forceDelete_sws_utmTag = 'forceDelete_sws_utmTag',
+  // Embeded widgets
+  viewAny_sws_embededWidget = 'viewAny_sws_embededWidget',
+  view_sws_embededWidget = 'view_sws_embededWidget',
+  create_sws_embededWidget = 'create_sws_embededWidget',
+  update_sws_embededWidget = 'update_sws_embededWidget',
+  delete_sws_embededWidget = 'delete_sws_embededWidget',
+  replicate_sws_embededWidget = 'replicate_sws_embededWidget',
+  restore_sws_embededWidget = 'restore_sws_embededWidget',
+  forceDelete_sws_embededWidget = 'forceDelete_sws_embededWidget',
+  // short link
+  viewAny_sws_shortLink = 'viewAny_sws_shortLink',
+  view_sws_shortLink = 'view_sws_shortLink',
+  create_sws_shortLink = 'create_sws_shortLink',
+  update_sws_shortLink = 'update_sws_shortLink',
+  delete_sws_shortLink = 'delete_sws_shortLink',
+  replicate_sws_shortLink = 'replicate_sws_shortLink',
+  restore_sws_shortLink = 'restore_sws_shortLink',
+  forceDelete_sws_shortLink = 'forceDelete_sws_shortLink',
+  // link in bio
+  viewAny_sws_linkInBio = 'viewAny_sws_linkInBio',
+  view_sws_linkInBio = 'view_sws_linkInBio',
+  create_sws_linkInBio = 'create_sws_linkInBio',
+  update_sws_linkInBio = 'update_sws_linkInBio',
+  delete_sws_linkInBio = 'delete_sws_linkInBio',
+  replicate_sws_linkInBio = 'replicate_sws_linkInBio',
+  restore_sws_linkInBio = 'restore_sws_linkInBio',
+  forceDelete_sws_linkInBio = 'forceDelete_sws_linkInBio',
+  // time slot
+  viewAny_sws_timeSlot = 'viewAny_sws_timeSlot',
+  view_sws_timeSlot = 'view_sws_timeSlot',
+  create_sws_timeSlot = 'create_sws_timeSlot',
+  update_sws_timeSlot = 'update_sws_timeSlot',
+  delete_sws_timeSlot = 'delete_sws_timeSlot',
+  replicate_sws_timeSlot = 'replicate_sws_timeSlot',
+  restore_sws_timeSlot = 'restore_sws_timeSlot',
+  forceDelete_sws_timeSlot = 'forceDelete_sws_timeSlot',
+  // label
+  viewAny_sws_label = 'viewAny_sws_label',
+  view_sws_label = 'view_sws_label',
+  create_sws_label = 'create_sws_label',
+  update_sws_label = 'update_sws_label',
+  delete_sws_label = 'delete_sws_label',
+  replicate_sws_label = 'replicate_sws_label',
+  restore_sws_label = 'restore_sws_label',
+  forceDelete_sws_label = 'forceDelete_sws_label',
+  // comment
+  viewAny_sws_comment = 'viewAny_sws_comment',
+  view_sws_comment = 'view_sws_comment',
+  create_sws_comment = 'create_sws_comment',
+  update_sws_comment = 'update_sws_comment',
+  delete_sws_comment = 'delete_sws_comment',
+  replicate_sws_comment = 'replicate_sws_comment',
+  restore_sws_comment = 'restore_sws_comment',
+  forceDelete_sws_comment = 'forceDelete_sws_comment'
 }

@@ -27,7 +27,7 @@ import GeoLocation from '@/components/UserDashboard/GeoLocation';
 import LinkExpiration from '@/components/UserDashboard/LinkExpiration';
 import LinkPassword from '@/components/UserDashboard/Password';
 import LinkFavIcon from '@/components/UserDashboard/Favicon';
-import GDPRPopup from '@/components/UserDashboard/GDPRPopup';
+import GDPRPopup from '@/components/UserDashboard/GdprPopup';
 import {
   ZIonCol,
   ZIonText,
@@ -519,7 +519,6 @@ const LinkInBioShareSettings: React.FC = () => {
                           <NewLinkFolder
                             _foldersData={[]}
                             _state={folderState.linkInBio}
-                            workspaceId={workspaceId}
                           />
 
                           {/* Add Notes */}

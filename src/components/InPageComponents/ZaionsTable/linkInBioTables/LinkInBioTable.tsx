@@ -462,7 +462,10 @@ const ZInpageTable: React.FC = () => {
                       CONSTANTS.RouteParams.workspace.workspaceId,
                       CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                     ],
-                    values: [workspaceId, 'all'],
+                    values: [
+                      workspaceId,
+                      CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                    ],
                     routeSearchParams: {
                       pageindex: 0,
                       pagesize: zLinkInBioTable
@@ -501,7 +504,10 @@ const ZInpageTable: React.FC = () => {
                       CONSTANTS.RouteParams.workspace.workspaceId,
                       CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                     ],
-                    values: [workspaceId, 'all'],
+                    values: [
+                      workspaceId,
+                      CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                    ],
                     routeSearchParams: {
                       pageindex:
                         zLinkInBioTable.getState().pagination.pageIndex - 1,
@@ -540,7 +546,10 @@ const ZInpageTable: React.FC = () => {
                       CONSTANTS.RouteParams.workspace.workspaceId,
                       CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                     ],
-                    values: [workspaceId, 'all'],
+                    values: [
+                      workspaceId,
+                      CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                    ],
                     routeSearchParams: {
                       pageindex:
                         zLinkInBioTable.getState().pagination.pageIndex + 1,
@@ -581,7 +590,10 @@ const ZInpageTable: React.FC = () => {
                       CONSTANTS.RouteParams.workspace.workspaceId,
                       CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                     ],
-                    values: [workspaceId, 'all'],
+                    values: [
+                      workspaceId,
+                      CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                    ],
                     routeSearchParams: {
                       pageindex: zLinkInBioTable.getPageCount() - 1,
                       pagesize: zLinkInBioTable
@@ -623,7 +635,7 @@ const ZInpageTable: React.FC = () => {
                     CONSTANTS.RouteParams.workspace.workspaceId,
                     CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                   ],
-                  values: [workspaceId, 'all'],
+                  values: [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE],
                   routeSearchParams: {
                     pageindex: zLinkInBioTable.getPageCount() - 1,
                     pagesize: Number(e.target.value)

@@ -38,12 +38,12 @@ explaining talha - members permissions management in zlink and any other product
 
 - no other option on shared workspaces, only two options “view” & “leave”
 - /app/s/ws/{wsId}/startup.
-    - - fetching data on this page, so user can see what he can do
-          - - - queries we will fetch on this page
-                  - - - - permissions of this user in this workspace, shortlinks, link in bios, posts
-- after fetching permissions and other (as mimium as possible) data move user to /app/s/ws/{wsId}/startup
-    - - total 4 sections, one for workspace info, one for shortlinks, one for link in bio, one for posts.
-          - - - total number of {shortlinks/bios/posts} in their section
+  - - fetching data on this page, so user can see what he can do
+        - - - queries we will fetch on this page
+                - - - - permissions of this user in this workspace, shortlinks, link in bios, posts
+- after fetching permissions and other (as mimium as possible) data move user to /app/s/ws/{wsId}/view
+  - - total 4 sections, one for workspace info, one for shortlinks, one for link in bio, one for posts.
+        - - - total number of {shortlinks/bios/posts} in their section
 
 $wsTeamMember = WSTeamMember
 $roleId = $wsTeamMember->mem

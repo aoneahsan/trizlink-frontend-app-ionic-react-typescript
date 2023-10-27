@@ -98,21 +98,25 @@ const ZViewInvitationModal: React.FC<{
   // api to get Invitation data
   const { data: userInvitationData, isFetching: isInvitationFetching } =
     useZRQGetRequest<WSTeamMembersInterface>({
-      _url: API_URL_ENUM.ws_team_member_invite_get,
+      _url: API_URL_ENUM.member_invite_get,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.INVITATION_GET,
         memberInviteId
       ],
       _showLoader: false,
       _checkPermissions: false,
-      _itemsIds: [memberInviteId],
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.memberInviteId],
+      _itemsIds: [workspaceId, memberInviteId],
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.workspaceId,
+        CONSTANTS.RouteParams.workspace.memberInviteId
+      ],
+      _shouldFetchWhenIdPassed: workspaceId && memberInviteId ? false : true,
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
 
   // update invitation data api
   const { mutateAsync: updateInvitationAsyncMutate } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.ws_team_member_update,
+    _url: API_URL_ENUM.member_update,
     _queriesKeysToInvalidate: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION.MAIN,
       workspaceId
@@ -133,8 +137,11 @@ const ZViewInvitationModal: React.FC<{
           requestData: zStringify({
             status: _item
           }),
-          itemIds: [memberInviteId],
-          urlDynamicParts: [CONSTANTS.RouteParams.workspace.memberInviteId]
+          itemIds: [workspaceId, memberInviteId],
+          urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.workspaceId,
+            CONSTANTS.RouteParams.workspace.memberInviteId
+          ]
         });
 
         if (
@@ -158,7 +165,7 @@ const ZViewInvitationModal: React.FC<{
             });
 
             const getWSShareWorkspaceData = getRQCDataHandler({
-              key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN]
+              key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
             });
 
             const __oldData =
@@ -169,9 +176,7 @@ const ZViewInvitationModal: React.FC<{
 
             if (_item === ZTeamMemberInvitationEnum.accepted) {
               await updateRQCDataHandler({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN
-                ],
+                key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
                 data: {
                   ...__data.workspace,
                   id: __data?.id,
@@ -185,9 +190,7 @@ const ZViewInvitationModal: React.FC<{
               );
 
               await updateRQCDataHandler({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN
-                ],
+                key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
                 data: __updatedData,
                 id: '',
                 updateHoleData: true,

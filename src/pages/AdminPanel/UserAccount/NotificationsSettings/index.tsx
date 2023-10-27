@@ -119,7 +119,7 @@ const ZNotificationSettings: React.FC = () => {
   const { data: WSShareData, isFetching: isWSShareDataFetching } =
     useZRQGetRequest<wsShareInterface[]>({
       _url: API_URL_ENUM.ws_share_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.WS_SHARE_MAIN]
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
     });
 
   // #endregion

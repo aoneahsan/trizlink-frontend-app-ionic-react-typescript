@@ -28,7 +28,6 @@ import {
   ZIonList,
   ZIonRow
 } from '@/components/ZIonComponents';
-import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 
 /**
  * Custom Hooks Imports go down
@@ -61,6 +60,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * */
 import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 import MESSAGES from '@/utils/messages';
+import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 
 /**
  * Style files Imports go down

@@ -47,6 +47,7 @@ import { UserAccountType } from '@/types/UserAccount/index.type';
  * ? Import of style sheet is a style import
  * */
 import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
+import dayjs from 'dayjs';
 
 /**
  * Images Imports go down
@@ -105,7 +106,18 @@ const ZUserInfoPopover: React.FC<ZUserInfoPopoverInterface> = ({
       <ZIonCol
         size='12'
         className='px-3 py-3 mt-2 border-top'>
-        <ZIonText className='block text-sm'>last seen: just now</ZIonText>
+        <ZIonText className='block text-sm'>
+          last seen:
+          <ZIonText
+            className='font-semibold ms-1'
+            color={
+              dayjs(user?.lastSeenAt).isAfter(dayjs()) ? 'success' : 'tertiary'
+            }>
+            {dayjs(user?.lastSeenAt).isAfter(dayjs())
+              ? 'Active'
+              : user?.lastSeenAtFormatted}
+          </ZIonText>
+        </ZIonText>
       </ZIonCol>
     </ZIonRow>
   );

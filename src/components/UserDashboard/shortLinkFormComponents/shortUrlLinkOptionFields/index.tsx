@@ -54,6 +54,7 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import {
   ShortLinkType,
+  ShortUrlLinkOptionType,
   ZaionsShortUrlOptionFieldsValuesInterface
 } from '@/types/AdminPanel/linksType';
 import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
@@ -103,13 +104,15 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
   const [newShortLinkTypeOptionDataAtom, setNewShortLinkTypeOptionDataAtom] =
     useRecoilState(NewShortLinkSelectTypeOption);
 
-  // getting link-in-bio and workspace ids from url with the help of useParams.
-  const { editLinkId, workspaceId } = useParams<{
+  // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
+  const { editLinkId, workspaceId, wsShareId, shareWSMemberId } = useParams<{
     editLinkId: string;
     workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
   }>();
 
-  // get short link data api.
+  // if owned workspace then this api will fetch the current short link data in this workspace.
   const { data: selectedShortLink, isFetching: isSelectedShortLinkFetching } =
     useZRQGetRequest<ShortLinkType>({
       _url: API_URL_ENUM.shortLinks_update_delete,
@@ -124,9 +127,32 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.shortLink.shortLinkId
       ],
-      _shouldFetchWhenIdPassed: !editLinkId ? true : false,
-      _extractType: ZRQGetRequestExtractEnum.extractItem
+      _shouldFetchWhenIdPassed: editLinkId && workspaceId ? false : true,
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _showLoader: false
     });
+
+  // if share workspace then this api will fetch the current short link data in this share workspace.
+  const {
+    data: swsSelectedShortLink,
+    isFetching: isSWSSelectedShortLinkFetching
+  } = useZRQGetRequest<ShortLinkType>({
+    _url: API_URL_ENUM.shortLinks_update_delete,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
+      workspaceId,
+      editLinkId
+    ],
+    _authenticated: true,
+    _itemsIds: [shareWSMemberId, editLinkId],
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.shareWSMemberId,
+      CONSTANTS.RouteParams.shortLink.shortLinkId
+    ],
+    _shouldFetchWhenIdPassed: editLinkId && wsShareId ? false : true,
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
+  });
 
   const { presentZIonPopover: presentShortLinkOptionsPopover } = useZIonPopover(
     ZShortLinkOptionsPopover,
@@ -137,19 +163,27 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 
   useEffect(() => {
     try {
-      const selectedTypeOptionData = LinkTypeOptionsData.find(
-        el => el.type === selectedShortLink?.type
-      );
+      let selectedTypeOptionData: ShortUrlLinkOptionType | undefined;
 
-      if (selectedShortLink && selectedTypeOptionData) {
+      if (workspaceId) {
+        selectedTypeOptionData = LinkTypeOptionsData.find(
+          el => el.type === selectedShortLink?.type
+        );
+      } else if (wsShareId) {
+        selectedTypeOptionData = LinkTypeOptionsData.find(
+          el => el.type === swsSelectedShortLink?.type
+        );
+      }
+
+      if (selectedShortLink && selectedTypeOptionData?.id) {
         setNewShortLinkTypeOptionDataAtom(_ => ({
-          ...selectedTypeOptionData
+          ...(selectedTypeOptionData as ShortUrlLinkOptionType)
         }));
       }
     } catch (error) {
       reportCustomError(error);
     }
-  }, [selectedShortLink]);
+  }, [selectedShortLink, workspaceId, wsShareId, swsSelectedShortLink]);
 
   const ShortLinkPlaceholder = () => {
     if (newShortLinkTypeOptionDataAtom) {
@@ -264,7 +298,8 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 
   return (
     <>
-      {!isSelectedShortLinkFetching && (
+      {((workspaceId && !isSelectedShortLinkFetching) ||
+        (wsShareId && !isSWSSelectedShortLinkFetching)) && (
         <ZIonGrid
           className={classNames({
             'mt-2': true,
@@ -657,7 +692,10 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
         </ZIonGrid>
       )}
 
-      {isSelectedShortLinkFetching && <ZaionsShortUrlOptionFieldsSkeleton />}
+      {((workspaceId && isSelectedShortLinkFetching) ||
+        (wsShareId && isSWSSelectedShortLinkFetching)) && (
+        <ZaionsShortUrlOptionFieldsSkeleton />
+      )}
     </>
   );
 };

@@ -37,6 +37,7 @@ import { useRecoilState } from 'recoil';
  * ? Like import of custom components is a custom import
  * */
 import { ZIonSegment, ZIonSegmentButton } from '@/components/ZIonComponents';
+import ZCan from '@/components/Can';
 
 /**
  * Global Constants Imports go down
@@ -49,6 +50,12 @@ import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { replaceParams, replaceRouteParams } from '@/utils/helpers';
 import { API_URL_ENUM } from '@/utils/enums';
+import {
+  permissionCheckModeEnum,
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 
 /**
@@ -70,8 +77,6 @@ import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
-import ZCan from '@/components/Can';
 
 /**
  * Images Imports go down
@@ -97,8 +102,10 @@ const AdminPanelSidebarMenu: React.FC<{
     useRecoilState(ZDashboardRState);
 
   // getting workspace ids from url with the help of useParams.
-  const { workspaceId } = useParams<{
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
     workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
   }>();
 
   // get workspace data api.
@@ -109,9 +116,27 @@ const AdminPanelSidebarMenu: React.FC<{
       _authenticated: true,
       _itemsIds: [workspaceId],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: !workspaceId ? true : false,
-      _extractType: ZRQGetRequestExtractEnum.extractItem
+      _shouldFetchWhenIdPassed: workspaceId ? false : true,
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _showLoader: false
     });
+
+  const {
+    data: selectedShareWorkspace,
+    isFetching: isSelectedShareWorkspaceFetching
+  } = useZRQGetRequest<workspaceInterface>({
+    _url: API_URL_ENUM.ws_share_info_data,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
+      wsShareId
+    ],
+    _authenticated: true,
+    _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
+  });
 
   // Made this constant for readability.
   const isExpand = ZDashboardState.dashboardMainSidebarIsCollabes.isExpand;
@@ -119,7 +144,11 @@ const AdminPanelSidebarMenu: React.FC<{
   const { zNavigatePushRoute } = useZNavigate();
 
   // is fetching.
-  const isZFetching = isSelectedWorkspaceFetching;
+  let isZFetching = isSelectedWorkspaceFetching;
+
+  if (wsShareId) {
+    isZFetching = isSelectedShareWorkspaceFetching;
+  }
 
   return (
     <>
@@ -157,13 +186,19 @@ const AdminPanelSidebarMenu: React.FC<{
                   size='12'
                   className='flex py-4 ion-justify-content-center'>
                   {!isZFetching && (
-                    <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
+                    <ZIonRouterLink
+                      routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}>
                       <ZIonImg
                         src={
-                          selectedWorkspace?.workspaceImage ||
-                          getUiAvatarApiUrl({
-                            name: selectedWorkspace?.workspaceName
-                          })
+                          wsShareId
+                            ? selectedShareWorkspace?.workspaceImage ||
+                              getUiAvatarApiUrl({
+                                name: selectedShareWorkspace?.workspaceName
+                              })
+                            : selectedWorkspace?.workspaceImage ||
+                              getUiAvatarApiUrl({
+                                name: selectedWorkspace?.workspaceName
+                              })
                         }
                         alt={`${PRODUCT_NAME} logo`}
                         className={classNames(classes['zaions-ap-msm-logo'], {
@@ -194,7 +229,18 @@ const AdminPanelSidebarMenu: React.FC<{
                 </ZIonCol>
 
                 {/* Short Links */}
-                <ZCan havePermissions={[permissionsEnum.viewAny_shortLink]}>
+                <ZCan
+                  shareWSId={wsShareId}
+                  permissionType={
+                    wsShareId
+                      ? permissionsTypeEnum.shareWSMemberPermissions
+                      : permissionsTypeEnum.loggedInUserPermissions
+                  }
+                  havePermissions={
+                    wsShareId
+                      ? [shareWSPermissionEnum.viewAny_sws_shortLink]
+                      : [permissionsEnum.viewAny_shortLink]
+                  }>
                   <ZIonCol
                     size='12'
                     className='my-3'>
@@ -207,15 +253,37 @@ const AdminPanelSidebarMenu: React.FC<{
                         zaions__primary_set:
                           activePage === AdminPanelSidebarMenuPageEnum.shortLink
                       })}
-                      routerLink={replaceRouteParams(
-                        ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                        [
-                          CONSTANTS.RouteParams.workspace.workspaceId,
-                          CONSTANTS.RouteParams
-                            .folderIdToGetShortLinksOrLinkInBio
-                        ],
-                        [workspaceId, 'all']
-                      )}>
+                      routerLink={
+                        workspaceId
+                          ? replaceRouteParams(
+                              ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                              [
+                                CONSTANTS.RouteParams.workspace.workspaceId,
+                                CONSTANTS.RouteParams
+                                  .folderIdToGetShortLinksOrLinkInBio
+                              ],
+                              [
+                                workspaceId,
+                                CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                              ]
+                            )
+                          : wsShareId && shareWSMemberId
+                          ? replaceRouteParams(
+                              ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                              [
+                                CONSTANTS.RouteParams.workspace.wsShareId,
+                                CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                                CONSTANTS.RouteParams
+                                  .folderIdToGetShortLinksOrLinkInBio
+                              ],
+                              [
+                                wsShareId,
+                                shareWSMemberId,
+                                CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                              ]
+                            )
+                          : ''
+                      }>
                       <ZIonText
                         className={classNames({
                           'flex ion-align-items-center': true,
@@ -240,7 +308,18 @@ const AdminPanelSidebarMenu: React.FC<{
                 </ZCan>
 
                 {/* Link-in-bio */}
-                <ZCan havePermissions={[permissionsEnum.viewAny_linkInBio]}>
+                <ZCan
+                  shareWSId={wsShareId}
+                  permissionType={
+                    wsShareId
+                      ? permissionsTypeEnum.shareWSMemberPermissions
+                      : permissionsTypeEnum.loggedInUserPermissions
+                  }
+                  havePermissions={
+                    wsShareId
+                      ? [shareWSPermissionEnum.viewAny_sws_linkInBio]
+                      : [permissionsEnum.viewAny_linkInBio]
+                  }>
                   <ZIonCol
                     size='12'
                     className='my-3'>
@@ -253,15 +332,37 @@ const AdminPanelSidebarMenu: React.FC<{
                         zaions__primary_set:
                           activePage === AdminPanelSidebarMenuPageEnum.linkInBio
                       })}
-                      routerLink={replaceRouteParams(
-                        ZaionsRoutes.AdminPanel.LinkInBio.Main,
-                        [
-                          CONSTANTS.RouteParams.workspace.workspaceId,
-                          CONSTANTS.RouteParams
-                            .folderIdToGetShortLinksOrLinkInBio
-                        ],
-                        [workspaceId, 'all']
-                      )}>
+                      routerLink={
+                        workspaceId
+                          ? replaceRouteParams(
+                              ZaionsRoutes.AdminPanel.LinkInBio.Main,
+                              [
+                                CONSTANTS.RouteParams.workspace.workspaceId,
+                                CONSTANTS.RouteParams
+                                  .folderIdToGetShortLinksOrLinkInBio
+                              ],
+                              [
+                                workspaceId,
+                                CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                              ]
+                            )
+                          : wsShareId
+                          ? replaceRouteParams(
+                              ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Main,
+                              [
+                                CONSTANTS.RouteParams.workspace.wsShareId,
+                                CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                                CONSTANTS.RouteParams
+                                  .folderIdToGetShortLinksOrLinkInBio
+                              ],
+                              [
+                                wsShareId,
+                                shareWSMemberId,
+                                CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                              ]
+                            )
+                          : ''
+                      }>
                       <ZIonText
                         className={classNames({
                           'flex ion-align-items-center': true,
@@ -442,44 +543,83 @@ const AdminPanelSidebarMenu: React.FC<{
 								</ZIonCol> */}
 
                 {/* Settings */}
-                <ZIonCol
-                  size='12'
-                  className='my-3'>
-                  <ZIonButton
-                    fill='clear'
-                    color='light'
-                    expand='block'
-                    className={classNames({
-                      'ion-no-padding ion-no-margin normal-case': true,
-                      zaions__primary_set:
-                        activePage === AdminPanelSidebarMenuPageEnum.settings
-                    })}
-                    routerLink={replaceRouteParams(
-                      ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
-                      [CONSTANTS.RouteParams.workspace.workspaceId],
-                      [workspaceId]
-                    )}>
-                    <ZIonText
+                <ZCan
+                  shareWSId={wsShareId}
+                  checkMode={permissionCheckModeEnum.any}
+                  permissionType={
+                    wsShareId
+                      ? permissionsTypeEnum.shareWSMemberPermissions
+                      : permissionsTypeEnum.loggedInUserPermissions
+                  }
+                  havePermissions={
+                    wsShareId
+                      ? [
+                          shareWSPermissionEnum.viewAny_sws_linkInBio,
+                          shareWSPermissionEnum.viewAny_sws_pixel,
+                          shareWSPermissionEnum.viewAny_sws_utmTag,
+                          shareWSPermissionEnum.viewAny_sws_embededWidget
+                        ]
+                      : [
+                          permissionsEnum.viewAny_ws_member,
+                          permissionsEnum.viewAny_pixel,
+                          permissionsEnum.viewAny_utmTag,
+                          permissionsEnum.viewAny_embededWidget
+                        ]
+                  }>
+                  <ZIonCol
+                    size='12'
+                    className='my-3'>
+                    <ZIonButton
+                      fill='clear'
+                      color='light'
+                      expand='block'
                       className={classNames({
-                        'flex ion-align-items-center': true,
-                        'ps-3 me-auto': isExpand
-                      })}>
-                      <ZIonIcon
-                        icon={settingsOutline}
-                        size='large'
-                      />
-
+                        'ion-no-padding ion-no-margin normal-case': true,
+                        zaions__primary_set:
+                          activePage === AdminPanelSidebarMenuPageEnum.settings
+                      })}
+                      routerLink={
+                        workspaceId
+                          ? replaceRouteParams(
+                              ZaionsRoutes.AdminPanel.Setting.AccountSettings
+                                .Members,
+                              [CONSTANTS.RouteParams.workspace.workspaceId],
+                              [workspaceId]
+                            )
+                          : wsShareId && shareWSMemberId
+                          ? replaceRouteParams(
+                              ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                                .Members,
+                              [
+                                CONSTANTS.RouteParams.workspace.wsShareId,
+                                CONSTANTS.RouteParams.workspace.shareWSMemberId
+                              ],
+                              [wsShareId, shareWSMemberId]
+                            )
+                          : ''
+                      }>
                       <ZIonText
                         className={classNames({
-                          'ps-2 zaions-transition': true,
-                          'inline-block': isExpand,
-                          hidden: !isExpand
+                          'flex ion-align-items-center': true,
+                          'ps-3 me-auto': isExpand
                         })}>
-                        Settings
+                        <ZIonIcon
+                          icon={settingsOutline}
+                          size='large'
+                        />
+
+                        <ZIonText
+                          className={classNames({
+                            'ps-2 zaions-transition': true,
+                            'inline-block': isExpand,
+                            hidden: !isExpand
+                          })}>
+                          Settings
+                        </ZIonText>
                       </ZIonText>
-                    </ZIonText>
-                  </ZIonButton>
-                </ZIonCol>
+                    </ZIonButton>
+                  </ZIonCol>
+                </ZCan>
               </ZIonRow>
             </ZIonGrid>
           </ZIonContent>
@@ -494,7 +634,18 @@ const AdminPanelSidebarMenu: React.FC<{
             // color='secondary'
             className='zaions_pretty_scrollbar'>
             {/* Short Links */}
-            <ZCan havePermissions={[permissionsEnum.viewAny_shortLink]}>
+            <ZCan
+              shareWSId={wsShareId}
+              permissionType={
+                wsShareId
+                  ? permissionsTypeEnum.shareWSMemberPermissions
+                  : permissionsTypeEnum.loggedInUserPermissions
+              }
+              havePermissions={
+                wsShareId
+                  ? [shareWSPermissionEnum.viewAny_sws_shortLink]
+                  : [permissionsEnum.viewAny_shortLink]
+              }>
               <ZIonSegmentButton
                 value={AdminPanelSidebarMenuPageEnum.shortLink}
                 className='normal-case'
@@ -506,7 +657,7 @@ const AdminPanelSidebarMenu: React.FC<{
                         CONSTANTS.RouteParams.workspace.workspaceId,
                         CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                       ],
-                      [workspaceId, 'all']
+                      [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
                     )
                   );
                 }}>
@@ -515,7 +666,18 @@ const AdminPanelSidebarMenu: React.FC<{
             </ZCan>
 
             {/* Link-in-bio */}
-            <ZCan havePermissions={[permissionsEnum.viewAny_linkInBio]}>
+            <ZCan
+              shareWSId={wsShareId}
+              permissionType={
+                wsShareId
+                  ? permissionsTypeEnum.shareWSMemberPermissions
+                  : permissionsTypeEnum.loggedInUserPermissions
+              }
+              havePermissions={
+                wsShareId
+                  ? [shareWSPermissionEnum.viewAny_sws_linkInBio]
+                  : [permissionsEnum.viewAny_linkInBio]
+              }>
               <ZIonSegmentButton
                 value={AdminPanelSidebarMenuPageEnum.linkInBio}
                 className='normal-case'
@@ -527,7 +689,7 @@ const AdminPanelSidebarMenu: React.FC<{
                         CONSTANTS.RouteParams.workspace.workspaceId,
                         CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                       ],
-                      [workspaceId, 'all']
+                      [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
                     )
                   );
                 }}>
@@ -544,7 +706,7 @@ const AdminPanelSidebarMenu: React.FC<{
                   replaceParams(
                     ZaionsRoutes.AdminPanel.ShortLinks.Main,
                     CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-                    'all'
+                    CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                   )
                 );
               }}>
@@ -560,7 +722,7 @@ const AdminPanelSidebarMenu: React.FC<{
                   replaceParams(
                     ZaionsRoutes.AdminPanel.ShortLinks.Main,
                     CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-                    'all'
+                    CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                   )
                 );
               }}>
@@ -594,7 +756,7 @@ const AdminPanelSidebarMenu: React.FC<{
                   replaceParams(
                     ZaionsRoutes.AdminPanel.ShortLinks.Main,
                     CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-                    'all'
+                    CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                   )
                 );
               }}>
@@ -602,20 +764,44 @@ const AdminPanelSidebarMenu: React.FC<{
             </ZIonSegmentButton>
 
             {/* Settings */}
-            <ZIonSegmentButton
-              value='settings'
-              className='normal-case'
-              onClick={() => {
-                zNavigatePushRoute(
-                  replaceRouteParams(
-                    ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
-                    [CONSTANTS.RouteParams.workspace.workspaceId],
-                    [workspaceId]
-                  )
-                );
-              }}>
-              Settings
-            </ZIonSegmentButton>
+            <ZCan
+              shareWSId={wsShareId}
+              checkMode={permissionCheckModeEnum.any}
+              permissionType={
+                wsShareId
+                  ? permissionsTypeEnum.shareWSMemberPermissions
+                  : permissionsTypeEnum.loggedInUserPermissions
+              }
+              havePermissions={
+                wsShareId
+                  ? [
+                      shareWSPermissionEnum.viewAny_sws_linkInBio,
+                      shareWSPermissionEnum.viewAny_sws_pixel,
+                      shareWSPermissionEnum.viewAny_sws_utmTag,
+                      shareWSPermissionEnum.viewAny_sws_embededWidget
+                    ]
+                  : [
+                      permissionsEnum.viewAny_ws_member,
+                      permissionsEnum.viewAny_pixel,
+                      permissionsEnum.viewAny_utmTag,
+                      permissionsEnum.viewAny_embededWidget
+                    ]
+              }>
+              <ZIonSegmentButton
+                value='settings'
+                className='normal-case'
+                onClick={() => {
+                  zNavigatePushRoute(
+                    replaceRouteParams(
+                      ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
+                      [CONSTANTS.RouteParams.workspace.workspaceId],
+                      [workspaceId]
+                    )
+                  );
+                }}>
+                Settings
+              </ZIonSegmentButton>
+            </ZCan>
           </ZIonSegment>
         </ZIonCol>
       )}

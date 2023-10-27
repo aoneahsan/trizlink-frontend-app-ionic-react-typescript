@@ -38,7 +38,6 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import {
   useZInvalidateReactQueries,
-  useZRQDeleteRequest,
   useZRQGetRequest
 } from '@/ZaionsHooks/zreactquery-hooks';
 
@@ -46,7 +45,11 @@ import {
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import {
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 import { reportCustomError } from '@/utils/customErrorType';
 import CONSTANTS from '@/utils/constants';
 import { API_URL_ENUM } from '@/utils/enums';
@@ -57,6 +60,7 @@ import { API_URL_ENUM } from '@/utils/enums';
  * */
 import { PixelAccountType } from '@/types/AdminPanel/linksType';
 import { FormMode } from '@/types/AdminPanel/index.type';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Recoil State Imports go down
@@ -85,9 +89,11 @@ import { FormMode } from '@/types/AdminPanel/index.type';
  * */
 
 const ZWSSettingPixelListPage: React.FC = () => {
-  // getting current workspace id form params.
-  const { workspaceId } = useParams<{
+  // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
     workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
   }>();
 
   // #region Custom hooks.
@@ -97,20 +103,52 @@ const ZWSSettingPixelListPage: React.FC = () => {
   // #endregion
 
   // #region APIs
+  //
   const { data: pixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN]
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN, workspaceId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _itemsIds: [workspaceId],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true
   });
 
-  const { mutate: deletePixelAccountMutate } = useZRQDeleteRequest({
-    _url: API_URL_ENUM.userPixelAccounts_update_delete
+  const { data: swsPixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
+    _url: API_URL_ENUM.sws_pixel_account_create_list,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
+      wsShareId
+    ],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true
+  });
+
+  // If share-workspace then this api will fetch role & permission of current member in this share-workspace.
+  const {
+    data: getMemberRolePermissions,
+    isFetching: isGetMemberRolePermissionsFetching,
+    isError: isGetMemberRolePermissionsError
+  } = useZRQGetRequest<{
+    memberRole?: string;
+    memberPermissions?: string[];
+  }>({
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
+      wsShareId
+    ],
+    _url: API_URL_ENUM.ws_share_member_role_permissions,
+    _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true,
+    _itemsIds: [shareWSMemberId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
   });
   // #endregion
 
   // #region Modals & popovers
   const { presentZIonModal: presentZAddPixelAccount } = useZIonModal(
     ZaionsAddPixelAccount,
-    { formMode: FormMode.ADD }
+    { formMode: FormMode.ADD, workspaceId, wsShareId, shareWSMemberId }
   );
 
   // #endregion
@@ -118,9 +156,17 @@ const ZWSSettingPixelListPage: React.FC = () => {
   // #region Functions.
   const invalidedQueries = async () => {
     try {
-      await zInvalidateReactQueries([
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN
-      ]);
+      if (workspaceId) {
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
+          workspaceId
+        ]);
+      } else if (wsShareId && shareWSMemberId) {
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
+          wsShareId
+        ]);
+      }
     } catch (error) {
       reportCustomError(error);
     }
@@ -128,7 +174,20 @@ const ZWSSettingPixelListPage: React.FC = () => {
   // #endregion
 
   return (
-    <>
+    <ZCan
+      shareWSId={wsShareId}
+      havePermissions={
+        workspaceId
+          ? [permissionsEnum.viewAny_pixel]
+          : wsShareId && shareWSMemberId
+          ? [shareWSPermissionEnum.viewAny_sws_pixel]
+          : []
+      }
+      permissionType={
+        wsShareId && shareWSMemberId
+          ? permissionsTypeEnum.shareWSMemberPermissions
+          : permissionsTypeEnum.loggedInUserPermissions
+      }>
       {/* filter, refresh, create buttons */}
       <ZIonRow className='border rounded-lg zaions__light_bg ion-align-items-center ion-padding'>
         <ZIonCol
@@ -156,7 +215,14 @@ const ZWSSettingPixelListPage: React.FC = () => {
               'text-sm': !isLgScale,
               'ion-text-center': !isLgScale
             })}>
-            Add team pixels & manage your pixels
+            {[
+              shareWSPermissionEnum.create_sws_pixel,
+              shareWSPermissionEnum.update_sws_pixel
+            ].some(el =>
+              getMemberRolePermissions?.memberPermissions?.includes(el)
+            ) || workspaceId
+              ? 'Pixel Mastery Zone: Add, Organize, and Manage Your pixels'
+              : 'Your Pixel View: Explore and Monitor Pixel Data'}
           </ZIonText>
         </ZIonCol>
 
@@ -172,7 +238,13 @@ const ZWSSettingPixelListPage: React.FC = () => {
             'w-full': !isSmScale
           })}>
           {/* Filter */}
-          {pixelAccountsData && pixelAccountsData?.length > 0 && (
+          {((workspaceId &&
+            pixelAccountsData &&
+            pixelAccountsData?.length > 0) ||
+            (wsShareId &&
+              shareWSMemberId &&
+              swsPixelAccountsData &&
+              swsPixelAccountsData?.length > 0)) && (
             <ZIonButton
               fill='outline'
               color='primary'
@@ -241,27 +313,42 @@ const ZWSSettingPixelListPage: React.FC = () => {
           </ZIonButton>
 
           {/* Create new pixel */}
-          <ZIonButton
-            color='primary'
-            fill='solid'
-            minHeight={isLgScale ? '39px' : '2rem'}
-            expand={!isLgScale ? 'block' : undefined}
-            testingselector={
-              CONSTANTS.testingSelectors.pixels.listPage.createBtn
+          <ZCan
+            shareWSId={wsShareId}
+            havePermissions={
+              workspaceId
+                ? [permissionsEnum.create_pixel]
+                : wsShareId && shareWSMemberId
+                ? [shareWSPermissionEnum.create_sws_pixel]
+                : []
             }
-            className={classNames({
-              'my-2': true,
-              'text-xs ion-no-margin ion-no-padding w-[33.33%]':
-                !isLgScale && isSmScale,
-              'w-full': !isSmScale
-            })}
-            onClick={() => {
-              presentZAddPixelAccount({
-                _cssClass: 'pixel-account-modal-size'
-              });
-            }}>
-            Create new pixel
-          </ZIonButton>
+            permissionType={
+              wsShareId && shareWSMemberId
+                ? permissionsTypeEnum.shareWSMemberPermissions
+                : permissionsTypeEnum.loggedInUserPermissions
+            }>
+            <ZIonButton
+              color='primary'
+              fill='solid'
+              minHeight={isLgScale ? '39px' : '2rem'}
+              expand={!isLgScale ? 'block' : undefined}
+              testingselector={
+                CONSTANTS.testingSelectors.pixels.listPage.createBtn
+              }
+              className={classNames({
+                'my-2': true,
+                'text-xs ion-no-margin ion-no-padding w-[33.33%]':
+                  !isLgScale && isSmScale,
+                'w-full': !isSmScale
+              })}
+              onClick={() => {
+                presentZAddPixelAccount({
+                  _cssClass: 'pixel-account-modal-size'
+                });
+              }}>
+              Create new pixel
+            </ZIonButton>
+          </ZCan>
 
           {/* {!isMdScale ? (
             <ZIonButton
@@ -289,7 +376,20 @@ const ZWSSettingPixelListPage: React.FC = () => {
         </ZIonCol>
       </ZIonRow>
 
-      <ZCan havePermissions={[permissionsEnum.view_pixel]}>
+      <ZCan
+        shareWSId={wsShareId}
+        havePermissions={
+          workspaceId
+            ? [permissionsEnum.view_pixel]
+            : wsShareId && shareWSMemberId
+            ? [shareWSPermissionEnum.view_sws_pixel]
+            : []
+        }
+        permissionType={
+          wsShareId && shareWSMemberId
+            ? permissionsTypeEnum.shareWSMemberPermissions
+            : permissionsTypeEnum.loggedInUserPermissions
+        }>
         <Suspense
           fallback={
             <ZIonRow className='h-full'>
@@ -299,7 +399,7 @@ const ZWSSettingPixelListPage: React.FC = () => {
           <ZPixelsTable />
         </Suspense>
       </ZCan>
-    </>
+    </ZCan>
   );
 };
 

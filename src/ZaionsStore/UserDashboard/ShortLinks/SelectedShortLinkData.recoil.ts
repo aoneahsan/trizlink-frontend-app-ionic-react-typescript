@@ -8,5 +8,7 @@ import { ShortLinkType } from '@/types/AdminPanel/linksType/index';
 
 export const SelectedShortLinkData = atom<ShortLinkType>({
   key: 'SelectedShortLinkData_key',
-  default: {},
+  default: {
+    featureImg: {}
+  }
 });

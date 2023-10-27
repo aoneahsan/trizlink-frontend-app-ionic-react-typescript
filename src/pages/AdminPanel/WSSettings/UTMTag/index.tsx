@@ -45,7 +45,11 @@ import {
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import {
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 import { reportCustomError } from '@/utils/customErrorType';
 import CONSTANTS from '@/utils/constants';
 import { API_URL_ENUM } from '@/utils/enums';
@@ -56,6 +60,7 @@ import { API_URL_ENUM } from '@/utils/enums';
  * */
 import { FormMode } from '@/types/AdminPanel/index.type';
 import { UTMTagTemplateType } from '@/types/AdminPanel/linksType';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Recoil State Imports go down
@@ -84,9 +89,11 @@ import { UTMTagTemplateType } from '@/types/AdminPanel/linksType';
  * */
 
 const ZWSSettingUtmTagListPage: React.FC = () => {
-  // getting current workspace id form params.
-  const { workspaceId } = useParams<{
+  // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
     workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
   }>();
 
   // #region Custom hooks.
@@ -96,11 +103,44 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
   // #endregion
 
   // #region APIs
+  // If owned workspace then this api is used to fetch workspace utm tags data.
   const { data: UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
-    _itemsIds: [],
-    _urlDynamicParts: [],
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN, workspaceId],
+    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _itemsIds: [workspaceId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _showLoader: false
+  });
+
+  // If share workspace then this api is used to fetch share workspace utm tags data.
+  const { data: swsUTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
+    _url: API_URL_ENUM.sws_utm_tag_create_list,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN, wsShareId],
+    _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true,
+    _itemsIds: [shareWSMemberId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _showLoader: false
+  });
+
+  // If share-workspace then this api will fetch role & permission of current member in this share-workspace.
+  const {
+    data: getMemberRolePermissions,
+    isFetching: isGetMemberRolePermissionsFetching,
+    isError: isGetMemberRolePermissionsError
+  } = useZRQGetRequest<{
+    memberRole?: string;
+    memberPermissions?: string[];
+  }>({
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
+      wsShareId
+    ],
+    _url: API_URL_ENUM.ws_share_member_role_permissions,
+    _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true,
+    _itemsIds: [shareWSMemberId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
   });
   // #endregion
@@ -109,7 +149,10 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
   const { presentZIonModal: presentZUtmTagsFormModal } = useZIonModal(
     ZaionsAddUtmTags,
     {
-      formMode: FormMode.ADD
+      formMode: FormMode.ADD,
+      workspaceId,
+      wsShareId,
+      shareWSMemberId
     }
   );
   // #endregion
@@ -117,9 +160,17 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
   // #region Functions.
   const invalidedQueries = async () => {
     try {
-      await zInvalidateReactQueries([
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN
-      ]);
+      if (workspaceId) {
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
+          workspaceId
+        ]);
+      } else if (wsShareId && shareWSMemberId) {
+        await zInvalidateReactQueries([
+          CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN,
+          wsShareId
+        ]);
+      }
     } catch (error) {
       reportCustomError(error);
     }
@@ -127,7 +178,20 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
   // #endregion
 
   return (
-    <>
+    <ZCan
+      shareWSId={wsShareId}
+      havePermissions={
+        workspaceId
+          ? [permissionsEnum.viewAny_utmTag]
+          : wsShareId && shareWSMemberId
+          ? [shareWSPermissionEnum.viewAny_sws_utmTag]
+          : []
+      }
+      permissionType={
+        wsShareId && shareWSMemberId
+          ? permissionsTypeEnum.shareWSMemberPermissions
+          : permissionsTypeEnum.loggedInUserPermissions
+      }>
       {/* filter, refresh, create buttons */}
       <ZIonRow className='border rounded-lg zaions__light_bg ion-align-items-center ion-padding'>
         <ZIonCol
@@ -155,7 +219,14 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
               'text-sm': !isLgScale,
               'ion-text-center': !isLgScale
             })}>
-            Add UTM tags & manage your UTM tags
+            {[
+              shareWSPermissionEnum.create_sws_utmTag,
+              shareWSPermissionEnum.update_sws_utmTag
+            ].some(el =>
+              getMemberRolePermissions?.memberPermissions?.includes(el)
+            ) || workspaceId
+              ? 'UTM Central: Add, Organize, and Manage Your utm tags'
+              : 'Your UTM View: Explore and Monitor UTM Tag Data'}
           </ZIonText>
         </ZIonCol>
 
@@ -171,7 +242,11 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
             'w-full': !isSmScale
           })}>
           {/* Filter */}
-          {UTMTagsData && UTMTagsData?.length > 0 && (
+          {((workspaceId && UTMTagsData && UTMTagsData?.length > 0) ||
+            (wsShareId &&
+              shareWSMemberId &&
+              swsUTMTagsData &&
+              swsUTMTagsData?.length > 0)) && (
             <ZIonButton
               fill='outline'
               color='primary'
@@ -242,27 +317,42 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
           </ZIonButton>
 
           {/* Create new UTM */}
-          <ZIonButton
-            color='primary'
-            fill='solid'
-            minHeight={isLgScale ? '39px' : '2rem'}
-            expand={!isLgScale ? 'block' : undefined}
-            testingselector={
-              CONSTANTS.testingSelectors.utmTags.listPage.createBtn
+          <ZCan
+            shareWSId={wsShareId}
+            havePermissions={
+              workspaceId
+                ? [permissionsEnum.create_utmTag]
+                : wsShareId && shareWSMemberId
+                ? [shareWSPermissionEnum.create_sws_utmTag]
+                : []
             }
-            className={classNames({
-              'my-2': true,
-              'text-xs ion-no-margin ion-no-padding w-[33.33%]':
-                !isLgScale && isSmScale,
-              'w-full': !isSmScale
-            })}
-            onClick={() => {
-              presentZUtmTagsFormModal({
-                _cssClass: 'utm-tags-modal-size'
-              });
-            }}>
-            Create new UTM
-          </ZIonButton>
+            permissionType={
+              wsShareId && shareWSMemberId
+                ? permissionsTypeEnum.shareWSMemberPermissions
+                : permissionsTypeEnum.loggedInUserPermissions
+            }>
+            <ZIonButton
+              color='primary'
+              fill='solid'
+              minHeight={isLgScale ? '39px' : '2rem'}
+              expand={!isLgScale ? 'block' : undefined}
+              testingselector={
+                CONSTANTS.testingSelectors.utmTags.listPage.createBtn
+              }
+              className={classNames({
+                'my-2': true,
+                'text-xs ion-no-margin ion-no-padding w-[33.33%]':
+                  !isLgScale && isSmScale,
+                'w-full': !isSmScale
+              })}
+              onClick={() => {
+                presentZUtmTagsFormModal({
+                  _cssClass: 'utm-tags-modal-size'
+                });
+              }}>
+              Create new UTM
+            </ZIonButton>
+          </ZCan>
 
           {/* {!isMdScale ? (
             <ZIonButton
@@ -290,7 +380,20 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
         </ZIonCol>
       </ZIonRow>
 
-      <ZCan havePermissions={[permissionsEnum.view_utmTag]}>
+      <ZCan
+        shareWSId={wsShareId}
+        havePermissions={
+          workspaceId
+            ? [permissionsEnum.view_utmTag]
+            : wsShareId && shareWSMemberId
+            ? [shareWSPermissionEnum.view_sws_utmTag]
+            : []
+        }
+        permissionType={
+          wsShareId && shareWSMemberId
+            ? permissionsTypeEnum.shareWSMemberPermissions
+            : permissionsTypeEnum.loggedInUserPermissions
+        }>
         <Suspense
           fallback={
             <ZIonRow className='h-full'>
@@ -300,7 +403,7 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
           <ZUTMTagsTable />
         </Suspense>
       </ZCan>
-    </>
+    </ZCan>
   );
 };
 

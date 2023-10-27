@@ -3,11 +3,13 @@
  * ? Like Import of React is a Core Import
  * */
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 
 /**
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import { useSetRecoilState } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -30,6 +32,7 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { API_URL_ENUM } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { reportCustomError } from '@/utils/customErrorType';
 
 /**
  * Type Imports go down
@@ -37,14 +40,12 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * */
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { UserRoleAndPermissionsInterface } from '@/types/UserAccount/index.type';
-import { useSetRecoilState } from 'recoil';
-import { currentLoggedInUserRoleAndPermissionsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
-import { reportCustomError } from '@/utils/customErrorType';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
+import { currentLoggedInUserRoleAndPermissionsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 
 /**
  * Style files Imports go down
@@ -68,77 +69,86 @@ import { reportCustomError } from '@/utils/customErrorType';
  * */
 
 const ZAppStartupPage: React.FC = () => {
-	//
-	const [loadingIsOpen, setLoadingIsOpen] = useState(true);
+  // getting current workspace id OR wsShareId && shareWSMemberId form params.
+  const { workspaceId, wsShareId, shareWSMemberId } = useParams<{
+    workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
+  }>();
 
-	// recoil state for storing current user roles & permissions.
-	const setCurrentLoginUserRoleAndPermissionsStateAtom = useSetRecoilState(
-		currentLoggedInUserRoleAndPermissionsRStateAtom
-	);
+  //
+  const [loadingIsOpen, setLoadingIsOpen] = useState(true);
 
-	// custom hooks
-	const { zNavigatePushRoute } = useZNavigate(); // hook to navigate
+  // recoil state for storing current user roles & permissions.
+  const setCurrentLoginUserRoleAndPermissionsStateAtom = useSetRecoilState(
+    currentLoggedInUserRoleAndPermissionsRStateAtom
+  );
 
-	// getting the role & permissions of the current log in user.
-	const {
-		data: getUserRoleAndPermissions,
-		isFetching: isUserRoleAndPermissionsFetching,
-		refetch: refetchUserRoleAndPermissions,
-	} = useZRQGetRequest<{
-		isSuccess: boolean;
-		result: UserRoleAndPermissionsInterface;
-	}>({
-		_url: API_URL_ENUM.getUserRolePermission,
-		_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.ROLE_PERMISSIONS],
-		_extractType: ZRQGetRequestExtractEnum.extractItem,
-		_checkPermissions: false,
-	});
+  // custom hooks
+  const { zNavigatePushRoute } = useZNavigate(); // hook to navigate
 
-	//
-	const { data: getUserSetting, isFetching: isUserSettingFetching } =
-		useZRQGetRequest({
-			_url: API_URL_ENUM.user_setting_list_create,
-			_key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.MAIN],
-			_checkPermissions: false,
-		});
+  // getting the role & permissions of the current log in user.
+  const {
+    data: getUserRoleAndPermissions,
+    isFetching: isUserRoleAndPermissionsFetching,
+    refetch: refetchUserRoleAndPermissions
+  } = useZRQGetRequest<{
+    isSuccess: boolean;
+    result: UserRoleAndPermissionsInterface;
+  }>({
+    _url: API_URL_ENUM.getUserRolePermission,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.ROLE_PERMISSIONS],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _checkPermissions: false
+  });
 
-	// storing the role & permissions in recoil state
-	const isZFetching = isUserRoleAndPermissionsFetching || isUserSettingFetching;
+  //
+  // const { data: getUserSetting, isFetching: isUserSettingFetching } =
+  //   useZRQGetRequest({
+  //     _url: API_URL_ENUM.user_setting_list_create,
+  //     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.MAIN],
+  //     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+  //     _itemsIds: [workspaceId],
+  //     _checkPermissions: false
+  //   });
 
-	useEffect(() => {
-		try {
-			if (getUserRoleAndPermissions?.isSuccess) {
-				// Storing in recoil.
-				setCurrentLoginUserRoleAndPermissionsStateAtom((oldValues) => ({
-					...oldValues,
-					role: getUserRoleAndPermissions.result.role,
-					permissions: getUserRoleAndPermissions.result.permissions,
-					fetched: true,
-				}));
+  // storing the role & permissions in recoil state
+  const isZFetching = isUserRoleAndPermissionsFetching;
 
-				setLoadingIsOpen(false);
-				// Redirect to workspaces index page
-				if (!isZFetching) {
-					zNavigatePushRoute(ZaionsRoutes.AdminPanel.Workspaces.Main);
-				}
-			} else if (getUserRoleAndPermissions === undefined) {
-				refetchUserRoleAndPermissions();
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	}, [getUserRoleAndPermissions, isZFetching]);
+  useEffect(() => {
+    try {
+      if (getUserRoleAndPermissions?.isSuccess) {
+        // Storing in recoil.
+        setCurrentLoginUserRoleAndPermissionsStateAtom(oldValues => ({
+          ...oldValues,
+          role: getUserRoleAndPermissions.result.role,
+          permissions: getUserRoleAndPermissions.result.permissions,
+          fetched: true
+        }));
 
-	return (
-		<ZIonPage pageTitle='zaions startup page'>
-			<ZIonContent>
-				<ZIonLoading
-					isOpen={isZFetching}
-					message='Loading dashboard please await a second!'
-				/>
-			</ZIonContent>
-		</ZIonPage>
-	);
+        setLoadingIsOpen(false);
+        // Redirect to workspaces index page
+        if (!isZFetching) {
+          zNavigatePushRoute(ZaionsRoutes.AdminPanel.Workspaces.Main);
+        }
+      } else if (getUserRoleAndPermissions === undefined) {
+        refetchUserRoleAndPermissions();
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  }, [getUserRoleAndPermissions, isZFetching]);
+
+  return (
+    <ZIonPage pageTitle='zaions startup page'>
+      <ZIonContent>
+        <ZIonLoading
+          isOpen={isZFetching}
+          message='Loading dashboard please await a second!'
+        />
+      </ZIonContent>
+    </ZIonPage>
+  );
 };
 
 export default ZAppStartupPage;

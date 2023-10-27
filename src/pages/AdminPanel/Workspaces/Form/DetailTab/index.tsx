@@ -157,7 +157,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
               CONSTANTS.RouteParams.workspace.workspaceId,
               CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
             ],
-            [editWorkspaceId, 'all']
+            [editWorkspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
           )
         );
         showErrorNotification(error.message);

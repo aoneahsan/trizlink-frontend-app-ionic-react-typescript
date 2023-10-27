@@ -22,6 +22,7 @@ import {
   ZIonText
 } from '@/components/ZIonComponents';
 import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
+import ZCan from '@/components/Can';
 
 /**
  * Custom Hooks Imports go down
@@ -45,21 +46,26 @@ import {
 import CONSTANTS from '@/utils/constants';
 import { showSuccessNotification } from '@/utils/notification';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import { extractInnerData } from '@/utils/helpers';
+import {
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { folderState, FormMode } from '@/types/AdminPanel/index.type';
+import { LinkFolderType } from '@/types/AdminPanel/linksType';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
-import { extractInnerData } from '@/utils/helpers';
-import { LinkFolderType } from '@/types/AdminPanel/linksType';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Style files Imports go down
@@ -81,17 +87,18 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
  * About: (Info of component here...)
  * @type {*}
  * */
-
 const FolderActionsPopoverContent: React.FC<{
   workspaceId: string;
+  shareWSMemberId: string;
+  wsShareId: string;
   state: folderState;
-}> = ({ workspaceId, state }) => {
+}> = ({ workspaceId, shareWSMemberId, wsShareId, state }) => {
   /**
    * hook to present folder form modal
    */
   const { presentZIonModal: presentFolderModal } = useZIonModal(
     ZaionsAddNewFolder,
-    { state, workspaceId }
+    { workspaceId, shareWSMemberId, wsShareId, state }
   );
 
   // Custom hooks.
@@ -111,6 +118,10 @@ const FolderActionsPopoverContent: React.FC<{
    */
   const { mutateAsync: deleteFolderMutate } = useZRQDeleteRequest({
     _url: API_URL_ENUM.folders_update_delete
+  });
+
+  const { mutateAsync: deleteSWSFolderMutate } = useZRQDeleteRequest({
+    _url: API_URL_ENUM.ws_share_folder_get_update_delete
   });
 
   /**
@@ -152,14 +163,26 @@ const FolderActionsPopoverContent: React.FC<{
   const removeFolderAccount = async () => {
     try {
       if (folderFormState.id) {
-        // hitting the delete api
-        const _response = await deleteFolderMutate({
-          itemIds: [workspaceId, folderFormState.id],
-          urlDynamicParts: [
-            CONSTANTS.RouteParams.workspace.workspaceId,
-            CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-          ]
-        });
+        let _response;
+        if (workspaceId) {
+          // hitting the delete api
+          _response = await deleteFolderMutate({
+            itemIds: [workspaceId, folderFormState.id],
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.workspaceId,
+              CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+            ]
+          });
+        } else if (wsShareId) {
+          // hitting the share workspace folder delete api
+          _response = await deleteSWSFolderMutate({
+            itemIds: [shareWSMemberId, folderFormState.id],
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.shareWSMemberId,
+              CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+            ]
+          });
+        }
 
         if (_response) {
           const _data = extractInnerData<{ success: boolean }>(
@@ -168,36 +191,66 @@ const FolderActionsPopoverContent: React.FC<{
           );
 
           if (_data && _data?.success) {
-            // getting all the folders from RQ cache.
-            const _oldFoldersData =
-              extractInnerData<LinkFolderType[]>(
-                getRQCDataHandler<LinkFolderType[]>({
+            let _oldFoldersData: LinkFolderType[] = [];
+
+            if (workspaceId) {
+              _oldFoldersData =
+                (getRQCDataHandler<LinkFolderType[]>({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
                     workspaceId,
                     state
                   ]
-                }) as LinkFolderType[],
+                }) as LinkFolderType[]) || [];
+            } else if (wsShareId) {
+              _oldFoldersData =
+                (getRQCDataHandler<LinkFolderType[]>({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
+                    wsShareId,
+                    state
+                  ]
+                }) as LinkFolderType[]) || [];
+            }
+
+            // getting all the folders from RQ cache.
+            const _oldRQCacheFoldersData =
+              extractInnerData<LinkFolderType[]>(
+                _oldFoldersData,
                 extractInnerDataOptionsEnum.createRequestResponseItems
               ) || [];
 
             // removing deleted folder from cache.
-            const _updatedFolders = _oldFoldersData.filter(
-              el => el.id !== folderFormState.id
+            const _updatedFolders = _oldRQCacheFoldersData?.filter(
+              el => el?.id !== folderFormState?.id
             );
 
             // Updating data in RQ cache.
-            await updateRQCDataHandler<LinkFolderType[] | undefined>({
-              key: [
-                CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-                workspaceId,
-                state
-              ],
-              data: _updatedFolders as LinkFolderType[],
-              id: '',
-              extractType: ZRQGetRequestExtractEnum.extractItems,
-              updateHoleData: true
-            });
+            if (workspaceId) {
+              await updateRQCDataHandler<LinkFolderType[] | undefined>({
+                key: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+                  workspaceId,
+                  state
+                ],
+                data: _updatedFolders as LinkFolderType[],
+                id: '',
+                extractType: ZRQGetRequestExtractEnum.extractItems,
+                updateHoleData: true
+              });
+            } else if (wsShareId) {
+              await updateRQCDataHandler<LinkFolderType[] | undefined>({
+                key: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
+                  wsShareId,
+                  state
+                ],
+                data: _updatedFolders as LinkFolderType[],
+                id: '',
+                extractType: ZRQGetRequestExtractEnum.extractItems,
+                updateHoleData: true
+              });
+            }
 
             // setting the folderFormState to initial state because the value of this recoil state is used as the initial values of the short link folder form, when we click on the delete button in popover it will store the value or that folder in this recoil state. because we need it in here for example the id to delete the folder.
             setFolderFormState(oldVal => ({
@@ -221,39 +274,82 @@ const FolderActionsPopoverContent: React.FC<{
 
   return (
     <ZIonList lines='none'>
-      <ZIonButton
-        fill='clear'
-        className='ion-no-padding ion-text-capitalize'
-        expand='block'
-        testingselector={`${CONSTANTS.testingSelectors.folder.editBtn}-${state}`}
-        testinglistselector={`${CONSTANTS.testingSelectors.folder.editBtn}-${state}-${folderFormState.id}`}
-        onClick={() => {
-          presentFolderModal({
-            _cssClass: 'folder-modal-size'
-          });
-        }}>
-        <ZIonIcon
-          icon={pencilOutline}
-          className='me-2'
-        />
-        <ZIonText>Rename</ZIonText>
-      </ZIonButton>
-      <ZIonButton
-        fill='clear'
-        className='ion-no-padding ion-text-capitalize'
-        expand='block'
-        testingselector={`${CONSTANTS.testingSelectors.folder.deleteBtn}-${state}`}
-        testinglistselector={`${CONSTANTS.testingSelectors.folder.deleteBtn}-${state}-${folderFormState.id}`}
-        onClick={() => {
-          void deleteFolderAccount();
-        }}>
-        <ZIonIcon
-          icon={trashOutline}
-          className='me-2'
-          color='danger'
-        />
-        <ZIonText color='danger'>Delete</ZIonText>
-      </ZIonButton>
+      <ZCan
+        shareWSId={wsShareId}
+        permissionType={
+          wsShareId
+            ? permissionsTypeEnum.shareWSMemberPermissions
+            : permissionsTypeEnum.loggedInUserPermissions
+        }
+        havePermissions={
+          wsShareId
+            ? state === folderState.shortlink
+              ? [shareWSPermissionEnum.update_sws_sl_folder]
+              : state === folderState.linkInBio
+              ? [shareWSPermissionEnum.update_sws_lib_folder]
+              : []
+            : state === folderState.shortlink
+            ? [permissionsEnum.update_sl_folder]
+            : state === folderState.linkInBio
+            ? [permissionsEnum.update_lib_folder]
+            : []
+        }>
+        <ZIonButton
+          fill='clear'
+          className='ion-no-padding ion-text-capitalize'
+          expand='block'
+          testingselector={`${CONSTANTS.testingSelectors.folder.editBtn}-${state}`}
+          testinglistselector={`${CONSTANTS.testingSelectors.folder.editBtn}-${state}-${folderFormState.id}`}
+          onClick={() => {
+            presentFolderModal({
+              _cssClass: 'folder-modal-size'
+            });
+          }}>
+          <ZIonIcon
+            icon={pencilOutline}
+            className='me-2'
+          />
+          <ZIonText>Rename</ZIonText>
+        </ZIonButton>
+      </ZCan>
+
+      <ZCan
+        shareWSId={wsShareId}
+        permissionType={
+          wsShareId
+            ? permissionsTypeEnum.shareWSMemberPermissions
+            : permissionsTypeEnum.loggedInUserPermissions
+        }
+        havePermissions={
+          wsShareId
+            ? state === folderState.shortlink
+              ? [shareWSPermissionEnum.delete_sws_sl_folder]
+              : state === folderState.linkInBio
+              ? [shareWSPermissionEnum.delete_sws_lib_folder]
+              : []
+            : state === folderState.shortlink
+            ? [permissionsEnum.delete_sl_folder]
+            : state === folderState.linkInBio
+            ? [permissionsEnum.delete_lib_folder]
+            : []
+        }>
+        <ZIonButton
+          fill='clear'
+          className='ion-no-padding ion-text-capitalize'
+          expand='block'
+          testingselector={`${CONSTANTS.testingSelectors.folder.deleteBtn}-${state}`}
+          testinglistselector={`${CONSTANTS.testingSelectors.folder.deleteBtn}-${state}-${folderFormState.id}`}
+          onClick={() => {
+            void deleteFolderAccount();
+          }}>
+          <ZIonIcon
+            icon={trashOutline}
+            className='me-2'
+            color='danger'
+          />
+          <ZIonText color='danger'>Delete</ZIonText>
+        </ZIonButton>
+      </ZCan>
     </ZIonList>
   );
 };

@@ -11,7 +11,12 @@ import React from 'react';
 import { menuController } from '@ionic/core/components';
 import { ItemReorderEventDetail } from '@ionic/react';
 import { IonReorderGroupCustomEvent } from '@ionic/core';
-import { appsOutline, closeOutline, ellipsisVertical } from 'ionicons/icons';
+import {
+  appsOutline,
+  closeOutline,
+  ellipsisVertical,
+  fileTrayOutline
+} from 'ionicons/icons';
 import { useParams } from 'react-router';
 import classNames from 'classnames';
 import { useSetRecoilState } from 'recoil';
@@ -53,7 +58,7 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * */
 import { PAGE_MENU_SIDE } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
-import { replaceRouteParams } from '@/utils/helpers';
+import { createRedirectRoute, replaceRouteParams } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
@@ -61,13 +66,23 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { LinkFolderType } from '@/types/AdminPanel/linksType';
-import { folderState, FormMode } from '@/types/AdminPanel/index.type';
+import {
+  AdminPanelSidebarMenuPageEnum,
+  folderState,
+  FormMode
+} from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
+import ZCan from '@/components/Can';
+import {
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Style files Imports go down
@@ -123,15 +138,20 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 
   const setFolderFormState = useSetRecoilState(FolderFormState);
 
-  const { workspaceId } = useParams<{
+  // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
     workspaceId: string;
+    shareWSMemberId: string;
+    wsShareId: string;
   }>();
 
   const { presentZIonModal: presentFolderModal } = useZIonModal(
     ZaionsAddNewFolder,
     {
-      state: state,
-      workspaceId
+      workspaceId,
+      shareWSMemberId,
+      wsShareId,
+      state: folderState.shortlink
     }
   );
 
@@ -172,126 +192,326 @@ const AdminPanelFoldersSidebarMenu: React.FC<
               <ZIonList
                 lines='none'
                 className='w-full py-0'>
-                <ZIonItem
-                  minHeight='2rem'
-                  className='cursor-pointer ms-2'
-                  onClick={() => {
-                    zNavigatePushRoute(
-                      replaceRouteParams(
-                        ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                        [
-                          CONSTANTS.RouteParams.workspace.workspaceId,
-                          CONSTANTS.RouteParams
-                            .folderIdToGetShortLinksOrLinkInBio
-                        ],
-                        [workspaceId, 'all']
-                      )
-                    );
-                  }}>
-                  <ZIonText>Default</ZIonText>
-                </ZIonItem>
-
-                {foldersData && foldersData.length ? (
-                  <ZIonReorderGroup
-                    disabled={false}
-                    onIonItemReorder={handleReorderFn}>
-                    {foldersData.map(el => (
-                      <ZIonItem
-                        key={el.id}
-                        data-folder-id={el.id}
-                        minHeight='2.3rem'
-                        className={`cursor-pointer zaions-short-link-folder-${
-                          state || ''
-                        }`}>
-                        <ZIonLabel
-                          className='my-0'
-                          onClick={() => {
+                <ZCan
+                  shareWSId={wsShareId}
+                  permissionType={
+                    wsShareId
+                      ? permissionsTypeEnum.shareWSMemberPermissions
+                      : permissionsTypeEnum.loggedInUserPermissions
+                  }
+                  havePermissions={
+                    wsShareId
+                      ? state === folderState.shortlink
+                        ? [shareWSPermissionEnum.viewAny_sws_sl_folder]
+                        : state === folderState.linkInBio
+                        ? [shareWSPermissionEnum.viewAny_sws_lib_folder]
+                        : []
+                      : state === folderState.shortlink
+                      ? [permissionsEnum.viewAny_sl_folder]
+                      : state === folderState.linkInBio
+                      ? [permissionsEnum.viewAny_lib_folder]
+                      : []
+                  }>
+                  <ZIonItem
+                    minHeight='2rem'
+                    className='cursor-pointer ms-2'
+                    onClick={() => {
+                      switch (state) {
+                        case folderState.shortlink:
+                          // if there is workspaceId means it's a owned workspace then redirect to short link of that workspace
+                          if (workspaceId) {
                             zNavigatePushRoute(
-                              replaceRouteParams(
-                                ZaionsRoutes.AdminPanel.ShortLinks.Main,
-                                [
+                              createRedirectRoute({
+                                url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                                params: [
                                   CONSTANTS.RouteParams.workspace.workspaceId,
                                   CONSTANTS.RouteParams
                                     .folderIdToGetShortLinksOrLinkInBio
                                 ],
-                                [workspaceId, el.id!]
-                              )
+                                values: [
+                                  workspaceId,
+                                  CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                                ]
+                              })
                             );
-                          }}>
-                          {el.title}
-                        </ZIonLabel>
-                        <ZIonButton
-                          fill='clear'
-                          color='dark'
-                          size='small'
-                          value={el.id}
-                          onClick={event => {
-                            folderActionHandlerFn &&
-                              folderActionHandlerFn(event);
-                            setFolderFormState(oldVal => ({
-                              ...oldVal,
-                              id: el.id,
-                              name: el.title,
-                              formMode: FormMode.EDIT
-                            }));
-                          }}
-                          className='ion-no-padding ms-auto'>
-                          <ZIonIcon icon={ellipsisVertical} />
-                        </ZIonButton>
-                        <ZIonReorder
-                          slot='start'
-                          className='me-3'>
-                          <ZIonIcon icon={appsOutline} />
-                        </ZIonReorder>
-                      </ZIonItem>
-                    ))}
-                  </ZIonReorderGroup>
-                ) : (
-                  ''
+                          }
+                          // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to short link of that share workspace
+                          else if (wsShareId && shareWSMemberId) {
+                            zNavigatePushRoute(
+                              createRedirectRoute({
+                                url: ZaionsRoutes.AdminPanel.ShareWS.Short_link
+                                  .Main,
+                                params: [
+                                  CONSTANTS.RouteParams.workspace.wsShareId,
+                                  CONSTANTS.RouteParams.workspace
+                                    .shareWSMemberId,
+                                  CONSTANTS.RouteParams
+                                    .folderIdToGetShortLinksOrLinkInBio
+                                ],
+                                values: [
+                                  wsShareId,
+                                  shareWSMemberId,
+                                  CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                                ]
+                              })
+                            );
+                          }
+                          break;
+
+                        case folderState.linkInBio:
+                          // if there is workspaceId means it's a owned workspace then redirect to link-in-bio of that workspace
+                          if (workspaceId) {
+                            zNavigatePushRoute(
+                              createRedirectRoute({
+                                url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
+                                params: [
+                                  CONSTANTS.RouteParams.workspace.workspaceId,
+                                  CONSTANTS.RouteParams
+                                    .folderIdToGetShortLinksOrLinkInBio
+                                ],
+                                values: [
+                                  workspaceId,
+                                  CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                                ]
+                              })
+                            );
+                          }
+                          // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to link-in-bio of that share workspace
+                          else if (wsShareId && shareWSMemberId) {
+                            zNavigatePushRoute(
+                              createRedirectRoute({
+                                url: ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio
+                                  .Main,
+                                params: [
+                                  CONSTANTS.RouteParams.workspace.wsShareId,
+                                  CONSTANTS.RouteParams.workspace
+                                    .shareWSMemberId,
+                                  CONSTANTS.RouteParams
+                                    .folderIdToGetShortLinksOrLinkInBio
+                                ],
+                                values: [
+                                  wsShareId,
+                                  shareWSMemberId,
+                                  CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                                ]
+                              })
+                            );
+                          }
+                          break;
+                      }
+                    }}>
+                    <ZIonText>Default</ZIonText>
+                  </ZIonItem>
+                </ZCan>
+
+                <ZCan
+                  shareWSId={wsShareId}
+                  permissionType={
+                    wsShareId
+                      ? permissionsTypeEnum.shareWSMemberPermissions
+                      : permissionsTypeEnum.loggedInUserPermissions
+                  }
+                  havePermissions={
+                    wsShareId
+                      ? state === folderState.shortlink
+                        ? [shareWSPermissionEnum.viewAny_sws_sl_folder]
+                        : state === folderState.linkInBio
+                        ? [shareWSPermissionEnum.viewAny_sws_lib_folder]
+                        : []
+                      : state === folderState.shortlink
+                      ? [permissionsEnum.viewAny_sl_folder]
+                      : state === folderState.linkInBio
+                      ? [permissionsEnum.viewAny_lib_folder]
+                      : []
+                  }>
+                  {foldersData && foldersData.length ? (
+                    <ZIonReorderGroup
+                      disabled={false}
+                      onIonItemReorder={handleReorderFn}>
+                      {foldersData.map(el => (
+                        <ZCan
+                          key={el.id}
+                          shareWSId={wsShareId}
+                          permissionType={
+                            wsShareId
+                              ? permissionsTypeEnum.shareWSMemberPermissions
+                              : permissionsTypeEnum.loggedInUserPermissions
+                          }
+                          havePermissions={
+                            wsShareId
+                              ? state === folderState.shortlink
+                                ? [shareWSPermissionEnum.view_sws_sl_folder]
+                                : state === folderState.linkInBio
+                                ? [shareWSPermissionEnum.view_sws_lib_folder]
+                                : []
+                              : state === folderState.shortlink
+                              ? [permissionsEnum.view_sl_folder]
+                              : state === folderState.linkInBio
+                              ? [permissionsEnum.view_lib_folder]
+                              : []
+                          }>
+                          <ZIonItem
+                            key={el.id}
+                            data-folder-id={el.id}
+                            minHeight='2.3rem'
+                            className={`cursor-pointer zaions-short-link-folder-${
+                              state || ''
+                            }`}>
+                            <ZIonLabel
+                              className='my-0'
+                              onClick={() => {
+                                zNavigatePushRoute(
+                                  replaceRouteParams(
+                                    ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                                    [
+                                      CONSTANTS.RouteParams.workspace
+                                        .workspaceId,
+                                      CONSTANTS.RouteParams
+                                        .folderIdToGetShortLinksOrLinkInBio
+                                    ],
+                                    [workspaceId, el.id!]
+                                  )
+                                );
+                              }}>
+                              {el.title}
+                            </ZIonLabel>
+                            <ZIonButton
+                              fill='clear'
+                              color='dark'
+                              size='small'
+                              value={el.id}
+                              onClick={event => {
+                                folderActionHandlerFn &&
+                                  folderActionHandlerFn(event);
+                                setFolderFormState(oldVal => ({
+                                  ...oldVal,
+                                  id: el.id,
+                                  name: el.title,
+                                  formMode: FormMode.EDIT
+                                }));
+                              }}
+                              className='ion-no-padding ms-auto'>
+                              <ZIonIcon icon={ellipsisVertical} />
+                            </ZIonButton>
+                            <ZIonReorder
+                              slot='start'
+                              className='me-3'>
+                              <ZIonIcon icon={appsOutline} />
+                            </ZIonReorder>
+                          </ZIonItem>
+                        </ZCan>
+                      ))}
+                    </ZIonReorderGroup>
+                  ) : (
+                    ''
+                  )}
+                </ZCan>
+
+                {foldersData?.length === 0 && (
+                  <ZIonItem
+                    style={{
+                      '--inner-padding-end': '0px',
+                      '--padding-start': '0px'
+                    }}>
+                    <ZIonLabel className='w-full text-md ion-text-center'>
+                      <ZIonIcon
+                        icon={fileTrayOutline}
+                        className='w-6 h-6'
+                        color='medium'
+                      />
+                      <ZIonText
+                        className='block'
+                        color='medium'>
+                        No folder found!
+                      </ZIonText>
+                    </ZIonLabel>
+                  </ZIonItem>
                 )}
               </ZIonList>
             </ZCustomScrollable>
           </div>
 
           <div className='px-1 mx-3 mb-1'>
-            <ZIonButton
-              className='mt-3 mb-2 ion-text-capitalize ion-no-margin ion-no-padding'
-              minHeight='1.9rem'
-              fill='outline'
-              expand='block'
-              onClick={() => {
-                setFolderFormState(oldVal => ({
-                  ...oldVal,
-                  id: '',
-                  name: '',
-                  formMode: FormMode.ADD
-                }));
-                presentFolderModal({
-                  _cssClass: 'link-in-bio-folder-modal'
-                });
-              }}>
-              New Folder
-            </ZIonButton>
+            <ZCan
+              shareWSId={wsShareId}
+              permissionType={
+                wsShareId
+                  ? permissionsTypeEnum.shareWSMemberPermissions
+                  : permissionsTypeEnum.loggedInUserPermissions
+              }
+              havePermissions={
+                wsShareId
+                  ? state === folderState.shortlink
+                    ? [shareWSPermissionEnum.create_sws_sl_folder]
+                    : state === folderState.linkInBio
+                    ? [shareWSPermissionEnum.create_sws_lib_folder]
+                    : []
+                  : state === folderState.shortlink
+                  ? [permissionsEnum.create_sl_folder]
+                  : state === folderState.linkInBio
+                  ? [permissionsEnum.create_lib_folder]
+                  : []
+              }>
+              <ZIonButton
+                className='mt-3 mb-2 ion-text-capitalize ion-no-margin ion-no-padding'
+                minHeight='1.9rem'
+                fill='outline'
+                expand='block'
+                onClick={() => {
+                  setFolderFormState(oldVal => ({
+                    ...oldVal,
+                    id: '',
+                    name: '',
+                    formMode: FormMode.ADD
+                  }));
+                  presentFolderModal({
+                    _cssClass: 'link-in-bio-folder-modal'
+                  });
+                }}>
+                New Folder
+              </ZIonButton>
+            </ZCan>
 
             {!isMdScale ? <ZUtilityButtonGroup /> : null}
           </div>
         </div>
       </ZIonContent>
 
-      <ZIonFooter className='py-1'>
-        {showSaveReorderButton && (
-          <ZIonButton
-            className='ion-margin-horizontal ion-no-padding'
-            expand='block'
-            color='tertiary'
-            minHeight='1.9rem'
-            onClick={event => {
-              saveReorderButtonFn && void saveReorderButtonFn(event);
-            }}>
-            save reorder
-          </ZIonButton>
-        )}
-      </ZIonFooter>
+      <ZCan
+        shareWSId={wsShareId}
+        permissionType={
+          wsShareId
+            ? permissionsTypeEnum.shareWSMemberPermissions
+            : permissionsTypeEnum.loggedInUserPermissions
+        }
+        havePermissions={
+          wsShareId
+            ? state === folderState.shortlink
+              ? [shareWSPermissionEnum.sort_sws_sl_folder]
+              : state === folderState.linkInBio
+              ? [shareWSPermissionEnum.sort_sws_lib_folder]
+              : []
+            : state === folderState.shortlink
+            ? [permissionsEnum.sort_sl_folder]
+            : state === folderState.linkInBio
+            ? [permissionsEnum.sort_lib_folder]
+            : []
+        }>
+        <ZIonFooter className='py-1'>
+          {showSaveReorderButton && (
+            <ZIonButton
+              className='ion-margin-horizontal ion-no-padding'
+              expand='block'
+              color='tertiary'
+              minHeight='1.9rem'
+              onClick={event => {
+                saveReorderButtonFn && void saveReorderButtonFn(event);
+              }}>
+              save reorder
+            </ZIonButton>
+          )}
+        </ZIonFooter>
+      </ZCan>
     </ZIonMenu>
   );
 };

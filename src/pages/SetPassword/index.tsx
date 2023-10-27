@@ -105,6 +105,8 @@ import {
 import { ProductFavicon } from '@/assets/images';
 import { errorCodes } from '@/utils/constants/apiConstants';
 import Z403View from '@/components/Errors/403';
+import ZCountdown from '@/components/CustomComponents/ZCountDown';
+import dayjs from 'dayjs';
 
 /**
  * Component props type go down
@@ -125,8 +127,13 @@ const ZSetPasswordPage: React.FC = () => {
     message?: string;
     isProcessing: boolean;
     errorCode?: number;
+    tab: ZSetPasswordTabEnum;
+    OTPCodeValidTill?: string;
+    resendOTPValidCheck: boolean;
   }>({
-    isProcessing: true
+    isProcessing: true,
+    tab: ZSetPasswordTabEnum.sendOptTab,
+    resendOTPValidCheck: false
   });
 
   useEffect(() => {
@@ -138,11 +145,16 @@ const ZSetPasswordPage: React.FC = () => {
           email: string;
           token: string;
           signupType: string;
+          tab: ZSetPasswordTabEnum;
+          OTPCodeValidTill: string;
+          resendOTPValidCheck: boolean;
         } | null;
 
         const userData = (await STORAGE.GET(
           LOCALSTORAGE_KEYS.USERDATA
         )) as UserAccountType | null;
+
+        console.log({ inviteeData, userData });
 
         const authToken = (await STORAGE.GET(LOCALSTORAGE_KEYS.AUTHTOKEN)) as
           | string
@@ -161,25 +173,28 @@ const ZSetPasswordPage: React.FC = () => {
         } else if (
           userData === undefined &&
           authToken === undefined &&
-          inviteeData?.token !== undefined
+          inviteeData
         ) {
           setCompState(oldValues => ({
             ...oldValues,
-            inviteToken: inviteeData?.token,
             canSetPassword: true,
-            isProcessing: false
+            isProcessing: false,
+            email: inviteeData?.email,
+            inviteToken: inviteeData?.token,
+            OTPCodeValidTill: inviteeData?.OTPCodeValidTill,
+            tab: inviteeData?.tab,
+            resendOTPValidCheck: inviteeData?.resendOTPValidCheck
           }));
         } else if (
           userData === undefined &&
           authToken === undefined &&
-          inviteeData?.token === undefined
+          inviteeData === undefined
         ) {
           setCompState(oldValues => ({
             ...oldValues,
-            inviteToken: inviteeData?.token,
+            errorCode: errorCodes.forbidden,
             canSetPassword: false,
-            isProcessing: false,
-            errorCode: errorCodes.forbidden
+            isProcessing: false
           }));
         }
       })();
@@ -260,8 +275,10 @@ const ZSetPasswordPage: React.FC = () => {
                   canViewPassword: false,
                   confirmPassword: '',
                   canViewConfirmPassword: false,
+                  OTPCodeValidTill: compState?.OTPCodeValidTill || '',
+                  resendOTPValidCheck: compState?.resendOTPValidCheck || false,
 
-                  tab: ZSetPasswordTabEnum.sendOptTab
+                  tab: compState?.tab || ZSetPasswordTabEnum.sendOptTab
                 }}
                 enableReinitialize={true}
                 // Validations of sign up form fields
@@ -397,9 +414,19 @@ const ZSendOtpTab: React.FC = () => {
         if (__response) {
           const __data = extractInnerData<{
             success: boolean;
+            OTPCodeValidTill: string;
           }>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
           if (__data?.success) {
+            const userData = {
+              email: values?.emailAddress,
+              tab: ZSetPasswordTabEnum.confirmOptTab,
+              OTPCodeValidTill: __data?.OTPCodeValidTill,
+              resendOTPValidCheck: false
+            };
+
+            await STORAGE.SET(LOCALSTORAGE_KEYS.INVITEE_USER_DATA, userData);
+
             if (values.isEmailAddressApiError === true) {
               setFieldValue('emailAddressApiErrorText', '', false);
               setFieldValue('isEmailAddressApiError', false, false);
@@ -516,6 +543,8 @@ const ZConfirmOptTab: React.FC = () => {
       emailAddress: string;
       otp: string;
       tab: ZSetPasswordTabEnum;
+      OTPCodeValidTill: string;
+      resendOTPValidCheck: boolean;
 
       isEmailAddressApiError: boolean;
       emailAddressApiErrorText: string;
@@ -541,15 +570,32 @@ const ZConfirmOptTab: React.FC = () => {
     _loaderMessage: 'Sending OTP...'
   });
 
+  const { mutateAsync: zResendOtpAsyncMutate } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.resend_user_otp,
+    _showAlertOnError: false,
+    authenticated: false,
+    _loaderMessage: MESSAGES.OTP.RESENDING
+  });
+
   const ZResendOTPHandler = async () => {
     try {
-      if (values?.emailAddress && values?.emailAddress?.trim()?.length > 0) {
+      const inviteeData = (await STORAGE.GET(
+        LOCALSTORAGE_KEYS.INVITEE_USER_DATA
+      )) as {
+        email: string;
+        token: string;
+        signupType: string;
+        tab: ZSetPasswordTabEnum;
+        OTPCodeValidTill: string;
+        resendOTPValidCheck: boolean;
+      } | null;
+
+      if (inviteeData?.email && inviteeData?.email?.trim()?.length > 0) {
         const __stringifyData = zStringify({
-          email: values.emailAddress,
-          inviteToken: values.inviteToken
+          email: inviteeData?.email
         });
 
-        const __response = await zSendOtpAsyncMutate({
+        const __response = await zResendOtpAsyncMutate({
           requestData: __stringifyData,
           itemIds: [],
           urlDynamicParts: []
@@ -558,9 +604,19 @@ const ZConfirmOptTab: React.FC = () => {
         if (__response) {
           const __data = extractInnerData<{
             success: boolean;
+            OTPCodeValidTill: string;
           }>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
           if (__data?.success) {
+            const userData = {
+              email: inviteeData?.email,
+              tab: ZSetPasswordTabEnum.confirmOptTab,
+              OTPCodeValidTill: __data?.OTPCodeValidTill,
+              resendOTPValidCheck: false
+            };
+
+            await STORAGE.SET(LOCALSTORAGE_KEYS.INVITEE_USER_DATA, userData);
+
             if (values.isEmailAddressApiError === true) {
               setFieldValue('emailAddressApiErrorText', '', false);
               setFieldValue('isEmailAddressApiError', false, false);
@@ -597,9 +653,20 @@ const ZConfirmOptTab: React.FC = () => {
 
   const ZConfirmOTPHandler = async () => {
     try {
-      if (values?.emailAddress && values?.emailAddress?.trim()?.length > 0) {
+      const inviteeData = (await STORAGE.GET(
+        LOCALSTORAGE_KEYS.INVITEE_USER_DATA
+      )) as {
+        email: string;
+        token: string;
+        signupType: string;
+        tab: ZSetPasswordTabEnum;
+        OTPCodeValidTill: string;
+        resendOTPValidCheck: boolean;
+      } | null;
+
+      if (inviteeData?.email && inviteeData?.email?.trim()?.length > 0) {
         const __stringifyData = zStringify({
-          email: values.emailAddress,
+          email: inviteeData?.email,
           otp: values.otp,
           inviteToken: values.inviteToken
         });
@@ -613,16 +680,24 @@ const ZConfirmOptTab: React.FC = () => {
         if (__response) {
           const __data = extractInnerData<{
             success: boolean;
+            OTPCodeValidTill: string;
           }>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
           if (__data?.success) {
+            const userData = {
+              email: inviteeData?.email,
+              tab: ZSetPasswordTabEnum.newPasswordTab
+            };
+
+            await STORAGE.SET(LOCALSTORAGE_KEYS.INVITEE_USER_DATA, userData);
+
             if (values?.isOTPApiError === true) {
               setFieldValue('OTPApiErrorText', '', false);
               setFieldValue('isOTPApiError', false, false);
             }
 
             setFieldValue('tab', ZSetPasswordTabEnum.newPasswordTab, false);
-
+            setFieldValue('otp', '', false);
             showSuccessNotification(MESSAGES.OTP.CONFIRMED);
           }
         }
@@ -656,52 +731,104 @@ const ZConfirmOptTab: React.FC = () => {
   return (
     <>
       {/* OTP Field */}
-      <ZIonInput
-        name='otp'
-        label='OTP'
-        labelPlacement='floating'
-        type='text'
-        maxlength={6}
-        enterkeyhint='next'
-        onIonChange={handleChange}
-        onIonBlur={handleBlur}
-        value={values.otp}
-        testingselector={CONSTANTS.testingSelectors.setPasswordPage.emailInput}
-        errorText={values?.isOTPApiError ? values?.OTPApiErrorText : undefined}
-        className={classNames({
-          'mb-4': true,
-          'ion-touched': touched.otp,
-          'ion-invalid': values?.isOTPApiError,
-          'ion-valid': touched.otp && !values?.isOTPApiError
-        })}
-      />
+      <div className='flex ion-align-items-start'>
+        <ZIonInput
+          name='otp'
+          label='OTP'
+          labelPlacement='floating'
+          type='text'
+          maxlength={6}
+          enterkeyhint='next'
+          onIonChange={handleChange}
+          onIonBlur={handleBlur}
+          value={values.otp}
+          testingselector={
+            CONSTANTS.testingSelectors.setPasswordPage.emailInput
+          }
+          errorText={
+            values?.isOTPApiError ? values?.OTPApiErrorText : undefined
+          }
+          className={classNames({
+            'mb-4': true,
+            'ion-touched': touched.otp,
+            'ion-invalid': values?.isOTPApiError,
+            'ion-valid': touched.otp && !values?.isOTPApiError
+          })}
+        />
+
+        <ZCountdown
+          onTick={() => {
+            if (
+              dayjs().isAfter(
+                dayjs(values?.OTPCodeValidTill).subtract(4, 'minute')
+              )
+            ) {
+              (async () => {
+                const userData = {
+                  email: values?.emailAddress,
+                  tab: ZSetPasswordTabEnum.confirmOptTab,
+                  OTPCodeValidTill: values?.OTPCodeValidTill,
+                  resendOTPValidCheck: true
+                };
+
+                await STORAGE.SET(
+                  LOCALSTORAGE_KEYS.INVITEE_USER_DATA,
+                  userData
+                );
+              })();
+              setFieldValue('resendOTPValidCheck', true, false);
+            }
+          }}
+          countDownTime={values?.OTPCodeValidTill}
+          color='dark'
+          component={({ d, color }) => {
+            return (
+              <ZIonText className='h-full mt-4 ms-2'>
+                {d.minutes}:{d.seconds}
+              </ZIonText>
+            );
+          }}
+        />
+      </div>
 
       {/* Confirm OTP Button */}
-      <ZIonButton
-        expand='block'
-        disabled={values?.otp?.trim()?.length !== 6}
-        className='mt-4 ion-text-capitalize'
-        onClick={async () => {
-          await ZConfirmOTPHandler();
-        }}
-        testingselector={
-          CONSTANTS.testingSelectors.setPasswordPage.confirmOtpBtn
-        }>
-        Continue
-      </ZIonButton>
+      <div
+        className={classNames({
+          'w-full': true,
+          'cursor-not-allowed': values?.otp?.trim()?.length !== 6
+        })}>
+        <ZIonButton
+          expand='block'
+          disabled={values?.otp?.trim()?.length !== 6}
+          className='mt-4 ion-text-capitalize'
+          onClick={async () => {
+            await ZConfirmOTPHandler();
+          }}
+          testingselector={
+            CONSTANTS.testingSelectors.setPasswordPage.confirmOtpBtn
+          }>
+          Continue
+        </ZIonButton>
+      </div>
 
-      <ZIonButton
-        expand='block'
-        fill='outline'
-        className='mt-4 ion-text-capitalize'
-        onClick={async () => {
-          await ZResendOTPHandler();
-        }}
-        testingselector={
-          CONSTANTS.testingSelectors.setPasswordPage.resendOtpBtn
-        }>
-        Resend OTP
-      </ZIonButton>
+      <div
+        className={classNames({
+          'w-full': true,
+          'cursor-not-allowed': !values.resendOTPValidCheck
+        })}>
+        <ZIonButton
+          expand='block'
+          fill='outline'
+          className='mt-4 ion-text-capitalize'
+          onClick={async () => {
+            await ZResendOTPHandler();
+          }}
+          testingselector={
+            CONSTANTS.testingSelectors.setPasswordPage.resendOtpBtn
+          }>
+          Resend OTP
+        </ZIonButton>
+      </div>
     </>
   );
 };
@@ -748,9 +875,20 @@ const ZNewPasswordTab: React.FC = () => {
 
   const ZSetPassword = async () => {
     try {
+      const inviteeData = (await STORAGE.GET(
+        LOCALSTORAGE_KEYS.INVITEE_USER_DATA
+      )) as {
+        email: string;
+        token: string;
+        signupType: string;
+        tab: ZSetPasswordTabEnum;
+        OTPCodeValidTill: string;
+        resendOTPValidCheck: boolean;
+      } | null;
+
       if (values?.password && values?.password?.trim()?.length > 0) {
         const __stringifyData = zStringify({
-          email: values.emailAddress,
+          email: inviteeData?.email,
           username: values.username,
           password: values.password,
           password_confirmation: values.confirmPassword,
@@ -771,6 +909,8 @@ const ZNewPasswordTab: React.FC = () => {
 
           // Checking if the __data is available & if there is a user object in __data which have the id.
           if (__data?.user?.id) {
+            await STORAGE.REMOVE(LOCALSTORAGE_KEYS.INVITEE_USER_DATA);
+
             // getting user data.
             const userData = getUserDataObjectForm(__data.user);
 

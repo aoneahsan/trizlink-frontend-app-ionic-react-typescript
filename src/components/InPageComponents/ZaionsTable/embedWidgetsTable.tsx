@@ -235,11 +235,16 @@ const ZInpageTable: React.FC = () => {
     _url: API_URL_ENUM.user_setting_delete_update_get,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+      workspaceId!,
       ZUserSettingTypeEnum.embedWidgetsListPageTable
     ],
-    _itemsIds: [ZUserSettingTypeEnum.embedWidgetsListPageTable],
-    _urlDynamicParts: [CONSTANTS.RouteParams.settings.type],
-    _extractType: ZRQGetRequestExtractEnum.extractItem
+    _itemsIds: [workspaceId!, ZUserSettingTypeEnum.embedWidgetsListPageTable],
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.workspaceId,
+      CONSTANTS.RouteParams.settings.type
+    ],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _shouldFetchWhenIdPassed: workspaceId ? false : true
   });
   // #endregion
 
@@ -517,7 +522,7 @@ const ZInpageTable: React.FC = () => {
 
   const { presentZIonModal: presentZUtmTagsFormModal } = useZIonModal(
     ZaionsAddUtmTags,
-    { formMode: FormMode.ADD }
+    { formMode: FormMode.ADD, workspaceId }
   );
   // #endregion
 
@@ -1038,7 +1043,8 @@ const ZEmbedWidgetActionPopover: React.FC<{
     ZaionsAddUtmTags,
     {
       utmTag: utmTag,
-      formMode: FormMode.EDIT
+      formMode: FormMode.EDIT,
+      workspaceId
     }
   );
   // #endregion
@@ -1050,9 +1056,9 @@ const ZEmbedWidgetActionPopover: React.FC<{
 
   const { data: UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
-    _itemsIds: [],
-    _urlDynamicParts: []
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN, workspaceId],
+    _itemsIds: [workspaceId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
 
   // when user won't to delete Utm tag and click on the delete button this function will fire and show the confirm alert.
@@ -1093,8 +1099,11 @@ const ZEmbedWidgetActionPopover: React.FC<{
       if (utmTag?.id?.trim() && UTMTagsData?.length) {
         if (utmTag?.id) {
           const _response = await deleteUtmTagMutate({
-            itemIds: [utmTag?.id],
-            urlDynamicParts: [CONSTANTS.RouteParams.utmTag.utmTagId]
+            itemIds: [workspaceId, utmTag?.id],
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.workspaceId,
+              CONSTANTS.RouteParams.utmTag.utmTagId
+            ]
           });
 
           if (_response) {
@@ -1108,7 +1117,10 @@ const ZEmbedWidgetActionPopover: React.FC<{
               const _oldUTMTags =
                 extractInnerData<UTMTagTemplateType[]>(
                   getRQCDataHandler<UTMTagTemplateType[]>({
-                    key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN]
+                    key: [
+                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
+                      workspaceId
+                    ]
                   }) as UTMTagTemplateType[],
                   extractInnerDataOptionsEnum.createRequestResponseItems
                 ) || [];
@@ -1120,7 +1132,10 @@ const ZEmbedWidgetActionPopover: React.FC<{
 
               // Updating data in RQ cache.
               await updateRQCDataHandler<UTMTagTemplateType[] | undefined>({
-                key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN],
+                key: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
+                  workspaceId
+                ],
                 data: _updatedUtmTags as UTMTagTemplateType[],
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItems,

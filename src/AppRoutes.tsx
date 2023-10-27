@@ -10,6 +10,14 @@ import ZaionsRoutes from './utils/constants/RoutesConstants';
 // Commented Routes
 import PublicRoute from './components/PublicRoute';
 import PrivateRoute from './components/PrivateRoute';
+import ZShareWSStartup from './pages/AdminPanel/ShareWS/Startup';
+const ZInvitationSLRedirectPage = lazy(
+  () => import('./pages/InvitationSLRedirect')
+);
+const ZSWSShortLinksListPage = lazy(
+  () => import('./pages/AdminPanel/ShareWS/ShortLinks/List')
+);
+const ZShareWSView = lazy(() => import('./pages/AdminPanel/ShareWS/View'));
 const TestingReactDropzone = lazy(() => import('./Testing/ReactDropZone'));
 const Z400View = lazy(() => import('./components/Errors/400'));
 const Z401View = lazy(() => import('./components/Errors/401'));
@@ -163,6 +171,12 @@ const AppRoutes = () => {
         component={ZShortLinkRedirectPage}
       />
 
+      <Route
+        exact
+        path={ZaionsRoutes.invitationSL}
+        component={ZInvitationSLRedirectPage}
+      />
+
       <PublicRoute
         exact
         path={ZaionsRoutes.SetPassword}
@@ -312,6 +326,11 @@ const AppRoutes = () => {
       />
 
       <PrivateRoute
+        path={ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Main}
+        Component={ZWorkspaceSettings}
+      />
+
+      <PrivateRoute
         path={ZaionsRoutes.AdminPanel.Setting.UserAccount.ProfileSettings}
         Component={ZUserAccount}
       />
@@ -374,6 +393,36 @@ const AppRoutes = () => {
         exact
         path={ZaionsRoutes.AdminPanel.Workspaces.View}
         Component={ViewSingleWorkspace}
+      />
+
+      <PrivateRoute
+        exact
+        path={ZaionsRoutes.AdminPanel.ShareWS.Startup}
+        Component={ZShareWSStartup}
+      />
+
+      <PrivateRoute
+        exact
+        path={ZaionsRoutes.AdminPanel.ShareWS.View}
+        Component={ZShareWSView}
+      />
+
+      <PrivateRoute
+        exact
+        path={ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main}
+        Component={ZShortLinksListPage}
+      />
+
+      <PrivateRoute
+        exact
+        path={ZaionsRoutes.AdminPanel.ShareWS.Short_link.Create}
+        Component={AdminCreateNewLinkPages}
+      />
+
+      <PrivateRoute
+        exact
+        path={ZaionsRoutes.AdminPanel.ShareWS.Short_link.Edit}
+        Component={AdminCreateNewLinkPages}
       />
 
       <PrivateRoute

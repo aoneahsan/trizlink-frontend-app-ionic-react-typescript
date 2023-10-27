@@ -57,47 +57,46 @@ import { useParams } from 'react-router';
  * */
 
 const LinkInBioFoldersHOC: React.FC = () => {
-	// const { data: getLinkInBioFoldersData } = useZRQGetRequest<LinkFolderType[]>({
-	// 	_url: API_URL_ENUM.LinkInBio_folders_create_list,
-	// 	_key: [			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-	// workspaceId,
-	// folderState.linkInBio,],
-	// });
+  // const { data: getLinkInBioFoldersData } = useZRQGetRequest<LinkFolderType[]>({
+  // 	_url: API_URL_ENUM.LinkInBio_folders_create_list,
+  // 	_key: [			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+  // workspaceId,
+  // folderState.linkInBio,],
+  // });
 
-	const [linkInBioFoldersData, setLinkInBioFoldersData] = useRecoilState(
-		LinkInBioFolderFormattedRState
-	);
+  const [linkInBioFoldersData, setLinkInBioFoldersData] = useRecoilState(
+    LinkInBioFolderFormattedRState
+  );
 
-	// getting current workspace id form params.
-	const { workspaceId } = useParams<{
-		workspaceId: string;
-	}>();
+  // getting current workspace id form params.
+  const { workspaceId } = useParams<{
+    workspaceId: string;
+  }>();
 
-	// useEffect(() => {
-	// 	try {
-	// 		if (getLinkInBioFoldersData) {
-	// 			const formattedLinkInBioFoldersData = getLinkInBioFoldersData?.map(
-	// 				(el) => {
-	// 					return { value: el.id, label: el.title };
-	// 				}
-	// 			) as FolderInterface[];
-	// 			if (formattedLinkInBioFoldersData) {
-	// 				setLinkInBioFoldersData(formattedLinkInBioFoldersData);
-	// 			}
-	// 		}
-	// 	} catch (error) {
-	// 		reportCustomError(error);
-	// 	}
-	// 	// eslint-disable-next-line
-	// }, [getLinkInBioFoldersData]);
+  // useEffect(() => {
+  // 	try {
+  // 		if (getLinkInBioFoldersData) {
+  // 			const formattedLinkInBioFoldersData = getLinkInBioFoldersData?.map(
+  // 				(el) => {
+  // 					return { value: el.id, label: el.title };
+  // 				}
+  // 			) as FolderInterface[];
+  // 			if (formattedLinkInBioFoldersData) {
+  // 				setLinkInBioFoldersData(formattedLinkInBioFoldersData);
+  // 			}
+  // 		}
+  // 	} catch (error) {
+  // 		reportCustomError(error);
+  // 	}
+  // 	// eslint-disable-next-line
+  // }, [getLinkInBioFoldersData]);
 
-	return (
-		<NewLinkFolder
-			_foldersData={[]}
-			_state={folderState.linkInBio}
-			workspaceId={workspaceId}
-		/>
-	);
+  return (
+    <NewLinkFolder
+      _foldersData={[]}
+      _state={folderState.linkInBio}
+    />
+  );
 };
 
 export default LinkInBioFoldersHOC;

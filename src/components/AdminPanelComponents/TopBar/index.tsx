@@ -15,7 +15,7 @@ import {
   refresh
 } from 'ionicons/icons';
 import classNames from 'classnames';
-import { useRouteMatch } from 'react-router';
+import { useParams, useRouteMatch } from 'react-router';
 
 /**
  * Custom Imports go down
@@ -49,7 +49,11 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * */
 import { API_URL_ENUM } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import {
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
@@ -101,6 +105,13 @@ const ZAdminPanelTopBar: React.FC<{
 }) => {
   const { isMdScale, isLgScale } = useZMediaQueryScale();
 
+  // getting current share workspace id form params.
+  const { wsShareId, shareWSMemberId } = useParams<{
+    workspaceId?: string;
+    shareWSMemberId: string;
+    wsShareId: string;
+  }>();
+
   // #region popovers.
   const { presentZIonPopover: presentZHelpCenterPopover } =
     useZIonPopover(ZHelpCenterPopover);
@@ -113,7 +124,7 @@ const ZAdminPanelTopBar: React.FC<{
   // #endregion
 
   // #region APIs.
-  // get workspace data api.
+
   const { data: currentWorkspaceData, isFetching: isCurrentWorkspaceFetching } =
     useZRQGetRequest<workspaceInterface>({
       _url: API_URL_ENUM.workspace_update_delete,
@@ -124,7 +135,7 @@ const ZAdminPanelTopBar: React.FC<{
       _authenticated: true,
       _itemsIds: [workspaceId || ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: !workspaceId ? true : false,
+      _shouldFetchWhenIdPassed: workspaceId ? false : true,
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
 
@@ -142,6 +153,8 @@ const ZAdminPanelTopBar: React.FC<{
       {/*  */}
       <ZADTopBarColOne
         workspaceId={workspaceId}
+        shareWSMemberId={shareWSMemberId}
+        wsShareId={wsShareId}
         showWSSwitcherBtn={showWSSwitcherBtn}
         showInviteBtn={showInviteBtn}
         menuOnClickFn={menuOnClickFn}
@@ -279,11 +292,15 @@ const ZAdminPanelTopBar: React.FC<{
 
 const ZADTopBarColOne: React.FC<{
   workspaceId?: string;
+  shareWSMemberId?: string;
+  wsShareId?: string;
   showWSSwitcherBtn?: boolean;
   showInviteBtn?: boolean;
   menuOnClickFn?: React.MouseEventHandler<HTMLIonButtonElement>;
 }> = ({
   workspaceId,
+  shareWSMemberId,
+  wsShareId,
   showWSSwitcherBtn = true,
   showInviteBtn = true,
   menuOnClickFn
@@ -325,7 +342,11 @@ const ZADTopBarColOne: React.FC<{
         <>
           {isMdScale && showWSSwitcherBtn ? (
             <ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
-              <ZWorkspaceSwitcher workspaceId={workspaceId} />
+              <ZWorkspaceSwitcher
+                workspaceId={workspaceId}
+                shareWSMemberId={shareWSMemberId}
+                wsShareId={wsShareId}
+              />
             </ZCan>
           ) : null}
 
@@ -335,9 +356,10 @@ const ZADTopBarColOne: React.FC<{
               color='tertiary'
               fill='clear'
               className='w-[2rem] rounded-full overflow-hidden ion-no-padding ion-no-margin'
-              onClick={menuOnClickFn}>
-              testingselector=
-              {CONSTANTS.testingSelectors.topBar.openInpageMenuBtn}
+              onClick={menuOnClickFn}
+              testingselector={
+                CONSTANTS.testingSelectors.topBar.openInpageMenuBtn
+              }>
               <ZIonIcon
                 icon={menu}
                 className='w-6 h-6'
@@ -345,12 +367,27 @@ const ZADTopBarColOne: React.FC<{
             </ZIonButton>
           ) : null}
 
-          {isMdScale && showInviteBtn ? (
-            <ZInviteButton
-              className='ms-2'
-              workspaceId={workspaceId}
-            />
-          ) : null}
+          <ZCan
+            shareWSId={wsShareId}
+            havePermissions={
+              wsShareId
+                ? [shareWSPermissionEnum.create_sws_member]
+                : [permissionsEnum.create_ws_member]
+            }
+            permissionType={
+              wsShareId
+                ? permissionsTypeEnum.shareWSMemberPermissions
+                : permissionsTypeEnum.loggedInUserPermissions
+            }>
+            {isMdScale && showInviteBtn ? (
+              <ZInviteButton
+                className='ms-2'
+                workspaceId={workspaceId}
+                wsShareId={wsShareId}
+                shareWSMemberId={shareWSMemberId}
+              />
+            ) : null}
+          </ZCan>
         </>
       )}
     </ZIonCol>

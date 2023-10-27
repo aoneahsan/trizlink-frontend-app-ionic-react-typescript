@@ -9,49 +9,46 @@ import React, { useCallback, useState, useEffect } from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import routeQueryString from 'qs';
+import { AxiosError } from 'axios';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
 import ZIonPage from '@/components/ZIonPage';
-import { useZRQUpdateRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
-import { extractInnerData, STORAGE, zStringify } from '@/utils/helpers';
-import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
-import { WSTeamMembersInterface } from '@/types/AdminPanel/workspace';
-import { AxiosError } from 'axios';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import ZFallbackIonSpinner from '@/components/CustomComponents/FallbackSpinner';
-import { ZIonContent, ZIonTitle } from '@/components/ZIonComponents';
 import Z401View from '@/components/Errors/401';
 import Z400View from '@/components/Errors/400';
 import Z500View from '@/components/Errors/500';
-import { reportCustomError } from '@/utils/customErrorType';
-import { LOCALSTORAGE_KEYS } from '@/utils/constants';
-import {
-	SignUpTypeEnum,
-	UserAccountType,
-} from '@/types/UserAccount/index.type';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { errorCodes } from '@/utils/constants/apiConstants';
 import Z403View from '@/components/Errors/403';
-import { useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZRQUpdateRequest } from '@/ZaionsHooks/zreactquery-hooks';
+import { useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import { extractInnerData, STORAGE, zStringify } from '@/utils/helpers';
+import { LOCALSTORAGE_KEYS } from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { errorCodes } from '@/utils/constants/apiConstants';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { WSTeamMembersInterface } from '@/types/AdminPanel/workspace';
+import {
+  SignUpTypeEnum,
+  UserAccountType
+} from '@/types/UserAccount/index.type';
 
 /**
  * Recoil State Imports go down
@@ -80,155 +77,155 @@ import { useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
  * */
 
 const ZValidateInvitationPage: React.FC = () => {
-	const [compState, setCompState] = useState<{
-		shouldFetch: boolean;
-		isProcessing: boolean;
-		errorCode?: number;
-		errorOccurred: boolean;
-	}>({
-		shouldFetch: false,
-		isProcessing: true,
-		errorOccurred: false,
-	});
+  const [compState, setCompState] = useState<{
+    shouldFetch: boolean;
+    isProcessing: boolean;
+    errorCode?: number;
+    errorOccurred: boolean;
+  }>({
+    shouldFetch: false,
+    isProcessing: true,
+    errorOccurred: false
+  });
 
-	// getting search param from url with the help of 'qs' package.
-	const routeQSearchParams = routeQueryString.parse(location.search, {
-		ignoreQueryPrefix: true,
-	});
+  // getting search param from url with the help of 'qs' package.
+  const routeQSearchParams = routeQueryString.parse(location.search, {
+    ignoreQueryPrefix: true
+  });
 
-	const _token = (routeQSearchParams as { token: string }).token;
+  const _token = (routeQSearchParams as { token: string }).token;
 
-	const { presentZIonErrorAlert } = useZIonErrorAlert();
+  const { presentZIonErrorAlert } = useZIonErrorAlert();
 
-	const { mutateAsync: validateAndUpdateInvitation } = useZRQUpdateRequest({
-		_url: API_URL_ENUM.validate_invitation_status,
-		_showAlertOnError: false,
-		_showLoader: false,
-		authenticated: false,
-	});
+  const { mutateAsync: validateAndUpdateInvitation } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.validate_invitation_status,
+    _showAlertOnError: false,
+    _showLoader: false,
+    authenticated: false
+  });
 
-	const validator = useCallback(async () => {
-		try {
-			const userData = (await STORAGE.GET(
-				LOCALSTORAGE_KEYS.USERDATA
-			)) as UserAccountType | null;
+  const validator = useCallback(async () => {
+    try {
+      const userData = (await STORAGE.GET(
+        LOCALSTORAGE_KEYS.USERDATA
+      )) as UserAccountType | null;
 
-			const __data = zStringify({
-				email: userData?.email,
-				token: _token,
-			});
+      const __data = zStringify({
+        email: userData?.email,
+        token: _token
+      });
 
-			const _response = await validateAndUpdateInvitation({
-				requestData: __data,
-				itemIds: [],
-				urlDynamicParts: [],
-			});
+      const _response = await validateAndUpdateInvitation({
+        requestData: __data,
+        itemIds: [],
+        urlDynamicParts: []
+      });
 
-			if ((_response as ZLinkMutateApiType<WSTeamMembersInterface>).success) {
-				const _data = extractInnerData<{
-					user: {
-						email: string;
-						signupType: string;
-					};
-				}>(_response, extractInnerDataOptionsEnum.createRequestResponseItem);
+      if ((_response as ZLinkMutateApiType<WSTeamMembersInterface>).success) {
+        const _data = extractInnerData<{
+          user: {
+            email: string;
+            signupType: string;
+          };
+        }>(_response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
-				if (_data && _data?.user?.email) {
-					setCompState((oldValues) => ({
-						...oldValues,
-						isProcessing: false,
-					}));
+        if (_data && _data?.user?.email) {
+          setCompState(oldValues => ({
+            ...oldValues,
+            isProcessing: false
+          }));
 
-					const inviteeData = {
-						email: _data?.user?.email,
-						token: _token,
-						signupType: _data?.user?.signupType,
-					};
-					void STORAGE.SET(LOCALSTORAGE_KEYS.INVITEE_USER_DATA, inviteeData);
+          const inviteeData = {
+            email: _data?.user?.email,
+            token: _token,
+            signupType: _data?.user?.signupType
+          };
+          void STORAGE.SET(LOCALSTORAGE_KEYS.INVITEE_USER_DATA, inviteeData);
 
-					if (_data?.user?.signupType === SignUpTypeEnum.normal) {
-						window.location.replace(ZaionsRoutes.LoginRoute);
-					} else if (_data?.user?.signupType === SignUpTypeEnum.invite) {
-						window.location.replace(ZaionsRoutes.SetPassword);
-					}
-				}
-			}
-		} catch (error) {
-			if (error instanceof AxiosError) {
-				const __apiErrors = error.response;
+          if (_data?.user?.signupType === SignUpTypeEnum.normal) {
+            window.location.replace(ZaionsRoutes.LoginRoute);
+          } else if (_data?.user?.signupType === SignUpTypeEnum.invite) {
+            window.location.replace(ZaionsRoutes.SetPassword);
+          }
+        }
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const __apiErrors = error.response;
 
-				setCompState((oldValues) => ({
-					...oldValues,
-					isProcessing: false,
-					errorCode: __apiErrors?.status,
-					errorOccurred: true,
-				}));
+        setCompState(oldValues => ({
+          ...oldValues,
+          isProcessing: false,
+          errorCode: __apiErrors?.status,
+          errorOccurred: true
+        }));
 
-				if (__apiErrors?.status === errorCodes.badRequest) {
-					presentZIonErrorAlert({
-						subHeader: 'Invalid token',
-						message: 'The provided token is invalid.',
-					});
-				}
-			}
-		}
-	}, []);
+        if (__apiErrors?.status === errorCodes.badRequest) {
+          presentZIonErrorAlert({
+            subHeader: 'Invalid token',
+            message: 'The provided token is invalid.'
+          });
+        }
+      }
+    }
+  }, []);
 
-	useEffect(() => {
-		if (_token && _token?.trim()?.length > 0) {
-			void validator();
-		} else {
-			setCompState((oldState) => ({
-				...oldState,
-				errorOccurred: true,
-				isProcessing: false,
-			}));
-		}
-	}, [_token]);
+  useEffect(() => {
+    if (_token && _token?.trim()?.length > 0) {
+      void validator();
+    } else {
+      setCompState(oldState => ({
+        ...oldState,
+        errorOccurred: true,
+        isProcessing: false
+      }));
+    }
+  }, [_token]);
 
-	if (compState.isProcessing) {
-		return <ZFallbackIonSpinner />;
-	} else if (
-		_token &&
-		compState.errorOccurred &&
-		compState.errorCode === errorCodes.unauthenticated &&
-		!compState.isProcessing
-	) {
-		return (
-			<ZIonPage>
-				<Z401View />
-			</ZIonPage>
-		);
-	} else if (
-		_token &&
-		compState.errorOccurred &&
-		compState.errorCode === errorCodes.badRequest &&
-		!compState.isProcessing
-	) {
-		return (
-			<ZIonPage>
-				<Z400View />
-			</ZIonPage>
-		);
-	} else if (
-		_token &&
-		compState.errorOccurred &&
-		compState.errorCode === errorCodes.forbidden &&
-		!compState.isProcessing
-	) {
-		return (
-			<ZIonPage>
-				<Z403View />
-			</ZIonPage>
-		);
-	} else if (_token && !compState.errorOccurred && !compState.isProcessing) {
-		return <ZFallbackIonSpinner />;
-	} else {
-		return (
-			<ZIonPage>
-				<Z500View />
-			</ZIonPage>
-		);
-	}
+  if (compState.isProcessing) {
+    return <ZFallbackIonSpinner />;
+  } else if (
+    _token &&
+    compState.errorOccurred &&
+    compState.errorCode === errorCodes.unauthenticated &&
+    !compState.isProcessing
+  ) {
+    return (
+      <ZIonPage>
+        <Z401View />
+      </ZIonPage>
+    );
+  } else if (
+    _token &&
+    compState.errorOccurred &&
+    compState.errorCode === errorCodes.badRequest &&
+    !compState.isProcessing
+  ) {
+    return (
+      <ZIonPage>
+        <Z400View />
+      </ZIonPage>
+    );
+  } else if (
+    _token &&
+    compState.errorOccurred &&
+    compState.errorCode === errorCodes.forbidden &&
+    !compState.isProcessing
+  ) {
+    return (
+      <ZIonPage>
+        <Z403View />
+      </ZIonPage>
+    );
+  } else if (_token && !compState.errorOccurred && !compState.isProcessing) {
+    return <ZFallbackIonSpinner />;
+  } else {
+    return (
+      <ZIonPage>
+        <Z500View />
+      </ZIonPage>
+    );
+  }
 };
 
 export default ZValidateInvitationPage;
