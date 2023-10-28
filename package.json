@@ -6,7 +6,8 @@
   "engines": {
     "node": "^18.17.0",
     "npm": "Please use PNPM (v1.22.19)",
-    "yarn": "^1.22.19"
+    "yarn": "Please use PNPM (^8.9.2)",
+    "pnpm": "^8.9.2"
   },
   "author": {
     "email": "developer@zaions.com",
@@ -27,8 +28,7 @@
     "cypress.open": "cypress open",
     "test.e2e": "cypress run",
     "test.unit": "vitest",
-    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
-    "preinstall": "node -e \"if (require('path').basename(process.env.npm_execpath) === 'npm-cli.js') throw new Error('Please use Yarn for installation: yarn install')\""
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'"
   },
   "description": "ZLink project - Project of Zaions (https://zaions.com).",
   "dependencies": {
