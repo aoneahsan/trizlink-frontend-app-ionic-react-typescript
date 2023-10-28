@@ -70,7 +70,12 @@ export const setupFrbAnalytics = async (
             }
           }
         });
-      } catch (error) {}
+      } catch (error) {
+        reportCustomError(
+          error,
+          'firebase analytics setDefaultEventParameters call'
+        );
+      }
 
       try {
         // this will set the user id for current logged in user, global setting this to true will set this user id for all following analytics logs on this page
@@ -98,7 +103,12 @@ export const setupFrbAnalytics = async (
             }
           }
         });
-      } catch (error) {}
+      } catch (error) {
+        reportCustomError(
+          error,
+          'firebase analytics setUserId & setUserProperties call'
+        );
+      }
 
       try {
         // set google analytics settings for initialized SDK
@@ -107,7 +117,9 @@ export const setupFrbAnalytics = async (
             'well this is just some custom data layer name for this event',
           gtagName: "not sure but it says it's gtagName so we will see"
         });
-      } catch (error) {}
+      } catch (error) {
+        reportCustomError(error, 'firebase analytics settings call');
+      }
 
       try {
         // finally logging a analytics event
@@ -136,7 +148,35 @@ export const setupFrbAnalytics = async (
             }
           }
         );
-      } catch (error) {}
+      } catch (error) {
+        reportCustomError(error, 'firebase analytics logEvent call');
+      }
+      try {
+        // finally logging a analytics event
+        logEvent(_frbAnalytics, 'select_item', {
+          wellThisIsNew: {
+            these: {
+              are: {
+                event: [
+                  'params',
+                  {
+                    mean: [
+                      'i hope',
+                      {
+                        any: {
+                          thingWeWant: 'O YAY'
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        });
+      } catch (error) {
+        reportCustomError(error, 'firebase analytics logEvent call');
+      }
 
       setFrbAnalyticsState(oldState => ({
         ...oldState,
