@@ -2212,7 +2212,8 @@ const ZTopBarSkeleton: React.FC = () => {
             <ZIonSkeletonText
               animated={true}
               width={isMdScale ? '40px' : !isMdScale ? '100%' : '40px'}
-              height='17px'></ZIonSkeletonText>
+              height='17px'
+            />
           </ZIonButton>
 
           {/* Title */}
@@ -2220,7 +2221,8 @@ const ZTopBarSkeleton: React.FC = () => {
             <ZIonSkeletonText
               animated={true}
               width='120px'
-              height='17px'></ZIonSkeletonText>
+              height='17px'
+            />
           </ZIonTitle>
         </ZIonCol>
 
@@ -2239,7 +2241,8 @@ const ZTopBarSkeleton: React.FC = () => {
               <ZIonSkeletonText
                 animated={true}
                 width='150px'
-                height='30px'></ZIonSkeletonText>
+                height='30px'
+              />
             </ZIonText>
           </ZIonCol>
         )}
@@ -2274,7 +2277,8 @@ const ZTopBarSkeleton: React.FC = () => {
             <ZIonSkeletonText
               animated={true}
               width={isMdScale ? '140px' : !isMdScale ? '100%' : '140px'}
-              height='17px'></ZIonSkeletonText>
+              height='17px'
+            />
           </ZIonButton>
         </ZIonCol>
       </ZIonRow>

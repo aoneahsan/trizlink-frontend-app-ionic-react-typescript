@@ -492,11 +492,7 @@ const ZProfileSettingsSettings: React.FC = () => {
                         errors?.username === undefined &&
                         !updateProfileDetailBtnDisable
                       ) {
-                        if (compState?.profileFile !== undefined) {
-                          await uploadFileToBackend();
-                        }
-
-                        const __zStringifyData = zStringify({
+                        let __zStringifyData = zStringify({
                           name: values?.name,
                           username: values?.username,
                           phoneNumber: values?.phoneNumber,
@@ -509,6 +505,43 @@ const ZProfileSettingsSettings: React.FC = () => {
                             compState?.profilePicFormattedObj?.fileUrl ||
                             userAccountStateAtom?.profileImage?.fileUrl
                         });
+
+                        //
+                        if (compState?.profileFile !== undefined) {
+                          // await uploadFileToBackend();
+                          const formData = new FormData();
+                          formData.append('file', compState?.profileFile!);
+                          const result = await uploadSingleFile(formData);
+
+                          if (result) {
+                            const __data = (
+                              result as {
+                                data: {
+                                  file: object;
+                                  fileName: object;
+                                  filePath: string;
+                                  fileUrl: string;
+                                };
+                              }
+                            )?.data;
+
+                            if (__data) {
+                              __zStringifyData = zStringify({
+                                name: values?.name,
+                                username: values?.username,
+                                phoneNumber: values?.phoneNumber,
+                                profileImage: zStringify({ ...__data }),
+                                avatar: __data.fileUrl
+                              });
+
+                              // showing success message.
+                              showSuccessNotification(
+                                MESSAGES.GENERAL.FILE.UPLOADED
+                              );
+                            }
+                          }
+                        }
+
                         void updateProfileDetailsHandler(__zStringifyData);
                       }
                     }}

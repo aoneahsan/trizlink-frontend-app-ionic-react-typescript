@@ -513,7 +513,8 @@ const ZWorkspacesCard: React.FC<{
                 accountStatus === ZTeamMemberInvitationEnum.accepted ? (
                   <ZIonButton
                     fill='clear'
-                    className='h-auto mb-1 ion-no-padding ion-no-margin'
+                    minHeight='auto'
+                    className='mb-1 overflow-hidden rounded-full w-7 h-7 ion-no-padding ion-no-margin'
                     testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardFavoritesButton}-${workspaceId}`}
                     testinglistselector={
                       CONSTANTS.testingSelectors.workspace.listPage
@@ -557,8 +558,10 @@ const ZWorkspacesCard: React.FC<{
                       }}>
                       <ZIonImg
                         src={
-                          user?.avatar ||
-                          getUiAvatarApiUrl({ name: user?.username })
+                          owned
+                            ? userAccountStateAtom?.avatar
+                            : user?.avatar ||
+                              getUiAvatarApiUrl({ name: user?.username })
                         }
                         className='w-[38px] h-[40px] zaions-object-fit-cover'
                       />
@@ -632,7 +635,8 @@ const ZWorkspacesCard: React.FC<{
                     {owned === true && (
                       <ZIonButton
                         fill='clear'
-                        className='h-auto mb-1 normal-case ion-no-padding ion-no-margin'
+                        minHeight='auto'
+                        className='w-6 h-6 overflow-hidden normal-case rounded-full ion-no-padding ion-no-margin'
                         color='dark'
                         testingselector={`${CONSTANTS.testingSelectors.workspace.listPage.workspaceCardActionPopoverButton}-${workspaceId}`}
                         testinglistselector={
