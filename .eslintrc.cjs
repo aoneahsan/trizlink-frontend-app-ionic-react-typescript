@@ -3,11 +3,12 @@ module.exports = {
     browser: true,
     es2021: true
   },
-  extends: [
-    'standard-with-typescript',
-    'plugin:react/recommended',
-    'eslint:recommended'
-  ],
+  settings: {
+    react: {
+      version: 'detect' // Automatically detect the react version
+    }
+  },
+  extends: ['standard-with-typescript', 'plugin:react/recommended'],
   overrides: [
     {
       env: {
@@ -26,6 +27,8 @@ module.exports = {
   plugins: ['react'],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    '@typescript-eslint/semi': 'off',
+    '@typescript-eslint/member-delimiter-style': 'off'
   }
 };

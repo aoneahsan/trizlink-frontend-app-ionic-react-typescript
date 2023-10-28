@@ -1687,7 +1687,10 @@ export const zRedirectToTarget = ({
           break;
 
         case messengerPlatformsBlockEnum.line:
-          if (_target?.accountId && _target?.accountId?.trim().length > 0) {
+          if (
+            _target?.accountId != null &&
+            _target?.accountId?.trim().length > 0
+          ) {
             __redirectUrl = `https://line.me/R/oaMessage/${_target?.accountId}`;
           }
           break;
