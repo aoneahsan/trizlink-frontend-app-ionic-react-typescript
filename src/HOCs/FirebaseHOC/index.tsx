@@ -114,8 +114,6 @@ const FirebaseHOC: React.FC<IFirebaseHOCProps> = ({ children }) => {
     }
   };
 
-  console.log({ compState, frbAppRState, frbRemoteConfigRState });
-
   if (compState.isProcessing) {
     return <ZFallbackIonSpinner />;
   } else if (
