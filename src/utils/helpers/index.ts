@@ -683,8 +683,12 @@ export const zAxiosApiRequest = async <T>({
   _urlDynamicParts,
   _contentType = zAxiosApiRequestContentType.Json
 }: zAxiosApiRequestInterface): Promise<T | undefined> => {
+  // Getting authToken from storage.
   const _authToken = await getAuthToken();
+
+  // authToken is fount or not authenticatedRequest request then
   if (_authToken || !_isAuthenticatedRequest) {
+    // Creating an axios config object.
     const reqInput: AxiosRequestConfig = {
       method: _method,
       data: _data,
@@ -697,16 +701,26 @@ export const zAxiosApiRequest = async <T>({
         }`
       }
     };
+
+    // Making axios request.
     const __res = await axiosInstance.request<AxiosRequestResponseType>(
       reqInput
     );
+
+    // retuning data of type T
     return __res.data as unknown as T;
+
+    // else if this is an authenticatedRequest and authToken is not fount then
   } else if (_isAuthenticatedRequest && !_authToken) {
+    // Remove data from storage.
     await Promise.all([
       STORAGE.REMOVE(LOCALSTORAGE_KEYS.USERDATA),
       STORAGE.REMOVE(LOCALSTORAGE_KEYS.AUTHTOKEN)
     ]);
+    // Redirect to login.
     window.location.replace(ZaionsRoutes.LoginRoute);
+
+    // Throw UnAuthenticated error.
     throwZCustomErrorUnAuthenticated();
   } else {
     throwZCustomErrorRequestFailed();

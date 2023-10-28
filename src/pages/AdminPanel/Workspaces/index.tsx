@@ -78,6 +78,7 @@ import {
   workspaceInterface,
   wsShareInterface
 } from '@/types/AdminPanel/workspace';
+import { zStringify } from '@/utils/helpers';
 
 /**
  * Recoil State Imports go down
@@ -132,7 +133,7 @@ const ZWorkspaceListPage: React.FC = () => {
       _url: API_URL_ENUM.ws_share_list,
       _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
     });
-  console.log({ WorkspacesData });
+
   useEffect(() => {
     const _sharedFavoriteWorkspaces = WSShareData?.filter(
       el => el?.isFavorite === 1

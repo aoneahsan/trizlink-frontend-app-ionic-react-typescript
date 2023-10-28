@@ -71,6 +71,7 @@ export const useZRQGetRequest = <T>({
   _staleTime?: number | typeof Infinity;
   _checkPermissions?: boolean;
   _showAlertOnError?: boolean;
+
   _queryOptions?: {
     refetchOnWindowFocus?: boolean;
     networkMode?: 'always' | 'offlineFirst' | 'online';
@@ -167,7 +168,7 @@ export const useZRQGetRequest = <T>({
           void STORAGE.SET(LOCALSTORAGE_KEYS.ERROR_DATA, __data);
 
           // redirect to 404
-          window.location.replace(ZaionsRoutes.Error.Z404);
+          // window.location.replace(ZaionsRoutes.Error.Z404);
         } else {
           // showing error alert...
           _showAlertOnError && void presentZIonErrorAlert();
@@ -188,6 +189,9 @@ export const useZRQGetRequest = <T>({
 
           case ZRQGetRequestExtractEnum.extractItem:
             return (data as unknown as { data: { item: T } })?.data?.item;
+
+          case ZRQGetRequestExtractEnum.extractData:
+            return (data as unknown as { data: T })?.data;
 
           default:
             return data;
