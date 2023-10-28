@@ -278,13 +278,17 @@ const ZShortLinksListPage: React.FC = () => {
     data: shortLinksData,
     isFetching: isShortLinksDataFetching,
     isError: isShortLinksDataError
-  } = useZRQGetRequest<ShortLinkType[]>({
-    _url: API_URL_ENUM.shortLinks_create_list,
+  } = useZRQGetRequest<{
+    items: ShortLinkType[];
+    itemsCount: string;
+  }>({
+    _url: API_URL_ENUM.shortLinks_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
     _itemsIds: [workspaceId],
     _shouldFetchWhenIdPassed: workspaceId ? false : true,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _showLoader: false
+    _showLoader: false,
+    _extractType: ZRQGetRequestExtractEnum.extractData
   });
 
   // If owned-workspace then this api will fetch owned-workspace-short-links-folder data.
@@ -563,7 +567,7 @@ const ZShortLinksListPage: React.FC = () => {
 
   return (
     <>
-      {((shortLinksData && shortLinksData?.length > 0) ||
+      {((shortLinksData?.items && shortLinksData?.items?.length > 0) ||
         (swsShortLinksData && swsShortLinksData?.length > 0)) && (
         <ZShortLinksFilterMenu />
       )}
@@ -936,13 +940,17 @@ const ZInpageMainContent: React.FC = () => {
 
   // If owned-workspace then this api will fetch owned-workspace-short-links data.
   const { data: shortLinksData, isFetching: isShortLinksDataFetching } =
-    useZRQGetRequest<ShortLinkType[]>({
-      _url: API_URL_ENUM.shortLinks_create_list,
+    useZRQGetRequest<{
+      items: ShortLinkType[];
+      itemsCount: string;
+    }>({
+      _url: API_URL_ENUM.shortLinks_list,
       _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
       _itemsIds: [workspaceId],
       _shouldFetchWhenIdPassed: workspaceId ? false : true,
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _showLoader: false
+      _showLoader: false,
+      _extractType: ZRQGetRequestExtractEnum.extractData
     });
   // #endregion
 
@@ -1162,7 +1170,9 @@ const ZInpageMainContent: React.FC = () => {
               'gap-2 flex-col': !isSmScale
             })}>
             {/* Filter button */}
-            {((workspaceId && shortLinksData && shortLinksData?.length > 0) ||
+            {((workspaceId &&
+              shortLinksData?.items &&
+              shortLinksData?.items?.length > 0) ||
               (wsShareId &&
                 swsShortLinksData &&
                 swsShortLinksData?.length > 0)) && (

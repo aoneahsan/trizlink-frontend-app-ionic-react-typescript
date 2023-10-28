@@ -13,7 +13,7 @@ import {
   trashBinOutline
 } from 'ionicons/icons';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import routeQueryString from 'qs';
 import {
   createColumnHelper,
@@ -164,13 +164,17 @@ const ZaionsShortLinkTable: React.FC<{
   });
 
   // Request for getting short links data.
-  const { data: ShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
-    _url: API_URL_ENUM.shortLinks_create_list,
+  const { data: ShortLinksData } = useZRQGetRequest<{
+    items: ShortLinkType[];
+    itemsCount: string;
+  }>({
+    _url: API_URL_ENUM.shortLinks_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
     _shouldFetchWhenIdPassed: workspaceId ? false : true,
     _itemsIds: [workspaceId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _showLoader: false
+    _showLoader: false,
+    _extractType: ZRQGetRequestExtractEnum.extractData
   });
 
   // Request for getting share workspace short links data.
@@ -242,7 +246,7 @@ const ZaionsShortLinkTable: React.FC<{
   return (
     <>
       {!showSkeleton ? (
-        (ShortLinksData && ShortLinksData?.length) ||
+        (ShortLinksData?.items && ShortLinksData?.items?.length) ||
         (swsShortLinksData && swsShortLinksData?.length) ? (
           <ZInpageTable />
         ) : (
@@ -301,7 +305,10 @@ const ZInpageTable: React.FC = () => {
   // #region Component state.
   const [compState, setCompState] = useState<{
     selectedShortLinkId?: string;
-  }>({});
+    totalShortLinks?: number;
+  }>({
+    totalShortLinks: 0
+  });
   // #endregion
 
   // Folder id getting from url. (use when use when to filter short links by folder listed on the left-side, when user click on the folder from listed folder the id of that folder the Id of folder will set in the url and we will fetch it here by useParams).
@@ -332,8 +339,9 @@ const ZInpageTable: React.FC = () => {
   const { zNavigatePushRoute } = useZNavigate();
   const { presentZIonToast } = useZIonToast();
   const { isMdScale, isSmScale } = useZMediaQueryScale();
+  const { search } = useLocation();
   // getting search param from url with the help of 'qs' package.
-  const routeQSearchParams = routeQueryString.parse(location.search, {
+  const routeQSearchParams = routeQueryString.parse(search, {
     ignoreQueryPrefix: true
   });
   const { pageindex, pagesize } = routeQSearchParams;
@@ -341,14 +349,28 @@ const ZInpageTable: React.FC = () => {
 
   // #region APIS requests.
   // Request for getting short links data.
-  const { data: ShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
-    _url: API_URL_ENUM.shortLinks_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
-    _shouldFetchWhenIdPassed: workspaceId ? false : true,
-    _itemsIds: [workspaceId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _showLoader: false
-  });
+  const { data: ShortLinksData, isFetching: isShortLinksDataFetching } =
+    useZRQGetRequest<{
+      items: ShortLinkType[];
+      itemsCount: string;
+    }>({
+      _url: API_URL_ENUM.shortLinks_list,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+        workspaceId,
+        String(pageindex)
+        // String(pagesize)
+      ],
+      _shouldFetchWhenIdPassed: workspaceId ? false : true,
+      _itemsIds: [workspaceId, String(pageindex), String(pagesize)],
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.workspaceId,
+        CONSTANTS.RouteParams.pageNumber,
+        CONSTANTS.RouteParams.paginationLimit
+      ],
+      _showLoader: false,
+      _extractType: ZRQGetRequestExtractEnum.extractData
+    });
 
   // Request for getting share workspace short links data.
   const {
@@ -489,15 +511,9 @@ const ZInpageTable: React.FC = () => {
       cell: row => {
         return (
           <>
-            {(JSON.parse(row?.getValue()!.toString()) as string[])?.length >
-            0 ? (
+            {(row?.getValue() as string[])?.length > 0 ? (
               <div className='flex gap-1 ion-align-items-center ZaionsTextEllipsis'>
-                <div className=''>
-                  {
-                    (JSON.parse(row?.getValue()!.toString()) as string[])
-                      ?.length
-                  }
-                </div>
+                <div className=''>{(row?.getValue() as string[])?.length}</div>
                 <ZIonText
                   color='primary'
                   className='cursor-pointer'
@@ -508,9 +524,7 @@ const ZInpageTable: React.FC = () => {
                   onClick={() => {
                     setShortLinkFormState(oldVal => ({
                       ...oldVal,
-                      pixelAccountIds: JSON.parse(
-                        row?.getValue()!.toString()
-                      ) as string[]
+                      pixelAccountIds: row?.getValue() as string[]
                     }));
                     // Open The Modal
                     presentPixelAccountDetailModal({
@@ -768,9 +782,9 @@ const ZInpageTable: React.FC = () => {
   }, [workspaceId, getUserSetting, swsGetUserSetting, wsShareId]);
 
   useEffect(() => {
-    zShortLinksTable.setPageIndex(Number(pageindex) || 0);
+    // zShortLinksTable.setPageIndex(Number(pageindex) || 0);
     zShortLinksTable.setPageSize(Number(pagesize) || 2);
-  }, [pageindex, pagesize]);
+  }, [pagesize]);
 
   // When the short links data fetch from backend, storing it in ShortLinksRStateAtom recoil state.
   useEffect(() => {
@@ -788,7 +802,7 @@ const ZInpageTable: React.FC = () => {
   useEffect(() => {
     try {
       if (workspaceId && ShortLinksData) {
-        setShortLinksStateAtom(ShortLinksData);
+        setShortLinksStateAtom(ShortLinksData?.items);
       } else if (wsShareId && swsShortLinksData) {
         setShortLinksStateAtom(swsShortLinksData);
       }
@@ -797,6 +811,15 @@ const ZInpageTable: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ShortLinksData, swsShortLinksData]);
+
+  useEffect(() => {
+    if (!isShortLinksDataFetching) {
+      setCompState(oldValues => ({
+        ...oldValues,
+        totalShortLinks: +(ShortLinksData?.itemsCount || 0)
+      }));
+    }
+  }, [isShortLinksDataFetching]);
   // #endregion
 
   return (
@@ -804,144 +827,147 @@ const ZInpageTable: React.FC = () => {
       className={classNames({
         'mt-2': !isMdScale
       })}>
-      <ZCustomScrollable
-        className='w-full border rounded-lg h-max ion-no-padding'
-        scrollX={true}>
-        <div className='min-w-[55rem]'>
-          {zShortLinksTable
-            .getHeaderGroups()
-            .map((_headerInfo, _headerIndex) => {
-              return (
-                <ZIonRow
-                  key={_headerIndex}
-                  className='flex flex-nowrap zaions__light_bg'>
-                  {_headerInfo.headers.map((_columnInfo, _columnIndex) => {
+      {isShortLinksDataFetching && <ZaionsShortLinkTableSkeleton />}
+      {!isShortLinksDataFetching && (
+        <ZCustomScrollable
+          className='w-full border rounded-lg h-max ion-no-padding'
+          scrollX={true}>
+          <div className='min-w-[55rem]'>
+            {zShortLinksTable
+              .getHeaderGroups()
+              .map((_headerInfo, _headerIndex) => {
+                return (
+                  <ZIonRow
+                    key={_headerIndex}
+                    className='flex flex-nowrap zaions__light_bg'>
+                    {_headerInfo.headers.map((_columnInfo, _columnIndex) => {
+                      return (
+                        <ZIonCol
+                          size={
+                            _columnInfo.column.id ===
+                              ZShortLinkListPageTableColumnsIds.id ||
+                            _columnInfo.column.id ===
+                              ZShortLinkListPageTableColumnsIds.actions
+                              ? '.8'
+                              : '2.5'
+                          }
+                          key={_columnInfo.id}
+                          className={classNames({
+                            'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
+                              true,
+                            'border-r': false
+                          })}>
+                          {_columnInfo.column.columnDef.header?.toString()}
+                        </ZIonCol>
+                      );
+                    })}
+
+                    <ZIonCol
+                      size='.8'
+                      className={classNames({
+                        'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
+                          true,
+                        'border-r': false
+                      })}>
+                      Actions
+                    </ZIonCol>
+                  </ZIonRow>
+                );
+              })}
+
+            {/* Body Section */}
+            <ZIonRow className='rounded-b-lg'>
+              <ZIonCol
+                size='12'
+                className='w-full ion-no-padding'>
+                {zShortLinksTable
+                  .getRowModel()
+                  .rows.map((_rowInfo, _rowIndex) => {
                     return (
-                      <ZIonCol
-                        size={
-                          _columnInfo.column.id ===
-                            ZShortLinkListPageTableColumnsIds.id ||
-                          _columnInfo.column.id ===
-                            ZShortLinkListPageTableColumnsIds.actions
-                            ? '.8'
-                            : '2.5'
-                        }
-                        key={_columnInfo.id}
-                        className={classNames({
-                          'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
-                            true,
-                          'border-r': false
-                        })}>
-                        {_columnInfo.column.columnDef.header?.toString()}
-                      </ZIonCol>
-                    );
-                  })}
-
-                  <ZIonCol
-                    size='.8'
-                    className={classNames({
-                      'border-b ps-2 py-1 font-bold zaions__light_bg text-sm':
-                        true,
-                      'border-r': false
-                    })}>
-                    Actions
-                  </ZIonCol>
-                </ZIonRow>
-              );
-            })}
-
-          {/* Body Section */}
-          <ZIonRow className='rounded-b-lg'>
-            <ZIonCol
-              size='12'
-              className='w-full ion-no-padding'>
-              {zShortLinksTable
-                .getRowModel()
-                .rows.map((_rowInfo, _rowIndex) => {
-                  return (
-                    <ZIonRow
-                      key={_rowIndex}
-                      className='flex-nowrap'>
-                      {_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
-                        _cellInfo.column.getIsVisible() ? (
-                          <ZIonCol
-                            key={_cellIndex}
-                            size={
-                              _cellInfo.column.id ===
-                                ZShortLinkListPageTableColumnsIds.id ||
-                              _cellInfo.column.id ===
-                                ZShortLinkListPageTableColumnsIds.actions
-                                ? '.8'
-                                : '2.5'
-                            }
-                            className={classNames({
-                              'py-1 mt-1 border-b flex ion-align-items-center':
-                                true,
-                              'border-r': false,
-                              'ps-2':
-                                _cellInfo.column.id !==
-                                ZShortLinkListPageTableColumnsIds.id,
-                              'ps-0':
+                      <ZIonRow
+                        key={_rowIndex}
+                        className='flex-nowrap'>
+                        {_rowInfo.getAllCells().map((_cellInfo, _cellIndex) =>
+                          _cellInfo.column.getIsVisible() ? (
+                            <ZIonCol
+                              key={_cellIndex}
+                              size={
                                 _cellInfo.column.id ===
-                                ZShortLinkListPageTableColumnsIds.id
-                            })}>
-                            <div
+                                  ZShortLinkListPageTableColumnsIds.id ||
+                                _cellInfo.column.id ===
+                                  ZShortLinkListPageTableColumnsIds.actions
+                                  ? '.8'
+                                  : '2.5'
+                              }
                               className={classNames({
-                                'w-full text-sm ZaionsTextEllipsis': true,
-                                'ps-3':
+                                'py-1 mt-1 border-b flex ion-align-items-center':
+                                  true,
+                                'border-r': false,
+                                'ps-2':
+                                  _cellInfo.column.id !==
+                                  ZShortLinkListPageTableColumnsIds.id,
+                                'ps-0':
                                   _cellInfo.column.id ===
                                   ZShortLinkListPageTableColumnsIds.id
                               })}>
-                              {flexRender(
-                                _cellInfo.column.columnDef.cell,
-                                _cellInfo.getContext()
-                              )}
-                            </div>
-                          </ZIonCol>
-                        ) : null
-                      )}
+                              <div
+                                className={classNames({
+                                  'w-full text-sm ZaionsTextEllipsis': true,
+                                  'ps-3':
+                                    _cellInfo.column.id ===
+                                    ZShortLinkListPageTableColumnsIds.id
+                                })}>
+                                {flexRender(
+                                  _cellInfo.column.columnDef.cell,
+                                  _cellInfo.getContext()
+                                )}
+                              </div>
+                            </ZIonCol>
+                          ) : null
+                        )}
 
-                      <ZIonCol
-                        size='.8'
-                        className={classNames({
-                          'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
-                            true,
-                          'border-r': false
-                        })}>
-                        <ZIonButton
-                          fill='clear'
-                          color='dark'
-                          className='ion-no-padding ion-no-margin'
-                          size='small'
-                          testingselector={
-                            CONSTANTS.testingSelectors.shortLink.listPage.table
-                              .actionPopoverBtn
-                          }
-                          testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
-                          onClick={(_event: unknown) => {
-                            setCompState(oldVal => ({
-                              ...oldVal,
-                              selectedShortLinkId: _rowInfo.original.id || ''
-                            }));
+                        <ZIonCol
+                          size='.8'
+                          className={classNames({
+                            'py-1 mt-1 border-b ps-2 ion-justify-content-center flex ion-align-items-center':
+                              true,
+                            'border-r': false
+                          })}>
+                          <ZIonButton
+                            fill='clear'
+                            color='dark'
+                            className='ion-no-padding ion-no-margin'
+                            size='small'
+                            testingselector={
+                              CONSTANTS.testingSelectors.shortLink.listPage
+                                .table.actionPopoverBtn
+                            }
+                            testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.actionPopoverBtn}-${_rowInfo.original.id}`}
+                            onClick={(_event: unknown) => {
+                              setCompState(oldVal => ({
+                                ...oldVal,
+                                selectedShortLinkId: _rowInfo.original.id || ''
+                              }));
 
-                            //
-                            presentZShortLinkActionPopover({
-                              _event: _event as Event,
-                              _cssClass:
-                                'zaions_present_folder_Action_popover_width',
-                              _dismissOnSelect: false
-                            });
-                          }}>
-                          <ZIonIcon icon={ellipsisVerticalOutline} />
-                        </ZIonButton>
-                      </ZIonCol>
-                    </ZIonRow>
-                  );
-                })}
-            </ZIonCol>
-          </ZIonRow>
-        </div>
-      </ZCustomScrollable>
+                              //
+                              presentZShortLinkActionPopover({
+                                _event: _event as Event,
+                                _cssClass:
+                                  'zaions_present_folder_Action_popover_width',
+                                _dismissOnSelect: false
+                              });
+                            }}>
+                            <ZIonIcon icon={ellipsisVerticalOutline} />
+                          </ZIonButton>
+                        </ZIonCol>
+                      </ZIonRow>
+                    );
+                  })}
+              </ZIonCol>
+            </ZIonRow>
+          </div>
+        </ZCustomScrollable>
+      )}
 
       {/*  */}
       <ZIonRow
@@ -951,10 +977,10 @@ const ZInpageTable: React.FC = () => {
           'mt-2': !isMdScale
         })}>
         <ZIonCol
-          sizeXl='6'
-          sizeLg='6'
-          sizeMd='6'
-          sizeSm='6'
+          sizeXl='4'
+          sizeLg='4'
+          sizeMd='4'
+          sizeSm='4'
           sizeXs='12'
           className={classNames({
             'flex mt-1': true,
@@ -966,13 +992,13 @@ const ZInpageTable: React.FC = () => {
             className='mr-2 ion-no-padding ion-no-margin'
             size='small'
             fill='clear'
-            disabled={!zShortLinksTable.getCanPreviousPage()}
+            disabled={+String(pageindex || '0') === 0}
             testingselector={
               CONSTANTS.testingSelectors.shortLink.listPage.table
                 .getFirstPageButton
             }
             onClick={() => {
-              if (zShortLinksTable.getCanPreviousPage()) {
+              if (+String(pageindex || '0') > 0) {
                 if (workspaceId) {
                   zNavigatePushRoute(
                     createRedirectRoute({
@@ -1031,13 +1057,14 @@ const ZInpageTable: React.FC = () => {
             className='mr-2 ion-no-padding ion-no-margin'
             size='small'
             fill='clear'
-            disabled={!zShortLinksTable.getCanPreviousPage()}
+            disabled={+String(pageindex || '0') === 0}
             testingselector={
               CONSTANTS.testingSelectors.shortLink.listPage.table.previousButton
             }
             onClick={() => {
-              if (zShortLinksTable.getCanPreviousPage()) {
-                zShortLinksTable.previousPage();
+              if (+String(pageindex || '0') > 0) {
+                // zShortLinksTable.previousPage();
+                zShortLinksTable.setPageIndex(oldValue => oldValue - 1);
 
                 if (workspaceId) {
                   zNavigatePushRoute(
@@ -1052,8 +1079,7 @@ const ZInpageTable: React.FC = () => {
                         CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                       ],
                       routeSearchParams: {
-                        pageindex:
-                          zShortLinksTable.getState().pagination.pageIndex - 1,
+                        pageindex: +String(pageindex || '0') - 1,
                         pagesize: zShortLinksTable
                           .getState()
                           .pagination.pageSize.toString()
@@ -1075,8 +1101,7 @@ const ZInpageTable: React.FC = () => {
                         CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                       ],
                       routeSearchParams: {
-                        pageindex:
-                          zShortLinksTable.getState().pagination.pageIndex - 1,
+                        pageindex: +String(pageindex || '0') - 1 - 1,
                         pagesize: zShortLinksTable
                           .getState()
                           .pagination.pageSize.toString()
@@ -1098,13 +1123,21 @@ const ZInpageTable: React.FC = () => {
             className='mr-2 ion-no-padding ion-no-margin'
             size='small'
             fill='clear'
-            disabled={!zShortLinksTable.getCanNextPage()}
+            disabled={
+              +String(pagesize) * +String(pageindex) + +String(pagesize) >=
+              +(ShortLinksData?.itemsCount || '0')
+            }
             testingselector={
               CONSTANTS.testingSelectors.shortLink.listPage.table.nextButton
             }
             onClick={() => {
-              if (zShortLinksTable.getCanNextPage()) {
-                zShortLinksTable.nextPage();
+              if (
+                +String(pagesize || '0') * +String(pageindex || '0') +
+                  +String(pagesize || '0') <=
+                +(ShortLinksData?.itemsCount || '0')
+              ) {
+                // zShortLinksTable.nextPage();
+                zShortLinksTable.setPageIndex(oldValue => oldValue + 1);
 
                 if (workspaceId) {
                   zNavigatePushRoute(
@@ -1119,8 +1152,7 @@ const ZInpageTable: React.FC = () => {
                         CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                       ],
                       routeSearchParams: {
-                        pageindex:
-                          zShortLinksTable.getState().pagination.pageIndex + 1,
+                        pageindex: +String(pageindex || '0') + 1,
                         pagesize: zShortLinksTable
                           .getState()
                           .pagination.pageSize.toString()
@@ -1142,8 +1174,7 @@ const ZInpageTable: React.FC = () => {
                         CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                       ],
                       routeSearchParams: {
-                        pageindex:
-                          zShortLinksTable.getState().pagination.pageIndex + 1,
+                        pageindex: +String(pageindex || '0') + 1,
                         pagesize: zShortLinksTable
                           .getState()
                           .pagination.pageSize.toString()
@@ -1229,13 +1260,74 @@ const ZInpageTable: React.FC = () => {
         </ZIonCol>
 
         {/* Col for pagination number like 1,2,3,...,n */}
-        {/* <ZIonCol></ZIonCol> */}
+        <ZIonCol
+          sizeXl='4'
+          sizeLg='4'
+          sizeMd='4'
+          sizeSm='4'
+          sizeXs='12'
+          className='flex pt-2 ion-align-items-center ion-justify-content-center'>
+          <ZPagination
+            currentPage={+String(pageindex) + 1}
+            itemsPerPage={+String(pagesize)}
+            totalItems={compState?.totalShortLinks || 0}
+            onPageChange={pageNumber => {
+              // zShortLinksTable.previousPage();
+              // pageNumber - 1 because array start from 0 but above we are doing current page (String(pageindex) + 1) so if 0 then it become 1 and when below we are setting we will remove this 1.
+              zShortLinksTable.setPageIndex(_ => pageNumber - 1);
+
+              if (workspaceId) {
+                zNavigatePushRoute(
+                  createRedirectRoute({
+                    url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
+                    params: [
+                      CONSTANTS.RouteParams.workspace.workspaceId,
+                      CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                    ],
+                    values: [
+                      workspaceId,
+                      CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                    ],
+                    routeSearchParams: {
+                      pageindex: pageNumber - 1,
+                      pagesize: zShortLinksTable
+                        .getState()
+                        .pagination.pageSize.toString()
+                    }
+                  })
+                );
+              } else if (wsShareId && shareWSMemberId) {
+                zNavigatePushRoute(
+                  createRedirectRoute({
+                    url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
+                    params: [
+                      CONSTANTS.RouteParams.workspace.wsShareId,
+                      CONSTANTS.RouteParams.workspace.shareWSMemberId,
+                      CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+                    ],
+                    values: [
+                      wsShareId,
+                      shareWSMemberId,
+                      CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                    ],
+                    routeSearchParams: {
+                      pageindex: +String(pageindex || '0') - 1 - 1,
+                      pagesize: zShortLinksTable
+                        .getState()
+                        .pagination.pageSize.toString()
+                    }
+                  })
+                );
+              }
+            }}
+          />
+        </ZIonCol>
 
         <ZIonCol
-          sizeXl='6'
-          sizeLg='6'
-          sizeMd='6'
-          sizeSm='6'
+          sizeXl='4'
+          sizeLg='4'
+          sizeMd='4'
+          sizeSm='4'
           sizeXs='12'
           className={classNames({
             'flex ion-align-items-center ': true,
@@ -1243,8 +1335,10 @@ const ZInpageTable: React.FC = () => {
             'ion-justify-content-between mt-1 px-2': !isSmScale
           })}>
           <ZIonText className='mt-1 font-semibold me-3'>
-            {_FilteredShortLinkDataSelector?.length || 0}{' '}
-            {_FilteredShortLinkDataSelector?.length === 1 ? 'Link' : 'Links'}
+            {ShortLinksData?.itemsCount || 0}{' '}
+            {ShortLinksData && +ShortLinksData?.itemsCount === 1
+              ? 'Link'
+              : 'Links'}
           </ZIonText>
           <ZIonSelect
             minHeight='30px'
@@ -1624,6 +1718,13 @@ const ZShortLinkActionPopover: React.FC<{
 
 // Skeleton.
 const ZaionsShortLinkTableSkeleton: React.FC = React.memo(() => {
+  const { search } = useLocation();
+
+  const routeQSearchParams = routeQueryString.parse(search, {
+    ignoreQueryPrefix: true
+  });
+  const { pagesize } = routeQSearchParams;
+
   return (
     <div className='w-full overflow-y-hidden border rounded-lg ms-1 h-max zaions_pretty_scrollbar ion-no-padding'>
       {/* Row-1 */}
@@ -1687,11 +1788,11 @@ const ZaionsShortLinkTableSkeleton: React.FC = React.memo(() => {
         <ZIonCol
           size='12'
           className='w-full ion-no-padding'>
-          {[1, 2].map(el => {
+          {[...Array(+String(pagesize || 2))].map((el, index) => {
             return (
               <ZIonRow
                 className='flex-nowrap'
-                key={el}>
+                key={index}>
                 {/* Row-2 Col-1 */}
                 <ZIonCol
                   size='.8'
@@ -1750,5 +1851,92 @@ const ZaionsShortLinkTableSkeleton: React.FC = React.memo(() => {
     </div>
   );
 });
+
+interface ZPaginationProps {
+  totalItems: number;
+  itemsPerPage: number;
+  currentPage: number;
+  onPageChange?: (pageNumber: number) => void;
+}
+
+const ZPagination: React.FC<ZPaginationProps> = ({
+  totalItems,
+  itemsPerPage,
+  currentPage,
+  onPageChange
+}) => {
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    let startPage, endPage;
+
+    if (totalPages <= 10) {
+      startPage = 1;
+      endPage = totalPages;
+    } else {
+      if (currentPage <= 6) {
+        startPage = 1;
+        endPage = 10;
+      } else if (currentPage + 4 >= totalPages) {
+        startPage = totalPages - 9;
+        endPage = totalPages;
+      } else {
+        startPage = currentPage - 5;
+        endPage = currentPage + 4;
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(
+        <ZIonText
+          key={i}
+          className={classNames({
+            'cursor-pointer mr-2': true
+          })}
+          onClick={() => onPageChange && onPageChange(i)}>
+          <ZIonText
+            className={classNames({
+              'font-semibold text-[1.2rem]': i === currentPage
+            })}
+            color={i === currentPage ? 'tertiary' : 'dark'}>
+            {i}
+          </ZIonText>
+          {i !== totalItems && ','}
+        </ZIonText>
+      );
+    }
+
+    if (totalPages > 10) {
+      if (currentPage > 6) {
+        pageNumbers.unshift(<ZIonText key='ellipsis1'>...</ZIonText>);
+        pageNumbers.unshift(
+          <ZIonText
+            key='start'
+            className='mr-1 cursor-pointer'
+            onClick={() => onPageChange && onPageChange(1)}>
+            1,
+          </ZIonText>
+        );
+      }
+
+      if (currentPage + 4 < totalPages) {
+        pageNumbers.push(<span key='ellipsis2'>...</span>);
+        pageNumbers.push(
+          <ZIonText
+            key='end'
+            className='cursor-pointer ms-1'
+            onClick={() => onPageChange && onPageChange(totalPages)}>
+            {totalPages}
+          </ZIonText>
+        );
+      }
+    }
+
+    return pageNumbers;
+  };
+
+  return <div>{renderPageNumbers()}</div>;
+};
 
 export default ZaionsShortLinkTable;

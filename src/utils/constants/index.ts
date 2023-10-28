@@ -50,6 +50,10 @@ const RouteParams = {
   // ShortLink redirect url path.
   urlPath: ':urlPath',
 
+  //
+  pageNumber: ':pageNumber',
+  paginationLimit: ':paginationLimit',
+
   // workspace
   workspace: {
     workspaceId: ':workspaceId',
@@ -184,6 +188,7 @@ export const API_URLS = {
   user_notification_mark_all_as_read: `/user/notification/markAllAsRead`,
 
   // Short links
+  shortLinks_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links/page-number/${RouteParams.pageNumber}/limit/${RouteParams.paginationLimit}`,
   shortLinks_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links`,
   shortLinks_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links/${RouteParams.shortLink.shortLinkId}`,
   shortLinks_is_path_available: `/user/workspaces/${RouteParams.workspace.workspaceId}/sl/is-path-available/${RouteParams.shortLink.path}`,

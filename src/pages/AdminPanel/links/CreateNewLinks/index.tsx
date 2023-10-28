@@ -1452,7 +1452,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
             ) => {
               let __fileUrl = values?.featureImg?.featureImgUrl;
               let __filePath = values?.featureImg?.featureImgPath;
-
+              console.log({ c: zStringify(values.tags) });
               if (
                 (workspaceId &&
                   values?.featureImg?.featureImgUrl.trim().length > 0 &&

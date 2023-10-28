@@ -508,7 +508,7 @@ const ZWorkspacesCard: React.FC<{
               </ZIonCol>
 
               {/* Add to Favorites button col */}
-              <ZIonCol className='ion-text-end me-2'>
+              <ZIonCol className='ion-text-end'>
                 {owned ||
                 accountStatus === ZTeamMemberInvitationEnum.accepted ? (
                   <ZIonButton
