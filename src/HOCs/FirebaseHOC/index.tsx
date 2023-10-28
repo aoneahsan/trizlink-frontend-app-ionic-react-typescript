@@ -95,7 +95,7 @@ const FirebaseHOC: React.FC<IFirebaseHOCProps> = ({ children }) => {
     const checkRemoteConfigIsSupported = await isSupported();
     if (checkRemoteConfigIsSupported) {
       const remoteConfig = getRemoteConfig(_firebaseApp);
-      setLogLevel(remoteConfig, ENVS.isProduction ? 'silent' : 'debug');
+      setLogLevel(remoteConfig, ENVS.isProduction ? 'silent' : 'error');
 
       // set the refetch/stale time for remote config keys
       remoteConfig.settings.minimumFetchIntervalMillis =
