@@ -5,7 +5,7 @@
   "type": "module",
   "engines": {
     "node": "^18.17.0",
-    "npm": "Please use Yarn (v1.22.19)",
+    "npm": "Please use PNPM (v1.22.19)",
     "yarn": "^1.22.19"
   },
   "author": {
@@ -27,7 +27,7 @@
     "cypress.open": "cypress open",
     "test.e2e": "cypress run",
     "test.unit": "vitest",
-    "lint": "eslint",
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "preinstall": "node -e \"if (require('path').basename(process.env.npm_execpath) === 'npm-cli.js') throw new Error('Please use Yarn for installation: yarn install')\""
   },
   "description": "ZLink project - Project of Zaions (https://zaions.com).",
@@ -50,7 +50,7 @@
     "@ionic/react": "^7.5.2",
     "@ionic/react-router": "^7.5.2",
     "@sentry/capacitor": "^0.14.0",
-    "@sentry/react": "^7.75.1",
+    "@sentry/react": "^7.76.0",
     "@splidejs/react-splide": "^0.7.12",
     "@tanstack/react-query": "^4.36.1",
     "@tanstack/react-query-devtools": "^4.36.1",
@@ -120,6 +120,10 @@
     "cypress": "^13.3.3",
     "eslint": "^8.52.0",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-config-standard-with-typescript": "^39.1.1",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.2",
     "husky": "^8.0.3",
     "jsdom": "^22.1.0",

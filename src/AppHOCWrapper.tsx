@@ -37,8 +37,6 @@ import PackagesHOC from '@/HOCs/PackagesHOC';
 import FirebaseHOC from '@/HOCs/FirebaseHOC';
 import ErrorLoggingHOC from '@/HOCs/ErrorLoggingHOC';
 
-import { useRecoilState } from 'recoil';
-
 // Global Constants
 
 setupIonicReact();
