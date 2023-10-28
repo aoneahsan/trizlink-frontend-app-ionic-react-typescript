@@ -489,7 +489,6 @@ const ZUpdatesTab: React.FC<{
     <ZCustomScrollable
       className='h-full pb-10 mb-2'
       scrollY={true}>
-      {/* console.log({ d: el.zlNotificationType }); */}
       {userInvitationNotificationsData?.map((el, index) => {
         return (
           <ZIonRow

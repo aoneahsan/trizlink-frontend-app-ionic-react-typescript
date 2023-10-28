@@ -1090,12 +1090,6 @@ const ZUpdateEmailModal: React.FC<{
               __data?.oldPrimaryEmail?.id &&
               __data?.primaryEmail?.id
             ) {
-              // console.log({
-              //   d: {
-              //     ...userAccountStateAtom,
-              //     email: __data?.primaryEmail?.email
-              //   }
-              // });
               // getting user data.
 
               await updateRQCDataHandler({

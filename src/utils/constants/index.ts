@@ -20,12 +20,7 @@ import {
   twitterSvgLogo,
   vkSvgLogo
 } from '@/assets/images';
-import {
-  IonLoaderEnum,
-  TimeFilterEnum,
-  ZShortLinkListPageTableColumnsEnum,
-  ZShortLinkListPageTableColumnsIds
-} from '@/types/AdminPanel/linksType';
+import { IonLoaderEnum, TimeFilterEnum } from '@/types/AdminPanel/linksType';
 import { ENVS } from '@/utils/envKeys';
 import { WSRolesNameEnum } from '@/types/AdminPanel/workspace';
 import { ZTeamMemberInvitationEnum } from '@/types/AdminPanel/index.type';
@@ -295,7 +290,7 @@ export const API_URLS = {
 };
 
 // Site
-export const PRODUCT_NAME = 'ZLinks';
+export const PRODUCT_NAME = 'TrizLink';
 export const PRODUCT_DOMAIN = 'prettylinks.zaions.com';
 export const CurrentProductDetails = {
   Name: ''

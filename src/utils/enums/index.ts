@@ -242,3 +242,11 @@ export enum ZSetPasswordTabEnum {
   confirmOptTab = 'confirmOptTab',
   newPasswordTab = 'newPasswordTab'
 }
+
+export enum TypeEnum {
+  string = 'string',
+  number = 'number',
+  boolean = 'boolean',
+  null = 'null',
+  undefined = 'undefined'
+}

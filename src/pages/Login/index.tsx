@@ -13,19 +13,19 @@ import ZaionsSecondaryHeader from '@/components/InPageComponents/ZaionsSecondary
 
 //
 const Login: React.FC = () => {
-	return (
-		<ZIonPage pageTitle='Login Page'>
-			{/* Page Content */}
-			<ZIonContent fullscreen>
-				<ZaionsSecondaryHeader />
-				<ZIonGrid>
-					<ZaionsLoginOptions />
-					<ZaionsSeparator className='my-6 py-2' />
-					<ZaionsLoginForm />
-				</ZIonGrid>
-			</ZIonContent>
-		</ZIonPage>
-	);
+  return (
+    <ZIonPage pageTitle='Login Page'>
+      {/* Page Content */}
+      <ZIonContent fullscreen>
+        <ZaionsSecondaryHeader />
+        <ZIonGrid>
+          <ZaionsLoginOptions />
+          <ZaionsSeparator className='py-2 my-6' />
+          <ZaionsLoginForm />
+        </ZIonGrid>
+      </ZIonContent>
+    </ZIonPage>
+  );
 };
 
 export default Login;

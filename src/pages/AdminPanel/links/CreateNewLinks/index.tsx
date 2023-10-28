@@ -63,8 +63,6 @@ const LinkExpiration = lazy(
 );
 const LinkPassword = lazy(() => import('@/components/UserDashboard/Password'));
 const LinkFavIcon = lazy(() => import('@/components/UserDashboard/Favicon'));
-import GdprPopup from '@/components/UserDashboard/GdprPopup';
-// const GdprPopup = lazy(() => import('@/components/UserDashboard/GdprPopup'));
 const ZaionsShortUrlOptionFields = lazy(
   () =>
     import(
@@ -655,30 +653,13 @@ const AdminCreateNewLinkPages: React.FC = () => {
   };
 
   const uploadFileToBackend = async (file: File) => {
-    // console.dir({ file });
     const formData = new FormData();
     formData.append('file', file);
-    // console.dir({ formData });
 
     // Uploading image to backend
     const result = await uploadSingleFile(formData);
-    // zConsoleLog({ message: 'file uploaded', data: { result } });
-
-    // storing the url get from result in component state
-    // setUploadTabState(oldValues => ({
-    //   ...oldValues,
-    //   file: {
-    //     ...oldValues.file,
-    //     fileUrl: result?.data?.fileUrl,
-    //     filePath: result?.data?.filePath,
-    //     isFileFetch: true
-    //   }
-    // }));
 
     return { fileUrl: result?.data?.fileUrl, filePath: result?.data?.filePath };
-
-    // Dismiss modal after storing image
-    // dismissZIonModal();
   };
 
   const FormikSubmissionHandler = async (
@@ -1447,7 +1428,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
                 errors.title?.trim() ||
                 errors.shortUrlPath?.trim() ||
                 errors.password?.value?.trim() ||
-                // !values.isShortUrlPathValid ||
+                // values.isShortUrlPathValid ||
                 !areAllObjectsFilled(
                   (errors.rotatorABTesting as Array<object>) || []
                 ) ||
@@ -1493,10 +1474,6 @@ const AdminCreateNewLinkPages: React.FC = () => {
                     selectedShortLink?.featureImg?.featureImgPath?.trim()
                       ?.length > 0)
                 ) {
-                  console.log({
-                    w: swsSelectedShortLink?.featureImg?.featureImgPath,
-                    w2: selectedShortLink?.featureImg?.featureImgPath
-                  });
                   await deleteSingleFile({
                     requestData: zStringify({
                       filePath: workspaceId

@@ -122,7 +122,6 @@ const AuthenticateHOC: React.FC<AuthenticateHOCPropsType> = props => {
         STORAGE.CLEAR(LOCALSTORAGE_KEYS.USERDATA);
         STORAGE.CLEAR(LOCALSTORAGE_KEYS.AUTHTOKEN);
 
-        //
         setCompState(oldState => ({
           ...oldState,
           isProcessing: false,
@@ -146,7 +145,6 @@ const AuthenticateHOC: React.FC<AuthenticateHOCPropsType> = props => {
     void checkAuthenticateValidation();
 
     App.addListener('appStateChange', ({ isActive }) => {
-      // console.log('App state changed. Is active?', isActive);
       if (isActive === true) {
         void checkAuthenticateValidation();
       }

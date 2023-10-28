@@ -150,7 +150,6 @@ export const useZRQGetRequest = <T>({
         const __error = (_error as AxiosError)?.response;
         const __errorMessage = (__error?.data as { errors: { item: string[] } })
           ?.errors?.item[0];
-        console.log({ c: __error?.status });
         // check if it's unauthenticated error
         if (__error?.status && __error?.status === errorCodes.unauthenticated) {
           // clear localstorage

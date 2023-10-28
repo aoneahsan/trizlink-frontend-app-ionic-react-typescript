@@ -233,7 +233,6 @@ const ZProfileSettingsSettings: React.FC = () => {
         );
 
         if (__data && __data?.id && __data?.email) {
-          console.log({ __data, compState });
           // getting user data.
           const userData = getUserDataObjectForm(__data);
 

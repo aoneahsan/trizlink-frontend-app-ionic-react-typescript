@@ -77,24 +77,10 @@ export const FilteredPixelsDataRStateSelector = selector({
           CONSTANTS.toLocaleStringOptions
         );
 
-        // console.log({
-        //   log: 'checking time',
-        //   _formattedStartDate,
-        //   startDate,
-        //   endDate
-        // });
-
         _filterPixelsData = pixelsRStateAtom?.filter(el => {
           const _createdAt = new Date(
             new Date(el.createAt as string)
           ).toLocaleString('en-US', CONSTANTS.toLocaleStringOptions);
-          console.log({
-            log: 'checking time',
-            _createdAt,
-            startDate,
-            endDate,
-            e: el.createAt
-          });
           if (
             new Date(_createdAt) >= new Date(_formattedStartDate) &&
             new Date(_createdAt) <= endDate

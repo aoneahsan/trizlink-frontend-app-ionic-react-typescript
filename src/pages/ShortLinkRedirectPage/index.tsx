@@ -261,8 +261,6 @@ const ZShortLinkRedirectPage: React.FC = () => {
           }
         }
 
-        // console.log({ __geoLocations, __redirectUrl });
-
         // If there is link-expiration define. then redirect according to it.
         if (
           __linkExpiration?.enabled &&
@@ -289,7 +287,6 @@ const ZShortLinkRedirectPage: React.FC = () => {
             ...oldValues,
             redirectLink: __redirectUrl
           }));
-          // console.log({ __redirectUrl });
           if (!(_data?.password as PasswordInterface)?.enabled) {
             window.location.replace(__redirectUrl);
           }
@@ -332,13 +329,6 @@ const ZShortLinkRedirectPage: React.FC = () => {
       }));
     }
   }, [urlPath]);
-
-  // const printCurrentPosition = useCallback(async () => {
-  // 	const coordinates = await Geolocation.getCurrentPosition();
-
-  // 	console.log('Current position:', coordinates);
-  // }, []);
-  // printCurrentPosition();
 
   /**
    * Showing appropriate view.

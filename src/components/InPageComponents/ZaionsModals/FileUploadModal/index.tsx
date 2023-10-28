@@ -6,22 +6,22 @@ import ReactDropzone from 'react-dropzone';
 
 // Custom Imports
 import {
-	ZIonCol,
-	ZIonRow,
-	ZIonText,
-	ZIonContent,
-	ZIonGrid,
-	ZIonRouterLink,
-	ZIonList,
-	ZIonItem,
-	ZIonImg,
-	ZIonInput,
-	ZIonButton,
-	ZIonIcon,
+  ZIonCol,
+  ZIonRow,
+  ZIonText,
+  ZIonContent,
+  ZIonGrid,
+  ZIonRouterLink,
+  ZIonList,
+  ZIonItem,
+  ZIonImg,
+  ZIonInput,
+  ZIonButton,
+  ZIonIcon
 } from '@/components/ZIonComponents';
 import {
-	useZRQCreateRequest,
-	useZRQUpdateRequest,
+  useZRQCreateRequest,
+  useZRQUpdateRequest
 } from '@/ZaionsHooks/zreactquery-hooks';
 
 // Global Constants
@@ -33,9 +33,9 @@ import { zStringify } from '@/utils/helpers';
 
 // Images
 import {
-	uploadModalCamera,
-	uploadModalFolder,
-	uploadModalLink,
+  uploadModalCamera,
+  uploadModalFolder,
+  uploadModalLink
 } from '@/assets/images';
 
 // Recoil States
@@ -47,42 +47,43 @@ import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type
 import classes from './styles.module.css';
 import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
 import { closeOutline } from 'ionicons/icons';
+import { PRODUCT_NAME } from '@/utils/constants';
 
 // Inpage types
 enum uploadFileModalTabEnum {
-	upload = 'upload',
-	url = 'url',
-	screenshot = 'screenshot',
-	galleryGiphy = 'galleryGiphy',
-	galleryPexels = 'galleryPexels',
-	galleryPixabay = 'galleryPixabay',
-	galleryUnsplash = 'galleryUnsplash',
-	galleryTenor = 'galleryTenor',
+  upload = 'upload',
+  url = 'url',
+  screenshot = 'screenshot',
+  galleryGiphy = 'galleryGiphy',
+  galleryPexels = 'galleryPexels',
+  galleryPixabay = 'galleryPixabay',
+  galleryUnsplash = 'galleryUnsplash',
+  galleryTenor = 'galleryTenor'
 }
 
 enum galleryEnum {
-	giphy = 'giphy',
-	pexels = 'pexels',
-	pixabay = 'pixabay',
-	unsplash = 'unsplash',
-	tenor = 'tenor',
+  giphy = 'giphy',
+  pexels = 'pexels',
+  pixabay = 'pixabay',
+  unsplash = 'unsplash',
+  tenor = 'tenor'
 }
 
 const ZaionsFileUploadModal: React.FC<{
-	dismissZIonModal: (data?: string, role?: string | undefined) => void;
+  dismissZIonModal: (data?: string, role?: string | undefined) => void;
 }> = ({ dismissZIonModal }) => {
-	const [compState, setCompState] = useState<{
-		currentTab: uploadFileModalTabEnum;
-	}>({ currentTab: uploadFileModalTabEnum.upload });
+  const [compState, setCompState] = useState<{
+    currentTab: uploadFileModalTabEnum;
+  }>({ currentTab: uploadFileModalTabEnum.upload });
 
-	// JSX Code
-	return (
-		<>
-			{/**
-			 * Header of Modal will shown if the `showActionInModalHeader` is set to `true` in      appSetting and hide if it is `false`
-			 * default: false
-			 *  */}
-			{/* {appSettings.appModalsSetting.actions.showActionInModalHeader && (
+  // JSX Code
+  return (
+    <>
+      {/**
+       * Header of Modal will shown if the `showActionInModalHeader` is set to `true` in      appSetting and hide if it is `false`
+       * default: false
+       *  */}
+      {/* {appSettings.appModalsSetting.actions.showActionInModalHeader && (
         <ZIonHeader>
           <ZIonRow className='ion-align-items-center'>
             <ZIonCol>
@@ -103,312 +104,303 @@ const ZaionsFileUploadModal: React.FC<{
         </ZIonHeader>
       )} */}
 
-			<ZIonContent>
-				<ZIonGrid className='h-full ion-no-padding'>
-					<ZIonRow className='h-full'>
-						<ZIonCol
-							size='3'
-							className='h-full zaions__light_bg ion-padding-vertical'
-						>
-							{/* Title */}
-							<ZIonText
-								color='dark'
-								className='flex ion-justify-content-center ion-align-items-center ion-padding-vertical ion-margin-top'
-							>
-								<h5 className='font-bold ion-no-margin me-2'>
-									Select an option
-								</h5>
-								<h6 className='ion-no-margin text-[14px] mt-1'>
-									<ZIonRouterLink>(help)</ZIonRouterLink>
-								</h6>
-							</ZIonText>
+      <ZIonContent>
+        <ZIonGrid className='h-full ion-no-padding'>
+          <ZIonRow className='h-full'>
+            <ZIonCol
+              size='3'
+              className='h-full zaions__light_bg ion-padding-vertical'>
+              {/* Title */}
+              <ZIonText
+                color='dark'
+                className='flex ion-justify-content-center ion-align-items-center ion-padding-vertical ion-margin-top'>
+                <h5 className='font-bold ion-no-margin me-2'>
+                  Select an option
+                </h5>
+                <h6 className='ion-no-margin text-[14px] mt-1'>
+                  <ZIonRouterLink>(help)</ZIonRouterLink>
+                </h6>
+              </ZIonText>
 
-							{/* Links */}
-							<ZIonList className='mt-3 ion-no-padding ion-no-margin zaions__light_bg'>
-								{/* 📁 Upload */}
-								<ZIonItem
-									className='cursor-pointer ion-no-padding'
-									color={
-										compState.currentTab === uploadFileModalTabEnum.upload
-											? undefined
-											: 'light'
-									}
-									lines={
-										compState.currentTab === uploadFileModalTabEnum.upload
-											? undefined
-											: 'none'
-									}
-									onClick={() => {
-										setCompState((oldValues) => ({
-											...oldValues,
-											currentTab: uploadFileModalTabEnum.upload,
-										}));
-									}}
-								>
-									<div className='ms-auto w-[80%]'>
-										<ZIonText>📁 Upload</ZIonText>
-									</div>
-								</ZIonItem>
+              {/* Links */}
+              <ZIonList className='mt-3 ion-no-padding ion-no-margin zaions__light_bg'>
+                {/* 📁 Upload */}
+                <ZIonItem
+                  className='cursor-pointer ion-no-padding'
+                  color={
+                    compState.currentTab === uploadFileModalTabEnum.upload
+                      ? undefined
+                      : 'light'
+                  }
+                  lines={
+                    compState.currentTab === uploadFileModalTabEnum.upload
+                      ? undefined
+                      : 'none'
+                  }
+                  onClick={() => {
+                    setCompState(oldValues => ({
+                      ...oldValues,
+                      currentTab: uploadFileModalTabEnum.upload
+                    }));
+                  }}>
+                  <div className='ms-auto w-[80%]'>
+                    <ZIonText>📁 Upload</ZIonText>
+                  </div>
+                </ZIonItem>
 
-								{/* 🔎 From URL */}
-								<ZIonItem
-									className='mt-2 cursor-pointer ion-no-padding'
-									color={
-										compState.currentTab === uploadFileModalTabEnum.url
-											? undefined
-											: 'light'
-									}
-									lines={
-										compState.currentTab === uploadFileModalTabEnum.url
-											? undefined
-											: 'none'
-									}
-									onClick={() => {
-										setCompState((oldValues) => ({
-											...oldValues,
-											currentTab: uploadFileModalTabEnum.url,
-										}));
-									}}
-								>
-									<div className='ms-auto w-[80%]'>
-										<ZIonText>🔎 From URL</ZIonText>
-									</div>
-								</ZIonItem>
+                {/* 🔎 From URL */}
+                <ZIonItem
+                  className='mt-2 cursor-pointer ion-no-padding'
+                  color={
+                    compState.currentTab === uploadFileModalTabEnum.url
+                      ? undefined
+                      : 'light'
+                  }
+                  lines={
+                    compState.currentTab === uploadFileModalTabEnum.url
+                      ? undefined
+                      : 'none'
+                  }
+                  onClick={() => {
+                    setCompState(oldValues => ({
+                      ...oldValues,
+                      currentTab: uploadFileModalTabEnum.url
+                    }));
+                  }}>
+                  <div className='ms-auto w-[80%]'>
+                    <ZIonText>🔎 From URL</ZIonText>
+                  </div>
+                </ZIonItem>
 
-								{/* 📸 Screenshot */}
-								<ZIonItem
-									className='mt-2 cursor-pointer ion-no-padding'
-									color={
-										compState.currentTab === uploadFileModalTabEnum.screenshot
-											? undefined
-											: 'light'
-									}
-									lines={
-										compState.currentTab === uploadFileModalTabEnum.screenshot
-											? undefined
-											: 'none'
-									}
-									onClick={() => {
-										setCompState((oldValues) => ({
-											...oldValues,
-											currentTab: uploadFileModalTabEnum.screenshot,
-										}));
-									}}
-								>
-									<div className='ms-auto w-[80%]'>
-										<ZIonText className='mx-auto'>📸 Screenshot</ZIonText>
-									</div>
-								</ZIonItem>
+                {/* 📸 Screenshot */}
+                <ZIonItem
+                  className='mt-2 cursor-pointer ion-no-padding'
+                  color={
+                    compState.currentTab === uploadFileModalTabEnum.screenshot
+                      ? undefined
+                      : 'light'
+                  }
+                  lines={
+                    compState.currentTab === uploadFileModalTabEnum.screenshot
+                      ? undefined
+                      : 'none'
+                  }
+                  onClick={() => {
+                    setCompState(oldValues => ({
+                      ...oldValues,
+                      currentTab: uploadFileModalTabEnum.screenshot
+                    }));
+                  }}>
+                  <div className='ms-auto w-[80%]'>
+                    <ZIonText className='mx-auto'>📸 Screenshot</ZIonText>
+                  </div>
+                </ZIonItem>
 
-								{/* 🎉 Giphy */}
-								<ZIonItem
-									className='mt-2 cursor-pointer ion-no-padding'
-									color={
-										compState.currentTab === uploadFileModalTabEnum.galleryGiphy
-											? undefined
-											: 'light'
-									}
-									lines={
-										compState.currentTab === uploadFileModalTabEnum.galleryGiphy
-											? undefined
-											: 'none'
-									}
-									onClick={() => {
-										setCompState((oldValues) => ({
-											...oldValues,
-											currentTab: uploadFileModalTabEnum.galleryGiphy,
-										}));
-									}}
-								>
-									<div className='ms-auto w-[80%]'>
-										<ZIonText className='mx-auto'>🎉 Giphy</ZIonText>
-									</div>
-								</ZIonItem>
+                {/* 🎉 Giphy */}
+                <ZIonItem
+                  className='mt-2 cursor-pointer ion-no-padding'
+                  color={
+                    compState.currentTab === uploadFileModalTabEnum.galleryGiphy
+                      ? undefined
+                      : 'light'
+                  }
+                  lines={
+                    compState.currentTab === uploadFileModalTabEnum.galleryGiphy
+                      ? undefined
+                      : 'none'
+                  }
+                  onClick={() => {
+                    setCompState(oldValues => ({
+                      ...oldValues,
+                      currentTab: uploadFileModalTabEnum.galleryGiphy
+                    }));
+                  }}>
+                  <div className='ms-auto w-[80%]'>
+                    <ZIonText className='mx-auto'>🎉 Giphy</ZIonText>
+                  </div>
+                </ZIonItem>
 
-								{/* 🗻 Pexels */}
-								<ZIonItem
-									className='mt-2 cursor-pointer ion-no-padding'
-									color={
-										compState.currentTab ===
-										uploadFileModalTabEnum.galleryPexels
-											? undefined
-											: 'light'
-									}
-									lines={
-										compState.currentTab ===
-										uploadFileModalTabEnum.galleryPexels
-											? undefined
-											: 'none'
-									}
-									onClick={() => {
-										setCompState((oldValues) => ({
-											...oldValues,
-											currentTab: uploadFileModalTabEnum.galleryPexels,
-										}));
-									}}
-								>
-									<div className='ms-auto w-[80%]'>
-										<ZIonText className='mx-auto'>🗻 Pexels</ZIonText>
-									</div>
-								</ZIonItem>
+                {/* 🗻 Pexels */}
+                <ZIonItem
+                  className='mt-2 cursor-pointer ion-no-padding'
+                  color={
+                    compState.currentTab ===
+                    uploadFileModalTabEnum.galleryPexels
+                      ? undefined
+                      : 'light'
+                  }
+                  lines={
+                    compState.currentTab ===
+                    uploadFileModalTabEnum.galleryPexels
+                      ? undefined
+                      : 'none'
+                  }
+                  onClick={() => {
+                    setCompState(oldValues => ({
+                      ...oldValues,
+                      currentTab: uploadFileModalTabEnum.galleryPexels
+                    }));
+                  }}>
+                  <div className='ms-auto w-[80%]'>
+                    <ZIonText className='mx-auto'>🗻 Pexels</ZIonText>
+                  </div>
+                </ZIonItem>
 
-								{/* 🍴 Pixabay */}
-								<ZIonItem
-									className='mt-2 cursor-pointer ion-no-padding'
-									color={
-										compState.currentTab ===
-										uploadFileModalTabEnum.galleryPixabay
-											? undefined
-											: 'light'
-									}
-									lines={
-										compState.currentTab ===
-										uploadFileModalTabEnum.galleryPixabay
-											? undefined
-											: 'none'
-									}
-									onClick={() => {
-										setCompState((oldValues) => ({
-											...oldValues,
-											currentTab: uploadFileModalTabEnum.galleryPixabay,
-										}));
-									}}
-								>
-									<div className='ms-auto w-[80%]'>
-										<ZIonText className='mx-auto'>🍴 Pixabay</ZIonText>
-									</div>
-								</ZIonItem>
+                {/* 🍴 Pixabay */}
+                <ZIonItem
+                  className='mt-2 cursor-pointer ion-no-padding'
+                  color={
+                    compState.currentTab ===
+                    uploadFileModalTabEnum.galleryPixabay
+                      ? undefined
+                      : 'light'
+                  }
+                  lines={
+                    compState.currentTab ===
+                    uploadFileModalTabEnum.galleryPixabay
+                      ? undefined
+                      : 'none'
+                  }
+                  onClick={() => {
+                    setCompState(oldValues => ({
+                      ...oldValues,
+                      currentTab: uploadFileModalTabEnum.galleryPixabay
+                    }));
+                  }}>
+                  <div className='ms-auto w-[80%]'>
+                    <ZIonText className='mx-auto'>🍴 Pixabay</ZIonText>
+                  </div>
+                </ZIonItem>
 
-								{/* 🌍 Unsplash */}
-								<ZIonItem
-									className='mt-2 cursor-pointer ion-no-padding'
-									color={
-										compState.currentTab ===
-										uploadFileModalTabEnum.galleryUnsplash
-											? undefined
-											: 'light'
-									}
-									lines={
-										compState.currentTab ===
-										uploadFileModalTabEnum.galleryUnsplash
-											? undefined
-											: 'none'
-									}
-									onClick={() => {
-										setCompState((oldValues) => ({
-											...oldValues,
-											currentTab: uploadFileModalTabEnum.galleryUnsplash,
-										}));
-									}}
-								>
-									<div className='ms-auto w-[80%]'>
-										<ZIonText className='mx-auto'>🌍 Unsplash</ZIonText>
-									</div>
-								</ZIonItem>
+                {/* 🌍 Unsplash */}
+                <ZIonItem
+                  className='mt-2 cursor-pointer ion-no-padding'
+                  color={
+                    compState.currentTab ===
+                    uploadFileModalTabEnum.galleryUnsplash
+                      ? undefined
+                      : 'light'
+                  }
+                  lines={
+                    compState.currentTab ===
+                    uploadFileModalTabEnum.galleryUnsplash
+                      ? undefined
+                      : 'none'
+                  }
+                  onClick={() => {
+                    setCompState(oldValues => ({
+                      ...oldValues,
+                      currentTab: uploadFileModalTabEnum.galleryUnsplash
+                    }));
+                  }}>
+                  <div className='ms-auto w-[80%]'>
+                    <ZIonText className='mx-auto'>🌍 Unsplash</ZIonText>
+                  </div>
+                </ZIonItem>
 
-								{/* 👋 Tenor */}
-								<ZIonItem
-									className='mt-2 cursor-pointer ion-no-padding'
-									color={
-										compState.currentTab === uploadFileModalTabEnum.galleryTenor
-											? undefined
-											: 'light'
-									}
-									lines={
-										compState.currentTab === uploadFileModalTabEnum.galleryTenor
-											? undefined
-											: 'none'
-									}
-									onClick={() => {
-										setCompState((oldValues) => ({
-											...oldValues,
-											currentTab: uploadFileModalTabEnum.galleryTenor,
-										}));
-									}}
-								>
-									<div className='ms-auto w-[80%]'>
-										<ZIonText className='mx-auto'>👋 Tenor</ZIonText>
-									</div>
-								</ZIonItem>
-							</ZIonList>
-						</ZIonCol>
-						<ZIonCol
-							size='9'
-							className={classNames({
-								'h-full ion-padding-bottom': true,
-								'flex flex-col ion-justify-content-center ion-align-items-center':
-									[
-										uploadFileModalTabEnum.screenshot,
-										uploadFileModalTabEnum.upload,
-										uploadFileModalTabEnum.url,
-									].includes(compState.currentTab),
-							})}
-						>
-							{/* Close modal button */}
-							<div className='w-full pb-2 ion-text-end ion-no-margin'>
-								<ZIonButton
-									fill='clear'
-									className='mt-2 ion-no-padding me-3'
-									onClick={() => dismissZIonModal()}
-								>
-									<ZIonIcon icon={closeOutline} size='large' />
-								</ZIonButton>
-							</div>
+                {/* 👋 Tenor */}
+                <ZIonItem
+                  className='mt-2 cursor-pointer ion-no-padding'
+                  color={
+                    compState.currentTab === uploadFileModalTabEnum.galleryTenor
+                      ? undefined
+                      : 'light'
+                  }
+                  lines={
+                    compState.currentTab === uploadFileModalTabEnum.galleryTenor
+                      ? undefined
+                      : 'none'
+                  }
+                  onClick={() => {
+                    setCompState(oldValues => ({
+                      ...oldValues,
+                      currentTab: uploadFileModalTabEnum.galleryTenor
+                    }));
+                  }}>
+                  <div className='ms-auto w-[80%]'>
+                    <ZIonText className='mx-auto'>👋 Tenor</ZIonText>
+                  </div>
+                </ZIonItem>
+              </ZIonList>
+            </ZIonCol>
+            <ZIonCol
+              size='9'
+              className={classNames({
+                'h-full ion-padding-bottom': true,
+                'flex flex-col ion-justify-content-center ion-align-items-center':
+                  [
+                    uploadFileModalTabEnum.screenshot,
+                    uploadFileModalTabEnum.upload,
+                    uploadFileModalTabEnum.url
+                  ].includes(compState.currentTab)
+              })}>
+              {/* Close modal button */}
+              <div className='w-full pb-2 ion-text-end ion-no-margin'>
+                <ZIonButton
+                  fill='clear'
+                  className='mt-2 ion-no-padding me-3'
+                  onClick={() => dismissZIonModal()}>
+                  <ZIonIcon
+                    icon={closeOutline}
+                    size='large'
+                  />
+                </ZIonButton>
+              </div>
 
-							{/* Upload tab component */}
-							{compState.currentTab === uploadFileModalTabEnum.upload && (
-								<UploadTab dismissZIonModal={dismissZIonModal} />
-							)}
+              {/* Upload tab component */}
+              {compState.currentTab === uploadFileModalTabEnum.upload && (
+                <UploadTab dismissZIonModal={dismissZIonModal} />
+              )}
 
-							{/* Link tab component */}
-							{compState.currentTab === uploadFileModalTabEnum.url && (
-								<LinkTab />
-							)}
+              {/* Link tab component */}
+              {compState.currentTab === uploadFileModalTabEnum.url && (
+                <LinkTab />
+              )}
 
-							{/* screenshot tab component */}
-							{compState.currentTab === uploadFileModalTabEnum.screenshot && (
-								<ScreenShotTab />
-							)}
+              {/* screenshot tab component */}
+              {compState.currentTab === uploadFileModalTabEnum.screenshot && (
+                <ScreenShotTab />
+              )}
 
-							{/* Gallery tab giphy component */}
-							{compState.currentTab === uploadFileModalTabEnum.galleryGiphy && (
-								<GalleryTab typeOfGallery={galleryEnum.giphy} />
-							)}
+              {/* Gallery tab giphy component */}
+              {compState.currentTab === uploadFileModalTabEnum.galleryGiphy && (
+                <GalleryTab typeOfGallery={galleryEnum.giphy} />
+              )}
 
-							{/* Gallery tab pexels component */}
-							{compState.currentTab ===
-								uploadFileModalTabEnum.galleryPexels && (
-								<GalleryTab typeOfGallery={galleryEnum.pexels} />
-							)}
+              {/* Gallery tab pexels component */}
+              {compState.currentTab ===
+                uploadFileModalTabEnum.galleryPexels && (
+                <GalleryTab typeOfGallery={galleryEnum.pexels} />
+              )}
 
-							{/* Gallery tab pixabay component */}
-							{compState.currentTab ===
-								uploadFileModalTabEnum.galleryPixabay && (
-								<GalleryTab typeOfGallery={galleryEnum.pixabay} />
-							)}
+              {/* Gallery tab pixabay component */}
+              {compState.currentTab ===
+                uploadFileModalTabEnum.galleryPixabay && (
+                <GalleryTab typeOfGallery={galleryEnum.pixabay} />
+              )}
 
-							{/* Gallery tab unsplash component */}
-							{compState.currentTab ===
-								uploadFileModalTabEnum.galleryUnsplash && (
-								<GalleryTab typeOfGallery={galleryEnum.unsplash} />
-							)}
+              {/* Gallery tab unsplash component */}
+              {compState.currentTab ===
+                uploadFileModalTabEnum.galleryUnsplash && (
+                <GalleryTab typeOfGallery={galleryEnum.unsplash} />
+              )}
 
-							{/* Gallery tab tenor component */}
-							{compState.currentTab === uploadFileModalTabEnum.galleryTenor && (
-								<GalleryTab typeOfGallery={galleryEnum.tenor} />
-							)}
-						</ZIonCol>
-					</ZIonRow>
-				</ZIonGrid>
-			</ZIonContent>
+              {/* Gallery tab tenor component */}
+              {compState.currentTab === uploadFileModalTabEnum.galleryTenor && (
+                <GalleryTab typeOfGallery={galleryEnum.tenor} />
+              )}
+            </ZIonCol>
+          </ZIonRow>
+        </ZIonGrid>
+      </ZIonContent>
 
-			{/**
-			 * Footer of Modal will shown if the `showActionInModalFooter` is set to `true` in appSetting, and hide if it is `false`
-			 * default: true
-			 *  */}
-			{/* {appSettings.appModalsSetting.actions.showActionInModalFooter && (
+      {/**
+       * Footer of Modal will shown if the `showActionInModalFooter` is set to `true` in appSetting, and hide if it is `false`
+       * default: true
+       *  */}
+      {/* {appSettings.appModalsSetting.actions.showActionInModalFooter && (
         <ZIonFooter>
-          <ZIonRow className='mx-3 mt-2  ion-justify-content-between ion-align-items-center'>
+          <ZIonRow className='mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
             <ZIonCol>
               <ZIonButton
                 fill='outline'
@@ -426,371 +418,361 @@ const ZaionsFileUploadModal: React.FC<{
           </ZIonRow>
         </ZIonFooter>
       )} */}
-		</>
-	);
+    </>
+  );
 };
 
 const UploadTab: React.FC<{
-	dismissZIonModal: (data?: string, role?: string | undefined) => void;
+  dismissZIonModal: (data?: string, role?: string | undefined) => void;
 }> = ({ dismissZIonModal }) => {
-	//  validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
-	// const { validateRequestResponse } = useZValidateRequestResponse();
+  //  validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
+  // const { validateRequestResponse } = useZValidateRequestResponse();
 
-	const [uploadTabState, setUploadTabState] = useState<{
-		file?: {
-			isFileFetch?: boolean;
-			fileUrl?: string;
-			filePath?: string;
-		};
-	}>({});
+  const [uploadTabState, setUploadTabState] = useState<{
+    file?: {
+      isFileFetch?: boolean;
+      fileUrl?: string;
+      filePath?: string;
+    };
+  }>({});
 
-	// Upload single file api.
-	const { mutateAsync: uploadSingleFile } = useZRQCreateRequest<{
-		data: {
-			file: unknown;
-			fileName: unknown;
-			filePath: '';
-			fileUrl: '';
-		};
-	}>({
-		_url: API_URL_ENUM.uploadSingleFile,
-		_authenticated: true,
-		_contentType: zAxiosApiRequestContentType.FormData,
-	});
+  // Upload single file api.
+  const { mutateAsync: uploadSingleFile } = useZRQCreateRequest<{
+    data: {
+      file: unknown;
+      fileName: unknown;
+      filePath: '';
+      fileUrl: '';
+    };
+  }>({
+    _url: API_URL_ENUM.uploadSingleFile,
+    _authenticated: true,
+    _contentType: zAxiosApiRequestContentType.FormData
+  });
 
-	// Delete file api.
-	const { mutateAsync: deleteSingleFile } = useZRQUpdateRequest({
-		_url: API_URL_ENUM.deleteSingleFile,
-	});
+  // Delete file api.
+  const { mutateAsync: deleteSingleFile } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.deleteSingleFile
+  });
 
-	const uploadFileToBackend = async (file: File) => {
-		// console.dir({ file });
-		const formData = new FormData();
-		formData.append('file', file);
-		// console.dir({ formData });
+  const uploadFileToBackend = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
 
-		// Uploading image to backend
-		const result = await uploadSingleFile(formData);
-		// zConsoleLog({ message: 'file uploaded', data: { result } });
+    // Uploading image to backend
+    const result = await uploadSingleFile(formData);
 
-		// storing the url get from result in component state
-		setUploadTabState((oldValues) => ({
-			...oldValues,
-			file: {
-				...oldValues.file,
-				fileUrl: result?.data.fileUrl,
-				filePath: result?.data.filePath,
-				isFileFetch: true,
-			},
-		}));
+    // storing the url get from result in component state
+    setUploadTabState(oldValues => ({
+      ...oldValues,
+      file: {
+        ...oldValues.file,
+        fileUrl: result?.data.fileUrl,
+        filePath: result?.data.filePath,
+        isFileFetch: true
+      }
+    }));
+  };
 
-		// Dismiss modal after storing image
-		// dismissZIonModal();
-	};
+  // Delete file handler or try again handler
+  const singleFileDeleteHandler = async () => {
+    try {
+      if (uploadTabState.file?.filePath) {
+        // Deleting the file from storage
+        await deleteSingleFile({
+          requestData: zStringify({ filePath: uploadTabState.file?.filePath }),
+          itemIds: [],
+          urlDynamicParts: []
+        });
 
-	// Delete file handler or try again handler
-	const singleFileDeleteHandler = async () => {
-		try {
-			if (uploadTabState.file?.filePath) {
-				// Deleting the file from storage
-				await deleteSingleFile({
-					requestData: zStringify({ filePath: uploadTabState.file?.filePath }),
-					itemIds: [],
-					urlDynamicParts: [],
-				});
+        // After deleting showing success message
+        showSuccessNotification(
+          MESSAGES.GENERAL.FILE.FILE_DELETED_SUCCESS_MESSAGE
+        );
 
-				// After deleting showing success message
-				showSuccessNotification(
-					MESSAGES.GENERAL.FILE.FILE_DELETED_SUCCESS_MESSAGE
-				);
+        // Dismiss the modal
+        dismissZIonModal();
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
 
-				// Dismiss the modal
-				dismissZIonModal();
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
+  // Try again handler
+  const singleFileTryAgainHandler = async () => {
+    try {
+      if (uploadTabState.file?.filePath) {
+        // Deleting the file from storage
+        await deleteSingleFile({
+          requestData: zStringify({ filePath: uploadTabState.file?.filePath }),
+          itemIds: [],
+          urlDynamicParts: []
+        });
 
-	// Try again handler
-	const singleFileTryAgainHandler = async () => {
-		try {
-			if (uploadTabState.file?.filePath) {
-				// Deleting the file from storage
-				await deleteSingleFile({
-					requestData: zStringify({ filePath: uploadTabState.file?.filePath }),
-					itemIds: [],
-					urlDynamicParts: [],
-				});
+        //
+        setUploadTabState(oldValues => ({
+          ...oldValues,
+          filePath: '',
+          fileUrl: '',
+          isFileFetch: false
+        }));
+      }
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
 
-				//
-				setUploadTabState((oldValues) => ({
-					...oldValues,
-					filePath: '',
-					fileUrl: '',
-					isFileFetch: false,
-				}));
-			}
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
+  return (
+    <ReactDropzone
+      onDrop={event => {
+        void uploadFileToBackend(event[0]);
+      }}>
+      {({ getRootProps, getInputProps, isDragActive }) => (
+        <div
+          className={classNames({
+            'w-[90%]': true,
+            'flex flex-col ion-align-items-center ion-justify-content-center h-[90%] rounded cursor-pointer':
+              !uploadTabState.file?.isFileFetch,
+            zaions__success_set: isDragActive,
+            zaions__primary_set: !isDragActive
+          })}
+          style={{
+            border: uploadTabState.file?.isFileFetch ? '' : '1px dashed #000'
+          }}
+          {...getRootProps()}>
+          {!uploadTabState.file?.isFileFetch && (
+            <>
+              <input {...getInputProps()} />
+              <ZIonText className='ion-no-margin'>
+                <ZIonImg
+                  src={uploadModalFolder}
+                  alt='send icon'
+                  style={{ width: '15rem' }}
+                />
+              </ZIonText>
+              <ZIonText color='dark'>
+                <h5 className='font-bold'>
+                  Drag & drop your image here or{' '}
+                  <ZIonText color='primary'>Browse</ZIonText>
+                </h5>
+              </ZIonText>
+              <div className='flex flex-col ion-align-items-center ion-justify-content-center'>
+                <ZIonText
+                  color='medium'
+                  className='mt-2 font-bold'>
+                  (5MB maximum - JPG, GIF, PNG)
+                </ZIonText>
+              </div>
+            </>
+          )}
 
-	return (
-		<ReactDropzone
-			onDrop={(event) => {
-				void uploadFileToBackend(event[0]);
-			}}
-		>
-			{({ getRootProps, getInputProps, isDragActive }) => (
-				<div
-					className={classNames({
-						'w-[90%]': true,
-						'flex flex-col ion-align-items-center ion-justify-content-center h-[90%] rounded cursor-pointer':
-							!uploadTabState.file?.isFileFetch,
-						zaions__success_set: isDragActive,
-						zaions__primary_set: !isDragActive,
-					})}
-					style={{
-						border: uploadTabState.file?.isFileFetch ? '' : '1px dashed #000',
-					}}
-					{...getRootProps()}
-				>
-					{!uploadTabState.file?.isFileFetch && (
-						<>
-							<input {...getInputProps()} />
-							<ZIonText className='ion-no-margin'>
-								<ZIonImg
-									src={uploadModalFolder}
-									alt='send icon'
-									style={{ width: '15rem' }}
-								/>
-							</ZIonText>
-							<ZIonText color='dark'>
-								<h5 className='font-bold'>
-									Drag & drop your image here or{' '}
-									<ZIonText color='primary'>Browse</ZIonText>
-								</h5>
-							</ZIonText>
-							<div className='flex flex-col ion-align-items-center ion-justify-content-center'>
-								<ZIonText color='medium' className='mt-2 font-bold'>
-									(5MB maximum - JPG, GIF, PNG)
-								</ZIonText>
-							</div>
-						</>
-					)}
-
-					{uploadTabState.file?.isFileFetch && (
-						<>
-							<div
-								className='w-[70%]  mx-auto my-3'
-								style={{ height: '400px' }}
-							>
-								<ZIonImg
-									src={uploadTabState.file?.fileUrl}
-									alt='send icon'
-									className='w-full h-full'
-								/>
-							</div>
-							<div className='w-full my-5 zaions__tertiary_set'>
-								<div className='w-[80%] flex ion-align-item-center ion-justify-content-between mx-auto py-2'>
-									<ZIonButton
-										color='danger'
-										className='normal-case'
-										onClick={() => {
-											void singleFileDeleteHandler();
-										}}
-									>
-										Cancel
-									</ZIonButton>
-									<ZIonButton
-										color='secondary'
-										className='normal-case'
-										onClick={() => {
-											void singleFileTryAgainHandler();
-										}}
-									>
-										Try Again
-									</ZIonButton>
-									<ZIonButton
-										color='success'
-										className='normal-case'
-										onClick={() => {
-											dismissZIonModal(
-												zStringify({
-													fileUrl: uploadTabState.file?.fileUrl,
-													filePath: uploadTabState.file?.filePath,
-												}),
-												ZIonModalActionEnum.success
-											);
-										}}
-									>
-										Done
-									</ZIonButton>
-								</div>
-							</div>
-						</>
-					)}
-				</div>
-			)}
-		</ReactDropzone>
-	);
+          {uploadTabState.file?.isFileFetch && (
+            <>
+              <div
+                className='w-[70%]  mx-auto my-3'
+                style={{ height: '400px' }}>
+                <ZIonImg
+                  src={uploadTabState.file?.fileUrl}
+                  alt='send icon'
+                  className='w-full h-full'
+                />
+              </div>
+              <div className='w-full my-5 zaions__tertiary_set'>
+                <div className='w-[80%] flex ion-align-item-center ion-justify-content-between mx-auto py-2'>
+                  <ZIonButton
+                    color='danger'
+                    className='normal-case'
+                    onClick={() => {
+                      void singleFileDeleteHandler();
+                    }}>
+                    Cancel
+                  </ZIonButton>
+                  <ZIonButton
+                    color='secondary'
+                    className='normal-case'
+                    onClick={() => {
+                      void singleFileTryAgainHandler();
+                    }}>
+                    Try Again
+                  </ZIonButton>
+                  <ZIonButton
+                    color='success'
+                    className='normal-case'
+                    onClick={() => {
+                      dismissZIonModal(
+                        zStringify({
+                          fileUrl: uploadTabState.file?.fileUrl,
+                          filePath: uploadTabState.file?.filePath
+                        }),
+                        ZIonModalActionEnum.success
+                      );
+                    }}>
+                    Done
+                  </ZIonButton>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </ReactDropzone>
+  );
 };
 
 const LinkTab: React.FC = () => {
-	return (
-		<div className='flex flex-col w-full h-full mt-2 rounded ion-align-items-center ion-justify-content-start'>
-			<ZIonText className='ion-no-margin'>
-				<ZIonImg
-					src={uploadModalLink}
-					alt='send icon'
-					style={{ width: '11rem', padding: '2rem' }}
-					className='mb-5 border-radius__50per zaions__primary_set'
-				/>
-			</ZIonText>
-			<ZIonText color='dark' className='mb-3'>
-				<h5 className='font-bold'>Paste the link of an image 🔗</h5>
-			</ZIonText>
-			<div className='flex flex-col ion-align-items-center ion-justify-content-center'>
-				<ZIonText color='medium' className='mt-2 font-bold'>
-					(5MB maximum - JPG, GIF, PNG)
-				</ZIonText>
-			</div>
-			<div
-				className='flex ion-justify-content-center ion-align-items-center w-[70%] mt-5 pt-2'
-				style={{ height: '3.5rem' }}
-			>
-				<ZIonInput
-					className={classNames(classes['file-modal-upload-input'], {
-						'zaions__primary_set ion-padding h-full': true,
-					})}
-					placeholder='https://mylink.com'
-					color='dark'
-					label=''
-				/>
-				<ZIonButton
-					className='h-full normal-case ion-no-margin'
-					style={{ '--border-radius': '0', '--box-shadow': 'none' }}
-				>
-					Select
-				</ZIonButton>
-			</div>
-		</div>
-	);
+  return (
+    <div className='flex flex-col w-full h-full mt-2 rounded ion-align-items-center ion-justify-content-start'>
+      <ZIonText className='ion-no-margin'>
+        <ZIonImg
+          src={uploadModalLink}
+          alt='send icon'
+          style={{ width: '11rem', padding: '2rem' }}
+          className='mb-5 border-radius__50per zaions__primary_set'
+        />
+      </ZIonText>
+      <ZIonText
+        color='dark'
+        className='mb-3'>
+        <h5 className='font-bold'>Paste the link of an image 🔗</h5>
+      </ZIonText>
+      <div className='flex flex-col ion-align-items-center ion-justify-content-center'>
+        <ZIonText
+          color='medium'
+          className='mt-2 font-bold'>
+          (5MB maximum - JPG, GIF, PNG)
+        </ZIonText>
+      </div>
+      <div
+        className='flex ion-justify-content-center ion-align-items-center w-[70%] mt-5 pt-2'
+        style={{ height: '3.5rem' }}>
+        <ZIonInput
+          className={classNames(classes['file-modal-upload-input'], {
+            'zaions__primary_set ion-padding h-full': true
+          })}
+          placeholder='https://mylink.com'
+          color='dark'
+          label=''
+        />
+        <ZIonButton
+          className='h-full normal-case ion-no-margin'
+          style={{ '--border-radius': '0', '--box-shadow': 'none' }}>
+          Select
+        </ZIonButton>
+      </div>
+    </div>
+  );
 };
 
 const ScreenShotTab: React.FC = () => {
-	return (
-		<div className='flex flex-col w-full h-full mt-2 rounded ion-align-items-center ion-justify-content-start'>
-			<ZIonText className='ion-no-margin'>
-				<ZIonImg
-					src={uploadModalCamera}
-					alt='send icon'
-					style={{ width: '11rem', padding: '2rem' }}
-					className='mb-5 border-radius__50per zaions__primary_set'
-				/>
-			</ZIonText>
-			<ZIonText color='dark' className='mb-3'>
-				<h5 className='font-bold'>Take a screenshot of a website 📸</h5>
-			</ZIonText>
-			<div className='flex flex-col ion-align-items-center ion-justify-content-center'>
-				<ZIonText color='medium' className='mt-2 font-bold'>
-					Paste the link of the Website you want to take a screenshot
-				</ZIonText>
-			</div>
-			<div
-				className='flex ion-justify-content-center ion-align-items-center w-[70%] mt-5 pt-2'
-				style={{ height: '3.5rem' }}
-			>
-				<ZIonInput
-					className={classNames(classes['file-modal-upload-input'], {
-						'zaions__primary_set ion-padding h-full': true,
-					})}
-					placeholder='https://mylink.com'
-					color='dark'
-					label=''
-				/>
-				<ZIonButton
-					className='h-full normal-case ion-no-margin'
-					style={{ '--border-radius': '0', '--box-shadow': 'none' }}
-				>
-					Take a screenshot
-				</ZIonButton>
-			</div>
-		</div>
-	);
+  return (
+    <div className='flex flex-col w-full h-full mt-2 rounded ion-align-items-center ion-justify-content-start'>
+      <ZIonText className='ion-no-margin'>
+        <ZIonImg
+          src={uploadModalCamera}
+          alt='send icon'
+          style={{ width: '11rem', padding: '2rem' }}
+          className='mb-5 border-radius__50per zaions__primary_set'
+        />
+      </ZIonText>
+      <ZIonText
+        color='dark'
+        className='mb-3'>
+        <h5 className='font-bold'>Take a screenshot of a website 📸</h5>
+      </ZIonText>
+      <div className='flex flex-col ion-align-items-center ion-justify-content-center'>
+        <ZIonText
+          color='medium'
+          className='mt-2 font-bold'>
+          Paste the link of the Website you want to take a screenshot
+        </ZIonText>
+      </div>
+      <div
+        className='flex ion-justify-content-center ion-align-items-center w-[70%] mt-5 pt-2'
+        style={{ height: '3.5rem' }}>
+        <ZIonInput
+          className={classNames(classes['file-modal-upload-input'], {
+            'zaions__primary_set ion-padding h-full': true
+          })}
+          placeholder='https://mylink.com'
+          color='dark'
+          label=''
+        />
+        <ZIonButton
+          className='h-full normal-case ion-no-margin'
+          style={{ '--border-radius': '0', '--box-shadow': 'none' }}>
+          Take a screenshot
+        </ZIonButton>
+      </div>
+    </div>
+  );
 };
 
 const GalleryTab: React.FC<{ typeOfGallery: galleryEnum }> = ({
-	typeOfGallery,
+  typeOfGallery
 }) => {
-	const searchInputPlaceholder =
-		typeOfGallery === galleryEnum.pixabay
-			? 'Search among millions of pictures powered by Pixabay'
-			: typeOfGallery === galleryEnum.giphy
-			? 'Search among millions of GIFs powered by Giphy'
-			: typeOfGallery === galleryEnum.pexels
-			? 'Search among millions of pictures powered by Pexels'
-			: typeOfGallery === galleryEnum.unsplash
-			? 'Search among millions of pictures powered by Unsplash'
-			: typeOfGallery === galleryEnum.tenor
-			? 'Search among millions of pictures powered by Tenor'
-			: '';
-	return (
-		<>
-			<ZIonRow className='px-3 mb-3 ion-justify-content-center'>
-				<ZIonCol
-					className='flex ion-justify-content-center ion-align-items-center w-[70%]'
-					style={{ height: '3.5rem' }}
-					size='12'
-				>
-					<ZIonInput
-						className={classNames(classes['file-modal-upload-input'], {
-							'zaions__primary_set ion-padding h-full': true,
-						})}
-						placeholder={searchInputPlaceholder}
-						color='dark'
-						label=''
-					/>
-					<ZIonButton
-						className='h-full normal-case ion-no-margin'
-						style={{ '--border-radius': '0', '--box-shadow': 'none' }}
-					>
-						Search
-					</ZIonButton>
-				</ZIonCol>
-			</ZIonRow>
-			<ZIonRow className='px-3 mx-auto ion-justify-content-between'>
-				{[1, 2, 3, 4, 5, 6].map((el) => {
-					return (
-						<ZIonCol
-							className={classNames(classes['zaions-gallery-card'], {
-								'zaions__primary_set ion-no-padding mb-3 flex ion-align-items-end cursor-pointer':
-									true,
-							})}
-							style={{
-								height: '160px',
-								backgroundImage: `url(https://cdn.pixabay.com/photo/2023/03/23/15/43/squirrel-7872248_960_720.jpg)`,
-							}}
-							size='3.9'
-							key={el}
-						>
-							<div
-								className={classNames(
-									classes['zaions-gallery-card-block-data'],
-									{
-										'w-full zaions__dark_bg_opacity_point_7': true,
-									}
-								)}
-							>
-								<span className='font-bold ps-2'>Ralphs_Fotos | Pixabay</span>
-							</div>
-						</ZIonCol>
-					);
-				})}
-			</ZIonRow>
-		</>
-	);
+  const searchInputPlaceholder =
+    typeOfGallery === galleryEnum.pixabay
+      ? 'Search among millions of pictures powered by Pixabay'
+      : typeOfGallery === galleryEnum.giphy
+      ? 'Search among millions of GIFs powered by Giphy'
+      : typeOfGallery === galleryEnum.pexels
+      ? 'Search among millions of pictures powered by Pexels'
+      : typeOfGallery === galleryEnum.unsplash
+      ? 'Search among millions of pictures powered by Unsplash'
+      : typeOfGallery === galleryEnum.tenor
+      ? 'Search among millions of pictures powered by Tenor'
+      : '';
+  return (
+    <>
+      <ZIonRow className='px-3 mb-3 ion-justify-content-center'>
+        <ZIonCol
+          className='flex ion-justify-content-center ion-align-items-center w-[70%]'
+          style={{ height: '3.5rem' }}
+          size='12'>
+          <ZIonInput
+            className={classNames(classes['file-modal-upload-input'], {
+              'zaions__primary_set ion-padding h-full': true
+            })}
+            placeholder={searchInputPlaceholder}
+            color='dark'
+            label=''
+          />
+          <ZIonButton
+            className='h-full normal-case ion-no-margin'
+            style={{ '--border-radius': '0', '--box-shadow': 'none' }}>
+            Search
+          </ZIonButton>
+        </ZIonCol>
+      </ZIonRow>
+      <ZIonRow className='px-3 mx-auto ion-justify-content-between'>
+        {[1, 2, 3, 4, 5, 6].map(el => {
+          return (
+            <ZIonCol
+              className={classNames(classes['zaions-gallery-card'], {
+                'zaions__primary_set ion-no-padding mb-3 flex ion-align-items-end cursor-pointer':
+                  true
+              })}
+              style={{
+                height: '160px',
+                backgroundImage: `url(https://cdn.pixabay.com/photo/2023/03/23/15/43/squirrel-7872248_960_720.jpg)`
+              }}
+              size='3.9'
+              key={el}>
+              <div
+                className={classNames(
+                  classes['zaions-gallery-card-block-data'],
+                  {
+                    'w-full zaions__dark_bg_opacity_point_7': true
+                  }
+                )}>
+                <span className='font-bold ps-2'>{PRODUCT_NAME}</span>
+              </div>
+            </ZIonCol>
+          );
+        })}
+      </ZIonRow>
+    </>
+  );
 };
 
 export default ZaionsFileUploadModal;

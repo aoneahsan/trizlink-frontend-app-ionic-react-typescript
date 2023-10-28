@@ -256,30 +256,8 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
     }
   }, [loggedIn, getUserRoleAndPermissions]);
 
-  // useEffect(() => {
-  //   refetchUserRoleAndPermissions();
-  // }, [loggedIn, isUserRoleAndPermissionsFetching]);
-
-  //
-  // useEffect(() => {
-  //   try {
-  //     if (loggedIn) {
-  //       // calling this so when user lands/refresh the page it will call this API and will not wait for 10(or more)seconds to update the user active status
-  //       updateUserStatusHandler();
-
-  //       // setting the user "updateUserStatus" API interval so it will keep updating the user status after specified interval
-  //       setLastSeenInterval();
-  //     } else {
-  //       clearLastSeenInterval();
-  //     }
-  //   } catch (error) {
-  //     reportCustomError(error);
-  //   }
-  // }, [loggedIn]);
-
   useEffect(() => {
     App.addListener('appStateChange', ({ isActive }) => {
-      // console.log('App state changed. Is active?', isActive);
       if (isActive) {
         setLastSeenInterval();
       } else {

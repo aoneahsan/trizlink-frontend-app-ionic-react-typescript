@@ -14,9 +14,11 @@ const container = document.getElementById('root');
 const root = container && createRoot(container);
 if (root) {
   root.render(
-    <React.StrictMode>
+    // <React.StrictMode>
+    <React.Fragment>
       <AppEntryPoint />
-    </React.StrictMode>
+    </React.Fragment>
+    // </React.StrictMode>
   );
 }
 

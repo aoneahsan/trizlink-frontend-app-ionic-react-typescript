@@ -752,7 +752,6 @@ const ZInpageTable: React.FC = () => {
     }
   }, [workspaceId, membersData, swsMembersData, wsShareId, shareWSMemberId]);
   // #endregion
-  // console.log({ d: zMembersTable?.getCanNextPage() }); // causing infinite loop
 
   return (
     <div>

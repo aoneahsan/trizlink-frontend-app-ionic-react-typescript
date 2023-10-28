@@ -15,12 +15,12 @@ import classNames from 'classnames';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonButton,
-	ZIonCol,
-	ZIonContent,
-	ZIonImg,
-	ZIonRow,
-	ZIonText,
+  ZIonButton,
+  ZIonCol,
+  ZIonContent,
+  ZIonImg,
+  ZIonRow,
+  ZIonText
 } from '@/components/ZIonComponents';
 import ZaionsSecondaryHeader from '@/components/InPageComponents/ZaionsSecondaryHeader';
 
@@ -69,56 +69,54 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * */
 
 const Z500View: React.FC = () => {
-	const { isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
+  const { isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
 
-	return (
-		<ZIonContent>
-			<ZaionsSecondaryHeader />
+  return (
+    <ZIonContent>
+      <ZaionsSecondaryHeader />
 
-			{/*  */}
-			<ZIonRow className='w-full h-full ion-justify-content-center'>
-				<div
-					className={classNames({
-						'flex flex-col ion-align-items-center ion-text-center': true,
-						'w-[40rem] h-[40rem]': isLgScale,
-						'w-[25rem]': !isLgScale && isMdScale,
-						'w-[95%]': !isMdScale,
-					})}
-				>
-					<ZIonImg
-						src={Z500Svg}
-						className={classNames({
-							'w-[60%] h-[60%]': isLgScale,
-							'w-[22rem] h-[22rem]': !isLgScale && isSmScale,
-							'w-[95%] h-[95%]': !isSmScale,
-						})}
-					/>
+      {/*  */}
+      <ZIonRow className='w-full h-full ion-justify-content-center'>
+        <div
+          className={classNames({
+            'flex flex-col ion-align-items-center ion-text-center': true,
+            'w-[40rem] h-[40rem]': isLgScale,
+            'w-[25rem]': !isLgScale && isMdScale,
+            'w-[95%]': !isMdScale
+          })}>
+          <ZIonImg
+            src={Z500Svg}
+            className={classNames({
+              'w-[60%] h-[60%]': isLgScale,
+              'w-[22rem] h-[22rem]': !isLgScale && isSmScale,
+              'w-[95%] h-[95%]': !isSmScale
+            })}
+          />
 
-					<ZIonText className='md:text-4xl text-2xl sm:text-3xl lg:text-4xl mt-2'>
-						Something went wrong!
-					</ZIonText>
-					<ZIonText className='text-sm md:text-lg lg:text-lg mt-3 ion-text-center'>
-						We're sorry, but something went wrong on our end. Our team has been
-						notified of this issue and is working to fix it. In the meantime,
-						you can try refreshing the page or coming back later. If the problem
-						persists, please don't hesitate to contact our support team for
-						further assistance.
-					</ZIonText>
+          <ZIonText className='mt-2 text-2xl md:text-4xl sm:text-3xl lg:text-4xl'>
+            Something went wrong!
+          </ZIonText>
+          <ZIonText className='mt-3 text-sm md:text-lg lg:text-lg ion-text-center'>
+            We're sorry, but something went wrong on our end. Our team has been
+            notified of this issue and is working to fix it. In the meantime,
+            you can try refreshing the page or coming back later. If the problem
+            persists, please don't hesitate to contact our support team for
+            further assistance.
+          </ZIonText>
 
-					<ZIonButton
-						routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}
-						className={classNames({
-							'sm:text-xs md:text-sm mt-4 w-[10rem]': true,
-							'mb-4': !isLgScale,
-							'w-[90%]': !isSmScale,
-						})}
-					>
-						Go Home
-					</ZIonButton>
-				</div>
-			</ZIonRow>
-		</ZIonContent>
-	);
+          <ZIonButton
+            routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}
+            className={classNames({
+              'sm:text-xs md:text-sm mt-4 w-[10rem]': true,
+              'mb-4': !isLgScale,
+              'w-[90%]': !isSmScale
+            })}>
+            Go Home
+          </ZIonButton>
+        </div>
+      </ZIonRow>
+    </ZIonContent>
+  );
 };
 
 export default Z500View;

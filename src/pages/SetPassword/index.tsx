@@ -154,8 +154,6 @@ const ZSetPasswordPage: React.FC = () => {
           LOCALSTORAGE_KEYS.USERDATA
         )) as UserAccountType | null;
 
-        console.log({ inviteeData, userData });
-
         const authToken = (await STORAGE.GET(LOCALSTORAGE_KEYS.AUTHTOKEN)) as
           | string
           | null;
