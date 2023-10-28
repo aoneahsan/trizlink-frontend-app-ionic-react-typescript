@@ -4,7 +4,6 @@
  * */
 import React from 'react';
 import { useEffect } from 'react';
-// import { init as sentryCapacitorInit } from '@sentry/capacitor';
 import { init as sentryReactInit, BrowserTracing } from '@sentry/react';
 import { ENVS } from '@/utils/envKeys';
 

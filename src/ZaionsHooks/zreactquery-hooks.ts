@@ -1,7 +1,13 @@
 // Core Imports
 
 // Packages Imports
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  QueryFilters,
+  QueryKey,
+  useMutation,
+  useQuery,
+  useQueryClient
+} from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useResetRecoilState, useRecoilValue } from 'recoil';
 
@@ -33,6 +39,7 @@ import {
 } from '@/ZaionsStore/UserAccount/index.recoil';
 import { appWiseIonicLoaderIsOpenedRSelector } from '@/ZaionsStore/AppRStates';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { Console } from 'console';
 
 /**
  * The custom hook for getting data from an API using useQuery hook from react-query package.
@@ -88,7 +95,7 @@ export const useZRQGetRequest = <T>({
   );
   const { permissionsChecker } = useZPermissionChecker();
 
-  return useQuery({
+  const __response = useQuery({
     queryKey: [..._key],
     queryFn: async (): Promise<T | undefined | null> => {
       if (_checkPermissions) {
@@ -129,57 +136,57 @@ export const useZRQGetRequest = <T>({
         });
       }
     },
-    onSuccess: _data => {
-      // onSucceed dismissing loader...
-      zAppWiseIonicLoaderIsOpenedRSelector &&
-        _showLoader &&
-        void dismissZIonLoader();
-      // zConsoleLog({
-      // 	message:
-      // 		'From ZaionsHook -> useZRQCreateRequest -> useQuery -> onSuccess',
-      // 	data: _data,
-      // });
-    },
-    onError: async _error => {
-      // need to dismiss the loader first, then showing error just so, user will not get redirected to login without knowing that there was a authenticated error
-      // OnError dismissing loader...
-      zAppWiseIonicLoaderIsOpenedRSelector &&
-        _showLoader &&
-        void dismissZIonLoader();
+    // onSuccess: _data => {
+    //   // onSucceed dismissing loader...
+    //   zAppWiseIonicLoaderIsOpenedRSelector &&
+    //     _showLoader &&
+    //     void dismissZIonLoader();
+    //   // zConsoleLog({
+    //   // 	message:
+    //   // 		'From ZaionsHook -> useZRQCreateRequest -> useQuery -> onSuccess',
+    //   // 	data: _data,
+    //   // });
+    // },
+    // onError: async _error => {
+    //   // need to dismiss the loader first, then showing error just so, user will not get redirected to login without knowing that there was a authenticated error
+    //   // OnError dismissing loader...
+    //   zAppWiseIonicLoaderIsOpenedRSelector &&
+    //     _showLoader &&
+    //     void dismissZIonLoader();
 
-      if (_error instanceof AxiosError) {
-        const __error = (_error as AxiosError)?.response;
-        const __errorMessage = (__error?.data as { errors: { item: string[] } })
-          ?.errors?.item[0];
-        // check if it's unauthenticated error
-        if (__error?.status && __error?.status === errorCodes.unauthenticated) {
-          // clear localstorage
-          await clearAuthDataFromLocalStorageAndRecoil(resetUserAccountState);
+    //   if (_error instanceof AxiosError) {
+    //     const __error = (_error as AxiosError)?.response;
+    //     const __errorMessage = (__error?.data as { errors: { item: string[] } })
+    //       ?.errors?.item[0];
+    //     // check if it's unauthenticated error
+    //     if (__error?.status && __error?.status === errorCodes.unauthenticated) {
+    //       // clear localstorage
+    //       await clearAuthDataFromLocalStorageAndRecoil(resetUserAccountState);
 
-          window.location.replace(ZaionsRoutes.LoginRoute);
+    //       window.location.replace(ZaionsRoutes.LoginRoute);
 
-          // showInfoNotification(MESSAGES.Login.loginExpiredMessage);
-        } else if (__error?.status === errorCodes.notFound) {
-          const __data = {
-            message: __errorMessage || 'Not found',
-            status: __error?.status
-          };
-          void STORAGE.SET(LOCALSTORAGE_KEYS.ERROR_DATA, __data);
+    //       // showInfoNotification(MESSAGES.Login.loginExpiredMessage);
+    //     } else if (__error?.status === errorCodes.notFound) {
+    //       const __data = {
+    //         message: __errorMessage || 'Not found',
+    //         status: __error?.status
+    //       };
+    //       void STORAGE.SET(LOCALSTORAGE_KEYS.ERROR_DATA, __data);
 
-          // redirect to 404
-          // window.location.replace(ZaionsRoutes.Error.Z404);
-        } else {
-          // showing error alert...
-          _showAlertOnError && void presentZIonErrorAlert();
-        }
-      } else {
-        // showing error alert...
-        _showAlertOnError && void presentZIonErrorAlert();
-      }
+    //       // redirect to 404
+    //       // window.location.replace(ZaionsRoutes.Error.Z404);
+    //     } else {
+    //       // showing error alert...
+    //       _showAlertOnError && void presentZIonErrorAlert();
+    //     }
+    //   } else {
+    //     // showing error alert...
+    //     _showAlertOnError && void presentZIonErrorAlert();
+    //   }
 
-      // throw the request_failed error
-      _showAlertOnError && reportCustomError(_error);
-    },
+    //   // throw the request_failed error
+    //   _showAlertOnError && reportCustomError(_error);
+    // },
     select: data => {
       if (_shouldExtractData) {
         switch (_extractType) {
@@ -202,6 +209,65 @@ export const useZRQGetRequest = <T>({
     retry: _queryOptions.retry,
     staleTime: _staleTime
   });
+
+  if (__response?.error) {
+    (async () => {
+      const _error = __response.error;
+      // need to dismiss the loader first, then showing error just so, user will not get redirected to login without knowing that there was a authenticated error
+      // OnError dismissing loader...
+      zAppWiseIonicLoaderIsOpenedRSelector &&
+        _showLoader &&
+        void dismissZIonLoader();
+
+      if (_error instanceof AxiosError) {
+        const __error = (_error as AxiosError)?.response;
+        const __errorMessage = (__error?.data as { errors: { item: string[] } })
+          ?.errors?.item[0];
+        console.log({ __errorMessage });
+        // check if it's unauthenticated error
+        if (__error?.status && __error?.status === errorCodes.unauthenticated) {
+          // clear localstorage
+          await clearAuthDataFromLocalStorageAndRecoil(resetUserAccountState);
+
+          window.location.replace(ZaionsRoutes.LoginRoute);
+
+          // showInfoNotification(MESSAGES.Login.loginExpiredMessage);
+        } else if (__error?.status === errorCodes.notFound) {
+          const __data = {
+            message: __errorMessage || 'Not found',
+            status: __error?.status
+          };
+          void STORAGE.SET(LOCALSTORAGE_KEYS.ERROR_DATA, __data);
+
+          // redirect to 404
+          window.location.replace(ZaionsRoutes.Error.Z404);
+        } else {
+          // showing error alert...
+          _showAlertOnError && void presentZIonErrorAlert();
+        }
+      } else {
+        // showing error alert...
+        _showAlertOnError && void presentZIonErrorAlert();
+      }
+
+      // throw the request_failed error
+      _showAlertOnError && reportCustomError(_error);
+    })();
+  }
+
+  if (__response?.data) {
+    // onSucceed dismissing loader...
+    zAppWiseIonicLoaderIsOpenedRSelector &&
+      _showLoader &&
+      void dismissZIonLoader();
+    // zConsoleLog({
+    // 	message:
+    // 		'From ZaionsHook -> useZRQCreateRequest -> useQuery -> onSuccess',
+    // 	data: _data,
+    // });
+  }
+
+  return __response;
 };
 
 /**
@@ -223,7 +289,7 @@ export const useZRQCreateRequest = <T>({
   _loaderMessage = MESSAGES.GENERAL.API_REQUEST.CREATING
 }: {
   _url: API_URL_ENUM;
-  _queriesKeysToInvalidate?: string[];
+  _queriesKeysToInvalidate?: QueryFilters;
   _authenticated?: boolean;
   _itemsIds?: string[];
   _urlDynamicParts?: string[];
@@ -290,9 +356,9 @@ export const useZRQCreateRequest = <T>({
     onSuccess: async _data => {
       // onSucceed dismissing loader...
       _showLoader && (await dismissZIonLoader());
-      if (_queriesKeysToInvalidate?.length) {
+      if (_queriesKeysToInvalidate) {
         await queryClient.invalidateQueries({
-          queryKey: _queriesKeysToInvalidate
+          queryKey: _queriesKeysToInvalidate as QueryKey
         });
       }
     },
@@ -335,7 +401,7 @@ export const useZRQUpdateRequest = <T>({
   _loaderMessage = MESSAGES.GENERAL.API_REQUEST.UPDATING
 }: {
   _url: API_URL_ENUM;
-  _queriesKeysToInvalidate?: string[];
+  _queriesKeysToInvalidate?: QueryFilters;
   authenticated?: boolean;
   _contentType?: zAxiosApiRequestContentType;
   _showAlertOnError?: boolean;
@@ -396,9 +462,9 @@ export const useZRQUpdateRequest = <T>({
     onSuccess: _data => {
       // onSucceed dismissing loader...
       _showLoader && void dismissZIonLoader();
-      if (_queriesKeysToInvalidate?.length) {
+      if (_queriesKeysToInvalidate) {
         void queryClient.invalidateQueries({
-          queryKey: _queriesKeysToInvalidate
+          queryKey: _queriesKeysToInvalidate as QueryKey
         });
       }
     },
@@ -441,7 +507,7 @@ export const useZRQDeleteRequest = <T>({
   _loaderMessage = MESSAGES.GENERAL.API_REQUEST.DELETING
 }: {
   _url: API_URL_ENUM;
-  _queriesKeysToInvalidate?: string[];
+  _queriesKeysToInvalidate?: QueryFilters;
   _authenticated?: boolean;
   _showAlertOnError?: boolean;
   _showLoader?: boolean;
@@ -491,9 +557,9 @@ export const useZRQDeleteRequest = <T>({
     onSuccess: _data => {
       // onSucceed dismissing loader...
       _showLoader && void dismissZIonLoader();
-      if (_queriesKeysToInvalidate?.length) {
+      if (_queriesKeysToInvalidate) {
         void queryClient.invalidateQueries({
-          queryKey: _queriesKeysToInvalidate
+          queryKey: _queriesKeysToInvalidate as QueryKey
         });
       }
     },
