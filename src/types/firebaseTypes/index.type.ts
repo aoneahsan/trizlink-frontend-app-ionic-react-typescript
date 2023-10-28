@@ -4,6 +4,9 @@ import {
   stringOrNumberOrBooleanOrNull
 } from '@/types/genericTypeDefinitions.type';
 
+// Export from other files in this folder
+export * from './frbAnalytics.type';
+
 export interface IFrbAppRStateAtom {
   frbAppInitLastTriedAt: stringOrNull;
   frbAppInitialized: boolean;

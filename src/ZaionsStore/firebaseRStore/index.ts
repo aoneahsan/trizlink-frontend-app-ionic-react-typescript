@@ -3,7 +3,10 @@ import {
   FrbRemoteConfigKeysType,
   IFrbAppRStateAtom,
   IFrbRemoteConfigRStateAtom
-} from '@/types/firebaseRStoreTypes/index.type';
+} from '@/types/firebaseTypes/index.type';
+
+// Exports from other files in this folder
+export * from './frbAnalyticsRStore.recoil';
 
 // frb = firebase
 

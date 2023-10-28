@@ -8,7 +8,7 @@ import {
 import { frbRemoteConfigKeysStructure } from '@/utils/constants/firebaseConstants';
 import { TypeEnum } from '@/utils/enums';
 import { stringOrNumberOrBooleanOrNull } from '@/types/genericTypeDefinitions.type';
-import { FrbRemoteConfigKeysNamesType } from '@/types/firebaseRStoreTypes/index.type';
+import { FrbRemoteConfigKeysNamesType } from '@/types/firebaseTypes/index.type';
 
 export const getRemoteConfigKeysData = (remoteConfig: RemoteConfig) => {
   const keys = getAll(remoteConfig);
