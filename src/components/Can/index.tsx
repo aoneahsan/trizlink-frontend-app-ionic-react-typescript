@@ -1,13 +1,13 @@
-import { UserRoleAndPermissionsInterface } from '@/types/UserAccount/index.type';
+import { type UserRoleAndPermissionsInterface } from '@/types/UserAccount/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import {
-  permissionCheckModeEnum,
-  permissionsEnum,
   permissionsTypeEnum,
-  shareWSPermissionEnum
+  permissionCheckModeEnum,
+  type permissionsEnum,
+  type shareWSPermissionEnum
 } from '@/utils/enums/RoleAndPermissions';
 import { extractInnerData } from '@/utils/helpers';
 import {
@@ -72,8 +72,8 @@ const ZCan: React.FC<CanComponentProps> = ({
   useEffect(() => {
     try {
       if (
-        !currentLoggedInUserRoleAndPermissionsStateAtom?.permissions.length &&
-        getUserRoleAndPermissions
+        currentLoggedInUserRoleAndPermissionsStateAtom?.permissions == null &&
+        getUserRoleAndPermissions != null
       ) {
         // Storing in recoil.
         setCurrentLoginUserRoleAndPermissionsStateAtom(oldValues => ({
@@ -90,6 +90,7 @@ const ZCan: React.FC<CanComponentProps> = ({
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getUserRoleAndPermissions]);
 
   useEffect(() => {
@@ -103,7 +104,7 @@ const ZCan: React.FC<CanComponentProps> = ({
       }));
     } else if (
       permissionType === permissionsTypeEnum.shareWSMemberPermissions &&
-      shareWSId
+      shareWSId != null
     ) {
       // if permissionType is permissionsTypeEnum.shareWSMemberPermissions then this means it a share workspace so first getting permissions of this workspace of the current user as member in the workspace and checking from the that permission.
       const _permissionFromRQ = getRQCDataHandler({
@@ -114,8 +115,8 @@ const ZCan: React.FC<CanComponentProps> = ({
         ]
       });
 
-      if (_permissionFromRQ) {
-        const __data = extractInnerData<{
+      if (_permissionFromRQ != null) {
+        const _data = extractInnerData<{
           memberRole?: string;
           memberPermissions?: string[];
         }>(
@@ -125,17 +126,18 @@ const ZCan: React.FC<CanComponentProps> = ({
 
         setCompState(oldValues => ({
           ...oldValues,
-          userPermissions: __data?.memberPermissions,
+          userPermissions: _data?.memberPermissions,
           isProcessing: false
         }));
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [permissionType, shareWSId]);
   // #endregion
 
   // const haveRequiredPermission = userPermissions?.includes(havePermission);
-  let haveRequiredPermission = undefined;
-  if (shareWSId) {
+  let haveRequiredPermission;
+  if (shareWSId != null) {
     switch (checkMode) {
       case permissionCheckModeEnum.every:
         haveRequiredPermission = (
@@ -173,11 +175,11 @@ const ZCan: React.FC<CanComponentProps> = ({
     content = children;
   } else if (
     (returnPermissionDeniedView &&
-      currentLoggedInUserRoleAndPermissionsStateAtom?.fetched &&
-      compState.isProcessing === false) ||
+      currentLoggedInUserRoleAndPermissionsStateAtom?.fetched === true &&
+      !compState.isProcessing) ||
     (returnPermissionDeniedView &&
-      compState.isProcessing === false &&
-      haveRequiredPermission === false)
+      !compState.isProcessing &&
+      !haveRequiredPermission)
   ) {
     content = <Z403View />;
   }
