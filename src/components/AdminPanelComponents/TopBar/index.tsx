@@ -285,7 +285,7 @@ const ZADTopBarColOne: React.FC<{
       sizeSm='4'
       sizeXs='4.5'
       className='flex h-full ion-align-items-center'>
-      {isWorkspaceListPage === false
+      {isWorkspaceListPage === false || isWorkspaceListPage === undefined
         ? isMdScale && (
             <ZIonButton
               color='secondary'
@@ -306,7 +306,7 @@ const ZADTopBarColOne: React.FC<{
         </>
       )}
 
-      {isWorkspaceListPage === false && (
+      {(isWorkspaceListPage === false || isWorkspaceListPage === undefined) && (
         <>
           {isMdScale && showWSSwitcherBtn && (
             <ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>

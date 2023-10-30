@@ -2,16 +2,19 @@
 import React from 'react';
 
 // Packages Imports
-import Select, { ActionMeta, MultiValue, PropsValue } from 'react-select';
+import Select, {
+  type ActionMeta,
+  type MultiValue,
+  type PropsValue
+} from 'react-select';
 import classNames from 'classnames';
 
 // Custom Imports
 import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 // Types Imports
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 interface ZaionsRSelectType {
   options: readonly ZaionsRSelectOptions[];
@@ -72,29 +75,33 @@ interface ZaionsRSelectType {
 // });
 
 const ZaionsRSelect: React.FC<ZaionsRSelectType> = props => {
-  const _testinglistselector = props.testinglistselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testinglistselector || PRODUCT_NAME,
-          _key: zCreateElementTestingSelectorKeyEnum.listSelector
-        })
-      }
-    : {};
+  const _testinglistselector =
+    props.testinglistselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testinglistselector,
+            _key: zCreateElementTestingSelectorKeyEnum.listSelector
+          })
+        }
+      : {};
 
-  const _testingSelector = props.testingselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testingselector || PRODUCT_NAME
-        })
-      }
-    : {};
+  const _testingSelector =
+    props.testingselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testingselector
+          })
+        }
+      : {};
   return (
     <Select
       {...props}
       // components={{ ClearIndicator }}
       // styles={{ clearIndicator: ClearIndicatorStyles }}
       className={classNames('basic-single', props.className)}
-      classNamePrefix={props.classNamePrefix || 'select'}
+      classNamePrefix={
+        props.classNamePrefix !== undefined ? props.classNamePrefix : 'select'
+      }
       {..._testingSelector}
       {..._testinglistselector}
     />

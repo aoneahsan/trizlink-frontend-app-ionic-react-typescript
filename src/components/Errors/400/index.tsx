@@ -95,10 +95,10 @@ const Z400View: React.FC = () => {
             Bad Request
           </ZIonText>
           <ZIonText className='mt-3 text-sm md:text-lg lg:text-lg ion-text-center'>
-            Uh-oh! Your request has hit a snag and couldn't be processed
-            properly. Kindly review the data you've provided and attempt again.
-            Should you encounter persistent difficulties, don't hesitate to get
-            in touch with our support team for expert help.
+            Uh-oh! Your request has hit a snag and couldn&apos;t be processed
+            properly. Kindly review the data you&apos;ve provided and attempt
+            again. Should you encounter persistent difficulties, don&apos;t
+            hesitate to get in touch with our support team for expert help.
           </ZIonText>
 
           <ZIonButton

@@ -1,8 +1,9 @@
+import React, { useEffect, useRef } from 'react';
 import { GoogleMap } from '@capacitor/google-maps';
-import { useEffect, useRef } from 'react';
 import { GM_CONSTANTS } from '@/utils/constants/googleMapsConstants';
 
 interface IZCapGMapProps {
+  mapId: string;
   mapSize?: {
     width?: string | number;
     height?: string | number;
@@ -12,54 +13,43 @@ interface IZCapGMapProps {
     lng?: number;
   };
   zoomLevel?: number;
-  mapId: string;
-  mapStyles?: {
-    [key: string]: unknown;
-  };
+  mapStyles?: Record<string, unknown>;
 }
 
-const ZCapGMap: React.FC<IZCapGMapProps> = ({
-  coordinates,
-  zoomLevel,
-  mapSize,
-  mapId,
-  mapStyles,
-}) => {
+const ZCapGMap: React.FC<IZCapGMapProps> = props => {
   const mapRef = useRef<HTMLElement>();
 
   useEffect(() => {
     void (async () => {
-      if (!mapRef.current) return;
+      if (mapRef?.current === null || mapRef?.current === undefined) return;
 
       await GoogleMap.create({
-        id: mapId || GM_CONSTANTS.MAP_ID,
+        id: props?.mapId ?? GM_CONSTANTS.MAP_ID,
         element: mapRef.current,
-        apiKey: GM_CONSTANTS.MAP_API_KEY || '',
+        apiKey: GM_CONSTANTS.MAP_API_KEY ?? '',
         config: {
           center: {
-            lat: coordinates?.lat || GM_CONSTANTS.DEFAULT_COORS.LAT,
-            lng: coordinates?.lng || GM_CONSTANTS.DEFAULT_COORS.LNG,
+            lat: props?.coordinates?.lat ?? GM_CONSTANTS.DEFAULT_COORS.LAT,
+            lng: props?.coordinates?.lng ?? GM_CONSTANTS.DEFAULT_COORS.LNG
           },
-          zoom: zoomLevel || GM_CONSTANTS.ZOOM_LEVEL,
-        },
+          zoom: props?.zoomLevel ?? GM_CONSTANTS.ZOOM_LEVEL
+        }
       });
     })();
 
     // eslint-disable-next-line
-  }, [coordinates?.lat, coordinates?.lng, zoomLevel]);
+  }, [props?.coordinates?.lat, props?.coordinates?.lng, props?.zoomLevel]);
 
   return (
-    <>
-      <capacitor-google-map
-        ref={mapRef}
-        style={{
-          width: mapSize?.width || '100%',
-          height: mapSize?.height || 400,
-          display: 'inline-block',
-          ...mapStyles,
-        }}
-      ></capacitor-google-map>
-    </>
+    <capacitor-google-map
+      ref={mapRef}
+      style={{
+        width: props?.mapSize?.width ?? '100%',
+        height: props?.mapSize?.height ?? 400,
+        display: 'inline-block',
+        ...props?.mapStyles
+      }}
+    />
   );
 };
 

@@ -39,7 +39,7 @@ import {
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
-import { FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
+import { type FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
 
 /**
  * Recoil State Imports go down
@@ -110,14 +110,15 @@ const ZUploadInput: React.FC<IZUploadInput> = ({
   // #endregion
 
   // #region functions
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const uploadFileToBackend = async (file: File) => {
     try {
       const formData = new FormData();
       formData.append('file', file);
       const result = await uploadSingleFile(formData);
 
-      if (result) {
-        const __data = (
+      if (result !== undefined) {
+        const _data = (
           result as {
             data: {
               file: object;
@@ -128,9 +129,9 @@ const ZUploadInput: React.FC<IZUploadInput> = ({
           }
         )?.data;
 
-        if (__data) {
-          if (setFieldValueFn && name) {
-            setFieldValueFn(name, { ...__data }, false);
+        if (_data !== undefined) {
+          if (setFieldValueFn !== undefined && name !== undefined) {
+            setFieldValueFn(name, { ..._data }, false);
           }
 
           // showing success message.
@@ -144,7 +145,7 @@ const ZUploadInput: React.FC<IZUploadInput> = ({
           ?.errors;
         const _axiosErrorMessage = error?.message;
 
-        if (_error) {
+        if (_error !== undefined && _error !== null) {
           showErrorNotification(_error?.file[0]);
         } else {
           showErrorNotification(_axiosErrorMessage);
@@ -153,6 +154,7 @@ const ZUploadInput: React.FC<IZUploadInput> = ({
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const uploadFilesToBackend = async (files: FileList) => {
     try {
       const formData = new FormData();
@@ -163,8 +165,8 @@ const ZUploadInput: React.FC<IZUploadInput> = ({
       }
 
       const result = await uploadFiles(formData);
-      if (result) {
-        const __data = (
+      if (result !== undefined) {
+        const _data = (
           result as {
             data: {
               file: object;
@@ -175,9 +177,9 @@ const ZUploadInput: React.FC<IZUploadInput> = ({
           }
         )?.data;
 
-        if (__data) {
-          if (setFieldValueFn && name) {
-            setFieldValueFn(name, { ...__data }, false);
+        if (_data !== undefined) {
+          if (setFieldValueFn !== undefined && name !== undefined) {
+            setFieldValueFn(name, { ..._data }, false);
           }
 
           // showing success message.
@@ -191,7 +193,7 @@ const ZUploadInput: React.FC<IZUploadInput> = ({
           ?.errors;
         const _axiosErrorMessage = error?.message;
 
-        if (_error) {
+        if (_error !== undefined && _error !== null) {
           showErrorNotification(_error?.file[0]);
         } else {
           showErrorNotification(_axiosErrorMessage);
@@ -212,12 +214,17 @@ const ZUploadInput: React.FC<IZUploadInput> = ({
       })}
       onChange={event => {
         if (multiple) {
-          const zFiles = event?.target?.files && event?.target?.files;
-          zFiles && void uploadFilesToBackend(zFiles);
+          const zFiles =
+            event?.target?.files !== undefined && event?.target?.files;
+          void (
+            zFiles !== undefined &&
+            zFiles !== null &&
+            uploadFilesToBackend(zFiles as FileList)
+          );
         } else {
-          const zFile = event?.target?.files && event?.target?.files[0];
+          const zFile = event?.target?.files?.[0];
 
-          zFile && void uploadFileToBackend(zFile);
+          void (zFile !== undefined && uploadFileToBackend(zFile));
         }
       }}
     />

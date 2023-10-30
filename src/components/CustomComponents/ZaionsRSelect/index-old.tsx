@@ -1,14 +1,14 @@
 import React from 'react';
 
 import ReactSelect, {
-  SingleValue,
-  ActionMeta,
-  GroupBase,
-  MultiValue,
+  type SingleValue,
+  type ActionMeta,
+  type GroupBase,
+  type MultiValue
 } from 'react-select';
 
-type ZaionsRSelectPropsType = {
-  options: readonly (string | GroupBase<string>)[];
+interface ZaionsRSelectPropsType {
+  options: ReadonlyArray<string | GroupBase<string>>;
   onChange: (
     newValue: SingleValue<string> | MultiValue<string>,
     actionMeta: ActionMeta<string>
@@ -19,7 +19,7 @@ type ZaionsRSelectPropsType = {
   isLoading: boolean;
   isDisabled: boolean;
   name: string;
-};
+}
 
 const ZaionsRSelectss: React.FC<ZaionsRSelectPropsType> = ({
   onChange,
@@ -29,7 +29,7 @@ const ZaionsRSelectss: React.FC<ZaionsRSelectPropsType> = ({
   className,
   isLoading,
   isDisabled,
-  name,
+  name
 }) => {
   return (
     <>

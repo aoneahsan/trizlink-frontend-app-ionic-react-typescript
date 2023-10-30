@@ -38,7 +38,8 @@ module.exports = {
     '@typescript-eslint/member-delimiter-style': 'off', // keep this off as it's useless
     'no-new': 'off', // need this like this otherwise we can not use "new" keyword in our project, ahsan need to check this further to confirm.
     '@typescript-eslint/semi': 'off', // ahsan setup prettier like this so we need this thing off
-    '@typescript-eslint/indent': 'off' // ahsan moved here, as we are using prettier and that formats the code in specific format which is showing error for this rule, so for now, commenting this but will need to think if this can be a problem or not in future.
+    '@typescript-eslint/indent': 'off', // ahsan moved here, as we are using prettier and that formats the code in specific format which is showing error for this rule, so for now, commenting this but will need to think if this can be a problem or not in future.
+    'react/prop-types': 'off' // we are in type script and have proper types definitions
 
     // rules disabled for now
     // eqeqeq: 'off',
@@ -52,7 +53,6 @@ module.exports = {
     // 'no-undef-init': 'off', // need to turn this on
     // 'spaced-comment': 'off',
     // 'object-shorthand': 'off',
-    // 'react/prop-types': 'off',
     // 'multiline-ternary': 'off',
     // 'react/display-name': 'off',
     // 'no-trailing-spaces': 'off',

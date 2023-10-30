@@ -6,11 +6,11 @@ import { IonInput } from '@ionic/react';
 
 // Type
 
-import { ZIonInputType } from '@/components/ZIonComponents/ZIonInput';
+import { type ZIonInputType } from '@/components/ZIonComponents/ZIonInput';
 
-type ZIonInputFieldType = {
+interface ZIonInputFieldType {
   inputFieldProps: ZIonInputType;
-};
+}
 
 const ZIonInputField = React.forwardRef(
   (
@@ -21,11 +21,12 @@ const ZIonInputField = React.forwardRef(
       <IonInput
         {...inputFieldProps}
         onIonInput={inputFieldProps.onIonChange}
-        fill={inputFieldProps.fill || 'outline'}
+        fill={inputFieldProps.fill ?? 'outline'}
         ref={ref}
       />
     );
   }
 );
+ZIonInputField.displayName = 'ZIonInputField';
 
 export default ZIonInputField;

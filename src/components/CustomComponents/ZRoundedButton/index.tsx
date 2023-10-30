@@ -1,21 +1,21 @@
 // Core Imports
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Imports
 import { ZIonButton } from '@/components/ZIonComponents';
 
 // Types
-import { ZIonColorType } from '@/types/zaionsAppSettings.type';
+import { type ZIonColorType } from '@/types/zaionsAppSettings.type';
 
 // Component Type
-type ZRoundedButtonType = {
+interface ZRoundedButtonType {
   className?: string;
   testingselector?: string;
   testinglistselector?: string;
   children?: ReactNode;
   color?: ZIonColorType;
   onClick?: React.MouseEventHandler<HTMLIonButtonElement>;
-};
+}
 
 /**
  * Rounded button component for example in LinkInBioBlocksForm page

@@ -8,7 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { OverlayEventDetail } from '@ionic/core';
+import { type OverlayEventDetail } from '@ionic/core';
 import { trashBin } from 'ionicons/icons';
 
 /**
@@ -32,7 +32,10 @@ import { useZIonActionSheet } from '@/ZaionsHooks/zionic-hooks';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { ZGenericObject, ZIonColorType } from '@/types/zaionsAppSettings.type';
+import {
+  type ZGenericObject,
+  type ZIonColorType
+} from '@/types/zaionsAppSettings.type';
 import classNames from 'classnames';
 
 /**
@@ -96,7 +99,7 @@ const ZCustomDeleteComponent: React.FC<ZCustomDeleteComponentInterface> = ({
       style={{
         '--background-hover-opacity': '0'
       }}
-      onClick={() =>
+      onClick={() => {
         void presentZIonActionSheet({
           header: actionSheetHeader,
           subHeader: actionSheetSubHeader,
@@ -119,10 +122,10 @@ const ZCustomDeleteComponent: React.FC<ZCustomDeleteComponentInterface> = ({
           ],
           mode: 'ios',
           onDidDismiss: ({ detail }) => {
-            deleteFn && void deleteFn(detail);
+            void (deleteFn !== undefined && deleteFn(detail));
           }
-        })
-      }>
+        });
+      }}>
       <ZIonText>
         <h4 className='ion-no-margin'>
           <ZIonIcon

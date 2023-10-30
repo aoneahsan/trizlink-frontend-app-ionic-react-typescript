@@ -564,37 +564,39 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
           </ZIonButton>
         </ZCan>
 
-        {showFoldersSaveReorderButton !== null && (
-          <ZCan
-            shareWSId={wsShareId}
-            permissionType={
-              wsShareId !== null
-                ? permissionsTypeEnum.shareWSMemberPermissions
-                : permissionsTypeEnum.loggedInUserPermissions
-            }
-            havePermissions={
-              wsShareId !== null
-                ? type === AdminPanelSidebarMenuPageEnum.shortLink
-                  ? [shareWSPermissionEnum.sort_sws_sl_folder]
+        {showFoldersSaveReorderButton !== null &&
+          showFoldersSaveReorderButton !== undefined &&
+          showFoldersSaveReorderButton && (
+            <ZCan
+              shareWSId={wsShareId}
+              permissionType={
+                wsShareId !== null
+                  ? permissionsTypeEnum.shareWSMemberPermissions
+                  : permissionsTypeEnum.loggedInUserPermissions
+              }
+              havePermissions={
+                wsShareId !== null
+                  ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                    ? [shareWSPermissionEnum.sort_sws_sl_folder]
+                    : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                    ? [shareWSPermissionEnum.sort_sws_lib_folder]
+                    : []
+                  : type === AdminPanelSidebarMenuPageEnum.shortLink
+                  ? [permissionsEnum.sort_sl_folder]
                   : type === AdminPanelSidebarMenuPageEnum.linkInBio
-                  ? [shareWSPermissionEnum.sort_sws_lib_folder]
+                  ? [permissionsEnum.sort_lib_folder]
                   : []
-                : type === AdminPanelSidebarMenuPageEnum.shortLink
-                ? [permissionsEnum.sort_sl_folder]
-                : type === AdminPanelSidebarMenuPageEnum.linkInBio
-                ? [permissionsEnum.sort_lib_folder]
-                : []
-            }>
-            <ZIonButton
-              className='absolute bottom-0 ion-text-capitalize ion-margin-horizontal'
-              expand='block'
-              testingselector={`${CONSTANTS.testingSelectors.folder.reorderBtn}-${type}`}
-              onClick={foldersSaveReorderButtonOnClickHandler}
-              style={{ width: '78%' }}>
-              save reorder
-            </ZIonButton>
-          </ZCan>
-        )}
+              }>
+              <ZIonButton
+                className='absolute bottom-0 ion-text-capitalize ion-margin-horizontal'
+                expand='block'
+                testingselector={`${CONSTANTS.testingSelectors.folder.reorderBtn}-${type}`}
+                onClick={foldersSaveReorderButtonOnClickHandler}
+                style={{ width: '78%' }}>
+                save reorder
+              </ZIonButton>
+            </ZCan>
+          )}
       </ZCustomScrollable>
     </ZIonCol>
   );

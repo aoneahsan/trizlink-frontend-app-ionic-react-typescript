@@ -4,7 +4,7 @@ import React from 'react';
 // Packages Imports
 import classNames from 'classnames';
 import { fileTrayOutline } from 'ionicons/icons';
-import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 
 // Custom Imports
 import {
@@ -18,7 +18,7 @@ import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 
 // Types
 import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
-import { FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
+import { type FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
 import { zJsonParse } from '@/utils/helpers';
 
 // Images
@@ -28,18 +28,16 @@ import { upload_send } from '@/assets/images';
 import classes from './styles.module.css';
 
 // Component Type
-type ZDragAndDropType = {
+interface ZDragAndDropType {
   className?: string;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   fieldName?: string;
   imageUrl?: string;
   title?: string;
   testingselector?: string;
   testinglistselector?: string;
   setFieldValue?: FormikSetFieldValueEventType;
-};
+}
 
 const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
   className,
@@ -85,20 +83,21 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
               // }));
 
               // setting the url in the recoil state which will be pass in props.
-              setFieldValue &&
+              setFieldValue !== undefined &&
                 setFieldValue(fieldName, fileData.fileUrl, false);
             }
           }
         });
       }}>
-      {imageUrl?.trim() ? (
+      {imageUrl !== undefined && imageUrl?.trim()?.length > 0 && (
         <ZIonImg
           src={imageUrl}
           testingselector={`${testingselector}-image`}
           testinglistselector={`${testinglistselector}-image`}
           className='w-full h-full'
         />
-      ) : (
+      )}
+      {imageUrl === undefined && (
         <>
           <ZIonText className='ion-no-margin'>
             <ZIonIcon
@@ -117,6 +116,7 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
           </ZIonText>
         </>
       )}
+
       <div
         className={classNames(classes['zaions-drag-and-drop__overlay'], {
           'flex flex-col ion-align-items-center ion-justify-content-center':

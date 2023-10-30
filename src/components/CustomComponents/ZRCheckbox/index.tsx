@@ -4,22 +4,22 @@ import classNames from 'classnames';
 
 import classes from './styles.module.css';
 
-type ZRCheckboxType = {
+interface ZRCheckboxType {
   handleChange: (val: boolean) => void;
   checkedValue?: boolean;
   className?: string;
-};
+}
 
 const ZRCheckbox: React.FC<ZRCheckboxType> = ({
   handleChange,
   checkedValue,
-  className,
+  className
 }) => {
   return (
     <input
       type='checkbox'
       checked={checkedValue}
-      onChange={(e) => {
+      onChange={e => {
         handleChange(e.target.checked);
       }}
       className={classNames(className, classes['zr-checkbox'])}

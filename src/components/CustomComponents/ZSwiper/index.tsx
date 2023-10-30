@@ -2,22 +2,22 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 /**
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
 import { register } from 'swiper/element/bundle';
-// import function to register Swiper custom elements
-// register Swiper custom elements
-register();
 
 /**
  * Style files Imports go down
  * ? Import of style sheet is a style import
  * */
 import 'swiper/css';
+// import function to register Swiper custom elements
+// register Swiper custom elements
+register();
 
 /**
  * Images Imports go down
@@ -34,7 +34,7 @@ interface ZSwiperInterface {
   slidesPerView?: number;
   spaceBetween?: number;
   children?: ReactNode;
-  style?: { [key: string]: unknown };
+  style?: Record<string, unknown>;
   className?: string;
 }
 
@@ -65,7 +65,7 @@ export const ZSwiperContainer: React.FC<ZSwiperInterface> = ({
   return (
     <swiper-container
       // class={classNames(className, {
-      // 	mySwiper: true,
+      // mySwiper: true,
       // })}
       slides-per-view={slidesPerView}
       space-between={spaceBetween}
@@ -77,12 +77,12 @@ export const ZSwiperContainer: React.FC<ZSwiperInterface> = ({
       // pagination='true'
       // centered-slides={true}
       // pagination={{
-      // 	hideOnClick: true,
+      // hideOnClick: true,
       // }}
       // breakpoints={{
-      // 	768: {
-      // 		slidesPerView: 3,
-      // 	},
+      // 768: {
+      // slidesPerView: 3,
+      // },
       // }}
       // pagination-dynamic-bullets='true'
       // pagination-type='progressbar'
@@ -102,9 +102,9 @@ export const ZSwiperContainer: React.FC<ZSwiperInterface> = ({
 };
 
 // export const ZSwiper = React.forwardRef(
-// 	(props: ZSwiperInterface, ref: React.Ref<any>) => {
-// 		return <swiper-container></swiper-container>;
-// 	}
+// (props: ZSwiperInterface, ref: React.Ref<any>) => {
+// return <swiper-container></swiper-container>;
+// }
 // );
 
 export const ZSwiperSlide: React.FC<ZSwiperSlideInterface> = ({

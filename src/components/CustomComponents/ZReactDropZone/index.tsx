@@ -9,10 +9,10 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import ReactDropzone, {
-  DropEvent,
-  DropzoneState,
-  FileError,
-  FileRejection
+  type DropEvent,
+  type DropzoneState,
+  type FileError,
+  type FileRejection
 } from 'react-dropzone';
 
 /**

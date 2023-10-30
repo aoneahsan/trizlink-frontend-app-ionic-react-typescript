@@ -96,11 +96,11 @@ const Z500View: React.FC = () => {
             Something went wrong!
           </ZIonText>
           <ZIonText className='mt-3 text-sm md:text-lg lg:text-lg ion-text-center'>
-            We're sorry, but something went wrong on our end. Our team has been
-            notified of this issue and is working to fix it. In the meantime,
-            you can try refreshing the page or coming back later. If the problem
-            persists, please don't hesitate to contact our support team for
-            further assistance.
+            We&apos;re sorry, but something went wrong on our end. Our team has
+            been notified of this issue and is working to fix it. In the
+            meantime, you can try refreshing the page or coming back later. If
+            the problem persists, please don&apos;t hesitate to contact our
+            support team for further assistance.
           </ZIonText>
 
           <ZIonButton

@@ -110,6 +110,25 @@ const AdminPanelSidebarMenu: React.FC<{
   }>();
 
   // get workspace data api.
+  // If share-workspace then this api will fetch role & permission of current member in this share-workspace.
+  const { data: getMemberRolePermissions } = useZRQGetRequest<{
+    memberRole?: string;
+    memberPermissions?: string[];
+  }>({
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
+      wsShareId
+    ],
+    _url: API_URL_ENUM.ws_share_member_role_permissions,
+    _shouldFetchWhenIdPassed: !(
+      shareWSMemberId !== undefined && shareWSMemberId?.length > 0
+    ),
+    _itemsIds: [shareWSMemberId],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
+  });
+
   const { data: selectedWorkspace, isFetching: isSelectedWorkspaceFetching } =
     useZRQGetRequest<workspaceInterface>({
       _url: API_URL_ENUM.workspace_update_delete,
@@ -555,7 +574,8 @@ const AdminPanelSidebarMenu: React.FC<{
                         shareWSPermissionEnum.viewAny_sws_linkInBio,
                         shareWSPermissionEnum.viewAny_sws_pixel,
                         shareWSPermissionEnum.viewAny_sws_utmTag,
-                        shareWSPermissionEnum.viewAny_sws_embededWidget
+                        shareWSPermissionEnum.viewAny_sws_embededWidget,
+                        shareWSPermissionEnum.viewAny_sws_member
                       ]
                     : [
                         permissionsEnum.viewAny_ws_member,
@@ -585,15 +605,29 @@ const AdminPanelSidebarMenu: React.FC<{
                             [workspaceId]
                           )
                         : wsShareId != null && shareWSMemberId != null
-                        ? replaceRouteParams(
-                            ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
-                              .Members,
-                            [
-                              CONSTANTS.RouteParams.workspace.wsShareId,
-                              CONSTANTS.RouteParams.workspace.shareWSMemberId
-                            ],
-                            [wsShareId, shareWSMemberId]
+                        ? getMemberRolePermissions?.memberPermissions !==
+                            undefined &&
+                          getMemberRolePermissions?.memberPermissions?.includes(
+                            shareWSPermissionEnum.viewAny_sws_member
                           )
+                          ? replaceRouteParams(
+                              ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                                .Members,
+                              [
+                                CONSTANTS.RouteParams.workspace.wsShareId,
+                                CONSTANTS.RouteParams.workspace.shareWSMemberId
+                              ],
+                              [wsShareId, shareWSMemberId]
+                            )
+                          : replaceRouteParams(
+                              ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
+                                .Pixel,
+                              [
+                                CONSTANTS.RouteParams.workspace.wsShareId,
+                                CONSTANTS.RouteParams.workspace.shareWSMemberId
+                              ],
+                              [wsShareId, shareWSMemberId]
+                            )
                         : ''
                     }>
                     <ZIonText
