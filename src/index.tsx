@@ -14,11 +14,11 @@ const container = document.getElementById('root');
 const root = container && createRoot(container);
 if (root) {
   root.render(
-    // <React.StrictMode>
-    <React.Fragment>
-      <AppEntryPoint />
-    </React.Fragment>
-    // </React.StrictMode>
+    <>
+      <React.StrictMode>
+        <AppEntryPoint />
+      </React.StrictMode>
+    </>
   );
 }
 

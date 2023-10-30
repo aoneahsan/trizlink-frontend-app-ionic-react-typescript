@@ -2,30 +2,21 @@
 import React from 'react';
 
 // Packages Imports
-import {
-  FirebaseApp,
-  initializeApp as initializeFirebaseApp
-} from 'firebase/app';
-import {
-  fetchAndActivate,
-  isSupported,
-  getRemoteConfig,
-  setLogLevel
-} from 'firebase/remote-config';
+import { initializeApp as initializeFirebaseApp } from 'firebase/app';
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import {
+  frbAnalyticsRState,
   frbAppRStateAtom,
   frbRemoteConfigRStateAtom
 } from '@/ZaionsStore/firebaseRStore';
 import { reportCustomError } from '@/utils/customErrorType';
 import { firebaseConfig } from '@/configs';
 import {} from 'firebase/analytics';
-import { getRemoteConfigKeysData } from '@/utils/helpers/firebaseHelpers';
-import { frbRemoteConfigSetting } from '@/utils/constants/firebaseConstants';
-import { ENVS } from '@/utils/envKeys';
 import ZFallbackIonSpinner from '@/components/CustomComponents/FallbackSpinner';
 import Z500View from '@/components/Errors/500';
+import { fetchAndSetupFrbRemoteConfigKeys } from './frbRemoteConfigFeatureSetup';
+import { setupFrbAnalytics } from './frbAnalyticsFeatureSetup';
 
 // Types
 interface IFirebaseHOCProps {
@@ -43,6 +34,8 @@ const FirebaseHOC: React.FC<IFirebaseHOCProps> = ({ children }) => {
   const [frbRemoteConfigRState, setFrbRemoteConfigRState] = useRecoilState(
     frbRemoteConfigRStateAtom
   );
+  const [frbAnalyticsState, setFrbAnalyticsState] =
+    useRecoilState(frbAnalyticsRState);
 
   useEffect(() => {
     // Initialize Firebase App and It's Services
@@ -57,7 +50,13 @@ const FirebaseHOC: React.FC<IFirebaseHOCProps> = ({ children }) => {
         const _firebaseApp = initializeAndSetupFirebaseApp();
 
         // Firebase Remote Config Keys Setup
-        await fetchAndSetupFrbRemoteConfigKeys(_firebaseApp);
+        await fetchAndSetupFrbRemoteConfigKeys(
+          _firebaseApp,
+          setFrbRemoteConfigRState
+        );
+
+        // Setup Firebase Analytics Feature
+        await setupFrbAnalytics(_firebaseApp, setFrbAnalyticsState);
 
         setCompState(oldState => ({
           ...oldState,
@@ -85,37 +84,13 @@ const FirebaseHOC: React.FC<IFirebaseHOCProps> = ({ children }) => {
     return firebaseApp;
   };
 
-  const fetchAndSetupFrbRemoteConfigKeys = async (
-    _firebaseApp: FirebaseApp
-  ) => {
-    const checkRemoteConfigIsSupported = await isSupported();
-    if (checkRemoteConfigIsSupported) {
-      const remoteConfig = getRemoteConfig(_firebaseApp);
-      setLogLevel(remoteConfig, ENVS.isProduction ? 'silent' : 'error');
-
-      // set the refetch/stale time for remote config keys
-      remoteConfig.settings.minimumFetchIntervalMillis =
-        frbRemoteConfigSetting.staleTimeInMilliseconds;
-
-      await fetchAndActivate(remoteConfig);
-
-      const result = getRemoteConfigKeysData(remoteConfig);
-
-      setFrbRemoteConfigRState(oldState => ({
-        ...oldState,
-        isInitialized: true,
-        lastFetchedAt: new Date().toString(),
-        keys: result
-      }));
-    }
-  };
-
   if (compState.isProcessing) {
     return <ZFallbackIonSpinner />;
   } else if (
     !compState.isProcessing &&
     frbAppRState.frbAppInitialized &&
-    frbRemoteConfigRState.isInitialized
+    frbRemoteConfigRState.isInitialized &&
+    frbAnalyticsState.isInitialized
   ) {
     return <>{children}</>;
   } else {

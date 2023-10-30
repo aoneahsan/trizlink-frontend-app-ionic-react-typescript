@@ -40,14 +40,21 @@ export class ZCustomError extends Error {
   }
 }
 
-export const reportCustomError = (errData: unknown, message?: string): void => {
+export const reportCustomError = (
+  errData: unknown,
+  message?: string,
+  showInConsole = true
+): void => {
   try {
     const _data = {
       err: errData,
       message: `[reportCustomError] - ${message || ''}`
     };
-    // we will do some other logic as well, like sentry or datadog
-    zConsoleError(_data);
+
+    if (showInConsole) {
+      // we will do some other logic as well, like sentry or datadog
+      zConsoleError(_data);
+    }
 
     captureException(
       new ZCustomError({ message: _data.message, errorData: _data })
