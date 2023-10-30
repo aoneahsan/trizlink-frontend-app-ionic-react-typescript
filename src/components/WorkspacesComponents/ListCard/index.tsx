@@ -594,7 +594,7 @@ const ZWorkspacesCard: React.FC<{
                         }
                         onClick={() => {
                           // Click on card will redirect to view workspace.
-                          if (workspaceId) {
+                          if (workspaceId !== undefined) {
                             if (owned === true) {
                               zNavigatePushRoute(
                                 createRedirectRoute({

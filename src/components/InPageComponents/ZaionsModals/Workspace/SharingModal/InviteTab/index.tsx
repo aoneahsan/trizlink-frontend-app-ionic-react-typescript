@@ -221,14 +221,14 @@ const ZInviteTab: React.FC<{
   useEffect(() => {
     try {
       let membersRQData: WSTeamMembersInterface[] | undefined | void = [];
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         membersRQData = getRQCDataHandler({
           key: [
             CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
             workspaceId
           ]
         });
-      } else if (wsShareId && shareWSMemberId) {
+      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
         membersRQData = getRQCDataHandler({
           key: [
             CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
@@ -270,13 +270,13 @@ const ZInviteTab: React.FC<{
       if (_data) {
         let __response;
         if (compState?.formMode === FormMode.ADD) {
-          if (workspaceId) {
+          if (workspaceId !== undefined) {
             __response = await inviteTeamMemberAsyncMutate(_data);
-          } else if (wsShareId && shareWSMemberId) {
+          } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
             __response = await swsInviteTeamMemberAsyncMutate(_data);
           }
         } else if (compState?.formMode === FormMode.EDIT) {
-          if (workspaceId) {
+          if (workspaceId !== undefined) {
             __response = await updateRoleAsyncMutate({
               itemIds: [workspaceId, compState?.memberId!],
               urlDynamicParts: [
@@ -285,7 +285,7 @@ const ZInviteTab: React.FC<{
               ],
               requestData: _data
             });
-          } else if (wsShareId && shareWSMemberId) {
+          } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
             __response = await swsUpdateRoleAsyncMutate({
               itemIds: [shareWSMemberId, compState?.memberId!],
               urlDynamicParts: [
@@ -307,14 +307,17 @@ const ZInviteTab: React.FC<{
 
           if (__data && __data?.id) {
             let _ws_membersRQData;
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               _ws_membersRQData = getRQCDataHandler({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
                   workspaceId
                 ]
               });
-            } else if (wsShareId && shareWSMemberId) {
+            } else if (
+              wsShareId !== undefined &&
+              shareWSMemberId !== undefined
+            ) {
               _ws_membersRQData = getRQCDataHandler({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
@@ -333,7 +336,7 @@ const ZInviteTab: React.FC<{
               if (compState?.formMode === FormMode.ADD) {
                 const __updatedMembersData = [..._oldTeamsMemberData, __data];
 
-                if (workspaceId) {
+                if (workspaceId !== undefined) {
                   await updateRQCDataHandler({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
@@ -344,7 +347,10 @@ const ZInviteTab: React.FC<{
                     updateHoleData: true,
                     extractType: ZRQGetRequestExtractEnum.extractItems
                   });
-                } else if (wsShareId && shareWSMemberId) {
+                } else if (
+                  wsShareId !== undefined &&
+                  shareWSMemberId !== undefined
+                ) {
                   await updateRQCDataHandler({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
@@ -360,7 +366,7 @@ const ZInviteTab: React.FC<{
 
                 showSuccessNotification(MESSAGES.MEMBER.INVITE_SEND);
               } else if (compState?.formMode === FormMode.EDIT) {
-                if (workspaceId) {
+                if (workspaceId !== undefined) {
                   await updateRQCDataHandler({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
@@ -369,7 +375,10 @@ const ZInviteTab: React.FC<{
                     data: __data,
                     id: __data?.id
                   });
-                } else if (wsShareId && shareWSMemberId) {
+                } else if (
+                  wsShareId !== undefined &&
+                  shareWSMemberId !== undefined
+                ) {
                   await updateRQCDataHandler({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
@@ -425,7 +434,7 @@ const ZInviteTab: React.FC<{
   const addInvitationShortLink = async (invitationId: string) => {
     try {
       let __response;
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         // WSTeamMembersInterface
         __response = await invitationLinkShortUrlAsyncMutate({
           itemIds: [workspaceId, invitationId],
@@ -435,7 +444,7 @@ const ZInviteTab: React.FC<{
           ],
           requestData: ''
         });
-      } else if (wsShareId && shareWSMemberId) {
+      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
         __response = await swsInvitationLinkShortUrlAsyncMutate({
           itemIds: [shareWSMemberId, invitationId],
           urlDynamicParts: [
@@ -453,7 +462,7 @@ const ZInviteTab: React.FC<{
         );
 
         if (__data && __data?.id) {
-          if (workspaceId) {
+          if (workspaceId !== undefined) {
             await updateRQCDataHandler({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,

@@ -147,7 +147,7 @@ const ZSettingsTab: React.FC<{
       if (values) {
         let _response;
         // Making an api call creating new workspace.
-        if (workspaceId) {
+        if (workspaceId !== undefined) {
           _response = await updateWorkspaceMutate({
             urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
             itemIds: [workspaceId],
@@ -172,7 +172,7 @@ const ZSettingsTab: React.FC<{
           );
 
           if (_data && _data.id) {
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               // Updating current short link in cache in RQ cache.
               await updateRQCDataHandler<workspaceInterface | undefined>({
                 key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
@@ -209,7 +209,7 @@ const ZSettingsTab: React.FC<{
   // when user went to delete workspace and click on the delete button this function will fire and show the confirm alert.
   const deleteWorkspace = async () => {
     try {
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         await presentZIonAlert({
           header: MESSAGES.WORKSPACE.DELETE_ALERT.HEADER,
           subHeader: MESSAGES.WORKSPACE.DELETE_ALERT.SUB_HEADER,
@@ -240,7 +240,7 @@ const ZSettingsTab: React.FC<{
   // on the delete workspace confirm alert, when user click on delete button this function will firs which will trigger delete request and delete the workspace.
   const removeWorkspace = async () => {
     try {
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         const _response = await deleteWorkspaceMutate({
           itemIds: [workspaceId],
           urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
@@ -380,7 +380,7 @@ const ZSettingsTab: React.FC<{
   // #region useEffect.
   useEffect(() => {
     try {
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         // getting all the workspace from RQ cache.
         const _allWorkspaces =
           extractInnerData<workspaceInterface[]>(
@@ -623,7 +623,7 @@ const ZSettingsTab: React.FC<{
                 .deleteButton
             }
             onClick={() => {
-              if (workspaceId) {
+              if (workspaceId !== undefined) {
                 void deleteWorkspace();
               } else if (wsShareId && wsShareMemberId) {
                 void LeaveWorkspaceConfirmAlert();

@@ -64,20 +64,20 @@ import React from 'react';
 const ZaionsDropDown = (props: {
   title: string;
   className: string;
-  items: {
+  items: Array<{
     id: string;
     link: string;
     title: string;
     text?: string;
     icon?: string;
     width?: string;
-  }[];
+  }>;
 }) => {
   return (
     <></>
     // <Dropdown
-    // 	className={`${classes.w-max} ${
-    // 		isXlScale ? 'pe-1' : ''
+    // className={`${classes.w-max} ${
+    // isXlScale ? 'pe-1' : ''
     // 	} mb-3`}
     // >
     // 	<Dropdown.Toggle as={CustomToggle} id='dropdown-custom-components'>

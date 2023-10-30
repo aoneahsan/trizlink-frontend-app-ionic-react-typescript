@@ -177,7 +177,7 @@ const ZTimetableTab: React.FC<{
           ...oldValues,
           timeSlotData: shareWSTimeSlotData || []
         }));
-      } else if (workspaceId) {
+      } else if (workspaceId !== undefined) {
         setCompState(oldValues => ({
           ...oldValues,
           timeSlotData: timeSlotData || []
@@ -482,7 +482,7 @@ const ZTimeSlotActionPopover: React.FC<{
     try {
       if (timeSlotId) {
         let __response;
-        if (workspaceId) {
+        if (workspaceId !== undefined) {
           __response = await deleteTimeSlotMutate({
             itemIds: [workspaceId!, timeSlotId],
             urlDynamicParts: [
@@ -536,7 +536,7 @@ const ZTimeSlotActionPopover: React.FC<{
               el => el.id !== timeSlotId
             );
 
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               // Updating data in RQ cache.
               await updateRQCDataHandler<TimeSlotInterface[] | undefined>({
                 key: [

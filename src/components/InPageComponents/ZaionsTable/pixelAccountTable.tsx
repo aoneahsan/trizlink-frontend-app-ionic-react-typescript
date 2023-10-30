@@ -211,9 +211,9 @@ const ZPixelsTable: React.FC<{
 
   let isZFetching = isPixelsDateFetching;
 
-  if (workspaceId) {
+  if (workspaceId !== undefined) {
     isZFetching = isPixelsDateFetching;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
     isZFetching = isSWSPixelsDateFetching;
   }
 
@@ -479,7 +479,7 @@ const ZInpageTable: React.FC = () => {
         let __getPixelIdColumn;
         let __getPlatformColumn;
 
-        if (workspaceId) {
+        if (workspaceId !== undefined) {
           __getTitleColumn = getPixelFiltersData?.settings?.columns.filter(
             el => el?.id === ZPixelsListPageTableColumnsIds.title
           )[0];
@@ -496,7 +496,7 @@ const ZInpageTable: React.FC = () => {
           __getPlatformColumn = getPixelFiltersData?.settings?.columns.filter(
             el => el?.id === ZPixelsListPageTableColumnsIds.platform
           )[0];
-        } else if (wsShareId && shareWSMemberId) {
+        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
           __getTitleColumn = getSWSPixelFiltersData?.settings?.columns.filter(
             el => el?.id === ZPixelsListPageTableColumnsIds.title
           )[0];
@@ -1279,7 +1279,7 @@ const ZPixelActionPopover: React.FC<{
     try {
       if (selectedId) {
         let _response;
-        if (workspaceId) {
+        if (workspaceId !== undefined) {
           _response = await deletePixelMutate({
             itemIds: [workspaceId, selectedId],
             urlDynamicParts: [
@@ -1287,7 +1287,7 @@ const ZPixelActionPopover: React.FC<{
               CONSTANTS.RouteParams.pixel.pixelId
             ]
           });
-        } else if (wsShareId && shareWSMemberId) {
+        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
           _response = await swsDeletePixelMutate({
             itemIds: [shareWSMemberId, selectedId],
             urlDynamicParts: [
@@ -1307,7 +1307,7 @@ const ZPixelActionPopover: React.FC<{
             // getting all the pixel from RQ cache.
             let _oldPixels: PixelAccountType[] = [];
 
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               _oldPixels =
                 extractInnerData<PixelAccountType[]>(
                   getRQCDataHandler<PixelAccountType[]>({
@@ -1318,7 +1318,10 @@ const ZPixelActionPopover: React.FC<{
                   }) as PixelAccountType[],
                   extractInnerDataOptionsEnum.createRequestResponseItems
                 ) || [];
-            } else if (wsShareId && shareWSMemberId) {
+            } else if (
+              wsShareId !== undefined &&
+              shareWSMemberId !== undefined
+            ) {
               _oldPixels =
                 extractInnerData<PixelAccountType[]>(
                   getRQCDataHandler<PixelAccountType[]>({
@@ -1337,7 +1340,7 @@ const ZPixelActionPopover: React.FC<{
             );
 
             // Updating data in RQ cache.
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               await updateRQCDataHandler<PixelAccountType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
@@ -1348,7 +1351,10 @@ const ZPixelActionPopover: React.FC<{
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
               });
-            } else if (wsShareId && shareWSMemberId) {
+            } else if (
+              wsShareId !== undefined &&
+              shareWSMemberId !== undefined
+            ) {
               await updateRQCDataHandler<PixelAccountType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,

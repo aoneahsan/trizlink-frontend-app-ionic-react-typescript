@@ -279,11 +279,11 @@ const ZWorkspaceSettings: React.FC = () => {
 
   // #region checking the route.
   let isMembersPage: boolean | undefined;
-  if (workspaceId) {
+  if (workspaceId !== undefined) {
     isMembersPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members
     )?.isExact;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
     isMembersPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Members
     )?.isExact;
@@ -302,32 +302,32 @@ const ZWorkspaceSettings: React.FC = () => {
   )?.isExact;
 
   let isPixelPage: boolean | undefined;
-  if (workspaceId) {
+  if (workspaceId !== undefined) {
     isPixelPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel
     )?.isExact;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
     isPixelPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Pixel
     )?.isExact;
   }
 
   let isUTMTagPage: boolean | undefined;
-  if (workspaceId) {
+  if (workspaceId !== undefined) {
     isUTMTagPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag
     )?.isExact;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
     isUTMTagPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.UTMTag
     )?.isExact;
   }
   let isEmbedWidgetPage: boolean | undefined;
-  if (workspaceId) {
+  if (workspaceId !== undefined) {
     isEmbedWidgetPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.EmbedWidget
     )?.isExact;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
     isEmbedWidgetPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.EmbedWidget
     )?.isExact;
@@ -1001,11 +1001,11 @@ const ZInpageMainContent: React.FC = () => {
 
   // #region checking the route.
   let isMembersPage: boolean | undefined;
-  if (workspaceId) {
+  if (workspaceId !== undefined) {
     isMembersPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members
     )?.isExact;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
     isMembersPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Members
     )?.isExact;
@@ -1024,32 +1024,32 @@ const ZInpageMainContent: React.FC = () => {
   )?.isExact;
 
   let isPixelPage: boolean | undefined;
-  if (workspaceId) {
+  if (workspaceId !== undefined) {
     isPixelPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel
     )?.isExact;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
     isPixelPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Pixel
     )?.isExact;
   }
 
   let isUTMTagPage: boolean | undefined;
-  if (workspaceId) {
+  if (workspaceId !== undefined) {
     isUTMTagPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag
     )?.isExact;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
     isUTMTagPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.UTMTag
     )?.isExact;
   }
   let isEmbedWidgetPage: boolean | undefined;
-  if (workspaceId) {
+  if (workspaceId !== undefined) {
     isEmbedWidgetPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.EmbedWidget
     )?.isExact;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
     isEmbedWidgetPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.EmbedWidget
     )?.isExact;

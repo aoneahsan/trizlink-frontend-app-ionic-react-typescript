@@ -110,7 +110,7 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
   const selectFromTemplate = (_selectedTemplateId: string) => {
     let __selectedTemp;
 
-    if (workspaceId) {
+    if (workspaceId !== undefined) {
       __selectedTemp =
         _UTMTagsData &&
         _UTMTagsData.length &&

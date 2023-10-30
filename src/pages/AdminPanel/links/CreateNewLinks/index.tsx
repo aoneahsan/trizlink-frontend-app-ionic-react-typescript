@@ -573,7 +573,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
   // Formik submit handler.
   const invalidedQueries = async () => {
     try {
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         if (editLinkId) {
           await zInvalidateReactQueries([
             CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
@@ -672,9 +672,9 @@ const AdminCreateNewLinkPages: React.FC = () => {
         // Making an api call creating new short link
         let _response;
 
-        if (workspaceId) {
+        if (workspaceId !== undefined) {
           _response = await createShortLink(_values);
-        } else if (wsShareId && shareWSMemberId) {
+        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
           _response = await swsCreateShortLink(_values);
         }
 
@@ -700,7 +700,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
             let __shortlinkCacheData;
 
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               __shortlinkCacheData =
                 (getRQCDataHandler<ShortLinkType[]>({
                   key: [
@@ -708,7 +708,10 @@ const AdminCreateNewLinkPages: React.FC = () => {
                     workspaceId
                   ]
                 }) as ShortLinkType[]) || [];
-            } else if (wsShareId && shareWSMemberId) {
+            } else if (
+              wsShareId !== undefined &&
+              shareWSMemberId !== undefined
+            ) {
               __shortlinkCacheData =
                 (getRQCDataHandler<ShortLinkType[]>({
                   key: [
@@ -728,7 +731,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
             const _updatedShortLinks = [..._oldShortLinks, _data];
 
             // Updating all shortLinks data in RQ cache.
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               await updateRQCDataHandler<ShortLinkType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
@@ -739,7 +742,10 @@ const AdminCreateNewLinkPages: React.FC = () => {
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
               });
-            } else if (wsShareId && shareWSMemberId) {
+            } else if (
+              wsShareId !== undefined &&
+              shareWSMemberId !== undefined
+            ) {
               await updateRQCDataHandler<ShortLinkType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
@@ -763,7 +769,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
       } else if (editLinkId) {
         let _response;
 
-        if (workspaceId) {
+        if (workspaceId !== undefined) {
           _response = await updateShortLink({
             requestData: _values,
             itemIds: [workspaceId, editLinkId],
@@ -772,7 +778,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
               CONSTANTS.RouteParams.shortLink.shortLinkId
             ]
           });
-        } else if (wsShareId && shareWSMemberId) {
+        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
           _response = await swsUpdateShortLink({
             requestData: _values,
             itemIds: [shareWSMemberId, editLinkId],
@@ -803,7 +809,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
             }));
 
             // Updating data all shortLinks in RQ cache.
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               await updateRQCDataHandler<ShortLinkType | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
@@ -825,7 +831,10 @@ const AdminCreateNewLinkPages: React.FC = () => {
                 extractType: ZRQGetRequestExtractEnum.extractItem,
                 updateHoleData: true
               });
-            } else if (wsShareId && shareWSMemberId) {
+            } else if (
+              wsShareId !== undefined &&
+              shareWSMemberId !== undefined
+            ) {
               await updateRQCDataHandler<ShortLinkType | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
@@ -2049,7 +2058,7 @@ const ZTopBar: React.FC = () => {
             fill='outline'
             onClick={async () => {
               try {
-                if (workspaceId) {
+                if (workspaceId !== undefined) {
                   if (
                     editLinkId &&
                     newShortLinkFormState?.formMode === FormMode.EDIT

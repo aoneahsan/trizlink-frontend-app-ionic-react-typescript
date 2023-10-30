@@ -336,7 +336,7 @@ const ZWorkspaceActionPopover: React.FC<{
   // delete Workspace Confirm Modal.
   const deleteWorkspaceConfirmModal = async () => {
     try {
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         await presentZIonAlert({
           header: MESSAGES.WORKSPACE.DELETE_ALERT.HEADER,
           subHeader: MESSAGES.WORKSPACE.DELETE_ALERT.SUB_HEADER,
@@ -367,7 +367,7 @@ const ZWorkspaceActionPopover: React.FC<{
   // removeWorkspace will hit delete workspace folder api
   const removeWorkspace = async () => {
     try {
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         // hitting the delete api.
         const _response = await deleteWorkspaceMutate({
           itemIds: [workspaceId],

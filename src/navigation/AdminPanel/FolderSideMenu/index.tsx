@@ -219,7 +219,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                       switch (state) {
                         case folderState.shortlink:
                           // if there is workspaceId means it's a owned workspace then redirect to short link of that workspace
-                          if (workspaceId) {
+                          if (workspaceId !== undefined) {
                             zNavigatePushRoute(
                               createRedirectRoute({
                                 url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
@@ -236,7 +236,10 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                             );
                           }
                           // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to short link of that share workspace
-                          else if (wsShareId && shareWSMemberId) {
+                          else if (
+                            wsShareId !== undefined &&
+                            shareWSMemberId !== undefined
+                          ) {
                             zNavigatePushRoute(
                               createRedirectRoute({
                                 url: ZaionsRoutes.AdminPanel.ShareWS.Short_link
@@ -260,7 +263,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 
                         case folderState.linkInBio:
                           // if there is workspaceId means it's a owned workspace then redirect to link-in-bio of that workspace
-                          if (workspaceId) {
+                          if (workspaceId !== undefined) {
                             zNavigatePushRoute(
                               createRedirectRoute({
                                 url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
@@ -277,7 +280,10 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                             );
                           }
                           // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to link-in-bio of that share workspace
-                          else if (wsShareId && shareWSMemberId) {
+                          else if (
+                            wsShareId !== undefined &&
+                            shareWSMemberId !== undefined
+                          ) {
                             zNavigatePushRoute(
                               createRedirectRoute({
                                 url: ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio

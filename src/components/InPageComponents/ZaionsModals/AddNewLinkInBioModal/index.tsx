@@ -40,7 +40,7 @@ import { ProductFavicon } from '@/assets/images';
 import { ZaionsLinkInBioDefaultData } from '@/data/UserDashboard/LinkInBio/index.data';
 
 // Types
-import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
+import { type LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 import {
   ZLinkInBioPageEnum,
   ZLinkInBioRHSComponentEnum
@@ -71,18 +71,18 @@ const ZaionsAddLinkInBioModal: React.FC<{
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
     });
 
-  const FormikSubmitHandler = async (data: string) => {
+  const FormikSubmitHandler = async (data: string): Promise<void> => {
     try {
-      if (data) {
+      if (data?.length > 0) {
         const _response = await createLinkInBioMutate(data);
 
-        if (_response) {
+        if (_response !== undefined && _response !== null) {
           const _data = extractInnerData<LinkInBioType>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data && _data.id) {
+          if (_data?.id !== null) {
             const _oldLinkInBios =
               extractInnerData<LinkInBioType[]>(
                 getRQCDataHandler<LinkInBioType[]>({
@@ -92,7 +92,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
                   ]
                 }) as LinkInBioType[],
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
             // added LinkInBio to all LinkInBios data in cache.
             const _updatedLinkInBios = [..._oldLinkInBios, _data];
@@ -110,7 +110,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
             });
 
             // after dismissing redirecting to edit link-in-bio-page
-            zNavigatePushRoute &&
+            zNavigatePushRoute !== undefined &&
               zNavigatePushRoute(
                 createRedirectRoute({
                   url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
@@ -118,7 +118,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
                     CONSTANTS.RouteParams.workspace.workspaceId,
                     CONSTANTS.RouteParams.linkInBio.linkInBioId
                   ],
-                  values: [workspaceId, _data.id],
+                  values: [workspaceId, _data?.id ?? ''],
                   routeSearchParams: {
                     page: ZLinkInBioPageEnum.design,
                     step: ZLinkInBioRHSComponentEnum.theme
@@ -152,14 +152,6 @@ const ZaionsAddLinkInBioModal: React.FC<{
 
       {/*  */}
       <div className='flex flex-col ion-text-center ion-justify-content-center'>
-        {/* <div className='flex mx-auto mb-2 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
-					<ZIonIcon
-						icon={toggleOutline}
-						className='w-8 h-8 mx-auto'
-						color='light'
-					/>
-				</div> */}
-
         <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
           <ZIonImg
             src={ProductFavicon}
@@ -184,7 +176,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
           }}
           onSubmit={async values => {
             try {
-              if (values && values.linkInBioTitle) {
+              if (values?.linkInBioTitle?.trim()?.length > 0) {
                 // Making an api call creating new link in bio
                 const zStringifyData = zStringify({
                   linkInBioTitle: values.linkInBioTitle,
@@ -217,24 +209,30 @@ const ZaionsAddLinkInBioModal: React.FC<{
                   onIonBlur={handleBlur}
                   value={values.linkInBioTitle} // the title of the new-link-in-bio
                   errorText={
-                    touched.linkInBioTitle ? errors.linkInBioTitle : undefined
+                    touched?.linkInBioTitle === true
+                      ? errors.linkInBioTitle
+                      : undefined
                   }
                   testingselector={
                     CONSTANTS.testingSelectors.linkInBio.formModal.titleInput
                   }
                   className={classNames({
                     'mt-5 ion-text-start': true,
-                    'ion-touched': touched.linkInBioTitle,
+                    'ion-touched': touched?.linkInBioTitle === true,
                     'ion-invalid': errors.linkInBioTitle,
                     'ion-valid':
-                      touched.linkInBioTitle && !errors.linkInBioTitle
+                      touched?.linkInBioTitle === true &&
+                      (errors.linkInBioTitle === undefined ||
+                        errors.linkInBioTitle === null)
                   })}
                 />
 
                 <ZIonButton
                   expand='block'
                   className='mt-4'
-                  onClick={() => void submitForm()}
+                  onClick={() => {
+                    void submitForm();
+                  }}
                   testingselector={
                     CONSTANTS.testingSelectors.linkInBio.formModal.submitFormBtn
                   }>

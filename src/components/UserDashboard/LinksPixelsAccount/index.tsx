@@ -157,12 +157,12 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
     <ZCan
       shareWSId={wsShareId}
       permissionType={
-        wsShareId
+        wsShareId !== undefined
           ? permissionsTypeEnum.shareWSMemberPermissions
           : permissionsTypeEnum.loggedInUserPermissions
       }
       havePermissions={
-        wsShareId
+        wsShareId !== undefined
           ? [shareWSPermissionEnum.viewAny_sws_pixel]
           : [permissionsEnum.viewAny_pixel]
       }>

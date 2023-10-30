@@ -64,13 +64,13 @@ import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil'
 
 // Types
 import {
-  PixelAccountPlatformType,
-  PixelAccountType,
+  type PixelAccountPlatformType,
+  type PixelAccountType,
   PixelPlatformsEnum
 } from '@/types/AdminPanel/linksType';
 import { FormMode } from '@/types/AdminPanel/index.type';
-import { resetFormType } from '@/types/ZaionsFormik.type';
-import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { type resetFormType } from '@/types/ZaionsFormik.type';
+import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 // Styles
@@ -170,21 +170,24 @@ const ZaionsAddPixelAccount: React.FC<{
    * Handle Form Submission Function
    * add a new pixel function
    *  */
-  const handleFormSubmit = async (_value: string, resetForm: resetFormType) => {
+  const handleFormSubmit = async (
+    _value: string,
+    resetForm: resetFormType
+  ): Promise<void> => {
     try {
-      let __response;
+      let _response;
 
       // if in from add mode then add a new pixel account
       if (formMode === FormMode.ADD) {
-        if (workspaceId) {
-          __response = await createPixelAccount(_value);
-        } else if (wsShareId && shareWSMemberId) {
-          __response = await createSWSPixelAccount(_value);
+        if (workspaceId !== undefined) {
+          _response = await createPixelAccount(_value);
+        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+          _response = await createSWSPixelAccount(_value);
         }
-      } // if in from edit mode then edit  pixel account
-      else if (formMode === FormMode.EDIT && selectedId) {
-        if (workspaceId) {
-          __response = await updatePixelAccount({
+      } else if (formMode === FormMode.EDIT && selectedId !== undefined) {
+        // if in from edit mode then edit  pixel account
+        if (workspaceId !== undefined) {
+          _response = await updatePixelAccount({
             itemIds: [workspaceId, selectedId],
             urlDynamicParts: [
               CONSTANTS.RouteParams.workspace.workspaceId,
@@ -192,8 +195,8 @@ const ZaionsAddPixelAccount: React.FC<{
             ],
             requestData: _value
           });
-        } else if (wsShareId && shareWSMemberId) {
-          __response = await updateSWSPixelAccount({
+        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+          _response = await updateSWSPixelAccount({
             itemIds: [shareWSMemberId, selectedId],
             urlDynamicParts: [
               CONSTANTS.RouteParams.workspace.shareWSMemberId,
@@ -204,45 +207,43 @@ const ZaionsAddPixelAccount: React.FC<{
         }
       }
 
-      if (
-        (__response as ZLinkMutateApiType<PixelAccountPlatformType>).success
-      ) {
-        const __data = extractInnerData<PixelAccountPlatformType>(
-          __response,
+      if ((_response as ZLinkMutateApiType<PixelAccountPlatformType>).success) {
+        const _data = extractInnerData<PixelAccountPlatformType>(
+          _response,
           extractInnerDataOptionsEnum.createRequestResponseItem
         );
 
-        if (__data && __data.id) {
-          let __pixelsDataFromCache: PixelAccountPlatformType[] = [];
-          if (workspaceId) {
-            __pixelsDataFromCache =
+        if (_data?.id !== null) {
+          let _pixelsDataFromCache: PixelAccountPlatformType[] = [];
+          if (workspaceId !== undefined) {
+            _pixelsDataFromCache =
               getRQCDataHandler<PixelAccountPlatformType[]>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
                   workspaceId
                 ]
-              }) || [];
-          } else if (wsShareId && shareWSMemberId) {
-            __pixelsDataFromCache =
+              }) ?? [];
+          } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+            _pixelsDataFromCache =
               getRQCDataHandler<PixelAccountPlatformType[]>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
                   wsShareId
                 ]
-              }) || [];
+              }) ?? [];
           }
 
-          const __oldPixelsData = extractInnerData<PixelAccountPlatformType[]>(
-            __pixelsDataFromCache,
+          const _oldPixelsData = extractInnerData<PixelAccountPlatformType[]>(
+            _pixelsDataFromCache,
             extractInnerDataOptionsEnum.createRequestResponseItems
           );
 
-          if (__oldPixelsData) {
+          if (_oldPixelsData !== undefined) {
             if (formMode === FormMode.ADD) {
               // added pixels to all pixels data in cache.
-              const __updatedPixelsData = [...__oldPixelsData, __data];
+              const _updatedPixelsData = [..._oldPixelsData, _data];
 
-              if (workspaceId) {
+              if (workspaceId !== undefined) {
                 // Updating all pixels data in RQ cache.
                 await updateRQCDataHandler<
                   PixelAccountPlatformType[] | undefined
@@ -251,12 +252,15 @@ const ZaionsAddPixelAccount: React.FC<{
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
                     workspaceId
                   ],
-                  data: __updatedPixelsData as PixelAccountPlatformType[],
+                  data: _updatedPixelsData as PixelAccountPlatformType[],
                   id: '',
                   extractType: ZRQGetRequestExtractEnum.extractItems,
                   updateHoleData: true
                 });
-              } else if (wsShareId && shareWSMemberId) {
+              } else if (
+                wsShareId !== undefined &&
+                shareWSMemberId !== undefined
+              ) {
                 // Updating all pixels data in RQ cache.
                 await updateRQCDataHandler<
                   PixelAccountPlatformType[] | undefined
@@ -265,7 +269,7 @@ const ZaionsAddPixelAccount: React.FC<{
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
                     wsShareId
                   ],
-                  data: __updatedPixelsData as PixelAccountPlatformType[],
+                  data: _updatedPixelsData as PixelAccountPlatformType[],
                   id: '',
                   extractType: ZRQGetRequestExtractEnum.extractItems,
                   updateHoleData: true
@@ -274,7 +278,7 @@ const ZaionsAddPixelAccount: React.FC<{
 
               showSuccessNotification(MESSAGES.PIXEL_ACCOUNT.CREATED);
             } else if (formMode === FormMode.EDIT) {
-              if (workspaceId) {
+              if (workspaceId !== undefined) {
                 // Updating all pixels data in RQ cache.
                 await updateRQCDataHandler<
                   PixelAccountPlatformType | undefined
@@ -283,11 +287,14 @@ const ZaionsAddPixelAccount: React.FC<{
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
                     workspaceId
                   ],
-                  data: __data,
-                  id: __data.id,
+                  data: _data,
+                  id: _data?.id ?? '',
                   extractType: ZRQGetRequestExtractEnum.extractItem
                 });
-              } else if (wsShareId && shareWSMemberId) {
+              } else if (
+                wsShareId !== undefined &&
+                shareWSMemberId !== undefined
+              ) {
                 // Updating all pixels data in RQ cache.
                 await updateRQCDataHandler<
                   PixelAccountPlatformType | undefined
@@ -296,8 +303,8 @@ const ZaionsAddPixelAccount: React.FC<{
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
                     wsShareId
                   ],
-                  data: __data,
-                  id: __data.id,
+                  data: _data,
+                  id: _data?.id ?? '',
                   extractType: ZRQGetRequestExtractEnum.extractItem
                 });
               }
@@ -312,7 +319,7 @@ const ZaionsAddPixelAccount: React.FC<{
       // SetDefaultPixelAccountFormState();
 
       // this will reset form
-      if (resetForm && formMode === FormMode.ADD) {
+      if (resetForm !== undefined && formMode === FormMode.ADD) {
         resetForm();
       }
 
@@ -324,7 +331,7 @@ const ZaionsAddPixelAccount: React.FC<{
 
     // After Submit loading state end
     // setTimeout(() => {
-    // 	void ionLoaderDismiss();
+    // void ionLoaderDismiss();
     // }, 3000);
   };
   // #endregion
@@ -335,12 +342,12 @@ const ZaionsAddPixelAccount: React.FC<{
       shareWSId={wsShareId}
       checkMode={permissionCheckModeEnum.any}
       permissionType={
-        wsShareId
+        wsShareId !== undefined
           ? permissionsTypeEnum.shareWSMemberPermissions
           : permissionsTypeEnum.loggedInUserPermissions
       }
       havePermissions={
-        wsShareId
+        wsShareId !== undefined
           ? [
               shareWSPermissionEnum.create_sws_pixel,
               shareWSPermissionEnum.update_sws_pixel
@@ -349,9 +356,9 @@ const ZaionsAddPixelAccount: React.FC<{
       }>
       <Formik
         initialValues={{
-          platform: pixelPlatform || PixelPlatformsEnum.facebook,
-          title: pixelTitle || '',
-          pixelId: pixelId || ''
+          platform: pixelPlatform ?? PixelPlatformsEnum.facebook,
+          title: pixelTitle ?? '',
+          pixelId: pixelId ?? ''
         }}
         enableReinitialize={true}
         validate={values => {
@@ -367,12 +374,15 @@ const ZaionsAddPixelAccount: React.FC<{
             VALIDATION_RULE.string
           ]);
 
-          if (values.platform && values.pixelId) {
+          if (
+            values?.platform?.trim?.length > 0 &&
+            values?.pixelId?.trim?.length > 0
+          ) {
             const errorMessage = validatePixelAccountID(
               values.platform,
               values.pixelId
             );
-            if (errorMessage) {
+            if (errorMessage !== undefined) {
               errors.pixelId = errorMessage;
             }
           }
@@ -445,15 +455,6 @@ const ZaionsAddPixelAccount: React.FC<{
                     </ZIonButton>
                   </ZIonCol>
                 </ZIonRow>
-                {/* {!isValid && (
-								<ZIonRow>
-									<ZIonCol className='ion-text-center'>
-										<ZIonNote color='danger'>
-											{MESSAGES.GENERAL.FORM.INVALID}
-										</ZIonNote>
-									</ZIonCol>
-								</ZIonRow>
-							)} */}
               </ZIonHeader>
             )}
 
@@ -497,15 +498,21 @@ const ZaionsAddPixelAccount: React.FC<{
                   fill='outline'
                   minHeight='2.3rem'
                   interface='popover'
-                  errorText={touched.platform ? errors.platform : undefined}
+                  errorText={
+                    touched?.platform === true ? errors?.platform : undefined
+                  }
                   testingselector={
                     CONSTANTS.testingSelectors.pixels.formModal.platformSelector
                   }
                   className={classNames({
                     'mt-5': true,
-                    'ion-touched': touched.platform,
-                    'ion-invalid': touched.platform && errors.platform,
-                    'ion-valid': touched.platform && !errors.platform
+                    'ion-touched': touched?.platform === true,
+                    'ion-invalid':
+                      touched?.platform === true && errors?.platform,
+                    'ion-valid':
+                      touched?.platform === true &&
+                      (errors.platform === undefined ||
+                        errors?.platform === null)
                   })}>
                   {platformData.map(el => {
                     return (
@@ -529,15 +536,17 @@ const ZaionsAddPixelAccount: React.FC<{
                   minHeight='2.3rem'
                   onIonChange={handleChange}
                   onIonBlur={handleBlur}
-                  errorText={touched.title ? errors.title : undefined}
+                  errorText={touched.title === true ? errors.title : undefined}
                   testingselector={
                     CONSTANTS.testingSelectors.pixels.formModal.pixelNameInput
                   }
                   className={classNames({
                     'mt-6 mb-2': true,
-                    'ion-touched': touched.title,
-                    'ion-invalid': touched.title && errors.title,
-                    'ion-valid': touched.title && !errors.title
+                    'ion-touched': touched.title === true,
+                    'ion-invalid': touched.title === true && errors.title,
+                    'ion-valid':
+                      touched.title === true &&
+                      (errors.title === undefined || errors.title === null)
                   })}
                 />
 
@@ -552,15 +561,20 @@ const ZaionsAddPixelAccount: React.FC<{
                   onIonChange={handleChange}
                   onIonBlur={handleBlur}
                   value={values.pixelId}
-                  errorText={touched.pixelId ? errors.pixelId : undefined}
+                  errorText={
+                    touched?.pixelId === true ? errors.pixelId : undefined
+                  }
                   testingselector={
                     CONSTANTS.testingSelectors.pixels.formModal.pixelIdInput
                   }
                   className={classNames({
                     'mt-0': true,
-                    'ion-touched': touched.pixelId,
-                    'ion-invalid': touched.pixelId && errors.pixelId,
-                    'ion-valid': touched.pixelId && !errors.pixelId
+                    'ion-touched': touched?.pixelId === true,
+                    'ion-invalid': touched?.pixelId === true && errors.pixelId,
+                    'ion-valid':
+                      touched?.pixelId === true &&
+                      errors.pixelId === undefined &&
+                      errors.pixelId === null
                   })}
                 />
               </Form>
@@ -602,7 +616,9 @@ const ZaionsAddPixelAccount: React.FC<{
                         CONSTANTS.testingSelectors.pixels.formModal
                           .submitFormBtn
                       }
-                      onClick={() => void submitForm()}>
+                      onClick={() => {
+                        void submitForm();
+                      }}>
                       {formMode === FormMode.ADD
                         ? 'Create'
                         : formMode === FormMode.EDIT

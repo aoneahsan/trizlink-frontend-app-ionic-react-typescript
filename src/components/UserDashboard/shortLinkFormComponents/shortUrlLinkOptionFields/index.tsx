@@ -165,7 +165,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
     try {
       let selectedTypeOptionData: ShortUrlLinkOptionType | undefined;
 
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         selectedTypeOptionData = LinkTypeOptionsData.find(
           el => el.type === selectedShortLink?.type
         );

@@ -203,9 +203,9 @@ const ZUTMTagsTable: React.FC<{
   // #endregion
 
   let isZFetching;
-  if (workspaceId) {
+  if (workspaceId !== undefined) {
     isZFetching = isUTMTagsDataFetching;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
     isZFetching = isSWSUTMTagsDataFetching;
   }
 
@@ -544,7 +544,7 @@ const ZInpageTable: React.FC = () => {
         let __getSourceColumn;
         let __getTermColumn;
 
-        if (workspaceId) {
+        if (workspaceId !== undefined) {
           __getTemplateNameColumn =
             getUTMTagFiltersData?.settings?.columns.filter(
               el => el?.id === ZUTMTagsListPageTableColumnsIds.templateName
@@ -574,7 +574,7 @@ const ZInpageTable: React.FC = () => {
           __getTermColumn = getUTMTagFiltersData?.settings?.columns.filter(
             el => el?.id === ZUTMTagsListPageTableColumnsIds.term
           )[0];
-        } else if (wsShareId && shareWSMemberId) {
+        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
           __getTemplateNameColumn =
             getSWSUTMTagFiltersData?.settings?.columns.filter(
               el => el?.id === ZUTMTagsListPageTableColumnsIds.templateName
@@ -1390,7 +1390,7 @@ const ZUTMTagActionPopover: React.FC<{
     try {
       if (utmTag?.id) {
         let _response;
-        if (workspaceId) {
+        if (workspaceId !== undefined) {
           _response = await deleteUtmTagMutate({
             itemIds: [workspaceId, utmTag?.id],
             urlDynamicParts: [
@@ -1399,7 +1399,7 @@ const ZUTMTagActionPopover: React.FC<{
             ]
           });
         }
-        if (wsShareId && shareWSMemberId) {
+        if (wsShareId !== undefined && shareWSMemberId !== undefined) {
           _response = await deleteSWSUtmTagMutate({
             itemIds: [shareWSMemberId, utmTag?.id],
             urlDynamicParts: [
@@ -1419,7 +1419,7 @@ const ZUTMTagActionPopover: React.FC<{
             // getting all the utm tag from RQ cache.
             let _oldUTMTags: UTMTagTemplateType[] = [];
 
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               _oldUTMTags =
                 extractInnerData<UTMTagTemplateType[]>(
                   getRQCDataHandler<UTMTagTemplateType[]>({
@@ -1430,7 +1430,10 @@ const ZUTMTagActionPopover: React.FC<{
                   }) as UTMTagTemplateType[],
                   extractInnerDataOptionsEnum.createRequestResponseItems
                 ) || [];
-            } else if (wsShareId && shareWSMemberId) {
+            } else if (
+              wsShareId !== undefined &&
+              shareWSMemberId !== undefined
+            ) {
               _oldUTMTags =
                 extractInnerData<UTMTagTemplateType[]>(
                   getRQCDataHandler<UTMTagTemplateType[]>({
@@ -1449,7 +1452,7 @@ const ZUTMTagActionPopover: React.FC<{
             );
 
             // Updating data in RQ cache.
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               await updateRQCDataHandler<UTMTagTemplateType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
@@ -1460,7 +1463,10 @@ const ZUTMTagActionPopover: React.FC<{
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
               });
-            } else if (wsShareId && shareWSMemberId) {
+            } else if (
+              wsShareId !== undefined &&
+              shareWSMemberId !== undefined
+            ) {
               await updateRQCDataHandler<UTMTagTemplateType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN,

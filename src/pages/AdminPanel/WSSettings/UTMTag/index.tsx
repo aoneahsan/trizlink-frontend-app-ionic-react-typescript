@@ -160,12 +160,12 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
   // #region Functions.
   const invalidedQueries = async () => {
     try {
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
           workspaceId
         ]);
-      } else if (wsShareId && shareWSMemberId) {
+      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN,
           wsShareId

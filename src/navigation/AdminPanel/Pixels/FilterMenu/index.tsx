@@ -270,7 +270,7 @@ const ZPixelsFilterMenu: React.FC = () => {
           getSWSPixelFiltersData?.type ===
             ZUserSettingTypeEnum.pixelListPageTable
         ) {
-          if (workspaceId) {
+          if (workspaceId !== undefined) {
             __response = await updatePixelFilersAsyncMutate({
               itemIds: [workspaceId, ZUserSettingTypeEnum.pixelListPageTable],
               urlDynamicParts: [
@@ -279,7 +279,7 @@ const ZPixelsFilterMenu: React.FC = () => {
               ],
               requestData: _data
             });
-          } else if (wsShareId && shareWSMemberId) {
+          } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
             __response = await updateSWSPixelFilersAsyncMutate({
               itemIds: [
                 shareWSMemberId,
@@ -293,9 +293,9 @@ const ZPixelsFilterMenu: React.FC = () => {
             });
           }
         } else {
-          if (workspaceId) {
+          if (workspaceId !== undefined) {
             __response = await createPixelFilersAsyncMutate(_data);
-          } else if (wsShareId && shareWSMemberId) {
+          } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
             __response = await createSWSPixelFilersAsyncMutate(_data);
           }
         }
@@ -309,7 +309,7 @@ const ZPixelsFilterMenu: React.FC = () => {
 
           // if we have data then show success message.
           if (__data && __data.id) {
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               await updateRQCDataHandler<ZUserSettingInterface | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
@@ -321,7 +321,10 @@ const ZPixelsFilterMenu: React.FC = () => {
                 extractType: ZRQGetRequestExtractEnum.extractItem,
                 updateHoleData: true
               });
-            } else if (wsShareId && shareWSMemberId) {
+            } else if (
+              wsShareId !== undefined &&
+              shareWSMemberId !== undefined
+            ) {
               await updateRQCDataHandler<ZUserSettingInterface | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,

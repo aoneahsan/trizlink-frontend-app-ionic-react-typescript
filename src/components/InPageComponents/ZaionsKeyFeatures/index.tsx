@@ -1,148 +1,137 @@
 // Core Imports
 import React, { useState } from 'react';
 // packages Imports
-import {} from '@ionic/react';
-import { useMediaQuery } from 'react-responsive';
 
 // Custom Imports
 import {
-	ZIonCol,
-	ZIonText,
-	ZIonImg,
-	ZIonGrid,
-	ZIonRow,
-	ZIonIcon,
+  ZIonCol,
+  ZIonText,
+  ZIonImg,
+  ZIonGrid,
+  ZIonRow,
+  ZIonIcon
 } from '@/components/ZIonComponents';
 
 // Global Constants
-import { BRACKPOINT_MD } from '@/utils/constants';
 
 // Types
-import { ZaionsKeyFeatureType } from '@/types/InPageComponentTypes/ZaionsKeyFeature.type';
-type ZaionsKeyFeaturesType = {
-	data: ZaionsKeyFeatureType[];
-};
+import { type ZaionsKeyFeatureType } from '@/types/InPageComponentTypes/ZaionsKeyFeature.type';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+interface ZaionsKeyFeaturesType {
+  data: ZaionsKeyFeatureType[];
+}
 
 const ZaionsKeyFeatures: React.FC<ZaionsKeyFeaturesType> = ({ data = [] }) => {
-	const isMdScale = useMediaQuery({
-		query: `(min-width: ${BRACKPOINT_MD})`,
-	});
+  const { isMdScale } = useZMediaQueryScale();
 
-	const [animationMedia, setAnimationMedia] = useState({
-		key: data[0]?.id,
-		media: data[0]?.animation,
-		title: data[0]?.title,
-		touched: false,
-	});
+  const [animationMedia, setAnimationMedia] = useState({
+    key: data[0]?.id,
+    media: data[0]?.animation,
+    title: data[0]?.title,
+    touched: false
+  });
 
-	return (
-		<>
-			<ZIonGrid className='ion-padding-bottom mb-1'>
-				{data.length && (
-					<ZIonRow>
-						<ZIonCol sizeXl='' sizeLg='' sizeMd='12' sizeSm='12' sizeXs='12'>
-							{data.map((el) => {
-								return (
-									<ZIonCol
-										sizeXl='12'
-										sizeLg='12'
-										sizeMd='12'
-										sizeSm='12'
-										sizeXs='12'
-										key={el.id}
-										onMouseEnter={() => {
-											if (animationMedia.key !== el.id) {
-												setAnimationMedia({
-													key: el.id,
-													media: el.animation,
-													title: el.title,
-													touched: true,
-												});
-											}
-										}}
-										// onMouseLeave={() => {
-										// 	if (el.id != ) {
-										// 		setAnimationMedia({ key: el.id, media: el.animation });
-										// 	}
-										// }}
-									>
-										<ZIonRow
-											className='ion-no-padding'
-											style={{
-												backgroundColor:
-													animationMedia.touched && animationMedia.key === el.id
-														? '#f6f7f8'
-														: '',
-											}}
-										>
-											<ZIonCol
-												sizeXl='1'
-												sizeLg='1'
-												sizeMd='1'
-												sizeSm='2'
-												sizeXs='2'
-											>
-												<ZIonIcon
-													size='large'
-													className='ion-padding-end'
-													icon={el.icon}
-												></ZIonIcon>
-											</ZIonCol>
-											<ZIonCol
-												sizeXl='11'
-												sizeLg='11'
-												sizeMd='11'
-												sizeSm='11'
-												sizeXs='11'
-											>
-												<ZIonText>
-													<ZIonText className='font-bold text-[15px]'>
-														{el.title}
-													</ZIonText>
-												</ZIonText>
-												<br />
-												<ZIonText className='text-[15px]'>{el?.text}</ZIonText>
-												<br />
-												{animationMedia.key === el.id && (
-													<ZIonText>{el?.link?.text}</ZIonText>
-												)}
-											</ZIonCol>
-										</ZIonRow>
-									</ZIonCol>
-								);
-							})}
-						</ZIonCol>
-						<ZIonCol
-							sizeXl='5'
-							sizeLg='5'
-							sizeMd='12'
-							sizeSm='12'
-							sizeXs='12'
-							className=''
-						>
-							<ZIonImg
-								src={animationMedia.media}
-								alt={animationMedia.title}
-								style={{ width: isMdScale ? '100%' : '90%' }}
-							/>
-						</ZIonCol>
-					</ZIonRow>
-				)}
-				{/* {!data.length && (
-					<template>
-						<ZIonRow>
-							<ZIonCol sizeXl='12'>No Data Found!</ZIonCol>
-						</ZIonRow>
-					</template>
-				)} */}
-				{!data.length && (
-					<ZIonRow>
-						<ZIonCol sizeXl='12'>No Data Found!</ZIonCol>
-					</ZIonRow>
-				)}
-			</ZIonGrid>
-		</>
-	);
+  return (
+    <>
+      <ZIonGrid className='mb-1 ion-padding-bottom'>
+        {data.length > 0 && (
+          <ZIonRow>
+            <ZIonCol
+              sizeXl=''
+              sizeLg=''
+              sizeMd='12'
+              sizeSm='12'
+              sizeXs='12'>
+              {data.map(el => {
+                return (
+                  <ZIonCol
+                    sizeXl='12'
+                    sizeLg='12'
+                    sizeMd='12'
+                    sizeSm='12'
+                    sizeXs='12'
+                    key={el.id}
+                    onMouseEnter={() => {
+                      if (animationMedia.key !== el.id) {
+                        setAnimationMedia({
+                          key: el.id,
+                          media: el.animation,
+                          title: el.title,
+                          touched: true
+                        });
+                      }
+                    }}
+                    // onMouseLeave={() => {
+                    // if (el.id != ) {
+                    // setAnimationMedia({ key: el.id, media: el.animation });
+                    // }
+                    // }}
+                  >
+                    <ZIonRow
+                      className='ion-no-padding'
+                      style={{
+                        backgroundColor:
+                          animationMedia.touched && animationMedia.key === el.id
+                            ? '#f6f7f8'
+                            : ''
+                      }}>
+                      <ZIonCol
+                        sizeXl='1'
+                        sizeLg='1'
+                        sizeMd='1'
+                        sizeSm='2'
+                        sizeXs='2'>
+                        <ZIonIcon
+                          size='large'
+                          className='ion-padding-end'
+                          icon={el.icon}></ZIonIcon>
+                      </ZIonCol>
+                      <ZIonCol
+                        sizeXl='11'
+                        sizeLg='11'
+                        sizeMd='11'
+                        sizeSm='11'
+                        sizeXs='11'>
+                        <ZIonText>
+                          <ZIonText className='font-bold text-[15px]'>
+                            {el.title}
+                          </ZIonText>
+                        </ZIonText>
+                        <br />
+                        <ZIonText className='text-[15px]'>{el?.text}</ZIonText>
+                        <br />
+                        {animationMedia.key === el.id && (
+                          <ZIonText>{el?.link?.text}</ZIonText>
+                        )}
+                      </ZIonCol>
+                    </ZIonRow>
+                  </ZIonCol>
+                );
+              })}
+            </ZIonCol>
+            <ZIonCol
+              sizeXl='5'
+              sizeLg='5'
+              sizeMd='12'
+              sizeSm='12'
+              sizeXs='12'
+              className=''>
+              <ZIonImg
+                src={animationMedia.media}
+                alt={animationMedia.title}
+                style={{ width: isMdScale ? '100%' : '90%' }}
+              />
+            </ZIonCol>
+          </ZIonRow>
+        )}
+        {data.length === 0 && (
+          <ZIonRow>
+            <ZIonCol sizeXl='12'>No Data Found!</ZIonCol>
+          </ZIonRow>
+        )}
+      </ZIonGrid>
+    </>
+  );
 };
 
 export default ZaionsKeyFeatures;

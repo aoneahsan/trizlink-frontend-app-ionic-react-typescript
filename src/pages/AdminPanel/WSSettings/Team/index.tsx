@@ -172,13 +172,13 @@ const ZWSSettingTeamsListPage: React.FC = () => {
   // #region Functions.
   const invalidedQueries = async () => {
     try {
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         // Invalidating RQ members cache.
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
           workspaceId
         ]);
-      } else if (wsShareId && shareWSMemberId) {
+      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
           wsShareId

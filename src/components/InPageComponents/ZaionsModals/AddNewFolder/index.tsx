@@ -16,9 +16,9 @@ import {
   ZIonContent,
   ZIonFooter,
   ZIonInput,
-  ZIonImg
+  ZIonImg,
+  ZIonButton
 } from '@/components/ZIonComponents';
-import { ZIonButton } from '@/components/ZIonComponents';
 import ZCan from '@/components/Can';
 
 // Custom hooks
@@ -58,9 +58,12 @@ import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil
 
 // Types
 import { folderState, FormMode } from '@/types/AdminPanel/index.type';
-import { FormikSetErrorsType, resetFormType } from '@/types/ZaionsFormik.type';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
-import { LinkFolderType } from '@/types/AdminPanel/linksType';
+import {
+  type FormikSetErrorsType,
+  type resetFormType
+} from '@/types/ZaionsFormik.type';
+import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { type LinkFolderType } from '@/types/AdminPanel/linksType';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 // Styles
@@ -127,28 +130,28 @@ const ZaionsAddNewFolder: React.FC<{
     value: string,
     resetForm: resetFormType,
     setErrors: FormikSetErrorsType
-  ) => {
+  ): Promise<void> => {
     try {
       // ADD API Request to add this new Folder to user account in DB.
       if (folderFormState.formMode === FormMode.ADD) {
         let _response;
 
-        if (workspaceId) {
+        if (workspaceId !== undefined) {
           _response = await createFolderAsyncMutate(value);
-        } else if (wsShareId) {
+        } else if (wsShareId !== undefined) {
           _response = await createSWSFolderAsyncMutate(value);
         }
 
-        if (_response) {
+        if (_response !== undefined) {
           const _data = extractInnerData<LinkFolderType>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data && _data.id) {
+          if (_data?.id !== null) {
             let _oldFoldersData: LinkFolderType[] = [];
 
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               _oldFoldersData =
                 (getRQCDataHandler<LinkFolderType[]>({
                   key: [
@@ -156,8 +159,8 @@ const ZaionsAddNewFolder: React.FC<{
                     workspaceId,
                     state
                   ]
-                }) as LinkFolderType[]) || [];
-            } else if (wsShareId) {
+                }) as LinkFolderType[]) ?? [];
+            } else if (wsShareId !== undefined) {
               _oldFoldersData =
                 (getRQCDataHandler<LinkFolderType[]>({
                   key: [
@@ -165,20 +168,20 @@ const ZaionsAddNewFolder: React.FC<{
                     wsShareId,
                     state
                   ]
-                }) as LinkFolderType[]) || [];
+                }) as LinkFolderType[]) ?? [];
             }
 
             const _oldShortLinks =
               extractInnerData<LinkFolderType[]>(
                 _oldFoldersData,
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
             // added shortLink to all shortLinks data in cache.
             const _updatedFolders = [..._oldShortLinks, _data];
 
             // Updating all shortLinks data in RQ cache.
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               await updateRQCDataHandler<LinkFolderType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
@@ -190,7 +193,7 @@ const ZaionsAddNewFolder: React.FC<{
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
               });
-            } else if (wsShareId) {
+            } else if (wsShareId !== undefined) {
               await updateRQCDataHandler<LinkFolderType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
@@ -210,10 +213,10 @@ const ZaionsAddNewFolder: React.FC<{
           }
         }
       } else if (folderFormState.formMode === FormMode.EDIT) {
-        if (folderFormState.id) {
+        if (folderFormState.id !== undefined) {
           let _response;
 
-          if (workspaceId) {
+          if (workspaceId !== undefined) {
             _response = await updateFolderAsyncMutate({
               itemIds: [workspaceId, folderFormState.id],
               urlDynamicParts: [
@@ -222,7 +225,7 @@ const ZaionsAddNewFolder: React.FC<{
               ],
               requestData: value
             });
-          } else if (wsShareId) {
+          } else if (wsShareId !== undefined) {
             _response = await updateSWSFolderAsyncMutate({
               itemIds: [shareWSMemberId, folderFormState?.id],
               urlDynamicParts: [
@@ -233,14 +236,14 @@ const ZaionsAddNewFolder: React.FC<{
             });
           }
 
-          if (_response) {
+          if (_response !== undefined) {
             const _data = extractInnerData<LinkFolderType>(
               _response,
               extractInnerDataOptionsEnum.createRequestResponseItem
             );
 
-            if (_data && _data.id) {
-              if (workspaceId) {
+            if (_data !== undefined && _data?.id !== null) {
+              if (workspaceId !== undefined) {
                 // Updating current short link in cache in RQ cache.
                 await updateRQCDataHandler<LinkFolderType | undefined>({
                   key: [
@@ -249,9 +252,9 @@ const ZaionsAddNewFolder: React.FC<{
                     state
                   ],
                   data: { ..._data },
-                  id: _data.id
+                  id: _data?.id ?? ''
                 });
-              } else if (wsShareId) {
+              } else if (wsShareId !== undefined) {
                 await updateRQCDataHandler<LinkFolderType | undefined>({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
@@ -259,7 +262,7 @@ const ZaionsAddNewFolder: React.FC<{
                     state
                   ],
                   data: { ..._data },
-                  id: _data.id
+                  id: _data.id ?? ''
                 });
               }
             }
@@ -280,21 +283,21 @@ const ZaionsAddNewFolder: React.FC<{
       SetDefaultFolderState();
 
       // this will reset form
-      if (resetForm) {
+      if (resetForm !== undefined) {
         resetForm();
       }
     } catch (error) {
       if (error instanceof AxiosError) {
         // await presentZIonErrorAlert();
         // Setting errors on form fields
-        const __apiErrors = (error.response?.data as { errors: ZGenericObject })
+        const _apiErrors = (error.response?.data as { errors: ZGenericObject })
           ?.errors;
-        const __errors = formatApiRequestErrorForFormikFormField(
+        const _errors = formatApiRequestErrorForFormikFormField(
           ['emailAddress', 'password'],
           ['email', 'password'],
-          __apiErrors
+          _apiErrors
         );
-        setErrors(__errors);
+        setErrors(_errors);
       } else if (error instanceof ZCustomError || error instanceof Error) {
         // if we need to do some other type of logic reporting (like report this error to API or error blogging to like sentry or datadog etc then we can do that here, otherwise if we just want to show the message of error to user in alert then we can do that in one else case no need for this check, but here we can set the title of alert to)
         reportCustomError(error);
@@ -302,7 +305,7 @@ const ZaionsAddNewFolder: React.FC<{
     }
   };
 
-  const SetDefaultFolderState = () => {
+  const SetDefaultFolderState = (): void => {
     // Reset to default
     setFolderFormState(oldVal => ({
       ...oldVal,
@@ -318,12 +321,12 @@ const ZaionsAddNewFolder: React.FC<{
       shareWSId={wsShareId}
       checkMode={permissionCheckModeEnum.any}
       permissionType={
-        wsShareId
+        wsShareId !== undefined
           ? permissionsTypeEnum.shareWSMemberPermissions
           : permissionsTypeEnum.loggedInUserPermissions
       }
       havePermissions={
-        wsShareId
+        wsShareId !== undefined
           ? state === folderState.shortlink
             ? [
                 shareWSPermissionEnum.create_sws_sl_folder,
@@ -346,7 +349,7 @@ const ZaionsAddNewFolder: React.FC<{
       }>
       <Formik
         initialValues={{
-          folderName: folderFormState.name || ''
+          folderName: folderFormState?.name ?? ''
         }}
         enableReinitialize={true}
         validate={values => {
@@ -354,7 +357,7 @@ const ZaionsAddNewFolder: React.FC<{
             folderName?: string;
           } = {};
 
-          if (!values.folderName) {
+          if (values?.folderName.length === 0) {
             errors.folderName = MESSAGES.FORM_VALIDATIONS.LINK.REQUIRED_FOLDER;
           }
 
@@ -383,7 +386,8 @@ const ZaionsAddNewFolder: React.FC<{
                * Header of Modal will shown if the `showActionInModalHeader` is set to `true` in  appSetting and hide if it is `false`
                * default: false
                *  */}
-              {appSettings.appModalsSetting.actions.showActionInModalHeader && (
+              {appSettings?.appModalsSetting?.actions
+                ?.showActionInModalHeader && (
                 <ZIonHeader>
                   <ZIonRow className='ion-align-items-center'>
                     <ZIonCol>
@@ -417,23 +421,14 @@ const ZaionsAddNewFolder: React.FC<{
                         onClick={() => {
                           void submitForm();
                         }}>
-                        {folderFormState.formMode === FormMode.ADD
+                        {folderFormState?.formMode === FormMode.ADD
                           ? 'Create'
-                          : folderFormState.formMode === FormMode.EDIT
+                          : folderFormState?.formMode === FormMode.EDIT
                           ? 'Update'
                           : ''}
                       </ZIonButton>
                     </ZIonCol>
                   </ZIonRow>
-                  {/* {!isValid && (
-									<ZIonRow>
-										<ZIonCol className='ion-text-center'>
-											<ZIonNote color='danger'>
-												{MESSAGES.GENERAL.FORM.INVALID}
-											</ZIonNote>
-										</ZIonCol>
-									</ZIonRow>
-								)} */}
                   {/* </IonToolbar> */}
                 </ZIonHeader>
               )}
@@ -458,9 +453,9 @@ const ZaionsAddNewFolder: React.FC<{
                       'text-2xl': isSmScale,
                       'text-xl': !isSmScale
                     })}>
-                    {folderFormState.formMode === FormMode.ADD
+                    {folderFormState?.formMode === FormMode.ADD
                       ? 'Create a new folder'
-                      : folderFormState.formMode === FormMode.EDIT
+                      : folderFormState?.formMode === FormMode.EDIT
                       ? 'Rename Folder'
                       : ''}
                     <ZIonRouterLink
@@ -480,16 +475,22 @@ const ZaionsAddNewFolder: React.FC<{
                     onIonBlur={handleBlur}
                     value={values.folderName}
                     errorText={
-                      touched.folderName ? errors.folderName : undefined
+                      touched?.folderName === true
+                        ? errors?.folderName
+                        : undefined
                     }
                     testingselector={
                       CONSTANTS.testingSelectors.folder.formModal.nameInput
                     }
                     className={classNames({
                       'mt-5': true,
-                      'ion-touched': touched.folderName,
-                      'ion-invalid': touched.folderName && errors.folderName,
-                      'ion-valid': touched.folderName && !errors.folderName
+                      'ion-touched': touched?.folderName,
+                      'ion-invalid':
+                        touched?.folderName === true && errors.folderName,
+                      'ion-valid':
+                        touched?.folderName === true &&
+                        (errors.folderName === undefined ||
+                          errors?.folderName === null)
                     })}
                   />
                 </Form>
@@ -499,7 +500,8 @@ const ZaionsAddNewFolder: React.FC<{
                * Footer of Modal will shown if the `showActionInModalFooter` is set to `true` in      appSetting, and hide if it is `false`
                * default: true
                *  */}
-              {appSettings.appModalsSetting.actions.showActionInModalFooter && (
+              {appSettings?.appModalsSetting?.actions
+                ?.showActionInModalFooter && (
                 <ZIonFooter>
                   <ZIonRow className='mx-3 mt-1 ion-justify-content-between ion-align-items-center'>
                     <ZIonCol>
@@ -528,7 +530,9 @@ const ZaionsAddNewFolder: React.FC<{
                         className='ion-text-capitalize'
                         type='submit'
                         disabled={isSubmitting || !isValid}
-                        onClick={() => void submitForm()}
+                        onClick={() => {
+                          void submitForm();
+                        }}
                         testingselector={
                           CONSTANTS.testingSelectors.folder.formModal
                             .submitFormBtn

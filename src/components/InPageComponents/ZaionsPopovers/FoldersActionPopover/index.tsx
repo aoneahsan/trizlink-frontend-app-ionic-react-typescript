@@ -164,7 +164,7 @@ const FolderActionsPopoverContent: React.FC<{
     try {
       if (folderFormState.id) {
         let _response;
-        if (workspaceId) {
+        if (workspaceId !== undefined) {
           // hitting the delete api
           _response = await deleteFolderMutate({
             itemIds: [workspaceId, folderFormState.id],
@@ -193,7 +193,7 @@ const FolderActionsPopoverContent: React.FC<{
           if (_data && _data?.success) {
             let _oldFoldersData: LinkFolderType[] = [];
 
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               _oldFoldersData =
                 (getRQCDataHandler<LinkFolderType[]>({
                   key: [
@@ -226,7 +226,7 @@ const FolderActionsPopoverContent: React.FC<{
             );
 
             // Updating data in RQ cache.
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               await updateRQCDataHandler<LinkFolderType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,

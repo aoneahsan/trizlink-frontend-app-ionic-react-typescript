@@ -56,9 +56,6 @@ const ZaionsCarouselSlider: React.FC = () => {
                         className={classes.zaions__quote}
                         alt='Quotes'
                       />
-                      {/* <ZIonText className={classes.zaions__quote}>
-												&#8221;
-											</ZIonText> */}
                       <ZIonGrid>
                         <ZIonRow className='px-4 py-4 mx-2 mt-2'>
                           <ZIonCol

@@ -119,7 +119,7 @@ const ZWorkspacesSettingModal: React.FC<{
   useEffect(() => {
     try {
       // workspaceId pass when the user is owner.
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         // if owner then it will work with the QUERIES_KEYS of that user.
 
         // getting all the workspace from RQ cache.

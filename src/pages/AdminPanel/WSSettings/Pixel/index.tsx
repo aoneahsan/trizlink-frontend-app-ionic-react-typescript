@@ -156,12 +156,12 @@ const ZWSSettingPixelListPage: React.FC = () => {
   // #region Functions.
   const invalidedQueries = async () => {
     try {
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
           workspaceId
         ]);
-      } else if (wsShareId && shareWSMemberId) {
+      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
           wsShareId

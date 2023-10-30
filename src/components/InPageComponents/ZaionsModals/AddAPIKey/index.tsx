@@ -16,12 +16,17 @@ import {
   ZIonNote,
   ZIonContent,
   ZIonIcon,
-  ZIonFooter
+  ZIonFooter,
+  ZIonButton
 } from '@/components/ZIonComponents';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Global Constants
 import { getRandomKey } from '@/utils/helpers';
 import MESSAGES from '@/utils/messages';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { reportCustomError } from '@/utils/customErrorType';
+import { useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
 
 // Images
 
@@ -32,12 +37,7 @@ import { APIKeyState } from '@/ZaionsStore/UserDashboard/APIKey';
 
 // Types
 import { FormMode } from '@/types/AdminPanel/index.type';
-import { resetFormType } from '@/types/ZaionsFormik.type';
-import { useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
-import { ZIonButton } from '@/components/ZIonComponents';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
-import { reportCustomError } from '@/utils/customErrorType';
+import { type resetFormType } from '@/types/ZaionsFormik.type';
 
 // Styles
 
@@ -57,7 +57,7 @@ const ZaionsAddAPIKeyModal: React.FC<{
   const handleFormSubmit = async (
     values: { name: string },
     resetForm?: resetFormType
-  ) => {
+  ): Promise<void> => {
     // On Submit loading state start
     await presentZIonLoader(
       apiKeyFormState.formMode === FormMode.ADD
@@ -98,7 +98,7 @@ const ZaionsAddAPIKeyModal: React.FC<{
       SetDefaultAPIKeyState();
 
       // this will reset form
-      if (resetForm) {
+      if (resetForm !== undefined) {
         resetForm();
       }
     } catch (error) {
@@ -110,7 +110,7 @@ const ZaionsAddAPIKeyModal: React.FC<{
     await dismissZIonLoader();
   };
 
-  const SetDefaultAPIKeyState = () => {
+  const SetDefaultAPIKeyState = (): void => {
     // Reset to default
     setAPIKeyFormState(oldVal => ({
       ...oldVal,
@@ -125,7 +125,7 @@ const ZaionsAddAPIKeyModal: React.FC<{
   return (
     <Formik
       initialValues={{
-        name: apiKeyFormState.name || 'API Key'
+        name: apiKeyFormState?.name ?? 'API Key'
       }}
       enableReinitialize={true}
       validate={values => {
@@ -133,7 +133,7 @@ const ZaionsAddAPIKeyModal: React.FC<{
           name?: string;
         } = {};
 
-        if (!values.name.trim()) {
+        if (values?.name === undefined || values?.name?.trim()?.length === 0) {
           errors.name = MESSAGES.GENERAL.FORM.API_KEY_REQUIRED;
         }
 
@@ -209,18 +209,18 @@ const ZaionsAddAPIKeyModal: React.FC<{
               <div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top'>
                 <ZIonText
                   className=''
-                  color={'primary'}>
-                  <h1
-                    className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}>
+                  color='primary'>
+                  <h1 className='mb-0 ion-padding-top bg-primary zaions__modal_icon'>
                     <ZIonIcon
                       icon={toggleOutline}
                       className='mx-auto'
-                      color='light'></ZIonIcon>
+                      color='light'
+                    />
                   </h1>
                 </ZIonText>
                 <br />
-                <ZIonText color={'dark'}>
-                  <h6 className='fw-blod'>
+                <ZIonText color='dark'>
+                  <h6 className='fw-bold'>
                     {apiKeyFormState.formMode === FormMode.ADD
                       ? 'Create a new API Key'
                       : apiKeyFormState.formMode === FormMode.EDIT
@@ -238,8 +238,11 @@ const ZaionsAddAPIKeyModal: React.FC<{
                   inputFieldProps={{
                     className: classNames({
                       'mt-4': true,
-                      'ion-touched ion-invalid': touched.name && errors.name,
-                      'ion-touched ion-valid': touched.name && !errors.name
+                      'ion-touched': touched.name === true,
+                      'ion-invalid': touched.name === true && errors.name,
+                      'ion-valid':
+                        touched.name === true &&
+                        (errors.name === undefined || errors.name === null)
                     }),
                     label: 'API name*',
                     type: 'text',
@@ -284,7 +287,9 @@ const ZaionsAddAPIKeyModal: React.FC<{
                       className='ion-text-capitalize'
                       type='submit'
                       disabled={isSubmitting || !isValid}
-                      onClick={() => void submitForm()}>
+                      onClick={() => {
+                        void submitForm();
+                      }}>
                       {apiKeyFormState.formMode === FormMode.ADD
                         ? 'Create'
                         : apiKeyFormState.formMode === FormMode.EDIT

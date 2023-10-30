@@ -217,7 +217,7 @@ const ZaionsShortLinkTable: React.FC<{
         }));
       }
 
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         zNavigatePushRoute(
           replaceParams(
             ZaionsRoutes.AdminPanel.ShortLinks.Create,
@@ -225,7 +225,7 @@ const ZaionsShortLinkTable: React.FC<{
             workspaceId
           )
         );
-      } else if (wsShareId && shareWSMemberId) {
+      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
         zNavigatePushRoute(
           createRedirectRoute({
             url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Create,
@@ -684,7 +684,7 @@ const ZInpageTable: React.FC = () => {
         let __getPixelsColumn;
         let __getUrlColumn;
 
-        if (workspaceId) {
+        if (workspaceId !== undefined) {
           __getTitleColumn = getUserSetting?.settings?.columns.filter(
             el => el?.id === ZShortLinkListPageTableColumnsIds.title
           )[0];
@@ -999,7 +999,7 @@ const ZInpageTable: React.FC = () => {
             }
             onClick={() => {
               if (+String(pageindex || '0') > 0) {
-                if (workspaceId) {
+                if (workspaceId !== undefined) {
                   zNavigatePushRoute(
                     createRedirectRoute({
                       url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
@@ -1019,7 +1019,10 @@ const ZInpageTable: React.FC = () => {
                       }
                     })
                   );
-                } else if (wsShareId && shareWSMemberId) {
+                } else if (
+                  wsShareId !== undefined &&
+                  shareWSMemberId !== undefined
+                ) {
                   zNavigatePushRoute(
                     createRedirectRoute({
                       url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
@@ -1066,7 +1069,7 @@ const ZInpageTable: React.FC = () => {
                 // zShortLinksTable.previousPage();
                 zShortLinksTable.setPageIndex(oldValue => oldValue - 1);
 
-                if (workspaceId) {
+                if (workspaceId !== undefined) {
                   zNavigatePushRoute(
                     createRedirectRoute({
                       url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
@@ -1086,7 +1089,10 @@ const ZInpageTable: React.FC = () => {
                       }
                     })
                   );
-                } else if (wsShareId && shareWSMemberId) {
+                } else if (
+                  wsShareId !== undefined &&
+                  shareWSMemberId !== undefined
+                ) {
                   zNavigatePushRoute(
                     createRedirectRoute({
                       url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
@@ -1139,7 +1145,7 @@ const ZInpageTable: React.FC = () => {
                 // zShortLinksTable.nextPage();
                 zShortLinksTable.setPageIndex(oldValue => oldValue + 1);
 
-                if (workspaceId) {
+                if (workspaceId !== undefined) {
                   zNavigatePushRoute(
                     createRedirectRoute({
                       url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
@@ -1159,7 +1165,10 @@ const ZInpageTable: React.FC = () => {
                       }
                     })
                   );
-                } else if (wsShareId && shareWSMemberId) {
+                } else if (
+                  wsShareId !== undefined &&
+                  shareWSMemberId !== undefined
+                ) {
                   zNavigatePushRoute(
                     createRedirectRoute({
                       url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
@@ -1206,7 +1215,7 @@ const ZInpageTable: React.FC = () => {
                   zShortLinksTable.getPageCount() - 1
                 );
 
-                if (workspaceId) {
+                if (workspaceId !== undefined) {
                   zNavigatePushRoute(
                     createRedirectRoute({
                       url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
@@ -1226,7 +1235,10 @@ const ZInpageTable: React.FC = () => {
                       }
                     })
                   );
-                } else if (wsShareId && shareWSMemberId) {
+                } else if (
+                  wsShareId !== undefined &&
+                  shareWSMemberId !== undefined
+                ) {
                   zNavigatePushRoute(
                     createRedirectRoute({
                       url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
@@ -1276,7 +1288,7 @@ const ZInpageTable: React.FC = () => {
               // pageNumber - 1 because array start from 0 but above we are doing current page (String(pageindex) + 1) so if 0 then it become 1 and when below we are setting we will remove this 1.
               zShortLinksTable.setPageIndex(_ => pageNumber - 1);
 
-              if (workspaceId) {
+              if (workspaceId !== undefined) {
                 zNavigatePushRoute(
                   createRedirectRoute({
                     url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
@@ -1296,7 +1308,10 @@ const ZInpageTable: React.FC = () => {
                     }
                   })
                 );
-              } else if (wsShareId && shareWSMemberId) {
+              } else if (
+                wsShareId !== undefined &&
+                shareWSMemberId !== undefined
+              ) {
                 zNavigatePushRoute(
                   createRedirectRoute({
                     url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
@@ -1352,7 +1367,7 @@ const ZInpageTable: React.FC = () => {
             onIonChange={e => {
               zShortLinksTable.setPageSize(Number(e.target.value));
 
-              if (workspaceId) {
+              if (workspaceId !== undefined) {
                 zNavigatePushRoute(
                   createRedirectRoute({
                     url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
@@ -1370,7 +1385,10 @@ const ZInpageTable: React.FC = () => {
                     }
                   })
                 );
-              } else if (wsShareId && shareWSMemberId) {
+              } else if (
+                wsShareId !== undefined &&
+                shareWSMemberId !== undefined
+              ) {
                 zNavigatePushRoute(
                   createRedirectRoute({
                     url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
@@ -1485,7 +1503,7 @@ const ZShortLinkActionPopover: React.FC<{
         if (shortLinkId) {
           let _response;
 
-          if (workspaceId) {
+          if (workspaceId !== undefined) {
             _response = await deleteShortLinkMutate({
               itemIds: [workspaceId, shortLinkId],
               urlDynamicParts: [
@@ -1493,7 +1511,7 @@ const ZShortLinkActionPopover: React.FC<{
                 CONSTANTS.RouteParams.shortLink.shortLinkId
               ]
             });
-          } else if (wsShareId && shareWSMemberId) {
+          } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
             _response = await deleteSWSShortLinkMutate({
               itemIds: [shareWSMemberId, shortLinkId],
               urlDynamicParts: [
@@ -1513,14 +1531,17 @@ const ZShortLinkActionPopover: React.FC<{
               // getting all the shortLinks from RQ cache.
               let _rqShortlinkData;
 
-              if (workspaceId) {
+              if (workspaceId !== undefined) {
                 _rqShortlinkData = getRQCDataHandler<ShortLinkType[]>({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
                     workspaceId
                   ]
                 }) as ShortLinkType[];
-              } else if (wsShareId && shareWSMemberId) {
+              } else if (
+                wsShareId !== undefined &&
+                shareWSMemberId !== undefined
+              ) {
                 _rqShortlinkData = getRQCDataHandler<ShortLinkType[]>({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
@@ -1541,7 +1562,7 @@ const ZShortLinkActionPopover: React.FC<{
               );
 
               // Updating data in RQ cache.
-              if (workspaceId) {
+              if (workspaceId !== undefined) {
                 await updateRQCDataHandler<ShortLinkType[] | undefined>({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
@@ -1552,7 +1573,10 @@ const ZShortLinkActionPopover: React.FC<{
                   extractType: ZRQGetRequestExtractEnum.extractItems,
                   updateHoleData: true
                 });
-              } else if (wsShareId && shareWSMemberId) {
+              } else if (
+                wsShareId !== undefined &&
+                shareWSMemberId !== undefined
+              ) {
                 await updateRQCDataHandler<ShortLinkType[] | undefined>({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
@@ -1615,7 +1639,7 @@ const ZShortLinkActionPopover: React.FC<{
                   formMode: FormMode.EDIT
                 }));
 
-                if (workspaceId) {
+                if (workspaceId !== undefined) {
                   zNavigatePushRoute(
                     replaceRouteParams(
                       ZaionsRoutes.AdminPanel.ShortLinks.Edit,
@@ -1626,7 +1650,10 @@ const ZShortLinkActionPopover: React.FC<{
                       [workspaceId, shortLinkId]
                     )
                   );
-                } else if (wsShareId && shareWSMemberId) {
+                } else if (
+                  wsShareId !== undefined &&
+                  shareWSMemberId !== undefined
+                ) {
                   zNavigatePushRoute(
                     replaceRouteParams(
                       ZaionsRoutes.AdminPanel.ShareWS.Short_link.Edit,

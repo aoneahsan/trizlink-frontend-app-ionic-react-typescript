@@ -135,11 +135,14 @@ const ZaionsPixelAccountDetail: React.FC<{
 
           {shortLinkFormState.pixelAccountIds?.map(el => {
             let pixel;
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               pixel =
                 __pixelAccountsData &&
                 __pixelAccountsData.find(_pixel => _pixel.id === el);
-            } else if (wsShareId && shareWSMemberId) {
+            } else if (
+              wsShareId !== undefined &&
+              shareWSMemberId !== undefined
+            ) {
               pixel =
                 __swsPixelAccountsData &&
                 __swsPixelAccountsData.find(_pixel => _pixel.id === el);

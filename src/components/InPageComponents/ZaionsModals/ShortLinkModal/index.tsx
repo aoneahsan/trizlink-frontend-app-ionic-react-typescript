@@ -180,7 +180,7 @@ const ZShortLinkModal: React.FC<{
                     }));
                   }
 
-                  if (workspaceId) {
+                  if (workspaceId !== undefined) {
                     zNavigatePushRoute(
                       createRedirectRoute({
                         url: ZaionsRoutes.AdminPanel.ShortLinks.Create,
@@ -188,7 +188,10 @@ const ZShortLinkModal: React.FC<{
                         values: [workspaceId]
                       })
                     );
-                  } else if (wsShareId && shareWSMemberId) {
+                  } else if (
+                    wsShareId !== undefined &&
+                    shareWSMemberId !== undefined
+                  ) {
                     zNavigatePushRoute(
                       createRedirectRoute({
                         url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Create,
@@ -209,7 +212,7 @@ const ZShortLinkModal: React.FC<{
               onClick={() => {
                 dismissZIonModal();
 
-                if (workspaceId) {
+                if (workspaceId !== undefined) {
                   zNavigatePushRoute(
                     replaceRouteParams(
                       ZaionsRoutes.AdminPanel.ShortLinks.Main,
@@ -220,7 +223,10 @@ const ZShortLinkModal: React.FC<{
                       [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
                     )
                   );
-                } else if (wsShareId && shareWSMemberId) {
+                } else if (
+                  wsShareId !== undefined &&
+                  shareWSMemberId !== undefined
+                ) {
                   zNavigatePushRoute(
                     createRedirectRoute({
                       url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,

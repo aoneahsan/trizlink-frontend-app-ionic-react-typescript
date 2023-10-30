@@ -203,7 +203,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
         if (mode === FormMode.ADD) {
           if (wsShareMemberId) {
             __response = await createSWSTimeSlotMutateAsync(_data);
-          } else if (workspaceId) {
+          } else if (workspaceId !== undefined) {
             __response = await createTimeSlotMutateAsync(_data);
           }
         } else if (mode === FormMode.EDIT) {
@@ -216,7 +216,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
               ],
               requestData: _data
             });
-          } else if (workspaceId) {
+          } else if (workspaceId !== undefined) {
             __response = await updateTimeSlotMutateAsync({
               itemIds: [workspaceId, timeSlotId || ''],
               urlDynamicParts: [
@@ -264,7 +264,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                 // added shortLink to all TimeSlot data in cache.
                 const __updatedTimeSlot = [...__oldTimeSlot, __data];
 
-                if (workspaceId) {
+                if (workspaceId !== undefined) {
                   // Updating all TimeSlot data in RQ cache.
                   await updateRQCDataHandler<TimeSlotInterface[] | undefined>({
                     key: [
@@ -291,7 +291,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
 
                 presentZIonToastSuccess(MESSAGES.TIME_SLOT.CREATED);
               } else if (mode === FormMode.EDIT) {
-                if (workspaceId) {
+                if (workspaceId !== undefined) {
                   // Updating all TimeSlot data in RQ cache.
                   await updateRQCDataHandler<TimeSlotInterface | undefined>({
                     key: [
@@ -391,7 +391,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
 
   let isZFetching = mode === FormMode.EDIT;
 
-  if (workspaceId) {
+  if (workspaceId !== undefined) {
     isZFetching = mode === FormMode.EDIT && isCurrentTimeSlotDataFetching;
   } else if (wsShareMemberId) {
     isZFetching = mode === FormMode.EDIT && isCurrentSWSTimeSlotDataFetching;

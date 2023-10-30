@@ -195,7 +195,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
   const shortLinksFoldersReorderHandler = async () => {
     try {
       let _result;
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         // The update api...
         _result = await UpdateShortLinksFoldersReorder({
           requestData: zStringify({

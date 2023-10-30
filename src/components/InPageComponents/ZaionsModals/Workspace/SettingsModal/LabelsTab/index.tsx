@@ -202,13 +202,13 @@ const ZLabelsTab: React.FC<{
       if (_data) {
         let __response;
         if (_mode === FormMode.ADD) {
-          if (workspaceId) {
+          if (workspaceId !== undefined) {
             __response = await createLabelMutateAsync(_data);
           } else if (wsShareMemberId) {
             __response = await createSWSLabelMutateAsync(_data);
           }
         } else if (_mode === FormMode.EDIT && _labelId?.trim()) {
-          if (workspaceId) {
+          if (workspaceId !== undefined) {
             __response = await updateLabelMutateAsync({
               itemIds: [workspaceId!, _labelId],
               urlDynamicParts: [
@@ -266,7 +266,7 @@ const ZLabelsTab: React.FC<{
                 const __updatedLabels = [...__oldLabels, __data];
 
                 // Updating all label data in RQ cache.
-                if (workspaceId) {
+                if (workspaceId !== undefined) {
                   await updateRQCDataHandler<LabelInterface[] | undefined>({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.MAIN,
@@ -292,7 +292,7 @@ const ZLabelsTab: React.FC<{
 
                 presentZIonToastSuccess(MESSAGES.LABEL.CREATED);
               } else if (_mode === FormMode.EDIT) {
-                if (workspaceId) {
+                if (workspaceId !== undefined) {
                   // Updating all labels data in RQ cache.
                   await updateRQCDataHandler<LabelInterface | undefined>({
                     key: [
@@ -361,7 +361,7 @@ const ZLabelsTab: React.FC<{
     try {
       if (_labelId) {
         let __response;
-        if (workspaceId) {
+        if (workspaceId !== undefined) {
           __response = await deleteLabelMutate({
             itemIds: [workspaceId!, _labelId],
             urlDynamicParts: [
@@ -417,7 +417,7 @@ const ZLabelsTab: React.FC<{
             );
 
             // Updating data in RQ cache.
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               await updateRQCDataHandler<LabelInterface[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.MAIN,
@@ -464,7 +464,7 @@ const ZLabelsTab: React.FC<{
           ...oldValues,
           labelsData: shareWSLabelsData || []
         }));
-      } else if (workspaceId) {
+      } else if (workspaceId !== undefined) {
         setCompState(oldValues => ({
           ...oldValues,
           labelsData: labelsData || []

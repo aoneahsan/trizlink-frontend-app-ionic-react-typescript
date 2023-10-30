@@ -385,7 +385,7 @@ const ZShortLinksListPage: React.FC = () => {
   // Invalid inpage RQ keys.
   const invalidedQueries = async () => {
     try {
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         // Workspace.
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
@@ -404,7 +404,7 @@ const ZShortLinksListPage: React.FC = () => {
           workspaceId,
           folderState.shortlink
         ]);
-      } else if (wsShareId && shareWSMemberId) {
+      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
         // Share workspace.
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
@@ -450,7 +450,7 @@ const ZShortLinksListPage: React.FC = () => {
   const shortLinksFoldersReOrderHandler = async () => {
     try {
       let _result;
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         // The update api...
         _result = await UpdateShortLinksFoldersReorder({
           requestData: zStringify({
@@ -459,7 +459,7 @@ const ZShortLinksListPage: React.FC = () => {
           itemIds: [],
           urlDynamicParts: []
         });
-      } else if (wsShareId && shareWSMemberId) {
+      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
         _result = await UpdateSWSShortLinksFoldersReorder({
           requestData: zStringify({
             folders: compState.shortLinksFoldersReorder.Ids
@@ -961,7 +961,7 @@ const ZInpageMainContent: React.FC = () => {
   // #region Functions.
   const invalidedQueries = async () => {
     try {
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         // Workspace.
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
@@ -980,7 +980,7 @@ const ZInpageMainContent: React.FC = () => {
           workspaceId,
           folderState.shortlink
         ]);
-      } else if (wsShareId && shareWSMemberId) {
+      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
         // Share workspace.
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
