@@ -9,13 +9,13 @@ import React, { ReactNode } from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import {
-	Chart as ChartJS,
-	CategoryScale,
-	LinearScale,
-	BarElement,
-	Title,
-	Tooltip,
-	Legend,
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
 } from 'chart.js';
 
 /**
@@ -40,15 +40,15 @@ import {
  * */
 
 const ZChartHOC: React.FC<{ children: ReactNode }> = ({ children }) => {
-	ChartJS.register(
-		CategoryScale,
-		LinearScale,
-		BarElement,
-		Title,
-		Tooltip,
-		Legend
-	);
-	return <>{children}</>;
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+  );
+  return <>{children}</>;
 };
 
 export default ZChartHOC;

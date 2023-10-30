@@ -9,12 +9,8 @@ import {
 import {
   fetchAndActivate,
   isSupported,
-  getAll,
   getRemoteConfig,
-  setLogLevel,
-  ensureInitialized,
-  getString,
-  getValue
+  setLogLevel
 } from 'firebase/remote-config';
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';

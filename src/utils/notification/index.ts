@@ -1,4 +1,4 @@
-import { toast, ToastContent, ToastOptions } from 'react-toastify';
+import { toast, type ToastContent, type ToastOptions } from 'react-toastify';
 import { NOTIFICATIONS } from '@/utils/constants';
 
 export const showNotification = (
@@ -11,7 +11,7 @@ export const showNotification = (
     position: 'top-right',
     pauseOnHover: true,
     type,
-    ...options,
+    ...options
   });
 };
 

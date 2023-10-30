@@ -4,6 +4,7 @@
 import {
   QueryFilters,
   QueryKey,
+  useInfiniteQuery,
   useMutation,
   useQuery,
   useQueryClient
@@ -125,6 +126,8 @@ export const useZRQGetRequest = <T>({
          * !second argument must be get because this hook is used to get data.
          * third argument is if this is the authenticated request or not.
          * @return return the data from api.
+         * fourth argument _itemIds if in url you went to put some ids, with will replace by fifth argument _urlDynamicParts.
+         * fifth argument _urlDynamicParts if in url you went to put some ids this ids will be replaced by _urlDynamicParts.
          */
         return await zAxiosApiRequest<T>({
           _url: _url,
@@ -187,6 +190,185 @@ export const useZRQGetRequest = <T>({
     //   // throw the request_failed error
     //   _showAlertOnError && reportCustomError(_error);
     // },
+    select: data => {
+      if (_shouldExtractData) {
+        switch (_extractType) {
+          case ZRQGetRequestExtractEnum.extractItems:
+            return (data as unknown as { data: { items: T } })?.data?.items;
+
+          case ZRQGetRequestExtractEnum.extractItem:
+            return (data as unknown as { data: { item: T } })?.data?.item;
+
+          case ZRQGetRequestExtractEnum.extractData:
+            return (data as unknown as { data: T })?.data;
+
+          default:
+            return data;
+        }
+      }
+    },
+    refetchOnWindowFocus: _queryOptions.refetchOnWindowFocus,
+    networkMode: _queryOptions.networkMode,
+    retry: _queryOptions.retry,
+    staleTime: _staleTime
+  });
+
+  if (__response?.error) {
+    (async () => {
+      const _error = __response.error;
+      // need to dismiss the loader first, then showing error just so, user will not get redirected to login without knowing that there was a authenticated error
+      // OnError dismissing loader...
+      zAppWiseIonicLoaderIsOpenedRSelector &&
+        _showLoader &&
+        void dismissZIonLoader();
+
+      if (_error instanceof AxiosError) {
+        const __error = (_error as AxiosError)?.response;
+        const __errorMessage = (__error?.data as { errors: { item: string[] } })
+          ?.errors?.item[0];
+        console.log({ __errorMessage });
+        // check if it's unauthenticated error
+        if (__error?.status && __error?.status === errorCodes.unauthenticated) {
+          // clear localstorage
+          await clearAuthDataFromLocalStorageAndRecoil(resetUserAccountState);
+
+          window.location.replace(ZaionsRoutes.LoginRoute);
+
+          // showInfoNotification(MESSAGES.Login.loginExpiredMessage);
+        } else if (__error?.status === errorCodes.notFound) {
+          const __data = {
+            message: __errorMessage || 'Not found',
+            status: __error?.status
+          };
+          void STORAGE.SET(LOCALSTORAGE_KEYS.ERROR_DATA, __data);
+
+          // redirect to 404
+          window.location.replace(ZaionsRoutes.Error.Z404);
+        } else {
+          // showing error alert...
+          _showAlertOnError && void presentZIonErrorAlert();
+        }
+      } else {
+        // showing error alert...
+        _showAlertOnError && void presentZIonErrorAlert();
+      }
+
+      // throw the request_failed error
+      _showAlertOnError && reportCustomError(_error);
+    })();
+  }
+
+  if (__response?.data) {
+    // onSucceed dismissing loader...
+    zAppWiseIonicLoaderIsOpenedRSelector &&
+      _showLoader &&
+      void dismissZIonLoader();
+    // zConsoleLog({
+    // 	message:
+    // 		'From ZaionsHook -> useZRQCreateRequest -> useQuery -> onSuccess',
+    // 	data: _data,
+    // });
+  }
+
+  return __response;
+};
+
+export const useZInfiniteQuery = <T>({
+  _url,
+  _key,
+  _itemsIds,
+  _urlDynamicParts,
+  _shouldFetchWhenIdPassed,
+  _authenticated,
+  _showLoader = true,
+  _shouldExtractData = true,
+  _extractType = ZRQGetRequestExtractEnum.extractItems,
+  _staleTime = 10 * 60000,
+  _checkPermissions = true,
+  _showAlertOnError = true,
+  _queryOptions = {
+    refetchOnWindowFocus: false,
+    networkMode: 'offlineFirst',
+    retry: 2
+  }
+}: {
+  _url: API_URL_ENUM;
+  _key: string[];
+  _shouldExtractData?: boolean;
+  _extractType?: ZRQGetRequestExtractEnum;
+  _authenticated?: boolean;
+  _showLoader?: boolean;
+  _itemsIds?: string[];
+  _urlDynamicParts?: string[];
+  _shouldFetchWhenIdPassed?: boolean;
+  _staleTime?: number | typeof Infinity;
+  _checkPermissions?: boolean;
+  _showAlertOnError?: boolean;
+
+  _queryOptions?: {
+    refetchOnWindowFocus?: boolean;
+    networkMode?: 'always' | 'offlineFirst' | 'online';
+    retry?: number;
+  };
+}) => {
+  const { presentZIonErrorAlert } = useZIonErrorAlert();
+  const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
+  const resetUserAccountState = useResetRecoilState(
+    ZaionsUserAccountRStateAtom
+  );
+  const zAppWiseIonicLoaderIsOpenedRSelector = useRecoilValue(
+    appWiseIonicLoaderIsOpenedRSelector
+  );
+  const { permissionsChecker } = useZPermissionChecker();
+
+  const __response = useInfiniteQuery({
+    queryKey: [..._key],
+    queryFn: async (): Promise<T | undefined | null> => {
+      if (_checkPermissions) {
+        const _permissionsCheckerResult = await permissionsChecker();
+        if (_permissionsCheckerResult) {
+          if (!_permissionsCheckerResult.hasAllPermissions) {
+            return null;
+          }
+        }
+      }
+
+      if (_shouldFetchWhenIdPassed) {
+        return null;
+      } else {
+        // Present ion loading before api start
+        !zAppWiseIonicLoaderIsOpenedRSelector &&
+          _showLoader &&
+          (await presentZIonLoader(
+            _itemsIds?.length
+              ? MESSAGES.GENERAL.API_REQUEST.FETCHING_SINGLE_DATA
+              : MESSAGES.GENERAL.API_REQUEST.FETCHING
+          ));
+
+        /**
+         * @_url - takes the get url to fetch data from api.
+         *  second argument take the method (post | get | update | delete). as this is the get api data so it  will be get
+         * !second argument must be get because this hook is used to get data.
+         * third argument is if this is the authenticated request or not.
+         * fourth argument _itemIds if in url you went to put some ids, with will replace by fifth argument _urlDynamicParts.
+         * fifth argument _urlDynamicParts if in url you went to put some ids this ids will be replaced by _urlDynamicParts.
+         * @return return the data from api.
+         */
+        return await zAxiosApiRequest<T>({
+          _url: _url,
+          _method: 'get',
+          _isAuthenticatedRequest: _authenticated,
+          _data: undefined,
+          _itemIds: _itemsIds,
+          _urlDynamicParts: _urlDynamicParts
+        });
+      }
+    },
+    initialPageParam: 0,
+    getPreviousPageParam: firstPage =>
+      (firstPage as { previousId: unknown })?.previousId ?? undefined,
+    getNextPageParam: lastPage =>
+      (lastPage as { nextId: unknown })?.nextId ?? undefined,
     select: data => {
       if (_shouldExtractData) {
         switch (_extractType) {
@@ -713,7 +895,14 @@ export const useZGetRQCacheData = () => {
   }
 };
 
-// Remove key from RQ cache.
+/**
+ * Remove data from React-query cache.
+ * Made this hook just because to use QueryClient.removeQueries in one place so if in feature we change it, just have to change this in this hook. (as same for all above).
+ * @param
+ * pass the key: string[] in removeRQCDataHandler
+ * @return
+ * removeRQCDataHandler: ({ key }: { key: string[]; }) => void
+ */
 export const useZRemoveRQCacheData = () => {
   try {
     const QueryClient = useQueryClient();
