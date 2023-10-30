@@ -1,14 +1,10 @@
 // Core Imports
 import React from 'react';
+
 // Packages Import
-import { IonItemDivider, IonRippleEffect } from '@ionic/react';
+import { IonRippleEffect } from '@ionic/react';
 import { Form, Formik } from 'formik';
-import {
-  airplaneOutline,
-  logOutOutline,
-  timeOutline,
-  toggleOutline
-} from 'ionicons/icons';
+import { airplaneOutline, logOutOutline, timeOutline } from 'ionicons/icons';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import classNames from 'classnames';
 
@@ -23,7 +19,6 @@ import {
   ZIonNote,
   ZIonContent,
   ZIonIcon,
-  ZIonItem,
   ZIonInput,
   ZIonFooter,
   ZIonImg
@@ -59,7 +54,6 @@ import { FormMode } from '@/types/AdminPanel/index.type';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import ZEditor from '@/components/CustomComponents/ZEditor';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 import { ProductFavicon } from '@/assets/images';
 
 // Styles
@@ -263,7 +257,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
             )}
 
             <ZIonContent className='ion-padding'>
-              <div className='flex ion-text-center ion-justify-content-center flex-col ion-padding-top ion-margin-bottom'>
+              <div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-bottom'>
                 {/* Product Favicon */}
                 <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
                   <ZIonImg
@@ -434,7 +428,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 
                 {/*-- Time Display Field --*/}
                 <div className='mt-5'>
-                  <ZIonTitle className='p-0 block mb-2 text-lg'>
+                  <ZIonTitle className='block p-0 mb-2 text-lg'>
                     Display after
                   </ZIonTitle>
                   <ZIonRow className='mt-4'>
@@ -625,7 +619,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 
                 {/*-- Position Field --*/}
                 <div className='mt-5'>
-                  <ZIonTitle className='p-0 mb-2 block text-lg'>
+                  <ZIonTitle className='block p-0 mb-2 text-lg'>
                     Position
                   </ZIonTitle>
 
@@ -633,7 +627,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                   <ZIonGrid className='ion-no-padding'>
                     <ZIonRow>
                       <ZIonCol sizeXl='7'>
-                        <ZIonRow className='mt-1 gap-2'>
+                        <ZIonRow className='gap-2 mt-1'>
                           {/* Position Top Start */}
                           <ZIonCol
                             size='3.5'
@@ -942,10 +936,10 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                           </ZIonCol>
                         </ZIonRow>
                       </ZIonCol>
-                      <ZIonCol className='ion-text-center flex ion-align-items-center flex-col ion-justify-content-center'>
+                      <ZIonCol className='flex flex-col ion-text-center ion-align-items-center ion-justify-content-center'>
                         {/*-- Animation Field --*/}
                         <div className='mt-5'>
-                          <ZIonTitle className='p-0 mb-2 block text-lg'>
+                          <ZIonTitle className='block p-0 mb-2 text-lg'>
                             🎈 Animation
                           </ZIonTitle>
                           <div className='mt-3'>
@@ -965,7 +959,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 
                         {/*-- Animation Field --*/}
                         <div className='mt-5'>
-                          <ZIonTitle className='p-0 mb-2 block text-lg'>
+                          <ZIonTitle className='block p-0 mb-2 text-lg'>
                             ❌ Closing option
                           </ZIonTitle>
                           <div className='mt-3'>
@@ -993,7 +987,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
              *  */}
             {appSettings.appModalsSetting.actions.showActionInModalFooter && (
               <ZIonFooter>
-                <ZIonRow className=' mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
+                <ZIonRow className='mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
                   <ZIonCol>
                     <ZIonButton
                       fill='outline'

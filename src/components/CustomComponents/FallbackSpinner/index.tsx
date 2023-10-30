@@ -3,7 +3,7 @@ import React from 'react';
 
 // Packages Import
 import { ProductFavicon } from '@/assets/images';
-import { ZIonImg, ZIonSpinner, ZIonText } from '@/components/ZIonComponents';
+import { ZIonImg, ZIonSpinner } from '@/components/ZIonComponents';
 import ZIonPage from '@/components/ZIonPage';
 
 // Type

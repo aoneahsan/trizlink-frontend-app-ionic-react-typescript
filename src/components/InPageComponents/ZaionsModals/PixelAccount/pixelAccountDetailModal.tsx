@@ -1,19 +1,9 @@
 // Core Imports
 import React from 'react';
 // Packages Import
-import { share, toggleOutline } from 'ionicons/icons';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 // Custom Imports
-
-import {
-  ZTable,
-  ZTableHeadCol,
-  ZTableRow,
-  ZTableRowCol,
-  ZTableTBody,
-  ZTableTHead
-} from '@/components/InPageComponents/ZaionsTable/table-styled-components.sc';
 
 // Global Constants
 import {
@@ -22,7 +12,6 @@ import {
   ZIonText,
   ZIonHeader,
   ZIonContent,
-  ZIonIcon,
   ZIonFooter,
   ZIonGrid,
   ZIonImg

@@ -8,7 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { closeOutline, toggleOutline } from 'ionicons/icons';
+import { closeOutline } from 'ionicons/icons';
 import { Formik } from 'formik';
 import classNames from 'classnames';
 
@@ -23,7 +23,6 @@ import {
   ZIonIcon,
   ZIonImg,
   ZIonInput,
-  ZIonNote,
   ZIonRow,
   ZIonText
 } from '@/components/ZIonComponents';
@@ -100,7 +99,7 @@ const ZAddNewWorkspaceModal: React.FC<{
   const { getRQCDataHandler } = useZGetRQCacheData();
 
   // Create new workspace API.
-  const { mutateAsync: createWorkspaceMutate, error } = useZRQCreateRequest({
+  const { mutateAsync: createWorkspaceMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.workspace_create_list,
     _queriesKeysToInvalidate: []
   });

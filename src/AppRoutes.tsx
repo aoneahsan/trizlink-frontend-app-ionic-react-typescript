@@ -14,9 +14,7 @@ import ZShareWSStartup from './pages/AdminPanel/ShareWS/Startup';
 const ZInvitationSLRedirectPage = lazy(
   () => import('./pages/InvitationSLRedirect')
 );
-const ZSWSShortLinksListPage = lazy(
-  () => import('./pages/AdminPanel/ShareWS/ShortLinks/List')
-);
+
 const ZShareWSView = lazy(() => import('./pages/AdminPanel/ShareWS/View'));
 const TestingReactDropzone = lazy(() => import('./Testing/ReactDropZone'));
 const Z400View = lazy(() => import('./components/Errors/400'));

@@ -43,7 +43,6 @@ import { STORAGE, zAxiosApiRequest } from '@/utils/helpers';
  * ? Import of recoil states is a Recoil State import
  * */
 import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
-import { ErrorCodeEnum } from '@/utils/customErrorType';
 interface AuthenticateHOCPropsType {
   children: ReactNode;
 }

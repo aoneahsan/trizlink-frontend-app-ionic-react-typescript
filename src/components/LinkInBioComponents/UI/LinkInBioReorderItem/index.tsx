@@ -13,7 +13,7 @@ import routeQueryString from 'qs';
 import { appsOutline, pencilOutline } from 'ionicons/icons';
 import { useFormikContext } from 'formik';
 import { OverlayEventDetail } from '@ionic/core';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -29,7 +29,6 @@ import {
 } from '@/components/ZIonComponents';
 import ZLinkInBioAvatarBlock from '@/components/LinkInBioComponents/UI/AvatarBlock';
 import ZLinkInBioButtonBlock from '@/components/LinkInBioComponents/UI/ButtonBlock';
-import ZLinkInBioCardBlock from '@/components/LinkInBioComponents/UI/CardBlock';
 import ZLinkInBioTextBlock from '@/components/LinkInBioComponents/UI/TextBlock';
 import ZLinkInBioRSSBlock from '@/components/LinkInBioComponents/UI/ZLinkInBioRSSBlock';
 import ZLinkInBioCalendarBlock from '@/components/LinkInBioComponents/UI/CalendarBlock';
@@ -54,8 +53,7 @@ import { reportCustomError } from '@/utils/customErrorType';
 import {
   createRedirectRoute,
   extractInnerData,
-  generatePredefinedThemeBackgroundValue,
-  zJsonParse
+  generatePredefinedThemeBackgroundValue
 } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
@@ -236,7 +234,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 
           if (
             element.id === (routeQSearchParams as { blockId: string }).blockId
-          )
+          ) {
             // Redirect to block
             zNavigatePushRoute(
               createRedirectRoute({
@@ -252,6 +250,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
                 }
               })
             );
+          }
         }
       }
     } catch (error) {

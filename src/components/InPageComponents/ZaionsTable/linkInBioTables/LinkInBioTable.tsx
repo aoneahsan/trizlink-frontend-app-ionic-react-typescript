@@ -1,5 +1,5 @@
 // Core Imports
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Packages Imports
 import routeQueryString from 'qs';
@@ -8,7 +8,6 @@ import {
   chevronForwardOutline,
   createOutline,
   ellipsisVerticalOutline,
-  fileTrayFullOutline,
   playBackOutline,
   playForwardOutline,
   trashBinOutline
@@ -36,12 +35,10 @@ import {
   ZIonCol,
   ZIonRow,
   ZIonText,
-  ZIonContent,
   ZIonIcon,
   ZIonItem,
   ZIonList,
   ZIonCheckbox,
-  ZIonTitle,
   ZIonSkeletonText,
   ZIonButton,
   ZIonSelect,
@@ -103,7 +100,7 @@ import ZaionsAddLinkInBioModal from '../../ZaionsModals/AddNewLinkInBioModal';
 const ZaionsLinkInBioLinksTable: React.FC<{
   showSkeleton?: boolean;
 }> = ({ showSkeleton = false }) => {
-  const { folderId, workspaceId } = useParams<{
+  const { workspaceId } = useParams<{
     folderId: string;
     workspaceId: string;
   }>();

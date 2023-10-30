@@ -10,7 +10,6 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import Countdown, {
-  CountdownRendererFn,
   CountdownRenderProps,
   CountdownTimeDelta
 } from 'react-countdown';

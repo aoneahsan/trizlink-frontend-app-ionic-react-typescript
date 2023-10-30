@@ -32,6 +32,7 @@ import {
   ZIonText
 } from '@/components/ZIonComponents';
 import ZWorkspaceTimeSlotFormModal from '../../TimeSlotFormModal';
+import ZCan from '@/components/Can';
 
 /**
  * Custom Hooks Imports go down
@@ -61,6 +62,12 @@ import { reportCustomError } from '@/utils/customErrorType';
 import { showErrorNotification } from '@/utils/notification';
 import MESSAGES from '@/utils/messages';
 import { extractInnerData } from '@/utils/helpers';
+import {
+  permissionCheckModeEnum,
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Type Imports go down
@@ -72,14 +79,6 @@ import {
   TimeSlotInterface
 } from '@/types/AdminPanel/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import ZCan from '@/components/Can';
-import {
-  permissionCheckModeEnum,
-  permissionsEnum,
-  permissionsTypeEnum,
-  shareWSPermissionEnum
-} from '@/utils/enums/RoleAndPermissions';
-import classNames from 'classnames';
 
 /**
  * Recoil State Imports go down

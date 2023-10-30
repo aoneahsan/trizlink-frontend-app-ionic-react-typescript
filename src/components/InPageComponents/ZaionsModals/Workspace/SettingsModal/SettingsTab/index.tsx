@@ -22,9 +22,7 @@ import {
   ZIonRow,
   ZIonText
 } from '@/components/ZIonComponents';
-import ZTimezoneInput, {
-  ZTimezoneSelector
-} from '@/components/CustomComponents/ZTimezone';
+import { ZTimezoneSelector } from '@/components/CustomComponents/ZTimezone';
 import { alertCircleOutline, eyeOffOutline } from 'ionicons/icons';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import { Formik } from 'formik';
@@ -51,7 +49,6 @@ import {
 } from '@/utils/notification';
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 import { useZIonAlert, useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**

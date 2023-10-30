@@ -36,11 +36,11 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     '@typescript-eslint/member-delimiter-style': 'off', // keep this off as it's useless
+    'no-new': 'off', // need this like this otherwise we can not use "new" keyword in our project, ahsan need to check this further to confirm.
 
     // rules disabled for now
-    eqeqeq: 'off',
-    curly: 'off',
-    'no-new': 'off',
+    // eqeqeq: 'off',
+    // curly: 'off',
     'no-tabs': 'off',
     'no-void': 'off',
     'no-empty': 'off',
@@ -78,7 +78,7 @@ module.exports = {
     '@typescript-eslint/dot-notation': 'off',
     '@typescript-eslint/return-await': 'off',
     '@typescript-eslint/comma-dangle': 'off',
-    '@typescript-eslint/no-unused-vars': 'off', // need to turn this on
+    // '@typescript-eslint/no-unused-vars': 'off', // need to turn this on
     '@typescript-eslint/prefer-includes': 'off',
     '@typescript-eslint/naming-convention': 'off', // need to turn this on
     '@typescript-eslint/no-dynamic-delete': 'off',

@@ -13,10 +13,10 @@ import {
   cameraOutline,
   checkmarkCircle,
   closeOutline,
-  imageOutline,
-  logoFacebook
+  imageOutline
 } from 'ionicons/icons';
 import classNames from 'classnames';
+import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 
 /**
  * Custom Imports go down
@@ -36,6 +36,8 @@ import {
   ZIonTextareaShort
 } from '@/components/ZIonComponents';
 import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/FileUploadModal';
+import ZPlatformColorPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/PlatformColorPopover';
+import ZPlatformIconsPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/PlatformIconsPopover';
 
 /**
  * Custom Hooks Imports go down
@@ -49,6 +51,12 @@ import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
  * */
 import { validateField, zJsonParse } from '@/utils/helpers';
 import { ZaionsInfo } from '@/utils/constants';
+import { VALIDATION_RULE } from '@/utils/enums';
+import {
+  ContentStyleData,
+  PlatformColorsData,
+  PlatformIconsData
+} from '@/data/UserDashboard/Workspace/MockUpPage/index.data';
 
 /**
  * Type Imports go down
@@ -59,16 +67,6 @@ import {
   workspaceFormConnectPagesEnum
 } from '@/types/AdminPanel/workspace';
 import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
-import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
-import { VALIDATION_RULE } from '@/utils/enums';
-import { url } from 'inspector';
-import ZPlatformColorPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/PlatformColorPopover';
-import ZPlatformIconsPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/PlatformIconsPopover';
-import {
-  ContentStyleData,
-  PlatformColorsData,
-  PlatformIconsData
-} from '@/data/UserDashboard/Workspace/MockUpPage/index.data';
 
 /**
  * Recoil State Imports go down

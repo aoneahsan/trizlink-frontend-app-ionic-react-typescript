@@ -2,9 +2,9 @@
 import React from 'react';
 // Packages Import
 import { Form, Formik } from 'formik';
-import { documentTextOutline, toggleOutline } from 'ionicons/icons';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import classNames from 'classnames';
+import { AxiosError } from 'axios';
 
 // Custom Imports
 import {
@@ -13,13 +13,22 @@ import {
   ZIonText,
   ZIonRouterLink,
   ZIonHeader,
-  ZIonNote,
   ZIonContent,
-  ZIonIcon,
   ZIonFooter,
   ZIonInput,
   ZIonImg
 } from '@/components/ZIonComponents';
+import { ZIonButton } from '@/components/ZIonComponents';
+import ZCan from '@/components/Can';
+
+// Custom hooks
+import {
+  useZGetRQCacheData,
+  useZRQCreateRequest,
+  useZRQUpdateRequest,
+  useZUpdateRQCacheData
+} from '@/ZaionsHooks/zreactquery-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Global Constants
 import {
@@ -28,43 +37,31 @@ import {
   zStringify
 } from '@/utils/helpers';
 import MESSAGES from '@/utils/messages';
-
-// Images
-
-// Recoil States
-import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
-
-// Types
-import { folderState, FormMode } from '@/types/AdminPanel/index.type';
-import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
-import { FormikSetErrorsType, resetFormType } from '@/types/ZaionsFormik.type';
-import {
-  useZGetRQCacheData,
-  useZRQCreateRequest,
-  useZRQUpdateRequest,
-  useZUpdateRQCacheData
-} from '@/ZaionsHooks/zreactquery-hooks';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
-import { ZIonButton } from '@/components/ZIonComponents';
 import { showSuccessNotification } from '@/utils/notification';
 import { reportCustomError, ZCustomError } from '@/utils/customErrorType';
 import CONSTANTS from '@/utils/constants';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
-import { AxiosError } from 'axios';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
-import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
-import { LinkFolderType } from '@/types/AdminPanel/linksType';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { ProductFavicon } from '@/assets/images';
 import {
   permissionCheckModeEnum,
   permissionsEnum,
   permissionsTypeEnum,
   shareWSPermissionEnum
 } from '@/utils/enums/RoleAndPermissions';
-import ZCan from '@/components/Can';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+
+// Images
+import { ProductFavicon } from '@/assets/images';
+
+// Recoil States
+import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
+import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
+
+// Types
+import { folderState, FormMode } from '@/types/AdminPanel/index.type';
+import { FormikSetErrorsType, resetFormType } from '@/types/ZaionsFormik.type';
+import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { LinkFolderType } from '@/types/AdminPanel/linksType';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 // Styles
 

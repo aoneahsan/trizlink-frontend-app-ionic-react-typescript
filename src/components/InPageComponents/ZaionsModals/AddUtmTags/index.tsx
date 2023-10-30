@@ -2,8 +2,7 @@
 import React from 'react';
 // Packages Import
 import { Formik, Form } from 'formik';
-import { toggleOutline } from 'ionicons/icons';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import classNames from 'classnames';
 
 // Custom Imports
@@ -74,8 +73,9 @@ const ZaionsAddUtmTags: React.FC<{
 }) => {
   // #region Recoil states.
   const appSettings = useRecoilValue(ZaionsAppSettingsRState);
-  const [ZaionsUTMTagsTemplateFormState, setZaionsUTMTagsTemplateFormState] =
-    useRecoilState(UTMTagsTemplateFormState);
+  const setZaionsUTMTagsTemplateFormState = useSetRecoilState(
+    UTMTagsTemplateFormState
+  );
   // #endregion
 
   // #region Custom hooks.

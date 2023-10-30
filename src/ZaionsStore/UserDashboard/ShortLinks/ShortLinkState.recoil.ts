@@ -1,4 +1,4 @@
-import { atom, atomFamily, selector } from 'recoil';
+import { atom, selector } from 'recoil';
 
 // Data
 // import { ZaionsShortLinkData } from '@/data/UserDashboard/ShortLinksData';

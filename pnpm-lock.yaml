@@ -57,11 +57,7 @@ dependencies:
     specifier: ^7.5.2
     version: 7.5.2(react-dom@18.2.0)(react-router-dom@5.3.4)(react-router@5.3.4)(react@18.2.0)
   '@sentry/react':
-<<<<<<< HEAD
-    specifier: ^7.75.1
-=======
     specifier: ^7.76.0
->>>>>>> 387150ffb766590624037d754647832b8cd3e2ab
     version: 7.76.0(react@18.2.0)
   '@splidejs/react-splide':
     specifier: ^0.7.12

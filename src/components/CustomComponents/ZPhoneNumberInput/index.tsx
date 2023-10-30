@@ -9,10 +9,7 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import { ZIonNote } from '@/components/ZIonComponents';
-import PhoneInput, {
-  formatPhoneNumberIntl,
-  isPossiblePhoneNumber
-} from 'react-phone-number-input';
+import PhoneInput, { formatPhoneNumberIntl } from 'react-phone-number-input';
 import classNames from 'classnames';
 
 /**

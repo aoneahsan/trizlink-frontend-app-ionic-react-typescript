@@ -7,13 +7,8 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import classNames from 'classnames';
-import {
-  appsOutline,
-  ellipsisVertical,
-  fileTrayOutline,
-  share
-} from 'ionicons/icons';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { appsOutline, ellipsisVertical, fileTrayOutline } from 'ionicons/icons';
+import { useSetRecoilState } from 'recoil';
 import { useParams } from 'react-router';
 
 /**
@@ -32,7 +27,6 @@ import {
   ZIonSkeletonText,
   ZIonText
 } from '@/components/ZIonComponents';
-import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 import ZCan from '@/components/Can';
 
@@ -47,7 +41,7 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * ? Like import of Constant is a global constants import
  * */
 import CONSTANTS from '@/utils/constants';
-import { createRedirectRoute, replaceParams } from '@/utils/helpers';
+import { createRedirectRoute } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import {
   permissionCheckModeEnum,
@@ -106,8 +100,6 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
     shareWSMemberId: string;
     wsShareId: string;
   }>();
-
-  const ZDashboardState = useRecoilValue(ZDashboardRState);
 
   //
   const setFolderFormState = useSetRecoilState(FolderFormState);

@@ -18,7 +18,6 @@ register();
  * ? Import of style sheet is a style import
  * */
 import 'swiper/css';
-import classNames from 'classnames';
 
 /**
  * Images Imports go down
@@ -30,22 +29,22 @@ import classNames from 'classnames';
  * ? Like if you have a type for props it should be please Down
  * */
 interface ZSwiperInterface {
-	onSlideChange?: (swiper: unknown) => void;
-	onSwiper?: (swiper: unknown) => void;
-	slidesPerView?: number;
-	spaceBetween?: number;
-	children?: ReactNode;
-	style?: { [key: string]: unknown };
-	className?: string;
+  onSlideChange?: (swiper: unknown) => void;
+  onSwiper?: (swiper: unknown) => void;
+  slidesPerView?: number;
+  spaceBetween?: number;
+  children?: ReactNode;
+  style?: { [key: string]: unknown };
+  className?: string;
 }
 
 interface ZSwiperSlideInterface {
-	onSlideChange?: (swiper: unknown) => void;
-	onSwiper?: (swiper: unknown) => void;
-	slidesPerView?: number;
-	spaceBetween?: number;
-	children?: ReactNode;
-	className?: string;
+  onSlideChange?: (swiper: unknown) => void;
+  onSwiper?: (swiper: unknown) => void;
+  slidesPerView?: number;
+  spaceBetween?: number;
+  children?: ReactNode;
+  className?: string;
 }
 
 /**
@@ -55,51 +54,51 @@ interface ZSwiperSlideInterface {
  * */
 
 export const ZSwiperContainer: React.FC<ZSwiperInterface> = ({
-	onSlideChange,
-	onSwiper,
-	slidesPerView = 3,
-	spaceBetween = 0,
-	children,
-	style,
-	className,
+  onSlideChange,
+  onSwiper,
+  slidesPerView = 3,
+  spaceBetween = 0,
+  children,
+  style,
+  className
 }) => {
-	return (
-		<swiper-container
-			// class={classNames(className, {
-			// 	mySwiper: true,
-			// })}
-			slides-per-view={slidesPerView}
-			space-between={spaceBetween}
-			mousewheel-force-to-axis='true'
-			style={style}
-			onSwiper={onSwiper}
-			onSlideChange={onSlideChange}
-			// navigation='true'
-			// pagination='true'
-			// centered-slides={true}
-			// pagination={{
-			// 	hideOnClick: true,
-			// }}
-			// breakpoints={{
-			// 	768: {
-			// 		slidesPerView: 3,
-			// 	},
-			// }}
-			// pagination-dynamic-bullets='true'
-			// pagination-type='progressbar'
-			// effect=''
-			// grab-cursor='true'
-			// centered-slides='true'
-			// slides-per-view='auto'
-			// coverflow-effect-rotate='50'
-			// coverflow-effect-stretch='0'
-			// coverflow-effect-depth='100'
-			// coverflow-effect-modifier='1'
-			// coverflow-effect-slide-shadows='false'
-		>
-			{children}
-		</swiper-container>
-	);
+  return (
+    <swiper-container
+      // class={classNames(className, {
+      // 	mySwiper: true,
+      // })}
+      slides-per-view={slidesPerView}
+      space-between={spaceBetween}
+      mousewheel-force-to-axis='true'
+      style={style}
+      onSwiper={onSwiper}
+      onSlideChange={onSlideChange}
+      // navigation='true'
+      // pagination='true'
+      // centered-slides={true}
+      // pagination={{
+      // 	hideOnClick: true,
+      // }}
+      // breakpoints={{
+      // 	768: {
+      // 		slidesPerView: 3,
+      // 	},
+      // }}
+      // pagination-dynamic-bullets='true'
+      // pagination-type='progressbar'
+      // effect=''
+      // grab-cursor='true'
+      // centered-slides='true'
+      // slides-per-view='auto'
+      // coverflow-effect-rotate='50'
+      // coverflow-effect-stretch='0'
+      // coverflow-effect-depth='100'
+      // coverflow-effect-modifier='1'
+      // coverflow-effect-slide-shadows='false'
+    >
+      {children}
+    </swiper-container>
+  );
 };
 
 // export const ZSwiper = React.forwardRef(
@@ -109,15 +108,14 @@ export const ZSwiperContainer: React.FC<ZSwiperInterface> = ({
 // );
 
 export const ZSwiperSlide: React.FC<ZSwiperSlideInterface> = ({
-	children,
-	className,
+  children,
+  className
 }) => {
-	return (
-		<swiper-slide
-			className={className}
-			style={{ width: 'min-content !important' }}
-		>
-			{children}
-		</swiper-slide>
-	);
+  return (
+    <swiper-slide
+      className={className}
+      style={{ width: 'min-content !important' }}>
+      {children}
+    </swiper-slide>
+  );
 };

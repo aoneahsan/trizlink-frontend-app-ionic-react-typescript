@@ -31,7 +31,7 @@ import {
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
-import { closeCircleOutline, closeOutline } from 'ionicons/icons';
+import { closeCircleOutline } from 'ionicons/icons';
 
 /**
  * Recoil State Imports go down

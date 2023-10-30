@@ -20,8 +20,7 @@ import {
   ZIonButton,
   ZIonIcon,
   ZIonLabel,
-  ZIonSkeletonText,
-  ZIonText
+  ZIonSkeletonText
 } from '@/components/ZIonComponents';
 import ZWorkspacesListPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/ListPopover';
 
@@ -31,6 +30,7 @@ import ZWorkspacesListPopover from '@/components/InPageComponents/ZaionsPopovers
  * */
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -45,8 +45,6 @@ import { API_URL_ENUM } from '@/utils/enums';
  * */
 import { workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import { useParams } from 'react-router';
 
 /**
  * Recoil State Imports go down
@@ -129,13 +127,6 @@ const ZWorkspaceSwitcher: React.FC<{
   >({
     _url: API_URL_ENUM.workspace_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
-  });
-
-  const { isFetching: isSharedWorkspacesDataFetching } = useZRQGetRequest<
-    workspaceInterface[]
-  >({
-    _url: API_URL_ENUM.ws_share_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
   });
 
   // #endregion

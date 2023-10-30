@@ -71,10 +71,11 @@ const ZCreateWorkspaceBtn: React.FC<{
         CONSTANTS.testingSelectors.workspace.listPage.createWorkspaceButton
       }
       onClick={() => {
-        if (!isWorkspacesDataFetching)
+        if (!isWorkspacesDataFetching) {
           presentZWorkspaceCreateModal({
             _cssClass: 'create-workspace-modal-size'
           });
+        }
       }}>
       <ZIonIcon
         icon={addOutline}

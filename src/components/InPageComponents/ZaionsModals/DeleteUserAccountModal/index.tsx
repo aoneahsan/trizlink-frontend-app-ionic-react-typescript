@@ -25,7 +25,6 @@ import {
   ZIonContent,
   ZIonIcon,
   ZIonItem,
-  ZIonInput,
   ZIonFooter,
   ZIonList
 } from '@/components/ZIonComponents';

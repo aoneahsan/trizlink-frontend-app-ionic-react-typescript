@@ -14,22 +14,21 @@ import React from 'react';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonButton,
-	ZIonIcon,
-	ZIonItem,
-	ZIonList,
-	ZIonRouterLink,
-	ZIonText,
+  ZIonButton,
+  ZIonIcon,
+  ZIonItem,
+  ZIonList,
+  ZIonText
 } from '@/components/ZIonComponents';
 import {
-	bulbOutline,
-	cashOutline,
-	chatboxEllipsesOutline,
-	ellipse,
-	giftOutline,
-	helpCircleOutline,
-	logoAndroid,
-	logoApple,
+  bulbOutline,
+  cashOutline,
+  chatboxEllipsesOutline,
+  ellipse,
+  giftOutline,
+  helpCircleOutline,
+  logoAndroid,
+  logoApple
 } from 'ionicons/icons';
 import CONSTANTS from '@/utils/constants';
 
@@ -75,157 +74,165 @@ import CONSTANTS from '@/utils/constants';
  * */
 
 const ZHelpCenterPopover: React.FC<{
-	dismissZIonPopover: (data?: string, role?: string | undefined) => void;
-	zNavigatePushRoute: (_url: string) => void;
+  dismissZIonPopover: (data?: string, role?: string | undefined) => void;
+  zNavigatePushRoute: (_url: string) => void;
 }> = ({ dismissZIonPopover, zNavigatePushRoute }) => {
-	return (
-		<div className='px-1 py-1'>
-			<ZIonText
-				className='block mx-3 mt-2 mb-2 text-xs tracking-widest'
-				color='medium'
-			>
-				APP STATUS
-			</ZIonText>
+  return (
+    <div className='px-1 py-1'>
+      <ZIonText
+        className='block mx-3 mt-2 mb-2 text-xs tracking-widest'
+        color='medium'>
+        APP STATUS
+      </ZIonText>
 
-			{/* All Systems Operational */}
-			<ZIonItem
-				lines='full'
-				minHeight='2.3rem'
-				className='cursor-pointer ion-activatable'
-				testingselector={
-					CONSTANTS.testingSelectors.topBar.helpPopover.allSystemsOperations
-				}
-			>
-				<ZIonIcon icon={ellipse} className='w-3 h-3' color='success' />
-				<ZIonText className='block text-sm tracking-wide ms-2'>
-					All Systems Operational
-				</ZIonText>
-			</ZIonItem>
+      {/* All Systems Operational */}
+      <ZIonItem
+        lines='full'
+        minHeight='2.3rem'
+        className='cursor-pointer ion-activatable'
+        testingselector={
+          CONSTANTS.testingSelectors.topBar.helpPopover.allSystemsOperations
+        }>
+        <ZIonIcon
+          icon={ellipse}
+          className='w-3 h-3'
+          color='success'
+        />
+        <ZIonText className='block text-sm tracking-wide ms-2'>
+          All Systems Operational
+        </ZIonText>
+      </ZIonItem>
 
-			{/*  */}
-			<ZIonList lines='none'>
-				{/* What's new? */}
-				<ZIonItem
-					minHeight='2.3rem'
-					className='cursor-pointer ion-activatable'
-					testingselector={
-						CONSTANTS.testingSelectors.topBar.helpPopover.whatsNew
-					}
-				>
-					<ZIonIcon icon={giftOutline} className='w-5 h-5' />
-					<ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
-						What's new?
-					</ZIonText>
-				</ZIonItem>
+      {/*  */}
+      <ZIonList lines='none'>
+        {/* What's new? */}
+        <ZIonItem
+          minHeight='2.3rem'
+          className='cursor-pointer ion-activatable'
+          testingselector={
+            CONSTANTS.testingSelectors.topBar.helpPopover.whatsNew
+          }>
+          <ZIonIcon
+            icon={giftOutline}
+            className='w-5 h-5'
+          />
+          <ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
+            What's new?
+          </ZIonText>
+        </ZIonItem>
 
-				{/* Suggest an idea */}
-				<ZIonItem
-					minHeight='2.3rem'
-					className='cursor-pointer ion-activatable'
-					testingselector={
-						CONSTANTS.testingSelectors.topBar.helpPopover.suggestAnIdea
-					}
-				>
-					<ZIonIcon icon={bulbOutline} className='w-5 h-5' />
-					<ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
-						Suggest an idea
-					</ZIonText>
-				</ZIonItem>
+        {/* Suggest an idea */}
+        <ZIonItem
+          minHeight='2.3rem'
+          className='cursor-pointer ion-activatable'
+          testingselector={
+            CONSTANTS.testingSelectors.topBar.helpPopover.suggestAnIdea
+          }>
+          <ZIonIcon
+            icon={bulbOutline}
+            className='w-5 h-5'
+          />
+          <ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
+            Suggest an idea
+          </ZIonText>
+        </ZIonItem>
 
-				{/* Help center */}
-				<ZIonItem
-					minHeight='2.3rem'
-					className='cursor-pointer ion-activatable'
-					testingselector={
-						CONSTANTS.testingSelectors.topBar.helpPopover.helpCenter
-					}
-				>
-					<ZIonIcon icon={helpCircleOutline} className='w-5 h-5' />
-					<ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
-						Help center
-					</ZIonText>
-				</ZIonItem>
+        {/* Help center */}
+        <ZIonItem
+          minHeight='2.3rem'
+          className='cursor-pointer ion-activatable'
+          testingselector={
+            CONSTANTS.testingSelectors.topBar.helpPopover.helpCenter
+          }>
+          <ZIonIcon
+            icon={helpCircleOutline}
+            className='w-5 h-5'
+          />
+          <ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
+            Help center
+          </ZIonText>
+        </ZIonItem>
 
-				{/* Price */}
-				<ZIonItem
-					minHeight='2.3rem'
-					className='cursor-pointer ion-activatable'
-					testingselector={CONSTANTS.testingSelectors.topBar.helpPopover.price}
-				>
-					<ZIonIcon icon={cashOutline} className='w-5 h-5' />
-					<ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
-						Price
-					</ZIonText>
-				</ZIonItem>
+        {/* Price */}
+        <ZIonItem
+          minHeight='2.3rem'
+          className='cursor-pointer ion-activatable'
+          testingselector={CONSTANTS.testingSelectors.topBar.helpPopover.price}>
+          <ZIonIcon
+            icon={cashOutline}
+            className='w-5 h-5'
+          />
+          <ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
+            Price
+          </ZIonText>
+        </ZIonItem>
 
-				{/* Contact support */}
-				<ZIonItem
-					minHeight='2.3rem'
-					className='cursor-pointer ion-activatable'
-					testingselector={
-						CONSTANTS.testingSelectors.topBar.helpPopover.contactSupport
-					}
-				>
-					<ZIonIcon icon={chatboxEllipsesOutline} className='w-5 h-5' />
-					<ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
-						Contact support
-					</ZIonText>
-				</ZIonItem>
-			</ZIonList>
+        {/* Contact support */}
+        <ZIonItem
+          minHeight='2.3rem'
+          className='cursor-pointer ion-activatable'
+          testingselector={
+            CONSTANTS.testingSelectors.topBar.helpPopover.contactSupport
+          }>
+          <ZIonIcon
+            icon={chatboxEllipsesOutline}
+            className='w-5 h-5'
+          />
+          <ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
+            Contact support
+          </ZIonText>
+        </ZIonItem>
+      </ZIonList>
 
-			<ZIonItem
-				minHeight='.1rem'
-				lines='full'
-				className='cursor-pointer ion-activatable'
-			/>
+      <ZIonItem
+        minHeight='.1rem'
+        lines='full'
+        className='cursor-pointer ion-activatable'
+      />
 
-			{/*  */}
-			<ZIonText
-				className='block mx-3 mt-2 mb-2 text-xs tracking-widest'
-				color='medium'
-			>
-				DOWNLOAD APPS
-			</ZIonText>
+      {/*  */}
+      <ZIonText
+        className='block mx-3 mt-2 mb-2 text-xs tracking-widest'
+        color='medium'>
+        DOWNLOAD APPS
+      </ZIonText>
 
-			<div className='flex gap-1 mx-3 ion-align-items-center'>
-				{/* iOS */}
-				<ZIonButton
-					className='w-1/2 ion-no-margin'
-					size='small'
-					fill='clear'
-					color='dark'
-					testingselector={
-						CONSTANTS.testingSelectors.topBar.helpPopover.iSOAppBtn
-					}
-				>
-					<ZIonIcon icon={logoApple} />
-					<ZIonText className='ps-1 mt-[3px]'>iOS</ZIonText>
-				</ZIonButton>
+      <div className='flex gap-1 mx-3 ion-align-items-center'>
+        {/* iOS */}
+        <ZIonButton
+          className='w-1/2 ion-no-margin'
+          size='small'
+          fill='clear'
+          color='dark'
+          testingselector={
+            CONSTANTS.testingSelectors.topBar.helpPopover.iSOAppBtn
+          }>
+          <ZIonIcon icon={logoApple} />
+          <ZIonText className='ps-1 mt-[3px]'>iOS</ZIonText>
+        </ZIonButton>
 
-				{/* Middle line */}
-				<div
-					className='h-[0.9em]'
-					style={{
-						borderInlineStart: '1px solid rgba(5, 5, 5, 0.06)',
-					}}
-				></div>
+        {/* Middle line */}
+        <div
+          className='h-[0.9em]'
+          style={{
+            borderInlineStart: '1px solid rgba(5, 5, 5, 0.06)'
+          }}></div>
 
-				{/* Android */}
-				<ZIonButton
-					className='w-1/2 ion-no-margin'
-					fill='clear'
-					size='small'
-					color='dark'
-					testingselector={
-						CONSTANTS.testingSelectors.topBar.helpPopover.androidAppBtn
-					}
-				>
-					<ZIonIcon icon={logoAndroid} />
-					<ZIonText className='ps-1'>Android</ZIonText>
-				</ZIonButton>
-			</div>
-		</div>
-	);
+        {/* Android */}
+        <ZIonButton
+          className='w-1/2 ion-no-margin'
+          fill='clear'
+          size='small'
+          color='dark'
+          testingselector={
+            CONSTANTS.testingSelectors.topBar.helpPopover.androidAppBtn
+          }>
+          <ZIonIcon icon={logoAndroid} />
+          <ZIonText className='ps-1'>Android</ZIonText>
+        </ZIonButton>
+      </div>
+    </div>
+  );
 };
 
 export default ZHelpCenterPopover;

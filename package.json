@@ -1,5 +1,5 @@
 {
-  "name": "com.zaions.zlink",
+  "name": "com.zaions.trizlink",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -14,7 +14,7 @@
     "name": "Zaions (Software House)",
     "url": "https://zaions.com"
   },
-  "displayName": "ZLink",
+  "displayName": "Trizlink",
   "categories": [
     "Extension Packs",
     "Other"
@@ -28,9 +28,9 @@
     "cypress.open": "cypress open",
     "test.e2e": "cypress run",
     "test.unit": "vitest",
-    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'"
+    "lint": "eslint src/**/*.{js,jsx,ts,tsx}"
   },
-  "description": "ZLink project - Project of Zaions (https://zaions.com).",
+  "description": "Trizlink project - Project of Zaions (https://zaions.com).",
   "dependencies": {
     "@capacitor/android": "^5.5.1",
     "@capacitor/app": "^5.0.6",

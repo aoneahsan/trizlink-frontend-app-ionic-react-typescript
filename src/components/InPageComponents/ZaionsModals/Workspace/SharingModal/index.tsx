@@ -8,13 +8,7 @@ import React, { useState } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import {
-  checkboxOutline,
-  closeOutline,
-  notificationsOutline,
-  peopleOutline,
-  personAddOutline
-} from 'ionicons/icons';
+import { closeOutline } from 'ionicons/icons';
 import classNames from 'classnames';
 
 /**
@@ -26,11 +20,8 @@ import {
   ZIonContent,
   ZIonFooter,
   ZIonGrid,
-  ZIonHeader,
   ZIonIcon,
   ZIonImg,
-  ZIonSegment,
-  ZIonSegmentButton,
   ZIonText
 } from '@/components/ZIonComponents';
 import ZInviteTab from './InviteTab';
@@ -59,9 +50,6 @@ import {
   WorkspaceSharingTabEnum
 } from '@/types/AdminPanel/workspace';
 import { FormMode } from '@/types/AdminPanel/index.type';
-import { ProductFavicon } from '@/assets/images';
-import { useZRQUpdateRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from '@/utils/enums';
 
 /**
  * Recoil State Imports go down
@@ -77,6 +65,7 @@ import { API_URL_ENUM } from '@/utils/enums';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
+import { ProductFavicon } from '@/assets/images';
 
 /**
  * Component props type go down
@@ -111,7 +100,7 @@ const ZWorkspacesSharingModal: React.FC<{
   wsShareId
 }) => {
   // Component state
-  const [compState, setCompState] = useState<{
+  const [compState] = useState<{
     activeTab: WorkspaceSharingTabEnum;
   }>({
     activeTab: Tab

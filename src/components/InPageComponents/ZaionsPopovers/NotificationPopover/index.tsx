@@ -2,6 +2,26 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
+import React, { useState } from 'react';
+
+/**
+ * Packages Imports go down
+ * ? Like import of ionic components is a packages import
+ * */
+import classNames from 'classnames';
+import { Formik } from 'formik';
+import {
+  fileTrayStackedOutline,
+  listCircleOutline,
+  personAdd,
+  refreshOutline,
+  settingsOutline
+} from 'ionicons/icons';
+
+/**
+ * Custom Imports go down
+ * ? Like import of custom components is a custom import
+ * */
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
@@ -19,23 +39,12 @@ import {
   ZIonSkeletonText,
   ZIonText
 } from '@/components/ZIonComponents';
-import {
-  IZNotification,
-  ZNotificationEnum,
-  ZTeamMemberInvitationEnum
-} from '@/types/AdminPanel/index.type';
-import { zNotificationSlotEnum } from '@/types/CustomHooks/zgeneric-hooks.type';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import CONSTANTS from '@/utils/constants';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { reportCustomError } from '@/utils/customErrorType';
-import {
-  API_URL_ENUM,
-  extractInnerDataOptionsEnum,
-  notificationTypeEnum
-} from '@/utils/enums';
-import { extractInnerData, zStringify } from '@/utils/helpers';
-import { showSuccessNotification } from '@/utils/notification';
+import ZViewInvitationModal from '@/components/InPageComponents/ZaionsModals/Workspace/ViewInvitationModal';
+
+/**
+ * Custom Hooks Imports go down
+ * ? Like import of custom Hook is a custom import
+ * */
 import { useZNotification } from '@/ZaionsHooks/ZGenericHooks';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import {
@@ -44,45 +53,31 @@ import {
   useZRQUpdateRequest,
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
-import classNames from 'classnames';
-import { Formik } from 'formik';
-import {
-  checkmarkOutline,
-  closeOutline,
-  fileTrayStackedOutline,
-  listCircleOutline,
-  logoFacebook,
-  personAdd,
-  refreshOutline,
-  settingsOutline
-} from 'ionicons/icons';
-import React, { useState } from 'react';
-import ZViewInvitationModal from '../../ZaionsModals/Workspace/ViewInvitationModal';
-
-/**
- * Packages Imports go down
- * ? Like import of ionic components is a packages import
- * */
-
-/**
- * Custom Imports go down
- * ? Like import of custom components is a custom import
- * */
-
-/**
- * Custom Hooks Imports go down
- * ? Like import of custom Hook is a custom import
- * */
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import CONSTANTS from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { reportCustomError } from '@/utils/customErrorType';
+import {
+  API_URL_ENUM,
+  extractInnerDataOptionsEnum,
+  notificationTypeEnum
+} from '@/utils/enums';
+import { extractInnerData } from '@/utils/helpers';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import {
+  IZNotification,
+  ZNotificationEnum
+} from '@/types/AdminPanel/index.type';
+import { zNotificationSlotEnum } from '@/types/CustomHooks/zgeneric-hooks.type';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Recoil State Imports go down
@@ -120,10 +115,9 @@ const ZNotificationPopover: React.FC<{
 }> = ({ dismissZIonPopover, workspaceId }) => {
   const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   const { presentZNotification } = useZNotification();
-  const {
-    data: userInvitationNotificationsData,
-    refetch: refetchNotifications
-  } = useZRQGetRequest<IZNotification[]>({
+  const { data: userInvitationNotificationsData } = useZRQGetRequest<
+    IZNotification[]
+  >({
     _url: API_URL_ENUM.user_unread_notifications_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION.MAIN,

@@ -1,22 +1,17 @@
 // Core Imports
-import React, { CSSProperties, FunctionComponent } from 'react';
+import React from 'react';
 
 // Packages Imports
-import Select, {
-  ActionMeta,
-  ClearIndicatorProps,
-  MultiValue,
-  PropsValue
-} from 'react-select';
+import Select, { ActionMeta, MultiValue, PropsValue } from 'react-select';
+import classNames from 'classnames';
 
-// Interface
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+// Custom Imports
 import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
-import classNames from 'classnames';
-import { ZIonIcon } from '@/components/ZIonComponents';
-import { closeOutline } from 'ionicons/icons';
+
+// Types Imports
+import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 interface ZaionsRSelectType {
   options: readonly ZaionsRSelectOptions[];
@@ -42,39 +37,39 @@ interface ZaionsRSelectType {
   ) => void;
 }
 
-const CustomClearText: FunctionComponent = () => (
-  <ZIonIcon
-    color='dark'
-    icon={closeOutline}
-  />
-);
-const ClearIndicator = (
-  props: ClearIndicatorProps<ZaionsRSelectOptions, true>
-) => {
-  const {
-    children = <CustomClearText />,
-    getStyles,
-    innerProps: { ref, ...restInnerProps }
-  } = props;
-  return (
-    <div
-      {...restInnerProps}
-      ref={ref}
-      style={getStyles('clearIndicator', props) as CSSProperties}>
-      <div style={{ padding: '0px 0px' }}>{children}</div>
-    </div>
-  );
-};
+// const CustomClearText: FunctionComponent = () => (
+//   <ZIonIcon
+//     color='dark'
+//     icon={closeOutline}
+//   />
+// );
+// const ClearIndicator = (
+//   props: ClearIndicatorProps<ZaionsRSelectOptions, true>
+// ) => {
+//   const {
+//     children = <CustomClearText />,
+//     getStyles,
+//     innerProps: { ref, ...restInnerProps }
+//   } = props;
+//   return (
+//     <div
+//       {...restInnerProps}
+//       ref={ref}
+//       style={getStyles('clearIndicator', props) as CSSProperties}>
+//       <div style={{ padding: '0px 0px' }}>{children}</div>
+//     </div>
+//   );
+// };
 
-const ClearIndicatorStyles = <T extends object>(
-  base: T,
-  state: ClearIndicatorProps<ZaionsRSelectOptions>
-) => ({
-  ...base,
-  cursor: 'pointer',
-  color: state.isFocused ? 'dark' : 'light',
-  border: 0
-});
+// const ClearIndicatorStyles = <T extends object>(
+//   base: T,
+//   state: ClearIndicatorProps<ZaionsRSelectOptions>
+// ) => ({
+//   ...base,
+//   cursor: 'pointer',
+//   color: state.isFocused ? 'dark' : 'light',
+//   border: 0
+// });
 
 const ZaionsRSelect: React.FC<ZaionsRSelectType> = props => {
   const _testinglistselector = props.testinglistselector

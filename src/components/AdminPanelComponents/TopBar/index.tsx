@@ -40,14 +40,12 @@ import ZInviteButton from '../InviteButton';
  * ? Like import of custom Hook is a custom import
  * */
 import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { API_URL_ENUM } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import {
   permissionsEnum,
@@ -60,8 +58,6 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { workspaceInterface } from '@/types/AdminPanel/workspace';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Recoil State Imports go down
@@ -122,26 +118,6 @@ const ZAdminPanelTopBar: React.FC<{
     }
   );
   // #endregion
-
-  // #region APIs.
-
-  const { data: currentWorkspaceData, isFetching: isCurrentWorkspaceFetching } =
-    useZRQGetRequest<workspaceInterface>({
-      _url: API_URL_ENUM.workspace_update_delete,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
-        workspaceId || ''
-      ],
-      _authenticated: true,
-      _itemsIds: [workspaceId || ''],
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: workspaceId ? false : true,
-      _extractType: ZRQGetRequestExtractEnum.extractItem
-    });
-
-  // #endregion
-
-  const isZFetching = isCurrentWorkspaceFetching;
 
   return (
     <ZIonRow

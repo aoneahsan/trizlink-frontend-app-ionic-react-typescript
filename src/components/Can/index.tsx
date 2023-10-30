@@ -1,7 +1,4 @@
-import {
-  UserRoleAndPermissionsInterface,
-  WSRoleType
-} from '@/types/UserAccount/index.type';
+import { UserRoleAndPermissionsInterface } from '@/types/UserAccount/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
@@ -19,7 +16,7 @@ import {
 } from '@/ZaionsHooks/zreactquery-hooks';
 import { currentLoggedInUserRoleAndPermissionsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 import React, { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import Z403View from '../Errors/403';
 
 interface CanComponentProps {

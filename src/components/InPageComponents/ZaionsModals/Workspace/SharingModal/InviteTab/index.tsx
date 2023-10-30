@@ -24,15 +24,12 @@ import { AxiosError } from 'axios';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZWorkspaceFormRoleSelectorPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/RoleSelectorPopover';
 import {
-  ZIonAvatar,
   ZIonBadge,
   ZIonButton,
   ZIonCol,
   ZIonGrid,
   ZIonIcon,
-  ZIonImg,
   ZIonInput,
   ZIonRow,
   ZIonText,
@@ -47,7 +44,7 @@ import ZaionsSeparator from '@/components/InPageComponents/ZaionsSepatator/Zaion
  * ? Like import of custom Hook is a custom import
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import { useZIonPopover, useZIonToast } from '@/ZaionsHooks/zionic-hooks';
+import { useZIonToast } from '@/ZaionsHooks/zionic-hooks';
 import {
   useZGetRQCacheData,
   useZRQCreateRequest,
@@ -60,7 +57,6 @@ import {
  * ? Like import of Constant is a global constants import
  * */
 import {
-  createRedirectRoute,
   extractInnerData,
   formatApiRequestErrorForFormikFormField,
   validateField,
@@ -94,7 +90,6 @@ import { ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import { FormMode } from '@/types/AdminPanel/index.type';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Recoil State Imports go down
@@ -202,13 +197,6 @@ const ZInviteTab: React.FC<{
     useZRQUpdateRequest({
       _url: API_URL_ENUM.sws_member_create_short_url,
       _loaderMessage: MESSAGES.MEMBER.INVITE_LINK_API
-    });
-  // #endregion
-
-  // #region modal & popover.
-  const { presentZIonPopover: presentZWorkspaceFormRoleSelectorPopover } =
-    useZIonPopover(ZWorkspaceFormRoleSelectorPopover, {
-      selectedRole: compState?.selectedItem?.memberRole?.name
     });
   // #endregion
 

@@ -34,13 +34,9 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
 
 // Recoils
-import {
-  ZaionsUserAccountRStateAtom,
-  currentLoggedInUserRoleAndPermissionsRStateAtom
-} from '@/ZaionsStore/UserAccount/index.recoil';
+import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 import { appWiseIonicLoaderIsOpenedRSelector } from '@/ZaionsStore/AppRStates';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { Console } from 'console';
 
 /**
  * The custom hook for getting data from an API using useQuery hook from react-query package.
@@ -471,7 +467,7 @@ export const useZRQCreateRequest = <T>({
   _loaderMessage = MESSAGES.GENERAL.API_REQUEST.CREATING
 }: {
   _url: API_URL_ENUM;
-  _queriesKeysToInvalidate?: QueryFilters;
+  _queriesKeysToInvalidate?: QueryFilters | QueryKey;
   _authenticated?: boolean;
   _itemsIds?: string[];
   _urlDynamicParts?: string[];
@@ -486,10 +482,6 @@ export const useZRQCreateRequest = <T>({
   const resetUserAccountState = useResetRecoilState(
     ZaionsUserAccountRStateAtom
   );
-  const currentLoggedInUserRoleAndPermissionsStateAtom = useRecoilValue(
-    currentLoggedInUserRoleAndPermissionsRStateAtom
-  );
-
   // const { getRQCDataHandler } = useZGetRQCacheData();
 
   // const _roleAndPermissions = getRQCDataHandler({
@@ -533,7 +525,7 @@ export const useZRQCreateRequest = <T>({
       });
     },
     onMutate: async () => {
-      await queryClient.cancelQueries(_queriesKeysToInvalidate);
+      await queryClient.cancelQueries(_queriesKeysToInvalidate as QueryFilters);
     },
     onSuccess: async _data => {
       // onSucceed dismissing loader...
@@ -583,7 +575,7 @@ export const useZRQUpdateRequest = <T>({
   _loaderMessage = MESSAGES.GENERAL.API_REQUEST.UPDATING
 }: {
   _url: API_URL_ENUM;
-  _queriesKeysToInvalidate?: QueryFilters;
+  _queriesKeysToInvalidate?: QueryFilters | QueryKey;
   authenticated?: boolean;
   _contentType?: zAxiosApiRequestContentType;
   _showAlertOnError?: boolean;
@@ -595,9 +587,6 @@ export const useZRQUpdateRequest = <T>({
   const queryClient = useQueryClient();
   const resetUserAccountState = useResetRecoilState(
     ZaionsUserAccountRStateAtom
-  );
-  const currentLoggedInUserRoleAndPermissionsStateAtom = useRecoilValue(
-    currentLoggedInUserRoleAndPermissionsRStateAtom
   );
   return useMutation({
     mutationFn: async ({
@@ -639,7 +628,7 @@ export const useZRQUpdateRequest = <T>({
       });
     },
     onMutate: () => {
-      void queryClient.cancelQueries(_queriesKeysToInvalidate);
+      void queryClient.cancelQueries(_queriesKeysToInvalidate as QueryFilters);
     },
     onSuccess: _data => {
       // onSucceed dismissing loader...
@@ -700,9 +689,6 @@ export const useZRQDeleteRequest = <T>({
   const queryClient = useQueryClient();
   const resetUserAccountState = useResetRecoilState(
     ZaionsUserAccountRStateAtom
-  );
-  const currentLoggedInUserRoleAndPermissionsStateAtom = useRecoilValue(
-    currentLoggedInUserRoleAndPermissionsRStateAtom
   );
 
   return useMutation({
@@ -825,7 +811,7 @@ export const useZUpdateRQCacheData = () => {
             if (Array.isArray(oldData)) {
               const updatedData = [...oldData];
               const index = updatedData.findIndex(el => el.id === id);
-              if (index != -1) {
+              if (index !== -1) {
                 updatedData[index] = data;
               }
               return updatedData;
@@ -843,7 +829,7 @@ export const useZUpdateRQCacheData = () => {
                 const index = updatedDataItems.findIndex(
                   (el: unknown) => (el as { id: string })?.id === id
                 );
-                if (index != -1) {
+                if (index !== -1) {
                   updatedDataItems[index] = data;
                 }
                 (updatedData as { data: { items: unknown[] } }).data.items =

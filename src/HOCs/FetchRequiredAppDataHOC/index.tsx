@@ -133,11 +133,7 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
 
   // #region APIS.
   // getting the role & permissions of the current log in user.
-  const {
-    data: getUserRoleAndPermissions,
-    refetch: refetchUserRoleAndPermissions,
-    isFetched: isUserRoleAndPermissionsFetching
-  } = useZRQGetRequest<{
+  const { data: getUserRoleAndPermissions } = useZRQGetRequest<{
     isSuccess: boolean;
     result: UserRoleAndPermissionsInterface;
   }>({

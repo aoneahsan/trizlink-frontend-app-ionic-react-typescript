@@ -2,7 +2,7 @@
 import React from 'react';
 // Packages Import
 import { Form, Formik } from 'formik';
-import { documentTextOutline, toggleOutline } from 'ionicons/icons';
+import { toggleOutline } from 'ionicons/icons';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import classNames from 'classnames';
 
@@ -261,7 +261,7 @@ const ZaionsAddAPIKeyModal: React.FC<{
              *  */}
             {appSettings.appModalsSetting.actions.showActionInModalFooter && (
               <ZIonFooter>
-                <ZIonRow className='mx-3 mt-2  ion-justify-content-between ion-align-items-center'>
+                <ZIonRow className='mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
                   <ZIonCol>
                     <ZIonButton
                       fill='outline'

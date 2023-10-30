@@ -3,7 +3,7 @@ import React from 'react';
 
 // Packages Import
 import { Form, Formik } from 'formik';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import classNames from 'classnames';
 
 // Custom Imports
@@ -20,6 +20,16 @@ import {
   ZIonButton,
   ZIonSelect
 } from '@/components/ZIonComponents';
+import ZCan from '@/components/Can';
+
+// Custom hooks
+import {
+  useZGetRQCacheData,
+  useZRQUpdateRequest,
+  useZRQCreateRequest,
+  useZUpdateRQCacheData
+} from '@/ZaionsHooks/zreactquery-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Global Constants
 import {
@@ -38,6 +48,12 @@ import {
 import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
 import { showSuccessNotification } from '@/utils/notification';
+import {
+  permissionCheckModeEnum,
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 
 // Images
 import { ProductFavicon } from '@/assets/images';
@@ -53,62 +69,47 @@ import {
   PixelPlatformsEnum
 } from '@/types/AdminPanel/linksType';
 import { FormMode } from '@/types/AdminPanel/index.type';
-import { PixelAccountFormState } from '@/ZaionsStore/FormStates/pixelAccountFormState.recoil';
 import { resetFormType } from '@/types/ZaionsFormik.type';
 import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import {
-  useZGetRQCacheData,
-  useZRQUpdateRequest,
-  useZRQCreateRequest,
-  useZUpdateRQCacheData
-} from '@/ZaionsHooks/zreactquery-hooks';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import ZCan from '@/components/Can';
-import {
-  permissionCheckModeEnum,
-  permissionsEnum,
-  permissionsTypeEnum,
-  shareWSPermissionEnum
-} from '@/utils/enums/RoleAndPermissions';
 
 // Styles
 
 // Pixel Id Placeholder check
-const PIXEL_ID_PLACEHOLDER = (curSelectedPlatformType?: PixelPlatformsEnum) => {
-  switch (curSelectedPlatformType) {
-    case PixelPlatformsEnum.facebook:
-      return '1234567891234567';
-    case PixelPlatformsEnum.twitter:
-      return 'zaionsOfficial';
-    case PixelPlatformsEnum.google_analytics:
-    case PixelPlatformsEnum.google_analytics_4:
-      return 'UA-000000-0';
-    case PixelPlatformsEnum.google_ads:
-      return '123456789';
-    case PixelPlatformsEnum.google_tag_manager:
-      return 'GMT-0000AAA';
-    case PixelPlatformsEnum.quora:
-      return 'd42ba18b3f684e8fb5d68cf9c628b6d';
-    case PixelPlatformsEnum.snapchat:
-      return '7c47481d-fde8-4263-89b3-4a63367e';
-    case PixelPlatformsEnum.pinterest:
-      return '1234567891234';
-    case PixelPlatformsEnum.bing:
-    case PixelPlatformsEnum.linkedin:
-      return '1234567';
-    case PixelPlatformsEnum.adroll:
-      return 'YourAdvertiserID|YourPixelID';
-    case PixelPlatformsEnum.nexus:
-      return '';
-    case PixelPlatformsEnum.tiktok:
-      return 'ABCDEFGHIGKLMNOPQRST';
-    case PixelPlatformsEnum.vk:
-      return 'VK-ABCD-000000-ABCD';
-    default:
-      return '1234567891234567';
-  }
-};
+// const PIXEL_ID_PLACEHOLDER = (curSelectedPlatformType?: PixelPlatformsEnum) => {
+//   switch (curSelectedPlatformType) {
+//     case PixelPlatformsEnum.facebook:
+//       return '1234567891234567';
+//     case PixelPlatformsEnum.twitter:
+//       return 'zaionsOfficial';
+//     case PixelPlatformsEnum.google_analytics:
+//     case PixelPlatformsEnum.google_analytics_4:
+//       return 'UA-000000-0';
+//     case PixelPlatformsEnum.google_ads:
+//       return '123456789';
+//     case PixelPlatformsEnum.google_tag_manager:
+//       return 'GMT-0000AAA';
+//     case PixelPlatformsEnum.quora:
+//       return 'd42ba18b3f684e8fb5d68cf9c628b6d';
+//     case PixelPlatformsEnum.snapchat:
+//       return '7c47481d-fde8-4263-89b3-4a63367e';
+//     case PixelPlatformsEnum.pinterest:
+//       return '1234567891234';
+//     case PixelPlatformsEnum.bing:
+//     case PixelPlatformsEnum.linkedin:
+//       return '1234567';
+//     case PixelPlatformsEnum.adroll:
+//       return 'YourAdvertiserID|YourPixelID';
+//     case PixelPlatformsEnum.nexus:
+//       return '';
+//     case PixelPlatformsEnum.tiktok:
+//       return 'ABCDEFGHIGKLMNOPQRST';
+//     case PixelPlatformsEnum.vk:
+//       return 'VK-ABCD-000000-ABCD';
+//     default:
+//       return '1234567891234567';
+//   }
+// };
 const ZaionsAddPixelAccount: React.FC<{
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
   pixelId?: string;
@@ -130,8 +131,10 @@ const ZaionsAddPixelAccount: React.FC<{
   shareWSMemberId,
   wsShareId
 }) => {
+  // #region Recoil state.
   const platformData = useRecoilValue(PixelAccountPlatformOptionsRState);
   const appSettings = useRecoilValue(ZaionsAppSettingsRState);
+  // #endregion
 
   // #region Custom Hooks.
   const { getRQCDataHandler } = useZGetRQCacheData();
