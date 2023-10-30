@@ -28,7 +28,8 @@
     "cypress.open": "cypress open",
     "test.e2e": "cypress run",
     "test.unit": "vitest",
-    "lint": "eslint src/**/*.{js,jsx,ts,tsx}"
+    "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
+    "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx}"
   },
   "description": "Trizlink project - Project of Zaions (https://zaions.com).",
   "dependencies": {

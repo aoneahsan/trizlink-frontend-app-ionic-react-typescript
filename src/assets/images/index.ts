@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 // type SVGFileRequireType = {
-// 	default: string;
+// default: string;
 // };
 
 // Home Page
@@ -441,7 +441,7 @@ import brandedLinksHero from './pages/features/brandedlinkshero.jpg';
 import autoBrandMin from './pages/features/autobrand-min.gif';
 import customizationMin1 from './pages/features/customization-min-1.gif';
 import smsMin from './pages/features/sms-min.gif';
-import domainSearch from './pages/features/yourbrnd-branding.gif';
+import domainSearch from './pages/features/domainsearch.gif';
 import deepLink from './pages/features/deeplink-min.gif';
 import IntegrationsCloudMobile from './pages/features/integrationscloud_mobile2.jpg';
 import SiteQRCodesSubSection from './pages/features/Site_QR-Codes_Sub-section.png';
@@ -463,7 +463,7 @@ import brandConsistencyResource from './pages/solution/brand-consistency_resourc
 import secretsSocialSmbResource from './pages/solution/secrets_social_smb_resource.png';
 import digitalmarketingMobile2 from './pages/solution/digitalmarketing_mobile2.jpg';
 import socialmediaMobile2 from './pages/solution/socialmedia_mobile2.jpg';
-import developerHeroMobile2 from './pages/solution/socialmedia_mobile2.jpg';
+import developerHeroMobile2 from './pages/solution/developer-hero-mobile.jpg';
 
 // Global
 import starsQuoteWidget from './global-images/stars-quote-widget.png';
@@ -486,9 +486,7 @@ import Q22022ProductFeaturesBlog from './global-images/q2-2022-product-features-
 import ProductLogo from './global-images/zlink-logo-zaions.png';
 import ProductFavicon from './global-images/favicon-z-link-white-bg_720.png';
 
-import BlogoOrange from './global-images/zlink-logo-zaions.png';
-
-import productSmLogo from './global-images/zlink-logo-zaions.png';
+import productSmLogo from './global-images/favicon-z-link-16-16.jpg';
 
 import linktreeLogoSymbol from './global-images/linktree-logo-symbol.png';
 
@@ -826,7 +824,6 @@ export {
   Q22022ProductFeaturesBlog,
   ProductLogo,
   ProductFavicon,
-  BlogoOrange,
   productSmLogo,
   linktreeLogoSymbol,
   uploadModalCamera,
