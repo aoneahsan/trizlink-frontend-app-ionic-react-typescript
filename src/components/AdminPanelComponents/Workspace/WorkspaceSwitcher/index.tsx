@@ -43,7 +43,7 @@ import { API_URL_ENUM } from '@/utils/enums';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
@@ -83,9 +83,9 @@ const ZWorkspaceSwitcher: React.FC<{
   const { presentZIonPopover: presentZWorkspacesListPopover } = useZIonPopover(
     ZWorkspacesListPopover,
     {
-      workspaceId: workspaceId,
-      shareWSMemberId: shareWSMemberId,
-      wsShareId: wsShareId
+      workspaceId,
+      shareWSMemberId,
+      wsShareId
     }
   );
   // #endregion
@@ -97,12 +97,14 @@ const ZWorkspaceSwitcher: React.FC<{
       _url: API_URL_ENUM.workspace_update_delete,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
-        workspaceId || ''
+        workspaceId ?? ''
       ],
       _authenticated: true,
-      _itemsIds: [workspaceId || ''],
+      _itemsIds: [workspaceId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: workspaceId ? false : true,
+      _shouldFetchWhenIdPassed: !(
+        workspaceId != null && workspaceId?.length > 0
+      ),
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
 
@@ -111,11 +113,13 @@ const ZWorkspaceSwitcher: React.FC<{
     useZRQGetRequest<workspaceInterface>({
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
-        wsShareId!
+        wsShareId ?? ''
       ],
       _url: API_URL_ENUM.ws_share_info_data,
-      _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
-      _itemsIds: [shareWSMemberId!],
+      _shouldFetchWhenIdPassed: !(
+        shareWSMemberId != null && shareWSMemberId?.length > 0
+      ),
+      _itemsIds: [shareWSMemberId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _showLoader: false
@@ -133,9 +137,9 @@ const ZWorkspaceSwitcher: React.FC<{
 
   let isZFetching = isWorkspacesDataFetching;
 
-  if (workspaceId) {
+  if (workspaceId !== undefined) {
     isZFetching = isZFetching && isCurrentWorkspaceFetching;
-  } else if (wsShareId) {
+  } else if (wsShareId !== undefined) {
     isZFetching = isZFetching && isGetShareWSInfoDataFetching;
   }
 
@@ -167,18 +171,18 @@ const ZWorkspaceSwitcher: React.FC<{
       }}>
       <ZUserAvatarButton
         userAvatar={
-          workspaceId
+          workspaceId !== undefined
             ? currentWorkspaceData?.workspaceImage
-            : wsShareId
+            : wsShareId !== undefined
             ? getShareWSInfoData?.workspaceImage
             : ''
         }
         userAvatarUi={
-          workspaceId
+          workspaceId !== undefined
             ? {
                 name: currentWorkspaceData?.workspaceName
               }
-            : wsShareId
+            : wsShareId !== undefined
             ? {
                 name: getShareWSInfoData?.workspaceName
               }
@@ -197,9 +201,9 @@ const ZWorkspaceSwitcher: React.FC<{
           'w-auto': !isLgScale
         })}>
         <ZIonLabel>
-          {workspaceId
+          {workspaceId !== undefined
             ? currentWorkspaceData?.workspaceName
-            : wsShareId
+            : wsShareId !== undefined
             ? getShareWSInfoData?.workspaceName
             : null}
         </ZIonLabel>

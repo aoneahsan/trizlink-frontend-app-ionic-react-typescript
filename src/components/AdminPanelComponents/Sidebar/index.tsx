@@ -29,7 +29,7 @@ import AdminPanelSidebarMenu from '@/components/AdminPanelComponents/Sidebar/Exp
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { AdminPanelSidebarMenuPageEnum } from '@/types/AdminPanel/index.type';
+import { type AdminPanelSidebarMenuPageEnum } from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down

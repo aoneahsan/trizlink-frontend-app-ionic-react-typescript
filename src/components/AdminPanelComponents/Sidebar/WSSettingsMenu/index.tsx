@@ -88,77 +88,91 @@ const ZWSSettingsMenu: React.FC = () => {
 
   // #region checking the route.
   let isMembersPage: boolean | undefined;
-  if (workspaceId) {
+  if (workspaceId !== null) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     isMembersPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members
     )?.isExact;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== null && shareWSMemberId !== null) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     isMembersPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Members
     )?.isExact;
   }
 
   let isReferralProgramPage: boolean | undefined;
-  if (workspaceId) {
+  if (workspaceId !== null) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     isReferralProgramPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.ReferralProgram
     )?.isExact;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== null && shareWSMemberId !== null) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     isReferralProgramPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.ReferralProgram
     )?.isExact;
   }
 
   let isBillingPage: boolean | undefined;
-  if (workspaceId) {
+  if (workspaceId !== null) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     isBillingPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.Billing
     )?.isExact;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== null && shareWSMemberId !== null) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     isBillingPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Billing
     )?.isExact;
   }
 
   let isUserPage: boolean | undefined;
-  if (workspaceId) {
+  if (workspaceId !== null) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     isUserPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.User
     )?.isExact;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== null && shareWSMemberId !== null) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     isUserPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.User
     )?.isExact;
   }
 
   let isPixelPage: boolean | undefined;
-  if (workspaceId) {
+  if (workspaceId !== null) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     isPixelPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel
     )?.isExact;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== null && shareWSMemberId !== null) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     isPixelPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Pixel
     )?.isExact;
   }
 
   let isUTMTagPage: boolean | undefined;
-  if (workspaceId) {
+  if (workspaceId !== null) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     isUTMTagPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag
     )?.isExact;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== null && shareWSMemberId !== null) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     isUTMTagPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.UTMTag
     )?.isExact;
   }
 
   let isEmbedWidgetPage: boolean | undefined;
-  if (workspaceId) {
+  if (workspaceId !== null) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     isEmbedWidgetPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.EmbedWidget
     )?.isExact;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (wsShareId !== null && shareWSMemberId !== null) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     isEmbedWidgetPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.EmbedWidget
     )?.isExact;
@@ -185,10 +199,10 @@ const ZWSSettingsMenu: React.FC = () => {
             CONSTANTS.testingSelectors.WSSettings.menuBar.accordionGroup.value
           }
           value={
-            isBillingPage ||
-            isMembersPage ||
-            isReferralProgramPage ||
-            isUserPage
+            isBillingPage === true ||
+            isMembersPage === true ||
+            isReferralProgramPage === true ||
+            isUserPage === true
               ? WSSettingsPageSect.accountSetting
               : WSSettingsPageSect.workspaceSettings
           }>
@@ -213,14 +227,14 @@ const ZWSSettingsMenu: React.FC = () => {
               <ZCan
                 shareWSId={wsShareId}
                 permissionType={
-                  wsShareId && shareWSMemberId
+                  wsShareId != null && shareWSMemberId != null
                     ? permissionsTypeEnum.shareWSMemberPermissions
                     : permissionsTypeEnum.loggedInUserPermissions
                 }
                 havePermissions={
-                  workspaceId
+                  workspaceId != null
                     ? [permissionsEnum.viewAny_ws_member]
-                    : wsShareId && shareWSMemberId
+                    : wsShareId != null && shareWSMemberId != null
                     ? [shareWSPermissionEnum.viewAny_sws_member]
                     : []
                 }>
@@ -235,14 +249,14 @@ const ZWSSettingsMenu: React.FC = () => {
                     CONSTANTS.testingSelectors.WSSettings.menuBar.as.teamBtn
                   }
                   routerLink={
-                    workspaceId
+                    workspaceId != null
                       ? replaceRouteParams(
                           ZaionsRoutes.AdminPanel.Setting.AccountSettings
                             .Members,
                           [CONSTANTS.RouteParams.workspace.workspaceId],
                           [workspaceId]
                         )
-                      : wsShareId && shareWSMemberId
+                      : wsShareId != null && shareWSMemberId != null
                       ? replaceRouteParams(
                           ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
                             .Members,
@@ -270,14 +284,14 @@ const ZWSSettingsMenu: React.FC = () => {
                   CONSTANTS.testingSelectors.WSSettings.menuBar.as.referralBtn
                 }
                 routerLink={
-                  workspaceId
+                  workspaceId != null
                     ? replaceRouteParams(
                         ZaionsRoutes.AdminPanel.Setting.AccountSettings
                           .ReferralProgram,
                         [CONSTANTS.RouteParams.workspace.workspaceId],
                         [workspaceId]
                       )
-                    : wsShareId && shareWSMemberId
+                    : wsShareId != null && shareWSMemberId != null
                     ? replaceRouteParams(
                         ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
                           .ReferralProgram,
@@ -304,13 +318,13 @@ const ZWSSettingsMenu: React.FC = () => {
                   CONSTANTS.testingSelectors.WSSettings.menuBar.as.billingBtn
                 }
                 routerLink={
-                  workspaceId
+                  workspaceId != null
                     ? replaceRouteParams(
                         ZaionsRoutes.AdminPanel.Setting.AccountSettings.Billing,
                         [CONSTANTS.RouteParams.workspace.workspaceId],
                         [workspaceId]
                       )
-                    : wsShareId && shareWSMemberId
+                    : wsShareId != null && shareWSMemberId != null
                     ? replaceRouteParams(
                         ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Billing,
                         [
@@ -336,13 +350,13 @@ const ZWSSettingsMenu: React.FC = () => {
                   CONSTANTS.testingSelectors.WSSettings.menuBar.as.userBtn
                 }
                 routerLink={
-                  workspaceId
+                  workspaceId != null
                     ? replaceRouteParams(
                         ZaionsRoutes.AdminPanel.Setting.AccountSettings.User,
                         [CONSTANTS.RouteParams.workspace.workspaceId],
                         [workspaceId]
                       )
-                    : wsShareId && shareWSMemberId
+                    : wsShareId != null && shareWSMemberId != null
                     ? replaceRouteParams(
                         ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.User,
                         [
@@ -363,18 +377,18 @@ const ZWSSettingsMenu: React.FC = () => {
             shareWSId={wsShareId}
             checkMode={permissionCheckModeEnum.any}
             permissionType={
-              wsShareId && shareWSMemberId
+              wsShareId != null && shareWSMemberId != null
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }
             havePermissions={
-              workspaceId
+              workspaceId != null
                 ? [
                     permissionsEnum.viewAny_pixel,
                     permissionsEnum.viewAny_utmTag,
                     permissionsEnum.viewAny_embededWidget
                   ]
-                : wsShareId && shareWSMemberId
+                : wsShareId != null && shareWSMemberId != null
                 ? [
                     shareWSPermissionEnum.viewAny_sws_pixel,
                     shareWSPermissionEnum.viewAny_sws_utmTag,
@@ -402,14 +416,14 @@ const ZWSSettingsMenu: React.FC = () => {
                 <ZCan
                   shareWSId={wsShareId}
                   permissionType={
-                    wsShareId && shareWSMemberId
+                    wsShareId != null && shareWSMemberId != null
                       ? permissionsTypeEnum.shareWSMemberPermissions
                       : permissionsTypeEnum.loggedInUserPermissions
                   }
                   havePermissions={
-                    workspaceId
+                    workspaceId != null
                       ? [permissionsEnum.viewAny_pixel]
-                      : wsShareId && shareWSMemberId
+                      : wsShareId != null && shareWSMemberId != null
                       ? [shareWSPermissionEnum.viewAny_sws_pixel]
                       : []
                   }>
@@ -424,14 +438,14 @@ const ZWSSettingsMenu: React.FC = () => {
                       CONSTANTS.testingSelectors.WSSettings.menuBar.ws.pixelBtn
                     }
                     routerLink={
-                      workspaceId
+                      workspaceId != null
                         ? replaceRouteParams(
                             ZaionsRoutes.AdminPanel.Setting.AccountSettings
                               .Pixel,
                             [CONSTANTS.RouteParams.workspace.workspaceId],
                             [workspaceId]
                           )
-                        : wsShareId && shareWSMemberId
+                        : wsShareId != null && shareWSMemberId != null
                         ? replaceRouteParams(
                             ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
                               .Pixel,
@@ -451,14 +465,14 @@ const ZWSSettingsMenu: React.FC = () => {
                 <ZCan
                   shareWSId={wsShareId}
                   permissionType={
-                    wsShareId && shareWSMemberId
+                    wsShareId != null && shareWSMemberId != null
                       ? permissionsTypeEnum.shareWSMemberPermissions
                       : permissionsTypeEnum.loggedInUserPermissions
                   }
                   havePermissions={
-                    workspaceId
+                    workspaceId != null
                       ? [permissionsEnum.viewAny_utmTag]
-                      : wsShareId && shareWSMemberId
+                      : wsShareId != null && shareWSMemberId != null
                       ? [shareWSPermissionEnum.viewAny_sws_utmTag]
                       : []
                   }>
@@ -473,14 +487,14 @@ const ZWSSettingsMenu: React.FC = () => {
                       CONSTANTS.testingSelectors.WSSettings.menuBar.ws.utmBtn
                     }
                     routerLink={
-                      workspaceId
+                      workspaceId != null
                         ? replaceRouteParams(
                             ZaionsRoutes.AdminPanel.Setting.AccountSettings
                               .UTMTag,
                             [CONSTANTS.RouteParams.workspace.workspaceId],
                             [workspaceId]
                           )
-                        : wsShareId && shareWSMemberId
+                        : wsShareId != null && shareWSMemberId != null
                         ? replaceRouteParams(
                             ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
                               .UTMTag,
@@ -500,14 +514,14 @@ const ZWSSettingsMenu: React.FC = () => {
                 <ZCan
                   shareWSId={wsShareId}
                   permissionType={
-                    wsShareId && shareWSMemberId
+                    wsShareId != null && shareWSMemberId != null
                       ? permissionsTypeEnum.shareWSMemberPermissions
                       : permissionsTypeEnum.loggedInUserPermissions
                   }
                   havePermissions={
-                    workspaceId
+                    workspaceId != null
                       ? [permissionsEnum.viewAny_embededWidget]
-                      : wsShareId && shareWSMemberId
+                      : wsShareId != null && shareWSMemberId != null
                       ? [shareWSPermissionEnum.viewAny_sws_embededWidget]
                       : []
                   }>
@@ -523,14 +537,14 @@ const ZWSSettingsMenu: React.FC = () => {
                         .embedWidgetBtn
                     }
                     routerLink={
-                      workspaceId
+                      workspaceId != null
                         ? replaceRouteParams(
                             ZaionsRoutes.AdminPanel.Setting.AccountSettings
                               .EmbedWidget,
                             [CONSTANTS.RouteParams.workspace.workspaceId],
                             [workspaceId]
                           )
-                        : wsShareId && shareWSMemberId
+                        : wsShareId != null && shareWSMemberId != null
                         ? replaceRouteParams(
                             ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
                               .EmbedWidget,

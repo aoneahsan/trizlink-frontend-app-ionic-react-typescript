@@ -83,20 +83,20 @@ const ZInviteButton: React.FC<IZInviteButton> = ({
       expand={isMdScale ? undefined : 'block'}
       testingselector={CONSTANTS.testingSelectors.topBar.teamInviteBtn}
       routerLink={
-        workspaceId
+        workspaceId != null
           ? replaceRouteParams(
               ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
               [CONSTANTS.RouteParams.workspace.workspaceId],
-              [workspaceId!]
+              [workspaceId]
             )
-          : wsShareId && shareWSMemberId
+          : wsShareId != null && shareWSMemberId != null
           ? replaceRouteParams(
               ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Members,
               [
                 CONSTANTS.RouteParams.workspace.wsShareId,
                 CONSTANTS.RouteParams.workspace.shareWSMemberId
               ],
-              [wsShareId!, shareWSMemberId!]
+              [wsShareId, shareWSMemberId]
             )
           : ''
       }>

@@ -37,7 +37,8 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     '@typescript-eslint/member-delimiter-style': 'off', // keep this off as it's useless
     'no-new': 'off', // need this like this otherwise we can not use "new" keyword in our project, ahsan need to check this further to confirm.
-    '@typescript-eslint/semi': 'off' // ahsan setup prettier like this so we need this thing off
+    '@typescript-eslint/semi': 'off', // ahsan setup prettier like this so we need this thing off
+    '@typescript-eslint/indent': 'off' // ahsan moved here, as we are using prettier and that formats the code in specific format which is showing error for this rule, so for now, commenting this but will need to think if this can be a problem or not in future.
 
     // rules disabled for now
     // eqeqeq: 'off',
@@ -65,7 +66,6 @@ module.exports = {
     // 'react/no-children-prop': 'off',
     // 'no-mixed-spaces-and-tabs': 'off',
     // 'react/react-in-jsx-scope': 'off',
-    // '@typescript-eslint/indent': 'off',
     // 'react/no-unknown-property': 'off',
     // '@typescript-eslint/quotes': 'off',
     // 'react-hooks/rules-of-hooks': 'off',
