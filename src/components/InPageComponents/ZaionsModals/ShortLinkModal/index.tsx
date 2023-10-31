@@ -129,9 +129,9 @@ const ZShortLinkModal: React.FC<{
                 '--border-radius': '0px'
               }}
               onClick={() => {
-                navigator.clipboard.writeText(shortUrl);
+                void navigator?.clipboard?.writeText(shortUrl);
 
-                presentZIonToast('✨ Copied', 'tertiary');
+                void presentZIonToast('✨ Copied', 'tertiary');
               }}>
               Copy
             </ZIonButton>
@@ -142,14 +142,14 @@ const ZShortLinkModal: React.FC<{
             <ZCan
               shareWSId={wsShareId}
               permissionType={
-                workspaceId
+                workspaceId !== undefined
                   ? permissionsTypeEnum.loggedInUserPermissions
                   : permissionsTypeEnum.shareWSMemberPermissions
               }
               havePermissions={
-                workspaceId
+                workspaceId !== undefined
                   ? [permissionsEnum.create_shortLink]
-                  : wsShareId && shareWSMemberId
+                  : wsShareId !== undefined && shareWSMemberId !== undefined
                   ? [shareWSPermissionEnum.create_sws_shortLink]
                   : []
               }>
@@ -174,7 +174,7 @@ const ZShortLinkModal: React.FC<{
                     el => el.type === messengerPlatformsBlockEnum.link
                   );
 
-                  if (selectedTypeOptionData) {
+                  if (selectedTypeOptionData !== undefined) {
                     setNewShortLinkTypeOptionDataAtom(_ => ({
                       ...selectedTypeOptionData
                     }));

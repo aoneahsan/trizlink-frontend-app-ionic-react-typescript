@@ -117,7 +117,7 @@ const ZHelpCenterPopover: React.FC<{
             className='w-5 h-5'
           />
           <ZIonText className='block mt-1 text-sm tracking-wide ms-2'>
-            What's new?
+            What&apos;s new?
           </ZIonText>
         </ZIonItem>
 

@@ -6,25 +6,17 @@ import classNames from 'classnames';
 import { ellipse } from 'ionicons/icons';
 
 // Custom Imports
-import {
-  ZIonAvatar,
-  ZIonIcon,
-  ZIonImg,
-  ZIonText
-} from '@/components/ZIonComponents';
-import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
+import { ZIonAvatar, ZIonIcon, ZIonImg } from '@/components/ZIonComponents';
 import { getUiAvatarApiUrl } from '@/utils/helpers/apiHelpers';
 import CONSTANTS from '@/utils/constants';
-import { ZIonColorType } from '@/types/zaionsAppSettings.type';
-import { ZUIAvatarApiDefaultParamsInterface } from '@/types/ZaionsApis.type';
+import { type ZIonColorType } from '@/types/zaionsAppSettings.type';
+import { type ZUIAvatarApiDefaultParamsInterface } from '@/types/ZaionsApis.type';
 
 // Style
 
 // Component Type
 interface ZUserAvatarButtonInterface {
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   active?: boolean;
   userAvatar?: string;
   className?: string;
@@ -77,15 +69,13 @@ const ZUserAvatarButton: React.FC<ZUserAvatarButtonInterface> = ({
           })}>
           <ZIonIcon
             className='w-[60%] h-[70%]'
-            icon={statusIcon || ellipse}
-            color={
-              statusIconColor ? statusIconColor : active ? 'success' : 'light'
-            }
+            icon={statusIcon ?? ellipse}
+            color={statusIconColor ?? (active ? 'success' : 'light')}
           />
         </div>
       )}
       <ZIonImg
-        src={userAvatar || getUiAvatarApiUrl({ ...userAvatarUi })}
+        src={userAvatar ?? getUiAvatarApiUrl({ ...userAvatarUi })}
         className='w-full h-full'
       />
     </ZIonAvatar>

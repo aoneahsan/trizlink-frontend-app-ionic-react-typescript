@@ -94,7 +94,7 @@ import { ZErrorCodeEnum } from '@/utils/enums/ErrorsCodes';
 import {
   FormikSetErrorsType,
   FormikSetFieldTouchedEventType,
-  FormikSetFieldValueEventType
+  FormikSetFieldValueEventVoidType
 } from '@/types/ZaionsFormik.type';
 import ZCountdown from '@/components/CustomComponents/ZCountDown';
 import dayjs from 'dayjs';
@@ -824,7 +824,7 @@ const ZChangePassword: React.FC = () => {
   }: {
     _data: string;
     setErrors: FormikSetErrorsType;
-    setFieldValueFn: FormikSetFieldValueEventType;
+    setFieldValueFn: FormikSetFieldValueEventVoidType;
     setFieldTouchedFn: FormikSetFieldTouchedEventType;
   }) => {
     try {
@@ -899,7 +899,7 @@ const ZChangePassword: React.FC = () => {
     setFieldTouchedFn
   }: {
     setErrors: FormikSetErrorsType;
-    setFieldValueFn: FormikSetFieldValueEventType;
+    setFieldValueFn: FormikSetFieldValueEventVoidType;
     setFieldTouchedFn: FormikSetFieldTouchedEventType;
   }) => {
     try {
@@ -939,7 +939,7 @@ const ZChangePassword: React.FC = () => {
   }: {
     _data: string;
     setErrors: FormikSetErrorsType;
-    setFieldValueFn: FormikSetFieldValueEventType;
+    setFieldValueFn: FormikSetFieldValueEventVoidType;
     setFieldTouchedFn: FormikSetFieldTouchedEventType;
   }) => {
     try {
@@ -1003,7 +1003,7 @@ const ZChangePassword: React.FC = () => {
     setFieldTouchedFn
   }: {
     setErrors: FormikSetErrorsType;
-    setFieldValueFn: FormikSetFieldValueEventType;
+    setFieldValueFn: FormikSetFieldValueEventVoidType;
     setFieldTouchedFn: FormikSetFieldTouchedEventType;
   }) => {
     try {
@@ -1025,7 +1025,7 @@ const ZChangePassword: React.FC = () => {
   const updatePasswordHandler = async (
     _data: string,
     setErrors: FormikSetErrorsType,
-    setFieldValueFn: FormikSetFieldValueEventType,
+    setFieldValueFn: FormikSetFieldValueEventVoidType,
     setFieldTouchedFn: FormikSetFieldTouchedEventType
   ) => {
     try {

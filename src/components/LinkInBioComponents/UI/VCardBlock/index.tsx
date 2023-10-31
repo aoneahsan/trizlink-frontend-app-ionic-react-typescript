@@ -16,10 +16,10 @@ import { cardOutline } from 'ionicons/icons';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonButton,
-	ZIonCol,
-	ZIonIcon,
-	ZIonText,
+  ZIonButton,
+  ZIonCol,
+  ZIonIcon,
+  ZIonText
 } from '@/components/ZIonComponents';
 
 /**
@@ -59,43 +59,42 @@ import {
  * */
 
 interface ZLinkInBioVCardBlockInterface {
-	VCardBlockData?: { [key: string]: unknown };
-	title?: string;
-	icon?: string;
+  VCardBlockData?: Record<string, unknown>;
+  title?: string;
+  icon?: string;
 }
 
 const ZLinkInBioVCardBlock: React.FC<ZLinkInBioVCardBlockInterface> = ({
-	VCardBlockData,
-	icon = cardOutline,
-	title,
+  VCardBlockData,
+  icon = cardOutline,
+  title
 }) => {
-	return (
-		<ZIonCol>
-			{VCardBlockData && (
-				<ZIonButton
-					expand='block'
-					className={classNames({
-						'normal-case font-bold text-[16px] my-0 mb-2': true,
-					})}
-					color='success'
-					style={{
-						height: '3.5rem',
-						'--border-radius': '0.8rem',
-						borderRadius: '0.8rem',
-					}}
-				>
-					<ZIonIcon
-						icon={icon}
-						style={{ width: '25px', height: '29px' }}
-						className='me-2'
-					/>
-					<ZIonText>
-						<h5 className='ion-no-padding ion-no-margin'>{title}</h5>
-					</ZIonText>
-				</ZIonButton>
-			)}
-		</ZIonCol>
-	);
+  return (
+    <ZIonCol>
+      {VCardBlockData !== undefined && (
+        <ZIonButton
+          expand='block'
+          className={classNames({
+            'normal-case font-bold text-[16px] my-0 mb-2': true
+          })}
+          color='success'
+          style={{
+            height: '3.5rem',
+            '--border-radius': '0.8rem',
+            borderRadius: '0.8rem'
+          }}>
+          <ZIonIcon
+            icon={icon}
+            style={{ width: '25px', height: '29px' }}
+            className='me-2'
+          />
+          <ZIonText>
+            <h5 className='ion-no-padding ion-no-margin'>{title}</h5>
+          </ZIonText>
+        </ZIonButton>
+      )}
+    </ZIonCol>
+  );
 };
 
 export default ZLinkInBioVCardBlock;

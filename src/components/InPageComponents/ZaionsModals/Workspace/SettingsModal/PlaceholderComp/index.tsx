@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 /**
  * Packages Imports go down
@@ -54,7 +54,7 @@ import {
  * Component props type go down
  * ? Like if you have a type for props it should be please Down
  * */
-interface ZWorkspaceSettingPlaceholderComp {
+interface IZWorkspaceSettingPlaceholderComp {
   title?: ReactNode;
   image?: string;
   buttonText?: string;
@@ -68,7 +68,7 @@ interface ZWorkspaceSettingPlaceholderComp {
  * */
 
 const ZWorkspaceSettingPlaceholderComp: React.FC<
-  ZWorkspaceSettingPlaceholderComp
+  IZWorkspaceSettingPlaceholderComp
 > = ({ buttonOnClick, buttonText, image, title }) => {
   return (
     <ZIonCol className='flex flex-col mb-5 ion-align-items-center ion-justify-content-center ion-text-center'>

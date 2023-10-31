@@ -73,7 +73,7 @@ import { extractInnerData } from '@/utils/helpers';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  IZNotification,
+  type IZNotification,
   ZNotificationEnum
 } from '@/types/AdminPanel/index.type';
 import { zNotificationSlotEnum } from '@/types/CustomHooks/zgeneric-hooks.type';
@@ -164,7 +164,7 @@ const ZNotificationPopover: React.FC<{
                           .tabs.updates
                       }
                       onClick={() => {
-                        setFieldValue(
+                        void setFieldValue(
                           'tab',
                           ZNotificationPopoverTabsEnum.updates,
                           false
@@ -186,7 +186,7 @@ const ZNotificationPopover: React.FC<{
                           .tabs.approvalRequests
                       }
                       onClick={() => {
-                        setFieldValue(
+                        void setFieldValue(
                           'tab',
                           ZNotificationPopoverTabsEnum.approvals,
                           false
@@ -213,8 +213,8 @@ const ZNotificationPopover: React.FC<{
                       color='medium'
                       className='ion-no-margin ion-no-padding'
                       id='z-wnp-refresh-btn'
-                      onClick={async () => {
-                        await zInvalidateReactQueries([
+                      onClick={() => {
+                        void zInvalidateReactQueries([
                           CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION
                             .MAIN,
                           workspaceId
@@ -249,52 +249,56 @@ const ZNotificationPopover: React.FC<{
                           .markAllAsReadBtn
                       }
                       disabled={
-                        userInvitationNotificationsData &&
-                        userInvitationNotificationsData?.filter(
-                          el => el.read_at === null
-                        )?.length > 0
-                          ? false
-                          : true
-                      }
-                      onClick={async () => {
-                        if (
-                          userInvitationNotificationsData &&
+                        !(
+                          userInvitationNotificationsData !== undefined &&
+                          userInvitationNotificationsData !== null &&
                           userInvitationNotificationsData?.filter(
                             el => el.read_at === null
                           )?.length > 0
-                        ) {
-                          const _response = await markAllAsReadAsyncMutate({
-                            requestData: '',
-                            itemIds: [],
-                            urlDynamicParts: []
-                          });
+                        )
+                      }
+                      onClick={() => {
+                        void (async () => {
+                          if (
+                            userInvitationNotificationsData !== undefined &&
+                            userInvitationNotificationsData !== null &&
+                            userInvitationNotificationsData?.filter(
+                              el => el.read_at === null
+                            )?.length > 0
+                          ) {
+                            const _response = await markAllAsReadAsyncMutate({
+                              requestData: '',
+                              itemIds: [],
+                              urlDynamicParts: []
+                            });
 
-                          if (_response) {
-                            const _data = extractInnerData<{
-                              success: boolean;
-                            }>(
-                              _response,
-                              extractInnerDataOptionsEnum.createRequestResponseItem
-                            );
+                            if (_response !== undefined) {
+                              const _data = extractInnerData<{
+                                success: boolean;
+                              }>(
+                                _response,
+                                extractInnerDataOptionsEnum.createRequestResponseItem
+                              );
 
-                            if (_data?.success) {
-                              // const _allNotification;
+                              if (_data !== undefined && _data?.success) {
+                                // const _allNotification;
 
-                              await zInvalidateReactQueries([
-                                CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER
-                                  .NOTIFICATION.MAIN,
-                                workspaceId
-                              ]);
+                                void zInvalidateReactQueries([
+                                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER
+                                    .NOTIFICATION.MAIN,
+                                  workspaceId
+                                ]);
 
-                              presentZNotification({
-                                message:
-                                  'Successfully marked all notification as read',
-                                notificationType: notificationTypeEnum.toast,
-                                slot: zNotificationSlotEnum.success
-                              });
+                                void presentZNotification({
+                                  message:
+                                    'Successfully marked all notification as read',
+                                  notificationType: notificationTypeEnum.toast,
+                                  slot: zNotificationSlotEnum.success
+                                });
+                              }
                             }
                           }
-                        }
+                        })();
                       }}>
                       <ZIonIcon
                         icon={listCircleOutline}
@@ -420,7 +424,7 @@ const ZUpdatesTab: React.FC<{
   const { presentZIonModal: presentZViewInvitationModal } = useZIonModal(
     ZViewInvitationModal,
     {
-      workspaceId: workspaceId,
+      workspaceId,
       memberInviteId: compState?.memberInviteId
     }
   );
@@ -431,26 +435,22 @@ const ZUpdatesTab: React.FC<{
     notificationId
   }: {
     notificationId?: string;
-  }) => {
+  }): Promise<void> => {
     try {
-      if (notificationId) {
+      if (notificationId !== undefined) {
         const _response = await markAsReadAsyncMutate({
           requestData: '',
           itemIds: [notificationId],
           urlDynamicParts: [CONSTANTS.RouteParams.user.notification.id]
         });
 
-        if (_response) {
+        if (_response !== undefined) {
           const _data = extractInnerData<IZNotification>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data?.id) {
-            // 	await zInvalidateReactQueries([
-            // 		CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION.MAIN,
-            // 		workspaceId,
-            // 	]);
+          if (_data?.id !== null && _data?.id !== undefined) {
             await updateRQCDataHandler({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION.MAIN,
@@ -461,7 +461,7 @@ const ZUpdatesTab: React.FC<{
               extractType: ZRQGetRequestExtractEnum.extractItems
             });
 
-            presentZNotification({
+            void presentZNotification({
               message: 'Successfully marked notification as read',
               notificationType: notificationTypeEnum.toast,
               slot: zNotificationSlotEnum.success
@@ -545,7 +545,7 @@ const ZUpdatesTab: React.FC<{
                           .notificationUpdateTabViewBtn
                       }
                       testinglistselector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.notificationUpdateTabViewBtn}-${el?.id}`}
-                      onClick={async () => {
+                      onClick={() => {
                         setCompState(oldValues => ({
                           ...oldValues,
                           memberInviteId: el?.data?.item?.wsTeamMemberInviteId
@@ -576,39 +576,12 @@ const ZUpdatesTab: React.FC<{
                   </ZIonText>
                 </div>
               </div>
-
-              {/* <div className='flex p-[3px] ion-align-items-center border rounded-md mt-2'>
-							<div className='w-[36px] h-[36px] zaions__light_bg rounded-sm me-2'></div>
-
-							<div className='w-[40%!important] me-1 overflow-hidden line-clamp-2 leading-none'>
-								<ZIonText className='text-xs'>
-									Lorem ipsum dolor sit amet consectetur adipisicing elit.
-									Dignissimos assumenda ex dolor non maiores sequi tempore
-									perspiciatis tenetur temporibus, dolores illo, inventore
-									repellendus quas voluptas doloremque ratione consequuntur quis
-									iure!
-								</ZIonText>
-							</div>
-
-							<div className='flex ion-align-items-center ion-justify-content-between w-[47%]'>
-								<div className='flex ion-align-items-center'>
-									<ZIonIcon icon={logoFacebook} className='w-4 h-4' />
-									<ZIonText className='text-xs mt-[1px] ms-1'>zaions</ZIonText>
-								</div>
-
-								<div className=''>
-									<ZIonText className='text-xs' color='medium'>
-										May 16, 11:44
-									</ZIonText>
-								</div>
-							</div>
-						</div> */}
             </ZIonCol>
           </ZIonRow>
         );
       })}
 
-      {userInvitationNotificationsData &&
+      {userInvitationNotificationsData !== undefined &&
       userInvitationNotificationsData?.length === 0 ? (
         <div className='flex flex-col w-full gap-2 py-7 ion-align-items-center ion-justify-content-center'>
           <ZIonIcon

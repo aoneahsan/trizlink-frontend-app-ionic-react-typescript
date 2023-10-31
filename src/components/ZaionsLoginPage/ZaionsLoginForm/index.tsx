@@ -13,7 +13,8 @@ import {
   ZIonIcon,
   ZIonRouterLink,
   ZIonInput,
-  ZIonRow
+  ZIonRow,
+  ZIonButton
 } from '@/components/ZIonComponents';
 
 // Global Constants
@@ -39,10 +40,12 @@ import MESSAGES from '@/utils/messages';
 import { showSuccessNotification } from '@/utils/notification';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { useZIonErrorAlert, useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
-import { UserAuthData } from '@/types/ZaionsApis.type';
-import { ZIonButton } from '@/components/ZIonComponents';
-import { FormikSetErrorsType, resetFormType } from '@/types/ZaionsFormik.type';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { type UserAuthData } from '@/types/ZaionsApis.type';
+import {
+  type FormikSetErrorsType,
+  type resetFormType
+} from '@/types/ZaionsFormik.type';
+import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import ZInputLengthConstant from '@/utils/constants/InputLenghtConstant';
 
 // Style
@@ -66,16 +69,16 @@ const ZaionsLoginForm: React.FC = () => {
 
   // Formik submit function.
   const FormikSubmissionHandler = async (
-    _values: { [key: string]: unknown },
+    _values: Record<string, unknown>,
     resetForm: resetFormType,
     setErrors: FormikSetErrorsType
-  ) => {
+  ): Promise<void> => {
     try {
       // Loading start...
       await presentZIonLoader('Logging in. please wait a second.');
 
       // registering data
-      const __response = await zAxiosApiRequest<UserAuthData>({
+      const _response = await zAxiosApiRequest<UserAuthData>({
         _url: API_URL_ENUM.login,
         _method: 'post',
         _isAuthenticatedRequest: false,
@@ -86,20 +89,20 @@ const ZaionsLoginForm: React.FC = () => {
       });
       // Checking if the __response is available.
       if (
-        __response &&
-        __response.success &&
-        __response.data.token.plainTextToken
+        _response !== undefined &&
+        _response.success &&
+        _response?.data?.token?.plainTextToken?.length > 0
       ) {
         // getting user data.
-        const userData = getUserDataObjectForm(__response.data.user);
+        const userData = getUserDataObjectForm(_response.data.user);
 
         // Storing user token at userAccountAuthToken State.
         const userToken = {
-          token: __response.data.token.plainTextToken
+          token: _response.data.token.plainTextToken
         };
 
         // Set user data && user token to localstorage.
-        if (userData && userToken) {
+        if (userData !== undefined && userData !== null && userToken !== null) {
           // store User token.
           void STORAGE.SET(LOCALSTORAGE_KEYS.USERDATA, userData);
           // store auth token.
@@ -127,11 +130,11 @@ const ZaionsLoginForm: React.FC = () => {
 
           // redirect to profile. (old 30/5/2023)
           // zNavigatePushRoute(
-          // 	replaceParams(
-          // 		ZaionsRoutes.AdminPanel.LinkInBio.Main,
-          // 		CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
-          // 		''
-          // 	)
+          // replaceParams(
+          // ZaionsRoutes.AdminPanel.LinkInBio.Main,
+          // CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio,
+          // ''
+          // )
           // );
 
           // Redirect to startup page
@@ -149,14 +152,14 @@ const ZaionsLoginForm: React.FC = () => {
       if (error instanceof AxiosError) {
         // await presentZIonErrorAlert();
         // Setting errors on form fields
-        const __apiErrors = (error.response?.data as { errors: ZGenericObject })
+        const _apiErrors = (error.response?.data as { errors: ZGenericObject })
           ?.errors;
-        const __errors = formatApiRequestErrorForFormikFormField(
+        const _errors = formatApiRequestErrorForFormikFormField(
           ['emailAddress', 'password'],
           ['email', 'password'],
-          __apiErrors
+          _apiErrors
         );
-        setErrors(__errors);
+        setErrors(_errors);
       } else if (error instanceof ZCustomError || error instanceof Error) {
         // if we need to do some other type of logic reporting (like report this error to API or error blogging to like sentry or datadog etc then we can do that here, otherwise if we just want to show the message of error to user in alert then we can do that in one else case no need for this check, but here we can set the title of alert to)
         await presentZIonErrorAlert();
@@ -228,16 +231,22 @@ const ZaionsLoginForm: React.FC = () => {
                   CONSTANTS.testingSelectors.loginPage.emailInput
                 }
                 errorText={
-                  touched.emailAddress ? errors.emailAddress : undefined
+                  touched?.emailAddress === true
+                    ? errors.emailAddress
+                    : undefined
                 }
                 zNextFieldId={
                   CONSTANTS.testingSelectors.loginPage.passwordInput
                 }
                 className={classNames({
                   'mb-4': true,
-                  'ion-touched': touched.emailAddress,
-                  'ion-invalid': errors.emailAddress,
-                  'ion-valid': touched.emailAddress && !errors.emailAddress
+                  'ion-touched': touched?.emailAddress === true,
+                  'ion-invalid':
+                    touched?.emailAddress === true && errors.emailAddress,
+                  'ion-valid':
+                    touched?.emailAddress === true &&
+                    (errors.emailAddress === undefined ||
+                      errors.emailAddress?.trim()?.length === 0)
                 })}
               />
 
@@ -253,23 +262,31 @@ const ZaionsLoginForm: React.FC = () => {
                   onIonBlur={handleBlur}
                   value={values.password}
                   id={CONSTANTS.testingSelectors.loginPage.passwordInput}
-                  errorText={touched.password ? errors.password : undefined}
+                  errorText={
+                    touched?.password === true ? errors.password : undefined
+                  }
                   clearOnEdit={false}
                   minlength={ZInputLengthConstant.loginForm.password.min}
                   testingselector={
                     CONSTANTS.testingSelectors.loginPage.passwordInput
                   }
                   className={classNames({
-                    'ion-touched': touched.password,
-                    'ion-invalid': errors.password,
-                    'ion-valid': touched.password && !errors.password
+                    'ion-touched': touched?.password === true,
+                    'ion-invalid':
+                      touched?.password === true && errors.password,
+                    'ion-valid':
+                      touched?.password === true &&
+                      (errors.password === undefined ||
+                        errors.password?.trim()?.length === 0)
                   })}
                 />
                 <ZIonButton
                   fill='clear'
                   size='large'
                   className='ion-no-padding ion-no-margin ms-3 w-max'
-                  onClick={() => setCanViewPassword(OldVal => !OldVal)}
+                  onClick={() => {
+                    setCanViewPassword(OldVal => !OldVal);
+                  }}
                   testingselector={
                     CONSTANTS.testingSelectors.loginPage.canViewPasswordButton
                   }>
@@ -295,7 +312,9 @@ const ZaionsLoginForm: React.FC = () => {
                 expand='block'
                 disabled={!isValid}
                 className='mt-4 ion-text-capitalize'
-                onClick={() => void submitForm()}
+                onClick={() => {
+                  void submitForm();
+                }}
                 testingselector={
                   CONSTANTS.testingSelectors.loginPage.loginButton
                 }>
@@ -309,7 +328,7 @@ const ZaionsLoginForm: React.FC = () => {
                   color='medium'>
                   By signing in with an account, you agree to <br />{' '}
                   {PRODUCT_NAME}
-                  's{' '}
+                  &apos;s{' '}
                   <ZIonRouterLink
                     routerLink={ZaionsRoutes.HomeRoute}
                     className='underline'

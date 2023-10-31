@@ -1,15 +1,14 @@
 // Core Import
-import { IonAccordionGroup } from '@ionic/react';
-import React, { ReactNode } from 'react';
-import { ZIonModeType } from '@/types/zaionsAppSettings.type';
+import React, { type ReactNode } from 'react';
+import { type ZIonModeType } from '@/types/zaionsAppSettings.type';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 // Packages Import
+import { IonAccordionGroup } from '@ionic/react';
 
 // Type
-type ZIonAccordionGroupType = {
+interface ZIonAccordionGroupType {
   children: ReactNode;
   className?: string;
   animated?: boolean;
@@ -22,25 +21,29 @@ type ZIonAccordionGroupType = {
   //
   testingselector?: string;
   testinglistselector?: string;
-};
+}
 
-const ZIonAccordionGroup = (props: ZIonAccordionGroupType) => {
-  const _testinglistselector = props.testinglistselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testinglistselector || PRODUCT_NAME,
-          _key: zCreateElementTestingSelectorKeyEnum.listSelector
-        })
-      }
-    : {};
+const ZIonAccordionGroup: React.FC<ZIonAccordionGroupType> = (
+  props: ZIonAccordionGroupType
+) => {
+  const _testinglistselector =
+    props.testinglistselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testinglistselector,
+            _key: zCreateElementTestingSelectorKeyEnum.listSelector
+          })
+        }
+      : {};
 
-  const _testingSelector = props.testingselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testingselector || PRODUCT_NAME
-        })
-      }
-    : {};
+  const _testingSelector =
+    props.testingselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testingselector
+          })
+        }
+      : {};
 
   return (
     <IonAccordionGroup

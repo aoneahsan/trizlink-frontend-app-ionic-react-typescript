@@ -16,14 +16,14 @@ import { contractOutline, settingsOutline } from 'ionicons/icons';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonButton,
-	ZIonButtons,
-	ZIonCol,
-	ZIonIcon,
-	ZIonImg,
-	ZIonRouterLink,
-	ZIonRow,
-	ZIonText,
+  ZIonButton,
+  ZIonButtons,
+  ZIonCol,
+  ZIonIcon,
+  ZIonImg,
+  ZIonRouterLink,
+  ZIonRow,
+  ZIonText
 } from '@/components/ZIonComponents';
 
 /**
@@ -71,96 +71,91 @@ import { ProductLogo } from '@/assets/images';
  * */
 
 const ZWorkspaceLinkedinPageLayout: React.FC = () => {
-	// Media Query Scale
+  // Media Query Scale
 
-	return (
-		<ZIonRow
-			className={classNames({
-				'mt-3 ion-justify-content-center': true,
-			})}
-		>
-			{/*  */}
-			<ZIonCol
-				sizeXl='8.5'
-				sizeLg='10.5'
-				sizeMd='11'
-				sizeSm='11.5'
-				sizeXs='11.7'
-				className='ion-no-padding'
-			>
-				<div
-					className={classNames({
-						'w-[calc(100% - 46px)] zaions-background-set relative h-[191px]':
-							true,
-					})}
-					style={{
-						backgroundImage: `url(https://d2b57pa8jvjkcd.cloudfront.net/xGF9qraKHpDFhkqdC/JHg2CLhHKG-tom-idea.jpg)`,
-					}}
-				>
-					<ZIonButtons className='absolute zaions__dark_set rounded right-[1%] top-[4%]'>
-						<ZIonButton className='ion-no-padding'>
-							<ZIonIcon icon={settingsOutline} />
-						</ZIonButton>
-						<ZIonButton className='ion-no-padding'>
-							<ZIonIcon icon={contractOutline} />
-						</ZIonButton>
-					</ZIonButtons>
-				</div>
-			</ZIonCol>
+  return (
+    <ZIonRow
+      className={classNames({
+        'mt-3 ion-justify-content-center': true
+      })}>
+      {/*  */}
+      <ZIonCol
+        sizeXl='8.5'
+        sizeLg='10.5'
+        sizeMd='11'
+        sizeSm='11.5'
+        sizeXs='11.7'
+        className='ion-no-padding'>
+        <div
+          className={classNames({
+            'w-[calc(100% - 46px)] zaions-background-set relative h-[191px]':
+              true
+          })}
+          style={{
+            backgroundImage:
+              'url(https://d2b57pa8jvjkcd.cloudfront.net/xGF9qraKHpDFhkqdC/JHg2CLhHKG-tom-idea.jpg)'
+          }}>
+          <ZIonButtons className='absolute zaions__dark_set rounded right-[1%] top-[4%]'>
+            <ZIonButton className='ion-no-padding'>
+              <ZIonIcon icon={settingsOutline} />
+            </ZIonButton>
+            <ZIonButton className='ion-no-padding'>
+              <ZIonIcon icon={contractOutline} />
+            </ZIonButton>
+          </ZIonButtons>
+        </div>
+      </ZIonCol>
 
-			{/*  */}
-			<ZIonCol
-				sizeXl='8.5'
-				sizeLg='10.5'
-				sizeMd='11'
-				sizeSm='11.5'
-				sizeXs='11.7'
-				className={classNames({
-					'border ion-no-padding flex ion-align-items-center py-2 ps-2 bg-white h-[5rem]':
-						true,
-				})}
-			>
-				<div
-					className={classNames({
-						'overflow-hidden translate-y-[-2.5rem] w-[7.2rem] h-[7.2rem]': true,
-					})}
-				>
-					<ZIonImg
-						src={ProductLogo}
-						className={classNames(classes['linkedin-profile-img'], {
-							'w-full h-full': true,
-						})}
-					/>
-				</div>
+      {/*  */}
+      <ZIonCol
+        sizeXl='8.5'
+        sizeLg='10.5'
+        sizeMd='11'
+        sizeSm='11.5'
+        sizeXs='11.7'
+        className={classNames({
+          'border ion-no-padding flex ion-align-items-center py-2 ps-2 bg-white h-[5rem]':
+            true
+        })}>
+        <div
+          className={classNames({
+            'overflow-hidden translate-y-[-2.5rem] w-[7.2rem] h-[7.2rem]': true
+          })}>
+          <ZIonImg
+            src={ProductLogo}
+            className={classNames(classes['linkedin-profile-img'], {
+              'w-full h-full': true
+            })}
+          />
+        </div>
 
-				<div
-					className={classNames({
-						'flex flex-col mx-2 px-1 mb-3': true,
-					})}
-				>
-					<ZIonText className='text-lg'>
-						<ZIonRouterLink
-							routerLink={CONSTANTS.ExternalURL.FacebookUrl}
-							target='_blank'
-							color='dark'
-							className='text-lg hover:underline zaions-transition'
-						>
-							zaions
-						</ZIonRouterLink>
-					</ZIonText>
-					<ZIonText className='text-sm' color='medium'>
-						<ZIonRouterLink
-							routerLink={CONSTANTS.ExternalURL.FacebookUrl}
-							target='_blank'
-							className='hover:underline zaions-transition'
-						>
-							@zaions
-						</ZIonRouterLink>
-					</ZIonText>
-				</div>
-			</ZIonCol>
-		</ZIonRow>
-	);
+        <div
+          className={classNames({
+            'flex flex-col mx-2 px-1 mb-3': true
+          })}>
+          <ZIonText className='text-lg'>
+            <ZIonRouterLink
+              routerLink={CONSTANTS.ExternalURL.FacebookUrl}
+              target='_blank'
+              color='dark'
+              className='text-lg hover:underline zaions-transition'>
+              zaions
+            </ZIonRouterLink>
+          </ZIonText>
+          <ZIonText
+            className='text-sm'
+            color='medium'>
+            <ZIonRouterLink
+              routerLink={CONSTANTS.ExternalURL.FacebookUrl}
+              target='_blank'
+              className='hover:underline zaions-transition'>
+              @zaions
+            </ZIonRouterLink>
+          </ZIonText>
+        </div>
+      </ZIonCol>
+    </ZIonRow>
+  );
 };
 
 export default ZWorkspaceLinkedinPageLayout;

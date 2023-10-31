@@ -9,21 +9,17 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import classNames from 'classnames';
-import { contractOutline, settingsOutline } from 'ionicons/icons';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonButton,
-	ZIonButtons,
-	ZIonCol,
-	ZIonIcon,
-	ZIonImg,
-	ZIonRouterLink,
-	ZIonRow,
-	ZIonText,
+  ZIonCol,
+  ZIonImg,
+  ZIonRouterLink,
+  ZIonRow,
+  ZIonText
 } from '@/components/ZIonComponents';
 
 /**
@@ -71,73 +67,66 @@ import { ProductLogo } from '@/assets/images';
  * */
 
 const ZWorkspaceTiktokPageLayout: React.FC = () => {
-	// Media Query Scale
-	const { isXlScale, isLgScale, isMdScale, isSmScale, isXsScale } =
-		useZMediaQueryScale();
+  // Media Query Scale
+  const { isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
 
-	return (
-		<ZIonRow
-			className={classNames({
-				'mt-3 ion-justify-content-center': true,
-			})}
-		>
-			{/*  */}
+  return (
+    <ZIonRow
+      className={classNames({
+        'mt-3 ion-justify-content-center': true
+      })}>
+      {/*  */}
 
-			{/*  */}
-			<ZIonCol
-				sizeXl='7'
-				sizeLg='9.5'
-				sizeMd='11'
-				sizeSm='11.5'
-				sizeXs='10'
-				className={classNames({
-					'ion-no-padding flex ion-align-items-center py-2 ps-2 mt-5': true,
-				})}
-			>
-				<div
-					className={classNames({
-						'rounded-full overflow-hidden': true,
-						'w-[7.2rem] h-[7.2rem]': !isLgScale,
-						'w-[77px] h-[77px]': isMdScale || isSmScale || !isSmScale,
-					})}
-				>
-					<ZIonImg
-						src={ProductLogo}
-						className={classNames({
-							'w-full h-full': true,
-						})}
-					/>
-				</div>
+      {/*  */}
+      <ZIonCol
+        sizeXl='7'
+        sizeLg='9.5'
+        sizeMd='11'
+        sizeSm='11.5'
+        sizeXs='10'
+        className={classNames({
+          'ion-no-padding flex ion-align-items-center py-2 ps-2 mt-5': true
+        })}>
+        <div
+          className={classNames({
+            'rounded-full overflow-hidden': true,
+            'w-[7.2rem] h-[7.2rem]': !isLgScale,
+            'w-[77px] h-[77px]': isMdScale || isSmScale || !isSmScale
+          })}>
+          <ZIonImg
+            src={ProductLogo}
+            className={classNames({
+              'w-full h-full': true
+            })}
+          />
+        </div>
 
-				<div
-					className={classNames({
-						'flex flex-col mx-2 px-1 mb-3': true,
-					})}
-				>
-					<ZIonText className='text-lg'>
-						<ZIonRouterLink
-							routerLink={CONSTANTS.ExternalURL.FacebookUrl}
-							target='_blank'
-							color='dark'
-							className='text-3xl font-bolder zaions-transition'
-						>
-							testing
-						</ZIonRouterLink>
-					</ZIonText>
-					<ZIonText className='text-sm'>
-						<ZIonRouterLink
-							routerLink={CONSTANTS.ExternalURL.FacebookUrl}
-							target='_blank'
-							className='hover:underline font-bold zaions-transition'
-							color='dark'
-						>
-							@zaions
-						</ZIonRouterLink>
-					</ZIonText>
-				</div>
-			</ZIonCol>
-		</ZIonRow>
-	);
+        <div
+          className={classNames({
+            'flex flex-col mx-2 px-1 mb-3': true
+          })}>
+          <ZIonText className='text-lg'>
+            <ZIonRouterLink
+              routerLink={CONSTANTS.ExternalURL.FacebookUrl}
+              target='_blank'
+              color='dark'
+              className='text-3xl font-bolder zaions-transition'>
+              testing
+            </ZIonRouterLink>
+          </ZIonText>
+          <ZIonText className='text-sm'>
+            <ZIonRouterLink
+              routerLink={CONSTANTS.ExternalURL.FacebookUrl}
+              target='_blank'
+              className='font-bold hover:underline zaions-transition'
+              color='dark'>
+              @zaions
+            </ZIonRouterLink>
+          </ZIonText>
+        </div>
+      </ZIonCol>
+    </ZIonRow>
+  );
 };
 
 export default ZWorkspaceTiktokPageLayout;

@@ -339,7 +339,9 @@ const ZaionsFileUploadModal: React.FC<{
                 <ZIonButton
                   fill='clear'
                   className='mt-2 ion-no-padding me-3'
-                  onClick={() => dismissZIonModal()}>
+                  onClick={() => {
+                    dismissZIonModal();
+                  }}>
                   <ZIonIcon
                     icon={closeOutline}
                     size='large'
@@ -455,7 +457,7 @@ const UploadTab: React.FC<{
     _url: API_URL_ENUM.deleteSingleFile
   });
 
-  const uploadFileToBackend = async (file: File) => {
+  const uploadFileToBackend = async (file: File): Promise<void> => {
     const formData = new FormData();
     formData.append('file', file);
 
@@ -475,9 +477,9 @@ const UploadTab: React.FC<{
   };
 
   // Delete file handler or try again handler
-  const singleFileDeleteHandler = async () => {
+  const singleFileDeleteHandler = async (): Promise<void> => {
     try {
-      if (uploadTabState.file?.filePath) {
+      if (uploadTabState?.file?.filePath !== undefined) {
         // Deleting the file from storage
         await deleteSingleFile({
           requestData: zStringify({ filePath: uploadTabState.file?.filePath }),
@@ -499,9 +501,9 @@ const UploadTab: React.FC<{
   };
 
   // Try again handler
-  const singleFileTryAgainHandler = async () => {
+  const singleFileTryAgainHandler = async (): Promise<void> => {
     try {
-      if (uploadTabState.file?.filePath) {
+      if (uploadTabState?.file?.filePath !== undefined) {
         // Deleting the file from storage
         await deleteSingleFile({
           requestData: zStringify({ filePath: uploadTabState.file?.filePath }),
@@ -532,15 +534,18 @@ const UploadTab: React.FC<{
           className={classNames({
             'w-[90%]': true,
             'flex flex-col ion-align-items-center ion-justify-content-center h-[90%] rounded cursor-pointer':
-              !uploadTabState.file?.isFileFetch,
+              uploadTabState?.file?.isFileFetch === false,
             zaions__success_set: isDragActive,
             zaions__primary_set: !isDragActive
           })}
           style={{
-            border: uploadTabState.file?.isFileFetch ? '' : '1px dashed #000'
+            border:
+              uploadTabState?.file?.isFileFetch === true
+                ? ''
+                : '1px dashed #000'
           }}
           {...getRootProps()}>
-          {!uploadTabState.file?.isFileFetch && (
+          {uploadTabState?.file?.isFileFetch === false && (
             <>
               <input {...getInputProps()} />
               <ZIonText className='ion-no-margin'>
@@ -566,7 +571,7 @@ const UploadTab: React.FC<{
             </>
           )}
 
-          {uploadTabState.file?.isFileFetch && (
+          {uploadTabState?.file?.isFileFetch === true && (
             <>
               <div
                 className='w-[70%]  mx-auto my-3'
@@ -754,7 +759,8 @@ const GalleryTab: React.FC<{ typeOfGallery: galleryEnum }> = ({
               })}
               style={{
                 height: '160px',
-                backgroundImage: `url(https://cdn.pixabay.com/photo/2023/03/23/15/43/squirrel-7872248_960_720.jpg)`
+                backgroundImage:
+                  'url(https://cdn.pixabay.com/photo/2023/03/23/15/43/squirrel-7872248_960_720.jpg)'
               }}
               size='3.9'
               key={el}>

@@ -3,7 +3,7 @@ import React from 'react';
 
 // Packages Imports
 import { addOutline, appsOutline } from 'ionicons/icons';
-import { ItemReorderEventDetail } from '@ionic/react';
+import { type ItemReorderEventDetail } from '@ionic/react';
 import { FieldArray, useFormikContext } from 'formik';
 
 // Custom Imports
@@ -20,11 +20,11 @@ import {
 // Types
 import {
   cardDisplayEnum,
-  linkInBioBlockCardItemInterface,
-  LinkInBioSingleBlockContentType
+  type linkInBioBlockCardItemInterface,
+  type LinkInBioSingleBlockContentType
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
-import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 import { reportCustomError } from '@/utils/customErrorType';
 import CONSTANTS from '@/utils/constants';
 
@@ -38,7 +38,7 @@ const LinkInBioQAndACardField: React.FC = () => {
 
   const handleCarouselCardReorder = (
     event: CustomEvent<ItemReorderEventDetail>
-  ) => {
+  ): void => {
     // The `from` and `to` properties contain the index of the item
     // when the drag started and ended, respectively
 
@@ -72,7 +72,9 @@ const LinkInBioQAndACardField: React.FC = () => {
                 <ZIonButton
                   expand='block'
                   className='ion-text-capitalize'
-                  onClick={() => push(getNewCardItemEmptyObjForQAndA)}
+                  onClick={() => {
+                    push(getNewCardItemEmptyObjForQAndA);
+                  }}
                   testingselector={
                     CONSTANTS.testingSelectors.linkInBio.formPage.design
                       .blockForm.fields.QAndA.addCardBtn
@@ -83,7 +85,7 @@ const LinkInBioQAndACardField: React.FC = () => {
                   />
                   add new Q&A
                 </ZIonButton>
-                {values.cardItems?.length
+                {values.cardItems !== null && values.cardItems !== undefined
                   ? values.cardItems.map((_cardItem, _index) => (
                       <ZIonItem
                         key={_index}
@@ -119,9 +121,7 @@ const LinkInBioQAndACardField: React.FC = () => {
                               CONSTANTS.testingSelectors.linkInBio.formPage
                                 .design.blockForm.fields.QAndA.titleInput
                             }
-                            value={
-                              values.cardItems && values.cardItems[_index].title
-                            }
+                            value={values.cardItems?.[_index].title}
                           />
 
                           <ZTextEditor
@@ -132,11 +132,9 @@ const LinkInBioQAndACardField: React.FC = () => {
                               CONSTANTS.testingSelectors.linkInBio.formPage
                                 .design.blockForm.fields.QAndA.textEditor
                             }
-                            value={
-                              values.cardItems && values.cardItems[_index].text
-                            }
+                            value={values.cardItems?.[_index].text}
                             onChange={_value => {
-                              setFieldValue(
+                              void setFieldValue(
                                 `cardItems.${_index}.text`,
                                 _value,
                                 false
@@ -157,7 +155,7 @@ const LinkInBioQAndACardField: React.FC = () => {
                           }
                           deleteFn={(detail: OverlayEventDetail<unknown>) => {
                             try {
-                              if (detail && detail.role === 'destructive') {
+                              if (detail?.role === 'destructive') {
                                 void remove(_index);
                               }
                             } catch (error) {

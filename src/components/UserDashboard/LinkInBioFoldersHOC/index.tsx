@@ -2,20 +2,18 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { useEffect } from 'react';
+import React from 'react';
 
 /**
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { useRecoilState } from 'recoil';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
 import NewLinkFolder from '../NewLinkFolder';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -32,8 +30,6 @@ import { folderState } from '@/types/AdminPanel/index.type';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import { LinkInBioFolderFormattedRState } from '@/ZaionsStore/UserDashboard/LinkInBio/linkInBioFoldersState.recoil';
-import { useParams } from 'react-router';
 
 /**
  * Style files Imports go down
@@ -58,38 +54,16 @@ import { useParams } from 'react-router';
 
 const LinkInBioFoldersHOC: React.FC = () => {
   // const { data: getLinkInBioFoldersData } = useZRQGetRequest<LinkFolderType[]>({
-  // 	_url: API_URL_ENUM.LinkInBio_folders_create_list,
-  // 	_key: [			CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
+  // _url: API_URL_ENUM.LinkInBio_folders_create_list,
+  // _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
   // workspaceId,
   // folderState.linkInBio,],
   // });
 
-  const [linkInBioFoldersData, setLinkInBioFoldersData] = useRecoilState(
-    LinkInBioFolderFormattedRState
-  );
-
   // getting current workspace id form params.
-  const { workspaceId } = useParams<{
-    workspaceId: string;
-  }>();
-
-  // useEffect(() => {
-  // 	try {
-  // 		if (getLinkInBioFoldersData) {
-  // 			const formattedLinkInBioFoldersData = getLinkInBioFoldersData?.map(
-  // 				(el) => {
-  // 					return { value: el.id, label: el.title };
-  // 				}
-  // 			) as FolderInterface[];
-  // 			if (formattedLinkInBioFoldersData) {
-  // 				setLinkInBioFoldersData(formattedLinkInBioFoldersData);
-  // 			}
-  // 		}
-  // 	} catch (error) {
-  // 		reportCustomError(error);
-  // 	}
-  // 	// eslint-disable-next-line
-  // }, [getLinkInBioFoldersData]);
+  // const { workspaceId } = useParams<{
+  //   workspaceId: string;
+  // }>();
 
   return (
     <NewLinkFolder

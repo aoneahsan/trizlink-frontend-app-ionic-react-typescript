@@ -63,13 +63,14 @@ import { DefaultTimeSlotColors } from '@/data/UserDashboard/Workspace/index.data
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import {
   daysEnum,
   FormMode,
-  TimeSlotInterface
+  type TimeSlotInterface
 } from '@/types/AdminPanel/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { type FormikSetFieldValueEventVoidType } from '@/types/ZaionsFormik.type';
 
 /**
  * Recoil State Imports go down
@@ -125,7 +126,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
   const { mutateAsync: createSWSTimeSlotMutateAsync } = useZRQCreateRequest({
     _url: API_URL_ENUM.time_slot_sws_create_list,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _itemsIds: [wsShareMemberId!],
+    _itemsIds: [wsShareMemberId ?? ''],
     _loaderMessage: MESSAGES.TIME_SLOT.CREATING_API
   });
 
@@ -138,16 +139,19 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.GET,
       workspaceId,
-      timeSlotId || ''
+      timeSlotId ?? ''
     ],
     _showLoader: false,
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.workspaceId,
       CONSTANTS.RouteParams.timeSlot.timeSlotId
     ],
-    _itemsIds: [workspaceId, timeSlotId || ''],
-    _shouldFetchWhenIdPassed:
-      timeSlotId && workspaceId && mode === FormMode.EDIT ? false : true,
+    _itemsIds: [workspaceId, timeSlotId ?? ''],
+    _shouldFetchWhenIdPassed: !(
+      timeSlotId !== undefined &&
+      workspaceId !== undefined &&
+      mode === FormMode.EDIT
+    ),
     _extractType: ZRQGetRequestExtractEnum.extractItem
   });
 
@@ -159,17 +163,20 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
     _url: API_URL_ENUM.time_slot_sws_update_delete_get,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.SWS_GET,
-      wsShareMemberId!,
-      timeSlotId || ''
+      wsShareMemberId ?? '',
+      timeSlotId ?? ''
     ],
     _showLoader: false,
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.shareWSMemberId,
       CONSTANTS.RouteParams.timeSlot.timeSlotId
     ],
-    _itemsIds: [wsShareMemberId!, timeSlotId || ''],
-    _shouldFetchWhenIdPassed:
-      timeSlotId && wsShareMemberId && mode === FormMode.EDIT ? false : true,
+    _itemsIds: [wsShareMemberId ?? '', timeSlotId ?? ''],
+    _shouldFetchWhenIdPassed: !(
+      timeSlotId !== undefined &&
+      wsShareMemberId !== undefined &&
+      mode === FormMode.EDIT
+    ),
     _extractType: ZRQGetRequestExtractEnum.extractItem
   });
 
@@ -195,74 +202,74 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
   // #endregion
 
   // #region functions.
-  const formikSubmitHandler = async (_data: string) => {
+  const formikSubmitHandler = async (_value: string): Promise<void> => {
     try {
-      if (_data) {
-        let __response;
+      if (_value?.trim()?.length > 0) {
+        let _response;
 
         if (mode === FormMode.ADD) {
-          if (wsShareMemberId) {
-            __response = await createSWSTimeSlotMutateAsync(_data);
+          if (wsShareMemberId !== undefined) {
+            _response = await createSWSTimeSlotMutateAsync(_value);
           } else if (workspaceId !== undefined) {
-            __response = await createTimeSlotMutateAsync(_data);
+            _response = await createTimeSlotMutateAsync(_value);
           }
         } else if (mode === FormMode.EDIT) {
-          if (wsShareMemberId) {
-            __response = await updateSWSTimeSlotMutateAsync({
-              itemIds: [wsShareMemberId, timeSlotId || ''],
+          if (wsShareMemberId !== undefined) {
+            _response = await updateSWSTimeSlotMutateAsync({
+              itemIds: [wsShareMemberId, timeSlotId ?? ''],
               urlDynamicParts: [
                 CONSTANTS.RouteParams.workspace.shareWSMemberId,
                 CONSTANTS.RouteParams.timeSlot.timeSlotId
               ],
-              requestData: _data
+              requestData: _value
             });
           } else if (workspaceId !== undefined) {
-            __response = await updateTimeSlotMutateAsync({
-              itemIds: [workspaceId, timeSlotId || ''],
+            _response = await updateTimeSlotMutateAsync({
+              itemIds: [workspaceId, timeSlotId ?? ''],
               urlDynamicParts: [
                 CONSTANTS.RouteParams.workspace.workspaceId,
                 CONSTANTS.RouteParams.timeSlot.timeSlotId
               ],
-              requestData: _data
+              requestData: _value
             });
           }
         }
 
-        if ((__response as ZLinkMutateApiType<TimeSlotInterface>).success) {
+        if ((_response as ZLinkMutateApiType<TimeSlotInterface>).success) {
           // extract Data from _response.
-          const __data = extractInnerData<TimeSlotInterface>(
-            __response,
+          const _data = extractInnerData<TimeSlotInterface>(
+            _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (__data && __data.id) {
-            let __rqTimeSlotData =
+          if (_data?.id !== null) {
+            let _rqTimeSlotData =
               (getRQCDataHandler<TimeSlotInterface[]>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
                   workspaceId
                 ]
-              }) as TimeSlotInterface[]) || [];
+              }) as TimeSlotInterface[]) ?? [];
 
-            if (wsShareMemberId) {
-              __rqTimeSlotData = getRQCDataHandler<TimeSlotInterface[]>({
+            if (wsShareMemberId !== undefined) {
+              _rqTimeSlotData = getRQCDataHandler<TimeSlotInterface[]>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.SWS_MAIN,
-                  wsShareMemberId!
+                  wsShareMemberId
                 ]
               }) as TimeSlotInterface[];
             }
 
-            const __oldTimeSlot =
+            const _oldTimeSlot =
               extractInnerData<TimeSlotInterface[]>(
-                __rqTimeSlotData,
+                _rqTimeSlotData,
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
-            if (__oldTimeSlot) {
+            if (_oldTimeSlot !== undefined) {
               if (mode === FormMode.ADD) {
                 // added shortLink to all TimeSlot data in cache.
-                const __updatedTimeSlot = [...__oldTimeSlot, __data];
+                const _updatedTimeSlot = [..._oldTimeSlot, _data];
 
                 if (workspaceId !== undefined) {
                   // Updating all TimeSlot data in RQ cache.
@@ -271,25 +278,25 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
                       workspaceId
                     ],
-                    data: __updatedTimeSlot as TimeSlotInterface[],
+                    data: _updatedTimeSlot as TimeSlotInterface[],
                     id: '',
                     extractType: ZRQGetRequestExtractEnum.extractItems,
                     updateHoleData: true
                   });
-                } else if (wsShareMemberId) {
+                } else if (wsShareMemberId !== undefined) {
                   await updateRQCDataHandler<TimeSlotInterface[] | undefined>({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.SWS_MAIN,
                       wsShareMemberId
                     ],
-                    data: __updatedTimeSlot as TimeSlotInterface[],
+                    data: _updatedTimeSlot as TimeSlotInterface[],
                     id: '',
                     extractType: ZRQGetRequestExtractEnum.extractItems,
                     updateHoleData: true
                   });
                 }
 
-                presentZIonToastSuccess(MESSAGES.TIME_SLOT.CREATED);
+                void presentZIonToastSuccess(MESSAGES.TIME_SLOT.CREATED);
               } else if (mode === FormMode.EDIT) {
                 if (workspaceId !== undefined) {
                   // Updating all TimeSlot data in RQ cache.
@@ -298,8 +305,8 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
                       workspaceId
                     ],
-                    data: __data as TimeSlotInterface,
-                    id: __data.id
+                    data: _data,
+                    id: _data?.id ?? ''
                   });
 
                   // Updating TimeSlot data in RQ cache.
@@ -307,22 +314,22 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.GET,
                       workspaceId,
-                      __data.id
+                      _data?.id ?? ''
                     ],
-                    data: __data as TimeSlotInterface,
+                    data: _data,
                     id: '',
                     updateHoleData: true,
                     extractType: ZRQGetRequestExtractEnum.extractItem
                   });
-                } else if (wsShareMemberId) {
+                } else if (wsShareMemberId !== undefined) {
                   // Updating all TimeSlot data in RQ cache.
                   await updateRQCDataHandler<TimeSlotInterface | undefined>({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.SWS_MAIN,
                       wsShareMemberId
                     ],
-                    data: __data as TimeSlotInterface,
-                    id: __data.id
+                    data: _data,
+                    id: _data?.id ?? ''
                   });
 
                   // Updating TimeSlot data in RQ cache.
@@ -330,16 +337,16 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.SWS_GET,
                       wsShareMemberId,
-                      __data.id
+                      _data?.id ?? ''
                     ],
-                    data: __data as TimeSlotInterface,
+                    data: _data,
                     id: '',
                     updateHoleData: true,
                     extractType: ZRQGetRequestExtractEnum.extractItem
                   });
                 }
 
-                presentZIonToastSuccess(MESSAGES.TIME_SLOT.UPDATED);
+                void presentZIonToastSuccess(MESSAGES.TIME_SLOT.UPDATED);
               }
             }
 
@@ -347,7 +354,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
           }
         } else {
           throw new Error(
-            (__response as ZLinkMutateApiType<TimeSlotInterface>).message ||
+            (_response as ZLinkMutateApiType<TimeSlotInterface>).message ??
               'something went wrong please try again! :('
           );
         }
@@ -360,8 +367,12 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
 
   useEffect(() => {
     try {
-      if (mode === FormMode.EDIT && timeSlotId && currentTimeSlotData?.id) {
-        const __oldTimeSlot =
+      if (
+        mode === FormMode.EDIT &&
+        timeSlotId !== undefined &&
+        currentTimeSlotData?.id !== undefined
+      ) {
+        const _oldTimeSlot =
           extractInnerData<TimeSlotInterface[]>(
             getRQCDataHandler<TimeSlotInterface[]>({
               key: [
@@ -370,9 +381,9 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
               ]
             }) as TimeSlotInterface[],
             extractInnerDataOptionsEnum.createRequestResponseItems
-          ) || [];
+          ) ?? [];
 
-        if (__oldTimeSlot) {
+        if (_oldTimeSlot !== undefined) {
           // Updating all TimeSlot data in RQ cache.
           void updateRQCDataHandler<TimeSlotInterface | undefined>({
             key: [
@@ -387,13 +398,14 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeSlotId, currentTimeSlotData?.id]);
 
   let isZFetching = mode === FormMode.EDIT;
 
   if (workspaceId !== undefined) {
     isZFetching = mode === FormMode.EDIT && isCurrentTimeSlotDataFetching;
-  } else if (wsShareMemberId) {
+  } else if (wsShareMemberId !== undefined) {
     isZFetching = mode === FormMode.EDIT && isCurrentSWSTimeSlotDataFetching;
   }
 
@@ -401,15 +413,15 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
     <ZIonContent className='w-full h-full ion-padding'>
       <Formik
         initialValues={{
-          time: currentTimeSlotData?.time || currentSWSTimeSlotData?.time || '',
+          time: currentTimeSlotData?.time ?? currentSWSTimeSlotData?.time ?? '',
           day:
-            currentTimeSlotData?.day ||
-            currentSWSTimeSlotData?.day ||
-            timeSlotDay ||
+            currentTimeSlotData?.day != null ??
+            currentSWSTimeSlotData?.day != null ??
+            timeSlotDay ??
             daysEnum.monday,
           color:
-            currentTimeSlotData?.color ||
-            currentSWSTimeSlotData?.color ||
+            currentTimeSlotData?.color ??
+            currentSWSTimeSlotData?.color ??
             DefaultTimeSlotColors[0].color
         }}
         enableReinitialize={true}
@@ -428,13 +440,13 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
         }}
         onSubmit={async values => {
           try {
-            const __zStringifyData = zStringify({
+            const _zStringifyData = zStringify({
               time: values.time,
               day: values.day,
               color: values.color
             });
 
-            await formikSubmitHandler(__zStringifyData);
+            await formikSubmitHandler(_zStringifyData);
           } catch (error) {
             reportCustomError(error);
           }
@@ -506,7 +518,9 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                     value={values.time}
                     onIonChange={handleChange}
                     onIonBlur={handleBlur}
-                    errorText={touched.time ? errors.time : undefined}
+                    errorText={
+                      touched?.time === true ? errors?.time : undefined
+                    }
                     testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.formModal.timeInput}-${timeSlotId}`}
                     testinglistselector={
                       CONSTANTS.testingSelectors.workspace.settingsModal
@@ -514,9 +528,13 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                     }
                     className={classNames({
                       z_ion_bg_white: true,
-                      'ion-touched': touched.time,
-                      'ion-invalid': errors.time,
-                      'ion-valid': !errors.time
+                      'ion-touched': touched?.time === true,
+                      'ion-invalid': touched?.time === true && errors.time,
+                      'ion-valid':
+                        touched?.time === true &&
+                        (errors?.time?.trim()?.length === 0 ||
+                          errors?.time === undefined ||
+                          errors?.time === null)
                     })}
                   />
                 )}
@@ -544,7 +562,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                     interface='popover'
                     name='day'
                     value={values.day}
-                    errorText={touched.day ? errors.day : undefined}
+                    errorText={touched?.day === true ? errors.day : undefined}
                     testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.formModal.daySelector}-${timeSlotId}`}
                     testinglistselector={
                       CONSTANTS.testingSelectors.workspace.settingsModal
@@ -563,9 +581,13 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                     disabled={mode === FormMode.EDIT}
                     className={classNames({
                       z_ion_bg_white: true,
-                      'ion-touched': touched.day,
-                      'ion-invalid': errors.day,
-                      'ion-valid': !errors.day
+                      'ion-touched': touched?.day === true,
+                      'ion-invalid': touched?.day === true && errors?.day,
+                      'ion-valid':
+                        touched?.day === true &&
+                        (errors?.day?.trim()?.length === 0 ||
+                          errors?.day === undefined ||
+                          errors?.day === undefined)
                     })}>
                     {ZDaysData.map((el, index) => {
                       return (
@@ -589,12 +611,6 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                   Select color
                 </ZIonText>
                 <div className='flex mt-3 ion-align-items-center'>
-                  {/* <div className='border-e selected'>
-										<div className='w-[1.3rem] cursor-pointer flex ion-align-items-center ion-justify-content-center h-[1.3rem] rounded-full mx-1 bg-slate-800'>
-											<ZIonIcon icon={checkmark} color='light' />
-										</div>
-									</div> */}
-
                   {/*  */}
                   {DefaultTimeSlotColors.map((el, index) => {
                     return (
@@ -611,7 +627,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                             .timetable.formModal.colorBtn
                         }
                         onClick={() => {
-                          setFieldValue('color', el.color, false);
+                          void setFieldValue('color', el.color, false);
                         }}>
                         {values.color === el.color && (
                           <ZIonIcon
@@ -626,7 +642,9 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                 <ZaionsColorPiker
                   value={values.color}
                   name='color'
-                  setFieldValueFn={setFieldValue}
+                  setFieldValueFn={
+                    setFieldValue as FormikSetFieldValueEventVoidType
+                  }
                   minHeight='2.3rem'
                   showSkeleton={isZFetching}
                   setDefaultColor={DefaultTimeSlotColors[0].color}

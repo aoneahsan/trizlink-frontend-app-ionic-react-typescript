@@ -6,8 +6,8 @@ import React from 'react';
 // Custom Imports
 import { ZIonItem } from '@/components/ZIonComponents';
 import {
-  IonSearchbarCustomEvent,
-  SearchbarChangeEventDetail
+  type IonSearchbarCustomEvent,
+  type SearchbarChangeEventDetail
 } from '@ionic/core';
 import ZIonSearchbar from '@/components/ZIonComponents/ZIonSearchbar';
 import { closeOutline, searchOutline } from 'ionicons/icons';

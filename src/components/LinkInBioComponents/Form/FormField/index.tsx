@@ -11,7 +11,6 @@ import {
   ZIonButton,
   ZIonCol,
   ZIonIcon,
-  ZIonInput,
   ZIonItem,
   ZIonReorder,
   ZIonReorderGroup,
@@ -24,8 +23,8 @@ import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
 import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedButton';
-import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
-import { ItemReorderEventDetail } from '@ionic/react';
+import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { type ItemReorderEventDetail } from '@ionic/react';
 import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
 import LinkInBioTitleField from '../TitleField';
 
@@ -40,11 +39,11 @@ import CONSTANTS from '@/utils/constants';
 // Type
 import {
   LinkInBioFormFieldsEnum,
-  linkInBioFromFieldItemInterface,
-  LinkInBioPredefinedPlatformInterface,
-  LinkInBioSingleBlockContentType
+  type linkInBioFromFieldItemInterface,
+  type LinkInBioPredefinedPlatformInterface,
+  type LinkInBioSingleBlockContentType
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
-import { FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
+import { type FormikSetFieldValueEventVoidType } from '@/types/ZaionsFormik.type';
 
 // Styles
 
@@ -70,7 +69,7 @@ const LinkInBioFormField: React.FC = () => {
 
   // fetch block data from api and storing it in LinkInBioPreDefinedFormFieldsData variable...
   const { data: LinkInBioPreDefinedFormFieldsData } = useZRQGetRequest<
-    LinkInBioPredefinedPlatformInterface<LinkInBioFormFieldsEnum>[]
+    Array<LinkInBioPredefinedPlatformInterface<LinkInBioFormFieldsEnum>>
   >({
     _url: API_URL_ENUM.linkInBioPreDefinedFormFields_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_FORM_FIELDS.MAIN]
@@ -79,7 +78,10 @@ const LinkInBioFormField: React.FC = () => {
   // After fetching data and storing it to LinkInBioPreDefinedFormFieldsData variable, setting data to setLinkInBioPredefinedFormFieldState recoil state and making sure that if only the data refetch then again store the lates data in recoil state...
   useEffect(() => {
     try {
-      if (LinkInBioPreDefinedFormFieldsData) {
+      if (
+        LinkInBioPreDefinedFormFieldsData !== undefined &&
+        LinkInBioPreDefinedFormFieldsData !== null
+      ) {
         setLinkInBioPredefinedFormFieldState(LinkInBioPreDefinedFormFieldsData);
       }
     } catch (error) {
@@ -91,7 +93,7 @@ const LinkInBioFormField: React.FC = () => {
   // handle reorder function (preview panel)
   const handleFormFieldsCardReorder = (
     event: CustomEvent<ItemReorderEventDetail>
-  ) => {
+  ): void => {
     // The `from` and `to` properties contain the index of the item
     // when the drag started and ended, respectively
 
@@ -130,7 +132,8 @@ const LinkInBioFormField: React.FC = () => {
           {({ remove }) => {
             return (
               <>
-                {values.form?.formFields?.length
+                {values.form?.formFields?.length !== null &&
+                values.form?.formFields !== undefined
                   ? values.form?.formFields.map((_cardItem, _index) => {
                       return (
                         <ZIonItem
@@ -168,10 +171,7 @@ const LinkInBioFormField: React.FC = () => {
                                     .design.blockForm.fields.form.titleInput
                                 }
                                 testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.titleInput}-${_index}`}
-                                value={
-                                  values.form?.formFields &&
-                                  values.form?.formFields[_index].title
-                                }
+                                value={values.form?.formFields?.[_index].title}
                               />
                             )}
 
@@ -187,8 +187,7 @@ const LinkInBioFormField: React.FC = () => {
                                 testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.titleInput}-2`}
                                 testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.titleInput}-2-${_index}`}
                                 value={
-                                  values.form?.formFields &&
-                                  values.form?.formFields[_index].placeholder
+                                  values.form?.formFields?.[_index].placeholder
                                 }
                                 slotImageUrl={
                                   predefinedFormFieldsImages[
@@ -217,8 +216,7 @@ const LinkInBioFormField: React.FC = () => {
                                 }
                                 testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.textarea}-${_index}`}
                                 value={
-                                  values.form?.formFields &&
-                                  values.form?.formFields[_index].columnId
+                                  values.form?.formFields?.[_index].columnId
                                 }
                               />
                             )}
@@ -234,7 +232,7 @@ const LinkInBioFormField: React.FC = () => {
                                     style={{
                                       '--inner-padding-end': '0'
                                     }}>
-                                    <ZIonText className='font-bold text-sm'>
+                                    <ZIonText className='text-sm font-bold'>
                                       Required
                                     </ZIonText>
                                     <ZRCSwitch
@@ -246,15 +244,17 @@ const LinkInBioFormField: React.FC = () => {
                                       }
                                       testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.requiredSwitcher}-${_index}`}
                                       onChange={value => {
-                                        setFieldValue(
+                                        void setFieldValue(
                                           `form.formFields.${_index}.required`,
                                           value,
                                           false
                                         );
                                       }}
                                       checked={
-                                        values.form?.formFields &&
-                                        values.form?.formFields[_index].required
+                                        values.form?.formFields !== null &&
+                                        values.form?.formFields !== undefined &&
+                                        values.form?.formFields[_index]
+                                          ?.required
                                       }
                                     />
                                   </ZIonItem>
@@ -265,7 +265,7 @@ const LinkInBioFormField: React.FC = () => {
                                     style={{
                                       '--inner-padding-end': '0'
                                     }}>
-                                    <ZIonText className='font-bold text-sm'>
+                                    <ZIonText className='text-sm font-bold'>
                                       Is Active
                                     </ZIonText>
                                     <ZRCSwitch
@@ -277,14 +277,15 @@ const LinkInBioFormField: React.FC = () => {
                                       }
                                       testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.activeSwitcher}-${_index}`}
                                       onChange={value => {
-                                        setFieldValue(
+                                        void setFieldValue(
                                           `form.formFields.${_index}.isActive`,
                                           value,
                                           false
                                         );
                                       }}
                                       checked={
-                                        values.form?.formFields &&
+                                        values.form?.formFields !== null &&
+                                        values.form?.formFields !== undefined &&
                                         values.form?.formFields[_index].isActive
                                       }
                                     />
@@ -306,7 +307,7 @@ const LinkInBioFormField: React.FC = () => {
                             testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.deleteBtn}-${_index}`}
                             deleteFn={(detail: OverlayEventDetail<unknown>) => {
                               try {
-                                if (detail && detail.role === 'destructive') {
+                                if (detail?.role === 'destructive') {
                                   void remove(_index);
                                 }
                               } catch (error) {
@@ -330,14 +331,14 @@ const LinkInBioFormField: React.FC = () => {
 //  formFieldValue: linkInBioFromFieldItemInterface[];
 const LinkInBiosFormFieldsModal: React.FC<{
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
-  setFieldValue: FormikSetFieldValueEventType;
+  setFieldValue: FormikSetFieldValueEventVoidType;
   formFieldValue: linkInBioFromFieldItemInterface[];
 }> = ({ dismissZIonModal, setFieldValue, formFieldValue }) => {
   // Recoil state for storing pre-defined form fields platform data.
   const linkInBioPredefinedFormFieldState = useRecoilValue(
     LinkInBioPredefinedFormFieldsRState
   );
-  const addNewFormFieldHandler = (type: LinkInBioFormFieldsEnum) => {
+  const addNewFormFieldHandler = (type: LinkInBioFormFieldsEnum): void => {
     try {
       const _updatedValue = [
         ...formFieldValue,
@@ -357,29 +358,32 @@ const LinkInBiosFormFieldsModal: React.FC<{
         Add a new field
       </ZIonTitle>
       <ZIonRow className='ion-padding ion-margin-top gap-y-4'>
-        {linkInBioPredefinedFormFieldState &&
-          linkInBioPredefinedFormFieldState.map(el => {
-            return (
-              <ZIonCol
-                size='3'
-                key={el.id}
-                className='flex ion-justify-content-center'>
-                <div className='ion-text-center me-3 w-max'>
-                  <LinkInBioPDButton
-                    icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
-                    onClick={() => {
-                      addNewFormFieldHandler(el.type);
-                    }}
-                  />
-                  <ZIonText
-                    color='dark'
-                    className='block pt-3'>
-                    {el.title}
-                  </ZIonText>
-                </div>
-              </ZIonCol>
-            );
-          })}
+        {linkInBioPredefinedFormFieldState?.map(el => {
+          return (
+            <ZIonCol
+              size='3'
+              key={el.id}
+              className='flex ion-justify-content-center'>
+              <div className='ion-text-center me-3 w-max'>
+                <LinkInBioPDButton
+                  icon={
+                    el.icon !== null && el.icon !== undefined
+                      ? ZIcons[el.icon]
+                      : ZIcons.PlaceHolder
+                  }
+                  onClick={() => {
+                    addNewFormFieldHandler(el.type);
+                  }}
+                />
+                <ZIonText
+                  color='dark'
+                  className='block pt-3'>
+                  {el.title}
+                </ZIonText>
+              </div>
+            </ZIonCol>
+          );
+        })}
       </ZIonRow>
     </ZRScrollbars>
   );

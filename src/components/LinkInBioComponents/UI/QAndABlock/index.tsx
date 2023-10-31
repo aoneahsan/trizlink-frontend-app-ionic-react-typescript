@@ -18,7 +18,7 @@ import {
   ZIonAccordionGroup,
   ZIonCol,
   ZIonItem,
-  ZIonLabel,
+  ZIonLabel
 } from '@/components/ZIonComponents';
 
 /**
@@ -30,8 +30,8 @@ import {
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { linkInBioBlockCardItemInterface } from '@/types/AdminPanel/linkInBioType/blockTypes';
-import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
+import { type linkInBioBlockCardItemInterface } from '@/types/AdminPanel/linkInBioType/blockTypes';
+import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 import classNames from 'classnames';
 
 /**
@@ -67,34 +67,34 @@ interface ZLinkInBioQAndABlockInterface {
 
 const ZLinkInBioQAndABlock: React.FC<ZLinkInBioQAndABlockInterface> = ({
   QAndABlockData,
-  fontFamily,
+  fontFamily
 }) => {
   return (
     <ZIonCol>
-      {QAndABlockData &&
-        QAndABlockData.map((element, index) => {
-          return (
-            <ZIonAccordionGroup>
-              <ZIonAccordion value={`z_q&a_accordion_${index}`}>
-                <ZIonItem slot='header' color='light'>
-                  <ZIonLabel className={classNames(fontFamily)}>
-                    {element.title}
-                  </ZIonLabel>
-                </ZIonItem>
-                <div
-                  className={classNames(fontFamily, {
-                    'ion-padding': true,
-                  })}
-                  slot='content'
-                >
-                  {element.text && (
-                    <div dangerouslySetInnerHTML={{ __html: element.text }} />
-                  )}
-                </div>
-              </ZIonAccordion>
-            </ZIonAccordionGroup>
-          );
-        })}
+      {QAndABlockData?.map((element, index) => {
+        return (
+          <ZIonAccordionGroup key={index}>
+            <ZIonAccordion value={`z_q&a_accordion_${index}`}>
+              <ZIonItem
+                slot='header'
+                color='light'>
+                <ZIonLabel className={classNames(fontFamily)}>
+                  {element.title}
+                </ZIonLabel>
+              </ZIonItem>
+              <div
+                className={classNames(fontFamily, {
+                  'ion-padding': true
+                })}
+                slot='content'>
+                {element.text !== null && element.text !== undefined && (
+                  <div dangerouslySetInnerHTML={{ __html: element.text }} />
+                )}
+              </div>
+            </ZIonAccordion>
+          </ZIonAccordionGroup>
+        );
+      })}
     </ZIonCol>
   );
 };

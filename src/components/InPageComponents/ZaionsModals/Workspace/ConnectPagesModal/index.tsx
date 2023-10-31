@@ -25,7 +25,8 @@ import {
   ZIonRow,
   ZIonText
 } from '@/components/ZIonComponents';
-import { CardsByType } from '@/data/UserDashboard/Workspace/ConnectPagesTab/index.data';
+import ZWorkspaceMockupPageModal from '../MockupPageModal';
+import { SingleCard } from '@/components/WorkspacesComponents/SingleCard';
 
 /**
  * Custom Hooks Imports go down
@@ -44,15 +45,14 @@ import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
  * */
 import {
   workspaceFormConnectPagesCardEnum,
-  workspaceFormConnectPagesEnum
+  type workspaceFormConnectPagesEnum
 } from '@/types/AdminPanel/workspace';
-import ZWorkspaceMockupPageModal from '../MockupPageModal';
-import { SingleCard } from '@/components/WorkspacesComponents/SingleCard';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
+import { CardsByType } from '@/data/UserDashboard/Workspace/ConnectPagesTab/index.data';
 
 /**
  * Style files Imports go down
@@ -86,9 +86,9 @@ const ZWorkspaceConnectPagesModal: React.FC<{
   const { presentZIonModal: presentZWorkspaceMockupPageModal } = useZIonModal(
     ZWorkspaceMockupPageModal,
     {
-      pageType: pageType,
-      color: color,
-      logo: logo
+      pageType,
+      color,
+      logo
     }
   );
 

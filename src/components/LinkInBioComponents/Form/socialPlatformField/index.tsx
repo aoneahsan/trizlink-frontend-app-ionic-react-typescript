@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 
 // Packages Imports
 import { addOutline, appsOutline } from 'ionicons/icons';
-import { ItemReorderEventDetail } from '@ionic/react';
+import { type ItemReorderEventDetail } from '@ionic/react';
 import { FieldArray, useFormikContext } from 'formik';
 import { useRecoilState } from 'recoil';
 import classNames from 'classnames';
@@ -32,9 +32,9 @@ import { predefinedSocialImages, ZIcons } from '@/utils/ZIcons';
 // Types
 import {
   cardDisplayEnum,
-  linkInBioBlockCardItemInterface,
-  LinkInBioPredefinedPlatformInterface,
-  LinkInBioSingleBlockContentType,
+  type linkInBioBlockCardItemInterface,
+  type LinkInBioPredefinedPlatformInterface,
+  type LinkInBioSingleBlockContentType,
   LinkInBioSocialPlatformEnum
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
@@ -42,7 +42,7 @@ import {
 import { LinkInBioPredefinedSocialPlatformRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
 import LinkInBioIconField from '../IconField';
 import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
-import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 
 // Styles
 
@@ -58,7 +58,7 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
 
   // fetch block data from api and storing it in LinkInBioBlocksData variable...
   const { data: LinkInBioPreDefinedSocialPlatformData } = useZRQGetRequest<
-    LinkInBioPredefinedPlatformInterface<LinkInBioSocialPlatformEnum>[]
+    Array<LinkInBioPredefinedPlatformInterface<LinkInBioSocialPlatformEnum>>
   >({
     _url: API_URL_ENUM.linkInBioPreDefinedSocialPlatform_create_list,
     _key: [
@@ -70,7 +70,10 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
   // After fetching data and storing it to LinkInBioPreDefinedSocialPlatformData variable, setting data to setLinkInBioPredefinedSocialPlatformState recoil state and making sure that if only the data refetch then again store the lates data in recoil state...
   useEffect(() => {
     try {
-      if (LinkInBioPreDefinedSocialPlatformData) {
+      if (
+        LinkInBioPreDefinedSocialPlatformData !== null &&
+        LinkInBioPreDefinedSocialPlatformData !== undefined
+      ) {
         setLinkInBioPredefinedSocialPlatformState(
           LinkInBioPreDefinedSocialPlatformData
         );
@@ -84,7 +87,7 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
   // handle reorder function (preview panel)
   const handleMusicCardReorder = (
     event: CustomEvent<ItemReorderEventDetail>
-  ) => {
+  ): void => {
     // The `from` and `to` properties contain the index of the item
     // when the drag started and ended, respectively
 
@@ -101,12 +104,12 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
   }: {
     _type: LinkInBioSocialPlatformEnum;
     _title: string;
-  }) => {
+  }): void => {
     try {
-      if (_type) {
+      if (_type !== undefined) {
         const _updateValue = values.cardItems;
 
-        if (_updateValue) {
+        if (_updateValue !== undefined) {
           const _index = _updateValue?.findIndex(
             item => item.socialCardType === _type
           );
@@ -125,14 +128,14 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
             _updateValue?.push(newEntry);
           }
 
-          setFieldValue('cardItems', _updateValue, true);
+          void setFieldValue('cardItems', _updateValue, true);
 
           /**
            * We are setting the title below just to make formik dirty.
            * Why? when we are setting the cardItems up why we need that?
            * what I understand that cardItems is an array an we are setting the value of cardItems to an array again, as we now array is a reference type so it does not change and formik does not get dirty and we also does not see the save button in frontend as save button will show when formik is dirty. for now the way round is to set title field to make formik dirty. we will change this as we find a better solution.
            */
-          setFieldValue(
+          void setFieldValue(
             'title',
             `${PRODUCT_NAME} music blocks = ${_updateValue.length}`,
             true
@@ -168,7 +171,11 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
                       <div className='ion-text-center me-3 w-max'>
                         <LinkInBioPDButton
                           color={_index > -1 ? 'secondary' : 'light'}
-                          icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
+                          icon={
+                            el.icon !== undefined && el.icon !== null
+                              ? ZIcons[el.icon]
+                              : ZIcons.PlaceHolder
+                          }
                           testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.socialPlatform.block}-${el.type}`}
                           testingselector={
                             CONSTANTS.testingSelectors.linkInBio.formPage.design
@@ -194,7 +201,7 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
                   CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm
                     .fields.socialPlatform.addBlockBtn
                 }
-                onClick={() =>
+                onClick={() => {
                   push({
                     target: {
                       url: ''
@@ -203,8 +210,8 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
                     isActive: true,
                     cardDisplayType: cardDisplayEnum.social,
                     socialCardType: LinkInBioSocialPlatformEnum.default
-                  })
-                }>
+                  });
+                }}>
                 <ZIonIcon
                   icon={addOutline}
                   className='me-1'
@@ -215,7 +222,7 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
               <ZIonReorderGroup
                 onIonItemReorder={handleMusicCardReorder}
                 disabled={false}>
-                {values.cardItems?.length
+                {values.cardItems !== null && values.cardItems !== undefined
                   ? values.cardItems.map((_cardItem, _index) => {
                       return (
                         <ZIonItem
@@ -253,10 +260,7 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
                                   .design.blockForm.fields.socialPlatform
                                   .linkInput
                               }
-                              value={
-                                values.cardItems &&
-                                values.cardItems[_index].target?.url
-                              }
+                              value={values.cardItems?.[_index].target?.url}
                               slotImageUrl={
                                 predefinedSocialImages[
                                   _cardItem.socialCardType as LinkInBioSocialPlatformEnum
@@ -277,10 +281,7 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
                                     .design.blockForm.fields.socialPlatform
                                     .iconInput
                                 }
-                                value={
-                                  values.cardItems &&
-                                  values.cardItems[_index].icon
-                                }
+                                value={values.cardItems?.[_index].icon}
                               />
                             )}
                           </div>
@@ -298,7 +299,7 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
                             }
                             deleteFn={(detail: OverlayEventDetail<unknown>) => {
                               try {
-                                if (detail && detail.role === 'destructive') {
+                                if (detail?.role === 'destructive') {
                                   void remove(_index);
                                 }
                               } catch (error) {

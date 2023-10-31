@@ -17,9 +17,8 @@ const ZaionsNewLabel: React.FC<{
     <div
       className={classNames(props.className, {
         zaions_secondary_color: true,
-        [classes.zaions_label_new]: true,
-      })}
-    >
+        [classes.zaions_label_new]: true
+      })}>
       {props.title}
     </div>
   );

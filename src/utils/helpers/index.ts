@@ -409,13 +409,11 @@ export const stringifyZQueryString = (_object: ZGenericObject) => {
  * @returns parse value.
  */
 export const parseZQueryString = (_value: string) => {
-  const __urlData = new URL(_value);
-  const __queryStringData = zQueryString.parse(
-    __urlData.search.replace('?', '')
-  );
+  const _urlData = new URL(_value);
+  const _queryStringData = zQueryString.parse(_urlData.search.replace('?', ''));
   return {
-    __queryStringData,
-    __urlData
+    _queryStringData,
+    _urlData
   };
 };
 

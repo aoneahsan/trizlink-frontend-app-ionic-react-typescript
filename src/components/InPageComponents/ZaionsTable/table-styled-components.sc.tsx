@@ -27,11 +27,11 @@ color: #686d7a;
 `;
 
 interface IZTableRowColProps {
-	large?: boolean;
+  large?: boolean;
 }
 
 export const ZTableRowCol = STYLED_COMPONENT.td<IZTableRowColProps>`
-padding: ${(props) => (props.large ? '1rem 1rem' : '.1rem 1rem')};  
+padding: ${props => (props.large ?? false ? '1rem 1rem' : '.1rem 1rem')};  
 font-size: 14px;
 color: #686d7a;
 `;

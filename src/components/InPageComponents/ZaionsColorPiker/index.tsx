@@ -30,7 +30,7 @@ import {
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { type FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
+import { type FormikSetFieldValueEventVoidType } from '@/types/ZaionsFormik.type';
 import { closeCircleOutline } from 'ionicons/icons';
 
 /**
@@ -62,7 +62,7 @@ interface ZaionsColorPikerType {
   setDefaultColor?: string;
   testingselector?: string;
   testinglistselector?: string;
-  setFieldValueFn?: FormikSetFieldValueEventType;
+  setFieldValueFn?: FormikSetFieldValueEventVoidType;
   closeIconOnChangeFn?: React.MouseEventHandler<HTMLIonButtonElement>;
 }
 

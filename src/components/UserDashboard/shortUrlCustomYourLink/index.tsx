@@ -12,7 +12,6 @@ import classNames from 'classnames';
 import { useFormikContext } from 'formik';
 import { useRecoilValue } from 'recoil';
 import { documentTextOutline } from 'ionicons/icons';
-import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 
 /**
  * Custom Imports go down
@@ -29,22 +28,18 @@ import {
   ZIonText,
   ZIonTextareaShort
 } from '@/components/ZIonComponents';
-import ZaionsFileUploadModal from '@/components/InPageComponents/ZaionsModals/FileUploadModal';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
-import { zJsonParse } from '@/utils/helpers';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
-import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
+import { type ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 
 /**
  * Recoil State Imports go down
@@ -83,10 +78,6 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
   const zaionsAppSettings = useRecoilValue(ZaionsAppSettingsRState);
   const { values, errors, touched, handleChange, handleBlur, setFieldValue } =
     useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
-
-  const { presentZIonModal: presentZFileUploadModal } = useZIonModal(
-    ZaionsFileUploadModal
-  );
 
   if (showSkeleton) {
     return <ZaionsCustomYourLinkSkeleton />;
@@ -127,9 +118,9 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
         {/* Col-1 Image */}
         <ZReactDropZone
           onDrop={(acceptedFiles, fileRejection, event) => {
-            if (acceptedFiles.length) {
+            if (acceptedFiles.length > 0) {
               const filePath = URL.createObjectURL(acceptedFiles[0]);
-              setFieldValue(
+              void setFieldValue(
                 'featureImg',
                 {
                   featureImgFile: acceptedFiles[0],
@@ -153,7 +144,8 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
                 }
                 style={{
                   background: `url(${
-                    values?.featureImg?.featureImgUrl?.trim()?.length
+                    values?.featureImg?.featureImgUrl !== undefined &&
+                    values?.featureImg?.featureImgUrl?.trim()?.length > 0
                       ? values?.featureImg?.featureImgUrl
                       : uploadImageBg
                   })`
@@ -221,7 +213,7 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.title}
-            errorText={touched.title ? errors.title : undefined}
+            errorText={touched.title === true ? errors.title : undefined}
             testingselector={
               CONSTANTS.testingSelectors.shortLink.formPage.customYourLink
                 .titleInput
@@ -229,8 +221,10 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
             className={classNames({
               'w-full': true,
               'ion-touched': touched.title,
-              'ion-invalid': touched.title && errors.title,
-              'ion-valid': touched.title && !errors.title
+              'ion-invalid': touched.title === true && errors.title,
+              'ion-valid':
+                touched.title === true &&
+                (errors.title === undefined || errors.title?.trim()?.length > 0)
             })}
           />
 
@@ -326,5 +320,6 @@ const ZaionsCustomYourLinkSkeleton: React.FC = React.memo(() => {
     </ZIonCol>
   );
 });
+ZaionsCustomYourLinkSkeleton.displayName = 'ZaionsCustomYourLinkSkeleton';
 
 export default ZaionsCustomYourLink;

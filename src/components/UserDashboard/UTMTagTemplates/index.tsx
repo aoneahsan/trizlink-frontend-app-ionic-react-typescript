@@ -18,11 +18,11 @@ import {
   ZIonRow,
   ZIonList,
   ZIonGrid,
-  ZIonSkeletonText
+  ZIonSkeletonText,
+  ZIonButton
 } from '@/components/ZIonComponents';
 import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 import ZaionsAddUtmTags from '@/components/InPageComponents/ZaionsModals/AddUtmTags';
-import { ZIonButton } from '@/components/ZIonComponents';
 
 // Global Constants
 import {
@@ -45,11 +45,11 @@ import { reportCustomError } from '@/utils/customErrorType';
 
 // Types
 import {
-  UTMTagTemplateType,
-  ZaionsShortUrlOptionFieldsValuesInterface
+  type UTMTagTemplateType,
+  type ZaionsShortUrlOptionFieldsValuesInterface
 } from '@/types/AdminPanel/linksType';
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import {
   permissionsEnum,
   permissionsTypeEnum,
@@ -63,7 +63,7 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
   showSkeleton = false
 }) => {
   // getting link-in-bio and workspace ids from url with the help of useParams.
-  const { editLinkId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
     editLinkId: string;
     workspaceId: string;
     shareWSMemberId: string;
@@ -89,7 +89,9 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
   const { data: _UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN, workspaceId],
-    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _shouldFetchWhenIdPassed: !(
+      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+    ),
     _itemsIds: [workspaceId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _showLoader: false
@@ -99,7 +101,9 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
   const { data: _SWSUTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.sws_utm_tag_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN],
-    _shouldFetchWhenIdPassed: wsShareId ? false : true,
+    _shouldFetchWhenIdPassed: !(
+      wsShareId !== undefined && wsShareId?.trim()?.length > 0
+    ),
     _itemsIds: [shareWSMemberId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
@@ -107,31 +111,29 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
   // #endregion
 
   // #region Functions.
-  const selectFromTemplate = (_selectedTemplateId: string) => {
-    let __selectedTemp;
+  const selectFromTemplate = (_selectedTemplateId: string): void => {
+    let _selectedTemp;
 
     if (workspaceId !== undefined) {
-      __selectedTemp =
-        _UTMTagsData &&
-        _UTMTagsData.length &&
-        _UTMTagsData.find(({ id }) => id === _selectedTemplateId);
-    } else if (wsShareId) {
-      __selectedTemp =
-        _SWSUTMTagsData &&
-        _SWSUTMTagsData.length &&
-        _SWSUTMTagsData.find(({ id }) => id === _selectedTemplateId);
+      _selectedTemp = _UTMTagsData?.find(
+        ({ id }) => id === _selectedTemplateId
+      );
+    } else if (wsShareId !== undefined) {
+      _selectedTemp = _SWSUTMTagsData?.find(
+        ({ id }) => id === _selectedTemplateId
+      );
     }
 
-    if (__selectedTemp) {
-      const __selectedUtmTagInfo = {
-        templateId: __selectedTemp.id,
-        utmCampaign: __selectedTemp.utmCampaign,
-        utmContent: __selectedTemp.utmContent,
-        utmMedium: __selectedTemp.utmMedium,
-        utmSource: __selectedTemp.utmSource,
-        utmTerm: __selectedTemp.utmTerm
+    if (_selectedTemp !== undefined) {
+      const _selectedUtmTagInfo = {
+        templateId: _selectedTemp.id,
+        utmCampaign: _selectedTemp.utmCampaign,
+        utmContent: _selectedTemp.utmContent,
+        utmMedium: _selectedTemp.utmMedium,
+        utmSource: _selectedTemp.utmSource,
+        utmTerm: _selectedTemp.utmTerm
       };
-      setFieldValue('UTMTags', __selectedUtmTagInfo, true);
+      void setFieldValue('UTMTags', _selectedUtmTagInfo, true);
     }
   };
   // #endregion
@@ -140,45 +142,44 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
     try {
       const { utmCampaign, utmMedium, utmSource, utmTerm, utmContent } =
         values.UTMTags;
-      const _queryParams: { [key: string]: string } = {};
-      const _baseURL = zAddUrlProtocol(values?.target?.url || '');
+      const _queryParams: Record<string, string> = {};
+      const _baseURL = zAddUrlProtocol(values?.target?.url ?? '');
 
-      if (_baseURL && isURL(_baseURL)) {
+      if (isURL(_baseURL)) {
         const _baseUrlWithoutParams = zExtractUrlParts(_baseURL).origin;
 
-        if (utmCampaign && utmCampaign.length > 0) {
+        if (utmCampaign !== undefined && utmCampaign.length > 0) {
           _queryParams.utm_campaign = utmCampaign;
         }
 
-        if (utmMedium && utmMedium.length > 0) {
+        if (utmMedium !== undefined && utmMedium.length > 0) {
           _queryParams.utm_medium = utmMedium;
         }
 
-        if (utmSource && utmSource.length > 0) {
+        if (utmSource !== undefined && utmSource.length > 0) {
           _queryParams.utm_source = utmSource;
         }
 
-        if (utmTerm && utmTerm.length > 0) {
+        if (utmTerm !== undefined && utmTerm.length > 0) {
           _queryParams.utm_term = utmTerm;
         }
 
-        if (utmContent && utmContent.length > 0) {
+        if (utmContent !== undefined && utmContent.length > 0) {
           _queryParams.utm_content = utmContent;
         }
 
         const _queryStringParams = stringifyZQueryString(_queryParams);
 
-        setFieldValue(
+        void setFieldValue(
           'target.url',
-          `${_baseUrlWithoutParams}${
-            _queryStringParams ? `?${_queryStringParams}` : ''
-          }`,
+          `${_baseUrlWithoutParams}${`?${_queryStringParams}` ?? ''}`,
           false
         );
       }
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     values.UTMTags.utmCampaign,
     values.UTMTags.utmMedium,
@@ -223,12 +224,12 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
           <ZCan
             shareWSId={wsShareId}
             permissionType={
-              wsShareId
+              wsShareId !== undefined
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }
             havePermissions={
-              wsShareId
+              wsShareId !== undefined
                 ? [
                     shareWSPermissionEnum.create_sws_utmTag,
                     shareWSPermissionEnum.update_sws_utmTag
@@ -377,12 +378,12 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
                   <ZCan
                     shareWSId={wsShareId}
                     permissionType={
-                      wsShareId
+                      wsShareId !== undefined
                         ? permissionsTypeEnum.shareWSMemberPermissions
                         : permissionsTypeEnum.loggedInUserPermissions
                     }
                     havePermissions={
-                      wsShareId
+                      wsShareId !== undefined
                         ? [shareWSPermissionEnum.create_sws_utmTag]
                         : [permissionsEnum.create_utmTag]
                     }>
@@ -428,11 +429,11 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
                 .selectTemplateSelector
             }
             options={
-              workspaceId
+              workspaceId !== undefined
                 ? (_UTMTagsData?.map(el => {
                     return { value: el.id, label: el.templateName };
                   }) as ZaionsRSelectOptions[])
-                : wsShareId
+                : wsShareId !== undefined
                 ? (_SWSUTMTagsData?.map(el => {
                     return { value: el.id, label: el.templateName };
                   }) as ZaionsRSelectOptions[])
@@ -440,7 +441,7 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
             }
             name='UTMTags.templateId'
             onChange={_value => {
-              if (_value as ZaionsRSelectOptions) {
+              if (_value !== undefined) {
                 selectFromTemplate(
                   (_value as ZaionsRSelectOptions)?.value as string
                 );
@@ -448,11 +449,11 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
             }}
             value={
               formatReactSelectOption(
-                values?.UTMTags?.templateId as string,
-                _UTMTagsData as ZGenericObject[],
+                values?.UTMTags?.templateId ?? '',
+                (_UTMTagsData as ZGenericObject[]) ?? [],
                 'id',
                 'templateName'
-              ) || []
+              ) ?? []
             }
           />
         </ZIonCol>
@@ -625,5 +626,6 @@ const UTMTagTemplatesSkeleton: React.FC = React.memo(() => {
     </>
   );
 });
+UTMTagTemplatesSkeleton.displayName = 'UTMTagTemplatesSkeleton';
 
 export default UTMTagTemplates;

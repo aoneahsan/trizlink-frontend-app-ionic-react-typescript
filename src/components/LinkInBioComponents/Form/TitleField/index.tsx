@@ -3,8 +3,8 @@ import React from 'react';
 
 // Packages Imports
 import { reorderTwoOutline } from 'ionicons/icons';
-import { InputChangeEventDetail } from '@ionic/react';
-import { IonInputCustomEvent } from '@ionic/core';
+import { type InputChangeEventDetail } from '@ionic/react';
+import { type IonInputCustomEvent } from '@ionic/core';
 
 // Custom Imports
 import {
@@ -48,25 +48,29 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
       lines='none'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
-      {!showImageInSlot && !slotImageUrl?.trim() && (
-        <ZIonIcon
-          icon={reorderTwoOutline}
-          slot='start'
-          className='w-7 h-7 me-2'
-          testingselector={`${testingselector}-icon`}
-          testinglistselector={`${testinglistselector}-icon`}
-        />
-      )}
+      {!showImageInSlot &&
+        slotImageUrl?.trim() === null &&
+        slotImageUrl?.trim() === '' && (
+          <ZIonIcon
+            icon={reorderTwoOutline}
+            slot='start'
+            className='w-7 h-7 me-2'
+            testingselector={`${testingselector}-icon`}
+            testinglistselector={`${testinglistselector}-icon`}
+          />
+        )}
 
-      {showImageInSlot && slotImageUrl?.trim() && (
-        <ZIonImg
-          src={slotImageUrl}
-          style={{ width: '25px' }}
-          slot='start'
-          testingselector={`${testingselector}-image`}
-          testinglistselector={`${testinglistselector}-image`}
-        />
-      )}
+      {showImageInSlot &&
+        slotImageUrl?.trim() !== null &&
+        slotImageUrl?.trim() !== '' && (
+          <ZIonImg
+            src={slotImageUrl}
+            style={{ width: '25px' }}
+            slot='start'
+            testingselector={`${testingselector}-image`}
+            testinglistselector={`${testinglistselector}-image`}
+          />
+        )}
 
       <ZIonInput
         label=''

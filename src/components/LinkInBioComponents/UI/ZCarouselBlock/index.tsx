@@ -27,8 +27,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-	linkInBioBlockCardItemInterface,
-	LinkInBioCardStyleEnum,
+  type linkInBioBlockCardItemInterface,
+  type LinkInBioCardStyleEnum
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 /**
@@ -52,8 +52,8 @@ import 'swiper/css';
  * ? Like if you have a type for props it should be please Down
  * */
 interface ZCarouselBlockInterface {
-	data?: linkInBioBlockCardItemInterface[];
-	cardStyle?: LinkInBioCardStyleEnum;
+  data?: linkInBioBlockCardItemInterface[];
+  cardStyle?: LinkInBioCardStyleEnum;
 }
 
 /**
@@ -62,40 +62,39 @@ interface ZCarouselBlockInterface {
  * @type {*}
  * */
 const ZCarouselBlock: React.FC<ZCarouselBlockInterface> = ({
-	data,
-	cardStyle,
+  data,
+  cardStyle
 }) => {
-	return (
-		<>
-			<Swiper
-				// spaceBetween={0}
-				// slidesPerView={1}
-				// onSlideChange={() => {}}
-				// onSwiper={(_) => {}}
-				style={{ width: '100%' }}
-			>
-				{data?.length ? (
-					data?.map((element, index) => {
-						return (
-							<SwiperSlide key={index}>
-								<ZCustomCard
-									mediaType={ZMediaEnum.carousel}
-									title={element.title}
-									description={element.description}
-									image={element.imageUrl}
-									type={cardStyle}
-								/>
-							</SwiperSlide>
-						);
-					})
-				) : (
-					<SwiperSlide>
-						<ZCustomCard mediaType={ZMediaEnum.carousel} />
-					</SwiperSlide>
-				)}
-			</Swiper>
-		</>
-	);
+  return (
+    <>
+      <Swiper
+        // spaceBetween={0}
+        // slidesPerView={1}
+        // onSlideChange={() => {}}
+        // onSwiper={(_) => {}}
+        style={{ width: '100%' }}>
+        {data !== undefined ? (
+          data?.map((element, index) => {
+            return (
+              <SwiperSlide key={index}>
+                <ZCustomCard
+                  mediaType={ZMediaEnum.carousel}
+                  title={element.title}
+                  description={element.description}
+                  image={element.imageUrl}
+                  type={cardStyle}
+                />
+              </SwiperSlide>
+            );
+          })
+        ) : (
+          <SwiperSlide>
+            <ZCustomCard mediaType={ZMediaEnum.carousel} />
+          </SwiperSlide>
+        )}
+      </Swiper>
+    </>
+  );
 };
 
 export default ZCarouselBlock;

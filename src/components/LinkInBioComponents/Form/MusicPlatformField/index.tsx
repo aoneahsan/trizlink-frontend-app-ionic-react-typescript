@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 
 // Packages Imports
 import { addOutline, appsOutline } from 'ionicons/icons';
-import { ItemReorderEventDetail } from '@ionic/react';
+import { type ItemReorderEventDetail } from '@ionic/react';
 import { FieldArray, useFormikContext } from 'formik';
 import { useRecoilState } from 'recoil';
 import classNames from 'classnames';
@@ -33,17 +33,17 @@ import { predefinedMusicPlatformImages, ZIcons } from '@/utils/ZIcons';
 // Types
 import {
   cardDisplayEnum,
-  linkInBioBlockCardItemInterface,
+  type linkInBioBlockCardItemInterface,
   LinkInBioMusicPlatformEnum,
-  LinkInBioPredefinedPlatformInterface,
-  LinkInBioSingleBlockContentType
+  type LinkInBioPredefinedPlatformInterface,
+  type LinkInBioSingleBlockContentType
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 // Recoil states
 import { LinkInBioPredefinedMusicPlatformRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
 import LinkInBioIconField from '../IconField';
 import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
-import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 
 // Styles
 
@@ -59,7 +59,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
 
   // fetch block data from api and storing it in LinkInBioBlocksData variable...
   const { data: LinkInBioPreDefinedMusicPlatformData } = useZRQGetRequest<
-    LinkInBioPredefinedPlatformInterface<LinkInBioMusicPlatformEnum>[]
+    Array<LinkInBioPredefinedPlatformInterface<LinkInBioMusicPlatformEnum>>
   >({
     _url: API_URL_ENUM.linkInBioPreDefinedMusicPlatform_create_list,
     _key: [
@@ -71,7 +71,10 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
   // After fetching data and storing it to LinkInBioPreDefinedMusicPlatformData variable, setting data to setLinkInBioPredefinedMusicPlatformState recoil state and making sure that if only the data refetch then again store the lates data in recoil state...
   useEffect(() => {
     try {
-      if (LinkInBioPreDefinedMusicPlatformData) {
+      if (
+        LinkInBioPreDefinedMusicPlatformData !== undefined &&
+        LinkInBioPreDefinedMusicPlatformData !== null
+      ) {
         setLinkInBioPredefinedMusicPlatformState(
           LinkInBioPreDefinedMusicPlatformData
         );
@@ -85,7 +88,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
   // handle reorder function (preview panel)
   const handleMusicCardReorder = (
     event: CustomEvent<ItemReorderEventDetail>
-  ) => {
+  ): void => {
     // The `from` and `to` properties contain the index of the item
     // when the drag started and ended, respectively
 
@@ -102,12 +105,12 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
   }: {
     _type: LinkInBioMusicPlatformEnum;
     _title: string;
-  }) => {
+  }): void => {
     try {
-      if (_type) {
+      if (_type !== undefined) {
         const _updateValue = values.cardItems;
 
-        if (_updateValue) {
+        if (_updateValue !== undefined) {
           const _index = _updateValue?.findIndex(
             item => item.musicCardType === _type
           );
@@ -126,14 +129,14 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
             _updateValue?.push(newEntry);
           }
 
-          setFieldValue('cardItems', _updateValue, true);
+          void setFieldValue('cardItems', _updateValue, true);
 
           /**
            * We are setting the title below just to make formik dirty.
            * Why? when we are setting the cardItems up why we need that?
            * what I understand that cardItems is an array an we are setting the value of cardItems to an array again, as we now array is a reference type so it does not change and formik does not get dirty and we also does not see the save button in frontend as save button will show when formik is dirty. for now the way round is to set title field to make formik dirty. we will change this as we find a better solution.
            */
-          setFieldValue(
+          void setFieldValue(
             'title',
             `${PRODUCT_NAME} music blocks = ${_updateValue.length}`,
             true
@@ -172,7 +175,11 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
                       <div className='ion-text-center me-3 w-max'>
                         <LinkInBioPDButton
                           color={_index > -1 ? 'secondary' : 'light'}
-                          icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
+                          icon={
+                            el.icon !== undefined && el.icon !== null
+                              ? ZIcons[el.icon]
+                              : ZIcons.PlaceHolder
+                          }
                           testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.block}-${el.type}`}
                           onClick={() => {
                             toggleMusicPlatformCardHandler({
@@ -194,7 +201,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
                   CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm
                     .fields.music.addBlockBtn
                 }
-                onClick={() =>
+                onClick={() => {
                   push({
                     target: {
                       url: ''
@@ -203,8 +210,8 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
                     isActive: true,
                     cardDisplayType: cardDisplayEnum.music,
                     musicCardType: LinkInBioMusicPlatformEnum.default
-                  })
-                }>
+                  });
+                }}>
                 <ZIonIcon
                   icon={addOutline}
                   className='me-1'
@@ -215,7 +222,8 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
               <ZIonReorderGroup
                 onIonItemReorder={handleMusicCardReorder}
                 disabled={false}>
-                {values.cardItems?.length
+                {values.cardItems?.length !== null &&
+                values.cardItems?.length !== undefined
                   ? values.cardItems.map((_cardItem, _index) => {
                       return (
                         <ZIonItem
@@ -253,10 +261,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
                                 CONSTANTS.testingSelectors.linkInBio.formPage
                                   .design.blockForm.fields.music.titleInput
                               }
-                              value={
-                                values.cardItems &&
-                                values.cardItems[_index].title
-                              }
+                              value={values.cardItems?.[_index].title}
                               slotImageUrl={
                                 predefinedMusicPlatformImages[
                                   _cardItem.musicCardType as LinkInBioMusicPlatformEnum
@@ -274,10 +279,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
                                 CONSTANTS.testingSelectors.linkInBio.formPage
                                   .design.blockForm.fields.music.linkInput
                               }
-                              value={
-                                values.cardItems &&
-                                values.cardItems[_index].target?.url
-                              }
+                              value={values.cardItems?.[_index].target?.url}
                             />
 
                             {_cardItem.musicCardType ===
@@ -292,10 +294,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
                                   CONSTANTS.testingSelectors.linkInBio.formPage
                                     .design.blockForm.fields.music.iconInput
                                 }
-                                value={
-                                  values.cardItems &&
-                                  values.cardItems[_index].icon
-                                }
+                                value={values.cardItems?.[_index].icon}
                               />
                             )}
                           </div>
@@ -312,7 +311,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
                             }
                             deleteFn={(detail: OverlayEventDetail<unknown>) => {
                               try {
-                                if (detail && detail.role === 'destructive') {
+                                if (detail?.role === 'destructive') {
                                   void remove(_index);
                                 }
                               } catch (error) {

@@ -16,7 +16,7 @@ import {
   imageOutline
 } from 'ionicons/icons';
 import classNames from 'classnames';
-import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 
 /**
  * Custom Imports go down
@@ -215,8 +215,9 @@ const ZWorkspaceMockupPageModal: React.FC<{
                       })}
                       style={{
                         background:
-                          values.coverImage.trim().length &&
-                          `url(${values.coverImage})`,
+                          values?.coverImage?.trim()?.length > 0
+                            ? `url(${values.coverImage})`
+                            : '',
 
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
@@ -240,7 +241,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
                               };
 
                               // setting the url in the formik state (setting coverImage).
-                              setFieldValue(
+                              void setFieldValue(
                                 'coverImage',
                                 fileData.fileUrl,
                                 false
@@ -315,7 +316,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
                                 };
 
                                 // setting the url in the formik state (setting profilePhoto).
-                                setFieldValue(
+                                void setFieldValue(
                                   'profilePhoto',
                                   fileData.fileUrl,
                                   false
@@ -329,7 +330,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
                             'border-dashed border-inherit hover:border-indigo-500 border-[1px] w-[96px] h-[96px] rounded-full flex ion-text-center flex-col ion-align-items-center ion-justify-content-center':
                               true,
                             zaions__dark_set:
-                              values.coverImage.trim().length ||
+                              values.coverImage.trim().length ??
                               values.profilePhoto.trim().length
                           })}
                           style={{
@@ -337,24 +338,25 @@ const ZWorkspaceMockupPageModal: React.FC<{
                             backgroundPosition: 'center',
                             backgroundRepeat: 'no-repeat',
                             background:
-                              values.profilePhoto.trim().length &&
-                              `url(${values.profilePhoto})`
+                              values?.profilePhoto?.trim()?.length > 0
+                                ? `url(${values.profilePhoto})`
+                                : ''
                           }}>
                           <ZIonIcon
                             icon={cameraOutline}
                             className={classNames({
                               'w-7 h-7': true,
                               'zaions_ion_color_light hidden hover:inline-block':
-                                values.coverImage.trim().length ||
-                                values.profilePhoto.trim().length
+                                values?.coverImage?.trim()?.length ??
+                                values?.profilePhoto?.trim()?.length
                             })}
                           />
                           <ZIonLabel
                             className={classNames({
                               'text-sm': true,
                               'zaions_ion_color_light hidden hover:block':
-                                values.coverImage.trim().length ||
-                                values.profilePhoto.trim().length
+                                values?.coverImage?.trim()?.length ??
+                                values?.profilePhoto?.trim()?.length
                             })}>
                             Add Profile Picture
                           </ZIonLabel>
@@ -362,7 +364,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
                       </ZIonCol>
                     </ZIonRow>
 
-                    {/***  Add Page Info ***/}
+                    {/** *  Add Page Info ***/}
                     <ZIonRow className='mx-3 mt-3'>
                       {/* pageName */}
                       <ZIonCol>
@@ -376,10 +378,13 @@ const ZWorkspaceMockupPageModal: React.FC<{
                           onIonBlur={handleBlur}
                           value={values.pageName}
                           className={classNames({
+                            '': touched?.pageName === true,
                             'ion-touched ion-invalid':
-                              touched.pageName && errors.pageName,
+                              touched?.pageName === true && errors?.pageName,
                             'ion-touched ion-valid':
-                              touched.pageName && !errors.pageName
+                              touched?.pageName === true &&
+                              (errors?.pageName === undefined ||
+                                errors?.pageName === undefined)
                           })}
                         />
                       </ZIonCol>
@@ -540,8 +545,10 @@ const PlatformColorAndIcon: React.FC = () => {
               _cssClass: '',
               _dismissOnSelect: false,
               _onWillDismiss: ({ detail }) => {
-                detail.data !== undefined &&
-                  setFieldValue('platformColor', detail.data, false);
+                void (
+                  detail.data !== undefined &&
+                  setFieldValue('platformColor', detail.data, false)
+                );
               }
             });
           }}>
@@ -564,8 +571,10 @@ const PlatformColorAndIcon: React.FC = () => {
               _cssClass: '',
               _dismissOnSelect: false,
               _onWillDismiss: ({ detail }) => {
-                detail.data !== undefined &&
-                  setFieldValue('platformIcon', detail.data, false);
+                void (
+                  detail.data !== undefined &&
+                  setFieldValue('platformIcon', detail.data, false)
+                );
               }
             });
           }}>
@@ -602,9 +611,9 @@ const ContentStyle: React.FC = () => {
             zaions__bg_white: el.contentStyleType === values.contentStyle
           })}
           key={index}
-          onClick={() =>
-            setFieldValue('contentStyle', el.contentStyleType, false)
-          }>
+          onClick={() => {
+            void setFieldValue('contentStyle', el.contentStyleType, false);
+          }}>
           {
             <ZIonIcon
               icon={checkmarkCircle}

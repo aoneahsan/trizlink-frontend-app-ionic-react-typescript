@@ -1,7 +1,6 @@
 import React from 'react';
 
 // Packages Imports
-import { timeOutline } from 'ionicons/icons';
 import classNames from 'classnames';
 
 // Custom Imports
@@ -12,7 +11,7 @@ import {
   ZIonRow,
   ZIonText
 } from '@/components/ZIonComponents';
-import { SwitchChangeEventHandler } from 'rc-switch';
+import { type SwitchChangeEventHandler } from 'rc-switch';
 
 const ZWorkspaceApprovalToggler: React.FC<{
   workspaceId?: string;

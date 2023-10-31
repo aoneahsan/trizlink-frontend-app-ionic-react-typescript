@@ -3,7 +3,10 @@ import React from 'react';
 
 // Packages Imports
 import { linkOutline, refreshCircleOutline } from 'ionicons/icons';
-import { InputChangeEventDetail, IonInputCustomEvent } from '@ionic/core';
+import {
+  type InputChangeEventDetail,
+  type IonInputCustomEvent
+} from '@ionic/core';
 
 // Custom Imports
 import {
@@ -11,8 +14,7 @@ import {
   ZIonIcon,
   ZIonImg,
   ZIonInput,
-  ZIonItem,
-  ZIonTitle
+  ZIonItem
 } from '@/components/ZIonComponents';
 
 // Styles
@@ -53,7 +55,7 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
       lines='none'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
-      {!showImageInSlot && !slotImageUrl?.trim() && (
+      {!showImageInSlot && slotImageUrl?.trim() === null && (
         <ZIonIcon
           icon={linkOutline}
           slot='start'
@@ -63,7 +65,7 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
         />
       )}
 
-      {showImageInSlot && slotImageUrl?.trim() && (
+      {showImageInSlot && slotImageUrl?.trim() !== null && (
         <ZIonImg
           src={slotImageUrl}
           style={{ width: '25px' }}

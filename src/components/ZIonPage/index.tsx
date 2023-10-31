@@ -1,5 +1,5 @@
 // Core Imports
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Imports
 import { IonPage } from '@ionic/react';
@@ -12,21 +12,21 @@ import SideBarMenu from '@/navigation/SideBarMenu';
 // Global Constants
 import { CONTENT_ID } from '@/utils/constants';
 import ZaionsDashboardResponsiveMenu from '@/navigation/AdminPanel/DashboardResponsiveMenu';
-import { PAGE_MENU, PAGE_MENU_SIDE } from '@/utils/enums';
+import { PAGE_MENU, type PAGE_MENU_SIDE } from '@/utils/enums';
 import AdminPanelShortLinksFolderSideMenu from '@/navigation/AdminPanel/ShortLinks/FolderSideMenu';
 import AdminPanelLinkInBioFolderSideMenu from '@/navigation/AdminPanel/LinkInBioFolderSideMenu';
 import ZWorkspaceViewPageFilterMenu from '@/navigation/AdminPanel/WorkspaceViewPageFilterMenu';
 import { useParams } from 'react-router';
 
 // Types
-type ZaionsIonPageType = {
+interface ZaionsIonPageType {
   children: ReactNode | ReactNode[];
   className?: string;
   id?: string;
   pageTitle?: string;
   menu?: PAGE_MENU | undefined;
   menuSide?: PAGE_MENU_SIDE;
-};
+}
 
 // Functional Component
 const ZIonPage: React.FC<ZaionsIonPageType> = ({
@@ -57,7 +57,7 @@ const ZIonPage: React.FC<ZaionsIonPageType> = ({
       )}
 
       <IonPage
-        id={id ? id : CONTENT_ID}
+        id={id ?? CONTENT_ID}
         // className={`${className}`}
         className={classNames(className)}>
         <ZaionsRHelmet title={pageTitle} />

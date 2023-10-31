@@ -24,7 +24,7 @@ import { ZIonCol } from '@/components/ZIonComponents';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { Property } from 'csstype/index';
+import { type Property } from 'csstype/index';
 
 /**
  * Recoil State Imports go down
@@ -64,7 +64,7 @@ const ZLinkInBioSeparatorBlock: React.FC<ZLinkInBioSeparatorBlockInterface> = ({
   _borderWidth = '1px',
   _borderColor,
   _borderStyle,
-  _marginVertical = 0,
+  _marginVertical = 0
 }) => {
   return (
     <ZIonCol>
@@ -74,9 +74,8 @@ const ZLinkInBioSeparatorBlock: React.FC<ZLinkInBioSeparatorBlockInterface> = ({
           borderTopWidth: _borderWidth,
           borderTopColor: _borderColor,
           borderTopStyle: _borderStyle,
-          margin: `${_marginVertical}px 0px`,
-        }}
-      ></div>
+          margin: `${_marginVertical}px 0px`
+        }}></div>
     </ZIonCol>
   );
 };

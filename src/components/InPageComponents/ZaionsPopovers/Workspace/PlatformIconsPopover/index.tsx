@@ -87,7 +87,7 @@ const ZPlatformIconsPopover: React.FC<{
             <ZIonIcon
               icon={el.icon}
               className='w-6 h-6'
-              style={{ color: _colorCode ? _colorCode : '' }}
+              style={{ color: _colorCode ?? '' }}
             />
           </div>
         </ZIonCol>
@@ -115,7 +115,7 @@ const ZPlatformIconsPopover: React.FC<{
             <ZIonIcon
               icon={el.icon}
               className='w-6 h-6'
-              style={{ color: _colorCode ? _colorCode : '' }}
+              style={{ color: _colorCode ?? '' }}
             />
           </div>
         </ZIonCol>

@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 
 // Packages Import
 import { apertureOutline } from 'ionicons/icons';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { useFormikContext } from 'formik';
 
 // Custom Imports
@@ -35,11 +35,11 @@ import { PixelAccountsRStateAtom } from '@/ZaionsStore/UserDashboard/PixelAccoun
 
 // Types
 import {
-  PixelAccountType,
-  PixelPlatformsEnum,
-  ZaionsShortUrlOptionFieldsValuesInterface
+  type PixelAccountType,
+  type PixelPlatformsEnum,
+  type ZaionsShortUrlOptionFieldsValuesInterface
 } from '@/types/AdminPanel/linksType';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { useParams } from 'react-router';
 import ZCan from '@/components/Can';
 import {
@@ -51,7 +51,7 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 // Styles
 
-const selectOptionComponent = (_el: PixelAccountType) => {
+const selectOptionComponent = (_el: PixelAccountType): JSX.Element => {
   return (
     <div
       className='flex ion-align-items-center'
@@ -70,7 +70,7 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
   showSkeleton = false
 }) => {
   // getting link-in-bio and workspace ids from url with the help of useParams.
-  const { editLinkId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
     editLinkId: string;
     workspaceId: string;
     shareWSMemberId: string;
@@ -83,9 +83,7 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
   } = useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
   // #region Recoils states.
-  const [pixelAccountsState, setPixelAccountsState] = useRecoilState(
-    PixelAccountsRStateAtom
-  );
+  const setPixelAccountsState = useSetRecoilState(PixelAccountsRStateAtom);
   // #endregion
 
   // #region Popovers & Modals.
@@ -96,11 +94,7 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
   // #endregion
 
   // #region APIS
-  const {
-    data: getMemberRolePermissions,
-    isFetching: isGetMemberRolePermissionsFetching,
-    isError: isGetMemberRolePermissionsError
-  } = useZRQGetRequest<{
+  const { data: getMemberRolePermissions } = useZRQGetRequest<{
     memberRole?: string;
     memberPermissions?: string[];
   }>({
@@ -109,7 +103,9 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
       wsShareId
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
-    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _shouldFetchWhenIdPassed: !(
+      shareWSMemberId !== undefined && shareWSMemberId?.trim()?.length > 0
+    ),
     _itemsIds: [shareWSMemberId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
@@ -119,7 +115,9 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
   const { data: pixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN, workspaceId],
-    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _shouldFetchWhenIdPassed: !(
+      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+    ),
     _showLoader: false,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _itemsIds: [workspaceId]
@@ -131,7 +129,9 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
       wsShareId
     ],
-    _shouldFetchWhenIdPassed: wsShareId ? false : true,
+    _shouldFetchWhenIdPassed: !(
+      wsShareId !== undefined && wsShareId?.trim()?.length > 0
+    ),
     _showLoader: false,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _itemsIds: [shareWSMemberId]
@@ -140,10 +140,10 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
 
   // #region UseEffects.
   useEffect(() => {
-    if (workspaceId && pixelAccountsData) {
-      setPixelAccountsState(pixelAccountsData);
-    } else if (wsShareId && swsPixelAccountsData) {
-      setPixelAccountsState(swsPixelAccountsData);
+    if (workspaceId !== undefined && pixelAccountsData !== undefined) {
+      setPixelAccountsState(pixelAccountsData ?? []);
+    } else if (wsShareId !== undefined && swsPixelAccountsData !== undefined) {
+      setPixelAccountsState(swsPixelAccountsData ?? []);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pixelAccountsData, swsPixelAccountsData]);
@@ -195,16 +195,16 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
           {/* Select */}
           <ZaionsRSelect
             disabled={
-              workspaceId ||
-              (wsShareId &&
-                [
-                  shareWSPermissionEnum.create_sws_pixel,
-                  shareWSPermissionEnum.update_sws_pixel
-                ].some(el =>
-                  getMemberRolePermissions?.memberPermissions?.includes(el)
-                ))
-                ? false
-                : true
+              !(
+                workspaceId !== undefined ||
+                (wsShareId !== undefined &&
+                  [
+                    shareWSPermissionEnum.create_sws_pixel,
+                    shareWSPermissionEnum.update_sws_pixel
+                  ].some(el =>
+                    getMemberRolePermissions?.memberPermissions?.includes(el)
+                  ))
+              )
             }
             className='pt-0 pb-0 ion-padding'
             isMulti
@@ -214,14 +214,14 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
                 .pixelsSelector
             }
             options={
-              workspaceId
-                ? pixelAccountsData
+              workspaceId !== undefined
+                ? pixelAccountsData !== undefined
                   ? pixelAccountsData?.map(el => {
                       return { value: el.id, label: selectOptionComponent(el) };
                     })
                   : []
-                : wsShareId
-                ? swsPixelAccountsData
+                : wsShareId !== undefined
+                ? swsPixelAccountsData !== undefined
                   ? swsPixelAccountsData?.map(el => {
                       return { value: el.id, label: selectOptionComponent(el) };
                     })
@@ -230,8 +230,8 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
             }
             onChange={_values => {
               if (
-                workspaceId ||
-                (wsShareId &&
+                workspaceId !== undefined ||
+                (wsShareId !== undefined &&
                   [
                     shareWSPermissionEnum.create_sws_pixel,
                     shareWSPermissionEnum.update_sws_pixel
@@ -239,7 +239,7 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
                     getMemberRolePermissions?.memberPermissions?.includes(el)
                   ))
               ) {
-                setFieldValue(
+                void setFieldValue(
                   'linkPixelsAccount',
                   _values.map(el => el.value) as string[],
                   false
@@ -249,14 +249,14 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
             value={
               formatReactSelectOptionsArray(
                 linkPixelsAccount,
-                workspaceId
+                workspaceId !== undefined
                   ? (pixelAccountsData as ZGenericObject[])
-                  : wsShareId
+                  : wsShareId.length > 0
                   ? (swsPixelAccountsData as ZGenericObject[])
                   : [],
                 'id',
                 'title'
-              ) || []
+              ) ?? []
             }
           />
 
@@ -264,14 +264,14 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
           <ZCan
             shareWSId={wsShareId}
             permissionType={
-              wsShareId
+              wsShareId !== undefined
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }
             havePermissions={
-              workspaceId
+              workspaceId !== undefined
                 ? [permissionsEnum.create_pixel]
-                : wsShareId
+                : wsShareId !== undefined
                 ? [shareWSPermissionEnum.create_sws_pixel]
                 : []
             }>
@@ -350,5 +350,6 @@ const LinkPixelsAccountSkeleton = React.memo(() => {
     </>
   );
 });
+LinkPixelsAccountSkeleton.displayName = 'LinkPixelsAccountSkeleton';
 
 export default React.memo(LinkPixelsAccount);

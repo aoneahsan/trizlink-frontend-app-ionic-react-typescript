@@ -14,18 +14,18 @@ import React from 'react';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonButton,
-	ZIonCheckbox,
-	ZIonCol,
-	ZIonFooter,
-	ZIonRouterLink,
-	ZIonRow,
-	ZIonText,
-	ZIonTitle,
+  ZIonButton,
+  ZIonCheckbox,
+  ZIonCol,
+  ZIonFooter,
+  ZIonRouterLink,
+  ZIonRow,
+  ZIonText,
+  ZIonTitle
 } from '@/components/ZIonComponents';
 import {
-	LinkInBioFormFieldsEnum,
-	linkInBioFromFieldItemInterface,
+  LinkInBioFormFieldsEnum,
+  type linkInBioFromFieldItemInterface
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 /**
@@ -37,7 +37,7 @@ import {
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
+import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 import classNames from 'classnames';
 import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
@@ -68,24 +68,24 @@ import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputFi
  * */
 
 interface ZLinkInBioFromBlockInterface {
-	fromBlockData?: {
-		formFields?: linkInBioFromFieldItemInterface[];
-		isTermEnabled?: boolean;
-		submitButtonText?: string;
-		termText?: string;
-		termLink?: string;
-	};
-	fontFamily?: LinkInBioThemeFontEnum;
+  fromBlockData?: {
+    formFields?: linkInBioFromFieldItemInterface[];
+    isTermEnabled?: boolean;
+    submitButtonText?: string;
+    termText?: string;
+    termLink?: string;
+  };
+  fontFamily?: LinkInBioThemeFontEnum;
 }
 
 const ZLinkInBioFormBlock: React.FC<ZLinkInBioFromBlockInterface> = ({
-	fromBlockData,
-	fontFamily,
+  fromBlockData,
+  fontFamily
 }) => {
-	return (
-		<ZIonRow className='w-full ion-justify-content-between ion-padding-vertical px-3 zaions__light_bg rounded row-gap-1-point-6-rem'>
-			{/* Header */}
-			{/* <ZIonHeader className='pb-2'>
+  return (
+    <ZIonRow className='w-full px-3 rounded ion-justify-content-between ion-padding-vertical zaions__light_bg row-gap-1-point-6-rem'>
+      {/* Header */}
+      {/* <ZIonHeader className='pb-2'>
         <ZIonButton
           expand='block'
           style={{ height: '40px' }}
@@ -97,95 +97,94 @@ const ZLinkInBioFormBlock: React.FC<ZLinkInBioFromBlockInterface> = ({
         </ZIonButton>
       </ZIonHeader> */}
 
-			{fromBlockData?.formFields?.map((element) => {
-				return (
-					<>
-						{/* Title */}
-						{element.type === LinkInBioFormFieldsEnum.title && (
-							<ZIonCol size='12'>
-								<ZIonTitle className='ion-no-padding ion-text-center'>
-									<h5
-										className={classNames(fontFamily, {
-											'font-bold ion-no-margin': true,
-										})}
-									>
-										{element.title}
-									</h5>
-								</ZIonTitle>
-							</ZIonCol>
-						)}
+      {fromBlockData?.formFields?.map(element => {
+        return (
+          <>
+            {/* Title */}
+            {element.type === LinkInBioFormFieldsEnum.title && (
+              <ZIonCol size='12'>
+                <ZIonTitle className='ion-no-padding ion-text-center'>
+                  <h5
+                    className={classNames(fontFamily, {
+                      'font-bold ion-no-margin': true
+                    })}>
+                    {element.title}
+                  </h5>
+                </ZIonTitle>
+              </ZIonCol>
+            )}
 
-						{/* First Name */}
-						{(element.type === LinkInBioFormFieldsEnum.firstName ||
-							element.type === LinkInBioFormFieldsEnum.lastName ||
-							element.type === LinkInBioFormFieldsEnum.email ||
-							element.type === LinkInBioFormFieldsEnum.phone ||
-							element.type === LinkInBioFormFieldsEnum.text ||
-							element.type === LinkInBioFormFieldsEnum.website) && (
-							<ZIonCol size='12'>
-								<ZIonInputField
-									inputFieldProps={{
-										className: classNames(fontFamily),
-										label: element.placeholder,
-										labelPlacement: 'floating',
-										style: {
-											'--padding-start': '11px',
-										},
-									}}
-								/>
-							</ZIonCol>
-						)}
+            {/* First Name */}
+            {(element.type === LinkInBioFormFieldsEnum.firstName ||
+              element.type === LinkInBioFormFieldsEnum.lastName ||
+              element.type === LinkInBioFormFieldsEnum.email ||
+              element.type === LinkInBioFormFieldsEnum.phone ||
+              element.type === LinkInBioFormFieldsEnum.text ||
+              element.type === LinkInBioFormFieldsEnum.website) && (
+              <ZIonCol size='12'>
+                <ZIonInputField
+                  inputFieldProps={{
+                    className: classNames(fontFamily),
+                    label: element.placeholder,
+                    labelPlacement: 'floating',
+                    style: {
+                      '--padding-start': '11px'
+                    }
+                  }}
+                />
+              </ZIonCol>
+            )}
 
-						{/* Date */}
-						{element.type === LinkInBioFormFieldsEnum.date && (
-							<ZIonCol size='12'>
-								<ZIonInputField
-									inputFieldProps={{
-										className: classNames(fontFamily),
-										label: element.placeholder,
-										labelPlacement: 'stacked',
-										style: {
-											'--padding-start': '11px',
-										},
-										type: 'datetime-local',
-									}}
-								/>
-							</ZIonCol>
-						)}
-					</>
-				);
-			})}
-			{fromBlockData?.isTermEnabled && (
-				<ZIonCol size='12' className='flex ion-align-items-center'>
-					<div className=''>
-						<ZIonCheckbox className='ion-no-margin' />
-					</div>
-					<ZIonRouterLink
-						className='ms-2 underline'
-						routerLink={fromBlockData.termLink}
-						target='_blank'
-						color='dark'
-					>
-						<ZIonText className={classNames(fontFamily)}>
-							{fromBlockData?.termText}
-						</ZIonText>
-					</ZIonRouterLink>
-				</ZIonCol>
-			)}
-			{/* Footer */}
-			<ZIonFooter className='pt-2'>
-				<ZIonButton
-					expand='block'
-					style={{ height: '40px' }}
-					className={classNames(fontFamily, {
-						'normal-case': true,
-					})}
-				>
-					{fromBlockData?.submitButtonText}
-				</ZIonButton>
-			</ZIonFooter>
-		</ZIonRow>
-	);
+            {/* Date */}
+            {element.type === LinkInBioFormFieldsEnum.date && (
+              <ZIonCol size='12'>
+                <ZIonInputField
+                  inputFieldProps={{
+                    className: classNames(fontFamily),
+                    label: element.placeholder,
+                    labelPlacement: 'stacked',
+                    style: {
+                      '--padding-start': '11px'
+                    },
+                    type: 'datetime-local'
+                  }}
+                />
+              </ZIonCol>
+            )}
+          </>
+        );
+      })}
+      {fromBlockData?.isTermEnabled === true && (
+        <ZIonCol
+          size='12'
+          className='flex ion-align-items-center'>
+          <div className=''>
+            <ZIonCheckbox className='ion-no-margin' />
+          </div>
+          <ZIonRouterLink
+            className='underline ms-2'
+            routerLink={fromBlockData.termLink}
+            target='_blank'
+            color='dark'>
+            <ZIonText className={classNames(fontFamily)}>
+              {fromBlockData?.termText}
+            </ZIonText>
+          </ZIonRouterLink>
+        </ZIonCol>
+      )}
+      {/* Footer */}
+      <ZIonFooter className='pt-2'>
+        <ZIonButton
+          expand='block'
+          style={{ height: '40px' }}
+          className={classNames(fontFamily, {
+            'normal-case': true
+          })}>
+          {fromBlockData?.submitButtonText}
+        </ZIonButton>
+      </ZIonFooter>
+    </ZIonRow>
+  );
 };
 
 export default ZLinkInBioFormBlock;

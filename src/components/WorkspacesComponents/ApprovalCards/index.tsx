@@ -33,7 +33,7 @@ import {
  * */
 import { WorkspaceApprovalCards } from '@/data/UserDashboard/Workspace/ApprovalPage';
 import { checkmarkCircle } from 'ionicons/icons';
-import { workspaceApprovalCardEnum } from '@/types/AdminPanel/workspace';
+import { type workspaceApprovalCardEnum } from '@/types/AdminPanel/workspace';
 import classNames from 'classnames';
 import CONSTANTS from '@/utils/constants';
 
@@ -84,7 +84,9 @@ const ZWorkspaceApprovalCards: React.FC<{
             sizeMd='6'
             sizeSm='6'
             sizeXs='12'
-            onClick={() => onClick && onClick(el.cardType)}>
+            onClick={() => {
+              onClick !== undefined && onClick(el.cardType);
+            }}>
             <ZIonCard
               testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.card}-${el.cardType}-${workspaceId}`}
               testinglistselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.approvals.card}-${el.cardType}`}

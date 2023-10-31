@@ -39,7 +39,7 @@ import {
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
-import { type FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
+import { type FormikSetFieldValueEventVoidType } from '@/types/ZaionsFormik.type';
 
 /**
  * Recoil State Imports go down
@@ -69,7 +69,7 @@ interface IZUploadInput {
     fileUrl?: string;
   };
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  setFieldValueFn?: FormikSetFieldValueEventType;
+  setFieldValueFn?: FormikSetFieldValueEventVoidType;
 }
 
 /**

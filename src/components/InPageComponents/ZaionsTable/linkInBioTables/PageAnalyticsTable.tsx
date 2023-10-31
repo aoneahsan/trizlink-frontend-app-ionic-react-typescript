@@ -15,9 +15,9 @@ import {
   ZTableRow,
   ZTableRowCol,
   ZTableTBody,
-  ZTableTHead,
+  ZTableTHead
 } from '@/components/InPageComponents/ZaionsTable/table-styled-components.sc';
-import { LinkInBioPageAnalyticsDataInterface } from '@/types/InPageComponentTypes/ZaionsTables.type';
+import { type LinkInBioPageAnalyticsDataInterface } from '@/types/InPageComponentTypes/ZaionsTables.type';
 
 /**
  * Custom Imports go down
@@ -80,19 +80,18 @@ const LinkInBioPageAnalyticsTable: React.FC<
             </ZTableRow>
           </ZTableTHead>
           <ZTableTBody>
-            {tableData &&
-              tableData.map((el, i) => {
-                return (
-                  <ZTableRow key={i}>
-                    <ZTableRowCol className='ps-3'>{el.value}</ZTableRowCol>
-                    <ZTableRowCol className='ps-3'>{el.visit}</ZTableRowCol>
-                    <ZTableRowCol className='ps-3'>{el.unique}</ZTableRowCol>
-                    <ZTableRowCol className='ps-3'>
-                      {el.visitPercentage}
-                    </ZTableRowCol>
-                  </ZTableRow>
-                );
-              })}
+            {tableData?.map((el, i) => {
+              return (
+                <ZTableRow key={i}>
+                  <ZTableRowCol className='ps-3'>{el.value}</ZTableRowCol>
+                  <ZTableRowCol className='ps-3'>{el.visit}</ZTableRowCol>
+                  <ZTableRowCol className='ps-3'>{el.unique}</ZTableRowCol>
+                  <ZTableRowCol className='ps-3'>
+                    {el.visitPercentage}
+                  </ZTableRowCol>
+                </ZTableRow>
+              );
+            })}
           </ZTableTBody>
         </ZTable>
       </ZIonCol>

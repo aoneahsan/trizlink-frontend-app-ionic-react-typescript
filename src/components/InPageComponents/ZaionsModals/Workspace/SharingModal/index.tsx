@@ -46,7 +46,7 @@ import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  WSRolesNameEnum,
+  type WSRolesNameEnum,
   WorkspaceSharingTabEnum
 } from '@/types/AdminPanel/workspace';
 import { FormMode } from '@/types/AdminPanel/index.type';
@@ -238,7 +238,9 @@ const ZWorkspacesSharingModal: React.FC<{
               'w-7 h-7': isSmScale,
               'w-6 h-6': !isSmScale
             })}
-            onClick={() => dismissZIonModal()}
+            onClick={() => {
+              dismissZIonModal();
+            }}
           />
         </div>
         <ZCustomScrollable
@@ -296,7 +298,9 @@ const ZWorkspacesSharingModal: React.FC<{
         <ZIonButton
           className='me-4'
           fill='outline'
-          onClick={() => dismissZIonModal()}>
+          onClick={() => {
+            dismissZIonModal();
+          }}>
           Cancel
         </ZIonButton>
         {/* <div

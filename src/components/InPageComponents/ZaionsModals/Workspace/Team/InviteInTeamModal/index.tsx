@@ -44,7 +44,7 @@ import { API_URL_ENUM } from '@/utils/enums';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { workspaceTeamInterface } from '@/types/AdminPanel/workspace';
+import { type workspaceTeamInterface } from '@/types/AdminPanel/workspace';
 
 /**
  * Recoil State Imports go down
@@ -142,11 +142,11 @@ const ZInviteInTeamModal: React.FC<{
                     value={values.team}
                     name='team'
                     onChange={e => {
-                      setFieldValue('team', e, false);
+                      void setFieldValue('team', e, false);
                     }}
                     options={
-                      WSTeamsData && WSTeamsData?.length > 0
-                        ? WSTeamsData.map(el => {
+                      WSTeamsData !== undefined && WSTeamsData !== null
+                        ? WSTeamsData?.map(el => {
                             return {
                               value: el.id,
                               label: el.title
@@ -161,7 +161,7 @@ const ZInviteInTeamModal: React.FC<{
                     disabled={values?.team?.value?.length === 0}
                     className='mx-0 mt-5'
                     onClick={() => {
-                      setFieldValue(
+                      void setFieldValue(
                         'tab',
                         EZInviteInTeamModalTab.inviteTab,
                         false

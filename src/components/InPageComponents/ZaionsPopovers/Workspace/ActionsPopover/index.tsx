@@ -64,7 +64,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  workspaceInterface,
+  type workspaceInterface,
   workspaceSettingsModalTabEnum,
   WorkspaceSharingTabEnum
 } from '@/types/AdminPanel/workspace';
@@ -124,7 +124,7 @@ const ZWorkspacesActionPopover: React.FC<{
     ZWorkspacesSettingModal,
     {
       Tab: modalTab,
-      workspaceId: workspaceId
+      workspaceId
     }
   );
   const { presentZIonModal: presentWorkspaceSharingModal } = useZIonModal(
@@ -140,7 +140,7 @@ const ZWorkspacesActionPopover: React.FC<{
   });
 
   // delete Workspace Confirm Modal.
-  const deleteWorkspaceConfirmModal = async () => {
+  const deleteWorkspaceConfirmModal = async (): Promise<void> => {
     try {
       if (workspaceId !== undefined) {
         await presentZIonAlert({
@@ -171,7 +171,7 @@ const ZWorkspacesActionPopover: React.FC<{
   };
 
   // removeWorkspace will hit delete workspace folder api
-  const removeWorkspace = async () => {
+  const removeWorkspace = async (): Promise<void> => {
     try {
       if (workspaceId !== undefined) {
         // hitting the delete api.
@@ -180,13 +180,13 @@ const ZWorkspacesActionPopover: React.FC<{
           urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
         });
 
-        if (_response) {
+        if (_response !== undefined) {
           const _data = extractInnerData<{ success: boolean }>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data && _data?.success) {
+          if (_data !== undefined && _data?.success) {
             // getting all the workspace from RQ cache.
             const _oldWorkspaces =
               extractInnerData<workspaceInterface[]>(
@@ -194,7 +194,7 @@ const ZWorkspacesActionPopover: React.FC<{
                   key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
                 }) as workspaceInterface[],
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
             // removing deleted workspace from cache.
             const _updatedWorkspaces = _oldWorkspaces.filter(
@@ -204,7 +204,7 @@ const ZWorkspacesActionPopover: React.FC<{
             // Updating data in RQ cache.
             await updateRQCDataHandler<workspaceInterface[] | undefined>({
               key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
-              data: _updatedWorkspaces as workspaceInterface[],
+              data: _updatedWorkspaces,
               id: '',
               extractType: ZRQGetRequestExtractEnum.extractItems,
               updateHoleData: true
@@ -316,7 +316,7 @@ const ZWorkspacesActionPopover: React.FC<{
             replaceRouteParams(
               ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
               [CONSTANTS.RouteParams.workspace.workspaceId],
-              [workspaceId!]
+              [workspaceId ?? '']
             )
           );
 
@@ -428,8 +428,8 @@ const ZWorkspacesActionPopover: React.FC<{
             testingselector={
               CONSTANTS.testingSelectors.workspace.actionsPopover.delete
             }
-            onClick={async () => {
-              await deleteWorkspaceConfirmModal();
+            onClick={() => {
+              void deleteWorkspaceConfirmModal();
             }}>
             <ZIonIcon
               icon={trashBinOutline}

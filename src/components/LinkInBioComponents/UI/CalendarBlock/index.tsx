@@ -17,7 +17,7 @@ import classNames from 'classnames';
 import { ZIonCol, ZIonDatetime } from '@/components/ZIonComponents';
 import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
 import ZTimezoneInput from '@/components/CustomComponents/ZTimezone';
-import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
+import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 
 /**
  * Global Constants Imports go down
@@ -49,7 +49,7 @@ import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
  * ? Like if you have a type for props it should be please Down
  * */
 interface ZLinkInBioCalendarBlockInterface {
-	fontFamily?: LinkInBioThemeFontEnum;
+  fontFamily?: LinkInBioThemeFontEnum;
 }
 
 /**
@@ -59,27 +59,26 @@ interface ZLinkInBioCalendarBlockInterface {
  * */
 
 const ZLinkInBioCalendarBlock: React.FC<ZLinkInBioCalendarBlockInterface> = ({
-	fontFamily,
+  fontFamily
 }) => {
-	return (
-		<ZIonCol>
-			<ZRScrollbars
-				style={{
-					width: '100%',
-					height: '500px',
-				}}
-			>
-				<div className=' flex flex-col ion-align-items-center'>
-					<ZIonDatetime />
-					<ZTimezoneInput
-						className={classNames(fontFamily, {
-							'w-[90%] ion-margin-top': true,
-						})}
-					/>
-				</div>
-			</ZRScrollbars>
-		</ZIonCol>
-	);
+  return (
+    <ZIonCol>
+      <ZRScrollbars
+        style={{
+          width: '100%',
+          height: '500px'
+        }}>
+        <div className='flex flex-col ion-align-items-center'>
+          <ZIonDatetime />
+          <ZTimezoneInput
+            className={classNames(fontFamily, {
+              'w-[90%] ion-margin-top': true
+            })}
+          />
+        </div>
+      </ZRScrollbars>
+    </ZIonCol>
+  );
 };
 
 export default ZLinkInBioCalendarBlock;

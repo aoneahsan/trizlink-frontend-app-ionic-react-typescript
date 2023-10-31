@@ -2,18 +2,11 @@
 import React from 'react';
 
 // Packages Import
-import { shieldCheckmarkOutline } from 'ionicons/icons';
 
 // Custom Imports
-import {
-  ZIonCol,
-  ZIonText,
-  ZIonIcon,
-  ZIonRouterLink
-} from '@/components/ZIonComponents';
+import { ZIonCol } from '@/components/ZIonComponents';
 
 // Global Constants
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Images
 

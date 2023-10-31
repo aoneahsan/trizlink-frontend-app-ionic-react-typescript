@@ -76,7 +76,7 @@ import MESSAGES from '@/utils/messages';
 
 // Types
 import {
-  LinkInBioType,
+  type LinkInBioType,
   ZLIBListPageTableColumnsIds,
   ZLinkInBioPageEnum,
   ZLinkInBioRHSComponentEnum
@@ -118,7 +118,7 @@ const ZaionsLinkInBioLinksTable: React.FC<{
   const { presentZIonModal: presentAddLinkInBioModal } = useZIonModal(
     ZaionsAddLinkInBioModal,
     {
-      workspaceId: workspaceId
+      workspaceId
     }
   );
   // #endregion
@@ -128,7 +128,9 @@ const ZaionsLinkInBioLinksTable: React.FC<{
       {showSkeleton && <ZaionsLinkInBioTableSkeleton />}
 
       {!showSkeleton ? (
-        getLinkInBioLinkData && getLinkInBioLinkData?.length > 0 ? (
+        getLinkInBioLinkData !== undefined &&
+        getLinkInBioLinkData !== null &&
+        getLinkInBioLinkData?.length > 0 ? (
           <ZInpageTable />
         ) : (
           <div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
@@ -136,7 +138,7 @@ const ZaionsLinkInBioLinksTable: React.FC<{
               message="No link-in-bio's founds. please create a link-in-bio."
               // message={`No link-in-bio's founds
               // ${(folderId !== null || folderId !== 'all') &&
-              // 	'In this Folder'}
+              // 'In this Folder'}
               // . please create a link-in-bio.`}
               btnText='Create link-in-bio'
               btnOnClick={() => {
@@ -183,7 +185,7 @@ const ZInpageTable: React.FC = () => {
   const { presentZIonPopover: presentZShortLinkActionPopover } = useZIonPopover(
     ZLinkInBioActionPopover,
     {
-      workspaceId: workspaceId,
+      workspaceId,
       linInBioId: compState.selectedLinkInBioLinkId
     }
   );
@@ -210,7 +212,7 @@ const ZInpageTable: React.FC = () => {
     try {
       _linkInBiosFilterOptionsState(oldState => ({
         ...oldState,
-        folderId: folderId
+        folderId
       }));
     } catch (error) {
       zConsoleError({
@@ -224,7 +226,7 @@ const ZInpageTable: React.FC = () => {
 
   useEffect(() => {
     try {
-      if (getLinkInBioLinkData) {
+      if (getLinkInBioLinkData !== undefined && getLinkInBioLinkData !== null) {
         setLinkInBiosStateAtom(getLinkInBioLinkData);
       }
     } catch (error) {
@@ -238,8 +240,9 @@ const ZInpageTable: React.FC = () => {
   }, [getLinkInBioLinkData]);
 
   useEffect(() => {
-    zLinkInBioTable.setPageIndex(Number(pageindex) || 0);
-    zLinkInBioTable.setPageSize(Number(pagesize) || 2);
+    zLinkInBioTable.setPageIndex(Number(pageindex) ?? 0);
+    zLinkInBioTable.setPageSize(Number(pagesize) ?? 2);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageindex, pagesize]);
 
   // #endregion
@@ -271,7 +274,7 @@ const ZInpageTable: React.FC = () => {
                 CONSTANTS.RouteParams.workspace.workspaceId,
                 CONSTANTS.RouteParams.linkInBio.linkInBioId
               ],
-              values: [workspaceId, row?.row?.original?.id!],
+              values: [workspaceId, row?.row?.original?.id ?? ''],
               routeSearchParams: {
                 page: ZLinkInBioPageEnum.design,
                 step: ZLinkInBioRHSComponentEnum.theme
@@ -294,7 +297,7 @@ const ZInpageTable: React.FC = () => {
 
   const zLinkInBioTable = useReactTable({
     columns: defaultColumns,
-    data: _FilteredLinkInBioLinksDataSelector || [],
+    data: _FilteredLinkInBioLinksDataSelector ?? [],
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     debugTable: false,
@@ -416,7 +419,7 @@ const ZInpageTable: React.FC = () => {
                       onClick={(_event: unknown) => {
                         setCompState(oldVal => ({
                           ...oldVal,
-                          selectedLinkInBioLinkId: _rowInfo.original.id || ''
+                          selectedLinkInBioLinkId: _rowInfo.original.id ?? ''
                         }));
 
                         //
@@ -747,6 +750,7 @@ const ZaionsLinkInBioTableSkeleton: React.FC = React.memo(() => {
     </ZIonRow>
   );
 });
+ZaionsLinkInBioTableSkeleton.displayName = 'ZaionsLinkInBioTableSkeleton';
 
 const ZLinkInBioActionPopover: React.FC<{
   dismissZIonPopover: (data?: string, role?: string | undefined) => void;
@@ -770,9 +774,9 @@ const ZLinkInBioActionPopover: React.FC<{
   // #endregion
 
   // #region Functions.
-  const editLinkInBioDetails = async () => {
+  const editLinkInBioDetails = async (): Promise<void> => {
     try {
-      if (linInBioId) {
+      if (linInBioId?.trim()?.length > 0) {
         // was using history here.
         zNavigatePushRoute(
           createRedirectRoute({
@@ -796,9 +800,12 @@ const ZLinkInBioActionPopover: React.FC<{
     }
   };
 
-  const deleteLinkInBio = async () => {
+  const deleteLinkInBio = async (): Promise<void> => {
     try {
-      if (linInBioId?.trim() && _FilteredLinkInBioLinksDataSelector?.length) {
+      if (
+        linInBioId?.trim()?.length > 0 &&
+        _FilteredLinkInBioLinksDataSelector?.length !== null
+      ) {
         await presentZIonAlert({
           header: MESSAGES.LINK_IN_BIO.DELETE_ALERT.HEADER,
           subHeader: MESSAGES.LINK_IN_BIO.DELETE_ALERT.SUB_HEADER,
@@ -826,56 +833,57 @@ const ZLinkInBioActionPopover: React.FC<{
     }
   };
 
-  const removeLinkInBio = async () => {
+  const removeLinkInBio = async (): Promise<void> => {
     try {
-      if (linInBioId?.trim() && _FilteredLinkInBioLinksDataSelector?.length) {
-        if (linInBioId) {
-          const _response = await deleteLinkInBioLinkMutateAsync({
-            itemIds: [workspaceId, linInBioId],
-            urlDynamicParts: [
-              CONSTANTS.RouteParams.workspace.workspaceId,
-              CONSTANTS.RouteParams.linkInBio.linkInBioId
-            ]
-          });
+      if (
+        linInBioId?.trim()?.length > 0 &&
+        _FilteredLinkInBioLinksDataSelector?.length !== null
+      ) {
+        const _response = await deleteLinkInBioLinkMutateAsync({
+          itemIds: [workspaceId, linInBioId],
+          urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.workspaceId,
+            CONSTANTS.RouteParams.linkInBio.linkInBioId
+          ]
+        });
 
-          if (_response) {
-            const _data = extractInnerData<{ success: boolean }>(
-              _response,
-              extractInnerDataOptionsEnum.createRequestResponseItem
+        if (_response !== undefined) {
+          const _data = extractInnerData<{ success: boolean }>(
+            _response,
+            extractInnerDataOptionsEnum.createRequestResponseItem
+          );
+
+          if (_data !== undefined && _data.success) {
+            // getting all the LinkInBios from RQ cache.
+            const _oldLinkInBios =
+              extractInnerData<LinkInBioType[]>(
+                getRQCDataHandler<LinkInBioType[]>({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+                    workspaceId
+                  ]
+                }) as LinkInBioType[],
+                extractInnerDataOptionsEnum.createRequestResponseItems
+              ) ?? [];
+
+            // removing deleted LinkInBios from cache.
+            const _updatedLinkInBios = _oldLinkInBios.filter(
+              el => el.id !== linInBioId
             );
 
-            if (_data && _data.success) {
-              // getting all the LinkInBios from RQ cache.
-              const _oldLinkInBios =
-                extractInnerData<LinkInBioType[]>(
-                  getRQCDataHandler<LinkInBioType[]>({
-                    key: [
-                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-                      workspaceId
-                    ]
-                  }) as LinkInBioType[],
-                  extractInnerDataOptionsEnum.createRequestResponseItems
-                ) || [];
+            // Updating data in RQ cache.
+            await updateRQCDataHandler<LinkInBioType[] | undefined>({
+              key: [
+                CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+                workspaceId
+              ],
+              data: _updatedLinkInBios,
+              id: '',
+              extractType: ZRQGetRequestExtractEnum.extractItems,
+              updateHoleData: true
+            });
 
-              // removing deleted LinkInBios from cache.
-              const _updatedLinkInBios = _oldLinkInBios.filter(
-                el => el.id !== linInBioId
-              );
-
-              // Updating data in RQ cache.
-              await updateRQCDataHandler<LinkInBioType[] | undefined>({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-                  workspaceId
-                ],
-                data: _updatedLinkInBios as LinkInBioType[],
-                id: '',
-                extractType: ZRQGetRequestExtractEnum.extractItems,
-                updateHoleData: true
-              });
-
-              showSuccessNotification(MESSAGES.LINK_IN_BIO.DELETE);
-            }
+            showSuccessNotification(MESSAGES.LINK_IN_BIO.DELETE);
           }
         }
       } else {
@@ -928,7 +936,9 @@ const ZLinkInBioActionPopover: React.FC<{
           button={true}
           detail={false}
           minHeight='2.5rem'
-          onClick={() => void deleteLinkInBio()}
+          onClick={() => {
+            void deleteLinkInBio();
+          }}
           testingselector={
             CONSTANTS.testingSelectors.linkInBio.listPage.table.deleteBtn
           }

@@ -17,12 +17,12 @@ import {
   ZIonCardHeader,
   ZIonCardTitle,
   ZIonCardContent,
-  ZIonItemDivider
+  ZIonItemDivider,
+  ZIonButton
 } from '@/components/ZIonComponents';
-import { ZIonButton } from '@/components/ZIonComponents';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Global Constant
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { PRODUCT_NAME } from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
@@ -30,7 +30,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { ZaionsHpCPData } from '@/ZaionsStore/ZaionsHPBCP.recoil';
 
 // Type
-import { ZaionsHpCPDataType } from '@/types/ZaionsHPBCPType';
+import { type ZaionsHpCPDataType } from '@/types/ZaionsHPBCPType';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 // const { Item: CarouselItem } = Carousel;

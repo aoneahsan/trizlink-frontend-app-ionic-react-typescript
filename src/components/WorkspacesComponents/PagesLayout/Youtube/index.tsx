@@ -16,14 +16,14 @@ import { contractOutline, settingsOutline } from 'ionicons/icons';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonButton,
-	ZIonButtons,
-	ZIonCol,
-	ZIonIcon,
-	ZIonImg,
-	ZIonRouterLink,
-	ZIonRow,
-	ZIonText,
+  ZIonButton,
+  ZIonButtons,
+  ZIonCol,
+  ZIonIcon,
+  ZIonImg,
+  ZIonRouterLink,
+  ZIonRow,
+  ZIonText
 } from '@/components/ZIonComponents';
 
 /**
@@ -69,71 +69,73 @@ import { ProductLogo } from '@/assets/images';
  * */
 
 const ZWorkspaceYoutubePageLayout: React.FC = () => {
-	return (
-		<ZIonRow
-			className={classNames({
-				'mt-4 pt-3 ion-justify-content-center': true,
-			})}
-		>
-			<ZIonCol
-				sizeXl='8.8'
-				sizeLg='9'
-				sizeMd='11'
-				sizeSm='12'
-				sizeXs='12'
-				className='ion-no-padding'
-			>
-				<div
-					className={classNames({
-						'mx-auto zaions-background-set relative h-[153px]': true,
-					})}
-					style={{
-						backgroundImage: `url(https://d2b57pa8jvjkcd.cloudfront.net/xGF9qraKHpDFhkqdC/JHg2CLhHKG-tom-idea.jpg)`,
-					}}
-				>
-					<ZIonButtons className='absolute zaions__dark_set rounded right-[1%] top-[4%]'>
-						<ZIonButton className='ion-no-padding'>
-							<ZIonIcon icon={settingsOutline} />
-						</ZIonButton>
-						<ZIonButton className='ion-no-padding'>
-							<ZIonIcon icon={contractOutline} />
-						</ZIonButton>
-					</ZIonButtons>
-				</div>
-			</ZIonCol>
+  return (
+    <ZIonRow
+      className={classNames({
+        'mt-4 pt-3 ion-justify-content-center': true
+      })}>
+      <ZIonCol
+        sizeXl='8.8'
+        sizeLg='9'
+        sizeMd='11'
+        sizeSm='12'
+        sizeXs='12'
+        className='ion-no-padding'>
+        <div
+          className={classNames({
+            'mx-auto zaions-background-set relative h-[153px]': true
+          })}
+          style={{
+            backgroundImage:
+              'url(https://d2b57pa8jvjkcd.cloudfront.net/xGF9qraKHpDFhkqdC/JHg2CLhHKG-tom-idea.jpg)'
+          }}>
+          <ZIonButtons className='absolute zaions__dark_set rounded right-[1%] top-[4%]'>
+            <ZIonButton className='ion-no-padding'>
+              <ZIonIcon icon={settingsOutline} />
+            </ZIonButton>
+            <ZIonButton className='ion-no-padding'>
+              <ZIonIcon icon={contractOutline} />
+            </ZIonButton>
+          </ZIonButtons>
+        </div>
+      </ZIonCol>
 
-			{/*  */}
-			<ZIonCol
-				sizeXl='8.8'
-				sizeLg='9'
-				sizeMd='11'
-				sizeSm='12'
-				sizeXs='12'
-				className='mx-auto flex bg-white py-3 px-3'
-			>
-				<div className='rounded-full overflow-hidden border-2 border-white border-solid w-[5rem] h-[5rem] flex'>
-					<ZIonImg src={ProductLogo} className='w-full h-full' />
-				</div>
+      {/*  */}
+      <ZIonCol
+        sizeXl='8.8'
+        sizeLg='9'
+        sizeMd='11'
+        sizeSm='12'
+        sizeXs='12'
+        className='flex px-3 py-3 mx-auto bg-white'>
+        <div className='rounded-full overflow-hidden border-2 border-white border-solid w-[5rem] h-[5rem] flex'>
+          <ZIonImg
+            src={ProductLogo}
+            className='w-full h-full'
+          />
+        </div>
 
-				<div className='flex flex-col justify-center ms-3'>
-					<ZIonText>
-						<ZIonRouterLink
-							routerLink=''
-							color='dark'
-							className='font-bold text-3xl'
-						>
-							Zaions
-						</ZIonRouterLink>
-					</ZIonText>
-					<ZIonText>
-						<ZIonRouterLink routerLink='' color='dark' className='text-sm'>
-							10M subscribers
-						</ZIonRouterLink>
-					</ZIonText>
-				</div>
-			</ZIonCol>
-		</ZIonRow>
-	);
+        <div className='flex flex-col justify-center ms-3'>
+          <ZIonText>
+            <ZIonRouterLink
+              routerLink=''
+              color='dark'
+              className='text-3xl font-bold'>
+              Zaions
+            </ZIonRouterLink>
+          </ZIonText>
+          <ZIonText>
+            <ZIonRouterLink
+              routerLink=''
+              color='dark'
+              className='text-sm'>
+              10M subscribers
+            </ZIonRouterLink>
+          </ZIonText>
+        </div>
+      </ZIonCol>
+    </ZIonRow>
+  );
 };
 
 export default ZWorkspaceYoutubePageLayout;

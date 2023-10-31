@@ -65,9 +65,9 @@ import {
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  workspaceInterface,
+  type workspaceInterface,
   workspaceSettingsModalTabEnum,
-  wsShareInterface
+  type wsShareInterface
 } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
@@ -139,7 +139,7 @@ const ZWorkspacesListPopover: React.FC<{
         key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
       }) as workspaceInterface[],
       extractInnerDataOptionsEnum.createRequestResponseItems
-    ) || [];
+    ) ?? [];
 
   const sharedWorkspacesList =
     extractInnerData<wsShareInterface[]>(
@@ -147,7 +147,7 @@ const ZWorkspacesListPopover: React.FC<{
         key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
       }) as wsShareInterface[],
       extractInnerDataOptionsEnum.createRequestResponseItems
-    ) || [];
+    ) ?? [];
 
   return (
     <div className='py-1'>
@@ -161,7 +161,11 @@ const ZWorkspacesListPopover: React.FC<{
               key={el.id}
               minHeight='2.2rem'
               className='cursor-pointer ion-activatable'
-              color={workspaceId && workspaceId === el.id ? 'light' : undefined}
+              color={
+                workspaceId !== undefined && workspaceId === el.id
+                  ? 'light'
+                  : undefined
+              }
               testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
               testingselector={
                 CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover
@@ -178,7 +182,7 @@ const ZWorkspacesListPopover: React.FC<{
                         CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                       ],
                       values: [
-                        el.id || '',
+                        el?.id ?? '',
                         CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                       ]
                     })
@@ -191,10 +195,10 @@ const ZWorkspacesListPopover: React.FC<{
                 icon={ellipsisHorizontalOutline}
                 className='cursor-pointer'
                 onClick={(event: unknown) => {
-                  if (el?.id) {
+                  if (el?.id !== undefined) {
                     setCompState(oldValues => ({
                       ...oldValues,
-                      _workspaceId: el.id!
+                      _workspaceId: el?.id ?? ''
                     }));
 
                     //
@@ -230,7 +234,9 @@ const ZWorkspacesListPopover: React.FC<{
               minHeight='2.2rem'
               className='cursor-pointer ion-activatable'
               color={
-                wsShareId && wsShareId === el.workspaceId ? 'light' : undefined
+                wsShareId !== undefined && wsShareId === el.workspaceId
+                  ? 'light'
+                  : undefined
               }
               testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.singleWorkspace}-${el.id}`}
               testingselector={
@@ -249,8 +255,8 @@ const ZWorkspacesListPopover: React.FC<{
                         CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                       ],
                       values: [
-                        el.workspaceId!,
-                        el.id!,
+                        el?.workspaceId ?? '',
+                        el?.id ?? '',
                         CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                       ]
                     })
@@ -263,10 +269,10 @@ const ZWorkspacesListPopover: React.FC<{
                 icon={ellipsisHorizontalOutline}
                 className='cursor-pointer'
                 onClick={(event: unknown) => {
-                  if (el?.id) {
+                  if (el?.id !== undefined || el?.id !== null) {
                     setCompState(oldValues => ({
                       ...oldValues,
-                      _workspaceId: el.id!
+                      _workspaceId: el.id ?? ''
                     }));
 
                     //
@@ -326,7 +332,7 @@ const ZWorkspaceActionPopover: React.FC<{
     ZWorkspacesSettingModal,
     {
       Tab: workspaceSettingsModalTabEnum.settings,
-      workspaceId: workspaceId
+      workspaceId
     }
   );
 
@@ -334,7 +340,7 @@ const ZWorkspaceActionPopover: React.FC<{
 
   // #region Functions.
   // delete Workspace Confirm Modal.
-  const deleteWorkspaceConfirmModal = async () => {
+  const deleteWorkspaceConfirmModal = async (): Promise<void> => {
     try {
       if (workspaceId !== undefined) {
         await presentZIonAlert({
@@ -365,7 +371,7 @@ const ZWorkspaceActionPopover: React.FC<{
   };
 
   // removeWorkspace will hit delete workspace folder api
-  const removeWorkspace = async () => {
+  const removeWorkspace = async (): Promise<void> => {
     try {
       if (workspaceId !== undefined) {
         // hitting the delete api.
@@ -374,13 +380,13 @@ const ZWorkspaceActionPopover: React.FC<{
           urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
         });
 
-        if (_response) {
+        if (_response !== undefined) {
           const _data = extractInnerData<{ success: boolean }>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data && _data?.success) {
+          if (_data !== undefined && _data?.success) {
             // getting all the workspace from RQ cache.
             const _oldWorkspaces =
               extractInnerData<workspaceInterface[]>(
@@ -388,7 +394,7 @@ const ZWorkspaceActionPopover: React.FC<{
                   key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
                 }) as workspaceInterface[],
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
             // removing deleted workspace from cache.
             const _updatedWorkspaces = _oldWorkspaces.filter(
@@ -398,7 +404,7 @@ const ZWorkspaceActionPopover: React.FC<{
             // Updating data in RQ cache.
             await updateRQCDataHandler<workspaceInterface[] | undefined>({
               key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
-              data: _updatedWorkspaces as workspaceInterface[],
+              data: _updatedWorkspaces,
               id: '',
               extractType: ZRQGetRequestExtractEnum.extractItems,
               updateHoleData: true
@@ -471,7 +477,7 @@ const ZWorkspaceActionPopover: React.FC<{
         }
         testinglistselector={`${CONSTANTS.testingSelectors.topBar.workspaceSwitcherPopover.actionPopover.deleteWorkspace}-${workspaceId}`}
         onClick={() => {
-          deleteWorkspaceConfirmModal();
+          void deleteWorkspaceConfirmModal();
         }}>
         <ZIonIcon
           icon={trashBinOutline}

@@ -1,7 +1,7 @@
 import React from 'react';
 import RGAutoComplete from 'react-google-autocomplete';
 import {
-  type FormikSetFieldValueEventType,
+  type FormikSetFieldValueEventVoidType,
   type FormikSetFieldTouchedEventType
 } from '@/types/ZaionsFormik.type';
 import { GM_CONSTANTS } from '@/utils/constants/googleMapsConstants';
@@ -14,7 +14,7 @@ interface IZRGAutoCompleteInputProps {
   value?: string;
   defaultValue?: string;
   onLocationSelectHandler: (place: google.maps.places.PlaceResult) => void;
-  setFieldValue?: FormikSetFieldValueEventType;
+  setFieldValue?: FormikSetFieldValueEventVoidType;
   setFieldTouched?: FormikSetFieldTouchedEventType;
   inputName: string;
   testingselector?: string;

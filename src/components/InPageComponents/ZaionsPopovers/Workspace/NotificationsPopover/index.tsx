@@ -105,7 +105,7 @@ const ZWorkspaceNotificationPopover: React.FC = () => {
                         value={workspaceViewNotificationsEnum.approvalRequests}
                         className='normal-case ion-no-padding ion-no-margin'
                         onClick={() => {
-                          setFieldValue(
+                          void setFieldValue(
                             'currentTab',
                             workspaceViewNotificationsEnum.approvalRequests,
                             false
@@ -118,7 +118,7 @@ const ZWorkspaceNotificationPopover: React.FC = () => {
                         value={workspaceViewNotificationsEnum.updates}
                         className='normal-case ion-no-padding ion-no-margin'
                         onClick={() => {
-                          setFieldValue(
+                          void setFieldValue(
                             'currentTab',
                             workspaceViewNotificationsEnum.updates,
                             false
@@ -166,7 +166,7 @@ const ZWorkspaceNotificationPopover: React.FC = () => {
 };
 
 // Updates Tab
-const UpdatesTab = () => {
+const UpdatesTab: React.FC = () => {
   return (
     <ZIonList
       lines='none'
@@ -239,7 +239,7 @@ const UpdatesTab = () => {
 };
 
 // Approval Requests Tab
-const ApprovalRequests = () => {
+const ApprovalRequests: React.FC = () => {
   return (
     <>
       <div className='flex flex-col py-5 ion-align-items-center ion-justify-content-center'>

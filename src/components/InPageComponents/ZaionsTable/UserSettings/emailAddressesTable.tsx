@@ -8,13 +8,11 @@ import React, { useState } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import routeQueryString from 'qs';
 import classNames from 'classnames';
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   useReactTable
 } from '@tanstack/react-table';
 import {
@@ -22,11 +20,14 @@ import {
   checkmarkCircle,
   closeOutline,
   createOutline,
-  ellipsisVerticalOutline,
   informationCircleOutline,
   trashBinOutline,
   warning
 } from 'ionicons/icons';
+import dayjs from 'dayjs';
+import { Formik } from 'formik';
+import { AxiosError } from 'axios';
+import { useRecoilState } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -40,41 +41,20 @@ import {
   ZIonCol,
   ZIonContent,
   ZIonFooter,
-  ZIonGrid,
   ZIonIcon,
   ZIonInput,
-  ZIonRadio,
   ZIonRow,
   ZIonSkeletonText,
   ZIonText,
   ZIonTitle
 } from '@/components/ZIonComponents';
+import ZCountdown from '@/components/CustomComponents/ZCountDown';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-
-/**
- * Global Constants Imports go down
- * ? Like import of Constant is a global constants import
- * */
-import CONSTANTS, { LOCALSTORAGE_KEYS } from '@/utils/constants';
-
-/**
- * Type Imports go down
- * ? Like import of type or type of some recoil state or any external type import is a Type import
- * */
-import {
-  EmailAddressInterface,
-  UserAccountType
-} from '@/types/UserAccount/index.type';
-import {
-  EmailStatusEnum,
-  ZEmailAddressesListPageTableColumnIds
-} from '@/types/AdminPanel/index.type';
 import {
   useZGetRQCacheData,
   useZRQDeleteRequest,
@@ -83,19 +63,17 @@ import {
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
 import {
-  API_URL_ENUM,
-  CONTAINS,
-  extractInnerDataOptionsEnum
-} from '@/utils/enums';
-import ZCountdown from '@/components/CustomComponents/ZCountDown';
-import dayjs from 'dayjs';
-import {
   useZIonAlert,
   useZIonErrorAlert,
-  useZIonModal,
-  useZIonPopover
+  useZIonModal
 } from '@/ZaionsHooks/zionic-hooks';
-import ZConfirmEmailOTPPopover from '../../ZaionsPopovers/ProfileSettings/ConfirmEmailOtpPopover';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+
+/**
+ * Global Constants Imports go down
+ * ? Like import of Constant is a global constants import
+ * */
+import CONSTANTS, { LOCALSTORAGE_KEYS } from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
 import {
   extractInnerData,
@@ -103,18 +81,25 @@ import {
   STORAGE,
   zStringify
 } from '@/utils/helpers';
-import { Formik } from 'formik';
 import {
   showErrorNotification,
   showInfoNotification,
   showSuccessNotification
 } from '@/utils/notification';
 import MESSAGES from '@/utils/messages';
-import { AxiosError } from 'axios';
 import { ZErrorCodeEnum } from '@/utils/enums/ErrorsCodes';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+
+/**
+ * Type Imports go down
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
+ * */
+import { type EmailAddressInterface } from '@/types/UserAccount/index.type';
+import {
+  EmailStatusEnum,
+  ZEmailAddressesListPageTableColumnIds
+} from '@/types/AdminPanel/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
-import { useRecoilState, useSetRecoilState } from 'recoil';
 import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 
 /**
@@ -147,13 +132,14 @@ const ZEmailAddressesTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
   enableMakeEmailPrimary
 }) => {
   // #region APIS.
-  const { data: userEmailsData, isFetching: isUserEmailsDataFetching } =
-    useZRQGetRequest<EmailAddressInterface[]>({
-      _url: API_URL_ENUM.userEmailsList,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.EMAILS],
-      _itemsIds: [],
-      _urlDynamicParts: []
-    });
+  const { isFetching: isUserEmailsDataFetching } = useZRQGetRequest<
+    EmailAddressInterface[]
+  >({
+    _url: API_URL_ENUM.userEmailsList,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.EMAILS],
+    _itemsIds: [],
+    _urlDynamicParts: []
+  });
   // #endregion
 
   if (isUserEmailsDataFetching) {
@@ -173,23 +159,14 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
   // #endregion
 
   // #region custom hooks.
-  const { zNavigatePushRoute } = useZNavigate();
-  const { isMdScale, isSmScale } = useZMediaQueryScale();
+  const { isMdScale } = useZMediaQueryScale();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
   const { presentZIonErrorAlert } = useZIonErrorAlert();
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { presentZIonAlert } = useZIonAlert();
-  // getting search param from url with the help of 'qs' package.
-  const routeQSearchParams = routeQueryString.parse(location.search, {
-    ignoreQueryPrefix: true
-  });
-  const { pageindex, pagesize } = routeQSearchParams;
   // #endregion
 
   // #region modals & popovers.
-  const { presentZIonPopover: presentZConfirmEmailOTPPopover } = useZIonPopover(
-    ZConfirmEmailOTPPopover
-  );
 
   const { presentZIonModal: presentUpdateEmailModal } = useZIonModal(
     ZUpdateEmailModal,
@@ -323,25 +300,25 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
                       }}
                       onSubmit={async (values, { setFieldValue }) => {
                         try {
-                          const __zStringifyData = zStringify({
+                          const _zStringifyData = zStringify({
                             email: _row?.email,
                             otp: values?.otp
                           });
-                          const __response = await confirmEmailOtpAsyncMutate({
-                            itemIds: [_row?.id!],
+                          const _response = await confirmEmailOtpAsyncMutate({
+                            itemIds: [_row?.id ?? ''],
                             urlDynamicParts: [
                               CONSTANTS.RouteParams.user.itemId
                             ],
-                            requestData: __zStringifyData
+                            requestData: _zStringifyData
                           });
-                          if (__response) {
-                            const __data =
+                          if (_response !== undefined) {
+                            const _data =
                               extractInnerData<EmailAddressInterface>(
-                                __response,
+                                _response,
                                 extractInnerDataOptionsEnum.createRequestResponseItem
                               );
 
-                            if (__data?.id) {
+                            if (_data?.id !== null && _data?.id !== undefined) {
                               // Updating data in RQ cache.
                               await updateRQCDataHandler<EmailAddressInterface>(
                                 {
@@ -349,8 +326,8 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
                                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER
                                       .EMAILS
                                   ],
-                                  data: __data as EmailAddressInterface,
-                                  id: __data?.id!
+                                  data: _data,
+                                  id: _data?.id
                                 }
                               );
 
@@ -361,16 +338,16 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
                           }
                         } catch (error) {
                           if (error instanceof AxiosError) {
-                            const __apiErrorObjects = error.response?.data as {
+                            const _apiErrorObjects = error.response?.data as {
                               errors: { item: string[] };
                               status: number;
                             };
 
-                            const __apiErrors = __apiErrorObjects?.errors?.item;
-                            const __apiErrorCode = __apiErrorObjects?.status;
+                            const _apiErrors = _apiErrorObjects?.errors?.item;
+                            const _apiErrorCode = _apiErrorObjects?.status;
 
-                            if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
-                              showErrorNotification(__apiErrors[0]);
+                            if (_apiErrorCode === ZErrorCodeEnum.badRequest) {
+                              showErrorNotification(_apiErrors[0]);
                             }
                           }
 
@@ -413,6 +390,7 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
                                 disabled={values?.otp?.length !== 6}
                                 size='small'
                                 className='ion-no-margin h-[2rem]'
+                                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                                 onClick={submitForm}
                                 style={{
                                   '--border-radius': '0px',
@@ -444,39 +422,41 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
                 <ZIonText
                   className='cursor-pointer hover:underline'
                   color='primary'
-                  onClick={async () => {
-                    try {
-                      const __zStringifyData = zStringify({
-                        email: _row?.email
-                      });
-                      const __response = await resendEmailOtpAsyncMutate({
-                        itemIds: [_row?.id!],
-                        urlDynamicParts: [CONSTANTS.RouteParams.user.itemId],
-                        requestData: __zStringifyData
-                      });
+                  onClick={() => {
+                    void (async () => {
+                      try {
+                        const _zStringifyData = zStringify({
+                          email: _row?.email
+                        });
+                        const _response = await resendEmailOtpAsyncMutate({
+                          itemIds: [_row?.id ?? ''],
+                          urlDynamicParts: [CONSTANTS.RouteParams.user.itemId],
+                          requestData: _zStringifyData
+                        });
 
-                      if (__response) {
-                        const __data = extractInnerData<EmailAddressInterface>(
-                          __response,
-                          extractInnerDataOptionsEnum.createRequestResponseItem
-                        );
+                        if (_response !== undefined) {
+                          const _data = extractInnerData<EmailAddressInterface>(
+                            _response,
+                            extractInnerDataOptionsEnum.createRequestResponseItem
+                          );
 
-                        if (__data?.id) {
-                          // Updating data in RQ cache.
-                          await updateRQCDataHandler<EmailAddressInterface>({
-                            key: [
-                              CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.EMAILS
-                            ],
-                            data: __data as EmailAddressInterface,
-                            id: __data?.id!
-                          });
+                          if (_data?.id !== null && _data?.id !== undefined) {
+                            // Updating data in RQ cache.
+                            await updateRQCDataHandler<EmailAddressInterface>({
+                              key: [
+                                CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.EMAILS
+                              ],
+                              data: _data,
+                              id: _data?.id
+                            });
 
-                          showSuccessNotification(MESSAGES.USER.RESEND_OTP);
+                            showSuccessNotification(MESSAGES.USER.RESEND_OTP);
+                          }
                         }
+                      } catch (error) {
+                        reportCustomError(error);
                       }
-                    } catch (error) {
-                      reportCustomError(error);
-                    }
+                    })();
                   }}>
                   Resend OTP
                 </ZIonText>
@@ -518,7 +498,7 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
             testinglistselector={
               CONSTANTS.testingSelectors.pixels.listPage.table.createAt
             }>
-            {row.getValue() || CONSTANTS.NO_VALUE_FOUND}
+            {row?.getValue() ?? CONSTANTS.NO_VALUE_FOUND}
           </ZIonText>
         );
       }
@@ -527,7 +507,7 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
 
   const zEmailAddressesTable = useReactTable({
     columns: defaultColumns,
-    data: userEmailsData || [],
+    data: userEmailsData ?? [],
     // state: {
     //   columnOrder: getPixelFiltersData?.settings?.columnOrderIds || []
     // },
@@ -541,9 +521,9 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
 
   // #region functions.
   // when user won't to delete email and click on the delete button this function will fire and show the confirm alert.
-  const deleteEmail = async (selectedId: string) => {
+  const deleteEmail = async (selectedId: string): Promise<void> => {
     try {
-      if (selectedId?.trim() && userEmailsData?.length) {
+      if (selectedId?.trim()?.length > 0 && userEmailsData?.length !== null) {
         // const selectedEmail = EmailsData?.find(el => el.id === selectedId);
         await presentZIonAlert({
           header: MESSAGES.USER.DELETE_ALERT.HEADER,
@@ -572,39 +552,39 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
     }
   };
 
-  const removeEmail = async (selectedId: string) => {
+  const removeEmail = async (selectedId: string): Promise<void> => {
     try {
-      if (selectedId) {
-        const __response = await deleteEmailAsyncMutate({
+      if (selectedId?.trim()?.length > 0) {
+        const _response = await deleteEmailAsyncMutate({
           itemIds: [selectedId],
           urlDynamicParts: [CONSTANTS.RouteParams.user.itemId]
         });
 
-        if (__response) {
-          const __data = extractInnerData<{ success: boolean }>(
-            __response,
+        if (_response !== undefined) {
+          const _data = extractInnerData<{ success: boolean }>(
+            _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (__data?.success) {
+          if (_data !== undefined && _data?.success) {
             // getting all the emails from RQ cache.
-            const __oldEmails =
+            const _oldEmails =
               extractInnerData<EmailAddressInterface[]>(
                 getRQCDataHandler<EmailAddressInterface[]>({
                   key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.EMAILS]
                 }) as EmailAddressInterface[],
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
             // removing deleted email from cache.
-            const __updatedEmails = __oldEmails.filter(
+            const _updatedEmails = _oldEmails.filter(
               el => el.id !== selectedId
             );
 
             // Updating data in RQ cache.
             await updateRQCDataHandler<EmailAddressInterface[] | undefined>({
               key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.EMAILS],
-              data: __updatedEmails as EmailAddressInterface[],
+              data: _updatedEmails,
               id: '',
               extractType: ZRQGetRequestExtractEnum.extractItems,
               updateHoleData: true
@@ -616,16 +596,16 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        const __apiErrorObjects = error.response?.data as {
+        const _apiErrorObjects = error.response?.data as {
           errors: { item: string[] };
           status: number;
         };
 
-        const __apiErrors = __apiErrorObjects?.errors?.item;
-        const __apiErrorCode = __apiErrorObjects?.status;
+        const _apiErrors = _apiErrorObjects?.errors?.item;
+        const _apiErrorCode = _apiErrorObjects?.status;
 
-        if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
-          showErrorNotification(__apiErrors[0]);
+        if (_apiErrorCode === ZErrorCodeEnum.badRequest) {
+          showErrorNotification(_apiErrors[0]);
         }
       }
       reportCustomError(error);
@@ -764,8 +744,9 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
                               icon={createOutline}
                               color='secondary'
                               className='w-6 h-6 cursor-pointer'
-                              id={`email-edit-btn-tt-${_rowInfo?.original
-                                ?.id!}`}
+                              id={`email-edit-btn-tt-${
+                                _rowInfo?.original?.id ?? ''
+                              }`}
                               onClick={() => {
                                 setCompState(oldValues => ({
                                   ...oldValues,
@@ -781,8 +762,9 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
                             <ZRTooltip
                               place='left'
                               variant='info'
-                              anchorSelect={`#email-edit-btn-tt-${_rowInfo
-                                ?.original?.id!}`}>
+                              anchorSelect={`#email-edit-btn-tt-${
+                                _rowInfo?.original?.id ?? ''
+                              }`}>
                               Make email primary
                             </ZRTooltip>
                           </>
@@ -792,16 +774,18 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
                               icon={informationCircleOutline}
                               color='warning'
                               className='w-6 h-6 cursor-pointer '
-                              id={`primary-enable-email-info-warning-tt-${_rowInfo
-                                ?.original?.id!}`}
+                              id={`primary-enable-email-info-warning-tt-${
+                                _rowInfo?.original?.id ?? ''
+                              }`}
                             />
 
                             <ZRTooltip
                               place='left'
                               variant='info'
-                              anchorSelect={`#primary-enable-email-info-warning-tt-${_rowInfo
-                                ?.original?.id!}`}>
-                              You can't make an email
+                              anchorSelect={`#primary-enable-email-info-warning-tt-${
+                                _rowInfo?.original?.id ?? ''
+                              }`}>
+                              You can&apos;t make an email
                               <br /> primary until the password
                               <br /> change process is complete.
                             </ZRTooltip>
@@ -815,15 +799,17 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
                               icon={informationCircleOutline}
                               color='warning'
                               className='w-6 h-6 cursor-pointer '
-                              id={`primary-email-info-warning-tt-${_rowInfo
-                                ?.original?.id!}`}
+                              id={`primary-email-info-warning-tt-${
+                                _rowInfo?.original?.id ?? ''
+                              }`}
                             />
 
                             <ZRTooltip
                               place='left'
                               variant='info'
-                              anchorSelect={`#primary-email-info-warning-tt-${_rowInfo
-                                ?.original?.id!}`}>
+                              anchorSelect={`#primary-email-info-warning-tt-${
+                                _rowInfo?.original?.id ?? ''
+                              }`}>
                               Important note: Primary email <br /> deletion is
                               restricted.
                             </ZRTooltip>
@@ -834,18 +820,20 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
                               icon={trashBinOutline}
                               color='danger'
                               className='w-5 h-5 cursor-pointer'
-                              id={`email-delete-btn-tt-${_rowInfo?.original
-                                ?.id!}`}
+                              id={`email-delete-btn-tt-${
+                                _rowInfo?.original?.id ?? ''
+                              }`}
                               onClick={() => {
-                                deleteEmail(_rowInfo?.original?.id!);
+                                void deleteEmail(_rowInfo?.original?.id ?? '');
                               }}
                             />
 
                             <ZRTooltip
                               place='left'
                               variant='error'
-                              anchorSelect={`#email-delete-btn-tt-${_rowInfo
-                                ?.original?.id!}`}>
+                              anchorSelect={`#email-delete-btn-tt-${
+                                _rowInfo?.original?.id ?? ''
+                              }`}>
                               Delete email
                             </ZRTooltip>
                           </>
@@ -1030,6 +1018,7 @@ const ZEmailTableSkeleton: React.FC = React.memo(() => {
     </div>
   );
 });
+ZEmailTableSkeleton.displayName = 'ZEmailTableSkeleton';
 
 // Email edit modal.
 const ZUpdateEmailModal: React.FC<{
@@ -1058,55 +1047,54 @@ const ZUpdateEmailModal: React.FC<{
   // #endregion
 
   // #region Functions.
-  const makeEmailPrimaryFn = async () => {
+  const makeEmailPrimaryFn = async (): Promise<void> => {
     try {
-      if (_email && _id) {
-        if (_isPrimary) {
+      if (_email !== undefined && _id !== undefined) {
+        if (_isPrimary !== null && _isPrimary?.length > 0) {
           showInfoNotification('Email is already a primary email.');
         } else {
           //
-          const __zStringifyData = zStringify({
+          const _zStringifyData = zStringify({
             email: _email
           });
 
           //
-          const __response = await makeEmailPrimaryAsyncMutate({
+          const _response = await makeEmailPrimaryAsyncMutate({
             itemIds: [_id],
             urlDynamicParts: [CONSTANTS.RouteParams.user.itemId],
-            requestData: __zStringifyData
+            requestData: _zStringifyData
           });
 
-          if (__response) {
-            const __data = extractInnerData<{
+          if (_response !== undefined) {
+            const _data = extractInnerData<{
               primaryEmail: EmailAddressInterface;
               oldPrimaryEmail: EmailAddressInterface;
             }>(
-              __response,
+              _response,
               extractInnerDataOptionsEnum.createRequestResponseItem
             );
 
             if (
-              __data &&
-              __data?.oldPrimaryEmail?.id &&
-              __data?.primaryEmail?.id
+              _data?.oldPrimaryEmail?.id !== undefined &&
+              _data?.primaryEmail?.id !== undefined
             ) {
               // getting user data.
 
               await updateRQCDataHandler({
                 key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.EMAILS],
-                id: __data?.oldPrimaryEmail?.id!,
-                data: __data?.oldPrimaryEmail
+                id: _data?.oldPrimaryEmail?.id,
+                data: _data?.oldPrimaryEmail
               });
 
               await updateRQCDataHandler({
                 key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.EMAILS],
-                id: __data?.primaryEmail?.id!,
-                data: __data?.primaryEmail
+                id: _data?.primaryEmail?.id,
+                data: _data?.primaryEmail
               });
 
               const userData = getUserDataObjectForm({
                 ...userAccountStateAtom,
-                email: __data?.primaryEmail?.email
+                email: _data?.primaryEmail?.email
               });
 
               // update User token.
@@ -1114,7 +1102,7 @@ const ZUpdateEmailModal: React.FC<{
 
               setUserAccountStateAtom(oldState => ({
                 ...oldState,
-                email: __data?.primaryEmail?.email
+                email: _data?.primaryEmail?.email
               }));
 
               showSuccessNotification(MESSAGES.USER.EMAIL_PRIMARY_SUCCESS);
@@ -1125,18 +1113,18 @@ const ZUpdateEmailModal: React.FC<{
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        const __apiErrorObjects = error.response?.data as {
+        const _apiErrorObjects = error.response?.data as {
           errors: { item: string[] };
           status: number;
         };
 
-        const __apiErrors = __apiErrorObjects?.errors?.item;
-        const __apiErrorCode = __apiErrorObjects?.status;
+        const _apiErrors = _apiErrorObjects?.errors?.item;
+        // const _apiErrorCode = _apiErrorObjects?.status;
 
         // if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
         //   showErrorNotification(__apiErrors[0]);
         // }
-        showErrorNotification(__apiErrors[0]);
+        showErrorNotification(_apiErrors[0]);
       }
 
       reportCustomError(error);
@@ -1157,7 +1145,9 @@ const ZUpdateEmailModal: React.FC<{
             <ZIonIcon
               icon={closeOutline}
               className='w-6 h-6 cursor-pointer'
-              onClick={() => dismissZIonModal()}
+              onClick={() => {
+                dismissZIonModal();
+              }}
             />
           </div>
 
@@ -1188,7 +1178,9 @@ const ZUpdateEmailModal: React.FC<{
         <ZIonButton
           className='me-4'
           fill='outline'
-          onClick={() => dismissZIonModal()}>
+          onClick={() => {
+            dismissZIonModal();
+          }}>
           Cancel
         </ZIonButton>
         <div

@@ -18,7 +18,7 @@ import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 
 // Types
 import { ZIonModalActionEnum } from '@/types/ZaionsApis.type';
-import { type FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
+import { type FormikSetFieldValueEventVoidType } from '@/types/ZaionsFormik.type';
 import { zJsonParse } from '@/utils/helpers';
 
 // Images
@@ -36,7 +36,7 @@ interface ZDragAndDropType {
   title?: string;
   testingselector?: string;
   testinglistselector?: string;
-  setFieldValue?: FormikSetFieldValueEventType;
+  setFieldValue?: FormikSetFieldValueEventVoidType;
 }
 
 const ZDragAndDrop: React.FC<ZDragAndDropType> = ({

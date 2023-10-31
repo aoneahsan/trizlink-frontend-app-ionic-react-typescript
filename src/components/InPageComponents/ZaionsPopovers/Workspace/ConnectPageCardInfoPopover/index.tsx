@@ -40,7 +40,7 @@ import {
  * */
 import {
   PageInfoCardItemTypeEnum,
-  WorkspacePageCardInfoPopoverItemType
+  type WorkspacePageCardInfoPopoverItemType
 } from '@/types/AdminPanel/workspace';
 
 /**
@@ -76,7 +76,7 @@ const ZWorkspaceConnectPagesCardInfoPopover: React.FC<{
     <ZIonContent className='ion-padding'>
       <ZIonGrid className=''>
         <ZIonRow className='gap-1 ion-align-items-center'>
-          {items.length &&
+          {items?.length !== 0 &&
             items.map(item => (
               <>
                 {item.type === PageInfoCardItemTypeEnum.heading && (
@@ -107,7 +107,7 @@ const ZWorkspaceConnectPagesCardInfoPopover: React.FC<{
                               <ZIonText className='block font-bold text-[13px]'>
                                 {_simpleCardItem.heading}
                               </ZIonText>
-                              {_simpleCardItem.subheading && (
+                              {_simpleCardItem?.subheading !== undefined && (
                                 <ZIonText className='block text-[13px]'>
                                   {_simpleCardItem.subheading}
                                 </ZIonText>

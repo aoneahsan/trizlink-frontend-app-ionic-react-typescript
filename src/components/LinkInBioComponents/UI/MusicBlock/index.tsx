@@ -15,10 +15,10 @@ import classNames from 'classnames';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonButton,
-	ZIonCol,
-	ZIonImg,
-	ZIonText,
+  ZIonButton,
+  ZIonCol,
+  ZIonImg,
+  ZIonText
 } from '@/components/ZIonComponents';
 import { predefinedMusicPlatformImagesInWhite } from '@/utils/ZIcons';
 
@@ -27,15 +27,15 @@ import { predefinedMusicPlatformImagesInWhite } from '@/utils/ZIcons';
  * ? Like import of Constant is a global constants import
  * */
 import {
-	linkInBioBlockCardItemInterface,
-	LinkInBioMusicPlatformEnum,
+  type linkInBioBlockCardItemInterface,
+  type LinkInBioMusicPlatformEnum
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
+import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 
 /**
  * Recoil State Imports go down
@@ -64,56 +64,54 @@ import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
  * */
 
 interface ZLinkInBioMusicBlockInterface {
-	musicBlockData?: linkInBioBlockCardItemInterface[];
-	fontFamily?: LinkInBioThemeFontEnum;
+  musicBlockData?: linkInBioBlockCardItemInterface[];
+  fontFamily?: LinkInBioThemeFontEnum;
 }
 
 const ZLinkInBioMusicBlock: React.FC<ZLinkInBioMusicBlockInterface> = ({
-	musicBlockData,
-	fontFamily,
+  musicBlockData,
+  fontFamily
 }) => {
-	return (
-		<ZIonCol>
-			{musicBlockData &&
-				musicBlockData.map((element, index) => {
-					return (
-						<ZIonButton
-							expand='block'
-							className={classNames({
-								'ion-text-capitalize font-bold text-[16px] my-0 mb-2': true,
-								'mt-3': index >= 1,
-							})}
-							color='success'
-							style={{
-								height: '3.5rem',
-								'--border-radius': '0.8rem',
-								borderRadius: '0.8rem',
-							}}
-							routerLink={element.target?.url}
-						>
-							<ZIonImg
-								src={
-									predefinedMusicPlatformImagesInWhite[
-										element.musicCardType as LinkInBioMusicPlatformEnum
-									]
-								}
-								style={{ width: '25px' }}
-								className='me-2'
-							/>
-							<ZIonText>
-								<h5
-									className={classNames(fontFamily, {
-										'ion-no-padding ion-no-margin': true,
-									})}
-								>
-									Listen on {element.title}
-								</h5>
-							</ZIonText>
-						</ZIonButton>
-					);
-				})}
-		</ZIonCol>
-	);
+  return (
+    <ZIonCol>
+      {musicBlockData?.map((element, index) => {
+        return (
+          <ZIonButton
+            key={index}
+            expand='block'
+            className={classNames({
+              'ion-text-capitalize font-bold text-[16px] my-0 mb-2': true,
+              'mt-3': index >= 1
+            })}
+            color='success'
+            style={{
+              height: '3.5rem',
+              '--border-radius': '0.8rem',
+              borderRadius: '0.8rem'
+            }}
+            routerLink={element.target?.url}>
+            <ZIonImg
+              src={
+                predefinedMusicPlatformImagesInWhite[
+                  element.musicCardType as LinkInBioMusicPlatformEnum
+                ]
+              }
+              style={{ width: '25px' }}
+              className='me-2'
+            />
+            <ZIonText>
+              <h5
+                className={classNames(fontFamily, {
+                  'ion-no-padding ion-no-margin': true
+                })}>
+                Listen on {element.title}
+              </h5>
+            </ZIonText>
+          </ZIonButton>
+        );
+      })}
+    </ZIonCol>
+  );
 };
 
 export default ZLinkInBioMusicBlock;

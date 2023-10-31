@@ -1,18 +1,20 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonCardContent } from '@ionic/react';
-import { ZIonModeType } from '@/types/zaionsAppSettings.type';
+import { type ZIonModeType } from '@/types/zaionsAppSettings.type';
 
 // Type
-type ZIonCardContentType = {
+interface ZIonCardContentType {
   children: ReactNode;
   className?: string;
   mode?: ZIonModeType;
-};
+}
 
-const ZIonCardContent = (props: ZIonCardContentType) => {
+const ZIonCardContent: React.FC<ZIonCardContentType> = (
+  props: ZIonCardContentType
+) => {
   return <IonCardContent {...props}>{props.children}</IonCardContent>;
 };
 

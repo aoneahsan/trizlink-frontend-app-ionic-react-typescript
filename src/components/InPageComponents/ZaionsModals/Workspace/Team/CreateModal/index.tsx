@@ -57,10 +57,10 @@ import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { workspaceTeamInterface } from '@/types/AdminPanel/workspace';
-import { FormikSetErrorsType } from '@/types/ZaionsFormik.type';
+import { type workspaceTeamInterface } from '@/types/AdminPanel/workspace';
+import { type FormikSetErrorsType } from '@/types/ZaionsFormik.type';
 
 /**
  * Recoil State Imports go down
@@ -113,31 +113,31 @@ const ZWSTeamCreateModal: React.FC<{
   const formikSubmitHandler = async (
     values: string,
     setErrors: FormikSetErrorsType
-  ) => {
+  ): Promise<void> => {
     try {
-      if (values) {
+      if (values?.trim()?.length > 0) {
         // Making an api call creating new workspace.
         const _response = await createWSTeamMutate(values);
 
-        if (_response) {
+        if (_response !== undefined) {
           // extracting data from _response.
           const _data = extractInnerData<workspaceTeamInterface>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data && _data.id) {
+          if (_data !== undefined && _data?.id !== null) {
             // getting all the workspace from RQ cache.
             const _oldWorkspaceTeams =
               extractInnerData<workspaceTeamInterface[]>(
-                (getRQCDataHandler<workspaceTeamInterface[]>({
+                getRQCDataHandler<workspaceTeamInterface[]>({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM,
                     workspaceId
                   ]
-                }) as workspaceTeamInterface[]) || [],
+                }) as workspaceTeamInterface[],
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
             // Adding newly created workspace data.
             const updatedWorkspaceTeams = [..._oldWorkspaceTeams, _data];
@@ -148,7 +148,7 @@ const ZWSTeamCreateModal: React.FC<{
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM,
                 workspaceId
               ],
-              data: updatedWorkspaceTeams as workspaceTeamInterface[],
+              data: updatedWorkspaceTeams,
               id: '',
               extractType: ZRQGetRequestExtractEnum.extractItems,
               updateHoleData: true
@@ -166,14 +166,14 @@ const ZWSTeamCreateModal: React.FC<{
           status: number;
         };
 
-        const __apiErrors = _error?.errors;
-        const __errors = formatApiRequestErrorForFormikFormField(
+        const _apiErrors = _error?.errors;
+        const _errors = formatApiRequestErrorForFormikFormField(
           ['title', 'description'],
           ['title', 'description'],
-          __apiErrors
+          _apiErrors
         );
 
-        setErrors(__errors);
+        setErrors(_errors);
       } else if (error instanceof ZCustomError || error instanceof Error) {
         reportCustomError(error);
       }
@@ -198,13 +198,6 @@ const ZWSTeamCreateModal: React.FC<{
       </div>
 
       <div className='flex flex-col ion-justify-content-center'>
-        {/* <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
-					<ZIonIcon
-						icon={toggleOutline}
-						className='w-8 h-8 mx-auto'
-						color='light'
-					/>
-				</div> */}
         <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
           <ZIonImg
             src={ProductFavicon}
@@ -271,16 +264,21 @@ const ZWSTeamCreateModal: React.FC<{
                     onIonChange={handleChange}
                     onIonBlur={handleBlur}
                     value={values.title}
-                    errorText={touched.title ? errors.title : undefined}
+                    errorText={
+                      touched?.title === true ? errors?.title : undefined
+                    }
                     testingselector={
                       CONSTANTS.testingSelectors.WSSettings.createModal
                         .titleInput
                     }
                     className={classNames({
-                      'ion-touched': touched.title,
-                      'ion-invalid': touched.title && errors.title,
+                      'ion-touched': touched?.title === true,
+                      'ion-invalid': touched?.title === true && errors?.title,
                       'ion-valid':
-                        touched.title && errors.title?.trim()?.length === 0
+                        touched?.title === true &&
+                        (errors?.title?.trim()?.length === 0 ||
+                          errors?.title === undefined ||
+                          errors?.title === null)
                     })}
                   />
                 </ZIonCol>
@@ -299,14 +297,17 @@ const ZWSTeamCreateModal: React.FC<{
                     onIonBlur={handleBlur}
                     value={values.description}
                     errorText={
-                      touched.description ? errors.description : undefined
+                      touched?.description === true
+                        ? errors.description
+                        : undefined
                     }
                     className={classNames({
                       'mt-1': false,
-                      'ion-touched': touched.description,
-                      'ion-invalid': touched.description && errors.description,
+                      'ion-touched': touched?.description === true,
+                      'ion-invalid':
+                        touched?.description === true && errors.description,
                       'ion-valid':
-                        touched.description &&
+                        touched?.description === true &&
                         errors.description?.trim()?.length === 0
                     })}
                     testingselector={
@@ -321,7 +322,9 @@ const ZWSTeamCreateModal: React.FC<{
                   <ZIonButton
                     expand='block'
                     className='mt-4 '
-                    onClick={() => void submitForm()}
+                    onClick={() => {
+                      void submitForm();
+                    }}
                     disabled={!isValid}
                     testingselector={
                       CONSTANTS.testingSelectors.WSSettings.createModal

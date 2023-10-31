@@ -14,10 +14,10 @@ import React from 'react';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonCol,
-	ZIonIcon,
-	ZIonItem,
-	ZIonRow,
+  ZIonCol,
+  ZIonIcon,
+  ZIonItem,
+  ZIonRow
 } from '@/components/ZIonComponents';
 import { PlatformColorsData } from '@/data/UserDashboard/Workspace/MockUpPage/index.data';
 import { checkmarkOutline } from 'ionicons/icons';
@@ -64,32 +64,38 @@ import { checkmarkOutline } from 'ionicons/icons';
  * */
 
 const ZPlatformColorPopover: React.FC<{
-	dismissZIonPopover: (data?: string, role?: string | undefined) => void;
-	_colorCode: string;
+  dismissZIonPopover: (data?: string, role?: string | undefined) => void;
+  _colorCode: string;
 }> = ({ _colorCode, dismissZIonPopover }) => {
-	return (
-		<ZIonRow className='ion-padding pt-2'>
-			<ZIonCol size='12' className='mb-2'>
-				<ZIonItem className='ion-no-padding'>PLATFORM COLORS</ZIonItem>
-			</ZIonCol>
-			{PlatformColorsData.map((el, index) => (
-				<ZIonCol size='3' key={index}>
-					<div
-						className='w-8 h-8 rounded cursor-pointer flex ion-align-items-center ion-justify-content-center'
-						style={{ backgroundColor: el.colorCode }}
-						title={el.colorName}
-						onClick={() => {
-							dismissZIonPopover(el.colorCode, el.colorName);
-						}}
-					>
-						{_colorCode === el.colorCode && (
-							<ZIonIcon icon={checkmarkOutline} color='light' />
-						)}
-					</div>
-				</ZIonCol>
-			))}
-		</ZIonRow>
-	);
+  return (
+    <ZIonRow className='pt-2 ion-padding'>
+      <ZIonCol
+        size='12'
+        className='mb-2'>
+        <ZIonItem className='ion-no-padding'>PLATFORM COLORS</ZIonItem>
+      </ZIonCol>
+      {PlatformColorsData.map((el, index) => (
+        <ZIonCol
+          size='3'
+          key={index}>
+          <div
+            className='flex w-8 h-8 rounded cursor-pointer ion-align-items-center ion-justify-content-center'
+            style={{ backgroundColor: el.colorCode }}
+            title={el.colorName}
+            onClick={() => {
+              dismissZIonPopover(el.colorCode, el.colorName);
+            }}>
+            {_colorCode === el.colorCode && (
+              <ZIonIcon
+                icon={checkmarkOutline}
+                color='light'
+              />
+            )}
+          </div>
+        </ZIonCol>
+      ))}
+    </ZIonRow>
+  );
 };
 
 export default ZPlatformColorPopover;

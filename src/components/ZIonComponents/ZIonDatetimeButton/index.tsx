@@ -2,24 +2,27 @@
 import React from 'react';
 
 // Packages Import
-import { DatetimeChangeEventDetail, IonDatetimeButton } from '@ionic/react';
+import {
+  type DatetimeChangeEventDetail,
+  IonDatetimeButton
+} from '@ionic/react';
 import ZIonDatetime from '../ZIonDatetime';
 import ZIonModal from '../ZIonModal';
 
 //
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
-import { IonDatetimeCustomEvent } from '@ionic/core/dist/types/components';
+import {
+  type ZIonColorType,
+  type ZIonModeType
+} from '@/types/zaionsAppSettings.type';
+import { type IonDatetimeCustomEvent } from '@ionic/core/dist/types/components';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 // Type
-type ZIonDatetimeButtonType = {
+interface ZIonDatetimeButtonType {
   id: string;
   className?: string;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   color?: ZIonColorType;
   datetime?: string;
   disabled?: boolean;
@@ -35,25 +38,29 @@ type ZIonDatetimeButtonType = {
   preferWheel?: boolean;
   testingselector?: string;
   testinglistselector?: string;
-};
+}
 
-const ZIonDatetimeButton = (props: ZIonDatetimeButtonType) => {
-  const _testinglistselector = props.testinglistselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testinglistselector || PRODUCT_NAME,
-          _key: zCreateElementTestingSelectorKeyEnum.listSelector
-        })
-      }
-    : {};
+const ZIonDatetimeButton: React.FC<ZIonDatetimeButtonType> = (
+  props: ZIonDatetimeButtonType
+) => {
+  const _testinglistselector =
+    props.testinglistselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testinglistselector,
+            _key: zCreateElementTestingSelectorKeyEnum.listSelector
+          })
+        }
+      : {};
 
-  const _testingSelector = props.testingselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testingselector || PRODUCT_NAME
-        })
-      }
-    : {};
+  const _testingSelector =
+    props.testingselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testingselector
+          })
+        }
+      : {};
   return (
     <>
       <IonDatetimeButton

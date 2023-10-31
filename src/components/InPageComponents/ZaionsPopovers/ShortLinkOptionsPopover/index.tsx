@@ -30,26 +30,26 @@ import { reportCustomError } from '@/utils/customErrorType';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
-import { ShortUrlLinkOptionType } from '@/types/AdminPanel/linksType';
+import { type messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
+import { type ShortUrlLinkOptionType } from '@/types/AdminPanel/linksType';
 
 /**
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
 import {
-	NewShortLinkFormState,
-	NewShortLinkSelectTypeOption,
+  NewShortLinkFormState,
+  NewShortLinkSelectTypeOption
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
 import { ZaionsShortUrlLinkOptionData } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortUrlLinkOption.recoil';
 import {
-	ZIonCol,
-	ZIonGrid,
-	ZIonIcon,
-	ZIonRow,
-	ZIonText,
+  ZIonCol,
+  ZIonGrid,
+  ZIonIcon,
+  ZIonRow,
+  ZIonText
 } from '@/components/ZIonComponents';
-import { FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
+import { type FormikSetFieldValueEventVoidType } from '@/types/ZaionsFormik.type';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
 import CONSTANTS from '@/utils/constants';
 
@@ -75,81 +75,85 @@ import CONSTANTS from '@/utils/constants';
  * */
 
 const ZShortLinkOptionsPopover: React.FC<{
-	dismissZIonPopover: (data?: string, role?: string | undefined) => void;
-	type: messengerPlatformsBlockEnum;
-	setFieldValue?: FormikSetFieldValueEventType;
+  dismissZIonPopover: (data?: string, role?: string | undefined) => void;
+  type: messengerPlatformsBlockEnum;
+  setFieldValue?: FormikSetFieldValueEventVoidType;
 }> = ({ dismissZIonPopover, setFieldValue, type }) => {
-	const ShortUrlLinkOptionData = useRecoilValue<ShortUrlLinkOptionType[]>(
-		ZaionsShortUrlLinkOptionData
-	);
-	const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
+  const ShortUrlLinkOptionData = useRecoilValue<ShortUrlLinkOptionType[]>(
+    ZaionsShortUrlLinkOptionData
+  );
+  const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
 
-	const setNewShortLinkTypeOptionDataAtom = useSetRecoilState(
-		NewShortLinkSelectTypeOption
-	);
+  const setNewShortLinkTypeOptionDataAtom = useSetRecoilState(
+    NewShortLinkSelectTypeOption
+  );
 
-	// const { setFieldValue } =
-	// 	useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
+  // const { setFieldValue } =
+  // useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
-	const shortLinkTypeOptionChangeHandler = (
-		_type: messengerPlatformsBlockEnum
-	) => {
-		try {
-			if (_type === type) {
-				return;
-			}
-			setFieldValue && setFieldValue('target', {}, false);
+  const shortLinkTypeOptionChangeHandler = (
+    _type: messengerPlatformsBlockEnum
+  ): void => {
+    try {
+      if (_type === type) {
+        return;
+      }
+      setFieldValue !== undefined && setFieldValue('target', {}, false);
 
-			const selectedTypeOptionData = LinkTypeOptionsData.find(
-				(el) => el.type === _type
-			);
+      const selectedTypeOptionData = LinkTypeOptionsData.find(
+        el => el.type === _type
+      );
 
-			if (selectedTypeOptionData) {
-				setNewShortLinkTypeOptionDataAtom((oldValues) => ({
-					...selectedTypeOptionData,
-				}));
-			}
+      if (selectedTypeOptionData !== undefined) {
+        setNewShortLinkTypeOptionDataAtom(oldValues => ({
+          ...selectedTypeOptionData
+        }));
+      }
 
-			setNewShortLinkFormState((oldVal) => ({
-				...oldVal,
-				type: _type,
-				target: {
-					url: null,
-					accountId: null,
-					message: null,
-					email: null,
-					subject: null,
-					phoneNumber: null,
-					username: null,
-				},
-			}));
-		} catch (error) {
-			reportCustomError(error);
-		}
-	};
+      setNewShortLinkFormState(oldVal => ({
+        ...oldVal,
+        type: _type,
+        target: {
+          url: null,
+          accountId: null,
+          message: null,
+          email: null,
+          subject: null,
+          phoneNumber: null,
+          username: null
+        }
+      }));
+    } catch (error) {
+      reportCustomError(error);
+    }
+  };
 
-	return (
-		<ZIonGrid className='ion-padding'>
-			<ZIonRow className='w-full'>
-				{ShortUrlLinkOptionData.map((el) => {
-					return (
-						<ZIonCol size='5' key={el.id}>
-							<ZIonText
-								className='flex gap-3 cursor-pointer ion-align-items-center ion-margin-bottom'
-								testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.ShortUrlOptionFields.typePopover.typeBtn}-${el.type}`}
-								onClick={() => {
-									shortLinkTypeOptionChangeHandler(el.type);
-								}}
-							>
-								<ZIonIcon icon={el.icon.iconName} className='w-6 h-6' />
-								{el.text}
-							</ZIonText>
-						</ZIonCol>
-					);
-				})}
-			</ZIonRow>
-		</ZIonGrid>
-	);
+  return (
+    <ZIonGrid className='ion-padding'>
+      <ZIonRow className='w-full'>
+        {ShortUrlLinkOptionData.map(el => {
+          return (
+            <ZIonCol
+              size='5'
+              key={el.id}>
+              <ZIonText
+                className='flex gap-3 cursor-pointer ion-align-items-center ion-margin-bottom'
+                testingselector={`${CONSTANTS.testingSelectors.shortLink.formPage.ShortUrlOptionFields.typePopover.typeBtn}-${el.type}`}
+                onClick={() => {
+                  shortLinkTypeOptionChangeHandler(el.type);
+                }}>
+                <ZIonIcon
+                  icon={el.icon.iconName}
+                  className='w-6 h-6'
+                />
+                {el.text}
+              </ZIonText>
+            </ZIonCol>
+          );
+        })}
+      </ZIonRow>
+    </ZIonGrid>
+  );
 };
 
 export default ZShortLinkOptionsPopover;
