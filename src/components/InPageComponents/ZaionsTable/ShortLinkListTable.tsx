@@ -767,13 +767,14 @@ const ZInpageTable: React.FC = () => {
     } catch (error) {
       reportCustomError(error);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [workspaceId, getUserSetting, swsGetUserSetting, wsShareId]);
 
   useEffect(() => {
     // zShortLinksTable.setPageIndex(Number(pageindex) ?? 0);
     zShortLinksTable.setPageSize(Number(pagesize) ?? 2);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    console.log({ w: Number(pagesize) ?? 2 });
+    // eslint-disable-next-line
   }, [pagesize]);
 
   // When the short links data fetch from backend, storing it in ShortLinksRStateAtom recoil state.
@@ -786,7 +787,7 @@ const ZInpageTable: React.FC = () => {
     } catch (error) {
       reportCustomError(error);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [folderId]);
 
   useEffect(() => {
@@ -799,7 +800,7 @@ const ZInpageTable: React.FC = () => {
     } catch (error) {
       reportCustomError(error);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [ShortLinksData, swsShortLinksData]);
 
   useEffect(() => {
@@ -809,7 +810,7 @@ const ZInpageTable: React.FC = () => {
         totalShortLinks: +(ShortLinksData?.itemsCount ?? 0)
       }));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [isShortLinksDataFetching]);
   // #endregion
 
