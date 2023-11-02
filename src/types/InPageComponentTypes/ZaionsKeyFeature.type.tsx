@@ -1,4 +1,4 @@
-export type ZaionsKeyFeatureType = {
+export interface ZaionsKeyFeatureType {
   id?: string | number;
   icon: string;
   title: string;
@@ -8,4 +8,4 @@ export type ZaionsKeyFeatureType = {
     url: string;
   };
   animation: string; // the gif/video/image used displayed when hovered over this item tile.
-};
+}

@@ -3,12 +3,12 @@ import { atom } from 'recoil';
 
 // Custom Imports
 // Types
-import { IdNameType } from '@/types/AdminPanel/linksType';
+import { type IdNameType } from '@/types/AdminPanel/linksType';
 
 // Data
 import { DefaultDomainsData } from '@/data/UserDashboard/CustomDomains';
 
 export const DefaultDomainsState = atom<IdNameType[]>({
-	key: 'DefaultDomainsState_Key',
-	default: DefaultDomainsData,
+  key: 'DefaultDomainsState_Key',
+  default: DefaultDomainsData
 });

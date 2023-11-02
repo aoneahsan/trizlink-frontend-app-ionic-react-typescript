@@ -1,19 +1,20 @@
 // Core Imports
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Imports
 import { IonModal } from '@ionic/react';
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
-import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
-import { IonModalCustomEvent } from '@ionic/core/dist/types/components';
+import {
+  type ZIonColorType,
+  type ZIonModeType
+} from '@/types/zaionsAppSettings.type';
+import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { type IonModalCustomEvent } from '@ionic/core/dist/types/components';
 
 // Type
-type ZIonModalType = {
+interface ZIonModalType {
   children?: ReactNode;
   className?: string;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   color?: ZIonColorType;
   mode?: ZIonModeType;
   animated?: boolean;
@@ -22,7 +23,7 @@ type ZIonModalType = {
   breakpoints?: number[];
   handle?: boolean;
   handleBehavior?: 'cycle' | 'none';
-  htmlAttributes?: { [key: string]: unknown };
+  htmlAttributes?: Record<string, unknown>;
   initialBreakpoint?: number;
   isOpen?: boolean;
   keepContentsMounted?: boolean;
@@ -47,11 +48,13 @@ type ZIonModalType = {
   onWillPresent?: (event: IonModalCustomEvent<void>) => void;
   // leaveAnimation?: (baseEl: unknown, opts?: unknown) => Animation;
   // enterAnimation?: (baseEl: unknown, opts?: unknown) => Animation;
-};
+}
 
-const ZIonModal = (props: ZIonModalType) => {
+const ZIonModal: React.FC<ZIonModalType> = (props: ZIonModalType) => {
   return (
-    <IonModal {...props} style={props.style}>
+    <IonModal
+      {...props}
+      style={props.style}>
       {props.children}
     </IonModal>
   );

@@ -11,8 +11,8 @@ import AppEntryPoint from './AppEntryPoint';
 // Custom Imports
 
 const container = document.getElementById('root');
-const root = container && createRoot(container);
-if (root) {
+const root = container !== null && createRoot(container);
+if (root !== false) {
   root.render(
     <>
       <React.StrictMode>
@@ -24,8 +24,8 @@ if (root) {
 
 // Call the element loader after the app has been rendered the first time
 // defineCustomElements(window)
-// 	.then()
-// 	.catch((err) => console.error(err));
+// .then()
+// .catch((err) => console.error(err));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

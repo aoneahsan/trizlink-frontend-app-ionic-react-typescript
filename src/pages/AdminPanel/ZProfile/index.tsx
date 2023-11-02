@@ -43,7 +43,9 @@ import {
   ZIonInput,
   ZIonIcon,
   ZIonCheckbox,
-  ZIonSelectOption
+  ZIonSelectOption,
+  ZIonButton,
+  ZIonSelect
 } from '@/components/ZIonComponents';
 
 /**
@@ -56,6 +58,7 @@ import CONSTANTS, {
   PRODUCT_NAME
 } from '@/utils/constants';
 import { PAGE_MENU } from '@/utils/enums';
+import { useZIonAlert, useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Type Imports go down
@@ -81,9 +84,6 @@ import {
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
-import { useZIonAlert, useZIonModal } from '@/ZaionsHooks/zionic-hooks';
-import { ZIonButton } from '@/components/ZIonComponents';
-import ZIonSelect from '@/components/ZIonComponents/ZIonSelect';
 
 /**
  * Images Imports go down
@@ -120,21 +120,21 @@ const ZProfile: React.FC = () => {
   );
   const [userAccountState] = useRecoilState(ZaionsUserAccountRStateAtom);
 
-  const setToPrimary = (id: string) => {
-    setUserAccountEmails(
-      oldVals =>
-        oldVals &&
-        oldVals.map(email =>
+  const setToPrimary = (id: string): void => {
+    setUserAccountEmails(oldValues => {
+      return (
+        oldValues?.map(email =>
           email.id === id
             ? { ...email, isPrimary: true }
             : { ...email, isPrimary: false }
-        )
-    );
+        ) ?? []
+      );
+    });
   };
 
-  const onDeleteEmail = async (id: string, email: string) => {
+  const onDeleteEmail = async (id: string, email: string): Promise<void> => {
     await presentZIonAlert({
-      header: `Delete Email`,
+      header: 'Delete Email',
       subHeader: 'Remove email from user account.',
       message: 'Are you sure you want to delete this email account?',
       buttons: [
@@ -146,17 +146,15 @@ const ZProfile: React.FC = () => {
           text: 'Delete',
           role: 'danger',
           handler: () => {
-            void removeEmailAccount(id);
+            removeEmailAccount(id);
           }
         }
       ]
     });
   };
 
-  const removeEmailAccount = (id: string) => {
-    setUserAccountEmails(
-      oldVal => oldVal && oldVal.filter(val => val.id !== id)
-    );
+  const removeEmailAccount = (id: string): void => {
+    setUserAccountEmails(oldVal => oldVal?.filter(val => val.id !== id) ?? []);
   };
 
   return (
@@ -235,7 +233,7 @@ const ZProfile: React.FC = () => {
                           className=''
                           minHeight='40px'
                           placeholder='username here'
-                          value={userAccountState && userAccountState.username}
+                          value={userAccountState?.username}
                         />
                         {/* </ZIonItem> */}
                         <div
@@ -289,86 +287,85 @@ const ZProfile: React.FC = () => {
                             </ZTableRow>
                           </ZTableTHead>
                           <ZTableTBody>
-                            {UserAccountEmails &&
-                              UserAccountEmails.map(el => (
-                                <ZTableRow key={el.id}>
-                                  <ZTableRowCol className='py-2'>
-                                    <ZIonText
-                                      color='dark'
-                                      className='mt-1 text-base'>
-                                      {el.emailAddress}
-                                    </ZIonText>
-                                  </ZTableRowCol>
-                                  <ZTableRowCol className='flex py-2 mt-1 ion-text-items-center'>
-                                    {el.isVerified ? (
-                                      <>
-                                        <ZIonIcon
-                                          icon={checkbox}
-                                          color='success'
-                                          className='pt-1 text-base me-1'
-                                        />{' '}
-                                        <ZIonText
-                                          color='dark'
-                                          className='text-base'>
-                                          Verified
-                                        </ZIonText>
-                                      </>
-                                    ) : (
-                                      <>
-                                        <ZIonIcon
-                                          icon={closeCircleOutline}
-                                          color='danger'
-                                          className='pt-1 text-base me-1'
-                                        />{' '}
-                                        <ZIonText
-                                          color='dark'
-                                          className='text-base'>
-                                          Not verified
-                                        </ZIonText>
-                                      </>
-                                    )}
-                                  </ZTableRowCol>
-                                  <ZTableRowCol className='py-2'>
-                                    <ZIonCheckbox
-                                      className='mt-1'
+                            {UserAccountEmails?.map(el => (
+                              <ZTableRow key={el.id}>
+                                <ZTableRowCol className='py-2'>
+                                  <ZIonText
+                                    color='dark'
+                                    className='mt-1 text-base'>
+                                    {el.emailAddress}
+                                  </ZIonText>
+                                </ZTableRowCol>
+                                <ZTableRowCol className='flex py-2 mt-1 ion-text-items-center'>
+                                  {el.isVerified !== undefined ? (
+                                    <>
+                                      <ZIonIcon
+                                        icon={checkbox}
+                                        color='success'
+                                        className='pt-1 text-base me-1'
+                                      />{' '}
+                                      <ZIonText
+                                        color='dark'
+                                        className='text-base'>
+                                        Verified
+                                      </ZIonText>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <ZIonIcon
+                                        icon={closeCircleOutline}
+                                        color='danger'
+                                        className='pt-1 text-base me-1'
+                                      />{' '}
+                                      <ZIonText
+                                        color='dark'
+                                        className='text-base'>
+                                        Not verified
+                                      </ZIonText>
+                                    </>
+                                  )}
+                                </ZTableRowCol>
+                                <ZTableRowCol className='py-2'>
+                                  <ZIonCheckbox
+                                    className='mt-1'
+                                    onClick={() => {
+                                      setToPrimary(el?.id ?? '');
+                                    }}
+                                    checked={el.isPrimary}
+                                    color='success'
+                                  />
+                                </ZTableRowCol>
+                                <ZTableRowCol>
+                                  {el.isPrimary === false && (
+                                    <ZIonButton
+                                      className='ion-no-padding'
+                                      fill='clear'
                                       onClick={() => {
-                                        setToPrimary(el.id ? el.id : '');
-                                      }}
-                                      checked={el.isPrimary}
-                                      color='success'
-                                    />
-                                  </ZTableRowCol>
-                                  <ZTableRowCol>
-                                    {!el.isPrimary && (
-                                      <ZIonButton
-                                        className='ion-no-padding'
-                                        fill='clear'
-                                        onClick={() => {
-                                          void onDeleteEmail(
-                                            el.id ? el.id : '',
-                                            el.emailAddress
-                                          );
-                                        }}>
-                                        <ZIonIcon
-                                          icon={trashBinOutline}
-                                          color='danger'
-                                        />
-                                      </ZIonButton>
-                                    )}
-                                  </ZTableRowCol>
-                                </ZTableRow>
-                              ))}
+                                        void onDeleteEmail(
+                                          el.id ?? '',
+                                          el.emailAddress
+                                        );
+                                      }}>
+                                      <ZIonIcon
+                                        icon={trashBinOutline}
+                                        color='danger'
+                                      />
+                                    </ZIonButton>
+                                  )}
+                                </ZTableRowCol>
+                              </ZTableRow>
+                            ))}
                           </ZTableTBody>
                         </ZTable>
                         <ZIonButton
                           fill='outline'
                           className='mt-4 ion-text-capitalize'
                           color='tertiary'
-                          onClick={() =>
+                          onClick={() => {
                             presentEmailModal({
                               _cssClass: classes.email_modal_size
-                            })
-                          }
+                            });
+                          }}
                           expand={!isMdScale ? 'block' : undefined}>
                           Add new email
                         </ZIonButton>{' '}
@@ -523,7 +520,7 @@ const ZProfile: React.FC = () => {
                           <h4 className='font-black'>Access history</h4>
                         </ZIonTitle>
                         <ZIonText className='text-[18px] block'>
-                          You're viewing recent activity on your account.
+                          You&apos;re viewing recent activity on your account.
                           Logging out will apply to all devices currently
                           connected to {PRODUCT_NAME}.
                         </ZIonText>
@@ -612,11 +609,11 @@ const ZProfile: React.FC = () => {
                             'mx-3 mt-0': !isMdScale
                           })}
                           expand={!isMdScale ? 'block' : undefined}
-                          onClick={() =>
+                          onClick={() => {
                             presentUserAccountDeleteModal({
                               _cssClass: classes.delete_account_modal_size
-                            })
-                          }>
+                            });
+                          }}>
                           delete account
                         </ZIonButton>
                       </ZIonCol>

@@ -1,9 +1,11 @@
 // Core Imports
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // Packages Imports
-import { initializeApp as initializeFirebaseApp } from 'firebase/app';
-import { useEffect } from 'react';
+import {
+  type FirebaseApp,
+  initializeApp as initializeFirebaseApp
+} from 'firebase/app';
 import { useRecoilState } from 'recoil';
 import {
   frbAnalyticsRState,
@@ -40,7 +42,7 @@ const FirebaseHOC: React.FC<IFirebaseHOCProps> = ({ children }) => {
   useEffect(() => {
     // Initialize Firebase App and It's Services
     try {
-      (async () => {
+      void (async () => {
         setCompState(oldState => ({
           ...oldState,
           isProcessing: true
@@ -66,9 +68,10 @@ const FirebaseHOC: React.FC<IFirebaseHOCProps> = ({ children }) => {
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const initializeAndSetupFirebaseApp = () => {
+  const initializeAndSetupFirebaseApp = (): FirebaseApp => {
     const firebaseApp = initializeFirebaseApp(firebaseConfig, {
       name: firebaseConfig.projectId,
       automaticDataCollectionEnabled: false

@@ -5,11 +5,11 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 const container = document.getElementById('root');
-const root = container && createRoot(container);
-if (root) {
-	root.render(
-		<React.StrictMode>
-			<h1>okay</h1>
-		</React.StrictMode>
-	);
+const root = container !== null && createRoot(container);
+if (root !== false) {
+  root.render(
+    <React.StrictMode>
+      <h1>okay</h1>
+    </React.StrictMode>
+  );
 }

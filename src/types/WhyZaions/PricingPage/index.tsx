@@ -1,4 +1,4 @@
-export type ZaionsPricingSubscriptionsType = {
+export interface ZaionsPricingSubscriptionsType {
   id?: string;
   label: string;
   price: string;
@@ -7,23 +7,23 @@ export type ZaionsPricingSubscriptionsType = {
   annualCharge?: string;
   limit_text: string;
   features_title: string;
-  features_included: {
+  features_included: Array<{
     feature_id?: string;
     icon: string;
     text: string;
     new?: boolean | undefined;
-  }[];
+  }>;
   link?: string;
   extra_data?: unknown;
-};
+}
 
 export type ZaionsPricingFeaturePlanType = string | boolean | null | undefined;
 
-export type ZaionsPricingFeatureDetailType = {
+export interface ZaionsPricingFeatureDetailType {
   id?: string;
   section_heading: string;
   new?: boolean;
-  features: {
+  features: Array<{
     feature_id?: string;
     feature_title?: string;
     plan1?: ZaionsPricingFeaturePlanType; // "true = check", "false = -", "string = text",
@@ -40,5 +40,5 @@ export type ZaionsPricingFeatureDetailType = {
         url?: string;
       };
     };
-  }[];
-};
+  }>;
+}

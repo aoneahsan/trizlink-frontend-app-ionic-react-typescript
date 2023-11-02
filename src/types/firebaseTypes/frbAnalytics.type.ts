@@ -1,8 +1,8 @@
-import { stringOrNull } from '@/types/genericTypeDefinitions.type';
-import { Analytics } from 'firebase/analytics';
+import { type stringOrNull } from '@/types/genericTypeDefinitions.type';
+import { type Analytics } from 'firebase/analytics';
 
-export type FrbAnalyticsRStateType = {
+export interface FrbAnalyticsRStateType {
   isInitialized: boolean;
   initializedAt: stringOrNull;
   frbAnalyticsInstance: Analytics | null;
-};
+}

@@ -19,15 +19,17 @@ export class ZCustomError extends Error {
   public errorCode;
   public errorData;
 
+  // eslint-disable-next-line @typescript-eslint/space-before-function-paren
   constructor(props?: ZCustomErrorProps) {
     const {
       message = MESSAGES.GENERAL.FAILED,
       componentName = 'App',
       errorCode = ErrorCodeEnum.RequestFailed,
       errorData = {}
-    } = props || {};
+    } = props ?? {};
     super(message);
 
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, ZCustomError);
     }
@@ -48,7 +50,7 @@ export const reportCustomError = (
   try {
     const _data = {
       err: errData,
-      message: `[reportCustomError] - ${message || ''}`
+      message: `[reportCustomError] - ${message ?? ''}`
     };
 
     if (showInConsole) {

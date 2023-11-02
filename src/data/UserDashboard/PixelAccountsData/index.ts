@@ -1,7 +1,7 @@
 import {
-  PixelAccountPlatformType,
-  PixelAccountType,
-  PixelPlatformsEnum,
+  type PixelAccountPlatformType,
+  type PixelAccountType,
+  PixelPlatformsEnum
 } from '@/types/AdminPanel/linksType';
 
 export const PixelAccountsData: PixelAccountType[] = [
@@ -11,7 +11,7 @@ export const PixelAccountsData: PixelAccountType[] = [
     platform: PixelPlatformsEnum.facebook,
     title: 'facebook',
     createAt: 'Nov 29, 2022',
-    updatedAt: undefined,
+    updatedAt: undefined
   },
   {
     id: '2',
@@ -19,84 +19,84 @@ export const PixelAccountsData: PixelAccountType[] = [
     platform: PixelPlatformsEnum.google_ads,
     title: 'google_ads',
     createAt: 'Nov 2, 2022',
-    updatedAt: 'Nov 29, 2022',
-  },
+    updatedAt: 'Nov 29, 2022'
+  }
 ];
 
 export const PixelAccountPlatformOptionsData: PixelAccountPlatformType[] = [
   {
     id: '1',
     type: PixelPlatformsEnum.facebook,
-    title: 'FaceBook',
+    title: 'FaceBook'
   },
   {
     id: '2',
     type: PixelPlatformsEnum.linkedin,
-    title: 'Linkdin',
+    title: 'Linkdin'
   },
   {
     id: '3',
     type: PixelPlatformsEnum.twitter,
-    title: 'Twitter',
+    title: 'Twitter'
   },
   {
     id: '4',
     type: PixelPlatformsEnum.google_analytics,
-    title: 'Google Analytics',
+    title: 'Google Analytics'
   },
   {
     id: '5',
     type: PixelPlatformsEnum.google_analytics_4,
-    title: 'Google Analytics 4',
+    title: 'Google Analytics 4'
   },
   {
     id: '6',
     type: PixelPlatformsEnum.google_ads,
-    title: 'Google Ads',
+    title: 'Google Ads'
   },
   {
     id: '7',
     type: PixelPlatformsEnum.google_tag_manager,
-    title: 'Google Tag Manager',
+    title: 'Google Tag Manager'
   },
   {
     id: '8',
     type: PixelPlatformsEnum.quora,
-    title: 'Quora',
+    title: 'Quora'
   },
   {
     id: '9',
     type: PixelPlatformsEnum.snapchat,
-    title: 'Snapchat',
+    title: 'Snapchat'
   },
   {
     id: '10',
     type: PixelPlatformsEnum.pinterest,
-    title: 'Pinterest',
+    title: 'Pinterest'
   },
   {
     id: '11',
     type: PixelPlatformsEnum.bing,
-    title: 'Bing',
+    title: 'Bing'
   },
   {
     id: '12',
     type: PixelPlatformsEnum.adroll,
-    title: 'Adroll',
+    title: 'Adroll'
   },
   {
     id: '13',
     type: PixelPlatformsEnum.nexus,
-    title: 'Nexus',
+    title: 'Nexus'
   },
   {
     id: '14',
     type: PixelPlatformsEnum.tiktok,
-    title: 'TikTok',
+    title: 'TikTok'
   },
   {
     id: '15',
     type: PixelPlatformsEnum.vk,
-    title: 'VK',
-  },
+    title: 'VK'
+  }
 ];

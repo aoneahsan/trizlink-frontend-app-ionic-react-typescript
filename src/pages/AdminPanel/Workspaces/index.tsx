@@ -10,7 +10,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
  * */
 import { addOutline, gitNetworkOutline, starOutline } from 'ionicons/icons';
 import classNames from 'classnames';
-import { RefresherEventDetail } from '@ionic/react';
+import { type RefresherEventDetail } from '@ionic/react';
 
 /**
  * Custom Imports go down
@@ -39,18 +39,6 @@ import ZAddNewWorkspaceModal from '@/components/InPageComponents/ZaionsModals/Wo
 //
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
 
-const ZWorkspacesCard = lazy(
-  () => import('@/components/WorkspacesComponents/ListCard')
-);
-
-// const ZUserProfileButton = lazy(
-// 	() => import('@/components/AdminPanelComponents/UserProfileButton')
-// );
-
-const ZAdminPanelTopBar = lazy(
-  () => import('@/components/AdminPanelComponents/TopBar')
-);
-
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
@@ -75,10 +63,21 @@ import { reportCustomError } from '@/utils/customErrorType';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  workspaceInterface,
-  wsShareInterface
+  type workspaceInterface,
+  type wsShareInterface
 } from '@/types/AdminPanel/workspace';
-import { zStringify } from '@/utils/helpers';
+
+const ZWorkspacesCard = lazy(
+  () => import('@/components/WorkspacesComponents/ListCard')
+);
+
+// const ZUserProfileButton = lazy(
+// () => import('@/components/AdminPanelComponents/UserProfileButton')
+// );
+
+const ZAdminPanelTopBar = lazy(
+  () => import('@/components/AdminPanelComponents/TopBar')
+);
 
 /**
  * Recoil State Imports go down
@@ -143,14 +142,14 @@ const ZWorkspaceListPage: React.FC = () => {
       el => el?.isFavorite === 1
     );
 
-    if (_sharedFavoriteWorkspaces) {
+    if (_sharedFavoriteWorkspaces !== undefined) {
       setCompState(oldValues => ({
         ...oldValues,
         sharedFavoriteWorkspaces: _sharedFavoriteWorkspaces
       }));
     }
 
-    if (_ownedFavoriteWorkspaces) {
+    if (_ownedFavoriteWorkspaces !== undefined) {
       setCompState(oldValues => ({
         ...oldValues,
         ownedFavoriteWorkspaces: _ownedFavoriteWorkspaces
@@ -158,7 +157,7 @@ const ZWorkspaceListPage: React.FC = () => {
     }
   }, [WorkspacesData, WSShareData]);
 
-  const zRefetchDataHandler = async () => {
+  const zRefetchDataHandler = async (): Promise<void> => {
     try {
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN
@@ -172,7 +171,9 @@ const ZWorkspaceListPage: React.FC = () => {
     }
   };
 
-  const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
+  const handleRefresh = async (
+    event: CustomEvent<RefresherEventDetail>
+  ): Promise<void> => {
     try {
       await zRefetchDataHandler();
       event.detail.complete();
@@ -208,7 +209,10 @@ const ZWorkspaceListPage: React.FC = () => {
         returnPermissionDeniedView={true}>
         <ZIonContent className='mb-5'>
           {/* IonRefresher */}
-          <ZIonRefresher onIonRefresh={event => void handleRefresh(event)}>
+          <ZIonRefresher
+            onIonRefresh={event => {
+              void handleRefresh(event);
+            }}>
             <ZIonRefresherContent />
           </ZIonRefresher>
 
@@ -256,8 +260,8 @@ const ZWorkspaceListPage: React.FC = () => {
                     <ZIonText
                       className='block mt-2 tracking-wider text-md ion-text-center'
                       color='dark'>
-                      You haven't added any workspaces to your favorites yet.
-                      Start by marking your most used workspaces!
+                      You haven&apos;t added any workspaces to your favorites
+                      yet. Start by marking your most used workspaces!
                     </ZIonText>
                   </ZIonCol>
                 )}
@@ -286,12 +290,14 @@ const ZWorkspaceListPage: React.FC = () => {
                               workspaceName={el.workspaceName as string}
                               user={el.user}
                               workspaceId={
-                                el?.accountStatus ? el.workspaceId : el.id
+                                el?.accountStatus != null
+                                  ? el.workspaceId
+                                  : el.id
                               }
-                              owned={el?.accountStatus ? false : true}
+                              owned={el?.accountStatus == null}
                               accountStatus={el?.accountStatus}
                               createdAt={el.createdAt}
-                              isFavorite={el.isFavorite ? true : false}
+                              isFavorite={Boolean(el.isFavorite)}
                               memberId={el.id}
                             />
                           </ZIonCol>
@@ -351,93 +357,96 @@ const ZWorkspaceListPage: React.FC = () => {
 
                 {isZFetching && <ZWorkspacesCardSkeleton />}
 
-                {WorkspacesData && WorkspacesData?.length > 0 && (
-                  <>
-                    {/* single card */}
-                    <Suspense fallback={<ZWorkspacesCardSkeleton />}>
-                      {!isZFetching &&
-                        WorkspacesData &&
-                        WorkspacesData.map(el => (
-                          <ZCan
-                            key={el.id}
-                            havePermissions={[permissionsEnum.view_workspace]}>
-                            <ZIonCol
-                              sizeXl='3'
-                              sizeLg='4'
-                              sizeMd='6'
-                              sizeSm='6'
-                              sizeXs='12'>
-                              <ZWorkspacesCard
-                                workspaceImage={el.workspaceImage}
-                                workspaceName={el.workspaceName as string}
-                                user={el.user}
-                                workspaceId={el.id}
-                                createdAt={el.createdAt}
-                                isFavorite={el.isFavorite ? true : false}
-                              />
-                            </ZIonCol>
-                          </ZCan>
-                        ))}
-                    </Suspense>
-
-                    {/* add a workspace card */}
-                    <ZCan havePermissions={[permissionsEnum.create_workspace]}>
-                      <ZIonCol
-                        sizeXl='3'
-                        sizeLg='4'
-                        sizeMd='6'
-                        sizeSm='6'
-                        sizeXs='12'>
-                        {!isZFetching && (
-                          <ZIonCard
-                            className={classNames({
-                              'h-[11.4rem] cursor-pointer': true
-                            })}
-                            testingselector={
-                              CONSTANTS.testingSelectors.workspace.listPage
-                                .createWorkspaceCardButton
-                            }
-                            onClick={() => {
-                              presentZWorkspaceCreateModal({
-                                _cssClass: 'create-workspace-modal-size'
-                              });
-                            }}>
-                            <ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
-                              <ZIonIcon
-                                icon={addOutline}
-                                size='large'
-                              />
-                              <ZIonText className='text-lg'>
-                                Create a workspace
-                              </ZIonText>
-                            </ZIonCardContent>
-                          </ZIonCard>
-                        )}
-
-                        {isZFetching && (
-                          <ZIonCard
-                            className={classNames({
-                              'h-[11.4rem] cursor-pointer': true
-                            })}>
-                            <ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
-                              <ZIonSkeletonText
-                                width='20px'
-                                height='20px'
-                              />
-
-                              <ZIonText className='text-lg'>
-                                <ZIonSkeletonText
-                                  width='120px'
-                                  height='15px'
+                {WorkspacesData !== null &&
+                  (WorkspacesData?.length ?? 0) > 0 && (
+                    <>
+                      {/* single card */}
+                      <Suspense fallback={<ZWorkspacesCardSkeleton />}>
+                        {!isZFetching &&
+                          WorkspacesData?.map(el => (
+                            <ZCan
+                              key={el.id}
+                              havePermissions={[
+                                permissionsEnum.view_workspace
+                              ]}>
+                              <ZIonCol
+                                sizeXl='3'
+                                sizeLg='4'
+                                sizeMd='6'
+                                sizeSm='6'
+                                sizeXs='12'>
+                                <ZWorkspacesCard
+                                  workspaceImage={el.workspaceImage}
+                                  workspaceName={el.workspaceName as string}
+                                  user={el.user}
+                                  workspaceId={el.id}
+                                  createdAt={el.createdAt}
+                                  isFavorite={Boolean(el.isFavorite)}
                                 />
-                              </ZIonText>
-                            </ZIonCardContent>
-                          </ZIonCard>
-                        )}
-                      </ZIonCol>
-                    </ZCan>
-                  </>
-                )}
+                              </ZIonCol>
+                            </ZCan>
+                          ))}
+                      </Suspense>
+
+                      {/* add a workspace card */}
+                      <ZCan
+                        havePermissions={[permissionsEnum.create_workspace]}>
+                        <ZIonCol
+                          sizeXl='3'
+                          sizeLg='4'
+                          sizeMd='6'
+                          sizeSm='6'
+                          sizeXs='12'>
+                          {!isZFetching && (
+                            <ZIonCard
+                              className={classNames({
+                                'h-[11.4rem] cursor-pointer': true
+                              })}
+                              testingselector={
+                                CONSTANTS.testingSelectors.workspace.listPage
+                                  .createWorkspaceCardButton
+                              }
+                              onClick={() => {
+                                presentZWorkspaceCreateModal({
+                                  _cssClass: 'create-workspace-modal-size'
+                                });
+                              }}>
+                              <ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
+                                <ZIonIcon
+                                  icon={addOutline}
+                                  size='large'
+                                />
+                                <ZIonText className='text-lg'>
+                                  Create a workspace
+                                </ZIonText>
+                              </ZIonCardContent>
+                            </ZIonCard>
+                          )}
+
+                          {isZFetching && (
+                            <ZIonCard
+                              className={classNames({
+                                'h-[11.4rem] cursor-pointer': true
+                              })}>
+                              <ZIonCardContent className='flex flex-col h-full ion-align-items-center ion-justify-content-center'>
+                                <ZIonSkeletonText
+                                  width='20px'
+                                  height='20px'
+                                />
+
+                                <ZIonText className='text-lg'>
+                                  <ZIonSkeletonText
+                                    width='120px'
+                                    height='15px'
+                                  />
+                                </ZIonText>
+                              </ZIonCardContent>
+                            </ZIonCard>
+                          )}
+                        </ZIonCol>
+                      </ZCan>
+                    </>
+                  )}
               </ZIonRow>
             </ZIonCard>
 
@@ -477,8 +486,7 @@ const ZWorkspaceListPage: React.FC = () => {
                   {/* single card */}
                   <Suspense fallback={<ZWorkspacesCardSkeleton />}>
                     {!isZFetching &&
-                      WSShareData &&
-                      WSShareData.map(el => {
+                      WSShareData?.map(el => {
                         return (
                           <ZCan
                             key={el.id}
@@ -498,7 +506,7 @@ const ZWorkspaceListPage: React.FC = () => {
                                 accountStatus={el.accountStatus}
                                 memberId={el.id}
                                 owned={false}
-                                isFavorite={el.isFavorite ? true : false}
+                                isFavorite={Boolean(el.isFavorite)}
                               />
                             </ZIonCol>
                           </ZCan>

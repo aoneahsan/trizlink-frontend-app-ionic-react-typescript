@@ -60,17 +60,17 @@ const ChartsExamples: React.FC = () => {
         stack: 'Stack 1'
       }
       // {
-      // 	label: 'Dataset 2',
-      // 	data: [1, 2, 3, 1],
-      // 	backgroundColor: 'rgba(53, 162, 235, 0.5)',
-      // 	stack: 'Stack 2',
+      // label: 'Dataset 2',
+      // data: [1, 2, 3, 1],
+      // backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      // stack: 'Stack 2',
       // },
       // {
-      // 	label: 'Dataset 3',
-      // 	data: [1, 2, 3],
-      // 	backgroundColor: 'rgba(63, 372, 345, 0.5)',
-      // 	borderColor: 'rgb(255, 99, 132)',
-      // 	stack: 'Stack 3',
+      // label: 'Dataset 3',
+      // data: [1, 2, 3],
+      // backgroundColor: 'rgba(63, 372, 345, 0.5)',
+      // borderColor: 'rgb(255, 99, 132)',
+      // stack: 'Stack 3',
       // },
     ]
   };

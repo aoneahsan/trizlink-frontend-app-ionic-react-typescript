@@ -1,19 +1,19 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonSegmentButton } from '@ionic/react';
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
+import {
+  type ZIonColorType,
+  type ZIonModeType
+} from '@/types/zaionsAppSettings.type';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
-import { PRODUCT_NAME } from '@/utils/constants';
 
-type ZIonSegmentButtonType = {
+interface ZIonSegmentButtonType {
   children: ReactNode;
   className?: string;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   color?: ZIonColorType;
   disabled?: boolean;
   mode?: ZIonModeType;
@@ -30,9 +30,11 @@ type ZIonSegmentButtonType = {
     | 'label-hide';
   id?: string;
   onClick?: React.MouseEventHandler<HTMLIonSegmentButtonElement>;
-};
+}
 
-const ZIonSegmentButton = (props: ZIonSegmentButtonType) => {
+const ZIonSegmentButton: React.FC<ZIonSegmentButtonType> = (
+  props: ZIonSegmentButtonType
+) => {
   const _testinglistselector =
     props.testinglistselector !== undefined
       ? {

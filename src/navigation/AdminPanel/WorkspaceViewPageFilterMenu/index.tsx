@@ -14,44 +14,27 @@ import React from 'react';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonAccordion,
-	ZIonAccordionGroup,
-	ZIonCheckbox,
-	ZIonCol,
-	ZIonContent,
-	ZIonIcon,
-	ZIonItem,
-	ZIonLabel,
-	ZIonMenu,
-	ZIonRadio,
-	ZIonRadioGroup,
-	ZIonRow,
-	ZIonText,
+  ZIonAccordion,
+  ZIonAccordionGroup,
+  ZIonCheckbox,
+  ZIonCol,
+  ZIonContent,
+  ZIonIcon,
+  ZIonItem,
+  ZIonLabel,
+  ZIonMenu,
+  ZIonRadio,
+  ZIonRadioGroup,
+  ZIonRow,
+  ZIonText
 } from '@/components/ZIonComponents';
 import CONSTANTS from '@/utils/constants';
 import {
-	alertCircle,
-	arrowUpOutline,
-	chatbubbleEllipsesOutline,
-	chatbubbleOutline,
-	checkmarkCircle,
-	checkmarkCircleOutline,
-	checkmarkOutline,
-	cloudDownload,
-	cloudDownloadOutline,
-	eyeOffOutline,
-	fileTrayFullOutline,
-	fileTrayStackedOutline,
-	flag,
-	flagOutline,
-	megaphone,
-	navigateCircle,
-	navigateCircleOutline,
-	pencil,
-	searchOutline,
-	send,
-	time,
-	timeOutline,
+  arrowUpOutline,
+  eyeOffOutline,
+  fileTrayFullOutline,
+  fileTrayStackedOutline,
+  searchOutline
 } from 'ionicons/icons';
 import { filterMenuOptions } from '@/data/UserDashboard/Workspace/FilterMenu/index.data';
 import { workspaceFilterAccordionContentEnum } from '@/types/AdminPanel/workspace';
@@ -98,268 +81,283 @@ import { workspaceFilterAccordionContentEnum } from '@/types/AdminPanel/workspac
  * */
 
 const ZWorkspaceViewPageFilterMenu: React.FC = () => {
-	return (
-		<ZIonMenu
-			contentId={CONSTANTS.MENU_IDS.ADMIN_PAGE_WORKSPACE_VIEW_FILTER_MENU_ID}
-			side='end'
-			menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_WORKSPACE_VIEW_FILTER_MENU_ID}
-		>
-			<ZIonContent>
-				<ZIonItem lines='full' className='font-bold text-xl' minHeight='66px'>
-					Filter & sort
-				</ZIonItem>
+  return (
+    <ZIonMenu
+      contentId={CONSTANTS.MENU_IDS.ADMIN_PAGE_WORKSPACE_VIEW_FILTER_MENU_ID}
+      side='end'
+      menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_WORKSPACE_VIEW_FILTER_MENU_ID}>
+      <ZIonContent>
+        <ZIonItem
+          lines='full'
+          className='text-xl font-bold'
+          minHeight='66px'>
+          Filter & sort
+        </ZIonItem>
 
-				<ZIonRow>
-					{/*  */}
-					<ZIonCol size='12' className='border-bottom pb-4'>
-						<ZIonLabel
-							className='text-xs block mt-2 mb-1 ms-2 tracking-widest'
-							color='medium'
-						>
-							SORT BY:
-						</ZIonLabel>
+        <ZIonRow>
+          {/*  */}
+          <ZIonCol
+            size='12'
+            className='pb-4 border-bottom'>
+            <ZIonLabel
+              className='block mt-2 mb-1 text-xs tracking-widest ms-2'
+              color='medium'>
+              SORT BY:
+            </ZIonLabel>
 
-						{/*  */}
-						<ZIonAccordionGroup>
-							<ZIonAccordion value='f'>
-								<ZIonItem
-									slot='header'
-									lines='full'
-									minHeight='46px'
-									color='light'
-								>
-									<ZIonIcon icon={arrowUpOutline} className='w-4 h-4' />
-									<ZIonText className='text-sm pt-1 ms-2'>
-										First scheduled date
-									</ZIonText>
-								</ZIonItem>
-								<div
-									className='ion-padding zaions__light_bg mt-1'
-									slot='content'
-								>
-									<ZIonRadioGroup>
-										{/* First scheduled date */}
-										<div className='pb-2'>
-											<ZIonRadio
-												value='FirstScheduledDate'
-												labelPlacement='end'
-												className='text-sm'
-											>
-												First scheduled date
-											</ZIonRadio>
-										</div>
+            {/*  */}
+            <ZIonAccordionGroup>
+              <ZIonAccordion value='f'>
+                <ZIonItem
+                  slot='header'
+                  lines='full'
+                  minHeight='46px'
+                  color='light'>
+                  <ZIonIcon
+                    icon={arrowUpOutline}
+                    className='w-4 h-4'
+                  />
+                  <ZIonText className='pt-1 text-sm ms-2'>
+                    First scheduled date
+                  </ZIonText>
+                </ZIonItem>
+                <div
+                  className='mt-1 ion-padding zaions__light_bg'
+                  slot='content'>
+                  <ZIonRadioGroup>
+                    {/* First scheduled date */}
+                    <div className='pb-2'>
+                      <ZIonRadio
+                        value='FirstScheduledDate'
+                        labelPlacement='end'
+                        className='text-sm'>
+                        First scheduled date
+                      </ZIonRadio>
+                    </div>
 
-										{/* Last scheduled date */}
-										<div className='pb-2'>
-											<ZIonRadio
-												value='LastScheduledDate'
-												labelPlacement='end'
-												className='text-sm'
-											>
-												Last scheduled date
-											</ZIonRadio>
-										</div>
+                    {/* Last scheduled date */}
+                    <div className='pb-2'>
+                      <ZIonRadio
+                        value='LastScheduledDate'
+                        labelPlacement='end'
+                        className='text-sm'>
+                        Last scheduled date
+                      </ZIonRadio>
+                    </div>
 
-										{/* Last created */}
-										<div className='pb-2'>
-											<ZIonRadio
-												value='LastCreated'
-												labelPlacement='end'
-												className='text-sm'
-											>
-												Last created
-											</ZIonRadio>
-										</div>
+                    {/* Last created */}
+                    <div className='pb-2'>
+                      <ZIonRadio
+                        value='LastCreated'
+                        labelPlacement='end'
+                        className='text-sm'>
+                        Last created
+                      </ZIonRadio>
+                    </div>
 
-										{/* First created */}
-										<div className='pb-2'>
-											<ZIonRadio
-												value='FirstCreated'
-												labelPlacement='end'
-												className='text-sm'
-											>
-												First created
-											</ZIonRadio>
-										</div>
+                    {/* First created */}
+                    <div className='pb-2'>
+                      <ZIonRadio
+                        value='FirstCreated'
+                        labelPlacement='end'
+                        className='text-sm'>
+                        First created
+                      </ZIonRadio>
+                    </div>
 
-										{/* Recent comments */}
-										<div className='pb-2'>
-											<ZIonRadio
-												value='RecentComments'
-												labelPlacement='end'
-												className='text-sm'
-											>
-												Recent comments
-											</ZIonRadio>
-										</div>
+                    {/* Recent comments */}
+                    <div className='pb-2'>
+                      <ZIonRadio
+                        value='RecentComments'
+                        labelPlacement='end'
+                        className='text-sm'>
+                        Recent comments
+                      </ZIonRadio>
+                    </div>
 
-										{/* Last activity */}
-										<div className='pb-2'>
-											<ZIonRadio
-												value='LastActivity'
-												labelPlacement='end'
-												className='text-sm'
-											>
-												Last activity
-											</ZIonRadio>
-										</div>
+                    {/* Last activity */}
+                    <div className='pb-2'>
+                      <ZIonRadio
+                        value='LastActivity'
+                        labelPlacement='end'
+                        className='text-sm'>
+                        Last activity
+                      </ZIonRadio>
+                    </div>
 
-										{/* Custom order */}
-										<div className='pb-2'>
-											<ZIonRadio
-												value='CustomOrder'
-												labelPlacement='end'
-												className='text-sm'
-											>
-												Custom order
-											</ZIonRadio>
-										</div>
-									</ZIonRadioGroup>
-								</div>
-							</ZIonAccordion>
-						</ZIonAccordionGroup>
-					</ZIonCol>
+                    {/* Custom order */}
+                    <div className='pb-2'>
+                      <ZIonRadio
+                        value='CustomOrder'
+                        labelPlacement='end'
+                        className='text-sm'>
+                        Custom order
+                      </ZIonRadio>
+                    </div>
+                  </ZIonRadioGroup>
+                </div>
+              </ZIonAccordion>
+            </ZIonAccordionGroup>
+          </ZIonCol>
 
-					{/* FILTER BY: */}
-					<ZIonCol size='12' className='border-bottom pb-4'>
-						<ZIonLabel
-							className='text-xs block mt-2 mb-1 ms-2 tracking-widest'
-							color='medium'
-						>
-							FILTER BY:
-						</ZIonLabel>
+          {/* FILTER BY: */}
+          <ZIonCol
+            size='12'
+            className='pb-4 border-bottom'>
+            <ZIonLabel
+              className='block mt-2 mb-1 text-xs tracking-widest ms-2'
+              color='medium'>
+              FILTER BY:
+            </ZIonLabel>
 
-						{/* Z Ion Accordion Group */}
-						<ZIonAccordionGroup>
-							{filterMenuOptions.map((el, index) => {
-								return (
-									<ZIonAccordion value={el.value} key={index} className='mt-2'>
-										<ZIonItem
-											slot='header'
-											lines='none'
-											minHeight='46px'
-											color='light'
-										>
-											<ZIonIcon icon={el.icon} className='w-4 h-4' />
-											<ZIonText className='text-sm pt-1 ms-2'>
-												{el.label}
-											</ZIonText>
-										</ZIonItem>
-										<div
-											className='ion-padding zaions__light_bg mt-1'
-											slot='content'
-										>
-											{/* here we are looping the filter items, first we are checking if we have filter items, if we have filter items then we are checking that what type of items are they checkbox, ratio, etc. accounting to type we are showing content.  */}
-											{el.filterItems.length ? (
-												// checking id el.filterType is workspaceFilterAccordionContentEnum.checkbox then show this content
-												el.filterType ===
-												workspaceFilterAccordionContentEnum.checkbox ? (
-													el.filterItems.map((_item, checkboxIndex) => {
-														return (
-															<div className='pb-2' key={checkboxIndex}>
-																<ZIonCheckbox
-																	labelPlacement='end'
-																	className='text-sm ion-align-items-center'
-																	value={el.value}
-																>
-																	<ZIonLabel className='text-sm ion-align-items-center flex'>
-																		{_item.icon && (
-																			<ZIonIcon
-																				className='w-5 h-5'
-																				icon={_item.icon}
-																				color={_item.color}
-																			/>
-																		)}
-																		<ZIonText className='ms-1'>
-																			{_item.title}
-																		</ZIonText>
-																	</ZIonLabel>
-																</ZIonCheckbox>
-															</div>
-														);
-													})
-												) : // else checking if el.filterType is workspaceFilterAccordionContentEnum.radio then show this content
-												el.filterType ===
-												  workspaceFilterAccordionContentEnum.radio ? (
-													<ZIonRadioGroup>
-														{el.filterItems.map((_item, ratioIndex) => {
-															return (
-																<div className='pb-2' key={ratioIndex}>
-																	<div className='pb-2'>
-																		<ZIonRadio
-																			value={_item.title}
-																			labelPlacement='end'
-																			className='text-sm'
-																		>
-																			{_item.title}
-																		</ZIonRadio>
-																	</div>
-																</div>
-															);
-														})}
-													</ZIonRadioGroup>
-												) : null
-											) : (
-												// else if el.filterItems is empty then show this content
-												<div className='py-3 flex ion-align-items-center ion-justify-content-center flex-col'>
-													<ZIonIcon
-														icon={fileTrayStackedOutline}
-														className='w-7 h-7'
-														color='medium'
-													/>
-													<ZIonText className='mt-2 text-sm' color='medium'>
-														No {el.label}
-													</ZIonText>
-												</div>
-											)}
-										</div>
-									</ZIonAccordion>
-								);
-							})}
-						</ZIonAccordionGroup>
-					</ZIonCol>
+            {/* Z Ion Accordion Group */}
+            <ZIonAccordionGroup>
+              {filterMenuOptions.map((el, index) => {
+                return (
+                  <ZIonAccordion
+                    value={el.value}
+                    key={index}
+                    className='mt-2'>
+                    <ZIonItem
+                      slot='header'
+                      lines='none'
+                      minHeight='46px'
+                      color='light'>
+                      <ZIonIcon
+                        icon={el.icon}
+                        className='w-4 h-4'
+                      />
+                      <ZIonText className='pt-1 text-sm ms-2'>
+                        {el.label}
+                      </ZIonText>
+                    </ZIonItem>
+                    <div
+                      className='mt-1 ion-padding zaions__light_bg'
+                      slot='content'>
+                      {/* here we are looping the filter items, first we are checking if we have filter items, if we have filter items then we are checking that what type of items are they checkbox, ratio, etc. accounting to type we are showing content.  */}
+                      {el.filterItems.length > 0 ? (
+                        // checking id el.filterType is workspaceFilterAccordionContentEnum.checkbox then show this content
+                        el.filterType ===
+                        workspaceFilterAccordionContentEnum.checkbox ? (
+                          el.filterItems.map((_item, checkboxIndex) => {
+                            return (
+                              <div
+                                className='pb-2'
+                                key={checkboxIndex}>
+                                <ZIonCheckbox
+                                  labelPlacement='end'
+                                  className='text-sm ion-align-items-center'
+                                  value={el.value}>
+                                  <ZIonLabel className='flex text-sm ion-align-items-center'>
+                                    {_item.icon !== undefined && (
+                                      <ZIonIcon
+                                        className='w-5 h-5'
+                                        icon={_item.icon}
+                                        color={_item.color}
+                                      />
+                                    )}
+                                    <ZIonText className='ms-1'>
+                                      {_item.title}
+                                    </ZIonText>
+                                  </ZIonLabel>
+                                </ZIonCheckbox>
+                              </div>
+                            );
+                          })
+                        ) : el.filterType ===
+                          workspaceFilterAccordionContentEnum.radio ? (
+                          <ZIonRadioGroup>
+                            {el.filterItems.map((_item, ratioIndex) => {
+                              return (
+                                <div
+                                  className='pb-2'
+                                  key={ratioIndex}>
+                                  <div className='pb-2'>
+                                    <ZIonRadio
+                                      value={_item.title}
+                                      labelPlacement='end'
+                                      className='text-sm'>
+                                      {_item.title}
+                                    </ZIonRadio>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </ZIonRadioGroup>
+                        ) : null
+                      ) : (
+                        // else if el.filterItems is empty then show this content
+                        <div className='flex flex-col py-3 ion-align-items-center ion-justify-content-center'>
+                          <ZIonIcon
+                            icon={fileTrayStackedOutline}
+                            className='w-7 h-7'
+                            color='medium'
+                          />
+                          <ZIonText
+                            className='mt-2 text-sm'
+                            color='medium'>
+                            No {el.label}
+                          </ZIonText>
+                        </div>
+                      )}
+                    </div>
+                  </ZIonAccordion>
+                );
+              })}
+            </ZIonAccordionGroup>
+          </ZIonCol>
 
-					<ZIonCol size='12' className='border-bottom py-4'>
-						<ZIonItem
-							lines='none'
-							minHeight='46px'
-							color='light'
-							className='ion-activatable ion-focusable cursor-pointer '
-						>
-							<ZIonIcon icon={searchOutline} className='w-4 h-4' />
-							<ZIonText className='text-sm pt-1 ms-2'>Search in posts</ZIonText>
-						</ZIonItem>
-					</ZIonCol>
+          <ZIonCol
+            size='12'
+            className='py-4 border-bottom'>
+            <ZIonItem
+              lines='none'
+              minHeight='46px'
+              color='light'
+              className='cursor-pointer ion-activatable ion-focusable '>
+              <ZIonIcon
+                icon={searchOutline}
+                className='w-4 h-4'
+              />
+              <ZIonText className='pt-1 text-sm ms-2'>Search in posts</ZIonText>
+            </ZIonItem>
+          </ZIonCol>
 
-					<ZIonCol size='12' className='border-bottom py-4 mb-2'>
-						<ZIonItem
-							lines='none'
-							minHeight='46px'
-							color='light'
-							className='ion-activatable ion-focusable cursor-pointer '
-						>
-							<ZIonIcon icon={eyeOffOutline} className='w-4 h-4' />
-							<ZIonText className='text-sm pt-1 ms-2'>
-								Hide team only posts
-							</ZIonText>
-						</ZIonItem>
+          <ZIonCol
+            size='12'
+            className='py-4 mb-2 border-bottom'>
+            <ZIonItem
+              lines='none'
+              minHeight='46px'
+              color='light'
+              className='cursor-pointer ion-activatable ion-focusable '>
+              <ZIonIcon
+                icon={eyeOffOutline}
+                className='w-4 h-4'
+              />
+              <ZIonText className='pt-1 text-sm ms-2'>
+                Hide team only posts
+              </ZIonText>
+            </ZIonItem>
 
-						<ZIonItem
-							lines='none'
-							minHeight='46px'
-							color='light'
-							className='ion-activatable ion-focusable cursor-pointer mt-2'
-						>
-							<ZIonIcon icon={fileTrayFullOutline} className='w-4 h-4' />
-							<ZIonText className='text-sm pt-1 ms-2'>
-								Show archived posts
-							</ZIonText>
-						</ZIonItem>
-					</ZIonCol>
-				</ZIonRow>
-			</ZIonContent>
-		</ZIonMenu>
-	);
+            <ZIonItem
+              lines='none'
+              minHeight='46px'
+              color='light'
+              className='mt-2 cursor-pointer ion-activatable ion-focusable'>
+              <ZIonIcon
+                icon={fileTrayFullOutline}
+                className='w-4 h-4'
+              />
+              <ZIonText className='pt-1 text-sm ms-2'>
+                Show archived posts
+              </ZIonText>
+            </ZIonItem>
+          </ZIonCol>
+        </ZIonRow>
+      </ZIonContent>
+    </ZIonMenu>
+  );
 };
 
 export default ZWorkspaceViewPageFilterMenu;

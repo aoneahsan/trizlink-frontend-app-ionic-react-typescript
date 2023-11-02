@@ -1,12 +1,15 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonList } from '@ionic/react';
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
+import {
+  type ZIonColorType,
+  type ZIonModeType
+} from '@/types/zaionsAppSettings.type';
 
 // Type
-type ZIonListType = {
+interface ZIonListType {
   children: ReactNode;
   className?: string;
   inset?: boolean;
@@ -14,12 +17,10 @@ type ZIonListType = {
   mode?: ZIonModeType;
   slot?: string;
   color?: ZIonColorType;
-  style?: {
-    [key: string]: unknown;
-  };
-};
+  style?: Record<string, unknown>;
+}
 
-const ZIonList = (props: ZIonListType) => {
+const ZIonList: React.FC<ZIonListType> = (props: ZIonListType) => {
   return <IonList {...props}>{props.children}</IonList>;
 };
 

@@ -1,29 +1,34 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
-import { IonRadioGroup, RadioGroupChangeEventDetail } from '@ionic/react';
+import { IonRadioGroup, type RadioGroupChangeEventDetail } from '@ionic/react';
 
 // Type
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
+import {
+  type ZIonColorType,
+  type ZIonModeType
+} from '@/types/zaionsAppSettings.type';
 
-import { IonRadioGroupCustomEvent } from '@ionic/core/dist/types/components';
+import { type IonRadioGroupCustomEvent } from '@ionic/core/dist/types/components';
 
-type ZIonRadioGroupType = {
-	children: ReactNode;
-	className?: string;
-	color?: ZIonColorType;
-	mode?: ZIonModeType;
-	allowEmptySelection?: boolean;
-	name?: string;
-	value?: string;
-	onIonChange?: (
-		event: IonRadioGroupCustomEvent<RadioGroupChangeEventDetail<unknown>>
-	) => void;
-};
+interface ZIonRadioGroupType {
+  children: ReactNode;
+  className?: string;
+  color?: ZIonColorType;
+  mode?: ZIonModeType;
+  allowEmptySelection?: boolean;
+  name?: string;
+  value?: string;
+  onIonChange?: (
+    event: IonRadioGroupCustomEvent<RadioGroupChangeEventDetail<unknown>>
+  ) => void;
+}
 
-const ZIonRadioGroup = (props: ZIonRadioGroupType) => {
-	return <IonRadioGroup {...props}>{props.children}</IonRadioGroup>;
+const ZIonRadioGroup: React.FC<ZIonRadioGroupType> = (
+  props: ZIonRadioGroupType
+) => {
+  return <IonRadioGroup {...props}>{props.children}</IonRadioGroup>;
 };
 
 export default ZIonRadioGroup;

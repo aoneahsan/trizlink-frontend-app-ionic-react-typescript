@@ -1,15 +1,17 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonNote } from '@ionic/react';
 
 // Type
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
+import {
+  type ZIonColorType,
+  type ZIonModeType
+} from '@/types/zaionsAppSettings.type';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
-type ZIonNoteType = {
+interface ZIonNoteType {
   children: ReactNode;
   className?: string;
   color?: ZIonColorType;
@@ -17,9 +19,9 @@ type ZIonNoteType = {
   slot?: 'error' | 'helper';
   testingselector?: string;
   testinglistselector?: string;
-};
+}
 
-const ZIonNote = (props: ZIonNoteType) => {
+const ZIonNote: React.FC<ZIonNoteType> = (props: ZIonNoteType) => {
   const _testinglistselector =
     props.testinglistselector !== undefined
       ? {

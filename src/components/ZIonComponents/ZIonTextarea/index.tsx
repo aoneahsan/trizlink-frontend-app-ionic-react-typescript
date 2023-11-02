@@ -4,15 +4,17 @@ import React from 'react';
 // Packages Import
 import { IonTextarea } from '@ionic/react';
 
-import { IonTextareaCustomEvent } from '@ionic/core/dist/types/components';
+import { type IonTextareaCustomEvent } from '@ionic/core/dist/types/components';
 
 // Type
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
+import {
+  type ZIonColorType,
+  type ZIonModeType
+} from '@/types/zaionsAppSettings.type';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
-import { PRODUCT_NAME } from '@/utils/constants';
 import ZInputLengthConstant from '@/utils/constants/InputLenghtConstant';
-type ZIonTextareaType = {
+interface ZIonTextareaType {
   className?: string;
   autoGrow?: boolean;
   autocapitalize?: 'off' | 'none' | 'on' | 'sentences' | 'words' | 'characters';
@@ -53,9 +55,7 @@ type ZIonTextareaType = {
   onIonChange?: (event: Event) => void;
   onIonBlur?: (event: IonTextareaCustomEvent<FocusEvent>) => void;
   counter?: boolean;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
 
   testingselector?: string;
   testinglistselector?: string;
@@ -65,9 +65,9 @@ type ZIonTextareaType = {
   helperText?: string;
   errorText?: string;
   fill?: 'solid' | 'outline';
-};
+}
 
-const ZIonTextarea = (props: ZIonTextareaType) => {
+const ZIonTextarea: React.FC<ZIonTextareaType> = (props: ZIonTextareaType) => {
   const _testinglistselector =
     props.testinglistselector !== undefined
       ? {

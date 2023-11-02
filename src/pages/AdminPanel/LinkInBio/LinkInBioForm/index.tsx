@@ -39,16 +39,6 @@ import {
 } from '@/components/ZIonComponents';
 import ZFallbackIonSpinner from '@/components/CustomComponents/FallbackSpinner';
 
-const LinkInBioDesignPage = lazy(
-  () => import('@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design')
-);
-const LinkInBioShareSettings = lazy(
-  () => import('@/pages/AdminPanel/LinkInBio/LinkInBioForm/ShareSettings')
-);
-const LinkInBioPageAnalytics = lazy(
-  () => import('@/pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics')
-);
-
 import {
   useZRQGetRequest,
   useZRQUpdateRequest,
@@ -81,7 +71,7 @@ import {
   LinkInBioButtonTypeEnum,
   LinkInBioThemeBackgroundEnum,
   LinkInBioThemeFontEnum,
-  LinkInBioType,
+  type LinkInBioType,
   ZLinkInBioPageEnum,
   ZLinkInBioRHSComponentEnum
 } from '@/types/AdminPanel/linkInBioType';
@@ -105,6 +95,16 @@ import {
 import classes from './styles.module.css';
 import ZCan from '@/components/Can';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+
+const LinkInBioDesignPage = lazy(
+  () => import('@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design')
+);
+const LinkInBioShareSettings = lazy(
+  () => import('@/pages/AdminPanel/LinkInBio/LinkInBioForm/ShareSettings')
+);
+const LinkInBioPageAnalytics = lazy(
+  () => import('@/pages/AdminPanel/LinkInBio/LinkInBioForm/PageAnalytics')
+);
 /**
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
@@ -143,7 +143,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
 
   // Recoil state link-in-bio form state (for editing or creating link-in-bio)
   const setLinkInBioFormState = useSetRecoilState(NewLinkInBioFormState);
-  //#endregion
+  // #endregion
 
   // #region Custom hooks.
   // useZNavigate for redirection
@@ -152,9 +152,9 @@ const ZaionsLinkInBioForm: React.FC = () => {
 
   // validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
   const { validateRequestResponse } = useZValidateRequestResponse();
-  //#endregion
+  // #endregion
 
-  //#region APIS
+  // #region APIS
   // fetching link-in-bio with the linkInBioId data from backend.
   const {
     data: selectedLinkInBio,
@@ -173,7 +173,9 @@ const ZaionsLinkInBioForm: React.FC = () => {
       CONSTANTS.RouteParams.linkInBio.linkInBioId,
       CONSTANTS.RouteParams.workspace.workspaceId
     ],
-    _shouldFetchWhenIdPassed: !linkInBioId ? true : false,
+    _shouldFetchWhenIdPassed: !(
+      linkInBioId !== undefined && linkInBioId?.trim()?.length > 0
+    ),
     _extractType: ZRQGetRequestExtractEnum.extractItem
   });
 
@@ -192,7 +194,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
   // Refetching if the linkInBioId changes and if the linkInBioId is undefined it will redirect user to link-in-bio page.
   useEffect(() => {
     try {
-      if (linkInBioId) {
+      if (linkInBioId?.trim()?.length > 0) {
         void linkInBioGetRequestFn();
       }
     } catch (error) {
@@ -218,7 +220,10 @@ const ZaionsLinkInBioForm: React.FC = () => {
   // Storing link-in-bio data in recoil state.
   useEffect(() => {
     try {
-      if (selectedLinkInBio && selectedLinkInBio?.id && linkInBioId) {
+      if (
+        selectedLinkInBio?.id !== undefined &&
+        linkInBioId?.trim()?.length > 0
+      ) {
         setLinkInBioFormState(oldVal => ({
           ...oldVal,
           formMode: FormMode.EDIT
@@ -235,7 +240,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
   // storing the current page info in setLinkInBioFromPageState recoil state, so we can show the appropriate content.
   useEffect(() => {
     try {
-      if (routeQSearchParams && routeQSearchParams.page) {
+      if (routeQSearchParams?.page !== undefined) {
         setLinkInBioFromPageState(oldValues => ({
           ...oldValues,
           page: ZLinkInBioPageEnum[
@@ -250,11 +255,11 @@ const ZaionsLinkInBioForm: React.FC = () => {
   }, [routeQSearchParams.page]);
 
   // formik submit function
-  const formikSubmitHandler = async (_reqDataStr: string) => {
+  const formikSubmitHandler = async (_reqDataStr: string): Promise<void> => {
     try {
-      if (_reqDataStr) {
+      if (_reqDataStr?.trim()?.length > 0) {
         // The update api...
-        const __response = await UpdateLinkInBio({
+        const _response = await UpdateLinkInBio({
           itemIds: [workspaceId, linkInBioId],
           urlDynamicParts: [
             CONSTANTS.RouteParams.workspace.workspaceId,
@@ -263,27 +268,27 @@ const ZaionsLinkInBioForm: React.FC = () => {
           requestData: _reqDataStr
         });
 
-        if (__response) {
+        if (_response !== undefined) {
           // if __response of the updateLinkInBio api is success this showing success notification else not success then error notification.
           await validateRequestResponse({
-            resultObj: __response
+            resultObj: _response
           });
 
           // extracting data from result.
-          const __extractItemFromResult = extractInnerData<LinkInBioType>(
-            __response,
+          const _extractItemFromResult = extractInnerData<LinkInBioType>(
+            _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (__extractItemFromResult?.id) {
+          if (_extractItemFromResult?.id !== undefined) {
             // Updating single link-in-bio in all link-in-bios data in RQ cache.
             await updateRQCDataHandler({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
                 workspaceId
               ],
-              data: __extractItemFromResult,
-              id: __extractItemFromResult?.id
+              data: _extractItemFromResult,
+              id: _extractItemFromResult?.id
             });
 
             // Updating single link-in-bio data in RQ cache.
@@ -293,7 +298,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
                 workspaceId,
                 linkInBioId
               ],
-              data: __extractItemFromResult as LinkInBioType,
+              data: _extractItemFromResult,
               id: '',
               extractType: ZRQGetRequestExtractEnum.extractItem,
               updateHoleData: true
@@ -319,71 +324,71 @@ const ZaionsLinkInBioForm: React.FC = () => {
             initialValues={{
               designPageCurrentTab:
                 (routeQSearchParams as { step: ZLinkInBioRHSComponentEnum })
-                  ?.step || ZLinkInBioRHSComponentEnum.theme,
+                  ?.step ?? ZLinkInBioRHSComponentEnum.theme,
               LinkInBioBlock: LinkInBioBlockEnum.default, // REMOVE THIS
-              title: selectedLinkInBio?.title || '',
-              linkInBioTitle: selectedLinkInBio?.linkInBioTitle || '',
+              title: selectedLinkInBio?.title ?? '',
+              linkInBioTitle: selectedLinkInBio?.linkInBioTitle ?? '',
               enableTitleInput: false,
               theme: {
                 background: {
                   bgType:
-                    selectedLinkInBio?.theme?.background?.bgType ||
+                    selectedLinkInBio?.theme?.background?.bgType ??
                     LinkInBioThemeBackgroundEnum.solidColor,
                   bgSolidColor:
-                    selectedLinkInBio?.theme?.background?.bgSolidColor || '',
+                    selectedLinkInBio?.theme?.background?.bgSolidColor ?? '',
                   bgGradientColors: {
                     startColor:
                       selectedLinkInBio?.theme?.background?.bgGradientColors
-                        ?.startColor || '',
+                        ?.startColor ?? '',
                     endColor:
                       selectedLinkInBio?.theme?.background?.bgGradientColors
-                        ?.endColor || '',
+                        ?.endColor ?? '',
                     direction:
                       selectedLinkInBio?.theme?.background?.bgGradientColors
-                        ?.direction || 0
+                        ?.direction ?? 0
                   },
                   enableBgImage:
-                    selectedLinkInBio?.theme?.background?.enableBgImage ||
+                    selectedLinkInBio?.theme?.background?.enableBgImage ??
                     false,
                   bgImageUrl:
-                    selectedLinkInBio?.theme?.background?.bgImageUrl || ''
+                    selectedLinkInBio?.theme?.background?.bgImageUrl ?? ''
                 },
                 button: {
                   background: {
                     bgType:
-                      selectedLinkInBio?.theme?.button?.background?.bgType ||
+                      selectedLinkInBio?.theme?.button?.background?.bgType ??
                       LinkInBioThemeBackgroundEnum.solidColor,
                     bgSolidColor:
                       selectedLinkInBio?.theme?.button?.background
-                        ?.bgSolidColor || '',
+                        ?.bgSolidColor ?? '',
                     bgGradientColors: {
                       startColor:
                         selectedLinkInBio?.theme?.button?.background
-                          ?.bgGradientColors?.startColor || '',
+                          ?.bgGradientColors?.startColor ?? '',
                       endColor:
                         selectedLinkInBio?.theme?.button?.background
-                          ?.bgGradientColors?.endColor || '',
+                          ?.bgGradientColors?.endColor ?? '',
                       direction:
                         selectedLinkInBio?.theme?.button?.background
-                          ?.bgGradientColors?.direction || 0
+                          ?.bgGradientColors?.direction ?? 0
                     },
                     bgImageUrl:
                       selectedLinkInBio?.theme?.button?.background
-                        ?.bgImageUrl || ''
+                        ?.bgImageUrl ?? ''
                   },
                   type:
-                    selectedLinkInBio?.theme?.button?.type ||
+                    selectedLinkInBio?.theme?.button?.type ??
                     LinkInBioButtonTypeEnum.inlineSquare,
                   shadowColor:
-                    selectedLinkInBio?.theme?.button?.shadowColor ||
+                    selectedLinkInBio?.theme?.button?.shadowColor ??
                     CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
                 },
                 font:
-                  selectedLinkInBio?.theme?.font || LinkInBioThemeFontEnum.lato
+                  selectedLinkInBio?.theme?.font ?? LinkInBioThemeFontEnum.lato
               },
               settings: {
-                headerCode: selectedLinkInBio?.settings?.headerCode || '',
-                bodyCode: selectedLinkInBio?.settings?.bodyCode || ''
+                headerCode: selectedLinkInBio?.settings?.headerCode ?? '',
+                bodyCode: selectedLinkInBio?.settings?.bodyCode ?? ''
               }
             }}
             //
@@ -398,9 +403,9 @@ const ZaionsLinkInBioForm: React.FC = () => {
                 settings: zStringify(values.settings),
                 folderId: 1
               });
-              setLinkInBioFormState(oldVal => ({
-                ...oldVal,
-                theme: values.theme,
+              setLinkInBioFormState(oldValues => ({
+                ...oldValues,
+                theme: { ...values.theme },
                 formMode: FormMode.EDIT
               }));
               void formikSubmitHandler(stringifyValue);
@@ -490,7 +495,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                         .formPage.topBar.titleSaveBtn
                                     }
                                     onClick={() => {
-                                      setFieldValue(
+                                      void setFieldValue(
                                         'enableTitleInput',
                                         false,
                                         false
@@ -510,7 +515,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                       .formPage.topBar.titleTextContainer
                                   }
                                   onClick={() => {
-                                    setFieldValue(
+                                    void setFieldValue(
                                       'enableTitleInput',
                                       true,
                                       false
@@ -864,5 +869,6 @@ const ZHeaderSkeleton: React.FC = React.memo(() => {
     </ZIonHeader>
   );
 });
+ZHeaderSkeleton.displayName = 'ZHeaderSkeleton';
 
 export default ZaionsLinkInBioForm;

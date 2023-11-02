@@ -40,7 +40,8 @@ module.exports = {
     '@typescript-eslint/semi': 'off', // ahsan setup prettier like this so we need this thing off
     '@typescript-eslint/indent': 'off', // ahsan moved here, as we are using prettier and that formats the code in specific format which is showing error for this rule, so for now, commenting this but will need to think if this can be a problem or not in future.
     'react/prop-types': 'off', // we are in type script and have proper types definitions
-    'multiline-ternary': 'off' // ahsan need to verify this, talha commented this for now.
+    'multiline-ternary': 'off', // ahsan need to verify this, talha commented this for now.
+    '@typescript-eslint/promise-function-async': 'off' // it's giving error on lazy components imports so need to debug that before we can enable this rule
 
     // rules disabled for now
     // eqeqeq: 'off',
@@ -91,7 +92,6 @@ module.exports = {
     // '@typescript-eslint/no-unused-expressions': 'off',
     // '@typescript-eslint/prefer-optional-chain': 'off',
     // '@typescript-eslint/triple-slash-reference': 'off',
-    // '@typescript-eslint/promise-function-async': 'off',
     // '@typescript-eslint/method-signature-style': 'off',
     // '@typescript-eslint/consistent-type-imports': 'off', // need to turn this on
     // '@typescript-eslint/prefer-nullish-coalescing': 'off',

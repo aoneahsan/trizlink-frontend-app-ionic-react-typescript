@@ -53,7 +53,8 @@ import {
   ZIonLabel,
   ZIonImg,
   ZIonIcon,
-  ZIonCheckbox
+  ZIonCheckbox,
+  ZIonButton
 } from '@/components/ZIonComponents';
 
 /**
@@ -68,7 +69,7 @@ import { PAGE_MENU } from '@/utils/enums';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  LinkTargetType,
+  type LinkTargetType,
   ZLinkIonPanelSidebarActiveLinkType
 } from '@/types/AdminPanel/linksType';
 
@@ -91,7 +92,7 @@ import classes from './styles.module.css';
  * */
 import { placeholderImage, qrCodeImage } from '@/assets/images';
 import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
-import { ZIonButton } from '@/components/ZIonComponents';
+
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import ZaionsDashboardFiltersModal from '@/components/InPageComponents/ZaionsModals/DashboardFiltersModal.tsx';
 
@@ -167,9 +168,9 @@ const ZLinks: React.FC = () => {
     DashboardLinkEditPopoverContent
   );
 
-  const getShortLinkData = (id: string | undefined) => {
+  const getShortLinkData = (id: string | undefined): void => {
     const updatedShortLinkData = shortLinksRStateAtom?.find(el => el.id === id);
-    if (updatedShortLinkData) {
+    if (updatedShortLinkData !== undefined) {
       setSelectedShortLinkData({ ...updatedShortLinkData });
     }
   };
@@ -224,11 +225,11 @@ const ZLinks: React.FC = () => {
                       </IonRadioGroup>
                       <ZIonButton
                         className='ion-text-capitalize'
-                        onClick={() =>
+                        onClick={() => {
                           presentDashboardFiltersModal({
                             _cssClass: 'dashboard-filter-modal-size'
-                          })
-                        }>
+                          });
+                        }}>
                         <ZIonIcon
                           icon={optionsOutline}
                           className='me-2'
@@ -257,7 +258,7 @@ const ZLinks: React.FC = () => {
                 {isChartVisible && (
                   <ZIonGrid className='ion-padding'>
                     <ZIonTitle className='ion-text-center'>
-                      <h1>Don't worry! Chart goes here later...</h1>
+                      <h1>Don&apos;t worry! Chart goes here later...</h1>
                     </ZIonTitle>
                   </ZIonGrid>
                 )}
@@ -293,28 +294,30 @@ const ZLinks: React.FC = () => {
                                   : undefined
                               }
                               key={el.id}
-                              onClick={() => getShortLinkData(el.id)}>
+                              onClick={() => {
+                                getShortLinkData(el.id);
+                              }}>
                               <ZIonRow className='w-full py-3'>
                                 <ZIonCol className='ion-text-end'>
                                   <ZIonCheckbox className='ms-auto me-2' />
                                 </ZIonCol>
                                 <ZIonCol size='8'>
                                   <ZIonText className='block text-xs'>
-                                    {el.createdAt || CONSTANTS.NO_VALUE_FOUND}
+                                    {el.createdAt ?? CONSTANTS.NO_VALUE_FOUND}
                                   </ZIonText>
                                   <ZIonText className='block mb-1'>
-                                    {el.title || CONSTANTS.NO_VALUE_FOUND}
+                                    {el.title ?? CONSTANTS.NO_VALUE_FOUND}
                                   </ZIonText>
                                   <ZIonText
                                     className='block text-sm'
                                     color='success'>
-                                    {(el.target as LinkTargetType)?.url ||
+                                    {(el.target as LinkTargetType)?.url ??
                                       (el.target as LinkTargetType)
-                                        ?.accountId ||
-                                      (el.target as LinkTargetType)?.email ||
-                                      (el.target as LinkTargetType)?.username ||
+                                        ?.accountId ??
+                                      (el.target as LinkTargetType)?.email ??
+                                      (el.target as LinkTargetType)?.username ??
                                       (el.target as LinkTargetType)
-                                        ?.phoneNumber ||
+                                        ?.phoneNumber ??
                                       CONSTANTS.NO_VALUE_FOUND}
                                   </ZIonText>
                                 </ZIonCol>
@@ -339,7 +342,7 @@ const ZLinks: React.FC = () => {
                         <ZIonCol sizeXl='8'>
                           <ZIonText>
                             <h4 className='font-bold'>
-                              {selectedShortLinkData.title ||
+                              {selectedShortLinkData.title ??
                                 CONSTANTS.NO_VALUE_FOUND}
                             </h4>
                           </ZIonText>
@@ -349,7 +352,7 @@ const ZLinks: React.FC = () => {
                               className='pe-1'
                             />
                             <ZIonText>
-                              {selectedShortLinkData.createdAt ||
+                              {selectedShortLinkData.createdAt ??
                                 CONSTANTS.NO_VALUE_FOUND}{' '}
                               by talhairshad
                             </ZIonText>
@@ -397,15 +400,15 @@ const ZLinks: React.FC = () => {
                           <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
                             <h4 className='font-bold'>
                               {(selectedShortLinkData.target as LinkTargetType)
-                                ?.url ||
+                                ?.url ??
                                 (selectedShortLinkData.target as LinkTargetType)
-                                  ?.accountId ||
+                                  ?.accountId ??
                                 (selectedShortLinkData.target as LinkTargetType)
-                                  ?.email ||
+                                  ?.email ??
                                 (selectedShortLinkData.target as LinkTargetType)
-                                  ?.username ||
+                                  ?.username ??
                                 (selectedShortLinkData.target as LinkTargetType)
-                                  ?.phoneNumber ||
+                                  ?.phoneNumber ??
                                 CONSTANTS.NO_VALUE_FOUND}
                             </h4>
                           </ZIonRouterLink>

@@ -4,8 +4,8 @@ import { atom, selector } from 'recoil';
 // Custom
 // Type
 import { TimeFilterEnum } from '@/types/AdminPanel/linksType';
-import { WSTeamMembersInterface } from '@/types/AdminPanel/workspace/index';
-import { IMembersFilterOptions } from '@/types/AdminPanel/index.type';
+import { type WSTeamMembersInterface } from '@/types/AdminPanel/workspace/index';
+import { type IMembersFilterOptions } from '@/types/AdminPanel/index.type';
 
 // Data
 
@@ -38,9 +38,9 @@ export const FilteredMembersDataRStateSelector = selector({
     let _filterMembersData: WSTeamMembersInterface[] | undefined =
       membersRStateAtom;
 
-    if (membersRStateAtom?.length) {
+    if (membersRStateAtom?.length > 0) {
       if (
-        _filterOptions?.timeFilter?.daysToSubtract &&
+        _filterOptions?.timeFilter?.daysToSubtract !== undefined &&
         _filterOptions?.timeFilter?.daysToSubtract !== TimeFilterEnum.allTime
       ) {
         let endDate = new Date(
@@ -92,13 +92,13 @@ export const FilteredMembersDataRStateSelector = selector({
         });
       }
 
-      if (_filterOptions?.role) {
+      if (_filterOptions?.role != null) {
         _filterMembersData = _filterMembersData?.filter(
-          el => el?.memberRole?.name! === _filterOptions?.role
+          el => el?.memberRole?.name === _filterOptions?.role
         );
       }
 
-      if (_filterOptions?.status) {
+      if (_filterOptions?.status != null) {
         _filterMembersData = _filterMembersData?.filter(
           el => el?.accountStatus === _filterOptions?.status
         );

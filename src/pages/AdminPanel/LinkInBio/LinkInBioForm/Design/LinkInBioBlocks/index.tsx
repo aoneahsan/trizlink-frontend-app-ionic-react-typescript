@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense } from 'react';
 
 /**
  * Packages Imports go down
@@ -24,13 +24,6 @@ import {
   ZIonText
 } from '@/components/ZIonComponents';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
-const ZLinkInBioAddBlockModal = lazy(
-  () =>
-    import('@/components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal')
-);
-const LinkInBioPDButton = lazy(
-  () => import('@/components/LinkInBioComponents/UI/PerDefinedButton')
-);
 
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
@@ -49,11 +42,11 @@ import { ZIcons } from '@/utils/ZIcons';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
+import { type LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 
 import {
   LinkInBioBlockEnum,
-  LinkInBioPredefinedBlocksInterface
+  type LinkInBioPredefinedBlocksInterface
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 /**
@@ -72,6 +65,16 @@ import { LinkInBioBlocksDefaultData } from '@/data/UserDashboard/LinkInBio/Block
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import classes from '../styles.module.css';
+const ZLinkInBioAddBlockModal = lazy(
+  async () =>
+    await import(
+      '@/components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal'
+    )
+);
+const LinkInBioPDButton = lazy(
+  async () =>
+    await import('@/components/LinkInBioComponents/UI/PerDefinedButton')
+);
 
 /**
  * Component props type go down
@@ -90,7 +93,7 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 
   // Recoil state for storing Link-in-bio blocks data that will fetch from backend.
   // const [linkInBioPredefinedBlocksState, setLinkInBioPredefinedBlocksState] =
-  // 	useRecoilState(LinkInBioPredefinedBlocksRState);
+  // useRecoilState(LinkInBioPredefinedBlocksRState);
 
   // getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio blocks of that id will be fetch from backend.
   const { linkInBioId, workspaceId } = useParams<{
@@ -125,14 +128,14 @@ const ZLinkInBioBlocksSection: React.FC = () => {
   });
 
   // the LinkInBioBlockHandler function will run then the user click on any of the blocks this will execute the presentZLinkInBioAddBlockModal function which is coming from the useZIonModal to present modal...
-  const LinkInBioBlockHandler = (_type: LinkInBioBlockEnum) => {
+  const LinkInBioBlockHandler = (_type: LinkInBioBlockEnum): void => {
     try {
-      if (_type) {
+      if (_type !== undefined) {
         presentZLinkInBioAddBlockModal({
           _cssClass: 'lib-block-modal-size'
         });
 
-        setFieldValue('LinkInBioBlock', _type, false);
+        void setFieldValue('LinkInBioBlock', _type, false);
       }
     } catch (error) {
       reportCustomError(error);
@@ -207,13 +210,17 @@ const ZLinkInBioBlocksSection: React.FC = () => {
                 }>
                 <div className='ion-text-center me-3 w-max'>
                   <LinkInBioPDButton
-                    icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
+                    icon={
+                      el.icon !== undefined
+                        ? ZIcons[el.icon]
+                        : ZIcons.PlaceHolder
+                    }
                     testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blocks.btn}-${el.type}`}
                     onClick={() => {
                       LinkInBioBlockHandler(LinkInBioBlockEnum[el.type]);
                     }}
                     onMouseEnter={() => {
-                      setFieldValue(
+                      void setFieldValue(
                         'LinkInBioBlock',
                         LinkInBioBlockEnum[el.type],
                         false

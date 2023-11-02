@@ -1,9 +1,9 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonSpinner } from '@ionic/react';
-import { ZIonColorType } from '@/types/zaionsAppSettings.type';
+import { type ZIonColorType } from '@/types/zaionsAppSettings.type';
 
 // Type
 interface ZIonSpinnerInterface {
@@ -22,9 +22,7 @@ interface ZIonSpinnerInterface {
     | 'lines-small';
   paused?: boolean;
   className?: string;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
 }
 
 const ZIonSpinner: React.FC<ZIonSpinnerInterface> = ({

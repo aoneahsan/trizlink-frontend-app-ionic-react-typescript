@@ -67,22 +67,22 @@ registerRoute(
     plugins: [
       // Ensure that once this runtime cache reaches a maximum size the
       // least-recently used images are removed.
-      new ExpirationPlugin({ maxEntries: 50 }),
-    ],
+      new ExpirationPlugin({ maxEntries: 50 })
+    ]
   })
 );
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
-self.addEventListener('message', (event) => {
+self.addEventListener('message', event => {
   if (event.data && (event.data as { type: string }).type === 'SKIP_WAITING') {
     self
       .skipWaiting()
       .then()
-      .catch((err) =>
+      .catch(err =>
         console.error({
           message: 'Error while calling self.skipWaiting()',
-          err,
+          err
         })
       );
   }

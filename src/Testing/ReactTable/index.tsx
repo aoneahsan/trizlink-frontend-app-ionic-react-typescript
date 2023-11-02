@@ -24,9 +24,9 @@ const TestingReactTable: React.FC = () => {
 
   const defaultColumns = [
     // columnHelper.accessor('id', {
-    // 	header: 'Id',
-    // 	id: '__z_id__',
-    // 	cell: (row) => row.getValue(),
+    // header: 'Id',
+    // id: '__z_id__',
+    // cell: (row) => row.getValue(),
     // }),
 
     columnHelper.display({
@@ -48,14 +48,14 @@ const TestingReactTable: React.FC = () => {
       footer: 'Title Footer'
     }),
     // columnHelper.group({
-    // 	id: 'title_parent',
-    // 	header: 'title parent',
-    // 	columns: [
-    // 		columnHelper.display({
-    // 			id: 'title_child',
-    // 			header: 'title child',
-    // 		}),
-    // 	],
+    // id: 'title_parent',
+    // header: 'title parent',
+    // columns: [
+    // columnHelper.display({
+    // id: 'title_child',
+    // header: 'title child',
+    // }),
+    // ],
     // }),
 
     columnHelper.accessor(itemData => itemData.price, {
@@ -77,12 +77,12 @@ const TestingReactTable: React.FC = () => {
       footer: 'Rating Footer',
       columns: [
         // columnHelper.display({
-        // 	id: 'ratingsColumn__rate',
-        // 	header: 'rate',
-        // 	footer: 'rate footer',
-        // 	cell: (props) => {
-        // 		return <span>rating</span>;
-        // 	},
+        // id: 'ratingsColumn__rate',
+        // header: 'rate',
+        // footer: 'rate footer',
+        // cell: (props) => {
+        // return <span>rating</span>;
+        // },
         // }),
 
         columnHelper.accessor(props => props.rating.rate, {
@@ -107,6 +107,7 @@ const TestingReactTable: React.FC = () => {
   useEffect(() => {
     zTable.setPageIndex(0);
     zTable.setPageSize(2);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -219,25 +220,33 @@ const TestingReactTable: React.FC = () => {
             <>
               <button
                 className='p-1 border rounded'
-                onClick={() => zTable.setPageIndex(0)}
+                onClick={() => {
+                  zTable.setPageIndex(0);
+                }}
                 disabled={!zTable.getCanPreviousPage()}>
                 {'<<'}
               </button>
               <button
                 className='p-1 border rounded'
-                onClick={() => zTable.previousPage()}
+                onClick={() => {
+                  zTable.previousPage();
+                }}
                 disabled={!zTable.getCanPreviousPage()}>
                 {'<'}
               </button>
               <button
                 className='p-1 border rounded'
-                onClick={() => zTable.nextPage()}
+                onClick={() => {
+                  zTable.nextPage();
+                }}
                 disabled={!zTable.getCanNextPage()}>
                 {'>'}
               </button>
               <button
                 className='p-1 border rounded'
-                onClick={() => zTable.setPageIndex(zTable.getPageCount() - 1)}
+                onClick={() => {
+                  zTable.setPageIndex(zTable.getPageCount() - 1);
+                }}
                 disabled={!zTable.getCanNextPage()}>
                 {'>>'}
               </button>
@@ -258,9 +267,10 @@ const TestingReactTable: React.FC = () => {
                   type='number'
                   defaultValue={zTable.getState().pagination.pageIndex + 1}
                   onChange={e => {
-                    const page = e.target.value
-                      ? Number(e.target.value) - 1
-                      : 0;
+                    const page =
+                      e.target.value.length > 0
+                        ? Number(e.target.value) - 1
+                        : 0;
                     zTable.setPageIndex(page);
                   }}
                   className='w-16 p-1 border rounded'

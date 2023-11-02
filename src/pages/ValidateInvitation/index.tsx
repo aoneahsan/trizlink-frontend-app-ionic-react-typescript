@@ -43,11 +43,11 @@ import { errorCodes } from '@/utils/constants/apiConstants';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
-import { WSTeamMembersInterface } from '@/types/AdminPanel/workspace';
+import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { type WSTeamMembersInterface } from '@/types/AdminPanel/workspace';
 import {
   SignUpTypeEnum,
-  UserAccountType
+  type UserAccountType
 } from '@/types/UserAccount/index.type';
 
 /**
@@ -110,13 +110,13 @@ const ZValidateInvitationPage: React.FC = () => {
         LOCALSTORAGE_KEYS.USERDATA
       )) as UserAccountType | null;
 
-      const __data = zStringify({
+      const _data = zStringify({
         email: userData?.email,
         token: _token
       });
 
       const _response = await validateAndUpdateInvitation({
-        requestData: __data,
+        requestData: _data,
         itemIds: [],
         urlDynamicParts: []
       });
@@ -129,7 +129,7 @@ const ZValidateInvitationPage: React.FC = () => {
           };
         }>(_response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
-        if (_data && _data?.user?.email) {
+        if (_data?.user?.email !== undefined) {
           setCompState(oldValues => ({
             ...oldValues,
             isProcessing: false
@@ -151,27 +151,28 @@ const ZValidateInvitationPage: React.FC = () => {
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        const __apiErrors = error.response;
+        const _apiErrors = error.response;
 
         setCompState(oldValues => ({
           ...oldValues,
           isProcessing: false,
-          errorCode: __apiErrors?.status,
+          errorCode: _apiErrors?.status,
           errorOccurred: true
         }));
 
-        if (__apiErrors?.status === errorCodes.badRequest) {
-          presentZIonErrorAlert({
+        if (_apiErrors?.status === errorCodes.badRequest) {
+          void presentZIonErrorAlert({
             subHeader: 'Invalid token',
             message: 'The provided token is invalid.'
           });
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (_token && _token?.trim()?.length > 0) {
+    if (_token?.trim()?.length > 0) {
       void validator();
     } else {
       setCompState(oldState => ({
@@ -180,12 +181,13 @@ const ZValidateInvitationPage: React.FC = () => {
         isProcessing: false
       }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_token]);
 
   if (compState.isProcessing) {
     return <ZFallbackIonSpinner />;
   } else if (
-    _token &&
+    _token?.trim()?.length > 0 &&
     compState.errorOccurred &&
     compState.errorCode === errorCodes.unauthenticated &&
     !compState.isProcessing
@@ -196,7 +198,7 @@ const ZValidateInvitationPage: React.FC = () => {
       </ZIonPage>
     );
   } else if (
-    _token &&
+    _token?.trim()?.length > 0 &&
     compState.errorOccurred &&
     compState.errorCode === errorCodes.badRequest &&
     !compState.isProcessing
@@ -207,7 +209,7 @@ const ZValidateInvitationPage: React.FC = () => {
       </ZIonPage>
     );
   } else if (
-    _token &&
+    _token?.trim()?.length > 0 &&
     compState.errorOccurred &&
     compState.errorCode === errorCodes.forbidden &&
     !compState.isProcessing
@@ -217,7 +219,11 @@ const ZValidateInvitationPage: React.FC = () => {
         <Z403View />
       </ZIonPage>
     );
-  } else if (_token && !compState.errorOccurred && !compState.isProcessing) {
+  } else if (
+    _token?.trim()?.length > 0 &&
+    !compState.errorOccurred &&
+    !compState.isProcessing
+  ) {
     return <ZFallbackIonSpinner />;
   } else {
     return (

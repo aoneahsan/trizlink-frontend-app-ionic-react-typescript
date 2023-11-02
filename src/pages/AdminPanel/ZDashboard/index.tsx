@@ -17,13 +17,14 @@ import ZIonPage from '@/components/ZIonPage';
 import ZLinkIonPanelSidebar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardSidePanel/index';
 import ZLinkDashboardTopBar from '@/components/UserDashboard/ZLinkdashboard/ZLDashboardTopbar';
 import {
-	ZIonText,
-	ZIonRow,
-	ZIonGrid,
-	ZIonContent,
-	ZIonSplitPane,
-	ZIonTitle,
-	ZIonImg,
+  ZIonText,
+  ZIonRow,
+  ZIonGrid,
+  ZIonContent,
+  ZIonSplitPane,
+  ZIonTitle,
+  ZIonImg,
+  ZIonButton
 } from '@/components/ZIonComponents';
 
 /**
@@ -31,9 +32,9 @@ import {
  * ? Like import of Constant is a global constants import
  * */
 import CONSTANTS, {
-	// BRACKPOINT_LG,
-	BRACKPOINT_MD,
-	BRACKPOINT_SM,
+  // BRACKPOINT_LG,
+  BRACKPOINT_MD,
+  BRACKPOINT_SM
 } from '@/utils/constants';
 
 /**
@@ -61,7 +62,6 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useMediaQuery } from 'react-responsive';
 import { PAGE_MENU } from '@/utils/enums';
 import classNames from 'classnames';
-import { ZIonButton } from '@/components/ZIonComponents';
 
 /**
  * Component props type go down
@@ -75,76 +75,74 @@ import { ZIonButton } from '@/components/ZIonComponents';
  * */
 
 const ZDashboard: React.FC = () => {
-	// const isLgScale = useMediaQuery({
-	// 	query: `(min-width: ${BRACKPOINT_LG})`,
-	// });
+  // const isLgScale = useMediaQuery({
+  //  query: `(min-width: ${BRACKPOINT_LG})`,
+  // });
 
-	const isMdScale = useMediaQuery({
-		query: `(min-width: ${BRACKPOINT_MD})`,
-	});
+  const isMdScale = useMediaQuery({
+    query: `(min-width: ${BRACKPOINT_MD})`
+  });
 
-	const isSmScale = useMediaQuery({
-		query: `(min-width: ${BRACKPOINT_SM})`,
-	});
-	return (
-		<>
-			<ZIonPage
-				pageTitle='Dashboard'
-				id={CONSTANTS.MENU_IDS.DASHBOARD_SM_MENU_CONTENT_ID}
-				menu={PAGE_MENU.DASHBOARD_PAGE_MENU}
-			>
-				<ZIonSplitPane
-					when='lg'
-					contentId={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
-				>
-					{/* Side Bar */}
-					<ZLinkIonPanelSidebar
-						activeLink={ZLinkIonPanelSidebarActiveLinkType.dashboard}
-					/>
+  const isSmScale = useMediaQuery({
+    query: `(min-width: ${BRACKPOINT_SM})`
+  });
+  return (
+    <>
+      <ZIonPage
+        pageTitle='Dashboard'
+        id={CONSTANTS.MENU_IDS.DASHBOARD_SM_MENU_CONTENT_ID}
+        menu={PAGE_MENU.DASHBOARD_PAGE_MENU}>
+        <ZIonSplitPane
+          when='lg'
+          contentId={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}>
+          {/* Side Bar */}
+          <ZLinkIonPanelSidebar
+            activeLink={ZLinkIonPanelSidebarActiveLinkType.dashboard}
+          />
 
-					<div
-						className='ion-page  overflow-y-scroll'
-						id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
-					>
-						<ZLinkDashboardTopBar />
-						<ZIonContent className='ion-padding'>
-							<ZIonGrid>
-								<ZIonRow className='ion-align-items-center ion-justify-content-center flex-col mt-3'>
-									<ZIonImg
-										src={dashboardEmptyState}
-										alt='dashboard Inactive state'
-										className={classNames({
-											'w-[40%]': isMdScale,
-											'w-[60%]': !isMdScale && isSmScale,
-											'w-full': !isSmScale,
-										})}
-									/>
-									<ZIonTitle className='text-3xl font-bold mb-2 mt-4'>
-										Every click tell a story
-									</ZIonTitle>
-									<ZIonText className='text-lg ion-text-center'>
-										See all your link data in one dashboard. View click metrics
-										by <br /> location, device, referrers and more.
-									</ZIonText>
-									<ZIonButton
-										className='ion-text-capitalize mt-4'
-										routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}
-									>
-										<ZIonText className='px-4 font-bold'>
-											View our plans
-										</ZIonText>
-									</ZIonButton>
-									<ZIonButton fill='clear' className='mt-3 ion-text-capitalize'>
-										Learn more
-									</ZIonButton>
-								</ZIonRow>
-							</ZIonGrid>
-						</ZIonContent>
-					</div>
-				</ZIonSplitPane>
-			</ZIonPage>
-		</>
-	);
+          <div
+            className='overflow-y-scroll ion-page'
+            id={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}>
+            <ZLinkDashboardTopBar />
+            <ZIonContent className='ion-padding'>
+              <ZIonGrid>
+                <ZIonRow className='flex-col mt-3 ion-align-items-center ion-justify-content-center'>
+                  <ZIonImg
+                    src={dashboardEmptyState}
+                    alt='dashboard Inactive state'
+                    className={classNames({
+                      'w-[40%]': isMdScale,
+                      'w-[60%]': !isMdScale && isSmScale,
+                      'w-full': !isSmScale
+                    })}
+                  />
+                  <ZIonTitle className='mt-4 mb-2 text-3xl font-bold'>
+                    Every click tell a story
+                  </ZIonTitle>
+                  <ZIonText className='text-lg ion-text-center'>
+                    See all your link data in one dashboard. View click metrics
+                    by <br /> location, device, referrers and more.
+                  </ZIonText>
+                  <ZIonButton
+                    className='mt-4 ion-text-capitalize'
+                    routerLink={ZaionsRoutes.WhyZaions.ZaionsPricingRoute}>
+                    <ZIonText className='px-4 font-bold'>
+                      View our plans
+                    </ZIonText>
+                  </ZIonButton>
+                  <ZIonButton
+                    fill='clear'
+                    className='mt-3 ion-text-capitalize'>
+                    Learn more
+                  </ZIonButton>
+                </ZIonRow>
+              </ZIonGrid>
+            </ZIonContent>
+          </div>
+        </ZIonSplitPane>
+      </ZIonPage>
+    </>
+  );
 };
 
 export default ZDashboard;

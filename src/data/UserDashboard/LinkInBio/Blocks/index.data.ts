@@ -2,17 +2,17 @@ import CONSTANTS from '@/utils/constants';
 
 import {
   LinkInBioButtonTypeEnum,
-  LinkInBioThemeBackgroundEnum,
+  LinkInBioThemeBackgroundEnum
 } from '@/types/AdminPanel/linkInBioType';
 import {
   LinkInBioBlockAnimationEnum,
   LinkInBioBlockEnum,
   LinkInBioCardStyleEnum,
   LinkInBioCardViewEnum,
-  LinkInBioSingleBlockContentType,
+  type LinkInBioSingleBlockContentType,
   LinkInBioMusicPlatformEnum,
   SeparatorTypeEnum,
-  LinkInBioSocialPlatformEnum,
+  LinkInBioSocialPlatformEnum
 } from '@/types/AdminPanel/linkInBioType/blockTypes/index';
 import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
 
@@ -21,20 +21,20 @@ const defaultTimezone = '(GMT +5:30) Bombay, Calcutta, Madras, New Delhi';
 const DefaultSharedData: LinkInBioSingleBlockContentType = {
   animation: {
     isEnabled: false,
-    type: LinkInBioBlockAnimationEnum.jello,
+    type: LinkInBioBlockAnimationEnum.jello
   },
 
   schedule: {
     isEnabled: false,
     startAt: new Date().toISOString(),
     endAt: new Date().toISOString(),
-    timezone: defaultTimezone,
-  },
+    timezone: defaultTimezone
+  }
 };
 
 const LinkInBioButtonBlockDefaultData: LinkInBioSingleBlockContentType = {
   target: {
-    url: '',
+    url: ''
   },
   title: 'button',
   icon: '',
@@ -47,24 +47,24 @@ const LinkInBioButtonBlockDefaultData: LinkInBioSingleBlockContentType = {
       bgGradientColors: {
         startColor: '#000',
         endColor: '#000',
-        direction: 0,
+        direction: 0
       },
       bgImageUrl: 'string',
-      enableBgImage: false,
+      enableBgImage: false
     },
-    buttonType: LinkInBioButtonTypeEnum.inlineCircle,
+    buttonType: LinkInBioButtonTypeEnum.inlineCircle
   },
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioTextBlockDefaultData: LinkInBioSingleBlockContentType = {
   text: 'text',
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioCountdownBlockDefaultData: LinkInBioSingleBlockContentType = {
   target: {
-    url: '',
+    url: ''
   },
   imageUrl: '',
   title: '',
@@ -72,7 +72,7 @@ const LinkInBioCountdownBlockDefaultData: LinkInBioSingleBlockContentType = {
   date: new Date().toISOString(),
   timezone: defaultTimezone,
   style: LinkInBioCardStyleEnum.horizontal,
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioCardBlockDefaultData: LinkInBioSingleBlockContentType = {
@@ -81,27 +81,27 @@ const LinkInBioCardBlockDefaultData: LinkInBioSingleBlockContentType = {
   cardItems: [
     {
       target: {
-        url: '',
+        url: ''
       },
       imageUrl: '',
       title: '',
-      description: '',
+      description: ''
     },
     {
       target: {
-        url: '',
+        url: ''
       },
       imageUrl: '',
       title: '',
-      description: '',
-    },
+      description: ''
+    }
   ],
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioRSSBlockDefaultData: LinkInBioSingleBlockContentType = {
   target: {
-    url: '',
+    url: ''
   },
   titleIsEnable: true,
   descriptionIsEnable: true,
@@ -109,39 +109,39 @@ const LinkInBioRSSBlockDefaultData: LinkInBioSingleBlockContentType = {
   cardNumber: 15,
   style: LinkInBioCardStyleEnum.horizontal,
   view: LinkInBioCardViewEnum.carousel,
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioAudioBlockDefaultData: LinkInBioSingleBlockContentType = {
   target: {
-    url: '',
+    url: ''
   },
   title: '',
   customHeight: 196,
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioVideoBlockDefaultData: LinkInBioSingleBlockContentType = {
   target: {
-    url: '',
+    url: ''
   },
   title: '',
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioCalendarBlockDefaultData: LinkInBioSingleBlockContentType = {
   target: {
-    url: '',
+    url: ''
   },
   title: '',
   customHeight: 196,
   cardMode: false,
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioShopifyBlockDefaultData: LinkInBioSingleBlockContentType = {
   target: {
-    url: '',
+    url: ''
   },
   titleIsEnable: true,
   descriptionIsEnable: false,
@@ -150,12 +150,12 @@ const LinkInBioShopifyBlockDefaultData: LinkInBioSingleBlockContentType = {
   cardNumber: 10,
   style: LinkInBioCardStyleEnum.horizontal,
   view: LinkInBioCardViewEnum.carousel,
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioMagentoBlockDefaultData: LinkInBioSingleBlockContentType = {
   target: {
-    url: '',
+    url: ''
   },
   titleIsEnable: true,
   descriptionIsEnable: false,
@@ -163,12 +163,12 @@ const LinkInBioMagentoBlockDefaultData: LinkInBioSingleBlockContentType = {
   cardNumber: 10,
   style: LinkInBioCardStyleEnum.horizontal,
   view: LinkInBioCardViewEnum.carousel,
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioWordpressBlockDefaultData: LinkInBioSingleBlockContentType = {
   target: {
-    url: '',
+    url: ''
   },
   titleIsEnable: true,
   descriptionIsEnable: false,
@@ -176,15 +176,15 @@ const LinkInBioWordpressBlockDefaultData: LinkInBioSingleBlockContentType = {
   cardNumber: 10,
   style: LinkInBioCardStyleEnum.horizontal,
   view: LinkInBioCardViewEnum.carousel,
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioMapsBlockDefaultData: LinkInBioSingleBlockContentType = {
   target: {
-    url: '',
+    url: ''
   },
   title: '',
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioVcardBlockDefaultData: LinkInBioSingleBlockContentType = {
@@ -204,7 +204,7 @@ const LinkInBioVcardBlockDefaultData: LinkInBioSingleBlockContentType = {
     zip: 0,
     state: '',
     country: '',
-    website: '',
+    website: ''
   },
   customAppearance: {
     isEnabled: false,
@@ -214,44 +214,44 @@ const LinkInBioVcardBlockDefaultData: LinkInBioSingleBlockContentType = {
       bgGradientColors: {
         startColor: '#000',
         endColor: '#000',
-        direction: 0,
+        direction: 0
       },
       bgImageUrl: 'string',
-      enableBgImage: false,
+      enableBgImage: false
     },
-    buttonType: LinkInBioButtonTypeEnum.inlineCircle,
+    buttonType: LinkInBioButtonTypeEnum.inlineCircle
   },
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioIframeBlockDefaultData: LinkInBioSingleBlockContentType = {
   target: {
-    url: '',
+    url: ''
   },
   title: '',
   iframe: '',
   cardMode: false,
   customHeight: 196,
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioSeparatorBlockDefaultData: LinkInBioSingleBlockContentType = {
   separatorType: SeparatorTypeEnum.solid,
   separatorColor: '#ffffff',
   margin: 20,
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioAvatarBlockDefaultData: LinkInBioSingleBlockContentType = {
   target: {
-    url: '',
+    url: ''
   },
   title: '',
   description: '',
   imageUrl: '',
   style: LinkInBioCardStyleEnum.circle,
   avatarShadow: false,
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioMusicBlockDefaultData: LinkInBioSingleBlockContentType = {
@@ -260,13 +260,13 @@ const LinkInBioMusicBlockDefaultData: LinkInBioSingleBlockContentType = {
   cardItems: [
     {
       target: {
-        url: '',
+        url: ''
       },
       musicCardType: LinkInBioMusicPlatformEnum.spotify,
-      title: 'Spotify',
-    },
+      title: 'Spotify'
+    }
   ],
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioMessengerBlockDefaultData: LinkInBioSingleBlockContentType = {
@@ -275,13 +275,13 @@ const LinkInBioMessengerBlockDefaultData: LinkInBioSingleBlockContentType = {
   cardItems: [
     {
       target: {
-        url: '',
+        url: ''
       },
       messengerCardType: messengerPlatformsBlockEnum.email,
-      title: 'Email',
-    },
+      title: 'Email'
+    }
   ],
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioSocialBlockDefaultData: LinkInBioSingleBlockContentType = {
@@ -290,12 +290,12 @@ const LinkInBioSocialBlockDefaultData: LinkInBioSingleBlockContentType = {
   cardItems: [
     {
       target: {
-        url: '',
+        url: ''
       },
-      socialCardType: LinkInBioSocialPlatformEnum.tiktok,
-    },
+      socialCardType: LinkInBioSocialPlatformEnum.tiktok
+    }
   ],
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
 const LinkInBioQAndABlockDefaultData: LinkInBioSingleBlockContentType = {
@@ -304,18 +304,19 @@ const LinkInBioQAndABlockDefaultData: LinkInBioSingleBlockContentType = {
   cardItems: [
     {
       target: {
-        url: '',
+        url: ''
       },
       title: '',
-      text: '',
-    },
+      text: ''
+    }
   ],
-  ...DefaultSharedData,
+  ...DefaultSharedData
 };
 
-export const LinkInBioBlocksDefaultData: {
-  [key: string]: LinkInBioSingleBlockContentType;
-} = {
+export const LinkInBioBlocksDefaultData: Record<
+  string,
+  LinkInBioSingleBlockContentType
+> = {
   [LinkInBioBlockEnum.button]: LinkInBioButtonBlockDefaultData,
   [LinkInBioBlockEnum.text]: LinkInBioTextBlockDefaultData,
   [LinkInBioBlockEnum.countdown]: LinkInBioCountdownBlockDefaultData,
@@ -335,5 +336,5 @@ export const LinkInBioBlocksDefaultData: {
   [LinkInBioBlockEnum.music]: LinkInBioMusicBlockDefaultData,
   [LinkInBioBlockEnum.QAndA]: LinkInBioQAndABlockDefaultData,
   [LinkInBioBlockEnum.messenger]: LinkInBioMessengerBlockDefaultData,
-  [LinkInBioBlockEnum.social]: LinkInBioSocialBlockDefaultData,
+  [LinkInBioBlockEnum.social]: LinkInBioSocialBlockDefaultData
 };

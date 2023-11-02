@@ -1,7 +1,7 @@
 import {
   EmbedWidgetsDisplayAtEnum,
   EmbedWidgetsPositionEnum,
-  EmbedWidgetsType,
+  type EmbedWidgetsType
 } from '@/types/AdminPanel/linksType';
 
 export const EmbedWidgetsData: EmbedWidgetsType[] = [
@@ -13,7 +13,7 @@ export const EmbedWidgetsData: EmbedWidgetsType[] = [
     displayAt: EmbedWidgetsDisplayAtEnum.Landing,
     position: EmbedWidgetsPositionEnum.CenterCenter,
     animation: true,
-    closingOption: true,
+    closingOption: true
   },
   {
     id: '2',
@@ -24,7 +24,7 @@ export const EmbedWidgetsData: EmbedWidgetsType[] = [
     delay: '60',
     position: EmbedWidgetsPositionEnum.TopStart,
     animation: false,
-    closingOption: true,
+    closingOption: true
   },
   {
     id: '3',
@@ -34,6 +34,6 @@ export const EmbedWidgetsData: EmbedWidgetsType[] = [
     displayAt: EmbedWidgetsDisplayAtEnum.Exit,
     position: EmbedWidgetsPositionEnum.BottomEnd,
     animation: true,
-    closingOption: false,
-  },
+    closingOption: false
+  }
 ];

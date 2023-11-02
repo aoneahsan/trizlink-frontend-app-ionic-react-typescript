@@ -1,5 +1,5 @@
+import React, { useEffect, useRef } from 'react';
 import { GoogleMap } from '@capacitor/google-maps';
-import { useEffect, useRef } from 'react';
 import { ENVS } from '@/utils/envKeys';
 import RGAutoComplete from 'react-google-autocomplete';
 
@@ -8,7 +8,7 @@ const GoogleMapsCapacitorPackageTest: React.FC = () => {
 
   useEffect(() => {
     void (async () => {
-      if (!mapRef.current) return;
+      if (mapRef.current == null) return;
 
       await GoogleMap.create({
         id: 'my-cool-map',
@@ -27,8 +27,8 @@ const GoogleMapsCapacitorPackageTest: React.FC = () => {
 
   const onLocationSelectHandler = async (
     place: google.maps.places.PlaceResult
-  ) => {
-    if (!mapRef.current) return;
+  ): Promise<void> => {
+    if (mapRef.current == null) return;
 
     await GoogleMap.create({
       id: 'my-cool-map',
@@ -36,8 +36,8 @@ const GoogleMapsCapacitorPackageTest: React.FC = () => {
       apiKey: ENVS.googleMapApiKey,
       config: {
         center: {
-          lat: place.geometry?.location?.lat() || 33.6,
-          lng: place.geometry?.location?.lng() || -117.9
+          lat: place.geometry?.location?.lat() ?? 33.6,
+          lng: place.geometry?.location?.lng() ?? -117.9
         },
         zoom: 8
       }

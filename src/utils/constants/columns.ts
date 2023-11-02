@@ -15,9 +15,9 @@ export const ShortLinksTableColumns = [
     isVisible: true
   },
   // {
-  // 	id: ZShortLinkListPageTableColumnsIds.click,
-  // 	name: ZShortLinkListPageTableColumnsEnum.clicks,
-  // 	isVisible: true,
+  // id: ZShortLinkListPageTableColumnsIds.click,
+  // name: ZShortLinkListPageTableColumnsEnum.clicks,
+  // isVisible: true,
   // },
   {
     id: ZShortLinkListPageTableColumnsIds.date,

@@ -16,11 +16,11 @@ import classNames from 'classnames';
  * */
 import ZIonPage from '@/components/ZIonPage';
 import {
-	ZIonCol,
-	ZIonContent,
-	ZIonGrid,
-	ZIonRow,
-	ZIonText,
+  ZIonCol,
+  ZIonContent,
+  ZIonGrid,
+  ZIonRow,
+  ZIonText
 } from '@/components/ZIonComponents';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 
@@ -61,65 +61,69 @@ import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
  * */
 
 const TestingIonComponents: React.FC = () => {
-	return (
-		<ZIonPage>
-			<ZIonContent>
-				{/* Grid-1 */}
-				<ZIonGrid
-					className={classNames({
-						'h-screen ion-no-padding': true,
-						'max-w-[200rem] mx-auto': false,
-					})}
-				>
-					{/* Row-1 */}
-					<ZIonRow className='h-full'>
-						{/* Col-1 Side bar */}
-						<ZIonCol size='.8' className='h-full bg-slate-700'>
-							<ZCustomScrollable
-								className='w-full h-full'
-								scrollY={true}
-								// scrollX={true}
-							>
-								{/* <div className='w-[20rem]'>
-									Lorem ipsum dolor sit amet consectetur adipisicing elit.
-									Accusamus a temporibus repudiandae et cupiditate. In ducimus
-									qui officia inventore eos, a facere recusandae enim. Delectus
-									ad velit quae repellat aut!
-								</div> */}
-								<ZIonText>
-									Lorem ipsum dolor sit ametconsectetur adipisicing elit.
-									Eveniet reiciendis nisi, esse optio pariatur, recusandae in
-									tenetur saepe, quisquam iste deserunt tempore qua Lorem ipsum
-									dolor sit amet consectetur adipisicing elit. Eveniet
-									reiciendis nisi, esse optio pariatur
-								</ZIonText>
-							</ZCustomScrollable>
-						</ZIonCol>
+  return (
+    <ZIonPage>
+      <ZIonContent>
+        {/* Grid-1 */}
+        <ZIonGrid
+          className={classNames({
+            'h-screen ion-no-padding': true,
+            'max-w-[200rem] mx-auto': false
+          })}>
+          {/* Row-1 */}
+          <ZIonRow className='h-full'>
+            {/* Col-1 Side bar */}
+            <ZIonCol
+              size='.8'
+              className='h-full bg-slate-700'>
+              <ZCustomScrollable
+                className='w-full h-full'
+                scrollY={true}
+                // scrollX={true}
+              >
+                {/* <div className='w-[20rem]'>
+Lorem ipsum dolor sit amet consectetur adipisicing elit.
+Accusamus a temporibus repudiandae et cupiditate. In ducimus
+qui officia inventore eos, a facere recusandae enim. Delectus
+ad velit quae repellat aut!
+</div> */}
+                <ZIonText>
+                  Lorem ipsum dolor sit ametconsectetur adipisicing elit.
+                  Eveniet reiciendis nisi, esse optio pariatur, recusandae in
+                  tenetur saepe, quisquam iste deserunt tempore qua Lorem ipsum
+                  dolor sit amet consectetur adipisicing elit. Eveniet
+                  reiciendis nisi, esse optio pariatur
+                </ZIonText>
+              </ZCustomScrollable>
+            </ZIonCol>
 
-						{/* Col-2 Right-side Main Container */}
-						<ZIonCol size='' className='h-auto bg-red-600'>
-							<ZIonGrid className='h-full ion-no-padding'>
-								<ZIonRow className='h-max'>
-									<ZIonCol size='12' className='h-[5rem] bg-cyan-500'></ZIonCol>
-								</ZIonRow>
-								{/* Col-2 Row-1 */}
-								<ZIonRow style={{ height: 'calc(100% - 4rem)' }}>
-									{/* Col-2 Row-1 col-1 Folder menu */}
-									<ZIonCol
-										size='2.4'
-										className='h-full bg-orange-400'
-									></ZIonCol>
+            {/* Col-2 Right-side Main Container */}
+            <ZIonCol
+              size=''
+              className='h-auto bg-red-600'>
+              <ZIonGrid className='h-full ion-no-padding'>
+                <ZIonRow className='h-max'>
+                  <ZIonCol
+                    size='12'
+                    className='h-[5rem] bg-cyan-500'></ZIonCol>
+                </ZIonRow>
+                {/* Col-2 Row-1 */}
+                <ZIonRow style={{ height: 'calc(100% - 4rem)' }}>
+                  {/* Col-2 Row-1 col-1 Folder menu */}
+                  <ZIonCol
+                    size='2.4'
+                    className='h-full bg-orange-400'></ZIonCol>
 
-									{/* Col-2 Row-1 col-2 Table & filters etc. */}
-									<ZIonCol className='h-full bg-lime-400'></ZIonCol>
-								</ZIonRow>
-							</ZIonGrid>
-						</ZIonCol>
-					</ZIonRow>
-				</ZIonGrid>
-			</ZIonContent>
-		</ZIonPage>
-	);
+                  {/* Col-2 Row-1 col-2 Table & filters etc. */}
+                  <ZIonCol className='h-full bg-lime-400'></ZIonCol>
+                </ZIonRow>
+              </ZIonGrid>
+            </ZIonCol>
+          </ZIonRow>
+        </ZIonGrid>
+      </ZIonContent>
+    </ZIonPage>
+  );
 };
 
 export default TestingIonComponents;

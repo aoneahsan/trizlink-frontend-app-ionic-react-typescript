@@ -9,8 +9,8 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import { menuController } from '@ionic/core/components';
-import { ItemReorderEventDetail } from '@ionic/react';
-import { IonReorderGroupCustomEvent } from '@ionic/core';
+import { type ItemReorderEventDetail } from '@ionic/react';
+import { type IonReorderGroupCustomEvent } from '@ionic/core';
 import {
   appsOutline,
   closeOutline,
@@ -56,7 +56,7 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { PAGE_MENU_SIDE } from '@/utils/enums';
+import { type PAGE_MENU_SIDE } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import { createRedirectRoute, replaceRouteParams } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
@@ -65,12 +65,8 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkFolderType } from '@/types/AdminPanel/linksType';
-import {
-  AdminPanelSidebarMenuPageEnum,
-  folderState,
-  FormMode
-} from '@/types/AdminPanel/index.type';
+import { type LinkFolderType } from '@/types/AdminPanel/linksType';
+import { folderState, FormMode } from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down
@@ -158,7 +154,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
   return (
     <ZIonMenu
       contentId={contentId}
-      side={menuSide || 'end'}
+      side={menuSide ?? 'end'}
       menuId={menuId}>
       {/* Header */}
       <ZIonHeader className='flex px-3 py-2 border-b shadow-none ion-align-items-center ion-no-padding ion-justify-content-between'>
@@ -174,10 +170,12 @@ const AdminPanelFoldersSidebarMenu: React.FC<
         <ZIonIcon
           icon={closeOutline}
           className='w-6 h-6 pt-[1px] cursor-pointer'
-          onClick={async () => {
-            await menuController.close(
-              CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
-            );
+          onClick={() => {
+            void (async () => {
+              await menuController.close(
+                CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
+              );
+            })();
           }}
         />
       </ZIonHeader>
@@ -195,12 +193,12 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                 <ZCan
                   shareWSId={wsShareId}
                   permissionType={
-                    wsShareId
+                    wsShareId !== undefined
                       ? permissionsTypeEnum.shareWSMemberPermissions
                       : permissionsTypeEnum.loggedInUserPermissions
                   }
                   havePermissions={
-                    wsShareId
+                    wsShareId !== undefined
                       ? state === folderState.shortlink
                         ? [shareWSPermissionEnum.viewAny_sws_sl_folder]
                         : state === folderState.linkInBio
@@ -234,12 +232,11 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                                 ]
                               })
                             );
-                          }
-                          // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to short link of that share workspace
-                          else if (
+                          } else if (
                             wsShareId !== undefined &&
                             shareWSMemberId !== undefined
                           ) {
+                            // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to short link of that share workspace
                             zNavigatePushRoute(
                               createRedirectRoute({
                                 url: ZaionsRoutes.AdminPanel.ShareWS.Short_link
@@ -278,12 +275,11 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                                 ]
                               })
                             );
-                          }
-                          // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to link-in-bio of that share workspace
-                          else if (
+                          } else if (
                             wsShareId !== undefined &&
                             shareWSMemberId !== undefined
                           ) {
+                            // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to link-in-bio of that share workspace
                             zNavigatePushRoute(
                               createRedirectRoute({
                                 url: ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio
@@ -313,12 +309,12 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                 <ZCan
                   shareWSId={wsShareId}
                   permissionType={
-                    wsShareId
+                    wsShareId !== undefined
                       ? permissionsTypeEnum.shareWSMemberPermissions
                       : permissionsTypeEnum.loggedInUserPermissions
                   }
                   havePermissions={
-                    wsShareId
+                    wsShareId !== undefined
                       ? state === folderState.shortlink
                         ? [shareWSPermissionEnum.viewAny_sws_sl_folder]
                         : state === folderState.linkInBio
@@ -330,7 +326,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                       ? [permissionsEnum.viewAny_lib_folder]
                       : []
                   }>
-                  {foldersData && foldersData.length ? (
+                  {foldersData !== undefined ? (
                     <ZIonReorderGroup
                       disabled={false}
                       onIonItemReorder={handleReorderFn}>
@@ -339,12 +335,12 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                           key={el.id}
                           shareWSId={wsShareId}
                           permissionType={
-                            wsShareId
+                            wsShareId !== undefined
                               ? permissionsTypeEnum.shareWSMemberPermissions
                               : permissionsTypeEnum.loggedInUserPermissions
                           }
                           havePermissions={
-                            wsShareId
+                            wsShareId !== undefined
                               ? state === folderState.shortlink
                                 ? [shareWSPermissionEnum.view_sws_sl_folder]
                                 : state === folderState.linkInBio
@@ -361,7 +357,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                             data-folder-id={el.id}
                             minHeight='2.3rem'
                             className={`cursor-pointer zaions-short-link-folder-${
-                              state || ''
+                              state != null || ''
                             }`}>
                             <ZIonLabel
                               className='my-0'
@@ -375,7 +371,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                                       CONSTANTS.RouteParams
                                         .folderIdToGetShortLinksOrLinkInBio
                                     ],
-                                    [workspaceId, el.id!]
+                                    [workspaceId, el?.id ?? '']
                                   )
                                 );
                               }}>
@@ -387,7 +383,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                               size='small'
                               value={el.id}
                               onClick={event => {
-                                folderActionHandlerFn &&
+                                folderActionHandlerFn !== undefined &&
                                   folderActionHandlerFn(event);
                                 setFolderFormState(oldVal => ({
                                   ...oldVal,
@@ -441,12 +437,12 @@ const AdminPanelFoldersSidebarMenu: React.FC<
             <ZCan
               shareWSId={wsShareId}
               permissionType={
-                wsShareId
+                wsShareId !== undefined
                   ? permissionsTypeEnum.shareWSMemberPermissions
                   : permissionsTypeEnum.loggedInUserPermissions
               }
               havePermissions={
-                wsShareId
+                wsShareId !== undefined
                   ? state === folderState.shortlink
                     ? [shareWSPermissionEnum.create_sws_sl_folder]
                     : state === folderState.linkInBio
@@ -486,12 +482,12 @@ const AdminPanelFoldersSidebarMenu: React.FC<
       <ZCan
         shareWSId={wsShareId}
         permissionType={
-          wsShareId
+          wsShareId !== undefined
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }
         havePermissions={
-          wsShareId
+          wsShareId !== undefined
             ? state === folderState.shortlink
               ? [shareWSPermissionEnum.sort_sws_sl_folder]
               : state === folderState.linkInBio
@@ -504,14 +500,14 @@ const AdminPanelFoldersSidebarMenu: React.FC<
             : []
         }>
         <ZIonFooter className='py-1'>
-          {showSaveReorderButton && (
+          {showSaveReorderButton !== undefined && (
             <ZIonButton
               className='ion-margin-horizontal ion-no-padding'
               expand='block'
               color='tertiary'
               minHeight='1.9rem'
               onClick={event => {
-                saveReorderButtonFn && void saveReorderButtonFn(event);
+                saveReorderButtonFn !== undefined && saveReorderButtonFn(event);
               }}>
               save reorder
             </ZIonButton>

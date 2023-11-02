@@ -212,15 +212,22 @@ const AdminPanelSidebarMenu: React.FC<{
                     <ZIonImg
                       src={
                         wsShareId != null
-                          ? selectedShareWorkspace?.workspaceImage != null
-                            ? selectedShareWorkspace?.workspaceImage
+                          ? (selectedShareWorkspace as workspaceInterface)
+                              ?.workspaceImage != null
+                            ? (selectedShareWorkspace as workspaceInterface)
+                                .workspaceImage
                             : getUiAvatarApiUrl({
-                                name: selectedShareWorkspace?.workspaceName
+                                name: (
+                                  selectedShareWorkspace as workspaceInterface
+                                ).workspaceName
                               })
-                          : selectedWorkspace?.workspaceImage != null
-                          ? selectedWorkspace?.workspaceImage
+                          : (selectedWorkspace as workspaceInterface)
+                              ?.workspaceImage != null
+                          ? (selectedWorkspace as workspaceInterface)
+                              ?.workspaceImage
                           : getUiAvatarApiUrl({
-                              name: selectedWorkspace?.workspaceName
+                              name: (selectedWorkspace as workspaceInterface)
+                                ?.workspaceName
                             })
                       }
                       alt={`${PRODUCT_NAME} logo`}
@@ -605,10 +612,19 @@ const AdminPanelSidebarMenu: React.FC<{
                             [workspaceId]
                           )
                         : wsShareId != null && shareWSMemberId != null
-                        ? getMemberRolePermissions?.memberPermissions !==
-                            undefined &&
-                          getMemberRolePermissions?.memberPermissions?.includes(
-                            shareWSPermissionEnum.viewAny_sws_member
+                        ? (
+                            getMemberRolePermissions as {
+                              memberPermissions: string[];
+                            }
+                          )?.memberPermissions !== undefined &&
+                          Boolean(
+                            (
+                              getMemberRolePermissions as {
+                                memberPermissions: string[];
+                              }
+                            )?.memberPermissions?.includes(
+                              shareWSPermissionEnum.viewAny_sws_member
+                            )
                           )
                           ? replaceRouteParams(
                               ZaionsRoutes.AdminPanel.ShareWS.AccountSettings

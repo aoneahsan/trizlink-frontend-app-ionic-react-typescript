@@ -1,20 +1,18 @@
-import { FormikErrors, FormikState } from 'formik';
+import { type FormikErrors, type FormikState } from 'formik';
 
-export type FormikHandleChangeEventType = {
+export interface FormikHandleChangeEventType {
   (e: React.ChangeEvent<unknown>): void;
   <T = string | React.ChangeEvent<unknown>>(
     field: T
   ): T extends React.ChangeEvent<unknown>
-    ? void
+    ? unknown
     : (e: string | React.ChangeEvent<unknown>) => void;
-};
+}
 
-export type FormikHandleBlurEventType = {
-  (e: React.FocusEvent<unknown, Element>): void;
-  <T = unknown>(fieldOrEvent: T): T extends string
-    ? (e: unknown) => void
-    : void;
-};
+export interface FormikHandleBlurEventType {
+  (e: React.FocusEvent<any, Element>): void;
+  <T = any>(fieldOrEvent: T): T extends string ? (e: any) => void : unknown;
+}
 
 export type FormikSetFieldValueEventVoidType = (
   field: string,
@@ -28,13 +26,11 @@ export type FormikSetFieldValueEventPromiseVoidType = (
   shouldValidate?: boolean | undefined
 ) => Promise<void>;
 
-export type FormikSetFieldTouchedEventType = {
-  (
-    field: string,
-    isTouched?: boolean | undefined,
-    shouldValidate?: boolean | undefined
-  ): void;
-};
+export type FormikSetFieldTouchedEventType = (
+  field: string,
+  isTouched?: boolean | undefined,
+  shouldValidate?: boolean | undefined
+) => void;
 
 export type resetFormType = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

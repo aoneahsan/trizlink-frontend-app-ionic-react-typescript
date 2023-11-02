@@ -1,5 +1,5 @@
-import { PixelPlatformsEnum } from './../../types/AdminPanel/linksType/index';
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { PixelPlatformsEnum } from '@/types/AdminPanel/linksType/index';
+import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 // import { zConsoleError } from '@/utils/helpers';
 // Custom Imports
 import {
@@ -143,7 +143,7 @@ export const API_URLS = {
   member_update: `/user/workspace/${RouteParams.workspace.workspaceId}/update-invitation/${RouteParams.workspace.memberInviteId}`,
   member_create_short_url: `/user/workspace/${RouteParams.workspace.workspaceId}/create-short-url/${RouteParams.workspace.memberInviteId}`,
   member_check_short_url: `/user/ws-member/short-url/check/${RouteParams.workspace.invitationId}`,
-  validate_invitation_status: `/user/validate-and-update-invitation`,
+  validate_invitation_status: '/user/validate-and-update-invitation',
 
   // Share workspace members
   sws_member_sendInvite_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/ws/member/send-invitation`,
@@ -183,9 +183,9 @@ export const API_URLS = {
   set_password: '/user/set-password',
   set_username_password: '/user/set-username-password',
 
-  user_unread_notifications_list: `/user/notification`,
+  user_unread_notifications_list: '/user/notification',
   user_notification_mark_as_read: `/user/notification/markAsRead/${RouteParams.user.notification.id}`,
-  user_notification_mark_all_as_read: `/user/notification/markAllAsRead`,
+  user_notification_mark_all_as_read: '/user/notification/markAllAsRead',
 
   // Short links
   shortLinks_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/short-links/page-number/${RouteParams.pageNumber}/limit/${RouteParams.paginationLimit}`,
@@ -232,7 +232,7 @@ export const API_URLS = {
   linkInBioPreDefinedMessengerPlatform_delete_update:
     '/user/lib-pre-dd/messengerPlatform/:messengerPlatformId',
 
-  linkInBioPreData_create_list: `/user/lib-pdd`,
+  linkInBioPreData_create_list: '/user/lib-pdd',
   linkInBioPreData_delete_update: `/user/lib-pdd/${RouteParams.linkInBio.libPddId}`,
 
   linkInBioPreDefinedSocialPlatform_create_list:
@@ -259,7 +259,7 @@ export const API_URLS = {
   ws_share_folder_reorder: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/folder/reorder`,
 
   // share workspace
-  ws_share_list: `/user/shared-ws`,
+  ws_share_list: '/user/shared-ws',
   ws_share_member_role_permissions: `/user/shared-ws/get-member-role-permissions/${RouteParams.workspace.shareWSMemberId}`,
   ws_share_update_is_favorite: `/user/shared-ws/update-is-favorite/${RouteParams.workspace.shareWSMemberId}`,
   ws_share_info_data: `/user/shared-ws/get-share-ws-info-data/${RouteParams.workspace.shareWSMemberId}`,
@@ -891,7 +891,7 @@ const testingSelectors = {
 
           bg: {
             // lib-fp-dt-bg -> link-in-bio-form-page-design-tab-background
-            bgSolidColorInput: 'lib-fp-dt-bg-sc-input', //sc -> solid color
+            bgSolidColorInput: 'lib-fp-dt-bg-sc-input', // sc -> solid color
             addGradientBtn: 'lib-fp-dt-bg-add-gradient-btn',
             container: 'lib-fp-dt-bg-container',
             gColors: {
@@ -904,7 +904,7 @@ const testingSelectors = {
 
           button: {
             // lib-fp-dt-btn -> link-in-bio-form-page-design-tab-button
-            bgSolidColorInput: 'lib-fp-dt-btn-sc-input', //sc -> solid color
+            bgSolidColorInput: 'lib-fp-dt-btn-sc-input', // sc -> solid color
             addGradientBtn: 'lib-fp-dt-btn-add-gradient-btn',
             container: 'lib-fp-dt-btn-container',
             gColors: {
@@ -1665,6 +1665,7 @@ const REACT_QUERY = {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const LINK_In_BIO = {
   FORM: {
     DIRECTION_PRE_CLICKED: 45

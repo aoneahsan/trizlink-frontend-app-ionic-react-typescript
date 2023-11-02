@@ -54,7 +54,7 @@ import {
   linkInBioPageAnalyticsOperatingSystemBlock,
   linkInBioPageAnalyticsReferersBlock,
   linkInBioPageAnalyticsRetargetingPixelsBlock,
-  linkInBioPageAnalyticsUtmTagBlock,
+  linkInBioPageAnalyticsUtmTagBlock
 } from '@/assets/images';
 
 /**
@@ -77,9 +77,8 @@ const LinkInBioPageAnalytics: React.FC = () => {
         <ZIonGrid
           // className='ion-padding ion-margin'
           className={classNames({
-            'ion-padding ion-margin': isSmScale,
-          })}
-        >
+            'ion-padding ion-margin': isSmScale
+          })}>
           {/* Header  */}
           <PageAnalyticsHeader />
 
@@ -100,8 +99,8 @@ const LinkInBioPageAnalytics: React.FC = () => {
                 unique: '1',
                 value: 'Pakistan',
                 visit: '1',
-                visitPercentage: '100%',
-              },
+                visitPercentage: '100%'
+              }
             ]}
           />
 

@@ -1,5 +1,5 @@
 // Core Imports
-import { lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 
 // Packages Imports
 import { Redirect, Route } from 'react-router-dom';
@@ -158,10 +158,10 @@ const ZWSSettingsTeamViewPage = lazy(
 );
 
 // Functional Component
-const AppRoutes = () => {
+const AppRoutes = (): JSX.Element => {
   return (
     // <IonReactRouter>
-    // 	<IonRouterOutlet>
+    // <IonRouterOutlet>
     <Suspense fallback={<ZFallbackIonSpinner />}>
       <Route
         exact
@@ -682,7 +682,7 @@ const AppRoutes = () => {
 
       {/* <Route path={ZaionsRoutes.Asterisk} component={Z404View} /> */}
     </Suspense>
-    // 	</IonRouterOutlet>
+    // </IonRouterOutlet>
     // </IonReactRouter>
   );
 };

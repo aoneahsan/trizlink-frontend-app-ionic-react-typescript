@@ -1,7 +1,7 @@
-import { FirebaseApp } from 'firebase/app';
+import { type FirebaseApp } from 'firebase/app';
 import {
-  stringOrNull,
-  stringOrNumberOrBooleanOrNull
+  type stringOrNull,
+  type stringOrNumberOrBooleanOrNull
 } from '@/types/genericTypeDefinitions.type';
 
 // Export from other files in this folder

@@ -87,7 +87,9 @@ const ZShareWSStartup: React.FC = () => {
       wsShareId
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
-    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _shouldFetchWhenIdPassed: !(
+      shareWSMemberId !== undefined && shareWSMemberId?.trim()?.length > 0
+    ),
     _itemsIds: [shareWSMemberId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
@@ -102,7 +104,9 @@ const ZShareWSStartup: React.FC = () => {
         shareWSMemberId
       ],
       _url: API_URL_ENUM.ws_share_member_role_permissions,
-      _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+      _shouldFetchWhenIdPassed: !(
+        shareWSMemberId !== undefined && shareWSMemberId?.trim()?.length > 0
+      ),
       _itemsIds: [shareWSMemberId],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
@@ -114,8 +118,8 @@ const ZShareWSStartup: React.FC = () => {
   useEffect(() => {
     try {
       if (
-        isGetMemberRolePermissionsFetching === false &&
-        isGetShareWSInfoDataFetching === false
+        !isGetMemberRolePermissionsFetching &&
+        !isGetShareWSInfoDataFetching
       ) {
         zNavigatePushRoute(
           createRedirectRoute({
@@ -124,13 +128,14 @@ const ZShareWSStartup: React.FC = () => {
               CONSTANTS.RouteParams.workspace.wsShareId,
               CONSTANTS.RouteParams.workspace.shareWSMemberId
             ],
-            values: [wsShareId, shareWSMemberId!]
+            values: [wsShareId, shareWSMemberId ?? '']
           })
         );
       }
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -146,13 +151,14 @@ const ZShareWSStartup: React.FC = () => {
               CONSTANTS.RouteParams.workspace.wsShareId,
               CONSTANTS.RouteParams.workspace.shareWSMemberId
             ],
-            values: [wsShareId, shareWSMemberId!]
+            values: [wsShareId, shareWSMemberId ?? '']
           })
         );
       }
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getMemberRolePermissions, getShareWSInfoData]);
   // #endregion
 

@@ -1,5 +1,5 @@
 // Type
-import { ZaionsPricingSubscriptionsType } from '@/types/WhyZaions/PricingPage';
+import { type ZaionsPricingSubscriptionsType } from '@/types/WhyZaions/PricingPage';
 
 // Images
 import {
@@ -17,7 +17,7 @@ import {
   XSUserPermission,
   XSScaleLinks,
   XSUptime,
-  XSEnterpriseSupport,
+  XSEnterpriseSupport
 } from '@/assets/images';
 import { PRODUCT_DOMAIN, PRODUCT_NAME } from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
@@ -35,20 +35,20 @@ export const ZaionsPricingPageData: ZaionsPricingSubscriptionsType[] = [
       {
         feature_id: '1',
         icon: XSlLinkInBio,
-        text: `${PRODUCT_NAME}-branded Link-in-bio`,
+        text: `${PRODUCT_NAME}-branded Link-in-bio`
       },
       {
         feature_id: '2',
         icon: XSCustomizableBackhalves,
-        text: 'Custom back-halves',
+        text: 'Custom back-halves'
       },
       {
         feature_id: '3',
         icon: XSQRCodes,
         text: `${PRODUCT_NAME}-branded QR Codes`,
-        new: true,
-      },
-    ],
+        new: true
+      }
+    ]
   },
   {
     id: '2',
@@ -63,24 +63,24 @@ export const ZaionsPricingPageData: ZaionsPricingSubscriptionsType[] = [
         feature_id: '1',
         icon: XSlLinkInBio,
         text: 'Link-in-bio',
-        new: true,
+        new: true
       },
       {
         feature_id: '2',
         icon: XSRedirect,
-        text: 'Link redirects',
+        text: 'Link redirects'
       },
       {
         feature_id: '3',
         icon: XSDataAnalytics,
-        text: 'Data export',
+        text: 'Data export'
       },
       {
         feature_id: '4',
         icon: XSChatSupport,
-        text: 'Access to support',
-      },
-    ],
+        text: 'Access to support'
+      }
+    ]
   },
   {
     id: '3',
@@ -94,24 +94,24 @@ export const ZaionsPricingPageData: ZaionsPricingSubscriptionsType[] = [
       {
         feature_id: '1',
         icon: XSComplimentaryDomain,
-        text: 'Complimentary custom domain*',
+        text: 'Complimentary custom domain*'
       },
       {
         feature_id: '2',
         icon: XSRedirect,
-        text: 'Custom link redirects',
+        text: 'Custom link redirects'
       },
       {
         feature_id: '3',
         icon: XSQRCodes,
-        text: 'QR Code colors and logos',
+        text: 'QR Code colors and logos'
       },
       {
         feature_id: '4',
         icon: XSShare,
-        text: 'Branded links',
-      },
-    ],
+        text: 'Branded links'
+      }
+    ]
   },
   {
     id: '4',
@@ -125,24 +125,24 @@ export const ZaionsPricingPageData: ZaionsPricingSubscriptionsType[] = [
       {
         feature_id: '1',
         icon: XSAnalytics,
-        text: 'Advanced performance dashboard',
+        text: 'Advanced performance dashboard'
       },
       {
         feature_id: '2',
         icon: XSCampaigns,
-        text: 'Campaigns',
+        text: 'Campaigns'
       },
       {
         feature_id: '3',
         icon: XSQRCodes,
-        text: 'QR Code multiple download formats',
+        text: 'QR Code multiple download formats'
       },
       {
         feature_id: '4',
         icon: XSLocationDeviceData,
-        text: 'Location and device type data',
-      },
-    ],
+        text: 'Location and device type data'
+      }
+    ]
   },
   {
     id: '5',
@@ -154,23 +154,23 @@ export const ZaionsPricingPageData: ZaionsPricingSubscriptionsType[] = [
       {
         feature_id: '1',
         icon: XSUserPermission,
-        text: 'Multiple user seats and group permissions',
+        text: 'Multiple user seats and group permissions'
       },
       {
         feature_id: '2',
         icon: XSScaleLinks,
-        text: 'At scale link generation',
+        text: 'At scale link generation'
       },
       {
         feature_id: '3',
         icon: XSUptime,
-        text: '99.9% SLA uptime',
+        text: '99.9% SLA uptime'
       },
       {
         feature_id: '4',
         icon: XSEnterpriseSupport,
-        text: 'Account manager support',
-      },
-    ],
-  },
+        text: 'Account manager support'
+      }
+    ]
+  }
 ];

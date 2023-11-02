@@ -11,41 +11,41 @@ import {
   electronicArts,
   marriott,
   newYorkTimes,
-  novasol,
+  novasol
 } from '@/assets/images';
 
 // Type
-import { ZaionsHPBrandsType } from '../types/ZionsHPBrandType';
+import { type ZaionsHPBrandsType } from '../types/ZionsHPBrandType';
 
 const HPBrandData: ZaionsHPBrandsType[] = [
   {
     id: 1,
-    image: disney,
+    image: disney
   },
 
   {
     id: 2,
-    image: novasol,
+    image: novasol
   },
 
   {
     id: 3,
-    image: bigFish,
+    image: bigFish
   },
 
   {
     id: 4,
-    image: marriott,
+    image: marriott
   },
 
   {
     id: 5,
-    image: newYorkTimes,
+    image: newYorkTimes
   },
   {
     id: 6,
-    image: electronicArts,
-  },
+    image: electronicArts
+  }
 ];
 
 export default HPBrandData;

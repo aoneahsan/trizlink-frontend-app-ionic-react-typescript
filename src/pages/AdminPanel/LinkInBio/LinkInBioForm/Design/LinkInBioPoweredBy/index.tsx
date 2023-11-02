@@ -17,12 +17,12 @@ import classNames from 'classnames';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonButton,
-	ZIonCol,
-	ZIonContent,
-	ZIonIcon,
-	ZIonRow,
-	ZIonText,
+  ZIonButton,
+  ZIonCol,
+  ZIonContent,
+  ZIonIcon,
+  ZIonRow,
+  ZIonText
 } from '@/components/ZIonComponents';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 
@@ -69,16 +69,16 @@ import classes from '../styles.module.css';
  * */
 
 const ZPoweredBySubscriptionModal: React.FC<{
-	dismissZIonModal: (data?: string, role?: string | undefined) => void;
+  dismissZIonModal: (data?: string, role?: string | undefined) => void;
 }> = ({ dismissZIonModal }) => {
-	// const appSettings = useRecoilValue(ZaionsAppSettingsRState);
-	return (
-		<>
-			{/**
-			 * Header of Modal will shown if the `showActionInModalHeader` is set to `true` in  appSetting and hide if it is `false`
-			 * default: false
-			 *  */}
-			{/* {appSettings.appModalsSetting.actions.showActionInModalHeader && (
+  // const appSettings = useRecoilValue(ZaionsAppSettingsRState);
+  return (
+    <>
+      {/**
+       * Header of Modal will shown if the `showActionInModalHeader` is set to `true` in  appSetting and hide if it is `false`
+       * default: false
+       *  */}
+      {/* {appSettings.appModalsSetting.actions.showActionInModalHeader && (
         <ZIonHeader>
           <ZIonRow className='ion-align-items-center'>
             <ZIonCol>
@@ -98,56 +98,56 @@ const ZPoweredBySubscriptionModal: React.FC<{
         </ZIonHeader>
       )} */}
 
-			<ZIonContent className='ion-padding'>
-				<div className='ion-text-end'>
-					<ZIonButton
-						className='ion-no-padding ion-no-margin'
-						onClick={() => {
-							dismissZIonModal();
-						}}
-						fill='clear'
-						color='dark'
-					>
-						<h4 className='ion-no-margin mt-1'>
-							<ZIonIcon icon={closeOutline} />
-						</h4>
-					</ZIonButton>
-				</div>
-				<div className='flex ion-text-center ion-justify-content-center flex-col ion-padding-top ion-margin-top'>
-					<ZIonText className='' color={'primary'}>
-						<h1
-							className={`mb-0 ion-padding-top bg-primary zaions__modal_icon`}
-						>
-							<ZIonIcon
-								icon={toggleOutline}
-								className='mx-auto'
-								color='light'
-							></ZIonIcon>
-						</h1>
-					</ZIonText>
-					<br />
-					<ZIonText color={'dark'}>
-						<h5 className='font-bold'>
-							To remove the {PRODUCT_NAME} logo, please <br /> increase your
-							plan 😊
-						</h5>
-					</ZIonText>
-					<ZIonText className='mt-2'>
-						Choose the best plan that scale with <br /> your needs to use Zlink!
-					</ZIonText>
-					<ZIonButton expand='block' className='mt-3'>
-						Subscribe
-					</ZIonButton>
-				</div>
-			</ZIonContent>
+      <ZIonContent className='ion-padding'>
+        <div className='ion-text-end'>
+          <ZIonButton
+            className='ion-no-padding ion-no-margin'
+            onClick={() => {
+              dismissZIonModal();
+            }}
+            fill='clear'
+            color='dark'>
+            <h4 className='mt-1 ion-no-margin'>
+              <ZIonIcon icon={closeOutline} />
+            </h4>
+          </ZIonButton>
+        </div>
+        <div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top'>
+          <ZIonText color='primary'>
+            <h1 className='mb-0 ion-padding-top bg-primary zaions__modal_icon'>
+              <ZIonIcon
+                icon={toggleOutline}
+                className='mx-auto'
+                color='light'
+              />
+            </h1>
+          </ZIonText>
+          <br />
+          <ZIonText color={'dark'}>
+            <h5 className='font-bold'>
+              To remove the {PRODUCT_NAME} logo, please <br /> increase your
+              plan 😊
+            </h5>
+          </ZIonText>
+          <ZIonText className='mt-2'>
+            Choose the best plan that scale with <br /> your needs to use{' '}
+            {PRODUCT_NAME}!
+          </ZIonText>
+          <ZIonButton
+            expand='block'
+            className='mt-3'>
+            Subscribe
+          </ZIonButton>
+        </div>
+      </ZIonContent>
 
-			{/**
-			 * Footer of Modal will shown if the `showActionInModalFooter` is set to `true` in appSetting, and hide if it is `false`
-			 * default: true
-			 *  */}
-			{/* {appSettings.appModalsSetting.actions.showActionInModalFooter && (
+      {/**
+       * Footer of Modal will shown if the `showActionInModalFooter` is set to `true` in appSetting, and hide if it is `false`
+       * default: true
+       *  */}
+      {/* {appSettings.appModalsSetting.actions.showActionInModalFooter && (
         <ZIonFooter>
-          <ZIonRow className=' mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
+          <ZIonRow className='mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
             <ZIonCol>
               <ZIonButton
                 fill='outline'
@@ -163,55 +163,62 @@ const ZPoweredBySubscriptionModal: React.FC<{
           </ZIonRow>
         </ZIonFooter>
       )} */}
-		</>
-	);
+    </>
+  );
 };
 
 const ZLinkInBioPoweredBySection: React.FC = () => {
-	// const { values, setFieldValue } = useFormikContext<LinkInBioType>();
+  // const { values, setFieldValue } = useFormikContext<LinkInBioType>();
 
-	const { presentZIonModal: presentPoweredBySubscriptionModal } = useZIonModal(
-		ZPoweredBySubscriptionModal
-	);
+  const { presentZIonModal: presentPoweredBySubscriptionModal } = useZIonModal(
+    ZPoweredBySubscriptionModal
+  );
 
-	return (
-		<ZIonCol
-			sizeXl='10'
-			sizeLg='11'
-			sizeMd='12'
-			sizeSm='12'
-			sizeXs='12'
-			className='ion-padding-vertical ion-margin-top ion-margin-start'
-			style={{ borderTop: '2px solid #edf5fd' }}
-		>
-			<ZIonRow
-				className={classNames(classes['row-gap-1-point-6-rem'], {
-					'ion-margin-top pt-2 ion-padding-bottom mb-2 ': true,
-				})}
-			>
-				{/*  */}
-				<ZIonCol size='6' className='flex ion-align-items-center'>
-					<ZIonText>
-						<h4 className='ion-no-margin ion-no-padding'>
-							<ZIonIcon icon={heartOutline} className='me-3' />
-						</h4>
-					</ZIonText>
-					<ZIonText className='text-[14px] mb-1'>Powered by Zlink</ZIonText>
-				</ZIonCol>
+  return (
+    <ZIonCol
+      sizeXl='10'
+      sizeLg='11'
+      sizeMd='12'
+      sizeSm='12'
+      sizeXs='12'
+      className='ion-padding-vertical ion-margin-top ion-margin-start'
+      style={{ borderTop: '2px solid #edf5fd' }}>
+      <ZIonRow
+        className={classNames(classes['row-gap-1-point-6-rem'], {
+          'ion-margin-top pt-2 ion-padding-bottom mb-2 ': true
+        })}>
+        {/*  */}
+        <ZIonCol
+          size='6'
+          className='flex ion-align-items-center'>
+          <ZIonText>
+            <h4 className='ion-no-margin ion-no-padding'>
+              <ZIonIcon
+                icon={heartOutline}
+                className='me-3'
+              />
+            </h4>
+          </ZIonText>
+          <ZIonText className='text-[14px] mb-1'>
+            Powered by {PRODUCT_NAME}
+          </ZIonText>
+        </ZIonCol>
 
-				<ZIonCol size='6' className='flex ion-justify-content-end'>
-					<ZRCSwitch
-						checked={true}
-						onChange={() => {
-							presentPoweredBySubscriptionModal({
-								_cssClass: classes['powered-by-subscription-modal-size'],
-							});
-						}}
-					/>
-				</ZIonCol>
-			</ZIonRow>
-		</ZIonCol>
-	);
+        <ZIonCol
+          size='6'
+          className='flex ion-justify-content-end'>
+          <ZRCSwitch
+            checked={true}
+            onChange={() => {
+              presentPoweredBySubscriptionModal({
+                _cssClass: classes['powered-by-subscription-modal-size']
+              });
+            }}
+          />
+        </ZIonCol>
+      </ZIonRow>
+    </ZIonCol>
+  );
 };
 
 export default ZLinkInBioPoweredBySection;

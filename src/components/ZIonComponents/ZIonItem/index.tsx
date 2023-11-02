@@ -1,19 +1,18 @@
 // Core Import
-import { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonItem } from '@ionic/react';
 
 // Type
 import {
-  ZIonColorType,
-  ZIonModeType,
-  ZIonRouterDirection
+  type ZIonColorType,
+  type ZIonModeType,
+  type ZIonRouterDirection
 } from '@/types/zaionsAppSettings.type';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
-type ZIonItemType = {
+interface ZIonItemType {
   children?: ReactNode;
   className?: string;
   button?: boolean;
@@ -37,22 +36,20 @@ type ZIonItemType = {
   id?: string;
   type?: 'button' | 'reset' | 'submit';
   routerLink?: string;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   onClick?: (event?: unknown) => void;
   minHeight?: 'auto' | string;
   testingselector?: string;
   testinglistselector?: string;
-};
+}
 
-const ZIonItem = (props: ZIonItemType) => {
+const ZIonItem: React.FC<ZIonItemType> = (props: ZIonItemType) => {
   const compStyle =
-    props.style && props.minHeight
+    props.style !== undefined && props.minHeight !== undefined
       ? { ...props.style, '--min-height': props.minHeight }
-      : props.style && !props.minHeight
+      : props.style !== undefined && props.minHeight === undefined
       ? { ...props.style }
-      : !props.style && props.minHeight
+      : props.style === undefined && props.minHeight !== undefined
       ? { '--min-height': props.minHeight }
       : {};
 

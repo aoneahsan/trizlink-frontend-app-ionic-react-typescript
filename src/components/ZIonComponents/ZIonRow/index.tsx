@@ -1,22 +1,21 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonRow } from '@ionic/react';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
-type ZIonRowType = {
+interface ZIonRowType {
   children: ReactNode;
   className?: string;
   testingselector?: string;
   testinglistselector?: string;
   style?: React.CSSProperties;
   onClick?: React.MouseEventHandler<HTMLIonRowElement>;
-};
+}
 
-const ZIonRow = (props: ZIonRowType) => {
+const ZIonRow: React.FC<ZIonRowType> = (props: ZIonRowType) => {
   const _testinglistselector =
     props.testinglistselector !== undefined
       ? {

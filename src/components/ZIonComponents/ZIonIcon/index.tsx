@@ -5,27 +5,24 @@ import React from 'react';
 import { IonIcon } from '@ionic/react';
 
 // Type
-import { ZIonColorType } from '@/types/zaionsAppSettings.type';
+import { type ZIonColorType } from '@/types/zaionsAppSettings.type';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
-import { PRODUCT_NAME } from '@/utils/constants';
-type ZIonIconType = {
+interface ZIonIconType {
   icon?: string;
   className?: string;
   color?: ZIonColorType;
   testingselector?: string;
   testinglistselector?: string;
   size?: 'small' | 'large' | 'default';
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   slot?: 'start' | 'end' | 'icon-only';
   title?: string;
   id?: string;
   onClick?: React.MouseEventHandler<HTMLIonIconElement>;
-};
+}
 
-const ZIonIcon = (props: ZIonIconType) => {
+const ZIonIcon: React.FC<ZIonIconType> = (props: ZIonIconType) => {
   const _testinglistselector =
     props.testinglistselector !== undefined
       ? {

@@ -1,4 +1,4 @@
-export type ZaionsCardWithIconType = {
+export interface ZaionsCardWithIconType {
   id: string | number;
   icon: string;
   title: string;
@@ -6,4 +6,4 @@ export type ZaionsCardWithIconType = {
   btnText: string;
   routeLink: string;
   XlSize?: string | number;
-};
+}

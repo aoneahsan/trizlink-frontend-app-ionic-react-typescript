@@ -8,9 +8,9 @@ import { atom } from 'recoil';
 import { ZaionsJobsData } from '@/data/Company/Careers/AvalableJobs.data';
 
 // Types
-import { ZaionsJobsType } from '@/types/Company/CareersPage/AvalableJobs.type';
+import { type ZaionsJobsType } from '@/types/Company/CareersPage/AvalableJobs.type';
 
 export const ZaionsJobsState = atom<ZaionsJobsType[]>({
   key: 'ZaionsJobsState_key',
-  default: ZaionsJobsData,
+  default: ZaionsJobsData
 });

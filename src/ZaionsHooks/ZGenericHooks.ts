@@ -1,4 +1,4 @@
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import { type permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import { currentLoggedInUserRoleAndPermissionsRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 import {
   useZIonToastSuccess,
@@ -13,8 +13,8 @@ import {
   showSuccessNotification
 } from '@/utils/notification';
 import {
-  useZMediaQueryScaleReturnInterface,
-  zNotificationInterface,
+  type useZMediaQueryScaleReturnInterface,
+  type zNotificationInterface,
   zNotificationSlotEnum
 } from '@/types/CustomHooks/zgeneric-hooks.type';
 import { useMediaQuery } from 'react-responsive';
@@ -27,14 +27,20 @@ import {
 } from '@/utils/constants';
 import { useLocation } from 'react-router';
 import {
-  emptyVoidReturnFunction,
+  emptyVoidReturnFunctionPromise,
   ZGetCurrentRoute,
   zGetRoutePermissions
 } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useRecoilValue } from 'recoil';
 
-export const useZNotification = () => {
+export const useZNotification = (): {
+  presentZNotification: ({
+    message,
+    notificationType,
+    slot
+  }: zNotificationInterface) => Promise<void>;
+} => {
   const { presentZIonToastDanger } = useZIonToastDanger();
   const { presentZIonToastSuccess } = useZIonToastSuccess();
 
@@ -45,36 +51,40 @@ export const useZNotification = () => {
     message,
     notificationType,
     slot
-  }: zNotificationInterface) => {
+  }: zNotificationInterface): Promise<void> => {
     try {
       switch (notificationType) {
         case notificationTypeEnum.toast:
           if (slot === zNotificationSlotEnum.error) {
-            return await presentZIonToastDanger(message);
+            await presentZIonToastDanger(message);
+            return;
           } else {
-            return await presentZIonToastSuccess(message);
+            await presentZIonToastSuccess(message);
+            return;
           }
 
         case notificationTypeEnum.sideNotification:
           if (slot === zNotificationSlotEnum.error) {
-            return showErrorNotification(message);
+            showErrorNotification(message);
+            return;
           } else {
-            return showSuccessNotification(message);
+            showSuccessNotification(message);
+            return;
           }
 
         case notificationTypeEnum.alert:
           if (slot === zNotificationSlotEnum.success) {
-            return await presentZIonSuccessAlert();
+            await presentZIonSuccessAlert();
           } else if (slot === zNotificationSlotEnum.error) {
-            return await presentZIonErrorAlert();
+            await presentZIonErrorAlert();
           }
           break;
 
         default:
           if (slot === zNotificationSlotEnum.error) {
-            return await presentZIonToastDanger(message);
+            await presentZIonToastDanger(message);
           } else {
-            return await presentZIonToastSuccess(message);
+            await presentZIonToastSuccess(message);
           }
       }
     } catch (error) {
@@ -97,27 +107,27 @@ export const useZMediaQueryScale = (): useZMediaQueryScaleReturnInterface => {
 
   // Check if the screen width is at 1300px scale
   const is1300pxScale = useMediaQuery({
-    query: `(min-width: 1300px)`
+    query: '(min-width: 1300px)'
   });
 
   // Check if the screen width is at 1250px scale
   const is1250pxScale = useMediaQuery({
-    query: `(min-width: 1250px)`
+    query: '(min-width: 1250px)'
   });
 
   // Check if the screen width is at 1200px scale
   const is1200pxScale = useMediaQuery({
-    query: `(min-width: 1200px)`
+    query: '(min-width: 1200px)'
   });
 
   // Check if the screen width is at 1150px scale
   const is1150pxScale = useMediaQuery({
-    query: `(min-width: 1150px)`
+    query: '(min-width: 1150px)'
   });
 
   // Check if the screen width is at 1100px scale
   const is1100pxScale = useMediaQuery({
-    query: `(min-width: 1100px)`
+    query: '(min-width: 1100px)'
   });
 
   // Check if the screen width is at large (lg) scale
@@ -162,16 +172,19 @@ export const useZMediaQueryScale = (): useZMediaQueryScaleReturnInterface => {
  * @returns An object containing the permissions checker function.
  */
 export const useZPermissionChecker = (): {
-  permissionsChecker: () => Promise<{
-    hasAllPermissions: boolean;
-    permissions: permissionsEnum[];
-  }> | void;
+  permissionsChecker: () =>
+    | Promise<{
+        hasAllPermissions: boolean;
+        permissions: permissionsEnum[];
+      }>
+    | Promise<void>;
 } => {
   try {
     // for getting pathname from location.
-    const __location = useLocation();
+    const _location = useLocation();
 
     // getting current users permissions.
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const currentUserAllPermissions = useRecoilValue(
       currentLoggedInUserRoleAndPermissionsRStateAtom
     );
@@ -191,39 +204,40 @@ export const useZPermissionChecker = (): {
         let permissions: permissionsEnum[] = [];
 
         //
-        const result = await new Promise<boolean>((res, _) => {
+        // eslint-disable-next-line promise/param-names
+        const result = await new Promise<boolean>(res => {
           /**
            * A boolean indicating if the user has all the required permissions for the current route.
            */
           let _hasAllPermissions = false;
 
-          if (__location.pathname) {
+          if (_location.pathname !== undefined) {
             /**
              * getting current route from url and checking if exist in ZaionsRoutes then return that route from ZaionsRoutes
              */
-            const __currentRoute = ZGetCurrentRoute({
-              _currentUrl: __location.pathname,
+            const _currentRoute = ZGetCurrentRoute({
+              _currentUrl: _location.pathname,
               _routesObj: ZaionsRoutes
             });
 
-            if (__currentRoute) {
+            if (_currentRoute !== undefined) {
               // getting permissions of that routes.
-              const __permissions = zGetRoutePermissions({
-                _currentRoute: __currentRoute
+              const _permissions = zGetRoutePermissions({
+                _currentRoute
               });
 
-              if (__permissions && __permissions.length) {
-                const userPermissions = currentUserAllPermissions?.permissions
-                  ?.length
-                  ? [...currentUserAllPermissions.permissions]
-                  : [];
+              if (_permissions !== undefined && _permissions?.length > 0) {
+                const userPermissions =
+                  currentUserAllPermissions?.permissions?.length !== null
+                    ? [...(currentUserAllPermissions?.permissions ?? [])]
+                    : [];
 
                 // checking if users has all the permission of that to asses it.
-                const haveRequiredPermission = __permissions.every(el =>
+                const haveRequiredPermission = _permissions.every(el =>
                   userPermissions?.includes(el)
                 );
 
-                permissions = [...__permissions];
+                permissions = [..._permissions];
                 _hasAllPermissions = haveRequiredPermission;
               }
             } else {
@@ -258,7 +272,7 @@ export const useZPermissionChecker = (): {
       alert(error.message);
     }
     reportCustomError(error);
-    return { permissionsChecker: emptyVoidReturnFunction };
+    return { permissionsChecker: emptyVoidReturnFunctionPromise };
     // return { hasAllPermissions: false, permissions: [] };
   }
 };

@@ -1,16 +1,18 @@
 // Core Imports
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonItemDivider } from '@ionic/react';
 
 // Type
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
+import {
+  type ZIonColorType,
+  type ZIonModeType
+} from '@/types/zaionsAppSettings.type';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
-import { PRODUCT_NAME } from '@/utils/constants';
 
-type ZIonItemDividerType = {
+interface ZIonItemDividerType {
   children?: ReactNode;
   color?: ZIonColorType;
   mode?: ZIonModeType;
@@ -19,12 +21,12 @@ type ZIonItemDividerType = {
   testinglistselector?: string;
   sticky?: boolean;
   onClick?: () => void;
-  style?: {
-    [key: string]: unknown;
-  };
-};
+  style?: Record<string, unknown>;
+}
 
-const ZIonItemDivider = (props: ZIonItemDividerType) => {
+const ZIonItemDivider: React.FC<ZIonItemDividerType> = (
+  props: ZIonItemDividerType
+) => {
   const _testinglistselector =
     props.testinglistselector !== undefined
       ? {

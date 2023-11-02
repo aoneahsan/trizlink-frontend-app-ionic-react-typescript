@@ -1,4 +1,4 @@
-export type Zaions4By4GridSysType = {
+export interface Zaions4By4GridSysType {
   id?: string | number;
   image: string;
   title: string;
@@ -7,4 +7,4 @@ export type Zaions4By4GridSysType = {
   text?: string;
   className?: string;
   size?: string;
-};
+}

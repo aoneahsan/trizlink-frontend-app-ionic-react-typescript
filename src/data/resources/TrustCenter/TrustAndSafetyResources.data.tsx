@@ -1,5 +1,5 @@
 // Types
-import { ZaionsCardWithIconType } from '@/types/ZaionsCardWithIcon.type';
+import { type ZaionsCardWithIconType } from '@/types/ZaionsCardWithIcon.type';
 
 // Images
 import { Checkmark } from '@/assets/images';
@@ -12,7 +12,7 @@ export const TrustAndSafetyResourcesData: ZaionsCardWithIconType[] = [
     title: 'Privacy Policy',
     text: 'Understand our policies and procedures around your personal data.',
     btnText: 'View Our Privacy Policy →',
-    routeLink: '/',
+    routeLink: '/'
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ export const TrustAndSafetyResourcesData: ZaionsCardWithIconType[] = [
     title: 'Terms of Service',
     text: 'Our Terms of Service governs your access to, and use of, our platform.',
     btnText: 'View Our ToS →',
-    routeLink: '/',
+    routeLink: '/'
   },
   {
     id: 3,
@@ -28,7 +28,7 @@ export const TrustAndSafetyResourcesData: ZaionsCardWithIconType[] = [
     title: 'Acceptable Use Policy',
     text: 'Our AUP establishes a code of conduct to help keep you safe from abuse.',
     btnText: 'View Our AUP →',
-    routeLink: '/',
+    routeLink: '/'
   },
   {
     id: 4,
@@ -36,7 +36,7 @@ export const TrustAndSafetyResourcesData: ZaionsCardWithIconType[] = [
     title: 'Report Abuse',
     text: 'If you’ve encountered abusive behavior that violates our policies, please let us know.',
     btnText: 'File a Report →',
-    routeLink: '/',
+    routeLink: '/'
   },
   {
     id: 5,
@@ -44,7 +44,7 @@ export const TrustAndSafetyResourcesData: ZaionsCardWithIconType[] = [
     title: 'Appeal a Decision',
     text: 'We do our best, but we’re not perfect. If you feel we’ve blocked a link in error, please let us know',
     btnText: 'File an Appeal →',
-    routeLink: '/',
+    routeLink: '/'
   },
   {
     id: 6,
@@ -52,6 +52,6 @@ export const TrustAndSafetyResourcesData: ZaionsCardWithIconType[] = [
     title: 'Preview Links',
     text: `Do you want to see the destination of a link before you click? Just add a ‘+’ to your ${PRODUCT_NAME} link.`,
     btnText: 'Learn More →',
-    routeLink: '/',
-  },
+    routeLink: '/'
+  }
 ];

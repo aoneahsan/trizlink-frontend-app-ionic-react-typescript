@@ -1,4 +1,4 @@
-import { FrbAnalyticsRStateType } from '@/types/firebaseTypes/frbAnalytics.type';
+import { type FrbAnalyticsRStateType } from '@/types/firebaseTypes/frbAnalytics.type';
 import { reportCustomError } from '@/utils/customErrorType';
 import {
   initializeAnalytics,
@@ -11,13 +11,13 @@ import {
   setUserProperties,
   settings
 } from 'firebase/analytics';
-import { FirebaseApp } from 'firebase/app';
-import { SetterOrUpdater } from 'recoil';
+import { type FirebaseApp } from 'firebase/app';
+import { type SetterOrUpdater } from 'recoil';
 
 export const setupFrbAnalytics = async (
   _frbApp: FirebaseApp,
   setFrbAnalyticsState: SetterOrUpdater<FrbAnalyticsRStateType>
-) => {
+): Promise<void> => {
   try {
     // checks if we are set to call initializeAnalytics
     const _isSupported = await isSupportedFrbAnalytics();

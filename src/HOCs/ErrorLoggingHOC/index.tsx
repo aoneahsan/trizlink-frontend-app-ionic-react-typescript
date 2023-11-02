@@ -2,8 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { init as sentryReactInit, BrowserTracing } from '@sentry/react';
 import { ENVS } from '@/utils/envKeys';
 
@@ -21,7 +20,7 @@ interface IErrorLoggingHOC {
 const ErrorLoggingHOC: React.FC<IErrorLoggingHOC> = ({ children }) => {
   useEffect(() => {
     const _sentryDNS = ENVS.sentryErrorLoggingDNS;
-    if (_sentryDNS) {
+    if (_sentryDNS !== undefined || _sentryDNS !== null) {
       sentryReactInit({
         dsn: _sentryDNS,
         dist: '1',

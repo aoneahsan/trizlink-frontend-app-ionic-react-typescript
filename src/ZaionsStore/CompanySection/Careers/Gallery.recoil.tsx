@@ -8,9 +8,9 @@ import { atom } from 'recoil';
 import { ZaionsCareersPageGalleryData } from '@/data/Company/Careers/Gallery.data';
 
 // Types
-import { ZaionsGalleryType } from '@/types/Company/CareersPage/Gallery.type';
+import { type ZaionsGalleryType } from '@/types/Company/CareersPage/Gallery.type';
 
 export const ZaionsCareersPageGalleryState = atom<ZaionsGalleryType[]>({
   key: 'ZaionsCareersPageGalleryState_key',
-  default: ZaionsCareersPageGalleryData,
+  default: ZaionsCareersPageGalleryData
 });

@@ -1,6 +1,6 @@
-import { UserAccountType } from '@/types/UserAccount/index.type';
-import { ReactNode } from 'react';
-import { ZTeamMemberInvitationEnum } from '../index.type';
+import { type UserAccountType } from '@/types/UserAccount/index.type';
+import { type ReactNode } from 'react';
+import { type ZTeamMemberInvitationEnum } from '../index.type';
 
 // Enum's
 export enum workspaceSettingsModalTabEnum {
@@ -224,10 +224,10 @@ export interface PageInfoCardSingleItemType {
   icon: string;
   heading: string;
   subheading?: string;
-  listItems?: {
+  listItems?: Array<{
     icon: string;
     text: string;
-  }[];
+  }>;
 }
 
 // Types

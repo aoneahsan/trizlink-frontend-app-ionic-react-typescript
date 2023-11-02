@@ -1,19 +1,18 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonRouterLink } from '@ionic/react';
 import {
-  ZIonColorType,
-  ZIonRouterDirection,
-  ZIonTargetType
+  type ZIonColorType,
+  type ZIonRouterDirection,
+  type ZIonTargetType
 } from '@/types/zaionsAppSettings.type';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 // Type
-type ZIonRouterLinkType = {
+interface ZIonRouterLinkType {
   children: ReactNode;
   className?: string;
   color?: ZIonColorType;
@@ -27,9 +26,11 @@ type ZIonRouterLinkType = {
   //
   testingselector?: string;
   testinglistselector?: string;
-};
+}
 
-const ZIonRouterLink = (props: ZIonRouterLinkType) => {
+const ZIonRouterLink: React.FC<ZIonRouterLinkType> = (
+  props: ZIonRouterLinkType
+) => {
   const _testinglistselector =
     props.testinglistselector !== undefined
       ? {

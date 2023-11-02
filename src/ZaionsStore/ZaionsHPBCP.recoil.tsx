@@ -7,9 +7,9 @@ import { atom } from 'recoil';
 import { HPBCData } from '@/data/HPBCPData';
 
 // Custom Imports
-import { ZaionsHpCPDataType } from '@/types/ZaionsHPBCPType';
+import { type ZaionsHpCPDataType } from '@/types/ZaionsHPBCPType';
 
 export const ZaionsHpCPData = atom<ZaionsHpCPDataType[]>({
   key: 'ZaionsHpCPData_Key',
-  default: HPBCData,
+  default: HPBCData
 });

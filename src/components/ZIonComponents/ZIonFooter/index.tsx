@@ -1,20 +1,20 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonFooter } from '@ionic/react';
-import { ZIonModeType } from '@/types/zaionsAppSettings.type';
+import { type ZIonModeType } from '@/types/zaionsAppSettings.type';
 
 // Type
-type ZIonFooterType = {
+interface ZIonFooterType {
   children: ReactNode;
   className?: string;
   collapse?: 'fade';
   mode?: ZIonModeType;
   translucent?: boolean;
-};
+}
 
-const ZIonFooter = (props: ZIonFooterType) => {
+const ZIonFooter: React.FC<ZIonFooterType> = (props: ZIonFooterType) => {
   return <IonFooter {...props}>{props.children}</IonFooter>;
 };
 

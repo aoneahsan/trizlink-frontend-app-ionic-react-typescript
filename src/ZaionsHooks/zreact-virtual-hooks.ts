@@ -13,7 +13,7 @@ export const useZRVirtualizer = ({
   _scrollMargin?: number;
   _horizontal?: boolean;
   _estimateSize?: (index: number) => number;
-}) => {
+}): void => {
   try {
     // const parentRef = React.useRef(null);
     // const rowVirtualizer = useVirtualizer({

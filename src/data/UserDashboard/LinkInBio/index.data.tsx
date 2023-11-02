@@ -4,7 +4,7 @@ import CONSTANTS from '@/utils/constants';
 import {
   LinkInBioButtonTypeEnum,
   LinkInBioThemeBackgroundEnum,
-  LinkInBioThemeFontEnum,
+  LinkInBioThemeFontEnum
 } from '@/types/AdminPanel/linkInBioType';
 
 export const ZaionsLinkInBioDefaultData = {
@@ -12,15 +12,15 @@ export const ZaionsLinkInBioDefaultData = {
     background: {
       bgType: LinkInBioThemeBackgroundEnum.solidColor,
       bgSolidColor: CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BG_COLOR,
-      enableBgImage: false,
+      enableBgImage: false
     },
     button: {
       background: {
         bgType: LinkInBioThemeBackgroundEnum.solidColor,
-        bgSolidColor: CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_COLOR,
+        bgSolidColor: CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_COLOR
       },
-      type: LinkInBioButtonTypeEnum.inlineSquare,
+      type: LinkInBioButtonTypeEnum.inlineSquare
     },
-    font: LinkInBioThemeFontEnum.lato,
-  },
+    font: LinkInBioThemeFontEnum.lato
+  }
 };

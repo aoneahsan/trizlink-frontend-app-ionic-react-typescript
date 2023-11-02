@@ -20,7 +20,7 @@ const TestingReactDropzone: React.FC = () => {
     _authenticated: true
   });
 
-  const uploadFileToBackend = async (file: File) => {
+  const uploadFileToBackend = async (file: File): Promise<void> => {
     const formData = new FormData();
     formData.append('file', file);
     const result = await uploadSingleFile(formData);
@@ -28,7 +28,7 @@ const TestingReactDropzone: React.FC = () => {
     alert('single file upload done');
   };
 
-  const uploadFilesToBackend = async (files: File[]) => {
+  const uploadFilesToBackend = async (files: File[]): Promise<void> => {
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -138,7 +138,8 @@ const TestingReactDropzone: React.FC = () => {
       <input
         type='file'
         onChange={event => {
-          event.target.files && event.target.files[0];
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          event.target.files?.[0];
         }}
       />
       <ZUploadInput />

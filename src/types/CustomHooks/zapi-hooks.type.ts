@@ -1,11 +1,14 @@
-import { apiTypeToValidateEnum, notificationTypeEnum } from '@/utils/enums';
+import {
+  type apiTypeToValidateEnum,
+  type notificationTypeEnum
+} from '@/utils/enums';
 
 /**
  * Enums
  */
 export enum zAxiosApiRequestContentType {
   Json = 'application/json',
-  FormData = 'multipart/form-data',
+  FormData = 'multipart/form-data'
 }
 
 /**

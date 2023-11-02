@@ -1,68 +1,68 @@
-import { ShortLinkType } from './AdminPanel/linksType/index';
+import { type ShortLinkType } from './AdminPanel/linksType/index';
 import {
-	EmbedWidgetsType,
-	PixelAccountType,
-	UTMTagTemplateType,
+  type EmbedWidgetsType,
+  type PixelAccountType,
+  type UTMTagTemplateType
 } from '@/types/AdminPanel/linksType';
 import {
-	AuthTokenResponseType,
-	UserAccountType,
+  type AuthTokenResponseType,
+  type UserAccountType
 } from './UserAccount/index.type';
-import { ZGenericObject } from './zaionsAppSettings.type';
-import { UTMTagInfoInterface } from './AdminPanel/index.type';
+import { type ZGenericObject } from './zaionsAppSettings.type';
+import { type UTMTagInfoInterface } from './AdminPanel/index.type';
 
 // Enum's
 export enum ZIonModalActionEnum {
-	success = 'success',
+  success = 'success'
 }
 
-export type UserAuthData = {
-	data: {
-		user: UserAccountType;
-		token: AuthTokenResponseType;
-	};
-	errors: ZGenericObject;
-	message: string;
-	success: boolean;
-	status: number;
-};
+export interface UserAuthData {
+  data: {
+    user: UserAccountType;
+    token: AuthTokenResponseType;
+  };
+  errors: ZGenericObject;
+  message: string;
+  success: boolean;
+  status: number;
+}
 
-export type AxiosRequestResponseType = {
-	data:
-		| UserAuthData
-		| AuthTokenResponseType
-		| ShortLinkType
-		| UserAccountType[]
-		| PixelAccountType[]
-		| UTMTagTemplateType[]
-		| EmbedWidgetsType[]
-		| UTMTagInfoInterface[]
-		| ShortLinkType[];
-};
+export interface AxiosRequestResponseType {
+  data:
+    | UserAuthData
+    | AuthTokenResponseType
+    | ShortLinkType
+    | UserAccountType[]
+    | PixelAccountType[]
+    | UTMTagTemplateType[]
+    | EmbedWidgetsType[]
+    | UTMTagInfoInterface[]
+    | ShortLinkType[];
+}
 
-export type ZLinkMutateApiType<T> = {
-	data: { item: T };
-	errors: ZGenericObject;
-	message: string;
-	status: number;
-	success: boolean;
-};
+export interface ZLinkMutateApiType<T> {
+  data: { item: T };
+  errors: ZGenericObject;
+  message: string;
+  status: number;
+  success: boolean;
+}
 
-export type ZLinkGetApiType<T> = {
-	data: { items: T };
-	errors: ZGenericObject;
-	message: string;
-	status: number;
-	success: boolean;
-};
+export interface ZLinkGetApiType<T> {
+  data: { items: T };
+  errors: ZGenericObject;
+  message: string;
+  status: number;
+  success: boolean;
+}
 
 export interface ZUIAvatarApiDefaultParamsInterface {
-	name?: string;
-	rounded?: string;
-	bold?: string;
-	size?: string;
-	background?: string;
-	color?: string;
-	fontSize?: string;
-	length?: string;
+  name?: string;
+  rounded?: string;
+  bold?: string;
+  size?: string;
+  background?: string;
+  color?: string;
+  fontSize?: string;
+  length?: string;
 }

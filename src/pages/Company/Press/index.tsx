@@ -21,7 +21,8 @@ import {
   ZIonCard,
   ZIonCardHeader,
   ZIonCardContent,
-  ZIonIcon
+  ZIonIcon,
+  ZIonButton
 } from '@/components/ZIonComponents';
 
 // Recoil State
@@ -29,16 +30,16 @@ import { ZaionsPressState } from '@/ZaionsStore/CompanySection/Press/Press.recoi
 import { ZaionsPressProductImagesState } from '@/ZaionsStore/CompanySection/Press/ProductImages.recoil';
 
 // Types
-import { ZaionsPressType } from '@/types/Company/PressPage/Press.type';
-import { ZaionsPressProductImagesType } from '@/types/Company/PressPage/ProductImages.type';
+import { type ZaionsPressType } from '@/types/Company/PressPage/Press.type';
+import { type ZaionsPressProductImagesType } from '@/types/Company/PressPage/ProductImages.type';
 
-// Global Contant
+// Global Contact
 import { BRACKPOINT_MD, PRODUCT_NAME } from '@/utils/constants';
 
 // Images
 import { ProductFavicon, ProductLogo } from '@/assets/images';
 import { ProductImagesZip, ProductLogoEsp } from '@/assets/others';
-import { ZIonButton } from '@/components/ZIonComponents';
+
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 const ZaionsPress: React.FC = () => {
@@ -55,8 +56,8 @@ const ZaionsPress: React.FC = () => {
       {/* Content */}
       <ZIonContent>
         <ZaionsTopMenu />
-        <ZIonGrid className='zaions__bg_gray pt-5 pb-5'>
-          <ZIonRow className='my-5 pt-5 pb-3'>
+        <ZIonGrid className='pt-5 pb-5 zaions__bg_gray'>
+          <ZIonRow className='pt-5 pb-3 my-5'>
             <ZIonCol></ZIonCol>
             <ZIonCol
               sizeXl='10'
@@ -133,7 +134,7 @@ const ZaionsPress: React.FC = () => {
           </ZIonRow>
         </ZIonGrid>
 
-        <ZIonGrid className='pt-5 mt-5 zaions__bg_gray pb-5'>
+        <ZIonGrid className='pt-5 pb-5 mt-5 zaions__bg_gray'>
           <ZIonRow>
             <ZIonCol
               sizeXl='10'
@@ -143,7 +144,7 @@ const ZaionsPress: React.FC = () => {
               sizeXs='12'
               className='mx-auto'>
               <ZIonText>
-                <h4 className='font-bold text-lg'>Media Kit</h4>
+                <h4 className='text-lg font-bold'>Media Kit</h4>
               </ZIonText>
               <ZIonText>
                 <h2 className='font-extrabold'>Brand Assets</h2>
@@ -156,7 +157,7 @@ const ZaionsPress: React.FC = () => {
               sizeMd='11'
               sizeSm='12'
               sizeXs='12'
-              className='mx-auto flex'>
+              className='flex mx-auto'>
               <ZIonRow className='ion-justify-content-center'>
                 <ZIonCol
                   sizeXl='4'
@@ -170,11 +171,11 @@ const ZaionsPress: React.FC = () => {
                     </ZIonCardHeader>
                     <ZIonCardContent>
                       <ZIonText
-                        className='font-extrabold text-lg'
+                        className='text-lg font-extrabold'
                         color={'dark'}>
                         {PRODUCT_NAME} Logo
                       </ZIonText>
-                      <div className='mt-4 flex ion-justify-content-between'>
+                      <div className='flex mt-4 ion-justify-content-between'>
                         <ZIonButton
                           fill='clear'
                           className='zaions__tertiary_btn ion-text-capitalize'
@@ -200,11 +201,11 @@ const ZaionsPress: React.FC = () => {
                     </ZIonCardHeader>
                     <ZIonCardContent>
                       <ZIonText
-                        className='font-extrabold text-lg'
+                        className='text-lg font-extrabold'
                         color={'dark'}>
                         {PRODUCT_NAME} Logo
                       </ZIonText>
-                      <div className='mt-4 flex ion-justify-content-between'>
+                      <div className='flex mt-4 ion-justify-content-between'>
                         <ZIonButton
                           fill='clear'
                           className='zaions__tertiary_btn ion-text-capitalize'
@@ -229,7 +230,7 @@ const ZaionsPress: React.FC = () => {
 
           <ZIonRow className='mt-5'>
             <ZIonCol
-              className='mx-auto flex ion-justify-content-between'
+              className='flex mx-auto ion-justify-content-between'
               sizeXl='10'>
               <ZIonText>
                 {' '}
@@ -274,11 +275,11 @@ const ZaionsPress: React.FC = () => {
                         </ZIonCardHeader>
                         <ZIonCardContent className='pe-0'>
                           <ZIonText
-                            className='font-extrabold text-base'
+                            className='text-base font-extrabold'
                             color={'dark'}>
                             {el.title}
                           </ZIonText>
-                          <div className='mt-4 flex ion-justify-content-between'>
+                          <div className='flex mt-4 ion-justify-content-between'>
                             <ZIonButton
                               fill='clear'
                               className='zaions__tertiary_btn ion-text-capitalize'

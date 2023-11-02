@@ -1,20 +1,19 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
-import { IonSelect, SelectChangeEventDetail } from '@ionic/react';
-import { IonSelectCustomEvent } from '@ionic/core/dist/types/components';
+import { IonSelect, type SelectChangeEventDetail } from '@ionic/react';
+import { type IonSelectCustomEvent } from '@ionic/core/dist/types/components';
 
 // Type
 import {
-  ZIonColorType,
-  ZIonModeType,
-  ZIonPlacementType
+  type ZIonColorType,
+  type ZIonModeType,
+  type ZIonPlacementType
 } from '@/types/zaionsAppSettings.type';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
-type ZIonSelectType = {
+interface ZIonSelectType {
   children: ReactNode;
   className?: string;
   cancelText?: string;
@@ -33,9 +32,7 @@ type ZIonSelectType = {
   value?: string | unknown;
   defaultValue?: string | number | readonly string[];
   color?: ZIonColorType;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   minHeight?: 'auto' | string;
   testingselector?: string;
   testinglistselector?: string;
@@ -54,15 +51,15 @@ type ZIonSelectType = {
   errorText?: string;
   toggleIcon?: string;
   expandedIcon?: string;
-};
+}
 
-const ZIonSelect = (props: ZIonSelectType) => {
+const ZIonSelect: React.FC<ZIonSelectType> = (props: ZIonSelectType) => {
   const compStyle =
-    props.style && props.minHeight
+    props.style !== undefined && props.minHeight !== undefined
       ? { ...props.style, minHeight: props.minHeight }
-      : props.style && !props.minHeight
+      : props.style !== undefined && props.minHeight === undefined
       ? { ...props.style }
-      : !props.style && props.minHeight
+      : props.style === undefined && props.minHeight !== undefined
       ? { minHeight: props.minHeight }
       : {};
 

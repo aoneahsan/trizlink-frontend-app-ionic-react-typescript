@@ -1,12 +1,12 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonTabs } from '@ionic/react';
-import { IonTabsCustomEvent } from '@ionic/core/dist/types/components';
+import { type IonTabsCustomEvent } from '@ionic/core/dist/types/components';
 
 // Type
-type ZIonTabsType = {
+interface ZIonTabsType {
   children?: ReactNode;
   onIonTabsDidChange?: (
     event: IonTabsCustomEvent<{
@@ -18,9 +18,9 @@ type ZIonTabsType = {
       tab: string;
     }>
   ) => void;
-};
+}
 
-const ZIonTabs = (props: ZIonTabsType) => {
+const ZIonTabs: React.FC<ZIonTabsType> = (props: ZIonTabsType) => {
   return <IonTabs {...props}>{props.children}</IonTabs>;
 };
 

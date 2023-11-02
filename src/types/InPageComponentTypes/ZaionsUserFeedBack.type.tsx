@@ -1,4 +1,4 @@
-export type ZaionsUserFeedBackCarouselType = {
+export interface ZaionsUserFeedBackCarouselType {
   activeIndex: number;
   controls: boolean;
   fade: boolean;
@@ -8,4 +8,4 @@ export type ZaionsUserFeedBackCarouselType = {
   touch: boolean;
   totalItemCount: number;
   lastItemIndex: number;
-};
+}

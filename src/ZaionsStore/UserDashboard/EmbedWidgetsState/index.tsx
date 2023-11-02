@@ -3,10 +3,13 @@ import { atom, selector } from 'recoil';
 
 // Custom
 // Type
-import { EmbedWidgetsType, TimeFilterEnum } from '@/types/AdminPanel/linksType';
+import {
+  type EmbedWidgetsType,
+  TimeFilterEnum
+} from '@/types/AdminPanel/linksType';
 // Data
 import { EmbedWidgetsData } from '@/data/UserDashboard/EmbedWidgets/index.data';
-import { IFilterOptions } from '@/types/AdminPanel/index.type';
+import { type IFilterOptions } from '@/types/AdminPanel/index.type';
 import CONSTANTS from '@/utils/constants';
 
 export const EmbedWidgetsRStateAtom = atom<EmbedWidgetsType[]>({
@@ -36,9 +39,9 @@ export const FilteredUtmTagsDataRStateSelector = selector({
     let _filterEmbedWidgetsData: EmbedWidgetsType[] | undefined =
       embedWidgetRStateAtom;
 
-    if (embedWidgetRStateAtom?.length) {
+    if (embedWidgetRStateAtom?.length !== 0) {
       if (
-        _filterOptions.timeFilter.daysToSubtract &&
+        _filterOptions.timeFilter.daysToSubtract !== undefined &&
         _filterOptions.timeFilter.daysToSubtract !== TimeFilterEnum.allTime
       ) {
         let endDate = new Date(

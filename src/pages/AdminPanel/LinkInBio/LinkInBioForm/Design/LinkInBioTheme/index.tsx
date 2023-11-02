@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense } from 'react';
 
 /**
  * Packages Imports go down
@@ -29,16 +29,6 @@ import {
   ZIonTitle
 } from '@/components/ZIonComponents';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
-const ZaionsRSelect = lazy(
-  () => import('@/components/CustomComponents/ZaionsRSelect')
-);
-const ZDragAndDrop = lazy(
-  () => import('@/components/CustomComponents/ZDragAndDrop')
-);
-const ZRCSwitch = lazy(() => import('@/components/CustomComponents/ZRCSwitch'));
-const ZaionsColorPiker = lazy(
-  () => import('@/components/InPageComponents/ZaionsColorPiker')
-);
 
 /**
  * Global Constants Imports go down
@@ -57,16 +47,16 @@ import {
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  LinkInBioBgGradientColorsInterface,
+  type LinkInBioBgGradientColorsInterface,
   LinkInBioButtonTypeEnum,
-  LinkInBioPredefinedThemeType,
+  type LinkInBioPredefinedThemeType,
   LinkInBioThemeBackgroundEnum,
-  LinkInBioThemeBackgroundType,
-  LinkInBioType
+  type LinkInBioThemeBackgroundType,
+  type LinkInBioType
 } from '@/types/AdminPanel/linkInBioType';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 /**
  * Recoil State Imports go down
@@ -84,6 +74,16 @@ import { LinkInBioFontFamilyRState } from '@/ZaionsStore/UserDashboard/LinkInBio
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import classes from '../styles.module.css';
+const ZaionsRSelect = lazy(
+  () => import('@/components/CustomComponents/ZaionsRSelect')
+);
+const ZDragAndDrop = lazy(
+  () => import('@/components/CustomComponents/ZDragAndDrop')
+);
+const ZRCSwitch = lazy(() => import('@/components/CustomComponents/ZRCSwitch'));
+const ZaionsColorPiker = lazy(
+  () => import('@/components/InPageComponents/ZaionsColorPiker')
+);
 
 /**
  * Component props type go down
@@ -103,7 +103,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
   const linkInBioFontFamilyState = useRecoilValue(LinkInBioFontFamilyRState);
 
   // const [linkInBioPredefinedThemesState, setLinkInBioPredefinedThemesState] =
-  // 	useRecoilState(LinkInBioPredefinedThemeRState);
+  // useRecoilState(LinkInBioPredefinedThemeRState);
   // #endregion
 
   // current Link-in-bio id.
@@ -140,7 +140,9 @@ const ZLinkInBioThemeSection: React.FC = () => {
         CONSTANTS.RouteParams.linkInBio.linkInBioId,
         CONSTANTS.RouteParams.workspace.workspaceId
       ],
-      _shouldFetchWhenIdPassed: !linkInBioId ? true : false,
+      _shouldFetchWhenIdPassed: !(
+        linkInBioId !== undefined && linkInBioId?.trim()?.length > 0
+      ),
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
   // #endregion
@@ -191,7 +193,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                     const _bgGradient =
                       _bg.bgGradientColors as LinkInBioBgGradientColorsInterface;
 
-                    setFieldValue(
+                    void setFieldValue(
                       'theme.background',
                       {
                         bgType: _bg?.bgType,
@@ -199,7 +201,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                         bgGradientColors: {
                           startColor: _bgGradient?.startColor,
                           endColor: _bgGradient?.endColor,
-                          direction: _bgGradient?.direction || 0
+                          direction: _bgGradient?.direction ?? 0
                         },
                         bgImageUrl: _bg?.bgImageUrl,
                         enableBgImage: _bg?.enableBgImage
@@ -254,6 +256,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
               showSkeleton={isZFetching}
               name='theme.background.bgSolidColor'
               value={values.theme.background.bgSolidColor as string}
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
               setFieldValueFn={setFieldValue}
               testingselector={
                 CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
@@ -270,6 +273,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
               <ZaionsColorPiker
                 name='theme.background.bgGradientColors.startColor'
                 showSkeleton={isZFetching}
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 setFieldValueFn={setFieldValue}
                 value={
                   values?.theme.background?.bgGradientColors
@@ -297,7 +301,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                       ?.direction as string) +
                     +CONSTANTS.LINK_In_BIO.FORM.DIRECTION_PRE_CLICKED;
                   _newDirection = _newDirection >= 359 ? 0 : _newDirection;
-                  setFieldValue(
+                  void setFieldValue(
                     'theme.background.bgGradientColors.direction',
                     _newDirection,
                     false
@@ -317,6 +321,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
               <ZaionsColorPiker
                 name='theme.background.bgGradientColors.endColor'
                 showSkeleton={isZFetching}
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 setFieldValueFn={setFieldValue}
                 showCloseIcon={true}
                 testingselector={
@@ -328,7 +333,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                     ?.endColor as string
                 }
                 closeIconOnChangeFn={() => {
-                  setFieldValue(
+                  void setFieldValue(
                     'theme.background.bgType',
                     LinkInBioThemeBackgroundEnum.solidColor,
                     false
@@ -349,7 +354,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   .addGradientBtn
               }
               onClick={() => {
-                setFieldValue(
+                void setFieldValue(
                   'theme.background.bgType',
                   LinkInBioThemeBackgroundEnum.gradient,
                   false
@@ -392,6 +397,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
               showSkeleton={isZFetching}
               name='theme.button.background.bgSolidColor'
               value={values?.theme?.button?.background?.bgSolidColor as string}
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
               setFieldValueFn={setFieldValue}
               testingselector={
                 CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
@@ -407,6 +413,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
               {/* Start color */}
               <ZaionsColorPiker
                 name='theme.button.background.bgGradientColors.startColor'
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 setFieldValueFn={setFieldValue}
                 showSkeleton={isZFetching}
                 testingselector={
@@ -435,7 +442,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                       ?.direction as string) +
                     +CONSTANTS.LINK_In_BIO.FORM.DIRECTION_PRE_CLICKED;
                   _newDirection = _newDirection >= 359 ? 0 : _newDirection;
-                  setFieldValue(
+                  void setFieldValue(
                     'theme.button.background.bgGradientColors.direction',
                     _newDirection,
                     false
@@ -454,6 +461,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
               {/* end color */}
               <ZaionsColorPiker
                 name='theme.button.background.bgGradientColors.endColor'
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 setFieldValueFn={setFieldValue}
                 showCloseIcon={true}
                 showSkeleton={isZFetching}
@@ -466,7 +474,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                     .button.gColors.endColorInput
                 }
                 closeIconOnChangeFn={() => {
-                  setFieldValue(
+                  void setFieldValue(
                     'theme.button.background.bgType',
                     LinkInBioThemeBackgroundEnum.solidColor,
                     false
@@ -487,7 +495,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   .button.addGradientBtn
               }
               onClick={() => {
-                setFieldValue(
+                void setFieldValue(
                   'theme.button.background.bgType',
                   LinkInBioThemeBackgroundEnum.gradient,
                   false
@@ -528,7 +536,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   .button.btnType.inlineSquare
               }
               onClick={() => {
-                setFieldValue(
+                void setFieldValue(
                   'theme.button.type',
                   LinkInBioButtonTypeEnum.inlineSquare,
                   false
@@ -553,7 +561,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   .button.btnType.inlineRound
               }
               onClick={() => {
-                setFieldValue(
+                void setFieldValue(
                   'theme.button.type',
                   LinkInBioButtonTypeEnum.inlineRound,
                   false
@@ -576,7 +584,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   LinkInBioButtonTypeEnum.inlineCircle
               })}
               onClick={() => {
-                setFieldValue(
+                void setFieldValue(
                   'theme.button.type',
                   LinkInBioButtonTypeEnum.inlineCircle,
                   false
@@ -608,7 +616,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                 '--border-radius': '0'
               }}
               onClick={() => {
-                setFieldValue(
+                void setFieldValue(
                   'theme.button.type',
                   LinkInBioButtonTypeEnum.inlineSquareOutline,
                   false
@@ -639,7 +647,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                 '--border-radius': '10px'
               }}
               onClick={() => {
-                setFieldValue(
+                void setFieldValue(
                   'theme.button.type',
                   LinkInBioButtonTypeEnum.inlineRoundOutline,
                   false
@@ -668,7 +676,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   : 'medium'
               }
               onClick={() => {
-                setFieldValue(
+                void setFieldValue(
                   'theme.button.type',
                   LinkInBioButtonTypeEnum.inlineCircleOutline,
                   false
@@ -701,7 +709,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                 '--border-radius': '0'
               }}
               onClick={() => {
-                setFieldValue(
+                void setFieldValue(
                   'theme.button.type',
                   LinkInBioButtonTypeEnum.inlineSquareShadow,
                   false
@@ -733,7 +741,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                 '--border-radius': '10px'
               }}
               onClick={() => {
-                setFieldValue(
+                void setFieldValue(
                   'theme.button.type',
                   LinkInBioButtonTypeEnum.inlineRoundShadow,
                   false
@@ -763,7 +771,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                 }
               )}
               onClick={() => {
-                setFieldValue(
+                void setFieldValue(
                   'theme.button.type',
                   LinkInBioButtonTypeEnum.inlineCircleShadow,
                   false
@@ -780,7 +788,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
               CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.button
                 .btnType.shadowColorInputContainer
             }>
-            {values?.theme?.button?.type &&
+            {values?.theme?.button?.type != null &&
               [
                 LinkInBioButtonTypeEnum.inlineSquareShadow,
                 LinkInBioButtonTypeEnum.inlineRoundShadow,
@@ -790,6 +798,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   showSkeleton={isZFetching}
                   name='theme.button.shadowColor'
                   value={values?.theme?.button?.shadowColor as string}
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   setFieldValueFn={setFieldValue}
                   testingselector={
                     CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
@@ -829,7 +838,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
               };
             })}
             onChange={_value => {
-              setFieldValue(
+              void setFieldValue(
                 'theme.font',
                 (_value as ZaionsRSelectOptions)?.value,
                 false
@@ -841,7 +850,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                 linkInBioFontFamilyState as unknown as ZGenericObject[],
                 'fontName',
                 'fontName'
-              ) || []
+              ) ?? []
             }
           />
         </div>
@@ -874,15 +883,19 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   .bgImage.toggler
               }
               onChange={value => {
-                setFieldValue('theme.background.enableBgImage', value, false);
-                if (value === true) {
-                  setFieldValue(
+                void setFieldValue(
+                  'theme.background.enableBgImage',
+                  value,
+                  false
+                );
+                if (value) {
+                  void setFieldValue(
                     'theme.background.bgType',
                     LinkInBioThemeBackgroundEnum.image,
                     false
                   );
                 } else {
-                  setFieldValue(
+                  void setFieldValue(
                     'theme.background.bgType',
                     LinkInBioThemeBackgroundEnum.solidColor,
                     false
@@ -893,9 +906,10 @@ const ZLinkInBioThemeSection: React.FC = () => {
           </ZIonCol>
         </ZIonRow>
 
-        {values?.theme?.background?.enableBgImage && (
+        {values?.theme?.background?.enableBgImage === true && (
           <div className='flex mt-4 ion-align-items-center ion-padding-bottom'>
             <ZDragAndDrop
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
               setFieldValue={setFieldValue}
               fieldName='theme.background.bgImageUrl'
               imageUrl={values.theme?.background?.bgImageUrl}

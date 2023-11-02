@@ -1,15 +1,16 @@
 import {
   getString,
-  RemoteConfig,
+  type RemoteConfig,
   getBoolean,
   getNumber,
   getAll
 } from 'firebase/remote-config';
 import { frbRemoteConfigKeysStructure } from '@/utils/constants/firebaseConstants';
 import { TypeEnum } from '@/utils/enums';
-import { stringOrNumberOrBooleanOrNull } from '@/types/genericTypeDefinitions.type';
-import { FrbRemoteConfigKeysNamesType } from '@/types/firebaseTypes/index.type';
+import { type stringOrNumberOrBooleanOrNull } from '@/types/genericTypeDefinitions.type';
+import { type FrbRemoteConfigKeysNamesType } from '@/types/firebaseTypes/index.type';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const getRemoteConfigKeysData = (remoteConfig: RemoteConfig) => {
   const keys = getAll(remoteConfig);
   const _keysData: {
@@ -27,7 +28,7 @@ export const getRemoteConfigKeysData = (remoteConfig: RemoteConfig) => {
   };
   for (const frbRCKey in keys) {
     const _keyStructure = frbGetRemoteConfigKeyStructure(frbRCKey);
-    if (_keyStructure) {
+    if (_keyStructure !== undefined) {
       let keyValue: stringOrNumberOrBooleanOrNull = null;
       if (_keyStructure.type === TypeEnum.string) {
         keyValue = getString(remoteConfig, frbRCKey);
@@ -37,7 +38,7 @@ export const getRemoteConfigKeysData = (remoteConfig: RemoteConfig) => {
         keyValue = getNumber(remoteConfig, frbRCKey);
       }
 
-      if (keyValue) {
+      if (keyValue !== undefined) {
         _keysData[frbRCKey as FrbRemoteConfigKeysNamesType] = keyValue;
       }
     }
@@ -46,6 +47,7 @@ export const getRemoteConfigKeysData = (remoteConfig: RemoteConfig) => {
   return _keysData;
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const frbGetRemoteConfigKeyStructure = (key: string) => {
   const index = frbRemoteConfigKeysStructure.findIndex(el => el.key === key);
   if (index > -1) {

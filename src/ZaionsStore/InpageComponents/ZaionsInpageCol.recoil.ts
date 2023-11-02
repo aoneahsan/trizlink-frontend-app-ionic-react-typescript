@@ -5,9 +5,9 @@ import { atom } from 'recoil';
 // Data
 
 // Types
-import { ZaionsInpageColType } from '@/types/InPageComponentTypes/ZaionsInpageCol.type';
+import { type ZaionsInpageColType } from '@/types/InPageComponentTypes/ZaionsInpageCol.type';
 
 export const ZaionsInpageColState = atom<ZaionsInpageColType[]>({
   key: 'ZaionsInpageColState_key',
-  default: [],
+  default: []
 });

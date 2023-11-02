@@ -77,13 +77,13 @@ import {
   userIcon_2,
   textIcon,
   calenderIcon,
-  linkIcon,
+  linkIcon
 } from '@/assets/images';
 import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
 import {
   LinkInBioFormFieldsEnum,
   LinkInBioMusicPlatformEnum,
-  LinkInBioSocialPlatformEnum,
+  LinkInBioSocialPlatformEnum
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 export const ZIcons: {
@@ -93,80 +93,78 @@ export const ZIcons: {
   [key: string]: string;
 } = {
   // SVG Icons
-  buttonBlock: buttonBlock,
-  textBlock: textBlock,
-  timerBlock: timerBlock,
-  cardClipBlock: cardClipBlock,
-  carouselBlock: carouselBlock,
-  RssBlock: RssBlock,
-  audioBlock: audioBlock,
-  videoBlock: videoBlock,
-  calenderBlock: calenderBlock,
-  shopify: shopify,
-  avatarBlock: avatarBlock,
-  magento: magento,
-  wordpress: wordpress,
-  map: map,
-  music: music,
-  QAndABlock: QAndABlock,
-  messengerBlock: messengerBlock,
-  socialBlock: socialBlock,
-  vcardBlock: vcardBlock,
+  buttonBlock,
+  textBlock,
+  timerBlock,
+  cardClipBlock,
+  carouselBlock,
+  RssBlock,
+  audioBlock,
+  videoBlock,
+  calenderBlock,
+  shopify,
+  avatarBlock,
+  magento,
+  wordpress,
+  map,
+  music,
+  QAndABlock,
+  messengerBlock,
+  socialBlock,
+  vcardBlock,
   IframeBlock: codeBlock,
-  spacingBlock: spacingBlock,
-  separatorBlock: separatorBlock,
-  formBlock: formBlock,
+  spacingBlock,
+  separatorBlock,
+  formBlock,
 
   // per defined music platform svg's
-  spotifyLogo: spotifyLogo,
-  soundCloudLogo: soundCloudLogo,
-  googleMusicLogo: googleMusicLogo,
-  appleMusicLogo: appleMusicLogo,
-  youtubeLogo: youtubeLogo,
-  deezerLogo: deezerLogo,
-  amazonMusicLogo: amazonMusicLogo,
-  napsterLogo: napsterLogo,
+  spotifyLogo,
+  soundCloudLogo,
+  googleMusicLogo,
+  appleMusicLogo,
+  youtubeLogo,
+  deezerLogo,
+  amazonMusicLogo,
+  napsterLogo,
 
   // per defined messenger platform svg's
-  emailLogo: emailLogo,
-  whatsAppLogo: whatsAppLogo,
-  messengerLogo: messengerLogo,
-  callLogo: callLogo,
-  smsLogo: smsLogo,
-  telegramLogo: telegramLogo,
-  skypeLogo: skypeLogo,
-  wechatLogo: wechatLogo,
-  lineLogo: lineLogo,
-  viberLogo: viberLogo,
+  emailLogo,
+  whatsAppLogo,
+  messengerLogo,
+  callLogo,
+  smsLogo,
+  telegramLogo,
+  skypeLogo,
+  wechatLogo,
+  lineLogo,
+  viberLogo,
 
   // pre defined social platform svg's
-  tiktokLogo: tiktokLogo,
-  facebookLogo: facebookLogo,
-  instagramLogo: instagramLogo,
-  twitterLogo: twitterLogo,
-  linkedinLogo: linkedinLogo,
-  slackLogo: slackLogo,
-  pinterestLogo: pinterestLogo,
+  tiktokLogo,
+  facebookLogo,
+  instagramLogo,
+  twitterLogo,
+  linkedinLogo,
+  slackLogo,
+  pinterestLogo,
 
   // pre defined form fields svg's
-  headingIcon: headingIcon,
-  userIcon_1: userIcon_1,
-  userIcon_2: userIcon_2,
-  textIcon: textIcon,
-  calenderIcon: calenderIcon,
-  linkIcon: linkIcon,
+  headingIcon,
+  userIcon_1,
+  userIcon_2,
+  textIcon,
+  calenderIcon,
+  linkIcon,
 
   // IonIcons
   // Images
   // Gifs
   // PlaceholderIcon = Zaions Favicon | Product
-  PlaceHolder: '',
+  PlaceHolder: ''
 };
 
 // link-in-bio music platform image form type.
-export const predefinedMusicPlatformImages: {
-  [key: string]: string;
-} = {
+export const predefinedMusicPlatformImages: Record<string, string> = {
   [LinkInBioMusicPlatformEnum.amazonMusic]: amazonMusicLogo,
   [LinkInBioMusicPlatformEnum.appleMusic]: appleMusicLogo,
   [LinkInBioMusicPlatformEnum.deezer]: deezerLogo,
@@ -174,13 +172,11 @@ export const predefinedMusicPlatformImages: {
   [LinkInBioMusicPlatformEnum.napster]: napsterLogo,
   [LinkInBioMusicPlatformEnum.soundCloud]: soundCloudLogo,
   [LinkInBioMusicPlatformEnum.spotify]: shopify,
-  [LinkInBioMusicPlatformEnum.youtube]: youtubeLogo,
+  [LinkInBioMusicPlatformEnum.youtube]: youtubeLogo
 };
 
 // link-in-bio music platform image form type.
-export const predefinedMusicPlatformImagesInWhite: {
-  [key: string]: string;
-} = {
+export const predefinedMusicPlatformImagesInWhite: Record<string, string> = {
   [LinkInBioMusicPlatformEnum.amazonMusic]: amazonMusicWhiteLogo,
   [LinkInBioMusicPlatformEnum.appleMusic]: appleMusicWhiteLogo,
   [LinkInBioMusicPlatformEnum.deezer]: deezerWhiteLogo,
@@ -188,29 +184,26 @@ export const predefinedMusicPlatformImagesInWhite: {
   [LinkInBioMusicPlatformEnum.napster]: napsterWhiteLogo,
   [LinkInBioMusicPlatformEnum.soundCloud]: soundCloudWhiteLogo,
   [LinkInBioMusicPlatformEnum.spotify]: spotifyWhiteLogo,
-  [LinkInBioMusicPlatformEnum.youtube]: youtubeWhiteLogo,
+  [LinkInBioMusicPlatformEnum.youtube]: youtubeWhiteLogo
 };
 
 // link-in-bio music platform image form type.
-export const predefinedMessengerPlatformImagesInWhite: {
-  [key: string]: string;
-} = {
-  [messengerPlatformsBlockEnum.email]: emailWhiteLogo,
-  [messengerPlatformsBlockEnum.call]: callWhiteLogo,
-  [messengerPlatformsBlockEnum.whatsapp]: whatsAppWhiteLogo,
-  [messengerPlatformsBlockEnum.messenger]: messengerWhiteLogo,
-  [messengerPlatformsBlockEnum.sms]: smsWhiteLogo,
-  [messengerPlatformsBlockEnum.telegram]: telegramWhiteLogo,
-  [messengerPlatformsBlockEnum.skype]: skypeWhiteLogo,
-  [messengerPlatformsBlockEnum.wechat]: wechatWhiteLogo,
-  [messengerPlatformsBlockEnum.line]: lineWhiteLogo,
-  [messengerPlatformsBlockEnum.viber]: viberWhiteLogo,
-};
+export const predefinedMessengerPlatformImagesInWhite: Record<string, string> =
+  {
+    [messengerPlatformsBlockEnum.email]: emailWhiteLogo,
+    [messengerPlatformsBlockEnum.call]: callWhiteLogo,
+    [messengerPlatformsBlockEnum.whatsapp]: whatsAppWhiteLogo,
+    [messengerPlatformsBlockEnum.messenger]: messengerWhiteLogo,
+    [messengerPlatformsBlockEnum.sms]: smsWhiteLogo,
+    [messengerPlatformsBlockEnum.telegram]: telegramWhiteLogo,
+    [messengerPlatformsBlockEnum.skype]: skypeWhiteLogo,
+    [messengerPlatformsBlockEnum.wechat]: wechatWhiteLogo,
+    [messengerPlatformsBlockEnum.line]: lineWhiteLogo,
+    [messengerPlatformsBlockEnum.viber]: viberWhiteLogo
+  };
 
 // link-in-bio social platform image form type.
-export const predefinedSocialImages: {
-  [key: string]: string;
-} = {
+export const predefinedSocialImages: Record<string, string> = {
   [LinkInBioSocialPlatformEnum.facebook]: facebookLogo,
   [LinkInBioSocialPlatformEnum.instagram]: instagramLogo,
   [LinkInBioSocialPlatformEnum.linkedin]: linkedinLogo,
@@ -218,26 +211,22 @@ export const predefinedSocialImages: {
   [LinkInBioSocialPlatformEnum.slack]: slackLogo,
   [LinkInBioSocialPlatformEnum.tiktok]: tiktokLogo,
   [LinkInBioSocialPlatformEnum.twitter]: twitterLogo,
-  [LinkInBioSocialPlatformEnum.youtube]: youtubeLogo,
+  [LinkInBioSocialPlatformEnum.youtube]: youtubeLogo
 };
 
 // link-in-bio form fields image form type.
-export const predefinedFormFieldsImages: {
-  [key: string]: string;
-} = {
+export const predefinedFormFieldsImages: Record<string, string> = {
   [LinkInBioFormFieldsEnum.email]: emailLogo,
   [LinkInBioFormFieldsEnum.date]: calenderIcon,
   [LinkInBioFormFieldsEnum.firstName]: userIcon_1,
   [LinkInBioFormFieldsEnum.lastName]: userIcon_2,
   [LinkInBioFormFieldsEnum.phone]: callLogo,
   [LinkInBioFormFieldsEnum.text]: textIcon,
-  [LinkInBioFormFieldsEnum.website]: linkIcon,
+  [LinkInBioFormFieldsEnum.website]: linkIcon
 };
 
 // link-in-bio social platform image form type.
-export const predefinedSocialWhiteImages: {
-  [key: string]: string;
-} = {
+export const predefinedSocialWhiteImages: Record<string, string> = {
   [LinkInBioSocialPlatformEnum.facebook]: facebookWhiteLogo,
   [LinkInBioSocialPlatformEnum.instagram]: instagramWhiteLogo,
   [LinkInBioSocialPlatformEnum.linkedin]: linkedinWhiteLogo,
@@ -245,5 +234,5 @@ export const predefinedSocialWhiteImages: {
   [LinkInBioSocialPlatformEnum.slack]: slackWhiteLogo,
   [LinkInBioSocialPlatformEnum.tiktok]: tiktokWhiteLogo,
   [LinkInBioSocialPlatformEnum.twitter]: twitterWhiteLogo,
-  [LinkInBioSocialPlatformEnum.youtube]: youtubeWhiteLogo,
+  [LinkInBioSocialPlatformEnum.youtube]: youtubeWhiteLogo
 };

@@ -1,5 +1,5 @@
 export declare const Amplify: {
-  configure(config: AmplifyConfig): void;
+  configure: (config: AmplifyConfig) => void;
   Auth: AmplifyAuth;
   Analytics: AmplifyAnalytics;
   Storage: AmplifyStorage;
@@ -14,7 +14,7 @@ export declare const Amplify: {
   PubSub: AmplifyPubSub;
 };
 
-type AmplifyConfig = {
+interface AmplifyConfig {
   Auth?: AuthOptions;
   Analytics?: AnalyticsOptions;
   Storage?: StorageOptions;
@@ -27,21 +27,21 @@ type AmplifyConfig = {
   XR?: XROptions;
   Predictions?: PredictionsOptions;
   PubSub?: PubSubOptions;
-};
+}
 
-type AuthOptions = {
+interface AuthOptions {
   identityPoolId?: string;
   region?: string;
   userPoolId?: string;
   userPoolWebClientId?: string;
   oauth?: OAuthOptions;
-};
+}
 
-type AnalyticsOptions = {
+interface AnalyticsOptions {
   disabled?: boolean;
   appId?: string;
   region?: string;
   // ... and so on
-};
+}
 
 // ... and so on for the rest of the options types

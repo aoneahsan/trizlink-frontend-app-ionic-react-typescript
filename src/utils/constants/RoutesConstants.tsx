@@ -26,7 +26,7 @@ const ZaionsRoutes = {
     Zaions101Route: `/pages/why-${PRODUCT_NAME}/${PRODUCT_NAME}-101`,
     ZaionsEnterpriseClassRoute: `/pages/why-${PRODUCT_NAME}/enterprise-class`,
     ZaionsIntegrationApiRoute: `/pages/why-${PRODUCT_NAME}/integrations-api`,
-    ZaionsPricingRoute: `/pages/pricing/v1`
+    ZaionsPricingRoute: '/pages/pricing/v1'
   },
 
   // Product Section

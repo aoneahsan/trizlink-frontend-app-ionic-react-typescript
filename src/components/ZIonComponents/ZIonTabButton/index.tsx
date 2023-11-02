@@ -1,13 +1,13 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonTabButton } from '@ionic/react';
-import { ZIonModeType } from '@/types/zaionsAppSettings.type';
+import { type ZIonModeType } from '@/types/zaionsAppSettings.type';
 // import {  } from '@ionic/core/dist/types/components';
 
 // Type
-type ZIonTabButtonType = {
+interface ZIonTabButtonType {
   children?: ReactNode;
   disabled?: boolean;
   download?: string;
@@ -24,9 +24,11 @@ type ZIonTabButtonType = {
   selected?: boolean;
   tab?: string;
   target?: string;
-};
+}
 
-const ZIonTabButton = (props: ZIonTabButtonType) => {
+const ZIonTabButton: React.FC<ZIonTabButtonType> = (
+  props: ZIonTabButtonType
+) => {
   return <IonTabButton {...props}>{props.children}</IonTabButton>;
 };
 

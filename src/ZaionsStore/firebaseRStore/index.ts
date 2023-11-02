@@ -1,8 +1,8 @@
 import { atom, selector } from 'recoil';
 import {
-  FrbRemoteConfigKeysType,
-  IFrbAppRStateAtom,
-  IFrbRemoteConfigRStateAtom
+  type FrbRemoteConfigKeysType,
+  type IFrbAppRStateAtom,
+  type IFrbRemoteConfigRStateAtom
 } from '@/types/firebaseTypes/index.type';
 
 // Exports from other files in this folder

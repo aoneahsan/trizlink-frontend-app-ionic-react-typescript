@@ -1,11 +1,11 @@
-import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
+import { type LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 import { atom, selector } from 'recoil';
 
 // Data
 // import { ZaionsShortLinkData } from '@/data/UserDashboard/LinkInBiosData';
 
 import {
-  ShortLinkFilterOptionsInterface,
+  type ShortLinkFilterOptionsInterface,
   TimeFilterEnum
 } from '@/types/AdminPanel/linksType';
 
@@ -41,15 +41,18 @@ export const FilteredLinkInBioLinksDataSelector = selector<
     const _filterOptions = get(LinkInBiosFilterOptionsRStateAtom);
     let _filterLinksData: LinkInBioType[] | undefined = linkInBiosStateAtom;
     // check's
-    if (linkInBiosStateAtom?.length) {
-      if (_filterOptions.folderId && _filterOptions.folderId !== 'all') {
+    if (linkInBiosStateAtom?.length !== undefined) {
+      if (
+        _filterOptions.folderId !== undefined &&
+        _filterOptions.folderId !== 'all'
+      ) {
         _filterLinksData = linkInBiosStateAtom.filter(
           el => el.folderId === _filterOptions.folderId
         );
       }
 
       if (
-        _filterOptions.timeFilter.daysToSubtract &&
+        _filterOptions.timeFilter.daysToSubtract !== undefined &&
         _filterOptions.timeFilter.daysToSubtract !== TimeFilterEnum.allTime
       ) {
         const endDate = new Date(
@@ -88,7 +91,7 @@ export const FilteredLinkInBioLinksDataSelector = selector<
         });
       }
 
-      if (_filterOptions.tags?.length) {
+      if (_filterOptions.tags?.length !== undefined) {
         _filterLinksData = linkInBiosStateAtom.filter(el => {
           return (_filterOptions.tags as string[]).every(tag =>
             (el.tags as string[]).includes(tag)
@@ -106,7 +109,7 @@ export const FilteredLinkInBioLinksDataSelector = selector<
       //     );
       //   });
       // }
-      if (_filterOptions.searchQuery) {
+      if (_filterOptions.searchQuery !== undefined) {
         _filterLinksData = linkInBiosStateAtom.filter(el => {
           return el.title
             ?.toLocaleLowerCase()
@@ -132,7 +135,7 @@ export const LinkInBiosFieldsDataRStateSelector = selector({
     // const _domains = new Set<string>();
 
     linkInBiosStateAtom?.forEach(el => {
-      if ((el.tags as string[])?.length) {
+      if ((el.tags as string[])?.length !== undefined) {
         (JSON.parse(el.tags as unknown as string) as string[]).forEach(tag =>
           _tagsArray.add(tag)
         );
@@ -152,11 +155,11 @@ export const LinkInBiosFieldsDataRStateSelector = selector({
 });
 
 // export const LinkInBioRStateAtomFamily = atomFamily<LinkInBioType, string>({
-// 	key: 'LinkInBioRStateAtomFamily_key',
-// 	default: {
-// 		theme: {
-// 			button: {},
-// 		},
-// 		settings: {},
-// 	},
+// key: 'LinkInBioRStateAtomFamily_key',
+// default: {
+// theme: {
+// button: {},
+// },
+// settings: {},
+// },
 // });

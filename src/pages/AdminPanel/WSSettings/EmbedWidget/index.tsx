@@ -45,7 +45,6 @@ import { useZInvalidateReactQueries } from '@/ZaionsHooks/zreactquery-hooks';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import { reportCustomError } from '@/utils/customErrorType';
 import CONSTANTS from '@/utils/constants';
-import { API_URL_ENUM } from '@/utils/enums';
 
 /**
  * Type Imports go down
@@ -104,7 +103,7 @@ const ZWSSettingEmbedWidgetListPage: React.FC = () => {
   // #endregion
 
   // #region Functions.
-  const invalidedQueries = async () => {
+  const invalidedQueries = async (): Promise<void> => {
     try {
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
@@ -177,15 +176,17 @@ const ZWSSettingEmbedWidgetListPage: React.FC = () => {
               'w-full': !isSmScale,
               'ion-no-margin': !isSmScale
             })}
-            onClick={async () => {
-              // Open the menu by menu-id
-              await menuController.enable(
-                true,
-                CONSTANTS.MENU_IDS.UTMTag_FILTERS_MENU_ID
-              );
-              await menuController.open(
-                CONSTANTS.MENU_IDS.UTMTag_FILTERS_MENU_ID
-              );
+            onClick={() => {
+              void (async () => {
+                // Open the menu by menu-id
+                await menuController.enable(
+                  true,
+                  CONSTANTS.MENU_IDS.UTMTag_FILTERS_MENU_ID
+                );
+                await menuController.open(
+                  CONSTANTS.MENU_IDS.UTMTag_FILTERS_MENU_ID
+                );
+              })();
             }}>
             <ZIonIcon
               slot='start'

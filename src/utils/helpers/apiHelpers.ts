@@ -1,13 +1,11 @@
-import { reportCustomError } from '@/utils/customErrorType';
 import { API_URL_ENUM } from '@/utils/enums';
-import { getApiUrl, STORAGE, zAxiosApiRequest } from '@/utils/helpers';
+import { getApiUrl, STORAGE } from '@/utils/helpers';
 import {
   API_DYNAMIC_PARTS,
   uiAvatarApiDefaultParams
 } from '@/utils/constants/apiConstants';
 import { LOCALSTORAGE_KEYS } from '@/utils/constants';
-import { Resetter, SetterOrUpdater } from 'recoil';
-import { UserAccountType } from '@/types/UserAccount/index.type';
+import { type Resetter } from 'recoil';
 
 export const getUiAvatarApiUrl = ({
   name = uiAvatarApiDefaultParams.name,
@@ -18,7 +16,7 @@ export const getUiAvatarApiUrl = ({
   length = uiAvatarApiDefaultParams.length,
   rounded = uiAvatarApiDefaultParams.rounded,
   size = uiAvatarApiDefaultParams.size
-}) => {
+}): string | undefined => {
   const _uiAvatar = API_DYNAMIC_PARTS.externalAPIs.uiAvatarAPI;
   return getApiUrl(
     API_URL_ENUM.uiAvatarAPI,
@@ -40,10 +38,10 @@ export const getUiAvatarApiUrl = ({
 
 export const clearAuthDataFromLocalStorageAndRecoil = async (
   resetUserAccountState: Resetter
-) => {
+): Promise<boolean> => {
   try {
     const authToken = await STORAGE.GET(LOCALSTORAGE_KEYS.AUTHTOKEN);
-    if (authToken) {
+    if (authToken !== null || authToken !== undefined) {
       await Promise.all([
         STORAGE.REMOVE(LOCALSTORAGE_KEYS.USERDATA),
         STORAGE.REMOVE(LOCALSTORAGE_KEYS.AUTHTOKEN)

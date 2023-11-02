@@ -1,21 +1,23 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonRange } from '@ionic/react';
 
 // Type
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
 import {
-  IonRangeCustomEvent,
-  RangeChangeEventDetail,
-  RangeKnobMoveEndEventDetail,
-  RangeKnobMoveStartEventDetail
+  type ZIonColorType,
+  type ZIonModeType
+} from '@/types/zaionsAppSettings.type';
+import {
+  type IonRangeCustomEvent,
+  type RangeChangeEventDetail,
+  type RangeKnobMoveEndEventDetail,
+  type RangeKnobMoveStartEventDetail
 } from '@ionic/core';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
-type ZIonRangeType = {
+interface ZIonRangeType {
   children?: ReactNode;
   className?: string;
   mode?: ZIonModeType;
@@ -44,9 +46,9 @@ type ZIonRangeType = {
   ) => void;
   testingselector?: string;
   testinglistselector?: string;
-};
+}
 
-const ZIonRange = (props: ZIonRangeType) => {
+const ZIonRange: React.FC<ZIonRangeType> = (props: ZIonRangeType) => {
   const _testinglistselector =
     props.testinglistselector !== undefined
       ? {

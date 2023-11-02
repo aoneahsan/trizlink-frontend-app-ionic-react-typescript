@@ -1,6 +1,6 @@
 import {
-  LinkInBioFormPageInterface,
-  LinkInBioType,
+  type LinkInBioFormPageInterface,
+  type LinkInBioType
 } from '@/types/AdminPanel/linkInBioType';
 import CONSTANTS from '@/utils/constants';
 import { atom } from 'recoil';
@@ -10,17 +10,17 @@ export const NewLinkInBioFormState = atom<LinkInBioType>({
   key: 'NewLinkInBioFormState_key',
   default: {
     theme: {
-      button: {},
+      button: {}
     },
     settings: {},
     folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
     shortUrl: {
-      domain: CONSTANTS.DEFAULT_VALUES.DEFAULT_CUSTOM_DOMAIN,
+      domain: CONSTANTS.DEFAULT_VALUES.DEFAULT_CUSTOM_DOMAIN
     },
     pixelIds: [],
     tags: [],
-    formMode: FormMode.ADD,
-  },
+    formMode: FormMode.ADD
+  }
 });
 
 /**
@@ -28,5 +28,5 @@ export const NewLinkInBioFormState = atom<LinkInBioType>({
  */
 export const LinkInBioFromPageRState = atom<LinkInBioFormPageInterface>({
   key: 'LinkInBioFromPageState_key',
-  default: {},
+  default: {}
 });

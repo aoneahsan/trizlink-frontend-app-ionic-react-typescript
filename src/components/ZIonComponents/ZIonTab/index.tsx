@@ -1,19 +1,19 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonTab } from '@ionic/react';
 // import {  } from '@ionic/core/dist/types/components';
 
 // Type
-type ZIonTabType = {
+interface ZIonTabType {
   tab: string;
   children?: ReactNode;
   // eslint-disable-next-line @typescript-eslint/ban-types
   component?: Function | HTMLElement | null | string;
-};
+}
 
-const ZIonTab = (props: ZIonTabType) => {
+const ZIonTab: React.FC<ZIonTabType> = (props: ZIonTabType) => {
   return <IonTab {...props}>{props.children}</IonTab>;
 };
 
