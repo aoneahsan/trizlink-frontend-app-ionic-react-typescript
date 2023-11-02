@@ -150,7 +150,6 @@ const AuthenticateHOC: React.FC<AuthenticateHOCPropsType> = props => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   if (compState.isProcessing) {
     return <ZFallbackIonSpinner />;
   } else if (

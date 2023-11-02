@@ -183,7 +183,6 @@ const ZWorkspaceListPage: React.FC = () => {
   };
 
   const isZFetching = isWorkspacesDataFetching && isWSShareDataFetching;
-
   if (isZFetching) {
     return (
       <ZIonPage>

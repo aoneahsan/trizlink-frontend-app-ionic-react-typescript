@@ -169,16 +169,16 @@ const ZaionsShortLinkTable: React.FC<{
   });
 
   // Request for getting share workspace short links data.
-  const { data: swsShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
-    _url: API_URL_ENUM.sws_sl_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN, wsShareId],
-    _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined && wsShareId?.trim()?.length > 0
-    ),
-    _itemsIds: [shareWSMemberId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _showLoader: false
-  });
+  // const { data: swsShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
+  //   _url: API_URL_ENUM.sws_sl_create_list,
+  //   _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN, wsShareId],
+  //   _shouldFetchWhenIdPassed: !(
+  //     wsShareId !== undefined && wsShareId?.trim()?.length > 0
+  //   ),
+  //   _itemsIds: [shareWSMemberId],
+  //   _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+  //   _showLoader: false
+  // });
   // #endregion
 
   // #region Functions.
@@ -235,8 +235,7 @@ const ZaionsShortLinkTable: React.FC<{
   return (
     <>
       {!showSkeleton ? (
-        (ShortLinksData?.items?.length ?? swsShortLinksData?.length) !==
-        null ? (
+        (ShortLinksData?.items?.length ?? 0) > 0 ? (
           <ZInpageTable />
         ) : (
           <div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
@@ -313,7 +312,6 @@ const ZInpageTable: React.FC = () => {
   const _FilteredShortLinkDataSelector = useRecoilValue(
     FilteredShortLinkDataSelector
   );
-
   // Recoil state for storing filter options. for example folderId, time, etc.
   const _setShortLinksFilterOptions = useSetRecoilState(
     ShortLinksFilterOptionsRStateAtom
@@ -1136,7 +1134,7 @@ const ZInpageTable: React.FC = () => {
                 +(ShortLinksData?.itemsCount ?? '0')
               ) {
                 // zShortLinksTable.nextPage();
-                zShortLinksTable.setPageIndex(oldValue => oldValue + 1);
+                zShortLinksTable.setPageIndex(oldValue => (oldValue ?? 0) + 1);
 
                 if (workspaceId !== undefined) {
                   zNavigatePushRoute(
@@ -1355,7 +1353,7 @@ const ZInpageTable: React.FC = () => {
             fill='outline'
             className='zaions__bg_white w-[8rem]'
             interface='popover'
-            value={zShortLinksTable.getState().pagination.pageSize}
+            value={zShortLinksTable.getState().pagination.pageSize ?? 2}
             testingselector={
               CONSTANTS.testingSelectors.shortLink.listPage.table.pageSizeInput
             }

@@ -44,7 +44,6 @@ export const FilteredShortLinkDataSelector = selector<
     const shortLinksRStateAtom = get(ShortLinksRStateAtom);
     const _filterOptions = get(ShortLinksFilterOptionsRStateAtom);
     let _filterLinksData: ShortLinkType[] | undefined = shortLinksRStateAtom;
-
     // check's
     if (
       shortLinksRStateAtom !== undefined &&

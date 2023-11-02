@@ -706,7 +706,7 @@ export const zAxiosApiRequest = async <T>({
   const _authToken = await getAuthToken();
 
   // authToken is fount or not authenticatedRequest request then
-  if (_authToken !== undefined ?? !_isAuthenticatedRequest) {
+  if (_authToken !== undefined || !_isAuthenticatedRequest) {
     // Creating an axios config object.
     const reqInput: AxiosRequestConfig = {
       method: _method,

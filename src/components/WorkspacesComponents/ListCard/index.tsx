@@ -412,6 +412,7 @@ const ZWorkspacesCard: React.FC<{
       reportCustomError(error);
     }
   };
+
   // #endregion
   return (
     <ZIonCard className='h-[11.4rem]'>
@@ -561,9 +562,14 @@ const ZWorkspacesCard: React.FC<{
                       <ZIonImg
                         src={
                           owned
-                            ? userAccountStateAtom?.avatar
-                            : user?.avatar ??
-                              getUiAvatarApiUrl({ name: user?.username })
+                            ? userAccountStateAtom?.avatar !== null
+                              ? userAccountStateAtom?.avatar
+                              : getUiAvatarApiUrl({
+                                  name: userAccountStateAtom?.username
+                                })
+                            : user?.avatar !== null
+                            ? user?.avatar
+                            : getUiAvatarApiUrl({ name: user?.username })
                         }
                         className='w-[38px] h-[40px] zaions-object-fit-cover'
                       />

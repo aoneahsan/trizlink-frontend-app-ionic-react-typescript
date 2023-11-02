@@ -52,7 +52,7 @@ export const useZRQGetRequest = <T>({
   _key,
   _itemsIds,
   _urlDynamicParts,
-  _shouldFetchWhenIdPassed,
+  _shouldFetchWhenIdPassed = false,
   _authenticated,
   _showLoader = true,
   _shouldExtractData = true,
@@ -107,7 +107,7 @@ export const useZRQGetRequest = <T>({
         }
       }
 
-      if (_shouldFetchWhenIdPassed !== undefined) {
+      if (_shouldFetchWhenIdPassed !== null && _shouldFetchWhenIdPassed) {
         return null;
       } else {
         // Present ion loading before api start
@@ -212,7 +212,7 @@ export const useZRQGetRequest = <T>({
     staleTime: _staleTime
   });
 
-  if (_response?.error !== null) {
+  if (_response?.error !== null && _response?.error !== undefined) {
     void (async () => {
       const error = _response.error;
       // need to dismiss the loader first, then showing error just so, user will not get redirected to login without knowing that there was a authenticated error
