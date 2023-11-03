@@ -124,9 +124,9 @@ const ZWSSettingEmbedWidgetListPage = lazy(() => import('./EmbedWidget'));
 const ZWorkspaceSettings: React.FC = () => {
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region Component state.
@@ -155,10 +155,13 @@ const ZWorkspaceSettings: React.FC = () => {
     isError: isWSTeamMembersDataError
   } = useZRQGetRequest<WSTeamMembersInterface[]>({
     _url: API_URL_ENUM.member_getAllInvite_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId],
-    _itemsIds: [workspaceId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+      workspaceId ?? ''
+    ],
+    _itemsIds: [workspaceId ?? ''],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
     ),
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _showLoader: false
@@ -173,14 +176,14 @@ const ZWorkspaceSettings: React.FC = () => {
     _url: API_URL_ENUM.sws_member_getAllInvite_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
-      wsShareId
+      wsShareId ?? ''
     ],
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _shouldFetchWhenIdPassed: !(
       wsShareId !== undefined &&
-      wsShareId?.trim()?.length > 0 &&
+      (wsShareId?.trim()?.length ?? 0) > 0 &&
       shareWSMemberId !== undefined &&
-      shareWSMemberId?.trim()?.length > 0
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
     ),
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
@@ -193,11 +196,11 @@ const ZWorkspaceSettings: React.FC = () => {
     isError: isUTMTagsDataError
   } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN, workspaceId],
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN, workspaceId ?? ''],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
     ),
-    _itemsIds: [workspaceId],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _showLoader: false
   });
@@ -211,15 +214,15 @@ const ZWorkspaceSettings: React.FC = () => {
     _url: API_URL_ENUM.sws_utm_tag_create_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN,
-      shareWSMemberId
+      shareWSMemberId ?? ''
     ],
     _shouldFetchWhenIdPassed: !(
       wsShareId !== undefined &&
-      wsShareId?.trim()?.length > 0 &&
+      (wsShareId?.trim()?.length ?? 0) > 0 &&
       shareWSMemberId !== undefined &&
-      shareWSMemberId?.trim()?.length > 0
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
     ),
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
   });
@@ -231,13 +234,16 @@ const ZWorkspaceSettings: React.FC = () => {
     isError: isPixelAccountsDataError
   } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN, workspaceId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
+      workspaceId ?? ''
+    ],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
     ),
     _showLoader: false,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _itemsIds: [workspaceId]
+    _itemsIds: [workspaceId ?? '']
   });
 
   // If share workspace then this api is used to fetch share workspace pixels.
@@ -249,17 +255,17 @@ const ZWorkspaceSettings: React.FC = () => {
     _url: API_URL_ENUM.sws_pixel_account_create_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
-      wsShareId
+      wsShareId ?? ''
     ],
     _shouldFetchWhenIdPassed: !(
       wsShareId !== undefined &&
-      wsShareId?.trim()?.length > 0 &&
+      (wsShareId?.trim()?.length ?? 0) > 0 &&
       shareWSMemberId !== undefined &&
-      shareWSMemberId?.trim()?.length > 0
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
     ),
     _showLoader: false,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _itemsIds: [shareWSMemberId]
+    _itemsIds: [shareWSMemberId ?? '']
   });
 
   // If share-workspace then this api will fetch role & permission of current member in this share-workspace.
@@ -272,16 +278,16 @@ const ZWorkspaceSettings: React.FC = () => {
   }>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
     _shouldFetchWhenIdPassed: !(
       wsShareId !== undefined &&
-      wsShareId?.trim()?.length > 0 &&
+      (wsShareId?.trim()?.length ?? 0) > 0 &&
       shareWSMemberId !== undefined &&
-      shareWSMemberId?.trim()?.length > 0
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
     ),
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -360,20 +366,20 @@ const ZWorkspaceSettings: React.FC = () => {
         // Invalidating RQ members cache.
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-          workspaceId
+          workspaceId ?? ''
         ]);
       }
       if (isPixelPage === true) {
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
-          workspaceId
+          workspaceId ?? ''
         ]);
       }
 
       if (isUTMTagPage === true) {
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
-          workspaceId
+          workspaceId ?? ''
         ]);
       }
     } catch (error) {
@@ -1029,9 +1035,9 @@ const ZWorkspaceSettings: React.FC = () => {
 const ZInpageMainContent: React.FC = () => {
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region Custom hooks.
@@ -1040,12 +1046,17 @@ const ZInpageMainContent: React.FC = () => {
 
   // #region checking the route.
   let isMembersPage: boolean | undefined;
-  if (workspaceId !== undefined) {
+  if (workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     isMembersPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members
     )?.isExact;
-  } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+  } else if (
+    wsShareId !== undefined &&
+    (wsShareId?.trim()?.length ?? 0) > 0 &&
+    shareWSMemberId !== undefined &&
+    (shareWSMemberId?.trim()?.length ?? 0) > 0
+  ) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     isMembersPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Members
@@ -1065,12 +1076,17 @@ const ZInpageMainContent: React.FC = () => {
   // )?.isExact;
 
   let isPixelPage: boolean | undefined;
-  if (workspaceId !== undefined) {
+  if (workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     isPixelPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel
     )?.isExact;
-  } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+  } else if (
+    wsShareId !== undefined &&
+    (wsShareId?.trim()?.length ?? 0) > 0 &&
+    shareWSMemberId !== undefined &&
+    (shareWSMemberId?.trim()?.length ?? 0) > 0
+  ) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     isPixelPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Pixel
@@ -1078,24 +1094,34 @@ const ZInpageMainContent: React.FC = () => {
   }
 
   let isUTMTagPage: boolean | undefined;
-  if (workspaceId !== undefined) {
+  if (workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     isUTMTagPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag
     )?.isExact;
-  } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+  } else if (
+    wsShareId !== undefined &&
+    (wsShareId?.trim()?.length ?? 0) > 0 &&
+    shareWSMemberId !== undefined &&
+    (shareWSMemberId?.trim()?.length ?? 0) > 0
+  ) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     isUTMTagPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.UTMTag
     )?.isExact;
   }
   let isEmbedWidgetPage: boolean | undefined;
-  if (workspaceId !== undefined) {
+  if (workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     isEmbedWidgetPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.Setting.AccountSettings.EmbedWidget
     )?.isExact;
-  } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+  } else if (
+    wsShareId !== undefined &&
+    (wsShareId?.trim()?.length ?? 0) > 0 &&
+    shareWSMemberId !== undefined &&
+    (shareWSMemberId?.trim()?.length ?? 0) > 0
+  ) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     isEmbedWidgetPage = useRouteMatch(
       ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.EmbedWidget

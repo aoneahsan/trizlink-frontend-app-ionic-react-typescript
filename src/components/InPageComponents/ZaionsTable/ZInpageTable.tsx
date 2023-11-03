@@ -75,10 +75,10 @@ export const ZInpageTable: React.FC = () => {
   // #endregion
   // Folder id getting from url. (use when use when to filter short links by folder listed on the left-side, when user click on the folder from listed folder the id of that folder the Id of folder will set in the url and we will fetch it here by useParams).
   const { folderId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    folderId: string;
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    folderId?: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region Recoils.
@@ -116,14 +116,14 @@ export const ZInpageTable: React.FC = () => {
     _url: API_URL_ENUM.shortLinks_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-      workspaceId,
+      workspaceId ?? '',
       String(pageindex),
       String(pagesize)
     ],
     _shouldFetchWhenIdPassed: !(
       workspaceId !== undefined && workspaceId?.trim()?.length > 0
     ),
-    _itemsIds: [workspaceId, String(pageindex), String(pagesize)],
+    _itemsIds: [workspaceId ?? '', String(pageindex), String(pagesize)],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.workspaceId,
       CONSTANTS.RouteParams.pageNumber,
@@ -136,11 +136,14 @@ export const ZInpageTable: React.FC = () => {
   // Request for getting share workspace short links data.
   const { data: swsShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
     _url: API_URL_ENUM.sws_sl_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN, wsShareId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
+      wsShareId ?? ''
+    ],
     _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined && wsShareId?.trim()?.length > 0
+      wsShareId !== undefined && (wsShareId?.trim()?.length ?? 0) > 0
     ),
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
   });
@@ -150,11 +153,11 @@ export const ZInpageTable: React.FC = () => {
     _url: API_URL_ENUM.user_setting_delete_update_get,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-      workspaceId,
+      workspaceId ?? '',
       ZUserSettingTypeEnum.shortLinkListPageTable
     ],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
     ),
     _itemsIds: [workspaceId ?? '', ZUserSettingTypeEnum.shortLinkListPageTable],
     _urlDynamicParts: [
@@ -170,16 +173,19 @@ export const ZInpageTable: React.FC = () => {
     _url: API_URL_ENUM.sws_user_setting_delete_update_get,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-      wsShareId,
+      wsShareId ?? '',
       ZUserSettingTypeEnum.shortLinkListPageTable
     ],
-    _itemsIds: [shareWSMemberId, ZUserSettingTypeEnum.shortLinkListPageTable],
+    _itemsIds: [
+      shareWSMemberId ?? '',
+      ZUserSettingTypeEnum.shortLinkListPageTable
+    ],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.shareWSMemberId,
       CONSTANTS.RouteParams.settings.type
     ],
     _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined && wsShareId?.trim()?.length > 0
+      wsShareId !== undefined && (wsShareId?.trim()?.length ?? 0) > 0
     ),
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false

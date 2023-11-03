@@ -126,8 +126,8 @@ const ZaionsLinkInBioForm: React.FC = () => {
 
   // getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio of that id will be fetch from backend and store in NewLinkInBioFormState recoil state.
   const { linkInBioId, workspaceId } = useParams<{
-    linkInBioId: string;
-    workspaceId: string;
+    linkInBioId?: string;
+    workspaceId?: string;
   }>();
 
   // #region Recoil states.
@@ -164,11 +164,11 @@ const ZaionsLinkInBioForm: React.FC = () => {
     _url: API_URL_ENUM.linkInBio_update_delete,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-      workspaceId,
-      linkInBioId
+      workspaceId ?? '',
+      linkInBioId ?? ''
     ],
     _authenticated: true,
-    _itemsIds: [linkInBioId, workspaceId],
+    _itemsIds: [linkInBioId ?? '', workspaceId ?? ''],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.linkInBio.linkInBioId,
       CONSTANTS.RouteParams.workspace.workspaceId
@@ -194,7 +194,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
   // Refetching if the linkInBioId changes and if the linkInBioId is undefined it will redirect user to link-in-bio page.
   useEffect(() => {
     try {
-      if (linkInBioId?.trim()?.length > 0) {
+      if ((linkInBioId?.trim()?.length ?? 0) > 0) {
         void linkInBioGetRequestFn();
       }
     } catch (error) {
@@ -206,7 +206,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
               CONSTANTS.RouteParams.workspace.workspaceId,
               CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
             ],
-            [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
+            [workspaceId ?? '', CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
           )
         );
         showErrorNotification(error.message);
@@ -222,7 +222,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
     try {
       if (
         selectedLinkInBio?.id !== undefined &&
-        linkInBioId?.trim()?.length > 0
+        (linkInBioId?.trim()?.length ?? 0) > 0
       ) {
         setLinkInBioFormState(oldVal => ({
           ...oldVal,
@@ -260,7 +260,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
       if (_reqDataStr?.trim()?.length > 0) {
         // The update api...
         const _response = await UpdateLinkInBio({
-          itemIds: [workspaceId, linkInBioId],
+          itemIds: [workspaceId ?? '', linkInBioId ?? ''],
           urlDynamicParts: [
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.linkInBio.linkInBioId
@@ -285,7 +285,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
             await updateRQCDataHandler({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-                workspaceId
+                workspaceId ?? ''
               ],
               data: _extractItemFromResult,
               id: _extractItemFromResult?.id
@@ -295,8 +295,8 @@ const ZaionsLinkInBioForm: React.FC = () => {
             await updateRQCDataHandler<LinkInBioType | undefined>({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-                workspaceId,
-                linkInBioId
+                workspaceId ?? '',
+                linkInBioId ?? ''
               ],
               data: _extractItemFromResult,
               id: '',
@@ -438,7 +438,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                     .folderIdToGetShortLinksOrLinkInBio
                                 ],
                                 [
-                                  workspaceId,
+                                  workspaceId ?? '',
                                   CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                                 ]
                               )}>
@@ -561,7 +561,10 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                         CONSTANTS.RouteParams.linkInBio
                                           .linkInBioId
                                       ],
-                                      values: [workspaceId, linkInBioId],
+                                      values: [
+                                        workspaceId ?? '',
+                                        linkInBioId ?? ''
+                                      ],
                                       routeSearchParams: {
                                         page: ZLinkInBioPageEnum.design,
                                         step: ZLinkInBioRHSComponentEnum.theme
@@ -593,7 +596,10 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                         CONSTANTS.RouteParams.linkInBio
                                           .linkInBioId
                                       ],
-                                      values: [workspaceId, linkInBioId],
+                                      values: [
+                                        workspaceId ?? '',
+                                        linkInBioId ?? ''
+                                      ],
                                       routeSearchParams: {
                                         page: ZLinkInBioPageEnum.shareSettings
                                       }
@@ -624,7 +630,10 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                         CONSTANTS.RouteParams.linkInBio
                                           .linkInBioId
                                       ],
-                                      values: [workspaceId, linkInBioId],
+                                      values: [
+                                        workspaceId ?? '',
+                                        linkInBioId ?? ''
+                                      ],
                                       routeSearchParams: {
                                         page: ZLinkInBioPageEnum.pageAnalytics
                                       }
@@ -655,7 +664,10 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                         CONSTANTS.RouteParams.linkInBio
                                           .linkInBioId
                                       ],
-                                      values: [workspaceId, linkInBioId],
+                                      values: [
+                                        workspaceId ?? '',
+                                        linkInBioId ?? ''
+                                      ],
                                       routeSearchParams: {
                                         page: ZLinkInBioPageEnum.lead
                                       }

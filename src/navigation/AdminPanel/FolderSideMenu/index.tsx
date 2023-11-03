@@ -136,9 +136,9 @@ const AdminPanelFoldersSidebarMenu: React.FC<
 
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   const { presentZIonModal: presentFolderModal } = useZIonModal(
@@ -371,7 +371,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                                       CONSTANTS.RouteParams
                                         .folderIdToGetShortLinksOrLinkInBio
                                     ],
-                                    [workspaceId, el?.id ?? '']
+                                    [workspaceId ?? '', el?.id ?? '']
                                   )
                                 );
                               }}>

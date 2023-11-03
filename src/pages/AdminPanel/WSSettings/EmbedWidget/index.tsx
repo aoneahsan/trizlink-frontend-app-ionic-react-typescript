@@ -81,7 +81,7 @@ import { FormMode } from '@/types/AdminPanel/index.type';
 const ZWSSettingEmbedWidgetListPage: React.FC = () => {
   // getting current workspace id form params.
   const { workspaceId } = useParams<{
-    workspaceId: string;
+    workspaceId?: string;
   }>();
 
   // #region Custom hooks.
@@ -107,7 +107,7 @@ const ZWSSettingEmbedWidgetListPage: React.FC = () => {
     try {
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
-        workspaceId
+        workspaceId ?? ''
       ]);
     } catch (error) {
       reportCustomError(error);

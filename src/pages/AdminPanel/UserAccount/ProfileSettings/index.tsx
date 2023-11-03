@@ -161,7 +161,6 @@ const ZProfileSettingsSettings: React.FC = () => {
   // Single file upload.
   const { mutateAsync: uploadSingleFile } = useZRQCreateRequest({
     _url: API_URL_ENUM.uploadSingleFile,
-    _queriesKeysToInvalidate: [],
     _authenticated: true,
     _contentType: zAxiosApiRequestContentType.FormData
   });

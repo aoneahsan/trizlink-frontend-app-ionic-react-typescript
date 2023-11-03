@@ -119,7 +119,7 @@ import ZWSTeamCreateModal from '@/components/InPageComponents/ZaionsModals/Works
 
 const ZWSSettingTeamListTable: React.FC = () => {
   const { workspaceId } = useParams<{
-    workspaceId: string;
+    workspaceId?: string;
   }>();
 
   // #region APIS
@@ -127,9 +127,15 @@ const ZWSSettingTeamListTable: React.FC = () => {
   const { data: WSTeamsData, isFetching: isWSTeamsDataFetching } =
     useZRQGetRequest<workspaceTeamInterface[]>({
       _url: API_URL_ENUM.workspace_team_create_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM, workspaceId],
-      _itemsIds: [workspaceId],
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM,
+        workspaceId ?? ''
+      ],
+      _itemsIds: [workspaceId ?? ''],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+      _shouldFetchWhenIdPassed: !(
+        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+      )
     });
 
   // #endregion
@@ -188,7 +194,7 @@ const ZInpageTable: React.FC = () => {
   // #endregion
 
   const { workspaceId } = useParams<{
-    workspaceId: string;
+    workspaceId?: string;
   }>();
 
   // #region Modal & Popovers.
@@ -205,8 +211,11 @@ const ZInpageTable: React.FC = () => {
   // Request for getting teams data.
   const { data: WSTeamsData } = useZRQGetRequest<workspaceTeamInterface[]>({
     _url: API_URL_ENUM.workspace_team_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM, workspaceId],
-    _itemsIds: [workspaceId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM,
+      workspaceId ?? ''
+    ],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
 
@@ -238,7 +247,7 @@ const ZInpageTable: React.FC = () => {
                 CONSTANTS.RouteParams.workspace.workspaceId,
                 CONSTANTS.RouteParams.workspace.teamId
               ],
-              values: [workspaceId, row?.row?.original?.id ?? '']
+              values: [workspaceId ?? '', row?.row?.original?.id ?? '']
             })}>
             <ZIonText>{row.getValue()}</ZIonText>
           </ZIonRouterLink>
@@ -486,7 +495,7 @@ const ZInpageTable: React.FC = () => {
                     url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
                       .Members,
                     params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId],
+                    values: [workspaceId ?? ''],
                     routeSearchParams: {
                       pageindex: 0,
                       pagesize: zTeamsTable
@@ -520,7 +529,7 @@ const ZInpageTable: React.FC = () => {
                     url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
                       .Members,
                     params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId],
+                    values: [workspaceId ?? ''],
                     routeSearchParams: {
                       pageindex:
                         zTeamsTable.getState().pagination.pageIndex - 1,
@@ -554,7 +563,7 @@ const ZInpageTable: React.FC = () => {
                     url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
                       .Members,
                     params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId],
+                    values: [workspaceId ?? ''],
                     routeSearchParams: {
                       pageindex:
                         zTeamsTable.getState().pagination.pageIndex + 1,
@@ -587,7 +596,7 @@ const ZInpageTable: React.FC = () => {
                     url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
                       .Members,
                     params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId],
+                    values: [workspaceId ?? ''],
                     routeSearchParams: {
                       pageindex: zTeamsTable.getPageCount() - 1,
                       pagesize: zTeamsTable
@@ -623,7 +632,7 @@ const ZInpageTable: React.FC = () => {
                 createRedirectRoute({
                   url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
                   params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                  values: [workspaceId],
+                  values: [workspaceId ?? ''],
                   routeSearchParams: {
                     pageindex: zTeamsTable.getPageCount() - 1,
                     pagesize: Number(e.target.value)

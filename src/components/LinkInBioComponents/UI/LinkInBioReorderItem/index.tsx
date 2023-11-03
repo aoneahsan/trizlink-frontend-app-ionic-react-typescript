@@ -147,8 +147,8 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 
   // link-in-bio id get from route(url).
   const { linkInBioId, workspaceId } = useParams<{
-    linkInBioId: string;
-    workspaceId: string;
+    linkInBioId?: string;
+    workspaceId?: string;
   }>();
 
   // fetching link-in-bio with the linkInBioId data from backend.
@@ -156,17 +156,17 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
     _url: API_URL_ENUM.linkInBio_update_delete,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-      workspaceId,
-      linkInBioId
+      workspaceId ?? '',
+      linkInBioId ?? ''
     ],
     _authenticated: true,
-    _itemsIds: [linkInBioId, workspaceId],
+    _itemsIds: [linkInBioId ?? '', workspaceId ?? ''],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.linkInBio.linkInBioId,
       CONSTANTS.RouteParams.workspace.workspaceId
     ],
     _shouldFetchWhenIdPassed: !(
-      linkInBioId !== undefined && linkInBioId?.trim?.length > 0
+      linkInBioId !== undefined && (linkInBioId?.trim()?.length ?? 0) > 0
     ),
     _extractType: ZRQGetRequestExtractEnum.extractItem
   });
@@ -193,7 +193,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
         );
 
         const _response = await deleteLinkInBioBlockMutate({
-          itemIds: [workspaceId, linkInBioId, element.id],
+          itemIds: [workspaceId ?? '', linkInBioId ?? '', element.id],
           urlDynamicParts: [
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.linkInBio.linkInBioId,
@@ -207,8 +207,8 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
               getRQCDataHandler<LinkInBioBlockFromType[]>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-                  workspaceId,
-                  linkInBioId
+                  workspaceId ?? '',
+                  linkInBioId ?? ''
                 ]
               }) as LinkInBioBlockFromType[],
               extractInnerDataOptionsEnum.createRequestResponseItems
@@ -223,8 +223,8 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
           await updateRQCDataHandler<LinkInBioBlockFromType[] | undefined>({
             key: [
               CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-              workspaceId,
-              linkInBioId
+              workspaceId ?? '',
+              linkInBioId ?? ''
             ],
             data: _updatedLinkInBioBlocks,
             id: '',
@@ -251,7 +251,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
                   CONSTANTS.RouteParams.workspace.workspaceId,
                   CONSTANTS.RouteParams.linkInBio.linkInBioId
                 ],
-                values: [workspaceId, linkInBioId],
+                values: [workspaceId ?? '', linkInBioId ?? ''],
                 routeSearchParams: {
                   page: ZLinkInBioPageEnum.design,
                   step: ZLinkInBioRHSComponentEnum.blocks
@@ -278,7 +278,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.linkInBio.linkInBioId
           ],
-          values: [workspaceId, linkInBioId],
+          values: [workspaceId ?? '', linkInBioId ?? ''],
           routeSearchParams: {
             page: ZLinkInBioPageEnum.design,
             step: ZLinkInBioRHSComponentEnum.blockForm,

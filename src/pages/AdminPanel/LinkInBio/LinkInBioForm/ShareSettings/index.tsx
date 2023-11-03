@@ -111,8 +111,8 @@ const LinkInBioShareSettings: React.FC = () => {
   const [showAdvanceOptions, setShowAdvanceOptions] = useState(false);
 
   const { linkInBioId, workspaceId } = useParams<{
-    linkInBioId: string;
-    workspaceId: string;
+    linkInBioId?: string;
+    workspaceId?: string;
   }>();
 
   // #region Custom hooks.
@@ -129,17 +129,17 @@ const LinkInBioShareSettings: React.FC = () => {
       _url: API_URL_ENUM.linkInBio_update_delete,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-        workspaceId,
-        linkInBioId
+        workspaceId ?? '',
+        linkInBioId ?? ''
       ],
       _authenticated: true,
-      _itemsIds: [linkInBioId, workspaceId],
+      _itemsIds: [linkInBioId ?? '', workspaceId ?? ''],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.linkInBio.linkInBioId,
         CONSTANTS.RouteParams.workspace.workspaceId
       ],
       _shouldFetchWhenIdPassed: !(
-        linkInBioId !== undefined && linkInBioId?.trim()?.length > 0
+        linkInBioId !== undefined && (linkInBioId?.trim()?.length ?? 0) > 0
       ),
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
@@ -160,7 +160,7 @@ const LinkInBioShareSettings: React.FC = () => {
       if (_reqDataStr?.trim()?.length > 0) {
         // The update api...
         const _response = await UpdateLinkInBio({
-          itemIds: [workspaceId, linkInBioId],
+          itemIds: [workspaceId ?? '', linkInBioId ?? ''],
           urlDynamicParts: [
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.linkInBio.linkInBioId
@@ -182,7 +182,7 @@ const LinkInBioShareSettings: React.FC = () => {
                 getRQCDataHandler<LinkInBioType[]>({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-                    workspaceId
+                    workspaceId ?? ''
                   ]
                 }) ?? [],
                 extractInnerDataOptionsEnum.createRequestResponseItems
@@ -192,8 +192,8 @@ const LinkInBioShareSettings: React.FC = () => {
             await updateRQCDataHandler<LinkInBioType | undefined>({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-                workspaceId,
-                linkInBioId
+                workspaceId ?? '',
+                linkInBioId ?? ''
               ],
               data: _data,
               id: '',
@@ -205,7 +205,7 @@ const LinkInBioShareSettings: React.FC = () => {
               await updateRQCDataHandler<LinkInBioType | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-                  workspaceId
+                  workspaceId ?? ''
                 ],
                 data: _data,
                 id: _data?.id

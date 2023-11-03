@@ -178,8 +178,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
   // current Link-in-bio id.
   const { linkInBioId, workspaceId } = useParams<{
-    linkInBioId: string;
-    workspaceId: string;
+    linkInBioId?: string;
+    workspaceId?: string;
   }>();
 
   // #region Custom hooks.
@@ -211,7 +211,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
     ignoreQueryPrefix: true
   });
 
-  const _blockId = (routeQSearchParams as { blockId: string }).blockId;
+  const _blockId = (routeQSearchParams as { blockId: string | undefined })
+    ?.blockId;
 
   // #region API.
   // Update Link-in-bio block API.
@@ -227,17 +228,17 @@ const ZLinkInBioBlocksForm: React.FC = () => {
       _url: API_URL_ENUM.linkInBioBlock_delete_update_get,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.GET,
-        workspaceId,
-        linkInBioId,
-        _blockId
+        workspaceId ?? '',
+        linkInBioId ?? '',
+        _blockId ?? ''
       ],
-      _itemsIds: [workspaceId, linkInBioId, _blockId],
+      _itemsIds: [workspaceId ?? '', linkInBioId ?? '', _blockId ?? ''],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.linkInBio.linkInBioId,
         CONSTANTS.RouteParams.linkInBio.libBlockId
       ],
-      _shouldFetchWhenIdPassed: !(_blockId?.trim()?.length > 0),
+      _shouldFetchWhenIdPassed: !((_blockId?.trim()?.length ?? 0) > 0),
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
 
@@ -267,7 +268,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
       if (_reqDataStr !== undefined) {
         // The update api...
         const _response = await UpdateLinkInBioBlock({
-          itemIds: [workspaceId, linkInBioId, _blockId],
+          itemIds: [workspaceId ?? '', linkInBioId ?? '', _blockId ?? ''],
           urlDynamicParts: [
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.linkInBio.linkInBioId,
@@ -305,8 +306,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
             await updateRQCDataHandler({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-                workspaceId,
-                linkInBioId
+                workspaceId ?? '',
+                linkInBioId ?? ''
               ],
               data: _extractItemFromResult,
               id: _extractItemFromResult?.id
@@ -316,9 +317,9 @@ const ZLinkInBioBlocksForm: React.FC = () => {
             await updateRQCDataHandler<LinkInBioBlockFromType | undefined>({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.GET,
-                workspaceId,
-                linkInBioId,
-                _blockId
+                workspaceId ?? '',
+                linkInBioId ?? '',
+                _blockId ?? ''
               ],
               data: _extractItemFromResult,
               id: '',
@@ -344,7 +345,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
         // );
 
         const _response = await deleteLinkInBioBlockMutate({
-          itemIds: [workspaceId, linkInBioId, _blockId],
+          itemIds: [workspaceId ?? '', linkInBioId ?? '', _blockId ?? ''],
           urlDynamicParts: [
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.linkInBio.linkInBioId,
@@ -359,8 +360,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
               getRQCDataHandler<LinkInBioBlockFromType[]>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-                  workspaceId,
-                  linkInBioId
+                  workspaceId ?? '',
+                  linkInBioId ?? ''
                 ]
               }) as LinkInBioBlockFromType[],
               extractInnerDataOptionsEnum.createRequestResponseItems
@@ -375,8 +376,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
           await updateRQCDataHandler<LinkInBioBlockFromType[] | undefined>({
             key: [
               CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-              workspaceId,
-              linkInBioId
+              workspaceId ?? '',
+              linkInBioId ?? ''
             ],
             data: _updatedLinkInBioBlocks,
             id: '',
@@ -398,7 +399,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                 CONSTANTS.RouteParams.workspace.workspaceId,
                 CONSTANTS.RouteParams.linkInBio.linkInBioId
               ],
-              values: [workspaceId, linkInBioId],
+              values: [workspaceId ?? '', linkInBioId ?? ''],
               routeSearchParams: {
                 page: ZLinkInBioPageEnum.design,
                 step: ZLinkInBioRHSComponentEnum.blocks
@@ -613,7 +614,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                             CONSTANTS.RouteParams.workspace.workspaceId,
                             CONSTANTS.RouteParams.linkInBio.linkInBioId
                           ],
-                          values: [workspaceId, linkInBioId],
+                          values: [workspaceId ?? '', linkInBioId ?? ''],
                           routeSearchParams: {
                             page: ZLinkInBioPageEnum.design,
                             step: ZLinkInBioRHSComponentEnum.blocks

@@ -50,7 +50,7 @@ import {
 } from '@/utils/enums/RoleAndPermissions';
 
 // Images
-import { ProductFavicon } from '@/assets/images';
+import { ProductFaviconSmall } from '@/assets/images';
 
 // Recoil States
 import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
@@ -96,7 +96,6 @@ const ZaionsAddNewFolder: React.FC<{
   // Create folder in owned workspace.
   const { mutateAsync: createFolderAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.folders_create_list,
-    _queriesKeysToInvalidate: [],
     _itemsIds: [workspaceId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
@@ -104,21 +103,18 @@ const ZaionsAddNewFolder: React.FC<{
   // Create folder in share workspace.
   const { mutateAsync: createSWSFolderAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.ws_share_folder_create,
-    _queriesKeysToInvalidate: [],
     _itemsIds: [shareWSMemberId],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId]
   });
 
   // Update folder in owned workspace.
   const { mutateAsync: updateFolderAsyncMutate } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.folders_update_delete,
-    _queriesKeysToInvalidate: []
+    _url: API_URL_ENUM.folders_update_delete
   });
 
   // Update folder in share workspace.
   const { mutateAsync: updateSWSFolderAsyncMutate } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.ws_share_folder_get_update_delete,
-    _queriesKeysToInvalidate: []
+    _url: API_URL_ENUM.ws_share_folder_get_update_delete
   });
   // #endregion
 
@@ -136,9 +132,17 @@ const ZaionsAddNewFolder: React.FC<{
       if (folderFormState.formMode === FormMode.ADD) {
         let _response;
 
-        if (workspaceId !== undefined) {
+        if (
+          workspaceId !== null &&
+          workspaceId !== undefined &&
+          workspaceId?.trim()?.length > 0
+        ) {
           _response = await createFolderAsyncMutate(value);
-        } else if (wsShareId !== undefined) {
+        } else if (
+          wsShareId !== null &&
+          wsShareId !== undefined &&
+          wsShareId?.trim()?.length > 0
+        ) {
           _response = await createSWSFolderAsyncMutate(value);
         }
 
@@ -151,7 +155,11 @@ const ZaionsAddNewFolder: React.FC<{
           if (_data?.id !== null) {
             let _oldFoldersData: LinkFolderType[] = [];
 
-            if (workspaceId !== undefined) {
+            if (
+              workspaceId !== null &&
+              workspaceId !== undefined &&
+              workspaceId?.trim()?.length > 0
+            ) {
               _oldFoldersData =
                 (getRQCDataHandler<LinkFolderType[]>({
                   key: [
@@ -160,7 +168,11 @@ const ZaionsAddNewFolder: React.FC<{
                     state
                   ]
                 }) as LinkFolderType[]) ?? [];
-            } else if (wsShareId !== undefined) {
+            } else if (
+              wsShareId !== null &&
+              wsShareId !== undefined &&
+              wsShareId?.trim()?.length > 0
+            ) {
               _oldFoldersData =
                 (getRQCDataHandler<LinkFolderType[]>({
                   key: [
@@ -181,7 +193,11 @@ const ZaionsAddNewFolder: React.FC<{
             const _updatedFolders = [..._oldShortLinks, _data];
 
             // Updating all shortLinks data in RQ cache.
-            if (workspaceId !== undefined) {
+            if (
+              workspaceId !== null &&
+              workspaceId !== undefined &&
+              workspaceId?.trim()?.length > 0
+            ) {
               await updateRQCDataHandler<LinkFolderType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
@@ -193,7 +209,11 @@ const ZaionsAddNewFolder: React.FC<{
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
               });
-            } else if (wsShareId !== undefined) {
+            } else if (
+              wsShareId !== null &&
+              wsShareId !== undefined &&
+              wsShareId?.trim()?.length > 0
+            ) {
               await updateRQCDataHandler<LinkFolderType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
@@ -216,7 +236,11 @@ const ZaionsAddNewFolder: React.FC<{
         if (folderFormState.id !== undefined) {
           let _response;
 
-          if (workspaceId !== undefined) {
+          if (
+            workspaceId !== null &&
+            workspaceId !== undefined &&
+            workspaceId?.trim()?.length > 0
+          ) {
             _response = await updateFolderAsyncMutate({
               itemIds: [workspaceId, folderFormState.id],
               urlDynamicParts: [
@@ -225,7 +249,11 @@ const ZaionsAddNewFolder: React.FC<{
               ],
               requestData: value
             });
-          } else if (wsShareId !== undefined) {
+          } else if (
+            wsShareId !== null &&
+            wsShareId !== undefined &&
+            wsShareId?.trim()?.length > 0
+          ) {
             _response = await updateSWSFolderAsyncMutate({
               itemIds: [shareWSMemberId, folderFormState?.id],
               urlDynamicParts: [
@@ -243,7 +271,11 @@ const ZaionsAddNewFolder: React.FC<{
             );
 
             if (_data !== undefined && _data?.id !== null) {
-              if (workspaceId !== undefined) {
+              if (
+                workspaceId !== null &&
+                workspaceId !== undefined &&
+                workspaceId?.trim()?.length > 0
+              ) {
                 // Updating current short link in cache in RQ cache.
                 await updateRQCDataHandler<LinkFolderType | undefined>({
                   key: [
@@ -254,7 +286,11 @@ const ZaionsAddNewFolder: React.FC<{
                   data: { ..._data },
                   id: _data?.id ?? ''
                 });
-              } else if (wsShareId !== undefined) {
+              } else if (
+                wsShareId !== null &&
+                wsShareId !== undefined &&
+                wsShareId?.trim()?.length > 0
+              ) {
                 await updateRQCDataHandler<LinkFolderType | undefined>({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
@@ -321,12 +357,16 @@ const ZaionsAddNewFolder: React.FC<{
       shareWSId={wsShareId}
       checkMode={permissionCheckModeEnum.any}
       permissionType={
-        wsShareId !== undefined
+        wsShareId !== null &&
+        wsShareId !== undefined &&
+        wsShareId?.trim()?.length > 0
           ? permissionsTypeEnum.shareWSMemberPermissions
           : permissionsTypeEnum.loggedInUserPermissions
       }
       havePermissions={
-        wsShareId !== undefined
+        wsShareId !== null &&
+        wsShareId !== undefined &&
+        wsShareId?.trim()?.length > 0
           ? state === folderState.shortlink
             ? [
                 shareWSPermissionEnum.create_sws_sl_folder,
@@ -437,7 +477,7 @@ const ZaionsAddNewFolder: React.FC<{
                 <div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top'>
                   <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
                     <ZIonImg
-                      src={ProductFavicon}
+                      src={ProductFaviconSmall}
                       className={classNames({
                         'mx-auto': true,
                         'w-[4rem] h-[4rem]': isSmScale,

@@ -115,9 +115,9 @@ import {
 const ZUTMTagsFilterMenu: React.FC = () => {
   // getting current workspace id OR wsShareId && shareWSMemberId form params.
   const { workspaceId, wsShareId, shareWSMemberId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region compState.
@@ -165,7 +165,7 @@ const ZUTMTagsFilterMenu: React.FC = () => {
     _url: API_URL_ENUM.user_setting_list_create,
     _loaderMessage: MESSAGES.UTM_TAGS_TEMPLATE.FILTERING,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _itemsIds: [workspaceId]
+    _itemsIds: [workspaceId ?? '']
   });
 
   // If share-workspace then this api will create share-workspace utm tags settings & filters data.
@@ -174,7 +174,7 @@ const ZUTMTagsFilterMenu: React.FC = () => {
       _url: API_URL_ENUM.sws_user_setting_list_create,
       _loaderMessage: MESSAGES.UTM_TAGS_TEMPLATE.FILTERING,
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-      _itemsIds: [shareWSMemberId]
+      _itemsIds: [shareWSMemberId ?? '']
     });
 
   // If owned-workspace then this api will fetch owned-workspace utm tags settings & filters data.
@@ -183,17 +183,17 @@ const ZUTMTagsFilterMenu: React.FC = () => {
       _url: API_URL_ENUM.user_setting_delete_update_get,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-        workspaceId,
+        workspaceId ?? '',
         ZUserSettingTypeEnum.UTMTagListPageTable
       ],
-      _itemsIds: [workspaceId, ZUserSettingTypeEnum.UTMTagListPageTable],
+      _itemsIds: [workspaceId ?? '', ZUserSettingTypeEnum.UTMTagListPageTable],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.settings.type
       ],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _shouldFetchWhenIdPassed: !(
-        workspaceId !== undefined && workspaceId?.trim()?.length > 0
+        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
       )
     });
 
@@ -203,10 +203,13 @@ const ZUTMTagsFilterMenu: React.FC = () => {
       _url: API_URL_ENUM.sws_user_setting_delete_update_get,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-        wsShareId,
+        wsShareId ?? '',
         ZUserSettingTypeEnum.UTMTagListPageTable
       ],
-      _itemsIds: [shareWSMemberId, ZUserSettingTypeEnum.UTMTagListPageTable],
+      _itemsIds: [
+        shareWSMemberId ?? '',
+        ZUserSettingTypeEnum.UTMTagListPageTable
+      ],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.workspace.shareWSMemberId,
         CONSTANTS.RouteParams.settings.type
@@ -214,9 +217,9 @@ const ZUTMTagsFilterMenu: React.FC = () => {
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _shouldFetchWhenIdPassed: !(
         wsShareId !== undefined &&
-        wsShareId?.trim()?.length > 0 &&
+        (wsShareId?.trim()?.length ?? 0) > 0 &&
         shareWSMemberId !== undefined &&
-        shareWSMemberId?.trim()?.length > 0
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
       )
     });
   // #endregion

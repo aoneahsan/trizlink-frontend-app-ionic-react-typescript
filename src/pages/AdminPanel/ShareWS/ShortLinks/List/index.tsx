@@ -145,9 +145,9 @@ const ZAdminPanelTopBar = lazy(
 const ZSWSShortLinksListPage: React.FC = () => {
   // getting current workspace id Or wsShareId & shareWSMemberId form params.
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region Component state.
@@ -189,13 +189,14 @@ const ZSWSShortLinksListPage: React.FC = () => {
   }>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
     _shouldFetchWhenIdPassed: !(
-      shareWSMemberId !== undefined && shareWSMemberId?.trim()?.length > 0
+      shareWSMemberId !== undefined &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
     ),
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -205,13 +206,14 @@ const ZSWSShortLinksListPage: React.FC = () => {
     useZRQGetRequest<workspaceInterface>({
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
-        wsShareId
+        wsShareId ?? ''
       ],
       _url: API_URL_ENUM.ws_share_info_data,
       _shouldFetchWhenIdPassed: !(
-        shareWSMemberId !== undefined && shareWSMemberId?.trim()?.length > 0
+        shareWSMemberId !== undefined &&
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
       ),
-      _itemsIds: [shareWSMemberId],
+      _itemsIds: [shareWSMemberId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _showLoader: false
@@ -224,10 +226,14 @@ const ZSWSShortLinksListPage: React.FC = () => {
     isError: isSWSShortLinksDataError
   } = useZRQGetRequest<ShortLinkType[]>({
     _url: API_URL_ENUM.sws_sl_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN, wsShareId],
-    _itemsIds: [shareWSMemberId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
+      wsShareId ?? ''
+    ],
+    _itemsIds: [shareWSMemberId ?? ''],
     _shouldFetchWhenIdPassed: !(
-      shareWSMemberId !== undefined && shareWSMemberId?.trim()?.length > 0
+      shareWSMemberId !== undefined &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
     ),
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
@@ -242,12 +248,13 @@ const ZSWSShortLinksListPage: React.FC = () => {
     _url: API_URL_ENUM.ws_share_folder_sl_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
-      wsShareId,
+      wsShareId ?? '',
       folderState.shortlink
     ],
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _shouldFetchWhenIdPassed: !(
-      shareWSMemberId !== undefined && shareWSMemberId?.trim()?.length > 0
+      shareWSMemberId !== undefined &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
     ),
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
@@ -326,26 +333,26 @@ const ZSWSShortLinksListPage: React.FC = () => {
       // Share workspace.
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
-        wsShareId
+        wsShareId ?? ''
       ]);
 
       // Share workspace shorts links.
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
-        wsShareId
+        wsShareId ?? ''
       ]);
 
       // Share workspace Folder.
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
-        wsShareId,
+        wsShareId ?? '',
         folderState.shortlink
       ]);
 
       // Member role & permissions Folder.
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-        wsShareId
+        wsShareId ?? ''
       ]);
     } catch (error) {
       reportCustomError(error);
@@ -621,9 +628,9 @@ const ZSWSShortLinksListPage: React.FC = () => {
 const ZInpageMainContent: React.FC = () => {
   // getting current workspace id form params.
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region Custom hooks.
@@ -647,13 +654,13 @@ const ZInpageMainContent: React.FC = () => {
     _url: API_URL_ENUM.ws_share_info_data,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
-      wsShareId
+      wsShareId ?? ''
     ],
     _authenticated: true,
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
     ),
     _extractType: ZRQGetRequestExtractEnum.extractItem
   });
@@ -665,10 +672,10 @@ const ZInpageMainContent: React.FC = () => {
     _url: API_URL_ENUM.ws_share_folder_sl_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
-      wsShareId,
+      wsShareId ?? '',
       folderState.shortlink
     ],
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId]
   });
 
@@ -678,9 +685,9 @@ const ZInpageMainContent: React.FC = () => {
       _url: API_URL_ENUM.sws_sl_create_list,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
-        wsShareId
+        wsShareId ?? ''
       ],
-      _itemsIds: [shareWSMemberId],
+      _itemsIds: [shareWSMemberId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId]
     });
 
@@ -690,13 +697,14 @@ const ZInpageMainContent: React.FC = () => {
   }>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
     _shouldFetchWhenIdPassed: !(
-      shareWSMemberId !== undefined && shareWSMemberId?.trim()?.length > 0
+      shareWSMemberId !== undefined &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
     ),
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -713,26 +721,26 @@ const ZInpageMainContent: React.FC = () => {
       // Share workspace.
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
-        wsShareId
+        wsShareId ?? ''
       ]);
 
       // Share workspace shorts links.
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
-        wsShareId
+        wsShareId ?? ''
       ]);
 
       // Share workspace Folder.
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
-        wsShareId,
+        wsShareId ?? '',
         folderState.shortlink
       ]);
 
       // Member Role and permissions
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-        wsShareId
+        wsShareId ?? ''
       ]);
     } catch (error) {
       reportCustomError(error);
@@ -979,7 +987,7 @@ const ZInpageMainContent: React.FC = () => {
                   routerLink={replaceParams(
                     ZaionsRoutes.AdminPanel.ShortLinks.Create,
                     CONSTANTS.RouteParams.workspace.workspaceId,
-                    workspaceId
+                    workspaceId ?? ''
                   )}
                   testingselector={
                     CONSTANTS.testingSelectors.shortLink.listPage.createBtn

@@ -14,7 +14,8 @@ export const ZaionsAppSettingsData: ZaionsAppSettingsType = {
     actions: {
       showActionInModalHeader: false,
       showActionInModalFooter: true
-    }
+    },
+    applyBorderRadius: true
   }
 };
 

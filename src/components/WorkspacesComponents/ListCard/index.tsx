@@ -167,7 +167,6 @@ const ZWorkspacesCard: React.FC<{
 
   const { mutateAsync: leaveSWSMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.leave_share_ws,
-    _queriesKeysToInvalidate: [],
     _loaderMessage: MESSAGES.WORKSPACE.LEAVING_WS_API
   });
 

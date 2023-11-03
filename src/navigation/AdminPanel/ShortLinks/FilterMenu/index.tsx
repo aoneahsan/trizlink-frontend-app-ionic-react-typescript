@@ -115,9 +115,9 @@ import MESSAGES from '@/utils/messages';
 const ZShortLinksFilterMenu: React.FC = () => {
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region compState.
@@ -193,7 +193,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
     _url: API_URL_ENUM.user_setting_list_create,
     _loaderMessage: MESSAGES.SHORT_LINKS.FILTERING,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _itemsIds: [workspaceId]
+    _itemsIds: [workspaceId ?? '']
   });
 
   // share workspace short link filter and short link other settings update api.
@@ -202,7 +202,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
       _url: API_URL_ENUM.sws_user_setting_list_create,
       _loaderMessage: MESSAGES.SHORT_LINKS.FILTERING,
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-      _itemsIds: [shareWSMemberId]
+      _itemsIds: [shareWSMemberId ?? '']
     }
   );
 
@@ -211,17 +211,17 @@ const ZShortLinksFilterMenu: React.FC = () => {
     _url: API_URL_ENUM.user_setting_delete_update_get,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-      workspaceId,
+      workspaceId ?? '',
       ZUserSettingTypeEnum.shortLinkListPageTable
     ],
-    _itemsIds: [workspaceId, ZUserSettingTypeEnum.shortLinkListPageTable],
+    _itemsIds: [workspaceId ?? '', ZUserSettingTypeEnum.shortLinkListPageTable],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.workspaceId,
       CONSTANTS.RouteParams.settings.type
     ],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
     ),
     _showLoader: false
   });
@@ -231,16 +231,19 @@ const ZShortLinksFilterMenu: React.FC = () => {
     _url: API_URL_ENUM.sws_user_setting_delete_update_get,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-      wsShareId,
+      wsShareId ?? '',
       ZUserSettingTypeEnum.shortLinkListPageTable
     ],
-    _itemsIds: [shareWSMemberId, ZUserSettingTypeEnum.shortLinkListPageTable],
+    _itemsIds: [
+      shareWSMemberId ?? '',
+      ZUserSettingTypeEnum.shortLinkListPageTable
+    ],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.shareWSMemberId,
       CONSTANTS.RouteParams.settings.type
     ],
     _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined && wsShareId?.trim()?.length > 0
+      wsShareId !== undefined && (wsShareId?.trim()?.length ?? 0) > 0
     ),
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false

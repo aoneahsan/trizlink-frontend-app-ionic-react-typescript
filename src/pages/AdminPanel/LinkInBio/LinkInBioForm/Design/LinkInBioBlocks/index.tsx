@@ -97,8 +97,8 @@ const ZLinkInBioBlocksSection: React.FC = () => {
 
   // getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio blocks of that id will be fetch from backend.
   const { linkInBioId, workspaceId } = useParams<{
-    linkInBioId: string;
-    workspaceId: string;
+    linkInBioId?: string;
+    workspaceId?: string;
   }>();
 
   // custom hook for presenting modal (the add block modal)
@@ -122,8 +122,8 @@ const ZLinkInBioBlocksSection: React.FC = () => {
     _url: API_URL_ENUM.linkInBioPreDefinedBlocks_create_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_DEFINED_BLOCKS.MAIN,
-      workspaceId,
-      linkInBioId
+      workspaceId ?? '',
+      linkInBioId ?? ''
     ]
   });
 

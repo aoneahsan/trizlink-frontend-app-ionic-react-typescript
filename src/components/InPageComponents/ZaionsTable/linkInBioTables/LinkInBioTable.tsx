@@ -101,15 +101,18 @@ const ZaionsLinkInBioLinksTable: React.FC<{
   showSkeleton?: boolean;
 }> = ({ showSkeleton = false }) => {
   const { workspaceId } = useParams<{
-    folderId: string;
-    workspaceId: string;
+    folderId?: string;
+    workspaceId?: string;
   }>();
 
   // #region APIS requests.
   const { data: getLinkInBioLinkData } = useZRQGetRequest<LinkInBioType[]>({
     _url: API_URL_ENUM.linkInBio_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN, workspaceId],
-    _itemsIds: [workspaceId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+      workspaceId ?? ''
+    ],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
   // #endregion
@@ -163,15 +166,18 @@ const ZInpageTable: React.FC = () => {
   // #endregion
 
   const { folderId, workspaceId } = useParams<{
-    folderId: string;
-    workspaceId: string;
+    folderId?: string;
+    workspaceId?: string;
   }>();
 
   // #region APIS requests.
   const { data: getLinkInBioLinkData } = useZRQGetRequest<LinkInBioType[]>({
     _url: API_URL_ENUM.linkInBio_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN, workspaceId],
-    _itemsIds: [workspaceId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+      workspaceId ?? ''
+    ],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
   // #endregion
@@ -274,7 +280,7 @@ const ZInpageTable: React.FC = () => {
                 CONSTANTS.RouteParams.workspace.workspaceId,
                 CONSTANTS.RouteParams.linkInBio.linkInBioId
               ],
-              values: [workspaceId, row?.row?.original?.id ?? ''],
+              values: [workspaceId ?? '', row?.row?.original?.id ?? ''],
               routeSearchParams: {
                 page: ZLinkInBioPageEnum.design,
                 step: ZLinkInBioRHSComponentEnum.theme
@@ -463,7 +469,7 @@ const ZInpageTable: React.FC = () => {
                       CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                     ],
                     values: [
-                      workspaceId,
+                      workspaceId ?? '',
                       CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                     ],
                     routeSearchParams: {
@@ -505,7 +511,7 @@ const ZInpageTable: React.FC = () => {
                       CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                     ],
                     values: [
-                      workspaceId,
+                      workspaceId ?? '',
                       CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                     ],
                     routeSearchParams: {
@@ -547,7 +553,7 @@ const ZInpageTable: React.FC = () => {
                       CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                     ],
                     values: [
-                      workspaceId,
+                      workspaceId ?? '',
                       CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                     ],
                     routeSearchParams: {
@@ -591,7 +597,7 @@ const ZInpageTable: React.FC = () => {
                       CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                     ],
                     values: [
-                      workspaceId,
+                      workspaceId ?? '',
                       CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                     ],
                     routeSearchParams: {
@@ -635,7 +641,10 @@ const ZInpageTable: React.FC = () => {
                     CONSTANTS.RouteParams.workspace.workspaceId,
                     CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                   ],
-                  values: [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE],
+                  values: [
+                    workspaceId ?? '',
+                    CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
+                  ],
                   routeSearchParams: {
                     pageindex: zLinkInBioTable.getPageCount() - 1,
                     pagesize: Number(e.target.value)

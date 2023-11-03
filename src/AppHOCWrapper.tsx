@@ -48,19 +48,19 @@ const AppHOCWrapper: React.FC = () => {
   return (
     <>
       {/* Other Packages  */}
-      {/* Recoil State HOC */}
-      <RecoilRoot>
-        {/* Ionic React Router HOC */}
-        <IonReactRouter>
-          {/* My Custom HOCs - Below This */}
-          {/* Error Logging HOC */}
-          <ErrorLoggingHOC>
-            {/* Firebase HOC */}
-            <FirebaseHOC>
-              {/* Ionic Router Outlet HOC */}
-              <IonRouterOutlet>
-                {/* React Query HOC */}
-                <QueryClientProvider client={queryClientObj}>
+      <QueryClientProvider client={queryClientObj}>
+        {/* Recoil State HOC */}
+        <RecoilRoot>
+          {/* Ionic React Router HOC */}
+          <IonReactRouter>
+            {/* Ionic Router Outlet HOC */}
+            <IonRouterOutlet>
+              {/* React Query HOC */}
+              {/* My Custom HOCs - Below This */}
+              {/* Error Logging HOC */}
+              <ErrorLoggingHOC>
+                {/* Firebase HOC */}
+                <FirebaseHOC>
                   {/* Authentication HOC */}
                   <AuthenticateHOC>
                     {/* HOC to fetch required data for app */}
@@ -74,12 +74,12 @@ const AppHOCWrapper: React.FC = () => {
 
                   {/* React Query Devtools */}
                   <ReactQueryDevtools initialIsOpen={false} />
-                </QueryClientProvider>
-              </IonRouterOutlet>
-            </FirebaseHOC>
-          </ErrorLoggingHOC>
-        </IonReactRouter>
-      </RecoilRoot>
+                </FirebaseHOC>
+              </ErrorLoggingHOC>
+            </IonRouterOutlet>
+          </IonReactRouter>
+        </RecoilRoot>
+      </QueryClientProvider>
     </>
   );
 };

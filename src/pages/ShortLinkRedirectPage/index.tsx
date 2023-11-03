@@ -53,6 +53,7 @@ import {
   extractInnerData,
   formatApiRequestErrorForFormikFormField,
   zGetRandomLink,
+  zIsPlatforms,
   zRedirectToTarget,
   zStringify
 } from '@/utils/helpers';
@@ -130,13 +131,13 @@ const ZShortLinkRedirectPage: React.FC = () => {
     errorOccurred: false
   });
 
-  const { urlPath } = useParams<{ urlPath: string }>();
+  const { urlPath } = useParams<{ urlPath?: string }>();
 
   const { mutateAsync: createSLRecodeAsyncMutate, error: SLRecodeError } =
     useZRQCreateRequest({
       _url: API_URL_ENUM.shortLink_get_target_url_info,
       _urlDynamicParts: [CONSTANTS.RouteParams.urlPath],
-      _itemsIds: [urlPath],
+      _itemsIds: [urlPath ?? ''],
       _showAlertOnError: false,
       _authenticated: false,
       _showLoader: false
@@ -145,7 +146,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
   const { mutateAsync: checkLinkPasswordValidation } = useZRQCreateRequest({
     _url: API_URL_ENUM.shortLink_check_target_password,
     _urlDynamicParts: [CONSTANTS.RouteParams.urlPath],
-    _itemsIds: [urlPath],
+    _itemsIds: [urlPath ?? ''],
     _showAlertOnError: false,
     _authenticated: false,
     _showLoader: false
@@ -153,8 +154,40 @@ const ZShortLinkRedirectPage: React.FC = () => {
 
   const logDeviceInfo = useCallback(async () => {
     const _deviceInfo = await Device.getInfo();
+    const {
+      isAndroidPlatform,
+      isCapacitor,
+      isCordova,
+      isDesktop,
+      isElectron,
+      isHybrid,
+      isIOS,
+      isIPad,
+      isIPhone,
+      isMobile,
+      isMobileWeb,
+      isPWA,
+      isPhablet,
+      isTablet
+    } = zIsPlatforms();
 
-    return _deviceInfo;
+    return {
+      ..._deviceInfo,
+      isAndroidPlatform,
+      isCapacitor,
+      isCordova,
+      isDesktop,
+      isElectron,
+      isHybrid,
+      isIOS,
+      isIPad,
+      isIPhone,
+      isMobile,
+      isMobileWeb,
+      isPWA,
+      isPhablet,
+      isTablet
+    };
   }, []);
 
   // const logBatteryInfo = useCallback(async () => {
@@ -179,8 +212,6 @@ const ZShortLinkRedirectPage: React.FC = () => {
     );
     const data = await response.json();
 
-    console.log({ data });
-
     const countryComponent = (
       data?.results?.[0]?.address_components as Array<{
         long_name: string;
@@ -193,8 +224,10 @@ const ZShortLinkRedirectPage: React.FC = () => {
 
   //
   const createURlRecodeCallback = useCallback(async () => {
+    // Getting device info from capacitor/device package
     const _deviceInfo = await logDeviceInfo();
 
+    // zStringify the data to sent in short-link recode api.
     const _data = zStringify({
       type: 'click',
       userIP: '',
@@ -202,9 +235,12 @@ const ZShortLinkRedirectPage: React.FC = () => {
       userDeviceInfo: zStringify(_deviceInfo)
     });
 
+    // Creating short-link recode
     const _response = await createSLRecodeAsyncMutate(_data);
 
-    if ((_response as ZLinkMutateApiType<ShortLinkType>).success) {
+    // After creating recode the response is send with short link information.
+    if ((_response as ZLinkMutateApiType<ShortLinkType>)?.success) {
+      // Extracting the data from response.
       const _data = extractInnerData<ShortLinkType>(
         _response,
         extractInnerDataOptionsEnum.createRequestResponseItem
@@ -221,7 +257,6 @@ const ZShortLinkRedirectPage: React.FC = () => {
         const _type = _data?.type as messengerPlatformsBlockEnum;
         const _geoLocations =
           _data?.geoLocationRotatorLinks as GeoLocationRotatorInterface[];
-        console.log({ _geoLocations });
         const _abTestingRotator =
           _data?.abTestingRotatorLinks as ABTestingRotatorInterface[];
         const _linkExpiration =
@@ -232,45 +267,95 @@ const ZShortLinkRedirectPage: React.FC = () => {
           longitude: _userPosition?.coords?.longitude
         });
 
+        // trimming and lowercasing because if user country is same but in api the case is change then it will be a problem so her we are trimming and lowercase to compare correctly.
+        const _userCountryTrim = _userCountry?.long_name?.trim()?.toLowerCase();
+
         // generating redirect link according to __target and type. (the default redirection)
         let _redirectUrl = zRedirectToTarget({
           _target,
           type: _type
         });
 
-        const _randomRotatorLink = zGetRandomLink(_abTestingRotator);
+        // if Ab testing rotators are set the setting _redirectUrl from below.
+        if (
+          _abTestingRotator?.length > 0 &&
+          (_geoLocations?.length === 0 ||
+            _geoLocations === undefined ||
+            _geoLocations === null)
+        ) {
+          const _randomRotatorLink = zGetRandomLink(_abTestingRotator);
 
-        if (_randomRotatorLink !== null && _abTestingRotator?.length > 0) {
-          _redirectUrl = _randomRotatorLink;
+          if (_randomRotatorLink !== null) {
+            _redirectUrl = _randomRotatorLink;
+          }
         }
 
-        let highestPriority = Infinity; // Start with a high value
+        // if geo locations are set the setting _redirectUrl from below.
+        if (
+          _userCountryTrim !== undefined &&
+          _userCountryTrim !== null &&
+          (_abTestingRotator?.length === 0 ||
+            _abTestingRotator === undefined ||
+            _abTestingRotator === null)
+        ) {
+          let highestPriority = Infinity; // Start with a high value
 
-        console.log({
-          d: _geoLocations,
-          _userCountry
-        });
+          // Checking if any geo-location define. if define then redirect according to it.
+          // Now check if the user's country exists in the geoRedirects array.
+          for (const geoLocation of _geoLocations) {
+            if (
+              geoLocation?.condition !== undefined &&
+              geoLocation?.country !== null
+            ) {
+              let _country: string | string[] | null = null;
 
-        // Checking if any geo-location define. if define then redirect according to it.
-        // Now check if the user's country exists in the geoRedirects array.
-        for (const geoLocation of _geoLocations) {
-          if (
-            (geoLocation.country !== undefined &&
-              geoLocation.condition === EZGeoLocationCondition.equalTo &&
-              geoLocation.country === _userCountry) ??
-            (geoLocation.condition === EZGeoLocationCondition.notEqualTo &&
-              geoLocation.country !== _userCountry) ??
-            (geoLocation.condition === EZGeoLocationCondition.within &&
-              Array.isArray(geoLocation.country) &&
-              geoLocation.country.includes(_userCountry!)) ??
-            (geoLocation.condition === EZGeoLocationCondition.notWithin &&
-              Array.isArray(geoLocation.country) &&
-              !geoLocation.country.includes(_userCountry!))
-          ) {
-            const currentPriority = conditionPriority[geoLocation.condition];
-            if (currentPriority < highestPriority) {
-              highestPriority = currentPriority;
-              _redirectUrl = geoLocation.redirectionLink;
+              //
+              if (typeof geoLocation?.country === 'string') {
+                // trimming and lowercasing because if user country is same but in google map api result the case is change then it will be a problem so her we are trimming and lowercase to compare correctly.
+                _country = geoLocation?.country?.trim()?.toLowerCase();
+              } else if (typeof geoLocation?.country === typeof []) {
+                _country = (geoLocation?.country ?? []).map(el =>
+                  el?.trim()?.toLowerCase()
+                );
+              }
+
+              // If condition is `equal to`.
+              const _equalTo =
+                geoLocation?.condition === EZGeoLocationCondition.equalTo &&
+                typeof _country === 'string' &&
+                _country === _userCountryTrim;
+
+              // If condition is `not equal to`.
+              const _notEqualTo =
+                geoLocation?.condition === EZGeoLocationCondition.notEqualTo &&
+                typeof _country === 'string' &&
+                _country !== _userCountryTrim;
+
+              // If condition is `with in`.
+              const _within =
+                geoLocation.condition === EZGeoLocationCondition.within &&
+                Array.isArray(geoLocation.country) &&
+                typeof _country === typeof [] &&
+                (_country ?? [])?.includes(_userCountryTrim ?? '');
+
+              // If condition is `not with in`.
+              const _notWithin =
+                geoLocation?.condition === EZGeoLocationCondition.notWithin &&
+                Array.isArray(geoLocation.country) &&
+                typeof _country === typeof [] &&
+                !(_country ?? [])?.includes(_userCountryTrim ?? '');
+
+              if (
+                geoLocation?.condition !== undefined &&
+                (_equalTo || _notEqualTo || _within || _notWithin)
+              ) {
+                const currentPriority =
+                  conditionPriority[geoLocation?.condition];
+                if (currentPriority < highestPriority) {
+                  highestPriority = currentPriority;
+                  _redirectUrl = geoLocation.redirectionLink;
+                }
+              }
             }
           }
         }
@@ -302,7 +387,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
             redirectLink: _redirectUrl
           }));
           if ((_data?.password as PasswordInterface)?.enabled === false) {
-            // window.location.replace(_redirectUrl);
+            window.location.replace(_redirectUrl);
           }
         }
       }
@@ -331,7 +416,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
    * Checking if :urlPath matches the requirement.
    */
   useEffect(() => {
-    if (urlPath?.trim()?.length === 6) {
+    if (urlPath !== undefined && urlPath?.trim()?.length === 6) {
       void createURlRecodeCallback();
       setCompState(oldState => ({
         ...oldState,
@@ -383,7 +468,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
 
                   return errors;
                 }}
-                onSubmit={async (values, { setErrors, setFieldError }) => {
+                onSubmit={async values => {
                   try {
                     const _zStringifyData = zStringify({
                       password: values?.password
@@ -431,14 +516,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
                     reportCustomError(error);
                   }
                 }}>
-                {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  submitForm
-                }) => {
+                {({ values, handleChange, handleBlur, submitForm }) => {
                   return (
                     <>
                       <ZIonItem

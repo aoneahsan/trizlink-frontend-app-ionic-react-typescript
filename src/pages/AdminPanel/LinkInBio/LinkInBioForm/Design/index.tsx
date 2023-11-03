@@ -148,8 +148,8 @@ const LinkInBioDesignPage: React.FC = () => {
 
   // getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio of that id will be fetch from backend and store in NewLinkInBioFormState recoil state.
   const { linkInBioId, workspaceId } = useParams<{
-    linkInBioId: string;
-    workspaceId: string;
+    linkInBioId?: string;
+    workspaceId?: string;
   }>();
 
   // #region Custom hooks.
@@ -176,10 +176,10 @@ const LinkInBioDesignPage: React.FC = () => {
     _url: API_URL_ENUM.linkInBioBlock_create_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-      workspaceId,
-      linkInBioId
+      workspaceId ?? '',
+      linkInBioId ?? ''
     ],
-    _itemsIds: [workspaceId, linkInBioId],
+    _itemsIds: [workspaceId ?? '', linkInBioId ?? ''],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.workspaceId,
       CONSTANTS.RouteParams.linkInBio.linkInBioId
@@ -231,7 +231,7 @@ const LinkInBioDesignPage: React.FC = () => {
     try {
       // The update api...
       const _result = await UpdateLinkInBioBlocksReorder({
-        itemIds: [workspaceId, linkInBioId],
+        itemIds: [workspaceId ?? '', linkInBioId ?? ''],
         urlDynamicParts: [
           CONSTANTS.RouteParams.workspace.workspaceId,
           CONSTANTS.RouteParams.linkInBio.linkInBioId
@@ -499,7 +499,7 @@ const LinkInBioDesignPage: React.FC = () => {
                     CONSTANTS.RouteParams.workspace.workspaceId,
                     CONSTANTS.RouteParams.linkInBio.linkInBioId
                   ],
-                  values: [workspaceId, linkInBioId],
+                  values: [workspaceId ?? '', linkInBioId ?? ''],
                   routeSearchParams: {
                     page: ZLinkInBioPageEnum.design,
                     step: ZLinkInBioRHSComponentEnum.theme
@@ -531,7 +531,7 @@ const LinkInBioDesignPage: React.FC = () => {
                     CONSTANTS.RouteParams.workspace.workspaceId,
                     CONSTANTS.RouteParams.linkInBio.linkInBioId
                   ],
-                  values: [workspaceId, linkInBioId],
+                  values: [workspaceId ?? '', linkInBioId ?? ''],
                   routeSearchParams: {
                     page: ZLinkInBioPageEnum.design,
                     step: ZLinkInBioRHSComponentEnum.blocks
@@ -561,7 +561,7 @@ const LinkInBioDesignPage: React.FC = () => {
                     CONSTANTS.RouteParams.workspace.workspaceId,
                     CONSTANTS.RouteParams.linkInBio.linkInBioId
                   ],
-                  values: [workspaceId, linkInBioId],
+                  values: [workspaceId ?? '', linkInBioId ?? ''],
                   routeSearchParams: {
                     page: ZLinkInBioPageEnum.design,
                     step: ZLinkInBioRHSComponentEnum.settings
@@ -591,7 +591,7 @@ const LinkInBioDesignPage: React.FC = () => {
                     CONSTANTS.RouteParams.workspace.workspaceId,
                     CONSTANTS.RouteParams.linkInBio.linkInBioId
                   ],
-                  values: [workspaceId, linkInBioId],
+                  values: [workspaceId ?? '', linkInBioId ?? ''],
                   routeSearchParams: {
                     page: ZLinkInBioPageEnum.design,
                     step: ZLinkInBioRHSComponentEnum.poweredBy

@@ -87,7 +87,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
 
   // getting workspace id from route (url), when user refresh the page the id from route will be get and workspace of that id will be fetch from backend.
   const { editWorkspaceId } = useParams<{
-    editWorkspaceId: string;
+    editWorkspaceId?: string;
   }>();
 
   // getting search param from url with the help of 'qs' package
@@ -366,7 +366,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
                               CONSTANTS.RouteParams.workspace
                                 .editWorkspaceIdParam
                             ],
-                            values: [editWorkspaceId],
+                            values: [editWorkspaceId ?? ''],
                             routeSearchParams: {
                               tab: workspaceFormTabEnum.connectPages
                             }
@@ -395,7 +395,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
                                 CONSTANTS.RouteParams.workspace
                                   .editWorkspaceIdParam
                               ],
-                              values: [editWorkspaceId],
+                              values: [editWorkspaceId ?? ''],
                               routeSearchParams: {
                                 tab: workspaceFormTabEnum.connectPages
                               }

@@ -111,8 +111,8 @@ const ZShareWSView: React.FC = () => {
 
   // getting current share workspace id form params.
   const { wsShareId, shareWSMemberId } = useParams<{
-    shareWSMemberId: string;
-    wsShareId: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region custom hooks.
@@ -139,13 +139,14 @@ const ZShareWSView: React.FC = () => {
   } = useZRQGetRequest<workspaceInterface>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_info_data,
     _shouldFetchWhenIdPassed: !(
-      shareWSMemberId !== undefined && shareWSMemberId?.trim()?.length > 0
+      shareWSMemberId !== undefined &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
     ),
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -161,13 +162,13 @@ const ZShareWSView: React.FC = () => {
   }>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
     _shouldFetchWhenIdPassed: !(
       shareWSMemberId !== undefined && shareWSMemberId?.trim()?.length > 0
     ),
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -179,12 +180,12 @@ const ZShareWSView: React.FC = () => {
     try {
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-        wsShareId
+        wsShareId ?? ''
       ]);
 
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
-        wsShareId
+        wsShareId ?? ''
       ]);
     } catch (error) {
       reportCustomError(error);
@@ -521,8 +522,8 @@ const ZShareWSView: React.FC = () => {
                       routerLink={createRedirectRoute({
                         url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
                         values: [
-                          wsShareId,
-                          shareWSMemberId,
+                          wsShareId ?? '',
+                          shareWSMemberId ?? '',
                           CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                         ],
                         params: [

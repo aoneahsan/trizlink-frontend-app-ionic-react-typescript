@@ -71,8 +71,8 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
 
   // getting workspace and shortlink ids from url with the help of useParams.
   const { editLinkId, workspaceId } = useParams<{
-    workspaceId: string;
-    editLinkId: string;
+    workspaceId?: string;
+    editLinkId?: string;
   }>();
 
   const { data: zIsPathAvailable, refetch: refetchZIsPathAvailable } =
@@ -80,14 +80,14 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
       _url: API_URL_ENUM.shortLinks_is_path_available,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.IS_PATH_AVAILABLE,
-        workspaceId
+        workspaceId ?? ''
       ],
       _shouldFetchWhenIdPassed: !(
         values?.shortUrlPath !== undefined &&
         values?.shortUrlPath?.trim()?.length === 6 &&
         initialValues?.shortUrlPath !== values?.shortUrlPath
       ),
-      _itemsIds: [workspaceId, values?.shortUrlPath ?? ''],
+      _itemsIds: [workspaceId ?? '', values?.shortUrlPath ?? ''],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.shortLink.path
@@ -96,7 +96,7 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
       _showLoader: false
     });
 
-  const isZEditMode = editLinkId?.trim()?.length > 0;
+  const isZEditMode = (editLinkId?.trim()?.length ?? 0) > 0;
 
   useEffect(() => {
     try {
@@ -246,7 +246,7 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS
                       .IS_PATH_AVAILABLE,
-                    workspaceId
+                    workspaceId ?? ''
                   ]
                 });
 
@@ -255,7 +255,7 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS
                         .IS_PATH_AVAILABLE,
-                      workspaceId
+                      workspaceId ?? ''
                     ]
                   });
                 }

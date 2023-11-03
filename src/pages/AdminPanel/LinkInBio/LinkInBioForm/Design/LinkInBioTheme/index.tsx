@@ -108,8 +108,8 @@ const ZLinkInBioThemeSection: React.FC = () => {
 
   // current Link-in-bio id.
   const { linkInBioId, workspaceId } = useParams<{
-    linkInBioId: string;
-    workspaceId: string;
+    linkInBioId?: string;
+    workspaceId?: string;
   }>();
 
   // #region APIS.
@@ -120,8 +120,8 @@ const ZLinkInBioThemeSection: React.FC = () => {
     _url: API_URL_ENUM.linkInBioPreDefinedThemes_create_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_DEFINED_THEMES.MAIN,
-      workspaceId,
-      linkInBioId
+      workspaceId ?? '',
+      linkInBioId ?? ''
     ]
   });
 
@@ -131,17 +131,17 @@ const ZLinkInBioThemeSection: React.FC = () => {
       _url: API_URL_ENUM.linkInBio_update_delete,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-        workspaceId,
-        linkInBioId
+        workspaceId ?? '',
+        linkInBioId ?? ''
       ],
       _authenticated: true,
-      _itemsIds: [linkInBioId, workspaceId],
+      _itemsIds: [linkInBioId ?? '', workspaceId ?? ''],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.linkInBio.linkInBioId,
         CONSTANTS.RouteParams.workspace.workspaceId
       ],
       _shouldFetchWhenIdPassed: !(
-        linkInBioId !== undefined && linkInBioId?.trim()?.length > 0
+        linkInBioId !== undefined && (linkInBioId?.trim()?.length ?? 0) > 0
       ),
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });

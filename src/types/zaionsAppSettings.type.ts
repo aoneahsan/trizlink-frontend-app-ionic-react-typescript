@@ -19,6 +19,7 @@ export interface ZaionsAppModalSettingType {
     showActionInModalHeader: boolean; // control the visibility of action buttons in the header of modal
     showActionInModalFooter: boolean; // control the visibility of action buttons in the footer of modal
   };
+  applyBorderRadius: boolean;
 }
 
 export interface ZaionsCountryCodeType {

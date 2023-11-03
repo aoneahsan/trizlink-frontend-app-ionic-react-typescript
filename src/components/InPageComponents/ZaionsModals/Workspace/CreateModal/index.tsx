@@ -78,7 +78,7 @@ import { type FormikSetErrorsType } from '@/types/ZaionsFormik.type';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
-import { ProductFavicon } from '@/assets/images';
+import { ProductFaviconSmall } from '@/assets/images';
 
 /**
  * Component props type go down
@@ -100,8 +100,7 @@ const ZAddNewWorkspaceModal: React.FC<{
 
   // Create new workspace API.
   const { mutateAsync: createWorkspaceMutate } = useZRQCreateRequest({
-    _url: API_URL_ENUM.workspace_create_list,
-    _queriesKeysToInvalidate: []
+    _url: API_URL_ENUM.workspace_create_list
   });
 
   // Formik submit handler
@@ -110,7 +109,7 @@ const ZAddNewWorkspaceModal: React.FC<{
     setErrors: FormikSetErrorsType
   ): Promise<void> => {
     try {
-      if (values?.length > 0) {
+      if (values?.trim()?.length > 0) {
         // Making an api call creating new workspace.
         const _response = await createWorkspaceMutate(values);
 
@@ -192,7 +191,7 @@ const ZAddNewWorkspaceModal: React.FC<{
       <div className='flex flex-col ion-justify-content-center'>
         <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
           <ZIonImg
-            src={ProductFavicon}
+            src={ProductFaviconSmall}
             className='w-10 h-10 mx-auto'
           />
         </div>

@@ -141,9 +141,9 @@ const ZPixelsTable: React.FC<{
 }> = ({ showSkeleton = false }) => {
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region custom hooks.
@@ -156,12 +156,12 @@ const ZPixelsTable: React.FC<{
       _url: API_URL_ENUM.userPixelAccounts_create_list,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
-        workspaceId
+        workspaceId ?? ''
       ],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _itemsIds: [workspaceId],
+      _itemsIds: [workspaceId ?? ''],
       _shouldFetchWhenIdPassed: !(
-        workspaceId !== undefined && workspaceId?.trim?.length > 0
+        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
       )
     });
 
@@ -171,15 +171,15 @@ const ZPixelsTable: React.FC<{
       _url: API_URL_ENUM.sws_pixel_account_create_list,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
-        wsShareId
+        wsShareId ?? ''
       ],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-      _itemsIds: [shareWSMemberId],
+      _itemsIds: [shareWSMemberId ?? ''],
       _shouldFetchWhenIdPassed: !(
         wsShareId !== undefined &&
-        wsShareId?.trim?.length > 0 &&
+        (wsShareId?.trim()?.length ?? 0) > 0 &&
         shareWSMemberId !== undefined &&
-        shareWSMemberId?.trim?.length > 0
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
       )
     });
 
@@ -190,16 +190,16 @@ const ZPixelsTable: React.FC<{
   }>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
     _shouldFetchWhenIdPassed: !(
       wsShareId !== undefined &&
-      wsShareId?.trim?.length > 0 &&
+      (wsShareId?.trim()?.length ?? 0) > 0 &&
       shareWSMemberId !== undefined &&
-      shareWSMemberId?.trim?.length > 0
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
     ),
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -275,9 +275,9 @@ const ZPixelsTable: React.FC<{
 const ZInpageTable: React.FC = () => {
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   const [compState, setCompState] = useState<{
@@ -308,11 +308,14 @@ const ZInpageTable: React.FC = () => {
   // If owned-workspace then this api will fetch pixels in this owned-workspace.
   const { data: PixelsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN, workspaceId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
+      workspaceId ?? ''
+    ],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _itemsIds: [workspaceId],
+    _itemsIds: [workspaceId ?? ''],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
     )
   });
 
@@ -321,15 +324,15 @@ const ZInpageTable: React.FC = () => {
     _url: API_URL_ENUM.sws_pixel_account_create_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
-      wsShareId
+      wsShareId ?? ''
     ],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _shouldFetchWhenIdPassed: !(
       wsShareId !== undefined &&
-      wsShareId?.trim?.length > 0 &&
+      (wsShareId?.trim()?.length ?? 0) > 0 &&
       shareWSMemberId !== undefined &&
-      shareWSMemberId?.trim?.length > 0
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
     )
   });
 
@@ -338,17 +341,17 @@ const ZInpageTable: React.FC = () => {
       _url: API_URL_ENUM.user_setting_delete_update_get,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-        workspaceId,
+        workspaceId ?? '',
         ZUserSettingTypeEnum.pixelListPageTable
       ],
-      _itemsIds: [workspaceId, ZUserSettingTypeEnum.pixelListPageTable],
+      _itemsIds: [workspaceId ?? '', ZUserSettingTypeEnum.pixelListPageTable],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.settings.type
       ],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _shouldFetchWhenIdPassed: !(
-        workspaceId !== undefined && workspaceId?.trim()?.length > 0
+        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
       )
     }
   );
@@ -360,7 +363,10 @@ const ZInpageTable: React.FC = () => {
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
         ZUserSettingTypeEnum.pixelListPageTable
       ],
-      _itemsIds: [shareWSMemberId, ZUserSettingTypeEnum.pixelListPageTable],
+      _itemsIds: [
+        shareWSMemberId ?? '',
+        ZUserSettingTypeEnum.pixelListPageTable
+      ],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.workspace.shareWSMemberId,
         CONSTANTS.RouteParams.settings.type
@@ -368,9 +374,9 @@ const ZInpageTable: React.FC = () => {
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _shouldFetchWhenIdPassed: !(
         wsShareId !== undefined &&
-        wsShareId?.trim?.length > 0 &&
+        wsShareId?.trim()?.length > 0 &&
         shareWSMemberId !== undefined &&
-        shareWSMemberId?.trim?.length > 0
+        shareWSMemberId?.trim()?.length > 0
       )
     });
   // #endregion

@@ -99,10 +99,10 @@ import { type FormikSetFieldValueEventVoidType } from '@/types/ZaionsFormik.type
  * */
 
 const ZWorkspaceTimeSlotFormModal: React.FC<{
-  workspaceId: string;
+  workspaceId?: string;
   timeSlotId?: string;
   mode?: FormMode;
-  timeSlotDay: daysEnum;
+  timeSlotDay?: daysEnum;
   wsShareMemberId?: string; // if this is share workspace then pass the member id
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
 }> = ({
@@ -118,7 +118,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
   const { mutateAsync: createTimeSlotMutateAsync } = useZRQCreateRequest({
     _url: API_URL_ENUM.time_slot_create_list,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _itemsIds: [workspaceId],
+    _itemsIds: [workspaceId ?? ''],
     _loaderMessage: MESSAGES.TIME_SLOT.CREATING_API
   });
 
@@ -138,7 +138,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
     _url: API_URL_ENUM.time_slot_update_delete,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.GET,
-      workspaceId,
+      workspaceId ?? '',
       timeSlotId ?? ''
     ],
     _showLoader: false,
@@ -146,7 +146,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
       CONSTANTS.RouteParams.workspace.workspaceId,
       CONSTANTS.RouteParams.timeSlot.timeSlotId
     ],
-    _itemsIds: [workspaceId, timeSlotId ?? ''],
+    _itemsIds: [workspaceId ?? '', timeSlotId ?? ''],
     _shouldFetchWhenIdPassed: !(
       timeSlotId !== undefined &&
       workspaceId !== undefined &&
@@ -247,7 +247,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
               (getRQCDataHandler<TimeSlotInterface[]>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
-                  workspaceId
+                  workspaceId ?? ''
                 ]
               }) as TimeSlotInterface[]) ?? [];
 
@@ -377,7 +377,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
             getRQCDataHandler<TimeSlotInterface[]>({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
-                workspaceId
+                workspaceId ?? ''
               ]
             }) as TimeSlotInterface[],
             extractInnerDataOptionsEnum.createRequestResponseItems
@@ -388,7 +388,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
           void updateRQCDataHandler<TimeSlotInterface | undefined>({
             key: [
               CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
-              workspaceId
+              workspaceId ?? ''
             ],
             data: { ...currentTimeSlotData },
             id: currentTimeSlotData?.id
@@ -415,8 +415,8 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
         initialValues={{
           time: currentTimeSlotData?.time ?? currentSWSTimeSlotData?.time ?? '',
           day:
-            currentTimeSlotData?.day != null ??
-            currentSWSTimeSlotData?.day != null ??
+            currentTimeSlotData?.day ??
+            currentSWSTimeSlotData?.day ??
             timeSlotDay ??
             daysEnum.monday,
           color:

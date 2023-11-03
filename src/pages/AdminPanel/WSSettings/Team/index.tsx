@@ -99,9 +99,9 @@ const ZMembersListTable = lazy(
 const ZWSSettingTeamsListPage: React.FC = () => {
   // getting current workspace id form params.
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region Custom hooks.
@@ -127,11 +127,14 @@ const ZWSSettingTeamsListPage: React.FC = () => {
     WSTeamMembersInterface[]
   >({
     _url: API_URL_ENUM.member_getAllInvite_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId],
-    _itemsIds: [workspaceId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+      workspaceId ?? ''
+    ],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? '') > 0
     )
   });
 
@@ -142,15 +145,15 @@ const ZWSSettingTeamsListPage: React.FC = () => {
     _url: API_URL_ENUM.sws_member_getAllInvite_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
-      wsShareId
+      wsShareId ?? ''
     ],
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _shouldFetchWhenIdPassed: !(
       wsShareId !== undefined &&
-      wsShareId?.trim()?.length > 0 &&
+      (wsShareId?.trim()?.length ?? 0) > 0 &&
       shareWSMemberId !== undefined &&
-      shareWSMemberId?.trim()?.length > 0
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
     )
   });
 
@@ -161,7 +164,7 @@ const ZWSSettingTeamsListPage: React.FC = () => {
   }>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
     _shouldFetchWhenIdPassed: !(
@@ -170,7 +173,7 @@ const ZWSSettingTeamsListPage: React.FC = () => {
       shareWSMemberId !== undefined &&
       shareWSMemberId?.trim()?.length > 0
     ),
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false

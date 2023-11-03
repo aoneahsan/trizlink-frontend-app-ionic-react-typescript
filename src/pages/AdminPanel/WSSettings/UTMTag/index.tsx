@@ -91,9 +91,9 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 const ZWSSettingUtmTagListPage: React.FC = () => {
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region Custom hooks.
@@ -106,11 +106,11 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
   // If owned workspace then this api is used to fetch workspace utm tags data.
   const { data: UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN, workspaceId],
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN, workspaceId ?? ''],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
     ),
-    _itemsIds: [workspaceId],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _showLoader: false
   });
@@ -118,14 +118,17 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
   // If share workspace then this api is used to fetch share workspace utm tags data.
   const { data: swsUTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.sws_utm_tag_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN, wsShareId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN,
+      wsShareId ?? ''
+    ],
     _shouldFetchWhenIdPassed: !(
       wsShareId !== undefined &&
-      wsShareId?.trim()?.length > 0 &&
+      (wsShareId?.trim()?.length ?? 0) > 0 &&
       shareWSMemberId !== undefined &&
-      shareWSMemberId?.trim()?.length > 0
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
     ),
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
   });
@@ -137,7 +140,7 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
   }>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
     _shouldFetchWhenIdPassed: !(
@@ -146,7 +149,7 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
       shareWSMemberId !== undefined &&
       shareWSMemberId?.trim()?.length > 0
     ),
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false

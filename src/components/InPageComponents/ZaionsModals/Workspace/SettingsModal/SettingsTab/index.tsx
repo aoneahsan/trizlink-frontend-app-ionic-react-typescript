@@ -118,20 +118,17 @@ const ZSettingsTab: React.FC<{
   // #region APIS
   const { mutateAsync: updateWorkspaceMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.workspace_update_delete,
-    _queriesKeysToInvalidate: [],
     _loaderMessage: MESSAGES.WORKSPACE.UPDATING_API
   });
 
   //
   const { mutateAsync: updateSWSMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.update_ws_share_info_data,
-    _queriesKeysToInvalidate: [],
     _loaderMessage: MESSAGES.WORKSPACE.UPDATING_API
   });
 
   const { mutateAsync: leaveSWSMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.leave_share_ws,
-    _queriesKeysToInvalidate: [],
     _loaderMessage: MESSAGES.WORKSPACE.LEAVING_WS_API
   });
 

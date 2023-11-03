@@ -83,7 +83,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
 }> = ({ className, showSkeleton = false }) => {
   // getting current workspace id form params.
   const { workspaceId } = useParams<{
-    workspaceId: string;
+    workspaceId?: string;
   }>();
 
   const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
@@ -136,7 +136,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
               replaceParams(
                 ZaionsRoutes.AdminPanel.ShortLinks.Create,
                 CONSTANTS.RouteParams.workspace.workspaceId,
-                workspaceId
+                workspaceId ?? ''
               )
             );
             resetForm();

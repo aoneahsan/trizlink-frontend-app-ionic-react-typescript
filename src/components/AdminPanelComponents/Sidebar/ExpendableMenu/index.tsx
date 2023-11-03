@@ -104,9 +104,9 @@ const AdminPanelSidebarMenu: React.FC<{
 
   // getting workspace ids from url with the help of useParams.
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // get workspace data api.
@@ -117,13 +117,13 @@ const AdminPanelSidebarMenu: React.FC<{
   }>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
     _shouldFetchWhenIdPassed: !(
-      shareWSMemberId !== undefined && shareWSMemberId?.length > 0
+      shareWSMemberId !== undefined && shareWSMemberId?.trim()?.length > 0
     ),
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -132,11 +132,14 @@ const AdminPanelSidebarMenu: React.FC<{
   const { data: selectedWorkspace, isFetching: isSelectedWorkspaceFetching } =
     useZRQGetRequest<workspaceInterface>({
       _url: API_URL_ENUM.workspace_update_delete,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId],
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
+        workspaceId ?? ''
+      ],
       _authenticated: true,
-      _itemsIds: [workspaceId],
+      _itemsIds: [workspaceId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: !(workspaceId?.length > 0),
+      _shouldFetchWhenIdPassed: !((workspaceId?.trim()?.length ?? 0) > 0),
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _showLoader: false
     });
@@ -148,11 +151,11 @@ const AdminPanelSidebarMenu: React.FC<{
     _url: API_URL_ENUM.ws_share_info_data,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
-      wsShareId
+      wsShareId ?? ''
     ],
     _authenticated: true,
-    _itemsIds: [shareWSMemberId],
-    _shouldFetchWhenIdPassed: !(shareWSMemberId?.length > 0),
+    _itemsIds: [shareWSMemberId ?? ''],
+    _shouldFetchWhenIdPassed: !((shareWSMemberId?.trim()?.length ?? 0) > 0),
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -166,7 +169,7 @@ const AdminPanelSidebarMenu: React.FC<{
   // is fetching.
   let isZFetching = isSelectedWorkspaceFetching;
 
-  if (wsShareId?.length > 0) {
+  if ((wsShareId?.trim()?.length ?? 0) > 0) {
     isZFetching = isSelectedShareWorkspaceFetching;
   }
 
@@ -381,7 +384,7 @@ const AdminPanelSidebarMenu: React.FC<{
                             ],
                             [
                               wsShareId,
-                              shareWSMemberId,
+                              shareWSMemberId ?? '',
                               CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                             ]
                           )
@@ -484,7 +487,7 @@ const AdminPanelSidebarMenu: React.FC<{
                   routerLink={replaceRouteParams(
                     ZaionsRoutes.AdminPanel.Workspaces.View,
                     [CONSTANTS.RouteParams.workspace.workspaceId],
-                    [workspaceId]
+                    [workspaceId ?? '']
                   )}>
                   <ZIonText
                     className={classNames({
@@ -707,7 +710,7 @@ const AdminPanelSidebarMenu: React.FC<{
                       CONSTANTS.RouteParams.workspace.workspaceId,
                       CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                     ],
-                    [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
+                    [workspaceId ?? '', CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
                   )
                 );
               }}>
@@ -739,7 +742,7 @@ const AdminPanelSidebarMenu: React.FC<{
                       CONSTANTS.RouteParams.workspace.workspaceId,
                       CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                     ],
-                    [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
+                    [workspaceId ?? '', CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
                   )
                 );
               }}>
@@ -788,7 +791,7 @@ const AdminPanelSidebarMenu: React.FC<{
                 replaceRouteParams(
                   ZaionsRoutes.AdminPanel.Workspaces.View,
                   [CONSTANTS.RouteParams.workspace.workspaceId],
-                  [workspaceId]
+                  [workspaceId ?? '']
                 )
               );
 
@@ -845,7 +848,7 @@ const AdminPanelSidebarMenu: React.FC<{
                   replaceRouteParams(
                     ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
                     [CONSTANTS.RouteParams.workspace.workspaceId],
-                    [workspaceId]
+                    [workspaceId ?? '']
                   )
                 );
               }}>

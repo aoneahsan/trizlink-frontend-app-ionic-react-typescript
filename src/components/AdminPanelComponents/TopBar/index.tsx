@@ -104,8 +104,8 @@ const ZAdminPanelTopBar: React.FC<{
   // getting current share workspace id form params.
   const { wsShareId, shareWSMemberId } = useParams<{
     workspaceId?: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region popovers.

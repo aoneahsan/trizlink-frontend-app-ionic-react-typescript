@@ -70,9 +70,9 @@ import { useParams } from 'react-router';
 const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region compState.
@@ -110,13 +110,13 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
     _url: API_URL_ENUM.ShortLink_folders_create_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-      workspaceId,
+      workspaceId ?? '',
       folderState.shortlink
     ],
-    _itemsIds: [workspaceId],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
     ),
     _showLoader: false
   });
@@ -127,12 +127,13 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
       _url: API_URL_ENUM.ws_share_folder_sl_list,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
-        wsShareId,
+        wsShareId ?? '',
         folderState.shortlink
       ],
-      _itemsIds: [shareWSMemberId],
+      _itemsIds: [shareWSMemberId ?? ''],
       _shouldFetchWhenIdPassed: !(
-        shareWSMemberId !== undefined && shareWSMemberId?.trim()?.length > 0
+        shareWSMemberId !== undefined &&
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
       ),
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
       _showLoader: false

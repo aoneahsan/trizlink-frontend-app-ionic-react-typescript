@@ -128,7 +128,7 @@ const ZLinkInBiosListPage: React.FC = () => {
 
   // getting link-in-bio and workspace ids from url with the help of useParams.
   const { workspaceId } = useParams<{
-    workspaceId: string;
+    workspaceId?: string;
   }>();
 
   // #region Custom hooks.
@@ -150,12 +150,15 @@ const ZLinkInBiosListPage: React.FC = () => {
   const { isFetching: isSelectedWorkspaceFetching } =
     useZRQGetRequest<workspaceInterface>({
       _url: API_URL_ENUM.workspace_update_delete,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId],
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
+        workspaceId ?? ''
+      ],
       _authenticated: true,
-      _itemsIds: [workspaceId],
+      _itemsIds: [workspaceId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
       _shouldFetchWhenIdPassed: !(
-        workspaceId !== undefined && workspaceId?.trim()?.length > 0
+        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
       ),
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
@@ -167,10 +170,10 @@ const ZLinkInBiosListPage: React.FC = () => {
     _url: API_URL_ENUM.LinkInBio_folders_create_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-      workspaceId,
+      workspaceId ?? '',
       folderState.linkInBio
     ],
-    _itemsIds: [workspaceId],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
 
@@ -178,8 +181,11 @@ const ZLinkInBiosListPage: React.FC = () => {
     LinkInBioType[]
   >({
     _url: API_URL_ENUM.linkInBio_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN, workspaceId],
-    _itemsIds: [workspaceId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+      workspaceId ?? ''
+    ],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
 
@@ -235,19 +241,19 @@ const ZLinkInBiosListPage: React.FC = () => {
       // Workspace.
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
-        workspaceId
+        workspaceId ?? ''
       ]);
 
       // Link in bio.
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-        workspaceId
+        workspaceId ?? ''
       ]);
 
       // Folder.
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-        workspaceId,
+        workspaceId ?? '',
         folderState.linkInBio
       ]);
     } catch (error) {

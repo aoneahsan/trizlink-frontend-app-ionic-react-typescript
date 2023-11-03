@@ -56,7 +56,7 @@ import {
 } from '@/utils/enums/RoleAndPermissions';
 
 // Images
-import { ProductFavicon } from '@/assets/images';
+import { ProductFaviconSmall } from '@/assets/images';
 
 // Recoil States
 import { PixelAccountPlatformOptionsRState } from '@/ZaionsStore/UserDashboard/PixelAccountsState/index.recoil';
@@ -145,7 +145,6 @@ const ZaionsAddPixelAccount: React.FC<{
   // #region Custom APIS.
   const { mutateAsync: createPixelAccount } = useZRQCreateRequest({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _queriesKeysToInvalidate: [],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _itemsIds: [workspaceId]
   });
@@ -465,7 +464,7 @@ const ZaionsAddPixelAccount: React.FC<{
               <div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top'>
                 <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
                   <ZIonImg
-                    src={ProductFavicon}
+                    src={ProductFaviconSmall}
                     className='w-10 h-10 mx-auto'
                   />
                 </div>

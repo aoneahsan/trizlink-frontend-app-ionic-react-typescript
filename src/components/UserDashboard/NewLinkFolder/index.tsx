@@ -46,10 +46,10 @@ const NewLinkFolder: React.FC<{
 }> = ({ _foldersData, _state, showSkeleton = false }) => {
   // getting link-in-bio and workspace ids from url with the help of useParams.
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    editLinkId: string;
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    editLinkId?: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   const { values, handleChange, handleBlur } =

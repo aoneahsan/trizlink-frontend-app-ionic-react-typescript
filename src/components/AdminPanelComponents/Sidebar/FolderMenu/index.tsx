@@ -96,9 +96,9 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 
   // getting current workspace id form params.
   const { workspaceId, wsShareId, shareWSMemberId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   //
@@ -145,16 +145,22 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                 : permissionsTypeEnum.loggedInUserPermissions
             }
             havePermissions={
-              wsShareId != null
+              wsShareId !== null &&
+              wsShareId !== undefined &&
+              wsShareId?.trim()?.length > 0
                 ? type === AdminPanelSidebarMenuPageEnum.shortLink
                   ? [shareWSPermissionEnum.viewAny_sws_sl_folder]
                   : type === AdminPanelSidebarMenuPageEnum.linkInBio
                   ? [shareWSPermissionEnum.viewAny_sws_lib_folder]
                   : []
-                : type === AdminPanelSidebarMenuPageEnum.shortLink
-                ? [permissionsEnum.viewAny_sl_folder]
-                : type === AdminPanelSidebarMenuPageEnum.linkInBio
-                ? [permissionsEnum.viewAny_lib_folder]
+                : workspaceId !== null &&
+                  workspaceId !== undefined &&
+                  workspaceId?.trim()?.length > 0
+                ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                  ? [permissionsEnum.viewAny_sl_folder]
+                  : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                  ? [permissionsEnum.viewAny_lib_folder]
+                  : []
                 : []
             }>
             <ZIonItem
@@ -252,21 +258,29 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
           <ZCan
             shareWSId={wsShareId}
             permissionType={
-              wsShareId != null
+              wsShareId !== null &&
+              wsShareId !== undefined &&
+              wsShareId?.trim()?.length > 0
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }
             havePermissions={
-              wsShareId != null
+              wsShareId !== null &&
+              wsShareId !== undefined &&
+              wsShareId?.trim()?.length > 0
                 ? type === AdminPanelSidebarMenuPageEnum.shortLink
                   ? [shareWSPermissionEnum.viewAny_sws_sl_folder]
                   : type === AdminPanelSidebarMenuPageEnum.linkInBio
                   ? [shareWSPermissionEnum.viewAny_sws_lib_folder]
                   : []
-                : type === AdminPanelSidebarMenuPageEnum.shortLink
-                ? [permissionsEnum.viewAny_sl_folder]
-                : type === AdminPanelSidebarMenuPageEnum.linkInBio
-                ? [permissionsEnum.viewAny_lib_folder]
+                : workspaceId !== null &&
+                  workspaceId !== undefined &&
+                  workspaceId?.trim()?.length > 0
+                ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                  ? [permissionsEnum.viewAny_sl_folder]
+                  : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                  ? [permissionsEnum.viewAny_lib_folder]
+                  : []
                 : []
             }>
             {!showSkeleton && foldersData?.length > 0 && (
@@ -278,21 +292,29 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                     key={el.id}
                     shareWSId={wsShareId}
                     permissionType={
-                      wsShareId !== null
+                      wsShareId !== null &&
+                      wsShareId !== undefined &&
+                      wsShareId?.trim()?.length > 0
                         ? permissionsTypeEnum.shareWSMemberPermissions
                         : permissionsTypeEnum.loggedInUserPermissions
                     }
                     havePermissions={
-                      wsShareId !== null
+                      wsShareId !== null &&
+                      wsShareId !== undefined &&
+                      wsShareId?.trim()?.length > 0
                         ? type === AdminPanelSidebarMenuPageEnum.shortLink
                           ? [shareWSPermissionEnum.view_sws_sl_folder]
                           : type === AdminPanelSidebarMenuPageEnum.linkInBio
                           ? [shareWSPermissionEnum.view_sws_lib_folder]
                           : []
-                        : type === AdminPanelSidebarMenuPageEnum.shortLink
-                        ? [permissionsEnum.view_sl_folder]
-                        : type === AdminPanelSidebarMenuPageEnum.linkInBio
-                        ? [permissionsEnum.view_lib_folder]
+                        : workspaceId !== null &&
+                          workspaceId !== undefined &&
+                          workspaceId?.trim()?.length > 0
+                        ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                          ? [permissionsEnum.view_sl_folder]
+                          : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                          ? [permissionsEnum.view_lib_folder]
+                          : []
                         : []
                     }>
                     <ZIonItem
@@ -325,7 +347,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                                         CONSTANTS.RouteParams
                                           .folderIdToGetShortLinksOrLinkInBio
                                       ],
-                                      values: [workspaceId, el?.id]
+                                      values: [workspaceId ?? '', el?.id]
                                     })
                                   );
                                 } else if (
@@ -346,8 +368,8 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                                           .folderIdToGetShortLinksOrLinkInBio
                                       ],
                                       values: [
-                                        wsShareId,
-                                        shareWSMemberId,
+                                        wsShareId ?? '',
+                                        shareWSMemberId ?? '',
                                         el.id
                                       ]
                                     })
@@ -368,7 +390,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                                         CONSTANTS.RouteParams
                                           .folderIdToGetShortLinksOrLinkInBio
                                       ],
-                                      values: [workspaceId, el.id]
+                                      values: [workspaceId ?? '', el.id]
                                     })
                                   );
                                 } else if (
@@ -389,8 +411,8 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                                           .folderIdToGetShortLinksOrLinkInBio
                                       ],
                                       values: [
-                                        wsShareId,
-                                        shareWSMemberId,
+                                        wsShareId ?? '',
+                                        shareWSMemberId ?? '',
                                         el.id
                                       ]
                                     })
@@ -407,12 +429,16 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                         shareWSId={wsShareId}
                         checkMode={permissionCheckModeEnum.any}
                         permissionType={
-                          wsShareId !== null
+                          wsShareId !== null &&
+                          wsShareId !== undefined &&
+                          wsShareId?.trim()?.length > 0
                             ? permissionsTypeEnum.shareWSMemberPermissions
                             : permissionsTypeEnum.loggedInUserPermissions
                         }
                         havePermissions={
-                          wsShareId !== null
+                          wsShareId !== null &&
+                          wsShareId !== undefined &&
+                          wsShareId?.trim()?.length > 0
                             ? type === AdminPanelSidebarMenuPageEnum.shortLink
                               ? [
                                   shareWSPermissionEnum.create_sws_sl_folder,
@@ -424,16 +450,20 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                                   shareWSPermissionEnum.delete_sws_lib_folder
                                 ]
                               : []
-                            : type === AdminPanelSidebarMenuPageEnum.shortLink
-                            ? [
-                                permissionsEnum.create_sl_folder,
-                                permissionsEnum.delete_sl_folder
-                              ]
-                            : type === AdminPanelSidebarMenuPageEnum.linkInBio
-                            ? [
-                                permissionsEnum.create_lib_folder,
-                                permissionsEnum.delete_lib_folder
-                              ]
+                            : workspaceId !== null &&
+                              workspaceId !== undefined &&
+                              workspaceId?.trim()?.length > 0
+                            ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                              ? [
+                                  permissionsEnum.create_sl_folder,
+                                  permissionsEnum.delete_sl_folder
+                                ]
+                              : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                              ? [
+                                  permissionsEnum.create_lib_folder,
+                                  permissionsEnum.delete_lib_folder
+                                ]
+                              : []
                             : []
                         }>
                         <ZIonButton
@@ -537,21 +567,29 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
         <ZCan
           shareWSId={wsShareId}
           permissionType={
-            wsShareId !== null
+            wsShareId !== null &&
+            wsShareId !== undefined &&
+            wsShareId?.trim()?.length > 0
               ? permissionsTypeEnum.shareWSMemberPermissions
               : permissionsTypeEnum.loggedInUserPermissions
           }
           havePermissions={
-            wsShareId !== null
+            wsShareId !== null &&
+            wsShareId !== undefined &&
+            wsShareId?.trim()?.length > 0
               ? type === AdminPanelSidebarMenuPageEnum.shortLink
                 ? [shareWSPermissionEnum.create_sws_sl_folder]
                 : type === AdminPanelSidebarMenuPageEnum.linkInBio
                 ? [shareWSPermissionEnum.create_sws_lib_folder]
                 : []
-              : type === AdminPanelSidebarMenuPageEnum.shortLink
-              ? [permissionsEnum.create_sl_folder]
-              : type === AdminPanelSidebarMenuPageEnum.linkInBio
-              ? [permissionsEnum.create_lib_folder]
+              : workspaceId !== null &&
+                workspaceId !== undefined &&
+                workspaceId?.trim()?.length > 0
+              ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                ? [permissionsEnum.create_sl_folder]
+                : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                ? [permissionsEnum.create_lib_folder]
+                : []
               : []
           }>
           <ZIonButton
@@ -570,21 +608,29 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
             <ZCan
               shareWSId={wsShareId}
               permissionType={
-                wsShareId !== null
+                wsShareId !== null &&
+                wsShareId !== undefined &&
+                wsShareId?.trim()?.length > 0
                   ? permissionsTypeEnum.shareWSMemberPermissions
                   : permissionsTypeEnum.loggedInUserPermissions
               }
               havePermissions={
-                wsShareId !== null
+                wsShareId !== null &&
+                wsShareId !== undefined &&
+                wsShareId?.trim()?.length > 0
                   ? type === AdminPanelSidebarMenuPageEnum.shortLink
                     ? [shareWSPermissionEnum.sort_sws_sl_folder]
                     : type === AdminPanelSidebarMenuPageEnum.linkInBio
                     ? [shareWSPermissionEnum.sort_sws_lib_folder]
                     : []
-                  : type === AdminPanelSidebarMenuPageEnum.shortLink
-                  ? [permissionsEnum.sort_sl_folder]
-                  : type === AdminPanelSidebarMenuPageEnum.linkInBio
-                  ? [permissionsEnum.sort_lib_folder]
+                  : workspaceId !== null &&
+                    workspaceId !== undefined &&
+                    workspaceId?.trim()?.length > 0
+                  ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                    ? [permissionsEnum.sort_sl_folder]
+                    : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                    ? [permissionsEnum.sort_lib_folder]
+                    : []
                   : []
               }>
               <ZIonButton

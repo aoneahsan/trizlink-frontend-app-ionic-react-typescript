@@ -11,12 +11,10 @@ import ZUploadInput from '@/components/CustomComponents/ZUploadInput';
 const TestingReactDropzone: React.FC = () => {
   const { mutateAsync: uploadSingleFile } = useZRQCreateRequest({
     _url: API_URL_ENUM.uploadSingleFile,
-    _queriesKeysToInvalidate: [],
     _authenticated: true
   });
   const { mutateAsync: uploadFiles } = useZRQCreateRequest({
     _url: API_URL_ENUM.uploadFiles,
-    _queriesKeysToInvalidate: [],
     _authenticated: true
   });
 

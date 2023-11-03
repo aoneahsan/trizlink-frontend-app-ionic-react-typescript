@@ -95,7 +95,6 @@ const ZUploadInput: React.FC<IZUploadInput> = ({
   // Single file upload.
   const { mutateAsync: uploadSingleFile } = useZRQCreateRequest({
     _url: API_URL_ENUM.uploadSingleFile,
-    _queriesKeysToInvalidate: [],
     _authenticated: true,
     _contentType: zAxiosApiRequestContentType.FormData
   });
@@ -103,7 +102,6 @@ const ZUploadInput: React.FC<IZUploadInput> = ({
   // Multi files upload.
   const { mutateAsync: uploadFiles } = useZRQCreateRequest({
     _url: API_URL_ENUM.uploadFiles,
-    _queriesKeysToInvalidate: [],
     _authenticated: true,
     _contentType: zAxiosApiRequestContentType.FormData
   });

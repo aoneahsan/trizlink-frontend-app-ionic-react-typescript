@@ -79,9 +79,9 @@ import {
 
 const ZWSSettingsMenu: React.FC = () => {
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   const { isLgScale } = useZMediaQueryScale();

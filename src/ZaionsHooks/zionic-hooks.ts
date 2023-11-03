@@ -1,4 +1,4 @@
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import {
   useIonPopover,
@@ -33,6 +33,7 @@ import {
   appWiseIonicToastRStateAtom
 } from '@/ZaionsStore/AppRStates';
 import { type ToastOptions } from 'react-toastify';
+import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
 
 type GenericComponentType = JSX.Element | ReactComponentOrElement;
 
@@ -461,6 +462,7 @@ export const useZIonModal = <A extends object>(
   dismissZIonModal: (data?: any, role?: string | undefined) => void;
 } => {
   const { zNavigatePushRoute } = useZNavigate();
+  const appSettings = useRecoilValue(ZaionsAppSettingsRState);
   const [presentIonModal, dismissZIonModal] = useIonModal(component, {
     dismissZIonModal: (data: string, role: string) => {
       dismissZIonModal(data, role);
@@ -508,7 +510,11 @@ export const useZIonModal = <A extends object>(
         | undefined;
     }): void => {
       presentIonModal({
-        cssClass: _cssClass,
+        cssClass: `${
+          appSettings?.appModalsSetting?.applyBorderRadius
+            ? 'border-radius_point_6'
+            : ''
+        } ${(_cssClass as string) ?? ''}`,
         onWillDismiss: _onWillDismiss,
         onDidDismiss: _onDidDismiss,
         leaveAnimation: _leaveAnimation,

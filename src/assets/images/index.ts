@@ -483,8 +483,9 @@ import blogHero from './global-images/blog-hero-800x450.png';
 import QRCodeIndexBlogLarge from './global-images/qr-code-index-blog-large-800x450.png';
 import Q22022ProductFeaturesBlog from './global-images/q2-2022-product-features-blog-featured-800x450.webp';
 
-import ProductLogo from './global-images/zlink-logo-zaions.png';
+import ProductLogo from './global-images/product-logo.png';
 import ProductFavicon from './global-images/favicon-z-link-white-bg_720.png';
+import ProductFaviconSmall from './global-images/favicon-100-114.png';
 
 import productSmLogo from './global-images/favicon-z-link-16-16.jpg';
 
@@ -824,6 +825,7 @@ export {
   Q22022ProductFeaturesBlog,
   ProductLogo,
   ProductFavicon,
+  ProductFaviconSmall,
   productSmLogo,
   linktreeLogoSymbol,
   uploadModalCamera,

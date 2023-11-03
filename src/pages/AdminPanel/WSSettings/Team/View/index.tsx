@@ -134,8 +134,8 @@ const ZMembersListTable = lazy(
 const ZWSSettingsTeamViewPage: React.FC = () => {
   // getting current workspace id form params.
   const { workspaceId, teamId } = useParams<{
-    workspaceId: string;
-    teamId: string;
+    workspaceId?: string;
+    teamId?: string;
   }>();
 
   // #region Custom domain.
@@ -152,8 +152,11 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
     isFetching: isWSTeamsDataFetching
   } = useZRQGetRequest<workspaceTeamInterface[]>({
     _url: API_URL_ENUM.workspace_team_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM, workspaceId],
-    _itemsIds: [workspaceId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM,
+      workspaceId ?? ''
+    ],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
 
@@ -165,14 +168,14 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
     _url: API_URL_ENUM.workspace_team_update_delete,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM_GET,
-      workspaceId,
-      teamId
+      workspaceId ?? '',
+      teamId ?? ''
     ],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.workspaceId,
       CONSTANTS.RouteParams.workspace.teamId
     ],
-    _itemsIds: [workspaceId, teamId],
+    _itemsIds: [workspaceId ?? '', teamId ?? ''],
     _extractType: ZRQGetRequestExtractEnum.extractItem
   });
 
@@ -209,7 +212,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-        workspaceId
+        workspaceId ?? ''
       ]);
     } catch (error) {
       reportCustomError(error);
@@ -236,7 +239,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
       if (values?.trim()?.length > 0) {
         // Making an api call creating new workspace.
         const _response = await updateWSTeamMutate({
-          itemIds: [workspaceId, teamId],
+          itemIds: [workspaceId ?? '', teamId ?? ''],
           urlDynamicParts: [
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.workspace.teamId
@@ -256,18 +259,18 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
             await updateRQCDataHandler<workspaceTeamInterface | undefined>({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM,
-                workspaceId
+                workspaceId ?? ''
               ],
               data: _data,
-              id: teamId
+              id: teamId ?? ''
             });
 
             // Updating data in RQ cache.
             await updateRQCDataHandler<workspaceTeamInterface | undefined>({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM_GET,
-                workspaceId,
-                teamId
+                workspaceId ?? '',
+                teamId ?? ''
               ],
               data: _data,
               id: '',

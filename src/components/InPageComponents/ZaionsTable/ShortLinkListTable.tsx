@@ -116,10 +116,10 @@ const ZaionsShortLinkTable: React.FC<{
 }> = ({ showSkeleton = false }) => {
   // Folder id getting from url. (use when use when to filter short links by folder listed on the left-side, when user click on the folder from listed folder the id of that folder the Id of folder will set in the url and we will fetch it here by useParams).
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    folderId: string;
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    folderId?: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   const { zNavigatePushRoute } = useZNavigate();
@@ -140,13 +140,14 @@ const ZaionsShortLinkTable: React.FC<{
   }>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
     _shouldFetchWhenIdPassed: !(
-      shareWSMemberId !== undefined && shareWSMemberId?.trim()?.length > 0
+      shareWSMemberId !== undefined &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
     ),
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -158,11 +159,14 @@ const ZaionsShortLinkTable: React.FC<{
     itemsCount: string;
   }>({
     _url: API_URL_ENUM.shortLinks_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+      workspaceId ?? ''
+    ],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
     ),
-    _itemsIds: [workspaceId],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _showLoader: false,
     _extractType: ZRQGetRequestExtractEnum.extractData
@@ -241,36 +245,40 @@ const ZaionsShortLinkTable: React.FC<{
           <div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
             <ZEmptyTable
               message={
-                (wsShareId.length > 0 &&
-                  getMemberRolePermissions?.memberPermissions?.includes(
+                ((wsShareId?.length ?? 0) > 0 &&
+                  (getMemberRolePermissions?.memberPermissions?.includes(
                     shareWSPermissionEnum.create_sws_shortLink
-                  )) ??
+                  ) ??
+                    false)) ||
                 workspaceId !== undefined
                   ? 'No short links founds. please create a short link.'
                   : 'No short links founds.'
               }
               showBtn={
-                wsShareId !== undefined
-                  ? getMemberRolePermissions?.memberPermissions?.includes(
-                      shareWSPermissionEnum.create_sws_shortLink
-                    )
-                  : workspaceId !== undefined
+                ((wsShareId?.length ?? 0) > 0 &&
+                  (getMemberRolePermissions?.memberPermissions?.includes(
+                    shareWSPermissionEnum.create_sws_shortLink
+                  ) ??
+                    false)) ||
+                workspaceId !== undefined
               }
               btnText={
-                (wsShareId !== undefined &&
-                  getMemberRolePermissions?.memberPermissions?.includes(
+                ((wsShareId?.length ?? 0) > 0 &&
+                  (getMemberRolePermissions?.memberPermissions?.includes(
                     shareWSPermissionEnum.create_sws_shortLink
-                  )) ??
+                  ) ??
+                    false)) ||
                 workspaceId !== undefined
                   ? 'Create short link'
                   : undefined
               }
               btnOnClick={() => {
                 if (
-                  (wsShareId !== undefined &&
-                    getMemberRolePermissions?.memberPermissions?.includes(
+                  ((wsShareId?.length ?? 0) > 0 &&
+                    (getMemberRolePermissions?.memberPermissions?.includes(
                       shareWSPermissionEnum.create_sws_shortLink
-                    )) ??
+                    ) ??
+                      false)) ||
                   workspaceId !== undefined
                 ) {
                   resetShortLinkFormHandler();
@@ -299,10 +307,10 @@ const ZInpageTable: React.FC = () => {
 
   // Folder id getting from url. (use when use when to filter short links by folder listed on the left-side, when user click on the folder from listed folder the id of that folder the Id of folder will set in the url and we will fetch it here by useParams).
   const { folderId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    folderId: string;
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    folderId?: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region Recoils.
@@ -342,14 +350,14 @@ const ZInpageTable: React.FC = () => {
       _url: API_URL_ENUM.shortLinks_list,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-        workspaceId,
+        workspaceId ?? '',
         String(pageindex)
         // String(pagesize)
       ],
       _shouldFetchWhenIdPassed: !(
-        workspaceId !== undefined && workspaceId?.trim()?.length > 0
+        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
       ),
-      _itemsIds: [workspaceId, String(pageindex), String(pagesize)],
+      _itemsIds: [workspaceId ?? '', String(pageindex), String(pagesize)],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.pageNumber,
@@ -362,11 +370,14 @@ const ZInpageTable: React.FC = () => {
   // Request for getting share workspace short links data.
   const { data: swsShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
     _url: API_URL_ENUM.sws_sl_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN, wsShareId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
+      wsShareId ?? ''
+    ],
     _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined && wsShareId?.trim()?.length > 0
+      wsShareId !== undefined && (wsShareId?.trim()?.length ?? 0) > 0
     ),
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
   });
@@ -376,13 +387,13 @@ const ZInpageTable: React.FC = () => {
     _url: API_URL_ENUM.user_setting_delete_update_get,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-      workspaceId,
+      workspaceId ?? '',
       ZUserSettingTypeEnum.shortLinkListPageTable
     ],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
     ),
-    _itemsIds: [workspaceId, ZUserSettingTypeEnum.shortLinkListPageTable],
+    _itemsIds: [workspaceId ?? '', ZUserSettingTypeEnum.shortLinkListPageTable],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.workspaceId,
       CONSTANTS.RouteParams.settings.type
@@ -396,16 +407,19 @@ const ZInpageTable: React.FC = () => {
     _url: API_URL_ENUM.sws_user_setting_delete_update_get,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-      wsShareId,
+      wsShareId ?? '',
       ZUserSettingTypeEnum.shortLinkListPageTable
     ],
-    _itemsIds: [shareWSMemberId, ZUserSettingTypeEnum.shortLinkListPageTable],
+    _itemsIds: [
+      shareWSMemberId ?? '',
+      ZUserSettingTypeEnum.shortLinkListPageTable
+    ],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.shareWSMemberId,
       CONSTANTS.RouteParams.settings.type
     ],
     _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined && wsShareId?.trim()?.length > 0
+      wsShareId !== undefined && (wsShareId?.trim()?.length ?? 0) > 0
     ),
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false

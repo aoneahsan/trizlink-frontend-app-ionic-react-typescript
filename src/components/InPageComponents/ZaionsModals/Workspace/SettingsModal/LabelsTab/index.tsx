@@ -206,7 +206,7 @@ const ZLabelsTab: React.FC<{
     _labelId?: string
   ): Promise<void> => {
     try {
-      if (_value?.length > 0) {
+      if (_value?.trim()?.length > 0) {
         let _response;
         if (_mode === FormMode.ADD) {
           if (workspaceId !== undefined) {
@@ -256,13 +256,21 @@ const ZLabelsTab: React.FC<{
                 ]
               }) as LabelInterface[]) ?? [];
 
-            if (wsShareMemberId !== undefined && wsShareId !== undefined) {
-              _rqLabelsData = getRQCDataHandler<LabelInterface[]>({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.SWS_MAIN,
-                  wsShareId
-                ]
-              }) as LabelInterface[];
+            if (
+              wsShareMemberId !== undefined &&
+              wsShareMemberId !== null &&
+              wsShareMemberId?.trim()?.length > 0 &&
+              wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0
+            ) {
+              _rqLabelsData =
+                (getRQCDataHandler<LabelInterface[]>({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.SWS_MAIN,
+                    wsShareId
+                  ]
+                }) as LabelInterface[]) ?? [];
             }
 
             const _oldLabels =
@@ -277,7 +285,11 @@ const ZLabelsTab: React.FC<{
                 const _updatedLabels = [..._oldLabels, _data];
 
                 // Updating all label data in RQ cache.
-                if (workspaceId !== undefined) {
+                if (
+                  workspaceId !== undefined &&
+                  workspaceId !== null &&
+                  workspaceId?.trim()?.length > 0
+                ) {
                   await updateRQCDataHandler<LabelInterface[] | undefined>({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.MAIN,
@@ -290,7 +302,11 @@ const ZLabelsTab: React.FC<{
                   });
                 } else if (
                   wsShareMemberId !== undefined &&
-                  wsShareId !== undefined
+                  wsShareMemberId !== null &&
+                  wsShareMemberId?.trim()?.length > 0 &&
+                  wsShareId !== undefined &&
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0
                 ) {
                   await updateRQCDataHandler<LabelInterface[] | undefined>({
                     key: [
@@ -306,7 +322,11 @@ const ZLabelsTab: React.FC<{
 
                 void presentZIonToastSuccess(MESSAGES.LABEL.CREATED);
               } else if (_mode === FormMode.EDIT) {
-                if (workspaceId !== undefined) {
+                if (
+                  workspaceId !== undefined &&
+                  workspaceId !== null &&
+                  workspaceId?.trim()?.length > 0
+                ) {
                   // Updating all labels data in RQ cache.
                   await updateRQCDataHandler<LabelInterface | undefined>({
                     key: [
@@ -318,7 +338,11 @@ const ZLabelsTab: React.FC<{
                   });
                 } else if (
                   wsShareMemberId !== undefined &&
-                  wsShareId !== undefined
+                  wsShareMemberId !== null &&
+                  wsShareMemberId?.trim()?.length > 0 &&
+                  wsShareId !== undefined &&
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0
                 ) {
                   // Updating all labels data in RQ cache.
                   await updateRQCDataHandler<LabelInterface | undefined>({
@@ -345,7 +369,11 @@ const ZLabelsTab: React.FC<{
   // when user won't to delete label and click on the delete button this function will fire and show the confirm alert.
   const deleteLabel = async (_labelId?: string): Promise<void> => {
     try {
-      if (_labelId !== undefined) {
+      if (
+        _labelId !== undefined &&
+        _labelId !== null &&
+        _labelId?.trim()?.length > 0
+      ) {
         await presentZIonAlert({
           header: MESSAGES.LABEL.DELETE_ALERT.HEADER,
           subHeader: MESSAGES.LABEL.DELETE_ALERT.SUB_HEADER,
@@ -376,9 +404,17 @@ const ZLabelsTab: React.FC<{
   // on the delete time slot confirm alert, when user click on delete button this function will first which will trigger delete request and delete the time slot.
   const removeLabel = async (_labelId?: string): Promise<void> => {
     try {
-      if (_labelId !== undefined) {
+      if (
+        _labelId !== undefined &&
+        _labelId !== null &&
+        _labelId?.trim()?.length > 0
+      ) {
         let _response;
-        if (workspaceId !== undefined) {
+        if (
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          workspaceId?.trim()?.length > 0
+        ) {
           _response = await deleteLabelMutate({
             itemIds: [workspaceId, _labelId],
             urlDynamicParts: [
@@ -386,7 +422,14 @@ const ZLabelsTab: React.FC<{
               CONSTANTS.RouteParams.label.labelId
             ]
           });
-        } else if (wsShareMemberId !== undefined) {
+        } else if (
+          wsShareMemberId !== undefined &&
+          wsShareMemberId !== null &&
+          wsShareMemberId?.trim()?.length > 0 &&
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0
+        ) {
           _response = await deleteSWSLabelMutate({
             itemIds: [wsShareMemberId, _labelId],
             urlDynamicParts: [
@@ -411,7 +454,14 @@ const ZLabelsTab: React.FC<{
                 ]
               }) as LabelInterface[]) ?? [];
 
-            if (wsShareMemberId !== undefined && wsShareId !== undefined) {
+            if (
+              wsShareMemberId !== undefined &&
+              wsShareMemberId !== null &&
+              wsShareMemberId?.trim()?.length > 0 &&
+              wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0
+            ) {
               _rqLabelsData =
                 (getRQCDataHandler<LabelInterface[]>({
                   key: [
@@ -432,7 +482,11 @@ const ZLabelsTab: React.FC<{
             const _updatedLabels = _oldLabels.filter(el => el.id !== _labelId);
 
             // Updating data in RQ cache.
-            if (workspaceId !== undefined) {
+            if (
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+            ) {
               await updateRQCDataHandler<LabelInterface[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.MAIN,
@@ -445,7 +499,11 @@ const ZLabelsTab: React.FC<{
               });
             } else if (
               wsShareMemberId !== undefined &&
-              wsShareId !== undefined
+              wsShareMemberId !== null &&
+              wsShareMemberId?.trim()?.length > 0 &&
+              wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0
             ) {
               await updateRQCDataHandler<LabelInterface[] | undefined>({
                 key: [
@@ -477,12 +535,23 @@ const ZLabelsTab: React.FC<{
   useEffect(() => {
     try {
       // Accounting to the member or owner getting data and storing it to component state to show in frontend.
-      if (wsShareMemberId !== undefined) {
+      if (
+        wsShareMemberId !== undefined &&
+        wsShareMemberId !== null &&
+        wsShareMemberId?.trim()?.length > 0 &&
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        wsShareId?.trim()?.length > 0
+      ) {
         setCompState(oldValues => ({
           ...oldValues,
           labelsData: shareWSLabelsData ?? []
         }));
-      } else if (workspaceId !== undefined) {
+      } else if (
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+      ) {
         setCompState(oldValues => ({
           ...oldValues,
           labelsData: labelsData ?? []
@@ -492,14 +561,21 @@ const ZLabelsTab: React.FC<{
       reportCustomError(error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shareWSLabelsData, labelsData]);
+  }, [shareWSLabelsData, labelsData, wsShareMemberId, wsShareId]);
   // #endregion
 
   // if owner then it will watch isFetching of owner api. to show skeleton while fetching data.
   let isZFetching = isLabelsDataFetching;
 
   // if member then it will watch isFetching of member api. to show skeleton while fetching data.
-  if (wsShareMemberId !== undefined) {
+  if (
+    wsShareMemberId !== undefined &&
+    wsShareMemberId !== null &&
+    wsShareMemberId?.trim()?.length > 0 &&
+    wsShareId !== undefined &&
+    wsShareId !== null &&
+    wsShareId?.trim()?.length > 0
+  ) {
     isZFetching = isShareWSLabelsDataFetching;
   }
 
@@ -562,12 +638,16 @@ const ZLabelsTab: React.FC<{
                     <ZCan
                       shareWSId={wsShareId}
                       permissionType={
-                        wsShareId !== undefined
+                        wsShareId !== undefined &&
+                        wsShareId !== null &&
+                        wsShareId?.trim()?.length > 0
                           ? permissionsTypeEnum.shareWSMemberPermissions
                           : permissionsTypeEnum.loggedInUserPermissions
                       }
                       havePermissions={
-                        wsShareId !== undefined
+                        wsShareId !== undefined &&
+                        wsShareId !== null &&
+                        wsShareId?.trim()?.length > 0
                           ? [shareWSPermissionEnum.create_sws_label]
                           : [permissionsEnum?.create_label]
                       }>
@@ -741,12 +821,16 @@ const ZLabelsTab: React.FC<{
                                       shareWSId={wsShareId}
                                       key={index}
                                       permissionType={
-                                        wsShareId !== undefined
+                                        wsShareId !== undefined &&
+                                        wsShareId !== null &&
+                                        wsShareId?.trim()?.length > 0
                                           ? permissionsTypeEnum.shareWSMemberPermissions
                                           : permissionsTypeEnum.loggedInUserPermissions
                                       }
                                       havePermissions={
-                                        wsShareId !== undefined
+                                        wsShareId !== undefined &&
+                                        wsShareId !== null &&
+                                        wsShareId?.trim()?.length > 0
                                           ? [
                                               shareWSPermissionEnum.view_sws_label
                                             ]
@@ -774,12 +858,16 @@ const ZLabelsTab: React.FC<{
                                             <ZCan
                                               shareWSId={wsShareId}
                                               permissionType={
-                                                wsShareId !== undefined
+                                                wsShareId !== undefined &&
+                                                wsShareId !== null &&
+                                                wsShareId?.trim()?.length > 0
                                                   ? permissionsTypeEnum.shareWSMemberPermissions
                                                   : permissionsTypeEnum.loggedInUserPermissions
                                               }
                                               havePermissions={
-                                                wsShareId !== undefined
+                                                wsShareId !== undefined &&
+                                                wsShareId !== null &&
+                                                wsShareId?.trim()?.length > 0
                                                   ? [
                                                       shareWSPermissionEnum.update_sws_label
                                                     ]
@@ -825,12 +913,16 @@ const ZLabelsTab: React.FC<{
                                             <ZCan
                                               shareWSId={wsShareId}
                                               permissionType={
-                                                wsShareId !== undefined
+                                                wsShareId !== undefined &&
+                                                wsShareId !== null &&
+                                                wsShareId?.trim()?.length > 0
                                                   ? permissionsTypeEnum.shareWSMemberPermissions
                                                   : permissionsTypeEnum.loggedInUserPermissions
                                               }
                                               havePermissions={
-                                                wsShareId !== undefined
+                                                wsShareId !== undefined &&
+                                                wsShareId !== null &&
+                                                wsShareId?.trim()?.length > 0
                                                   ? [
                                                       shareWSPermissionEnum.delete_sws_label
                                                     ]
@@ -1045,12 +1137,16 @@ const ZLabelsTab: React.FC<{
                             <ZCan
                               shareWSId={wsShareId}
                               permissionType={
-                                wsShareId !== undefined
+                                wsShareId !== undefined &&
+                                wsShareId !== null &&
+                                wsShareId?.trim()?.length > 0
                                   ? permissionsTypeEnum.shareWSMemberPermissions
                                   : permissionsTypeEnum.loggedInUserPermissions
                               }
                               havePermissions={
-                                wsShareId !== undefined
+                                wsShareId !== undefined &&
+                                wsShareId !== null &&
+                                wsShareId?.trim()?.length > 0
                                   ? [shareWSPermissionEnum.create_sws_label]
                                   : [permissionsEnum?.create_label]
                               }>

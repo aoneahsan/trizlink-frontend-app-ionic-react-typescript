@@ -9,8 +9,8 @@ const PrivateRoute = ({ Component, ...rest }: any): React.ReactNode => {
   return (
     <Suspense fallback={<ZFallbackIonSpinner />}>
       <PrivateRouteAsync
-        Component={Component}
         {...rest}
+        Component={Component}
       />
     </Suspense>
   );

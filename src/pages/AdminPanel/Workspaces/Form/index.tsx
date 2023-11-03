@@ -100,7 +100,7 @@ const ZWorkspaceForm: React.FC = () => {
 
   // getting workspace id from route (url), when user refresh the page the id from route will be get and workspace of that id will be fetch from backend.
   const { editWorkspaceId } = useParams<{
-    editWorkspaceId: string;
+    editWorkspaceId?: string;
   }>();
 
   // Recoil State that hold workspaces.
@@ -114,10 +114,11 @@ const ZWorkspaceForm: React.FC = () => {
       _url: API_URL_ENUM.workspace_update_delete,
       _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET],
       _authenticated: true,
-      _itemsIds: [editWorkspaceId],
+      _itemsIds: [editWorkspaceId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
       _shouldFetchWhenIdPassed: !(
-        editWorkspaceId !== undefined && editWorkspaceId?.trim()?.length > 0
+        editWorkspaceId !== undefined &&
+        (editWorkspaceId?.trim()?.length ?? 0 ?? '') > 0
       ),
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
@@ -143,7 +144,7 @@ const ZWorkspaceForm: React.FC = () => {
               CONSTANTS.RouteParams.workspace.workspaceId,
               CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
             ],
-            [editWorkspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
+            [editWorkspaceId ?? '', CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
           )
         );
         showErrorNotification(error.message);

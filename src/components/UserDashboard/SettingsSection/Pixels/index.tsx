@@ -29,7 +29,7 @@ import { useParams } from 'react-router';
 const APSettingsPixels: React.FC = () => {
   // getting link-in-bio and workspace ids from url with the help of useParams.
   const { workspaceId } = useParams<{
-    workspaceId: string;
+    workspaceId?: string;
   }>();
 
   const { presentZIonModal: presentZAddPixelAccount } = useZIonModal(

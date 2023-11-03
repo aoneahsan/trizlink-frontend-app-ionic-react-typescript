@@ -88,9 +88,9 @@ import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil
  * @type {*}
  * */
 const FolderActionsPopoverContent: React.FC<{
-  workspaceId: string;
-  shareWSMemberId: string;
-  wsShareId: string;
+  workspaceId?: string;
+  shareWSMemberId?: string;
+  wsShareId?: string;
   state: folderState;
 }> = ({ workspaceId, shareWSMemberId, wsShareId, state }) => {
   /**
@@ -162,7 +162,11 @@ const FolderActionsPopoverContent: React.FC<{
     try {
       if (folderFormState?.id !== null && folderFormState?.id !== undefined) {
         let _response;
-        if (workspaceId !== undefined) {
+        if (
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          workspaceId?.trim()?.length > 0
+        ) {
           // hitting the delete api
           _response = await deleteFolderMutate({
             itemIds: [workspaceId, folderFormState.id],
@@ -171,10 +175,14 @@ const FolderActionsPopoverContent: React.FC<{
               CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
             ]
           });
-        } else if (wsShareId !== undefined) {
+        } else if (
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0
+        ) {
           // hitting the share workspace folder delete api
           _response = await deleteSWSFolderMutate({
-            itemIds: [shareWSMemberId, folderFormState.id],
+            itemIds: [shareWSMemberId ?? '', folderFormState.id],
             urlDynamicParts: [
               CONSTANTS.RouteParams.workspace.shareWSMemberId,
               CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
@@ -275,21 +283,29 @@ const FolderActionsPopoverContent: React.FC<{
       <ZCan
         shareWSId={wsShareId}
         permissionType={
-          wsShareId !== undefined
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }
         havePermissions={
-          wsShareId !== undefined
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0
             ? state === folderState.shortlink
               ? [shareWSPermissionEnum.update_sws_sl_folder]
               : state === folderState.linkInBio
               ? [shareWSPermissionEnum.update_sws_lib_folder]
               : []
-            : state === folderState.shortlink
-            ? [permissionsEnum.update_sl_folder]
-            : state === folderState.linkInBio
-            ? [permissionsEnum.update_lib_folder]
+            : workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+            ? state === folderState.shortlink
+              ? [permissionsEnum.update_sl_folder]
+              : state === folderState.linkInBio
+              ? [permissionsEnum.update_lib_folder]
+              : []
             : []
         }>
         <ZIonButton
@@ -314,21 +330,29 @@ const FolderActionsPopoverContent: React.FC<{
       <ZCan
         shareWSId={wsShareId}
         permissionType={
-          wsShareId !== undefined
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }
         havePermissions={
-          wsShareId !== undefined
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0
             ? state === folderState.shortlink
               ? [shareWSPermissionEnum.delete_sws_sl_folder]
               : state === folderState.linkInBio
               ? [shareWSPermissionEnum.delete_sws_lib_folder]
               : []
-            : state === folderState.shortlink
-            ? [permissionsEnum.delete_sl_folder]
-            : state === folderState.linkInBio
-            ? [permissionsEnum.delete_lib_folder]
+            : workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+            ? state === folderState.shortlink
+              ? [permissionsEnum.delete_sl_folder]
+              : state === folderState.linkInBio
+              ? [permissionsEnum.delete_lib_folder]
+              : []
             : []
         }>
         <ZIonButton

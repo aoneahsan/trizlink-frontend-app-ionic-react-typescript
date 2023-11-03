@@ -107,10 +107,10 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
   const { editLinkId, workspaceId, wsShareId, shareWSMemberId } = useParams<{
-    editLinkId: string;
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    editLinkId?: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // if owned workspace then this api will fetch the current short link data in this workspace.
@@ -119,20 +119,20 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
       _url: API_URL_ENUM.shortLinks_update_delete,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
-        workspaceId,
-        editLinkId
+        workspaceId ?? '',
+        editLinkId ?? ''
       ],
       _authenticated: true,
-      _itemsIds: [workspaceId, editLinkId],
+      _itemsIds: [workspaceId ?? '', editLinkId ?? ''],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.shortLink.shortLinkId
       ],
       _shouldFetchWhenIdPassed: !(
         editLinkId !== undefined &&
-        editLinkId?.trim()?.length > 0 &&
+        (editLinkId?.trim()?.length ?? 0) > 0 &&
         workspaceId !== undefined &&
-        workspaceId?.trim()?.length > 0
+        (workspaceId?.trim()?.length ?? 0) > 0
       ),
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _showLoader: false
@@ -146,20 +146,20 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
     _url: API_URL_ENUM.shortLinks_update_delete,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
-      workspaceId,
-      editLinkId
+      workspaceId ?? '',
+      editLinkId ?? ''
     ],
     _authenticated: true,
-    _itemsIds: [shareWSMemberId, editLinkId],
+    _itemsIds: [shareWSMemberId ?? '', editLinkId ?? ''],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.shareWSMemberId,
       CONSTANTS.RouteParams.shortLink.shortLinkId
     ],
     _shouldFetchWhenIdPassed: !(
       editLinkId !== undefined &&
-      editLinkId?.trim()?.length > 0 &&
+      (editLinkId?.trim()?.length ?? 0) > 0 &&
       wsShareId !== undefined &&
-      wsShareId?.trim()?.length > 0
+      (wsShareId?.trim()?.length ?? 0) > 0
     ),
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false

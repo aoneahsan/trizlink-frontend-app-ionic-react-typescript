@@ -1,5 +1,6 @@
 import { type ABTestingRotatorInterface } from '@/types/AdminPanel/index.type';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import { isPlatform } from '@ionic/react';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { workspaceFormConnectPagesEnum } from '@/types/AdminPanel/workspace/index';
 import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
@@ -1861,4 +1862,53 @@ export const zGetRandomLink = (
   } catch (error) {
     reportCustomError(error);
   }
+};
+
+export const zIsPlatforms = (): {
+  isAndroidPlatform: boolean;
+  isCapacitor: boolean;
+  isCordova: boolean;
+  isDesktop: boolean;
+  isElectron: boolean;
+  isHybrid: boolean;
+  isIOS: boolean;
+  isIPad: boolean;
+  isIPhone: boolean;
+  isMobile: boolean;
+  isMobileWeb: boolean;
+  isPhablet: boolean;
+  isPWA: boolean;
+  isTablet: boolean;
+} => {
+  const isAndroidPlatform = isPlatform('android');
+  const isCapacitor = isPlatform('capacitor');
+  const isCordova = isPlatform('cordova');
+  const isDesktop = isPlatform('desktop');
+  const isElectron = isPlatform('electron');
+  const isHybrid = isPlatform('hybrid');
+  const isIOS = isPlatform('ios');
+  const isIPad = isPlatform('ipad');
+  const isIPhone = isPlatform('iphone');
+  const isMobile = isPlatform('mobile');
+  const isMobileWeb = isPlatform('mobileweb');
+  const isPhablet = isPlatform('phablet');
+  const isPWA = isPlatform('pwa');
+  const isTablet = isPlatform('tablet');
+
+  return {
+    isAndroidPlatform,
+    isCapacitor,
+    isCordova,
+    isDesktop,
+    isElectron,
+    isHybrid,
+    isIOS,
+    isIPad,
+    isIPhone,
+    isMobile,
+    isMobileWeb,
+    isPhablet,
+    isPWA,
+    isTablet
+  };
 };

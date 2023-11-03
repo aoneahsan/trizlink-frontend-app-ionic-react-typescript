@@ -77,7 +77,7 @@ import { useParams } from 'react-router';
  * */
 
 const ZWSNotificationSettings: React.FC = () => {
-  const { workspaceId } = useParams<{ workspaceId: string }>();
+  const { workspaceId } = useParams<{ workspaceId?: string }>();
 
   // #region Custom hooks.
   const { isSmScale, isLgScale, isMdScale } = useZMediaQueryScale();
@@ -86,9 +86,9 @@ const ZWSNotificationSettings: React.FC = () => {
   // #region APIS.
   const { data: selectedWorkspace } = useZRQGetRequest<workspaceInterface>({
     _url: API_URL_ENUM.workspace_update_delete,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId],
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId ?? ''],
     _authenticated: true,
-    _itemsIds: [workspaceId],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _shouldFetchWhenIdPassed: !(
       workspaceId !== undefined && workspaceId?.trim()?.length > 0

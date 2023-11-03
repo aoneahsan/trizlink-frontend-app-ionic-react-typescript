@@ -102,7 +102,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
 
   // getting workspace id from route (url), when user refresh the page the id from route will be get and workspace of that id will be fetch from backend.
   const { editWorkspaceId } = useParams<{
-    editWorkspaceId: string;
+    editWorkspaceId?: string;
   }>();
 
   // getting search param from url with the help of 'qs' package
@@ -121,9 +121,9 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
     _url: API_URL_ENUM.workspace_update_delete,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET],
     _authenticated: true,
-    _itemsIds: [editWorkspaceId],
+    _itemsIds: [editWorkspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _shouldFetchWhenIdPassed: editWorkspaceId.length === 0,
+    _shouldFetchWhenIdPassed: (editWorkspaceId?.trim().length ?? -1) === 0,
     _extractType: ZRQGetRequestExtractEnum.extractItem
   });
 
@@ -154,7 +154,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
               CONSTANTS.RouteParams.workspace.workspaceId,
               CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
             ],
-            [editWorkspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
+            [editWorkspaceId ?? '', CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
           )
         );
         showErrorNotification(error.message);
@@ -170,7 +170,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
       if (reqDataStr?.trim()?.length > 0) {
         // hitting workspace update api.
         const _result = UpdateWorkspaceMutateAsync({
-          itemIds: [editWorkspaceId],
+          itemIds: [editWorkspaceId ?? ''],
           urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
           requestData: reqDataStr
         });
@@ -301,7 +301,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
                                 CONSTANTS.RouteParams.workspace
                                   .editWorkspaceIdParam
                               ],
-                              values: [editWorkspaceId],
+                              values: [editWorkspaceId ?? ''],
                               routeSearchParams: {
                                 tab: workspaceFormTabEnum.inviteClients
                               }

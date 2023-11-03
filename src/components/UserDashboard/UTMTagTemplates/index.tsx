@@ -64,10 +64,10 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
 }) => {
   // getting link-in-bio and workspace ids from url with the help of useParams.
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    editLinkId: string;
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    editLinkId?: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   const { values, setFieldValue, handleBlur, handleChange } =
@@ -88,11 +88,11 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
   // If owned workspace then this api will fetch current owned workspace utm tags data.
   const { data: _UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN, workspaceId],
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN, workspaceId ?? ''],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
     ),
-    _itemsIds: [workspaceId],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _showLoader: false
   });
@@ -102,9 +102,9 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
     _url: API_URL_ENUM.sws_utm_tag_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN],
     _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined && wsShareId?.trim()?.length > 0
+      wsShareId !== undefined && (wsShareId?.trim()?.length ?? 0) > 0
     ),
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
   });
@@ -450,7 +450,7 @@ const UTMTagTemplates: React.FC<{ showSkeleton?: boolean }> = ({
             value={
               formatReactSelectOption(
                 values?.UTMTags?.templateId ?? '',
-                (_UTMTagsData as ZGenericObject[]) ?? [],
+                (_UTMTagsData as unknown as ZGenericObject[]) ?? [],
                 'id',
                 'templateName'
               ) ?? []

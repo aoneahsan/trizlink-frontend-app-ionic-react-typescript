@@ -70,9 +70,9 @@ import { currentLoggedInUserRoleAndPermissionsRStateAtom } from '@/ZaionsStore/U
 const ZAppStartupPage: React.FC = () => {
   // getting current workspace id OR wsShareId && shareWSMemberId form params.
   // const { workspaceId, wsShareId, shareWSMemberId } = useParams<{
-  //   workspaceId: string;
-  //   shareWSMemberId: string;
-  //   wsShareId: string;
+  //   workspaceId?: string;
+  //   shareWSMemberId?: string;
+  //   wsShareId?: string;
   // }>();
 
   //

@@ -150,9 +150,9 @@ import {
 const ZMembersListTable: React.FC = () => {
   // getting current workspace id form params.
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region APIS.
@@ -161,11 +161,14 @@ const ZMembersListTable: React.FC = () => {
     WSTeamMembersInterface[]
   >({
     _url: API_URL_ENUM.member_getAllInvite_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId],
-    _itemsIds: [workspaceId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+      workspaceId ?? ''
+    ],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
     )
   });
 
@@ -175,9 +178,9 @@ const ZMembersListTable: React.FC = () => {
       _url: API_URL_ENUM.member_getAllInvite_list,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
-        wsShareId
+        wsShareId ?? ''
       ],
-      _itemsIds: [shareWSMemberId],
+      _itemsIds: [shareWSMemberId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
       _shouldFetchWhenIdPassed: !(
         wsShareId !== undefined &&
@@ -194,7 +197,7 @@ const ZMembersListTable: React.FC = () => {
   }>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
     _shouldFetchWhenIdPassed: !(
@@ -203,7 +206,7 @@ const ZMembersListTable: React.FC = () => {
       shareWSMemberId !== undefined &&
       shareWSMemberId?.trim()?.length > 0
     ),
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -301,9 +304,9 @@ const ZInpageTable: React.FC = () => {
 
   // getting current workspace id form params.
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region Custom hooks
@@ -328,11 +331,14 @@ const ZInpageTable: React.FC = () => {
   // If owned-workspace then this api will fetch members in this owned-workspace.
   const { data: membersData } = useZRQGetRequest<WSTeamMembersInterface[]>({
     _url: API_URL_ENUM.member_getAllInvite_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS, workspaceId],
-    _itemsIds: [workspaceId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+      workspaceId ?? ''
+    ],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
     )
   });
 
@@ -341,15 +347,15 @@ const ZInpageTable: React.FC = () => {
     _url: API_URL_ENUM.member_getAllInvite_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
-      wsShareId
+      wsShareId ?? ''
     ],
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _shouldFetchWhenIdPassed: !(
       wsShareId !== undefined &&
-      wsShareId?.trim()?.length > 0 &&
+      (wsShareId?.trim()?.length ?? 0) > 0 &&
       shareWSMemberId !== undefined &&
-      shareWSMemberId?.trim()?.length > 0
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
     )
   });
 
@@ -358,17 +364,17 @@ const ZInpageTable: React.FC = () => {
       _url: API_URL_ENUM.user_setting_delete_update_get,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-        workspaceId,
+        workspaceId ?? '',
         ZUserSettingTypeEnum.membersListPageTable
       ],
-      _itemsIds: [workspaceId, ZUserSettingTypeEnum.membersListPageTable],
+      _itemsIds: [workspaceId ?? '', ZUserSettingTypeEnum.membersListPageTable],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.settings.type
       ],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _shouldFetchWhenIdPassed: !(
-        workspaceId !== undefined && workspaceId?.trim()?.length > 0
+        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
       )
     });
 
@@ -379,7 +385,10 @@ const ZInpageTable: React.FC = () => {
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
         ZUserSettingTypeEnum.membersListPageTable
       ],
-      _itemsIds: [shareWSMemberId, ZUserSettingTypeEnum.membersListPageTable],
+      _itemsIds: [
+        shareWSMemberId ?? '',
+        ZUserSettingTypeEnum.membersListPageTable
+      ],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.workspace.shareWSMemberId,
         CONSTANTS.RouteParams.settings.type

@@ -66,7 +66,6 @@ const ZaionsAddLinkInBioModal: React.FC<{
   const { mutateAsync: createLinkInBioMutate } =
     useZRQCreateRequest<LinkInBioType>({
       _url: API_URL_ENUM.linkInBio_create_list,
-      _queriesKeysToInvalidate: [],
       _itemsIds: [workspaceId],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
     });

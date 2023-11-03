@@ -87,6 +87,10 @@ ion-app.ios ion-title {
   -o-border-radius: 100vmax !important;
 }
 
+.border-radius_point_6 {
+  --border-radius: 0.6rem;
+}
+
 .border-radius__50per {
   --border-radius: 50%;
   border-radius: 50%;
@@ -539,7 +543,10 @@ span.new {
 
 .link-in-bio-folder-modal {
   --height: 50vh;
+  --min-height: 330px;
+  --max-height: 40vh;
   --width: 33vw;
+  --max-width: 29vw;
 }
 
 .short-link-modal {
