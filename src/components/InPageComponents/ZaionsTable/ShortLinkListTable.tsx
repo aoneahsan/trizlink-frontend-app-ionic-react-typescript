@@ -498,7 +498,8 @@ const ZInpageTable: React.FC = () => {
       cell: row => {
         return (
           <>
-            {(row?.getValue() as string[])?.length > 0 ? (
+            {Array.isArray(row?.getValue()) &&
+            (row?.getValue() as string[])?.length > 0 ? (
               <div className='flex gap-1 ion-align-items-center ZaionsTextEllipsis'>
                 <div className=''>{(row?.getValue() as string[])?.length}</div>
                 <ZIonText
@@ -535,31 +536,34 @@ const ZInpageTable: React.FC = () => {
       header: 'Notes',
       footer: 'Notes',
       cell: row => {
+        const rowsAvailable = row.getValue()?.trim().length ?? 0;
         return (
           <>
-            {row.getValue() !== undefined ? (
+            {rowsAvailable > 0 ? (
               <div className='flex ion-align-items-center'>
-                <div className='text-sm ZaionsTextEllipsis'>
+                <div className='text-sm ZaionsTextEllipsis w-[max-content!important]'>
                   {row.getValue()}
                 </div>
-                <ZIonText
-                  color='primary'
-                  className='text-sm cursor-pointer'
-                  testingselector={
-                    CONSTANTS.testingSelectors.shortLink.listPage.table.notes
-                  }
-                  testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.notes}-${row.row.original.id}`}
-                  onClick={() => {
-                    setShortLinkFormState(oldVal => ({
-                      ...oldVal,
-                      note: row.getValue()
-                    }));
-                    presentShortLinkNoteModal({
-                      _cssClass: 'pixel-account-detail-modal-size'
-                    });
-                  }}>
-                  Read more
-                </ZIonText>
+                {rowsAvailable > 23 && (
+                  <ZIonText
+                    color='primary'
+                    className='text-sm cursor-pointer'
+                    testingselector={
+                      CONSTANTS.testingSelectors.shortLink.listPage.table.notes
+                    }
+                    testinglistselector={`${CONSTANTS.testingSelectors.shortLink.listPage.table.notes}-${row.row.original.id}`}
+                    onClick={() => {
+                      setShortLinkFormState(oldVal => ({
+                        ...oldVal,
+                        note: row.getValue()
+                      }));
+                      presentShortLinkNoteModal({
+                        _cssClass: 'pixel-account-detail-modal-size'
+                      });
+                    }}>
+                    Read more
+                  </ZIonText>
+                )}
               </div>
             ) : (
               CONSTANTS.NO_VALUE_FOUND
@@ -581,7 +585,7 @@ const ZInpageTable: React.FC = () => {
         id: ZShortLinkListPageTableColumnsIds.url,
         cell: row => (
           <ZIonRouterLink
-            routerLink={String(row.getValue())}
+            href={String(row.getValue())}
             color='dark'
             className='hover:underline'
             target='_blank'
@@ -772,8 +776,8 @@ const ZInpageTable: React.FC = () => {
 
   useEffect(() => {
     // zShortLinksTable.setPageIndex(Number(pageindex) ?? 0);
-    zShortLinksTable.setPageSize(Number(pagesize) ?? 2);
-    console.log({ w: Number(pagesize) ?? 2 });
+    zShortLinksTable.setPageSize(Number(pagesize ?? 2));
+
     // eslint-disable-next-line
   }, [pagesize]);
 
@@ -1272,8 +1276,8 @@ const ZInpageTable: React.FC = () => {
           sizeXs='12'
           className='flex pt-2 ion-align-items-center ion-justify-content-center'>
           <ZPagination
-            currentPage={+String(pageindex) + 1}
-            itemsPerPage={+String(pagesize)}
+            currentPage={+String(pageindex ?? 0) + 1}
+            itemsPerPage={+String(pagesize ?? 2)}
             totalItems={compState?.totalShortLinks ?? 0}
             onPageChange={pageNumber => {
               // zShortLinksTable.previousPage();

@@ -179,14 +179,15 @@ const ZShortLinkRedirectPage: React.FC = () => {
     );
     const data = await response.json();
 
+    console.log({ data });
+
     const countryComponent = (
-      data.results[0].address_components as Array<{
+      data?.results?.[0]?.address_components as Array<{
         long_name: string;
         short_name: string;
         types: string[];
       }>
     ).find(component => component.types.includes('country'));
-
     return countryComponent ?? null;
   };
 
@@ -220,6 +221,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
         const _type = _data?.type as messengerPlatformsBlockEnum;
         const _geoLocations =
           _data?.geoLocationRotatorLinks as GeoLocationRotatorInterface[];
+        console.log({ _geoLocations });
         const _abTestingRotator =
           _data?.abTestingRotatorLinks as ABTestingRotatorInterface[];
         const _linkExpiration =
@@ -243,6 +245,11 @@ const ZShortLinkRedirectPage: React.FC = () => {
         }
 
         let highestPriority = Infinity; // Start with a high value
+
+        console.log({
+          d: _geoLocations,
+          _userCountry
+        });
 
         // Checking if any geo-location define. if define then redirect according to it.
         // Now check if the user's country exists in the geoRedirects array.
@@ -295,7 +302,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
             redirectLink: _redirectUrl
           }));
           if ((_data?.password as PasswordInterface)?.enabled === false) {
-            window.location.replace(_redirectUrl);
+            // window.location.replace(_redirectUrl);
           }
         }
       }

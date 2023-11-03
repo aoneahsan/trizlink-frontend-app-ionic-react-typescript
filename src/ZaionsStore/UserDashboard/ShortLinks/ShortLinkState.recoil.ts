@@ -175,7 +175,7 @@ export const ShortLinksFieldsDataRStateSelector = selector({
     const _domains = new Set<string>();
 
     shortLinksRStateAtom?.forEach(el => {
-      if ((el.tags as string[])?.length > 0) {
+      if ((JSON.parse(el.tags as string) as string[])?.length > 0) {
         (JSON.parse(el.tags as string) as string[]).forEach(tag =>
           _tagsArray.add(tag)
         );

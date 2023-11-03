@@ -1528,7 +1528,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
             ) => {
               let _fileUrl = values?.featureImg?.featureImgUrl;
               let _filePath = values?.featureImg?.featureImgPath;
-              console.log({ c: zStringify(values.tags) });
+
               if (
                 (workspaceId !== undefined &&
                   values?.featureImg?.featureImgUrl.trim().length > 0 &&

@@ -96,7 +96,7 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
       _showLoader: false
     });
 
-  const isZEditMode = editLinkId.length > 0 && editLinkId?.trim()?.length > 0;
+  const isZEditMode = editLinkId?.trim()?.length > 0;
 
   useEffect(() => {
     try {
