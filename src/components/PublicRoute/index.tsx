@@ -9,7 +9,7 @@ const PublicRoute = ({
   Component,
   restricted = true,
   ...rest
-}: any): JSX.Element => {
+}: any): React.ReactNode => {
   return (
     // restricted = false meaning public route
     // restricted = true meaning restricted route
@@ -26,7 +26,7 @@ const PublicRouteAsync = ({
   Comp: Component,
   restricted,
   ...rest
-}: any): JSX.Element => {
+}: any): React.ReactNode => {
   const loggedIn = useRecoilValue(IsAuthenticatedRStateSelector);
 
   return (
@@ -34,7 +34,7 @@ const PublicRouteAsync = ({
     // restricted = true meaning restricted route
     <Route
       {...rest}
-      render={(props: any) =>
+      component={(props: any) =>
         loggedIn && Boolean(restricted) ? (
           <Redirect to={ZRoutesRedirects.AUTHENTICATED_USER_REDIRECT} />
         ) : (

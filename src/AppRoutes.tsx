@@ -23,7 +23,6 @@ const Z403View = lazy(() => import('./components/Errors/403'));
 const Z404View = lazy(() => import('./components/Errors/404'));
 const Z500View = lazy(() => import('./components/Errors/500'));
 
-const ZaionsReactArea = lazy(() => import('@/Testing/ReactArea'));
 const Zaions101 = lazy(() => import('@/pages/Zaions/Zaions101'));
 const ZaionsEnterpriseClass = lazy(
   () => import('@/pages/Zaions/enterprise-class')
@@ -647,10 +646,6 @@ const AppRoutes = (): JSX.Element => {
         component={TestingReactTable}
       />
 
-      <Route
-        path={ZaionsRoutes.Testing.ReactArea.Main}
-        component={ZaionsReactArea}
-      />
       <Route
         exact
         path={ZaionsRoutes.Testing.ReactCharts.Main}
