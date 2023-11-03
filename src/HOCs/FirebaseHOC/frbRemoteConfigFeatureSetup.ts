@@ -18,21 +18,23 @@ export const fetchAndSetupFrbRemoteConfigKeys = async (
   const checkRemoteConfigIsSupported = await isSupported();
   if (checkRemoteConfigIsSupported) {
     const remoteConfig = getRemoteConfig(_firebaseApp);
-    setLogLevel(remoteConfig, ENVS.isProduction ? 'silent' : 'error');
+    if (remoteConfig.app.name !== null) {
+      setLogLevel(remoteConfig, ENVS.isProduction ? 'silent' : 'error');
 
-    // set the refetch/stale time for remote config keys
-    remoteConfig.settings.minimumFetchIntervalMillis =
-      frbRemoteConfigSetting.staleTimeInMilliseconds;
+      // set the refetch/stale time for remote config keys
+      remoteConfig.settings.minimumFetchIntervalMillis =
+        frbRemoteConfigSetting.staleTimeInMilliseconds;
 
-    await fetchAndActivate(remoteConfig);
+      await fetchAndActivate(remoteConfig);
 
-    const result = getRemoteConfigKeysData(remoteConfig);
+      const result = getRemoteConfigKeysData(remoteConfig);
 
-    setFrbRemoteConfigRState(oldState => ({
-      ...oldState,
-      isInitialized: true,
-      lastFetchedAt: new Date().toString(),
-      keys: result
-    }));
+      setFrbRemoteConfigRState(oldState => ({
+        ...oldState,
+        isInitialized: true,
+        lastFetchedAt: new Date().toString(),
+        keys: result
+      }));
+    }
   }
 };
