@@ -194,7 +194,9 @@ const ZPixelsFilterMenu: React.FC = () => {
       ],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _shouldFetchWhenIdPassed: !(
-        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        (workspaceId?.trim()?.length ?? 0) > 0
       )
     }
   );
@@ -219,8 +221,10 @@ const ZPixelsFilterMenu: React.FC = () => {
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _shouldFetchWhenIdPassed: !(
         wsShareId !== undefined &&
+        wsShareId !== null &&
         (wsShareId?.trim()?.length ?? 0) > 0 &&
         shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
         (shareWSMemberId?.trim()?.length ?? 0) > 0
       )
     });
@@ -231,15 +235,22 @@ const ZPixelsFilterMenu: React.FC = () => {
       if (
         (getPixelFiltersData?.type !== null &&
           getPixelFiltersData?.settings?.columns !== undefined) ??
-        (getSWSPixelFiltersData?.type != null &&
+        (getSWSPixelFiltersData?.type !== null &&
           getSWSPixelFiltersData?.settings?.columns !== undefined)
       ) {
         setCompState(_oldValue => ({
           ..._oldValue,
           pixelsColumn:
-            workspaceId !== undefined
+            workspaceId !== undefined &&
+            workspaceId !== null &&
+            workspaceId?.trim()?.length > 0
               ? getPixelFiltersData?.settings?.columns
-              : wsShareId !== undefined && shareWSMemberId !== undefined
+              : wsShareId !== undefined &&
+                wsShareId !== null &&
+                wsShareId?.trim()?.length > 0 &&
+                shareWSMemberId !== undefined &&
+                shareWSMemberId !== null &&
+                shareWSMemberId?.trim()?.length > 0
               ? getSWSPixelFiltersData?.settings?.columns
               : _oldValue.pixelsColumn
         }));
@@ -285,7 +296,11 @@ const ZPixelsFilterMenu: React.FC = () => {
           getSWSPixelFiltersData?.type ===
             ZUserSettingTypeEnum.pixelListPageTable
         ) {
-          if (workspaceId !== undefined) {
+          if (
+            workspaceId !== undefined &&
+            workspaceId !== null &&
+            workspaceId?.trim()?.length > 0
+          ) {
             _response = await updatePixelFilersAsyncMutate({
               itemIds: [workspaceId, ZUserSettingTypeEnum.pixelListPageTable],
               urlDynamicParts: [
@@ -294,7 +309,14 @@ const ZPixelsFilterMenu: React.FC = () => {
               ],
               requestData: _value
             });
-          } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+          } else if (
+            wsShareId !== undefined &&
+            wsShareId !== null &&
+            (wsShareId?.trim()?.length ?? 0) > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            (shareWSMemberId?.trim()?.length ?? 0) > 0
+          ) {
             _response = await updateSWSPixelFilersAsyncMutate({
               itemIds: [
                 shareWSMemberId,
@@ -308,9 +330,20 @@ const ZPixelsFilterMenu: React.FC = () => {
             });
           }
         } else {
-          if (workspaceId !== undefined) {
+          if (
+            workspaceId !== undefined &&
+            workspaceId !== null &&
+            workspaceId?.trim()?.length > 0
+          ) {
             _response = await createPixelFilersAsyncMutate(_value);
-          } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+          } else if (
+            wsShareId !== undefined &&
+            wsShareId !== null &&
+            (wsShareId?.trim()?.length ?? 0) > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            (shareWSMemberId?.trim()?.length ?? 0) > 0
+          ) {
             _response = await createSWSPixelFilersAsyncMutate(_value);
           }
         }
@@ -324,7 +357,11 @@ const ZPixelsFilterMenu: React.FC = () => {
 
           // if we have data then show success message.
           if (_data?.id !== null && _data?.id !== undefined) {
-            if (workspaceId !== undefined) {
+            if (
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+            ) {
               await updateRQCDataHandler<ZUserSettingInterface | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
@@ -338,7 +375,11 @@ const ZPixelsFilterMenu: React.FC = () => {
               });
             } else if (
               wsShareId !== undefined &&
-              shareWSMemberId !== undefined
+              wsShareId !== null &&
+              (wsShareId?.trim()?.length ?? 0) > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              (shareWSMemberId?.trim()?.length ?? 0) > 0
             ) {
               await updateRQCDataHandler<ZUserSettingInterface | undefined>({
                 key: [
@@ -376,14 +417,26 @@ const ZPixelsFilterMenu: React.FC = () => {
       <ZCan
         shareWSId={wsShareId}
         permissionType={
-          wsShareId !== undefined && shareWSMemberId !== undefined
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          (wsShareId?.trim()?.length ?? 0) > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          (shareWSMemberId?.trim()?.length ?? 0) > 0
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }
         havePermissions={
-          workspaceId !== undefined
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          workspaceId?.trim()?.length > 0
             ? [permissionsEnum.viewAny_pixel]
-            : wsShareId !== undefined && shareWSMemberId !== undefined
+            : wsShareId !== undefined &&
+              wsShareId !== null &&
+              (wsShareId?.trim()?.length ?? 0) > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              (shareWSMemberId?.trim()?.length ?? 0) > 0
             ? [shareWSPermissionEnum.viewAny_sws_pixel]
             : []
         }>

@@ -161,7 +161,9 @@ const ZPixelsTable: React.FC<{
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
       _itemsIds: [workspaceId ?? ''],
       _shouldFetchWhenIdPassed: !(
-        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        (workspaceId?.trim()?.length ?? 0) > 0
       )
     });
 
@@ -177,8 +179,10 @@ const ZPixelsTable: React.FC<{
       _itemsIds: [shareWSMemberId ?? ''],
       _shouldFetchWhenIdPassed: !(
         wsShareId !== undefined &&
+        wsShareId !== null &&
         (wsShareId?.trim()?.length ?? 0) > 0 &&
         shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
         (shareWSMemberId?.trim()?.length ?? 0) > 0
       )
     });
@@ -195,8 +199,10 @@ const ZPixelsTable: React.FC<{
     _url: API_URL_ENUM.ws_share_member_role_permissions,
     _shouldFetchWhenIdPassed: !(
       wsShareId !== undefined &&
+      wsShareId !== null &&
       (wsShareId?.trim()?.length ?? 0) > 0 &&
       shareWSMemberId !== undefined &&
+      shareWSMemberId !== null &&
       (shareWSMemberId?.trim()?.length ?? 0) > 0
     ),
     _itemsIds: [shareWSMemberId ?? ''],
@@ -219,19 +225,39 @@ const ZPixelsTable: React.FC<{
 
   let isZFetching = isPixelsDateFetching;
 
-  if (workspaceId !== undefined) {
+  if (
+    workspaceId !== undefined &&
+    workspaceId !== null &&
+    (workspaceId?.trim()?.length ?? 0) > 0
+  ) {
     isZFetching = isPixelsDateFetching;
-  } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+  } else if (
+    (wsShareId?.trim()?.length ?? 0) > 0 &&
+    shareWSMemberId !== undefined &&
+    shareWSMemberId !== null &&
+    (shareWSMemberId?.trim()?.length ?? 0) > 0
+  ) {
     isZFetching = isSWSPixelsDateFetching;
   }
 
   return (
     <>
       {!isZFetching ? (
-        (workspaceId !== undefined && PixelsData?.length !== null) ||
+        (workspaceId !== undefined &&
+          workspaceId !== null &&
+          (workspaceId?.trim()?.length ?? 0) > 0 &&
+          PixelsData !== null &&
+          PixelsData !== undefined &&
+          PixelsData?.length > 0) ||
         (wsShareId !== undefined &&
+          wsShareId !== null &&
+          (wsShareId?.trim()?.length ?? 0) > 0 &&
           shareWSMemberId !== undefined &&
-          swsPixelsData?.length !== null) ? (
+          shareWSMemberId !== null &&
+          (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
+          swsPixelsData?.length !== undefined &&
+          swsPixelsData?.length !== null &&
+          swsPixelsData?.length > 0) ? (
           <ZInpageTable />
         ) : (
           <div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
@@ -242,7 +268,11 @@ const ZPixelsTable: React.FC<{
                   shareWSPermissionEnum.update_sws_pixel
                 ].some(el =>
                   getMemberRolePermissions?.memberPermissions?.includes(el)
-                ) || workspaceId !== undefined
+                ) ||
+                (workspaceId !== undefined &&
+                  workspaceId !== null &&
+                  (workspaceId?.trim()?.length ?? 0) > 0 &&
+                  PixelsData?.length !== null)
                   ? 'No pixels founds. please create a pixel.'
                   : 'No pixels founds.'
               }
@@ -253,14 +283,16 @@ const ZPixelsTable: React.FC<{
                 });
               }}
               showBtn={
-                !!(
-                  [
-                    shareWSPermissionEnum.create_sws_pixel,
-                    shareWSPermissionEnum.update_sws_pixel
-                  ].some(el =>
-                    getMemberRolePermissions?.memberPermissions?.includes(el)
-                  ) || workspaceId !== undefined
-                )
+                [
+                  shareWSPermissionEnum.create_sws_pixel,
+                  shareWSPermissionEnum.update_sws_pixel
+                ].some(el =>
+                  getMemberRolePermissions?.memberPermissions?.includes(el)
+                ) ||
+                (workspaceId !== undefined &&
+                  workspaceId !== null &&
+                  (workspaceId?.trim()?.length ?? 0) > 0 &&
+                  PixelsData?.length !== null)
               }
             />
           </div>
@@ -315,7 +347,9 @@ const ZInpageTable: React.FC = () => {
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _itemsIds: [workspaceId ?? ''],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+      workspaceId !== undefined &&
+      workspaceId !== null &&
+      (workspaceId?.trim()?.length ?? 0) > 0
     )
   });
 
@@ -330,8 +364,10 @@ const ZInpageTable: React.FC = () => {
     _itemsIds: [shareWSMemberId ?? ''],
     _shouldFetchWhenIdPassed: !(
       wsShareId !== undefined &&
+      wsShareId !== null &&
       (wsShareId?.trim()?.length ?? 0) > 0 &&
       shareWSMemberId !== undefined &&
+      shareWSMemberId !== null &&
       (shareWSMemberId?.trim()?.length ?? 0) > 0
     )
   });
@@ -351,7 +387,9 @@ const ZInpageTable: React.FC = () => {
       ],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _shouldFetchWhenIdPassed: !(
-        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        (workspaceId?.trim()?.length ?? 0) > 0
       )
     }
   );
@@ -374,8 +412,10 @@ const ZInpageTable: React.FC = () => {
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _shouldFetchWhenIdPassed: !(
         wsShareId !== undefined &&
+        wsShareId !== null &&
         wsShareId?.trim()?.length > 0 &&
         shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
         shareWSMemberId?.trim()?.length > 0
       )
     });
@@ -478,7 +518,10 @@ const ZInpageTable: React.FC = () => {
     columns: defaultColumns,
     data: filteredPixelsDataRSelector ?? [],
     state: {
-      columnOrder: getPixelFiltersData?.settings?.columnOrderIds ?? []
+      columnOrder:
+        getPixelFiltersData?.settings?.columnOrderIds ??
+        getSWSPixelFiltersData?.settings?.columnOrderIds ??
+        []
     },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -500,7 +543,11 @@ const ZInpageTable: React.FC = () => {
         let _getPixelIdColumn;
         let _getPlatformColumn;
 
-        if (workspaceId !== undefined) {
+        if (
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          workspaceId?.trim()?.length > 0
+        ) {
           _getTitleColumn = getPixelFiltersData?.settings?.columns.filter(
             el => el?.id === ZPixelsListPageTableColumnsIds.title
           )[0];
@@ -517,7 +564,14 @@ const ZInpageTable: React.FC = () => {
           _getPlatformColumn = getPixelFiltersData?.settings?.columns.filter(
             el => el?.id === ZPixelsListPageTableColumnsIds.platform
           )[0];
-        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+        } else if (
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          shareWSMemberId?.trim()?.length > 0
+        ) {
           _getTitleColumn = getSWSPixelFiltersData?.settings?.columns.filter(
             el => el?.id === ZPixelsListPageTableColumnsIds.title
           )[0];
@@ -573,19 +627,29 @@ const ZInpageTable: React.FC = () => {
   ]);
 
   useEffect(() => {
-    zPixelTable.setPageIndex(Number(pageindex) ?? 0);
-    zPixelTable.setPageSize(Number(pagesize) ?? 2);
+    zPixelTable.setPageIndex(Number(pageindex ?? 0));
+    zPixelTable.setPageSize(Number(pagesize ?? 2));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageindex, pagesize]);
 
   useEffect(() => {
     try {
-      if (workspaceId !== undefined && PixelsData !== null) {
+      if (
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0 &&
+        PixelsData !== null
+      ) {
         setPixelDataRState(PixelsData ?? []);
       } else if (
         wsShareId !== undefined &&
+        shareWSMemberId !== null &&
+        wsShareId !== null &&
+        wsShareId?.trim()?.length > 0 &&
         shareWSMemberId !== undefined &&
-        swsPixelsData !== undefined
+        shareWSMemberId?.trim()?.length > 0 &&
+        swsPixelsData !== undefined &&
+        swsPixelsData !== null
       ) {
         setPixelDataRState(swsPixelsData ?? []);
       }
@@ -1223,9 +1287,9 @@ ZPixelTableSkeleton.displayName = 'ZPixelTableSkeleton';
 const ZPixelActionPopover: React.FC<{
   dismissZIonPopover: (data?: string, role?: string | undefined) => void;
   zNavigatePushRoute: (_url: string) => void;
-  workspaceId: string; // if owned workspace then this will be id of owned workspace.
-  wsShareId: string; // if share workspace then this will be id of share workspace.
-  shareWSMemberId: string; // if share workspace then this will be id of current member.
+  workspaceId?: string; // if owned workspace then this will be id of owned workspace.
+  wsShareId?: string; // if share workspace then this will be id of share workspace.
+  shareWSMemberId?: string; // if share workspace then this will be id of current member.
   pixelId: string;
   selectedId: string;
   pixelTitle: string;
@@ -1308,7 +1372,11 @@ const ZPixelActionPopover: React.FC<{
     try {
       if (selectedId?.trim()?.length > 0) {
         let _response;
-        if (workspaceId !== undefined) {
+        if (
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          workspaceId?.trim()?.length > 0
+        ) {
           _response = await deletePixelMutate({
             itemIds: [workspaceId, selectedId],
             urlDynamicParts: [
@@ -1316,7 +1384,14 @@ const ZPixelActionPopover: React.FC<{
               CONSTANTS.RouteParams.pixel.pixelId
             ]
           });
-        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+        } else if (
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          shareWSMemberId?.trim()?.length > 0
+        ) {
           _response = await swsDeletePixelMutate({
             itemIds: [shareWSMemberId, selectedId],
             urlDynamicParts: [
@@ -1332,11 +1407,15 @@ const ZPixelActionPopover: React.FC<{
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data !== undefined && _data?.success) {
+          if (_data !== undefined && _data !== null && _data?.success) {
             // getting all the pixel from RQ cache.
             let _oldPixels: PixelAccountType[] = [];
 
-            if (workspaceId !== undefined) {
+            if (
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+            ) {
               _oldPixels =
                 extractInnerData<PixelAccountType[]>(
                   getRQCDataHandler<PixelAccountType[]>({
@@ -1349,7 +1428,11 @@ const ZPixelActionPopover: React.FC<{
                 ) ?? [];
             } else if (
               wsShareId !== undefined &&
-              shareWSMemberId !== undefined
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
             ) {
               _oldPixels =
                 extractInnerData<PixelAccountType[]>(
@@ -1369,7 +1452,11 @@ const ZPixelActionPopover: React.FC<{
             );
 
             // Updating data in RQ cache.
-            if (workspaceId !== undefined) {
+            if (
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+            ) {
               await updateRQCDataHandler<PixelAccountType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
@@ -1382,7 +1469,11 @@ const ZPixelActionPopover: React.FC<{
               });
             } else if (
               wsShareId !== undefined &&
-              shareWSMemberId !== undefined
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
             ) {
               await updateRQCDataHandler<PixelAccountType[] | undefined>({
                 key: [
@@ -1418,14 +1509,24 @@ const ZPixelActionPopover: React.FC<{
       <ZCan
         shareWSId={wsShareId}
         permissionType={
-          wsShareId !== undefined && shareWSMemberId !== undefined
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          shareWSMemberId?.trim()?.length > 0
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }
         havePermissions={
           workspaceId !== undefined
             ? [permissionsEnum.update_pixel]
-            : wsShareId !== undefined && shareWSMemberId !== undefined
+            : wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
             ? [shareWSPermissionEnum.update_sws_pixel]
             : []
         }>
@@ -1478,14 +1579,24 @@ const ZPixelActionPopover: React.FC<{
       <ZCan
         shareWSId={wsShareId}
         permissionType={
-          wsShareId !== undefined && shareWSMemberId !== undefined
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          shareWSMemberId?.trim()?.length > 0
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }
         havePermissions={
           workspaceId !== undefined
             ? [permissionsEnum.delete_pixel]
-            : wsShareId !== undefined && shareWSMemberId !== undefined
+            : wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
             ? [shareWSPermissionEnum.delete_sws_pixel]
             : []
         }>

@@ -134,7 +134,9 @@ const ZWSSettingTeamsListPage: React.FC = () => {
     _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && (workspaceId?.trim()?.length ?? '') > 0
+      workspaceId !== undefined &&
+      workspaceId !== null &&
+      (workspaceId?.trim()?.length ?? 0) > 0
     )
   });
 
@@ -151,8 +153,10 @@ const ZWSSettingTeamsListPage: React.FC = () => {
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _shouldFetchWhenIdPassed: !(
       wsShareId !== undefined &&
+      wsShareId !== null &&
       (wsShareId?.trim()?.length ?? 0) > 0 &&
       shareWSMemberId !== undefined &&
+      shareWSMemberId !== null &&
       (shareWSMemberId?.trim()?.length ?? 0) > 0
     )
   });
@@ -169,8 +173,10 @@ const ZWSSettingTeamsListPage: React.FC = () => {
     _url: API_URL_ENUM.ws_share_member_role_permissions,
     _shouldFetchWhenIdPassed: !(
       wsShareId !== undefined &&
+      wsShareId !== null &&
       wsShareId?.trim()?.length > 0 &&
       shareWSMemberId !== undefined &&
+      shareWSMemberId !== null &&
       shareWSMemberId?.trim()?.length > 0
     ),
     _itemsIds: [shareWSMemberId ?? ''],
@@ -183,13 +189,24 @@ const ZWSSettingTeamsListPage: React.FC = () => {
   // #region Functions.
   const invalidedQueries = async (): Promise<void> => {
     try {
-      if (workspaceId !== undefined) {
+      if (
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+      ) {
         // Invalidating RQ members cache.
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
           workspaceId
         ]);
-      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+      } else if (
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        wsShareId?.trim()?.length > 0 &&
+        shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
+        shareWSMemberId?.trim()?.length > 0
+      ) {
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
           wsShareId
@@ -211,14 +228,26 @@ const ZWSSettingTeamsListPage: React.FC = () => {
     <ZCan
       shareWSId={wsShareId}
       havePermissions={
-        workspaceId !== undefined
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
           ? [permissionsEnum.viewAny_ws_member]
-          : wsShareId !== undefined && shareWSMemberId !== undefined
+          : wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
           ? [shareWSPermissionEnum.viewAny_sws_member]
           : []
       }
       permissionType={
-        wsShareId !== undefined && shareWSMemberId !== undefined
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        wsShareId?.trim()?.length > 0 &&
+        shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
+        shareWSMemberId?.trim()?.length > 0
           ? permissionsTypeEnum.shareWSMemberPermissions
           : permissionsTypeEnum.loggedInUserPermissions
       }>
@@ -254,7 +283,10 @@ const ZWSSettingTeamsListPage: React.FC = () => {
               shareWSPermissionEnum.update_sws_member
             ].some(el =>
               getMemberRolePermissions?.memberPermissions?.includes(el)
-            ) ?? workspaceId !== undefined
+            ) ||
+            (workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0)
               ? 'Team Building Zone: Add, Organize, and Manage Your Members'
               : 'Your Member Dashboard: Stay Connected with Your Teammates'}
           </ZIonText>
@@ -351,14 +383,26 @@ const ZWSSettingTeamsListPage: React.FC = () => {
           <ZCan
             shareWSId={wsShareId}
             havePermissions={
-              workspaceId !== undefined
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
                 ? [permissionsEnum.send_invitation_ws_member]
-                : wsShareId !== undefined && shareWSMemberId !== undefined
+                : wsShareId !== undefined &&
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0 &&
+                  shareWSMemberId !== undefined &&
+                  shareWSMemberId !== null &&
+                  shareWSMemberId?.trim()?.length > 0
                 ? [shareWSPermissionEnum.send_invitation_sws_member]
                 : []
             }
             permissionType={
-              wsShareId !== undefined && shareWSMemberId !== undefined
+              wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }>
@@ -415,14 +459,26 @@ const ZWSSettingTeamsListPage: React.FC = () => {
       <ZCan
         shareWSId={wsShareId}
         havePermissions={
-          workspaceId !== undefined
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          workspaceId?.trim()?.length > 0
             ? [permissionsEnum.viewAny_ws_member]
-            : wsShareId !== undefined && shareWSMemberId !== undefined
+            : wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
             ? [shareWSPermissionEnum.viewAny_sws_member]
             : []
         }
         permissionType={
-          wsShareId !== undefined && shareWSMemberId !== undefined
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          shareWSMemberId?.trim()?.length > 0
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }>

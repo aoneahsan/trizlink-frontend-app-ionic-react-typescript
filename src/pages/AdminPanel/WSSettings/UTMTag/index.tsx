@@ -108,7 +108,9 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN, workspaceId ?? ''],
     _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+      workspaceId !== undefined &&
+      workspaceId !== null &&
+      (workspaceId?.trim()?.length ?? 0) > 0
     ),
     _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
@@ -124,8 +126,10 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
     ],
     _shouldFetchWhenIdPassed: !(
       wsShareId !== undefined &&
+      wsShareId !== null &&
       (wsShareId?.trim()?.length ?? 0) > 0 &&
       shareWSMemberId !== undefined &&
+      shareWSMemberId !== null &&
       (shareWSMemberId?.trim()?.length ?? 0) > 0
     ),
     _itemsIds: [shareWSMemberId ?? ''],
@@ -145,8 +149,10 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
     _url: API_URL_ENUM.ws_share_member_role_permissions,
     _shouldFetchWhenIdPassed: !(
       wsShareId !== undefined &&
+      wsShareId !== null &&
       wsShareId?.trim()?.length > 0 &&
       shareWSMemberId !== undefined &&
+      shareWSMemberId !== null &&
       shareWSMemberId?.trim()?.length > 0
     ),
     _itemsIds: [shareWSMemberId ?? ''],
@@ -171,12 +177,23 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
   // #region Functions.
   const invalidedQueries = async (): Promise<void> => {
     try {
-      if (workspaceId !== undefined) {
+      if (
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        (workspaceId?.trim()?.length ?? 0) > 0
+      ) {
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
           workspaceId
         ]);
-      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+      } else if (
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        wsShareId?.trim()?.length > 0 &&
+        shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
+        shareWSMemberId?.trim()?.length > 0
+      ) {
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN,
           wsShareId
@@ -192,14 +209,26 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
     <ZCan
       shareWSId={wsShareId}
       havePermissions={
-        workspaceId !== undefined
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        (workspaceId?.trim()?.length ?? 0) > 0
           ? [permissionsEnum.viewAny_utmTag]
-          : wsShareId !== undefined && shareWSMemberId !== undefined
+          : wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
           ? [shareWSPermissionEnum.viewAny_sws_utmTag]
           : []
       }
       permissionType={
-        wsShareId !== undefined && shareWSMemberId !== undefined
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        wsShareId?.trim()?.length > 0 &&
+        shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
+        shareWSMemberId?.trim()?.length > 0
           ? permissionsTypeEnum.shareWSMemberPermissions
           : permissionsTypeEnum.loggedInUserPermissions
       }>
@@ -235,7 +264,10 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
               shareWSPermissionEnum.update_sws_utmTag
             ].some(el =>
               getMemberRolePermissions?.memberPermissions?.includes(el)
-            ) ?? workspaceId !== undefined
+            ) ||
+            (workspaceId !== undefined &&
+              workspaceId !== null &&
+              (workspaceId?.trim()?.length ?? 0) > 0)
               ? 'UTM Central: Add, Organize, and Manage Your utm tags'
               : 'Your UTM View: Explore and Monitor UTM Tag Data'}
           </ZIonText>
@@ -335,14 +367,26 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
           <ZCan
             shareWSId={wsShareId}
             havePermissions={
-              workspaceId !== undefined
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              (workspaceId?.trim()?.length ?? 0) > 0
                 ? [permissionsEnum.create_utmTag]
-                : wsShareId !== undefined && shareWSMemberId !== undefined
+                : wsShareId !== undefined &&
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0 &&
+                  shareWSMemberId !== undefined &&
+                  shareWSMemberId !== null &&
+                  shareWSMemberId?.trim()?.length > 0
                 ? [shareWSPermissionEnum.create_sws_utmTag]
                 : []
             }
             permissionType={
-              wsShareId !== undefined && shareWSMemberId !== undefined
+              wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }>
@@ -398,14 +442,26 @@ const ZWSSettingUtmTagListPage: React.FC = () => {
       <ZCan
         shareWSId={wsShareId}
         havePermissions={
-          workspaceId !== undefined
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          (workspaceId?.trim()?.length ?? 0) > 0
             ? [permissionsEnum.view_utmTag]
-            : wsShareId !== undefined && shareWSMemberId !== undefined
+            : wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
             ? [shareWSPermissionEnum.view_sws_utmTag]
             : []
         }
         permissionType={
-          wsShareId !== undefined && shareWSMemberId !== undefined
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          shareWSMemberId?.trim()?.length > 0
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }>

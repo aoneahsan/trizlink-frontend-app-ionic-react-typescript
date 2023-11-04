@@ -269,6 +269,9 @@ export interface ZUserSettingInterface {
       time: TimeFilterEnum;
       startDate: string;
       endDate: string;
+
+      role?: string;
+      status?: string;
     };
   };
 }

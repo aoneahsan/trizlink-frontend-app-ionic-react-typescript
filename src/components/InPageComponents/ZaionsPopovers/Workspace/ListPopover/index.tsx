@@ -135,17 +135,17 @@ const ZWorkspacesListPopover: React.FC<{
 
   const workspacesList =
     extractInnerData<workspaceInterface[]>(
-      getRQCDataHandler<workspaceInterface[]>({
+      (getRQCDataHandler<workspaceInterface[]>({
         key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
-      }) as workspaceInterface[],
+      }) as workspaceInterface[]) ?? [],
       extractInnerDataOptionsEnum.createRequestResponseItems
     ) ?? [];
 
   const sharedWorkspacesList =
     extractInnerData<wsShareInterface[]>(
-      getRQCDataHandler<wsShareInterface[]>({
+      (getRQCDataHandler<wsShareInterface[]>({
         key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
-      }) as wsShareInterface[],
+      }) as wsShareInterface[]) ?? [],
       extractInnerDataOptionsEnum.createRequestResponseItems
     ) ?? [];
 

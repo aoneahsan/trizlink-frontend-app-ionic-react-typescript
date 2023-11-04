@@ -178,14 +178,29 @@ const ZaionsAddPixelAccount: React.FC<{
 
       // if in from add mode then add a new pixel account
       if (formMode === FormMode.ADD) {
-        if (workspaceId !== undefined) {
+        if (
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          (workspaceId?.trim()?.length ?? 0) > 0
+        ) {
           _response = await createPixelAccount(_value);
-        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+        } else if (
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          (wsShareId?.trim()?.length ?? 0) > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          (shareWSMemberId?.trim()?.length ?? 0) > 0
+        ) {
           _response = await createSWSPixelAccount(_value);
         }
       } else if (formMode === FormMode.EDIT && selectedId !== undefined) {
         // if in from edit mode then edit  pixel account
-        if (workspaceId !== undefined) {
+        if (
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          (workspaceId?.trim()?.length ?? 0) > 0
+        ) {
           _response = await updatePixelAccount({
             itemIds: [workspaceId, selectedId],
             urlDynamicParts: [
@@ -194,7 +209,14 @@ const ZaionsAddPixelAccount: React.FC<{
             ],
             requestData: _value
           });
-        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+        } else if (
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          (wsShareId?.trim()?.length ?? 0) > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          (shareWSMemberId?.trim()?.length ?? 0) > 0
+        ) {
           _response = await updateSWSPixelAccount({
             itemIds: [shareWSMemberId, selectedId],
             urlDynamicParts: [
@@ -214,7 +236,11 @@ const ZaionsAddPixelAccount: React.FC<{
 
         if (_data?.id !== null) {
           let _pixelsDataFromCache: PixelAccountPlatformType[] = [];
-          if (workspaceId !== undefined) {
+          if (
+            workspaceId !== undefined &&
+            workspaceId !== null &&
+            (workspaceId?.trim()?.length ?? 0) > 0
+          ) {
             _pixelsDataFromCache =
               getRQCDataHandler<PixelAccountPlatformType[]>({
                 key: [
@@ -222,7 +248,14 @@ const ZaionsAddPixelAccount: React.FC<{
                   workspaceId
                 ]
               }) ?? [];
-          } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+          } else if (
+            wsShareId !== undefined &&
+            wsShareId !== null &&
+            (wsShareId?.trim()?.length ?? 0) > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            (shareWSMemberId?.trim()?.length ?? 0) > 0
+          ) {
             _pixelsDataFromCache =
               getRQCDataHandler<PixelAccountPlatformType[]>({
                 key: [
@@ -242,7 +275,11 @@ const ZaionsAddPixelAccount: React.FC<{
               // added pixels to all pixels data in cache.
               const _updatedPixelsData = [..._oldPixelsData, _data];
 
-              if (workspaceId !== undefined) {
+              if (
+                workspaceId !== undefined &&
+                workspaceId !== null &&
+                (workspaceId?.trim()?.length ?? 0) > 0
+              ) {
                 // Updating all pixels data in RQ cache.
                 await updateRQCDataHandler<
                   PixelAccountPlatformType[] | undefined
@@ -258,7 +295,11 @@ const ZaionsAddPixelAccount: React.FC<{
                 });
               } else if (
                 wsShareId !== undefined &&
-                shareWSMemberId !== undefined
+                wsShareId !== null &&
+                (wsShareId?.trim()?.length ?? 0) > 0 &&
+                shareWSMemberId !== undefined &&
+                shareWSMemberId !== null &&
+                (shareWSMemberId?.trim()?.length ?? 0) > 0
               ) {
                 // Updating all pixels data in RQ cache.
                 await updateRQCDataHandler<
@@ -277,7 +318,11 @@ const ZaionsAddPixelAccount: React.FC<{
 
               showSuccessNotification(MESSAGES.PIXEL_ACCOUNT.CREATED);
             } else if (formMode === FormMode.EDIT) {
-              if (workspaceId !== undefined) {
+              if (
+                workspaceId !== undefined &&
+                workspaceId !== null &&
+                (workspaceId?.trim()?.length ?? 0) > 0
+              ) {
                 // Updating all pixels data in RQ cache.
                 await updateRQCDataHandler<
                   PixelAccountPlatformType | undefined
@@ -292,7 +337,11 @@ const ZaionsAddPixelAccount: React.FC<{
                 });
               } else if (
                 wsShareId !== undefined &&
-                shareWSMemberId !== undefined
+                wsShareId !== null &&
+                (wsShareId?.trim()?.length ?? 0) > 0 &&
+                shareWSMemberId !== undefined &&
+                shareWSMemberId !== null &&
+                (shareWSMemberId?.trim()?.length ?? 0) > 0
               ) {
                 // Updating all pixels data in RQ cache.
                 await updateRQCDataHandler<
@@ -341,12 +390,22 @@ const ZaionsAddPixelAccount: React.FC<{
       shareWSId={wsShareId}
       checkMode={permissionCheckModeEnum.any}
       permissionType={
-        wsShareId !== undefined
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        (wsShareId?.trim()?.length ?? 0) > 0 &&
+        shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
           ? permissionsTypeEnum.shareWSMemberPermissions
           : permissionsTypeEnum.loggedInUserPermissions
       }
       havePermissions={
-        wsShareId !== undefined
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        (wsShareId?.trim()?.length ?? 0) > 0 &&
+        shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
           ? [
               shareWSPermissionEnum.create_sws_pixel,
               shareWSPermissionEnum.update_sws_pixel
@@ -374,14 +433,18 @@ const ZaionsAddPixelAccount: React.FC<{
           ]);
 
           if (
-            values?.platform?.trim?.length > 0 &&
-            values?.pixelId?.trim?.length > 0
+            values?.platform?.trim()?.length > 0 &&
+            values?.pixelId?.trim()?.length > 0
           ) {
             const errorMessage = validatePixelAccountID(
               values.platform,
               values.pixelId
             );
-            if (errorMessage !== undefined) {
+            if (
+              errorMessage !== undefined &&
+              errorMessage !== null &&
+              errorMessage?.trim()?.length > 0
+            ) {
               errors.pixelId = errorMessage;
             }
           }

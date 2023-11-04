@@ -197,7 +197,9 @@ const ZMembersFilterMenu: React.FC = () => {
       ],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _shouldFetchWhenIdPassed: !(
-        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        (workspaceId?.trim()?.length ?? 0) > 0
       )
     });
 
@@ -221,8 +223,10 @@ const ZMembersFilterMenu: React.FC = () => {
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _shouldFetchWhenIdPassed: !(
         wsShareId !== undefined &&
+        wsShareId !== null &&
         (wsShareId?.trim()?.length ?? 0) > 0 &&
         shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
         (shareWSMemberId?.trim()?.length ?? 0) > 0
       )
     });
@@ -241,9 +245,16 @@ const ZMembersFilterMenu: React.FC = () => {
         setCompState(_oldValue => ({
           ..._oldValue,
           membersColumn:
-            workspaceId !== undefined
+            workspaceId !== undefined &&
+            workspaceId !== null &&
+            (workspaceId?.trim()?.length ?? 0) > 0
               ? getMemberFiltersData?.settings?.columns
-              : wsShareId !== undefined && shareWSMemberId !== undefined
+              : wsShareId !== undefined &&
+                wsShareId !== null &&
+                (wsShareId?.trim()?.length ?? 0) > 0 &&
+                shareWSMemberId !== undefined &&
+                shareWSMemberId !== null &&
+                (shareWSMemberId?.trim()?.length ?? 0) > 0
               ? getSWSMemberFiltersData?.settings?.columns
               : _oldValue.membersColumn
         }));
@@ -294,7 +305,11 @@ const ZMembersFilterMenu: React.FC = () => {
           getSWSMemberFiltersData?.type ===
             ZUserSettingTypeEnum.membersListPageTable
         ) {
-          if (workspaceId !== undefined) {
+          if (
+            workspaceId !== undefined &&
+            workspaceId !== null &&
+            (workspaceId?.trim()?.length ?? 0) > 0
+          ) {
             _response = await updateMemberFilersAsyncMutate({
               itemIds: [workspaceId, ZUserSettingTypeEnum.membersListPageTable],
               urlDynamicParts: [
@@ -303,7 +318,14 @@ const ZMembersFilterMenu: React.FC = () => {
               ],
               requestData: _value
             });
-          } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+          } else if (
+            wsShareId !== undefined &&
+            wsShareId !== null &&
+            (wsShareId?.trim()?.length ?? 0) > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            (shareWSMemberId?.trim()?.length ?? 0) > 0
+          ) {
             _response = await updateSWSMemberFilersAsyncMutate({
               itemIds: [
                 shareWSMemberId,
@@ -317,9 +339,20 @@ const ZMembersFilterMenu: React.FC = () => {
             });
           }
         } else {
-          if (workspaceId !== undefined) {
+          if (
+            workspaceId !== undefined &&
+            workspaceId !== null &&
+            (workspaceId?.trim()?.length ?? 0) > 0
+          ) {
             _response = await createMemberFilersAsyncMutate(_value);
-          } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+          } else if (
+            wsShareId !== undefined &&
+            wsShareId !== null &&
+            (wsShareId?.trim()?.length ?? 0) > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            (shareWSMemberId?.trim()?.length ?? 0) > 0
+          ) {
             _response = await createSWSMemberFilersAsyncMutate(_value);
           }
         }
@@ -333,7 +366,11 @@ const ZMembersFilterMenu: React.FC = () => {
 
           // if we have data then show success message.
           if (_data?.id !== undefined || _data?.id !== null) {
-            if (workspaceId !== undefined) {
+            if (
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              (workspaceId?.trim()?.length ?? 0) > 0
+            ) {
               await updateRQCDataHandler<ZUserSettingInterface | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
@@ -385,14 +422,26 @@ const ZMembersFilterMenu: React.FC = () => {
       <ZCan
         shareWSId={wsShareId}
         permissionType={
-          wsShareId !== undefined && shareWSMemberId !== undefined
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          (wsShareId?.trim()?.length ?? 0) > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          (shareWSMemberId?.trim()?.length ?? 0) > 0
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }
         havePermissions={
-          workspaceId !== undefined
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          (workspaceId?.trim()?.length ?? 0) > 0
             ? [permissionsEnum.viewAny_ws_member]
-            : wsShareId !== undefined && shareWSMemberId !== undefined
+            : wsShareId !== undefined &&
+              wsShareId !== null &&
+              (wsShareId?.trim()?.length ?? 0) > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              (shareWSMemberId?.trim()?.length ?? 0) > 0
             ? [shareWSPermissionEnum.viewAny_sws_member]
             : []
         }>
@@ -445,8 +494,14 @@ const ZMembersFilterMenu: React.FC = () => {
                   getSWSMemberFiltersData?.settings?.filters?.endDate ??
                   new Date().toISOString(),
 
-                role: '',
-                status: ''
+                role:
+                  getMemberFiltersData?.settings?.filters?.role ??
+                  getSWSMemberFiltersData?.settings?.filters?.role ??
+                  '',
+                status:
+                  getMemberFiltersData?.settings?.filters?.status ??
+                  getSWSMemberFiltersData?.settings?.filters?.status ??
+                  ''
               }
             }}
             enableReinitialize={true}

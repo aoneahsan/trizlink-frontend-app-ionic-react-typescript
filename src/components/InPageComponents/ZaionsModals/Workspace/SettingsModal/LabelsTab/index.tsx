@@ -815,7 +815,7 @@ const ZLabelsTab: React.FC<{
                           return (
                             <>
                               {!isZFetching &&
-                                values.allLabels.map((el, index) => {
+                                values?.allLabels?.map((el, index) => {
                                   return (
                                     <ZCan
                                       shareWSId={wsShareId}
@@ -843,15 +843,17 @@ const ZLabelsTab: React.FC<{
                                           '--background': 'transparent',
                                           '--inner-padding-end': '0px'
                                         }}>
-                                        {el?.editMode === false && (
+                                        {(el?.editMode === false ||
+                                          el?.editMode === undefined ||
+                                          el?.editMode === null) && (
                                           <>
                                             <ZIonBadge className='font-normal ion-no-padding px-1 max-w-[5.5rem] tracking-wider'>
                                               <ZIonTitle className='text-sm ion-no-padding h-min'>
-                                                {el.title}
+                                                {el?.title}
                                               </ZIonTitle>
                                             </ZIonBadge>
                                             <ZIonText className='mx-2 text-sm'>
-                                              {el.postsCount ?? 0} posts
+                                              {el?.postsCount ?? 0} posts
                                             </ZIonText>
 
                                             {/* if user as a owner or member have permission to do this action then showing element */}
@@ -959,7 +961,7 @@ const ZLabelsTab: React.FC<{
                                             </ZCan>
                                           </>
                                         )}
-                                        {el?.editMode === false && (
+                                        {el?.editMode === true && (
                                           <div className='flex w-full ion-align-items-start'>
                                             <ZIonInput
                                               placeholder='Label name'

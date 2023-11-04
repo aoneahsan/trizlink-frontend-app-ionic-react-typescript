@@ -45,6 +45,8 @@ export const FilteredPixelsDataRStateSelector = selector({
     if (pixelsRStateAtom?.length !== 0) {
       if (
         _filterOptions?.timeFilter?.daysToSubtract !== undefined &&
+        _filterOptions?.timeFilter?.daysToSubtract !== null &&
+        _filterOptions?.timeFilter?.daysToSubtract?.trim()?.length > 0 &&
         _filterOptions?.timeFilter?.daysToSubtract !== TimeFilterEnum.allTime
       ) {
         let endDate = new Date(
@@ -95,7 +97,11 @@ export const FilteredPixelsDataRStateSelector = selector({
         });
       }
 
-      if (_filterOptions?.platform != null) {
+      if (
+        _filterOptions?.platform !== undefined &&
+        _filterOptions?.platform !== null &&
+        _filterOptions?.platform?.trim()?.length > 0
+      ) {
         _filterPixelsData = _filterPixelsData?.filter(
           el => el?.platform === _filterOptions?.platform
         );

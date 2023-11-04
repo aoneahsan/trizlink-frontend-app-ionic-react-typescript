@@ -265,7 +265,10 @@ const ZWorkspacesSharingModal: React.FC<{
                   'text-2xl': isSmScale,
                   'text-xl': !isSmScale
                 })}>
-                Invite a new member
+                {/* {role !== undefined && role !== null && role?.trim()?.length > 0
+                  ? 'Update member role'
+                  : 'Invite a member'} */}
+                Invite a member
               </ZIonText>
             </div>
 

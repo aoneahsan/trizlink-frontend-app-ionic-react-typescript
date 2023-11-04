@@ -41,6 +41,7 @@ export const FilteredMembersDataRStateSelector = selector({
     if (membersRStateAtom?.length > 0) {
       if (
         _filterOptions?.timeFilter?.daysToSubtract !== undefined &&
+        _filterOptions?.timeFilter?.daysToSubtract !== null &&
         _filterOptions?.timeFilter?.daysToSubtract !== TimeFilterEnum.allTime
       ) {
         let endDate = new Date(
@@ -92,13 +93,21 @@ export const FilteredMembersDataRStateSelector = selector({
         });
       }
 
-      if (_filterOptions?.role != null) {
+      if (
+        _filterOptions?.role !== null &&
+        _filterOptions?.role !== undefined &&
+        _filterOptions?.role?.trim()?.length > 0
+      ) {
         _filterMembersData = _filterMembersData?.filter(
           el => el?.memberRole?.name === _filterOptions?.role
         );
       }
 
-      if (_filterOptions?.status != null) {
+      if (
+        _filterOptions?.status !== null &&
+        _filterOptions?.status !== undefined &&
+        _filterOptions?.status?.trim()?.length > 0
+      ) {
         _filterMembersData = _filterMembersData?.filter(
           el => el?.accountStatus === _filterOptions?.status
         );
