@@ -21,5 +21,6 @@ export const ENVS = {
   firebaseAppKey: _env.VITE_FIREBASE_APP_KEY,
   firebaseProductId: _env.VITE_FIREBASE_PROJECT_ID,
   firebaseMeasurementId: _env.VITE_FIREBASE_MEASUREMENT_ID,
-  sentryErrorLoggingDNS: _env.VITE_SENTRY_DNS
+  sentryErrorLoggingDNS: _env.VITE_SENTRY_DNS,
+  googleClientId: _env.VITE_GOOGLE_CLIENT_ID
 };

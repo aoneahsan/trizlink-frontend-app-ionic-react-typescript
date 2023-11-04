@@ -1,21 +1,22 @@
 import { ZIonButton, ZIonIcon } from '@/components/ZIonComponents';
 import CONSTANTS, { BRACKPOINT_SM } from '@/utils/constants';
 import { logoGoogle } from 'ionicons/icons';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
-import { useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
+import { useZIonErrorAlert, useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
 import { reportCustomError } from '@/utils/customErrorType';
 import { isPlatform } from '@ionic/react';
+import { ENVS } from '@/utils/envKeys';
+import { googleAuthConfig } from '@/configs/socialAuth';
 const isWeb = !isPlatform('capacitor');
 
 if (isWeb) {
   try {
     GoogleAuth.initialize({
-      clientId:
-        '1098579848404-v2emjb5nh94rancq1jhp2t9gljog3ken.apps.googleusercontent.com',
-      grantOfflineAccess: false,
-      scopes: ['profile', 'email']
+      clientId: ENVS.googleClientId,
+      grantOfflineAccess: googleAuthConfig.grantOfflineAccess,
+      scopes: googleAuthConfig.scopes
     });
   } catch (error) {
     reportCustomError(error);
@@ -34,9 +35,12 @@ const GoogleSocialAuth: React.FC<IGoogleSocialAuthProps> = () => {
     query: `(min-width: ${BRACKPOINT_SM})`
   });
   const { presentZIonErrorAlert } = useZIonErrorAlert();
+  const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
 
   const googleAuthHandler = async () => {
     try {
+      // TODO: talha please move the message for all social auth methods in one file/object for social auth messages, and please get proper messages from chatGpt4/3.5 whatever is available
+      presentZIonLoader('Processing Google Auth Request...');
       setCompState(oldState => ({
         ...oldState,
         processing: true
@@ -49,6 +53,13 @@ const GoogleSocialAuth: React.FC<IGoogleSocialAuthProps> = () => {
       }
 
       const gUser = await GoogleAuth.signIn();
+      setCompState(oldState => ({
+        ...oldState,
+        processing: false
+      }));
+
+      // yes we will only dismiss the main loader once we have completed the auth request completely and properly, or in case of error
+      dismissZIonLoader();
       if (gUser?.id) {
         console.log({ gUser });
       } else {
@@ -56,6 +67,11 @@ const GoogleSocialAuth: React.FC<IGoogleSocialAuthProps> = () => {
       }
     } catch (e) {
       reportCustomError(e);
+      dismissZIonLoader();
+      setCompState(oldState => ({
+        ...oldState,
+        processing: false
+      }));
     }
   };
   return (
@@ -64,7 +80,8 @@ const GoogleSocialAuth: React.FC<IGoogleSocialAuthProps> = () => {
       color='tertiary'
       expand={!isXsScale ? 'block' : undefined}
       testingselector={CONSTANTS.testingSelectors.loginPage.googleLoginButton}
-      onClick={googleAuthHandler}>
+      onClick={googleAuthHandler}
+      disabled={compState.processing}>
       <ZIonIcon
         icon={logoGoogle}
         className='font-bold me-1 '></ZIonIcon>
