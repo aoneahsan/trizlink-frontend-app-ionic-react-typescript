@@ -7,7 +7,7 @@ export const ENVS = {
     _env.VITE_TITLE ||
     'ZLink - Url Shortener, Link-in-bio & Social Media Management SAAS APP - Zaions',
   apiUrl,
-  cryptoSecret: _env.VITE_CRYPTO_SECRET ?? 'zlink-app-secrect',
+  cryptoSecret: _env.VITE_CRYPTO_SECRET ?? 'trizlink-app-secrect',
   googleMapApiKey: _env.VITE_GOOGLE_MAP_API_KEY || '',
   isProduction: _env.PROD,
   isDevelopment: _env.DEV,

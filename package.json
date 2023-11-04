@@ -1,5 +1,5 @@
 {
-  "name": "com.zaions.zlink",
+  "name": "com.trizlink.app",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -14,7 +14,7 @@
     "name": "Zaions (Software House)",
     "url": "https://zaions.com"
   },
-  "displayName": "ZLink",
+  "displayName": "Trizlink",
   "categories": [
     "Extension Packs",
     "Other"
@@ -30,7 +30,7 @@
     "test.unit": "vitest",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'"
   },
-  "description": "ZLink project - Project of Zaions (https://zaions.com).",
+  "description": "Trizlink project - Project of Zaions (https://zaions.com).",
   "dependencies": {
     "@capacitor/android": "^5.5.1",
     "@capacitor/app": "^5.0.6",
@@ -46,6 +46,7 @@
     "@capacitor/preferences": "^5.0.6",
     "@capacitor/status-bar": "^5.0.6",
     "@capacitor/toast": "^5.0.6",
+    "@codetrix-studio/capacitor-google-auth": "^3.3.4",
     "@ionic/core": "^7.5.2",
     "@ionic/react": "^7.5.2",
     "@ionic/react-router": "^7.5.2",

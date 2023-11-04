@@ -47,6 +47,9 @@ dependencies:
   '@capacitor/toast':
     specifier: ^5.0.6
     version: 5.0.6(@capacitor/core@5.5.1)
+  '@codetrix-studio/capacitor-google-auth':
+    specifier: ^3.3.4
+    version: 3.3.4(@capacitor/core@5.5.1)
   '@ionic/core':
     specifier: ^7.5.2
     version: 7.5.2
@@ -57,21 +60,17 @@ dependencies:
     specifier: ^7.5.2
     version: 7.5.2(react-dom@18.2.0)(react-router-dom@5.3.4)(react-router@5.3.4)(react@18.2.0)
   '@sentry/react':
-<<<<<<< HEAD
-    specifier: ^7.75.1
-=======
     specifier: ^7.76.0
->>>>>>> 387150ffb766590624037d754647832b8cd3e2ab
     version: 7.76.0(react@18.2.0)
   '@splidejs/react-splide':
     specifier: ^0.7.12
     version: 0.7.12
   '@tanstack/react-query':
     specifier: ^5.0.5
-    version: 5.0.5(react-dom@18.2.0)(react@18.2.0)
+    version: 5.4.3(react-dom@18.2.0)(react@18.2.0)
   '@tanstack/react-query-devtools':
     specifier: ^5.4.2
-    version: 5.4.2(@tanstack/react-query@5.0.5)(react-dom@18.2.0)(react@18.2.0)
+    version: 5.4.3(@tanstack/react-query@5.4.3)(react-dom@18.2.0)(react@18.2.0)
   '@tanstack/react-table':
     specifier: ^8.10.7
     version: 8.10.7(react-dom@18.2.0)(react@18.2.0)
@@ -1935,6 +1934,14 @@ packages:
       '@capacitor/core': 5.5.1
     dev: false
 
+  /@codetrix-studio/capacitor-google-auth@3.3.4(@capacitor/core@5.5.1):
+    resolution: {integrity: sha512-R9kTWK5x2bT+gXV1ia48Xt/rS1RPXrVVPDCeX4mpGFyIyjdx1FmuAkHeFNsSQ4sGDKkjCWnXf6z+ikcKnusz7g==}
+    peerDependencies:
+      '@capacitor/core': ^5.0.0
+    dependencies:
+      '@capacitor/core': 5.5.1
+    dev: false
+
   /@colors/colors@1.5.0:
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
     engines: {node: '>=0.1.90'}
@@ -2694,7 +2701,7 @@ packages:
       '@firebase/logger': 0.4.0
       '@firebase/util': 1.9.3
       '@firebase/webchannel-wrapper': 0.10.3
-      '@grpc/grpc-js': 1.9.8
+      '@grpc/grpc-js': 1.9.7
       '@grpc/proto-loader': 0.7.10
       node-fetch: 2.6.7
       tslib: 2.6.2
@@ -2960,8 +2967,8 @@ packages:
       supercluster: 7.1.5
     dev: false
 
-  /@grpc/grpc-js@1.9.8:
-    resolution: {integrity: sha512-FFPzDS333Vw8hvf+1FaEsaCYVPBdNdUCw7zArTiF7+6gOzln967b4GBCBekKGqoKEgna8d3Ayxv8t+IvazXG3g==}
+  /@grpc/grpc-js@1.9.7:
+    resolution: {integrity: sha512-yMaA/cIsRhGzW3ymCNpdlPcInXcovztlgu/rirThj2b87u3RzWUszliOqZ/pldy7yhmJPS8uwog+kZSTa4A0PQ==}
     engines: {node: ^8.13.0 || >=10.10.0}
     dependencies:
       '@grpc/proto-loader': 0.7.10
@@ -3821,29 +3828,29 @@ packages:
       - supports-color
     dev: true
 
-  /@tanstack/query-core@5.0.5:
-    resolution: {integrity: sha512-MThCETMkHDHTnFZHp71L+SqTtD5d6XHftFCVR1xRJdWM3qGrlQ2VCXaj0SKVcyJej2e1Opa2c7iknu1llxCDNQ==}
+  /@tanstack/query-core@5.4.3:
+    resolution: {integrity: sha512-fnI9ORjcuLGm1sNrKatKIosRQUpuqcD4SV7RqRSVmj8JSicX2aoMyKryHEBpVQvf6N4PaBVgBxQomjsbsGPssQ==}
     dev: false
 
   /@tanstack/query-devtools@5.4.2:
     resolution: {integrity: sha512-EXdaMXi8CxZuMp97J5mq6wy1RduOfoWFv5vtA1U+hyqb8Wst6M8kkkjDSdFvGZIRpYY4K8mKLlEFHNUZDG5dtw==}
     dev: false
 
-  /@tanstack/react-query-devtools@5.4.2(@tanstack/react-query@5.0.5)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-bdJvnoKqHlh7sBTHC9O88WaqLu1D8wDrP0IstOhDODaPJfxW26yJOKK1/1uPQpZXFoOtFFYHpCqKoM58DBrWSQ==}
+  /@tanstack/react-query-devtools@5.4.3(@tanstack/react-query@5.4.3)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-J9EB50vpK5yvQ5W+AOp9jIQa+1mld+Wwc2GF3VLr2SEDhOyiTiHOjrFGKKL1Cal5Wg8UuS3vexf8trElrtg05A==}
     peerDependencies:
-      '@tanstack/react-query': ^5.0.5
+      '@tanstack/react-query': ^5.4.3
       react: ^18.0.0
       react-dom: ^18.0.0
     dependencies:
       '@tanstack/query-devtools': 5.4.2
-      '@tanstack/react-query': 5.0.5(react-dom@18.2.0)(react@18.2.0)
+      '@tanstack/react-query': 5.4.3(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@tanstack/react-query@5.0.5(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-ZG0Q4HZ0iuI8mWiZ2/MdVYPHbrmAVhMn7+gLOkxJh6zLIgCL4luSZlohzN5Xt4MjxfxxWioO1nemwpudaTsmQg==}
+  /@tanstack/react-query@5.4.3(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-4aSOrRNa6yEmf7mws5QPTVMn8Lp7L38tFoTZ0c1ZmhIvbr8GIA0WT7X5N3yz/nuK8hUtjw9cAzBr4BPDZZ+tzA==}
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
@@ -3854,7 +3861,7 @@ packages:
       react-native:
         optional: true
     dependencies:
-      '@tanstack/query-core': 5.0.5
+      '@tanstack/query-core': 5.4.3
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
@@ -5212,7 +5219,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.22.1
-      caniuse-lite: 1.0.30001555
+      caniuse-lite: 1.0.30001554
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -5542,8 +5549,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001555
-      electron-to-chromium: 1.4.569
+      caniuse-lite: 1.0.30001554
+      electron-to-chromium: 1.4.568
       node-releases: 2.0.13
       update-browserslist-db: 1.0.13(browserslist@4.22.1)
     dev: true
@@ -5641,13 +5648,13 @@ packages:
     resolution: {integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==}
     dependencies:
       browserslist: 4.22.1
-      caniuse-lite: 1.0.30001555
+      caniuse-lite: 1.0.30001554
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
     dev: true
 
-  /caniuse-lite@1.0.30001555:
-    resolution: {integrity: sha512-NzbUFKUnJ3DTcq6YyZB6+qqhfD112uR3uoEnkmfzm2wVzUNsFkU7AwBjKQ654Sp5cau0JxhFyRSn/tQZ+XfygA==}
+  /caniuse-lite@1.0.30001554:
+    resolution: {integrity: sha512-A2E3U//MBwbJVzebddm1YfNp7Nud5Ip+IPn4BozBmn4KqVX7AvluoIDFWjsv5OkGnKUXQVmMSoMKLa3ScCblcQ==}
     dev: true
 
   /case-sensitive-paths-webpack-plugin@2.4.0:
@@ -6766,8 +6773,8 @@ packages:
       jake: 10.8.7
     dev: true
 
-  /electron-to-chromium@1.4.569:
-    resolution: {integrity: sha512-LsrJjZ0IbVy12ApW3gpYpcmHS3iRxH4bkKOW98y1/D+3cvDUWGcbzbsFinfUS8knpcZk/PG/2p/RnkMCYN7PVg==}
+  /electron-to-chromium@1.4.568:
+    resolution: {integrity: sha512-3TCOv8+BY6Ltpt1/CmGBMups2IdKOyfEmz4J8yIS4xLSeMm0Rf+psSaxLuswG9qMKt+XbNbmADybtXGpTFlbDg==}
     dev: true
 
   /elementtree@0.1.7:
