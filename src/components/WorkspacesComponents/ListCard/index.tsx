@@ -10,6 +10,7 @@ import React from 'react';
  * */
 import classNames from 'classnames';
 import { ellipsisHorizontalOutline, star, starOutline } from 'ionicons/icons';
+import { useRecoilValue } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -90,7 +91,6 @@ import { type UserAccountType } from '@/types/UserAccount/index.type';
  * */
 import classes from './styles.module.css';
 import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
-import { useRecoilValue } from 'recoil';
 
 /**
  * Images Imports go down
@@ -559,6 +559,7 @@ const ZWorkspacesCard: React.FC<{
                         });
                       }}>
                       <ZIonImg
+                        className='w-[38px] h-[40px] zaions-object-fit-cover'
                         src={
                           owned
                             ? userAccountStateAtom?.avatar !== null
@@ -570,7 +571,6 @@ const ZWorkspacesCard: React.FC<{
                             ? user?.avatar
                             : getUiAvatarApiUrl({ name: user?.username })
                         }
-                        className='w-[38px] h-[40px] zaions-object-fit-cover'
                       />
                     </ZIonButton>
                   </ZIonCol>

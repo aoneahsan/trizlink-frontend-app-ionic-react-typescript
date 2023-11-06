@@ -77,6 +77,7 @@ import PaulaC from './pages/company/reviews/PaulaC.png';
 
 // SVG's
 import linkMngt3 from './svg/link-mngt-3.svg';
+import gift from './svg/gift.svg';
 import mobileLayout from './svg/mobileLayout.svg';
 import MedicalInstrumentStethoscope from './svg/icon-large-medical-instrument-stethoscope.svg';
 import iconLargePerformanceMoneyIncrease from './svg/icon-large-performance-money-increase.svg';
@@ -585,6 +586,7 @@ export {
   PlaceholderAvatar,
   PaulaC,
   linkMngt3,
+  gift,
   mobileLayout,
   MedicalInstrumentStethoscope,
   iconLargePerformanceMoneyIncrease,

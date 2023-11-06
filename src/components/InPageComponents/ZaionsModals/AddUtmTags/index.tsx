@@ -57,9 +57,9 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 // Styles
 
 const ZaionsAddUtmTags: React.FC<{
-  workspaceId: string;
-  shareWSMemberId: string;
-  wsShareId: string;
+  workspaceId?: string;
+  shareWSMemberId?: string;
+  wsShareId?: string;
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
   formMode?: FormMode;
   utmTag?: UTMTagTemplateType;
@@ -86,16 +86,14 @@ const ZaionsAddUtmTags: React.FC<{
   // #region APIS.
   const { mutateAsync: createUTMTagAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
-    _itemsIds: [workspaceId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _queriesKeysToInvalidate: []
+    _itemsIds: [workspaceId ?? ''],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
 
   const { mutateAsync: createSWSUTMTagAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.sws_utm_tag_create_list,
-    _itemsIds: [shareWSMemberId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _queriesKeysToInvalidate: []
+    _itemsIds: [shareWSMemberId ?? ''],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId]
   });
 
   const { mutateAsync: updateUTMTagAsyncMutate } = useZRQUpdateRequest({
@@ -120,13 +118,28 @@ const ZaionsAddUtmTags: React.FC<{
       let _response;
       // ADD API Request to add this UTM Tag to user account in DB.
       if (formMode === FormMode.ADD) {
-        if (workspaceId !== undefined) {
+        if (
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          workspaceId?.trim()?.length > 0
+        ) {
           _response = await createUTMTagAsyncMutate(value);
-        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+        } else if (
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== null &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId?.trim()?.length > 0
+        ) {
           _response = await createSWSUTMTagAsyncMutate(value);
         }
       } else if (formMode === FormMode.EDIT && utmTag?.id !== undefined) {
-        if (workspaceId !== undefined) {
+        if (
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          workspaceId?.trim()?.length > 0
+        ) {
           _response = await updateUTMTagAsyncMutate({
             itemIds: [workspaceId, utmTag?.id],
             urlDynamicParts: [
@@ -135,7 +148,14 @@ const ZaionsAddUtmTags: React.FC<{
             ],
             requestData: value
           });
-        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+        } else if (
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== null &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId?.trim()?.length > 0
+        ) {
           _response = await updateSWSUTMTagAsyncMutate({
             itemIds: [shareWSMemberId, utmTag?.id],
             urlDynamicParts: [
@@ -156,7 +176,11 @@ const ZaionsAddUtmTags: React.FC<{
         if (_data?.id !== null) {
           let _utmDataFromCache: UTMTagTemplateType[] = [];
 
-          if (workspaceId !== undefined) {
+          if (
+            workspaceId !== undefined &&
+            workspaceId !== null &&
+            workspaceId?.trim()?.length > 0
+          ) {
             _utmDataFromCache =
               getRQCDataHandler<UTMTagTemplateType[]>({
                 key: [
@@ -164,7 +188,14 @@ const ZaionsAddUtmTags: React.FC<{
                   workspaceId
                 ]
               }) ?? [];
-          } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+          } else if (
+            wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== null &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId?.trim()?.length > 0
+          ) {
             _utmDataFromCache =
               getRQCDataHandler<UTMTagTemplateType[]>({
                 key: [
@@ -179,11 +210,15 @@ const ZaionsAddUtmTags: React.FC<{
             extractInnerDataOptionsEnum.createRequestResponseItems
           );
 
-          if (_oldUtmData !== undefined) {
+          if (_oldUtmData !== undefined && _oldUtmData !== null) {
             if (formMode === FormMode.ADD) {
               const _updatedUtmTagsData = [..._oldUtmData, _data];
 
-              if (workspaceId !== undefined) {
+              if (
+                workspaceId !== undefined &&
+                workspaceId !== null &&
+                workspaceId?.trim()?.length > 0
+              ) {
                 await updateRQCDataHandler({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
@@ -196,6 +231,11 @@ const ZaionsAddUtmTags: React.FC<{
                 });
               } else if (
                 wsShareId !== undefined &&
+                wsShareId !== null &&
+                wsShareId?.trim()?.length > 0 &&
+                shareWSMemberId !== null &&
+                shareWSMemberId !== undefined &&
+                shareWSMemberId?.trim()?.length > 0 &&
                 shareWSMemberId !== undefined
               ) {
                 await updateRQCDataHandler({
@@ -214,12 +254,19 @@ const ZaionsAddUtmTags: React.FC<{
             } else if (formMode === FormMode.EDIT) {
               await updateRQCDataHandler({
                 key:
-                  workspaceId !== undefined
+                  workspaceId !== undefined &&
+                  workspaceId !== null &&
+                  workspaceId?.trim()?.length > 0
                     ? [
                         CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
                         workspaceId
                       ]
-                    : wsShareId !== undefined
+                    : wsShareId !== undefined &&
+                      wsShareId !== null &&
+                      wsShareId?.trim()?.length > 0 &&
+                      shareWSMemberId !== null &&
+                      shareWSMemberId !== undefined &&
+                      shareWSMemberId?.trim()?.length > 0
                     ? [
                         CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN,
                         wsShareId
@@ -275,12 +322,22 @@ const ZaionsAddUtmTags: React.FC<{
     <ZCan
       shareWSId={wsShareId}
       permissionType={
-        wsShareId !== undefined
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        wsShareId?.trim()?.length > 0 &&
+        shareWSMemberId !== null &&
+        shareWSMemberId !== undefined &&
+        shareWSMemberId?.trim()?.length > 0
           ? permissionsTypeEnum.shareWSMemberPermissions
           : permissionsTypeEnum.loggedInUserPermissions
       }
       havePermissions={
-        wsShareId !== undefined
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        wsShareId?.trim()?.length > 0 &&
+        shareWSMemberId !== null &&
+        shareWSMemberId !== undefined &&
+        shareWSMemberId?.trim()?.length > 0
           ? [
               shareWSPermissionEnum.create_sws_utmTag,
               shareWSPermissionEnum.update_sws_utmTag
@@ -442,7 +499,10 @@ const ZaionsAddUtmTags: React.FC<{
                     'mt-5': true,
                     'ion-touched': touched?.templateName,
                     'ion-invalid':
-                      touched?.templateName === true && errors?.templateName,
+                      touched?.templateName === true &&
+                      errors?.templateName !== undefined &&
+                      errors?.templateName !== null &&
+                      errors?.templateName?.trim()?.length > 0,
                     'ion-valid':
                       touched?.templateName === true &&
                       (errors?.templateName === undefined ||
@@ -473,7 +533,10 @@ const ZaionsAddUtmTags: React.FC<{
                     'mt-3': true,
                     'ion-touched': touched?.utmCampaign === true,
                     'ion-invalid':
-                      touched?.utmCampaign === true && errors?.utmCampaign,
+                      touched?.utmCampaign === true &&
+                      errors?.utmCampaign !== undefined &&
+                      errors?.utmCampaign !== null &&
+                      errors?.utmCampaign?.trim()?.length > 0,
                     'ion-valid':
                       touched?.utmCampaign === true &&
                       (errors?.utmCampaign === undefined ||
@@ -502,7 +565,10 @@ const ZaionsAddUtmTags: React.FC<{
                     'mt-3': true,
                     'ion-touched': touched?.utmMedium === true,
                     'ion-invalid':
-                      touched?.utmMedium === true && errors?.utmMedium,
+                      touched?.utmMedium === true &&
+                      errors?.utmMedium !== null &&
+                      errors?.utmMedium !== undefined &&
+                      errors?.utmMedium?.trim()?.length > 0,
                     'ion-valid':
                       touched?.utmMedium === true &&
                       (errors?.utmMedium === undefined ||

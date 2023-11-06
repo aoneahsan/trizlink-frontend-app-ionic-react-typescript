@@ -23,7 +23,8 @@ import {
   BRACKPOINT_XL,
   BRACKPOINT_LG,
   BRACKPOINT_SM,
-  BRACKPOINT_XS
+  BRACKPOINT_XS,
+  BRACKPOINT_2XL
 } from '@/utils/constants';
 import { useLocation } from 'react-router';
 import {
@@ -100,6 +101,15 @@ export const useZNotification = (): {
  * @returns an object with boolean values for each defined media scale.
  */
 export const useZMediaQueryScale = (): useZMediaQueryScaleReturnInterface => {
+  // Check if the screen width is at 2 extra-large (sxl) scale
+  const is2XlScale = useMediaQuery({
+    query: `(min-width: ${BRACKPOINT_2XL})`
+  });
+
+  const isBelow2XlScale = useMediaQuery({
+    query: `(max-width: ${BRACKPOINT_2XL})`
+  });
+
   // Check if the screen width is at extra-large (xl) scale
   const isXlScale = useMediaQuery({
     query: `(min-width: ${BRACKPOINT_XL})`
@@ -151,6 +161,8 @@ export const useZMediaQueryScale = (): useZMediaQueryScaleReturnInterface => {
   });
 
   return {
+    is2XlScale,
+    isBelow2XlScale,
     isXlScale,
     isLgScale,
     isMdScale,

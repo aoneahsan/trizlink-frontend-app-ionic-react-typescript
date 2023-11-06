@@ -12,6 +12,8 @@ export interface zNotificationInterface {
 }
 
 export interface useZMediaQueryScaleReturnInterface {
+  is2XlScale: boolean;
+  isBelow2XlScale: boolean;
   isXlScale: boolean;
   isLgScale: boolean;
   isMdScale: boolean;

@@ -97,9 +97,11 @@ const ZWSSettingsMenu = lazy(
   () => import('@/components/AdminPanelComponents/Sidebar/WSSettingsMenu')
 );
 const ZWSSettingTeamsListPage = lazy(() => import('./Team'));
+const ZBillingPage = lazy(() => import('./Billing'));
 const ZWSSettingPixelListPage = lazy(() => import('./Pixel'));
 const ZWSSettingUtmTagListPage = lazy(() => import('./UTMTag'));
 const ZWSSettingEmbedWidgetListPage = lazy(() => import('./EmbedWidget'));
+const ZWSReferralProgramListPage = lazy(() => import('./ReferralProgram'));
 
 /**
  * Style files Imports go down
@@ -138,7 +140,7 @@ const ZWorkspaceSettings: React.FC = () => {
   // #endregion
 
   // #region Custom hooks.
-  const { isSmScale, isLgScale, isMdScale } = useZMediaQueryScale();
+  const { is2XlScale, isSmScale, isLgScale, isMdScale } = useZMediaQueryScale();
   const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   // #endregion
 
@@ -1078,12 +1080,20 @@ const ZWorkspaceSettings: React.FC = () => {
                 <ZIonCol
                   sizeXl={
                     ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                      ? '10'
+                      ? is2XlScale
+                        ? '10.5'
+                        : '10'
+                      : is2XlScale
+                      ? '11.4'
                       : '11.2'
                   }
                   sizeLg={
                     ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                      ? '10'
+                      ? is2XlScale
+                        ? '10.5'
+                        : '10'
+                      : is2XlScale
+                      ? '11.4'
                       : '11.2'
                   }
                   sizeMd='12'
@@ -1198,17 +1208,41 @@ const ZInpageMainContent: React.FC = () => {
     )?.isExact;
   }
 
-  // const isReferralProgramPage = useRouteMatch(
-  //   ZaionsRoutes.AdminPanel.Setting.AccountSettings.ReferralProgram
-  // )?.isExact;
+  let isReferralProgramPage: boolean | undefined;
+  if (workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    isReferralProgramPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.Setting.AccountSettings.ReferralProgram
+    )?.isExact;
+  } else if (
+    wsShareId !== undefined &&
+    (wsShareId?.trim()?.length ?? 0) > 0 &&
+    shareWSMemberId !== undefined &&
+    (shareWSMemberId?.trim()?.length ?? 0) > 0
+  ) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    isReferralProgramPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.ReferralProgram
+    )?.isExact;
+  }
 
-  // const isBillingPage = useRouteMatch(
-  //   ZaionsRoutes.AdminPanel.Setting.AccountSettings.Billing
-  // )?.isExact;
-
-  // const isUserPage = useRouteMatch(
-  //   ZaionsRoutes.AdminPanel.Setting.AccountSettings.User
-  // )?.isExact;
+  let isBillingPage: boolean | undefined;
+  if (workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    isBillingPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.Setting.AccountSettings.Billing
+    )?.isExact;
+  } else if (
+    wsShareId !== undefined &&
+    (wsShareId?.trim()?.length ?? 0) > 0 &&
+    shareWSMemberId !== undefined &&
+    (shareWSMemberId?.trim()?.length ?? 0) > 0
+  ) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    isBillingPage = useRouteMatch(
+      ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Billing
+    )?.isExact;
+  }
 
   let isPixelPage: boolean | undefined;
   if (workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0) {
@@ -1281,6 +1315,8 @@ const ZInpageMainContent: React.FC = () => {
         {isPixelPage === true ? <ZWSSettingPixelListPage /> : null}
         {isUTMTagPage === true ? <ZWSSettingUtmTagListPage /> : null}
         {isEmbedWidgetPage === true ? <ZWSSettingEmbedWidgetListPage /> : null}
+        {isReferralProgramPage === true ? <ZWSReferralProgramListPage /> : null}
+        {isBillingPage === true ? <ZBillingPage /> : null}
       </Suspense>
     </div>
   );

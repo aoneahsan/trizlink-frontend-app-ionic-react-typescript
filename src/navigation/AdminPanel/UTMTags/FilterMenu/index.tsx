@@ -192,9 +192,7 @@ const ZUTMTagsFilterMenu: React.FC = () => {
         CONSTANTS.RouteParams.settings.type
       ],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
-      _shouldFetchWhenIdPassed: !(
-        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
-      )
+      _shouldFetchWhenIdPassed: !((workspaceId?.trim()?.length ?? 0) > 0)
     });
 
   // If share-workspace then this api will fetch share-workspace utm tags settings & filters data.
@@ -216,9 +214,7 @@ const ZUTMTagsFilterMenu: React.FC = () => {
       ],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _shouldFetchWhenIdPassed: !(
-        wsShareId !== undefined &&
         (wsShareId?.trim()?.length ?? 0) > 0 &&
-        shareWSMemberId !== undefined &&
         (shareWSMemberId?.trim()?.length ?? 0) > 0
       )
     });
@@ -235,9 +231,10 @@ const ZUTMTagsFilterMenu: React.FC = () => {
         setCompState(_oldValue => ({
           ..._oldValue,
           utmTagsColumn:
-            workspaceId !== undefined
+            (workspaceId?.trim()?.length ?? 0) > 0
               ? getUtmTagsFiltersData?.settings?.columns
-              : wsShareId !== undefined && shareWSMemberId !== undefined
+              : (wsShareId?.trim()?.length ?? 0) > 0 &&
+                (shareWSMemberId?.trim()?.length ?? 0) > 0
               ? getSWSUtmTagsFiltersData?.settings?.columns
               : _oldValue.utmTagsColumn
         }));
@@ -283,19 +280,25 @@ const ZUTMTagsFilterMenu: React.FC = () => {
           getSWSUtmTagsFiltersData?.type ===
             ZUserSettingTypeEnum.UTMTagListPageTable
         ) {
-          if (workspaceId !== undefined) {
+          if ((workspaceId?.trim()?.length ?? 0) > 0) {
             _response = await updateUtmTagsFilersAsyncMutate({
-              itemIds: [workspaceId, ZUserSettingTypeEnum.UTMTagListPageTable],
+              itemIds: [
+                workspaceId ?? '',
+                ZUserSettingTypeEnum.UTMTagListPageTable
+              ],
               urlDynamicParts: [
                 CONSTANTS.RouteParams.workspace.workspaceId,
                 CONSTANTS.RouteParams.settings.type
               ],
               requestData: _value
             });
-          } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+          } else if (
+            (wsShareId?.trim()?.length ?? 0) > 0 &&
+            (shareWSMemberId?.trim()?.length ?? 0) > 0
+          ) {
             _response = await updateSWSUtmTagsFilersAsyncMutate({
               itemIds: [
-                shareWSMemberId,
+                shareWSMemberId ?? '',
                 ZUserSettingTypeEnum.UTMTagListPageTable
               ],
               urlDynamicParts: [
@@ -306,14 +309,17 @@ const ZUTMTagsFilterMenu: React.FC = () => {
             });
           }
         } else {
-          if (workspaceId !== undefined) {
+          if ((workspaceId?.trim()?.length ?? 0) > 0) {
             _response = await createUtmTagsFilersAsyncMutate(_value);
-          } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+          } else if (
+            (wsShareId?.trim()?.length ?? 0) > 0 &&
+            (shareWSMemberId?.trim()?.length ?? 0) > 0
+          ) {
             _response = await createSWSUtmTagsFilersAsyncMutate(_value);
           }
         }
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           // extract Data from _response.
           const _data = extractInnerData<ZUserSettingInterface>(
             _response,
@@ -322,11 +328,11 @@ const ZUTMTagsFilterMenu: React.FC = () => {
 
           // if we have data then show success message.
           if (_data?.id !== undefined && _data?.id !== null) {
-            if (workspaceId !== undefined) {
+            if ((workspaceId?.trim()?.length ?? 0) > 0) {
               await updateRQCDataHandler<ZUserSettingInterface | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-                  workspaceId,
+                  workspaceId ?? '',
                   ZUserSettingTypeEnum.UTMTagListPageTable
                 ],
                 data: _data,
@@ -335,13 +341,13 @@ const ZUTMTagsFilterMenu: React.FC = () => {
                 updateHoleData: true
               });
             } else if (
-              wsShareId !== undefined &&
-              shareWSMemberId !== undefined
+              (wsShareId?.trim()?.length ?? 0) > 0 &&
+              (shareWSMemberId?.trim()?.length ?? 0) > 0
             ) {
               await updateRQCDataHandler<ZUserSettingInterface | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-                  wsShareId,
+                  wsShareId ?? '',
                   ZUserSettingTypeEnum.UTMTagListPageTable
                 ],
                 data: _data,
@@ -374,14 +380,16 @@ const ZUTMTagsFilterMenu: React.FC = () => {
       <ZCan
         shareWSId={wsShareId}
         permissionType={
-          wsShareId !== undefined && shareWSMemberId !== undefined
+          (wsShareId?.trim()?.length ?? 0) > 0 &&
+          (shareWSMemberId?.trim()?.length ?? 0) > 0
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }
         havePermissions={
-          workspaceId !== undefined
+          (workspaceId?.trim()?.length ?? 0) > 0
             ? [permissionsEnum.viewAny_utmTag]
-            : wsShareId !== undefined && shareWSMemberId !== undefined
+            : (wsShareId?.trim()?.length ?? 0) > 0 &&
+              (shareWSMemberId?.trim()?.length ?? 0) > 0
             ? [shareWSPermissionEnum.viewAny_sws_utmTag]
             : []
         }>

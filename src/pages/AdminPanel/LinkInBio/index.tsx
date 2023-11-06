@@ -132,7 +132,8 @@ const ZLinkInBiosListPage: React.FC = () => {
   }>();
 
   // #region Custom hooks.
-  const { isXlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale();
+  const { isXlScale, is2XlScale, isMdScale, isLgScale, isSmScale } =
+    useZMediaQueryScale();
   const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   const { validateRequestResponse } = useZValidateRequestResponse();
   // #endregion
@@ -375,12 +376,20 @@ const ZLinkInBiosListPage: React.FC = () => {
               <ZIonCol
                 sizeXl={
                   ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                    ? '10'
+                    ? is2XlScale
+                      ? '10.5'
+                      : '10'
+                    : is2XlScale
+                    ? '11.4'
                     : '11.2'
                 }
                 sizeLg={
                   ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                    ? '10'
+                    ? is2XlScale
+                      ? '10.5'
+                      : '10'
+                    : is2XlScale
+                    ? '11.4'
                     : '11.2'
                 }
                 sizeMd='12'

@@ -175,7 +175,7 @@ const ZShortLinksListPage: React.FC = () => {
   // #endregion
 
   // #region Custom hooks.
-  const { isMdScale, isLgScale, isSmScale } = useZMediaQueryScale(); // media query hook.
+  const { is2XlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale(); // media query hook.
   const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   const { validateRequestResponse } = useZValidateRequestResponse();
   // #endregion
@@ -682,12 +682,20 @@ const ZShortLinksListPage: React.FC = () => {
                   <ZIonCol
                     sizeXl={
                       ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                        ? '10'
+                        ? is2XlScale
+                          ? '10.5'
+                          : '10'
+                        : is2XlScale
+                        ? '11.4'
                         : '11.2'
                     }
                     sizeLg={
                       ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                        ? '10'
+                        ? is2XlScale
+                          ? '10.5'
+                          : '10'
+                        : is2XlScale
+                        ? '11.4'
                         : '11.2'
                     }
                     sizeMd='12'

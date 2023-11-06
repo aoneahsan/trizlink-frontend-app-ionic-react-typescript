@@ -258,6 +258,10 @@ span.new {
   background: rgba(var(--ion-color-light-rgb), 0.5);
 }
 
+.z-ion-bg-transparent {
+  --background: transparent;
+}
+
 .zaions__bg_light_opacity_point7 {
   background: rgba(var(--ion-color-light-rgb), 0.7);
 }
@@ -496,6 +500,7 @@ span.new {
 
 .zaions_workspaces_actions_popover_size {
   --width: 256px;
+  --max-height: 350px;
 }
 
 .zaions_workspaces_profile_popover_size {
@@ -578,6 +583,7 @@ span.new {
 .workspace-post-detail-modal-size {
   --height: 94vh;
   --width: 87.6vw;
+  --min-height: 530px;
 }
 
 /* .invite-member-in-team-modal-size {
@@ -589,6 +595,7 @@ span.new {
 .invite-member-in-team-modal-size {
   --height: 95vh;
   --width: 650px;
+  --min-height: 530px;
 }
 
 .workspace-compose-modal-size {

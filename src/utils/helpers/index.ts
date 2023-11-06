@@ -1588,6 +1588,20 @@ export const zGetRoutePermissions = ({
         ];
         break;
 
+      case ZaionsRoutes.AdminPanel.Setting.AccountSettings.ReferralProgram:
+        _permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_workspaceTeam
+        ];
+        break;
+
+      case ZaionsRoutes.AdminPanel.Setting.AccountSettings.Billing:
+        _permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_workspaceTeam
+        ];
+        break;
+
       case ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel:
         _permissions = [permissionsEnum.viewAny_pixel];
         break;
@@ -1643,6 +1657,20 @@ export const zGetRoutePermissions = ({
         break;
 
       case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Members:
+        _permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_workspaceTeam
+        ];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.ReferralProgram:
+        _permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_workspaceTeam
+        ];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Billing:
         _permissions = [
           permissionsEnum.viewAny_workspace,
           permissionsEnum.viewAny_workspaceTeam

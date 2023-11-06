@@ -62,3 +62,4 @@ export { default as ZIonToolbar } from './ZIonToolbar';
 export { default as ZIonSkeletonText } from './ZIonSkeletonText';
 export { default as ZIonRefresher } from './ZIonRefresher';
 export { default as ZIonRefresherContent } from './ZIonRefresherContent';
+export { default as ZIonProgressBar } from './ZIonProgressBar';

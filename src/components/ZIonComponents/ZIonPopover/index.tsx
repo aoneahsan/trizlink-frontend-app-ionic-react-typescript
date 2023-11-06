@@ -42,8 +42,20 @@ interface ZIonPopoverType {
   ) => void;
 }
 
-const ZIonPopover: React.FC<ZIonPopoverType> = (props: ZIonPopoverType) => {
-  return <IonPopover {...props}> {props.children}</IonPopover>;
-};
+// const ZIonPopover: React.FC<ZIonPopoverType> = (props: ZIonPopoverType) => {
+//   return <IonPopover {...props}>{props.children}</IonPopover>;
+// };
+const ZIonPopover = React.forwardRef(
+  (props: ZIonPopoverType, ref: React.Ref<HTMLIonPopoverElement>) => {
+    return (
+      <IonPopover
+        ref={ref}
+        {...props}>
+        {props.children}
+      </IonPopover>
+    );
+  }
+);
+ZIonPopover.displayName = 'ZIonPopover';
 
 export default ZIonPopover;

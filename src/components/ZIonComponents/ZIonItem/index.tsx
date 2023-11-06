@@ -38,6 +38,8 @@ interface ZIonItemType {
   routerLink?: string;
   style?: Record<string, unknown>;
   onClick?: (event?: unknown) => void;
+  onMouseEnter?: React.MouseEventHandler<HTMLIonItemElement>;
+  onMouseLeave?: React.MouseEventHandler<HTMLIonItemElement>;
   minHeight?: 'auto' | string;
   testingselector?: string;
   testinglistselector?: string;

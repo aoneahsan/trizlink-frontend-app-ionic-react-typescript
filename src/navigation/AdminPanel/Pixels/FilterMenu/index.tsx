@@ -488,7 +488,10 @@ const ZPixelsFilterMenu: React.FC = () => {
                   getPixelFiltersData?.settings?.filters?.endDate ??
                   getSWSPixelFiltersData?.settings?.filters?.endDate ??
                   new Date().toISOString(),
-                platform: ''
+                platform:
+                  getPixelFiltersData?.settings?.filters?.platform ??
+                  getSWSPixelFiltersData?.settings?.filters?.platform ??
+                  ''
               }
             }}
             enableReinitialize={true}

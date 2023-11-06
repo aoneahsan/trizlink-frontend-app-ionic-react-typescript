@@ -112,7 +112,8 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
  * */
 import {
   FilteredPixelsDataRStateSelector,
-  PixelAccountsRStateAtom
+  PixelAccountsRStateAtom,
+  PixelsFilterOptionsRStateAtom
 } from '@/ZaionsStore/UserDashboard/PixelAccountsState/index.recoil';
 
 /**
@@ -321,6 +322,9 @@ const ZInpageTable: React.FC = () => {
 
   // #region Recoil state.
   const setPixelDataRState = useSetRecoilState(PixelAccountsRStateAtom);
+  const setPixelsFilterOptionsRState = useSetRecoilState(
+    PixelsFilterOptionsRStateAtom
+  );
   const filteredPixelsDataRSelector = useRecoilValue(
     FilteredPixelsDataRStateSelector
   );
@@ -534,6 +538,33 @@ const ZInpageTable: React.FC = () => {
   // #region useEffect's
   useEffect(() => {
     try {
+      if (getPixelFiltersData !== undefined && getPixelFiltersData !== null) {
+        setPixelsFilterOptionsRState(oldValues => ({
+          ...oldValues,
+          timeFilter: {
+            daysToSubtract: getPixelFiltersData?.settings?.filters?.time,
+            endAt: getPixelFiltersData?.settings?.filters?.endDate,
+            startedAt: getPixelFiltersData?.settings?.filters?.startDate
+          },
+          platform: getPixelFiltersData?.settings?.filters
+            ?.platform as PixelPlatformsEnum
+        }));
+      } else if (
+        getSWSPixelFiltersData !== undefined &&
+        getSWSPixelFiltersData !== null
+      ) {
+        setPixelsFilterOptionsRState(oldValues => ({
+          ...oldValues,
+          timeFilter: {
+            daysToSubtract: getSWSPixelFiltersData?.settings?.filters?.time,
+            endAt: getSWSPixelFiltersData?.settings?.filters?.endDate,
+            startedAt: getSWSPixelFiltersData?.settings?.filters?.startDate
+          },
+          platform: getSWSPixelFiltersData?.settings?.filters
+            ?.platform as PixelPlatformsEnum
+        }));
+      }
+
       if (
         getPixelFiltersData?.settings?.columns !== undefined ??
         getSWSPixelFiltersData?.settings?.columns !== undefined

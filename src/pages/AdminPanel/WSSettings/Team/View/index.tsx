@@ -139,7 +139,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
   }>();
 
   // #region Custom domain.
-  const { isMdScale, isXlScale, isLgScale } = useZMediaQueryScale();
+  const { is2XlScale, isMdScale, isXlScale, isLgScale } = useZMediaQueryScale();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
   const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   // #endregion
@@ -345,12 +345,20 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
               <ZIonCol
                 sizeXl={
                   ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                    ? '10'
+                    ? is2XlScale
+                      ? '10.5'
+                      : '10'
+                    : is2XlScale
+                    ? '11.4'
                     : '11.2'
                 }
                 sizeLg={
                   ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                    ? '10'
+                    ? is2XlScale
+                      ? '10.5'
+                      : '10'
+                    : is2XlScale
+                    ? '11.4'
                     : '11.2'
                 }
                 sizeMd='12'

@@ -311,6 +311,7 @@ export const ZaionsInfo = {
 };
 
 // @Medias BrackPoint:
+export const BRACKPOINT_2XL = '1400px';
 export const BRACKPOINT_XL = '1200px';
 export const BRACKPOINT_LG = '992px';
 export const BRACKPOINT_MD = '768px';

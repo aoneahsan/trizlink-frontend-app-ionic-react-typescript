@@ -225,7 +225,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
   // #endregion
 
   // #region Custom hooks
-  const { isLgScale, isMdScale } = useZMediaQueryScale(); //
+  const { is2XlScale, isLgScale, isMdScale } = useZMediaQueryScale(); //
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
   const { zInvalidateReactQueries } = useZInvalidateReactQueries();
@@ -1668,13 +1668,21 @@ const AdminCreateNewLinkPages: React.FC = () => {
                         sizeXl={
                           ZDashboardState.dashboardMainSidebarIsCollabes
                             .isExpand
-                            ? '10'
+                            ? is2XlScale
+                              ? '10.5'
+                              : '10'
+                            : is2XlScale
+                            ? '11.4'
                             : '11.2'
                         }
                         sizeLg={
                           ZDashboardState.dashboardMainSidebarIsCollabes
                             .isExpand
-                            ? '10'
+                            ? is2XlScale
+                              ? '10.5'
+                              : '10'
+                            : is2XlScale
+                            ? '11.4'
                             : '11.2'
                         }
                         sizeMd='12'

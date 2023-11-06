@@ -272,6 +272,8 @@ export interface ZUserSettingInterface {
 
       role?: string;
       status?: string;
+
+      platform?: string;
     };
   };
 }

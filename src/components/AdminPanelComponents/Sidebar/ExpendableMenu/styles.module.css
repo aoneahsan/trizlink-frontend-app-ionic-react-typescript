@@ -1,15 +1,25 @@
 /* zaions adminPanel mainSideMenu logo styles */
 .zaions-ap-msm-logo {
-	width: 42px; /* 80px */
-	height: 42px;
+  width: 42px; /* 80px */
+  height: 42px;
 }
 
 .zaions-ap-msm-logo::part(image) {
-	border-radius: 50%;
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	-ms-border-radius: 50%;
-	-o-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+}
+.list-item {
+  --ripple-color: rgba(var(--ion-color-medium-rgb), 0.6);
+  --detail-icon-color: var(--ion-color-white);
+}
+.list-item:hover {
+  --background: rgba(var(--ion-color-medium-rgb), 0.4);
+}
+.list-item-active {
+  --background: rgba(var(--ion-color-medium-rgb), 0.5);
 }
 
 /* Testing 123 */
