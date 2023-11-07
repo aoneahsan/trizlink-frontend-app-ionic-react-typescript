@@ -7,7 +7,7 @@ export const ENVS = {
     _env.VITE_TITLE ??
     'ZLink - Url Shortener, Link-in-bio & Social Media Management SAAS APP - Zaions',
   apiUrl,
-  cryptoSecret: _env.VITE_CRYPTO_SECRET ?? 'zlink-app-secrect',
+  cryptoSecret: _env.VITE_CRYPTO_SECRET ?? 'trizlink-app-secrect',
   googleMapApiKey: _env.VITE_GOOGLE_MAP_API_KEY ?? '',
   isProduction: _env.PROD,
   isDevelopment: _env.DEV,
@@ -21,5 +21,6 @@ export const ENVS = {
   firebaseAppKey: _env.VITE_FIREBASE_APP_KEY,
   firebaseProductId: _env.VITE_FIREBASE_PROJECT_ID,
   firebaseMeasurementId: _env.VITE_FIREBASE_MEASUREMENT_ID,
-  sentryErrorLoggingDNS: _env.VITE_SENTRY_DNS
+  sentryErrorLoggingDNS: _env.VITE_SENTRY_DNS,
+  googleClientId: _env.VITE_GOOGLE_CLIENT_ID
 };

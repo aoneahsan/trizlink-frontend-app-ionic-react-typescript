@@ -113,13 +113,13 @@ const ZPoweredBySubscriptionModal: React.FC<{
           </ZIonButton>
         </div>
         <div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top'>
-          <ZIonText color='primary'>
-            <h1 className='mb-0 ion-padding-top bg-primary zaions__modal_icon'>
+          <ZIonText color={'primary'}>
+            <h1
+              className={'mb-0 ion-padding-top bg-primary zaions__modal_icon'}>
               <ZIonIcon
                 icon={toggleOutline}
                 className='mx-auto'
-                color='light'
-              />
+                color='light'></ZIonIcon>
             </h1>
           </ZIonText>
           <br />

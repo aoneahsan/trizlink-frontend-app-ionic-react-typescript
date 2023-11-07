@@ -1,43 +1,43 @@
 {
-	"icons": [
-		{
-			"src": "favicon.png",
-			"sizes": "64x64 32x32 24x24 16x16",
-			"type": "image/x-icon"
-		},
-		{
-			"src": "favicon.png",
-			"type": "image/png",
-			"sizes": "512x512",
-			"purpose": "maskable"
-		}
-	],
-	"id": "com.zaions.zlink",
-	"short_name": "zlink",
-	"name": "ZLink - Url Shortener, Link-in-bio & Social Media Management SAAS APP - Zaions",
-	"description": "ZLink - Url Shortener, Link-in-bio & Social Media Management SAAS APP - developed @ Zaions(https://zaions.com), to help you create pretty links for your organization long urls and get many benefits out of them.",
-	"dir": "auto",
-	"lang": "en-US",
-	"orientation": "any",
-	"scope": ".",
-	"prefer_related_applications": true,
-	"categories": [
-		"business",
-		"productivity",
-		"utilities",
-		"url shortener",
-		"pretty links",
-		"analytics",
-		"re-targeting"
-	],
-	"related_applications": [
-		{
-			"platform": "play",
-			"id": "com.zaions.zlink"
-		}
-	],
-	"start_url": "/",
-	"display": "standalone",
-	"theme_color": "#3880ff",
-	"background_color": "#eeeeee"
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "favicon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "id": "com.trizlink.app",
+  "short_name": "trizlink",
+  "name": "Trizlink - Url Shortener, Link-in-bio & Social Media Management SAAS APP - Zaions",
+  "description": "Trizlink - Url Shortener, Link-in-bio & Social Media Management SAAS APP - developed @ Zaions(https://zaions.com/bio), to help you create pretty links for your organization long urls and get many benefits out of them.",
+  "dir": "auto",
+  "lang": "en-US",
+  "orientation": "any",
+  "scope": ".",
+  "prefer_related_applications": true,
+  "categories": [
+    "business",
+    "productivity",
+    "utilities",
+    "url shortener",
+    "pretty links",
+    "analytics",
+    "re-targeting"
+  ],
+  "related_applications": [
+    {
+      "platform": "play",
+      "id": "com.trizlink.app"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#3880ff",
+  "background_color": "#eeeeee"
 }

@@ -1,5 +1,5 @@
 {
-  "name": "com.zaions.trizlink",
+  "name": "com.trizlink.app",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -47,6 +47,7 @@
     "@capacitor/preferences": "^5.0.6",
     "@capacitor/status-bar": "^5.0.6",
     "@capacitor/toast": "^5.0.6",
+    "@codetrix-studio/capacitor-google-auth": "^3.3.4",
     "@ionic/core": "^7.5.2",
     "@ionic/react": "^7.5.2",
     "@ionic/react-router": "^7.5.2",

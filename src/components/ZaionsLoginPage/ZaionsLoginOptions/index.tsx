@@ -2,37 +2,25 @@
 import React from 'react';
 
 // Packages Imports
-import {
-  logoApple,
-  logoFacebook,
-  logoGoogle,
-  logoTwitter
-} from 'ionicons/icons';
-import { useMediaQuery } from 'react-responsive';
 
 // Custom Imports
 import {
   ZIonCol,
   ZIonText,
-  ZIonIcon,
   ZIonRouterLink,
   ZIonRow,
-  ZIonImg,
-  ZIonButton
+  ZIonImg
 } from '@/components/ZIonComponents';
 
 // Global Constants
-import CONSTANTS, { BRACKPOINT_SM } from '@/utils/constants';
+import CONSTANTS from '@/utils/constants';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { ProductFavicon } from '@/assets/images';
+import GoogleSocialAuth from '@/components/SocialAuth/GoogleAuth';
 
 // Style
 
 const ZaionsLoginOptions: React.FC = () => {
-  const isXsScale = useMediaQuery({
-    query: `(min-width: ${BRACKPOINT_SM})`
-  });
-
   return (
     <>
       <ZIonRow>
@@ -47,7 +35,7 @@ const ZaionsLoginOptions: React.FC = () => {
               Log in and start sharing
             </ZIonText>
             <ZIonText className='block'>
-              <ZIonText>Don&apos;t have an account? </ZIonText>
+              <ZIonText>Don't have an account? </ZIonText>
               <ZIonRouterLink
                 className='underline'
                 routerLink={ZaionsRoutes.SignUpRoute}
@@ -70,19 +58,10 @@ const ZaionsLoginOptions: React.FC = () => {
             className='block mt-2 mb-3'>
             Log in with:
           </ZIonText>
-          <ZIonButton
-            className='me-2 ion-text-capitalize'
-            color='tertiary'
-            expand={!isXsScale ? 'block' : undefined}
-            testingselector={
-              CONSTANTS.testingSelectors.loginPage.googleLoginButton
-            }>
-            <ZIonIcon
-              icon={logoGoogle}
-              className='font-bold me-1 '></ZIonIcon>{' '}
-            Google
-          </ZIonButton>
-          <ZIonButton
+          {/* Google Social Auth Component */}
+          <GoogleSocialAuth />
+
+          {/* <ZIonButton
             className='me-2 ion-text-capitalize'
             color='tertiary'
             expand={!isXsScale ? 'block' : undefined}
@@ -117,7 +96,7 @@ const ZaionsLoginOptions: React.FC = () => {
               icon={logoApple}
               className='font-bold me-1'></ZIonIcon>{' '}
             Apple
-          </ZIonButton>
+          </ZIonButton> */}
         </ZIonCol>
         {/* <ZIonCol className="ion-text-center" size="3.6"></ZIonCol> */}
       </ZIonRow>
