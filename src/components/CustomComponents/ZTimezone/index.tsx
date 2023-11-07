@@ -14,6 +14,7 @@ import {
 } from '@ionic/core';
 import classNames from 'classnames';
 import {
+  type SingleValue,
   type ActionMeta,
   type MultiValue,
   type PropsValue
@@ -70,7 +71,9 @@ interface ZTimezoneInputInterface {
   value?: PropsValue<ZaionsRSelectOptions>;
   defaultValue?: PropsValue<ZaionsRSelectOptions>;
   onChange?: (
-    newValue: MultiValue<ZaionsRSelectOptions>,
+    newValue:
+      | MultiValue<ZaionsRSelectOptions>
+      | SingleValue<ZaionsRSelectOptions>,
     actionMeta: ActionMeta<ZaionsRSelectOptions>
   ) => void;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;

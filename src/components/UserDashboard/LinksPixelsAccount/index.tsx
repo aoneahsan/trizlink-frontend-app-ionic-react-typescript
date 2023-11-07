@@ -248,7 +248,7 @@ const LinkPixelsAccount: React.FC<{ showSkeleton?: boolean }> = ({
               ) {
                 void setFieldValue(
                   'linkPixelsAccount',
-                  _values.map(el => el.value) as string[],
+                  (_values as Array<{ value: unknown }>)?.map(el => el.value),
                   false
                 );
               }

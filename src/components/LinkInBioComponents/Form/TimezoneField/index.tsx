@@ -3,6 +3,7 @@ import React from 'react';
 
 // Packages Imports
 import {
+  type SingleValue,
   type ActionMeta,
   type MultiValue,
   type PropsValue
@@ -24,7 +25,9 @@ interface LinkInBioTimezoneFieldInterface {
   testingselector?: string;
   testinglistselector?: string;
   onChange?: (
-    newValue: MultiValue<ZaionsRSelectOptions>,
+    newValue:
+      | MultiValue<ZaionsRSelectOptions>
+      | SingleValue<ZaionsRSelectOptions>,
     actionMeta: ActionMeta<ZaionsRSelectOptions>
   ) => void;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
