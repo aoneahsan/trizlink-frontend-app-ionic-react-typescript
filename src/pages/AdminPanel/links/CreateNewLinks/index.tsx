@@ -429,9 +429,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
       workspaceId ?? ''
     ],
-    _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
-    ),
+    _shouldFetchWhenIdPassed: !((workspaceId?.trim()?.length ?? 0) > 0),
     _showLoader: false,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _itemsIds: [workspaceId ?? '']
@@ -448,9 +446,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
       wsShareId ?? ''
     ],
     _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined &&
       (wsShareId?.trim()?.length ?? 0) > 0 &&
-      shareWSMemberId !== undefined &&
       (shareWSMemberId?.trim()?.length ?? 0) > 0
     ),
     _showLoader: false,
@@ -466,9 +462,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
         workspaceId ?? ''
       ],
-      _shouldFetchWhenIdPassed: !(
-        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
-      ),
+      _shouldFetchWhenIdPassed: !((workspaceId?.trim()?.length ?? 0) > 0),
       _itemsIds: [workspaceId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
       _showLoader: false
@@ -482,9 +476,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
     _url: API_URL_ENUM.sws_utm_tag_create_list,
     _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN],
     _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined &&
       (wsShareId?.trim()?.length ?? 0) > 0 &&
-      shareWSMemberId !== undefined &&
       (shareWSMemberId?.trim()?.length ?? 0) > 0
     ),
     _itemsIds: [shareWSMemberId ?? ''],
@@ -518,7 +510,11 @@ const AdminCreateNewLinkPages: React.FC = () => {
   // after getting data store in recoil state.
   useEffect(() => {
     try {
-      if (selectedShortLink?.id !== null && editLinkId !== undefined) {
+      if (
+        selectedShortLink?.id !== null &&
+        selectedShortLink?.id !== undefined &&
+        (editLinkId?.trim()?.length ?? 0) > 0
+      ) {
         setNewShortLinkFormState(oldVal => ({
           ...oldVal,
           type: selectedShortLink?.type,
@@ -626,11 +622,11 @@ const AdminCreateNewLinkPages: React.FC = () => {
   // Formik submit handler.
   const invalidedQueries = async (): Promise<void> => {
     try {
-      if (workspaceId !== undefined) {
+      if ((workspaceId?.trim()?.length ?? 0) > 0) {
         if ((editLinkId?.trim()?.length ?? 0) > 0) {
           await zInvalidateReactQueries([
             CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
-            workspaceId,
+            workspaceId ?? '',
             editLinkId ?? ''
           ]);
         }
@@ -638,19 +634,19 @@ const AdminCreateNewLinkPages: React.FC = () => {
         // Pixel.
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
-          workspaceId
+          workspaceId ?? ''
         ]);
 
         // Utm tag.
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
-          workspaceId
+          workspaceId ?? ''
         ]);
 
         // Folder.
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-          workspaceId,
+          workspaceId ?? '',
           folderState.shortlink
         ]);
       } else if ((wsShareId?.trim()?.length ?? 0) > 0) {
@@ -728,17 +724,20 @@ const AdminCreateNewLinkPages: React.FC = () => {
     setErrors: FormikSetErrorsType
   ): Promise<void> => {
     try {
-      if (editLinkId === undefined) {
+      if ((editLinkId?.trim()?.length ?? 0) === 0) {
         // Making an api call creating new short link
         let _response;
 
-        if (workspaceId !== undefined) {
+        if ((workspaceId?.trim()?.length ?? 0) > 0) {
           _response = await createShortLink(_values);
-        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+        } else if (
+          (wsShareId?.trim()?.length ?? 0) > 0 &&
+          (shareWSMemberId?.trim()?.length ?? 0) > 0
+        ) {
           _response = await swsCreateShortLink(_values);
         }
 
-        if ((_response as ZLinkMutateApiType<ShortLinkType>).success) {
+        if ((_response as ZLinkMutateApiType<ShortLinkType>)?.success) {
           // if we have a successful response then...
           // extract Data from _response.
           const _data = extractInnerData<ShortLinkType>(
@@ -760,23 +759,23 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
             let _shortlinkCacheData;
 
-            if (workspaceId !== undefined) {
+            if ((workspaceId?.trim()?.length ?? 0) > 0) {
               _shortlinkCacheData =
                 (getRQCDataHandler<ShortLinkType[]>({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-                    workspaceId
+                    workspaceId ?? ''
                   ]
                 }) as ShortLinkType[]) ?? [];
             } else if (
-              wsShareId !== undefined &&
-              shareWSMemberId !== undefined
+              (wsShareId?.trim()?.length ?? 0) > 0 &&
+              (shareWSMemberId?.trim()?.length ?? 0) > 0
             ) {
               _shortlinkCacheData =
                 (getRQCDataHandler<ShortLinkType[]>({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
-                    wsShareId
+                    wsShareId ?? ''
                   ]
                 }) as ShortLinkType[]) ?? [];
             }
@@ -791,11 +790,11 @@ const AdminCreateNewLinkPages: React.FC = () => {
             const _updatedShortLinks = [..._oldShortLinks, _data];
 
             // Updating all shortLinks data in RQ cache.
-            if (workspaceId !== undefined) {
+            if ((workspaceId?.trim()?.length ?? 0) > 0) {
               await updateRQCDataHandler<ShortLinkType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-                  workspaceId
+                  workspaceId ?? ''
                 ],
                 data: _updatedShortLinks,
                 id: '',
@@ -803,13 +802,13 @@ const AdminCreateNewLinkPages: React.FC = () => {
                 updateHoleData: true
               });
             } else if (
-              wsShareId !== undefined &&
-              shareWSMemberId !== undefined
+              (wsShareId?.trim()?.length ?? 0) > 0 &&
+              (shareWSMemberId?.trim()?.length ?? 0) > 0
             ) {
               await updateRQCDataHandler<ShortLinkType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
-                  wsShareId
+                  wsShareId ?? ''
                 ],
                 data: _updatedShortLinks,
                 id: '',
@@ -826,22 +825,25 @@ const AdminCreateNewLinkPages: React.FC = () => {
               'something went wrong please try again! :('
           );
         }
-      } else if (editLinkId?.trim()?.length > 0) {
+      } else if ((editLinkId?.trim()?.length ?? 0) > 0) {
         let _response;
 
-        if (workspaceId !== undefined) {
+        if ((workspaceId?.trim()?.length ?? 0) > 0) {
           _response = await updateShortLink({
             requestData: _values,
-            itemIds: [workspaceId, editLinkId],
+            itemIds: [workspaceId ?? '', editLinkId ?? ''],
             urlDynamicParts: [
               CONSTANTS.RouteParams.workspace.workspaceId,
               CONSTANTS.RouteParams.shortLink.shortLinkId
             ]
           });
-        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+        } else if (
+          (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
+          (wsShareId?.trim()?.length ?? 0) > 0
+        ) {
           _response = await swsUpdateShortLink({
             requestData: _values,
-            itemIds: [shareWSMemberId, editLinkId],
+            itemIds: [shareWSMemberId ?? '', editLinkId ?? ''],
             urlDynamicParts: [
               CONSTANTS.RouteParams.workspace.shareWSMemberId,
               CONSTANTS.RouteParams.shortLink.shortLinkId
@@ -849,7 +851,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
           });
         }
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           // extract Data from _response.
           const _data = extractInnerData<ShortLinkType>(
             _response,
@@ -869,22 +871,22 @@ const AdminCreateNewLinkPages: React.FC = () => {
             }));
 
             // Updating data all shortLinks in RQ cache.
-            if (workspaceId !== undefined) {
+            if ((workspaceId?.trim()?.length ?? 0) > 0) {
               await updateRQCDataHandler<ShortLinkType | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-                  workspaceId
+                  workspaceId ?? ''
                 ],
                 data: { ..._data },
-                id: editLinkId
+                id: editLinkId ?? ''
               });
 
               // Updating current short link in cache in RQ cache.
               await updateRQCDataHandler<ShortLinkType | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
-                  workspaceId,
-                  editLinkId
+                  workspaceId ?? '',
+                  editLinkId ?? ''
                 ],
                 data: { ..._data },
                 id: '',
@@ -892,24 +894,24 @@ const AdminCreateNewLinkPages: React.FC = () => {
                 updateHoleData: true
               });
             } else if (
-              wsShareId !== undefined &&
-              shareWSMemberId !== undefined
+              (wsShareId?.trim()?.length ?? 0) > 0 &&
+              (shareWSMemberId?.trim()?.length ?? 0) > 0
             ) {
               await updateRQCDataHandler<ShortLinkType | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
-                  wsShareId
+                  wsShareId ?? ''
                 ],
                 data: { ..._data },
-                id: editLinkId
+                id: editLinkId ?? ''
               });
 
               // Updating current short link in cache in RQ cache.
               await updateRQCDataHandler<ShortLinkType | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_GET,
-                  wsShareId,
-                  editLinkId
+                  wsShareId ?? '',
+                  editLinkId ?? ''
                 ],
                 data: { ..._data },
                 id: '',
@@ -981,7 +983,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
           <div className='flex flex-col w-full h-full pt-4 ion-align-items-center ion-justify-content-center'>
             <ZIonSpinner className='w-10 h-10' />
 
-            {workspaceId !== undefined
+            {(workspaceId?.trim()?.length ?? 0) > 0
               ? isSelectedShortLinkFetching
                 ? 'Fetching current short link data'
                 : isPixelAccountsDataFetching
@@ -991,7 +993,8 @@ const AdminCreateNewLinkPages: React.FC = () => {
                 : isShortLinksFoldersDataFetching
                 ? 'Fetching workspace short links folders'
                 : null
-              : wsShareId !== undefined && shareWSMemberId !== undefined
+              : (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
+                (wsShareId?.trim()?.length ?? 0) > 0
               ? isGetMemberRolePermissionsFetching
                 ? 'Getting & setting your permissions in this workspace'
                 : isSWSFetching
@@ -1014,12 +1017,14 @@ const AdminCreateNewLinkPages: React.FC = () => {
           checkMode={permissionCheckModeEnum.any}
           shareWSId={wsShareId}
           permissionType={
-            wsShareId !== undefined
+            (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
+            (wsShareId?.trim()?.length ?? 0) > 0
               ? permissionsTypeEnum.shareWSMemberPermissions
               : permissionsTypeEnum.loggedInUserPermissions
           }
           havePermissions={
-            wsShareId !== undefined
+            (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
+            (wsShareId?.trim()?.length ?? 0) > 0
               ? [
                   shareWSPermissionEnum.create_sws_shortLink,
                   shareWSPermissionEnum.update_sws_shortLink
@@ -1104,15 +1109,13 @@ const AdminCreateNewLinkPages: React.FC = () => {
               linkNote:
                 selectedShortLink?.notes ?? swsSelectedShortLink?.notes ?? '',
               tags:
-                (selectedShortLink?.tags !== undefined &&
-                  (JSON.parse(
-                    selectedShortLink?.tags as string
-                  ) as string[])) ??
-                (swsSelectedShortLink?.tags !== undefined &&
-                  (JSON.parse(
-                    swsSelectedShortLink?.tags as string
-                  ) as string[])) ??
-                [],
+                selectedShortLink?.tags !== undefined &&
+                selectedShortLink?.tags !== null
+                  ? (selectedShortLink?.tags as string[])
+                  : swsSelectedShortLink?.tags !== undefined &&
+                    swsSelectedShortLink?.tags !== null
+                  ? (swsSelectedShortLink?.tags as string[])
+                  : [],
               linkExpiration: {
                 enabled:
                   (
@@ -1264,7 +1267,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
               // Url Validations Start
               if (
-                newShortLinkFormState.type === messengerPlatformsBlockEnum.link
+                newShortLinkFormState?.type === messengerPlatformsBlockEnum.link
               ) {
                 validateField(
                   'url',
@@ -1301,7 +1304,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
                 );
                 if (
                   values?.target?.phoneNumber !== undefined &&
-                  !isPossiblePhoneNumber(values.target.phoneNumber)
+                  !isPossiblePhoneNumber(values?.target?.phoneNumber)
                 ) {
                   errors.target.phoneNumber = 'Not a valid phone number.';
                 }
@@ -1313,9 +1316,10 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
               // Username Validation Start
               if (
-                newShortLinkFormState.type ===
+                newShortLinkFormState?.type ===
                   messengerPlatformsBlockEnum.telegram ||
-                newShortLinkFormState.type === messengerPlatformsBlockEnum.skype
+                newShortLinkFormState?.type ===
+                  messengerPlatformsBlockEnum.skype
               ) {
                 validateField(
                   'username',
@@ -1330,7 +1334,8 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
               // Email Validation Start
               if (
-                newShortLinkFormState.type === messengerPlatformsBlockEnum.email
+                newShortLinkFormState?.type ===
+                messengerPlatformsBlockEnum.email
               ) {
                 validateField(
                   'email',
@@ -1345,11 +1350,11 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
               // AccountId Validation Start
               if (
-                newShortLinkFormState.type ===
+                newShortLinkFormState?.type ===
                   messengerPlatformsBlockEnum.wechat ||
-                newShortLinkFormState.type ===
+                newShortLinkFormState?.type ===
                   messengerPlatformsBlockEnum.viber ||
-                newShortLinkFormState.type === messengerPlatformsBlockEnum.line
+                newShortLinkFormState?.type === messengerPlatformsBlockEnum.line
               ) {
                 validateField(
                   'accountId',
@@ -1364,7 +1369,8 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
               // Subject Validation Start
               if (
-                newShortLinkFormState.type === messengerPlatformsBlockEnum.email
+                newShortLinkFormState?.type ===
+                messengerPlatformsBlockEnum.email
               ) {
                 validateField(
                   'subject',
@@ -1379,13 +1385,13 @@ const AdminCreateNewLinkPages: React.FC = () => {
 
               // Message Validation Start
               if (
-                newShortLinkFormState.type ===
+                newShortLinkFormState?.type ===
                   messengerPlatformsBlockEnum.email ||
-                newShortLinkFormState.type ===
+                newShortLinkFormState?.type ===
                   messengerPlatformsBlockEnum.sms ||
-                newShortLinkFormState.type ===
+                newShortLinkFormState?.type ===
                   messengerPlatformsBlockEnum.viber ||
-                newShortLinkFormState.type ===
+                newShortLinkFormState?.type ===
                   messengerPlatformsBlockEnum.whatsapp
               ) {
                 validateField(
@@ -1404,7 +1410,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
               // Link Title Validation End
 
               // Password Validation Start
-              if (values.password.enabled) {
+              if (values?.password?.enabled) {
                 validateField(
                   'password',
                   values?.password,
@@ -1415,7 +1421,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
               // Password Validation End
 
               // Link Expiration Validation Start
-              if (values.linkExpiration.enabled) {
+              if (values?.linkExpiration?.enabled) {
                 validateField(
                   'redirectionLink',
                   values?.linkExpiration,
@@ -1426,7 +1432,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
               // Link Expiration Validation End
 
               // Rotator AB Testing Field Validation Start
-              if (values.rotatorABTesting.length > 0) {
+              if (values?.rotatorABTesting?.length > 0) {
                 errors.rotatorABTesting = values.rotatorABTesting.map(
                   el => ({})
                 );
@@ -1457,7 +1463,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
               // Rotator AB Testing Field Validation End
 
               // Rotator Geo Location Field Validation Start
-              if (values.geoLocation.length > 0) {
+              if (values?.geoLocation?.length > 0) {
                 errors.geoLocation = values.geoLocation.map(el => ({}));
                 values.geoLocation.forEach(
                   (el: GeoLocationRotatorInterface, index) => {
@@ -1538,23 +1544,24 @@ const AdminCreateNewLinkPages: React.FC = () => {
               let _filePath = values?.featureImg?.featureImgPath;
 
               if (
-                (workspaceId !== undefined &&
+                ((workspaceId?.trim()?.length ?? 0) > 0 &&
                   values?.featureImg?.featureImgUrl.trim().length > 0 &&
                   values?.featureImg?.featureImgUrl !==
                     selectedShortLink?.featureImg?.featureImgUrl) ||
-                (wsShareId !== undefined &&
-                  shareWSMemberId !== undefined &&
+                ((wsShareId?.trim()?.length ?? 0) > 0 &&
+                  (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
                   values?.featureImg?.featureImgUrl.trim().length > 0 &&
                   values?.featureImg?.featureImgUrl !==
                     swsSelectedShortLink?.featureImg?.featureImgUrl)
               ) {
                 if (
-                  (wsShareId !== undefined &&
+                  ((wsShareId?.trim()?.length ?? 0) > 0 &&
+                    (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
                     swsSelectedShortLink?.featureImg?.featureImgPath !==
                       undefined &&
                     swsSelectedShortLink?.featureImg?.featureImgPath?.trim()
                       ?.length > 0) ??
-                  (workspaceId !== undefined &&
+                  ((workspaceId?.trim()?.length ?? 0) > 0 &&
                     selectedShortLink?.featureImg?.featureImgPath !==
                       undefined &&
                     selectedShortLink?.featureImg?.featureImgPath?.trim()
@@ -1563,9 +1570,10 @@ const AdminCreateNewLinkPages: React.FC = () => {
                   await deleteSingleFile({
                     requestData: zStringify({
                       filePath:
-                        workspaceId !== undefined
+                        (workspaceId?.trim()?.length ?? 0) > 0
                           ? selectedShortLink?.featureImg?.featureImgPath
-                          : wsShareId !== undefined
+                          : (wsShareId?.trim()?.length ?? 0) > 0 &&
+                            (shareWSMemberId?.trim()?.length ?? 0) > 0
                           ? swsSelectedShortLink?.featureImg?.featureImgPath
                           : ''
                     }),
@@ -1574,7 +1582,10 @@ const AdminCreateNewLinkPages: React.FC = () => {
                   });
                 }
 
-                if (values.featureImg.featureImgFile !== null) {
+                if (
+                  values?.featureImg?.featureImgFile !== null &&
+                  values?.featureImg?.featureImgFile !== undefined
+                ) {
                   const { filePath, fileUrl } = await uploadFileToBackend(
                     values.featureImg.featureImgFile
                   );
@@ -1666,7 +1677,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
                       <ZIonCol
                         className='w-full h-screen overflow-y-scroll zaions_pretty_scrollbar zaions-transition'
                         sizeXl={
-                          ZDashboardState.dashboardMainSidebarIsCollabes
+                          ZDashboardState?.dashboardMainSidebarIsCollabes
                             .isExpand
                             ? is2XlScale
                               ? '10.5'
@@ -1676,7 +1687,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
                             : '11.2'
                         }
                         sizeLg={
-                          ZDashboardState.dashboardMainSidebarIsCollabes
+                          ZDashboardState?.dashboardMainSidebarIsCollabes
                             .isExpand
                             ? is2XlScale
                               ? '10.5'
@@ -1746,12 +1757,14 @@ const AdminCreateNewLinkPages: React.FC = () => {
                               <ZCan
                                 shareWSId={wsShareId}
                                 permissionType={
-                                  wsShareId !== undefined
+                                  (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
+                                  (wsShareId?.trim()?.length ?? 0) > 0
                                     ? permissionsTypeEnum.shareWSMemberPermissions
                                     : permissionsTypeEnum.loggedInUserPermissions
                                 }
                                 havePermissions={
-                                  wsShareId !== undefined
+                                  (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
+                                  (wsShareId?.trim()?.length ?? 0) > 0
                                     ? [shareWSPermissionEnum.viewAny_sws_pixel]
                                     : [permissionsEnum.viewAny_pixel]
                                 }>
@@ -1763,10 +1776,11 @@ const AdminCreateNewLinkPages: React.FC = () => {
                                   }>
                                   <LinksPixelsAccount
                                     showSkeleton={
-                                      workspaceId !== undefined
+                                      (workspaceId?.trim()?.length ?? 0) > 0
                                         ? isPixelAccountsDataFetching
-                                        : wsShareId !== undefined &&
-                                          shareWSMemberId !== undefined
+                                        : (shareWSMemberId?.trim()?.length ??
+                                            0) > 0 &&
+                                          (wsShareId?.trim()?.length ?? 0) > 0
                                         ? isSWSPixelAccountsDataFetching
                                         : undefined
                                     }
@@ -1778,12 +1792,14 @@ const AdminCreateNewLinkPages: React.FC = () => {
                               <ZCan
                                 shareWSId={wsShareId}
                                 permissionType={
-                                  wsShareId !== undefined
+                                  (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
+                                  (wsShareId?.trim()?.length ?? 0) > 0
                                     ? permissionsTypeEnum.shareWSMemberPermissions
                                     : permissionsTypeEnum.loggedInUserPermissions
                                 }
                                 havePermissions={
-                                  wsShareId !== undefined
+                                  (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
+                                  (wsShareId?.trim()?.length ?? 0) > 0
                                     ? [shareWSPermissionEnum.viewAny_sws_utmTag]
                                     : [permissionsEnum.viewAny_utmTag]
                                 }>
@@ -1795,10 +1811,12 @@ const AdminCreateNewLinkPages: React.FC = () => {
                                   }>
                                   <UTMTagTemplates
                                     showSkeleton={
-                                      workspaceId !== undefined
+                                      (workspaceId?.trim()?.length ?? 0) > 0
                                         ? isUTMTagsDataFetching
-                                        : wsShareId !== undefined &&
-                                          shareWSMemberId !== undefined
+                                        : (wsShareId?.trim()?.length ?? 0) >
+                                            0 &&
+                                          (shareWSMemberId?.trim()?.length ??
+                                            0) > 0
                                         ? isSWSUTMTagsDataFetching
                                         : undefined
                                     }
@@ -1859,12 +1877,16 @@ const AdminCreateNewLinkPages: React.FC = () => {
                                         returnPermissionDeniedView={true}
                                         shareWSId={wsShareId}
                                         permissionType={
-                                          wsShareId !== undefined
+                                          (shareWSMemberId?.trim()?.length ??
+                                            0) > 0 &&
+                                          (wsShareId?.trim()?.length ?? 0) > 0
                                             ? permissionsTypeEnum.shareWSMemberPermissions
                                             : permissionsTypeEnum.loggedInUserPermissions
                                         }
                                         havePermissions={
-                                          wsShareId !== undefined
+                                          (shareWSMemberId?.trim()?.length ??
+                                            0) > 0 &&
+                                          (wsShareId?.trim()?.length ?? 0) > 0
                                             ? [
                                                 shareWSPermissionEnum.viewAny_sws_sl_folder
                                               ]
@@ -1875,20 +1897,27 @@ const AdminCreateNewLinkPages: React.FC = () => {
                                         <NewLinkFolder
                                           _state={folderState.shortlink}
                                           showSkeleton={
-                                            workspaceId !== undefined
+                                            (workspaceId?.trim()?.length ?? 0) >
+                                            0
                                               ? isShortLinksFoldersDataFetching
-                                              : wsShareId !== undefined &&
-                                                shareWSMemberId !== undefined
+                                              : (shareWSMemberId?.trim()
+                                                  ?.length ?? 0) > 0 &&
+                                                (wsShareId?.trim()?.length ??
+                                                  0) > 0
                                               ? isSWSShortLinksFoldersDataFetching
                                               : undefined
                                           }
                                           _foldersData={
-                                            workspaceId !== undefined &&
+                                            (workspaceId?.trim()?.length ?? 0) >
+                                              0 &&
                                             (shortLinksFoldersData !== null ||
                                               shortLinksFoldersData !==
                                                 undefined)
                                               ? shortLinksFoldersData ?? []
-                                              : wsShareId !== undefined &&
+                                              : (shareWSMemberId?.trim()
+                                                  ?.length ?? 0) > 0 &&
+                                                (wsShareId?.trim()?.length ??
+                                                  0) > 0 &&
                                                 (swsShortLinksFoldersData !==
                                                   null ||
                                                   swsShortLinksFoldersData !==
@@ -1907,12 +1936,16 @@ const AdminCreateNewLinkPages: React.FC = () => {
                                         returnPermissionDeniedView={true}
                                         shareWSId={wsShareId}
                                         permissionType={
-                                          wsShareId !== undefined
+                                          (shareWSMemberId?.trim()?.length ??
+                                            0) > 0 &&
+                                          (wsShareId?.trim()?.length ?? 0) > 0
                                             ? permissionsTypeEnum.shareWSMemberPermissions
                                             : permissionsTypeEnum.loggedInUserPermissions
                                         }
                                         havePermissions={
-                                          wsShareId !== undefined
+                                          (shareWSMemberId?.trim()?.length ??
+                                            0) > 0 &&
+                                          (wsShareId?.trim()?.length ?? 0) > 0
                                             ? [
                                                 shareWSPermissionEnum.viewAny_sws_embededWidget
                                               ]
@@ -2046,16 +2079,16 @@ const ZTopBar: React.FC = () => {
                   (!isMdScale && isSmScale) || (!isMdScale && !isSmScale)
               })}
               routerLink={
-                workspaceId !== undefined
+                (workspaceId?.trim()?.length ?? 0) > 0
                   ? replaceRouteParams(
                       ZaionsRoutes.AdminPanel.ShortLinks.Main,
                       [
                         CONSTANTS.RouteParams.workspace.workspaceId,
                         CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                       ],
-                      [workspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
+                      [workspaceId ?? '', CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
                     )
-                  : wsShareId !== undefined
+                  : (wsShareId?.trim()?.length ?? 0) > 0
                   ? replaceRouteParams(
                       ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
                       [
@@ -2064,7 +2097,7 @@ const ZTopBar: React.FC = () => {
                         CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                       ],
                       [
-                        wsShareId,
+                        wsShareId ?? '',
                         shareWSMemberId ?? '',
                         CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                       ]
@@ -2087,7 +2120,9 @@ const ZTopBar: React.FC = () => {
               'text-md ion-no-padding ps-2': !isMdScale && isSmScale,
               'text-sm ion-no-padding ps-2': !isMdScale && !isSmScale
             })}>
-            {editLinkId !== undefined ? 'Update Link' : 'Create a New link'}
+            {(editLinkId?.trim()?.length ?? 0) > 0
+              ? 'Update Link'
+              : 'Create a New link'}
           </ZIonTitle>
         </ZIonCol>
 
@@ -2157,63 +2192,63 @@ const ZTopBar: React.FC = () => {
             onClick={() => {
               void (async () => {
                 try {
-                  if (workspaceId !== undefined) {
+                  if ((workspaceId?.trim()?.length ?? 0) > 0) {
                     if (
-                      editLinkId !== undefined &&
+                      (editLinkId?.trim()?.length ?? 0) > 0 &&
                       newShortLinkFormState?.formMode === FormMode.EDIT
                     ) {
                       await zInvalidateReactQueries([
                         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
-                        workspaceId,
-                        editLinkId
+                        workspaceId ?? '',
+                        editLinkId ?? ''
                       ]);
                     }
 
                     // Pixel.
                     await zInvalidateReactQueries([
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
-                      workspaceId
+                      workspaceId ?? ''
                     ]);
 
                     // Utm tag.
                     await zInvalidateReactQueries([
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
-                      workspaceId
+                      workspaceId ?? ''
                     ]);
 
                     // Folder.
                     await zInvalidateReactQueries([
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-                      workspaceId,
+                      workspaceId ?? '',
                       folderState.shortlink
                     ]);
-                  } else if (wsShareId !== undefined) {
+                  } else if ((wsShareId?.trim()?.length ?? 0) > 0) {
                     await zInvalidateReactQueries([
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS
                         .MEMBER_ROLE_AND_PERMISSIONS,
-                      wsShareId
+                      wsShareId ?? ''
                     ]);
 
                     await zInvalidateReactQueries([
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
-                      wsShareId
+                      wsShareId ?? ''
                     ]);
 
                     if (
-                      editLinkId !== undefined &&
+                      (editLinkId?.trim()?.length ?? 0) > 0 &&
                       newShortLinkFormState?.formMode === FormMode.EDIT
                     ) {
                       await zInvalidateReactQueries([
                         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_GET,
-                        wsShareId,
-                        editLinkId
+                        wsShareId ?? '',
+                        editLinkId ?? ''
                       ]);
                     }
 
                     // Share workspace Pixel.
                     await zInvalidateReactQueries([
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
-                      wsShareId
+                      wsShareId ?? ''
                     ]);
 
                     // Share workspace Utm tag.
@@ -2224,7 +2259,7 @@ const ZTopBar: React.FC = () => {
                     // Share workspace folder
                     await zInvalidateReactQueries([
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
-                      wsShareId,
+                      wsShareId ?? '',
                       folderState.shortlink
                     ]);
                   }
@@ -2279,7 +2314,7 @@ const ZTopBar: React.FC = () => {
                 ? '1.3rem'
                 : undefined
             }>
-            {editLinkId !== undefined
+            {(editLinkId?.trim()?.length ?? 0) > 0
               ? 'Get my updated link'
               : 'Get my new link'}
           </ZIonButton>

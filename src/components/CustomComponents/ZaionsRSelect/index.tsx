@@ -20,7 +20,7 @@ interface ZaionsRSelectType {
   options: readonly ZaionsRSelectOptions[];
   className?: string;
   closeMenuOnSelect?: boolean;
-  isMulti?: true;
+  isMulti?: boolean;
   name?: string;
   placeholder?: React.ReactNode;
   disabled?: boolean;

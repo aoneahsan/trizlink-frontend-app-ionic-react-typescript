@@ -181,7 +181,6 @@ const DomainName: React.FC<{ showSkeleton?: boolean }> = ({
             labelPlacement='stacked'
             fill='outline'
             minHeight='2.3rem'
-            interface='popover'
             disabled={isZEditMode}
             value={values?.shortUrlDomain}
             testingselector={

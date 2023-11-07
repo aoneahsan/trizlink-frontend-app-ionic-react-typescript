@@ -272,7 +272,6 @@ const GeoLocation: React.FC = () => {
                                 sizeXs='12'>
                                 <ZIonSelect
                                   minHeight='2.5rem'
-                                  interface='popover'
                                   fill='outline'
                                   label='Condition'
                                   labelPlacement='stacked'
@@ -321,6 +320,7 @@ const GeoLocation: React.FC = () => {
                                 sizeMd='5.8'
                                 sizeSm='11'
                                 sizeXs='11'>
+                                {/* Here in ZIonSelect the interface is action-sheet because first we are using popover interface but there is an issue using popover interface when we click at left side of select the popover width got smaller don't now why.  */}
                                 <ZIonSelect
                                   toggleIcon={
                                     values?.geoLocation[_index]?.condition ===
@@ -339,7 +339,6 @@ const GeoLocation: React.FC = () => {
                                       : undefined
                                   }
                                   minHeight='2.5rem'
-                                  interface='popover'
                                   multiple={
                                     values?.geoLocation[_index]?.condition ===
                                       EZGeoLocationCondition.notWithin ||

@@ -139,6 +139,7 @@ const ZTimezoneInput: React.FC<ZTimezoneInputInterface> = props => {
 export const ZTimezoneSelector: React.FC<
   ZTimezoneSelectorInterface
 > = props => {
+  /* Here in ZIonSelect the interface is action-sheet because first we are using popover interface but there is an issue using popover interface when we click at left side of select the popover width got smaller don't now why.  */
   return (
     <ZIonSelect
       {...props}
@@ -147,7 +148,6 @@ export const ZTimezoneSelector: React.FC<
       labelPlacement='stacked'
       errorText={props.errorText}
       minHeight='2.5rem'
-      interface='popover'
       className={classNames(props.className)}>
       {TIMEZONES.map((el, index) => {
         return (

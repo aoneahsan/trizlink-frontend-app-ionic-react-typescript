@@ -475,7 +475,6 @@ const ZProfile: React.FC = () => {
                             'w-full mx-auto px-3 mt-2': !isMdScale
                           })}>
                           <ZIonSelect
-                            interface='popover'
                             label='Country Code'
                             labelPlacement='floating'>
                             {countryCode.map((el, key) => (

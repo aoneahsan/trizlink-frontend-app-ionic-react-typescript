@@ -25,7 +25,6 @@ const ZaionsTestPage: React.FC = () => {
               expandedIcon=''
               toggleIcon=''
               aria-label='Time filter'
-              interface='popover'
               fill='outline'
               minHeight='2.3rem'
               color='primary'

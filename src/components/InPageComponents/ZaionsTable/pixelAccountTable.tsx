@@ -1131,7 +1131,6 @@ const ZInpageTable: React.FC = () => {
             minHeight='30px'
             fill='outline'
             className='bg-white w-[7rem]'
-            interface='popover'
             value={zPixelTable.getState().pagination.pageSize}
             testingselector={
               CONSTANTS.testingSelectors.pixels.listPage.table.pageSizeInput

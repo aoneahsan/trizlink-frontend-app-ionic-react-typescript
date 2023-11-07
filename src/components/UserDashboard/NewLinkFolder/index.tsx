@@ -120,7 +120,6 @@ const NewLinkFolder: React.FC<{
           onIonBlur={handleBlur}
           name='folderId'
           value={values?.folderId}
-          interface='popover'
           fill='outline'
           minHeight='40px'
           testingselector={

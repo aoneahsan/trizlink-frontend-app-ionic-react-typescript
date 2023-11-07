@@ -84,7 +84,7 @@ const ZWSSettingsMenu: React.FC = () => {
     wsShareId?: string;
   }>();
 
-  const { isLgScale } = useZMediaQueryScale();
+  const { is2XlScale, isLgScale } = useZMediaQueryScale();
 
   // #region checking the route.
   let isMembersPage: boolean | undefined;
@@ -258,7 +258,7 @@ const ZWSSettingsMenu: React.FC = () => {
 
   return (
     <ZIonCol
-      sizeXl='2.8'
+      sizeXl={is2XlScale ? '2' : '2.8'}
       sizeLg='3'
       sizeMd='3'
       sizeSm='2.8'

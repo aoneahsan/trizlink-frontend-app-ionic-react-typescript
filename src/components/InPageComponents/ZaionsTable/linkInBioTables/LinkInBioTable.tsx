@@ -626,7 +626,6 @@ const ZInpageTable: React.FC = () => {
             minHeight='30px'
             fill='outline'
             className='bg-white w-[7rem]'
-            interface='popover'
             value={zLinkInBioTable.getState().pagination.pageSize}
             testingselector={
               CONSTANTS.testingSelectors.linkInBio.listPage.table.pageSizeInput

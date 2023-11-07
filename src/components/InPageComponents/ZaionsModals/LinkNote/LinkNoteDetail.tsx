@@ -1,7 +1,7 @@
 // Core Imports
 import React from 'react';
+
 // Packages Import
-import { toggleOutline } from 'ionicons/icons';
 import { useRecoilValue } from 'recoil';
 
 // Custom Imports
@@ -11,19 +11,20 @@ import {
   ZIonText,
   ZIonHeader,
   ZIonContent,
-  ZIonIcon,
   ZIonFooter,
-  ZIonGrid,
-  ZIonButton
+  ZIonButton,
+  ZIonImg
 } from '@/components/ZIonComponents';
 
 // Global Constants
 
 // Images
+import { ProductFaviconSmall } from '@/assets/images';
 
 // Recoil States
 import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
 import { ShortLinkFormState } from '@/ZaionsStore/FormStates/shortLinkFormState';
+import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 
 // Types
 
@@ -69,28 +70,25 @@ const ZaionsLinkNoteDetailModal: React.FC<{
 
       <ZIonContent className='ion-padding'>
         <div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top'>
+          <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
+            <ZIonImg
+              src={ProductFaviconSmall}
+              className='w-10 h-10 mx-auto'
+            />
+          </div>
+
           <ZIonText
-            className=''
-            color={'primary'}>
-            <h1 className='mb-0 ion-padding-top bg-primary zaions__modal_icon'>
-              <ZIonIcon
-                icon={toggleOutline}
-                className='mx-auto'
-                color='light'></ZIonIcon>
-            </h1>
-          </ZIonText>
-          <br />
-          <ZIonText color={'dark'}>
-            <h5 className='font-bold'>Link Detail 📕</h5>
+            color='dark'
+            className='block mt-3 text-xl font-bold ion-text-center ion-padding-bottom'>
+            Link Detail 📕
           </ZIonText>
         </div>
-        <ZIonGrid>
-          <ZIonRow>
-            <ZIonCol>
-              <ZIonText>{shortLinkFormState.note}</ZIonText>
-            </ZIonCol>
-          </ZIonRow>
-        </ZIonGrid>
+
+        <ZCustomScrollable
+          className='ion-padding pt-0 h-[10.7rem]'
+          scrollY={true}>
+          <ZIonText>{shortLinkFormState.note}</ZIonText>
+        </ZCustomScrollable>
       </ZIonContent>
 
       {/**

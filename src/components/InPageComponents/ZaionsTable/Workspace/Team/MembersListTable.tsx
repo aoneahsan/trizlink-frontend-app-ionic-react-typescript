@@ -1380,7 +1380,6 @@ const ZInpageTable: React.FC = () => {
             minHeight='30px'
             fill='outline'
             className='zaions__bg_white w-[7rem] mt-1'
-            interface='popover'
             value={zMembersTable.getState().pagination.pageSize}
             testingselector={
               CONSTANTS.testingSelectors.WSSettings.teamListPage.table

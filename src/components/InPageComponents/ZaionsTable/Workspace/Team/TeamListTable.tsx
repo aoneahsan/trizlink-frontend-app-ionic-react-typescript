@@ -619,7 +619,6 @@ const ZInpageTable: React.FC = () => {
             minHeight='30px'
             fill='outline'
             className='bg-white w-[7rem] mt-1'
-            interface='popover'
             value={zTeamsTable.getState().pagination.pageSize}
             testingselector={
               CONSTANTS.testingSelectors.WSSettings.teamListPage.table

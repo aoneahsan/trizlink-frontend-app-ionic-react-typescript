@@ -338,12 +338,12 @@ const ZADTopBarColOne: React.FC<{
           <ZCan
             shareWSId={wsShareId}
             havePermissions={
-              wsShareId !== null
+              (wsShareId?.trim()?.length ?? 0) > 0
                 ? [shareWSPermissionEnum.create_sws_member]
                 : [permissionsEnum.create_ws_member]
             }
             permissionType={
-              wsShareId !== null
+              (wsShareId?.trim()?.length ?? 0) > 0
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }>

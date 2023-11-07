@@ -37,7 +37,7 @@ const Tags: React.FC = () => {
 
   const handleTagSubmit = async (_tag: string): Promise<void> => {
     try {
-      if (!values.tags.includes(_tag)) {
+      if (!values?.tags?.includes(_tag)) {
         const _tags = [...values.tags];
         _tags.push(_tag);
         void setFieldValue('tags', _tags, true);
@@ -50,9 +50,11 @@ const Tags: React.FC = () => {
   };
 
   const removeTags = (_tag: string): void => {
-    if (values.tags.includes(_tag)) {
-      const _tags = values.tags.filter(el => el !== _tag);
-      void setFieldValue('tags', _tags, true);
+    if (typeof values?.tags === typeof []) {
+      if (values?.tags?.includes(_tag)) {
+        const _tags = values.tags.filter(el => el !== _tag);
+        void setFieldValue('tags', _tags, true);
+      }
     }
   };
   return (
@@ -107,7 +109,7 @@ const Tags: React.FC = () => {
             }
           }}
         />
-        <div className='tags ion-padding-top'>
+        <div className='tags'>
           {values.tags !== undefined && values.tags.length > 0
             ? values.tags.map(el => {
                 return (

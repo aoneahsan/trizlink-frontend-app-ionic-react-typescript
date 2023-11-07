@@ -1076,7 +1076,6 @@ export const ZInpageTable: React.FC = () => {
             minHeight='30px'
             fill='outline'
             className='zaions__bg_white w-[8rem]'
-            interface='popover'
             value={zShortLinksTable.getState().pagination.pageSize}
             testingselector={
               CONSTANTS.testingSelectors.shortLink.listPage.table.pageSizeInput

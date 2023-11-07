@@ -302,7 +302,6 @@ const ZWorkspacePostDetailModal: React.FC = () => {
 
                         <div className='flex px-2 mt-4 ion-align-items-center ion-justify-content-between'>
                           <ZIonSelect
-                            interface='popover'
                             fill='outline'
                             label=''
                             minHeight='30px'

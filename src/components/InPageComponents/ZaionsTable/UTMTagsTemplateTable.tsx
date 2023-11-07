@@ -1272,7 +1272,6 @@ const ZInpageTable: React.FC = () => {
             minHeight='30px'
             fill='outline'
             className='zaions__bg_white w-[7rem]'
-            interface='popover'
             value={zUTMTagTable.getState().pagination.pageSize}
             testingselector={
               CONSTANTS.testingSelectors.utmTags.listPage.table.pageSizeInput

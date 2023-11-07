@@ -217,7 +217,6 @@ const ZaionsAPIKeysTable: React.FC = () => {
                 <ZIonCol>
                   <ZIonItem lines='none'>
                     <ZIonSelect
-                      interface='popover'
                       value={'20'}
                       label='Items per page:'>
                       <ZIonSelectOption value={'20'}>20</ZIonSelectOption>

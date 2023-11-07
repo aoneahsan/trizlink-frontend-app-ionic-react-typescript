@@ -60,8 +60,8 @@ const ZaionsDashboardFiltersModal: React.FC<{
           </ZIonCol>
         </ZIonRow>
         <ZIonItem className='ion-margin-start ion-margin-end'>
+          {/* Here in ZIonSelect the interface is action-sheet because first we are using popover interface but there is an issue using popover interface when we click at left side of select the popover width got smaller don't now why.  */}
           <ZIonSelect
-            interface='popover'
             multiple={true}
             label='0 filters applied.'
             labelPlacement='stacked'>

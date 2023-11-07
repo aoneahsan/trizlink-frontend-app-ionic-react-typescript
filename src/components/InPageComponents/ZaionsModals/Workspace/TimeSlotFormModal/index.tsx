@@ -559,7 +559,6 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                     labelPlacement='stacked'
                     minHeight='2.3rem'
                     fill='outline'
-                    interface='popover'
                     name='day'
                     value={values.day}
                     errorText={touched?.day === true ? errors.day : undefined}

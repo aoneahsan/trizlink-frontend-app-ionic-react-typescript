@@ -144,8 +144,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
                 fill='outline'
                 label='Company Size*'
                 labelPlacement='floating'
-                className='mt-5'
-                interface='popover'>
+                className='mt-5'>
                 {ZaionsDiscoverEnterpriseCompanySize.map((el, index) => {
                   return (
                     <ZIonSelectOption
@@ -162,8 +161,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
                 fill='outline'
                 label='Primary Use Case*'
                 labelPlacement='floating'
-                className='mt-5'
-                interface='popover'>
+                className='mt-5'>
                 {ZaionsDiscoverEnterprisePrimaryUseCase.map((el, index) => {
                   return (
                     <ZIonSelectOption
@@ -180,8 +178,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
                 fill='outline'
                 label='Country*'
                 labelPlacement='floating'
-                className='mt-5'
-                interface='popover'>
+                className='mt-5'>
                 {ZCountryData.map((el, index) => {
                   return (
                     <ZIonSelectOption

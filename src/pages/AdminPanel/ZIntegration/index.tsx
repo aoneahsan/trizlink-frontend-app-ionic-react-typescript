@@ -178,7 +178,6 @@ const ZIntegration: React.FC = () => {
                         <ZIonItem className='my-2'>
                           <ZIonSelect
                             value='1'
-                            interface='popover'
                             label='Default app group (required)'
                             labelPlacement='stacked'>
                             <ZIonSelectOption value='1'>

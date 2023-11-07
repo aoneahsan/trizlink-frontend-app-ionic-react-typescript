@@ -1146,7 +1146,7 @@ const ZWorkspaceSettings: React.FC = () => {
                       {/* Col-2 Row-2 col-2 Table & filters etc. */}
                       <ZIonCol
                         className='h-full zaions-transition'
-                        sizeXl='9.2'
+                        sizeXl={is2XlScale ? '10' : '9.2'}
                         sizeLg='9'
                         sizeMd='9'
                         sizeSm='12'

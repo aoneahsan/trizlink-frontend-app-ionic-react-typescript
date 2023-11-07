@@ -555,7 +555,8 @@ span.new {
 }
 
 .short-link-modal {
-  --height: 45vh;
+  --height: 40vh;
+  --min-height: 230px;
   --width: 35vw;
 }
 
@@ -642,8 +643,9 @@ span.new {
 .pixel-account-detail-modal-size,
 .note-detail-modal-size,
 .dashboard-filter-modal-size {
-  --height: 55vh;
+  --height: 400px;
   --width: 33vw;
+  --min-height: 400px;
 }
 
 .lib-block-modal-size {

@@ -82,11 +82,12 @@ const ZIonSelect: React.FC<ZIonSelectType> = (props: ZIonSelectType) => {
         }
       : {};
 
-  //
+  /* Here in ZIonSelect the interface is action-sheet because first we are using popover interface but there is an issue using popover interface when we click at left side of select the popover width got smaller don't now why.  */
   return (
     <IonSelect
       {...props}
       style={compStyle}
+      interface={props?.interface ?? 'action-sheet'}
       {..._testingSelector}
       {..._testinglistselector}>
       {props.children}

@@ -72,6 +72,7 @@ import { FormMode } from '@/types/AdminPanel/index.type';
 import { type resetFormType } from '@/types/ZaionsFormik.type';
 import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import ZInputLengthConstant from '@/utils/constants/InputLenghtConstant';
 
 // Styles
 
@@ -110,6 +111,41 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 //       return '1234567891234567';
 //   }
 // };
+const PixelInputMax = (
+  curSelectedPlatformType?: PixelPlatformsEnum
+): number => {
+  switch (curSelectedPlatformType) {
+    case PixelPlatformsEnum.facebook:
+      return 16;
+
+    case PixelPlatformsEnum.twitter:
+      return 5;
+
+    case PixelPlatformsEnum.linkedin:
+      return 7;
+
+    case PixelPlatformsEnum.google_analytics_4:
+      return 12;
+
+    case PixelPlatformsEnum.google_ads:
+      return 12;
+
+    case PixelPlatformsEnum.quora:
+      return 31;
+
+    case PixelPlatformsEnum.snapchat:
+      return 32;
+
+    case PixelPlatformsEnum.pinterest:
+      return 32;
+
+    case PixelPlatformsEnum.vk:
+      return 17;
+
+    default:
+      return ZInputLengthConstant.defaultStringMaxLength;
+  }
+};
 const ZaionsAddPixelAccount: React.FC<{
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
   pixelId?: string;
@@ -228,7 +264,9 @@ const ZaionsAddPixelAccount: React.FC<{
         }
       }
 
-      if ((_response as ZLinkMutateApiType<PixelAccountPlatformType>).success) {
+      if (
+        (_response as ZLinkMutateApiType<PixelAccountPlatformType>)?.success
+      ) {
         const _data = extractInnerData<PixelAccountPlatformType>(
           _response,
           extractInnerDataOptionsEnum.createRequestResponseItem
@@ -270,7 +308,7 @@ const ZaionsAddPixelAccount: React.FC<{
             extractInnerDataOptionsEnum.createRequestResponseItems
           );
 
-          if (_oldPixelsData !== undefined) {
+          if (_oldPixelsData !== undefined && _oldPixelsData !== null) {
             if (formMode === FormMode.ADD) {
               // added pixels to all pixels data in cache.
               const _updatedPixelsData = [..._oldPixelsData, _data];
@@ -551,6 +589,7 @@ const ZaionsAddPixelAccount: React.FC<{
                   'px-3': !isMdScale
                 })}>
                 {/* Pixel platform select */}
+                {/* Here in ZIonSelect the interface is action-sheet because first we are using popover interface but there is an issue using popover interface when we click at left side of select the popover width got smaller don't now why.  */}
                 <ZIonSelect
                   name='platform'
                   label='Select the platform*'
@@ -559,7 +598,6 @@ const ZaionsAddPixelAccount: React.FC<{
                   onIonChange={handleChange}
                   fill='outline'
                   minHeight='2.3rem'
-                  interface='popover'
                   errorText={
                     touched?.platform === true ? errors?.platform : undefined
                   }
@@ -570,11 +608,11 @@ const ZaionsAddPixelAccount: React.FC<{
                     'mt-5': true,
                     'ion-touched': touched?.platform === true,
                     'ion-invalid':
-                      touched?.platform === true && errors?.platform,
+                      touched?.platform === true &&
+                      (errors?.platform?.trim()?.length ?? 0) > 0,
                     'ion-valid':
                       touched?.platform === true &&
-                      (errors.platform === undefined ||
-                        errors?.platform === null)
+                      (errors?.platform?.trim()?.length ?? 0) === 0
                   })}>
                   {platformData.map(el => {
                     return (
@@ -598,17 +636,21 @@ const ZaionsAddPixelAccount: React.FC<{
                   minHeight='2.3rem'
                   onIonChange={handleChange}
                   onIonBlur={handleBlur}
-                  errorText={touched.title === true ? errors.title : undefined}
+                  errorText={
+                    touched?.title === true ? errors?.title : undefined
+                  }
                   testingselector={
                     CONSTANTS.testingSelectors.pixels.formModal.pixelNameInput
                   }
                   className={classNames({
                     'mt-6 mb-2': true,
-                    'ion-touched': touched.title === true,
-                    'ion-invalid': touched.title === true && errors.title,
+                    'ion-touched': touched?.title === true,
+                    'ion-invalid':
+                      touched?.title === true &&
+                      (errors?.title?.trim()?.length ?? 0) > 0,
                     'ion-valid':
-                      touched.title === true &&
-                      (errors.title === undefined || errors.title === null)
+                      touched?.title === true &&
+                      (errors?.title?.trim()?.length ?? 0) === 0
                   })}
                 />
 
@@ -616,6 +658,7 @@ const ZaionsAddPixelAccount: React.FC<{
                 <ZIonInput
                   label='Pixel ID*'
                   labelPlacement='stacked'
+                  maxlength={PixelInputMax(values?.platform)}
                   name='pixelId'
                   placeholder='Enter Pixel Id'
                   type='text'
@@ -624,7 +667,7 @@ const ZaionsAddPixelAccount: React.FC<{
                   onIonBlur={handleBlur}
                   value={values.pixelId}
                   errorText={
-                    touched?.pixelId === true ? errors.pixelId : undefined
+                    touched?.pixelId === true ? errors?.pixelId : undefined
                   }
                   testingselector={
                     CONSTANTS.testingSelectors.pixels.formModal.pixelIdInput
@@ -632,11 +675,12 @@ const ZaionsAddPixelAccount: React.FC<{
                   className={classNames({
                     'mt-0': true,
                     'ion-touched': touched?.pixelId === true,
-                    'ion-invalid': touched?.pixelId === true && errors.pixelId,
+                    'ion-invalid':
+                      touched?.pixelId === true &&
+                      (errors?.pixelId?.trim()?.length ?? 0) > 0,
                     'ion-valid':
                       touched?.pixelId === true &&
-                      errors.pixelId === undefined &&
-                      errors.pixelId === null
+                      (errors?.pixelId?.trim()?.length ?? 0) === 0
                   })}
                 />
               </Form>
