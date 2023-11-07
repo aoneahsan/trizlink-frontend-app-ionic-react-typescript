@@ -130,7 +130,7 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
               );
             }
           }}>
-          {({ getRootProps, getInputProps, isDragActive, acceptedFiles }) => {
+          {({ getRootProps, getInputProps }) => {
             return (
               <ZIonCol
                 size='12'
