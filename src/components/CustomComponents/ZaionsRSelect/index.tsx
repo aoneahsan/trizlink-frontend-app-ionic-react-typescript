@@ -3,6 +3,7 @@ import React from 'react';
 
 // Packages Imports
 import Select, {
+  type SingleValue,
   type ActionMeta,
   type MultiValue,
   type PropsValue
@@ -34,8 +35,14 @@ interface ZaionsRSelectType {
   testingselector?: string;
   testinglistselector?: string;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
+  // onChange?: (
+  //   newValue: MultiValue<ZaionsRSelectOptions>,
+  //   actionMeta: ActionMeta<ZaionsRSelectOptions>
+  // ) => void;
   onChange?: (
-    newValue: MultiValue<ZaionsRSelectOptions>,
+    newValue:
+      | MultiValue<ZaionsRSelectOptions>
+      | SingleValue<ZaionsRSelectOptions>,
     actionMeta: ActionMeta<ZaionsRSelectOptions>
   ) => void;
 }

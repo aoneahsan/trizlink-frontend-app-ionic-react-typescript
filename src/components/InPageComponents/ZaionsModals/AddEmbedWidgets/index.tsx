@@ -116,7 +116,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
         embedWidgetsFormState.id !== undefined ||
           (embedWidgetsFormState.id !== null &&
             updateEmbedWidgetAccount({
-              itemIds: [embedWidgetsFormState.id],
+              itemIds: [embedWidgetsFormState.id ?? ''],
               urlDynamicParts: [':embeddedId'],
               requestData: values
             }));
