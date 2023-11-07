@@ -29,17 +29,13 @@ import {
 import ZWorkspaceFormConnectPagesTab from '@/pages/AdminPanel/Workspaces/Form/ConnectPagesTab';
 import ZIonPage from '@/components/ZIonPage';
 import ZWorkspaceFormInviteClientsTab from './InviteClientsTab';
-import ZWorkspaceFormDetailTab from './DetailTab';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-import {
-  useZRQGetRequest,
-  useZRQUpdateRequest
-} from '@/ZaionsHooks/zreactquery-hooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
@@ -58,7 +54,7 @@ import { reportCustomError } from '@/utils/customErrorType';
  * */
 import {
   workspaceFormTabEnum,
-  workspaceInterface
+  type workspaceInterface
 } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import classNames from 'classnames';
@@ -100,17 +96,16 @@ const ZWorkspaceForm: React.FC = () => {
   const { zNavigatePushRoute } = useZNavigate();
 
   // Media Query Scale
-  const { isXlScale, isLgScale, isMdScale, isSmScale, isXsScale } =
-    useZMediaQueryScale();
+  const { isXlScale, isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
 
   // getting workspace id from route (url), when user refresh the page the id from route will be get and workspace of that id will be fetch from backend.
   const { editWorkspaceId } = useParams<{
-    editWorkspaceId: string;
+    editWorkspaceId?: string;
   }>();
 
   // Recoil State that hold workspaces.
   // const [workspaceState, setWorkspaceState] = useRecoilState(
-  // 	WorkspaceRStateAtomFamily(editWorkspaceId)
+  // WorkspaceRStateAtomFamily(editWorkspaceId)
   // );
 
   // fetching link-in-bio with the editWorkspaceId data from backend.
@@ -119,17 +114,14 @@ const ZWorkspaceForm: React.FC = () => {
       _url: API_URL_ENUM.workspace_update_delete,
       _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET],
       _authenticated: true,
-      _itemsIds: [editWorkspaceId],
+      _itemsIds: [editWorkspaceId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: !editWorkspaceId ? true : false,
+      _shouldFetchWhenIdPassed: !(
+        editWorkspaceId !== undefined &&
+        (editWorkspaceId?.trim()?.length ?? 0 ?? '') > 0
+      ),
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
-
-  // Update workspace API.
-  const { mutateAsync: UpdateWorkspaceMutateAsync } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.workspace_update_delete,
-    _queriesKeysToInvalidate: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET]
-  });
 
   //
   const WorkspaceGetRequestFn = useCallback(async () => {
@@ -140,7 +132,7 @@ const ZWorkspaceForm: React.FC = () => {
   // Refetching if the editLinkInBioId changes and if the editLinkInBioId is undefined it will redirect user to link-in-bio page.
   useEffect(() => {
     try {
-      if (editWorkspaceId) {
+      if (editWorkspaceId !== undefined) {
         void WorkspaceGetRequestFn();
       }
     } catch (error) {
@@ -152,7 +144,7 @@ const ZWorkspaceForm: React.FC = () => {
               CONSTANTS.RouteParams.workspace.workspaceId,
               CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
             ],
-            [editWorkspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
+            [editWorkspaceId ?? '', CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
           )
         );
         showErrorNotification(error.message);
@@ -163,12 +155,14 @@ const ZWorkspaceForm: React.FC = () => {
     // eslint-disable-next-line
   }, [editWorkspaceId]);
 
-  if (!selectedWorkspace) return null;
+  if (selectedWorkspace === undefined || selectedWorkspace === null) {
+    return null;
+  }
 
   return (
     <ZIonPage pageTitle='Zaions Workspace Form Page'>
       <ZIonHeader className='ion-no-border'>
-        <ZIonRow className='pb-3 pt-2 ion-justify-content-center ion-align-items-center'>
+        <ZIonRow className='pt-2 pb-3 ion-justify-content-center ion-align-items-center'>
           {/*  */}
           <ZIonCol
             sizeXl='1'
@@ -200,7 +194,7 @@ const ZWorkspaceForm: React.FC = () => {
             className='ion-text-center'
             size='11'>
             {/* Tab Title */}
-            <ZIonText className='text-4xl block'>
+            <ZIonText className='block text-4xl'>
               {routeQSearchParams.tab ===
               workspaceFormTabEnum.workspaceDetailForm
                 ? 'Create a workspace'
@@ -214,7 +208,7 @@ const ZWorkspaceForm: React.FC = () => {
             </ZIonText>
 
             {/* Tab sub title */}
-            <ZIonText className='mt-3 text-muted block'>
+            <ZIonText className='block mt-3 text-muted'>
               {routeQSearchParams.tab === workspaceFormTabEnum.inviteClients
                 ? 'Working with a client? Invite them in the workspace so they can approve and leave feedback on content.'
                 : routeQSearchParams.tab === workspaceFormTabEnum.connectPages

@@ -3,7 +3,7 @@
 // Packages Imports
 
 // Custom Imports
-import { ZaionsHPFAQType } from '@/types/ZionsHPFAQType';
+import { type ZaionsHPFAQType } from '@/types/ZionsHPFAQType';
 import { PRODUCT_DOMAIN, PRODUCT_NAME } from '@/utils/constants';
 
 export const HPFAQData: ZaionsHPFAQType[] = [
@@ -18,7 +18,7 @@ export const HPFAQData: ZaionsHPFAQType[] = [
     
     If you’re contributing content to the online world, you need a URL shortener.
     
-    Make your URLs stand out with our easy to use free link shortener above.`,
+    Make your URLs stand out with our easy to use free link shortener above.`
   },
   {
     id: '2',
@@ -28,6 +28,6 @@ export const HPFAQData: ZaionsHPFAQType[] = [
     On a more practical side, a short URL is also easier to incorporate into your collateral – whether you’re looking to engage with your customers offline or online.
     
     ${PRODUCT_NAME} is the best URL shortener for everyone, from influencers to small brands to large enterprises, who are looking for a simple way to create, track and manage their links.`,
-    button: 'Find a plan that works for you',
-  },
+    button: 'Find a plan that works for you'
+  }
 ];

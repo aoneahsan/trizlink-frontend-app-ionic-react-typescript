@@ -14,7 +14,7 @@ import React from 'react';
  * ? Like import of custom components is a custom import
  * */
 import { ZIonCol, ZIonText } from '@/components/ZIonComponents';
-import { LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
+import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 import classNames from 'classnames';
 
 /**
@@ -54,28 +54,27 @@ import classNames from 'classnames';
  * */
 
 interface ZLinkInBioTextBlockInterface {
-	children?: string;
-	fontFamily?: LinkInBioThemeFontEnum;
+  children?: string;
+  fontFamily?: LinkInBioThemeFontEnum;
 }
 
 const ZLinkInBioTextBlock: React.FC<ZLinkInBioTextBlockInterface> = ({
-	children,
-	fontFamily,
+  children,
+  fontFamily
 }) => {
-	return (
-		<ZIonCol className='overflow-hidden line-clamp-3'>
-			<ZIonText
-				className={classNames(fontFamily, {
-					'font-bold text-[15px]': true,
-				})}
-				color='light'
-			>
-				{children ? (
-					<div dangerouslySetInnerHTML={{ __html: children }} />
-				) : null}
-			</ZIonText>
-		</ZIonCol>
-	);
+  return (
+    <ZIonCol className='overflow-hidden line-clamp-3'>
+      <ZIonText
+        className={classNames(fontFamily, {
+          'font-bold text-[15px]': true
+        })}
+        color='light'>
+        {children !== undefined ? (
+          <div dangerouslySetInnerHTML={{ __html: children }} />
+        ) : null}
+      </ZIonText>
+    </ZIonCol>
+  );
 };
 
 export default ZLinkInBioTextBlock;

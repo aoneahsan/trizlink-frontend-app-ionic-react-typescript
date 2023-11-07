@@ -44,22 +44,19 @@ import CONSTANTS, { LOCALSTORAGE_KEYS } from '@/utils/constants';
 
 // Images
 import { ProductFavicon } from '@/assets/images';
-import {
-  useZRQCreateRequest,
-  useZRQUpdateRequest
-} from '@/ZaionsHooks/zreactquery-hooks';
+import { useZRQUpdateRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import {
   showErrorNotification,
   showSuccessNotification
 } from '@/utils/notification';
 import { AxiosError } from 'axios';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { ZErrorCodeEnum } from '@/utils/enums/ErrorsCodes';
 import { reportCustomError, ZCustomError } from '@/utils/customErrorType';
 import { useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
 import {
-  AuthTokenResponseType,
-  UserAccountType
+  type AuthTokenResponseType,
+  type UserAccountType
 } from '@/types/UserAccount/index.type';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import { useSetRecoilState } from 'recoil';
@@ -112,8 +109,8 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
         <ZIonGrid className=''>
           <Formik
             initialValues={{
-              // emailAddress: compState?.email || '',
-              emailAddress: compState?.email || '',
+              // emailAddress: compState?.email ?? '',
+              emailAddress: compState?.email ?? '',
               password: '',
               otp: '',
               confirm_password: '',
@@ -122,11 +119,11 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
               emailAddressApiErrorText: '',
               isOTPApiError: false,
               OTPApiErrorText: '',
-              OTPCodeValidTill: compState?.OTPCodeValidTill || '',
-              resendOTPValidCheck: compState?.resendOTPValidCheck || false,
+              OTPCodeValidTill: compState?.OTPCodeValidTill ?? '',
+              resendOTPValidCheck: compState?.resendOTPValidCheck ?? false,
 
               // tab: compState?.tab || ZSetPasswordTabEnum.sendOptTab,
-              tab: compState?.tab || ZSetPasswordTabEnum.sendOptTab
+              tab: compState?.tab != null || ZSetPasswordTabEnum.sendOptTab
             }}
             // Validations of sign up form fields
             validate={values => {
@@ -203,7 +200,7 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
                   </ZIonRow>
 
                   {/*  */}
-                  <ZIonRow className='ion-justify-content-center ion-align-items-top mt-6'>
+                  <ZIonRow className='mt-6 ion-justify-content-center ion-align-items-top'>
                     <ZIonCol
                       className='ion-text-start'
                       size='4.2'
@@ -251,31 +248,38 @@ const ZSendOtpTab: React.FC = () => {
     _loaderMessage: MESSAGES.OTP.SENDING
   });
 
-  const ZSendOTPHandler = async () => {
+  const ZSendOTPHandler = async (): Promise<void> => {
     try {
-      if (values?.emailAddress && values?.emailAddress?.trim()?.length > 0) {
-        const __stringifyData = zStringify({
+      if (
+        values?.emailAddress?.length > 0 &&
+        values?.emailAddress?.trim()?.length > 0
+      ) {
+        const _stringifyData = zStringify({
           email: values.emailAddress
         });
 
-        const __response = await zSendOtpAsyncMutate({
+        const _response = await zSendOtpAsyncMutate({
           itemIds: [],
           urlDynamicParts: [],
-          requestData: __stringifyData
+          requestData: _stringifyData
         });
 
-        if (__response) {
-          const __data = extractInnerData<{
+        if (_response !== undefined) {
+          const _data = extractInnerData<{
             success: boolean;
             OTPCodeValidTill?: string;
-          }>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
+          }>(_response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
-          if (__data?.success) {
-            setFieldValue('OTPCodeValidTill', __data?.OTPCodeValidTill, false);
+          if (_data !== undefined && _data?.success) {
+            void setFieldValue(
+              'OTPCodeValidTill',
+              _data?.OTPCodeValidTill,
+              false
+            );
             const userData = {
               email: values?.emailAddress,
               tab: ZSetPasswordTabEnum.confirmOptTab,
-              OTPCodeValidTill: __data?.OTPCodeValidTill,
+              OTPCodeValidTill: _data?.OTPCodeValidTill,
               resendOTPValidCheck: false
             };
 
@@ -284,7 +288,7 @@ const ZSendOtpTab: React.FC = () => {
               userData
             );
 
-            setFieldValue('tab', ZSetPasswordTabEnum.confirmOptTab, false);
+            void setFieldValue('tab', ZSetPasswordTabEnum.confirmOptTab, false);
 
             showSuccessNotification(MESSAGES.OTP.SEND_SUCCESSFULLY);
           }
@@ -292,17 +296,17 @@ const ZSendOtpTab: React.FC = () => {
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        const __apiErrorObjects = error.response?.data as {
+        const _apiErrorObjects = error.response?.data as {
           errors: { item: string[] };
           status: number;
         };
 
-        const __apiErrors = __apiErrorObjects?.errors?.item;
-        const __apiErrorCode = __apiErrorObjects?.status;
+        const _apiErrors = _apiErrorObjects?.errors?.item;
+        const _apiErrorCode = _apiErrorObjects?.status;
 
-        if (__apiErrorCode === ZErrorCodeEnum.notFound) {
-          setFieldValue('emailAddressApiErrorText', __apiErrors[0], false);
-          setFieldValue('isEmailAddressApiError', true, false);
+        if (_apiErrorCode === ZErrorCodeEnum.notFound) {
+          void setFieldValue('emailAddressApiErrorText', _apiErrors[0], false);
+          void setFieldValue('isEmailAddressApiError', true, false);
         }
       }
       reportCustomError(error);
@@ -320,15 +324,15 @@ const ZSendOtpTab: React.FC = () => {
         onIonChange={e => {
           handleChange(e);
           if (values.isEmailAddressApiError) {
-            setFieldValue('isEmailAddressApiError', false);
+            void setFieldValue('isEmailAddressApiError', false);
           }
         }}
         onIonBlur={handleBlur}
         value={values.emailAddress}
         testingselector={CONSTANTS.testingSelectors.setPasswordPage.emailInput}
         errorText={
-          touched.emailAddress
-            ? errors.emailAddress?.trim()
+          touched?.emailAddress === true
+            ? errors.emailAddress?.trim() !== ''
               ? errors.emailAddress
               : values.isEmailAddressApiError
               ? values?.emailAddressApiErrorText
@@ -337,9 +341,12 @@ const ZSendOtpTab: React.FC = () => {
         }
         className={classNames({
           'mb-4': true,
-          'ion-touched': touched.emailAddress,
+          'ion-touched': touched?.emailAddress === true,
           'ion-invalid': values?.isEmailAddressApiError || errors.emailAddress,
-          'ion-valid': touched.emailAddress && !errors.emailAddress
+          'ion-valid':
+            touched?.emailAddress === true &&
+            errors?.emailAddress?.trim()?.length === 0 &&
+            errors?.emailAddress === undefined
         })}
       />
 
@@ -352,8 +359,8 @@ const ZSendOtpTab: React.FC = () => {
           values?.isEmailAddressApiError
         }
         className='mt-4 ion-text-capitalize'
-        onClick={async () => {
-          await ZSendOTPHandler();
+        onClick={() => {
+          void ZSendOTPHandler();
         }}
         testingselector={CONSTANTS.testingSelectors.setPasswordPage.otpBtn}>
         Send OTP
@@ -393,29 +400,29 @@ const ZConfirmOptTab: React.FC = () => {
     _loaderMessage: MESSAGES.OTP.RESENDING
   });
 
-  const ZConfirmOTPHandler = async () => {
+  const ZConfirmOTPHandler = async (): Promise<void> => {
     try {
-      if (values?.otp && values?.otp?.trim()?.length === 6) {
-        const __stringifyData = zStringify({
+      if (values?.otp?.length > 0 && values?.otp?.trim()?.length === 6) {
+        const _stringifyData = zStringify({
           email: values.emailAddress,
           otp: values.otp
         });
 
-        const __response = await zConfirmOtpAsyncMutate({
-          requestData: __stringifyData,
+        const _response = await zConfirmOtpAsyncMutate({
+          requestData: _stringifyData,
           itemIds: [],
           urlDynamicParts: []
         });
 
-        if (__response) {
-          const __data = extractInnerData<{
+        if (_response !== undefined) {
+          const _data = extractInnerData<{
             success: boolean;
-          }>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
+          }>(_response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
-          if (__data?.success) {
-            if (values?.isOTPApiError === true) {
-              setFieldValue('OTPApiErrorText', '', false);
-              setFieldValue('isOTPApiError', false, false);
+          if (_data !== undefined && _data?.success) {
+            if (values?.isOTPApiError) {
+              void setFieldValue('OTPApiErrorText', '', false);
+              void setFieldValue('isOTPApiError', false, false);
             }
 
             const userData = {
@@ -430,25 +437,29 @@ const ZConfirmOptTab: React.FC = () => {
               userData
             );
 
-            setFieldValue('tab', ZSetPasswordTabEnum.newPasswordTab, false);
-            setFieldValue('otp', '', false);
+            void setFieldValue(
+              'tab',
+              ZSetPasswordTabEnum.newPasswordTab,
+              false
+            );
+            void setFieldValue('otp', '', false);
             showSuccessNotification(MESSAGES.OTP.CONFIRMED);
           }
         }
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        const __apiErrorObjects = error.response?.data as {
+        const _apiErrorObjects = error.response?.data as {
           errors: { item: string[] };
           status: number;
         };
 
-        const __apiErrors = __apiErrorObjects?.errors?.item;
-        const __apiErrorCode = __apiErrorObjects?.status;
+        const _apiErrors = _apiErrorObjects?.errors?.item;
+        const _apiErrorCode = _apiErrorObjects?.status;
 
-        if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
-          setFieldValue('OTPApiErrorText', __apiErrors[0], false);
-          setFieldValue('isOTPApiError', true, false);
+        if (_apiErrorCode === ZErrorCodeEnum.badRequest) {
+          void setFieldValue('OTPApiErrorText', _apiErrors[0], false);
+          void setFieldValue('isOTPApiError', true, false);
         }
       }
 
@@ -456,29 +467,32 @@ const ZConfirmOptTab: React.FC = () => {
     }
   };
 
-  const ZResendOTPHandler = async () => {
+  const ZResendOTPHandler = async (): Promise<void> => {
     try {
-      if (values?.emailAddress && values?.emailAddress?.trim()?.length > 0) {
-        const __stringifyData = zStringify({
+      if (
+        values?.emailAddress?.length > 0 &&
+        values?.emailAddress?.trim()?.length > 0
+      ) {
+        const _stringifyData = zStringify({
           email: values.emailAddress
         });
 
-        const __response = await zResendOtpAsyncMutate({
+        const _response = await zResendOtpAsyncMutate({
           itemIds: [],
           urlDynamicParts: [],
-          requestData: __stringifyData
+          requestData: _stringifyData
         });
-        if (__response) {
-          const __data = extractInnerData<{
+        if (_response !== undefined) {
+          const _data = extractInnerData<{
             success: boolean;
             OTPCodeValidTill: string;
-          }>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
+          }>(_response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
-          if (__data?.success) {
+          if (_data !== undefined && _data?.success) {
             const userData = {
               email: values?.emailAddress,
               tab: ZSetPasswordTabEnum.confirmOptTab,
-              OTPCodeValidTill: __data?.OTPCodeValidTill,
+              OTPCodeValidTill: _data?.OTPCodeValidTill,
               resendOTPValidCheck: false
             };
 
@@ -487,9 +501,13 @@ const ZConfirmOptTab: React.FC = () => {
               userData
             );
 
-            setFieldValue('OTPCodeValidTill', __data?.OTPCodeValidTill, false);
-            setFieldValue('resendOTPValidCheck', false, false);
-            setFieldValue('tab', ZSetPasswordTabEnum.confirmOptTab, false);
+            void setFieldValue(
+              'OTPCodeValidTill',
+              _data?.OTPCodeValidTill,
+              false
+            );
+            void setFieldValue('resendOTPValidCheck', false, false);
+            void setFieldValue('tab', ZSetPasswordTabEnum.confirmOptTab, false);
 
             showSuccessNotification(MESSAGES.OTP.SEND_SUCCESSFULLY);
           }
@@ -497,16 +515,16 @@ const ZConfirmOptTab: React.FC = () => {
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        const __apiErrorObjects = error.response?.data as {
+        const _apiErrorObjects = error.response?.data as {
           errors: { item: string[] };
           status: number;
         };
 
-        const __apiErrors = __apiErrorObjects?.errors?.item;
-        const __apiErrorCode = __apiErrorObjects?.status;
+        const _apiErrors = _apiErrorObjects?.errors?.item;
+        const _apiErrorCode = _apiErrorObjects?.status;
 
-        if (__apiErrorCode === ZErrorCodeEnum.notFound) {
-          showErrorNotification(__apiErrors[0]);
+        if (_apiErrorCode === ZErrorCodeEnum.notFound) {
+          showErrorNotification(_apiErrors[0]);
         }
       }
       reportCustomError(error);
@@ -537,7 +555,7 @@ const ZConfirmOptTab: React.FC = () => {
             'mb-4': true,
             'ion-touched': touched.otp,
             'ion-invalid': values?.isOTPApiError,
-            'ion-valid': touched.otp && !values?.isOTPApiError
+            'ion-valid': touched?.otp === true && !values?.isOTPApiError
           })}
         />
 
@@ -548,7 +566,7 @@ const ZConfirmOptTab: React.FC = () => {
                 dayjs(values?.OTPCodeValidTill).subtract(4, 'minute')
               )
             ) {
-              (async () => {
+              void (async () => {
                 const userData = {
                   email: values?.emailAddress,
                   tab: ZSetPasswordTabEnum.confirmOptTab,
@@ -561,7 +579,7 @@ const ZConfirmOptTab: React.FC = () => {
                   userData
                 );
               })();
-              setFieldValue('resendOTPValidCheck', true, false);
+              void setFieldValue('resendOTPValidCheck', true, false);
             }
           }}
           countDownTime={values?.OTPCodeValidTill}
@@ -586,8 +604,8 @@ const ZConfirmOptTab: React.FC = () => {
           expand='block'
           disabled={values?.otp?.trim()?.length !== 6}
           className='mt-4 ion-text-capitalize'
-          onClick={async () => {
-            await ZConfirmOTPHandler();
+          onClick={() => {
+            void ZConfirmOTPHandler();
           }}
           testingselector={
             CONSTANTS.testingSelectors.setPasswordPage.confirmOtpBtn
@@ -607,9 +625,9 @@ const ZConfirmOptTab: React.FC = () => {
           fill='outline'
           className='mt-4 ion-text-capitalize'
           disabled={!values.resendOTPValidCheck}
-          onClick={async () => {
+          onClick={() => {
             if (values.resendOTPValidCheck) {
-              await ZResendOTPHandler();
+              void ZResendOTPHandler();
             }
           }}
           testingselector={
@@ -660,41 +678,44 @@ const ZNewPasswordTab: React.FC = () => {
 
   const { presentZIonErrorAlert } = useZIonErrorAlert();
 
-  const ZSetPassword = async () => {
+  const ZSetPassword = async (): Promise<void> => {
     try {
-      if (values?.password && values?.password?.trim()?.length > 0) {
-        const __stringifyData = zStringify({
+      if (
+        values?.password?.length > 0 &&
+        values?.password?.trim()?.length > 0
+      ) {
+        const _stringifyData = zStringify({
           email: values.emailAddress,
           password: values.password,
           password_confirmation: values.confirmPassword
         });
 
-        const __response = await zSetPasswordAsyncMutate({
-          requestData: __stringifyData,
+        const _response = await zSetPasswordAsyncMutate({
+          requestData: _stringifyData,
           itemIds: [],
           urlDynamicParts: []
         });
 
-        if (__response) {
-          const __data = extractInnerData<{
+        if (_response !== undefined) {
+          const _data = extractInnerData<{
             user: UserAccountType;
             token: AuthTokenResponseType;
-          }>(__response, extractInnerDataOptionsEnum.createRequestResponseItem);
+          }>(_response, extractInnerDataOptionsEnum.createRequestResponseItem);
 
           // Checking if the __data is available & if there is a user object in __data which have the id.
-          if (__data?.user?.id) {
+          if (_data !== undefined && _data?.user?.id !== null) {
             // getting user data.
-            const userData = getUserDataObjectForm(__data.user);
+            const userData = getUserDataObjectForm(_data?.user);
 
             // Storing user token at userAccountAuthToken State.
             const userToken = {
-              token: __data?.token?.plainTextToken
+              token: _data?.token?.plainTextToken
             };
 
             await STORAGE.REMOVE(LOCALSTORAGE_KEYS.SIGNUP_USER_DATA);
 
             // Set user data && user token to localstorage.
-            if (userData && userToken.token) {
+            if (userData !== null && userToken.token !== null) {
               // store User token.
               void STORAGE.SET(LOCALSTORAGE_KEYS.USERDATA, userData);
               // store auth token.
@@ -730,27 +751,27 @@ const ZNewPasswordTab: React.FC = () => {
         // if there any error then showing the alert modal.
         // await presentZIonErrorAlert();
 
-        const __apiErrorObjects = error.response?.data as {
+        const _apiErrorObjects = error.response?.data as {
           errors: { item: string[] } | ZGenericObject;
           status: number;
         };
 
-        const __apiErrors = __apiErrorObjects?.errors;
-        const __apiErrorCode = __apiErrorObjects?.status;
+        const _apiErrors = _apiErrorObjects?.errors;
+        const _apiErrorCode = _apiErrorObjects?.status;
 
-        if (__apiErrorCode === ZErrorCodeEnum.serverError) {
-          const __errors = formatApiRequestErrorForFormikFormField(
+        if (_apiErrorCode === ZErrorCodeEnum.serverError) {
+          const _errors = formatApiRequestErrorForFormikFormField(
             ['password', 'confirmPassword'],
             ['password', 'password_confirmation'],
-            __apiErrors as ZGenericObject
+            _apiErrors as ZGenericObject
           );
 
-          setErrors(__errors);
+          setErrors(_errors);
         }
 
-        if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
-          presentZIonErrorAlert({
-            message: (__apiErrors as { item: string[] }).item[0]
+        if (_apiErrorCode === ZErrorCodeEnum.badRequest) {
+          void presentZIonErrorAlert({
+            message: (_apiErrors as { item: string[] }).item[0]
           });
         }
       }
@@ -768,20 +789,23 @@ const ZNewPasswordTab: React.FC = () => {
           labelPlacement='floating'
           onIonChange={e => {
             handleChange(e);
-            if (e?.target?.value && (e?.target?.value as string)?.length > 0) {
-              setFieldTouched('password', true, true);
+            if ((e?.target?.value as string)?.length > 0) {
+              void setFieldTouched('password', true, true);
             }
           }}
           onIonBlur={handleBlur}
           value={values.password}
-          errorText={touched.password ? errors.password : undefined}
+          errorText={touched?.password === true ? errors.password : undefined}
           type={values.canViewPassword ? 'text' : 'password'}
           clearOnEdit={false}
           testingselector={CONSTANTS.testingSelectors.signupPage.passwordInput}
           className={classNames({
-            'ion-touched': touched.password,
-            'ion-invalid': touched.password && errors.password,
-            'ion-valid': touched.password && !errors.password
+            'ion-touched': touched?.password === true,
+            'ion-invalid': touched?.password === true && errors.password,
+            'ion-valid':
+              touched?.password === true &&
+              (errors.password?.trim()?.length === 0 ||
+                errors.password === undefined)
           })}
         />
 
@@ -793,9 +817,13 @@ const ZNewPasswordTab: React.FC = () => {
           testingselector={
             CONSTANTS.testingSelectors.signupPage.canViewPasswordButton
           }
-          onClick={() =>
-            setFieldValue('canViewPassword', !values.canViewPassword, false)
-          }>
+          onClick={() => {
+            void setFieldValue(
+              'canViewPassword',
+              !values.canViewPassword,
+              false
+            );
+          }}>
           <ZIonIcon
             icon={values.canViewPassword ? eyeOffOutline : eyeOutline}
           />
@@ -807,7 +835,7 @@ const ZNewPasswordTab: React.FC = () => {
           <ZIonCol size='6'>
             <ZIonText
               color={
-                touched.password
+                touched?.password === true
                   ? checkIfContains(values.password, CONTAINS.minCharacter)
                     ? 'success'
                     : 'danger'
@@ -819,7 +847,7 @@ const ZNewPasswordTab: React.FC = () => {
           <ZIonCol size='6'>
             <ZIonText
               color={
-                touched.password
+                touched?.password === true
                   ? checkIfContains(values.password, CONTAINS.number)
                     ? 'success'
                     : 'danger'
@@ -831,7 +859,7 @@ const ZNewPasswordTab: React.FC = () => {
           <ZIonCol size='6'>
             <ZIonText
               color={
-                touched.password
+                touched?.password === true
                   ? checkIfContains(values.password, CONTAINS.letter)
                     ? 'success'
                     : 'danger'
@@ -843,7 +871,7 @@ const ZNewPasswordTab: React.FC = () => {
           <ZIonCol size='6'>
             <ZIonText
               color={
-                touched.password
+                touched?.password === true
                   ? checkIfContains(values.password, CONTAINS.specialSymbol)
                     ? 'success'
                     : 'danger'
@@ -870,12 +898,18 @@ const ZNewPasswordTab: React.FC = () => {
             CONSTANTS.testingSelectors.signupPage.confirmPasswordInput
           }
           errorText={
-            touched.confirmPassword ? errors.confirmPassword : undefined
+            touched.confirmPassword === true
+              ? errors.confirmPassword
+              : undefined
           }
           className={classNames({
-            'ion-touched': touched.confirmPassword,
-            'ion-invalid': touched.confirmPassword && errors.confirmPassword,
-            'ion-valid': touched.confirmPassword && !errors.confirmPassword
+            'ion-touched': touched?.confirmPassword === true,
+            'ion-invalid':
+              touched?.confirmPassword === true && errors.confirmPassword,
+            'ion-valid':
+              touched?.confirmPassword === true &&
+              (errors.confirmPassword?.trim()?.length === 0 ||
+                errors?.confirmPassword === undefined)
           })}
         />
         <ZIonButton
@@ -885,13 +919,13 @@ const ZNewPasswordTab: React.FC = () => {
           testingselector={
             CONSTANTS.testingSelectors.signupPage.canViewConfirmPasswordButton
           }
-          onClick={() =>
-            setFieldValue(
+          onClick={() => {
+            void setFieldValue(
               'canViewConfirmPassword',
               !values.canViewConfirmPassword,
               false
-            )
-          }>
+            );
+          }}>
           <ZIonIcon
             icon={values?.canViewConfirmPassword ? eyeOffOutline : eyeOutline}
           />
@@ -908,8 +942,8 @@ const ZNewPasswordTab: React.FC = () => {
             errors?.confirmPassword?.trim()?.length > 0)
         }
         className='mt-4 ion-text-capitalize'
-        onClick={async () => {
-          await ZSetPassword();
+        onClick={() => {
+          void ZSetPassword();
         }}
         testingselector={
           CONSTANTS.testingSelectors.setPasswordPage.confirmOtpBtn

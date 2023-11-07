@@ -10,6 +10,7 @@ import React from 'react';
  * */
 import classNames from 'classnames';
 import { ellipsisHorizontalOutline, star, starOutline } from 'ionicons/icons';
+import { useRecoilValue } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -71,13 +72,13 @@ import MESSAGES from '@/utils/messages';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  wsShareInterface,
-  WSTeamMembersInterface
+  type wsShareInterface,
+  type WSTeamMembersInterface
 } from '@/types/AdminPanel/workspace';
 import { ZTeamMemberInvitationEnum } from '@/types/AdminPanel/index.type';
-import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { UserAccountType } from '@/types/UserAccount/index.type';
+import { type UserAccountType } from '@/types/UserAccount/index.type';
 
 /**
  * Recoil State Imports go down
@@ -90,7 +91,6 @@ import { UserAccountType } from '@/types/UserAccount/index.type';
  * */
 import classes from './styles.module.css';
 import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
-import { useRecoilValue } from 'recoil';
 
 /**
  * Images Imports go down
@@ -151,7 +151,7 @@ const ZWorkspacesCard: React.FC<{
 
   const { presentZIonPopover: presentWorkspacesActionsPopover } =
     useZIonPopover(ZWorkspacesActionPopover, {
-      workspaceId: workspaceId
+      workspaceId
     }); // popover hook to show UserInfoPopover
   // #endregion
 
@@ -161,13 +161,12 @@ const ZWorkspacesCard: React.FC<{
     _url: API_URL_ENUM.member_update,
     _queriesKeysToInvalidate: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION.MAIN,
-      workspaceId!
+      workspaceId ?? ''
     ]
   });
 
   const { mutateAsync: leaveSWSMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.leave_share_ws,
-    _queriesKeysToInvalidate: [],
     _loaderMessage: MESSAGES.WORKSPACE.LEAVING_WS_API
   });
 
@@ -175,18 +174,20 @@ const ZWorkspacesCard: React.FC<{
   const { mutateAsync: updateIsFavoriteOwnedWSAsyncMutate } =
     useZRQUpdateRequest({
       _url: API_URL_ENUM.workspace_update_is_favorite,
-      _loaderMessage: isFavorite
-        ? MESSAGES.WORKSPACE.REMOVING_TO_IS_FAVORITE_API
-        : MESSAGES.WORKSPACE.ADDING_TO_IS_FAVORITE_API
+      _loaderMessage:
+        isFavorite === true
+          ? MESSAGES.WORKSPACE.REMOVING_TO_IS_FAVORITE_API
+          : MESSAGES.WORKSPACE.ADDING_TO_IS_FAVORITE_API
     });
 
   // Update isFavorite of share workspace
   const { mutateAsync: updateIsFavoriteShareWSAsyncMutate } =
     useZRQUpdateRequest({
       _url: API_URL_ENUM.ws_share_update_is_favorite,
-      _loaderMessage: isFavorite
-        ? MESSAGES.WORKSPACE.REMOVING_TO_IS_FAVORITE_API
-        : MESSAGES.WORKSPACE.ADDING_TO_IS_FAVORITE_API
+      _loaderMessage:
+        isFavorite === true
+          ? MESSAGES.WORKSPACE.REMOVING_TO_IS_FAVORITE_API
+          : MESSAGES.WORKSPACE.ADDING_TO_IS_FAVORITE_API
     });
   // #endregion
 
@@ -195,35 +196,33 @@ const ZWorkspacesCard: React.FC<{
     _item
   }: {
     _item: ZTeamMemberInvitationEnum;
-  }) => {
+  }): Promise<void> => {
     try {
-      if (_item) {
-        const __response = await updateInvitationAsyncMutate({
+      if (_item?.trim()?.length > 0) {
+        const _response = await updateInvitationAsyncMutate({
           requestData: zStringify({
             status: _item
           }),
-          itemIds: [workspaceId!, memberId!],
+          itemIds: [workspaceId ?? '', memberId ?? ''],
           urlDynamicParts: [
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.workspace.memberInviteId
           ]
         });
 
-        if (
-          (__response as ZLinkMutateApiType<WSTeamMembersInterface>).success
-        ) {
-          const __data = extractInnerData<WSTeamMembersInterface>(
-            __response,
+        if ((_response as ZLinkMutateApiType<WSTeamMembersInterface>).success) {
+          const _data = extractInnerData<WSTeamMembersInterface>(
+            _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (__data && __data?.id) {
+          if (_data?.id !== undefined) {
             await updateRQCDataHandler({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.INVITATION_GET,
-                memberId!
+                memberId ?? ''
               ],
-              data: __data,
+              data: _data,
               id: '',
               updateHoleData: true,
               extractType: ZRQGetRequestExtractEnum.extractItem
@@ -233,30 +232,28 @@ const ZWorkspacesCard: React.FC<{
               key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
             });
 
-            const __oldData =
+            const _oldData =
               extractInnerData<wsShareInterface[]>(
                 getWSShareWorkspaceData,
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
             if (_item === ZTeamMemberInvitationEnum.accepted) {
               await updateRQCDataHandler({
                 key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
                 data: {
-                  ...__data.workspace,
-                  id: __data?.id,
-                  accountStatus: __data?.accountStatus
+                  ..._data.workspace,
+                  id: _data?.id,
+                  accountStatus: _data?.accountStatus
                 },
-                id: __data?.id!
+                id: _data?.id
               });
             } else if (_item === ZTeamMemberInvitationEnum.rejected) {
-              const __updatedData = __oldData?.filter(
-                el => el?.id !== __data?.id
-              );
+              const _updatedData = _oldData?.filter(el => el?.id !== _data?.id);
 
               await updateRQCDataHandler({
                 key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
-                data: __updatedData,
+                data: _updatedData,
                 id: '',
                 updateHoleData: true,
                 extractType: ZRQGetRequestExtractEnum.extractItems
@@ -276,53 +273,56 @@ const ZWorkspacesCard: React.FC<{
     }
   };
 
-  const zUpdateIsFavoriteHandler = async () => {
+  const zUpdateIsFavoriteHandler = async (): Promise<void> => {
     try {
-      let __response;
-      const __zStringifyData = zStringify({
+      let _response;
+      const _zStringifyData = zStringify({
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         isFavorite: !isFavorite
       });
       if (owned) {
-        __response = await updateIsFavoriteOwnedWSAsyncMutate({
-          itemIds: [workspaceId!],
+        _response = await updateIsFavoriteOwnedWSAsyncMutate({
+          itemIds: [workspaceId ?? ''],
           urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-          requestData: __zStringifyData
+          requestData: _zStringifyData
         });
       } else {
-        __response = await updateIsFavoriteShareWSAsyncMutate({
-          itemIds: [memberId!],
+        _response = await updateIsFavoriteShareWSAsyncMutate({
+          itemIds: [memberId ?? ''],
           urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-          requestData: __zStringifyData
+          requestData: _zStringifyData
         });
       }
 
-      if (__response) {
-        const __data = extractInnerData<WSTeamMembersInterface>(
-          __response,
+      if (_response !== undefined) {
+        const _data = extractInnerData<WSTeamMembersInterface>(
+          _response,
           extractInnerDataOptionsEnum.createRequestResponseItem
         );
 
-        if (owned) {
-          await updateRQCDataHandler({
-            key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
-            data: {
-              ...__data
-            },
-            id: __data?.id!
-            // extractType: ZRQGetRequestExtractEnum.extractItems,
-          });
-        } else {
-          await updateRQCDataHandler({
-            key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
-            data: {
-              ...__data
-            },
-            id: __data?.id!
-            // extractType: ZRQGetRequestExtractEnum.extractItems,
-          });
+        if (_data?.id !== undefined && _data?.id !== null) {
+          if (owned) {
+            await updateRQCDataHandler({
+              key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
+              data: {
+                ..._data
+              },
+              id: _data?.id
+              // extractType: ZRQGetRequestExtractEnum.extractItems,
+            });
+          } else {
+            await updateRQCDataHandler({
+              key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
+              data: {
+                ..._data
+              },
+              id: _data?.id
+              // extractType: ZRQGetRequestExtractEnum.extractItems,
+            });
+          }
         }
 
-        if (__data?.isFavorite) {
+        if (_data?.isFavorite === true) {
           showSuccessNotification(MESSAGES.WORKSPACE.ADD_TO_IS_FAVORITE);
         } else {
           showSuccessNotification(MESSAGES.WORKSPACE.REMOVE_TO_IS_FAVORITE);
@@ -334,9 +334,9 @@ const ZWorkspacesCard: React.FC<{
   };
 
   // when member went to leave workspace and click on the leave button this function will fire and show the confirm alert.
-  const LeaveWorkspaceConfirmAlert = async () => {
+  const LeaveWorkspaceConfirmAlert = async (): Promise<void> => {
     try {
-      if (workspaceId && memberId) {
+      if (workspaceId !== undefined && memberId !== undefined) {
         await presentZIonAlert({
           header: MESSAGES.WORKSPACE.LEAVE_WS_ALERT.HEADER,
           subHeader: MESSAGES.WORKSPACE.LEAVE_WS_ALERT.SUB_HEADER,
@@ -364,9 +364,9 @@ const ZWorkspacesCard: React.FC<{
     }
   };
 
-  const leaveWorkspaceHandler = async () => {
+  const leaveWorkspaceHandler = async (): Promise<void> => {
     try {
-      if (workspaceId && memberId && owned === false) {
+      if (workspaceId !== undefined && memberId !== undefined && !owned) {
         const _response = await leaveSWSMutate({
           urlDynamicParts: [
             CONSTANTS.RouteParams.workspace.shareWSId,
@@ -376,30 +376,30 @@ const ZWorkspacesCard: React.FC<{
           requestData: ''
         });
 
-        if (_response) {
+        if (_response !== undefined) {
           // extracting data from _response.
           const _data = extractInnerData<{ success: boolean }>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data?.success) {
+          if (_data !== undefined && _data?.success) {
             const getWSShareWorkspaceData =
               getRQCDataHandler({
                 key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
-              }) || [];
+              }) ?? [];
 
-            const __oldData =
+            const _oldData =
               extractInnerData<wsShareInterface[]>(
                 getWSShareWorkspaceData,
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
-            const __updatedData = __oldData?.filter(el => el?.id !== memberId);
+            const _updatedData = _oldData?.filter(el => el?.id !== memberId);
 
             await updateRQCDataHandler({
               key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
-              data: __updatedData,
+              data: _updatedData,
               id: '',
               updateHoleData: true,
               extractType: ZRQGetRequestExtractEnum.extractItems
@@ -411,6 +411,7 @@ const ZWorkspacesCard: React.FC<{
       reportCustomError(error);
     }
   };
+
   // #endregion
   return (
     <ZIonCard className='h-[11.4rem]'>
@@ -426,7 +427,8 @@ const ZWorkspacesCard: React.FC<{
                   className={classNames({
                     'w-[40px] h-[40px] rounded overflow-hidden': true,
                     'flex ion-align-items-center ion-justify-content-center':
-                      !workspaceImage
+                      workspaceImage === undefined ||
+                      workspaceImage?.trim()?.length === 0
                   })}>
                   <ZIonRouterLink
                     color='dark'
@@ -437,7 +439,7 @@ const ZWorkspacesCard: React.FC<{
                         CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
                       ],
                       values: [
-                        workspaceId || '',
+                        workspaceId ?? '',
                         CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                       ]
                     })}
@@ -448,7 +450,7 @@ const ZWorkspacesCard: React.FC<{
                     }>
                     <ZIonImg
                       src={
-                        workspaceImage ||
+                        workspaceImage ??
                         getUiAvatarApiUrl({
                           name: workspaceName
                         })
@@ -472,7 +474,7 @@ const ZWorkspacesCard: React.FC<{
                                 .folderIdToGetShortLinksOrLinkInBio
                             ],
                             values: [
-                              workspaceId || '',
+                              workspaceId ?? '',
                               CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                             ]
                           })
@@ -484,7 +486,7 @@ const ZWorkspacesCard: React.FC<{
                               CONSTANTS.RouteParams.workspace.wsShareId,
                               CONSTANTS.RouteParams.workspace.shareWSMemberId
                             ],
-                            values: [workspaceId!, memberId!]
+                            values: [workspaceId ?? '', memberId ?? '']
                           })
                         : undefined
                     }
@@ -523,7 +525,7 @@ const ZWorkspacesCard: React.FC<{
                     onClick={() => {
                       void zUpdateIsFavoriteHandler();
                     }}>
-                    <ZIonIcon icon={isFavorite ? star : starOutline} />
+                    <ZIonIcon icon={isFavorite === true ? star : starOutline} />
                   </ZIonButton>
                 ) : null}
               </ZIonCol>
@@ -557,13 +559,18 @@ const ZWorkspacesCard: React.FC<{
                         });
                       }}>
                       <ZIonImg
+                        className='w-[38px] h-[40px] zaions-object-fit-cover'
                         src={
                           owned
-                            ? userAccountStateAtom?.avatar
-                            : user?.avatar ||
-                              getUiAvatarApiUrl({ name: user?.username })
+                            ? userAccountStateAtom?.avatar !== null
+                              ? userAccountStateAtom?.avatar
+                              : getUiAvatarApiUrl({
+                                  name: userAccountStateAtom?.username
+                                })
+                            : user?.avatar !== null
+                            ? user?.avatar
+                            : getUiAvatarApiUrl({ name: user?.username })
                         }
-                        className='w-[38px] h-[40px] zaions-object-fit-cover'
                       />
                     </ZIonButton>
                   </ZIonCol>
@@ -594,8 +601,8 @@ const ZWorkspacesCard: React.FC<{
                         }
                         onClick={() => {
                           // Click on card will redirect to view workspace.
-                          if (workspaceId) {
-                            if (owned === true) {
+                          if (workspaceId !== undefined) {
+                            if (owned) {
                               zNavigatePushRoute(
                                 createRedirectRoute({
                                   url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
@@ -619,7 +626,7 @@ const ZWorkspacesCard: React.FC<{
                                     CONSTANTS.RouteParams.workspace
                                       .shareWSMemberId
                                   ],
-                                  values: [workspaceId, memberId!]
+                                  values: [workspaceId, memberId ?? '']
                                 })
                               );
                             }
@@ -632,7 +639,7 @@ const ZWorkspacesCard: React.FC<{
 
                   {/* actions popover button */}
                   <ZIonCol className='ion-text-end'>
-                    {owned === true && (
+                    {owned && (
                       <ZIonButton
                         fill='clear'
                         minHeight='auto'
@@ -653,7 +660,7 @@ const ZWorkspacesCard: React.FC<{
                         <ZIonIcon icon={ellipsisHorizontalOutline} />
                       </ZIonButton>
                     )}
-                    {owned === false && (
+                    {!owned && (
                       <ZIonButton
                         color='danger'
                         size='default'
@@ -686,7 +693,7 @@ const ZWorkspacesCard: React.FC<{
                             .acceptInvitationButton
                         }
                         onClick={() => {
-                          zInvitationResponseHandler({
+                          void zInvitationResponseHandler({
                             _item: ZTeamMemberInvitationEnum.accepted
                           });
                         }}>
@@ -707,7 +714,7 @@ const ZWorkspacesCard: React.FC<{
                           .rejectInvitationButton
                       }
                       onClick={() => {
-                        zInvitationResponseHandler({
+                        void zInvitationResponseHandler({
                           _item: ZTeamMemberInvitationEnum.rejected
                         });
                       }}>

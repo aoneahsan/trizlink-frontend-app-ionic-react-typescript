@@ -1,13 +1,13 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonContent } from '@ionic/react';
 
 // Type
-import { ZIonColorType } from '@/types/zaionsAppSettings.type';
+import { type ZIonColorType } from '@/types/zaionsAppSettings.type';
 
-type ZIonContentType = {
+interface ZIonContentType {
   children: ReactNode;
   color?: ZIonColorType;
   forceOverscroll?: boolean;
@@ -16,12 +16,10 @@ type ZIonContentType = {
   scrollX?: boolean;
   scrollY?: boolean;
   className?: string;
-  style?: {
-    [key: string]: unknown;
-  };
-};
+  style?: Record<string, unknown>;
+}
 
-const ZIonContent = (props: ZIonContentType) => {
+const ZIonContent: React.FC<ZIonContentType> = (props: ZIonContentType) => {
   return <IonContent {...props}>{props.children}</IonContent>;
 };
 

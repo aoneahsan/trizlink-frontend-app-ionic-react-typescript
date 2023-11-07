@@ -24,15 +24,12 @@ import { AxiosError } from 'axios';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import ZWorkspaceFormRoleSelectorPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/RoleSelectorPopover';
 import {
-  ZIonAvatar,
   ZIonBadge,
   ZIonButton,
   ZIonCol,
   ZIonGrid,
   ZIonIcon,
-  ZIonImg,
   ZIonInput,
   ZIonRow,
   ZIonText,
@@ -47,7 +44,7 @@ import ZaionsSeparator from '@/components/InPageComponents/ZaionsSepatator/Zaion
  * ? Like import of custom Hook is a custom import
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import { useZIonPopover, useZIonToast } from '@/ZaionsHooks/zionic-hooks';
+import { useZIonToast } from '@/ZaionsHooks/zionic-hooks';
 import {
   useZGetRQCacheData,
   useZRQCreateRequest,
@@ -60,7 +57,6 @@ import {
  * ? Like import of Constant is a global constants import
  * */
 import {
-  createRedirectRoute,
   extractInnerData,
   formatApiRequestErrorForFormikFormField,
   validateField,
@@ -83,18 +79,17 @@ import { ENVS } from '@/utils/envKeys';
  * */
 import {
   WSRolesNameEnum,
-  WSTeamMembersInterface
+  type WSTeamMembersInterface
 } from '@/types/AdminPanel/workspace';
-import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import {
-  FormikSetErrorsType,
-  FormikSetFieldValueEventType
+  type FormikSetFieldValueEventPromiseVoidType,
+  type FormikSetErrorsType
 } from '@/types/ZaionsFormik.type';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import { FormMode } from '@/types/AdminPanel/index.type';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Recoil State Imports go down
@@ -163,7 +158,7 @@ const ZInviteTab: React.FC<{
   // If owned workspace then this api will use to invite member in workspace.
   const { mutateAsync: inviteTeamMemberAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.member_sendInvite_list,
-    _itemsIds: [workspaceId!],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _showAlertOnError: false,
     _loaderMessage: MESSAGES.MEMBER.SENDING_INVITATION_LINK_API
@@ -172,7 +167,7 @@ const ZInviteTab: React.FC<{
   // If share workspace and member has permission to invite other members then this api will use to invite member in workspace.
   const { mutateAsync: swsInviteTeamMemberAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.sws_member_sendInvite_list,
-    _itemsIds: [shareWSMemberId!],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showAlertOnError: false,
     _loaderMessage: MESSAGES.MEMBER.INVITE_LINK_API
@@ -205,13 +200,6 @@ const ZInviteTab: React.FC<{
     });
   // #endregion
 
-  // #region modal & popover.
-  const { presentZIonPopover: presentZWorkspaceFormRoleSelectorPopover } =
-    useZIonPopover(ZWorkspaceFormRoleSelectorPopover, {
-      selectedRole: compState?.selectedItem?.memberRole?.name
-    });
-  // #endregion
-
   // #region useEffects.
   useEffect(() => {
     setCompState(oldValues => ({
@@ -222,7 +210,7 @@ const ZInviteTab: React.FC<{
       formMode
     }));
 
-    if (email && memberId) {
+    if (email !== undefined && memberId !== undefined) {
       setCompState(oldValues => ({
         ...oldValues,
         canCreateShortUrl: true
@@ -232,24 +220,37 @@ const ZInviteTab: React.FC<{
 
   useEffect(() => {
     try {
-      let membersRQData: WSTeamMembersInterface[] | undefined | void = [];
-      if (workspaceId) {
-        membersRQData = getRQCDataHandler({
-          key: [
-            CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
-            workspaceId
-          ]
-        });
-      } else if (wsShareId && shareWSMemberId) {
-        membersRQData = getRQCDataHandler({
-          key: [
-            CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
-            wsShareId
-          ]
-        });
+      let membersRQData: WSTeamMembersInterface[] | undefined = [];
+      if (
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim().length > 0
+      ) {
+        membersRQData =
+          getRQCDataHandler({
+            key: [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
+              workspaceId
+            ]
+          }) ?? [];
+      } else if (
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        wsShareId?.trim()?.length > 0 &&
+        shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
+        shareWSMemberId?.trim()?.length > 0
+      ) {
+        membersRQData =
+          getRQCDataHandler({
+            key: [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
+              wsShareId
+            ]
+          }) ?? [];
       }
 
-      if (membersRQData) {
+      if (membersRQData !== undefined && membersRQData !== null) {
         const _extractItems = extractInnerData<WSTeamMembersInterface[]>(
           membersRQData,
           extractInnerDataOptionsEnum.createRequestResponseItems
@@ -257,77 +258,105 @@ const ZInviteTab: React.FC<{
 
         const _selectedItem = _extractItems?.find(el => el?.id === memberId);
 
-        if (_selectedItem) {
+        if (_selectedItem !== undefined && _selectedItem !== null) {
           setCompState(oldValues => ({
             ...oldValues,
             selectedItem: _selectedItem,
-            canCreateShortUrl: _selectedItem?.shortUrlId ? false : true
+            canCreateShortUrl: _selectedItem?.shortUrlId === null
           }));
         }
       }
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberId, workspaceId, wsShareId, shareWSMemberId]);
 
   // #endregion
 
   // #region Functions.
   const formikSubmitHandler = async (
-    _data: string,
+    _value: string,
     setErrors: FormikSetErrorsType,
-    setFieldValue: FormikSetFieldValueEventType
-  ) => {
+    setFieldValue: FormikSetFieldValueEventPromiseVoidType
+  ): Promise<void> => {
     try {
-      if (_data) {
-        let __response;
+      if (_value?.trim()?.length > 0) {
+        let _response;
         if (compState?.formMode === FormMode.ADD) {
-          if (workspaceId) {
-            __response = await inviteTeamMemberAsyncMutate(_data);
-          } else if (wsShareId && shareWSMemberId) {
-            __response = await swsInviteTeamMemberAsyncMutate(_data);
+          if (
+            workspaceId !== undefined &&
+            workspaceId !== null &&
+            workspaceId?.trim().length > 0
+          ) {
+            _response = await inviteTeamMemberAsyncMutate(_value);
+          } else if (
+            wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ) {
+            _response = await swsInviteTeamMemberAsyncMutate(_value);
           }
         } else if (compState?.formMode === FormMode.EDIT) {
-          if (workspaceId) {
-            __response = await updateRoleAsyncMutate({
-              itemIds: [workspaceId, compState?.memberId!],
+          if (
+            workspaceId !== undefined &&
+            workspaceId !== null &&
+            workspaceId?.trim().length > 0
+          ) {
+            _response = await updateRoleAsyncMutate({
+              itemIds: [workspaceId, compState?.memberId ?? ''],
               urlDynamicParts: [
                 CONSTANTS.RouteParams.workspace.workspaceId,
                 CONSTANTS.RouteParams.workspace.memberInviteId
               ],
-              requestData: _data
+              requestData: _value
             });
-          } else if (wsShareId && shareWSMemberId) {
-            __response = await swsUpdateRoleAsyncMutate({
-              itemIds: [shareWSMemberId, compState?.memberId!],
+          } else if (
+            wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ) {
+            _response = await swsUpdateRoleAsyncMutate({
+              itemIds: [shareWSMemberId, compState?.memberId ?? ''],
               urlDynamicParts: [
                 CONSTANTS.RouteParams.workspace.shareWSMemberId,
                 CONSTANTS.RouteParams.workspace.memberInviteId
               ],
-              requestData: _data
+              requestData: _value
             });
           }
         }
 
-        if (
-          (__response as ZLinkMutateApiType<WSTeamMembersInterface>).success
-        ) {
-          const __data = extractInnerData<WSTeamMembersInterface>(
-            __response,
+        if ((_response as ZLinkMutateApiType<WSTeamMembersInterface>).success) {
+          const _data = extractInnerData<WSTeamMembersInterface>(
+            _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (__data && __data?.id) {
-            let _ws_membersRQData;
-            if (workspaceId) {
-              _ws_membersRQData = getRQCDataHandler({
+          if (_data?.id !== null) {
+            let WSmembersRQData;
+            if (
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim().length > 0
+            ) {
+              WSmembersRQData = getRQCDataHandler({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
                   workspaceId
                 ]
               });
-            } else if (wsShareId && shareWSMemberId) {
-              _ws_membersRQData = getRQCDataHandler({
+            } else if (
+              wsShareId !== undefined &&
+              shareWSMemberId !== undefined
+            ) {
+              WSmembersRQData = getRQCDataHandler({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
                   wsShareId
@@ -335,35 +364,46 @@ const ZInviteTab: React.FC<{
               });
             }
 
-            if (_ws_membersRQData) {
+            if (WSmembersRQData !== undefined) {
               const _oldTeamsMemberData =
                 extractInnerData<WSTeamMembersInterface[]>(
-                  _ws_membersRQData,
+                  WSmembersRQData,
                   extractInnerDataOptionsEnum.createRequestResponseItems
-                ) || [];
+                ) ?? [];
 
               if (compState?.formMode === FormMode.ADD) {
-                const __updatedMembersData = [..._oldTeamsMemberData, __data];
+                const _updatedMembersData = [..._oldTeamsMemberData, _data];
 
-                if (workspaceId) {
+                if (
+                  workspaceId !== undefined &&
+                  workspaceId !== null &&
+                  workspaceId?.trim().length > 0
+                ) {
                   await updateRQCDataHandler({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
                       workspaceId
                     ],
-                    data: __updatedMembersData,
+                    data: _updatedMembersData,
                     id: '',
                     updateHoleData: true,
                     extractType: ZRQGetRequestExtractEnum.extractItems
                   });
-                } else if (wsShareId && shareWSMemberId) {
+                } else if (
+                  wsShareId !== undefined &&
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0 &&
+                  shareWSMemberId !== undefined &&
+                  shareWSMemberId !== null &&
+                  shareWSMemberId?.trim()?.length > 0
+                ) {
                   await updateRQCDataHandler({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
                         .SWS_MEMBERS_MAIN,
                       wsShareId
                     ],
-                    data: __updatedMembersData,
+                    data: _updatedMembersData,
                     id: '',
                     updateHoleData: true,
                     extractType: ZRQGetRequestExtractEnum.extractItems
@@ -372,24 +412,35 @@ const ZInviteTab: React.FC<{
 
                 showSuccessNotification(MESSAGES.MEMBER.INVITE_SEND);
               } else if (compState?.formMode === FormMode.EDIT) {
-                if (workspaceId) {
+                if (
+                  workspaceId !== undefined &&
+                  workspaceId !== null &&
+                  workspaceId?.trim().length > 0
+                ) {
                   await updateRQCDataHandler({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
                       workspaceId
                     ],
-                    data: __data,
-                    id: __data?.id
+                    data: _data,
+                    id: _data?.id ?? ''
                   });
-                } else if (wsShareId && shareWSMemberId) {
+                } else if (
+                  wsShareId !== undefined &&
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0 &&
+                  shareWSMemberId !== undefined &&
+                  shareWSMemberId !== null &&
+                  shareWSMemberId?.trim()?.length > 0
+                ) {
                   await updateRQCDataHandler({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE
                         .SWS_MEMBERS_MAIN,
                       wsShareId
                     ],
-                    data: __data,
-                    id: __data?.id
+                    data: _data,
+                    id: _data?.id ?? ''
                   });
                 }
 
@@ -398,9 +449,9 @@ const ZInviteTab: React.FC<{
 
               setCompState(oldValues => ({
                 ...oldValues,
-                selectedItem: __data,
-                memberId: __data?.id,
-                canCreateShortUrl: __data?.shortUrlId ? false : true,
+                selectedItem: _data,
+                memberId: _data?.id,
+                canCreateShortUrl: _data?.shortUrlId === null,
                 formMode: FormMode.EDIT
               }));
             }
@@ -411,35 +462,41 @@ const ZInviteTab: React.FC<{
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        const __apiErrors = (error.response?.data as { errors: ZGenericObject })
+        const _apiErrors = (error.response?.data as { errors: ZGenericObject })
           ?.errors;
-        const __errors = formatApiRequestErrorForFormikFormField(
+        const _errors = formatApiRequestErrorForFormikFormField(
           ['email', 'role'],
           ['email', 'role'],
-          __apiErrors
+          _apiErrors
         );
-        if ((__errors as { email: string })?.email) {
-          setFieldValue('isApiEmailError', true, false);
-          setFieldValue(
+        if ((_errors as { email: string })?.email?.trim()?.length > 0) {
+          void setFieldValue('isApiEmailError', true, false);
+          void setFieldValue(
             'apiEmailErrorText',
-            (__errors as { email: string })?.email,
+            (_errors as { email: string })?.email,
             false
           );
         }
 
-        setErrors(__errors);
+        setErrors(_errors);
       }
       reportCustomError(error);
     }
   };
 
   //
-  const addInvitationShortLink = async (invitationId: string) => {
+  const addInvitationShortLink = async (
+    invitationId: string
+  ): Promise<void> => {
     try {
-      let __response;
-      if (workspaceId) {
+      let _response;
+      if (
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim().length > 0
+      ) {
         // WSTeamMembersInterface
-        __response = await invitationLinkShortUrlAsyncMutate({
+        _response = await invitationLinkShortUrlAsyncMutate({
           itemIds: [workspaceId, invitationId],
           urlDynamicParts: [
             CONSTANTS.RouteParams.workspace.workspaceId,
@@ -447,8 +504,8 @@ const ZInviteTab: React.FC<{
           ],
           requestData: ''
         });
-      } else if (wsShareId && shareWSMemberId) {
-        __response = await swsInvitationLinkShortUrlAsyncMutate({
+      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
+        _response = await swsInvitationLinkShortUrlAsyncMutate({
           itemIds: [shareWSMemberId, invitationId],
           urlDynamicParts: [
             CONSTANTS.RouteParams.workspace.shareWSMemberId,
@@ -458,39 +515,50 @@ const ZInviteTab: React.FC<{
         });
       }
 
-      if (__response) {
-        const __data = extractInnerData<WSTeamMembersInterface>(
-          __response,
+      if (_response !== undefined) {
+        const _data = extractInnerData<WSTeamMembersInterface>(
+          _response,
           extractInnerDataOptionsEnum.createRequestResponseItem
         );
 
-        if (__data && __data?.id) {
-          if (workspaceId) {
+        if (_data?.id !== null) {
+          if (
+            workspaceId !== undefined &&
+            workspaceId !== null &&
+            workspaceId?.trim().length > 0
+          ) {
             await updateRQCDataHandler({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MEMBERS,
                 workspaceId
               ],
-              data: __data,
-              id: __data?.id,
+              data: _data,
+              id: _data?.id ?? '',
               extractType: ZRQGetRequestExtractEnum.extractItem
             });
-          } else if (shareWSMemberId && wsShareId) {
+          } else if (
+            wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ) {
             await updateRQCDataHandler({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.SWS_MEMBERS_MAIN,
                 wsShareId
               ],
-              data: __data,
-              id: __data?.id,
+              data: _data,
+              id: _data?.id ?? '',
               extractType: ZRQGetRequestExtractEnum.extractItem
             });
           }
 
           setCompState(oldValues => ({
             ...oldValues,
-            selectedItem: __data,
-            canCreateShortUrl: __data?.shortUrlId ? false : true,
+            selectedItem: _data,
+            canCreateShortUrl: _data?.shortUrlId === null,
             formMode: FormMode.EDIT
           }));
 
@@ -507,9 +575,9 @@ const ZInviteTab: React.FC<{
     <Formik
       initialValues={{
         role:
-          compState?.selectedItem?.memberRole.name || WSRolesNameEnum.Approver,
-        email: compState?.selectedItem?.email || '',
-        canCreateShortUrl: compState?.canCreateShortUrl || false,
+          compState?.selectedItem?.memberRole.name ?? WSRolesNameEnum.Approver,
+        email: compState?.selectedItem?.email ?? '',
+        canCreateShortUrl: compState?.canCreateShortUrl ?? false,
 
         isApiEmailError: false,
         apiEmailErrorText: ''
@@ -535,9 +603,17 @@ const ZInviteTab: React.FC<{
         }
 
         if (compState?.formMode === FormMode.EDIT && role !== values.role) {
-          await formikSubmitHandler(_zStringifyData, setErrors, setFieldValue);
+          await formikSubmitHandler(
+            _zStringifyData,
+            setErrors,
+            setFieldValue as FormikSetFieldValueEventPromiseVoidType
+          );
         } else if (compState?.formMode === FormMode.ADD) {
-          await formikSubmitHandler(_zStringifyData, setErrors, setFieldValue);
+          await formikSubmitHandler(
+            _zStringifyData,
+            setErrors,
+            setFieldValue as FormikSetFieldValueEventPromiseVoidType
+          );
         }
       }}>
       {({
@@ -848,14 +924,16 @@ const ZInviteTab: React.FC<{
                     onIonChange={e => {
                       handleChange(e);
                       if (values.isApiEmailError) {
-                        setFieldValue('isApiEmailError', false);
+                        void setFieldValue('isApiEmailError', false);
                       }
                     }}
                     onIonBlur={handleBlur}
                     value={values.email}
                     errorText={
-                      touched.email
-                        ? errors.email?.trim()
+                      touched?.email === true
+                        ? errors?.email !== undefined &&
+                          errors?.email !== null &&
+                          errors?.email?.trim()?.length > 0
                           ? errors.email
                           : values.isApiEmailError
                           ? values?.apiEmailErrorText
@@ -863,43 +941,21 @@ const ZInviteTab: React.FC<{
                         : undefined
                     }
                     className={classNames({
-                      'ion-touched': touched.email,
+                      'ion-touched': touched?.email === true,
                       'ion-invalid':
-                        (touched.email && errors.email) ||
+                        (touched?.email === true &&
+                          errors?.email !== undefined &&
+                          errors?.email !== null &&
+                          errors?.email?.trim()?.length > 0) ||
                         values.isApiEmailError,
-                      'ion-valid': touched.email && !errors.email
+                      'ion-valid':
+                        touched?.email === true &&
+                        (errors.email === undefined ||
+                          errors.email === null ||
+                          errors?.email?.trim()?.length === 0)
                     })}
                   />
                 </ZIonCol>
-
-                {/* <ZIonCol
-										sizeXl='6'
-										size='6'
-										sizeMd='12'
-										sizeSm='12'
-										sizeXs='12'
-									>
-										<ZIonInput
-											// name='pageName'
-											label=''
-											// labelPlacement='floating'
-											// errorText={errors.pageName}
-											placeholder='Name (Optional)'
-											// onIonChange={handleChange}
-											// onIonBlur={handleBlur}
-											// value={values.pageName}
-											// className={classNames({
-											// 	'ion-touched ion-invalid': touched.pageName && errors.pageName,
-											// 	'ion-touched ion-valid': touched.pageName && !errors.pageName,
-											// })}
-											className=''
-											style={{
-												minHeight: '30px',
-												'--padding-start': '7px',
-												'--padding-end': '7px',
-											}}
-										/>
-									</ZIonCol> */}
 
                 {/* role fields */}
                 <ZIonCol
@@ -908,50 +964,6 @@ const ZInviteTab: React.FC<{
                   sizeMd='12'
                   sizeSm='12'
                   sizeXs='12'>
-                  {/* <ZIonButton
-										fill='outline'
-										size='small'
-										color='medium'
-										height='2.3rem'
-										className={classNames({
-											'm-0 flex h-full normal-case ion-align-items-start': true,
-										})}
-										style={{
-											'--border-width': '1px',
-										}}
-										onClick={(event: unknown) => {
-											presentZWorkspaceFormRoleSelectorPopover({
-												_event: event as Event,
-												_cssClass: 'workspace_form_role_popover_size',
-												_dismissOnSelect: false,
-												_onDidDismiss: ({ detail }) => {
-													if (detail.data) {
-														setCompState((oldValues) => ({
-															...oldValues,
-															_role: detail.data as WSRolesNameEnum,
-														}));
-														setFieldValue(
-															'role',
-															WSRolesNameEnum[
-																detail.data as WSRolesNameEnum
-															] !== undefined
-																? WSRolesNameEnum[
-																		detail.data as WSRolesNameEnum
-																  ]
-																: values.role,
-															false
-														);
-													}
-												},
-											});
-										}}
-									>
-										<ZIonText className='flex me-auto'>{values.role}</ZIonText>
-										<ZIonIcon
-											icon={chevronDownOutline}
-											className='flex ms-auto'
-										/>
-									</ZIonButton> */}
                   <ZaionsRSelect
                     name='role'
                     testingselector={
@@ -959,7 +971,7 @@ const ZInviteTab: React.FC<{
                         .countrySelector
                     }
                     onChange={_value => {
-                      setFieldValue(
+                      void setFieldValue(
                         'role',
                         (_value as ZaionsRSelectOptions).value,
                         true
@@ -1025,7 +1037,8 @@ const ZInviteTab: React.FC<{
                 </ZIonCol>
 
                 {/* Create invite link btn */}
-                {!compState?.selectedItem?.shortUrlId && (
+                {(compState?.selectedItem?.shortUrlId === null ||
+                  compState?.selectedItem?.shortUrlId === undefined) && (
                   <ZIonCol
                     sizeXl='6'
                     size='6'
@@ -1035,19 +1048,21 @@ const ZInviteTab: React.FC<{
                     <div
                       className={classNames({
                         'w-full h-full': true,
-                        'cursor-not-allowed':
-                          values?.canCreateShortUrl === false
+                        'cursor-not-allowed': !values?.canCreateShortUrl
                       })}>
                       <ZIonButton
-                        disabled={values?.canCreateShortUrl === false}
+                        disabled={!values?.canCreateShortUrl}
                         fill='outline'
                         id='role-popover-index'
                         size='small'
                         color={values?.canCreateShortUrl ? 'primary' : 'medium'}
                         height='2.3rem'
                         onClick={() => {
-                          if (compState?.memberId) {
-                            addInvitationShortLink(compState?.memberId);
+                          if (
+                            compState?.memberId !== undefined &&
+                            compState?.memberId !== null
+                          ) {
+                            void addInvitationShortLink(compState?.memberId);
                           }
                         }}
                         className={classNames({
@@ -1069,20 +1084,12 @@ const ZInviteTab: React.FC<{
               </ZIonRow>
             </ZIonGrid>
 
-            <ZIonRow
+            {/* <ZIonRow
               className={classNames({
                 'mt-3 px-3': true,
                 'ion-align-items-center': isLgScale,
                 'ion-align-items-start': !isLgScale
-              })}>
-              {/*  */}
-              {/* <ZIonCol
-								size='12'
-								className='flex my-1 ion-align-items-center ion-justify-content-center'
-							>
-								
-							</ZIonCol> */}
-            </ZIonRow>
+              })}></ZIonRow> */}
             <ZaionsSeparator
               sizeXl='11.5'
               sizeLg='11.5'
@@ -1092,14 +1099,7 @@ const ZInviteTab: React.FC<{
               text={
                 <div className='flex px-2 mx-auto zaions__bg_white w-max ion-align-items-center ion-justify-content-center'>
                   <ZIonText className='me-2'>Invite link</ZIonText>
-                  {/* <div
-                    className='flex ion-align-items-center'
-                    id='wss-tsm-invite-link-help-btn-tt'>
-                    <ZIonIcon
-                      icon={helpCircleOutline}
-                      className='w-5 h-5 cursor-pointer'
-                    />
-                  </div> */}
+
                   <ZRTooltip
                     anchorSelect='#wss-tsm-invite-link-help-btn-tt'
                     place='bottom'
@@ -1122,7 +1122,8 @@ const ZInviteTab: React.FC<{
 
             {/* Invitation links */}
 
-            {compState?.selectedItem?.shortUrlId &&
+            {compState?.selectedItem?.shortUrlId !== undefined &&
+            compState?.selectedItem?.shortUrlId !== null &&
             compState?.selectedItem?.shortUrlId?.trim()?.length > 0 ? (
               <ZIonRow
                 className={classNames({
@@ -1136,17 +1137,17 @@ const ZInviteTab: React.FC<{
                   <ZIonButton
                     size='small'
                     height='2.3rem'
-                    id={`wss-tsm-copy-invite-link-tt`}
+                    id={'wss-tsm-copy-invite-link-tt'}
                     className={classNames({
                       'm-0 w-[2.3rem] overflow-hidden rounded-full ion-no-padding ion-hide-sm-down':
                         true
                     })}
                     onClick={() => {
-                      navigator.clipboard.writeText(
+                      void navigator.clipboard.writeText(
                         `${ENVS.defaultShortUrlDomain}/${CONSTANTS.SHORT_LINK.invitationSLStaticPath}/${compState?.selectedItem?.shortUrlId}`
                       );
 
-                      presentZIonToast('✨ Copied', 'tertiary');
+                      void presentZIonToast('✨ Copied', 'tertiary');
                     }}>
                     <ZIonIcon
                       icon={linkOutline}
@@ -1158,7 +1159,7 @@ const ZInviteTab: React.FC<{
 
                   {/* wss-tsm -> workspace-settings-team-settings-modal */}
                   <ZRTooltip
-                    anchorSelect={`#wss-tsm-copy-invite-link-tt`}
+                    anchorSelect={'#wss-tsm-copy-invite-link-tt'}
                     place='top'
                     content='copy invite link'
                     variant='info'
@@ -1237,7 +1238,7 @@ const ZInviteTab: React.FC<{
                     fill='clear'
                     expand='full'
                     height='100%'
-                    id={`wss-tsm-delete-invite-link-tt`}
+                    id={'wss-tsm-delete-invite-link-tt'}
                     className='overflow-hidden rounded-r shadow-none ion-no-margin ms-2 ion-hide-sm-down'>
                     <ZIonIcon
                       color='danger'
@@ -1247,7 +1248,7 @@ const ZInviteTab: React.FC<{
 
                   {/* wss-tsm -> workspace-settings-team-settings-modal */}
                   <ZRTooltip
-                    anchorSelect={`#wss-tsm-delete-invite-link-tt`}
+                    anchorSelect={'#wss-tsm-delete-invite-link-tt'}
                     place='top'
                     content='delete invite link'
                     variant='info'
@@ -1278,15 +1279,18 @@ const ZInviteTab: React.FC<{
                 </ZIonText>
 
                 <ZIonButton
-                  disabled={values?.canCreateShortUrl === false}
+                  disabled={!values?.canCreateShortUrl}
                   fill='outline'
                   id='role-popover-index'
                   size='small'
                   color={values?.canCreateShortUrl ? 'primary' : 'medium'}
                   height='2.3rem'
                   onClick={() => {
-                    if (compState?.memberId) {
-                      addInvitationShortLink(compState?.memberId);
+                    if (
+                      compState?.memberId !== undefined &&
+                      compState?.memberId !== null
+                    ) {
+                      void addInvitationShortLink(compState?.memberId);
                     }
                   }}
                   className={classNames({

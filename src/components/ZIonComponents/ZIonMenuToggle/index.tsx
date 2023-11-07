@@ -1,20 +1,22 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonMenuToggle } from '@ionic/react';
 
 // Type
-type ZIonMenuToggleType = {
-	children: ReactNode;
-	className?: string;
-	autoHide?: boolean;
-	menu?: string;
-	slot?: string;
-};
+interface ZIonMenuToggleType {
+  children: ReactNode;
+  className?: string;
+  autoHide?: boolean;
+  menu?: string;
+  slot?: string;
+}
 
-const ZIonMenuToggle = (props: ZIonMenuToggleType) => {
-	return <IonMenuToggle {...props}>{props.children}</IonMenuToggle>;
+const ZIonMenuToggle: React.FC<ZIonMenuToggleType> = (
+  props: ZIonMenuToggleType
+) => {
+  return <IonMenuToggle {...props}>{props.children}</IonMenuToggle>;
 };
 
 export default ZIonMenuToggle;

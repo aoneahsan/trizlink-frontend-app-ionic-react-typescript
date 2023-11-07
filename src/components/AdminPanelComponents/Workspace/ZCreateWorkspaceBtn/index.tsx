@@ -35,7 +35,7 @@ import { API_URL_ENUM } from '@/utils/enums';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import classNames from 'classnames';
 
 /**
@@ -71,10 +71,11 @@ const ZCreateWorkspaceBtn: React.FC<{
         CONSTANTS.testingSelectors.workspace.listPage.createWorkspaceButton
       }
       onClick={() => {
-        if (!isWorkspacesDataFetching)
+        if (!isWorkspacesDataFetching) {
           presentZWorkspaceCreateModal({
             _cssClass: 'create-workspace-modal-size'
           });
+        }
       }}>
       <ZIonIcon
         icon={addOutline}

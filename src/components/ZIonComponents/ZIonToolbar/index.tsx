@@ -1,19 +1,22 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonToolbar } from '@ionic/react';
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
+import {
+  type ZIonColorType,
+  type ZIonModeType
+} from '@/types/zaionsAppSettings.type';
 
 // Type
-type ZIonToolbarType = {
+interface ZIonToolbarType {
   children: ReactNode;
   color?: ZIonColorType;
   className?: string;
   mode?: ZIonModeType;
-};
+}
 
-const ZIonToolbar = (props: ZIonToolbarType) => {
+const ZIonToolbar: React.FC<ZIonToolbarType> = (props: ZIonToolbarType) => {
   return <IonToolbar {...props}>{props.children}</IonToolbar>;
 };
 

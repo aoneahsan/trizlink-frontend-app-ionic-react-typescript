@@ -1,4 +1,3 @@
-/* tslint:disable */
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
@@ -40,7 +39,7 @@ export enum ModelAttributeTypes {
   numberSet = 'numberSet',
   string = 'string',
   stringSet = 'stringSet',
-  _null = '_null',
+  _null = '_null'
 }
 
 export type ModelSizeInput = {

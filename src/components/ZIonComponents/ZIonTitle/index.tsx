@@ -1,43 +1,42 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonTitle } from '@ionic/react';
-import { ZIonColorType } from '@/types/zaionsAppSettings.type';
+import { type ZIonColorType } from '@/types/zaionsAppSettings.type';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
-import { PRODUCT_NAME } from '@/utils/constants';
 
 // Type
-type ZIonTitleType = {
+interface ZIonTitleType {
   children: ReactNode;
   color?: ZIonColorType;
   size?: 'large' | 'small' | undefined;
   className?: string;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   testingselector?: string;
   testinglistselector?: string;
-};
+}
 
-const ZIonTitle = (props: ZIonTitleType) => {
-  const _testinglistselector = props.testinglistselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testinglistselector || PRODUCT_NAME,
-          _key: zCreateElementTestingSelectorKeyEnum.listSelector
-        })
-      }
-    : {};
+const ZIonTitle: React.FC<ZIonTitleType> = (props: ZIonTitleType) => {
+  const _testinglistselector =
+    props.testinglistselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testinglistselector,
+            _key: zCreateElementTestingSelectorKeyEnum.listSelector
+          })
+        }
+      : {};
 
-  const _testingSelector = props.testingselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testingselector || PRODUCT_NAME
-        })
-      }
-    : {};
+  const _testingSelector =
+    props.testingselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testingselector
+          })
+        }
+      : {};
 
   return (
     <IonTitle

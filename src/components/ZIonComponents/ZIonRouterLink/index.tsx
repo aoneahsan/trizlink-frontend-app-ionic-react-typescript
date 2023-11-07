@@ -1,19 +1,18 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonRouterLink } from '@ionic/react';
 import {
-  ZIonColorType,
-  ZIonRouterDirection,
-  ZIonTargetType
+  type ZIonColorType,
+  type ZIonRouterDirection,
+  type ZIonTargetType
 } from '@/types/zaionsAppSettings.type';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 // Type
-type ZIonRouterLinkType = {
+interface ZIonRouterLinkType {
   children: ReactNode;
   className?: string;
   color?: ZIonColorType;
@@ -27,25 +26,29 @@ type ZIonRouterLinkType = {
   //
   testingselector?: string;
   testinglistselector?: string;
-};
+}
 
-const ZIonRouterLink = (props: ZIonRouterLinkType) => {
-  const _testinglistselector = props.testinglistselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testinglistselector || PRODUCT_NAME,
-          _key: zCreateElementTestingSelectorKeyEnum.listSelector
-        })
-      }
-    : {};
+const ZIonRouterLink: React.FC<ZIonRouterLinkType> = (
+  props: ZIonRouterLinkType
+) => {
+  const _testinglistselector =
+    props.testinglistselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testinglistselector,
+            _key: zCreateElementTestingSelectorKeyEnum.listSelector
+          })
+        }
+      : {};
 
-  const _testingSelector = props.testingselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testingselector || PRODUCT_NAME
-        })
-      }
-    : {};
+  const _testingSelector =
+    props.testingselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testingselector
+          })
+        }
+      : {};
   return (
     <IonRouterLink
       {...props}

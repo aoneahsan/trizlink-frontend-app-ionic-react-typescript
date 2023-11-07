@@ -10,7 +10,6 @@ import React, { useState } from 'react';
  * */
 import {
   checkmarkOutline,
-  pencilOutline,
   peopleOutline,
   pricetagOutline,
   settingsOutline,
@@ -25,11 +24,11 @@ import classNames from 'classnames';
  * */
 import {
   ZIonIcon,
-  ZIonInput,
   ZIonItem,
   ZIonList,
   ZIonText
 } from '@/components/ZIonComponents';
+import ZCan from '@/components/Can';
 import ZWorkspacesSettingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SettingsModal';
 import ZWorkspacesSharingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SharingModal';
 
@@ -37,34 +36,18 @@ import ZWorkspacesSharingModal from '@/components/InPageComponents/ZaionsModals/
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import {
-  useZIonAlert,
-  useZIonErrorAlert,
-  useZIonModal
-} from '@/ZaionsHooks/zionic-hooks';
-
-/**
- * Global Constants Imports go down
- * ? Like import of Constant is a global constants import
- * */
-
-/**
- * Type Imports go down
- * ? Like import of type or type of some recoil state or any external type import is a Type import
- * */
-import {
-  workspaceFormTabEnum,
-  workspaceInterface,
-  workspaceSettingsModalTabEnum,
-  WorkspaceSharingTabEnum
-} from '@/types/AdminPanel/workspace';
-import ZCan from '@/components/Can';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import { useZIonAlert, useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import {
   useZGetRQCacheData,
   useZRQDeleteRequest,
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
+
+/**
+ * Global Constants Imports go down
+ * ? Like import of Constant is a global constants import
+ * */
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
@@ -72,15 +55,20 @@ import {
   showErrorNotification,
   showSuccessNotification
 } from '@/utils/notification';
-import {
-  createRedirectRoute,
-  extractInnerData,
-  replaceRouteParams
-} from '@/utils/helpers';
+import { extractInnerData, replaceRouteParams } from '@/utils/helpers';
 import MESSAGES from '@/utils/messages';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+
+/**
+ * Type Imports go down
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
+ * */
+import {
+  type workspaceInterface,
+  workspaceSettingsModalTabEnum,
+  WorkspaceSharingTabEnum
+} from '@/types/AdminPanel/workspace';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Recoil State Imports go down
@@ -136,7 +124,7 @@ const ZWorkspacesActionPopover: React.FC<{
     ZWorkspacesSettingModal,
     {
       Tab: modalTab,
-      workspaceId: workspaceId
+      workspaceId
     }
   );
   const { presentZIonModal: presentWorkspaceSharingModal } = useZIonModal(
@@ -152,9 +140,9 @@ const ZWorkspacesActionPopover: React.FC<{
   });
 
   // delete Workspace Confirm Modal.
-  const deleteWorkspaceConfirmModal = async () => {
+  const deleteWorkspaceConfirmModal = async (): Promise<void> => {
     try {
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         await presentZIonAlert({
           header: MESSAGES.WORKSPACE.DELETE_ALERT.HEADER,
           subHeader: MESSAGES.WORKSPACE.DELETE_ALERT.SUB_HEADER,
@@ -183,22 +171,22 @@ const ZWorkspacesActionPopover: React.FC<{
   };
 
   // removeWorkspace will hit delete workspace folder api
-  const removeWorkspace = async () => {
+  const removeWorkspace = async (): Promise<void> => {
     try {
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         // hitting the delete api.
         const _response = await deleteWorkspaceMutate({
           itemIds: [workspaceId],
           urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
         });
 
-        if (_response) {
+        if (_response !== undefined) {
           const _data = extractInnerData<{ success: boolean }>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data && _data?.success) {
+          if (_data !== undefined && _data?.success) {
             // getting all the workspace from RQ cache.
             const _oldWorkspaces =
               extractInnerData<workspaceInterface[]>(
@@ -206,7 +194,7 @@ const ZWorkspacesActionPopover: React.FC<{
                   key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
                 }) as workspaceInterface[],
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
             // removing deleted workspace from cache.
             const _updatedWorkspaces = _oldWorkspaces.filter(
@@ -216,7 +204,7 @@ const ZWorkspacesActionPopover: React.FC<{
             // Updating data in RQ cache.
             await updateRQCDataHandler<workspaceInterface[] | undefined>({
               key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
-              data: _updatedWorkspaces as workspaceInterface[],
+              data: _updatedWorkspaces,
               id: '',
               extractType: ZRQGetRequestExtractEnum.extractItems,
               updateHoleData: true
@@ -328,7 +316,7 @@ const ZWorkspacesActionPopover: React.FC<{
             replaceRouteParams(
               ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
               [CONSTANTS.RouteParams.workspace.workspaceId],
-              [workspaceId!]
+              [workspaceId ?? '']
             )
           );
 
@@ -405,7 +393,7 @@ const ZWorkspacesActionPopover: React.FC<{
               CONSTANTS.testingSelectors.workspace.actionsPopover.edit
             }
             onClick={() => {
-              if (workspaceId) {
+              if (workspaceId !== undefined) {
                 zNavigatePushRoute(
                   createRedirectRoute({
                     url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
@@ -440,8 +428,8 @@ const ZWorkspacesActionPopover: React.FC<{
             testingselector={
               CONSTANTS.testingSelectors.workspace.actionsPopover.delete
             }
-            onClick={async () => {
-              await deleteWorkspaceConfirmModal();
+            onClick={() => {
+              void deleteWorkspaceConfirmModal();
             }}>
             <ZIonIcon
               icon={trashBinOutline}

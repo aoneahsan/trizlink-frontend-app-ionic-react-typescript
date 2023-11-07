@@ -8,7 +8,7 @@ import React, { lazy, Suspense } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { RefresherEventDetail } from '@ionic/react';
+import { type RefresherEventDetail } from '@ionic/react';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import { menuController } from '@ionic/core/components';
@@ -39,9 +39,6 @@ import {
 } from '@/components/ZIonComponents';
 import ZIonPage from '@/components/ZIonPage';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
-const ZAdminPanelTopBar = lazy(
-  () => import('@/components/AdminPanelComponents/TopBar')
-);
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 import ZProfileSettingsSettings from './ProfileSettings';
 import ZNotificationSettings from './NotificationsSettings';
@@ -51,7 +48,6 @@ import ZNotificationSettings from './NotificationsSettings';
  * ? Like import of custom Hook is a custom import
  * */
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import { useZInvalidateReactQueries } from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
@@ -61,6 +57,9 @@ import { reportCustomError } from '@/utils/customErrorType';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import CONSTANTS from '@/utils/constants';
 import ZWSNotificationSettings from './WSNotificationSettings';
+const ZAdminPanelTopBar = lazy(
+  () => import('@/components/AdminPanelComponents/TopBar')
+);
 
 /**
  * Type Imports go down
@@ -97,7 +96,6 @@ import ZWSNotificationSettings from './WSNotificationSettings';
 const ZUserAccount: React.FC = () => {
   // #region Custom hooks.
   const { isSmScale, isLgScale, isMdScale } = useZMediaQueryScale();
-  const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   // #endregion
 
   // #region checking the route.
@@ -115,14 +113,17 @@ const ZUserAccount: React.FC = () => {
   // #endregion
 
   // #region Functions.
-  const invalidedQueries = async () => {
+  const invalidedQueries = async (): Promise<void> => {
     try {
+      //
     } catch (error) {
       reportCustomError(error);
     }
   };
 
-  const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
+  const handleRefresh = async (
+    event: CustomEvent<RefresherEventDetail>
+  ): Promise<void> => {
     try {
       await invalidedQueries();
       event.detail.complete();
@@ -156,8 +157,8 @@ const ZUserAccount: React.FC = () => {
             testingselector={
               CONSTANTS.testingSelectors.userAccount.ionMenu.closeMenuBtn
             }
-            onClick={async () => {
-              await menuController.close(
+            onClick={() => {
+              void menuController.close(
                 CONSTANTS.MENU_IDS.USER_SETTINGS_PAGE_MENU_ID
               );
             }}
@@ -184,7 +185,7 @@ const ZUserAccount: React.FC = () => {
                     }
                     className={classNames({
                       zaions__light_bg:
-                        isNotificationSettingsPage ||
+                        isNotificationSettingsPage ??
                         isWorkspaceNotificationPage
                     })}>
                     <ZIonIcon
@@ -217,7 +218,7 @@ const ZUserAccount: React.FC = () => {
                       className='w-6 h-6 me-2'
                       color='dark'
                     />
-                    <ZIonText className='font-semibold block mt-1'>
+                    <ZIonText className='block mt-1 font-semibold'>
                       Profile settings
                     </ZIonText>
                   </ZIonItem>
@@ -234,7 +235,10 @@ const ZUserAccount: React.FC = () => {
         id={CONSTANTS.MENU_IDS.USER_SETTINGS_PAGE_ID}>
         <ZIonContent>
           {/* IonRefresher */}
-          <ZIonRefresher onIonRefresh={event => void handleRefresh(event)}>
+          <ZIonRefresher
+            onIonRefresh={event => {
+              void handleRefresh(event);
+            }}>
             <ZIonRefresherContent />
           </ZIonRefresher>
 
@@ -254,15 +258,17 @@ const ZUserAccount: React.FC = () => {
               <ZAdminPanelTopBar
                 showWSSwitcherBtn={false}
                 showInviteBtn={false}
-                menuOnClickFn={async () => {
-                  // Open the menu by menu-id
-                  await menuController.enable(
-                    true,
-                    CONSTANTS.MENU_IDS.USER_SETTINGS_PAGE_MENU_ID
-                  );
-                  await menuController.open(
-                    CONSTANTS.MENU_IDS.USER_SETTINGS_PAGE_MENU_ID
-                  );
+                menuOnClickFn={() => {
+                  void (async () => {
+                    // Open the menu by menu-id
+                    await menuController.enable(
+                      true,
+                      CONSTANTS.MENU_IDS.USER_SETTINGS_PAGE_MENU_ID
+                    );
+                    await menuController.open(
+                      CONSTANTS.MENU_IDS.USER_SETTINGS_PAGE_MENU_ID
+                    );
+                  })();
                 }}
               />
             </Suspense>
@@ -300,7 +306,7 @@ const ZUserAccount: React.FC = () => {
                         }
                         className={classNames({
                           zaions__light_bg:
-                            isNotificationSettingsPage ||
+                            isNotificationSettingsPage ??
                             isWorkspaceNotificationPage
                         })}>
                         <ZIonIcon
@@ -333,7 +339,7 @@ const ZUserAccount: React.FC = () => {
                           className='w-6 h-6 me-2'
                           color='dark'
                         />
-                        <ZIonText className='font-semibold block mt-1'>
+                        <ZIonText className='block mt-1 font-semibold'>
                           Profile settings
                         </ZIonText>
                       </ZIonItem>
@@ -407,9 +413,11 @@ const ZInpageMainContent: React.FC = () => {
             <ZFallbackIonSpinner2 />
           </ZIonCol>
         }>
-        {isProfileSettingsPage ? <ZProfileSettingsSettings /> : null}
-        {isNotificationSettings ? <ZNotificationSettings /> : null}
-        {isWorkspaceNotificationPage ? <ZWSNotificationSettings /> : null}
+        {isProfileSettingsPage === true ? <ZProfileSettingsSettings /> : null}
+        {isNotificationSettings === true ? <ZNotificationSettings /> : null}
+        {isWorkspaceNotificationPage === true ? (
+          <ZWSNotificationSettings />
+        ) : null}
       </Suspense>
     </div>
   );

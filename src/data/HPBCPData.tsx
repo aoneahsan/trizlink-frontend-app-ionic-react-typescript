@@ -4,7 +4,7 @@
 import { checkmarkCircleOutline } from 'ionicons/icons';
 
 // Custom Imports
-import { ZaionsHpCPDataType } from '@/types/ZaionsHPBCPType';
+import { type ZaionsHpCPDataType } from '@/types/ZaionsHPBCPType';
 
 // Images
 import { linkInBio, linkMngt3, qrCode } from '@/assets/images';
@@ -22,26 +22,26 @@ export const HPBCData: ZaionsHpCPDataType[] = [
       {
         id: 1,
         featureIcon: checkmarkCircleOutline,
-        fetureText: 'URL shortening at scale',
+        fetureText: 'URL shortening at scale'
       },
       {
         id: 2,
         featureIcon: checkmarkCircleOutline,
-        fetureText: 'Custom links with your brand',
+        fetureText: 'Custom links with your brand'
       },
       {
         id: 3,
         featureIcon: checkmarkCircleOutline,
-        fetureText: 'URL redirects',
+        fetureText: 'URL redirects'
       },
       {
         id: 4,
         featureIcon: checkmarkCircleOutline,
-        fetureText: 'Advanced analytics & tracking',
-      },
+        fetureText: 'Advanced analytics & tracking'
+      }
     ],
     primaryBtnText: 'Get Started For Free',
-    secondaryBtnText: 'Learn more',
+    secondaryBtnText: 'Learn more'
   },
   {
     id: 2,
@@ -55,26 +55,26 @@ export const HPBCData: ZaionsHpCPDataType[] = [
       {
         id: 1,
         featureIcon: checkmarkCircleOutline,
-        fetureText: 'URL shortening at scale',
+        fetureText: 'URL shortening at scale'
       },
       {
         id: 2,
         featureIcon: checkmarkCircleOutline,
-        fetureText: 'Custom links with your brand',
+        fetureText: 'Custom links with your brand'
       },
       {
         id: 3,
         featureIcon: checkmarkCircleOutline,
-        fetureText: 'URL redirects',
+        fetureText: 'URL redirects'
       },
       {
         id: 4,
         featureIcon: checkmarkCircleOutline,
-        fetureText: 'Advanced analytics & tracking',
-      },
+        fetureText: 'Advanced analytics & tracking'
+      }
     ],
     primaryBtnText: 'Get Started For Free',
-    secondaryBtnText: 'Learn more',
+    secondaryBtnText: 'Learn more'
   },
   {
     id: 3,
@@ -88,26 +88,26 @@ export const HPBCData: ZaionsHpCPDataType[] = [
       {
         id: 1,
         featureIcon: checkmarkCircleOutline,
-        fetureText: 'URL shortening at scale',
+        fetureText: 'URL shortening at scale'
       },
       {
         id: 2,
         featureIcon: checkmarkCircleOutline,
-        fetureText: 'Custom links with your brand',
+        fetureText: 'Custom links with your brand'
       },
       {
         id: 3,
         featureIcon: checkmarkCircleOutline,
-        fetureText: 'URL redirects',
+        fetureText: 'URL redirects'
       },
       {
         id: 4,
         featureIcon: checkmarkCircleOutline,
-        fetureText: 'Advanced analytics & tracking',
-      },
+        fetureText: 'Advanced analytics & tracking'
+      }
     ],
     primaryBtnText: 'Get Started For Free',
     secondaryBtnText: 'Learn more',
-    extraData: 'New',
-  },
+    extraData: 'New'
+  }
 ];

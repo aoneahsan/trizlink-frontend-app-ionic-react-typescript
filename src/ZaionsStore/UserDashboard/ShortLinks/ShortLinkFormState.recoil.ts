@@ -1,9 +1,9 @@
 import CONSTANTS from '@/utils/constants';
 import { LinkTypeOptionsData } from '@/data/UserDashboard/Links/index';
-import { atom, selector } from 'recoil';
+import { atom } from 'recoil';
 import {
-  ShortLinkType,
-  ShortUrlLinkOptionType
+  type ShortLinkType,
+  type ShortUrlLinkOptionType
 } from '@/types/AdminPanel/linksType';
 import {
   FormMode,

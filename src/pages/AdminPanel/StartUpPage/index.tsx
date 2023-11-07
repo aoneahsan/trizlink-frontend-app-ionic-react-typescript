@@ -3,7 +3,6 @@
  * ? Like Import of React is a Core Import
  * */
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
 
 /**
  * Packages Imports go down
@@ -39,7 +38,7 @@ import { reportCustomError } from '@/utils/customErrorType';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { UserRoleAndPermissionsInterface } from '@/types/UserAccount/index.type';
+import { type UserRoleAndPermissionsInterface } from '@/types/UserAccount/index.type';
 
 /**
  * Recoil State Imports go down
@@ -70,14 +69,14 @@ import { currentLoggedInUserRoleAndPermissionsRStateAtom } from '@/ZaionsStore/U
 
 const ZAppStartupPage: React.FC = () => {
   // getting current workspace id OR wsShareId && shareWSMemberId form params.
-  const { workspaceId, wsShareId, shareWSMemberId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
-  }>();
+  // const { workspaceId, wsShareId, shareWSMemberId } = useParams<{
+  //   workspaceId?: string;
+  //   shareWSMemberId?: string;
+  //   wsShareId?: string;
+  // }>();
 
   //
-  const [loadingIsOpen, setLoadingIsOpen] = useState(true);
+  const [, setLoadingIsOpen] = useState(true);
 
   // recoil state for storing current user roles & permissions.
   const setCurrentLoginUserRoleAndPermissionsStateAtom = useSetRecoilState(
@@ -117,7 +116,7 @@ const ZAppStartupPage: React.FC = () => {
 
   useEffect(() => {
     try {
-      if (getUserRoleAndPermissions?.isSuccess) {
+      if (getUserRoleAndPermissions?.isSuccess === true) {
         // Storing in recoil.
         setCurrentLoginUserRoleAndPermissionsStateAtom(oldValues => ({
           ...oldValues,
@@ -132,11 +131,12 @@ const ZAppStartupPage: React.FC = () => {
           zNavigatePushRoute(ZaionsRoutes.AdminPanel.Workspaces.Main);
         }
       } else if (getUserRoleAndPermissions === undefined) {
-        refetchUserRoleAndPermissions();
+        void refetchUserRoleAndPermissions();
       }
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getUserRoleAndPermissions, isZFetching]);
 
   return (

@@ -4,7 +4,6 @@ import React from 'react';
 // Packages Imports
 
 // Custom Imports
-import ZaionsCarouselActions from './CarouselAction';
 import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
 import ZaionsCarouselSlider from './CarouselSlider';
 
@@ -13,13 +12,13 @@ import ZaionsCarouselSlider from './CarouselSlider';
 // Global Constants
 
 const ZaionsCarousel: React.FC = () => {
-	return (
-		<>
-			<ZaionsCarouselSlider />
-			{/* <ZaionsCarouselActions /> */}
-			<ZaionsHr />
-		</>
-	);
+  return (
+    <>
+      <ZaionsCarouselSlider />
+      {/* <ZaionsCarouselActions /> */}
+      <ZaionsHr />
+    </>
+  );
 };
 
 export default ZaionsCarousel;

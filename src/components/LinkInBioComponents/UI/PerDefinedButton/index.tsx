@@ -6,8 +6,7 @@ import classNames from 'classnames';
 import { ZIonButton, ZIonImg } from '@/components/ZIonComponents';
 
 // Style
-import classes from './styles.module.css';
-import { ZIonColorType } from '@/types/zaionsAppSettings.type';
+import { type ZIonColorType } from '@/types/zaionsAppSettings.type';
 
 // Component type
 interface LinkInBioPDButtonInterface {
@@ -18,9 +17,7 @@ interface LinkInBioPDButtonInterface {
   color?: ZIonColorType;
   testingselector?: string;
   testinglistselector?: string;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
 }
 
 // This button component is use to in blocks page where the single block is this single button. and also in musicPlatform, social block etc.
@@ -42,7 +39,7 @@ const LinkInBioPDButton: React.FC<LinkInBioPDButtonInterface> = ({
       color={color}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
-      className={classNames(className)} //classes['zaions-block-button'],
+      className={classNames(className)} // classes['zaions-block-button'],
       height='4.5rem'
       testingselector={testingselector}
       testinglistselector={testinglistselector}>

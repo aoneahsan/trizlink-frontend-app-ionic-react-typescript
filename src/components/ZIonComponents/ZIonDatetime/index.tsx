@@ -2,18 +2,19 @@
 import React from 'react';
 
 // Packages Import
-import { DatetimeChangeEventDetail, IonDatetime } from '@ionic/react';
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
-import { IonDatetimeCustomEvent } from '@ionic/core/dist/types/components';
+import { type DatetimeChangeEventDetail, IonDatetime } from '@ionic/react';
+import {
+  type ZIonColorType,
+  type ZIonModeType
+} from '@/types/zaionsAppSettings.type';
+import { type IonDatetimeCustomEvent } from '@ionic/core/dist/types/components';
 
 // Type
-type ZIonDatetimeType = {
+interface ZIonDatetimeType {
   className?: string;
   color?: ZIonColorType;
   mode?: ZIonModeType;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   cancelText?: string;
   clearText?: string;
   dayValues?: number | number[] | string;
@@ -55,9 +56,9 @@ type ZIonDatetimeType = {
     event: IonDatetimeCustomEvent<DatetimeChangeEventDetail>
   ) => void;
   onIonFocus?: (event: IonDatetimeCustomEvent<void>) => void;
-};
+}
 
-const ZIonDatetime = (props: ZIonDatetimeType) => {
+const ZIonDatetime: React.FC<ZIonDatetimeType> = (props: ZIonDatetimeType) => {
   return <IonDatetime {...props} />;
 };
 

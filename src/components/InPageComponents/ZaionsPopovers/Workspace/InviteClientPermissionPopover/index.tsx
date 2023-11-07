@@ -8,24 +8,22 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import { starOutline } from 'ionicons/icons';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonBadge,
-	ZIonCol,
-	ZIonIcon,
-	ZIonItem,
-	ZIonLabel,
-	ZIonList,
-	ZIonPopover,
-	ZIonRow,
-	ZIonText,
+  ZIonBadge,
+  ZIonCol,
+  ZIonIcon,
+  ZIonItem,
+  ZIonLabel,
+  ZIonList,
+  ZIonRow,
+  ZIonText
 } from '@/components/ZIonComponents';
-import { starOutline } from 'ionicons/icons';
-import { workspaceFormPermissionEnum } from '@/types/AdminPanel/workspace';
 
 /**
  * Custom Hooks Imports go down
@@ -41,6 +39,7 @@ import { workspaceFormPermissionEnum } from '@/types/AdminPanel/workspace';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import { workspaceFormPermissionEnum } from '@/types/AdminPanel/workspace';
 
 /**
  * Recoil State Imports go down
@@ -69,63 +68,61 @@ import { workspaceFormPermissionEnum } from '@/types/AdminPanel/workspace';
  * */
 
 const ZInviteClientsPermissionPopover: React.FC<{
-	dismissZIonPopover: (data?: string, role?: string | undefined) => void;
-	selectedPermission: workspaceFormPermissionEnum;
+  dismissZIonPopover: (data?: string, role?: string | undefined) => void;
+  selectedPermission: workspaceFormPermissionEnum;
 }> = ({ dismissZIonPopover, selectedPermission }) => {
-	return (
-		<ZIonRow>
-			<ZIonCol size='12'>
-				<ZIonList lines='none'>
-					{/* Term */}
-					<ZIonItem
-						className='ion-activatable cursor-pointer'
-						color={
-							selectedPermission === workspaceFormPermissionEnum.team
-								? 'primary'
-								: undefined
-						}
-						onClick={() => {
-							dismissZIonPopover(
-								workspaceFormPermissionEnum.team,
-								workspaceFormPermissionEnum.team
-							);
-						}}
-					>
-						<ZIonLabel className='ion-text-wrap'>
-							<h2>Term</h2>
-							<ZIonText>Can view team only posts and commends</ZIonText>
-						</ZIonLabel>
-					</ZIonItem>
+  return (
+    <ZIonRow>
+      <ZIonCol size='12'>
+        <ZIonList lines='none'>
+          {/* Term */}
+          <ZIonItem
+            className='cursor-pointer ion-activatable'
+            color={
+              selectedPermission === workspaceFormPermissionEnum.team
+                ? 'primary'
+                : undefined
+            }
+            onClick={() => {
+              dismissZIonPopover(
+                workspaceFormPermissionEnum.team,
+                workspaceFormPermissionEnum.team
+              );
+            }}>
+            <ZIonLabel className='ion-text-wrap'>
+              <h2>Term</h2>
+              <ZIonText>Can view team only posts and commends</ZIonText>
+            </ZIonLabel>
+          </ZIonItem>
 
-					{/* Client */}
-					<ZIonItem
-						color={
-							selectedPermission === workspaceFormPermissionEnum.client
-								? 'primary'
-								: undefined
-						}
-						className='ion-activatable cursor-pointer'
-						onClick={() => {
-							dismissZIonPopover(
-								workspaceFormPermissionEnum.client,
-								workspaceFormPermissionEnum.client
-							);
-						}}
-					>
-						<ZIonLabel className='ion-text-wrap'>
-							<h2>
-								<ZIonText>Client</ZIonText>
-								<ZIonBadge className='ms-2'>
-									<ZIonIcon icon={starOutline} /> Pro
-								</ZIonBadge>
-							</h2>
-							<ZIonText>Cannot view private team post and notes</ZIonText>
-						</ZIonLabel>
-					</ZIonItem>
-				</ZIonList>
-			</ZIonCol>
-		</ZIonRow>
-	);
+          {/* Client */}
+          <ZIonItem
+            color={
+              selectedPermission === workspaceFormPermissionEnum.client
+                ? 'primary'
+                : undefined
+            }
+            className='cursor-pointer ion-activatable'
+            onClick={() => {
+              dismissZIonPopover(
+                workspaceFormPermissionEnum.client,
+                workspaceFormPermissionEnum.client
+              );
+            }}>
+            <ZIonLabel className='ion-text-wrap'>
+              <h2>
+                <ZIonText>Client</ZIonText>
+                <ZIonBadge className='ms-2'>
+                  <ZIonIcon icon={starOutline} /> Pro
+                </ZIonBadge>
+              </h2>
+              <ZIonText>Cannot view private team post and notes</ZIonText>
+            </ZIonLabel>
+          </ZIonItem>
+        </ZIonList>
+      </ZIonCol>
+    </ZIonRow>
+  );
 };
 
 export default ZInviteClientsPermissionPopover;

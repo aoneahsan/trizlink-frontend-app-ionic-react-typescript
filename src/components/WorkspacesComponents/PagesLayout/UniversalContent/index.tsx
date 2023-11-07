@@ -15,12 +15,12 @@ import classNames from 'classnames';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonButton,
-	ZIonCol,
-	ZIonIcon,
-	ZIonImg,
-	ZIonRow,
-	ZIonText,
+  ZIonButton,
+  ZIonCol,
+  ZIonIcon,
+  ZIonImg,
+  ZIonRow,
+  ZIonText
 } from '@/components/ZIonComponents';
 
 /**
@@ -67,88 +67,84 @@ import { settingsOutline } from 'ionicons/icons';
  * */
 
 const ZWorkspaceUniversalContentPageLayout: React.FC = () => {
-	// Media Query Scale
-	const { isXlScale, isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
+  // Media Query Scale
+  const { isXlScale, isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
 
-	return (
-		<ZIonRow
-			className={classNames({
-				'mt-3 ion-justify-content-center': true,
-			})}
-		>
-			{/*  */}
-			<ZIonCol
-				sizeXl='7'
-				sizeLg='9.5'
-				sizeMd='11'
-				sizeSm='11.5'
-				sizeXs='11.8'
-				className={classNames({
-					'ion-no-padding flex  py-2 ps-2': true,
-					'ion-align-items-start': isXlScale || isLgScale,
-					'ion-align-items-center':
-						(!isLgScale && isMdScale) || isSmScale || !isSmScale,
-				})}
-			>
-				<ZIonRow
-					className={classNames({
-						'flex ion-align-items-center border-b-[1px] border-solid border-[#0000001a] pb-3':
-							true,
-						'w-[80%] mx-auto': (!isLgScale && isMdScale) || isSmScale,
-						'w-[95%]': !isSmScale,
-					})}
-				>
-					<ZIonCol
-						size='2.5'
-						sizeLg='2.5'
-						sizeMd='max-content'
-						sizeSm='max-content'
-						sizeXs='max-content'
-					>
-						<div
-							className={classNames({
-								'rounded-full overflow-hidden flex justify-center': true,
-								'w-[92px] h-[92px]': isXlScale || isLgScale,
-								'w-[77px] h-[77px]':
-									(!isLgScale && isMdScale) || isSmScale || !isSmScale,
-							})}
-						>
-							<ZIonImg
-								src='https://d2b57pa8jvjkcd.cloudfront.net/xGF9qraKHpDFhkqdC/dz5XmBCTYv-webearbearscrop.jpg'
-								className={classNames({
-									'w-full h-full': true,
-								})}
-							/>
-						</div>
-					</ZIonCol>
-					{/*  */}
-					<ZIonCol className='flex ion-align-items-center'>
-						<div className='w-1/2'>
-							<ZIonText
-								className={classNames({
-									'text-lg block font-bold': true,
-								})}
-							>
-								MTI
-							</ZIonText>
+  return (
+    <ZIonRow
+      className={classNames({
+        'mt-3 ion-justify-content-center': true
+      })}>
+      {/*  */}
+      <ZIonCol
+        sizeXl='7'
+        sizeLg='9.5'
+        sizeMd='11'
+        sizeSm='11.5'
+        sizeXs='11.8'
+        className={classNames({
+          'ion-no-padding flex  py-2 ps-2': true,
+          'ion-align-items-start': isXlScale || isLgScale,
+          'ion-align-items-center':
+            (!isLgScale && isMdScale) || isSmScale || !isSmScale
+        })}>
+        <ZIonRow
+          className={classNames({
+            'flex ion-align-items-center border-b-[1px] border-solid border-[#0000001a] pb-3':
+              true,
+            'w-[80%] mx-auto': (!isLgScale && isMdScale) || isSmScale,
+            'w-[95%]': !isSmScale
+          })}>
+          <ZIonCol
+            size='2.5'
+            sizeLg='2.5'
+            sizeMd='max-content'
+            sizeSm='max-content'
+            sizeXs='max-content'>
+            <div
+              className={classNames({
+                'rounded-full overflow-hidden flex justify-center': true,
+                'w-[92px] h-[92px]': isXlScale || isLgScale,
+                'w-[77px] h-[77px]':
+                  (!isLgScale && isMdScale) || isSmScale || !isSmScale
+              })}>
+              <ZIonImg
+                src='https://d2b57pa8jvjkcd.cloudfront.net/xGF9qraKHpDFhkqdC/dz5XmBCTYv-webearbearscrop.jpg'
+                className={classNames({
+                  'w-full h-full': true
+                })}
+              />
+            </div>
+          </ZIonCol>
+          {/*  */}
+          <ZIonCol className='flex ion-align-items-center'>
+            <div className='w-1/2'>
+              <ZIonText
+                className={classNames({
+                  'text-lg block font-bold': true
+                })}>
+                MTI
+              </ZIonText>
 
-							{/*  */}
-							<ZIonText className='text-base block' color='medium'>
-								Universal content
-							</ZIonText>
-						</div>
+              {/*  */}
+              <ZIonText
+                className='block text-base'
+                color='medium'>
+                Universal content
+              </ZIonText>
+            </div>
 
-						{/*  */}
-						<div className='ion-text-end w-1/2'>
-							<ZIonButton size='small'>
-								<ZIonIcon icon={settingsOutline} />
-							</ZIonButton>
-						</div>
-					</ZIonCol>
-				</ZIonRow>
-			</ZIonCol>
-		</ZIonRow>
-	);
+            {/*  */}
+            <div className='w-1/2 ion-text-end'>
+              <ZIonButton size='small'>
+                <ZIonIcon icon={settingsOutline} />
+              </ZIonButton>
+            </div>
+          </ZIonCol>
+        </ZIonRow>
+      </ZIonCol>
+    </ZIonRow>
+  );
 };
 
 export default ZWorkspaceUniversalContentPageLayout;

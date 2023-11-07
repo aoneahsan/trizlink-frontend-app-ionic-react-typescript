@@ -1,23 +1,23 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
-import { IonReorderGroup, ItemReorderEventDetail } from '@ionic/react';
-import { IonReorderGroupCustomEvent } from '@ionic/core/dist/types/components';
+import { IonReorderGroup, type ItemReorderEventDetail } from '@ionic/react';
+import { type IonReorderGroupCustomEvent } from '@ionic/core/dist/types/components';
 
-type ZIonReorderGroupType = {
+interface ZIonReorderGroupType {
   children?: ReactNode;
   className?: string;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   disabled?: boolean;
   onIonItemReorder?: (
     event: IonReorderGroupCustomEvent<ItemReorderEventDetail>
   ) => void;
-};
+}
 
-const ZIonReorderGroup = (props: ZIonReorderGroupType) => {
+const ZIonReorderGroup: React.FC<ZIonReorderGroupType> = (
+  props: ZIonReorderGroupType
+) => {
   return <IonReorderGroup {...props}>{props.children}</IonReorderGroup>;
 };
 

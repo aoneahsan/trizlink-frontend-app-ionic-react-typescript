@@ -94,10 +94,10 @@ import {
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { UTMTagTemplateType } from '@/types/AdminPanel/linksType';
+import { type UTMTagTemplateType } from '@/types/AdminPanel/linksType';
 import {
   FormMode,
-  ZUserSettingInterface,
+  type ZUserSettingInterface,
   ZUserSettingTypeEnum,
   ZUTMTagsListPageTableColumnsIds
 } from '@/types/AdminPanel/index.type';
@@ -109,6 +109,7 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
  * */
 import {
   FilteredUtmTagsDataRStateSelector,
+  UTMTagsFilterOptionsRStateAtom,
   UTMTagsRStateAtom
 } from '@/ZaionsStore/UserDashboard/UTMTagTemplatesState';
 
@@ -137,25 +138,28 @@ const ZUTMTagsTable: React.FC<{
   showSkeleton?: boolean;
 }> = ({ showSkeleton = false }) => {
   // getting link-in-bio and workspace ids from url with the help of useParams.
-  const { editLinkId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    editLinkId: string;
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    editLinkId?: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
-
-  // #region custom hooks.
-  const { zNavigatePushRoute } = useZNavigate();
-  // #endregion
 
   // #region APIS requests.
   // If owned workspace then this api is used to fetch workspace utm tags data.
   const { data: UTMTagsData, isFetching: isUTMTagsDataFetching } =
     useZRQGetRequest<UTMTagTemplateType[]>({
       _url: API_URL_ENUM.userAccountUtmTags_create_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN, workspaceId],
-      _shouldFetchWhenIdPassed: workspaceId ? false : true,
-      _itemsIds: [workspaceId],
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
+        workspaceId ?? ''
+      ],
+      _shouldFetchWhenIdPassed: !(
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        (workspaceId?.trim()?.length ?? 0) > 0
+      ),
+      _itemsIds: [workspaceId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
     });
 
@@ -163,28 +167,41 @@ const ZUTMTagsTable: React.FC<{
   const { data: swsUTMTagsData, isFetching: isSWSUTMTagsDataFetching } =
     useZRQGetRequest<UTMTagTemplateType[]>({
       _url: API_URL_ENUM.sws_utm_tag_create_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN, wsShareId],
-      _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true,
-      _itemsIds: [shareWSMemberId],
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN,
+        wsShareId ?? ''
+      ],
+      _shouldFetchWhenIdPassed: !(
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        (wsShareId?.trim()?.length > 0 ?? 0) &&
+        shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
+        (shareWSMemberId?.trim()?.length > 0 ?? 0)
+      ),
+      _itemsIds: [shareWSMemberId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId]
     });
 
   // If share-workspace then this api will fetch role & permission of current member in this share-workspace.
-  const {
-    data: getMemberRolePermissions,
-    isFetching: isGetMemberRolePermissionsFetching,
-    isError: isGetMemberRolePermissionsError
-  } = useZRQGetRequest<{
+  const { data: getMemberRolePermissions } = useZRQGetRequest<{
     memberRole?: string;
     memberPermissions?: string[];
   }>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
-    _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true,
-    _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: !(
+      wsShareId !== undefined &&
+      wsShareId !== null &&
+      wsShareId?.trim()?.length > 0 &&
+      shareWSMemberId !== undefined &&
+      shareWSMemberId !== null &&
+      shareWSMemberId?.trim()?.length > 0
+    ),
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -203,20 +220,32 @@ const ZUTMTagsTable: React.FC<{
   // #endregion
 
   let isZFetching;
-  if (workspaceId) {
+  if (
+    workspaceId !== undefined &&
+    workspaceId !== null &&
+    workspaceId?.trim()?.length > 0
+  ) {
     isZFetching = isUTMTagsDataFetching;
-  } else if (wsShareId && shareWSMemberId) {
+  } else if (
+    wsShareId !== undefined &&
+    wsShareId !== null &&
+    wsShareId?.trim()?.length > 0 &&
+    shareWSMemberId !== null &&
+    shareWSMemberId !== undefined &&
+    shareWSMemberId?.trim()?.length > 0 &&
+    shareWSMemberId !== undefined
+  ) {
     isZFetching = isSWSUTMTagsDataFetching;
   }
 
   return (
     <>
-      {!isZFetching ? (
-        (workspaceId && UTMTagsData && UTMTagsData?.length) ||
-        (wsShareId &&
-          shareWSMemberId &&
-          swsUTMTagsData &&
-          swsUTMTagsData?.length) ? (
+      {isZFetching === false ? (
+        ((workspaceId?.trim()?.length ?? 0) > 0 &&
+          (UTMTagsData?.length ?? 0) > 0) ||
+        ((wsShareId?.trim()?.length ?? 0) > 0 &&
+          (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
+          (swsUTMTagsData?.length ?? 0) > 0) ? (
           <ZInpageTable />
         ) : (
           <div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
@@ -227,7 +256,10 @@ const ZUTMTagsTable: React.FC<{
                   shareWSPermissionEnum.update_sws_utmTag
                 ].some(el =>
                   getMemberRolePermissions?.memberPermissions?.includes(el)
-                ) || workspaceId
+                ) ||
+                (workspaceId !== undefined &&
+                  workspaceId !== null &&
+                  workspaceId?.trim()?.length > 0)
                   ? 'No UTM tags founds. please create a UTM tag.'
                   : 'No UTM tags founds.'
               }
@@ -241,21 +273,24 @@ const ZUTMTagsTable: React.FC<{
                 });
               }}
               showBtn={
-                [
-                  shareWSPermissionEnum.create_sws_utmTag,
-                  shareWSPermissionEnum.update_sws_utmTag
-                ].some(el =>
-                  getMemberRolePermissions?.memberPermissions?.includes(el)
-                ) || workspaceId
-                  ? true
-                  : false
+                !!(
+                  [
+                    shareWSPermissionEnum.create_sws_utmTag,
+                    shareWSPermissionEnum.update_sws_utmTag
+                  ].some(el =>
+                    getMemberRolePermissions?.memberPermissions?.includes(el)
+                  ) ||
+                  (workspaceId !== undefined &&
+                    workspaceId !== null &&
+                    workspaceId?.trim()?.length > 0)
+                )
               }
             />
           </div>
         )
       ) : null}
 
-      {showSkeleton || isZFetching ? <ZUTMTableSkeleton /> : null}
+      {showSkeleton || isZFetching === true ? <ZUTMTableSkeleton /> : null}
     </>
   );
 };
@@ -266,15 +301,18 @@ const ZInpageTable: React.FC = () => {
   }>();
 
   // getting link-in-bio and workspace ids from url with the help of useParams.
-  const { editLinkId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    editLinkId: string;
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    editLinkId?: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region Recoil state.
   const setUtmTagsDataRState = useSetRecoilState(UTMTagsRStateAtom);
+  const setUTMTagsFilterOptionsRState = useSetRecoilState(
+    UTMTagsFilterOptionsRStateAtom
+  );
   const filteredUtmTagsDataRSelector = useRecoilValue(
     FilteredUtmTagsDataRStateSelector
   );
@@ -294,74 +332,101 @@ const ZInpageTable: React.FC = () => {
   // If owned workspace then this api is used to fetch workspace utm tags data.
   const { data: UTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.userAccountUtmTags_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN, workspaceId],
-    _shouldFetchWhenIdPassed: workspaceId ? false : true,
-    _itemsIds: [workspaceId],
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN, workspaceId ?? ''],
+    _shouldFetchWhenIdPassed: !(
+      workspaceId !== undefined &&
+      workspaceId !== null &&
+      (workspaceId?.trim()?.length ?? 0) > 0
+    ),
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
 
   // If share workspace then this api is used to fetch share workspace utm tags data.
   const { data: swsUTMTagsData } = useZRQGetRequest<UTMTagTemplateType[]>({
     _url: API_URL_ENUM.sws_utm_tag_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN, wsShareId],
-    _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true,
-    _itemsIds: [shareWSMemberId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN,
+      wsShareId ?? ''
+    ],
+    _shouldFetchWhenIdPassed: !(
+      wsShareId !== undefined &&
+      wsShareId !== null &&
+      (wsShareId?.trim()?.length ?? 0) > 0 &&
+      shareWSMemberId !== undefined &&
+      shareWSMemberId !== null &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
+    ),
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
   });
 
-  const {
-    data: getUTMTagFiltersData,
-    isFetching: isUTMTagFiltersDataFetching
-  } = useZRQGetRequest<ZUserSettingInterface>({
-    _url: API_URL_ENUM.user_setting_delete_update_get,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-      ZUserSettingTypeEnum.UTMTagListPageTable
-    ],
-    _itemsIds: [workspaceId!, ZUserSettingTypeEnum.UTMTagListPageTable],
-    _urlDynamicParts: [
-      CONSTANTS.RouteParams.workspace.workspaceId,
-      CONSTANTS.RouteParams.settings.type
-    ],
-    _extractType: ZRQGetRequestExtractEnum.extractItem,
-    _shouldFetchWhenIdPassed: workspaceId ? false : true
-  });
+  const { data: getUTMTagFiltersData } =
+    useZRQGetRequest<ZUserSettingInterface>({
+      _url: API_URL_ENUM.user_setting_delete_update_get,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+        ZUserSettingTypeEnum.UTMTagListPageTable
+      ],
+      _itemsIds: [workspaceId ?? '', ZUserSettingTypeEnum.UTMTagListPageTable],
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.workspaceId,
+        CONSTANTS.RouteParams.settings.type
+      ],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _shouldFetchWhenIdPassed: !(
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        (workspaceId?.trim()?.length ?? 0) > 0
+      )
+    });
 
-  const {
-    data: getSWSUTMTagFiltersData,
-    isFetching: isSWSUTMTagFiltersDataFetching
-  } = useZRQGetRequest<ZUserSettingInterface>({
-    _url: API_URL_ENUM.sws_user_setting_delete_update_get,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-      ZUserSettingTypeEnum.UTMTagListPageTable
-    ],
-    _itemsIds: [shareWSMemberId!, ZUserSettingTypeEnum.UTMTagListPageTable],
-    _urlDynamicParts: [
-      CONSTANTS.RouteParams.workspace.shareWSMemberId,
-      CONSTANTS.RouteParams.settings.type
-    ],
-    _extractType: ZRQGetRequestExtractEnum.extractItem,
-    _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true
-  });
+  const { data: getSWSUTMTagFiltersData } =
+    useZRQGetRequest<ZUserSettingInterface>({
+      _url: API_URL_ENUM.sws_user_setting_delete_update_get,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
+        ZUserSettingTypeEnum.UTMTagListPageTable
+      ],
+      _itemsIds: [
+        shareWSMemberId ?? '',
+        ZUserSettingTypeEnum.UTMTagListPageTable
+      ],
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+        CONSTANTS.RouteParams.settings.type
+      ],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _shouldFetchWhenIdPassed: !(
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        (wsShareId?.trim()?.length ?? 0) > 0 &&
+        shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
+      )
+    });
 
   // If share-workspace then this api will fetch role & permission of current member in this share-workspace.
-  const {
-    data: getMemberRolePermissions,
-    isFetching: isGetMemberRolePermissionsFetching,
-    isError: isGetMemberRolePermissionsError
-  } = useZRQGetRequest<{
+  const { data: getMemberRolePermissions } = useZRQGetRequest<{
     memberRole?: string;
     memberPermissions?: string[];
   }>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
-    _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true,
-    _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: !(
+      wsShareId !== undefined &&
+      wsShareId !== null &&
+      wsShareId?.trim()?.length > 0 &&
+      shareWSMemberId !== undefined &&
+      shareWSMemberId !== null &&
+      shareWSMemberId?.trim()?.length > 0
+    ),
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -517,9 +582,9 @@ const ZInpageTable: React.FC = () => {
 
   const zUTMTagTable = useReactTable({
     columns: defaultColumns,
-    data: filteredUtmTagsDataRSelector || [],
+    data: filteredUtmTagsDataRSelector ?? [],
     state: {
-      columnOrder: getUTMTagFiltersData?.settings?.columnOrderIds || []
+      columnOrder: getUTMTagFiltersData?.settings?.columnOrderIds ?? []
     },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -532,144 +597,189 @@ const ZInpageTable: React.FC = () => {
   // #region useEffect's
   useEffect(() => {
     try {
-      if (
-        getUTMTagFiltersData?.settings?.columns ||
-        getSWSUTMTagFiltersData?.settings?.columns
+      if (getUTMTagFiltersData !== undefined && getUTMTagFiltersData !== null) {
+        setUTMTagsFilterOptionsRState(oldValues => ({
+          ...oldValues,
+          timeFilter: {
+            daysToSubtract: getUTMTagFiltersData?.settings?.filters?.time,
+            endAt: getUTMTagFiltersData?.settings?.filters?.endDate,
+            startedAt: getUTMTagFiltersData?.settings?.filters?.startDate
+          }
+        }));
+      } else if (
+        getSWSUTMTagFiltersData !== undefined &&
+        getSWSUTMTagFiltersData !== null
       ) {
-        let __getTemplateNameColumn;
-        let __getFormattedCreateAtColumn;
-        let __getCampaignColumn;
-        let __getContentColumn;
-        let __getMediumColumn;
-        let __getSourceColumn;
-        let __getTermColumn;
+        setUTMTagsFilterOptionsRState(oldValues => ({
+          ...oldValues,
+          timeFilter: {
+            daysToSubtract: getSWSUTMTagFiltersData?.settings?.filters?.time,
+            endAt: getSWSUTMTagFiltersData?.settings?.filters?.endDate,
+            startedAt: getSWSUTMTagFiltersData?.settings?.filters?.startDate
+          }
+        }));
+      }
+      if (
+        (getUTMTagFiltersData?.settings?.columns !== undefined &&
+          getUTMTagFiltersData?.settings?.columns !== null) ||
+        (getSWSUTMTagFiltersData?.settings?.columns !== undefined &&
+          getSWSUTMTagFiltersData?.settings?.columns !== null)
+      ) {
+        let _getTemplateNameColumn;
+        let _getFormattedCreateAtColumn;
+        let _getCampaignColumn;
+        let _getContentColumn;
+        let _getMediumColumn;
+        let _getSourceColumn;
+        let _getTermColumn;
 
-        if (workspaceId) {
-          __getTemplateNameColumn =
+        if (
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          workspaceId?.trim()?.length > 0
+        ) {
+          _getTemplateNameColumn =
             getUTMTagFiltersData?.settings?.columns.filter(
               el => el?.id === ZUTMTagsListPageTableColumnsIds.templateName
             )[0];
 
-          __getFormattedCreateAtColumn =
+          _getFormattedCreateAtColumn =
             getUTMTagFiltersData?.settings?.columns.filter(
               el => el?.id === ZUTMTagsListPageTableColumnsIds.formattedCreateAt
             )[0];
 
-          __getCampaignColumn = getUTMTagFiltersData?.settings?.columns.filter(
+          _getCampaignColumn = getUTMTagFiltersData?.settings?.columns.filter(
             el => el?.id === ZUTMTagsListPageTableColumnsIds.campaign
           )[0];
 
-          __getContentColumn = getUTMTagFiltersData?.settings?.columns.filter(
+          _getContentColumn = getUTMTagFiltersData?.settings?.columns.filter(
             el => el?.id === ZUTMTagsListPageTableColumnsIds.content
           )[0];
 
-          __getMediumColumn = getUTMTagFiltersData?.settings?.columns.filter(
+          _getMediumColumn = getUTMTagFiltersData?.settings?.columns.filter(
             el => el?.id === ZUTMTagsListPageTableColumnsIds.medium
           )[0];
 
-          __getSourceColumn = getUTMTagFiltersData?.settings?.columns.filter(
+          _getSourceColumn = getUTMTagFiltersData?.settings?.columns.filter(
             el => el?.id === ZUTMTagsListPageTableColumnsIds.source
           )[0];
 
-          __getTermColumn = getUTMTagFiltersData?.settings?.columns.filter(
+          _getTermColumn = getUTMTagFiltersData?.settings?.columns.filter(
             el => el?.id === ZUTMTagsListPageTableColumnsIds.term
           )[0];
-        } else if (wsShareId && shareWSMemberId) {
-          __getTemplateNameColumn =
+        } else if (
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== null &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId?.trim()?.length > 0 &&
+          shareWSMemberId !== undefined
+        ) {
+          _getTemplateNameColumn =
             getSWSUTMTagFiltersData?.settings?.columns.filter(
               el => el?.id === ZUTMTagsListPageTableColumnsIds.templateName
             )[0];
 
-          __getFormattedCreateAtColumn =
+          _getFormattedCreateAtColumn =
             getSWSUTMTagFiltersData?.settings?.columns.filter(
               el => el?.id === ZUTMTagsListPageTableColumnsIds.formattedCreateAt
             )[0];
 
-          __getCampaignColumn =
+          _getCampaignColumn =
             getSWSUTMTagFiltersData?.settings?.columns.filter(
               el => el?.id === ZUTMTagsListPageTableColumnsIds.campaign
             )[0];
 
-          __getContentColumn =
-            getSWSUTMTagFiltersData?.settings?.columns.filter(
-              el => el?.id === ZUTMTagsListPageTableColumnsIds.content
-            )[0];
+          _getContentColumn = getSWSUTMTagFiltersData?.settings?.columns.filter(
+            el => el?.id === ZUTMTagsListPageTableColumnsIds.content
+          )[0];
 
-          __getMediumColumn = getSWSUTMTagFiltersData?.settings?.columns.filter(
+          _getMediumColumn = getSWSUTMTagFiltersData?.settings?.columns.filter(
             el => el?.id === ZUTMTagsListPageTableColumnsIds.medium
           )[0];
 
-          __getSourceColumn = getSWSUTMTagFiltersData?.settings?.columns.filter(
+          _getSourceColumn = getSWSUTMTagFiltersData?.settings?.columns.filter(
             el => el?.id === ZUTMTagsListPageTableColumnsIds.source
           )[0];
 
-          __getTermColumn = getSWSUTMTagFiltersData?.settings?.columns.filter(
+          _getTermColumn = getSWSUTMTagFiltersData?.settings?.columns.filter(
             el => el?.id === ZUTMTagsListPageTableColumnsIds.term
           )[0];
         }
 
-        if (__getTemplateNameColumn) {
+        if (_getTemplateNameColumn !== undefined) {
           zUTMTagTable
             ?.getColumn(ZUTMTagsListPageTableColumnsIds.templateName)
-            ?.toggleVisibility(__getTemplateNameColumn?.isVisible);
+            ?.toggleVisibility(_getTemplateNameColumn?.isVisible);
         }
 
-        if (__getMediumColumn) {
+        if (_getMediumColumn !== undefined) {
           zUTMTagTable
             ?.getColumn(ZUTMTagsListPageTableColumnsIds.medium)
-            ?.toggleVisibility(__getMediumColumn?.isVisible);
+            ?.toggleVisibility(_getMediumColumn?.isVisible);
         }
 
-        if (__getFormattedCreateAtColumn) {
+        if (_getFormattedCreateAtColumn !== undefined) {
           zUTMTagTable
             ?.getColumn(ZUTMTagsListPageTableColumnsIds.formattedCreateAt)
-            ?.toggleVisibility(__getFormattedCreateAtColumn?.isVisible);
+            ?.toggleVisibility(_getFormattedCreateAtColumn?.isVisible);
         }
 
-        if (__getCampaignColumn) {
+        if (_getCampaignColumn !== undefined) {
           zUTMTagTable
             ?.getColumn(ZUTMTagsListPageTableColumnsIds.campaign)
-            ?.toggleVisibility(__getCampaignColumn?.isVisible);
+            ?.toggleVisibility(_getCampaignColumn?.isVisible);
         }
 
-        if (__getSourceColumn) {
+        if (_getSourceColumn !== undefined) {
           zUTMTagTable
             ?.getColumn(ZUTMTagsListPageTableColumnsIds.source)
-            ?.toggleVisibility(__getSourceColumn?.isVisible);
+            ?.toggleVisibility(_getSourceColumn?.isVisible);
         }
 
-        if (__getContentColumn) {
+        if (_getContentColumn !== undefined) {
           zUTMTagTable
             ?.getColumn(ZUTMTagsListPageTableColumnsIds.content)
-            ?.toggleVisibility(__getContentColumn?.isVisible);
+            ?.toggleVisibility(_getContentColumn?.isVisible);
         }
 
-        if (__getTermColumn) {
+        if (_getTermColumn !== undefined) {
           zUTMTagTable
             ?.getColumn(ZUTMTagsListPageTableColumnsIds.term)
-            ?.toggleVisibility(__getTermColumn?.isVisible);
+            ?.toggleVisibility(_getTermColumn?.isVisible);
         }
       }
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getUTMTagFiltersData, getSWSUTMTagFiltersData]);
 
   useEffect(() => {
-    zUTMTagTable.setPageIndex(Number(pageindex) || 0);
-    zUTMTagTable.setPageSize(Number(pagesize) || 2);
+    zUTMTagTable.setPageIndex(Number(pageindex ?? 0));
+    zUTMTagTable.setPageSize(Number(pagesize ?? 2));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageindex, pagesize]);
 
   useEffect(() => {
     try {
-      if (workspaceId && UTMTagsData) {
-        setUtmTagsDataRState(UTMTagsData);
-      } else if (wsShareId && shareWSMemberId && swsUTMTagsData) {
-        setUtmTagsDataRState(swsUTMTagsData);
+      if (
+        (workspaceId?.trim()?.length ?? 0) > 0 &&
+        (UTMTagsData?.length ?? 0) > 0
+      ) {
+        setUtmTagsDataRState(UTMTagsData ?? []);
+      } else if (
+        (wsShareId?.trim()?.length ?? 0) > 0 &&
+        (shareWSMemberId?.trim()?.length ?? 0) > 0 &&
+        (swsUTMTagsData?.length ?? 0) > 0
+      ) {
+        setUtmTagsDataRState(swsUTMTagsData ?? []);
       }
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [UTMTagsData, swsUTMTagsData, workspaceId, wsShareId, shareWSMemberId]);
   // #endregion
 
@@ -835,7 +945,10 @@ const ZInpageTable: React.FC = () => {
                       shareWSPermissionEnum.update_sws_utmTag
                     ].some(el =>
                       getMemberRolePermissions?.memberPermissions?.includes(el)
-                    ) || workspaceId
+                    ) ||
+                    (workspaceId !== undefined &&
+                      workspaceId !== null &&
+                      workspaceId?.trim()?.length > 0)
                       ? 'No UTM tags founds. please create a UTM tag.'
                       : 'No UTM tags founds.'
                   }
@@ -854,9 +967,10 @@ const ZInpageTable: React.FC = () => {
                       shareWSPermissionEnum.update_sws_utmTag
                     ].some(el =>
                       getMemberRolePermissions?.memberPermissions?.includes(el)
-                    ) || workspaceId
-                      ? true
-                      : false
+                    ) ||
+                    (workspaceId !== undefined &&
+                      workspaceId !== null &&
+                      workspaceId?.trim()?.length > 0)
                   }
                 />
               )}
@@ -896,12 +1010,14 @@ const ZInpageTable: React.FC = () => {
             onClick={() => {
               if (zUTMTagTable.getCanPreviousPage()) {
                 zNavigatePushRoute(
-                  workspaceId
+                  workspaceId !== undefined &&
+                    workspaceId !== null &&
+                    workspaceId?.trim()?.length > 0
                     ? createRedirectRoute({
                         url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
                           .UTMTag,
                         params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                        values: [workspaceId!],
+                        values: [workspaceId],
                         routeSearchParams: {
                           pageindex: 0,
                           pagesize: zUTMTagTable
@@ -909,7 +1025,13 @@ const ZInpageTable: React.FC = () => {
                             .pagination.pageSize.toString()
                         }
                       })
-                    : wsShareId && shareWSMemberId
+                    : wsShareId !== undefined &&
+                      wsShareId !== null &&
+                      wsShareId?.trim()?.length > 0 &&
+                      shareWSMemberId !== null &&
+                      shareWSMemberId !== undefined &&
+                      shareWSMemberId?.trim()?.length > 0 &&
+                      shareWSMemberId !== undefined
                     ? createRedirectRoute({
                         url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
                           .UTMTag,
@@ -951,12 +1073,14 @@ const ZInpageTable: React.FC = () => {
                 zUTMTagTable.previousPage();
 
                 zNavigatePushRoute(
-                  workspaceId
+                  workspaceId !== undefined &&
+                    workspaceId !== null &&
+                    workspaceId?.trim()?.length > 0
                     ? createRedirectRoute({
                         url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
                           .UTMTag,
                         params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                        values: [workspaceId!],
+                        values: [workspaceId],
                         routeSearchParams: {
                           pageindex:
                             zUTMTagTable.getState().pagination.pageIndex - 1,
@@ -965,7 +1089,13 @@ const ZInpageTable: React.FC = () => {
                             .pagination.pageSize.toString()
                         }
                       })
-                    : wsShareId && shareWSMemberId
+                    : wsShareId !== undefined &&
+                      wsShareId !== null &&
+                      wsShareId?.trim()?.length > 0 &&
+                      shareWSMemberId !== null &&
+                      shareWSMemberId !== undefined &&
+                      shareWSMemberId?.trim()?.length > 0 &&
+                      shareWSMemberId !== undefined
                     ? createRedirectRoute({
                         url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
                           .UTMTag,
@@ -1007,12 +1137,14 @@ const ZInpageTable: React.FC = () => {
                 zUTMTagTable.nextPage();
 
                 zNavigatePushRoute(
-                  workspaceId
+                  workspaceId !== undefined &&
+                    workspaceId !== null &&
+                    workspaceId?.trim()?.length > 0
                     ? createRedirectRoute({
                         url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
                           .UTMTag,
                         params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                        values: [workspaceId!],
+                        values: [workspaceId],
                         routeSearchParams: {
                           pageindex:
                             zUTMTagTable.getState().pagination.pageIndex + 1,
@@ -1021,7 +1153,13 @@ const ZInpageTable: React.FC = () => {
                             .pagination.pageSize.toString()
                         }
                       })
-                    : wsShareId && shareWSMemberId
+                    : wsShareId !== undefined &&
+                      wsShareId !== null &&
+                      wsShareId?.trim()?.length > 0 &&
+                      shareWSMemberId !== null &&
+                      shareWSMemberId !== undefined &&
+                      shareWSMemberId?.trim()?.length > 0 &&
+                      shareWSMemberId !== undefined
                     ? createRedirectRoute({
                         url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
                           .UTMTag,
@@ -1063,12 +1201,14 @@ const ZInpageTable: React.FC = () => {
                 zUTMTagTable.setPageIndex(zUTMTagTable.getPageCount() - 1);
 
                 zNavigatePushRoute(
-                  workspaceId
+                  workspaceId !== undefined &&
+                    workspaceId !== null &&
+                    workspaceId?.trim()?.length > 0
                     ? createRedirectRoute({
                         url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
                           .UTMTag,
                         params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                        values: [workspaceId!],
+                        values: [workspaceId],
                         routeSearchParams: {
                           pageindex: zUTMTagTable.getPageCount() - 1,
                           pagesize: zUTMTagTable
@@ -1076,7 +1216,13 @@ const ZInpageTable: React.FC = () => {
                             .pagination.pageSize.toString()
                         }
                       })
-                    : wsShareId && shareWSMemberId
+                    : wsShareId !== undefined &&
+                      wsShareId !== null &&
+                      wsShareId?.trim()?.length > 0 &&
+                      shareWSMemberId !== null &&
+                      shareWSMemberId !== undefined &&
+                      shareWSMemberId?.trim()?.length > 0 &&
+                      shareWSMemberId !== undefined
                     ? createRedirectRoute({
                         url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
                           .UTMTag,
@@ -1119,14 +1265,13 @@ const ZInpageTable: React.FC = () => {
             'ion-justify-content-between mt-1 px-2': !isSmScale
           })}>
           <ZIonText className='mt-1 font-semibold me-3'>
-            {filteredUtmTagsDataRSelector?.length || 0}{' '}
+            {filteredUtmTagsDataRSelector?.length ?? 0}{' '}
             {filteredUtmTagsDataRSelector?.length === 1 ? 'UTMTag' : 'UTMTags'}
           </ZIonText>
           <ZIonSelect
             minHeight='30px'
             fill='outline'
-            className='bg-white w-[7rem]'
-            interface='popover'
+            className='zaions__bg_white w-[7rem]'
             value={zUTMTagTable.getState().pagination.pageSize}
             testingselector={
               CONSTANTS.testingSelectors.utmTags.listPage.table.pageSizeInput
@@ -1135,18 +1280,26 @@ const ZInpageTable: React.FC = () => {
               zUTMTagTable.setPageSize(Number(e.target.value));
 
               zNavigatePushRoute(
-                workspaceId
+                workspaceId !== undefined &&
+                  workspaceId !== null &&
+                  workspaceId?.trim()?.length > 0
                   ? createRedirectRoute({
                       url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
                         .UTMTag,
                       params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                      values: [workspaceId!],
+                      values: [workspaceId],
                       routeSearchParams: {
                         pageindex: zUTMTagTable.getPageCount() - 1,
                         pagesize: Number(e.target.value)
                       }
                     })
-                  : wsShareId && shareWSMemberId
+                  : wsShareId !== undefined &&
+                    wsShareId !== null &&
+                    wsShareId?.trim()?.length > 0 &&
+                    shareWSMemberId !== null &&
+                    shareWSMemberId !== undefined &&
+                    shareWSMemberId?.trim()?.length > 0 &&
+                    shareWSMemberId !== undefined
                   ? createRedirectRoute({
                       url: ZaionsRoutes.AdminPanel.ShareWS.AccountSettings
                         .UTMTag,
@@ -1306,6 +1459,7 @@ const ZUTMTableSkeleton: React.FC = React.memo(() => {
     </div>
   );
 });
+ZUTMTableSkeleton.displayName = 'ZUTMTableSkeleton';
 
 // UTMTag action popover
 const ZUTMTagActionPopover: React.FC<{
@@ -1332,7 +1486,7 @@ const ZUTMTagActionPopover: React.FC<{
   const { presentZIonModal: presentZUtmTagsFormModal } = useZIonModal(
     ZaionsAddUtmTags,
     {
-      utmTag: utmTag,
+      utmTag,
       formMode: FormMode.EDIT,
       workspaceId,
       shareWSMemberId,
@@ -1354,9 +1508,13 @@ const ZUTMTagActionPopover: React.FC<{
   // #endregion
 
   // when user won't to delete Utm tag and click on the delete button this function will fire and show the confirm alert.
-  const deleteUTMTag = async () => {
+  const deleteUTMTag = async (): Promise<void> => {
     try {
-      if (utmTag?.id?.trim()) {
+      if (
+        utmTag?.id !== undefined &&
+        utmTag?.id !== null &&
+        utmTag?.id?.trim()?.length > 0
+      ) {
         // const selectedUTMTag = UTMTagsData?.find(el => el.id === utmTag?.id);
         await presentZIonAlert({
           header: MESSAGES.UTM_TAGS_TEMPLATE.DELETE_ALERT.HEADER,
@@ -1386,11 +1544,19 @@ const ZUTMTagActionPopover: React.FC<{
   };
 
   // on the delete Utm tag confirm alert, when user click on delete button this function will fires which will trigger delete request and delete the Utm tag.
-  const removeUTMTag = async () => {
+  const removeUTMTag = async (): Promise<void> => {
     try {
-      if (utmTag?.id) {
+      if (
+        utmTag?.id !== undefined &&
+        utmTag?.id !== null &&
+        utmTag?.id?.trim()?.length > 0
+      ) {
         let _response;
-        if (workspaceId) {
+        if (
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          workspaceId?.trim()?.length > 0
+        ) {
           _response = await deleteUtmTagMutate({
             itemIds: [workspaceId, utmTag?.id],
             urlDynamicParts: [
@@ -1399,7 +1565,15 @@ const ZUTMTagActionPopover: React.FC<{
             ]
           });
         }
-        if (wsShareId && shareWSMemberId) {
+        if (
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== null &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId?.trim()?.length > 0 &&
+          shareWSMemberId !== undefined
+        ) {
           _response = await deleteSWSUtmTagMutate({
             itemIds: [shareWSMemberId, utmTag?.id],
             urlDynamicParts: [
@@ -1409,17 +1583,21 @@ const ZUTMTagActionPopover: React.FC<{
           });
         }
 
-        if (_response) {
+        if (_response !== undefined && _response !== null) {
           const _data = extractInnerData<{ success: boolean }>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data && _data?.success) {
+          if (_data !== undefined && _data !== null && _data?.success) {
             // getting all the utm tag from RQ cache.
             let _oldUTMTags: UTMTagTemplateType[] = [];
 
-            if (workspaceId) {
+            if (
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+            ) {
               _oldUTMTags =
                 extractInnerData<UTMTagTemplateType[]>(
                   getRQCDataHandler<UTMTagTemplateType[]>({
@@ -1429,8 +1607,15 @@ const ZUTMTagActionPopover: React.FC<{
                     ]
                   }) as UTMTagTemplateType[],
                   extractInnerDataOptionsEnum.createRequestResponseItems
-                ) || [];
-            } else if (wsShareId && shareWSMemberId) {
+                ) ?? [];
+            } else if (
+              wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+            ) {
               _oldUTMTags =
                 extractInnerData<UTMTagTemplateType[]>(
                   getRQCDataHandler<UTMTagTemplateType[]>({
@@ -1440,7 +1625,7 @@ const ZUTMTagActionPopover: React.FC<{
                     ]
                   }) as UTMTagTemplateType[],
                   extractInnerDataOptionsEnum.createRequestResponseItems
-                ) || [];
+                ) ?? [];
             }
 
             // removing deleted utm tag from cache.
@@ -1449,24 +1634,35 @@ const ZUTMTagActionPopover: React.FC<{
             );
 
             // Updating data in RQ cache.
-            if (workspaceId) {
+            if (
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+            ) {
               await updateRQCDataHandler<UTMTagTemplateType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
                   workspaceId
                 ],
-                data: _updatedUtmTags as UTMTagTemplateType[],
+                data: _updatedUtmTags,
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
               });
-            } else if (wsShareId && shareWSMemberId) {
+            } else if (
+              wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+            ) {
               await updateRQCDataHandler<UTMTagTemplateType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.SWS_MAIN,
                   wsShareId
                 ],
-                data: _updatedUtmTags as UTMTagTemplateType[],
+                data: _updatedUtmTags,
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
@@ -1495,14 +1691,28 @@ const ZUTMTagActionPopover: React.FC<{
       <ZCan
         shareWSId={wsShareId}
         permissionType={
-          wsShareId && shareWSMemberId
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== null &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId?.trim()?.length > 0 &&
+          shareWSMemberId !== undefined
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }
         havePermissions={
-          workspaceId
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          workspaceId?.trim()?.length > 0
             ? [permissionsEnum.update_utmTag]
-            : wsShareId && shareWSMemberId
+            : wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== null &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined
             ? [shareWSPermissionEnum.update_sws_utmTag]
             : []
         }>
@@ -1514,21 +1724,27 @@ const ZUTMTagActionPopover: React.FC<{
             CONSTANTS.testingSelectors.utmTags.listPage.table.editBtn
           }
           testinglistselector={`${CONSTANTS.testingSelectors.utmTags.listPage.table.editBtn}-${utmTag?.id}`}
-          onClick={async () => {
-            try {
-              if (utmTag?.id) {
-                //
-                presentZUtmTagsFormModal({
-                  _cssClass: 'utm-tags-modal-size'
-                });
+          onClick={() => {
+            void (async () => {
+              try {
+                if (
+                  utmTag?.id !== undefined &&
+                  utmTag?.id !== null &&
+                  utmTag?.id?.trim()?.length > 0
+                ) {
+                  //
+                  presentZUtmTagsFormModal({
+                    _cssClass: 'utm-tags-modal-size'
+                  });
 
-                dismissZIonPopover('', '');
-              } else {
-                await presentZIonErrorAlert();
+                  dismissZIonPopover('', '');
+                } else {
+                  await presentZIonErrorAlert();
+                }
+              } catch (error) {
+                reportCustomError(error);
               }
-            } catch (error) {
-              reportCustomError(error);
-            }
+            })();
           }}>
           <ZIonButton
             size='small'
@@ -1553,14 +1769,28 @@ const ZUTMTagActionPopover: React.FC<{
       <ZCan
         shareWSId={wsShareId}
         permissionType={
-          wsShareId && shareWSMemberId
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== null &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId?.trim()?.length > 0 &&
+          shareWSMemberId !== undefined
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }
         havePermissions={
-          workspaceId
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          workspaceId?.trim()?.length > 0
             ? [permissionsEnum.delete_utmTag]
-            : wsShareId && shareWSMemberId
+            : wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== null &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined
             ? [shareWSPermissionEnum.delete_sws_utmTag]
             : []
         }>
@@ -1568,7 +1798,9 @@ const ZUTMTagActionPopover: React.FC<{
           button={true}
           detail={false}
           minHeight='2.5rem'
-          onClick={() => void deleteUTMTag()}
+          onClick={() => {
+            void deleteUTMTag();
+          }}
           testingselector={
             CONSTANTS.testingSelectors.utmTags.listPage.table.deleteBtn
           }

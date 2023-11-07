@@ -1,5 +1,4 @@
-import { ZaionsKeyFeatureType } from '@/types/InPageComponentTypes/ZaionsKeyFeature.type';
-import {} from 'ionicons';
+import { type ZaionsKeyFeatureType } from '@/types/InPageComponentTypes/ZaionsKeyFeature.type';
 import { BrandingGif, DashboardGif, ShortenMin } from '@/assets/gif';
 import { checkboxOutline, linkOutline, mailOutline } from 'ionicons/icons';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
@@ -13,8 +12,8 @@ export const DMSMKeyFeaturesData: ZaionsKeyFeatureType[] = [
     text: 'Deploy branded links to lift results across every touchpoint.',
     link: {
       text: 'Learn more about link management →',
-      url: ZaionsRoutes.Products.ZaionsLinkManagmentRoute,
-    },
+      url: ZaionsRoutes.Products.ZaionsLinkManagmentRoute
+    }
   },
   {
     id: 2,
@@ -24,8 +23,8 @@ export const DMSMKeyFeaturesData: ZaionsKeyFeatureType[] = [
     text: 'Improve click-through’s and amplify your brand at the same time.',
     link: {
       text: 'Learn more about branded links →',
-      url: ZaionsRoutes.Feature.ZaionsBrandedLinksRoute,
-    },
+      url: ZaionsRoutes.Feature.ZaionsBrandedLinksRoute
+    }
   },
   {
     id: 3,
@@ -35,7 +34,7 @@ export const DMSMKeyFeaturesData: ZaionsKeyFeatureType[] = [
     text: 'Identify and promote your top-performing content.',
     link: {
       text: 'Learn more about campaign management and analytics →',
-      url: ZaionsRoutes.Feature.ZaionsCampaignManagementAnalyticsRoute,
-    },
-  },
+      url: ZaionsRoutes.Feature.ZaionsCampaignManagementAnalyticsRoute
+    }
+  }
 ];

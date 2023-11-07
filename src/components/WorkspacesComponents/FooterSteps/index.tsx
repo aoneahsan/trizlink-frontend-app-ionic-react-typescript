@@ -60,52 +60,49 @@ import { workspaceFormTabEnum } from '@/types/AdminPanel/workspace';
  * */
 
 const ZWorkspaceFooterSteps: React.FC = () => {
-	// getting search param from url with the help of 'qs' package
-	const routeQSearchParams = routeQueryString.parse(location.search, {
-		ignoreQueryPrefix: true,
-	});
+  // getting search param from url with the help of 'qs' package
+  const routeQSearchParams = routeQueryString.parse(location.search, {
+    ignoreQueryPrefix: true
+  });
 
-	return (
-		<ZIonRow className='gap-1 mt-3 ion-align-items-center'>
-			<ZIonCol
-				className={classNames({
-					'h-2 p-0 m-0 rounded zaions-transition': true,
-					zaions__primary_bg:
-						routeQSearchParams.tab === workspaceFormTabEnum.inviteClients ||
-						routeQSearchParams.tab === workspaceFormTabEnum.connectPages ||
-						routeQSearchParams.tab === workspaceFormTabEnum.Approval,
-					zaions__medium_bg:
-						routeQSearchParams.tab === workspaceFormTabEnum.workspaceDetailForm,
-				})}
-			></ZIonCol>
+  return (
+    <ZIonRow className='gap-1 mt-3 ion-align-items-center'>
+      <ZIonCol
+        className={classNames({
+          'h-2 p-0 m-0 rounded zaions-transition': true,
+          zaions__primary_bg:
+            routeQSearchParams.tab === workspaceFormTabEnum.inviteClients ||
+            routeQSearchParams.tab === workspaceFormTabEnum.connectPages ||
+            routeQSearchParams.tab === workspaceFormTabEnum.Approval,
+          zaions__medium_bg:
+            routeQSearchParams.tab === workspaceFormTabEnum.workspaceDetailForm
+        })}></ZIonCol>
 
-			<ZIonCol
-				className={classNames({
-					'h-2 p-0 m-0 rounded zaions-transition': true,
-					zaions__primary_bg:
-						routeQSearchParams.tab === workspaceFormTabEnum.connectPages ||
-						routeQSearchParams.tab === workspaceFormTabEnum.Approval,
-					zaions__medium_bg:
-						routeQSearchParams.tab ===
-							workspaceFormTabEnum.workspaceDetailForm ||
-						routeQSearchParams.tab === workspaceFormTabEnum.inviteClients,
-				})}
-			></ZIonCol>
+      <ZIonCol
+        className={classNames({
+          'h-2 p-0 m-0 rounded zaions-transition': true,
+          zaions__primary_bg:
+            routeQSearchParams.tab === workspaceFormTabEnum.connectPages ||
+            routeQSearchParams.tab === workspaceFormTabEnum.Approval,
+          zaions__medium_bg:
+            routeQSearchParams.tab ===
+              workspaceFormTabEnum.workspaceDetailForm ||
+            routeQSearchParams.tab === workspaceFormTabEnum.inviteClients
+        })}></ZIonCol>
 
-			<ZIonCol
-				className={classNames({
-					'h-2 p-0 m-0 rounded zaions-transition': true,
-					zaions__primary_bg:
-						routeQSearchParams.tab === workspaceFormTabEnum.Approval,
-					zaions__medium_bg:
-						routeQSearchParams.tab ===
-							workspaceFormTabEnum.workspaceDetailForm ||
-						routeQSearchParams.tab === workspaceFormTabEnum.inviteClients ||
-						routeQSearchParams.tab === workspaceFormTabEnum.connectPages,
-				})}
-			></ZIonCol>
-		</ZIonRow>
-	);
+      <ZIonCol
+        className={classNames({
+          'h-2 p-0 m-0 rounded zaions-transition': true,
+          zaions__primary_bg:
+            routeQSearchParams.tab === workspaceFormTabEnum.Approval,
+          zaions__medium_bg:
+            routeQSearchParams.tab ===
+              workspaceFormTabEnum.workspaceDetailForm ||
+            routeQSearchParams.tab === workspaceFormTabEnum.inviteClients ||
+            routeQSearchParams.tab === workspaceFormTabEnum.connectPages
+        })}></ZIonCol>
+    </ZIonRow>
+  );
 };
 
 export default ZWorkspaceFooterSteps;

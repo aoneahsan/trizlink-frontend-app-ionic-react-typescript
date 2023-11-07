@@ -10,8 +10,11 @@ import { useParams } from 'react-router';
  * ? Like import of ionic components is a packages import
  * */
 import classNames from 'classnames';
-import { closeOutline, share } from 'ionicons/icons';
-import { ItemReorderEventDetail, menuController } from '@ionic/core/components';
+import { closeOutline } from 'ionicons/icons';
+import {
+  type ItemReorderEventDetail,
+  menuController
+} from '@ionic/core/components';
 import { Formik } from 'formik';
 import { useSetRecoilState } from 'recoil';
 
@@ -69,12 +72,11 @@ import MESSAGES from '@/utils/messages';
  * */
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { TimeFilterEnum } from '@/types/AdminPanel/linksType';
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 import {
   ZMembersListPageTableColumnsIds,
-  ZPixelsListPageTableColumnsIds,
-  ZTeamMemberInvitationEnum,
-  ZUserSettingInterface,
+  type ZTeamMemberInvitationEnum,
+  type ZUserSettingInterface,
   ZUserSettingTypeEnum
 } from '@/types/AdminPanel/index.type';
 
@@ -83,7 +85,7 @@ import {
  * ? Import of recoil states is a Recoil State import
  * */
 import { MembersFilterOptionsRStateAtom } from '@/ZaionsStore/UserDashboard/MemberState/index.recoil';
-import { WSRolesNameEnum } from '@/types/AdminPanel/workspace';
+import { type WSRolesNameEnum } from '@/types/AdminPanel/workspace';
 import ZCan from '@/components/Can';
 import {
   permissionsEnum,
@@ -115,18 +117,18 @@ import {
 const ZMembersFilterMenu: React.FC = () => {
   // getting current workspace id OR wsShareId && shareWSMemberId form params.
   const { workspaceId, wsShareId, shareWSMemberId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region compState.
   const [compState, setCompState] = useState<{
-    membersColumn?: {
+    membersColumn?: Array<{
       id?: string;
       name: string;
       isVisible: boolean;
-    }[];
+    }>;
     columnOrderIds: string[];
   }>({
     columnOrderIds: [],
@@ -166,7 +168,7 @@ const ZMembersFilterMenu: React.FC = () => {
     _url: API_URL_ENUM.user_setting_list_create,
     _loaderMessage: MESSAGES.MEMBER.FILTERING,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _itemsIds: [workspaceId]
+    _itemsIds: [workspaceId ?? '']
   });
 
   // If owned-workspace then this api will create owned-workspace member settings & filters data.
@@ -175,77 +177,103 @@ const ZMembersFilterMenu: React.FC = () => {
       _url: API_URL_ENUM.sws_user_setting_list_create,
       _loaderMessage: MESSAGES.MEMBER.FILTERING,
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-      _itemsIds: [shareWSMemberId]
+      _itemsIds: [shareWSMemberId ?? '']
     }
   );
 
   // If owned-workspace then this api will fetch owned-workspace member settings & filters data.
-  const {
-    data: getMemberFiltersData,
-    isFetching: isMemberFiltersDataFetching
-  } = useZRQGetRequest<ZUserSettingInterface>({
-    _url: API_URL_ENUM.user_setting_delete_update_get,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-      workspaceId,
-      ZUserSettingTypeEnum.membersListPageTable
-    ],
-    _itemsIds: [workspaceId, ZUserSettingTypeEnum.membersListPageTable],
-    _urlDynamicParts: [
-      CONSTANTS.RouteParams.workspace.workspaceId,
-      CONSTANTS.RouteParams.settings.type
-    ],
-    _extractType: ZRQGetRequestExtractEnum.extractItem,
-    _shouldFetchWhenIdPassed: workspaceId ? false : true
-  });
+  const { data: getMemberFiltersData } =
+    useZRQGetRequest<ZUserSettingInterface>({
+      _url: API_URL_ENUM.user_setting_delete_update_get,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+        workspaceId ?? '',
+        ZUserSettingTypeEnum.membersListPageTable
+      ],
+      _itemsIds: [workspaceId ?? '', ZUserSettingTypeEnum.membersListPageTable],
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.workspaceId,
+        CONSTANTS.RouteParams.settings.type
+      ],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _shouldFetchWhenIdPassed: !(
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        (workspaceId?.trim()?.length ?? 0) > 0
+      )
+    });
 
   // If owned-workspace then this api will fetch owned-workspace member settings & filters data.
-  const {
-    data: getSWSMemberFiltersData,
-    isFetching: isMemberSWSFiltersDataFetching
-  } = useZRQGetRequest<ZUserSettingInterface>({
-    _url: API_URL_ENUM.sws_user_setting_delete_update_get,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-      wsShareId,
-      ZUserSettingTypeEnum.membersListPageTable
-    ],
-    _itemsIds: [shareWSMemberId, ZUserSettingTypeEnum.membersListPageTable],
-    _urlDynamicParts: [
-      CONSTANTS.RouteParams.workspace.shareWSMemberId,
-      CONSTANTS.RouteParams.settings.type
-    ],
-    _extractType: ZRQGetRequestExtractEnum.extractItem,
-    _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true
-  });
+  const { data: getSWSMemberFiltersData } =
+    useZRQGetRequest<ZUserSettingInterface>({
+      _url: API_URL_ENUM.sws_user_setting_delete_update_get,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
+        wsShareId ?? '',
+        ZUserSettingTypeEnum.membersListPageTable
+      ],
+      _itemsIds: [
+        shareWSMemberId ?? '',
+        ZUserSettingTypeEnum.membersListPageTable
+      ],
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.shareWSMemberId,
+        CONSTANTS.RouteParams.settings.type
+      ],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _shouldFetchWhenIdPassed: !(
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        (wsShareId?.trim()?.length ?? 0) > 0 &&
+        shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
+      )
+    });
   // #endregion
 
   useEffect(() => {
     try {
       if (
-        (getMemberFiltersData?.type &&
-          getMemberFiltersData?.settings?.columns) ||
-        (getSWSMemberFiltersData?.type &&
-          getSWSMemberFiltersData?.settings?.columns)
+        (getMemberFiltersData?.type !== null &&
+          (getMemberFiltersData?.settings?.columns !== undefined ||
+            getMemberFiltersData?.settings?.columns !== null)) ||
+        (getSWSMemberFiltersData?.type !== null &&
+          (getSWSMemberFiltersData?.settings?.columns !== undefined ||
+            getSWSMemberFiltersData?.settings?.columns !== null))
       ) {
         setCompState(_oldValue => ({
           ..._oldValue,
-          membersColumn: workspaceId
-            ? getMemberFiltersData?.settings?.columns
-            : wsShareId && shareWSMemberId
-            ? getSWSMemberFiltersData?.settings?.columns
-            : _oldValue.membersColumn
+          membersColumn:
+            workspaceId !== undefined &&
+            workspaceId !== null &&
+            (workspaceId?.trim()?.length ?? 0) > 0
+              ? getMemberFiltersData?.settings?.columns
+              : wsShareId !== undefined &&
+                wsShareId !== null &&
+                (wsShareId?.trim()?.length ?? 0) > 0 &&
+                shareWSMemberId !== undefined &&
+                shareWSMemberId !== null &&
+                (shareWSMemberId?.trim()?.length ?? 0) > 0
+              ? getSWSMemberFiltersData?.settings?.columns
+              : _oldValue.membersColumn
         }));
       }
     } catch (error) {
       reportCustomError(error);
     }
-  }, [getMemberFiltersData, getSWSMemberFiltersData]);
+  }, [
+    getMemberFiltersData,
+    getSWSMemberFiltersData,
+    workspaceId,
+    wsShareId,
+    shareWSMemberId
+  ]);
 
   // #region Functions.
   const handleCarouselCardReorder = (
     event: CustomEvent<ItemReorderEventDetail>
-  ) => {
+  ): void => {
     const reorderedItems = event.detail.complete(compState.membersColumn);
     const membersColumnIds: string[] = [ZMembersListPageTableColumnsIds.id];
 
@@ -255,7 +283,7 @@ const ZMembersFilterMenu: React.FC = () => {
         name: string;
         isVisible: boolean;
       };
-      membersColumnIds.push(_block?.id!);
+      membersColumnIds.push(_block?.id ?? '');
     }
 
     //
@@ -266,10 +294,10 @@ const ZMembersFilterMenu: React.FC = () => {
     }));
   };
 
-  const FormikSubmitHandler = async (_data: string) => {
+  const FormikSubmitHandler = async (_value: string): Promise<void> => {
     try {
-      if (_data) {
-        let __response;
+      if (_value?.trim()?.length > 0) {
+        let _response;
 
         if (
           getMemberFiltersData?.type ===
@@ -277,17 +305,28 @@ const ZMembersFilterMenu: React.FC = () => {
           getSWSMemberFiltersData?.type ===
             ZUserSettingTypeEnum.membersListPageTable
         ) {
-          if (workspaceId) {
-            __response = await updateMemberFilersAsyncMutate({
+          if (
+            workspaceId !== undefined &&
+            workspaceId !== null &&
+            (workspaceId?.trim()?.length ?? 0) > 0
+          ) {
+            _response = await updateMemberFilersAsyncMutate({
               itemIds: [workspaceId, ZUserSettingTypeEnum.membersListPageTable],
               urlDynamicParts: [
                 CONSTANTS.RouteParams.workspace.workspaceId,
                 CONSTANTS.RouteParams.settings.type
               ],
-              requestData: _data
+              requestData: _value
             });
-          } else if (wsShareId && shareWSMemberId) {
-            __response = await updateSWSMemberFilersAsyncMutate({
+          } else if (
+            wsShareId !== undefined &&
+            wsShareId !== null &&
+            (wsShareId?.trim()?.length ?? 0) > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            (shareWSMemberId?.trim()?.length ?? 0) > 0
+          ) {
+            _response = await updateSWSMemberFilersAsyncMutate({
               itemIds: [
                 shareWSMemberId,
                 ZUserSettingTypeEnum.membersListPageTable
@@ -296,46 +335,64 @@ const ZMembersFilterMenu: React.FC = () => {
                 CONSTANTS.RouteParams.workspace.shareWSMemberId,
                 CONSTANTS.RouteParams.settings.type
               ],
-              requestData: _data
+              requestData: _value
             });
           }
         } else {
-          if (workspaceId) {
-            __response = await createMemberFilersAsyncMutate(_data);
-          } else if (wsShareId && shareWSMemberId) {
-            __response = await createSWSMemberFilersAsyncMutate(_data);
+          if (
+            workspaceId !== undefined &&
+            workspaceId !== null &&
+            (workspaceId?.trim()?.length ?? 0) > 0
+          ) {
+            _response = await createMemberFilersAsyncMutate(_value);
+          } else if (
+            wsShareId !== undefined &&
+            wsShareId !== null &&
+            (wsShareId?.trim()?.length ?? 0) > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            (shareWSMemberId?.trim()?.length ?? 0) > 0
+          ) {
+            _response = await createSWSMemberFilersAsyncMutate(_value);
           }
         }
 
-        if (__response) {
+        if (_response !== undefined) {
           // extract Data from _response.
-          const __data = extractInnerData<ZUserSettingInterface>(
-            __response,
+          const _data = extractInnerData<ZUserSettingInterface>(
+            _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
           // if we have data then show success message.
-          if (__data && __data.id) {
-            if (workspaceId) {
+          if (_data?.id !== undefined || _data?.id !== null) {
+            if (
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              (workspaceId?.trim()?.length ?? 0) > 0
+            ) {
               await updateRQCDataHandler<ZUserSettingInterface | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
                   workspaceId,
                   ZUserSettingTypeEnum.membersListPageTable
                 ],
-                data: __data,
+                data: _data,
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItem,
                 updateHoleData: true
               });
-            } else if (wsShareId && shareWSMemberId) {
+            } else if (
+              wsShareId !== undefined &&
+              shareWSMemberId !== undefined
+            ) {
               await updateRQCDataHandler<ZUserSettingInterface | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
                   wsShareId,
                   ZUserSettingTypeEnum.membersListPageTable
                 ],
-                data: __data,
+                data: _data,
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItem,
                 updateHoleData: true
@@ -365,14 +422,26 @@ const ZMembersFilterMenu: React.FC = () => {
       <ZCan
         shareWSId={wsShareId}
         permissionType={
-          wsShareId && shareWSMemberId
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          (wsShareId?.trim()?.length ?? 0) > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          (shareWSMemberId?.trim()?.length ?? 0) > 0
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }
         havePermissions={
-          workspaceId
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          (workspaceId?.trim()?.length ?? 0) > 0
             ? [permissionsEnum.viewAny_ws_member]
-            : wsShareId && shareWSMemberId
+            : wsShareId !== undefined &&
+              wsShareId !== null &&
+              (wsShareId?.trim()?.length ?? 0) > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              (shareWSMemberId?.trim()?.length ?? 0) > 0
             ? [shareWSPermissionEnum.viewAny_sws_member]
             : []
         }>
@@ -394,11 +463,13 @@ const ZMembersFilterMenu: React.FC = () => {
               CONSTANTS.testingSelectors.pixels.listPage.filterSidebar
                 .closeMenuBtn
             }
-            onClick={async () => {
-              // Close the menu by menu-id
-              await menuController.close(
-                CONSTANTS.MENU_IDS.MEMBER_FILTERS_MENU_ID
-              );
+            onClick={() => {
+              void (async () => {
+                // Close the menu by menu-id
+                await menuController.close(
+                  CONSTANTS.MENU_IDS.MEMBER_FILTERS_MENU_ID
+                );
+              })();
             }}
           />
         </ZIonHeader>
@@ -411,20 +482,26 @@ const ZMembersFilterMenu: React.FC = () => {
 
               filters: {
                 time:
-                  getMemberFiltersData?.settings?.filters?.time ||
-                  getSWSMemberFiltersData?.settings?.filters?.time ||
+                  getMemberFiltersData?.settings?.filters?.time ??
+                  getSWSMemberFiltersData?.settings?.filters?.time ??
                   TimeFilterEnum.allTime,
                 startDate:
-                  getMemberFiltersData?.settings?.filters?.startDate ||
-                  getSWSMemberFiltersData?.settings?.filters?.startDate ||
+                  getMemberFiltersData?.settings?.filters?.startDate ??
+                  getSWSMemberFiltersData?.settings?.filters?.startDate ??
                   new Date().toISOString(),
                 endDate:
-                  getMemberFiltersData?.settings?.filters?.endDate ||
-                  getSWSMemberFiltersData?.settings?.filters?.endDate ||
+                  getMemberFiltersData?.settings?.filters?.endDate ??
+                  getSWSMemberFiltersData?.settings?.filters?.endDate ??
                   new Date().toISOString(),
 
-                role: '',
-                status: ''
+                role:
+                  getMemberFiltersData?.settings?.filters?.role ??
+                  getSWSMemberFiltersData?.settings?.filters?.role ??
+                  '',
+                status:
+                  getMemberFiltersData?.settings?.filters?.status ??
+                  getSWSMemberFiltersData?.settings?.filters?.status ??
+                  ''
               }
             }}
             enableReinitialize={true}
@@ -481,7 +558,7 @@ const ZMembersFilterMenu: React.FC = () => {
                             .filterSidebar.timeFilterInput
                         }
                         onChange={_value => {
-                          setFieldValue(
+                          void setFieldValue(
                             'filters.time',
                             (_value as ZaionsRSelectOptions).value,
                             true
@@ -546,7 +623,7 @@ const ZMembersFilterMenu: React.FC = () => {
                             .filterSidebar.timeFilterInput
                         }
                         onChange={_value => {
-                          setFieldValue(
+                          void setFieldValue(
                             'filters.role',
                             (_value as ZaionsRSelectOptions).value,
                             true
@@ -578,7 +655,7 @@ const ZMembersFilterMenu: React.FC = () => {
                             .filterSidebar.timeFilterInput
                         }
                         onChange={_value => {
-                          setFieldValue(
+                          void setFieldValue(
                             'filters.status',
                             (_value as ZaionsRSelectOptions).value,
                             true
@@ -696,7 +773,7 @@ const ZMembersFilterMenu: React.FC = () => {
                                       testingselector={`${CONSTANTS.testingSelectors.pixels.listPage.filterSidebar.reorderToggler}-${el.id}`}
                                       checked={el.isVisible}
                                       onChange={_value => {
-                                        setFieldValue(
+                                        void setFieldValue(
                                           `columns.${index}.isVisible`,
                                           _value,
                                           false

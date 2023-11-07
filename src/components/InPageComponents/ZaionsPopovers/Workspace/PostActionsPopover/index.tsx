@@ -9,14 +9,14 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import {
-	copyOutline,
-	discOutline,
-	eyeOffOutline,
-	fileTrayFullOutline,
-	linkOutline,
-	pricetagOutline,
-	star,
-	syncOutline,
+  copyOutline,
+  discOutline,
+  eyeOffOutline,
+  fileTrayFullOutline,
+  linkOutline,
+  pricetagOutline,
+  star,
+  syncOutline
 } from 'ionicons/icons';
 
 /**
@@ -24,10 +24,10 @@ import {
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonIcon,
-	ZIonItem,
-	ZIonLabel,
-	ZIonList,
+  ZIonIcon,
+  ZIonItem,
+  ZIonLabel,
+  ZIonList
 } from '@/components/ZIonComponents';
 
 /**
@@ -72,76 +72,94 @@ import {
  * */
 
 const ZWorkspacePostActionsPopover: React.FC = () => {
-	return (
-		<ZIonList lines='none'>
-			{/* Manage labels */}
-			<ZIonItem
-				className='ion-activatable ion-focusable cursor-pointer text-sm'
-				minHeight='35px'
-			>
-				<ZIonIcon icon={pricetagOutline} className='me-1 w-5 h-5' />
-				<ZIonLabel className='m-0'>Manage labels</ZIonLabel>
-			</ZIonItem>
+  return (
+    <ZIonList lines='none'>
+      {/* Manage labels */}
+      <ZIonItem
+        className='text-sm cursor-pointer ion-activatable ion-focusable'
+        minHeight='35px'>
+        <ZIonIcon
+          icon={pricetagOutline}
+          className='w-5 h-5 me-1'
+        />
+        <ZIonLabel className='m-0'>Manage labels</ZIonLabel>
+      </ZIonItem>
 
-			{/* Repost */}
-			<ZIonItem
-				className='ion-activatable ion-focusable cursor-pointer text-sm'
-				minHeight='35px'
-			>
-				<ZIonIcon icon={syncOutline} className='me-1 w-5 h-5' />
-				<ZIonLabel className='m-0'>Repost</ZIonLabel>
-			</ZIonItem>
+      {/* Repost */}
+      <ZIonItem
+        className='text-sm cursor-pointer ion-activatable ion-focusable'
+        minHeight='35px'>
+        <ZIonIcon
+          icon={syncOutline}
+          className='w-5 h-5 me-1'
+        />
+        <ZIonLabel className='m-0'>Repost</ZIonLabel>
+      </ZIonItem>
 
-			{/* Hide from clients */}
-			<ZIonItem
-				className='ion-activatable ion-focusable cursor-pointer text-sm'
-				minHeight='35px'
-			>
-				<ZIonIcon icon={eyeOffOutline} className='me-1 w-5 h-5' />
-				<ZIonLabel className='m-0 flex ion-align-items-center'>
-					Hide from clients
-					<ZIonIcon icon={star} className='ms-1 w-4 h-4' color='secondary' />
-				</ZIonLabel>
-			</ZIonItem>
+      {/* Hide from clients */}
+      <ZIonItem
+        className='text-sm cursor-pointer ion-activatable ion-focusable'
+        minHeight='35px'>
+        <ZIonIcon
+          icon={eyeOffOutline}
+          className='w-5 h-5 me-1'
+        />
+        <ZIonLabel className='flex m-0 ion-align-items-center'>
+          Hide from clients
+          <ZIonIcon
+            icon={star}
+            className='w-4 h-4 ms-1'
+            color='secondary'
+          />
+        </ZIonLabel>
+      </ZIonItem>
 
-			{/* Copy public share link */}
-			<ZIonItem
-				className='ion-activatable ion-focusable cursor-pointer text-sm'
-				minHeight='35px'
-			>
-				<ZIonIcon icon={linkOutline} className='me-1 w-5 h-5' />
-				<ZIonLabel className='m-0'>Copy public share link</ZIonLabel>
-			</ZIonItem>
+      {/* Copy public share link */}
+      <ZIonItem
+        className='text-sm cursor-pointer ion-activatable ion-focusable'
+        minHeight='35px'>
+        <ZIonIcon
+          icon={linkOutline}
+          className='w-5 h-5 me-1'
+        />
+        <ZIonLabel className='m-0'>Copy public share link</ZIonLabel>
+      </ZIonItem>
 
-			{/* Copy to... */}
-			<ZIonItem
-				className='ion-activatable ion-focusable cursor-pointer text-sm'
-				minHeight='35px'
-			>
-				<ZIonIcon icon={copyOutline} className='me-1 w-5 h-5' />
-				<ZIonLabel className='m-0'>Copy to...</ZIonLabel>
-			</ZIonItem>
+      {/* Copy to... */}
+      <ZIonItem
+        className='text-sm cursor-pointer ion-activatable ion-focusable'
+        minHeight='35px'>
+        <ZIonIcon
+          icon={copyOutline}
+          className='w-5 h-5 me-1'
+        />
+        <ZIonLabel className='m-0'>Copy to...</ZIonLabel>
+      </ZIonItem>
 
-			{/* Preferred audience */}
-			<ZIonItem
-				className='ion-activatable ion-focusable cursor-pointer text-sm'
-				minHeight='35px'
-				lines='full'
-			>
-				<ZIonIcon icon={discOutline} className='me-1 w-5 h-5' />
-				<ZIonLabel className='m-0'>Preferred audience</ZIonLabel>
-			</ZIonItem>
+      {/* Preferred audience */}
+      <ZIonItem
+        className='text-sm cursor-pointer ion-activatable ion-focusable'
+        minHeight='35px'
+        lines='full'>
+        <ZIonIcon
+          icon={discOutline}
+          className='w-5 h-5 me-1'
+        />
+        <ZIonLabel className='m-0'>Preferred audience</ZIonLabel>
+      </ZIonItem>
 
-			{/* Archive post */}
-			<ZIonItem
-				className='ion-activatable ion-focusable cursor-pointer text-sm'
-				minHeight='35px'
-			>
-				<ZIonIcon icon={fileTrayFullOutline} className='me-1 w-5 h-5' />
-				<ZIonLabel className='m-0'>Archive post</ZIonLabel>
-			</ZIonItem>
-		</ZIonList>
-	);
+      {/* Archive post */}
+      <ZIonItem
+        className='text-sm cursor-pointer ion-activatable ion-focusable'
+        minHeight='35px'>
+        <ZIonIcon
+          icon={fileTrayFullOutline}
+          className='w-5 h-5 me-1'
+        />
+        <ZIonLabel className='m-0'>Archive post</ZIonLabel>
+      </ZIonItem>
+    </ZIonList>
+  );
 };
 
 export default ZWorkspacePostActionsPopover;

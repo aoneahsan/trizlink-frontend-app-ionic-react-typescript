@@ -1,16 +1,15 @@
-import { selector } from 'recoil';
 // Packages Imports
-import { atom } from 'recoil';
+import { selector, atom } from 'recoil';
 
 // Custom
 // Type
 import {
   TimeFilterEnum,
-  UTMTagTemplateType
+  type UTMTagTemplateType
 } from '@/types/AdminPanel/linksType';
 // Data
 import { UTMTagTemplatesData } from '@/data/UserDashboard/UTMTagTemplatesData';
-import { IFilterOptions } from '@/types/AdminPanel/index.type';
+import { type IFilterOptions } from '@/types/AdminPanel/index.type';
 import CONSTANTS from '@/utils/constants';
 
 export const UTMTagsRStateAtom = atom<UTMTagTemplateType[]>({
@@ -40,9 +39,9 @@ export const FilteredUtmTagsDataRStateSelector = selector({
     let _filterUtmTagsData: UTMTagTemplateType[] | undefined =
       utmTagsRStateAtom;
 
-    if (utmTagsRStateAtom?.length) {
+    if (utmTagsRStateAtom?.length > 0) {
       if (
-        _filterOptions?.timeFilter?.daysToSubtract &&
+        _filterOptions?.timeFilter?.daysToSubtract !== undefined &&
         _filterOptions?.timeFilter?.daysToSubtract !== TimeFilterEnum.allTime
       ) {
         let endDate = new Date(

@@ -1,14 +1,13 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonCol } from '@ionic/react';
-import { ZIonColorType } from '@/types/zaionsAppSettings.type';
+import { type ZIonColorType } from '@/types/zaionsAppSettings.type';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
-type ZIonColType = {
+interface ZIonColType {
   offset?: string;
   offsetXl?: string;
   offsetLg?: string;
@@ -37,42 +36,42 @@ type ZIonColType = {
   className?: string;
   color?: ZIonColorType;
   title?: string;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   testingselector?: string;
   testinglistselector?: string;
   onMouseEnter?: React.MouseEventHandler<HTMLIonColElement>;
   onClick?: React.MouseEventHandler<HTMLIonIconElement>;
   minHeight?: 'auto' | string;
-};
+}
 
-const ZIonCol = (props: ZIonColType) => {
+const ZIonCol: React.FC<ZIonColType> = (props: ZIonColType) => {
   const compStyle =
-    props.style && props.minHeight
+    props.style !== undefined && props.minHeight !== undefined
       ? { ...props.style, 'min-height': props.minHeight }
-      : props.style && !props.minHeight
+      : props.style !== undefined && props.minHeight === undefined
       ? { ...props.style }
-      : !props.style && props.minHeight
+      : props.style === undefined && props.minHeight !== undefined
       ? { 'min-height': props.minHeight }
       : {};
 
-  const _testinglistselector = props.testinglistselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testinglistselector || PRODUCT_NAME,
-          _key: zCreateElementTestingSelectorKeyEnum.listSelector
-        })
-      }
-    : {};
+  const _testinglistselector =
+    props.testinglistselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testinglistselector,
+            _key: zCreateElementTestingSelectorKeyEnum.listSelector
+          })
+        }
+      : {};
 
-  const _testingSelector = props.testingselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testingselector || PRODUCT_NAME
-        })
-      }
-    : {};
+  const _testingSelector =
+    props.testingselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testingselector
+          })
+        }
+      : {};
   return (
     <IonCol
       {...props}

@@ -1,19 +1,19 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonRippleEffect } from '@ionic/react';
 
-type ZIonRippleEffectType = {
+interface ZIonRippleEffectType {
   children?: ReactNode;
   className?: string;
   type?: 'bounded' | 'unbounded';
-  style?: {
-    [key: string]: unknown;
-  };
-};
+  style?: Record<string, unknown>;
+}
 
-const ZIonRippleEffect = (props: ZIonRippleEffectType) => {
+const ZIonRippleEffect: React.FC<ZIonRippleEffectType> = (
+  props: ZIonRippleEffectType
+) => {
   return <IonRippleEffect {...props}>{props.children}</IonRippleEffect>;
 };
 

@@ -2,7 +2,6 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import { ZIonText, ZIonTitle } from '@/components/ZIonComponents';
 import React from 'react';
 
 /**
@@ -10,18 +9,18 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import Countdown, {
-  CountdownRendererFn,
-  CountdownRenderProps,
-  CountdownTimeDelta
+  type CountdownRenderProps,
+  type CountdownTimeDelta
 } from 'react-countdown';
 import { getRemainingTimeForCountDown } from '@/utils/helpers';
-import { ZIonColorType } from '@/types/zaionsAppSettings.type';
-import { CountdownTimeDeltaFn } from 'react-countdown/dist/Countdown';
+import { type ZIonColorType } from '@/types/zaionsAppSettings.type';
+import { type CountdownTimeDeltaFn } from 'react-countdown/dist/Countdown';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
+import { ZIonText, ZIonTitle } from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
@@ -169,9 +168,9 @@ const ZCountdown: React.FC<{
       date={getRemainingTimeForCountDown(countDownTime)}
       renderer={(props: CountdownRenderProps) => {
         if (component === undefined) {
-          return ZCustomRender({ d: props, color: color });
+          return ZCustomRender({ d: props, color });
         } else {
-          return component && component({ d: props, color: color });
+          return component !== undefined && component({ d: props, color });
         }
       }}
     />

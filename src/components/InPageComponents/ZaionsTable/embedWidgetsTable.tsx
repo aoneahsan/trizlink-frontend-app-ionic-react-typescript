@@ -92,12 +92,12 @@ import {
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  EmbedWidgetsType,
-  UTMTagTemplateType
+  type EmbedWidgetsType,
+  type UTMTagTemplateType
 } from '@/types/AdminPanel/linksType';
 import {
   FormMode,
-  ZUserSettingInterface,
+  type ZUserSettingInterface,
   ZUserSettingTypeEnum,
   ZUTMTagsListPageTableColumnsIds
 } from '@/types/AdminPanel/index.type';
@@ -107,10 +107,7 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
  * Recoil State Imports go down
  * ? Import of recoil states is a Recoil State import
  * */
-import {
-  FilteredUtmTagsDataRStateSelector,
-  UTMTagsRStateAtom
-} from '@/ZaionsStore/UserDashboard/UTMTagTemplatesState';
+import { FilteredUtmTagsDataRStateSelector } from '@/ZaionsStore/UserDashboard/UTMTagTemplatesState';
 import { EmbedWidgetsRStateAtom } from '@/ZaionsStore/UserDashboard/EmbedWidgetsState';
 
 /**
@@ -137,10 +134,6 @@ import { EmbedWidgetsRStateAtom } from '@/ZaionsStore/UserDashboard/EmbedWidgets
 const EmbedWidgetsTable: React.FC<{
   showSkeleton?: boolean;
 }> = ({ showSkeleton = false }) => {
-  // #region custom hooks.
-  const { zNavigatePushRoute } = useZNavigate();
-  // #endregion
-
   // #region APIS requests.
   // Request for getting embed widgets data.
   const { data: embedWidgetsData, isFetching: isEmbedWidgetsDataFetching } =
@@ -168,7 +161,9 @@ const EmbedWidgetsTable: React.FC<{
   return (
     <>
       {!isZFetching ? (
-        embedWidgetsData && embedWidgetsData?.length ? (
+        embedWidgetsData !== null &&
+        embedWidgetsData !== undefined &&
+        embedWidgetsData?.length > 0 ? (
           <ZInpageTable />
         ) : (
           <div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
@@ -228,24 +223,27 @@ const ZInpageTable: React.FC = () => {
     _urlDynamicParts: []
   });
 
-  const {
-    data: getEmbedWidgetFiltersData,
-    isFetching: isEmbedWidgetFiltersDataFetching
-  } = useZRQGetRequest<ZUserSettingInterface>({
-    _url: API_URL_ENUM.user_setting_delete_update_get,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-      workspaceId!,
-      ZUserSettingTypeEnum.embedWidgetsListPageTable
-    ],
-    _itemsIds: [workspaceId!, ZUserSettingTypeEnum.embedWidgetsListPageTable],
-    _urlDynamicParts: [
-      CONSTANTS.RouteParams.workspace.workspaceId,
-      CONSTANTS.RouteParams.settings.type
-    ],
-    _extractType: ZRQGetRequestExtractEnum.extractItem,
-    _shouldFetchWhenIdPassed: workspaceId ? false : true
-  });
+  const { data: getEmbedWidgetFiltersData } =
+    useZRQGetRequest<ZUserSettingInterface>({
+      _url: API_URL_ENUM.user_setting_delete_update_get,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+        workspaceId ?? '',
+        ZUserSettingTypeEnum.embedWidgetsListPageTable
+      ],
+      _itemsIds: [
+        workspaceId ?? '',
+        ZUserSettingTypeEnum.embedWidgetsListPageTable
+      ],
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.workspaceId,
+        CONSTANTS.RouteParams.settings.type
+      ],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _shouldFetchWhenIdPassed: !(
+        workspaceId !== undefined && workspaceId?.length > 0
+      )
+    });
   // #endregion
 
   // #region Managing table data with react-table.
@@ -397,9 +395,9 @@ const ZInpageTable: React.FC = () => {
 
   const zUTMTagTable = useReactTable({
     columns: defaultColumns,
-    data: filteredUtmTagsDataRSelector || [],
+    data: filteredUtmTagsDataRSelector ?? [],
     state: {
-      columnOrder: getEmbedWidgetFiltersData?.settings?.columnOrderIds || []
+      columnOrder: getEmbedWidgetFiltersData?.settings?.columnOrderIds ?? []
     },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -412,102 +410,105 @@ const ZInpageTable: React.FC = () => {
   // #region useEffect's
   useEffect(() => {
     try {
-      if (getEmbedWidgetFiltersData?.settings?.columns) {
-        const __getTemplateNameColumn =
+      if (getEmbedWidgetFiltersData?.settings?.columns !== null) {
+        const _getTemplateNameColumn =
           getEmbedWidgetFiltersData?.settings?.columns.filter(
             el => el?.id === ZUTMTagsListPageTableColumnsIds.templateName
           )[0];
 
-        const __getFormattedCreateAtColumn =
+        const _getFormattedCreateAtColumn =
           getEmbedWidgetFiltersData?.settings?.columns.filter(
             el => el?.id === ZUTMTagsListPageTableColumnsIds.formattedCreateAt
           )[0];
 
-        const __getCampaignColumn =
+        const _getCampaignColumn =
           getEmbedWidgetFiltersData?.settings?.columns.filter(
             el => el?.id === ZUTMTagsListPageTableColumnsIds.campaign
           )[0];
 
-        const __getContentColumn =
+        const _getContentColumn =
           getEmbedWidgetFiltersData?.settings?.columns.filter(
             el => el?.id === ZUTMTagsListPageTableColumnsIds.content
           )[0];
 
-        const __getMediumColumn =
+        const _getMediumColumn =
           getEmbedWidgetFiltersData?.settings?.columns.filter(
             el => el?.id === ZUTMTagsListPageTableColumnsIds.medium
           )[0];
 
-        const __getSourceColumn =
+        const _getSourceColumn =
           getEmbedWidgetFiltersData?.settings?.columns.filter(
             el => el?.id === ZUTMTagsListPageTableColumnsIds.source
           )[0];
 
-        const __getTermColumn =
+        const _getTermColumn =
           getEmbedWidgetFiltersData?.settings?.columns.filter(
             el => el?.id === ZUTMTagsListPageTableColumnsIds.term
           )[0];
 
-        if (__getTemplateNameColumn) {
+        if (_getTemplateNameColumn !== undefined) {
           zUTMTagTable
             ?.getColumn(ZUTMTagsListPageTableColumnsIds.templateName)
-            ?.toggleVisibility(__getTemplateNameColumn?.isVisible);
+            ?.toggleVisibility(_getTemplateNameColumn?.isVisible);
         }
 
-        if (__getMediumColumn) {
+        if (_getMediumColumn !== undefined) {
           zUTMTagTable
             ?.getColumn(ZUTMTagsListPageTableColumnsIds.medium)
-            ?.toggleVisibility(__getMediumColumn?.isVisible);
+            ?.toggleVisibility(_getMediumColumn?.isVisible);
         }
 
-        if (__getFormattedCreateAtColumn) {
+        if (_getFormattedCreateAtColumn !== undefined) {
           zUTMTagTable
             ?.getColumn(ZUTMTagsListPageTableColumnsIds.formattedCreateAt)
-            ?.toggleVisibility(__getFormattedCreateAtColumn?.isVisible);
+            ?.toggleVisibility(_getFormattedCreateAtColumn?.isVisible);
         }
 
-        if (__getCampaignColumn) {
+        if (_getCampaignColumn !== undefined) {
           zUTMTagTable
             ?.getColumn(ZUTMTagsListPageTableColumnsIds.campaign)
-            ?.toggleVisibility(__getCampaignColumn?.isVisible);
+            ?.toggleVisibility(_getCampaignColumn?.isVisible);
         }
 
-        if (__getSourceColumn) {
+        if (_getSourceColumn !== undefined) {
           zUTMTagTable
             ?.getColumn(ZUTMTagsListPageTableColumnsIds.source)
-            ?.toggleVisibility(__getSourceColumn?.isVisible);
+            ?.toggleVisibility(_getSourceColumn?.isVisible);
         }
 
-        if (__getContentColumn) {
+        if (_getContentColumn !== undefined) {
           zUTMTagTable
             ?.getColumn(ZUTMTagsListPageTableColumnsIds.content)
-            ?.toggleVisibility(__getContentColumn?.isVisible);
+            ?.toggleVisibility(_getContentColumn?.isVisible);
         }
 
-        if (__getTermColumn) {
+        if (_getTermColumn !== undefined) {
           zUTMTagTable
             ?.getColumn(ZUTMTagsListPageTableColumnsIds.term)
-            ?.toggleVisibility(__getTermColumn?.isVisible);
+            ?.toggleVisibility(_getTermColumn?.isVisible);
         }
       }
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getEmbedWidgetFiltersData]);
 
   useEffect(() => {
-    zUTMTagTable.setPageIndex(Number(pageindex) || 0);
-    zUTMTagTable.setPageSize(Number(pagesize) || 2);
+    zUTMTagTable.setPageIndex(Number(pageindex) ?? 0);
+    zUTMTagTable.setPageSize(Number(pagesize) ?? 2);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageindex, pagesize]);
 
   useEffect(() => {
     try {
-      if (UTMTagsData) {
+      if (UTMTagsData !== undefined && UTMTagsData !== null) {
         setEmbedWidgetsDataRState(UTMTagsData);
       }
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [UTMTagsData]);
   // #endregion
 
@@ -515,7 +516,7 @@ const ZInpageTable: React.FC = () => {
   const { presentZIonPopover: presentZUTMTagActionPopover } = useZIonPopover(
     ZEmbedWidgetActionPopover,
     {
-      workspaceId: workspaceId,
+      workspaceId,
       utmTag: compState?.embedWidget
     }
   );
@@ -713,7 +714,7 @@ const ZInpageTable: React.FC = () => {
                   createRedirectRoute({
                     url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag,
                     params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId!],
+                    values: [workspaceId ?? ''],
                     routeSearchParams: {
                       pageindex: 0,
                       pagesize: zUTMTagTable
@@ -749,7 +750,7 @@ const ZInpageTable: React.FC = () => {
                   createRedirectRoute({
                     url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag,
                     params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId!],
+                    values: [workspaceId ?? ''],
                     routeSearchParams: {
                       pageindex:
                         zUTMTagTable.getState().pagination.pageIndex - 1,
@@ -785,7 +786,7 @@ const ZInpageTable: React.FC = () => {
                   createRedirectRoute({
                     url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag,
                     params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId!],
+                    values: [workspaceId ?? ''],
                     routeSearchParams: {
                       pageindex:
                         zUTMTagTable.getState().pagination.pageIndex + 1,
@@ -821,7 +822,7 @@ const ZInpageTable: React.FC = () => {
                   createRedirectRoute({
                     url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag,
                     params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId!],
+                    values: [workspaceId ?? ''],
                     routeSearchParams: {
                       pageindex: zUTMTagTable.getPageCount() - 1,
                       pagesize: zUTMTagTable
@@ -855,14 +856,13 @@ const ZInpageTable: React.FC = () => {
             'ion-justify-content-between mt-1 px-2': !isSmScale
           })}>
           <ZIonText className='mt-1 font-semibold me-3'>
-            {filteredUtmTagsDataRSelector?.length || 0}{' '}
+            {filteredUtmTagsDataRSelector?.length ?? 0}{' '}
             {filteredUtmTagsDataRSelector?.length === 1 ? 'UTMTag' : 'UTMTags'}
           </ZIonText>
           <ZIonSelect
             minHeight='30px'
             fill='outline'
             className='bg-white w-[7rem]'
-            interface='popover'
             value={zUTMTagTable.getState().pagination.pageSize}
             testingselector={
               CONSTANTS.testingSelectors.utmTags.listPage.table.pageSizeInput
@@ -874,7 +874,7 @@ const ZInpageTable: React.FC = () => {
                 createRedirectRoute({
                   url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag,
                   params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                  values: [workspaceId!],
+                  values: [workspaceId ?? ''],
                   routeSearchParams: {
                     pageindex: zUTMTagTable.getPageCount() - 1,
                     pagesize: Number(e.target.value)
@@ -1025,6 +1025,7 @@ const ZEmbedWidgetTableSkeleton: React.FC = React.memo(() => {
     </div>
   );
 });
+ZEmbedWidgetTableSkeleton.displayName = 'ZEmbedWidgetTableSkeleton';
 
 // UTMTag action popover
 const ZEmbedWidgetActionPopover: React.FC<{
@@ -1042,7 +1043,7 @@ const ZEmbedWidgetActionPopover: React.FC<{
   const { presentZIonModal: presentZUtmTagsFormModal } = useZIonModal(
     ZaionsAddUtmTags,
     {
-      utmTag: utmTag,
+      utmTag,
       formMode: FormMode.EDIT,
       workspaceId
     }
@@ -1062,10 +1063,14 @@ const ZEmbedWidgetActionPopover: React.FC<{
   });
 
   // when user won't to delete Utm tag and click on the delete button this function will fire and show the confirm alert.
-  const deleteUTMTag = async () => {
+  const deleteUTMTag = async (): Promise<void> => {
     try {
-      if (utmTag?.id?.trim() && UTMTagsData?.length) {
-        const selectedUTMTag = UTMTagsData?.find(el => el.id === utmTag?.id);
+      if (
+        utmTag?.id?.trim() !== undefined &&
+        utmTag?.id?.trim() !== '' &&
+        UTMTagsData?.length !== null
+      ) {
+        // const selectedUTMTag = UTMTagsData?.find(el => el.id === utmTag?.id);
         await presentZIonAlert({
           header: MESSAGES.UTM_TAGS_TEMPLATE.DELETE_ALERT.HEADER,
           subHeader: MESSAGES.UTM_TAGS_TEMPLATE.DELETE_ALERT.SUB_HEADER,
@@ -1094,10 +1099,14 @@ const ZEmbedWidgetActionPopover: React.FC<{
   };
 
   // on the delete Utm tag confirm alert, when user click on delete button this function will fires which will trigger delete request and delete the Utm tag.
-  const removeUTMTag = async () => {
+  const removeUTMTag = async (): Promise<void> => {
     try {
-      if (utmTag?.id?.trim() && UTMTagsData?.length) {
-        if (utmTag?.id) {
+      if (
+        utmTag?.id?.trim() !== undefined &&
+        utmTag?.id?.trim() !== '' &&
+        UTMTagsData?.length !== null
+      ) {
+        if (utmTag?.id !== undefined) {
           const _response = await deleteUtmTagMutate({
             itemIds: [workspaceId, utmTag?.id],
             urlDynamicParts: [
@@ -1106,13 +1115,13 @@ const ZEmbedWidgetActionPopover: React.FC<{
             ]
           });
 
-          if (_response) {
+          if (_response !== undefined) {
             const _data = extractInnerData<{ success: boolean }>(
               _response,
               extractInnerDataOptionsEnum.createRequestResponseItem
             );
 
-            if (_data && _data?.success) {
+            if (_data !== undefined && _data?.success) {
               // getting all the utm tag from RQ cache.
               const _oldUTMTags =
                 extractInnerData<UTMTagTemplateType[]>(
@@ -1123,10 +1132,10 @@ const ZEmbedWidgetActionPopover: React.FC<{
                     ]
                   }) as UTMTagTemplateType[],
                   extractInnerDataOptionsEnum.createRequestResponseItems
-                ) || [];
+                ) ?? [];
 
               // removing deleted utm tag from cache.
-              const _updatedUtmTags = _oldUTMTags.filter(
+              const _updatedUtmTags = _oldUTMTags?.filter(
                 el => el.id !== utmTag?.id
               );
 
@@ -1136,7 +1145,7 @@ const ZEmbedWidgetActionPopover: React.FC<{
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.UTM_TAGS.MAIN,
                   workspaceId
                 ],
-                data: _updatedUtmTags as UTMTagTemplateType[],
+                data: _updatedUtmTags,
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
@@ -1173,21 +1182,23 @@ const ZEmbedWidgetActionPopover: React.FC<{
             CONSTANTS.testingSelectors.utmTags.listPage.table.editBtn
           }
           testinglistselector={`${CONSTANTS.testingSelectors.utmTags.listPage.table.editBtn}-${utmTag?.id}`}
-          onClick={async () => {
-            try {
-              if (utmTag?.id) {
-                //
-                presentZUtmTagsFormModal({
-                  _cssClass: 'utm-tags-modal-size'
-                });
+          onClick={() => {
+            void (async () => {
+              try {
+                if (utmTag?.id !== null) {
+                  //
+                  presentZUtmTagsFormModal({
+                    _cssClass: 'utm-tags-modal-size'
+                  });
 
-                dismissZIonPopover('', '');
-              } else {
-                await presentZIonErrorAlert();
+                  dismissZIonPopover('', '');
+                } else {
+                  await presentZIonErrorAlert();
+                }
+              } catch (error) {
+                reportCustomError(error);
               }
-            } catch (error) {
-              reportCustomError(error);
-            }
+            })();
           }}>
           <ZIonButton
             size='small'
@@ -1214,7 +1225,9 @@ const ZEmbedWidgetActionPopover: React.FC<{
           button={true}
           detail={false}
           minHeight='2.5rem'
-          onClick={() => void deleteUTMTag()}
+          onClick={() => {
+            void deleteUTMTag();
+          }}
           testingselector={
             CONSTANTS.testingSelectors.utmTags.listPage.table.deleteBtn
           }

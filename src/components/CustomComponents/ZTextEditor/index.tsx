@@ -24,7 +24,7 @@ import ReactQuill from 'react-quill';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { DeltaStatic, Sources } from 'quill/index';
+import { type Sources, type DeltaStatic } from 'quill/index';
 
 /**
  * Recoil State Imports go down
@@ -37,7 +37,6 @@ import { DeltaStatic, Sources } from 'quill/index';
  * */
 import 'react-quill/dist/quill.snow.css';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 /**
@@ -89,22 +88,24 @@ interface ZTextEditorInterface {
  * */
 
 const ZTextEditor: React.FC<ZTextEditorInterface> = props => {
-  const _testinglistselector = props.testinglistselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testinglistselector || PRODUCT_NAME,
-          _key: zCreateElementTestingSelectorKeyEnum.listSelector
-        })
-      }
-    : {};
+  const _testinglistselector =
+    props.testinglistselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testinglistselector,
+            _key: zCreateElementTestingSelectorKeyEnum.listSelector
+          })
+        }
+      : {};
 
-  const _testingSelector = props.testingselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testingselector || PRODUCT_NAME
-        })
-      }
-    : {};
+  const _testingSelector =
+    props.testingselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testingselector
+          })
+        }
+      : {};
 
   return (
     <ReactQuill

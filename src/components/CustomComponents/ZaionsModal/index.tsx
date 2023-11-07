@@ -43,21 +43,21 @@ import classNames from 'classnames';
 
 /**
  * Component props type Imports go down
- * ? Like if you have a type for props it should be pleace Down
+ * ? Like if you have a type for props it should be place Down
  * */
 
-type ZaionsIonModalType = {
+interface ZaionsIonModalType {
   className?: string;
   triggerId: string;
   width?: string;
   height?: string;
   children: JSX.Element;
   isOpen?: boolean;
-};
+}
 
 /**
  * Functional Component
- * About: (custom modal stracture)
+ * About: (custom modal structure)
  * @type {*}
  * */
 const ZaionsIonModal = React.forwardRef<
@@ -71,7 +71,7 @@ const ZaionsIonModal = React.forwardRef<
       width = '50vw',
       height = '50vh',
       isOpen = false,
-      children,
+      children
     },
     ref
   ) => {
@@ -82,16 +82,17 @@ const ZaionsIonModal = React.forwardRef<
           trigger={triggerId}
           style={{
             '--width': width,
-            '--height': height,
+            '--height': height
           }}
           className={classNames(className)}
-          isOpen={isOpen}
-        >
+          isOpen={isOpen}>
           {children}
         </IonModal>
       </>
     );
   }
 );
+
+ZaionsIonModal.displayName = 'ZaionsIonModal';
 
 export default ZaionsIonModal;

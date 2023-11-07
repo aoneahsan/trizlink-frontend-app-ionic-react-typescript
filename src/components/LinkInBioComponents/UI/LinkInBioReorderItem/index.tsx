@@ -12,8 +12,8 @@ import { useLocation, useParams } from 'react-router';
 import routeQueryString from 'qs';
 import { appsOutline, pencilOutline } from 'ionicons/icons';
 import { useFormikContext } from 'formik';
-import { OverlayEventDetail } from '@ionic/core';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { type OverlayEventDetail } from '@ionic/core';
+import { useRecoilState } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -29,7 +29,6 @@ import {
 } from '@/components/ZIonComponents';
 import ZLinkInBioAvatarBlock from '@/components/LinkInBioComponents/UI/AvatarBlock';
 import ZLinkInBioButtonBlock from '@/components/LinkInBioComponents/UI/ButtonBlock';
-import ZLinkInBioCardBlock from '@/components/LinkInBioComponents/UI/CardBlock';
 import ZLinkInBioTextBlock from '@/components/LinkInBioComponents/UI/TextBlock';
 import ZLinkInBioRSSBlock from '@/components/LinkInBioComponents/UI/ZLinkInBioRSSBlock';
 import ZLinkInBioCalendarBlock from '@/components/LinkInBioComponents/UI/CalendarBlock';
@@ -54,8 +53,7 @@ import { reportCustomError } from '@/utils/customErrorType';
 import {
   createRedirectRoute,
   extractInnerData,
-  generatePredefinedThemeBackgroundValue,
-  zJsonParse
+  generatePredefinedThemeBackgroundValue
 } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
@@ -67,14 +65,14 @@ import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
  * */
 import {
   LinkInBioButtonTypeEnum,
-  LinkInBioThemeBackgroundType,
-  LinkInBioType,
+  type LinkInBioThemeBackgroundType,
+  type LinkInBioType,
   ZLinkInBioPageEnum,
   ZLinkInBioRHSComponentEnum
 } from '@/types/AdminPanel/linkInBioType';
 import {
   LinkInBioBlockEnum,
-  LinkInBioBlockFromType
+  type LinkInBioBlockFromType
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 /**
@@ -149,8 +147,8 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 
   // link-in-bio id get from route(url).
   const { linkInBioId, workspaceId } = useParams<{
-    linkInBioId: string;
-    workspaceId: string;
+    linkInBioId?: string;
+    workspaceId?: string;
   }>();
 
   // fetching link-in-bio with the linkInBioId data from backend.
@@ -158,16 +156,18 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
     _url: API_URL_ENUM.linkInBio_update_delete,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-      workspaceId,
-      linkInBioId
+      workspaceId ?? '',
+      linkInBioId ?? ''
     ],
     _authenticated: true,
-    _itemsIds: [linkInBioId, workspaceId],
+    _itemsIds: [linkInBioId ?? '', workspaceId ?? ''],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.linkInBio.linkInBioId,
       CONSTANTS.RouteParams.workspace.workspaceId
     ],
-    _shouldFetchWhenIdPassed: !linkInBioId ? true : false,
+    _shouldFetchWhenIdPassed: !(
+      linkInBioId !== undefined && (linkInBioId?.trim()?.length ?? 0) > 0
+    ),
     _extractType: ZRQGetRequestExtractEnum.extractItem
   });
 
@@ -179,37 +179,43 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
   });
 
   // delete block function.
-  const deleteBlockHandler = async (detail: OverlayEventDetail<unknown>) => {
+  const deleteBlockHandler = async (
+    detail: OverlayEventDetail<unknown>
+  ): Promise<void> => {
     try {
-      if (detail && detail.role === 'destructive' && element.id) {
+      if (
+        detail?.role === 'destructive' &&
+        element?.id !== null &&
+        element?.id !== undefined
+      ) {
         const _updateLinkInBioBlockState = linkInBioBlockState.filter(
           el => el.id !== element.id
         );
 
-        const __response = await deleteLinkInBioBlockMutate({
-          itemIds: [workspaceId, linkInBioId, element.id],
+        const _response = await deleteLinkInBioBlockMutate({
+          itemIds: [workspaceId ?? '', linkInBioId ?? '', element.id],
           urlDynamicParts: [
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.linkInBio.linkInBioId,
             CONSTANTS.RouteParams.linkInBio.libBlockId
           ]
         });
-        if (__response) {
+        if (_response !== undefined) {
           // getting all the LinkInBioBlocks from RQ cache.
-          const __oldLinkInBioBlocks =
+          const _oldLinkInBioBlocks =
             extractInnerData<LinkInBioBlockFromType[]>(
               getRQCDataHandler<LinkInBioBlockFromType[]>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-                  workspaceId,
-                  linkInBioId
+                  workspaceId ?? '',
+                  linkInBioId ?? ''
                 ]
               }) as LinkInBioBlockFromType[],
               extractInnerDataOptionsEnum.createRequestResponseItems
-            ) || [];
+            ) ?? [];
 
           // removing deleted LinkInBioBlocks from cache.
-          const __updatedLinkInBioBlocks = __oldLinkInBioBlocks.filter(
+          const _updatedLinkInBioBlocks = _oldLinkInBioBlocks.filter(
             el => el.id !== element.id
           );
 
@@ -217,10 +223,10 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
           await updateRQCDataHandler<LinkInBioBlockFromType[] | undefined>({
             key: [
               CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-              workspaceId,
-              linkInBioId
+              workspaceId ?? '',
+              linkInBioId ?? ''
             ],
-            data: __updatedLinkInBioBlocks as LinkInBioBlockFromType[],
+            data: _updatedLinkInBioBlocks,
             id: '',
             extractType: ZRQGetRequestExtractEnum.extractItems,
             updateHoleData: true
@@ -229,14 +235,14 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
           // setLinkInBioBlockState(_updateLinkInBioBlockState);
           // if _response of the updateLinkInBio api is success this showing success notification else not success then error notification.
           await validateRequestResponse({
-            resultObj: __response
+            resultObj: _response
           });
 
           setLinkInBioBlockState(_updateLinkInBioBlockState);
 
           if (
             element.id === (routeQSearchParams as { blockId: string }).blockId
-          )
+          ) {
             // Redirect to block
             zNavigatePushRoute(
               createRedirectRoute({
@@ -245,13 +251,14 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
                   CONSTANTS.RouteParams.workspace.workspaceId,
                   CONSTANTS.RouteParams.linkInBio.linkInBioId
                 ],
-                values: [workspaceId, linkInBioId],
+                values: [workspaceId ?? '', linkInBioId ?? ''],
                 routeSearchParams: {
                   page: ZLinkInBioPageEnum.design,
                   step: ZLinkInBioRHSComponentEnum.blocks
                 }
               })
             );
+          }
         }
       }
     } catch (error) {
@@ -260,9 +267,9 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
   };
 
   // Edit block function this will execute when user went to edit the block and click on the pencil button present in every block side by side of delete button, this will navigate the user to block form page where from route the the blockID will be get and the data of that id will fetch from backend and placed as initial value.
-  const blockEditHandler = () => {
+  const blockEditHandler = (): void => {
     try {
-      setFieldValue('LinkInBioBlock', element?.blockType, false);
+      void setFieldValue('LinkInBioBlock', element?.blockType, false);
 
       zNavigatePushRoute(
         createRedirectRoute({
@@ -271,11 +278,11 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.linkInBio.linkInBioId
           ],
-          values: [workspaceId, linkInBioId],
+          values: [workspaceId ?? '', linkInBioId ?? ''],
           routeSearchParams: {
             page: ZLinkInBioPageEnum.design,
             step: ZLinkInBioRHSComponentEnum.blockForm,
-            blockId: element?.id || ''
+            blockId: element?.id ?? ''
           }
         })
       );
@@ -287,7 +294,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
   // ----- Buttons Types ----- //
   // Outlines.
   const currentBlockCustomAppearanceButtonOutlineType =
-    element.blockContent?.customAppearance?.buttonType &&
+    element.blockContent?.customAppearance?.buttonType != null &&
     [
       LinkInBioButtonTypeEnum.inlineSquareOutline,
       LinkInBioButtonTypeEnum.inlineRoundOutline,
@@ -295,7 +302,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
     ].includes(element.blockContent?.customAppearance.buttonType);
 
   const linkInBioThemeButtonOutlineType =
-    selectedLinkInBio?.theme?.button?.type &&
+    selectedLinkInBio?.theme?.button?.type != null &&
     [
       LinkInBioButtonTypeEnum.inlineSquareOutline,
       LinkInBioButtonTypeEnum.inlineRoundOutline,
@@ -304,7 +311,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 
   // Square
   const currentBlockCustomAppearanceButtonSquareType =
-    element.blockContent?.customAppearance?.buttonType &&
+    element.blockContent?.customAppearance?.buttonType != null &&
     [
       LinkInBioButtonTypeEnum.inlineSquare,
       LinkInBioButtonTypeEnum.inlineSquareOutline,
@@ -312,7 +319,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
     ].includes(element.blockContent?.customAppearance.buttonType);
 
   const linkInBioThemeButtonSquareType =
-    selectedLinkInBio?.theme?.button?.type &&
+    selectedLinkInBio?.theme?.button?.type != null &&
     [
       LinkInBioButtonTypeEnum.inlineSquare,
       LinkInBioButtonTypeEnum.inlineSquareOutline,
@@ -321,7 +328,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 
   // Circle
   const currentBlockCustomAppearanceButtonCircleType =
-    element.blockContent?.customAppearance?.buttonType &&
+    element.blockContent?.customAppearance?.buttonType != null &&
     [
       LinkInBioButtonTypeEnum.inlineCircle,
       LinkInBioButtonTypeEnum.inlineCircleOutline,
@@ -329,7 +336,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
     ].includes(element.blockContent?.customAppearance.buttonType);
 
   const linkInBioThemeButtonCircleType =
-    selectedLinkInBio?.theme?.button?.type &&
+    selectedLinkInBio?.theme?.button?.type != null &&
     [
       LinkInBioButtonTypeEnum.inlineCircle,
       LinkInBioButtonTypeEnum.inlineCircleOutline,
@@ -338,7 +345,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 
   // Shadow
   const currentBlockCustomAppearanceButtonShadowType =
-    element.blockContent?.customAppearance?.buttonType &&
+    element.blockContent?.customAppearance?.buttonType != null &&
     [
       LinkInBioButtonTypeEnum.inlineSquareShadow,
       LinkInBioButtonTypeEnum.inlineRoundShadow,
@@ -346,7 +353,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
     ].includes(element.blockContent?.customAppearance.buttonType);
 
   const linkInBioThemeButtonShadowType =
-    selectedLinkInBio?.theme?.button?.type &&
+    selectedLinkInBio?.theme?.button?.type != null &&
     [
       LinkInBioButtonTypeEnum.inlineSquareShadow,
       LinkInBioButtonTypeEnum.inlineRoundShadow,
@@ -363,28 +370,30 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
     '--box-shadow': 'none'
   };
 
-  const _buttonStyle = element.blockContent?.customAppearance?.isEnabled
-    ? currentBlockCustomAppearanceButtonOutlineType
+  const _buttonStyle =
+    element.blockContent?.customAppearance?.isEnabled === true
+      ? currentBlockCustomAppearanceButtonOutlineType
+        ? _buttonOutlineStyle
+        : generatePredefinedThemeBackgroundValue(
+            element.blockContent?.customAppearance
+              .background as LinkInBioThemeBackgroundType
+          )
+      : linkInBioThemeButtonOutlineType
       ? _buttonOutlineStyle
       : generatePredefinedThemeBackgroundValue(
-          element.blockContent?.customAppearance
-            .background as LinkInBioThemeBackgroundType
-        )
-    : linkInBioThemeButtonOutlineType
-    ? _buttonOutlineStyle
-    : generatePredefinedThemeBackgroundValue(
-        selectedLinkInBio?.theme?.button
-          ?.background as LinkInBioThemeBackgroundType
-      );
+          selectedLinkInBio?.theme?.button
+            ?.background as LinkInBioThemeBackgroundType
+        );
 
   // ----- Buttons Fill value ----- //
-  const _buttonFillValue = element.blockContent?.customAppearance?.isEnabled
-    ? currentBlockCustomAppearanceButtonOutlineType
+  const _buttonFillValue =
+    element.blockContent?.customAppearance?.isEnabled === true
+      ? currentBlockCustomAppearanceButtonOutlineType
+        ? 'outline'
+        : 'default'
+      : linkInBioThemeButtonOutlineType
       ? 'outline'
-      : 'default'
-    : linkInBioThemeButtonOutlineType
-    ? 'outline'
-    : 'default';
+      : 'default';
 
   return (
     <ZIonItem
@@ -395,7 +404,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
       })}
       style={{
         '--background': 'transparent',
-        opacity: element.isActive ? '1' : '0.4'
+        opacity: element.isActive === true ? '1' : '0.4'
       }}
       data-block-id={element.id}>
       <ZCustomDeleteComponent
@@ -427,7 +436,8 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
         <ZLinkInBioAvatarBlock />
       ) : element?.blockType === LinkInBioBlockEnum.text ? (
         <ZLinkInBioTextBlock
-          children={element.blockContent?.text || 'text'}
+          // eslint-disable-next-line react/no-children-prop
+          children={element.blockContent?.text ?? 'text'}
           fontFamily={selectedLinkInBio?.theme?.font}
         />
       ) : element?.blockType === LinkInBioBlockEnum.card ? (
@@ -443,55 +453,58 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
           fontFamily={selectedLinkInBio?.theme?.font}
           style={{
             ..._buttonStyle,
-            '--box-shadow': element.blockContent?.customAppearance?.isEnabled
-              ? currentBlockCustomAppearanceButtonShadowType
+            '--box-shadow':
+              element.blockContent?.customAppearance?.isEnabled === true
+                ? currentBlockCustomAppearanceButtonShadowType
+                  ? `6px 6px ${
+                      element.blockContent?.customAppearance?.shadowColor ??
+                      CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
+                    }`
+                  : ''
+                : linkInBioThemeButtonShadowType
                 ? `6px 6px ${
-                    element.blockContent?.customAppearance?.shadowColor ||
+                    selectedLinkInBio?.theme?.button?.shadowColor ??
                     CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
                   }`
                 : ''
-              : linkInBioThemeButtonShadowType
-              ? `6px 6px ${
-                  selectedLinkInBio?.theme?.button?.shadowColor ||
-                  CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
-                }`
-              : ''
           }}
-          title={element.blockContent?.title || 'button'}
+          title={element.blockContent?.title ?? 'button'}
           url={element.blockContent?.target?.url}
           // TODO: make this a option in frontend, so user will be able to select whether to open the link in new tab or not - (will be theme and block wise)
           target='_blank'
           animationType={
-            element.blockContent?.animation?.isEnabled
+            element.blockContent?.animation?.isEnabled === true
               ? element.blockContent?.animation?.type
               : undefined
           }
           fill={_buttonFillValue}
           className={classNames({
             // inlineSquare
-            inlineSquare: element.blockContent?.customAppearance?.isEnabled
-              ? currentBlockCustomAppearanceButtonSquareType
-              : linkInBioThemeButtonSquareType,
+            inlineSquare:
+              element.blockContent?.customAppearance?.isEnabled === true
+                ? currentBlockCustomAppearanceButtonSquareType
+                : linkInBioThemeButtonSquareType,
             // inlineRound
-            inlineRound: element.blockContent?.customAppearance?.isEnabled
-              ? element.blockContent?.customAppearance?.buttonType &&
-                [
-                  LinkInBioButtonTypeEnum.inlineRound,
-                  LinkInBioButtonTypeEnum.inlineRoundOutline,
-                  LinkInBioButtonTypeEnum.inlineRoundShadow
-                ].includes(element.blockContent?.customAppearance.buttonType)
-              : selectedLinkInBio?.theme?.button?.type &&
-                [
-                  LinkInBioButtonTypeEnum.inlineRound,
-                  LinkInBioButtonTypeEnum.inlineRoundOutline,
-                  LinkInBioButtonTypeEnum.inlineRoundShadow
-                ].includes(selectedLinkInBio?.theme?.button?.type),
+            inlineRound:
+              element.blockContent?.customAppearance?.isEnabled === true
+                ? element.blockContent?.customAppearance?.buttonType != null &&
+                  [
+                    LinkInBioButtonTypeEnum.inlineRound,
+                    LinkInBioButtonTypeEnum.inlineRoundOutline,
+                    LinkInBioButtonTypeEnum.inlineRoundShadow
+                  ].includes(element.blockContent?.customAppearance.buttonType)
+                : selectedLinkInBio?.theme?.button?.type != null &&
+                  [
+                    LinkInBioButtonTypeEnum.inlineRound,
+                    LinkInBioButtonTypeEnum.inlineRoundOutline,
+                    LinkInBioButtonTypeEnum.inlineRoundShadow
+                  ].includes(selectedLinkInBio?.theme?.button?.type),
 
             // inlineCircle
-            'border-radius__100vmax': element.blockContent?.customAppearance
-              ?.isEnabled
-              ? currentBlockCustomAppearanceButtonCircleType
-              : linkInBioThemeButtonCircleType
+            'border-radius__100vmax':
+              element.blockContent?.customAppearance?.isEnabled === true
+                ? currentBlockCustomAppearanceButtonCircleType
+                : linkInBioThemeButtonCircleType
           })}
         />
       ) : element?.blockType === LinkInBioBlockEnum.RSS ? (
@@ -503,7 +516,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
         <ZLinkInBioCalendarBlock fontFamily={selectedLinkInBio?.theme?.font} />
       ) : element?.blockType === LinkInBioBlockEnum.countdown ? (
         <>
-          {element.blockContent?.imageUrl &&
+          {element.blockContent?.imageUrl !== undefined &&
           element.blockContent?.imageUrl?.trim()?.length > 0 ? (
             <ZCustomCard
               mediaType={ZMediaEnum.countDown}
@@ -576,7 +589,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
         />
       ) : element?.blockType === LinkInBioBlockEnum.map ? (
         <ZLinkInBioMapBlock
-          mapId={`${PRODUCT_NAME}-map-block-${element.id || ''}`}
+          mapId={`${PRODUCT_NAME}-map-block-${element.id ?? ''}`}
           latitude={element.blockContent?.map?.lat}
           longitude={element.blockContent?.map?.lng}
         />

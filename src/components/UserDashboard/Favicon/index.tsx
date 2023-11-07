@@ -22,7 +22,7 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 // Recoil States
 
 // Types
-import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
+import { type ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 import CONSTANTS from '@/utils/constants';
 
 // Styles
@@ -55,6 +55,7 @@ const LinkFavIcon: React.FC = () => {
 
       <div className='flex px-2 mt-2 ion-align-items-center ion-padding-bottom'>
         <ZDragAndDrop
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
           setFieldValue={setFieldValue}
           fieldName='favicon'
           imageUrl={values.favicon}

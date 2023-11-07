@@ -40,14 +40,12 @@ import ZInviteButton from '../InviteButton';
  * ? Like import of custom Hook is a custom import
  * */
 import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import { API_URL_ENUM } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import {
   permissionsEnum,
@@ -60,8 +58,6 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { workspaceInterface } from '@/types/AdminPanel/workspace';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Recoil State Imports go down
@@ -108,8 +104,8 @@ const ZAdminPanelTopBar: React.FC<{
   // getting current share workspace id form params.
   const { wsShareId, shareWSMemberId } = useParams<{
     workspaceId?: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region popovers.
@@ -118,30 +114,10 @@ const ZAdminPanelTopBar: React.FC<{
   const { presentZIonPopover: presentZNotificationPopover } = useZIonPopover(
     ZNotificationPopover,
     {
-      workspaceId: workspaceId
+      workspaceId
     }
   );
   // #endregion
-
-  // #region APIs.
-
-  const { data: currentWorkspaceData, isFetching: isCurrentWorkspaceFetching } =
-    useZRQGetRequest<workspaceInterface>({
-      _url: API_URL_ENUM.workspace_update_delete,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
-        workspaceId || ''
-      ],
-      _authenticated: true,
-      _itemsIds: [workspaceId || ''],
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: workspaceId ? false : true,
-      _extractType: ZRQGetRequestExtractEnum.extractItem
-    });
-
-  // #endregion
-
-  const isZFetching = isCurrentWorkspaceFetching;
 
   return (
     <ZIonRow
@@ -161,16 +137,6 @@ const ZAdminPanelTopBar: React.FC<{
       />
 
       {/*  */}
-      {/* <ZIonCol
-				sizeXl='4'
-				sizeLg='3'
-				sizeMd='3'
-				sizeSm='3'
-				sizeXs='3'
-				className='h-full'
-			></ZIonCol> */}
-
-      {/*  */}
       <ZIonCol
         sizeXl='6'
         sizeLg='6'
@@ -182,7 +148,7 @@ const ZAdminPanelTopBar: React.FC<{
           'ion-justify-content-end flex': true
           // 'mt-1': !isMdScale
         })}>
-        {showRefreshBtn ? (
+        {showRefreshBtn && (
           <ZIonButton
             fill='outline'
             color='primary'
@@ -203,10 +169,10 @@ const ZAdminPanelTopBar: React.FC<{
             />
             Refetch
           </ZIonButton>
-        ) : null}
+        )}
 
         {/* Upgrade button */}
-        {isMdScale ? (
+        {isMdScale && (
           <ZIonButton
             color='secondary'
             expand={!isMdScale ? 'block' : undefined}
@@ -219,10 +185,10 @@ const ZAdminPanelTopBar: React.FC<{
             testingselector={CONSTANTS.testingSelectors.topBar.upgradeBtn}>
             Upgrade
           </ZIonButton>
-        ) : null}
+        )}
 
         {/* Help button */}
-        {isMdScale ? (
+        {isMdScale && (
           <ZIonButton
             color='tertiary'
             size='small'
@@ -245,10 +211,10 @@ const ZAdminPanelTopBar: React.FC<{
             />
             {/* <ZIonText className='mt-[2px]'>Help</ZIonText> */}
           </ZIonButton>
-        ) : null}
+        )}
 
         {/* Notification button */}
-        {isMdScale ? (
+        {isMdScale && (
           <ZIonButton
             color='tertiary'
             size='small'
@@ -272,13 +238,13 @@ const ZAdminPanelTopBar: React.FC<{
             />
             {/* <ZIonText className='mt-[2px]'>Help</ZIonText> */}
           </ZIonButton>
-        ) : null}
+        )}
 
-        {!isMdScale && showWSSwitcherBtn ? (
+        {!isMdScale && showWSSwitcherBtn && (
           <ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
             <ZWorkspaceSwitcher workspaceId={workspaceId} />
           </ZCan>
-        ) : null}
+        )}
 
         {/* User profile button */}
         <ZUserProfileButton
@@ -319,7 +285,7 @@ const ZADTopBarColOne: React.FC<{
       sizeSm='4'
       sizeXs='4.5'
       className='flex h-full ion-align-items-center'>
-      {!isWorkspaceListPage
+      {isWorkspaceListPage === false || isWorkspaceListPage === undefined
         ? isMdScale && (
             <ZIonButton
               color='secondary'
@@ -334,13 +300,15 @@ const ZADTopBarColOne: React.FC<{
             </ZIonButton>
           )
         : null}
-      {isWorkspaceListPage ? (
+      {isWorkspaceListPage === true && (
         <>
           <ZCreateWorkspaceBtn />
         </>
-      ) : (
+      )}
+
+      {(isWorkspaceListPage === false || isWorkspaceListPage === undefined) && (
         <>
-          {isMdScale && showWSSwitcherBtn ? (
+          {isMdScale && showWSSwitcherBtn && (
             <ZCan havePermissions={[permissionsEnum.viewAny_workspace]}>
               <ZWorkspaceSwitcher
                 workspaceId={workspaceId}
@@ -348,9 +316,9 @@ const ZADTopBarColOne: React.FC<{
                 wsShareId={wsShareId}
               />
             </ZCan>
-          ) : null}
+          )}
 
-          {!isMdScale ? (
+          {!isMdScale && (
             <ZIonButton
               minHeight='2rem'
               color='tertiary'
@@ -365,28 +333,28 @@ const ZADTopBarColOne: React.FC<{
                 className='w-6 h-6'
               />
             </ZIonButton>
-          ) : null}
+          )}
 
           <ZCan
             shareWSId={wsShareId}
             havePermissions={
-              wsShareId
+              (wsShareId?.trim()?.length ?? 0) > 0
                 ? [shareWSPermissionEnum.create_sws_member]
                 : [permissionsEnum.create_ws_member]
             }
             permissionType={
-              wsShareId
+              (wsShareId?.trim()?.length ?? 0) > 0
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }>
-            {isMdScale && showInviteBtn ? (
+            {isMdScale && showInviteBtn && (
               <ZInviteButton
                 className='ms-2'
                 workspaceId={workspaceId}
                 wsShareId={wsShareId}
                 shareWSMemberId={shareWSMemberId}
               />
-            ) : null}
+            )}
           </ZCan>
         </>
       )}

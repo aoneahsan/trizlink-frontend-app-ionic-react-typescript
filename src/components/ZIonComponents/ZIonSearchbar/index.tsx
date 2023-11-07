@@ -2,14 +2,16 @@
 import React from 'react';
 
 // Packages Import
-import { IonSearchbar, SearchbarChangeEventDetail } from '@ionic/react';
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
+import { IonSearchbar, type SearchbarChangeEventDetail } from '@ionic/react';
+import {
+  type ZIonColorType,
+  type ZIonModeType
+} from '@/types/zaionsAppSettings.type';
 
 // Type
-import { IonSearchbarCustomEvent } from '@ionic/core/dist/types/components';
+import { type IonSearchbarCustomEvent } from '@ionic/core/dist/types/components';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
-import { PRODUCT_NAME } from '@/utils/constants';
 
 type ZIonInputAutoCompleteType =
   | 'name'
@@ -67,7 +69,7 @@ type ZIonInputAutoCompleteType =
   | 'impp'
   | 'photo';
 
-type ZIonSearchbarType = {
+interface ZIonSearchbarType {
   className?: string;
   animated?: boolean;
   autocomplete?: ZIonInputAutoCompleteType;
@@ -105,34 +107,36 @@ type ZIonSearchbarType = {
   value?: null | string;
   defaultValue?: string | readonly string[];
   name?: string;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   testingselector?: string;
   testinglistselector?: string;
   onIonChange?: (
     event: IonSearchbarCustomEvent<SearchbarChangeEventDetail>
   ) => void;
   onIonBlur?: <A extends Event>(event: A) => void;
-};
+}
 
-const ZIonSearchbar = (props: ZIonSearchbarType) => {
-  const _testinglistselector = props.testinglistselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testinglistselector || PRODUCT_NAME,
-          _key: zCreateElementTestingSelectorKeyEnum.listSelector
-        })
-      }
-    : {};
+const ZIonSearchbar: React.FC<ZIonSearchbarType> = (
+  props: ZIonSearchbarType
+) => {
+  const _testinglistselector =
+    props.testinglistselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testinglistselector,
+            _key: zCreateElementTestingSelectorKeyEnum.listSelector
+          })
+        }
+      : {};
 
-  const _testingSelector = props.testingselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testingselector || PRODUCT_NAME
-        })
-      }
-    : {};
+  const _testingSelector =
+    props.testingselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testingselector
+          })
+        }
+      : {};
   return (
     <IonSearchbar
       {...props}

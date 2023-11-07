@@ -25,10 +25,12 @@ import {
   ZIonContent,
   ZIonIcon,
   ZIonItem,
-  ZIonInput,
   ZIonFooter,
-  ZIonList
+  ZIonList,
+  ZIonButton,
+  ZIonTitle
 } from '@/components/ZIonComponents';
+import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 /**
  * Global Constants Imports go down
@@ -40,6 +42,8 @@ import { API_URL_ENUM } from '@/utils/enums';
 import { ZCustomError, reportCustomError } from '@/utils/customErrorType';
 import { showSuccessNotification } from '@/utils/notification';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
+import { zAxiosApiRequest, zStringify } from '@/utils/helpers';
 
 /**
  * Type Imports go down
@@ -51,11 +55,6 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
  * ? Import of recoil states is a Recoil State import
  * */
 import { ZaionsAuthToken } from '@/ZaionsStore/UserAccount/index.recoil';
-import { useZIonLoading } from '@/ZaionsHooks/zionic-hooks';
-import { ZIonButton } from '@/components/ZIonComponents';
-import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
-import { zAxiosApiRequest, zStringify } from '@/utils/helpers';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 /**
  * Style files Imports go down
@@ -87,10 +86,10 @@ const DeleteUserAccountModal: React.FC<{
   const handleFormSubmit = async (values: {
     confirm: string;
     reason: string;
-  }) => {
+  }): Promise<void> => {
     try {
       await presentZIonLoader(MESSAGES.GENERAL.DELETING_ACCOUNT);
-      if (authToken) {
+      if (authToken !== null || authToken !== undefined) {
         try {
           await zAxiosApiRequest({
             _url: API_URL_ENUM.delete,
@@ -115,7 +114,8 @@ const DeleteUserAccountModal: React.FC<{
         MESSAGES.GENERAL.USER_ACCOUNT_SUCCESS_DELETE_MESSAGE
       );
 
-      zNavigatePushRoute && zNavigatePushRoute(ZaionsRoutes.HomeRoute);
+      zNavigatePushRoute !== undefined &&
+        zNavigatePushRoute(ZaionsRoutes.HomeRoute);
     } catch (error) {
       reportCustomError({
         errorPlacement: 'From DeleteUserAccountModal - formik - onSubmit',
@@ -137,13 +137,14 @@ const DeleteUserAccountModal: React.FC<{
           } = {};
 
           if (
-            !values.confirm.trim() ||
-            values.confirm.trim() !== CONSTANTS.USER_ACCOUNT_DELETE_CONFIRM_KEY
+            values?.confirm?.trim().length === 0 ||
+            values?.confirm?.trim() !==
+              CONSTANTS.USER_ACCOUNT_DELETE_CONFIRM_KEY
           ) {
             errors.confirm = MESSAGES.GENERAL.DELETE_USER_ACCOUNT_CONFIRM;
           }
 
-          if (!values.reason) {
+          if (values?.reason?.length === 0) {
             errors.reason = MESSAGES.GENERAL.DELETE_USER_ACCOUNT_REASON;
           }
           return errors;
@@ -170,7 +171,9 @@ const DeleteUserAccountModal: React.FC<{
                       fill='clear'
                       className='ion-no-padding ion-no-margin me-2'
                       color='dark'
-                      onClick={() => dismissZIonModal()}>
+                      onClick={() => {
+                        dismissZIonModal();
+                      }}>
                       <ZIonIcon
                         icon={closeOutline}
                         size='large'
@@ -226,16 +229,18 @@ const DeleteUserAccountModal: React.FC<{
                       </ZIonItem>
                       <ZIonItem className='mt-2 ion-no-padding ion-align-items-start'>
                         Links branded with your own custom domain will continue
-                        to function as long as the domain's DNS records point to
-                        {PRODUCT_NAME}'s servers
+                        to function as long as the domain&apos;s DNS records
+                        point to
+                        {PRODUCT_NAME}&apos;s servers
                       </ZIonItem>
                       <ZIonItem className='ion-no-padding'>
-                        Your name will not appear next to links you've created
+                        Your name will not appear next to links you&apos;ve
+                        created
                       </ZIonItem>
 
                       <ZIonText className='block font-bold text-[16px] mt-3'>
-                        We're sad to see you go. Can you tell us why you're
-                        leaving?
+                        We&apos;re sad to see you go. Can you tell us why
+                        you&apos;re leaving?
                       </ZIonText>
                     </ZIonList>
                     <ZIonList lines='none'>
@@ -243,12 +248,12 @@ const DeleteUserAccountModal: React.FC<{
                         <ZIonItem>
                           <IonRadio
                             className='me-2'
-                            onClick={() =>
-                              setFieldValue(
+                            onClick={() => {
+                              void setFieldValue(
                                 'reason',
                                 `I have another ${PRODUCT_NAME} account`
-                              )
-                            }
+                              );
+                            }}
                           />
                           <ZIonText>
                             I have another {PRODUCT_NAME} account
@@ -257,12 +262,12 @@ const DeleteUserAccountModal: React.FC<{
                         <ZIonItem>
                           <IonRadio
                             className='me-2'
-                            onClick={() =>
-                              setFieldValue(
+                            onClick={() => {
+                              void setFieldValue(
                                 'reason',
                                 `I have privacy concerns using ${PRODUCT_NAME}`
-                              )
-                            }
+                              );
+                            }}
                           />
                           <ZIonText>
                             I have privacy concerns using {PRODUCT_NAME}
@@ -271,12 +276,12 @@ const DeleteUserAccountModal: React.FC<{
                         <ZIonItem>
                           <IonRadio
                             className='me-2'
-                            onClick={() =>
-                              setFieldValue(
+                            onClick={() => {
+                              void setFieldValue(
                                 'reason',
                                 `I no longer find  ${PRODUCT_NAME} useful`
-                              )
-                            }
+                              );
+                            }}
                           />
                           <ZIonText>
                             I no longer find {PRODUCT_NAME} useful
@@ -285,7 +290,9 @@ const DeleteUserAccountModal: React.FC<{
                         <ZIonItem>
                           <IonRadio
                             className='me-2'
-                            onClick={() => setFieldValue('reason', `Other`)}
+                            onClick={() => {
+                              void setFieldValue('reason', 'Other');
+                            }}
                           />
                           <ZIonText>Other</ZIonText>
                         </ZIonItem>
@@ -294,10 +301,13 @@ const DeleteUserAccountModal: React.FC<{
                             inputFieldProps={{
                               className: classNames({
                                 'ion-margin-start mt-3': true,
-                                'ion-touched ion-invalid':
-                                  touched.reason && errors.reason,
-                                'ion-touched ion-valid':
-                                  touched.reason && !errors.reason
+                                'ion-touched': touched?.reason === true,
+                                'ion-invalid':
+                                  touched?.reason === true && errors?.reason,
+                                'ion-valid':
+                                  touched?.reason === true &&
+                                  (errors?.reason === null ||
+                                    errors?.reason === undefined)
                               }),
                               label: 'Specify reason',
                               labelPlacement: 'floating',
@@ -315,19 +325,22 @@ const DeleteUserAccountModal: React.FC<{
                     </ZIonList>
 
                     <ZIonText className='font-bold text-[16px] mt-4'>
-                      To permanently delete your account, enter '
-                      {CONSTANTS.USER_ACCOUNT_DELETE_CONFIRM_KEY}' below, and
-                      then select Delete account.
+                      To permanently delete your account, enter &apos;
+                      {CONSTANTS.USER_ACCOUNT_DELETE_CONFIRM_KEY}&apos; below,
+                      and then select Delete account.
                     </ZIonText>
 
                     <ZIonInputField
                       inputFieldProps={{
                         className: classNames({
                           'mt-3': true,
-                          'ion-touched ion-invalid':
-                            touched.confirm && errors.confirm,
-                          'ion-touched ion-valid':
-                            touched.confirm && !errors.confirm
+                          'ion-touched': touched?.confirm === true,
+                          'ion-invalid':
+                            touched?.confirm === true && errors.confirm,
+                          'ion-valid':
+                            touched?.confirm === true &&
+                            (errors.confirm === null ||
+                              errors.confirm === undefined)
                         }),
                         label: 'Enter Key',
                         labelPlacement: 'floating',
@@ -347,7 +360,9 @@ const DeleteUserAccountModal: React.FC<{
                 <ZIonButton
                   className='me-4'
                   fill='outline'
-                  onClick={() => dismissZIonModal()}>
+                  onClick={() => {
+                    dismissZIonModal();
+                  }}>
                   Cancel
                 </ZIonButton>
                 <ZIonButton

@@ -12,10 +12,9 @@ import {
   ZIonList,
   ZIonRow,
   ZIonText,
-  ZIonTitle,
-  ZIonToggle
+  ZIonTitle
 } from '@/components/ZIonComponents';
-import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import CONSTANTS from '@/utils/constants';
 import { API_URL_ENUM } from '@/utils/enums';
@@ -78,23 +77,24 @@ import { useParams } from 'react-router';
  * */
 
 const ZWSNotificationSettings: React.FC = () => {
-  const { workspaceId } = useParams<{ workspaceId: string }>();
+  const { workspaceId } = useParams<{ workspaceId?: string }>();
 
   // #region Custom hooks.
   const { isSmScale, isLgScale, isMdScale } = useZMediaQueryScale();
   // #endregion
 
   // #region APIS.
-  const { data: selectedWorkspace, isFetching: isSelectedWorkspaceFetching } =
-    useZRQGetRequest<workspaceInterface>({
-      _url: API_URL_ENUM.workspace_update_delete,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId],
-      _authenticated: true,
-      _itemsIds: [workspaceId],
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: !workspaceId ? true : false,
-      _extractType: ZRQGetRequestExtractEnum.extractItem
-    });
+  const { data: selectedWorkspace } = useZRQGetRequest<workspaceInterface>({
+    _url: API_URL_ENUM.workspace_update_delete,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId ?? ''],
+    _authenticated: true,
+    _itemsIds: [workspaceId ?? ''],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _shouldFetchWhenIdPassed: !(
+      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+    ),
+    _extractType: ZRQGetRequestExtractEnum.extractItem
+  });
   // #endregion
 
   return (
@@ -150,7 +150,7 @@ const ZWSNotificationSettings: React.FC = () => {
               color='medium'>
               Owner by:
               <ZIonText
-                className='ms-1 font-semibold'
+                className='font-semibold ms-1'
                 color='dark'>
                 {selectedWorkspace?.user?.username}
               </ZIonText>
@@ -160,7 +160,7 @@ const ZWSNotificationSettings: React.FC = () => {
 
         {/*  */}
         <ZIonList
-          className='border mt-2 rounded-lg'
+          className='mt-2 border rounded-lg'
           lines='full'>
           <ZIonItem
             className='mx-2'
@@ -172,8 +172,8 @@ const ZWSNotificationSettings: React.FC = () => {
                 Workspace notification on your profile
               </ZIonText>
               <ZIonText className='block'>
-                Don't miss updates about your workspace
-                <ZIonText className='ms-1 font-semibold'>
+                Don&apos;t miss updates about your workspace
+                <ZIonText className='font-semibold ms-1'>
                   {selectedWorkspace?.workspaceName}
                 </ZIonText>
               </ZIonText>

@@ -3,7 +3,7 @@ import React from 'react';
 
 // Packages Import
 import { Form, Formik } from 'formik';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import classNames from 'classnames';
 
 // Custom Imports
@@ -20,6 +20,16 @@ import {
   ZIonButton,
   ZIonSelect
 } from '@/components/ZIonComponents';
+import ZCan from '@/components/Can';
+
+// Custom hooks
+import {
+  useZGetRQCacheData,
+  useZRQUpdateRequest,
+  useZRQCreateRequest,
+  useZUpdateRQCacheData
+} from '@/ZaionsHooks/zreactquery-hooks';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Global Constants
 import {
@@ -38,33 +48,6 @@ import {
 import CONSTANTS from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
 import { showSuccessNotification } from '@/utils/notification';
-
-// Images
-import { ProductFavicon } from '@/assets/images';
-
-// Recoil States
-import { PixelAccountPlatformOptionsRState } from '@/ZaionsStore/UserDashboard/PixelAccountsState/index.recoil';
-import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
-
-// Types
-import {
-  PixelAccountPlatformType,
-  PixelAccountType,
-  PixelPlatformsEnum
-} from '@/types/AdminPanel/linksType';
-import { FormMode } from '@/types/AdminPanel/index.type';
-import { PixelAccountFormState } from '@/ZaionsStore/FormStates/pixelAccountFormState.recoil';
-import { resetFormType } from '@/types/ZaionsFormik.type';
-import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import {
-  useZGetRQCacheData,
-  useZRQUpdateRequest,
-  useZRQCreateRequest,
-  useZUpdateRQCacheData
-} from '@/ZaionsHooks/zreactquery-hooks';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import ZCan from '@/components/Can';
 import {
   permissionCheckModeEnum,
   permissionsEnum,
@@ -72,41 +55,95 @@ import {
   shareWSPermissionEnum
 } from '@/utils/enums/RoleAndPermissions';
 
+// Images
+import { ProductFaviconSmall } from '@/assets/images';
+
+// Recoil States
+import { PixelAccountPlatformOptionsRState } from '@/ZaionsStore/UserDashboard/PixelAccountsState/index.recoil';
+import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
+
+// Types
+import {
+  type PixelAccountPlatformType,
+  type PixelAccountType,
+  PixelPlatformsEnum
+} from '@/types/AdminPanel/linksType';
+import { FormMode } from '@/types/AdminPanel/index.type';
+import { type resetFormType } from '@/types/ZaionsFormik.type';
+import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import ZInputLengthConstant from '@/utils/constants/InputLenghtConstant';
+
 // Styles
 
 // Pixel Id Placeholder check
-const PIXEL_ID_PLACEHOLDER = (curSelectedPlatformType?: PixelPlatformsEnum) => {
+// const PIXEL_ID_PLACEHOLDER = (curSelectedPlatformType?: PixelPlatformsEnum) => {
+//   switch (curSelectedPlatformType) {
+//     case PixelPlatformsEnum.facebook:
+//       return '1234567891234567';
+//     case PixelPlatformsEnum.twitter:
+//       return 'zaionsOfficial';
+//     case PixelPlatformsEnum.google_analytics:
+//     case PixelPlatformsEnum.google_analytics_4:
+//       return 'UA-000000-0';
+//     case PixelPlatformsEnum.google_ads:
+//       return '123456789';
+//     case PixelPlatformsEnum.google_tag_manager:
+//       return 'GMT-0000AAA';
+//     case PixelPlatformsEnum.quora:
+//       return 'd42ba18b3f684e8fb5d68cf9c628b6d';
+//     case PixelPlatformsEnum.snapchat:
+//       return '7c47481d-fde8-4263-89b3-4a63367e';
+//     case PixelPlatformsEnum.pinterest:
+//       return '1234567891234';
+//     case PixelPlatformsEnum.bing:
+//     case PixelPlatformsEnum.linkedin:
+//       return '1234567';
+//     case PixelPlatformsEnum.adroll:
+//       return 'YourAdvertiserID|YourPixelID';
+//     case PixelPlatformsEnum.nexus:
+//       return '';
+//     case PixelPlatformsEnum.tiktok:
+//       return 'ABCDEFGHIGKLMNOPQRST';
+//     case PixelPlatformsEnum.vk:
+//       return 'VK-ABCD-000000-ABCD';
+//     default:
+//       return '1234567891234567';
+//   }
+// };
+const PixelInputMax = (
+  curSelectedPlatformType?: PixelPlatformsEnum
+): number => {
   switch (curSelectedPlatformType) {
     case PixelPlatformsEnum.facebook:
-      return '1234567891234567';
+      return 16;
+
     case PixelPlatformsEnum.twitter:
-      return 'zaionsOfficial';
-    case PixelPlatformsEnum.google_analytics:
-    case PixelPlatformsEnum.google_analytics_4:
-      return 'UA-000000-0';
-    case PixelPlatformsEnum.google_ads:
-      return '123456789';
-    case PixelPlatformsEnum.google_tag_manager:
-      return 'GMT-0000AAA';
-    case PixelPlatformsEnum.quora:
-      return 'd42ba18b3f684e8fb5d68cf9c628b6d';
-    case PixelPlatformsEnum.snapchat:
-      return '7c47481d-fde8-4263-89b3-4a63367e';
-    case PixelPlatformsEnum.pinterest:
-      return '1234567891234';
-    case PixelPlatformsEnum.bing:
+      return 5;
+
     case PixelPlatformsEnum.linkedin:
-      return '1234567';
-    case PixelPlatformsEnum.adroll:
-      return 'YourAdvertiserID|YourPixelID';
-    case PixelPlatformsEnum.nexus:
-      return '';
-    case PixelPlatformsEnum.tiktok:
-      return 'ABCDEFGHIGKLMNOPQRST';
+      return 7;
+
+    case PixelPlatformsEnum.google_analytics_4:
+      return 12;
+
+    case PixelPlatformsEnum.google_ads:
+      return 12;
+
+    case PixelPlatformsEnum.quora:
+      return 31;
+
+    case PixelPlatformsEnum.snapchat:
+      return 32;
+
+    case PixelPlatformsEnum.pinterest:
+      return 32;
+
     case PixelPlatformsEnum.vk:
-      return 'VK-ABCD-000000-ABCD';
+      return 17;
+
     default:
-      return '1234567891234567';
+      return ZInputLengthConstant.defaultStringMaxLength;
   }
 };
 const ZaionsAddPixelAccount: React.FC<{
@@ -130,8 +167,10 @@ const ZaionsAddPixelAccount: React.FC<{
   shareWSMemberId,
   wsShareId
 }) => {
+  // #region Recoil state.
   const platformData = useRecoilValue(PixelAccountPlatformOptionsRState);
   const appSettings = useRecoilValue(ZaionsAppSettingsRState);
+  // #endregion
 
   // #region Custom Hooks.
   const { getRQCDataHandler } = useZGetRQCacheData();
@@ -142,7 +181,6 @@ const ZaionsAddPixelAccount: React.FC<{
   // #region Custom APIS.
   const { mutateAsync: createPixelAccount } = useZRQCreateRequest({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _queriesKeysToInvalidate: [],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _itemsIds: [workspaceId]
   });
@@ -167,21 +205,39 @@ const ZaionsAddPixelAccount: React.FC<{
    * Handle Form Submission Function
    * add a new pixel function
    *  */
-  const handleFormSubmit = async (_value: string, resetForm: resetFormType) => {
+  const handleFormSubmit = async (
+    _value: string,
+    resetForm: resetFormType
+  ): Promise<void> => {
     try {
-      let __response;
+      let _response;
 
       // if in from add mode then add a new pixel account
       if (formMode === FormMode.ADD) {
-        if (workspaceId) {
-          __response = await createPixelAccount(_value);
-        } else if (wsShareId && shareWSMemberId) {
-          __response = await createSWSPixelAccount(_value);
+        if (
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          (workspaceId?.trim()?.length ?? 0) > 0
+        ) {
+          _response = await createPixelAccount(_value);
+        } else if (
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          (wsShareId?.trim()?.length ?? 0) > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          (shareWSMemberId?.trim()?.length ?? 0) > 0
+        ) {
+          _response = await createSWSPixelAccount(_value);
         }
-      } // if in from edit mode then edit  pixel account
-      else if (formMode === FormMode.EDIT && selectedId) {
-        if (workspaceId) {
-          __response = await updatePixelAccount({
+      } else if (formMode === FormMode.EDIT && selectedId !== undefined) {
+        // if in from edit mode then edit  pixel account
+        if (
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          (workspaceId?.trim()?.length ?? 0) > 0
+        ) {
+          _response = await updatePixelAccount({
             itemIds: [workspaceId, selectedId],
             urlDynamicParts: [
               CONSTANTS.RouteParams.workspace.workspaceId,
@@ -189,8 +245,15 @@ const ZaionsAddPixelAccount: React.FC<{
             ],
             requestData: _value
           });
-        } else if (wsShareId && shareWSMemberId) {
-          __response = await updateSWSPixelAccount({
+        } else if (
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          (wsShareId?.trim()?.length ?? 0) > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          (shareWSMemberId?.trim()?.length ?? 0) > 0
+        ) {
+          _response = await updateSWSPixelAccount({
             itemIds: [shareWSMemberId, selectedId],
             urlDynamicParts: [
               CONSTANTS.RouteParams.workspace.shareWSMemberId,
@@ -202,44 +265,59 @@ const ZaionsAddPixelAccount: React.FC<{
       }
 
       if (
-        (__response as ZLinkMutateApiType<PixelAccountPlatformType>).success
+        (_response as ZLinkMutateApiType<PixelAccountPlatformType>)?.success
       ) {
-        const __data = extractInnerData<PixelAccountPlatformType>(
-          __response,
+        const _data = extractInnerData<PixelAccountPlatformType>(
+          _response,
           extractInnerDataOptionsEnum.createRequestResponseItem
         );
 
-        if (__data && __data.id) {
-          let __pixelsDataFromCache: PixelAccountPlatformType[] = [];
-          if (workspaceId) {
-            __pixelsDataFromCache =
+        if (_data?.id !== null) {
+          let _pixelsDataFromCache: PixelAccountPlatformType[] = [];
+          if (
+            workspaceId !== undefined &&
+            workspaceId !== null &&
+            (workspaceId?.trim()?.length ?? 0) > 0
+          ) {
+            _pixelsDataFromCache =
               getRQCDataHandler<PixelAccountPlatformType[]>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
                   workspaceId
                 ]
-              }) || [];
-          } else if (wsShareId && shareWSMemberId) {
-            __pixelsDataFromCache =
+              }) ?? [];
+          } else if (
+            wsShareId !== undefined &&
+            wsShareId !== null &&
+            (wsShareId?.trim()?.length ?? 0) > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            (shareWSMemberId?.trim()?.length ?? 0) > 0
+          ) {
+            _pixelsDataFromCache =
               getRQCDataHandler<PixelAccountPlatformType[]>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
                   wsShareId
                 ]
-              }) || [];
+              }) ?? [];
           }
 
-          const __oldPixelsData = extractInnerData<PixelAccountPlatformType[]>(
-            __pixelsDataFromCache,
+          const _oldPixelsData = extractInnerData<PixelAccountPlatformType[]>(
+            _pixelsDataFromCache,
             extractInnerDataOptionsEnum.createRequestResponseItems
           );
 
-          if (__oldPixelsData) {
+          if (_oldPixelsData !== undefined && _oldPixelsData !== null) {
             if (formMode === FormMode.ADD) {
               // added pixels to all pixels data in cache.
-              const __updatedPixelsData = [...__oldPixelsData, __data];
+              const _updatedPixelsData = [..._oldPixelsData, _data];
 
-              if (workspaceId) {
+              if (
+                workspaceId !== undefined &&
+                workspaceId !== null &&
+                (workspaceId?.trim()?.length ?? 0) > 0
+              ) {
                 // Updating all pixels data in RQ cache.
                 await updateRQCDataHandler<
                   PixelAccountPlatformType[] | undefined
@@ -248,12 +326,19 @@ const ZaionsAddPixelAccount: React.FC<{
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
                     workspaceId
                   ],
-                  data: __updatedPixelsData as PixelAccountPlatformType[],
+                  data: _updatedPixelsData as PixelAccountPlatformType[],
                   id: '',
                   extractType: ZRQGetRequestExtractEnum.extractItems,
                   updateHoleData: true
                 });
-              } else if (wsShareId && shareWSMemberId) {
+              } else if (
+                wsShareId !== undefined &&
+                wsShareId !== null &&
+                (wsShareId?.trim()?.length ?? 0) > 0 &&
+                shareWSMemberId !== undefined &&
+                shareWSMemberId !== null &&
+                (shareWSMemberId?.trim()?.length ?? 0) > 0
+              ) {
                 // Updating all pixels data in RQ cache.
                 await updateRQCDataHandler<
                   PixelAccountPlatformType[] | undefined
@@ -262,7 +347,7 @@ const ZaionsAddPixelAccount: React.FC<{
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
                     wsShareId
                   ],
-                  data: __updatedPixelsData as PixelAccountPlatformType[],
+                  data: _updatedPixelsData as PixelAccountPlatformType[],
                   id: '',
                   extractType: ZRQGetRequestExtractEnum.extractItems,
                   updateHoleData: true
@@ -271,7 +356,11 @@ const ZaionsAddPixelAccount: React.FC<{
 
               showSuccessNotification(MESSAGES.PIXEL_ACCOUNT.CREATED);
             } else if (formMode === FormMode.EDIT) {
-              if (workspaceId) {
+              if (
+                workspaceId !== undefined &&
+                workspaceId !== null &&
+                (workspaceId?.trim()?.length ?? 0) > 0
+              ) {
                 // Updating all pixels data in RQ cache.
                 await updateRQCDataHandler<
                   PixelAccountPlatformType | undefined
@@ -280,11 +369,18 @@ const ZaionsAddPixelAccount: React.FC<{
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
                     workspaceId
                   ],
-                  data: __data,
-                  id: __data.id,
+                  data: _data,
+                  id: _data?.id ?? '',
                   extractType: ZRQGetRequestExtractEnum.extractItem
                 });
-              } else if (wsShareId && shareWSMemberId) {
+              } else if (
+                wsShareId !== undefined &&
+                wsShareId !== null &&
+                (wsShareId?.trim()?.length ?? 0) > 0 &&
+                shareWSMemberId !== undefined &&
+                shareWSMemberId !== null &&
+                (shareWSMemberId?.trim()?.length ?? 0) > 0
+              ) {
                 // Updating all pixels data in RQ cache.
                 await updateRQCDataHandler<
                   PixelAccountPlatformType | undefined
@@ -293,8 +389,8 @@ const ZaionsAddPixelAccount: React.FC<{
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
                     wsShareId
                   ],
-                  data: __data,
-                  id: __data.id,
+                  data: _data,
+                  id: _data?.id ?? '',
                   extractType: ZRQGetRequestExtractEnum.extractItem
                 });
               }
@@ -309,7 +405,7 @@ const ZaionsAddPixelAccount: React.FC<{
       // SetDefaultPixelAccountFormState();
 
       // this will reset form
-      if (resetForm && formMode === FormMode.ADD) {
+      if (resetForm !== undefined && formMode === FormMode.ADD) {
         resetForm();
       }
 
@@ -321,7 +417,7 @@ const ZaionsAddPixelAccount: React.FC<{
 
     // After Submit loading state end
     // setTimeout(() => {
-    // 	void ionLoaderDismiss();
+    // void ionLoaderDismiss();
     // }, 3000);
   };
   // #endregion
@@ -332,12 +428,22 @@ const ZaionsAddPixelAccount: React.FC<{
       shareWSId={wsShareId}
       checkMode={permissionCheckModeEnum.any}
       permissionType={
-        wsShareId
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        (wsShareId?.trim()?.length ?? 0) > 0 &&
+        shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
           ? permissionsTypeEnum.shareWSMemberPermissions
           : permissionsTypeEnum.loggedInUserPermissions
       }
       havePermissions={
-        wsShareId
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        (wsShareId?.trim()?.length ?? 0) > 0 &&
+        shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
           ? [
               shareWSPermissionEnum.create_sws_pixel,
               shareWSPermissionEnum.update_sws_pixel
@@ -346,9 +452,9 @@ const ZaionsAddPixelAccount: React.FC<{
       }>
       <Formik
         initialValues={{
-          platform: pixelPlatform || PixelPlatformsEnum.facebook,
-          title: pixelTitle || '',
-          pixelId: pixelId || ''
+          platform: pixelPlatform ?? PixelPlatformsEnum.facebook,
+          title: pixelTitle ?? '',
+          pixelId: pixelId ?? ''
         }}
         enableReinitialize={true}
         validate={values => {
@@ -364,12 +470,19 @@ const ZaionsAddPixelAccount: React.FC<{
             VALIDATION_RULE.string
           ]);
 
-          if (values.platform && values.pixelId) {
+          if (
+            values?.platform?.trim()?.length > 0 &&
+            values?.pixelId?.trim()?.length > 0
+          ) {
             const errorMessage = validatePixelAccountID(
               values.platform,
               values.pixelId
             );
-            if (errorMessage) {
+            if (
+              errorMessage !== undefined &&
+              errorMessage !== null &&
+              errorMessage?.trim()?.length > 0
+            ) {
               errors.pixelId = errorMessage;
             }
           }
@@ -442,15 +555,6 @@ const ZaionsAddPixelAccount: React.FC<{
                     </ZIonButton>
                   </ZIonCol>
                 </ZIonRow>
-                {/* {!isValid && (
-								<ZIonRow>
-									<ZIonCol className='ion-text-center'>
-										<ZIonNote color='danger'>
-											{MESSAGES.GENERAL.FORM.INVALID}
-										</ZIonNote>
-									</ZIonCol>
-								</ZIonRow>
-							)} */}
               </ZIonHeader>
             )}
 
@@ -461,7 +565,7 @@ const ZaionsAddPixelAccount: React.FC<{
               <div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-top'>
                 <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
                   <ZIonImg
-                    src={ProductFavicon}
+                    src={ProductFaviconSmall}
                     className='w-10 h-10 mx-auto'
                   />
                 </div>
@@ -485,6 +589,7 @@ const ZaionsAddPixelAccount: React.FC<{
                   'px-3': !isMdScale
                 })}>
                 {/* Pixel platform select */}
+                {/* Here in ZIonSelect the interface is action-sheet because first we are using popover interface but there is an issue using popover interface when we click at left side of select the popover width got smaller don't now why.  */}
                 <ZIonSelect
                   name='platform'
                   label='Select the platform*'
@@ -493,16 +598,21 @@ const ZaionsAddPixelAccount: React.FC<{
                   onIonChange={handleChange}
                   fill='outline'
                   minHeight='2.3rem'
-                  interface='popover'
-                  errorText={touched.platform ? errors.platform : undefined}
+                  errorText={
+                    touched?.platform === true ? errors?.platform : undefined
+                  }
                   testingselector={
                     CONSTANTS.testingSelectors.pixels.formModal.platformSelector
                   }
                   className={classNames({
                     'mt-5': true,
-                    'ion-touched': touched.platform,
-                    'ion-invalid': touched.platform && errors.platform,
-                    'ion-valid': touched.platform && !errors.platform
+                    'ion-touched': touched?.platform === true,
+                    'ion-invalid':
+                      touched?.platform === true &&
+                      (errors?.platform?.trim()?.length ?? 0) > 0,
+                    'ion-valid':
+                      touched?.platform === true &&
+                      (errors?.platform?.trim()?.length ?? 0) === 0
                   })}>
                   {platformData.map(el => {
                     return (
@@ -526,15 +636,21 @@ const ZaionsAddPixelAccount: React.FC<{
                   minHeight='2.3rem'
                   onIonChange={handleChange}
                   onIonBlur={handleBlur}
-                  errorText={touched.title ? errors.title : undefined}
+                  errorText={
+                    touched?.title === true ? errors?.title : undefined
+                  }
                   testingselector={
                     CONSTANTS.testingSelectors.pixels.formModal.pixelNameInput
                   }
                   className={classNames({
                     'mt-6 mb-2': true,
-                    'ion-touched': touched.title,
-                    'ion-invalid': touched.title && errors.title,
-                    'ion-valid': touched.title && !errors.title
+                    'ion-touched': touched?.title === true,
+                    'ion-invalid':
+                      touched?.title === true &&
+                      (errors?.title?.trim()?.length ?? 0) > 0,
+                    'ion-valid':
+                      touched?.title === true &&
+                      (errors?.title?.trim()?.length ?? 0) === 0
                   })}
                 />
 
@@ -542,6 +658,7 @@ const ZaionsAddPixelAccount: React.FC<{
                 <ZIonInput
                   label='Pixel ID*'
                   labelPlacement='stacked'
+                  maxlength={PixelInputMax(values?.platform)}
                   name='pixelId'
                   placeholder='Enter Pixel Id'
                   type='text'
@@ -549,15 +666,21 @@ const ZaionsAddPixelAccount: React.FC<{
                   onIonChange={handleChange}
                   onIonBlur={handleBlur}
                   value={values.pixelId}
-                  errorText={touched.pixelId ? errors.pixelId : undefined}
+                  errorText={
+                    touched?.pixelId === true ? errors?.pixelId : undefined
+                  }
                   testingselector={
                     CONSTANTS.testingSelectors.pixels.formModal.pixelIdInput
                   }
                   className={classNames({
                     'mt-0': true,
-                    'ion-touched': touched.pixelId,
-                    'ion-invalid': touched.pixelId && errors.pixelId,
-                    'ion-valid': touched.pixelId && !errors.pixelId
+                    'ion-touched': touched?.pixelId === true,
+                    'ion-invalid':
+                      touched?.pixelId === true &&
+                      (errors?.pixelId?.trim()?.length ?? 0) > 0,
+                    'ion-valid':
+                      touched?.pixelId === true &&
+                      (errors?.pixelId?.trim()?.length ?? 0) === 0
                   })}
                 />
               </Form>
@@ -599,7 +722,9 @@ const ZaionsAddPixelAccount: React.FC<{
                         CONSTANTS.testingSelectors.pixels.formModal
                           .submitFormBtn
                       }
-                      onClick={() => void submitForm()}>
+                      onClick={() => {
+                        void submitForm();
+                      }}>
                       {formMode === FormMode.ADD
                         ? 'Create'
                         : formMode === FormMode.EDIT

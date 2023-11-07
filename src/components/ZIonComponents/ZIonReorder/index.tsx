@@ -1,24 +1,24 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonReorder } from '@ionic/react';
 
-type ZIonReorderType = {
-	children?: ReactNode;
-	className?: string;
-	style?: {
-		[key: string]: unknown;
-	};
-	slot?: 'start' | 'end';
-};
+interface ZIonReorderType {
+  children?: ReactNode;
+  className?: string;
+  style?: Record<string, unknown>;
+  slot?: 'start' | 'end';
+}
 
-const ZIonReorder = (props: ZIonReorderType) => {
-	return (
-		<IonReorder {...props} color='primary'>
-			{props.children}
-		</IonReorder>
-	);
+const ZIonReorder: React.FC<ZIonReorderType> = (props: ZIonReorderType) => {
+  return (
+    <IonReorder
+      {...props}
+      color='primary'>
+      {props.children}
+    </IonReorder>
+  );
 };
 
 export default ZIonReorder;

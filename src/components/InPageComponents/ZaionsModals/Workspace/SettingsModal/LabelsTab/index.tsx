@@ -18,6 +18,7 @@ import {
   trashBinOutline
 } from 'ionicons/icons';
 import { FieldArray, Formik } from 'formik';
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
@@ -35,6 +36,7 @@ import {
   ZIonTitle
 } from '@/components/ZIonComponents';
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
+import ZCan from '@/components/Can';
 
 /**
  * Custom Hooks Imports go down
@@ -48,6 +50,11 @@ import {
   useZRQUpdateRequest,
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
+import {
+  useZIonAlert,
+  useZIonErrorAlert,
+  useZIonToastSuccess
+} from '@/ZaionsHooks/zionic-hooks';
 
 /**
  * Global Constants Imports go down
@@ -59,30 +66,23 @@ import {
   VALIDATION_RULE
 } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
-
-/**
- * Type Imports go down
- * ? Like import of type or type of some recoil state or any external type import is a Type import
- * */
-import { FormMode, LabelInterface } from '@/types/AdminPanel/index.type';
 import { reportCustomError } from '@/utils/customErrorType';
-import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { extractInnerData, validateField, zStringify } from '@/utils/helpers';
-import {
-  useZIonAlert,
-  useZIonErrorAlert,
-  useZIonToastSuccess
-} from '@/ZaionsHooks/zionic-hooks';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import MESSAGES from '@/utils/messages';
-import classNames from 'classnames';
 import { showErrorNotification } from '@/utils/notification';
-import ZCan from '@/components/Can';
 import {
   permissionsEnum,
   permissionsTypeEnum,
   shareWSPermissionEnum
 } from '@/utils/enums/RoleAndPermissions';
+
+/**
+ * Type Imports go down
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
+ * */
+import { FormMode, type LabelInterface } from '@/types/AdminPanel/index.type';
+import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Recoil State Imports go down
@@ -129,33 +129,40 @@ const ZLabelsTab: React.FC<{
   const { presentZIonAlert } = useZIonAlert();
   // #endregion
 
-  //#region APIS
+  // #region APIS
   // if owner then this api hit to get label for current workspace data.
   const { data: labelsData, isFetching: isLabelsDataFetching } =
     useZRQGetRequest<LabelInterface[]>({
       _url: API_URL_ENUM.label_create_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.MAIN, workspaceId!],
+      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.MAIN, workspaceId ?? ''],
       _showLoader: false,
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: workspaceId ? false : true,
-      _itemsIds: [workspaceId!]
+      _shouldFetchWhenIdPassed: !(
+        workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      ),
+      _itemsIds: [workspaceId ?? '']
     });
 
   const { data: shareWSLabelsData, isFetching: isShareWSLabelsDataFetching } =
     useZRQGetRequest<LabelInterface[]>({
       _url: API_URL_ENUM.label_sws_create_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.SWS_MAIN, wsShareId!],
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.SWS_MAIN,
+        wsShareId ?? ''
+      ],
       _showLoader: false,
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-      _itemsIds: [wsShareMemberId!],
-      _shouldFetchWhenIdPassed: wsShareMemberId ? false : true
+      _itemsIds: [wsShareMemberId ?? ''],
+      _shouldFetchWhenIdPassed: !(
+        wsShareMemberId !== undefined && wsShareMemberId?.trim()?.length > 0
+      )
     });
 
   // if owner then this api hit to create label for current workspace.
   const { mutateAsync: createLabelMutateAsync } = useZRQCreateRequest({
     _url: API_URL_ENUM.label_create_list,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _itemsIds: [workspaceId!],
+    _itemsIds: [workspaceId ?? ''],
     _loaderMessage: MESSAGES.LABEL.CREATING_API
   });
 
@@ -163,7 +170,7 @@ const ZLabelsTab: React.FC<{
   const { mutateAsync: createSWSLabelMutateAsync } = useZRQCreateRequest({
     _url: API_URL_ENUM.label_sws_create_list,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _itemsIds: [wsShareMemberId!],
+    _itemsIds: [wsShareMemberId ?? ''],
     _loaderMessage: MESSAGES.LABEL.CREATING_API
   });
 
@@ -194,127 +201,161 @@ const ZLabelsTab: React.FC<{
 
   // #region Functions.
   const FormikSubmissionHandler = async (
-    _data: string,
+    _value: string,
     _mode: FormMode,
     _labelId?: string
-  ) => {
+  ): Promise<void> => {
     try {
-      if (_data) {
-        let __response;
+      if (_value?.trim()?.length > 0) {
+        let _response;
         if (_mode === FormMode.ADD) {
-          if (workspaceId) {
-            __response = await createLabelMutateAsync(_data);
-          } else if (wsShareMemberId) {
-            __response = await createSWSLabelMutateAsync(_data);
+          if (workspaceId !== undefined) {
+            _response = await createLabelMutateAsync(_value);
+          } else if (wsShareMemberId !== undefined) {
+            _response = await createSWSLabelMutateAsync(_value);
           }
-        } else if (_mode === FormMode.EDIT && _labelId?.trim()) {
-          if (workspaceId) {
-            __response = await updateLabelMutateAsync({
-              itemIds: [workspaceId!, _labelId],
+        } else if (
+          _mode === FormMode.EDIT &&
+          _labelId !== undefined &&
+          _labelId?.trim()?.length > 0
+        ) {
+          if (workspaceId !== undefined) {
+            _response = await updateLabelMutateAsync({
+              itemIds: [workspaceId, _labelId],
               urlDynamicParts: [
                 CONSTANTS.RouteParams.workspace.workspaceId,
                 CONSTANTS.RouteParams.label.labelId
               ],
-              requestData: _data
+              requestData: _value
             });
-          } else if (wsShareMemberId) {
-            __response = await updateSWSLabelMutateAsync({
-              itemIds: [wsShareMemberId!, _labelId],
+          } else if (wsShareMemberId !== undefined) {
+            _response = await updateSWSLabelMutateAsync({
+              itemIds: [wsShareMemberId, _labelId],
               urlDynamicParts: [
                 CONSTANTS.RouteParams.workspace.shareWSMemberId,
                 CONSTANTS.RouteParams.label.labelId
               ],
-              requestData: _data
+              requestData: _value
             });
           }
         }
 
-        if ((__response as ZLinkMutateApiType<LabelInterface>).success) {
+        if ((_response as ZLinkMutateApiType<LabelInterface>).success) {
           // extract Data from _response.
-          const __data = extractInnerData<LabelInterface>(
-            __response,
+          const _data = extractInnerData<LabelInterface>(
+            _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (__data && __data.id) {
-            let __rqLabelsData =
+          if (_data?.id !== null) {
+            let _rqLabelsData =
               (getRQCDataHandler<LabelInterface[]>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.MAIN,
-                  workspaceId!
+                  workspaceId ?? ''
                 ]
-              }) as LabelInterface[]) || [];
+              }) as LabelInterface[]) ?? [];
 
-            if (wsShareMemberId) {
-              __rqLabelsData = getRQCDataHandler<LabelInterface[]>({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.SWS_MAIN,
-                  wsShareId!
-                ]
-              }) as LabelInterface[];
+            if (
+              wsShareMemberId !== undefined &&
+              wsShareMemberId !== null &&
+              wsShareMemberId?.trim()?.length > 0 &&
+              wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0
+            ) {
+              _rqLabelsData =
+                (getRQCDataHandler<LabelInterface[]>({
+                  key: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.SWS_MAIN,
+                    wsShareId
+                  ]
+                }) as LabelInterface[]) ?? [];
             }
 
-            const __oldLabels =
+            const _oldLabels =
               extractInnerData<LabelInterface[]>(
-                __rqLabelsData,
+                _rqLabelsData,
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
-            if (__oldLabels) {
+            if (_oldLabels !== null) {
               if (_mode === FormMode.ADD) {
                 // added shortLink to all label data in cache.
-                const __updatedLabels = [...__oldLabels, __data];
+                const _updatedLabels = [..._oldLabels, _data];
 
                 // Updating all label data in RQ cache.
-                if (workspaceId) {
+                if (
+                  workspaceId !== undefined &&
+                  workspaceId !== null &&
+                  workspaceId?.trim()?.length > 0
+                ) {
                   await updateRQCDataHandler<LabelInterface[] | undefined>({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.MAIN,
-                      workspaceId!
+                      workspaceId
                     ],
-                    data: __updatedLabels as LabelInterface[],
+                    data: _updatedLabels as LabelInterface[],
                     id: '',
                     extractType: ZRQGetRequestExtractEnum.extractItems,
                     updateHoleData: true
                   });
-                } else if (wsShareMemberId) {
+                } else if (
+                  wsShareMemberId !== undefined &&
+                  wsShareMemberId !== null &&
+                  wsShareMemberId?.trim()?.length > 0 &&
+                  wsShareId !== undefined &&
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0
+                ) {
                   await updateRQCDataHandler<LabelInterface[] | undefined>({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.SWS_MAIN,
-                      wsShareId!
+                      wsShareId
                     ],
-                    data: __updatedLabels as LabelInterface[],
+                    data: _updatedLabels as LabelInterface[],
                     id: '',
                     extractType: ZRQGetRequestExtractEnum.extractItems,
                     updateHoleData: true
                   });
                 }
 
-                presentZIonToastSuccess(MESSAGES.LABEL.CREATED);
+                void presentZIonToastSuccess(MESSAGES.LABEL.CREATED);
               } else if (_mode === FormMode.EDIT) {
-                if (workspaceId) {
+                if (
+                  workspaceId !== undefined &&
+                  workspaceId !== null &&
+                  workspaceId?.trim()?.length > 0
+                ) {
                   // Updating all labels data in RQ cache.
                   await updateRQCDataHandler<LabelInterface | undefined>({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.MAIN,
-                      workspaceId!
+                      workspaceId
                     ],
-                    data: __data as LabelInterface,
-                    id: __data.id
+                    data: _data,
+                    id: _data?.id ?? ''
                   });
-                } else if (wsShareMemberId) {
+                } else if (
+                  wsShareMemberId !== undefined &&
+                  wsShareMemberId !== null &&
+                  wsShareMemberId?.trim()?.length > 0 &&
+                  wsShareId !== undefined &&
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0
+                ) {
                   // Updating all labels data in RQ cache.
                   await updateRQCDataHandler<LabelInterface | undefined>({
                     key: [
                       CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.SWS_MAIN,
-                      wsShareId!
+                      wsShareId
                     ],
-                    data: __data as LabelInterface,
-                    id: __data.id
+                    data: _data,
+                    id: _data?.id ?? ''
                   });
                 }
 
-                presentZIonToastSuccess(MESSAGES.LABEL.UPDATED);
+                void presentZIonToastSuccess(MESSAGES.LABEL.UPDATED);
               }
             }
           }
@@ -326,9 +367,13 @@ const ZLabelsTab: React.FC<{
   };
 
   // when user won't to delete label and click on the delete button this function will fire and show the confirm alert.
-  const deleteLabel = async (_labelId?: string) => {
+  const deleteLabel = async (_labelId?: string): Promise<void> => {
     try {
-      if (_labelId) {
+      if (
+        _labelId !== undefined &&
+        _labelId !== null &&
+        _labelId?.trim()?.length > 0
+      ) {
         await presentZIonAlert({
           header: MESSAGES.LABEL.DELETE_ALERT.HEADER,
           subHeader: MESSAGES.LABEL.DELETE_ALERT.SUB_HEADER,
@@ -357,21 +402,36 @@ const ZLabelsTab: React.FC<{
   };
 
   // on the delete time slot confirm alert, when user click on delete button this function will first which will trigger delete request and delete the time slot.
-  const removeLabel = async (_labelId?: string) => {
+  const removeLabel = async (_labelId?: string): Promise<void> => {
     try {
-      if (_labelId) {
-        let __response;
-        if (workspaceId) {
-          __response = await deleteLabelMutate({
-            itemIds: [workspaceId!, _labelId],
+      if (
+        _labelId !== undefined &&
+        _labelId !== null &&
+        _labelId?.trim()?.length > 0
+      ) {
+        let _response;
+        if (
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          workspaceId?.trim()?.length > 0
+        ) {
+          _response = await deleteLabelMutate({
+            itemIds: [workspaceId, _labelId],
             urlDynamicParts: [
               CONSTANTS.RouteParams.workspace.workspaceId,
               CONSTANTS.RouteParams.label.labelId
             ]
           });
-        } else if (wsShareMemberId) {
-          __response = await deleteSWSLabelMutate({
-            itemIds: [wsShareMemberId!, _labelId],
+        } else if (
+          wsShareMemberId !== undefined &&
+          wsShareMemberId !== null &&
+          wsShareMemberId?.trim()?.length > 0 &&
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0
+        ) {
+          _response = await deleteSWSLabelMutate({
+            itemIds: [wsShareMemberId, _labelId],
             urlDynamicParts: [
               CONSTANTS.RouteParams.workspace.shareWSMemberId,
               CONSTANTS.RouteParams.label.labelId
@@ -379,69 +439,85 @@ const ZLabelsTab: React.FC<{
           });
         }
 
-        if (__response) {
-          const __data = extractInnerData<{ success: boolean }>(
-            __response,
+        if (_response !== undefined) {
+          const _data = extractInnerData<{ success: boolean }>(
+            _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (__data && __data?.success) {
-            let __rqLabelsData =
+          if (_data?.success === true) {
+            let _rqLabelsData =
               (getRQCDataHandler<LabelInterface[]>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.MAIN,
-                  workspaceId!
+                  workspaceId ?? ''
                 ]
-              }) as LabelInterface[]) || [];
+              }) as LabelInterface[]) ?? [];
 
-            if (wsShareMemberId) {
-              __rqLabelsData =
+            if (
+              wsShareMemberId !== undefined &&
+              wsShareMemberId !== null &&
+              wsShareMemberId?.trim()?.length > 0 &&
+              wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0
+            ) {
+              _rqLabelsData =
                 (getRQCDataHandler<LabelInterface[]>({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.SWS_MAIN,
-                    wsShareId!
+                    wsShareId
                   ]
-                }) as LabelInterface[]) || [];
+                }) as LabelInterface[]) ?? [];
             }
 
             // getting all the label from RQ cache.
-            const __oldLabels =
+            const _oldLabels =
               extractInnerData<LabelInterface[]>(
-                __rqLabelsData,
+                _rqLabelsData,
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
             // removing deleted label from cache.
-            const __updatedLabels = __oldLabels.filter(
-              el => el.id !== _labelId
-            );
+            const _updatedLabels = _oldLabels.filter(el => el.id !== _labelId);
 
             // Updating data in RQ cache.
-            if (workspaceId) {
+            if (
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+            ) {
               await updateRQCDataHandler<LabelInterface[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.MAIN,
-                  workspaceId!
+                  workspaceId
                 ],
-                data: __updatedLabels as LabelInterface[],
+                data: _updatedLabels,
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
               });
-            } else if (wsShareMemberId) {
+            } else if (
+              wsShareMemberId !== undefined &&
+              wsShareMemberId !== null &&
+              wsShareMemberId?.trim()?.length > 0 &&
+              wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0
+            ) {
               await updateRQCDataHandler<LabelInterface[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.LABEL.SWS_MAIN,
-                  wsShareId!
+                  wsShareId
                 ],
-                data: __updatedLabels?.length === 0 ? [] : __updatedLabels,
+                data: _updatedLabels?.length === 0 ? [] : _updatedLabels,
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
               });
             }
 
-            presentZIonToastSuccess(MESSAGES.LABEL.DELETED);
+            void presentZIonToastSuccess(MESSAGES.LABEL.DELETED);
           } else {
             showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
           }
@@ -453,34 +529,53 @@ const ZLabelsTab: React.FC<{
       reportCustomError(error);
     }
   };
-  //#endregion
+  // #endregion
 
   // #region useEffects.
   useEffect(() => {
     try {
       // Accounting to the member or owner getting data and storing it to component state to show in frontend.
-      if (wsShareMemberId) {
+      if (
+        wsShareMemberId !== undefined &&
+        wsShareMemberId !== null &&
+        wsShareMemberId?.trim()?.length > 0 &&
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        wsShareId?.trim()?.length > 0
+      ) {
         setCompState(oldValues => ({
           ...oldValues,
-          labelsData: shareWSLabelsData || []
+          labelsData: shareWSLabelsData ?? []
         }));
-      } else if (workspaceId) {
+      } else if (
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+      ) {
         setCompState(oldValues => ({
           ...oldValues,
-          labelsData: labelsData || []
+          labelsData: labelsData ?? []
         }));
       }
     } catch (error) {
       reportCustomError(error);
     }
-  }, [shareWSLabelsData, labelsData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shareWSLabelsData, labelsData, wsShareMemberId, wsShareId]);
   // #endregion
 
   // if owner then it will watch isFetching of owner api. to show skeleton while fetching data.
   let isZFetching = isLabelsDataFetching;
 
   // if member then it will watch isFetching of member api. to show skeleton while fetching data.
-  if (wsShareMemberId) {
+  if (
+    wsShareMemberId !== undefined &&
+    wsShareMemberId !== null &&
+    wsShareMemberId?.trim()?.length > 0 &&
+    wsShareId !== undefined &&
+    wsShareId !== null &&
+    wsShareId?.trim()?.length > 0
+  ) {
     isZFetching = isShareWSLabelsDataFetching;
   }
 
@@ -488,16 +583,6 @@ const ZLabelsTab: React.FC<{
     <Formik
       initialValues={{}}
       onSubmit={() => {}}>
-      {/* <ZWorkspaceSettingPlaceholderComp
-				buttonText='Create label'
-				image={WorkspaceSettingsLabelPlaceholder}
-				title={
-					<span>
-						Create labels to categorize posts and <br /> organize your campaigns
-						better
-					</span>
-				}
-			/> */}
       {() => {
         return (
           <div className='flex flex-col w-full h-full pt-6 ion-align-items-center'>
@@ -511,7 +596,7 @@ const ZLabelsTab: React.FC<{
                 title: '',
 
                 //
-                allLabels: compState.labelsData || [],
+                allLabels: compState?.labelsData ?? [],
 
                 // edit
                 mode: FormMode.ADD,
@@ -529,11 +614,11 @@ const ZLabelsTab: React.FC<{
               }}
               onSubmit={async values => {
                 try {
-                  const __zStringifyData = zStringify({
+                  const _zStringifyData = zStringify({
                     title: values.title
                   });
 
-                  await FormikSubmissionHandler(__zStringifyData, values.mode);
+                  await FormikSubmissionHandler(_zStringifyData, values.mode);
                 } catch (error) {
                   reportCustomError(error);
                 }
@@ -553,12 +638,16 @@ const ZLabelsTab: React.FC<{
                     <ZCan
                       shareWSId={wsShareId}
                       permissionType={
-                        wsShareId
+                        wsShareId !== undefined &&
+                        wsShareId !== null &&
+                        wsShareId?.trim()?.length > 0
                           ? permissionsTypeEnum.shareWSMemberPermissions
                           : permissionsTypeEnum.loggedInUserPermissions
                       }
                       havePermissions={
-                        wsShareId
+                        wsShareId !== undefined &&
+                        wsShareId !== null &&
+                        wsShareId?.trim()?.length > 0
                           ? [shareWSPermissionEnum.create_sws_label]
                           : [permissionsEnum?.create_label]
                       }>
@@ -572,8 +661,8 @@ const ZLabelsTab: React.FC<{
                             .labels.addNewLabelButton
                         }
                         onClick={() => {
-                          setFieldValue('enableAddLabel', true, false);
-                          setFieldValue('mode', FormMode.ADD, false);
+                          void setFieldValue('enableAddLabel', true, false);
+                          void setFieldValue('mode', FormMode.ADD, false);
                         }}>
                         <ZIonIcon
                           icon={addOutline}
@@ -605,8 +694,6 @@ const ZLabelsTab: React.FC<{
                           campaigns, statuses or categories. A post can <br />{' '}
                           be assigned multiple labels. You can easily filter{' '}
                           <br /> down posts by labels in the Filter & sort menu.
-                          {/* <br />
-									<ZIonRouterLink routerLink='/'>Learn more</ZIonRouterLink> */}
                         </ZIonText>
                       </ZRTooltip>
                     </ZCan>
@@ -620,16 +707,22 @@ const ZLabelsTab: React.FC<{
                           value={values.title}
                           onIonChange={handleChange}
                           onIonBlur={handleBlur}
-                          errorText={touched.title ? errors.title : undefined}
+                          errorText={
+                            touched?.title === true ? errors?.title : undefined
+                          }
                           testingselector={
                             CONSTANTS.testingSelectors.workspace.settingsModal
                               .labels.labelNameInput
                           }
                           className={classNames({
                             z_ion_bg_white: true,
-                            'ion-touched': touched.title,
-                            'ion-invalid': errors.title,
-                            'ion-valid': !errors.title
+                            'ion-touched': touched?.title === true,
+                            'ion-invalid':
+                              touched?.title === true && errors?.title,
+                            'ion-valid':
+                              touched?.title === true &&
+                              (errors?.title === undefined ||
+                                errors?.title === null)
                           })}
                         />
                         <ZIonButton
@@ -642,7 +735,7 @@ const ZLabelsTab: React.FC<{
                               .labels.closedCreateModeButton
                           }
                           onClick={() => {
-                            setFieldValue('enableAddLabel', false, false);
+                            void setFieldValue('enableAddLabel', false, false);
                           }}>
                           <ZIonIcon
                             icon={closeOutline}
@@ -722,18 +815,22 @@ const ZLabelsTab: React.FC<{
                           return (
                             <>
                               {!isZFetching &&
-                                values.allLabels.map((el, index) => {
+                                values?.allLabels?.map((el, index) => {
                                   return (
                                     <ZCan
                                       shareWSId={wsShareId}
                                       key={index}
                                       permissionType={
-                                        wsShareId
+                                        wsShareId !== undefined &&
+                                        wsShareId !== null &&
+                                        wsShareId?.trim()?.length > 0
                                           ? permissionsTypeEnum.shareWSMemberPermissions
                                           : permissionsTypeEnum.loggedInUserPermissions
                                       }
                                       havePermissions={
-                                        wsShareId
+                                        wsShareId !== undefined &&
+                                        wsShareId !== null &&
+                                        wsShareId?.trim()?.length > 0
                                           ? [
                                               shareWSPermissionEnum.view_sws_label
                                             ]
@@ -746,27 +843,33 @@ const ZLabelsTab: React.FC<{
                                           '--background': 'transparent',
                                           '--inner-padding-end': '0px'
                                         }}>
-                                        {!el.editMode && (
+                                        {(el?.editMode === false ||
+                                          el?.editMode === undefined ||
+                                          el?.editMode === null) && (
                                           <>
                                             <ZIonBadge className='font-normal ion-no-padding px-1 max-w-[5.5rem] tracking-wider'>
                                               <ZIonTitle className='text-sm ion-no-padding h-min'>
-                                                {el.title}
+                                                {el?.title}
                                               </ZIonTitle>
                                             </ZIonBadge>
                                             <ZIonText className='mx-2 text-sm'>
-                                              {el.postsCount || 0} posts
+                                              {el?.postsCount ?? 0} posts
                                             </ZIonText>
 
                                             {/* if user as a owner or member have permission to do this action then showing element */}
                                             <ZCan
                                               shareWSId={wsShareId}
                                               permissionType={
-                                                wsShareId
+                                                wsShareId !== undefined &&
+                                                wsShareId !== null &&
+                                                wsShareId?.trim()?.length > 0
                                                   ? permissionsTypeEnum.shareWSMemberPermissions
                                                   : permissionsTypeEnum.loggedInUserPermissions
                                               }
                                               havePermissions={
-                                                wsShareId
+                                                wsShareId !== undefined &&
+                                                wsShareId !== null &&
+                                                wsShareId?.trim()?.length > 0
                                                   ? [
                                                       shareWSPermissionEnum.update_sws_label
                                                     ]
@@ -786,13 +889,13 @@ const ZLabelsTab: React.FC<{
                                                     .labels.editLabelButton
                                                 }
                                                 onClick={() => {
-                                                  setFieldValue(
+                                                  void setFieldValue(
                                                     `allLabels.${index}.editMode`,
                                                     true,
                                                     false
                                                   );
 
-                                                  setFieldValue(
+                                                  void setFieldValue(
                                                     'mode',
                                                     FormMode.EDIT,
                                                     false
@@ -812,12 +915,16 @@ const ZLabelsTab: React.FC<{
                                             <ZCan
                                               shareWSId={wsShareId}
                                               permissionType={
-                                                wsShareId
+                                                wsShareId !== undefined &&
+                                                wsShareId !== null &&
+                                                wsShareId?.trim()?.length > 0
                                                   ? permissionsTypeEnum.shareWSMemberPermissions
                                                   : permissionsTypeEnum.loggedInUserPermissions
                                               }
                                               havePermissions={
-                                                wsShareId
+                                                wsShareId !== undefined &&
+                                                wsShareId !== null &&
+                                                wsShareId?.trim()?.length > 0
                                                   ? [
                                                       shareWSPermissionEnum.delete_sws_label
                                                     ]
@@ -837,9 +944,9 @@ const ZLabelsTab: React.FC<{
                                                     .workspace.settingsModal
                                                     .labels.deleteLabelButton
                                                 }
-                                                onClick={async () => {
-                                                  if (el.id) {
-                                                    await deleteLabel(el.id);
+                                                onClick={() => {
+                                                  if (el?.id !== null) {
+                                                    void deleteLabel(el.id);
                                                   }
                                                 }}
                                               />
@@ -854,7 +961,7 @@ const ZLabelsTab: React.FC<{
                                             </ZCan>
                                           </>
                                         )}
-                                        {el.editMode && (
+                                        {el?.editMode === true && (
                                           <div className='flex w-full ion-align-items-start'>
                                             <ZIonInput
                                               placeholder='Label name'
@@ -873,21 +980,24 @@ const ZLabelsTab: React.FC<{
                                                 'w-full z_ion_bg_white ps-2':
                                                   true,
                                                 'ion-touched':
-                                                  touched.allLabels &&
+                                                  touched?.allLabels !==
+                                                    undefined &&
                                                   touched.allLabels[index]
                                                     ?.title,
                                                 'ion-invalid':
-                                                  values.allLabels &&
-                                                  values.allLabels[
+                                                  touched?.allLabels !==
+                                                    undefined &&
+                                                  values?.allLabels[
                                                     index
-                                                  ]?.title?.trim().length === 0,
+                                                  ]?.title?.trim()?.length ===
+                                                    0,
                                                 'ion-valid':
                                                   values.allLabels[
                                                     index
-                                                  ].title?.trim().length
+                                                  ].title?.trim()?.length
                                               })}
                                               value={
-                                                values.allLabels[index].title
+                                                values?.allLabels[index]?.title
                                               }
                                               style={{
                                                 '--padding-start': '12px'
@@ -899,13 +1009,13 @@ const ZLabelsTab: React.FC<{
                                               size='small'
                                               fill='clear'
                                               onClick={() => {
-                                                setFieldValue(
+                                                void setFieldValue(
                                                   `allLabels.${index}.title`,
                                                   compState?.labelsData[index]
                                                     ?.title,
                                                   false
                                                 );
-                                                setFieldValue(
+                                                void setFieldValue(
                                                   `allLabels.${index}.editMode`,
                                                   false,
                                                   false
@@ -922,12 +1032,13 @@ const ZLabelsTab: React.FC<{
                                               className={classNames({
                                                 'h-full': true,
                                                 'cursor-not-allowed':
-                                                  (values.allLabels &&
+                                                  (values?.allLabels !==
+                                                    undefined &&
                                                     values.allLabels[
                                                       index
                                                     ]?.title?.trim().length ===
                                                       0) ||
-                                                  values.allLabels[
+                                                  values?.allLabels[
                                                     index
                                                   ]?.title?.trim() ===
                                                     compState?.labelsData[
@@ -941,7 +1052,8 @@ const ZLabelsTab: React.FC<{
                                                 color='success'
                                                 fill='clear'
                                                 disabled={
-                                                  (values.allLabels &&
+                                                  (values.allLabels !==
+                                                    undefined &&
                                                     values.allLabels[
                                                       index
                                                     ]?.title?.trim().length ===
@@ -953,14 +1065,15 @@ const ZLabelsTab: React.FC<{
                                                       index
                                                     ]?.title?.trim()
                                                 }
-                                                onClick={async () => {
+                                                onClick={() => {
                                                   try {
                                                     if (
-                                                      (values.allLabels &&
-                                                        (values.allLabels[
+                                                      (values.allLabels !==
+                                                        undefined &&
+                                                        (values?.allLabels[
                                                           index
                                                         ]?.title?.trim()
-                                                          .length || 0) > 0) ||
+                                                          .length ?? 0) > 0) ||
                                                       values.allLabels[
                                                         index
                                                       ]?.title?.trim() !==
@@ -968,7 +1081,7 @@ const ZLabelsTab: React.FC<{
                                                           index
                                                         ]?.title?.trim()
                                                     ) {
-                                                      const __zStringifyData =
+                                                      const _zStringifyData =
                                                         zStringify({
                                                           title:
                                                             values.allLabels[
@@ -976,19 +1089,19 @@ const ZLabelsTab: React.FC<{
                                                             ].title
                                                         });
 
-                                                      await FormikSubmissionHandler(
-                                                        __zStringifyData,
+                                                      void FormikSubmissionHandler(
+                                                        _zStringifyData,
                                                         values.mode,
                                                         el.id
                                                       );
 
-                                                      setFieldValue(
+                                                      void setFieldValue(
                                                         `allLabels.${index}.editMode`,
                                                         false,
                                                         false
                                                       );
 
-                                                      setFieldValue(
+                                                      void setFieldValue(
                                                         'mode',
                                                         FormMode.ADD,
                                                         false
@@ -1026,12 +1139,16 @@ const ZLabelsTab: React.FC<{
                             <ZCan
                               shareWSId={wsShareId}
                               permissionType={
-                                wsShareId
+                                wsShareId !== undefined &&
+                                wsShareId !== null &&
+                                wsShareId?.trim()?.length > 0
                                   ? permissionsTypeEnum.shareWSMemberPermissions
                                   : permissionsTypeEnum.loggedInUserPermissions
                               }
                               havePermissions={
-                                wsShareId
+                                wsShareId !== undefined &&
+                                wsShareId !== null &&
+                                wsShareId?.trim()?.length > 0
                                   ? [shareWSPermissionEnum.create_sws_label]
                                   : [permissionsEnum?.create_label]
                               }>

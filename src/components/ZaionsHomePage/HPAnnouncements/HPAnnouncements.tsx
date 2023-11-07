@@ -4,7 +4,7 @@ import React from 'react';
 // Packages Imports
 
 // Custom Imports
-// import ZaionsNewLabel from "components/InPageComponents/Zaions.NewLable";
+// import ZaionsNewLabel from "components/InPageComponents/Zaions.NewLabel";
 
 // Styles
 // import classes from './styles.module.css'

@@ -6,10 +6,10 @@ import { register } from 'swiper/element/bundle';
 register();
 
 interface IPackagesHOC {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }
 const PackagesHOC: React.FC<IPackagesHOC> = ({ children }) => {
-	return <>{children}</>;
+  return <>{children}</>;
 };
 
 export default PackagesHOC;

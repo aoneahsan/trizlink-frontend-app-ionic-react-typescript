@@ -57,38 +57,34 @@ import { ZIonItem, ZIonLabel, ZIonList } from '@/components/ZIonComponents';
  * */
 
 const ZWorkspaceMemberActionPopover: React.FC = () => {
-	return (
-		<ZIonList lines='none'>
-			<ZIonItem
-				className='ion-activatable ion-focusable cursor-pointer'
-				minHeight='32px'
-			>
-				<ZIonLabel>Set as workspace owner...</ZIonLabel>
-			</ZIonItem>
+  return (
+    <ZIonList lines='none'>
+      <ZIonItem
+        className='cursor-pointer ion-activatable ion-focusable'
+        minHeight='32px'>
+        <ZIonLabel>Set as workspace owner...</ZIonLabel>
+      </ZIonItem>
 
-			<ZIonItem
-				className='ion-activatable ion-focusable cursor-pointer'
-				minHeight='32px'
-			>
-				<ZIonLabel>Change permission...</ZIonLabel>
-			</ZIonItem>
+      <ZIonItem
+        className='cursor-pointer ion-activatable ion-focusable'
+        minHeight='32px'>
+        <ZIonLabel>Change permission...</ZIonLabel>
+      </ZIonItem>
 
-			<ZIonItem
-				className='ion-activatable ion-focusable cursor-pointer'
-				minHeight='32px'
-				lines='full'
-			>
-				<ZIonLabel>Convert to client member</ZIonLabel>
-			</ZIonItem>
+      <ZIonItem
+        className='cursor-pointer ion-activatable ion-focusable'
+        minHeight='32px'
+        lines='full'>
+        <ZIonLabel>Convert to client member</ZIonLabel>
+      </ZIonItem>
 
-			<ZIonItem
-				className='ion-activatable ion-focusable cursor-pointer'
-				minHeight='32px'
-			>
-				<ZIonLabel color='danger'>Remove from workspace</ZIonLabel>
-			</ZIonItem>
-		</ZIonList>
-	);
+      <ZIonItem
+        className='cursor-pointer ion-activatable ion-focusable'
+        minHeight='32px'>
+        <ZIonLabel color='danger'>Remove from workspace</ZIonLabel>
+      </ZIonItem>
+    </ZIonList>
+  );
 };
 
 export default ZWorkspaceMemberActionPopover;

@@ -1,24 +1,29 @@
 // Core Imports
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Imports
 import { IonCardTitle } from '@ionic/react';
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
+import {
+  type ZIonColorType,
+  type ZIonModeType
+} from '@/types/zaionsAppSettings.type';
 
 // Type
-type ZIonCardTitleType = {
+interface ZIonCardTitleType {
   children?: ReactNode;
   className?: string;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   color?: ZIonColorType;
   mode?: ZIonModeType;
-};
+}
 
-const ZIonCardTitle = (props: ZIonCardTitleType) => {
+const ZIonCardTitle: React.FC<ZIonCardTitleType> = (
+  props: ZIonCardTitleType
+) => {
   return (
-    <IonCardTitle {...props} style={props.style}>
+    <IonCardTitle
+      {...props}
+      style={props.style}>
       {props.children}
     </IonCardTitle>
   );

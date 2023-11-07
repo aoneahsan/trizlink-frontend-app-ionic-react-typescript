@@ -31,10 +31,10 @@ import CONSTANTS from '@/utils/constants';
 
 // Types
 import {
-  LinkFolderType,
-  ZaionsShortUrlOptionFieldsValuesInterface
+  type LinkFolderType,
+  type ZaionsShortUrlOptionFieldsValuesInterface
 } from '@/types/AdminPanel/linksType';
-import { folderState } from '@/types/AdminPanel/index.type';
+import { type folderState } from '@/types/AdminPanel/index.type';
 
 // Styles
 // import CLASSES from './styles.module.css';
@@ -45,11 +45,11 @@ const NewLinkFolder: React.FC<{
   showSkeleton?: boolean;
 }> = ({ _foldersData, _state, showSkeleton = false }) => {
   // getting link-in-bio and workspace ids from url with the help of useParams.
-  const { editLinkId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    editLinkId: string;
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+  const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    editLinkId?: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   const { values, handleChange, handleBlur } =
@@ -115,32 +115,11 @@ const NewLinkFolder: React.FC<{
       {/*  */}
       <div className='block px-4 mt-4'>
         {/* Folder select */}
-        {/* <ZaionsRSelect
-					className=''
-					options={_foldersData as unknown as ZaionsRSelectOptions[]}
-					name='folderId'
-					onChange={(_value) => {
-						setFieldValue(
-							'folderId',
-							(_value as ZaionsRSelectOptions)?.value,
-							false
-						);
-					}}
-					value={
-						formatReactSelectOption(
-							values?.folderId,
-							_foldersData as ZGenericObject[],
-							'title',
-							'id'
-						) || []
-					}
-				/> */}
         <ZIonSelect
           onIonChange={handleChange}
           onIonBlur={handleBlur}
           name='folderId'
           value={values?.folderId}
-          interface='popover'
           fill='outline'
           minHeight='40px'
           testingselector={
@@ -149,16 +128,15 @@ const NewLinkFolder: React.FC<{
           <ZIonSelectOption value={CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER}>
             default
           </ZIonSelectOption>
-          {_foldersData &&
-            _foldersData.map((el, index) => {
-              return (
-                <ZIonSelectOption
-                  key={index}
-                  value={el.id}>
-                  {el.title}
-                </ZIonSelectOption>
-              );
-            })}
+          {_foldersData?.map((el, index) => {
+            return (
+              <ZIonSelectOption
+                key={index}
+                value={el.id}>
+                {el.title}
+              </ZIonSelectOption>
+            );
+          })}
         </ZIonSelect>
       </div>
     </ZIonCol>
@@ -217,6 +195,7 @@ const FolderSkeleton: React.FC = React.memo(() => {
     </ZIonCol>
   );
 });
+FolderSkeleton.displayName = 'FolderSkeleton';
 
 const FolderSkeletonOld: React.FC = React.memo(() => {
   return (
@@ -238,5 +217,6 @@ const FolderSkeletonOld: React.FC = React.memo(() => {
     </ZIonCol>
   );
 });
+FolderSkeletonOld.displayName = 'FolderSkeletonOld';
 
 export default NewLinkFolder;

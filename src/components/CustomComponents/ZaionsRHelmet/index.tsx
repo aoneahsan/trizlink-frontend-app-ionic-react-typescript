@@ -43,9 +43,9 @@ import CONSTANTS from '@/utils/constants';
 
 /**
  * Component props type Imports go down
- * ? Like if you have a type for props it should be pleace Down
+ * ? Like if you have a type for props it should be place Down
  * */
-type ZaionsRHelmetProps = {
+interface ZaionsRHelmetProps {
   title?: string;
   description?: string;
   keywords?: string;
@@ -70,7 +70,7 @@ type ZaionsRHelmetProps = {
   XUACompatible?: string;
   copyRight?: string;
   roboto?: string;
-};
+}
 
 /**
  * Functional Component
@@ -96,7 +96,7 @@ const ZaionsRHelmet: React.FC<ZaionsRHelmetProps> = ({
   twitterTitle = CONSTANTS.ZaionsRHelmetDefaults.twitterTitle,
   twitterDescription = CONSTANTS.ZaionsRHelmetDefaults.twitterDescription,
   twitterImage = CONSTANTS.ZaionsRHelmetDefaults.twitterImage,
-  shortcutIcon = CONSTANTS.ZaionsRHelmetDefaults.shortcutIcon,
+  shortcutIcon = CONSTANTS.ZaionsRHelmetDefaults.shortcutIcon
 
   // do not uncomment below onces
   // refresh = CONSTANTS.ZaionsRHelmetDefaults.refresh,
@@ -110,35 +110,30 @@ const ZaionsRHelmet: React.FC<ZaionsRHelmetProps> = ({
       {/* <Helmet> */}
       {/* Common */}
       {/* <title>{title}</title>
-				<meta name='description' content={description} />
-				<meta name='keywords' content={keywords} />
-				<meta name='author' content={author} />
-				<meta name='viewport' content={viewport} />
-				<meta name='og:title' content={ogTitle} />
-				<meta name='og:type' content={ogType} />
-				<meta name='og:url' content={ogUrl} />
-				<meta name='og:image' content={ogImage} />
-				<meta name='og:description' content={ogDescription} />
-				<meta name='og:locale' content={ogLocale} />
-				<meta name='og:site_name' content={ogSiteName} />
-				<meta name='twitter:card' content={twitterCard} />
-				<meta name='twitter:site' content={twitterSite} />
-				<meta name='twitter:creator' content={twitterCreator} />
-				<meta name='twitter:title' content={twitterTitle} />
-				<meta name='twitter:description' content={twitterDescription} />
-				<meta name='twitter:image' content={twitterImage} />
-				<base href='/' />
-				<link rel='shortcut icon' href={shortcutIcon} type='image/png' />
-				<meta charSet='UTF-8' /> */}
+      <meta name='description' content={description} />
+      <meta name='keywords' content={keywords} />
+      <meta name='author' content={author} />
+      <meta name='viewport' content={viewport} />
+      <meta name='og:title' content={ogTitle} />
+      <meta name='og:type' content={ogType} />
+      <meta name='og:url' content={ogUrl} />
+      <meta name='og:image' content={ogImage} />
+      <meta name='og:description' content={ogDescription} />
+      <meta name='og:locale' content={ogLocale} />
+      <meta name='og:site_name' content={ogSiteName} />
+      <meta name='twitter:card' content={twitterCard} />
+      <meta name='twitter:site' content={twitterSite} />
+      <meta name='twitter:creator' content={twitterCreator} />
+      <meta name='twitter:title' content={twitterTitle} />
+      <meta name='twitter:description' content={twitterDescription} />
+      <meta name='twitter:image' content={twitterImage} />
+      <base href='/' />
+      <link rel='shortcut icon' href={shortcutIcon} type='image/png' />
+      <meta charSet='UTF-8' /> */}
 
       {/* do not uncomment these below - commented by ahsan */}
-      {/* <meta
-					http-equiv='content-security-policy'
-					content={contentSecurityPolicy}
-				/> */}
-      {/* <meta http-equiv='x-ua-compatible' content={XUACompatible} />
-				<meta name='copyright' content={copyRight} />
-				<meta name='robots' content={roboto} /> */}
+      {/* <meta http-equiv='content-security-policy' content={contentSecurityPolicy} /> */}
+      {/* <meta http-equiv='x-ua-compatible' content={XUACompatible} /> <meta name='copyright' content={copyRight} /> <meta name='robots' content={roboto} /> */}
       {/* <meta http-equiv='refresh' content={refresh} /> */}
       {/* </Helmet> */}
     </>

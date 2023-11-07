@@ -3,14 +3,17 @@ import { atom, selector } from 'recoil';
 
 // Custom
 // Type
-import { PixelAccountType, TimeFilterEnum } from '@/types/AdminPanel/linksType';
-import { PixelAccountPlatformType } from '@/types/AdminPanel/linksType/index';
+import {
+  type PixelAccountType,
+  TimeFilterEnum
+} from '@/types/AdminPanel/linksType';
+import { type PixelAccountPlatformType } from '@/types/AdminPanel/linksType/index';
 // Data
 import {
   PixelAccountPlatformOptionsData
   // PixelAccountsData,
 } from '@/data/UserDashboard/PixelAccountsData';
-import { IPixelsFilterOptions } from '@/types/AdminPanel/index.type';
+import { type IPixelsFilterOptions } from '@/types/AdminPanel/index.type';
 import CONSTANTS from '@/utils/constants';
 
 export const PixelAccountsRStateAtom = atom<PixelAccountType[]>({
@@ -39,9 +42,11 @@ export const FilteredPixelsDataRStateSelector = selector({
     const _filterOptions = get(PixelsFilterOptionsRStateAtom);
     let _filterPixelsData: PixelAccountType[] | undefined = pixelsRStateAtom;
 
-    if (pixelsRStateAtom?.length) {
+    if (pixelsRStateAtom?.length !== 0) {
       if (
-        _filterOptions?.timeFilter?.daysToSubtract &&
+        _filterOptions?.timeFilter?.daysToSubtract !== undefined &&
+        _filterOptions?.timeFilter?.daysToSubtract !== null &&
+        _filterOptions?.timeFilter?.daysToSubtract?.trim()?.length > 0 &&
         _filterOptions?.timeFilter?.daysToSubtract !== TimeFilterEnum.allTime
       ) {
         let endDate = new Date(
@@ -92,7 +97,11 @@ export const FilteredPixelsDataRStateSelector = selector({
         });
       }
 
-      if (_filterOptions?.platform) {
+      if (
+        _filterOptions?.platform !== undefined &&
+        _filterOptions?.platform !== null &&
+        _filterOptions?.platform?.trim()?.length > 0
+      ) {
         _filterPixelsData = _filterPixelsData?.filter(
           el => el?.platform === _filterOptions?.platform
         );

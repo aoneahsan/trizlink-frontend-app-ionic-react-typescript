@@ -2,31 +2,25 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import { zEmptyTable } from '@/assets/images';
-import {
-  ZIonButton,
-  ZIonImg,
-  ZIonText,
-  ZIonTitle
-} from '@/components/ZIonComponents';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import classNames from 'classnames';
 import React from 'react';
 
 /**
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
+import { ZIonButton, ZIonImg, ZIonText } from '@/components/ZIonComponents';
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
  * Global Constants Imports go down
@@ -52,6 +46,7 @@ import React from 'react';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
+import { zEmptyTable } from '@/assets/images';
 
 /**
  * Component props type go down

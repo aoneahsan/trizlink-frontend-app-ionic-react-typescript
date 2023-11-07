@@ -54,106 +54,110 @@ import classNames from 'classnames';
  * */
 
 const PageAnalyticsInfoBlocks: React.FC = () => {
-	const { isXlScale } = useZMediaQueryScale();
+  const { isXlScale } = useZMediaQueryScale();
 
-	return (
-		<ZIonRow
-			className={classNames({
-				'mt-4 ion-justify-content-between': true,
-				'gap-y-4': !isXlScale,
-			})}
-		>
-			{/* Click Info Block */}
-			<ZIonCol
-				className='border zaions__bg_white flex ion-align-items-center ion-justify-content-center py-4'
-				sizeXl='2.2'
-				sizeLg='2.9'
-				sizeMd='3.9'
-				sizeSm='5.9'
-				sizeXs='12'
-			>
-				<ZIonText className='text-5xl'>🚀</ZIonText>
-				<div className='ms-3'>
-					<ZIonText className='text-lg font-bold block'>Clicks</ZIonText>
-					<ZIonText className='text-xl font-bold block' color='primary'>
-						1
-					</ZIonText>
-				</div>
-			</ZIonCol>
+  return (
+    <ZIonRow
+      className={classNames({
+        'mt-4 ion-justify-content-between': true,
+        'gap-y-4': !isXlScale
+      })}>
+      {/* Click Info Block */}
+      <ZIonCol
+        className='flex py-4 border zaions__bg_white ion-align-items-center ion-justify-content-center'
+        sizeXl='2.2'
+        sizeLg='2.9'
+        sizeMd='3.9'
+        sizeSm='5.9'
+        sizeXs='12'>
+        <ZIonText className='text-5xl'>🚀</ZIonText>
+        <div className='ms-3'>
+          <ZIonText className='block text-lg font-bold'>Clicks</ZIonText>
+          <ZIonText
+            className='block text-xl font-bold'
+            color='primary'>
+            1
+          </ZIonText>
+        </div>
+      </ZIonCol>
 
-			{/* Users Info Block */}
-			<ZIonCol
-				className='border zaions__bg_white flex ion-align-items-center ion-justify-content-center py-4'
-				sizeXl='2.2'
-				sizeLg='2.9'
-				sizeMd='3.9'
-				sizeSm='5.9'
-				sizeXs='12'
-			>
-				<ZIonText className='text-5xl'>🧙‍</ZIonText>
-				<div className='ms-3'>
-					<ZIonText className='text-lg font-bold block'>Users</ZIonText>
-					<ZIonText className='text-xl font-bold block' color='primary'>
-						1
-					</ZIonText>
-				</div>
-			</ZIonCol>
+      {/* Users Info Block */}
+      <ZIonCol
+        className='flex py-4 border zaions__bg_white ion-align-items-center ion-justify-content-center'
+        sizeXl='2.2'
+        sizeLg='2.9'
+        sizeMd='3.9'
+        sizeSm='5.9'
+        sizeXs='12'>
+        <ZIonText className='text-5xl'>🧙‍</ZIonText>
+        <div className='ms-3'>
+          <ZIonText className='block text-lg font-bold'>Users</ZIonText>
+          <ZIonText
+            className='block text-xl font-bold'
+            color='primary'>
+            1
+          </ZIonText>
+        </div>
+      </ZIonCol>
 
-			{/* Referrers Info Block */}
-			<ZIonCol
-				className='border zaions__bg_white flex ion-align-items-center ion-justify-content-center py-4'
-				sizeXl='2.2'
-				sizeLg='2.9'
-				sizeMd='3.9'
-				sizeSm='5.9'
-				sizeXs='12'
-			>
-				<ZIonText className='text-5xl'>🧭‍</ZIonText>
-				<div className='ms-3'>
-					<ZIonText className='text-lg font-bold block'>Referrers</ZIonText>
-					<ZIonText className='text-xl font-bold block' color='primary'>
-						1
-					</ZIonText>
-				</div>
-			</ZIonCol>
+      {/* Referrers Info Block */}
+      <ZIonCol
+        className='flex py-4 border zaions__bg_white ion-align-items-center ion-justify-content-center'
+        sizeXl='2.2'
+        sizeLg='2.9'
+        sizeMd='3.9'
+        sizeSm='5.9'
+        sizeXs='12'>
+        <ZIonText className='text-5xl'>🧭‍</ZIonText>
+        <div className='ms-3'>
+          <ZIonText className='block text-lg font-bold'>Referrers</ZIonText>
+          <ZIonText
+            className='block text-xl font-bold'
+            color='primary'>
+            1
+          </ZIonText>
+        </div>
+      </ZIonCol>
 
-			{/* Conversion Info Block */}
-			<ZIonCol
-				className='border zaions__bg_white flex ion-align-items-center ion-justify-content-center py-4'
-				sizeXl='2.2'
-				sizeLg='2.9'
-				sizeMd='3.9'
-				sizeSm='5.9'
-				sizeXs='12'
-			>
-				<ZIonText className='text-5xl'>🎈‍</ZIonText>
-				<div className='ms-3'>
-					<ZIonText className='text-lg font-bold block'>Conversion</ZIonText>
-					<ZIonText className='text-xl font-bold block' color='primary'>
-						1
-					</ZIonText>
-				</div>
-			</ZIonCol>
+      {/* Conversion Info Block */}
+      <ZIonCol
+        className='flex py-4 border zaions__bg_white ion-align-items-center ion-justify-content-center'
+        sizeXl='2.2'
+        sizeLg='2.9'
+        sizeMd='3.9'
+        sizeSm='5.9'
+        sizeXs='12'>
+        <ZIonText className='text-5xl'>🎈‍</ZIonText>
+        <div className='ms-3'>
+          <ZIonText className='block text-lg font-bold'>Conversion</ZIonText>
+          <ZIonText
+            className='block text-xl font-bold'
+            color='primary'>
+            1
+          </ZIonText>
+        </div>
+      </ZIonCol>
 
-			{/* Conversion Info Block */}
-			<ZIonCol
-				className='border zaions__bg_white flex ion-align-items-center ion-justify-content-center py-4'
-				sizeXl='2.2'
-				sizeLg='2.9'
-				sizeMd='3.9'
-				sizeSm='5.9'
-				sizeXs='12'
-			>
-				<ZIonText className='text-5xl'>🌎‍</ZIonText>
-				<div className='ms-3'>
-					<ZIonText className='text-lg font-bold block'>Countries</ZIonText>
-					<ZIonText className='text-xl font-bold block' color='primary'>
-						1
-					</ZIonText>
-				</div>
-			</ZIonCol>
-		</ZIonRow>
-	);
+      {/* Conversion Info Block */}
+      <ZIonCol
+        className='flex py-4 border zaions__bg_white ion-align-items-center ion-justify-content-center'
+        sizeXl='2.2'
+        sizeLg='2.9'
+        sizeMd='3.9'
+        sizeSm='5.9'
+        sizeXs='12'>
+        <ZIonText className='text-5xl'>🌎‍</ZIonText>
+        <div className='ms-3'>
+          <ZIonText className='block text-lg font-bold'>Countries</ZIonText>
+          <ZIonText
+            className='block text-xl font-bold'
+            color='primary'>
+            1
+          </ZIonText>
+        </div>
+      </ZIonCol>
+    </ZIonRow>
+  );
 };
 
 export default PageAnalyticsInfoBlocks;

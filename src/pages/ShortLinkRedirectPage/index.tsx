@@ -15,8 +15,6 @@ import { Device } from '@capacitor/device';
 import dayjs from 'dayjs';
 import DayJsTimezonePlugin from 'dayjs/plugin/timezone';
 import DayJsUtcPlugin from 'dayjs/plugin/utc';
-dayjs.extend(DayJsUtcPlugin);
-dayjs.extend(DayJsTimezonePlugin);
 
 /**
  * Custom Imports go down
@@ -55,6 +53,7 @@ import {
   extractInnerData,
   formatApiRequestErrorForFormikFormField,
   zGetRandomLink,
+  zIsPlatforms,
   zRedirectToTarget,
   zStringify
 } from '@/utils/helpers';
@@ -63,21 +62,26 @@ import {
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkTargetType, ShortLinkType } from '@/types/AdminPanel/linksType';
-import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import {
-  ABTestingRotatorInterface,
+  type LinkTargetType,
+  type ShortLinkType
+} from '@/types/AdminPanel/linksType';
+import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import {
+  type ABTestingRotatorInterface,
   EZGeoLocationCondition,
-  GeoLocationRotatorInterface,
-  LinkExpirationInfoInterface,
-  messengerPlatformsBlockEnum,
-  PasswordInterface
+  type GeoLocationRotatorInterface,
+  type LinkExpirationInfoInterface,
+  type messengerPlatformsBlockEnum,
+  type PasswordInterface
 } from '@/types/AdminPanel/index.type';
 import { ProductLogo } from '@/assets/images';
 import { Formik } from 'formik';
 import classNames from 'classnames';
 import { reportCustomError } from '@/utils/customErrorType';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
+dayjs.extend(DayJsUtcPlugin);
+dayjs.extend(DayJsTimezonePlugin);
 
 /**
  * Recoil State Imports go down
@@ -127,13 +131,13 @@ const ZShortLinkRedirectPage: React.FC = () => {
     errorOccurred: false
   });
 
-  const { urlPath } = useParams<{ urlPath: string }>();
+  const { urlPath } = useParams<{ urlPath?: string }>();
 
   const { mutateAsync: createSLRecodeAsyncMutate, error: SLRecodeError } =
     useZRQCreateRequest({
       _url: API_URL_ENUM.shortLink_get_target_url_info,
       _urlDynamicParts: [CONSTANTS.RouteParams.urlPath],
-      _itemsIds: [urlPath],
+      _itemsIds: [urlPath ?? ''],
       _showAlertOnError: false,
       _authenticated: false,
       _showLoader: false
@@ -142,7 +146,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
   const { mutateAsync: checkLinkPasswordValidation } = useZRQCreateRequest({
     _url: API_URL_ENUM.shortLink_check_target_password,
     _urlDynamicParts: [CONSTANTS.RouteParams.urlPath],
-    _itemsIds: [urlPath],
+    _itemsIds: [urlPath ?? ''],
     _showAlertOnError: false,
     _authenticated: false,
     _showLoader: false
@@ -150,149 +154,246 @@ const ZShortLinkRedirectPage: React.FC = () => {
 
   const logDeviceInfo = useCallback(async () => {
     const _deviceInfo = await Device.getInfo();
+    const {
+      isAndroidPlatform,
+      isCapacitor,
+      isCordova,
+      isDesktop,
+      isElectron,
+      isHybrid,
+      isIOS,
+      isIPad,
+      isIPhone,
+      isMobile,
+      isMobileWeb,
+      isPWA,
+      isPhablet,
+      isTablet
+    } = zIsPlatforms();
 
-    return _deviceInfo;
+    return {
+      ..._deviceInfo,
+      isAndroidPlatform,
+      isCapacitor,
+      isCordova,
+      isDesktop,
+      isElectron,
+      isHybrid,
+      isIOS,
+      isIPad,
+      isIPhone,
+      isMobile,
+      isMobileWeb,
+      isPWA,
+      isPhablet,
+      isTablet
+    };
   }, []);
 
   // const logBatteryInfo = useCallback(async () => {
-  // 	const _batteryInfo = await Device.getBatteryInfo();
+  // const _batteryInfo = await Device.getBatteryInfo();
 
-  // 	return _batteryInfo;
+  // return _batteryInfo;
   // }, []);
 
-  async function getCountryFromCoordinates({
+  const getCountryFromCoordinates = async ({
     latitude,
     longitude
   }: {
     latitude?: number;
     longitude?: number;
-  }) {
+  }): Promise<{
+    long_name: string;
+    short_name: string;
+    types: string[];
+  } | null> => {
     const response = await fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${ENVS?.googleMapApiKey}`
     );
     const data = await response.json();
 
     const countryComponent = (
-      data.results[0].address_components as {
+      data?.results?.[0]?.address_components as Array<{
         long_name: string;
         short_name: string;
         types: string[];
-      }[]
+      }>
     ).find(component => component.types.includes('country'));
-
-    return countryComponent ? countryComponent?.long_name : null;
-  }
+    return countryComponent ?? null;
+  };
 
   //
   const createURlRecodeCallback = useCallback(async () => {
-    const __deviceInfo = await logDeviceInfo();
+    // Getting device info from capacitor/device package
+    const _deviceInfo = await logDeviceInfo();
 
-    const __data = zStringify({
+    // zStringify the data to sent in short-link recode api.
+    const _data = zStringify({
       type: 'click',
       userIP: '',
       userLocationCoords: zStringify({}),
-      userDeviceInfo: zStringify(__deviceInfo)
+      userDeviceInfo: zStringify(_deviceInfo)
     });
 
-    const _response = await createSLRecodeAsyncMutate(__data);
+    // Creating short-link recode
+    const _response = await createSLRecodeAsyncMutate(_data);
 
-    if ((_response as ZLinkMutateApiType<ShortLinkType>).success) {
+    // After creating recode the response is send with short link information.
+    if ((_response as ZLinkMutateApiType<ShortLinkType>)?.success) {
+      // Extracting the data from response.
       const _data = extractInnerData<ShortLinkType>(
         _response,
         extractInnerDataOptionsEnum.createRequestResponseItem
       );
 
-      if (_data && _data.id) {
+      if (_data?.id !== null && _data?.id !== undefined) {
         setCompState(oldValues => ({
           ...oldValues,
           sl: _data,
           isProcessing: false
         }));
 
-        const __target = _data?.target as LinkTargetType;
-        const __type = _data?.type as messengerPlatformsBlockEnum;
-        const __geoLocations =
+        const _target = _data?.target as LinkTargetType;
+        const _type = _data?.type as messengerPlatformsBlockEnum;
+        const _geoLocations =
           _data?.geoLocationRotatorLinks as GeoLocationRotatorInterface[];
-        const __abTestingRotator =
+        const _abTestingRotator =
           _data?.abTestingRotatorLinks as ABTestingRotatorInterface[];
-        const __linkExpiration =
+        const _linkExpiration =
           _data?.linkExpirationInfo as LinkExpirationInfoInterface;
-        const __userPosition = await Geolocation.getCurrentPosition();
-        const __userCountry = await getCountryFromCoordinates({
-          latitude: __userPosition?.coords?.latitude,
-          longitude: __userPosition?.coords?.longitude
+        const _userPosition = await Geolocation.getCurrentPosition();
+        const _userCountry = await getCountryFromCoordinates({
+          latitude: _userPosition?.coords?.latitude,
+          longitude: _userPosition?.coords?.longitude
         });
+
+        // trimming and lowercasing because if user country is same but in api the case is change then it will be a problem so her we are trimming and lowercase to compare correctly.
+        const _userCountryTrim = _userCountry?.long_name?.trim()?.toLowerCase();
 
         // generating redirect link according to __target and type. (the default redirection)
-        let __redirectUrl = zRedirectToTarget({
-          _target: __target,
-          type: __type
+        let _redirectUrl = zRedirectToTarget({
+          _target,
+          type: _type
         });
 
-        const __randomRotatorLink = zGetRandomLink(__abTestingRotator);
+        // if Ab testing rotators are set the setting _redirectUrl from below.
+        if (
+          _abTestingRotator?.length > 0 &&
+          (_geoLocations?.length === 0 ||
+            _geoLocations === undefined ||
+            _geoLocations === null)
+        ) {
+          const _randomRotatorLink = zGetRandomLink(_abTestingRotator);
 
-        if (__randomRotatorLink && __abTestingRotator?.length > 0) {
-          __redirectUrl = __randomRotatorLink;
+          if (_randomRotatorLink !== null) {
+            _redirectUrl = _randomRotatorLink;
+          }
         }
 
-        let highestPriority = Infinity; // Start with a high value
+        // if geo locations are set the setting _redirectUrl from below.
+        if (
+          _userCountryTrim !== undefined &&
+          _userCountryTrim !== null &&
+          (_abTestingRotator?.length === 0 ||
+            _abTestingRotator === undefined ||
+            _abTestingRotator === null)
+        ) {
+          let highestPriority = Infinity; // Start with a high value
 
-        // Checking if any geo-location define. if define then redirect according to it.
-        // Now check if the user's country exists in the geoRedirects array.
-        for (const geoLocation of __geoLocations) {
-          if (
-            (geoLocation.country &&
-              geoLocation.condition === EZGeoLocationCondition.equalTo &&
-              geoLocation.country === __userCountry) ||
-            (geoLocation.condition === EZGeoLocationCondition.notEqualTo &&
-              geoLocation.country !== __userCountry) ||
-            (geoLocation.condition === EZGeoLocationCondition.within &&
-              Array.isArray(geoLocation.country) &&
-              geoLocation.country.includes(__userCountry!)) ||
-            (geoLocation.condition === EZGeoLocationCondition.notWithin &&
-              Array.isArray(geoLocation.country) &&
-              !geoLocation.country.includes(__userCountry!))
-          ) {
-            const currentPriority = conditionPriority[geoLocation.condition!];
-            if (currentPriority < highestPriority) {
-              highestPriority = currentPriority;
-              __redirectUrl = geoLocation.redirectionLink;
+          // Checking if any geo-location define. if define then redirect according to it.
+          // Now check if the user's country exists in the geoRedirects array.
+          for (const geoLocation of _geoLocations) {
+            if (
+              geoLocation?.condition !== undefined &&
+              geoLocation?.country !== null
+            ) {
+              let _country: string | string[] | null = null;
+
+              //
+              if (typeof geoLocation?.country === 'string') {
+                // trimming and lowercasing because if user country is same but in google map api result the case is change then it will be a problem so her we are trimming and lowercase to compare correctly.
+                _country = geoLocation?.country?.trim()?.toLowerCase();
+              } else if (typeof geoLocation?.country === typeof []) {
+                _country = (geoLocation?.country ?? []).map(el =>
+                  el?.trim()?.toLowerCase()
+                );
+              }
+
+              // If condition is `equal to`.
+              const _equalTo =
+                geoLocation?.condition === EZGeoLocationCondition.equalTo &&
+                typeof _country === 'string' &&
+                _country === _userCountryTrim;
+
+              // If condition is `not equal to`.
+              const _notEqualTo =
+                geoLocation?.condition === EZGeoLocationCondition.notEqualTo &&
+                typeof _country === 'string' &&
+                _country !== _userCountryTrim;
+
+              // If condition is `with in`.
+              const _within =
+                geoLocation.condition === EZGeoLocationCondition.within &&
+                Array.isArray(geoLocation.country) &&
+                typeof _country === typeof [] &&
+                (_country ?? [])?.includes(_userCountryTrim ?? '');
+
+              // If condition is `not with in`.
+              const _notWithin =
+                geoLocation?.condition === EZGeoLocationCondition.notWithin &&
+                Array.isArray(geoLocation.country) &&
+                typeof _country === typeof [] &&
+                !(_country ?? [])?.includes(_userCountryTrim ?? '');
+
+              if (
+                geoLocation?.condition !== undefined &&
+                (_equalTo || _notEqualTo || _within || _notWithin)
+              ) {
+                const currentPriority =
+                  conditionPriority[geoLocation?.condition];
+                if (currentPriority < highestPriority) {
+                  highestPriority = currentPriority;
+                  _redirectUrl = geoLocation.redirectionLink;
+                }
+              }
             }
           }
         }
 
         // If there is link-expiration define. then redirect according to it.
         if (
-          __linkExpiration?.enabled &&
-          __linkExpiration?.redirectionLink &&
-          __linkExpiration?.redirectionLink?.trim()?.length > 0
+          _linkExpiration?.enabled === true &&
+          _linkExpiration?.redirectionLink !== undefined &&
+          _linkExpiration?.redirectionLink?.trim()?.length > 0
         ) {
-          const __expirationTimePass = dayjs
-            .tz(dayjs(), __linkExpiration?.timezone)
+          const _expirationTimePass = dayjs
+            .tz(dayjs(), _linkExpiration?.timezone)
             .isAfter(
               dayjs.tz(
-                __linkExpiration?.expirationDate,
-                __linkExpiration?.timezone
+                _linkExpiration?.expirationDate,
+                _linkExpiration?.timezone
               )
             );
 
-          if (__expirationTimePass) {
-            __redirectUrl = __linkExpiration?.redirectionLink;
+          if (_expirationTimePass) {
+            _redirectUrl = _linkExpiration?.redirectionLink;
           }
         }
 
         // redirecting...
-        if (__redirectUrl) {
+        if (_redirectUrl !== undefined) {
           setCompState(oldValues => ({
             ...oldValues,
-            redirectLink: __redirectUrl
+            redirectLink: _redirectUrl
           }));
-          if (!(_data?.password as PasswordInterface)?.enabled) {
-            window.location.replace(__redirectUrl);
+          if ((_data?.password as PasswordInterface)?.enabled === false) {
+            window.location.replace(_redirectUrl);
           }
         }
       }
     }
+
+    // eslint-disable-next-line
   }, []);
 
   /**
@@ -300,7 +401,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
    */
   useEffect(() => {
     if (SLRecodeError instanceof AxiosError) {
-      if (SLRecodeError?.response?.data?.status) {
+      if (SLRecodeError?.response?.data?.status !== undefined) {
         setCompState(oldValues => ({
           ...oldValues,
           errorCode: SLRecodeError?.response?.data?.status,
@@ -315,7 +416,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
    * Checking if :urlPath matches the requirement.
    */
   useEffect(() => {
-    if (urlPath && urlPath?.trim()?.length === 6) {
+    if (urlPath !== undefined && urlPath?.trim()?.length === 6) {
       void createURlRecodeCallback();
       setCompState(oldState => ({
         ...oldState,
@@ -328,12 +429,13 @@ const ZShortLinkRedirectPage: React.FC = () => {
         isProcessing: false
       }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [urlPath]);
 
   /**
    * Showing appropriate view.
    */
-  if ((compState?.sl?.password as PasswordInterface)?.enabled) {
+  if ((compState?.sl?.password as PasswordInterface)?.enabled === true) {
     return (
       <ZIonPage>
         <ZIonContent
@@ -366,62 +468,55 @@ const ZShortLinkRedirectPage: React.FC = () => {
 
                   return errors;
                 }}
-                onSubmit={async (values, { setErrors, setFieldError }) => {
+                onSubmit={async values => {
                   try {
                     const _zStringifyData = zStringify({
                       password: values?.password
                     });
 
-                    const __response:
+                    const _response:
                       | unknown
                       | ZLinkMutateApiType<{ success: boolean }> =
                       await checkLinkPasswordValidation(_zStringifyData);
 
                     // if we have a successful response then...
                     if (
-                      (__response as ZLinkMutateApiType<{ success: boolean }>)
+                      (_response as ZLinkMutateApiType<{ success: boolean }>)
                         .success
                     ) {
                       // extract Data from _response.
                       const _data = extractInnerData<{ success: boolean }>(
-                        __response,
+                        _response,
                         extractInnerDataOptionsEnum.createRequestResponseItem
                       );
 
                       // if we have data then update cache and show success message.
-                      if (_data && _data.success) {
-                        window.location.replace(compState?.redirectLink!);
+                      if (_data !== undefined && _data.success) {
+                        window.location.replace(compState?.redirectLink ?? '');
                       }
                     }
                   } catch (error) {
                     if (error instanceof AxiosError) {
                       // await presentZIonErrorAlert();
                       // Setting errors on form fields
-                      const __apiErrors = (
+                      const _apiErrors = (
                         error.response?.data as { errors: ZGenericObject }
                       )?.errors;
-                      const __errors = formatApiRequestErrorForFormikFormField(
+                      const _errors = formatApiRequestErrorForFormikFormField(
                         ['password'],
                         ['password'],
-                        __apiErrors
+                        _apiErrors
                       );
 
                       setCompState(oldValues => ({
                         ...oldValues,
-                        error: (__errors as { password: string }).password
+                        error: (_errors as { password: string }).password
                       }));
                     }
                     reportCustomError(error);
                   }
                 }}>
-                {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  submitForm
-                }) => {
+                {({ values, handleChange, handleBlur, submitForm }) => {
                   return (
                     <>
                       <ZIonItem
@@ -447,8 +542,8 @@ const ZShortLinkRedirectPage: React.FC = () => {
                             // 'ion-touched': touched.password,
                             // 'ion-valid': errors?.password?.trim()?.length === 0,
                             // 'ion-invalid':
-                            // 	errors?.password &&
-                            // 	errors?.password?.trim()?.length > 0,
+                            // errors?.password &&
+                            // errors?.password?.trim()?.length > 0,
                           })}
                           onKeyUp={event => {
                             if (event?.key === 'Enter') {
@@ -467,7 +562,9 @@ const ZShortLinkRedirectPage: React.FC = () => {
                         <ZIonButton
                           slot='end'
                           className='ion-no-margin ion-text-capitalize'
-                          onClick={() => void submitForm()}
+                          onClick={() => {
+                            void submitForm();
+                          }}
                           testingselector={
                             CONSTANTS.testingSelectors.shortLink.listPage
                               .searchBtn
@@ -496,7 +593,6 @@ const ZShortLinkRedirectPage: React.FC = () => {
   if (compState.isProcessing) {
     return <ZFallbackIonSpinner />;
   } else if (
-    urlPath &&
     urlPath?.trim()?.length === 6 &&
     !compState.errorOccurred &&
     !compState.isProcessing
@@ -511,13 +607,13 @@ const ZShortLinkRedirectPage: React.FC = () => {
               size='6'
               className='flex flex-col ion-align-items-center ion-justify-content-center ion-text-center h-max'>
               <ZIonTitle className='text-4xl font-bold ion-no-padding'>
-                Something's wrong here.
+                Something&apos;s wrong here.
               </ZIonTitle>
 
               <ZIonText className='block mt-3 text-lg tracking-wide'>
-                Oops! It seems like you've encountered a 404 error. This
+                Oops! It seems like you&apos;ve encountered a 404 error. This
                 indicates that the link you clicked on is either incorrect or
-                the URL you entered is invalid. You might find what you're
+                the URL you entered is invalid. You might find what you&apos;re
                 searching for at
                 <ZIonRouterLink className='cursor-pointer ms-1 hover:underline'>
                   {ExternalURL.GenericExternalURL}

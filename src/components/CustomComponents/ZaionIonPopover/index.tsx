@@ -52,7 +52,7 @@ import { ZIonContent } from '@/components/ZIonComponents';
  * @type {*}
  * */
 
-type ZaionsIonPopoverType = {
+interface ZaionsIonPopoverType {
   children: JSX.Element | JSX.Element[];
   isOpen: boolean;
   alignment?: 'center' | 'end' | 'start' | undefined;
@@ -62,7 +62,7 @@ type ZaionsIonPopoverType = {
   dismissOnSelect?: boolean;
   showBackdrop?: boolean;
   onMouseLeave?: React.MouseEventHandler<HTMLIonPopoverElement> | undefined;
-};
+}
 
 const ZaionsIonPopover: React.FC<ZaionsIonPopoverType> = ({
   children,
@@ -73,7 +73,7 @@ const ZaionsIonPopover: React.FC<ZaionsIonPopoverType> = ({
   backdropDismiss = true,
   dismissOnSelect = false,
   showBackdrop = true,
-  onMouseLeave = undefined,
+  onMouseLeave = undefined
 }) => {
   return (
     <IonPopover
@@ -84,8 +84,7 @@ const ZaionsIonPopover: React.FC<ZaionsIonPopoverType> = ({
       backdropDismiss={backdropDismiss}
       dismissOnSelect={dismissOnSelect}
       showBackdrop={showBackdrop}
-      onMouseLeave={onMouseLeave}
-    >
+      onMouseLeave={onMouseLeave}>
       <ZIonContent className='ion-padding'>{children}</ZIonContent>
     </IonPopover>
   );

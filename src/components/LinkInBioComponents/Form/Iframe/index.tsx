@@ -7,7 +7,7 @@ import React from 'react';
 import { ZIonCol } from '@/components/ZIonComponents';
 import ZEditor from '@/components/CustomComponents/ZEditor';
 import { useFormikContext } from 'formik';
-import { LinkInBioSingleBlockContentType } from '@/types/AdminPanel/linkInBioType/blockTypes';
+import { type LinkInBioSingleBlockContentType } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 // Styles
 
@@ -21,7 +21,7 @@ const LinkInBioIframeField: React.FC<{
     useFormikContext<LinkInBioSingleBlockContentType>();
   return (
     <ZIonCol size='12'>
-      <div className='ion-padding-top mt-3'>
+      <div className='mt-3 ion-padding-top'>
         <ZEditor
           width={'100%'}
           height={'240px'}
@@ -31,7 +31,7 @@ const LinkInBioIframeField: React.FC<{
           testinglistselector={testinglistselector}
           testingselector={testingselector}
           onChange={value => {
-            setFieldValue('iframe', value, false);
+            void setFieldValue('iframe', value, false);
           }}
         />
       </div>

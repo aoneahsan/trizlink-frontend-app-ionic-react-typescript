@@ -1,18 +1,17 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
-import { InputChangeEventDetail, IonInput } from '@ionic/react';
+import { type InputChangeEventDetail, IonInput } from '@ionic/react';
 import {
-  ZIonColorType,
-  ZIonModeType,
-  ZIonPlacementType
+  type ZIonColorType,
+  type ZIonModeType,
+  type ZIonPlacementType
 } from '@/types/zaionsAppSettings.type';
 
 // Type
-import { IonInputCustomEvent } from '@ionic/core/dist/types/components';
-import { zCreateElementTestingSelector, zGotoNextField } from '@/utils/helpers';
-import { PRODUCT_NAME } from '@/utils/constants';
+import { type IonInputCustomEvent } from '@ionic/core/dist/types/components';
+import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 import ZInputLengthConstant from '@/utils/constants/InputLenghtConstant';
 
@@ -72,7 +71,7 @@ type ZIonInputAutoCompleteType =
   | 'impp'
   | 'photo';
 
-export type ZIonInputType = {
+export interface ZIonInputType {
   children?: ReactNode;
   className?: string;
   autocapitalize?: 'off' | 'none' | 'on' | 'sentences' | 'words' | 'characters';
@@ -139,9 +138,7 @@ export type ZIonInputType = {
     | 'week';
   value?: null | number | string;
   defaultValue?: string | number | readonly string[];
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   minHeight?: 'auto' | string;
   testingselector?: string;
   testinglistselector?: string;
@@ -161,50 +158,52 @@ export type ZIonInputType = {
 
   //
   zNextFieldId?: string;
-};
+}
 
 const ZIonInput = React.forwardRef(
   (props: ZIonInputType, ref: React.Ref<HTMLIonInputElement>) => {
     const compStyle =
-      props.style && props.minHeight
+      props.style !== undefined && props.minHeight !== undefined
         ? { ...props.style, minHeight: props.minHeight }
-        : props.style && !props.minHeight
+        : props.style !== undefined && props.minHeight === undefined
         ? { ...props.style }
-        : !props.style && props.minHeight
+        : props.style === undefined && props.minHeight !== undefined
         ? { minHeight: props.minHeight }
         : {};
 
-    const _testinglistselector = props.testinglistselector
-      ? {
-          ...zCreateElementTestingSelector({
-            _value: props.testinglistselector || PRODUCT_NAME,
-            _key: zCreateElementTestingSelectorKeyEnum.listSelector
-          })
-        }
-      : {};
+    const _testinglistselector =
+      props.testinglistselector !== undefined
+        ? {
+            ...zCreateElementTestingSelector({
+              _value: props.testinglistselector,
+              _key: zCreateElementTestingSelectorKeyEnum.listSelector
+            })
+          }
+        : {};
 
-    const _testingSelector = props.testingselector
-      ? {
-          ...zCreateElementTestingSelector({
-            _value: props.testingselector || PRODUCT_NAME
-          })
-        }
-      : {};
+    const _testingSelector =
+      props.testingselector !== undefined
+        ? {
+            ...zCreateElementTestingSelector({
+              _value: props.testingselector
+            })
+          }
+        : {};
 
     return (
       <IonInput
         {...props}
         onIonInput={props.onIonChange}
-        fill={props.fill || 'outline'}
+        fill={props.fill ?? 'outline'}
         ref={ref}
-        counter={props.counter === false || props.type === 'url' ? false : true}
+        counter={!(props.counter === false || props.type === 'url')}
         maxlength={
           props.type === 'url'
             ? undefined
-            : props.maxlength || ZInputLengthConstant.defaultStringMaxLength
+            : props.maxlength ?? ZInputLengthConstant.defaultStringMaxLength
         }
         onKeyUp={event => {
-          if (props.onKeyUp) {
+          if (props.onKeyUp !== null && props.onKeyUp !== undefined) {
             props.onKeyUp(event);
           }
         }}
@@ -216,5 +215,6 @@ const ZIonInput = React.forwardRef(
     );
   }
 );
+ZIonInput.displayName = 'ZIonInput';
 
 export default ZIonInput;

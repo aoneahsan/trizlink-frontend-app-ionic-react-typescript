@@ -1,3 +1,3 @@
-export type ZaionsModalsActionType = {
+export interface ZaionsModalsActionType {
   ShowUTMTagsModal: boolean;
-};
+}

@@ -3,36 +3,43 @@
  * ? Like Import of React is a Core Import
  * */
 import React from 'react';
-import { ActionMeta, MultiValue, PropsValue } from 'react-select';
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
-import { PRODUCT_NAME, TIMEZONES } from '@/utils/constants';
-import ZaionsRSelect from '../ZaionsRSelect';
-import { ZIonSelect, ZIonSelectOption } from '@/components/ZIonComponents';
-import { IonSelectCustomEvent, SelectChangeEventDetail } from '@ionic/core';
-import { ZIonPlacementType } from '@/types/zaionsAppSettings.type';
-import classNames from 'classnames';
-import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 /**
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import {
+  type IonSelectCustomEvent,
+  type SelectChangeEventDetail
+} from '@ionic/core';
+import classNames from 'classnames';
+import {
+  type ActionMeta,
+  type MultiValue,
+  type PropsValue
+} from 'react-select';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
+import { ZIonSelect, ZIonSelectOption } from '@/components/ZIonComponents';
+import ZaionsRSelect from '../ZaionsRSelect';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { TIMEZONES } from '@/utils/constants';
+import { zCreateElementTestingSelector } from '@/utils/helpers';
+import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { type ZIonPlacementType } from '@/types/zaionsAppSettings.type';
 
 /**
  * Recoil State Imports go down
@@ -84,9 +91,7 @@ interface ZTimezoneSelectorInterface {
   onIonChange?: (
     event: IonSelectCustomEvent<SelectChangeEventDetail<unknown>>
   ) => void;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   testingselector?: string;
   testinglistselector?: string;
 }
@@ -98,22 +103,24 @@ interface ZTimezoneSelectorInterface {
  * */
 
 const ZTimezoneInput: React.FC<ZTimezoneInputInterface> = props => {
-  const _testinglistselector = props.testinglistselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testinglistselector || PRODUCT_NAME,
-          _key: zCreateElementTestingSelectorKeyEnum.listSelector
-        })
-      }
-    : {};
+  const _testinglistselector =
+    props.testinglistselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testinglistselector,
+            _key: zCreateElementTestingSelectorKeyEnum.listSelector
+          })
+        }
+      : {};
 
-  const _testingSelector = props.testingselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testingselector || PRODUCT_NAME
-        })
-      }
-    : {};
+  const _testingSelector =
+    props.testingselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testingselector
+          })
+        }
+      : {};
   return (
     <ZaionsRSelect
       {...props}
@@ -132,6 +139,7 @@ const ZTimezoneInput: React.FC<ZTimezoneInputInterface> = props => {
 export const ZTimezoneSelector: React.FC<
   ZTimezoneSelectorInterface
 > = props => {
+  /* Here in ZIonSelect the interface is action-sheet because first we are using popover interface but there is an issue using popover interface when we click at left side of select the popover width got smaller don't now why.  */
   return (
     <ZIonSelect
       {...props}
@@ -140,7 +148,6 @@ export const ZTimezoneSelector: React.FC<
       labelPlacement='stacked'
       errorText={props.errorText}
       minHeight='2.5rem'
-      interface='popover'
       className={classNames(props.className)}>
       {TIMEZONES.map((el, index) => {
         return (

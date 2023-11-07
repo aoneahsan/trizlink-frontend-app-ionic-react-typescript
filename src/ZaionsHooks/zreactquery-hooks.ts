@@ -2,12 +2,15 @@
 
 // Packages Imports
 import {
-  QueryFilters,
-  QueryKey,
+  type QueryFilters,
+  type QueryKey,
   useInfiniteQuery,
   useMutation,
   useQuery,
-  useQueryClient
+  useQueryClient,
+  type UseQueryResult,
+  type UseInfiniteQueryResult,
+  type UseMutationResult
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useResetRecoilState, useRecoilValue } from 'recoil';
@@ -23,7 +26,7 @@ import {
   STORAGE
 } from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
-import { API_URL_ENUM } from '@/utils/enums';
+import { type API_URL_ENUM } from '@/utils/enums';
 import MESSAGES from '@/utils/messages';
 import { errorCodes } from '@/utils/constants/apiConstants';
 import { clearAuthDataFromLocalStorageAndRecoil } from '@/utils/helpers/apiHelpers';
@@ -34,13 +37,9 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
 
 // Recoils
-import {
-  ZaionsUserAccountRStateAtom,
-  currentLoggedInUserRoleAndPermissionsRStateAtom
-} from '@/ZaionsStore/UserAccount/index.recoil';
+import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
 import { appWiseIonicLoaderIsOpenedRSelector } from '@/ZaionsStore/AppRStates';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { Console } from 'console';
 
 /**
  * The custom hook for getting data from an API using useQuery hook from react-query package.
@@ -53,7 +52,7 @@ export const useZRQGetRequest = <T>({
   _key,
   _itemsIds,
   _urlDynamicParts,
-  _shouldFetchWhenIdPassed,
+  _shouldFetchWhenIdPassed = false,
   _authenticated,
   _showLoader = true,
   _shouldExtractData = true,
@@ -85,7 +84,7 @@ export const useZRQGetRequest = <T>({
     networkMode?: 'always' | 'offlineFirst' | 'online';
     retry?: number;
   };
-}) => {
+}): UseQueryResult<T | null | undefined, Error> => {
   const { presentZIonErrorAlert } = useZIonErrorAlert();
   const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
   const resetUserAccountState = useResetRecoilState(
@@ -96,26 +95,26 @@ export const useZRQGetRequest = <T>({
   );
   const { permissionsChecker } = useZPermissionChecker();
 
-  const __response = useQuery({
+  const _response = useQuery({
     queryKey: [..._key],
     queryFn: async (): Promise<T | undefined | null> => {
       if (_checkPermissions) {
         const _permissionsCheckerResult = await permissionsChecker();
-        if (_permissionsCheckerResult) {
+        if (_permissionsCheckerResult !== undefined) {
           if (!_permissionsCheckerResult.hasAllPermissions) {
             return null;
           }
         }
       }
 
-      if (_shouldFetchWhenIdPassed) {
+      if (_shouldFetchWhenIdPassed !== null && _shouldFetchWhenIdPassed) {
         return null;
       } else {
         // Present ion loading before api start
         !zAppWiseIonicLoaderIsOpenedRSelector &&
           _showLoader &&
           (await presentZIonLoader(
-            _itemsIds?.length
+            _itemsIds?.length !== undefined
               ? MESSAGES.GENERAL.API_REQUEST.FETCHING_SINGLE_DATA
               : MESSAGES.GENERAL.API_REQUEST.FETCHING
           ));
@@ -130,12 +129,12 @@ export const useZRQGetRequest = <T>({
          * fifth argument _urlDynamicParts if in url you went to put some ids this ids will be replaced by _urlDynamicParts.
          */
         return await zAxiosApiRequest<T>({
-          _url: _url,
+          _url,
           _method: 'get',
           _isAuthenticatedRequest: _authenticated,
           _data: undefined,
           _itemIds: _itemsIds,
-          _urlDynamicParts: _urlDynamicParts
+          _urlDynamicParts
         });
       }
     },
@@ -145,9 +144,9 @@ export const useZRQGetRequest = <T>({
     //     _showLoader &&
     //     void dismissZIonLoader();
     //   // zConsoleLog({
-    //   // 	message:
-    //   // 		'From ZaionsHook -> useZRQCreateRequest -> useQuery -> onSuccess',
-    //   // 	data: _data,
+    //   // message:
+    //   // 'From ZaionsHook -> useZRQCreateRequest -> useQuery -> onSuccess',
+    //   // data: _data,
     //   // });
     // },
     // onError: async _error => {
@@ -213,64 +212,71 @@ export const useZRQGetRequest = <T>({
     staleTime: _staleTime
   });
 
-  if (__response?.error) {
-    (async () => {
-      const _error = __response.error;
+  if (_response?.error !== null && _response?.error !== undefined) {
+    void (async () => {
+      const error = _response.error;
       // need to dismiss the loader first, then showing error just so, user will not get redirected to login without knowing that there was a authenticated error
       // OnError dismissing loader...
-      zAppWiseIonicLoaderIsOpenedRSelector &&
+      void (
+        zAppWiseIonicLoaderIsOpenedRSelector &&
         _showLoader &&
-        void dismissZIonLoader();
+        dismissZIonLoader()
+      );
 
-      if (_error instanceof AxiosError) {
-        const __error = (_error as AxiosError)?.response;
-        const __errorMessage = (__error?.data as { errors: { item: string[] } })
+      if (error instanceof AxiosError) {
+        const _error = (error as AxiosError)?.response;
+        const _errorMessage = (_error?.data as { errors: { item: string[] } })
           ?.errors?.item[0];
-        console.log({ __errorMessage });
+        console.log({ __errorMessage: _errorMessage });
         // check if it's unauthenticated error
-        if (__error?.status && __error?.status === errorCodes.unauthenticated) {
+        if (
+          _error?.status !== null &&
+          _error?.status === errorCodes.unauthenticated
+        ) {
           // clear localstorage
           await clearAuthDataFromLocalStorageAndRecoil(resetUserAccountState);
 
           window.location.replace(ZaionsRoutes.LoginRoute);
 
           // showInfoNotification(MESSAGES.Login.loginExpiredMessage);
-        } else if (__error?.status === errorCodes.notFound) {
-          const __data = {
-            message: __errorMessage || 'Not found',
-            status: __error?.status
+        } else if (_error?.status === errorCodes.notFound) {
+          const _data = {
+            message: _errorMessage ?? 'Not found',
+            status: _error?.status
           };
-          void STORAGE.SET(LOCALSTORAGE_KEYS.ERROR_DATA, __data);
+          void STORAGE.SET(LOCALSTORAGE_KEYS.ERROR_DATA, _data);
 
           // redirect to 404
           window.location.replace(ZaionsRoutes.Error.Z404);
         } else {
           // showing error alert...
-          _showAlertOnError && void presentZIonErrorAlert();
+          void (_showAlertOnError && presentZIonErrorAlert());
         }
       } else {
         // showing error alert...
-        _showAlertOnError && void presentZIonErrorAlert();
+        void (_showAlertOnError && presentZIonErrorAlert());
       }
 
       // throw the request_failed error
-      _showAlertOnError && reportCustomError(_error);
+      _showAlertOnError && reportCustomError(error);
     })();
   }
 
-  if (__response?.data) {
+  if (_response?.data !== null) {
     // onSucceed dismissing loader...
-    zAppWiseIonicLoaderIsOpenedRSelector &&
+    void (
+      zAppWiseIonicLoaderIsOpenedRSelector &&
       _showLoader &&
-      void dismissZIonLoader();
+      dismissZIonLoader()
+    );
     // zConsoleLog({
-    // 	message:
-    // 		'From ZaionsHook -> useZRQCreateRequest -> useQuery -> onSuccess',
-    // 	data: _data,
+    // message:
+    // 'From ZaionsHook -> useZRQCreateRequest -> useQuery -> onSuccess',
+    // data: _data,
     // });
   }
 
-  return __response;
+  return _response;
 };
 
 export const useZInfiniteQuery = <T>({
@@ -310,7 +316,7 @@ export const useZInfiniteQuery = <T>({
     networkMode?: 'always' | 'offlineFirst' | 'online';
     retry?: number;
   };
-}) => {
+}): UseInfiniteQueryResult => {
   const { presentZIonErrorAlert } = useZIonErrorAlert();
   const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
   const resetUserAccountState = useResetRecoilState(
@@ -321,26 +327,29 @@ export const useZInfiniteQuery = <T>({
   );
   const { permissionsChecker } = useZPermissionChecker();
 
-  const __response = useInfiniteQuery({
+  const _response = useInfiniteQuery({
     queryKey: [..._key],
     queryFn: async (): Promise<T | undefined | null> => {
       if (_checkPermissions) {
         const _permissionsCheckerResult = await permissionsChecker();
-        if (_permissionsCheckerResult) {
-          if (!_permissionsCheckerResult.hasAllPermissions) {
+        if (_permissionsCheckerResult !== null) {
+          if (
+            !(_permissionsCheckerResult as { hasAllPermissions: boolean })
+              ?.hasAllPermissions
+          ) {
             return null;
           }
         }
       }
 
-      if (_shouldFetchWhenIdPassed) {
+      if (_shouldFetchWhenIdPassed !== undefined) {
         return null;
       } else {
         // Present ion loading before api start
         !zAppWiseIonicLoaderIsOpenedRSelector &&
           _showLoader &&
           (await presentZIonLoader(
-            _itemsIds?.length
+            _itemsIds?.length !== null
               ? MESSAGES.GENERAL.API_REQUEST.FETCHING_SINGLE_DATA
               : MESSAGES.GENERAL.API_REQUEST.FETCHING
           ));
@@ -355,12 +364,12 @@ export const useZInfiniteQuery = <T>({
          * @return return the data from api.
          */
         return await zAxiosApiRequest<T>({
-          _url: _url,
+          _url,
           _method: 'get',
           _isAuthenticatedRequest: _authenticated,
           _data: undefined,
           _itemIds: _itemsIds,
-          _urlDynamicParts: _urlDynamicParts
+          _urlDynamicParts
         });
       }
     },
@@ -392,64 +401,71 @@ export const useZInfiniteQuery = <T>({
     staleTime: _staleTime
   });
 
-  if (__response?.error) {
-    (async () => {
-      const _error = __response.error;
+  if (_response?.error !== undefined) {
+    void (async () => {
+      const error = _response.error;
       // need to dismiss the loader first, then showing error just so, user will not get redirected to login without knowing that there was a authenticated error
       // OnError dismissing loader...
-      zAppWiseIonicLoaderIsOpenedRSelector &&
+      void (
+        zAppWiseIonicLoaderIsOpenedRSelector &&
         _showLoader &&
-        void dismissZIonLoader();
+        dismissZIonLoader()
+      );
 
-      if (_error instanceof AxiosError) {
-        const __error = (_error as AxiosError)?.response;
-        const __errorMessage = (__error?.data as { errors: { item: string[] } })
+      if (error instanceof AxiosError) {
+        const _error = (error as AxiosError)?.response;
+        const _errorMessage = (_error?.data as { errors: { item: string[] } })
           ?.errors?.item[0];
-        console.log({ __errorMessage });
+        console.log({ __errorMessage: _errorMessage });
         // check if it's unauthenticated error
-        if (__error?.status && __error?.status === errorCodes.unauthenticated) {
+        if (
+          _error?.status !== undefined &&
+          _error?.status === errorCodes.unauthenticated
+        ) {
           // clear localstorage
           await clearAuthDataFromLocalStorageAndRecoil(resetUserAccountState);
 
           window.location.replace(ZaionsRoutes.LoginRoute);
 
           // showInfoNotification(MESSAGES.Login.loginExpiredMessage);
-        } else if (__error?.status === errorCodes.notFound) {
-          const __data = {
-            message: __errorMessage || 'Not found',
-            status: __error?.status
+        } else if (_error?.status === errorCodes.notFound) {
+          const _data = {
+            message: _errorMessage ?? 'Not found',
+            status: _error?.status
           };
-          void STORAGE.SET(LOCALSTORAGE_KEYS.ERROR_DATA, __data);
+          void STORAGE.SET(LOCALSTORAGE_KEYS.ERROR_DATA, _data);
 
           // redirect to 404
           window.location.replace(ZaionsRoutes.Error.Z404);
         } else {
           // showing error alert...
-          _showAlertOnError && void presentZIonErrorAlert();
+          void (_showAlertOnError && presentZIonErrorAlert());
         }
       } else {
         // showing error alert...
-        _showAlertOnError && void presentZIonErrorAlert();
+        void (_showAlertOnError && presentZIonErrorAlert());
       }
 
       // throw the request_failed error
-      _showAlertOnError && reportCustomError(_error);
+      _showAlertOnError && reportCustomError(error);
     })();
   }
 
-  if (__response?.data) {
+  if (_response?.data !== undefined) {
     // onSucceed dismissing loader...
-    zAppWiseIonicLoaderIsOpenedRSelector &&
+    void (
+      zAppWiseIonicLoaderIsOpenedRSelector &&
       _showLoader &&
-      void dismissZIonLoader();
+      dismissZIonLoader()
+    );
     // zConsoleLog({
-    // 	message:
-    // 		'From ZaionsHook -> useZRQCreateRequest -> useQuery -> onSuccess',
-    // 	data: _data,
+    // message:
+    // 'From ZaionsHook -> useZRQCreateRequest -> useQuery -> onSuccess',
+    // data: _data,
     // });
   }
 
-  return __response;
+  return _response;
 };
 
 /**
@@ -471,7 +487,7 @@ export const useZRQCreateRequest = <T>({
   _loaderMessage = MESSAGES.GENERAL.API_REQUEST.CREATING
 }: {
   _url: API_URL_ENUM;
-  _queriesKeysToInvalidate?: QueryFilters;
+  _queriesKeysToInvalidate?: QueryFilters | QueryKey;
   _authenticated?: boolean;
   _itemsIds?: string[];
   _urlDynamicParts?: string[];
@@ -479,21 +495,17 @@ export const useZRQCreateRequest = <T>({
   _showAlertOnError?: boolean;
   _showLoader?: boolean;
   _loaderMessage?: string;
-}) => {
+}): UseMutationResult<T | undefined, Error, string | FormData, void> => {
   const { presentZIonErrorAlert } = useZIonErrorAlert();
-  const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
+  // const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
   const queryClient = useQueryClient();
   const resetUserAccountState = useResetRecoilState(
     ZaionsUserAccountRStateAtom
   );
-  const currentLoggedInUserRoleAndPermissionsStateAtom = useRecoilValue(
-    currentLoggedInUserRoleAndPermissionsRStateAtom
-  );
-
   // const { getRQCDataHandler } = useZGetRQCacheData();
 
   // const _roleAndPermissions = getRQCDataHandler({
-  // 	key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.ROLE_PERMISSIONS],
+  // key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.ROLE_PERMISSIONS],
   // });
 
   return useMutation({
@@ -501,20 +513,20 @@ export const useZRQCreateRequest = <T>({
       _requestData: string | FormData
     ): Promise<T | undefined> => {
       // if (_permissions && _permissions?.length > 0) {
-      // 	const userPermissions =
-      // 		currentLoggedInUserRoleAndPermissionsStateAtom?.permissions;
-      // 	// const haveRequiredPermission = userPermissions?.includes(havePermission);
-      // 	const haveRequiredPermission = _permissions.every((el) =>
-      // 		userPermissions?.includes(el)
-      // 	);
+      // const userPermissions =
+      // currentLoggedInUserRoleAndPermissionsStateAtom?.permissions;
+      // // const haveRequiredPermission = userPermissions?.includes(havePermission);
+      // const haveRequiredPermission = _permissions.every((el) =>
+      // userPermissions?.includes(el)
+      // );
 
-      // 	if (haveRequiredPermission === false) {
-      // 		return undefined;
-      // 	}
+      // if (haveRequiredPermission === false) {
+      // return undefined;
+      // }
       // }
 
       // Present ion loading before api start
-      _showLoader && (await presentZIonLoader(_loaderMessage));
+      // await presentZIonLoader(_loaderMessage);
       /**
        * @_url - takes the post url to post data to api.
        *  second argument take the method (post | get | update | delete). as this is the post api so it  will be post
@@ -523,22 +535,22 @@ export const useZRQCreateRequest = <T>({
        * @return return the data from api.
        */
       return await zAxiosApiRequest<T>({
-        _url: _url,
+        _url,
         _method: 'post',
         _isAuthenticatedRequest: _authenticated,
         _data: _requestData,
         _itemIds: _itemsIds,
-        _urlDynamicParts: _urlDynamicParts,
-        _contentType: _contentType
+        _urlDynamicParts,
+        _contentType
       });
     },
     onMutate: async () => {
-      await queryClient.cancelQueries(_queriesKeysToInvalidate);
+      await queryClient.cancelQueries(_queriesKeysToInvalidate as QueryFilters);
     },
     onSuccess: async _data => {
       // onSucceed dismissing loader...
-      _showLoader && (await dismissZIonLoader());
-      if (_queriesKeysToInvalidate) {
+      // await (_showLoader && dismissZIonLoader());
+      if (_queriesKeysToInvalidate !== undefined) {
         await queryClient.invalidateQueries({
           queryKey: _queriesKeysToInvalidate as QueryKey
         });
@@ -546,23 +558,23 @@ export const useZRQCreateRequest = <T>({
     },
     onError: async _error => {
       // OnError dismissing loader...
-      _showLoader && void dismissZIonLoader();
+      // void (_showLoader && dismissZIonLoader());
 
       // showing error alert...
-      _showAlertOnError && void presentZIonErrorAlert();
+      void (_showAlertOnError && presentZIonErrorAlert());
 
       // throw the request_failed error
       _showAlertOnError && reportCustomError(_error);
 
       // check if it's unauthenticated error
       const errorCode = (_error as AxiosError)?.response?.status;
-      if (errorCode && errorCode === errorCodes.unauthenticated) {
+      if (errorCode !== undefined && errorCode === errorCodes.unauthenticated) {
         // clear localstorage
         await clearAuthDataFromLocalStorageAndRecoil(resetUserAccountState);
       }
     },
 
-    networkMode: 'offlineFirst' //will remove later
+    networkMode: 'offlineFirst' // will remove later
   });
 };
 
@@ -583,21 +595,27 @@ export const useZRQUpdateRequest = <T>({
   _loaderMessage = MESSAGES.GENERAL.API_REQUEST.UPDATING
 }: {
   _url: API_URL_ENUM;
-  _queriesKeysToInvalidate?: QueryFilters;
+  _queriesKeysToInvalidate?: QueryFilters | QueryKey;
   authenticated?: boolean;
   _contentType?: zAxiosApiRequestContentType;
   _showAlertOnError?: boolean;
   _showLoader?: boolean;
   _loaderMessage?: string;
-}) => {
+}): UseMutationResult<
+  T | undefined,
+  Error,
+  {
+    itemIds: string[];
+    urlDynamicParts: string[];
+    requestData: string;
+  },
+  void
+> => {
   const { presentZIonErrorAlert } = useZIonErrorAlert();
   const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
   const queryClient = useQueryClient();
   const resetUserAccountState = useResetRecoilState(
     ZaionsUserAccountRStateAtom
-  );
-  const currentLoggedInUserRoleAndPermissionsStateAtom = useRecoilValue(
-    currentLoggedInUserRoleAndPermissionsRStateAtom
   );
   return useMutation({
     mutationFn: async ({
@@ -629,22 +647,22 @@ export const useZRQUpdateRequest = <T>({
        */
       // const generateEditURl =
       return await zAxiosApiRequest({
-        _url: _url,
+        _url,
         _method: 'put',
         _isAuthenticatedRequest: authenticated,
         _data: requestData,
         _itemIds: itemIds,
         _urlDynamicParts: urlDynamicParts,
-        _contentType: _contentType
+        _contentType
       });
     },
     onMutate: () => {
-      void queryClient.cancelQueries(_queriesKeysToInvalidate);
+      void queryClient.cancelQueries(_queriesKeysToInvalidate as QueryFilters);
     },
     onSuccess: _data => {
       // onSucceed dismissing loader...
-      _showLoader && void dismissZIonLoader();
-      if (_queriesKeysToInvalidate) {
+      void (_showLoader && dismissZIonLoader());
+      if (_queriesKeysToInvalidate !== undefined) {
         void queryClient.invalidateQueries({
           queryKey: _queriesKeysToInvalidate as QueryKey
         });
@@ -652,10 +670,10 @@ export const useZRQUpdateRequest = <T>({
     },
     onError: async _error => {
       // OnError dismissing loader...
-      _showLoader && void dismissZIonLoader();
+      void (_showLoader && dismissZIonLoader());
 
       // showing error alert...
-      _showAlertOnError && void presentZIonErrorAlert();
+      void (_showAlertOnError && presentZIonErrorAlert());
       // TODO create a helper function to throw a ZCustomError so if we add sentry or some other error logging then it will be easy to track that as well
 
       // throw the request_failed error
@@ -663,13 +681,13 @@ export const useZRQUpdateRequest = <T>({
 
       // check if it's unauthenticated error
       const errorCode = (_error as AxiosError)?.response?.status;
-      if (errorCode && errorCode === errorCodes.unauthenticated) {
+      if (errorCode !== undefined && errorCode === errorCodes.unauthenticated) {
         // clear localstorage
         await clearAuthDataFromLocalStorageAndRecoil(resetUserAccountState);
       }
     },
 
-    networkMode: 'offlineFirst' //will remove later
+    networkMode: 'offlineFirst' // will remove later
   });
 };
 
@@ -694,15 +712,20 @@ export const useZRQDeleteRequest = <T>({
   _showAlertOnError?: boolean;
   _showLoader?: boolean;
   _loaderMessage?: string;
-}) => {
+}): UseMutationResult<
+  T | undefined,
+  Error,
+  {
+    itemIds: string[];
+    urlDynamicParts: string[];
+  },
+  void
+> => {
   const { presentZIonErrorAlert } = useZIonErrorAlert();
   const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
   const queryClient = useQueryClient();
   const resetUserAccountState = useResetRecoilState(
     ZaionsUserAccountRStateAtom
-  );
-  const currentLoggedInUserRoleAndPermissionsStateAtom = useRecoilValue(
-    currentLoggedInUserRoleAndPermissionsRStateAtom
   );
 
   return useMutation({
@@ -725,7 +748,7 @@ export const useZRQDeleteRequest = <T>({
        */
       // const generateEditURl =
       return await zAxiosApiRequest({
-        _url: _url,
+        _url,
         _method: 'delete',
         _isAuthenticatedRequest: _authenticated,
         _data: undefined,
@@ -738,8 +761,8 @@ export const useZRQDeleteRequest = <T>({
     },
     onSuccess: _data => {
       // onSucceed dismissing loader...
-      _showLoader && void dismissZIonLoader();
-      if (_queriesKeysToInvalidate) {
+      void (_showLoader && dismissZIonLoader());
+      if (_queriesKeysToInvalidate !== undefined) {
         void queryClient.invalidateQueries({
           queryKey: _queriesKeysToInvalidate as QueryKey
         });
@@ -747,10 +770,10 @@ export const useZRQDeleteRequest = <T>({
     },
     onError: async _error => {
       // OnError dismissing loader...
-      _showLoader && void dismissZIonLoader();
+      void (_showLoader && dismissZIonLoader());
 
       // showing error alert...
-      _showAlertOnError && void presentZIonErrorAlert();
+      void (_showAlertOnError && presentZIonErrorAlert());
       // TODO create a helper function to throw a ZCustomError so if we add sentry or some other error logging then it will be easy to track that as well
 
       // throw the request_failed error
@@ -758,7 +781,7 @@ export const useZRQDeleteRequest = <T>({
 
       // check if it's unauthenticated error
       const errorCode = (_error as AxiosError)?.response?.status;
-      if (errorCode && errorCode === errorCodes.unauthenticated) {
+      if (errorCode !== undefined && errorCode === errorCodes.unauthenticated) {
         // clear localstorage
         await clearAuthDataFromLocalStorageAndRecoil(resetUserAccountState);
       }
@@ -766,12 +789,20 @@ export const useZRQDeleteRequest = <T>({
   });
 };
 
-export const useZInvalidateReactQueries = () => {
+export const useZInvalidateReactQueries = ():
+  | {
+      zInvalidateReactQueries: (
+        _queriesKeysToInvalidate?: string[]
+      ) => Promise<void>;
+    }
+  | {
+      zInvalidateReactQueries: () => void;
+    } => {
   const queryClient = useQueryClient();
   try {
     const zInvalidateReactQueries = async (
       _queriesKeysToInvalidate?: string[]
-    ) => {
+    ): Promise<void> => {
       await queryClient.invalidateQueries({
         queryKey: _queriesKeysToInvalidate
       });
@@ -785,7 +816,21 @@ export const useZInvalidateReactQueries = () => {
 };
 
 // Update data in React-Query
-export const useZUpdateRQCacheData = () => {
+export const useZUpdateRQCacheData = (): {
+  updateRQCDataHandler: <T>({
+    key,
+    data,
+    id,
+    updateHoleData,
+    extractType
+  }: {
+    key: string | string[];
+    id: string;
+    data: T;
+    updateHoleData?: boolean | undefined;
+    extractType?: ZRQGetRequestExtractEnum | undefined;
+  }) => unknown;
+} => {
   try {
     const queryClient = useQueryClient();
 
@@ -801,18 +846,18 @@ export const useZUpdateRQCacheData = () => {
       data: T;
       updateHoleData?: boolean;
       extractType?: ZRQGetRequestExtractEnum;
-    }) => {
+    }): unknown => {
       if (updateHoleData) {
         queryClient.setQueryData([...key], (oldData: unknown) => {
           const updatedData = structuredClone(oldData);
-          if (updatedData) {
+          if (updatedData !== undefined) {
             switch (extractType) {
               case ZRQGetRequestExtractEnum.extractItem:
-                (updatedData as { data: { item: T } })!.data!.item = data;
+                (updatedData as { data: { item: T } }).data.item = data;
                 break;
 
               case ZRQGetRequestExtractEnum.extractItems:
-                (updatedData as { data: { items: T } })!.data!.items = data;
+                (updatedData as { data: { items: T } }).data.items = data;
                 break;
             }
           }
@@ -821,11 +866,11 @@ export const useZUpdateRQCacheData = () => {
         });
       } else {
         const _res = queryClient.setQueryData([...key], (oldData: unknown) => {
-          if (oldData) {
+          if (oldData !== undefined) {
             if (Array.isArray(oldData)) {
               const updatedData = [...oldData];
               const index = updatedData.findIndex(el => el.id === id);
-              if (index != -1) {
+              if (index !== -1) {
                 updatedData[index] = data;
               }
               return updatedData;
@@ -835,15 +880,15 @@ export const useZUpdateRQCacheData = () => {
                 updatedData as { data: { items: unknown[] } }
               )?.data?.items;
               if (
-                actualDataItems &&
+                actualDataItems !== undefined &&
                 Array.isArray(actualDataItems) &&
-                actualDataItems.length
+                actualDataItems.length > 0
               ) {
                 const updatedDataItems = [...actualDataItems];
                 const index = updatedDataItems.findIndex(
                   (el: unknown) => (el as { id: string })?.id === id
                 );
-                if (index != -1) {
+                if (index !== -1) {
                   updatedDataItems[index] = data;
                 }
                 (updatedData as { data: { items: unknown[] } }).data.items =
@@ -874,7 +919,13 @@ export const useZUpdateRQCacheData = () => {
  * @return
  * getRQCDataHandler: <T>(key: string[]): T|undefined
  */
-export const useZGetRQCacheData = () => {
+export const useZGetRQCacheData = ():
+  | {
+      getRQCDataHandler: <T>({ key }: { key: string[] }) => T | undefined;
+    }
+  | {
+      getRQCDataHandler: () => void;
+    } => {
   try {
     const QueryClient = useQueryClient();
 
@@ -903,12 +954,14 @@ export const useZGetRQCacheData = () => {
  * @return
  * removeRQCDataHandler: ({ key }: { key: string[]; }) => void
  */
-export const useZRemoveRQCacheData = () => {
+export const useZRemoveRQCacheData = (): {
+  removeRQCDataHandler: ({ key }: { key: string[] }) => void;
+} => {
   try {
     const QueryClient = useQueryClient();
 
-    const removeRQCDataHandler = ({ key }: { key: string[] }) => {
-      return QueryClient.removeQueries({
+    const removeRQCDataHandler = ({ key }: { key: string[] }): void => {
+      QueryClient.removeQueries({
         queryKey: key,
         exact: true
       });

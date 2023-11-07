@@ -83,7 +83,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
 }> = ({ className, showSkeleton = false }) => {
   // getting current workspace id form params.
   const { workspaceId } = useParams<{
-    workspaceId: string;
+    workspaceId?: string;
   }>();
 
   const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
@@ -108,7 +108,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
       }}
       onSubmit={(values, { resetForm }) => {
         try {
-          if (values.domain) {
+          if (values?.domain !== undefined || values?.domain !== null) {
             setNewShortLinkFormState(oldValues => ({
               ...oldValues,
               folderId: CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
@@ -126,7 +126,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
               el => el.type === messengerPlatformsBlockEnum.link
             );
 
-            if (selectedTypeOptionData) {
+            if (selectedTypeOptionData !== undefined) {
               setNewShortLinkTypeOptionDataAtom(_ => ({
                 ...selectedTypeOptionData
               }));
@@ -136,7 +136,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
               replaceParams(
                 ZaionsRoutes.AdminPanel.ShortLinks.Create,
                 CONSTANTS.RouteParams.workspace.workspaceId,
-                workspaceId
+                workspaceId ?? ''
               )
             );
             resetForm();
@@ -155,8 +155,14 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
                 style={{ '--inner-padding-end': '0px' }}
                 className={classNames(className, {
                   'ion-item-start-no-padding': true,
-                  'ion-invalid': touched.domain && errors.domain,
-                  'ion-valid': touched.domain && !errors.domain
+                  'ion-touched': touched?.domain === true,
+                  'ion-invalid':
+                    touched?.domain === true &&
+                    errors.domain !== undefined &&
+                    errors.domain?.length > 0,
+                  'ion-valid':
+                    touched?.domain === true &&
+                    (errors?.domain === null || errors?.domain === undefined)
                 })}>
                 <ZIonInput
                   aria-label='domain'
@@ -174,8 +180,14 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
                   }
                   className={classNames({
                     'rounded-none zaions__bg_white': true,
-                    'ion-touched ion-invalid': touched.domain && errors.domain,
-                    'ion-touched ion-valid': touched.domain && !errors.domain
+                    'ion-touched': touched?.domain === true,
+                    'ion-invalid':
+                      touched?.domain === true &&
+                      errors.domain !== undefined &&
+                      errors.domain?.length > 0,
+                    'ion-valid':
+                      touched?.domain === true &&
+                      (errors?.domain === null || errors?.domain === undefined)
                   })}
                   style={{
                     '--padding-start': '10px',
@@ -186,7 +198,9 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
                 <ZIonButton
                   className='ion-no-margin ion-text-capitalize'
                   slot='end'
-                  onClick={() => void submitForm()}
+                  onClick={() => {
+                    void submitForm();
+                  }}
                   testingselector={
                     CONSTANTS.testingSelectors.shortLink.listPage.switchItBtn
                   }
@@ -198,18 +212,21 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
                 </ZIonButton>
               </ZIonItem>
             )}
-            {!showSkeleton && errors.domain && touched.domain && (
-              <div className='ps-1 text-[14px]'>
-                <ZIonNote
-                  color='danger'
-                  testingselector={
-                    CONSTANTS.testingSelectors.shortLink.listPage
-                      .switchItInputError
-                  }>
-                  {errors.domain}
-                </ZIonNote>
-              </div>
-            )}
+            {!showSkeleton &&
+              errors.domain !== undefined &&
+              errors.domain.length > 0 &&
+              touched.domain === true && (
+                <div className='ps-1 text-[14px]'>
+                  <ZIonNote
+                    color='danger'
+                    testingselector={
+                      CONSTANTS.testingSelectors.shortLink.listPage
+                        .switchItInputError
+                    }>
+                    {errors.domain}
+                  </ZIonNote>
+                </div>
+              )}
 
             {/* Skeleton */}
             {showSkeleton && <ZaionsCreateShortLinkUrlInputSkeleton />}
@@ -253,5 +270,8 @@ export const ZaionsCreateShortLinkUrlInputSkeleton: React.FC = React.memo(
     );
   }
 );
+
+ZaionsCreateShortLinkUrlInputSkeleton.displayName =
+  'ZaionsCreateShortLinkUrlInputSkeleton';
 
 export default ZaionsCreateShortLinkUrlInput;

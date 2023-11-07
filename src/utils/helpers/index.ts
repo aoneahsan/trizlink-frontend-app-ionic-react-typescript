@@ -1,14 +1,18 @@
-import { ABTestingRotatorInterface } from './../../types/AdminPanel/index.type';
+import { type ABTestingRotatorInterface } from '@/types/AdminPanel/index.type';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
-import { useLocation } from 'react-router';
+import { isPlatform } from '@ionic/react';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { workspaceFormConnectPagesEnum } from './../../types/AdminPanel/workspace/index';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { workspaceFormConnectPagesEnum } from '@/types/AdminPanel/workspace/index';
+import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
 // Packages Import
-import { ConfirmResult, Dialog, PromptResult } from '@capacitor/dialog';
+import {
+  type ConfirmResult,
+  Dialog,
+  type PromptResult
+} from '@capacitor/dialog';
 import { Preferences } from '@capacitor/preferences';
 import {
-  LinkTargetType,
+  type LinkTargetType,
   PixelPlatformsEnum
 } from '@/types/AdminPanel/linksType';
 import isEmail from 'validator/lib/isEmail';
@@ -28,17 +32,17 @@ import {
 import { ENVS } from '@/utils/envKeys';
 import MESSAGES from '@/utils/messages';
 import { AES, enc } from 'crypto-js';
-import { UserAccountType } from '@/types/UserAccount/index.type';
+import { type UserAccountType } from '@/types/UserAccount/index.type';
 import axiosInstance from '@/axiosInstance';
 import {
-  ZCapDialogPropsType,
-  ZConsolePropsType,
-  ZRoutesObject
+  type ZCapDialogPropsType,
+  type ZConsolePropsType,
+  type ZRoutesObject
 } from '@/types/ZaionsHelperFunction.type';
 import {
-  AxiosRequestResponseType,
-  ZLinkGetApiType,
-  ZLinkMutateApiType
+  type AxiosRequestResponseType,
+  type ZLinkGetApiType,
+  type ZLinkMutateApiType
 } from '@/types/ZaionsApis.type';
 import {
   reportCustomError,
@@ -46,19 +50,18 @@ import {
   throwZCustomErrorUnAuthenticated,
   ZCustomError
 } from '@/utils/customErrorType';
-import { AxiosRequestConfig } from 'axios';
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { type AxiosRequestConfig } from 'axios';
+import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 import VALIDATOR from 'validator';
 import {
   LinkInBioThemeBackgroundEnum,
-  LinkInBioThemeBackgroundType
+  type LinkInBioThemeBackgroundType
 } from '@/types/AdminPanel/linkInBioType';
 import zQueryString from 'qs';
 import dayjs from 'dayjs';
 import DayJsDurationPlugin from 'dayjs/plugin/duration';
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
-import { LinkInBioPageAnalyticsDataInterface } from '@/types/InPageComponentTypes/ZaionsTables.type';
 import {
   logoFacebook,
   logoInstagram,
@@ -89,22 +92,22 @@ export const isValidUrl = (url: string): boolean => {
 
 export const STORAGE = {
   GET: async <T>(_key: string): Promise<T | undefined> => {
-    const __val = (await Preferences.get({ key: _key })).value;
-    if (__val) {
-      return decryptData(__val);
+    const _val = (await Preferences.get({ key: _key })).value;
+    if (_val !== null) {
+      return await decryptData(_val);
     } else {
       return undefined;
     }
   },
   SET: async (key: string, value: unknown): Promise<void> => {
     const valStr = encryptData(value);
-    return await Preferences.set({ key, value: valStr });
+    await Preferences.set({ key, value: valStr });
   },
   REMOVE: async (key: string): Promise<void> => {
-    return await Preferences.remove({ key });
+    await Preferences.remove({ key });
   },
   CLEAR: async (key: string): Promise<void> => {
-    return await Preferences.clear();
+    await Preferences.clear();
   }
 };
 
@@ -133,14 +136,17 @@ export const showZCapDialog = async ({
   cancelButtonTitle = NOTIFICATIONS.ZIonAlerts.CANCEL_BUTTON.TEXT,
   inputText = '',
   inputPlaceholder = 'Enter your input here...'
-}: ZCapDialogPropsType): Promise<void | ConfirmResult | PromptResult> => {
+}: // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+ZCapDialogPropsType): Promise<void | ConfirmResult | PromptResult> => {
   switch (type) {
-    case 'alert':
-      return await Dialog.alert({
+    case 'alert': {
+      await Dialog.alert({
         title,
         message,
         buttonTitle
       });
+      return;
+    }
     case 'confirm':
       return await Dialog.confirm({
         title,
@@ -166,11 +172,13 @@ export const showZCapDialogAlert = async ({
   title,
   message,
   buttonTitle
-}: ZCapDialogPropsType): Promise<void | ConfirmResult | PromptResult> => {
+}: // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+ZCapDialogPropsType): Promise<void | ConfirmResult | PromptResult> => {
   return await showZCapDialog({ title, message, buttonTitle, type: 'alert' });
 };
 
 export const showZCapSuccessDialogAlert = async (): Promise<
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   void | ConfirmResult | PromptResult
 > => {
   return await showZCapDialogAlert({
@@ -181,6 +189,7 @@ export const showZCapSuccessDialogAlert = async (): Promise<
 };
 
 export const showZCapErrorDialogAlert = async (): Promise<
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   void | ConfirmResult | PromptResult
 > => {
   return await showZCapDialogAlert({
@@ -197,7 +206,8 @@ export const showZCapDialogPrompt = async ({
   cancelButtonTitle,
   inputText,
   inputPlaceholder
-}: ZCapDialogPropsType): Promise<void | ConfirmResult | PromptResult> => {
+}: // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+ZCapDialogPropsType): Promise<void | ConfirmResult | PromptResult> => {
   return await showZCapDialog({
     title,
     message,
@@ -214,7 +224,8 @@ export const showZCapDialogConfirm = async ({
   message,
   okButtonTitle,
   cancelButtonTitle
-}: ZCapDialogPropsType): Promise<void | ConfirmResult | PromptResult> => {
+}: // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+ZCapDialogPropsType): Promise<void | ConfirmResult | PromptResult> => {
   return await showZCapDialog({
     title,
     message,
@@ -253,7 +264,7 @@ export const validatePixelAccountID = (
         return MESSAGES.FORM_VALIDATIONS.PIXEL_ACCOUNTS.GOOGLE_ANALYTICS
           .WORD_COUNT;
       } else if (
-        CONSTANTS.PIXEL_ACCOUNTS.GOOGLE_ANALYTICS.SHOULD_INCLUDE &&
+        CONSTANTS.PIXEL_ACCOUNTS.GOOGLE_ANALYTICS.SHOULD_INCLUDE.length > 0 &&
         !pixelID
           .toLowerCase()
           .includes(CONSTANTS.PIXEL_ACCOUNTS.GOOGLE_ANALYTICS.SHOULD_INCLUDE)
@@ -290,7 +301,7 @@ export const validatePixelAccountID = (
 
     case PixelPlatformsEnum.google_tag_manager:
       if (
-        CONSTANTS.PIXEL_ACCOUNTS.GOOGLE_TAG_MANAGER.SHOULD_INCLUDE &&
+        CONSTANTS.PIXEL_ACCOUNTS.GOOGLE_TAG_MANAGER.SHOULD_INCLUDE.length > 0 &&
         !pixelID
           .toLowerCase()
           .startsWith(
@@ -332,7 +343,7 @@ export const validatePixelAccountID = (
 
     case PixelPlatformsEnum.vk:
       if (
-        CONSTANTS.PIXEL_ACCOUNTS.VK.SHOULD_INCLUDE &&
+        CONSTANTS.PIXEL_ACCOUNTS.VK.SHOULD_INCLUDE.length > 0 &&
         !pixelID
           .toLowerCase()
           .startsWith(CONSTANTS.PIXEL_ACCOUNTS.VK.SHOULD_INCLUDE)
@@ -377,7 +388,7 @@ export const replaceRouteParams = (
           'replaceRouteParams: values and params array length not matching.'
       })
         .then()
-        .catch(err => console.error);
+        .catch(() => console.error);
       return '';
     }
 
@@ -399,7 +410,7 @@ export const replaceRouteParams = (
  * @param _object
  * @returns stringify object.
  */
-export const stringifyZQueryString = (_object: ZGenericObject) => {
+export const stringifyZQueryString = (_object: ZGenericObject): string => {
   return zQueryString.stringify(_object);
 };
 
@@ -408,14 +419,17 @@ export const stringifyZQueryString = (_object: ZGenericObject) => {
  * @param _value
  * @returns parse value.
  */
-export const parseZQueryString = (_value: string) => {
-  const __urlData = new URL(_value);
-  const __queryStringData = zQueryString.parse(
-    __urlData.search.replace('?', '')
-  );
+export const parseZQueryString = (
+  _value: string
+): {
+  _queryStringData: zQueryString.ParsedQs;
+  _urlData: URL;
+} => {
+  const _urlData = new URL(_value);
+  const _queryStringData = zQueryString.parse(_urlData.search.replace('?', ''));
   return {
-    __queryStringData,
-    __urlData
+    _queryStringData,
+    _urlData
   };
 };
 
@@ -433,11 +447,11 @@ export const createRedirectRoute = ({
   values?: string[];
 }): string => {
   let _route = replaceRouteParams(url, params, values);
-  if (routeSearchParams) {
+  if (routeSearchParams != null) {
     _route = `${_route}?${stringifyZQueryString(routeSearchParams)}`;
   }
   // The hash parameter must be placed after search parameter in url
-  if (routeHashParams) {
+  if (routeHashParams != null) {
     _route = `${_route}#${stringifyZQueryString(routeHashParams)}`;
   }
 
@@ -448,9 +462,12 @@ export const formatDataForZaionsRSelectOptions = (
   data: unknown,
   valueKey: string,
   labelKey: string
-) => {
-  if (Array.isArray(data) && data.length) {
-    return data.map((el: { [valueKey: string]: string }) => {
+): Array<{
+  value: string | undefined;
+  label: string | undefined;
+}> => {
+  if (Array.isArray(data) && data.length > 0) {
+    return data.map((el: Record<string, string>) => {
       let _value, _label;
 
       if (Object.prototype.hasOwnProperty.call(el, valueKey)) {
@@ -500,8 +517,8 @@ export const checkIfContains = (
 
 export const validateField = (
   fieldKey: string,
-  values: { [key: string]: unknown },
-  errorsObj: { [key: string]: unknown },
+  values: Record<string, unknown>,
+  errorsObj: Record<string, unknown>,
   validationRule: VALIDATION_RULE = VALIDATION_RULE.string
 ): void => {
   const _fieldKeyTitleCase = convertToTitleCase(fieldKey);
@@ -509,7 +526,10 @@ export const validateField = (
   /**
    * Checking in the field key is empty then give `fieldKey is required` error message (generally for every field)
    */
-  if (!Object.prototype.hasOwnProperty.call(values, fieldKey) || !_val) {
+  if (
+    !Object.prototype.hasOwnProperty.call(values, fieldKey) ||
+    _val.length === 0
+  ) {
     errorsObj[fieldKey] = `${_fieldKeyTitleCase} is required`;
   } else if (validationRule === VALIDATION_RULE.email && !isEmail(_val)) {
     errorsObj[fieldKey] = `${_fieldKeyTitleCase} needs to be a valid email.`;
@@ -541,8 +561,8 @@ export const validateField = (
 
 export const validateFields = (
   fieldKeys: string[],
-  values: { [key: string]: unknown },
-  errorsObj: { [key: string]: unknown },
+  values: Record<string, unknown>,
+  errorsObj: Record<string, unknown>,
   validationRules: VALIDATION_RULE[]
 ): void => {
   if (fieldKeys.length !== validationRules.length) {
@@ -551,7 +571,7 @@ export const validateFields = (
       message: 'Fields and Validation Rules array length not matching.'
     })
       .then()
-      .catch(err => console.error);
+      .catch(() => console.error);
     return;
   }
   for (let i = 0; i < fieldKeys.length; i++) {
@@ -591,26 +611,26 @@ export const formatApiRequestErrorForFormikFormField = (
     return {};
   } else {
     // check if there are any errors in _apiErrorsObj
-    if (_apiErrorsObj && Object.keys(_apiErrorsObj).length) {
-      const __error: ZGenericObject = {};
+    if (Object.keys(_apiErrorsObj).length > 0) {
+      const _error: ZGenericObject = {};
       for (let i = 0; i < _formFieldKeys.length; i++) {
-        const __formFiledKey = _formFieldKeys[i];
-        const __apiErrorFieldKey = _apiErrorObjectKeys[i];
-        const ___data = _apiErrorsObj[__apiErrorFieldKey] as unknown;
+        const _formFiledKey = _formFieldKeys[i];
+        const _apiErrorFieldKey = _apiErrorObjectKeys[i];
+        const _data = _apiErrorsObj[_apiErrorFieldKey] as unknown;
 
         if (
           Object.prototype.hasOwnProperty.call(
             _apiErrorsObj,
-            __apiErrorFieldKey
+            _apiErrorFieldKey
           ) &&
-          Array.isArray(___data) &&
-          ___data[0]
+          Array.isArray(_data) &&
+          Boolean(_data[0])
         ) {
-          __error[__formFiledKey] = ___data[0];
+          _error[_formFiledKey] = _data[0];
         }
       }
 
-      return __error;
+      return _error;
     }
 
     return {};
@@ -625,35 +645,35 @@ export const getApiUrl = (
   isExternalThirdPartyAPI = false
 ): string | undefined => {
   try {
-    let __url: string;
+    let _url: string;
     if (isExternalThirdPartyAPI) {
-      __url = API_URLS[url];
+      _url = API_URLS[url];
     } else {
       if (includeAPIDefault) {
-        __url = `${ZLinkApiRootUrl}${API_URLS[url]}`;
+        _url = `${ZLinkApiRootUrl}${API_URLS[url]}`;
       } else {
-        __url = `${ZLinkApiRootUrl.replace('/api/zlink/v1', '')}${
+        _url = `${ZLinkApiRootUrl.replace('/api/zlink/v1', '')}${
           API_URLS[url]
         }`;
       }
     }
 
     if (
-      itemIds &&
-      urlDynamicParts &&
+      itemIds !== undefined &&
+      urlDynamicParts !== undefined &&
       itemIds.length === urlDynamicParts.length
     ) {
       for (let i = 0; i < urlDynamicParts.length; i++) {
         const dynamicPart = urlDynamicParts[i];
-        if (__url.includes(dynamicPart)) {
+        if (_url.includes(dynamicPart)) {
           const itemId = itemIds[i];
-          __url = __url.replace(dynamicPart, itemId);
+          _url = _url.replace(dynamicPart, itemId);
         }
       }
     } else if (itemIds?.length !== urlDynamicParts?.length) {
       throw new Error('length does not match. invalid length');
     }
-    return __url;
+    return _url;
   } catch (error) {
     reportError(error);
   }
@@ -687,7 +707,7 @@ export const zAxiosApiRequest = async <T>({
   const _authToken = await getAuthToken();
 
   // authToken is fount or not authenticatedRequest request then
-  if (_authToken || !_isAuthenticatedRequest) {
+  if (_authToken !== undefined || !_isAuthenticatedRequest) {
     // Creating an axios config object.
     const reqInput: AxiosRequestConfig = {
       method: _method,
@@ -697,21 +717,21 @@ export const zAxiosApiRequest = async <T>({
         Accept: zAxiosApiRequestContentType.Json,
         'Content-Type': _contentType,
         Authorization: `${CONSTANTS.DEFAULT_VALUES.API_TOKEN_PRIMARY_KEY} ${
-          _authToken || ''
+          _authToken ?? ''
         }`
       }
     };
 
     // Making axios request.
-    const __res = await axiosInstance.request<AxiosRequestResponseType>(
+    const _res = await axiosInstance.request<AxiosRequestResponseType>(
       reqInput
     );
 
     // retuning data of type T
-    return __res.data as unknown as T;
+    return _res.data as unknown as T;
 
     // else if this is an authenticatedRequest and authToken is not fount then
-  } else if (_isAuthenticatedRequest && !_authToken) {
+  } else if (_isAuthenticatedRequest && _authToken === undefined) {
     // Remove data from storage.
     await Promise.all([
       STORAGE.REMOVE(LOCALSTORAGE_KEYS.USERDATA),
@@ -728,6 +748,7 @@ export const zAxiosApiRequest = async <T>({
 };
 
 // as we are returning a simple js object, so typescript will automatically define the return type for this function
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const getUserDataObjectForm = (_user: UserAccountType) => {
   return {
     id: _user?.id?.toString(),
@@ -747,6 +768,10 @@ export const getUserDataObjectForm = (_user: UserAccountType) => {
 };
 
 export const emptyVoidReturnFunction = (): void => {
+  zConsoleLog({ message: 'emptyVoidReturnFunction' });
+};
+
+export const emptyVoidReturnFunctionPromise = async (): Promise<void> => {
   zConsoleLog({ message: 'emptyVoidReturnFunction' });
 };
 
@@ -782,7 +807,7 @@ export const zConsoleLog = ({
   data = null,
   err = null
 }: ZConsolePropsType): void => {
-  return zConsole({ message, type: 'log', data, err });
+  zConsole({ message, type: 'log', data, err });
 };
 
 export const zConsoleInfo = ({
@@ -790,7 +815,7 @@ export const zConsoleInfo = ({
   data = null,
   err = null
 }: ZConsolePropsType): void => {
-  return zConsole({ message, type: 'info', data, err });
+  zConsole({ message, type: 'info', data, err });
 };
 
 export const zConsoleWarning = ({
@@ -798,7 +823,7 @@ export const zConsoleWarning = ({
   data = null,
   err = null
 }: ZConsolePropsType): void => {
-  return zConsole({ message, type: 'warning', data, err });
+  zConsole({ message, type: 'warning', data, err });
 };
 
 export const zConsoleSuccess = ({
@@ -808,7 +833,7 @@ export const zConsoleSuccess = ({
   data: unknown;
   message?: string;
 }): void => {
-  return zConsoleLog({ message, data });
+  zConsoleLog({ message, data });
 };
 
 export const zConsoleError = ({
@@ -818,7 +843,7 @@ export const zConsoleError = ({
   err: unknown;
   message?: string;
 }): void => {
-  return zConsole({ message, type: 'error', err });
+  zConsole({ message, type: 'error', err });
 };
 
 export const zConsoleCount = ({
@@ -826,7 +851,7 @@ export const zConsoleCount = ({
 }: {
   message?: string;
 }): void => {
-  return zConsole({ message, type: 'count' });
+  zConsole({ message, type: 'count' });
 };
 
 export const zStringify = (_data: unknown): string => {
@@ -854,7 +879,7 @@ export const formatReactSelectOption = (
   _idKeyName: string,
   _labelKeyName: string
 ): ZaionsRSelectOptions | undefined => {
-  const __item = _itemsDataArr?.find(_el => {
+  const _item = _itemsDataArr?.find(_el => {
     return (
       Object.prototype.hasOwnProperty.call(_el, _idKeyName) &&
       _el[_idKeyName] === _itemId
@@ -862,13 +887,13 @@ export const formatReactSelectOption = (
   });
 
   if (
-    __item &&
-    Object.prototype.hasOwnProperty.call(__item, _idKeyName) &&
-    Object.prototype.hasOwnProperty.call(__item, _labelKeyName)
+    _item !== undefined &&
+    Object.prototype.hasOwnProperty.call(_item, _idKeyName) &&
+    Object.prototype.hasOwnProperty.call(_item, _labelKeyName)
   ) {
     return {
-      value: __item[_idKeyName] as string,
-      label: __item[_labelKeyName]
+      value: _item[_idKeyName] as string,
+      label: _item[_labelKeyName]
     };
   } else {
     return undefined;
@@ -881,22 +906,22 @@ export const formatReactSelectOptionsArray = (
   _idKeyName: string,
   _labelKeyName: string
 ): ZaionsRSelectOptions[] | undefined => {
-  const __formattedOptionsArr: ZaionsRSelectOptions[] = [];
+  const _formattedOptionsArr: ZaionsRSelectOptions[] = [];
   for (let i = 0; i < _itemIdArr.length; i++) {
-    const __itemId = _itemIdArr[i];
+    const _itemId = _itemIdArr[i];
     const _result = formatReactSelectOption(
-      __itemId,
+      _itemId,
       _itemsDataArr,
       _idKeyName,
       _labelKeyName
     );
 
-    if (_result) {
-      __formattedOptionsArr.push(_result);
+    if (_result !== undefined) {
+      _formattedOptionsArr.push(_result);
     }
   }
 
-  return __formattedOptionsArr;
+  return _formattedOptionsArr;
 };
 export const getPrimaryDomain = (url: string): string => {
   let hostname = url.replace(/^(https?:\/\/)?(www\.)?/i, '');
@@ -956,28 +981,26 @@ export const generatePredefinedThemeBackgroundValue = (
 ): ZGenericObject => {
   try {
     const value: ZGenericObject = {};
-    if (_backgroundData) {
+    if (_backgroundData !== undefined) {
       if (_backgroundData.bgType === LinkInBioThemeBackgroundEnum.gradient) {
-        const __gradientValue =
-          _backgroundData.bgGradientColors &&
+        const _gradientValue =
+          _backgroundData.bgGradientColors !== undefined &&
           `linear-gradient(${_backgroundData.bgGradientColors.direction}deg, ${_backgroundData.bgGradientColors.startColor}, ${_backgroundData.bgGradientColors.endColor})`;
 
-        value['--background'] = __gradientValue as string;
-        value['background'] = __gradientValue as string;
+        value['--background'] = _gradientValue as string;
+        value.background = _gradientValue as string;
       } else if (
         _backgroundData.bgType === LinkInBioThemeBackgroundEnum.solidColor
       ) {
-        const __solidColorValue = _backgroundData.bgSolidColor as string;
-        value['--background'] = __solidColorValue;
-        value['background'] = __solidColorValue;
+        const _solidColorValue = _backgroundData.bgSolidColor as string;
+        value['--background'] = _solidColorValue;
+        value.background = _solidColorValue;
       } else if (
         _backgroundData.bgType === LinkInBioThemeBackgroundEnum.image
       ) {
         value['--background'] = `url(${_backgroundData.bgImageUrl as string})`;
-        value['background'] = `url(${_backgroundData.bgImageUrl as string})`;
-        value['backgroundImage'] = `url(${
-          _backgroundData.bgImageUrl as string
-        })`;
+        value.background = `url(${_backgroundData.bgImageUrl as string})`;
+        value.backgroundImage = `url(${_backgroundData.bgImageUrl as string})`;
       }
       // value.backgroundSize = CSS_BACKGROUND_OPTION.cover;
 
@@ -1003,7 +1026,7 @@ export const extractInnerData = <T>(
 ): T | undefined => {
   try {
     // checking _object and _type is passed.
-    if (_object && _type) {
+    if (_object !== undefined && _type !== undefined) {
       // extract accounting to the type
       switch (_type) {
         case extractInnerDataOptionsEnum.createRequestResponseItem:
@@ -1042,9 +1065,10 @@ export const extractInnerData = <T>(
  * ZSanitizeHTML gonna made for the text area (react-quill) for sanitize the html data but react-quill is doing it by it self we tested it and it is working well. if we need to add a package for sanitizing we will add it to this function and use this function in all the place need.
  * @param param0 value of type T
  */
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const ZSanitizeHTML = <T>({ value }: { value: T }) => {
   try {
-    if (value) {
+    if (value !== undefined) {
       zConsoleLog({ data: { value } });
     }
   } catch (error) {
@@ -1061,7 +1085,7 @@ export const getRemainingTimeForCountDown = (
   countDownTimeFinishDate: string | undefined
 ): number => {
   try {
-    if (countDownTimeFinishDate) {
+    if (countDownTimeFinishDate !== null) {
       const endDate = dayjs(countDownTimeFinishDate);
       if (endDate.isValid()) {
         const remainingTimeInMilliSeconds = endDate.diff(
@@ -1090,7 +1114,7 @@ export const convertTimeToSpecificUnit = ({
   weeks = 0,
   years = 0,
   formatAs = 'minute'
-}) => {
+}): number | undefined => {
   const result = dayjs.duration({
     days,
     hours,
@@ -1139,59 +1163,62 @@ export const convertTimeToSpecificUnit = ({
 //   }
 // };
 
-const formattedAnalyticsBlocksData = (
-  _data: ZGenericObject[],
-  columnNames: string[]
-): LinkInBioPageAnalyticsDataInterface[] | undefined => {
+// const formattedAnalyticsBlocksData = (
+//   _data: ZGenericObject[],
+//   columnNames: string[]
+// ): LinkInBioPageAnalyticsDataInterface[] | undefined => {
+//   try {
+//     if (columnNames.length >= 1 && columnNames.length <= 4) {
+//       // Checking if data is passed or not
+//       if (_data) {
+//         const _result: LinkInBioPageAnalyticsDataInterface[] = [];
+//         const _arr = ['value', 'visit', 'unique', 'visitPercentage'];
+
+//         // Looping the _data
+//         for (let i = 0; i < _data.length; i++) {
+//           // Getting the value
+//           const _item = _data[i];
+
+//           columnNames.forEach((element, _i) => {
+//             const replaceBy = _arr[_i];
+
+//             // assign the value key to the `columnName`
+//             _item[replaceBy] = _item[element];
+
+//             // deleting the `columnName` key
+//             delete _item[element];
+//           });
+
+//           // pushing the item in _result array
+//           _result.push(_item);
+//         }
+
+//         return _result;
+//       }
+//     } else {
+//       Dialog.alert({
+//         title: 'formattedAnalyticsBlocksData, Invalid parameters',
+//         message:
+//           'formattedAnalyticsBlocksData: length of columnNames parament mush be in between 1 to 4!'
+//       })
+//         .then()
+//         .catch(_ => console.error);
+
+//       throw new ZCustomError({
+//         message: 'Invalid parameters passed to extractInnerData'
+//       });
+//     }
+//   } catch (error) {
+//     reportCustomError(error);
+//   }
+// };
+
+export const doesUrlIncludes = (
+  _url: string,
+  _searchString: string
+): boolean | undefined => {
   try {
-    if (columnNames.length >= 1 && columnNames.length <= 4) {
-      // Checking if data is passed or not
-      if (_data) {
-        const _result: LinkInBioPageAnalyticsDataInterface[] = [];
-        const _arr = ['value', 'visit', 'unique', 'visitPercentage'];
-
-        // Looping the _data
-        for (let i = 0; i < _data.length; i++) {
-          // Getting the value
-          const _item = _data[i];
-
-          columnNames.forEach((element, _i) => {
-            const replaceBy = _arr[_i];
-
-            // assign the value key to the `columnName`
-            _item[replaceBy] = _item[element];
-
-            // deleting the `columnName` key
-            delete _item[element];
-          });
-
-          // pushing the item in _result array
-          _result.push(_item);
-        }
-
-        return _result;
-      }
-    } else {
-      Dialog.alert({
-        title: 'formattedAnalyticsBlocksData, Invalid parameters',
-        message:
-          'formattedAnalyticsBlocksData: length of columnNames parament mush be in between 1 to 4!'
-      })
-        .then()
-        .catch(_ => console.error);
-
-      throw new ZCustomError({
-        message: 'Invalid parameters passed to extractInnerData'
-      });
-    }
-  } catch (error) {
-    reportCustomError(error);
-  }
-};
-
-export const doesUrlIncludes = (_url: string, _searchString: string) => {
-  try {
-    if (_url && _searchString) {
+    if (_url !== undefined && _searchString !== undefined) {
       return _url.includes(_searchString);
     } else {
       throw new Error(
@@ -1208,9 +1235,11 @@ export const doesUrlIncludes = (_url: string, _searchString: string) => {
  * @param type typeof workspaceFormConnectPagesEnum
  * @returns accounting to type it will return icon.
  */
-export const getPlatformIcon = (type: workspaceFormConnectPagesEnum) => {
+export const getPlatformIcon = (
+  type: workspaceFormConnectPagesEnum
+): string | undefined => {
   try {
-    if (type) {
+    if (type !== undefined) {
       let icon;
       switch (type) {
         case workspaceFormConnectPagesEnum.facebook:
@@ -1265,15 +1294,15 @@ export const getPlatformIcon = (type: workspaceFormConnectPagesEnum) => {
  * Clears user and authentication tokens from local storage upon successful logout.
  * Redirects the user to the home page after logout.
  */
-export const UserLogoutFn = async () => {
+export const UserLogoutFn = async (): Promise<void> => {
   try {
-    const __response = await zAxiosApiRequest<{ isSuccess: boolean }>({
+    const _response = await zAxiosApiRequest<{ isSuccess: boolean }>({
       _url: API_URL_ENUM.logout,
       _method: 'post',
       _isAuthenticatedRequest: false
     });
 
-    if (__response?.isSuccess) {
+    if (_response !== undefined && _response?.isSuccess) {
       // clear User token.
       void STORAGE.CLEAR(LOCALSTORAGE_KEYS.USERDATA);
       // clear auth token.
@@ -1289,10 +1318,10 @@ export const UserLogoutFn = async () => {
   }
 };
 
-export const areAllObjectsFilled = (array: Array<object>): boolean => {
+export const areAllObjectsFilled = (array: object[]): boolean => {
   let isValid = true;
   for (let i = 0; i < array.length; i++) {
-    if (Object.keys(array[i]).length) {
+    if (Object.keys(array[i]).length > 0) {
       isValid = false;
     }
   }
@@ -1304,10 +1333,10 @@ export const areAllObjectsFilled = (array: Array<object>): boolean => {
  * @param _url
  * @returns parts of url.
  */
-export const zExtractUrlParts = (_url: string) => {
-  const __zExtractedUrl = new URL(_url);
+export const zExtractUrlParts = (_url: string): URL => {
+  const _zExtractedUrl = new URL(_url);
 
-  return __zExtractedUrl;
+  return _zExtractedUrl;
 };
 
 /**
@@ -1331,18 +1360,18 @@ export const zAddUrlProtocol = (url: string): string => {
 export const zGenerateRandomString = (
   _length: number | undefined = CONSTANTS.SHORT_LINK.urlPathLength
 ): string => {
-  const __characters =
+  const _characters =
     'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
-  const __charactersLength = __characters.length;
+  const _charactersLength = _characters.length;
 
-  const __randomStringCharts = new Array(_length);
+  const _randomStringCharts = new Array(_length);
 
   for (let _i = 0; _i < _length; _i++) {
-    const _randomIndex = Math.floor(Math.random() * __charactersLength);
-    __randomStringCharts[_i] = __characters.charAt(_randomIndex);
+    const _randomIndex = Math.floor(Math.random() * _charactersLength);
+    _randomStringCharts[_i] = _characters.charAt(_randomIndex);
   }
 
-  return __randomStringCharts.join('');
+  return _randomStringCharts.join('');
 };
 
 /**
@@ -1362,7 +1391,7 @@ export const zGenerateShortLink = ({
   urlPath?: string;
 }): string | undefined => {
   try {
-    if (domain && urlPath) {
+    if (domain !== undefined && urlPath !== undefined) {
       return `${domain}/${CONSTANTS.SHORT_LINK.urlStaticPath}/${urlPath}`;
     } else {
       throw new ZCustomError({
@@ -1385,25 +1414,25 @@ export const zCreateElementTestingSelector = ({
 }: {
   _value: string;
   _key?: zCreateElementTestingSelectorKeyEnum;
-}): { [key: string]: string } => {
-  const __prefix = CONSTANTS.testingSelectorsPrefix;
+}): Record<string, string> => {
+  const _prefix = CONSTANTS.testingSelectorsPrefix;
 
-  const __attributeValue = `${__prefix}${_value}`;
+  const _attributeValue = `${_prefix}${_value}`;
 
   switch (_key) {
     case zCreateElementTestingSelectorKeyEnum.selector:
       return {
-        'cy-es': __attributeValue
+        'cy-es': _attributeValue
       };
 
     case zCreateElementTestingSelectorKeyEnum.listSelector:
       return {
-        'cy-els': __attributeValue
+        'cy-els': _attributeValue
       };
 
     default:
       return {
-        'cy-es': __attributeValue
+        'cy-es': _attributeValue
       };
   }
 };
@@ -1477,11 +1506,11 @@ export const ZGetCurrentRoute = ({
 
       if (typeof _routesObj[key] === 'object') {
         const _nestedRouteCheck = ZGetCurrentRoute({
-          _currentUrl: _currentUrl,
+          _currentUrl,
           _routesObj: _routesObj[key] as ZRoutesObject
         });
 
-        if (_nestedRouteCheck) {
+        if (_nestedRouteCheck !== undefined) {
           return _nestedRouteCheck;
         }
       }
@@ -1503,31 +1532,31 @@ export const zGetRoutePermissions = ({
   _currentRoute: string;
 }): permissionsEnum[] | undefined => {
   try {
-    let __permissions: permissionsEnum[] = [];
+    let _permissions: permissionsEnum[] = [];
     switch (_currentRoute) {
       case ZaionsRoutes.AdminPanel.Workspaces.Main:
-        __permissions = [
+        _permissions = [
           permissionsEnum.viewAny_workspace,
           permissionsEnum.viewAny_shareWS
         ];
         break;
 
       case ZaionsRoutes.AdminPanel.Workspaces.App:
-        __permissions = [
+        _permissions = [
           permissionsEnum.viewAny_workspace,
           permissionsEnum.viewAny_shareWS
         ];
         break;
 
       case ZaionsRoutes.AdminPanel.ShortLinks.Main:
-        __permissions = [
+        _permissions = [
           permissionsEnum.viewAny_workspace,
           permissionsEnum.viewAny_shortLink
         ];
         break;
 
       case ZaionsRoutes.AdminPanel.ShortLinks.Create:
-        __permissions = [
+        _permissions = [
           permissionsEnum.view_workspace,
           permissionsEnum.viewAny_pixel,
           permissionsEnum.viewAny_utmTag,
@@ -1536,7 +1565,7 @@ export const zGetRoutePermissions = ({
         break;
 
       case ZaionsRoutes.AdminPanel.ShortLinks.Edit:
-        __permissions = [
+        _permissions = [
           permissionsEnum.viewAny_workspace,
           permissionsEnum.update_shortLink,
           permissionsEnum.viewAny_pixel,
@@ -1546,103 +1575,131 @@ export const zGetRoutePermissions = ({
         break;
 
       case ZaionsRoutes.AdminPanel.LinkInBio.Main:
-        __permissions = [
+        _permissions = [
           permissionsEnum.viewAny_workspace,
           permissionsEnum.viewAny_linkInBio
         ];
         break;
 
       case ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members:
-        __permissions = [
+        _permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_workspaceTeam
+        ];
+        break;
+
+      case ZaionsRoutes.AdminPanel.Setting.AccountSettings.ReferralProgram:
+        _permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_workspaceTeam
+        ];
+        break;
+
+      case ZaionsRoutes.AdminPanel.Setting.AccountSettings.Billing:
+        _permissions = [
           permissionsEnum.viewAny_workspace,
           permissionsEnum.viewAny_workspaceTeam
         ];
         break;
 
       case ZaionsRoutes.AdminPanel.Setting.AccountSettings.Pixel:
-        __permissions = [permissionsEnum.viewAny_pixel];
+        _permissions = [permissionsEnum.viewAny_pixel];
         break;
 
       case ZaionsRoutes.AdminPanel.Setting.AccountSettings.UTMTag:
-        __permissions = [permissionsEnum.viewAny_utmTag];
+        _permissions = [permissionsEnum.viewAny_utmTag];
         break;
 
       case ZaionsRoutes.AdminPanel.Setting.UserAccount.NotificationSettings:
-        __permissions = [permissionsEnum.viewAny_workspace];
+        _permissions = [permissionsEnum.viewAny_workspace];
         break;
 
       case ZaionsRoutes.AdminPanel.Setting.UserAccount.ProfileSettings:
-        __permissions = [permissionsEnum.viewAny_emails];
+        _permissions = [permissionsEnum.viewAny_emails];
         break;
 
       case ZaionsRoutes.AdminPanel.Setting.UserAccount.WorkspaceNotifications:
-        __permissions = [
+        _permissions = [
           permissionsEnum.viewAny_workspace,
           permissionsEnum.view_workspace
         ];
         break;
 
       case ZaionsRoutes.AdminPanel.Setting.AccountSettings.ViewTeam:
-        __permissions = [
+        _permissions = [
           permissionsEnum.viewAny_workspace,
           permissionsEnum.view_workspaceTeam
         ];
         break;
 
       case ZaionsRoutes.AdminPanel.ShareWS.Startup:
-        __permissions = [permissionsEnum.view_shareWS];
+        _permissions = [permissionsEnum.view_shareWS];
         break;
 
       case ZaionsRoutes.AdminPanel.ShareWS.View:
-        __permissions = [permissionsEnum.view_shareWS];
+        _permissions = [permissionsEnum.view_shareWS];
         break;
 
       case ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main:
-        __permissions = [permissionsEnum.view_shareWS];
+        _permissions = [permissionsEnum.view_shareWS];
         break;
 
       case ZaionsRoutes.AdminPanel.ShareWS.Short_link.Create:
-        __permissions = [permissionsEnum.create_shareWS];
+        _permissions = [permissionsEnum.create_shareWS];
         break;
 
       case ZaionsRoutes.AdminPanel.ShareWS.Short_link.Edit:
-        __permissions = [permissionsEnum.update_shareWS];
+        _permissions = [permissionsEnum.update_shareWS];
         break;
 
       case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Main:
-        __permissions = [permissionsEnum.update_shareWS];
+        _permissions = [permissionsEnum.update_shareWS];
         break;
 
       case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Members:
-        __permissions = [
+        _permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_workspaceTeam
+        ];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.ReferralProgram:
+        _permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_workspaceTeam
+        ];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Billing:
+        _permissions = [
           permissionsEnum.viewAny_workspace,
           permissionsEnum.viewAny_workspaceTeam
         ];
         break;
 
       case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Pixel:
-        __permissions = [
+        _permissions = [
           permissionsEnum.viewAny_workspace,
           permissionsEnum.viewAny_ws_member
         ];
         break;
 
       case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.UTMTag:
-        __permissions = [
+        _permissions = [
           permissionsEnum.viewAny_workspace,
           permissionsEnum.viewAny_ws_member
         ];
         break;
 
       case ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.EmbedWidget:
-        __permissions = [
+        _permissions = [
           permissionsEnum.viewAny_workspace,
           permissionsEnum.viewAny_ws_member
         ];
         break;
     }
 
-    return __permissions;
+    return _permissions;
   } catch (error) {
     reportCustomError(error);
     return [];
@@ -1663,26 +1720,38 @@ export const zRedirectToTarget = ({
 }: {
   _target: LinkTargetType;
   type: messengerPlatformsBlockEnum;
-}) => {
+}): string | undefined => {
   try {
-    if (_target) {
-      let __redirectUrl = '';
+    if (_target !== undefined) {
+      let _redirectUrl = '';
       switch (type) {
         case messengerPlatformsBlockEnum.link:
-          if (_target?.url && _target?.url?.trim().length > 0) {
-            __redirectUrl = _target?.url;
+          if (
+            _target?.url !== null &&
+            _target?.url !== undefined &&
+            _target?.url?.trim().length > 0
+          ) {
+            _redirectUrl = _target?.url;
           }
           break;
 
         case messengerPlatformsBlockEnum.email:
-          if (_target?.email && _target?.email?.trim().length > 0) {
-            __redirectUrl = `mailto:${_target?.email}subject=${_target?.subject}&body=${_target?.message}`;
+          if (
+            _target?.email !== null &&
+            _target?.email !== undefined &&
+            _target?.email?.trim().length > 0
+          ) {
+            _redirectUrl = `mailto:${_target?.email}subject=${_target?.subject}&body=${_target?.message}`;
           }
           break;
 
         case messengerPlatformsBlockEnum.messenger:
-          if (_target?.url && _target?.url?.trim().length > 0) {
-            __redirectUrl = _target?.url;
+          if (
+            _target?.url !== null &&
+            _target?.url !== undefined &&
+            _target?.url?.trim().length > 0
+          ) {
+            _redirectUrl = _target?.url;
           }
           break;
 
@@ -1691,43 +1760,67 @@ export const zRedirectToTarget = ({
             _target?.accountId != null &&
             _target?.accountId?.trim().length > 0
           ) {
-            __redirectUrl = `https://line.me/R/oaMessage/${_target?.accountId}`;
+            _redirectUrl = `https://line.me/R/oaMessage/${_target?.accountId}`;
           }
           break;
 
         case messengerPlatformsBlockEnum.whatsapp:
-          if (_target?.phoneNumber && _target?.phoneNumber?.trim().length > 0) {
-            __redirectUrl = `https://wa.me/+92${_target?.phoneNumber}`;
+          if (
+            _target?.phoneNumber !== undefined &&
+            _target?.phoneNumber !== null &&
+            _target?.phoneNumber?.trim().length > 0
+          ) {
+            _redirectUrl = `https://wa.me/+92${_target?.phoneNumber}`;
           }
           break;
 
         case messengerPlatformsBlockEnum.call:
-          if (_target?.phoneNumber && _target?.phoneNumber?.trim().length > 0) {
-            __redirectUrl = `tel:${_target?.phoneNumber}`;
+          if (
+            _target?.phoneNumber !== undefined &&
+            _target?.phoneNumber !== null &&
+            _target?.phoneNumber?.trim().length > 0
+          ) {
+            _redirectUrl = `tel:${_target?.phoneNumber}`;
           }
           break;
 
         case messengerPlatformsBlockEnum.sms:
-          if (_target?.phoneNumber && _target?.phoneNumber?.trim().length > 0) {
-            __redirectUrl = `sms:+${_target?.phoneNumber}&body=${_target?.message}`;
+          if (
+            _target?.phoneNumber !== undefined &&
+            _target?.phoneNumber !== null &&
+            _target?.phoneNumber?.trim().length > 0
+          ) {
+            _redirectUrl = `sms:+${_target?.phoneNumber}&body=${_target?.message}`;
           }
           break;
 
         case messengerPlatformsBlockEnum.telegram:
-          if (_target?.username && _target?.username?.trim().length > 0) {
-            __redirectUrl = `https://t.me/${_target?.username}`;
+          if (
+            _target?.username !== undefined &&
+            _target?.username !== null &&
+            _target?.username?.trim().length > 0
+          ) {
+            _redirectUrl = `https://t.me/${_target?.username}`;
           }
           break;
 
         case messengerPlatformsBlockEnum.skype:
-          if (_target?.username && _target?.username?.trim().length > 0) {
-            __redirectUrl = `skype:${_target?.username}?chat`;
+          if (
+            _target?.username !== undefined &&
+            _target?.username !== null &&
+            _target?.username?.trim().length > 0
+          ) {
+            _redirectUrl = `skype:${_target?.username}?chat`;
           }
           break;
 
         case messengerPlatformsBlockEnum.viber:
-          if (_target?.username && _target?.username?.trim().length > 0) {
-            __redirectUrl = `viber://pa?chatURI=${_target?.username}&text=${_target?.message}`;
+          if (
+            _target?.username !== undefined &&
+            _target?.username !== null &&
+            _target?.username?.trim().length > 0
+          ) {
+            _redirectUrl = `viber://pa?chatURI=${_target?.username}&text=${_target?.message}`;
           }
           break;
 
@@ -1735,19 +1828,19 @@ export const zRedirectToTarget = ({
           break;
       }
 
-      return __redirectUrl;
+      return _redirectUrl;
     }
   } catch (error) {
     reportCustomError(error);
   }
 };
 
-export const zGotoNextField = (uniqueId?: string) => {
-  if (uniqueId) {
+export const zGotoNextField = (uniqueId?: string): void => {
+  if (uniqueId !== undefined) {
     const _nextField = document.getElementById(uniqueId) as HTMLIonInputElement;
 
-    if (_nextField && _nextField instanceof HTMLIonInputElement) {
-      _nextField?.setFocus();
+    if (_nextField !== undefined && _nextField instanceof HTMLIonInputElement) {
+      void _nextField?.setFocus();
     }
   }
 };
@@ -1756,11 +1849,14 @@ export const zCalculateRotatorABTesting = ({
   _data
 }: {
   _data: ABTestingRotatorInterface[];
-}) => {
+}): {
+  _totalPercentage: number;
+  _remainingPercentage: number;
+} => {
   try {
     const _totalPercentage = CONSTANTS.DEFAULT_VALUES.Z_PERCENTAGE;
     const _dataPercentage = _data.reduce(
-      (sum, obj) => sum + obj.percentage!,
+      (sum, obj) => sum + (obj.percentage ?? 0),
       0
     );
     const _remainingPercentage = _totalPercentage - _dataPercentage;
@@ -1772,19 +1868,21 @@ export const zCalculateRotatorABTesting = ({
   }
 };
 
-export const zGetRandomLink = (_array: ABTestingRotatorInterface[]) => {
+export const zGetRandomLink = (
+  _array: ABTestingRotatorInterface[]
+): string | null | undefined => {
   try {
     // Generate a random number between 0 to 99
-    const __randomNumber = Math.floor(Math.random() * 100);
+    const _randomNumber = Math.floor(Math.random() * 100);
 
-    let __accumulatingPercentage = 0;
+    let _accumulatingPercentage = 0;
 
     // determine which link the random number fall under based on the percentage.
-    for (const __item of _array) {
-      __accumulatingPercentage += __item?.percentage!;
+    for (const _item of _array) {
+      _accumulatingPercentage += _item?.percentage ?? 0;
 
-      if (__randomNumber < __accumulatingPercentage) {
-        return __item?.redirectionLink;
+      if (_randomNumber < _accumulatingPercentage) {
+        return _item?.redirectionLink;
       }
     }
 
@@ -1792,4 +1890,53 @@ export const zGetRandomLink = (_array: ABTestingRotatorInterface[]) => {
   } catch (error) {
     reportCustomError(error);
   }
+};
+
+export const zIsPlatforms = (): {
+  isAndroidPlatform: boolean;
+  isCapacitor: boolean;
+  isCordova: boolean;
+  isDesktop: boolean;
+  isElectron: boolean;
+  isHybrid: boolean;
+  isIOS: boolean;
+  isIPad: boolean;
+  isIPhone: boolean;
+  isMobile: boolean;
+  isMobileWeb: boolean;
+  isPhablet: boolean;
+  isPWA: boolean;
+  isTablet: boolean;
+} => {
+  const isAndroidPlatform = isPlatform('android');
+  const isCapacitor = isPlatform('capacitor');
+  const isCordova = isPlatform('cordova');
+  const isDesktop = isPlatform('desktop');
+  const isElectron = isPlatform('electron');
+  const isHybrid = isPlatform('hybrid');
+  const isIOS = isPlatform('ios');
+  const isIPad = isPlatform('ipad');
+  const isIPhone = isPlatform('iphone');
+  const isMobile = isPlatform('mobile');
+  const isMobileWeb = isPlatform('mobileweb');
+  const isPhablet = isPlatform('phablet');
+  const isPWA = isPlatform('pwa');
+  const isTablet = isPlatform('tablet');
+
+  return {
+    isAndroidPlatform,
+    isCapacitor,
+    isCordova,
+    isDesktop,
+    isElectron,
+    isHybrid,
+    isIOS,
+    isIPad,
+    isIPhone,
+    isMobile,
+    isMobileWeb,
+    isPhablet,
+    isPWA,
+    isTablet
+  };
 };

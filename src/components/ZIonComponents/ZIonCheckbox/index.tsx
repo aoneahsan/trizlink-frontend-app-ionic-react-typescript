@@ -1,21 +1,20 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
-import { CheckboxChangeEventDetail, IonCheckbox } from '@ionic/react';
+import { type CheckboxChangeEventDetail, IonCheckbox } from '@ionic/react';
 
 // Type
 import {
-  ZIonColorType,
-  ZIonModeType,
-  ZIonSlotType
+  type ZIonColorType,
+  type ZIonModeType,
+  type ZIonSlotType
 } from '@/types/zaionsAppSettings.type';
-import { IonCheckboxCustomEvent } from '@ionic/core/dist/types/components';
+import { type IonCheckboxCustomEvent } from '@ionic/core/dist/types/components';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
-type ZIonCheckboxType = {
+interface ZIonCheckboxType {
   className?: string;
   checked?: boolean;
   color?: ZIonColorType;
@@ -37,30 +36,32 @@ type ZIonCheckboxType = {
   //
   testingselector?: string;
   testinglistselector?: string;
-};
+}
 
-const ZIonCheckbox = (props: ZIonCheckboxType) => {
-  const _testinglistselector = props.testinglistselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testinglistselector || PRODUCT_NAME,
-          _key: zCreateElementTestingSelectorKeyEnum.listSelector
-        })
-      }
-    : {};
+const ZIonCheckbox: React.FC<ZIonCheckboxType> = (props: ZIonCheckboxType) => {
+  const _testinglistselector =
+    props.testinglistselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testinglistselector,
+            _key: zCreateElementTestingSelectorKeyEnum.listSelector
+          })
+        }
+      : {};
 
-  const _testingSelector = props.testingselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testingselector || PRODUCT_NAME
-        })
-      }
-    : {};
+  const _testingSelector =
+    props.testingselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testingselector
+          })
+        }
+      : {};
 
   return (
     <IonCheckbox
       {...props}
-      aria-label={`zaions-checkbox-label-${props.name || ''}`}
+      aria-label={`zaions-checkbox-label-${props.name ?? ''}`}
       {..._testingSelector}
       {..._testinglistselector}>
       {props.children}

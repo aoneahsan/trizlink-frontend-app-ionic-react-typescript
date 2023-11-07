@@ -2,13 +2,17 @@
 import React from 'react';
 
 // Packages Imports
-import { ActionMeta, MultiValue, PropsValue } from 'react-select';
+import {
+  type ActionMeta,
+  type MultiValue,
+  type PropsValue
+} from 'react-select';
 
 // Custom Imports
 import ZTimezoneInput from '@/components/CustomComponents/ZTimezone';
 
 // Type
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 // Styles
 

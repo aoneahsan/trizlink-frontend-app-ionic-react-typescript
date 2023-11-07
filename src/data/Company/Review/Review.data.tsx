@@ -1,5 +1,5 @@
 // Type
-import { ZaionsReviewType } from '@/types/Company/ReviewsPage/Review.type';
+import { type ZaionsReviewType } from '@/types/Company/ReviewsPage/Review.type';
 
 // Images
 import { MustafaA, DrReneeM, PaulaC, starsQuoteWidget } from '@/assets/images';
@@ -15,7 +15,7 @@ export const ZaionsReviewData: ZaionsReviewType[] = [
     reviewStars: starsQuoteWidget,
     date: '10/09/2022',
     userMessage: `I like the way ${PRODUCT_NAME} shortens the link which is very useful when you have to post that link on Social Media platform. I would suggest people use this tool. Very helpful.`,
-    fullReviewLink: '/',
+    fullReviewLink: '/'
   },
   {
     id: '2',
@@ -27,7 +27,7 @@ export const ZaionsReviewData: ZaionsReviewType[] = [
     reviewStars: starsQuoteWidget,
     date: '05/03/2022',
     userMessage: `I love that custom url! Most people don't realize I am using ${PRODUCT_NAME} because of my custom url`,
-    fullReviewLink: '/',
+    fullReviewLink: '/'
   },
   {
     id: '3',
@@ -36,7 +36,7 @@ export const ZaionsReviewData: ZaionsReviewType[] = [
     reviewStars: starsQuoteWidget,
     date: '10/12/2022',
     userMessage: `When our team needs to post on our social media channels, ${PRODUCT_NAME} is so essential! Sometimes, we need to include links in our posts. However, social media channels don't allow us to hyperlink links, so with ${PRODUCT_NAME}, we are able to shorten URLs and include them within our posts`,
-    fullReviewLink: '/',
+    fullReviewLink: '/'
   },
   {
     id: '4',
@@ -47,6 +47,6 @@ export const ZaionsReviewData: ZaionsReviewType[] = [
     reviewStars: starsQuoteWidget,
     date: '05/27/2022',
     userMessage: `We upload our long URLs and create shortened custom ${PRODUCT_NAME} links. We also generate QR codes. it works well. It's straightforward and flexible. I haven't had to try other tools - this meets our needs!`,
-    fullReviewLink: '/',
-  },
+    fullReviewLink: '/'
+  }
 ];

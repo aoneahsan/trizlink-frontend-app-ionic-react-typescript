@@ -7,13 +7,8 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import classNames from 'classnames';
-import {
-  appsOutline,
-  ellipsisVertical,
-  fileTrayOutline,
-  share
-} from 'ionicons/icons';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { appsOutline, ellipsisVertical, fileTrayOutline } from 'ionicons/icons';
+import { useSetRecoilState } from 'recoil';
 import { useParams } from 'react-router';
 
 /**
@@ -32,7 +27,6 @@ import {
   ZIonSkeletonText,
   ZIonText
 } from '@/components/ZIonComponents';
-import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 import ZCan from '@/components/Can';
 
@@ -47,7 +41,7 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * ? Like import of Constant is a global constants import
  * */
 import CONSTANTS from '@/utils/constants';
-import { createRedirectRoute, replaceParams } from '@/utils/helpers';
+import { createRedirectRoute } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import {
   permissionCheckModeEnum,
@@ -63,7 +57,7 @@ import {
 import {
   AdminPanelSidebarMenuPageEnum,
   FormMode,
-  ZDashboardFolderMenuInterface
+  type ZDashboardFolderMenuInterface
 } from '@/types/AdminPanel/index.type';
 
 /**
@@ -102,28 +96,26 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 
   // getting current workspace id form params.
   const { workspaceId, wsShareId, shareWSMemberId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
-
-  const ZDashboardState = useRecoilValue(ZDashboardRState);
 
   //
   const setFolderFormState = useSetRecoilState(FolderFormState);
 
   // Request for getting short links folders.
   // const { data: shortLinksFoldersData } = useZRQGetRequest<LinkFolderType[]>({
-  // 	_url: API_URL_ENUM.folders_create_list,
-  // 	// _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
-  // 	_key: ['make'],
+  // _url: API_URL_ENUM.folders_create_list,
+  // _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN],
+  // _key: ['make'],
   // });
 
   return (
     <ZIonCol
       className='border-e-[1px] zaions-transition h-full'
       // size={
-      // 	ZDashboardState.dashboardMainSidebarIsCollabes.isExpand ? '2' : '2.4'
+      // ZDashboardState.dashboardMainSidebarIsCollabes.isExpand ? '2' : '2.4'
       // }
     >
       <ZCustomScrollable
@@ -148,21 +140,27 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
           <ZCan
             shareWSId={wsShareId}
             permissionType={
-              wsShareId
+              wsShareId != null
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }
             havePermissions={
-              wsShareId
+              wsShareId !== null &&
+              wsShareId !== undefined &&
+              wsShareId?.trim()?.length > 0
                 ? type === AdminPanelSidebarMenuPageEnum.shortLink
                   ? [shareWSPermissionEnum.viewAny_sws_sl_folder]
                   : type === AdminPanelSidebarMenuPageEnum.linkInBio
                   ? [shareWSPermissionEnum.viewAny_sws_lib_folder]
                   : []
-                : type === AdminPanelSidebarMenuPageEnum.shortLink
-                ? [permissionsEnum.viewAny_sl_folder]
-                : type === AdminPanelSidebarMenuPageEnum.linkInBio
-                ? [permissionsEnum.viewAny_lib_folder]
+                : workspaceId !== null &&
+                  workspaceId !== undefined &&
+                  workspaceId?.trim()?.length > 0
+                ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                  ? [permissionsEnum.viewAny_sl_folder]
+                  : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                  ? [permissionsEnum.viewAny_lib_folder]
+                  : []
                 : []
             }>
             <ZIonItem
@@ -173,7 +171,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                 switch (type) {
                   case AdminPanelSidebarMenuPageEnum.shortLink:
                     // if there is workspaceId means it's a owned workspace then redirect to short link of that workspace
-                    if (workspaceId) {
+                    if (workspaceId != null) {
                       zNavigatePushRoute(
                         createRedirectRoute({
                           url: ZaionsRoutes.AdminPanel.ShortLinks.Main,
@@ -188,9 +186,8 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                           ]
                         })
                       );
-                    }
-                    // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to short link of that share workspace
-                    else if (wsShareId && shareWSMemberId) {
+                    } else if (wsShareId != null && shareWSMemberId != null) {
+                      // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to short link of that share workspace
                       zNavigatePushRoute(
                         createRedirectRoute({
                           url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
@@ -212,7 +209,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 
                   case AdminPanelSidebarMenuPageEnum.linkInBio:
                     // if there is workspaceId means it's a owned workspace then redirect to link-in-bio of that workspace
-                    if (workspaceId) {
+                    if (workspaceId != null) {
                       zNavigatePushRoute(
                         createRedirectRoute({
                           url: ZaionsRoutes.AdminPanel.LinkInBio.Main,
@@ -227,9 +224,8 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                           ]
                         })
                       );
-                    }
-                    // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to link-in-bio of that share workspace
-                    else if (wsShareId && shareWSMemberId) {
+                    } else if (wsShareId != null && shareWSMemberId != null) {
+                      // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to link-in-bio of that share workspace
                       zNavigatePushRoute(
                         createRedirectRoute({
                           url: ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Main,
@@ -262,24 +258,32 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
           <ZCan
             shareWSId={wsShareId}
             permissionType={
-              wsShareId
+              wsShareId !== null &&
+              wsShareId !== undefined &&
+              wsShareId?.trim()?.length > 0
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }
             havePermissions={
-              wsShareId
+              wsShareId !== null &&
+              wsShareId !== undefined &&
+              wsShareId?.trim()?.length > 0
                 ? type === AdminPanelSidebarMenuPageEnum.shortLink
                   ? [shareWSPermissionEnum.viewAny_sws_sl_folder]
                   : type === AdminPanelSidebarMenuPageEnum.linkInBio
                   ? [shareWSPermissionEnum.viewAny_sws_lib_folder]
                   : []
-                : type === AdminPanelSidebarMenuPageEnum.shortLink
-                ? [permissionsEnum.viewAny_sl_folder]
-                : type === AdminPanelSidebarMenuPageEnum.linkInBio
-                ? [permissionsEnum.viewAny_lib_folder]
+                : workspaceId !== null &&
+                  workspaceId !== undefined &&
+                  workspaceId?.trim()?.length > 0
+                ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                  ? [permissionsEnum.viewAny_sl_folder]
+                  : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                  ? [permissionsEnum.viewAny_lib_folder]
+                  : []
                 : []
             }>
-            {!showSkeleton && foldersData && foldersData.length ? (
+            {!showSkeleton && foldersData?.length > 0 && (
               <ZIonReorderGroup
                 disabled={false}
                 onIonItemReorder={handleFoldersReorder}>
@@ -288,21 +292,29 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                     key={el.id}
                     shareWSId={wsShareId}
                     permissionType={
-                      wsShareId
+                      wsShareId !== null &&
+                      wsShareId !== undefined &&
+                      wsShareId?.trim()?.length > 0
                         ? permissionsTypeEnum.shareWSMemberPermissions
                         : permissionsTypeEnum.loggedInUserPermissions
                     }
                     havePermissions={
-                      wsShareId
+                      wsShareId !== null &&
+                      wsShareId !== undefined &&
+                      wsShareId?.trim()?.length > 0
                         ? type === AdminPanelSidebarMenuPageEnum.shortLink
                           ? [shareWSPermissionEnum.view_sws_sl_folder]
                           : type === AdminPanelSidebarMenuPageEnum.linkInBio
                           ? [shareWSPermissionEnum.view_sws_lib_folder]
                           : []
-                        : type === AdminPanelSidebarMenuPageEnum.shortLink
-                        ? [permissionsEnum.view_sl_folder]
-                        : type === AdminPanelSidebarMenuPageEnum.linkInBio
-                        ? [permissionsEnum.view_lib_folder]
+                        : workspaceId !== null &&
+                          workspaceId !== undefined &&
+                          workspaceId?.trim()?.length > 0
+                        ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                          ? [permissionsEnum.view_sl_folder]
+                          : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                          ? [permissionsEnum.view_lib_folder]
+                          : []
                         : []
                     }>
                     <ZIonItem
@@ -320,11 +332,11 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                         testingselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}`}
                         testinglistselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-${type}-${el.id}`}
                         onClick={() => {
-                          if (el.id) {
+                          if (el.id !== undefined) {
                             switch (type) {
                               case AdminPanelSidebarMenuPageEnum.shortLink:
                                 // if there is workspaceId means it's a owned workspace then redirect to short link folder of that workspace
-                                if (workspaceId) {
+                                if (workspaceId !== null) {
                                   zNavigatePushRoute(
                                     createRedirectRoute({
                                       url: ZaionsRoutes.AdminPanel.ShortLinks
@@ -335,12 +347,14 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                                         CONSTANTS.RouteParams
                                           .folderIdToGetShortLinksOrLinkInBio
                                       ],
-                                      values: [workspaceId, el.id]
+                                      values: [workspaceId ?? '', el?.id]
                                     })
                                   );
-                                }
-                                // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to short link folder of that share workspace
-                                else if (wsShareId && shareWSMemberId) {
+                                } else if (
+                                  wsShareId !== null &&
+                                  shareWSMemberId !== null
+                                ) {
+                                  // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to short link folder of that share workspace
                                   zNavigatePushRoute(
                                     createRedirectRoute({
                                       url: ZaionsRoutes.AdminPanel.ShareWS
@@ -354,8 +368,8 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                                           .folderIdToGetShortLinksOrLinkInBio
                                       ],
                                       values: [
-                                        wsShareId,
-                                        shareWSMemberId,
+                                        wsShareId ?? '',
+                                        shareWSMemberId ?? '',
                                         el.id
                                       ]
                                     })
@@ -365,7 +379,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 
                               case AdminPanelSidebarMenuPageEnum.linkInBio:
                                 // if there is workspaceId means it's a owned workspace then redirect to link-in-bio folder of that workspace
-                                if (workspaceId) {
+                                if (workspaceId !== null) {
                                   zNavigatePushRoute(
                                     createRedirectRoute({
                                       url: ZaionsRoutes.AdminPanel.LinkInBio
@@ -376,12 +390,14 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                                         CONSTANTS.RouteParams
                                           .folderIdToGetShortLinksOrLinkInBio
                                       ],
-                                      values: [workspaceId, el.id]
+                                      values: [workspaceId ?? '', el.id]
                                     })
                                   );
-                                }
-                                // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to link-in-bio folder of that share workspace
-                                else if (wsShareId && shareWSMemberId) {
+                                } else if (
+                                  wsShareId !== null &&
+                                  shareWSMemberId !== null
+                                ) {
+                                  // if there is wsShareId && shareWSMemberId means it's a share workspace then redirect to link-in-bio folder of that share workspace
                                   zNavigatePushRoute(
                                     createRedirectRoute({
                                       url: ZaionsRoutes.AdminPanel.ShareWS
@@ -395,8 +411,8 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                                           .folderIdToGetShortLinksOrLinkInBio
                                       ],
                                       values: [
-                                        wsShareId,
-                                        shareWSMemberId,
+                                        wsShareId ?? '',
+                                        shareWSMemberId ?? '',
                                         el.id
                                       ]
                                     })
@@ -413,12 +429,16 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                         shareWSId={wsShareId}
                         checkMode={permissionCheckModeEnum.any}
                         permissionType={
-                          wsShareId
+                          wsShareId !== null &&
+                          wsShareId !== undefined &&
+                          wsShareId?.trim()?.length > 0
                             ? permissionsTypeEnum.shareWSMemberPermissions
                             : permissionsTypeEnum.loggedInUserPermissions
                         }
                         havePermissions={
-                          wsShareId
+                          wsShareId !== null &&
+                          wsShareId !== undefined &&
+                          wsShareId?.trim()?.length > 0
                             ? type === AdminPanelSidebarMenuPageEnum.shortLink
                               ? [
                                   shareWSPermissionEnum.create_sws_sl_folder,
@@ -430,16 +450,20 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                                   shareWSPermissionEnum.delete_sws_lib_folder
                                 ]
                               : []
-                            : type === AdminPanelSidebarMenuPageEnum.shortLink
-                            ? [
-                                permissionsEnum.create_sl_folder,
-                                permissionsEnum.delete_sl_folder
-                              ]
-                            : type === AdminPanelSidebarMenuPageEnum.linkInBio
-                            ? [
-                                permissionsEnum.create_lib_folder,
-                                permissionsEnum.delete_lib_folder
-                              ]
+                            : workspaceId !== null &&
+                              workspaceId !== undefined &&
+                              workspaceId?.trim()?.length > 0
+                            ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                              ? [
+                                  permissionsEnum.create_sl_folder,
+                                  permissionsEnum.delete_sl_folder
+                                ]
+                              : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                              ? [
+                                  permissionsEnum.create_lib_folder,
+                                  permissionsEnum.delete_lib_folder
+                                ]
+                              : []
                             : []
                         }>
                         <ZIonButton
@@ -451,7 +475,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                           testingselector={`${CONSTANTS.testingSelectors.folder.actionPopoverBtn}-${type}`}
                           testinglistselector={`${CONSTANTS.testingSelectors.folder.actionPopoverBtn}-${type}-${el.id}`}
                           onClick={event => {
-                            folderActionsButtonOnClickHandler &&
+                            folderActionsButtonOnClickHandler != null &&
                               folderActionsButtonOnClickHandler(event);
 
                             setFolderFormState(oldVal => ({
@@ -474,7 +498,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                   </ZCan>
                 ))}
               </ZIonReorderGroup>
-            ) : null}
+            )}
           </ZCan>
 
           {!showSkeleton && foldersData?.length === 0 && (
@@ -543,21 +567,29 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
         <ZCan
           shareWSId={wsShareId}
           permissionType={
-            wsShareId
+            wsShareId !== null &&
+            wsShareId !== undefined &&
+            wsShareId?.trim()?.length > 0
               ? permissionsTypeEnum.shareWSMemberPermissions
               : permissionsTypeEnum.loggedInUserPermissions
           }
           havePermissions={
-            wsShareId
+            wsShareId !== null &&
+            wsShareId !== undefined &&
+            wsShareId?.trim()?.length > 0
               ? type === AdminPanelSidebarMenuPageEnum.shortLink
                 ? [shareWSPermissionEnum.create_sws_sl_folder]
                 : type === AdminPanelSidebarMenuPageEnum.linkInBio
                 ? [shareWSPermissionEnum.create_sws_lib_folder]
                 : []
-              : type === AdminPanelSidebarMenuPageEnum.shortLink
-              ? [permissionsEnum.create_sl_folder]
-              : type === AdminPanelSidebarMenuPageEnum.linkInBio
-              ? [permissionsEnum.create_lib_folder]
+              : workspaceId !== null &&
+                workspaceId !== undefined &&
+                workspaceId?.trim()?.length > 0
+              ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                ? [permissionsEnum.create_sl_folder]
+                : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                ? [permissionsEnum.create_lib_folder]
+                : []
               : []
           }>
           <ZIonButton
@@ -570,37 +602,47 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
           </ZIonButton>
         </ZCan>
 
-        {showFoldersSaveReorderButton && (
-          <ZCan
-            shareWSId={wsShareId}
-            permissionType={
-              wsShareId
-                ? permissionsTypeEnum.shareWSMemberPermissions
-                : permissionsTypeEnum.loggedInUserPermissions
-            }
-            havePermissions={
-              wsShareId
-                ? type === AdminPanelSidebarMenuPageEnum.shortLink
-                  ? [shareWSPermissionEnum.sort_sws_sl_folder]
-                  : type === AdminPanelSidebarMenuPageEnum.linkInBio
-                  ? [shareWSPermissionEnum.sort_sws_lib_folder]
+        {showFoldersSaveReorderButton !== null &&
+          showFoldersSaveReorderButton !== undefined &&
+          showFoldersSaveReorderButton && (
+            <ZCan
+              shareWSId={wsShareId}
+              permissionType={
+                wsShareId !== null &&
+                wsShareId !== undefined &&
+                wsShareId?.trim()?.length > 0
+                  ? permissionsTypeEnum.shareWSMemberPermissions
+                  : permissionsTypeEnum.loggedInUserPermissions
+              }
+              havePermissions={
+                wsShareId !== null &&
+                wsShareId !== undefined &&
+                wsShareId?.trim()?.length > 0
+                  ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                    ? [shareWSPermissionEnum.sort_sws_sl_folder]
+                    : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                    ? [shareWSPermissionEnum.sort_sws_lib_folder]
+                    : []
+                  : workspaceId !== null &&
+                    workspaceId !== undefined &&
+                    workspaceId?.trim()?.length > 0
+                  ? type === AdminPanelSidebarMenuPageEnum.shortLink
+                    ? [permissionsEnum.sort_sl_folder]
+                    : type === AdminPanelSidebarMenuPageEnum.linkInBio
+                    ? [permissionsEnum.sort_lib_folder]
+                    : []
                   : []
-                : type === AdminPanelSidebarMenuPageEnum.shortLink
-                ? [permissionsEnum.sort_sl_folder]
-                : type === AdminPanelSidebarMenuPageEnum.linkInBio
-                ? [permissionsEnum.sort_lib_folder]
-                : []
-            }>
-            <ZIonButton
-              className='absolute bottom-0 ion-text-capitalize ion-margin-horizontal'
-              expand='block'
-              testingselector={`${CONSTANTS.testingSelectors.folder.reorderBtn}-${type}`}
-              onClick={foldersSaveReorderButtonOnClickHandler}
-              style={{ width: '78%' }}>
-              save reorder
-            </ZIonButton>
-          </ZCan>
-        )}
+              }>
+              <ZIonButton
+                className='absolute bottom-0 ion-text-capitalize ion-margin-horizontal'
+                expand='block'
+                testingselector={`${CONSTANTS.testingSelectors.folder.reorderBtn}-${type}`}
+                onClick={foldersSaveReorderButtonOnClickHandler}
+                style={{ width: '78%' }}>
+                save reorder
+              </ZIonButton>
+            </ZCan>
+          )}
       </ZCustomScrollable>
     </ZIonCol>
   );

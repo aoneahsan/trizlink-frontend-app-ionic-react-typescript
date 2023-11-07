@@ -1,5 +1,5 @@
-export type ZaionsHPGlobalType = {
+export interface ZaionsHPGlobalType {
   id: string | number;
   subscribers: string;
   text: string;
-};
+}

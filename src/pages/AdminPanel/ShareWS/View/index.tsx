@@ -8,7 +8,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { RefresherEventDetail } from '@ionic/react';
+import { type RefresherEventDetail } from '@ionic/react';
 import classNames from 'classnames';
 import { createOutline, pricetagOutline, timeOutline } from 'ionicons/icons';
 import { useParams } from 'react-router';
@@ -35,10 +35,6 @@ import {
 import ZIonPage from '@/components/ZIonPage';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
 import ZWorkspacesSettingModal from '@/components/InPageComponents/ZaionsModals/Workspace/SettingsModal';
-
-const ZAdminPanelTopBar = lazy(
-  () => import('@/components/AdminPanelComponents/TopBar')
-);
 
 /**
  * Custom Hooks Imports go down
@@ -68,11 +64,15 @@ import { API_URL_ENUM } from '@/utils/enums';
  * */
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import {
-  workspaceInterface,
+  type workspaceInterface,
   workspaceSettingsModalTabEnum
 } from '@/types/AdminPanel/workspace';
 import { createRedirectRoute } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+
+const ZAdminPanelTopBar = lazy(
+  () => import('@/components/AdminPanelComponents/TopBar')
+);
 
 /**
  * Recoil State Imports go down
@@ -111,8 +111,8 @@ const ZShareWSView: React.FC = () => {
 
   // getting current share workspace id form params.
   const { wsShareId, shareWSMemberId } = useParams<{
-    shareWSMemberId: string;
-    wsShareId: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region custom hooks.
@@ -125,7 +125,7 @@ const ZShareWSView: React.FC = () => {
     ZWorkspacesSettingModal,
     {
       Tab: compState.modalTab,
-      wsShareId: wsShareId,
+      wsShareId,
       wsShareMemberId: shareWSMemberId
     }
   );
@@ -139,11 +139,14 @@ const ZShareWSView: React.FC = () => {
   } = useZRQGetRequest<workspaceInterface>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_info_data,
-    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
-    _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: !(
+      shareWSMemberId !== undefined &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
+    ),
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -159,11 +162,13 @@ const ZShareWSView: React.FC = () => {
   }>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
-    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
-    _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: !(
+      shareWSMemberId !== undefined && shareWSMemberId?.trim()?.length > 0
+    ),
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -171,23 +176,25 @@ const ZShareWSView: React.FC = () => {
   // #endregion
 
   // #region Functions.
-  const invalidedQueries = async () => {
+  const invalidedQueries = async (): Promise<void> => {
     try {
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-        wsShareId
+        wsShareId ?? ''
       ]);
 
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
-        wsShareId
+        wsShareId ?? ''
       ]);
     } catch (error) {
       reportCustomError(error);
     }
   };
 
-  const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
+  const handleRefresh = async (
+    event: CustomEvent<RefresherEventDetail>
+  ): Promise<void> => {
     try {
       await invalidedQueries();
       event.detail.complete();
@@ -199,10 +206,10 @@ const ZShareWSView: React.FC = () => {
 
   useEffect(() => {
     if (
-      isGetMemberRolePermissionsFetching === false &&
-      isGetShareWSInfoDataFetching === false &&
-      isGetMemberRolePermissionsError === false &&
-      isGetShareWSInfoDataError === false
+      !isGetMemberRolePermissionsFetching &&
+      !isGetShareWSInfoDataFetching &&
+      !isGetMemberRolePermissionsError &&
+      !isGetShareWSInfoDataError
     ) {
       setCompState(oldValues => ({
         ...oldValues,
@@ -247,7 +254,10 @@ const ZShareWSView: React.FC = () => {
           returnPermissionDeniedView={true}>
           <ZIonContent>
             {/* IonRefresher */}
-            <ZIonRefresher onIonRefresh={event => void handleRefresh(event)}>
+            <ZIonRefresher
+              onIonRefresh={event => {
+                void handleRefresh(event);
+              }}>
               <ZIonRefresherContent />
             </ZIonRefresher>
 
@@ -268,7 +278,7 @@ const ZShareWSView: React.FC = () => {
                   showInviteBtn={false}
                   showRefreshBtn={true}
                   refreshBtnOnClick={() => {
-                    invalidedQueries();
+                    void invalidedQueries();
                   }}
                   showWSSwitcherBtn={false}
                 />
@@ -279,35 +289,36 @@ const ZShareWSView: React.FC = () => {
                   {!isZFetching && (
                     <>
                       <ZIonTitle className='block font-bold ion-no-padding'>
-                        Welcome to "
+                        Welcome to &quot;
                         <ZIonText color='tertiary'>
                           {getShareWSInfoData?.workspaceName}
                         </ZIonText>
-                        " workspace
+                        &quot; workspace
                       </ZIonTitle>
                       <ZIonText
                         className='block text-sm'
                         color='dark'>
-                        Owned by "
+                        Owned by &quot;
                         <ZIonText
                           className='font-semibold'
                           color='tertiary'>
                           {getShareWSInfoData?.user?.username}
                         </ZIonText>
-                        "<ZIonText className='px-1'>|</ZIonText>Created at
+                        &quot;<ZIonText className='px-1'>|</ZIonText>Created at
                         <ZIonText className='px-1'>
                           {getShareWSInfoData?.createdAt}
                         </ZIonText>
                       </ZIonText>
                       <ZIonText className='block mt-3 text-sm'>
-                        Your expertise as a "
+                        Your expertise as a &quot;
                         <ZIonText
                           className='font-semibold'
                           color='tertiary'>
                           {getMemberRolePermissions?.memberRole}
                         </ZIonText>
-                        " is essential here. Your contributions make a
-                        difference. Let's work together to achieve great things!
+                        &quot; is essential here. Your contributions make a
+                        difference. Let&apos;s work together to achieve great
+                        things!
                       </ZIonText>
                     </>
                   )}
@@ -354,7 +365,8 @@ const ZShareWSView: React.FC = () => {
                   )}
 
                   {!isZFetching &&
-                    getMemberRolePermissions?.memberPermissions?.length && (
+                    (getMemberRolePermissions?.memberPermissions ?? [])
+                      ?.length > 0 && (
                       <>
                         {/* If member has permission to view Time slot */}
                         <ZCan
@@ -484,13 +496,13 @@ const ZShareWSView: React.FC = () => {
                   <ZIonText
                     className='block text-sm'
                     color='dark'>
-                    Total short link in this workspace are "
+                    Total short link in this workspace are &ldquo;
                     <ZIonText
                       className='font-semibold'
                       color='tertiary'>
                       0
                     </ZIonText>
-                    "
+                    &ldquo;
                   </ZIonText>
                 </ZIonCol>
 
@@ -510,8 +522,8 @@ const ZShareWSView: React.FC = () => {
                       routerLink={createRedirectRoute({
                         url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main,
                         values: [
-                          wsShareId,
-                          shareWSMemberId,
+                          wsShareId ?? '',
+                          shareWSMemberId ?? '',
                           CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE
                         ],
                         params: [

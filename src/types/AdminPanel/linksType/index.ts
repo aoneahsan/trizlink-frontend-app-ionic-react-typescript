@@ -1,16 +1,16 @@
 // IMPORTS
 import {
-  ABTestingRotatorInterface,
-  FormMode,
-  GeoLocationRotatorInterface,
-  LinkExpirationInfoInterface,
-  messengerPlatformsBlockEnum,
-  PasswordInterface,
-  ShortUrlInterface,
-  UTMTagInfoInterface
+  type ABTestingRotatorInterface,
+  type FormMode,
+  type GeoLocationRotatorInterface,
+  type LinkExpirationInfoInterface,
+  type messengerPlatformsBlockEnum,
+  type PasswordInterface,
+  type ShortUrlInterface,
+  type UTMTagInfoInterface
 } from '@/types/AdminPanel/index.type';
 
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 // CONSTANTS
 
@@ -197,15 +197,15 @@ export interface ShortLinkFilterOptionsInterface {
 }
 
 // TYPES
-export type FormErrorsType = {
+export interface FormErrorsType {
   url?: string;
   linkTitle?: string;
   phoneNumber?: string;
   username?: string;
   linkExpirationInfoRL?: string;
-};
+}
 
-export type IdNameType = {
+export interface IdNameType {
   id?: string;
   name?: string;
   createAt?: string;
@@ -213,18 +213,18 @@ export type IdNameType = {
 
   // Just to handle frontend form
   formMode?: FormMode;
-};
+}
 
-export type PixelAccountPlatformType = {
+export interface PixelAccountPlatformType {
   id?: string;
   type: PixelPlatformsEnum;
   title: string;
 
   // Just to handle frontend form
   formMode?: FormMode;
-};
+}
 
-export type PixelAccountType = {
+export interface PixelAccountType {
   id?: string;
   platform?: PixelPlatformsEnum;
   title: string | undefined;
@@ -235,9 +235,9 @@ export type PixelAccountType = {
 
   // Just to handle frontend form
   formMode?: FormMode;
-};
+}
 
-export type UTMTagTemplateType = {
+export interface UTMTagTemplateType {
   id?: string;
   templateName: string;
   utmCampaign?: string;
@@ -251,9 +251,9 @@ export type UTMTagTemplateType = {
 
   // Just to handle frontend form
   formMode?: FormMode;
-};
+}
 
-export type EmbedWidgetsType = {
+export interface EmbedWidgetsType {
   id?: string;
   name?: string;
   jsCode?: string;
@@ -270,20 +270,20 @@ export type EmbedWidgetsType = {
 
   // Just to handle frontend form
   formMode?: FormMode;
-};
+}
 
-export type LinkFolderType = {
+export interface LinkFolderType {
   id?: string;
   title: string;
   icon?: string;
-};
+}
 
 // label?: string;
 // value?: string;
 // createAt?: string;
 // updateAt?: string;
 
-export type ShortLinkType = {
+export interface ShortLinkType {
   id?: string;
 
   // form data - for creation/updating
@@ -336,11 +336,11 @@ export type ShortLinkType = {
   };
 
   formMode?: FormMode;
-};
+}
 
 // 'ionic' | 'react' | 'svg' | 'image' | other
 
-export type ShortUrlLinkOptionType = {
+export interface ShortUrlLinkOptionType {
   id?: string;
   icon: {
     iconName: string;
@@ -348,7 +348,7 @@ export type ShortUrlLinkOptionType = {
   };
   text: string;
   type: messengerPlatformsBlockEnum;
-};
+}
 
 // const as = []
 

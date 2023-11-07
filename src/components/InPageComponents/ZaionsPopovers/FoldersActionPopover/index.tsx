@@ -58,7 +58,7 @@ import {
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { folderState, FormMode } from '@/types/AdminPanel/index.type';
-import { LinkFolderType } from '@/types/AdminPanel/linksType';
+import { type LinkFolderType } from '@/types/AdminPanel/linksType';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
@@ -88,9 +88,9 @@ import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil
  * @type {*}
  * */
 const FolderActionsPopoverContent: React.FC<{
-  workspaceId: string;
-  shareWSMemberId: string;
-  wsShareId: string;
+  workspaceId?: string;
+  shareWSMemberId?: string;
+  wsShareId?: string;
   state: folderState;
 }> = ({ workspaceId, shareWSMemberId, wsShareId, state }) => {
   /**
@@ -127,13 +127,11 @@ const FolderActionsPopoverContent: React.FC<{
   /**
    * deleteFolderAccount will show the confirm alert before deleting short link folder.
    */
-  const deleteFolderAccount = async () => {
+  const deleteFolderAccount = async (): Promise<void> => {
     try {
-      if (folderFormState && folderFormState.id) {
+      if (folderFormState?.id !== null && folderFormState?.id !== undefined) {
         await presentZIonAlert({
-          header: `Delete Folder "${
-            folderFormState.name ? folderFormState.name : ''
-          }"`,
+          header: `Delete Folder "${folderFormState?.name ?? ''}"`,
           subHeader: 'Remove folder from user account.',
           message: 'Are you sure you want to delete this folder?',
           buttons: [
@@ -160,11 +158,15 @@ const FolderActionsPopoverContent: React.FC<{
   /**
    * removeFolderAccount will hit delete short link folder api
    */
-  const removeFolderAccount = async () => {
+  const removeFolderAccount = async (): Promise<void> => {
     try {
-      if (folderFormState.id) {
+      if (folderFormState?.id !== null && folderFormState?.id !== undefined) {
         let _response;
-        if (workspaceId) {
+        if (
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          workspaceId?.trim()?.length > 0
+        ) {
           // hitting the delete api
           _response = await deleteFolderMutate({
             itemIds: [workspaceId, folderFormState.id],
@@ -173,10 +175,14 @@ const FolderActionsPopoverContent: React.FC<{
               CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
             ]
           });
-        } else if (wsShareId) {
+        } else if (
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0
+        ) {
           // hitting the share workspace folder delete api
           _response = await deleteSWSFolderMutate({
-            itemIds: [shareWSMemberId, folderFormState.id],
+            itemIds: [shareWSMemberId ?? '', folderFormState.id],
             urlDynamicParts: [
               CONSTANTS.RouteParams.workspace.shareWSMemberId,
               CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
@@ -184,16 +190,16 @@ const FolderActionsPopoverContent: React.FC<{
           });
         }
 
-        if (_response) {
+        if (_response !== undefined) {
           const _data = extractInnerData<{ success: boolean }>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data && _data?.success) {
+          if (_data !== undefined && _data?.success) {
             let _oldFoldersData: LinkFolderType[] = [];
 
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               _oldFoldersData =
                 (getRQCDataHandler<LinkFolderType[]>({
                   key: [
@@ -201,8 +207,8 @@ const FolderActionsPopoverContent: React.FC<{
                     workspaceId,
                     state
                   ]
-                }) as LinkFolderType[]) || [];
-            } else if (wsShareId) {
+                }) as LinkFolderType[]) ?? [];
+            } else if (wsShareId !== undefined) {
               _oldFoldersData =
                 (getRQCDataHandler<LinkFolderType[]>({
                   key: [
@@ -210,7 +216,7 @@ const FolderActionsPopoverContent: React.FC<{
                     wsShareId,
                     state
                   ]
-                }) as LinkFolderType[]) || [];
+                }) as LinkFolderType[]) ?? [];
             }
 
             // getting all the folders from RQ cache.
@@ -218,7 +224,7 @@ const FolderActionsPopoverContent: React.FC<{
               extractInnerData<LinkFolderType[]>(
                 _oldFoldersData,
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
             // removing deleted folder from cache.
             const _updatedFolders = _oldRQCacheFoldersData?.filter(
@@ -226,26 +232,26 @@ const FolderActionsPopoverContent: React.FC<{
             );
 
             // Updating data in RQ cache.
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               await updateRQCDataHandler<LinkFolderType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
                   workspaceId,
                   state
                 ],
-                data: _updatedFolders as LinkFolderType[],
+                data: _updatedFolders,
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
               });
-            } else if (wsShareId) {
+            } else if (wsShareId !== undefined) {
               await updateRQCDataHandler<LinkFolderType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
                   wsShareId,
                   state
                 ],
-                data: _updatedFolders as LinkFolderType[],
+                data: _updatedFolders,
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
@@ -261,7 +267,7 @@ const FolderActionsPopoverContent: React.FC<{
             }));
 
             // show success message after deleting
-            showSuccessNotification(`Folder deleted successfully.`);
+            showSuccessNotification('Folder deleted successfully.');
           }
         }
       } else {
@@ -277,21 +283,29 @@ const FolderActionsPopoverContent: React.FC<{
       <ZCan
         shareWSId={wsShareId}
         permissionType={
-          wsShareId
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }
         havePermissions={
-          wsShareId
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0
             ? state === folderState.shortlink
               ? [shareWSPermissionEnum.update_sws_sl_folder]
               : state === folderState.linkInBio
               ? [shareWSPermissionEnum.update_sws_lib_folder]
               : []
-            : state === folderState.shortlink
-            ? [permissionsEnum.update_sl_folder]
-            : state === folderState.linkInBio
-            ? [permissionsEnum.update_lib_folder]
+            : workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+            ? state === folderState.shortlink
+              ? [permissionsEnum.update_sl_folder]
+              : state === folderState.linkInBio
+              ? [permissionsEnum.update_lib_folder]
+              : []
             : []
         }>
         <ZIonButton
@@ -316,21 +330,29 @@ const FolderActionsPopoverContent: React.FC<{
       <ZCan
         shareWSId={wsShareId}
         permissionType={
-          wsShareId
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }
         havePermissions={
-          wsShareId
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0
             ? state === folderState.shortlink
               ? [shareWSPermissionEnum.delete_sws_sl_folder]
               : state === folderState.linkInBio
               ? [shareWSPermissionEnum.delete_sws_lib_folder]
               : []
-            : state === folderState.shortlink
-            ? [permissionsEnum.delete_sl_folder]
-            : state === folderState.linkInBio
-            ? [permissionsEnum.delete_lib_folder]
+            : workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+            ? state === folderState.shortlink
+              ? [permissionsEnum.delete_sl_folder]
+              : state === folderState.linkInBio
+              ? [permissionsEnum.delete_lib_folder]
+              : []
             : []
         }>
         <ZIonButton

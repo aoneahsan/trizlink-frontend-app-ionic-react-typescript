@@ -12,7 +12,10 @@ import { useParams } from 'react-router';
 import classNames from 'classnames';
 import { Formik } from 'formik';
 import { menuController } from '@ionic/core/components';
-import { ItemReorderEventDetail, RefresherEventDetail } from '@ionic/react';
+import {
+  type ItemReorderEventDetail,
+  type RefresherEventDetail
+} from '@ionic/react';
 import { filterOutline, refresh, searchOutline } from 'ionicons/icons';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -49,25 +52,9 @@ import ZCan from '@/components/Can';
 // const ZCan = lazy(() => import('@/components/Can'));
 
 // const ZCustomScrollable = lazy(
-// 	() => import('@/components/CustomComponents/ZScrollable')
+// () => import('@/components/CustomComponents/ZScrollable')
 // );
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
-
-const ZRCheckbox = lazy(
-  () => import('@/components/CustomComponents/ZRCheckbox')
-);
-
-const ZDashboardFolderMenu = lazy(
-  () => import('@/components/AdminPanelComponents/Sidebar/FolderMenu')
-);
-
-const AdminPanelSidebarMenu = lazy(
-  () => import('@/components/AdminPanelComponents/Sidebar/ExpendableMenu')
-);
-
-const ZAdminPanelTopBar = lazy(
-  () => import('@/components/AdminPanelComponents/TopBar')
-);
 
 /**
  * Custom Hooks Imports go down
@@ -106,14 +93,17 @@ import { LinkTypeOptionsData } from '@/data/UserDashboard/Links';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkFolderType, ShortLinkType } from '@/types/AdminPanel/linksType';
+import {
+  type LinkFolderType,
+  type ShortLinkType
+} from '@/types/AdminPanel/linksType';
 import {
   AdminPanelSidebarMenuPageEnum,
   folderState,
   FormMode,
   messengerPlatformsBlockEnum
 } from '@/types/AdminPanel/index.type';
-import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
@@ -125,10 +115,7 @@ import {
   NewShortLinkFormState,
   NewShortLinkSelectTypeOption
 } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkFormState.recoil';
-import {
-  ShortLinksFilterOptionsRStateAtom,
-  ShortLinksRStateAtom
-} from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
+import { ShortLinksFilterOptionsRStateAtom } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinkState.recoil';
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
 
 /**
@@ -136,6 +123,18 @@ import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil
  * ? Import of style sheet is a style import
  * */
 import classes from './styles.module.css';
+
+const ZDashboardFolderMenu = lazy(
+  () => import('@/components/AdminPanelComponents/Sidebar/FolderMenu')
+);
+
+const AdminPanelSidebarMenu = lazy(
+  () => import('@/components/AdminPanelComponents/Sidebar/ExpendableMenu')
+);
+
+const ZAdminPanelTopBar = lazy(
+  () => import('@/components/AdminPanelComponents/TopBar')
+);
 
 /**
  * Images Imports go down
@@ -155,9 +154,9 @@ import classes from './styles.module.css';
 const ZShortLinksListPage: React.FC = () => {
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region Component state.
@@ -176,7 +175,7 @@ const ZShortLinksListPage: React.FC = () => {
   // #endregion
 
   // #region Custom hooks.
-  const { isMdScale, isLgScale, isSmScale } = useZMediaQueryScale(); // media query hook.
+  const { is2XlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale(); // media query hook.
   const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   const { validateRequestResponse } = useZValidateRequestResponse();
   // #endregion
@@ -192,7 +191,6 @@ const ZShortLinksListPage: React.FC = () => {
   // #region APIS requests.
   // If share-workspace then this api will fetch role & permission of current member in this share-workspace.
   const {
-    data: getMemberRolePermissions,
     isFetching: isGetMemberRolePermissionsFetching,
     isError: isGetMemberRolePermissionsError
   } = useZRQGetRequest<{
@@ -201,11 +199,14 @@ const ZShortLinksListPage: React.FC = () => {
   }>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
-    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
-    _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: !(
+      shareWSMemberId !== undefined &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
+    ),
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -216,11 +217,14 @@ const ZShortLinksListPage: React.FC = () => {
     useZRQGetRequest<workspaceInterface>({
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
-        wsShareId
+        wsShareId ?? ''
       ],
       _url: API_URL_ENUM.ws_share_info_data,
-      _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
-      _itemsIds: [shareWSMemberId],
+      _shouldFetchWhenIdPassed: !(
+        shareWSMemberId !== undefined &&
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
+      ),
+      _itemsIds: [shareWSMemberId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _showLoader: false
@@ -233,9 +237,15 @@ const ZShortLinksListPage: React.FC = () => {
     isError: isSWSShortLinksDataError
   } = useZRQGetRequest<ShortLinkType[]>({
     _url: API_URL_ENUM.sws_sl_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN, wsShareId],
-    _itemsIds: [shareWSMemberId],
-    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
+      wsShareId ?? ''
+    ],
+    _itemsIds: [shareWSMemberId ?? ''],
+    _shouldFetchWhenIdPassed: !(
+      shareWSMemberId !== undefined &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
+    ),
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
   });
@@ -249,11 +259,14 @@ const ZShortLinksListPage: React.FC = () => {
     _url: API_URL_ENUM.ws_share_folder_sl_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
-      wsShareId,
+      wsShareId ?? '',
       folderState.shortlink
     ],
-    _itemsIds: [shareWSMemberId],
-    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _itemsIds: [shareWSMemberId ?? ''],
+    _shouldFetchWhenIdPassed: !(
+      shareWSMemberId !== undefined &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
+    ),
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
   });
@@ -264,11 +277,13 @@ const ZShortLinksListPage: React.FC = () => {
     isError: isSelectedWorkspaceError
   } = useZRQGetRequest<workspaceInterface>({
     _url: API_URL_ENUM.workspace_update_delete,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId],
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId ?? ''],
     _authenticated: true,
-    _itemsIds: [workspaceId],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _shouldFetchWhenIdPassed: !(
+      workspaceId !== undefined && workspaceId?.trim()?.length > 0
+    ),
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
   });
@@ -283,9 +298,14 @@ const ZShortLinksListPage: React.FC = () => {
     itemsCount: string;
   }>({
     _url: API_URL_ENUM.shortLinks_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
-    _itemsIds: [workspaceId],
-    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+      workspaceId ?? ''
+    ],
+    _itemsIds: [workspaceId ?? ''],
+    _shouldFetchWhenIdPassed: !(
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+    ),
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _showLoader: false,
     _extractType: ZRQGetRequestExtractEnum.extractData
@@ -300,11 +320,13 @@ const ZShortLinksListPage: React.FC = () => {
     _url: API_URL_ENUM.ShortLink_folders_create_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-      workspaceId,
+      workspaceId ?? '',
       folderState.shortlink
     ],
-    _itemsIds: [workspaceId],
-    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _itemsIds: [workspaceId ?? ''],
+    _shouldFetchWhenIdPassed: !(
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+    ),
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _showLoader: false
   });
@@ -347,15 +369,15 @@ const ZShortLinksListPage: React.FC = () => {
     {
       state: folderState.shortlink,
       workspaceId,
-      shareWSMemberId: shareWSMemberId,
-      wsShareId: wsShareId
+      shareWSMemberId,
+      wsShareId
     }
   );
   // #endregion
 
   // #region Functions.
   // Short links folders reorder function.
-  const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
+  const handleReorder = (event: CustomEvent<ItemReorderEventDetail>): void => {
     event.detail.complete();
 
     setTimeout(() => {
@@ -370,7 +392,7 @@ const ZShortLinksListPage: React.FC = () => {
         );
       }
 
-      if (_shortLinksFoldersIds.length) {
+      if (_shortLinksFoldersIds.length > 0) {
         setCompState(oldValues => ({
           ...oldValues,
           shortLinksFoldersReorder: {
@@ -383,9 +405,9 @@ const ZShortLinksListPage: React.FC = () => {
   };
 
   // Invalid inpage RQ keys.
-  const invalidedQueries = async () => {
+  const invalidedQueries = async (): Promise<void> => {
     try {
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         // Workspace.
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
@@ -404,7 +426,7 @@ const ZShortLinksListPage: React.FC = () => {
           workspaceId,
           folderState.shortlink
         ]);
-      } else if (wsShareId && shareWSMemberId) {
+      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
         // Share workspace.
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
@@ -437,7 +459,9 @@ const ZShortLinksListPage: React.FC = () => {
   };
 
   // IonRefresher refresh handler
-  const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
+  const handleRefresh = async (
+    event: CustomEvent<RefresherEventDetail>
+  ): Promise<void> => {
     try {
       await invalidedQueries();
       event.detail.complete();
@@ -447,10 +471,10 @@ const ZShortLinksListPage: React.FC = () => {
   };
 
   // Reorder folder handler.
-  const shortLinksFoldersReOrderHandler = async () => {
+  const shortLinksFoldersReOrderHandler = async (): Promise<void> => {
     try {
       let _result;
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         // The update api...
         _result = await UpdateShortLinksFoldersReorder({
           requestData: zStringify({
@@ -459,7 +483,7 @@ const ZShortLinksListPage: React.FC = () => {
           itemIds: [],
           urlDynamicParts: []
         });
-      } else if (wsShareId && shareWSMemberId) {
+      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
         _result = await UpdateSWSShortLinksFoldersReorder({
           requestData: zStringify({
             folders: compState.shortLinksFoldersReorder.Ids
@@ -468,7 +492,7 @@ const ZShortLinksListPage: React.FC = () => {
           urlDynamicParts: []
         });
       }
-      if (_result) {
+      if (_result !== undefined || _result !== null) {
         // if _result of the UpdateShortLinksFoldersReorder api is success this showing success notification else not success then error notification.
         await validateRequestResponse({
           resultObj: _result
@@ -493,15 +517,15 @@ const ZShortLinksListPage: React.FC = () => {
   useEffect(() => {
     try {
       if (
-        wsShareId &&
-        isSWSFetching === false &&
-        isSWSError === false &&
-        isSWSShortLinksFoldersDataFetching === false &&
-        isSWSShortLinksFoldersDataError === false &&
-        isSWSShortLinksDataFetching === false &&
-        isSWSShortLinksDataError === false &&
-        isGetMemberRolePermissionsFetching === false &&
-        isGetMemberRolePermissionsError === false
+        wsShareId !== undefined &&
+        !isSWSFetching &&
+        !isSWSError &&
+        !isSWSShortLinksFoldersDataFetching &&
+        !isSWSShortLinksFoldersDataError &&
+        !isSWSShortLinksDataFetching &&
+        !isSWSShortLinksDataError &&
+        !isGetMemberRolePermissionsFetching &&
+        !isGetMemberRolePermissionsError
       ) {
         setCompState(oldValues => ({
           ...oldValues,
@@ -526,13 +550,13 @@ const ZShortLinksListPage: React.FC = () => {
   useEffect(() => {
     try {
       if (
-        workspaceId &&
-        isSelectedWorkspaceError === false &&
-        isSelectedWorkspaceFetching === false &&
-        isShortLinksDataFetching === false &&
-        isShortLinksDataError === false &&
-        isShortLinksFoldersDataError === false &&
-        isShortLinksFoldersDataFetching === false
+        workspaceId !== undefined &&
+        !isSelectedWorkspaceError &&
+        !isSelectedWorkspaceFetching &&
+        !isShortLinksDataFetching &&
+        !isShortLinksDataError &&
+        !isShortLinksFoldersDataError &&
+        !isShortLinksFoldersDataFetching
       ) {
         setCompState(oldValues => ({
           ...oldValues,
@@ -558,7 +582,7 @@ const ZShortLinksListPage: React.FC = () => {
     isShortLinksDataFetching ||
     isSelectedWorkspaceFetching;
 
-  if (wsShareId) {
+  if (wsShareId !== undefined) {
     isZFetching =
       isSWSShortLinksFoldersDataFetching ||
       isSWSShortLinksDataFetching ||
@@ -567,10 +591,12 @@ const ZShortLinksListPage: React.FC = () => {
 
   return (
     <>
-      {((shortLinksData?.items && shortLinksData?.items?.length > 0) ||
-        (swsShortLinksData && swsShortLinksData?.length > 0)) && (
-        <ZShortLinksFilterMenu />
-      )}
+      {((shortLinksData?.items !== undefined &&
+        shortLinksData?.items !== null &&
+        shortLinksData?.items?.length > 0) ||
+        (swsShortLinksData !== undefined &&
+          swsShortLinksData !== null &&
+          swsShortLinksData?.length > 0)) && <ZShortLinksFilterMenu />}
 
       {!isLgScale ? <AdminPanelShortLinksFolderSideMenu /> : null}
 
@@ -585,7 +611,7 @@ const ZShortLinksListPage: React.FC = () => {
             <div className='flex flex-col w-full h-full pt-4 ion-align-items-center ion-justify-content-center'>
               <ZIonSpinner className='w-10 h-10' />
 
-              {workspaceId
+              {workspaceId !== undefined
                 ? isSelectedWorkspaceFetching
                   ? 'Setting workspace data'
                   : isShortLinksDataFetching
@@ -593,7 +619,7 @@ const ZShortLinksListPage: React.FC = () => {
                   : isShortLinksFoldersDataFetching
                   ? 'Fetching workspace short links folders'
                   : null
-                : wsShareId && shareWSMemberId
+                : wsShareId !== undefined && shareWSMemberId !== undefined
                 ? isGetMemberRolePermissionsFetching
                   ? 'Getting & setting your permissions in this workspace'
                   : isSWSFetching
@@ -611,19 +637,22 @@ const ZShortLinksListPage: React.FC = () => {
             returnPermissionDeniedView={true}
             shareWSId={wsShareId}
             permissionType={
-              wsShareId
+              wsShareId !== undefined
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }
             havePermissions={
-              wsShareId
+              wsShareId !== undefined
                 ? [shareWSPermissionEnum.viewAny_sws_shortLink]
                 : [permissionsEnum.viewAny_shortLink]
             }>
             {/* Content */}
             <ZIonContent>
               {/* IonRefresher */}
-              <ZIonRefresher onIonRefresh={event => void handleRefresh(event)}>
+              <ZIonRefresher
+                onIonRefresh={event => {
+                  void handleRefresh(event);
+                }}>
                 <ZIonRefresherContent />
               </ZIonRefresher>
 
@@ -653,12 +682,20 @@ const ZShortLinksListPage: React.FC = () => {
                   <ZIonCol
                     sizeXl={
                       ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                        ? '10'
+                        ? is2XlScale
+                          ? '10.5'
+                          : '10'
+                        : is2XlScale
+                        ? '11.4'
                         : '11.2'
                     }
                     sizeLg={
                       ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                        ? '10'
+                        ? is2XlScale
+                          ? '10.5'
+                          : '10'
+                        : is2XlScale
+                        ? '11.4'
                         : '11.2'
                     }
                     sizeMd='12'
@@ -687,12 +724,12 @@ const ZShortLinksListPage: React.FC = () => {
                           <ZCan
                             shareWSId={wsShareId}
                             permissionType={
-                              wsShareId
+                              wsShareId !== undefined
                                 ? permissionsTypeEnum.shareWSMemberPermissions
                                 : permissionsTypeEnum.loggedInUserPermissions
                             }
                             havePermissions={
-                              wsShareId
+                              wsShareId !== undefined
                                 ? [shareWSPermissionEnum.viewAny_sws_folder]
                                 : [permissionsEnum.viewAny_folder]
                             }>
@@ -706,11 +743,13 @@ const ZShortLinksListPage: React.FC = () => {
                                 showSkeleton={isZFetching}
                                 type={AdminPanelSidebarMenuPageEnum.shortLink}
                                 foldersData={
-                                  workspaceId && shortLinksFoldersData?.length
-                                    ? shortLinksFoldersData
-                                    : wsShareId &&
-                                      swsShortLinksFoldersData?.length
-                                    ? swsShortLinksFoldersData
+                                  workspaceId !== undefined &&
+                                  shortLinksFoldersData !== null &&
+                                  shortLinksFoldersData?.length !== null
+                                    ? shortLinksFoldersData ?? []
+                                    : wsShareId !== undefined &&
+                                      swsShortLinksFoldersData?.length !== null
+                                    ? swsShortLinksFoldersData ?? []
                                     : []
                                 }
                                 showFoldersSaveReorderButton={
@@ -784,23 +823,10 @@ const ZShortLinksListPage: React.FC = () => {
 const ZInpageMainContent: React.FC = () => {
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
-
-  // #region Component state.
-  const [compState, setCompState] = useState<{
-    shortLinksFoldersReorder: {
-      Ids?: string[];
-      isEnable?: boolean;
-    };
-  }>({
-    shortLinksFoldersReorder: {
-      isEnable: false
-    }
-  });
-  // #endregion
 
   // #region Custom hooks.
   const { isXlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale(); // media query hook.
@@ -809,11 +835,7 @@ const ZInpageMainContent: React.FC = () => {
 
   // #region Recoils.
   // Recoil state for storing filter options for short-links.
-  const shortLinksFilterOptions = useRecoilValue(
-    ShortLinksFilterOptionsRStateAtom
-  );
   // Recoil state for shortLinks.
-  const shortLinksStateAtom = useRecoilValue(ShortLinksRStateAtom);
   //
   const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
 
@@ -828,12 +850,15 @@ const ZInpageMainContent: React.FC = () => {
     _url: API_URL_ENUM.ws_share_info_data,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
-      wsShareId
+      wsShareId ?? ''
     ],
     _authenticated: true,
-    _itemsIds: [shareWSMemberId],
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _shouldFetchWhenIdPassed: !(
+      shareWSMemberId !== undefined &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
+    ),
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
   });
@@ -844,10 +869,13 @@ const ZInpageMainContent: React.FC = () => {
       _url: API_URL_ENUM.sws_sl_create_list,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.SWS_MAIN,
-        wsShareId
+        wsShareId ?? ''
       ],
-      _itemsIds: [shareWSMemberId],
-      _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+      _itemsIds: [shareWSMemberId ?? ''],
+      _shouldFetchWhenIdPassed: !(
+        shareWSMemberId !== undefined &&
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
+      ),
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
       _showLoader: false
     });
@@ -859,41 +887,33 @@ const ZInpageMainContent: React.FC = () => {
     _url: API_URL_ENUM.ws_share_folder_sl_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
-      wsShareId,
+      wsShareId ?? '',
       folderState.shortlink
     ],
-    _itemsIds: [shareWSMemberId],
-    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
+    _itemsIds: [shareWSMemberId ?? ''],
+    _shouldFetchWhenIdPassed: !(
+      shareWSMemberId !== undefined &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
+    ),
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _showLoader: false
   });
 
-  // If share-workspace then this api will update share-workspace-short-link-folders order.
-  const { mutateAsync: UpdateSWSShortLinksFoldersReorder } =
-    useZRQUpdateRequest({
-      _url: API_URL_ENUM.ws_share_folder_reorder,
-      _queriesKeysToInvalidate: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
-        wsShareId,
-        folderState.shortlink
-      ]
-    });
-
   // If share-workspace then this api will fetch role & permissions of current user in this share-workspace.
-  const {
-    data: getMemberRolePermissions,
-    isFetching: isGetMemberRolePermissionsFetching
-  } = useZRQGetRequest<{
+  const { data: getMemberRolePermissions } = useZRQGetRequest<{
     memberRole?: string;
     memberPermissions?: string[];
   }>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
-    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
-    _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: !(
+      shareWSMemberId !== undefined &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
+    ),
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -903,11 +923,16 @@ const ZInpageMainContent: React.FC = () => {
   const { isFetching: isSelectedWorkspaceFetching } =
     useZRQGetRequest<workspaceInterface>({
       _url: API_URL_ENUM.workspace_update_delete,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId],
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
+        workspaceId ?? ''
+      ],
       _authenticated: true,
-      _itemsIds: [workspaceId],
+      _itemsIds: [workspaceId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: workspaceId ? false : true,
+      _shouldFetchWhenIdPassed: !(
+        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+      ),
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _showLoader: false
     });
@@ -919,23 +944,15 @@ const ZInpageMainContent: React.FC = () => {
     _url: API_URL_ENUM.ShortLink_folders_create_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-      workspaceId,
+      workspaceId ?? '',
       folderState.shortlink
     ],
-    _itemsIds: [workspaceId],
-    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _itemsIds: [workspaceId ?? ''],
+    _shouldFetchWhenIdPassed: !(
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+    ),
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
     _showLoader: false
-  });
-
-  // If owned-workspace then this api will update owned-workspace-short-link-folders order.
-  const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.ShortLinks_folders_reorder,
-    _queriesKeysToInvalidate: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-      workspaceId,
-      folderState.shortlink
-    ]
   });
 
   // If owned-workspace then this api will fetch owned-workspace-short-links data.
@@ -945,9 +962,14 @@ const ZInpageMainContent: React.FC = () => {
       itemsCount: string;
     }>({
       _url: API_URL_ENUM.shortLinks_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN, workspaceId],
-      _itemsIds: [workspaceId],
-      _shouldFetchWhenIdPassed: workspaceId ? false : true,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+        workspaceId ?? ''
+      ],
+      _itemsIds: [workspaceId ?? ''],
+      _shouldFetchWhenIdPassed: !(
+        workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      ),
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
       _showLoader: false,
       _extractType: ZRQGetRequestExtractEnum.extractData
@@ -959,9 +981,9 @@ const ZInpageMainContent: React.FC = () => {
   // #endregion
 
   // #region Functions.
-  const invalidedQueries = async () => {
+  const invalidedQueries = async (): Promise<void> => {
     try {
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         // Workspace.
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
@@ -980,7 +1002,7 @@ const ZInpageMainContent: React.FC = () => {
           workspaceId,
           folderState.shortlink
         ]);
-      } else if (wsShareId && shareWSMemberId) {
+      } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
         // Share workspace.
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
@@ -1012,7 +1034,7 @@ const ZInpageMainContent: React.FC = () => {
     }
   };
 
-  const resetShortLinkFormHandler = () => {
+  const resetShortLinkFormHandler = (): void => {
     try {
       setNewShortLinkFormState(oldValues => ({
         ...oldValues,
@@ -1030,7 +1052,7 @@ const ZInpageMainContent: React.FC = () => {
         el => el.type === messengerPlatformsBlockEnum.link
       );
 
-      if (selectedTypeOptionData) {
+      if (selectedTypeOptionData !== undefined) {
         setNewShortLinkTypeOptionDataAtom(_ => ({
           ...selectedTypeOptionData
         }));
@@ -1046,7 +1068,7 @@ const ZInpageMainContent: React.FC = () => {
     isShortLinksDataFetching ||
     isSelectedWorkspaceFetching;
 
-  if (wsShareId) {
+  if (wsShareId !== undefined) {
     isZFetching =
       isSWSShortLinksFoldersDataFetching ||
       isSWSShortLinksDataFetching ||
@@ -1080,12 +1102,12 @@ const ZInpageMainContent: React.FC = () => {
             })}
             // color='medium'
           >
-            {workspaceId
+            {workspaceId !== undefined
               ? 'Create a New Link or Manage Your Existing Ones!'
-              : wsShareId
+              : wsShareId !== undefined
               ? getMemberRolePermissions?.memberPermissions?.includes(
                   shareWSPermissionEnum.create_sws_shortLink
-                )
+                ) ?? false
                 ? 'Create a New Link or Manage Existing Ones!'
                 : 'Explore Existing Links'
               : null}
@@ -1098,12 +1120,12 @@ const ZInpageMainContent: React.FC = () => {
             })}
             // color='medium'
           >
-            {workspaceId
+            {workspaceId !== undefined
               ? 'Craft fresh links or take a peek at your existing ones. The choice is yours!'
-              : wsShareId
+              : wsShareId !== undefined
               ? getMemberRolePermissions?.memberPermissions?.includes(
                   shareWSPermissionEnum.create_sws_shortLink
-                )
+                ) ?? false
                 ? 'Craft fresh links or take a peek at existing ones. The choice is yours!'
                 : 'As new member, dive into short link world and oversee existing creations.'
               : null}
@@ -1114,12 +1136,12 @@ const ZInpageMainContent: React.FC = () => {
           <ZCan
             shareWSId={wsShareId}
             permissionType={
-              wsShareId
+              wsShareId !== undefined
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }
             havePermissions={
-              wsShareId
+              wsShareId !== undefined
                 ? [shareWSPermissionEnum.create_sws_shortLink]
                 : [permissionsEnum.create_shortLink]
             }>
@@ -1170,12 +1192,12 @@ const ZInpageMainContent: React.FC = () => {
               'gap-2 flex-col': !isSmScale
             })}>
             {/* Filter button */}
-            {((workspaceId &&
-              shortLinksData?.items &&
+            {((workspaceId !== undefined &&
+              shortLinksData?.items !== undefined &&
               shortLinksData?.items?.length > 0) ||
-              (wsShareId &&
-                swsShortLinksData &&
-                swsShortLinksData?.length > 0)) && (
+              (wsShareId !== undefined &&
+                swsShortLinksData !== undefined &&
+                (swsShortLinksData?.length ?? 0) > 0)) && (
               <ZIonButton
                 fill='outline'
                 color='primary'
@@ -1189,14 +1211,16 @@ const ZInpageMainContent: React.FC = () => {
                 testingselector={
                   CONSTANTS.testingSelectors.shortLink.listPage.filterBtn
                 }
-                onClick={async () => {
-                  await menuController.enable(
-                    true,
-                    CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID
-                  );
-                  await menuController.open(
-                    CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID
-                  );
+                onClick={() => {
+                  void (async () => {
+                    await menuController.enable(
+                      true,
+                      CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID
+                    );
+                    await menuController.open(
+                      CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID
+                    );
+                  })();
                 }}>
                 <ZIonIcon
                   icon={filterOutline}
@@ -1206,10 +1230,6 @@ const ZInpageMainContent: React.FC = () => {
               </ZIonButton>
             )}
 
-            {/* <ZIonMenuToggle
-								autoHide={false}
-								menu={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
-							> */}
             {!isLgScale ? (
               <ZIonButton
                 fill='outline'
@@ -1221,14 +1241,16 @@ const ZInpageMainContent: React.FC = () => {
                   'text-xs w-[25%]': !isLgScale,
                   'w-full': !isSmScale
                 })}
-                onClick={async () => {
-                  await menuController.enable(
-                    true,
-                    CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
-                  );
-                  await menuController.open(
-                    CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
-                  );
+                onClick={() => {
+                  void (async () => {
+                    await menuController.enable(
+                      true,
+                      CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
+                    );
+                    await menuController.open(
+                      CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID
+                    );
+                  })();
                 }}>
                 Open folders menu
               </ZIonButton>
@@ -1262,12 +1284,12 @@ const ZInpageMainContent: React.FC = () => {
             <ZCan
               shareWSId={wsShareId}
               permissionType={
-                wsShareId
+                wsShareId !== undefined
                   ? permissionsTypeEnum.shareWSMemberPermissions
                   : permissionsTypeEnum.loggedInUserPermissions
               }
               havePermissions={
-                wsShareId
+                wsShareId !== undefined
                   ? [shareWSPermissionEnum.create_sws_shortLink]
                   : [permissionsEnum.create_shortLink]
               }>
@@ -1281,22 +1303,24 @@ const ZInpageMainContent: React.FC = () => {
                   'text-xs w-[25%]': !isLgScale,
                   'w-full': !isSmScale
                 })}
-                onClick={() => resetShortLinkFormHandler()}
+                onClick={() => {
+                  resetShortLinkFormHandler();
+                }}
                 routerLink={
-                  workspaceId
+                  workspaceId !== undefined
                     ? replaceParams(
                         ZaionsRoutes.AdminPanel.ShortLinks.Create,
                         CONSTANTS.RouteParams.workspace.workspaceId,
                         workspaceId
                       )
-                    : wsShareId
+                    : wsShareId !== undefined
                     ? createRedirectRoute({
                         url: ZaionsRoutes.AdminPanel.ShareWS.Short_link.Create,
                         params: [
                           CONSTANTS.RouteParams.workspace.wsShareId,
                           CONSTANTS.RouteParams.workspace.shareWSMemberId
                         ],
-                        values: [wsShareId, shareWSMemberId]
+                        values: [wsShareId, shareWSMemberId ?? '']
                       })
                     : ''
                 }
@@ -1314,12 +1338,12 @@ const ZInpageMainContent: React.FC = () => {
       <ZCan
         shareWSId={wsShareId}
         permissionType={
-          wsShareId
+          wsShareId !== undefined
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }
         havePermissions={
-          wsShareId
+          wsShareId !== undefined
             ? [shareWSPermissionEnum.view_sws_shortLink]
             : [permissionsEnum.view_shortLink]
         }>
@@ -1329,7 +1353,7 @@ const ZInpageMainContent: React.FC = () => {
   );
 };
 
-const SearchQueryInputComponent = () => {
+const SearchQueryInputComponent: React.FC = () => {
   const setShortLinksFilterOptions = useSetRecoilState(
     ShortLinksFilterOptionsRStateAtom
   );
@@ -1340,7 +1364,7 @@ const SearchQueryInputComponent = () => {
       }}
       onSubmit={values => {
         try {
-          if (values.searchValue) {
+          if ((values?.searchValue?.trim()?.length ?? 0) > 0) {
             setShortLinksFilterOptions(oldValues => ({
               ...oldValues,
               searchQuery: values.searchValue
@@ -1383,7 +1407,9 @@ const SearchQueryInputComponent = () => {
           <ZIonButton
             slot='end'
             className='ion-no-margin ion-text-capitalize'
-            onClick={() => void submitForm()}
+            onClick={() => {
+              void submitForm();
+            }}
             testingselector={
               CONSTANTS.testingSelectors.shortLink.listPage.searchBtn
             }

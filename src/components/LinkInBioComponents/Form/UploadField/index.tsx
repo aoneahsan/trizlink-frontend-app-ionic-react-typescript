@@ -7,7 +7,7 @@ import { imageOutline } from 'ionicons/icons';
 // Custom Imports
 import { ZIonIcon, ZIonItem } from '@/components/ZIonComponents';
 import ZDragAndDrop from '@/components/CustomComponents/ZDragAndDrop';
-import { FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
+import { type FormikSetFieldValueEventVoidType } from '@/types/ZaionsFormik.type';
 
 // Styles
 
@@ -19,7 +19,7 @@ interface LinkInBioUploadFieldInterface {
   imageUrl?: string;
   testinglistselector?: string;
   testingselector?: string;
-  setFieldValue?: FormikSetFieldValueEventType;
+  setFieldValue?: FormikSetFieldValueEventVoidType;
 }
 
 const LinkInBioUploadField: React.FC<LinkInBioUploadFieldInterface> = ({

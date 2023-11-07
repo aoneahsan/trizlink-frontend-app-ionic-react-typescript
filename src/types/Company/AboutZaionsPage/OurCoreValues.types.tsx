@@ -1,5 +1,5 @@
-export type ZaionsOurCoreValuesType = {
+export interface ZaionsOurCoreValuesType {
   id?: string;
   title?: string;
   text?: string;
-};
+}

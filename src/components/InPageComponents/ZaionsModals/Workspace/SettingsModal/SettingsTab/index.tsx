@@ -8,6 +8,8 @@ import React, { useEffect, useState } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import { Formik } from 'formik';
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
@@ -22,52 +24,47 @@ import {
   ZIonRow,
   ZIonText
 } from '@/components/ZIonComponents';
-import ZTimezoneInput, {
-  ZTimezoneSelector
-} from '@/components/CustomComponents/ZTimezone';
+import { ZTimezoneSelector } from '@/components/CustomComponents/ZTimezone';
 import { alertCircleOutline, eyeOffOutline } from 'ionicons/icons';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
-import { Formik } from 'formik';
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
+
+/**
+ * Custom Hooks Imports go down
+ * ? Like import of custom Hook is a custom import
+ * */
+import { useZIonAlert, useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
 import {
   useZGetRQCacheData,
   useZRQDeleteRequest,
   useZRQUpdateRequest,
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
-import { reportCustomError } from '@/utils/customErrorType';
-import { extractInnerData, validateField, zStringify } from '@/utils/helpers';
-import {
-  workspaceInterface,
-  wsShareInterface
-} from '@/types/AdminPanel/workspace';
-import CONSTANTS from '@/utils/constants';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
-import classNames from 'classnames';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import MESSAGES from '@/utils/messages';
-import {
-  showErrorNotification,
-  showSuccessNotification
-} from '@/utils/notification';
-import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
-import { useZIonAlert, useZIonErrorAlert } from '@/ZaionsHooks/zionic-hooks';
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-
-/**
- * Custom Hooks Imports go down
- * ? Like import of custom Hook is a custom import
- * */
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { reportCustomError } from '@/utils/customErrorType';
+import { extractInnerData, validateField, zStringify } from '@/utils/helpers';
+import CONSTANTS from '@/utils/constants';
+import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import MESSAGES from '@/utils/messages';
+import {
+  showErrorNotification,
+  showSuccessNotification
+} from '@/utils/notification';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import {
+  type workspaceInterface,
+  type wsShareInterface
+} from '@/types/AdminPanel/workspace';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Recoil State Imports go down
@@ -111,30 +108,27 @@ const ZSettingsTab: React.FC<{
   const [compState, setCompState] = useState<{
     workspace?: workspaceInterface;
   }>({});
-  //#region Custom hooks.
+  // #region Custom hooks.
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { presentZIonErrorAlert } = useZIonErrorAlert();
   const { presentZIonAlert } = useZIonAlert();
-  //#endregion
+  // #endregion
 
-  //#region APIS
+  // #region APIS
   const { mutateAsync: updateWorkspaceMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.workspace_update_delete,
-    _queriesKeysToInvalidate: [],
     _loaderMessage: MESSAGES.WORKSPACE.UPDATING_API
   });
 
   //
   const { mutateAsync: updateSWSMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.update_ws_share_info_data,
-    _queriesKeysToInvalidate: [],
     _loaderMessage: MESSAGES.WORKSPACE.UPDATING_API
   });
 
   const { mutateAsync: leaveSWSMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.leave_share_ws,
-    _queriesKeysToInvalidate: [],
     _loaderMessage: MESSAGES.WORKSPACE.LEAVING_WS_API
   });
 
@@ -145,18 +139,29 @@ const ZSettingsTab: React.FC<{
   // #endregion
 
   // #region Functions.
-  const formikSubmitHandler = async (values: string) => {
+  const formikSubmitHandler = async (values: string): Promise<void> => {
     try {
-      if (values) {
+      if (values?.length > 0) {
         let _response;
         // Making an api call creating new workspace.
-        if (workspaceId) {
+        if (
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          workspaceId?.trim()?.length > 0
+        ) {
           _response = await updateWorkspaceMutate({
             urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
             itemIds: [workspaceId],
             requestData: values
           });
-        } else if (wsShareId && wsShareMemberId) {
+        } else if (
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          wsShareMemberId !== undefined &&
+          wsShareMemberId !== null &&
+          wsShareMemberId?.trim()?.length > 0
+        ) {
           _response = await updateSWSMutate({
             urlDynamicParts: [
               CONSTANTS.RouteParams.workspace.shareWSId,
@@ -167,22 +172,33 @@ const ZSettingsTab: React.FC<{
           });
         }
 
-        if (_response) {
+        if (_response !== undefined) {
           // extracting data from _response.
           const _data = extractInnerData<workspaceInterface>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data && _data.id) {
-            if (workspaceId) {
+          if (_data !== undefined && _data?.id !== null) {
+            if (
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+            ) {
               // Updating current short link in cache in RQ cache.
               await updateRQCDataHandler<workspaceInterface | undefined>({
                 key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
                 data: { ..._data },
-                id: _data.id
+                id: _data?.id ?? ''
               });
-            } else if (wsShareId && wsShareMemberId) {
+            } else if (
+              wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              wsShareMemberId !== undefined &&
+              wsShareMemberId !== null &&
+              wsShareMemberId?.trim()?.length > 0
+            ) {
               await updateRQCDataHandler<workspaceInterface | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
@@ -210,9 +226,13 @@ const ZSettingsTab: React.FC<{
   };
 
   // when user went to delete workspace and click on the delete button this function will fire and show the confirm alert.
-  const deleteWorkspace = async () => {
+  const deleteWorkspace = async (): Promise<void> => {
     try {
-      if (workspaceId) {
+      if (
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+      ) {
         await presentZIonAlert({
           header: MESSAGES.WORKSPACE.DELETE_ALERT.HEADER,
           subHeader: MESSAGES.WORKSPACE.DELETE_ALERT.SUB_HEADER,
@@ -241,21 +261,25 @@ const ZSettingsTab: React.FC<{
   };
 
   // on the delete workspace confirm alert, when user click on delete button this function will firs which will trigger delete request and delete the workspace.
-  const removeWorkspace = async () => {
+  const removeWorkspace = async (): Promise<void> => {
     try {
-      if (workspaceId) {
+      if (
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+      ) {
         const _response = await deleteWorkspaceMutate({
           itemIds: [workspaceId],
           urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
         });
 
-        if (_response) {
+        if (_response !== undefined) {
           const _data = extractInnerData<{ success: boolean }>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data && _data?.success) {
+          if (_data !== undefined && _data?.success) {
             // getting all the shortLinks from RQ cache.
             const _oldShortLinks =
               extractInnerData<workspaceInterface[]>(
@@ -263,7 +287,7 @@ const ZSettingsTab: React.FC<{
                   key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
                 }) as workspaceInterface[],
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
             // removing deleted shortLinks from cache.
             const _updatedShortLinks = _oldShortLinks.filter(
@@ -273,7 +297,7 @@ const ZSettingsTab: React.FC<{
             // Updating data in RQ cache.
             await updateRQCDataHandler<workspaceInterface[] | undefined>({
               key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
-              data: _updatedShortLinks as workspaceInterface[],
+              data: _updatedShortLinks,
               id: '',
               extractType: ZRQGetRequestExtractEnum.extractItems,
               updateHoleData: true
@@ -295,9 +319,16 @@ const ZSettingsTab: React.FC<{
   };
 
   // when member went to leave workspace and click on the leave button this function will fire and show the confirm alert.
-  const LeaveWorkspaceConfirmAlert = async () => {
+  const LeaveWorkspaceConfirmAlert = async (): Promise<void> => {
     try {
-      if (wsShareId && wsShareMemberId) {
+      if (
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        wsShareId?.trim()?.length > 0 &&
+        wsShareMemberId !== undefined &&
+        wsShareMemberId !== null &&
+        wsShareMemberId?.trim()?.length > 0
+      ) {
         await presentZIonAlert({
           header: MESSAGES.WORKSPACE.LEAVE_WS_ALERT.HEADER,
           subHeader: MESSAGES.WORKSPACE.LEAVE_WS_ALERT.SUB_HEADER,
@@ -325,9 +356,16 @@ const ZSettingsTab: React.FC<{
     }
   };
 
-  const leaveWorkspaceHandler = async () => {
+  const leaveWorkspaceHandler = async (): Promise<void> => {
     try {
-      if (wsShareId && wsShareMemberId) {
+      if (
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        wsShareId?.trim()?.length > 0 &&
+        wsShareMemberId !== undefined &&
+        wsShareMemberId !== null &&
+        wsShareMemberId?.trim()?.length > 0
+      ) {
         const _response = await leaveSWSMutate({
           urlDynamicParts: [
             CONSTANTS.RouteParams.workspace.shareWSId,
@@ -337,32 +375,32 @@ const ZSettingsTab: React.FC<{
           requestData: ''
         });
 
-        if (_response) {
+        if (_response !== undefined) {
           // extracting data from _response.
           const _data = extractInnerData<{ success: boolean }>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data?.success) {
+          if (_data !== undefined && _data?.success) {
             const getWSShareWorkspaceData =
               getRQCDataHandler({
                 key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
-              }) || [];
+              }) ?? [];
 
-            const __oldData =
+            const _oldData =
               extractInnerData<wsShareInterface[]>(
                 getWSShareWorkspaceData,
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
-            const __updatedData = __oldData?.filter(
+            const _updatedData = _oldData?.filter(
               el => el?.id !== wsShareMemberId
             );
 
             await updateRQCDataHandler({
               key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
-              data: __updatedData,
+              data: _updatedData,
               id: '',
               updateHoleData: true,
               extractType: ZRQGetRequestExtractEnum.extractItems
@@ -378,12 +416,16 @@ const ZSettingsTab: React.FC<{
       reportCustomError(error);
     }
   };
-  //#endregion
+  // #endregion
 
   // #region useEffect.
   useEffect(() => {
     try {
-      if (workspaceId) {
+      if (
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+      ) {
         // getting all the workspace from RQ cache.
         const _allWorkspaces =
           extractInnerData<workspaceInterface[]>(
@@ -391,9 +433,9 @@ const ZSettingsTab: React.FC<{
               key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
             }) as workspaceInterface[],
             extractInnerDataOptionsEnum.createRequestResponseItems
-          ) || [];
+          ) ?? [];
 
-        const _currentWorkspace = _allWorkspaces.filter(
+        const _currentWorkspace = _allWorkspaces?.filter(
           el => el.id === workspaceId
         );
 
@@ -401,7 +443,11 @@ const ZSettingsTab: React.FC<{
           ...oldValues,
           workspace: _currentWorkspace[0]
         }));
-      } else if (wsShareId && wsShareMemberId) {
+      } else if (
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        wsShareId?.trim()?.length > 0
+      ) {
         // getting all the workspace from RQ cache.
         const _currentShareWorkspace = extractInnerData<workspaceInterface>(
           getRQCDataHandler<workspaceInterface>({
@@ -421,6 +467,7 @@ const ZSettingsTab: React.FC<{
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspaceId]);
   // #endregion
 
@@ -429,9 +476,9 @@ const ZSettingsTab: React.FC<{
       <ZIonRow className='mx-auto w-[40%]'>
         <Formik
           initialValues={{
-            workspaceName: compState.workspace?.workspaceName || '',
-            workspaceTimezone: compState.workspace?.workspaceTimezone || '',
-            internalPost: compState.workspace?.internalPost || false
+            workspaceName: compState?.workspace?.workspaceName ?? '',
+            workspaceTimezone: compState?.workspace?.workspaceTimezone ?? '',
+            internalPost: compState?.workspace?.internalPost ?? false
           }}
           enableReinitialize={true}
           validate={values => {
@@ -480,9 +527,13 @@ const ZSettingsTab: React.FC<{
                   }
                   className={classNames({
                     z_ion_bg_white: true,
-                    'ion-touched': touched.workspaceName,
-                    'ion-invalid': errors.workspaceName,
-                    'ion-valid': !errors.workspaceName
+                    'ion-touched': touched?.workspaceName === true,
+                    'ion-invalid':
+                      touched?.workspaceName === true && errors?.workspaceName,
+                    'ion-valid':
+                      touched?.workspaceName === true &&
+                      errors?.workspaceName === undefined &&
+                      errors?.workspaceName === null
                   })}
                 />
 
@@ -501,9 +552,14 @@ const ZSettingsTab: React.FC<{
                   }
                   className={classNames({
                     'pt-2 z_ion_bg_white ion-margin-top': true,
-                    'ion-touched': touched.workspaceTimezone,
-                    'ion-invalid': errors.workspaceTimezone,
-                    'ion-valid': !errors.workspaceTimezone
+                    'ion-touched': touched?.workspaceTimezone === true,
+                    'ion-invalid':
+                      touched?.workspaceTimezone === true &&
+                      errors?.workspaceTimezone,
+                    'ion-valid':
+                      touched?.workspaceTimezone === true &&
+                      errors?.workspaceTimezone === undefined &&
+                      errors?.workspaceTimezone === null
                   })}
                 />
 
@@ -529,21 +585,28 @@ const ZSettingsTab: React.FC<{
                     <ZRTooltip
                       anchorSelect='#z-workspace-internal-post'
                       place='bottom'
-                      className='z-40 bg-white'
+                      className='z-40'
                       content='New posts will be visible only for team members.'
                     />
                   </ZIonCol>
 
                   <ZIonCol className='ion-text-end'>
                     <ZRCSwitch
-                      disabled={wsShareId && wsShareMemberId ? true : false}
+                      disabled={
+                        wsShareId !== undefined &&
+                        wsShareId !== null &&
+                        wsShareId?.trim()?.length > 0 &&
+                        wsShareMemberId !== undefined &&
+                        wsShareMemberId !== null &&
+                        wsShareMemberId?.trim()?.length > 0
+                      }
                       testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.internalPostToggler}-${workspaceId}`}
                       testinglistselector={
                         CONSTANTS.testingSelectors.workspace.settingsModal
                           .settings.internalPostToggler
                       }
                       onChange={value => {
-                        setFieldValue('internalPost', value, false);
+                        void setFieldValue('internalPost', value, false);
                       }}
                     />
                   </ZIonCol>
@@ -603,16 +666,30 @@ const ZSettingsTab: React.FC<{
           size='12'
           className='mt-2'>
           <ZIonText className='block text-lg'>
-            {workspaceId
+            {workspaceId !== undefined &&
+            workspaceId !== null &&
+            workspaceId?.trim()?.length > 0
               ? 'Remove workspace'
-              : wsShareId && wsShareMemberId
+              : wsShareId !== undefined &&
+                wsShareId !== null &&
+                wsShareId?.trim()?.length > 0 &&
+                wsShareMemberId !== undefined &&
+                wsShareMemberId !== null &&
+                wsShareMemberId?.trim()?.length > 0
               ? 'Leave workspace'
               : null}
           </ZIonText>
           <ZIonText className='block text-sm text-muted'>
-            {workspaceId
+            {workspaceId !== undefined &&
+            workspaceId !== null &&
+            workspaceId?.trim()?.length > 0
               ? 'Remove this workspace and erase all data (posts, comments, pages etc.). This action is irreversible.'
-              : wsShareId && wsShareMemberId
+              : wsShareId !== undefined &&
+                wsShareId !== null &&
+                wsShareId?.trim()?.length > 0 &&
+                wsShareMemberId !== undefined &&
+                wsShareMemberId !== null &&
+                wsShareMemberId?.trim()?.length > 0
               ? 'If you choose to leave this workspace you will lose access to all data (posts, comments, pages, etc.). You can regain your access in the future if someone else will invite you back in the workspace.'
               : null}
           </ZIonText>
@@ -626,15 +703,33 @@ const ZSettingsTab: React.FC<{
                 .deleteButton
             }
             onClick={() => {
-              if (workspaceId) {
+              if (
+                workspaceId !== undefined &&
+                workspaceId !== null &&
+                workspaceId?.trim()?.length > 0
+              ) {
                 void deleteWorkspace();
-              } else if (wsShareId && wsShareMemberId) {
+              } else if (
+                wsShareId !== undefined &&
+                wsShareId !== null &&
+                wsShareId?.trim()?.length > 0 &&
+                wsShareMemberId !== undefined &&
+                wsShareMemberId !== null &&
+                wsShareMemberId?.trim()?.length > 0
+              ) {
                 void LeaveWorkspaceConfirmAlert();
               }
             }}>
-            {workspaceId
+            {workspaceId !== undefined &&
+            workspaceId !== null &&
+            workspaceId?.trim()?.length > 0
               ? 'Remove this workspace'
-              : wsShareId && wsShareMemberId
+              : wsShareId !== undefined &&
+                wsShareId !== null &&
+                wsShareId?.trim()?.length > 0 &&
+                wsShareMemberId !== undefined &&
+                wsShareMemberId !== null &&
+                wsShareMemberId?.trim()?.length > 0
               ? 'Leave this workspace'
               : null}
           </ZIonButton>

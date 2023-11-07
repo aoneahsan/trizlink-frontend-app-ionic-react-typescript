@@ -25,7 +25,7 @@ import {
 
 /* Theme variables */
 import './theme/variables.css';
-import { UserAccountType } from '@/types/UserAccount/index.type';
+import { type UserAccountType } from '@/types/UserAccount/index.type';
 import { reportCustomError } from './utils/customErrorType';
 
 const App: React.FC = () => {
@@ -43,7 +43,7 @@ const App: React.FC = () => {
         const authToken = (await STORAGE.GET(LOCALSTORAGE_KEYS.AUTHTOKEN)) as
           | string
           | null;
-        if (userData && authToken) {
+        if (userData !== null && authToken !== null) {
           setUserAccountStateAtom(oldState => ({
             ...oldState,
             ...userData

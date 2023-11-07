@@ -27,8 +27,7 @@ import {
   ZIonSegmentButton,
   ZIonIcon,
   ZIonGrid,
-  ZIonRow,
-  ZIonCol
+  ZIonRow
 } from '@/components/ZIonComponents';
 import ZTimetableTab from './TimetableTab';
 import ZSettingsTab from './SettingsTab';
@@ -61,7 +60,7 @@ import {
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  workspaceInterface,
+  type workspaceInterface,
   workspaceSettingsModalTabEnum
 } from '@/types/AdminPanel/workspace';
 
@@ -119,7 +118,7 @@ const ZWorkspacesSettingModal: React.FC<{
   useEffect(() => {
     try {
       // workspaceId pass when the user is owner.
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         // if owner then it will work with the QUERIES_KEYS of that user.
 
         // getting all the workspace from RQ cache.
@@ -129,7 +128,7 @@ const ZWorkspacesSettingModal: React.FC<{
               key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
             }) as workspaceInterface[],
             extractInnerDataOptionsEnum.createRequestResponseItems
-          ) || [];
+          ) ?? [];
 
         const _currentWorkspace = _allWorkspaces.filter(
           el => el.id === workspaceId
@@ -139,7 +138,7 @@ const ZWorkspacesSettingModal: React.FC<{
           ...oldValues,
           workspace: _currentWorkspace[0]
         }));
-      } else if (wsShareId) {
+      } else if (wsShareId !== undefined) {
         //  workspaceId pass when the user is a member.
 
         // if member then it will work with the QUERIES_KEYS of that member.
@@ -150,7 +149,7 @@ const ZWorkspacesSettingModal: React.FC<{
           ]
         }) as workspaceInterface;
 
-        if (_rqShareWSData) {
+        if (_rqShareWSData !== undefined) {
           const _currentShareWorkspaces = extractInnerData<workspaceInterface>(
             _rqShareWSData,
             extractInnerDataOptionsEnum.createRequestResponseItem
@@ -165,7 +164,8 @@ const ZWorkspacesSettingModal: React.FC<{
     } catch (error) {
       reportCustomError(error);
     }
-  }, [workspaceId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspaceId, wsShareId]);
 
   return (
     <>
@@ -186,12 +186,12 @@ const ZWorkspacesSettingModal: React.FC<{
           <ZCan
             shareWSId={wsShareId}
             havePermissions={
-              wsShareId
+              wsShareId !== undefined
                 ? [shareWSPermissionEnum.viewAny_sws_timeSlot]
                 : [permissionsEnum.viewAny_timeSlot]
             }
             permissionType={
-              wsShareId
+              wsShareId !== undefined
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }>
@@ -221,12 +221,12 @@ const ZWorkspacesSettingModal: React.FC<{
           <ZCan
             shareWSId={wsShareId}
             havePermissions={
-              wsShareId
+              wsShareId !== undefined
                 ? [shareWSPermissionEnum.viewAny_sws_label]
                 : [permissionsEnum.viewAny_label]
             }
             permissionType={
-              wsShareId
+              wsShareId !== undefined
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }>
@@ -255,12 +255,12 @@ const ZWorkspacesSettingModal: React.FC<{
           <ZCan
             shareWSId={wsShareId}
             havePermissions={
-              wsShareId
+              wsShareId !== undefined
                 ? [shareWSPermissionEnum.update_sws_workspace]
                 : [permissionsEnum.update_workspace]
             }
             permissionType={
-              wsShareId
+              wsShareId !== undefined
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }>

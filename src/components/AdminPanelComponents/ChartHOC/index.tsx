@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 /**
  * Packages Imports go down

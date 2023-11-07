@@ -87,6 +87,10 @@ ion-app.ios ion-title {
   -o-border-radius: 100vmax !important;
 }
 
+.border-radius_point_6 {
+  --border-radius: 0.6rem;
+}
+
 .border-radius__50per {
   --border-radius: 50%;
   border-radius: 50%;
@@ -252,6 +256,10 @@ span.new {
 }
 .zaions__bg_light_opacity_point5 {
   background: rgba(var(--ion-color-light-rgb), 0.5);
+}
+
+.z-ion-bg-transparent {
+  --background: transparent;
 }
 
 .zaions__bg_light_opacity_point7 {
@@ -492,6 +500,7 @@ span.new {
 
 .zaions_workspaces_actions_popover_size {
   --width: 256px;
+  --max-height: 350px;
 }
 
 .zaions_workspaces_profile_popover_size {
@@ -539,11 +548,15 @@ span.new {
 
 .link-in-bio-folder-modal {
   --height: 50vh;
+  --min-height: 330px;
+  --max-height: 40vh;
   --width: 33vw;
+  --max-width: 29vw;
 }
 
 .short-link-modal {
-  --height: 45vh;
+  --height: 40vh;
+  --min-height: 230px;
   --width: 35vw;
 }
 
@@ -571,6 +584,7 @@ span.new {
 .workspace-post-detail-modal-size {
   --height: 94vh;
   --width: 87.6vw;
+  --min-height: 530px;
 }
 
 /* .invite-member-in-team-modal-size {
@@ -582,6 +596,7 @@ span.new {
 .invite-member-in-team-modal-size {
   --height: 95vh;
   --width: 650px;
+  --min-height: 530px;
 }
 
 .workspace-compose-modal-size {
@@ -628,8 +643,9 @@ span.new {
 .pixel-account-detail-modal-size,
 .note-detail-modal-size,
 .dashboard-filter-modal-size {
-  --height: 55vh;
+  --height: 400px;
   --width: 33vw;
+  --min-height: 400px;
 }
 
 .lib-block-modal-size {

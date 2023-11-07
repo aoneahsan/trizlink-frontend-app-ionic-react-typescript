@@ -6,8 +6,8 @@ import {
   IonCheckbox,
   IonChip,
   IonList,
-  ItemReorderEventDetail,
-  RefresherEventDetail
+  type ItemReorderEventDetail,
+  type RefresherEventDetail
 } from '@ionic/react';
 import {
   calendar,
@@ -41,17 +41,54 @@ import ZIonPage from '@/components/ZIonPage';
 import ZaionsAddNewFolder from '@/components/InPageComponents/ZaionsModals/AddNewFolder';
 import ZaionsAddLinkInBioModal from '@/components/InPageComponents/ZaionsModals/AddNewLinkInBioModal';
 import FolderActionsPopoverContent from '@/components/InPageComponents/ZaionsPopovers/FoldersActionPopover';
-import ZFallbackIonSpinner, {
-  ZFallbackIonSpinner2
-} from '@/components/CustomComponents/FallbackSpinner';
+import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
 //
 import ZCan from '@/components/Can';
 // const ZCan = lazy(() => import('@/components/Can'));
 
 // const ZCustomScrollable = lazy(
-// 	() => import('@/components/CustomComponents/ZScrollable')
+// () => import('@/components/CustomComponents/ZScrollable')
 // );
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
+
+// Types
+import {
+  AdminPanelSidebarMenuPageEnum,
+  folderState
+} from '@/types/AdminPanel/index.type';
+import { type LinkInBioType } from '@/types/AdminPanel/linkInBioType';
+import { type workspaceInterface } from '@/types/AdminPanel/workspace';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import {
+  type LinkFolderType,
+  TimeFilterEnum
+} from '@/types/AdminPanel/linksType';
+
+// Recoil States
+import {
+  LinkInBiosFieldsDataRStateSelector,
+  LinkInBiosFilterOptionsRStateAtom,
+  LinkInBiosRStateAtom
+} from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioState.recoil';
+import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
+
+// Global Contents
+import {
+  useZInvalidateReactQueries,
+  useZRQGetRequest,
+  useZRQUpdateRequest
+} from '@/ZaionsHooks/zreactquery-hooks';
+import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
+import CONSTANTS from '@/utils/constants';
+import { API_URL_ENUM, PAGE_MENU } from '@/utils/enums';
+import { zStringify } from '@/utils/helpers';
+import { reportCustomError } from '@/utils/customErrorType';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
+import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+
+// Styles
+import classes from './styles.module.css';
 
 const ZRCheckbox = lazy(
   () => import('@/components/CustomComponents/ZRCheckbox')
@@ -75,42 +112,6 @@ const ZAdminPanelTopBar = lazy(
   () => import('@/components/AdminPanelComponents/TopBar')
 );
 
-// Types
-import {
-  AdminPanelSidebarMenuPageEnum,
-  folderState
-} from '@/types/AdminPanel/index.type';
-import { LinkInBioType } from '@/types/AdminPanel/linkInBioType';
-import { workspaceInterface } from '@/types/AdminPanel/workspace';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { LinkFolderType, TimeFilterEnum } from '@/types/AdminPanel/linksType';
-
-// Recoil States
-import {
-  LinkInBiosFieldsDataRStateSelector,
-  LinkInBiosFilterOptionsRStateAtom,
-  LinkInBiosRStateAtom
-} from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioState.recoil';
-import { ZDashboardRState } from '@/ZaionsStore/UserDashboard/ZDashboard';
-
-// Global Contents
-import {
-  useZInvalidateReactQueries,
-  useZRQGetRequest,
-  useZRQUpdateRequest
-} from '@/ZaionsHooks/zreactquery-hooks';
-import { useZIonModal, useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
-import CONSTANTS from '@/utils/constants';
-import { API_URL_ENUM, PAGE_MENU, PAGE_MENU_SIDE } from '@/utils/enums';
-import { zStringify } from '@/utils/helpers';
-import { reportCustomError } from '@/utils/customErrorType';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
-
-// Styles
-import classes from './styles.module.css';
-
 const ZLinkInBiosListPage: React.FC = () => {
   // #region Component state.
   const [compState, setCompState] = useState<{
@@ -127,11 +128,12 @@ const ZLinkInBiosListPage: React.FC = () => {
 
   // getting link-in-bio and workspace ids from url with the help of useParams.
   const { workspaceId } = useParams<{
-    workspaceId: string;
+    workspaceId?: string;
   }>();
 
   // #region Custom hooks.
-  const { isXlScale, isMdScale, isLgScale, isSmScale } = useZMediaQueryScale();
+  const { isXlScale, is2XlScale, isMdScale, isLgScale, isSmScale } =
+    useZMediaQueryScale();
   const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   const { validateRequestResponse } = useZValidateRequestResponse();
   // #endregion
@@ -149,11 +151,16 @@ const ZLinkInBiosListPage: React.FC = () => {
   const { isFetching: isSelectedWorkspaceFetching } =
     useZRQGetRequest<workspaceInterface>({
       _url: API_URL_ENUM.workspace_update_delete,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET, workspaceId],
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
+        workspaceId ?? ''
+      ],
       _authenticated: true,
-      _itemsIds: [workspaceId],
+      _itemsIds: [workspaceId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: !workspaceId ? true : false,
+      _shouldFetchWhenIdPassed: !(
+        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+      ),
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
 
@@ -164,10 +171,10 @@ const ZLinkInBiosListPage: React.FC = () => {
     _url: API_URL_ENUM.LinkInBio_folders_create_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-      workspaceId,
+      workspaceId ?? '',
       folderState.linkInBio
     ],
-    _itemsIds: [workspaceId],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
 
@@ -175,8 +182,11 @@ const ZLinkInBiosListPage: React.FC = () => {
     LinkInBioType[]
   >({
     _url: API_URL_ENUM.linkInBio_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN, workspaceId],
-    _itemsIds: [workspaceId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+      workspaceId ?? ''
+    ],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
 
@@ -221,30 +231,30 @@ const ZLinkInBiosListPage: React.FC = () => {
   const { presentZIonModal: presentAddLinkInBioModal } = useZIonModal(
     ZaionsAddLinkInBioModal,
     {
-      workspaceId: workspaceId
+      workspaceId
     }
   );
   // #endregion
 
   // #region Functions.
-  const invalidedQueries = async () => {
+  const invalidedQueries = async (): Promise<void> => {
     try {
       // Workspace.
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET,
-        workspaceId
+        workspaceId ?? ''
       ]);
 
       // Link in bio.
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-        workspaceId
+        workspaceId ?? ''
       ]);
 
       // Folder.
       await zInvalidateReactQueries([
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-        workspaceId,
+        workspaceId ?? '',
         folderState.linkInBio
       ]);
     } catch (error) {
@@ -253,7 +263,7 @@ const ZLinkInBiosListPage: React.FC = () => {
   };
 
   // Link-in-bio folders reorder function.
-  const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
+  const handleReorder = (event: CustomEvent<ItemReorderEventDetail>): void => {
     event.detail.complete();
 
     setTimeout(() => {
@@ -268,7 +278,7 @@ const ZLinkInBiosListPage: React.FC = () => {
         );
       }
 
-      if (_linkInBioFoldersIds.length) {
+      if (_linkInBioFoldersIds.length > 0) {
         setCompState(_ => ({
           LinkInBioFoldersReorder: {
             Ids: _linkInBioFoldersIds,
@@ -280,7 +290,9 @@ const ZLinkInBiosListPage: React.FC = () => {
   };
 
   //
-  const handleRefresh = async (event: CustomEvent<RefresherEventDetail>) => {
+  const handleRefresh = async (
+    event: CustomEvent<RefresherEventDetail>
+  ): Promise<void> => {
     try {
       await invalidedQueries();
       event.detail.complete();
@@ -289,7 +301,7 @@ const ZLinkInBiosListPage: React.FC = () => {
     }
   };
 
-  const linkInBioFoldersReOrderHandler = async () => {
+  const linkInBioFoldersReOrderHandler = async (): Promise<void> => {
     try {
       // The update api...
       const _result = await UpdateShortLinksFoldersReorder({
@@ -335,7 +347,10 @@ const ZLinkInBiosListPage: React.FC = () => {
         {/* <Suspense fallback={<ZFallbackIonSpinner />}> */}
         <ZIonContent>
           {/* Page Navigation */}
-          <ZIonRefresher onIonRefresh={event => void handleRefresh(event)}>
+          <ZIonRefresher
+            onIonRefresh={event => {
+              void handleRefresh(event);
+            }}>
             <ZIonRefresherContent />
           </ZIonRefresher>
 
@@ -361,12 +376,20 @@ const ZLinkInBiosListPage: React.FC = () => {
               <ZIonCol
                 sizeXl={
                   ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                    ? '10'
+                    ? is2XlScale
+                      ? '10.5'
+                      : '10'
+                    : is2XlScale
+                    ? '11.4'
                     : '11.2'
                 }
                 sizeLg={
                   ZDashboardState.dashboardMainSidebarIsCollabes.isExpand
-                    ? '10'
+                    ? is2XlScale
+                      ? '10.5'
+                      : '10'
+                    : is2XlScale
+                    ? '11.4'
                     : '11.2'
                 }
                 sizeMd='12'
@@ -397,9 +420,7 @@ const ZLinkInBiosListPage: React.FC = () => {
                           <ZDashboardFolderMenu
                             showSkeleton={isZFetching}
                             type={AdminPanelSidebarMenuPageEnum.linkInBio}
-                            foldersData={
-                              linkInBiosFoldersData ? linkInBiosFoldersData : []
-                            }
+                            foldersData={linkInBiosFoldersData ?? []}
                             showFoldersSaveReorderButton={
                               compState?.LinkInBioFoldersReorder?.isEnable
                             }
@@ -557,7 +578,7 @@ const ZLinkInBiosListPage: React.FC = () => {
                                   className={classNames({
                                     'my-2': true
                                   })}>
-                                  Export data's
+                                  Export data&apos;s
                                 </ZIonButton>
 
                                 <ZIonButton
@@ -594,7 +615,7 @@ const ZLinkInBiosListPage: React.FC = () => {
                                       });
                                     }}
                                     // className={classNames({
-                                    // 	'my-2': true,
+                                    // 'my-2': true,
                                     // })}
                                   >
                                     Create a new Link In Bio
@@ -721,35 +742,18 @@ const ZLinkInBiosListPage: React.FC = () => {
                                       slot='start'
                                       icon={pricetagOutline}
                                     />
-                                    {linkInBiosFilterOptionsState.tags
-                                      ? linkInBiosFilterOptionsState.tags
+                                    {linkInBiosFilterOptionsState?.tags !==
+                                      undefined &&
+                                    linkInBiosFilterOptionsState?.tags !== null
+                                      ? linkInBiosFilterOptionsState?.tags
                                           ?.length === 1
                                         ? linkInBiosFilterOptionsState.tags[0]
-                                        : linkInBiosFilterOptionsState.tags
-                                            ?.length > 1
+                                        : (linkInBiosFilterOptionsState?.tags
+                                            ?.length ?? 0) > 1
                                         ? `${linkInBiosFilterOptionsState.tags?.length} tags`
                                         : 'No values'
                                       : 'No values'}
                                   </ZIonButton>
-
-                                  {/* Filter by Columns */}
-                                  {/* <ZIonButton
-																			fill='outline'
-																			color='primary'
-																			expand={!isMdScale ? 'block' : undefined}
-																			height='39px'
-																			className={classNames({
-																				'ms-auto me-3': isXlScale,
-																				'my-2': !isMdScale,
-																			})}
-																		>
-																			<ZIonIcon
-																				slot='start'
-																				className='pb-[3px]'
-																				icon={menuOutline}
-																			/>
-																			7 Columns
-																		</ZIonButton> */}
 
                                   {/* Refetch data button */}
                                   <ZIonButton
@@ -801,11 +805,11 @@ const ZLinkInBiosListPage: React.FC = () => {
   );
 };
 
-const LinkInBiosTimeRangeFilterPopover = () => {
+const LinkInBiosTimeRangeFilterPopover: React.FC = () => {
   const [linkInBiosFilterOptionsState, setLinkInBiosFilterOptionsState] =
     useRecoilState(LinkInBiosFilterOptionsRStateAtom);
 
-  const timeRangeFilterSubmission = (_value: TimeFilterEnum) => {
+  const timeRangeFilterSubmission = (_value: TimeFilterEnum): void => {
     try {
       setLinkInBiosFilterOptionsState(oldValues => ({
         ...oldValues,
@@ -823,7 +827,9 @@ const LinkInBiosTimeRangeFilterPopover = () => {
           color={'secondary'}
           expand='block'
           className='mx-2 my-3'
-          onClick={() => timeRangeFilterSubmission(TimeFilterEnum.allTime)}
+          onClick={() => {
+            timeRangeFilterSubmission(TimeFilterEnum.allTime);
+          }}
           fill={
             linkInBiosFilterOptionsState.timeFilter.daysToSubtract ===
             TimeFilterEnum.allTime
@@ -836,7 +842,9 @@ const LinkInBiosTimeRangeFilterPopover = () => {
           color={'secondary'}
           expand='block'
           className='mx-2 my-3'
-          onClick={() => timeRangeFilterSubmission(TimeFilterEnum.today)}
+          onClick={() => {
+            timeRangeFilterSubmission(TimeFilterEnum.today);
+          }}
           fill={
             linkInBiosFilterOptionsState.timeFilter.daysToSubtract ===
             TimeFilterEnum.today
@@ -849,9 +857,9 @@ const LinkInBiosTimeRangeFilterPopover = () => {
           color={'secondary'}
           expand='block'
           className='mx-2 my-3'
-          onClick={() =>
-            timeRangeFilterSubmission(TimeFilterEnum.lastSevenDays)
-          }
+          onClick={() => {
+            timeRangeFilterSubmission(TimeFilterEnum.lastSevenDays);
+          }}
           fill={
             linkInBiosFilterOptionsState.timeFilter.daysToSubtract ===
             TimeFilterEnum.lastSevenDays
@@ -870,7 +878,9 @@ const LinkInBiosTimeRangeFilterPopover = () => {
               : 'outline'
           }
           className='mx-2 my-3'
-          onClick={() => timeRangeFilterSubmission(TimeFilterEnum.last30days)}>
+          onClick={() => {
+            timeRangeFilterSubmission(TimeFilterEnum.last30days);
+          }}>
           Last 30 days
         </ZIonButton>
         <ZIonButton
@@ -883,7 +893,9 @@ const LinkInBiosTimeRangeFilterPopover = () => {
               : 'outline'
           }
           className='mx-2 my-3'
-          onClick={() => timeRangeFilterSubmission(TimeFilterEnum.thisMonth)}>
+          onClick={() => {
+            timeRangeFilterSubmission(TimeFilterEnum.thisMonth);
+          }}>
           This month
         </ZIonButton>
         <ZIonButton
@@ -896,7 +908,9 @@ const LinkInBiosTimeRangeFilterPopover = () => {
               : 'outline'
           }
           className='mx-2 my-3'
-          onClick={() => timeRangeFilterSubmission(TimeFilterEnum.lastMonth)}>
+          onClick={() => {
+            timeRangeFilterSubmission(TimeFilterEnum.lastMonth);
+          }}>
           Last month
         </ZIonButton>
         <ZIonButton
@@ -909,7 +923,9 @@ const LinkInBiosTimeRangeFilterPopover = () => {
               : 'outline'
           }
           className='mx-2 my-3'
-          onClick={() => timeRangeFilterSubmission(TimeFilterEnum.customRange)}>
+          onClick={() => {
+            timeRangeFilterSubmission(TimeFilterEnum.customRange);
+          }}>
           Custom Range
         </ZIonButton>
       </div>
@@ -917,7 +933,7 @@ const LinkInBiosTimeRangeFilterPopover = () => {
   );
 };
 
-const LinkInBiosTagsFiltersPopover = () => {
+const LinkInBiosTagsFiltersPopover: React.FC = () => {
   // For getting all tags data
   const { tags: _LinkInBiosFieldsDataTagsSelector } = useRecoilValue(
     LinkInBiosFieldsDataRStateSelector
@@ -932,17 +948,13 @@ const LinkInBiosTagsFiltersPopover = () => {
     allTags: string[],
     filteredTags: string[] = []
   ): {
-    _filteredTags?: {
-      [key: string]: boolean;
-    };
+    _filteredTags?: Record<string, boolean>;
     _allTags?: boolean;
   } => {
     try {
-      const _filteredTags: {
-        [key: string]: boolean;
-      } = {};
+      const _filteredTags: Record<string, boolean> = {};
       let _allTags = true;
-      if (allTags.length) {
+      if (allTags.length > 0) {
         allTags.forEach((tag, i) => {
           if (filteredTags.includes(tag)) {
             _filteredTags[tag] = true;
@@ -968,10 +980,12 @@ const LinkInBiosTagsFiltersPopover = () => {
         )}
         onSubmit={values => {
           try {
-            if (values._filteredTags) {
+            if (values._filteredTags !== null) {
               const _tags: string[] = [];
-              for (const [key, value] of Object.entries(values._filteredTags)) {
-                if (value === true) {
+              for (const [key, value] of Object.entries(
+                values?._filteredTags ?? {}
+              )) {
+                if (value) {
                   _tags.push(key);
                 }
               }
@@ -992,7 +1006,9 @@ const LinkInBiosTagsFiltersPopover = () => {
               <ZIonButton
                 expand='block'
                 className='m-0 ion-text-capitalize'
-                onClick={() => void submitForm()}>
+                onClick={() => {
+                  void submitForm();
+                }}>
                 <ZIonIcon
                   icon={filterOutline}
                   className='me-1'
@@ -1003,27 +1019,13 @@ const LinkInBiosTagsFiltersPopover = () => {
                 <ZIonText className='font-bold ms-3 text-[14px] zaions__color_gray2'>
                   All Tags
                 </ZIonText>
-                {/* <IonCheckbox
-									slot='end'
-									checked={values._allTags}
-									onIonChange={({ target }) => {
-										setFieldValue('_allTags', target.checked, false);
-										_shortLinksFieldsDataTagsSelector.forEach((el) => {
-											setFieldValue(
-												`_filteredTags.${el}`,
-												target.checked,
-												false
-											);
-										});
-									}}
-									onIonBlur={handleBlur}
-								/> */}
+
                 <ZRCheckbox
                   checkedValue={values._allTags}
                   handleChange={checked => {
-                    setFieldValue('_allTags', checked, false);
+                    void setFieldValue('_allTags', checked, false);
                     _LinkInBiosFieldsDataTagsSelector.forEach(el => {
-                      setFieldValue(`_filteredTags.${el}`, checked, false);
+                      void setFieldValue(`_filteredTags.${el}`, checked, false);
                     });
                   }}
                   className='ms-auto'
@@ -1037,14 +1039,19 @@ const LinkInBiosTagsFiltersPopover = () => {
                       <IonCheckbox
                         slot='end'
                         checked={
-                          values._filteredTags && values._filteredTags[el]
+                          values?._filteredTags !== undefined &&
+                          values._filteredTags[el]
                         }
                         name={el}
                         onIonChange={({ target }) => {
-                          if (!target.checked && values._allTags) {
-                            setFieldValue('_allTags', false, false);
+                          if (
+                            !target.checked &&
+                            values?._allTags !== undefined &&
+                            values?._allTags !== null
+                          ) {
+                            void setFieldValue('_allTags', false, false);
                           }
-                          setFieldValue(
+                          void setFieldValue(
                             `_filteredTags.${el}`,
                             target.checked,
                             false
@@ -1154,13 +1161,13 @@ const LinkInBiosTagsFiltersPopover = () => {
 //                 All Domains
 //               </ZIonText>
 //               {/* <IonCheckbox
-// 								slot='end'
-// 								checked={values._allDomains}
-// 								onIonChange={({ target }) => {
-// 									setFieldValue('_allDomains', target.checked, false);
-// 								}}
-// 								onIonBlur={handleBlur}
-// 							/> */}
+// slot='end'
+// checked={values._allDomains}
+// onIonChange={({ target }) => {
+// setFieldValue('_allDomains', target.checked, false);
+// }}
+// onIonBlur={handleBlur}
+// /> */}
 //               <ZRCheckbox
 //                 checkedValue={values._allDomains}
 //                 handleChange={(checked) => {
@@ -1209,7 +1216,7 @@ const LinkInBiosTagsFiltersPopover = () => {
 //   );
 // };
 
-const SearchQueryInputComponent = () => {
+const SearchQueryInputComponent: React.FC = () => {
   const setLinkInBiosFilterOptionsState = useSetRecoilState(
     LinkInBiosFilterOptionsRStateAtom
   );
@@ -1220,7 +1227,7 @@ const SearchQueryInputComponent = () => {
       }}
       onSubmit={values => {
         try {
-          if (values.searchValue) {
+          if (values?.searchValue?.trim()?.length > 0) {
             setLinkInBiosFilterOptionsState(oldValues => ({
               ...oldValues,
               searchQuery: values.searchValue
@@ -1261,7 +1268,9 @@ const SearchQueryInputComponent = () => {
             }}
           />
           <ZIonButton
-            onClick={() => void submitForm()}
+            onClick={() => {
+              void submitForm();
+            }}
             slot='end'
             className='ion-no-margin ion-text-capitalize'
             testingselector={

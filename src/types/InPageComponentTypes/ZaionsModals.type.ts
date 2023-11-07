@@ -1,7 +1,7 @@
-export type ZaionsModalsActionType = {
+export interface ZaionsModalsActionType {
   // map(
-  // 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // 	arg0: (el: any) => { value: any; label: any }
+  // // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // arg0: (el: any) => { value: any; label: any }
   // ): import('../components/CustomComponents/index.type').ZaionsRSelectOptions[]
   ShowDashboardFiltersModal: boolean;
-};
+}

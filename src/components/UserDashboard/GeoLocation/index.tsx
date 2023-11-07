@@ -25,14 +25,9 @@ import {
   ZIonSelect,
   ZIonSelectOption
 } from '@/components/ZIonComponents';
-import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
 
 // Global Constants
-import {
-  formatReactSelectOption,
-  getRandomKey,
-  zAddUrlProtocol
-} from '@/utils/helpers';
+import { getRandomKey, zAddUrlProtocol } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
@@ -42,20 +37,17 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { ZCountryData } from '@/data/DiscoverEnterprise/index.data';
 
 // Types
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
-import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { type ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 import CONSTANTS from '@/utils/constants';
 import { EZGeoLocationCondition } from '@/types/AdminPanel/index.type';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
-import { AutoSizer, List } from 'react-virtualized';
 
 // Styles
 
-type GeoLocationErrorsType = {
+interface GeoLocationErrorsType {
   redirectionLink: string | boolean | undefined;
   country?: string;
-};
+}
 
 const ZConditions = [
   {
@@ -77,15 +69,8 @@ const ZConditions = [
 ];
 
 const GeoLocation: React.FC = () => {
-  const {
-    values,
-    errors,
-    touched,
-    setFieldValue,
-    handleChange,
-    handleBlur,
-    setFieldTouched
-  } = useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
+  const { values, errors, touched, setFieldValue, handleChange, handleBlur } =
+    useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
   const [compState, setCompState] = useState<{
     equalToConditionCountries: string[];
@@ -102,6 +87,8 @@ const GeoLocation: React.FC = () => {
     const _filteredEqualToGeoLocation = values?.geoLocation?.filter(el => {
       if (el.condition === EZGeoLocationCondition.equalTo) {
         return el.country;
+      } else {
+        return null;
       }
     });
 
@@ -109,6 +96,8 @@ const GeoLocation: React.FC = () => {
     const _filteredNotEqualToGeoLocation = values?.geoLocation?.filter(el => {
       if (el.condition === EZGeoLocationCondition.notEqualTo) {
         return el.country;
+      } else {
+        return null;
       }
     });
 
@@ -124,14 +113,14 @@ const GeoLocation: React.FC = () => {
       _geoLocation => _geoLocation.country
     );
 
-    if (_equalToCountries) {
+    if (_equalToCountries !== undefined) {
       setCompState(oldValues => ({
         ...oldValues,
         equalToConditionCountries: _equalToCountries as string[]
       }));
     }
 
-    if (_notEqualToCountries) {
+    if (_notEqualToCountries !== undefined) {
       setCompState(oldValues => ({
         ...oldValues,
         notEqualToConditionCountries: _notEqualToCountries as string[]
@@ -177,7 +166,7 @@ const GeoLocation: React.FC = () => {
                     CONSTANTS.testingSelectors.shortLink.formPage.geoLocation
                       .container
                   }>
-                  {values.geoLocation.length
+                  {values.geoLocation.length > 0
                     ? values.geoLocation.map((_geoLocationEl, _index) => (
                         <ZIonRow
                           key={_index}
@@ -223,15 +212,16 @@ const GeoLocation: React.FC = () => {
                                       values?.geoLocation[_index]
                                         ?.redirectionLink;
                                     const formattedUrl = zAddUrlProtocol(
-                                      inputUrl || ''
+                                      inputUrl ?? ''
                                     );
-                                    setFieldValue(
+                                    void setFieldValue(
                                       `geoLocation.${_index}.redirectionLink`,
                                       formattedUrl
                                     );
                                   }}
                                   errorText={
-                                    errors.geoLocation?.length
+                                    errors.geoLocation !== null &&
+                                    errors.geoLocation !== undefined
                                       ? ((
                                           errors.geoLocation[
                                             _index
@@ -242,29 +232,34 @@ const GeoLocation: React.FC = () => {
                                   className={classNames({
                                     z_ion_bg_white: true,
                                     'ion-touched':
-                                      touched?.geoLocation &&
+                                      touched?.geoLocation !== undefined &&
                                       touched?.geoLocation[_index]
                                         ?.redirectionLink,
                                     'ion-invalid':
-                                      touched?.geoLocation &&
-                                      errors?.geoLocation &&
+                                      touched?.geoLocation !== undefined &&
+                                      errors?.geoLocation !== undefined &&
                                       touched?.geoLocation[_index]
-                                        ?.redirectionLink &&
+                                        ?.redirectionLink !== undefined &&
                                       (
                                         errors.geoLocation[
                                           _index
                                         ] as GeoLocationErrorsType
                                       ).redirectionLink,
                                     'ion-valid':
-                                      touched?.geoLocation &&
-                                      errors?.geoLocation &&
+                                      touched?.geoLocation !== undefined &&
+                                      errors?.geoLocation !== undefined &&
                                       touched?.geoLocation[_index]
-                                        ?.redirectionLink &&
-                                      !(
+                                        ?.redirectionLink !== undefined &&
+                                      ((
                                         errors.geoLocation[
                                           _index
                                         ] as GeoLocationErrorsType
-                                      ).redirectionLink
+                                      ).redirectionLink === undefined ||
+                                        (
+                                          errors.geoLocation[
+                                            _index
+                                          ] as GeoLocationErrorsType
+                                        ).redirectionLink === null)
                                   })}
                                 />
                               </ZIonCol>
@@ -277,7 +272,6 @@ const GeoLocation: React.FC = () => {
                                 sizeXs='12'>
                                 <ZIonSelect
                                   minHeight='2.5rem'
-                                  interface='popover'
                                   fill='outline'
                                   label='Condition'
                                   labelPlacement='stacked'
@@ -289,7 +283,7 @@ const GeoLocation: React.FC = () => {
                                       e?.target?.value ===
                                         EZGeoLocationCondition.notEqualTo
                                     ) {
-                                      setFieldValue(
+                                      void setFieldValue(
                                         `geoLocation.${_index}.country`,
                                         '',
                                         false
@@ -326,6 +320,7 @@ const GeoLocation: React.FC = () => {
                                 sizeMd='5.8'
                                 sizeSm='11'
                                 sizeXs='11'>
+                                {/* Here in ZIonSelect the interface is action-sheet because first we are using popover interface but there is an issue using popover interface when we click at left side of select the popover width got smaller don't now why.  */}
                                 <ZIonSelect
                                   toggleIcon={
                                     values?.geoLocation[_index]?.condition ===
@@ -344,7 +339,6 @@ const GeoLocation: React.FC = () => {
                                       : undefined
                                   }
                                   minHeight='2.5rem'
-                                  interface='popover'
                                   multiple={
                                     values?.geoLocation[_index]?.condition ===
                                       EZGeoLocationCondition.notWithin ||
@@ -367,7 +361,7 @@ const GeoLocation: React.FC = () => {
                                       .formPage.geoLocation.countrySelector
                                   }
                                   errorText={
-                                    errors.geoLocation?.length
+                                    errors.geoLocation !== undefined
                                       ? ((
                                           errors.geoLocation[
                                             _index
@@ -378,26 +372,33 @@ const GeoLocation: React.FC = () => {
                                   className={classNames({
                                     z_ion_bg_white: true,
                                     'ion-touched':
-                                      touched?.geoLocation &&
+                                      touched?.geoLocation !== undefined &&
                                       touched?.geoLocation[_index]?.country,
                                     'ion-invalid':
-                                      touched?.geoLocation &&
-                                      errors?.geoLocation &&
-                                      touched?.geoLocation[_index]?.country &&
+                                      touched?.geoLocation !== undefined &&
+                                      errors?.geoLocation !== undefined &&
+                                      touched?.geoLocation[_index]?.country ===
+                                        true &&
                                       (
                                         errors.geoLocation[
                                           _index
                                         ] as GeoLocationErrorsType
                                       ).country,
                                     'ion-valid':
-                                      touched?.geoLocation &&
-                                      errors?.geoLocation &&
-                                      touched?.geoLocation[_index]?.country &&
-                                      !(
+                                      touched?.geoLocation !== undefined &&
+                                      errors?.geoLocation !== undefined &&
+                                      touched?.geoLocation[_index]?.country ===
+                                        true &&
+                                      ((
                                         errors.geoLocation[
                                           _index
                                         ] as GeoLocationErrorsType
-                                      ).country
+                                      ).country === undefined ||
+                                        (
+                                          errors.geoLocation[
+                                            _index
+                                          ] as GeoLocationErrorsType
+                                        ).country === null)
                                   })}>
                                   {ZCountryData.map((el, index) => {
                                     let _disabled = false;
@@ -431,69 +432,23 @@ const GeoLocation: React.FC = () => {
                                     );
                                   })}
                                 </ZIonSelect>
-                                {/* <ZaionsRSelect
-														placeholder='country*'
-														name={`geoLocation.${_index}.country`}
-														options={ZCountryData}
-														testingselector={
-															CONSTANTS.testingSelectors.shortLink.formPage
-																.geoLocation.countrySelector
-														}
-														testinglistselector={`${CONSTANTS.testingSelectors.shortLink.formPage.geoLocation.countrySelector}-${_geoLocationEl.id}`}
-														onChange={(_value) => {
-															setFieldValue(
-																`geoLocation.${_index}.country`,
-																(_value as ZaionsRSelectOptions).value,
-																true
-															);
-														}}
-														className={classNames({
-															'pb-0 mb-0 geo-location-country-field': true,
-															invalid:
-																touched?.geoLocation &&
-																errors?.geoLocation &&
-																touched?.geoLocation[_index]?.country &&
-																(
-																	errors?.geoLocation[
-																		_index
-																	] as GeoLocationErrorsType
-																)?.country,
 
-															valid:
-																touched?.geoLocation &&
-																errors?.geoLocation &&
-																touched?.geoLocation[_index]?.country &&
-																!(
-																	errors?.geoLocation[
-																		_index
-																	] as GeoLocationErrorsType
-																)?.country,
-														})}
-														onBlur={() => {
-															setFieldTouched(
-																`geoLocation.${_index}.country`,
-																true,
-																true
-															);
-														}}
-														value={
-															formatReactSelectOption(
-																values?.geoLocation[_index]?.country as string,
-																ZCountryData as ZGenericObject[],
-																'label',
-																'value'
-															) || []
-														}
-													/>
-													 */}
-                                {errors?.geoLocation &&
-                                touched?.geoLocation &&
+                                {errors?.geoLocation !== undefined &&
+                                touched?.geoLocation !== undefined &&
                                 (
                                   errors.geoLocation[
                                     _index
                                   ] as GeoLocationErrorsType
-                                )?.country &&
-                                touched?.geoLocation[_index]?.country ? (
+                                )?.country !== undefined &&
+                                (
+                                  (
+                                    errors.geoLocation[
+                                      _index
+                                    ] as GeoLocationErrorsType
+                                  )?.country as string
+                                )?.trim()?.length > 0 &&
+                                touched?.geoLocation[_index]?.country ===
+                                  true ? (
                                   <ZIonNote
                                     className='text-xs ps-2'
                                     color='danger'
@@ -503,7 +458,7 @@ const GeoLocation: React.FC = () => {
                                         .countrySelectorError
                                     }
                                     testinglistselector={`${CONSTANTS.testingSelectors.shortLink.formPage.geoLocation.countrySelectorError}-${_geoLocationEl.id}`}>
-                                    {errors.geoLocation?.length &&
+                                    {errors.geoLocation !== undefined &&
                                       (
                                         errors.geoLocation[
                                           _index
@@ -538,10 +493,10 @@ const GeoLocation: React.FC = () => {
               </ZCustomScrollable>
 
               {/*  */}
-              {!values.rotatorABTesting.length ? (
+              {values.rotatorABTesting.length === 0 ? (
                 <ZIonButton
                   fill='outline'
-                  className='mt-2 ion-no-padding ion-padding-horizontal px-0 ms-2'
+                  className='px-0 mt-2 ion-no-padding ion-padding-horizontal ms-2'
                   size='small'
                   testingselector={
                     CONSTANTS.testingSelectors.shortLink.formPage.geoLocation
@@ -550,25 +505,25 @@ const GeoLocation: React.FC = () => {
                   style={{
                     '--border-width': '1px'
                   }}
-                  onClick={() =>
+                  onClick={() => {
                     push({
                       id: getRandomKey(),
                       redirectionLink: 'https://',
                       country: '',
                       condition: EZGeoLocationCondition.equalTo
-                    })
-                  }>
+                    });
+                  }}>
                   Add a redirection
                 </ZIonButton>
               ) : (
                 <ZIonText
                   color='dark'
-                  className='ms-3 text-md block ion-no-padding'
+                  className='block ms-3 text-md ion-no-padding'
                   testingselector={
                     CONSTANTS.testingSelectors.shortLink.formPage.geoLocation
                       .deleteSingleGeoLocationBtn
                   }>
-                  You can't add a redirection if AB testing is activated
+                  You can&apos;t add a redirection if AB testing is activated
                 </ZIonText>
               )}
             </>

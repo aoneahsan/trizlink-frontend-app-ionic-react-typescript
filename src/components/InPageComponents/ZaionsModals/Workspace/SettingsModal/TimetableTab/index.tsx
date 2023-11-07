@@ -32,6 +32,7 @@ import {
   ZIonText
 } from '@/components/ZIonComponents';
 import ZWorkspaceTimeSlotFormModal from '../../TimeSlotFormModal';
+import ZCan from '@/components/Can';
 
 /**
  * Custom Hooks Imports go down
@@ -61,6 +62,12 @@ import { reportCustomError } from '@/utils/customErrorType';
 import { showErrorNotification } from '@/utils/notification';
 import MESSAGES from '@/utils/messages';
 import { extractInnerData } from '@/utils/helpers';
+import {
+  permissionCheckModeEnum,
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
 
 /**
  * Type Imports go down
@@ -69,17 +76,9 @@ import { extractInnerData } from '@/utils/helpers';
 import {
   daysEnum,
   FormMode,
-  TimeSlotInterface
+  type TimeSlotInterface
 } from '@/types/AdminPanel/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import ZCan from '@/components/Can';
-import {
-  permissionCheckModeEnum,
-  permissionsEnum,
-  permissionsTypeEnum,
-  shareWSPermissionEnum
-} from '@/utils/enums/RoleAndPermissions';
-import classNames from 'classnames';
 
 /**
  * Recoil State Imports go down
@@ -125,9 +124,9 @@ const ZTimetableTab: React.FC<{
   const { presentZIonPopover: presentZTimeSlotActionPopover } = useZIonPopover(
     ZTimeSlotActionPopover,
     {
-      workspaceId: workspaceId,
-      wsShareMemberId: wsShareMemberId,
-      wsShareId: wsShareId,
+      workspaceId,
+      wsShareMemberId,
+      wsShareId,
       timeSlotId: compState.timeSlotId
     }
   );
@@ -135,9 +134,9 @@ const ZTimetableTab: React.FC<{
   const { presentZIonModal: presentZWorkspaceTimeSlotFormModal } = useZIonModal(
     ZWorkspaceTimeSlotFormModal,
     {
-      workspaceId: workspaceId,
+      workspaceId,
       timeSlotDay: compState.timeSlotDay,
-      wsShareMemberId: wsShareMemberId
+      wsShareMemberId
     }
   );
 
@@ -146,11 +145,16 @@ const ZTimetableTab: React.FC<{
   const { data: timeSlotData, isFetching: isTimeSlotDataFetching } =
     useZRQGetRequest<TimeSlotInterface[]>({
       _url: API_URL_ENUM.time_slot_create_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN, workspaceId!],
-      _shouldFetchWhenIdPassed: workspaceId ? false : true,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
+        workspaceId ?? ''
+      ],
+      _shouldFetchWhenIdPassed: !(
+        workspaceId !== undefined && workspaceId?.trim()?.length > 0
+      ),
       _showLoader: false,
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _itemsIds: [workspaceId!]
+      _itemsIds: [workspaceId ?? '']
     });
 
   // if member then this api hit to get time-slot for current share-workspace data.
@@ -161,39 +165,41 @@ const ZTimetableTab: React.FC<{
     _url: API_URL_ENUM.time_slot_sws_create_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.SWS_MAIN,
-      wsShareMemberId!
+      wsShareMemberId ?? ''
     ],
-    _shouldFetchWhenIdPassed: wsShareMemberId ? false : true,
+    _shouldFetchWhenIdPassed: !(
+      wsShareMemberId !== undefined && wsShareMemberId?.trim()?.length > 0
+    ),
     _showLoader: false,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _itemsIds: [wsShareMemberId!]
+    _itemsIds: [wsShareMemberId ?? '']
   });
   // #endregion
 
   useEffect(() => {
     try {
       // Accounting to the member or owner getting data and storing it to component state to show in frontend.
-      if (wsShareMemberId) {
+      if (wsShareMemberId !== undefined) {
         setCompState(oldValues => ({
           ...oldValues,
-          timeSlotData: shareWSTimeSlotData || []
+          timeSlotData: shareWSTimeSlotData ?? []
         }));
-      } else if (workspaceId) {
+      } else if (workspaceId !== undefined) {
         setCompState(oldValues => ({
           ...oldValues,
-          timeSlotData: timeSlotData || []
+          timeSlotData: timeSlotData ?? []
         }));
       }
     } catch (error) {
       reportCustomError(error);
     }
-  }, [shareWSTimeSlotData, timeSlotData]);
+  }, [shareWSTimeSlotData, timeSlotData, workspaceId, wsShareMemberId]);
 
   // if owner then it will watch isFetching of owner api. to show skeleton while fetching data.
   let isZFetching = isTimeSlotDataFetching;
 
   // if member then it will watch isFetching of member api. to show skeleton while fetching data.
-  if (wsShareMemberId) {
+  if (wsShareMemberId !== undefined) {
     isZFetching = isShareWSTimeSlotDataFetching;
   }
 
@@ -211,16 +217,6 @@ const ZTimetableTab: React.FC<{
     <Formik
       initialValues={{}}
       onSubmit={() => {}}>
-      {/* <ZWorkspaceSettingPlaceholderComp
-				buttonText='Add a time'
-				image={WorkspaceSettingsTimetablePlaceholder}
-				title={
-					<span>
-						Add your preferred publishing times <br /> for faster scheduling
-					</span>
-				}
-			/> */}
-
       {() => {
         return (
           <div className='w-full h-full px-2 py-3'>
@@ -255,7 +251,6 @@ const ZTimetableTab: React.FC<{
                     className='h-full zaions__bg_white'
                     key={_elementIndex}>
                     {!isZFetching &&
-                      compState?.timeSlotData &&
                       compState?.timeSlotData?.map(
                         (_timeSlot, _timeSlotIndex) => {
                           if (_element.day === _timeSlot?.day) {
@@ -283,12 +278,12 @@ const ZTimetableTab: React.FC<{
                                   shareWSId={wsShareId}
                                   checkMode={permissionCheckModeEnum.any}
                                   permissionType={
-                                    wsShareId
+                                    wsShareId !== undefined
                                       ? permissionsTypeEnum.shareWSMemberPermissions
                                       : permissionsTypeEnum.loggedInUserPermissions
                                   }
                                   havePermissions={
-                                    wsShareId
+                                    wsShareId !== undefined
                                       ? [
                                           shareWSPermissionEnum.update_sws_timeSlot,
                                           shareWSPermissionEnum.delete_sws_timeSlot
@@ -306,7 +301,7 @@ const ZTimetableTab: React.FC<{
                                         .timeActionButton
                                     }
                                     onClick={(event: unknown) => {
-                                      if (_timeSlot.id) {
+                                      if (_timeSlot?.id !== null) {
                                         setCompState(oldValues => ({
                                           ...oldValues,
                                           timeSlotId: _timeSlot.id as string
@@ -327,6 +322,8 @@ const ZTimetableTab: React.FC<{
                                 </ZCan>
                               </div>
                             );
+                          } else {
+                            return null;
                           }
                         }
                       )}
@@ -360,12 +357,12 @@ const ZTimetableTab: React.FC<{
                     <ZCan
                       shareWSId={wsShareId}
                       permissionType={
-                        wsShareId
+                        wsShareId !== undefined
                           ? permissionsTypeEnum.shareWSMemberPermissions
                           : permissionsTypeEnum.loggedInUserPermissions
                       }
                       havePermissions={
-                        wsShareId
+                        wsShareId !== undefined
                           ? [shareWSPermissionEnum.create_sws_timeSlot]
                           : [permissionsEnum?.create_timeSlot]
                       }>
@@ -416,10 +413,10 @@ const ZTimeSlotActionPopover: React.FC<{
   const { presentZIonModal: presentZWorkspaceTimeSlotFormModal } = useZIonModal(
     ZWorkspaceTimeSlotFormModal,
     {
-      workspaceId: workspaceId,
-      timeSlotId: timeSlotId,
+      workspaceId,
+      timeSlotId,
       mode: FormMode.EDIT,
-      wsShareMemberId: wsShareMemberId
+      wsShareMemberId
     }
   );
 
@@ -448,9 +445,9 @@ const ZTimeSlotActionPopover: React.FC<{
 
   // #region Functions.
   // when user won't to delete time slot and click on the delete button this function will fire and show the confirm alert.
-  const deleteTimeSlot = async () => {
+  const deleteTimeSlot = async (): Promise<void> => {
     try {
-      if (timeSlotId) {
+      if (timeSlotId !== undefined) {
         await presentZIonAlert({
           header: MESSAGES.TIME_SLOT.DELETE_ALERT.HEADER,
           subHeader: MESSAGES.TIME_SLOT.DELETE_ALERT.SUB_HEADER,
@@ -479,21 +476,21 @@ const ZTimeSlotActionPopover: React.FC<{
   };
 
   // on the delete time slot confirm alert, when user click on delete button this function will first which will trigger delete request and delete the time slot.
-  const removeTimeSlot = async () => {
+  const removeTimeSlot = async (): Promise<void> => {
     try {
-      if (timeSlotId) {
-        let __response;
-        if (workspaceId) {
-          __response = await deleteTimeSlotMutate({
-            itemIds: [workspaceId!, timeSlotId],
+      if (timeSlotId !== undefined) {
+        let _response;
+        if (workspaceId !== undefined) {
+          _response = await deleteTimeSlotMutate({
+            itemIds: [workspaceId, timeSlotId],
             urlDynamicParts: [
               CONSTANTS.RouteParams.workspace.workspaceId,
               CONSTANTS.RouteParams.timeSlot.timeSlotId
             ]
           });
-        } else if (wsShareMemberId) {
-          __response = await deleteSWSTimeSlotMutate({
-            itemIds: [wsShareMemberId!, timeSlotId],
+        } else if (wsShareMemberId !== undefined) {
+          _response = await deleteSWSTimeSlotMutate({
+            itemIds: [wsShareMemberId, timeSlotId],
             urlDynamicParts: [
               CONSTANTS.RouteParams.workspace.shareWSMemberId,
               CONSTANTS.RouteParams.timeSlot.timeSlotId
@@ -501,68 +498,68 @@ const ZTimeSlotActionPopover: React.FC<{
           });
         }
 
-        if (__response) {
-          const __data = extractInnerData<{ success: boolean }>(
-            __response,
+        if (_response !== undefined) {
+          const _data = extractInnerData<{ success: boolean }>(
+            _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (__data && __data?.success) {
-            let __rqTimeSlotData =
+          if (_data !== undefined && _data?.success) {
+            let _rqTimeSlotData =
               (getRQCDataHandler<TimeSlotInterface[]>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
-                  workspaceId!
+                  workspaceId ?? ''
                 ]
-              }) as TimeSlotInterface[]) || [];
+              }) as TimeSlotInterface[]) ?? [];
 
-            if (wsShareMemberId) {
-              __rqTimeSlotData = getRQCDataHandler<TimeSlotInterface[]>({
+            if (wsShareMemberId !== undefined) {
+              _rqTimeSlotData = getRQCDataHandler<TimeSlotInterface[]>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.SWS_MAIN,
-                  wsShareMemberId!
+                  wsShareMemberId
                 ]
               }) as TimeSlotInterface[];
             }
 
             // getting all the shortLinks from RQ cache.
-            const __oldTimeSlots =
+            const _oldTimeSlots =
               extractInnerData<TimeSlotInterface[]>(
-                __rqTimeSlotData,
+                _rqTimeSlotData,
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
             // removing deleted shortLinks from cache.
-            const __updatedTimeSlots = __oldTimeSlots.filter(
+            const _updatedTimeSlots = _oldTimeSlots.filter(
               el => el.id !== timeSlotId
             );
 
-            if (workspaceId) {
+            if (workspaceId !== undefined) {
               // Updating data in RQ cache.
               await updateRQCDataHandler<TimeSlotInterface[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.MAIN,
-                  workspaceId!
+                  workspaceId
                 ],
-                data: __updatedTimeSlots as TimeSlotInterface[],
+                data: _updatedTimeSlots,
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
               });
-            } else if (wsShareMemberId) {
+            } else if (wsShareMemberId !== undefined) {
               await updateRQCDataHandler<TimeSlotInterface[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.TIME_SLOT.SWS_MAIN,
-                  wsShareMemberId!
+                  wsShareMemberId
                 ],
-                data: __updatedTimeSlots as TimeSlotInterface[],
+                data: _updatedTimeSlots,
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
               });
             }
 
-            presentZIonToastSuccess(MESSAGES.TIME_SLOT.DELETED);
+            void presentZIonToastSuccess(MESSAGES.TIME_SLOT.DELETED);
           } else {
             showErrorNotification(MESSAGES.GENERAL.SOMETHING_WENT_WRONG);
           }
@@ -585,12 +582,12 @@ const ZTimeSlotActionPopover: React.FC<{
       <ZCan
         shareWSId={wsShareId}
         permissionType={
-          wsShareId
+          wsShareId !== undefined
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }
         havePermissions={
-          wsShareId
+          wsShareId !== undefined
             ? [shareWSPermissionEnum.update_sws_timeSlot]
             : [permissionsEnum?.update_timeSlot]
         }>
@@ -603,7 +600,7 @@ const ZTimeSlotActionPopover: React.FC<{
               .timeEditButton
           }
           onClick={() => {
-            if (timeSlotId) {
+            if (timeSlotId !== undefined) {
               presentZWorkspaceTimeSlotFormModal({
                 _cssClass: 'workspace-create-time-slot-modal'
               });
@@ -624,12 +621,12 @@ const ZTimeSlotActionPopover: React.FC<{
       <ZCan
         shareWSId={wsShareId}
         permissionType={
-          wsShareId
+          wsShareId !== undefined
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }
         havePermissions={
-          wsShareId
+          wsShareId !== undefined
             ? [shareWSPermissionEnum.delete_sws_timeSlot]
             : [permissionsEnum?.delete_timeSlot]
         }>
@@ -643,7 +640,7 @@ const ZTimeSlotActionPopover: React.FC<{
               .timeDeleteButton
           }
           onClick={() => {
-            deleteTimeSlot();
+            void deleteTimeSlot();
 
             dismissZIonPopover('', '');
           }}>

@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
 
 /**
@@ -62,10 +62,8 @@ import {
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  workspaceFormPermissionEnum,
-  WSRolesNameEnum,
   workspaceFormTabEnum,
-  workspaceInterface
+  type workspaceInterface
 } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import { arrowForward } from 'ionicons/icons';
@@ -104,7 +102,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
 
   // getting workspace id from route (url), when user refresh the page the id from route will be get and workspace of that id will be fetch from backend.
   const { editWorkspaceId } = useParams<{
-    editWorkspaceId: string;
+    editWorkspaceId?: string;
   }>();
 
   // getting search param from url with the help of 'qs' package
@@ -113,22 +111,21 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
   });
 
   // useZNavigate for redirection
-  const { zNavigatePushRoute, zNavigateGoBack } = useZNavigate();
+  const { zNavigatePushRoute } = useZNavigate();
 
   // validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
   const { validateRequestResponse } = useZValidateRequestResponse();
 
   // fetching link-in-bio with the editWorkspaceId data from backend.
-  const { data: selectedWorkspace, refetch: refetchSelectedWorkspace } =
-    useZRQGetRequest<workspaceInterface>({
-      _url: API_URL_ENUM.workspace_update_delete,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET],
-      _authenticated: true,
-      _itemsIds: [editWorkspaceId],
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-      _shouldFetchWhenIdPassed: !editWorkspaceId ? true : false,
-      _extractType: ZRQGetRequestExtractEnum.extractItem
-    });
+  const { data: selectedWorkspace } = useZRQGetRequest<workspaceInterface>({
+    _url: API_URL_ENUM.workspace_update_delete,
+    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.GET],
+    _authenticated: true,
+    _itemsIds: [editWorkspaceId ?? ''],
+    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+    _shouldFetchWhenIdPassed: (editWorkspaceId?.trim().length ?? -1) === 0,
+    _extractType: ZRQGetRequestExtractEnum.extractItem
+  });
 
   // Update workspace API.
   const { mutateAsync: UpdateWorkspaceMutateAsync } = useZRQUpdateRequest({
@@ -138,15 +135,15 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
 
   //
   // const WorkspaceGetRequestFn = useCallback(async () => {
-  // 	await refetchSelectedWorkspace();
-  // 	// eslint-disable-next-line
+  // await refetchSelectedWorkspace();
+  // // eslint-disable-next-line
   // }, []);
 
   // Refetching if the editLinkInBioId changes and if the editLinkInBioId is undefined it will redirect user to link-in-bio page.
   useEffect(() => {
     try {
       // if (editWorkspaceId) {
-      // 	void WorkspaceGetRequestFn();
+      // void WorkspaceGetRequestFn();
       // }
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -157,7 +154,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
               CONSTANTS.RouteParams.workspace.workspaceId,
               CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
             ],
-            [editWorkspaceId, CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
+            [editWorkspaceId ?? '', CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
           )
         );
         showErrorNotification(error.message);
@@ -168,12 +165,12 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
     // eslint-disable-next-line
   }, [editWorkspaceId]);
 
-  const formikSubmitHn = async (reqDataStr: string) => {
+  const formikSubmitHn = async (reqDataStr: string): Promise<void> => {
     try {
-      if (reqDataStr) {
+      if (reqDataStr?.trim()?.length > 0) {
         // hitting workspace update api.
         const _result = UpdateWorkspaceMutateAsync({
-          itemIds: [editWorkspaceId],
+          itemIds: [editWorkspaceId ?? ''],
           urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
           requestData: reqDataStr
         });
@@ -225,16 +222,19 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
           return (
             <>
               <ZIonContent>
-                <ZIonGrid className='pb-2 flex ion-align-items-center mx-0 h-full'>
-                  <ZIonRow className='on-justify-content-center ion-align-items-center mx-auto w-80'>
+                <ZIonGrid className='flex h-full pb-2 mx-0 ion-align-items-center'>
+                  <ZIonRow className='mx-auto on-justify-content-center ion-align-items-center w-80'>
                     {/* Workspace name */}
                     <ZIonCol size='12'>
                       <ZIonInput
                         className={classNames({
                           'ion-touched ion-invalid':
-                            touched.workspaceName && errors.workspaceName,
+                            touched?.workspaceName === true &&
+                            errors.workspaceName,
                           'ion-touched ion-valid':
-                            touched.workspaceName && !errors.workspaceName
+                            touched?.workspaceName === true &&
+                            (errors.workspaceName?.trim()?.length === 0 ||
+                              errors.workspaceName === null)
                         })}
                         name='workspaceName'
                         label='Workspace Name'
@@ -290,7 +290,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
                         disabled={!isValid}
                         onClick={() => {
                           if (dirty) {
-                            formikSubmitHn(zStringify(values));
+                            void formikSubmitHn(zStringify(values));
                           }
 
                           // Navigate to workspace -> invite client
@@ -301,7 +301,7 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
                                 CONSTANTS.RouteParams.workspace
                                   .editWorkspaceIdParam
                               ],
-                              values: [editWorkspaceId],
+                              values: [editWorkspaceId ?? ''],
                               routeSearchParams: {
                                 tab: workspaceFormTabEnum.inviteClients
                               }

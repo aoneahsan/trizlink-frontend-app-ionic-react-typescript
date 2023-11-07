@@ -95,7 +95,7 @@ const ZWorkspaceProfilePopover: React.FC<{
   const zUserAccountStateAtom = useRecoilValue(ZaionsUserAccountRStateAtom);
 
   // logout confirm alert.
-  const ZLogoutAlert = async () => {
+  const ZLogoutAlert = async (): Promise<void> => {
     try {
       await presentZIonAlert({
         header: MESSAGES.Logout.LOGOUT_ALERT.HEADER,
@@ -121,13 +121,13 @@ const ZWorkspaceProfilePopover: React.FC<{
     }
   };
 
-  const profileLogoutHandler = async () => {
+  const profileLogoutHandler = async (): Promise<void> => {
     try {
       // Loading start...
       await presentZIonLoader('Logging out. please wait a second.');
 
       // logout user
-      const __response = await zAxiosApiRequest<{
+      const _response = await zAxiosApiRequest<{
         data: { isSuccess: boolean };
       }>({
         _url: API_URL_ENUM.logout,
@@ -135,7 +135,7 @@ const ZWorkspaceProfilePopover: React.FC<{
         _isAuthenticatedRequest: false
       });
 
-      if (__response?.data.isSuccess) {
+      if (_response?.data.isSuccess === true) {
         // clear User token.
         void STORAGE.CLEAR(LOCALSTORAGE_KEYS.USERDATA);
         // clear auth token.
@@ -230,7 +230,9 @@ const ZWorkspaceProfilePopover: React.FC<{
           className='text-sm cursor-pointer ion-activatable ion-focusable'
           minHeight='40px'
           lines='none'
-          onClick={() => void ZLogoutAlert()}
+          onClick={() => {
+            void ZLogoutAlert();
+          }}
           testingselector={
             CONSTANTS.testingSelectors.user.profilePopover.logout
           }>

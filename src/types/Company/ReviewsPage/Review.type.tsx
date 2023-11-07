@@ -1,4 +1,4 @@
-export type ZaionsReviewType = {
+export interface ZaionsReviewType {
   id?: string;
   userLink?: string;
   userAvater?: string;
@@ -9,4 +9,4 @@ export type ZaionsReviewType = {
   date: string;
   userMessage: string;
   fullReviewLink: string;
-};
+}

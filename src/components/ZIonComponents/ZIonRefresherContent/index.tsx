@@ -2,10 +2,10 @@
 import React from 'react';
 
 // Packages Import
-import { IonicSafeString, IonRefresherContent } from '@ionic/react';
+import { type IonicSafeString, IonRefresherContent } from '@ionic/react';
 
 // Type
-type ZIonRefresherContentType = {
+interface ZIonRefresherContentType {
   className?: string;
   pullingIcon?: null | string | undefined;
   pullingText?: IonicSafeString | string | undefined;
@@ -22,9 +22,11 @@ type ZIonRefresherContentType = {
     | null
     | undefined;
   refreshingText?: IonicSafeString | string | undefined;
-};
+}
 
-const ZIonRefresherContent = (props: ZIonRefresherContentType) => {
+const ZIonRefresherContent: React.FC<ZIonRefresherContentType> = (
+  props: ZIonRefresherContentType
+) => {
   return <IonRefresherContent {...props} />;
 };
 

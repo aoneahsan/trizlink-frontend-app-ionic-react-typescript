@@ -9,7 +9,8 @@ import {
   ZIonCol,
   ZIonRow,
   ZIonText,
-  ZIonRouterLink
+  ZIonRouterLink,
+  ZIonButton
 } from '@/components/ZIonComponents';
 
 // Global Constants
@@ -17,7 +18,6 @@ import {
 // Images
 
 // Recoil States
-import { ZIonButton } from '@/components/ZIonComponents';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZaionsAddUtmTags from '@/components/InPageComponents/ZaionsModals/AddUtmTags';
 
@@ -30,7 +30,7 @@ const APSettingsUtmTags: React.FC = () => {
     useZIonModal(ZaionsAddUtmTags);
   return (
     <>
-      <ZIonRow className='py-4 px-4 zaions__bg_white mx-4 mt-5 ion-align-items-center'>
+      <ZIonRow className='px-4 py-4 mx-4 mt-5 zaions__bg_white ion-align-items-center'>
         <ZIonCol
           sizeXl='6'
           sizeLg='6'

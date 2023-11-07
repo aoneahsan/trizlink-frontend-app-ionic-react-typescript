@@ -16,7 +16,6 @@ import classNames from 'classnames';
  * */
 import {
   ZIonButton,
-  ZIonCol,
   ZIonContent,
   ZIonImg,
   ZIonRow,
@@ -34,6 +33,7 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Type Imports go down
@@ -55,7 +55,6 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import { Z500Svg } from '@/assets/images';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Component props type go down
@@ -97,11 +96,11 @@ const Z500View: React.FC = () => {
             Something went wrong!
           </ZIonText>
           <ZIonText className='mt-3 text-sm md:text-lg lg:text-lg ion-text-center'>
-            We're sorry, but something went wrong on our end. Our team has been
-            notified of this issue and is working to fix it. In the meantime,
-            you can try refreshing the page or coming back later. If the problem
-            persists, please don't hesitate to contact our support team for
-            further assistance.
+            We&apos;re sorry, but something went wrong on our end. Our team has
+            been notified of this issue and is working to fix it. In the
+            meantime, you can try refreshing the page or coming back later. If
+            the problem persists, please don&apos;t hesitate to contact our
+            support team for further assistance.
           </ZIonText>
 
           <ZIonButton

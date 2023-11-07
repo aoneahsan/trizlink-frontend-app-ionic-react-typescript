@@ -9,10 +9,7 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import { ZIonNote } from '@/components/ZIonComponents';
-import PhoneInput, {
-  formatPhoneNumberIntl,
-  isPossiblePhoneNumber
-} from 'react-phone-number-input';
+import PhoneInput, { formatPhoneNumberIntl } from 'react-phone-number-input';
 import classNames from 'classnames';
 
 /**
@@ -29,6 +26,8 @@ import classNames from 'classnames';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { zCreateElementTestingSelector } from '@/utils/helpers';
+import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 /**
  * Type Imports go down
@@ -46,9 +45,6 @@ import classNames from 'classnames';
  * */
 import 'react-phone-number-input/style.css';
 import classes from './styles.module.css';
-import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { PRODUCT_NAME } from '@/utils/constants';
-import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 /**
  * Images Imports go down
@@ -70,9 +66,7 @@ interface IZCPhoneNumberInput {
   minHeight?: string;
   testingselector?: string;
   testinglistselector?: string;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
 }
 
 /**
@@ -95,30 +89,32 @@ const ZCPhoneNumberInput: React.FC<IZCPhoneNumberInput> = ({
   onChange
 }) => {
   const compStyle =
-    style && minHeight
-      ? { ...style, minHeight: minHeight }
-      : style && !minHeight
+    style !== undefined && minHeight !== undefined
+      ? { ...style, minHeight }
+      : style !== undefined && minHeight === undefined
       ? { ...style }
-      : !style && minHeight
-      ? { minHeight: minHeight }
+      : style === undefined && minHeight !== undefined
+      ? { minHeight }
       : {};
 
-  const _testinglistselector = testinglistselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: testinglistselector || PRODUCT_NAME,
-          _key: zCreateElementTestingSelectorKeyEnum.listSelector
-        })
-      }
-    : {};
+  const _testinglistselector =
+    testinglistselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: testinglistselector,
+            _key: zCreateElementTestingSelectorKeyEnum.listSelector
+          })
+        }
+      : {};
 
-  const _testingSelector = testingselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: testingselector || PRODUCT_NAME
-        })
-      }
-    : {};
+  const _testingSelector =
+    testingselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: testingselector
+          })
+        }
+      : {};
   return (
     <div className={className}>
       <PhoneInput
@@ -136,7 +132,7 @@ const ZCPhoneNumberInput: React.FC<IZCPhoneNumberInput> = ({
         {..._testinglistselector}
         value={formatPhoneNumberIntl(String(value))}
       />
-      {errorText && errorText?.trim().length > 0 && (
+      {errorText !== undefined && errorText?.trim()?.length > 0 && (
         <ZIonNote
           color='danger'
           className='z-custom-pn-field-error-text'>

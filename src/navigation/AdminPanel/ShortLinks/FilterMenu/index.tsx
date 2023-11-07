@@ -15,9 +15,9 @@ import {
   cloudUploadOutline
 } from 'ionicons/icons';
 import { Formik } from 'formik';
-import { ItemReorderEventDetail } from '@ionic/react';
+import { type ItemReorderEventDetail } from '@ionic/react';
 import { useParams } from 'react-router';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import classNames from 'classnames';
 
 /**
@@ -42,12 +42,8 @@ import {
   ZIonTitle
 } from '@/components/ZIonComponents';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
-import {
-  ShortLinksDomainsFiltersPopover,
-  ShortLinksTagsFiltersPopover,
-  ShortLinksTimeRangeFilterPopover
-} from '@/components/InPageComponents/ZaionsPopovers/ShortLinks/FiltersPopovers';
 import ZaionsRSelect from '@/components/CustomComponents/ZaionsRSelect';
+
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
@@ -58,7 +54,6 @@ import {
   useZRQUpdateRequest,
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
-import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 /**
@@ -76,7 +71,7 @@ import { ShortLinksTableColumns } from '@/utils/constants/columns';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  ZUserSettingInterface,
+  type ZUserSettingInterface,
   ZUserSettingTypeEnum
 } from '@/types/AdminPanel/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
@@ -84,7 +79,7 @@ import {
   TimeFilterEnum,
   ZShortLinkListPageTableColumnsIds
 } from '@/types/AdminPanel/linksType';
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 /**
  * Recoil State Imports go down
@@ -120,19 +115,19 @@ import MESSAGES from '@/utils/messages';
 const ZShortLinksFilterMenu: React.FC = () => {
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region compState.
   const [compState, setCompState] = useState<{
-    shortLinkColumn?: {
+    shortLinkColumn?: Array<{
       id?: string;
       name: string;
       isVisible: boolean;
       orderNumber: number;
-    }[];
+    }>;
     columnOrderIds: string[];
     filters?: {
       tags?: string[];
@@ -156,7 +151,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
 
   // #region Recoils.
   // Recoil state for storing filter options for short-links.
-  const [shortLinksFilterOptions, setShortLinksFilterOptions] = useRecoilState(
+  const setShortLinksFilterOptions = useSetRecoilState(
     ShortLinksFilterOptionsRStateAtom
   );
   // For getting all tags data
@@ -174,7 +169,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
   // const setNewShortLinkFormState = useSetRecoilState(NewShortLinkFormState);
 
   // const setNewShortLinkTypeOptionDataAtom = useSetRecoilState(
-  // 	NewShortLinkSelectTypeOption
+  // NewShortLinkSelectTypeOption
   // );
   // #endregion
 
@@ -198,7 +193,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
     _url: API_URL_ENUM.user_setting_list_create,
     _loaderMessage: MESSAGES.SHORT_LINKS.FILTERING,
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _itemsIds: [workspaceId]
+    _itemsIds: [workspaceId ?? '']
   });
 
   // share workspace short link filter and short link other settings update api.
@@ -207,62 +202,67 @@ const ZShortLinksFilterMenu: React.FC = () => {
       _url: API_URL_ENUM.sws_user_setting_list_create,
       _loaderMessage: MESSAGES.SHORT_LINKS.FILTERING,
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-      _itemsIds: [shareWSMemberId]
+      _itemsIds: [shareWSMemberId ?? '']
     }
   );
 
   // owned workspace short link filter and short link other settings get api.
-  const { data: getUserSetting, isFetching: isUserSettingFetching } =
-    useZRQGetRequest<ZUserSettingInterface>({
-      _url: API_URL_ENUM.user_setting_delete_update_get,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-        workspaceId,
-        ZUserSettingTypeEnum.shortLinkListPageTable
-      ],
-      _itemsIds: [workspaceId, ZUserSettingTypeEnum.shortLinkListPageTable],
-      _urlDynamicParts: [
-        CONSTANTS.RouteParams.workspace.workspaceId,
-        CONSTANTS.RouteParams.settings.type
-      ],
-      _extractType: ZRQGetRequestExtractEnum.extractItem,
-      _shouldFetchWhenIdPassed: workspaceId ? false : true,
-      _showLoader: false
-    });
+  const { data: getUserSetting } = useZRQGetRequest<ZUserSettingInterface>({
+    _url: API_URL_ENUM.user_setting_delete_update_get,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+      workspaceId ?? '',
+      ZUserSettingTypeEnum.shortLinkListPageTable
+    ],
+    _itemsIds: [workspaceId ?? '', ZUserSettingTypeEnum.shortLinkListPageTable],
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.workspaceId,
+      CONSTANTS.RouteParams.settings.type
+    ],
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _shouldFetchWhenIdPassed: !(
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+    ),
+    _showLoader: false
+  });
 
   // share workspace short link filter and short link other settings get api.
-  const { data: swsGetUserSetting, isFetching: isSWSUserSettingFetching } =
-    useZRQGetRequest<ZUserSettingInterface>({
-      _url: API_URL_ENUM.sws_user_setting_delete_update_get,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-        wsShareId,
-        ZUserSettingTypeEnum.shortLinkListPageTable
-      ],
-      _itemsIds: [shareWSMemberId, ZUserSettingTypeEnum.shortLinkListPageTable],
-      _urlDynamicParts: [
-        CONSTANTS.RouteParams.workspace.shareWSMemberId,
-        CONSTANTS.RouteParams.settings.type
-      ],
-      _shouldFetchWhenIdPassed: wsShareId ? false : true,
-      _extractType: ZRQGetRequestExtractEnum.extractItem,
-      _showLoader: false
-    });
+  const { data: swsGetUserSetting } = useZRQGetRequest<ZUserSettingInterface>({
+    _url: API_URL_ENUM.sws_user_setting_delete_update_get,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
+      wsShareId ?? '',
+      ZUserSettingTypeEnum.shortLinkListPageTable
+    ],
+    _itemsIds: [
+      shareWSMemberId ?? '',
+      ZUserSettingTypeEnum.shortLinkListPageTable
+    ],
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.shareWSMemberId,
+      CONSTANTS.RouteParams.settings.type
+    ],
+    _shouldFetchWhenIdPassed: !(
+      wsShareId !== undefined && (wsShareId?.trim()?.length ?? 0) > 0
+    ),
+    _extractType: ZRQGetRequestExtractEnum.extractItem,
+    _showLoader: false
+  });
   // #endregion
 
   useEffect(() => {
     try {
       if (
-        workspaceId &&
-        getUserSetting?.type &&
-        getUserSetting?.settings?.columns
+        workspaceId !== undefined &&
+        getUserSetting?.type !== null &&
+        getUserSetting?.settings?.columns !== undefined
       ) {
         setCompState(_oldValue => ({
           ..._oldValue,
           shortLinkColumn: getUserSetting?.settings?.columns,
           filters: swsGetUserSetting?.settings?.filters
         }));
-      } else if (wsShareId && swsGetUserSetting?.type) {
+      } else if (wsShareId !== undefined && swsGetUserSetting?.type != null) {
         setCompState(_oldValues => ({
           ..._oldValues,
           shortLinkColumn: swsGetUserSetting?.settings?.columns,
@@ -274,26 +274,15 @@ const ZShortLinksFilterMenu: React.FC = () => {
     }
   }, [getUserSetting, workspaceId, swsGetUserSetting, wsShareId]);
 
-  // #region Popovers.
-  const { presentZIonPopover: presentShortLinkTimeFilterModal } =
-    useZIonPopover(ShortLinksTimeRangeFilterPopover);
-
-  const { presentZIonPopover: presentShortLinkTagsFilterModal } =
-    useZIonPopover(ShortLinksTagsFiltersPopover);
-
-  const { presentZIonPopover: presentShortLinkDomainsFilterModal } =
-    useZIonPopover(ShortLinksDomainsFiltersPopover);
-  // #endregion
-
   // #region Functions.
   const handleCarouselCardReorder = (
     event: CustomEvent<ItemReorderEventDetail>
-  ) => {
+  ): void => {
     event.detail.complete();
 
     setTimeout(() => {
       const _shortLinksListColumnsEls = document.querySelectorAll(
-        `.zaions-short-link-list-table-column`
+        '.zaions-short-link-list-table-column'
       );
       const _shortLinksColumnIds: string[] = [
         ZShortLinkListPageTableColumnsIds.id
@@ -303,7 +292,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
         _shortLinksColumnIds.push(_block.getAttribute('data-id') as string);
       }
 
-      if (_shortLinksColumnIds) {
+      if (_shortLinksColumnIds?.length > 0) {
         setCompState(oldValues => ({
           ...oldValues,
           columnOrderIds: _shortLinksColumnIds
@@ -312,16 +301,16 @@ const ZShortLinksFilterMenu: React.FC = () => {
     }, 100);
   };
 
-  const FormikSubmitHandler = async (_data: string) => {
+  const FormikSubmitHandler = async (_value: string): Promise<void> => {
     try {
-      if (_data) {
-        let __response;
+      if (_value?.trim()?.length > 0) {
+        let _response;
 
-        if (workspaceId) {
+        if (workspaceId !== undefined) {
           if (
             getUserSetting?.type === ZUserSettingTypeEnum.shortLinkListPageTable
           ) {
-            __response = await updateUserSettingsAsyncMutate({
+            _response = await updateUserSettingsAsyncMutate({
               itemIds: [
                 workspaceId,
                 ZUserSettingTypeEnum.shortLinkListPageTable
@@ -330,17 +319,17 @@ const ZShortLinksFilterMenu: React.FC = () => {
                 CONSTANTS.RouteParams.workspace.workspaceId,
                 CONSTANTS.RouteParams.settings.type
               ],
-              requestData: _data
+              requestData: _value
             });
           } else {
-            __response = await createUserSettingsAsyncMutate(_data);
+            _response = await createUserSettingsAsyncMutate(_value);
           }
-        } else if (wsShareId && shareWSMemberId) {
+        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
           if (
             swsGetUserSetting?.type ===
             ZUserSettingTypeEnum.shortLinkListPageTable
           ) {
-            __response = await swsUpdateUserSettingsAsyncMutate({
+            _response = await swsUpdateUserSettingsAsyncMutate({
               itemIds: [
                 shareWSMemberId,
                 ZUserSettingTypeEnum.shortLinkListPageTable
@@ -349,42 +338,45 @@ const ZShortLinksFilterMenu: React.FC = () => {
                 CONSTANTS.RouteParams.workspace.shareWSMemberId,
                 CONSTANTS.RouteParams.settings.type
               ],
-              requestData: _data
+              requestData: _value
             });
           } else {
-            __response = await swsCreateUserSettingsAsyncMutate(_data);
+            _response = await swsCreateUserSettingsAsyncMutate(_value);
           }
         }
 
-        if (__response) {
+        if (_response !== undefined) {
           // extract Data from _response.
-          const __data = extractInnerData<ZUserSettingInterface>(
-            __response,
+          const _data = extractInnerData<ZUserSettingInterface>(
+            _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
           // if we have data then show success message.
-          if (__data && __data.id) {
-            if (workspaceId) {
+          if (_data?.id !== undefined || _data?.id !== null) {
+            if (workspaceId !== undefined) {
               await updateRQCDataHandler<ZUserSettingInterface | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
                   workspaceId,
                   ZUserSettingTypeEnum.shortLinkListPageTable
                 ],
-                data: __data,
+                data: _data,
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItem,
                 updateHoleData: true
               });
-            } else if (wsShareId && shareWSMemberId) {
+            } else if (
+              wsShareId !== undefined &&
+              shareWSMemberId !== undefined
+            ) {
               await updateRQCDataHandler<ZUserSettingInterface | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
                   wsShareId,
                   ZUserSettingTypeEnum.shortLinkListPageTable
                 ],
-                data: __data,
+                data: _data,
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItem,
                 updateHoleData: true
@@ -425,8 +417,8 @@ const ZShortLinksFilterMenu: React.FC = () => {
         <ZIonIcon
           icon={closeOutline}
           className='w-6 h-6 pt-[2px] cursor-pointer'
-          onClick={async () => {
-            await menuController.close(CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID);
+          onClick={() => {
+            void menuController.close(CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID);
           }}
         />
       </ZIonHeader>
@@ -436,13 +428,13 @@ const ZShortLinksFilterMenu: React.FC = () => {
         {/* Columns visibility accordion */}
         <Formik
           initialValues={{
-            columns: compState?.shortLinkColumn || ShortLinksTableColumns,
+            columns: compState?.shortLinkColumn ?? ShortLinksTableColumns,
             // columns: ShortLinksTableColumns,
 
             filters: {
-              tags: compState?.filters?.tags || [],
-              domains: compState?.filters?.domains || [],
-              time: compState?.filters?.time || TimeFilterEnum.allTime
+              tags: compState?.filters?.tags ?? [],
+              domains: compState?.filters?.domains ?? [],
+              time: compState?.filters?.time != null ?? TimeFilterEnum.allTime
             }
           }}
           enableReinitialize={true}
@@ -450,12 +442,12 @@ const ZShortLinksFilterMenu: React.FC = () => {
             try {
               const _domains = Array.from(
                 values.filters.domains as ZaionsRSelectOptions[],
-                ({ value }) => value!
+                ({ value }) => value ?? ''
               );
 
               const _tags = Array.from(
                 values.filters.tags as ZaionsRSelectOptions[],
-                ({ value }) => value!
+                ({ value }) => value ?? ''
               );
 
               setShortLinksFilterOptions(oldVales => ({
@@ -504,14 +496,16 @@ const ZShortLinksFilterMenu: React.FC = () => {
                           .geoLocation.countrySelector
                       }
                       onChange={_value => {
-                        setFieldValue(
+                        void setFieldValue(
                           'filters.time',
                           (_value as ZaionsRSelectOptions).value,
                           true
                         );
                       }}
                       value={CONSTANTS.ZTimeSelectData?.find(
-                        el => el.value === values.filters.time
+                        el =>
+                          (el.value as TimeFilterEnum) ===
+                          (values.filters.time as unknown as TimeFilterEnum)
                       )}
                       options={CONSTANTS.ZTimeSelectData}
                     />
@@ -526,10 +520,10 @@ const ZShortLinksFilterMenu: React.FC = () => {
                           .geoLocation.countrySelector
                       }
                       onChange={_value => {
-                        setFieldValue('filters.tags', _value, true);
+                        void setFieldValue('filters.tags', _value, true);
                       }}
                       options={
-                        _shortLinksFieldsDataTagsSelector
+                        _shortLinksFieldsDataTagsSelector?.length > 0
                           ? _shortLinksFieldsDataTagsSelector.map(el => {
                               return {
                                 value: el,
@@ -550,10 +544,10 @@ const ZShortLinksFilterMenu: React.FC = () => {
                           .geoLocation.countrySelector
                       }
                       onChange={_value => {
-                        setFieldValue('filters.domains', _value, true);
+                        void setFieldValue('filters.domains', _value, true);
                       }}
                       options={
-                        _shortLinksFieldsDataDomainsSelector
+                        _shortLinksFieldsDataDomainsSelector?.length > 0
                           ? _shortLinksFieldsDataDomainsSelector?.map(el => {
                               return {
                                 value: el,
@@ -563,100 +557,6 @@ const ZShortLinksFilterMenu: React.FC = () => {
                           : []
                       }
                     />
-
-                    {/* <ZIonButton
-											expand='block'
-											className='mt-2 ion-no-margin ion-no-padding'
-											fill='outline'
-											color='tertiary'
-											testingselector={
-												CONSTANTS.testingSelectors.shortLink.listPage
-													.tagsFilterBtn
-											}
-											style={
-												!isLgScale
-													? {
-															minHeight: '2rem',
-													  }
-													: {}
-											}
-											onClick={(event: unknown) => {
-												presentShortLinkTagsFilterModal({
-													_event: event as Event,
-													_dismissOnSelect: false,
-													_cssClass: 'short-link-tags-filter-modal-size',
-												});
-											}}
-										>
-											<ZIonIcon
-												slot='start'
-												icon={pricetagOutline}
-												className={classNames({
-													'w-4 h-4': !isLgScale,
-												})}
-											/>
-											<ZIonText
-												className={classNames({
-													'mt-1 ms-1': true,
-													'text-xs': !isLgScale,
-												})}
-											>
-												{shortLinksFilterOptions.tags
-													? shortLinksFilterOptions.tags?.length === 1
-														? shortLinksFilterOptions.tags[0]
-														: shortLinksFilterOptions.tags?.length > 1
-														? `${shortLinksFilterOptions.tags?.length} tags`
-														: 'No values'
-													: 'No values'}
-											</ZIonText>
-										</ZIonButton>
-
-										<ZIonButton
-											expand='block'
-											className='mt-2 ion-no-margin ion-no-padding'
-											fill='outline'
-											color='tertiary'
-											testingselector={
-												CONSTANTS.testingSelectors.shortLink.listPage
-													.domainFilterBtn
-											}
-											style={
-												!isLgScale
-													? {
-															minHeight: '2rem',
-													  }
-													: {}
-											}
-											onClick={(event: unknown) => {
-												presentShortLinkDomainsFilterModal({
-													_event: event as Event,
-													_dismissOnSelect: false,
-													_cssClass: 'short-link-tags-filter-modal-size',
-												});
-											}}
-										>
-											<ZIonIcon
-												slot='start'
-												icon={businessOutline}
-												className={classNames({
-													'w-4 h-4': !isLgScale,
-												})}
-											/>
-											<ZIonText
-												className={classNames({
-													'mt-1 ms-1': true,
-													'text-xs': !isLgScale,
-												})}
-											>
-												{shortLinksFilterOptions.domains
-													? shortLinksFilterOptions.domains?.length === 1
-														? shortLinksFilterOptions.domains[0]
-														: shortLinksFilterOptions.domains?.length > 1
-														? `${shortLinksFilterOptions.domains?.length} domains`
-														: 'No values'
-													: 'No values'}
-											</ZIonText>
-										</ZIonButton> */}
 
                     <ZIonButton
                       expand='block'
@@ -732,16 +632,9 @@ const ZShortLinksFilterMenu: React.FC = () => {
 
                                 <ZIonText slot='end'>
                                   <ZRCSwitch
-                                    // checked={
-                                    // 	compState?.shortLinkColumn &&
-                                    // 	compState.shortLinkColumn[index]
-                                    // 		.isVisible === false
-                                    // 		? false
-                                    // 		: el.isVisible
-                                    // }
                                     checked={el.isVisible}
                                     onChange={_value => {
-                                      setFieldValue(
+                                      void setFieldValue(
                                         `columns.${index}.isVisible`,
                                         _value,
                                         false
@@ -790,7 +683,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
               slot='start'
               icon={cloudDownloadOutline}
             />
-            <ZIonText className='mt-1 ms-1'>Export data's</ZIonText>
+            <ZIonText className='mt-1 ms-1'>Export data&apos;s</ZIonText>
           </ZIonButton>
 
           <ZIonButton

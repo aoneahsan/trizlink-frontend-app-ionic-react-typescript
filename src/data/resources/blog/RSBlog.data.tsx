@@ -8,9 +8,9 @@ import {
   heroQ3Features,
   Q22022ProductFeaturesBlog,
   QRCodeIndexBlogLarge,
-  trustSafety,
+  trustSafety
 } from '@/assets/images';
-import { Zaions4By4GridSysType } from '@/types/InPageComponentTypes/Zaions4By4GridSys.type';
+import { type Zaions4By4GridSysType } from '@/types/InPageComponentTypes/Zaions4By4GridSys.type';
 import { PRODUCT_NAME } from '@/utils/constants';
 
 export const RSBlogData: Zaions4By4GridSysType[] = [
@@ -21,7 +21,7 @@ export const RSBlogData: Zaions4By4GridSysType[] = [
     text: 'Marvel brought fans a bit closer online and offline to their superheroes with QR Codes.',
     image: blogAdWeelHero,
     link: '/',
-    size: '4',
+    size: '4'
   },
   {
     id: 2,
@@ -30,7 +30,7 @@ export const RSBlogData: Zaions4By4GridSysType[] = [
     text: `Find out about all the latest happenings at ${PRODUCT_NAME}.`,
     image: heroQ3Features,
     link: '/',
-    size: '4',
+    size: '4'
   },
   {
     id: 3,
@@ -39,7 +39,7 @@ export const RSBlogData: Zaions4By4GridSysType[] = [
     text: 'As summer in many areas of the world starts to wind down and kids make their way back to...',
     image: heroImageDesktop,
     link: '/',
-    size: '4',
+    size: '4'
   },
   {
     id: 4,
@@ -48,7 +48,7 @@ export const RSBlogData: Zaions4By4GridSysType[] = [
     text: 'A year ago, we embarked on a journey to create a first-of-its-kind platform that would seamlessly combine all of...',
     image: blogNewUIHero,
     link: '/',
-    size: '4',
+    size: '4'
   },
   {
     id: 5,
@@ -57,7 +57,7 @@ export const RSBlogData: Zaions4By4GridSysType[] = [
     text: 'SMS marketers know the power of this uniquely personal channel. Two-thirds of them reported that it “significantly” or “overwhelmingly”...',
     image: benefitsOfSmsMarketing,
     link: '/',
-    size: '4',
+    size: '4'
   },
   {
     id: 6,
@@ -66,7 +66,7 @@ export const RSBlogData: Zaions4By4GridSysType[] = [
     text: `This post is the second in a series highlighting ${PRODUCT_NAME}’s Trust & Safety (T&S) efforts. In our previous post,...`,
     image: trustSafety,
     link: '/',
-    size: '4',
+    size: '4'
   },
   {
     id: 7,
@@ -75,7 +75,7 @@ export const RSBlogData: Zaions4By4GridSysType[] = [
     text: 'Mobile phones have gone from modern luxury to the ultimate necessity for today’s consumer. Whether you’re a small business,...',
     image: blogMobileApp,
     link: '/',
-    size: '4',
+    size: '4'
   },
   {
     id: 8,
@@ -84,16 +84,16 @@ export const RSBlogData: Zaions4By4GridSysType[] = [
     text: `At ${PRODUCT_NAME}, Interns are valued and integral members of the team. ${PRODUCT_NAME} Interns bring a fresh perspective, innovative ideas,...`,
     image: blogHero,
     link: '/',
-    size: '4',
+    size: '4'
   },
   {
     id: 9,
     title: `New! ${PRODUCT_NAME} QR Code Index H1 2022`,
     label: `${PRODUCT_NAME} News`,
-    text: `Discover the key trends and behaviors that are driving QR code creation and use cases during the first two...`,
+    text: 'Discover the key trends and behaviors that are driving QR code creation and use cases during the first two...',
     image: QRCodeIndexBlogLarge,
     link: '/',
-    size: '4',
+    size: '4'
   },
   {
     id: 10,
@@ -102,6 +102,6 @@ export const RSBlogData: Zaions4By4GridSysType[] = [
     text: `Another quarter has passed and ${PRODUCT_NAME} has continued to deliver features that solve our customers’ most pressing pain points–we...`,
     image: Q22022ProductFeaturesBlog,
     link: '/',
-    size: '4',
-  },
+    size: '4'
+  }
 ];

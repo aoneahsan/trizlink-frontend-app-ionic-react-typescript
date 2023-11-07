@@ -17,12 +17,12 @@ import classNames from 'classnames';
  * */
 import ZaionsHr from '@/components/InPageComponents/Zaions_hr';
 import {
-	ZIonCol,
-	ZIonRow,
-	ZIonText,
-	ZIonButton,
-	ZIonGrid,
-	ZIonImg,
+  ZIonCol,
+  ZIonRow,
+  ZIonText,
+  ZIonButton,
+  ZIonGrid,
+  ZIonImg
 } from '@/components/ZIonComponents';
 
 /**
@@ -54,138 +54,127 @@ import classes from './styles.module.css';
 
 /**
  * Component props type go down
- * ? Like if you have a type for props it should be pleace Down
+ * ? Like if you have a type for props it should be place Down
  * */
-type ZaionsTwoByTwoRightColsType = {
-	colRightImage: string;
-	MDScaleColRightImage?: string;
-	title?: string | JSX.Element | JSX.Element[];
-	text: string | JSX.Element | JSX.Element[];
-	Btn?: true | boolean;
-	BtnText?: string | JSX.Element | JSX.Element[];
-	bottomHr?: true | boolean;
-	ImgWidth?: string | number;
-	className?: string;
-};
+interface ZaionsTwoByTwoRightColsType {
+  colRightImage: string;
+  MDScaleColRightImage?: string;
+  title?: string | JSX.Element | JSX.Element[];
+  text: string | JSX.Element | JSX.Element[];
+  Btn?: true | boolean;
+  BtnText?: string | JSX.Element | JSX.Element[];
+  bottomHr?: true | boolean;
+  ImgWidth?: string | number;
+  className?: string;
+}
 
 /**
  * Functional Component
  * About: (Info of component here...)
  * @type {*}
  * */
-const ZaionsTwoByTwoRightCols: React.FC<ZaionsTwoByTwoRightColsType> = (
-	props
-) => {
-	const isLgScale = useMediaQuery({
-		query: `(min-width: ${BRACKPOINT_LG})`,
-	});
+const ZaionsTwoByTwoRightCols: React.FC<
+  ZaionsTwoByTwoRightColsType
+> = props => {
+  const isLgScale = useMediaQuery({
+    query: `(min-width: ${BRACKPOINT_LG})`
+  });
 
-	const isMdScale = useMediaQuery({
-		query: `(min-width: ${BRACKPOINT_MD})`,
-	});
+  const isMdScale = useMediaQuery({
+    query: `(min-width: ${BRACKPOINT_MD})`
+  });
 
-	return (
-		<>
-			<ZIonGrid
-				className={`${classNames(props.className, {
-					'mt-5 pt-3': isMdScale,
-				})}`}
-			>
-				<ZIonRow>
-					<ZIonCol></ZIonCol>
-					{!isLgScale ? (
-						<ZIonCol size='12'>
-							<ZIonImg
-								className='w-full'
-								src={
-									!props.MDScaleColRightImage ||
-									props.MDScaleColRightImage === ''
-										? props.colRightImage
-										: props.MDScaleColRightImage
-								}
-							></ZIonImg>
-						</ZIonCol>
-					) : (
-						''
-					)}
-					<ZIonCol sizeXl='6' sizeLg='5' sizeMd='12' sizeSm='12' sizeXs='12'>
-						<ZIonText>
-							<h2 className='font-bold ion-margin-bottom'>{props.title}</h2>
-						</ZIonText>
-						<ZIonText className=''>{props.text}</ZIonText>
-						{props.Btn === true ? (
-							<div>
-								<ZIonButton
-									fill='clear'
-									className={`${classes.zaions__inpage_secondarybtn} mt-3`}
-									size='large'
-									expand={!isMdScale ? 'block' : undefined}
-								>
-									{props.BtnText === '' ||
-									props.BtnText === undefined ||
-									props.BtnText === null
-										? 'Learn more'
-										: props.BtnText}
-								</ZIonButton>
-							</div>
-						) : (
-							''
-						)}
-					</ZIonCol>
-					<ZIonCol
-						sizeXl='5'
-						sizeLg='5'
-						sizeMd='5'
-						sizeSm='5'
-						sizeXs='12'
-						className='ms-5'
-					>
-						{isLgScale ? (
-							<ZIonImg
-								style={{
-									width:
-										!props.ImgWidth || props.ImgWidth === ''
-											? '95%'
-											: props.ImgWidth,
-								}}
-								src={props.colRightImage}
-							></ZIonImg>
-						) : (
-							''
-						)}
-					</ZIonCol>
-					<ZIonCol></ZIonCol>
-				</ZIonRow>
-			</ZIonGrid>
-			{props.bottomHr === true ? (
-				<ZIonGrid
-					className={classNames({
-						'ion-no-padding ion-no-margin': !isMdScale,
-					})}
-				>
-					<ZIonRow
-						className={classNames({
-							'ion-no-padding ion-no-margin': isMdScale,
-						})}
-					>
-						<ZIonCol></ZIonCol>
-						<ZIonCol
-							sizeXl='11.2'
-							sizeLg='12'
-							sizeMd='12'
-							sizeSm='12'
-							sizeXs='12'
-						>
-							<ZaionsHr></ZaionsHr>
-						</ZIonCol>
-						<ZIonCol></ZIonCol>
-					</ZIonRow>
-				</ZIonGrid>
-			) : (
-				''
-			)}
-		</>
-	);
+  return (
+    <>
+      <ZIonGrid
+        className={`${classNames(props.className, {
+          'mt-5 pt-3': isMdScale
+        })}`}>
+        <ZIonRow>
+          <ZIonCol></ZIonCol>
+          {!isLgScale && (
+            <ZIonCol size='12'>
+              <ZIonImg
+                className='w-full'
+                src={
+                  props.MDScaleColRightImage === undefined ||
+                  props.MDScaleColRightImage === ''
+                    ? props.colRightImage
+                    : props.MDScaleColRightImage
+                }></ZIonImg>
+            </ZIonCol>
+          )}
+          <ZIonCol
+            sizeXl='6'
+            sizeLg='5'
+            sizeMd='12'
+            sizeSm='12'
+            sizeXs='12'>
+            <ZIonText>
+              <h2 className='font-bold ion-margin-bottom'>{props.title}</h2>
+            </ZIonText>
+            <ZIonText className=''>{props.text}</ZIonText>
+            {props.Btn === true && (
+              <div>
+                <ZIonButton
+                  fill='clear'
+                  className={`${classes.zaions__inpage_secondarybtn} mt-3`}
+                  size='large'
+                  expand={!isMdScale ? 'block' : undefined}>
+                  {props.BtnText === '' ||
+                  props.BtnText === undefined ||
+                  props.BtnText === null
+                    ? 'Learn more'
+                    : props.BtnText}
+                </ZIonButton>
+              </div>
+            )}
+          </ZIonCol>
+          <ZIonCol
+            sizeXl='5'
+            sizeLg='5'
+            sizeMd='5'
+            sizeSm='5'
+            sizeXs='12'
+            className='ms-5'>
+            {isLgScale && (
+              <ZIonImg
+                style={{
+                  width:
+                    props?.ImgWidth !== undefined || props?.ImgWidth === ''
+                      ? '95%'
+                      : props.ImgWidth
+                }}
+                src={props.colRightImage}></ZIonImg>
+            )}
+          </ZIonCol>
+          <ZIonCol></ZIonCol>
+        </ZIonRow>
+      </ZIonGrid>
+      {props.bottomHr === true && (
+        <ZIonGrid
+          className={classNames({
+            'ion-no-padding ion-no-margin': !isMdScale
+          })}>
+          <ZIonRow
+            className={classNames({
+              'ion-no-padding ion-no-margin': isMdScale
+            })}>
+            <ZIonCol></ZIonCol>
+            <ZIonCol
+              sizeXl='11.2'
+              sizeLg='12'
+              sizeMd='12'
+              sizeSm='12'
+              sizeXs='12'>
+              <ZaionsHr></ZaionsHr>
+            </ZIonCol>
+            <ZIonCol></ZIonCol>
+          </ZIonRow>
+        </ZIonGrid>
+      )}
+    </>
+  );
 };
 
 export default ZaionsTwoByTwoRightCols;

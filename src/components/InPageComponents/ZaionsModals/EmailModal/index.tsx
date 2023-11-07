@@ -53,9 +53,9 @@ import { ZErrorCodeEnum } from '@/utils/enums/ErrorsCodes';
 
 /**
  * Type Imports go down
- * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
+ * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { EmailAddressInterface } from '@/types/UserAccount/index.type';
+import { type EmailAddressInterface } from '@/types/UserAccount/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
@@ -100,18 +100,18 @@ const AddEmailModal: React.FC<{
   // #endregion
 
   // #region Functions.
-  const ZAddEmailHandler = async (_data: string) => {
+  const ZAddEmailHandler = async (_value: string): Promise<void> => {
     try {
-      if (_data) {
-        const __response = await addEmailAsyncMutate(_data);
+      if (_value?.length > 0) {
+        const _response = await addEmailAsyncMutate(_value);
 
-        if (__response) {
-          const __data = extractInnerData<EmailAddressInterface>(
-            __response,
+        if (_response !== undefined) {
+          const _data = extractInnerData<EmailAddressInterface>(
+            _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (__data?.id) {
+          if (_data?.id !== null) {
             // getting all the emails from RQ cache.
             const _oldUserEmails =
               extractInnerData<EmailAddressInterface[]>(
@@ -119,10 +119,10 @@ const AddEmailModal: React.FC<{
                   key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.EMAILS]
                 }) as EmailAddressInterface[],
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
             // Adding newly created emails data.
-            const updatedUserEmails = [..._oldUserEmails, __data];
+            const updatedUserEmails = [..._oldUserEmails, _data];
 
             // Updating data in RQ cache.
             await updateRQCDataHandler<EmailAddressInterface[] | undefined>({
@@ -142,16 +142,16 @@ const AddEmailModal: React.FC<{
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        const __apiErrorObjects = error.response?.data as {
+        const _apiErrorObjects = error.response?.data as {
           errors: { item: string[] };
           status: number;
         };
 
-        const __apiErrors = __apiErrorObjects?.errors?.item;
-        const __apiErrorCode = __apiErrorObjects?.status;
+        const _apiErrors = _apiErrorObjects?.errors?.item;
+        const _apiErrorCode = _apiErrorObjects?.status;
 
-        if (__apiErrorCode === ZErrorCodeEnum.badRequest) {
-          showErrorNotification(__apiErrors[0]);
+        if (_apiErrorCode === ZErrorCodeEnum.badRequest) {
+          showErrorNotification(_apiErrors[0]);
         }
       }
       reportCustomError(error);
@@ -173,10 +173,10 @@ const AddEmailModal: React.FC<{
           return errors;
         }}
         onSubmit={values => {
-          const __zStringifyData = zStringify({
+          const _zStringifyData = zStringify({
             email: values.email
           });
-          void ZAddEmailHandler(__zStringifyData);
+          void ZAddEmailHandler(_zStringifyData);
         }}>
         {({
           values,
@@ -198,7 +198,9 @@ const AddEmailModal: React.FC<{
                   <ZIonIcon
                     icon={closeOutline}
                     className='w-6 h-6 cursor-pointer'
-                    onClick={() => dismissZIonModal()}
+                    onClick={() => {
+                      dismissZIonModal();
+                    }}
                   />
                 </div>
 
@@ -217,14 +219,16 @@ const AddEmailModal: React.FC<{
                 minHeight='2.3rem'
                 labelPlacement='stacked'
                 value={values.email}
-                errorText={touched.email ? errors.email : undefined}
+                errorText={touched?.email === true ? errors?.email : undefined}
                 onIonChange={handleChange}
                 onIonBlur={handleBlur}
                 className={classNames({
                   'mt-5': true,
-                  'ion-touched': touched.email,
-                  'ion-invalid': touched.email && errors.email,
-                  'ion-valid': touched.email && !errors.email
+                  'ion-touched': touched?.email === true,
+                  'ion-invalid': touched?.email === true && errors?.email,
+                  'ion-valid':
+                    touched?.email === true &&
+                    (errors?.email === null || errors?.email === undefined)
                 })}
               />
             </ZIonContent>
@@ -233,7 +237,9 @@ const AddEmailModal: React.FC<{
               <ZIonButton
                 className='me-4'
                 fill='outline'
-                onClick={() => dismissZIonModal()}>
+                onClick={() => {
+                  dismissZIonModal();
+                }}>
                 Cancel
               </ZIonButton>
               <div

@@ -4,7 +4,7 @@ import React from 'react';
 // Packages Imports
 import { addOutline, appsOutline } from 'ionicons/icons';
 import { FieldArray, useFormikContext } from 'formik';
-import { ItemReorderEventDetail } from '@ionic/react';
+import { type ItemReorderEventDetail } from '@ionic/react';
 
 // Custom Imports
 import {
@@ -22,12 +22,12 @@ import LinkInBioDescriptionField from '../DescriptionField';
 // Types
 import {
   cardDisplayEnum,
-  linkInBioBlockCardItemInterface,
-  LinkInBioSingleBlockContentType
+  type linkInBioBlockCardItemInterface,
+  type LinkInBioSingleBlockContentType
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
 import { reportCustomError } from '@/utils/customErrorType';
-import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 import CONSTANTS from '@/utils/constants';
 
 // Styles
@@ -40,7 +40,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
 
   const handleCarouselCardReorder = (
     event: CustomEvent<ItemReorderEventDetail>
-  ) => {
+  ): void => {
     // The `from` and `to` properties contain the index of the item
     // when the drag started and ended, respectively
 
@@ -82,14 +82,16 @@ const LinkInBioCarouselCardField: React.FC = () => {
                     CONSTANTS.testingSelectors.linkInBio.formPage.design
                       .blockForm.fields.carouselCard.addCardBtn
                   }
-                  onClick={() => push(getNewCardItemEmptyObjForCarousel)}>
+                  onClick={() => {
+                    push(getNewCardItemEmptyObjForCarousel);
+                  }}>
                   <ZIonIcon
                     icon={addOutline}
                     className='me-1'
                   />
                   add card
                 </ZIonButton>
-                {values.cardItems?.length
+                {values.cardItems?.length != null
                   ? values.cardItems.map((_cardItem, _index) => (
                       <ZIonItem
                         key={_index}
@@ -123,10 +125,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
                               CONSTANTS.testingSelectors.linkInBio.formPage
                                 .design.blockForm.fields.carouselCard.linkInput
                             }
-                            value={
-                              values.cardItems &&
-                              values.cardItems[_index].target?.url
-                            }
+                            value={values.cardItems?.[_index].target?.url}
                           />
 
                           <LinkInBioUploadField
@@ -145,9 +144,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
                             name={`cardItems.${_index}.title`}
                             onIonChange={handleChange}
                             onIonBlur={handleBlur}
-                            value={
-                              values.cardItems && values.cardItems[_index].title
-                            }
+                            value={values.cardItems?.[_index].title}
                             testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.titleInput}-${_index}`}
                             testingselector={
                               CONSTANTS.testingSelectors.linkInBio.formPage
@@ -160,10 +157,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
                             name={`cardItems.${_index}.description`}
                             onIonChange={handleChange}
                             onIonBlur={handleBlur}
-                            value={
-                              values.cardItems &&
-                              values.cardItems[_index].description
-                            }
+                            value={values.cardItems?.[_index].description}
                             testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.description}-${_index}`}
                             testingselector={
                               CONSTANTS.testingSelectors.linkInBio.formPage
@@ -185,7 +179,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
                           }
                           deleteFn={(detail: OverlayEventDetail<unknown>) => {
                             try {
-                              if (detail && detail.role === 'destructive') {
+                              if (detail?.role === 'destructive') {
                                 void remove(_index);
                               }
                             } catch (error) {

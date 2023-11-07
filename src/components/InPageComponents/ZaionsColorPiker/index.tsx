@@ -30,8 +30,8 @@ import {
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { FormikSetFieldValueEventType } from '@/types/ZaionsFormik.type';
-import { closeCircleOutline, closeOutline } from 'ionicons/icons';
+import { type FormikSetFieldValueEventVoidType } from '@/types/ZaionsFormik.type';
+import { closeCircleOutline } from 'ionicons/icons';
 
 /**
  * Recoil State Imports go down
@@ -62,7 +62,7 @@ interface ZaionsColorPikerType {
   setDefaultColor?: string;
   testingselector?: string;
   testinglistselector?: string;
-  setFieldValueFn?: FormikSetFieldValueEventType;
+  setFieldValueFn?: FormikSetFieldValueEventVoidType;
   closeIconOnChangeFn?: React.MouseEventHandler<HTMLIonButtonElement>;
 }
 
@@ -79,7 +79,7 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
   showCloseIcon = false,
   showSkeleton = false,
   minHeight = '40px',
-  setDefaultColor = '#000', //if color is values is empty the when color is be set.
+  setDefaultColor = '#000', // if color is values is empty the when color is be set.
   testingselector,
   testinglistselector,
   closeIconOnChangeFn
@@ -106,8 +106,8 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
         className='zaions-color-piker'
         value={value}
         onChange={({ target }) => {
-          setFieldValueFn &&
-            setFieldValueFn(name, target.value || setDefaultColor, false);
+          setFieldValueFn !== undefined &&
+            setFieldValueFn(name, target?.value ?? setDefaultColor, false);
         }}
       />
       <ZIonInput
@@ -119,8 +119,8 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
         minHeight={minHeight}
         style={{ '--background': '#fff' }}
         onIonChange={({ target }) => {
-          setFieldValueFn &&
-            setFieldValueFn(name, target.value || setDefaultColor, false);
+          setFieldValueFn !== undefined &&
+            setFieldValueFn(name, target?.value ?? setDefaultColor, false);
         }}
       />
       {showCloseIcon && (
@@ -164,5 +164,7 @@ const ZaionsColorPikerSkeleton: React.FC = React.memo(() => {
     </ZIonItem>
   );
 });
+
+ZaionsColorPikerSkeleton.displayName = 'ZaionsColorPikerSkeleton';
 
 export default ZaionsColorPiker;

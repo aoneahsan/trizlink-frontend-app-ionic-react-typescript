@@ -2,14 +2,13 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 /**
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { ItemReorderEventDetail } from '@ionic/react';
-import { useRecoilState } from 'recoil';
+import { type ItemReorderEventDetail } from '@ionic/react';
 
 /**
  * Custom Imports go down
@@ -42,14 +41,9 @@ import { zStringify } from '@/utils/helpers';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkFolderType } from '@/types/AdminPanel/linksType';
+import { type LinkFolderType } from '@/types/AdminPanel/linksType';
 import { folderState } from '@/types/AdminPanel/index.type';
 
-/**
- * Recoil State Imports go down
- * ? Import of recoil states is a Recoil State import
- * */
-import { ShortLinksFolderRStateAtom } from '@/ZaionsStore/UserDashboard/ShortLinks/ShortLinksFoldersState.recoil';
 import { useParams } from 'react-router';
 
 /**
@@ -76,9 +70,9 @@ import { useParams } from 'react-router';
 const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region compState.
@@ -112,39 +106,39 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 
   // #region APIS.
   // If owned-workspace then this api will fetch owned-workspace-short-links-folder data.
-  const {
-    data: shortLinksFoldersData,
-    isFetching: isShortLinksFoldersDataFetching
-  } = useZRQGetRequest<LinkFolderType[]>({
+  const { data: shortLinksFoldersData } = useZRQGetRequest<LinkFolderType[]>({
     _url: API_URL_ENUM.ShortLink_folders_create_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
-      workspaceId,
+      workspaceId ?? '',
       folderState.shortlink
     ],
-    _itemsIds: [workspaceId],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _shouldFetchWhenIdPassed: workspaceId ? false : true,
+    _shouldFetchWhenIdPassed: !(
+      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+    ),
     _showLoader: false
   });
 
   // If share-workspace then this api will fetch share-workspace-short-links-folders data.
-  const {
-    data: swsShortLinksFoldersData,
-    isFetching: isSWSShortLinksFoldersDataFetching,
-    isError: isSWSShortLinksFoldersDataError
-  } = useZRQGetRequest<LinkFolderType[]>({
-    _url: API_URL_ENUM.ws_share_folder_sl_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
-      wsShareId,
-      folderState.shortlink
-    ],
-    _itemsIds: [shareWSMemberId],
-    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _showLoader: false
-  });
+  const { data: swsShortLinksFoldersData } = useZRQGetRequest<LinkFolderType[]>(
+    {
+      _url: API_URL_ENUM.ws_share_folder_sl_list,
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
+        wsShareId ?? '',
+        folderState.shortlink
+      ],
+      _itemsIds: [shareWSMemberId ?? ''],
+      _shouldFetchWhenIdPassed: !(
+        shareWSMemberId !== undefined &&
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
+      ),
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
+      _showLoader: false
+    }
+  );
 
   // If owned-workspace then this api will used to update the owned-workspace-short-links-folders reorders.
   const { mutateAsync: UpdateShortLinksFoldersReorder } = useZRQUpdateRequest({
@@ -166,7 +160,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
 
   // #region Functions.
   // folder reorder handler
-  const handleReorder = (event: CustomEvent<ItemReorderEventDetail>) => {
+  const handleReorder = (event: CustomEvent<ItemReorderEventDetail>): void => {
     event.detail.complete();
 
     setTimeout(() => {
@@ -181,7 +175,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
         );
       }
 
-      if (_shortLinksFoldersIds) {
+      if (_shortLinksFoldersIds !== undefined) {
         setCompState(_ => ({
           shortLinksFoldersReorder: {
             Ids: _shortLinksFoldersIds,
@@ -192,10 +186,10 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
     }, 100);
   };
 
-  const shortLinksFoldersReorderHandler = async () => {
+  const shortLinksFoldersReorderHandler = async (): Promise<void> => {
     try {
       let _result;
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         // The update api...
         _result = await UpdateShortLinksFoldersReorder({
           requestData: zStringify({
@@ -204,7 +198,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
           itemIds: [],
           urlDynamicParts: []
         });
-      } else if (wsShareId) {
+      } else if (wsShareId !== undefined) {
         // The update api...
         _result = await UpdateSWSShortLinksFoldersReorder({
           requestData: zStringify({
@@ -215,7 +209,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
         });
       }
 
-      if (_result) {
+      if (_result !== undefined) {
         // if _result of the UpdateShortLinksFoldersReorder api is success this showing success notification else not success then error notification.
         await validateRequestResponse({
           resultObj: _result
@@ -241,15 +235,19 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
       menuSide={PAGE_MENU_SIDE.START}
       showSaveReorderButton={compState.shortLinksFoldersReorder.isEnable}
       handleReorderFn={handleReorder}
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       saveReorderButtonFn={shortLinksFoldersReorderHandler}
       state={folderState.shortlink}
       menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
       contentId={CONSTANTS.MENU_IDS.AD_SL_LIST_PAGE}
       foldersData={
-        workspaceId && shortLinksFoldersData?.length
-          ? shortLinksFoldersData
-          : wsShareId && swsShortLinksFoldersData?.length
-          ? swsShortLinksFoldersData
+        workspaceId !== undefined &&
+        (shortLinksFoldersData !== undefined || shortLinksFoldersData !== null)
+          ? (shortLinksFoldersData as LinkFolderType[])
+          : wsShareId !== undefined &&
+            (swsShortLinksFoldersData !== undefined ||
+              swsShortLinksFoldersData !== null)
+          ? (swsShortLinksFoldersData as LinkFolderType[])
           : []
       }
       folderActionHandlerFn={(event: unknown) => {

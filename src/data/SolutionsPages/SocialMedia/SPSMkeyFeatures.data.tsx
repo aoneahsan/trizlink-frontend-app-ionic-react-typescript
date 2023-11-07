@@ -1,4 +1,4 @@
-import { ZaionsKeyFeatureType } from '@/types/InPageComponentTypes/ZaionsKeyFeature.type';
+import { type ZaionsKeyFeatureType } from '@/types/InPageComponentTypes/ZaionsKeyFeature.type';
 import {} from 'ionicons';
 import { BrandingGif, DashboardGif, ShortenMin } from '@/assets/gif';
 import { checkboxOutline, linkOutline, mailOutline } from 'ionicons/icons';
@@ -13,8 +13,8 @@ export const SPSMKeyFeaturesData: ZaionsKeyFeatureType[] = [
     text: 'Share and manage links your followers will want to click.',
     link: {
       text: 'Learn more about link management →',
-      url: ZaionsBusinessDetails.WebsiteUrl,
-    },
+      url: ZaionsBusinessDetails.WebsiteUrl
+    }
   },
   {
     id: 2,
@@ -24,8 +24,8 @@ export const SPSMKeyFeaturesData: ZaionsKeyFeatureType[] = [
     text: 'Amplify and further expand your brand with each share.',
     link: {
       text: 'Learn more about branded links →',
-      url: ZaionsBusinessDetails.WebsiteUrl,
-    },
+      url: ZaionsBusinessDetails.WebsiteUrl
+    }
   },
   {
     id: 3,
@@ -35,7 +35,7 @@ export const SPSMKeyFeaturesData: ZaionsKeyFeatureType[] = [
     text: 'Identify your best content across social channels.',
     link: {
       text: 'Learn more about campaign management and analytics →',
-      url: ZaionsBusinessDetails.WebsiteUrl,
-    },
-  },
+      url: ZaionsBusinessDetails.WebsiteUrl
+    }
+  }
 ];

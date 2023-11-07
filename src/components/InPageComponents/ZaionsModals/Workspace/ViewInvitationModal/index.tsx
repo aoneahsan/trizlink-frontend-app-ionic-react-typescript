@@ -28,7 +28,6 @@ import {
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
-import { useZIonToast } from '@/ZaionsHooks/zionic-hooks';
 import {
   useZGetRQCacheData,
   useZRQGetRequest,
@@ -52,12 +51,11 @@ import { showSuccessNotification } from '@/utils/notification';
  * */
 import { ZTeamMemberInvitationEnum } from '@/types/AdminPanel/index.type';
 import {
-  wsShareInterface,
-  WSTeamMembersInterface
+  type wsShareInterface,
+  type WSTeamMembersInterface
 } from '@/types/AdminPanel/workspace';
-import { ZLinkMutateApiType } from '@/types/ZaionsApis.type';
+import { type ZLinkMutateApiType } from '@/types/ZaionsApis.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import reactSelect from 'react-select';
 
 /**
  * Recoil State Imports go down
@@ -110,7 +108,9 @@ const ZViewInvitationModal: React.FC<{
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.workspace.memberInviteId
       ],
-      _shouldFetchWhenIdPassed: workspaceId && memberInviteId ? false : true,
+      _shouldFetchWhenIdPassed: !(
+        workspaceId !== undefined && memberInviteId !== undefined
+      ),
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
 
@@ -130,10 +130,10 @@ const ZViewInvitationModal: React.FC<{
     _item
   }: {
     _item: ZTeamMemberInvitationEnum;
-  }) => {
+  }): Promise<void> => {
     try {
-      if (_item) {
-        const __response = await updateInvitationAsyncMutate({
+      if (_item?.trim()?.length > 0) {
+        const _response = await updateInvitationAsyncMutate({
           requestData: zStringify({
             status: _item
           }),
@@ -144,21 +144,19 @@ const ZViewInvitationModal: React.FC<{
           ]
         });
 
-        if (
-          (__response as ZLinkMutateApiType<WSTeamMembersInterface>).success
-        ) {
-          const __data = extractInnerData<WSTeamMembersInterface>(
-            __response,
+        if ((_response as ZLinkMutateApiType<WSTeamMembersInterface>).success) {
+          const _data = extractInnerData<WSTeamMembersInterface>(
+            _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (__data && __data?.id) {
+          if (_data !== undefined && _data?.id !== null) {
             await updateRQCDataHandler({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.INVITATION_GET,
-                memberInviteId!
+                memberInviteId
               ],
-              data: __data,
+              data: _data,
               id: '',
               updateHoleData: true,
               extractType: ZRQGetRequestExtractEnum.extractItem
@@ -168,30 +166,28 @@ const ZViewInvitationModal: React.FC<{
               key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN]
             });
 
-            const __oldData =
+            const _oldData =
               extractInnerData<wsShareInterface[]>(
                 getWSShareWorkspaceData,
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
             if (_item === ZTeamMemberInvitationEnum.accepted) {
               await updateRQCDataHandler({
                 key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
                 data: {
-                  ...__data.workspace,
-                  id: __data?.id,
-                  accountStatus: __data?.accountStatus
+                  ..._data.workspace,
+                  id: _data?.id,
+                  accountStatus: _data?.accountStatus
                 },
-                id: __data?.id!
+                id: _data?.id ?? ''
               });
             } else if (_item === ZTeamMemberInvitationEnum.rejected) {
-              const __updatedData = __oldData?.filter(
-                el => el?.id !== __data?.id
-              );
+              const _updatedData = _oldData?.filter(el => el?.id !== _data?.id);
 
               await updateRQCDataHandler({
                 key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MAIN],
-                data: __updatedData,
+                data: _updatedData,
                 id: '',
                 updateHoleData: true,
                 extractType: ZRQGetRequestExtractEnum.extractItems
@@ -279,7 +275,7 @@ const ZViewInvitationModal: React.FC<{
                 CONSTANTS.testingSelectors.invitation.viewModal.acceptedBtn
               }
               onClick={() => {
-                zInvitationResponseHandler({
+                void zInvitationResponseHandler({
                   _item: ZTeamMemberInvitationEnum.accepted
                 });
               }}>
@@ -296,7 +292,7 @@ const ZViewInvitationModal: React.FC<{
                 CONSTANTS.testingSelectors.invitation.viewModal.rejectedBtn
               }
               onClick={() => {
-                zInvitationResponseHandler({
+                void zInvitationResponseHandler({
                   _item: ZTeamMemberInvitationEnum.rejected
                 });
               }}>

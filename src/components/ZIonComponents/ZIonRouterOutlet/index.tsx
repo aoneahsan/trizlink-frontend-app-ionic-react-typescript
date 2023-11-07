@@ -1,16 +1,18 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonRouterOutlet } from '@ionic/react';
 
 // Type
-type ZIonRouterOutletType = {
+interface ZIonRouterOutletType {
   children?: ReactNode;
   className?: string;
-};
+}
 
-const ZIonRouterOutlet = (props: ZIonRouterOutletType) => {
+const ZIonRouterOutlet: React.FC<ZIonRouterOutletType> = (
+  props: ZIonRouterOutletType
+) => {
   return <IonRouterOutlet {...props}>{props.children}</IonRouterOutlet>;
 };
 

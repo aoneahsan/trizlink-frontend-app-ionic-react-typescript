@@ -1,13 +1,13 @@
-import { atom, atomFamily, selector } from 'recoil';
+import { atom, selector } from 'recoil';
 
 // Data
 // import { ZaionsShortLinkData } from '@/data/UserDashboard/ShortLinksData';
 
 import {
-  ShortLinkType,
-  ShortLinkFilterOptionsInterface,
+  type ShortLinkType,
+  type ShortLinkFilterOptionsInterface,
   TimeFilterEnum,
-  LinkTargetType
+  type LinkTargetType
 } from '@/types/AdminPanel/linksType';
 import { getPrimaryDomain } from '@/utils/helpers';
 import CONSTANTS from '@/utils/constants';
@@ -44,17 +44,22 @@ export const FilteredShortLinkDataSelector = selector<
     const shortLinksRStateAtom = get(ShortLinksRStateAtom);
     const _filterOptions = get(ShortLinksFilterOptionsRStateAtom);
     let _filterLinksData: ShortLinkType[] | undefined = shortLinksRStateAtom;
-
     // check's
-    if (shortLinksRStateAtom?.length) {
-      if (_filterOptions.folderId && _filterOptions.folderId !== 'all') {
+    if (
+      shortLinksRStateAtom !== undefined &&
+      shortLinksRStateAtom?.length > 0
+    ) {
+      if (
+        _filterOptions.folderId !== null &&
+        _filterOptions.folderId !== 'all'
+      ) {
         _filterLinksData = shortLinksRStateAtom.filter(
           el => el.folderId === _filterOptions.folderId
         );
       }
 
       if (
-        _filterOptions?.timeFilter?.daysToSubtract &&
+        _filterOptions?.timeFilter?.daysToSubtract !== undefined &&
         _filterOptions?.timeFilter?.daysToSubtract !== TimeFilterEnum.allTime
       ) {
         let endDate = new Date(
@@ -106,7 +111,11 @@ export const FilteredShortLinkDataSelector = selector<
         });
       }
 
-      if (_filterOptions.tags?.length) {
+      if (
+        _filterOptions.tags !== undefined &&
+        _filterOptions.tags !== null &&
+        _filterOptions.tags?.length > 0
+      ) {
         _filterLinksData = shortLinksRStateAtom.filter(el => {
           return (_filterOptions.tags as string[]).every(tag =>
             (el.tags as string[]).includes(tag)
@@ -114,24 +123,33 @@ export const FilteredShortLinkDataSelector = selector<
         });
       }
 
-      if (_filterOptions.domains?.length) {
+      if (
+        _filterOptions.domains !== undefined &&
+        _filterOptions.domains !== null &&
+        _filterOptions.domains?.length > 0
+      ) {
         // eslint-disable-next-line
         _filterLinksData = shortLinksRStateAtom.filter(el => {
           const _url = (el.target as LinkTargetType).url;
-          if (_url) {
+          if (_url !== undefined && _url !== null && _url?.trim()?.length > 0) {
             return _filterOptions.domains?.includes(getPrimaryDomain(_url));
           }
         });
       }
 
-      if (_filterOptions.searchQuery) {
+      if (
+        _filterOptions?.searchQuery !== undefined &&
+        _filterOptions?.searchQuery !== null &&
+        _filterOptions?.searchQuery?.trim()?.length > 0
+      ) {
         _filterLinksData = shortLinksRStateAtom.filter(el => {
           return (
-            el.title
+            (el.title
               ?.toLocaleLowerCase()
               ?.includes(
                 (_filterOptions.searchQuery as string)?.toLocaleLowerCase()
-              ) ||
+              ) ??
+              false) ||
             ((JSON.parse(el.target as string) as LinkTargetType).url as string)
               ?.toLocaleLowerCase()
               ?.includes(
@@ -157,14 +175,12 @@ export const ShortLinksFieldsDataRStateSelector = selector({
     const _domains = new Set<string>();
 
     shortLinksRStateAtom?.forEach(el => {
-      if ((el.tags as string[])?.length) {
-        (JSON.parse(el.tags as string) as string[]).forEach(tag =>
-          _tagsArray.add(tag)
-        );
+      if ((el.tags as string[])?.length > 0) {
+        (el.tags as string[])?.forEach(tag => _tagsArray.add(tag));
       }
 
       const _url = (el.target as LinkTargetType).url;
-      if (_url) {
+      if (_url !== undefined && _url !== null && _url?.trim()?.length > 0) {
         _domains.add(getPrimaryDomain(_url));
       }
     });
@@ -177,6 +193,6 @@ export const ShortLinksFieldsDataRStateSelector = selector({
 });
 
 // export const ShortLinkRStateAtomFamily = atomFamily<ShortLinkType, string>({
-// 	key: 'ShortLink_key',
-// 	default: {},
+// key: 'ShortLink_key',
+// default: {},
 // });

@@ -1,15 +1,18 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonRadio } from '@ionic/react';
 
 // Type
-import { ZIonColorType, ZIonModeType } from '@/types/zaionsAppSettings.type';
+import {
+  type ZIonColorType,
+  type ZIonModeType
+} from '@/types/zaionsAppSettings.type';
 
-import { IonRadioCustomEvent } from '@ionic/core/dist/types/components';
+import { type IonRadioCustomEvent } from '@ionic/core/dist/types/components';
 
-type ZIonRadioType = {
+interface ZIonRadioType {
   children?: ReactNode;
   className?: string;
   color?: ZIonColorType;
@@ -23,9 +26,9 @@ type ZIonRadioType = {
   legacy?: boolean;
   onIonBlur?: (event: IonRadioCustomEvent<void>) => void;
   onIonFocus?: (event: IonRadioCustomEvent<void>) => void;
-};
+}
 
-const ZIonRadio = (props: ZIonRadioType) => {
+const ZIonRadio: React.FC<ZIonRadioType> = (props: ZIonRadioType) => {
   return <IonRadio {...props}>{props.children}</IonRadio>;
 };
 

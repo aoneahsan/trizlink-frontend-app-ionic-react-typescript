@@ -5,8 +5,8 @@ import React from 'react';
 
 // Custom Imports
 import { ZIonInput, ZIonItem } from '@/components/ZIonComponents';
-import { InputChangeEventDetail } from '@ionic/react';
-import { IonInputCustomEvent } from '@ionic/core';
+import { type InputChangeEventDetail } from '@ionic/react';
+import { type IonInputCustomEvent } from '@ionic/core';
 
 // Styles
 

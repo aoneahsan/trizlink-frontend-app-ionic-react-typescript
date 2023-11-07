@@ -8,9 +8,10 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { closeOutline, toggleOutline } from 'ionicons/icons';
+import { closeOutline } from 'ionicons/icons';
 import { Formik } from 'formik';
 import classNames from 'classnames';
+import { AxiosError } from 'axios';
 
 /**
  * Custom Imports go down
@@ -23,7 +24,6 @@ import {
   ZIonIcon,
   ZIonImg,
   ZIonInput,
-  ZIonNote,
   ZIonRow,
   ZIonText
 } from '@/components/ZIonComponents';
@@ -52,19 +52,17 @@ import {
 import { reportCustomError, ZCustomError } from '@/utils/customErrorType';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
+import { showSuccessNotification } from '@/utils/notification';
+import MESSAGES from '@/utils/messages';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { workspaceInterface } from '@/types/AdminPanel/workspace';
+import { type workspaceInterface } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import { AxiosError } from 'axios';
-import { ZGenericObject } from '@/types/zaionsAppSettings.type';
-import { FormikSetErrorsType } from '@/types/ZaionsFormik.type';
-import { ProductFavicon } from '@/assets/images';
-import { showSuccessNotification } from '@/utils/notification';
-import MESSAGES from '@/utils/messages';
+import { type ZGenericObject } from '@/types/zaionsAppSettings.type';
+import { type FormikSetErrorsType } from '@/types/ZaionsFormik.type';
 
 /**
  * Recoil State Imports go down
@@ -80,6 +78,7 @@ import MESSAGES from '@/utils/messages';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
+import { ProductFaviconSmall } from '@/assets/images';
 
 /**
  * Component props type go down
@@ -100,29 +99,28 @@ const ZAddNewWorkspaceModal: React.FC<{
   const { getRQCDataHandler } = useZGetRQCacheData();
 
   // Create new workspace API.
-  const { mutateAsync: createWorkspaceMutate, error } = useZRQCreateRequest({
-    _url: API_URL_ENUM.workspace_create_list,
-    _queriesKeysToInvalidate: []
+  const { mutateAsync: createWorkspaceMutate } = useZRQCreateRequest({
+    _url: API_URL_ENUM.workspace_create_list
   });
 
   // Formik submit handler
   const formikSubmitHandler = async (
     values: string,
     setErrors: FormikSetErrorsType
-  ) => {
+  ): Promise<void> => {
     try {
-      if (values) {
+      if (values?.trim()?.length > 0) {
         // Making an api call creating new workspace.
         const _response = await createWorkspaceMutate(values);
 
-        if (_response) {
+        if (_response !== undefined) {
           // extracting data from _response.
           const _data = extractInnerData<workspaceInterface>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data && _data.id) {
+          if (_data?.id !== undefined) {
             // getting all the workspace from RQ cache.
             const _oldWorkspaces =
               extractInnerData<workspaceInterface[]>(
@@ -130,7 +128,7 @@ const ZAddNewWorkspaceModal: React.FC<{
                   key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN]
                 }) as workspaceInterface[],
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
             // Adding newly created workspace data.
             const updatedWorkspaces = [..._oldWorkspaces, _data];
@@ -138,7 +136,7 @@ const ZAddNewWorkspaceModal: React.FC<{
             // Updating data in RQ cache.
             await updateRQCDataHandler<workspaceInterface[] | undefined>({
               key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.MAIN],
-              data: updatedWorkspaces as workspaceInterface[],
+              data: updatedWorkspaces,
               id: '',
               extractType: ZRQGetRequestExtractEnum.extractItems,
               updateHoleData: true
@@ -153,15 +151,15 @@ const ZAddNewWorkspaceModal: React.FC<{
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        const __apiErrors = (error.response?.data as { errors: ZGenericObject })
+        const _apiErrors = (error.response?.data as { errors: ZGenericObject })
           ?.errors;
-        const __errors = formatApiRequestErrorForFormikFormField(
+        const _errors = formatApiRequestErrorForFormikFormField(
           ['title', 'workspaceTimezone'],
           ['title', 'timezone'],
-          __apiErrors
+          _apiErrors
         );
 
-        setErrors(__errors);
+        setErrors(_errors);
       } else if (error instanceof ZCustomError || error instanceof Error) {
         reportCustomError(error);
       }
@@ -191,16 +189,9 @@ const ZAddNewWorkspaceModal: React.FC<{
 
       {/*  */}
       <div className='flex flex-col ion-justify-content-center'>
-        {/* <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter zaions__primary_bg'>
-					<ZIonIcon
-						icon={toggleOutline}
-						className='w-8 h-8 mx-auto'
-						color='light'
-					/>
-				</div> */}
         <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
           <ZIonImg
-            src={ProductFavicon}
+            src={ProductFaviconSmall}
             className='w-10 h-10 mx-auto'
           />
         </div>
@@ -249,14 +240,19 @@ const ZAddNewWorkspaceModal: React.FC<{
                     placeholder='Workspace Name'
                     onIonChange={handleChange}
                     onIonBlur={handleBlur}
-                    value={values.title}
-                    errorText={touched.title ? errors.title : undefined}
+                    value={values?.title}
+                    errorText={
+                      touched?.title === true ? errors?.title : undefined
+                    }
                     testingselector={
                       CONSTANTS.testingSelectors.workspace.createModal.nameInput
                     }
                     className={classNames({
-                      'ion-touched ion-invalid': touched.title && errors.title,
-                      'ion-touched ion-valid': touched.title && !errors.title
+                      'ion-touched': touched?.title === true,
+                      'ion-invalid': touched?.title === true && errors.title,
+                      'ion-valid':
+                        touched?.title === true &&
+                        (errors.title === null || errors.title === undefined)
                     })}
                   />
                 </ZIonCol>
@@ -289,7 +285,9 @@ const ZAddNewWorkspaceModal: React.FC<{
                     <ZIonButton
                       expand='block'
                       className='ion-no-margin'
-                      onClick={() => void submitForm()}
+                      onClick={() => {
+                        void submitForm();
+                      }}
                       disabled={!isValid}
                       testingselector={
                         CONSTANTS.testingSelectors.workspace.createModal

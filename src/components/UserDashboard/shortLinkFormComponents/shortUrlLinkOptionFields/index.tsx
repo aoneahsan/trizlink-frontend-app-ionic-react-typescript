@@ -13,7 +13,10 @@ import classNames from 'classnames';
 import { useFormikContext } from 'formik';
 import { refreshCircleOutline } from 'ionicons/icons';
 import { useRecoilState } from 'recoil';
-import { InputChangeEventDetail, IonInputCustomEvent } from '@ionic/core';
+import {
+  type InputChangeEventDetail,
+  type IonInputCustomEvent
+} from '@ionic/core';
 import isURL from 'validator/lib/isURL';
 
 /**
@@ -27,8 +30,6 @@ import {
   ZIonIcon,
   ZIonInput,
   ZIonRow,
-  ZIonSelect,
-  ZIonSelectOption,
   ZIonSkeletonText,
   ZIonText,
   ZIonTextareaShort
@@ -53,9 +54,9 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * */
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import {
-  ShortLinkType,
-  ShortUrlLinkOptionType,
-  ZaionsShortUrlOptionFieldsValuesInterface
+  type ShortLinkType,
+  type ShortUrlLinkOptionType,
+  type ZaionsShortUrlOptionFieldsValuesInterface
 } from '@/types/AdminPanel/linksType';
 import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
 
@@ -106,10 +107,10 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
   const { editLinkId, workspaceId, wsShareId, shareWSMemberId } = useParams<{
-    editLinkId: string;
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    editLinkId?: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // if owned workspace then this api will fetch the current short link data in this workspace.
@@ -118,16 +119,21 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
       _url: API_URL_ENUM.shortLinks_update_delete,
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
-        workspaceId,
-        editLinkId
+        workspaceId ?? '',
+        editLinkId ?? ''
       ],
       _authenticated: true,
-      _itemsIds: [workspaceId, editLinkId],
+      _itemsIds: [workspaceId ?? '', editLinkId ?? ''],
       _urlDynamicParts: [
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.shortLink.shortLinkId
       ],
-      _shouldFetchWhenIdPassed: editLinkId && workspaceId ? false : true,
+      _shouldFetchWhenIdPassed: !(
+        editLinkId !== undefined &&
+        (editLinkId?.trim()?.length ?? 0) > 0 &&
+        workspaceId !== undefined &&
+        (workspaceId?.trim()?.length ?? 0) > 0
+      ),
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _showLoader: false
     });
@@ -140,16 +146,21 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
     _url: API_URL_ENUM.shortLinks_update_delete,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.GET,
-      workspaceId,
-      editLinkId
+      workspaceId ?? '',
+      editLinkId ?? ''
     ],
     _authenticated: true,
-    _itemsIds: [shareWSMemberId, editLinkId],
+    _itemsIds: [shareWSMemberId ?? '', editLinkId ?? ''],
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.shareWSMemberId,
       CONSTANTS.RouteParams.shortLink.shortLinkId
     ],
-    _shouldFetchWhenIdPassed: editLinkId && wsShareId ? false : true,
+    _shouldFetchWhenIdPassed: !(
+      editLinkId !== undefined &&
+      (editLinkId?.trim()?.length ?? 0) > 0 &&
+      wsShareId !== undefined &&
+      (wsShareId?.trim()?.length ?? 0) > 0
+    ),
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
   });
@@ -165,17 +176,20 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
     try {
       let selectedTypeOptionData: ShortUrlLinkOptionType | undefined;
 
-      if (workspaceId) {
+      if (workspaceId !== undefined) {
         selectedTypeOptionData = LinkTypeOptionsData.find(
           el => el.type === selectedShortLink?.type
         );
-      } else if (wsShareId) {
+      } else if (wsShareId !== undefined) {
         selectedTypeOptionData = LinkTypeOptionsData.find(
           el => el.type === swsSelectedShortLink?.type
         );
       }
 
-      if (selectedShortLink && selectedTypeOptionData?.id) {
+      if (
+        selectedShortLink !== undefined &&
+        selectedTypeOptionData?.id !== null
+      ) {
         setNewShortLinkTypeOptionDataAtom(_ => ({
           ...(selectedTypeOptionData as ShortUrlLinkOptionType)
         }));
@@ -183,10 +197,11 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedShortLink, workspaceId, wsShareId, swsSelectedShortLink]);
 
-  const ShortLinkPlaceholder = () => {
-    if (newShortLinkTypeOptionDataAtom) {
+  const ShortLinkPlaceholder = (): string | undefined => {
+    if (newShortLinkTypeOptionDataAtom !== null) {
       switch (newShortLinkTypeOptionDataAtom?.type) {
         case messengerPlatformsBlockEnum.link:
           return 'https://yourlink.com';
@@ -227,68 +242,68 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 
   const linkInputChangeHandler = (
     event: IonInputCustomEvent<InputChangeEventDetail>
-  ) => {
+  ): void => {
     try {
       handleChange(event);
 
       if (isURL(event.target.value as string)) {
-        const { __queryStringData } = parseZQueryString(
+        const { _queryStringData } = parseZQueryString(
           zAddUrlProtocol(String(event.target.value))
         );
 
         // utmCampaign
-        if (__queryStringData['utm_campaign']) {
-          setFieldValue(
+        if (_queryStringData.utm_campaign !== undefined) {
+          void setFieldValue(
             'UTMTags.utmCampaign',
-            __queryStringData['utm_campaign'],
+            _queryStringData.utm_campaign,
             false
           );
         } else {
-          setFieldValue('UTMTags.utmCampaign', '', false);
+          void setFieldValue('UTMTags.utmCampaign', '', false);
         }
 
         // utmMedium
-        if (__queryStringData['utm_medium']) {
-          setFieldValue(
+        if (_queryStringData.utm_medium !== undefined) {
+          void setFieldValue(
             'UTMTags.utmMedium',
-            __queryStringData['utm_medium'],
+            _queryStringData.utm_medium,
             false
           );
         } else {
-          setFieldValue('UTMTags.utmMedium', '', false);
+          void setFieldValue('UTMTags.utmMedium', '', false);
         }
 
         // utmSource
-        if (__queryStringData['utm_source']) {
-          setFieldValue(
+        if (_queryStringData.utm_source !== undefined) {
+          void setFieldValue(
             'UTMTags.utmSource',
-            __queryStringData['utm_source'],
+            _queryStringData.utm_source,
             false
           );
         } else {
-          setFieldValue('UTMTags.utmSource', '', false);
+          void setFieldValue('UTMTags.utmSource', '', false);
         }
 
         // utmTerm
-        if (__queryStringData['utm_term']) {
-          setFieldValue(
+        if (_queryStringData.utm_term !== undefined) {
+          void setFieldValue(
             'UTMTags.utmTerm',
-            __queryStringData['utm_term'],
+            _queryStringData.utm_term,
             false
           );
         } else {
-          setFieldValue('UTMTags.utmTerm', '', false);
+          void setFieldValue('UTMTags.utmTerm', '', false);
         }
 
         // utmContent
-        if (__queryStringData['utm_content']) {
-          setFieldValue(
+        if (_queryStringData.utm_content !== undefined) {
+          void setFieldValue(
             'UTMTags.utmContent',
-            __queryStringData['utm_content'],
+            _queryStringData.utm_content,
             false
           );
         } else {
-          setFieldValue('UTMTags.utmContent', '', false);
+          void setFieldValue('UTMTags.utmContent', '', false);
         }
       }
     } catch (error) {
@@ -298,8 +313,8 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
 
   return (
     <>
-      {((workspaceId && !isSelectedShortLinkFetching) ||
-        (wsShareId && !isSWSSelectedShortLinkFetching)) && (
+      {((workspaceId !== undefined && !isSelectedShortLinkFetching) ||
+        (wsShareId !== undefined && !isSWSSelectedShortLinkFetching)) && (
         <ZIonGrid
           className={classNames({
             'mt-2': true,
@@ -313,7 +328,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                 'flex-col': !isMdScale
               })}>
               {/* Options Dropdown (messengerPlatformsBlockEnum)  */}
-              {newShortLinkTypeOptionDataAtom && (
+              {newShortLinkTypeOptionDataAtom !== null && (
                 <ZIonButton
                   fill={isMdScale ? 'default' : 'outline'}
                   className={classNames({
@@ -334,7 +349,8 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                     });
                   }}
                   height='39px'>
-                  {newShortLinkTypeOptionDataAtom.icon.iconName && (
+                  {(newShortLinkTypeOptionDataAtom?.icon?.iconName).length >
+                    0 && (
                     <ZIonIcon
                       icon={newShortLinkTypeOptionDataAtom.icon.iconName}
                       size={isMdScale ? 'large' : 'default'}
@@ -354,7 +370,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                   </ZIonText>
                 </ZIonButton>
               )}
-              {!newShortLinkTypeOptionDataAtom && (
+              {newShortLinkTypeOptionDataAtom === null && (
                 <>Invalid Option Type Selected.</>
               )}
 
@@ -376,7 +392,9 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                     value={values?.target?.url}
                     placeholder={ShortLinkPlaceholder()}
                     errorText={
-                      touched?.target?.url ? errors?.target?.url : undefined
+                      touched?.target?.url === true
+                        ? errors?.target?.url
+                        : undefined
                     }
                     testingselector={
                       CONSTANTS.testingSelectors.shortLink.formPage
@@ -385,15 +403,18 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                     onIonBlur={e => {
                       handleBlur(e);
                       const inputUrl = values?.target?.url;
-                      const formattedUrl = zAddUrlProtocol(inputUrl || '');
-                      setFieldValue('target.url', formattedUrl);
+                      const formattedUrl = zAddUrlProtocol(inputUrl ?? '');
+                      void setFieldValue('target.url', formattedUrl);
                     }}
                     className={classNames({
                       'w-full ion-margin-end ': true,
                       'ion-touched': touched?.target?.url,
                       'ion-invalid':
-                        touched?.target?.url && errors?.target?.url,
-                      'ion-valid': touched?.target?.url && !errors?.target?.url
+                        touched?.target?.url === true && errors?.target?.url,
+                      'ion-valid':
+                        touched?.target?.url === true &&
+                        (errors?.target?.url === undefined ||
+                          errors?.target?.url?.trim()?.length === 0)
                     })}
                   />
                 </>
@@ -407,25 +428,6 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                 newShortLinkTypeOptionDataAtom?.type ===
                   messengerPlatformsBlockEnum.call) && (
                 <>
-                  {/* <ZIonSelect
-										name='countryCode'
-										// value={values.countryCode}
-										// onIonChange={handleCountryCodeChange}
-										className='w-1/5 me-2'
-										minHeight='40px'
-										value='92'
-										fill='outline'
-										interface='popover'
-									>
-										{/* {countryCodes.map((country) => (
-											<IonSelectOption key={country.code} value={country.code}>
-												{country.name} ({country.code})
-											</IonSelectOption>
-										))} * /}
-										<ZIonSelectOption value='92'>
-											+92 (pakistan)
-										</ZIonSelectOption>
-									</ZIonSelect> */}
                   <ZCPhoneNumberInput
                     placeholder={ShortLinkPlaceholder()}
                     value={String(values?.target?.phoneNumber)}
@@ -434,15 +436,15 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                       'w-full ': true
                     })}
                     errorText={
-                      touched?.target?.phoneNumber
+                      touched?.target?.phoneNumber === true
                         ? errors?.target?.phoneNumber
                         : undefined
                     }
                     onChange={_value => {
-                      setFieldValue('target.phoneNumber', _value, true);
+                      void setFieldValue('target.phoneNumber', _value, true);
                     }}
                     onBlur={() => {
-                      setFieldTouched('target.phoneNumber', true, true);
+                      void setFieldTouched('target.phoneNumber', true, true);
                     }}
                     testingselector={
                       CONSTANTS.testingSelectors.shortLink.formPage
@@ -450,36 +452,6 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                     }
                   />
                   {/* Input of every Phone Number */}
-                  {/* <ZIonInput
-										label='Phone number'
-										labelPlacement='stacked'
-										name='target.phoneNumber'
-										type='text'
-										minHeight='40px'
-										onIonChange={handleChange}
-										onIonBlur={handleBlur}
-										value={values?.target?.phoneNumber}
-										placeholder={ShortLinkPlaceholder()}
-										testingselector={
-											CONSTANTS.testingSelectors.shortLink.formPage
-												.ShortUrlOptionFields.numberInput
-										}
-										errorText={
-											touched?.target?.phoneNumber
-												? errors?.target?.phoneNumber
-												: undefined
-										}
-										className={classNames({
-											'w-full ion-margin-end': true,
-											'ion-touched': touched?.target?.phoneNumber,
-											'ion-invalid':
-												touched?.target?.phoneNumber &&
-												errors?.target?.phoneNumber,
-											'ion-valid':
-												touched?.target?.phoneNumber &&
-												!errors?.target?.phoneNumber,
-										})}
-									/> */}
                 </>
               )}
 
@@ -505,7 +477,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                         .ShortUrlOptionFields.usernameInput
                     }
                     errorText={
-                      touched?.target?.username
+                      touched?.target?.username === true
                         ? errors?.target?.username
                         : undefined
                     }
@@ -513,9 +485,12 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                       'w-full ion-margin-end': true,
                       'ion-touched': touched?.target?.username,
                       'ion-invalid':
-                        touched?.target?.username && errors?.target?.username,
+                        touched?.target?.username === true &&
+                        errors?.target?.username,
                       'ion-valid':
-                        touched?.target?.username && !errors?.target?.username
+                        touched?.target?.username === true &&
+                        (errors?.target?.username?.trim()?.length === 0 ||
+                          errors?.target?.username === undefined)
                     })}
                   />
                 </>
@@ -545,7 +520,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                         .ShortUrlOptionFields.accountIdInput
                     }
                     errorText={
-                      touched?.target?.accountId
+                      touched?.target?.accountId === true
                         ? errors?.target?.accountId
                         : undefined
                     }
@@ -553,9 +528,12 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                       'w-full ion-margin-end': true,
                       'ion-touched': touched?.target?.accountId,
                       'ion-invalid':
-                        touched?.target?.accountId && errors?.target?.accountId,
+                        touched?.target?.accountId === true &&
+                        errors?.target?.accountId,
                       'ion-valid':
-                        touched?.target?.accountId && !errors?.target?.accountId
+                        touched?.target?.accountId === true &&
+                        (errors?.target?.accountId?.trim()?.length === 0 ||
+                          errors?.target?.accountId === undefined)
                     })}
                   />
                 </>
@@ -577,7 +555,9 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                     value={values?.target?.email}
                     placeholder={ShortLinkPlaceholder()}
                     errorText={
-                      touched?.target?.email ? errors?.target?.email : undefined
+                      touched?.target?.email === true
+                        ? errors?.target?.email
+                        : undefined
                     }
                     testingselector={
                       CONSTANTS.testingSelectors.shortLink.formPage
@@ -587,9 +567,12 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                       'w-full ion-margin-end': true,
                       'ion-touched': touched?.target?.email,
                       'ion-invalid':
-                        touched?.target?.email && errors?.target?.email,
+                        touched?.target?.email === true &&
+                        errors?.target?.email,
                       'ion-valid':
-                        touched?.target?.email && !errors?.target?.email
+                        touched?.target?.email === true &&
+                        (errors?.target?.email?.trim()?.length === 0 ||
+                          errors?.target?.email === undefined)
                     })}
                   />
                 </>
@@ -633,7 +616,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                   onIonBlur={handleBlur}
                   value={values?.target?.subject}
                   errorText={
-                    touched?.target?.subject
+                    touched?.target?.subject === true
                       ? errors?.target?.subject
                       : undefined
                   }
@@ -645,9 +628,12 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                     'w-full mt-4': true,
                     'ion-touched': touched?.target?.subject,
                     'ion-invalid':
-                      touched?.target?.subject && errors?.target?.subject,
+                      touched?.target?.subject === true &&
+                      errors?.target?.subject,
                     'ion-valid':
-                      touched?.target?.subject && !errors?.target?.subject
+                      touched?.target?.subject === true &&
+                      (errors?.target?.subject?.trim()?.length === 0 ||
+                        errors?.target?.subject === undefined)
                   })}
                 />
               )}
@@ -673,7 +659,7 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                       .ShortUrlOptionFields.messageTextarea
                   }
                   errorText={
-                    touched?.target?.message
+                    touched?.target?.message === true
                       ? errors?.target?.message
                       : undefined
                   }
@@ -681,9 +667,12 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
                     'w-full ion-margin-end mt-4': true,
                     'ion-touched': touched?.target?.message,
                     'ion-invalid':
-                      touched?.target?.message && errors?.target?.message,
+                      touched?.target?.message === true &&
+                      errors?.target?.message,
                     'ion-valid':
-                      touched?.target?.message && !errors?.target?.message
+                      touched?.target?.message === true &&
+                      (errors?.target?.message?.trim()?.length === 0 ||
+                        errors?.target?.message === undefined)
                   })}
                 />
               )}
@@ -692,15 +681,15 @@ const ZaionsShortUrlOptionFields: React.FC = () => {
         </ZIonGrid>
       )}
 
-      {((workspaceId && isSelectedShortLinkFetching) ||
-        (wsShareId && isSWSSelectedShortLinkFetching)) && (
+      {((workspaceId !== undefined && isSelectedShortLinkFetching) ||
+        (wsShareId !== undefined && isSWSSelectedShortLinkFetching)) && (
         <ZaionsShortUrlOptionFieldsSkeleton />
       )}
     </>
   );
 };
 
-const ZaionsShortUrlOptionFieldsSkeleton = () => {
+const ZaionsShortUrlOptionFieldsSkeleton: React.FC = () => {
   const { isMdScale, isSmScale } = useZMediaQueryScale();
   return (
     <ZIonGrid className='mx-3 mt-2'>
@@ -722,29 +711,25 @@ const ZaionsShortUrlOptionFieldsSkeleton = () => {
             <ZIonSkeletonText
               animated={true}
               width='30px'
-              height='20px'></ZIonSkeletonText>
+              height='20px'
+            />
 
             {/*  */}
             <ZIonText className='pt-[3px] ms-2 text-lg ion-padding-end'>
               <ZIonSkeletonText
                 animated={true}
                 width='60px'
-                height='20px'></ZIonSkeletonText>
+                height='20px'
+              />
             </ZIonText>
           </ZIonButton>
 
           {/* Link Input */}
-          {/* <ZIonInput
-						label='URL'
-						labelPlacement='stacked'
-						type='url'
-						className='w-full ion-margin-end'
-						minHeight='40px'
-					></ZIonInput> */}
           <ZIonSkeletonText
             animated={true}
             width='100%'
-            height='40px'></ZIonSkeletonText>
+            height='40px'
+          />
 
           <ZIonButton
             fill='clear'
@@ -759,15 +744,15 @@ const ZaionsShortUrlOptionFieldsSkeleton = () => {
                 <ZIonSkeletonText
                   animated={true}
                   width='80px'
-                  height='17px'></ZIonSkeletonText>
+                  height='17px'
+                />
               </ZIonText>
             )}
             <ZIonSkeletonText
               animated={true}
               width={isMdScale ? '25px' : !isMdScale ? '17px' : '25px'}
-              height={
-                isMdScale ? '25px' : !isMdScale ? '17px' : '25px'
-              }></ZIonSkeletonText>
+              height={isMdScale ? '25px' : !isMdScale ? '17px' : '25px'}
+            />
           </ZIonButton>
         </ZIonCol>
 

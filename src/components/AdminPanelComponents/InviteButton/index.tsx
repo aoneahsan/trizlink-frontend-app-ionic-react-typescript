@@ -27,8 +27,6 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * ? Like import of Constant is a global constants import
  * */
 import CONSTANTS from '@/utils/constants';
-import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
-import ZInviteInTeamModal from '@/components/InPageComponents/ZaionsModals/Workspace/Team/InviteInTeamModal';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { replaceRouteParams } from '@/utils/helpers';
 
@@ -75,13 +73,6 @@ const ZInviteButton: React.FC<IZInviteButton> = ({
   shareWSMemberId,
   wsShareId
 }) => {
-  const { presentZIonModal: presentZInviteInTeamModal } = useZIonModal(
-    ZInviteInTeamModal,
-    {
-      workspaceId: workspaceId
-    }
-  );
-
   const { isLgScale, isMdScale } = useZMediaQueryScale();
 
   return (
@@ -92,20 +83,20 @@ const ZInviteButton: React.FC<IZInviteButton> = ({
       expand={isMdScale ? undefined : 'block'}
       testingselector={CONSTANTS.testingSelectors.topBar.teamInviteBtn}
       routerLink={
-        workspaceId
+        workspaceId != null
           ? replaceRouteParams(
               ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
               [CONSTANTS.RouteParams.workspace.workspaceId],
-              [workspaceId!]
+              [workspaceId]
             )
-          : wsShareId && shareWSMemberId
+          : wsShareId != null && shareWSMemberId != null
           ? replaceRouteParams(
               ZaionsRoutes.AdminPanel.ShareWS.AccountSettings.Members,
               [
                 CONSTANTS.RouteParams.workspace.wsShareId,
                 CONSTANTS.RouteParams.workspace.shareWSMemberId
               ],
-              [wsShareId!, shareWSMemberId!]
+              [wsShareId, shareWSMemberId]
             )
           : ''
       }>

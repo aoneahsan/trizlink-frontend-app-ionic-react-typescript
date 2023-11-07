@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 /**
  * Packages Imports go down
@@ -43,7 +43,6 @@ import { STORAGE, zAxiosApiRequest } from '@/utils/helpers';
  * ? Import of recoil states is a Recoil State import
  * */
 import { ZaionsUserAccountRStateAtom } from '@/ZaionsStore/UserAccount/index.recoil';
-import { ErrorCodeEnum } from '@/utils/customErrorType';
 interface AuthenticateHOCPropsType {
   children: ReactNode;
 }
@@ -74,7 +73,7 @@ const AuthenticateHOC: React.FC<AuthenticateHOCPropsType> = props => {
 
   const { zNavigatePushRoute } = useZNavigate();
 
-  const checkAuthenticateValidation = async () => {
+  const checkAuthenticateValidation = async (): Promise<void> => {
     try {
       if (!zIsPrivateRoute) {
         setCompState(oldState => ({
@@ -89,7 +88,7 @@ const AuthenticateHOC: React.FC<AuthenticateHOCPropsType> = props => {
           STORAGE.GET(LOCALSTORAGE_KEYS.AUTHTOKEN),
           STORAGE.GET(LOCALSTORAGE_KEYS.USERDATA)
         ]).then(async ([authToken, userData]) => {
-          if (authToken && userData) {
+          if (authToken !== undefined && userData !== undefined) {
             // check api result
             await zAxiosApiRequest({
               _url: API_URL_ENUM.verifyAuthenticationStatus,
@@ -115,12 +114,12 @@ const AuthenticateHOC: React.FC<AuthenticateHOCPropsType> = props => {
     } catch (error: any) {
       // Checking if Unauthorized.
       if (
-        error.response &&
+        error.response !== undefined &&
         error.response.status === ZErrorCodeEnum.unauthorized
       ) {
         // Clear storage
-        STORAGE.CLEAR(LOCALSTORAGE_KEYS.USERDATA);
-        STORAGE.CLEAR(LOCALSTORAGE_KEYS.AUTHTOKEN);
+        void STORAGE.CLEAR(LOCALSTORAGE_KEYS.USERDATA);
+        void STORAGE.CLEAR(LOCALSTORAGE_KEYS.AUTHTOKEN);
 
         setCompState(oldState => ({
           ...oldState,
@@ -144,13 +143,13 @@ const AuthenticateHOC: React.FC<AuthenticateHOCPropsType> = props => {
   React.useEffect(() => {
     void checkAuthenticateValidation();
 
-    App.addListener('appStateChange', ({ isActive }) => {
-      if (isActive === true) {
+    void App.addListener('appStateChange', ({ isActive }) => {
+      if (isActive) {
         void checkAuthenticateValidation();
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   if (compState.isProcessing) {
     return <ZFallbackIonSpinner />;
   } else if (

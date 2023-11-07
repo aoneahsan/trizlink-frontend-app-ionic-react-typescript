@@ -1,4 +1,4 @@
-export type ZaionsJobsType = {
+export interface ZaionsJobsType {
   id?: string;
   JobTitle: string;
   JobPlace: string;
@@ -7,4 +7,4 @@ export type ZaionsJobsType = {
     categoryId: string;
     categoryName: string;
   };
-};
+}

@@ -46,8 +46,8 @@ import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
  * ? Like if you have a type for props it should be please Down
  * */
 interface ZAudioBlockInterface {
-	audioLink?: string;
-	title?: string;
+  audioLink?: string;
+  title?: string;
 }
 
 /**
@@ -57,13 +57,13 @@ interface ZAudioBlockInterface {
  * */
 
 const ZAudioBlock: React.FC<ZAudioBlockInterface> = ({ audioLink, title }) => {
-	return (
-		<ZCustomCard
-			mediaType={ZMediaEnum.audio}
-			mediaLink={audioLink}
-			title={title}
-		/>
-	);
+  return (
+    <ZCustomCard
+      mediaType={ZMediaEnum.audio}
+      mediaLink={audioLink}
+      title={title}
+    />
+  );
 };
 
 export default ZAudioBlock;

@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 /**
  * Packages Imports go down
@@ -14,12 +14,11 @@ import React, { ReactNode } from 'react';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonButton,
-	ZIonCol,
-	ZIonImg,
-	ZIonText,
+  ZIonButton,
+  ZIonCol,
+  ZIonImg,
+  ZIonText
 } from '@/components/ZIonComponents';
-import { WorkspaceSettingsTimetablePlaceholder } from '@/assets/images';
 
 /**
  * Custom Hooks Imports go down
@@ -55,11 +54,11 @@ import { WorkspaceSettingsTimetablePlaceholder } from '@/assets/images';
  * Component props type go down
  * ? Like if you have a type for props it should be please Down
  * */
-interface ZWorkspaceSettingPlaceholderComp {
-	title?: ReactNode;
-	image?: string;
-	buttonText?: string;
-	buttonOnClick?: React.MouseEventHandler<HTMLIonButtonElement>;
+interface IZWorkspaceSettingPlaceholderComp {
+  title?: ReactNode;
+  image?: string;
+  buttonText?: string;
+  buttonOnClick?: React.MouseEventHandler<HTMLIonButtonElement>;
 }
 
 /**
@@ -69,19 +68,21 @@ interface ZWorkspaceSettingPlaceholderComp {
  * */
 
 const ZWorkspaceSettingPlaceholderComp: React.FC<
-	ZWorkspaceSettingPlaceholderComp
+  IZWorkspaceSettingPlaceholderComp
 > = ({ buttonOnClick, buttonText, image, title }) => {
-	return (
-		<ZIonCol className='flex flex-col mb-5 ion-align-items-center ion-justify-content-center ion-text-center'>
-			<ZIonImg src={image} />
+  return (
+    <ZIonCol className='flex flex-col mb-5 ion-align-items-center ion-justify-content-center ion-text-center'>
+      <ZIonImg src={image} />
 
-			<ZIonText className='mt-3 text-3xl ion-text-center'>{title}</ZIonText>
+      <ZIonText className='mt-3 text-3xl ion-text-center'>{title}</ZIonText>
 
-			<ZIonButton className='mt-4 normal-case' onClick={buttonOnClick}>
-				{buttonText}
-			</ZIonButton>
-		</ZIonCol>
-	);
+      <ZIonButton
+        className='mt-4 normal-case'
+        onClick={buttonOnClick}>
+        {buttonText}
+      </ZIonButton>
+    </ZIonCol>
+  );
 };
 
 export default ZWorkspaceSettingPlaceholderComp;

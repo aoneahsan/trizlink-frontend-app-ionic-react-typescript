@@ -2,27 +2,26 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import { ZIonButton, ZIonIcon, ZIonText } from '@/components/ZIonComponents';
-import {
-  addOutline,
-  helpCircleOutline,
-  notificationsOutline,
-  openOutline,
-  trendingUpOutline
-} from 'ionicons/icons';
 import React from 'react';
-import { useParams } from 'react-router';
-import ZInviteButton from '../InviteButton';
 
 /**
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import { useParams } from 'react-router';
+import {
+  helpCircleOutline,
+  notificationsOutline,
+  openOutline,
+  trendingUpOutline
+} from 'ionicons/icons';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
+import { ZIonButton, ZIonIcon, ZIonText } from '@/components/ZIonComponents';
+import ZInviteButton from '../InviteButton';
 
 /**
  * Custom Hooks Imports go down

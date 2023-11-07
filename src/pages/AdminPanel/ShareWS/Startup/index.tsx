@@ -69,8 +69,8 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 const ZShareWSStartup: React.FC = () => {
   // getting current share workspace id form params.
   const { wsShareId, shareWSMemberId } = useParams<{
-    shareWSMemberId: string;
-    wsShareId: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region Custom hooks
@@ -84,11 +84,14 @@ const ZShareWSStartup: React.FC = () => {
   } = useZRQGetRequest({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
-    _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
-    _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: !(
+      shareWSMemberId !== undefined &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
+    ),
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -98,12 +101,15 @@ const ZShareWSStartup: React.FC = () => {
     useZRQGetRequest({
       _key: [
         CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.SHARE_WS_INFO,
-        wsShareId,
-        shareWSMemberId
+        wsShareId ?? '',
+        shareWSMemberId ?? ''
       ],
       _url: API_URL_ENUM.ws_share_member_role_permissions,
-      _shouldFetchWhenIdPassed: shareWSMemberId ? false : true,
-      _itemsIds: [shareWSMemberId],
+      _shouldFetchWhenIdPassed: !(
+        shareWSMemberId !== undefined &&
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
+      ),
+      _itemsIds: [shareWSMemberId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _showLoader: false
@@ -114,8 +120,8 @@ const ZShareWSStartup: React.FC = () => {
   useEffect(() => {
     try {
       if (
-        isGetMemberRolePermissionsFetching === false &&
-        isGetShareWSInfoDataFetching === false
+        !isGetMemberRolePermissionsFetching &&
+        !isGetShareWSInfoDataFetching
       ) {
         zNavigatePushRoute(
           createRedirectRoute({
@@ -124,13 +130,14 @@ const ZShareWSStartup: React.FC = () => {
               CONSTANTS.RouteParams.workspace.wsShareId,
               CONSTANTS.RouteParams.workspace.shareWSMemberId
             ],
-            values: [wsShareId, shareWSMemberId!]
+            values: [wsShareId ?? '', shareWSMemberId ?? '']
           })
         );
       }
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -146,13 +153,14 @@ const ZShareWSStartup: React.FC = () => {
               CONSTANTS.RouteParams.workspace.wsShareId,
               CONSTANTS.RouteParams.workspace.shareWSMemberId
             ],
-            values: [wsShareId, shareWSMemberId!]
+            values: [wsShareId ?? '', shareWSMemberId ?? '']
           })
         );
       }
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getMemberRolePermissions, getShareWSInfoData]);
   // #endregion
 

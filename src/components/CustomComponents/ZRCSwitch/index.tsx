@@ -1,11 +1,10 @@
 import React from 'react';
 
-import RCSwitch, { SwitchChangeEventHandler } from 'rc-switch';
+import RCSwitch, { type SwitchChangeEventHandler } from 'rc-switch';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
-type ZRCSwitchType = {
+interface ZRCSwitchType {
   className?: string;
   onChange?: SwitchChangeEventHandler;
   checked?: boolean;
@@ -13,33 +12,33 @@ type ZRCSwitchType = {
   disabled?: boolean;
   checkedChildren?: string;
   unCheckedChildren?: string;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   id?: string;
 
   //
   testingselector?: string;
   testinglistselector?: string;
-};
+}
 
 const ZRCSwitch: React.FC<ZRCSwitchType> = props => {
-  const _testinglistselector = props.testinglistselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testinglistselector || PRODUCT_NAME,
-          _key: zCreateElementTestingSelectorKeyEnum.listSelector
-        })
-      }
-    : {};
+  const _testinglistselector =
+    props.testinglistselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testinglistselector,
+            _key: zCreateElementTestingSelectorKeyEnum.listSelector
+          })
+        }
+      : {};
 
-  const _testingSelector = props.testingselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testingselector || PRODUCT_NAME
-        })
-      }
-    : {};
+  const _testingSelector =
+    props.testingselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testingselector
+          })
+        }
+      : {};
 
   return (
     <RCSwitch

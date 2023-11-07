@@ -58,7 +58,7 @@ import { API_URL_ENUM } from '@/utils/enums';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { PixelAccountType } from '@/types/AdminPanel/linksType';
+import { type PixelAccountType } from '@/types/AdminPanel/linksType';
 import { FormMode } from '@/types/AdminPanel/index.type';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
@@ -91,9 +91,9 @@ import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 const ZWSSettingPixelListPage: React.FC = () => {
   // getting current workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
   const { workspaceId, shareWSMemberId, wsShareId } = useParams<{
-    workspaceId: string;
-    shareWSMemberId: string;
-    wsShareId: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region Custom hooks.
@@ -106,39 +106,56 @@ const ZWSSettingPixelListPage: React.FC = () => {
   //
   const { data: pixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.userPixelAccounts_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN, workspaceId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
+      workspaceId ?? ''
+    ],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _itemsIds: [workspaceId],
-    _shouldFetchWhenIdPassed: workspaceId ? false : true
+    _itemsIds: [workspaceId ?? ''],
+    _shouldFetchWhenIdPassed: !(
+      workspaceId !== undefined &&
+      workspaceId !== null &&
+      (workspaceId?.trim()?.length ?? 0) > 0
+    )
   });
 
   const { data: swsPixelAccountsData } = useZRQGetRequest<PixelAccountType[]>({
     _url: API_URL_ENUM.sws_pixel_account_create_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
-      wsShareId
+      wsShareId ?? ''
     ],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _itemsIds: [shareWSMemberId],
-    _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true
+    _itemsIds: [shareWSMemberId ?? ''],
+    _shouldFetchWhenIdPassed: !(
+      wsShareId !== undefined &&
+      wsShareId !== null &&
+      (wsShareId?.trim()?.length ?? 0) > 0 &&
+      shareWSMemberId !== undefined &&
+      shareWSMemberId !== null &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
+    )
   });
 
   // If share-workspace then this api will fetch role & permission of current member in this share-workspace.
-  const {
-    data: getMemberRolePermissions,
-    isFetching: isGetMemberRolePermissionsFetching,
-    isError: isGetMemberRolePermissionsError
-  } = useZRQGetRequest<{
+  const { data: getMemberRolePermissions } = useZRQGetRequest<{
     memberRole?: string;
     memberPermissions?: string[];
   }>({
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHARE_WS.MEMBER_ROLE_AND_PERMISSIONS,
-      wsShareId
+      wsShareId ?? ''
     ],
     _url: API_URL_ENUM.ws_share_member_role_permissions,
-    _shouldFetchWhenIdPassed: wsShareId && shareWSMemberId ? false : true,
-    _itemsIds: [shareWSMemberId],
+    _shouldFetchWhenIdPassed: !(
+      wsShareId !== undefined &&
+      wsShareId !== null &&
+      (wsShareId?.trim()?.length ?? 0) > 0 &&
+      shareWSMemberId !== undefined &&
+      shareWSMemberId !== null &&
+      (shareWSMemberId?.trim()?.length ?? 0) > 0
+    ),
+    _itemsIds: [shareWSMemberId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
     _extractType: ZRQGetRequestExtractEnum.extractItem,
     _showLoader: false
@@ -154,14 +171,25 @@ const ZWSSettingPixelListPage: React.FC = () => {
   // #endregion
 
   // #region Functions.
-  const invalidedQueries = async () => {
+  const invalidedQueries = async (): Promise<void> => {
     try {
-      if (workspaceId) {
+      if (
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        (workspaceId?.trim()?.length ?? 0) > 0
+      ) {
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.MAIN,
-          workspaceId
+          workspaceId ?? ''
         ]);
-      } else if (wsShareId && shareWSMemberId) {
+      } else if (
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        (wsShareId?.trim()?.length ?? 0) > 0 &&
+        shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
+      ) {
         await zInvalidateReactQueries([
           CONSTANTS.REACT_QUERY.QUERIES_KEYS.PIXEL_ACCOUNT.SWS_MAIN,
           wsShareId
@@ -177,14 +205,26 @@ const ZWSSettingPixelListPage: React.FC = () => {
     <ZCan
       shareWSId={wsShareId}
       havePermissions={
-        workspaceId
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        (workspaceId?.trim()?.length ?? 0) > 0
           ? [permissionsEnum.viewAny_pixel]
-          : wsShareId && shareWSMemberId
+          : wsShareId !== undefined &&
+            wsShareId !== null &&
+            (wsShareId?.trim()?.length ?? 0) > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            (shareWSMemberId?.trim()?.length ?? 0) > 0
           ? [shareWSPermissionEnum.viewAny_sws_pixel]
           : []
       }
       permissionType={
-        wsShareId && shareWSMemberId
+        wsShareId !== undefined &&
+        wsShareId !== null &&
+        (wsShareId?.trim()?.length ?? 0) > 0 &&
+        shareWSMemberId !== undefined &&
+        shareWSMemberId !== null &&
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
           ? permissionsTypeEnum.shareWSMemberPermissions
           : permissionsTypeEnum.loggedInUserPermissions
       }>
@@ -220,7 +260,10 @@ const ZWSSettingPixelListPage: React.FC = () => {
               shareWSPermissionEnum.update_sws_pixel
             ].some(el =>
               getMemberRolePermissions?.memberPermissions?.includes(el)
-            ) || workspaceId
+            ) ||
+            (workspaceId !== undefined &&
+              workspaceId !== null &&
+              (workspaceId?.trim()?.length ?? 0) > 0)
               ? 'Pixel Mastery Zone: Add, Organize, and Manage Your pixels'
               : 'Your Pixel View: Explore and Monitor Pixel Data'}
           </ZIonText>
@@ -238,13 +281,15 @@ const ZWSSettingPixelListPage: React.FC = () => {
             'w-full': !isSmScale
           })}>
           {/* Filter */}
-          {((workspaceId &&
-            pixelAccountsData &&
-            pixelAccountsData?.length > 0) ||
-            (wsShareId &&
-              shareWSMemberId &&
-              swsPixelAccountsData &&
-              swsPixelAccountsData?.length > 0)) && (
+          {((workspaceId !== undefined &&
+            workspaceId !== null &&
+            (workspaceId?.trim()?.length ?? 0) > 0 &&
+            pixelAccountsData !== null &&
+            (pixelAccountsData?.length ?? 0) > 0) ||
+            (wsShareId !== undefined &&
+              shareWSMemberId !== undefined &&
+              swsPixelAccountsData !== undefined &&
+              (swsPixelAccountsData?.length ?? 0) > 0)) && (
             <ZIonButton
               fill='outline'
               color='primary'
@@ -261,13 +306,17 @@ const ZWSSettingPixelListPage: React.FC = () => {
                 'w-full': !isSmScale,
                 'ion-no-margin': !isSmScale
               })}
-              onClick={async () => {
-                // Open the menu by menu-id
-                await menuController.enable(
-                  true,
-                  CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID
-                );
-                await menuController.open(CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID);
+              onClick={() => {
+                void (async () => {
+                  // Open the menu by menu-id
+                  await menuController.enable(
+                    true,
+                    CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID
+                  );
+                  await menuController.open(
+                    CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID
+                  );
+                })();
               }}>
               <ZIonIcon
                 slot='start'
@@ -316,14 +365,26 @@ const ZWSSettingPixelListPage: React.FC = () => {
           <ZCan
             shareWSId={wsShareId}
             havePermissions={
-              workspaceId
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              (workspaceId?.trim()?.length ?? 0) > 0
                 ? [permissionsEnum.create_pixel]
-                : wsShareId && shareWSMemberId
+                : wsShareId !== undefined &&
+                  wsShareId !== null &&
+                  (wsShareId?.trim()?.length ?? 0) > 0 &&
+                  shareWSMemberId !== undefined &&
+                  shareWSMemberId !== null &&
+                  (shareWSMemberId?.trim()?.length ?? 0) > 0
                 ? [shareWSPermissionEnum.create_sws_pixel]
                 : []
             }
             permissionType={
-              wsShareId && shareWSMemberId
+              wsShareId !== undefined &&
+              wsShareId !== null &&
+              (wsShareId?.trim()?.length ?? 0) > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              (shareWSMemberId?.trim()?.length ?? 0) > 0
                 ? permissionsTypeEnum.shareWSMemberPermissions
                 : permissionsTypeEnum.loggedInUserPermissions
             }>
@@ -379,14 +440,26 @@ const ZWSSettingPixelListPage: React.FC = () => {
       <ZCan
         shareWSId={wsShareId}
         havePermissions={
-          workspaceId
+          workspaceId !== undefined &&
+          workspaceId !== null &&
+          (workspaceId?.trim()?.length ?? 0) > 0
             ? [permissionsEnum.view_pixel]
-            : wsShareId && shareWSMemberId
+            : wsShareId !== undefined &&
+              wsShareId !== null &&
+              (wsShareId?.trim()?.length ?? 0) > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              (shareWSMemberId?.trim()?.length ?? 0) > 0
             ? [shareWSPermissionEnum.view_sws_pixel]
             : []
         }
         permissionType={
-          wsShareId && shareWSMemberId
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          (wsShareId?.trim()?.length ?? 0) > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          (shareWSMemberId?.trim()?.length ?? 0) > 0
             ? permissionsTypeEnum.shareWSMemberPermissions
             : permissionsTypeEnum.loggedInUserPermissions
         }>

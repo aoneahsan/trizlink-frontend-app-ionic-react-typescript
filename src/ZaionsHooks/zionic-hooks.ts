@@ -1,13 +1,12 @@
-import { addCircleOutline } from 'ionicons/icons';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import {
-  useIonToast,
   useIonPopover,
-  ReactComponentOrElement,
+  type ReactComponentOrElement,
   useIonModal,
   useIonActionSheet,
-  createAnimation
+  createAnimation,
+  type Animation
 } from '@ionic/react';
 import MESSAGES from '@/utils/messages';
 import {
@@ -16,25 +15,25 @@ import {
   zConsoleError
 } from '@/utils/helpers';
 import { NOTIFICATIONS } from '@/utils/constants';
-import CONSTANTS from '@/utils/constants';
-import { ZIonColorType } from '@/types/zaionsAppSettings.type';
+import { type ZIonColorType } from '@/types/zaionsAppSettings.type';
 import {
-  useZIonAlertPropsType,
-  UseZIonAlertReturnType,
-  UseZIonAlertSuccessReturnType,
-  useZIonErrorAlertReturnType,
-  useZIonLoadingReturnType,
-  useZIonToastDangerReturnType,
-  useZIonToastReturnType,
-  useZIonToastSuccessReturnType
+  type useZIonAlertPropsType,
+  type UseZIonAlertReturnType,
+  type UseZIonAlertSuccessReturnType,
+  type useZIonErrorAlertReturnType,
+  type useZIonLoadingReturnType,
+  type useZIonToastDangerReturnType,
+  type useZIonToastReturnType,
+  type useZIonToastSuccessReturnType
 } from '@/types/CustomHooks/zionic-hooks.type';
-import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 import {
   appWiseIonicAlertRStateAtom,
   appWiseIonicLoaderRStateAtom,
   appWiseIonicToastRStateAtom
 } from '@/ZaionsStore/AppRStates';
-import { ToastOptions } from 'react-toastify';
+import { type ToastOptions } from 'react-toastify';
+import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
 
 type GenericComponentType = JSX.Element | ReactComponentOrElement;
 
@@ -65,6 +64,7 @@ export const useZIonAlert = (): UseZIonAlertReturnType => {
         ...oldValues,
         showAlert: false
       }));
+      // eslint-disable-next-line promise/param-names
       await new Promise((res, rej) => {
         res('ok');
       });
@@ -74,12 +74,12 @@ export const useZIonAlert = (): UseZIonAlertReturnType => {
           showAlert: true,
           alertProps: {
             ...oldValues.alertProps,
-            header: header,
-            subHeader: subHeader,
-            message: message,
-            animated: animated,
-            keyboardClose: keyboardClose,
-            buttons: buttons
+            header,
+            subHeader,
+            message,
+            animated,
+            keyboardClose,
+            buttons
           }
         }));
       }, 0);
@@ -88,7 +88,9 @@ export const useZIonAlert = (): UseZIonAlertReturnType => {
   } catch (error) {
     showZCapErrorDialogAlert()
       .then()
-      .catch((err: Error) => zConsoleError({ err }));
+      .catch((err: Error) => {
+        zConsoleError({ err });
+      });
     return { presentZIonAlert: emptyVoidReturnFunction };
   }
 };
@@ -105,7 +107,8 @@ export const useZIonSuccessAlert = (): UseZIonAlertSuccessReturnType => {
         ...oldValues,
         showAlert: false
       }));
-      await new Promise((res, rej) => {
+      // eslint-disable-next-line promise/param-names
+      await new Promise(res => {
         res('ok');
       });
       setTimeout(() => {
@@ -132,7 +135,9 @@ export const useZIonSuccessAlert = (): UseZIonAlertSuccessReturnType => {
   } catch (error) {
     showZCapErrorDialogAlert()
       .then()
-      .catch((err: Error) => zConsoleError({ err }));
+      .catch((err: Error) => {
+        zConsoleError({ err });
+      });
     return { presentZIonSuccessAlert: emptyVoidReturnFunction };
   }
 };
@@ -153,7 +158,8 @@ export const useZIonErrorAlert = (): useZIonErrorAlertReturnType => {
         ...oldValues,
         showAlert: false
       }));
-      await new Promise((res, rej) => {
+      // eslint-disable-next-line promise/param-names
+      await new Promise(res => {
         res('ok');
       });
       setTimeout(() => {
@@ -161,9 +167,9 @@ export const useZIonErrorAlert = (): useZIonErrorAlertReturnType => {
           ...oldValues,
           showAlert: true,
           alertProps: {
-            header: props?.header || MESSAGES.GENERAL.FAILED,
-            subHeader: props?.subHeader || MESSAGES.GENERAL.FAILED_SUBHEADING,
-            message: props?.message || MESSAGES.GENERAL.FAILED_MESSAGE,
+            header: props?.header ?? MESSAGES.GENERAL.FAILED,
+            subHeader: props?.subHeader ?? MESSAGES.GENERAL.FAILED_SUBHEADING,
+            message: props?.message ?? MESSAGES.GENERAL.FAILED_MESSAGE,
             animated: true,
             keyboardClose: true,
             buttons: [
@@ -180,7 +186,9 @@ export const useZIonErrorAlert = (): useZIonErrorAlertReturnType => {
   } catch (error) {
     showZCapErrorDialogAlert()
       .then()
-      .catch((err: Error) => zConsoleError({ err }));
+      .catch((err: Error) => {
+        zConsoleError({ err });
+      });
     return { presentZIonErrorAlert: emptyVoidReturnFunction };
   }
 };
@@ -197,20 +205,21 @@ export const useZIonLoading = (id?: string): useZIonLoadingReturnType => {
   try {
     // Present Ion Loader
     const presentZIonLoader = async (message?: string): Promise<void> => {
-      await new Promise((res, rej) => {
+      // eslint-disable-next-line promise/param-names
+      await new Promise(res => {
         res('ok');
       });
       setAppWiseIonLoaderState(oldValues => ({
         ...oldValues,
         showLoader: true,
         loaderProps: {
-          message: message
+          message
         }
       }));
     };
 
     // Dismiss ionLoader
-    const dismissZIonLoader = () => {
+    const dismissZIonLoader = (): void => {
       setAppWiseIonLoaderState(oldValues => ({
         ...oldValues,
         showLoader: false
@@ -221,7 +230,9 @@ export const useZIonLoading = (id?: string): useZIonLoadingReturnType => {
   } catch (error) {
     showZCapErrorDialogAlert()
       .then()
-      .catch((err: Error) => zConsoleError({ err }));
+      .catch((err: Error) => {
+        zConsoleError({ err });
+      });
     return {
       presentZIonLoader: emptyVoidReturnFunction,
       dismissZIonLoader: emptyVoidReturnFunction
@@ -245,7 +256,8 @@ export const useZIonToast = (): useZIonToastReturnType => {
       color?: ZIonColorType,
       toastProps?: ToastOptions
     ): Promise<void> => {
-      await new Promise((res, rej) => {
+      // eslint-disable-next-line promise/param-names
+      await new Promise(res => {
         res('ok');
       });
       setAppWiseIonToastState(oldValues => ({
@@ -257,9 +269,9 @@ export const useZIonToast = (): useZIonToastReturnType => {
         setAppWiseIonToastState(oldValues => ({
           ...oldValues,
           showToast: true,
-          message: message || '',
-          color: color || 'primary',
-          toastProps: toastProps || {}
+          message: message ?? '',
+          color: color ?? 'primary',
+          toastProps: toastProps ?? {}
         }));
       }, 0);
     };
@@ -267,7 +279,9 @@ export const useZIonToast = (): useZIonToastReturnType => {
   } catch (error) {
     showZCapErrorDialogAlert()
       .then()
-      .catch((err: Error) => zConsoleError({ err }));
+      .catch((err: Error) => {
+        zConsoleError({ err });
+      });
     return {
       presentZIonToast: emptyVoidReturnFunction
     };
@@ -282,7 +296,8 @@ export const useZIonToastDanger = (): useZIonToastDangerReturnType => {
 
   try {
     const presentZIonToastDanger = async (message?: string): Promise<void> => {
-      await new Promise((res, rej) => {
+      // eslint-disable-next-line promise/param-names
+      await new Promise(res => {
         res('ok');
       });
       setAppWiseIonToastState(oldValues => ({
@@ -294,7 +309,7 @@ export const useZIonToastDanger = (): useZIonToastDangerReturnType => {
         setAppWiseIonToastState(oldValues => ({
           ...oldValues,
           showToast: true,
-          message: message || MESSAGES.GENERAL.FAILED,
+          message: message ?? MESSAGES.GENERAL.FAILED,
           color: 'danger'
         }));
       }, 0);
@@ -303,7 +318,9 @@ export const useZIonToastDanger = (): useZIonToastDangerReturnType => {
   } catch (error) {
     showZCapErrorDialogAlert()
       .then()
-      .catch((err: Error) => zConsoleError({ err }));
+      .catch((err: Error) => {
+        zConsoleError({ err });
+      });
     return {
       presentZIonToastDanger: emptyVoidReturnFunction
     };
@@ -317,7 +334,8 @@ export const useZIonToastSuccess = (): useZIonToastSuccessReturnType => {
   );
   try {
     const presentZIonToastSuccess = async (message?: string): Promise<void> => {
-      await new Promise((res, rej) => {
+      // eslint-disable-next-line promise/param-names
+      await new Promise(res => {
         res('ok');
       });
       setAppWiseIonToastState(oldValues => ({
@@ -329,7 +347,7 @@ export const useZIonToastSuccess = (): useZIonToastSuccessReturnType => {
         setAppWiseIonToastState(oldValues => ({
           ...oldValues,
           showToast: true,
-          message: message || MESSAGES.GENERAL.SUCCESS,
+          message: message ?? MESSAGES.GENERAL.SUCCESS,
           color: 'success',
           toastProps: {}
         }));
@@ -339,7 +357,9 @@ export const useZIonToastSuccess = (): useZIonToastSuccessReturnType => {
   } catch (error) {
     showZCapErrorDialogAlert()
       .then()
-      .catch((err: Error) => zConsoleError({ err }));
+      .catch((err: Error) => {
+        zConsoleError({ err });
+      });
     return {
       presentZIonToastSuccess: emptyVoidReturnFunction
     };
@@ -372,8 +392,9 @@ export const useZIonPopover = <A extends object>(
   const { zNavigatePushRoute } = useZNavigate();
   const [presentIonPopover, dismissZIonPopover] = useIonPopover(component, {
     zNavigatePushRoute,
-    dismissZIonPopover: (data: string, role: string) =>
-      dismissZIonPopover(data, role),
+    dismissZIonPopover: (data: string, role: string) => {
+      dismissZIonPopover(data, role);
+    },
     ...componentProps
   });
   try {
@@ -407,7 +428,9 @@ export const useZIonPopover = <A extends object>(
   } catch (error) {
     showZCapErrorDialogAlert()
       .then()
-      .catch((err: Error) => zConsoleError({ err }));
+      .catch((err: Error) => {
+        zConsoleError({ err });
+      });
   }
   return {
     presentZIonPopover: emptyVoidReturnFunction,
@@ -422,24 +445,41 @@ export const useZIonPopover = <A extends object>(
 export const useZIonModal = <A extends object>(
   component: GenericComponentType,
   componentProps?: A
-) => {
+): {
+  presentZIonModal: ({
+    _cssClass,
+    _onWillDismiss,
+    _onDidDismiss
+  }: {
+    _cssClass?: string | string[] | undefined;
+    _onWillDismiss?:
+      | ((event: CustomEvent<OverlayEventDetail<unknown>>) => void)
+      | undefined;
+    _onDidDismiss?:
+      | ((event: CustomEvent<OverlayEventDetail<any>>) => void)
+      | undefined;
+  }) => void;
+  dismissZIonModal: (data?: any, role?: string | undefined) => void;
+} => {
   const { zNavigatePushRoute } = useZNavigate();
+  const appSettings = useRecoilValue(ZaionsAppSettingsRState);
   const [presentIonModal, dismissZIonModal] = useIonModal(component, {
-    dismissZIonModal: (data: string, role: string) =>
-      dismissZIonModal(data, role),
+    dismissZIonModal: (data: string, role: string) => {
+      dismissZIonModal(data, role);
+    },
     zNavigatePushRoute,
     ...componentProps
   });
   try {
-    const _enterAnimation = (baseEl: HTMLElement) => {
+    const _enterAnimation = (baseEl: HTMLElement): Animation => {
       const root = baseEl.shadowRoot;
 
       const backdropAnimation = createAnimation()
-        .addElement(root?.querySelector('ion-backdrop')!)
+        .addElement(root?.querySelector('ion-backdrop') as Element)
         .fromTo('opacity', '0.01', 'var(--backdrop-opacity)');
 
       const wrapperAnimation = createAnimation()
-        .addElement(root?.querySelector('.modal-wrapper')!)
+        .addElement(root?.querySelector('.modal-wrapper') as Element)
         .keyframes([
           { offset: 0, opacity: '0', transform: 'scale(0)' },
           { offset: 1, opacity: '0.99', transform: 'scale(1)' }
@@ -452,7 +492,7 @@ export const useZIonModal = <A extends object>(
         .addAnimation([backdropAnimation, wrapperAnimation]);
     };
 
-    const _leaveAnimation = (baseEl: HTMLElement) => {
+    const _leaveAnimation = (baseEl: HTMLElement): Animation => {
       return _enterAnimation(baseEl).direction('reverse');
     };
 
@@ -470,7 +510,11 @@ export const useZIonModal = <A extends object>(
         | undefined;
     }): void => {
       presentIonModal({
-        cssClass: _cssClass,
+        cssClass: `${
+          appSettings?.appModalsSetting?.applyBorderRadius
+            ? 'border-radius_point_6'
+            : ''
+        } ${(_cssClass as string) ?? ''}`,
         onWillDismiss: _onWillDismiss,
         onDidDismiss: _onDidDismiss,
         leaveAnimation: _leaveAnimation,
@@ -481,7 +525,9 @@ export const useZIonModal = <A extends object>(
   } catch (error) {
     showZCapErrorDialogAlert()
       .then()
-      .catch((err: Error) => zConsoleError({ err }));
+      .catch((err: Error) => {
+        zConsoleError({ err });
+      });
 
     return {
       presentZIonModal: emptyVoidReturnFunction,
@@ -494,6 +540,7 @@ export const useZIonModal = <A extends object>(
  * Modal
  * custom hook for Modal.
  */
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const useZIonActionSheet = () => {
   const [presentIonActionSheet] = useIonActionSheet();
   try {
@@ -502,7 +549,9 @@ export const useZIonActionSheet = () => {
   } catch (error) {
     showZCapErrorDialogAlert()
       .then()
-      .catch((err: Error) => zConsoleError({ err }));
+      .catch((err: Error) => {
+        zConsoleError({ err });
+      });
 
     return {
       presentZIonActionSheet: emptyVoidReturnFunction

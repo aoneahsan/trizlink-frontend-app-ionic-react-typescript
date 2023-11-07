@@ -1,20 +1,19 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonButton } from '@ionic/react';
 
 // Type
 import {
-  ZIonColorType,
-  ZIonModeType,
-  ZIonTargetType
+  type ZIonColorType,
+  type ZIonModeType,
+  type ZIonTargetType
 } from '@/types/zaionsAppSettings.type';
 import classNames from 'classnames';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
-type ZIonButtonType = {
+interface ZIonButtonType {
   children?: ReactNode;
   className?: string;
   color?: ZIonColorType;
@@ -32,9 +31,7 @@ type ZIonButtonType = {
   title?: string;
   target?: ZIonTargetType;
   value?: string | number | string[] | number[];
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   href?: string;
   height?: '36px' | string;
   minHeight?: '36px' | string;
@@ -46,41 +43,45 @@ type ZIonButtonType = {
   //
   testingselector?: string;
   testinglistselector?: string;
-};
-const ZIonButton = (props: ZIonButtonType) => {
+}
+const ZIonButton: React.FC<ZIonButtonType> = (props: ZIonButtonType) => {
   const compStyle =
-    props.style && props.height
+    props.style !== undefined && props.height !== undefined
       ? { ...props.style, height: props.height }
-      : props.style && props.height && props.minHeight
+      : props.style !== undefined &&
+        props.height !== undefined &&
+        props.minHeight !== undefined
       ? { ...props.style, height: props.height, minHeight: props.minHeight }
-      : props.style && props.minHeight
+      : props.style !== undefined && props.minHeight !== undefined
       ? { ...props.style, minHeight: props.minHeight }
-      : props.style && !props.height
+      : props.style !== undefined && props.height === undefined
       ? { ...props.style }
-      : props.style && !props.minHeight
+      : props.style !== undefined && props.minHeight === undefined
       ? { ...props.style }
-      : !props.style && props.height
+      : props.style === undefined && props.height !== undefined
       ? { height: props.height }
-      : !props.style && props.minHeight
+      : props.style === undefined && props.minHeight !== undefined
       ? { minHeight: props.minHeight }
       : {};
 
-  const _testinglistselector = props.testinglistselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testinglistselector || PRODUCT_NAME,
-          _key: zCreateElementTestingSelectorKeyEnum.listSelector
-        })
-      }
-    : {};
+  const _testinglistselector =
+    props.testinglistselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testinglistselector,
+            _key: zCreateElementTestingSelectorKeyEnum.listSelector
+          })
+        }
+      : {};
 
-  const _testingSelector = props.testingselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testingselector || PRODUCT_NAME
-        })
-      }
-    : {};
+  const _testingSelector =
+    props.testingselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testingselector
+          })
+        }
+      : {};
 
   return (
     <IonButton

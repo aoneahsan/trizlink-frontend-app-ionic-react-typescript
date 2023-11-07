@@ -1,12 +1,12 @@
-import { IonReorderGroupCustomEvent } from '@ionic/core';
+import { type IonReorderGroupCustomEvent } from '@ionic/core';
 import {
-  LinkFolderType,
-  PixelPlatformsEnum,
-  TimeFilterEnum
+  type LinkFolderType,
+  type PixelPlatformsEnum,
+  type TimeFilterEnum
 } from './linksType/index';
-import { ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
-import { ItemReorderEventDetail } from '@ionic/react';
-import { WSRolesNameEnum } from './workspace';
+import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
+import { type ItemReorderEventDetail } from '@ionic/react';
+import { type WSRolesNameEnum } from './workspace';
 
 // Enum's
 export enum FormMode {
@@ -258,17 +258,22 @@ export interface ZUserSettingInterface {
   type?: ZUserSettingTypeEnum;
   workspaceId?: string;
   settings: {
-    columns: {
+    columns: Array<{
       id?: string;
       name: string;
       isVisible: boolean;
       orderNumber: number;
-    }[];
+    }>;
     columnOrderIds: string[];
     filters: {
       time: TimeFilterEnum;
       startDate: string;
       endDate: string;
+
+      role?: string;
+      status?: string;
+
+      platform?: string;
     };
   };
 }

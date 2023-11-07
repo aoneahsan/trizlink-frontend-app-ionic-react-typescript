@@ -1,4 +1,4 @@
-import { FrbAnalyticsRStateType } from '@/types/firebaseTypes/frbAnalytics.type';
+import { type FrbAnalyticsRStateType } from '@/types/firebaseTypes/frbAnalytics.type';
 import { reportCustomError } from '@/utils/customErrorType';
 import {
   initializeAnalytics,
@@ -8,16 +8,15 @@ import {
   setConsent,
   setDefaultEventParameters,
   setUserId,
-  setUserProperties,
-  settings
+  setUserProperties
 } from 'firebase/analytics';
-import { FirebaseApp } from 'firebase/app';
-import { SetterOrUpdater } from 'recoil';
+import { type FirebaseApp } from 'firebase/app';
+import { type SetterOrUpdater } from 'recoil';
 
 export const setupFrbAnalytics = async (
   _frbApp: FirebaseApp,
   setFrbAnalyticsState: SetterOrUpdater<FrbAnalyticsRStateType>
-) => {
+): Promise<void> => {
   try {
     // checks if we are set to call initializeAnalytics
     const _isSupported = await isSupportedFrbAnalytics();
@@ -110,16 +109,16 @@ export const setupFrbAnalytics = async (
         );
       }
 
-      try {
-        // set google analytics settings for initialized SDK
-        settings({
-          dataLayerName:
-            'well this is just some custom data layer name for this event',
-          gtagName: "not sure but it says it's gtagName so we will see"
-        });
-      } catch (error) {
-        reportCustomError(error, 'firebase analytics settings call');
-      }
+      // try {
+      //   // set google analytics settings for initialized SDK
+      //   settings({
+      //     dataLayerName:
+      //       'well this is just some custom data layer name for this event',
+      //     gtagName: "not sure but it says it's gtagName so we will see"
+      //   });
+      // } catch (error) {
+      //   reportCustomError(error, 'firebase analytics settings call');
+      // }
 
       try {
         // finally logging a analytics event

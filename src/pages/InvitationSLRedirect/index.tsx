@@ -106,18 +106,14 @@ const ZInvitationSLRedirectPage: React.FC = () => {
     _showLoader: false,
     _shouldExtractData: true,
     _itemsIds: [urlPath],
-    _shouldFetchWhenIdPassed:
-      urlPath && urlPath?.trim()?.length === 12 ? false : true,
+    _shouldFetchWhenIdPassed: !(urlPath?.trim()?.length === 12),
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.invitationId]
   });
   // #endregion
 
   // #region UseEffects
   useEffect(() => {
-    if (
-      (urlPath && urlPath?.trim()?.length < 12) ||
-      urlPath?.trim()?.length > 12
-    ) {
+    if (urlPath?.trim()?.length < 12 || urlPath?.trim()?.length > 12) {
       setCompState(oldState => ({
         ...oldState,
         errorOccurred: true,
@@ -127,7 +123,7 @@ const ZInvitationSLRedirectPage: React.FC = () => {
   }, [urlPath]);
 
   useEffect(() => {
-    if (checkSLData?.success) {
+    if (checkSLData?.success === true) {
       setCompState(oldState => ({
         ...oldState,
         errorOccurred: false,
@@ -149,13 +145,13 @@ const ZInvitationSLRedirectPage: React.FC = () => {
         isProcessing: false
       }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkSLData, isCheckSLDataError]);
   // #endregion
 
   if (compState.isProcessing) {
     return <ZFallbackIonSpinner />;
   } else if (
-    urlPath &&
     urlPath?.trim()?.length === 12 &&
     !compState.errorOccurred &&
     !compState.isProcessing
@@ -170,13 +166,13 @@ const ZInvitationSLRedirectPage: React.FC = () => {
               size='6'
               className='flex flex-col ion-align-items-center ion-justify-content-center ion-text-center h-max'>
               <ZIonTitle className='text-4xl font-bold ion-no-padding'>
-                Something's wrong here.
+                Something&apos;s wrong here.
               </ZIonTitle>
 
               <ZIonText className='block mt-3 text-lg tracking-wide'>
-                Oops! It seems like you've encountered a 404 error. This
+                Oops! It seems like you&apos;ve encountered a 404 error. This
                 indicates that the link you clicked on is either incorrect or
-                the URL you entered is invalid. You might find what you're
+                the URL you entered is invalid. You might find what you&apos;re
                 searching for at
                 <ZIonRouterLink className='cursor-pointer ms-1 hover:underline'>
                   {ExternalURL.GenericExternalURL}

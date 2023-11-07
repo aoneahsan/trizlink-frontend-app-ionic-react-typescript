@@ -29,15 +29,15 @@ import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 
 // Types
-import { ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
+import { type ZaionsShortUrlOptionFieldsValuesInterface } from '@/types/AdminPanel/linksType';
 import CONSTANTS from '@/utils/constants';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 import { useZIonPopover } from '@/ZaionsHooks/zionic-hooks';
 
-type RotatorABTestingErrorType = {
+interface RotatorABTestingErrorType {
   redirectionLink?: string;
   percentage?: string;
-};
+}
 
 const RotatorABTesting: React.FC = () => {
   const [compState, setCompState] = useState<{
@@ -63,7 +63,7 @@ const RotatorABTesting: React.FC = () => {
 
     Array.from(
       values?.rotatorABTesting,
-      ({ percentage }) => (_total = _total + percentage!)
+      ({ percentage }) => (_total = _total + (percentage ?? 0))
     );
 
     if (_total > 100) {
@@ -197,7 +197,7 @@ const RotatorABTesting: React.FC = () => {
                               'gap-2 ion-align-items-top pt-3 pb-2 px-2': true,
                               'border-t border-b': _index % 2 === 0,
                               'zaions__light_bg_opacity_point_8 ':
-                                _index % 2 === 0 && compState.isError === false,
+                                _index % 2 === 0 && !compState.isError,
                               // 'mt-3': isSmScale,
                               'pt-4 mt-2 border-t':
                                 (!isMdScale && isSmScale) || !isSmScale
@@ -227,9 +227,9 @@ const RotatorABTesting: React.FC = () => {
                                     values?.rotatorABTesting[_index]
                                       ?.redirectionLink;
                                   const formattedUrl = zAddUrlProtocol(
-                                    inputUrl || ''
+                                    inputUrl ?? ''
                                   );
-                                  setFieldValue(
+                                  void setFieldValue(
                                     `rotatorABTesting.${_index}.redirectionLink`,
                                     formattedUrl
                                   );
@@ -239,10 +239,10 @@ const RotatorABTesting: React.FC = () => {
                                     .redirectionLink
                                 }
                                 errorText={
-                                  errors.rotatorABTesting?.length
-                                    ? touched?.rotatorABTesting &&
+                                  errors.rotatorABTesting !== undefined
+                                    ? touched?.rotatorABTesting !== undefined &&
                                       touched?.rotatorABTesting[_index]
-                                        ?.redirectionLink
+                                        ?.redirectionLink === true
                                       ? ((
                                           errors.rotatorABTesting[
                                             _index
@@ -254,14 +254,14 @@ const RotatorABTesting: React.FC = () => {
                                 className={classNames({
                                   'z_ion_bg_white ': true,
                                   'ion-touched':
-                                    touched.rotatorABTesting &&
+                                    touched.rotatorABTesting !== undefined &&
                                     touched.rotatorABTesting[_index]
                                       ?.redirectionLink,
                                   'ion-invalid':
-                                    touched.rotatorABTesting &&
-                                    errors.rotatorABTesting &&
+                                    touched.rotatorABTesting !== undefined &&
+                                    errors.rotatorABTesting !== undefined &&
                                     touched.rotatorABTesting[_index]
-                                      ?.redirectionLink &&
+                                      ?.redirectionLink === true &&
                                     (
                                       errors.rotatorABTesting[
                                         _index
@@ -269,15 +269,20 @@ const RotatorABTesting: React.FC = () => {
                                     )?.redirectionLink,
 
                                   'ion-valid':
-                                    touched.rotatorABTesting &&
-                                    errors.rotatorABTesting &&
+                                    touched.rotatorABTesting !== undefined &&
+                                    errors.rotatorABTesting !== undefined &&
                                     touched.rotatorABTesting[_index]
-                                      ?.redirectionLink &&
-                                    !(
+                                      ?.redirectionLink === true &&
+                                    ((
                                       errors.rotatorABTesting[
                                         _index
                                       ] as RotatorABTestingErrorType
-                                    )?.redirectionLink
+                                    )?.redirectionLink === undefined ||
+                                      (
+                                        errors.rotatorABTesting[
+                                          _index
+                                        ] as RotatorABTestingErrorType
+                                      )?.redirectionLink === null)
                                 })}
                               />
                             </ZIonCol>
@@ -426,7 +431,7 @@ const RotatorABTesting: React.FC = () => {
                       )}
                   </ZIonGrid>
                 </ZCustomScrollable>
-                {values.geoLocation.length ? (
+                {values.geoLocation.length > 0 ? (
                   <ZIonText
                     color='dark'
                     className='block ms-3 text-md ion-no-padding'
@@ -434,7 +439,7 @@ const RotatorABTesting: React.FC = () => {
                       CONSTANTS.testingSelectors.shortLink.formPage
                         .rotatorABTesting.disabledAddSingleRotatorBtn
                     }>
-                    You can't add a redirection if Geolocation is activated
+                    You can&apos;t add a redirection if Geolocation is activated
                   </ZIonText>
                 ) : (
                   <ZIonButton
@@ -448,13 +453,13 @@ const RotatorABTesting: React.FC = () => {
                     style={{
                       '--border-width': '1px'
                     }}
-                    onClick={() =>
+                    onClick={() => {
                       push({
                         id: getRandomKey(),
                         redirectionLink: 'https://',
                         percentage: 1
-                      })
-                    }>
+                      });
+                    }}>
                     Add a destination
                   </ZIonButton>
                 )}
@@ -472,8 +477,9 @@ const ZRotatorABTestingErrorPopover: React.FC<{
 }> = ({ errors }) => {
   return (
     <div className='p-3'>
-      {errors?.length &&
-        errors?.map((el, index) => <ZIonText key={index}>{el}</ZIonText>)}
+      {errors?.map((el, index) => (
+        <ZIonText key={index}>{el}</ZIonText>
+      ))}
     </div>
   );
 };

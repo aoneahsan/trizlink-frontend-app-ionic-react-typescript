@@ -72,10 +72,7 @@ import CONSTANTS from '@/utils/constants';
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
 import { createRedirectRoute, extractInnerData } from '@/utils/helpers';
-import {
-  showErrorNotification,
-  showSuccessNotification
-} from '@/utils/notification';
+import { showErrorNotification } from '@/utils/notification';
 import MESSAGES from '@/utils/messages';
 import { reportCustomError } from '@/utils/customErrorType';
 
@@ -84,7 +81,7 @@ import { reportCustomError } from '@/utils/customErrorType';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  workspaceTeamInterface,
+  type workspaceTeamInterface,
   ZWSTeamListPageTableColumnsIds
 } from '@/types/AdminPanel/workspace';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
@@ -122,7 +119,7 @@ import ZWSTeamCreateModal from '@/components/InPageComponents/ZaionsModals/Works
 
 const ZWSSettingTeamListTable: React.FC = () => {
   const { workspaceId } = useParams<{
-    workspaceId: string;
+    workspaceId?: string;
   }>();
 
   // #region APIS
@@ -130,9 +127,15 @@ const ZWSSettingTeamListTable: React.FC = () => {
   const { data: WSTeamsData, isFetching: isWSTeamsDataFetching } =
     useZRQGetRequest<workspaceTeamInterface[]>({
       _url: API_URL_ENUM.workspace_team_create_list,
-      _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM, workspaceId],
-      _itemsIds: [workspaceId],
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+      _key: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM,
+        workspaceId ?? ''
+      ],
+      _itemsIds: [workspaceId ?? ''],
+      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
+      _shouldFetchWhenIdPassed: !(
+        workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
+      )
     });
 
   // #endregion
@@ -141,7 +144,7 @@ const ZWSSettingTeamListTable: React.FC = () => {
   const { presentZIonModal: presentZWSTeamCreateModal } = useZIonModal(
     ZWSTeamCreateModal,
     {
-      workspaceId: workspaceId
+      workspaceId
     }
   );
   // #endregion
@@ -151,7 +154,9 @@ const ZWSSettingTeamListTable: React.FC = () => {
       {isWSTeamsDataFetching && <ZTeamTableSkeleton />}
 
       {!isWSTeamsDataFetching ? (
-        WSTeamsData && WSTeamsData?.length > 0 ? (
+        WSTeamsData !== undefined &&
+        WSTeamsData !== null &&
+        WSTeamsData?.length > 0 ? (
           <ZInpageTable />
         ) : (
           <div className='w-full mb-3 border rounded-lg h-max ion-padding zaions__light_bg'>
@@ -189,14 +194,14 @@ const ZInpageTable: React.FC = () => {
   // #endregion
 
   const { workspaceId } = useParams<{
-    workspaceId: string;
+    workspaceId?: string;
   }>();
 
   // #region Modal & Popovers.
   const { presentZIonPopover: presentZTeamActionPopover } = useZIonPopover(
     ZTeamActionPopover,
     {
-      workspaceId: workspaceId,
+      workspaceId,
       teamId: compState.selectedTeamId
     }
   );
@@ -206,8 +211,11 @@ const ZInpageTable: React.FC = () => {
   // Request for getting teams data.
   const { data: WSTeamsData } = useZRQGetRequest<workspaceTeamInterface[]>({
     _url: API_URL_ENUM.workspace_team_create_list,
-    _key: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM, workspaceId],
-    _itemsIds: [workspaceId],
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM,
+      workspaceId ?? ''
+    ],
+    _itemsIds: [workspaceId ?? ''],
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
 
@@ -239,7 +247,7 @@ const ZInpageTable: React.FC = () => {
                 CONSTANTS.RouteParams.workspace.workspaceId,
                 CONSTANTS.RouteParams.workspace.teamId
               ],
-              values: [workspaceId, row?.row?.original?.id!]
+              values: [workspaceId ?? '', row?.row?.original?.id ?? '']
             })}>
             <ZIonText>{row.getValue()}</ZIonText>
           </ZIonRouterLink>
@@ -256,22 +264,11 @@ const ZInpageTable: React.FC = () => {
       cell: row => {
         return (
           <>
-            {row.getValue() ? (
+            {row?.getValue() !== undefined ? (
               <div className='flex ion-align-items-center'>
                 <div className='text-sm ZaionsTextEllipsis'>
                   {row.getValue()}
                 </div>
-                {/* <ZIonText
-									color='primary'
-									className='text-sm cursor-pointer'
-									testingselector={`${CONSTANTS.testingSelectors.WSSettings.teamListPage.table.description}-${row.row.original.id}`}
-									testinglistselector={
-										CONSTANTS.testingSelectors.WSSettings.teamListPage.table
-											.description
-									}
-								>
-									Read more
-								</ZIonText> */}
               </div>
             ) : (
               CONSTANTS.NO_VALUE_FOUND
@@ -301,7 +298,7 @@ const ZInpageTable: React.FC = () => {
 
   const zTeamsTable = useReactTable({
     columns: defaultColumns,
-    data: WSTeamsData || [],
+    data: WSTeamsData ?? [],
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     debugTable: false,
@@ -312,8 +309,9 @@ const ZInpageTable: React.FC = () => {
   // #endregion
 
   useEffect(() => {
-    zTeamsTable.setPageIndex(Number(pageindex) || 0);
-    zTeamsTable.setPageSize(Number(pagesize) || 2);
+    zTeamsTable.setPageIndex(Number(pageindex) ?? 0);
+    zTeamsTable.setPageSize(Number(pagesize) ?? 2);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageindex, pagesize]);
 
   return (
@@ -370,7 +368,7 @@ const ZInpageTable: React.FC = () => {
 
           {/* Body Section */}
           <ZIonRow className='rounded-b-lg zaions__light_bg'>
-            {WSTeamsData?.length ? (
+            {WSTeamsData?.length != null ? (
               <ZIonCol
                 size='12'
                 className='w-full ion-no-padding'>
@@ -441,7 +439,7 @@ const ZInpageTable: React.FC = () => {
                           onClick={(_event: unknown) => {
                             setCompState(oldVal => ({
                               ...oldVal,
-                              selectedTeamId: _rowInfo.original.id || ''
+                              selectedTeamId: _rowInfo.original.id ?? ''
                             }));
 
                             //
@@ -497,7 +495,7 @@ const ZInpageTable: React.FC = () => {
                     url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
                       .Members,
                     params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId],
+                    values: [workspaceId ?? ''],
                     routeSearchParams: {
                       pageindex: 0,
                       pagesize: zTeamsTable
@@ -531,7 +529,7 @@ const ZInpageTable: React.FC = () => {
                     url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
                       .Members,
                     params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId],
+                    values: [workspaceId ?? ''],
                     routeSearchParams: {
                       pageindex:
                         zTeamsTable.getState().pagination.pageIndex - 1,
@@ -565,7 +563,7 @@ const ZInpageTable: React.FC = () => {
                     url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
                       .Members,
                     params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId],
+                    values: [workspaceId ?? ''],
                     routeSearchParams: {
                       pageindex:
                         zTeamsTable.getState().pagination.pageIndex + 1,
@@ -598,7 +596,7 @@ const ZInpageTable: React.FC = () => {
                     url: ZaionsRoutes.AdminPanel.Setting.AccountSettings
                       .Members,
                     params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                    values: [workspaceId],
+                    values: [workspaceId ?? ''],
                     routeSearchParams: {
                       pageindex: zTeamsTable.getPageCount() - 1,
                       pagesize: zTeamsTable
@@ -621,7 +619,6 @@ const ZInpageTable: React.FC = () => {
             minHeight='30px'
             fill='outline'
             className='bg-white w-[7rem] mt-1'
-            interface='popover'
             value={zTeamsTable.getState().pagination.pageSize}
             testingselector={
               CONSTANTS.testingSelectors.WSSettings.teamListPage.table
@@ -634,7 +631,7 @@ const ZInpageTable: React.FC = () => {
                 createRedirectRoute({
                   url: ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members,
                   params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                  values: [workspaceId],
+                  values: [workspaceId ?? ''],
                   routeSearchParams: {
                     pageindex: zTeamsTable.getPageCount() - 1,
                     pagesize: Number(e.target.value)
@@ -680,11 +677,11 @@ const ZTeamActionPopover: React.FC<{
 
   // #region Functions.
   // when user won't to delete team and click on the delete button this function will fire and show the confirm alert.
-  const deleteTeam = async () => {
+  const deleteTeam = async (): Promise<void> => {
     try {
-      if (teamId?.trim()) {
+      if (teamId?.trim()?.length > 0) {
         await presentZIonAlert({
-          header: `Delete team.`,
+          header: 'Delete team.',
           subHeader: 'Remove team from user account.',
           message: 'Are you sure you want to delete this team?',
           buttons: [
@@ -710,9 +707,9 @@ const ZTeamActionPopover: React.FC<{
   };
 
   // on the delete short link confirm alert, when user click on delete button this function will fires which will trigger delete request and delete the short link.
-  const removeTeam = async () => {
+  const removeTeam = async (): Promise<void> => {
     try {
-      if (teamId?.trim()) {
+      if (teamId?.trim()?.length > 0) {
         const _response = await deleteTeamMutate({
           itemIds: [workspaceId, teamId],
           urlDynamicParts: [
@@ -721,13 +718,13 @@ const ZTeamActionPopover: React.FC<{
           ]
         });
 
-        if (_response) {
+        if (_response !== undefined) {
           const _data = extractInnerData<{ success: boolean }>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data && _data?.success) {
+          if (_data !== undefined && _data?.success) {
             // getting all the shortLinks from RQ cache.
             const _oldTeams =
               extractInnerData<workspaceTeamInterface[]>(
@@ -738,7 +735,7 @@ const ZTeamActionPopover: React.FC<{
                   ]
                 }) as workspaceTeamInterface[],
                 extractInnerDataOptionsEnum.createRequestResponseItems
-              ) || [];
+              ) ?? [];
 
             // removing deleted shortLinks from cache.
             const _updatedTeams = _oldTeams.filter(el => el.id !== teamId);
@@ -749,7 +746,7 @@ const ZTeamActionPopover: React.FC<{
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.WORKSPACE.TEAM,
                 workspaceId
               ],
-              data: _updatedTeams as workspaceTeamInterface[],
+              data: _updatedTeams,
               id: '',
               extractType: ZRQGetRequestExtractEnum.extractItems,
               updateHoleData: true
@@ -825,7 +822,9 @@ const ZTeamActionPopover: React.FC<{
             button={true}
             detail={false}
             minHeight='2.5rem'
-            onClick={() => void deleteTeam()}
+            onClick={() => {
+              void deleteTeam();
+            }}
             testinglistselector={
               CONSTANTS.testingSelectors.WSSettings.teamListPage.table.deleteBtn
             }
@@ -982,5 +981,6 @@ const ZTeamTableSkeleton: React.FC = React.memo(() => {
     </div>
   );
 });
+ZTeamTableSkeleton.displayName = 'ZTeamTableSkeleton';
 
 export default ZWSSettingTeamListTable;

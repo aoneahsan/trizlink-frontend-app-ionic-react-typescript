@@ -8,13 +8,7 @@ import React, { useState } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import {
-  checkboxOutline,
-  closeOutline,
-  notificationsOutline,
-  peopleOutline,
-  personAddOutline
-} from 'ionicons/icons';
+import { closeOutline } from 'ionicons/icons';
 import classNames from 'classnames';
 
 /**
@@ -26,11 +20,8 @@ import {
   ZIonContent,
   ZIonFooter,
   ZIonGrid,
-  ZIonHeader,
   ZIonIcon,
   ZIonImg,
-  ZIonSegment,
-  ZIonSegmentButton,
   ZIonText
 } from '@/components/ZIonComponents';
 import ZInviteTab from './InviteTab';
@@ -55,13 +46,10 @@ import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
-  WSRolesNameEnum,
+  type WSRolesNameEnum,
   WorkspaceSharingTabEnum
 } from '@/types/AdminPanel/workspace';
 import { FormMode } from '@/types/AdminPanel/index.type';
-import { ProductFavicon } from '@/assets/images';
-import { useZRQUpdateRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from '@/utils/enums';
 
 /**
  * Recoil State Imports go down
@@ -77,6 +65,7 @@ import { API_URL_ENUM } from '@/utils/enums';
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
+import { ProductFavicon } from '@/assets/images';
 
 /**
  * Component props type go down
@@ -111,7 +100,7 @@ const ZWorkspacesSharingModal: React.FC<{
   wsShareId
 }) => {
   // Component state
-  const [compState, setCompState] = useState<{
+  const [compState] = useState<{
     activeTab: WorkspaceSharingTabEnum;
   }>({
     activeTab: Tab
@@ -249,7 +238,9 @@ const ZWorkspacesSharingModal: React.FC<{
               'w-7 h-7': isSmScale,
               'w-6 h-6': !isSmScale
             })}
-            onClick={() => dismissZIonModal()}
+            onClick={() => {
+              dismissZIonModal();
+            }}
           />
         </div>
         <ZCustomScrollable
@@ -274,7 +265,10 @@ const ZWorkspacesSharingModal: React.FC<{
                   'text-2xl': isSmScale,
                   'text-xl': !isSmScale
                 })}>
-                Invite a new member
+                {/* {role !== undefined && role !== null && role?.trim()?.length > 0
+                  ? 'Update member role'
+                  : 'Invite a member'} */}
+                Invite a member
               </ZIonText>
             </div>
 
@@ -307,7 +301,9 @@ const ZWorkspacesSharingModal: React.FC<{
         <ZIonButton
           className='me-4'
           fill='outline'
-          onClick={() => dismissZIonModal()}>
+          onClick={() => {
+            dismissZIonModal();
+          }}>
           Cancel
         </ZIonButton>
         {/* <div

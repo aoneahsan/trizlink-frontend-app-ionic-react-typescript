@@ -15,19 +15,19 @@ import classNames from 'classnames';
  * ? Like import of custom components is a custom import
  * */
 import {
-	ZIonCard,
-	ZIonCardContent,
-	ZIonCardHeader,
-	ZIonCardTitle,
-	ZIonCol,
-	ZIonImg,
-	ZIonText,
+  ZIonCard,
+  ZIonCardContent,
+  ZIonCardHeader,
+  ZIonCardTitle,
+  ZIonCol,
+  ZIonImg,
+  ZIonText
 } from '@/components/ZIonComponents';
 import {
-	videoBlockEmptyState,
-	rssWithBackground,
-	audioBlockEmptyState,
-	carouselPreviewBlock,
+  videoBlockEmptyState,
+  rssWithBackground,
+  audioBlockEmptyState,
+  carouselPreviewBlock
 } from '@/assets/images';
 
 /**
@@ -67,13 +67,13 @@ import ZCountdown from '../ZCountDown';
  * ? Like if you have a type for props it should be please Down
  * */
 interface ZCustomCardInterface {
-	title?: string;
-	description?: string;
-	mediaLink?: string;
-	type?: LinkInBioCardStyleEnum;
-	mediaType?: ZMediaEnum;
-	image?: string;
-	countDownTime?: string;
+  title?: string;
+  description?: string;
+  mediaLink?: string;
+  type?: LinkInBioCardStyleEnum;
+  mediaType?: ZMediaEnum;
+  image?: string;
+  countDownTime?: string;
 }
 
 /**
@@ -82,185 +82,185 @@ interface ZCustomCardInterface {
  * @type {*}
  * */
 const ZCustomCard: React.FC<ZCustomCardInterface> = ({
-	title,
-	description,
-	mediaLink,
-	type = LinkInBioCardStyleEnum.horizontal,
-	mediaType = ZMediaEnum.image,
-	image,
-	countDownTime,
+  title,
+  description,
+  mediaLink,
+  type = LinkInBioCardStyleEnum.horizontal,
+  mediaType = ZMediaEnum.image,
+  image,
+  countDownTime
 }) => {
-	// getting the custom style for all the buttons from linkInBioFormState recoil.
-	const linkInBioFormState = useRecoilValue(NewLinkInBioFormState);
+  // getting the custom style for all the buttons from linkInBioFormState recoil.
+  const linkInBioFormState = useRecoilValue(NewLinkInBioFormState);
 
-	return (
-		<ZIonCol>
-			<ZIonCard
-				className={classNames({
-					'ion-no-padding ion-no-margin': true,
-					flex:
-						type === LinkInBioCardStyleEnum.thumbCircle ||
-						type === LinkInBioCardStyleEnum.thumbRound ||
-						type === LinkInBioCardStyleEnum.thumbStrip,
-					'ion-align-items-center':
-						type === LinkInBioCardStyleEnum.thumbCircle ||
-						type === LinkInBioCardStyleEnum.thumbRound,
-				})}
-			>
-				<ZIonCardHeader
-					className={classNames({
-						'ion-no-padding ion-no-margin flex ion-justify-content-center ion-align-items-center':
-							true,
+  return (
+    <ZIonCol>
+      <ZIonCard
+        className={classNames({
+          'ion-no-padding ion-no-margin': true,
+          flex:
+            type === LinkInBioCardStyleEnum.thumbCircle ||
+            type === LinkInBioCardStyleEnum.thumbRound ||
+            type === LinkInBioCardStyleEnum.thumbStrip,
+          'ion-align-items-center':
+            type === LinkInBioCardStyleEnum.thumbCircle ||
+            type === LinkInBioCardStyleEnum.thumbRound
+        })}>
+        <ZIonCardHeader
+          className={classNames({
+            'ion-no-padding ion-no-margin flex ion-justify-content-center ion-align-items-center':
+              true,
 
-						'ion-margin':
-							type === LinkInBioCardStyleEnum.thumbCircle ||
-							type === LinkInBioCardStyleEnum.thumbRound,
-						'border-radius__100vmax':
-							type === LinkInBioCardStyleEnum.thumbCircle,
-					})}
-					color='primary'
-					style={{
-						width:
-							type === LinkInBioCardStyleEnum.horizontal ||
-							type === LinkInBioCardStyleEnum.vertical
-								? '100%'
-								: type === LinkInBioCardStyleEnum.thumbCircle ||
-								  type === LinkInBioCardStyleEnum.thumbRound
-								? '350px'
-								: '100%',
-						height:
-							type === LinkInBioCardStyleEnum.horizontal
-								? '160px'
-								: type === LinkInBioCardStyleEnum.vertical
-								? '330px'
-								: type === LinkInBioCardStyleEnum.thumbStrip
-								? 'auto'
-								: '110px',
-						position: 'relative',
-						borderRadius: type === LinkInBioCardStyleEnum.thumbRound && '15px',
-						overflow: 'hidden',
-					}}
-				>
-					{/* If no image provided or get from api the default image */}
-					{(!mediaLink || mediaType !== ZMediaEnum.countDown) && (
-						<ZIonImg
-							src={
-								image?.trim()
-									? image
-									: mediaType === ZMediaEnum.image
-									? rssWithBackground
-									: mediaType === ZMediaEnum.video
-									? videoBlockEmptyState
-									: mediaType === ZMediaEnum.audio
-									? audioBlockEmptyState
-									: mediaType === ZMediaEnum.carousel
-									? carouselPreviewBlock
-									: ''
-							}
-							style={{
-								width:
-									mediaType === ZMediaEnum.video ||
-									mediaType === ZMediaEnum.audio
-										? '161px'
-										: '100%',
-								height: '100%',
-								position: 'absolute',
-								objectFit: 'cover',
-							}}
-						/>
-					)}
+            'ion-margin':
+              type === LinkInBioCardStyleEnum.thumbCircle ||
+              type === LinkInBioCardStyleEnum.thumbRound,
+            'border-radius__100vmax':
+              type === LinkInBioCardStyleEnum.thumbCircle
+          })}
+          color='primary'
+          style={{
+            width:
+              type === LinkInBioCardStyleEnum.horizontal ||
+              type === LinkInBioCardStyleEnum.vertical
+                ? '100%'
+                : type === LinkInBioCardStyleEnum.thumbCircle ||
+                  type === LinkInBioCardStyleEnum.thumbRound
+                ? '350px'
+                : '100%',
+            height:
+              type === LinkInBioCardStyleEnum.horizontal
+                ? '160px'
+                : type === LinkInBioCardStyleEnum.vertical
+                ? '330px'
+                : type === LinkInBioCardStyleEnum.thumbStrip
+                ? 'auto'
+                : '110px',
+            position: 'relative',
+            borderRadius: type === LinkInBioCardStyleEnum.thumbRound && '15px',
+            overflow: 'hidden'
+          }}>
+          {/* If no image provided or get from api the default image */}
+          {(mediaLink !== undefined || mediaType !== ZMediaEnum.countDown) && (
+            <ZIonImg
+              src={
+                image?.trim() !== undefined
+                  ? image
+                  : mediaType === ZMediaEnum.image
+                  ? rssWithBackground
+                  : mediaType === ZMediaEnum.video
+                  ? videoBlockEmptyState
+                  : mediaType === ZMediaEnum.audio
+                  ? audioBlockEmptyState
+                  : mediaType === ZMediaEnum.carousel
+                  ? carouselPreviewBlock
+                  : ''
+              }
+              style={{
+                width:
+                  mediaType === ZMediaEnum.video ||
+                  mediaType === ZMediaEnum.audio
+                    ? '161px'
+                    : '100%',
+                height: '100%',
+                position: 'absolute',
+                objectFit: 'cover'
+              }}
+            />
+          )}
 
-					{/* For Image */}
-					{mediaLink &&
-						(mediaType === ZMediaEnum.image ||
-							mediaType === ZMediaEnum.countDown) && (
-							<ZIonImg
-								src={mediaLink}
-								style={{
-									width: '100%',
-									height: '100%',
-									position: 'absolute',
-									objectFit: 'cover',
-								}}
-							/>
-						)}
+          {/* For Image */}
+          {mediaLink !== undefined &&
+            (mediaType === ZMediaEnum.image ||
+              mediaType === ZMediaEnum.countDown) && (
+              <ZIonImg
+                src={mediaLink}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  position: 'absolute',
+                  objectFit: 'cover'
+                }}
+              />
+            )}
 
-					{/* For Video */}
-					{mediaLink && mediaType === ZMediaEnum.video && (
-						<ZReactMediaPlayer
-							playerProps={{ url: mediaLink, width: '100%', height: '100%' }}
-							mediaType='video'
-						/>
-					)}
+          {/* For Video */}
+          {mediaLink !== undefined && mediaType === ZMediaEnum.video && (
+            <ZReactMediaPlayer
+              playerProps={{ url: mediaLink, width: '100%', height: '100%' }}
+              mediaType='video'
+            />
+          )}
 
-					{/* For audio */}
-					{mediaLink && mediaType === ZMediaEnum.audio && (
-						<ZReactMediaPlayer
-							playerProps={{ url: mediaLink, width: '100%', height: '100%' }}
-							mediaType='audio'
-						/>
-					)}
-				</ZIonCardHeader>
+          {/* For audio */}
+          {mediaLink !== undefined && mediaType === ZMediaEnum.audio && (
+            <ZReactMediaPlayer
+              playerProps={{ url: mediaLink, width: '100%', height: '100%' }}
+              mediaType='audio'
+            />
+          )}
+        </ZIonCardHeader>
 
-				{(title || description || mediaType === ZMediaEnum.countDown) && (
-					<ZIonCardContent
-						className={classNames({
-							'ion-margin-top': true,
-							'ion-text-center':
-								type === LinkInBioCardStyleEnum.horizontal ||
-								type === LinkInBioCardStyleEnum.vertical,
-							'ion-text-start':
-								type === LinkInBioCardStyleEnum.thumbCircle ||
-								type === LinkInBioCardStyleEnum.thumbRound ||
-								type === LinkInBioCardStyleEnum.thumbStrip,
-						})}
-					>
-						{title && title?.trim()?.length > 0 && (
-							<ZIonCardTitle
-								className={classNames(linkInBioFormState?.theme?.font, {
-									'font-bold': true,
-									'mb-2':
-										type === LinkInBioCardStyleEnum.horizontal ||
-										type === LinkInBioCardStyleEnum.vertical,
-									'flex flex-col ion-justify-content-center':
-										type === LinkInBioCardStyleEnum.thumbCircle ||
-										type === LinkInBioCardStyleEnum.thumbRound ||
-										type === LinkInBioCardStyleEnum.thumbStrip,
-								})}
-							>
-								{title}
-							</ZIonCardTitle>
-						)}
+        {(title !== undefined ||
+          description !== undefined ||
+          mediaType === ZMediaEnum.countDown) && (
+          <ZIonCardContent
+            className={classNames({
+              'ion-margin-top': true,
+              'ion-text-center':
+                type === LinkInBioCardStyleEnum.horizontal ||
+                type === LinkInBioCardStyleEnum.vertical,
+              'ion-text-start':
+                type === LinkInBioCardStyleEnum.thumbCircle ||
+                type === LinkInBioCardStyleEnum.thumbRound ||
+                type === LinkInBioCardStyleEnum.thumbStrip
+            })}>
+            {title !== undefined && title?.trim()?.length > 0 && (
+              <ZIonCardTitle
+                className={classNames(linkInBioFormState?.theme?.font, {
+                  'font-bold': true,
+                  'mb-2':
+                    type === LinkInBioCardStyleEnum.horizontal ||
+                    type === LinkInBioCardStyleEnum.vertical,
+                  'flex flex-col ion-justify-content-center':
+                    type === LinkInBioCardStyleEnum.thumbCircle ||
+                    type === LinkInBioCardStyleEnum.thumbRound ||
+                    type === LinkInBioCardStyleEnum.thumbStrip
+                })}>
+                {title}
+              </ZIonCardTitle>
+            )}
 
-						{/*  */}
-						{description && description?.trim()?.length > 0 && (
-							<div>
-								<ZIonText
-									style={{
-										width:
-											type === LinkInBioCardStyleEnum.thumbCircle ||
-											type === LinkInBioCardStyleEnum.thumbRound ||
-											type === LinkInBioCardStyleEnum.thumbStrip
-												? '200px'
-												: '100%',
-									}}
-									className={classNames(linkInBioFormState?.theme?.font, {
-										'inline-block w-full': true,
-									})}
-								>
-									{description}
-								</ZIonText>
-							</div>
-						)}
+            {/*  */}
+            {description !== undefined && description?.trim()?.length > 0 && (
+              <div>
+                <ZIonText
+                  style={{
+                    width:
+                      type === LinkInBioCardStyleEnum.thumbCircle ||
+                      type === LinkInBioCardStyleEnum.thumbRound ||
+                      type === LinkInBioCardStyleEnum.thumbStrip
+                        ? '200px'
+                        : '100%'
+                  }}
+                  className={classNames(linkInBioFormState?.theme?.font, {
+                    'inline-block w-full': true
+                  })}>
+                  {description}
+                </ZIonText>
+              </div>
+            )}
 
-						{mediaType === ZMediaEnum.countDown && (
-							<ZCountdown color='dark' countDownTime={countDownTime} />
-						)}
-					</ZIonCardContent>
-				)}
-			</ZIonCard>
-		</ZIonCol>
-	);
+            {mediaType === ZMediaEnum.countDown && (
+              <ZCountdown
+                color='dark'
+                countDownTime={countDownTime}
+              />
+            )}
+          </ZIonCardContent>
+        )}
+      </ZIonCard>
+    </ZIonCol>
+  );
 };
 
 export default ZCustomCard;

@@ -3,7 +3,10 @@ import React from 'react';
 
 // Packages Imports
 import { addCircleOutline } from 'ionicons/icons';
-import { InputChangeEventDetail, IonInputCustomEvent } from '@ionic/core';
+import {
+  type InputChangeEventDetail,
+  type IonInputCustomEvent
+} from '@ionic/core';
 
 // Custom Imports
 import { ZIonIcon, ZIonInput, ZIonItem } from '@/components/ZIonComponents';

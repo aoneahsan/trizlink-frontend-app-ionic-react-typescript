@@ -41,8 +41,8 @@ import { ZErrorCodeEnum } from '@/utils/enums/ErrorsCodes';
  * */
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import {
-  UserAccountType,
-  UserRoleAndPermissionsInterface
+  type UserAccountType,
+  type UserRoleAndPermissionsInterface
 } from '@/types/UserAccount/index.type';
 
 /**
@@ -81,7 +81,7 @@ const FetchRequiredAppDataHOC: React.FC<IFetchRequiredAppDataHOCProps> = ({
 
   useEffect(() => {
     if (is404Page === undefined) {
-      (async () => {
+      void (async () => {
         const _errorData = (await STORAGE.GET(
           LOCALSTORAGE_KEYS.ERROR_DATA
         )) as { message: string; status: number } | null;
@@ -133,11 +133,7 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
 
   // #region APIS.
   // getting the role & permissions of the current log in user.
-  const {
-    data: getUserRoleAndPermissions,
-    refetch: refetchUserRoleAndPermissions,
-    isFetched: isUserRoleAndPermissionsFetching
-  } = useZRQGetRequest<{
+  const { data: getUserRoleAndPermissions } = useZRQGetRequest<{
     isSuccess: boolean;
     result: UserRoleAndPermissionsInterface;
   }>({
@@ -156,30 +152,30 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
   // #endregion
 
   // #region Functions.
-  const updateUserStatusHandler = async () => {
+  const updateUserStatusHandler = async (): Promise<void> => {
     try {
-      const __response = await updateUserStatus({
+      const _response = await updateUserStatus({
         requestData: '',
         itemIds: [],
         urlDynamicParts: []
       });
 
-      if (__response) {
-        const __data = extractInnerData<{ user: UserAccountType }>(
-          __response,
+      if (_response !== undefined) {
+        const _data = extractInnerData<{ user: UserAccountType }>(
+          _response,
           extractInnerDataOptionsEnum.createRequestResponseItem
         );
 
-        if (__data?.user) {
+        if (_data?.user !== undefined || _data?.user !== null) {
           // getting user data.
-          const userData = getUserDataObjectForm(__data?.user);
+          const userData = getUserDataObjectForm(_data?.user ?? {});
 
           // store User token.
           void STORAGE.SET(LOCALSTORAGE_KEYS.USERDATA, userData);
 
           setUserAccountStateAtom(oldValues => ({
             ...oldValues,
-            lastSeenAt: __data?.user?.lastSeenAt
+            lastSeenAt: _data?.user?.lastSeenAt
           }));
         }
       }
@@ -188,10 +184,14 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
     }
   };
 
-  const setLastSeenInterval = () => {
+  const setLastSeenInterval = (): void => {
     try {
-      if (loggedIn && !zUserLastSeenInterval) {
+      if (
+        loggedIn &&
+        (zUserLastSeenInterval === undefined || zUserLastSeenInterval === null)
+      ) {
         zUserLastSeenInterval = setInterval(
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
           updateUserStatusHandler,
           1000 * CONSTANTS.ZLastSeenInterval
         );
@@ -201,9 +201,9 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
     }
   };
 
-  const clearLastSeenInterval = () => {
+  const clearLastSeenInterval = (): void => {
     try {
-      if (zUserLastSeenInterval) {
+      if (zUserLastSeenInterval !== undefined) {
         clearInterval(zUserLastSeenInterval);
         zUserLastSeenInterval = undefined;
       }
@@ -227,7 +227,7 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
 
   useEffect(() => {
     try {
-      if (loggedIn && getUserRoleAndPermissions?.isSuccess) {
+      if (loggedIn && getUserRoleAndPermissions?.isSuccess === true) {
         // Storing in recoil.
         setUserRoleAndPermissions(oldValues => ({
           ...oldValues,
@@ -244,7 +244,7 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
         }));
 
         // calling this so when user lands/refresh the page it will call this API and will not wait for 10(or more)seconds to update the user active status
-        updateUserStatusHandler();
+        void updateUserStatusHandler();
 
         // setting the user "updateUserStatus" API interval so it will keep updating the user status after specified interval
         setLastSeenInterval();
@@ -254,16 +254,18 @@ const FetchRequiredAppDataHOCAsync: React.FC<IFetchRequiredAppDataHOCProps> = ({
     } catch (error) {
       reportCustomError(error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedIn, getUserRoleAndPermissions]);
 
   useEffect(() => {
-    App.addListener('appStateChange', ({ isActive }) => {
+    void App.addListener('appStateChange', ({ isActive }) => {
       if (isActive) {
         setLastSeenInterval();
       } else {
         clearLastSeenInterval();
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // #endregion

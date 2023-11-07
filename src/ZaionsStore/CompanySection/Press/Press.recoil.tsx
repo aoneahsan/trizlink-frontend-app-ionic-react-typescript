@@ -8,9 +8,9 @@ import { atom } from 'recoil';
 import { ZaionsPressData } from '@/data/Company/Press/Press.data';
 
 // Types
-import { ZaionsPressType } from '@/types/Company/PressPage/Press.type';
+import { type ZaionsPressType } from '@/types/Company/PressPage/Press.type';
 
 export const ZaionsPressState = atom<ZaionsPressType[]>({
   key: 'ZaionsPressState_key',
-  default: ZaionsPressData,
+  default: ZaionsPressData
 });

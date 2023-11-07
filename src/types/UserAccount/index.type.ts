@@ -1,4 +1,4 @@
-import { WSRolesNameEnum } from '../AdminPanel/workspace';
+import { type WSRolesNameEnum } from '../AdminPanel/workspace';
 
 // Enums
 export enum WSRoleType {
@@ -20,13 +20,13 @@ export interface UserRoleAndPermissionsInterface {
 }
 
 export interface WSRolesInterfaces {
-  WSRoles: {
+  WSRoles: Array<{
     id: 4;
     name: WSRolesNameEnum;
     roleType: WSRoleType;
     created_at: string;
     updated_at: string;
-  }[];
+  }>;
 }
 
 export interface EmailAddressInterface {
@@ -39,7 +39,7 @@ export interface EmailAddressInterface {
 }
 
 // Type
-export type UserAccountType = {
+export interface UserAccountType {
   id?: string;
   username?: string;
   name?: string;
@@ -57,17 +57,19 @@ export type UserAccountType = {
   lastSeenAt?: string;
   lastSeenAtFormatted?: string;
   email_verified_at?: string | null;
-};
+}
 
-export type UserAccountEmailType = {
+export interface UserAccountEmailType {
   id?: string;
   emailAddress: string;
   isPrimary?: boolean;
   isVerified?: boolean;
   makePrimary?: boolean;
-};
+}
 
-export type UserAccountAuthTokenType = {
+export interface UserAccountAuthTokenType {
   token?: string;
-};
-export type AuthTokenResponseType = { plainTextToken: string };
+}
+export interface AuthTokenResponseType {
+  plainTextToken: string;
+}

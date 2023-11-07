@@ -1,9 +1,9 @@
-import { ZIonColorType } from './../../types/zaionsAppSettings.type';
-import { ToastOptions } from 'react-toastify';
+import { type ZIonColorType } from '@/types/zaionsAppSettings.type';
+import { type ToastOptions } from 'react-toastify';
 import { atom, selector } from 'recoil';
 
 // Types
-import { AlertOptions, LoadingOptions } from '@ionic/react';
+import { type AlertOptions, type LoadingOptions } from '@ionic/react';
 
 // Recoil state for managing loader (showing loading, hide loader) etc.
 export const appWiseIonicLoaderRStateAtom = atom<{

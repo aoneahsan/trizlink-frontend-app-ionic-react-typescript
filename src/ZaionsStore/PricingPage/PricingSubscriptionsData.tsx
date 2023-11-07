@@ -4,7 +4,7 @@ import { atom } from 'recoil';
 // Custom Imports
 // Data
 import { ZaionsPricingPageData } from '@/data/WhyZaions/PricingPage';
-import { ZaionsPricingSubscriptionsType } from '@/types/WhyZaions/PricingPage';
+import { type ZaionsPricingSubscriptionsType } from '@/types/WhyZaions/PricingPage';
 
 // Types
 
@@ -12,5 +12,5 @@ export const ZaionsPricingSubscriptionsState = atom<
   ZaionsPricingSubscriptionsType[]
 >({
   key: 'ZaionsPrcingDataOfCols_Key',
-  default: ZaionsPricingPageData,
+  default: ZaionsPricingPageData
 });

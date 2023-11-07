@@ -2,6 +2,26 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
+import React, { useState } from 'react';
+
+/**
+ * Packages Imports go down
+ * ? Like import of ionic components is a packages import
+ * */
+import classNames from 'classnames';
+import { Formik } from 'formik';
+import {
+  fileTrayStackedOutline,
+  listCircleOutline,
+  personAdd,
+  refreshOutline,
+  settingsOutline
+} from 'ionicons/icons';
+
+/**
+ * Custom Imports go down
+ * ? Like import of custom components is a custom import
+ * */
 import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
@@ -19,23 +39,12 @@ import {
   ZIonSkeletonText,
   ZIonText
 } from '@/components/ZIonComponents';
-import {
-  IZNotification,
-  ZNotificationEnum,
-  ZTeamMemberInvitationEnum
-} from '@/types/AdminPanel/index.type';
-import { zNotificationSlotEnum } from '@/types/CustomHooks/zgeneric-hooks.type';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import CONSTANTS from '@/utils/constants';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { reportCustomError } from '@/utils/customErrorType';
-import {
-  API_URL_ENUM,
-  extractInnerDataOptionsEnum,
-  notificationTypeEnum
-} from '@/utils/enums';
-import { extractInnerData, zStringify } from '@/utils/helpers';
-import { showSuccessNotification } from '@/utils/notification';
+import ZViewInvitationModal from '@/components/InPageComponents/ZaionsModals/Workspace/ViewInvitationModal';
+
+/**
+ * Custom Hooks Imports go down
+ * ? Like import of custom Hook is a custom import
+ * */
 import { useZNotification } from '@/ZaionsHooks/ZGenericHooks';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import {
@@ -44,45 +53,31 @@ import {
   useZRQUpdateRequest,
   useZUpdateRQCacheData
 } from '@/ZaionsHooks/zreactquery-hooks';
-import classNames from 'classnames';
-import { Formik } from 'formik';
-import {
-  checkmarkOutline,
-  closeOutline,
-  fileTrayStackedOutline,
-  listCircleOutline,
-  logoFacebook,
-  personAdd,
-  refreshOutline,
-  settingsOutline
-} from 'ionicons/icons';
-import React, { useState } from 'react';
-import ZViewInvitationModal from '../../ZaionsModals/Workspace/ViewInvitationModal';
-
-/**
- * Packages Imports go down
- * ? Like import of ionic components is a packages import
- * */
-
-/**
- * Custom Imports go down
- * ? Like import of custom components is a custom import
- * */
-
-/**
- * Custom Hooks Imports go down
- * ? Like import of custom Hook is a custom import
- * */
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import CONSTANTS from '@/utils/constants';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import { reportCustomError } from '@/utils/customErrorType';
+import {
+  API_URL_ENUM,
+  extractInnerDataOptionsEnum,
+  notificationTypeEnum
+} from '@/utils/enums';
+import { extractInnerData } from '@/utils/helpers';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import {
+  type IZNotification,
+  ZNotificationEnum
+} from '@/types/AdminPanel/index.type';
+import { zNotificationSlotEnum } from '@/types/CustomHooks/zgeneric-hooks.type';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
 /**
  * Recoil State Imports go down
@@ -120,10 +115,9 @@ const ZNotificationPopover: React.FC<{
 }> = ({ dismissZIonPopover, workspaceId }) => {
   const { zInvalidateReactQueries } = useZInvalidateReactQueries();
   const { presentZNotification } = useZNotification();
-  const {
-    data: userInvitationNotificationsData,
-    refetch: refetchNotifications
-  } = useZRQGetRequest<IZNotification[]>({
+  const { data: userInvitationNotificationsData } = useZRQGetRequest<
+    IZNotification[]
+  >({
     _url: API_URL_ENUM.user_unread_notifications_list,
     _key: [
       CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION.MAIN,
@@ -170,7 +164,7 @@ const ZNotificationPopover: React.FC<{
                           .tabs.updates
                       }
                       onClick={() => {
-                        setFieldValue(
+                        void setFieldValue(
                           'tab',
                           ZNotificationPopoverTabsEnum.updates,
                           false
@@ -192,7 +186,7 @@ const ZNotificationPopover: React.FC<{
                           .tabs.approvalRequests
                       }
                       onClick={() => {
-                        setFieldValue(
+                        void setFieldValue(
                           'tab',
                           ZNotificationPopoverTabsEnum.approvals,
                           false
@@ -219,8 +213,8 @@ const ZNotificationPopover: React.FC<{
                       color='medium'
                       className='ion-no-margin ion-no-padding'
                       id='z-wnp-refresh-btn'
-                      onClick={async () => {
-                        await zInvalidateReactQueries([
+                      onClick={() => {
+                        void zInvalidateReactQueries([
                           CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION
                             .MAIN,
                           workspaceId
@@ -255,52 +249,56 @@ const ZNotificationPopover: React.FC<{
                           .markAllAsReadBtn
                       }
                       disabled={
-                        userInvitationNotificationsData &&
-                        userInvitationNotificationsData?.filter(
-                          el => el.read_at === null
-                        )?.length > 0
-                          ? false
-                          : true
-                      }
-                      onClick={async () => {
-                        if (
-                          userInvitationNotificationsData &&
+                        !(
+                          userInvitationNotificationsData !== undefined &&
+                          userInvitationNotificationsData !== null &&
                           userInvitationNotificationsData?.filter(
                             el => el.read_at === null
                           )?.length > 0
-                        ) {
-                          const _response = await markAllAsReadAsyncMutate({
-                            requestData: '',
-                            itemIds: [],
-                            urlDynamicParts: []
-                          });
+                        )
+                      }
+                      onClick={() => {
+                        void (async () => {
+                          if (
+                            userInvitationNotificationsData !== undefined &&
+                            userInvitationNotificationsData !== null &&
+                            userInvitationNotificationsData?.filter(
+                              el => el.read_at === null
+                            )?.length > 0
+                          ) {
+                            const _response = await markAllAsReadAsyncMutate({
+                              requestData: '',
+                              itemIds: [],
+                              urlDynamicParts: []
+                            });
 
-                          if (_response) {
-                            const _data = extractInnerData<{
-                              success: boolean;
-                            }>(
-                              _response,
-                              extractInnerDataOptionsEnum.createRequestResponseItem
-                            );
+                            if (_response !== undefined) {
+                              const _data = extractInnerData<{
+                                success: boolean;
+                              }>(
+                                _response,
+                                extractInnerDataOptionsEnum.createRequestResponseItem
+                              );
 
-                            if (_data?.success) {
-                              // const _allNotification;
+                              if (_data !== undefined && _data?.success) {
+                                // const _allNotification;
 
-                              await zInvalidateReactQueries([
-                                CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER
-                                  .NOTIFICATION.MAIN,
-                                workspaceId
-                              ]);
+                                void zInvalidateReactQueries([
+                                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER
+                                    .NOTIFICATION.MAIN,
+                                  workspaceId
+                                ]);
 
-                              presentZNotification({
-                                message:
-                                  'Successfully marked all notification as read',
-                                notificationType: notificationTypeEnum.toast,
-                                slot: zNotificationSlotEnum.success
-                              });
+                                void presentZNotification({
+                                  message:
+                                    'Successfully marked all notification as read',
+                                  notificationType: notificationTypeEnum.toast,
+                                  slot: zNotificationSlotEnum.success
+                                });
+                              }
                             }
                           }
-                        }
+                        })();
                       }}>
                       <ZIonIcon
                         icon={listCircleOutline}
@@ -426,7 +424,7 @@ const ZUpdatesTab: React.FC<{
   const { presentZIonModal: presentZViewInvitationModal } = useZIonModal(
     ZViewInvitationModal,
     {
-      workspaceId: workspaceId,
+      workspaceId,
       memberInviteId: compState?.memberInviteId
     }
   );
@@ -437,26 +435,22 @@ const ZUpdatesTab: React.FC<{
     notificationId
   }: {
     notificationId?: string;
-  }) => {
+  }): Promise<void> => {
     try {
-      if (notificationId) {
+      if (notificationId !== undefined) {
         const _response = await markAsReadAsyncMutate({
           requestData: '',
           itemIds: [notificationId],
           urlDynamicParts: [CONSTANTS.RouteParams.user.notification.id]
         });
 
-        if (_response) {
+        if (_response !== undefined) {
           const _data = extractInnerData<IZNotification>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data?.id) {
-            // 	await zInvalidateReactQueries([
-            // 		CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION.MAIN,
-            // 		workspaceId,
-            // 	]);
+          if (_data?.id !== null && _data?.id !== undefined) {
             await updateRQCDataHandler({
               key: [
                 CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.NOTIFICATION.MAIN,
@@ -467,7 +461,7 @@ const ZUpdatesTab: React.FC<{
               extractType: ZRQGetRequestExtractEnum.extractItems
             });
 
-            presentZNotification({
+            void presentZNotification({
               message: 'Successfully marked notification as read',
               notificationType: notificationTypeEnum.toast,
               slot: zNotificationSlotEnum.success
@@ -551,7 +545,7 @@ const ZUpdatesTab: React.FC<{
                           .notificationUpdateTabViewBtn
                       }
                       testinglistselector={`${CONSTANTS.testingSelectors.topBar.notificationPopover.notificationUpdateTabViewBtn}-${el?.id}`}
-                      onClick={async () => {
+                      onClick={() => {
                         setCompState(oldValues => ({
                           ...oldValues,
                           memberInviteId: el?.data?.item?.wsTeamMemberInviteId
@@ -582,39 +576,12 @@ const ZUpdatesTab: React.FC<{
                   </ZIonText>
                 </div>
               </div>
-
-              {/* <div className='flex p-[3px] ion-align-items-center border rounded-md mt-2'>
-							<div className='w-[36px] h-[36px] zaions__light_bg rounded-sm me-2'></div>
-
-							<div className='w-[40%!important] me-1 overflow-hidden line-clamp-2 leading-none'>
-								<ZIonText className='text-xs'>
-									Lorem ipsum dolor sit amet consectetur adipisicing elit.
-									Dignissimos assumenda ex dolor non maiores sequi tempore
-									perspiciatis tenetur temporibus, dolores illo, inventore
-									repellendus quas voluptas doloremque ratione consequuntur quis
-									iure!
-								</ZIonText>
-							</div>
-
-							<div className='flex ion-align-items-center ion-justify-content-between w-[47%]'>
-								<div className='flex ion-align-items-center'>
-									<ZIonIcon icon={logoFacebook} className='w-4 h-4' />
-									<ZIonText className='text-xs mt-[1px] ms-1'>zaions</ZIonText>
-								</div>
-
-								<div className=''>
-									<ZIonText className='text-xs' color='medium'>
-										May 16, 11:44
-									</ZIonText>
-								</div>
-							</div>
-						</div> */}
             </ZIonCol>
           </ZIonRow>
         );
       })}
 
-      {userInvitationNotificationsData &&
+      {userInvitationNotificationsData !== undefined &&
       userInvitationNotificationsData?.length === 0 ? (
         <div className='flex flex-col w-full gap-2 py-7 ion-align-items-center ion-justify-content-center'>
           <ZIonIcon

@@ -13,8 +13,6 @@ import {
   ZIonAccordionGroup,
   ZIonCheckbox,
   ZIonCol,
-  ZIonContent,
-  ZIonGrid,
   ZIonIcon,
   ZIonImg,
   ZIonItem,
@@ -22,10 +20,8 @@ import {
   ZIonRow,
   ZIonSkeletonText,
   ZIonText,
-  ZIonTitle,
-  ZIonToggle
+  ZIonTitle
 } from '@/components/ZIonComponents';
-import ZIonPage from '@/components/ZIonPage';
 import classNames from 'classnames';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
@@ -44,8 +40,8 @@ import { chromeLogo, emailLogo } from '@/assets/images';
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import {
-  workspaceInterface,
-  wsShareInterface
+  type workspaceInterface,
+  type wsShareInterface
 } from '@/types/AdminPanel/workspace';
 import { API_URL_ENUM } from '@/utils/enums';
 import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
@@ -184,7 +180,7 @@ const ZNotificationSettings: React.FC = () => {
         </ZIonTitle>
         <ZIonAccordionGroup className='mt-2'>
           {/* Workspaces notifications */}
-          <ZIonAccordion className='rounded-lg overflow-hidden mb-2'>
+          <ZIonAccordion className='mb-2 overflow-hidden rounded-lg'>
             <ZIonItem
               slot='header'
               lines='none'
@@ -221,7 +217,7 @@ const ZNotificationSettings: React.FC = () => {
               </ZIonLabel>
             </ZIonItem>
             <div
-              className='p-2 border rounded-b-lg border-t-0'
+              className='p-2 border border-t-0 rounded-b-lg'
               slot='content'>
               <ZIonText
                 color='medium'
@@ -247,12 +243,12 @@ const ZNotificationSettings: React.FC = () => {
                         '--padding-start': '10px'
                       }}>
                       <ZIonSkeletonText
-                        className='rounded-full overflow-hidden'
+                        className='overflow-hidden rounded-full'
                         width={isMdScale ? '2.5rem' : '2rem'}
                         height={isMdScale ? '2.5rem' : '2rem'}
                       />
                       <ZIonLabel className='ms-3'>
-                        <ZIonText className='block text-md font-semibold'>
+                        <ZIonText className='block font-semibold text-md'>
                           <ZIonSkeletonText
                             width='12rem'
                             height='.8rem'
@@ -285,7 +281,7 @@ const ZNotificationSettings: React.FC = () => {
                         url: ZaionsRoutes.AdminPanel.Setting.UserAccount
                           .WorkspaceNotifications,
                         params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                        values: [el.id!]
+                        values: [el.id ?? '']
                       })}
                       className={classNames({
                         'mb-0 ion-activatable ripple-parent cursor-pointer rounded-lg':
@@ -322,7 +318,7 @@ const ZNotificationSettings: React.FC = () => {
                   );
                 })}
 
-              {WSShareData && WSShareData?.length > 0 && (
+              {(WSShareData?.length ?? 0) > 0 && (
                 <ZIonText
                   className={classNames({
                     'block ms-2': true,
@@ -336,8 +332,7 @@ const ZNotificationSettings: React.FC = () => {
               )}
 
               {!isWSShareDataFetching &&
-                WSShareData &&
-                WSShareData?.length > 0 &&
+                (WSShareData?.length ?? 0) > 0 &&
                 WSShareData?.map((el, index) => {
                   return (
                     <ZIonItem
@@ -387,7 +382,7 @@ const ZNotificationSettings: React.FC = () => {
           </ZIonAccordion>
 
           {/* Invitation notifications */}
-          <ZIonAccordion className='rounded-lg overflow-hidden mb-2'>
+          <ZIonAccordion className='mb-2 overflow-hidden rounded-lg'>
             <ZIonItem
               slot='header'
               lines='none'
@@ -424,7 +419,7 @@ const ZNotificationSettings: React.FC = () => {
               </ZIonLabel>
             </ZIonItem>
             <div
-              className='p-2 border rounded-b-lg border-t-0'
+              className='p-2 border border-t-0 rounded-b-lg'
               slot='content'>
               <ZIonText
                 className={classNames({
@@ -613,7 +608,7 @@ const ZNotificationSettings: React.FC = () => {
           </ZIonAccordion>
 
           {/* Other notifications */}
-          <ZIonAccordion className='rounded-lg overflow-hidden'>
+          <ZIonAccordion className='overflow-hidden rounded-lg'>
             <ZIonItem
               slot='header'
               lines='none'
@@ -650,7 +645,7 @@ const ZNotificationSettings: React.FC = () => {
               </ZIonLabel>
             </ZIonItem>
             <div
-              className='p-2 border rounded-b-lg border-t-0'
+              className='p-2 border border-t-0 rounded-b-lg'
               slot='content'>
               <ZIonText
                 className={classNames({
@@ -850,7 +845,7 @@ const ZNotificationSettings: React.FC = () => {
         </ZIonTitle>
         <ZIonAccordionGroup className='mt-2'>
           {/* Browser */}
-          <ZIonAccordion className='rounded-lg overflow-hidden mb-2'>
+          <ZIonAccordion className='mb-2 overflow-hidden rounded-lg'>
             <ZIonItem
               slot='header'
               lines='none'
@@ -887,7 +882,7 @@ const ZNotificationSettings: React.FC = () => {
               </ZIonLabel>
             </ZIonItem>
             <div
-              className='p-2 border rounded-b-lg border-t-0'
+              className='p-2 border border-t-0 rounded-b-lg'
               slot='content'>
               {/* Email Frequency */}
               <div className='mt-2'>
@@ -1020,7 +1015,7 @@ const ZNotificationSettings: React.FC = () => {
           </ZIonAccordion>
 
           {/* Email */}
-          <ZIonAccordion className='rounded-lg overflow-hidden mb-2'>
+          <ZIonAccordion className='mb-2 overflow-hidden rounded-lg'>
             <ZIonItem
               slot='header'
               minHeight='25px'
@@ -1057,7 +1052,7 @@ const ZNotificationSettings: React.FC = () => {
               </ZIonLabel>
             </ZIonItem>
             <div
-              className='p-2 border rounded-b-lg border-t-0'
+              className='p-2 border border-t-0 rounded-b-lg'
               slot='content'>
               <ZIonItem
                 lines='none'
@@ -1125,7 +1120,7 @@ const ZNotificationSettings: React.FC = () => {
                         .notificationSettingsTab.emailNotificationAccording
                         .allToggler
                     }>
-                    <ZIonLabel className='ms-3 my-0 ion-text-wrap'>
+                    <ZIonLabel className='my-0 ms-3 ion-text-wrap'>
                       <ZIonText
                         className={classNames({
                           'block font-semibold': true,
@@ -1162,7 +1157,7 @@ const ZNotificationSettings: React.FC = () => {
                         .notificationSettingsTab.emailNotificationAccording
                         .suggestedToggler
                     }>
-                    <ZIonLabel className='ms-3 my-0 ion-text-wrap'>
+                    <ZIonLabel className='my-0 ms-3 ion-text-wrap'>
                       <ZIonText
                         className={classNames({
                           'block font-semibold': true,
@@ -1200,7 +1195,7 @@ const ZNotificationSettings: React.FC = () => {
                         .notificationSettingsTab.emailNotificationAccording
                         .requestedToggler
                     }>
-                    <ZIonLabel className='ms-3 my-0 ion-text-wrap'>
+                    <ZIonLabel className='my-0 ms-3 ion-text-wrap'>
                       <ZIonText
                         className={classNames({
                           'block font-semibold': true,
@@ -1258,7 +1253,7 @@ const ZNotificationSettings: React.FC = () => {
           </ZIonAccordion>
 
           {/* SMS */}
-          <ZIonAccordion className='rounded-lg overflow-hidden'>
+          <ZIonAccordion className='overflow-hidden rounded-lg'>
             <ZIonItem
               slot='header'
               lines='none'
@@ -1291,11 +1286,11 @@ const ZNotificationSettings: React.FC = () => {
               </ZIonLabel>
             </ZIonItem>
             <div
-              className='p-2 border rounded-b-lg border-t-0'
+              className='p-2 border border-t-0 rounded-b-lg'
               slot='content'>
               {/* SMS Frequency */}
               <div className='mt-2'>
-                <ZIonText className='px-3 block text-md'>
+                <ZIonText className='block px-3 text-md'>
                   SMS Frequency
                 </ZIonText>
               </div>

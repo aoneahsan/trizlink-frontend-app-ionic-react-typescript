@@ -10,7 +10,7 @@ export const ZaionsShortLinkData = [
       utmContent: 'Zaions Content',
       utmMedium: 'Zaions Medium',
       utmSource: 'Zaions Source',
-      utmTerm: 'ZaionsTerm',
+      utmTerm: 'ZaionsTerm'
     },
     folderId: '2',
     createdAt: 'Des 12, 2022, 11:00',
@@ -23,7 +23,7 @@ export const ZaionsShortLinkData = [
       phoneNumber: '',
       subject: '',
       url: ZaionsBusinessDetails.WebsiteUrl,
-      username: '',
+      username: ''
     },
     featureImg: '',
     title: 'Zaions 1 (The Group Of Projects)',
@@ -31,13 +31,13 @@ export const ZaionsShortLinkData = [
     pixelIds: ['1', '2'],
     shortUrl: {
       domain: 'swiy.co',
-      url: '',
+      url: ''
     },
     notes:
       'We Provide Best Web Services, including website development, mobile app development, website layout designing and over all 360 solutions.',
     tags: ['123', 'cwd', 'zaions', 'ahsan mahmmod', 'mti', 'aoneahsan'],
     abTestingRotatorLinks: [
-      { redirectionLink: 'https://aoneahsan.com', percentage: 100 },
+      { redirectionLink: 'https://aoneahsan.com', percentage: 100 }
     ],
     geoLocationRotatorLinks: [],
     linkExpirationInfo: undefined,
@@ -46,9 +46,9 @@ export const ZaionsShortLinkData = [
       url: '',
       type: '',
       fileName: '',
-      size: '',
+      size: ''
     },
-    totalClicks: 10000,
+    totalClicks: 10000
   },
   {
     id: '2',
@@ -58,7 +58,7 @@ export const ZaionsShortLinkData = [
       utmContent: 'Default Content 2',
       utmMedium: 'Default Medium 2',
       utmSource: 'Default Source 2',
-      utmTerm: 'DefaultTerm 2',
+      utmTerm: 'DefaultTerm 2'
     },
     folderId: '0',
 
@@ -71,7 +71,7 @@ export const ZaionsShortLinkData = [
       phoneNumber: '',
       subject: '',
       url: '',
-      username: '',
+      username: ''
     },
     featureImg: '',
     title: 'Zaions 2 (The Group Of Projects)',
@@ -79,13 +79,13 @@ export const ZaionsShortLinkData = [
     pixelIds: ['1'],
     shortUrl: {
       domain: 'swiy.co',
-      url: 'https://shorturl.com',
+      url: 'https://shorturl.com'
     },
     notes:
       'We Provide Best Web Services, including website development, mobile app development, website layout designing and over all 660 solutions.',
     tags: ['123', 'cwd', 'zaions', 'ahsan mahmmod', 'mti', 'aoneahsan'],
     abTestingRotatorLinks: [
-      { redirectionLink: 'https://aoneahsan.com', percentage: 100 },
+      { redirectionLink: 'https://aoneahsan.com', percentage: 100 }
     ],
     geoLocationRotatorLinks: [],
     linkExpirationInfo: undefined,
@@ -94,9 +94,9 @@ export const ZaionsShortLinkData = [
       url: '',
       type: '',
       fileName: '',
-      size: '',
+      size: ''
     },
-    totalClicks: 500,
+    totalClicks: 500
   },
   {
     id: '3',
@@ -106,7 +106,7 @@ export const ZaionsShortLinkData = [
       utmContent: 'Zaions devs Content',
       utmMedium: 'Zaions devs Medium',
       utmSource: 'Zaions devs Source',
-      utmTerm: 'Zaions devs Term',
+      utmTerm: 'Zaions devs Term'
     },
     folderId: '1',
     createdAt: 'Aug 12, 2022, 23:00',
@@ -119,7 +119,7 @@ export const ZaionsShortLinkData = [
       phoneNumber: '',
       subject: '',
       url: '',
-      username: '',
+      username: ''
     },
     featureImg: '',
     title: 'Zaions 3 (The Group Of Projects)',
@@ -127,13 +127,13 @@ export const ZaionsShortLinkData = [
     pixelIds: ['1', '2'],
     shortUrl: {
       domain: 'swiy.co',
-      url: 'https://shorturl.com',
+      url: 'https://shorturl.com'
     },
     notes:
       'We Provide Best Web Services, including website development, mobile app development, website layout designing and over all 960 solutions.',
     tags: ['123', 'cwd', 'zaions', 'ahsan mahmmod', 'mti', 'aoneahsan'],
     abTestingRotatorLinks: [
-      { redirectionLink: 'https://aoneahsan.com', percentage: 100 },
+      { redirectionLink: 'https://aoneahsan.com', percentage: 100 }
     ],
     geoLocationRotatorLinks: [],
     linkExpirationInfo: undefined,
@@ -142,8 +142,8 @@ export const ZaionsShortLinkData = [
       url: '',
       type: '',
       fileName: '',
-      size: '',
+      size: ''
     },
-    totalClicks: 3000,
-  },
+    totalClicks: 3000
+  }
 ];

@@ -9,7 +9,8 @@ import {
   ZIonCol,
   ZIonRow,
   ZIonText,
-  ZIonRouterLink
+  ZIonRouterLink,
+  ZIonButton
 } from '@/components/ZIonComponents';
 
 // Global Constants
@@ -17,7 +18,6 @@ import {
 // Images
 
 // Recoil States
-import { ZIonButton } from '@/components/ZIonComponents';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import ZaionsAddPixelAccount from '@/components/InPageComponents/ZaionsModals/AddPixelsAccount';
 import { useParams } from 'react-router';
@@ -29,7 +29,7 @@ import { useParams } from 'react-router';
 const APSettingsPixels: React.FC = () => {
   // getting link-in-bio and workspace ids from url with the help of useParams.
   const { workspaceId } = useParams<{
-    workspaceId: string;
+    workspaceId?: string;
   }>();
 
   const { presentZIonModal: presentZAddPixelAccount } = useZIonModal(

@@ -1,14 +1,10 @@
 // Core Imports
 import React from 'react';
+
 // Packages Import
-import { IonItemDivider, IonRippleEffect } from '@ionic/react';
+import { IonRippleEffect } from '@ionic/react';
 import { Form, Formik } from 'formik';
-import {
-  airplaneOutline,
-  logOutOutline,
-  timeOutline,
-  toggleOutline
-} from 'ionicons/icons';
+import { airplaneOutline, logOutOutline, timeOutline } from 'ionicons/icons';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import classNames from 'classnames';
 
@@ -23,17 +19,30 @@ import {
   ZIonNote,
   ZIonContent,
   ZIonIcon,
-  ZIonItem,
   ZIonInput,
   ZIonFooter,
-  ZIonImg
+  ZIonImg,
+  ZIonButton,
+  ZIonTitle
 } from '@/components/ZIonComponents';
+import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
+import ZEditor from '@/components/CustomComponents/ZEditor';
 
 // Global Constants
 import { validateField, validateFields, zStringify } from '@/utils/helpers';
 import MESSAGES from '@/utils/messages';
+import { API_URL_ENUM, VALIDATION_RULE } from '@/utils/enums';
+import { reportCustomError } from '@/utils/customErrorType';
+import CONSTANTS from '@/utils/constants';
+import { showSuccessNotification } from '@/utils/notification';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
+import {
+  useZRQCreateRequest,
+  useZRQUpdateRequest
+} from '@/ZaionsHooks/zreactquery-hooks';
 
 // Images
+import { ProductFavicon } from '@/assets/images';
 
 // Recoil States
 import { ZaionsAppSettingsRState } from '@/ZaionsStore/zaionsAppSettings.recoil';
@@ -44,23 +53,8 @@ import {
   EmbedWidgetsDisplayAtEnum,
   EmbedWidgetsPositionEnum
 } from '@/types/AdminPanel/linksType';
-import { resetFormType } from '@/types/ZaionsFormik.type';
-import {
-  useZRQCreateRequest,
-  useZRQUpdateRequest
-} from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM, VALIDATION_RULE } from '@/utils/enums';
-import { reportCustomError } from '@/utils/customErrorType';
-import CONSTANTS from '@/utils/constants';
-import { ZIonButton } from '@/components/ZIonComponents';
-import ZIonTitle from '@/components/ZIonComponents/ZIonTitle';
-import { showSuccessNotification } from '@/utils/notification';
+import { type resetFormType } from '@/types/ZaionsFormik.type';
 import { FormMode } from '@/types/AdminPanel/index.type';
-import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
-import ZEditor from '@/components/CustomComponents/ZEditor';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
-import { ProductFavicon } from '@/assets/images';
 
 // Styles
 
@@ -90,7 +84,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
    * Handle Form Submission Function
    * add a new Embed Widget function
    *  */
-  const SetDefaultEmbedWidgets = () => {
+  const SetDefaultEmbedWidgets = (): void => {
     // Reset to default
     setEmbedWidgetsFormState(oldVal => ({
       ...oldVal,
@@ -107,7 +101,10 @@ const ZaionsEmbedWidgetsModal: React.FC<{
     }));
   };
 
-  const handleFormSubmit = (values: string, resetForm?: resetFormType) => {
+  const handleFormSubmit = (
+    values: string,
+    resetForm?: resetFormType
+  ): void => {
     try {
       // ADD API Request to add this Embed widget to user account in DB.
       if (embedWidgetsFormState.formMode === FormMode.ADD) {
@@ -116,12 +113,13 @@ const ZaionsEmbedWidgetsModal: React.FC<{
           MESSAGES.GENERAL.EMBED_WIDGET.NEW_EMBED_WIDGET_CREATED_SUCCEED_MESSAGE
         );
       } else if (embedWidgetsFormState.formMode === FormMode.EDIT) {
-        embedWidgetsFormState.id &&
-          updateEmbedWidgetAccount({
-            itemIds: [embedWidgetsFormState.id],
-            urlDynamicParts: [':embeddedId'],
-            requestData: values
-          });
+        embedWidgetsFormState.id !== undefined ||
+          (embedWidgetsFormState.id !== null &&
+            updateEmbedWidgetAccount({
+              itemIds: [embedWidgetsFormState.id],
+              urlDynamicParts: [':embeddedId'],
+              requestData: values
+            }));
         showSuccessNotification(
           MESSAGES.GENERAL.EMBED_WIDGET.EMBED_WIDGET_UPDATED_SUCCEED_MESSAGE
         );
@@ -134,7 +132,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
       SetDefaultEmbedWidgets();
 
       // this will reset form
-      if (resetForm) {
+      if (resetForm !== undefined) {
         resetForm();
       }
     } catch (error) {
@@ -146,19 +144,19 @@ const ZaionsEmbedWidgetsModal: React.FC<{
   return (
     <Formik
       initialValues={{
-        name: embedWidgetsFormState.name || '',
+        name: embedWidgetsFormState?.name ?? '',
         canCodeJs: true,
-        jsCode: embedWidgetsFormState.jsCode || '',
+        jsCode: embedWidgetsFormState?.jsCode ?? '',
         canCodeHtml: true,
-        HTMLCode: embedWidgetsFormState.HTMLCode || '',
+        HTMLCode: embedWidgetsFormState?.HTMLCode ?? '',
         displayAt:
-          embedWidgetsFormState.displayAt || EmbedWidgetsDisplayAtEnum.Landing,
-        delay: embedWidgetsFormState.delay || '',
+          embedWidgetsFormState?.displayAt ?? EmbedWidgetsDisplayAtEnum.Landing,
+        delay: embedWidgetsFormState?.delay ?? '',
         position:
-          embedWidgetsFormState.position ||
+          embedWidgetsFormState?.position ??
           EmbedWidgetsPositionEnum.BottomCenter,
-        animation: embedWidgetsFormState.animation || false,
-        closingOption: embedWidgetsFormState.closingOption || false
+        animation: embedWidgetsFormState?.animation ?? false,
+        closingOption: embedWidgetsFormState?.closingOption ?? false
       }}
       enableReinitialize={true}
       validate={values => {
@@ -196,7 +194,8 @@ const ZaionsEmbedWidgetsModal: React.FC<{
           animation: values.animation,
           closingOption: values.closingOption
         });
-        void handleFormSubmit(stringifyValue, resetForm);
+
+        handleFormSubmit(stringifyValue, resetForm);
       }}>
       {({
         values,
@@ -263,7 +262,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
             )}
 
             <ZIonContent className='ion-padding'>
-              <div className='flex ion-text-center ion-justify-content-center flex-col ion-padding-top ion-margin-bottom'>
+              <div className='flex flex-col ion-text-center ion-justify-content-center ion-padding-top ion-margin-bottom'>
                 {/* Product Favicon */}
                 <div className='flex mx-auto mb-0 rounded-full w-11 h-11 ion-align-items-center ion-justify-content-enter'>
                   <ZIonImg
@@ -296,7 +295,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
 
               {/*  */}
               <Form className='px-2 mt-6'>
-                {/*-- Name Field --*/}
+                {/* -- Name Field -- */}
                 <ZIonInput
                   type='text'
                   name='name'
@@ -306,23 +305,31 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                   onIonChange={handleChange}
                   onIonBlur={handleBlur}
                   value={values.name}
-                  errorText={touched.name ? errors.name : undefined}
+                  errorText={touched?.name === true ? errors?.name : undefined}
                   className={classNames({
                     'px-2': true,
-                    'ion-touched': touched.name,
-                    'ion-invalid': touched.name && errors.name,
-                    'ion-valid': touched.name && !errors.name
+                    'ion-touched': touched?.name === true,
+                    'ion-invalid': touched?.name === true && errors?.name,
+                    'ion-valid':
+                      touched?.name === true &&
+                      errors?.name !== undefined &&
+                      errors?.name !== null &&
+                      errors?.name?.trim()?.length > 0
                   })}
                 />
 
-                {/*-- Custom Javascript Field --*/}
+                {/* -- Custom Javascript Field -- */}
                 <div className='mt-4'>
                   <ZIonRow>
                     <ZIonCol className='px-0'>
                       <ZIonTitle
                         className='p-0 mb-2 text-lg'
                         color={
-                          touched.jsCode && errors.jsCode ? 'danger' : undefined
+                          touched?.jsCode === true &&
+                          errors?.jsCode !== undefined &&
+                          errors?.jsCode !== null
+                            ? 'danger'
+                            : undefined
                         }>
                         Custom Javascript
                       </ZIonTitle>
@@ -335,8 +342,8 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                         checkedChildren='on'
                         unCheckedChildren='off'
                         onChange={val => {
-                          setFieldTouched('canCodeJs', true, false);
-                          setFieldValue('canCodeJs', val, true);
+                          void setFieldTouched('canCodeJs', true, false);
+                          void setFieldValue('canCodeJs', val, true);
                         }}
                       />
                     </ZIonCol>
@@ -352,17 +359,19 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                         value={values.jsCode}
                         className='border'
                         onChange={value => {
-                          setFieldTouched('jsCode', true, false);
-                          setFieldValue('jsCode', value, true);
+                          void setFieldTouched('jsCode', true, false);
+                          void setFieldValue('jsCode', value, true);
                         }}
                       />
-                      {errors.jsCode && touched.jsCode && (
-                        <ZIonNote
-                          color='danger'
-                          className='ion-margin-start'>
-                          {errors.jsCode}
-                        </ZIonNote>
-                      )}
+                      {errors?.jsCode !== undefined &&
+                        errors?.jsCode !== null &&
+                        touched?.jsCode === true && (
+                          <ZIonNote
+                            color='danger'
+                            className='ion-margin-start'>
+                            {errors.jsCode}
+                          </ZIonNote>
+                        )}
                     </>
                   ) : (
                     <ZIonText
@@ -373,14 +382,16 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                   )}
                 </div>
 
-                {/*-- Custom HTML Field --*/}
+                {/* -- Custom HTML Field -- */}
                 <div className='mt-4'>
                   <ZIonRow>
                     <ZIonCol>
                       <ZIonTitle
                         className='p-0 mb-2 text-lg'
                         color={
-                          touched.HTMLCode && errors.HTMLCode
+                          touched?.HTMLCode === true &&
+                          errors?.HTMLCode !== undefined &&
+                          errors?.HTMLCode !== null
                             ? 'danger'
                             : undefined
                         }>
@@ -394,8 +405,8 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                         checkedChildren='on'
                         unCheckedChildren='off'
                         onChange={val => {
-                          setFieldTouched('canCodeHtml', true, false);
-                          setFieldValue('canCodeHtml', val, true);
+                          void setFieldTouched('canCodeHtml', true, false);
+                          void setFieldValue('canCodeHtml', val, true);
                         }}
                       />
                     </ZIonCol>
@@ -411,17 +422,19 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                         value={values.HTMLCode}
                         className='border'
                         onChange={value => {
-                          setFieldTouched('HTMLCode', true, false);
-                          setFieldValue('HTMLCode', value, true);
+                          void setFieldTouched('HTMLCode', true, false);
+                          void setFieldValue('HTMLCode', value, true);
                         }}
                       />
-                      {errors.HTMLCode && touched.HTMLCode && (
-                        <ZIonNote
-                          color='danger'
-                          className='ion-margin-start'>
-                          {errors.HTMLCode}
-                        </ZIonNote>
-                      )}
+                      {errors?.HTMLCode !== undefined &&
+                        errors?.HTMLCode !== null &&
+                        touched?.HTMLCode === true && (
+                          <ZIonNote
+                            color='danger'
+                            className='ion-margin-start'>
+                            {errors.HTMLCode}
+                          </ZIonNote>
+                        )}
                     </>
                   ) : (
                     <ZIonText
@@ -432,9 +445,9 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                   )}
                 </div>
 
-                {/*-- Time Display Field --*/}
+                {/* -- Time Display Field -- */}
                 <div className='mt-5'>
-                  <ZIonTitle className='p-0 block mb-2 text-lg'>
+                  <ZIonTitle className='block p-0 mb-2 text-lg'>
                     Display after
                   </ZIonTitle>
                   <ZIonRow className='mt-4'>
@@ -476,14 +489,13 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                         expand='block'
                         className='ion-no-margin'
                         color={
-                          !!values.displayAt &&
                           values.displayAt === EmbedWidgetsDisplayAtEnum.Landing
                             ? 'primary'
                             : 'medium'
                         }
                         onClick={() => {
-                          setFieldTouched('displayAt', true);
-                          setFieldValue(
+                          void setFieldTouched('displayAt', true);
+                          void setFieldValue(
                             'displayAt',
                             EmbedWidgetsDisplayAtEnum.Landing,
                             true
@@ -529,14 +541,13 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                         expand='block'
                         className='ion-no-margin'
                         color={
-                          !!values.displayAt &&
-                          values.displayAt === EmbedWidgetsDisplayAtEnum.Delay
+                          values?.displayAt === EmbedWidgetsDisplayAtEnum.Delay
                             ? 'primary'
                             : 'medium'
                         }
                         onClick={() => {
-                          setFieldTouched('displayAt', true);
-                          setFieldValue(
+                          void setFieldTouched('displayAt', true);
+                          void setFieldValue(
                             'displayAt',
                             EmbedWidgetsDisplayAtEnum.Delay,
                             true
@@ -582,14 +593,13 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                         expand='block'
                         className='ion-no-margin'
                         color={
-                          !!values.displayAt &&
-                          values.displayAt === EmbedWidgetsDisplayAtEnum.Exit
+                          values?.displayAt === EmbedWidgetsDisplayAtEnum.Exit
                             ? 'primary'
                             : 'medium'
                         }
                         onClick={() => {
-                          setFieldTouched('displayAt', true);
-                          setFieldValue(
+                          void setFieldTouched('displayAt', true);
+                          void setFieldValue(
                             'displayAt',
                             EmbedWidgetsDisplayAtEnum.Exit,
                             true
@@ -602,30 +612,34 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                   </ZIonRow>
                 </div>
 
-                {!!values.displayAt &&
-                  values.displayAt === EmbedWidgetsDisplayAtEnum.Delay && (
-                    <ZIonInput
-                      name='delay'
-                      type='number'
-                      label='Second'
-                      minHeight='2.3rem'
-                      labelPlacement='stacked'
-                      value={values.delay}
-                      onIonChange={handleChange}
-                      onIonBlur={handleBlur}
-                      errorText={touched.delay ? errors.delay : undefined}
-                      className={classNames({
-                        'mt-4 w-full mx-auto': true,
-                        'ion-touched': touched.delay,
-                        'ion-invalid': touched.delay && errors.delay,
-                        'ion-valid': touched.delay && !errors.delay
-                      })}
-                    />
-                  )}
+                {values.displayAt === EmbedWidgetsDisplayAtEnum.Delay && (
+                  <ZIonInput
+                    name='delay'
+                    type='number'
+                    label='Second'
+                    minHeight='2.3rem'
+                    labelPlacement='stacked'
+                    value={values.delay}
+                    onIonChange={handleChange}
+                    onIonBlur={handleBlur}
+                    errorText={
+                      touched?.delay === true ? errors?.delay : undefined
+                    }
+                    className={classNames({
+                      'mt-4 w-full mx-auto': true,
+                      'ion-touched': touched?.delay,
+                      'ion-invalid': touched?.delay === true && errors?.delay,
+                      'ion-valid':
+                        touched?.delay === true &&
+                        errors?.delay === undefined &&
+                        errors?.delay === null
+                    })}
+                  />
+                )}
 
-                {/*-- Position Field --*/}
+                {/* -- Position Field -- */}
                 <div className='mt-5'>
-                  <ZIonTitle className='p-0 mb-2 block text-lg'>
+                  <ZIonTitle className='block p-0 mb-2 text-lg'>
                     Position
                   </ZIonTitle>
 
@@ -633,7 +647,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                   <ZIonGrid className='ion-no-padding'>
                     <ZIonRow>
                       <ZIonCol sizeXl='7'>
-                        <ZIonRow className='mt-1 gap-2'>
+                        <ZIonRow className='gap-2 mt-1'>
                           {/* Position Top Start */}
                           <ZIonCol
                             size='3.5'
@@ -649,8 +663,8 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                                 EmbedWidgetsPositionEnum.TopStart
                             })}
                             onClick={() => {
-                              setFieldTouched('position', true);
-                              setFieldValue(
+                              void setFieldTouched('position', true);
+                              void setFieldValue(
                                 'position',
                                 EmbedWidgetsPositionEnum.TopStart,
                                 true
@@ -683,8 +697,8 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                                 EmbedWidgetsPositionEnum.TopCenter
                             })}
                             onClick={() => {
-                              setFieldTouched('position', true);
-                              setFieldValue(
+                              void setFieldTouched('position', true);
+                              void setFieldValue(
                                 'position',
                                 EmbedWidgetsPositionEnum.TopCenter,
                                 true
@@ -717,8 +731,8 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                                 EmbedWidgetsPositionEnum.TopEnd
                             })}
                             onClick={() => {
-                              setFieldTouched('position', true);
-                              setFieldValue(
+                              void setFieldTouched('position', true);
+                              void setFieldValue(
                                 'position',
                                 EmbedWidgetsPositionEnum.TopEnd,
                                 true
@@ -751,8 +765,8 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                                 EmbedWidgetsPositionEnum.CenterStart
                             })}
                             onClick={() => {
-                              setFieldTouched('position', true);
-                              setFieldValue(
+                              void setFieldTouched('position', true);
+                              void setFieldValue(
                                 'position',
                                 EmbedWidgetsPositionEnum.CenterStart,
                                 true
@@ -785,8 +799,8 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                                 EmbedWidgetsPositionEnum.CenterCenter
                             })}
                             onClick={() => {
-                              setFieldTouched('position', true);
-                              setFieldValue(
+                              void setFieldTouched('position', true);
+                              void setFieldValue(
                                 'position',
                                 EmbedWidgetsPositionEnum.CenterCenter,
                                 true
@@ -819,8 +833,8 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                                 EmbedWidgetsPositionEnum.CenterEnd
                             })}
                             onClick={() => {
-                              setFieldTouched('position', true);
-                              setFieldValue(
+                              void setFieldTouched('position', true);
+                              void setFieldValue(
                                 'position',
                                 EmbedWidgetsPositionEnum.CenterEnd,
                                 true
@@ -853,8 +867,8 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                                 EmbedWidgetsPositionEnum.BottomStart
                             })}
                             onClick={() => {
-                              setFieldTouched('position', true);
-                              setFieldValue(
+                              void setFieldTouched('position', true);
+                              void setFieldValue(
                                 'position',
                                 EmbedWidgetsPositionEnum.BottomStart,
                                 true
@@ -887,8 +901,8 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                                 EmbedWidgetsPositionEnum.BottomCenter
                             })}
                             onClick={() => {
-                              setFieldTouched('position', true);
-                              setFieldValue(
+                              void setFieldTouched('position', true);
+                              void setFieldValue(
                                 'position',
                                 EmbedWidgetsPositionEnum.BottomCenter,
                                 true
@@ -921,8 +935,8 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                                 EmbedWidgetsPositionEnum.BottomEnd
                             })}
                             onClick={() => {
-                              setFieldTouched('position', true);
-                              setFieldValue(
+                              void setFieldTouched('position', true);
+                              void setFieldValue(
                                 'position',
                                 EmbedWidgetsPositionEnum.BottomEnd,
                                 true
@@ -942,17 +956,17 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                           </ZIonCol>
                         </ZIonRow>
                       </ZIonCol>
-                      <ZIonCol className='ion-text-center flex ion-align-items-center flex-col ion-justify-content-center'>
-                        {/*-- Animation Field --*/}
+                      <ZIonCol className='flex flex-col ion-text-center ion-align-items-center ion-justify-content-center'>
+                        {/* -- Animation Field -- */}
                         <div className='mt-5'>
-                          <ZIonTitle className='p-0 mb-2 block text-lg'>
+                          <ZIonTitle className='block p-0 mb-2 text-lg'>
                             🎈 Animation
                           </ZIonTitle>
                           <div className='mt-3'>
                             <ZRCSwitch
                               onChange={val => {
-                                setFieldTouched('animation', true, false);
-                                setFieldValue('animation', val, true);
+                                void setFieldTouched('animation', true, false);
+                                void setFieldValue('animation', val, true);
                               }}
                               defaultChecked={values.animation}
                               checkedChildren='on'
@@ -963,16 +977,20 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                           </div>
                         </div>
 
-                        {/*-- Animation Field --*/}
+                        {/* -- Animation Field -- */}
                         <div className='mt-5'>
-                          <ZIonTitle className='p-0 mb-2 block text-lg'>
+                          <ZIonTitle className='block p-0 mb-2 text-lg'>
                             ❌ Closing option
                           </ZIonTitle>
                           <div className='mt-3'>
                             <ZRCSwitch
                               onChange={val => {
-                                setFieldTouched('closingOption', true, false);
-                                setFieldValue('closingOption', val, true);
+                                void setFieldTouched(
+                                  'closingOption',
+                                  true,
+                                  false
+                                );
+                                void setFieldValue('closingOption', val, true);
                               }}
                               defaultChecked={values.closingOption}
                               checkedChildren='on'
@@ -993,7 +1011,7 @@ const ZaionsEmbedWidgetsModal: React.FC<{
              *  */}
             {appSettings.appModalsSetting.actions.showActionInModalFooter && (
               <ZIonFooter>
-                <ZIonRow className=' mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
+                <ZIonRow className='mx-3 mt-2 ion-justify-content-between ion-align-items-center'>
                   <ZIonCol>
                     <ZIonButton
                       fill='outline'
@@ -1015,7 +1033,9 @@ const ZaionsEmbedWidgetsModal: React.FC<{
                       className='ion-text-capitalize'
                       type='submit'
                       disabled={isSubmitting || !isValid}
-                      onClick={() => void submitForm()}>
+                      onClick={() => {
+                        void submitForm();
+                      }}>
                       {embedWidgetsFormState.formMode === FormMode.ADD
                         ? 'Create'
                         : embedWidgetsFormState.formMode === FormMode.EDIT

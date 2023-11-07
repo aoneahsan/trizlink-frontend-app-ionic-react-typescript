@@ -2,8 +2,8 @@
 import React from 'react';
 
 // Packages Import
-import { ProductFavicon } from '@/assets/images';
-import { ZIonImg, ZIonSpinner, ZIonText } from '@/components/ZIonComponents';
+import { ProductFaviconSmall } from '@/assets/images';
+import { ZIonImg, ZIonSpinner } from '@/components/ZIonComponents';
 import ZIonPage from '@/components/ZIonPage';
 
 // Type
@@ -15,7 +15,7 @@ const ZFallbackIonSpinner: React.FC = () => {
         className='absolute flex flex-col gap-2 top-1/2 start-1/2 ion-justify-content-center ion-align-items-center'
         style={{ transform: 'translate(-50%, -50%)' }}>
         <ZIonImg
-          src={ProductFavicon}
+          src={ProductFaviconSmall}
           className='w-[6rem] mb-2'
         />
         <ZIonSpinner

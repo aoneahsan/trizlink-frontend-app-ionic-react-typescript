@@ -8,15 +8,14 @@ import 'ace-builds/src-noconflict/theme-monokai';
 import 'ace-builds/src-noconflict/ext-language_tools';
 
 // Custom Imports
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
 
 // Styles
 
-import { ZEditorThemeEnum } from '@/types/components/ZEditor.type';
+import { type ZEditorThemeEnum } from '@/types/components/ZEditor.type';
 // Component Type
-type ZEditorType = {
+interface ZEditorType {
   className?: string;
   name?: string;
   width?: string;
@@ -25,32 +24,32 @@ type ZEditorType = {
   fontSize?: string | number;
   value?: string;
   theme?: ZEditorThemeEnum;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   onChange?: (value: string, event?: unknown) => void;
 
   testingselector?: string;
   testinglistselector?: string;
-};
+}
 
 const ZEditor: React.FC<ZEditorType> = props => {
-  const _testinglistselector = props.testinglistselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testinglistselector || PRODUCT_NAME,
-          _key: zCreateElementTestingSelectorKeyEnum.listSelector
-        })
-      }
-    : {};
+  const _testinglistselector =
+    props.testinglistselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testinglistselector,
+            _key: zCreateElementTestingSelectorKeyEnum.listSelector
+          })
+        }
+      : {};
 
-  const _testingSelector = props.testingselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testingselector || PRODUCT_NAME
-        })
-      }
-    : {};
+  const _testingSelector =
+    props.testingselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testingselector
+          })
+        }
+      : {};
 
   return (
     <AceEditor

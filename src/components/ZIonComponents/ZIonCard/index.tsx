@@ -1,21 +1,20 @@
 // Core Import
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 // Packages Import
 import { IonCard } from '@ionic/react';
 
 // Type
 import {
-  ZIonColorType,
-  ZIonModeType,
-  ZIonRouterDirection,
-  ZIonTargetType
+  type ZIonColorType,
+  type ZIonModeType,
+  type ZIonRouterDirection,
+  type ZIonTargetType
 } from '@/types/zaionsAppSettings.type';
-import { PRODUCT_NAME } from '@/utils/constants';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
-type ZIonCardType = {
+interface ZIonCardType {
   children: ReactNode;
   button?: boolean;
   color?: ZIonColorType;
@@ -29,9 +28,7 @@ type ZIonCardType = {
   target?: ZIonTargetType;
   type?: 'button' | 'reset' | 'submit';
   className?: string;
-  style?: {
-    [key: string]: unknown;
-  };
+  style?: Record<string, unknown>;
   onMouseEnter?: React.MouseEventHandler<HTMLIonCardElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLIonCardElement>;
   onClick?: React.MouseEventHandler<HTMLIonCardElement>;
@@ -39,25 +36,27 @@ type ZIonCardType = {
   //
   testingselector?: string;
   testinglistselector?: string;
-};
+}
 
-const ZIonCard = (props: ZIonCardType) => {
-  const _testinglistselector = props.testinglistselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testinglistselector || PRODUCT_NAME,
-          _key: zCreateElementTestingSelectorKeyEnum.listSelector
-        })
-      }
-    : {};
+const ZIonCard: React.FC<ZIonCardType> = (props: ZIonCardType) => {
+  const _testinglistselector =
+    props.testinglistselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testinglistselector,
+            _key: zCreateElementTestingSelectorKeyEnum.listSelector
+          })
+        }
+      : {};
 
-  const _testingSelector = props.testingselector
-    ? {
-        ...zCreateElementTestingSelector({
-          _value: props.testingselector || PRODUCT_NAME
-        })
-      }
-    : {};
+  const _testingSelector =
+    props.testingselector !== undefined
+      ? {
+          ...zCreateElementTestingSelector({
+            _value: props.testingselector
+          })
+        }
+      : {};
   return (
     <IonCard
       {...props}

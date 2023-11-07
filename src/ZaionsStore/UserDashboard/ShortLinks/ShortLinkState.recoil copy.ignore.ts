@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { ShortLinkType } from 'types/AdminPanel/linksType';
+import { type ShortLinkType } from 'types/AdminPanel/linksType';
 import {
   FormMode,
   messengerPlatformsBlockEnum

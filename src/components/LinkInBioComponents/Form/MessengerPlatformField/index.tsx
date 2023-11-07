@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 
 // Packages Imports
 import { addOutline, appsOutline } from 'ionicons/icons';
-import { ItemReorderEventDetail } from '@ionic/react';
+import { type ItemReorderEventDetail } from '@ionic/react';
 import { FieldArray, useFormikContext } from 'formik';
 import { useRecoilState } from 'recoil';
 import classNames from 'classnames';
@@ -33,9 +33,9 @@ import { ZIcons } from '@/utils/ZIcons';
 // Types
 import {
   cardDisplayEnum,
-  linkInBioBlockCardItemInterface,
-  LinkInBioPredefinedPlatformInterface,
-  LinkInBioSingleBlockContentType
+  type linkInBioBlockCardItemInterface,
+  type LinkInBioPredefinedPlatformInterface,
+  type LinkInBioSingleBlockContentType
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 // Recoil states
@@ -47,7 +47,7 @@ import LinkInBioObjectField from '../objectField';
 import ZTextEditor from '@/components/CustomComponents/ZTextEditor';
 import LinkInBioPhoneNumberField from '../PhoneNumberField';
 import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
-import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 
 // Styles
 
@@ -63,7 +63,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
 
   // fetch block data from api and storing it in LinkInBioBlocksData variable...
   const { data: LinkInBioPreDefinedMessengerPlatformData } = useZRQGetRequest<
-    LinkInBioPredefinedPlatformInterface<messengerPlatformsBlockEnum>[]
+    Array<LinkInBioPredefinedPlatformInterface<messengerPlatformsBlockEnum>>
   >({
     _url: API_URL_ENUM.linkInBioPreDefinedMessengerPlatform_create_list,
     _key: [
@@ -75,7 +75,10 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
   // After fetching data and storing it to LinkInBioPreDefinedMessengerPlatformData variable, setting data to setLinkInBioPredefinedMessengerPlatformState recoil state and making sure that if only the data refetch then again store the lates data in recoil state...
   useEffect(() => {
     try {
-      if (LinkInBioPreDefinedMessengerPlatformData) {
+      if (
+        LinkInBioPreDefinedMessengerPlatformData !== undefined &&
+        LinkInBioPreDefinedMessengerPlatformData !== null
+      ) {
         setLinkInBioPredefinedMessengerPlatformState(
           LinkInBioPreDefinedMessengerPlatformData
         );
@@ -89,7 +92,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
   // handle reorder function (preview panel)
   const handleMessengerCardReorder = (
     event: CustomEvent<ItemReorderEventDetail>
-  ) => {
+  ): void => {
     // The `from` and `to` properties contain the index of the item
     // when the drag started and ended, respectively
 
@@ -106,12 +109,12 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
   }: {
     _type: messengerPlatformsBlockEnum;
     _title: string;
-  }) => {
+  }): void => {
     try {
-      if (_type) {
+      if (_type !== undefined && _type !== null) {
         const _updateValue = values.cardItems;
 
-        if (_updateValue) {
+        if (_updateValue !== undefined) {
           const _index = _updateValue?.findIndex(
             item => item.messengerCardType === _type
           );
@@ -130,14 +133,14 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
             _updateValue?.push(newEntry);
           }
 
-          setFieldValue('cardItems', _updateValue, true);
+          void setFieldValue('cardItems', _updateValue, true);
 
           /**
            * We are setting the title below just to make formik dirty.
            * Why? when we are setting the cardItems up why we need that?
            * what I understand that cardItems is an array an we are setting the value of cardItems to an array again, as we now array is a reference type so it does not change and formik does not get dirty and we also does not see the save button in frontend as save button will show when formik is dirty. for now the way round is to set title field to make formik dirty. we will change this as we find a better solution.
            */
-          setFieldValue(
+          void setFieldValue(
             'title',
             `${PRODUCT_NAME} music blocks = ${_updateValue.length}`,
             true
@@ -173,7 +176,11 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                       className='flex ion-justify-content-start'>
                       <div className='ion-text-center me-3 w-max'>
                         <LinkInBioPDButton
-                          icon={el.icon ? ZIcons[el.icon] : ZIcons.PlaceHolder}
+                          icon={
+                            el.icon !== null && el.icon !== undefined
+                              ? ZIcons[el.icon]
+                              : ZIcons.PlaceHolder
+                          }
                           testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.block}-${el.type}`}
                           onClick={() => {
                             toggleMusicPlatformCardHandler({
@@ -196,7 +203,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                   CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm
                     .fields.messenger.addBlockBtn
                 }
-                onClick={() =>
+                onClick={() => {
                   push({
                     target: {
                       url: ''
@@ -205,15 +212,16 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                     isActive: true,
                     cardDisplayType: cardDisplayEnum.music,
                     messengerCardType: messengerPlatformsBlockEnum.default
-                  })
-                }>
+                  });
+                }}>
                 <ZIonIcon
                   icon={addOutline}
                   className='me-1'
                 />
                 add custom element
               </ZIonButton>
-              {values.cardItems?.length
+              {values.cardItems?.length !== null &&
+              values.cardItems?.length !== undefined
                 ? values.cardItems.map((_cardItem, _index) => {
                     return (
                       <ZIonItem
@@ -249,9 +257,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                               CONSTANTS.testingSelectors.linkInBio.formPage
                                 .design.blockForm.fields.messenger.titleInput
                             }
-                            value={
-                              values.cardItems && values.cardItems[_index].title
-                            }
+                            value={values.cardItems?.[_index].title}
                           />
 
                           {(_cardItem.messengerCardType ===
@@ -268,10 +274,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                                 CONSTANTS.testingSelectors.linkInBio.formPage
                                   .design.blockForm.fields.messenger.linkInput
                               }
-                              value={
-                                values.cardItems &&
-                                values.cardItems[_index].target?.url
-                              }
+                              value={values.cardItems?.[_index].target?.url}
                             />
                           )}
 
@@ -287,10 +290,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                                 CONSTANTS.testingSelectors.linkInBio.formPage
                                   .design.blockForm.fields.messenger.iconInput
                               }
-                              value={
-                                values.cardItems &&
-                                values.cardItems[_index].icon
-                              }
+                              value={values.cardItems?.[_index].icon}
                             />
                           )}
 
@@ -306,10 +306,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                                 CONSTANTS.testingSelectors.linkInBio.formPage
                                   .design.blockForm.fields.messenger.emailInput
                               }
-                              value={
-                                values.cardItems &&
-                                values.cardItems[_index].email
-                              }
+                              value={values.cardItems?.[_index].email}
                             />
                           )}
 
@@ -329,10 +326,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                                 CONSTANTS.testingSelectors.linkInBio.formPage
                                   .design.blockForm.fields.messenger.emailInput
                               }
-                              value={
-                                values.cardItems &&
-                                values.cardItems[_index].phoneNumber
-                              }
+                              value={values.cardItems?.[_index].phoneNumber}
                             />
                           )}
 
@@ -358,10 +352,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                                   .design.blockForm.fields.messenger
                                   .usernameInput
                               }
-                              value={
-                                values.cardItems &&
-                                values.cardItems[_index].username
-                              }
+                              value={values.cardItems?.[_index].username}
                             />
                           )}
 
@@ -377,10 +368,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                                 CONSTANTS.testingSelectors.linkInBio.formPage
                                   .design.blockForm.fields.messenger.objectInput
                               }
-                              value={
-                                values.cardItems &&
-                                values.cardItems[_index].object
-                              }
+                              value={values.cardItems?.[_index].object}
                             />
                           )}
 
@@ -400,12 +388,9 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                                 CONSTANTS.testingSelectors.linkInBio.formPage
                                   .design.blockForm.fields.messenger.textInput
                               }
-                              value={
-                                values.cardItems &&
-                                values.cardItems[_index].text
-                              }
+                              value={values.cardItems?.[_index].text}
                               onChange={_value => {
-                                setFieldValue(
+                                void setFieldValue(
                                   `cardItems.${_index}.text`,
                                   _value,
                                   false
@@ -427,7 +412,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                           }
                           deleteFn={(detail: OverlayEventDetail<unknown>) => {
                             try {
-                              if (detail && detail.role === 'destructive') {
+                              if (detail?.role === 'destructive') {
                                 void remove(_index);
                               }
                             } catch (error) {

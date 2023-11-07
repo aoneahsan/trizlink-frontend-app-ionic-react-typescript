@@ -10,11 +10,11 @@ import {
   ZIonRow,
   ZIonText,
   ZIonRouterLink,
-  ZIonImg
+  ZIonImg,
+  ZIonButton
 } from '@/components/ZIonComponents';
 import EmbedWidgetsTable from '@/components/InPageComponents/ZaionsTable/embedWidgetsTable';
 import ZaionsEmbedWidgetsModal from '@/components/InPageComponents/ZaionsModals/AddEmbedWidgets';
-import { ZIonButton } from '@/components/ZIonComponents';
 
 // Global Constants
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
@@ -70,7 +70,7 @@ const APSettingsEmbedWidgets: React.FC = () => {
         </ZIonCol>
       </ZIonRow>
 
-      {embedWidgetsData && embedWidgetsData?.length ? (
+      {embedWidgetsData?.length > 0 ? (
         <EmbedWidgetsTable />
       ) : (
         <ZIonRow className='px-4 py-4 mx-4 mt-5 zaions__bg_white ion-align-items-center'>

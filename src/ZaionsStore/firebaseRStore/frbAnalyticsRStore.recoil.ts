@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil';
-import { FrbAnalyticsRStateType } from '@/types/firebaseTypes/frbAnalytics.type';
-import { Analytics } from 'firebase/analytics';
+import { type FrbAnalyticsRStateType } from '@/types/firebaseTypes/frbAnalytics.type';
+import { type Analytics } from 'firebase/analytics';
 
 export const frbAnalyticsRState = atom<FrbAnalyticsRStateType>({
   key: 'frbAnalyticsRState_key',

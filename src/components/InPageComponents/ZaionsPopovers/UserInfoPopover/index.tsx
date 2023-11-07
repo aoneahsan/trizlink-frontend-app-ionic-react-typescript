@@ -35,7 +35,7 @@ import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { UserAccountType } from '@/types/UserAccount/index.type';
+import { type UserAccountType } from '@/types/UserAccount/index.type';
 
 /**
  * Recoil State Imports go down
@@ -80,7 +80,7 @@ const ZUserInfoPopover: React.FC<ZUserInfoPopoverInterface> = ({
         <ZUserAvatarButton
           className='w-[50px] h-[50px]'
           userAvatar={
-            user?.avatar ||
+            user?.avatar ??
             getUiAvatarApiUrl({
               name: user?.username
             })

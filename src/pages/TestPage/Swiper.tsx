@@ -57,7 +57,7 @@ const ZaionsTestPage: React.FC = () => {
             <ZIonButton
               onClick={() => {
                 try {
-                  if (swiperRef.current) {
+                  if (swiperRef.current !== null) {
                     console.info(swiperRef.current);
                   }
                 } catch (error) {
@@ -69,7 +69,7 @@ const ZaionsTestPage: React.FC = () => {
             <ZIonButton
               onClick={() => {
                 try {
-                  if (swiperRef.current) {
+                  if (swiperRef.current !== null) {
                     // swiperRef.current?.slidePrev();
                   }
                 } catch (error) {

@@ -29,12 +29,7 @@ import AdminPanelSidebarMenu from '@/components/AdminPanelComponents/Sidebar/Exp
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import {
-	AdminPanelSidebarMenuPageEnum,
-	ZDashboardFolderMenuInterface,
-} from '@/types/AdminPanel/index.type';
-import ZDashboardFolderMenu from './FolderMenu';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { type AdminPanelSidebarMenuPageEnum } from '@/types/AdminPanel/index.type';
 
 /**
  * Recoil State Imports go down
@@ -63,14 +58,14 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
  * */
 
 const ZDashboardSidebar: React.FC<{
-	type: AdminPanelSidebarMenuPageEnum;
+  type: AdminPanelSidebarMenuPageEnum;
 }> = ({ type }) => {
-	return (
-		<>
-			{/* Expendable Navigation in the left-hand side */}
-			<AdminPanelSidebarMenu activePage={type} />
-		</>
-	);
+  return (
+    <>
+      {/* Expendable Navigation in the left-hand side */}
+      <AdminPanelSidebarMenu activePage={type} />
+    </>
+  );
 };
 
 export default ZDashboardSidebar;

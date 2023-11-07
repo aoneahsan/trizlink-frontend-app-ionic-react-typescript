@@ -36,12 +36,6 @@ import ZWorkspaceFooterSteps from '@/components/WorkspacesComponents/FooterSteps
 import ZInviteClientsPermissionPopover from '@/components/InPageComponents/ZaionsPopovers/Workspace/InviteClientPermissionPopover';
 
 /**
- * Custom Hooks Imports go down
- * ? Like import of custom Hook is a custom import
- * */
-import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
-
-/**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
@@ -89,12 +83,11 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 const ZWorkspaceFormInviteClientsTab: React.FC = () => {
   // Custom Hooks
   // Media Query Scale
-  const { isXlScale, isLgScale, isMdScale, isSmScale, isXsScale } =
-    useZMediaQueryScale();
+  const { isXlScale, isLgScale, isMdScale, isSmScale } = useZMediaQueryScale();
 
   // getting workspace id from route (url), when user refresh the page the id from route will be get and workspace of that id will be fetch from backend.
   const { editWorkspaceId } = useParams<{
-    editWorkspaceId: string;
+    editWorkspaceId?: string;
   }>();
 
   // getting search param from url with the help of 'qs' package
@@ -115,14 +108,14 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
         ]
       }}
       validate={() => {
-        const errors: {} = {};
+        const errors = {};
 
         return errors;
       }}
       onSubmit={() => {}}>
       {({ values, handleBlur, handleChange, setFieldValue }) => {
         const shouldShowNextButton = values.clients?.some(
-          client => client.email?.trim().length && isEmail(client.email)
+          client => client.email?.trim().length !== 0 && isEmail(client.email)
         );
         return (
           <>
@@ -157,9 +150,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
                             sizeMd='1'
                             sizeSm='2'
                             sizeXs='2'>
-                            <ZUserAvatarButton
-                              userAvatar={el.avatar && el.avatar}
-                            />
+                            <ZUserAvatarButton userAvatar={el.avatar ?? ''} />
                           </ZIonCol>
                         )}
 
@@ -184,29 +175,26 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
                                 placeholder='name@example.com'
                                 onIonChange={handleChange}
                                 onIonBlur={handleBlur}
-                                value={
-                                  values.clients && values.clients[index].email
-                                }
+                                value={values.clients?.[index].email}
                               />
                             </div>
 
                             {/* Role & permission buttons */}
-                            <div className='gap-2 zaions_max__content ms-2 flex'>
+                            <div className='flex gap-2 zaions_max__content ms-2'>
                               {/* Role popover button */}
                               <ZIonButton
                                 id={`role-popover-index-${index}`}
                                 fill='outline'
-                                className='m-0 flex h-full normal-case'>
-                                {values.clients && values.clients[index].role}
+                                className='flex h-full m-0 normal-case'>
+                                {values.clients?.[index].role}
                               </ZIonButton>
 
                               {/* permission popover */}
                               <ZIonButton
                                 fill='outline'
                                 id={`permission-popover-index-${index}`}
-                                className='m-0 flex h-full normal-case'>
-                                {values.clients &&
-                                  values.clients[index].permission}
+                                className='flex h-full m-0 normal-case'>
+                                {values.clients?.[index].permission}
                               </ZIonButton>
                             </div>
                           </div>
@@ -254,18 +242,17 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
                           side='bottom'>
                           <ZWorkspaceFormRoleSelectorPopover
                             dismissZIonPopover={role => {
-                              setFieldValue(
+                              void setFieldValue(
                                 `clients.${index}.role`,
                                 WSRolesNameEnum[role as WSRolesNameEnum] !==
                                   undefined
                                   ? WSRolesNameEnum[role as WSRolesNameEnum]
-                                  : values.clients &&
-                                      values.clients[index].role,
+                                  : values.clients?.[index].role,
                                 false
                               );
                             }}
                             selectedRole={
-                              (values.clients && values.clients[index].role) ||
+                              values.clients?.[index].role ??
                               WSRolesNameEnum.Contributor
                             }
                           />
@@ -281,7 +268,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
                           side='bottom'>
                           <ZInviteClientsPermissionPopover
                             dismissZIonPopover={permission => {
-                              setFieldValue(
+                              void setFieldValue(
                                 `clients.${index}.permission`,
                                 workspaceFormPermissionEnum[
                                   permission as workspaceFormPermissionEnum
@@ -289,14 +276,12 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
                                   ? workspaceFormPermissionEnum[
                                       permission as workspaceFormPermissionEnum
                                     ]
-                                  : values.clients &&
-                                      values.clients[index].permission,
+                                  : values.clients?.[index].permission,
                                 false
                               );
                             }}
                             selectedPermission={
-                              (values.clients &&
-                                values.clients[index].permission) ||
+                              values.clients?.[index]?.permission ??
                               workspaceFormPermissionEnum.team
                             }
                           />
@@ -319,13 +304,13 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
                         sizeXs='12'>
                         <ZIonButton
                           className='normal-case'
-                          onClick={() =>
+                          onClick={() => {
                             push({
                               email: '',
                               role: WSRolesNameEnum.Approver,
                               permission: workspaceFormPermissionEnum.team
-                            })
-                          }
+                            });
+                          }}
                           expand={!isMdScale ? 'block' : undefined}>
                           <ZIonIcon
                             icon={addOutline}
@@ -364,27 +349,6 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
                   routeQSearchParams.tab ===
                     workspaceFormTabEnum.connectPages ? (
                     <>
-                      {/* Go Back button */}
-                      {/* <ZIonCol size='6'>
-												<ZIonButton
-													expand='block'
-													fill='outline'
-													className='normal-case'
-													routerLink={createRedirectRoute({
-														url: ZaionsRoutes.AdminPanel.Workspaces.Edit,
-														params: [
-															CONSTANTS.RouteParams.workspace.editWorkspaceIdParam,
-														],
-														values: [editWorkspaceId],
-														routeSearchParams: {
-															tab: workspaceFormTabEnum.workspaceDetailForm,
-														},
-													})}
-												>
-													Go Back
-												</ZIonButton>
-											</ZIonCol> */}
-
                       {/* Invite Later button */}
                       <ZIonCol
                         sizeXl='6'
@@ -402,7 +366,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
                               CONSTANTS.RouteParams.workspace
                                 .editWorkspaceIdParam
                             ],
-                            values: [editWorkspaceId],
+                            values: [editWorkspaceId ?? ''],
                             routeSearchParams: {
                               tab: workspaceFormTabEnum.connectPages
                             }
@@ -431,7 +395,7 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
                                 CONSTANTS.RouteParams.workspace
                                   .editWorkspaceIdParam
                               ],
-                              values: [editWorkspaceId],
+                              values: [editWorkspaceId ?? ''],
                               routeSearchParams: {
                                 tab: workspaceFormTabEnum.connectPages
                               }

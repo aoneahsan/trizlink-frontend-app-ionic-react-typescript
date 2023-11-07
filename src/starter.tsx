@@ -56,7 +56,7 @@ import React from 'react';
  * */
 
 const ZaionsStarterFile: React.FC = () => {
-	return <></>;
+  return <></>;
 };
 
 export default ZaionsStarterFile;
