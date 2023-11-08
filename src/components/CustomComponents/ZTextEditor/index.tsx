@@ -9,6 +9,7 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import ReactQuill from 'react-quill';
+import { Editor, EditorState, RichUtils } from 'draft-js';
 
 /**
  * Custom Imports go down
@@ -38,6 +39,10 @@ import { type Sources, type DeltaStatic } from 'quill/index';
 import 'react-quill/dist/quill.snow.css';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
+import classNames from 'classnames';
+import { ZIonButton, ZIonIcon, ZIonTitle } from '@/components/ZIonComponents';
+import { informationCircleOutline } from 'ionicons/icons';
+import ZRTooltip from '../ZRTooltip';
 
 /**
  * Images Imports go down
@@ -81,6 +86,11 @@ interface ZTextEditorInterface {
   ) => void;
 }
 
+interface ZTextEditor2Interface {
+  className?: string;
+  style?: React.CSSProperties;
+}
+
 /**
  * Functional Component
  * About: (Info of component here...)
@@ -115,6 +125,110 @@ const ZTextEditor: React.FC<ZTextEditorInterface> = props => {
       {..._testingSelector}
       {..._testinglistselector}
     />
+  );
+};
+
+export const ZTextEditor2: React.FC<ZTextEditor2Interface> = ({
+  className
+}) => {
+  const [editorState, setEditorState] = React.useState<EditorState>(() =>
+    EditorState.createEmpty()
+  );
+
+  const onChangeHandler = (newState: EditorState): void => {
+    setEditorState(newState);
+  };
+  console.log({ editorState });
+
+  return (
+    <>
+      <div
+        className={classNames(className, {
+          'w-full min-h-[10rem] max-h-max border rounded-lg overflow-hidden':
+            true
+        })}>
+        <div className='flex w-full py-2 border-b ion-padding-horizontal ion-align-items-center ion-justify-content-between'>
+          <ZIonTitle className='ion-no-padding'>Rich text editor</ZIonTitle>
+
+          <div
+            className='flex first-letter:ion-align-items-center'
+            id='zc-rich-text-editor-id'>
+            <ZIonIcon
+              icon={informationCircleOutline}
+              className='w-6 h-6 cursor-pointer'
+              color='primary'
+            />
+          </div>
+
+          <ZRTooltip anchorSelect='#zc-rich-text-editor-id'>
+            <div className=''>
+              <p>some text here...</p>
+            </div>
+          </ZRTooltip>
+        </div>
+        <div className='flex w-full gap-1 py-2 border-b ion-padding-horizontal ion-align-items-center'>
+          <ZIonButton
+            className='ion-no-margin'
+            size='small'
+            onClick={() => {
+              onChangeHandler(RichUtils.toggleInlineStyle(editorState, 'BOLD'));
+            }}>
+            Bold
+          </ZIonButton>
+
+          <ZIonButton
+            className='ion-no-margin'
+            size='small'
+            onClick={() => {
+              onChangeHandler(
+                RichUtils.toggleInlineStyle(editorState, 'ITALIC')
+              );
+            }}>
+            Italic
+          </ZIonButton>
+
+          <ZIonButton
+            className='ion-no-margin'
+            size='small'
+            onClick={() => {
+              onChangeHandler(
+                RichUtils.toggleInlineStyle(editorState, 'UNDERLINE')
+              );
+            }}>
+            Underline
+          </ZIonButton>
+
+          <ZIonButton
+            className='ion-no-margin'
+            size='small'
+            onClick={() => {
+              onChangeHandler(
+                RichUtils.toggleInlineStyle(editorState, 'STRIKETHROUGH')
+              );
+            }}>
+            Stripe
+          </ZIonButton>
+        </div>
+
+        <div className='ion-padding'>
+          <Editor
+            editorState={editorState}
+            onChange={setEditorState}
+            handleKeyCommand={(command, editorState) => {
+              const newState = RichUtils.handleKeyCommand(editorState, command);
+
+              if (newState !== null) {
+                onChangeHandler(newState);
+                return 'handled';
+              }
+
+              return 'not-handled';
+            }}
+          />
+        </div>
+      </div>
+      {editorState.getCurrentContent()}
+    </>
   );
 };
 

@@ -134,7 +134,7 @@ const ZaionsLinkInBioForm = lazy(
 const TestingIonComponents = lazy(
   () => import('./Testing/TestingIonComponents/index')
 );
-
+const DraftJS = lazy(() => import('./Testing/DraftJs'));
 const ZUserAccount = lazy(() => import('./pages/AdminPanel/UserAccount'));
 const ZSetPasswordPage = lazy(() => import('./pages/SetPassword'));
 const ZAppStartupPage = lazy(() => import('./pages/AdminPanel/StartUpPage'));
@@ -204,6 +204,12 @@ const AppRoutes = (): JSX.Element => {
           exact
           path={ZaionsRoutes.Testing.IonComponents.Main}
           component={TestingIonComponents}
+        />
+
+        <Route
+          exact
+          path={ZaionsRoutes.Testing.DraftJs.Main}
+          component={DraftJS}
         />
 
         <Route

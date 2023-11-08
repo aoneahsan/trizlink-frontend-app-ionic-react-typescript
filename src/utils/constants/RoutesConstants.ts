@@ -206,6 +206,9 @@ const ZaionsRoutes = {
     },
     IonComponents: {
       Main: '/testing/testing-ion-components'
+    },
+    DraftJs: {
+      Main: '/testing/testing-draft-js'
     }
   }
 };

@@ -49,12 +49,12 @@ const AppHOCWrapper: React.FC = () => {
     <>
       {/* Other Packages  */}
       <QueryClientProvider client={queryClientObj}>
-        {/* Recoil State HOC */}
-        <RecoilRoot>
-          {/* Ionic React Router HOC */}
-          <IonReactRouter>
-            {/* Ionic Router Outlet HOC */}
-            <IonRouterOutlet>
+        {/* Ionic React Router HOC */}
+        <IonReactRouter>
+          {/* Ionic Router Outlet HOC */}
+          <IonRouterOutlet>
+            {/* Recoil State HOC */}
+            <RecoilRoot>
               {/* React Query HOC */}
               {/* My Custom HOCs - Below This */}
               {/* Error Logging HOC */}
@@ -76,9 +76,9 @@ const AppHOCWrapper: React.FC = () => {
                   <ReactQueryDevtools initialIsOpen={false} />
                 </FirebaseHOC>
               </ErrorLoggingHOC>
-            </IonRouterOutlet>
-          </IonReactRouter>
-        </RecoilRoot>
+            </RecoilRoot>
+          </IonRouterOutlet>
+        </IonReactRouter>
       </QueryClientProvider>
     </>
   );
