@@ -8,7 +8,8 @@ const config: CapacitorConfig = {
   plugins: {
     GoogleAuth: {
       scopes: ['profile', 'email'],
-      serverClientId: 'xxxxxx-xxxxxxxxxxxxxxxxxx.apps.googleusercontent.com',
+      serverClientId:
+        '1098579848404-v2emjb5nh94rancq1jhp2t9gljog3ken.apps.googleusercontent.com', // sir ahsan say to paste directly
       forceCodeForRefreshToken: true
     }
   }

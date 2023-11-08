@@ -1,7 +1,9 @@
 {
   "name": "com.trizlink.app",
+  "displayName": "Trizlink",
+  "description": "Trizlink project - Project of Zaions (https://zaions.com).",
   "private": true,
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "engines": {
     "node": "^18.17.0",
@@ -14,7 +16,6 @@
     "name": "Zaions (Software House)",
     "url": "https://zaions.com"
   },
-  "displayName": "Trizlink",
   "categories": [
     "Extension Packs",
     "Other"
@@ -31,7 +32,6 @@
     "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
     "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx}"
   },
-  "description": "Trizlink project - Project of Zaions (https://zaions.com).",
   "dependencies": {
     "@capacitor/android": "^5.5.1",
     "@capacitor/app": "^5.0.6",
