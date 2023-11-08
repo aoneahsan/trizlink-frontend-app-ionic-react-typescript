@@ -37,6 +37,9 @@ const ZOtpLength = 6;
 
 const ZOptResendAfter = 5;
 
+// This minutes will added to time in every api request in time variable current time + ZRequestTimeAddM.
+const ZRequestTimeAddM = 3;
+
 // we are using this in "FetchRequiredAppDataHOCAsync" component, here 1 means 1s in time, and we are using this to call the user "updateUserStatus" api on interval, with interval set to run on this variable * with 1000 (as to convert millisecond to seconds)
 const ZLastSeenInterval = 60;
 
@@ -113,6 +116,7 @@ const RouteParams = {
 // left here as it will mess up many imports, we can move this when we have some free time (i know that will add more imports to correct but we don't have time for it right now)
 export const API_URLS = {
   login: '/login',
+  socialLogin: '/social-login',
   logout: '/logout',
   verifyAuthenticationStatus: '/verify-authentication-status',
   register: '/register',
@@ -472,6 +476,12 @@ export const LOCALSTORAGE_KEYS = {
   FORGET_PASSWORD_USER_DATA: 'ziomkliy-rthng-r',
   SET_PASSWORD_DATA: 'zplkithfns-wolf-s',
   ERROR_DATA: 'asdgcvbv_cbert-k'
+};
+
+export const encryptKeys = {
+  encryptedEncodeData: 'zinrekg_mke_z',
+  accessToken: 'acmkfdr_aset_k',
+  time: 'tzasd_iasdm_e'
 };
 
 export const Platforms = {
@@ -1758,6 +1768,7 @@ const ZStatesOptions: ZaionsRSelectOptions[] = [
 
 const CONSTANTS = {
   ZOptResendAfter,
+  ZRequestTimeAddM,
   ZLastSeenInterval,
   ZRolesOptions,
   ZOtpLength,

@@ -37,6 +37,7 @@ export enum CONTAINS {
 }
 export enum API_URL_ENUM {
   login = 'login',
+  socialLogin = 'socialLogin',
   logout = 'logout',
   verifyAuthenticationStatus = 'verifyAuthenticationStatus',
   delete = 'delete',
