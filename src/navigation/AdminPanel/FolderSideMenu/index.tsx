@@ -8,9 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { menuController } from '@ionic/core/components';
-import { type ItemReorderEventDetail } from '@ionic/react';
-import { type IonReorderGroupCustomEvent } from '@ionic/core';
+import { menuController, type IonReorderGroupCustomEvent } from '@ionic/core';
 import {
   appsOutline,
   closeOutline,
@@ -101,7 +99,11 @@ interface AdminPanelFoldersSidebarMenuInterface {
   state?: folderState;
   showSaveReorderButton?: boolean;
   handleReorderFn?: (
-    event: IonReorderGroupCustomEvent<ItemReorderEventDetail>
+    event: IonReorderGroupCustomEvent<{
+      from: number;
+      to: number;
+      complete: (data?: boolean | unknown[]) => unknown;
+    }>
   ) => void;
   menuId?: string;
   folderActionHandlerFn?: React.MouseEventHandler<HTMLIonButtonElement>;

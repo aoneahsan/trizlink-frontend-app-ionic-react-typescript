@@ -8,14 +8,13 @@ import React, { useEffect, useState } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { menuController } from '@ionic/core/components';
+import { menuController, type ItemReorderEventDetail } from '@ionic/core';
 import {
   closeOutline,
   cloudDownloadOutline,
   cloudUploadOutline
 } from 'ionicons/icons';
 import { Formik } from 'formik';
-import { type ItemReorderEventDetail } from '@ionic/react';
 import { useParams } from 'react-router';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import classNames from 'classnames';

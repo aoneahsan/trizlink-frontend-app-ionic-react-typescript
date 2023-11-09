@@ -10,7 +10,7 @@ import React, { lazy, Suspense } from 'react';
  * */
 import { useParams } from 'react-router';
 import { filterOutline, refresh } from 'ionicons/icons';
-import { menuController } from '@ionic/core/components';
+import { menuController } from '@ionic/core';
 import classNames from 'classnames';
 
 /**

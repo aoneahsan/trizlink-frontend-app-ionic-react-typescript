@@ -8,10 +8,9 @@ import React, { lazy, Suspense } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { type RefresherEventDetail } from '@ionic/react';
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
-import { menuController } from '@ionic/core/components';
+import { menuController, type RefresherEventDetail } from '@ionic/core';
 import {
   closeOutline,
   notificationsOutline,

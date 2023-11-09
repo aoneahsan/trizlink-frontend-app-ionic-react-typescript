@@ -374,10 +374,12 @@ export const useZInfiniteQuery = <T>({
       }
     },
     initialPageParam: 0,
-    getPreviousPageParam: firstPage =>
-      (firstPage as { previousId: unknown })?.previousId ?? undefined,
-    getNextPageParam: lastPage =>
-      (lastPage as { nextId: unknown })?.nextId ?? undefined,
+    getPreviousPageParam: firstPage => {
+      return (firstPage as { previousId: unknown })?.previousId ?? undefined;
+    },
+    getNextPageParam: lastPage => {
+      return (lastPage as { nextId: unknown })?.nextId ?? undefined;
+    },
     select: data => {
       if (_shouldExtractData) {
         switch (_extractType) {

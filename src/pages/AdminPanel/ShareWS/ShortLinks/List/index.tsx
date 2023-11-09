@@ -10,11 +10,12 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
  * */
 import classNames from 'classnames';
 import { Formik } from 'formik';
-import { menuController } from '@ionic/core/components';
 import {
+  menuController,
   type ItemReorderEventDetail,
   type RefresherEventDetail
-} from '@ionic/react';
+} from '@ionic/core';
+
 import { filterOutline, refresh, searchOutline } from 'ionicons/icons';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useParams } from 'react-router';

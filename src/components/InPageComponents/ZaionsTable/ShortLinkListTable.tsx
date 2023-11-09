@@ -365,6 +365,29 @@ const ZInpageTable: React.FC = () => {
       _extractType: ZRQGetRequestExtractEnum.extractData
     });
 
+  // const { data: ShortLinksInfiniteQueryData } = useZInfiniteQuery({
+  //   _url: API_URL_ENUM.shortLinks_list,
+  //   _key: [
+  //     CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+  //     workspaceId ?? '',
+  //     String(pageindex),
+  //     'testing'
+  //   ],
+  //   _shouldFetchWhenIdPassed: !((workspaceId?.trim()?.length ?? 0) > 0),
+  //   _itemsIds: [workspaceId ?? '', String(pageindex), String(pagesize)],
+  //   _urlDynamicParts: [
+  //     CONSTANTS.RouteParams.workspace.workspaceId,
+  //     CONSTANTS.RouteParams.pageNumber,
+  //     CONSTANTS.RouteParams.paginationLimit
+  //   ],
+  //   _showLoader: false,
+  //   _extractType: ZRQGetRequestExtractEnum.extractData
+  // });
+
+  // console.log({
+  //   ShortLinksInfiniteQueryData
+  // });
+
   // Request for getting share workspace short links data.
   const { data: swsShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
     _url: API_URL_ENUM.sws_sl_create_list,

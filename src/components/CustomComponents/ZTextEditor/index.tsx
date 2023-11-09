@@ -41,7 +41,6 @@ import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
  * Style files Imports go down
  * ? Import of style sheet is a style import
  * */
-import 'react-quill/dist/quill.snow.css';
 
 /**
  * Images Imports go down

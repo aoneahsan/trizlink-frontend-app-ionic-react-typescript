@@ -4,7 +4,10 @@ import React from 'react';
 // Packages Imports
 import classNames from 'classnames';
 import { calendarOutline } from 'ionicons/icons';
-import { type DatetimeChangeEventDetail } from '@ionic/core';
+import {
+  type DatetimeChangeEventDetail,
+  type IonDatetimeCustomEvent
+} from '@ionic/core';
 
 // Custom Imports
 import {
@@ -12,9 +15,6 @@ import {
   ZIonIcon,
   ZIonItem
 } from '@/components/ZIonComponents';
-
-// Type
-import { type IonDatetimeCustomEvent } from '@ionic/core/dist/types/components';
 
 // Styles
 import classes from './styles.module.css';

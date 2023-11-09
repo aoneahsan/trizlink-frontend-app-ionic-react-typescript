@@ -10,7 +10,7 @@ import React, { Suspense } from 'react';
  * */
 import { useParams } from 'react-router';
 import classNames from 'classnames';
-import { menuController } from '@ionic/core/components';
+import { menuController } from '@ionic/core';
 import { filterOutline, refresh } from 'ionicons/icons';
 
 /**
