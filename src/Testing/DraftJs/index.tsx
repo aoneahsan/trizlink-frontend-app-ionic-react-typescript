@@ -20,7 +20,7 @@ import {
   ZIonGrid,
   ZIonRow
 } from '@/components/ZIonComponents';
-import { ZTextEditor2 } from '@/components/CustomComponents/ZTextEditor';
+import ZRichTextEditor from '@/components/CustomComponents/ZTextEditor';
 
 /**
  * Global Constants Imports go down
@@ -66,7 +66,7 @@ const DraftJS: React.FC = () => {
           <ZIonRow>
             <ZIonCol>
               <div className='w-1/2 h-1/2'>
-                <ZTextEditor2 />
+                <ZRichTextEditor />
               </div>
             </ZIonCol>
           </ZIonRow>

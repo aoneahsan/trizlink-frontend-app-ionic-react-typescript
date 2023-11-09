@@ -7,6 +7,9 @@ import { type ItemReorderEventDetail } from '@ionic/react';
 import { FieldArray, useFormikContext } from 'formik';
 import { useRecoilState } from 'recoil';
 import classNames from 'classnames';
+import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
 
 // Custom Imports
 import LinkInBioTitleField from '../TitleField';
@@ -21,6 +24,11 @@ import {
 } from '@/components/ZIonComponents';
 import LinkInBioLinkField from '../LinkField';
 import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedButton';
+import ZRichTextEditor from '@/components/CustomComponents/ZTextEditor';
+import LinkInBioPhoneNumberField from '../PhoneNumberField';
+import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
+import LinkInBioEmailField from '../EmailField';
+import LinkInBioObjectField from '../objectField';
 
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
@@ -29,8 +37,10 @@ import { API_URL_ENUM } from '@/utils/enums';
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
 import { ZIcons } from '@/utils/ZIcons';
+import LinkInBioIconField from '../IconField';
 
 // Types
+import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
 import {
   cardDisplayEnum,
   type linkInBioBlockCardItemInterface,
@@ -40,14 +50,6 @@ import {
 
 // Recoil states
 import { LinkInBioPredefinedMessengerPlatformRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
-import LinkInBioIconField from '../IconField';
-import { messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
-import LinkInBioEmailField from '../EmailField';
-import LinkInBioObjectField from '../objectField';
-import ZTextEditor from '@/components/CustomComponents/ZTextEditor';
-import LinkInBioPhoneNumberField from '../PhoneNumberField';
-import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
-import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 
 // Styles
 
@@ -380,7 +382,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                               messengerPlatformsBlockEnum.sms ||
                             _cardItem.messengerCardType ===
                               messengerPlatformsBlockEnum.viber) && (
-                            <ZTextEditor
+                            <ZRichTextEditor
                               placeholder='Message'
                               className='pt-2'
                               testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.textInput}-${_index}`}
@@ -388,11 +390,13 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                                 CONSTANTS.testingSelectors.linkInBio.formPage
                                   .design.blockForm.fields.messenger.textInput
                               }
-                              value={values.cardItems?.[_index].text}
-                              onChange={_value => {
+                              onChange={editorState => {
+                                const rawContentState = convertToRaw(
+                                  editorState.getCurrentContent()
+                                );
                                 void setFieldValue(
                                   `cardItems.${_index}.text`,
-                                  _value,
+                                  draftToHtml(rawContentState),
                                   false
                                 );
                               }}

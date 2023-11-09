@@ -2,7 +2,7 @@
 import React, { lazy, Suspense } from 'react';
 
 // Packages Imports
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 
 // Custom
 import ZaionsRoutes from './utils/constants/RoutesConstants';
@@ -161,7 +161,7 @@ const AppRoutes = (): JSX.Element => {
   return (
     // <IonReactRouter>
     // <IonRouterOutlet>
-    <Switch>
+    <>
       <Suspense fallback={<ZFallbackIonSpinner />}>
         <Route
           exact
@@ -688,7 +688,7 @@ const AppRoutes = (): JSX.Element => {
           component={Z404View}
         /> */}
       </Suspense>
-    </Switch>
+    </>
     // </IonRouterOutlet>
     // </IonReactRouter>
   );

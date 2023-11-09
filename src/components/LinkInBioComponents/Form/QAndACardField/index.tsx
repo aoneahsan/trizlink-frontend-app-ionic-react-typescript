@@ -5,9 +5,11 @@ import React from 'react';
 import { addOutline, appsOutline } from 'ionicons/icons';
 import { type ItemReorderEventDetail } from '@ionic/react';
 import { FieldArray, useFormikContext } from 'formik';
+import { convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
 
 // Custom Imports
-import ZTextEditor from '@/components/CustomComponents/ZTextEditor';
+import ZRichTextEditor from '@/components/CustomComponents/ZTextEditor';
 import LinkInBioTitleField from '../TitleField';
 import {
   ZIonButton,
@@ -124,7 +126,7 @@ const LinkInBioQAndACardField: React.FC = () => {
                             value={values.cardItems?.[_index].title}
                           />
 
-                          <ZTextEditor
+                          <ZRichTextEditor
                             placeholder='Answer'
                             className='mt-3'
                             testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.QAndA.textEditor}-${_index}`}
@@ -132,11 +134,13 @@ const LinkInBioQAndACardField: React.FC = () => {
                               CONSTANTS.testingSelectors.linkInBio.formPage
                                 .design.blockForm.fields.QAndA.textEditor
                             }
-                            value={values.cardItems?.[_index].text}
-                            onChange={_value => {
+                            onChange={editorState => {
+                              const rawContentState = convertToRaw(
+                                editorState.getCurrentContent()
+                              );
                               void setFieldValue(
                                 `cardItems.${_index}.text`,
-                                _value,
+                                draftToHtml(rawContentState),
                                 false
                               );
                             }}

@@ -2,30 +2,35 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { type SyntheticEvent } from 'react';
 
 /**
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import ReactQuill from 'react-quill';
 import { Editor, EditorState, RichUtils } from 'draft-js';
+import classNames from 'classnames';
+import { informationCircleOutline } from 'ionicons/icons';
+// import draftToHtml from 'draftjs-to-html';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
+import ZRTooltip from '@/components/CustomComponents/ZRTooltip';
+import { ZIonButton, ZIonIcon, ZIonTitle } from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { zCreateElementTestingSelector } from '@/utils/helpers';
+import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { type Sources, type DeltaStatic } from 'quill/index';
 
 /**
  * Recoil State Imports go down
@@ -37,12 +42,6 @@ import { type Sources, type DeltaStatic } from 'quill/index';
  * ? Import of style sheet is a style import
  * */
 import 'react-quill/dist/quill.snow.css';
-import { zCreateElementTestingSelector } from '@/utils/helpers';
-import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
-import classNames from 'classnames';
-import { ZIonButton, ZIonIcon, ZIonTitle } from '@/components/ZIonComponents';
-import { informationCircleOutline } from 'ionicons/icons';
-import ZRTooltip from '../ZRTooltip';
 
 /**
  * Images Imports go down
@@ -54,41 +53,13 @@ import ZRTooltip from '../ZRTooltip';
  * ? Like if you have a type for props it should be please Down
  * */
 interface ZTextEditorInterface {
-  value?: ReactQuill.Value;
-  defaultValue?: ReactQuill.Value;
-  bounds?: string | HTMLElement;
   className?: string;
-  children?: React.ReactElement<
-    unknown,
-    string | React.JSXElementConstructor<unknown>
-  >;
-  formats?: string[];
   style?: React.CSSProperties;
-  id?: string;
   placeholder?: string;
   testingselector?: string;
   testinglistselector?: string;
-  onChange?: (
-    value: string,
-    delta: DeltaStatic,
-    source: Sources,
-    editor: ReactQuill.UnprivilegedEditor
-  ) => void;
-  onBlur?: (
-    previousSelection: ReactQuill.Range,
-    source: Sources,
-    editor: ReactQuill.UnprivilegedEditor
-  ) => void;
-  onChangeSelection?: (
-    selection: ReactQuill.Range,
-    source: Sources,
-    editor: ReactQuill.UnprivilegedEditor
-  ) => void;
-}
-
-interface ZTextEditor2Interface {
-  className?: string;
-  style?: React.CSSProperties;
+  onBlur?: (e: SyntheticEvent) => void;
+  onChange?: (editorState: EditorState) => void;
 }
 
 /**
@@ -97,139 +68,165 @@ interface ZTextEditor2Interface {
  * @type {*}
  * */
 
-const ZTextEditor: React.FC<ZTextEditorInterface> = props => {
+const INLINE_STYLES = [
+  { label: 'Bold', style: 'BOLD' },
+  { label: 'Italic', style: 'ITALIC' },
+  { label: 'Underline', style: 'UNDERLINE' },
+  { label: 'Monospace', style: 'CODE' },
+  { label: 'Stripe', style: 'STRIKETHROUGH' }
+];
+
+// const BLOCK_TYPES = [
+//   { label: 'H1', style: 'header-one' },
+//   { label: 'H2', style: 'header-two' },
+//   { label: 'H3', style: 'header-three' },
+//   { label: 'H4', style: 'header-four' },
+//   { label: 'H5', style: 'header-five' },
+//   { label: 'H6', style: 'header-six' },
+//   { label: 'Blockquote', style: 'blockquote' },
+//   { label: 'UL', style: 'unordered-list-item' },
+//   { label: 'OL', style: 'ordered-list-item' },
+//   { label: 'Code Block', style: 'code-block' }
+// ];
+
+const ZRichTextEditor: React.FC<ZTextEditorInterface> = ({
+  className,
+  onBlur,
+  onChange,
+  placeholder,
+  testinglistselector,
+  testingselector
+}) => {
   const _testinglistselector =
-    props.testinglistselector !== undefined
+    testinglistselector !== undefined
       ? {
           ...zCreateElementTestingSelector({
-            _value: props.testinglistselector,
+            _value: testinglistselector,
             _key: zCreateElementTestingSelectorKeyEnum.listSelector
           })
         }
       : {};
 
   const _testingSelector =
-    props.testingselector !== undefined
+    testingselector !== undefined
       ? {
           ...zCreateElementTestingSelector({
-            _value: props.testingselector
+            _value: testingselector
           })
         }
       : {};
 
-  return (
-    <ReactQuill
-      theme='snow'
-      {...props}
-      style={{ ...props.style }}
-      {..._testingSelector}
-      {..._testinglistselector}
-    />
-  );
-};
-
-export const ZTextEditor2: React.FC<ZTextEditor2Interface> = ({
-  className
-}) => {
   const [editorState, setEditorState] = React.useState<EditorState>(() =>
     EditorState.createEmpty()
   );
 
+  // const rawContentState = convertToRaw(editorState.getCurrentContent());
+
+  // useEffect(() => {
+  //   const markup = draftToHtml(rawContentState);
+
+  //   console.log({ markup });
+  // }, [rawContentState]);
+
   const onChangeHandler = (newState: EditorState): void => {
     setEditorState(newState);
   };
-  console.log({ editorState });
 
   return (
-    <>
-      <div
-        className={classNames(className, {
-          'w-full min-h-[10rem] max-h-max border rounded-lg overflow-hidden':
-            true
-        })}>
-        <div className='flex w-full py-2 border-b ion-padding-horizontal ion-align-items-center ion-justify-content-between'>
-          <ZIonTitle className='ion-no-padding'>Rich text editor</ZIonTitle>
+    <div
+      className={classNames(className, {
+        'w-full min-h-[10rem] max-h-max border rounded-lg overflow-hidden': true
+      })}
+      {..._testingSelector}
+      {..._testinglistselector}>
+      <div className='flex w-full py-2 border-b ion-padding-horizontal ion-align-items-center ion-justify-content-between'>
+        <ZIonTitle className='ion-no-padding'>Rich text editor</ZIonTitle>
 
-          <div
-            className='flex first-letter:ion-align-items-center'
-            id='zc-rich-text-editor-id'>
-            <ZIonIcon
-              icon={informationCircleOutline}
-              className='w-6 h-6 cursor-pointer'
-              color='primary'
-            />
-          </div>
-
-          <ZRTooltip anchorSelect='#zc-rich-text-editor-id'>
-            <div className=''>
-              <p>some text here...</p>
-            </div>
-          </ZRTooltip>
-        </div>
-        <div className='flex w-full gap-1 py-2 border-b ion-padding-horizontal ion-align-items-center'>
-          <ZIonButton
-            className='ion-no-margin'
-            size='small'
-            onClick={() => {
-              onChangeHandler(RichUtils.toggleInlineStyle(editorState, 'BOLD'));
-            }}>
-            Bold
-          </ZIonButton>
-
-          <ZIonButton
-            className='ion-no-margin'
-            size='small'
-            onClick={() => {
-              onChangeHandler(
-                RichUtils.toggleInlineStyle(editorState, 'ITALIC')
-              );
-            }}>
-            Italic
-          </ZIonButton>
-
-          <ZIonButton
-            className='ion-no-margin'
-            size='small'
-            onClick={() => {
-              onChangeHandler(
-                RichUtils.toggleInlineStyle(editorState, 'UNDERLINE')
-              );
-            }}>
-            Underline
-          </ZIonButton>
-
-          <ZIonButton
-            className='ion-no-margin'
-            size='small'
-            onClick={() => {
-              onChangeHandler(
-                RichUtils.toggleInlineStyle(editorState, 'STRIKETHROUGH')
-              );
-            }}>
-            Stripe
-          </ZIonButton>
-        </div>
-
-        <div className='ion-padding'>
-          <Editor
-            editorState={editorState}
-            onChange={setEditorState}
-            handleKeyCommand={(command, editorState) => {
-              const newState = RichUtils.handleKeyCommand(editorState, command);
-
-              if (newState !== null) {
-                onChangeHandler(newState);
-                return 'handled';
-              }
-
-              return 'not-handled';
-            }}
+        <div
+          className='flex first-letter:ion-align-items-center'
+          id='zc-rich-text-editor-id'>
+          <ZIonIcon
+            icon={informationCircleOutline}
+            className='w-6 h-6 cursor-pointer'
+            color='primary'
           />
         </div>
+
+        <ZRTooltip anchorSelect='#zc-rich-text-editor-id'>
+          <div className=''>
+            <p>some text here...</p>
+          </div>
+        </ZRTooltip>
       </div>
-      {editorState.getCurrentContent()}
-    </>
+      {/* <div className='flex w-full gap-1 py-2 border-b ion-padding-horizontal ion-align-items-center'>
+        {BLOCK_TYPES?.map((el, index) => {
+          return (
+            <ZIonButton
+              key={index}
+              className='ion-no-margin'
+              size='small'
+              onClick={() => {
+                onChangeHandler(
+                  RichUtils.toggleBlockType(editorState, el?.style)
+                );
+              }}>
+              {el?.label}
+            </ZIonButton>
+          );
+        })}
+      </div> */}
+
+      <div className='flex w-full gap-1 py-2 border-b ion-padding-horizontal ion-align-items-center'>
+        {INLINE_STYLES?.map((el, index) => {
+          return (
+            <ZIonButton
+              key={index}
+              className='ion-no-margin'
+              size='small'
+              onClick={() => {
+                onChangeHandler(
+                  RichUtils.toggleInlineStyle(editorState, el?.style)
+                );
+              }}>
+              {el?.label}
+            </ZIonButton>
+          );
+        })}
+      </div>
+
+      <div className='ion-padding'>
+        <Editor
+          editorState={editorState}
+          onBlur={onBlur}
+          placeholder={placeholder}
+          onChange={(editorState: EditorState) => {
+            setEditorState(() => editorState);
+
+            //
+            if (onChange !== undefined) {
+              onChange(editorState);
+            }
+          }}
+          handleKeyCommand={(command, editorState) => {
+            const newState = RichUtils.handleKeyCommand(editorState, command);
+
+            if (newState !== null) {
+              onChangeHandler(newState);
+              return 'handled';
+            }
+
+            return 'not-handled';
+          }}
+        />
+      </div>
+    </div>
   );
 };
 
-export default ZTextEditor;
+export default ZRichTextEditor;
+
+// <div
+// className='unsetStyles'
+// dangerouslySetInnerHTML={{
+//   __html: draftToHtml(rawContentState)
+// }}></div>

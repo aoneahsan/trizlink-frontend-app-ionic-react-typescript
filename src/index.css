@@ -6,6 +6,16 @@ body {
 @import url('theme/tailwind.css');
 
 @import url('theme/variables.css');
+
+.unsetStyles,
+.unsetStyles * {
+  font-size: unset;
+  font-family: unset;
+  list-style: unset;
+  margin: unset;
+  padding: unset;
+}
+
 a {
   text-decoration: none;
 }

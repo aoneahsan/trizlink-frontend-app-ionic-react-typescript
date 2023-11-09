@@ -31,6 +31,8 @@ import {
 import { useRecoilState } from 'recoil';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
+import { convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
 import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 
 /**
@@ -62,7 +64,7 @@ import LinkInBioEnableField from '@/components/LinkInBioComponents/Form/DateTime
 import LinkInBioSearchField from '@/components/LinkInBioComponents/Form/SearchField';
 import LinkInBioTimezoneField from '@/components/LinkInBioComponents/Form/TimezoneField';
 import ZRoundedButton from '@/components/CustomComponents/ZRoundedButton';
-import ZTextEditor from '@/components/CustomComponents/ZTextEditor';
+import ZRichTextEditor from '@/components/CustomComponents/ZTextEditor';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import ZaionsColorPiker from '@/components/InPageComponents/ZaionsColorPiker';
 import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
@@ -1117,14 +1119,20 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                   <ZIonCol
                     size='12'
                     className='mt-2 mb-4'>
-                    <ZTextEditor
-                      value={values.text}
+                    <ZRichTextEditor
                       testingselector={
                         CONSTANTS.testingSelectors.linkInBio.formPage.design
                           .blockForm.fields.textEditor
                       }
-                      onChange={_value => {
-                        void setFieldValue('text', _value, false);
+                      onChange={editorState => {
+                        const rawContentState = convertToRaw(
+                          editorState.getCurrentContent()
+                        );
+                        void setFieldValue(
+                          'text',
+                          draftToHtml(rawContentState),
+                          false
+                        );
                       }}
                     />
                   </ZIonCol>
