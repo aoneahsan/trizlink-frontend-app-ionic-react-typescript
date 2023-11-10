@@ -63,6 +63,7 @@ import {
 import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
 import {
   useZGetRQCacheData,
+  useZInfiniteQuery,
   useZRQDeleteRequest,
   useZRQGetRequest,
   useZUpdateRQCacheData
@@ -300,6 +301,7 @@ const ZInpageTable: React.FC = () => {
   const [compState, setCompState] = useState<{
     selectedShortLinkId?: string;
     totalShortLinks?: number;
+    pageIndex?: number;
   }>({
     totalShortLinks: 0
   });
@@ -365,28 +367,30 @@ const ZInpageTable: React.FC = () => {
       _extractType: ZRQGetRequestExtractEnum.extractData
     });
 
-  // const { data: ShortLinksInfiniteQueryData } = useZInfiniteQuery({
-  //   _url: API_URL_ENUM.shortLinks_list,
-  //   _key: [
-  //     CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
-  //     workspaceId ?? '',
-  //     String(pageindex),
-  //     'testing'
-  //   ],
-  //   _shouldFetchWhenIdPassed: !((workspaceId?.trim()?.length ?? 0) > 0),
-  //   _itemsIds: [workspaceId ?? '', String(pageindex), String(pagesize)],
-  //   _urlDynamicParts: [
-  //     CONSTANTS.RouteParams.workspace.workspaceId,
-  //     CONSTANTS.RouteParams.pageNumber,
-  //     CONSTANTS.RouteParams.paginationLimit
-  //   ],
-  //   _showLoader: false,
-  //   _extractType: ZRQGetRequestExtractEnum.extractData
-  // });
-
-  // console.log({
-  //   ShortLinksInfiniteQueryData
-  // });
+  const {
+    data: ShortLinksInfiniteQueryData,
+    fetchNextPage: ShortLinksInfiniteQueryFetchNextPage
+  } = useZInfiniteQuery<unknown[]>({
+    _url: API_URL_ENUM.shortLinks_list,
+    _key: [
+      CONSTANTS.REACT_QUERY.QUERIES_KEYS.SHORT_LINKS.MAIN,
+      workspaceId ?? '',
+      // String(pageindex),
+      'testing'
+    ],
+    _shouldFetchWhenIdPassed: !((workspaceId?.trim()?.length ?? 0) > 0),
+    _itemsIds: [workspaceId ?? '', String(pageindex), String(pagesize)],
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.workspaceId,
+      CONSTANTS.RouteParams.pageNumber,
+      CONSTANTS.RouteParams.paginationLimit
+    ],
+    _showLoader: false,
+    _extractType: ZRQGetRequestExtractEnum.extractPage,
+    _pageParam: Number(pageindex)
+  });
+  // console.log({ ShortLinksInfiniteQueryData });
+  // console.log({ hasNextPage, isFetching, isFetchingNextPage, status });
 
   // Request for getting share workspace short links data.
   const { data: swsShortLinksData } = useZRQGetRequest<ShortLinkType[]>({
@@ -1231,6 +1235,23 @@ const ZInpageTable: React.FC = () => {
                     })
                   );
                 }
+
+                setTimeout(() => {
+                  void (async () => {
+                    const pagesIndex = Array.from(
+                      ShortLinksInfiniteQueryData as unknown[],
+                      el =>
+                        (el as { data: { currentPage: number } })?.data
+                          ?.currentPage
+                    );
+
+                    // console.log({ pagesIndex, pageindex });
+
+                    if (!pagesIndex?.includes(Number(pageindex) + 1)) {
+                      await ShortLinksInfiniteQueryFetchNextPage();
+                    }
+                  })();
+                }, 100);
               }
             }}>
             <ZIonIcon

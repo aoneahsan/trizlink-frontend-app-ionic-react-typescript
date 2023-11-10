@@ -10,7 +10,8 @@ import {
   useQueryClient,
   type UseQueryResult,
   type UseInfiniteQueryResult,
-  type UseMutationResult
+  type UseMutationResult,
+  type InfiniteData
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useResetRecoilState, useRecoilValue } from 'recoil';
@@ -292,6 +293,8 @@ export const useZInfiniteQuery = <T>({
   _staleTime = 10 * 60000,
   _checkPermissions = true,
   _showAlertOnError = true,
+  _initialPageParam = 0,
+  _pageParam = 0,
   _queryOptions = {
     refetchOnWindowFocus: false,
     networkMode: 'offlineFirst',
@@ -310,13 +313,18 @@ export const useZInfiniteQuery = <T>({
   _staleTime?: number | typeof Infinity;
   _checkPermissions?: boolean;
   _showAlertOnError?: boolean;
+  _initialPageParam?: number;
+  _pageParam?: number;
 
   _queryOptions?: {
     refetchOnWindowFocus?: boolean;
     networkMode?: 'always' | 'offlineFirst' | 'online';
     retry?: number;
   };
-}): UseInfiniteQueryResult => {
+}): UseInfiniteQueryResult<
+  T | InfiniteData<T | null | undefined> | undefined,
+  Error
+> => {
   const { presentZIonErrorAlert } = useZIonErrorAlert();
   const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
   const resetUserAccountState = useResetRecoilState(
@@ -342,7 +350,11 @@ export const useZInfiniteQuery = <T>({
         }
       }
 
-      if (_shouldFetchWhenIdPassed !== undefined) {
+      if (
+        _shouldFetchWhenIdPassed === true &&
+        _shouldFetchWhenIdPassed !== undefined &&
+        _shouldFetchWhenIdPassed !== null
+      ) {
         return null;
       } else {
         // Present ion loading before api start
@@ -373,24 +385,52 @@ export const useZInfiniteQuery = <T>({
         });
       }
     },
-    initialPageParam: 0,
-    getPreviousPageParam: firstPage => {
-      return (firstPage as { previousId: unknown })?.previousId ?? undefined;
+    initialPageParam: _initialPageParam,
+
+    getPreviousPageParam: data => {
+      return (data as { previousId: unknown })?.previousId ?? undefined;
     },
-    getNextPageParam: lastPage => {
-      return (lastPage as { nextId: unknown })?.nextId ?? undefined;
+    getNextPageParam: (data, pages) => {
+      const pagesIndex = Array.from(
+        pages,
+        el =>
+          (el as unknown as { data: { currentPage: number } })?.data
+            ?.currentPage
+      );
+      // console.log({ pagesIndex, _pageParam });
+
+      if (
+        pagesIndex !== undefined &&
+        pagesIndex !== null &&
+        !pagesIndex?.includes(_pageParam)
+      ) {
+        return true;
+      }
+      return false;
     },
     select: data => {
+      const _data = data as { pages: unknown[]; pageParams: number[] };
+
+      // _data?.pages?.map(el => el)
+      const _items = Array.from(_data?.pages, el => [
+        ...(el as { data: { items: unknown[] } })?.data?.items
+      ]);
+      console.log({ _items });
       if (_shouldExtractData) {
         switch (_extractType) {
           case ZRQGetRequestExtractEnum.extractItems:
-            return (data as unknown as { data: { items: T } })?.data?.items;
+            return (data as unknown as { pages: { data: { items: T } } })?.pages
+              ?.data?.items;
 
           case ZRQGetRequestExtractEnum.extractItem:
-            return (data as unknown as { data: { item: T } })?.data?.item;
+            return (data as unknown as { pages: { data: { item: T } } })?.pages
+              ?.data?.item;
 
           case ZRQGetRequestExtractEnum.extractData:
-            return (data as unknown as { data: T })?.data;
+            return (data as unknown as { pages: { data: T } })?.pages?.data;
+
+          case ZRQGetRequestExtractEnum.extractPage:
+            return (data as unknown as { pages: T })?.pages;
 
           default:
             return data;
@@ -403,7 +443,7 @@ export const useZInfiniteQuery = <T>({
     staleTime: _staleTime
   });
 
-  if (_response?.error !== undefined) {
+  if (_response?.error !== undefined && _response?.error !== null) {
     void (async () => {
       const error = _response.error;
       // need to dismiss the loader first, then showing error just so, user will not get redirected to login without knowing that there was a authenticated error
