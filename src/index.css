@@ -534,8 +534,9 @@ span.new {
   --height: 350px;
 }
 .z-notification-popover-size {
-  --width: 500px;
-  --height: 450px;
+  --width: 40rem;
+  --height: 40rem;
+  --min-height: 20rem;
 }
 .z-notification-popover-size .popover-viewport {
   overflow: hidden;

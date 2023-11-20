@@ -11,4 +11,5 @@ export interface ZaionsRSelectOptions {
   readonly isFixed?: boolean;
   readonly isDisabled?: boolean;
   readonly className?: string;
+  readonly extraData?: string;
 }

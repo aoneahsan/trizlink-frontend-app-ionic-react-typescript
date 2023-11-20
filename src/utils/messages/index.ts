@@ -186,6 +186,8 @@ const FORM_VALIDATIONS = {
 };
 
 const USER = {
+  USER_NOTIFICATION_SETTING_SAVE:
+    'Bingo! successfully updated the personal notification settings.',
   ADD_EMAIL:
     'Congratulations on taking the first step! A verification code has been sent to your new email.',
   PASSWORD_CHANGE:
@@ -325,7 +327,9 @@ const WORKSPACE = {
     SUB_HEADER: 'Confirm Your Move!',
     MESSAGES:
       'If you choose to leave this workspace you will lose access to all data (posts, comments, pages, etc.). You can regain your access in the future if someone else will invite you back in the workspace.'
-  }
+  },
+  WS_SETTINGS_UPDATED:
+    'Bingo! successfully updated the workspace notification settings.'
 };
 
 const PIXEL_ACCOUNT = {

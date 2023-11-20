@@ -1618,6 +1618,13 @@ export const zGetRoutePermissions = ({
         _permissions = [permissionsEnum.viewAny_emails];
         break;
 
+      case ZaionsRoutes.AdminPanel.Setting.UserAccount.WSNotificationSettings:
+        _permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.viewAny_shareWS
+        ];
+        break;
+
       case ZaionsRoutes.AdminPanel.Setting.UserAccount.WorkspaceNotifications:
         _permissions = [
           permissionsEnum.viewAny_workspace,

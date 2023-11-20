@@ -65,6 +65,7 @@ import {
  * ? Import of recoil states is a Recoil State import
  * */
 import { FolderFormState } from '@/ZaionsStore/FormStates/folderFormState.recoil';
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 /**
  * Images Imports go down
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
@@ -93,6 +94,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
 }) => {
   // Custom Hooks
   const { zNavigatePushRoute } = useZNavigate();
+  const { isXlScale } = useZMediaQueryScale();
 
   // getting current workspace id form params.
   const { workspaceId, wsShareId, shareWSMemberId } = useParams<{
@@ -119,15 +121,26 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
       // }
     >
       <ZCustomScrollable
-        className='w-full h-full ion-padding-top ion-padding'
+        className={classNames({
+          'w-full h-full': true,
+          'ion-padding': isXlScale,
+          'px-3': !isXlScale
+        })}
         scrollY={true}>
         <ZIonList
           lines='none'
-          className='w-full ion-padding'>
+          className={classNames({
+            'w-full': true,
+            'ion-padding': isXlScale
+          })}>
           <ZIonItem className='ion-no-padding'>
             <ZIonText
               color='primary'
-              className='block text-xl font-bold'>
+              className={classNames({
+                'block font-bold': true,
+                'text-xl': isXlScale,
+                'text-lg': !isXlScale
+              })}>
               {type === AdminPanelSidebarMenuPageEnum.shortLink
                 ? 'All short links '
                 : type === AdminPanelSidebarMenuPageEnum.linkInBio
@@ -167,6 +180,14 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
               minHeight='2.2rem'
               className='cursor-pointer ion-activatable ripple-parent'
               testingselector={`${CONSTANTS.testingSelectors.folder.singleFolder}-default-${type}`}
+              style={
+                !isXlScale
+                  ? {
+                      '--padding-start': '8px',
+                      '--padding-end': '8px'
+                    }
+                  : undefined
+              }
               onClick={() => {
                 switch (type) {
                   case AdminPanelSidebarMenuPageEnum.shortLink:
@@ -320,6 +341,14 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                     <ZIonItem
                       data-folder-id={el.id}
                       minHeight='2.2rem'
+                      style={
+                        !isXlScale
+                          ? {
+                              '--padding-start': '8px',
+                              '--padding-end': '8px'
+                            }
+                          : undefined
+                      }
                       className={classNames({
                         'cursor-pointer ion-activatable ripple-parent': true,
                         'zaions-short-link-folder':
@@ -526,6 +555,14 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
             [1, 2, 3].map(el => (
               <ZIonItem
                 key={el}
+                style={
+                  !isXlScale
+                    ? {
+                        '--padding-start': '8px',
+                        '--padding-end': '8px'
+                      }
+                    : undefined
+                }
                 className={classNames({
                   'cursor-pointer ': true,
                   'zaions-short-link-folder':
@@ -593,7 +630,10 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
               : []
           }>
           <ZIonButton
-            className='ion-text-capitalize ion-margin-horizontal'
+            className={classNames({
+              'ion-text-capitalize': true,
+              'ion-margin-horizontal': isXlScale
+            })}
             fill='outline'
             expand='block'
             onClick={addNewFolderButtonOnClickHandler}

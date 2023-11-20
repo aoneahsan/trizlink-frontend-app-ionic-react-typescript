@@ -208,6 +208,26 @@ export enum permissionsEnum {
   restore_utmTag = 'restore_utmTag',
   forceDelete_utmTag = 'forceDelete_utmTag',
 
+  // User Notifications Settings
+  viewAny_USNotificationSettings = 'viewAny_USNotificationSettings',
+  view_USNotificationSettings = 'view_USNotificationSettings',
+  create_USNotificationSettings = 'create_USNotificationSettings',
+  update_USNotificationSettings = 'update_USNotificationSettings',
+  delete_USNotificationSettings = 'delete_USNotificationSettings',
+  replicate_USNotificationSettings = 'replicate_USNotificationSettings',
+  restore_USNotificationSettings = 'restore_USNotificationSettings',
+  forceDelete_USNotificationSettings = 'forceDelete_USNotificationSettings',
+
+  // Workspace Notifications Settings
+  viewAny_WSNotificationSettings = 'viewAny_WSNotificationSettings',
+  view_WSNotificationSettings = 'view_WSNotificationSettings',
+  create_WSNotificationSettings = 'create_WSNotificationSettings',
+  update_WSNotificationSettings = 'update_WSNotificationSettings',
+  delete_WSNotificationSettings = 'delete_WSNotificationSettings',
+  replicate_WSNotificationSettings = 'replicate_WSNotificationSettings',
+  restore_WSNotificationSettings = 'restore_WSNotificationSettings',
+  forceDelete_WSNotificationSettings = 'forceDelete_WSNotificationSettings',
+
   viewAny_USSettings = 'viewAny_USSettings',
   view_USSettings = 'view_USSettings',
   create_USSettings = 'create_USSettings',

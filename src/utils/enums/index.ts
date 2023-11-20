@@ -67,6 +67,14 @@ export enum API_URL_ENUM {
   userAccountUtmTags_create_list = 'userAccountUtmTags_create_list',
   userAccountUtmTags_update_delete = 'userAccountUtmTags_update_delete',
 
+  // User notification settings
+  us_notification_setting_get_create = 'us_notification_setting_get_create',
+  us_notification_setting_update = 'us_notification_setting_update',
+
+  // Workspace notification settings
+  ws_notification_setting_get_create = 'ws_notification_setting_get_create',
+  ws_notification_setting_update = 'ws_notification_setting_update',
+
   // Share workspace Utm tags
   sws_utm_tag_create_list = 'sws_utm_tag_create_list',
   sws_utm_tag_update_delete = 'sws_utm_tag_update_delete',

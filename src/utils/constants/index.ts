@@ -77,6 +77,7 @@ const RouteParams = {
 
   user: {
     itemId: ':itemId',
+    type: ':type',
     notification: {
       type: ':type',
       id: ':id'
@@ -171,6 +172,14 @@ export const API_URLS = {
   userAccountUtmTags_create_list: `/user/workspace/${RouteParams.workspace.workspaceId}/utm-tag`,
   userAccountUtmTags_update_delete: `/user/workspace/${RouteParams.workspace.workspaceId}/utm-tag/${RouteParams.utmTag.utmTagId}`,
 
+  // User notification settings
+  us_notification_setting_get_create: '/user/us-notification-setting',
+  us_notification_setting_update: `/user/us-notification-setting/${RouteParams.user.itemId}`,
+
+  // Workspace notification settings
+  ws_notification_setting_get_create: `/user/ws-notification-setting/${RouteParams.workspace.workspaceId}/${RouteParams.user.type}`,
+  ws_notification_setting_update: `/user/ws-notification-setting/${RouteParams.workspace.workspaceId}/wsn/${RouteParams.user.itemId}`,
+
   // Share workspace Utm tags
   sws_utm_tag_create_list: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/utm-tag`,
   sws_utm_tag_update_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/utm-tag/${RouteParams.utmTag.utmTagId}`,
@@ -187,7 +196,7 @@ export const API_URLS = {
   set_password: '/user/set-password',
   set_username_password: '/user/set-username-password',
 
-  user_unread_notifications_list: '/user/notification',
+  user_unread_notifications_list: `/user/notification/type/${RouteParams.user.notification.type}`,
   user_notification_mark_as_read: `/user/notification/markAsRead/${RouteParams.user.notification.id}`,
   user_notification_mark_all_as_read: '/user/notification/markAllAsRead',
 
@@ -1270,7 +1279,8 @@ const testingSelectors = {
     notificationPopover: {
       tabs: {
         approvalRequests: 'tb-np-approval-requests-btn',
-        updates: 'tb-np-updates-btn'
+        updates: 'tb-np-updates-btn',
+        personal: 'tb-np-personal-btn'
       },
       markAllAsReadBtn: 'tb-np-masr-btn',
       settingsBtn: 'tb-np-settings-btn',
@@ -1671,6 +1681,12 @@ const REACT_QUERY = {
 
         SWS_MAIN: 'rq-sws-user-setting-main-key',
         SWS_GET: 'rq-sws-user-setting-get-key'
+      },
+      NOTIFICATION_SETTING: {
+        GET: 'rq-user-notification-setting-get-key'
+      },
+      WORKSPACE_NOTIFICATION_SETTING: {
+        GET: 'rq-workspace-notification-setting-get-key'
       }
     }
   }

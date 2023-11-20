@@ -12,6 +12,12 @@ export enum SignUpTypeEnum {
   invite = 'invite'
 }
 
+export enum USNotificationSettingFrequencyEnum {
+  all = 'all',
+  suggested = 'suggested',
+  required = 'required'
+}
+
 // Interfaces
 export interface UserRoleAndPermissionsInterface {
   role: string;
@@ -36,6 +42,41 @@ export interface EmailAddressInterface {
   optExpireTime: string;
   isPrimary: boolean;
   verifiedAt: string;
+}
+
+export interface IUSNotificationSettingInner {
+  inApp: boolean;
+  email: boolean;
+  push: boolean;
+  sms: boolean;
+}
+
+export interface IUSNotificationSetting {
+  id?: string;
+  invitationNotification: IUSNotificationSettingInner;
+  newDeviceLogin: IUSNotificationSettingInner;
+  passwordReset: IUSNotificationSettingInner;
+  otherNotification: IUSNotificationSettingInner;
+  browser: {
+    push: boolean;
+    playSoundInNotification: boolean;
+    playSoundInMessage: boolean;
+  };
+  email: {
+    frequency: USNotificationSettingFrequencyEnum;
+    notifications: {
+      otherNotifications: boolean;
+    };
+  };
+  sms: {
+    frequency: USNotificationSettingFrequencyEnum;
+  };
+}
+
+export interface IWSNotificationSetting {
+  id?: string;
+  notificationOnProfile: boolean;
+  allowPushNotification: boolean;
 }
 
 // Type

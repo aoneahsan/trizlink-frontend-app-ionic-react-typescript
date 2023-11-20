@@ -12,6 +12,7 @@ import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
 import { menuController, type RefresherEventDetail } from '@ionic/core';
 import {
+  albumsOutline,
   closeOutline,
   notificationsOutline,
   personOutline
@@ -28,6 +29,9 @@ import {
   ZIonHeader,
   ZIonIcon,
   ZIonItem,
+  ZIonItemDivider,
+  ZIonItemGroup,
+  ZIonLabel,
   ZIonList,
   ZIonMenu,
   ZIonRefresher,
@@ -40,7 +44,8 @@ import ZIonPage from '@/components/ZIonPage';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
 import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 import ZProfileSettingsSettings from './ProfileSettings';
-import ZNotificationSettings from './NotificationsSettings';
+import ZPersonalSettings from './PersonalSettings';
+import ZSingleWSNotificationSettings from './SingleWSNotificationSettings';
 
 /**
  * Custom Hooks Imports go down
@@ -55,7 +60,7 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import { reportCustomError } from '@/utils/customErrorType';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import CONSTANTS from '@/utils/constants';
-import ZWSNotificationSettings from './WSNotificationSettings';
+import WorkspacesSettings from './WorkspacesSettings';
 const ZAdminPanelTopBar = lazy(
   () => import('@/components/AdminPanelComponents/TopBar')
 );
@@ -106,7 +111,11 @@ const ZUserAccount: React.FC = () => {
     ZaionsRoutes.AdminPanel.Setting.UserAccount.NotificationSettings
   )?.isExact;
 
-  const isWorkspaceNotificationPage = useRouteMatch(
+  const isWorkspacesNotificationPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.UserAccount.WSNotificationSettings
+  )?.isExact;
+
+  const isSingleWorkspaceNotificationPage = useRouteMatch(
     ZaionsRoutes.AdminPanel.Setting.UserAccount.WorkspaceNotifications
   )?.isExact;
   // #endregion
@@ -171,32 +180,6 @@ const ZUserAccount: React.FC = () => {
                 <ZIonList
                   lines='none'
                   className='mt-3'>
-                  {/* Notifications settings */}
-                  <ZIonItem
-                    minHeight='2.2rem'
-                    testingselector={
-                      CONSTANTS.testingSelectors.userAccount.ionMenu
-                        .notificationSettings
-                    }
-                    routerLink={
-                      ZaionsRoutes.AdminPanel.Setting.UserAccount
-                        .NotificationSettings
-                    }
-                    className={classNames({
-                      zaions__light_bg:
-                        isNotificationSettingsPage ??
-                        isWorkspaceNotificationPage
-                    })}>
-                    <ZIonIcon
-                      icon={notificationsOutline}
-                      className='w-6 h-6 me-2'
-                      color='dark'
-                    />
-                    <ZIonText className='font-semibold'>
-                      Notification settings
-                    </ZIonText>
-                  </ZIonItem>
-
                   {/* Profile settings */}
                   <ZIonItem
                     minHeight='2.2rem'
@@ -209,7 +192,6 @@ const ZUserAccount: React.FC = () => {
                         .ProfileSettings
                     }
                     className={classNames({
-                      'mt-2': true,
                       zaions__light_bg: isProfileSettingsPage
                     })}>
                     <ZIonIcon
@@ -221,6 +203,64 @@ const ZUserAccount: React.FC = () => {
                       Profile settings
                     </ZIonText>
                   </ZIonItem>
+
+                  {/* Notifications settings */}
+                  <ZIonItemGroup className='mt-2'>
+                    <ZIonItemDivider>
+                      <ZIonLabel className='ion-no-margin'>
+                        Notification settings
+                      </ZIonLabel>
+                    </ZIonItemDivider>
+
+                    <ZIonItem
+                      minHeight='2.2rem'
+                      testingselector={
+                        CONSTANTS.testingSelectors.userAccount.ionMenu
+                          .notificationSettings
+                      }
+                      routerLink={
+                        ZaionsRoutes.AdminPanel.Setting.UserAccount
+                          .NotificationSettings
+                      }
+                      className={classNames({
+                        zaions__light_bg: isNotificationSettingsPage
+                      })}>
+                      <ZIonIcon
+                        icon={notificationsOutline}
+                        className='w-6 h-6 me-2'
+                        color='dark'
+                      />
+                      <ZIonText className='font-semibold'>
+                        Personal settings
+                      </ZIonText>
+                    </ZIonItem>
+
+                    <ZIonItem
+                      minHeight='2.2rem'
+                      testingselector={
+                        CONSTANTS.testingSelectors.userAccount.menuBar
+                          .notificationSettings
+                      }
+                      routerLink={
+                        ZaionsRoutes.AdminPanel.Setting.UserAccount
+                          .WSNotificationSettings
+                      }
+                      className={classNames({
+                        'mt-2': true,
+                        zaions__light_bg:
+                          isWorkspacesNotificationPage === true ||
+                          isSingleWorkspaceNotificationPage === true
+                      })}>
+                      <ZIonIcon
+                        icon={albumsOutline}
+                        className='w-6 h-6 me-2'
+                        color='dark'
+                      />
+                      <ZIonText className='font-semibold'>
+                        Workspaces Notification settings
+                      </ZIonText>
+                    </ZIonItem>
+                  </ZIonItemGroup>
                 </ZIonList>
               </ZIonCol>
             </ZIonRow>
@@ -292,32 +332,6 @@ const ZUserAccount: React.FC = () => {
                     <ZIonList
                       lines='none'
                       className='mt-3'>
-                      {/* Notifications settings */}
-                      <ZIonItem
-                        minHeight='2.2rem'
-                        testingselector={
-                          CONSTANTS.testingSelectors.userAccount.menuBar
-                            .notificationSettings
-                        }
-                        routerLink={
-                          ZaionsRoutes.AdminPanel.Setting.UserAccount
-                            .NotificationSettings
-                        }
-                        className={classNames({
-                          zaions__light_bg:
-                            isNotificationSettingsPage ??
-                            isWorkspaceNotificationPage
-                        })}>
-                        <ZIonIcon
-                          icon={notificationsOutline}
-                          className='w-6 h-6 me-2'
-                          color='dark'
-                        />
-                        <ZIonText className='font-semibold'>
-                          Notification settings
-                        </ZIonText>
-                      </ZIonItem>
-
                       {/* Profile settings */}
                       <ZIonItem
                         minHeight='2.2rem'
@@ -330,7 +344,6 @@ const ZUserAccount: React.FC = () => {
                             .ProfileSettings
                         }
                         className={classNames({
-                          'mt-2': true,
                           zaions__light_bg: isProfileSettingsPage
                         })}>
                         <ZIonIcon
@@ -342,6 +355,64 @@ const ZUserAccount: React.FC = () => {
                           Profile settings
                         </ZIonText>
                       </ZIonItem>
+
+                      {/* Notifications settings */}
+                      <ZIonItemGroup className='mt-2'>
+                        <ZIonItemDivider>
+                          <ZIonLabel className='ion-no-margin'>
+                            Notification settings
+                          </ZIonLabel>
+                        </ZIonItemDivider>
+
+                        <ZIonItem
+                          minHeight='2.2rem'
+                          testingselector={
+                            CONSTANTS.testingSelectors.userAccount.menuBar
+                              .notificationSettings
+                          }
+                          routerLink={
+                            ZaionsRoutes.AdminPanel.Setting.UserAccount
+                              .NotificationSettings
+                          }
+                          className={classNames({
+                            zaions__light_bg: isNotificationSettingsPage
+                          })}>
+                          <ZIonIcon
+                            icon={notificationsOutline}
+                            className='w-6 h-6 me-2'
+                            color='dark'
+                          />
+                          <ZIonText className='font-semibold'>
+                            Personal settings
+                          </ZIonText>
+                        </ZIonItem>
+
+                        <ZIonItem
+                          minHeight='2.2rem'
+                          testingselector={
+                            CONSTANTS.testingSelectors.userAccount.menuBar
+                              .notificationSettings
+                          }
+                          routerLink={
+                            ZaionsRoutes.AdminPanel.Setting.UserAccount
+                              .WSNotificationSettings
+                          }
+                          className={classNames({
+                            'mt-2': true,
+                            zaions__light_bg:
+                              isWorkspacesNotificationPage === true ||
+                              isSingleWorkspaceNotificationPage === true
+                          })}>
+                          <ZIonIcon
+                            icon={albumsOutline}
+                            className='w-6 h-6 me-2'
+                            color='dark'
+                          />
+                          <ZIonText className='font-semibold'>
+                            Workspaces Notification settings
+                          </ZIonText>
+                        </ZIonItem>
+                      </ZIonItemGroup>
                     </ZIonList>
                   </ZIonCol>
                 </Suspense>
@@ -394,7 +465,11 @@ const ZInpageMainContent: React.FC = () => {
     ZaionsRoutes.AdminPanel.Setting.UserAccount.NotificationSettings
   )?.isExact;
 
-  const isWorkspaceNotificationPage = useRouteMatch(
+  const isWorkspacesNotificationPage = useRouteMatch(
+    ZaionsRoutes.AdminPanel.Setting.UserAccount.WSNotificationSettings
+  )?.isExact;
+
+  const isSingleWorkspaceNotificationPage = useRouteMatch(
     ZaionsRoutes.AdminPanel.Setting.UserAccount.WorkspaceNotifications
   )?.isExact;
   // #endregion
@@ -413,9 +488,10 @@ const ZInpageMainContent: React.FC = () => {
           </ZIonCol>
         }>
         {isProfileSettingsPage === true ? <ZProfileSettingsSettings /> : null}
-        {isNotificationSettings === true ? <ZNotificationSettings /> : null}
-        {isWorkspaceNotificationPage === true ? (
-          <ZWSNotificationSettings />
+        {isNotificationSettings === true ? <ZPersonalSettings /> : null}
+        {isWorkspacesNotificationPage === true ? <WorkspacesSettings /> : null}
+        {isSingleWorkspaceNotificationPage === true ? (
+          <ZSingleWSNotificationSettings />
         ) : null}
       </Suspense>
     </div>

@@ -2,6 +2,20 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
+import React from 'react';
+
+/**
+ * Packages Imports go down
+ * ? Like import of ionic components is a packages import
+ * */
+import classNames from 'classnames';
+import { arrowBackCircleOutline, notificationsOutline } from 'ionicons/icons';
+import { useParams } from 'react-router';
+
+/**
+ * Custom Imports go down
+ * ? Like import of custom components is a custom import
+ * */
 import ZRCSwitch from '@/components/CustomComponents/ZRCSwitch';
 import ZUserAvatarButton from '@/components/WorkspacesComponents/UserButton';
 import {
@@ -14,41 +28,29 @@ import {
   ZIonText,
   ZIonTitle
 } from '@/components/ZIonComponents';
-import { type workspaceInterface } from '@/types/AdminPanel/workspace';
-import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
-import CONSTANTS from '@/utils/constants';
-import { API_URL_ENUM } from '@/utils/enums';
-import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
-import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import classNames from 'classnames';
-import { notificationsOutline } from 'ionicons/icons';
-import React from 'react';
-import { useParams } from 'react-router';
-
-/**
- * Packages Imports go down
- * ? Like import of ionic components is a packages import
- * */
-
-/**
- * Custom Imports go down
- * ? Like import of custom components is a custom import
- * */
 
 /**
  * Custom Hooks Imports go down
  * ? Like import of custom Hook is a custom import
  * */
+import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
 /**
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import CONSTANTS from '@/utils/constants';
+import { API_URL_ENUM } from '@/utils/enums';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import { type workspaceInterface } from '@/types/AdminPanel/workspace';
+import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 /**
  * Recoil State Imports go down
@@ -76,11 +78,12 @@ import { useParams } from 'react-router';
  * @type {*}
  * */
 
-const ZWSNotificationSettings: React.FC = () => {
+const ZSingleWSNotificationSettings: React.FC = () => {
   const { workspaceId } = useParams<{ workspaceId?: string }>();
 
   // #region Custom hooks.
   const { isSmScale, isLgScale, isMdScale } = useZMediaQueryScale();
+  const { zNavigatePushRoute } = useZNavigate();
   // #endregion
 
   // #region APIS.
@@ -113,15 +116,28 @@ const ZWSNotificationSettings: React.FC = () => {
         className={classNames({
           'mb-2': !isSmScale
         })}>
-        <ZIonTitle
-          className={classNames({
-            'block font-bold ion-no-padding': true,
-            'text-2xl': isLgScale,
-            'text-xl': !isLgScale,
-            'ion-text-center': !isSmScale
-          })}>
-          Workspace notifications settings
-        </ZIonTitle>
+        <div className='flex w-full gap-3 mb-3'>
+          <ZIonIcon
+            icon={arrowBackCircleOutline}
+            className='w-7 h-7 mt-[3px] cursor-pointer'
+            color='primary'
+            onClick={() => {
+              zNavigatePushRoute(
+                ZaionsRoutes.AdminPanel.Setting.UserAccount
+                  .WSNotificationSettings
+              );
+            }}
+          />
+          <ZIonTitle
+            className={classNames({
+              'block font-bold ion-no-padding': true,
+              'text-2xl': isLgScale,
+              'text-xl': !isLgScale,
+              'ion-text-center': !isSmScale
+            })}>
+            Workspace notifications settings
+          </ZIonTitle>
+        </div>
 
         <ZIonItem
           className='mt-2'
@@ -165,7 +181,10 @@ const ZWSNotificationSettings: React.FC = () => {
           <ZIonItem
             className='mx-2'
             style={{ '--padding-start': '10px', '--padding-end': '0px' }}>
-            <ZIonIcon icon={notificationsOutline} />
+            <ZIonIcon
+              icon={notificationsOutline}
+              className='me-3 w-7 h-7'
+            />
 
             <ZIonLabel>
               <ZIonText className='block'>
@@ -200,4 +219,4 @@ const ZWSNotificationSettings: React.FC = () => {
   );
 };
 
-export default ZWSNotificationSettings;
+export default ZSingleWSNotificationSettings;

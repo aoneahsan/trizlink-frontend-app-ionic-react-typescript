@@ -228,7 +228,6 @@ export const useZRQGetRequest = <T>({
         const _error = (error as AxiosError)?.response;
         const _errorMessage = (_error?.data as { errors: { item: string[] } })
           ?.errors?.item[0];
-        console.log({ __errorMessage: _errorMessage });
         // check if it's unauthenticated error
         if (
           _error?.status !== null &&
@@ -248,7 +247,7 @@ export const useZRQGetRequest = <T>({
           void STORAGE.SET(LOCALSTORAGE_KEYS.ERROR_DATA, _data);
 
           // redirect to 404
-          window.location.replace(ZaionsRoutes.Error.Z404);
+          // window.location.replace(ZaionsRoutes.Error.Z404);
         } else {
           // showing error alert...
           void (_showAlertOnError && presentZIonErrorAlert());

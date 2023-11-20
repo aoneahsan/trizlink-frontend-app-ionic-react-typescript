@@ -6,7 +6,9 @@ import Select, {
   type SingleValue,
   type ActionMeta,
   type MultiValue,
-  type PropsValue
+  type PropsValue,
+  type GroupBase,
+  type OptionsOrGroups
 } from 'react-select';
 import classNames from 'classnames';
 
@@ -18,7 +20,10 @@ import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
 import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
 
 interface ZaionsRSelectType {
-  options: readonly ZaionsRSelectOptions[];
+  options: OptionsOrGroups<
+    ZaionsRSelectOptions,
+    GroupBase<ZaionsRSelectOptions>
+  >;
   className?: string;
   closeMenuOnSelect?: boolean;
   isMulti?: boolean;

@@ -1097,8 +1097,8 @@ const ZInpageMainContent: React.FC = () => {
           <ZIonText
             className={classNames({
               'block font-bold ion-no-padding': true,
-              'text-2xl': isLgScale,
-              'text-xl': !isLgScale,
+              'text-2xl': isXlScale,
+              'text-xl': !isXlScale,
               'ion-text-center': !isLgScale
             })}
             // color='medium'

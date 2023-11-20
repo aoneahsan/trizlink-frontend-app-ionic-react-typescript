@@ -68,7 +68,10 @@ export enum ZNotificationEnum {
   newDeviceLogin = 'newDeviceLogin',
   lastLogout = 'lastLogout',
   wsTeamMemberInvitation = 'wsTeamMemberInvitation',
-  wsMemberInviteAction = 'wsMemberInviteAction' // action by invitee in invitee accept
+  wsMemberInviteAction = 'wsMemberInviteAction', // action by invitee in invitee accept
+  personal = 'personal', // all user personal notification like any invitation etc.
+  workspace = 'workspace', // all workspace notification.
+  updates = 'updates' // all app updates notification.
 }
 
 export enum ZTeamMemberInvitationEnum {
