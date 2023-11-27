@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.trizlink.app',
-  appName: 'trizlink',
+  appId: 'com.zaions_tappk.app',
+  appName: 'zaions_tappk',
   webDir: 'dist',
   bundledWebRuntime: false,
   plugins: {

@@ -12,10 +12,10 @@
       "purpose": "maskable"
     }
   ],
-  "id": "com.trizlink.app",
-  "short_name": "trizlink",
-  "name": "Trizlink - Url Shortener, Link-in-bio & Social Media Management SAAS APP - Zaions",
-  "description": "Trizlink - Url Shortener, Link-in-bio & Social Media Management SAAS APP - developed @ Zaions(https://zaions.com/bio), to help you create pretty links for your organization long urls and get many benefits out of them.",
+  "id": "com.zaions_tappk.app",
+  "short_name": "zaions_tappk",
+  "name": "zaions_tappk - Url Shortener, Link-in-bio & Social Media Management SAAS APP - Zaions",
+  "description": "zaions_tappk - Url Shortener, Link-in-bio & Social Media Management SAAS APP - developed @ Zaions(https://zaions.com/bio), to help you create pretty links for your organization long urls and get many benefits out of them.",
   "dir": "auto",
   "lang": "en-US",
   "orientation": "any",
@@ -33,7 +33,7 @@
   "related_applications": [
     {
       "platform": "play",
-      "id": "com.trizlink.app"
+      "id": "com.zaions_tappk.app"
     }
   ],
   "start_url": "/",
