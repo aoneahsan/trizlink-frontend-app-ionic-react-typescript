@@ -11,8 +11,9 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useParams, useRouteMatch } from 'react-router';
 import { useRecoilValue } from 'recoil';
 import classNames from 'classnames';
-import { menuController, type RefresherEventDetail } from '@ionic/core';
+import { type RefresherEventDetail } from '@ionic/core';
 import { closeOutline } from 'ionicons/icons';
+import { menuController } from '@ionic/core/components';
 
 /**
  * Custom Imports go down
@@ -586,8 +587,8 @@ const ZWorkspaceSettings: React.FC = () => {
         {!isMdScale && (
           <ZIonMenu
             side='start'
-            menuId={CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID}
-            contentId={CONSTANTS.MENU_IDS.ADMIN_PANEL_WS_SETTING_PAGE_ID}>
+            menuId={CONSTANTS.MENU_IDS.WS_SETTINGS_MENU_ID}
+            contentId={CONSTANTS.PAGE_IDS.ADMIN_PANEL_WS_SETTING_PAGE_ID}>
             {/* Header */}
             <ZIonHeader className='flex px-3 py-2 border-b shadow-none ion-align-items-center ion-no-padding ion-justify-content-between'>
               <ZIonTitle
@@ -605,7 +606,7 @@ const ZWorkspaceSettings: React.FC = () => {
                 onClick={() => {
                   void (async () => {
                     await menuController.close(
-                      CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
+                      CONSTANTS.MENU_IDS.WS_SETTINGS_MENU_ID
                     );
                   })();
                 }}
@@ -1042,7 +1043,7 @@ const ZWorkspaceSettings: React.FC = () => {
         {/*  */}
         <ZIonPage
           pageTitle='Workspace settings page'
-          id={CONSTANTS.MENU_IDS.ADMIN_PANEL_WS_SETTING_PAGE_ID}>
+          id={CONSTANTS.PAGE_IDS.ADMIN_PANEL_WS_SETTING_PAGE_ID}>
           {/* Content */}
           <ZIonContent>
             {/* IonRefresher */}
@@ -1118,10 +1119,10 @@ const ZWorkspaceSettings: React.FC = () => {
                             // Open the menu by menu-id
                             await menuController.enable(
                               true,
-                              CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
+                              CONSTANTS.MENU_IDS.WS_SETTINGS_MENU_ID
                             );
                             await menuController.open(
-                              CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
+                              CONSTANTS.MENU_IDS.WS_SETTINGS_MENU_ID
                             );
                           })();
                         }}

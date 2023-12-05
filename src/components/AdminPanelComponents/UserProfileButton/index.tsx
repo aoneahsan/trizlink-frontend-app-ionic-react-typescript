@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Packages Imports go down
@@ -69,13 +69,17 @@ const ZUserProfileButton: React.FC<{
   ); // popover hook to show ZWorkspaceProfilePopover
 
   const zUserAccountStateAtom = useRecoilValue(ZaionsUserAccountRStateAtom);
+  const userAvatarUi = useMemo(
+    () => ({
+      name: zUserAccountStateAtom?.username
+    }),
+    [zUserAccountStateAtom?.username]
+  );
 
   return (
     <ZUserAvatarButton
       userAvatar={zUserAccountStateAtom?.avatar}
-      userAvatarUi={{
-        name: zUserAccountStateAtom?.username
-      }}
+      userAvatarUi={userAvatarUi}
       style={{ height, width }}
       onClick={(event: unknown) => {
         presentWorkspaceProfilePopover({

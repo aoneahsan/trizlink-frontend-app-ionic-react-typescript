@@ -1581,6 +1581,14 @@ export const zGetRoutePermissions = ({
         ];
         break;
 
+      case ZaionsRoutes.AdminPanel.LinkInBio.Edit:
+        _permissions = [
+          permissionsEnum.viewAny_workspace,
+          permissionsEnum.view_workspace,
+          permissionsEnum.update_linkInBio
+        ];
+        break;
+
       case ZaionsRoutes.AdminPanel.Setting.AccountSettings.Members:
         _permissions = [
           permissionsEnum.viewAny_workspace,
@@ -1648,6 +1656,10 @@ export const zGetRoutePermissions = ({
         break;
 
       case ZaionsRoutes.AdminPanel.ShareWS.Short_link.Main:
+        _permissions = [permissionsEnum.view_shareWS];
+        break;
+
+      case ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Main:
         _permissions = [permissionsEnum.view_shareWS];
         break;
 
@@ -1946,4 +1958,131 @@ export const zIsPlatforms = (): {
     isPWA,
     isTablet
   };
+};
+
+/**
+ * Checks if the given value is a non-empty string.
+ *
+ * @param value - The string value to be checked.
+ * @returns A boolean indicating whether the string is non-empty or not.
+ */
+export const isZNonEmptyString = (
+  value: string | undefined | null
+): boolean => {
+  return value !== undefined && value !== null && value?.trim()?.length > 0;
+};
+
+/**
+ * Checks if all the values in the given array are non-empty strings.
+ *
+ * @param values - An array of string values to be checked.
+ * @returns A boolean indicating whether all strings in the array are non-empty or not.
+ */
+export const isZNonEmptyStrings = (
+  values: Array<string | undefined | null>
+): boolean => {
+  const _result = values.every(_value => isZNonEmptyString(_value));
+
+  return _result;
+};
+
+export const _getQueryKeyV1 = ({
+  keys,
+  workspaceId,
+  shareWSId,
+  shareWSUniqueId
+}: {
+  keys: string[];
+  workspaceId?: string;
+  shareWSId?: string;
+  shareWSUniqueId?: string;
+}): string[] => {
+  try {
+    if (
+      workspaceId !== undefined &&
+      workspaceId !== null &&
+      workspaceId?.trim()?.length > 0
+    ) {
+      return [...keys, workspaceId];
+    } else if (
+      shareWSId !== undefined &&
+      shareWSId !== null &&
+      shareWSId?.trim()?.length > 0 &&
+      shareWSUniqueId !== undefined &&
+      shareWSUniqueId !== null &&
+      shareWSUniqueId?.trim()?.length > 0
+    ) {
+      return [...keys, shareWSId, shareWSUniqueId];
+    } else {
+      return [...keys];
+    }
+  } catch (error) {
+    reportCustomError(error);
+    return [];
+  }
+};
+
+export const _getQueryKey = ({
+  keys,
+  additionalKeys
+}: {
+  keys: string[];
+  additionalKeys?: Array<string | null | undefined>;
+}): string[] => {
+  try {
+    const result = [...keys];
+    // if (
+    //   workspaceId !== undefined &&
+    //   workspaceId !== null &&
+    //   workspaceId?.trim()?.length > 0
+    // ) {
+    //   result.push(workspaceId);
+    // }
+
+    // if (
+    //   shareWSUniqueId !== undefined &&
+    //   shareWSUniqueId !== null &&
+    //   shareWSUniqueId?.trim()?.length > 0
+    // ) {
+    //   result.push(shareWSUniqueId);
+    // }
+
+    if (
+      additionalKeys !== null &&
+      additionalKeys !== undefined &&
+      additionalKeys.length > 0
+    ) {
+      for (let i = 0; i < additionalKeys.length; i++) {
+        const element = additionalKeys[i];
+        if (
+          element !== undefined &&
+          element !== null &&
+          element?.trim()?.length > 0
+        ) {
+          result.push(element);
+        }
+      }
+    }
+
+    return result;
+  } catch (error) {
+    reportCustomError(error);
+    return [];
+  }
+};
+
+export const shouldNotBeNullUndefined = <R>(val: unknown): R | undefined => {
+  try {
+    if (val !== null && val !== undefined) {
+      if (typeof val === 'string' && val.trim().length > 0) {
+        return val as R;
+      } else {
+        return val as R;
+      }
+    } else {
+      return undefined;
+    }
+  } catch (error) {
+    return undefined;
+  }
 };

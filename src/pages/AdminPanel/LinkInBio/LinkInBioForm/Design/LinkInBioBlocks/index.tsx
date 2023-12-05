@@ -33,7 +33,7 @@ import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
  * ? Like import of Constant is a global constants import
  * */
 import { reportCustomError } from '@/utils/customErrorType';
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
 
 import CONSTANTS from '@/utils/constants';
 import { ZIcons } from '@/utils/ZIcons';
@@ -65,6 +65,11 @@ import { LinkInBioBlocksDefaultData } from '@/data/UserDashboard/LinkInBio/Block
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import classes from '../styles.module.css';
+import {
+  _getQueryKey,
+  isZNonEmptyString,
+  isZNonEmptyStrings
+} from '@/utils/helpers';
 const ZLinkInBioAddBlockModal = lazy(
   async () =>
     await import(
@@ -96,9 +101,11 @@ const ZLinkInBioBlocksSection: React.FC = () => {
   // useRecoilState(LinkInBioPredefinedBlocksRState);
 
   // getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio blocks of that id will be fetch from backend.
-  const { linkInBioId, workspaceId } = useParams<{
+  const { linkInBioId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
     linkInBioId?: string;
     workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // custom hook for presenting modal (the add block modal)
@@ -110,7 +117,9 @@ const ZLinkInBioBlocksSection: React.FC = () => {
         LinkInBioBlocksDefaultData[values.LinkInBioBlock as string],
       setFieldValue, // passing setFieldValue to ZLinkInBioAddBlockModal component.
       linkInBioId,
-      workspaceId
+      workspaceId,
+      shareWSMemberId,
+      wsShareId
     }
   );
 
@@ -120,17 +129,36 @@ const ZLinkInBioBlocksSection: React.FC = () => {
     isFetching: isLinkInBioPreDefinedBlocksDataFetching
   } = useZRQGetRequest<LinkInBioPredefinedBlocksInterface[]>({
     _url: API_URL_ENUM.linkInBioPreDefinedBlocks_create_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_DEFINED_BLOCKS.MAIN,
-      workspaceId ?? '',
-      linkInBioId ?? ''
-    ]
+    _key: _getQueryKey({
+      keys: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_DEFINED_BLOCKS.MAIN
+      ],
+      additionalKeys: [workspaceId, wsShareId, shareWSMemberId, linkInBioId]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId]
+    }),
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
+    ],
+    _shouldFetchWhenIdPassed: !(
+      isZNonEmptyStrings([workspaceId, linkInBioId]) ||
+      isZNonEmptyStrings([wsShareId, shareWSMemberId, linkInBioId])
+    )
   });
 
   // the LinkInBioBlockHandler function will run then the user click on any of the blocks this will execute the presentZLinkInBioAddBlockModal function which is coming from the useZIonModal to present modal...
   const LinkInBioBlockHandler = (_type: LinkInBioBlockEnum): void => {
     try {
-      if (_type !== undefined) {
+      if (_type !== undefined && _type !== null) {
         presentZLinkInBioAddBlockModal({
           _cssClass: 'lib-block-modal-size'
         });
@@ -211,7 +239,7 @@ const ZLinkInBioBlocksSection: React.FC = () => {
                 <div className='ion-text-center me-3 w-max'>
                   <LinkInBioPDButton
                     icon={
-                      el.icon !== undefined
+                      el.icon !== undefined && el.icon !== null
                         ? ZIcons[el.icon]
                         : ZIcons.PlaceHolder
                     }

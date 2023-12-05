@@ -152,7 +152,8 @@ const ZaionsRoutes = {
         Edit: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/short-links/edit/${CONSTANTS.RouteParams.editShortLinkIdParam}`
       },
       Link_in_bio: {
-        Main: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/link-in-bio/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`
+        Main: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/link-in-bio/list/${CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
+        Edit: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/link-in-bio/edit/${CONSTANTS.RouteParams.linkInBio.linkInBioId}`
       },
       AccountSettings: {
         Main: `${ZPrivateRoutePath}/s/ws/${wsShareId}/member/${shareWSMemberId}/settings`,
@@ -212,7 +213,7 @@ const ZaionsRoutes = {
       Main: '/testing/testing-draft-js'
     }
   }
-};
+} as const;
 
 export const ZRoutesRedirects = {
   // Redirects

@@ -41,7 +41,10 @@ export const FilteredLinkInBioLinksDataSelector = selector<
     const _filterOptions = get(LinkInBiosFilterOptionsRStateAtom);
     let _filterLinksData: LinkInBioType[] | undefined = linkInBiosStateAtom;
     // check's
-    if (linkInBiosStateAtom?.length !== undefined) {
+    if (
+      linkInBiosStateAtom?.length !== undefined &&
+      linkInBiosStateAtom?.length > 0
+    ) {
       if (
         _filterOptions.folderId !== undefined &&
         _filterOptions.folderId !== 'all'
@@ -109,7 +112,11 @@ export const FilteredLinkInBioLinksDataSelector = selector<
       //     );
       //   });
       // }
-      if (_filterOptions.searchQuery !== undefined) {
+      if (
+        _filterOptions.searchQuery !== undefined &&
+        _filterOptions?.searchQuery !== null &&
+        _filterOptions?.searchQuery?.trim()?.length > 0
+      ) {
         _filterLinksData = linkInBiosStateAtom.filter(el => {
           return el.title
             ?.toLocaleLowerCase()
@@ -135,10 +142,8 @@ export const LinkInBiosFieldsDataRStateSelector = selector({
     // const _domains = new Set<string>();
 
     linkInBiosStateAtom?.forEach(el => {
-      if ((el.tags as string[])?.length !== undefined) {
-        (JSON.parse(el.tags as unknown as string) as string[]).forEach(tag =>
-          _tagsArray.add(tag)
-        );
+      if ((el.tags as string[])?.length > 0) {
+        (el.tags as string[])?.forEach(tag => _tagsArray.add(tag));
       }
 
       // const _url = (JSON.parse(el.target as string) as LinkTargetType).url;

@@ -15,6 +15,17 @@ body {
   margin: unset;
   padding: unset;
 }
+.text {
+  background: linear-gradient(
+    to top,
+    #fff,
+    #0fb4ff82,
+    #09456155,
+    #ff448482,
+    #ffeb3b82,
+    #ff448482
+  );
+}
 
 a {
   text-decoration: none;

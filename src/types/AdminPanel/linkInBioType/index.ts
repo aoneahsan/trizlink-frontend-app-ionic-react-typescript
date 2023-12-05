@@ -176,6 +176,9 @@ export interface LinkInBioType {
   createdAt?: string;
   updatedAt?: string;
 
+  formattedCreatedAt?: string;
+  formattedUpdatedAt?: string;
+
   // frontend form fields
   formState?: {
     submitted?: boolean;

@@ -45,7 +45,11 @@ import {
  * ? Like import of Constant is a global constants import
  * */
 import CONSTANTS from '@/utils/constants';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  ZWSTypeEum,
+  extractInnerDataOptionsEnum
+} from '@/utils/enums';
 
 /**
  * Type Imports go down
@@ -97,11 +101,6 @@ import MESSAGES from '@/utils/messages';
  * About: (Info of component here...)
  * @type {*}
  * */
-
-enum ZWSTypeEum {
-  personalWorkspace = 'personalWorkspace',
-  shareWorkspace = 'shareWorkspace'
-}
 
 const WorkspacesSettings: React.FC = () => {
   // #region Component States.

@@ -16,6 +16,7 @@ import {
   ZIonInput,
   ZIonItem
 } from '@/components/ZIonComponents';
+import classNames from 'classnames';
 
 // Styles
 
@@ -51,7 +52,7 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
 }) => {
   return (
     <ZIonItem
-      className={className}
+      className={classNames(className, { 'ion-align-items-start': true })}
       lines='none'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>

@@ -9,7 +9,6 @@ import React from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import {
-  ZIonButton,
   ZIonIcon,
   ZIonInput,
   ZIonItem,
@@ -63,7 +62,7 @@ interface ZaionsColorPikerType {
   testingselector?: string;
   testinglistselector?: string;
   setFieldValueFn?: FormikSetFieldValueEventVoidType;
-  closeIconOnChangeFn?: React.MouseEventHandler<HTMLIonButtonElement>;
+  closeIconOnChangeFn?: React.MouseEventHandler<HTMLIonIconElement>;
 }
 
 /**
@@ -124,16 +123,12 @@ const ZaionsColorPiker: React.FC<ZaionsColorPikerType> = ({
         }}
       />
       {showCloseIcon && (
-        <ZIonButton
-          slot='end'
-          fill='clear'
-          className='ion-no-padding ion-no-margin ms-2'
-          onClick={closeIconOnChangeFn}>
-          <ZIonIcon
-            icon={closeCircleOutline}
-            className='w-6 h-6'
-          />
-        </ZIonButton>
+        <ZIonIcon
+          icon={closeCircleOutline}
+          color='primary'
+          className='w-8 h-8 mt-1 cursor-pointer ms-2'
+          onClick={closeIconOnChangeFn}
+        />
       )}
     </ZIonItem>
   );

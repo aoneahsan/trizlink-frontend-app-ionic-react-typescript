@@ -239,7 +239,7 @@ const AdminPanelShortLinksFolderSideMenu: React.FC = () => {
       saveReorderButtonFn={shortLinksFoldersReorderHandler}
       state={folderState.shortlink}
       menuId={CONSTANTS.MENU_IDS.ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID}
-      contentId={CONSTANTS.MENU_IDS.AD_SL_LIST_PAGE}
+      contentId={CONSTANTS.PAGE_IDS.AD_SL_LIST_PAGE}
       foldersData={
         workspaceId !== undefined &&
         (shortLinksFoldersData !== undefined || shortLinksFoldersData !== null)

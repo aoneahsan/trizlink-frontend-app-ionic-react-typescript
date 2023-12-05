@@ -14,7 +14,7 @@ import { CONTENT_ID } from '@/utils/constants';
 import ZaionsDashboardResponsiveMenu from '@/navigation/AdminPanel/DashboardResponsiveMenu';
 import { PAGE_MENU, type PAGE_MENU_SIDE } from '@/utils/enums';
 import AdminPanelShortLinksFolderSideMenu from '@/navigation/AdminPanel/ShortLinks/FolderSideMenu';
-import AdminPanelLinkInBioFolderSideMenu from '@/navigation/AdminPanel/LinkInBioFolderSideMenu';
+import AdminPanelLinkInBioFolderSideMenu from '@/navigation/AdminPanel/LinkInBio/FolderSideMenu';
 import ZWorkspaceViewPageFilterMenu from '@/navigation/AdminPanel/WorkspaceViewPageFilterMenu';
 import { useParams } from 'react-router';
 

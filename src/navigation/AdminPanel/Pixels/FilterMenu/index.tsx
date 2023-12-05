@@ -63,7 +63,11 @@ import {
 import { extractInnerData, zStringify } from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
 import { PixelTableColumns } from '@/utils/constants/columns';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  extractInnerDataOptionsEnum,
+  ZWSTypeEum
+} from '@/utils/enums';
 import MESSAGES from '@/utils/messages';
 
 /**
@@ -150,116 +154,114 @@ const ZPixelsFilterMenu: React.FC = () => {
   // #endregion
 
   // #region APIs.
-  // If owned-workspace then this api will update owned-workspace pixel settings & filters data.
+  // Update pixel settings & filters data.
   const { mutateAsync: updatePixelFilersAsyncMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.user_setting_delete_update_get,
     _loaderMessage: MESSAGES.PIXEL_ACCOUNT.FILTERING
   });
 
-  // If share-workspace then this api will update share-workspace pixel settings & filters data.
-  const { mutateAsync: updateSWSPixelFilersAsyncMutate } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.sws_user_setting_delete_update_get,
-    _loaderMessage: MESSAGES.PIXEL_ACCOUNT.FILTERING
-  });
-
-  // If owned-workspace then this api will create owned-workspace pixel settings & filters data.
+  // Create pixel settings & filters data.
   const { mutateAsync: createPixelFilersAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.user_setting_list_create,
     _loaderMessage: MESSAGES.PIXEL_ACCOUNT.FILTERING,
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _itemsIds: [workspaceId ?? '']
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
+    ],
+    _itemsIds:
+      workspaceId !== undefined &&
+      workspaceId !== null &&
+      workspaceId?.trim()?.length > 0
+        ? [ZWSTypeEum.personalWorkspace, workspaceId]
+        : wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          shareWSMemberId?.trim()?.length > 0
+        ? [ZWSTypeEum.shareWorkspace, shareWSMemberId]
+        : []
   });
 
-  // If share-workspace then this api will create share-workspace pixel settings & filters data.
-  const { mutateAsync: createSWSPixelFilersAsyncMutate } = useZRQCreateRequest({
-    _url: API_URL_ENUM.sws_user_setting_list_create,
-    _loaderMessage: MESSAGES.PIXEL_ACCOUNT.FILTERING,
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-    _itemsIds: [shareWSMemberId ?? '']
-  });
-
-  // If owned-workspace then this api will fetch owned-workspace pixel settings & filters data.
+  // Get pixel settings & filters data.
   const { data: getPixelFiltersData } = useZRQGetRequest<ZUserSettingInterface>(
     {
       _url: API_URL_ENUM.user_setting_delete_update_get,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-        workspaceId ?? '',
-        ZUserSettingTypeEnum.pixelListPageTable
-      ],
-      _itemsIds: [workspaceId ?? '', ZUserSettingTypeEnum.pixelListPageTable],
+      _key:
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+          ? [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+              workspaceId,
+              ZUserSettingTypeEnum.pixelListPageTable
+            ]
+          : wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
+              wsShareId,
+              shareWSMemberId,
+              ZUserSettingTypeEnum.pixelListPageTable
+            ]
+          : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET],
+      _itemsIds:
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+          ? [
+              ZWSTypeEum.personalWorkspace,
+              workspaceId,
+              ZUserSettingTypeEnum.pixelListPageTable
+            ]
+          : wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [
+              ZWSTypeEum.shareWorkspace,
+              shareWSMemberId,
+              ZUserSettingTypeEnum.pixelListPageTable
+            ]
+          : [],
       _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.type,
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.settings.type
       ],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _shouldFetchWhenIdPassed: !(
-        workspaceId !== undefined &&
-        workspaceId !== null &&
-        (workspaceId?.trim()?.length ?? 0) > 0
-      )
+        ((wsShareId?.trim()?.length ?? 0) === 0 &&
+          (shareWSMemberId?.trim()?.length ?? 0) === 0) ||
+        (workspaceId?.trim()?.length ?? 0) === 0
+      ),
+      _showLoader: false
     }
   );
-
-  // If share-workspace then this api will fetch share-workspace pixel settings & filters data.
-  const { data: getSWSPixelFiltersData } =
-    useZRQGetRequest<ZUserSettingInterface>({
-      _url: API_URL_ENUM.sws_user_setting_delete_update_get,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-        wsShareId ?? '',
-        ZUserSettingTypeEnum.pixelListPageTable
-      ],
-      _itemsIds: [
-        shareWSMemberId ?? '',
-        ZUserSettingTypeEnum.pixelListPageTable
-      ],
-      _urlDynamicParts: [
-        CONSTANTS.RouteParams.workspace.shareWSMemberId,
-        CONSTANTS.RouteParams.settings.type
-      ],
-      _extractType: ZRQGetRequestExtractEnum.extractItem,
-      _shouldFetchWhenIdPassed: !(
-        wsShareId !== undefined &&
-        wsShareId !== null &&
-        (wsShareId?.trim()?.length ?? 0) > 0 &&
-        shareWSMemberId !== undefined &&
-        shareWSMemberId !== null &&
-        (shareWSMemberId?.trim()?.length ?? 0) > 0
-      )
-    });
   // #endregion
 
   useEffect(() => {
     try {
       if (
-        (getPixelFiltersData?.type !== null &&
-          getPixelFiltersData?.settings?.columns !== undefined) ??
-        (getSWSPixelFiltersData?.type !== null &&
-          getSWSPixelFiltersData?.settings?.columns !== undefined)
+        getPixelFiltersData?.type !== null &&
+        getPixelFiltersData?.settings?.columns !== undefined
       ) {
         setCompState(_oldValue => ({
           ..._oldValue,
-          pixelsColumn:
-            workspaceId !== undefined &&
-            workspaceId !== null &&
-            workspaceId?.trim()?.length > 0
-              ? getPixelFiltersData?.settings?.columns
-              : wsShareId !== undefined &&
-                wsShareId !== null &&
-                wsShareId?.trim()?.length > 0 &&
-                shareWSMemberId !== undefined &&
-                shareWSMemberId !== null &&
-                shareWSMemberId?.trim()?.length > 0
-              ? getSWSPixelFiltersData?.settings?.columns
-              : _oldValue.pixelsColumn
+          pixelsColumn: getPixelFiltersData?.settings?.columns
         }));
       }
     } catch (error) {
       reportCustomError(error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getPixelFiltersData, getSWSPixelFiltersData]);
+  }, [getPixelFiltersData]);
 
   // #region Functions.
   const handleCarouselCardReorder = (
@@ -291,64 +293,42 @@ const ZPixelsFilterMenu: React.FC = () => {
         let _response;
 
         if (
-          getPixelFiltersData?.type ===
-            ZUserSettingTypeEnum.pixelListPageTable ||
-          getSWSPixelFiltersData?.type ===
-            ZUserSettingTypeEnum.pixelListPageTable
+          getPixelFiltersData?.type === ZUserSettingTypeEnum.pixelListPageTable
         ) {
-          if (
-            workspaceId !== undefined &&
-            workspaceId !== null &&
-            workspaceId?.trim()?.length > 0
-          ) {
-            _response = await updatePixelFilersAsyncMutate({
-              itemIds: [workspaceId, ZUserSettingTypeEnum.pixelListPageTable],
-              urlDynamicParts: [
-                CONSTANTS.RouteParams.workspace.workspaceId,
-                CONSTANTS.RouteParams.settings.type
-              ],
-              requestData: _value
-            });
-          } else if (
-            wsShareId !== undefined &&
-            wsShareId !== null &&
-            (wsShareId?.trim()?.length ?? 0) > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            (shareWSMemberId?.trim()?.length ?? 0) > 0
-          ) {
-            _response = await updateSWSPixelFilersAsyncMutate({
-              itemIds: [
-                shareWSMemberId,
-                ZUserSettingTypeEnum.pixelListPageTable
-              ],
-              urlDynamicParts: [
-                CONSTANTS.RouteParams.workspace.shareWSMemberId,
-                CONSTANTS.RouteParams.settings.type
-              ],
-              requestData: _value
-            });
-          }
+          _response = await updatePixelFilersAsyncMutate({
+            itemIds:
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+                ? [
+                    ZWSTypeEum.personalWorkspace,
+                    workspaceId,
+                    ZUserSettingTypeEnum.pixelListPageTable
+                  ]
+                : wsShareId !== undefined &&
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0 &&
+                  shareWSMemberId !== undefined &&
+                  shareWSMemberId !== null &&
+                  shareWSMemberId?.trim()?.length > 0
+                ? [
+                    ZWSTypeEum.shareWorkspace,
+                    shareWSMemberId,
+                    ZUserSettingTypeEnum.pixelListPageTable
+                  ]
+                : [],
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.type,
+              CONSTANTS.RouteParams.workspace.workspaceId,
+              CONSTANTS.RouteParams.settings.type
+            ],
+            requestData: _value
+          });
         } else {
-          if (
-            workspaceId !== undefined &&
-            workspaceId !== null &&
-            workspaceId?.trim()?.length > 0
-          ) {
-            _response = await createPixelFilersAsyncMutate(_value);
-          } else if (
-            wsShareId !== undefined &&
-            wsShareId !== null &&
-            (wsShareId?.trim()?.length ?? 0) > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            (shareWSMemberId?.trim()?.length ?? 0) > 0
-          ) {
-            _response = await createSWSPixelFilersAsyncMutate(_value);
-          }
+          _response = await createPixelFilersAsyncMutate(_value);
         }
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           // extract Data from _response.
           const _data = extractInnerData<ZUserSettingInterface>(
             _response,
@@ -385,6 +365,7 @@ const ZPixelsFilterMenu: React.FC = () => {
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
                   wsShareId,
+                  shareWSMemberId,
                   ZUserSettingTypeEnum.pixelListPageTable
                 ],
                 data: _data,
@@ -405,7 +386,7 @@ const ZPixelsFilterMenu: React.FC = () => {
   return (
     <ZIonMenu
       side='end'
-      contentId={CONSTANTS.MENU_IDS.ADMIN_PANEL_WS_SETTING_PAGE_ID}
+      contentId={CONSTANTS.PAGE_IDS.ADMIN_PANEL_WS_SETTING_PAGE_ID}
       menuId={CONSTANTS.MENU_IDS.P_FILTERS_MENU_ID}
       style={
         isLgScale
@@ -478,20 +459,14 @@ const ZPixelsFilterMenu: React.FC = () => {
               filters: {
                 time:
                   getPixelFiltersData?.settings?.filters?.time ??
-                  getSWSPixelFiltersData?.settings?.filters?.time ??
                   TimeFilterEnum.allTime,
                 startDate:
                   getPixelFiltersData?.settings?.filters?.startDate ??
-                  getSWSPixelFiltersData?.settings?.filters?.startDate ??
                   new Date().toISOString(),
                 endDate:
                   getPixelFiltersData?.settings?.filters?.endDate ??
-                  getSWSPixelFiltersData?.settings?.filters?.endDate ??
                   new Date().toISOString(),
-                platform:
-                  getPixelFiltersData?.settings?.filters?.platform ??
-                  getSWSPixelFiltersData?.settings?.filters?.platform ??
-                  ''
+                platform: getPixelFiltersData?.settings?.filters?.platform ?? ''
               }
             }}
             enableReinitialize={true}

@@ -11,10 +11,10 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Formik } from 'formik';
 import {
-  menuController,
   type ItemReorderEventDetail,
   type RefresherEventDetail
 } from '@ionic/core';
+import { menuController } from '@ionic/core/components';
 
 import { filterOutline, refresh, searchOutline } from 'ionicons/icons';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -468,7 +468,7 @@ const ZSWSShortLinksListPage: React.FC = () => {
         {/*  */}
         <ZIonPage
           pageTitle='Zaions share workspace short-links list page'
-          id={CONSTANTS.MENU_IDS.AD_SL_LIST_PAGE}>
+          id={CONSTANTS.PAGE_IDS.AD_SL_LIST_PAGE}>
           <ZCan
             shareWSId={wsShareId}
             permissionType={permissionsTypeEnum.shareWSMemberPermissions}

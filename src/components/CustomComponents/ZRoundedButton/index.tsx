@@ -6,6 +6,7 @@ import { ZIonButton } from '@/components/ZIonComponents';
 
 // Types
 import { type ZIonColorType } from '@/types/zaionsAppSettings.type';
+import classNames from 'classnames';
 
 // Component Type
 interface ZRoundedButtonType {
@@ -25,14 +26,12 @@ const ZRoundedButton: React.FC<ZRoundedButtonType> = props => {
     <ZIonButton
       {...props}
       shape='round'
+      className={classNames(props.className, {
+        'w-[3rem] ion-no-padding': true
+      })}
       testinglistselector={props.testinglistselector}
       testingselector={props.testingselector}
-      style={{
-        '--padding-top': '1.5rem',
-        '--padding-bottom': '1.5rem',
-        '--padding-start': '.9rem',
-        '--padding-end': '.9rem'
-      }}>
+      height='3rem'>
       {props.children}
     </ZIonButton>
   );

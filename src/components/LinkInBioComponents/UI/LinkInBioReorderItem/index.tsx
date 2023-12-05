@@ -51,13 +51,20 @@ import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
  * */
 import { reportCustomError } from '@/utils/customErrorType';
 import {
+  _getQueryKey,
   createRedirectRoute,
   extractInnerData,
-  generatePredefinedThemeBackgroundValue
+  generatePredefinedThemeBackgroundValue,
+  isZNonEmptyString,
+  isZNonEmptyStrings
 } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  ZWSTypeEum,
+  extractInnerDataOptionsEnum
+} from '@/utils/enums';
 
 /**
  * Type Imports go down
@@ -146,27 +153,38 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
   // link-in-bio id get from route(url).
-  const { linkInBioId, workspaceId } = useParams<{
+  const { linkInBioId, workspaceId, wsShareId, shareWSMemberId } = useParams<{
     linkInBioId?: string;
     workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // fetching link-in-bio with the linkInBioId data from backend.
   const { data: selectedLinkInBio } = useZRQGetRequest<LinkInBioType>({
     _url: API_URL_ENUM.linkInBio_update_delete,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-      workspaceId ?? '',
-      linkInBioId ?? ''
-    ],
-    _authenticated: true,
-    _itemsIds: [linkInBioId ?? '', workspaceId ?? ''],
+    _key: _getQueryKey({
+      keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET],
+      additionalKeys: [workspaceId, wsShareId, shareWSMemberId, linkInBioId]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId, linkInBioId]
+    }),
     _urlDynamicParts: [
-      CONSTANTS.RouteParams.linkInBio.linkInBioId,
-      CONSTANTS.RouteParams.workspace.workspaceId
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId,
+      CONSTANTS.RouteParams.linkInBio.linkInBioId
     ],
     _shouldFetchWhenIdPassed: !(
-      linkInBioId !== undefined && (linkInBioId?.trim()?.length ?? 0) > 0
+      isZNonEmptyStrings([workspaceId, linkInBioId]) ||
+      isZNonEmptyStrings([wsShareId, shareWSMemberId, linkInBioId])
     ),
     _extractType: ZRQGetRequestExtractEnum.extractItem
   });
@@ -193,23 +211,45 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
         );
 
         const _response = await deleteLinkInBioBlockMutate({
-          itemIds: [workspaceId ?? '', linkInBioId ?? '', element.id],
+          itemIds: _getQueryKey({
+            keys: [
+              isZNonEmptyString(workspaceId)
+                ? ZWSTypeEum.personalWorkspace
+                : isZNonEmptyString(wsShareId) &&
+                  isZNonEmptyString(shareWSMemberId)
+                ? ZWSTypeEum.shareWorkspace
+                : ''
+            ],
+            additionalKeys: [
+              workspaceId,
+              shareWSMemberId,
+              linkInBioId,
+              element.id
+            ]
+          }),
           urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.type,
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.linkInBio.linkInBioId,
             CONSTANTS.RouteParams.linkInBio.libBlockId
           ]
         });
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           // getting all the LinkInBioBlocks from RQ cache.
           const _oldLinkInBioBlocks =
             extractInnerData<LinkInBioBlockFromType[]>(
               getRQCDataHandler<LinkInBioBlockFromType[]>({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-                  workspaceId ?? '',
-                  linkInBioId ?? ''
-                ]
+                key: _getQueryKey({
+                  keys: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN
+                  ],
+                  additionalKeys: [
+                    workspaceId,
+                    wsShareId,
+                    shareWSMemberId,
+                    linkInBioId
+                  ]
+                })
               }) as LinkInBioBlockFromType[],
               extractInnerDataOptionsEnum.createRequestResponseItems
             ) ?? [];
@@ -221,11 +261,15 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 
           // Updating data in RQ cache.
           await updateRQCDataHandler<LinkInBioBlockFromType[] | undefined>({
-            key: [
-              CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-              workspaceId ?? '',
-              linkInBioId ?? ''
-            ],
+            key: _getQueryKey({
+              keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN],
+              additionalKeys: [
+                workspaceId,
+                wsShareId,
+                shareWSMemberId,
+                linkInBioId
+              ]
+            }),
             data: _updatedLinkInBioBlocks,
             id: '',
             extractType: ZRQGetRequestExtractEnum.extractItems,
@@ -241,17 +285,25 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
           setLinkInBioBlockState(_updateLinkInBioBlockState);
 
           if (
-            element.id === (routeQSearchParams as { blockId: string }).blockId
+            element.id === (routeQSearchParams as { blockId: string })?.blockId
           ) {
             // Redirect to block
             zNavigatePushRoute(
               createRedirectRoute({
-                url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+                url: isZNonEmptyString(workspaceId)
+                  ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
+                  : isZNonEmptyString(wsShareId) &&
+                    isZNonEmptyString(shareWSMemberId)
+                  ? ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Main
+                  : '',
                 params: [
                   CONSTANTS.RouteParams.workspace.workspaceId,
                   CONSTANTS.RouteParams.linkInBio.linkInBioId
                 ],
-                values: [workspaceId ?? '', linkInBioId ?? ''],
+                values: _getQueryKey({
+                  keys: [],
+                  additionalKeys: [workspaceId, shareWSMemberId, linkInBioId]
+                }),
                 routeSearchParams: {
                   page: ZLinkInBioPageEnum.design,
                   step: ZLinkInBioRHSComponentEnum.blocks
@@ -273,12 +325,19 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 
       zNavigatePushRoute(
         createRedirectRoute({
-          url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+          url: isZNonEmptyString(workspaceId)
+            ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
+            : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+            ? ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Main
+            : '',
           params: [
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.linkInBio.linkInBioId
           ],
-          values: [workspaceId ?? '', linkInBioId ?? ''],
+          values: _getQueryKey({
+            keys: [],
+            additionalKeys: [workspaceId, shareWSMemberId, linkInBioId]
+          }),
           routeSearchParams: {
             page: ZLinkInBioPageEnum.design,
             step: ZLinkInBioRHSComponentEnum.blockForm,
@@ -404,7 +463,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
       })}
       style={{
         '--background': 'transparent',
-        opacity: element.isActive === true ? '1' : '0.4'
+        opacity: element.isActive ?? false ? '1' : '0.4'
       }}
       data-block-id={element.id}>
       <ZCustomDeleteComponent

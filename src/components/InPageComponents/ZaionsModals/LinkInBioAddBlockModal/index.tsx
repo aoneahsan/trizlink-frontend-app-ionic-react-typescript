@@ -8,6 +8,8 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import { useSetRecoilState } from 'recoil';
+import { closeOutline, toggleOutline } from 'ionicons/icons';
 
 /**
  * Custom Imports go down
@@ -32,12 +34,18 @@ import {
  * */
 import CONSTANTS from '@/utils/constants';
 import {
+  _getQueryKey,
   createRedirectRoute,
   extractInnerData,
+  isZNonEmptyString,
   zStringify
 } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  ZWSTypeEum,
+  extractInnerDataOptionsEnum
+} from '@/utils/enums';
 import { reportCustomError } from '@/utils/customErrorType';
 
 /**
@@ -60,8 +68,6 @@ import {
  * ? Import of recoil states is a Recoil State import
  * */
 import { LinkInBioBlocksRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
-import { useSetRecoilState } from 'recoil';
-import { closeOutline, toggleOutline } from 'ionicons/icons';
 import { LinkInBioBlocksDefaultData } from '@/data/UserDashboard/LinkInBio/Blocks/index.data';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 
@@ -92,7 +98,9 @@ const ZLinkInBioAddBlockModal: React.FC<{
   linkInBioId: string;
   modalHeading?: string;
   modalSubHeading?: string;
-  workspaceId: string;
+  workspaceId?: string;
+  shareWSMemberId?: string;
+  wsShareId?: string;
   zNavigatePushRoute?: (_url: string) => void;
 }> = ({
   dismissZIonModal,
@@ -102,6 +110,8 @@ const ZLinkInBioAddBlockModal: React.FC<{
   modalHeading = 'Add block 😊',
   modalSubHeading = `Would you like add this ${_blockType} block in your page?`,
   workspaceId,
+  shareWSMemberId,
+  wsShareId,
   zNavigatePushRoute
 }) => {
   // #region Custom Hooks.
@@ -116,9 +126,18 @@ const ZLinkInBioAddBlockModal: React.FC<{
   const { mutateAsync: createLinkInBioMutate } =
     useZRQCreateRequest<LinkInBioBlockFromType>({
       _url: API_URL_ENUM.linkInBioBlock_create_list,
-      _authenticated: true,
-      _itemsIds: [workspaceId, linkInBioId],
+      _itemsIds: _getQueryKey({
+        keys: [
+          isZNonEmptyString(workspaceId)
+            ? ZWSTypeEum.personalWorkspace
+            : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+            ? ZWSTypeEum.shareWorkspace
+            : ''
+        ],
+        additionalKeys: [workspaceId, shareWSMemberId, linkInBioId]
+      }),
       _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.type,
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.linkInBio.linkInBioId
       ]
@@ -129,7 +148,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
     _position: LinkInBioBlocksPositionEnum
   ): Promise<void> => {
     try {
-      if (_position !== undefined) {
+      if (_position !== undefined && _position !== null) {
         const _stringifyValue = zStringify({
           blockType: _blockType,
           blockContent: zStringify(_blockContent),
@@ -138,32 +157,35 @@ const ZLinkInBioAddBlockModal: React.FC<{
 
         const _response = await createLinkInBioMutate(_stringifyValue);
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           const _data = extractInnerData<LinkInBioBlockFromType>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data?.id !== null) {
+          if (_data?.id !== null && _data?.id !== undefined) {
             const _oldBlocks = extractInnerData<LinkInBioBlockFromType[]>(
               getRQCDataHandler({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-                  workspaceId,
-                  linkInBioId
-                ]
+                key: _getQueryKey({
+                  keys: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN
+                  ],
+                  additionalKeys: [
+                    workspaceId,
+                    wsShareId,
+                    shareWSMemberId,
+                    linkInBioId
+                  ]
+                })
               }),
               extractInnerDataOptionsEnum.createRequestResponseItems
             );
 
-            if (_oldBlocks !== undefined) {
+            if (_oldBlocks !== undefined && _oldBlocks !== null) {
               let _updatedBlocks = [..._oldBlocks];
 
               if (_position === LinkInBioBlocksPositionEnum.top) {
-                _updatedBlocks = [
-                  _data as LinkInBioBlockFromType,
-                  ..._oldBlocks
-                ];
+                _updatedBlocks = [_data, ..._oldBlocks];
 
                 //
                 const _newLinkInBioBlock: LinkInBioBlockFromType = {
@@ -183,10 +205,7 @@ const ZLinkInBioAddBlockModal: React.FC<{
                   ...oldValues
                 ]);
               } else if (_position === LinkInBioBlocksPositionEnum.bottom) {
-                _updatedBlocks = [
-                  ..._oldBlocks,
-                  _data as LinkInBioBlockFromType
-                ];
+                _updatedBlocks = [..._oldBlocks, _data];
 
                 //
                 const _newLinkInBioBlock: LinkInBioBlockFromType = {
@@ -206,11 +225,17 @@ const ZLinkInBioAddBlockModal: React.FC<{
 
               await updateRQCDataHandler({
                 id: '',
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-                  workspaceId,
-                  linkInBioId
-                ],
+                key: _getQueryKey({
+                  keys: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN
+                  ],
+                  additionalKeys: [
+                    workspaceId,
+                    wsShareId,
+                    shareWSMemberId,
+                    linkInBioId
+                  ]
+                }),
                 data: _updatedBlocks,
                 updateHoleData: true,
                 extractType: ZRQGetRequestExtractEnum.extractItems
@@ -220,12 +245,21 @@ const ZLinkInBioAddBlockModal: React.FC<{
             zNavigatePushRoute !== undefined &&
               zNavigatePushRoute(
                 createRedirectRoute({
-                  url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+                  // url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+                  url: isZNonEmptyString(workspaceId)
+                    ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
+                    : isZNonEmptyString(wsShareId) &&
+                      isZNonEmptyString(shareWSMemberId)
+                    ? ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Edit
+                    : '',
                   params: [
                     CONSTANTS.RouteParams.workspace.workspaceId,
                     CONSTANTS.RouteParams.linkInBio.linkInBioId
                   ],
-                  values: [workspaceId, linkInBioId],
+                  values: _getQueryKey({
+                    keys: [],
+                    additionalKeys: [workspaceId, shareWSMemberId, linkInBioId]
+                  }),
                   routeSearchParams: {
                     page: ZLinkInBioPageEnum.design,
                     step: ZLinkInBioRHSComponentEnum.blockForm,

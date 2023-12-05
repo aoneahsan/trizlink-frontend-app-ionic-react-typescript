@@ -8,7 +8,8 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { menuController, type IonReorderGroupCustomEvent } from '@ionic/core';
+import { type IonReorderGroupCustomEvent } from '@ionic/core';
+import { menuController } from '@ionic/core/components';
 import {
   appsOutline,
   closeOutline,

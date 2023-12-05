@@ -45,7 +45,11 @@ import {
  * */
 import CONSTANTS from '@/utils/constants';
 import { showSuccessNotification } from '@/utils/notification';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  extractInnerDataOptionsEnum,
+  ZWSTypeEum
+} from '@/utils/enums';
 import { extractInnerData } from '@/utils/helpers';
 import {
   permissionsEnum,
@@ -117,11 +121,7 @@ const FolderActionsPopoverContent: React.FC<{
    * delete short link folder api.
    */
   const { mutateAsync: deleteFolderMutate } = useZRQDeleteRequest({
-    _url: API_URL_ENUM.folders_update_delete
-  });
-
-  const { mutateAsync: deleteSWSFolderMutate } = useZRQDeleteRequest({
-    _url: API_URL_ENUM.ws_share_folder_get_update_delete
+    _url: API_URL_ENUM.folders_get_update_delete
   });
 
   /**
@@ -161,45 +161,46 @@ const FolderActionsPopoverContent: React.FC<{
   const removeFolderAccount = async (): Promise<void> => {
     try {
       if (folderFormState?.id !== null && folderFormState?.id !== undefined) {
-        let _response;
-        if (
-          workspaceId !== undefined &&
-          workspaceId !== null &&
-          workspaceId?.trim()?.length > 0
-        ) {
-          // hitting the delete api
-          _response = await deleteFolderMutate({
-            itemIds: [workspaceId, folderFormState.id],
-            urlDynamicParts: [
-              CONSTANTS.RouteParams.workspace.workspaceId,
-              CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-            ]
-          });
-        } else if (
-          wsShareId !== undefined &&
-          wsShareId !== null &&
-          wsShareId?.trim()?.length > 0
-        ) {
-          // hitting the share workspace folder delete api
-          _response = await deleteSWSFolderMutate({
-            itemIds: [shareWSMemberId ?? '', folderFormState.id],
-            urlDynamicParts: [
-              CONSTANTS.RouteParams.workspace.shareWSMemberId,
-              CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-            ]
-          });
-        }
+        // hitting the delete api
+        const _response = await deleteFolderMutate({
+          itemIds:
+            workspaceId !== undefined &&
+            workspaceId !== null &&
+            workspaceId?.trim()?.length > 0
+              ? [ZWSTypeEum.personalWorkspace, workspaceId, folderFormState?.id]
+              : wsShareId !== undefined &&
+                wsShareId !== null &&
+                wsShareId?.trim()?.length > 0 &&
+                shareWSMemberId !== undefined &&
+                shareWSMemberId !== null &&
+                shareWSMemberId?.trim()?.length > 0
+              ? [
+                  ZWSTypeEum.shareWorkspace,
+                  shareWSMemberId,
+                  folderFormState?.id
+                ]
+              : [],
+          urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.type,
+            CONSTANTS.RouteParams.workspace.workspaceId,
+            CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+          ]
+        });
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           const _data = extractInnerData<{ success: boolean }>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data !== undefined && _data?.success) {
+          if (_data !== undefined && _data !== null && _data?.success) {
             let _oldFoldersData: LinkFolderType[] = [];
 
-            if (workspaceId !== undefined) {
+            if (
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+            ) {
               _oldFoldersData =
                 (getRQCDataHandler<LinkFolderType[]>({
                   key: [
@@ -208,12 +209,20 @@ const FolderActionsPopoverContent: React.FC<{
                     state
                   ]
                 }) as LinkFolderType[]) ?? [];
-            } else if (wsShareId !== undefined) {
+            } else if (
+              wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+            ) {
               _oldFoldersData =
                 (getRQCDataHandler<LinkFolderType[]>({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
                     wsShareId,
+                    shareWSMemberId,
                     state
                   ]
                 }) as LinkFolderType[]) ?? [];
@@ -232,7 +241,11 @@ const FolderActionsPopoverContent: React.FC<{
             );
 
             // Updating data in RQ cache.
-            if (workspaceId !== undefined) {
+            if (
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+            ) {
               await updateRQCDataHandler<LinkFolderType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.MAIN,
@@ -244,11 +257,19 @@ const FolderActionsPopoverContent: React.FC<{
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
               });
-            } else if (wsShareId !== undefined) {
+            } else if (
+              wsShareId !== undefined &&
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
+            ) {
               await updateRQCDataHandler<LinkFolderType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
                   wsShareId,
+                  shareWSMemberId,
                   state
                 ],
                 data: _updatedFolders,
