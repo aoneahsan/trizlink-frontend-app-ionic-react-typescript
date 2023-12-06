@@ -86,16 +86,14 @@ const Tags: React.FC = () => {
       {/*  */}
       <div className='block px-4 mt-4'>
         <ZIonInput
-          label=''
+          aria-label='Tags'
+          className='ion-item-start-no-padding'
           name='tags'
           minHeight='40px'
           placeholder='Add tag'
           testingselector={
             CONSTANTS.testingSelectors.shortLink.formPage.tag.tagInput
           }
-          style={{
-            '--padding-start': '0px'
-          }}
           onKeyUp={({ currentTarget, key }) => {
             if (
               currentTarget?.value !== undefined &&

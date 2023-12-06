@@ -383,6 +383,32 @@ const ZPixelsFilterMenu: React.FC = () => {
   };
   // #endregion
 
+  const formikInitialValues = {
+    columns: compState?.pixelsColumn,
+
+    filters: {
+      time:
+        getPixelFiltersData?.settings?.filters?.time ?? TimeFilterEnum.allTime,
+      startDate:
+        getPixelFiltersData?.settings?.filters?.startDate ??
+        new Date().toISOString(),
+      endDate:
+        getPixelFiltersData?.settings?.filters?.endDate ??
+        new Date().toISOString(),
+      platform: getPixelFiltersData?.settings?.filters?.platform ?? ''
+    }
+  };
+
+  const zIonItemStyle = {
+    '--inner-padding-end': '.3rem'
+  };
+
+  const libListTableColumnStyle = {
+    '--padding-bottom': '.1rem',
+    '--padding-top': '.1rem',
+    '--padding-start': '2px'
+  };
+
   return (
     <ZIonMenu
       side='end'
@@ -453,22 +479,7 @@ const ZPixelsFilterMenu: React.FC = () => {
         {/* Content */}
         <ZIonContent className='ion-padding-top'>
           <Formik
-            initialValues={{
-              columns: compState?.pixelsColumn,
-
-              filters: {
-                time:
-                  getPixelFiltersData?.settings?.filters?.time ??
-                  TimeFilterEnum.allTime,
-                startDate:
-                  getPixelFiltersData?.settings?.filters?.startDate ??
-                  new Date().toISOString(),
-                endDate:
-                  getPixelFiltersData?.settings?.filters?.endDate ??
-                  new Date().toISOString(),
-                platform: getPixelFiltersData?.settings?.filters?.platform ?? ''
-              }
-            }}
+            initialValues={formikInitialValues}
             enableReinitialize={true}
             onSubmit={async values => {
               try {
@@ -645,9 +656,7 @@ const ZPixelsFilterMenu: React.FC = () => {
                             CONSTANTS.testingSelectors.pixels.listPage
                               .filterSidebar.columnAccordionHead
                           }
-                          style={{
-                            '--inner-padding-end': '.3rem'
-                          }}>
+                          style={zIonItemStyle}>
                           <ZIonText
                             className={classNames({
                               'text-sm ion-no-margin font-semibold': true
@@ -677,11 +686,7 @@ const ZPixelsFilterMenu: React.FC = () => {
                                       .filterSidebar.reorderItem
                                   }
                                   testingselector={`${CONSTANTS.testingSelectors.pixels.listPage.filterSidebar.reorderItem}-${el.id}`}
-                                  style={{
-                                    '--padding-bottom': '.1rem',
-                                    '--padding-top': '.1rem',
-                                    '--padding-start': '2px'
-                                  }}>
+                                  style={libListTableColumnStyle}>
                                   <ZIonReorder
                                     slot='start'
                                     className='me-3 ps-2'

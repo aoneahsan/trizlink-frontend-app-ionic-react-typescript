@@ -104,6 +104,8 @@ const LinkInBioFormField: React.FC = () => {
     event.detail.complete();
   };
 
+  const zIonTextareaShortStyle = { '--padding-start': '16px' };
+
   return (
     <>
       <ZIonButton
@@ -139,15 +141,12 @@ const LinkInBioFormField: React.FC = () => {
                         <ZIonItem
                           key={_index}
                           lines='none'
-                          className='pt-3 my-4 border zaions-linkInBio-block'
+                          className='pt-3 my-4 border zaions-linkInBio-block z-ion-bg-transparent'
                           testinglistselector={
                             CONSTANTS.testingSelectors.linkInBio.formPage.design
                               .blockForm.fields.form.cardItem
                           }
-                          testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.cardItem}-${_index}`}
-                          style={{
-                            '--background': 'transparent'
-                          }}>
+                          testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.form.cardItem}-${_index}`}>
                           <ZIonReorder
                             slot='start'
                             className='ms-3 me-2'>
@@ -209,7 +208,7 @@ const LinkInBioFormField: React.FC = () => {
                                 onIonChange={handleChange}
                                 onIonBlur={handleBlur}
                                 placeholder='column ID'
-                                style={{ '--padding-start': '16px' }}
+                                style={zIonTextareaShortStyle}
                                 testinglistselector={
                                   CONSTANTS.testingSelectors.linkInBio.formPage
                                     .design.blockForm.fields.form.textarea
@@ -228,10 +227,7 @@ const LinkInBioFormField: React.FC = () => {
                                 <div className='flex ion-justify-content-between'>
                                   <ZIonItem
                                     lines='none'
-                                    className='ion-item-start-no-padding'
-                                    style={{
-                                      '--inner-padding-end': '0'
-                                    }}>
+                                    className='ion-item-start-no-padding z-inner-padding-end-0'>
                                     <ZIonText className='text-sm font-bold'>
                                       Required
                                     </ZIonText>
@@ -261,10 +257,7 @@ const LinkInBioFormField: React.FC = () => {
 
                                   <ZIonItem
                                     lines='none'
-                                    className='ion-item-start-no-padding'
-                                    style={{
-                                      '--inner-padding-end': '0'
-                                    }}>
+                                    className='ion-item-start-no-padding z-inner-padding-end-0'>
                                     <ZIonText className='text-sm font-bold'>
                                       Is Active
                                     </ZIonText>
@@ -353,7 +346,7 @@ const LinkInBiosFormFieldsModal: React.FC<{
     }
   };
   return (
-    <ZRScrollbars style={{ width: '100%', height: '100%' }}>
+    <ZRScrollbars className='w-full h-full'>
       <ZIonTitle className='py-3 ion-text-center border-bottom__violet'>
         Add a new field
       </ZIonTitle>

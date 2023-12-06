@@ -8,6 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
@@ -18,6 +19,7 @@ import {
   ZIonCheckbox,
   ZIonCol,
   ZIonFooter,
+  ZIonInput,
   ZIonRouterLink,
   ZIonRow,
   ZIonText,
@@ -38,8 +40,6 @@ import {
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
-import classNames from 'classnames';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 /**
  * Recoil State Imports go down
@@ -82,15 +82,15 @@ const ZLinkInBioFormBlock: React.FC<ZLinkInBioFromBlockInterface> = ({
   fromBlockData,
   fontFamily
 }) => {
+  const zIonButtonStyle = { '--padding-start': '11px' };
   return (
     <ZIonRow className='w-full px-3 rounded ion-justify-content-between ion-padding-vertical zaions__light_bg row-gap-1-point-6-rem'>
       {/* Header */}
       {/* <ZIonHeader className='pb-2'>
         <ZIonButton
           expand='block'
-          style={{ height: '40px' }}
           className={classNames(fontFamily, {
-            'normal-case': true,
+            'normal-case h-[40px]': true,
           })}
         >
           {fromBlockData?.submitButtonText}
@@ -122,15 +122,11 @@ const ZLinkInBioFormBlock: React.FC<ZLinkInBioFromBlockInterface> = ({
               element.type === LinkInBioFormFieldsEnum.text ||
               element.type === LinkInBioFormFieldsEnum.website) && (
               <ZIonCol size='12'>
-                <ZIonInputField
-                  inputFieldProps={{
-                    className: classNames(fontFamily),
-                    label: element.placeholder,
-                    labelPlacement: 'floating',
-                    style: {
-                      '--padding-start': '11px'
-                    }
-                  }}
+                <ZIonInput
+                  label={element.placeholder}
+                  labelPlacement='floating'
+                  className={classNames(fontFamily)}
+                  style={zIonButtonStyle}
                 />
               </ZIonCol>
             )}
@@ -138,16 +134,12 @@ const ZLinkInBioFormBlock: React.FC<ZLinkInBioFromBlockInterface> = ({
             {/* Date */}
             {element.type === LinkInBioFormFieldsEnum.date && (
               <ZIonCol size='12'>
-                <ZIonInputField
-                  inputFieldProps={{
-                    className: classNames(fontFamily),
-                    label: element.placeholder,
-                    labelPlacement: 'stacked',
-                    style: {
-                      '--padding-start': '11px'
-                    },
-                    type: 'datetime-local'
-                  }}
+                <ZIonInput
+                  label={element.placeholder}
+                  labelPlacement='stacked'
+                  type='datetime-local'
+                  className={classNames(fontFamily)}
+                  style={zIonButtonStyle}
                 />
               </ZIonCol>
             )}
@@ -176,9 +168,8 @@ const ZLinkInBioFormBlock: React.FC<ZLinkInBioFromBlockInterface> = ({
       <ZIonFooter className='pt-2'>
         <ZIonButton
           expand='block'
-          style={{ height: '40px' }}
           className={classNames(fontFamily, {
-            'normal-case': true
+            'normal-case h-[40px]': true
           })}>
           {fromBlockData?.submitButtonText}
         </ZIonButton>

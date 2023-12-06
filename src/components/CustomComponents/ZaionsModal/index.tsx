@@ -75,15 +75,18 @@ const ZaionsIonModal = React.forwardRef<
     },
     ref
   ) => {
+    // #region comp constants
+    const _style = {
+      '--width': width,
+      '--height': height
+    };
+    // #endregion
     return (
       <>
         <IonModal
           ref={ref}
           trigger={triggerId}
-          style={{
-            '--width': width,
-            '--height': height
-          }}
+          style={_style}
           className={classNames(className)}
           isOpen={isOpen}>
           {children}

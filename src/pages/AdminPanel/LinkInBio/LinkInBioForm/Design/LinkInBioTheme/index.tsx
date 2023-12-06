@@ -184,6 +184,16 @@ const ZLinkInBioThemeSection: React.FC = () => {
 
   const isZFetching = isSelectedLinkInBioFetching;
 
+  const bgDirectionIcon = {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    transform: `rotate(${values?.theme?.background?.bgGradientColors?.direction}deg)`
+  };
+
+  const bgButtonDirectionIcon = {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    transform: `rotate(${values?.theme?.button?.background?.bgGradientColors?.direction}deg)`
+  };
+
   return (
     <>
       {/* 🎨 Pre-defined start */}
@@ -204,6 +214,12 @@ const ZLinkInBioThemeSection: React.FC = () => {
           })}>
           {!isLinkInBioPreDefinedThemesDataFetching &&
             LinkInBioPreDefinedThemesData?.map((el, i) => {
+              const ZIonButtonStyle = {
+                ...generatePredefinedThemeBackgroundValue(
+                  el.background as LinkInBioThemeBackgroundType
+                )
+              };
+
               return (
                 <ZIonCol
                   size='max-content'
@@ -218,11 +234,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                     className={classNames(classes['zaions-pd-color-block'], {
                       'me-3': true
                     })}
-                    style={{
-                      ...generatePredefinedThemeBackgroundValue(
-                        el.background as LinkInBioThemeBackgroundType
-                      )
-                    }}
+                    style={ZIonButtonStyle}
                     onClick={() => {
                       const _bg = el.background as LinkInBioThemeBackgroundType;
 
@@ -349,10 +361,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   <ZIonIcon
                     icon={arrowUp}
                     className='direction-icon'
-                    style={{
-                      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                      transform: `rotate(${values?.theme?.background?.bgGradientColors?.direction}deg)`
-                    }}
+                    style={bgDirectionIcon}
                   />
                 </ZIonButton>
 
@@ -498,10 +507,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                 <ZIonIcon
                   icon={arrowUp}
                   className='direction-icon'
-                  style={{
-                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                    transform: `rotate(${values?.theme?.button?.background?.bgGradientColors?.direction}deg)`
-                  }}
+                  style={bgButtonDirectionIcon}
                 />
               </ZIonButton>
 
@@ -572,11 +578,8 @@ const ZLinkInBioThemeSection: React.FC = () => {
           <ZIonCol size='4'>
             <ZIonButton
               color='medium'
-              style={{
-                '--border-radius': '0'
-              }}
               className={classNames(classes['zaions-button-type'], {
-                'zaions-button-type-button-active': true, // from index.css
+                'zaions-button-type-button-active z-ion-border-radius-0': true, // from index.css
                 'zaions-border-primary':
                   values?.theme?.button?.type ===
                   LinkInBioButtonTypeEnum.inlineSquare
@@ -598,10 +601,8 @@ const ZLinkInBioThemeSection: React.FC = () => {
           <ZIonCol size='4'>
             <ZIonButton
               color='medium'
-              style={{
-                '--border-radius': '10px'
-              }}
               className={classNames(classes['zaions-button-type'], {
+                'z-ion-border-radius-1rem': true,
                 'zaions-border-primary':
                   values?.theme?.button?.type ===
                   LinkInBioButtonTypeEnum.inlineRound
@@ -652,6 +653,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   .button.btnType.inlineSquareOutline
               }
               className={classNames(classes['zaions-button-type'], {
+                'z-ion-border-radius-0': true,
                 'zaions-border-primary':
                   values?.theme?.button?.type ===
                   LinkInBioButtonTypeEnum.inlineSquareOutline
@@ -662,9 +664,6 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   ? 'primary'
                   : 'medium'
               }
-              style={{
-                '--border-radius': '0'
-              }}
               onClick={() => {
                 void setFieldValue(
                   'theme.button.type',
@@ -683,6 +682,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   .button.btnType.inlineRoundOutline
               }
               className={classNames(classes['zaions-button-type'], {
+                'z-ion-border-radius-1rem': true,
                 'zaions-border-primary':
                   values?.theme?.button?.type ===
                   LinkInBioButtonTypeEnum.inlineRoundOutline
@@ -693,9 +693,6 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   ? 'primary'
                   : 'medium'
               }
-              style={{
-                '--border-radius': '10px'
-              }}
               onClick={() => {
                 void setFieldValue(
                   'theme.button.type',
@@ -747,6 +744,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                 classes['zaions-button-type'],
                 classes['zaions-button-type-shadow'],
                 {
+                  'z-ion-border-radius-0': true,
                   'zaions-border-transparent':
                     values?.theme?.button?.type !==
                     LinkInBioButtonTypeEnum.inlineSquareShadow,
@@ -755,9 +753,6 @@ const ZLinkInBioThemeSection: React.FC = () => {
                     LinkInBioButtonTypeEnum.inlineSquareShadow
                 }
               )}
-              style={{
-                '--border-radius': '0'
-              }}
               onClick={() => {
                 void setFieldValue(
                   'theme.button.type',
@@ -779,6 +774,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                 classes['zaions-button-type'],
                 classes['zaions-button-type-shadow'],
                 {
+                  'z-ion-border-radius-1rem': true,
                   'zaions-border-transparent':
                     values?.theme?.button?.type !==
                     LinkInBioButtonTypeEnum.inlineRoundShadow,
@@ -787,9 +783,6 @@ const ZLinkInBioThemeSection: React.FC = () => {
                     LinkInBioButtonTypeEnum.inlineRoundShadow
                 }
               )}
-              style={{
-                '--border-radius': '10px'
-              }}
               onClick={() => {
                 void setFieldValue(
                   'theme.button.type',

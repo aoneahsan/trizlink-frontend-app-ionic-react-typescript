@@ -106,6 +106,15 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
   //
   const setFolderFormState = useSetRecoilState(FolderFormState);
 
+  // #region comp constants
+  const fallbackZIonItemStyle = {
+    '--inner-padding-end': '0px',
+    '--padding-start': '0px'
+  };
+
+  const saveReorderStyle = { width: '78%' };
+  // #endregion
+
   return (
     <ZIonCol className='border-e-[1px] zaions-transition h-full'>
       <ZCustomScrollable
@@ -581,11 +590,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
           </ZCan>
 
           {!showSkeleton && foldersData?.length === 0 && (
-            <ZIonItem
-              style={{
-                '--inner-padding-end': '0px',
-                '--padding-start': '0px'
-              }}>
+            <ZIonItem style={fallbackZIonItemStyle}>
               <ZIonLabel className='w-full text-md ion-text-center'>
                 <ZIonIcon
                   icon={fileTrayOutline}
@@ -740,7 +745,7 @@ const ZDashboardFolderMenu: React.FC<ZDashboardFolderMenuInterface> = ({
                 expand='block'
                 testingselector={`${CONSTANTS.testingSelectors.folder.reorderBtn}-${type}`}
                 onClick={foldersSaveReorderButtonOnClickHandler}
-                style={{ width: '78%' }}>
+                style={saveReorderStyle}>
                 save reorder
               </ZIonButton>
             </ZCan>

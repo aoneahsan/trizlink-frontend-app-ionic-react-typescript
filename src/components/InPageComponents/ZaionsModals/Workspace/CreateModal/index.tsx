@@ -166,6 +166,11 @@ const ZAddNewWorkspaceModal: React.FC<{
     }
   };
 
+  const formikInitialValues = {
+    title: '',
+    workspaceTimezone: CONSTANTS.DEFAULT_VALUES.TIMEZONE_DEFAULT
+  };
+
   return (
     <ZIonContent className='ion-padding'>
       {/* Close modal button */}
@@ -203,10 +208,7 @@ const ZAddNewWorkspaceModal: React.FC<{
         </ZIonText>
 
         <Formik
-          initialValues={{
-            title: '',
-            workspaceTimezone: CONSTANTS.DEFAULT_VALUES.TIMEZONE_DEFAULT
-          }}
+          initialValues={formikInitialValues}
           validate={values => {
             const errors = {};
             validateField('title', values, errors);

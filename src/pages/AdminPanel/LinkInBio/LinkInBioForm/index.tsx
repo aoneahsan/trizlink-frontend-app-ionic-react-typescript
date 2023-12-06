@@ -357,6 +357,71 @@ const ZaionsLinkInBioForm: React.FC = () => {
 
   const isZFetching = isSelectedLinkInBioFetching;
 
+  const formikInitialValues = {
+    designPageCurrentTab:
+      (routeQSearchParams as { step: ZLinkInBioRHSComponentEnum })?.step ??
+      ZLinkInBioRHSComponentEnum.theme,
+    LinkInBioBlock: LinkInBioBlockEnum.default, // REMOVE THIS
+    title: selectedLinkInBio?.title ?? '',
+    linkInBioTitle: selectedLinkInBio?.linkInBioTitle ?? '',
+    enableTitleInput: false,
+    theme: {
+      background: {
+        bgType:
+          selectedLinkInBio?.theme?.background?.bgType ??
+          LinkInBioThemeBackgroundEnum.solidColor,
+        bgSolidColor: selectedLinkInBio?.theme?.background?.bgSolidColor ?? '',
+        bgGradientColors: {
+          startColor:
+            selectedLinkInBio?.theme?.background?.bgGradientColors
+              ?.startColor ?? '',
+          endColor:
+            selectedLinkInBio?.theme?.background?.bgGradientColors?.endColor ??
+            '',
+          direction:
+            selectedLinkInBio?.theme?.background?.bgGradientColors?.direction ??
+            0
+        },
+        enableBgImage:
+          selectedLinkInBio?.theme?.background?.enableBgImage ?? false,
+        bgImageUrl: selectedLinkInBio?.theme?.background?.bgImageUrl ?? ''
+      },
+      button: {
+        background: {
+          bgType:
+            selectedLinkInBio?.theme?.button?.background?.bgType ??
+            LinkInBioThemeBackgroundEnum.solidColor,
+          bgSolidColor:
+            selectedLinkInBio?.theme?.button?.background?.bgSolidColor ?? '',
+          bgGradientColors: {
+            startColor:
+              selectedLinkInBio?.theme?.button?.background?.bgGradientColors
+                ?.startColor ?? '',
+            endColor:
+              selectedLinkInBio?.theme?.button?.background?.bgGradientColors
+                ?.endColor ?? '',
+            direction:
+              selectedLinkInBio?.theme?.button?.background?.bgGradientColors
+                ?.direction ?? 0
+          },
+          bgImageUrl:
+            selectedLinkInBio?.theme?.button?.background?.bgImageUrl ?? ''
+        },
+        type:
+          selectedLinkInBio?.theme?.button?.type ??
+          LinkInBioButtonTypeEnum.inlineSquare,
+        shadowColor:
+          selectedLinkInBio?.theme?.button?.shadowColor ??
+          CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
+      },
+      font: selectedLinkInBio?.theme?.font ?? LinkInBioThemeFontEnum.lato
+    },
+    settings: {
+      headerCode: selectedLinkInBio?.settings?.headerCode ?? '',
+      bodyCode: selectedLinkInBio?.settings?.bodyCode ?? ''
+    }
+  };
+
   return (
     <ZIonPage pageTitle='Link In Bio Form Page'>
       <ZCan
@@ -384,76 +449,7 @@ const ZaionsLinkInBioForm: React.FC = () => {
         <Suspense fallback={<ZFallbackIonSpinner />}>
           <Formik
             // #region initial values
-            initialValues={{
-              designPageCurrentTab:
-                (routeQSearchParams as { step: ZLinkInBioRHSComponentEnum })
-                  ?.step ?? ZLinkInBioRHSComponentEnum.theme,
-              LinkInBioBlock: LinkInBioBlockEnum.default, // REMOVE THIS
-              title: selectedLinkInBio?.title ?? '',
-              linkInBioTitle: selectedLinkInBio?.linkInBioTitle ?? '',
-              enableTitleInput: false,
-              theme: {
-                background: {
-                  bgType:
-                    selectedLinkInBio?.theme?.background?.bgType ??
-                    LinkInBioThemeBackgroundEnum.solidColor,
-                  bgSolidColor:
-                    selectedLinkInBio?.theme?.background?.bgSolidColor ?? '',
-                  bgGradientColors: {
-                    startColor:
-                      selectedLinkInBio?.theme?.background?.bgGradientColors
-                        ?.startColor ?? '',
-                    endColor:
-                      selectedLinkInBio?.theme?.background?.bgGradientColors
-                        ?.endColor ?? '',
-                    direction:
-                      selectedLinkInBio?.theme?.background?.bgGradientColors
-                        ?.direction ?? 0
-                  },
-                  enableBgImage:
-                    selectedLinkInBio?.theme?.background?.enableBgImage ??
-                    false,
-                  bgImageUrl:
-                    selectedLinkInBio?.theme?.background?.bgImageUrl ?? ''
-                },
-                button: {
-                  background: {
-                    bgType:
-                      selectedLinkInBio?.theme?.button?.background?.bgType ??
-                      LinkInBioThemeBackgroundEnum.solidColor,
-                    bgSolidColor:
-                      selectedLinkInBio?.theme?.button?.background
-                        ?.bgSolidColor ?? '',
-                    bgGradientColors: {
-                      startColor:
-                        selectedLinkInBio?.theme?.button?.background
-                          ?.bgGradientColors?.startColor ?? '',
-                      endColor:
-                        selectedLinkInBio?.theme?.button?.background
-                          ?.bgGradientColors?.endColor ?? '',
-                      direction:
-                        selectedLinkInBio?.theme?.button?.background
-                          ?.bgGradientColors?.direction ?? 0
-                    },
-                    bgImageUrl:
-                      selectedLinkInBio?.theme?.button?.background
-                        ?.bgImageUrl ?? ''
-                  },
-                  type:
-                    selectedLinkInBio?.theme?.button?.type ??
-                    LinkInBioButtonTypeEnum.inlineSquare,
-                  shadowColor:
-                    selectedLinkInBio?.theme?.button?.shadowColor ??
-                    CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
-                },
-                font:
-                  selectedLinkInBio?.theme?.font ?? LinkInBioThemeFontEnum.lato
-              },
-              settings: {
-                headerCode: selectedLinkInBio?.settings?.headerCode ?? '',
-                bodyCode: selectedLinkInBio?.settings?.bodyCode ?? ''
-              }
-            }}
+            initialValues={formikInitialValues}
             //
             enableReinitialize
             // #endregion
@@ -526,12 +522,9 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                       .formPage.topBar.titleIonItem
                                   }
                                   className={classNames({
-                                    'ion-no-padding ion-no-margin me-2 ion-align-items-start':
+                                    'ion-no-padding ion-no-margin me-2 ion-align-items-start z-inner-padding-end-0':
                                       true
-                                  })}
-                                  style={{
-                                    '--inner-padding-end': '0'
-                                  }}>
+                                  })}>
                                   <ZIonInput
                                     aria-label='Link-in-bio title'
                                     counter={false}
@@ -547,12 +540,10 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                     className={classNames(
                                       classes['link-in-bio-title-field'],
                                       {
-                                        'text-[18px]': true
+                                        'text-[18px] z-ion-border-radius-point-8rem':
+                                          true
                                       }
                                     )}
-                                    style={{
-                                      '--padding-start': '.8rem'
-                                    }}
                                   />
                                   <ZIonButton
                                     className='ion-text-capitalize ion-no-margin'

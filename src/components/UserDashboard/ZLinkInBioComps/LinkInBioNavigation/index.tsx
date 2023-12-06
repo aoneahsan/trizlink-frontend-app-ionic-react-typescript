@@ -110,17 +110,14 @@ const ZLinkInBioNavigation: React.FC = () => {
               <ZIonImg
                 src={linktreeLogoSymbol}
                 alt='linktree Logo Symbol'
-                className='me-2'
-                style={{ width: '25px' }}
+                className='me-2 w-[25px]'
               />
             </ZIonRouterLink>
           )}
           <div
-            style={{
-              width: !isLgScale ? '100%' : undefined,
-              display: !isLgScale ? 'flex' : undefined,
-              justifyContent: !isLgScale ? 'space-around' : undefined
-            }}>
+            className={classNames({
+              'w-full flex ion-justify-content-between': !isLgScale
+            })}>
             <ZIonButton
               className={classNames(
                 classes['z-link-in-bio-navigation__buttons'],
@@ -209,36 +206,22 @@ const ZLinkInBioNavigation: React.FC = () => {
               <ZIonImg
                 src={linktreeLogoSymbol}
                 alt='linktree Logo Symbol'
-                className='me-2'
-                style={{ width: '25px' }}
+                className='me-2 w-[25px]'
               />
             </ZIonRouterLink>
           )}
           <ZIonButton
             fill='clear'
-            className='mx-2 mb-3 ion-text-capitalize'
+            className='mx-2 mb-3 ion-text-capitalize w-[2.5rem] h-[2.5rem] ion-no-padding'
             shape='round'
-            style={{
-              '--padding-top': '1.3rem',
-              '--padding-bottom': '1.3rem',
-              '--padding-end': '1rem',
-              '--padding-start': '1rem'
-            }}
             color='dark'
             size='small'>
             <ZIonIcon icon={megaphoneOutline} />
           </ZIonButton>
           <ZIonButton
-            className='ion-text-capitalize me-2'
+            className='ion-text-capitalize me-2 w-[2.5rem] h-[2.5rem] ion-no-padding'
             shape='round'
-            color='light'
-            style={{
-              '--padding-top': '1.3rem',
-              '--padding-bottom': '1.3rem',
-              '--padding-end': '1rem',
-              '--padding-start': '1rem',
-              '--box-shadow': 'none'
-            }}>
+            color='light'>
             <ZIonIcon
               icon={flash}
               size='small'
@@ -249,36 +232,29 @@ const ZLinkInBioNavigation: React.FC = () => {
             </ZIonText>
           </ZIonButton>
           <ZIonButton
-            className='ion-text-capitalize me-2'
+            className='ion-text-capitalize me-2 w-[2.5rem] h-[2.5rem] ion-no-padding z-ion-box-shadow z-ion-border-width'
             shape='round'
             color='medium'
-            style={{
-              '--padding-top': '1.3rem',
-              '--padding-bottom': '1.3rem',
-              '--padding-end': '1rem',
-              '--padding-start': '1rem',
-              '--box-shadow': 'none',
-              '--border-width': '1px'
-            }}
             fill='outline'>
             <ZIonIcon
               icon={shareSocialOutline}
               size='small'
               color='dark'
               className='me-1'
-            />{' '}
-            <ZIonText color='dark'>
+            />
+            <ZIonText
+              color='dark'
+              className='ms-1'>
               <h6 className='font-bold ion-no-margin'>Share</h6>
             </ZIonText>
           </ZIonButton>
           {isLgScale && (
             <ZIonButton
               fill='clear'
-              className='mx-2 mb-0 ion-text-capitalize ion-no-padding hover:outline-sand'
+              className='mx-2 mb-0 ion-text-capitalize ion-no-padding hover:outline-sand w-[2.5rem] h-[2.5rem]'
               shape='round'
               color='dark'
-              size='small'
-              style={{ width: '2.5rem', height: '2.5rem' }}>
+              size='small'>
               <ZIonImg
                 src={blogAdWeelHero}
                 className='border-radius__100vmax'

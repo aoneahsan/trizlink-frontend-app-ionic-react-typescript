@@ -54,8 +54,8 @@ const ZaionsLoginOptions: React.FC = () => {
         {/* </ZIonCol> */}
         <ZIonCol className='ion-text-center'>
           <ZIonText
-            style={{ width: '100%', color: '#6c6d71', fontSize: '16px' }}
-            className='block mt-2 mb-3'>
+            className='block w-full mt-2 mb-3 text-[16px]'
+            color='medium'>
             Log in with:
           </ZIonText>
           {/* Google Social Auth Component */}

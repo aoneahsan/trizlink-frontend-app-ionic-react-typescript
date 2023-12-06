@@ -57,6 +57,10 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
   //   filePath?: string;
   // }>({});
 
+  // #region comp constants
+  const _zIonImgStyle = { width: '4rem' };
+  // #endregion
+
   return (
     <ZIonGrid
       style={style}
@@ -128,7 +132,7 @@ const ZDragAndDrop: React.FC<ZDragAndDropType> = ({
             alt='send icon'
             testingselector={`${testingselector}-od-icon`} // od -> overlay-div
             testinglistselector={`${testinglistselector}-od-icon`}
-            style={{ width: '4rem' }}
+            style={_zIonImgStyle}
           />
         </ZIonText>
         <ZIonText

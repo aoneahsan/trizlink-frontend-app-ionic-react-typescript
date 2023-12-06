@@ -133,49 +133,49 @@ const LinkInBiosTimeRangeFilterPopover: React.FC = () => {
 
   return (
     <ZRScrollbars
-      style={{
-        width: !isMdScale ? '87.6vw' : 200,
-        height: !isMdScale ? '94vh' : 300
-      }}>
+      className={classNames({
+        'w-[87.6vw] h-[94vh]': !isMdScale,
+        'w-[200] h-[300]': isMdScale
+      })}>
       <div className='ion-padding-horizontal'>
         <ZIonButton
-          color={'secondary'}
+          color='secondary'
           expand='block'
           className='mx-2 my-3'>
           All Time
         </ZIonButton>
         <ZIonButton
-          color={'secondary'}
+          color='secondary'
           expand='block'
           className='mx-2 my-3'>
           Today
         </ZIonButton>
         <ZIonButton
-          color={'secondary'}
+          color='secondary'
           expand='block'
           className='mx-2 my-3'>
           Last 7 days
         </ZIonButton>
         <ZIonButton
-          color={'secondary'}
+          color='secondary'
           expand='block'
           className='mx-2 my-3'>
           Last 30 days
         </ZIonButton>
         <ZIonButton
-          color={'secondary'}
+          color='secondary'
           expand='block'
           className='mx-2 my-3'>
           This month
         </ZIonButton>
         <ZIonButton
-          color={'secondary'}
+          color='secondary'
           expand='block'
           className='mx-2 my-3'>
           Last month
         </ZIonButton>
         <ZIonButton
-          color={'secondary'}
+          color='secondary'
           expand='block'
           className='mx-2 my-3'>
           Custom Range

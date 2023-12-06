@@ -154,6 +154,8 @@ const AdminPanelFoldersSidebarMenu: React.FC<
     }
   );
 
+  const _zIonContentStyle = { '--padding-top': '7px' };
+
   return (
     <ZIonMenu
       contentId={contentId}
@@ -184,7 +186,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
       </ZIonHeader>
 
       {/* Content */}
-      <ZIonContent style={{ '--padding-top': '7px' }}>
+      <ZIonContent style={_zIonContentStyle}>
         <div className='flex flex-col h-full gap-1'>
           <div className='max-h-[66%] min-h-max'>
             <ZCustomScrollable
@@ -413,11 +415,7 @@ const AdminPanelFoldersSidebarMenu: React.FC<
                 </ZCan>
 
                 {foldersData?.length === 0 && (
-                  <ZIonItem
-                    style={{
-                      '--inner-padding-end': '0px',
-                      '--padding-start': '0px'
-                    }}>
+                  <ZIonItem className='z-inner-padding-end-0 ion-item-start-no-padding'>
                     <ZIonLabel className='w-full text-md ion-text-center'>
                       <ZIonIcon
                         icon={fileTrayOutline}

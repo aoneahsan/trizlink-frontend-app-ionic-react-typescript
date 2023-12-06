@@ -93,12 +93,18 @@ import classNames from 'classnames';
 const ZWorkspaceCreatePageModal: React.FC<{
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
 }> = ({ dismissZIonModal }) => {
+  const formikInitialValues = {
+    pageType: workspaceFormConnectPagesEnum.facebook,
+    pageId: '0'
+  };
+  const zIonSegmentStyle = {
+    '--padding-end': '9px',
+    '--padding-start': '9px'
+  };
+
   return (
     <Formik
-      initialValues={{
-        pageType: workspaceFormConnectPagesEnum.facebook,
-        pageId: '0'
-      }}
+      initialValues={formikInitialValues}
       validate={() => {
         const errors = {};
 
@@ -163,10 +169,7 @@ const ZWorkspaceCreatePageModal: React.FC<{
                             void setFieldValue('pageType', el.type, false);
                             void setFieldValue('pageId', index, false);
                           }}
-                          style={{
-                            '--padding-end': '9px',
-                            '--padding-start': '9px'
-                          }}
+                          style={zIonSegmentStyle}
                           key={index}>
                           <ZIonIcon
                             icon={getPlatformIcon(el.type)}

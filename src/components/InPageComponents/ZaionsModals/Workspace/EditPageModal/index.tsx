@@ -80,20 +80,17 @@ import { workspaceFormConnectPagesEnum } from '@/types/AdminPanel/workspace';
 const ZWorkspaceEditPageModal: React.FC<{
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
 }> = ({ dismissZIonModal }) => {
+  const formikInitialValues = {};
+  const zIonBadgeStyle = { borderColor: 'var(--ion-color-warning)' };
   return (
     <ZIonContent>
       <Formik
-        initialValues={{}}
+        initialValues={formikInitialValues}
         onSubmit={() => {}}>
         {({ values }) => {
           return (
             <ZIonGrid className='ion-no-padding'>
-              <ZIonRow
-                className='ion-padding pb-0 h-[200px] zaions-background-set'
-                style={{
-                  background:
-                    'url(https://d2b57pa8jvjkcd.cloudfront.net/xGF9qraKHpDFhkqdC/JHg2CLhHKG-tom-idea.jpg)'
-                }}>
+              <ZIonRow className='ion-padding pb-0 h-[200px] zaions-background-set zaions__medium_bg'>
                 <ZIonCol size='12'>
                   <div className='flex ion-align-items-center ion-justify-content-between'>
                     <ZIonButton id='z-workspace-hide-profile'>
@@ -177,7 +174,7 @@ const ZWorkspaceEditPageModal: React.FC<{
                   <ZIonText className='text-xl me-3'>Connection</ZIonText>
                   <ZIonBadge
                     className='flex border ion-align-items-center zaions__warning_set'
-                    style={{ borderColor: 'var(--ion-color-warning)' }}>
+                    style={zIonBadgeStyle}>
                     <ZIonIcon
                       icon={alertCircleOutline}
                       className='me-2'

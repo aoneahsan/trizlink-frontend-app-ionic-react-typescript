@@ -228,15 +228,12 @@ const LinkInBioSocialPlatformCardField: React.FC = () => {
                         <ZIonItem
                           key={_index}
                           lines='none'
-                          className='py-3 my-4 border zaions-linkInBio-block'
+                          className='py-3 my-4 border zaions-linkInBio-block z-ion-bg-transparent'
                           testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.socialPlatform.cardItem}-${_index}`}
                           testingselector={
                             CONSTANTS.testingSelectors.linkInBio.formPage.design
                               .blockForm.fields.socialPlatform.cardItem
-                          }
-                          style={{
-                            '--background': 'transparent'
-                          }}>
+                          }>
                           <ZIonReorder
                             slot='start'
                             className='ms-3'>

@@ -371,6 +371,32 @@ const ZUTMTagsFilterMenu: React.FC = () => {
   };
   // #endregion
 
+  const formikInitialValues = {
+    columns: compState?.utmTagsColumn,
+
+    filters: {
+      time:
+        getUtmTagsFiltersData?.settings?.filters?.time ??
+        TimeFilterEnum.allTime,
+      startDate:
+        getUtmTagsFiltersData?.settings?.filters?.startDate ??
+        new Date().toISOString(),
+      endDate:
+        getUtmTagsFiltersData?.settings?.filters?.endDate ??
+        new Date().toISOString()
+    }
+  };
+
+  const zIonItemStyle = {
+    '--inner-padding-end': '.3rem'
+  };
+
+  const libListTableColumnStyle = {
+    '--padding-bottom': '.1rem',
+    '--padding-top': '.1rem',
+    '--padding-start': '2px'
+  };
+
   return (
     <ZIonMenu
       side='end'
@@ -429,21 +455,7 @@ const ZUTMTagsFilterMenu: React.FC = () => {
         {/* Content */}
         <ZIonContent className='ion-padding-top'>
           <Formik
-            initialValues={{
-              columns: compState?.utmTagsColumn,
-
-              filters: {
-                time:
-                  getUtmTagsFiltersData?.settings?.filters?.time ??
-                  TimeFilterEnum.allTime,
-                startDate:
-                  getUtmTagsFiltersData?.settings?.filters?.startDate ??
-                  new Date().toISOString(),
-                endDate:
-                  getUtmTagsFiltersData?.settings?.filters?.endDate ??
-                  new Date().toISOString()
-              }
-            }}
+            initialValues={formikInitialValues}
             enableReinitialize={true}
             onSubmit={async values => {
               try {
@@ -587,9 +599,7 @@ const ZUTMTagsFilterMenu: React.FC = () => {
                             CONSTANTS.testingSelectors.utmTags.listPage
                               .filterSidebar.columnAccordionHead
                           }
-                          style={{
-                            '--inner-padding-end': '.3rem'
-                          }}>
+                          style={zIonItemStyle}>
                           <ZIonText
                             className={classNames({
                               'text-sm ion-no-margin font-semibold': true
@@ -619,11 +629,7 @@ const ZUTMTagsFilterMenu: React.FC = () => {
                                       .filterSidebar.reorderItem
                                   }
                                   testingselector={`${CONSTANTS.testingSelectors.utmTags.listPage.filterSidebar.reorderItem}-${el.id}`}
-                                  style={{
-                                    '--padding-bottom': '.1rem',
-                                    '--padding-top': '.1rem',
-                                    '--padding-start': '2px'
-                                  }}>
+                                  style={libListTableColumnStyle}>
                                   <ZIonReorder
                                     slot='start'
                                     className='me-3 ps-2'

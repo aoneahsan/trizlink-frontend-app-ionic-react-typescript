@@ -557,7 +557,7 @@ const ZLinkInBiosListPage: React.FC = () => {
                     </Suspense>
 
                     {/* Col-2 Row-2 */}
-                    <ZIonRow style={{ height: 'calc(100% - 4rem)' }}>
+                    <ZIonRow className='h-[calc(100%-4rem)]'>
                       {isLgScale && (
                         <ZCan
                           shareWSId={wsShareId}
@@ -1104,7 +1104,9 @@ const ZInpageMainContent: React.FC = () => {
 //   };
 
 //   return (
-//     <ZRScrollbars style={{ width: 300, height: 300 }}>
+//     <ZRScrollbars  className={classNames({
+// 'w-[300px] h-[300px]': true
+// })}>
 //       <Formik
 //         initialValues={generateInitialValueOfDomainsFormik(
 //           _LinkInBiosFieldsDataDomainsSelector,
@@ -1208,11 +1210,14 @@ const SearchQueryInputComponent: React.FC = () => {
   const setLinkInBiosFilterOptionsState = useSetRecoilState(
     LinkInBiosFilterOptionsRStateAtom
   );
+  const formikInitialValues = {
+    searchValue: ''
+  };
+  const zIonItemStyle = { '--padding-start': '10px' };
+
   return (
     <Formik
-      initialValues={{
-        searchValue: ''
-      }}
+      initialValues={formikInitialValues}
       onSubmit={values => {
         try {
           if (values?.searchValue?.trim()?.length > 0) {
@@ -1232,8 +1237,7 @@ const SearchQueryInputComponent: React.FC = () => {
       }}>
       {({ submitForm, handleChange }) => (
         <ZIonItem
-          className='ion-item-start-no-padding'
-          style={{ '--inner-padding-end': '0px' }}
+          className='ion-item-start-no-padding z-inner-padding-end-0'
           lines='none'
           minHeight='40px'>
           <ZIonInput
@@ -1245,29 +1249,22 @@ const SearchQueryInputComponent: React.FC = () => {
             placeholder='Search link by title, domain...'
             fill='outline'
             counter={false}
-            className='zaions__bg_white'
+            className='zaions__bg_white z-ion-border-radius-0'
             minHeight='40px'
             testingselector={
               CONSTANTS.testingSelectors.linkInBio.listPage.searchInput
             }
-            style={{
-              '--padding-start': '10px',
-              '--border-radius': '0'
-            }}
+            style={zIonItemStyle}
           />
           <ZIonButton
             onClick={() => {
               void submitForm();
             }}
             slot='end'
-            className='ion-no-margin ion-text-capitalize'
+            className='h-full ion-no-margin ion-text-capitalize z-ion-border-radius-0'
             testingselector={
               CONSTANTS.testingSelectors.linkInBio.listPage.searchBtn
-            }
-            style={{
-              height: '100%',
-              '--border-radius': '0'
-            }}>
+            }>
             <ZIonIcon
               icon={filterOutline}
               className='me-2'

@@ -409,21 +409,23 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
     isZFetching = mode === FormMode.EDIT && isCurrentSWSTimeSlotDataFetching;
   }
 
+  const formikInitialValues = {
+    time: currentTimeSlotData?.time ?? currentSWSTimeSlotData?.time ?? '',
+    day:
+      currentTimeSlotData?.day ??
+      currentSWSTimeSlotData?.day ??
+      timeSlotDay ??
+      daysEnum.monday,
+    color:
+      currentTimeSlotData?.color ??
+      currentSWSTimeSlotData?.color ??
+      DefaultTimeSlotColors[0].color
+  };
+
   return (
     <ZIonContent className='w-full h-full ion-padding'>
       <Formik
-        initialValues={{
-          time: currentTimeSlotData?.time ?? currentSWSTimeSlotData?.time ?? '',
-          day:
-            currentTimeSlotData?.day ??
-            currentSWSTimeSlotData?.day ??
-            timeSlotDay ??
-            daysEnum.monday,
-          color:
-            currentTimeSlotData?.color ??
-            currentSWSTimeSlotData?.color ??
-            DefaultTimeSlotColors[0].color
-        }}
+        initialValues={formikInitialValues}
         enableReinitialize={true}
         validate={values => {
           const errors: {
@@ -612,6 +614,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                 <div className='flex mt-3 ion-align-items-center'>
                   {/*  */}
                   {DefaultTimeSlotColors.map((el, index) => {
+                    const zIonButtonStyle = { '--background': el.color };
                     return (
                       <ZIonButton
                         key={index}
@@ -619,7 +622,7 @@ const ZWorkspaceTimeSlotFormModal: React.FC<{
                         size='small'
                         fill='default'
                         className='w-[1.7rem] shadow-none cursor-pointer ion-no-margin ion-no-padding flex ion-align-items-center ion-justify-content-center h-[1.3rem] rounded-full mx-1'
-                        style={{ '--background': el.color }}
+                        style={zIonButtonStyle}
                         testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.timetable.formModal.colorBtn}-${el.id}`}
                         testinglistselector={
                           CONSTANTS.testingSelectors.workspace.settingsModal

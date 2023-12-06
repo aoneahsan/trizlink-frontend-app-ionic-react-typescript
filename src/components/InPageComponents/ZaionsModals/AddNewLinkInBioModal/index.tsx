@@ -196,6 +196,12 @@ const ZaionsAddLinkInBioModal: React.FC<{
     } catch (error) {}
   };
 
+  // #region Comp Constants
+  const formikInitialValues = {
+    linkInBioTitle: ''
+  };
+  // #endregion
+
   return (
     <ZIonContent className='ion-padding'>
       {/* Close modal button */}
@@ -228,9 +234,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
         </ZIonText>
 
         <Formik
-          initialValues={{
-            linkInBioTitle: ''
-          }}
+          initialValues={formikInitialValues}
           validate={values => {
             const errors = {};
             validateField('linkInBioTitle', values, errors);

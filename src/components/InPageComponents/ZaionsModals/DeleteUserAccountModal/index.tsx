@@ -28,9 +28,9 @@ import {
   ZIonFooter,
   ZIonList,
   ZIonButton,
-  ZIonTitle
+  ZIonTitle,
+  ZIonInput
 } from '@/components/ZIonComponents';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 /**
  * Global Constants Imports go down
@@ -126,10 +126,15 @@ const DeleteUserAccountModal: React.FC<{
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { presentZIonLoader, dismissZIonLoader } = useZIonLoading();
+
+  // #region Comp Constants
+  const formikInitialValues = { confirm: '', reason: '' };
+  // #endregion
+
   return (
     <>
       <Formik
-        initialValues={{ confirm: '', reason: '' }}
+        initialValues={formikInitialValues}
         validate={values => {
           const errors: {
             confirm?: string;
@@ -297,28 +302,26 @@ const DeleteUserAccountModal: React.FC<{
                           <ZIonText>Other</ZIonText>
                         </ZIonItem>
                         {values.reason === 'Other' && (
-                          <ZIonInputField
-                            inputFieldProps={{
-                              className: classNames({
-                                'ion-margin-start mt-3': true,
-                                'ion-touched': touched?.reason === true,
-                                'ion-invalid':
-                                  touched?.reason === true && errors?.reason,
-                                'ion-valid':
-                                  touched?.reason === true &&
-                                  (errors?.reason === null ||
-                                    errors?.reason === undefined)
-                              }),
-                              label: 'Specify reason',
-                              labelPlacement: 'floating',
-                              name: 'reason',
-                              onIonChange: handleChange,
-                              onIonBlur: handleBlur,
-                              value: values.reason,
-                              errorText: errors.reason,
-                              type: 'text',
-                              color: 'dark'
-                            }}
+                          <ZIonInput
+                            label='Specify reason'
+                            labelPlacement='floating'
+                            name='reason'
+                            onIonChange={handleChange}
+                            onIonBlur={handleBlur}
+                            value={values.reason}
+                            errorText={errors.reason}
+                            type='text'
+                            color='dark'
+                            className={classNames({
+                              'ion-margin-start mt-3': true,
+                              'ion-touched': touched?.reason === true,
+                              'ion-invalid':
+                                touched?.reason === true && errors?.reason,
+                              'ion-valid':
+                                touched?.reason === true &&
+                                (errors?.reason === null ||
+                                  errors?.reason === undefined)
+                            })}
                           />
                         )}
                       </IonRadioGroup>
@@ -330,28 +333,26 @@ const DeleteUserAccountModal: React.FC<{
                       and then select Delete account.
                     </ZIonText>
 
-                    <ZIonInputField
-                      inputFieldProps={{
-                        className: classNames({
-                          'mt-3': true,
-                          'ion-touched': touched?.confirm === true,
-                          'ion-invalid':
-                            touched?.confirm === true && errors.confirm,
-                          'ion-valid':
-                            touched?.confirm === true &&
-                            (errors.confirm === null ||
-                              errors.confirm === undefined)
-                        }),
-                        label: 'Enter Key',
-                        labelPlacement: 'floating',
-                        name: 'confirm',
-                        onIonChange: handleChange,
-                        onIonBlur: handleBlur,
-                        value: values.confirm,
-                        errorText: errors.confirm,
-                        type: 'text',
-                        color: 'dark'
-                      }}
+                    <ZIonInput
+                      label='Enter Key'
+                      labelPlacement='floating'
+                      name='confirm'
+                      onIonChange={handleChange}
+                      onIonBlur={handleBlur}
+                      value={values.confirm}
+                      errorText={errors.confirm}
+                      type='text'
+                      color='dark'
+                      className={classNames({
+                        'mt-3': true,
+                        'ion-touched': touched?.confirm === true,
+                        'ion-invalid':
+                          touched?.confirm === true && errors.confirm,
+                        'ion-valid':
+                          touched?.confirm === true &&
+                          (errors.confirm === null ||
+                            errors.confirm === undefined)
+                      })}
                     />
                   </ZIonCol>
                 </ZIonRow>

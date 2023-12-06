@@ -60,7 +60,7 @@ const LinkFavIcon: React.FC = () => {
           fieldName='favicon'
           imageUrl={values.favicon}
           title='Click to upload favicon'
-          style={{ height: '9rem' }}
+          className='h-[9rem]'
           testingselector={
             CONSTANTS.testingSelectors.shortLink.formPage.favicon
           }

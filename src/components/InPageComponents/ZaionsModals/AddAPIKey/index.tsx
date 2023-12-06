@@ -17,9 +17,9 @@ import {
   ZIonContent,
   ZIonIcon,
   ZIonFooter,
-  ZIonButton
+  ZIonButton,
+  ZIonInput
 } from '@/components/ZIonComponents';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 // Global Constants
 import { getRandomKey } from '@/utils/helpers';
@@ -121,12 +121,17 @@ const ZaionsAddAPIKeyModal: React.FC<{
       updateAt: ''
     }));
   };
+
+  // #region Comp Constants
+  const formikInitialValues = {
+    name: apiKeyFormState?.name ?? 'API Key'
+  };
+  // #endregion
+
   // JSX Code
   return (
     <Formik
-      initialValues={{
-        name: apiKeyFormState?.name ?? 'API Key'
-      }}
+      initialValues={formikInitialValues}
       enableReinitialize={true}
       validate={values => {
         const errors: {
@@ -234,26 +239,24 @@ const ZaionsAddAPIKeyModal: React.FC<{
                 </ZIonText>
               </div>
               <Form className='px-2'>
-                <ZIonInputField
-                  inputFieldProps={{
-                    className: classNames({
-                      'mt-4': true,
-                      'ion-touched': touched.name === true,
-                      'ion-invalid': touched.name === true && errors.name,
-                      'ion-valid':
-                        touched.name === true &&
-                        (errors.name === undefined || errors.name === null)
-                    }),
-                    label: 'API name*',
-                    type: 'text',
-                    labelPlacement: 'floating',
-                    name: 'name',
-                    onIonChange: handleChange,
-                    onIonBlur: handleBlur,
-                    value: values.name,
-                    errorText: errors.name,
-                    color: 'dark'
-                  }}
+                <ZIonInput
+                  label='API name*'
+                  type='text'
+                  labelPlacement='floating'
+                  name='name'
+                  onIonChange={handleChange}
+                  onIonBlur={handleBlur}
+                  value={values.name}
+                  errorText={errors.name}
+                  color='dark'
+                  className={classNames({
+                    'mt-4': true,
+                    'ion-touched': touched.name === true,
+                    'ion-invalid': touched.name === true && errors.name,
+                    'ion-valid':
+                      touched.name === true &&
+                      (errors.name === undefined || errors.name === null)
+                  })}
                 />
               </Form>
             </ZIonContent>

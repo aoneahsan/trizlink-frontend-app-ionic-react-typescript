@@ -45,7 +45,7 @@ const LinkInBioPDButton: React.FC<LinkInBioPDButtonInterface> = ({
       testinglistselector={testinglistselector}>
       <ZIonImg
         src={icon}
-        style={{ width: '25px' }}
+        className='w-[25px]'
       />
     </ZIonButton>
   );

@@ -223,9 +223,3 @@ const ZRichTextEditor: React.FC<ZTextEditorInterface> = ({
 };
 
 export default ZRichTextEditor;
-
-// <div
-// className='unsetStyles'
-// dangerouslySetInnerHTML={{
-//   __html: draftToHtml(rawContentState)
-// }}></div>

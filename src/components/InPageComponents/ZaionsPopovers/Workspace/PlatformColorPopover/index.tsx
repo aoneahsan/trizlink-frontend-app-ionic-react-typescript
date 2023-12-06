@@ -74,26 +74,29 @@ const ZPlatformColorPopover: React.FC<{
         className='mb-2'>
         <ZIonItem className='ion-no-padding'>PLATFORM COLORS</ZIonItem>
       </ZIonCol>
-      {PlatformColorsData.map((el, index) => (
-        <ZIonCol
-          size='3'
-          key={index}>
-          <div
-            className='flex w-8 h-8 rounded cursor-pointer ion-align-items-center ion-justify-content-center'
-            style={{ backgroundColor: el.colorCode }}
-            title={el.colorName}
-            onClick={() => {
-              dismissZIonPopover(el.colorCode, el.colorName);
-            }}>
-            {_colorCode === el.colorCode && (
-              <ZIonIcon
-                icon={checkmarkOutline}
-                color='light'
-              />
-            )}
-          </div>
-        </ZIonCol>
-      ))}
+      {PlatformColorsData.map((el, index) => {
+        const _style = { backgroundColor: el.colorCode };
+        return (
+          <ZIonCol
+            size='3'
+            key={index}>
+            <div
+              className='flex w-8 h-8 rounded cursor-pointer ion-align-items-center ion-justify-content-center'
+              style={_style}
+              title={el.colorName}
+              onClick={() => {
+                dismissZIonPopover(el.colorCode, el.colorName);
+              }}>
+              {_colorCode === el.colorCode && (
+                <ZIonIcon
+                  icon={checkmarkOutline}
+                  color='light'
+                />
+              )}
+            </div>
+          </ZIonCol>
+        );
+      })}
     </ZIonRow>
   );
 };

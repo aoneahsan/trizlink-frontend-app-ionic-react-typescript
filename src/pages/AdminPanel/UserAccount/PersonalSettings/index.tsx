@@ -168,43 +168,45 @@ const ZPersonalSettings: React.FC = () => {
   };
   // #endregion
 
+  const formikInitialValues = {
+    invitationNotification: {
+      inApp: USNotificationSettingsData?.invitationNotification?.inApp ?? false,
+      push: USNotificationSettingsData?.invitationNotification?.push ?? false,
+      email: USNotificationSettingsData?.invitationNotification?.email ?? false,
+      sms: USNotificationSettingsData?.invitationNotification?.sms ?? false
+    },
+    otherNotification: {
+      inApp: USNotificationSettingsData?.otherNotification?.inApp ?? false,
+      push: USNotificationSettingsData?.otherNotification?.push ?? false,
+      email: USNotificationSettingsData?.otherNotification?.email ?? false,
+      sms: USNotificationSettingsData?.otherNotification?.sms ?? false
+    },
+    browser: {
+      push: USNotificationSettingsData?.browser?.push ?? false,
+      playSoundInNotification:
+        USNotificationSettingsData?.browser?.playSoundInNotification ?? false,
+      playSoundInMessage:
+        USNotificationSettingsData?.browser?.playSoundInMessage ?? false
+    },
+    email: {
+      frequency:
+        USNotificationSettingsData?.email?.frequency ??
+        USNotificationSettingFrequencyEnum.all,
+      notifications: {
+        otherNotifications:
+          USNotificationSettingsData?.email?.notifications
+            ?.otherNotifications ?? false
+      }
+    }
+  };
+
+  const zIonItemStyle = {
+    '--padding-start': '4px'
+  };
+
   return (
     <Formik
-      initialValues={{
-        invitationNotification: {
-          inApp:
-            USNotificationSettingsData?.invitationNotification?.inApp ?? false,
-          push:
-            USNotificationSettingsData?.invitationNotification?.push ?? false,
-          email:
-            USNotificationSettingsData?.invitationNotification?.email ?? false,
-          sms: USNotificationSettingsData?.invitationNotification?.sms ?? false
-        },
-        otherNotification: {
-          inApp: USNotificationSettingsData?.otherNotification?.inApp ?? false,
-          push: USNotificationSettingsData?.otherNotification?.push ?? false,
-          email: USNotificationSettingsData?.otherNotification?.email ?? false,
-          sms: USNotificationSettingsData?.otherNotification?.sms ?? false
-        },
-        browser: {
-          push: USNotificationSettingsData?.browser?.push ?? false,
-          playSoundInNotification:
-            USNotificationSettingsData?.browser?.playSoundInNotification ??
-            false,
-          playSoundInMessage:
-            USNotificationSettingsData?.browser?.playSoundInMessage ?? false
-        },
-        email: {
-          frequency:
-            USNotificationSettingsData?.email?.frequency ??
-            USNotificationSettingFrequencyEnum.all,
-          notifications: {
-            otherNotifications:
-              USNotificationSettingsData?.email?.notifications
-                ?.otherNotifications ?? false
-          }
-        }
-      }}
+      initialValues={formikInitialValues}
       enableReinitialize={true}
       onSubmit={values => {
         const zStringifyData = zStringify({
@@ -355,10 +357,7 @@ const ZPersonalSettings: React.FC = () => {
                             key={index}
                             className={classNames({
                               'h-[2.9rem]': !isMdScale
-                            })}
-                            style={{
-                              '--padding-start': '10px'
-                            }}>
+                            })}>
                             <ZIonSkeletonText
                               className='overflow-hidden rounded-full'
                               width={isMdScale ? '2.5rem' : '2rem'}
@@ -406,19 +405,9 @@ const ZPersonalSettings: React.FC = () => {
                               'mb-0 ion-activatable ripple-parent cursor-pointer rounded-lg':
                                 true,
                               'h-[2.9rem] mb-1': !isMdScale
-                            })}
-                            style={{
-                              '--padding-start': '10px'
-                            }}>
+                            })}>
                             <ZUserAvatarButton
                               userAvatar={el?.workspaceImage}
-                              userAvatarUi={{
-                                name: el?.workspaceName
-                              }}
-                              style={{
-                                height: isMdScale ? '2.5rem' : '2rem',
-                                width: isMdScale ? '2.5rem' : '2rem'
-                              }}
                             />
                             <ZIonLabel className='ms-2'>
                               <ZIonText
@@ -467,19 +456,9 @@ const ZPersonalSettings: React.FC = () => {
                               'mb-0 ion-activatable ripple-parent cursor-pointer rounded-lg':
                                 true,
                               'h-[2.9rem] mb-1': !isMdScale
-                            })}
-                            style={{
-                              '--padding-start': '10px'
-                            }}>
+                            })}>
                             <ZUserAvatarButton
                               userAvatar={el?.workspaceImage}
-                              userAvatarUi={{
-                                name: el?.workspaceName
-                              }}
-                              style={{
-                                height: isMdScale ? '2.5rem' : '2rem',
-                                width: isMdScale ? '2.5rem' : '2rem'
-                              }}
                             />
                             <ZIonLabel className='ms-2'>
                               <ZIonText
@@ -1340,9 +1319,7 @@ const ZPersonalSettings: React.FC = () => {
                         className={classNames({
                           'rounded-lg overflow-hidden mt-2': true
                         })}
-                        style={{
-                          '--padding-start': '4px'
-                        }}>
+                        style={zIonItemStyle}>
                         <ZIonCheckbox
                           mode='ios'
                           onIonChange={() => {
@@ -1388,9 +1365,7 @@ const ZPersonalSettings: React.FC = () => {
                         className={classNames({
                           'rounded-lg overflow-hidden mt-2': true
                         })}
-                        style={{
-                          '--padding-start': '4px'
-                        }}>
+                        style={zIonItemStyle}>
                         <ZIonCheckbox
                           mode='ios'
                           checked={
@@ -1437,9 +1412,7 @@ const ZPersonalSettings: React.FC = () => {
                         className={classNames({
                           'rounded-lg overflow-hidden mt-2': true
                         })}
-                        style={{
-                          '--padding-start': '4px'
-                        }}>
+                        style={zIonItemStyle}>
                         <ZIonCheckbox
                           mode='ios'
                           checked={

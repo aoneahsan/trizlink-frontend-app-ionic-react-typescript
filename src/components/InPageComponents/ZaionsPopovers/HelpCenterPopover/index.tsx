@@ -77,6 +77,9 @@ const ZHelpCenterPopover: React.FC<{
   dismissZIonPopover: (data?: string, role?: string | undefined) => void;
   zNavigatePushRoute: (_url: string) => void;
 }> = ({ dismissZIonPopover, zNavigatePushRoute }) => {
+  const divStyle = {
+    borderInlineStart: '1px solid rgba(5, 5, 5, 0.06)'
+  };
   return (
     <div className='px-1 py-1'>
       <ZIonText
@@ -214,9 +217,7 @@ const ZHelpCenterPopover: React.FC<{
         {/* Middle line */}
         <div
           className='h-[0.9em]'
-          style={{
-            borderInlineStart: '1px solid rgba(5, 5, 5, 0.06)'
-          }}></div>
+          style={divStyle}></div>
 
         {/* Android */}
         <ZIonButton

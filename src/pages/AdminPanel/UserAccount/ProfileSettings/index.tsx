@@ -206,8 +206,31 @@ const ZProfileSettingsSettings: React.FC = () => {
       // }
     }
   };
-
   // #endregion
+
+  const formikInitialValues = {
+    name: userAccountStateAtom?.name ?? '',
+    username: userAccountStateAtom?.username ?? '',
+    userProfileFile: {
+      filePath: userAccountStateAtom?.profileImage?.filePath ?? '',
+      fileUrl:
+        userAccountStateAtom?.profileImage?.fileUrl ??
+        userAccountStateAtom?.avatar ??
+        ''
+    },
+    phoneNumber: userAccountStateAtom?.phoneNumber ?? '',
+    enableMakeEmailPrimary: true
+  };
+
+  const ZUserAvatarButtonStyle = {
+    cursor: 'auto !important',
+    '--border-radius': '4px'
+  };
+
+  const _userAvatarUi = {
+    name: userAccountStateAtom?.username
+  };
+
   return (
     <ZIonRow
       className={classNames({
@@ -254,19 +277,7 @@ const ZProfileSettingsSettings: React.FC = () => {
         sizeXs='12'
         className='mt-4'>
         <Formik
-          initialValues={{
-            name: userAccountStateAtom?.name ?? '',
-            username: userAccountStateAtom?.username ?? '',
-            userProfileFile: {
-              filePath: userAccountStateAtom?.profileImage?.filePath ?? '',
-              fileUrl:
-                userAccountStateAtom?.profileImage?.fileUrl ??
-                userAccountStateAtom?.avatar ??
-                ''
-            },
-            phoneNumber: userAccountStateAtom?.phoneNumber ?? '',
-            enableMakeEmailPrimary: true
-          }}
+          initialValues={formikInitialValues}
           enableReinitialize={true}
           validate={values => {
             const errors = {};
@@ -355,21 +366,14 @@ const ZProfileSettingsSettings: React.FC = () => {
                 {/* Profile */}
                 <div className='flex w-full gap-2 mt-2 mb-4 ion-align-items-center'>
                   <ZUserAvatarButton
-                    className='border rounded-sm'
+                    className='border rounded-sm w-[3rem!important] h-[3rem!important]'
                     userAvatar={
                       compState?.profilePicFrontendUrl ??
                       compState?.profilePicFormattedObj?.fileUrl ??
                       userAccountStateAtom?.profileImage?.fileUrl
                     }
-                    style={{
-                      height: '3rem',
-                      width: '3rem',
-                      cursor: 'auto !important',
-                      '--border-radius': '4px'
-                    }}
-                    userAvatarUi={{
-                      name: userAccountStateAtom?.username
-                    }}
+                    style={ZUserAvatarButtonStyle}
+                    userAvatarUi={_userAvatarUi}
                   />
                   {/* <ZUploadInput
                     setFieldValueFn={setFieldValue}
@@ -1044,28 +1048,31 @@ const ZChangePassword: React.FC = () => {
     }
   };
   // #endregion
+
+  const formikInitialValues = {
+    tab: EChangePasswordTab.currentPasswordTab,
+    canViewCurrentPassword: false,
+    currentPassword: '',
+    isCurrentPasswordApiError: false,
+    currentPasswordApiMessage: '',
+
+    canViewNewPassword: false,
+    newPassword: '',
+
+    canViewConfirmPassword: false,
+    confirmPassword: '',
+
+    otp: '',
+    otpCodeValidTill: '',
+    isOTPApiError: false,
+    OTPApiMessage: '',
+
+    resendOTPValidCheck: false
+  };
+
   return (
     <Formik
-      initialValues={{
-        tab: EChangePasswordTab.currentPasswordTab,
-        canViewCurrentPassword: false,
-        currentPassword: '',
-        isCurrentPasswordApiError: false,
-        currentPasswordApiMessage: '',
-
-        canViewNewPassword: false,
-        newPassword: '',
-
-        canViewConfirmPassword: false,
-        confirmPassword: '',
-
-        otp: '',
-        otpCodeValidTill: '',
-        isOTPApiError: false,
-        OTPApiMessage: '',
-
-        resendOTPValidCheck: false
-      }}
+      initialValues={formikInitialValues}
       validate={values => {
         const errors: {
           confirmPassword?: string;

@@ -142,12 +142,11 @@ const ZNotificationTab: React.FC = () => {
           {isSmScale && (
             <ZUserAvatarButton
               className={classNames({
-                'w-[10px] h-[10px]': true,
+                'w-[35px] h-[35px]': true,
                 'me-3': isLgScale,
                 'me-1': !isLgScale
               })}
               userAvatar={ProductLogo}
-              style={{ height: '35px', width: '35px' }}
             />
           )}
 

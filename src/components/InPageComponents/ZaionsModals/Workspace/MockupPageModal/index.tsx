@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Packages Imports go down
@@ -105,6 +105,23 @@ const ZWorkspaceMockupPageModal: React.FC<{
     ZaionsFileUploadModal
   );
 
+  // #region Comp Constant
+  const _style = { backgroundColor: color };
+
+  const formikInitialValues = {
+    coverImage: '',
+    profilePhoto: '',
+    pageName: '',
+    username: '',
+    location: '',
+    subscribersCount: '',
+    description: '',
+    platformColor: PlatformColorsData[0].colorCode,
+    platformIcon: PlatformIconsData.defaultIcons[0].icon,
+    contentStyle: contentStyleInterface.default
+  };
+  // #endregion
+
   return (
     <>
       <ZIonHeader>
@@ -116,7 +133,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
               {/*  */}
               <div
                 className='flex w-10 h-10 rounded ion-align-items-center ion-justify-content-center'
-                style={{ backgroundColor: color }}>
+                style={_style}>
                 <ZIonIcon
                   icon={logo}
                   className='w-7 h-7'
@@ -152,18 +169,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
       {/*  */}
       <ZIonContent color='light'>
         <Formik
-          initialValues={{
-            coverImage: '',
-            profilePhoto: '',
-            pageName: '',
-            username: '',
-            location: '',
-            subscribersCount: '',
-            description: '',
-            platformColor: PlatformColorsData[0].colorCode,
-            platformIcon: PlatformIconsData.defaultIcons[0].icon,
-            contentStyle: contentStyleInterface.default
-          }}
+          initialValues={formikInitialValues}
           validate={values => {
             const errors = {};
 
@@ -188,6 +194,35 @@ const ZWorkspaceMockupPageModal: React.FC<{
             handleBlur,
             setFieldValue
           }) => {
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const zIonRowCoverImgStyle = useMemo(
+              () => ({
+                background:
+                  values?.coverImage?.trim()?.length > 0
+                    ? `url(${values.coverImage})`
+                    : '',
+
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+              }),
+              [values?.coverImage]
+            );
+
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const profilePicStyle = useMemo(
+              () => ({
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                background:
+                  values?.profilePhoto?.trim()?.length > 0
+                    ? `url(${values.profilePhoto})`
+                    : ''
+              }),
+              [values?.profilePhoto]
+            );
+
             return (
               <>
                 <Form>
@@ -213,16 +248,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
                             workspaceFormConnectPagesEnum.googleBusiness ||
                           pageType === workspaceFormConnectPagesEnum.youtube
                       })}
-                      style={{
-                        background:
-                          values?.coverImage?.trim()?.length > 0
-                            ? `url(${values.coverImage})`
-                            : '',
-
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat'
-                      }}
+                      style={zIonRowCoverImgStyle}
                       onClick={() => {
                         presentZFileUploadModal({
                           _cssClass: 'file-upload-modal-size',
@@ -333,15 +359,7 @@ const ZWorkspaceMockupPageModal: React.FC<{
                               values.coverImage.trim().length ??
                               values.profilePhoto.trim().length
                           })}
-                          style={{
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat',
-                            background:
-                              values?.profilePhoto?.trim()?.length > 0
-                                ? `url(${values.profilePhoto})`
-                                : ''
-                          }}>
+                          style={profilePicStyle}>
                           <ZIonIcon
                             icon={cameraOutline}
                             className={classNames({
@@ -532,6 +550,18 @@ const PlatformColorAndIcon: React.FC = () => {
     }
   );
 
+  // #region Comp Constants
+  const zIonButtonStyle = useMemo(
+    () => ({ backgroundColor: values.platformColor }),
+    [values.platformColor]
+  );
+
+  const zIonIconStyle = useMemo(
+    () => ({ color: values.platformColor }),
+    [values.platformColor]
+  );
+  // #endregion
+
   return (
     <ZIonRow className='mx-3 mt-3'>
       <ZIonCol>
@@ -554,7 +584,7 @@ const PlatformColorAndIcon: React.FC = () => {
           }}>
           <div
             className='w-8 h-8 rounded zaions_secondary_color'
-            style={{ backgroundColor: values.platformColor }}></div>
+            style={zIonButtonStyle}></div>
           <ZIonText className='ms-3'>Platform color</ZIonText>
         </ZIonButton>
       </ZIonCol>
@@ -581,7 +611,7 @@ const PlatformColorAndIcon: React.FC = () => {
           <ZIonIcon
             className='w-8 h-8'
             icon={values.platformIcon}
-            style={{ color: values.platformColor }}
+            style={zIonIconStyle}
           />
           <ZIonText className='mt-1 ms-3'>Platform icon</ZIonText>
         </ZIonButton>

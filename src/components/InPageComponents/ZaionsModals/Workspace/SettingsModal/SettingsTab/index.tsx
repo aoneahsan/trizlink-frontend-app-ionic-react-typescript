@@ -471,15 +471,19 @@ const ZSettingsTab: React.FC<{
   }, [workspaceId]);
   // #endregion
 
+  // #region Comp Constant
+  const formikInitialValues = {
+    workspaceName: compState?.workspace?.workspaceName ?? '',
+    workspaceTimezone: compState?.workspace?.workspaceTimezone ?? '',
+    internalPost: compState?.workspace?.internalPost ?? false
+  };
+  // #endregion
+
   return (
     <ZIonGrid className='w-full h-full pt-6'>
       <ZIonRow className='mx-auto w-[40%]'>
         <Formik
-          initialValues={{
-            workspaceName: compState?.workspace?.workspaceName ?? '',
-            workspaceTimezone: compState?.workspace?.workspaceTimezone ?? '',
-            internalPost: compState?.workspace?.internalPost ?? false
-          }}
+          initialValues={formikInitialValues}
           enableReinitialize={true}
           validate={values => {
             const errors = {};

@@ -73,7 +73,7 @@ const ZLinkInBioRSSBlock: React.FC<ZLinkInBioRSSBlockInterface> = ({
         // slidesPerView={1}
         // onSlideChange={() => {}}
         // onSwiper={(_) => {}}
-        style={{ width: '100%' }}>
+        className='w-full'>
         {data !== undefined ? (
           data?.map((element, index) => {
             return (

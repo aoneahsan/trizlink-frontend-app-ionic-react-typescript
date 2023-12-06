@@ -72,6 +72,7 @@ const ZLinkInBioQAndABlock: React.FC<ZLinkInBioQAndABlockInterface> = ({
   return (
     <ZIonCol>
       {QAndABlockData?.map((element, index) => {
+        const _dangerouslySetInnerHTML = { __html: element.text ?? '' };
         return (
           <ZIonAccordionGroup key={index}>
             <ZIonAccordion value={`z_q&a_accordion_${index}`}>
@@ -88,7 +89,7 @@ const ZLinkInBioQAndABlock: React.FC<ZLinkInBioQAndABlockInterface> = ({
                 })}
                 slot='content'>
                 {element.text !== null && element.text !== undefined && (
-                  <div dangerouslySetInnerHTML={{ __html: element.text }} />
+                  <div dangerouslySetInnerHTML={_dangerouslySetInnerHTML} />
                 )}
               </div>
             </ZIonAccordion>

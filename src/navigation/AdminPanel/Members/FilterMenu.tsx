@@ -376,6 +376,34 @@ const ZMembersFilterMenu: React.FC = () => {
   };
   // #endregion
 
+  const formikInitialValues = {
+    columns: compState?.membersColumn,
+
+    filters: {
+      time:
+        getMemberFiltersData?.settings?.filters?.time ?? TimeFilterEnum.allTime,
+      startDate:
+        getMemberFiltersData?.settings?.filters?.startDate ??
+        new Date().toISOString(),
+      endDate:
+        getMemberFiltersData?.settings?.filters?.endDate ??
+        new Date().toISOString(),
+
+      role: getMemberFiltersData?.settings?.filters?.role ?? '',
+      status: getMemberFiltersData?.settings?.filters?.status ?? ''
+    }
+  };
+
+  const zIonItemStyle = {
+    '--inner-padding-end': '.3rem'
+  };
+
+  const libListTableColumnStyle = {
+    '--padding-bottom': '.1rem',
+    '--padding-top': '.1rem',
+    '--padding-start': '2px'
+  };
+
   return (
     <ZIonMenu
       side='end'
@@ -446,24 +474,7 @@ const ZMembersFilterMenu: React.FC = () => {
         {/* Content */}
         <ZIonContent className='ion-padding-top'>
           <Formik
-            initialValues={{
-              columns: compState?.membersColumn,
-
-              filters: {
-                time:
-                  getMemberFiltersData?.settings?.filters?.time ??
-                  TimeFilterEnum.allTime,
-                startDate:
-                  getMemberFiltersData?.settings?.filters?.startDate ??
-                  new Date().toISOString(),
-                endDate:
-                  getMemberFiltersData?.settings?.filters?.endDate ??
-                  new Date().toISOString(),
-
-                role: getMemberFiltersData?.settings?.filters?.role ?? '',
-                status: getMemberFiltersData?.settings?.filters?.status ?? ''
-              }
-            }}
+            initialValues={formikInitialValues}
             enableReinitialize={true}
             onSubmit={async values => {
               try {
@@ -673,9 +684,7 @@ const ZMembersFilterMenu: React.FC = () => {
                             CONSTANTS.testingSelectors.pixels.listPage
                               .filterSidebar.columnAccordionHead
                           }
-                          style={{
-                            '--inner-padding-end': '.3rem'
-                          }}>
+                          style={zIonItemStyle}>
                           <ZIonText
                             className={classNames({
                               'text-sm ion-no-margin font-semibold': true
@@ -705,11 +714,7 @@ const ZMembersFilterMenu: React.FC = () => {
                                       .filterSidebar.reorderItem
                                   }
                                   testingselector={`${CONSTANTS.testingSelectors.pixels.listPage.filterSidebar.reorderItem}-${el.id}`}
-                                  style={{
-                                    '--padding-bottom': '.1rem',
-                                    '--padding-top': '.1rem',
-                                    '--padding-start': '2px'
-                                  }}>
+                                  style={libListTableColumnStyle}>
                                   <ZIonReorder
                                     slot='start'
                                     className='me-3 ps-2'

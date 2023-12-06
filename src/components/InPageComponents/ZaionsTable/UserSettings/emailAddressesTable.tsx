@@ -286,6 +286,12 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
       cell: row => {
         const _row = row?.row?.original;
         const _expireTime = dayjs(_row.optExpireTime);
+        const formikInitialValues = {
+          otp: ''
+        };
+        const zIonButtonStyle = {
+          '--box-shadow': 'none'
+        };
         return (
           <div className='flex ion-align-items-center'>
             {_row?.status === EmailStatusEnum.Verified ? (
@@ -295,9 +301,7 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
                 <div className='flex mb-1 ion-align-items-center'>
                   <div className='w-[80%] flex ion-align-items-center'>
                     <Formik
-                      initialValues={{
-                        otp: ''
-                      }}
+                      initialValues={formikInitialValues}
                       onSubmit={async (values, { setFieldValue }) => {
                         try {
                           const _zStringifyData = zStringify({
@@ -374,9 +378,8 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
                               minHeight='2rem'
                               counter={false}
                               maxlength={6}
-                              style={{ '--border-radius': '0px' }}
                               className={classNames({
-                                'w-[90%]': true,
+                                'w-[90%] z-ion-border-radius-0': true,
                                 'ion-touched': touched.otp
                               })}
                             />
@@ -389,13 +392,10 @@ const ZInpageTable: React.FC<{ enableMakeEmailPrimary: boolean }> = ({
                                 slot='end'
                                 disabled={values?.otp?.length !== 6}
                                 size='small'
-                                className='ion-no-margin h-[2rem]'
+                                className='ion-no-margin h-[2rem] z-ion-border-radius-0'
                                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
                                 onClick={submitForm}
-                                style={{
-                                  '--border-radius': '0px',
-                                  '--box-shadow': 'none'
-                                }}>
+                                style={zIonButtonStyle}>
                                 <ZIonIcon icon={checkmark} />
                               </ZIonButton>
                             </div>

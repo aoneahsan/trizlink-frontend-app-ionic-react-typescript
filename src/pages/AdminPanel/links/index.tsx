@@ -745,7 +745,7 @@ const ZShortLinksListPage: React.FC = () => {
                       </Suspense>
 
                       {/* Col-2 Row-2 */}
-                      <ZIonRow style={{ height: 'calc(100% - 4rem)' }}>
+                      <ZIonRow className='h-[calc(100%-4rem)]'>
                         {/* Col-2 Row-2 col-1 Folder menu */}
                         {isLgScale && (
                           <ZCan
@@ -1430,11 +1430,14 @@ const SearchQueryInputComponent: React.FC = () => {
   const setShortLinksFilterOptions = useSetRecoilState(
     ShortLinksFilterOptionsRStateAtom
   );
+
+  const formikInitialValues = {
+    searchValue: ''
+  };
+
   return (
     <Formik
-      initialValues={{
-        searchValue: ''
-      }}
+      initialValues={formikInitialValues}
       onSubmit={values => {
         try {
           if ((values?.searchValue?.trim()?.length ?? 0) > 0) {
@@ -1454,8 +1457,7 @@ const SearchQueryInputComponent: React.FC = () => {
       }}>
       {({ submitForm, handleChange }) => (
         <ZIonItem
-          className='border ion-item-start-no-padding'
-          style={{ '--inner-padding-end': '0px' }}
+          className='border ion-item-start-no-padding z-inner-padding-end-0'
           lines='none'
           minHeight='40px'>
           <ZIonInput
@@ -1467,29 +1469,21 @@ const SearchQueryInputComponent: React.FC = () => {
             clearInput={true}
             placeholder='Search link by title, domain...'
             counter={false}
-            className='zaions__bg_white'
+            className='zaions__bg_white z-ion-border-radius-0 ion-padding-start-1rem'
             onIonChange={handleChange}
             testingselector={
               CONSTANTS.testingSelectors.shortLink.listPage.searchInput
             }
-            style={{
-              '--padding-start': '10px',
-              '--border-radius': '0'
-            }}
           />
           <ZIonButton
             slot='end'
-            className='ion-no-margin ion-text-capitalize'
+            className='h-full ion-no-margin ion-text-capitalize z-ion-border-radius-0'
             onClick={() => {
               void submitForm();
             }}
             testingselector={
               CONSTANTS.testingSelectors.shortLink.listPage.searchBtn
-            }
-            style={{
-              height: '100%',
-              '--border-radius': '0'
-            }}>
+            }>
             <ZIonIcon
               icon={searchOutline}
               className='me-2'

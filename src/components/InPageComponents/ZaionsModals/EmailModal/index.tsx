@@ -159,10 +159,14 @@ const AddEmailModal: React.FC<{
   };
   // #endregion
 
+  // #region Comp Constants
+  const formikInitialValues = { email: '' };
+  // #endregion
+
   return (
     <>
       <Formik
-        initialValues={{ email: '' }}
+        initialValues={formikInitialValues}
         validate={values => {
           const errors: {
             email?: string;

@@ -86,15 +86,11 @@ const ZWorkspacePinterestPageLayout: React.FC = () => {
         className='ion-no-padding'>
         <div
           className={classNames({
-            'mx-auto rounded-[32px] zaions-background-set relative h-[369px]':
+            'mx-auto rounded-[32px] zaions-background-set relative h-[369px] zaions__medium_bg':
               true
             // 'w-[656px]': isMdScale,
             // 'w-full': !isMdScale,
-          })}
-          style={{
-            backgroundImage:
-              'url(https://d2b57pa8jvjkcd.cloudfront.net/xGF9qraKHpDFhkqdC/JHg2CLhHKG-tom-idea.jpg)'
-          }}>
+          })}>
           <ZIonButtons className='absolute zaions__dark_set rounded right-[1%] top-[4%]'>
             <ZIonButton className='ion-no-padding'>
               <ZIonIcon icon={settingsOutline} />

@@ -17,6 +17,7 @@ import {
 // Types
 import { type ZaionsKeyFeatureType } from '@/types/InPageComponentTypes/ZaionsKeyFeature.type';
 import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
+import classNames from 'classnames';
 interface ZaionsKeyFeaturesType {
   data: ZaionsKeyFeatureType[];
 }
@@ -60,21 +61,13 @@ const ZaionsKeyFeatures: React.FC<ZaionsKeyFeaturesType> = ({ data = [] }) => {
                           touched: true
                         });
                       }
-                    }}
-                    // onMouseLeave={() => {
-                    // if (el.id != ) {
-                    // setAnimationMedia({ key: el.id, media: el.animation });
-                    // }
-                    // }}
-                  >
+                    }}>
                     <ZIonRow
-                      className='ion-no-padding'
-                      style={{
-                        backgroundColor:
+                      className={classNames({
+                        'ion-no-padding': true,
+                        zaions__medium_bg:
                           animationMedia.touched && animationMedia.key === el.id
-                            ? '#f6f7f8'
-                            : ''
-                      }}>
+                      })}>
                       <ZIonCol
                         sizeXl='1'
                         sizeLg='1'
@@ -84,7 +77,8 @@ const ZaionsKeyFeatures: React.FC<ZaionsKeyFeaturesType> = ({ data = [] }) => {
                         <ZIonIcon
                           size='large'
                           className='ion-padding-end'
-                          icon={el.icon}></ZIonIcon>
+                          icon={el.icon}
+                        />
                       </ZIonCol>
                       <ZIonCol
                         sizeXl='11'
@@ -119,7 +113,10 @@ const ZaionsKeyFeatures: React.FC<ZaionsKeyFeaturesType> = ({ data = [] }) => {
               <ZIonImg
                 src={animationMedia.media}
                 alt={animationMedia.title}
-                style={{ width: isMdScale ? '100%' : '90%' }}
+                className={classNames({
+                  'w-[100%]': isMdScale,
+                  'w-[90%]': !isMdScale
+                })}
               />
             </ZIonCol>
           </ZIonRow>

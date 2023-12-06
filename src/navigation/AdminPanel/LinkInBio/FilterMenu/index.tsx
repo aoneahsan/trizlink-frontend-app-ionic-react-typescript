@@ -395,6 +395,27 @@ const ZLinkInBioFilterMenu: React.FC = () => {
     }
   }, [getLinkInBioFiltersData]);
 
+  const formikInitialValues = {
+    columns: compState?.shortLinkColumn ?? LinkInBioTableColumns,
+    // columns: ShortLinksTableColumns,
+
+    filters: {
+      tags: compState?.filters?.tags ?? [],
+      domains: compState?.filters?.domains ?? [],
+      time: compState?.filters?.time != null ?? TimeFilterEnum.allTime
+    }
+  };
+
+  const zIonItemStyle = {
+    '--inner-padding-end': '.3rem'
+  };
+
+  const libListTableColumnStyle = {
+    '--padding-bottom': '.1rem',
+    '--padding-top': '.1rem',
+    '--padding-start': '2px'
+  };
+
   return (
     <ZIonMenu
       side='end'
@@ -430,16 +451,7 @@ const ZLinkInBioFilterMenu: React.FC = () => {
       {/* Content */}
       <ZIonContent className='ion-padding-top'>
         <Formik
-          initialValues={{
-            columns: compState?.shortLinkColumn ?? LinkInBioTableColumns,
-            // columns: ShortLinksTableColumns,
-
-            filters: {
-              tags: compState?.filters?.tags ?? [],
-              domains: compState?.filters?.domains ?? [],
-              time: compState?.filters?.time != null ?? TimeFilterEnum.allTime
-            }
-          }}
+          initialValues={formikInitialValues}
           enableReinitialize={true}
           onSubmit={async values => {
             const _tags = Array.from(
@@ -559,9 +571,7 @@ const ZLinkInBioFilterMenu: React.FC = () => {
                         slot='header'
                         lines='none'
                         className='ps-1 h-[2.2rem] flex overflow-hidden rounded-lg cursor-pointer ion-activatable w-[104.6%]'
-                        style={{
-                          '--inner-padding-end': '.3rem'
-                        }}>
+                        style={zIonItemStyle}>
                         <ZIonText
                           className={classNames({
                             'text-sm ion-no-margin font-semibold': true
@@ -586,11 +596,7 @@ const ZLinkInBioFilterMenu: React.FC = () => {
                                 color='light'
                                 className='zaions-lib-list-table-column'
                                 data-id={el?.id}
-                                style={{
-                                  '--padding-bottom': '.1rem',
-                                  '--padding-top': '.1rem',
-                                  '--padding-start': '2px'
-                                }}>
+                                style={libListTableColumnStyle}>
                                 <ZIonReorder
                                   slot='start'
                                   className='me-3'

@@ -63,11 +63,12 @@ const ZLinkInBioMapBlock: React.FC<ZLinkInBioMapBlockInterface> = ({
   latitude,
   longitude
 }) => {
+  const _coordinates = { lat: latitude, lng: longitude };
   return (
     <ZIonCol>
       <ZCapGMap
         mapId={mapId}
-        coordinates={{ lat: latitude, lng: longitude }}
+        coordinates={_coordinates}
       />
     </ZIonCol>
   );

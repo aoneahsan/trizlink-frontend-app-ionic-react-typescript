@@ -75,18 +75,13 @@ const ZLinkInBioVCardBlock: React.FC<ZLinkInBioVCardBlockInterface> = ({
         <ZIonButton
           expand='block'
           className={classNames({
-            'normal-case font-bold text-[16px] my-0 mb-2': true
+            'normal-case font-bold text-[16px] my-0 mb-2 h-[3.5rem] rounded-[0.8rem] overflow-hidden':
+              true
           })}
-          color='success'
-          style={{
-            height: '3.5rem',
-            '--border-radius': '0.8rem',
-            borderRadius: '0.8rem'
-          }}>
+          color='success'>
           <ZIonIcon
             icon={icon}
-            style={{ width: '25px', height: '29px' }}
-            className='me-2'
+            className='me-2 w-[25px] h-[29px]'
           />
           <ZIonText>
             <h5 className='ion-no-padding ion-no-margin'>{title}</h5>

@@ -41,12 +41,13 @@ const LinkInBioDateTimeField: React.FC<LinkInBioDateTimeFieldInterface> = ({
   testingselector,
   onIonChange
 }) => {
+  const _style = { '--background-hover': 'transparent' };
   return (
     <ZIonItem
       minHeight='32px'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}
-      style={{ '--background-hover': 'transparent' }}>
+      style={_style}>
       <ZIonIcon
         icon={calendarOutline}
         slot='start'

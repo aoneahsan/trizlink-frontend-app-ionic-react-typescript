@@ -111,10 +111,13 @@ export const ZSwiperSlide: React.FC<ZSwiperSlideInterface> = ({
   children,
   className
 }) => {
+  // #region comp constants
+  const _style = { width: 'min-content !important' };
+  // #endregion
   return (
     <swiper-slide
       className={className}
-      style={{ width: 'min-content !important' }}>
+      style={_style}>
       {children}
     </swiper-slide>
   );

@@ -36,6 +36,9 @@ const LinkInBioSearchField: React.FC<LinkInBioSearchFieldInterface> = ({
   onIonChange,
   onIonBlur
 }) => {
+  const _style = {
+    '--box-shadow': 'none'
+  };
   return (
     <ZIonItem
       className='ion-no-padding'
@@ -51,9 +54,7 @@ const LinkInBioSearchField: React.FC<LinkInBioSearchFieldInterface> = ({
         testingselector={`${testingselector}-input`}
         testinglistselector={`${testinglistselector}-input`}
         className='ion-no-padding'
-        style={{
-          '--box-shadow': 'none'
-        }}
+        style={_style}
       />
     </ZIonItem>
   );

@@ -1,5 +1,5 @@
 // Core Imports
-import React from 'react';
+import React, { useMemo } from 'react';
 
 // Packages Imports
 import { type Zaions4By4GridSysType } from '@/types/InPageComponentTypes/Zaions4By4GridSys.type';
@@ -14,6 +14,7 @@ import {
   ZIonCardHeader,
   ZIonCardContent
 } from '@/components/ZIonComponents';
+import { isZNonEmptyString } from '@/utils/helpers';
 
 interface ZaionsCardType {
   data: Zaions4By4GridSysType[];
@@ -21,6 +22,15 @@ interface ZaionsCardType {
 }
 
 const ZaionsCard: React.FC<ZaionsCardType> = ({ data, MinHeight }) => {
+  // #region comp constants
+  const _zIonCardStyle = useMemo(
+    () => ({
+      minHeight: isZNonEmptyString(String(MinHeight)) ? MinHeight : '330px'
+    }),
+    [MinHeight]
+  );
+  // #endregion
+
   return (
     <>
       {data.map(el => {
@@ -33,10 +43,7 @@ const ZaionsCard: React.FC<ZaionsCardType> = ({ data, MinHeight }) => {
             sizeXs='12'
             key={el.id}
             className={el.className}>
-            <ZIonCard
-              style={{
-                minHeight: MinHeight ?? '330px'
-              }}>
+            <ZIonCard style={_zIonCardStyle}>
               <ZIonCardHeader className='p-0'>
                 <ZIonRouterLink routerLink={el.link}>
                   <ZIonImg src={el.image}></ZIonImg>
@@ -50,13 +57,9 @@ const ZaionsCard: React.FC<ZaionsCardType> = ({ data, MinHeight }) => {
                     <h3 className='mt-2 font-extrabold text-dark'>
                       {el.title}
                     </h3>
-                  </ZIonText>{' '}
+                  </ZIonText>
                 </ZIonRouterLink>
-                <ZIonText
-                  className='mt-2'
-                  style={{ fontSize: '13px' }}>
-                  {el.text}
-                </ZIonText>
+                <ZIonText className='mt-2 text-[13px] ms-1'>{el.text}</ZIonText>
               </ZIonCardContent>
             </ZIonCard>
           </ZIonCol>

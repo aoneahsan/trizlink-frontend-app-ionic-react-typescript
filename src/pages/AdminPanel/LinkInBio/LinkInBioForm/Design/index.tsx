@@ -277,6 +277,12 @@ const LinkInBioDesignPage: React.FC = () => {
 
   const isZFetching = isSelectedLinkInBioBlocksFetching;
 
+  const ZIonColStyle = {
+    ...generatePredefinedThemeBackgroundValue(
+      values.theme.background as LinkInBioThemeBackgroundType
+    )
+  };
+
   return (
     <Suspense fallback={<ZFallbackIonSpinner2 />}>
       <ZIonContent>
@@ -414,12 +420,7 @@ const LinkInBioDesignPage: React.FC = () => {
                     {!isZFetching && (
                       <ZIonCol
                         size='11'
-                        style={{
-                          ...generatePredefinedThemeBackgroundValue(
-                            values.theme
-                              .background as LinkInBioThemeBackgroundType
-                          )
-                        }}
+                        style={ZIonColStyle}
                         className={classNames(classes.zaions__view_panel, {
                           'h-[85%] ion-padding-start rounded border shadow-md':
                             true

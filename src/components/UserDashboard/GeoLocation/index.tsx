@@ -128,6 +128,8 @@ const GeoLocation: React.FC = () => {
     }
   }, [values?.geoLocation]);
 
+  const zIonButtonStyle = { '--border-width': '1px' };
+
   return (
     <ZIonCol
       sizeXl='5.9'
@@ -502,9 +504,7 @@ const GeoLocation: React.FC = () => {
                     CONSTANTS.testingSelectors.shortLink.formPage.geoLocation
                       .addSingleGeoLocationBtn
                   }
-                  style={{
-                    '--border-width': '1px'
-                  }}
+                  style={zIonButtonStyle}
                   onClick={() => {
                     push({
                       id: getRandomKey(),

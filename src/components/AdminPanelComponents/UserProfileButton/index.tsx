@@ -76,11 +76,15 @@ const ZUserProfileButton: React.FC<{
     [zUserAccountStateAtom?.username]
   );
 
+  // #region comp constants
+  const _style = { height, width };
+  // #endregion
+
   return (
     <ZUserAvatarButton
       userAvatar={zUserAccountStateAtom?.avatar}
       userAvatarUi={userAvatarUi}
-      style={{ height, width }}
+      style={_style}
       onClick={(event: unknown) => {
         presentWorkspaceProfilePopover({
           _event: event as Event,

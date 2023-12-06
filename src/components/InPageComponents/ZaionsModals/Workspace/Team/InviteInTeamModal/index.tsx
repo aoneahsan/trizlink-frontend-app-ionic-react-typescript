@@ -89,6 +89,11 @@ const ZInviteInTeamModal: React.FC<{
     _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
   });
 
+  const formikInitialValues = {
+    team: { label: '', value: '' },
+    tab: EZInviteInTeamModalTab.teamSelectTab
+  };
+
   return (
     <ZIonContent>
       {/* Close modal button */}
@@ -125,10 +130,7 @@ const ZInviteInTeamModal: React.FC<{
         </ZIonText>
       </div>
       <Formik
-        initialValues={{
-          team: { label: '', value: '' },
-          tab: EZInviteInTeamModalTab.teamSelectTab
-        }}
+        initialValues={formikInitialValues}
         onSubmit={() => {}}>
         {({ values, errors, handleBlur, handleChange, setFieldValue }) => {
           return (

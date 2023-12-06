@@ -50,6 +50,35 @@ ion-app.ios ion-title {
   -o-transition: all 0.3s ease !important;
 }
 
+/* Z Ionic */
+.z-inner-padding-end-0 {
+  --inner-padding-end: 0px;
+}
+
+.z-ion-border-radius-0 {
+  --border-radius: 0px;
+}
+
+.z-ion-border-radius-1rem {
+  --border-radius: 1rem;
+}
+
+.z-ion-border-radius-point-8rem {
+  --border-radius: 0.8rem;
+}
+
+.z-ion-background-hover-opacity {
+  --background-hover-opacity: 0;
+}
+
+.z-ion-box-shadow {
+  --box-shadow: none;
+}
+
+.z-ion-border-width {
+  --border-width: 1px;
+}
+
 /* Scrollbar */
 .zaions_pretty_scrollbar::-webkit-scrollbar {
   height: 8px;
@@ -956,6 +985,10 @@ ion-modal.zaions__modal_w100 {
   --padding-start: 0px;
 }
 
+.ion-padding-start-1rem {
+  --padding-start: 1rem;
+}
+
 .hover\:outline-sand {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
   transition-duration: 75ms;
@@ -1115,3 +1148,5 @@ ion-range.z-ion-range-show-top-pin::part(pin) {
 ion-range.z-ion-range-show-top-pin::part(pin)::before {
   content: none;
 }
+
+.

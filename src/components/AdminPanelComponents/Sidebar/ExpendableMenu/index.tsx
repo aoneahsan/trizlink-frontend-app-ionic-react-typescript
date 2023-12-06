@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useParams } from 'react-router';
 
 /**
@@ -172,6 +172,33 @@ const AdminPanelSidebarMenu: React.FC<{
     isZFetching = isSelectedShareWorkspaceFetching;
   }
 
+  // #region comp constants
+  const togglerMenuButtonStyle = useMemo(
+    () => ({ right: isExpand ? '-9%' : '-25%', top: '7%' }),
+    [isExpand]
+  );
+
+  const selectedWsImageStyle = useMemo(
+    () => ({
+      width: isExpand
+        ? is2XlScale
+          ? '70px'
+          : '80px'
+        : is2XlScale
+        ? '50px'
+        : '42px',
+      height: isExpand
+        ? is2XlScale
+          ? '70px'
+          : '80px'
+        : is2XlScale
+        ? '50px'
+        : '42px'
+    }),
+    [isExpand, is2XlScale]
+  );
+  // #endregion
+
   let _content = <></>;
 
   if (isLgScale) {
@@ -197,7 +224,7 @@ const AdminPanelSidebarMenu: React.FC<{
                 }
               }));
             }}
-            style={{ right: isExpand ? '-9%' : '-25%', top: '7%' }}>
+            style={togglerMenuButtonStyle}>
             <ZIonIcon
               icon={isExpand ? chevronBackOutline : chevronForwardOutline}
             />
@@ -233,22 +260,7 @@ const AdminPanelSidebarMenu: React.FC<{
                     className={classNames(classes['zaions-ap-msm-logo'], {
                       'rounded-full zaions-transition': true
                     })}
-                    style={{
-                      width: isExpand
-                        ? is2XlScale
-                          ? '70px'
-                          : '80px'
-                        : is2XlScale
-                        ? '50px'
-                        : '42px',
-                      height: isExpand
-                        ? is2XlScale
-                          ? '70px'
-                          : '80px'
-                        : is2XlScale
-                        ? '50px'
-                        : '42px'
-                    }}
+                    style={selectedWsImageStyle}
                   />
                 </ZIonRouterLink>
               )}

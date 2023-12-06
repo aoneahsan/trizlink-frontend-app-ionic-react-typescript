@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Packages Imports go down
@@ -74,6 +74,18 @@ interface ZaionsTwoByTwoLeftColsType {
  * */
 const ZaionsTwoByTwoLeftCols: React.FC<ZaionsTwoByTwoLeftColsType> = props => {
   const { isMdScale } = useZMediaQueryScale();
+
+  // #region comp constants
+  const _style = useMemo(
+    () => ({
+      width:
+        props?.ImgWidth === undefined || props.ImgWidth === ''
+          ? '95%'
+          : props.ImgWidth
+    }),
+    [props?.ImgWidth]
+  );
+  // #endregion
   return (
     <>
       <ZIonGrid
@@ -89,13 +101,9 @@ const ZaionsTwoByTwoLeftCols: React.FC<ZaionsTwoByTwoLeftColsType> = props => {
             sizeSm='12'
             sizeXs='12'>
             <ZIonImg
-              style={{
-                width:
-                  props?.ImgWidth === undefined || props.ImgWidth === ''
-                    ? '95%'
-                    : props.ImgWidth
-              }}
-              src={props.colLeftImage}></ZIonImg>
+              style={_style}
+              src={props.colLeftImage}
+            />
           </ZIonCol>
           <ZIonCol
             sizeXl='6'

@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Packages Imports go down
@@ -37,6 +37,7 @@ import {
  * ? Like import of type or type of some recoil state or any extarnal type import is a Type import
  * */
 import { type Zaions4By4GridSysType } from '@/types/InPageComponentTypes/Zaions4By4GridSys.type';
+import { isZNonEmptyString } from '@/utils/helpers';
 
 /**
  * Recoil State Imports go down
@@ -77,13 +78,27 @@ const Zaions4By4GridSystem: React.FC<Zaions4By4GridSysTypes> = ({
   BGColor = '#eff0f2',
   className
 }) => {
+  // #region comp constants
+  const _zIonGridStyle = useMemo(
+    () => ({
+      backgroundColor: BGColor
+    }),
+    [BGColor]
+  );
+
+  const _zIonCardStyle = useMemo(
+    () => ({
+      minHeight: isZNonEmptyString(String(MinHeight)) ? MinHeight : '330px'
+    }),
+    [MinHeight]
+  );
+  // #endregion
+
   return (
     <>
       <ZIonGrid
         className={`${classNames(className)}`}
-        style={{
-          backgroundColor: BGColor
-        }}>
+        style={_zIonGridStyle}>
         {titleBar && (
           <ZIonRow className='mt-3'>
             <ZIonCol
@@ -106,13 +121,10 @@ const Zaions4By4GridSystem: React.FC<Zaions4By4GridSysTypes> = ({
                   <ZIonCol
                     size='3'
                     key={el.id}>
-                    <ZIonCard
-                      style={{
-                        minHeight: MinHeight !== '' ? MinHeight : '330px'
-                      }}>
+                    <ZIonCard style={_zIonCardStyle}>
                       <ZIonCardHeader className='p-0'>
                         <ZIonRouterLink routerLink={el.link}>
-                          <ZIonImg src={el.image}></ZIonImg>
+                          <ZIonImg src={el.image} />
                         </ZIonRouterLink>
                       </ZIonCardHeader>
                       <ZIonCardContent className='pt-3'>

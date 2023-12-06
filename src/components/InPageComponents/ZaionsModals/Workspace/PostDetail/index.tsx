@@ -100,11 +100,13 @@ import { workspacePostDetailTabEnum } from '@/types/AdminPanel/workspace';
 const ZWorkspacePostDetailModal: React.FC = () => {
   const { isLgScale, isXlScale } = useZMediaQueryScale();
 
+  const formikInitialValues = {
+    modalTab: workspacePostDetailTabEnum.desktop
+  };
+
   return (
     <Formik
-      initialValues={{
-        modalTab: workspacePostDetailTabEnum.desktop
-      }}
+      initialValues={formikInitialValues}
       onSubmit={() => {}}>
       {({ values, setFieldValue }) => {
         return (

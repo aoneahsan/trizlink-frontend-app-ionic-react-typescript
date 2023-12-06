@@ -66,16 +66,17 @@ const ZLinkInBioSeparatorBlock: React.FC<ZLinkInBioSeparatorBlockInterface> = ({
   _borderStyle,
   _marginVertical = 0
 }) => {
+  const _style = {
+    borderTopWidth: _borderWidth,
+    borderTopColor: _borderColor,
+    borderTopStyle: _borderStyle,
+    margin: `${_marginVertical}px 0px`
+  };
   return (
     <ZIonCol>
       <div
         className='pb-2'
-        style={{
-          borderTopWidth: _borderWidth,
-          borderTopColor: _borderColor,
-          borderTopStyle: _borderStyle,
-          margin: `${_marginVertical}px 0px`
-        }}></div>
+        style={_style}></div>
     </ZIonCol>
   );
 };

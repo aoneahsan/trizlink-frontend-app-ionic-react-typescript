@@ -50,6 +50,9 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
   onIonChange,
   onIonBlur
 }) => {
+  const refreshBtnStyle = {
+    '--background-hover-opacity': '0'
+  };
   return (
     <ZIonItem
       className={classNames(className, { 'ion-align-items-start': true })}
@@ -68,8 +71,8 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
 
       {showImageInSlot && slotImageUrl?.trim() !== null && (
         <ZIonImg
+          className='w-[25px]'
           src={slotImageUrl}
-          style={{ width: '25px' }}
           slot='start'
           testingselector={`${testingselector}-image`}
           testinglistselector={`${testinglistselector}-image`}
@@ -98,9 +101,7 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
           onClick={RefreshBtnClickFn}
           testingselector={`${testingselector}-refresh-btn`}
           testinglistselector={`${testinglistselector}-refresh-btn`}
-          style={{
-            '--background-hover-opacity': '0'
-          }}>
+          style={refreshBtnStyle}>
           <ZIonIcon
             icon={refreshCircleOutline}
             className='w-7 h-7'

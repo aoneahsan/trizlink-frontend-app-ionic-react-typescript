@@ -357,6 +357,12 @@ const ZaionsAddNewFolder: React.FC<{
     }));
   };
 
+  // #region Comp Constants
+  const formikInitialValues = {
+    folderName: folderFormState?.name ?? ''
+  };
+  // #endregion
+
   // JSX Code
   return (
     <ZCan
@@ -394,9 +400,7 @@ const ZaionsAddNewFolder: React.FC<{
           : []
       }>
       <Formik
-        initialValues={{
-          folderName: folderFormState?.name ?? ''
-        }}
+        initialValues={formikInitialValues}
         enableReinitialize={true}
         validate={values => {
           const errors: {

@@ -1,5 +1,5 @@
 // Core Imports
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 // Packages Import
 import classNames from 'classnames';
 import ReactDropzone from 'react-dropzone';
@@ -68,6 +68,8 @@ enum galleryEnum {
   unsplash = 'unsplash',
   tenor = 'tenor'
 }
+
+const zIonButtonStyle = { '--border-radius': '0', '--box-shadow': 'none' };
 
 const ZaionsFileUploadModal: React.FC<{
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
@@ -524,6 +526,17 @@ const UploadTab: React.FC<{
     }
   };
 
+  // #region Comp Constants
+  const formikInitialValues = useMemo(
+    () => ({
+      border:
+        uploadTabState?.file?.isFileFetch === true ? '' : '1px dashed #000'
+    }),
+    [uploadTabState?.file?.isFileFetch]
+  );
+
+  // #endregion
+
   return (
     <ReactDropzone
       onDrop={event => {
@@ -538,12 +551,7 @@ const UploadTab: React.FC<{
             zaions__success_set: isDragActive,
             zaions__primary_set: !isDragActive
           })}
-          style={{
-            border:
-              uploadTabState?.file?.isFileFetch === true
-                ? ''
-                : '1px dashed #000'
-          }}
+          style={formikInitialValues}
           {...getRootProps()}>
           {uploadTabState?.file?.isFileFetch === false && (
             <>
@@ -552,7 +560,7 @@ const UploadTab: React.FC<{
                 <ZIonImg
                   src={uploadModalFolder}
                   alt='send icon'
-                  style={{ width: '15rem' }}
+                  className='w-[15rem]'
                 />
               </ZIonText>
               <ZIonText color='dark'>
@@ -573,9 +581,7 @@ const UploadTab: React.FC<{
 
           {uploadTabState?.file?.isFileFetch === true && (
             <>
-              <div
-                className='w-[70%]  mx-auto my-3'
-                style={{ height: '400px' }}>
+              <div className='w-[70%] h-[400px] mx-auto my-3'>
                 <ZIonImg
                   src={uploadTabState.file?.fileUrl}
                   alt='send icon'
@@ -631,8 +637,7 @@ const LinkTab: React.FC = () => {
         <ZIonImg
           src={uploadModalLink}
           alt='send icon'
-          style={{ width: '11rem', padding: '2rem' }}
-          className='mb-5 border-radius__50per zaions__primary_set'
+          className='mb-5 border-radius__50per zaions__primary_set w-[11rem] p-[2rem]'
         />
       </ZIonText>
       <ZIonText
@@ -647,9 +652,7 @@ const LinkTab: React.FC = () => {
           (5MB maximum - JPG, GIF, PNG)
         </ZIonText>
       </div>
-      <div
-        className='flex ion-justify-content-center ion-align-items-center w-[70%] mt-5 pt-2'
-        style={{ height: '3.5rem' }}>
+      <div className='flex ion-justify-content-center ion-align-items-center w-[70%] mt-5 pt-2 h-[3.5rem]'>
         <ZIonInput
           className={classNames(classes['file-modal-upload-input'], {
             'zaions__primary_set ion-padding h-full': true
@@ -660,7 +663,7 @@ const LinkTab: React.FC = () => {
         />
         <ZIonButton
           className='h-full normal-case ion-no-margin'
-          style={{ '--border-radius': '0', '--box-shadow': 'none' }}>
+          style={zIonButtonStyle}>
           Select
         </ZIonButton>
       </div>
@@ -675,8 +678,7 @@ const ScreenShotTab: React.FC = () => {
         <ZIonImg
           src={uploadModalCamera}
           alt='send icon'
-          style={{ width: '11rem', padding: '2rem' }}
-          className='mb-5 border-radius__50per zaions__primary_set'
+          className='mb-5 border-radius__50per zaions__primary_set w-[11rem] p-[2rem]'
         />
       </ZIonText>
       <ZIonText
@@ -691,9 +693,7 @@ const ScreenShotTab: React.FC = () => {
           Paste the link of the Website you want to take a screenshot
         </ZIonText>
       </div>
-      <div
-        className='flex ion-justify-content-center ion-align-items-center w-[70%] mt-5 pt-2'
-        style={{ height: '3.5rem' }}>
+      <div className='flex ion-justify-content-center ion-align-items-center w-[70%] mt-5 pt-2 h-[3.5rem]'>
         <ZIonInput
           className={classNames(classes['file-modal-upload-input'], {
             'zaions__primary_set ion-padding h-full': true
@@ -704,7 +704,7 @@ const ScreenShotTab: React.FC = () => {
         />
         <ZIonButton
           className='h-full normal-case ion-no-margin'
-          style={{ '--border-radius': '0', '--box-shadow': 'none' }}>
+          style={zIonButtonStyle}>
           Take a screenshot
         </ZIonButton>
       </div>
@@ -731,8 +731,7 @@ const GalleryTab: React.FC<{ typeOfGallery: galleryEnum }> = ({
     <>
       <ZIonRow className='px-3 mb-3 ion-justify-content-center'>
         <ZIonCol
-          className='flex ion-justify-content-center ion-align-items-center w-[70%]'
-          style={{ height: '3.5rem' }}
+          className='flex ion-justify-content-center ion-align-items-center w-[70%] h-[3.5rem]'
           size='12'>
           <ZIonInput
             className={classNames(classes['file-modal-upload-input'], {
@@ -744,7 +743,7 @@ const GalleryTab: React.FC<{ typeOfGallery: galleryEnum }> = ({
           />
           <ZIonButton
             className='h-full normal-case ion-no-margin'
-            style={{ '--border-radius': '0', '--box-shadow': 'none' }}>
+            style={zIonButtonStyle}>
             Search
           </ZIonButton>
         </ZIonCol>
@@ -754,14 +753,9 @@ const GalleryTab: React.FC<{ typeOfGallery: galleryEnum }> = ({
           return (
             <ZIonCol
               className={classNames(classes['zaions-gallery-card'], {
-                'zaions__primary_set ion-no-padding mb-3 flex ion-align-items-end cursor-pointer':
+                'zaions__primary_set ion-no-padding mb-3 flex ion-align-items-end cursor-pointer h-[160px] zaions__medium_bg':
                   true
               })}
-              style={{
-                height: '160px',
-                backgroundImage:
-                  'url(https://cdn.pixabay.com/photo/2023/03/23/15/43/squirrel-7872248_960_720.jpg)'
-              }}
               size='3.9'
               key={el}>
               <div

@@ -78,15 +78,11 @@ const ZLinkInBioMessengerBlock: React.FC<ZLinkInBioMessengerBlockInterface> = ({
             key={index}
             expand='block'
             className={classNames({
-              'ion-text-capitalize font-bold text-[16px] my-0 mb-2': true,
+              'ion-text-capitalize font-bold text-[16px] my-0 mb-2 h-[3.5rem] rounded-[0.8rem] overflow-hidden':
+                true,
               'mt-3': index >= 1
             })}
             color='success'
-            style={{
-              height: '3.5rem',
-              '--border-radius': '0.8rem',
-              borderRadius: '0.8rem'
-            }}
             routerLink={element.target?.url}>
             <ZIonImg
               src={
@@ -94,8 +90,7 @@ const ZLinkInBioMessengerBlock: React.FC<ZLinkInBioMessengerBlockInterface> = ({
                   element.messengerCardType as messengerPlatformsBlockEnum
                 ]
               }
-              style={{ width: '25px' }}
-              className='me-2'
+              className='me-2 w-[25px]'
             />
             <ZIonText>
               <h5

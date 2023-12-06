@@ -181,8 +181,7 @@ const ZLinkInBioPoweredBySection: React.FC = () => {
       sizeMd='12'
       sizeSm='12'
       sizeXs='12'
-      className='ion-padding-vertical ion-margin-top ion-margin-start'
-      style={{ borderTop: '2px solid #edf5fd' }}>
+      className='ion-padding-vertical ion-margin-top ion-margin-start border-t border-[#edf5fd]'>
       <ZIonRow
         className={classNames(classes['row-gap-1-point-6-rem'], {
           'ion-margin-top pt-2 ion-padding-bottom mb-2 ': true

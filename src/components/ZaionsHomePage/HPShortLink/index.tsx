@@ -94,7 +94,7 @@ const ZaionsHPShortLink: React.FC = () => {
               />
               <ZIonText
                 color='medium'
-                style={{ fontSize: '13px' }}>
+                className='text-[13px]'>
                 By clicking SHORTEN, you are agreeing to {PRODUCT_NAME}&apos;s{' '}
                 <ZIonRouterLink
                   routerLink={ZaionsRoutes.Legal.ZaionsTermsOfService}

@@ -31,6 +31,7 @@ const LinkInBioUploadField: React.FC<LinkInBioUploadFieldInterface> = ({
   testingselector,
   setFieldValue
 }) => {
+  const _style = { height: dropdownHeight };
   return (
     <ZIonItem
       lines='none'
@@ -46,7 +47,7 @@ const LinkInBioUploadField: React.FC<LinkInBioUploadFieldInterface> = ({
         fieldName={fieldName}
         imageUrl={imageUrl}
         setFieldValue={setFieldValue}
-        style={{ height: dropdownHeight }}
+        style={_style}
         testingselector={testingselector}
         testinglistselector={testinglistselector}
       />

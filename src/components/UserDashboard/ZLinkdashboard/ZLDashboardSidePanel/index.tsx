@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Packages Imports go down
@@ -88,16 +88,20 @@ const ZLinkIonPanelSidebar: React.FC<{
 }> = ({ activeLink = ZLinkIonPanelSidebarActiveLinkType.dashboard }) => {
   const [ZDashboardState, setZDashboardState] =
     useRecoilState(ZDashboardRState);
+  const _style = useMemo(
+    () => ({
+      '--side-min-width': ZDashboardState.dashboardMainSidebarIsCollabes
+        .isExpand
+        ? '84px'
+        : '240px'
+    }),
+    [ZDashboardState.dashboardMainSidebarIsCollabes.isExpand]
+  );
   return (
     <ZIonMenu
       contentId={CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL}
       className={classNames(classes.ZDashboardMenuWidth)}
-      style={{
-        '--side-min-width': ZDashboardState.dashboardMainSidebarIsCollabes
-          .isExpand
-          ? '84px'
-          : '240px'
-      }}
+      style={_style}
       menuId='CONSTANTS.DEFAULT_VALUES.ZAIONS_DASHBOARD_SPLIT_PANEL'>
       <IonToolbar className='pb-2 mt-3 border-bottom'>
         <ZIonTitle className='ion-padding-bottom'>

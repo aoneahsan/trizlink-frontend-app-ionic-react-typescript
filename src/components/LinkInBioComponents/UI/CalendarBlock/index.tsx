@@ -63,11 +63,7 @@ const ZLinkInBioCalendarBlock: React.FC<ZLinkInBioCalendarBlockInterface> = ({
 }) => {
   return (
     <ZIonCol>
-      <ZRScrollbars
-        style={{
-          width: '100%',
-          height: '500px'
-        }}>
+      <ZRScrollbars className='w-full h-[500px]'>
         <div className='flex flex-col ion-align-items-center'>
           <ZIonDatetime />
           <ZTimezoneInput

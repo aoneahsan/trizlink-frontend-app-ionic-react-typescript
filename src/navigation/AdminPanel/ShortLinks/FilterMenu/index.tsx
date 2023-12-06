@@ -410,6 +410,27 @@ const ZShortLinksFilterMenu: React.FC = () => {
   };
   // #endregion
 
+  const formikInitialValues = {
+    columns: compState?.shortLinkColumn ?? ShortLinksTableColumns,
+    // columns: ShortLinksTableColumns,
+
+    filters: {
+      tags: compState?.filters?.tags ?? [],
+      domains: compState?.filters?.domains ?? [],
+      time: compState?.filters?.time ?? TimeFilterEnum.allTime
+    }
+  };
+
+  const zIonItemStyle = {
+    '--inner-padding-end': '.3rem'
+  };
+
+  const libListTableColumnStyle = {
+    '--padding-bottom': '.1rem',
+    '--padding-top': '.1rem',
+    '--padding-start': '2px'
+  };
+
   return (
     <ZIonMenu
       side='end'
@@ -446,16 +467,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
       <ZIonContent className='ion-padding-top'>
         {/* Columns visibility accordion */}
         <Formik
-          initialValues={{
-            columns: compState?.shortLinkColumn ?? ShortLinksTableColumns,
-            // columns: ShortLinksTableColumns,
-
-            filters: {
-              tags: compState?.filters?.tags ?? [],
-              domains: compState?.filters?.domains ?? [],
-              time: compState?.filters?.time ?? TimeFilterEnum.allTime
-            }
-          }}
+          initialValues={formikInitialValues}
           enableReinitialize={true}
           onSubmit={async values => {
             try {
@@ -609,9 +621,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
                         slot='header'
                         lines='none'
                         className='ps-1 h-[2.2rem] flex overflow-hidden rounded-lg cursor-pointer ion-activatable w-[104.6%]'
-                        style={{
-                          '--inner-padding-end': '.3rem'
-                        }}>
+                        style={zIonItemStyle}>
                         <ZIonText
                           className={classNames({
                             'text-sm ion-no-margin font-semibold': true
@@ -636,11 +646,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
                                 color='light'
                                 className='zaions-short-link-list-table-column'
                                 data-id={el?.id}
-                                style={{
-                                  '--padding-bottom': '.1rem',
-                                  '--padding-top': '.1rem',
-                                  '--padding-start': '2px'
-                                }}>
+                                style={libListTableColumnStyle}>
                                 <ZIonReorder
                                   slot='start'
                                   className='me-3'

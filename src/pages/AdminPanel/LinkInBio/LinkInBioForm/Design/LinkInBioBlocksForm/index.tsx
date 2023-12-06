@@ -507,156 +507,152 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
   const isZFetching = isLinkInBioBlockDataFetching;
 
+  const formikInitialValues = {
+    target: {
+      url: linkInBioBlockData?.blockContent?.target?.url ?? '',
+
+      email: linkInBioBlockData?.blockContent?.target?.email ?? '',
+
+      phoneNumber: linkInBioBlockData?.blockContent?.target?.phoneNumber ?? '',
+
+      username: linkInBioBlockData?.blockContent?.target?.username ?? '',
+
+      accountId: linkInBioBlockData?.blockContent?.target?.accountId ?? '',
+
+      subject: linkInBioBlockData?.blockContent?.target?.subject ?? '',
+      message: linkInBioBlockData?.blockContent?.target?.message ?? '',
+      type:
+        linkInBioBlockData?.blockContent?.target?.type ??
+        linkInBioBlockCardItemEnum.whatsapp
+    },
+    vcard: {
+      firstName: linkInBioBlockData?.blockContent?.vcard?.firstName ?? '',
+      lastName: linkInBioBlockData?.blockContent?.vcard?.lastName ?? '',
+      mobile: linkInBioBlockData?.blockContent?.vcard?.mobile ?? '',
+      phone: linkInBioBlockData?.blockContent?.vcard?.phone ?? '',
+      fax: linkInBioBlockData?.blockContent?.vcard?.fax ?? '',
+      email: linkInBioBlockData?.blockContent?.vcard?.email ?? '',
+      company: linkInBioBlockData?.blockContent?.vcard?.company ?? '',
+      job: linkInBioBlockData?.blockContent?.vcard?.job ?? '',
+      street: linkInBioBlockData?.blockContent?.vcard?.street ?? '',
+      city: linkInBioBlockData?.blockContent?.vcard?.city ?? '',
+      zip: linkInBioBlockData?.blockContent?.vcard?.zip ?? 0,
+      state: linkInBioBlockData?.blockContent?.vcard?.state ?? '',
+      country: linkInBioBlockData?.blockContent?.vcard?.country ?? '',
+      website: linkInBioBlockData?.blockContent?.vcard?.website ?? ''
+    },
+    title: linkInBioBlockData?.blockContent?.title ?? '',
+    icon: linkInBioBlockData?.blockContent?.icon ?? '',
+    text: linkInBioBlockData?.blockContent?.text ?? '',
+    description: linkInBioBlockData?.blockContent?.description ?? '',
+    titleIsEnable: linkInBioBlockData?.blockContent?.titleIsEnable ?? false,
+    descriptionIsEnable:
+      linkInBioBlockData?.blockContent?.descriptionIsEnable ?? false,
+    pictureIsEnable: linkInBioBlockData?.blockContent?.pictureIsEnable ?? false,
+    priceIsEnable: linkInBioBlockData?.blockContent?.priceIsEnable ?? false,
+    cardIsEnable: linkInBioBlockData?.blockContent?.cardIsEnable ?? false,
+    cardNumber: linkInBioBlockData?.blockContent?.cardNumber ?? 0,
+    searchString: linkInBioBlockData?.blockContent?.searchString ?? '',
+    spacing: linkInBioBlockData?.blockContent?.spacing ?? 0,
+    customHeight: linkInBioBlockData?.blockContent?.customHeight ?? 0,
+    date: linkInBioBlockData?.blockContent?.date ?? '',
+    timezone: linkInBioBlockData?.blockContent?.timezone ?? '',
+    imageUrl: linkInBioBlockData?.blockContent?.imageUrl ?? '',
+    avatarShadow: linkInBioBlockData?.blockContent?.avatarShadow ?? false,
+    cardMode: linkInBioBlockData?.blockContent?.cardMode ?? false,
+    iframe: linkInBioBlockData?.blockContent?.iframe ?? '',
+    separatorType:
+      linkInBioBlockData?.blockContent?.separatorType ??
+      SeparatorTypeEnum.solid,
+    separatorColor: linkInBioBlockData?.blockContent?.separatorColor ?? '',
+    separatorMargin: linkInBioBlockData?.blockContent?.separatorMargin ?? 0,
+    margin: linkInBioBlockData?.blockContent?.margin ?? 0,
+
+    map: {
+      formattedAddress: 'okay',
+      lat: 10,
+      lng: 10,
+      userEnteredAddress: 'working'
+    },
+
+    customAppearance: {
+      isEnabled:
+        linkInBioBlockData?.blockContent?.customAppearance?.isEnabled ?? false,
+      background: {
+        bgType:
+          linkInBioBlockData?.blockContent?.customAppearance?.background
+            ?.bgType ?? LinkInBioThemeBackgroundEnum.solidColor,
+        bgSolidColor:
+          linkInBioBlockData?.blockContent?.customAppearance?.background
+            ?.bgSolidColor ?? CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BG_COLOR,
+        bgGradientColors: {
+          startColor:
+            linkInBioBlockData?.blockContent?.customAppearance?.background
+              ?.bgGradientColors?.startColor ?? '',
+          endColor:
+            linkInBioBlockData?.blockContent?.customAppearance?.background
+              ?.bgGradientColors?.endColor ?? '',
+          direction:
+            linkInBioBlockData?.blockContent?.customAppearance?.background
+              ?.bgGradientColors?.direction ?? 0
+        }
+      },
+      color: linkInBioBlockData?.blockContent?.customAppearance?.color ?? '',
+      buttonType:
+        linkInBioBlockData?.blockContent?.customAppearance?.buttonType ??
+        LinkInBioButtonTypeEnum.inlineSquare,
+      shadowColor:
+        linkInBioBlockData?.blockContent?.customAppearance?.shadowColor ??
+        CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
+    },
+
+    animation: {
+      isEnabled:
+        linkInBioBlockData?.blockContent?.animation?.isEnabled ?? false,
+      type: linkInBioBlockData?.blockContent?.animation?.type
+    },
+
+    style:
+      linkInBioBlockData?.blockContent?.style ?? LinkInBioCardStyleEnum.square,
+
+    view:
+      linkInBioBlockData?.blockContent?.view ?? LinkInBioCardViewEnum.carousel,
+
+    cardItems: linkInBioBlockData?.blockContent?.cardItems ?? [],
+
+    form: {
+      formFields: linkInBioBlockData?.blockContent?.form?.formFields ?? [],
+      isTermEnabled:
+        linkInBioBlockData?.blockContent?.form?.isTermEnabled ?? false,
+      submitButtonText:
+        linkInBioBlockData?.blockContent?.form?.submitButtonText ?? 'Submit',
+      termText:
+        linkInBioBlockData?.blockContent?.form?.termText ??
+        'I Agree to Terms & Conditions',
+      termLink: linkInBioBlockData?.blockContent?.form?.termLink
+    },
+
+    schedule: {
+      isEnabled: linkInBioBlockData?.blockContent?.schedule?.isEnabled ?? false,
+      // startAt: linkInBioBlockData?.blockContent?.schedule?.startAt ?? '',
+      startAt:
+        linkInBioBlockData?.blockContent?.schedule?.startAt ??
+        new Date().toISOString(),
+      endAt:
+        linkInBioBlockData?.blockContent?.schedule?.endAt ??
+        new Date().toISOString(),
+      timezone: linkInBioBlockData?.blockContent?.schedule?.timezone ?? ''
+    },
+
+    isActive: Boolean(linkInBioBlockData?.isActive)
+  };
+
+  const ZRGAutoCompleteInputInputStyles = { width: '100%', border: 'none' };
+
   return (
     <Formik
       // #region initial values
-      initialValues={{
-        target: {
-          url: linkInBioBlockData?.blockContent?.target?.url ?? '',
-
-          email: linkInBioBlockData?.blockContent?.target?.email ?? '',
-
-          phoneNumber:
-            linkInBioBlockData?.blockContent?.target?.phoneNumber ?? '',
-
-          username: linkInBioBlockData?.blockContent?.target?.username ?? '',
-
-          accountId: linkInBioBlockData?.blockContent?.target?.accountId ?? '',
-
-          subject: linkInBioBlockData?.blockContent?.target?.subject ?? '',
-          message: linkInBioBlockData?.blockContent?.target?.message ?? '',
-          type:
-            linkInBioBlockData?.blockContent?.target?.type ??
-            linkInBioBlockCardItemEnum.whatsapp
-        },
-        vcard: {
-          firstName: linkInBioBlockData?.blockContent?.vcard?.firstName ?? '',
-          lastName: linkInBioBlockData?.blockContent?.vcard?.lastName ?? '',
-          mobile: linkInBioBlockData?.blockContent?.vcard?.mobile ?? '',
-          phone: linkInBioBlockData?.blockContent?.vcard?.phone ?? '',
-          fax: linkInBioBlockData?.blockContent?.vcard?.fax ?? '',
-          email: linkInBioBlockData?.blockContent?.vcard?.email ?? '',
-          company: linkInBioBlockData?.blockContent?.vcard?.company ?? '',
-          job: linkInBioBlockData?.blockContent?.vcard?.job ?? '',
-          street: linkInBioBlockData?.blockContent?.vcard?.street ?? '',
-          city: linkInBioBlockData?.blockContent?.vcard?.city ?? '',
-          zip: linkInBioBlockData?.blockContent?.vcard?.zip ?? 0,
-          state: linkInBioBlockData?.blockContent?.vcard?.state ?? '',
-          country: linkInBioBlockData?.blockContent?.vcard?.country ?? '',
-          website: linkInBioBlockData?.blockContent?.vcard?.website ?? ''
-        },
-        title: linkInBioBlockData?.blockContent?.title ?? '',
-        icon: linkInBioBlockData?.blockContent?.icon ?? '',
-        text: linkInBioBlockData?.blockContent?.text ?? '',
-        description: linkInBioBlockData?.blockContent?.description ?? '',
-        titleIsEnable: linkInBioBlockData?.blockContent?.titleIsEnable ?? false,
-        descriptionIsEnable:
-          linkInBioBlockData?.blockContent?.descriptionIsEnable ?? false,
-        pictureIsEnable:
-          linkInBioBlockData?.blockContent?.pictureIsEnable ?? false,
-        priceIsEnable: linkInBioBlockData?.blockContent?.priceIsEnable ?? false,
-        cardIsEnable: linkInBioBlockData?.blockContent?.cardIsEnable ?? false,
-        cardNumber: linkInBioBlockData?.blockContent?.cardNumber ?? 0,
-        searchString: linkInBioBlockData?.blockContent?.searchString ?? '',
-        spacing: linkInBioBlockData?.blockContent?.spacing ?? 0,
-        customHeight: linkInBioBlockData?.blockContent?.customHeight ?? 0,
-        date: linkInBioBlockData?.blockContent?.date ?? '',
-        timezone: linkInBioBlockData?.blockContent?.timezone ?? '',
-        imageUrl: linkInBioBlockData?.blockContent?.imageUrl ?? '',
-        avatarShadow: linkInBioBlockData?.blockContent?.avatarShadow ?? false,
-        cardMode: linkInBioBlockData?.blockContent?.cardMode ?? false,
-        iframe: linkInBioBlockData?.blockContent?.iframe ?? '',
-        separatorType:
-          linkInBioBlockData?.blockContent?.separatorType ??
-          SeparatorTypeEnum.solid,
-        separatorColor: linkInBioBlockData?.blockContent?.separatorColor ?? '',
-        separatorMargin: linkInBioBlockData?.blockContent?.separatorMargin ?? 0,
-        margin: linkInBioBlockData?.blockContent?.margin ?? 0,
-
-        map: {
-          formattedAddress: 'okay',
-          lat: 10,
-          lng: 10,
-          userEnteredAddress: 'working'
-        },
-
-        customAppearance: {
-          isEnabled:
-            linkInBioBlockData?.blockContent?.customAppearance?.isEnabled ??
-            false,
-          background: {
-            bgType:
-              linkInBioBlockData?.blockContent?.customAppearance?.background
-                ?.bgType ?? LinkInBioThemeBackgroundEnum.solidColor,
-            bgSolidColor:
-              linkInBioBlockData?.blockContent?.customAppearance?.background
-                ?.bgSolidColor ?? CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BG_COLOR,
-            bgGradientColors: {
-              startColor:
-                linkInBioBlockData?.blockContent?.customAppearance?.background
-                  ?.bgGradientColors?.startColor ?? '',
-              endColor:
-                linkInBioBlockData?.blockContent?.customAppearance?.background
-                  ?.bgGradientColors?.endColor ?? '',
-              direction:
-                linkInBioBlockData?.blockContent?.customAppearance?.background
-                  ?.bgGradientColors?.direction ?? 0
-            }
-          },
-          color:
-            linkInBioBlockData?.blockContent?.customAppearance?.color ?? '',
-          buttonType:
-            linkInBioBlockData?.blockContent?.customAppearance?.buttonType ??
-            LinkInBioButtonTypeEnum.inlineSquare,
-          shadowColor:
-            linkInBioBlockData?.blockContent?.customAppearance?.shadowColor ??
-            CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
-        },
-
-        animation: {
-          isEnabled:
-            linkInBioBlockData?.blockContent?.animation?.isEnabled ?? false,
-          type: linkInBioBlockData?.blockContent?.animation?.type
-        },
-
-        style:
-          linkInBioBlockData?.blockContent?.style ??
-          LinkInBioCardStyleEnum.square,
-
-        view:
-          linkInBioBlockData?.blockContent?.view ??
-          LinkInBioCardViewEnum.carousel,
-
-        cardItems: linkInBioBlockData?.blockContent?.cardItems ?? [],
-
-        form: {
-          formFields: linkInBioBlockData?.blockContent?.form?.formFields ?? [],
-          isTermEnabled:
-            linkInBioBlockData?.blockContent?.form?.isTermEnabled ?? false,
-          submitButtonText:
-            linkInBioBlockData?.blockContent?.form?.submitButtonText ??
-            'Submit',
-          termText:
-            linkInBioBlockData?.blockContent?.form?.termText ??
-            'I Agree to Terms & Conditions',
-          termLink: linkInBioBlockData?.blockContent?.form?.termLink
-        },
-
-        schedule: {
-          isEnabled:
-            linkInBioBlockData?.blockContent?.schedule?.isEnabled ?? false,
-          // startAt: linkInBioBlockData?.blockContent?.schedule?.startAt ?? '',
-          startAt:
-            linkInBioBlockData?.blockContent?.schedule?.startAt ??
-            new Date().toISOString(),
-          endAt:
-            linkInBioBlockData?.blockContent?.schedule?.endAt ??
-            new Date().toISOString(),
-          timezone: linkInBioBlockData?.blockContent?.schedule?.timezone ?? ''
-        },
-
-        isActive: Boolean(linkInBioBlockData?.isActive)
-      }}
+      initialValues={formikInitialValues}
       enableReinitialize
       // #endregion
 
@@ -672,6 +668,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
       // #endregion
     >
       {({ values, dirty, handleChange, setFieldValue, submitForm }) => {
+        const directionIconStyle = {
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          transform: `rotate(${values?.customAppearance?.background?.bgGradientColors?.direction}deg)`
+        };
         return (
           <>
             <ZIonCol
@@ -871,9 +871,6 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                           CONSTANTS.testingSelectors.linkInBio.formPage.design
                             .blockForm.isActiveBtn
                         }
-                        style={{
-                          '--background-hover-opacity': '0'
-                        }}
                         onClick={() => {
                           void setFieldValue(
                             'isActive',
@@ -891,15 +888,12 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                       {/* duplicate button */}
                       <ZIonButton
                         fill='clear'
-                        className='ion-no-padding me-3 ion-no-margin'
+                        className='ion-no-padding me-3 ion-no-margin z-ion-background-hover-opacity'
                         color='light'
                         testingselector={
                           CONSTANTS.testingSelectors.linkInBio.formPage.design
                             .blockForm.duplicateBtn
                         }
-                        style={{
-                          '--background-hover-opacity': '0'
-                        }}
                         onClick={() => {
                           presentZLinkInBioAddBlockModal({
                             _cssClass: 'lib-block-modal-size'
@@ -1121,7 +1115,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                     LinkInBioBlockEnum.form) && (
                   <ZIonCol
                     size='12'
-                    className='mt-1'>
+                    className='mt-3'>
                     <LinkInBioTitleField
                       name='title'
                       value={values.title}
@@ -1447,7 +1441,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                     className='mt-4'>
                     <ZIonItem className='ion-item-start-no-padding'>
                       <ZRGAutoCompleteInput
-                        inputStyles={{ width: '100%', border: 'none' }}
+                        inputStyles={ZRGAutoCompleteInputInputStyles}
                         defaultValue={values?.map?.userEnteredAddress}
                         inputName='map.userEnteredAddress'
                         testingselector={
@@ -1679,9 +1673,9 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={borderSolid}
-                          style={{
-                            width: '22px'
-                          }}
+                          className={classNames({
+                            'w-[22px]': true
+                          })}
                         />
                       </ZRoundedButton>
 
@@ -1703,9 +1697,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={borderDashed}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -1727,9 +1719,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={borderDotted}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
                     </div>
@@ -1926,10 +1916,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                               <ZIonIcon
                                 icon={arrowUp}
                                 className='direction-icon'
-                                style={{
-                                  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                                  transform: `rotate(${values?.customAppearance?.background?.bgGradientColors?.direction}deg)`
-                                }}
+                                style={directionIconStyle}
                               />
                             </ZIonButton>
                             <ZaionsColorPiker
@@ -1988,16 +1975,14 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                             className={classNames(
                               classes['zaions-button-type'],
                               {
-                                'zaions-button-type-button-active': true, // from index.css
+                                'zaions-button-type-button-active z-ion-border-radius-0':
+                                  true, // from index.css
                                 'zaions-border-primary':
                                   values?.customAppearance?.buttonType ===
                                   LinkInBioButtonTypeEnum.inlineSquare
                               }
                             )}
                             color='medium'
-                            style={{
-                              '--border-radius': '0'
-                            }}
                             onClick={() => {
                               void setFieldValue(
                                 'customAppearance.buttonType',
@@ -2013,15 +1998,13 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                             className={classNames(
                               classes['zaions-button-type'],
                               {
+                                'z-ion-border-radius-1rem': true,
                                 'zaions-border-primary':
                                   values?.customAppearance?.buttonType ===
                                   LinkInBioButtonTypeEnum.inlineRound
                               }
                             )}
                             color='medium'
-                            style={{
-                              '--border-radius': '10px'
-                            }}
                             onClick={() => {
                               void setFieldValue(
                                 'customAppearance.buttonType',
@@ -2060,6 +2043,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                             className={classNames(
                               classes['zaions-button-type'],
                               {
+                                'z-ion-border-radius-0': true,
                                 'zaions-border-primary':
                                   values?.customAppearance?.buttonType ===
                                   LinkInBioButtonTypeEnum.inlineSquareOutline
@@ -2071,9 +2055,6 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                                 ? 'primary'
                                 : 'medium'
                             }
-                            style={{
-                              '--border-radius': '0'
-                            }}
                             fill='outline'
                             onClick={() => {
                               void setFieldValue(
@@ -2090,6 +2071,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                             className={classNames(
                               classes['zaions-button-type'],
                               {
+                                'z-ion-border-radius-1rem': true,
                                 'zaions-border-primary':
                                   values?.customAppearance?.buttonType ===
                                   LinkInBioButtonTypeEnum.inlineRoundOutline
@@ -2101,9 +2083,6 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                                 ? 'primary'
                                 : 'medium'
                             }
-                            style={{
-                              '--border-radius': '10px'
-                            }}
                             fill='outline'
                             onClick={() => {
                               void setFieldValue(
@@ -2150,6 +2129,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                               classes['zaions-button-type'],
                               classes['zaions-button-type-shadow'],
                               {
+                                'z-ion-border-radius-0': true,
                                 'zaions-border-transparent':
                                   values?.customAppearance?.buttonType !==
                                   LinkInBioButtonTypeEnum.inlineSquareShadow,
@@ -2159,9 +2139,6 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                               }
                             )}
                             color='medium'
-                            style={{
-                              '--border-radius': '0'
-                            }}
                             onClick={() => {
                               void setFieldValue(
                                 'customAppearance.buttonType',
@@ -2178,6 +2155,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                               classes['zaions-button-type'],
                               classes['zaions-button-type-shadow'],
                               {
+                                'z-ion-border-radius-1rem': true,
                                 'zaions-border-transparent':
                                   values?.customAppearance?.buttonType !==
                                   LinkInBioButtonTypeEnum.inlineRoundShadow,
@@ -2187,9 +2165,6 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                               }
                             )}
                             color='medium'
-                            style={{
-                              '--border-radius': '10px'
-                            }}
                             onClick={() => {
                               void setFieldValue(
                                 'customAppearance.buttonType',
@@ -2324,9 +2299,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={card_style_1}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2346,9 +2319,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={card_style_2}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
                     </>
@@ -2381,9 +2352,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={thumb_style_1}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2403,9 +2372,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={thumb_style_2}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2425,9 +2392,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={strip_style}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
                     </>
@@ -2451,9 +2416,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={strip_style}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2473,9 +2436,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={strip_style}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2495,9 +2456,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={strip_style}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
                     </>
@@ -2540,9 +2499,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                     }}>
                     <ZIonImg
                       src={carousel_view}
-                      style={{
-                        width: '22px'
-                      }}
+                      className='w-[22px]'
                     />
                   </ZRoundedButton>
 
@@ -2562,9 +2519,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                     }}>
                     <ZIonImg
                       src={list_view}
-                      style={{
-                        width: '22px'
-                      }}
+                      className='w-[22px]'
                     />
                   </ZRoundedButton>
 
@@ -2584,9 +2539,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                     }}>
                     <ZIonImg
                       src={mixed_view}
-                      style={{
-                        width: '22px'
-                      }}
+                      className='w-[22px]'
                     />
                   </ZRoundedButton>
                 </div>
@@ -2653,9 +2606,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={tadaAnimation}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2676,9 +2627,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={shakeAnimation}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2699,9 +2648,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={swingAnimation}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2722,9 +2669,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={wobbleAnimation}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2745,9 +2690,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={jelloAnimation}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2768,9 +2711,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={pulseAnimation}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2791,9 +2732,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={zoomAnimation}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
                     </ZIonCol>

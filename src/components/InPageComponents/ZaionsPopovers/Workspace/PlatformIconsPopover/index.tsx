@@ -68,30 +68,33 @@ const ZPlatformIconsPopover: React.FC<{
   _colorCode?: string;
   _icon: string;
 }> = ({ _colorCode, _icon, dismissZIonPopover }) => {
+  const _style = { color: _colorCode ?? '' };
   return (
     <ZIonRow className='pt-2 ion-padding'>
-      {PlatformIconsData.defaultIcons.map((el, index) => (
-        <ZIonCol
-          size='3'
-          key={index}>
-          <div
-            className={classNames({
-              'rounded py-1 cursor-pointer flex ion-align-items-center ion-justify-content-center':
-                true,
-              zaions__dark_set: _icon === el.icon
-            })}
-            onClick={() => {
-              dismissZIonPopover(el.icon);
-            }}
-            title={el.iconName}>
-            <ZIonIcon
-              icon={el.icon}
-              className='w-6 h-6'
-              style={{ color: _colorCode ?? '' }}
-            />
-          </div>
-        </ZIonCol>
-      ))}
+      {PlatformIconsData.defaultIcons.map((el, index) => {
+        return (
+          <ZIonCol
+            size='3'
+            key={index}>
+            <div
+              className={classNames({
+                'rounded py-1 cursor-pointer flex ion-align-items-center ion-justify-content-center':
+                  true,
+                zaions__dark_set: _icon === el.icon
+              })}
+              onClick={() => {
+                dismissZIonPopover(el.icon);
+              }}
+              title={el.iconName}>
+              <ZIonIcon
+                icon={el.icon}
+                className='w-6 h-6'
+                style={_style}
+              />
+            </div>
+          </ZIonCol>
+        );
+      })}
 
       <ZIonCol
         size='12'
@@ -99,27 +102,30 @@ const ZPlatformIconsPopover: React.FC<{
         <ZIonItem className='text-base ion-no-padding'>PLATFORM</ZIonItem>
       </ZIonCol>
 
-      {PlatformIconsData.platformIcons.map((el, index) => (
-        <ZIonCol
-          size='3'
-          key={index}>
-          <div
-            className={classNames({
-              'rounded py-1 cursor-pointer flex ion-align-items-center ion-justify-content-center':
-                true,
-              zaions__dark_set: _icon === el.icon
-            })}
-            onClick={() => {
-              dismissZIonPopover(el.icon);
-            }}>
-            <ZIonIcon
-              icon={el.icon}
-              className='w-6 h-6'
-              style={{ color: _colorCode ?? '' }}
-            />
-          </div>
-        </ZIonCol>
-      ))}
+      {PlatformIconsData.platformIcons.map((el, index) => {
+        const _style = { color: _colorCode ?? '' };
+        return (
+          <ZIonCol
+            size='3'
+            key={index}>
+            <div
+              className={classNames({
+                'rounded py-1 cursor-pointer flex ion-align-items-center ion-justify-content-center':
+                  true,
+                zaions__dark_set: _icon === el.icon
+              })}
+              onClick={() => {
+                dismissZIonPopover(el.icon);
+              }}>
+              <ZIonIcon
+                icon={el.icon}
+                className='w-6 h-6'
+                style={_style}
+              />
+            </div>
+          </ZIonCol>
+        );
+      })}
     </ZIonRow>
   );
 };

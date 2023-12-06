@@ -229,15 +229,12 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                       <ZIonItem
                         key={_index}
                         lines='none'
-                        className='pt-2 pb-3 my-4 border zaions-linkInBio-block'
+                        className='pt-2 pb-3 my-4 border zaions-linkInBio-block z-ion-bg-transparent'
                         testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.cardItem}-${_index}`}
                         testingselector={
                           CONSTANTS.testingSelectors.linkInBio.formPage.design
                             .blockForm.fields.messenger.cardItem
-                        }
-                        style={{
-                          '--background': 'transparent'
-                        }}>
+                        }>
                         <ZIonReorder
                           slot='start'
                           className='ms-3 me-2'>

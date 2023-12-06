@@ -88,6 +88,12 @@ const ZCustomDeleteComponent: React.FC<ZCustomDeleteComponentInterface> = ({
   // IonActionSheet present went user went to delete a block.
   const { presentZIonActionSheet } = useZIonActionSheet();
 
+  // #region comp constants
+  const _style = {
+    '--background-hover-opacity': '0'
+  };
+  // #endregion
+
   return (
     <ZIonButton
       slot={slot}
@@ -96,9 +102,7 @@ const ZCustomDeleteComponent: React.FC<ZCustomDeleteComponentInterface> = ({
       size='small'
       testingselector={testingselector}
       testinglistselector={testinglistselector}
-      style={{
-        '--background-hover-opacity': '0'
-      }}
+      style={_style}
       onClick={() => {
         void presentZIonActionSheet({
           header: actionSheetHeader,

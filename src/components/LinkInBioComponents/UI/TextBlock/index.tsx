@@ -62,6 +62,7 @@ const ZLinkInBioTextBlock: React.FC<ZLinkInBioTextBlockInterface> = ({
   children,
   fontFamily
 }) => {
+  const _dangerouslySetInnerHTML = { __html: children ?? '' };
   return (
     <ZIonCol className='overflow-hidden line-clamp-3'>
       <ZIonText
@@ -70,7 +71,7 @@ const ZLinkInBioTextBlock: React.FC<ZLinkInBioTextBlockInterface> = ({
         })}
         color='light'>
         {children !== undefined ? (
-          <div dangerouslySetInnerHTML={{ __html: children }} />
+          <div dangerouslySetInnerHTML={_dangerouslySetInnerHTML} />
         ) : null}
       </ZIonText>
     </ZIonCol>

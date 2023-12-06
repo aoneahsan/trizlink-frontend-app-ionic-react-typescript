@@ -87,12 +87,9 @@ const ZWorkspaceTwitterPageLayout: React.FC = () => {
         className='ion-no-padding'>
         <div
           className={classNames({
-            'mx-auto zaions-background-set relative h-[20.1rem]': true
-          })}
-          style={{
-            backgroundImage:
-              'url(https://d2b57pa8jvjkcd.cloudfront.net/xGF9qraKHpDFhkqdC/JHg2CLhHKG-tom-idea.jpg)'
-          }}>
+            'mx-auto zaions-background-set relative h-[20.1rem] zaions__medium_bg':
+              true
+          })}>
           <ZIonButtons className='absolute zaions__dark_set rounded right-[1%] top-[4%]'>
             <ZIonButton className='ion-no-padding'>
               <ZIonIcon icon={settingsOutline} />

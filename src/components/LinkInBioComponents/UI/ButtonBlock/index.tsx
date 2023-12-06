@@ -15,7 +15,7 @@ import classNames from 'classnames';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonButton, ZIonCol } from '@/components/ZIonComponents';
+import { ZIonButton, ZIonCol, ZIonText } from '@/components/ZIonComponents';
 
 /**
  * Global Constants Imports go down
@@ -88,30 +88,21 @@ const ZLinkInBioButtonBlock: React.FC<ZLinkInBioButtonBlockInterface> = ({
   // Recoil state link-in-bio form state (for editing or creating link-in-bio)
 
   return (
-    <ZIonCol style={{ padding: '0.6rem 0' }}>
+    <ZIonCol className='py-[0.4rem] px-0'>
       {/* <motion.div animate={animationType} variants={variants}> */}
       <ZIonButton
         expand='block'
         className={classNames(className, animationType, fontFamily, {
-          'ion-text-capitalize font-bold text-[16px] my-0 animated mx-auto':
+          'ion-text-capitalize font-bold text-[16px] my-0 animated mx-auto w-[90%] h-[3.5rem]':
             true
         })}
-        style={{
-          ...style,
-          height: '3.5rem',
-
-          color: '#fff',
-          // '--box-shadow': '0 10px 35px -5px rgb(0 0 0 / 20%)',
-          // '--border-radius': '0.8rem',
-          // borderRadius: '0.8rem',
-          width: '90%'
-        }}
+        style={style}
         target={target}
         href={url}
         fill={fill}
         // color='light'
       >
-        {title}
+        <ZIonText color='light'>{title}</ZIonText>
       </ZIonButton>
       {/* </motion.div> */}
     </ZIonCol>

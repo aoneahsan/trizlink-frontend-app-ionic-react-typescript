@@ -314,7 +314,7 @@ const ZUserAccount: React.FC = () => {
             </Suspense>
 
             {/* Row-2 */}
-            <ZIonRow style={{ height: 'calc(100% - 4rem)' }}>
+            <ZIonRow className='h-[calc(100%-4rem)]'>
               {/* Row-2 col-1 Folder menu */}
               {isLgScale ? (
                 <Suspense

@@ -51,11 +51,16 @@ const ZRGAutoCompleteInput: React.FC<IZRGAutoCompleteInputProps> = ({
           })
         }
       : {};
+
+  // #region comp constants
+  const _style = { ...inputStyles };
+  // #endregion
+
   return (
     <RGAutoComplete
       apiKey={GM_CONSTANTS.MAP_API_KEY}
       onPlaceSelected={onLocationSelectHandler}
-      style={{ ...inputStyles }}
+      style={_style}
       className={className}
       defaultValue={defaultValue}
       // onChange={(event) => {

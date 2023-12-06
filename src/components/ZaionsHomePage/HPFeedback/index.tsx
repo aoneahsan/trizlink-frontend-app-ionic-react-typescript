@@ -11,17 +11,18 @@ import ZaionsCarousel from '@/components/InPageComponents/ZaionsCarousel';
 // Global Constant
 import { PRODUCT_NAME } from '@/utils/constants';
 import { ZIonText } from '@/components/ZIonComponents';
+import classNames from 'classnames';
 
 const ZaionsHPUsersFeedBack: React.FC = () => {
   return (
     <>
       <div className='mt-5 ion-text-center ion-margin-bottom ion-padding-bottom'>
-        <ZIonText>
-          <h2
-            className='text-3xl'
-            style={{ fontWeight: '800', color: '#252628' }}>
-            What {PRODUCT_NAME} customers are saying
-          </h2>
+        <ZIonText
+          color='medium'
+          className={classNames({
+            'text-3xl font-extrabold': true
+          })}>
+          What {PRODUCT_NAME} customers are saying
         </ZIonText>
       </div>
       <ZaionsCarousel />

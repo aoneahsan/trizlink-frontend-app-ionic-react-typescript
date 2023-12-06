@@ -377,7 +377,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
                   </Suspense>
 
                   {/* Col-2 Row-2 */}
-                  <ZIonRow style={{ height: 'calc(100% - 4rem)' }}>
+                  <ZIonRow className='h-[calc(100%-4rem)]'>
                     <ZIonCol
                       sizeXl='2.8'
                       sizeLg='2.8'

@@ -135,11 +135,16 @@ const ZNotificationPopover: React.FC<{
     _showLoader: false
   });
 
+  const formikInitialValues = {
+    tab: ZNotificationPopoverTabsEnum.updates
+  };
+  const _zIonSegmentStyle = {
+    '--padding-end': '5px',
+    '--padding-start': '5px'
+  };
   return (
     <Formik
-      initialValues={{
-        tab: ZNotificationPopoverTabsEnum.updates
-      }}
+      initialValues={formikInitialValues}
       onSubmit={() => {}}>
       {({ values, setFieldValue }) => {
         return (
@@ -153,9 +158,8 @@ const ZNotificationPopover: React.FC<{
                   className='ion-no-padding'
                   size='7'>
                   <ZIonSegment
-                    className='ion-justify-content-start'
-                    value={values.tab}
-                    style={{ gridAutoColumns: 'max-content' }}>
+                    className='ion-justify-content-start auto-cols-max'
+                    value={values.tab}>
                     {/* personal */}
                     <ZIonSegmentButton
                       className='normal-case w-max min-w-[80px]'
@@ -171,10 +175,7 @@ const ZNotificationPopover: React.FC<{
                           false
                         );
                       }}
-                      style={{
-                        '--padding-end': '5px',
-                        '--padding-start': '5px'
-                      }}>
+                      style={_zIonSegmentStyle}>
                       <ZIonLabel className='text-sm'>Personal</ZIonLabel>
                     </ZIonSegmentButton>
 
@@ -193,10 +194,7 @@ const ZNotificationPopover: React.FC<{
                           false
                         );
                       }}
-                      style={{
-                        '--padding-end': '5px',
-                        '--padding-start': '5px'
-                      }}>
+                      style={_zIonSegmentStyle}>
                       <ZIonLabel className='text-sm'>Updates</ZIonLabel>
                     </ZIonSegmentButton>
 
@@ -215,10 +213,7 @@ const ZNotificationPopover: React.FC<{
                           false
                         );
                       }}
-                      style={{
-                        '--padding-end': '5px',
-                        '--padding-start': '5px'
-                      }}>
+                      style={_zIonSegmentStyle}>
                       <ZIonLabel className='text-sm'>
                         Approval requests
                       </ZIonLabel>

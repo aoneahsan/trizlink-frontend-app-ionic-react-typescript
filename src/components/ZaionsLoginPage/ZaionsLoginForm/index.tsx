@@ -167,6 +167,11 @@ const ZaionsLoginForm: React.FC = () => {
     }
   };
 
+  const formikInitialValues = {
+    emailAddress: '',
+    password: ''
+  };
+
   return (
     <ZIonRow className='ion-justify-content-center'>
       <ZIonCol
@@ -178,10 +183,7 @@ const ZaionsLoginForm: React.FC = () => {
         sizeXs='11.5'>
         <Formik
           // Initial Values of sign up form fields
-          initialValues={{
-            emailAddress: '',
-            password: ''
-          }}
+          initialValues={formikInitialValues}
           // Validations of sign up form fields
           validate={values => {
             try {

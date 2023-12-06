@@ -975,7 +975,165 @@ const AdminCreateNewLinkPages: React.FC = () => {
   if ((wsShareId?.trim()?.length ?? 0) > 0) {
     isZFetching = isSWSSelectedShortLinkFetching;
   }
+  const formikInitialValues = {
+    target: {
+      url:
+        (selectedShortLink?.target as LinkTargetType)?.url ??
+        (swsSelectedShortLink?.target as LinkTargetType)?.url ??
+        (newShortLinkFormState?.target as LinkTargetType)?.url ??
+        'https://',
+      phoneNumber:
+        (selectedShortLink?.target as LinkTargetType)?.phoneNumber ??
+        (swsSelectedShortLink?.target as LinkTargetType)?.phoneNumber ??
+        '',
+      username:
+        (selectedShortLink?.target as LinkTargetType)?.username ??
+        (swsSelectedShortLink?.target as LinkTargetType)?.username ??
+        '',
+      email:
+        (selectedShortLink?.target as LinkTargetType)?.email ??
+        (swsSelectedShortLink?.target as LinkTargetType)?.email ??
+        '',
+      accountId:
+        (selectedShortLink?.target as LinkTargetType)?.accountId ??
+        (swsSelectedShortLink?.target as LinkTargetType)?.accountId ??
+        '',
+      subject:
+        (selectedShortLink?.target as LinkTargetType)?.subject ??
+        (swsSelectedShortLink?.target as LinkTargetType)?.subject ??
+        '',
+      message:
+        (selectedShortLink?.target as LinkTargetType)?.message ??
+        (swsSelectedShortLink?.target as LinkTargetType)?.message ??
+        ''
+    },
+    title: selectedShortLink?.title ?? swsSelectedShortLink?.title ?? '',
+    linkDescription:
+      selectedShortLink?.description ?? swsSelectedShortLink?.description ?? '',
+    featureImg: {
+      featureImgPath:
+        selectedShortLink?.featureImg?.featureImgPath ??
+        swsSelectedShortLink?.featureImg?.featureImgPath ??
+        '',
+      featureImgUrl:
+        selectedShortLink?.featureImg?.featureImgUrl ??
+        swsSelectedShortLink?.featureImg?.featureImgUrl ??
+        '',
+      featureImgFile:
+        selectedShortLink?.featureImg?.featureImgFile ??
+        swsSelectedShortLink?.featureImg?.featureImgFile ??
+        null
+    },
+    password: {
+      value:
+        (selectedShortLink?.password as PasswordInterface)?.password ??
+        (swsSelectedShortLink?.password as PasswordInterface)?.password ??
+        '',
+      enabled:
+        (selectedShortLink?.password as PasswordInterface)?.enabled ??
+        (swsSelectedShortLink?.password as PasswordInterface)?.enabled ??
+        false
+    },
+    folderId:
+      selectedShortLink?.folderId ??
+      swsSelectedShortLink?.folderId ??
+      CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
+    linkNote: selectedShortLink?.notes ?? swsSelectedShortLink?.notes ?? '',
+    tags:
+      selectedShortLink?.tags !== undefined && selectedShortLink?.tags !== null
+        ? (selectedShortLink?.tags as string[])
+        : swsSelectedShortLink?.tags !== undefined &&
+          swsSelectedShortLink?.tags !== null
+        ? (swsSelectedShortLink?.tags as string[])
+        : [],
+    linkExpiration: {
+      enabled:
+        (selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface)
+          ?.enabled ??
+        (
+          swsSelectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
+        )?.enabled ??
+        false,
+      expirationDate:
+        (selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface)
+          ?.expirationDate ??
+        (
+          swsSelectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
+        )?.expirationDate ??
+        '',
+      timezone:
+        (selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface)
+          ?.timezone ??
+        (
+          swsSelectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
+        )?.timezone ??
+        CONSTANTS.DEFAULT_VALUES.TIMEZONE_DEFAULT,
+      redirectionLink:
+        (selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface)
+          ?.redirectionLink ??
+        (
+          swsSelectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
+        )?.redirectionLink ??
+        'https://'
+    },
+    rotatorABTesting:
+      (selectedShortLink?.abTestingRotatorLinks as ABTestingRotatorInterface[]) ??
+      (swsSelectedShortLink?.abTestingRotatorLinks as ABTestingRotatorInterface[]) ??
+      [],
+    geoLocation:
+      (selectedShortLink?.geoLocationRotatorLinks as GeoLocationRotatorInterface[]) ??
+      (swsSelectedShortLink?.geoLocationRotatorLinks as GeoLocationRotatorInterface[]) ??
+      [],
 
+    //
+    shortUrlDomain:
+      selectedShortLink?.shortUrlDomain ??
+      swsSelectedShortLink?.shortUrlDomain ??
+      ENVS.defaultShortUrlDomain,
+    shortUrlPath:
+      selectedShortLink?.shortUrlPath ??
+      swsSelectedShortLink?.shortUrlPath ??
+      '',
+    isShortUrlPathValid: true,
+    //
+
+    linkPixelsAccount:
+      (selectedShortLink?.pixelIds !== undefined &&
+        (JSON.parse(selectedShortLink?.pixelIds as string) as string[])) ??
+      (swsSelectedShortLink?.pixelIds !== undefined &&
+        (JSON.parse(swsSelectedShortLink?.pixelIds as string) as string[])) ??
+      [],
+    UTMTags: {
+      templateId:
+        (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.templateId ??
+        (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.templateId ??
+        '',
+      utmCampaign:
+        (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmCampaign ??
+        (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)
+          ?.utmCampaign ??
+        '',
+      utmMedium:
+        (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmMedium ??
+        (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmMedium ??
+        '',
+      utmSource:
+        (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmSource ??
+        (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmSource ??
+        '',
+      utmTerm:
+        (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmTerm ??
+        (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmTerm ??
+        '',
+      utmContent:
+        (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmContent ??
+        (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)?.utmContent ??
+        ''
+    },
+
+    favicon: selectedShortLink?.favicon ?? swsSelectedShortLink?.favicon ?? ''
+    // complete page fields here
+  };
   return (
     <ZIonPage pageTitle='Create New Page'>
       {compState?.isProcessing ? (
@@ -1036,196 +1194,7 @@ const AdminCreateNewLinkPages: React.FC = () => {
           }>
           <Formik
             // #region Initial values
-            initialValues={{
-              target: {
-                url:
-                  (selectedShortLink?.target as LinkTargetType)?.url ??
-                  (swsSelectedShortLink?.target as LinkTargetType)?.url ??
-                  (newShortLinkFormState?.target as LinkTargetType)?.url ??
-                  'https://',
-                phoneNumber:
-                  (selectedShortLink?.target as LinkTargetType)?.phoneNumber ??
-                  (swsSelectedShortLink?.target as LinkTargetType)
-                    ?.phoneNumber ??
-                  '',
-                username:
-                  (selectedShortLink?.target as LinkTargetType)?.username ??
-                  (swsSelectedShortLink?.target as LinkTargetType)?.username ??
-                  '',
-                email:
-                  (selectedShortLink?.target as LinkTargetType)?.email ??
-                  (swsSelectedShortLink?.target as LinkTargetType)?.email ??
-                  '',
-                accountId:
-                  (selectedShortLink?.target as LinkTargetType)?.accountId ??
-                  (swsSelectedShortLink?.target as LinkTargetType)?.accountId ??
-                  '',
-                subject:
-                  (selectedShortLink?.target as LinkTargetType)?.subject ??
-                  (swsSelectedShortLink?.target as LinkTargetType)?.subject ??
-                  '',
-                message:
-                  (selectedShortLink?.target as LinkTargetType)?.message ??
-                  (swsSelectedShortLink?.target as LinkTargetType)?.message ??
-                  ''
-              },
-              title:
-                selectedShortLink?.title ?? swsSelectedShortLink?.title ?? '',
-              linkDescription:
-                selectedShortLink?.description ??
-                swsSelectedShortLink?.description ??
-                '',
-              featureImg: {
-                featureImgPath:
-                  selectedShortLink?.featureImg?.featureImgPath ??
-                  swsSelectedShortLink?.featureImg?.featureImgPath ??
-                  '',
-                featureImgUrl:
-                  selectedShortLink?.featureImg?.featureImgUrl ??
-                  swsSelectedShortLink?.featureImg?.featureImgUrl ??
-                  '',
-                featureImgFile:
-                  selectedShortLink?.featureImg?.featureImgFile ??
-                  swsSelectedShortLink?.featureImg?.featureImgFile ??
-                  null
-              },
-              password: {
-                value:
-                  (selectedShortLink?.password as PasswordInterface)
-                    ?.password ??
-                  (swsSelectedShortLink?.password as PasswordInterface)
-                    ?.password ??
-                  '',
-                enabled:
-                  (selectedShortLink?.password as PasswordInterface)?.enabled ??
-                  (swsSelectedShortLink?.password as PasswordInterface)
-                    ?.enabled ??
-                  false
-              },
-              folderId:
-                selectedShortLink?.folderId ??
-                swsSelectedShortLink?.folderId ??
-                CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
-              linkNote:
-                selectedShortLink?.notes ?? swsSelectedShortLink?.notes ?? '',
-              tags:
-                selectedShortLink?.tags !== undefined &&
-                selectedShortLink?.tags !== null
-                  ? (selectedShortLink?.tags as string[])
-                  : swsSelectedShortLink?.tags !== undefined &&
-                    swsSelectedShortLink?.tags !== null
-                  ? (swsSelectedShortLink?.tags as string[])
-                  : [],
-              linkExpiration: {
-                enabled:
-                  (
-                    selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-                  )?.enabled ??
-                  (
-                    swsSelectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-                  )?.enabled ??
-                  false,
-                expirationDate:
-                  (
-                    selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-                  )?.expirationDate ??
-                  (
-                    swsSelectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-                  )?.expirationDate ??
-                  '',
-                timezone:
-                  (
-                    selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-                  )?.timezone ??
-                  (
-                    swsSelectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-                  )?.timezone ??
-                  CONSTANTS.DEFAULT_VALUES.TIMEZONE_DEFAULT,
-                redirectionLink:
-                  (
-                    selectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-                  )?.redirectionLink ??
-                  (
-                    swsSelectedShortLink?.linkExpirationInfo as LinkExpirationInfoInterface
-                  )?.redirectionLink ??
-                  'https://'
-              },
-              rotatorABTesting:
-                (selectedShortLink?.abTestingRotatorLinks as ABTestingRotatorInterface[]) ??
-                (swsSelectedShortLink?.abTestingRotatorLinks as ABTestingRotatorInterface[]) ??
-                [],
-              geoLocation:
-                (selectedShortLink?.geoLocationRotatorLinks as GeoLocationRotatorInterface[]) ??
-                (swsSelectedShortLink?.geoLocationRotatorLinks as GeoLocationRotatorInterface[]) ??
-                [],
-
-              //
-              shortUrlDomain:
-                selectedShortLink?.shortUrlDomain ??
-                swsSelectedShortLink?.shortUrlDomain ??
-                ENVS.defaultShortUrlDomain,
-              shortUrlPath:
-                selectedShortLink?.shortUrlPath ??
-                swsSelectedShortLink?.shortUrlPath ??
-                '',
-              isShortUrlPathValid: true,
-              //
-
-              linkPixelsAccount:
-                (selectedShortLink?.pixelIds !== undefined &&
-                  (JSON.parse(
-                    selectedShortLink?.pixelIds as string
-                  ) as string[])) ??
-                (swsSelectedShortLink?.pixelIds !== undefined &&
-                  (JSON.parse(
-                    swsSelectedShortLink?.pixelIds as string
-                  ) as string[])) ??
-                [],
-              UTMTags: {
-                templateId:
-                  (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                    ?.templateId ??
-                  (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                    ?.templateId ??
-                  '',
-                utmCampaign:
-                  (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                    ?.utmCampaign ??
-                  (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                    ?.utmCampaign ??
-                  '',
-                utmMedium:
-                  (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                    ?.utmMedium ??
-                  (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                    ?.utmMedium ??
-                  '',
-                utmSource:
-                  (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                    ?.utmSource ??
-                  (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                    ?.utmSource ??
-                  '',
-                utmTerm:
-                  (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                    ?.utmTerm ??
-                  (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                    ?.utmTerm ??
-                  '',
-                utmContent:
-                  (selectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                    ?.utmContent ??
-                  (swsSelectedShortLink?.utmTagInfo as UTMTagInfoInterface)
-                    ?.utmContent ??
-                  ''
-              },
-
-              favicon:
-                selectedShortLink?.favicon ??
-                swsSelectedShortLink?.favicon ??
-                ''
-              // complete page fields here
-            }}
+            initialValues={formikInitialValues}
             enableReinitialize={true}
             // #endregion
 

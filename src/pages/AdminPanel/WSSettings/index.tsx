@@ -1130,7 +1130,7 @@ const ZWorkspaceSettings: React.FC = () => {
                     </Suspense>
 
                     {/* Col-2 Row-2 */}
-                    <ZIonRow style={{ height: 'calc(100% - 4rem)' }}>
+                    <ZIonRow className='h-[calc(100%-4rem)]'>
                       {/* Col-2 Row-2 col-1 Folder menu */}
                       {isMdScale ? (
                         <Suspense

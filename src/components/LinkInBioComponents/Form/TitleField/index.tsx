@@ -42,6 +42,8 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
   onIonChange,
   onIonBlur
 }) => {
+  const inputStyle = { '--padding-start': '.8rem' };
+
   return (
     <ZIonItem
       className={className}
@@ -65,17 +67,18 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
         slotImageUrl?.trim() !== '' && (
           <ZIonImg
             src={slotImageUrl}
-            style={{ width: '25px' }}
             slot='start'
+            className='w-[25px]'
             testingselector={`${testingselector}-image`}
             testinglistselector={`${testinglistselector}-image`}
           />
         )}
 
       <ZIonInput
-        label=''
+        aria-label='title'
         minHeight='40px'
         name={name}
+        style={inputStyle}
         placeholder={placeholder}
         onIonChange={onIonChange}
         onIonBlur={onIonBlur}

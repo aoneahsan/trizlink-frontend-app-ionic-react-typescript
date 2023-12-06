@@ -454,21 +454,48 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
       ? 'outline'
       : 'default';
 
+  // #region Comp Constants
+  const zIonItemStyle = {
+    opacity: element.isActive ?? false ? '1' : '0.4'
+  };
+
+  const zCustomDeleteComponentData = { id: element?.id as string };
+
+  const zLinkInBioButtonBlockStyle = {
+    ..._buttonStyle,
+    '--box-shadow':
+      element.blockContent?.customAppearance?.isEnabled === true
+        ? currentBlockCustomAppearanceButtonShadowType
+          ? `6px 6px ${
+              element.blockContent?.customAppearance?.shadowColor ??
+              CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
+            }`
+          : ''
+        : linkInBioThemeButtonShadowType
+        ? `6px 6px ${
+            selectedLinkInBio?.theme?.button?.shadowColor ??
+            CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
+          }`
+        : ''
+  };
+
+  const zIonColStyle = {
+    height: `${element.blockContent?.spacing as number}px`
+  };
+  // #endregion
+
   return (
     <ZIonItem
       className={classNames({
-        'my-4 zaions-linkInBio-block': true,
+        'my-4 zaions-linkInBio-block z-ion-bg-transparent': true,
         zaions__light_bg_opacity_point_2:
           element.id === (routeQSearchParams as { blockId: string }).blockId
       })}
-      style={{
-        '--background': 'transparent',
-        opacity: element.isActive ?? false ? '1' : '0.4'
-      }}
+      style={zIonItemStyle}
       data-block-id={element.id}>
       <ZCustomDeleteComponent
         deleteFn={deleteBlockHandler}
-        data={{ id: element?.id as string }}
+        data={zCustomDeleteComponentData}
         className='ion-no-padding me-1'
         slot='start'
         iconColor='light'
@@ -510,23 +537,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
       ) : element?.blockType === LinkInBioBlockEnum.button ? (
         <ZLinkInBioButtonBlock
           fontFamily={selectedLinkInBio?.theme?.font}
-          style={{
-            ..._buttonStyle,
-            '--box-shadow':
-              element.blockContent?.customAppearance?.isEnabled === true
-                ? currentBlockCustomAppearanceButtonShadowType
-                  ? `6px 6px ${
-                      element.blockContent?.customAppearance?.shadowColor ??
-                      CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
-                    }`
-                  : ''
-                : linkInBioThemeButtonShadowType
-                ? `6px 6px ${
-                    selectedLinkInBio?.theme?.button?.shadowColor ??
-                    CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
-                  }`
-                : ''
-          }}
+          style={zLinkInBioButtonBlockStyle}
           title={element.blockContent?.title ?? 'button'}
           url={element.blockContent?.target?.url}
           // TODO: make this a option in frontend, so user will be able to select whether to open the link in new tab or not - (will be theme and block wise)
@@ -614,11 +625,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
           socialBlockData={element.blockContent?.cardItems}
         />
       ) : element?.blockType === LinkInBioBlockEnum.spacing ? (
-        <ZIonCol
-          style={{
-            height: `${element.blockContent?.spacing as number}px`
-          }}
-        />
+        <ZIonCol style={zIonColStyle} />
       ) : element?.blockType === LinkInBioBlockEnum.separator ? (
         <ZLinkInBioSeparatorBlock
           _borderColor={element.blockContent?.separatorColor}
