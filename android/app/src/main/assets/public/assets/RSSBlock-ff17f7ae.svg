@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 33.863 33.863" focusable="false">
+    <defs>
+        <clipPath>
+            <path d="M0 0H33.863V33.863H0z" class="block_rss_cls-1-rss"></path>
+        </clipPath>
+        <style>
+            .block_rss_cls-1-rss {
+                fill: #c501ff
+            }
+
+        </style>
+    </defs>
+    <g>
+        <g>
+            <circle cx="4.838" cy="4.838" r="4.838" class="block_rss_cls-1-rss" transform="translate(0 24.187)">
+            </circle>
+            <path d="M16.126 30.829h6.448A22.6 22.6 0 0 0 0 8.254V14.7a16.144 16.144 0 0 1 16.126 16.129z"
+                class="block_rss_cls-1-rss" transform="translate(0 3.034)"></path>
+            <path d="M33.863 33.863A33.9 33.9 0 0 0 0 0v6.45a27.444 27.444 0 0 1 27.415 27.413z"
+                class="block_rss_cls-1-rss"></path>
+        </g>
+    </g>
+</svg>

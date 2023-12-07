@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="887" height="887"
+  viewBox="0 0 887 887">
+  <defs>
+    <clipPath>
+      <rect width="233.84" height="233.84" fill="#fff" />
+    </clipPath>
+  </defs>
+  <g transform="translate(1156 -17648)">
+    <rect width="887" height="887" transform="translate(-1156 17648)" fill="#fff" opacity="0" />
+    <g transform="translate(-829.084 17975.027)" clip-path="url(#clip-path)">
+      <g id="rss">
+        <circle cx="33.41" cy="33.41" r="33.41" transform="translate(0 167.02)" fill="#fff" />
+        <path d="M111.357,164.147h44.527C155.884,78.2,85.946,8.263,0,8.254V52.8A111.48,111.48,0,0,1,111.357,164.147Z"
+          transform="translate(0 69.693)" fill="#fff" />
+        <path d="M233.84,233.84C233.84,104.9,128.943,0,0,0V44.537c104.39,0,189.313,84.9,189.313,189.3Z" fill="#fff" />
+      </g>
+    </g>
+  </g>
+</svg>

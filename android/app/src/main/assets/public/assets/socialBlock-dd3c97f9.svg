@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 33.863 33.863" focusable="false">
+  <defs>
+    <clipPath>
+      <path d="M0 0H33.863V33.863H0z" class="block_social_cls-1-social" data-name="Rectangle 7831"></path>
+    </clipPath>
+    <style>
+      .block_social_cls-1-social {
+        fill: #10d4c6
+      }
+
+    </style>
+  </defs>
+  <g>
+    <g transform="translate(2.021)">
+      <g transform="translate(21.869 5.964)">
+        <g>
+          <path d="M20.451 4.361h-1.989a.994.994 0 1 0 0 1.988h1.988a.994.994 0 0 0 0-1.988z"
+            class="block_social_cls-1-social" transform="translate(-17.468 -4.361)"></path>
+        </g>
+      </g>
+      <g transform="translate(11.928)">
+        <g>
+          <path d="M13.077 2.537L12.083.549a.994.994 0 1 0-1.778.889l.995 1.988a.994.994 0 1 0 1.778-.889z"
+            class="block_social_cls-1-social" transform="translate(-10.2)"></path>
+        </g>
+      </g>
+      <g transform="translate(18.886)">
+        <g>
+          <path
+            d="M17.721.1a1 1 0 0 0-1.334.445l-.994 1.988a.994.994 0 1 0 1.778.889l.994-1.988A.994.994 0 0 0 17.721.1z"
+            class="block_social_cls-1-social" transform="translate(-15.288)"></path>
+        </g>
+      </g>
+      <g transform="translate(7.952 5.964)">
+        <g>
+          <path d="M10.275 4.361H8.287a.994.994 0 1 0 0 1.988h1.988a.994.994 0 1 0 0-1.988z"
+            class="block_social_cls-1-social" transform="translate(-7.293 -4.361)"></path>
+        </g>
+      </g>
+      <g id="block_social_Groupe_9185" data-name="Groupe 9185" transform="translate(0 15.97)">
+        <g id="block_social_Groupe_9184" data-name="Groupe 9184">
+          <path id="block_social_Tracé_32816"
+            d="M6.448 11.678H2.472a.994.994 0 0 0-.994.994v15.9a.994.994 0 0 0 .994.994h3.976a.994.994 0 0 0 .994-.994v-15.9a.994.994 0 0 0-.994-.994z"
+            class="block_social_cls-1-social" transform="translate(-1.478 -11.678)"></path>
+        </g>
+      </g>
+      <g transform="translate(7.952 6.03)">
+        <g>
+          <path id="block_social_Tracé_32817"
+            d="M29.142 16.985a3.126 3.126 0 0 0-3.168-2.635h-7.75c.659-1.179 1.012-4.515 1-5.878a4.139 4.139 0 0 0-4.149-4.063h-.82a.994.994 0 0 0-.994.994c0 2.3-.9 6.448-2.583 8.136a11.011 11.011 0 0 1-3.381 2.184v14.916a23.221 23.221 0 0 0 8.2 1.6h6.5a3.023 3.023 0 0 0 2.981-4.081 2.983 2.983 0 0 0 1.988-3.976A2.984 2.984 0 0 0 28.4 19.32a2.976 2.976 0 0 0 .742-2.335z"
+            class="block_social_cls-1-social" transform="translate(-7.293 -4.409)"></path>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

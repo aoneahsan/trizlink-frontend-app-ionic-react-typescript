@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 33.862 33.862" focusable="false">
+  <defs>
+    <clipPath>
+      <path d="M0 0H33.862V33.862H0z" class="block_spacing_cls-1-spacing" data-name="Rectangle 7831"></path>
+    </clipPath>
+    <style>
+      .block_spacing_cls-1-spacing {
+        fill: #5a6982
+      }
+
+    </style>
+  </defs>
+  <g transform="rotate(90 16.931 16.931)">
+    <g transform="translate(0 .114)">
+      <path
+        d="M12.412 8.907a1.866 1.866 0 0 0-1.32-3.186H6.369L8.9 3.187A1.866 1.866 0 1 0 6.264.547l-5.72 5.72a1.83 1.83 0 0 0-.465.784A1.892 1.892 0 0 0 .1 8.181a1.919 1.919 0 0 0 .448.726l5.727 5.72a1.866 1.866 0 0 0 2.64-2.64L6.376 9.453H11.1a1.863 1.863 0 0 0 1.312-.546z"
+        class="block_spacing_cls-1-spacing" transform="translate(0 9.299)"></path>
+      <path
+        d="M.546 8.907a1.866 1.866 0 0 1 1.32-3.186h4.719L4.051 3.187a1.866 1.866 0 0 1 2.64-2.64l5.717 5.72a1.83 1.83 0 0 1 .465.784 1.892 1.892 0 0 1-.02 1.123 1.919 1.919 0 0 1-.448.726l-5.72 5.72a1.866 1.866 0 0 1-2.64-2.64l2.54-2.527H1.863a1.863 1.863 0 0 1-1.317-.546z"
+        class="block_spacing_cls-1-spacing" transform="translate(20.911 9.299)"></path>
+      <path id="block_spacing_Tracé_32823" d="M0 31.261V2.375a2.375 2.375 0 1 1 4.75 0v28.883a2.375 2.375 0 0 1-4.75 0z"
+        class="block_spacing_cls-1-spacing" transform="translate(14.559)"></path>
+    </g>
+  </g>
+</svg>
