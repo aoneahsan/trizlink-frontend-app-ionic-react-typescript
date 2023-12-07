@@ -47,6 +47,8 @@ const LinkInBioDateTimeField: React.FC<LinkInBioDateTimeFieldInterface> = ({
       minHeight='32px'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}
+      className='ion-item-start-no-padding'
+      lines='none'
       style={_style}>
       <ZIonIcon
         icon={calendarOutline}

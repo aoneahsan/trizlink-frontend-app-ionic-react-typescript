@@ -545,7 +545,7 @@ const UploadTab: React.FC<{
       {({ getRootProps, getInputProps, isDragActive }) => (
         <div
           className={classNames({
-            'w-[90%]': true,
+            'w-[90%] h-[80%]': true,
             'flex flex-col ion-align-items-center ion-justify-content-center h-[90%] rounded cursor-pointer':
               uploadTabState?.file?.isFileFetch === false,
             zaions__success_set: isDragActive,

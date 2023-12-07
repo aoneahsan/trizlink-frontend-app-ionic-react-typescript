@@ -986,7 +986,11 @@ ion-modal.zaions__modal_w100 {
 }
 
 .ion-padding-start-1rem {
-  --padding-start: 1rem;
+  --padding-start: 1rem !important;
+}
+
+.ion-padding-start-point-8rem {
+  --padding-start: 0.8rem !important;
 }
 
 .ion-padding-end-0 {

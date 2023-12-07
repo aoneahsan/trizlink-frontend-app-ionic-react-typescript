@@ -37,7 +37,7 @@ const LinkInBioIconField: React.FC<LinkInBioIconFieldInterface> = ({
 }) => {
   return (
     <ZIonItem
-      className={className}
+      className={`ion-item-start-no-padding ${className}`}
       lines='none'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>

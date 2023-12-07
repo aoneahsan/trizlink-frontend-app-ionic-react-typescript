@@ -42,11 +42,9 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
   onIonChange,
   onIonBlur
 }) => {
-  const inputStyle = { '--padding-start': '.8rem' };
-
   return (
     <ZIonItem
-      className={className}
+      className={`ion-item-start-no-padding ${className}`}
       lines='none'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
@@ -78,7 +76,7 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
         aria-label='title'
         minHeight='40px'
         name={name}
-        style={inputStyle}
+        className='ion-padding-start-point-8rem'
         placeholder={placeholder}
         onIonChange={onIonChange}
         onIonBlur={onIonBlur}

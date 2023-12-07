@@ -55,7 +55,9 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
   };
   return (
     <ZIonItem
-      className={classNames(className, { 'ion-align-items-start': true })}
+      className={classNames(className, {
+        'ion-align-items-start ion-item-start-no-padding': true
+      })}
       lines='none'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
@@ -80,13 +82,14 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
       )}
 
       <ZIonInput
-        label=''
+        aria-label='url'
         name={name}
         minHeight='40px'
         placeholder={placeholder}
         onIonChange={onIonChange}
         onIonBlur={onIonBlur}
         value={value}
+        className='ion-padding-start-point-8rem'
         testingselector={`${testingselector}-input`}
         testinglistselector={`${testinglistselector}-input`}
       />

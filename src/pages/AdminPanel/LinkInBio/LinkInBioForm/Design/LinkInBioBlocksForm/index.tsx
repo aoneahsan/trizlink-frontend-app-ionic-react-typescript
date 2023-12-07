@@ -558,6 +558,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
     date: linkInBioBlockData?.blockContent?.date ?? '',
     timezone: linkInBioBlockData?.blockContent?.timezone ?? '',
     imageUrl: linkInBioBlockData?.blockContent?.imageUrl ?? '',
+    imageFile: undefined,
     avatarShadow: linkInBioBlockData?.blockContent?.avatarShadow ?? false,
     cardMode: linkInBioBlockData?.blockContent?.cardMode ?? false,
     iframe: linkInBioBlockData?.blockContent?.iframe ?? '',
@@ -734,8 +735,9 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                   {isZFetching && (
                     <ZIonText>
                       <ZIonSkeletonText
-                        width='6rem'
-                        height='1rem'
+                        width='7rem'
+                        height='1.1rem'
+                        className='rounded-sm'
                       />
                     </ZIonText>
                   )}
@@ -847,13 +849,13 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                     [...Array(3)].map((_, i) => (
                       <ZIonButton
                         fill='clear'
-                        className='mt-2 ion-no-padding me-3 ion-no-margin'
+                        className='mt-1 ion-no-padding me-3 ion-no-margin'
                         color='light'
                         size='small'
                         key={i}>
                         <ZIonSkeletonText
                           width='2rem'
-                          height='2rem'
+                          height='1.5rem'
                           animated={true}
                         />
                       </ZIonButton>
@@ -998,7 +1000,9 @@ const ZLinkInBioBlocksForm: React.FC = () => {
               {isZFetching && (
                 <ZIonTitle className='text-lg font-bold ion-no-padding'>
                   <ZIonSkeletonText
-                    height='1rem'
+                    height='1.1rem'
+                    width='8rem'
+                    className='rounded-sm'
                     animated={true}
                   />
                 </ZIonTitle>
@@ -1013,7 +1017,9 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         className='mt-3'
                         key={i}>
                         <ZIonSkeletonText
-                          height='2rem'
+                          height='2.2rem'
+                          width='95%'
+                          className='rounded-md'
                           animated={true}
                         />
                       </ZIonCol>
@@ -1241,14 +1247,28 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                     className='mt-4'>
                     <LinkInBioUploadField
                       dropdownHeight='6rem'
-                      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                      setFieldValue={setFieldValue}
-                      fieldName='imageUrl'
                       imageUrl={values.imageUrl}
                       testingselector={
                         CONSTANTS.testingSelectors.linkInBio.formPage.design
                           .blockForm.fields.upload
                       }
+                      onDrop={event => {
+                        if (event[0] !== undefined) {
+                          void setFieldValue('imageFile', event[0], false);
+
+                          const reader = new FileReader();
+
+                          reader.onload = ({ target }) => {
+                            void setFieldValue(
+                              'imageUrl',
+                              target?.result as string,
+                              false
+                            );
+                          };
+
+                          reader.readAsDataURL(event[0]);
+                        }
+                      }}
                     />
                   </ZIonCol>
                 )}
@@ -1867,7 +1887,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                   {/* 🖍️ Button color */}
                   {values.customAppearance.isEnabled && (
                     <ZIonCol
-                      className='mt-3 mb-2'
+                      className='mt-2 mb-2'
                       size='12'>
                       <div className='flex ion-align-items-start ion-padding-bottom'>
                         {values?.customAppearance?.background?.bgType ===
@@ -1959,7 +1979,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         )}
                       </div>
 
-                      <ZIonTitle className='font-bold text-[16px] ion-margin-top ion-no-padding'>
+                      <ZIonTitle className='font-bold text-[16px] mt-1 ion-no-padding'>
                         🎫 Button type
                       </ZIonTitle>
                       <ZIonRow

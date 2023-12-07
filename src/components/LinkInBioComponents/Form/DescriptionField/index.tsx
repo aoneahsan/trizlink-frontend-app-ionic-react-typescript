@@ -39,21 +39,22 @@ const LinkInBioDescriptionField: React.FC<
 }) => {
   return (
     <ZIonItem
-      className={className}
+      className={`${className} ion-item-start-no-padding`}
       lines='none'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
       <ZIonIcon
         icon={reorderFourOutline}
         slot='start'
-        className='w-7 h-7 me-2'
+        className='mt-0 mb-6 w-7 h-7 me-2'
         testingselector={`${testingselector}-icon`}
         testinglistselector={`${testinglistselector}-icon`}
       />
 
       <ZIonTextareaShort
-        label=''
+        aria-label='description'
         rows={3}
+        className='ion-padding-start-point-8rem'
         value={value}
         name={name}
         fill='outline'

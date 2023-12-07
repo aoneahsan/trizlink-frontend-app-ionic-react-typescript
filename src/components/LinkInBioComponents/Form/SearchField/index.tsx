@@ -41,7 +41,7 @@ const LinkInBioSearchField: React.FC<LinkInBioSearchFieldInterface> = ({
   };
   return (
     <ZIonItem
-      className='ion-no-padding'
+      className='ion-no-padding ion-item-start-no-padding'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
       <ZIonSearchbar
