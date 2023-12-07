@@ -57,8 +57,10 @@ const ZaionsEnterpriseClass: React.FC = () => {
           label='Enterprise Class'
           title={
             <ZIonText
-              className='block'
-              style={{ lineHeight: !isMdScale ? '3rem' : '' }}>
+              className={classNames({
+                block: true,
+                'leading-[3rem]': !isMdScale
+              })}>
               The trusted, unrivaled <br /> enterprise-grade solution
             </ZIonText>
           }
@@ -69,8 +71,7 @@ const ZaionsEnterpriseClass: React.FC = () => {
           secondaryBtnText='Watch Enterprise Demo'
           extraData={
             <ZIonText
-              className={'zaions__getAQuote_btn mt-3'}
-              style={{ fontSize: '15px', letterSpacing: '0px' }}>
+              className={'zaions__getAQuote_btn mt-3 text-[15px] leading-0'}>
               <ZIonText className='font-bold'>Talk to Sales:</ZIonText> +1 (718)
               838-9412
             </ZIonText>

@@ -46,6 +46,7 @@ import {
   iconLargePasswordSecurityMin,
   socialmediaMobile2
 } from '@/assets/images';
+import classNames from 'classnames';
 
 const ZaionsSocialMedia: React.FC = () => {
   const keyFeaturesData = useRecoilValue<ZaionsKeyFeatureType[]>(
@@ -71,7 +72,10 @@ const ZaionsSocialMedia: React.FC = () => {
           lgImg={socialmediaMobile2}
           label='Social Media'
           title={
-            <ZIonText style={{ lineHeight: !isMdScale ? '3rem' : '' }}>
+            <ZIonText
+              className={classNames({
+                'leading-[3rem]': !isMdScale
+              })}>
               Stand out and connect on <br /> social media
             </ZIonText>
           }
@@ -147,9 +151,7 @@ const ZaionsSocialMedia: React.FC = () => {
               sizeXs='12'
               className='ion-text-center'>
               <ZIonText>
-                <h2
-                  className='pt-1 mt-2 font-bolder zaions__color_dark'
-                  style={{ fontSize: '38px' }}>
+                <h2 className='pt-1 mt-2 font-bolder zaions__color_dark text-[38px]'>
                   The world’s leading link management platform
                 </h2>
               </ZIonText>

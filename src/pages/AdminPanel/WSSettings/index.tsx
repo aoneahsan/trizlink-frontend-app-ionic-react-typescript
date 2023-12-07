@@ -544,6 +544,10 @@ const ZWorkspaceSettings: React.FC = () => {
       </ZIonPage>
     );
   } else {
+    const zIonContentStyle = {
+      '--padding-start': '.6rem',
+      '--padding-end': '.6rem'
+    };
     return (
       <ZCan
         shareWSId={wsShareId}
@@ -613,11 +617,7 @@ const ZWorkspaceSettings: React.FC = () => {
               />
             </ZIonHeader>
 
-            <ZIonContent
-              style={{
-                '--padding-start': '.6rem',
-                '--padding-end': '.6rem'
-              }}>
+            <ZIonContent style={zIonContentStyle}>
               {/* Account Settings */}
               <ZIonText className='block mt-2 font-semibold text-md ion-no-padding'>
                 Account settings

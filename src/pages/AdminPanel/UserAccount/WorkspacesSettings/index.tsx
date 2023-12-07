@@ -296,6 +296,15 @@ const WorkspacesSettings: React.FC = () => {
     }
   ];
 
+  const formikInitialValues = {
+    notificationOnProfile:
+      Boolean(WSNotificationSettingsData?.notificationOnProfile) ?? false,
+    allowPushNotification:
+      Boolean(WSNotificationSettingsData?.allowPushNotification) ?? false
+  };
+
+  const _userAvatarUi = { name: compState?.selectedWS?.workspaceName };
+
   return (
     <ZIonRow
       className={classNames({
@@ -323,181 +332,6 @@ const WorkspacesSettings: React.FC = () => {
         </ZIonTitle>
       </ZIonCol>
 
-      {/* <ZIonCol
-        sizeXl='12'
-        sizeLg='12'
-        sizeMd='12'
-        sizeSm='12'
-        sizeXs='12'
-        className='mt-4'>
-        <ZIonText
-          color='medium'
-          className={classNames({
-            'block ': true,
-            'text-lg my-2': isLgScale,
-            'text-md my-1': !isLgScale && isSmScale,
-            'text-sm': !isSmScale
-          })}>
-          Owned workspaces
-        </ZIonText>
-        {isWorkspacesDataFetching &&
-          isWSShareDataFetching &&
-          [...Array(3)].map((_, index) => {
-            return (
-              <ZIonItem
-                lines='none'
-                key={index}
-                className={classNames({
-                  'h-[2.9rem]': !isMdScale
-                })}
-                style={{
-                  '--padding-start': '10px'
-                }}>
-                <ZIonSkeletonText
-                  className='overflow-hidden rounded-full'
-                  width={isMdScale ? '2.5rem' : '2rem'}
-                  height={isMdScale ? '2.5rem' : '2rem'}
-                />
-                <ZIonLabel className='ms-3'>
-                  <ZIonText className='block font-semibold text-md'>
-                    <ZIonSkeletonText
-                      width='12rem'
-                      height='.8rem'
-                    />
-                  </ZIonText>
-                  <ZIonText className='block text-xs'>
-                    <ZIonSkeletonText
-                      width='12rem'
-                      height='.8rem'
-                    />
-                  </ZIonText>
-                </ZIonLabel>
-              </ZIonItem>
-            );
-          })}
-
-        {!isWorkspacesDataFetching &&
-          WorkspacesData?.map((el, index) => {
-            return (
-              <ZIonItem
-                lines='none'
-                key={index}
-                testinglistselector={`${CONSTANTS.testingSelectors.userAccount.notificationSettingsTab.WSNotificationsAccordion.ownedWSItem}-${index}`}
-                testingselector={
-                  CONSTANTS.testingSelectors.userAccount.notificationSettingsTab
-                    .WSNotificationsAccordion.ownedWSItem
-                }
-                routerLink={createRedirectRoute({
-                  url: ZaionsRoutes.AdminPanel.Setting.UserAccount
-                    .WorkspaceNotifications,
-                  params: [CONSTANTS.RouteParams.workspace.workspaceId],
-                  values: [el.id ?? '']
-                })}
-                className={classNames({
-                  'mb-0 ion-activatable ripple-parent cursor-pointer rounded-lg':
-                    true,
-                  'h-[2.9rem] mb-1': !isMdScale
-                })}
-                style={{
-                  '--padding-start': '10px'
-                }}>
-                <ZUserAvatarButton
-                  userAvatar={el?.workspaceImage}
-                  userAvatarUi={{
-                    name: el?.workspaceName
-                  }}
-                  style={{
-                    height: isMdScale ? '2.5rem' : '2rem',
-                    width: isMdScale ? '2.5rem' : '2rem'
-                  }}
-                />
-                <ZIonLabel className='ms-2'>
-                  <ZIonText
-                    className={classNames({
-                      'block font-semibold': true,
-                      'text-md': isLgScale,
-                      'text-sm': !isLgScale
-                    })}>
-                    {el?.workspaceName}
-                  </ZIonText>
-                  {/* <ZIonText className='block text-xs'>
-                            Primary email
-                          </ZIonText>  * /}
-                </ZIonLabel>
-              </ZIonItem>
-            );
-          })}
-
-        {(WSShareData?.length ?? 0) > 0 && (
-          <ZIonText
-            className={classNames({
-              'block ms-2': true,
-              'text-lg my-2': isLgScale,
-              'text-md my-1': !isLgScale && isSmScale,
-              'text-sm': !isSmScale
-            })}
-            color='medium'>
-            Share workspaces
-          </ZIonText>
-        )}
-
-        {!isWSShareDataFetching &&
-          (WSShareData?.length ?? 0) > 0 &&
-          WSShareData?.map((el, index) => {
-            return (
-              <ZIonItem
-                key={index}
-                lines='none'
-                testingselector={
-                  CONSTANTS.testingSelectors.userAccount.notificationSettingsTab
-                    .WSNotificationsAccordion.shareWSItem
-                }
-                testinglistselector={`${CONSTANTS.testingSelectors.userAccount.notificationSettingsTab.WSNotificationsAccordion.shareWSItem}-${index}`}
-                className={classNames({
-                  'mb-0 ion-activatable ripple-parent cursor-pointer rounded-lg':
-                    true,
-                  'h-[2.9rem] mb-1': !isMdScale
-                })}
-                style={{
-                  '--padding-start': '10px'
-                }}>
-                <ZUserAvatarButton
-                  userAvatar={el?.workspaceImage}
-                  userAvatarUi={{
-                    name: el?.workspaceName
-                  }}
-                  style={{
-                    height: isMdScale ? '2.5rem' : '2rem',
-                    width: isMdScale ? '2.5rem' : '2rem'
-                  }}
-                />
-                <ZIonLabel className='ms-2'>
-                  <ZIonText
-                    className={classNames({
-                      'block font-semibold': true,
-                      'text-md': isLgScale,
-                      'text-sm': !isLgScale
-                    })}>
-                    {el?.workspaceName}
-                  </ZIonText>
-                  {/* <ZIonText className='block text-xs'>
-                            Primary email
-                          </ZIonText> * /}
-                </ZIonLabel>
-              </ZIonItem>
-            );
-          })}
-
-        <div className=''>
-          <ZIonLabel>Select a workspace</ZIonLabel>
-          <ZaionsRSelect
-            options={zSelectOptions}
-            onChange={option => {
-              SelectWSHandler(option as SingleValue<ZaionsRSelectOptions>);
-            }}
-          />
-        </div>
-      </ZIonCol> */}
       <ZIonCol
         sizeXl='12'
         sizeLg='12'
@@ -567,14 +401,7 @@ const WorkspacesSettings: React.FC = () => {
             'mb-2': !isSmScale
           })}>
           <Formik
-            initialValues={{
-              notificationOnProfile:
-                Boolean(WSNotificationSettingsData?.notificationOnProfile) ??
-                false,
-              allowPushNotification:
-                Boolean(WSNotificationSettingsData?.allowPushNotification) ??
-                false
-            }}
+            initialValues={formikInitialValues}
             enableReinitialize={true}
             onSubmit={values => {
               const zStringifyData = zStringify(values);
@@ -595,13 +422,11 @@ const WorkspacesSettings: React.FC = () => {
                     lines='none'>
                     <ZUserAvatarButton
                       userAvatar={compState?.selectedWS?.workspaceImage}
-                      userAvatarUi={{
-                        name: compState?.selectedWS?.workspaceName
-                      }}
-                      style={{
-                        height: isMdScale ? '2.5rem' : '2rem',
-                        width: isMdScale ? '2.5rem' : '2rem'
-                      }}
+                      userAvatarUi={_userAvatarUi}
+                      className={classNames({
+                        'w-[2.5rem] h-[2.5rem]': isMdScale,
+                        'w-[2rem] h-[2rem]': !isMdScale
+                      })}
                     />
                     <ZIonLabel className='ms-2'>
                       <ZIonText
@@ -647,12 +472,7 @@ const WorkspacesSettings: React.FC = () => {
                   <ZIonList
                     className='mt-2 border rounded-lg'
                     lines='full'>
-                    <ZIonItem
-                      className='mx-2'
-                      style={{
-                        '--padding-start': '10px',
-                        '--padding-end': '0px'
-                      }}>
+                    <ZIonItem className='mx-2 ion-padding-start-1rem ion-padding-end-0'>
                       <ZIonIcon
                         icon={notificationsOutline}
                         className='me-3 w-7 h-7'
@@ -686,11 +506,7 @@ const WorkspacesSettings: React.FC = () => {
 
                     <ZIonItem
                       lines='none'
-                      className='mx-2'
-                      style={{
-                        '--padding-start': '10px',
-                        '--padding-end': '0px'
-                      }}>
+                      className='mx-2 ion-padding-start-1rem ion-padding-end-0'>
                       <ZIonText>Allow push notification</ZIonText>
 
                       <ZIonText slot='end'>

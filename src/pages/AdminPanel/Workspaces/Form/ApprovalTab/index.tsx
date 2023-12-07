@@ -93,13 +93,15 @@ const ZWorkspaceFormApprovalTab: React.FC = () => {
     ignoreQueryPrefix: true
   });
 
+  const formikInitialValues = {
+    approval: workspaceApprovalCardEnum.required,
+    schedulePostsApproval: false,
+    lockContentApproval: false
+  };
+
   return (
     <Formik
-      initialValues={{
-        approval: workspaceApprovalCardEnum.required,
-        schedulePostsApproval: false,
-        lockContentApproval: false
-      }}
+      initialValues={formikInitialValues}
       validate={() => {
         const errors = {};
 

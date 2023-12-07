@@ -19,11 +19,15 @@ const GoogleMapsCapacitorPackageTest: React.FC = () => {
   //     });
   //   }
   // };
+  const ZCapGMapCoordinates = {
+    lat: mapCoordinates.lat,
+    lng: mapCoordinates.lng
+  };
   return (
     <>
       <ZCapGMap
         mapId='zaions-test-google-map'
-        coordinates={{ lat: mapCoordinates.lat, lng: mapCoordinates.lng }}
+        coordinates={ZCapGMapCoordinates}
       />
       <CreateAnimation
         duration={1500}
@@ -36,7 +40,7 @@ const GoogleMapsCapacitorPackageTest: React.FC = () => {
           },
           { property: 'opacity', fromValue: '1', toValue: '0.2' }
         ]}>
-        <div style={{ width: '600px', height: '200px', background: 'red' }}>
+        <div className='w-[600px] h-[200px] bg-red-400'>
           {/* <ZRGAutoCompleteInput
             name='zaions-google-autocomplete'
             onLocationSelectHandler={onLocationSelectHandler}

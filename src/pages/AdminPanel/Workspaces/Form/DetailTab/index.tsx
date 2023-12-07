@@ -185,16 +185,18 @@ const ZWorkspaceFormDetailTab: React.FC = () => {
     }
   };
 
+  const formikInitialValues = {
+    workspaceName: selectedWorkspace?.workspaceName,
+    workspaceTimezone: selectedWorkspace?.workspaceTimezone
+  };
+
   return (
     <>
       <ZIonButton routerLink={ZaionsRoutes.AdminPanel.Workspaces.Main}>
         go back
       </ZIonButton>
       <Formik
-        initialValues={{
-          workspaceName: selectedWorkspace?.workspaceName,
-          workspaceTimezone: selectedWorkspace?.workspaceTimezone
-        }}
+        initialValues={formikInitialValues}
         validate={values => {
           const errors: {
             workspaceName?: string;

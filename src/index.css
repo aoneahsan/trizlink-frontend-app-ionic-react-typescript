@@ -71,7 +71,7 @@ ion-app.ios ion-title {
   --background-hover-opacity: 0;
 }
 
-.z-ion-box-shadow {
+.z-ion-box-shadow-none {
   --box-shadow: none;
 }
 
@@ -989,6 +989,10 @@ ion-modal.zaions__modal_w100 {
   --padding-start: 1rem;
 }
 
+.ion-padding-end-0 {
+  --padding-end: 0;
+}
+
 .hover\:outline-sand {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
   transition-duration: 75ms;
@@ -1148,5 +1152,3 @@ ion-range.z-ion-range-show-top-pin::part(pin) {
 ion-range.z-ion-range-show-top-pin::part(pin)::before {
   content: none;
 }
-
-.

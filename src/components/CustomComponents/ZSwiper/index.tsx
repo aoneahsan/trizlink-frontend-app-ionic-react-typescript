@@ -62,6 +62,15 @@ export const ZSwiperContainer: React.FC<ZSwiperInterface> = ({
   style,
   className
 }) => {
+  // const _pagination = {
+  //   hideOnClick: true
+  // };
+  // const _breakpoints = {
+  //   768: {
+  //     slidesPerView: 3
+  //   }
+  // };
+
   return (
     <swiper-container
       // class={classNames(className, {
@@ -76,14 +85,8 @@ export const ZSwiperContainer: React.FC<ZSwiperInterface> = ({
       // navigation='true'
       // pagination='true'
       // centered-slides={true}
-      // pagination={{
-      // hideOnClick: true,
-      // }}
-      // breakpoints={{
-      // 768: {
-      // slidesPerView: 3,
-      // },
-      // }}
+      // pagination={_pagination}
+      // breakpoints={_breakpoints}
       // pagination-dynamic-bullets='true'
       // pagination-type='progressbar'
       // effect=''

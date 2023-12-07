@@ -129,6 +129,20 @@ const ZAccountDetails: React.FC = () => {
     query: `(min-width: ${BRACKPOINT_SM})`
   });
   const { presentZIonToastDanger } = useZIonToastDanger();
+
+  const formikInitialValues = {
+    primaryEmail: (userAccountEmails !== null &&
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+      {
+        ...userAccountEmails
+          .filter(el => el.isPrimary === true)
+          .map(el => ({
+            value: el.id,
+            label: el.emailAddress
+          }))
+      }[0]) || { value: '', label: '' }
+  };
+
   return (
     <>
       <ZIonPage
@@ -442,18 +456,7 @@ const ZAccountDetails: React.FC = () => {
                         </ZIonCol>
                       ) : (
                         <Formik
-                          initialValues={{
-                            primaryEmail: (userAccountEmails !== null &&
-                              // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-                              {
-                                ...userAccountEmails
-                                  .filter(el => el.isPrimary === true)
-                                  .map(el => ({
-                                    value: el.id,
-                                    label: el.emailAddress
-                                  }))
-                              }[0]) || { value: '', label: '' }
-                          }}
+                          initialValues={formikInitialValues}
                           onSubmit={values => {
                             try {
                               if (values.primaryEmail.value !== null) {

@@ -305,6 +305,14 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
 
   const isZFetching = isWSTeamsDataFetching || isCurrentWSTeamDataFetching;
 
+  const formikInitialValues = {
+    editMode: false,
+
+    //
+    title: currentWSTeamData?.title ?? '',
+    description: currentWSTeamData?.description ?? ''
+  };
+
   return (
     <ZIonPage>
       <ZCan
@@ -451,13 +459,7 @@ const ZWSSettingsTeamViewPage: React.FC = () => {
                         className='flex flex-col w-full h-full gap-10 px-3 pt-3'
                         scrollY={true}>
                         <Formik
-                          initialValues={{
-                            editMode: false,
-
-                            //
-                            title: currentWSTeamData?.title ?? '',
-                            description: currentWSTeamData?.description ?? ''
-                          }}
+                          initialValues={formikInitialValues}
                           validate={values => {
                             const errors: {
                               title?: string;

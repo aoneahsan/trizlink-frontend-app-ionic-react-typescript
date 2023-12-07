@@ -67,7 +67,10 @@ const ZaionsQRCode: React.FC = () => {
           lgImg={qrCodesMobile}
           label='QR Codes'
           title={
-            <ZIonText style={{ lineHeight: !isMdScale ? '3rem' : '' }}>
+            <ZIonText
+              className={classNames({
+                'leading-[3rem]': !isMdScale
+              })}>
               Engage customers, <br /> one scan at a time
             </ZIonText>
           }
@@ -103,9 +106,7 @@ const ZaionsQRCode: React.FC = () => {
               sizeXs='12'
               className='ion-text-center'>
               <ZIonText>
-                <h2
-                  className='font-bolder zaions__color_dark'
-                  style={{ fontSize: '38px' }}>
+                <h2 className='font-bolder zaions__color_dark text-[38px]'>
                   Power your marketing and business strategy with QR Codes
                 </h2>
               </ZIonText>
@@ -192,9 +193,7 @@ const ZaionsQRCode: React.FC = () => {
               sizeXs='12'
               className='ion-text-center'>
               <ZIonText>
-                <h2
-                  className='font-bolder zaions__color_dark'
-                  style={{ fontSize: '38px' }}>
+                <h2 className='font-bolder zaions__color_dark text-[38px]'>
                   QR Code solutions to fit any need
                 </h2>
               </ZIonText>
@@ -205,9 +204,7 @@ const ZaionsQRCode: React.FC = () => {
               sizeSm='0'
               sizeXs='0'></ZIonCol>
           </ZIonRow>
-          <ZIonRow
-            style={{ backgroundColor: '#f5f6f7' }}
-            className='py-5'>
+          <ZIonRow className='py-5 zaions-ion-bg-color-light'>
             <ZIonCol
               sizeXl='1'
               sizeLg='1'
@@ -220,18 +217,16 @@ const ZaionsQRCode: React.FC = () => {
               sizeMd='10'
               sizeSm='12'
               sizeXs='12'
-              className='py-4 me-4'
-              style={{ backgroundColor: '#fff' }}>
+              className='py-4 me-4 zaions-ion-bg-color-light'>
               <ZIonGrid>
                 <ZIonRow>
                   <ZIonCol size='12'>
                     <ZIonImg
                       src={ProductLogo}
-                      style={{ height: '60px' }}></ZIonImg>
-                    <div
-                      className='mx-auto'
-                      style={{ width: '94%' }}>
-                      <hr style={{ borderColor: '#999999' }} />
+                      className='h-[60px]'
+                    />
+                    <div className='mx-auto w-[94%]'>
+                      <hr className='border-[#999999]' />
                     </div>
                   </ZIonCol>
                   <ZIonCol
@@ -263,7 +258,7 @@ const ZaionsQRCode: React.FC = () => {
                           className='me-1 ps-0'>
                           <ZIonImg
                             src={generateQrCode}
-                            style={{ height: '50px' }}
+                            className='h-[50px]'
                           />
                         </ZIonCol>
                         <ZIonCol size='10.5'>
@@ -279,7 +274,7 @@ const ZaionsQRCode: React.FC = () => {
                           className='me-1 ps-0'>
                           <ZIonImg
                             src={customizeColorQr}
-                            style={{ height: '50px' }}
+                            className='h-[50px]'
                           />
                         </ZIonCol>
                         <ZIonCol size='10.5'>
@@ -295,7 +290,7 @@ const ZaionsQRCode: React.FC = () => {
                           className='me-1 ps-0'>
                           <ZIonImg
                             src={printedMaterial}
-                            style={{ height: '50px' }}
+                            className='h-[50px]'
                           />
                         </ZIonCol>
                         <ZIonCol size='10.5'>
@@ -311,7 +306,7 @@ const ZaionsQRCode: React.FC = () => {
                           className='me-1 ps-0'>
                           <ZIonImg
                             src={analizeCampaigns2}
-                            style={{ height: '50px' }}
+                            className='h-[50px]'
                           />
                         </ZIonCol>
                         <ZIonCol size='10.5'>
@@ -332,18 +327,16 @@ const ZaionsQRCode: React.FC = () => {
               sizeMd='10'
               sizeSm='12'
               sizeXs='12'
-              className='py-4 me-4'
-              style={{ backgroundColor: '#fff' }}>
+              className='py-4 me-4 zaions__bg_white'>
               <ZIonGrid>
                 <ZIonRow>
                   <ZIonCol size='12'>
                     <ZIonImg
                       src={ProductLogo}
-                      style={{ height: '60px' }}></ZIonImg>
-                    <div
-                      className='mx-auto'
-                      style={{ width: '94%' }}>
-                      <hr style={{ borderColor: '#999999' }} />
+                      className='h-[60px]'
+                    />
+                    <div className='mx-auto w-[94%]'>
+                      <hr className='border-[#999999]' />
                     </div>
                   </ZIonCol>
                   <ZIonCol
@@ -375,7 +368,7 @@ const ZaionsQRCode: React.FC = () => {
                           className='me-1 ps-0'>
                           <ZIonImg
                             src={generateQrCode}
-                            style={{ height: '50px' }}
+                            className='h-[50px]'
                           />
                         </ZIonCol>
                         <ZIonCol size='10.5'>
@@ -391,7 +384,7 @@ const ZaionsQRCode: React.FC = () => {
                           className='me-1 ps-0'>
                           <ZIonImg
                             src={customizeColorQr}
-                            style={{ height: '50px' }}
+                            className='h-[50px]'
                           />
                         </ZIonCol>
                         <ZIonCol size='10.5'>
@@ -407,7 +400,7 @@ const ZaionsQRCode: React.FC = () => {
                           className='me-1 ps-0'>
                           <ZIonImg
                             src={printedMaterial}
-                            style={{ height: '50px' }}
+                            className='h-[50px]'
                           />
                         </ZIonCol>
                         <ZIonCol size='10.5'>
@@ -423,7 +416,7 @@ const ZaionsQRCode: React.FC = () => {
                           className='me-1 ps-0'>
                           <ZIonImg
                             src={analizeCampaigns2}
-                            style={{ height: '50px' }}
+                            className='h-[50px]'
                           />
                         </ZIonCol>
                         <ZIonCol size='10.5'>

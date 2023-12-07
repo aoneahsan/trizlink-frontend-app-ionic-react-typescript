@@ -289,8 +289,8 @@ const ZaionsAbout: React.FC = () => {
                 </ZIonCol>
                 <ZIonCol>
                   <ZIonImg
+                    className='w-[85%]'
                     src={ChaunceyExcitingImage}
-                    style={{ width: '85%' }}
                   />
                 </ZIonCol>
               </ZIonRow>

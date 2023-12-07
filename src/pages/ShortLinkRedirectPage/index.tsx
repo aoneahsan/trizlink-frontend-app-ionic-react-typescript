@@ -436,6 +436,9 @@ const ZShortLinkRedirectPage: React.FC = () => {
    * Showing appropriate view.
    */
   if ((compState?.sl?.password as PasswordInterface)?.enabled === true) {
+    const formikInitialValues = {
+      password: ''
+    };
     return (
       <ZIonPage>
         <ZIonContent
@@ -460,9 +463,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
               </ZIonText>
 
               <Formik
-                initialValues={{
-                  password: ''
-                }}
+                initialValues={formikInitialValues}
                 validate={() => {
                   const errors = {};
 
@@ -520,8 +521,7 @@ const ZShortLinkRedirectPage: React.FC = () => {
                   return (
                     <>
                       <ZIonItem
-                        className='ion-item-start-no-padding overflow-hidden rounded w-[90%] mt-5'
-                        style={{ '--inner-padding-end': '0px' }}
+                        className='ion-item-start-no-padding overflow-hidden rounded w-[90%] mt-5 z-inner-padding-end-0'
                         lines='none'
                         minHeight='3rem'>
                         <ZIonInput
@@ -538,7 +538,8 @@ const ZShortLinkRedirectPage: React.FC = () => {
                           // errorText={errors?.password}
                           value={values.password}
                           className={classNames({
-                            'rounded zaions__bg_white': true
+                            'rounded zaions__bg_white z-ion-border-radius-0 z-ion-border-radius-1rem':
+                              true
                             // 'ion-touched': touched.password,
                             // 'ion-valid': errors?.password?.trim()?.length === 0,
                             // 'ion-invalid':
@@ -554,25 +555,17 @@ const ZShortLinkRedirectPage: React.FC = () => {
                             CONSTANTS.testingSelectors.shortLink.listPage
                               .searchInput
                           }
-                          style={{
-                            '--padding-start': '10px',
-                            '--border-radius': '0'
-                          }}
                         />
                         <ZIonButton
                           slot='end'
-                          className='ion-no-margin ion-text-capitalize'
+                          className='h-full ion-no-margin ion-text-capitalize z-ion-border-radius-0'
                           onClick={() => {
                             void submitForm();
                           }}
                           testingselector={
                             CONSTANTS.testingSelectors.shortLink.listPage
                               .searchBtn
-                          }
-                          style={{
-                            height: '100%',
-                            '--border-radius': '0'
-                          }}>
+                          }>
                           <ZIonText className='block px-3 text-sm'>
                             Enter
                           </ZIonText>

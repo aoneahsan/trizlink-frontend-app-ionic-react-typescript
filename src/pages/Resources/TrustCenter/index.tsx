@@ -68,14 +68,11 @@ const ZaionsTrustCenter: React.FC = () => {
           <ZIonRow>
             <ZIonCol className='text-center'>
               <ZIonImg
-                className='mx-auto'
-                style={{ maxWidth: '100%', width: '100px' }}
+                className='w-[100px] max-w-full mx-auto'
                 src={trustAndSafety}
               />
               <ZIonText>
-                <h2
-                  className='mt-3 zaions__color_dark'
-                  style={{ fontWeight: '800' }}>
+                <h2 className='mt-3 font-extrabold zaions__color_dark'>
                   About Trust and Safety at {PRODUCT_NAME}
                 </h2>
               </ZIonText>
@@ -104,9 +101,7 @@ const ZaionsTrustCenter: React.FC = () => {
               size='12'
               className='text-center'>
               <ZIonText>
-                <h2
-                  className='font-bolder'
-                  style={{ fontSize: '2.2rem' }}>
+                <h2 className='font-bolder text-[2.2rem]'>
                   Trust & Safety Resources
                 </h2>
               </ZIonText>

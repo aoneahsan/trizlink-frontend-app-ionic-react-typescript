@@ -100,6 +100,10 @@ const ZSingleWSNotificationSettings: React.FC = () => {
   });
   // #endregion
 
+  const _userAvatarUi = {
+    name: selectedWorkspace?.workspaceName
+  };
+
   return (
     <ZIonRow
       className={classNames({
@@ -144,13 +148,11 @@ const ZSingleWSNotificationSettings: React.FC = () => {
           lines='none'>
           <ZUserAvatarButton
             userAvatar={selectedWorkspace?.workspaceImage}
-            userAvatarUi={{
-              name: selectedWorkspace?.workspaceName
-            }}
-            style={{
-              height: isMdScale ? '2.5rem' : '2rem',
-              width: isMdScale ? '2.5rem' : '2rem'
-            }}
+            userAvatarUi={_userAvatarUi}
+            className={classNames({
+              'w-[2.5rem] h-[2.5rem]': isMdScale,
+              'w-[2rem] h-[2rem]': !isMdScale
+            })}
           />
           <ZIonLabel className='ms-2'>
             <ZIonText
@@ -178,9 +180,7 @@ const ZSingleWSNotificationSettings: React.FC = () => {
         <ZIonList
           className='mt-2 border rounded-lg'
           lines='full'>
-          <ZIonItem
-            className='mx-2'
-            style={{ '--padding-start': '10px', '--padding-end': '0px' }}>
+          <ZIonItem className='mx-2 ion-padding-start-1rem ion-padding-end-0'>
             <ZIonIcon
               icon={notificationsOutline}
               className='me-3 w-7 h-7'
@@ -205,8 +205,7 @@ const ZSingleWSNotificationSettings: React.FC = () => {
 
           <ZIonItem
             lines='none'
-            className='mx-2'
-            style={{ '--padding-start': '10px', '--padding-end': '0px' }}>
+            className='mx-2 ion-padding-start-1rem ion-padding-end-0'>
             <ZIonText>Allow push notification</ZIonText>
 
             <ZIonText slot='end'>

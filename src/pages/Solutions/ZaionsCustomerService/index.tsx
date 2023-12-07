@@ -46,6 +46,7 @@ import {
   iconLargeCustomerServersMin,
   iconLargePasswordSecurityMin
 } from '@/assets/images';
+import classNames from 'classnames';
 
 const ZaionsCustomerService: React.FC = () => {
   const keyFeaturesData = useRecoilValue<ZaionsKeyFeatureType[]>(
@@ -71,7 +72,10 @@ const ZaionsCustomerService: React.FC = () => {
           lgImg={customerSupportMobile2}
           label='Customer Service'
           title={
-            <ZIonText style={{ lineHeight: !isMdScale ? '3rem' : '' }}>
+            <ZIonText
+              className={classNames({
+                'leading-[3rem]': !isMdScale
+              })}>
               Quick resolutions in <br /> fewer characters
             </ZIonText>
           }
@@ -145,9 +149,7 @@ const ZaionsCustomerService: React.FC = () => {
               sizeXs='12'
               className='ion-text-center'>
               <ZIonText>
-                <h2
-                  className='pt-1 mt-2 font-bolder zaions__color_dark'
-                  style={{ fontSize: '38px' }}>
+                <h2 className='pt-1 mt-2 font-bolder zaions__color_dark text-[38px]'>
                   The world’s leading link management platform
                 </h2>
               </ZIonText>

@@ -55,7 +55,10 @@ const ZaionsBrandedLinks: React.FC = () => {
           lgImg={brandedLinksmobile}
           label='Branded Links'
           title={
-            <ZIonText style={{ lineHeight: !isMdScale ? '3rem' : '' }}>
+            <ZIonText
+              className={classNames({
+                'leading-[3rem]': !isMdScale
+              })}>
               Replace “{PRODUCT_DOMAIN}” with <br /> your brand
             </ZIonText>
           }
@@ -82,9 +85,7 @@ const ZaionsBrandedLinks: React.FC = () => {
 
         <ZaionsTwoByTwoLeftCols
           title={
-            <ZIonText
-              className='mb-5'
-              style={{ fontWeight: '800' }}>
+            <ZIonText className='mb-5 font-extrabold'>
               Get more clicks <br />
             </ZIonText>
           }
@@ -130,9 +131,7 @@ const ZaionsBrandedLinks: React.FC = () => {
 
         <ZaionsTwoByTwoRightCols
           title={
-            <ZIonText
-              className='mb-5 ms-4'
-              style={{ fontWeight: '800' }}>
+            <ZIonText className='mb-5 font-extrabold ms-4'>
               Create recognizable links
             </ZIonText>
           }

@@ -95,18 +95,20 @@ const ZWorkspaceFormInviteClientsTab: React.FC = () => {
     ignoreQueryPrefix: true
   });
 
+  const formikInitialValues = {
+    clients: [
+      {
+        email: '',
+        avatar: '',
+        role: WSRolesNameEnum.Approver,
+        permission: workspaceFormPermissionEnum.team
+      }
+    ]
+  };
+
   return (
     <Formik
-      initialValues={{
-        clients: [
-          {
-            email: '',
-            avatar: '',
-            role: WSRolesNameEnum.Approver,
-            permission: workspaceFormPermissionEnum.team
-          }
-        ]
-      }}
+      initialValues={formikInitialValues}
       validate={() => {
         const errors = {};
 

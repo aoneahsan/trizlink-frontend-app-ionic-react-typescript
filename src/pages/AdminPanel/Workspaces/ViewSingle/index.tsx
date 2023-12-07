@@ -159,6 +159,11 @@ const ViewSingleWorkspace: React.FC = () => {
     ZWorkspaceEditPageModal
   );
 
+  const formikInitialValues = {
+    pageId: '1',
+    pageType: workspaceFormConnectPagesEnum.facebook
+  };
+
   return (
     <ZIonPage
       pageTitle='Zaions view single workspace page'
@@ -166,10 +171,7 @@ const ViewSingleWorkspace: React.FC = () => {
       id={CONSTANTS.MENU_IDS.ADMIN_PAGE_WORKSPACE_VIEW_FILTER_MENU_ID}>
       <ZCan havePermissions={[permissionsEnum.view_workspace]}>
         <Formik
-          initialValues={{
-            pageId: '1',
-            pageType: workspaceFormConnectPagesEnum.facebook
-          }}
+          initialValues={formikInitialValues}
           validate={() => {
             const errors = {};
 
@@ -226,7 +228,7 @@ const ViewSingleWorkspace: React.FC = () => {
                             animated
                             showClearButton='focus'
                             color='light'
-                            style={{ '--box-shadow': 'none' }}
+                            className='z-ion-box-shadow-none'
                           />
                         </div>
                       </ZIonCol>
@@ -394,15 +396,11 @@ const ViewSingleWorkspace: React.FC = () => {
                           className='zaions_pretty_scrollbar'>
                           {workspacePagesDomeData.map((el, index) => (
                             <ZIonSegmentButton
-                              className='px-1 normal-case'
+                              className='px-1 normal-case z-ion-border-radius-1rem'
                               value={String(index)}
                               onClick={() => {
                                 void setFieldValue('pageType', el.type, false);
                                 void setFieldValue('pageId', index, false);
-                              }}
-                              style={{
-                                '--padding-end': '9px',
-                                '--padding-start': '9px'
                               }}
                               key={index}>
                               <ZIonIcon

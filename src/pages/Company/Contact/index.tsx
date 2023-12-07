@@ -163,32 +163,28 @@ const ZaionsContact: React.FC = () => {
                         routerLink={CONSTANTS.SocialLinks.twitter}>
                         <ZIonIcon
                           icon={logoFacebook}
-                          className='me-3 text-[3rem]'
-                          style={{ color: '#3c5a99' }}
+                          className='me-3 text-[3rem] text-[#3c5a99]'
                         />
                       </ZIonRouterLink>
                       <ZIonRouterLink
                         routerLink={CONSTANTS.SocialLinks.twitter}>
                         <ZIonIcon
                           icon={logoTwitter}
-                          className='me-3 text-[3rem]'
-                          style={{ color: '#0079b0' }}
+                          className='me-3 text-[3rem] text-[#0079b0]'
                         />
                       </ZIonRouterLink>
                       <ZIonRouterLink
                         routerLink={CONSTANTS.SocialLinks.linkdin}>
                         <ZIonIcon
                           icon={logoLinkedin}
-                          className='me-3 text-[3rem]'
-                          style={{ color: '#1da1f2' }}
+                          className='me-3 text-[3rem] text-[#1da1f2]'
                         />
                       </ZIonRouterLink>
                       <ZIonRouterLink
                         routerLink={CONSTANTS.SocialLinks.instagram}>
                         <ZIonIcon
                           icon={logoInstagram}
-                          className='me-3 text-[3rem]'
-                          style={{ color: '#000' }}
+                          className='me-3 text-[3rem] text-black'
                         />
                       </ZIonRouterLink>
                     </h2>

@@ -105,11 +105,14 @@ const ZaionsRSelect: React.FC<ZaionsRSelectType> = props => {
           })
         }
       : {};
+
+  // const _components = { ClearIndicator }
+  // const _styles = { clearIndicator: ClearIndicatorStyles }
   return (
     <Select
       {...props}
-      // components={{ ClearIndicator }}
-      // styles={{ clearIndicator: ClearIndicatorStyles }}
+      // components={_components}
+      // styles={_styles}
       className={classNames('basic-single', props.className)}
       classNamePrefix={
         props.classNamePrefix !== undefined ? props.classNamePrefix : 'select'

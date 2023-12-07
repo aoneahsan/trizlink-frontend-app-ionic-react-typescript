@@ -185,9 +185,7 @@ const ZaionsCodeOfConduct: React.FC = () => {
                 applies to all workers at all times, including during periods of
                 training, apprenticeship, and probation.
               </ZIonText>{' '}
-              <ZIonText
-                className='pt-1 pb-0 mt-3 mb-0'
-                style={{ fontWeight: '600' }}>
+              <ZIonText className='pt-1 pb-0 mt-3 mb-0 font-semibold'>
                 Documentation
               </ZIonText>{' '}
               <ZIonText className='zaions__color_gray2'>
@@ -204,9 +202,7 @@ const ZaionsCodeOfConduct: React.FC = () => {
                   internal records.
                 </li>
               </ul>
-              <ZIonText
-                className='pt-1 pb-0 mt-3 mb-0'
-                style={{ fontWeight: '600' }}>
+              <ZIonText className='pt-1 pb-0 mt-3 mb-0 font-semibold'>
                 Deductions
               </ZIonText>
               <br />
@@ -217,9 +213,7 @@ const ZaionsCodeOfConduct: React.FC = () => {
               <ZIonText>
                 <h4 className='mt-4 text-lg font-bold'>Work Hours</h4>
               </ZIonText>
-              <ZIonText
-                className='pt-1 pb-0 mt-3 mb-0'
-                style={{ fontWeight: '600' }}>
+              <ZIonText className='pt-1 pb-0 mt-3 mb-0 font-semibold'>
                 Regular Work Hours
               </ZIonText>
               <br />
@@ -236,9 +230,7 @@ const ZaionsCodeOfConduct: React.FC = () => {
                   worked per week.
                 </li>
               </ul>
-              <ZIonText
-                className='pt-1 pb-0 mt-3 mb-0'
-                style={{ fontWeight: '600' }}>
+              <ZIonText className='pt-1 pb-0 mt-3 mb-0 font-semibold'>
                 Overtime Work Hours
               </ZIonText>
               <br />
@@ -246,9 +238,7 @@ const ZaionsCodeOfConduct: React.FC = () => {
                 Additional overtime hours must not exceed the maximum legally
                 permitted number of overtime hours worked per week.
               </ZIonText>{' '}
-              <ZIonText
-                className='pt-1 pb-0 mt-3 mb-0'
-                style={{ fontWeight: '600' }}>
+              <ZIonText className='pt-1 pb-0 mt-3 mb-0 font-semibold'>
                 Documentation
               </ZIonText>{' '}
               <ZIonText className='zaions__color_gray2'>
@@ -317,9 +307,7 @@ const ZaionsCodeOfConduct: React.FC = () => {
                   documentation and recordkeeping.
                 </li>
               </ul>
-              <ZIonText
-                className='mt-3 mb-0 zaions__color_gray2'
-                style={{ fontWeight: '600' }}>
+              <ZIonText className='mt-3 mb-0 font-semibold zaions__color_gray2'>
                 Offices
               </ZIonText>{' '}
               <ZIonText className='zaions__color_gray2'>
@@ -391,9 +379,7 @@ const ZaionsCodeOfConduct: React.FC = () => {
                 <li className='zaions__color_gray2'>indentured labor; and</li>
                 <li className='zaions__color_gray2'>prison labor.</li>
               </ul>
-              <ZIonText
-                className='mt-3 mb-0 zaions__color_gray2'
-                style={{ fontWeight: '600' }}>
+              <ZIonText className='mt-3 mb-0 font-semibold zaions__color_gray2'>
                 Compliance and Documentation
               </ZIonText>{' '}
               <ZIonText className='zaions__color_gray2'>
@@ -415,9 +401,7 @@ const ZaionsCodeOfConduct: React.FC = () => {
                   regarding the eligibility of all workers.
                 </li>
               </ul>
-              <ZIonText
-                className='mt-3 mb-0 zaions__color_gray2'
-                style={{ fontWeight: '600' }}>
+              <ZIonText className='mt-3 mb-0 font-semibold zaions__color_gray2'>
                 Freedom of Movement
               </ZIonText>{' '}
               <ZIonText className='zaions__color_gray2'>
@@ -432,9 +416,7 @@ const ZaionsCodeOfConduct: React.FC = () => {
                   retaliation, or fine or other monetary obligation.
                 </li>
               </ul>
-              <ZIonText
-                className='mt-3 mb-0 zaions__color_gray2'
-                style={{ fontWeight: '600' }}>
+              <ZIonText className='mt-3 mb-0 font-semibold zaions__color_gray2'>
                 Freedom to Terminate Employment
               </ZIonText>{' '}
               <ZIonText className='zaions__color_gray2'>
@@ -448,9 +430,7 @@ const ZaionsCodeOfConduct: React.FC = () => {
                   Environmental Protection
                 </h4>
               </ZIonText>
-              <ZIonText
-                className='mt-3 mb-0 zaions__color_gray2'
-                style={{ fontWeight: '600' }}>
+              <ZIonText className='mt-3 mb-0 font-semibold zaions__color_gray2'>
                 Operation of {PRODUCT_NAME}’s Offices
               </ZIonText>{' '}
               <ZIonText className='zaions__color_gray2'>

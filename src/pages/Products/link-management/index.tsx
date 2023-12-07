@@ -69,8 +69,10 @@ const ZaionsLinkManagment: React.FC = () => {
           label='Link Management'
           title={
             <ZIonText
-              className='block'
-              style={{ lineHeight: !isMdScale ? '3rem' : '' }}>
+              className={classNames({
+                block: true,
+                'leading-[3rem]': !isMdScale
+              })}>
               Connect and ignite <br /> action with every link
             </ZIonText>
           }
@@ -134,8 +136,8 @@ const ZaionsLinkManagment: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -157,8 +159,8 @@ const ZaionsLinkManagment: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -180,8 +182,8 @@ const ZaionsLinkManagment: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -245,8 +247,8 @@ const ZaionsLinkManagment: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -268,8 +270,8 @@ const ZaionsLinkManagment: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -291,8 +293,8 @@ const ZaionsLinkManagment: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -355,8 +357,8 @@ const ZaionsLinkManagment: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -379,8 +381,8 @@ const ZaionsLinkManagment: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -402,8 +404,8 @@ const ZaionsLinkManagment: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -468,8 +470,8 @@ const ZaionsLinkManagment: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -492,8 +494,8 @@ const ZaionsLinkManagment: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -516,8 +518,8 @@ const ZaionsLinkManagment: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -584,8 +586,8 @@ const ZaionsLinkManagment: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -608,8 +610,8 @@ const ZaionsLinkManagment: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -631,8 +633,8 @@ const ZaionsLinkManagment: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'

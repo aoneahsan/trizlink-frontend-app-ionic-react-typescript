@@ -107,9 +107,7 @@ const ZaionsPricing: React.FC = () => {
           </ZIonRow>
         </ZIonGrid>
 
-        <ZIonGrid
-          className=''
-          style={{ backgroundColor: '#eee' }}>
+        <ZIonGrid className='bg-[#eee]'>
           <ZIonRow>
             <ZIonCol
               sizeXl='11.5'
@@ -148,9 +146,7 @@ const ZaionsPricing: React.FC = () => {
                       sizeSm='6'
                       sizeXs='12'
                       key={el.id}>
-                      <ZIonCard
-                        className='mx-0'
-                        style={{ height: '560px' }}>
+                      <ZIonCard className='mx-0 h-[560px]'>
                         <ZIonCardHeader className='px-0 pb-2'>
                           <ZIonText className='block mt-1 mb-0 text-base font-bold text-center label'>
                             {el.label}
@@ -265,9 +261,7 @@ const ZaionsPricing: React.FC = () => {
                         sizeMd=''
                         sizeSm=''
                         sizeXs=''>
-                        <th
-                          className='text-center zaions__bg_gray'
-                          style={{ color: '#464c50' }}>
+                        <th className='text-center zaions__bg_gray text-[#464c50]'>
                           <ZIonText className='block mt-1 mb-0 text-base font-bold label'>
                             FREE
                           </ZIonText>
@@ -288,9 +282,7 @@ const ZaionsPricing: React.FC = () => {
                             Get Started
                           </ZIonButton>
                         </th>
-                        <th
-                          className='text-center'
-                          style={{ color: '#464c50' }}>
+                        <th className='text-center text-[#464c50]'>
                           <ZIonText className='block mt-1 mb-0 text-base font-bold label'>
                             STARTER
                           </ZIonText>
@@ -310,9 +302,7 @@ const ZaionsPricing: React.FC = () => {
                             Get Started
                           </ZIonButton>
                         </th>
-                        <th
-                          className='text-center zaions__bg_gray'
-                          style={{ color: '#464c50' }}>
+                        <th className='text-center zaions__bg_gray text-[#464c50]'>
                           <ZIonText className='block mt-1 mb-0 text-base font-bold label'>
                             BASIC
                           </ZIonText>
@@ -332,9 +322,7 @@ const ZaionsPricing: React.FC = () => {
                             Get Started
                           </ZIonButton>
                         </th>
-                        <th
-                          className='text-center'
-                          style={{ color: '#464c50' }}>
+                        <th className='text-center text-[#464c50]'>
                           <ZIonText className='block mt-1 mb-0 text-base font-bold label'>
                             PREMIUM
                           </ZIonText>
@@ -354,9 +342,7 @@ const ZaionsPricing: React.FC = () => {
                             Get Started
                           </ZIonButton>
                         </th>
-                        <th
-                          className='text-center zaions__bg_gray'
-                          style={{ color: '#464c50' }}>
+                        <th className='text-center zaions__bg_gray text-[#464c50]'>
                           <ZIonText className='block mt-1 mb-0 text-base font-bold label'>
                             ENTERPRISE
                           </ZIonText>
@@ -508,9 +494,7 @@ const ZaionsPricing: React.FC = () => {
                         sizeSm=''
                         sizeXs=''
                         className='flex ion-justify-content-center align-items-center'>
-                        <th
-                          className='text-center'
-                          style={{ color: '#464c50' }}>
+                        <th className='text-center text-[#464c50]'>
                           <ZIonButton
                             className='mx-3 ion-text-capitalize'
                             color={'tertiary'}
@@ -519,9 +503,7 @@ const ZaionsPricing: React.FC = () => {
                             Get Started
                           </ZIonButton>
                         </th>
-                        <th
-                          className='text-center'
-                          style={{ color: '#464c50' }}>
+                        <th className='text-center text-[#464c50]'>
                           <ZIonButton
                             className='mx-3 ion-text-capitalize'
                             color={'tertiary'}
@@ -529,9 +511,7 @@ const ZaionsPricing: React.FC = () => {
                             Get Started
                           </ZIonButton>
                         </th>
-                        <th
-                          className='text-center'
-                          style={{ color: '#464c50' }}>
+                        <th className='text-center text-[#464c50]'>
                           <ZIonButton
                             className='mx-3 ion-text-capitalize'
                             color={'tertiary'}
@@ -539,9 +519,7 @@ const ZaionsPricing: React.FC = () => {
                             Get Started
                           </ZIonButton>
                         </th>
-                        <th
-                          className='text-center'
-                          style={{ color: '#464c50' }}>
+                        <th className='text-center text-[#464c50]'>
                           <ZIonButton
                             className='mx-3 ion-text-capitalize'
                             color={'tertiary'}
@@ -549,9 +527,7 @@ const ZaionsPricing: React.FC = () => {
                             Get Started
                           </ZIonButton>
                         </th>
-                        <th
-                          className='text-center'
-                          style={{ color: '#464c50' }}>
+                        <th className='text-center text-[#464c50]'>
                           <ZIonButton
                             className='mx-3 ion-text-capitalize'
                             color={'tertiary'}

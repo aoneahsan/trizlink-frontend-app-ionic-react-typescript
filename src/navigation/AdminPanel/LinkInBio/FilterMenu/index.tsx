@@ -402,7 +402,7 @@ const ZLinkInBioFilterMenu: React.FC = () => {
     filters: {
       tags: compState?.filters?.tags ?? [],
       domains: compState?.filters?.domains ?? [],
-      time: compState?.filters?.time != null ?? TimeFilterEnum.allTime
+      time: compState?.filters?.time ?? TimeFilterEnum.allTime
     }
   };
 
