@@ -9,7 +9,7 @@ import React, { useState } from 'react';
  * ? Like import of ionic components is a packages import
  * */
 import { useSetRecoilState } from 'recoil';
-import { closeOutline, toggleOutline } from 'ionicons/icons';
+import { closeOutline } from 'ionicons/icons';
 
 /**
  * Custom Imports go down
@@ -67,7 +67,7 @@ import {
   ZLinkInBioPageEnum,
   ZLinkInBioRHSComponentEnum,
   addBlockModalUIEnum,
-  libFormSettingsInterface
+  type libFormSettingsInterface
 } from '@/types/AdminPanel/linkInBioType';
 import {
   LinkInBioBlockEnum,
