@@ -297,100 +297,113 @@ const ZLinkInBioThemeSection: React.FC = () => {
             CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
               .container
           }>
-          <Suspense fallback={<ZFallbackIonSpinner2 />}>
-            {/* If bgType solidColor show this input */}
-            {values?.theme?.background?.bgType ===
-              LinkInBioThemeBackgroundEnum.solidColor && (
-              <ZaionsColorPiker
-                showSkeleton={isZFetching}
-                name='theme.background.bgSolidColor'
-                value={values.theme.background.bgSolidColor as string}
-                // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                setFieldValueFn={setFieldValue}
-                testingselector={
-                  CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
-                    .bgSolidColorInput
-                }
-              />
-            )}
-          </Suspense>
-
-          {/* If bgType solidColor show blow inputs */}
-          <Suspense fallback={<ZFallbackIonSpinner2 />}>
-            {values?.theme?.background?.bgType ===
-              LinkInBioThemeBackgroundEnum.gradient && (
-              <>
-                {/* start color */}
-                <ZaionsColorPiker
-                  name='theme.background.bgGradientColors.startColor'
-                  showSkeleton={isZFetching}
-                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                  setFieldValueFn={setFieldValue}
-                  value={
-                    values?.theme.background?.bgGradientColors
-                      ?.startColor as string
-                  }
-                  testingselector={
-                    CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
-                      .bg.gColors.startColorInput
-                  }
-                />
-
-                {/* direction */}
-                <ZIonButton
-                  shape='round'
-                  className='mt-3 direction-button ion-margin-horizontal ion-no-padding w-[2.5rem]'
-                  color='secondary'
-                  height='2.5rem'
-                  testingselector={
-                    CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
-                      .bg.gColors.directionBtn
-                  }
-                  onClick={() => {
-                    let _newDirection =
-                      +(values?.theme?.background?.bgGradientColors
-                        ?.direction as string) +
-                      +CONSTANTS.LINK_In_BIO.FORM.DIRECTION_PRE_CLICKED;
-                    _newDirection = _newDirection >= 359 ? 0 : _newDirection;
-                    void setFieldValue(
-                      'theme.background.bgGradientColors.direction',
-                      _newDirection,
-                      false
-                    );
-                  }}>
-                  <ZIonIcon
-                    icon={arrowUp}
-                    className='direction-icon'
-                    style={bgDirectionIcon}
+          {values?.theme?.background?.bgType !==
+          LinkInBioThemeBackgroundEnum.image ? (
+            <>
+              <Suspense fallback={<ZFallbackIonSpinner2 />}>
+                {/* If bgType solidColor show this input */}
+                {values?.theme?.background?.bgType ===
+                  LinkInBioThemeBackgroundEnum.solidColor && (
+                  <ZaionsColorPiker
+                    showSkeleton={isZFetching}
+                    name='theme.background.bgSolidColor'
+                    value={values.theme.background.bgSolidColor as string}
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                    setFieldValueFn={setFieldValue}
+                    testingselector={
+                      CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+                        .bg.bgSolidColorInput
+                    }
                   />
-                </ZIonButton>
+                )}
+              </Suspense>
 
-                {/* end color */}
-                <ZaionsColorPiker
-                  name='theme.background.bgGradientColors.endColor'
-                  showSkeleton={isZFetching}
-                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                  setFieldValueFn={setFieldValue}
-                  showCloseIcon={true}
-                  testingselector={
-                    CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
-                      .bg.gColors.endColorInput
-                  }
-                  value={
-                    values?.theme?.background?.bgGradientColors
-                      ?.endColor as string
-                  }
-                  closeIconOnChangeFn={() => {
-                    void setFieldValue(
-                      'theme.background.bgType',
-                      LinkInBioThemeBackgroundEnum.solidColor,
-                      false
-                    );
-                  }}
-                />
-              </>
-            )}
-          </Suspense>
+              {/* If bgType solidColor show blow inputs */}
+              <Suspense fallback={<ZFallbackIonSpinner2 />}>
+                {values?.theme?.background?.bgType ===
+                  LinkInBioThemeBackgroundEnum.gradient && (
+                  <>
+                    {/* start color */}
+                    <ZaionsColorPiker
+                      name='theme.background.bgGradientColors.startColor'
+                      showSkeleton={isZFetching}
+                      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                      setFieldValueFn={setFieldValue}
+                      value={
+                        values?.theme.background?.bgGradientColors
+                          ?.startColor as string
+                      }
+                      testingselector={
+                        CONSTANTS.testingSelectors.linkInBio.formPage.design
+                          .theme.bg.gColors.startColorInput
+                      }
+                    />
+
+                    {/* direction */}
+                    <ZIonButton
+                      shape='round'
+                      className='mt-3 direction-button ion-margin-horizontal ion-no-padding w-[2.5rem]'
+                      color='secondary'
+                      height='2.5rem'
+                      testingselector={
+                        CONSTANTS.testingSelectors.linkInBio.formPage.design
+                          .theme.bg.gColors.directionBtn
+                      }
+                      onClick={() => {
+                        let _newDirection =
+                          +(values?.theme?.background?.bgGradientColors
+                            ?.direction as string) +
+                          +CONSTANTS.LINK_In_BIO.FORM.DIRECTION_PRE_CLICKED;
+                        _newDirection =
+                          _newDirection >= 359 ? 0 : _newDirection;
+                        void setFieldValue(
+                          'theme.background.bgGradientColors.direction',
+                          _newDirection,
+                          false
+                        );
+                      }}>
+                      <ZIonIcon
+                        icon={arrowUp}
+                        className='direction-icon'
+                        style={bgDirectionIcon}
+                      />
+                    </ZIonButton>
+
+                    {/* end color */}
+                    <ZaionsColorPiker
+                      name='theme.background.bgGradientColors.endColor'
+                      showSkeleton={isZFetching}
+                      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                      setFieldValueFn={setFieldValue}
+                      showCloseIcon={true}
+                      testingselector={
+                        CONSTANTS.testingSelectors.linkInBio.formPage.design
+                          .theme.bg.gColors.endColorInput
+                      }
+                      value={
+                        values?.theme?.background?.bgGradientColors
+                          ?.endColor as string
+                      }
+                      closeIconOnChangeFn={() => {
+                        void setFieldValue(
+                          'theme.background.bgType',
+                          LinkInBioThemeBackgroundEnum.solidColor,
+                          false
+                        );
+                      }}
+                    />
+                  </>
+                )}
+              </Suspense>
+            </>
+          ) : (
+            <>
+              <ZIonText className='my-1 font-semibold'>
+                You can not set background color when background image mode is
+                on.
+              </ZIonText>
+            </>
+          )}
 
           {/* Add gradient btn */}
           {values?.theme?.background?.bgType ===
@@ -959,14 +972,33 @@ const ZLinkInBioThemeSection: React.FC = () => {
           <div className='flex mt-4 ion-align-items-center ion-padding-bottom'>
             <Suspense fallback={<ZFallbackIonSpinner2 />}>
               <ZDragAndDrop
-                // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                setFieldValue={setFieldValue}
-                fieldName='theme.background.bgImageUrl'
+                // fieldName='theme.background.bgImageUrl'
                 imageUrl={values.theme?.background?.bgImageUrl}
                 testingselector={
                   CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
                     .bgImage.upload
                 }
+                onDrop={event => {
+                  if (event[0] !== undefined && event[0] !== null) {
+                    void setFieldValue(
+                      'theme.background.bgImageFile',
+                      event[0],
+                      false
+                    );
+
+                    const reader = new FileReader();
+
+                    reader.onload = ({ target }) => {
+                      void setFieldValue(
+                        'theme.background.bgImageUrl',
+                        target?.result as string,
+                        false
+                      );
+                    };
+
+                    reader.readAsDataURL(event[0]);
+                  }
+                }}
               />
             </Suspense>
           </div>

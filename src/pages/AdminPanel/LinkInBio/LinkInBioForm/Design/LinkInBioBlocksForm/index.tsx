@@ -68,7 +68,7 @@ import ZRichTextEditor from '@/components/CustomComponents/ZTextEditor';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import ZaionsColorPiker from '@/components/InPageComponents/ZaionsColorPiker';
 import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
-import ZLinkInBioAddBlockModal from '@/components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal';
+import ZLinkInBioAddBlockModal from '@/components/InPageComponents/ZaionsModals/LinkInBio/AddBlockModal';
 import LinkInBioCarouselCardField from '@/components/LinkInBioComponents/Form/CarouselCardField';
 import LinkInBioQAndACardField from '@/components/LinkInBioComponents/Form/QAndACardField';
 import LinkInBioMusicPlatformCardField from '@/components/LinkInBioComponents/Form/MusicPlatformField';
@@ -1253,7 +1253,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                           .blockForm.fields.upload
                       }
                       onDrop={event => {
-                        if (event[0] !== undefined) {
+                        if (event[0] !== undefined && event[0] !== null) {
                           void setFieldValue('imageFile', event[0], false);
 
                           const reader = new FileReader();

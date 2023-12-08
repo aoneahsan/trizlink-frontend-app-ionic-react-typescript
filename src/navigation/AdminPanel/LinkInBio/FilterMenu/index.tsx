@@ -166,7 +166,7 @@ const ZLinkInBioFilterMenu: React.FC = () => {
   // #endregion
 
   // #region Apis
-  // owned workspace short link filter and short link other settings get api.
+  //  workspace short link filter and short link other settings get api.
   const { data: getLinkInBioFiltersData } =
     useZRQGetRequest<ZUserSettingInterface>({
       _url: API_URL_ENUM.user_setting_delete_update_get,
@@ -229,7 +229,7 @@ const ZLinkInBioFilterMenu: React.FC = () => {
 
   const { mutateAsync: createLibFiltersAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.user_setting_list_create,
-    _loaderMessage: MESSAGES.SHORT_LINKS.FILTERING,
+    _loaderMessage: MESSAGES.LINK_IN_BIO.FILTERING,
     _urlDynamicParts: [
       CONSTANTS.RouteParams.workspace.type,
       CONSTANTS.RouteParams.workspace.workspaceId

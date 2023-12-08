@@ -73,7 +73,7 @@ import {
 const ZLinkInBioAddBlockModal = lazy(
   async () =>
     await import(
-      '@/components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal'
+      '@/components/InPageComponents/ZaionsModals/LinkInBio/AddBlockModal'
     )
 );
 const LinkInBioPDButton = lazy(

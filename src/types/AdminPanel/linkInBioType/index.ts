@@ -9,7 +9,8 @@ import {
   type PasswordInterface,
   type ShortUrlInterface,
   type UTMTagInfoInterface,
-  type FormMode
+  type FormMode,
+  type ZUserSettingTypeEnum
 } from '@/types/AdminPanel/index.type';
 
 import { type ZaionsRSelectOptions } from '@/types/components/CustomComponents/index.type';
@@ -67,6 +68,24 @@ export enum ZLinkInBioPageEnum {
   blockAnalytics = 'blockAnalytics'
 }
 
+// LIB -> link-in-bio
+export enum ZLIBListPageTableColumnsIds {
+  id = '__z_link_in_bio_id__',
+  title = '__z_link_in_bio_title__',
+  date = '__z_link_in_bio_date__',
+  pixel = '__z_link_in_bio_pixels__',
+  notes = '__z_link_in_bio_notes__',
+  url = '__z_link_in_bio_target_url__',
+  linkToShare = '__z_link_in_bio_link_to_share__',
+  click = '__z_link_in_bio_click__',
+  actions = '__z_link_in_bio_actions__'
+}
+
+export enum addBlockModalUIEnum {
+  minimalistic = 'minimalistic',
+  advance = 'advance'
+}
+
 /**
  * Interfaces
  */
@@ -85,17 +104,15 @@ export interface LinkInBioBgGradientColorsInterface {
   direction: string | number;
 }
 
-// LIB -> link-in-bio
-export enum ZLIBListPageTableColumnsIds {
-  id = '__z_link_in_bio_id__',
-  title = '__z_link_in_bio_title__',
-  date = '__z_link_in_bio_date__',
-  pixel = '__z_link_in_bio_pixels__',
-  notes = '__z_link_in_bio_notes__',
-  url = '__z_link_in_bio_target_url__',
-  linkToShare = '__z_link_in_bio_link_to_share__',
-  click = '__z_link_in_bio_click__',
-  actions = '__z_link_in_bio_actions__'
+export interface libFormSettingsInterface {
+  id?: string;
+  type?: ZUserSettingTypeEnum;
+  workspaceId?: string;
+  settings: {
+    addBlockModal: {
+      Ui: addBlockModalUIEnum;
+    };
+  };
 }
 
 /**
@@ -106,6 +123,8 @@ export interface LinkInBioThemeBackgroundType {
   bgSolidColor?: string;
   bgGradientColors?: LinkInBioBgGradientColorsInterface;
   bgImageUrl?: string;
+  bgImageFile?: File | null;
+  bgImagePath?: string | null;
   enableBgImage?: boolean;
 }
 

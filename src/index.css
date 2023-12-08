@@ -312,6 +312,10 @@ span.new {
   --background: transparent;
 }
 
+.z-bg-transparent {
+  background: transparent;
+}
+
 .zaions__bg_light_opacity_point7 {
   background: rgba(var(--ion-color-light-rgb), 0.7);
 }
@@ -650,6 +654,12 @@ span.new {
   --min-height: 530px;
 }
 
+.lib-form-settings-modal-size {
+  --height: 95vh;
+  --width: 50%;
+  --min-height: 530px;
+}
+
 .workspace-compose-modal-size {
   --height: 59vh;
   --width: 650px;
@@ -701,7 +711,7 @@ span.new {
 
 .lib-block-modal-size {
   --width: 500px;
-  --height: 365px;
+  --height: 384px;
 }
 
 .link-in-bio-form-fields-modal-size {

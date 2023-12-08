@@ -475,7 +475,10 @@ const ZProfileSettingsSettings: React.FC = () => {
                           });
 
                           //
-                          if (compState?.profileFile !== undefined) {
+                          if (
+                            compState?.profileFile !== undefined &&
+                            compState?.profileFile !== null
+                          ) {
                             // await uploadFileToBackend();
                             const formData = new FormData();
                             formData.append('file', compState?.profileFile);

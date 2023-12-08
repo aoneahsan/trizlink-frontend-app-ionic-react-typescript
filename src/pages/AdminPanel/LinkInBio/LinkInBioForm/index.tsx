@@ -39,6 +39,7 @@ import {
 import ZFallbackIonSpinner from '@/components/CustomComponents/FallbackSpinner';
 
 import {
+  useZRQCreateRequest,
   useZRQGetRequest,
   useZRQUpdateRequest,
   useZUpdateRQCacheData
@@ -104,6 +105,9 @@ import {
   permissionsTypeEnum,
   shareWSPermissionEnum
 } from '@/utils/enums/RoleAndPermissions';
+import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
+import ZLinkInBioFormSettingsModal from '@/components/InPageComponents/ZaionsModals/LinkInBio/SettingsModal';
 
 const LinkInBioDesignPage = lazy(
   () => import('@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design')
@@ -165,6 +169,17 @@ const ZaionsLinkInBioForm: React.FC = () => {
   const { validateRequestResponse } = useZValidateRequestResponse();
   // #endregion
 
+  // #region Modals
+  const { presentZIonModal: presentZLinkInBioFormSettingsModal } = useZIonModal(
+    ZLinkInBioFormSettingsModal,
+    {
+      workspaceId,
+      shareWSMemberId,
+      wsShareId
+    }
+  );
+  // #endregion
+
   // #region APIS
 
   // fetching link-in-bio with the linkInBioId data from backend.
@@ -203,6 +218,18 @@ const ZaionsLinkInBioForm: React.FC = () => {
   // Update Link-in-bio API
   const { mutateAsync: UpdateLinkInBio } = useZRQUpdateRequest({
     _url: API_URL_ENUM.linkInBio_update_delete
+  });
+
+  // Single file upload.
+  const { mutateAsync: uploadSingleFile } = useZRQCreateRequest({
+    _url: API_URL_ENUM.uploadSingleFile,
+    _authenticated: true,
+    _contentType: zAxiosApiRequestContentType.FormData
+  });
+
+  // Delete file api.
+  const { mutateAsync: deleteSingleFile } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.deleteSingleFile
   });
   // #endregion
 
@@ -384,7 +411,9 @@ const ZaionsLinkInBioForm: React.FC = () => {
         },
         enableBgImage:
           selectedLinkInBio?.theme?.background?.enableBgImage ?? false,
-        bgImageUrl: selectedLinkInBio?.theme?.background?.bgImageUrl ?? ''
+        bgImageUrl: selectedLinkInBio?.theme?.background?.bgImageUrl ?? '',
+        bgImageFile: selectedLinkInBio?.theme?.background?.bgImageFile ?? null,
+        bgImagePath: selectedLinkInBio?.theme?.background?.bgImagePath ?? null
       },
       button: {
         background: {
@@ -455,18 +484,63 @@ const ZaionsLinkInBioForm: React.FC = () => {
             // #endregion
 
             // #region Submit function
-            onSubmit={values => {
+            onSubmit={async values => {
+              if (
+                values.theme?.background?.bgImageUrl !== null &&
+                values.theme?.background?.bgImageUrl !== undefined &&
+                values.theme?.background?.bgImageFile !== null
+              ) {
+                const formData = new FormData();
+                formData.append('file', values.theme?.background?.bgImageFile);
+
+                if (
+                  selectedLinkInBio?.theme?.background?.bgImageUrl !==
+                    undefined &&
+                  selectedLinkInBio?.theme?.background?.bgImageUrl !== null
+                ) {
+                  // Deleting the file from storage
+                  await deleteSingleFile({
+                    requestData: zStringify({
+                      filePath:
+                        selectedLinkInBio?.theme?.background?.bgImagePath
+                    }),
+                    itemIds: [],
+                    urlDynamicParts: []
+                  });
+                }
+
+                const result = await uploadSingleFile(formData);
+
+                if (result !== undefined || result !== null) {
+                  const _data = (
+                    result as {
+                      data: {
+                        file: object;
+                        fileName: object;
+                        filePath: string;
+                        fileUrl: string;
+                      };
+                    }
+                  )?.data;
+
+                  values.theme.background.bgImageUrl = _data.fileUrl;
+                  values.theme.background.bgImagePath = _data.filePath;
+                }
+              }
+
               const stringifyValue = zStringify({
                 linkInBioTitle: values.linkInBioTitle,
                 theme: zStringify(values.theme),
                 settings: zStringify(values.settings),
                 folderId: 1
               });
+
               setLinkInBioFormState(oldValues => ({
                 ...oldValues,
                 theme: { ...values.theme },
                 formMode: FormMode.EDIT
               }));
+
               void formikSubmitHandler(stringifyValue);
             }}
             // #endregion
@@ -800,6 +874,24 @@ const ZaionsLinkInBioForm: React.FC = () => {
                               }>
                               <ZIonText className='ion-no-padding text-[16px]'>
                                 errors
+                              </ZIonText>
+                            </ZIonButton>
+
+                            {/* Settings btn */}
+                            <ZIonButton
+                              className='ion-text-lowercase ion-no-margin me-4'
+                              color='tertiary'
+                              onClick={() => {
+                                presentZLinkInBioFormSettingsModal({
+                                  _cssClass: 'lib-form-settings-modal-size'
+                                });
+                              }}
+                              testingselector={
+                                CONSTANTS.testingSelectors.linkInBio.formPage
+                                  .topBar.errorsBtn
+                              }>
+                              <ZIonText className='ion-no-padding text-[16px]'>
+                                Setting
                               </ZIonText>
                             </ZIonButton>
 
