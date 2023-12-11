@@ -15,6 +15,7 @@ import {
   albumsOutline,
   colorPaletteOutline,
   heartOutline,
+  saveOutline,
   settingsOutline
 } from 'ionicons/icons';
 
@@ -492,7 +493,23 @@ const LinkInBioDesignPage: React.FC = () => {
         </ZIonGrid>
       </ZIonContent>
 
-      <ZIonFooter className='zaions__primary_set'>
+      <ZIonFooter className='relative zaions__primary_set'>
+        {dirty &&
+          values.designPageCurrentTab === ZLinkInBioRHSComponentEnum.theme && (
+            <ZIonButton
+              minHeight='2.5rem'
+              className='fixed z-10 transition-all bottom-2 left-6 animated bounceInLeft z-animation-delay-0 z-animation-iteration-1'
+              testingselector={
+                CONSTANTS.testingSelectors.linkInBio.formPage.design.TopTitleBar
+                  .saveBtn
+              }
+              onClick={() => {
+                void submitForm();
+              }}>
+              <ZIonText className='me-2'>Save</ZIonText>
+              <ZIonIcon icon={saveOutline} />
+            </ZIonButton>
+          )}
         <ZIonGrid>
           <ZIonRow>
             <ZIonCol></ZIonCol>

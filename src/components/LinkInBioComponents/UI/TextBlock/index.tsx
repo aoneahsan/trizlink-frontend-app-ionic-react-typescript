@@ -16,6 +16,8 @@ import React from 'react';
 import { ZIonCol, ZIonText } from '@/components/ZIonComponents';
 import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 import classNames from 'classnames';
+import { type LinkInBioBlockAnimationEnum } from '@/types/AdminPanel/linkInBioType/blockTypes';
+import { isZNonEmptyString } from '@/utils/helpers';
 
 /**
  * Global Constants Imports go down
@@ -56,18 +58,21 @@ import classNames from 'classnames';
 interface ZLinkInBioTextBlockInterface {
   children?: string;
   fontFamily?: LinkInBioThemeFontEnum;
+  animationType?: LinkInBioBlockAnimationEnum;
 }
 
 const ZLinkInBioTextBlock: React.FC<ZLinkInBioTextBlockInterface> = ({
   children,
-  fontFamily
+  fontFamily,
+  animationType
 }) => {
   const _dangerouslySetInnerHTML = { __html: children ?? '' };
   return (
-    <ZIonCol className='overflow-hidden line-clamp-3'>
+    <ZIonCol className='overflow-hidden line-clamp-3 ms-3'>
       <ZIonText
-        className={classNames(fontFamily, {
-          'font-bold text-[15px]': true
+        className={classNames(fontFamily, animationType, {
+          'font-bold text-[15px] block': true,
+          'animated ': isZNonEmptyString(animationType)
         })}
         color='light'>
         {children !== undefined ? (

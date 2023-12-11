@@ -10,7 +10,7 @@ import { useLocation, useParams } from 'react-router';
  * ? Like import of ionic components is a packages import
  * */
 import routeQueryString from 'qs';
-import { appsOutline, pencilOutline } from 'ionicons/icons';
+import { appsOutline, createOutline } from 'ionicons/icons';
 import { useFormikContext } from 'formik';
 import { type OverlayEventDetail } from '@ionic/core';
 import { useRecoilState } from 'recoil';
@@ -502,7 +502,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
       />
 
       <ZIonButton
-        className='ion-no-padding me-3'
+        className='ion-no-padding me-0 ms-3'
         slot='start'
         fill='clear'
         size='large'
@@ -511,13 +511,24 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
         }}>
         <ZIonText>
           <ZIonIcon
-            icon={pencilOutline}
+            icon={createOutline}
             color='light'
-            className='w-6 h-6'
+            className='w-6 h-6 me-2'
           />
         </ZIonText>
       </ZIonButton>
 
+      {/* <div
+        className={classNames(
+          element.blockContent?.animation?.isEnabled === true
+            ? element.blockContent?.animation?.type
+            : undefined,
+          {
+            'animated ':
+              element.blockContent?.animation?.isEnabled === true &&
+              isZNonEmptyString(element.blockContent?.animation?.type)
+          }
+        )}> */}
       {element?.blockType === LinkInBioBlockEnum.avatar ? (
         <ZLinkInBioAvatarBlock />
       ) : element?.blockType === LinkInBioBlockEnum.text ? (
@@ -525,6 +536,11 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
           // eslint-disable-next-line react/no-children-prop
           children={element.blockContent?.text ?? 'text'}
           fontFamily={selectedLinkInBio?.theme?.font}
+          animationType={
+            element.blockContent?.animation?.isEnabled === true
+              ? element.blockContent?.animation?.type
+              : undefined
+          }
         />
       ) : element?.blockType === LinkInBioBlockEnum.card ? (
         <ZCustomCard
@@ -592,12 +608,30 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
               mediaType={ZMediaEnum.countDown}
               title={element.blockContent?.title}
               description={element.blockContent?.description}
-              image={element.blockContent?.imageUrl}
+              mediaLink={element.blockContent?.imageUrl}
               type={element.blockContent?.style}
               countDownTime={element.blockContent?.date}
+              animationType={
+                element.blockContent?.animation?.isEnabled === true
+                  ? element.blockContent?.animation?.type
+                  : undefined
+              }
             />
           ) : (
-            <ZCountdown countDownTime={element.blockContent?.date} />
+            <div
+              className={classNames(
+                element.blockContent?.animation?.isEnabled === true
+                  ? element.blockContent?.animation?.type
+                  : undefined,
+                {
+                  'w-full h-full': true,
+                  'animated ':
+                    element.blockContent?.animation?.isEnabled === true &&
+                    isZNonEmptyString(element.blockContent?.animation?.type)
+                }
+              )}>
+              <ZCountdown countDownTime={element.blockContent?.date} />
+            </div>
           )}
         </>
       ) : element?.blockType === LinkInBioBlockEnum.video ? (
@@ -662,6 +696,8 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
       ) : (
         ''
       )}
+      {/* </div> */}
+
       <ZIonReorder
         slot='end'
         className='ms-3'>

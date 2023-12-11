@@ -50,11 +50,7 @@ import ZCan from '@/components/Can';
 // Global Constants
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import {
-  createRedirectRoute,
-  extractInnerData,
-  replaceRouteParams
-} from '@/utils/helpers';
+import { createRedirectRoute, extractInnerData } from '@/utils/helpers';
 import {
   API_URL_ENUM,
   ZWSTypeEum,
@@ -411,29 +407,37 @@ const ZInpageTable: React.FC<{
             className='hover:underline'
             routerLink={
               (workspaceId?.trim()?.length ?? 0) > 0
-                ? replaceRouteParams(
-                    ZaionsRoutes.AdminPanel.LinkInBio.Edit,
-                    [
+                ? createRedirectRoute({
+                    url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+                    params: [
                       CONSTANTS.RouteParams.workspace.workspaceId,
                       CONSTANTS.RouteParams.linkInBio.linkInBioId
                     ],
-                    [workspaceId ?? '', row?.row?.original?.id ?? '']
-                  )
+                    values: [workspaceId ?? '', row?.row?.original?.id ?? ''],
+                    routeSearchParams: {
+                      page: ZLinkInBioPageEnum.design,
+                      step: ZLinkInBioRHSComponentEnum.theme
+                    }
+                  })
                 : (wsShareId?.trim()?.length ?? 0) > 0 &&
                   (shareWSMemberId?.trim()?.length ?? 0) > 0
-                ? replaceRouteParams(
-                    ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Edit,
-                    [
+                ? createRedirectRoute({
+                    url: ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Edit,
+                    params: [
                       CONSTANTS.RouteParams.workspace.wsShareId,
                       CONSTANTS.RouteParams.workspace.shareWSMemberId,
                       CONSTANTS.RouteParams.linkInBio.linkInBioId
                     ],
-                    [
+                    values: [
                       wsShareId ?? '',
                       shareWSMemberId ?? '',
                       row?.row?.original?.id ?? ''
-                    ]
-                  )
+                    ],
+                    routeSearchParams: {
+                      page: ZLinkInBioPageEnum.design,
+                      step: ZLinkInBioRHSComponentEnum.theme
+                    }
+                  })
                 : ''
             }>
             <ZIonText>{row.getValue()}</ZIonText>
@@ -1362,7 +1366,7 @@ const ZLinkInBioActionPopover: React.FC<{
           ]
         });
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           const _data = extractInnerData<{ success: boolean }>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem

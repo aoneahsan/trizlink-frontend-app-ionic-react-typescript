@@ -486,17 +486,16 @@ const ZaionsLinkInBioForm: React.FC = () => {
             // #region Submit function
             onSubmit={async values => {
               if (
-                values.theme?.background?.bgImageUrl !== null &&
-                values.theme?.background?.bgImageUrl !== undefined &&
+                isZNonEmptyString(values.theme?.background?.bgImageUrl) &&
                 values.theme?.background?.bgImageFile !== null
               ) {
                 const formData = new FormData();
                 formData.append('file', values.theme?.background?.bgImageFile);
 
                 if (
-                  selectedLinkInBio?.theme?.background?.bgImageUrl !==
-                    undefined &&
-                  selectedLinkInBio?.theme?.background?.bgImageUrl !== null
+                  isZNonEmptyString(
+                    selectedLinkInBio?.theme?.background?.bgImageUrl
+                  )
                 ) {
                   // Deleting the file from storage
                   await deleteSingleFile({

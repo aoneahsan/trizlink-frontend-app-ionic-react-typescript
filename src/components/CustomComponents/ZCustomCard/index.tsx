@@ -39,12 +39,16 @@ import {
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkInBioCardStyleEnum } from '@/types/AdminPanel/linkInBioType/blockTypes';
+import {
+  type LinkInBioBlockAnimationEnum,
+  LinkInBioCardStyleEnum
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
 import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
 import ZReactMediaPlayer from '../ZCustomAudio';
 import { useRecoilValue } from 'recoil';
 import { NewLinkInBioFormState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';
 import ZCountdown from '../ZCountDown';
+import { isZNonEmptyString } from '@/utils/helpers';
 
 /**
  * Recoil State Imports go down
@@ -74,6 +78,7 @@ interface ZCustomCardInterface {
   mediaType?: ZMediaEnum;
   image?: string;
   countDownTime?: string;
+  animationType?: LinkInBioBlockAnimationEnum;
 }
 
 /**
@@ -88,6 +93,7 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
   type = LinkInBioCardStyleEnum.horizontal,
   mediaType = ZMediaEnum.image,
   image,
+  animationType,
   countDownTime
 }) => {
   // getting the custom style for all the buttons from linkInBioFormState recoil.
@@ -160,7 +166,7 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
   return (
     <ZIonCol>
       <ZIonCard
-        className={classNames({
+        className={classNames(animationType, {
           'ion-no-padding ion-no-margin': true,
           flex:
             type === LinkInBioCardStyleEnum.thumbCircle ||
@@ -168,7 +174,8 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
             type === LinkInBioCardStyleEnum.thumbStrip,
           'ion-align-items-center':
             type === LinkInBioCardStyleEnum.thumbCircle ||
-            type === LinkInBioCardStyleEnum.thumbRound
+            type === LinkInBioCardStyleEnum.thumbRound,
+          'animated ': isZNonEmptyString(animationType)
         })}>
         <ZIonCardHeader
           className={classNames({
@@ -187,7 +194,7 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
           {(mediaLink !== undefined || mediaType !== ZMediaEnum.countDown) && (
             <ZIonImg
               src={
-                image?.trim() !== undefined
+                isZNonEmptyString(image)
                   ? image
                   : mediaType === ZMediaEnum.image
                   ? rssWithBackground
@@ -235,7 +242,7 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
           mediaType === ZMediaEnum.countDown) && (
           <ZIonCardContent
             className={classNames({
-              'ion-margin-top': true,
+              'ion-margin-top ': true,
               'ion-text-center':
                 type === LinkInBioCardStyleEnum.horizontal ||
                 type === LinkInBioCardStyleEnum.vertical,

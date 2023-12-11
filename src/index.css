@@ -50,6 +50,14 @@ ion-app.ios ion-title {
   -o-transition: all 0.3s ease !important;
 }
 
+.z-animation-iteration-1 {
+  animation-iteration-count: 1 !important;
+}
+
+.z-animation-delay-0 {
+  animation-delay: 0s !important;
+}
+
 /* Z Ionic */
 .z-inner-padding-end-0 {
   --inner-padding-end: 0px;
@@ -67,8 +75,16 @@ ion-app.ios ion-title {
   --border-radius: 0.8rem;
 }
 
+.z-ion-border-radius-point-7rem {
+  --border-radius: 0.7rem;
+}
+
 .z-ion-background-hover-opacity {
   --background-hover-opacity: 0;
+}
+
+.z-ion-background-hover-transparent {
+  --background-hover: transparent;
 }
 
 .z-ion-box-shadow-none {
