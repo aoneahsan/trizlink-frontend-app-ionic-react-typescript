@@ -10,6 +10,7 @@ interface ZIonCardContentType {
   children: ReactNode;
   className?: string;
   mode?: ZIonModeType;
+  style?: Record<string, unknown>;
 }
 
 const ZIonCardContent: React.FC<ZIonCardContentType> = (

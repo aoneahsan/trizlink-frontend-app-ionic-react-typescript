@@ -496,13 +496,15 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
       <ZCustomDeleteComponent
         deleteFn={deleteBlockHandler}
         data={zCustomDeleteComponentData}
-        className='ion-no-padding me-1'
+        className='ion-no-padding me-1 w-[2rem] rounded-full overflow-hidden'
+        btnMinHeight='2rem'
         slot='start'
         iconColor='light'
       />
 
       <ZIonButton
-        className='ion-no-padding me-0 ms-3'
+        className='ion-no-padding ms-1 me-2 w-[2rem] rounded-full overflow-hidden'
+        minHeight='2rem'
         slot='start'
         fill='clear'
         size='large'
@@ -513,7 +515,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
           <ZIonIcon
             icon={createOutline}
             color='light'
-            className='w-6 h-6 me-2'
+            className='w-6 h-6'
           />
         </ZIonText>
       </ZIonButton>
@@ -648,6 +650,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
         <ZCarouselBlock
           data={element.blockContent?.cardItems}
           cardStyle={element.blockContent?.style}
+          view={element.blockContent?.view}
         />
       ) : element?.blockType === LinkInBioBlockEnum.music ? (
         <ZLinkInBioMusicBlock

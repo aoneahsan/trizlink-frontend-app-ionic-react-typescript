@@ -96,7 +96,7 @@ const LinkInBioCarouselCardField: React.FC = () => {
                       <ZIonItem
                         key={_index}
                         lines='none'
-                        className='py-3 my-3 border zaions-linkInBio-block z-ion-bg-transparent'
+                        className='py-3 my-3 border rounded-md shadow-md zaions-linkInBio-block z-ion-bg-transparent'
                         testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.carouselCard.cardItem}-${_index}`}
                         testingselector={
                           CONSTANTS.testingSelectors.linkInBio.formPage.design

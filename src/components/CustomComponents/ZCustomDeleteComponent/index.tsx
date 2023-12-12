@@ -15,7 +15,7 @@ import { trashBin } from 'ionicons/icons';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonButton, ZIonIcon, ZIonText } from '@/components/ZIonComponents';
+import { ZIonButton, ZIonIcon } from '@/components/ZIonComponents';
 import { useZIonActionSheet } from '@/ZaionsHooks/zionic-hooks';
 
 /**
@@ -54,6 +54,7 @@ import classNames from 'classnames';
  * */
 interface ZCustomDeleteComponentInterface {
   className?: string;
+  btnMinHeight?: string;
   slot?: 'start' | 'end' | string;
   actionSheetHeader?: string;
   actionSheetSubHeader?: string;
@@ -83,6 +84,7 @@ const ZCustomDeleteComponent: React.FC<ZCustomDeleteComponentInterface> = ({
   iconClassName,
   testingselector,
   testinglistselector,
+  btnMinHeight,
   deleteFn
 }) => {
   // IonActionSheet present went user went to delete a block.
@@ -99,6 +101,7 @@ const ZCustomDeleteComponent: React.FC<ZCustomDeleteComponentInterface> = ({
       slot={slot}
       className={className}
       fill='clear'
+      minHeight={btnMinHeight}
       size='small'
       testingselector={testingselector}
       testinglistselector={testinglistselector}
@@ -130,17 +133,13 @@ const ZCustomDeleteComponent: React.FC<ZCustomDeleteComponentInterface> = ({
           }
         });
       }}>
-      <ZIonText>
-        <h4 className='ion-no-margin'>
-          <ZIonIcon
-            icon={iconName}
-            color={iconColor}
-            className={classNames(iconClassName, {
-              'w-6 h-6': true
-            })}
-          />
-        </h4>
-      </ZIonText>
+      <ZIonIcon
+        icon={iconName}
+        color={iconColor}
+        className={classNames(iconClassName, {
+          'w-6 h-6': true
+        })}
+      />
     </ZIonButton>
   );
 };

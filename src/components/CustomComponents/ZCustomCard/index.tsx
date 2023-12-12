@@ -78,6 +78,7 @@ interface ZCustomCardInterface {
   mediaType?: ZMediaEnum;
   image?: string;
   countDownTime?: string;
+  className?: string;
   animationType?: LinkInBioBlockAnimationEnum;
 }
 
@@ -94,7 +95,8 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
   mediaType = ZMediaEnum.image,
   image,
   animationType,
-  countDownTime
+  countDownTime,
+  className
 }) => {
   // getting the custom style for all the buttons from linkInBioFormState recoil.
   const linkInBioFormState = useRecoilValue(NewLinkInBioFormState);
@@ -106,9 +108,12 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
         type === LinkInBioCardStyleEnum.horizontal ||
         type === LinkInBioCardStyleEnum.vertical
           ? '100%'
-          : type === LinkInBioCardStyleEnum.thumbCircle ||
-            type === LinkInBioCardStyleEnum.thumbRound
-          ? '350px'
+          : type === LinkInBioCardStyleEnum.thumbRound
+          ? '202px'
+          : type === LinkInBioCardStyleEnum.thumbCircle
+          ? '115px'
+          : type === LinkInBioCardStyleEnum.thumbStrip
+          ? '56%'
           : '100%',
       height:
         type === LinkInBioCardStyleEnum.horizontal
@@ -121,6 +126,23 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
       position: 'relative',
       borderRadius: type === LinkInBioCardStyleEnum.thumbRound && '15px',
       overflow: 'hidden'
+    }),
+    [type]
+  );
+
+  const _zIonCardContentStyle = useMemo(
+    () => ({
+      width:
+        type === LinkInBioCardStyleEnum.thumbRound
+          ? 'calc(100% - 202px)'
+          : type === LinkInBioCardStyleEnum.thumbCircle
+          ? 'calc(100% - 115px)'
+          : '100%',
+      height:
+        (type === LinkInBioCardStyleEnum.thumbCircle ||
+          type === LinkInBioCardStyleEnum.thumbRound ||
+          type === LinkInBioCardStyleEnum.thumbStrip) &&
+        'max-content'
     }),
     [type]
   );
@@ -149,25 +171,18 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
     () => ({ url: mediaLink, width: '100%', height: '100%' }),
     [mediaLink]
   );
-
-  const descriptionTextStyle = useMemo(
-    () => ({
-      width:
-        type === LinkInBioCardStyleEnum.thumbCircle ||
-        type === LinkInBioCardStyleEnum.thumbRound ||
-        type === LinkInBioCardStyleEnum.thumbStrip
-          ? '200px'
-          : '100%'
-    }),
-    [type]
-  );
   // #endregion
 
+  // console.log({ type });
+
   return (
-    <ZIonCol>
+    <ZIonCol
+      className={classNames(className, {
+        'h-full': true
+      })}>
       <ZIonCard
         className={classNames(animationType, {
-          'ion-no-padding ion-no-margin': true,
+          'ion-no-padding ion-no-margin h-full': true,
           flex:
             type === LinkInBioCardStyleEnum.thumbCircle ||
             type === LinkInBioCardStyleEnum.thumbRound ||
@@ -242,15 +257,19 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
           mediaType === ZMediaEnum.countDown) && (
           <ZIonCardContent
             className={classNames({
-              'ion-margin-top ': true,
+              'ion-margin-top h-[8rem]': true,
               'ion-text-center':
                 type === LinkInBioCardStyleEnum.horizontal ||
                 type === LinkInBioCardStyleEnum.vertical,
               'ion-text-start':
                 type === LinkInBioCardStyleEnum.thumbCircle ||
                 type === LinkInBioCardStyleEnum.thumbRound ||
-                type === LinkInBioCardStyleEnum.thumbStrip
-            })}>
+                type === LinkInBioCardStyleEnum.thumbStrip,
+              'ps-1':
+                type === LinkInBioCardStyleEnum.thumbCircle ||
+                type === LinkInBioCardStyleEnum.thumbRound
+            })}
+            style={_zIonCardContentStyle}>
             {title !== undefined && title?.trim()?.length > 0 && (
               <ZIonCardTitle
                 className={classNames(linkInBioFormState?.theme?.font, {
@@ -271,7 +290,6 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
             {description !== undefined && description?.trim()?.length > 0 && (
               <div>
                 <ZIonText
-                  style={descriptionTextStyle}
                   className={classNames(linkInBioFormState?.theme?.font, {
                     'inline-block w-full': true
                   })}>
