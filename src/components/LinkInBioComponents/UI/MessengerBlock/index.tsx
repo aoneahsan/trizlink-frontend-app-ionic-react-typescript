@@ -26,12 +26,16 @@ import { predefinedMessengerPlatformImagesInWhite } from '@/utils/ZIcons';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { isZNonEmptyString } from '@/utils/helpers';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { type linkInBioBlockCardItemInterface } from '@/types/AdminPanel/linkInBioType/blockTypes';
+import {
+  type LinkInBioBlockAnimationEnum,
+  type linkInBioBlockCardItemInterface
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
 import { type messengerPlatformsBlockEnum } from '@/types/AdminPanel/index.type';
 import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 
@@ -64,14 +68,19 @@ import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 interface ZLinkInBioMessengerBlockInterface {
   messengerBlockData?: linkInBioBlockCardItemInterface[];
   fontFamily?: LinkInBioThemeFontEnum;
+  animationType?: LinkInBioBlockAnimationEnum;
 }
 
 const ZLinkInBioMessengerBlock: React.FC<ZLinkInBioMessengerBlockInterface> = ({
   messengerBlockData,
-  fontFamily
+  fontFamily,
+  animationType
 }) => {
   return (
-    <ZIonCol>
+    <ZIonCol
+      className={classNames(animationType, {
+        'animated ': isZNonEmptyString(animationType)
+      })}>
       {messengerBlockData?.map((element, index) => {
         return (
           <ZIonButton

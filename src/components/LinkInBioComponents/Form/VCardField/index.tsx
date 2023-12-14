@@ -40,6 +40,7 @@ const LinkInBioVCardField: React.FC = () => {
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.firstName}
+            minHeight='2.5rem'
           />
         </ZIonCol>
 
@@ -52,6 +53,7 @@ const LinkInBioVCardField: React.FC = () => {
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.lastName}
+            minHeight='2.5rem'
           />
         </ZIonCol>
 
@@ -66,6 +68,7 @@ const LinkInBioVCardField: React.FC = () => {
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.mobile}
+            minHeight='2.5rem'
           />
         </ZIonCol>
 
@@ -80,6 +83,7 @@ const LinkInBioVCardField: React.FC = () => {
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.phone}
+            minHeight='2.5rem'
           />
         </ZIonCol>
 
@@ -94,6 +98,7 @@ const LinkInBioVCardField: React.FC = () => {
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.fax}
+            minHeight='2.5rem'
           />
         </ZIonCol>
 
@@ -108,6 +113,7 @@ const LinkInBioVCardField: React.FC = () => {
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.email}
+            minHeight='2.5rem'
           />
         </ZIonCol>
 
@@ -122,6 +128,7 @@ const LinkInBioVCardField: React.FC = () => {
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.company}
+            minHeight='2.5rem'
           />
         </ZIonCol>
 
@@ -136,6 +143,7 @@ const LinkInBioVCardField: React.FC = () => {
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.job}
+            minHeight='2.5rem'
           />
         </ZIonCol>
 
@@ -150,6 +158,7 @@ const LinkInBioVCardField: React.FC = () => {
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.street}
+            minHeight='2.5rem'
           />
         </ZIonCol>
 
@@ -164,6 +173,7 @@ const LinkInBioVCardField: React.FC = () => {
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.city}
+            minHeight='2.5rem'
           />
         </ZIonCol>
 
@@ -178,6 +188,7 @@ const LinkInBioVCardField: React.FC = () => {
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.zip}
+            minHeight='2.5rem'
           />
         </ZIonCol>
 
@@ -192,6 +203,7 @@ const LinkInBioVCardField: React.FC = () => {
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.state}
+            minHeight='2.5rem'
           />
         </ZIonCol>
 
@@ -206,6 +218,7 @@ const LinkInBioVCardField: React.FC = () => {
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.country}
+            minHeight='2.5rem'
           />
         </ZIonCol>
 
@@ -220,6 +233,7 @@ const LinkInBioVCardField: React.FC = () => {
             onIonChange={handleChange}
             onIonBlur={handleBlur}
             value={values.vcard?.website}
+            minHeight='2.5rem'
           />
         </ZIonCol>
       </ZIonRow>

@@ -41,7 +41,8 @@ const LinkInBioPhoneNumberField: React.FC<
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
       <ZIonInput
-        label=''
+        aria-label='Phone number'
+        className='ion-padding-start-point-8rem'
         name={name}
         placeholder={placeholder}
         onIonChange={onIonChange}

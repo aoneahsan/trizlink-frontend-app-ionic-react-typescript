@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useLocation, useParams } from 'react-router';
 
 /**
@@ -43,12 +43,12 @@ import {
   ZIonDatetimeButton,
   ZIonIcon,
   ZIonImg,
-  ZIonItem,
   ZIonLabel,
   ZIonRange,
   ZIonRouterLink,
   ZIonRow,
   ZIonSkeletonText,
+  ZIonSpinner,
   ZIonText,
   ZIonTitle
 } from '@/components/ZIonComponents';
@@ -149,16 +149,19 @@ import classes from '../styles.module.css';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import {
+  album_style,
   borderDashed,
   borderDotted,
   borderSolid,
   card_style_1,
   card_style_2,
   carousel_view,
+  circle_style,
   jelloAnimation,
   list_view,
   pulseAnimation,
   shakeAnimation,
+  square_style,
   strip_style,
   swingAnimation,
   tadaAnimation,
@@ -168,6 +171,7 @@ import {
   zoomAnimation
 } from '@/assets/images';
 import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
+import LinkInBioDateTimeField from '@/components/LinkInBioComponents/Form/DateTimeField';
 
 /**
  * Component props type go down
@@ -265,7 +269,6 @@ const ZLinkInBioBlocksForm: React.FC = () => {
       ),
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
-
   // delete link-in-bio block api where use went to delete the block on preview panel and click on the delete button in ActionSheet (useZIonActionSheet) the deleteBlockHandler will execute with will hit this api and delete the block.
   const { mutateAsync: deleteLinkInBioBlockMutate } = useZRQDeleteRequest({
     _url: API_URL_ENUM.linkInBioBlock_delete_update_get
@@ -567,7 +570,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
     searchString: linkInBioBlockData?.blockContent?.searchString ?? '',
     spacing: linkInBioBlockData?.blockContent?.spacing ?? 0,
     customHeight: linkInBioBlockData?.blockContent?.customHeight ?? 0,
-    date: linkInBioBlockData?.blockContent?.date ?? '',
+    date: linkInBioBlockData?.blockContent?.date ?? new Date().toString(),
     timezone: linkInBioBlockData?.blockContent?.timezone ?? '',
     imageUrl: linkInBioBlockData?.blockContent?.imageUrl ?? '',
     imagePath: linkInBioBlockData?.blockContent?.imagePath ?? '',
@@ -586,7 +589,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
       formattedAddress: 'okay',
       lat: 10,
       lng: 10,
-      userEnteredAddress: 'working'
+      userEnteredAddress: ''
     },
 
     customAppearance: {
@@ -660,8 +663,6 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
     isActive: Boolean(linkInBioBlockData?.isActive)
   };
-
-  const ZRGAutoCompleteInputInputStyles = { width: '100%', border: 'none' };
 
   return (
     <Formik
@@ -1077,7 +1078,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                 </ZIonTitle>
               )}
 
-              <ZIonRow className='ion-padding-bottom'>
+              <ZIonRow className='mb-3'>
                 {isZFetching &&
                   [...Array(5)].map((_, i) => {
                     return (
@@ -1222,17 +1223,17 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                 {linkInBioBlockData?.blockType === LinkInBioBlockEnum.form && (
                   <ZIonCol
                     size='12'
-                    className='mt-3 border-bottom__violet'>
-                    <ZIonTitle className='font-bold text-[16px] ion-no-padding ms-3'>
+                    className='mt-4 border-bottom__violet'>
+                    <ZIonTitle className='font-bold text-[16px] ion-no-padding '>
                       ✅ Submit button
                     </ZIonTitle>
-                    <div className='mt-2 mb-5'>
+                    <div className='mt-3 mb-5'>
                       <LinkInBioTitleField
                         name='form.submitButtonText'
                         value={values.form?.submitButtonText}
                         onIonChange={handleChange}
                         placeholder='Submit button text'
-                        showImageInSlot={true}
+                        showImageInSlot={false}
                         testingselector={
                           CONSTANTS.testingSelectors.linkInBio.formPage.design
                             .blockForm.fields.submitButtonText
@@ -1302,9 +1303,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                 {(linkInBioBlockData?.blockType ===
                   LinkInBioBlockEnum.countdown ||
                   linkInBioBlockData?.blockType === LinkInBioBlockEnum.card ||
-                  linkInBioBlockData?.blockType === LinkInBioBlockEnum.avatar ||
                   linkInBioBlockData?.blockType ===
-                    LinkInBioBlockEnum.music) && (
+                    LinkInBioBlockEnum.avatar) && (
                   <ZIonCol
                     size='12'
                     className='mt-4'>
@@ -1353,36 +1353,23 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                       }
                     /> */}
 
-                    <ZIonItem
-                      minHeight='32px'
-                      testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.timezoneInput}-item`}
-                      testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.timezoneInput}-item`}
-                      className='ion-item-start-no-padding z-ion-background-hover-transparent z-inner-padding-end-0'
-                      lines='none'>
-                      <ZIonDatetimeButton
-                        id={`${linkInBioBlockData?.blockType}-${linkInBioBlockData?.id}`}
+                    <Suspense
+                      fallback={
+                        <div className='flex w-full ion-align-items-center ion-justify-content-center'>
+                          <ZIonSpinner className='w-7 h-7' />
+                        </div>
+                      }>
+                      <LinkInBioDateTimeField
                         name='date'
+                        value={values.date}
                         onIonChange={handleChange}
+                        id={`${linkInBioBlockData?.blockType}-${linkInBioBlockData?.id}`}
                         testingselector={
                           CONSTANTS.testingSelectors.linkInBio.formPage.design
-                            .blockForm.fields.timezoneInput
+                            .blockForm.fields.dateTimeInput
                         }
-                        testinglistselector={
-                          CONSTANTS.testingSelectors.linkInBio.formPage.design
-                            .blockForm.fields.timezoneInput
-                        }
-                        min={new Date().toISOString()}
-                        value={dayjs(values.date).format(
-                          CONSTANTS.DateTime.iso8601DateTime
-                        )}
-                        className={classNames(
-                          classes['zaions-datetime-field'],
-                          {
-                            'zaions-datetime-btn w-full': true
-                          }
-                        )}
                       />
-                    </ZIonItem>
+                    </Suspense>
                   </ZIonCol>
                 )}
 
@@ -1552,34 +1539,28 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                 {linkInBioBlockData?.blockType === LinkInBioBlockEnum.map && (
                   <ZIonCol
                     size='12'
-                    className='mt-4'>
-                    <ZIonItem className='ion-item-start-no-padding'>
-                      <ZRGAutoCompleteInput
-                        inputStyles={ZRGAutoCompleteInputInputStyles}
-                        defaultValue={values?.map?.userEnteredAddress}
-                        inputName='map.userEnteredAddress'
-                        testingselector={
-                          CONSTANTS.testingSelectors.linkInBio.formPage.design
-                            .blockForm.fields.map
-                        }
-                        className={classNames(
-                          classes['map-auto-complete-input']
-                        )}
-                        onLocationSelectHandler={(
-                          place: google.maps.places.PlaceResult
-                        ) => {
-                          void setFieldValue(
-                            'map.formattedAddress',
-                            'Making a string',
-                            true
-                          );
-                          const _lat = place.geometry?.location?.lat() ?? 0;
-                          const _lng = place.geometry?.location?.lng() ?? 0;
-                          void setFieldValue('map.lat', _lat, true);
-                          void setFieldValue('map.lng', _lng, true);
-                        }}
-                      />
-                    </ZIonItem>
+                    className='mb-2'>
+                    <ZRGAutoCompleteInput
+                      defaultValue={values?.map?.userEnteredAddress}
+                      inputName='map.userEnteredAddress'
+                      testingselector={
+                        CONSTANTS.testingSelectors.linkInBio.formPage.design
+                          .blockForm.fields.map
+                      }
+                      onLocationSelectHandler={(
+                        place: google.maps.places.PlaceResult
+                      ) => {
+                        void setFieldValue(
+                          'map.formattedAddress',
+                          'Making a string',
+                          true
+                        );
+                        const _lat = place.geometry?.location?.lat() ?? 0;
+                        const _lng = place.geometry?.location?.lng() ?? 0;
+                        void setFieldValue('map.lat', _lat, true);
+                        void setFieldValue('map.lng', _lng, true);
+                      }}
+                    />
                   </ZIonCol>
                 )}
 
@@ -2511,6 +2492,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                       </ZRoundedButton>
                     </>
                   )}
+
+                  {/*  */}
                   {linkInBioBlockData?.blockType ===
                     LinkInBioBlockEnum.avatar && (
                     <>
@@ -2529,7 +2512,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                           );
                         }}>
                         <ZIonImg
-                          src={strip_style}
+                          src={circle_style}
                           className='w-[22px]'
                         />
                       </ZRoundedButton>
@@ -2549,7 +2532,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                           );
                         }}>
                         <ZIonImg
-                          src={strip_style}
+                          src={square_style}
                           className='w-[22px]'
                         />
                       </ZRoundedButton>
@@ -2569,7 +2552,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                           );
                         }}>
                         <ZIonImg
-                          src={strip_style}
+                          src={album_style}
                           className='w-[22px]'
                         />
                       </ZRoundedButton>

@@ -8,24 +8,12 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import classNames from 'classnames';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import {
-  ZIonCol,
-  ZIonDatetime,
-  ZIonIcon,
-  ZIonImg
-} from '@/components/ZIonComponents';
-import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
-import ZTimezoneInput from '@/components/CustomComponents/ZTimezone';
 import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
-import { isZNonEmptyString } from '@/utils/helpers';
-import { rssWithBackground } from '@/assets/images';
-import { calendarOutline } from 'ionicons/icons';
 import ZCustomCard from '@/components/CustomComponents/ZCustomCard';
 import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
 
@@ -106,7 +94,7 @@ const ZLinkInBioCalendarBlock: React.FC<ZLinkInBioCalendarBlockInterface> = ({
     //   )}
     // </ZIonCol>
     <ZCustomCard
-      mediaType={ZMediaEnum.iframe}
+      mediaType={ZMediaEnum.calendar}
       mediaLink={mediaLink}
       title={title}
     />

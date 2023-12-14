@@ -90,7 +90,7 @@ const LinkInBioQAndACardField: React.FC = () => {
                       <ZIonItem
                         key={_index}
                         lines='none'
-                        className='pb-3 my-4 border zaions-linkInBio-block z-ion-bg-transparent'
+                        className='pb-3 my-4 border rounded-md shadow-md zaions-linkInBio-block z-ion-bg-transparent'
                         testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.QAndA.cardItem}-${_index}`}
                         testingselector={
                           CONSTANTS.testingSelectors.linkInBio.formPage.design

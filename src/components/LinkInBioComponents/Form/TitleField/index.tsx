@@ -44,7 +44,7 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
 }) => {
   return (
     <ZIonItem
-      className={`ion-item-start-no-padding ${className}`}
+      className={`ion-item-start-no-padding ion-align-items-start ${className}`}
       lines='none'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
@@ -66,7 +66,7 @@ const LinkInBioTitleField: React.FC<LinkInBioTitleFieldInterface> = ({
           <ZIonImg
             src={slotImageUrl}
             slot='start'
-            className='w-[25px]'
+            className='w-[25px] mt-2 me-3'
             testingselector={`${testingselector}-image`}
             testinglistselector={`${testinglistselector}-image`}
           />

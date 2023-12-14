@@ -36,10 +36,6 @@ const LinkInBioDateTimeField: React.FC<LinkInBioDateTimeFieldInterface> = ({
   testingselector,
   onIonChange
 }) => {
-  console.log({
-    c: dayjs(value).format(CONSTANTS.DateTime.iso8601DateTime),
-    c1: value
-  });
   return (
     <ZIonItem
       minHeight='32px'

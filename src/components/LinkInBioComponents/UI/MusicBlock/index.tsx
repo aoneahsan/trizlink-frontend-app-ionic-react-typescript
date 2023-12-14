@@ -26,16 +26,18 @@ import { predefinedMusicPlatformImagesInWhite } from '@/utils/ZIcons';
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
-import {
-  type linkInBioBlockCardItemInterface,
-  type LinkInBioMusicPlatformEnum
-} from '@/types/AdminPanel/linkInBioType/blockTypes';
+import { isZNonEmptyString } from '@/utils/helpers';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
+import {
+  type LinkInBioBlockAnimationEnum,
+  type linkInBioBlockCardItemInterface,
+  type LinkInBioMusicPlatformEnum
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
 
 /**
  * Recoil State Imports go down
@@ -66,14 +68,19 @@ import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 interface ZLinkInBioMusicBlockInterface {
   musicBlockData?: linkInBioBlockCardItemInterface[];
   fontFamily?: LinkInBioThemeFontEnum;
+  animationType?: LinkInBioBlockAnimationEnum;
 }
 
 const ZLinkInBioMusicBlock: React.FC<ZLinkInBioMusicBlockInterface> = ({
   musicBlockData,
-  fontFamily
+  fontFamily,
+  animationType
 }) => {
   return (
-    <ZIonCol>
+    <ZIonCol
+      className={classNames(animationType, {
+        'animated ': isZNonEmptyString(animationType)
+      })}>
       {musicBlockData?.map((element, index) => {
         return (
           <ZIonButton
@@ -85,7 +92,14 @@ const ZLinkInBioMusicBlock: React.FC<ZLinkInBioMusicBlockInterface> = ({
               'mt-3': index >= 1
             })}
             color='success'
-            routerLink={element.target?.url}>
+            target={
+              isZNonEmptyString(element.target?.url) ? '_blank' : undefined
+            }
+            href={
+              isZNonEmptyString(element.target?.url)
+                ? element.target?.url
+                : undefined
+            }>
             <ZIonImg
               src={
                 predefinedMusicPlatformImagesInWhite[

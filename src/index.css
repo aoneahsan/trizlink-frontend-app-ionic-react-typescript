@@ -732,7 +732,8 @@ span.new {
 
 .link-in-bio-form-fields-modal-size {
   --width: 592px;
-  --height: 380px;
+  --height: 465px;
+  --min-height: 400px;
 }
 
 .workspace-create-time-slot-modal {

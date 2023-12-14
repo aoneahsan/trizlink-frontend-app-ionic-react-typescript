@@ -39,8 +39,9 @@ const LinkInBioEmailField: React.FC<LinkInBioEmailFieldInterface> = ({
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
       <ZIonInput
-        label=''
+        aria-label='email'
         name={name}
+        className='ion-padding-start-point-8rem'
         placeholder={placeholder}
         onIonChange={onIonChange}
         onIonBlur={onIonBlur}

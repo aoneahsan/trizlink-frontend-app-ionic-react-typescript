@@ -79,7 +79,7 @@ const ZLinkInBioRSSBlock: React.FC<ZLinkInBioRSSBlockInterface> = ({
             return (
               <SwiperSlide key={index}>
                 <ZCustomCard
-                  mediaType={ZMediaEnum.image}
+                  mediaType={ZMediaEnum.rss}
                   title={element.title}
                   description={element.description}
                   image={element.imageUrl}
@@ -90,7 +90,7 @@ const ZLinkInBioRSSBlock: React.FC<ZLinkInBioRSSBlockInterface> = ({
           })
         ) : (
           <SwiperSlide>
-            <ZCustomCard mediaType={ZMediaEnum.image} />
+            <ZCustomCard mediaType={ZMediaEnum.rss} />
           </SwiperSlide>
         )}
       </Swiper>

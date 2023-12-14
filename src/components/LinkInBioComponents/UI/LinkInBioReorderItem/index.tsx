@@ -532,7 +532,13 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
           }
         )}> */}
       {element?.blockType === LinkInBioBlockEnum.avatar ? (
-        <ZLinkInBioAvatarBlock />
+        <ZLinkInBioAvatarBlock
+          fontFamily={selectedLinkInBio?.theme?.font}
+          title={element.blockContent?.title}
+          description={element.blockContent?.description}
+          url={element.blockContent?.imageUrl}
+          style={element.blockContent?.style}
+        />
       ) : element?.blockType === LinkInBioBlockEnum.text ? (
         <ZLinkInBioTextBlock
           // eslint-disable-next-line react/no-children-prop
@@ -660,6 +666,11 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
         <ZLinkInBioMusicBlock
           fontFamily={selectedLinkInBio?.theme?.font}
           musicBlockData={element.blockContent?.cardItems}
+          animationType={
+            element.blockContent?.animation?.isEnabled === true
+              ? element.blockContent?.animation?.type
+              : undefined
+          }
         />
       ) : element?.blockType === LinkInBioBlockEnum.social ? (
         <ZLinkInBioSocialBlock
@@ -677,28 +688,114 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
         <ZLinkInBioMessengerBlock
           messengerBlockData={element.blockContent?.cardItems}
           fontFamily={selectedLinkInBio?.theme?.font}
+          animationType={
+            element.blockContent?.animation?.isEnabled === true
+              ? element.blockContent?.animation?.type
+              : undefined
+          }
         />
       ) : element?.blockType === LinkInBioBlockEnum.QAndA ? (
         <ZLinkInBioQAndABlock
           QAndABlockData={element.blockContent?.cardItems}
           fontFamily={selectedLinkInBio?.theme?.font}
+          animationType={
+            element.blockContent?.animation?.isEnabled === true
+              ? element.blockContent?.animation?.type
+              : undefined
+          }
         />
       ) : element?.blockType === LinkInBioBlockEnum.VCard ? (
         <ZLinkInBioVCardBlock
           VCardBlockData={element.blockContent?.vcard}
           title={element.blockContent?.title}
+          fontFamily={selectedLinkInBio?.theme?.font}
+          btnStyle={zLinkInBioButtonBlockStyle}
+          btnClassName={classNames({
+            // inlineSquare
+            inlineSquare:
+              element.blockContent?.customAppearance?.isEnabled === true
+                ? currentBlockCustomAppearanceButtonSquareType
+                : linkInBioThemeButtonSquareType,
+            // inlineRound
+            inlineRound:
+              element.blockContent?.customAppearance?.isEnabled === true
+                ? element.blockContent?.customAppearance?.buttonType != null &&
+                  [
+                    LinkInBioButtonTypeEnum.inlineRound,
+                    LinkInBioButtonTypeEnum.inlineRoundOutline,
+                    LinkInBioButtonTypeEnum.inlineRoundShadow
+                  ].includes(element.blockContent?.customAppearance.buttonType)
+                : selectedLinkInBio?.theme?.button?.type != null &&
+                  [
+                    LinkInBioButtonTypeEnum.inlineRound,
+                    LinkInBioButtonTypeEnum.inlineRoundOutline,
+                    LinkInBioButtonTypeEnum.inlineRoundShadow
+                  ].includes(selectedLinkInBio?.theme?.button?.type),
+
+            // inlineCircle
+            'border-radius__100vmax':
+              element.blockContent?.customAppearance?.isEnabled === true
+                ? currentBlockCustomAppearanceButtonCircleType
+                : linkInBioThemeButtonCircleType
+          })}
+          animationType={
+            element.blockContent?.animation?.isEnabled === true
+              ? element.blockContent?.animation?.type
+              : undefined
+          }
           // icon={element.blockContent?.icon}
         />
       ) : element?.blockType === LinkInBioBlockEnum.form ? (
         <ZLinkInBioFormBlock
           fromBlockData={element.blockContent?.form}
           fontFamily={selectedLinkInBio?.theme?.font}
+          btnStyle={zLinkInBioButtonBlockStyle}
+          btnClassName={classNames({
+            // inlineSquare
+            inlineSquare:
+              element.blockContent?.customAppearance?.isEnabled === true
+                ? currentBlockCustomAppearanceButtonSquareType
+                : linkInBioThemeButtonSquareType,
+            // inlineRound
+            inlineRound:
+              element.blockContent?.customAppearance?.isEnabled === true
+                ? element.blockContent?.customAppearance?.buttonType != null &&
+                  [
+                    LinkInBioButtonTypeEnum.inlineRound,
+                    LinkInBioButtonTypeEnum.inlineRoundOutline,
+                    LinkInBioButtonTypeEnum.inlineRoundShadow
+                  ].includes(element.blockContent?.customAppearance.buttonType)
+                : selectedLinkInBio?.theme?.button?.type != null &&
+                  [
+                    LinkInBioButtonTypeEnum.inlineRound,
+                    LinkInBioButtonTypeEnum.inlineRoundOutline,
+                    LinkInBioButtonTypeEnum.inlineRoundShadow
+                  ].includes(selectedLinkInBio?.theme?.button?.type),
+
+            // inlineCircle
+            'border-radius__100vmax':
+              element.blockContent?.customAppearance?.isEnabled === true
+                ? currentBlockCustomAppearanceButtonCircleType
+                : linkInBioThemeButtonCircleType
+          })}
+          animationType={
+            element.blockContent?.animation?.isEnabled === true
+              ? element.blockContent?.animation?.type
+              : undefined
+          }
         />
       ) : element?.blockType === LinkInBioBlockEnum.map ? (
         <ZLinkInBioMapBlock
           mapId={`${PRODUCT_NAME}-map-block-${element.id ?? ''}`}
           latitude={element.blockContent?.map?.lat}
           longitude={element.blockContent?.map?.lng}
+          title={element.blockContent?.title}
+        />
+      ) : element?.blockType === LinkInBioBlockEnum.Iframe ? (
+        <ZCustomCard
+          mediaType={ZMediaEnum.iframeSrcDoc}
+          iframeSrcDocText={element.blockContent?.iframe}
+          title={element.blockContent?.title}
         />
       ) : (
         ''

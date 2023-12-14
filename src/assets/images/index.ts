@@ -232,6 +232,12 @@ import thumb_style_2 from './svg/thumb2.svg';
 
 import strip_style from './svg/strip.svg';
 
+import square_style from './svg/square.svg';
+
+import album_style from './svg/album.svg';
+
+import circle_style from './svg/circle.svg';
+
 import carousel_view from './svg/carousel.svg';
 
 import list_view from './svg/list.svg';
@@ -688,6 +694,9 @@ export {
   thumb_style_1,
   thumb_style_2,
   strip_style,
+  square_style,
+  album_style,
+  circle_style,
   carousel_view,
   list_view,
   mixed_view,

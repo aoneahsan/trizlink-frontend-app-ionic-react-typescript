@@ -21,6 +21,9 @@ import {
   ZIonIcon,
   ZIonText
 } from '@/components/ZIonComponents';
+import { type LinkInBioBlockAnimationEnum } from '@/types/AdminPanel/linkInBioType/blockTypes';
+import { isZNonEmptyString } from '@/utils/helpers';
+import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 
 /**
  * Global Constants Imports go down
@@ -62,23 +65,34 @@ interface ZLinkInBioVCardBlockInterface {
   VCardBlockData?: Record<string, unknown>;
   title?: string;
   icon?: string;
+  animationType?: LinkInBioBlockAnimationEnum;
+  btnStyle?: Record<string, unknown>;
+  btnClassName?: string;
+  fontFamily?: LinkInBioThemeFontEnum;
 }
 
 const ZLinkInBioVCardBlock: React.FC<ZLinkInBioVCardBlockInterface> = ({
   VCardBlockData,
   icon = cardOutline,
-  title
+  title,
+  animationType,
+  btnStyle,
+  btnClassName,
+  fontFamily
 }) => {
   return (
-    <ZIonCol>
+    <ZIonCol
+      className={classNames(animationType, {
+        'animated ': isZNonEmptyString(animationType)
+      })}>
       {VCardBlockData !== undefined && (
         <ZIonButton
           expand='block'
-          className={classNames({
-            'normal-case font-bold text-[16px] my-0 mb-2 h-[3.5rem] rounded-[0.8rem] overflow-hidden':
+          style={btnStyle}
+          className={classNames(btnClassName, fontFamily, {
+            'font-bold text-[16px] my-0 mb-2 h-[3.5rem] rounded-[0.8rem] overflow-hidden mt-2':
               true
-          })}
-          color='success'>
+          })}>
           <ZIonIcon
             icon={icon}
             className='me-2 w-[25px] h-[29px]'
