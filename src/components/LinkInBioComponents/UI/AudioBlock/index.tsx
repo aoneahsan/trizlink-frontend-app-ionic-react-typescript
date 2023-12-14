@@ -59,7 +59,7 @@ interface ZAudioBlockInterface {
 const ZAudioBlock: React.FC<ZAudioBlockInterface> = ({ audioLink, title }) => {
   return (
     <ZCustomCard
-      mediaType={ZMediaEnum.audio}
+      mediaType={ZMediaEnum.iframe}
       mediaLink={audioLink}
       title={title}
     />

@@ -28,7 +28,7 @@ import CONSTANTS from '@/utils/constants';
 // Styles
 
 const LinkFavIcon: React.FC = () => {
-  const { values, setFieldValue } =
+  const { values } =
     useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
   return (
     <ZIonCol
@@ -55,9 +55,8 @@ const LinkFavIcon: React.FC = () => {
 
       <div className='flex px-2 mt-2 ion-align-items-center ion-padding-bottom'>
         <ZDragAndDrop
-          // eslint-disable-next-line @typescript-eslint/no-misused-promises
-          setFieldValue={setFieldValue}
-          fieldName='favicon'
+          // setFieldValue={setFieldValue}
+          // fieldName='favicon'
           imageUrl={values.favicon}
           title='Click to upload favicon'
           className='h-[9rem]'

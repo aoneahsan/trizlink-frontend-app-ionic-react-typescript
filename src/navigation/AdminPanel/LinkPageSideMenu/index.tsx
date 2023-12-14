@@ -26,9 +26,9 @@ const ZaionsAdminLinkPageSideMenu: React.FC = () => {
   return (
     <>
       <ZIonMenu
-        contentId={CONSTANTS.MENU_IDS.ADMIN_LINK_PAGE_CONTENT_ID}
+        contentId={CONSTANTS.PAGE_IDS.ADMIN_LINK_PAGE_CONTENT_ID}
         side='end'
-        menuId={CONSTANTS.MENU_IDS.ADMIN_LINK_PAGE_CONTENT_ID}>
+        menuId={CONSTANTS.PAGE_IDS.ADMIN_LINK_PAGE_CONTENT_ID}>
         <ZIonHeader>
           <IonToolbar>
             <ZIonTitle>Dashboard Menu Content</ZIonTitle>

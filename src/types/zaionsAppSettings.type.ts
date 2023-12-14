@@ -58,5 +58,6 @@ export enum ZMediaEnum {
   video = 'video',
   audio = 'audio',
   carousel = 'carousel',
-  countDown = 'countDown'
+  countDown = 'countDown',
+  iframe = 'iframe'
 }

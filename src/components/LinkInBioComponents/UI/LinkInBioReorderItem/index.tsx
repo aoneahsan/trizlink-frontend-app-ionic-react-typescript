@@ -601,7 +601,11 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
           cardStyle={element.blockContent?.style}
         />
       ) : element?.blockType === LinkInBioBlockEnum.calendar ? (
-        <ZLinkInBioCalendarBlock fontFamily={selectedLinkInBio?.theme?.font} />
+        <ZLinkInBioCalendarBlock
+          fontFamily={selectedLinkInBio?.theme?.font}
+          mediaLink={element.blockContent?.target?.url}
+          title={element.blockContent?.title}
+        />
       ) : element?.blockType === LinkInBioBlockEnum.countdown ? (
         <>
           {element.blockContent?.imageUrl !== undefined &&

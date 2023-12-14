@@ -408,7 +408,8 @@ const ZLinkInBioAddBlockModal: React.FC<{
           </ZIonText>
         </div>
 
-        {getLinkInBioFiltersData?.settings?.addBlockModal?.Ui ===
+        {(getLinkInBioFiltersData?.settings?.addBlockModal?.Ui ??
+          addBlockModalUIEnum.minimalistic) ===
           addBlockModalUIEnum.minimalistic && (
           <div className='flex flex-col ion-text-center ion-justify-content-center ion-margin-top'>
             <ZIonButton
@@ -440,7 +441,8 @@ const ZLinkInBioAddBlockModal: React.FC<{
         )}
 
         {!isLinkInBioFiltersDataFetching &&
-          getLinkInBioFiltersData?.settings?.addBlockModal?.Ui ===
+          (getLinkInBioFiltersData?.settings?.addBlockModal?.Ui ??
+            addBlockModalUIEnum.minimalistic) ===
             addBlockModalUIEnum.advance && (
             <div className=''>
               <ZIonRadioGroup
@@ -490,7 +492,8 @@ const ZLinkInBioAddBlockModal: React.FC<{
           </ZIonCol>
 
           {!isLinkInBioFiltersDataFetching &&
-            getLinkInBioFiltersData?.settings?.addBlockModal?.Ui ===
+            (getLinkInBioFiltersData?.settings?.addBlockModal?.Ui ??
+              addBlockModalUIEnum.minimalistic) ===
               addBlockModalUIEnum.advance && (
               <ZIonCol className='flex gap-2 ion-justify-content-end ion-align-items-center'>
                 <ZIonButton

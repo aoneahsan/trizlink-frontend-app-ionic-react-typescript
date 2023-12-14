@@ -116,18 +116,20 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
           ? '56%'
           : '100%',
       height:
-        type === LinkInBioCardStyleEnum.horizontal
+        mediaType === ZMediaEnum.iframe
+          ? '380px'
+          : type === LinkInBioCardStyleEnum.horizontal
           ? '160px'
           : type === LinkInBioCardStyleEnum.vertical
           ? '330px'
           : type === LinkInBioCardStyleEnum.thumbStrip
           ? 'auto'
-          : '110px',
+          : '15rem',
       position: 'relative',
       borderRadius: type === LinkInBioCardStyleEnum.thumbRound && '15px',
       overflow: 'hidden'
     }),
-    [type]
+    [mediaType, type]
   );
 
   const _zIonCardContentStyle = useMemo(
@@ -138,11 +140,7 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
           : type === LinkInBioCardStyleEnum.thumbCircle
           ? 'calc(100% - 115px)'
           : '100%',
-      height:
-        (type === LinkInBioCardStyleEnum.thumbCircle ||
-          type === LinkInBioCardStyleEnum.thumbRound ||
-          type === LinkInBioCardStyleEnum.thumbStrip) &&
-        'max-content'
+      height: 'max-content'
     }),
     [type]
   );
@@ -150,7 +148,9 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
   const _defaultImageStyle = useMemo(
     () => ({
       width:
-        mediaType === ZMediaEnum.video || mediaType === ZMediaEnum.audio
+        mediaType === ZMediaEnum.video ||
+        mediaType === ZMediaEnum.audio ||
+        mediaType === ZMediaEnum.iframe
           ? '161px'
           : '100%',
       height: '100%',
@@ -172,8 +172,6 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
     [mediaLink]
   );
   // #endregion
-
-  // console.log({ type });
 
   return (
     <ZIonCol
@@ -206,27 +204,31 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
           color='primary'
           style={_zIonCardHeaderStyle}>
           {/* If no image provided or get from api the default image */}
-          {(mediaLink !== undefined || mediaType !== ZMediaEnum.countDown) && (
-            <ZIonImg
-              src={
-                isZNonEmptyString(image)
-                  ? image
-                  : mediaType === ZMediaEnum.image
-                  ? rssWithBackground
-                  : mediaType === ZMediaEnum.video
-                  ? videoBlockEmptyState
-                  : mediaType === ZMediaEnum.audio
-                  ? audioBlockEmptyState
-                  : mediaType === ZMediaEnum.carousel
-                  ? carouselPreviewBlock
-                  : ''
-              }
-              style={_defaultImageStyle}
-            />
-          )}
+          {/* {(!isZNonEmptyString(mediaLink) ||
+            mediaType !== ZMediaEnum.countDown) && */}
+          {!isZNonEmptyString(mediaLink) &&
+            mediaType !== ZMediaEnum.countDown && (
+              <ZIonImg
+                src={
+                  isZNonEmptyString(image)
+                    ? image
+                    : mediaType === ZMediaEnum.image
+                    ? rssWithBackground
+                    : mediaType === ZMediaEnum.video
+                    ? videoBlockEmptyState
+                    : mediaType === ZMediaEnum.audio ||
+                      mediaType === ZMediaEnum.iframe
+                    ? audioBlockEmptyState
+                    : mediaType === ZMediaEnum.carousel
+                    ? carouselPreviewBlock
+                    : ''
+                }
+                style={_defaultImageStyle}
+              />
+            )}
 
           {/* For Image */}
-          {mediaLink !== undefined &&
+          {isZNonEmptyString(mediaLink) &&
             (mediaType === ZMediaEnum.image ||
               mediaType === ZMediaEnum.countDown) && (
               <ZIonImg
@@ -236,7 +238,7 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
             )}
 
           {/* For Video */}
-          {mediaLink !== undefined && mediaType === ZMediaEnum.video && (
+          {isZNonEmptyString(mediaLink) && mediaType === ZMediaEnum.video && (
             <ZReactMediaPlayer
               playerProps={ZMediaPlayerStyle}
               mediaType='video'
@@ -244,11 +246,24 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
           )}
 
           {/* For audio */}
-          {mediaLink !== undefined && mediaType === ZMediaEnum.audio && (
+          {/* {isZNonEmptyString(mediaLink) && mediaType === ZMediaEnum.audio && (
             <ZReactMediaPlayer
               playerProps={ZMediaPlayerStyle}
               mediaType='audio'
             />
+          )} */}
+
+          {isZNonEmptyString(mediaLink) && mediaType === ZMediaEnum.iframe && (
+            <ZIonCol>
+              <iframe
+                width='100%'
+                scrolling='no'
+                frameBorder='0'
+                allow='encrypted-media'
+                height='100%'
+                src={mediaLink}
+              />
+            </ZIonCol>
           )}
         </ZIonCardHeader>
 
@@ -257,7 +272,7 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
           mediaType === ZMediaEnum.countDown) && (
           <ZIonCardContent
             className={classNames({
-              'ion-margin-top h-[8rem]': true,
+              'ion-margin-top': true,
               'ion-text-center':
                 type === LinkInBioCardStyleEnum.horizontal ||
                 type === LinkInBioCardStyleEnum.vertical,
@@ -288,10 +303,10 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
 
             {/*  */}
             {description !== undefined && description?.trim()?.length > 0 && (
-              <div>
+              <div className='h-max'>
                 <ZIonText
                   className={classNames(linkInBioFormState?.theme?.font, {
-                    'inline-block w-full': true
+                    'inline-block whitespace-break-spaces': true
                   })}>
                   {description}
                 </ZIonText>

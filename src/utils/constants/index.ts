@@ -581,9 +581,34 @@ const testingSelectors = {
   // #region workspace
   workspace: {
     listPage: {
+      page: 'workspace-list-page',
+      favoriteWorkspaces: 'wlp-favorite-ws-section',
+      favoriteCard: 'wlp-favorite-ws-card',
+      fwEmpty: {
+        col: 'wlp-fw-no-data-col',
+        icon: 'wlp-fw-no-data-col-icon',
+        text: 'wlp-fw-no-data-col-text'
+      },
+      ownedWorkspaces: 'wlp-owned-ws-section',
+      ownedWsCard: 'wlp-owned-ws-card',
+      owEmpty: {
+        col: 'wlp-ow-no-data-col',
+        btn: 'wlp-ow-no-data-col-btn',
+        icon: 'wlp-ow-no-data-col-btn-icon',
+        title: 'wlp-ow-no-data-col-title',
+        text: 'wlp-ow-no-data-col-text'
+      },
+      shareWorkspaces: 'wlp-share-ws-section',
+      shareWsCard: 'wlp-share-ws-card',
+      swEmpty: {
+        col: 'wlp-sw-no-data-col',
+        icon: 'wlp-sw-no-data-col-icon',
+        text: 'wlp-sw-no-data-col-text'
+      },
       inviteButton: 'wlp-invite-btn',
       createWorkspaceButton: 'wlp-create-btn',
       createWorkspaceCardButton: 'wlp-create-card-btn',
+      workspaceCard: 'wlp-card',
       viewWorkspaceButton: 'wlp-view-btn',
       leaveWorkspaceButton: 'wlp-leave-btn',
       acceptInvitationButton: 'wlp-accept-btn',

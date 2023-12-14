@@ -157,7 +157,6 @@ import {
   carousel_view,
   jelloAnimation,
   list_view,
-  mixed_view,
   pulseAnimation,
   shakeAnimation,
   strip_style,
@@ -2638,7 +2637,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                     />
                   </ZRoundedButton>
 
-                  <ZRoundedButton
+                  {/* <ZRoundedButton
                     className='me-2'
                     color={
                       values.view === LinkInBioCardViewEnum.mixed
@@ -2656,7 +2655,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                       src={mixed_view}
                       className='w-[22px]'
                     />
-                  </ZRoundedButton>
+                  </ZRoundedButton> */}
                 </div>
               </ZIonCol>
             )}

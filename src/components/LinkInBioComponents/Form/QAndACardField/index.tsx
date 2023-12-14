@@ -5,8 +5,6 @@ import React from 'react';
 import { addOutline, appsOutline } from 'ionicons/icons';
 import { type ItemReorderEventDetail } from '@ionic/react';
 import { FieldArray, useFormikContext } from 'formik';
-import { convertToRaw } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
 
 // Custom Imports
 import ZRichTextEditor from '@/components/CustomComponents/ZTextEditor';
@@ -132,12 +130,9 @@ const LinkInBioQAndACardField: React.FC = () => {
                                 .design.blockForm.fields.QAndA.textEditor
                             }
                             onChange={editorState => {
-                              const rawContentState = convertToRaw(
-                                editorState.getCurrentContent()
-                              );
                               void setFieldValue(
                                 `cardItems.${_index}.text`,
-                                draftToHtml(rawContentState),
+                                editorState,
                                 false
                               );
                             }}

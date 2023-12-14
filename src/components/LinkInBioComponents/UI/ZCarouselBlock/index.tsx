@@ -104,7 +104,7 @@ const ZCarouselBlock: React.FC<ZCarouselBlockInterface> = ({
         </Swiper>
       ) : view === LinkInBioCardViewEnum.list ? (
         <ZIonLabel className=''>
-          {data !== undefined ? (
+          {data !== undefined && data !== undefined && data?.length > 0 ? (
             data?.map((element, index) => {
               return (
                 <div

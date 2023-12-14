@@ -8,8 +8,6 @@ import { FieldArray, useFormikContext } from 'formik';
 import { useRecoilState } from 'recoil';
 import classNames from 'classnames';
 import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
-import { convertToRaw } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
 
 // Custom Imports
 import LinkInBioTitleField from '../TitleField';
@@ -388,12 +386,9 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                                   .design.blockForm.fields.messenger.textInput
                               }
                               onChange={editorState => {
-                                const rawContentState = convertToRaw(
-                                  editorState.getCurrentContent()
-                                );
                                 void setFieldValue(
                                   `cardItems.${_index}.text`,
-                                  draftToHtml(rawContentState),
+                                  editorState,
                                   false
                                 );
                               }}

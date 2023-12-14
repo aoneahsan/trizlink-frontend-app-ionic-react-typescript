@@ -178,10 +178,10 @@ const ZUTMTagsTable: React.FC<{
       _shouldFetchWhenIdPassed: !(
         wsShareId !== undefined &&
         wsShareId !== null &&
-        (wsShareId?.trim()?.length > 0 ?? 0) &&
+        (wsShareId?.trim()?.length ?? 0) > 0 &&
         shareWSMemberId !== undefined &&
         shareWSMemberId !== null &&
-        (shareWSMemberId?.trim()?.length > 0 ?? 0)
+        (shareWSMemberId?.trim()?.length ?? 0) > 0
       ),
       _itemsIds: [shareWSMemberId ?? ''],
       _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId]
