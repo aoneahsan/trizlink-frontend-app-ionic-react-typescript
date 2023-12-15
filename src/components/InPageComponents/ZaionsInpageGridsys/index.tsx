@@ -31,14 +31,14 @@ const ZaionsInpageCol: React.FC<ZaionsInpageColType> = props => {
       key={props.id}>
       <ZIonImg
         src={props.icon}
-        style={{ width: '60px' }}
-        className={`${
+        className={`w-[60px] ${
           props.isLogoCenter !== undefined && props?.isLogoCenter
             ? 'mx-auto'
             : !isLgScale
             ? 'mx-auto'
             : ''
-        }`}></ZIonImg>
+        }`}
+      />
       <ZIonTitle className='pt-1 mt-2 mb-2 font-bold ion-no-padding'>
         {props.title}
       </ZIonTitle>

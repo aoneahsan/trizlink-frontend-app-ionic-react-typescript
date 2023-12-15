@@ -8,6 +8,7 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
+import classNames from 'classnames';
 
 /**
  * Custom Imports go down
@@ -18,12 +19,14 @@ import {
   ZIonCheckbox,
   ZIonCol,
   ZIonFooter,
+  ZIonInput,
   ZIonRouterLink,
   ZIonRow,
   ZIonText,
   ZIonTitle
 } from '@/components/ZIonComponents';
 import {
+  type LinkInBioBlockAnimationEnum,
   LinkInBioFormFieldsEnum,
   type linkInBioFromFieldItemInterface
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
@@ -32,14 +35,13 @@ import {
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { isZNonEmptyString } from '@/utils/helpers';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
-import classNames from 'classnames';
-import ZIonInputField from '@/components/CustomComponents/FormFields/ZIonInputField';
 
 /**
  * Recoil State Imports go down
@@ -76,109 +78,122 @@ interface ZLinkInBioFromBlockInterface {
     termLink?: string;
   };
   fontFamily?: LinkInBioThemeFontEnum;
+  animationType?: LinkInBioBlockAnimationEnum;
+  btnStyle?: Record<string, unknown>;
+  btnClassName?: string;
 }
 
 const ZLinkInBioFormBlock: React.FC<ZLinkInBioFromBlockInterface> = ({
   fromBlockData,
-  fontFamily
+  fontFamily,
+  animationType,
+  btnStyle,
+  btnClassName
 }) => {
+  const zIonButtonStyle = { '--padding-start': '11px' };
+
   return (
-    <ZIonRow className='w-full px-3 rounded ion-justify-content-between ion-padding-vertical zaions__light_bg row-gap-1-point-6-rem'>
+    <ZIonRow
+      className={classNames(animationType, {
+        'w-full rounded ion-justify-content-between zaions__light_bg row-gap-1-point-6-rem':
+          true,
+        'animated ': isZNonEmptyString(animationType)
+      })}>
       {/* Header */}
       {/* <ZIonHeader className='pb-2'>
         <ZIonButton
           expand='block'
-          style={{ height: '40px' }}
           className={classNames(fontFamily, {
-            'normal-case': true,
+            'normal-case h-[40px]': true,
           })}
         >
           {fromBlockData?.submitButtonText}
         </ZIonButton>
       </ZIonHeader> */}
 
-      {fromBlockData?.formFields?.map(element => {
-        return (
-          <>
-            {/* Title */}
-            {element.type === LinkInBioFormFieldsEnum.title && (
-              <ZIonCol size='12'>
-                <ZIonTitle className='ion-no-padding ion-text-center'>
-                  <h5
+      <div className='w-full px-3 ion-padding-vertical'>
+        {fromBlockData?.formFields?.map(element => {
+          return (
+            <>
+              {/* Title */}
+              {element.type === LinkInBioFormFieldsEnum.title && (
+                <ZIonCol size='12'>
+                  <ZIonTitle
                     className={classNames(fontFamily, {
-                      'font-bold ion-no-margin': true
+                      'font-bold ion-no-padding ion-text-center text-2xl': true
                     })}>
                     {element.title}
-                  </h5>
-                </ZIonTitle>
-              </ZIonCol>
-            )}
+                  </ZIonTitle>
+                </ZIonCol>
+              )}
 
-            {/* First Name */}
-            {(element.type === LinkInBioFormFieldsEnum.firstName ||
-              element.type === LinkInBioFormFieldsEnum.lastName ||
-              element.type === LinkInBioFormFieldsEnum.email ||
-              element.type === LinkInBioFormFieldsEnum.phone ||
-              element.type === LinkInBioFormFieldsEnum.text ||
-              element.type === LinkInBioFormFieldsEnum.website) && (
-              <ZIonCol size='12'>
-                <ZIonInputField
-                  inputFieldProps={{
-                    className: classNames(fontFamily),
-                    label: element.placeholder,
-                    labelPlacement: 'floating',
-                    style: {
-                      '--padding-start': '11px'
-                    }
-                  }}
-                />
-              </ZIonCol>
-            )}
+              {/* First Name */}
+              {(element.type === LinkInBioFormFieldsEnum.firstName ||
+                element.type === LinkInBioFormFieldsEnum.lastName ||
+                element.type === LinkInBioFormFieldsEnum.email ||
+                element.type === LinkInBioFormFieldsEnum.phone ||
+                element.type === LinkInBioFormFieldsEnum.text ||
+                element.type === LinkInBioFormFieldsEnum.website) && (
+                <ZIonCol size='12'>
+                  <ZIonInput
+                    label={`${element.placeholder}${
+                      element.required === true ? '*' : ''
+                    }`}
+                    labelPlacement='stacked'
+                    className={classNames(fontFamily, {
+                      'mt-2': true
+                    })}
+                    style={zIonButtonStyle}
+                    minHeight='2.5rem'
+                  />
+                </ZIonCol>
+              )}
 
-            {/* Date */}
-            {element.type === LinkInBioFormFieldsEnum.date && (
-              <ZIonCol size='12'>
-                <ZIonInputField
-                  inputFieldProps={{
-                    className: classNames(fontFamily),
-                    label: element.placeholder,
-                    labelPlacement: 'stacked',
-                    style: {
-                      '--padding-start': '11px'
-                    },
-                    type: 'datetime-local'
-                  }}
-                />
-              </ZIonCol>
-            )}
-          </>
-        );
-      })}
-      {fromBlockData?.isTermEnabled === true && (
-        <ZIonCol
-          size='12'
-          className='flex ion-align-items-center'>
-          <div className=''>
-            <ZIonCheckbox className='ion-no-margin' />
-          </div>
-          <ZIonRouterLink
-            className='underline ms-2'
-            routerLink={fromBlockData.termLink}
-            target='_blank'
-            color='dark'>
-            <ZIonText className={classNames(fontFamily)}>
-              {fromBlockData?.termText}
-            </ZIonText>
-          </ZIonRouterLink>
-        </ZIonCol>
-      )}
+              {/* Date */}
+              {element.type === LinkInBioFormFieldsEnum.date && (
+                <ZIonCol size='12'>
+                  <ZIonInput
+                    label={element.placeholder}
+                    labelPlacement='stacked'
+                    type='datetime-local'
+                    className={classNames(fontFamily, {
+                      'mt-2': true
+                    })}
+                    style={zIonButtonStyle}
+                    minHeight='2.5rem'
+                  />
+                </ZIonCol>
+              )}
+            </>
+          );
+        })}
+        {fromBlockData?.isTermEnabled === true && (
+          <ZIonCol
+            size='12'
+            className='flex ion-align-items-center'>
+            <div className=''>
+              <ZIonCheckbox className='ion-no-margin' />
+            </div>
+            <ZIonRouterLink
+              className='underline ms-2'
+              routerLink={fromBlockData.termLink}
+              target='_blank'
+              color='dark'>
+              <ZIonText className={classNames(fontFamily)}>
+                {fromBlockData?.termText}
+              </ZIonText>
+            </ZIonRouterLink>
+          </ZIonCol>
+        )}
+      </div>
+
       {/* Footer */}
-      <ZIonFooter className='pt-2'>
+      <ZIonFooter className='px-3 pt-2 pb-1'>
         <ZIonButton
           expand='block'
-          style={{ height: '40px' }}
-          className={classNames(fontFamily, {
-            'normal-case': true
+          style={btnStyle}
+          className={classNames(fontFamily, btnClassName, {
+            'normal-case h-[40px]': true
           })}>
           {fromBlockData?.submitButtonText}
         </ZIonButton>

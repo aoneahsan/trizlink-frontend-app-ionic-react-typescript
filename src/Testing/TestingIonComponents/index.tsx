@@ -108,7 +108,7 @@ ad velit quae repellat aut!
                     className='h-[5rem] bg-cyan-500'></ZIonCol>
                 </ZIonRow>
                 {/* Col-2 Row-1 */}
-                <ZIonRow style={{ height: 'calc(100% - 4rem)' }}>
+                <ZIonRow className='h-[calc(100%-4rem)]'>
                   {/* Col-2 Row-1 col-1 Folder menu */}
                   <ZIonCol
                     size='2.4'

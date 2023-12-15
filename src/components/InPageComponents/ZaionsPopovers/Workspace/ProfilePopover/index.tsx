@@ -157,17 +157,18 @@ const ZWorkspaceProfilePopover: React.FC<{
     }
   };
 
+  const _userAvatarUi = {
+    name: zUserAccountStateAtom?.username
+  };
+
   return (
     <>
       <ZIonRow className='pt-2 ion-align-items-center'>
         <ZIonCol size='max-content'>
           <ZUserAvatarButton
-            className='w-[10px] h-[10px] me-1 ms-1 border'
+            className='w-[40px] h-[40px] me-1 ms-1 border'
             userAvatar={zUserAccountStateAtom?.avatar}
-            userAvatarUi={{
-              name: zUserAccountStateAtom?.username
-            }}
-            style={{ height: '40px', width: '40px' }}
+            userAvatarUi={_userAvatarUi}
           />
         </ZIonCol>
         <ZIonCol>

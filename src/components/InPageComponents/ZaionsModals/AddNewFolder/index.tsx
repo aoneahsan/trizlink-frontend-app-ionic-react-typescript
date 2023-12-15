@@ -37,7 +37,11 @@ import {
   zStringify
 } from '@/utils/helpers';
 import MESSAGES from '@/utils/messages';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  extractInnerDataOptionsEnum,
+  ZWSTypeEum
+} from '@/utils/enums';
 import { showSuccessNotification } from '@/utils/notification';
 import { reportCustomError, ZCustomError } from '@/utils/customErrorType';
 import CONSTANTS from '@/utils/constants';
@@ -93,28 +97,32 @@ const ZaionsAddNewFolder: React.FC<{
   // #endregion
 
   // #region APIS.
-  // Create folder in owned workspace.
+  // Create folder
   const { mutateAsync: createFolderAsyncMutate } = useZRQCreateRequest({
-    _url: API_URL_ENUM.folders_create_list,
-    _itemsIds: [workspaceId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+    _url: API_URL_ENUM.folders_create,
+    // _itemsIds: [workspaceId],
+    _itemsIds:
+      workspaceId !== undefined &&
+      workspaceId !== null &&
+      workspaceId?.trim()?.length > 0
+        ? [ZWSTypeEum.personalWorkspace, workspaceId]
+        : wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          shareWSMemberId?.trim()?.length > 0
+        ? [ZWSTypeEum.shareWorkspace, shareWSMemberId]
+        : [],
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
+    ]
   });
 
-  // Create folder in share workspace.
-  const { mutateAsync: createSWSFolderAsyncMutate } = useZRQCreateRequest({
-    _url: API_URL_ENUM.ws_share_folder_create,
-    _itemsIds: [shareWSMemberId],
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId]
-  });
-
-  // Update folder in owned workspace.
+  // Update folder.
   const { mutateAsync: updateFolderAsyncMutate } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.folders_update_delete
-  });
-
-  // Update folder in share workspace.
-  const { mutateAsync: updateSWSFolderAsyncMutate } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.ws_share_folder_get_update_delete
+    _url: API_URL_ENUM.folders_get_update_delete
   });
   // #endregion
 
@@ -130,29 +138,15 @@ const ZaionsAddNewFolder: React.FC<{
     try {
       // ADD API Request to add this new Folder to user account in DB.
       if (folderFormState.formMode === FormMode.ADD) {
-        let _response;
+        const _response = await createFolderAsyncMutate(value);
 
-        if (
-          workspaceId !== null &&
-          workspaceId !== undefined &&
-          workspaceId?.trim()?.length > 0
-        ) {
-          _response = await createFolderAsyncMutate(value);
-        } else if (
-          wsShareId !== null &&
-          wsShareId !== undefined &&
-          wsShareId?.trim()?.length > 0
-        ) {
-          _response = await createSWSFolderAsyncMutate(value);
-        }
-
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           const _data = extractInnerData<LinkFolderType>(
             _response,
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data?.id !== null) {
+          if (_data?.id !== null && _data?.id !== undefined) {
             let _oldFoldersData: LinkFolderType[] = [];
 
             if (
@@ -171,13 +165,17 @@ const ZaionsAddNewFolder: React.FC<{
             } else if (
               wsShareId !== null &&
               wsShareId !== undefined &&
-              wsShareId?.trim()?.length > 0
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== null &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId?.trim()?.length > 0
             ) {
               _oldFoldersData =
                 (getRQCDataHandler<LinkFolderType[]>({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
                     wsShareId,
+                    shareWSMemberId,
                     state
                   ]
                 }) as LinkFolderType[]) ?? [];
@@ -204,7 +202,7 @@ const ZaionsAddNewFolder: React.FC<{
                   workspaceId,
                   state
                 ],
-                data: _updatedFolders as LinkFolderType[],
+                data: _updatedFolders,
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
@@ -212,15 +210,19 @@ const ZaionsAddNewFolder: React.FC<{
             } else if (
               wsShareId !== null &&
               wsShareId !== undefined &&
-              wsShareId?.trim()?.length > 0
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== null &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId?.trim()?.length > 0
             ) {
               await updateRQCDataHandler<LinkFolderType[] | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
                   wsShareId,
+                  shareWSMemberId,
                   state
                 ],
-                data: _updatedFolders as LinkFolderType[],
+                data: _updatedFolders,
                 id: '',
                 extractType: ZRQGetRequestExtractEnum.extractItems,
                 updateHoleData: true
@@ -233,44 +235,44 @@ const ZaionsAddNewFolder: React.FC<{
           }
         }
       } else if (folderFormState.formMode === FormMode.EDIT) {
-        if (folderFormState.id !== undefined) {
-          let _response;
+        if (folderFormState?.id !== undefined && folderFormState?.id !== null) {
+          const _response = await updateFolderAsyncMutate({
+            itemIds:
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+                ? [
+                    ZWSTypeEum.personalWorkspace,
+                    workspaceId,
+                    folderFormState?.id
+                  ]
+                : wsShareId !== undefined &&
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0 &&
+                  shareWSMemberId !== undefined &&
+                  shareWSMemberId !== null &&
+                  shareWSMemberId?.trim()?.length > 0
+                ? [
+                    ZWSTypeEum.shareWorkspace,
+                    shareWSMemberId,
+                    folderFormState?.id
+                  ]
+                : [],
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.type,
+              CONSTANTS.RouteParams.workspace.workspaceId,
+              CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+            ],
+            requestData: value
+          });
 
-          if (
-            workspaceId !== null &&
-            workspaceId !== undefined &&
-            workspaceId?.trim()?.length > 0
-          ) {
-            _response = await updateFolderAsyncMutate({
-              itemIds: [workspaceId, folderFormState.id],
-              urlDynamicParts: [
-                CONSTANTS.RouteParams.workspace.workspaceId,
-                CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-              ],
-              requestData: value
-            });
-          } else if (
-            wsShareId !== null &&
-            wsShareId !== undefined &&
-            wsShareId?.trim()?.length > 0
-          ) {
-            _response = await updateSWSFolderAsyncMutate({
-              itemIds: [shareWSMemberId, folderFormState?.id],
-              urlDynamicParts: [
-                CONSTANTS.RouteParams.workspace.shareWSMemberId,
-                CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-              ],
-              requestData: value
-            });
-          }
-
-          if (_response !== undefined) {
+          if (_response !== undefined && _response !== null) {
             const _data = extractInnerData<LinkFolderType>(
               _response,
               extractInnerDataOptionsEnum.createRequestResponseItem
             );
 
-            if (_data !== undefined && _data?.id !== null) {
+            if (_data?.id !== undefined && _data?.id !== null) {
               if (
                 workspaceId !== null &&
                 workspaceId !== undefined &&
@@ -284,21 +286,25 @@ const ZaionsAddNewFolder: React.FC<{
                     state
                   ],
                   data: { ..._data },
-                  id: _data?.id ?? ''
+                  id: _data?.id
                 });
               } else if (
                 wsShareId !== null &&
                 wsShareId !== undefined &&
-                wsShareId?.trim()?.length > 0
+                wsShareId?.trim()?.length > 0 &&
+                shareWSMemberId !== undefined &&
+                shareWSMemberId !== null &&
+                shareWSMemberId?.trim()?.length > 0
               ) {
                 await updateRQCDataHandler<LinkFolderType | undefined>({
                   key: [
                     CONSTANTS.REACT_QUERY.QUERIES_KEYS.FOLDER.SWS_MAIN,
                     wsShareId,
+                    shareWSMemberId,
                     state
                   ],
                   data: { ..._data },
-                  id: _data.id ?? ''
+                  id: _data.id
                 });
               }
             }
@@ -351,6 +357,12 @@ const ZaionsAddNewFolder: React.FC<{
     }));
   };
 
+  // #region Comp Constants
+  const formikInitialValues = {
+    folderName: folderFormState?.name ?? ''
+  };
+  // #endregion
+
   // JSX Code
   return (
     <ZCan
@@ -388,9 +400,7 @@ const ZaionsAddNewFolder: React.FC<{
           : []
       }>
       <Formik
-        initialValues={{
-          folderName: folderFormState?.name ?? ''
-        }}
+        initialValues={formikInitialValues}
         enableReinitialize={true}
         validate={values => {
           const errors: {

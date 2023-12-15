@@ -6,18 +6,16 @@ import { addOutline, appsOutline } from 'ionicons/icons';
 import { type ItemReorderEventDetail } from '@ionic/react';
 import { FieldArray, useFormikContext } from 'formik';
 import { useRecoilState } from 'recoil';
-import classNames from 'classnames';
 
 // Custom Imports
 import LinkInBioTitleField from '../TitleField';
 import {
   ZIonButton,
-  ZIonCol,
   ZIonIcon,
   ZIonItem,
   ZIonReorder,
   ZIonReorderGroup,
-  ZIonRow
+  ZIonSpinner
 } from '@/components/ZIonComponents';
 import LinkInBioLinkField from '../LinkField';
 import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedButton';
@@ -25,7 +23,7 @@ import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedBut
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
 // Global constant
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
 import { predefinedMusicPlatformImages, ZIcons } from '@/utils/ZIcons';
@@ -44,10 +42,23 @@ import { LinkInBioPredefinedMusicPlatformRState } from '@/ZaionsStore/UserDashbo
 import LinkInBioIconField from '../IconField';
 import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
 import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import { useParams } from 'react-router';
+import {
+  _getQueryKey,
+  isZNonEmptyString,
+  isZNonEmptyStrings
+} from '@/utils/helpers';
 
 // Styles
 
 const LinkInBioMusicPlatformCardField: React.FC = () => {
+  const { linkInBioId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    linkInBioId?: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
+  }>();
+
   const { values, handleBlur, handleChange, setFieldValue } =
     useFormikContext<LinkInBioSingleBlockContentType>();
 
@@ -58,14 +69,38 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
   ] = useRecoilState(LinkInBioPredefinedMusicPlatformRState);
 
   // fetch block data from api and storing it in LinkInBioBlocksData variable...
-  const { data: LinkInBioPreDefinedMusicPlatformData } = useZRQGetRequest<
+  const {
+    data: LinkInBioPreDefinedMusicPlatformData,
+    isFetching: isLibPDMusicPlatformDataFetching
+  } = useZRQGetRequest<
     Array<LinkInBioPredefinedPlatformInterface<LinkInBioMusicPlatformEnum>>
   >({
     _url: API_URL_ENUM.linkInBioPreDefinedMusicPlatform_create_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_DEFINED_MUSIC_PLATFORM
-        .MAIN
-    ]
+    _key: _getQueryKey({
+      keys: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS
+          .LINK_IN_BIO_PRE_DEFINED_MUSIC_PLATFORM.MAIN
+      ]
+      // additionalKeys: [workspaceId, wsShareId, shareWSMemberId, linkInBioId]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId]
+    }),
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
+    ],
+    _shouldFetchWhenIdPassed: !(
+      isZNonEmptyStrings([workspaceId, linkInBioId]) ||
+      isZNonEmptyStrings([wsShareId, shareWSMemberId, linkInBioId])
+    )
   });
 
   // After fetching data and storing it to LinkInBioPreDefinedMusicPlatformData variable, setting data to setLinkInBioPredefinedMusicPlatformState recoil state and making sure that if only the data refetch then again store the lates data in recoil state...
@@ -155,7 +190,36 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
           return (
             <>
               {/* After getting MusicPlatform data from api and storing it to the LinkInBioPredefinedMusicPlatformsRState recoil state, looping the recoil state value to make MusicPlatforms */}
-              <ZIonRow
+              <div className='flex flex-wrap w-full gap-2 mb-3 ion-align-items-center'>
+                {isLibPDMusicPlatformDataFetching && (
+                  <ZIonSpinner className='w-8 h-8 mx-auto my-2' />
+                )}
+                {!isLibPDMusicPlatformDataFetching &&
+                  linkInBioPredefinedMusicPlatformState?.map(el => {
+                    const _index = values.cardItems?.findIndex(
+                      _el => _el.musicCardType === el.type
+                    ) as number;
+                    return (
+                      <LinkInBioPDButton
+                        key={el.id}
+                        color={_index > -1 ? 'secondary' : 'light'}
+                        icon={
+                          el.icon !== undefined && el.icon !== null
+                            ? ZIcons[el.icon]
+                            : ZIcons.PlaceHolder
+                        }
+                        testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.block}-${el.type}`}
+                        onClick={() => {
+                          toggleMusicPlatformCardHandler({
+                            _type: el.type,
+                            _title: el.title as string
+                          });
+                        }}
+                      />
+                    );
+                  })}
+              </div>
+              {/* <ZIonRow
                 testingselector={
                   CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm
                     .fields.music.blocksContainer
@@ -192,7 +256,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
                     </ZIonCol>
                   );
                 })}
-              </ZIonRow>
+              </ZIonRow> */}
 
               <ZIonButton
                 expand='block'
@@ -229,18 +293,15 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
                         <ZIonItem
                           key={_index}
                           lines='none'
-                          className='py-3 my-3 border zaions-linkInBio-block'
+                          className='py-3 my-3 border rounded-md shadow-md zaions-linkInBio-block z-ion-bg-transparent'
                           testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.cardItem}-${_index}`}
                           testingselector={
                             CONSTANTS.testingSelectors.linkInBio.formPage.design
                               .blockForm.fields.music.cardItem
-                          }
-                          style={{
-                            '--background': 'transparent'
-                          }}>
+                          }>
                           <ZIonReorder
                             slot='start'
-                            className='ms-3 me-2'>
+                            className='ms-1 me-5'>
                             <ZIonIcon
                               icon={appsOutline}
                               color='dark'
@@ -248,7 +309,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
                             />
                           </ZIonReorder>
 
-                          <div className='w-full pe-3'>
+                          <div className='w-full ps-2'>
                             <LinkInBioTitleField
                               className='mt-1'
                               placeholder='Title'
@@ -270,7 +331,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
                             />
 
                             <LinkInBioLinkField
-                              className='mt-1'
+                              className='mt-2'
                               name={`cardItems.${_index}.target.url`}
                               onIonChange={handleChange}
                               onIonBlur={handleBlur}
@@ -280,6 +341,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
                                   .design.blockForm.fields.music.linkInput
                               }
                               value={values.cardItems?.[_index].target?.url}
+                              showRefreshBtn={false}
                             />
 
                             {_cardItem.musicCardType ===
@@ -303,7 +365,7 @@ const LinkInBioMusicPlatformCardField: React.FC = () => {
                           <ZCustomDeleteComponent
                             slot='end'
                             iconColor='danger'
-                            className='ion-no-padding me-1 ms-2'
+                            className='ion-no-padding ms-5 me-1'
                             testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.deleteBtn}-${_index}`}
                             testingselector={
                               CONSTANTS.testingSelectors.linkInBio.formPage

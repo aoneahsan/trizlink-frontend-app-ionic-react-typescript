@@ -75,11 +75,12 @@ const ZWorkspaceFormRoleSelectorPopover: React.FC<{
   dismissZIonPopover: (data?: string, role?: string | undefined) => void;
   selectedRole: WSRolesNameEnum;
 }> = ({ dismissZIonPopover, selectedRole }) => {
+  const formikInitialValues = {
+    role: selectedRole ?? WSRolesNameEnum.Approver
+  };
   return (
     <Formik
-      initialValues={{
-        role: selectedRole ?? WSRolesNameEnum.Approver
-      }}
+      initialValues={formikInitialValues}
       enableReinitialize={true}
       onSubmit={values => {
         dismissZIonPopover(values.role, values.role);

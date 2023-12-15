@@ -471,15 +471,19 @@ const ZSettingsTab: React.FC<{
   }, [workspaceId]);
   // #endregion
 
+  // #region Comp Constant
+  const formikInitialValues = {
+    workspaceName: compState?.workspace?.workspaceName ?? '',
+    workspaceTimezone: compState?.workspace?.workspaceTimezone ?? '',
+    internalPost: compState?.workspace?.internalPost ?? false
+  };
+  // #endregion
+
   return (
     <ZIonGrid className='w-full h-full pt-6'>
       <ZIonRow className='mx-auto w-[40%]'>
         <Formik
-          initialValues={{
-            workspaceName: compState?.workspace?.workspaceName ?? '',
-            workspaceTimezone: compState?.workspace?.workspaceTimezone ?? '',
-            internalPost: compState?.workspace?.internalPost ?? false
-          }}
+          initialValues={formikInitialValues}
           enableReinitialize={true}
           validate={values => {
             const errors = {};
@@ -503,6 +507,7 @@ const ZSettingsTab: React.FC<{
             errors,
             touched,
             initialValues,
+            isValid,
             handleChange,
             handleBlur,
             setFieldValue,
@@ -617,13 +622,13 @@ const ZSettingsTab: React.FC<{
                     className={classNames({
                       'w-max': true,
                       'cursor-not-allowed':
-                        values?.workspaceName?.trim()?.length === 0 ||
-                        values?.workspaceTimezone?.trim()?.length === 0 ||
-                        (values.workspaceName ===
+                        isValid &&
+                        values.workspaceName ===
                           compState.workspace?.workspaceName &&
-                          values.workspaceTimezone ===
-                            compState.workspace?.workspaceTimezone &&
-                          values.internalPost === initialValues?.internalPost)
+                        values.workspaceTimezone ===
+                          compState.workspace?.workspaceTimezone &&
+                        Boolean(values.internalPost) ===
+                          Boolean(initialValues?.internalPost)
                     })}>
                     <ZIonButton
                       testingselector={`${CONSTANTS.testingSelectors.workspace.settingsModal.settings.updateButton}-${workspaceId}`}
@@ -632,23 +637,23 @@ const ZSettingsTab: React.FC<{
                           .settings.updateButton
                       }
                       disabled={
-                        values?.workspaceName?.trim()?.length === 0 ||
-                        values?.workspaceTimezone?.trim()?.length === 0 ||
+                        !isValid ||
                         (values.workspaceName ===
                           compState.workspace?.workspaceName &&
                           values.workspaceTimezone ===
                             compState.workspace?.workspaceTimezone &&
-                          values.internalPost === initialValues?.internalPost)
+                          Boolean(values.internalPost) ===
+                            Boolean(initialValues?.internalPost))
                       }
                       onClick={() => {
                         if (
-                          values?.workspaceName?.trim()?.length > 0 ||
-                          values?.workspaceTimezone?.trim()?.length > 0 ||
-                          (values.workspaceName !==
-                            compState.workspace?.workspaceName &&
-                            values.workspaceTimezone !==
-                              compState.workspace?.workspaceTimezone &&
-                            values.internalPost !== initialValues?.internalPost)
+                          (isValid &&
+                            values.workspaceName !==
+                              compState.workspace?.workspaceName) ||
+                          values.workspaceTimezone !==
+                            compState.workspace?.workspaceTimezone ||
+                          Boolean(values.internalPost) !==
+                            Boolean(initialValues?.internalPost)
                         ) {
                           void submitForm();
                         }

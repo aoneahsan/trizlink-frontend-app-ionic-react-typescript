@@ -98,7 +98,6 @@ const ZaionsDropDown: React.FC<{
     // <Dropdown.Item
     // eventKey='1'
     // className={`${classes.zaions__dropdown_item} flex py-2 `}
-    // // style={{ width: `${el.width}` }}
     // >
     // <div className='pt-2 me-2 pe-1'>
     // <ZIonIcon

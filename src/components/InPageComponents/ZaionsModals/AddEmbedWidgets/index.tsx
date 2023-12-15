@@ -140,24 +140,27 @@ const ZaionsEmbedWidgetsModal: React.FC<{
     }
   };
 
+  // #region Comp Constants
+  const formikInitialValues = {
+    name: embedWidgetsFormState?.name ?? '',
+    canCodeJs: true,
+    jsCode: embedWidgetsFormState?.jsCode ?? '',
+    canCodeHtml: true,
+    HTMLCode: embedWidgetsFormState?.HTMLCode ?? '',
+    displayAt:
+      embedWidgetsFormState?.displayAt ?? EmbedWidgetsDisplayAtEnum.Landing,
+    delay: embedWidgetsFormState?.delay ?? '',
+    position:
+      embedWidgetsFormState?.position ?? EmbedWidgetsPositionEnum.BottomCenter,
+    animation: embedWidgetsFormState?.animation ?? false,
+    closingOption: embedWidgetsFormState?.closingOption ?? false
+  };
+  // #endregion
+
   // JSX Code
   return (
     <Formik
-      initialValues={{
-        name: embedWidgetsFormState?.name ?? '',
-        canCodeJs: true,
-        jsCode: embedWidgetsFormState?.jsCode ?? '',
-        canCodeHtml: true,
-        HTMLCode: embedWidgetsFormState?.HTMLCode ?? '',
-        displayAt:
-          embedWidgetsFormState?.displayAt ?? EmbedWidgetsDisplayAtEnum.Landing,
-        delay: embedWidgetsFormState?.delay ?? '',
-        position:
-          embedWidgetsFormState?.position ??
-          EmbedWidgetsPositionEnum.BottomCenter,
-        animation: embedWidgetsFormState?.animation ?? false,
-        closingOption: embedWidgetsFormState?.closingOption ?? false
-      }}
+      initialValues={formikInitialValues}
       enableReinitialize={true}
       validate={values => {
         const errors: {

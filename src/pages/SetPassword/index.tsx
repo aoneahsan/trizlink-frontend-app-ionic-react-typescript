@@ -211,6 +211,27 @@ const ZSetPasswordPage: React.FC = () => {
     );
   }
 
+  const formikInitialValues = {
+    emailAddress: '',
+    inviteToken: compState?.inviteToken,
+    otp: '',
+
+    isEmailAddressApiError: false,
+    emailAddressApiErrorText: '',
+    isOTPApiError: false,
+    OTPApiErrorText: '',
+
+    password: '',
+    username: '',
+    canViewPassword: false,
+    confirmPassword: '',
+    canViewConfirmPassword: false,
+    OTPCodeValidTill: compState?.OTPCodeValidTill ?? '',
+    resendOTPValidCheck: compState?.resendOTPValidCheck ?? false,
+
+    tab: compState?.tab ?? ZSetPasswordTabEnum.sendOptTab
+  };
+
   return (
     <ZIonPage pageTitle='set password page'>
       <ZIonContent fullscreen>
@@ -262,26 +283,7 @@ const ZSetPasswordPage: React.FC = () => {
               sizeXs='11.5'>
               <Formik
                 // Initial Values of sign up form fields
-                initialValues={{
-                  emailAddress: '',
-                  inviteToken: compState?.inviteToken,
-                  otp: '',
-
-                  isEmailAddressApiError: false,
-                  emailAddressApiErrorText: '',
-                  isOTPApiError: false,
-                  OTPApiErrorText: '',
-
-                  password: '',
-                  username: '',
-                  canViewPassword: false,
-                  confirmPassword: '',
-                  canViewConfirmPassword: false,
-                  OTPCodeValidTill: compState?.OTPCodeValidTill ?? '',
-                  resendOTPValidCheck: compState?.resendOTPValidCheck ?? false,
-
-                  tab: compState?.tab ?? ZSetPasswordTabEnum.sendOptTab
-                }}
+                initialValues={formikInitialValues}
                 enableReinitialize={true}
                 // Validations of sign up form fields
                 validate={values => {

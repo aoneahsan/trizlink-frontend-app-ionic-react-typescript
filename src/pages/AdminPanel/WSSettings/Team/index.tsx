@@ -10,7 +10,7 @@ import React, { lazy, Suspense } from 'react';
  * */
 import { useParams } from 'react-router';
 import { filterOutline, refresh } from 'ionicons/icons';
-import { menuController } from '@ionic/core';
+import { menuController } from '@ionic/core/components';
 import classNames from 'classnames';
 
 /**
@@ -443,10 +443,10 @@ const ZWSSettingTeamsListPage: React.FC = () => {
                 // Open the menu by menu-id
                 await menuController.enable(
                   true,
-                  CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
+                  CONSTANTS.MENU_IDS.WS_SETTINGS_MENU_ID
                 );
                 await menuController.open(
-                  CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
+                  CONSTANTS.MENU_IDS.WS_SETTINGS_MENU_ID
                 );
               }}>
               Open menu

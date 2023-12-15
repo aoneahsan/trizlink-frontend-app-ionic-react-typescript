@@ -98,7 +98,7 @@ const PageAnalyticsHeader: React.FC = () => {
           {/* Favicon */}
           <ZIonImg
             src={ProductLogo}
-            style={{ width: '30px', height: '30px' }}
+            className='w-[30px] h-[30px]'
           />
 
           {/* Generated short link */}
@@ -146,7 +146,7 @@ const PageAnalyticsHeader: React.FC = () => {
           <ZIonIcon
             icon={linkOutline}
             color='dark'
-            style={{ width: '1.7rem', height: '1.7rem' }}
+            className='w-[1.7rem] h-[1.7rem]'
           />
         </ZIonButton>
 
@@ -159,7 +159,7 @@ const PageAnalyticsHeader: React.FC = () => {
           <ZIonIcon
             icon={shareSocialOutline}
             color='dark'
-            style={{ width: '1.5rem', height: '1.5rem' }}
+            className='w-[1.5rem] h-[1.5rem]'
           />
         </ZIonButton>
 
@@ -171,7 +171,7 @@ const PageAnalyticsHeader: React.FC = () => {
           <ZIonIcon
             icon={eyeOutline}
             color='dark'
-            style={{ width: '1.5rem', height: '1.5rem' }}
+            className='w-[1.5rem] h-[1.5rem]'
           />
         </ZIonButton>
 
@@ -184,7 +184,7 @@ const PageAnalyticsHeader: React.FC = () => {
           <ZIonIcon
             icon={qrCodeOutline}
             color='dark'
-            style={{ width: '1.5rem', height: '1.5rem' }}
+            className='w-[1.5rem] h-[1.5rem]'
           />
         </ZIonButton>
 
@@ -197,7 +197,7 @@ const PageAnalyticsHeader: React.FC = () => {
           <ZIonIcon
             icon={barChartOutline}
             color='dark'
-            style={{ width: '1.5rem', height: '1.5rem' }}
+            className='w-[1.5rem] h-[1.5rem]'
           />
         </ZIonButton>
 
@@ -210,7 +210,7 @@ const PageAnalyticsHeader: React.FC = () => {
           <ZIonIcon
             icon={pencilOutline}
             color='dark'
-            style={{ width: '1.5rem', height: '1.5rem' }}
+            className='w-[1.5rem] h-[1.5rem]'
           />
         </ZIonButton>
 
@@ -223,7 +223,7 @@ const PageAnalyticsHeader: React.FC = () => {
           <ZIonIcon
             icon={copyOutline}
             color='dark'
-            style={{ width: '1.5rem', height: '1.5rem' }}
+            className='w-[1.5rem] h-[1.5rem]'
           />
         </ZIonButton>
 
@@ -236,7 +236,7 @@ const PageAnalyticsHeader: React.FC = () => {
           <ZIonIcon
             icon={reloadOutline}
             color='danger'
-            style={{ width: '1.5rem', height: '1.5rem' }}
+            className='w-[1.5rem] h-[1.5rem]'
           />
         </ZIonButton>
 
@@ -249,7 +249,7 @@ const PageAnalyticsHeader: React.FC = () => {
           <ZIonIcon
             icon={trashBinOutline}
             color='danger'
-            style={{ width: '1.5rem', height: '1.5rem' }}
+            className='w-[1.5rem] h-[1.5rem]'
           />
         </ZIonButton>
       </ZIonCol>

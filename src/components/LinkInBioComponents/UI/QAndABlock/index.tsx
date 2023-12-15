@@ -25,12 +25,16 @@ import {
  * Global Constants Imports go down
  * ? Like import of Constant is a global constants import
  * */
+import { isZNonEmptyString } from '@/utils/helpers';
 
 /**
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { type linkInBioBlockCardItemInterface } from '@/types/AdminPanel/linkInBioType/blockTypes';
+import {
+  type LinkInBioBlockAnimationEnum,
+  type linkInBioBlockCardItemInterface
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
 import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
 import classNames from 'classnames';
 
@@ -63,15 +67,21 @@ import classNames from 'classnames';
 interface ZLinkInBioQAndABlockInterface {
   QAndABlockData?: linkInBioBlockCardItemInterface[];
   fontFamily?: LinkInBioThemeFontEnum;
+  animationType?: LinkInBioBlockAnimationEnum;
 }
 
 const ZLinkInBioQAndABlock: React.FC<ZLinkInBioQAndABlockInterface> = ({
   QAndABlockData,
-  fontFamily
+  fontFamily,
+  animationType
 }) => {
   return (
-    <ZIonCol>
+    <ZIonCol
+      className={classNames(animationType, {
+        'animated ': isZNonEmptyString(animationType)
+      })}>
       {QAndABlockData?.map((element, index) => {
+        const _dangerouslySetInnerHTML = { __html: element.text ?? '' };
         return (
           <ZIonAccordionGroup key={index}>
             <ZIonAccordion value={`z_q&a_accordion_${index}`}>
@@ -88,7 +98,7 @@ const ZLinkInBioQAndABlock: React.FC<ZLinkInBioQAndABlockInterface> = ({
                 })}
                 slot='content'>
                 {element.text !== null && element.text !== undefined && (
-                  <div dangerouslySetInnerHTML={{ __html: element.text }} />
+                  <div dangerouslySetInnerHTML={_dangerouslySetInnerHTML} />
                 )}
               </div>
             </ZIonAccordion>

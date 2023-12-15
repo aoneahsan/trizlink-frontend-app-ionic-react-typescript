@@ -92,9 +92,13 @@ const ZWorkspaceConnectPagesModal: React.FC<{
     }
   );
 
+  const formikInitialValues = {};
+
+  const _style = { backgroundColor: color };
+
   return (
     <Formik
-      initialValues={{}}
+      initialValues={formikInitialValues}
       validate={() => {
         const errors = {};
 
@@ -113,7 +117,7 @@ const ZWorkspaceConnectPagesModal: React.FC<{
                     {/*  */}
                     <div
                       className='flex w-10 h-10 rounded ion-align-items-center ion-justify-content-center'
-                      style={{ backgroundColor: color }}>
+                      style={_style}>
                       <ZIonIcon
                         icon={logo}
                         className='w-7 h-7'

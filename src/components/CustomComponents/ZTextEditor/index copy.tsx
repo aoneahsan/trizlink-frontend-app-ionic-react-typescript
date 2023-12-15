@@ -2,7 +2,6 @@
 //  * Core Imports go down
 //  * ? Like Import of React is a Core Import
 //  * */
-import React from 'react';
 
 // /**
 //  * Packages Imports go down
@@ -121,7 +120,6 @@ import React from 'react';
 //     <ReactQuill
 //       theme='snow'
 //       {...props}
-//       style={{ ...props.style }}
 //       {..._testingSelector}
 //       {..._testinglistselector}
 //     />
@@ -352,14 +350,6 @@ import React from 'react';
 // //         onClick={focusEditor}>
 // //         <Editor
 // //           // blockStyleFn={getBlockStyle}
-// //           customStyleMap={{
-// //             CODE: {
-// //               backgroundColor: 'rgba(0, 0, 0, 0.05)',
-// //               fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
-// //               fontSize: 16,
-// //               padding: 2
-// //             }
-// //           }}
 // //           editorState={editorState}
 // //           handleKeyCommand={(command, editorState) => {
 // //             const newState = RichUtils.handleKeyCommand(editorState, command);

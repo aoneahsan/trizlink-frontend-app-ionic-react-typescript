@@ -51,6 +51,17 @@ const ZEditor: React.FC<ZEditorType> = props => {
         }
       : {};
 
+  // #region comp constants
+  const _editorProps = { $blockScrolling: true };
+  const _setOptions = {
+    enableBasicAutocompletion: true,
+    enableLiveAutocompletion: true,
+    enableSnippets: true,
+    showLineNumbers: true,
+    tabSize: 2
+  };
+  // #endregion
+
   return (
     <AceEditor
       {...props}
@@ -58,14 +69,8 @@ const ZEditor: React.FC<ZEditorType> = props => {
       {..._testinglistselector}
       // theme={props.theme || ZEditorThemeEnum.monokai}
       mode='javascript'
-      editorProps={{ $blockScrolling: true }}
-      setOptions={{
-        enableBasicAutocompletion: true,
-        enableLiveAutocompletion: true,
-        enableSnippets: true,
-        showLineNumbers: true,
-        tabSize: 2
-      }}
+      editorProps={_editorProps}
+      setOptions={_setOptions}
     />
   );
 };

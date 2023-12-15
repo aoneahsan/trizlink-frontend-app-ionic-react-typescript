@@ -18,7 +18,8 @@ import {
   ZIonCardTitle,
   ZIonCardContent,
   ZIonItemDivider,
-  ZIonButton
+  ZIonButton,
+  ZIonImg
 } from '@/components/ZIonComponents';
 
 // Global Constant
@@ -32,6 +33,7 @@ import { ZaionsHpCPData } from '@/ZaionsStore/ZaionsHPBCP.recoil';
 // Type
 import { type ZaionsHpCPDataType } from '@/types/ZaionsHPBCPType';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import classNames from 'classnames';
 
 // const { Item: CarouselItem } = Carousel;
 
@@ -132,25 +134,22 @@ const ZSingleCard: React.FC<ZaionsHpCPDataType> = ({
       sizeMd='6'
       sizeSm='6'
       sizeXs='6'
-      className='h-full'>
-      <ZIonCard
-        style={{
-          border: '1px #000 solid',
-          borderRadius: '20px'
-        }}>
+      className={classNames({
+        'h-full ': true
+      })}>
+      <ZIonCard className='rounded-[20px] border border-black'>
         <ZIonCardHeader className='mt-4'>
           <ZIonCardTitle
-            className='flex ion-align-items-center'
-            style={{
-              flexDirection: !isSmScale && 'column',
-              gap: !isSmScale && '10px'
-            }}>
-            <img
+            className={classNames({
+              'flex ion-align-items-center': true,
+              'flex-col gap-[10px]': !isSmScale
+            })}>
+            <ZIonImg
               src={icon}
               className='ion-padding-end'
               alt='icon'
-            />{' '}
-            <ZIonText className='font-bold'>{title}</ZIonText>{' '}
+            />
+            <ZIonText className='font-bold ms-1'>{title}</ZIonText>
             {extraData === 'New' ? (
               <ZaionsNewLabel
                 className='ms-2'

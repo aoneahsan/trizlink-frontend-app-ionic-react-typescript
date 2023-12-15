@@ -83,6 +83,8 @@ const RotatorABTesting: React.FC = () => {
     }
   }, [values?.rotatorABTesting]);
 
+  const zIonButtonStyle = { '--border-width': '1px' };
+
   return (
     <ZIonCol
       sizeXl='5.9'
@@ -125,9 +127,7 @@ const RotatorABTesting: React.FC = () => {
                   _event: event as Event
                 });
               }}
-              style={{
-                '--border-width': '1px'
-              }}>
+              style={zIonButtonStyle}>
               Error details
             </ZIonButton>
           )}
@@ -450,9 +450,7 @@ const RotatorABTesting: React.FC = () => {
                       CONSTANTS.testingSelectors.shortLink.formPage
                         .rotatorABTesting.addSingleRotatorBtn
                     }
-                    style={{
-                      '--border-width': '1px'
-                    }}
+                    style={zIonButtonStyle}
                     onClick={() => {
                       push({
                         id: getRandomKey(),

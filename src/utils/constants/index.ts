@@ -66,13 +66,15 @@ const RouteParams = {
     editWorkspaceIdParam: ':editWorkspaceId',
     teamId: ':teamId',
     memberInviteId: ':memberInviteId',
-    invitationId: ':invitationId'
+    invitationId: ':invitationId',
+    type: ':type',
+    modal: ':modal'
   },
 
   settings: {
     tab: ':tab',
     sect: ':sect',
-    type: ':type'
+    type: ':swType'
   },
 
   user: {
@@ -214,48 +216,39 @@ export const API_URLS = {
   sws_sl_get_update_delete: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/short-link/${RouteParams.shortLink.shortLinkId}`,
 
   FolderShortLinks: '/user/folders/:folderId/short-links',
-  LinkInBio_folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/get/linkInBio/folders`,
+  LinkInBio_folders_create_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/get/linkInBio/folders`,
 
-  folders_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder/${RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
-  folders_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/folder`,
+  folders_get_update_delete: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/folder/${RouteParams.folderIdToGetShortLinksOrLinkInBio}`,
+  folders_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/folder/${RouteParams.workspace.modal}`,
+  folders_create: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/folder`,
 
-  user_setting_list_create: `/user/workspace/${RouteParams.workspace.workspaceId}/modal-settings`,
-  user_setting_delete_update_get: `/user/workspace/${RouteParams.workspace.workspaceId}/modal-settings/${RouteParams.settings.type}`,
-
-  sws_user_setting_list_create: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/modal-settings`,
-  sws_user_setting_delete_update_get: `/user/sws/member/${RouteParams.workspace.shareWSMemberId}/modal-settings/${RouteParams.settings.type}`,
+  user_setting_list_create: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/modal-settings`,
+  user_setting_delete_update_get: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/modal-settings/${RouteParams.settings.type}`,
 
   userAccount_LinkInBio_folders_update_delete:
     '/user/link-in-bio-folders/:folderId',
-  linkInBio_create_list: `/user/workspaces/${RouteParams.workspace.workspaceId}/link-in-bio`,
-  linkInBio_update_delete: `/user/workspaces/${RouteParams.workspace.workspaceId}/link-in-bio/${RouteParams.linkInBio.linkInBioId}`,
-  linkInBioPreDefinedThemes_create_list: '/user/lib-pre-dd/themes',
-  linkInBioPreDefinedBlocks_create_list: '/user/lib-pre-dd/blocks',
-  linkInBioPreDefinedBlocks_delete_update: '/user/lib-pre-dd/blocks/:blockId',
-  linkInBioBlock_create_list: `/user/ws/${RouteParams.workspace.workspaceId}/lib/${RouteParams.linkInBio.linkInBioId}/lib-block`,
-  linkInBioBlock_delete_update_get: `/user/ws/${RouteParams.workspace.workspaceId}/lib/${RouteParams.linkInBio.linkInBioId}/lib-block/${RouteParams.linkInBio.libBlockId}`,
+  linkInBio_create_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/link-in-bio`,
+  linkInBio_update_delete: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/link-in-bio/${RouteParams.linkInBio.linkInBioId}`,
+  linkInBioPreDefinedThemes_create_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/lib-pre-dd/themes`,
+  linkInBioPreDefinedBlocks_create_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/lib-pre-dd/blocks`,
+  linkInBioPreDefinedBlocks_delete_update: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/lib-pre-dd/blocks/:blockId`,
+  linkInBioBlock_create_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/lib/${RouteParams.linkInBio.linkInBioId}/lib-block`,
+  linkInBioBlock_delete_update_get: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/lib/${RouteParams.linkInBio.linkInBioId}/lib-block/${RouteParams.linkInBio.libBlockId}`,
   linkInBioBlocks_reorder: `/user/link-in-bio/${RouteParams.linkInBio.linkInBioId}/blocks/reorder`,
-  linkInBioPreDefinedMusicPlatform_create_list:
-    '/user/lib-pre-dd/musicPlatform',
-  linkInBioPreDefinedMusicPlatform_delete_update:
-    '/user/lib-pre-dd/musicPlatform/:musicPlatformId',
+  linkInBioPreDefinedMusicPlatform_create_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/lib-pre-dd/musicPlatform`,
+  linkInBioPreDefinedMusicPlatform_delete_update: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/lib-pre-dd/musicPlatform/:musicPlatformId`,
 
-  linkInBioPreDefinedMessengerPlatform_create_list:
-    '/user/lib-pre-dd/messengerPlatform',
-  linkInBioPreDefinedMessengerPlatform_delete_update:
-    '/user/lib-pre-dd/messengerPlatform/:messengerPlatformId',
+  linkInBioPreDefinedMessengerPlatform_create_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/lib-pre-dd/messengerPlatform`,
+  linkInBioPreDefinedMessengerPlatform_delete_update: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/lib-pre-dd/messengerPlatform/:messengerPlatformId`,
 
-  linkInBioPreData_create_list: '/user/lib-pdd',
-  linkInBioPreData_delete_update: `/user/lib-pdd/${RouteParams.linkInBio.libPddId}`,
+  linkInBioPreData_create_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/lib-pdd`,
+  linkInBioPreData_delete_update: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/lib-pdd/${RouteParams.linkInBio.libPddId}`,
 
-  linkInBioPreDefinedSocialPlatform_create_list:
-    '/user/lib-pre-dd/socialPlatform',
-  linkInBioPreDefinedSocialPlatform_delete_update:
-    '/user/lib-pre-dd/socialPlatform/:socialPlatformId',
+  linkInBioPreDefinedSocialPlatform_create_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/lib-pre-dd/socialPlatform`,
+  linkInBioPreDefinedSocialPlatform_delete_update: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/lib-pre-dd/socialPlatform/:socialPlatformId`,
 
-  linkInBioPreDefinedFormFields_create_list: '/user/lib-pre-dd/formField',
-  linkInBioPreDefinedFormFields_delete_update:
-    '/user/lib-pre-dd/formField/:formFieldId',
+  linkInBioPreDefinedFormFields_create_list: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/lib-pre-dd/formField`,
+  linkInBioPreDefinedFormFields_delete_update: `/user/${RouteParams.workspace.type}/${RouteParams.workspace.workspaceId}/lib-pre-dd/formField/:formFieldId`,
 
   // workspace
   workspace_create_list: '/user/workspaces',
@@ -338,24 +331,29 @@ export const CONTENT_ID = 'zaions_main-content';
 
 const MENU_IDS = {
   CONTENT_ID: 'zaions_main-content',
-  AD_SL_LIST_PAGE: 'ad_sl_list_page', // AD_SL => AdminPanel_shortLink
-  ADMIN_PANEL_WS_SETTING_PAGE_ID: 'admin-panel-ws-settings-page-id',
-  ADMIN_LINK_PAGE_CONTENT_ID: 'zaions-link-page-menu',
   DASHBOARD_SM_MENU_CONTENT_ID: 'zaions-dashboard-responsive-menu-content-id',
   SL_FILTERS_MENU_ID: 'sl_filters_menu_id', // sl => shortLink
+  LIB_FILTERS_MENU_ID: 'lib_filters_menu_id', // lib => linkInBio
   P_FILTERS_MENU_ID: 'p_filters_menu_id', // p => pixels
   MEMBER_FILTERS_MENU_ID: 'member_filters_menu_id',
   UTMTag_FILTERS_MENU_ID: 'utmTag_filters_menu_id',
-  WS_SETTINGS_PAGE_MENU_ID: 'ws-settings-page-menu-id',
-  USER_SETTINGS_PAGE_MENU_ID: 'user-settings-page-menu-id',
-  USER_SETTINGS_PAGE_ID: 'user-settings-page-id',
+  WS_SETTINGS_MENU_ID: 'ws-settings-menu-id',
+  USER_SETTINGS_MENU_ID: 'user-settings-menu-id',
   ADMIN_PAGE_SHORT_LINKS_FOLDERS_MENU_ID:
     'admin_page_short_links_folders_menu_id',
   ADMIN_PAGE_LINKS_IN_BIO_FOLDERS_MENU_ID:
     'admin_page_links_in_bio_folders_menu_id',
   ADMIN_PAGE_WORKSPACE_VIEW_FILTER_MENU_ID:
     'admin_page_workspace_view_filter_menu_id'
-};
+} as const;
+
+const PAGE_IDS = {
+  AD_SL_LIST_PAGE: 'ad_sl_list_page', // AD_SL => AdminPanel_shortLink
+  AD_LIB_LIST_PAGE: 'ad_lib_list_page', // AD_LIB => AdminPanel_linkinbio
+  ADMIN_PANEL_WS_SETTING_PAGE_ID: 'admin-panel-ws-settings-page-id',
+  ADMIN_LINK_PAGE_CONTENT_ID: 'zaions-link-page-menu',
+  USER_SETTINGS_PAGE_ID: 'user-settings-page-id'
+} as const;
 
 // Other
 // branch = v1-frontend-dev;
@@ -583,9 +581,34 @@ const testingSelectors = {
   // #region workspace
   workspace: {
     listPage: {
+      page: 'workspace-list-page',
+      favoriteWorkspaces: 'wlp-favorite-ws-section',
+      favoriteCard: 'wlp-favorite-ws-card',
+      fwEmpty: {
+        col: 'wlp-fw-no-data-col',
+        icon: 'wlp-fw-no-data-col-icon',
+        text: 'wlp-fw-no-data-col-text'
+      },
+      ownedWorkspaces: 'wlp-owned-ws-section',
+      ownedWsCard: 'wlp-owned-ws-card',
+      owEmpty: {
+        col: 'wlp-ow-no-data-col',
+        btn: 'wlp-ow-no-data-col-btn',
+        icon: 'wlp-ow-no-data-col-btn-icon',
+        title: 'wlp-ow-no-data-col-title',
+        text: 'wlp-ow-no-data-col-text'
+      },
+      shareWorkspaces: 'wlp-share-ws-section',
+      shareWsCard: 'wlp-share-ws-card',
+      swEmpty: {
+        col: 'wlp-sw-no-data-col',
+        icon: 'wlp-sw-no-data-col-icon',
+        text: 'wlp-sw-no-data-col-text'
+      },
       inviteButton: 'wlp-invite-btn',
       createWorkspaceButton: 'wlp-create-btn',
       createWorkspaceCardButton: 'wlp-create-card-btn',
+      workspaceCard: 'wlp-card',
       viewWorkspaceButton: 'wlp-view-btn',
       leaveWorkspaceButton: 'wlp-leave-btn',
       acceptInvitationButton: 'wlp-accept-btn',
@@ -1807,6 +1830,7 @@ const CONSTANTS = {
   LINK_In_BIO,
   DateTime,
   MENU_IDS,
+  PAGE_IDS,
   ExternalURL,
   ZTooltipIds,
   testingSelectors,

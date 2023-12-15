@@ -7,6 +7,8 @@ import {
 import { GM_CONSTANTS } from '@/utils/constants/googleMapsConstants';
 import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
+import classNames from 'classnames';
+import { ZIonItem, ZIonLabel } from '@/components/ZIonComponents';
 
 interface IZRGAutoCompleteInputProps {
   inputStyles?: Record<string, unknown>;
@@ -19,6 +21,7 @@ interface IZRGAutoCompleteInputProps {
   inputName: string;
   testingselector?: string;
   testinglistselector?: string;
+  placeholder?: string;
 }
 
 const ZRGAutoCompleteInput: React.FC<IZRGAutoCompleteInputProps> = ({
@@ -31,7 +34,8 @@ const ZRGAutoCompleteInput: React.FC<IZRGAutoCompleteInputProps> = ({
   setFieldTouched,
   inputName,
   testingselector,
-  testinglistselector
+  testinglistselector,
+  placeholder
 }) => {
   const _testinglistselector =
     testinglistselector !== undefined
@@ -51,26 +55,43 @@ const ZRGAutoCompleteInput: React.FC<IZRGAutoCompleteInputProps> = ({
           })
         }
       : {};
+
+  // #region comp constants
+  const _style = { ...inputStyles };
+  // #endregion
+
   return (
-    <RGAutoComplete
-      apiKey={GM_CONSTANTS.MAP_API_KEY}
-      onPlaceSelected={onLocationSelectHandler}
-      style={{ ...inputStyles }}
-      className={className}
-      defaultValue={defaultValue}
-      // onChange={(event) => {
-      //   const _value = (event.target as { value?: string })?.value || '';
-      //   setFieldValue && setFieldValue(inputName, _value, false);
-      //   setFieldTouched && setFieldTouched(inputName, true, true);
-      // }}
-      onSelect={_ => {
-        // const _value = (event.target as { value?: string })?.value || '';
-        // setFieldValue && setFieldValue(inputName, _value, false);
-        // setFieldTouched && setFieldTouched(inputName, true, true);
-      }}
-      {..._testingSelector}
-      {..._testinglistselector}
-    />
+    <ZIonItem
+      className='ion-item-start-no-padding ion-padding-end-0'
+      lines='none'>
+      <ZIonLabel
+        position='stacked'
+        className='ps-1'>
+        Search an address
+      </ZIonLabel>
+      <RGAutoComplete
+        apiKey={GM_CONSTANTS.MAP_API_KEY}
+        onPlaceSelected={onLocationSelectHandler}
+        style={_style}
+        className={classNames(className, {
+          'z-upload-input p-[.4rem] w-full mt-2': true
+        })}
+        defaultValue={defaultValue}
+        placeholder={placeholder}
+        // onChange={(event) => {
+        //   const _value = (event.target as { value?: string })?.value || '';
+        //   setFieldValue && setFieldValue(inputName, _value, false);
+        //   setFieldTouched && setFieldTouched(inputName, true, true);
+        // }}
+        onSelect={_ => {
+          // const _value = (event.target as { value?: string })?.value || '';
+          // setFieldValue && setFieldValue(inputName, _value, false);
+          // setFieldTouched && setFieldTouched(inputName, true, true);
+        }}
+        {..._testingSelector}
+        {..._testinglistselector}
+      />
+    </ZIonItem>
   );
 };
 

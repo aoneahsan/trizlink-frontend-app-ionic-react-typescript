@@ -314,7 +314,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
                       'text-5xl font-extrabold me-2': true,
                       'mb-4': !isSmScale
                     })}
-                    style={{ color: '#ee6123' }}
+                    color='warning'
                   />
                   <ZIonText className='text-[18px] '>
                     <ZIonText className='font-bold me-1'>
@@ -336,7 +336,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
                       'text-5xl font-extrabold me-1': true,
                       'mb-4': !isSmScale
                     })}
-                    style={{ color: '#ee6123' }}
+                    color='warning'
                   />
                   <ZIonText className='text-[18px]'>
                     <ZIonText className='font-bold'>Auto Branding</ZIonText> –
@@ -356,7 +356,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
                       'text-5xl font-extrabold me-1': true,
                       'mb-4': !isSmScale
                     })}
-                    style={{ color: '#ee6123' }}
+                    color='warning'
                   />
                   <ZIonText className='text-[18px]'>
                     <ZIonText className='font-bold me-1'>
@@ -377,7 +377,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
                       'text-5xl font-extrabold me-1': true,
                       'mb-4': !isSmScale
                     })}
-                    style={{ color: '#ee6123' }}
+                    color='warning'
                   />
                   <ZIonText className='text-[18px] '>
                     <ZIonText className='font-bold'>
@@ -398,7 +398,7 @@ const ZaionsDiscoverEnterprise: React.FC = () => {
                       'text-5xl font-extrabold me-1': true,
                       'mb-4': !isSmScale
                     })}
-                    style={{ color: '#ee6123' }}
+                    color='warning'
                   />
                   <ZIonText className='text-[18px] '>
                     <ZIonText className='font-bold me-1'>

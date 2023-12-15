@@ -3,6 +3,7 @@ import {
   ZPixelsListPageTableColumnsIds,
   ZUTMTagsListPageTableColumnsIds
 } from '@/types/AdminPanel/index.type';
+import { ZLIBListPageTableColumnsIds } from '@/types/AdminPanel/linkInBioType';
 import {
   ZShortLinkListPageTableColumnsEnum,
   ZShortLinkListPageTableColumnsIds
@@ -131,6 +132,34 @@ export const MemberTableColumns = [
   {
     id: ZMembersListPageTableColumnsIds.invitedAcceptedAt,
     name: 'Invited accepted at',
+    isVisible: true
+  }
+];
+
+export const LinkInBioTableColumns = [
+  {
+    id: ZLIBListPageTableColumnsIds.title,
+    name: ZLIBListPageTableColumnsIds.title,
+    isVisible: true
+  },
+  {
+    id: ZLIBListPageTableColumnsIds.date,
+    name: ZLIBListPageTableColumnsIds.date,
+    isVisible: true
+  },
+  {
+    id: ZLIBListPageTableColumnsIds.pixel,
+    name: ZLIBListPageTableColumnsIds.pixel,
+    isVisible: true
+  },
+  {
+    id: ZLIBListPageTableColumnsIds.linkToShare,
+    name: ZLIBListPageTableColumnsIds.linkToShare,
+    isVisible: true
+  },
+  {
+    id: ZLIBListPageTableColumnsIds.actions,
+    name: ZLIBListPageTableColumnsIds.actions,
     isVisible: true
   }
 ];

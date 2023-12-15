@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg"  width="100%" height="100%" viewBox="0 0 24.761 24.761" fit="" preserveAspectRatio="xMidYMid meet" focusable="false">
+    <defs>
+        <clipPath id="album_clip">
+            <use></use>
+        </clipPath>
+        <style>
+            .album_cls-2-album{fill:none;stroke:#fff;stroke-width:2px}.album_cls-3-album{stroke:none}
+        </style>
+    </defs>
+    <g transform="translate(-187.837 -232.837)">
+        <path id="album_Rectangle2_album" d="M0 0H24.761V24.761H0z" data-name="Rectangle 7831" transform="translate(187.837 232.837)" style="fill:#354052;opacity:0"></path>
+        <g transform="translate(189.477 233.582)">
+            <g id="album_Rectangle_album" class="album_cls-2-album" data-name="Rectangle 6787">
+                <path d="M0 0H21.293V17.847H0z" class="album_cls-3-album"></path>
+                <path d="M1 1H20.293V16.847H1z" style="fill:none"></path>
+            </g>
+            <g id="album_Rectangle_4_album" class="album_cls-2-album" data-name="Rectangle 6788" transform="translate(2.271 21.03)">
+                <rect id="album_fill_album" width="16.751" height="1.504" class="album_cls-3-album" rx=".752"></rect>
+                <path d="M0 .504h16.751m-1-.504v1.504m1-.504H0m1 .504V0"></path>
+            </g>
+        </g>
+    </g>
+</svg>

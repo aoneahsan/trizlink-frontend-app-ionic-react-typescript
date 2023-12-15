@@ -8,7 +8,8 @@ import React, { useEffect, useState } from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { menuController, type ItemReorderEventDetail } from '@ionic/core';
+import { type ItemReorderEventDetail } from '@ionic/core';
+import { menuController } from '@ionic/core/components';
 import {
   closeOutline,
   cloudDownloadOutline,
@@ -62,7 +63,11 @@ import { useZMediaQueryScale } from '@/ZaionsHooks/ZGenericHooks';
 import CONSTANTS from '@/utils/constants';
 import { extractInnerData, zStringify } from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  ZWSTypeEum,
+  extractInnerDataOptionsEnum
+} from '@/utils/enums';
 import { ShortLinksTableColumns } from '@/utils/constants/columns';
 
 /**
@@ -173,105 +178,113 @@ const ZShortLinksFilterMenu: React.FC = () => {
   // #endregion
 
   // #region APIs.
-  // owned workspace short link filter and short link other settings create api.
+  // Update short link other settings create api.
   const { mutateAsync: updateUserSettingsAsyncMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.user_setting_delete_update_get,
     _loaderMessage: MESSAGES.SHORT_LINKS.FILTERING
   });
 
-  // share workspace short link filter and short link other settings create api.
-  const { mutateAsync: swsUpdateUserSettingsAsyncMutate } = useZRQUpdateRequest(
-    {
-      _url: API_URL_ENUM.sws_user_setting_delete_update_get,
-      _loaderMessage: MESSAGES.SHORT_LINKS.FILTERING
-    }
-  );
-
-  // owned workspace short link filter and short link other settings update api.
+  // Create short link other settings update api.
   const { mutateAsync: createUserSettingsAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.user_setting_list_create,
     _loaderMessage: MESSAGES.SHORT_LINKS.FILTERING,
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _itemsIds: [workspaceId ?? '']
-  });
-
-  // share workspace short link filter and short link other settings update api.
-  const { mutateAsync: swsCreateUserSettingsAsyncMutate } = useZRQCreateRequest(
-    {
-      _url: API_URL_ENUM.sws_user_setting_list_create,
-      _loaderMessage: MESSAGES.SHORT_LINKS.FILTERING,
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-      _itemsIds: [shareWSMemberId ?? '']
-    }
-  );
-
-  // owned workspace short link filter and short link other settings get api.
-  const { data: getUserSetting } = useZRQGetRequest<ZUserSettingInterface>({
-    _url: API_URL_ENUM.user_setting_delete_update_get,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-      workspaceId ?? '',
-      ZUserSettingTypeEnum.shortLinkListPageTable
-    ],
-    _itemsIds: [workspaceId ?? '', ZUserSettingTypeEnum.shortLinkListPageTable],
     _urlDynamicParts: [
-      CONSTANTS.RouteParams.workspace.workspaceId,
-      CONSTANTS.RouteParams.settings.type
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
     ],
-    _extractType: ZRQGetRequestExtractEnum.extractItem,
-    _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
-    ),
-    _showLoader: false
+    _itemsIds:
+      workspaceId !== undefined &&
+      workspaceId !== null &&
+      workspaceId?.trim()?.length > 0
+        ? [ZWSTypeEum.personalWorkspace, workspaceId]
+        : wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          shareWSMemberId?.trim()?.length > 0
+        ? [ZWSTypeEum.shareWorkspace, shareWSMemberId]
+        : []
   });
 
-  // share workspace short link filter and short link other settings get api.
-  const { data: swsGetUserSetting } = useZRQGetRequest<ZUserSettingInterface>({
-    _url: API_URL_ENUM.sws_user_setting_delete_update_get,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-      wsShareId ?? '',
-      ZUserSettingTypeEnum.shortLinkListPageTable
-    ],
-    _itemsIds: [
-      shareWSMemberId ?? '',
-      ZUserSettingTypeEnum.shortLinkListPageTable
-    ],
-    _urlDynamicParts: [
-      CONSTANTS.RouteParams.workspace.shareWSMemberId,
-      CONSTANTS.RouteParams.settings.type
-    ],
-    _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined && (wsShareId?.trim()?.length ?? 0) > 0
-    ),
-    _extractType: ZRQGetRequestExtractEnum.extractItem,
-    _showLoader: false
-  });
+  // Get short link other settings get api.
+  const { data: getShortLinkFiltersData } =
+    useZRQGetRequest<ZUserSettingInterface>({
+      _url: API_URL_ENUM.user_setting_delete_update_get,
+      _key:
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+          ? [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+              workspaceId,
+              ZUserSettingTypeEnum.shortLinkListPageTable
+            ]
+          : wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
+              wsShareId,
+              shareWSMemberId,
+              ZUserSettingTypeEnum.shortLinkListPageTable
+            ]
+          : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET],
+      _itemsIds:
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+          ? [
+              ZWSTypeEum.personalWorkspace,
+              workspaceId,
+              ZUserSettingTypeEnum.shortLinkListPageTable
+            ]
+          : wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [
+              ZWSTypeEum.shareWorkspace,
+              shareWSMemberId,
+              ZUserSettingTypeEnum.shortLinkListPageTable
+            ]
+          : [],
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.type,
+        CONSTANTS.RouteParams.workspace.workspaceId,
+        CONSTANTS.RouteParams.settings.type
+      ],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _shouldFetchWhenIdPassed: !(
+        ((wsShareId?.trim()?.length ?? 0) === 0 &&
+          (shareWSMemberId?.trim()?.length ?? 0) === 0) ||
+        (workspaceId?.trim()?.length ?? 0) === 0
+      ),
+      _showLoader: false
+    });
   // #endregion
 
   useEffect(() => {
     try {
       if (
-        workspaceId !== undefined &&
-        getUserSetting?.type !== null &&
-        getUserSetting?.settings?.columns !== undefined
+        getShortLinkFiltersData?.type !== null &&
+        getShortLinkFiltersData?.settings?.columns !== undefined
       ) {
         setCompState(_oldValue => ({
           ..._oldValue,
-          shortLinkColumn: getUserSetting?.settings?.columns,
-          filters: swsGetUserSetting?.settings?.filters
-        }));
-      } else if (wsShareId !== undefined && swsGetUserSetting?.type != null) {
-        setCompState(_oldValues => ({
-          ..._oldValues,
-          shortLinkColumn: swsGetUserSetting?.settings?.columns,
-          filters: swsGetUserSetting?.settings?.filters
+          shortLinkColumn: getShortLinkFiltersData?.settings?.columns,
+          filters: getShortLinkFiltersData?.settings?.filters
         }));
       }
     } catch (error) {
       reportCustomError(error);
     }
-  }, [getUserSetting, workspaceId, swsGetUserSetting, wsShareId]);
+  }, [getShortLinkFiltersData]);
 
   // #region Functions.
   const handleCarouselCardReorder = (
@@ -305,46 +318,44 @@ const ZShortLinksFilterMenu: React.FC = () => {
       if (_value?.trim()?.length > 0) {
         let _response;
 
-        if (workspaceId !== undefined) {
-          if (
-            getUserSetting?.type === ZUserSettingTypeEnum.shortLinkListPageTable
-          ) {
-            _response = await updateUserSettingsAsyncMutate({
-              itemIds: [
-                workspaceId,
-                ZUserSettingTypeEnum.shortLinkListPageTable
-              ],
-              urlDynamicParts: [
-                CONSTANTS.RouteParams.workspace.workspaceId,
-                CONSTANTS.RouteParams.settings.type
-              ],
-              requestData: _value
-            });
-          } else {
-            _response = await createUserSettingsAsyncMutate(_value);
-          }
-        } else if (wsShareId !== undefined && shareWSMemberId !== undefined) {
-          if (
-            swsGetUserSetting?.type ===
-            ZUserSettingTypeEnum.shortLinkListPageTable
-          ) {
-            _response = await swsUpdateUserSettingsAsyncMutate({
-              itemIds: [
-                shareWSMemberId,
-                ZUserSettingTypeEnum.shortLinkListPageTable
-              ],
-              urlDynamicParts: [
-                CONSTANTS.RouteParams.workspace.shareWSMemberId,
-                CONSTANTS.RouteParams.settings.type
-              ],
-              requestData: _value
-            });
-          } else {
-            _response = await swsCreateUserSettingsAsyncMutate(_value);
-          }
+        if (
+          getShortLinkFiltersData?.type ===
+          ZUserSettingTypeEnum.shortLinkListPageTable
+        ) {
+          _response = await updateUserSettingsAsyncMutate({
+            itemIds:
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+                ? [
+                    ZWSTypeEum.personalWorkspace,
+                    workspaceId,
+                    ZUserSettingTypeEnum.shortLinkListPageTable
+                  ]
+                : wsShareId !== undefined &&
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0 &&
+                  shareWSMemberId !== undefined &&
+                  shareWSMemberId !== null &&
+                  shareWSMemberId?.trim()?.length > 0
+                ? [
+                    ZWSTypeEum.shareWorkspace,
+                    shareWSMemberId,
+                    ZUserSettingTypeEnum.shortLinkListPageTable
+                  ]
+                : [],
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.type,
+              CONSTANTS.RouteParams.workspace.workspaceId,
+              CONSTANTS.RouteParams.settings.type
+            ],
+            requestData: _value
+          });
+        } else {
+          _response = await createUserSettingsAsyncMutate(_value);
         }
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           // extract Data from _response.
           const _data = extractInnerData<ZUserSettingInterface>(
             _response,
@@ -352,8 +363,12 @@ const ZShortLinksFilterMenu: React.FC = () => {
           );
 
           // if we have data then show success message.
-          if (_data?.id !== undefined || _data?.id !== null) {
-            if (workspaceId !== undefined) {
+          if (_data?.id !== undefined && _data?.id !== null) {
+            if (
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+            ) {
               await updateRQCDataHandler<ZUserSettingInterface | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
@@ -367,12 +382,17 @@ const ZShortLinksFilterMenu: React.FC = () => {
               });
             } else if (
               wsShareId !== undefined &&
-              shareWSMemberId !== undefined
+              wsShareId !== null &&
+              wsShareId?.trim()?.length > 0 &&
+              shareWSMemberId !== undefined &&
+              shareWSMemberId !== null &&
+              shareWSMemberId?.trim()?.length > 0
             ) {
               await updateRQCDataHandler<ZUserSettingInterface | undefined>({
                 key: [
                   CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
                   wsShareId,
+                  shareWSMemberId,
                   ZUserSettingTypeEnum.shortLinkListPageTable
                 ],
                 data: _data,
@@ -390,10 +410,31 @@ const ZShortLinksFilterMenu: React.FC = () => {
   };
   // #endregion
 
+  const formikInitialValues = {
+    columns: compState?.shortLinkColumn ?? ShortLinksTableColumns,
+    // columns: ShortLinksTableColumns,
+
+    filters: {
+      tags: compState?.filters?.tags ?? [],
+      domains: compState?.filters?.domains ?? [],
+      time: compState?.filters?.time ?? TimeFilterEnum.allTime
+    }
+  };
+
+  const zIonItemStyle = {
+    '--inner-padding-end': '.3rem'
+  };
+
+  const libListTableColumnStyle = {
+    '--padding-bottom': '.1rem',
+    '--padding-top': '.1rem',
+    '--padding-start': '2px'
+  };
+
   return (
     <ZIonMenu
       side='end'
-      contentId={CONSTANTS.MENU_IDS.AD_SL_LIST_PAGE}
+      contentId={CONSTANTS.PAGE_IDS.AD_SL_LIST_PAGE}
       menuId={CONSTANTS.MENU_IDS.SL_FILTERS_MENU_ID}
       style={
         isLgScale
@@ -426,16 +467,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
       <ZIonContent className='ion-padding-top'>
         {/* Columns visibility accordion */}
         <Formik
-          initialValues={{
-            columns: compState?.shortLinkColumn ?? ShortLinksTableColumns,
-            // columns: ShortLinksTableColumns,
-
-            filters: {
-              tags: compState?.filters?.tags ?? [],
-              domains: compState?.filters?.domains ?? [],
-              time: compState?.filters?.time != null ?? TimeFilterEnum.allTime
-            }
-          }}
+          initialValues={formikInitialValues}
           enableReinitialize={true}
           onSubmit={async values => {
             try {
@@ -589,9 +621,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
                         slot='header'
                         lines='none'
                         className='ps-1 h-[2.2rem] flex overflow-hidden rounded-lg cursor-pointer ion-activatable w-[104.6%]'
-                        style={{
-                          '--inner-padding-end': '.3rem'
-                        }}>
+                        style={zIonItemStyle}>
                         <ZIonText
                           className={classNames({
                             'text-sm ion-no-margin font-semibold': true
@@ -616,11 +646,7 @@ const ZShortLinksFilterMenu: React.FC = () => {
                                 color='light'
                                 className='zaions-short-link-list-table-column'
                                 data-id={el?.id}
-                                style={{
-                                  '--padding-bottom': '.1rem',
-                                  '--padding-top': '.1rem',
-                                  '--padding-start': '2px'
-                                }}>
+                                style={libListTableColumnStyle}>
                                 <ZIonReorder
                                   slot='start'
                                   className='me-3'

@@ -39,7 +39,7 @@ import {
   zGenerateShortLink,
   replaceRouteParams
 } from '@/utils/helpers';
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 import {
   useZIonModal,
@@ -149,48 +149,67 @@ export const ZInpageTable: React.FC = () => {
   });
 
   // If owned-workspace then this api will fetch owned-workspace-short-link filters options data.
-  const { data: getUserSetting } = useZRQGetRequest<ZUserSettingInterface>({
-    _url: API_URL_ENUM.user_setting_delete_update_get,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-      workspaceId ?? '',
-      ZUserSettingTypeEnum.shortLinkListPageTable
-    ],
-    _shouldFetchWhenIdPassed: !(
-      workspaceId !== undefined && (workspaceId?.trim()?.length ?? 0) > 0
-    ),
-    _itemsIds: [workspaceId ?? '', ZUserSettingTypeEnum.shortLinkListPageTable],
-    _urlDynamicParts: [
-      CONSTANTS.RouteParams.workspace.workspaceId,
-      CONSTANTS.RouteParams.settings.type
-    ],
-    _extractType: ZRQGetRequestExtractEnum.extractItem,
-    _showLoader: false
-  });
-
-  // If share-workspace then this api will fetch share-workspace-short-link filters options data.
-  const { data: swsGetUserSetting } = useZRQGetRequest<ZUserSettingInterface>({
-    _url: API_URL_ENUM.sws_user_setting_delete_update_get,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-      wsShareId ?? '',
-      ZUserSettingTypeEnum.shortLinkListPageTable
-    ],
-    _itemsIds: [
-      shareWSMemberId ?? '',
-      ZUserSettingTypeEnum.shortLinkListPageTable
-    ],
-    _urlDynamicParts: [
-      CONSTANTS.RouteParams.workspace.shareWSMemberId,
-      CONSTANTS.RouteParams.settings.type
-    ],
-    _shouldFetchWhenIdPassed: !(
-      wsShareId !== undefined && (wsShareId?.trim()?.length ?? 0) > 0
-    ),
-    _extractType: ZRQGetRequestExtractEnum.extractItem,
-    _showLoader: false
-  });
+  const { data: getShortLinkFiltersData } =
+    useZRQGetRequest<ZUserSettingInterface>({
+      _url: API_URL_ENUM.user_setting_delete_update_get,
+      _key:
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+          ? [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+              workspaceId,
+              ZUserSettingTypeEnum.shortLinkListPageTable
+            ]
+          : wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
+              wsShareId,
+              shareWSMemberId,
+              ZUserSettingTypeEnum.shortLinkListPageTable
+            ]
+          : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET],
+      _itemsIds:
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+          ? [
+              ZWSTypeEum.personalWorkspace,
+              workspaceId,
+              ZUserSettingTypeEnum.shortLinkListPageTable
+            ]
+          : wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [
+              ZWSTypeEum.shareWorkspace,
+              shareWSMemberId,
+              ZUserSettingTypeEnum.shortLinkListPageTable
+            ]
+          : [],
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.type,
+        CONSTANTS.RouteParams.workspace.workspaceId,
+        CONSTANTS.RouteParams.settings.type
+      ],
+      _extractType: ZRQGetRequestExtractEnum.extractItem,
+      _shouldFetchWhenIdPassed: !(
+        ((wsShareId?.trim()?.length ?? 0) === 0 &&
+          (shareWSMemberId?.trim()?.length ?? 0) === 0) ||
+        (workspaceId?.trim()?.length ?? 0) === 0
+      ),
+      _showLoader: false
+    });
   // #endregion
+
   // #region Modal & Popovers.
   const { presentZIonModal: presentPixelAccountDetailModal } = useZIonModal(
     ZaionsPixelAccountDetail,
@@ -422,12 +441,7 @@ export const ZInpageTable: React.FC = () => {
     columns: defaultColumns,
     data: _FilteredShortLinkDataSelector ?? [],
     state: {
-      columnOrder:
-        workspaceId !== undefined
-          ? getUserSetting?.settings?.columnOrderIds
-          : wsShareId !== undefined
-          ? swsGetUserSetting?.settings?.columnOrderIds
-          : []
+      columnOrder: getShortLinkFiltersData?.settings?.columnOrderIds ?? []
     },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -441,105 +455,71 @@ export const ZInpageTable: React.FC = () => {
   useEffect(() => {
     try {
       if (
-        getUserSetting?.settings?.columns !== undefined ||
-        swsGetUserSetting?.settings?.columns !== undefined
+        getShortLinkFiltersData?.settings?.columns !== undefined &&
+        getShortLinkFiltersData?.settings?.columns !== null
       ) {
-        let _getTitleColumn;
-        let _getDateColumn;
-        let _getLinkToShareColumn;
-        let _getNotesColumn;
-        let _getPixelsColumn;
-        let _getUrlColumn;
-
-        if (workspaceId !== undefined) {
-          _getTitleColumn = getUserSetting?.settings?.columns.filter(
+        const _getTitleColumn =
+          getShortLinkFiltersData?.settings?.columns.filter(
             el => el?.id === ZShortLinkListPageTableColumnsIds.title
           )[0];
 
-          _getDateColumn = getUserSetting?.settings?.columns.filter(
+        const _getDateColumn =
+          getShortLinkFiltersData?.settings?.columns.filter(
             el => el?.id === ZShortLinkListPageTableColumnsIds.date
           )[0];
 
-          _getLinkToShareColumn = getUserSetting?.settings?.columns.filter(
+        const _getLinkToShareColumn =
+          getShortLinkFiltersData?.settings?.columns.filter(
             el => el?.id === ZShortLinkListPageTableColumnsIds.linkToShare
           )[0];
 
-          _getNotesColumn = getUserSetting?.settings?.columns.filter(
+        const _getNotesColumn =
+          getShortLinkFiltersData?.settings?.columns.filter(
             el => el?.id === ZShortLinkListPageTableColumnsIds.notes
           )[0];
 
-          _getPixelsColumn = getUserSetting?.settings?.columns.filter(
+        const _getPixelsColumn =
+          getShortLinkFiltersData?.settings?.columns.filter(
             el => el?.id === ZShortLinkListPageTableColumnsIds.pixel
           )[0];
 
-          _getUrlColumn = getUserSetting?.settings?.columns.filter(
-            el => el?.id === ZShortLinkListPageTableColumnsIds.url
-          )[0];
-        } else if (wsShareId !== undefined) {
-          _getTitleColumn = swsGetUserSetting?.settings?.columns.filter(
-            el => el?.id === ZShortLinkListPageTableColumnsIds.title
-          )[0];
-
-          _getDateColumn = swsGetUserSetting?.settings?.columns.filter(
-            el => el?.id === ZShortLinkListPageTableColumnsIds.date
-          )[0];
-
-          _getLinkToShareColumn = swsGetUserSetting?.settings?.columns.filter(
-            el => el?.id === ZShortLinkListPageTableColumnsIds.linkToShare
-          )[0];
-
-          _getNotesColumn = swsGetUserSetting?.settings?.columns.filter(
-            el => el?.id === ZShortLinkListPageTableColumnsIds.notes
-          )[0];
-
-          _getPixelsColumn = swsGetUserSetting?.settings?.columns.filter(
-            el => el?.id === ZShortLinkListPageTableColumnsIds.pixel
-          )[0];
-
-          _getUrlColumn = swsGetUserSetting?.settings?.columns.filter(
-            el => el?.id === ZShortLinkListPageTableColumnsIds.url
-          )[0];
-        }
+        const _getUrlColumn = getShortLinkFiltersData?.settings?.columns.filter(
+          el => el?.id === ZShortLinkListPageTableColumnsIds.url
+        )[0];
 
         if (_getTitleColumn !== undefined) {
           zShortLinksTable
-            .getColumn('__z_short_link_title__')
+            .getColumn(ZShortLinkListPageTableColumnsIds.title)
             ?.toggleVisibility(_getTitleColumn.isVisible);
         }
 
         if (_getDateColumn !== undefined) {
           zShortLinksTable
-            .getColumn('__z_short_link_date__')
+            .getColumn(ZShortLinkListPageTableColumnsIds.date)
             ?.toggleVisibility(_getDateColumn.isVisible);
         }
 
         if (_getLinkToShareColumn !== undefined) {
           zShortLinksTable
-            .getColumn('__z_short_link_link_to_share__')
+            .getColumn(ZShortLinkListPageTableColumnsIds.linkToShare)
             ?.toggleVisibility(_getLinkToShareColumn.isVisible);
         }
 
         if (_getNotesColumn !== undefined) {
           zShortLinksTable
-            .getColumn('__z_short_link_notes__')
-            ?.toggleVisibility(_getNotesColumn.isVisible);
-        }
-
-        if (_getNotesColumn !== undefined) {
-          zShortLinksTable
-            .getColumn('__z_short_link_notes__')
+            .getColumn(ZShortLinkListPageTableColumnsIds.notes)
             ?.toggleVisibility(_getNotesColumn.isVisible);
         }
 
         if (_getPixelsColumn !== undefined) {
           zShortLinksTable
-            .getColumn('__z_short_link_pixels__')
+            .getColumn(ZShortLinkListPageTableColumnsIds.pixel)
             ?.toggleVisibility(_getPixelsColumn.isVisible);
         }
 
         if (_getUrlColumn !== undefined) {
           zShortLinksTable
-            .getColumn('__z_short_link_target_url__')
+            .getColumn(ZShortLinkListPageTableColumnsIds.linkToShare)
             ?.toggleVisibility(_getUrlColumn.isVisible);
         }
       }
@@ -547,7 +527,7 @@ export const ZInpageTable: React.FC = () => {
       reportCustomError(error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workspaceId, getUserSetting, swsGetUserSetting, wsShareId]);
+  }, [getShortLinkFiltersData]);
 
   // useEffect(() => {
   //   zShortLinksTable.setPageIndex(Number(pageindex) || 0);
@@ -568,7 +548,11 @@ export const ZInpageTable: React.FC = () => {
 
   useEffect(() => {
     try {
-      if (workspaceId !== undefined && ShortLinksData !== undefined) {
+      if (
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        ShortLinksData !== undefined
+      ) {
         setShortLinksStateAtom(ShortLinksData?.items);
       } else if (wsShareId !== undefined && swsShortLinksData !== undefined) {
         setShortLinksStateAtom(swsShortLinksData ?? []);
@@ -579,16 +563,6 @@ export const ZInpageTable: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ShortLinksData, swsShortLinksData]);
   // #endregion
-  console.log({
-    // pagesize: +String(pagesize),
-    // pageindex: +String(pageindex),
-    // c1: +String(pagesize) * +String(pageindex) + +String(pagesize),
-    // itemsCount: ShortLinksData?.itemsCount,
-    c:
-      +String(pagesize ?? '0') * +String(pageindex ?? '0') +
-        +String(pagesize ?? '0') <=
-      +(ShortLinksData?.itemsCount ?? '0')
-  });
 
   return (
     <div

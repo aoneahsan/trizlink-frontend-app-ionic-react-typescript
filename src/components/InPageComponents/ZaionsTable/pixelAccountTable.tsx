@@ -75,7 +75,11 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * ? Like import of Constant is a global constants import
  * */
 import CONSTANTS from '@/utils/constants';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  ZWSTypeEum,
+  extractInnerDataOptionsEnum
+} from '@/utils/enums';
 import { createRedirectRoute, extractInnerData } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import {
@@ -379,50 +383,63 @@ const ZInpageTable: React.FC = () => {
   const { data: getPixelFiltersData } = useZRQGetRequest<ZUserSettingInterface>(
     {
       _url: API_URL_ENUM.user_setting_delete_update_get,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-        workspaceId ?? '',
-        ZUserSettingTypeEnum.pixelListPageTable
-      ],
-      _itemsIds: [workspaceId ?? '', ZUserSettingTypeEnum.pixelListPageTable],
+      _key:
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+          ? [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+              workspaceId,
+              ZUserSettingTypeEnum.pixelListPageTable
+            ]
+          : wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
+              wsShareId,
+              shareWSMemberId,
+              ZUserSettingTypeEnum.pixelListPageTable
+            ]
+          : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET],
+      _itemsIds:
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+          ? [
+              ZWSTypeEum.personalWorkspace,
+              workspaceId,
+              ZUserSettingTypeEnum.pixelListPageTable
+            ]
+          : wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [
+              ZWSTypeEum.shareWorkspace,
+              shareWSMemberId,
+              ZUserSettingTypeEnum.pixelListPageTable
+            ]
+          : [],
       _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.type,
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.settings.type
       ],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _shouldFetchWhenIdPassed: !(
-        workspaceId !== undefined &&
-        workspaceId !== null &&
-        (workspaceId?.trim()?.length ?? 0) > 0
-      )
+        ((wsShareId?.trim()?.length ?? 0) === 0 &&
+          (shareWSMemberId?.trim()?.length ?? 0) === 0) ||
+        (workspaceId?.trim()?.length ?? 0) === 0
+      ),
+      _showLoader: false
     }
   );
-
-  const { data: getSWSPixelFiltersData } =
-    useZRQGetRequest<ZUserSettingInterface>({
-      _url: API_URL_ENUM.sws_user_setting_delete_update_get,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-        ZUserSettingTypeEnum.pixelListPageTable
-      ],
-      _itemsIds: [
-        shareWSMemberId ?? '',
-        ZUserSettingTypeEnum.pixelListPageTable
-      ],
-      _urlDynamicParts: [
-        CONSTANTS.RouteParams.workspace.shareWSMemberId,
-        CONSTANTS.RouteParams.settings.type
-      ],
-      _extractType: ZRQGetRequestExtractEnum.extractItem,
-      _shouldFetchWhenIdPassed: !(
-        wsShareId !== undefined &&
-        wsShareId !== null &&
-        wsShareId?.trim()?.length > 0 &&
-        shareWSMemberId !== undefined &&
-        shareWSMemberId !== null &&
-        shareWSMemberId?.trim()?.length > 0
-      )
-    });
   // #endregion
 
   // #region Managing table data with react-table.
@@ -522,10 +539,7 @@ const ZInpageTable: React.FC = () => {
     columns: defaultColumns,
     data: filteredPixelsDataRSelector ?? [],
     state: {
-      columnOrder:
-        getPixelFiltersData?.settings?.columnOrderIds ??
-        getSWSPixelFiltersData?.settings?.columnOrderIds ??
-        []
+      columnOrder: getPixelFiltersData?.settings?.columnOrderIds ?? []
     },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -549,77 +563,29 @@ const ZInpageTable: React.FC = () => {
           platform: getPixelFiltersData?.settings?.filters
             ?.platform as PixelPlatformsEnum
         }));
-      } else if (
-        getSWSPixelFiltersData !== undefined &&
-        getSWSPixelFiltersData !== null
-      ) {
-        setPixelsFilterOptionsRState(oldValues => ({
-          ...oldValues,
-          timeFilter: {
-            daysToSubtract: getSWSPixelFiltersData?.settings?.filters?.time,
-            endAt: getSWSPixelFiltersData?.settings?.filters?.endDate,
-            startedAt: getSWSPixelFiltersData?.settings?.filters?.startDate
-          },
-          platform: getSWSPixelFiltersData?.settings?.filters
-            ?.platform as PixelPlatformsEnum
-        }));
       }
 
       if (
-        getPixelFiltersData?.settings?.columns !== undefined ??
-        getSWSPixelFiltersData?.settings?.columns !== undefined
+        getPixelFiltersData?.settings?.columns !== undefined &&
+        getPixelFiltersData?.settings?.columns !== null
       ) {
-        let _getTitleColumn;
-        let _getFormattedCreateAtColumn;
-        let _getPixelIdColumn;
-        let _getPlatformColumn;
+        const _getTitleColumn = getPixelFiltersData?.settings?.columns.filter(
+          el => el?.id === ZPixelsListPageTableColumnsIds.title
+        )[0];
 
-        if (
-          workspaceId !== undefined &&
-          workspaceId !== null &&
-          workspaceId?.trim()?.length > 0
-        ) {
-          _getTitleColumn = getPixelFiltersData?.settings?.columns.filter(
-            el => el?.id === ZPixelsListPageTableColumnsIds.title
+        const _getFormattedCreateAtColumn =
+          getPixelFiltersData?.settings?.columns.filter(
+            el => el?.id === ZPixelsListPageTableColumnsIds.formattedCreateAt
           )[0];
 
-          _getFormattedCreateAtColumn =
-            getPixelFiltersData?.settings?.columns.filter(
-              el => el?.id === ZPixelsListPageTableColumnsIds.formattedCreateAt
-            )[0];
+        const _getPixelIdColumn = getPixelFiltersData?.settings?.columns.filter(
+          el => el?.id === ZPixelsListPageTableColumnsIds.pixelId
+        )[0];
 
-          _getPixelIdColumn = getPixelFiltersData?.settings?.columns.filter(
-            el => el?.id === ZPixelsListPageTableColumnsIds.pixelId
-          )[0];
-
-          _getPlatformColumn = getPixelFiltersData?.settings?.columns.filter(
+        const _getPlatformColumn =
+          getPixelFiltersData?.settings?.columns.filter(
             el => el?.id === ZPixelsListPageTableColumnsIds.platform
           )[0];
-        } else if (
-          wsShareId !== undefined &&
-          wsShareId !== null &&
-          wsShareId?.trim()?.length > 0 &&
-          shareWSMemberId !== undefined &&
-          shareWSMemberId !== null &&
-          shareWSMemberId?.trim()?.length > 0
-        ) {
-          _getTitleColumn = getSWSPixelFiltersData?.settings?.columns.filter(
-            el => el?.id === ZPixelsListPageTableColumnsIds.title
-          )[0];
-
-          _getFormattedCreateAtColumn =
-            getSWSPixelFiltersData?.settings?.columns.filter(
-              el => el?.id === ZPixelsListPageTableColumnsIds.formattedCreateAt
-            )[0];
-
-          _getPixelIdColumn = getSWSPixelFiltersData?.settings?.columns.filter(
-            el => el?.id === ZPixelsListPageTableColumnsIds.pixelId
-          )[0];
-
-          _getPlatformColumn = getSWSPixelFiltersData?.settings?.columns.filter(
-            el => el?.id === ZPixelsListPageTableColumnsIds.platform
-          )[0];
-        }
 
         if (_getTitleColumn !== undefined) {
           zPixelTable
@@ -649,13 +615,7 @@ const ZInpageTable: React.FC = () => {
       reportCustomError(error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    getPixelFiltersData,
-    getSWSPixelFiltersData,
-    workspaceId,
-    wsShareId,
-    shareWSMemberId
-  ]);
+  }, [getPixelFiltersData]);
 
   useEffect(() => {
     zPixelTable.setPageIndex(Number(pageindex ?? 0));

@@ -19,7 +19,7 @@
   height: 100%;
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.3);
-  display: none !important  ;
+  display: none !important;
 }
 .zaions-drag-and-drop:hover .zaions-drag-and-drop__overlay {
   display: flex !important;

@@ -145,6 +145,12 @@ const ZWorkspaceSwitcher: React.FC<{
 
   if (isZFetching) return <ZWorkspaceSwitcherSkeleton />;
 
+  // #region comp constants
+  const _style = {
+    '--border-width': '1px'
+  };
+  // #endregion
+
   return (
     <ZIonButton
       fill='outline'
@@ -165,10 +171,7 @@ const ZWorkspaceSwitcher: React.FC<{
         'me-2 ms-2': false,
         'me-0 ms-1 ion-no-padding': false
       })}
-      style={{
-        '--border-width': '1px'
-        // border: '1px solid',
-      }}>
+      style={_style}>
       <ZUserAvatarButton
         userAvatar={
           workspaceId !== undefined
@@ -221,6 +224,12 @@ const ZWorkspaceSwitcher: React.FC<{
 const ZWorkspaceSwitcherSkeleton: React.FC = () => {
   const { isLgScale } = useZMediaQueryScale();
 
+  // #region comp constants
+  const _style = {
+    '--border-width': '1px'
+  };
+  // #endregion
+
   return (
     <ZIonButton
       fill='outline'
@@ -233,9 +242,7 @@ const ZWorkspaceSwitcherSkeleton: React.FC = () => {
         'me-2 ms-2': false,
         'me-0 ms-1 ion-no-padding': false
       })}
-      style={{
-        '--border-width': '1px'
-      }}>
+      style={_style}>
       <ZIonSkeletonText
         className={classNames({
           'me-2 rounded-full': true,

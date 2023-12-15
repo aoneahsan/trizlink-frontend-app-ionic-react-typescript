@@ -37,18 +37,19 @@ const LinkInBioIconField: React.FC<LinkInBioIconFieldInterface> = ({
 }) => {
   return (
     <ZIonItem
-      className={className}
+      className={`ion-item-start-no-padding ion-align-items-start ${className}`}
       lines='none'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
       <ZIonIcon
         icon={addCircleOutline}
         slot='start'
-        className='w-7 h-7 me-2'
+        className='mt-2 w-7 h-7 me-2'
       />
       <ZIonInput
-        label=''
+        aria-label='Icon input'
         minHeight='40px'
+        className='ion-padding-start-point-8rem'
         name={name}
         placeholder={placeholder}
         onIonChange={onIonChange}

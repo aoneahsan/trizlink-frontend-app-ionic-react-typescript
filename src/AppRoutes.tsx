@@ -314,6 +314,12 @@ const AppRoutes = (): JSX.Element => {
 
         <PrivateRoute
           exact
+          path={ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Main}
+          Component={ZLinkInBiosListPage}
+        />
+
+        <PrivateRoute
+          exact
           path={ZaionsRoutes.AdminPanel.LinkInBio.Create}
           Component={ZaionsLinkInBioForm}
         />

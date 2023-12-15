@@ -89,6 +89,11 @@ const ZWorkspaceComposeModal: React.FC = () => {
   // Recoil state to manage ZWorkspaceComposeModal.
   const [workspaceComposeModalStateAtom, setWorkspaceComposeModalStateAtom] =
     useRecoilState(WorkspaceComposeModalRStateAtom);
+
+  const ZIonSegmentButtonStyle = {
+    '--padding-end': '9px',
+    '--padding-start': '9px'
+  };
   return (
     <ZIonModal
       isOpen={workspaceComposeModalStateAtom.isOpen}
@@ -121,10 +126,7 @@ const ZWorkspaceComposeModal: React.FC = () => {
               key={index}
               className='px-1 normal-case'
               value={String(index)}
-              style={{
-                '--padding-end': '9px',
-                '--padding-start': '9px'
-              }}>
+              style={ZIonSegmentButtonStyle}>
               <ZIonIcon
                 icon={getPlatformIcon(el.type)}
                 className='mb-2 w-7 h-7'
@@ -225,17 +227,15 @@ const ZWorkspaceComposeModal: React.FC = () => {
 
             <ZIonButtons>
               <ZIonButton
-                className='m-0 normal-case'
+                className='m-0 normal-case z-ion-border-radius-0'
                 color='primary'
-                fill='solid'
-                style={{ '--border-radius': '0px' }}>
+                fill='solid'>
                 Save
               </ZIonButton>
               <ZIonButton
-                className='m-0 normal-case'
+                className='m-0 normal-case z-ion-border-radius-0'
                 color='primary'
-                fill='solid'
-                style={{ '--border-radius': '0px' }}>
+                fill='solid'>
                 <ZIonIcon icon={chevronDownOutline} />
               </ZIonButton>
             </ZIonButtons>

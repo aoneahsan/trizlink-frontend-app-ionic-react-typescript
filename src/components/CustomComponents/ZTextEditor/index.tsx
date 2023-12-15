@@ -2,13 +2,19 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { type SyntheticEvent } from 'react';
+import React, { type SyntheticEvent, useMemo } from 'react';
 
 /**
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import { Editor, EditorState, RichUtils } from 'draft-js';
+import {
+  ContentState,
+  Editor,
+  EditorState,
+  RichUtils,
+  convertToRaw
+} from 'draft-js';
 import classNames from 'classnames';
 import { informationCircleOutline } from 'ionicons/icons';
 // import draftToHtml from 'draftjs-to-html';
@@ -26,6 +32,7 @@ import { ZIonButton, ZIonIcon, ZIonTitle } from '@/components/ZIonComponents';
  * */
 import { zCreateElementTestingSelector } from '@/utils/helpers';
 import { zCreateElementTestingSelectorKeyEnum } from '@/utils/enums';
+import draftToHtml from 'draftjs-to-html';
 
 /**
  * Type Imports go down
@@ -58,7 +65,8 @@ interface ZTextEditorInterface {
   testingselector?: string;
   testinglistselector?: string;
   onBlur?: (e: SyntheticEvent) => void;
-  onChange?: (editorState: EditorState) => void;
+  onChange?: (editorState: string) => void;
+  initialValue?: string;
 }
 
 /**
@@ -94,8 +102,11 @@ const ZRichTextEditor: React.FC<ZTextEditorInterface> = ({
   onChange,
   placeholder,
   testinglistselector,
-  testingselector
+  testingselector,
+  initialValue
 }) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const initialValueText = useMemo(() => initialValue, []);
   const _testinglistselector =
     testinglistselector !== undefined
       ? {
@@ -105,7 +116,6 @@ const ZRichTextEditor: React.FC<ZTextEditorInterface> = ({
           })
         }
       : {};
-
   const _testingSelector =
     testingselector !== undefined
       ? {
@@ -114,10 +124,15 @@ const ZRichTextEditor: React.FC<ZTextEditorInterface> = ({
           })
         }
       : {};
-
   const [editorState, setEditorState] = React.useState<EditorState>(() =>
-    EditorState.createEmpty()
+    EditorState.createWithContent(
+      ContentState.createFromText(initialValueText ?? '')
+    )
   );
+
+  const onChangeHandler = (newState: EditorState): void => {
+    setEditorState(newState);
+  };
 
   // const rawContentState = convertToRaw(editorState.getCurrentContent());
 
@@ -126,10 +141,6 @@ const ZRichTextEditor: React.FC<ZTextEditorInterface> = ({
 
   //   console.log({ markup });
   // }, [rawContentState]);
-
-  const onChangeHandler = (newState: EditorState): void => {
-    setEditorState(newState);
-  };
 
   return (
     <div
@@ -196,15 +207,46 @@ const ZRichTextEditor: React.FC<ZTextEditorInterface> = ({
       <div className='ion-padding'>
         <Editor
           editorState={editorState}
-          onBlur={onBlur}
-          placeholder={placeholder}
-          onChange={(editorState: EditorState) => {
-            setEditorState(() => editorState);
+          // onBlur={onBlur} // ahsan commented this and added the below logic
+          onBlur={_ => {
+            const rawContentState = convertToRaw(
+              editorState.getCurrentContent()
+            );
 
-            //
-            if (onChange !== undefined) {
-              onChange(editorState);
+            if (onChange !== undefined && onChange !== null) {
+              onChange(draftToHtml(rawContentState));
             }
+          }}
+          placeholder={placeholder}
+          // ahsan commented this as
+          // onChange={(editorState: EditorState) => {
+          //   setEditorState(() => editorState);
+
+          // const rawContentState = convertToRaw(
+          //   editorState.getCurrentContent()
+          // );
+          // void setFieldValue(
+          //   'text',
+          //   draftToHtml(rawContentState),
+          //   false
+          // );
+
+          //   if (onChange !== undefined && onChange !== null) {
+          //     onChange(editorState);
+          //   }
+          // }}
+          onChange={_editorState => {
+            // setting this here as i will need this in onBlur event
+            setEditorState(() => _editorState);
+            // ahsan did this, as i do not want to run this logic each time user enters a character instead only when user goes to an other field and this one get's onBlur event
+            // const rawContentState = convertToRaw(
+            //   editorState.getCurrentContent()
+            // );
+            // void setFieldValue(
+            //   'text',
+            //   draftToHtml(rawContentState),
+            //   false
+            // );
           }}
           handleKeyCommand={(command, editorState) => {
             const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -223,9 +265,3 @@ const ZRichTextEditor: React.FC<ZTextEditorInterface> = ({
 };
 
 export default ZRichTextEditor;
-
-// <div
-// className='unsetStyles'
-// dangerouslySetInnerHTML={{
-//   __html: draftToHtml(rawContentState)
-// }}></div>

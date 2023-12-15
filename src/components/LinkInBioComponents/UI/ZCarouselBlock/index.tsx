@@ -16,6 +16,7 @@ import React from 'react';
 import ZCustomCard from '@/components/CustomComponents/ZCustomCard';
 import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Scrollbar, Grid } from 'swiper/modules';
 
 /**
  * Global Constants Imports go down
@@ -27,6 +28,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
 import {
+  LinkInBioCardViewEnum,
   type linkInBioBlockCardItemInterface,
   type LinkInBioCardStyleEnum
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
@@ -41,6 +43,7 @@ import {
  * ? Import of style sheet is a style import
  * */
 import 'swiper/css';
+import { ZIonLabel, ZIonText } from '@/components/ZIonComponents';
 
 /**
  * Images Imports go down
@@ -54,6 +57,7 @@ import 'swiper/css';
 interface ZCarouselBlockInterface {
   data?: linkInBioBlockCardItemInterface[];
   cardStyle?: LinkInBioCardStyleEnum;
+  view?: LinkInBioCardViewEnum;
 }
 
 /**
@@ -63,36 +67,86 @@ interface ZCarouselBlockInterface {
  * */
 const ZCarouselBlock: React.FC<ZCarouselBlockInterface> = ({
   data,
-  cardStyle
+  cardStyle,
+  view
 }) => {
   return (
     <>
-      <Swiper
-        // spaceBetween={0}
-        // slidesPerView={1}
-        // onSlideChange={() => {}}
-        // onSwiper={(_) => {}}
-        style={{ width: '100%' }}>
+      {view === LinkInBioCardViewEnum.carousel ? (
+        <Swiper
+          spaceBetween={10}
+          modules={[Navigation, Pagination, Scrollbar, Grid]}
+          // slidesPerView={1}
+          // onSlideChange={() => {}}
+          // onSwiper={(_) => {}}
+          className='w-full h-full'>
+          {data !== undefined ? (
+            data?.map((element, index) => {
+              return (
+                <SwiperSlide
+                  key={index}
+                  className='h-full'>
+                  <ZCustomCard
+                    mediaType={ZMediaEnum.carousel}
+                    title={element.title}
+                    description={element.description}
+                    image={element.imageUrl}
+                    type={cardStyle}
+                  />
+                </SwiperSlide>
+              );
+            })
+          ) : (
+            <SwiperSlide>
+              <ZCustomCard mediaType={ZMediaEnum.carousel} />
+            </SwiperSlide>
+          )}
+        </Swiper>
+      ) : view === LinkInBioCardViewEnum.list ? (
+        <ZIonLabel className=''>
+          {data !== undefined && data !== undefined && data?.length > 0 ? (
+            data?.map((element, index) => {
+              return (
+                <div
+                  className='mt-3'
+                  key={index}>
+                  <ZCustomCard
+                    mediaType={ZMediaEnum.carousel}
+                    title={element.title}
+                    description={element.description}
+                    image={element.imageUrl}
+                    type={cardStyle}
+                    key={index}
+                  />
+                </div>
+              );
+            })
+          ) : (
+            <ZCustomCard mediaType={ZMediaEnum.carousel} />
+          )}
+        </ZIonLabel>
+      ) : (
+        <ZIonText>Not a valid view</ZIonText>
+      )}
+
+      {/* <ZIonLabel className='flex-col w-full gap-3'>
         {data !== undefined ? (
           data?.map((element, index) => {
             return (
-              <SwiperSlide key={index}>
-                <ZCustomCard
-                  mediaType={ZMediaEnum.carousel}
-                  title={element.title}
-                  description={element.description}
-                  image={element.imageUrl}
-                  type={cardStyle}
-                />
-              </SwiperSlide>
+              <ZCustomCard
+                mediaType={ZMediaEnum.carousel}
+                title={element.title}
+                description={element.description}
+                image={element.imageUrl}
+                type={cardStyle}
+                key={index}
+              />
             );
           })
         ) : (
-          <SwiperSlide>
-            <ZCustomCard mediaType={ZMediaEnum.carousel} />
-          </SwiperSlide>
+          <ZCustomCard mediaType={ZMediaEnum.carousel} />
         )}
-      </Swiper>
+      </ZIonLabel> */}
     </>
   );
 };

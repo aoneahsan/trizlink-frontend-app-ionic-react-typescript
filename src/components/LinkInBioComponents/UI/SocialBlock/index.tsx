@@ -67,6 +67,12 @@ const ZLinkInBioSocialBlock: React.FC<ZLinkInBioSocialBlockInterface> = ({
     <ZIonCol>
       <ZIonRow className='ion-align-items-center ion-justify-content-center row-gap-1-point-6-rem'>
         {socialBlockData?.map((el, index) => {
+          const _style = {
+            width:
+              el.socialCardType === LinkInBioSocialPlatformEnum.facebook
+                ? '1.2rem'
+                : '1.5rem'
+          };
           return (
             <ZIonCol
               key={index}
@@ -78,12 +84,7 @@ const ZLinkInBioSocialBlock: React.FC<ZLinkInBioSocialBlockInterface> = ({
                     el.socialCardType as LinkInBioSocialPlatformEnum
                   ]
                 }
-                style={{
-                  width:
-                    el.socialCardType === LinkInBioSocialPlatformEnum.facebook
-                      ? '1.2rem'
-                      : '1.5rem'
-                }}
+                style={_style}
               />
             </ZIonCol>
           );

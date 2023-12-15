@@ -10,7 +10,7 @@ import { useLocation, useParams } from 'react-router';
  * ? Like import of ionic components is a packages import
  * */
 import routeQueryString from 'qs';
-import { appsOutline, pencilOutline } from 'ionicons/icons';
+import { appsOutline, createOutline } from 'ionicons/icons';
 import { useFormikContext } from 'formik';
 import { type OverlayEventDetail } from '@ionic/core';
 import { useRecoilState } from 'recoil';
@@ -51,13 +51,20 @@ import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
  * */
 import { reportCustomError } from '@/utils/customErrorType';
 import {
+  _getQueryKey,
   createRedirectRoute,
   extractInnerData,
-  generatePredefinedThemeBackgroundValue
+  generatePredefinedThemeBackgroundValue,
+  isZNonEmptyString,
+  isZNonEmptyStrings
 } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  ZWSTypeEum,
+  extractInnerDataOptionsEnum
+} from '@/utils/enums';
 
 /**
  * Type Imports go down
@@ -146,27 +153,38 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
 
   // link-in-bio id get from route(url).
-  const { linkInBioId, workspaceId } = useParams<{
+  const { linkInBioId, workspaceId, wsShareId, shareWSMemberId } = useParams<{
     linkInBioId?: string;
     workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // fetching link-in-bio with the linkInBioId data from backend.
   const { data: selectedLinkInBio } = useZRQGetRequest<LinkInBioType>({
     _url: API_URL_ENUM.linkInBio_update_delete,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-      workspaceId ?? '',
-      linkInBioId ?? ''
-    ],
-    _authenticated: true,
-    _itemsIds: [linkInBioId ?? '', workspaceId ?? ''],
+    _key: _getQueryKey({
+      keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET],
+      additionalKeys: [workspaceId, wsShareId, shareWSMemberId, linkInBioId]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId, linkInBioId]
+    }),
     _urlDynamicParts: [
-      CONSTANTS.RouteParams.linkInBio.linkInBioId,
-      CONSTANTS.RouteParams.workspace.workspaceId
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId,
+      CONSTANTS.RouteParams.linkInBio.linkInBioId
     ],
     _shouldFetchWhenIdPassed: !(
-      linkInBioId !== undefined && (linkInBioId?.trim()?.length ?? 0) > 0
+      isZNonEmptyStrings([workspaceId, linkInBioId]) ||
+      isZNonEmptyStrings([wsShareId, shareWSMemberId, linkInBioId])
     ),
     _extractType: ZRQGetRequestExtractEnum.extractItem
   });
@@ -193,23 +211,45 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
         );
 
         const _response = await deleteLinkInBioBlockMutate({
-          itemIds: [workspaceId ?? '', linkInBioId ?? '', element.id],
+          itemIds: _getQueryKey({
+            keys: [
+              isZNonEmptyString(workspaceId)
+                ? ZWSTypeEum.personalWorkspace
+                : isZNonEmptyString(wsShareId) &&
+                  isZNonEmptyString(shareWSMemberId)
+                ? ZWSTypeEum.shareWorkspace
+                : ''
+            ],
+            additionalKeys: [
+              workspaceId,
+              shareWSMemberId,
+              linkInBioId,
+              element.id
+            ]
+          }),
           urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.type,
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.linkInBio.linkInBioId,
             CONSTANTS.RouteParams.linkInBio.libBlockId
           ]
         });
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           // getting all the LinkInBioBlocks from RQ cache.
           const _oldLinkInBioBlocks =
             extractInnerData<LinkInBioBlockFromType[]>(
               getRQCDataHandler<LinkInBioBlockFromType[]>({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-                  workspaceId ?? '',
-                  linkInBioId ?? ''
-                ]
+                key: _getQueryKey({
+                  keys: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN
+                  ],
+                  additionalKeys: [
+                    workspaceId,
+                    wsShareId,
+                    shareWSMemberId,
+                    linkInBioId
+                  ]
+                })
               }) as LinkInBioBlockFromType[],
               extractInnerDataOptionsEnum.createRequestResponseItems
             ) ?? [];
@@ -221,11 +261,15 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 
           // Updating data in RQ cache.
           await updateRQCDataHandler<LinkInBioBlockFromType[] | undefined>({
-            key: [
-              CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-              workspaceId ?? '',
-              linkInBioId ?? ''
-            ],
+            key: _getQueryKey({
+              keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN],
+              additionalKeys: [
+                workspaceId,
+                wsShareId,
+                shareWSMemberId,
+                linkInBioId
+              ]
+            }),
             data: _updatedLinkInBioBlocks,
             id: '',
             extractType: ZRQGetRequestExtractEnum.extractItems,
@@ -241,17 +285,25 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
           setLinkInBioBlockState(_updateLinkInBioBlockState);
 
           if (
-            element.id === (routeQSearchParams as { blockId: string }).blockId
+            element.id === (routeQSearchParams as { blockId: string })?.blockId
           ) {
             // Redirect to block
             zNavigatePushRoute(
               createRedirectRoute({
-                url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+                url: isZNonEmptyString(workspaceId)
+                  ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
+                  : isZNonEmptyString(wsShareId) &&
+                    isZNonEmptyString(shareWSMemberId)
+                  ? ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Main
+                  : '',
                 params: [
                   CONSTANTS.RouteParams.workspace.workspaceId,
                   CONSTANTS.RouteParams.linkInBio.linkInBioId
                 ],
-                values: [workspaceId ?? '', linkInBioId ?? ''],
+                values: _getQueryKey({
+                  keys: [],
+                  additionalKeys: [workspaceId, shareWSMemberId, linkInBioId]
+                }),
                 routeSearchParams: {
                   page: ZLinkInBioPageEnum.design,
                   step: ZLinkInBioRHSComponentEnum.blocks
@@ -273,12 +325,19 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
 
       zNavigatePushRoute(
         createRedirectRoute({
-          url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+          url: isZNonEmptyString(workspaceId)
+            ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
+            : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+            ? ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Main
+            : '',
           params: [
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.linkInBio.linkInBioId
           ],
-          values: [workspaceId ?? '', linkInBioId ?? ''],
+          values: _getQueryKey({
+            keys: [],
+            additionalKeys: [workspaceId, shareWSMemberId, linkInBioId]
+          }),
           routeSearchParams: {
             page: ZLinkInBioPageEnum.design,
             step: ZLinkInBioRHSComponentEnum.blockForm,
@@ -395,28 +454,57 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
       ? 'outline'
       : 'default';
 
+  // #region Comp Constants
+  const zIonItemStyle = {
+    opacity: element.isActive ?? false ? '1' : '0.4'
+  };
+
+  const zCustomDeleteComponentData = { id: element?.id as string };
+
+  const zLinkInBioButtonBlockStyle = {
+    ..._buttonStyle,
+    '--box-shadow':
+      element.blockContent?.customAppearance?.isEnabled === true
+        ? currentBlockCustomAppearanceButtonShadowType
+          ? `6px 6px ${
+              element.blockContent?.customAppearance?.shadowColor ??
+              CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
+            }`
+          : ''
+        : linkInBioThemeButtonShadowType
+        ? `6px 6px ${
+            selectedLinkInBio?.theme?.button?.shadowColor ??
+            CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
+          }`
+        : ''
+  };
+
+  const zIonColStyle = {
+    height: `${element.blockContent?.spacing as number}px`
+  };
+  // #endregion
+
   return (
     <ZIonItem
       className={classNames({
-        'my-4 zaions-linkInBio-block': true,
+        'my-4 zaions-linkInBio-block z-ion-bg-transparent': true,
         zaions__light_bg_opacity_point_2:
           element.id === (routeQSearchParams as { blockId: string }).blockId
       })}
-      style={{
-        '--background': 'transparent',
-        opacity: element.isActive === true ? '1' : '0.4'
-      }}
+      style={zIonItemStyle}
       data-block-id={element.id}>
       <ZCustomDeleteComponent
         deleteFn={deleteBlockHandler}
-        data={{ id: element?.id as string }}
-        className='ion-no-padding me-1'
+        data={zCustomDeleteComponentData}
+        className='ion-no-padding me-1 w-[2rem] rounded-full overflow-hidden'
+        btnMinHeight='2rem'
         slot='start'
         iconColor='light'
       />
 
       <ZIonButton
-        className='ion-no-padding me-3'
+        className='ion-no-padding ms-1 me-2 w-[2rem] rounded-full overflow-hidden'
+        minHeight='2rem'
         slot='start'
         fill='clear'
         size='large'
@@ -425,20 +513,42 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
         }}>
         <ZIonText>
           <ZIonIcon
-            icon={pencilOutline}
+            icon={createOutline}
             color='light'
             className='w-6 h-6'
           />
         </ZIonText>
       </ZIonButton>
 
+      {/* <div
+        className={classNames(
+          element.blockContent?.animation?.isEnabled === true
+            ? element.blockContent?.animation?.type
+            : undefined,
+          {
+            'animated ':
+              element.blockContent?.animation?.isEnabled === true &&
+              isZNonEmptyString(element.blockContent?.animation?.type)
+          }
+        )}> */}
       {element?.blockType === LinkInBioBlockEnum.avatar ? (
-        <ZLinkInBioAvatarBlock />
+        <ZLinkInBioAvatarBlock
+          fontFamily={selectedLinkInBio?.theme?.font}
+          title={element.blockContent?.title}
+          description={element.blockContent?.description}
+          url={element.blockContent?.imageUrl}
+          style={element.blockContent?.style}
+        />
       ) : element?.blockType === LinkInBioBlockEnum.text ? (
         <ZLinkInBioTextBlock
           // eslint-disable-next-line react/no-children-prop
           children={element.blockContent?.text ?? 'text'}
           fontFamily={selectedLinkInBio?.theme?.font}
+          animationType={
+            element.blockContent?.animation?.isEnabled === true
+              ? element.blockContent?.animation?.type
+              : undefined
+          }
         />
       ) : element?.blockType === LinkInBioBlockEnum.card ? (
         <ZCustomCard
@@ -451,23 +561,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
       ) : element?.blockType === LinkInBioBlockEnum.button ? (
         <ZLinkInBioButtonBlock
           fontFamily={selectedLinkInBio?.theme?.font}
-          style={{
-            ..._buttonStyle,
-            '--box-shadow':
-              element.blockContent?.customAppearance?.isEnabled === true
-                ? currentBlockCustomAppearanceButtonShadowType
-                  ? `6px 6px ${
-                      element.blockContent?.customAppearance?.shadowColor ??
-                      CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
-                    }`
-                  : ''
-                : linkInBioThemeButtonShadowType
-                ? `6px 6px ${
-                    selectedLinkInBio?.theme?.button?.shadowColor ??
-                    CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
-                  }`
-                : ''
-          }}
+          style={zLinkInBioButtonBlockStyle}
           title={element.blockContent?.title ?? 'button'}
           url={element.blockContent?.target?.url}
           // TODO: make this a option in frontend, so user will be able to select whether to open the link in new tab or not - (will be theme and block wise)
@@ -513,7 +607,11 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
           cardStyle={element.blockContent?.style}
         />
       ) : element?.blockType === LinkInBioBlockEnum.calendar ? (
-        <ZLinkInBioCalendarBlock fontFamily={selectedLinkInBio?.theme?.font} />
+        <ZLinkInBioCalendarBlock
+          fontFamily={selectedLinkInBio?.theme?.font}
+          mediaLink={element.blockContent?.target?.url}
+          title={element.blockContent?.title}
+        />
       ) : element?.blockType === LinkInBioBlockEnum.countdown ? (
         <>
           {element.blockContent?.imageUrl !== undefined &&
@@ -522,12 +620,30 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
               mediaType={ZMediaEnum.countDown}
               title={element.blockContent?.title}
               description={element.blockContent?.description}
-              image={element.blockContent?.imageUrl}
+              mediaLink={element.blockContent?.imageUrl}
               type={element.blockContent?.style}
               countDownTime={element.blockContent?.date}
+              animationType={
+                element.blockContent?.animation?.isEnabled === true
+                  ? element.blockContent?.animation?.type
+                  : undefined
+              }
             />
           ) : (
-            <ZCountdown countDownTime={element.blockContent?.date} />
+            <div
+              className={classNames(
+                element.blockContent?.animation?.isEnabled === true
+                  ? element.blockContent?.animation?.type
+                  : undefined,
+                {
+                  'w-full h-full': true,
+                  'animated ':
+                    element.blockContent?.animation?.isEnabled === true &&
+                    isZNonEmptyString(element.blockContent?.animation?.type)
+                }
+              )}>
+              <ZCountdown countDownTime={element.blockContent?.date} />
+            </div>
           )}
         </>
       ) : element?.blockType === LinkInBioBlockEnum.video ? (
@@ -544,22 +660,24 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
         <ZCarouselBlock
           data={element.blockContent?.cardItems}
           cardStyle={element.blockContent?.style}
+          view={element.blockContent?.view}
         />
       ) : element?.blockType === LinkInBioBlockEnum.music ? (
         <ZLinkInBioMusicBlock
           fontFamily={selectedLinkInBio?.theme?.font}
           musicBlockData={element.blockContent?.cardItems}
+          animationType={
+            element.blockContent?.animation?.isEnabled === true
+              ? element.blockContent?.animation?.type
+              : undefined
+          }
         />
       ) : element?.blockType === LinkInBioBlockEnum.social ? (
         <ZLinkInBioSocialBlock
           socialBlockData={element.blockContent?.cardItems}
         />
       ) : element?.blockType === LinkInBioBlockEnum.spacing ? (
-        <ZIonCol
-          style={{
-            height: `${element.blockContent?.spacing as number}px`
-          }}
-        />
+        <ZIonCol style={zIonColStyle} />
       ) : element?.blockType === LinkInBioBlockEnum.separator ? (
         <ZLinkInBioSeparatorBlock
           _borderColor={element.blockContent?.separatorColor}
@@ -570,32 +688,120 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
         <ZLinkInBioMessengerBlock
           messengerBlockData={element.blockContent?.cardItems}
           fontFamily={selectedLinkInBio?.theme?.font}
+          animationType={
+            element.blockContent?.animation?.isEnabled === true
+              ? element.blockContent?.animation?.type
+              : undefined
+          }
         />
       ) : element?.blockType === LinkInBioBlockEnum.QAndA ? (
         <ZLinkInBioQAndABlock
           QAndABlockData={element.blockContent?.cardItems}
           fontFamily={selectedLinkInBio?.theme?.font}
+          animationType={
+            element.blockContent?.animation?.isEnabled === true
+              ? element.blockContent?.animation?.type
+              : undefined
+          }
         />
       ) : element?.blockType === LinkInBioBlockEnum.VCard ? (
         <ZLinkInBioVCardBlock
           VCardBlockData={element.blockContent?.vcard}
           title={element.blockContent?.title}
+          fontFamily={selectedLinkInBio?.theme?.font}
+          btnStyle={zLinkInBioButtonBlockStyle}
+          btnClassName={classNames({
+            // inlineSquare
+            inlineSquare:
+              element.blockContent?.customAppearance?.isEnabled === true
+                ? currentBlockCustomAppearanceButtonSquareType
+                : linkInBioThemeButtonSquareType,
+            // inlineRound
+            inlineRound:
+              element.blockContent?.customAppearance?.isEnabled === true
+                ? element.blockContent?.customAppearance?.buttonType != null &&
+                  [
+                    LinkInBioButtonTypeEnum.inlineRound,
+                    LinkInBioButtonTypeEnum.inlineRoundOutline,
+                    LinkInBioButtonTypeEnum.inlineRoundShadow
+                  ].includes(element.blockContent?.customAppearance.buttonType)
+                : selectedLinkInBio?.theme?.button?.type != null &&
+                  [
+                    LinkInBioButtonTypeEnum.inlineRound,
+                    LinkInBioButtonTypeEnum.inlineRoundOutline,
+                    LinkInBioButtonTypeEnum.inlineRoundShadow
+                  ].includes(selectedLinkInBio?.theme?.button?.type),
+
+            // inlineCircle
+            'border-radius__100vmax':
+              element.blockContent?.customAppearance?.isEnabled === true
+                ? currentBlockCustomAppearanceButtonCircleType
+                : linkInBioThemeButtonCircleType
+          })}
+          animationType={
+            element.blockContent?.animation?.isEnabled === true
+              ? element.blockContent?.animation?.type
+              : undefined
+          }
           // icon={element.blockContent?.icon}
         />
       ) : element?.blockType === LinkInBioBlockEnum.form ? (
         <ZLinkInBioFormBlock
           fromBlockData={element.blockContent?.form}
           fontFamily={selectedLinkInBio?.theme?.font}
+          btnStyle={zLinkInBioButtonBlockStyle}
+          btnClassName={classNames({
+            // inlineSquare
+            inlineSquare:
+              element.blockContent?.customAppearance?.isEnabled === true
+                ? currentBlockCustomAppearanceButtonSquareType
+                : linkInBioThemeButtonSquareType,
+            // inlineRound
+            inlineRound:
+              element.blockContent?.customAppearance?.isEnabled === true
+                ? element.blockContent?.customAppearance?.buttonType != null &&
+                  [
+                    LinkInBioButtonTypeEnum.inlineRound,
+                    LinkInBioButtonTypeEnum.inlineRoundOutline,
+                    LinkInBioButtonTypeEnum.inlineRoundShadow
+                  ].includes(element.blockContent?.customAppearance.buttonType)
+                : selectedLinkInBio?.theme?.button?.type != null &&
+                  [
+                    LinkInBioButtonTypeEnum.inlineRound,
+                    LinkInBioButtonTypeEnum.inlineRoundOutline,
+                    LinkInBioButtonTypeEnum.inlineRoundShadow
+                  ].includes(selectedLinkInBio?.theme?.button?.type),
+
+            // inlineCircle
+            'border-radius__100vmax':
+              element.blockContent?.customAppearance?.isEnabled === true
+                ? currentBlockCustomAppearanceButtonCircleType
+                : linkInBioThemeButtonCircleType
+          })}
+          animationType={
+            element.blockContent?.animation?.isEnabled === true
+              ? element.blockContent?.animation?.type
+              : undefined
+          }
         />
       ) : element?.blockType === LinkInBioBlockEnum.map ? (
         <ZLinkInBioMapBlock
           mapId={`${PRODUCT_NAME}-map-block-${element.id ?? ''}`}
           latitude={element.blockContent?.map?.lat}
           longitude={element.blockContent?.map?.lng}
+          title={element.blockContent?.title}
+        />
+      ) : element?.blockType === LinkInBioBlockEnum.Iframe ? (
+        <ZCustomCard
+          mediaType={ZMediaEnum.iframeSrcDoc}
+          iframeSrcDocText={element.blockContent?.iframe}
+          title={element.blockContent?.title}
         />
       ) : (
         ''
       )}
+      {/* </div> */}
+
       <ZIonReorder
         slot='end'
         className='ms-3'>

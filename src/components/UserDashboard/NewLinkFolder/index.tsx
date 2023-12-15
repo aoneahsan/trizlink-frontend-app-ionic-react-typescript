@@ -209,9 +209,8 @@ const FolderSkeletonOld: React.FC = React.memo(() => {
       <div className='flex w-full h-full ion-align-items-center ion-justify-content-center'>
         <ZIonSpinner
           color='primary'
-          className=''
+          className='w-[50px] h-[50px]'
           name='crescent'
-          style={{ width: '50px', height: '50px' }}
         />
       </div>
     </ZIonCol>

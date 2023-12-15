@@ -104,6 +104,11 @@ const ZWorkspaceSinglePost: React.FC<ZWorkspaceSinglePostInterface> = ({
     ZWorkspacePostDetailModal
   );
 
+  const zUserAvatarButtonStyle = {
+    '--border-radius':
+      pageType === workspaceFormConnectPagesEnum.linkedin && '4px'
+  };
+
   return (
     <ZIonCard
       className={className}
@@ -120,10 +125,7 @@ const ZWorkspaceSinglePost: React.FC<ZWorkspaceSinglePostInterface> = ({
               'w-[30px!important] h-[30px!important]':
                 type === workspacePostDetailTabEnum.mobile
             })}
-            style={{
-              '--border-radius':
-                pageType === workspaceFormConnectPagesEnum.linkedin && '4px'
-            }}
+            style={zUserAvatarButtonStyle}
           />
 
           <div className='ms-2'>

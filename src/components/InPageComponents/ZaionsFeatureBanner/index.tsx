@@ -123,12 +123,8 @@ const ZaionsFeatureBanner: React.FC<{
                   </span>
                   <ZIonRouterLink
                     routerLink={routeLink}
-                    color={'dark'}>
-                    <h2
-                      className=''
-                      style={{ fontWeight: '800' }}>
-                      {bannerColTitle}
-                    </h2>
+                    color='dark'>
+                    <h2 className='font-extrabold'>{bannerColTitle}</h2>
                   </ZIonRouterLink>
                   <ZIonText className='text-base zaions__color_gray2'>
                     {bannerText}

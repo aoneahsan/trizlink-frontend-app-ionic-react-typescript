@@ -425,10 +425,10 @@ const ZWSSettingPixelListPage: React.FC = () => {
                 // Open the menu by menu-id
                 await menuController.enable(
                   true,
-                  CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
+                  CONSTANTS.MENU_IDS.WS_SETTINGS_MENU_ID
                 );
                 await menuController.open(
-                  CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
+                  CONSTANTS.MENU_IDS.WS_SETTINGS_MENU_ID
                 );
               }}>
               Open menu

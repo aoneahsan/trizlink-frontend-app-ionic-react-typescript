@@ -34,12 +34,13 @@ const LinkInBioObjectField: React.FC<LinkInBioObjectFieldInterface> = ({
 }) => {
   return (
     <ZIonItem
-      className={className}
+      className={`ion-item-start-no-padding ${className}`}
       lines='none'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
       <ZIonInput
-        label=''
+        aria-label='object'
+        className='ion-padding-start-point-8rem'
         name={name}
         placeholder={placeholder}
         onIonChange={onIonChange}

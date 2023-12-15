@@ -77,12 +77,14 @@ import ZWorkspaceSinglePost from '../SinglePost';
 const ZWorkspacePostsLayout: React.FC<{
   pageType?: workspaceFormConnectPagesEnum;
 }> = ({ pageType }) => {
+  const formikInitialValues = { showCommentBox: false };
+  const zIonButtonStyle = {
+    boxShadow: '0 2px 4px rgba(0,0,0,.08), 0 0 1px rgba(50,79,58,.1)'
+  };
   return (
     <ZIonGrid>
       <Formik
-        initialValues={{
-          showCommentBox: false
-        }}
+        initialValues={formikInitialValues}
         onSubmit={() => {}}>
         {({ values, setFieldValue }) => {
           return (
@@ -96,10 +98,7 @@ const ZWorkspacePostsLayout: React.FC<{
                     fill='clear'
                     className='rounded-full overflow-hidden ion-no-padding w-[40px] h-[40px] zaions__bg_white'
                     size='small'
-                    style={{
-                      boxShadow:
-                        '0 2px 4px rgba(0,0,0,.08), 0 0 1px rgba(50,79,58,.1)'
-                    }}>
+                    style={zIonButtonStyle}>
                     <ZIonIcon
                       icon={checkmark}
                       color='dark'
@@ -111,10 +110,7 @@ const ZWorkspacePostsLayout: React.FC<{
                     fill='clear'
                     className='rounded-full overflow-hidden ion-no-padding w-[40px] h-[40px] zaions__bg_white mt-2'
                     size='small'
-                    style={{
-                      boxShadow:
-                        '0 2px 4px rgba(0,0,0,.08), 0 0 1px rgba(50,79,58,.1)'
-                    }}>
+                    style={zIonButtonStyle}>
                     <ZIonIcon
                       icon={
                         (pageType !== undefined

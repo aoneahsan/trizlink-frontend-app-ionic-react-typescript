@@ -213,9 +213,14 @@ const ZTimetableTab: React.FC<{
     { day: daysEnum.sunday, loop: 3 }
   ];
 
+  // #region Comp Constant
+  const formikInitialValues = {};
+
+  // #endregion
+
   return (
     <Formik
-      initialValues={{}}
+      initialValues={formikInitialValues}
       onSubmit={() => {}}>
       {() => {
         return (
@@ -254,20 +259,24 @@ const ZTimetableTab: React.FC<{
                       compState?.timeSlotData?.map(
                         (_timeSlot, _timeSlotIndex) => {
                           if (_element.day === _timeSlot?.day) {
+                            const divStyle = {
+                              borderColor: _timeSlot?.color
+                            };
+
+                            const zIonIconStyle = {
+                              color: _timeSlot?.color
+                            };
+
                             return (
                               <div
                                 key={_timeSlotIndex}
                                 className='w-full h-[2.4rem] mb-3 shadow-sm zaions__bg_white rounded border flex ion-align-items-center ion-justify-content-between px-2'
-                                style={{
-                                  borderColor: _timeSlot?.color
-                                }}>
+                                style={divStyle}>
                                 <ZIonText className='flex ion-align-items-center'>
                                   <ZIonIcon
                                     icon={timeOutline}
                                     className='w-6 h-6'
-                                    style={{
-                                      color: _timeSlot?.color
-                                    }}
+                                    style={zIonIconStyle}
                                   />
                                   <ZIonText className='mt-[2px] text-sm ms-2'>
                                     {_timeSlot?.time}

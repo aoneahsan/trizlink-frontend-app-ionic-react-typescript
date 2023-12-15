@@ -107,9 +107,7 @@ const ZaionsResourceLibrary: React.FC = () => {
                   sizeMd='12'
                   sizeSm='12'
                   sizeXs='12'>
-                  <ZIonText
-                    className='text-lg zaions__color_gray2'
-                    style={{ borderBottom: '1px #eff0f2 solid' }}>
+                  <ZIonText className='text-lg zaions__color_gray2 border-b border-[#eff0f2] '>
                     Filter Resources
                   </ZIonText>
                   <div className='zaions__color_gray2'>

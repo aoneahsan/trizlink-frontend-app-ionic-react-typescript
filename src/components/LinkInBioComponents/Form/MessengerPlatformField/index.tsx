@@ -6,21 +6,18 @@ import { addOutline, appsOutline } from 'ionicons/icons';
 import { type ItemReorderEventDetail } from '@ionic/react';
 import { FieldArray, useFormikContext } from 'formik';
 import { useRecoilState } from 'recoil';
-import classNames from 'classnames';
+import { useParams } from 'react-router';
 import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
-import { convertToRaw } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
 
 // Custom Imports
 import LinkInBioTitleField from '../TitleField';
 import {
   ZIonButton,
-  ZIonCol,
   ZIonIcon,
   ZIonItem,
   ZIonReorder,
   ZIonReorderGroup,
-  ZIonRow
+  ZIonSpinner
 } from '@/components/ZIonComponents';
 import LinkInBioLinkField from '../LinkField';
 import LinkInBioPDButton from '@/components/LinkInBioComponents/UI/PerDefinedButton';
@@ -33,7 +30,7 @@ import LinkInBioObjectField from '../objectField';
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
 // Global constant
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 import { reportCustomError } from '@/utils/customErrorType';
 import { ZIcons } from '@/utils/ZIcons';
@@ -50,10 +47,22 @@ import {
 
 // Recoil states
 import { LinkInBioPredefinedMessengerPlatformRState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioBlocksState';
+import {
+  _getQueryKey,
+  isZNonEmptyString,
+  isZNonEmptyStrings
+} from '@/utils/helpers';
 
 // Styles
 
 const LinkInBioMessengerPlatformCardField: React.FC = () => {
+  const { linkInBioId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
+    linkInBioId?: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
+  }>();
+
   const { values, handleBlur, handleChange, setFieldValue } =
     useFormikContext<LinkInBioSingleBlockContentType>();
 
@@ -64,14 +73,38 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
   ] = useRecoilState(LinkInBioPredefinedMessengerPlatformRState);
 
   // fetch block data from api and storing it in LinkInBioBlocksData variable...
-  const { data: LinkInBioPreDefinedMessengerPlatformData } = useZRQGetRequest<
+  const {
+    data: LinkInBioPreDefinedMessengerPlatformData,
+    isFetching: isLibPDMessengerPlatformDataFetching
+  } = useZRQGetRequest<
     Array<LinkInBioPredefinedPlatformInterface<messengerPlatformsBlockEnum>>
   >({
     _url: API_URL_ENUM.linkInBioPreDefinedMessengerPlatform_create_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS
-        .LINK_IN_BIO_PRE_DEFINED_MESSENGER_PLATFORM.MAIN
-    ]
+    _key: _getQueryKey({
+      keys: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS
+          .LINK_IN_BIO_PRE_DEFINED_MESSENGER_PLATFORM.MAIN
+      ]
+      // additionalKeys: [workspaceId, wsShareId, shareWSMemberId, linkInBioId]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId]
+    }),
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
+    ],
+    _shouldFetchWhenIdPassed: !(
+      isZNonEmptyStrings([workspaceId, linkInBioId]) ||
+      isZNonEmptyStrings([wsShareId, shareWSMemberId, linkInBioId])
+    )
   });
 
   // After fetching data and storing it to LinkInBioPreDefinedMessengerPlatformData variable, setting data to setLinkInBioPredefinedMessengerPlatformState recoil state and making sure that if only the data refetch then again store the lates data in recoil state...
@@ -163,7 +196,36 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
           return (
             <>
               {/* After getting MusicPlatform data from api and storing it to the LinkInBioPredefinedMusicPlatformsRState recoil state, looping the recoil state value to make MusicPlatforms */}
-              <ZIonRow
+              <div className='flex flex-wrap w-full gap-2 mb-3 ion-align-items-center'>
+                {isLibPDMessengerPlatformDataFetching && (
+                  <ZIonSpinner className='w-8 h-8 mx-auto my-2' />
+                )}
+                {!isLibPDMessengerPlatformDataFetching &&
+                  linkInBioPredefinedMessengerPlatformState?.map(el => {
+                    const _index = values.cardItems?.findIndex(
+                      _el => _el.messengerCardType === el.type
+                    ) as number;
+                    return (
+                      <LinkInBioPDButton
+                        key={el.id}
+                        color={_index > -1 ? 'secondary' : 'light'}
+                        icon={
+                          el.icon !== undefined && el.icon !== null
+                            ? ZIcons[el.icon]
+                            : ZIcons.PlaceHolder
+                        }
+                        testingselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.music.block}-${el.type}`}
+                        onClick={() => {
+                          toggleMusicPlatformCardHandler({
+                            _type: el.type,
+                            _title: el.title as string
+                          });
+                        }}
+                      />
+                    );
+                  })}
+              </div>
+              {/* <ZIonRow
                 className={classNames({
                   'ion-padding-bottom mb-3 row-gap-1-point-6-rem w-[90%]': true
                 })}>
@@ -196,7 +258,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                     </ZIonCol>
                   );
                 })}
-              </ZIonRow>
+              </ZIonRow> */}
 
               <ZIonButton
                 expand='block'
@@ -229,18 +291,15 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                       <ZIonItem
                         key={_index}
                         lines='none'
-                        className='pt-2 pb-3 my-4 border zaions-linkInBio-block'
+                        className='pt-3 pb-3 my-4 border rounded-md shadow-md zaions-linkInBio-block z-ion-bg-transparent'
                         testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.cardItem}-${_index}`}
                         testingselector={
                           CONSTANTS.testingSelectors.linkInBio.formPage.design
                             .blockForm.fields.messenger.cardItem
-                        }
-                        style={{
-                          '--background': 'transparent'
-                        }}>
+                        }>
                         <ZIonReorder
                           slot='start'
-                          className='ms-3 me-2'>
+                          className='ms-1 me-5'>
                           <ZIonIcon
                             icon={appsOutline}
                             color='dark'
@@ -248,7 +307,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                           />
                         </ZIonReorder>
 
-                        <div className='w-full pe-3'>
+                        <div className='w-full ps-2'>
                           <LinkInBioTitleField
                             placeholder='Title'
                             name={`cardItems.${_index}.title`}
@@ -391,12 +450,9 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                                   .design.blockForm.fields.messenger.textInput
                               }
                               onChange={editorState => {
-                                const rawContentState = convertToRaw(
-                                  editorState.getCurrentContent()
-                                );
                                 void setFieldValue(
                                   `cardItems.${_index}.text`,
-                                  draftToHtml(rawContentState),
+                                  editorState,
                                   false
                                 );
                               }}
@@ -408,7 +464,7 @@ const LinkInBioMessengerPlatformCardField: React.FC = () => {
                         <ZCustomDeleteComponent
                           slot='end'
                           iconColor='danger'
-                          className='ion-no-padding me-1 ms-2'
+                          className='ion-no-padding ms-5 me-1'
                           testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.messenger.deleteBtn}-${_index}`}
                           testingselector={
                             CONSTANTS.testingSelectors.linkInBio.formPage.design

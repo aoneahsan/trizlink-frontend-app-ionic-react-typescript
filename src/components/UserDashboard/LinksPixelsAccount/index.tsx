@@ -58,8 +58,7 @@ const selectOptionComponent = (_el: PixelAccountType): JSX.Element => {
       key={_el.id}>
       <ZIonImg
         src={Platforms[_el.platform as PixelPlatformsEnum]}
-        style={{ width: '30px' }}
-        className='pe-3'
+        className='pe-3 w-[30px]'
       />
       {_el.title}
     </div>

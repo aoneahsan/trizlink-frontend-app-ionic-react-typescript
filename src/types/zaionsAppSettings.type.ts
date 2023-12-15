@@ -55,8 +55,13 @@ export type ZGenericObject = Record<string, string | number>;
 
 export enum ZMediaEnum {
   image = 'image',
+  rss = 'rss',
+  calendar = 'calendar',
   video = 'video',
   audio = 'audio',
+  map = 'map',
   carousel = 'carousel',
-  countDown = 'countDown'
+  countDown = 'countDown',
+  iframe = 'iframe',
+  iframeSrcDoc = 'iframeSrcDoc'
 }

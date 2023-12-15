@@ -82,12 +82,14 @@ const ZaionsHPBanner: React.FC = () => {
           sizeXs='12'>
           <ZIonImg
             src={HomePageHeroDesktopImage}
-            style={{
-              width: !isMdScale ? '100%' : '460px',
-              minWidth: isLgScale ? '60%' : '100%'
-            }}
             alt=''
-            className='mx-auto'
+            className={classNames({
+              'mx-auto': true,
+              'w-full': !isMdScale,
+              'w-[460px]': isMdScale,
+              'min-w-[60%]': isLgScale,
+              'min-w-full': !isLgScale
+            })}
           />
         </ZIonCol>
       </ZIonRow>

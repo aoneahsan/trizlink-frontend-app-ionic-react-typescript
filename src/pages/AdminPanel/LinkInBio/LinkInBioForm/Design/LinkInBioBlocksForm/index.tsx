@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useLocation, useParams } from 'react-router';
 
 /**
@@ -31,8 +31,6 @@ import {
 import { useRecoilState } from 'recoil';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
-import { convertToRaw } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
 import { type OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 
 /**
@@ -45,12 +43,12 @@ import {
   ZIonDatetimeButton,
   ZIonIcon,
   ZIonImg,
-  ZIonItem,
   ZIonLabel,
   ZIonRange,
   ZIonRouterLink,
   ZIonRow,
   ZIonSkeletonText,
+  ZIonSpinner,
   ZIonText,
   ZIonTitle
 } from '@/components/ZIonComponents';
@@ -59,7 +57,6 @@ import LinkInBioLinkField from '@/components/LinkInBioComponents/Form/LinkField'
 import LinkInBioTitleField from '@/components/LinkInBioComponents/Form/TitleField';
 import LinkInBioDescriptionField from '@/components/LinkInBioComponents/Form/DescriptionField';
 import LinkInBioUploadField from '@/components/LinkInBioComponents/Form/UploadField';
-import LinkInBioDateTimeField from '@/components/LinkInBioComponents/Form/DateTimeField';
 import LinkInBioEnableField from '@/components/LinkInBioComponents/Form/DateTimeField/enableField';
 import LinkInBioSearchField from '@/components/LinkInBioComponents/Form/SearchField';
 import LinkInBioTimezoneField from '@/components/LinkInBioComponents/Form/TimezoneField';
@@ -68,7 +65,7 @@ import ZRichTextEditor from '@/components/CustomComponents/ZTextEditor';
 import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
 import ZaionsColorPiker from '@/components/InPageComponents/ZaionsColorPiker';
 import ZCustomDeleteComponent from '@/components/CustomComponents/ZCustomDeleteComponent';
-import ZLinkInBioAddBlockModal from '@/components/InPageComponents/ZaionsModals/LinkInBioAddBlockModal';
+import ZLinkInBioAddBlockModal from '@/components/InPageComponents/ZaionsModals/LinkInBio/AddBlockModal';
 import LinkInBioCarouselCardField from '@/components/LinkInBioComponents/Form/CarouselCardField';
 import LinkInBioQAndACardField from '@/components/LinkInBioComponents/Form/QAndACardField';
 import LinkInBioMusicPlatformCardField from '@/components/LinkInBioComponents/Form/MusicPlatformField';
@@ -89,19 +86,27 @@ import {
   useZRQDeleteRequest,
   useZRQGetRequest,
   useZRQUpdateRequest,
-  useZGetRQCacheData
+  useZGetRQCacheData,
+  useZRQCreateRequest
 } from '@/ZaionsHooks/zreactquery-hooks';
 import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
 import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
 import CONSTANTS, { TIMEZONES } from '@/utils/constants';
 import {
+  _getQueryKey,
   createRedirectRoute,
   extractInnerData,
   formatReactSelectOption,
+  isZNonEmptyString,
+  isZNonEmptyStrings,
   zStringify
 } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  ZWSTypeEum,
+  extractInnerDataOptionsEnum
+} from '@/utils/enums';
 import { reportCustomError } from '@/utils/customErrorType';
 
 /**
@@ -144,17 +149,19 @@ import classes from '../styles.module.css';
  * ? Import of images like png,jpg,jpeg,gif,svg etc. is a Images Imports import
  * */
 import {
+  album_style,
   borderDashed,
   borderDotted,
   borderSolid,
   card_style_1,
   card_style_2,
   carousel_view,
+  circle_style,
   jelloAnimation,
   list_view,
-  mixed_view,
   pulseAnimation,
   shakeAnimation,
+  square_style,
   strip_style,
   swingAnimation,
   tadaAnimation,
@@ -163,6 +170,8 @@ import {
   wobbleAnimation,
   zoomAnimation
 } from '@/assets/images';
+import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
+import LinkInBioDateTimeField from '@/components/LinkInBioComponents/Form/DateTimeField';
 
 /**
  * Component props type go down
@@ -179,9 +188,11 @@ const ZLinkInBioBlocksForm: React.FC = () => {
   const location = useLocation();
 
   // current Link-in-bio id.
-  const { linkInBioId, workspaceId } = useParams<{
+  const { linkInBioId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
     linkInBioId?: string;
     workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region Custom hooks.
@@ -219,34 +230,60 @@ const ZLinkInBioBlocksForm: React.FC = () => {
   // #region API.
   // Update Link-in-bio block API.
   const { mutateAsync: UpdateLinkInBioBlock } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.linkInBioBlock_delete_update_get,
-    _queriesKeysToInvalidate: []
-    // [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN]
+    _url: API_URL_ENUM.linkInBioBlock_delete_update_get
   });
 
   // fetching link-in-bio block data with the help of linkInBioId and id from backend.
   const { data: linkInBioBlockData, isFetching: isLinkInBioBlockDataFetching } =
     useZRQGetRequest<LinkInBioBlockFromType>({
       _url: API_URL_ENUM.linkInBioBlock_delete_update_get,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.GET,
-        workspaceId ?? '',
-        linkInBioId ?? '',
-        _blockId ?? ''
-      ],
-      _itemsIds: [workspaceId ?? '', linkInBioId ?? '', _blockId ?? ''],
+      _key: _getQueryKey({
+        keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.GET],
+        additionalKeys: [
+          workspaceId,
+          wsShareId,
+          shareWSMemberId,
+          linkInBioId,
+          _blockId
+        ]
+      }),
+      _itemsIds: _getQueryKey({
+        keys: [
+          isZNonEmptyString(workspaceId)
+            ? ZWSTypeEum.personalWorkspace
+            : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+            ? ZWSTypeEum.shareWorkspace
+            : ''
+        ],
+        additionalKeys: [workspaceId, shareWSMemberId, linkInBioId, _blockId]
+      }),
       _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.type,
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.linkInBio.linkInBioId,
         CONSTANTS.RouteParams.linkInBio.libBlockId
       ],
-      _shouldFetchWhenIdPassed: !((_blockId?.trim()?.length ?? 0) > 0),
+      _shouldFetchWhenIdPassed: !(
+        isZNonEmptyStrings([workspaceId, _blockId]) ||
+        isZNonEmptyStrings([wsShareId, shareWSMemberId, _blockId])
+      ),
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
-
   // delete link-in-bio block api where use went to delete the block on preview panel and click on the delete button in ActionSheet (useZIonActionSheet) the deleteBlockHandler will execute with will hit this api and delete the block.
   const { mutateAsync: deleteLinkInBioBlockMutate } = useZRQDeleteRequest({
     _url: API_URL_ENUM.linkInBioBlock_delete_update_get
+  });
+
+  // Single file upload.
+  const { mutateAsync: uploadSingleFile } = useZRQCreateRequest({
+    _url: API_URL_ENUM.uploadSingleFile,
+    _authenticated: true,
+    _contentType: zAxiosApiRequestContentType.FormData
+  });
+
+  // Delete file api.
+  const { mutateAsync: deleteSingleFile } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.deleteSingleFile
   });
   // #endregion
 
@@ -267,11 +304,27 @@ const ZLinkInBioBlocksForm: React.FC = () => {
   // formik submit function.
   const formikSubmitHandler = async (_reqDataStr: string): Promise<void> => {
     try {
-      if (_reqDataStr !== undefined) {
+      if (isZNonEmptyString(_reqDataStr)) {
         // The update api...
         const _response = await UpdateLinkInBioBlock({
-          itemIds: [workspaceId ?? '', linkInBioId ?? '', _blockId ?? ''],
+          itemIds: _getQueryKey({
+            keys: [
+              isZNonEmptyString(workspaceId)
+                ? ZWSTypeEum.personalWorkspace
+                : isZNonEmptyString(wsShareId) &&
+                  isZNonEmptyString(shareWSMemberId)
+                ? ZWSTypeEum.shareWorkspace
+                : ''
+            ],
+            additionalKeys: [
+              workspaceId,
+              shareWSMemberId,
+              linkInBioId,
+              _blockId
+            ]
+          }),
           urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.type,
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.linkInBio.linkInBioId,
             CONSTANTS.RouteParams.linkInBio.libBlockId
@@ -279,7 +332,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
           requestData: _reqDataStr
         });
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           // if __response of the updateLinkInBioBlock api is success this showing success notification else not success then error notification.
           await validateRequestResponse({
             resultObj: _response
@@ -303,26 +356,41 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
           setLinkInBioBlocksState(_updatedLinkInBioBlocksState);
 
-          if (_extractItemFromResult?.id !== undefined) {
+          if (
+            _extractItemFromResult?.id !== undefined &&
+            _extractItemFromResult?.id !== null
+          ) {
             // Updating single block in all blocks data in RQ cache.
             await updateRQCDataHandler({
-              key: [
-                CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-                workspaceId ?? '',
-                linkInBioId ?? ''
-              ],
+              key: _getQueryKey({
+                keys: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN
+                ],
+                additionalKeys: [
+                  workspaceId,
+                  wsShareId,
+                  shareWSMemberId,
+                  linkInBioId
+                ]
+              }),
               data: _extractItemFromResult,
               id: _extractItemFromResult?.id
             });
 
             // Updating single block data in RQ cache.
             await updateRQCDataHandler<LinkInBioBlockFromType | undefined>({
-              key: [
-                CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.GET,
-                workspaceId ?? '',
-                linkInBioId ?? '',
-                _blockId ?? ''
-              ],
+              key: _getQueryKey({
+                keys: [
+                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.GET
+                ],
+                additionalKeys: [
+                  workspaceId,
+                  wsShareId,
+                  shareWSMemberId,
+                  linkInBioId,
+                  _blockId
+                ]
+              }),
               data: _extractItemFromResult,
               id: '',
               extractType: ZRQGetRequestExtractEnum.extractItem,
@@ -347,24 +415,46 @@ const ZLinkInBioBlocksForm: React.FC = () => {
         // );
 
         const _response = await deleteLinkInBioBlockMutate({
-          itemIds: [workspaceId ?? '', linkInBioId ?? '', _blockId ?? ''],
+          itemIds: _getQueryKey({
+            keys: [
+              isZNonEmptyString(workspaceId)
+                ? ZWSTypeEum.personalWorkspace
+                : isZNonEmptyString(wsShareId) &&
+                  isZNonEmptyString(shareWSMemberId)
+                ? ZWSTypeEum.shareWorkspace
+                : ''
+            ],
+            additionalKeys: [
+              workspaceId,
+              shareWSMemberId,
+              linkInBioId,
+              _blockId
+            ]
+          }),
           urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.type,
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.linkInBio.linkInBioId,
             CONSTANTS.RouteParams.linkInBio.libBlockId
           ]
         });
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           // getting all the LinkInBioBlocks from RQ cache.
           const _oldLinkInBioBlocks =
             extractInnerData<LinkInBioBlockFromType[]>(
               getRQCDataHandler<LinkInBioBlockFromType[]>({
-                key: [
-                  CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-                  workspaceId ?? '',
-                  linkInBioId ?? ''
-                ]
+                key: _getQueryKey({
+                  keys: [
+                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN
+                  ],
+                  additionalKeys: [
+                    workspaceId,
+                    wsShareId,
+                    shareWSMemberId,
+                    linkInBioId
+                  ]
+                })
               }) as LinkInBioBlockFromType[],
               extractInnerDataOptionsEnum.createRequestResponseItems
             ) ?? [];
@@ -376,11 +466,15 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
           // Updating data in RQ cache.
           await updateRQCDataHandler<LinkInBioBlockFromType[] | undefined>({
-            key: [
-              CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-              workspaceId ?? '',
-              linkInBioId ?? ''
-            ],
+            key: _getQueryKey({
+              keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN],
+              additionalKeys: [
+                workspaceId,
+                wsShareId,
+                shareWSMemberId,
+                linkInBioId
+              ]
+            }),
             data: _updatedLinkInBioBlocks,
             id: '',
             extractType: ZRQGetRequestExtractEnum.extractItems,
@@ -396,12 +490,20 @@ const ZLinkInBioBlocksForm: React.FC = () => {
           // Redirect to block
           zNavigatePushRoute(
             createRedirectRoute({
-              url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+              url: isZNonEmptyString(workspaceId)
+                ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
+                : isZNonEmptyString(wsShareId) &&
+                  isZNonEmptyString(shareWSMemberId)
+                ? ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Main
+                : '',
               params: [
                 CONSTANTS.RouteParams.workspace.workspaceId,
                 CONSTANTS.RouteParams.linkInBio.linkInBioId
               ],
-              values: [workspaceId ?? '', linkInBioId ?? ''],
+              values: _getQueryKey({
+                keys: [],
+                additionalKeys: [workspaceId, shareWSMemberId, linkInBioId]
+              }),
               routeSearchParams: {
                 page: ZLinkInBioPageEnum.design,
                 step: ZLinkInBioRHSComponentEnum.blocks
@@ -418,161 +520,200 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
   const isZFetching = isLinkInBioBlockDataFetching;
 
+  const formikInitialValues = {
+    target: {
+      url: linkInBioBlockData?.blockContent?.target?.url ?? '',
+
+      email: linkInBioBlockData?.blockContent?.target?.email ?? '',
+
+      phoneNumber: linkInBioBlockData?.blockContent?.target?.phoneNumber ?? '',
+
+      username: linkInBioBlockData?.blockContent?.target?.username ?? '',
+
+      accountId: linkInBioBlockData?.blockContent?.target?.accountId ?? '',
+
+      subject: linkInBioBlockData?.blockContent?.target?.subject ?? '',
+      message: linkInBioBlockData?.blockContent?.target?.message ?? '',
+      type:
+        linkInBioBlockData?.blockContent?.target?.type ??
+        linkInBioBlockCardItemEnum.whatsapp
+    },
+    vcard: {
+      firstName: linkInBioBlockData?.blockContent?.vcard?.firstName ?? '',
+      lastName: linkInBioBlockData?.blockContent?.vcard?.lastName ?? '',
+      mobile: linkInBioBlockData?.blockContent?.vcard?.mobile ?? '',
+      phone: linkInBioBlockData?.blockContent?.vcard?.phone ?? '',
+      fax: linkInBioBlockData?.blockContent?.vcard?.fax ?? '',
+      email: linkInBioBlockData?.blockContent?.vcard?.email ?? '',
+      company: linkInBioBlockData?.blockContent?.vcard?.company ?? '',
+      job: linkInBioBlockData?.blockContent?.vcard?.job ?? '',
+      street: linkInBioBlockData?.blockContent?.vcard?.street ?? '',
+      city: linkInBioBlockData?.blockContent?.vcard?.city ?? '',
+      zip: linkInBioBlockData?.blockContent?.vcard?.zip ?? 0,
+      state: linkInBioBlockData?.blockContent?.vcard?.state ?? '',
+      country: linkInBioBlockData?.blockContent?.vcard?.country ?? '',
+      website: linkInBioBlockData?.blockContent?.vcard?.website ?? ''
+    },
+    title: linkInBioBlockData?.blockContent?.title ?? '',
+    icon: linkInBioBlockData?.blockContent?.icon ?? '',
+    text: isZNonEmptyString(linkInBioBlockData?.blockContent?.text)
+      ? linkInBioBlockData?.blockContent?.text
+      : 'text',
+    description: linkInBioBlockData?.blockContent?.description ?? '',
+    titleIsEnable: linkInBioBlockData?.blockContent?.titleIsEnable ?? false,
+    descriptionIsEnable:
+      linkInBioBlockData?.blockContent?.descriptionIsEnable ?? false,
+    pictureIsEnable: linkInBioBlockData?.blockContent?.pictureIsEnable ?? false,
+    priceIsEnable: linkInBioBlockData?.blockContent?.priceIsEnable ?? false,
+    cardIsEnable: linkInBioBlockData?.blockContent?.cardIsEnable ?? false,
+    cardNumber: linkInBioBlockData?.blockContent?.cardNumber ?? 0,
+    searchString: linkInBioBlockData?.blockContent?.searchString ?? '',
+    spacing: linkInBioBlockData?.blockContent?.spacing ?? 0,
+    customHeight: linkInBioBlockData?.blockContent?.customHeight ?? 0,
+    date: linkInBioBlockData?.blockContent?.date ?? new Date().toString(),
+    timezone: linkInBioBlockData?.blockContent?.timezone ?? '',
+    imageUrl: linkInBioBlockData?.blockContent?.imageUrl ?? '',
+    imagePath: linkInBioBlockData?.blockContent?.imagePath ?? '',
+    imageFile: linkInBioBlockData?.blockContent?.imageFile ?? null,
+    avatarShadow: linkInBioBlockData?.blockContent?.avatarShadow ?? false,
+    cardMode: linkInBioBlockData?.blockContent?.cardMode ?? false,
+    iframe: linkInBioBlockData?.blockContent?.iframe ?? '',
+    separatorType:
+      linkInBioBlockData?.blockContent?.separatorType ??
+      SeparatorTypeEnum.solid,
+    separatorColor: linkInBioBlockData?.blockContent?.separatorColor ?? '',
+    separatorMargin: linkInBioBlockData?.blockContent?.separatorMargin ?? 0,
+    margin: linkInBioBlockData?.blockContent?.margin ?? 0,
+
+    map: {
+      formattedAddress: 'okay',
+      lat: 10,
+      lng: 10,
+      userEnteredAddress: ''
+    },
+
+    customAppearance: {
+      isEnabled:
+        linkInBioBlockData?.blockContent?.customAppearance?.isEnabled ?? false,
+      background: {
+        bgType:
+          linkInBioBlockData?.blockContent?.customAppearance?.background
+            ?.bgType ?? LinkInBioThemeBackgroundEnum.solidColor,
+        bgSolidColor:
+          linkInBioBlockData?.blockContent?.customAppearance?.background
+            ?.bgSolidColor ?? CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BG_COLOR,
+        bgGradientColors: {
+          startColor:
+            linkInBioBlockData?.blockContent?.customAppearance?.background
+              ?.bgGradientColors?.startColor ?? '',
+          endColor:
+            linkInBioBlockData?.blockContent?.customAppearance?.background
+              ?.bgGradientColors?.endColor ?? '',
+          direction:
+            linkInBioBlockData?.blockContent?.customAppearance?.background
+              ?.bgGradientColors?.direction ?? 0
+        }
+      },
+      color: linkInBioBlockData?.blockContent?.customAppearance?.color ?? '',
+      buttonType:
+        linkInBioBlockData?.blockContent?.customAppearance?.buttonType ??
+        LinkInBioButtonTypeEnum.inlineSquare,
+      shadowColor:
+        linkInBioBlockData?.blockContent?.customAppearance?.shadowColor ??
+        CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
+    },
+
+    animation: {
+      isEnabled:
+        linkInBioBlockData?.blockContent?.animation?.isEnabled ?? false,
+      type: linkInBioBlockData?.blockContent?.animation?.type
+    },
+
+    style:
+      linkInBioBlockData?.blockContent?.style ?? LinkInBioCardStyleEnum.square,
+
+    view:
+      linkInBioBlockData?.blockContent?.view ?? LinkInBioCardViewEnum.carousel,
+
+    cardItems: linkInBioBlockData?.blockContent?.cardItems ?? [],
+
+    form: {
+      formFields: linkInBioBlockData?.blockContent?.form?.formFields ?? [],
+      isTermEnabled:
+        linkInBioBlockData?.blockContent?.form?.isTermEnabled ?? false,
+      submitButtonText:
+        linkInBioBlockData?.blockContent?.form?.submitButtonText ?? 'Submit',
+      termText:
+        linkInBioBlockData?.blockContent?.form?.termText ??
+        'I Agree to Terms & Conditions',
+      termLink: linkInBioBlockData?.blockContent?.form?.termLink
+    },
+
+    schedule: {
+      isEnabled: linkInBioBlockData?.blockContent?.schedule?.isEnabled ?? false,
+      // startAt: linkInBioBlockData?.blockContent?.schedule?.startAt ?? '',
+      startAt:
+        linkInBioBlockData?.blockContent?.schedule?.startAt ??
+        new Date().toISOString(),
+      endAt:
+        linkInBioBlockData?.blockContent?.schedule?.endAt ??
+        new Date().toISOString(),
+      timezone: linkInBioBlockData?.blockContent?.schedule?.timezone ?? ''
+    },
+
+    isActive: Boolean(linkInBioBlockData?.isActive)
+  };
+
   return (
     <Formik
       // #region initial values
-      initialValues={{
-        target: {
-          url: linkInBioBlockData?.blockContent?.target?.url ?? '',
-
-          email: linkInBioBlockData?.blockContent?.target?.email ?? '',
-
-          phoneNumber:
-            linkInBioBlockData?.blockContent?.target?.phoneNumber ?? '',
-
-          username: linkInBioBlockData?.blockContent?.target?.username ?? '',
-
-          accountId: linkInBioBlockData?.blockContent?.target?.accountId ?? '',
-
-          subject: linkInBioBlockData?.blockContent?.target?.subject ?? '',
-          message: linkInBioBlockData?.blockContent?.target?.message ?? '',
-          type:
-            linkInBioBlockData?.blockContent?.target?.type ??
-            linkInBioBlockCardItemEnum.whatsapp
-        },
-        vcard: {
-          firstName: linkInBioBlockData?.blockContent?.vcard?.firstName ?? '',
-          lastName: linkInBioBlockData?.blockContent?.vcard?.lastName ?? '',
-          mobile: linkInBioBlockData?.blockContent?.vcard?.mobile ?? '',
-          phone: linkInBioBlockData?.blockContent?.vcard?.phone ?? '',
-          fax: linkInBioBlockData?.blockContent?.vcard?.fax ?? '',
-          email: linkInBioBlockData?.blockContent?.vcard?.email ?? '',
-          company: linkInBioBlockData?.blockContent?.vcard?.company ?? '',
-          job: linkInBioBlockData?.blockContent?.vcard?.job ?? '',
-          street: linkInBioBlockData?.blockContent?.vcard?.street ?? '',
-          city: linkInBioBlockData?.blockContent?.vcard?.city ?? '',
-          zip: linkInBioBlockData?.blockContent?.vcard?.zip ?? 0,
-          state: linkInBioBlockData?.blockContent?.vcard?.state ?? '',
-          country: linkInBioBlockData?.blockContent?.vcard?.country ?? '',
-          website: linkInBioBlockData?.blockContent?.vcard?.website ?? ''
-        },
-        title: linkInBioBlockData?.blockContent?.title ?? '',
-        icon: linkInBioBlockData?.blockContent?.icon ?? '',
-        text: linkInBioBlockData?.blockContent?.text ?? '',
-        description: linkInBioBlockData?.blockContent?.description ?? '',
-        titleIsEnable: linkInBioBlockData?.blockContent?.titleIsEnable ?? false,
-        descriptionIsEnable:
-          linkInBioBlockData?.blockContent?.descriptionIsEnable ?? false,
-        pictureIsEnable:
-          linkInBioBlockData?.blockContent?.pictureIsEnable ?? false,
-        priceIsEnable: linkInBioBlockData?.blockContent?.priceIsEnable ?? false,
-        cardIsEnable: linkInBioBlockData?.blockContent?.cardIsEnable ?? false,
-        cardNumber: linkInBioBlockData?.blockContent?.cardNumber ?? 0,
-        searchString: linkInBioBlockData?.blockContent?.searchString ?? '',
-        spacing: linkInBioBlockData?.blockContent?.spacing ?? 0,
-        customHeight: linkInBioBlockData?.blockContent?.customHeight ?? 0,
-        date: linkInBioBlockData?.blockContent?.date ?? '',
-        timezone: linkInBioBlockData?.blockContent?.timezone ?? '',
-        imageUrl: linkInBioBlockData?.blockContent?.imageUrl ?? '',
-        avatarShadow: linkInBioBlockData?.blockContent?.avatarShadow ?? false,
-        cardMode: linkInBioBlockData?.blockContent?.cardMode ?? false,
-        iframe: linkInBioBlockData?.blockContent?.iframe ?? '',
-        separatorType:
-          linkInBioBlockData?.blockContent?.separatorType ??
-          SeparatorTypeEnum.solid,
-        separatorColor: linkInBioBlockData?.blockContent?.separatorColor ?? '',
-        separatorMargin: linkInBioBlockData?.blockContent?.separatorMargin ?? 0,
-        margin: linkInBioBlockData?.blockContent?.margin ?? 0,
-
-        map: {
-          formattedAddress: 'okay',
-          lat: 10,
-          lng: 10,
-          userEnteredAddress: 'working'
-        },
-
-        customAppearance: {
-          isEnabled:
-            linkInBioBlockData?.blockContent?.customAppearance?.isEnabled ??
-            false,
-          background: {
-            bgType:
-              linkInBioBlockData?.blockContent?.customAppearance?.background
-                ?.bgType ?? LinkInBioThemeBackgroundEnum.solidColor,
-            bgSolidColor:
-              linkInBioBlockData?.blockContent?.customAppearance?.background
-                ?.bgSolidColor ?? CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BG_COLOR,
-            bgGradientColors: {
-              startColor:
-                linkInBioBlockData?.blockContent?.customAppearance?.background
-                  ?.bgGradientColors?.startColor ?? '',
-              endColor:
-                linkInBioBlockData?.blockContent?.customAppearance?.background
-                  ?.bgGradientColors?.endColor ?? '',
-              direction:
-                linkInBioBlockData?.blockContent?.customAppearance?.background
-                  ?.bgGradientColors?.direction ?? 0
-            }
-          },
-          color:
-            linkInBioBlockData?.blockContent?.customAppearance?.color ?? '',
-          buttonType:
-            linkInBioBlockData?.blockContent?.customAppearance?.buttonType ??
-            LinkInBioButtonTypeEnum.inlineSquare,
-          shadowColor:
-            linkInBioBlockData?.blockContent?.customAppearance?.shadowColor ??
-            CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
-        },
-
-        animation: {
-          isEnabled:
-            linkInBioBlockData?.blockContent?.animation?.isEnabled ?? false,
-          type: linkInBioBlockData?.blockContent?.animation?.type
-        },
-
-        style:
-          linkInBioBlockData?.blockContent?.style ??
-          LinkInBioCardStyleEnum.square,
-
-        view:
-          linkInBioBlockData?.blockContent?.view ??
-          LinkInBioCardViewEnum.carousel,
-
-        cardItems: linkInBioBlockData?.blockContent?.cardItems ?? [],
-
-        form: {
-          formFields: linkInBioBlockData?.blockContent?.form?.formFields ?? [],
-          isTermEnabled:
-            linkInBioBlockData?.blockContent?.form?.isTermEnabled ?? false,
-          submitButtonText:
-            linkInBioBlockData?.blockContent?.form?.submitButtonText ??
-            'Submit',
-          termText:
-            linkInBioBlockData?.blockContent?.form?.termText ??
-            'I Agree to Terms & Conditions',
-          termLink: linkInBioBlockData?.blockContent?.form?.termLink
-        },
-
-        schedule: {
-          isEnabled:
-            linkInBioBlockData?.blockContent?.schedule?.isEnabled ?? false,
-          // startAt: linkInBioBlockData?.blockContent?.schedule?.startAt ?? '',
-          startAt:
-            linkInBioBlockData?.blockContent?.schedule?.startAt ??
-            new Date().toISOString(),
-          endAt:
-            linkInBioBlockData?.blockContent?.schedule?.endAt ??
-            new Date().toISOString(),
-          timezone: linkInBioBlockData?.blockContent?.schedule?.timezone ?? ''
-        },
-
-        isActive: linkInBioBlockData?.isActive
-      }}
-      enableReinitialize
+      initialValues={formikInitialValues}
+      enableReinitialize={true}
       // #endregion
 
       // #region submit handler
-      onSubmit={values => {
+      onSubmit={async values => {
+        if (
+          isZNonEmptyString(values?.imageUrl) &&
+          values?.imageFile !== null &&
+          values?.imageFile !== undefined &&
+          values?.imageUrl !== linkInBioBlockData?.blockContent?.imageUrl
+        ) {
+          const formData = new FormData();
+          formData.append('file', values?.imageFile);
+
+          if (isZNonEmptyString(linkInBioBlockData?.blockContent?.imagePath)) {
+            // Deleting the file from storage
+            await deleteSingleFile({
+              requestData: zStringify({
+                filePath: linkInBioBlockData?.blockContent?.imagePath
+              }),
+              itemIds: [],
+              urlDynamicParts: []
+            });
+          }
+
+          const result = await uploadSingleFile(formData);
+
+          if (result !== undefined || result !== null) {
+            const _data = (
+              result as {
+                data: {
+                  file: object;
+                  fileName: object;
+                  filePath: string;
+                  fileUrl: string;
+                };
+              }
+            )?.data;
+
+            values.imageUrl = _data.fileUrl;
+            values.imagePath = _data.filePath;
+
+            // delete values.imageFile;
+          }
+        }
+
         const stringifyValue = zStringify({
           blockType: linkInBioBlockData?.blockType,
           blockContent: zStringify(values),
@@ -583,8 +724,27 @@ const ZLinkInBioBlocksForm: React.FC = () => {
       // #endregion
     >
       {({ values, dirty, handleChange, setFieldValue, submitForm }) => {
+        const directionIconStyle = {
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          transform: `rotate(${values?.customAppearance?.background?.bgGradientColors?.direction}deg)`
+        };
         return (
           <>
+            {/* {dirty && (
+              <ZIonButton
+                minHeight='2.5rem'
+                className='fixed z-30 transition-all bottom-2 left-6 animated bounceInLeft z-animation-delay-0 z-animation-iteration-1'
+                testingselector={
+                  CONSTANTS.testingSelectors.linkInBio.formPage.design
+                    .TopTitleBar.saveBtn
+                }
+                onClick={() => {
+                  void submitForm();
+                }}>
+                <ZIonText className='me-2'>Save</ZIonText>
+                <ZIonIcon icon={saveOutline} />
+              </ZIonButton>
+            )} */}
             <ZIonCol
               sizeXl='11'
               sizeLg='12'
@@ -611,12 +771,24 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                     onClick={() => {
                       zNavigatePushRoute(
                         createRedirectRoute({
-                          url: ZaionsRoutes.AdminPanel.LinkInBio.Edit,
+                          url: isZNonEmptyString(workspaceId)
+                            ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
+                            : isZNonEmptyString(wsShareId) &&
+                              isZNonEmptyString(shareWSMemberId)
+                            ? ZaionsRoutes.AdminPanel.ShareWS.Link_in_bio.Main
+                            : '',
                           params: [
                             CONSTANTS.RouteParams.workspace.workspaceId,
                             CONSTANTS.RouteParams.linkInBio.linkInBioId
                           ],
-                          values: [workspaceId ?? '', linkInBioId ?? ''],
+                          values: _getQueryKey({
+                            keys: [],
+                            additionalKeys: [
+                              workspaceId,
+                              shareWSMemberId,
+                              linkInBioId
+                            ]
+                          }),
                           routeSearchParams: {
                             page: ZLinkInBioPageEnum.design,
                             step: ZLinkInBioRHSComponentEnum.blocks
@@ -633,8 +805,9 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                   {isZFetching && (
                     <ZIonText>
                       <ZIonSkeletonText
-                        width='6rem'
-                        height='1rem'
+                        width='7rem'
+                        height='1.1rem'
+                        className='rounded-sm'
                       />
                     </ZIonText>
                   )}
@@ -746,13 +919,13 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                     [...Array(3)].map((_, i) => (
                       <ZIonButton
                         fill='clear'
-                        className='mt-2 ion-no-padding me-3 ion-no-margin'
+                        className='mt-1 ion-no-padding me-3 ion-no-margin'
                         color='light'
                         size='small'
                         key={i}>
                         <ZIonSkeletonText
                           width='2rem'
-                          height='2rem'
+                          height='1.5rem'
                           animated={true}
                         />
                       </ZIonButton>
@@ -770,9 +943,6 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                           CONSTANTS.testingSelectors.linkInBio.formPage.design
                             .blockForm.isActiveBtn
                         }
-                        style={{
-                          '--background-hover-opacity': '0'
-                        }}
                         onClick={() => {
                           void setFieldValue(
                             'isActive',
@@ -781,11 +951,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                           );
                         }}>
                         <ZIonIcon
-                          icon={
-                            values.isActive === true
-                              ? eyeOutline
-                              : eyeOffOutline
-                          }
+                          icon={values.isActive ? eyeOutline : eyeOffOutline}
                           className='mt-2 w-7 h-7'
                           color='dark'
                         />
@@ -794,15 +960,12 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                       {/* duplicate button */}
                       <ZIonButton
                         fill='clear'
-                        className='ion-no-padding me-3 ion-no-margin'
+                        className='ion-no-padding me-3 ion-no-margin z-ion-background-hover-opacity'
                         color='light'
                         testingselector={
                           CONSTANTS.testingSelectors.linkInBio.formPage.design
                             .blockForm.duplicateBtn
                         }
-                        style={{
-                          '--background-hover-opacity': '0'
-                        }}
                         onClick={() => {
                           presentZLinkInBioAddBlockModal({
                             _cssClass: 'lib-block-modal-size'
@@ -907,13 +1070,15 @@ const ZLinkInBioBlocksForm: React.FC = () => {
               {isZFetching && (
                 <ZIonTitle className='text-lg font-bold ion-no-padding'>
                   <ZIonSkeletonText
-                    height='1rem'
+                    height='1.1rem'
+                    width='8rem'
+                    className='rounded-sm'
                     animated={true}
                   />
                 </ZIonTitle>
               )}
 
-              <ZIonRow className='ion-padding-bottom'>
+              <ZIonRow className='mb-3'>
                 {isZFetching &&
                   [...Array(5)].map((_, i) => {
                     return (
@@ -922,7 +1087,9 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         className='mt-3'
                         key={i}>
                         <ZIonSkeletonText
-                          height='2rem'
+                          height='2.2rem'
+                          width='95%'
+                          className='rounded-md'
                           animated={true}
                         />
                       </ZIonCol>
@@ -1024,7 +1191,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                     LinkInBioBlockEnum.form) && (
                   <ZIonCol
                     size='12'
-                    className='mt-1'>
+                    className='mt-3'>
                     <LinkInBioTitleField
                       name='title'
                       value={values.title}
@@ -1056,17 +1223,17 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                 {linkInBioBlockData?.blockType === LinkInBioBlockEnum.form && (
                   <ZIonCol
                     size='12'
-                    className='mt-3 border-bottom__violet'>
-                    <ZIonTitle className='font-bold text-[16px] ion-no-padding ms-3'>
+                    className='mt-4 border-bottom__violet'>
+                    <ZIonTitle className='font-bold text-[16px] ion-no-padding '>
                       ✅ Submit button
                     </ZIonTitle>
-                    <div className='mt-2 mb-5'>
+                    <div className='mt-3 mb-5'>
                       <LinkInBioTitleField
                         name='form.submitButtonText'
                         value={values.form?.submitButtonText}
                         onIonChange={handleChange}
                         placeholder='Submit button text'
-                        showImageInSlot={true}
+                        showImageInSlot={false}
                         testingselector={
                           CONSTANTS.testingSelectors.linkInBio.formPage.design
                             .blockForm.fields.submitButtonText
@@ -1124,16 +1291,10 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         CONSTANTS.testingSelectors.linkInBio.formPage.design
                           .blockForm.fields.textEditor
                       }
-                      onChange={editorState => {
-                        const rawContentState = convertToRaw(
-                          editorState.getCurrentContent()
-                        );
-                        void setFieldValue(
-                          'text',
-                          draftToHtml(rawContentState),
-                          false
-                        );
+                      onChange={editorContentStr => {
+                        void setFieldValue('text', editorContentStr, false);
                       }}
+                      initialValue={values.text}
                     />
                   </ZIonCol>
                 )}
@@ -1142,22 +1303,35 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                 {(linkInBioBlockData?.blockType ===
                   LinkInBioBlockEnum.countdown ||
                   linkInBioBlockData?.blockType === LinkInBioBlockEnum.card ||
-                  linkInBioBlockData?.blockType === LinkInBioBlockEnum.avatar ||
                   linkInBioBlockData?.blockType ===
-                    LinkInBioBlockEnum.music) && (
+                    LinkInBioBlockEnum.avatar) && (
                   <ZIonCol
                     size='12'
                     className='mt-4'>
                     <LinkInBioUploadField
                       dropdownHeight='6rem'
-                      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                      setFieldValue={setFieldValue}
-                      fieldName='imageUrl'
                       imageUrl={values.imageUrl}
                       testingselector={
                         CONSTANTS.testingSelectors.linkInBio.formPage.design
                           .blockForm.fields.upload
                       }
+                      onDrop={event => {
+                        if (event[0] !== undefined && event[0] !== null) {
+                          void setFieldValue('imageFile', event[0], false);
+
+                          const reader = new FileReader();
+
+                          reader.onload = ({ target }) => {
+                            void setFieldValue(
+                              'imageUrl',
+                              target?.result as string,
+                              false
+                            );
+                          };
+
+                          reader.readAsDataURL(event[0]);
+                        }
+                      }}
                     />
                   </ZIonCol>
                 )}
@@ -1168,7 +1342,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                   <ZIonCol
                     size='12'
                     className='pt-2 mt-4'>
-                    <LinkInBioDateTimeField
+                    {/* <LinkInBioDateTimeField
                       name='date'
                       value={values.date}
                       onIonChange={handleChange}
@@ -1177,7 +1351,25 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         CONSTANTS.testingSelectors.linkInBio.formPage.design
                           .blockForm.fields.dateTimeInput
                       }
-                    />
+                    /> */}
+
+                    <Suspense
+                      fallback={
+                        <div className='flex w-full ion-align-items-center ion-justify-content-center'>
+                          <ZIonSpinner className='w-7 h-7' />
+                        </div>
+                      }>
+                      <LinkInBioDateTimeField
+                        name='date'
+                        value={values.date}
+                        onIonChange={handleChange}
+                        id={`${linkInBioBlockData?.blockType}-${linkInBioBlockData?.id}`}
+                        testingselector={
+                          CONSTANTS.testingSelectors.linkInBio.formPage.design
+                            .blockForm.fields.dateTimeInput
+                        }
+                      />
+                    </Suspense>
                   </ZIonCol>
                 )}
 
@@ -1204,8 +1396,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         formatReactSelectOption(
                           values?.timezone,
                           TIMEZONES as ZGenericObject[],
-                          'label',
-                          'value'
+                          'value',
+                          'label'
                         ) ?? []
                       }
                     />
@@ -1347,34 +1539,28 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                 {linkInBioBlockData?.blockType === LinkInBioBlockEnum.map && (
                   <ZIonCol
                     size='12'
-                    className='mt-4'>
-                    <ZIonItem className='ion-item-start-no-padding'>
-                      <ZRGAutoCompleteInput
-                        inputStyles={{ width: '100%', border: 'none' }}
-                        defaultValue={values?.map?.userEnteredAddress}
-                        inputName='map.userEnteredAddress'
-                        testingselector={
-                          CONSTANTS.testingSelectors.linkInBio.formPage.design
-                            .blockForm.fields.map
-                        }
-                        className={classNames(
-                          classes['map-auto-complete-input']
-                        )}
-                        onLocationSelectHandler={(
-                          place: google.maps.places.PlaceResult
-                        ) => {
-                          void setFieldValue(
-                            'map.formattedAddress',
-                            'Making a string',
-                            true
-                          );
-                          const _lat = place.geometry?.location?.lat() ?? 0;
-                          const _lng = place.geometry?.location?.lng() ?? 0;
-                          void setFieldValue('map.lat', _lat, true);
-                          void setFieldValue('map.lng', _lng, true);
-                        }}
-                      />
-                    </ZIonItem>
+                    className='mb-2'>
+                    <ZRGAutoCompleteInput
+                      defaultValue={values?.map?.userEnteredAddress}
+                      inputName='map.userEnteredAddress'
+                      testingselector={
+                        CONSTANTS.testingSelectors.linkInBio.formPage.design
+                          .blockForm.fields.map
+                      }
+                      onLocationSelectHandler={(
+                        place: google.maps.places.PlaceResult
+                      ) => {
+                        void setFieldValue(
+                          'map.formattedAddress',
+                          'Making a string',
+                          true
+                        );
+                        const _lat = place.geometry?.location?.lat() ?? 0;
+                        const _lng = place.geometry?.location?.lng() ?? 0;
+                        void setFieldValue('map.lat', _lat, true);
+                        void setFieldValue('map.lng', _lng, true);
+                      }}
+                    />
                   </ZIonCol>
                 )}
 
@@ -1582,9 +1768,9 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={borderSolid}
-                          style={{
-                            width: '22px'
-                          }}
+                          className={classNames({
+                            'w-[22px]': true
+                          })}
                         />
                       </ZRoundedButton>
 
@@ -1606,9 +1792,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={borderDashed}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -1630,9 +1814,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={borderDotted}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
                     </div>
@@ -1780,9 +1962,9 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                   {/* 🖍️ Button color */}
                   {values.customAppearance.isEnabled && (
                     <ZIonCol
-                      className='mt-3 mb-2'
+                      className='mt-2 mb-2'
                       size='12'>
-                      <div className='flex ion-align-items-center ion-padding-bottom'>
+                      <div className='flex ion-align-items-start ion-padding-bottom'>
                         {values?.customAppearance?.background?.bgType ===
                           LinkInBioThemeBackgroundEnum.solidColor && (
                           <ZaionsColorPiker
@@ -1809,14 +1991,9 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                             />
                             <ZIonButton
                               shape='round'
-                              className='mt-3 direction-button ion-margin-horizontal'
+                              className='mt-3 direction-button ion-margin-horizontal w-[2.5rem] ion-no-padding'
+                              height='2.5rem'
                               color='secondary'
-                              style={{
-                                '--padding-top': '1.3rem',
-                                '--padding-bottom': '1.3rem',
-                                '--padding-start': '.7rem',
-                                '--padding-end': '.7rem'
-                              }}
                               onClick={() => {
                                 let _newDirection =
                                   +(values?.customAppearance?.background
@@ -1834,10 +2011,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                               <ZIonIcon
                                 icon={arrowUp}
                                 className='direction-icon'
-                                style={{
-                                  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                                  transform: `rotate(${values?.customAppearance?.background?.bgGradientColors?.direction}deg)`
-                                }}
+                                style={directionIconStyle}
                               />
                             </ZIonButton>
                             <ZaionsColorPiker
@@ -1880,7 +2054,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         )}
                       </div>
 
-                      <ZIonTitle className='font-bold text-[16px] ion-margin-top ion-no-padding'>
+                      <ZIonTitle className='font-bold text-[16px] mt-1 ion-no-padding'>
                         🎫 Button type
                       </ZIonTitle>
                       <ZIonRow
@@ -1896,16 +2070,14 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                             className={classNames(
                               classes['zaions-button-type'],
                               {
-                                'zaions-button-type-button-active': true, // from index.css
+                                'zaions-button-type-button-active z-ion-border-radius-0':
+                                  true, // from index.css
                                 'zaions-border-primary':
                                   values?.customAppearance?.buttonType ===
                                   LinkInBioButtonTypeEnum.inlineSquare
                               }
                             )}
                             color='medium'
-                            style={{
-                              '--border-radius': '0'
-                            }}
                             onClick={() => {
                               void setFieldValue(
                                 'customAppearance.buttonType',
@@ -1921,15 +2093,13 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                             className={classNames(
                               classes['zaions-button-type'],
                               {
+                                'z-ion-border-radius-point-7rem': true,
                                 'zaions-border-primary':
                                   values?.customAppearance?.buttonType ===
                                   LinkInBioButtonTypeEnum.inlineRound
                               }
                             )}
                             color='medium'
-                            style={{
-                              '--border-radius': '10px'
-                            }}
                             onClick={() => {
                               void setFieldValue(
                                 'customAppearance.buttonType',
@@ -1968,6 +2138,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                             className={classNames(
                               classes['zaions-button-type'],
                               {
+                                'z-ion-border-radius-0': true,
                                 'zaions-border-primary':
                                   values?.customAppearance?.buttonType ===
                                   LinkInBioButtonTypeEnum.inlineSquareOutline
@@ -1979,9 +2150,6 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                                 ? 'primary'
                                 : 'medium'
                             }
-                            style={{
-                              '--border-radius': '0'
-                            }}
                             fill='outline'
                             onClick={() => {
                               void setFieldValue(
@@ -1998,6 +2166,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                             className={classNames(
                               classes['zaions-button-type'],
                               {
+                                'z-ion-border-radius-point-7rem': true,
                                 'zaions-border-primary':
                                   values?.customAppearance?.buttonType ===
                                   LinkInBioButtonTypeEnum.inlineRoundOutline
@@ -2009,9 +2178,6 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                                 ? 'primary'
                                 : 'medium'
                             }
-                            style={{
-                              '--border-radius': '10px'
-                            }}
                             fill='outline'
                             onClick={() => {
                               void setFieldValue(
@@ -2058,6 +2224,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                               classes['zaions-button-type'],
                               classes['zaions-button-type-shadow'],
                               {
+                                'z-ion-border-radius-0': true,
                                 'zaions-border-transparent':
                                   values?.customAppearance?.buttonType !==
                                   LinkInBioButtonTypeEnum.inlineSquareShadow,
@@ -2067,9 +2234,6 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                               }
                             )}
                             color='medium'
-                            style={{
-                              '--border-radius': '0'
-                            }}
                             onClick={() => {
                               void setFieldValue(
                                 'customAppearance.buttonType',
@@ -2086,6 +2250,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                               classes['zaions-button-type'],
                               classes['zaions-button-type-shadow'],
                               {
+                                'z-ion-border-radius-point-7rem': true,
                                 'zaions-border-transparent':
                                   values?.customAppearance?.buttonType !==
                                   LinkInBioButtonTypeEnum.inlineRoundShadow,
@@ -2095,9 +2260,6 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                               }
                             )}
                             color='medium'
-                            style={{
-                              '--border-radius': '10px'
-                            }}
                             onClick={() => {
                               void setFieldValue(
                                 'customAppearance.buttonType',
@@ -2232,9 +2394,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={card_style_1}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2254,9 +2414,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={card_style_2}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
                     </>
@@ -2289,9 +2447,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={thumb_style_1}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2311,9 +2467,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={thumb_style_2}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2333,13 +2487,13 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={strip_style}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
                     </>
                   )}
+
+                  {/*  */}
                   {linkInBioBlockData?.blockType ===
                     LinkInBioBlockEnum.avatar && (
                     <>
@@ -2358,10 +2512,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                           );
                         }}>
                         <ZIonImg
-                          src={strip_style}
-                          style={{
-                            width: '22px'
-                          }}
+                          src={circle_style}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2380,10 +2532,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                           );
                         }}>
                         <ZIonImg
-                          src={strip_style}
-                          style={{
-                            width: '22px'
-                          }}
+                          src={square_style}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2402,10 +2552,8 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                           );
                         }}>
                         <ZIonImg
-                          src={strip_style}
-                          style={{
-                            width: '22px'
-                          }}
+                          src={album_style}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
                     </>
@@ -2448,9 +2596,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                     }}>
                     <ZIonImg
                       src={carousel_view}
-                      style={{
-                        width: '22px'
-                      }}
+                      className='w-[22px]'
                     />
                   </ZRoundedButton>
 
@@ -2470,13 +2616,11 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                     }}>
                     <ZIonImg
                       src={list_view}
-                      style={{
-                        width: '22px'
-                      }}
+                      className='w-[22px]'
                     />
                   </ZRoundedButton>
 
-                  <ZRoundedButton
+                  {/* <ZRoundedButton
                     className='me-2'
                     color={
                       values.view === LinkInBioCardViewEnum.mixed
@@ -2492,11 +2636,9 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                     }}>
                     <ZIonImg
                       src={mixed_view}
-                      style={{
-                        width: '22px'
-                      }}
+                      className='w-[22px]'
                     />
-                  </ZRoundedButton>
+                  </ZRoundedButton> */}
                 </div>
               </ZIonCol>
             )}
@@ -2561,9 +2703,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={tadaAnimation}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2584,9 +2724,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={shakeAnimation}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2607,9 +2745,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={swingAnimation}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2630,9 +2766,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={wobbleAnimation}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2653,9 +2787,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={jelloAnimation}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2676,9 +2808,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={pulseAnimation}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
 
@@ -2699,9 +2829,7 @@ const ZLinkInBioBlocksForm: React.FC = () => {
                         }}>
                         <ZIonImg
                           src={zoomAnimation}
-                          style={{
-                            width: '22px'
-                          }}
+                          className='w-[22px]'
                         />
                       </ZRoundedButton>
                     </ZIonCol>

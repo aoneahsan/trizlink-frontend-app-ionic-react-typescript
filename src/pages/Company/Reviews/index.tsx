@@ -59,7 +59,10 @@ const ZaionsReviews: React.FC = () => {
         <ZaionsTopMenu />
         <ZaionsInpageHeader
           title={
-            <ZIonText style={{ lineHeight: !isMdScale ? '3rem' : '' }}>
+            <ZIonText
+              className={classNames({
+                'leading-[3rem]': !isMdScale
+              })}>
               {PRODUCT_NAME} Reviews
             </ZIonText>
           }
@@ -139,7 +142,7 @@ const ZaionsReviews: React.FC = () => {
                               <div className='flex'>
                                 <ZIonImg
                                   src={el.reviewStars}
-                                  style={{ width: '83px' }}
+                                  className='w-[83px]'
                                 />
 
                                 <ZIonText className='ms-2 text-[15px]'>

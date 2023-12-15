@@ -10,7 +10,7 @@ import React, { Suspense } from 'react';
  * */
 import { useParams } from 'react-router';
 import classNames from 'classnames';
-import { menuController } from '@ionic/core';
+import { menuController } from '@ionic/core/components';
 import { filterOutline, refresh } from 'ionicons/icons';
 
 /**
@@ -268,10 +268,10 @@ const ZWSSettingEmbedWidgetListPage: React.FC = () => {
                 // Open the menu by menu-id
                 await menuController.enable(
                   true,
-                  CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
+                  CONSTANTS.MENU_IDS.WS_SETTINGS_MENU_ID
                 );
                 await menuController.open(
-                  CONSTANTS.MENU_IDS.WS_SETTINGS_PAGE_MENU_ID
+                  CONSTANTS.MENU_IDS.WS_SETTINGS_MENU_ID
                 );
               }}>
               Open menu

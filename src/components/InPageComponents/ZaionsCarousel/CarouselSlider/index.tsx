@@ -40,7 +40,7 @@ const ZaionsCarouselSlider: React.FC = () => {
               // slidesPerView={1}
               // onSlideChange={() => {}}
               // onSwiper={(_) => {}}
-              style={{ width: '100%' }}>
+              className='w-full'>
               <SwiperSlide key={0}>
                 <ZIonCol></ZIonCol>
                 <>

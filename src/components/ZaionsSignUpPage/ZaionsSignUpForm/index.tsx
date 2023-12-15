@@ -214,6 +214,21 @@ const ZaionsSignUpForm: React.FC = props => {
     }
   }, []);
 
+  const formikInitialValues = {
+    username: '',
+    emailAddress: compState?.email ?? '',
+    password: '',
+    otp: '',
+    confirm_password: '',
+
+    isOTPApiError: false,
+    OTPApiErrorText: '',
+    OTPCodeValidTill: compState?.OTPCodeValidTill ?? '',
+    resendOTPValidCheck: compState?.resendOTPValidCheck ?? false,
+
+    tab: compState?.tab ?? ZSetPasswordTabEnum.sendOptTab
+  };
+
   return (
     <ZIonRow className='ion-justify-content-center'>
       <ZIonCol
@@ -225,20 +240,7 @@ const ZaionsSignUpForm: React.FC = props => {
         sizeXs='11.5'>
         <Formik
           // Initial Values of sign up form fields
-          initialValues={{
-            username: '',
-            emailAddress: compState?.email ?? '',
-            password: '',
-            otp: '',
-            confirm_password: '',
-
-            isOTPApiError: false,
-            OTPApiErrorText: '',
-            OTPCodeValidTill: compState?.OTPCodeValidTill ?? '',
-            resendOTPValidCheck: compState?.resendOTPValidCheck ?? false,
-
-            tab: compState?.tab ?? ZSetPasswordTabEnum.sendOptTab
-          }}
+          initialValues={formikInitialValues}
           // Validations of sign up form fields
           validate={values => {
             try {

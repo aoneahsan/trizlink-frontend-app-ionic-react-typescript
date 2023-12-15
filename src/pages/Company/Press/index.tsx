@@ -92,7 +92,7 @@ const ZaionsPress: React.FC = () => {
                         <ZIonRouterLink routerLink={el.link}>
                           <ZIonImg
                             src={el.image}
-                            style={{ width: '100%' }}
+                            className='w-full'
                           />
                         </ZIonRouterLink>
                       </ZIonCol>
@@ -106,7 +106,7 @@ const ZaionsPress: React.FC = () => {
                       <ZIonText className=''>{el.date}</ZIonText>
                       <ZIonRouterLink
                         routerLink={el.link}
-                        color={'dark'}>
+                        color='dark'>
                         <ZIonText>
                           <h3 className='font-extrabold'>{el.title}</h3>
                         </ZIonText>
@@ -119,9 +119,8 @@ const ZaionsPress: React.FC = () => {
                       <ZIonCol>
                         <ZIonRouterLink routerLink={el.link}>
                           <ZIonImg
-                            className='ms-auto'
+                            className='ms-auto w-[90%]'
                             src={el.image}
-                            style={{ width: '90%' }}
                           />
                         </ZIonRouterLink>
                       </ZIonCol>

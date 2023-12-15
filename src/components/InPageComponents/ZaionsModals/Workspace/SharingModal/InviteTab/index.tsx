@@ -571,17 +571,22 @@ const ZInviteTab: React.FC<{
   };
   // #endregion
 
+  // #region Comp Constant
+  const formikInitialValues = {
+    role: compState?.selectedItem?.memberRole.name ?? WSRolesNameEnum.Approver,
+    email: compState?.selectedItem?.email ?? '',
+    canCreateShortUrl: compState?.canCreateShortUrl ?? false,
+
+    isApiEmailError: false,
+    apiEmailErrorText: ''
+  };
+
+  const zIonButtonStyle = { '--border-width': '1px' };
+  // #endregion
+
   return (
     <Formik
-      initialValues={{
-        role:
-          compState?.selectedItem?.memberRole.name ?? WSRolesNameEnum.Approver,
-        email: compState?.selectedItem?.email ?? '',
-        canCreateShortUrl: compState?.canCreateShortUrl ?? false,
-
-        isApiEmailError: false,
-        apiEmailErrorText: ''
-      }}
+      initialValues={formikInitialValues}
       validate={values => {
         const errors: { email?: string } = {};
 
@@ -1015,9 +1020,7 @@ const ZInviteTab: React.FC<{
                     className={classNames({
                       'm-0 flex h-full normal-case ion-align-items-start': true
                     })}
-                    style={{
-                      '--border-width': '1px'
-                    }}>
+                    style={zIonButtonStyle}>
                     <ZIonIcon
                       icon={
                         compState?.formMode === FormMode.ADD
@@ -1069,9 +1072,7 @@ const ZInviteTab: React.FC<{
                           'm-0 flex h-full normal-case ion-align-items-start':
                             true
                         })}
-                        style={{
-                          '--border-width': '1px'
-                        }}>
+                        style={zIonButtonStyle}>
                         <ZIonIcon
                           icon={linkOutline}
                           className='me-2'
@@ -1296,9 +1297,7 @@ const ZInviteTab: React.FC<{
                   className={classNames({
                     'm-0 flex h-full mt-3 ion-align-items-start': true
                   })}
-                  style={{
-                    '--border-width': '1px'
-                  }}>
+                  style={zIonButtonStyle}>
                   <ZIonIcon
                     icon={linkOutline}
                     className='me-2'

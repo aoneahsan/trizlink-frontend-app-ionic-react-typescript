@@ -123,14 +123,11 @@ const ZWorkspaceFacebookPageLayout: React.FC = () => {
         className='ion-no-padding'>
         <div
           className={classNames({
-            'w-[calc(100% - 46px)] zaions-background-set relative': true,
+            'w-[calc(100% - 46px)] zaions-background-set relative zaions__medium_bg':
+              true,
             'h-[312px]': isXlScale,
             'h-[211px]': !isXlScale
-          })}
-          style={{
-            backgroundImage:
-              'url(https://d2b57pa8jvjkcd.cloudfront.net/xGF9qraKHpDFhkqdC/JHg2CLhHKG-tom-idea.jpg)'
-          }}>
+          })}>
           <ZIonButtons className='absolute zaions__dark_set rounded right-[1%] top-[2%]'>
             <ZIonButton className='ion-no-padding'>
               <ZIonIcon icon={settingsOutline} />

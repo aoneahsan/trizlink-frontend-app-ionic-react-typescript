@@ -71,7 +71,10 @@ const ZaionsLinkInBio: React.FC = () => {
           lgImg={libMobile}
           label='Link-in-bio'
           title={
-            <ZIonText style={{ lineHeight: !isMdScale ? '3rem' : '' }}>
+            <ZIonText
+              className={classNames({
+                'leading-[3rem]': !isMdScale
+              })}>
               Make your social <br /> media profiles work <br /> harder
             </ZIonText>
           }
@@ -136,8 +139,8 @@ const ZaionsLinkInBio: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -159,8 +162,8 @@ const ZaionsLinkInBio: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -183,8 +186,8 @@ const ZaionsLinkInBio: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -261,8 +264,8 @@ const ZaionsLinkInBio: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -284,8 +287,8 @@ const ZaionsLinkInBio: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -307,8 +310,8 @@ const ZaionsLinkInBio: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -330,8 +333,8 @@ const ZaionsLinkInBio: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -404,8 +407,8 @@ const ZaionsLinkInBio: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -427,8 +430,8 @@ const ZaionsLinkInBio: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -450,8 +453,8 @@ const ZaionsLinkInBio: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -473,8 +476,8 @@ const ZaionsLinkInBio: React.FC = () => {
                       sizeXs='1.5'>
                       <ZIonImg
                         src={checkVector}
-                        style={{ width: '25px' }}
-                        className='mt-1'></ZIonImg>
+                        className='mt-1 w-[25px]'
+                      />
                     </ZIonCol>
                     <ZIonCol
                       size='11'
@@ -505,10 +508,9 @@ const ZaionsLinkInBio: React.FC = () => {
         />
 
         <ZIonGrid
-          className={`mt-4 pb-3 mb-5 pt-5 ${
+          className={`mt-4 pb-3 mb-5 pt-5 zaions-ion-bg-color-light ${
             !isLgScale ? 'ion-text-center' : ''
-          }`}
-          style={{ background: '#f5fafe' }}>
+          }`}>
           <ZIonRow className='pt-2 mb-4'>
             <ZIonCol
               size='1'
@@ -524,9 +526,7 @@ const ZaionsLinkInBio: React.FC = () => {
               <ZIonText>
                 <b>Advanced Link-in-bio</b>
               </ZIonText>
-              <h2
-                className='pt-1 mt-2 font-bolder zaions__color_dark'
-                style={{ fontSize: '38px' }}>
+              <h2 className='pt-1 mt-2 font-bolder zaions__color_dark text-[38px]'>
                 Make your {PRODUCT_NAME} Link-in-bio even more powerful
               </h2>
               <ZIonText className='pt-1 text-lg zaions__color_gray2'>

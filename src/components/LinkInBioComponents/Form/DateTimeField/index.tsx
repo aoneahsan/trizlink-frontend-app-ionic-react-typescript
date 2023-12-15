@@ -3,18 +3,13 @@ import React from 'react';
 
 // Packages Imports
 import classNames from 'classnames';
-import { calendarOutline } from 'ionicons/icons';
 import {
   type DatetimeChangeEventDetail,
   type IonDatetimeCustomEvent
 } from '@ionic/core';
 
 // Custom Imports
-import {
-  ZIonDatetimeButton,
-  ZIonIcon,
-  ZIonItem
-} from '@/components/ZIonComponents';
+import { ZIonDatetimeButton, ZIonItem } from '@/components/ZIonComponents';
 
 // Styles
 import classes from './styles.module.css';
@@ -46,12 +41,13 @@ const LinkInBioDateTimeField: React.FC<LinkInBioDateTimeFieldInterface> = ({
       minHeight='32px'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}
-      style={{ '--background-hover': 'transparent' }}>
-      <ZIonIcon
+      className='ion-item-start-no-padding z-ion-background-hover-transparent z-inner-padding-end-0'
+      lines='none'>
+      {/* <ZIonIcon
         icon={calendarOutline}
         slot='start'
         className='my-0 me-2'
-      />
+      /> */}
 
       <ZIonDatetimeButton
         id={id}

@@ -78,9 +78,7 @@ const InPageFooter: React.FC<{
       <ZIonFooter collapse='fade'>
         <>
           {blueSec ? (
-            <div
-              className='py-3'
-              style={{ background: '#0b1736' }}>
+            <div className='py-3'>
               <div className='flex flex-col py-5 ion-text-center ion-margin-top ion-padding-bottom ion-justify-content-center ion-align-items-center'>
                 <br />
                 <ZIonText
@@ -387,25 +385,29 @@ const InPageFooter: React.FC<{
                       size='large'
                       className='ion-padding-end'
                       icon={logoTwitter}
-                      style={{ color: '#56575b' }}></ZIonIcon>
+                      color='medium'
+                    />
                   </ZIonRouterLink>
                   <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
                     <ZIonIcon
                       size='large'
                       className='ion-padding-end zaions__color_gray2'
-                      icon={logoInstagram}></ZIonIcon>
+                      icon={logoInstagram}
+                    />
                   </ZIonRouterLink>
                   <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
                     <ZIonIcon
                       size='large'
                       className='ion-padding-end zaions__color_gray2'
-                      icon={logoLinkedin}></ZIonIcon>
+                      icon={logoLinkedin}
+                    />
                   </ZIonRouterLink>
                   <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
                     <ZIonIcon
                       size='large'
                       icon={logoFacebook}
-                      className='zaions__color_gray2'></ZIonIcon>
+                      className='zaions__color_gray2'
+                    />
                   </ZIonRouterLink>
                 </ZIonCol>
                 <ZIonCol
@@ -1203,25 +1205,29 @@ const InPageFooter: React.FC<{
                     size='large'
                     className='ion-padding-end'
                     icon={logoTwitter}
-                    style={{ color: '#56575b' }}></ZIonIcon>
+                    color='medium'
+                  />
                 </ZIonRouterLink>
                 <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
                   <ZIonIcon
                     size='large'
                     className='ion-padding-end zaions__color_gray2'
-                    icon={logoInstagram}></ZIonIcon>
+                    icon={logoInstagram}
+                  />
                 </ZIonRouterLink>
                 <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
                   <ZIonIcon
                     size='large'
                     className='ion-padding-end zaions__color_gray2'
-                    icon={logoLinkedin}></ZIonIcon>
+                    icon={logoLinkedin}
+                  />
                 </ZIonRouterLink>
                 <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
                   <ZIonIcon
                     size='large'
                     icon={logoFacebook}
-                    className='zaions__color_gray2'></ZIonIcon>
+                    className='zaions__color_gray2'
+                  />
                 </ZIonRouterLink>
               </div>
             </ZIonAccordion>

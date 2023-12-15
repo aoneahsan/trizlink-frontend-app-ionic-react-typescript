@@ -161,11 +161,7 @@ const DashboardTopBarUserAccountModal: React.FC = ({
               className='ion-no-padding'>
               <ZIonImg
                 src={productSmLogo}
-                style={{
-                  minWidth: '100%',
-                  maxWidth: '100%'
-                }}
-                className='rounded-full me-2'
+                className='max-w-full rounded-full me-2 min-w-ful'
               />
             </ZIonCol>
             <ZIonCol className='ion-no-padding ps-3'>
@@ -283,7 +279,10 @@ const ZLinkDashboardTopBar: React.FC = () => {
                 size={!isMdScale ? 'small' : 'default'}>
                 <ZIonIcon
                   icon={helpCircle}
-                  style={{ fontSize: !isMdScale ? '2rem' : '2.5rem' }}
+                  className={classNames({
+                    'text-[2rem]': !isMdScale,
+                    'text-[2.5rem]': isMdScale
+                  })}
                 />
               </ZIonButton>
               <ZIonButton
@@ -305,11 +304,10 @@ const ZLinkDashboardTopBar: React.FC = () => {
                 }}>
                 <ZIonImg
                   src={productSmLogo}
-                  style={{
-                    minWidth: !isMdScale ? '20px' : '30px',
-                    maxWidth: !isMdScale ? '20px' : '30px'
-                  }}
-                  className='me-2'
+                  className={classNames({
+                    'min-w-[20px] max-w-[20px]': !isMdScale,
+                    'min-w-[30px] max-w-[30px]': isMdScale
+                  })}
                 />
                 talhairshad
                 <ZIonIcon

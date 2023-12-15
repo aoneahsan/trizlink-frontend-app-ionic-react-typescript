@@ -193,9 +193,7 @@ const ZaionsAcceptableUsePolicy: React.FC = () => {
                 thoroughly and take appropriate actions, up to and including
                 terminating user accounts.
               </ZIonText>
-              <ZIonText
-                className='pt-1 pb-0 mt-3 mb-0'
-                style={{ fontWeight: '700' }}>
+              <ZIonText className='pt-1 pb-0 mt-3 mb-0 font-bold'>
                 If you believe {PRODUCT_NAME} mistakenly flagged your activity
                 as misconduct, you can contact us and we will investigate your
                 appeal.

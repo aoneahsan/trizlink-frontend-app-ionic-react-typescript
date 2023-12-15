@@ -47,8 +47,10 @@ const Zaions101: React.FC = () => {
           label={`${PRODUCT_NAME} 101`}
           title={
             <ZIonText
-              className='block'
-              style={{ lineHeight: !isMdScale ? '3rem' : '' }}>
+              className={classNames({
+                block: true,
+                'leading-[3rem]': !isMdScale
+              })}>
               World-class link management
             </ZIonText>
           }

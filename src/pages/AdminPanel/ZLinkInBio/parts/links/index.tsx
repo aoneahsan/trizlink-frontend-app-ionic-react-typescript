@@ -101,6 +101,32 @@ const ZLinkInBioLinksSection: React.FC = () => {
     event.detail.complete();
   };
 
+  const ZIonAccordionStyle = { 'border-radius': '20px' };
+  const addLinkButtonStyle = {
+    '--padding-top': '1.4rem',
+    '--padding-bottom': '1.4rem'
+  };
+  const headerButtonStyle = {
+    '--padding-top': '1.2rem',
+    '--padding-bottom': '1.2rem',
+    '--padding-end': '1rem',
+    '--padding-start': '1rem',
+    '--box-shadow': 'none',
+    '--border-width': '1px'
+  };
+  const zIonButtonStyle = {
+    '--background-hover': 'transparent',
+    '--background-hover-opacity': '0',
+    'margin-right': '2rem'
+  };
+
+  const zIonButtonPaddingStyle = {
+    '--padding-top': '.8rem',
+    '--padding-bottom': '.8rem',
+    '--padding-end': '.5rem',
+    '--padding-start': '.5rem'
+  };
+
   return (
     <ZIonPage>
       <ZIonContent
@@ -117,7 +143,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
               <ZIonAccordionGroup>
                 <ZIonAccordion
                   value='analytics'
-                  style={{ 'border-radius': '20px' }}>
+                  style={ZIonAccordionStyle}>
                   <ZIonItem
                     slot='header'
                     className={classNames(classes['link-page-analytics'], {
@@ -150,10 +176,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
                     expand='block'
                     shape='round'
                     className='ion-text-capitalize font-bold text-[16px]'
-                    style={{
-                      '--padding-top': '1.4rem',
-                      '--padding-bottom': '1.4rem'
-                    }}>
+                    style={addLinkButtonStyle}>
                     <ZIonIcon
                       icon={addOutline}
                       className='me-1'
@@ -170,14 +193,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
                     className='ion-text-capitalize me-2'
                     shape='round'
                     color='medium'
-                    style={{
-                      '--padding-top': '1.2rem',
-                      '--padding-bottom': '1.2rem',
-                      '--padding-end': '1rem',
-                      '--padding-start': '1rem',
-                      '--box-shadow': 'none',
-                      '--border-width': '1px'
-                    }}
+                    style={headerButtonStyle}
                     fill='outline'>
                     <ZIonIcon
                       icon={fileTrayFullOutline}
@@ -202,9 +218,7 @@ const ZLinkInBioLinksSection: React.FC = () => {
                       disabled={false}
                       onIonItemReorder={handleReorder}>
                       {/* Item as drag components inside list start */}
-                      <ZIonItem
-                        className='ion-margin-bottom'
-                        style={{ 'border-radius': '25px' }}>
+                      <ZIonItem className='ion-margin-bottom rounded-[25px]'>
                         {/* AiOutlineHolder */}
                         <IonReorder slot='start'>
                           <IonIcon icon={appsOutline} />
@@ -215,20 +229,12 @@ const ZLinkInBioLinksSection: React.FC = () => {
                             className='ion-no-padding ion-no-margin'>
                             {/* Title Input */}
                             <div className=''>
-                              {/* <ZIonInput
-value={'Seo Home - Zaions'}
-className='text-[14px]'
-/> */}
                               <ZIonButton
                                 fill='clear'
                                 size='small'
                                 color='dark'
                                 className='ion-no-margin ion-no-padding ion-text-capitalize'
-                                style={{
-                                  '--background-hover': 'transparent',
-                                  '--background-hover-opacity': '0',
-                                  'margin-right': '2rem'
-                                }}>
+                                style={zIonButtonStyle}>
                                 <ZIonText className='me-2 font-bold text-[14px] tracking-normal'>
                                   Seo Home - Zaions
                                 </ZIonText>
@@ -246,11 +252,7 @@ me='text-[14px]'
                                 size='small'
                                 color='dark'
                                 className='ion-no-margin ion-no-padding ion-text-lowercase'
-                                style={{
-                                  '--background-hover': 'transparent',
-                                  '--background-hover-opacity': '0',
-                                  'margin-right': '2rem'
-                                }}>
+                                style={zIonButtonStyle}>
                                 <ZIonText className='text-sm font-bold tracking-normal me-2'>
                                   {ZaionsBusinessDetails.WebsiteUrl}
                                 </ZIonText>
@@ -263,12 +265,7 @@ me='text-[14px]'
                               fill='clear'
                               className='mx-2 ion-text-capitalize'
                               shape='round'
-                              style={{
-                                '--padding-top': '.8rem',
-                                '--padding-bottom': '.8rem',
-                                '--padding-end': '.5rem',
-                                '--padding-start': '.5rem'
-                              }}
+                              style={zIonButtonPaddingStyle}
                               color='dark'
                               size='small'
                               title='Notify subscribers'>
@@ -284,12 +281,7 @@ me='text-[14px]'
                               <ZIonButton
                                 fill='clear'
                                 className='ion-text-capitalize me-2 ms-0'
-                                style={{
-                                  '--padding-top': '.8rem',
-                                  '--padding-bottom': '.8rem',
-                                  '--padding-end': '.5rem',
-                                  '--padding-start': '.5rem'
-                                }}
+                                style={zIonButtonPaddingStyle}
                                 color='dark'
                                 size='small'
                                 title='Redirect'>
@@ -299,12 +291,7 @@ me='text-[14px]'
                               <ZIonButton
                                 fill='clear'
                                 className='ion-text-capitalize me-2 ms-0'
-                                style={{
-                                  '--padding-top': '.8rem',
-                                  '--padding-bottom': '.8rem',
-                                  '--padding-end': '.5rem',
-                                  '--padding-start': '.5rem'
-                                }}
+                                style={zIonButtonPaddingStyle}
                                 color='dark'
                                 size='small'
                                 title='Thumbnail'>
@@ -314,12 +301,7 @@ me='text-[14px]'
                               <ZIonButton
                                 fill='clear'
                                 className='ion-text-capitalize me-2 ms-0'
-                                style={{
-                                  '--padding-top': '.8rem',
-                                  '--padding-bottom': '.8rem',
-                                  '--padding-end': '.5rem',
-                                  '--padding-start': '.5rem'
-                                }}
+                                style={zIonButtonPaddingStyle}
                                 color='dark'
                                 size='small'
                                 title='Prioritize'>
@@ -329,12 +311,7 @@ me='text-[14px]'
                               <ZIonButton
                                 fill='clear'
                                 className='ion-text-capitalize me-2 ms-0'
-                                style={{
-                                  '--padding-top': '.8rem',
-                                  '--padding-bottom': '.8rem',
-                                  '--padding-end': '.5rem',
-                                  '--padding-start': '.5rem'
-                                }}
+                                style={zIonButtonPaddingStyle}
                                 color='dark'
                                 size='small'
                                 title='Schedule'>
@@ -344,12 +321,7 @@ me='text-[14px]'
                               <ZIonButton
                                 fill='clear'
                                 className='ion-text-capitalize me-2 ms-0'
-                                style={{
-                                  '--padding-top': '.8rem',
-                                  '--padding-bottom': '.8rem',
-                                  '--padding-end': '.5rem',
-                                  '--padding-start': '.5rem'
-                                }}
+                                style={zIonButtonPaddingStyle}
                                 color='dark'
                                 size='small'
                                 title='Lock'>
@@ -359,12 +331,7 @@ me='text-[14px]'
                               <ZIonButton
                                 fill='clear'
                                 className='ion-text-lowercase me-2 ms-0'
-                                style={{
-                                  '--padding-top': '.8rem',
-                                  '--padding-bottom': '.8rem',
-                                  '--padding-end': '.5rem',
-                                  '--padding-start': '.5rem'
-                                }}
+                                style={zIonButtonPaddingStyle}
                                 color='dark'
                                 size='small'
                                 title='Lifetime clicks'>
@@ -381,12 +348,7 @@ me='text-[14px]'
                               <ZIonButton
                                 fill='clear'
                                 className='ion-text-capitalize me-0 ms-0'
-                                style={{
-                                  '--padding-top': '.8rem',
-                                  '--padding-bottom': '.8rem',
-                                  '--padding-end': '.5rem',
-                                  '--padding-start': '.5rem'
-                                }}
+                                style={zIonButtonPaddingStyle}
                                 color='dark'
                                 size='small'
                                 title='Delete'>

@@ -22,7 +22,11 @@ import {
 } from '@/ZaionsHooks/zreactquery-hooks';
 
 // Global Constants
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  ZWSTypeEum,
+  extractInnerDataOptionsEnum
+} from '@/utils/enums';
 import { reportCustomError } from '@/utils/customErrorType';
 import {
   createRedirectRoute,
@@ -31,7 +35,6 @@ import {
   zStringify
 } from '@/utils/helpers';
 import CONSTANTS from '@/utils/constants';
-import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Images
 import { ProductFavicon } from '@/assets/images';
@@ -40,12 +43,13 @@ import { ProductFavicon } from '@/assets/images';
 import { ZaionsLinkInBioDefaultData } from '@/data/UserDashboard/LinkInBio/index.data';
 
 // Types
-import { type LinkInBioType } from '@/types/AdminPanel/linkInBioType';
 import {
   ZLinkInBioPageEnum,
+  type LinkInBioType,
   ZLinkInBioRHSComponentEnum
 } from '@/types/AdminPanel/linkInBioType';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
+import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
 // Styles
 
@@ -58,16 +62,40 @@ const ZaionsAddLinkInBioModal: React.FC<{
   dismissZIonModal: (data?: string, role?: string | undefined) => void;
   zNavigatePushRoute?: (_url: string) => void;
   workspaceId: string;
-}> = ({ dismissZIonModal, zNavigatePushRoute, workspaceId }) => {
+  shareWSMemberId: string;
+  wsShareId: string;
+}> = ({
+  dismissZIonModal,
+  zNavigatePushRoute,
+  workspaceId,
+  wsShareId,
+  shareWSMemberId
+}) => {
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
+  console.log({ workspaceId, wsShareId, shareWSMemberId });
 
   // Create new link-in-bio API.
   const { mutateAsync: createLinkInBioMutate } =
     useZRQCreateRequest<LinkInBioType>({
       _url: API_URL_ENUM.linkInBio_create_list,
-      _itemsIds: [workspaceId],
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId]
+      _itemsIds:
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+          ? [workspaceId, ZWSTypeEum.personalWorkspace]
+          : wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [shareWSMemberId, ZWSTypeEum.shareWorkspace]
+          : [],
+      _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.workspaceId,
+        CONSTANTS.RouteParams.workspace.type
+      ]
     });
 
   const FormikSubmitHandler = async (data: string): Promise<void> => {
@@ -81,15 +109,34 @@ const ZaionsAddLinkInBioModal: React.FC<{
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_data?.id !== null) {
+          if (_data?.id !== null && _data?.id !== undefined) {
+            const _libCacheData =
+              getRQCDataHandler<LinkInBioType[]>({
+                key:
+                  workspaceId !== undefined &&
+                  workspaceId !== null &&
+                  workspaceId?.trim()?.length > 0
+                    ? [
+                        CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+                        workspaceId
+                      ]
+                    : wsShareId !== undefined &&
+                      wsShareId !== null &&
+                      wsShareId?.trim()?.length > 0 &&
+                      shareWSMemberId !== undefined &&
+                      shareWSMemberId !== null &&
+                      shareWSMemberId?.trim()?.length > 0
+                    ? [
+                        CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+                        wsShareId,
+                        shareWSMemberId
+                      ]
+                    : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN]
+              }) ?? [];
+
             const _oldLinkInBios =
               extractInnerData<LinkInBioType[]>(
-                getRQCDataHandler<LinkInBioType[]>({
-                  key: [
-                    CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-                    workspaceId
-                  ]
-                }) as LinkInBioType[],
+                _libCacheData,
                 extractInnerDataOptionsEnum.createRequestResponseItems
               ) ?? [];
 
@@ -98,11 +145,27 @@ const ZaionsAddLinkInBioModal: React.FC<{
 
             // Updating all shortLinks data in RQ cache.
             await updateRQCDataHandler<LinkInBioType[] | undefined>({
-              key: [
-                CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-                workspaceId
-              ],
-              data: _updatedLinkInBios as LinkInBioType[],
+              key:
+                workspaceId !== undefined &&
+                workspaceId !== null &&
+                workspaceId?.trim()?.length > 0
+                  ? [
+                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+                      workspaceId
+                    ]
+                  : wsShareId !== undefined &&
+                    wsShareId !== null &&
+                    wsShareId?.trim()?.length > 0 &&
+                    shareWSMemberId !== undefined &&
+                    shareWSMemberId !== null &&
+                    shareWSMemberId?.trim()?.length > 0
+                  ? [
+                      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
+                      wsShareId,
+                      shareWSMemberId
+                    ]
+                  : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN],
+              data: _updatedLinkInBios,
               id: '',
               extractType: ZRQGetRequestExtractEnum.extractItems,
               updateHoleData: true
@@ -132,6 +195,12 @@ const ZaionsAddLinkInBioModal: React.FC<{
       }
     } catch (error) {}
   };
+
+  // #region Comp Constants
+  const formikInitialValues = {
+    linkInBioTitle: ''
+  };
+  // #endregion
 
   return (
     <ZIonContent className='ion-padding'>
@@ -165,9 +234,7 @@ const ZaionsAddLinkInBioModal: React.FC<{
         </ZIonText>
 
         <Formik
-          initialValues={{
-            linkInBioTitle: ''
-          }}
+          initialValues={formikInitialValues}
           validate={values => {
             const errors = {};
             validateField('linkInBioTitle', values, errors);
@@ -175,15 +242,13 @@ const ZaionsAddLinkInBioModal: React.FC<{
           }}
           onSubmit={async values => {
             try {
-              if (values?.linkInBioTitle?.trim()?.length > 0) {
-                // Making an api call creating new link in bio
-                const zStringifyData = zStringify({
-                  linkInBioTitle: values.linkInBioTitle,
-                  theme: zStringify(ZaionsLinkInBioDefaultData.theme), // passing default data with title
-                  folderId: 1
-                });
-                await FormikSubmitHandler(zStringifyData);
-              }
+              // Making an api call creating new link in bio
+              const zStringifyData = zStringify({
+                linkInBioTitle: values.linkInBioTitle,
+                theme: zStringify(ZaionsLinkInBioDefaultData.theme), // passing default data with title
+                folderId: 1
+              });
+              await FormikSubmitHandler(zStringifyData);
             } catch (error) {
               reportCustomError(error);
             }

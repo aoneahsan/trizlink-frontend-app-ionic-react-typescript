@@ -246,6 +246,8 @@ export interface LinkInBioSingleBlockContentType {
   date?: string;
   timezone?: string;
   imageUrl?: string;
+  imagePath?: string;
+  imageFile?: File | null;
   avatarShadow?: boolean;
   cardMode?: boolean;
   iframe?: string;

@@ -84,11 +84,12 @@ import { ProductLogo } from '@/assets/images';
  * */
 
 const ZWorkspaceNotificationPopover: React.FC = () => {
+  const formikInitialValues = {
+    currentTab: workspaceViewNotificationsEnum.approvalRequests
+  };
   return (
     <Formik
-      initialValues={{
-        currentTab: workspaceViewNotificationsEnum.approvalRequests
-      }}
+      initialValues={formikInitialValues}
       onSubmit={() => {}}>
       {({ values, setFieldValue }) => {
         return (
@@ -167,6 +168,9 @@ const ZWorkspaceNotificationPopover: React.FC = () => {
 
 // Updates Tab
 const UpdatesTab: React.FC = () => {
+  const zIonAvatarStyle = {
+    '--border-radius': '4px'
+  };
   return (
     <ZIonList
       lines='none'
@@ -177,9 +181,8 @@ const UpdatesTab: React.FC = () => {
         <ZIonRow className='w-full ion-align-items-start'>
           <ZIonCol size='max-content'>
             <ZUserAvatarButton
-              className='w-[10px] h-[10px] me-1'
+              className='w-[39px] h-[39px] me-1'
               userAvatar={ProductLogo}
-              style={{ height: '39px', width: '39px' }}
             />
           </ZIonCol>
 
@@ -199,11 +202,8 @@ const UpdatesTab: React.FC = () => {
             <div className='flex p-1 mt-3 border rounded'>
               <div className='flex w-2/4 ion-align-items-center'>
                 <ZIonAvatar
-                  style={{
-                    '--border-radius': '4px',
-                    width: '48px',
-                    height: '32px'
-                  }}>
+                  className='w-[48px] h-[32px]'
+                  style={zIonAvatarStyle}>
                   <ZIonImg src={getUiAvatarApiUrl({})} />
                 </ZIonAvatar>
                 <ZIonLabel className='ms-2'>

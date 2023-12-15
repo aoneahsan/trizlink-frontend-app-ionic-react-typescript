@@ -15,6 +15,17 @@ body {
   margin: unset;
   padding: unset;
 }
+.text {
+  background: linear-gradient(
+    to top,
+    #fff,
+    #0fb4ff82,
+    #09456155,
+    #ff448482,
+    #ffeb3b82,
+    #ff448482
+  );
+}
 
 a {
   text-decoration: none;
@@ -37,6 +48,51 @@ ion-app.ios ion-title {
   -moz-transition: all 0.3s ease !important;
   -ms-transition: all 0.3s ease !important;
   -o-transition: all 0.3s ease !important;
+}
+
+.z-animation-iteration-1 {
+  animation-iteration-count: 1 !important;
+}
+
+.z-animation-delay-0 {
+  animation-delay: 0s !important;
+}
+
+/* Z Ionic */
+.z-inner-padding-end-0 {
+  --inner-padding-end: 0px;
+}
+
+.z-ion-border-radius-0 {
+  --border-radius: 0px;
+}
+
+.z-ion-border-radius-1rem {
+  --border-radius: 1rem;
+}
+
+.z-ion-border-radius-point-8rem {
+  --border-radius: 0.8rem;
+}
+
+.z-ion-border-radius-point-7rem {
+  --border-radius: 0.7rem;
+}
+
+.z-ion-background-hover-opacity {
+  --background-hover-opacity: 0;
+}
+
+.z-ion-background-hover-transparent {
+  --background-hover: transparent;
+}
+
+.z-ion-box-shadow-none {
+  --box-shadow: none;
+}
+
+.z-ion-border-width {
+  --border-width: 1px;
 }
 
 /* Scrollbar */
@@ -270,6 +326,10 @@ span.new {
 
 .z-ion-bg-transparent {
   --background: transparent;
+}
+
+.z-bg-transparent {
+  background: transparent;
 }
 
 .zaions__bg_light_opacity_point7 {
@@ -610,6 +670,12 @@ span.new {
   --min-height: 530px;
 }
 
+.lib-form-settings-modal-size {
+  --height: 95vh;
+  --width: 50%;
+  --min-height: 530px;
+}
+
 .workspace-compose-modal-size {
   --height: 59vh;
   --width: 650px;
@@ -661,12 +727,13 @@ span.new {
 
 .lib-block-modal-size {
   --width: 500px;
-  --height: 365px;
+  --height: 384px;
 }
 
 .link-in-bio-form-fields-modal-size {
   --width: 592px;
-  --height: 380px;
+  --height: 465px;
+  --min-height: 400px;
 }
 
 .workspace-create-time-slot-modal {
@@ -943,6 +1010,18 @@ ion-modal.zaions__modal_w100 {
 
 .ion-item-start-no-padding {
   --padding-start: 0px;
+}
+
+.ion-padding-start-1rem {
+  --padding-start: 1rem !important;
+}
+
+.ion-padding-start-point-8rem {
+  --padding-start: 0.8rem !important;
+}
+
+.ion-padding-end-0 {
+  --padding-end: 0;
 }
 
 .hover\:outline-sand {

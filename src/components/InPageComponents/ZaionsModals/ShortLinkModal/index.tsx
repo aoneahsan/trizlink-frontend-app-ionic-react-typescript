@@ -124,10 +124,7 @@ const ZShortLinkModal: React.FC<{
             </div>
             <ZIonButton
               height='2.5rem'
-              className='ion-no-margin'
-              style={{
-                '--border-radius': '0px'
-              }}
+              className='ion-no-margin z-ion-border-radius-0'
               onClick={() => {
                 void navigator?.clipboard?.writeText(shortUrl);
 

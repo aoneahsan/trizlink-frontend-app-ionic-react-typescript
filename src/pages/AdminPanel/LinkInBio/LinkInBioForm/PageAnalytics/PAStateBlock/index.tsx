@@ -85,8 +85,7 @@ const PageAnalyticsStateBlock: React.FC<PageAnalyticsStateBlockInterface> = ({
         <ZIonCol className='flex flex-col py-5 my-5 ion-justify-content-center ion-align-items-center'>
           <ZIonImg
             src={imageUrl}
-            className='mt-4 mb-5'
-            style={{ width: '120px', height: '120px' }}
+            className='mt-4 mb-5 w-[120px] h-[120px]'
           />
           <ZIonText>
             <h6 className='mb-4 font-bold'>{title}</h6>

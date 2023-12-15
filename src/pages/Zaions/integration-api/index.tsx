@@ -34,6 +34,7 @@ import {
   linkshorteningApipage02,
   Mobile2
 } from '@/assets/images';
+import classNames from 'classnames';
 
 const ZaionsIntegrationApi: React.FC = () => {
   const isMdScale = useMediaQuery({
@@ -49,8 +50,10 @@ const ZaionsIntegrationApi: React.FC = () => {
           label='Integrations & API'
           title={
             <ZIonText
-              className='block'
-              style={{ lineHeight: !isMdScale ? '3rem' : '' }}>
+              className={classNames({
+                block: true,
+                'leading-[3rem]': !isMdScale
+              })}>
               Integrate Your Workflow
             </ZIonText>
           }

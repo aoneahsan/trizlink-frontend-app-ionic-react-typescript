@@ -34,13 +34,14 @@ const LinkInBioEmailField: React.FC<LinkInBioEmailFieldInterface> = ({
 }) => {
   return (
     <ZIonItem
-      className={className}
+      className={`ion-item-start-no-padding ${className}`}
       lines='none'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
       <ZIonInput
-        label=''
+        aria-label='email'
         name={name}
+        className='ion-padding-start-point-8rem'
         placeholder={placeholder}
         onIonChange={onIonChange}
         onIonBlur={onIonBlur}

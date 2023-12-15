@@ -156,7 +156,7 @@ const ZaionsBlogs: React.FC = () => {
           </ZIonRow>
         </ZIonGrid>
 
-        <ZIonGrid style={{ backgroundColor: '#eeeeee' }}>
+        <ZIonGrid className='zaions-ion-bg-color-light'>
           <ZIonRow className='py-5'>
             <ZIonCol
               sizeXl='1'
@@ -206,9 +206,7 @@ const ZaionsBlogs: React.FC = () => {
                   Sign up
                 </Button>
               </InputGroup> */}
-              <ZIonText
-                className='mt-4'
-                style={{ fontSize: '13px' }}>
+              <ZIonText className='mt-4 text-[13px]'>
                 By submitting my email, I consent to {PRODUCT_NAME} emailing me
                 marketing communications. I may opt out at any time. By signing
                 up, I agree to {PRODUCT_NAME}&apos;s{' '}

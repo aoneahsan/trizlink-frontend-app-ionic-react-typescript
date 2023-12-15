@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 /**
  * Packages Imports go down
@@ -221,6 +221,18 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageType]);
 
+  const zIonCardStyle = useMemo(
+    () => ({
+      backgroundColor: compState.isActive ? compState.activeColor : ''
+    }),
+    [compState.isActive, compState.activeColor]
+  );
+
+  const zIonIconStyle = useMemo(
+    () => ({ color: compState.activeColor }),
+    [compState.activeColor]
+  );
+
   return (
     <ZIonCard
       className='h-full cursor-pointer'
@@ -236,9 +248,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
           isActive: false
         }));
       }}
-      style={{
-        backgroundColor: compState.isActive ? compState.activeColor : ''
-      }}
+      style={zIonCardStyle}
       onClick={() => {
         pageType === workspaceFormConnectPagesEnum.universalContent
           ? presentZWorkspaceMockupPageModal({
@@ -252,7 +262,7 @@ const ZWorkspaceFromConnectPagesCard: React.FC<
         <ZIonIcon
           icon={icon ?? compState.iconName}
           className='w-10 h-10 pt-2 mt-1'
-          style={{ color: compState.activeColor }}
+          style={zIonIconStyle}
           color={compState.isActive ? 'light' : undefined}
         />
         {/*  */}

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDropzone from 'react-dropzone';
 import { API_URL_ENUM } from '@/utils/enums';
 import { zConsoleLog } from '@/utils/helpers';
@@ -7,8 +7,15 @@ import { useZRQCreateRequest } from '@/ZaionsHooks/zreactquery-hooks';
 
 import CLASSES from './styles.module.css';
 import ZUploadInput from '@/components/CustomComponents/ZUploadInput';
+import ZDragAndDrop from '@/components/CustomComponents/ZDragAndDrop';
 
 const TestingReactDropzone: React.FC = () => {
+  const [compState, setCompState] = useState<{
+    file: File | undefined;
+    fileUrl?: string;
+  }>({
+    file: undefined
+  });
   const { mutateAsync: uploadSingleFile } = useZRQCreateRequest({
     _url: API_URL_ENUM.uploadSingleFile,
     _authenticated: true
@@ -182,6 +189,33 @@ const TestingReactDropzone: React.FC = () => {
           );
         }}
       </ReactDropzone>
+      <ZDragAndDrop
+        onDrop={event => {
+          zConsoleLog({
+            message: 'ReactDropzone onDrop event',
+            data: { event }
+          });
+          if (event[0] !== undefined) {
+            setCompState(oldValues => ({
+              ...oldValues,
+              file: event[0]
+            }));
+
+            const reader = new FileReader();
+
+            reader.onload = ({ target }) => {
+              console.log({ c: target?.result });
+              setCompState(oldValues => ({
+                ...oldValues,
+                fileUrl: target?.result as string
+              }));
+            };
+
+            reader.readAsDataURL(event[0]);
+          }
+        }}
+        imageUrl={compState.fileUrl}
+      />
     </>
   );
 };

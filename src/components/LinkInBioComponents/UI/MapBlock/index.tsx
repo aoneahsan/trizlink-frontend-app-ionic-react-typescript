@@ -13,8 +13,7 @@ import React from 'react';
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonCol } from '@/components/ZIonComponents';
-import ZCapGMap from '@/components/CustomComponents/GoogleMaps/ZCapGMap';
+import ZCustomCard from '@/components/CustomComponents/ZCustomCard';
 
 /**
  * Global Constants Imports go down
@@ -25,6 +24,7 @@ import ZCapGMap from '@/components/CustomComponents/GoogleMaps/ZCapGMap';
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
+import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
 
 /**
  * Recoil State Imports go down
@@ -54,22 +54,31 @@ import ZCapGMap from '@/components/CustomComponents/GoogleMaps/ZCapGMap';
 
 interface ZLinkInBioMapBlockInterface {
   mapId: string;
+  title?: string;
   latitude?: number;
   longitude?: number;
 }
 
 const ZLinkInBioMapBlock: React.FC<ZLinkInBioMapBlockInterface> = ({
   mapId,
+  title,
   latitude,
   longitude
 }) => {
+  const _coordinates = { lat: latitude, lng: longitude };
   return (
-    <ZIonCol>
-      <ZCapGMap
-        mapId={mapId}
-        coordinates={{ lat: latitude, lng: longitude }}
-      />
-    </ZIonCol>
+    // <ZIonCol>
+    //   <ZCapGMap
+    //     mapId={mapId}
+    //     coordinates={_coordinates}
+    //   />
+    // </ZIonCol>
+    <ZCustomCard
+      mediaType={ZMediaEnum.map}
+      mapId={mapId}
+      title={title}
+      coordinates={_coordinates}
+    />
   );
 };
 

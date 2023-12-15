@@ -37,8 +37,7 @@ const ZaionsCardWithIcon: React.FC<{
             key={el.id}>
             <ZIonRouterLink routerLink={el.routeLink}>
               <ZIonCard
-                className={`ion-padding-top ion-padding-start ion-padding-bottom ${classes.ZaionsCard}`}
-                style={{ height: 'max-content' }}>
+                className={`ion-padding-top ion-padding-start ion-padding-bottom ${classes.ZaionsCard} h-max`}>
                 <ZIonCardHeader>
                   <ZIonImg
                     className='w-[40%]'

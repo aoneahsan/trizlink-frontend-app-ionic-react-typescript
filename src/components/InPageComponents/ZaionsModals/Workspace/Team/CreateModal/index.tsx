@@ -181,6 +181,13 @@ const ZWSTeamCreateModal: React.FC<{
   };
   // #endregion
 
+  // #region Comp Constant
+  const formikInitialValues = {
+    title: '',
+    description: ''
+  };
+  // #endregion
+
   return (
     <ZIonContent className='ion-padding'>
       {/* Close modal button */}
@@ -212,10 +219,7 @@ const ZWSTeamCreateModal: React.FC<{
         </ZIonText>
 
         <Formik
-          initialValues={{
-            title: '',
-            description: ''
-          }}
+          initialValues={formikInitialValues}
           validate={values => {
             const errors: {
               title?: string;

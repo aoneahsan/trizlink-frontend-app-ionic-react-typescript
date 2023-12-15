@@ -48,7 +48,10 @@ const ZaionsCampaignManagementAnalytics: React.FC = () => {
           lgImg={CampaignAndAnalytics}
           label='Campaign Management & Analytics'
           title={
-            <ZIonText style={{ lineHeight: !isMdScale ? '3rem' : '' }}>
+            <ZIonText
+              className={classNames({
+                'leading-[3rem]': !isMdScale
+              })}>
               Short links solve big problems
             </ZIonText>
           }

@@ -72,7 +72,10 @@ const ZaionsPartners: React.FC = () => {
             lgImg={IlloMobile}
             label={<ZIonText>Partners</ZIonText>}
             title={
-              <ZIonText style={{ lineHeight: !isMdScale ? '3rem' : '' }}>
+              <ZIonText
+                className={classNames({
+                  'leading-[3rem]': !isMdScale
+                })}>
                 {PRODUCT_NAME} Partner Program
               </ZIonText>
             }
@@ -103,9 +106,7 @@ const ZaionsPartners: React.FC = () => {
                 sizeSm='11'
                 sizeXs='12'
                 className='mx-auto ion-text-center'>
-                <h2
-                  className='font-bolder zaions__color_dark'
-                  style={{ fontSize: '38px' }}>
+                <h2 className='font-bolder zaions__color_dark text-[38px]'>
                   Join our Partner Program
                 </h2>
                 <p className=''>
@@ -189,7 +190,7 @@ const ZaionsPartners: React.FC = () => {
                           <ZIonIcon
                             icon={checkmarkSharp}
                             className='text-3xl font-extrabold me-2'
-                            style={{ color: '#ee6123' }}
+                            color='warning'
                           />
                           <ZIonText className='text-[18px] fw-light'>
                             Co-marketing opportunities
@@ -199,7 +200,7 @@ const ZaionsPartners: React.FC = () => {
                           <ZIonIcon
                             icon={checkmarkSharp}
                             className='text-3xl font-extrabold me-2'
-                            style={{ color: '#ee6123' }}
+                            color='warning'
                           />
                           <ZIonText className='text-[18px] fw-light'>
                             Eligibility for certification
@@ -209,7 +210,7 @@ const ZaionsPartners: React.FC = () => {
                           <ZIonIcon
                             icon={checkmarkSharp}
                             className='text-3xl font-extrabold me-2'
-                            style={{ color: '#ee6123' }}
+                            color='warning'
                           />
                           <ZIonText className='text-[18px] fw-light'>
                             Technical guidance and flexible API usage
@@ -219,7 +220,7 @@ const ZaionsPartners: React.FC = () => {
                           <ZIonIcon
                             icon={checkmarkSharp}
                             className='text-3xl font-extrabold me-2'
-                            style={{ color: '#ee6123' }}
+                            color='warning'
                           />
                           <ZIonText className='text-[18px] fw-light'>
                             Sales collaboration
@@ -245,7 +246,7 @@ const ZaionsPartners: React.FC = () => {
                           <ZIonIcon
                             icon={checkmarkSharp}
                             className='text-3xl font-extrabold me-2'
-                            style={{ color: '#ee6123' }}
+                            color='warning'
                           />
                           <ZIonText className='text-[18px] fw-light'>
                             A broad focus on business customers
@@ -255,7 +256,7 @@ const ZaionsPartners: React.FC = () => {
                           <ZIonIcon
                             icon={checkmarkSharp}
                             className='text-3xl font-extrabold me-2'
-                            style={{ color: '#ee6123' }}
+                            color='warning'
                           />
                           <ZIonText className='text-[18px] fw-light'>
                             A current {PRODUCT_NAME} integration in good <br />{' '}
@@ -266,7 +267,7 @@ const ZaionsPartners: React.FC = () => {
                           <ZIonIcon
                             icon={checkmarkSharp}
                             className='text-3xl font-extrabold me-2'
-                            style={{ color: '#ee6123' }}
+                            color='warning'
                           />
                           <ZIonText className='text-[18px] fw-light'>
                             A solution complementary to {PRODUCT_NAME}’s
@@ -277,7 +278,7 @@ const ZaionsPartners: React.FC = () => {
                           <ZIonIcon
                             icon={checkmarkSharp}
                             className='text-3xl font-extrabold me-2'
-                            style={{ color: '#ee6123' }}
+                            color='warning'
                           />
                           <ZIonText className='text-[18px] fw-light'>
                             A broad focus on business customers

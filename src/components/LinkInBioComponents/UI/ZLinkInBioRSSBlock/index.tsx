@@ -73,13 +73,13 @@ const ZLinkInBioRSSBlock: React.FC<ZLinkInBioRSSBlockInterface> = ({
         // slidesPerView={1}
         // onSlideChange={() => {}}
         // onSwiper={(_) => {}}
-        style={{ width: '100%' }}>
+        className='w-full'>
         {data !== undefined ? (
           data?.map((element, index) => {
             return (
               <SwiperSlide key={index}>
                 <ZCustomCard
-                  mediaType={ZMediaEnum.image}
+                  mediaType={ZMediaEnum.rss}
                   title={element.title}
                   description={element.description}
                   image={element.imageUrl}
@@ -90,7 +90,7 @@ const ZLinkInBioRSSBlock: React.FC<ZLinkInBioRSSBlockInterface> = ({
           })
         ) : (
           <SwiperSlide>
-            <ZCustomCard mediaType={ZMediaEnum.image} />
+            <ZCustomCard mediaType={ZMediaEnum.rss} />
           </SwiperSlide>
         )}
       </Swiper>

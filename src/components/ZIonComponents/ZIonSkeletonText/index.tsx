@@ -19,11 +19,12 @@ interface ZIonSkeletonTextType {
 const ZIonSkeletonText: React.FC<ZIonSkeletonTextType> = (
   props: ZIonSkeletonTextType
 ) => {
+  const _style = { ...props.style, width: props.width, height: props.height };
   return (
     <IonSkeletonText
       {...props}
       animated={props.animated ?? true}
-      style={{ ...props.style, width: props.width, height: props.height }}>
+      style={_style}>
       {props.children}
     </IonSkeletonText>
   );

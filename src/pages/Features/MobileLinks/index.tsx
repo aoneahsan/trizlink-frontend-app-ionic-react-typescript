@@ -50,7 +50,10 @@ const ZaionsMobileLinks: React.FC = () => {
           lgImg={Mobile2}
           label='Mobile Links'
           title={
-            <ZIonText style={{ lineHeight: !isMdScale ? '3rem' : '' }}>
+            <ZIonText
+              className={classNames({
+                'leading-[3rem]': !isMdScale
+              })}>
               Custom SMS Short Links
             </ZIonText>
           }
@@ -157,9 +160,7 @@ const ZaionsMobileLinks: React.FC = () => {
 
         <ZaionsTwoByTwoRightCols
           title={
-            <ZIonText
-              className='mb-5 ms-4'
-              style={{ fontWeight: '800' }}>
+            <ZIonText className='mb-5 font-extrabold ms-4'>
               Integrations
             </ZIonText>
           }

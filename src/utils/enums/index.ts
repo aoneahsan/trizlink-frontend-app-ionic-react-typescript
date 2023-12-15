@@ -17,6 +17,11 @@ export enum VALIDATION_RULE {
   linkTitle = 'linkTitle'
 }
 
+export enum ZWSTypeEum {
+  personalWorkspace = 'personalWorkspace',
+  shareWorkspace = 'shareWorkspace'
+}
+
 export enum PAGE_MENU {
   UNAUTHENTICATED_PAGE_MENU = 'UNAUTHENTICATED_PAGE_MENU',
   DASHBOARD_PAGE_MENU = 'DASHBOARD_PAGE_MENU',
@@ -138,14 +143,12 @@ export enum API_URL_ENUM {
   linkInBio_update_delete = 'linkInBio_update_delete',
   linkInBio_create_list = 'linkInBio_create_list',
 
-  folders_update_delete = 'folders_update_delete',
-  folders_create_list = 'folders_create_list',
+  folders_get_update_delete = 'folders_get_update_delete',
+  folders_list = 'folders_list',
+  folders_create = 'folders_create',
 
   user_setting_list_create = 'user_setting_list_create',
   user_setting_delete_update_get = 'user_setting_delete_update_get',
-
-  sws_user_setting_list_create = 'sws_user_setting_list_create',
-  sws_user_setting_delete_update_get = 'sws_user_setting_delete_update_get',
 
   linkInBioPreData_create_list = 'linkInBioPreData_create_list',
   linkInBioPreData_delete_update = 'linkInBioPreData_delete_update',

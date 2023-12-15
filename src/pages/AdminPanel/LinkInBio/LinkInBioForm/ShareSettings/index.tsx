@@ -231,49 +231,50 @@ const LinkInBioShareSettings: React.FC = () => {
 
   const isZFetching = isSelectedLinkInBioFetching;
 
+  const formikInitialValues = {
+    title: selectedLinkInBio?.title ?? '',
+    linkDescription: selectedLinkInBio?.description ?? '',
+    featureImg: selectedLinkInBio?.featureImg ?? '',
+    password: {
+      value: selectedLinkInBio?.password?.value ?? '',
+      enabled: selectedLinkInBio?.password?.enabled ?? false
+    },
+    folderId:
+      selectedLinkInBio?.folderId ?? CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
+    linkNote: selectedLinkInBio?.notes ?? '',
+    tags: (zJsonParse(String(selectedLinkInBio?.tags)) as string[]) ?? [],
+    linkExpiration: {
+      enabled: selectedLinkInBio?.linkExpirationInfo?.enabled ?? false,
+      expirationDate:
+        selectedLinkInBio?.linkExpirationInfo?.expirationDate ?? '',
+      timezone: selectedLinkInBio?.linkExpirationInfo?.timezone ?? '',
+      redirectionLink:
+        selectedLinkInBio?.linkExpirationInfo?.redirectionLink ?? ''
+    },
+    rotatorABTesting: selectedLinkInBio?.abTestingRotatorLinks ?? [],
+    geoLocation: selectedLinkInBio?.geoLocationRotatorLinks ?? [],
+    shortUrl: {
+      domain: selectedLinkInBio?.shortUrl?.domain ?? '',
+      url: selectedLinkInBio?.shortUrl?.url ?? ''
+    },
+    linkPixelsAccount: selectedLinkInBio?.pixelIds ?? [],
+    UTMTags: {
+      templateId: selectedLinkInBio?.utmTagInfo?.templateId ?? '',
+      utmCampaign: selectedLinkInBio?.utmTagInfo?.utmCampaign ?? '',
+      utmMedium: selectedLinkInBio?.utmTagInfo?.utmMedium ?? '',
+      utmSource: selectedLinkInBio?.utmTagInfo?.utmSource ?? '',
+      utmTerm: selectedLinkInBio?.utmTagInfo?.utmTerm ?? '',
+      utmContent: selectedLinkInBio?.utmTagInfo?.utmContent ?? ''
+    },
+    favicon: selectedLinkInBio?.favicon ?? ''
+
+    // complete page fields here
+  };
+
   return (
     <Formik
       // #region ( Initial Values Start  )
-      initialValues={{
-        title: selectedLinkInBio?.title ?? '',
-        linkDescription: selectedLinkInBio?.description ?? '',
-        featureImg: selectedLinkInBio?.featureImg ?? '',
-        password: {
-          value: selectedLinkInBio?.password?.value ?? '',
-          enabled: selectedLinkInBio?.password?.enabled ?? false
-        },
-        folderId:
-          selectedLinkInBio?.folderId ??
-          CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
-        linkNote: selectedLinkInBio?.notes ?? '',
-        tags: (zJsonParse(String(selectedLinkInBio?.tags)) as string[]) ?? [],
-        linkExpiration: {
-          enabled: selectedLinkInBio?.linkExpirationInfo?.enabled ?? false,
-          expirationDate:
-            selectedLinkInBio?.linkExpirationInfo?.expirationDate ?? '',
-          timezone: selectedLinkInBio?.linkExpirationInfo?.timezone ?? '',
-          redirectionLink:
-            selectedLinkInBio?.linkExpirationInfo?.redirectionLink ?? ''
-        },
-        rotatorABTesting: selectedLinkInBio?.abTestingRotatorLinks ?? [],
-        geoLocation: selectedLinkInBio?.geoLocationRotatorLinks ?? [],
-        shortUrl: {
-          domain: selectedLinkInBio?.shortUrl?.domain ?? '',
-          url: selectedLinkInBio?.shortUrl?.url ?? ''
-        },
-        linkPixelsAccount: selectedLinkInBio?.pixelIds ?? [],
-        UTMTags: {
-          templateId: selectedLinkInBio?.utmTagInfo?.templateId ?? '',
-          utmCampaign: selectedLinkInBio?.utmTagInfo?.utmCampaign ?? '',
-          utmMedium: selectedLinkInBio?.utmTagInfo?.utmMedium ?? '',
-          utmSource: selectedLinkInBio?.utmTagInfo?.utmSource ?? '',
-          utmTerm: selectedLinkInBio?.utmTagInfo?.utmTerm ?? '',
-          utmContent: selectedLinkInBio?.utmTagInfo?.utmContent ?? ''
-        },
-        favicon: selectedLinkInBio?.favicon ?? ''
-
-        // complete page fields here
-      }}
+      initialValues={formikInitialValues}
       enableReinitialize={true}
       // #endregion ( Initial Values End  )
 

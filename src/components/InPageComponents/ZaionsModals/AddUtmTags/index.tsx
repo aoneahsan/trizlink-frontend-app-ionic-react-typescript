@@ -317,6 +317,17 @@ const ZaionsAddUtmTags: React.FC<{
   };
   // #endregion
 
+  // #region Comp Constants
+  const formikInitialValues = {
+    templateName: utmTag?.templateName ?? '',
+    utmCampaign: utmTag?.utmCampaign ?? '',
+    utmMedium: utmTag?.utmMedium ?? '',
+    utmSource: utmTag?.utmSource ?? '',
+    utmTerm: utmTag?.utmTerm ?? '',
+    utmContent: utmTag?.utmContent ?? ''
+  };
+  // #endregion
+
   // JSX Code
   return (
     <ZCan
@@ -345,14 +356,7 @@ const ZaionsAddUtmTags: React.FC<{
           : [permissionsEnum.create_utmTag, permissionsEnum.update_utmTag]
       }>
       <Formik
-        initialValues={{
-          templateName: utmTag?.templateName ?? '',
-          utmCampaign: utmTag?.utmCampaign ?? '',
-          utmMedium: utmTag?.utmMedium ?? '',
-          utmSource: utmTag?.utmSource ?? '',
-          utmTerm: utmTag?.utmTerm ?? '',
-          utmContent: utmTag?.utmContent ?? ''
-        }}
+        initialValues={formikInitialValues}
         enableReinitialize={true}
         validate={values => {
           const errors: {

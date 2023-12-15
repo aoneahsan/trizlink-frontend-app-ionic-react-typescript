@@ -10,7 +10,8 @@ import React, { lazy, Suspense } from 'react';
  * */
 import classNames from 'classnames';
 import { useRouteMatch } from 'react-router';
-import { menuController, type RefresherEventDetail } from '@ionic/core';
+import { type RefresherEventDetail } from '@ionic/core';
+import { menuController } from '@ionic/core/components';
 import {
   albumsOutline,
   closeOutline,
@@ -146,8 +147,8 @@ const ZUserAccount: React.FC = () => {
     <>
       <ZIonMenu
         side='start'
-        menuId={CONSTANTS.MENU_IDS.USER_SETTINGS_PAGE_MENU_ID}
-        contentId={CONSTANTS.MENU_IDS.USER_SETTINGS_PAGE_ID}>
+        menuId={CONSTANTS.MENU_IDS.USER_SETTINGS_MENU_ID}
+        contentId={CONSTANTS.PAGE_IDS.USER_SETTINGS_PAGE_ID}>
         {/* Header */}
         <ZIonHeader className='flex px-3 py-2 border-b shadow-none ion-align-items-center ion-no-padding ion-justify-content-between'>
           <ZIonTitle
@@ -167,7 +168,7 @@ const ZUserAccount: React.FC = () => {
             }
             onClick={() => {
               void menuController.close(
-                CONSTANTS.MENU_IDS.USER_SETTINGS_PAGE_MENU_ID
+                CONSTANTS.MENU_IDS.USER_SETTINGS_MENU_ID
               );
             }}
           />
@@ -271,7 +272,7 @@ const ZUserAccount: React.FC = () => {
       {/* Main page */}
       <ZIonPage
         pageTitle='User settings page'
-        id={CONSTANTS.MENU_IDS.USER_SETTINGS_PAGE_ID}>
+        id={CONSTANTS.PAGE_IDS.USER_SETTINGS_PAGE_ID}>
         <ZIonContent>
           {/* IonRefresher */}
           <ZIonRefresher
@@ -302,10 +303,10 @@ const ZUserAccount: React.FC = () => {
                     // Open the menu by menu-id
                     await menuController.enable(
                       true,
-                      CONSTANTS.MENU_IDS.USER_SETTINGS_PAGE_MENU_ID
+                      CONSTANTS.MENU_IDS.USER_SETTINGS_MENU_ID
                     );
                     await menuController.open(
-                      CONSTANTS.MENU_IDS.USER_SETTINGS_PAGE_MENU_ID
+                      CONSTANTS.MENU_IDS.USER_SETTINGS_MENU_ID
                     );
                   })();
                 }}
@@ -313,7 +314,7 @@ const ZUserAccount: React.FC = () => {
             </Suspense>
 
             {/* Row-2 */}
-            <ZIonRow style={{ height: 'calc(100% - 4rem)' }}>
+            <ZIonRow className='h-[calc(100%-4rem)]'>
               {/* Row-2 col-1 Folder menu */}
               {isLgScale ? (
                 <Suspense

@@ -16,6 +16,7 @@ import {
   ZIonInput,
   ZIonItem
 } from '@/components/ZIonComponents';
+import classNames from 'classnames';
 
 // Styles
 
@@ -49,9 +50,14 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
   onIonChange,
   onIonBlur
 }) => {
+  const refreshBtnStyle = {
+    '--background-hover-opacity': '0'
+  };
   return (
     <ZIonItem
-      className={className}
+      className={classNames(className, {
+        'ion-align-items-start ion-item-start-no-padding': true
+      })}
       lines='none'
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
@@ -67,8 +73,8 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
 
       {showImageInSlot && slotImageUrl?.trim() !== null && (
         <ZIonImg
+          className='w-[25px]'
           src={slotImageUrl}
-          style={{ width: '25px' }}
           slot='start'
           testingselector={`${testingselector}-image`}
           testinglistselector={`${testinglistselector}-image`}
@@ -76,13 +82,14 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
       )}
 
       <ZIonInput
-        label=''
+        aria-label='url'
         name={name}
         minHeight='40px'
         placeholder={placeholder}
         onIonChange={onIonChange}
         onIonBlur={onIonBlur}
         value={value}
+        className='ion-padding-start-point-8rem'
         testingselector={`${testingselector}-input`}
         testinglistselector={`${testinglistselector}-input`}
       />
@@ -97,9 +104,7 @@ const LinkInBioLinkField: React.FC<LinkInBioLinkFieldInterface> = ({
           onClick={RefreshBtnClickFn}
           testingselector={`${testingselector}-refresh-btn`}
           testinglistselector={`${testinglistselector}-refresh-btn`}
-          style={{
-            '--background-hover-opacity': '0'
-          }}>
+          style={refreshBtnStyle}>
           <ZIonIcon
             icon={refreshCircleOutline}
             className='w-7 h-7'

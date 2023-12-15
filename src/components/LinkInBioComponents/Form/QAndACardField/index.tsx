@@ -5,8 +5,6 @@ import React from 'react';
 import { addOutline, appsOutline } from 'ionicons/icons';
 import { type ItemReorderEventDetail } from '@ionic/react';
 import { FieldArray, useFormikContext } from 'formik';
-import { convertToRaw } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
 
 // Custom Imports
 import ZRichTextEditor from '@/components/CustomComponents/ZTextEditor';
@@ -92,15 +90,12 @@ const LinkInBioQAndACardField: React.FC = () => {
                       <ZIonItem
                         key={_index}
                         lines='none'
-                        className='pb-3 my-4 border zaions-linkInBio-block'
+                        className='pb-3 my-4 border rounded-md shadow-md zaions-linkInBio-block z-ion-bg-transparent'
                         testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.blockForm.fields.QAndA.cardItem}-${_index}`}
                         testingselector={
                           CONSTANTS.testingSelectors.linkInBio.formPage.design
                             .blockForm.fields.QAndA.cardItem
-                        }
-                        style={{
-                          '--background': 'transparent'
-                        }}>
+                        }>
                         <ZIonReorder
                           slot='start'
                           className='ms-3'>
@@ -135,12 +130,9 @@ const LinkInBioQAndACardField: React.FC = () => {
                                 .design.blockForm.fields.QAndA.textEditor
                             }
                             onChange={editorState => {
-                              const rawContentState = convertToRaw(
-                                editorState.getCurrentContent()
-                              );
                               void setFieldValue(
                                 `cardItems.${_index}.text`,
-                                draftToHtml(rawContentState),
+                                editorState,
                                 false
                               );
                             }}

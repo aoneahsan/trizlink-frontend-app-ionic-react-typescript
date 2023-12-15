@@ -422,6 +422,14 @@ const ZaionsAddPixelAccount: React.FC<{
   };
   // #endregion
 
+  // #region Comp Constants
+  const formikInitialValues = {
+    platform: pixelPlatform ?? PixelPlatformsEnum.facebook,
+    title: pixelTitle ?? '',
+    pixelId: pixelId ?? ''
+  };
+  // #endregion
+
   // JSX Code
   return (
     <ZCan
@@ -451,11 +459,7 @@ const ZaionsAddPixelAccount: React.FC<{
           : [permissionsEnum.create_pixel, permissionsEnum.update_pixel]
       }>
       <Formik
-        initialValues={{
-          platform: pixelPlatform ?? PixelPlatformsEnum.facebook,
-          title: pixelTitle ?? '',
-          pixelId: pixelId ?? ''
-        }}
+        initialValues={formikInitialValues}
         enableReinitialize={true}
         validate={values => {
           const errors: {

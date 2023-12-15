@@ -61,9 +61,7 @@ const ZaionsMobileApps: React.FC = () => {
             label={'Mobile App'}
             title={`Get the ${PRODUCT_NAME} App`}
             subTitle={
-              <ZIonText
-                className='pt-2'
-                style={{ lineHeight: '2.2rem' }}>
+              <ZIonText className='pt-2 leading-[2.2rem]'>
                 Create and manage links faster and from anywhere with the{' '}
                 {PRODUCT_NAME} mobile app. There’s <br /> no easier way to
                 create connections on the go.{' '}
@@ -79,9 +77,7 @@ const ZaionsMobileApps: React.FC = () => {
                 size='12'
                 className='text-center'>
                 <ZIonText>
-                  <h2
-                    className='font-bolder'
-                    style={{ fontSize: '2.2rem' }}>
+                  <h2 className='font-bolder text-[2.2rem]'>
                     {PRODUCT_NAME} Mobile Apps
                   </h2>
                 </ZIonText>
@@ -135,9 +131,7 @@ const ZaionsMobileApps: React.FC = () => {
                 sizeXs='12'
                 className='ion-text-center'>
                 <ZIonText>
-                  <h2
-                    className='pt-1 mt-2 font-bolder zaions__color_dark'
-                    style={{ fontSize: '38px' }}>
+                  <h2 className='pt-1 mt-2 font-bolder zaions__color_dark text-[38px]'>
                     Mobile Features to Discover
                   </h2>
                 </ZIonText>

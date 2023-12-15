@@ -325,7 +325,7 @@ export const ShortLinksTagsFiltersPopover: React.FC = () => {
   };
 
   return (
-    <ZRScrollbars style={{ width: 300, height: 300 }}>
+    <ZRScrollbars className='w-[300px] h-[300px]'>
       <Formik
         initialValues={generateInitialValueOfTagsFormik(
           _shortLinksFieldsDataTagsSelector,
@@ -468,7 +468,7 @@ export const ShortLinksDomainsFiltersPopover: React.FC = () => {
   };
 
   return (
-    <ZRScrollbars style={{ width: 300, height: 300 }}>
+    <ZRScrollbars className='w-[300px] h-[300px]'>
       <Formik
         initialValues={generateInitialValueOfDomainsFormik(
           _shortLinksFieldsDataDomainsSelector,

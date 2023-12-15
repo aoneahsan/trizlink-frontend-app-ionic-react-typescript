@@ -40,15 +40,19 @@ const ZCapGMap: React.FC<IZCapGMapProps> = props => {
     // eslint-disable-next-line
   }, [props?.coordinates?.lat, props?.coordinates?.lng, props?.zoomLevel]);
 
+  // #region comp constants
+  const _capacitorGoogleMap = {
+    width: props?.mapSize?.width ?? '100%',
+    height: props?.mapSize?.height ?? 400,
+    display: 'inline-block',
+    ...props?.mapStyles
+  };
+  // #endregion
+
   return (
     <capacitor-google-map
       ref={mapRef}
-      style={{
-        width: props?.mapSize?.width ?? '100%',
-        height: props?.mapSize?.height ?? 400,
-        display: 'inline-block',
-        ...props?.mapStyles
-      }}
+      style={_capacitorGoogleMap}
     />
   );
 };

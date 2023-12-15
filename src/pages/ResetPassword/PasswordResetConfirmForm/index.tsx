@@ -102,29 +102,32 @@ const ZaionsPasswordResetConfirm: React.FC = () => {
       reportCustomError(error);
     }
   }, []);
+
+  const formikInitialValues = {
+    // emailAddress: compState?.email ?? '',
+    emailAddress: compState?.email ?? '',
+    password: '',
+    otp: '',
+    confirm_password: '',
+
+    isEmailAddressApiError: false,
+    emailAddressApiErrorText: '',
+    isOTPApiError: false,
+    OTPApiErrorText: '',
+    OTPCodeValidTill: compState?.OTPCodeValidTill ?? '',
+    resendOTPValidCheck: compState?.resendOTPValidCheck ?? false,
+
+    // tab: compState?.tab || ZSetPasswordTabEnum.sendOptTab,
+    tab: compState?.tab != null || ZSetPasswordTabEnum.sendOptTab
+  };
+
   return (
     <ZIonPage>
       <ZIonContent fullscreen>
         <ZaionsSecondaryHeader />
         <ZIonGrid className=''>
           <Formik
-            initialValues={{
-              // emailAddress: compState?.email ?? '',
-              emailAddress: compState?.email ?? '',
-              password: '',
-              otp: '',
-              confirm_password: '',
-
-              isEmailAddressApiError: false,
-              emailAddressApiErrorText: '',
-              isOTPApiError: false,
-              OTPApiErrorText: '',
-              OTPCodeValidTill: compState?.OTPCodeValidTill ?? '',
-              resendOTPValidCheck: compState?.resendOTPValidCheck ?? false,
-
-              // tab: compState?.tab || ZSetPasswordTabEnum.sendOptTab,
-              tab: compState?.tab != null || ZSetPasswordTabEnum.sendOptTab
-            }}
+            initialValues={formikInitialValues}
             // Validations of sign up form fields
             validate={values => {
               try {

@@ -94,11 +94,24 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
 
   const { zNavigatePushRoute } = useZNavigate();
 
+  // #region comp constants
+  const formikInitialValues = {
+    domain: ''
+  };
+
+  const zIonInputStyle = {
+    '--padding-start': '10px',
+    '--border-radius': '0'
+  };
+
+  const zIonButtonStyle = {
+    '--border-radius': '0'
+  };
+  // #endregion
+
   return (
     <Formik
-      initialValues={{
-        domain: ''
-      }}
+      initialValues={formikInitialValues}
       validate={values => {
         const errors: { domain?: string } = {};
 
@@ -152,9 +165,8 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
               <ZIonItem
                 lines='none'
                 minHeight='40px'
-                style={{ '--inner-padding-end': '0px' }}
                 className={classNames(className, {
-                  'ion-item-start-no-padding': true,
+                  'ion-item-start-no-padding z-inner-padding-end-0': true,
                   'ion-touched': touched?.domain === true,
                   'ion-invalid':
                     touched?.domain === true &&
@@ -189,14 +201,11 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
                       touched?.domain === true &&
                       (errors?.domain === null || errors?.domain === undefined)
                   })}
-                  style={{
-                    '--padding-start': '10px',
-                    '--border-radius': '0'
-                  }}
+                  style={zIonInputStyle}
                 />
 
                 <ZIonButton
-                  className='ion-no-margin ion-text-capitalize'
+                  className='h-full ion-no-margin ion-text-capitalize'
                   slot='end'
                   onClick={() => {
                     void submitForm();
@@ -204,10 +213,7 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
                   testingselector={
                     CONSTANTS.testingSelectors.shortLink.listPage.switchItBtn
                   }
-                  style={{
-                    height: '100%',
-                    '--border-radius': '0'
-                  }}>
+                  style={zIonButtonStyle}>
                   <ZIonText className='me-1'>Switch it</ZIonText>
                 </ZIonButton>
               </ZIonItem>
@@ -239,10 +245,16 @@ const ZaionsCreateShortLinkUrlInput: React.FC<{
 
 export const ZaionsCreateShortLinkUrlInputSkeleton: React.FC = React.memo(
   () => {
+    // #region Comp Constant
+    const zIonButtonStyle = {
+      '--border-radius': '0',
+      '--box-shadow': 'none'
+    };
+    // #endregion
+
     return (
       <ZIonItem
-        className='ion-item-start-no-padding'
-        style={{ '--inner-padding-end': '0px' }}
+        className='z-inner-padding-end-0 ion-item-start-no-padding'
         lines='none'
         minHeight='40px'>
         {/* <ZIonInput className='rounded-none' minHeight='40px' /> */}
@@ -253,13 +265,9 @@ export const ZaionsCreateShortLinkUrlInputSkeleton: React.FC = React.memo(
         />
 
         <ZIonButton
-          className='shadow-none ion-no-margin'
+          className='shadow-none ion-no-margin h-[40px]'
           slot='end'
-          style={{
-            height: '40px',
-            '--border-radius': '0',
-            '--box-shadow': 'none'
-          }}>
+          style={zIonButtonStyle}>
           <ZIonSkeletonText
             width='75px'
             height='20px'

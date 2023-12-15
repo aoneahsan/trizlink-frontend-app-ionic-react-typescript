@@ -140,7 +140,7 @@ const APSettingsCustomDomain: React.FC = () => {
                 <ZIonNote slot='helper'>
                   It can be a subdomain (app.yourDomain.com)
                 </ZIonNote>
-                <ZIonNote slot='error'>{}</ZIonNote>
+                {/* <ZIonNote slot='error'>{}</ZIonNote> */}
               </ZIonItem>
               <ZIonButton
                 slot='end'

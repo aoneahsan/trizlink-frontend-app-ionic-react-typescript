@@ -6,35 +6,39 @@ import { imageOutline } from 'ionicons/icons';
 
 // Custom Imports
 import { ZIonIcon, ZIonItem } from '@/components/ZIonComponents';
-import ZDragAndDrop from '@/components/CustomComponents/ZDragAndDrop';
-import { type FormikSetFieldValueEventVoidType } from '@/types/ZaionsFormik.type';
+import ZDragAndDrop, {
+  type ZDragAndDropType
+} from '@/components/CustomComponents/ZDragAndDrop';
 
 // Styles
 
 // Component Type
-interface LinkInBioUploadFieldInterface {
+interface LinkInBioUploadFieldInterface extends ZDragAndDropType {
   className?: string;
   dropdownHeight?: string;
-  fieldName?: string;
-  imageUrl?: string;
-  testinglistselector?: string;
-  testingselector?: string;
-  setFieldValue?: FormikSetFieldValueEventVoidType;
 }
 
 const LinkInBioUploadField: React.FC<LinkInBioUploadFieldInterface> = ({
   className,
   dropdownHeight,
-  fieldName,
   imageUrl,
   testinglistselector,
   testingselector,
-  setFieldValue
+  multiple,
+  autoFocus,
+  disabled,
+  maxSize,
+  minSize,
+  maxFiles,
+  onDrop,
+  onDropRejected,
+  onError
 }) => {
+  const _style = { height: dropdownHeight };
   return (
     <ZIonItem
       lines='none'
-      className={className}
+      className={` ion-item-start-no-padding ${className}`}
       testingselector={`${testingselector}-item`}
       testinglistselector={`${testinglistselector}-item`}>
       <ZIonIcon
@@ -43,12 +47,19 @@ const LinkInBioUploadField: React.FC<LinkInBioUploadFieldInterface> = ({
         className='w-7 h-7 me-2'
       />
       <ZDragAndDrop
-        fieldName={fieldName}
         imageUrl={imageUrl}
-        setFieldValue={setFieldValue}
-        style={{ height: dropdownHeight }}
+        style={_style}
         testingselector={testingselector}
         testinglistselector={testinglistselector}
+        onDrop={onDrop}
+        multiple={multiple}
+        autoFocus={autoFocus}
+        disabled={disabled}
+        maxSize={maxSize}
+        minSize={minSize}
+        maxFiles={maxFiles}
+        onDropRejected={onDropRejected}
+        onError={onError}
       />
     </ZIonItem>
   );

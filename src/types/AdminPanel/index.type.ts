@@ -58,6 +58,8 @@ export enum daysEnum {
 
 export enum ZUserSettingTypeEnum {
   shortLinkListPageTable = 'shortLinkListPageTable',
+  libListPageTable = 'libListPageTable',
+  libFormSettings = 'libFormSettings',
   pixelListPageTable = 'pixelListPageTable',
   UTMTagListPageTable = 'UTMTagListPageTable',
   embedWidgetsListPageTable = 'embedWidgetsListPageTable',

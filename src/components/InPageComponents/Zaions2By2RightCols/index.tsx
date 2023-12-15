@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Packages Imports go down
@@ -84,6 +84,18 @@ const ZaionsTwoByTwoRightCols: React.FC<
     query: `(min-width: ${BRACKPOINT_MD})`
   });
 
+  // #region comp constants
+  const _style = useMemo(
+    () => ({
+      width:
+        props?.ImgWidth !== undefined || props?.ImgWidth === ''
+          ? '95%'
+          : props.ImgWidth
+    }),
+    [props?.ImgWidth]
+  );
+  // #endregion
+
   return (
     <>
       <ZIonGrid
@@ -139,13 +151,9 @@ const ZaionsTwoByTwoRightCols: React.FC<
             className='ms-5'>
             {isLgScale && (
               <ZIonImg
-                style={{
-                  width:
-                    props?.ImgWidth !== undefined || props?.ImgWidth === ''
-                      ? '95%'
-                      : props.ImgWidth
-                }}
-                src={props.colRightImage}></ZIonImg>
+                style={_style}
+                src={props.colRightImage}
+              />
             )}
           </ZIonCol>
           <ZIonCol></ZIonCol>

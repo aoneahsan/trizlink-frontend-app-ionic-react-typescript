@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Packages Imports go down
@@ -79,6 +79,18 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
   const { values, errors, touched, handleChange, handleBlur, setFieldValue } =
     useFormikContext<ZaionsShortUrlOptionFieldsValuesInterface>();
 
+  const zIonColStyle = useMemo(
+    () => ({
+      background: `url(${
+        values?.featureImg?.featureImgUrl !== undefined &&
+        values?.featureImg?.featureImgUrl?.trim()?.length > 0
+          ? values?.featureImg?.featureImgUrl
+          : uploadImageBg
+      })`
+    }),
+    [values?.featureImg?.featureImgUrl]
+  );
+
   if (showSkeleton) {
     return <ZaionsCustomYourLinkSkeleton />;
   }
@@ -142,14 +154,7 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
                   CONSTANTS.testingSelectors.shortLink.formPage.customYourLink
                     .imageCol
                 }
-                style={{
-                  background: `url(${
-                    values?.featureImg?.featureImgUrl !== undefined &&
-                    values?.featureImg?.featureImgUrl?.trim()?.length > 0
-                      ? values?.featureImg?.featureImgUrl
-                      : uploadImageBg
-                  })`
-                }}>
+                style={zIonColStyle}>
                 <div
                   {...getRootProps()}
                   className={classNames(
@@ -165,8 +170,7 @@ const ZaionsCustomYourLink: React.FC<{ showSkeleton?: boolean }> = ({
                         <ZIonImg
                           src={upload_send}
                           alt='send icon'
-                          className='mx-auto'
-                          style={{ width: '10rem' }}
+                          className='mx-auto w-[10rem]'
                           testingselector={
                             CONSTANTS.testingSelectors.shortLink.formPage
                               .customYourLink.image

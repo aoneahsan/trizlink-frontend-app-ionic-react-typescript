@@ -63,7 +63,11 @@ import {
 import { extractInnerData, zStringify } from '@/utils/helpers';
 import { reportCustomError } from '@/utils/customErrorType';
 import { MemberTableColumns } from '@/utils/constants/columns';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
+import {
+  API_URL_ENUM,
+  extractInnerDataOptionsEnum,
+  ZWSTypeEum
+} from '@/utils/enums';
 import MESSAGES from '@/utils/messages';
 
 /**
@@ -149,126 +153,112 @@ const ZMembersFilterMenu: React.FC = () => {
   // #endregion
 
   // #region APIs.
-  // If owned-workspace then this api will update owned-workspace member settings & filters data.
+  // Update member settings & filters data.
   const { mutateAsync: updateMemberFilersAsyncMutate } = useZRQUpdateRequest({
     _url: API_URL_ENUM.user_setting_delete_update_get,
     _loaderMessage: MESSAGES.MEMBER.FILTERING
   });
 
-  // If share-workspace then this api will update share-workspace member settings & filters data.
-  const { mutateAsync: updateSWSMemberFilersAsyncMutate } = useZRQUpdateRequest(
-    {
-      _url: API_URL_ENUM.sws_user_setting_delete_update_get,
-      _loaderMessage: MESSAGES.MEMBER.FILTERING
-    }
-  );
-
-  // If share-workspace then this api will create share-workspace member settings & filters data.
+  // create member settings & filters data.
   const { mutateAsync: createMemberFilersAsyncMutate } = useZRQCreateRequest({
     _url: API_URL_ENUM.user_setting_list_create,
     _loaderMessage: MESSAGES.MEMBER.FILTERING,
-    _urlDynamicParts: [CONSTANTS.RouteParams.workspace.workspaceId],
-    _itemsIds: [workspaceId ?? '']
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
+    ],
+    _itemsIds:
+      workspaceId !== undefined &&
+      workspaceId !== null &&
+      workspaceId?.trim()?.length > 0
+        ? [ZWSTypeEum.personalWorkspace, workspaceId]
+        : wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          shareWSMemberId?.trim()?.length > 0
+        ? [ZWSTypeEum.shareWorkspace, shareWSMemberId]
+        : []
   });
 
-  // If owned-workspace then this api will create owned-workspace member settings & filters data.
-  const { mutateAsync: createSWSMemberFilersAsyncMutate } = useZRQCreateRequest(
-    {
-      _url: API_URL_ENUM.sws_user_setting_list_create,
-      _loaderMessage: MESSAGES.MEMBER.FILTERING,
-      _urlDynamicParts: [CONSTANTS.RouteParams.workspace.shareWSMemberId],
-      _itemsIds: [shareWSMemberId ?? '']
-    }
-  );
-
-  // If owned-workspace then this api will fetch owned-workspace member settings & filters data.
+  // Get member settings & filters data.
   const { data: getMemberFiltersData } =
     useZRQGetRequest<ZUserSettingInterface>({
       _url: API_URL_ENUM.user_setting_delete_update_get,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
-        workspaceId ?? '',
-        ZUserSettingTypeEnum.membersListPageTable
-      ],
-      _itemsIds: [workspaceId ?? '', ZUserSettingTypeEnum.membersListPageTable],
+      _key:
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+          ? [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET,
+              workspaceId,
+              ZUserSettingTypeEnum.membersListPageTable
+            ]
+          : wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [
+              CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
+              wsShareId,
+              shareWSMemberId,
+              ZUserSettingTypeEnum.membersListPageTable
+            ]
+          : [CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.GET],
+      _itemsIds:
+        workspaceId !== undefined &&
+        workspaceId !== null &&
+        workspaceId?.trim()?.length > 0
+          ? [
+              ZWSTypeEum.personalWorkspace,
+              workspaceId,
+              ZUserSettingTypeEnum.membersListPageTable
+            ]
+          : wsShareId !== undefined &&
+            wsShareId !== null &&
+            wsShareId?.trim()?.length > 0 &&
+            shareWSMemberId !== undefined &&
+            shareWSMemberId !== null &&
+            shareWSMemberId?.trim()?.length > 0
+          ? [
+              ZWSTypeEum.shareWorkspace,
+              shareWSMemberId,
+              ZUserSettingTypeEnum.membersListPageTable
+            ]
+          : [],
       _urlDynamicParts: [
+        CONSTANTS.RouteParams.workspace.type,
         CONSTANTS.RouteParams.workspace.workspaceId,
         CONSTANTS.RouteParams.settings.type
       ],
       _extractType: ZRQGetRequestExtractEnum.extractItem,
       _shouldFetchWhenIdPassed: !(
-        workspaceId !== undefined &&
-        workspaceId !== null &&
-        (workspaceId?.trim()?.length ?? 0) > 0
-      )
-    });
-
-  // If owned-workspace then this api will fetch owned-workspace member settings & filters data.
-  const { data: getSWSMemberFiltersData } =
-    useZRQGetRequest<ZUserSettingInterface>({
-      _url: API_URL_ENUM.sws_user_setting_delete_update_get,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.USER.SETTING.SWS_GET,
-        wsShareId ?? '',
-        ZUserSettingTypeEnum.membersListPageTable
-      ],
-      _itemsIds: [
-        shareWSMemberId ?? '',
-        ZUserSettingTypeEnum.membersListPageTable
-      ],
-      _urlDynamicParts: [
-        CONSTANTS.RouteParams.workspace.shareWSMemberId,
-        CONSTANTS.RouteParams.settings.type
-      ],
-      _extractType: ZRQGetRequestExtractEnum.extractItem,
-      _shouldFetchWhenIdPassed: !(
-        wsShareId !== undefined &&
-        wsShareId !== null &&
-        (wsShareId?.trim()?.length ?? 0) > 0 &&
-        shareWSMemberId !== undefined &&
-        shareWSMemberId !== null &&
-        (shareWSMemberId?.trim()?.length ?? 0) > 0
-      )
+        ((wsShareId?.trim()?.length ?? 0) === 0 &&
+          (shareWSMemberId?.trim()?.length ?? 0) === 0) ||
+        (workspaceId?.trim()?.length ?? 0) === 0
+      ),
+      _showLoader: false
     });
   // #endregion
 
   useEffect(() => {
     try {
       if (
-        (getMemberFiltersData?.type !== null &&
-          (getMemberFiltersData?.settings?.columns !== undefined ||
-            getMemberFiltersData?.settings?.columns !== null)) ||
-        (getSWSMemberFiltersData?.type !== null &&
-          (getSWSMemberFiltersData?.settings?.columns !== undefined ||
-            getSWSMemberFiltersData?.settings?.columns !== null))
+        getMemberFiltersData?.type !== null &&
+        getMemberFiltersData?.settings?.columns !== undefined
       ) {
         setCompState(_oldValue => ({
           ..._oldValue,
-          membersColumn:
-            workspaceId !== undefined &&
-            workspaceId !== null &&
-            (workspaceId?.trim()?.length ?? 0) > 0
-              ? getMemberFiltersData?.settings?.columns
-              : wsShareId !== undefined &&
-                wsShareId !== null &&
-                (wsShareId?.trim()?.length ?? 0) > 0 &&
-                shareWSMemberId !== undefined &&
-                shareWSMemberId !== null &&
-                (shareWSMemberId?.trim()?.length ?? 0) > 0
-              ? getSWSMemberFiltersData?.settings?.columns
-              : _oldValue.membersColumn
+          membersColumn: getMemberFiltersData?.settings?.columns
         }));
       }
     } catch (error) {
       reportCustomError(error);
     }
-  }, [
-    getMemberFiltersData,
-    getSWSMemberFiltersData,
-    workspaceId,
-    wsShareId,
-    shareWSMemberId
-  ]);
+  }, [getMemberFiltersData]);
 
   // #region Functions.
   const handleCarouselCardReorder = (
@@ -301,63 +291,42 @@ const ZMembersFilterMenu: React.FC = () => {
 
         if (
           getMemberFiltersData?.type ===
-            ZUserSettingTypeEnum.membersListPageTable ||
-          getSWSMemberFiltersData?.type ===
-            ZUserSettingTypeEnum.membersListPageTable
+          ZUserSettingTypeEnum.membersListPageTable
         ) {
-          if (
-            workspaceId !== undefined &&
-            workspaceId !== null &&
-            (workspaceId?.trim()?.length ?? 0) > 0
-          ) {
-            _response = await updateMemberFilersAsyncMutate({
-              itemIds: [workspaceId, ZUserSettingTypeEnum.membersListPageTable],
-              urlDynamicParts: [
-                CONSTANTS.RouteParams.workspace.workspaceId,
-                CONSTANTS.RouteParams.settings.type
-              ],
-              requestData: _value
-            });
-          } else if (
-            wsShareId !== undefined &&
-            wsShareId !== null &&
-            (wsShareId?.trim()?.length ?? 0) > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            (shareWSMemberId?.trim()?.length ?? 0) > 0
-          ) {
-            _response = await updateSWSMemberFilersAsyncMutate({
-              itemIds: [
-                shareWSMemberId,
-                ZUserSettingTypeEnum.membersListPageTable
-              ],
-              urlDynamicParts: [
-                CONSTANTS.RouteParams.workspace.shareWSMemberId,
-                CONSTANTS.RouteParams.settings.type
-              ],
-              requestData: _value
-            });
-          }
+          _response = await updateMemberFilersAsyncMutate({
+            itemIds:
+              workspaceId !== undefined &&
+              workspaceId !== null &&
+              workspaceId?.trim()?.length > 0
+                ? [
+                    ZWSTypeEum.personalWorkspace,
+                    workspaceId,
+                    ZUserSettingTypeEnum.membersListPageTable
+                  ]
+                : wsShareId !== undefined &&
+                  wsShareId !== null &&
+                  wsShareId?.trim()?.length > 0 &&
+                  shareWSMemberId !== undefined &&
+                  shareWSMemberId !== null &&
+                  shareWSMemberId?.trim()?.length > 0
+                ? [
+                    ZWSTypeEum.shareWorkspace,
+                    shareWSMemberId,
+                    ZUserSettingTypeEnum.membersListPageTable
+                  ]
+                : [],
+            urlDynamicParts: [
+              CONSTANTS.RouteParams.workspace.type,
+              CONSTANTS.RouteParams.workspace.workspaceId,
+              CONSTANTS.RouteParams.settings.type
+            ],
+            requestData: _value
+          });
         } else {
-          if (
-            workspaceId !== undefined &&
-            workspaceId !== null &&
-            (workspaceId?.trim()?.length ?? 0) > 0
-          ) {
-            _response = await createMemberFilersAsyncMutate(_value);
-          } else if (
-            wsShareId !== undefined &&
-            wsShareId !== null &&
-            (wsShareId?.trim()?.length ?? 0) > 0 &&
-            shareWSMemberId !== undefined &&
-            shareWSMemberId !== null &&
-            (shareWSMemberId?.trim()?.length ?? 0) > 0
-          ) {
-            _response = await createSWSMemberFilersAsyncMutate(_value);
-          }
+          _response = await createMemberFilersAsyncMutate(_value);
         }
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           // extract Data from _response.
           const _data = extractInnerData<ZUserSettingInterface>(
             _response,
@@ -407,10 +376,38 @@ const ZMembersFilterMenu: React.FC = () => {
   };
   // #endregion
 
+  const formikInitialValues = {
+    columns: compState?.membersColumn,
+
+    filters: {
+      time:
+        getMemberFiltersData?.settings?.filters?.time ?? TimeFilterEnum.allTime,
+      startDate:
+        getMemberFiltersData?.settings?.filters?.startDate ??
+        new Date().toISOString(),
+      endDate:
+        getMemberFiltersData?.settings?.filters?.endDate ??
+        new Date().toISOString(),
+
+      role: getMemberFiltersData?.settings?.filters?.role ?? '',
+      status: getMemberFiltersData?.settings?.filters?.status ?? ''
+    }
+  };
+
+  const zIonItemStyle = {
+    '--inner-padding-end': '.3rem'
+  };
+
+  const libListTableColumnStyle = {
+    '--padding-bottom': '.1rem',
+    '--padding-top': '.1rem',
+    '--padding-start': '2px'
+  };
+
   return (
     <ZIonMenu
       side='end'
-      contentId={CONSTANTS.MENU_IDS.ADMIN_PANEL_WS_SETTING_PAGE_ID}
+      contentId={CONSTANTS.PAGE_IDS.ADMIN_PANEL_WS_SETTING_PAGE_ID}
       menuId={CONSTANTS.MENU_IDS.MEMBER_FILTERS_MENU_ID}
       style={
         isLgScale
@@ -477,33 +474,7 @@ const ZMembersFilterMenu: React.FC = () => {
         {/* Content */}
         <ZIonContent className='ion-padding-top'>
           <Formik
-            initialValues={{
-              columns: compState?.membersColumn,
-
-              filters: {
-                time:
-                  getMemberFiltersData?.settings?.filters?.time ??
-                  getSWSMemberFiltersData?.settings?.filters?.time ??
-                  TimeFilterEnum.allTime,
-                startDate:
-                  getMemberFiltersData?.settings?.filters?.startDate ??
-                  getSWSMemberFiltersData?.settings?.filters?.startDate ??
-                  new Date().toISOString(),
-                endDate:
-                  getMemberFiltersData?.settings?.filters?.endDate ??
-                  getSWSMemberFiltersData?.settings?.filters?.endDate ??
-                  new Date().toISOString(),
-
-                role:
-                  getMemberFiltersData?.settings?.filters?.role ??
-                  getSWSMemberFiltersData?.settings?.filters?.role ??
-                  '',
-                status:
-                  getMemberFiltersData?.settings?.filters?.status ??
-                  getSWSMemberFiltersData?.settings?.filters?.status ??
-                  ''
-              }
-            }}
+            initialValues={formikInitialValues}
             enableReinitialize={true}
             onSubmit={async values => {
               try {
@@ -713,9 +684,7 @@ const ZMembersFilterMenu: React.FC = () => {
                             CONSTANTS.testingSelectors.pixels.listPage
                               .filterSidebar.columnAccordionHead
                           }
-                          style={{
-                            '--inner-padding-end': '.3rem'
-                          }}>
+                          style={zIonItemStyle}>
                           <ZIonText
                             className={classNames({
                               'text-sm ion-no-margin font-semibold': true
@@ -745,11 +714,7 @@ const ZMembersFilterMenu: React.FC = () => {
                                       .filterSidebar.reorderItem
                                   }
                                   testingselector={`${CONSTANTS.testingSelectors.pixels.listPage.filterSidebar.reorderItem}-${el.id}`}
-                                  style={{
-                                    '--padding-bottom': '.1rem',
-                                    '--padding-top': '.1rem',
-                                    '--padding-start': '2px'
-                                  }}>
+                                  style={libListTableColumnStyle}>
                                   <ZIonReorder
                                     slot='start'
                                     className='me-3 ps-2'

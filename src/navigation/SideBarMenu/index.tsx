@@ -57,8 +57,7 @@ const SideBarMenu: React.FC<SideBarMenuPropsType> = ({ menuSide }) => {
               <ZIonRouterLink routerLink={ZaionsRoutes.HomeRoute}>
                 <ZIonImg
                   src={ProductLogo}
-                  className='mx-auto pe-3'
-                  style={{ width: '100px' }}
+                  className='w-full mx-auto pe-3'
                 />
               </ZIonRouterLink>
             </IonToolbar>

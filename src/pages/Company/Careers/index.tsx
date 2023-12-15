@@ -63,6 +63,8 @@ const ZaionsCareers: React.FC = () => {
     query: `(min-width: ${BRACKPOINT_MD})`
   });
 
+  const responsiveMasonryColumnsCountBreakPoints = { 540: 1, 720: 2, 960: 3 };
+
   return (
     <ZIonPage pageTitle='Careers Page'>
       {/* Content */}
@@ -215,9 +217,7 @@ const ZaionsCareers: React.FC = () => {
                 !isMdScale ? 'ion-text-center' : 'ion-text-left'
               }`}>
               <ZIonText>
-                <h2
-                  className='font-bolder zaions__color_dark'
-                  style={{ fontSize: '38px' }}>
+                <h2 className='font-bolder zaions__color_dark text-[38px]'>
                   Employee Benefits
                 </h2>
               </ZIonText>
@@ -286,9 +286,7 @@ const ZaionsCareers: React.FC = () => {
                 'ion-text-left': isMdScale
               })}>
               <ZIonText>
-                <h2
-                  className='font-bolder zaions__color_dark'
-                  style={{ fontSize: '38px' }}>
+                <h2 className='font-bolder zaions__color_dark text-[38px]'>
                   Our employees love working here
                 </h2>
               </ZIonText>
@@ -336,7 +334,9 @@ const ZaionsCareers: React.FC = () => {
               sizeSm='11.5'
               sizeXs='11.9'>
               <ResponsiveMasonry
-                columnsCountBreakPoints={{ 540: 1, 720: 2, 960: 3 }}>
+                columnsCountBreakPoints={
+                  responsiveMasonryColumnsCountBreakPoints
+                }>
                 <Masonry gutter='10px'>
                   {OurGalleryData.map(el => (
                     <div

@@ -8,16 +8,14 @@ import React from 'react';
  * Packages Imports go down
  * ? Like import of ionic components is a packages import
  * */
-import classNames from 'classnames';
 
 /**
  * Custom Imports go down
  * ? Like import of custom components is a custom import
  * */
-import { ZIonCol, ZIonDatetime } from '@/components/ZIonComponents';
-import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
-import ZTimezoneInput from '@/components/CustomComponents/ZTimezone';
 import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
+import ZCustomCard from '@/components/CustomComponents/ZCustomCard';
+import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
 
 /**
  * Global Constants Imports go down
@@ -50,6 +48,8 @@ import { type LinkInBioThemeFontEnum } from '@/types/AdminPanel/linkInBioType';
  * */
 interface ZLinkInBioCalendarBlockInterface {
   fontFamily?: LinkInBioThemeFontEnum;
+  mediaLink?: string;
+  title?: string;
 }
 
 /**
@@ -59,25 +59,45 @@ interface ZLinkInBioCalendarBlockInterface {
  * */
 
 const ZLinkInBioCalendarBlock: React.FC<ZLinkInBioCalendarBlockInterface> = ({
-  fontFamily
+  fontFamily,
+  mediaLink,
+  title
 }) => {
   return (
-    <ZIonCol>
-      <ZRScrollbars
-        style={{
-          width: '100%',
-          height: '500px'
-        }}>
-        <div className='flex flex-col ion-align-items-center'>
-          <ZIonDatetime />
-          <ZTimezoneInput
-            className={classNames(fontFamily, {
-              'w-[90%] ion-margin-top': true
-            })}
-          />
-        </div>
-      </ZRScrollbars>
-    </ZIonCol>
+    // <ZIonCol>
+    //   {/* <ZRScrollbars className='w-full h-[500px]'>
+    //     <div className='flex flex-col ion-align-items-center'>
+    //       <ZIonDatetime />
+    //       <ZTimezoneInput
+    //         className={classNames(fontFamily, {
+    //           'w-[90%] ion-margin-top': true
+    //         })}
+    //       />
+    //     </div>
+    //   </ZRScrollbars> */}
+    //   {isZNonEmptyString(mediaLink) ? (
+    //     <iframe
+    //       width='100%'
+    //       scrolling='no'
+    //       frameBorder='0'
+    //       allow='encrypted-media'
+    //       height='634px'
+    //       src={mediaLink}></iframe>
+    //   ) : (
+    //     <div className='flex w-full py-2 m-3 rounded-lg shadow-md ion-align-items-center ion-justify-content-center zaions__primary_set'>
+    //       <ZIonIcon
+    //         icon={calendarOutline}
+    //         className='w-[6rem] h-[6rem]'
+    //         color='light'
+    //       />
+    //     </div>
+    //   )}
+    // </ZIonCol>
+    <ZCustomCard
+      mediaType={ZMediaEnum.calendar}
+      mediaLink={mediaLink}
+      title={title}
+    />
   );
 };
 

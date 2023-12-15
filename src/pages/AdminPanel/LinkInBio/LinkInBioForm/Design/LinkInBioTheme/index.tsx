@@ -35,11 +35,14 @@ import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpin
  * ? Like import of Constant is a global constants import
  * */
 import { useZRQGetRequest } from '@/ZaionsHooks/zreactquery-hooks';
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
 import CONSTANTS from '@/utils/constants';
 import {
+  _getQueryKey,
   formatReactSelectOption,
-  generatePredefinedThemeBackgroundValue
+  generatePredefinedThemeBackgroundValue,
+  isZNonEmptyString,
+  isZNonEmptyStrings
 } from '@/utils/helpers';
 
 /**
@@ -97,6 +100,7 @@ const ZaionsColorPiker = lazy(
  * */
 
 const ZLinkInBioThemeSection: React.FC = () => {
+  console.count('log count of ZLinkInBioThemeSection');
   const { values, setFieldValue } = useFormikContext<LinkInBioType>();
 
   // #region Recoil state.
@@ -107,9 +111,11 @@ const ZLinkInBioThemeSection: React.FC = () => {
   // #endregion
 
   // current Link-in-bio id.
-  const { linkInBioId, workspaceId } = useParams<{
+  const { linkInBioId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
     linkInBioId?: string;
     workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region APIS.
@@ -118,30 +124,59 @@ const ZLinkInBioThemeSection: React.FC = () => {
     isFetching: isLinkInBioPreDefinedThemesDataFetching
   } = useZRQGetRequest<LinkInBioPredefinedThemeType[]>({
     _url: API_URL_ENUM.linkInBioPreDefinedThemes_create_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_DEFINED_THEMES.MAIN,
-      workspaceId ?? '',
-      linkInBioId ?? ''
-    ]
+    _key: _getQueryKey({
+      keys: [
+        CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_PRE_DEFINED_THEMES.MAIN
+      ],
+      additionalKeys: [workspaceId, wsShareId, shareWSMemberId, linkInBioId]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId]
+    }),
+    _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId
+    ],
+    _shouldFetchWhenIdPassed: !(
+      isZNonEmptyStrings([workspaceId, linkInBioId]) ||
+      isZNonEmptyStrings([wsShareId, shareWSMemberId, linkInBioId])
+    ),
+    _extractType: ZRQGetRequestExtractEnum.extractItems
   });
 
   // fetching link-in-bio with the linkInBioId data from backend.
   const { isFetching: isSelectedLinkInBioFetching } =
     useZRQGetRequest<LinkInBioType>({
       _url: API_URL_ENUM.linkInBio_update_delete,
-      _key: [
-        CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-        workspaceId ?? '',
-        linkInBioId ?? ''
-      ],
-      _authenticated: true,
-      _itemsIds: [linkInBioId ?? '', workspaceId ?? ''],
+      _key: _getQueryKey({
+        keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET],
+        additionalKeys: [workspaceId, wsShareId, shareWSMemberId, linkInBioId]
+      }),
+      _itemsIds: _getQueryKey({
+        keys: [
+          isZNonEmptyString(workspaceId)
+            ? ZWSTypeEum.personalWorkspace
+            : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+            ? ZWSTypeEum.shareWorkspace
+            : ''
+        ],
+        additionalKeys: [workspaceId, shareWSMemberId, linkInBioId]
+      }),
       _urlDynamicParts: [
-        CONSTANTS.RouteParams.linkInBio.linkInBioId,
-        CONSTANTS.RouteParams.workspace.workspaceId
+        CONSTANTS.RouteParams.workspace.type,
+        CONSTANTS.RouteParams.workspace.workspaceId,
+        CONSTANTS.RouteParams.linkInBio.linkInBioId
       ],
       _shouldFetchWhenIdPassed: !(
-        linkInBioId !== undefined && (linkInBioId?.trim()?.length ?? 0) > 0
+        isZNonEmptyStrings([workspaceId, linkInBioId]) ||
+        isZNonEmptyStrings([wsShareId, shareWSMemberId, linkInBioId])
       ),
       _extractType: ZRQGetRequestExtractEnum.extractItem
     });
@@ -149,8 +184,18 @@ const ZLinkInBioThemeSection: React.FC = () => {
 
   const isZFetching = isSelectedLinkInBioFetching;
 
+  const bgDirectionIcon = {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    transform: `rotate(${values?.theme?.background?.bgGradientColors?.direction}deg)`
+  };
+
+  const bgButtonDirectionIcon = {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    transform: `rotate(${values?.theme?.button?.background?.bgGradientColors?.direction}deg)`
+  };
+
   return (
-    <Suspense fallback={<ZFallbackIonSpinner2 />}>
+    <>
       {/* 🎨 Pre-defined start */}
       <ZIonCol
         sizeXl='11'
@@ -164,55 +209,58 @@ const ZLinkInBioThemeSection: React.FC = () => {
         </ZIonTitle>
         <ZIonRow
           className={classNames(classes['row-gap-1-point-6-rem'], {
-            'ion-margin-top pt-2 ion-padding-bottom mb-2 gap-y-2  border-bottom__violet':
+            'ion-margin-top pt-2 ion-padding-bottom mb-2 gap-y-2 border-bottom__violet':
               true
           })}>
-          {LinkInBioPreDefinedThemesData?.map((el, i) => {
-            return (
-              <ZIonCol
-                size='max-content'
-                key={i}>
-                <ZIonButton
-                  size='large'
-                  testingselector={
-                    CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
-                      .preDefinedThemeBlock
-                  }
-                  testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.preDefinedThemeBlock}-${el.id}`}
-                  className={classNames(classes['zaions-pd-color-block'], {
-                    'me-3': true
-                  })}
-                  style={{
-                    ...generatePredefinedThemeBackgroundValue(
-                      el.background as LinkInBioThemeBackgroundType
-                    )
-                  }}
-                  onClick={() => {
-                    const _bg = el.background as LinkInBioThemeBackgroundType;
+          {!isLinkInBioPreDefinedThemesDataFetching &&
+            LinkInBioPreDefinedThemesData?.map((el, i) => {
+              const ZIonButtonStyle = {
+                ...generatePredefinedThemeBackgroundValue(
+                  el.background as LinkInBioThemeBackgroundType
+                )
+              };
 
-                    const _bgGradient =
-                      _bg.bgGradientColors as LinkInBioBgGradientColorsInterface;
+              return (
+                <ZIonCol
+                  size='max-content'
+                  key={i}>
+                  <ZIonButton
+                    size='large'
+                    testingselector={
+                      CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+                        .preDefinedThemeBlock
+                    }
+                    testinglistselector={`${CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.preDefinedThemeBlock}-${el.id}`}
+                    className={classNames(classes['zaions-pd-color-block'], {
+                      'me-3': true
+                    })}
+                    style={ZIonButtonStyle}
+                    onClick={() => {
+                      const _bg = el.background as LinkInBioThemeBackgroundType;
 
-                    void setFieldValue(
-                      'theme.background',
-                      {
-                        bgType: _bg?.bgType,
-                        bgSolidColor: _bg?.bgSolidColor,
-                        bgGradientColors: {
-                          startColor: _bgGradient?.startColor,
-                          endColor: _bgGradient?.endColor,
-                          direction: _bgGradient?.direction ?? 0
+                      const _bgGradient =
+                        _bg.bgGradientColors as LinkInBioBgGradientColorsInterface;
+
+                      void setFieldValue(
+                        'theme.background',
+                        {
+                          bgType: _bg?.bgType,
+                          bgSolidColor: _bg?.bgSolidColor,
+                          bgGradientColors: {
+                            startColor: _bgGradient?.startColor,
+                            endColor: _bgGradient?.endColor,
+                            direction: _bgGradient?.direction ?? 0
+                          },
+                          bgImageUrl: _bg?.bgImageUrl,
+                          enableBgImage: _bg?.enableBgImage
                         },
-                        bgImageUrl: _bg?.bgImageUrl,
-                        enableBgImage: _bg?.enableBgImage
-                      },
-                      true
-                    );
-                  }}
-                />
-              </ZIonCol>
-            );
-          })}
+                        true
+                      );
+                    }}
+                  />
+                </ZIonCol>
+              );
+            })}
 
           {isLinkInBioPreDefinedThemesDataFetching
             ? [...Array(14)].map((_, i) => (
@@ -244,102 +292,116 @@ const ZLinkInBioThemeSection: React.FC = () => {
         </ZIonTitle>
 
         <ZIonGrid
-          className='flex ion-align-items-center ion-padding-bottom'
+          className='flex ion-align-items-start ion-padding-bottom'
           testingselector={
             CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
               .container
           }>
-          {/* If bgType solidColor show this input */}
-          {values?.theme?.background?.bgType ===
-            LinkInBioThemeBackgroundEnum.solidColor && (
-            <ZaionsColorPiker
-              showSkeleton={isZFetching}
-              name='theme.background.bgSolidColor'
-              value={values.theme.background.bgSolidColor as string}
-              // eslint-disable-next-line @typescript-eslint/no-misused-promises
-              setFieldValueFn={setFieldValue}
-              testingselector={
-                CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
-                  .bgSolidColorInput
-              }
-            />
-          )}
-
-          {/* If bgType solidColor show blow inputs */}
-          {values?.theme?.background?.bgType ===
-            LinkInBioThemeBackgroundEnum.gradient && (
+          {values?.theme?.background?.bgType !==
+          LinkInBioThemeBackgroundEnum.image ? (
             <>
-              {/* start color */}
-              <ZaionsColorPiker
-                name='theme.background.bgGradientColors.startColor'
-                showSkeleton={isZFetching}
-                // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                setFieldValueFn={setFieldValue}
-                value={
-                  values?.theme.background?.bgGradientColors
-                    ?.startColor as string
-                }
-                testingselector={
-                  CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
-                    .gColors.startColorInput
-                }
-              />
+              <Suspense fallback={<ZFallbackIonSpinner2 />}>
+                {/* If bgType solidColor show this input */}
+                {values?.theme?.background?.bgType ===
+                  LinkInBioThemeBackgroundEnum.solidColor && (
+                  <ZaionsColorPiker
+                    showSkeleton={isZFetching}
+                    name='theme.background.bgSolidColor'
+                    value={values.theme.background.bgSolidColor as string}
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                    setFieldValueFn={setFieldValue}
+                    testingselector={
+                      CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+                        .bg.bgSolidColorInput
+                    }
+                  />
+                )}
+              </Suspense>
 
-              {/* direction */}
-              <ZIonButton
-                shape='round'
-                className='mt-3 direction-button ion-margin-horizontal ion-no-padding w-[3rem]'
-                color='secondary'
-                height='2.5rem'
-                testingselector={
-                  CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
-                    .gColors.directionBtn
-                }
-                onClick={() => {
-                  let _newDirection =
-                    +(values?.theme?.background?.bgGradientColors
-                      ?.direction as string) +
-                    +CONSTANTS.LINK_In_BIO.FORM.DIRECTION_PRE_CLICKED;
-                  _newDirection = _newDirection >= 359 ? 0 : _newDirection;
-                  void setFieldValue(
-                    'theme.background.bgGradientColors.direction',
-                    _newDirection,
-                    false
-                  );
-                }}>
-                <ZIonIcon
-                  icon={arrowUp}
-                  className='direction-icon'
-                  style={{
-                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                    transform: `rotate(${values?.theme?.background?.bgGradientColors?.direction}deg)`
-                  }}
-                />
-              </ZIonButton>
+              {/* If bgType solidColor show blow inputs */}
+              <Suspense fallback={<ZFallbackIonSpinner2 />}>
+                {values?.theme?.background?.bgType ===
+                  LinkInBioThemeBackgroundEnum.gradient && (
+                  <>
+                    {/* start color */}
+                    <ZaionsColorPiker
+                      name='theme.background.bgGradientColors.startColor'
+                      showSkeleton={isZFetching}
+                      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                      setFieldValueFn={setFieldValue}
+                      value={
+                        values?.theme.background?.bgGradientColors
+                          ?.startColor as string
+                      }
+                      testingselector={
+                        CONSTANTS.testingSelectors.linkInBio.formPage.design
+                          .theme.bg.gColors.startColorInput
+                      }
+                    />
 
-              {/* end color */}
-              <ZaionsColorPiker
-                name='theme.background.bgGradientColors.endColor'
-                showSkeleton={isZFetching}
-                // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                setFieldValueFn={setFieldValue}
-                showCloseIcon={true}
-                testingselector={
-                  CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.bg
-                    .gColors.endColorInput
-                }
-                value={
-                  values?.theme?.background?.bgGradientColors
-                    ?.endColor as string
-                }
-                closeIconOnChangeFn={() => {
-                  void setFieldValue(
-                    'theme.background.bgType',
-                    LinkInBioThemeBackgroundEnum.solidColor,
-                    false
-                  );
-                }}
-              />
+                    {/* direction */}
+                    <ZIonButton
+                      shape='round'
+                      className='mt-3 direction-button ion-margin-horizontal ion-no-padding w-[2.5rem]'
+                      color='secondary'
+                      height='2.5rem'
+                      testingselector={
+                        CONSTANTS.testingSelectors.linkInBio.formPage.design
+                          .theme.bg.gColors.directionBtn
+                      }
+                      onClick={() => {
+                        let _newDirection =
+                          +(values?.theme?.background?.bgGradientColors
+                            ?.direction as string) +
+                          +CONSTANTS.LINK_In_BIO.FORM.DIRECTION_PRE_CLICKED;
+                        _newDirection =
+                          _newDirection >= 359 ? 0 : _newDirection;
+                        void setFieldValue(
+                          'theme.background.bgGradientColors.direction',
+                          _newDirection,
+                          false
+                        );
+                      }}>
+                      <ZIonIcon
+                        icon={arrowUp}
+                        className='direction-icon'
+                        style={bgDirectionIcon}
+                      />
+                    </ZIonButton>
+
+                    {/* end color */}
+                    <ZaionsColorPiker
+                      name='theme.background.bgGradientColors.endColor'
+                      showSkeleton={isZFetching}
+                      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                      setFieldValueFn={setFieldValue}
+                      showCloseIcon={true}
+                      testingselector={
+                        CONSTANTS.testingSelectors.linkInBio.formPage.design
+                          .theme.bg.gColors.endColorInput
+                      }
+                      value={
+                        values?.theme?.background?.bgGradientColors
+                          ?.endColor as string
+                      }
+                      closeIconOnChangeFn={() => {
+                        void setFieldValue(
+                          'theme.background.bgType',
+                          LinkInBioThemeBackgroundEnum.solidColor,
+                          false
+                        );
+                      }}
+                    />
+                  </>
+                )}
+              </Suspense>
+            </>
+          ) : (
+            <>
+              <ZIonText className='my-1 font-semibold'>
+                You can not set background color when background image mode is
+                on.
+              </ZIonText>
             </>
           )}
 
@@ -385,51 +447,58 @@ const ZLinkInBioThemeSection: React.FC = () => {
         </ZIonTitle>
 
         <ZIonGrid
-          className='flex ion-align-items-center ion-padding-bottom border-bottom__violet'
+          className='flex ion-align-items-start ion-padding-bottom border-bottom__violet'
           testingselector={
             CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.button
               .container
           }>
           {/* If bgType solidColor show this input */}
-          {values?.theme?.button?.background?.bgType ===
-            LinkInBioThemeBackgroundEnum.solidColor && (
-            <ZaionsColorPiker
-              showSkeleton={isZFetching}
-              name='theme.button.background.bgSolidColor'
-              value={values?.theme?.button?.background?.bgSolidColor as string}
-              // eslint-disable-next-line @typescript-eslint/no-misused-promises
-              setFieldValueFn={setFieldValue}
-              testingselector={
-                CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
-                  .button.bgSolidColorInput
-              }
-            />
-          )}
+          <Suspense fallback={<ZFallbackIonSpinner2 />}>
+            {values?.theme?.button?.background?.bgType ===
+              LinkInBioThemeBackgroundEnum.solidColor && (
+              <ZaionsColorPiker
+                showSkeleton={isZFetching}
+                name='theme.button.background.bgSolidColor'
+                value={
+                  values?.theme?.button?.background?.bgSolidColor as string
+                }
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                setFieldValueFn={setFieldValue}
+                testingselector={
+                  CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+                    .button.bgSolidColorInput
+                }
+              />
+            )}
+          </Suspense>
 
           {/* If bgType solidColor show blow inputs */}
+
           {values?.theme?.button?.background?.bgType ===
             LinkInBioThemeBackgroundEnum.gradient && (
             <>
-              {/* Start color */}
-              <ZaionsColorPiker
-                name='theme.button.background.bgGradientColors.startColor'
-                // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                setFieldValueFn={setFieldValue}
-                showSkeleton={isZFetching}
-                testingselector={
-                  CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
-                    .button.gColors.startColorInput
-                }
-                value={
-                  values?.theme?.button?.background?.bgGradientColors
-                    ?.startColor as string
-                }
-              />
+              <Suspense fallback={<ZFallbackIonSpinner2 />}>
+                {/* Start color */}
+                <ZaionsColorPiker
+                  name='theme.button.background.bgGradientColors.startColor'
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                  setFieldValueFn={setFieldValue}
+                  showSkeleton={isZFetching}
+                  testingselector={
+                    CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+                      .button.gColors.startColorInput
+                  }
+                  value={
+                    values?.theme?.button?.background?.bgGradientColors
+                      ?.startColor as string
+                  }
+                />
+              </Suspense>
 
               {/* direction */}
               <ZIonButton
                 shape='round'
-                className='mt-3 direction-button ion-margin-horizontal ion-no-padding w-[3rem]'
+                className='mt-3 direction-button ion-margin-horizontal ion-no-padding w-[2.5rem]'
                 height='2.5rem'
                 color='secondary'
                 testingselector={
@@ -451,36 +520,36 @@ const ZLinkInBioThemeSection: React.FC = () => {
                 <ZIonIcon
                   icon={arrowUp}
                   className='direction-icon'
-                  style={{
-                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-                    transform: `rotate(${values?.theme?.button?.background?.bgGradientColors?.direction}deg)`
-                  }}
+                  style={bgButtonDirectionIcon}
                 />
               </ZIonButton>
 
               {/* end color */}
-              <ZaionsColorPiker
-                name='theme.button.background.bgGradientColors.endColor'
-                // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                setFieldValueFn={setFieldValue}
-                showCloseIcon={true}
-                showSkeleton={isZFetching}
-                value={
-                  values?.theme?.button?.background?.bgGradientColors
-                    ?.endColor as string
-                }
-                testingselector={
-                  CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
-                    .button.gColors.endColorInput
-                }
-                closeIconOnChangeFn={() => {
-                  void setFieldValue(
-                    'theme.button.background.bgType',
-                    LinkInBioThemeBackgroundEnum.solidColor,
-                    false
-                  );
-                }}
-              />
+
+              <Suspense fallback={<ZFallbackIonSpinner2 />}>
+                <ZaionsColorPiker
+                  name='theme.button.background.bgGradientColors.endColor'
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                  setFieldValueFn={setFieldValue}
+                  showCloseIcon={true}
+                  showSkeleton={isZFetching}
+                  value={
+                    values?.theme?.button?.background?.bgGradientColors
+                      ?.endColor as string
+                  }
+                  testingselector={
+                    CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+                      .button.gColors.endColorInput
+                  }
+                  closeIconOnChangeFn={() => {
+                    void setFieldValue(
+                      'theme.button.background.bgType',
+                      LinkInBioThemeBackgroundEnum.solidColor,
+                      false
+                    );
+                  }}
+                />
+              </Suspense>
             </>
           )}
 
@@ -522,11 +591,8 @@ const ZLinkInBioThemeSection: React.FC = () => {
           <ZIonCol size='4'>
             <ZIonButton
               color='medium'
-              style={{
-                '--border-radius': '0'
-              }}
               className={classNames(classes['zaions-button-type'], {
-                'zaions-button-type-button-active': true, // from index.css
+                'zaions-button-type-button-active z-ion-border-radius-0': true, // from index.css
                 'zaions-border-primary':
                   values?.theme?.button?.type ===
                   LinkInBioButtonTypeEnum.inlineSquare
@@ -548,10 +614,8 @@ const ZLinkInBioThemeSection: React.FC = () => {
           <ZIonCol size='4'>
             <ZIonButton
               color='medium'
-              style={{
-                '--border-radius': '10px'
-              }}
               className={classNames(classes['zaions-button-type'], {
+                'z-ion-border-radius-1rem': true,
                 'zaions-border-primary':
                   values?.theme?.button?.type ===
                   LinkInBioButtonTypeEnum.inlineRound
@@ -602,6 +666,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   .button.btnType.inlineSquareOutline
               }
               className={classNames(classes['zaions-button-type'], {
+                'z-ion-border-radius-0': true,
                 'zaions-border-primary':
                   values?.theme?.button?.type ===
                   LinkInBioButtonTypeEnum.inlineSquareOutline
@@ -612,9 +677,6 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   ? 'primary'
                   : 'medium'
               }
-              style={{
-                '--border-radius': '0'
-              }}
               onClick={() => {
                 void setFieldValue(
                   'theme.button.type',
@@ -633,6 +695,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   .button.btnType.inlineRoundOutline
               }
               className={classNames(classes['zaions-button-type'], {
+                'z-ion-border-radius-1rem': true,
                 'zaions-border-primary':
                   values?.theme?.button?.type ===
                   LinkInBioButtonTypeEnum.inlineRoundOutline
@@ -643,9 +706,6 @@ const ZLinkInBioThemeSection: React.FC = () => {
                   ? 'primary'
                   : 'medium'
               }
-              style={{
-                '--border-radius': '10px'
-              }}
               onClick={() => {
                 void setFieldValue(
                   'theme.button.type',
@@ -697,6 +757,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                 classes['zaions-button-type'],
                 classes['zaions-button-type-shadow'],
                 {
+                  'z-ion-border-radius-0': true,
                   'zaions-border-transparent':
                     values?.theme?.button?.type !==
                     LinkInBioButtonTypeEnum.inlineSquareShadow,
@@ -705,9 +766,6 @@ const ZLinkInBioThemeSection: React.FC = () => {
                     LinkInBioButtonTypeEnum.inlineSquareShadow
                 }
               )}
-              style={{
-                '--border-radius': '0'
-              }}
               onClick={() => {
                 void setFieldValue(
                   'theme.button.type',
@@ -729,6 +787,7 @@ const ZLinkInBioThemeSection: React.FC = () => {
                 classes['zaions-button-type'],
                 classes['zaions-button-type-shadow'],
                 {
+                  'z-ion-border-radius-1rem': true,
                   'zaions-border-transparent':
                     values?.theme?.button?.type !==
                     LinkInBioButtonTypeEnum.inlineRoundShadow,
@@ -737,9 +796,6 @@ const ZLinkInBioThemeSection: React.FC = () => {
                     LinkInBioButtonTypeEnum.inlineRoundShadow
                 }
               )}
-              style={{
-                '--border-radius': '10px'
-              }}
               onClick={() => {
                 void setFieldValue(
                   'theme.button.type',
@@ -788,24 +844,26 @@ const ZLinkInBioThemeSection: React.FC = () => {
               CONSTANTS.testingSelectors.linkInBio.formPage.design.theme.button
                 .btnType.shadowColorInputContainer
             }>
-            {values?.theme?.button?.type != null &&
-              [
-                LinkInBioButtonTypeEnum.inlineSquareShadow,
-                LinkInBioButtonTypeEnum.inlineRoundShadow,
-                LinkInBioButtonTypeEnum.inlineCircleShadow
-              ].includes(values?.theme?.button?.type) && (
-                <ZaionsColorPiker
-                  showSkeleton={isZFetching}
-                  name='theme.button.shadowColor'
-                  value={values?.theme?.button?.shadowColor as string}
-                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                  setFieldValueFn={setFieldValue}
-                  testingselector={
-                    CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
-                      .button.btnType.shadowColorInput
-                  }
-                />
-              )}
+            <Suspense fallback={<ZFallbackIonSpinner2 />}>
+              {values?.theme?.button?.type != null &&
+                [
+                  LinkInBioButtonTypeEnum.inlineSquareShadow,
+                  LinkInBioButtonTypeEnum.inlineRoundShadow,
+                  LinkInBioButtonTypeEnum.inlineCircleShadow
+                ].includes(values?.theme?.button?.type) && (
+                  <ZaionsColorPiker
+                    showSkeleton={isZFetching}
+                    name='theme.button.shadowColor'
+                    value={values?.theme?.button?.shadowColor as string}
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                    setFieldValueFn={setFieldValue}
+                    testingselector={
+                      CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+                        .button.btnType.shadowColorInput
+                    }
+                  />
+                )}
+            </Suspense>
           </ZIonCol>
         </ZIonRow>
       </ZIonCol>
@@ -818,41 +876,43 @@ const ZLinkInBioThemeSection: React.FC = () => {
         sizeMd='12'
         sizeSm='12'
         sizeXs='12'
-        className='mt-3 ion-margin-start'>
-        <ZIonTitle className='font-bold text-[16px] ion-no-padding'>
+        className='mt-3 ion-margin-start border-bottom__violet'>
+        <ZIonTitle className='font-bold mb-3 pb-1 text-[16px] ion-no-padding'>
           📝 Font
         </ZIonTitle>
 
         <div className='flex ion-align-items-center ion-padding-bottom'>
-          <ZaionsRSelect
-            className='w-full z_ff__roboto'
-            name='theme.font'
-            testingselector={
-              CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
-                .fontSelector
-            }
-            options={linkInBioFontFamilyState?.map(el => {
-              return {
-                value: el.fontName,
-                label: el.fontName
-              };
-            })}
-            onChange={_value => {
-              void setFieldValue(
-                'theme.font',
-                (_value as ZaionsRSelectOptions)?.value,
-                false
-              );
-            }}
-            value={
-              formatReactSelectOption(
-                values?.theme?.font as string,
-                linkInBioFontFamilyState as unknown as ZGenericObject[],
-                'fontName',
-                'fontName'
-              ) ?? []
-            }
-          />
+          <Suspense fallback={<ZFallbackIonSpinner2 />}>
+            <ZaionsRSelect
+              className='w-full z_ff__roboto'
+              name='theme.font'
+              testingselector={
+                CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+                  .fontSelector
+              }
+              options={linkInBioFontFamilyState?.map(el => {
+                return {
+                  value: el.fontName,
+                  label: el.fontName
+                };
+              })}
+              onChange={_value => {
+                void setFieldValue(
+                  'theme.font',
+                  (_value as ZaionsRSelectOptions)?.value,
+                  false
+                );
+              }}
+              value={
+                formatReactSelectOption(
+                  values?.theme?.font as string,
+                  linkInBioFontFamilyState as unknown as ZGenericObject[],
+                  'fontName',
+                  'fontName'
+                ) ?? []
+              }
+            />
+          </Suspense>
         </div>
       </ZIonCol>
       {/* 📝 Font end */}
@@ -876,53 +936,76 @@ const ZLinkInBioThemeSection: React.FC = () => {
             </ZIonTitle>
           </ZIonCol>
           <ZIonCol className='flex ion-justify-content-end'>
-            <ZRCSwitch
-              checked={values?.theme?.background?.enableBgImage}
-              testingselector={
-                CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
-                  .bgImage.toggler
-              }
-              onChange={value => {
-                void setFieldValue(
-                  'theme.background.enableBgImage',
-                  value,
-                  false
-                );
-                if (value) {
-                  void setFieldValue(
-                    'theme.background.bgType',
-                    LinkInBioThemeBackgroundEnum.image,
-                    false
-                  );
-                } else {
-                  void setFieldValue(
-                    'theme.background.bgType',
-                    LinkInBioThemeBackgroundEnum.solidColor,
-                    false
-                  );
+            <Suspense fallback={<ZFallbackIonSpinner2 />}>
+              <ZRCSwitch
+                checked={values?.theme?.background?.enableBgImage}
+                testingselector={
+                  CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+                    .bgImage.toggler
                 }
-              }}
-            />
+                onChange={value => {
+                  void setFieldValue(
+                    'theme.background.enableBgImage',
+                    value,
+                    false
+                  );
+                  if (value) {
+                    void setFieldValue(
+                      'theme.background.bgType',
+                      LinkInBioThemeBackgroundEnum.image,
+                      false
+                    );
+                  } else {
+                    void setFieldValue(
+                      'theme.background.bgType',
+                      LinkInBioThemeBackgroundEnum.solidColor,
+                      false
+                    );
+                  }
+                }}
+              />
+            </Suspense>
           </ZIonCol>
         </ZIonRow>
 
         {values?.theme?.background?.enableBgImage === true && (
           <div className='flex mt-4 ion-align-items-center ion-padding-bottom'>
-            <ZDragAndDrop
-              // eslint-disable-next-line @typescript-eslint/no-misused-promises
-              setFieldValue={setFieldValue}
-              fieldName='theme.background.bgImageUrl'
-              imageUrl={values.theme?.background?.bgImageUrl}
-              testingselector={
-                CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
-                  .bgImage.upload
-              }
-            />
+            <Suspense fallback={<ZFallbackIonSpinner2 />}>
+              <ZDragAndDrop
+                // fieldName='theme.background.bgImageUrl'
+                imageUrl={values.theme?.background?.bgImageUrl}
+                testingselector={
+                  CONSTANTS.testingSelectors.linkInBio.formPage.design.theme
+                    .bgImage.upload
+                }
+                onDrop={event => {
+                  if (event[0] !== undefined && event[0] !== null) {
+                    void setFieldValue(
+                      'theme.background.bgImageFile',
+                      event[0],
+                      false
+                    );
+
+                    const reader = new FileReader();
+
+                    reader.onload = ({ target }) => {
+                      void setFieldValue(
+                        'theme.background.bgImageUrl',
+                        target?.result as string,
+                        false
+                      );
+                    };
+
+                    reader.readAsDataURL(event[0]);
+                  }
+                }}
+              />
+            </Suspense>
           </div>
         )}
       </ZIonCol>
       {/* 🖼️ Background image end */}
-    </Suspense>
+    </>
   );
 };
 

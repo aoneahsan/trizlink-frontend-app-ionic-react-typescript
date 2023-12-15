@@ -15,6 +15,7 @@ import {
   albumsOutline,
   colorPaletteOutline,
   heartOutline,
+  saveOutline,
   settingsOutline
 } from 'ionicons/icons';
 
@@ -36,8 +37,8 @@ import {
   ZIonSkeletonText,
   ZIonText
 } from '@/components/ZIonComponents';
-import ZRScrollbars from '@/components/CustomComponents/ZRScrollBar';
 import { ZFallbackIonSpinner2 } from '@/components/CustomComponents/FallbackSpinner';
+import ZCustomScrollable from '@/components/CustomComponents/ZScrollable';
 
 import {
   useZRQGetRequest,
@@ -51,12 +52,15 @@ import { useZValidateRequestResponse } from '@/ZaionsHooks/zapi-hooks';
  * */
 import CONSTANTS, { PRODUCT_NAME } from '@/utils/constants';
 import {
+  _getQueryKey,
   createRedirectRoute,
   generatePredefinedThemeBackgroundValue,
+  isZNonEmptyString,
+  isZNonEmptyStrings,
   zStringify
 } from '@/utils/helpers';
 import { useParams } from 'react-router';
-import { API_URL_ENUM } from '@/utils/enums';
+import { API_URL_ENUM, ZWSTypeEum } from '@/utils/enums';
 import { reportCustomError } from '@/utils/customErrorType';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 
@@ -131,6 +135,14 @@ const ZLinkInBioReorderItem = lazy(
  * */
 
 const LinkInBioDesignPage: React.FC = () => {
+  // getting current linkInBioId & workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
+  const { linkInBioId, workspaceId, wsShareId, shareWSMemberId } = useParams<{
+    linkInBioId?: string;
+    workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
+  }>();
+
   const { values, dirty, submitForm } = useFormikContext<LinkInBioType>();
 
   // #region Component states
@@ -145,12 +157,6 @@ const LinkInBioDesignPage: React.FC = () => {
     }
   });
   // #endregion
-
-  // getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio of that id will be fetch from backend and store in NewLinkInBioFormState recoil state.
-  const { linkInBioId, workspaceId } = useParams<{
-    linkInBioId?: string;
-    workspaceId?: string;
-  }>();
 
   // #region Custom hooks.
   // validate the request. this hook will show success notification if the request->success is true and show error notification if request->success is false.
@@ -174,18 +180,28 @@ const LinkInBioDesignPage: React.FC = () => {
     isFetching: isSelectedLinkInBioBlocksFetching
   } = useZRQGetRequest<LinkInBioBlockFromType[]>({
     _url: API_URL_ENUM.linkInBioBlock_create_list,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN,
-      workspaceId ?? '',
-      linkInBioId ?? ''
-    ],
-    _itemsIds: [workspaceId ?? '', linkInBioId ?? ''],
+    _key: _getQueryKey({
+      keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO_BLOCK.MAIN],
+      additionalKeys: [workspaceId, wsShareId, shareWSMemberId, linkInBioId]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId, linkInBioId]
+    }),
     _urlDynamicParts: [
+      CONSTANTS.RouteParams.workspace.type,
       CONSTANTS.RouteParams.workspace.workspaceId,
       CONSTANTS.RouteParams.linkInBio.linkInBioId
     ],
     _shouldFetchWhenIdPassed: !(
-      linkInBioId !== undefined && linkInBioId?.trim()?.length > 0
+      isZNonEmptyStrings([workspaceId, linkInBioId]) ||
+      isZNonEmptyStrings([wsShareId, shareWSMemberId, linkInBioId])
     ),
     _extractType: ZRQGetRequestExtractEnum.extractItems
   });
@@ -262,12 +278,16 @@ const LinkInBioDesignPage: React.FC = () => {
 
   const isZFetching = isSelectedLinkInBioBlocksFetching;
 
+  const ZIonColStyle = {
+    ...generatePredefinedThemeBackgroundValue(
+      values.theme.background as LinkInBioThemeBackgroundType
+    )
+  };
+
   return (
     <Suspense fallback={<ZFallbackIonSpinner2 />}>
       <ZIonContent>
-        <ZIonGrid
-          className='overflow-hidden ion-no-padding ion-margin-horizontal'
-          style={{ height: 'calc(112% - 70px)' }}>
+        <ZIonGrid className='h-full overflow-hidden ion-no-padding ion-margin-horizontal'>
           <ZIonRow className='h-full'>
             <ZIonCol
               sizeXl='6.4'
@@ -276,7 +296,9 @@ const LinkInBioDesignPage: React.FC = () => {
               sizeSm='12'
               sizeXs='12'
               className='h-full'>
-              <ZRScrollbars style={{ width: '100%', height: '100%' }}>
+              <ZCustomScrollable
+                scrollY
+                className='w-full h-full'>
                 <ZIonRow className='ion-padding-horizontal ion-margin-horizontal'>
                   {values.designPageCurrentTab !==
                     ZLinkInBioRHSComponentEnum.blockForm && (
@@ -382,7 +404,7 @@ const LinkInBioDesignPage: React.FC = () => {
                     ''
                   )}
                 </ZIonRow>
-              </ZRScrollbars>
+              </ZCustomScrollable>
             </ZIonCol>
 
             <ZIonCol
@@ -391,22 +413,22 @@ const LinkInBioDesignPage: React.FC = () => {
               sizeMd='6'
               sizeSm='12'
               sizeXs='12'>
-              <ZRScrollbars style={{ width: '100%', height: '100%' }}>
+              <ZCustomScrollable
+                scrollY
+                className='w-full h-full'>
                 <ZIonContent>
                   <ZIonRow className='h-full ion-justify-content-center ion-align-items-center'>
                     {!isZFetching && (
                       <ZIonCol
                         size='11'
-                        style={{
-                          ...generatePredefinedThemeBackgroundValue(
-                            values.theme
-                              .background as LinkInBioThemeBackgroundType
-                          )
-                        }}
+                        style={ZIonColStyle}
                         className={classNames(classes.zaions__view_panel, {
-                          'h-[85%] ion-padding-start rounded': true
+                          'h-[85%] ion-padding-start rounded border shadow-md':
+                            true
                         })}>
-                        <ZRScrollbars style={{ width: '100%', height: '100%' }}>
+                        <ZCustomScrollable
+                          scrollY
+                          className='w-full h-full'>
                           <ZIonRow className='my-2 ion-padding-end ion-padding-bottom'>
                             <ZIonList
                               lines='none'
@@ -426,7 +448,7 @@ const LinkInBioDesignPage: React.FC = () => {
                               </ZIonReorderGroup>
                             </ZIonList>
                           </ZIonRow>
-                        </ZRScrollbars>
+                        </ZCustomScrollable>
                       </ZIonCol>
                     )}
 
@@ -465,13 +487,29 @@ const LinkInBioDesignPage: React.FC = () => {
                     </ZIonButton>
                   )}
                 </ZIonContent>
-              </ZRScrollbars>
+              </ZCustomScrollable>
             </ZIonCol>
           </ZIonRow>
         </ZIonGrid>
       </ZIonContent>
 
-      <ZIonFooter className='zaions__primary_set'>
+      <ZIonFooter className='relative zaions__primary_set'>
+        {dirty &&
+          values.designPageCurrentTab === ZLinkInBioRHSComponentEnum.theme && (
+            <ZIonButton
+              minHeight='2.5rem'
+              className='fixed z-10 transition-all bottom-2 left-6 animated bounceInLeft z-animation-delay-0 z-animation-iteration-1'
+              testingselector={
+                CONSTANTS.testingSelectors.linkInBio.formPage.design.TopTitleBar
+                  .saveBtn
+              }
+              onClick={() => {
+                void submitForm();
+              }}>
+              <ZIonText className='me-2'>Save</ZIonText>
+              <ZIonIcon icon={saveOutline} />
+            </ZIonButton>
+          )}
         <ZIonGrid>
           <ZIonRow>
             <ZIonCol></ZIonCol>

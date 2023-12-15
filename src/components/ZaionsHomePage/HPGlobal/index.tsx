@@ -88,10 +88,8 @@ const ZaionsHPGlobal: React.FC = () => {
                       className={`${
                         !isMdScale ? 'ion-text-center' : 'ion-text-right'
                       }`}>
-                      <ZIonText>
-                        <h1 style={{ fontSize: '40px', fontWeight: '800' }}>
-                          {item.subscribers}
-                        </h1>
+                      <ZIonText className='text-[40px] font-extrabold'>
+                        {item.subscribers}
                       </ZIonText>
                     </ZIonCol>
                     <ZIonCol

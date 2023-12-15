@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { lazy, Suspense, useCallback, useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router';
 
 /**
@@ -13,7 +13,6 @@ import { Formik } from 'formik';
 import { createOutline } from 'ionicons/icons';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import routeQueryString from 'qs';
-import { AxiosError } from 'axios';
 import classNames from 'classnames';
 
 /**
@@ -40,6 +39,7 @@ import {
 import ZFallbackIonSpinner from '@/components/CustomComponents/FallbackSpinner';
 
 import {
+  useZRQCreateRequest,
   useZRQGetRequest,
   useZRQUpdateRequest,
   useZUpdateRQCacheData
@@ -52,15 +52,21 @@ import { useZNavigate } from '@/ZaionsHooks/zrouter-hooks';
  * ? Like import of Constant is a global constants import
  * */
 import {
+  _getQueryKey,
   createRedirectRoute,
   extractInnerData,
+  isZNonEmptyString,
+  isZNonEmptyStrings,
   replaceRouteParams,
   zStringify
 } from '@/utils/helpers';
 import ZaionsRoutes from '@/utils/constants/RoutesConstants';
 import CONSTANTS from '@/utils/constants';
-import { API_URL_ENUM, extractInnerDataOptionsEnum } from '@/utils/enums';
-import { showErrorNotification } from '@/utils/notification';
+import {
+  API_URL_ENUM,
+  extractInnerDataOptionsEnum,
+  ZWSTypeEum
+} from '@/utils/enums';
 import { reportCustomError } from '@/utils/customErrorType';
 
 /**
@@ -94,7 +100,14 @@ import {
  * */
 import classes from './styles.module.css';
 import ZCan from '@/components/Can';
-import { permissionsEnum } from '@/utils/enums/RoleAndPermissions';
+import {
+  permissionsEnum,
+  permissionsTypeEnum,
+  shareWSPermissionEnum
+} from '@/utils/enums/RoleAndPermissions';
+import { zAxiosApiRequestContentType } from '@/types/CustomHooks/zapi-hooks.type';
+import { useZIonModal } from '@/ZaionsHooks/zionic-hooks';
+import ZLinkInBioFormSettingsModal from '@/components/InPageComponents/ZaionsModals/LinkInBio/SettingsModal';
 
 const LinkInBioDesignPage = lazy(
   () => import('@/pages/AdminPanel/LinkInBio/LinkInBioForm/Design')
@@ -124,10 +137,12 @@ const LinkInBioPageAnalytics = lazy(
 const ZaionsLinkInBioForm: React.FC = () => {
   const location = useLocation();
 
-  // getting link-in-bio id from route (url), when user refresh the page the id from route will be get and link-in-bio of that id will be fetch from backend and store in NewLinkInBioFormState recoil state.
-  const { linkInBioId, workspaceId } = useParams<{
+  // getting current linkInBioId & workspace id Or wsShareId & shareWSMemberId form params. if workspaceId then this will be owned-workspace else if wsShareId & shareWSMemberId then this will be share-workspace
+  const { linkInBioId, workspaceId, shareWSMemberId, wsShareId } = useParams<{
     linkInBioId?: string;
     workspaceId?: string;
+    shareWSMemberId?: string;
+    wsShareId?: string;
   }>();
 
   // #region Recoil states.
@@ -154,82 +169,109 @@ const ZaionsLinkInBioForm: React.FC = () => {
   const { validateRequestResponse } = useZValidateRequestResponse();
   // #endregion
 
+  // #region Modals
+  const { presentZIonModal: presentZLinkInBioFormSettingsModal } = useZIonModal(
+    ZLinkInBioFormSettingsModal,
+    {
+      workspaceId,
+      shareWSMemberId,
+      wsShareId
+    }
+  );
+  // #endregion
+
   // #region APIS
+
   // fetching link-in-bio with the linkInBioId data from backend.
   const {
     data: selectedLinkInBio,
-    refetch: refetchSelectedLinkInBio,
+    // refetch: refetchSelectedLinkInBio,
     isFetching: isSelectedLinkInBioFetching
   } = useZRQGetRequest<LinkInBioType>({
     _url: API_URL_ENUM.linkInBio_update_delete,
-    _key: [
-      CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-      workspaceId ?? '',
-      linkInBioId ?? ''
-    ],
-    _authenticated: true,
-    _itemsIds: [linkInBioId ?? '', workspaceId ?? ''],
+    _key: _getQueryKey({
+      keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET],
+      additionalKeys: [workspaceId, wsShareId, shareWSMemberId, linkInBioId]
+    }),
+    _itemsIds: _getQueryKey({
+      keys: [
+        isZNonEmptyString(workspaceId)
+          ? ZWSTypeEum.personalWorkspace
+          : isZNonEmptyString(wsShareId) && isZNonEmptyString(shareWSMemberId)
+          ? ZWSTypeEum.shareWorkspace
+          : ''
+      ],
+      additionalKeys: [workspaceId, shareWSMemberId, linkInBioId]
+    }),
     _urlDynamicParts: [
-      CONSTANTS.RouteParams.linkInBio.linkInBioId,
-      CONSTANTS.RouteParams.workspace.workspaceId
+      CONSTANTS.RouteParams.workspace.type,
+      CONSTANTS.RouteParams.workspace.workspaceId,
+      CONSTANTS.RouteParams.linkInBio.linkInBioId
     ],
     _shouldFetchWhenIdPassed: !(
-      linkInBioId !== undefined && linkInBioId?.trim()?.length > 0
+      isZNonEmptyStrings([wsShareId, shareWSMemberId, linkInBioId]) ||
+      isZNonEmptyStrings([workspaceId, linkInBioId])
     ),
     _extractType: ZRQGetRequestExtractEnum.extractItem
   });
 
   // Update Link-in-bio API
   const { mutateAsync: UpdateLinkInBio } = useZRQUpdateRequest({
-    _url: API_URL_ENUM.linkInBio_update_delete,
-    _queriesKeysToInvalidate: []
+    _url: API_URL_ENUM.linkInBio_update_delete
+  });
+
+  // Single file upload.
+  const { mutateAsync: uploadSingleFile } = useZRQCreateRequest({
+    _url: API_URL_ENUM.uploadSingleFile,
+    _authenticated: true,
+    _contentType: zAxiosApiRequestContentType.FormData
+  });
+
+  // Delete file api.
+  const { mutateAsync: deleteSingleFile } = useZRQUpdateRequest({
+    _url: API_URL_ENUM.deleteSingleFile
   });
   // #endregion
 
-  const linkInBioGetRequestFn = useCallback(async () => {
-    await refetchSelectedLinkInBio();
-    // eslint-disable-next-line
-  }, []);
-
+  // #region UseEffects
   // Refetching if the linkInBioId changes and if the linkInBioId is undefined it will redirect user to link-in-bio page.
-  useEffect(() => {
-    try {
-      if ((linkInBioId?.trim()?.length ?? 0) > 0) {
-        void linkInBioGetRequestFn();
-      }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        zNavigatePushRoute(
-          replaceRouteParams(
-            ZaionsRoutes.AdminPanel.LinkInBio.Main,
-            [
-              CONSTANTS.RouteParams.workspace.workspaceId,
-              CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
-            ],
-            [workspaceId ?? '', CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
-          )
-        );
-        showErrorNotification(error.message);
-      } else {
-        reportCustomError(error);
-      }
-    }
-    // eslint-disable-next-line
-  }, [linkInBioId]);
+  // useEffect(() => {
+  //   try {
+  //     if ((linkInBioId?.trim()?.length ?? 0) > 0) {
+  //       void linkInBioGetRequestFn();
+  //     }
+  //   } catch (error) {
+  //     if (error instanceof AxiosError) {
+  //       zNavigatePushRoute(
+  //         replaceRouteParams(
+  //           ZaionsRoutes.AdminPanel.LinkInBio.Main,
+  //           [
+  //             CONSTANTS.RouteParams.workspace.workspaceId,
+  //             CONSTANTS.RouteParams.folderIdToGetShortLinksOrLinkInBio
+  //           ],
+  //           [workspaceId ?? '', CONSTANTS.DEFAULT_VALUES.FOLDER_ROUTE]
+  //         )
+  //       );
+  //       showErrorNotification(error.message);
+  //     } else {
+  //       reportCustomError(error);
+  //     }
+  //   }
+  //   // eslint-disable-next-line
+  // }, [linkInBioId]);
 
   // Storing link-in-bio data in recoil state.
   useEffect(() => {
     try {
       if (
         selectedLinkInBio?.id !== undefined &&
+        selectedLinkInBio?.id !== null &&
         (linkInBioId?.trim()?.length ?? 0) > 0
       ) {
         setLinkInBioFormState(oldVal => ({
           ...oldVal,
           formMode: FormMode.EDIT
         }));
-
-        //
       }
     } catch (error) {
       reportCustomError(error);
@@ -240,7 +282,10 @@ const ZaionsLinkInBioForm: React.FC = () => {
   // storing the current page info in setLinkInBioFromPageState recoil state, so we can show the appropriate content.
   useEffect(() => {
     try {
-      if (routeQSearchParams?.page !== undefined) {
+      if (
+        routeQSearchParams?.page !== undefined &&
+        routeQSearchParams?.page !== null
+      ) {
         setLinkInBioFromPageState(oldValues => ({
           ...oldValues,
           page: ZLinkInBioPageEnum[
@@ -253,6 +298,13 @@ const ZaionsLinkInBioForm: React.FC = () => {
     }
     // eslint-disable-next-line
   }, [routeQSearchParams.page]);
+  // #endregion
+
+  // #region Functions
+  // const linkInBioGetRequestFn = useCallback(async () => {
+  //   await refetchSelectedLinkInBio();
+  //   // eslint-disable-next-line
+  // }, []);
 
   // formik submit function
   const formikSubmitHandler = async (_reqDataStr: string): Promise<void> => {
@@ -260,15 +312,26 @@ const ZaionsLinkInBioForm: React.FC = () => {
       if (_reqDataStr?.trim()?.length > 0) {
         // The update api...
         const _response = await UpdateLinkInBio({
-          itemIds: [workspaceId ?? '', linkInBioId ?? ''],
+          itemIds: _getQueryKey({
+            keys: [
+              isZNonEmptyString(workspaceId)
+                ? ZWSTypeEum.personalWorkspace
+                : isZNonEmptyString(wsShareId) &&
+                  isZNonEmptyString(shareWSMemberId)
+                ? ZWSTypeEum.shareWorkspace
+                : ''
+            ],
+            additionalKeys: [workspaceId, shareWSMemberId, linkInBioId]
+          }),
           urlDynamicParts: [
+            CONSTANTS.RouteParams.workspace.type,
             CONSTANTS.RouteParams.workspace.workspaceId,
             CONSTANTS.RouteParams.linkInBio.linkInBioId
           ],
           requestData: _reqDataStr
         });
 
-        if (_response !== undefined) {
+        if (_response !== undefined && _response !== null) {
           // if __response of the updateLinkInBio api is success this showing success notification else not success then error notification.
           await validateRequestResponse({
             resultObj: _response
@@ -280,24 +343,31 @@ const ZaionsLinkInBioForm: React.FC = () => {
             extractInnerDataOptionsEnum.createRequestResponseItem
           );
 
-          if (_extractItemFromResult?.id !== undefined) {
+          if (
+            _extractItemFromResult?.id !== undefined &&
+            _extractItemFromResult?.id !== null
+          ) {
             // Updating single link-in-bio in all link-in-bios data in RQ cache.
             await updateRQCDataHandler({
-              key: [
-                CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN,
-                workspaceId ?? ''
-              ],
+              key: _getQueryKey({
+                keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.MAIN],
+                additionalKeys: [workspaceId, wsShareId, shareWSMemberId]
+              }),
               data: _extractItemFromResult,
               id: _extractItemFromResult?.id
             });
 
             // Updating single link-in-bio data in RQ cache.
             await updateRQCDataHandler<LinkInBioType | undefined>({
-              key: [
-                CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET,
-                workspaceId ?? '',
-                linkInBioId ?? ''
-              ],
+              key: _getQueryKey({
+                keys: [CONSTANTS.REACT_QUERY.QUERIES_KEYS.LINK_IN_BIO.GET],
+                additionalKeys: [
+                  workspaceId,
+                  wsShareId,
+                  shareWSMemberId,
+                  linkInBioId
+                ]
+              }),
               data: _extractItemFromResult,
               id: '',
               extractType: ZRQGetRequestExtractEnum.extractItem,
@@ -310,104 +380,166 @@ const ZaionsLinkInBioForm: React.FC = () => {
       reportCustomError(error);
     }
   };
+  // #endregion
 
   const isZFetching = isSelectedLinkInBioFetching;
+
+  const formikInitialValues = {
+    designPageCurrentTab:
+      (routeQSearchParams as { step: ZLinkInBioRHSComponentEnum })?.step ??
+      ZLinkInBioRHSComponentEnum.theme,
+    LinkInBioBlock: LinkInBioBlockEnum.default, // REMOVE THIS
+    title: selectedLinkInBio?.title ?? '',
+    linkInBioTitle: selectedLinkInBio?.linkInBioTitle ?? '',
+    enableTitleInput: false,
+    theme: {
+      background: {
+        bgType:
+          selectedLinkInBio?.theme?.background?.bgType ??
+          LinkInBioThemeBackgroundEnum.solidColor,
+        bgSolidColor: selectedLinkInBio?.theme?.background?.bgSolidColor ?? '',
+        bgGradientColors: {
+          startColor:
+            selectedLinkInBio?.theme?.background?.bgGradientColors
+              ?.startColor ?? '',
+          endColor:
+            selectedLinkInBio?.theme?.background?.bgGradientColors?.endColor ??
+            '',
+          direction:
+            selectedLinkInBio?.theme?.background?.bgGradientColors?.direction ??
+            0
+        },
+        enableBgImage:
+          selectedLinkInBio?.theme?.background?.enableBgImage ?? false,
+        bgImageUrl: selectedLinkInBio?.theme?.background?.bgImageUrl ?? '',
+        bgImageFile: selectedLinkInBio?.theme?.background?.bgImageFile ?? null,
+        bgImagePath: selectedLinkInBio?.theme?.background?.bgImagePath ?? null
+      },
+      button: {
+        background: {
+          bgType:
+            selectedLinkInBio?.theme?.button?.background?.bgType ??
+            LinkInBioThemeBackgroundEnum.solidColor,
+          bgSolidColor:
+            selectedLinkInBio?.theme?.button?.background?.bgSolidColor ?? '',
+          bgGradientColors: {
+            startColor:
+              selectedLinkInBio?.theme?.button?.background?.bgGradientColors
+                ?.startColor ?? '',
+            endColor:
+              selectedLinkInBio?.theme?.button?.background?.bgGradientColors
+                ?.endColor ?? '',
+            direction:
+              selectedLinkInBio?.theme?.button?.background?.bgGradientColors
+                ?.direction ?? 0
+          },
+          bgImageUrl:
+            selectedLinkInBio?.theme?.button?.background?.bgImageUrl ?? ''
+        },
+        type:
+          selectedLinkInBio?.theme?.button?.type ??
+          LinkInBioButtonTypeEnum.inlineSquare,
+        shadowColor:
+          selectedLinkInBio?.theme?.button?.shadowColor ??
+          CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
+      },
+      font: selectedLinkInBio?.theme?.font ?? LinkInBioThemeFontEnum.lato
+    },
+    settings: {
+      headerCode: selectedLinkInBio?.settings?.headerCode ?? '',
+      bodyCode: selectedLinkInBio?.settings?.bodyCode ?? ''
+    }
+  };
 
   return (
     <ZIonPage pageTitle='Link In Bio Form Page'>
       <ZCan
-        havePermissions={[permissionsEnum.update_linkInBio]}
-        returnPermissionDeniedView={true}>
+        shareWSId={wsShareId}
+        permissionType={
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          shareWSMemberId?.trim()?.length > 0
+            ? permissionsTypeEnum.shareWSMemberPermissions
+            : permissionsTypeEnum.loggedInUserPermissions
+        }
+        havePermissions={
+          wsShareId !== undefined &&
+          wsShareId !== null &&
+          wsShareId?.trim()?.length > 0 &&
+          shareWSMemberId !== undefined &&
+          shareWSMemberId !== null &&
+          shareWSMemberId?.trim()?.length > 0
+            ? [shareWSPermissionEnum.update_sws_linkInBio]
+            : [permissionsEnum.update_linkInBio]
+        }>
         <Suspense fallback={<ZFallbackIonSpinner />}>
           <Formik
             // #region initial values
-            initialValues={{
-              designPageCurrentTab:
-                (routeQSearchParams as { step: ZLinkInBioRHSComponentEnum })
-                  ?.step ?? ZLinkInBioRHSComponentEnum.theme,
-              LinkInBioBlock: LinkInBioBlockEnum.default, // REMOVE THIS
-              title: selectedLinkInBio?.title ?? '',
-              linkInBioTitle: selectedLinkInBio?.linkInBioTitle ?? '',
-              enableTitleInput: false,
-              theme: {
-                background: {
-                  bgType:
-                    selectedLinkInBio?.theme?.background?.bgType ??
-                    LinkInBioThemeBackgroundEnum.solidColor,
-                  bgSolidColor:
-                    selectedLinkInBio?.theme?.background?.bgSolidColor ?? '',
-                  bgGradientColors: {
-                    startColor:
-                      selectedLinkInBio?.theme?.background?.bgGradientColors
-                        ?.startColor ?? '',
-                    endColor:
-                      selectedLinkInBio?.theme?.background?.bgGradientColors
-                        ?.endColor ?? '',
-                    direction:
-                      selectedLinkInBio?.theme?.background?.bgGradientColors
-                        ?.direction ?? 0
-                  },
-                  enableBgImage:
-                    selectedLinkInBio?.theme?.background?.enableBgImage ??
-                    false,
-                  bgImageUrl:
-                    selectedLinkInBio?.theme?.background?.bgImageUrl ?? ''
-                },
-                button: {
-                  background: {
-                    bgType:
-                      selectedLinkInBio?.theme?.button?.background?.bgType ??
-                      LinkInBioThemeBackgroundEnum.solidColor,
-                    bgSolidColor:
-                      selectedLinkInBio?.theme?.button?.background
-                        ?.bgSolidColor ?? '',
-                    bgGradientColors: {
-                      startColor:
-                        selectedLinkInBio?.theme?.button?.background
-                          ?.bgGradientColors?.startColor ?? '',
-                      endColor:
-                        selectedLinkInBio?.theme?.button?.background
-                          ?.bgGradientColors?.endColor ?? '',
-                      direction:
-                        selectedLinkInBio?.theme?.button?.background
-                          ?.bgGradientColors?.direction ?? 0
-                    },
-                    bgImageUrl:
-                      selectedLinkInBio?.theme?.button?.background
-                        ?.bgImageUrl ?? ''
-                  },
-                  type:
-                    selectedLinkInBio?.theme?.button?.type ??
-                    LinkInBioButtonTypeEnum.inlineSquare,
-                  shadowColor:
-                    selectedLinkInBio?.theme?.button?.shadowColor ??
-                    CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
-                },
-                font:
-                  selectedLinkInBio?.theme?.font ?? LinkInBioThemeFontEnum.lato
-              },
-              settings: {
-                headerCode: selectedLinkInBio?.settings?.headerCode ?? '',
-                bodyCode: selectedLinkInBio?.settings?.bodyCode ?? ''
-              }
-            }}
+            initialValues={formikInitialValues}
             //
             enableReinitialize
             // #endregion
 
             // #region Submit function
-            onSubmit={values => {
+            onSubmit={async values => {
+              if (
+                isZNonEmptyString(values.theme?.background?.bgImageUrl) &&
+                values.theme?.background?.bgImageFile !== null
+              ) {
+                const formData = new FormData();
+                formData.append('file', values.theme?.background?.bgImageFile);
+
+                if (
+                  isZNonEmptyString(
+                    selectedLinkInBio?.theme?.background?.bgImageUrl
+                  )
+                ) {
+                  // Deleting the file from storage
+                  await deleteSingleFile({
+                    requestData: zStringify({
+                      filePath:
+                        selectedLinkInBio?.theme?.background?.bgImagePath
+                    }),
+                    itemIds: [],
+                    urlDynamicParts: []
+                  });
+                }
+
+                const result = await uploadSingleFile(formData);
+
+                if (result !== undefined || result !== null) {
+                  const _data = (
+                    result as {
+                      data: {
+                        file: object;
+                        fileName: object;
+                        filePath: string;
+                        fileUrl: string;
+                      };
+                    }
+                  )?.data;
+
+                  values.theme.background.bgImageUrl = _data.fileUrl;
+                  values.theme.background.bgImagePath = _data.filePath;
+                }
+              }
+
               const stringifyValue = zStringify({
                 linkInBioTitle: values.linkInBioTitle,
                 theme: zStringify(values.theme),
                 settings: zStringify(values.settings),
                 folderId: 1
               });
+
               setLinkInBioFormState(oldValues => ({
                 ...oldValues,
                 theme: { ...values.theme },
                 formMode: FormMode.EDIT
               }));
+
               void formikSubmitHandler(stringifyValue);
             }}
             // #endregion
@@ -463,13 +595,12 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                       .formPage.topBar.titleIonItem
                                   }
                                   className={classNames({
-                                    'ion-no-padding ion-no-margin me-2': true
-                                  })}
-                                  style={{
-                                    '--inner-padding-end': '0'
-                                  }}>
+                                    'ion-no-padding ion-no-margin me-2 ion-align-items-start z-inner-padding-end-0':
+                                      true
+                                  })}>
                                   <ZIonInput
-                                    label=''
+                                    aria-label='Link-in-bio title'
+                                    counter={false}
                                     minHeight='40px'
                                     name='linkInBioTitle'
                                     onIonChange={handleChange}
@@ -482,7 +613,8 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                     className={classNames(
                                       classes['link-in-bio-title-field'],
                                       {
-                                        'text-[18px]': true
+                                        'text-[18px] z-ion-border-radius-point-8rem':
+                                          true
                                       }
                                     )}
                                   />
@@ -553,18 +685,27 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                 onClick={() => {
                                   zNavigatePushRoute(
                                     createRedirectRoute({
-                                      url: ZaionsRoutes.AdminPanel.LinkInBio
-                                        .Edit,
+                                      url: isZNonEmptyString(workspaceId)
+                                        ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
+                                        : isZNonEmptyString(wsShareId) &&
+                                          isZNonEmptyString(shareWSMemberId)
+                                        ? ZaionsRoutes.AdminPanel.ShareWS
+                                            .Link_in_bio.Main
+                                        : '',
                                       params: [
                                         CONSTANTS.RouteParams.workspace
                                           .workspaceId,
                                         CONSTANTS.RouteParams.linkInBio
                                           .linkInBioId
                                       ],
-                                      values: [
-                                        workspaceId ?? '',
-                                        linkInBioId ?? ''
-                                      ],
+                                      values: _getQueryKey({
+                                        keys: [],
+                                        additionalKeys: [
+                                          workspaceId,
+                                          shareWSMemberId,
+                                          linkInBioId
+                                        ]
+                                      }),
                                       routeSearchParams: {
                                         page: ZLinkInBioPageEnum.design,
                                         step: ZLinkInBioRHSComponentEnum.theme
@@ -588,18 +729,27 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                 onClick={() => {
                                   zNavigatePushRoute(
                                     createRedirectRoute({
-                                      url: ZaionsRoutes.AdminPanel.LinkInBio
-                                        .Edit,
+                                      url: isZNonEmptyString(workspaceId)
+                                        ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
+                                        : isZNonEmptyString(wsShareId) &&
+                                          isZNonEmptyString(shareWSMemberId)
+                                        ? ZaionsRoutes.AdminPanel.ShareWS
+                                            .Link_in_bio.Main
+                                        : '',
                                       params: [
                                         CONSTANTS.RouteParams.workspace
                                           .workspaceId,
                                         CONSTANTS.RouteParams.linkInBio
                                           .linkInBioId
                                       ],
-                                      values: [
-                                        workspaceId ?? '',
-                                        linkInBioId ?? ''
-                                      ],
+                                      values: _getQueryKey({
+                                        keys: [],
+                                        additionalKeys: [
+                                          workspaceId,
+                                          shareWSMemberId,
+                                          linkInBioId
+                                        ]
+                                      }),
                                       routeSearchParams: {
                                         page: ZLinkInBioPageEnum.shareSettings
                                       }
@@ -622,18 +772,27 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                 onClick={() => {
                                   zNavigatePushRoute(
                                     createRedirectRoute({
-                                      url: ZaionsRoutes.AdminPanel.LinkInBio
-                                        .Edit,
+                                      url: isZNonEmptyString(workspaceId)
+                                        ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
+                                        : isZNonEmptyString(wsShareId) &&
+                                          isZNonEmptyString(shareWSMemberId)
+                                        ? ZaionsRoutes.AdminPanel.ShareWS
+                                            .Link_in_bio.Main
+                                        : '',
                                       params: [
                                         CONSTANTS.RouteParams.workspace
                                           .workspaceId,
                                         CONSTANTS.RouteParams.linkInBio
                                           .linkInBioId
                                       ],
-                                      values: [
-                                        workspaceId ?? '',
-                                        linkInBioId ?? ''
-                                      ],
+                                      values: _getQueryKey({
+                                        keys: [],
+                                        additionalKeys: [
+                                          workspaceId,
+                                          shareWSMemberId,
+                                          linkInBioId
+                                        ]
+                                      }),
                                       routeSearchParams: {
                                         page: ZLinkInBioPageEnum.pageAnalytics
                                       }
@@ -656,18 +815,27 @@ const ZaionsLinkInBioForm: React.FC = () => {
                                 onClick={() => {
                                   zNavigatePushRoute(
                                     createRedirectRoute({
-                                      url: ZaionsRoutes.AdminPanel.LinkInBio
-                                        .Edit,
+                                      url: isZNonEmptyString(workspaceId)
+                                        ? ZaionsRoutes.AdminPanel.LinkInBio.Edit
+                                        : isZNonEmptyString(wsShareId) &&
+                                          isZNonEmptyString(shareWSMemberId)
+                                        ? ZaionsRoutes.AdminPanel.ShareWS
+                                            .Link_in_bio.Main
+                                        : '',
                                       params: [
                                         CONSTANTS.RouteParams.workspace
                                           .workspaceId,
                                         CONSTANTS.RouteParams.linkInBio
                                           .linkInBioId
                                       ],
-                                      values: [
-                                        workspaceId ?? '',
-                                        linkInBioId ?? ''
-                                      ],
+                                      values: _getQueryKey({
+                                        keys: [],
+                                        additionalKeys: [
+                                          workspaceId,
+                                          shareWSMemberId,
+                                          linkInBioId
+                                        ]
+                                      }),
                                       routeSearchParams: {
                                         page: ZLinkInBioPageEnum.lead
                                       }
@@ -705,6 +873,24 @@ const ZaionsLinkInBioForm: React.FC = () => {
                               }>
                               <ZIonText className='ion-no-padding text-[16px]'>
                                 errors
+                              </ZIonText>
+                            </ZIonButton>
+
+                            {/* Settings btn */}
+                            <ZIonButton
+                              className='ion-text-lowercase ion-no-margin me-4'
+                              color='tertiary'
+                              onClick={() => {
+                                presentZLinkInBioFormSettingsModal({
+                                  _cssClass: 'lib-form-settings-modal-size'
+                                });
+                              }}
+                              testingselector={
+                                CONSTANTS.testingSelectors.linkInBio.formPage
+                                  .topBar.errorsBtn
+                              }>
+                              <ZIonText className='ion-no-padding text-[16px]'>
+                                Setting
                               </ZIonText>
                             </ZIonButton>
 

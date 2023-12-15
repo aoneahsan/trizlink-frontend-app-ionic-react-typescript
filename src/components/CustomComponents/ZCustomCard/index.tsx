@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React from 'react';
+import React, { useMemo } from 'react';
 
 /**
  * Packages Imports go down
@@ -20,15 +20,10 @@ import {
   ZIonCardHeader,
   ZIonCardTitle,
   ZIonCol,
+  ZIonIcon,
   ZIonImg,
   ZIonText
 } from '@/components/ZIonComponents';
-import {
-  videoBlockEmptyState,
-  rssWithBackground,
-  audioBlockEmptyState,
-  carouselPreviewBlock
-} from '@/assets/images';
 
 /**
  * Global Constants Imports go down
@@ -39,12 +34,27 @@ import {
  * Type Imports go down
  * ? Like import of type or type of some recoil state or any external type import is a Type import
  * */
-import { LinkInBioCardStyleEnum } from '@/types/AdminPanel/linkInBioType/blockTypes';
+import {
+  type LinkInBioBlockAnimationEnum,
+  LinkInBioCardStyleEnum
+} from '@/types/AdminPanel/linkInBioType/blockTypes';
 import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
 import ZReactMediaPlayer from '../ZCustomAudio';
 import { useRecoilValue } from 'recoil';
 import { NewLinkInBioFormState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';
 import ZCountdown from '../ZCountDown';
+import { isZNonEmptyString } from '@/utils/helpers';
+import {
+  calendar,
+  codeSlashOutline,
+  imageOutline,
+  layersOutline,
+  mapOutline,
+  videocamOutline,
+  volumeHighOutline,
+  wifiOutline
+} from 'ionicons/icons';
+import ZCapGMap from '../GoogleMaps/ZCapGMap';
 
 /**
  * Recoil State Imports go down
@@ -74,6 +84,14 @@ interface ZCustomCardInterface {
   mediaType?: ZMediaEnum;
   image?: string;
   countDownTime?: string;
+  className?: string;
+  iframeSrcDocText?: string;
+  mapId?: string;
+  coordinates?: {
+    lat: number | undefined;
+    lng: number | undefined;
+  };
+  animationType?: LinkInBioBlockAnimationEnum;
 }
 
 /**
@@ -88,27 +106,103 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
   type = LinkInBioCardStyleEnum.horizontal,
   mediaType = ZMediaEnum.image,
   image,
-  countDownTime
+  animationType,
+  countDownTime,
+  className,
+  mapId,
+  coordinates,
+  iframeSrcDocText
 }) => {
   // getting the custom style for all the buttons from linkInBioFormState recoil.
   const linkInBioFormState = useRecoilValue(NewLinkInBioFormState);
 
+  // #region comp constants
+  const _zIonCardHeaderStyle = useMemo(
+    () => ({
+      width:
+        type === LinkInBioCardStyleEnum.horizontal ||
+        type === LinkInBioCardStyleEnum.vertical
+          ? '100%'
+          : type === LinkInBioCardStyleEnum.thumbRound
+          ? '202px'
+          : type === LinkInBioCardStyleEnum.thumbCircle
+          ? '115px'
+          : type === LinkInBioCardStyleEnum.thumbStrip
+          ? '56%'
+          : '100%',
+      height:
+        mediaType === ZMediaEnum.iframe && isZNonEmptyString(mediaLink)
+          ? '380px'
+          : mediaType === ZMediaEnum.iframeSrcDoc &&
+            isZNonEmptyString(iframeSrcDocText)
+          ? '16rem'
+          : mediaType === ZMediaEnum.calendar && isZNonEmptyString(mediaLink)
+          ? '16rem'
+          : isZNonEmptyString(mapId) &&
+            mediaType === ZMediaEnum.map &&
+            coordinates !== undefined &&
+            coordinates !== null
+          ? '17rem'
+          : type === LinkInBioCardStyleEnum.horizontal
+          ? '160px'
+          : type === LinkInBioCardStyleEnum.vertical
+          ? '330px'
+          : type === LinkInBioCardStyleEnum.thumbStrip
+          ? 'auto'
+          : '15rem',
+      position: 'relative',
+      borderRadius: type === LinkInBioCardStyleEnum.thumbRound && '15px',
+      overflow: 'hidden'
+    }),
+    [type, mediaType, mediaLink, iframeSrcDocText, mapId, coordinates]
+  );
+
+  const _zIonCardContentStyle = useMemo(
+    () => ({
+      width:
+        type === LinkInBioCardStyleEnum.thumbRound
+          ? 'calc(100% - 202px)'
+          : type === LinkInBioCardStyleEnum.thumbCircle
+          ? 'calc(100% - 115px)'
+          : '100%',
+      height: 'max-content'
+    }),
+    [type]
+  );
+
+  const ZMediaImageStyle = {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    objectFit: 'cover'
+  };
+
+  const ZMediaPlayerStyle = useMemo(
+    () => ({ url: mediaLink, width: '100%', height: '100%' }),
+    [mediaLink]
+  );
+  // #endregion
+
   return (
-    <ZIonCol>
+    <ZIonCol
+      className={classNames(className, {
+        'h-full': true
+      })}>
       <ZIonCard
-        className={classNames({
-          'ion-no-padding ion-no-margin': true,
+        className={classNames(animationType, {
+          'ion-no-padding ion-no-margin h-full': true,
           flex:
             type === LinkInBioCardStyleEnum.thumbCircle ||
             type === LinkInBioCardStyleEnum.thumbRound ||
             type === LinkInBioCardStyleEnum.thumbStrip,
           'ion-align-items-center':
             type === LinkInBioCardStyleEnum.thumbCircle ||
-            type === LinkInBioCardStyleEnum.thumbRound
+            type === LinkInBioCardStyleEnum.thumbRound,
+          'animated ': isZNonEmptyString(animationType)
         })}>
         <ZIonCardHeader
           className={classNames({
-            'ion-no-padding ion-no-margin flex ion-justify-content-center ion-align-items-center':
+            'ion-no-padding ion-no-margin flex ion-justify-content-center ion-align-items-center zaions__primary_set':
               true,
 
             'ion-margin':
@@ -118,90 +212,122 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
               type === LinkInBioCardStyleEnum.thumbCircle
           })}
           color='primary'
-          style={{
-            width:
-              type === LinkInBioCardStyleEnum.horizontal ||
-              type === LinkInBioCardStyleEnum.vertical
-                ? '100%'
-                : type === LinkInBioCardStyleEnum.thumbCircle ||
-                  type === LinkInBioCardStyleEnum.thumbRound
-                ? '350px'
-                : '100%',
-            height:
-              type === LinkInBioCardStyleEnum.horizontal
-                ? '160px'
-                : type === LinkInBioCardStyleEnum.vertical
-                ? '330px'
-                : type === LinkInBioCardStyleEnum.thumbStrip
-                ? 'auto'
-                : '110px',
-            position: 'relative',
-            borderRadius: type === LinkInBioCardStyleEnum.thumbRound && '15px',
-            overflow: 'hidden'
-          }}>
+          style={_zIonCardHeaderStyle}>
           {/* If no image provided or get from api the default image */}
-          {(mediaLink !== undefined || mediaType !== ZMediaEnum.countDown) && (
-            <ZIonImg
-              src={
-                image?.trim() !== undefined
-                  ? image
-                  : mediaType === ZMediaEnum.image
-                  ? rssWithBackground
-                  : mediaType === ZMediaEnum.video
-                  ? videoBlockEmptyState
-                  : mediaType === ZMediaEnum.audio
-                  ? audioBlockEmptyState
-                  : mediaType === ZMediaEnum.carousel
-                  ? carouselPreviewBlock
-                  : ''
-              }
-              style={{
-                width:
-                  mediaType === ZMediaEnum.video ||
-                  mediaType === ZMediaEnum.audio
-                    ? '161px'
-                    : '100%',
-                height: '100%',
-                position: 'absolute',
-                objectFit: 'cover'
-              }}
-            />
-          )}
+          {!isZNonEmptyString(mediaLink) &&
+            mediaType !== ZMediaEnum.map &&
+            mediaType !== ZMediaEnum.iframeSrcDoc && (
+              <ZIonIcon
+                // icon={calendarOutline}
+                color='light'
+                className='w-[6rem] h-[6rem]'
+                icon={
+                  mediaType === ZMediaEnum.image
+                    ? imageOutline
+                    : mediaType === ZMediaEnum.rss
+                    ? wifiOutline
+                    : mediaType === ZMediaEnum.video
+                    ? videocamOutline
+                    : mediaType === ZMediaEnum.audio ||
+                      mediaType === ZMediaEnum.iframe
+                    ? volumeHighOutline
+                    : mediaType === ZMediaEnum.carousel
+                    ? layersOutline
+                    : mediaType === ZMediaEnum.calendar
+                    ? calendar
+                    : ''
+                }
+              />
+            )}
+
+          {!isZNonEmptyString(mapId) &&
+            mediaType === ZMediaEnum.map &&
+            (coordinates === undefined || coordinates === null) && (
+              <ZIonIcon
+                color='light'
+                className='w-[6rem] h-[6rem]'
+                icon={mapOutline}
+              />
+            )}
+
+          {!isZNonEmptyString(iframeSrcDocText) &&
+            mediaType === ZMediaEnum.iframeSrcDoc &&
+            (coordinates === undefined || coordinates === null) && (
+              <ZIonIcon
+                color='light'
+                className='w-[6rem] h-[6rem]'
+                icon={codeSlashOutline}
+              />
+            )}
 
           {/* For Image */}
-          {mediaLink !== undefined &&
+          {isZNonEmptyString(mediaLink) &&
             (mediaType === ZMediaEnum.image ||
               mediaType === ZMediaEnum.countDown) && (
               <ZIonImg
                 src={mediaLink}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  position: 'absolute',
-                  objectFit: 'cover'
-                }}
+                style={ZMediaImageStyle}
               />
             )}
 
           {/* For Video */}
-          {mediaLink !== undefined && mediaType === ZMediaEnum.video && (
+          {isZNonEmptyString(mediaLink) && mediaType === ZMediaEnum.video && (
             <ZReactMediaPlayer
-              playerProps={{ url: mediaLink, width: '100%', height: '100%' }}
+              playerProps={ZMediaPlayerStyle}
               mediaType='video'
             />
           )}
 
+          {isZNonEmptyString(mapId) &&
+            mediaType === ZMediaEnum.map &&
+            coordinates !== undefined &&
+            coordinates !== null && (
+              <ZCapGMap
+                mapId={mapId ?? ''}
+                coordinates={coordinates}
+              />
+            )}
+
           {/* For audio */}
-          {mediaLink !== undefined && mediaType === ZMediaEnum.audio && (
+          {/* {isZNonEmptyString(mediaLink) && mediaType === ZMediaEnum.audio && (
             <ZReactMediaPlayer
-              playerProps={{ url: mediaLink, width: '100%', height: '100%' }}
+              playerProps={ZMediaPlayerStyle}
               mediaType='audio'
             />
-          )}
+          )} */}
+
+          {isZNonEmptyString(mediaLink) &&
+            (mediaType === ZMediaEnum.iframe ||
+              mediaType === ZMediaEnum.calendar) && (
+              <ZIonCol>
+                <iframe
+                  width='100%'
+                  scrolling='no'
+                  frameBorder='0'
+                  allow='encrypted-media'
+                  height='100%'
+                  src={mediaLink}
+                />
+              </ZIonCol>
+            )}
+
+          {isZNonEmptyString(iframeSrcDocText) &&
+            mediaType === ZMediaEnum.iframeSrcDoc && (
+              <ZIonCol>
+                <iframe
+                  width='100%'
+                  height='100%'
+                  scrolling='yes'
+                  frameBorder='0'
+                  allow='encrypted-media'
+                  srcDoc={iframeSrcDocText}
+                />
+              </ZIonCol>
+            )}
         </ZIonCardHeader>
 
-        {(title !== undefined ||
-          description !== undefined ||
+        {(isZNonEmptyString(title) ||
+          isZNonEmptyString(description) ||
           mediaType === ZMediaEnum.countDown) && (
           <ZIonCardContent
             className={classNames({
@@ -212,8 +338,12 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
               'ion-text-start':
                 type === LinkInBioCardStyleEnum.thumbCircle ||
                 type === LinkInBioCardStyleEnum.thumbRound ||
-                type === LinkInBioCardStyleEnum.thumbStrip
-            })}>
+                type === LinkInBioCardStyleEnum.thumbStrip,
+              'ps-1':
+                type === LinkInBioCardStyleEnum.thumbCircle ||
+                type === LinkInBioCardStyleEnum.thumbRound
+            })}
+            style={_zIonCardContentStyle}>
             {title !== undefined && title?.trim()?.length > 0 && (
               <ZIonCardTitle
                 className={classNames(linkInBioFormState?.theme?.font, {
@@ -232,18 +362,10 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
 
             {/*  */}
             {description !== undefined && description?.trim()?.length > 0 && (
-              <div>
+              <div className='h-max'>
                 <ZIonText
-                  style={{
-                    width:
-                      type === LinkInBioCardStyleEnum.thumbCircle ||
-                      type === LinkInBioCardStyleEnum.thumbRound ||
-                      type === LinkInBioCardStyleEnum.thumbStrip
-                        ? '200px'
-                        : '100%'
-                  }}
                   className={classNames(linkInBioFormState?.theme?.font, {
-                    'inline-block w-full': true
+                    'inline-block whitespace-break-spaces': true
                   })}>
                   {description}
                 </ZIonText>

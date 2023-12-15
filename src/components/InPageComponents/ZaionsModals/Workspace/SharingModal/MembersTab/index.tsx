@@ -94,9 +94,8 @@ const ZMembersTab: React.FC = () => {
           className='flex ion-align-items-center'>
           {isSmScale && (
             <ZUserAvatarButton
-              className='w-[10px] h-[10px] me-3'
+              className='h-[35px] me-3 w-[35px]'
               userAvatar={ProductLogo}
-              style={{ height: '35px', width: '35px' }}
             />
           )}
 

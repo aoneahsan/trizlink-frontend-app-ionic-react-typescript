@@ -61,9 +61,7 @@ const ZaionsBrowserExtensions: React.FC = () => {
             label={'Browser Extension'}
             title={`Get the ${PRODUCT_NAME} Browser Extension`}
             subTitle={
-              <ZIonText
-                className='pt-2'
-                style={{ lineHeight: '2.2rem' }}>
+              <ZIonText className='pt-2 leading-[2.2rem]'>
                 Create a link, fast and easy, right from the page you’re
                 viewing. Add ${PRODUCT_NAME}’s browser <br /> extension to boost
                 your productivity.{' '}
@@ -79,9 +77,7 @@ const ZaionsBrowserExtensions: React.FC = () => {
                 size='12'
                 className='text-center'>
                 <ZIonText>
-                  <h2
-                    className='font-bolder'
-                    style={{ fontSize: '2.2rem' }}>
+                  <h2 className='font-bolder text-[2.2rem]'>
                     {PRODUCT_NAME} Browser Extensions
                   </h2>
                 </ZIonText>
@@ -132,9 +128,7 @@ const ZaionsBrowserExtensions: React.FC = () => {
                 sizeXs='12'
                 className='ion-text-center'>
                 <ZIonText>
-                  <h2
-                    className='pt-1 mt-2 font-bolder zaions__color_dark'
-                    style={{ fontSize: '38px' }}>
+                  <h2 className='pt-1 mt-2 font-bolder zaions__color_dark text-[38px]'>
                     Browser Features to Discover
                   </h2>
                 </ZIonText>
