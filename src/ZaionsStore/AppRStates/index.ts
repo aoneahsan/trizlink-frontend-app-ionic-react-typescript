@@ -1,4 +1,7 @@
-import { type ZIonColorType } from '@/types/zaionsAppSettings.type';
+import {
+  type reloadBlockingInterface,
+  type ZIonColorType
+} from '@/types/zaionsAppSettings.type';
 import { type ToastOptions } from 'react-toastify';
 import { atom, selector } from 'recoil';
 
@@ -74,5 +77,12 @@ export const appWiseIonicToastRStateAtom = atom<{
     message: '',
     color: 'primary',
     toastProps: {}
+  }
+});
+
+export const reloadBlockingRStateAtom = atom<reloadBlockingInterface>({
+  key: 'reloadBlockingRStateAtom_key',
+  default: {
+    isBlock: false
   }
 });

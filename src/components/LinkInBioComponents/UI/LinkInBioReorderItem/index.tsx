@@ -13,7 +13,7 @@ import routeQueryString from 'qs';
 import { appsOutline, createOutline } from 'ionicons/icons';
 import { useFormikContext } from 'formik';
 import { type OverlayEventDetail } from '@ionic/core';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 /**
  * Custom Imports go down
@@ -101,6 +101,7 @@ import classNames from 'classnames';
 import { ZRQGetRequestExtractEnum } from '@/types/ZReactQuery/index.type';
 import ZCustomCard from '@/components/CustomComponents/ZCustomCard';
 import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
+import { reloadBlockingRStateAtom } from '@/ZaionsStore/AppRStates';
 
 /**
  * Style files Imports go down
@@ -148,6 +149,8 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
   const [linkInBioBlockState, setLinkInBioBlockState] = useRecoilState(
     LinkInBioBlocksRState
   );
+
+  const reloadBlockingRState = useRecoilValue(reloadBlockingRStateAtom);
 
   const { getRQCDataHandler } = useZGetRQCacheData();
   const { updateRQCDataHandler } = useZUpdateRQCacheData();
@@ -505,11 +508,14 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
       <ZIonButton
         className='ion-no-padding ms-1 me-2 w-[2rem] rounded-full overflow-hidden'
         minHeight='2rem'
+        disabled={reloadBlockingRState?.isBlock}
         slot='start'
         fill='clear'
         size='large'
         onClick={() => {
-          blockEditHandler();
+          if (!reloadBlockingRState?.isBlock) {
+            blockEditHandler();
+          }
         }}>
         <ZIonText>
           <ZIonIcon
@@ -555,7 +561,7 @@ const ZLinkInBioReorderItem: React.FC<ZLinkInBioReorderItemInterface> = ({
           mediaType={ZMediaEnum.image}
           title={element.blockContent?.title}
           description={element.blockContent?.description}
-          image={element.blockContent?.imageUrl}
+          mediaLink={element.blockContent?.imageUrl}
           type={element.blockContent?.style}
         />
       ) : element?.blockType === LinkInBioBlockEnum.button ? (

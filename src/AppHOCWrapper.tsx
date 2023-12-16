@@ -36,6 +36,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import PackagesHOC from '@/HOCs/PackagesHOC';
 import FirebaseHOC from '@/HOCs/FirebaseHOC';
 import ErrorLoggingHOC from '@/HOCs/ErrorLoggingHOC';
+import ReloadBlockingHOC from './HOCs/ReloadBlockingHOC';
 
 // Global Constants
 
@@ -67,7 +68,9 @@ const AppHOCWrapper: React.FC = () => {
                     <FetchRequiredAppDataHOC>
                       {/* HOC for any other package, whose separate HOC we don't want */}
                       <PackagesHOC>
-                        <ZaionsApp />
+                        <ReloadBlockingHOC>
+                          <ZaionsApp />
+                        </ReloadBlockingHOC>
                       </PackagesHOC>
                     </FetchRequiredAppDataHOC>
                   </AuthenticateHOC>

@@ -240,22 +240,37 @@ const ZLinkInBioThemeSection: React.FC = () => {
 
                       const _bgGradient =
                         _bg.bgGradientColors as LinkInBioBgGradientColorsInterface;
-
-                      void setFieldValue(
-                        'theme.background',
-                        {
-                          bgType: _bg?.bgType,
-                          bgSolidColor: _bg?.bgSolidColor,
-                          bgGradientColors: {
-                            startColor: _bgGradient?.startColor,
-                            endColor: _bgGradient?.endColor,
-                            direction: _bgGradient?.direction ?? 0
+                      if (
+                        values.theme.background?.bgType !== _bg?.bgType ||
+                        values.theme.background?.enableBgImage !==
+                          _bg?.enableBgImage ||
+                        values.theme.background?.bgImageUrl !==
+                          _bg?.bgImageUrl ||
+                        values.theme.background?.bgSolidColor !==
+                          _bg?.bgSolidColor ||
+                        values.theme.background?.bgGradientColors?.direction !==
+                          _bg?.bgGradientColors?.direction ||
+                        values.theme.background?.bgGradientColors
+                          ?.startColor !== _bg?.bgGradientColors?.startColor ||
+                        values.theme.background?.bgGradientColors?.endColor !==
+                          _bg?.bgGradientColors?.endColor
+                      ) {
+                        void setFieldValue(
+                          'theme.background',
+                          {
+                            bgType: _bg?.bgType,
+                            bgSolidColor: _bg?.bgSolidColor,
+                            bgGradientColors: {
+                              startColor: _bgGradient?.startColor,
+                              endColor: _bgGradient?.endColor,
+                              direction: _bgGradient?.direction ?? 0
+                            },
+                            bgImageUrl: _bg?.bgImageUrl,
+                            enableBgImage: _bg?.enableBgImage
                           },
-                          bgImageUrl: _bg?.bgImageUrl,
-                          enableBgImage: _bg?.enableBgImage
-                        },
-                        true
-                      );
+                          true
+                        );
+                      }
                     }}
                   />
                 </ZIonCol>

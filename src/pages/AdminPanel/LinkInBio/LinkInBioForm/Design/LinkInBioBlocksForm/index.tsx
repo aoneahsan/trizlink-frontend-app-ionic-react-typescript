@@ -2,7 +2,7 @@
  * Core Imports go down
  * ? Like Import of React is a Core Import
  * */
-import React, { Suspense } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router';
 
 /**
@@ -520,149 +520,158 @@ const ZLinkInBioBlocksForm: React.FC = () => {
 
   const isZFetching = isLinkInBioBlockDataFetching;
 
-  const formikInitialValues = {
-    target: {
-      url: linkInBioBlockData?.blockContent?.target?.url ?? '',
+  const formikInitialValues = useMemo(
+    () => ({
+      target: {
+        url: linkInBioBlockData?.blockContent?.target?.url ?? '',
 
-      email: linkInBioBlockData?.blockContent?.target?.email ?? '',
+        email: linkInBioBlockData?.blockContent?.target?.email ?? '',
 
-      phoneNumber: linkInBioBlockData?.blockContent?.target?.phoneNumber ?? '',
+        phoneNumber:
+          linkInBioBlockData?.blockContent?.target?.phoneNumber ?? '',
 
-      username: linkInBioBlockData?.blockContent?.target?.username ?? '',
+        username: linkInBioBlockData?.blockContent?.target?.username ?? '',
 
-      accountId: linkInBioBlockData?.blockContent?.target?.accountId ?? '',
+        accountId: linkInBioBlockData?.blockContent?.target?.accountId ?? '',
 
-      subject: linkInBioBlockData?.blockContent?.target?.subject ?? '',
-      message: linkInBioBlockData?.blockContent?.target?.message ?? '',
-      type:
-        linkInBioBlockData?.blockContent?.target?.type ??
-        linkInBioBlockCardItemEnum.whatsapp
-    },
-    vcard: {
-      firstName: linkInBioBlockData?.blockContent?.vcard?.firstName ?? '',
-      lastName: linkInBioBlockData?.blockContent?.vcard?.lastName ?? '',
-      mobile: linkInBioBlockData?.blockContent?.vcard?.mobile ?? '',
-      phone: linkInBioBlockData?.blockContent?.vcard?.phone ?? '',
-      fax: linkInBioBlockData?.blockContent?.vcard?.fax ?? '',
-      email: linkInBioBlockData?.blockContent?.vcard?.email ?? '',
-      company: linkInBioBlockData?.blockContent?.vcard?.company ?? '',
-      job: linkInBioBlockData?.blockContent?.vcard?.job ?? '',
-      street: linkInBioBlockData?.blockContent?.vcard?.street ?? '',
-      city: linkInBioBlockData?.blockContent?.vcard?.city ?? '',
-      zip: linkInBioBlockData?.blockContent?.vcard?.zip ?? 0,
-      state: linkInBioBlockData?.blockContent?.vcard?.state ?? '',
-      country: linkInBioBlockData?.blockContent?.vcard?.country ?? '',
-      website: linkInBioBlockData?.blockContent?.vcard?.website ?? ''
-    },
-    title: linkInBioBlockData?.blockContent?.title ?? '',
-    icon: linkInBioBlockData?.blockContent?.icon ?? '',
-    text: isZNonEmptyString(linkInBioBlockData?.blockContent?.text)
-      ? linkInBioBlockData?.blockContent?.text
-      : 'text',
-    description: linkInBioBlockData?.blockContent?.description ?? '',
-    titleIsEnable: linkInBioBlockData?.blockContent?.titleIsEnable ?? false,
-    descriptionIsEnable:
-      linkInBioBlockData?.blockContent?.descriptionIsEnable ?? false,
-    pictureIsEnable: linkInBioBlockData?.blockContent?.pictureIsEnable ?? false,
-    priceIsEnable: linkInBioBlockData?.blockContent?.priceIsEnable ?? false,
-    cardIsEnable: linkInBioBlockData?.blockContent?.cardIsEnable ?? false,
-    cardNumber: linkInBioBlockData?.blockContent?.cardNumber ?? 0,
-    searchString: linkInBioBlockData?.blockContent?.searchString ?? '',
-    spacing: linkInBioBlockData?.blockContent?.spacing ?? 0,
-    customHeight: linkInBioBlockData?.blockContent?.customHeight ?? 0,
-    date: linkInBioBlockData?.blockContent?.date ?? new Date().toString(),
-    timezone: linkInBioBlockData?.blockContent?.timezone ?? '',
-    imageUrl: linkInBioBlockData?.blockContent?.imageUrl ?? '',
-    imagePath: linkInBioBlockData?.blockContent?.imagePath ?? '',
-    imageFile: linkInBioBlockData?.blockContent?.imageFile ?? null,
-    avatarShadow: linkInBioBlockData?.blockContent?.avatarShadow ?? false,
-    cardMode: linkInBioBlockData?.blockContent?.cardMode ?? false,
-    iframe: linkInBioBlockData?.blockContent?.iframe ?? '',
-    separatorType:
-      linkInBioBlockData?.blockContent?.separatorType ??
-      SeparatorTypeEnum.solid,
-    separatorColor: linkInBioBlockData?.blockContent?.separatorColor ?? '',
-    separatorMargin: linkInBioBlockData?.blockContent?.separatorMargin ?? 0,
-    margin: linkInBioBlockData?.blockContent?.margin ?? 0,
-
-    map: {
-      formattedAddress: 'okay',
-      lat: 10,
-      lng: 10,
-      userEnteredAddress: ''
-    },
-
-    customAppearance: {
-      isEnabled:
-        linkInBioBlockData?.blockContent?.customAppearance?.isEnabled ?? false,
-      background: {
-        bgType:
-          linkInBioBlockData?.blockContent?.customAppearance?.background
-            ?.bgType ?? LinkInBioThemeBackgroundEnum.solidColor,
-        bgSolidColor:
-          linkInBioBlockData?.blockContent?.customAppearance?.background
-            ?.bgSolidColor ?? CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BG_COLOR,
-        bgGradientColors: {
-          startColor:
-            linkInBioBlockData?.blockContent?.customAppearance?.background
-              ?.bgGradientColors?.startColor ?? '',
-          endColor:
-            linkInBioBlockData?.blockContent?.customAppearance?.background
-              ?.bgGradientColors?.endColor ?? '',
-          direction:
-            linkInBioBlockData?.blockContent?.customAppearance?.background
-              ?.bgGradientColors?.direction ?? 0
-        }
+        subject: linkInBioBlockData?.blockContent?.target?.subject ?? '',
+        message: linkInBioBlockData?.blockContent?.target?.message ?? '',
+        type:
+          linkInBioBlockData?.blockContent?.target?.type ??
+          linkInBioBlockCardItemEnum.whatsapp
       },
-      color: linkInBioBlockData?.blockContent?.customAppearance?.color ?? '',
-      buttonType:
-        linkInBioBlockData?.blockContent?.customAppearance?.buttonType ??
-        LinkInBioButtonTypeEnum.inlineSquare,
-      shadowColor:
-        linkInBioBlockData?.blockContent?.customAppearance?.shadowColor ??
-        CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
-    },
+      vcard: {
+        firstName: linkInBioBlockData?.blockContent?.vcard?.firstName ?? '',
+        lastName: linkInBioBlockData?.blockContent?.vcard?.lastName ?? '',
+        mobile: linkInBioBlockData?.blockContent?.vcard?.mobile ?? '',
+        phone: linkInBioBlockData?.blockContent?.vcard?.phone ?? '',
+        fax: linkInBioBlockData?.blockContent?.vcard?.fax ?? '',
+        email: linkInBioBlockData?.blockContent?.vcard?.email ?? '',
+        company: linkInBioBlockData?.blockContent?.vcard?.company ?? '',
+        job: linkInBioBlockData?.blockContent?.vcard?.job ?? '',
+        street: linkInBioBlockData?.blockContent?.vcard?.street ?? '',
+        city: linkInBioBlockData?.blockContent?.vcard?.city ?? '',
+        zip: linkInBioBlockData?.blockContent?.vcard?.zip ?? 0,
+        state: linkInBioBlockData?.blockContent?.vcard?.state ?? '',
+        country: linkInBioBlockData?.blockContent?.vcard?.country ?? '',
+        website: linkInBioBlockData?.blockContent?.vcard?.website ?? ''
+      },
+      title: linkInBioBlockData?.blockContent?.title ?? '',
+      icon: linkInBioBlockData?.blockContent?.icon ?? '',
+      text: isZNonEmptyString(linkInBioBlockData?.blockContent?.text)
+        ? linkInBioBlockData?.blockContent?.text
+        : 'text',
+      description: linkInBioBlockData?.blockContent?.description ?? '',
+      titleIsEnable: linkInBioBlockData?.blockContent?.titleIsEnable ?? false,
+      descriptionIsEnable:
+        linkInBioBlockData?.blockContent?.descriptionIsEnable ?? false,
+      pictureIsEnable:
+        linkInBioBlockData?.blockContent?.pictureIsEnable ?? false,
+      priceIsEnable: linkInBioBlockData?.blockContent?.priceIsEnable ?? false,
+      cardIsEnable: linkInBioBlockData?.blockContent?.cardIsEnable ?? false,
+      cardNumber: linkInBioBlockData?.blockContent?.cardNumber ?? 0,
+      searchString: linkInBioBlockData?.blockContent?.searchString ?? '',
+      spacing: linkInBioBlockData?.blockContent?.spacing ?? 0,
+      customHeight: linkInBioBlockData?.blockContent?.customHeight ?? 0,
+      date: linkInBioBlockData?.blockContent?.date ?? new Date().toString(),
+      timezone: linkInBioBlockData?.blockContent?.timezone ?? '',
+      imageUrl: linkInBioBlockData?.blockContent?.imageUrl ?? '',
+      imagePath: linkInBioBlockData?.blockContent?.imagePath ?? '',
+      imageFile: linkInBioBlockData?.blockContent?.imageFile ?? null,
+      avatarShadow: linkInBioBlockData?.blockContent?.avatarShadow ?? false,
+      cardMode: linkInBioBlockData?.blockContent?.cardMode ?? false,
+      iframe: linkInBioBlockData?.blockContent?.iframe ?? '',
+      separatorType:
+        linkInBioBlockData?.blockContent?.separatorType ??
+        SeparatorTypeEnum.solid,
+      separatorColor: linkInBioBlockData?.blockContent?.separatorColor ?? '',
+      separatorMargin: linkInBioBlockData?.blockContent?.separatorMargin ?? 0,
+      margin: linkInBioBlockData?.blockContent?.margin ?? 0,
 
-    animation: {
-      isEnabled:
-        linkInBioBlockData?.blockContent?.animation?.isEnabled ?? false,
-      type: linkInBioBlockData?.blockContent?.animation?.type
-    },
+      map: {
+        formattedAddress: 'okay',
+        lat: 10,
+        lng: 10,
+        userEnteredAddress: ''
+      },
 
-    style:
-      linkInBioBlockData?.blockContent?.style ?? LinkInBioCardStyleEnum.square,
+      customAppearance: {
+        isEnabled:
+          linkInBioBlockData?.blockContent?.customAppearance?.isEnabled ??
+          false,
+        background: {
+          bgType:
+            linkInBioBlockData?.blockContent?.customAppearance?.background
+              ?.bgType ?? LinkInBioThemeBackgroundEnum.solidColor,
+          bgSolidColor:
+            linkInBioBlockData?.blockContent?.customAppearance?.background
+              ?.bgSolidColor ?? CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BG_COLOR,
+          bgGradientColors: {
+            startColor:
+              linkInBioBlockData?.blockContent?.customAppearance?.background
+                ?.bgGradientColors?.startColor ?? '',
+            endColor:
+              linkInBioBlockData?.blockContent?.customAppearance?.background
+                ?.bgGradientColors?.endColor ?? '',
+            direction:
+              linkInBioBlockData?.blockContent?.customAppearance?.background
+                ?.bgGradientColors?.direction ?? 0
+          }
+        },
+        color: linkInBioBlockData?.blockContent?.customAppearance?.color ?? '',
+        buttonType:
+          linkInBioBlockData?.blockContent?.customAppearance?.buttonType ??
+          LinkInBioButtonTypeEnum.inlineSquare,
+        shadowColor:
+          linkInBioBlockData?.blockContent?.customAppearance?.shadowColor ??
+          CONSTANTS.LINK_In_BIO.INITIAL_VALUES.BUTTON_SHADOW_COLOR
+      },
 
-    view:
-      linkInBioBlockData?.blockContent?.view ?? LinkInBioCardViewEnum.carousel,
+      animation: {
+        isEnabled:
+          linkInBioBlockData?.blockContent?.animation?.isEnabled ?? false,
+        type: linkInBioBlockData?.blockContent?.animation?.type
+      },
 
-    cardItems: linkInBioBlockData?.blockContent?.cardItems ?? [],
+      style:
+        linkInBioBlockData?.blockContent?.style ??
+        LinkInBioCardStyleEnum.square,
 
-    form: {
-      formFields: linkInBioBlockData?.blockContent?.form?.formFields ?? [],
-      isTermEnabled:
-        linkInBioBlockData?.blockContent?.form?.isTermEnabled ?? false,
-      submitButtonText:
-        linkInBioBlockData?.blockContent?.form?.submitButtonText ?? 'Submit',
-      termText:
-        linkInBioBlockData?.blockContent?.form?.termText ??
-        'I Agree to Terms & Conditions',
-      termLink: linkInBioBlockData?.blockContent?.form?.termLink
-    },
+      view:
+        linkInBioBlockData?.blockContent?.view ??
+        LinkInBioCardViewEnum.carousel,
 
-    schedule: {
-      isEnabled: linkInBioBlockData?.blockContent?.schedule?.isEnabled ?? false,
-      // startAt: linkInBioBlockData?.blockContent?.schedule?.startAt ?? '',
-      startAt:
-        linkInBioBlockData?.blockContent?.schedule?.startAt ??
-        new Date().toISOString(),
-      endAt:
-        linkInBioBlockData?.blockContent?.schedule?.endAt ??
-        new Date().toISOString(),
-      timezone: linkInBioBlockData?.blockContent?.schedule?.timezone ?? ''
-    },
+      cardItems: linkInBioBlockData?.blockContent?.cardItems ?? [],
 
-    isActive: Boolean(linkInBioBlockData?.isActive)
-  };
+      form: {
+        formFields: linkInBioBlockData?.blockContent?.form?.formFields ?? [],
+        isTermEnabled:
+          linkInBioBlockData?.blockContent?.form?.isTermEnabled ?? false,
+        submitButtonText:
+          linkInBioBlockData?.blockContent?.form?.submitButtonText ?? 'Submit',
+        termText:
+          linkInBioBlockData?.blockContent?.form?.termText ??
+          'I Agree to Terms & Conditions',
+        termLink: linkInBioBlockData?.blockContent?.form?.termLink
+      },
+
+      schedule: {
+        isEnabled:
+          linkInBioBlockData?.blockContent?.schedule?.isEnabled ?? false,
+        // startAt: linkInBioBlockData?.blockContent?.schedule?.startAt ?? '',
+        startAt:
+          linkInBioBlockData?.blockContent?.schedule?.startAt ??
+          new Date().toISOString(),
+        endAt:
+          linkInBioBlockData?.blockContent?.schedule?.endAt ??
+          new Date().toISOString(),
+        timezone: linkInBioBlockData?.blockContent?.schedule?.timezone ?? ''
+      },
+
+      isActive: Boolean(linkInBioBlockData?.isActive)
+    }),
+    [linkInBioBlockData]
+  );
 
   return (
     <Formik

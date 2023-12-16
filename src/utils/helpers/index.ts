@@ -2086,3 +2086,34 @@ export const shouldNotBeNullUndefined = <R>(val: unknown): R | undefined => {
     return undefined;
   }
 };
+
+const zBeforeUnloadHandler = (event: BeforeUnloadEvent): void => {
+  // Recommended
+  event.preventDefault();
+  // Included for legacy support, e.g. Chrome/Edge < 119
+  event.returnValue = true;
+};
+
+export const shouldBlockReload = (shouldBlock: boolean = false): void => {
+  try {
+    if (shouldBlock) {
+      window.addEventListener('beforeunload', zBeforeUnloadHandler, {
+        capture: true
+      });
+
+      // To block the user to use the browser back button. suggested by ahsan bhai it is working for now.
+      history.pushState(null, '', location.href);
+      window.onpopstate = function (event) {
+        history.go(1);
+      };
+    } else {
+      window.removeEventListener('beforeunload', zBeforeUnloadHandler, {
+        capture: true
+      });
+
+      window.onpopstate = null;
+    }
+  } catch (error) {
+    reportCustomError(error);
+  }
+};

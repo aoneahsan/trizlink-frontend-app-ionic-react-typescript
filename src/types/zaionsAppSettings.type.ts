@@ -65,3 +65,9 @@ export enum ZMediaEnum {
   iframe = 'iframe',
   iframeSrcDoc = 'iframeSrcDoc'
 }
+
+export interface reloadBlockingInterface {
+  // lib => linkInBio.
+  pageUrl?: string;
+  isBlock: boolean;
+}

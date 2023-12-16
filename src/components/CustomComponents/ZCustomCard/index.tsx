@@ -124,9 +124,9 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
         type === LinkInBioCardStyleEnum.vertical
           ? '100%'
           : type === LinkInBioCardStyleEnum.thumbRound
-          ? '202px'
+          ? '10rem'
           : type === LinkInBioCardStyleEnum.thumbCircle
-          ? '115px'
+          ? '12rem'
           : type === LinkInBioCardStyleEnum.thumbStrip
           ? '56%'
           : '100%',
@@ -149,6 +149,9 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
           ? '330px'
           : type === LinkInBioCardStyleEnum.thumbStrip
           ? 'auto'
+          : type === LinkInBioCardStyleEnum.thumbRound ||
+            type === LinkInBioCardStyleEnum.thumbCircle
+          ? '10rem'
           : '15rem',
       position: 'relative',
       borderRadius: type === LinkInBioCardStyleEnum.thumbRound && '15px',
