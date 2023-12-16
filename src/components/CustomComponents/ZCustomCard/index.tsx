@@ -39,7 +39,7 @@ import {
   LinkInBioCardStyleEnum
 } from '@/types/AdminPanel/linkInBioType/blockTypes';
 import { ZMediaEnum } from '@/types/zaionsAppSettings.type';
-import ZReactMediaPlayer from '../ZCustomAudio';
+// import ZReactMediaPlayer from '../ZCustomAudio';
 import { useRecoilValue } from 'recoil';
 import { NewLinkInBioFormState } from '@/ZaionsStore/UserDashboard/LinkInBio/LinkInBioFormState.recoil';
 import ZCountdown from '../ZCountDown';
@@ -180,10 +180,10 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
     objectFit: 'cover'
   };
 
-  const ZMediaPlayerStyle = useMemo(
-    () => ({ url: mediaLink, width: '100%', height: '100%' }),
-    [mediaLink]
-  );
+  // const ZMediaPlayerStyle = useMemo(
+  //   () => ({ url: mediaLink, width: '100%', height: '100%' }),
+  //   [mediaLink]
+  // );
   // #endregion
 
   return (
@@ -274,12 +274,12 @@ const ZCustomCard: React.FC<ZCustomCardInterface> = ({
             )}
 
           {/* For Video */}
-          {isZNonEmptyString(mediaLink) && mediaType === ZMediaEnum.video && (
+          {/* {isZNonEmptyString(mediaLink) && mediaType === ZMediaEnum.video && (
             <ZReactMediaPlayer
               playerProps={ZMediaPlayerStyle}
               mediaType='video'
             />
-          )}
+          )} */}
 
           {isZNonEmptyString(mapId) &&
             mediaType === ZMediaEnum.map &&
