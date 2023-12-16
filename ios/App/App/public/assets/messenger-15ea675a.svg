@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 33.863 33.863" focusable="false">
+  <defs>
+    <clipPath>
+      <path d="M0 0H33.863V33.863H0z" data-name="Rectangle 7831" style="fill:#31ebde"></path>
+    </clipPath>
+  </defs>
+  <g>
+    <path id="block_messenger_comment"
+      d="M29.208-.052H4.656A4.661 4.661 0 0 0 0 4.6v15.029a4.66 4.66 0 0 0 4.639 4.656V31.1l9.8-6.818h14.77a4.661 4.661 0 0 0 4.656-4.656V4.6a4.661 4.661 0 0 0-4.657-4.652zM24.8 17.41H9.064v-1.984H24.8zm0-4.233H9.064v-1.984H24.8zm0-4.233H9.064V6.96H24.8zm0 0"
+      transform="translate(0 1.406)" style="fill:#10d472"></path>
+  </g>
+</svg>

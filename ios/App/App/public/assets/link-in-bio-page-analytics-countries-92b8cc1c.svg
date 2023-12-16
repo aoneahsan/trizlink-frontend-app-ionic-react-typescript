@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+    <defs>
+        <clipPath id="prefix__clip-path">
+            <path id="prefix__Rectangle_8343" d="M0 0H120V120H0z" class="prefix__cls-1" data-name="Rectangle 8343" transform="translate(-6402 -18975)"/>
+        </clipPath>
+        <style>
+            .prefix__cls-1{fill:#b8d9ff}
+        </style>
+    </defs>
+    <g id="prefix__Groupe_de_masques_884" data-name="Groupe de masques 884" transform="translate(6402 18975)">
+        <g id="prefix__globe_1_" data-name="globe (1)" transform="translate(-6402 -18975)">
+            <path id="prefix__Tracé_33880" d="M96.986 114.345a34.216 34.216 0 0 0-58.957 0A3.753 3.753 0 0 0 41.261 120h52.5a3.747 3.747 0 0 0 3.225-5.655z" data-name="Tracé 33880" style="opacity:.6;fill:#b8d9ff"/>
+            <circle id="prefix__Ellipse_1975" cx="45" cy="45" r="45" data-name="Ellipse 1975" transform="translate(22.511)" style="opacity:.2;fill:#b8d9ff"/>
+            <g id="prefix__Groupe_9537" data-name="Groupe 9537">
+                <path id="prefix__Tracé_33881" d="M67.511 105.022A59.992 59.992 0 0 1 23.193 4.673l5.528 5.062a52.419 52.419 0 0 0 74.047 74.055l5.07 5.535a59.574 59.574 0 0 1-40.327 15.697z" class="prefix__cls-1" data-name="Tracé 33881"/>
+                <path id="prefix__Tracé_33882" d="M108.753 93.75a3.767 3.767 0 0 1-2.655-1.1l-7.5-7.5a3.749 3.749 0 0 1 5.3-5.3l7.5 7.5a3.746 3.746 0 0 1-2.647 6.4z" class="prefix__cls-1" data-name="Tracé 33882"/>
+                <path id="prefix__Tracé_33883" d="M30.011 15a3.767 3.767 0 0 1-2.655-1.1l-7.5-7.5a3.749 3.749 0 1 1 5.3-5.3l7.5 7.5a3.746 3.746 0 0 1-2.645 6.4z" class="prefix__cls-1" data-name="Tracé 33883"/>
+            </g>
+        </g>
+    </g>
+</svg>

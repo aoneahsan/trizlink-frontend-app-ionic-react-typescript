@@ -25,7 +25,7 @@ import GeoLocation from '@/components/UserDashboard/GeoLocation';
 import LinkExpiration from '@/components/UserDashboard/LinkExpiration';
 import LinkPassword from '@/components/UserDashboard/Password';
 import LinkFavIcon from '@/components/UserDashboard/Favicon';
-import GDPRPopup from '@/components/UserDashboard/GdprPopup';
+import GDPRPopup from '@/components/UserDashboard/GDPRPopup';
 import {
   ZIonCol,
   ZIonText,
@@ -242,7 +242,10 @@ const LinkInBioShareSettings: React.FC = () => {
     folderId:
       selectedLinkInBio?.folderId ?? CONSTANTS.DEFAULT_VALUES.DEFAULT_FOLDER,
     linkNote: selectedLinkInBio?.notes ?? '',
-    tags: (zJsonParse(String(selectedLinkInBio?.tags)) as string[]) ?? [],
+    tags:
+      selectedLinkInBio?.tags !== null && selectedLinkInBio?.tags !== undefined
+        ? zJsonParse(String(selectedLinkInBio.tags))
+        : [],
     linkExpiration: {
       enabled: selectedLinkInBio?.linkExpirationInfo?.enabled ?? false,
       expirationDate:
